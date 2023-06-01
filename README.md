@@ -5,7 +5,7 @@ Cookie Analysis Tooling for learning, understanding, and preparing for the upcom
 
 [Privacy Sandbox](https://privacysandbox.com/) is a multi-year [initiative by Google](https://developer.chrome.com/docs/privacy-sandbox/overview/) for building a more private web by defining a set of building blocks (i.e. proposed APIs) enabling [a new privacy model for the web](https://github.com/michaelkleber/privacy-model). This Initiative encompasses three tracks:
 
-1. Replacing functionality powered by cross-site tracking with privacy-preserving alternatives.
+1. Replacing functionality powered by third-party cookies with privacy-preserving alternatives.
 
 2. Turning down third-party cookies, while  ensuring that the ecosystem has the technical capabilities for embracing new privacy-preserving solutions (e.g. First Party Sets, Topics, etc.)
 
