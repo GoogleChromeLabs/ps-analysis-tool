@@ -24,14 +24,14 @@ Tracks #2 and #3 bring significant changes to how the web operates today, and th
 
 ## Cookie Analysis
 
-Cookie Analysis Tooling for learning, understanding, and preparing for the upcoming deprecation of the 3P cookies and the release of [Privacy Sandbox APIs](https://privacysandbox.com/open-web/#proposals-for-the-web).
+This Cookie Analysis Tool is designed to provide detailed information about cookie usage during browsing sessions. It tracks and analyzes the various cookies that websites place on your browser, and it offers a comprehensive overview of their origins, their purposes, their expiry dates. It also provide context and access points to knowledge about 3P cookies and [Privacy Sandbox APIs](https://privacysandbox.com/open-web/#proposals-for-the-web). This tool can be used as a Chrome Extension, or via a CLI on your terminal. 
 
 ### Extension
-A Chrome extension designed to provide detailed information about cookie usage during browsing sessions. It tracks and analyzes the various cookies that websites place on your browser, and it offers a comprehensive overview of their origins, their purposes, their expiry dates. It also provide context and access points to knowledge about 3P cookies and Privacy Sandbox APIs. 
+The Chrome extension provides a quick summary analysis via a pop-up from th extension icon, as well as cookie anlaysis dev tools panel.
 
 ### CLI
 
-A CLI tool which crawls a sitemap (provided as an argument) and outputs a JSON file in out folder. This JSON file will have all lists of all 3p cookies set on a site visit
+A CLI tool which parses a sitemap provided as input, and outputs a JSON file listign all cookies set while navigsting through the URLs in the sitemap. 
 
 ### Usage instructions
 
