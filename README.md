@@ -19,6 +19,9 @@
 
 3. Mitigating workarounds, by ensuring developers have a well-lit path to the new capabilities of the platform, and avoid pursuing tracking via other means. 
 
+Tracks #2 and #3 bring significant changes to how the web operates today, and the purpose of this tool is to shed light, provide insights, and helping you to learn and understand the changes that are happening regarding the deprecation of 3P cookies, and the potential impact on the aspects of your site or product implementation that are build using cookies.
+
+
 ## Cookie Analysis
 
 Cookie Analysis Tooling for learning, understanding, and preparing for the upcoming deprecation of the 3P cookies and the release of [Privacy Sandbox APIs](https://privacysandbox.com/open-web/#proposals-for-the-web).
