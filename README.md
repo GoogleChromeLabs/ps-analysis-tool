@@ -63,6 +63,7 @@ A CLI tool which parses a sitemap provided as input, and outputs a JSON file lis
 
 * [The Privacy Sandbox](https://developer.chrome.com/privacy-sandbox/) 
 * [A Potential New Privacy Model for the Web](https://github.com/michaelkleber/privacy-model)
+* [Chrome Facilitated Testing](https://developer.chrome.com/en/docs/privacy-sandbox/chrome-testing/)
 
 ## Contributing
-Please refer to our contribution [guidelines](docs/CONTRIBUTING.md) and [code of conduct](docs/code-of-conduct.md).
+If you have requests for features you would like to see in this tool, please file an Feature Request or join as a contributor! Please refer to our contribution [guidelines](docs/CONTRIBUTING.md) and [code of conduct](docs/code-of-conduct.md).
