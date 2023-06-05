@@ -2,7 +2,7 @@
 <a name="logo" href="https://www.privacysandbox.com"><img align="center" src="https://github.com/GoogleChromeLabs/cookie-analysis-tool/assets/506089/62ae89de-430a-4a5b-b5bf-2a1b2f86c712" alt="Privacy Sandbox" style="width:30%;height:100%"/></a>
 </h1>
 
-## Table of contents[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#table-of-contents)
+## Table of contents
 - [Privacy Sandbox](#privacy-sandbox)
 - [Cookie Analysis](#cookie-analysis)
 - [Examples](#examples)
