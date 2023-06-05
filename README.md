@@ -49,6 +49,13 @@ A CLI tool which parses a sitemap provided as input, and outputs a JSON file lis
 - Run the cli util providing a sitemap as input. E.g. `node dist/cli/index.js -s https://<example.com>/sitemap_index.xml\`.
 
 ## Examples
+<div style="display=flex; justify-content:center;">
+  <img alt="DevTools CNN.com #1" src="https://github.com/GoogleChromeLabs/cookie-analysis-tool/assets/506089/56e95ae9-d3bc-4010-8dee-ca2d6ecf60d0" alt="cnn.com pop-up" >
+</div>
+
+<div style="display=flex; justify-content:center;">
+  <img alt="DevTools CNN.com #2" src="https://github.com/GoogleChromeLabs/cookie-analysis-tool/assets/506089/896f4c04-315e-4f62-9f5d-38ff5db08eb1">
+</div>
 
 ## Call to Action
 
