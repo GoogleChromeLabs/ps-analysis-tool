@@ -54,7 +54,7 @@ A CLI tool which crawls a sitemap (provided as an argument) and outputs a JSON f
 
 ## Resources
 
-* [The Privacy Sandbox](https://privacysandbox.com/)
+* [The Privacy Sandbox](https://developer.chrome.com/privacy-sandbox/) 
 * [A Potential New Privacy Model for the Web](https://github.com/michaelkleber/privacy-model)
 
 ## Contributing
