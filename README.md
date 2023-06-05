@@ -27,7 +27,7 @@ Tracks #2 and #3 bring significant changes to how the web operates today, and th
 Cookie Analysis Tooling for learning, understanding, and preparing for the upcoming deprecation of the 3P cookies and the release of [Privacy Sandbox APIs](https://privacysandbox.com/open-web/#proposals-for-the-web).
 
 ### Extension
-A chrome extension to give info about cookie usage in a browsing experience.
+A Chrome extension designed to provide detailed information about cookie usage during browsing sessions. It tracks and analyzes the various cookies that websites place on your browser, and it offers a comprehensive overview of their origins, their purposes, their expiry dates. It also provide context and access points to knowledge about 3P cookies and Privacy Sandbox APIs. 
 
 ### CLI
 
