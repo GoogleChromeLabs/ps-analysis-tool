@@ -16,22 +16,24 @@ Cookie Analysis Tooling for learning, understanding, and preparing for the upcom
 ### Extension
 A chrome extension to give info about cookie usage in a browsing experience.
 
-#### Usage instruction
-
-- `npm install` Install all dependencies
-- `npm run extension:dev` or `npm run extension:build` to genrate a build in `/dist/extension`
-- Click on "Load Unpacked" button on [chrome://extensions/](chrome://extensions/) and upload `dist/extension` folder
-
 ### CLI
 
 A CLI tool which crawls a sitemap (provided as an argument) and outputs a JSON file in out folder. This JSON file will have all lists of all 3p cookies set on a site visit
 
-#### Usage instruction
+### Usage instructions
 
+- Clone this Cookie Analysis Tool Repository
 - `npm install` Install all dependencies
-- `npm run cli:build` to genrate a build in `/dist/cli`.
-- Then cli util can be used example - `node dist/cli/index.js -s https://<example.com>/sitemap_index.xml\`.
 
+#### Extension
+
+- `npm run extension:dev` or `npm run extension:build` to genrate a build in `/dist/extension`
+- Click on "Load Unpacked" button on [chrome://extensions/](chrome://extensions/) and upload `dist/extension` folder
+
+#### CLI
+
+- `npm run cli:build` to genrate a build in `/dist/cli`.
+- Run the cli util providing a sitemap as input. E.g. `node dist/cli/index.js -s https://<example.com>/sitemap_index.xml\`.
 
 # Resources
 
