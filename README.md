@@ -30,7 +30,7 @@ A CLI tool which crawls a sitemap (provided as an argument) and outputs a JSON f
 
 - `npm install` Install all dependencies
 - `npm run cli:build` to genrate a build in `/dist/cli`.
-- Then cli util can be used example - `node dist/cli/index.js -s https://rtcamp.com/sitemap_index.xml\`.
+- Then cli util can be used example - `node dist/cli/index.js -s https://<example.com>/sitemap_index.xml\`.
 
 
 # Resources
