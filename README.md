@@ -6,6 +6,8 @@
 - [Privacy Sandbox](#privacy-sandbox)
 - [Target audience](#target-audience)
 - [Cookie Analysis](#cookie-analysis)
+- [How the Tool Works](#how-the-tool-works)
+- [Capabilities](#capabilities)
 - [Examples](#examples)
 - [Call to action](#call-to-action)
 - [Resources](#resources)
@@ -57,6 +59,23 @@ The CLI implementation parses a sitemap provided as input, and outputs a JSON fi
 
 - `npm run cli:build` to genrate a build in `/dist/cli`.
 - Run the cli util providing a sitemap as input. E.g. `node dist/cli/index.js -s https://<example.com>/sitemap_index.xml\`.
+
+## How the tool works
+
+TODO: 
+- Architectural diagrams
+- Clear explanation of what is being tracked/analyzed
+- Code references enabling open source verification of claims
+
+## Capabilities
+
+TODO: 
+- Feature set, with description, use cases, knowledge access points to related topics.
+
+| Feature       | Description   |
+| ------------- | ------------- |
+| ...           | ...           |
+| ...           | ...           |
 
 ## Examples
 The following screenshot shows the Cookie Analysis tool running on the cnn.com URL, showing a summary of the seen cookies on that page.
