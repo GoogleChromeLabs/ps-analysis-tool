@@ -27,23 +27,23 @@ Tracks #2 and #3 bring significant changes to how the web operates today, and th
 This Cookie Analysis Tool is designed to provide detailed information about cookie usage during browsing sessions. It tracks and analyzes the various cookies that websites place on your browser, and it offers a comprehensive overview of their origins, their purposes, their expiry dates. It also provide context and access points to knowledge about 3P cookies and [Privacy Sandbox APIs](https://privacysandbox.com/open-web/#proposals-for-the-web). This tool can be accessed as a [Chrome Extension](https://developer.chrome.com/docs/extensions/mv3/), or via a CLI on your terminal. 
 
 ### Extension
-The Chrome extension provides a quick summary analysis via a pop-up from th extension icon, as well as cookie anlaysis dev tools panel.
+The Chrome extension provides a summary cookie analysis via a pop-up window from the extension icon, as well as detailed cookie anlaysis in a panel inside dev tools.
 
 ### CLI
 
 A CLI tool which parses a sitemap provided as input, and outputs a JSON file listign all cookies set while navigsting through the URLs in the sitemap. 
 
-### Usage instructions
+## Usage instructions
 
 - Clone this Cookie Analysis Tool Repository
 - `npm install` Install all dependencies
 
-#### Extension
+### Extension
 
 - `npm run extension:dev` or `npm run extension:build` to genrate a build in `/dist/extension`
 - Click on "Load Unpacked" button on [chrome://extensions/](chrome://extensions/) and upload `dist/extension` folder
 
-#### CLI
+### CLI
 
 - `npm run cli:build` to genrate a build in `/dist/cli`.
 - Run the cli util providing a sitemap as input. E.g. `node dist/cli/index.js -s https://<example.com>/sitemap_index.xml\`.
