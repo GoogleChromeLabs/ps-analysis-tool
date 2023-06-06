@@ -43,7 +43,7 @@ The Chrome extension provides a summary cookie analysis via a pop-up window from
 
 ### CLI
 
-The CLI implementation parses a sitemap provided as input, and outputs a JSON file listign all cookies set while navigsting through the URLs in the sitemap. 
+The CLI implementation parses a sitemap provided as input, and outputs a JSON file listign all cookies set while navigating through the URLs in the sitemap. 
 
 ## Usage instructions
 
