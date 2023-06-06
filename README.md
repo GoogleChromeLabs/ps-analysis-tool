@@ -24,7 +24,7 @@ Tracks #2 and #3 bring significant changes to how the web operates today, and th
 
 ## Cookie Analysis
 
-This Cookie Analysis Tool is designed to provide detailed information about cookie usage during browsing sessions. It tracks and analyzes the various cookies that websites place on your browser, and it offers a comprehensive overview of their origins, their purposes, their expiry dates. It also provide context and access points to knowledge about 3P cookies and [Privacy Sandbox APIs](https://privacysandbox.com/open-web/#proposals-for-the-web). This tool can be used as a Chrome Extension, or via a CLI on your terminal. 
+This Cookie Analysis Tool is designed to provide detailed information about cookie usage during browsing sessions. It tracks and analyzes the various cookies that websites place on your browser, and it offers a comprehensive overview of their origins, their purposes, their expiry dates. It also provide context and access points to knowledge about 3P cookies and [Privacy Sandbox APIs](https://privacysandbox.com/open-web/#proposals-for-the-web). This tool can be accessed as a [Chrome Extension](https://developer.chrome.com/docs/extensions/mv3/), or via a CLI on your terminal. 
 
 ### Extension
 The Chrome extension provides a quick summary analysis via a pop-up from th extension icon, as well as cookie anlaysis dev tools panel.
@@ -49,12 +49,16 @@ A CLI tool which parses a sitemap provided as input, and outputs a JSON file lis
 - Run the cli util providing a sitemap as input. E.g. `node dist/cli/index.js -s https://<example.com>/sitemap_index.xml\`.
 
 ## Examples
-<div style="display=flex; justify-content:center;">
-  <img alt="DevTools CNN.com #1" src="https://github.com/GoogleChromeLabs/cookie-analysis-tool/assets/506089/56e95ae9-d3bc-4010-8dee-ca2d6ecf60d0" alt="cnn.com pop-up" >
-</div>
+The following screenshot shows the Cookie Analysis tool running on the cnn.com URL, showing a summary of the seen cookies on that page.
 
 <div style="display=flex; justify-content:center;">
-  <img alt="DevTools CNN.com #2" src="https://github.com/GoogleChromeLabs/cookie-analysis-tool/assets/506089/896f4c04-315e-4f62-9f5d-38ff5db08eb1">
+  <img style="width:60%" alt="DevTools CNN.com #1" src="https://github.com/GoogleChromeLabs/cookie-analysis-tool/assets/506089/56e95ae9-d3bc-4010-8dee-ca2d6ecf60d0" alt="cnn.com pop-up" >
+</div>
+
+The following screenshot shows the tool interface in Chrome DevTools, showing details of the cookies tracked, and capabilities such as classification, sorting, and others. 
+
+<div style="display=flex; justify-content:center;">
+  <img style="width:60%" alt="DevTools CNN.com #2" src="https://github.com/GoogleChromeLabs/cookie-analysis-tool/assets/506089/896f4c04-315e-4f62-9f5d-38ff5db08eb1">
 </div>
 
 ## Call to Action
