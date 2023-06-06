@@ -4,6 +4,7 @@
 
 ## Table of contents
 - [Privacy Sandbox](#privacy-sandbox)
+- [Target audience](#target-audience)
 - [Cookie Analysis](#cookie-analysis)
 - [Examples](#examples)
 - [Call to action](#call-to-action)
@@ -19,8 +20,17 @@
 
 3. Mitigating workarounds, by ensuring developers have a well-lit path to the new capabilities of the platform, and avoid pursuing tracking via other means. 
 
-Tracks #2 and #3 bring significant changes to how the web operates today, and the purpose of this tool is to shed light, provide insights, and helping you to learn and understand the changes that are happening regarding the deprecation of 3P cookies, and the potential impact on the aspects of your site or product implementation that are build using cookies.
+Tracks #2 and #3 bring significant changes to how the web operates today, and the purpose of this tool is to shed light, provide insights, and helping you to learn and understand the changes that are happening regarding the deprecation of 3P cookies, and the potential impact on the aspects of your site or product implementation that are build using cookies. 
 
+## Target Audience
+
+**First-party site developers**: responsible for the creation and maintenance of websites. A significant part of their work involves auditing and managing third-party dependencies to ensure that their websites run smoothly and securely. They need to understand the changes to 3P cookie use cases,  how to integrate Privacy Sandbox APIs into their solutions, and how to troubleshoot any issues that arise.
+
+**Third-Party Service Providers using valid cookie use cases**: responsible for creating and maintaining services that are integrated into other websites as third-party dependencies, and rely on cookies for various functions, such as maintaining user sessions or tracking user preferences. They need to stay informed and guided on understanding how to use cookies effectively and responsibly, in compliance with all relevant laws and regulations.
+
+**Third-Party Service Providers transitioning away from cookies** : responsible for developing third-party services that rely on cookies (e.g. tracking, data storage, or user session management), which need to transition to alternate methods due to evolving regulations and platform changes. They need guidance and technical support for understanding  how to integrate Privacy Sandbox APIs into their solutions, and how to troubleshoot any issues that arise.
+
+**Website owners and technology leaders**: responsible for tech and business decision making. They need the ability to get reports and insights about the cookies usage by their sites and the potential impact on user privacy.
 
 ## Cookie Analysis
 
@@ -31,7 +41,7 @@ The Chrome extension provides a summary cookie analysis via a pop-up window from
 
 ### CLI
 
-A CLI tool which parses a sitemap provided as input, and outputs a JSON file listign all cookies set while navigsting through the URLs in the sitemap. 
+The CLI implementation parses a sitemap provided as input, and outputs a JSON file listign all cookies set while navigsting through the URLs in the sitemap. 
 
 ## Usage instructions
 
@@ -62,6 +72,15 @@ The following screenshot shows the tool interface in Chrome DevTools, showing de
 </div>
 
 ## Call to Action
+TODO: Tailored CTAs for each [target audience](#target-audience).
+
+**First-party site developers**: ...
+
+**Third-Party Service Providers using valid cookie use cases**:  ...
+
+**Third-Party Service Providers transitioning away from cookies**: ...
+
+**Website owners and technology leaders**: ...
 
 ## Resources
 
