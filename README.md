@@ -71,13 +71,12 @@ TODO:
 
 ## Capabilities
 
-TODO: 
-- Feature set, with description, use cases, knowledge access points to related topics.
-
 | Feature       | Description   |
 | ------------- | ------------- |
-| ...           | ...           |
-| ...           | ...           |
+| List           | Detect and list all the cookies on a given web page           |
+| Classify           | Classify observed cookies across different categories           |
+| Summary View | Display cookie analysis summary in extension icon pop up |
+| CLI | CLI to cookie analysis on sets of URLs (e.g. Sitemap) |
 
 ## Examples
 The following screenshot shows the Cookie Analysis tool running on the cnn.com URL, showing a summary of the seen cookies on that page.
