@@ -1,5 +1,5 @@
 chrome.devtools.panels.create(
-  'Privacy Analysis',
+  'Privacy Sandbox',
   'icons/icon.svg',
   'devtools/index.html',
   function (panel) {

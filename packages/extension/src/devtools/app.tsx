@@ -7,10 +7,13 @@ import React from 'react';
  * Internal dependencies.
  */
 import './app.css';
+import { TabSelctor } from './components';
 
 const App: React.FC = () => {
   return (
-    <p>Hello</p>
+    <div className='w-full h-screen'>
+        <TabSelctor/>
+    </div>
   );
 };
 

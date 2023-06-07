@@ -1,0 +1,1 @@
+export { TabSelctor } from "./tabSelector";
