@@ -24,7 +24,7 @@ export const TabSelctor = () => {
               setSelectedTab(tab as TAB_ENUM);
             }}
           >
-            <p>{tab}</p>
+            <p>{TABS[tab as TAB_ENUM].display_name}</p>
           </div>
         ))}
       </div>
