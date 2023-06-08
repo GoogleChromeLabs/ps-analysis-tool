@@ -1,0 +1,31 @@
+{
+	"name": "cookie-analysis-tool",
+	"version": "0.0.1",
+	"description": "",
+	"main": "src/index.js",
+	"scripts": {
+		"extension:dev": "npm run dev --workspace=@cookie-analysis-tool/extension"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/GoogleChromeLabs/cookie-analysis-tool"
+	},
+	"author": "rtCamp",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/GoogleChromeLabs/cookie-analysis-tool/issues"
+	},
+	"homepage": "https://github.com/GoogleChromeLabs/cookie-analysis-toolreadme",
+	"devDependencies": {
+		"webpack": "^5.85.1"
+	},
+	"lint-staged": {
+		"*.{js,ts,tsx,css,md}": "prettier --write",
+		"*.json": [
+			"prettier --write"
+		]
+	},
+	"workspaces": [
+		"packages/*"
+	]
+}

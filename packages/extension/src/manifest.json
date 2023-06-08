@@ -1,0 +1,41 @@
+{
+  "name": "Cookie Analysis Tool",
+  "description": "",
+  "version": "0.0.1",
+  "manifest_version": 3,
+  "icons": {
+    "16": "icons/16x16.png",
+    "32": "icons/32x32.png",
+    "48": "icons/48x48.png",
+    "128": "icons/128x128.png"
+  },
+  "permissions": [
+    "contextMenus",
+    "cookies",
+    "history",
+    "webRequest",
+    "declarativeNetRequest",
+    "tabs",
+    "activeTab",
+    "storage",
+    "scripting",
+    "nativeMessaging",
+    "offscreen",
+    "webNavigation"
+  ],
+  "host_permissions": ["*://*/*"],
+  "devtools_page": "devtools/devtools.html",
+  "background": {
+    "service_worker": "service-worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_icon": "icons/48x48.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["data/*.json"],
+      "matches": ["*://*/*"]
+    }
+  ]
+}
