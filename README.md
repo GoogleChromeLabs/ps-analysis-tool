@@ -64,7 +64,8 @@ The CLI implementation parses a sitemap provided as input, and outputs a JSON fi
 
 ## How the tool works
 
-TODO: 
+### Archictecture
+
 - Architectural diagrams
 - Clear explanation of what is being tracked/analyzed
 - Code references enabling open source verification of claims
