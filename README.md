@@ -89,18 +89,6 @@ The CLI implementation parses a sitemap provided as input, and outputs a JSON fi
 | Summary View | Display cookie analysis summary in extension icon pop up |
 | CLI | CLI to cookie analysis on sets of URLs (e.g. Sitemap) |
 
-## Examples
-The following screenshot shows the Cookie Analysis tool running on the cnn.com URL, showing a summary of the seen cookies on that page.
-
-<div style="display=flex; justify-content:center;">
-  <img style="width:60%" alt="DevTools CNN.com #1" src="https://github.com/GoogleChromeLabs/cookie-analysis-tool/assets/506089/56e95ae9-d3bc-4010-8dee-ca2d6ecf60d0" alt="cnn.com pop-up" >
-</div>
-
-The following screenshot shows the tool interface in Chrome DevTools, showing details of the cookies tracked, and capabilities such as classification, sorting, and others. 
-
-<div style="display=flex; justify-content:center;">
-  <img style="width:60%" alt="DevTools CNN.com #2" src="https://github.com/GoogleChromeLabs/cookie-analysis-tool/assets/506089/896f4c04-315e-4f62-9f5d-38ff5db08eb1">
-</div>
 
 ## Call to Action
 TODO: Tailored CTAs for each [target audience](#target-audience).
