@@ -70,6 +70,16 @@ The CLI implementation parses a sitemap provided as input, and outputs a JSON fi
 - Clear explanation of what is being tracked/analyzed
 - Code references enabling open source verification of claims
 
+### User Interface
+
+#### Icon
+
+#### Popup
+
+#### Side Panel
+
+#### DevTools Panel
+
 ## Capabilities
 
 | Feature       | Description   |
