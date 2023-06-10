@@ -80,7 +80,7 @@ The CLI implementation parses a sitemap provided as input, and outputs a JSON fi
 
 #### DevTools Panel
 
-## Features
+## Features 🚧
 
 | Feature       | Description   |
 | ------------- | ------------- |
@@ -103,11 +103,14 @@ If you are a **third-party service providers transitioning away from cookies**, 
 
 If you are a **website owners and/or technology leader**, use the tool to...
 
-## Resources 🚧
+## Resources
+The Privacy Sandbox initiative aims to create technologies that both protect people's privacy online and give companies and developers tools to build thriving digital businesses. The goal of Privacy Sandbox is to reduce cross-site and cross-app tracking while helping to keep online content and services free for all. There are several entry points to sources of information about the Privacy Sandbox in general 
 
-* [The Privacy Sandbox](https://developer.chrome.com/privacy-sandbox/) 
-* [A Potential New Privacy Model for the Web](https://github.com/michaelkleber/privacy-model)
-* [Chrome Facilitated Testing](https://developer.chrome.com/en/docs/privacy-sandbox/chrome-testing/)
+* Privacy Sandbox [main site](https://privacysandbox.com/)
+* Privacy Sandbox for developers: [developer.Chrome](https://developer.chrome.com/privacy-sandbox/), [testing](https://developer.chrome.com/en/docs/privacy-sandbox/chrome-testing/)
+* A Potential New Privacy Model for the Web [explainer](https://github.com/michaelkleber/privacy-model)
 
 ## Contributing
 If you have requests for features you would like to see in this tool, please file an Feature Request or join as a contributor! Please refer to our contribution [guidelines](docs/CONTRIBUTING.md) and [code of conduct](docs/code-of-conduct.md).
+
+[Another form of contributing is by reporting breakages, proposing features, and engage in community discussions]
