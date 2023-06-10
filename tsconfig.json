@@ -3,7 +3,7 @@
     "rootDir": "src",
     "target": "es6",
     "module": "commonjs",
-    "typeRoots": ["../../node_modules/@types", "./packages/**/src/@types"],
+    "typeRoots": ["./node_modules/@types", "./packages/**/src/@types"],
     "esModuleInterop": true,
     "strict": true,
     "strictNullChecks": false,
@@ -11,5 +11,5 @@
     "jsx": "react"
   },
   "types": ["chrome"],
-  "exclude": ["react", "../../node_modules"]
+  "exclude": ["react", "./node_modules"]
 }
