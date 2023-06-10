@@ -41,18 +41,18 @@ const commonConfig = {
 
 const root = {
   entry: {
-    'service-worker': './src/service-worker.ts',
+    'service-worker': './packages/extension/src/service-worker.ts',
   },
   output: {
-    path: path.resolve( __dirname, '../../dist/extension' ),
+    path: path.resolve( __dirname, './dist/extension' ),
     filename: 'service-worker.js',
   },
   plugins: [
     new CopyPlugin({
       patterns: [
-        { from: "src/manifest.json", to: "" },
-        { from: "icons", to: "icons" },
-        { from: "../../data", to: "data" }
+        { from: "./packages/extension/src/manifest.json", to: "" },
+        { from: "./packages/extension/icons", to: "icons" },
+        { from: "./data", to: "data" }
       ],
     }),
     new WebpackBar({
@@ -65,11 +65,11 @@ const root = {
 
 const devTools = {
   entry: {
-    index: './src/devtools/index.tsx',
-    devtools: './src/devtools/devtools.ts'
+    index: './packages/extension/src/devtools/index.tsx',
+    devtools: './packages/extension/src/devtools/devtools.ts'
   },
   output: {
-    path: path.resolve( __dirname, '../../dist/extension/devtools' ),
+    path: path.resolve( __dirname, './dist/extension/devtools' ),
     filename: '[name].js',
   },
   plugins: [
@@ -79,13 +79,13 @@ const devTools = {
     }),
     new HtmlWebpackPlugin( {
       title: 'CAT Devtool',
-      template: './src/devtools/index.html',
+      template: './packages/extension/src/devtools/index.html',
       filename: 'index.html',
       inject: false,
     } ),
     new HtmlWebpackPlugin( {
       title: 'CAT',
-      template: './src/devtools/devtools.html',
+      template: './packages/extension/src/devtools/devtools.html',
       filename: 'devtools.html',
       inject: false
     } ),

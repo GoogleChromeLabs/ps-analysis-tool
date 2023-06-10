@@ -1,10 +1,14 @@
 {
 	"name": "cookie-analysis-tool",
 	"version": "0.0.1",
-	"description": "",
-	"main": "src/index.js",
+	"description": "Cookie Analysis Chrome DevTools extension and CLI for analysis and understanding of cookie usage on web pages.",
 	"scripts": {
-		"extension:dev": "npm run dev --workspace=@cookie-analysis-tool/extension"
+		"test": "jest --config=jest.config.js",
+		"extension:dev": "webpack --config webpack.config.cjs --watch",
+		"extension:build": "cross-env NODE_ENV=production webpack --config webpack.config.cjs",
+		"serve": "webpack serve",
+		"lint": "eslint .",
+		"lint:fix": "eslint --fix ."
 	},
 	"repository": {
 		"type": "git",
@@ -17,6 +21,11 @@
 	},
 	"homepage": "https://github.com/GoogleChromeLabs/cookie-analysis-toolreadme",
 	"devDependencies": {
+		"@babel/preset-env": "^7.22.5",
+		"@babel/preset-react": "^7.22.5",
+		"babel-jest": "^29.5.0",
+		"jest": "^29.5.0",
+		"react-test-renderer": "^18.2.0",
 		"webpack": "^5.85.1"
 	},
 	"lint-staged": {

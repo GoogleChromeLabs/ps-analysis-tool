@@ -3,14 +3,6 @@
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "dev": "webpack --config webpack.config.cjs --watch",
-    "build": "cross-env NODE_ENV=production webpack --config webpack.config.cjs",
-    "serve": "webpack serve",
-    "cookie-db:update": "node scripts/update-cookie-db.js",
-    "lint": "eslint src/**/*.{ts,tsx,json}",
-    "lint:fix": "eslint --fix 'src/**/*.{ts,tsx,json}'"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rtCamp/cookie-analysis-tool.git"

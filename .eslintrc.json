@@ -20,6 +20,12 @@
       "version": "detect"
     }
   },
-  "ignorePatterns": ["**/*.cjs"],
+  "ignorePatterns": [
+	  "**/*.cjs",
+	  "**/node_modules/**",
+	  "dist/**",
+	  "out/**",
+	  "data/"
+  ],
   "rules": {}
 }
