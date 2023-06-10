@@ -22,7 +22,7 @@
 
 3. Mitigating workarounds, by ensuring developers have a well-lit path to the new capabilities of the platform, and avoid pursuing tracking via other means. 
 
-Tracks #2 and #3 bring significant changes to how the web operates today, and the purpose of this tool is to shed light, provide insights, and helping you to learn and understand the changes that are happening regarding the deprecation of 3P cookies, and the potential impact on the aspects of your site or product implementation that are build using cookies. 
+Tracks #2 and #3 bring significant changes to how the web operates today, and the purpose of this tool is to shed light, provide insights, and helping you to learn and understand the changes that are happening regarding the deprecation of 3P cookies, and the potential impact on the aspects of your site or product built using cookies. 
 
 ## Target Audience
 
@@ -64,13 +64,13 @@ The CLI implementation parses a sitemap provided as input, and outputs a JSON fi
 
 ## How the tool works
 
-### Archictecture
+### Archictecture 🚧
 
 - Architectural diagrams
 - Clear explanation of what is being tracked/analyzed
 - Code references enabling open source verification of claims
 
-### User Interface
+### User Interface 🚧
 
 #### Icon
 
@@ -80,28 +80,30 @@ The CLI implementation parses a sitemap provided as input, and outputs a JSON fi
 
 #### DevTools Panel
 
-## Capabilities
+## Features
 
 | Feature       | Description   |
 | ------------- | ------------- |
-| List           | Detect and list all the cookies on a given web page           |
-| Classify           | Classify observed cookies across different categories           |
+| List| Detect and list all the cookies on a given web page|
+| Classify| Classify observed cookies across different categories|
 | Summary View | Display cookie analysis summary in extension icon pop up |
 | CLI | CLI to cookie analysis on sets of URLs (e.g. Sitemap) |
 
 
-## Call to Action
-TODO: Tailored CTAs for each [target audience](#target-audience).
+## Call to Action 🚧
+[Tailored CTAs for each [target audience](#target-audience).]
 
-**First-party site developers**: ...
+The goal of this tool is to assist users on understanding cookie behaviors and their impact on browsing experience, and getting insights regarding [the upcoming deprecation of the way in which 3P cookies work](https://privacysandbox.com/open-web/#the-privacy-sandbox-timeline). The way to achieve this is to use the tool to analyze your site(s), your browsing experience, detect and report breakages, get support from Google on fixes, and, if you are developer of solutions that require functionality of cookis being deprecated, learn how to make them happen leveraging the new platform APIs that allow you to achieve the same goals in a privacy-preserving way. 
 
-**Third-Party Service Providers using valid cookie use cases**:  ...
+If you are a **first-party site developer** developing and/or maintaining the site(s) for your organization, use the tool to...
 
-**Third-Party Service Providers transitioning away from cookies**: ...
+If you are **third-party service provider using valid cookie use cases**, use the tool to...
 
-**Website owners and technology leaders**: ...
+If you are a **third-party service providers transitioning away from cookies**, use the toool to...
 
-## Resources
+If you are a **website owners and/or technology leader**, use the tool to...
+
+## Resources 🚧
 
 * [The Privacy Sandbox](https://developer.chrome.com/privacy-sandbox/) 
 * [A Potential New Privacy Model for the Web](https://github.com/michaelkleber/privacy-model)
