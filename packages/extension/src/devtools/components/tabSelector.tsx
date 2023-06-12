@@ -12,8 +12,8 @@ export const TabSelctor = () => {
   const [selectedTab, setSelectedTab] = useState<TAB_ENUM>(TAB_ENUM.COOKIE_TAB);
   const TabComponent = TABS[selectedTab].Component;
   return (
-    <div className="w-full h-full flex flex-col">
-      <div className="w-full h-10 bg-slate-300 flex pt-2">
+    <div className="w-full h-full">
+      <div className="w-full h-[3%] bg-slate-300 flex pt-2">
         {Object.keys(TAB_ENUM).map((tab) => (
           <div
             key={tab}
@@ -28,7 +28,7 @@ export const TabSelctor = () => {
           </div>
         ))}
       </div>
-      <div className="flex-1">
+      <div className="h-[97%]">
         <TabComponent />
       </div>
     </div>

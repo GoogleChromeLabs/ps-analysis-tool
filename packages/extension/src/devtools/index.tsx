@@ -5,8 +5,13 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 
 /**
- * External dependencies.
+ * Internal dependencies.
  */
 import App from './app';
+import { Provider as ExternalStoreProvider } from '../app/cookieStore';
 
-createRoot(document.getElementById('root')).render(<App />);
+createRoot(document.getElementById('root')).render(
+  <ExternalStoreProvider>
+    <App />
+  </ExternalStoreProvider>
+);
