@@ -4,7 +4,8 @@
 	"description": "",
 	"main": "src/index.js",
 	"scripts": {
-		"extension:dev": "npm run dev --workspace=@cookie-analysis-tool/extension"
+		"extension:dev": "npm run dev --workspace=@cookie-analysis-tool/extension",
+		"cookie-db:update": "node scripts/update-cookie-db.js"
 	},
 	"repository": {
 		"type": "git",
@@ -17,6 +18,7 @@
 	},
 	"homepage": "https://github.com/GoogleChromeLabs/cookie-analysis-toolreadme",
 	"devDependencies": {
+		"fs-extra": "^11.1.1",
 		"webpack": "^5.85.1"
 	},
 	"lint-staged": {
