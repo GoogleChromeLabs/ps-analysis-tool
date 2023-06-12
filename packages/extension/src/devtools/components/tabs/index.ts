@@ -2,7 +2,7 @@
  * Internal dependencies.
  */
 import { BounceTrackingTab } from './BounceTrackingTab';
-import { CookieTab } from './CookiesTab';
+import { CookieTab } from './CookieTab';
 import { FingerprintingTab } from './FingerprintingTab';
 
 export enum TAB_ENUM {
