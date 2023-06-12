@@ -72,13 +72,13 @@ The CLI implementation parses a sitemap provided as input, and outputs a JSON fi
 
 ### User Interface 🚧
 
-#### Icon
-
-#### Popup
+#### Icon Popup
 
 #### Side Panel
 
 #### DevTools Panel
+
+#### Enterprise Chrome
 
 ## Features 🚧
 
