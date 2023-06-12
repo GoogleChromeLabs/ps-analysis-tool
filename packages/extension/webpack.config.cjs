@@ -52,7 +52,6 @@ const root = {
       patterns: [
         { from: "src/manifest.json", to: "" },
         { from: "icons", to: "icons" },
-        { from: "../../data", to: "data" }
       ],
     }),
     new WebpackBar({

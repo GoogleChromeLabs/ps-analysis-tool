@@ -31,11 +31,5 @@
   },
   "action": {
     "default_icon": "icons/48x48.png"
-  },
-  "web_accessible_resources": [
-    {
-      "resources": ["data/*.json"],
-      "matches": ["*://*/*"]
-    }
-  ]
+  }
 }
