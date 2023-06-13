@@ -13,7 +13,7 @@ export const TabSelctor = () => {
   const TabComponent = TABS[selectedTab].Component;
   return (
     <div className="w-full h-full">
-      <div className="w-full h-[3%] bg-slate-300 flex pt-2">
+      <div className="w-full h-[48px] bg-slate-300 flex pt-2">
         {Object.keys(TAB_ENUM).map((tab) => (
           <div
             key={tab}
@@ -28,7 +28,7 @@ export const TabSelctor = () => {
           </div>
         ))}
       </div>
-      <div className="h-[97%]">
+      <div style={{ height: 'calc(100% - 48px)' }}>
         <TabComponent />
       </div>
     </div>
