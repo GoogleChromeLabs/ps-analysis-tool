@@ -7,8 +7,7 @@
 - [Target audience](#target-audience)
 - [Cookie Analysis](#cookie-analysis)
 - [How the Tool Works](#how-the-tool-works)
-- [Capabilities](#capabilities)
-- [Examples](#examples)
+- [Features](#features)
 - [Call to action](#call-to-action)
 - [Resources](#resources)
 
