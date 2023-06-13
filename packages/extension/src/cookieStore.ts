@@ -3,8 +3,15 @@
  */
 import cookie, { Cookie as ParsedCookie } from 'simple-cookie';
 
+/**
+ * Internal dependencies.
+ */
+import { fetchDictionary, jsonToCookieAnalytics } from './utils';
+import { CookieAnalytics, CookieDatabase } from './types';
+
 export type CookieData = {
   parsedData: ParsedCookie;
+  analytics: CookieAnalytics | undefined;
   origin: string;
   toplevel: string;
 };
@@ -49,6 +56,8 @@ export type Header = {
   value?: string;
 };
 
+let cookieInfoHashMap: CookieDatabase = {};
+
 const mkHeaderToCookie =
   (url: string, top: string | undefined) =>
   (header: Header): CookieData | undefined => {
@@ -57,9 +66,16 @@ const mkHeaderToCookie =
     }
     const c = cookie.parse(header.value);
 
+    let analytics: CookieAnalytics | undefined;
+
+    if (cookieInfoHashMap && Object.keys(cookieInfoHashMap).includes(c.name)) {
+      const analyticsFromCsvJSON = cookieInfoHashMap[c.name][0];
+      analytics = jsonToCookieAnalytics(analyticsFromCsvJSON);
+    }
+
     const origin = url ? new URL(url).origin : '';
     const toplevel = new URL(top).origin;
-    return { parsedData: c, origin, toplevel };
+    return { parsedData: c, analytics, origin, toplevel };
   };
 
 // This should be a transaction. Currently it has very likely a race condition.
@@ -135,6 +151,8 @@ export const CookieStore = {
     if (chrome.runtime.lastError || !tab) {
       return;
     }
+
+    fetchDictionary().then((data) => (cookieInfoHashMap = data));
 
     const newCookies = headers
       .map(mkHeaderToCookie(url, tab.url))

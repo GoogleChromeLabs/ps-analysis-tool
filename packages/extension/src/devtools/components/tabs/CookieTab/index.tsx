@@ -29,7 +29,12 @@ export const CookieTab = () => {
         />
       </div>
       <div className="flex-1 overflow-y-scroll border-t-gray-300 border-t-2 lg:border-t-0">
-        {selectedCookie && <CookieDetails data={selectedCookie.parsedData} />}
+        {selectedCookie && (
+          <CookieDetails
+            data={selectedCookie.parsedData}
+            analytics={selectedCookie.analytics}
+          />
+        )}
       </div>
     </div>
   );

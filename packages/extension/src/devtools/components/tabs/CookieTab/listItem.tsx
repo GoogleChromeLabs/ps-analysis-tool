@@ -7,6 +7,7 @@ import React from 'react';
  * Internal dependencies.
  */
 import { CookieData } from '../../../../cookieStore';
+import { isFirstParty } from '../../../../utils';
 
 interface IListItem {
   cookie: CookieData;
@@ -44,9 +45,46 @@ const ListItem = ({ cookie, isSelected, onClick }: IListItem) => {
             <span>{cookie.parsedData.value}</span>
           </div>
         </div>
+        <div
+          className={
+            'mt-4 flex justify-between items-center text-sm text-secondary'
+          }
+        >
+          <span
+            className="font-bold"
+            style={{ color: getCategoryColor(cookie.analytics?.category) }}
+          >
+            {cookie.analytics?.category || 'Uncategorized'}
+          </span>
+          <span
+            className={classNames(
+              isFirstParty(cookie.toplevel, cookie.parsedData.domain)
+                ? 'text-first-party'
+                : 'text-third-party',
+              'font-bold'
+            )}
+          >
+            {isFirstParty(cookie.toplevel, cookie.parsedData.domain)
+              ? 'First Party'
+              : 'Third Party'}
+          </span>
+        </div>
       </div>
     </a>
   );
+};
+
+const getCategoryColor = (category: string) => {
+  switch (category) {
+    case 'Functional':
+      return '#63c00c';
+    case 'Marketing':
+      return '#dd9a09';
+    case 'Analytics':
+      return '#8e0bda';
+    default:
+      return '#c90011';
+  }
 };
 
 export default ListItem;
