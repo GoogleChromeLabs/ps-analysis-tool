@@ -42,6 +42,7 @@
 		"css-loader": "^6.8.1",
 		"csvtojson": "^2.0.10",
 		"eslint": "^8.42.0",
+		"eslint-plugin-header": "^3.1.1",
 		"eslint-plugin-react": "^7.32.2",
 		"eslint-plugin-react-hooks": "^4.6.0",
 		"html-webpack-plugin": "^5.5.2",
