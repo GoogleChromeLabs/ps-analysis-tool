@@ -95,9 +95,9 @@ The CLI implementation parses a sitemap provided as input, and outputs a JSON fi
 
 The goal of this tool is to assist users on understanding cookie behaviors and their impact on browsing experience, and getting insights regarding [the upcoming deprecation of the way in which 3P cookies work](https://privacysandbox.com/open-web/#the-privacy-sandbox-timeline). The way to achieve this is to use the tool to analyze your site(s), your browsing experience, detect and report breakages, get support from Google on fixes, and, if you are developer of solutions that require functionality of cookis being deprecated, learn how to make them happen leveraging the new platform APIs that allow you to achieve the same goals in a privacy-preserving way. 
 
-If you are a **first-party site developer** developing and/or maintaining the site(s) for your organization, use the tool to...
+If you are a **first-party site developer** developing and/or maintaining the site(s) for your organization, use the tool to gain insights into third-party cookie usage in your products and identify and troubleshoot potential issues to ensure your websites run smoothly.
 
-If you are **third-party service provider using valid cookie use cases**, use the tool to...
+If you are **third-party service provider using valid cookie use cases**, use the tool to stay up-to-date on best practices and methods of using cookies effectively accounting for the upcoming changes in how 3P cookies work. 
 
 If you are a **third-party service providers transitioning away from cookies**, use the toool to...
 
