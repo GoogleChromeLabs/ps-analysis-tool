@@ -8,7 +8,8 @@
 		"extension:build": "cross-env NODE_ENV=production webpack --config webpack.config.cjs",
 		"serve": "webpack serve",
 		"lint": "eslint .",
-		"lint:fix": "eslint --fix ."
+		"lint:fix": "eslint --fix .",
+		"prepare": "husky install"
 	},
 	"repository": {
 		"type": "git",
@@ -61,10 +62,14 @@
 		"webpackbar": "^5.0.2"
 	},
 	"lint-staged": {
-		"*.{js,ts,tsx,css,md}": "prettier --write",
+		"*.(cjs|js|ts|tsx)": [
+			"eslint --fix"
+		],
 		"*.json": [
 			"prettier --write"
-		]
+		],
+		"*.(xml|xml.dist)": "prettier --write",
+		"*.yml": "prettier --write"
 	},
 	"type": "module",
 	"workspaces": [
