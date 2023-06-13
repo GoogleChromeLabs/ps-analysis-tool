@@ -63,13 +63,13 @@ The CLI implementation parses a sitemap provided as input, and outputs a JSON fi
 
 ## How the tool works
 
-### Archictecture 🚧
+### Archictecture
 
 - Architectural diagrams
 - Clear explanation of what is being tracked/analyzed
 - Code references enabling open source verification of claims
 
-### User Interface 🚧
+### User Interface
 
 #### Icon Popup
 
@@ -79,7 +79,7 @@ The CLI implementation parses a sitemap provided as input, and outputs a JSON fi
 
 #### Enterprise Chrome
 
-## Features 🚧
+## Features
 
 | Feature       | Description   |
 | ------------- | ------------- |
@@ -89,7 +89,7 @@ The CLI implementation parses a sitemap provided as input, and outputs a JSON fi
 | CLI | CLI to cookie analysis on sets of URLs (e.g. Sitemap) |
 
 
-## Call to Action 🚧
+## Call to Action
 [Tailored CTAs for each [target audience](#target-audience).]
 
 The goal of this tool is to assist users on understanding cookie behaviors and their impact on browsing experience, and getting insights regarding [the upcoming deprecation of the way in which 3P cookies work](https://privacysandbox.com/open-web/#the-privacy-sandbox-timeline). The way to achieve this is to use the tool to analyze your site(s), your browsing experience, detect and report breakages, get support from Google on fixes, and, if you are developer of solutions that require functionality of cookis being deprecated, learn how to make them happen leveraging the new platform APIs that allow you to achieve the same goals in a privacy-preserving way. 
