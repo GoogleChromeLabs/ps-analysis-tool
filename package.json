@@ -15,12 +15,11 @@
 		"type": "git",
 		"url": "git+https://github.com/GoogleChromeLabs/cookie-analysis-tool"
 	},
-	"author": "rtCamp",
-	"license": "ISC",
+	"license": "Apache-2.0",
 	"bugs": {
 		"url": "https://github.com/GoogleChromeLabs/cookie-analysis-tool/issues"
 	},
-	"homepage": "https://github.com/GoogleChromeLabs/cookie-analysis-toolreadme",
+	"homepage": "https://github.com/GoogleChromeLabs/cookie-analysis-tool",
 	"devDependencies": {
 		"@babel/plugin-transform-react-jsx": "^7.22.5",
 		"@babel/preset-env": "^7.22.5",
