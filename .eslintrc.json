@@ -20,13 +20,7 @@
       "version": "detect"
     }
   },
-  "ignorePatterns": [
-    "**/*.cjs",
-    "**/node_modules/**",
-    "dist/**",
-    "out/**",
-    "data/"
-  ],
+  "ignorePatterns": ["**/node_modules/**", "dist/**", "out/**", "data/"],
   "rules": {
     "header/header": [
       "error",
@@ -55,9 +49,13 @@
   },
   "overrides": [
     {
-      "files": ["**/jest.*.js"],
+      "files": ["**/jest.*.js", "**/*.cjs"],
       "env": {
         "node": true
+      },
+      "rules": {
+        "eslint-comments/require-description": "off",
+        "@typescript-eslint/no-var-requires": "off"
       }
     }
   ]
