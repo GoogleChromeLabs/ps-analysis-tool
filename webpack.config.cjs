@@ -67,7 +67,6 @@ const root = {
       patterns: [
         { from: "./packages/extension/src/manifest.json", to: "" },
         { from: "./packages/extension/icons", to: "icons" },
-        { from: "./data", to: "data" }
       ],
     }),
     new WebpackBar({
