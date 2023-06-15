@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "allowSyntheticDefaultImports": true,
+    "jsx": "preserve",
+    "target": "esnext",
+    "module": "esnext",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "declaration": true,
+    "declarationMap": true,
+    "composite": true,
+    "emitDeclarationOnly": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "verbatimModuleSyntax": true,
+    "moduleResolution": "node",
+    "esModuleInterop": false,
+    "resolveJsonModule": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmitOnError": true,
+    "pretty": true,
+    "sourceMap": true,
+    "typeRoots": ["./typings", "./node_modules/@types"],
+    "types": ["jest", "jest-extended", "node"]
+  },
+  "exclude": ["packages/*/node_modules/**", "**/tests/**/*.js"]
+}
