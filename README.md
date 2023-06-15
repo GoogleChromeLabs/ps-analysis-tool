@@ -7,7 +7,6 @@
 - [Target audience](#target-audience)
 - [Cookie Analysis](#cookie-analysis)
 - [How the Tool Works](#how-the-tool-works)
-- [Features](#features)
 - [Call to action](#call-to-action)
 - [Resources](#resources)
 
@@ -73,31 +72,39 @@ The goal of this tool is to help you to answer questions as these:
 
 To provide these kind of assistance the tool encompasses a modular architecture with a set of processing and analysis components, and also different user interface entry points. 
 
-### Archictecture
+### User Interface
 
+#### DevTools Panel
+
+#### Extension Icon Popup
+
+#### Side Panel
+
+#### Enterprise Chrome
+
+### Functional Components
 - Architectural diagrams
 - Clear explanation of what is being tracked/analyzed
 - Code references enabling open source verification of claims
 
-### User Interface
+#### Identifying Cookies
+- Cookie Scanner
+- Tap into Chrome and DevTools APIs to gather cookie information from network streams
 
-#### Icon Popup
+#### Understanding Cookie Bahaviors
+- Leverage existing cookie DBs to classify observed cookies
 
-#### Side Panel
+#### Manipulating and Mutating Cookies
+- Provide capabilities to toggle cookies on/off, and manipulate their values to test behaviors of sites
 
-#### DevTools Panel
+#### Analysis of Privacy Sandbox APIs
 
-#### Enterprise Chrome
+The provide dedicated analysis panels for various PS 
 
-## Features
-
-| Feature       | Description   |
-| ------------- | ------------- |
-| List| Detect and list all the cookies on a given web page|
-| Classify| Classify observed cookies across different categories|
-| Summary View | Display cookie analysis summary in extension icon pop up |
-| CLI | CLI to cookie analysis on sets of URLs (e.g. Sitemap) |
-
+- Topics
+- Protected Audiences
+- CHIPS
+- Storage Access
 
 ## Call to Action
 [Tailored CTAs for each [target audience](#target-audience).]
