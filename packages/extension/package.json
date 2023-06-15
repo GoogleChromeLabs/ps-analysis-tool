@@ -1,0 +1,18 @@
+{
+  "name": "@cookie-analysis-tool/extension",
+  "version": "0.0.1",
+  "description": "Chrome extension for cookie analysis",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rtCamp/cookie-analysis-tool.git"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/rtCamp/cookie-analysis-tool/issues"
+  },
+  "homepage": "https://github.com/rtCamp/cookie-analysis-tool#readme",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
