@@ -25,7 +25,9 @@ interface ITabSelector {
 
 export const TabSelctor = ({ tabs }: ITabSelector) => {
   const [selectedTabInd, setSelectedTabInd] = useState<number>(0);
+
   const TabComponent = tabs[selectedTabInd].Component;
+
   return (
     <div className="w-full h-full flex flex-col">
       <div className="w-full h-10 bg-slate-300 flex pt-2">
