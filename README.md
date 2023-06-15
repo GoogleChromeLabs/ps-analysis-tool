@@ -62,6 +62,16 @@ The CLI implementation parses a sitemap provided as input, and outputs a JSON fi
 - Run the cli util providing a sitemap as input. E.g. `node dist/cli/index.js -s https://<example.com>/sitemap_index.xml\`.
 
 ## How the tool works
+The goal of this tool is to help you to answer questions as these:
+
+* How can I identify cookies being used on my site? 
+* How can I tell what behaviors a third party cookie is tracking on my website or what it's being used for?
+* How can I block third party cookies being set on my site by other websites unrelated to mine?
+* How can I ensure that my websites are still able to function properly after third-party cookies are deprecated?
+* How can I, as a developer, test my web applications to ensure that they are compatible with the cross-site boundary APIs and the upcoming changes to third-party cookies?
+* How can developers provide feedback to Google on the cross-site boundary APIs and the third-party cookie deprecation, and what role can they play in shaping the future of web development and privacy standards?
+
+To provide these kind of assistance the tool encompasses a modular architecture with a set of processing and analysis components, and also different user interface entry points. 
 
 ### Archictecture
 
