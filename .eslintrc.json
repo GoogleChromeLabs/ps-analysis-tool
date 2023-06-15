@@ -13,7 +13,6 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
-    "plugin:jsx-a11y/recommended",
     "plugin:jsdoc/recommended"
   ],
   "parser": "@typescript-eslint/parser",
@@ -89,7 +88,6 @@
       }
     ],
     "import/no-relative-packages": "error",
-    "jsx-a11y/label-has-for": "off",
     "no-restricted-properties": "error",
     "no-return-assign": "error",
     "no-return-await": "error",
@@ -110,7 +108,6 @@
       }
     ],
     "no-useless-call": "error",
-    "jsx-a11y/anchor-has-content": "off",
     "no-useless-concat": "error",
     "no-console": "error",
     "no-duplicate-imports": "error",
