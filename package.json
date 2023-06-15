@@ -7,8 +7,8 @@
 		"extension:dev": "webpack --config webpack.config.cjs --watch",
 		"extension:build": "cross-env NODE_ENV=production webpack --config webpack.config.cjs",
 		"serve": "webpack serve",
-		"lint": "eslint .",
-		"lint:fix": "eslint --fix .",
+		"lint:js": "eslint .",
+		"lint:js:fix": "eslint --fix .",
 		"prepare": "husky install"
 	},
 	"repository": {

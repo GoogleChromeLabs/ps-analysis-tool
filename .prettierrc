@@ -16,6 +16,12 @@
 			"options": {
 				"parser": "json"
 			}
+		},
+		{
+			"files": ["*.yml", "*.neon.dist"],
+			"options": {
+				"parser": "yaml"
+			}
 		}
 	]
 }
