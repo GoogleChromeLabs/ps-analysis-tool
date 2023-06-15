@@ -13,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-declare module '*.svg' {
-  import React = require('react');
-  const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
-  export default ReactComponent;
-}
+import React from 'react';
+
+global.React = React;

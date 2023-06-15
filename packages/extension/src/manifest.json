@@ -1,6 +1,6 @@
 {
   "name": "Cookie Analysis Tool",
-  "description": "",
+  "description": "Cookie analysis tool for analysis and understanding of cookie usage on web pages.",
   "version": "0.0.1",
   "manifest_version": 3,
   "icons": {
@@ -9,20 +9,7 @@
     "48": "icons/48x48.png",
     "128": "icons/128x128.png"
   },
-  "permissions": [
-    "contextMenus",
-    "cookies",
-    "history",
-    "webRequest",
-    "declarativeNetRequest",
-    "tabs",
-    "activeTab",
-    "storage",
-    "scripting",
-    "nativeMessaging",
-    "offscreen",
-    "webNavigation"
-  ],
+  "permissions": [],
   "host_permissions": ["*://*/*"],
   "devtools_page": "devtools/devtools.html",
   "background": {

@@ -1,66 +1,18 @@
 {
   "name": "@cookie-analysis-tool/extension",
   "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "dev": "webpack --config webpack.config.cjs --watch",
-    "build": "cross-env NODE_ENV=production webpack --config webpack.config.cjs",
-    "serve": "webpack serve",
-    "cookie-db:update": "node scripts/update-cookie-db.js",
-    "lint": "eslint src/**/*.{ts,tsx,json}",
-    "lint:fix": "eslint --fix 'src/**/*.{ts,tsx,json}'"
-  },
+  "description": "Chrome extension for cookie analysis",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rtCamp/cookie-analysis-tool.git"
   },
-  "author": "",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/rtCamp/cookie-analysis-tool/issues"
   },
   "homepage": "https://github.com/rtCamp/cookie-analysis-tool#readme",
   "dependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "simple-cookie": "^1.0.15",
-    "use-context-selector": "^1.4.1",
-    "victory": "^36.6.10"
-  },
-  "devDependencies": {
-    "@babel/plugin-transform-react-jsx": "^7.21.5",
-    "@babel/preset-env": "^7.21.5",
-    "@babel/preset-react": "^7.18.6",
-    "@babel/preset-typescript": "^7.21.5",
-    "@svgr/webpack": "^8.0.1",
-    "@types/chrome": "^0.0.236",
-    "@types/react": "^18.2.6",
-    "@types/react-dom": "^18.2.4",
-    "@typescript-eslint/eslint-plugin": "^5.59.9",
-    "@typescript-eslint/parser": "^5.59.9",
-    "autoprefixer": "^10.4.14",
-    "babel-loader": "^9.1.2",
-    "babel-plugin-styled-components": "^2.1.1",
-    "copy-webpack-plugin": "^11.0.0",
-    "cross-env": "^7.0.3",
-    "css-loader": "^6.7.3",
-    "csvtojson": "^2.0.10",
-    "eslint": "^8.42.0",
-    "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "html-webpack-plugin": "^5.5.1",
-    "husky": "^8.0.3",
-    "lint-staged": "^13.2.2",
-    "postcss-loader": "^7.3.0",
-    "prettier": "^2.8.8",
-    "style-loader": "^3.3.2",
-    "tailwindcss": "^3.3.2",
-    "ts-loader": "^9.4.2",
-    "typescript": "^5.0.4",
-    "webpack": "^5.82.1",
-    "webpack-cli": "^5.1.1",
-    "webpack-dev-server": "^4.15.0",
-    "webpackbar": "^5.0.2"
+    "react-dom": "^18.2.0"
   }
 }
