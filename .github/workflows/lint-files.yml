@@ -67,6 +67,3 @@ jobs:
         run: npm run lint:js
         env:
           NODE_OPTIONS: --max-old-space-size=4096
-        if: >
-          github.event.pull_request.head.repo.fork == true ||
-          github.event.pull_request.user.login == 'dependabot[bot]'
