@@ -1,6 +1,6 @@
 {
   "name": "Cookie Analysis Tool",
-  "description": "Cookie Analysis Chrome DevTools extension and CLI for analysis and understanding of cookie usage on web pages.",
+  "description": "Cookie analysis tool for analysis and understanding of cookie usage on web pages.",
   "version": "0.0.1",
   "manifest_version": 3,
   "icons": {
