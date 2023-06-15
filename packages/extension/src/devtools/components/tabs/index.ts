@@ -17,15 +17,18 @@
 /**
  * External dependencies.
  */
-import React from 'react';
-import { createRoot } from 'react-dom/client';
+import { BounceTrackingTab } from './BounceTrackingTab';
+import { CookieTab } from './CookiesTab';
+import { FingerprintingTab } from './FingerprintingTab';
 
-/**
- * Internal dependencies.
- */
-import App from './app';
-
-const root = document.getElementById('root');
-if (root) {
-  createRoot(root).render(<App />);
-}
+export const TABS = [
+  { display_name: 'Cookies', Component: CookieTab },
+  {
+    display_name: 'Bounce Tracking',
+    Component: BounceTrackingTab,
+  },
+  {
+    display_name: 'Fingerprinting',
+    Component: FingerprintingTab,
+  },
+];

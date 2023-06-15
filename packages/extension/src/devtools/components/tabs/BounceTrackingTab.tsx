@@ -18,14 +18,11 @@
  * External dependencies.
  */
 import React from 'react';
-import { createRoot } from 'react-dom/client';
 
-/**
- * Internal dependencies.
- */
-import App from './app';
-
-const root = document.getElementById('root');
-if (root) {
-  createRoot(root).render(<App />);
-}
+export const BounceTrackingTab = () => {
+  return (
+    <div className="w-full h-full flex justify-center items-center">
+      <p>Bounce tracking Panel</p>
+    </div>
+  );
+};

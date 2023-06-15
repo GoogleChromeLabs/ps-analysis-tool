@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const path = require( 'path' );
-const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
-const CopyPlugin = require("copy-webpack-plugin");
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const WebpackBar = require('webpackbar');
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -38,7 +38,7 @@ const commonConfig = {
       },
       {
         test: /\.css$/i,
-        use: ["style-loader", "css-loader", "postcss-loader"],
+        use: ['style-loader', 'css-loader', 'postcss-loader'],
       },
       {
         // svg
@@ -47,68 +47,64 @@ const commonConfig = {
       },
     ],
   },
-  devtool: ! isProduction ? 'source-map' : undefined,
+  devtool: !isProduction ? 'source-map' : undefined,
   mode,
   resolve: {
-    extensions: [ '.ts', '.tsx', '.js' ],
+    extensions: ['.ts', '.tsx', '.js'],
   },
-}
+};
 
 const root = {
   entry: {
     'service-worker': './packages/extension/src/service-worker.ts',
   },
   output: {
-    path: path.resolve( __dirname, './dist/extension' ),
+    path: path.resolve(__dirname, './dist/extension'),
     filename: 'service-worker.js',
   },
   plugins: [
     new CopyPlugin({
       patterns: [
-        { from: "./packages/extension/src/manifest.json", to: "" },
-        { from: "./packages/extension/icons", to: "icons" },
+        { from: './packages/extension/src/manifest.json', to: '' },
+        { from: './packages/extension/icons', to: 'icons' },
       ],
     }),
     new WebpackBar({
-      name: "Root",
+      name: 'Root',
       color: '#EEE070',
-    })
+    }),
   ],
-  ...commonConfig
-}
+  ...commonConfig,
+};
 
 const devTools = {
   entry: {
     index: './packages/extension/src/devtools/index.tsx',
-    devtools: './packages/extension/src/devtools/devtools.ts'
+    devtools: './packages/extension/src/devtools/devtools.ts',
   },
   output: {
-    path: path.resolve( __dirname, './dist/extension/devtools' ),
+    path: path.resolve(__dirname, './dist/extension/devtools'),
     filename: '[name].js',
   },
   plugins: [
     new WebpackBar({
-      name: "DevTools",
+      name: 'DevTools',
       color: '#357BB5',
     }),
-    new HtmlWebpackPlugin( {
+    new HtmlWebpackPlugin({
       title: 'CAT Devtool',
       template: './packages/extension/src/devtools/index.html',
       filename: 'index.html',
       inject: false,
-    } ),
-    new HtmlWebpackPlugin( {
+    }),
+    new HtmlWebpackPlugin({
       title: 'CAT',
       template: './packages/extension/src/devtools/devtools.html',
       filename: 'devtools.html',
-      inject: false
-    } ),
+      inject: false,
+    }),
   ],
   ...commonConfig,
-}
+};
 
-
-module.exports = [
-  root,
-  devTools,
-]
+module.exports = [root, devTools];

@@ -13,16 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/**
+ * Internal dependencies.
+ */
 import React from 'react';
 
 /**
  * Internal dependencies.
  */
 import './app.css';
+import { TabSelctor } from './components';
+import { TABS } from './components/tabs';
 
 const App: React.FC = () => {
   return (
-    <p>Hello</p>
+    <div className="w-full h-screen">
+      <TabSelctor tabs={TABS} />
+    </div>
   );
 };
 
