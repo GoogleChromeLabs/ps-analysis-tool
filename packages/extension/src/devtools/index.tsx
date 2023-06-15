@@ -13,12 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from 'react';
-import { createRoot } from 'react-dom/client';
 
 /**
  * External dependencies.
  */
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+
+/**
+ * Internal dependencies.
+ */
 import App from './app';
 
-createRoot(document.getElementById('root')).render(<App />);
+const root = document.getElementById('root');
+if (root) {
+  createRoot(root).render(<App />);
+}

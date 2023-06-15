@@ -20,7 +20,7 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint", "react", "react-hooks", "header"],
+  "plugins": ["@typescript-eslint", "react", "react-hooks", "header", "jest"],
   "settings": {
     "react": {
       "version": "detect"
@@ -129,7 +129,8 @@
     {
       "files": ["**/jest.*.js", "**/*.cjs"],
       "env": {
-        "node": true
+        "node": true,
+        "jest/globals": true
       },
       "rules": {
         "eslint-comments/require-description": "off",

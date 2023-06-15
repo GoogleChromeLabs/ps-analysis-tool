@@ -20,11 +20,12 @@ import React from 'react';
  */
 import './app.css';
 import { TabSelctor } from './components';
+import { TABS } from './components/tabs';
 
 const App: React.FC = () => {
   return (
     <div className="w-full h-screen">
-      <TabSelctor />
+      <TabSelctor tabs={TABS} />
     </div>
   );
 };
