@@ -6,10 +6,15 @@
   },
   "extends": [
     "eslint:recommended",
+    "plugin:import/recommended",
+    "plugin:eslint-comments/recommended",
+    "plugin:prettier/recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
-    "plugin:react-hooks/recommended"
+    "plugin:react-hooks/recommended",
+    "plugin:jsx-a11y/recommended",
+    "plugin:jsdoc/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -20,6 +25,11 @@
   "settings": {
     "react": {
       "version": "detect"
+    },
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
     }
   },
   "ignorePatterns": ["**/node_modules/**", "dist/**", "out/**", "data/"],
@@ -47,6 +57,83 @@
         " * limitations under the License.",
         " "
       ]
+    ],
+    "array-callback-return": "error",
+    "block-scoped-var": "error",
+    "complexity": ["error", { "max": 20 }],
+    "consistent-return": "error",
+    "curly": ["error", "all"],
+    "default-case": "error",
+    "eol-last": "error",
+    "eqeqeq": "error",
+    "guard-for-in": "error",
+    "no-await-in-loop": "error",
+    "no-constant-binary-expression": "error",
+    "no-extra-bind": "error",
+    "no-extra-label": "error",
+    "no-floating-decimal": "error",
+    "no-implicit-coercion": "error",
+    "no-implicit-globals": "error",
+    "no-implied-eval": "error",
+    "no-loop-func": "error",
+    "no-new": "error",
+    "no-new-func": "error",
+    "no-new-wrappers": "error",
+    "no-multiple-empty-lines": "error",
+    "no-trailing-spaces": "error",
+    "import/no-cycle": "error",
+    "import/no-useless-path-segments": [
+      "error",
+      {
+        "noUselessIndex": true
+      }
+    ],
+    "import/no-relative-packages": "error",
+    "jsx-a11y/label-has-for": "off",
+    "no-restricted-properties": "error",
+    "no-return-assign": "error",
+    "no-return-await": "error",
+    "no-sequences": "error",
+    "no-shadow": [
+      "error",
+      {
+        "ignoreOnInitialization": true
+      }
+    ],
+    "no-template-curly-in-string": "error",
+    "no-throw-literal": "error",
+    "no-unmodified-loop-condition": "error",
+    "no-unused-vars": [
+      "error",
+      {
+        "ignoreRestSiblings": true
+      }
+    ],
+    "no-useless-call": "error",
+    "jsx-a11y/anchor-has-content": "off",
+    "no-useless-concat": "error",
+    "no-console": "error",
+    "no-duplicate-imports": "error",
+    "no-var": "error",
+    "prefer-arrow-callback": [
+      "error",
+      {
+        "allowNamedFunctions": true
+      }
+    ],
+    "prefer-const": "error",
+    "prefer-object-spread": "error",
+    "prefer-promise-reject-errors": "error",
+    "prefer-rest-params": "error",
+    "prefer-spread": "error",
+    "radix": ["error", "as-needed"],
+    "require-await": "error",
+    "rest-spread-spacing": ["error", "never"],
+    "react/forbid-component-props": [
+      "error",
+      {
+        "forbid": ["for"]
+      }
     ]
   },
   "overrides": [

@@ -19,9 +19,9 @@ export default {
     '^.+\\.[jt]sx?$': 'babel-jest',
   },
   testEnvironment: 'jsdom',
-  testMatch: [ '**/tests/**/*.{js,jsx,ts,tsx}' ],
+  testMatch: ['**/tests/**/*.{js,jsx,ts,tsx}'],
   globals: {},
-  setupFilesAfterEnv: [ '<rootDir>/jest.setup' ],
+  setupFilesAfterEnv: ['<rootDir>/jest.setup'],
   testPathIgnorePatterns: [
     '<rootDir>/.git',
     '<rootDir>/dist',

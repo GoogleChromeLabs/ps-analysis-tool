@@ -23,8 +23,8 @@ import { TabSelctor } from './components';
 
 const App: React.FC = () => {
   return (
-    <div className='w-full h-screen'>
-        <TabSelctor/>
+    <div className="w-full h-screen">
+      <TabSelctor />
     </div>
   );
 };
