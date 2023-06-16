@@ -34,11 +34,10 @@ import { CookieStore } from './cookieStore';
  */
 chrome.webRequest.onResponseStarted.addListener(
   (details) => {
-    const { tabId, initiator, url, responseHeaders } = details;
+    const { tabId, url, responseHeaders } = details;
 
     // Adds the cookies from the request headers to the cookies object.
     CookieStore.addFromRequest(tabId, {
-      initiator,
       url,
       headers: responseHeaders,
     });

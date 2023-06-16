@@ -1,7 +1,20 @@
-/**
- * External dependencies.
+/*
+ * Copyright 2023 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-import cookie, { Cookie as ParsedCookie } from 'simple-cookie';
+import cookie, { type Cookie as ParsedCookie } from 'simple-cookie';
+import { noop } from './utils';
 
 export type CookieData = {
   parsedData: ParsedCookie;
@@ -23,8 +36,7 @@ export type StorageValue = {
 };
 
 export type Request = {
-  headers: chrome.webRequest.HttpHeader[];
-  initiator: string | null;
+  headers: chrome.webRequest.HttpHeader[] | undefined;
   url: string;
 };
 
@@ -51,14 +63,14 @@ export type Header = {
 
 const mkHeaderToCookie =
   (url: string, top: string | undefined) =>
-  (header: Header): CookieData | undefined => {
+  (header: Header): CookieData | null => {
     if (!header.value || header.name.toLowerCase() !== 'set-cookie') {
-      return;
+      return null;
     }
     const c = cookie.parse(header.value);
 
     const origin = url ? new URL(url).origin : '';
-    const toplevel = new URL(top).origin;
+    const toplevel = top ? new URL(top).origin : '';
     return { parsedData: c, origin, toplevel };
   };
 
@@ -108,10 +120,12 @@ const updateStorage: <A>(
       potentialBytesInUse > chrome.storage.local.QUOTA_BYTES &&
       lruStorage.length
     ) {
-      const [key, value] = lruStorage.pop();
-      storage[key] = empty;
-      await chrome.action.setBadgeText({ tabId: +key, text: '' });
-      potentialBytesInUse -= new TextEncoder().encode(value).length;
+      const b = lruStorage.pop();
+      if (b) {
+        const [tabId, value] = b;
+        storage[tabId] = empty;
+        potentialBytesInUse -= new TextEncoder().encode(value).length;
+      }
     }
   }
 
@@ -122,13 +136,14 @@ export const CookieStore = {
   async addFromRequest(tabId: number, { headers, url }: Request) {
     let tab = null;
 
-    if (!tabId || Number(tabId) < 0) {
+    if (!tabId || Number(tabId) < 0 || !headers) {
       return;
     }
 
     try {
       tab = await chrome.tabs.get(tabId);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log(error);
     }
 
@@ -138,12 +153,15 @@ export const CookieStore = {
 
     const newCookies = headers
       .map(mkHeaderToCookie(url, tab.url))
-      .filter((x: CookieData | undefined) => Boolean(x));
+      .filter((x: CookieData | null) => Boolean(x));
 
     const newCookiesObj: { [key: string]: CookieData } = {};
 
-    for (const cookie of newCookies) {
-      newCookiesObj[cookie.parsedData.name + cookie.parsedData.domain] = cookie;
+    for (const newCookie of newCookies) {
+      if (newCookie) {
+        newCookiesObj[newCookie.parsedData.name + newCookie.parsedData.domain] =
+          newCookie;
+      }
     }
 
     await updateStorage(tabId, empty, (x: StorageValue) => {
@@ -194,11 +212,16 @@ export const CookieStore = {
     const tabs = await chrome.tabs.query({ windowId });
 
     tabs.forEach(async (tab) => {
-      await CookieStore.removeTabData(tab.id);
+      if (tab.id) {
+        await CookieStore.removeTabData(tab.id);
+      }
     });
   },
-  getSyncStore: (tabId: number) => ({
+  getSyncStore: (tabId: number | null) => ({
     subscribe(listener: () => void) {
+      if (!tabId) {
+        return noop;
+      }
       listeners[tabId] = listeners[tabId] || {
         subscriber: [],
         listener: undefined,
@@ -219,13 +242,14 @@ export const CookieStore = {
         );
         if (listeners[tabId].subscriber.length === 0 && chrome.storage) {
           chrome.storage.onChanged.removeListener(listeners[tabId].listener);
-          listeners[tabId].listener = undefined;
+          listeners[tabId].listener = () => undefined;
         }
       };
     },
     getSnapshot() {
       // IMPORTANT: identity must change iff value has changed
-      return store[tabId] || empty;
+
+      return tabId ? store[tabId] || empty : empty;
     },
   }),
 };
