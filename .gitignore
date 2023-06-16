@@ -24,3 +24,6 @@ out
 # Other
 .cache
 .env
+
+# tsc output
+*.tsbuildinfo
