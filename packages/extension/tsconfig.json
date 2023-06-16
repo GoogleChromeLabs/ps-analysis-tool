@@ -1,15 +1,8 @@
 {
+  "extends": "../../tsconfig.shared.json",
   "compilerOptions": {
     "rootDir": "src",
-    "target": "es6",
-    "module": "commonjs",
-    "typeRoots": ["../../node_modules/@types", "./src/@types"],
-    "esModuleInterop": true,
-    "strict": true,
-    "strictNullChecks": false,
-    "skipLibCheck": true,
-    "jsx": "react"
+    "declarationDir": "dist-types"
   },
-  "types": ["chrome"],
-  "exclude": ["react", "../../node_modules"]
+  "include": ["src"]
 }
