@@ -67,3 +67,8 @@ jobs:
         run: npm run lint:js
         env:
           NODE_OPTIONS: --max-old-space-size=4096
+
+      - name: Type Checks
+        run: npm run lint:types
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
