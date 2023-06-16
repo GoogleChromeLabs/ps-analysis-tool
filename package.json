@@ -7,7 +7,8 @@
 		"extension:dev": "webpack --config webpack.config.cjs --watch",
 		"extension:build": "cross-env NODE_ENV=production webpack --config webpack.config.cjs",
 		"serve": "webpack serve",
-		"lint:js": "eslint .",
+		"lint:js": "npm run check-types; eslint .",
+		"check-types": "tsc --project ./packages/**/tsconfig.json",
 		"lint:js:fix": "eslint --fix .",
 		"prepare": "husky install"
 	},
@@ -29,6 +30,7 @@
 		"@testing-library/jest-dom": "^5.16.5",
 		"@testing-library/react": "^14.0.0",
 		"@types/chrome": "^0.0.237",
+		"@types/jest": "^29.5.2",
 		"@types/react": "^18.2.9",
 		"@types/react-dom": "^18.2.4",
 		"@typescript-eslint/eslint-plugin": "^5.59.9",
