@@ -21,7 +21,7 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { type CookieData } from '../../../../../store';
+import { type CookieData } from '../../../../../localStore';
 import ListItem from './listItem';
 
 interface ICoookieList {

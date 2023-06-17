@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import { CookieStore } from '../store';
+import { CookieStore } from '../localStore';
 
 /**
  * Fires when the browser receives a response from a web server.
