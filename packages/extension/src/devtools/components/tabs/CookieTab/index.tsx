@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
 import React from 'react';
 
 /**
@@ -23,6 +26,7 @@ import CookieList from './cookieList';
 
 export const CookieTab = () => {
   const cookies = useCookieStore(({ state }) => state.cookies);
+
   return (
     <div className="w-full h-full flex flex-col ">
       <div className="flex-1 overflow-y-scroll ">

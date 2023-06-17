@@ -13,34 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import cookie, { type Cookie as ParsedCookie } from 'simple-cookie';
-import { noop } from './utils';
-
-export type CookieData = {
-  parsedData: ParsedCookie;
-  origin: string;
-  toplevel: string;
-};
-
-export type CurrentCookie = {
-  cookieKey: string; // cookie key = name + domain
-  cookie: CookieData;
-};
-
-export type StorageValue = {
-  cookies: {
-    [key: string]: CookieData;
-  };
-  url: URL | undefined;
-  focusedAt: number | undefined;
-};
-
-export type Request = {
-  headers: chrome.webRequest.HttpHeader[] | undefined;
-  url: string;
-};
+/**
+ * Internal dependencies.
+ */
+import parseCookieHeader from './parseCookieHeader';
+import updateStorage from './updateStorage';
+import { noop } from '../utils/noop';
+import type { StorageValue, CookieData, Request } from './types';
+import { emptyTabData } from './consts';
 
 const store: { [tabId: number]: StorageValue } = {};
+
 const listeners: {
   [tabId: number]: {
     subscriber: (() => void)[];
@@ -50,89 +33,7 @@ const listeners: {
   };
 } = {};
 
-export const empty: StorageValue = {
-  cookies: {},
-  url: undefined,
-  focusedAt: undefined,
-};
-
-export type Header = {
-  name: string;
-  value?: string;
-};
-
-const mkHeaderToCookie =
-  (url: string, top: string | undefined) =>
-  (header: Header): CookieData | null => {
-    if (!header.value || header.name.toLowerCase() !== 'set-cookie') {
-      return null;
-    }
-    const c = cookie.parse(header.value);
-
-    const origin = url ? new URL(url).origin : '';
-    const toplevel = top ? new URL(top).origin : '';
-    return { parsedData: c, origin, toplevel };
-  };
-
-// This should be a transaction. Currently it has very likely a race condition.
-const updateStorage: <A>(
-  key: number,
-  def: A,
-  step: (val: A) => A
-) => Promise<void> = async (key, def, step) => {
-  // bytesInUse is an approximation of the size of the storage.
-  const bytesInUse = await chrome.storage.local.getBytesInUse();
-
-  // storage is the entire chrome.storage object.
-  const storage = await chrome.storage.local.get();
-
-  // potentialBytesInUse is an approximation of the size of the storage after the update.
-  let potentialBytesInUse =
-    bytesInUse - new TextEncoder().encode(storage[key]).length;
-
-  if (!storage[key]) {
-    storage[key] = def;
-  }
-  storage[key] = step(storage[key]);
-
-  // We add the size of the new value to the potentialBytesInUse.
-  potentialBytesInUse += new TextEncoder().encode(storage[key]).length;
-
-  /**
-   * If we are over the quota, we remove the least recently used tab.
-   * LRU is defined as the tab that was focused at the longest time ago based on focusedAt timestamp.
-   */
-  if (potentialBytesInUse > chrome.storage.local.QUOTA_BYTES) {
-    const lruStorage = Object.entries(storage).sort(([, a], [, b]) => {
-      if (a.focusedAt && b.focusedAt) {
-        return b.focusedAt - a.focusedAt;
-      } else if (a.focusedAt) {
-        return -1;
-      } else if (b.focusedAt) {
-        return 1;
-      } else {
-        return 0;
-      }
-    });
-
-    // We remove the least recently used tab until we are under the quota or there are no more tabs.
-    while (
-      potentialBytesInUse > chrome.storage.local.QUOTA_BYTES &&
-      lruStorage.length
-    ) {
-      const b = lruStorage.pop();
-      if (b) {
-        const [tabId, value] = b;
-        storage[tabId] = empty;
-        potentialBytesInUse -= new TextEncoder().encode(value).length;
-      }
-    }
-  }
-
-  await chrome.storage.local.set(storage);
-};
-
-export const CookieStore = {
+const CookieStore = {
   async addFromRequest(tabId: number, { headers, url }: Request) {
     let tab = null;
 
@@ -152,7 +53,7 @@ export const CookieStore = {
     }
 
     const newCookies = headers
-      .map(mkHeaderToCookie(url, tab.url))
+      .map(parseCookieHeader(url, tab.url))
       .filter((x: CookieData | null) => Boolean(x));
 
     const newCookiesObj: { [key: string]: CookieData } = {};
@@ -164,7 +65,7 @@ export const CookieStore = {
       }
     }
 
-    await updateStorage(tabId, empty, (x: StorageValue) => {
+    await updateStorage(tabId, emptyTabData, (x: StorageValue) => {
       const updatedCookies = {
         ...x.cookies,
         ...newCookiesObj,
@@ -177,7 +78,7 @@ export const CookieStore = {
     });
   },
   async updateTabLocation(tabId: number, url: URL, focusedAt: number) {
-    await updateStorage(tabId, empty, (x: StorageValue) => ({
+    await updateStorage(tabId, emptyTabData, (x: StorageValue) => ({
       ...x,
       cookies: {},
       url,
@@ -249,7 +150,9 @@ export const CookieStore = {
     getSnapshot() {
       // IMPORTANT: identity must change iff value has changed
 
-      return tabId ? store[tabId] || empty : empty;
+      return tabId ? store[tabId] || emptyTabData : emptyTabData;
     },
   }),
 };
+
+export default CookieStore;

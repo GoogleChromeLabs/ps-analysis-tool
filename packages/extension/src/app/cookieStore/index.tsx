@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
 import { useContextSelector, createContext } from 'use-context-selector';
 import React, {
   type PropsWithChildren,
@@ -20,11 +23,12 @@ import React, {
   useState,
   useSyncExternalStore,
 } from 'react';
+
 /**
  * Internal dependencies.
  */
-import { type StorageValue, CookieStore, empty } from '../../cookieStore';
-import { getCurrentTabId } from '../../utils';
+import { type StorageValue, CookieStore, emptyTabData } from '../../store';
+import { getCurrentTabId } from '../../utils/getCurrentTabId';
 
 export interface ICookieStoreContext {
   state: StorageValue;
@@ -32,7 +36,7 @@ export interface ICookieStoreContext {
 }
 
 const initialState: ICookieStoreContext = {
-  state: empty,
+  state: emptyTabData,
   actions: {},
 };
 
@@ -76,7 +80,9 @@ export function useCookieStore(): ICookieStoreContext;
 export function useCookieStore<T>(
   selector: (state: ICookieStoreContext) => T
 ): T;
+
 /**
+ * Cookie store hook.
  * @param selector Selector function to partially select state.
  * @returns selected part of the state
  */

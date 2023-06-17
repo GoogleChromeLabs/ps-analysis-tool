@@ -13,25 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
-import React from 'react';
-import { createRoot } from 'react-dom/client';
+import { type Cookie as ParsedCookie } from 'simple-cookie';
 
-/**
- * Internal dependencies.
- */
-import App from './app';
-import { Provider as ExternalStoreProvider } from '../app/cookieStore';
+export type CookieData = {
+  parsedData: ParsedCookie;
+  origin: string;
+  toplevel: string;
+};
 
-const root = document.getElementById('root');
+export type StorageValue = {
+  cookies: {
+    [key: string]: CookieData;
+  };
+  url: URL | undefined;
+  focusedAt: number | undefined;
+};
 
-if (root) {
-  createRoot(root).render(
-    <ExternalStoreProvider>
-      <App />
-    </ExternalStoreProvider>
-  );
-}
+export type Request = {
+  headers: chrome.webRequest.HttpHeader[] | undefined;
+  url: string;
+};
+
+export type Header = {
+  name: string;
+  value?: string;
+};

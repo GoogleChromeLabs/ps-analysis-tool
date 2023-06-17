@@ -13,13 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const getCurrentTabId = async () => {
-  const tabs = await chrome.tabs.query({
-    active: true,
-    currentWindow: true,
-  });
-  return tabs[0].id;
-};
 export const noop = () => {
-  return;
+  return undefined;
 };

@@ -9,7 +9,7 @@
     "48": "icons/48x48.png",
     "128": "icons/128x128.png"
   },
-  "permissions": [],
+  "permissions": ["storage", "tabs", "webNavigation", "webRequest"],
   "host_permissions": ["*://*/*"],
   "devtools_page": "devtools/devtools.html",
   "background": {

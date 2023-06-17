@@ -56,7 +56,7 @@ const commonConfig = {
 
 const root = {
   entry: {
-    'service-worker': './packages/extension/src/service-worker.ts',
+    'service-worker': './packages/extension/src/worker/service-worker.ts',
   },
   output: {
     path: path.resolve(__dirname, './dist/extension'),

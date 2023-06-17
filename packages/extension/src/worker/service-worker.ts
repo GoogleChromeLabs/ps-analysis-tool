@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * Internal dependencies.
  */
-import { CookieStore } from './cookieStore';
+import { CookieStore } from '../store';
 
 /**
  * Fires when the browser receives a response from a web server.
