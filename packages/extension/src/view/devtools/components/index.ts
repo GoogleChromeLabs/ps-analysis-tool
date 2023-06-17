@@ -13,25 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * External dependencies.
- */
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-
-/**
- * Internal dependencies.
- */
-import App from './app';
-import { Provider as ExternalStoreProvider } from '../app/cookieStore';
-
-const root = document.getElementById('root');
-
-if (root) {
-  createRoot(root).render(
-    <ExternalStoreProvider>
-      <App />
-    </ExternalStoreProvider>
-  );
-}
+export { TabSelector } from './tabSelector';

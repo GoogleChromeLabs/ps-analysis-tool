@@ -79,8 +79,8 @@ const root = {
 
 const devTools = {
   entry: {
-    index: './packages/extension/src/devtools/index.tsx',
-    devtools: './packages/extension/src/devtools/devtools.ts',
+    index: './packages/extension/src/view/devtools/index.tsx',
+    devtools: './packages/extension/src/view/devtools/devtools.ts',
   },
   output: {
     path: path.resolve(__dirname, './dist/extension/devtools'),
@@ -93,13 +93,13 @@ const devTools = {
     }),
     new HtmlWebpackPlugin({
       title: 'CAT Devtool',
-      template: './packages/extension/src/devtools/index.html',
+      template: './packages/extension/src/view/devtools/index.html',
       filename: 'index.html',
       inject: false,
     }),
     new HtmlWebpackPlugin({
       title: 'CAT',
-      template: './packages/extension/src/devtools/devtools.html',
+      template: './packages/extension/src/view/devtools/devtools.html',
       filename: 'devtools.html',
       inject: false,
     }),

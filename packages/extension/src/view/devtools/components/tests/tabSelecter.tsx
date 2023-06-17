@@ -24,7 +24,7 @@ import '@testing-library/jest-dom';
 /**
  * Internal dependencies.
  */
-import { TabSelctor } from '../tabSelector';
+import { TabSelector } from '../tabSelector';
 import { TABS } from '../tabs';
 
 describe("loads tabs of Extension's devtools", () => {
@@ -32,7 +32,7 @@ describe("loads tabs of Extension's devtools", () => {
    * Test to check if the Cookie Panel is loaded by default.
    */
   test('loads Cookie Panel by default', () => {
-    render(<TabSelctor tabs={TABS} />);
+    render(<TabSelector tabs={TABS} />);
     // by default Cookies Panel is selected.
     expect(screen.getByText('Cookies Panel')).toBeInTheDocument();
   });
@@ -41,7 +41,7 @@ describe("loads tabs of Extension's devtools", () => {
    * Test to check if the Cookie Panel is loaded when the tab is clicked.
    */
   test('loads Cookie Panel', async () => {
-    render(<TabSelctor tabs={TABS} />);
+    render(<TabSelector tabs={TABS} />);
     // Move to another tab
     fireEvent.click(screen.getByText('Bounce Tracking'));
 
@@ -53,7 +53,7 @@ describe("loads tabs of Extension's devtools", () => {
    * Test to check if the Bounce Tracking Panel is loaded when the tab is clicked.
    */
   test('loads Bounce Tracking Panel', async () => {
-    render(<TabSelctor tabs={TABS} />);
+    render(<TabSelector tabs={TABS} />);
     // Click on Bounce Tracking tab
     fireEvent.click(screen.getByText('Bounce Tracking'));
     expect(
@@ -65,7 +65,7 @@ describe("loads tabs of Extension's devtools", () => {
    * Test to check if the FingerPrinting Panel is loaded when the tab is clicked.
    */
   test('loads FingerPrinting Panel', async () => {
-    render(<TabSelctor tabs={TABS} />);
+    render(<TabSelector tabs={TABS} />);
     // Click on FingerPrinting tab
     fireEvent.click(screen.getByText('Fingerprinting'));
     expect(await screen.findByText('Fingerprinting Panel')).toBeInTheDocument();

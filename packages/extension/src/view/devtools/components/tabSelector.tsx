@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
@@ -23,7 +22,7 @@ interface ITabSelector {
   tabs: { display_name: string; Component: () => React.JSX.Element }[];
 }
 
-export const TabSelctor = ({ tabs }: ITabSelector) => {
+export const TabSelector = ({ tabs }: ITabSelector) => {
   const [selectedTabInd, setSelectedTabInd] = useState<number>(0);
 
   const TabComponent = tabs[selectedTabInd].Component;

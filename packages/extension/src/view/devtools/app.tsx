@@ -13,22 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
-import { BounceTrackingTab } from './BounceTrackingTab';
-import { CookieTab } from './CookieTab';
-import { FingerprintingTab } from './FingerprintingTab';
+import React from 'react';
 
-export const TABS = [
-  { display_name: 'Cookies', Component: CookieTab },
-  {
-    display_name: 'Bounce Tracking',
-    Component: BounceTrackingTab,
-  },
-  {
-    display_name: 'Fingerprinting',
-    Component: FingerprintingTab,
-  },
-];
+/**
+ * Internal dependencies.
+ */
+import './app.css';
+import { TabSelector } from './components';
+import { TABS } from './components/tabs';
+
+const App: React.FC = () => {
+  return (
+    <div className="w-full h-screen">
+      <TabSelector tabs={TABS} />
+    </div>
+  );
+};
+
+export default App;
