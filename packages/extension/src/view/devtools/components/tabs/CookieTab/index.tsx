@@ -21,7 +21,7 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { useCookieStore } from '../../../../../app/cookieStore';
+import { useCookieStore } from '../../../../stateProviders/cookieStore';
 import CookieList from './cookieList';
 
 export const CookieTab = () => {

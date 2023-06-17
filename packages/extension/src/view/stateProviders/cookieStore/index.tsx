@@ -27,8 +27,12 @@ import React, {
 /**
  * Internal dependencies.
  */
-import { type StorageValue, CookieStore, emptyTabData } from '../../localStore';
-import { getCurrentTabId } from '../../utils/getCurrentTabId';
+import {
+  type StorageValue,
+  CookieStore,
+  emptyTabData,
+} from '../../../localStore';
+import { getCurrentTabId } from '../../../utils/getCurrentTabId';
 
 export interface ICookieStoreContext {
   state: StorageValue;

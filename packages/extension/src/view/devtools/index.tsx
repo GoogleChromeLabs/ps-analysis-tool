@@ -23,7 +23,7 @@ import { createRoot } from 'react-dom/client';
  * Internal dependencies.
  */
 import App from './app';
-import { Provider as ExternalStoreProvider } from '../../app/cookieStore';
+import { Provider as ExternalStoreProvider } from '../stateProviders/cookieStore';
 
 const root = document.getElementById('root');
 
