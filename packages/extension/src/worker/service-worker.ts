@@ -20,16 +20,7 @@ import { CookieStore } from '../localStore';
 
 /**
  * Fires when the browser receives a response from a web server.
- *
- * For example:
- * When user loads a new page.
- * When user refreshes a page.
- * When the user clicks on a link.
- * When the user submits a form.
- * When the browser loads a web page in the background.
- * When the browser receives a push notification.
- * When the browser receives a WebSocket message.
- * When the browser receives a file download.
+ * @see https://developer.chrome.com/docs/extensions/reference/webRequest/
  */
 chrome.webRequest.onResponseStarted.addListener(
   (details) => {
@@ -45,7 +36,10 @@ chrome.webRequest.onResponseStarted.addListener(
   ['extraHeaders', 'responseHeaders']
 );
 
-// Fired when the browser is about to navigate to a new page.
+/**
+ * Update tab metadata when the browser is about to navigate to a new page.
+ * @see https://developer.chrome.com/docs/extensions/reference/webNavigation/
+ */
 chrome.webNavigation.onBeforeNavigate.addListener((details) => {
   const { tabId, url, frameType } = details;
 
@@ -55,17 +49,18 @@ chrome.webNavigation.onBeforeNavigate.addListener((details) => {
   }
 });
 
-// Fired when a tab is activated(focused) or created.
+/**
+ * Update tab focus when a tab is activated(focused) or created.
+ * @see https://developer.chrome.com/docs/extensions/reference/tabs/
+ */
 chrome.tabs.onActivated.addListener((activeInfo) => {
   CookieStore.updateTabFocus(activeInfo);
 });
 
-// Fired when a tab is closed.
 chrome.tabs.onRemoved.addListener((tabId) => {
   CookieStore.removeTabData(tabId);
 });
 
-// Fired when browser window is closed.
 chrome.windows.onRemoved.addListener((windowId) => {
   CookieStore.removeWindowData(windowId);
 });
