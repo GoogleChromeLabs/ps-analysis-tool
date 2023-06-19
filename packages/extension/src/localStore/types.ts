@@ -28,7 +28,7 @@ export type StorageValue = {
   cookies: {
     [key: string]: CookieData;
   };
-  url: URL | undefined;
+  url: string | undefined;
   focusedAt: number | undefined;
 };
 

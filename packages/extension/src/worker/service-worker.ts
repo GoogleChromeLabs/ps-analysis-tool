@@ -37,23 +37,6 @@ chrome.webRequest.onResponseStarted.addListener(
 );
 
 /**
- * Fired before sending an HTTP request, once the request headers are available.
- * @see https://developer.chrome.com/docs/extensions/reference/webRequest/#event-onBeforeSendHeaders
- */
-chrome.webRequest.onBeforeSendHeaders.addListener(
-  (details) => {
-    const { tabId, url, requestHeaders } = details;
-
-    CookieStore.addFromRequest(tabId, {
-      url,
-      headers: requestHeaders,
-    });
-  },
-  { urls: ['*://*/*'] },
-  ['extraHeaders', 'requestHeaders']
-);
-
-/**
  * Update tab metadata when the browser is about to navigate to a new page.
  * @see https://developer.chrome.com/docs/extensions/reference/webNavigation/
  */
@@ -62,7 +45,7 @@ chrome.webNavigation.onBeforeNavigate.addListener((details) => {
 
   if (url && frameType === 'outermost_frame') {
     // Updates the location of the tab in the cookies object.
-    CookieStore.updateTabLocation(tabId, new URL(url), Date.now());
+    CookieStore.updateTabLocation(tabId, new URL(url).origin, Date.now());
   }
 });
 

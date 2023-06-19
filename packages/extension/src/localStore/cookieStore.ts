@@ -65,19 +65,19 @@ const CookieStore = {
       }
     }
 
-    await updateStorage(tabId, emptyTabData, (x: StorageValue) => {
+    await updateStorage(tabId, emptyTabData, (previousState: StorageValue) => {
       const updatedCookies = {
-        ...x.cookies,
+        ...previousState.cookies,
         ...newCookiesObj,
       };
 
       return {
-        ...x,
+        ...previousState,
         cookies: updatedCookies,
       };
     });
   },
-  async updateTabLocation(tabId: number, url: URL, focusedAt: number) {
+  async updateTabLocation(tabId: number, url: string, focusedAt: number) {
     await updateStorage(tabId, emptyTabData, (x: StorageValue) => ({
       ...x,
       cookies: {},

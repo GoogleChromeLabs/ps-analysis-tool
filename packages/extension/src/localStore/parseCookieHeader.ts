@@ -26,10 +26,7 @@ import type { CookieData, Header } from './types';
 const parseCookieHeader =
   (url: string, top: string | undefined) =>
   (header: Header): CookieData | null => {
-    if (
-      !header.value ||
-      !['set-cookie', 'cookie'].includes(header.name.toLowerCase())
-    ) {
+    if (!header.value || !['set-cookie'].includes(header.name.toLowerCase())) {
       return null;
     }
 
