@@ -21,17 +21,13 @@ import React, {
   type PropsWithChildren,
   useEffect,
   useState,
-  useSyncExternalStore,
+  useCallback,
 } from 'react';
 
 /**
  * Internal dependencies.
  */
-import {
-  type StorageValue,
-  CookieStore,
-  emptyTabData,
-} from '../../../localStore';
+import { type StorageValue, emptyTabData } from '../../../localStore';
 import { getCurrentTabId } from '../../../utils/getCurrentTabId';
 
 export interface ICookieStoreContext {
@@ -47,31 +43,26 @@ const initialState: ICookieStoreContext = {
 export const Context = createContext<ICookieStoreContext>(initialState);
 
 export const Provider = ({ children }: PropsWithChildren) => {
-  const [currentTabId, setCurrentTabId] = useState<number | null>(null);
-  const [state, setState] = useState<StorageValue>(initialState.state);
-  const { subscribe, getSnapshot } = CookieStore.getSyncStore(currentTabId);
-  const externalState = useSyncExternalStore(subscribe, getSnapshot);
+  const [state, setState] = useState<StorageValue>(emptyTabData);
 
-  useEffect(() => {
-    (async () => {
-      const tabId = await getCurrentTabId();
-      if (!tabId) {
-        return;
-      }
-      setCurrentTabId(tabId);
-      const storage = await chrome.storage.local.get();
-      const currentTabState = storage[tabId];
+  const changeListener = useCallback(async () => {
+    const tabId = await getCurrentTabId();
 
-      if (currentTabState) {
-        setState(currentTabState);
-      }
-    })();
+    if (!tabId) {
+      return;
+    }
+
+    const tabData = await chrome.storage.local.get();
+
+    setState(tabData[tabId]);
   }, []);
 
-  // Sync
   useEffect(() => {
-    setState(externalState);
-  }, [externalState]);
+    chrome.storage.onChanged.addListener(changeListener);
+    return () => {
+      chrome.storage.onChanged.removeListener(changeListener);
+    };
+  }, [changeListener]);
 
   return (
     <Context.Provider value={{ state, actions: {} }}>

@@ -18,20 +18,8 @@
  */
 import parseCookieHeader from './parseCookieHeader';
 import updateStorage from './updateStorage';
-import { noop } from '../utils/noop';
 import type { StorageValue, CookieData, Request } from './types';
 import { emptyTabData } from './consts';
-
-const store: { [tabId: number]: StorageValue } = {};
-
-const listeners: {
-  [tabId: number]: {
-    subscriber: (() => void)[];
-    listener: (change: {
-      [name: string]: chrome.storage.StorageChange;
-    }) => void | undefined;
-  };
-} = {};
 
 const CookieStore = {
   async addFromRequest(tabId: number, { headers, url }: Request) {
@@ -118,41 +106,6 @@ const CookieStore = {
       }
     });
   },
-  getSyncStore: (tabId: number | null) => ({
-    subscribe(listener: () => void) {
-      if (!tabId) {
-        return noop;
-      }
-      listeners[tabId] = listeners[tabId] || {
-        subscriber: [],
-        listener: undefined,
-      };
-      if (!listeners[tabId].listener && chrome.storage) {
-        listeners[tabId].listener = (changes) => {
-          if (Object.keys(changes).includes(tabId.toString())) {
-            store[tabId] = changes[tabId].newValue;
-            listeners[tabId].subscriber.forEach((l) => l());
-          }
-        };
-        chrome.storage.onChanged.addListener(listeners[tabId].listener);
-      }
-      listeners[tabId].subscriber.push(listener);
-      return () => {
-        listeners[tabId].subscriber = listeners[tabId].subscriber.filter(
-          (l) => l !== listener
-        );
-        if (listeners[tabId].subscriber.length === 0 && chrome.storage) {
-          chrome.storage.onChanged.removeListener(listeners[tabId].listener);
-          listeners[tabId].listener = () => undefined;
-        }
-      };
-    },
-    getSnapshot() {
-      // IMPORTANT: identity must change iff value has changed
-
-      return tabId ? store[tabId] || emptyTabData : emptyTabData;
-    },
-  }),
 };
 
 export default CookieStore;
