@@ -45,7 +45,7 @@ export const Context = createContext<ICookieStoreContext>(initialState);
 export const Provider = ({ children }: PropsWithChildren) => {
   const [state, setState] = useState<StorageValue>(emptyTabData);
 
-  const changeListener = useCallback(async () => {
+  const syncState = useCallback(async () => {
     const tabId = await getCurrentTabId();
 
     if (!tabId) {
@@ -58,11 +58,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
   }, []);
 
   useEffect(() => {
-    chrome.storage.onChanged.addListener(changeListener);
+    syncState();
+    chrome.storage.onChanged.addListener(syncState);
     return () => {
-      chrome.storage.onChanged.removeListener(changeListener);
+      chrome.storage.onChanged.removeListener(syncState);
     };
-  }, [changeListener]);
+  }, [syncState]);
 
   return (
     <Context.Provider value={{ state, actions: {} }}>
