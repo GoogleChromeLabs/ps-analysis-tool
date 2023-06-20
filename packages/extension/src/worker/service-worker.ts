@@ -19,6 +19,7 @@
 import { type CookieData, CookieStore } from '../localStore';
 import parseResponseCookieHeader from './parseResponseCookieHeader';
 import type { Header } from './types';
+import { getTab } from '../utils/getTab';
 
 /**
  * Fires when the browser receives a response from a web server.
@@ -28,20 +29,9 @@ chrome.webRequest.onResponseStarted.addListener(
   async (details: chrome.webRequest.WebResponseCacheDetails) => {
     const { tabId, url, responseHeaders } = details;
 
-    let tab: chrome.tabs.Tab | null = null;
+    const tab = await getTab(tabId);
 
-    if (!tabId || Number(tabId) < 0 || !responseHeaders) {
-      return;
-    }
-
-    try {
-      tab = await chrome.tabs.get(tabId);
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error);
-    }
-
-    if (chrome.runtime.lastError || !tab) {
+    if (!tab || !responseHeaders) {
       return;
     }
 
