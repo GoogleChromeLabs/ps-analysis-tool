@@ -16,9 +16,9 @@
 /**
  * Internal dependencies.
  */
-import { type StorageValue } from './types';
+import { type TabData } from './types';
 
-export const emptyTabData: StorageValue = {
+export const emptyTabData: TabData = {
   cookies: {},
   url: undefined,
   focusedAt: undefined,

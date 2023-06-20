@@ -27,11 +27,11 @@ import React, {
 /**
  * Internal dependencies.
  */
-import { type StorageValue, emptyTabData } from '../../../localStore';
+import { type TabData, emptyTabData } from '../../../localStore';
 import { getCurrentTabId } from '../../../utils/getCurrentTabId';
 
 export interface ICookieStoreContext {
-  state: StorageValue;
+  state: TabData;
   actions: object;
 }
 
@@ -43,7 +43,7 @@ const initialState: ICookieStoreContext = {
 export const Context = createContext<ICookieStoreContext>(initialState);
 
 export const Provider = ({ children }: PropsWithChildren) => {
-  const [state, setState] = useState<StorageValue>(emptyTabData);
+  const [state, setState] = useState<TabData>(emptyTabData);
 
   const syncState = useCallback(async () => {
     const tabId = await getCurrentTabId();

@@ -16,37 +16,33 @@
 /**
  * Internal dependencies.
  */
-import { emptyTabData } from './consts';
+import { type Storage, type TabData } from './types';
 
-const updateStorage: <A>(
-  key: number,
-  def: A,
-  step: (val: A) => A
-) => Promise<void> = async (key, def, step) => {
-  // bytesInUse is an approximation of the size of the storage.
-  const bytesInUse = await chrome.storage.local.getBytesInUse();
+const updateStorage = async (
+  tabId: string,
+  updater: (prevState: TabData) => TabData
+) => {
+  //Find out storage quota used currently
+  const currentBytesInUse = await chrome.storage.local.getBytesInUse();
+  const currentStorageSnapshot: Storage = await chrome.storage.local.get();
+  const restBytesInUse =
+    currentBytesInUse -
+    new TextEncoder().encode(JSON.stringify(currentStorageSnapshot[tabId]))
+      .length;
 
-  // storage is the entire chrome.storage object.
-  const storage = await chrome.storage.local.get();
+  //Find out storage quota that will be used in the future
+  const newStorageValue: Storage = {
+    ...currentStorageSnapshot,
+    [tabId]: updater(currentStorageSnapshot[tabId]),
+  };
 
-  // potentialBytesInUse is an approximation of the size of the storage after the update.
-  let potentialBytesInUse =
-    bytesInUse - new TextEncoder().encode(storage[key]).length;
+  let futureBytesInUse =
+    new TextEncoder().encode(JSON.stringify(newStorageValue[tabId])).length +
+    restBytesInUse;
 
-  if (!storage[key]) {
-    storage[key] = def;
-  }
-  storage[key] = step(storage[key]);
-
-  // We add the size of the new value to the potentialBytesInUse.
-  potentialBytesInUse += new TextEncoder().encode(storage[key]).length;
-
-  /**
-   * If we are over the quota, we remove the least recently used tab.
-   * LRU is defined as the tab that was focused at the longest time ago based on focusedAt timestamp.
-   */
-  if (potentialBytesInUse > chrome.storage.local.QUOTA_BYTES) {
-    const lruStorage = Object.entries(storage).sort(([, a], [, b]) => {
+  //Delete data for tabs until enough space is available with LRU strategy
+  if (futureBytesInUse > chrome.storage.local.QUOTA_BYTES) {
+    const lruStorage = Object.entries(newStorageValue).sort(([, a], [, b]) => {
       if (a.focusedAt && b.focusedAt) {
         return b.focusedAt - a.focusedAt;
       } else if (a.focusedAt) {
@@ -58,21 +54,23 @@ const updateStorage: <A>(
       }
     });
 
-    // We remove the least recently used tab until we are under the quota or there are no more tabs.
     while (
-      potentialBytesInUse > chrome.storage.local.QUOTA_BYTES &&
+      futureBytesInUse > chrome.storage.local.QUOTA_BYTES &&
       lruStorage.length
     ) {
       const b = lruStorage.pop();
       if (b) {
-        const [tabId, value] = b;
-        storage[tabId] = emptyTabData;
-        potentialBytesInUse -= new TextEncoder().encode(value).length;
+        const [key, value] = b;
+        delete newStorageValue[key];
+        futureBytesInUse -= new TextEncoder().encode(
+          JSON.stringify({ key: value })
+        ).length;
       }
     }
   }
 
-  await chrome.storage.local.set(storage);
+  //Apply update to the chrome local store
+  await chrome.storage.local.set(newStorageValue);
 };
 
 export default updateStorage;

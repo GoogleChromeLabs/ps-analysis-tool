@@ -19,5 +19,5 @@ export const getCurrentTabId = async () => {
     currentWindow: true,
   });
 
-  return tabs[0]?.id;
+  return tabs[0] && tabs[0].id ? tabs[0].id.toString() : undefined;
 };

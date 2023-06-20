@@ -56,6 +56,7 @@ describe('parseResponseCookieHeader', () => {
       },
       origin: 'https://example.com',
       toplevel: 'https://example.com',
+      headerType: 'response',
     });
   });
 });

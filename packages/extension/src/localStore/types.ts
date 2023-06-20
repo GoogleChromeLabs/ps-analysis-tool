@@ -25,10 +25,14 @@ export type CookieData = {
   headerType: string; // @todo Can this be response | request ?
 };
 
-export type StorageValue = {
+export type TabData = {
   cookies: {
     [key: string]: CookieData;
   };
   url: string | undefined;
   focusedAt: number | undefined;
+};
+
+export type Storage = {
+  [tabId: string]: TabData;
 };

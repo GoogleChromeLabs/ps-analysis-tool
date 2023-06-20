@@ -49,7 +49,7 @@ chrome.webRequest.onResponseStarted.addListener(
     }
 
     // Adds the cookies from the request headers to the cookies object.
-    await CookieStore.update(tabId, cookies);
+    await CookieStore.update(tabId.toString(), cookies);
   },
   { urls: ['*://*/*'] },
   ['extraHeaders', 'responseHeaders']
@@ -64,7 +64,11 @@ chrome.webNavigation.onBeforeNavigate.addListener((details) => {
 
   if (url && frameType === 'outermost_frame') {
     // Updates the location of the tab in the cookies object.
-    CookieStore.updateTabLocation(tabId, new URL(url).origin, Date.now());
+    CookieStore.updateTabLocation(
+      tabId.toString(),
+      new URL(url).origin,
+      Date.now()
+    );
   }
 });
 
@@ -77,7 +81,7 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
 });
 
 chrome.tabs.onRemoved.addListener((tabId) => {
-  CookieStore.removeTabData(tabId);
+  CookieStore.removeTabData(tabId.toString());
 });
 
 chrome.windows.onRemoved.addListener((windowId) => {

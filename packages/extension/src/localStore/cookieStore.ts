@@ -17,16 +17,15 @@
  * Internal dependencies.
  */
 import updateStorage from './updateStorage';
-import type { StorageValue, CookieData } from './types';
-import { emptyTabData } from './consts';
+import type { TabData, CookieData } from './types';
 
 const CookieStore = {
   /**
    * Update cookie store.
-   * @param {number|string} tabId Tab id.
+   * @param {string} tabId Tab id.
    * @param {Array} cookies Cookies data.
    */
-  async update(tabId: number, cookies: CookieData[]) {
+  async update(tabId: string, cookies: CookieData[]) {
     const newCookies: { [key: string]: CookieData } = {};
 
     for (const cookie of cookies) {
@@ -35,14 +34,14 @@ const CookieStore = {
       }
     }
 
-    await updateStorage(tabId, emptyTabData, (previousState: StorageValue) => {
+    await updateStorage(tabId, (prevState: TabData) => {
       const updatedCookies = {
-        ...previousState.cookies,
+        ...prevState.cookies,
         ...newCookies,
       };
 
       return {
-        ...previousState,
+        ...prevState,
         cookies: updatedCookies,
       };
     });
@@ -50,13 +49,13 @@ const CookieStore = {
 
   /**
    * Update tab location.
-   * @param {string|number} tabId Tab id.
+   * @param {string} tabId Tab id.
    * @param {string} url Tab url.
    * @param {number} focusedAt The timestamp, when the tab was focused.
    */
-  async updateTabLocation(tabId: number, url: string, focusedAt: number) {
-    await updateStorage(tabId, emptyTabData, (x: StorageValue) => ({
-      ...x,
+  async updateTabLocation(tabId: string, url: string, focusedAt: number) {
+    await updateStorage(tabId, (prevState: TabData) => ({
+      ...prevState,
       cookies: {},
       url,
       focusedAt,
@@ -81,8 +80,8 @@ const CookieStore = {
    * Remove the tab data from the store.
    * @param tabId The tab id.
    */
-  async removeTabData(tabId: number) {
-    await chrome.storage.local.remove(tabId.toString());
+  async removeTabData(tabId: string) {
+    await chrome.storage.local.remove(tabId);
   },
 
   /**
@@ -94,7 +93,7 @@ const CookieStore = {
 
     tabs.forEach(async (tab) => {
       if (tab.id) {
-        await CookieStore.removeTabData(tab.id);
+        await CookieStore.removeTabData(tab.id.toString());
       }
     });
   },
