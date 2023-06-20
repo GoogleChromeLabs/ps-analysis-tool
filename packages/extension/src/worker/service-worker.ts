@@ -17,7 +17,7 @@
  * Internal dependencies.
  */
 import { type CookieData, CookieStore } from '../localStore';
-import parseCookieHeader from './parseCookieHeader';
+import parseResponseCookieHeader from './parseResponseCookieHeader';
 import type { Header } from './types';
 
 /**
@@ -50,7 +50,7 @@ chrome.webRequest.onResponseStarted.addListener(
     // @ts-ignore
     const cookies: CookieData[] | [] = responseHeaders
       .map((header: Header): CookieData | null =>
-        parseCookieHeader(url, tab?.url, header)
+        parseResponseCookieHeader(url, tab?.url, header)
       )
       .filter((x: CookieData | null) => Boolean(x));
 

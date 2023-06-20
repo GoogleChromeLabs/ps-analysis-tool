@@ -22,6 +22,7 @@ export type CookieData = {
   parsedData: ParsedCookie;
   origin: string;
   toplevel: string;
+  headerType: string; // @todo Can this be response | request ?
 };
 
 export type StorageValue = {

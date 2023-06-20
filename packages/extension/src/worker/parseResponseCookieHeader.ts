@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import cookie from 'simple-cookie';
+import cookie, { type Cookie as ParsedCookie } from 'simple-cookie';
 
 /**
  * Internal dependencies.
@@ -24,26 +24,28 @@ import cookie from 'simple-cookie';
 import type { Header } from './types';
 
 /**
- * Parse cookies header.
+ * Parse response cookies header.
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
  * @param {string} url URL.
  * @param {string} top Top level url.
  * @param {object} header Header
  * @returns {object | null} Parsed cookie object.
  */
-const parseCookieHeader = (
+const parseResponseCookieHeader = (
   url: string,
   top: string | undefined,
   header: Header
 ) => {
-  if (!header.value || !['set-cookie'].includes(header.name.toLowerCase())) {
+  if (!header.value || 'set-cookie' !== header.name.toLowerCase()) {
     return null;
   }
 
-  const c = cookie.parse(header.value);
+  const parsedCookie: ParsedCookie = cookie.parse(header.value);
 
   const origin = url ? new URL(url).origin : '';
   const toplevel = top ? new URL(top).origin : '';
-  return { parsedData: c, origin, toplevel };
+
+  return { parsedData: parsedCookie, origin, toplevel, headerType: 'response' };
 };
 
-export default parseCookieHeader;
+export default parseResponseCookieHeader;
