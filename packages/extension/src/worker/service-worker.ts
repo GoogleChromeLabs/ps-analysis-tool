@@ -16,21 +16,49 @@
 /**
  * Internal dependencies.
  */
-import { CookieStore } from '../localStore';
+import { type CookieData, CookieStore, Header } from '../localStore';
+import parseCookieHeader from './parseCookieHeader';
 
 /**
  * Fires when the browser receives a response from a web server.
  * @see https://developer.chrome.com/docs/extensions/reference/webRequest/
  */
 chrome.webRequest.onResponseStarted.addListener(
-  (details) => {
+  async (details: chrome.webRequest.WebResponseCacheDetails) => {
     const { tabId, url, responseHeaders } = details;
 
+    let tab: chrome.tabs.Tab | null = null;
+
+    if (!tabId || Number(tabId) < 0 || !responseHeaders) {
+      return;
+    }
+
+    try {
+      tab = await chrome.tabs.get(tabId);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+    }
+
+    if (chrome.runtime.lastError || !tab) {
+      return;
+    }
+
+    // @todo: Fix ts error.
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const cookies: CookieData[] | [] = responseHeaders
+      .map((header: Header): CookieData | null =>
+        parseCookieHeader(url, tab?.url, header)
+      )
+      .filter((x: CookieData | null) => Boolean(x));
+
+    if (!cookies.length) {
+      return;
+    }
+
     // Adds the cookies from the request headers to the cookies object.
-    CookieStore.addFromRequest(tabId, {
-      url,
-      headers: responseHeaders,
-    });
+    await CookieStore.update(tabId, cookies);
   },
   { urls: ['*://*/*'] },
   ['extraHeaders', 'responseHeaders']

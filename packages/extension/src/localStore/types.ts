@@ -32,11 +32,6 @@ export type StorageValue = {
   focusedAt: number | undefined;
 };
 
-export type Request = {
-  headers: chrome.webRequest.HttpHeader[] | undefined;
-  url: string;
-};
-
 export type Header = {
   name: string;
   value?: string;

@@ -21,20 +21,29 @@ import cookie from 'simple-cookie';
 /**
  * Internal dependencies.
  */
-import type { CookieData, Header } from './types';
+import type { Header } from '../localStore';
 
-const parseCookieHeader =
-  (url: string, top: string | undefined) =>
-  (header: Header): CookieData | null => {
-    if (!header.value || !['set-cookie'].includes(header.name.toLowerCase())) {
-      return null;
-    }
+/**
+ * Parse cookies header.
+ * @param {string} url URL.
+ * @param {string} top Top level url.
+ * @param {object} header Header
+ * @returns {object | null} Parsed cookie object.
+ */
+const parseCookieHeader = (
+  url: string,
+  top: string | undefined,
+  header: Header
+) => {
+  if (!header.value || !['set-cookie'].includes(header.name.toLowerCase())) {
+    return null;
+  }
 
-    const c = cookie.parse(header.value);
+  const c = cookie.parse(header.value);
 
-    const origin = url ? new URL(url).origin : '';
-    const toplevel = top ? new URL(top).origin : '';
-    return { parsedData: c, origin, toplevel };
-  };
+  const origin = url ? new URL(url).origin : '';
+  const toplevel = top ? new URL(top).origin : '';
+  return { parsedData: c, origin, toplevel };
+};
 
 export default parseCookieHeader;
