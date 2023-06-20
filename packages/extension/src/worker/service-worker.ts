@@ -77,7 +77,7 @@ chrome.webNavigation.onBeforeNavigate.addListener((details) => {
  * @see https://developer.chrome.com/docs/extensions/reference/tabs/
  */
 chrome.tabs.onActivated.addListener((activeInfo) => {
-  CookieStore.updateTabFocus(activeInfo);
+  CookieStore.updateTabFocus(activeInfo.tabId.toString());
 });
 
 chrome.tabs.onRemoved.addListener((tabId) => {

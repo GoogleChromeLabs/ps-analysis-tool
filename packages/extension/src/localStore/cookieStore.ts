@@ -64,10 +64,9 @@ const CookieStore = {
 
   /**
    * Update the focusedAt timestamp for the tab.
-   * @param activeInfo The active tab info.
+   * @param tabId The active tab id.
    */
-  async updateTabFocus(activeInfo: chrome.tabs.TabActiveInfo) {
-    const { tabId } = activeInfo;
+  async updateTabFocus(tabId: string) {
     const storage = await chrome.storage.local.get();
 
     if (storage[tabId]) {
