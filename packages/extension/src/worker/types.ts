@@ -13,21 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import { type Cookie as ParsedCookie } from 'simple-cookie';
-
-export type CookieData = {
-  parsedData: ParsedCookie;
-  origin: string;
-  toplevel: string;
-};
-
-export type StorageValue = {
-  cookies: {
-    [key: string]: CookieData;
-  };
-  url: string | undefined;
-  focusedAt: number | undefined;
+export type Header = {
+  name: string;
+  value?: string;
 };

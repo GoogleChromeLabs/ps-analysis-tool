@@ -16,8 +16,9 @@
 /**
  * Internal dependencies.
  */
-import { type CookieData, CookieStore, Header } from '../localStore';
+import { type CookieData, CookieStore } from '../localStore';
 import parseCookieHeader from './parseCookieHeader';
+import type { Header } from './types';
 
 /**
  * Fires when the browser receives a response from a web server.
