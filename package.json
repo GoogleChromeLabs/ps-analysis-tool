@@ -8,9 +8,9 @@
 		"extension:build": "cross-env NODE_ENV=production webpack --config webpack.config.cjs",
 		"serve": "webpack serve",
 		"lint":  "npm-run-all --parallel lint:*",
-		"lint:fix": "eslint --fix .",
 		"lint:js": "eslint .",
 		"lint:types": "tsc --project ./packages/**/tsconfig.json",
+		"lint:js:fix": "eslint --fix .",
 		"prepare": "husky install"
 	},
 	"repository": {

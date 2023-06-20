@@ -21,7 +21,7 @@ import cookie from 'simple-cookie';
 /**
  * Internal dependencies.
  */
-import type { Header } from '../localStore';
+import type { Header } from './types';
 
 /**
  * Parse cookies header.
