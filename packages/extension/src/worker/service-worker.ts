@@ -85,3 +85,7 @@ chrome.tabs.onRemoved.addListener((tabId) => {
 chrome.windows.onRemoved.addListener((windowId) => {
   CookieStore.removeWindowData(windowId);
 });
+
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.storage.local.clear();
+});
