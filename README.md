@@ -119,17 +119,18 @@ This module provide services shareable to other parts of the tool.
 
 #### Analysis of Privacy Sandbox APIs
 
-The provide dedicated analysis panels for various PS 
+The Privacy Analysis tool provides information and guidance on the status and usage of Privacy Sandbox APIs, including the following:
 
-- Topics
-- Protected Audiences
-- CHIPS
-- Storage Access
+| API | Description |
+|-------|---------|
+| Topics|  |
+| Attribution Reporting | |
+| Storage Access | |
+
 
 ## Call to Action
-[Tailored CTAs for each [target audience](#target-audience).]
 
-The goal of this tool is to assist users on understanding cookie behaviors and their impact on browsing experience, and getting insights regarding [the upcoming deprecation of the way in which 3P cookies work](https://privacysandbox.com/open-web/#the-privacy-sandbox-timeline). The way to achieve this is to use the tool to analyze your site(s), your browsing experience, detect and report breakages, get support from Google on fixes, and, if you are developer of solutions that require functionality of cookis being deprecated, learn how to make them happen leveraging the new platform APIs that allow you to achieve the same goals in a privacy-preserving way. 
+The goal of this tool is to assist [users](#target-audience) on getting knowledge and insights regarding [the upcoming deprecation of the way in which 3P cookies work](https://privacysandbox.com/open-web/#the-privacy-sandbox-timeline), and on the status an dbehaviors of the new Privacy Sandbox APIs. You can use the tool to analyze your site(s), your browsing experience, detect and report breakages, get support from Google on fixes, and, if you are developer of solutions that require functionality of cookis being deprecated, learn how to make them happen leveraging the new platform APIs that allow you to achieve the same goals in a privacy-preserving way. 
 
 If you are a **first-party site developer** developing and/or maintaining the site(s) for your organization, use the tool to gain insights into third-party cookie usage in your products and identify and troubleshoot potential issues to ensure your websites run smoothly.
 
@@ -139,12 +140,6 @@ If you are a **third-party service providers transitioning away from cookies**, 
 
 If you are a **website owners and/or technology leader**, use the tool to...
 
-## Resources
-The Privacy Sandbox initiative aims to create technologies that both protect people's privacy online and give companies and developers tools to build thriving digital businesses. The goal of Privacy Sandbox is to reduce cross-site and cross-app tracking while helping to keep online content and services free for all. There are several entry points to sources of information about the Privacy Sandbox in general 
-
-* Privacy Sandbox [main site](https://privacysandbox.com/)
-* Privacy Sandbox for developers: [developer.Chrome](https://developer.chrome.com/privacy-sandbox/), [testing](https://developer.chrome.com/en/docs/privacy-sandbox/chrome-testing/)
-* A Potential New Privacy Model for the Web [explainer](https://github.com/michaelkleber/privacy-model)
 
 ## Contributing
 If you have requests for features you would like to see in this tool, please file an Feature Request or join as a contributor! Please refer to our contribution [guidelines](docs/CONTRIBUTING.md) and [code of conduct](docs/code-of-conduct.md).
