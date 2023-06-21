@@ -75,9 +75,9 @@ The goal of this tool is to help you to answer questions as these:
 To provide these kind of assistance the tool encompasses a modular architecture with a set of processing and analysis components, and also different user interface entry points.
 
 ### Architecture
-
-![SPPI DevRel Ideation (6)](https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/6049673e-3508-4e03-8649-55b6f938abb9)
-
+<p align="center">
+  <img src="https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/6049673e-3508-4e03-8649-55b6f938abb9" width="70%" height="100%">
+</p>
 
 ### Input
 The input to the tool is composed of network traffic and browser data during a browsing session. 
