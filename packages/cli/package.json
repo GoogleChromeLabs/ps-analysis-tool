@@ -1,22 +1,14 @@
 {
   "name": "@cookie-analysis-tool/cli",
   "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-  },
+  "description": "CLI tool for cookie analysis",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/GoogleChromeLabs/cookie-analysis-tool.git"
   },
-  "author": "",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/GoogleChromeLabs/cookie-analysis-tool/issues"
   },
-  "homepage": "https://github.com/GoogleChromeLabs/cookie-analysis-tool#readme",
-  "dependencies": {
-  },
-  "devDependencies": {
-  }
+  "homepage": "https://github.com/GoogleChromeLabs/cookie-analysis-tool#readme"
 }

@@ -1,0 +1,74 @@
+name: Lint Files
+
+on:
+  push:
+    paths:
+      - '**.cjs'
+      - '**.js'
+      - '**.ts'
+      - '**.tsx'
+      - '.eslint*'
+      - '.nvmrc'
+      - '.prettier*'
+    branches:
+      - main
+      - release/*
+  pull_request:
+    paths:
+      - '**.cjs'
+      - '**.js'
+      - '**.ts'
+      - '**.tsx'
+      - '.eslint*'
+      - '.nvmrc'
+      - '.prettier*'
+
+# Cancels all prior workflow runs associated with pull requests that are still in progress.
+concurrency:
+  # The concurrency group contains the workflow name and the (target) branch name.
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read # For actions/checkout to fetch code
+    timeout-minutes: 20
+    steps:
+      - name: Harden Runner # Security agent: blocks outbound traffic & detects code overwrite to prevent breaches
+        uses: step-security/harden-runner@128a63446a954579617e875aaab7d2978154e969
+        with:
+          disable-sudo: true
+          disable-file-monitoring: true
+          egress-policy: block
+          allowed-endpoints: >
+            api.github.com:443
+            github.com:443
+            registry.npmjs.org:443
+
+      - name: Checkout
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9
+
+      - name: Setup Node
+        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: JS Lint
+        run: npm run lint:js
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
+
+      - name: Type Checks
+        run: npm run lint:types
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096

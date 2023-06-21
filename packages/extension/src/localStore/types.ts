@@ -13,8 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-declare module '*.svg' {
-  import React = require('react');
-  const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
-  export default ReactComponent;
-}
+/**
+ * External dependencies.
+ */
+import { type Cookie as ParsedCookie } from 'simple-cookie';
+
+export type CookieData = {
+  parsedCookie: ParsedCookie;
+  url: string;
+  toplevel: string;
+  headerType: 'response' | 'request';
+};
+
+export type TabData = {
+  cookies: {
+    [key: string]: CookieData;
+  };
+  url: string | undefined;
+  focusedAt: number | undefined;
+};
+
+export type Storage = {
+  [tabId: string]: TabData;
+};

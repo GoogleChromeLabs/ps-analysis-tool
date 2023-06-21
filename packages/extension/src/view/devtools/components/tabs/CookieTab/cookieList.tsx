@@ -13,8 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-declare module '*.svg' {
-  import React = require('react');
-  const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
-  export default ReactComponent;
+/**
+ * External dependencies.
+ */
+import React from 'react';
+
+/**
+ * Internal dependencies.
+ */
+import { type CookieData } from '../../../../../localStore';
+import ListItem from './listItem';
+
+interface ICoookieList {
+  cookies: {
+    [key: string]: CookieData;
+  };
 }
+
+const CookieList = ({ cookies }: ICoookieList) => (
+  <ul className="w-full h-full">
+    {Object.entries(cookies).map(([key, value]) => (
+      <li key={key}>
+        <ListItem cookie={value} />
+      </li>
+    ))}
+  </ul>
+);
+
+export default CookieList;

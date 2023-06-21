@@ -13,8 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-declare module '*.svg' {
-  import React = require('react');
-  const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
-  export default ReactComponent;
-}
+/**
+ * Internal dependencies.
+ */
+import { BounceTrackingTab } from './BounceTrackingTab';
+import { CookieTab } from './CookieTab';
+import { FingerprintingTab } from './FingerprintingTab';
+
+export const TABS = [
+  { display_name: 'Cookies', Component: CookieTab },
+  {
+    display_name: 'Bounce Tracking',
+    Component: BounceTrackingTab,
+  },
+  {
+    display_name: 'Fingerprinting',
+    Component: FingerprintingTab,
+  },
+];

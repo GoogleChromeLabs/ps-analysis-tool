@@ -1,13 +1,8 @@
-# node/bower and dependency directories
+# node and dependency directories
 node_modules
-bower_components
-.next
-.sass-cache
 
 # Log files and databases
 *.log
-*.sql
-*.csv
 
 # Code Editor files
 .idea
@@ -29,3 +24,6 @@ out
 # Other
 .cache
 .env
+
+# tsc output
+*.tsbuildinfo

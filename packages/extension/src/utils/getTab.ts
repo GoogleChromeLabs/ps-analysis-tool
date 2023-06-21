@@ -13,8 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-declare module '*.svg' {
-  import React = require('react');
-  const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
-  export default ReactComponent;
-}
+export const getTab = async (
+  tabId: number | string
+): Promise<chrome.tabs.Tab | null> => {
+  let tab: chrome.tabs.Tab | null = null;
+
+  if (!tabId || Number(tabId) < 0) {
+    return null;
+  }
+
+  try {
+    tab = await chrome.tabs.get(Number(tabId));
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log(error);
+  }
+
+  if (chrome.runtime.lastError || !tab) {
+    return null;
+  }
+
+  return tab;
+};

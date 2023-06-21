@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-declare module '*.svg' {
-  import React = require('react');
-  const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
-  export default ReactComponent;
-}
+chrome.devtools.panels.create(
+  'Privacy Sandbox',
+  'icons/icon.svg',
+  'devtools/index.html'
+);

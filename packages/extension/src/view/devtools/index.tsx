@@ -13,8 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-declare module '*.svg' {
-  import React = require('react');
-  const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
-  export default ReactComponent;
+/**
+ * External dependencies.
+ */
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+
+/**
+ * Internal dependencies.
+ */
+import App from './app';
+import { Provider as ExternalStoreProvider } from '../stateProviders/syncCookieStore';
+
+const root = document.getElementById('root');
+
+if (root) {
+  createRoot(root).render(
+    <ExternalStoreProvider>
+      <App />
+    </ExternalStoreProvider>
+  );
 }

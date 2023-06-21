@@ -13,8 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-declare module '*.svg' {
-  import React = require('react');
-  const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
-  export default ReactComponent;
-}
+export default {
+  rootDir: './',
+  transform: {
+    '^.+\\.[jt]sx?$': 'babel-jest',
+  },
+  testEnvironment: 'jsdom',
+  testMatch: ['**/tests/**/*.{js,jsx,ts,tsx}'],
+  globals: {},
+  setupFilesAfterEnv: ['<rootDir>/jest.setup'],
+  testPathIgnorePatterns: [
+    '<rootDir>/.git',
+    '<rootDir>/dist',
+    '<rootDir>/out',
+    '<rootDir>/node_modules',
+  ],
+};

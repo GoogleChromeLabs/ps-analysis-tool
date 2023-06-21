@@ -13,8 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-declare module '*.svg' {
-  import React = require('react');
-  const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
-  export default ReactComponent;
-}
+module.exports = function (api) {
+  const isProduction = api.env('production');
+
+  return {
+    presets: [
+      ['@babel/preset-env'],
+      [
+        '@babel/preset-react',
+        {
+          development: !isProduction,
+        },
+      ],
+      '@babel/preset-typescript',
+    ],
+    plugins: [
+      ['@babel/plugin-transform-react-jsx'],
+      ['babel-plugin-styled-components'],
+    ],
+    sourceMaps: true,
+  };
+};

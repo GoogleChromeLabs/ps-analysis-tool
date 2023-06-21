@@ -1,32 +1,90 @@
 {
 	"name": "cookie-analysis-tool",
 	"version": "0.0.1",
-	"description": "",
-	"main": "src/index.js",
+	"description": "Cookie Analysis Tool and CLI for analysis and understanding of cookie usage on web pages.",
 	"scripts": {
-		"extension:dev": "npm run dev --workspace=@cookie-analysis-tool/extension",
-		"cookie-db:update": "node scripts/update-cookie-db.js"
+		"test": "jest --config=jest.config.js",
+		"extension:dev": "webpack --config webpack.config.cjs --watch",
+		"extension:build": "cross-env NODE_ENV=production webpack --config webpack.config.cjs",
+		"serve": "webpack serve",
+		"lint": "npm-run-all --parallel lint:*",
+		"lint:js": "eslint .",
+		"lint:types": "tsc --project ./packages/**/tsconfig.json",
+		"lint:js:fix": "eslint --fix .",
+		"prepare": "husky install"
 	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/GoogleChromeLabs/cookie-analysis-tool"
 	},
-	"author": "rtCamp",
-	"license": "ISC",
+	"license": "Apache-2.0",
 	"bugs": {
 		"url": "https://github.com/GoogleChromeLabs/cookie-analysis-tool/issues"
 	},
-	"homepage": "https://github.com/GoogleChromeLabs/cookie-analysis-toolreadme",
+	"homepage": "https://github.com/GoogleChromeLabs/cookie-analysis-tool",
 	"devDependencies": {
-		"fs-extra": "^11.1.1",
-		"webpack": "^5.85.1"
+		"@babel/plugin-transform-react-jsx": "^7.22.5",
+		"@babel/preset-env": "^7.22.5",
+		"@babel/preset-react": "^7.22.5",
+		"@babel/preset-typescript": "^7.22.5",
+		"@svgr/webpack": "^8.0.1",
+		"@testing-library/jest-dom": "^5.16.5",
+		"@testing-library/react": "^14.0.0",
+		"@types/chrome": "^0.0.237",
+		"@types/jest": "^29.5.2",
+		"@types/react": "^18.2.9",
+		"@types/react-dom": "^18.2.4",
+		"@typescript-eslint/eslint-plugin": "^5.59.9",
+		"@typescript-eslint/parser": "^5.59.9",
+		"autoprefixer": "^10.4.14",
+		"babel-jest": "^29.5.0",
+		"babel-loader": "^9.1.2",
+		"babel-plugin-styled-components": "^2.1.3",
+		"copy-webpack-plugin": "^11.0.0",
+		"cross-env": "^7.0.3",
+		"css-loader": "^6.8.1",
+		"csvtojson": "^2.0.10",
+		"eslint": "^8.42.0",
+		"eslint-config-prettier": "^8.8.0",
+		"eslint-plugin-eslint-comments": "^3.2.0",
+		"eslint-plugin-header": "^3.1.1",
+		"eslint-plugin-import": "^2.27.5",
+		"eslint-plugin-jest": "^27.2.1",
+		"eslint-plugin-jsdoc": "^46.2.6",
+		"eslint-plugin-jsx-a11y": "^6.7.1",
+		"eslint-plugin-prettier": "^4.2.1",
+		"eslint-plugin-react": "^7.32.2",
+		"eslint-plugin-react-hooks": "^4.6.0",
+		"html-webpack-plugin": "^5.5.2",
+		"husky": "^8.0.3",
+		"jest": "^29.5.0",
+		"jest-environment-jsdom": "^29.5.0",
+		"jest-extended": "^4.0.0",
+		"lint-staged": "^13.2.2",
+		"npm-run-all": "^4.1.5",
+		"postcss-loader": "^7.3.3",
+		"prettier": "^2.8.8",
+		"react-test-renderer": "^18.2.0",
+		"style-loader": "^3.3.3",
+		"tailwindcss": "^3.3.2",
+		"ts-loader": "^9.4.3",
+		"typescript": "^5.0.4",
+		"webpack": "^5.86.0",
+		"webpack-cli": "^5.1.4",
+		"webpack-dev-server": "^4.15.1",
+		"webpackbar": "^5.0.2"
 	},
 	"lint-staged": {
-		"*.{js,ts,tsx,css,md}": "prettier --write",
+		"*.(cjs|js|ts|tsx)": [
+			"eslint --fix"
+		],
 		"*.json": [
 			"prettier --write"
-		]
+		],
+		"*.(xml|xml.dist)": "prettier --write",
+		"*.yml": "prettier --write"
 	},
+	"type": "module",
 	"workspaces": [
 		"packages/*"
 	]
