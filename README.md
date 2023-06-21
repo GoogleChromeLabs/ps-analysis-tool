@@ -8,7 +8,7 @@
 - [Privacy Sandbox Analysis](#privacy-sandbox-analysis)
 - [How the Tool Works](#how-the-tool-works)
 - [Call to action](#call-to-action)
-- [Resources](#resources)
+
 
 ## Privacy Sandbox
 
