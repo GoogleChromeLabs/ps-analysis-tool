@@ -61,6 +61,8 @@ The CLI implementation parses a sitemap provided as input, and outputs a JSON fi
 - Run the cli util providing a sitemap as input. E.g. `node dist/cli/index.js -s https://<example.com>/sitemap_index.xml\`.
 
 ## How the tool works
+
+### Browsing Session Analysis 
 The goal of this tool is to help you to answer questions as these:
 
 * How can I identify cookies being used on my site? 
@@ -70,32 +72,46 @@ The goal of this tool is to help you to answer questions as these:
 * How can I, as a developer, test my web applications to ensure that they are compatible with the cross-site boundary APIs and the upcoming changes to third-party cookies?
 * How can developers provide feedback to Google on the cross-site boundary APIs and the third-party cookie deprecation, and what role can they play in shaping the future of web development and privacy standards?
 
-To provide these kind of assistance the tool encompasses a modular architecture with a set of processing and analysis components, and also different user interface entry points. 
+To provide these kind of assistance the tool encompasses a modular architecture with a set of processing and analysis components, and also different user interface entry points.
 
-### User Interface
+### Architecture
 
-#### DevTools Panel
+![SPPI DevRel Ideation (5)](https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/97929429-20ea-498c-9bc6-733692b843e1)
 
-#### Extension Icon Popup
+#### Input
 
-#### Side Panel
+#### Data Gathering
 
-#### Enterprise Chrome
+#### Data Processing
 
-### Functional Components
-- Architectural diagrams
-- Clear explanation of what is being tracked/analyzed
-- Code references enabling open source verification of claims
-
-#### Identifying Cookies
+##### Parsing
 - Cookie Scanner
 - Tap into Chrome and DevTools APIs to gather cookie information from network streams
 
-#### Understanding Cookie Bahaviors
+##### Classification
 - Leverage existing cookie DBs to classify observed cookies
 
-#### Manipulating and Mutating Cookies
+##### Insights
 - Provide capabilities to toggle cookies on/off, and manipulate their values to test behaviors of sites
+
+#### Services
+
+##### Rendering
+
+##### Data Storage
+
+#### Output: User Interfaces
+
+##### DevTools Panel
+
+##### Icon Popup, Side Panel
+
+##### Google Admin Console
+
+
+
+
+
 
 #### Analysis of Privacy Sandbox APIs
 
