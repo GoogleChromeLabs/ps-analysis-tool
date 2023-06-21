@@ -53,9 +53,7 @@ This tool can be accessed as a [Chrome Extension](https://developer.chrome.com/d
 - `npm run cli:build` to genrate a build in `/dist/cli`.
 - Run the cli util providing a sitemap as input. E.g. `node dist/cli/index.js -s https://<example.com>/sitemap_index.xml\`.
 
-## How the tool works
-
-### Browsing Session Analysis 
+## Browsing Session Analysis 
 
 The overall goal of [Privacy Sandbox](https://privacysandbox.com/) is to protect users' privacy online. This encompasses reducing cross-site and cross-app tracking. This is done by introducing [a new privacy model for the web](https://github.com/michaelkleber/privacy-model), making changes to how 3P cookies work, and providing developers the platform capabilities they need to build thriving digital businesses. The goal of this tool is to help uers navigate the transition to a more private web, by answering questions such as:
 
@@ -67,7 +65,7 @@ The overall goal of [Privacy Sandbox](https://privacysandbox.com/) is to protect
 * How can I test my web applications to ensure that they are compatible with the cross-site boundary APIs and the upcoming changes to third-party cookies?
 * How can I provide feedback to Google on the cross-site boundary APIs and the third-party cookie deprecation, and what role can I play in shaping the future of web development and privacy standards?
 
-### Architecture
+## Architecture
 
 The Privacy Analysis tool is structured as a set of processing and analysis modeules, and its output is tailored to different user interfaces for different use cases. 
 
@@ -75,10 +73,10 @@ The Privacy Analysis tool is structured as a set of processing and analysis mode
   <img src="https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/6049673e-3508-4e03-8649-55b6f938abb9" width="70%" height="100%">
 </p>
 
-### Input
+## Input
 The input to the tool is composed of network traffic and browser data during a given browsing session. 
 
-### Output
+## Output
 
 The tool produces output for three different access points, serving the needs of the different members of our [target audience](#target-audience): 
 
@@ -89,7 +87,7 @@ The tool produces output for three different access points, serving the needs of
 |Google Admin Console| For enterprise users. Extend Google Admin UI with 3PCD/PS analysis information |
 
  
-### Data Gathering
+## Data Gathering
 
 The data provided as input to the tool are gathered using [Chrome APIs](https://developer.chrome.com/docs/extensions/reference/), which include all the web platform standard APIs, and chrome-secific APIs such as Chome Enterprise APIs, and DevTools APIs.
 
@@ -99,7 +97,7 @@ The data provided as input to the tool are gathered using [Chrome APIs](https://
 | DevTools | |
 | Enterprise | |
 
-### Data Processing
+## Data Processing
 
 | Module | Description |
 |-------|---------|
@@ -107,7 +105,7 @@ The data provided as input to the tool are gathered using [Chrome APIs](https://
 | Classification | Leverage and extend existing cookie DBs to classify observed cookies |
 | Insights | "Privacy Sandbox debugging" information|
 
-### Services
+## Services
 This module provide services shareable to other parts of the tool.
 
 | Service | Description |
@@ -115,17 +113,6 @@ This module provide services shareable to other parts of the tool.
 | Data Storage| Capabilities for storing and querying data gathered and processed by the tool |
 | Rendering | Components to generate UI/UX for each of the different output modules|
 | Enterprise | |
-
-
-#### Analysis of Privacy Sandbox APIs
-
-The Privacy Analysis tool provides information and guidance on the status and usage of Privacy Sandbox APIs, including the following:
-
-| API | Description |
-|-------|---------|
-| Topics|  |
-| Attribution Reporting | |
-| Storage Access | |
 
 
 ## Call to Action
