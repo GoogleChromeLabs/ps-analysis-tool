@@ -41,6 +41,22 @@ const ListItem = ({ cookie }: IListItem) => {
             <span>{cookie.parsedCookie.value}</span>
           </div>
         </div>
+        <div
+          className={
+            'mt-4 flex justify-between items-center text-sm text-secondary'
+          }
+        >
+          <span className="font-bold">
+            {cookie.analytics?.category || 'Uncategorized'}
+          </span>
+          <span
+            className={`font-bold ${
+              cookie.isFirstParty ? 'text-first-party' : 'text-third-party'
+            }`}
+          >
+            {cookie.isFirstParty ? 'First Party' : 'Third Party'}
+          </span>
+        </div>
       </div>
     </a>
   );

@@ -32,9 +32,9 @@ const cookieArray: CookieData[] = [
       name: 'countryCode1',
       value: 'IN',
     },
+    isFirstParty: null,
     analytics: null,
     url: 'https://example.com',
-    toplevel: 'https://example.com',
     headerType: 'response',
   },
   {
@@ -48,9 +48,9 @@ const cookieArray: CookieData[] = [
       name: 'countryCode2',
       value: 'IN',
     },
+    isFirstParty: null,
     analytics: null,
     url: 'https://example.com',
-    toplevel: 'https://example.com',
     headerType: 'response',
   },
 ];

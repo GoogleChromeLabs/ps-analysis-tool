@@ -23,6 +23,7 @@ import cookie, { type Cookie as ParsedCookie } from 'simple-cookie';
  */
 import type { CookieData } from '../localStore';
 import type { CookieDatabase } from '../utils/fetchCookieDictionary';
+import isFirstParty from '../utils/isFirstParty';
 
 /**
  * Parse response cookies header.
@@ -35,26 +36,25 @@ import type { CookieDatabase } from '../utils/fetchCookieDictionary';
  */
 const parseResponseCookieHeader = (
   url: string,
-  top: string | undefined,
+  top: string,
   value: string,
   dict: CookieDatabase
 ): CookieData => {
   const parsedCookie: ParsedCookie = cookie.parse(value);
-  const toplevel = top ? new URL(top).origin : '';
 
   let analytics = null;
 
   if (dict && Object.keys(dict).includes(parsedCookie.name)) {
     //@TODO Handle cases where a name has multiple entries by checking other attributes.
-    analytics = dict[parsedCookie.name][0];
+    analytics = dict[parsedCookie.name] ? dict[parsedCookie.name][0] : null;
   }
 
   return {
     parsedCookie: parsedCookie,
     analytics,
     url,
-    toplevel,
     headerType: 'response',
+    isFirstParty: isFirstParty(top, url),
   };
 };
 

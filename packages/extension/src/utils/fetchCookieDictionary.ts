@@ -38,5 +38,6 @@ export async function fetchDictionary(): Promise<CookieDatabase> {
   const url = chrome.runtime.getURL('data/open-cookie-database.json');
 
   const data = await (await fetch(url)).json();
+
   return data;
 }

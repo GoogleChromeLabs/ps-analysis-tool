@@ -40,7 +40,7 @@ chrome.webRequest.onResponseStarted.addListener(
       if (header.name.toLowerCase() === 'set-cookie' && header.value) {
         const cookie = parseResponseCookieHeader(
           url,
-          tab?.url,
+          tab.url || '',
           header.value,
           dictionary
         );

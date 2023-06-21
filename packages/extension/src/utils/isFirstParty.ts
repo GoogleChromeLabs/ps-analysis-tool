@@ -13,28 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Internal dependencies.
- */
-import { type Cookie as ParsedCookie } from 'simple-cookie';
-import type { CookieAnalytics } from '../utils/fetchCookieDictionary';
+const isFirstParty = (tabURL: string, cookieURL: string): boolean | null => {
+  try {
+    const cookieOrigin = new URL(cookieURL).origin;
+    const tabOrigin = new URL(tabURL).origin;
 
-export type CookieData = {
-  parsedCookie: ParsedCookie;
-  analytics: CookieAnalytics | null;
-  url: string;
-  isFirstParty: boolean | null;
-  headerType: 'response' | 'request';
+    return cookieOrigin === tabOrigin;
+  } catch (error) {
+    return null;
+  }
 };
 
-export type TabData = {
-  cookies: {
-    [key: string]: CookieData;
-  };
-  url: string | undefined;
-  focusedAt: number | undefined;
-};
-
-export type Storage = {
-  [tabId: string]: TabData;
-};
+export default isFirstParty;
