@@ -93,26 +93,28 @@ The tool produces output for three different access points, serving the needs of
 
 The data provided as input to the tool are gathered using [Chrome APIs](https://developer.chrome.com/docs/extensions/reference/), which include all the web platform standard APIs, and chrome-secific APIs such as Chome Enterprise APIs, and DevTools APIs.
 
+| APIs | Description |
+|-------|---------|
+| Chrome APIs| |
+| DevTools | |
+| Enterprise | |
+
 ### Data Processing
 
-#### Parsing
-- Cookie Scanner
-- Tap into Chrome and DevTools APIs to gather cookie information from network streams
-
-#### Classification
-- Leverage existing cookie DBs to classify observed cookies
-
-#### Insights
-- Provide capabilities to toggle cookies on/off, and manipulate their values to test behaviors of sites
+| Module | Description |
+|-------|---------|
+| Parsing| Extract information from network streams|
+| Classification | Leverage and extend existing cookie DBs to classify observed cookies |
+| Insights | "Privacy Sandbox debugging" information|
 
 ### Services
-This module provide services shareable to other parts of the tool
+This module provide services shareable to other parts of the tool.
 
-#### Rendering
-- Components to generate UI/UX for each of the different output modules
-
-#### Data Storage
-- Capabilities for storing and querying data gathered and processed by the tool
+| Service | Description |
+|-------|---------|
+| Data Storage| Capabilities for storing and querying data gathered and processed by the tool |
+| Rendering | Components to generate UI/UX for each of the different output modules|
+| Enterprise | |
 
 
 #### Analysis of Privacy Sandbox APIs
