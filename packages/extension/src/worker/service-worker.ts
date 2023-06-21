@@ -71,21 +71,38 @@ chrome.webNavigation.onBeforeNavigate.addListener((details) => {
 });
 
 /**
- * Update tab focus when a tab is activated(focused) or created.
- * @see https://developer.chrome.com/docs/extensions/reference/tabs/
+ * Fires when the tab is focused,
+ * When a new window is opened,
+ * Not when the tab is refreshed or a new website is opened.
+ * @see https://developer.chrome.com/docs/extensions/reference/tabs/#event-onActivated
  */
-chrome.tabs.onActivated.addListener((activeInfo) => {
-  CookieStore.updateTabFocus(activeInfo.tabId.toString());
+chrome.tabs.onActivated.addListener(async (activeInfo) => {
+  await CookieStore.updateTabFocus(activeInfo.tabId.toString());
 });
 
-chrome.tabs.onRemoved.addListener((tabId) => {
-  CookieStore.removeTabData(tabId.toString());
+/**
+ * Fires when a tab is closed.
+ * @see https://developer.chrome.com/docs/extensions/reference/tabs/#event-onRemoved
+ */
+chrome.tabs.onRemoved.addListener(async (tabId) => {
+  await CookieStore.removeTabData(tabId.toString());
 });
 
-chrome.windows.onRemoved.addListener((windowId) => {
-  CookieStore.removeWindowData(windowId);
+/**
+ * Fires when a window is removed (closed).
+ * @see https://developer.chrome.com/docs/extensions/reference/windows/#event-onRemoved
+ */
+chrome.windows.onRemoved.addListener(async (windowId) => {
+  await CookieStore.removeWindowData(windowId);
 });
 
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.local.clear();
+/**
+ * Fires when the extension is first installed,
+ * when clicked on the extension refresh button from chrome://extensions/
+ * when the extension is updated to a new version,
+ * when Chrome is updated to a new version.
+ * @see https://developer.chrome.com/docs/extensions/reference/runtime/#event-onInstalled
+ */
+chrome.runtime.onInstalled.addListener(async () => {
+  await chrome.storage.local.clear();
 });

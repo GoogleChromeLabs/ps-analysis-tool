@@ -86,7 +86,7 @@ const CookieStore = {
   },
 
   /**
-   * Remove the window's tabs data from the store.
+   * Remove the window's all tabs data from the store.
    * @param {number} windowId The window id.
    */
   async removeWindowData(windowId: number) {
