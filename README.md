@@ -65,15 +65,16 @@ The goal of this tool is to help you to answer questions as these:
 * How can I, as a developer, test my web applications to ensure that they are compatible with the cross-site boundary APIs and the upcoming changes to third-party cookies?
 * How can developers provide feedback to Google on the cross-site boundary APIs and the third-party cookie deprecation, and what role can they play in shaping the future of web development and privacy standards?
 
-To provide these kind of assistance the tool encompasses a modular architecture with a set of processing and analysis components, and also different user interface entry points.
-
 ### Architecture
+
+To provide the desired assistance, the tool is structured as a set of processing and analysis modeules, and its output is tailored to different user interfaces for different use cases. 
+
 <p align="center">
   <img src="https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/6049673e-3508-4e03-8649-55b6f938abb9" width="70%" height="100%">
 </p>
 
 ### Input
-The input to the tool is composed of network traffic and browser data during a browsing session. 
+The input to the tool is composed of network traffic and browser data during a given browsing session. 
 
 ### Output
 
