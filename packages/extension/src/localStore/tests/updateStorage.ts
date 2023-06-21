@@ -20,13 +20,13 @@
 import updateStorage from '../updateStorage';
 import { type Storage } from '../types';
 
-describe.only('local store: updateSorage', () => {
+describe.only('local store: updateStorage', () => {
   let storage: Storage = {};
+
   beforeAll(() => {
     globalThis.chrome = {
       storage: {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-ignore local does not implementains of other properties
+        //@ts-ignore local does not implementations of other properties
         local: {
           set: (data) =>
             new Promise((resolve) => {
@@ -131,7 +131,7 @@ describe.only('local store: updateSorage', () => {
     expect(storage).toStrictEqual({ '123': newData, '234': tab2 });
   });
 
-  it.only('makes space for new updates by deleating tab data by LRU', async () => {
+  it.only('makes space for new updates by deleting tab data by LRU', async () => {
     const tab1 = {
       cookies: {},
       url: '123',

@@ -17,7 +17,7 @@
     "type": "module"
   },
   "action": {
-    "default_icon": "icons/48x48.png"
+    "default_icon": "icons/icon-48.png"
   },
   "web_accessible_resources": [
     {

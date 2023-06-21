@@ -59,7 +59,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     syncState();
+
     chrome.storage.onChanged.addListener(syncState);
+
     return () => {
       chrome.storage.onChanged.removeListener(syncState);
     };

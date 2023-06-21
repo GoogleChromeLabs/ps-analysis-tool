@@ -23,7 +23,8 @@ describe('parseResponseCookieHeader', () => {
     const parsedCookie = parseResponseCookieHeader(
       'https://example.com/public/api/alerts',
       'https://example.com/',
-      'countryCode=IN; Domain=.example.com; Path=/; SameSite=None; Secure'
+      'countryCode=IN; Domain=.example.com; Path=/; SameSite=None; Secure',
+      {}
     );
 
     expect(parsedCookie).toEqual({
@@ -37,6 +38,7 @@ describe('parseResponseCookieHeader', () => {
         name: 'countryCode',
         value: 'IN',
       },
+      analytics: null,
       url: 'https://example.com/public/api/alerts',
       toplevel: 'https://example.com',
       headerType: 'response',

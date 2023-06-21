@@ -18,7 +18,7 @@
  * Internal dependencies.
  */
 import CookieStore from '../cookieStore';
-import { type CookieData, type Storage } from '../types';
+import type { CookieData, Storage } from '../types';
 
 const cookieArray: CookieData[] = [
   {
@@ -32,6 +32,7 @@ const cookieArray: CookieData[] = [
       name: 'countryCode1',
       value: 'IN',
     },
+    analytics: null,
     url: 'https://example.com',
     toplevel: 'https://example.com',
     headerType: 'response',
@@ -47,6 +48,7 @@ const cookieArray: CookieData[] = [
       name: 'countryCode2',
       value: 'IN',
     },
+    analytics: null,
     url: 'https://example.com',
     toplevel: 'https://example.com',
     headerType: 'response',
@@ -57,19 +59,16 @@ describe.only('local store: CookieStore', () => {
   let storage: Storage = {};
   beforeAll(() => {
     globalThis.chrome = {
-      //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //@ts-ignore local does not need implementains of other properties for these tests
+      //@ts-ignore local does not need implementations of other properties for these tests
       tabs: {
         query: () =>
           new Promise((resolve) => {
-            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
             //@ts-ignore local does not need other properties for these tests
             resolve([{ id: 123 }]);
           }),
       },
       storage: {
-        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-ignore local does not need implementains of other properties for these tests
+        //@ts-ignore local does not need implementations of other properties for these tests
         local: {
           set: (data) =>
             new Promise((resolve) => {
@@ -133,12 +132,12 @@ describe.only('local store: CookieStore', () => {
 
   it('should update tab foucusedAt value', async () => {
     await CookieStore.update('123', cookieArray);
-    const prevFoucusedAt = storage['123'].focusedAt;
+    const prevFocusedAt = storage['123'].focusedAt;
 
     await new Promise((r) => setTimeout(r, 100));
     await CookieStore.updateTabFocus('123');
 
-    expect(storage['123'].focusedAt).not.toBe(prevFoucusedAt);
+    expect(storage['123'].focusedAt).not.toBe(prevFocusedAt);
   });
 
   it('should remove tab data', async () => {
