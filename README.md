@@ -82,21 +82,12 @@ The input to the tool is composed of network traffic and browser data during a g
 
 The tool produces output for three different access points, serving the needs of the different members of our [target audience](#target-audience): 
 
-1. DevTools Panel
-2. Icon popup and Side Panel
-3. Google Admin Console
+| Surface | Description |
+|---------|--------|
+|DevTools Panel | Main user interface of the tool. Learning, monitoring, and debugging capabilities for developers responsible for making 1P sites work and developing 3P services |
+|Icon popup and Side Panel| Dynamic monitoring capabilities. Basic privacy-sandbox-related information, such as status of cookies, classification results at any given time (e.g. how many marketing cookies?)|
+|Google Admin Console| For enterprise users. Extend Google Admin UI with 3PCD/PS analysis information |
 
-#### DevTools Panel
-- Main user interface of the tool.
-- Learning, monitoring, and debugging capabilities for developers responsible for making 1P sites work and developing 3P services. 
-
-#### Icon Popup, Side Panel
-- Dynamic monitoring capabilities
-- Basic privacy-sandbox-related information, such as status of cookies, classification results at any given time (e.g. how many marketing cookies?)
-
-#### Google Admin Console
-- For enterprise users
-- Extend Google Admin UI with 3PCD/PS analysis information
  
 ### Data Gathering
 
