@@ -25,10 +25,10 @@ const updateStorage = async (
   //Find out storage quota used currently
   const currentBytesInUse = await chrome.storage.local.getBytesInUse();
   const currentStorageSnapshot: Storage = await chrome.storage.local.get();
-  const restBytesInUse =
-    currentBytesInUse -
-    new TextEncoder().encode(JSON.stringify(currentStorageSnapshot[tabId]))
-      .length;
+  const encodedData = new TextEncoder().encode(
+    JSON.stringify(currentStorageSnapshot[tabId])
+  );
+  const restBytesInUse = currentBytesInUse - encodedData.length;
 
   //Find out storage quota that will be used in the future
   const newStorageValue: Storage = {

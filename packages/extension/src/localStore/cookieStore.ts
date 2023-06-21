@@ -65,7 +65,7 @@ const CookieStore = {
 
   /**
    * Update the focusedAt timestamp for the tab.
-   * @param tabId The active tab id.
+   * @param {string} tabId The active tab id.
    */
   async updateTabFocus(tabId: string) {
     const storage = await chrome.storage.local.get();
@@ -73,12 +73,13 @@ const CookieStore = {
     if (storage[tabId]) {
       storage[tabId].focusedAt = Date.now();
     }
+
     await chrome.storage.local.set(storage);
   },
 
   /**
    * Remove the tab data from the store.
-   * @param tabId The tab id.
+   * @param {string} tabId The tab id.
    */
   async removeTabData(tabId: string) {
     await chrome.storage.local.remove(tabId);
@@ -86,16 +87,18 @@ const CookieStore = {
 
   /**
    * Remove the window's tabs data from the store.
-   * @param windowId The window id.
+   * @param {number} windowId The window id.
    */
   async removeWindowData(windowId: number) {
     const tabs = await chrome.tabs.query({ windowId });
 
-    tabs.forEach(async (tab) => {
+    const tabPromises = tabs.map(async (tab) => {
       if (tab.id) {
         await CookieStore.removeTabData(tab.id.toString());
       }
     });
+
+    await Promise.all(tabPromises);
   },
 };
 
