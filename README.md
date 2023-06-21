@@ -78,35 +78,43 @@ To provide these kind of assistance the tool encompasses a modular architecture 
 
 ![SPPI DevRel Ideation (5)](https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/97929429-20ea-498c-9bc6-733692b843e1)
 
-#### Input
+### Input
+The input to the tool is composed of network traffic and browser data during a browsing session. These iput is gathered using [Chrome APIs](https://developer.chrome.com/docs/extensions/reference/), which include all the web platform standard APIs, and chrome-secific APIs such as Chome Enterprise APIs, and DevTools APIs.
 
-#### Data Gathering
+### Output
 
-#### Data Processing
+The tool produces output for three different access points, serving the needs of the different members of our [target audience](#target-audience): 
 
-##### Parsing
+1. DevTools Panel
+2. Icon popup and Side Panel
+3. Google Admin Console
+
+#### DevTools Panel
+
+#### Icon Popup, Side Panel
+
+#### Google Admin Console
+
+### Data Gathering
+
+### Data Processing
+
+#### Parsing
 - Cookie Scanner
 - Tap into Chrome and DevTools APIs to gather cookie information from network streams
 
-##### Classification
+#### Classification
 - Leverage existing cookie DBs to classify observed cookies
 
-##### Insights
+#### Insights
 - Provide capabilities to toggle cookies on/off, and manipulate their values to test behaviors of sites
 
-#### Services
+### Services
 
-##### Rendering
+#### Rendering
 
-##### Data Storage
+#### Data Storage
 
-#### Output: User Interfaces
-
-##### DevTools Panel
-
-##### Icon Popup, Side Panel
-
-##### Google Admin Console
 
 
 
