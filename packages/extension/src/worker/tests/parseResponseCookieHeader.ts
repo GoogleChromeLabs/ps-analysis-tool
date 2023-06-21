@@ -54,7 +54,7 @@ describe('parseResponseCookieHeader', () => {
         name: 'countryCode',
         value: 'IN',
       },
-      url: 'https://example.com',
+      url: 'https://example.com/public/api/alerts',
       toplevel: 'https://example.com',
       headerType: 'response',
     });
