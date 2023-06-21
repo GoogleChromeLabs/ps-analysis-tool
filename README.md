@@ -76,7 +76,8 @@ To provide these kind of assistance the tool encompasses a modular architecture 
 
 ### Architecture
 
-![SPPI DevRel Ideation (5)](https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/97929429-20ea-498c-9bc6-733692b843e1)
+![SPPI DevRel Ideation (6)](https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/6049673e-3508-4e03-8649-55b6f938abb9)
+
 
 ### Input
 The input to the tool is composed of network traffic and browser data during a browsing session. 
