@@ -21,26 +21,22 @@ import cookie, { type Cookie as ParsedCookie } from 'simple-cookie';
 /**
  * Internal dependencies.
  */
-import type { Header } from './types';
+import type { CookieData } from '../localStore';
 
 /**
  * Parse response cookies header.
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
  * @param {string} url URL.
  * @param {string} top Top level url.
- * @param {object} header Header
- * @returns {object | null} Parsed cookie object.
+ * @param {string} value header value
+ * @returns {CookieData} Parsed cookie object.
  */
 const parseResponseCookieHeader = (
   url: string,
   top: string | undefined,
-  header: Header
-) => {
-  if (!header.value || 'set-cookie' !== header.name.toLowerCase()) {
-    return null;
-  }
-
-  const parsedCookie: ParsedCookie = cookie.parse(header.value);
+  value: string
+): CookieData => {
+  const parsedCookie: ParsedCookie = cookie.parse(value);
   const toplevel = top ? new URL(top).origin : '';
 
   return {

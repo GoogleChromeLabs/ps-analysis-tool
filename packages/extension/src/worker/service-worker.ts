@@ -18,7 +18,6 @@
  */
 import { type CookieData, CookieStore } from '../localStore';
 import parseResponseCookieHeader from './parseResponseCookieHeader';
-import type { Header } from './types';
 import { getTab } from '../utils/getTab';
 
 /**
@@ -35,13 +34,13 @@ chrome.webRequest.onResponseStarted.addListener(
       return;
     }
 
-    // @ts-ignore
-    const cookies: CookieData[] | [] = responseHeaders
-      .map((header: Header): CookieData | null =>
-        // @ts-ignore
-        parseResponseCookieHeader(url, tab?.url, header)
-      )
-      .filter((x: CookieData | null) => Boolean(x));
+    const cookies = responseHeaders.reduce<CookieData[]>((acc, header) => {
+      if (header.name.toLowerCase() === 'set-cookie' && header.value) {
+        const cookie = parseResponseCookieHeader(url, tab?.url, header.value);
+        return [...acc, cookie];
+      }
+      return acc;
+    }, []);
 
     if (!cookies.length) {
       return;
