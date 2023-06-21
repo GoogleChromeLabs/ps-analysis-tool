@@ -5,7 +5,7 @@
 ## Table of contents
 - [Privacy Sandbox](#privacy-sandbox)
 - [Target audience](#target-audience)
-- [Cookie Analysis](#cookie-analysis)
+- [Privacy Sandbox Analysis](#privacy-sandbox-analysis)
 - [How the Tool Works](#how-the-tool-works)
 - [Call to action](#call-to-action)
 - [Resources](#resources)
@@ -32,14 +32,14 @@ Tracks #2 and #3 bring significant changes to how the web operates today, and th
 
 **Website owners and technology leaders**: responsible for tech and business decision making. They need the ability to get reports and insights about the cookies usage by their sites and the potential impact on user privacy.
 
-## Cookie Analysis
+## Privacy Sandbox Analysis
 
-This Cookie Analysis Tool is designed to provide detailed information about cookie usage during browsing sessions. It tracks and analyzes the various cookies that websites place on your browser, and it offers a comprehensive overview of their origins, their purposes, their expiry dates, and other relevant information. It also provides context and knowledge access points to about 3P cookies and [Privacy Sandbox APIs](https://privacysandbox.com/open-web/#proposals-for-the-web). 
+The Privacy Sandbox Analysis tool is designed to provide detailed information about cookie usage during browsing sessions, and shed light on the use and behavior of PS APIs. The tool provides capabilities for tracking and analyzing the cookies that are placed on the browser as you go through your browsing session, and it also provides context and knowledge access points to learn about 3P cookies and [Privacy Sandbox APIs](https://privacysandbox.com/open-web/#proposals-for-the-web). 
 
 This tool can be accessed as a [Chrome Extension](https://developer.chrome.com/docs/extensions/mv3/), or via a CLI on your terminal. 
 
 ### Extension
-The Chrome extension provides a summary cookie analysis via a pop-up window from the extension icon, as well as detailed cookie anlaysis in a panel inside dev tools.
+The Chrome extension provides capabilities surfaced via the extension pop up, the Side Panel, and as Devtools panel. 
 
 ### CLI
 
