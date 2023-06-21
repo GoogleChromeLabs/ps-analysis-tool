@@ -30,7 +30,8 @@ const CookieStore = {
 
     for (const cookie of cookies) {
       if (cookie) {
-        newCookies[cookie.parsedData.name + cookie.parsedData.domain] = cookie;
+        newCookies[cookie.parsedCookie.name + cookie.parsedCookie.domain] =
+          cookie;
       }
     }
 

@@ -44,7 +44,7 @@ describe('parseResponseCookieHeader', () => {
     );
 
     expect(parsedCookie).toEqual({
-      parsedData: {
+      parsedCookie: {
         expires: 0,
         httponly: false,
         secure: true,
@@ -54,7 +54,7 @@ describe('parseResponseCookieHeader', () => {
         name: 'countryCode',
         value: 'IN',
       },
-      origin: 'https://example.com',
+      url: 'https://example.com',
       toplevel: 'https://example.com',
       headerType: 'response',
     });

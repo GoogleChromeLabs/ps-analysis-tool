@@ -38,6 +38,7 @@ chrome.webRequest.onResponseStarted.addListener(
     // @ts-ignore
     const cookies: CookieData[] | [] = responseHeaders
       .map((header: Header): CookieData | null =>
+        // @ts-ignore
         parseResponseCookieHeader(url, tab?.url, header)
       )
       .filter((x: CookieData | null) => Boolean(x));

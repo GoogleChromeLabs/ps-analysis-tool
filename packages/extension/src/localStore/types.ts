@@ -19,10 +19,10 @@
 import { type Cookie as ParsedCookie } from 'simple-cookie';
 
 export type CookieData = {
-  parsedData: ParsedCookie;
-  origin: string;
+  parsedCookie: ParsedCookie;
+  url: string;
   toplevel: string;
-  headerType: string; // @todo Can this be response | request ?
+  headerType: 'response' | 'request';
 };
 
 export type TabData = {

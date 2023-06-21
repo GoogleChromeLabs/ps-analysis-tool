@@ -22,7 +22,7 @@ import { type CookieData, type Storage } from '../types';
 
 const cookieArray: CookieData[] = [
   {
-    parsedData: {
+    parsedCookie: {
       expires: 0,
       httponly: false,
       secure: true,
@@ -32,12 +32,12 @@ const cookieArray: CookieData[] = [
       name: 'countryCode1',
       value: 'IN',
     },
-    origin: 'https://example.com',
+    url: 'https://example.com',
     toplevel: 'https://example.com',
     headerType: 'response',
   },
   {
-    parsedData: {
+    parsedCookie: {
       expires: 0,
       httponly: false,
       secure: true,
@@ -47,7 +47,7 @@ const cookieArray: CookieData[] = [
       name: 'countryCode2',
       value: 'IN',
     },
-    origin: 'https://example.com',
+    url: 'https://example.com',
     toplevel: 'https://example.com',
     headerType: 'response',
   },
