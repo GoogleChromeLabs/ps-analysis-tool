@@ -79,7 +79,7 @@ To provide these kind of assistance the tool encompasses a modular architecture 
 ![SPPI DevRel Ideation (5)](https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/97929429-20ea-498c-9bc6-733692b843e1)
 
 ### Input
-The input to the tool is composed of network traffic and browser data during a browsing session. These iput is gathered using [Chrome APIs](https://developer.chrome.com/docs/extensions/reference/), which include all the web platform standard APIs, and chrome-secific APIs such as Chome Enterprise APIs, and DevTools APIs.
+The input to the tool is composed of network traffic and browser data during a browsing session. 
 
 ### Output
 
@@ -90,12 +90,20 @@ The tool produces output for three different access points, serving the needs of
 3. Google Admin Console
 
 #### DevTools Panel
+- Main user interface of the tool.
+- Learning, monitoring, and debugging capabilities for developers responsible for making 1P sites work and developing 3P services. 
 
 #### Icon Popup, Side Panel
+- Dynamic monitoring capabilities
+- Basic privacy-sandbox-related information, such as status of cookies, classification results at any given time (e.g. how many marketing cookies?)
 
 #### Google Admin Console
-
+- For enterprise users
+- Extend Google Admin UI with 3PCD/PS analysis information
+-  
 ### Data Gathering
+
+The data provided as input to the tool are gathered using [Chrome APIs](https://developer.chrome.com/docs/extensions/reference/), which include all the web platform standard APIs, and chrome-secific APIs such as Chome Enterprise APIs, and DevTools APIs.
 
 ### Data Processing
 
@@ -110,15 +118,13 @@ The tool produces output for three different access points, serving the needs of
 - Provide capabilities to toggle cookies on/off, and manipulate their values to test behaviors of sites
 
 ### Services
+This module provide services shareable to other parts of the tool
 
 #### Rendering
+- Components to generate UI/UX for each of the different output modules
 
 #### Data Storage
-
-
-
-
-
+- Capabilities for storing and querying data gathered and processed by the tool
 
 
 #### Analysis of Privacy Sandbox APIs
