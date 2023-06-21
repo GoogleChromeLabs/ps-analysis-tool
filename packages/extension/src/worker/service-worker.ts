@@ -37,10 +37,14 @@ chrome.webRequest.onResponseStarted.addListener(
 
     const dictionary = await fetchDictionary();
     const cookies = responseHeaders.reduce<CookieData[]>((acc, header) => {
-      if (header.name.toLowerCase() === 'set-cookie' && header.value) {
+      if (
+        header.name.toLowerCase() === 'set-cookie' &&
+        header.value &&
+        tab.url
+      ) {
         const cookie = parseResponseCookieHeader(
           url,
-          tab.url || '',
+          tab.url,
           header.value,
           dictionary
         );

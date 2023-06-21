@@ -28,8 +28,8 @@ import isFirstParty from '../utils/isFirstParty';
 /**
  * Parse response cookies header.
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
- * @param {string} url URL.
- * @param {string} top Top level url.
+ * @param {string} url Cookie URL (URL of the server which is setting/updating cookies).
+ * @param {string} top Top level url ( URL in tab's address bar ).
  * @param {string} value header value
  * @param {CookieDatabase} dict Dictionary from open cookie database
  * @returns {CookieData} Parsed cookie object.
