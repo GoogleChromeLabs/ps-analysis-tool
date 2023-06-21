@@ -19,28 +19,11 @@
 import parseResponseCookieHeader from '../parseResponseCookieHeader';
 
 describe('parseResponseCookieHeader', () => {
-  it('Should return null if cookie is not set', () => {
+  it('Should parse all set-cookie header (response cookies)', () => {
     const parsedCookie = parseResponseCookieHeader(
       'https://example.com/public/api/alerts',
       'https://example.com/',
-      {
-        name: 'access-control-allow-origin',
-        value: 'http://example.com',
-      }
-    );
-
-    expect(parsedCookie).toBeNull();
-  });
-
-  it('Should parse all cookie values for Set-Cookie in request', () => {
-    const parsedCookie = parseResponseCookieHeader(
-      'https://example.com/public/api/alerts',
-      'https://example.com/',
-      {
-        name: 'set-cookie',
-        value:
-          'countryCode=IN; Domain=.example.com; Path=/; SameSite=None; Secure',
-      }
+      'countryCode=IN; Domain=.example.com; Path=/; SameSite=None; Secure'
     );
 
     expect(parsedCookie).toEqual({
