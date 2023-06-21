@@ -56,18 +56,20 @@ This tool can be accessed as a [Chrome Extension](https://developer.chrome.com/d
 ## How the tool works
 
 ### Browsing Session Analysis 
-The goal of this tool is to help you to answer questions as these:
+
+The overall goal of [Privacy Sandbox](https://privacysandbox.com/) is to protect users' privacy online. This encompasses reducing cross-site and cross-app tracking. This is done by introducing [a new privacy model for the web](https://github.com/michaelkleber/privacy-model), making changes to how 3P cookies work, and providing developers the platform capabilities they need to build thriving digital businesses. The goal of this tool is to help uers navigate the transition to a more private web, by answering questions such as:
 
 * How can I identify cookies being used on my site? 
 * How can I tell what behaviors a third party cookie is tracking on my website or what it's being used for?
 * How can I block third party cookies being set on my site by other websites unrelated to mine?
+* What happens to my browsing session if 3P cookies are being blocked?
 * How can I ensure that my websites are still able to function properly after third-party cookies are deprecated?
-* How can I, as a developer, test my web applications to ensure that they are compatible with the cross-site boundary APIs and the upcoming changes to third-party cookies?
-* How can developers provide feedback to Google on the cross-site boundary APIs and the third-party cookie deprecation, and what role can they play in shaping the future of web development and privacy standards?
+* How can I test my web applications to ensure that they are compatible with the cross-site boundary APIs and the upcoming changes to third-party cookies?
+* How can I provide feedback to Google on the cross-site boundary APIs and the third-party cookie deprecation, and what role can I play in shaping the future of web development and privacy standards?
 
 ### Architecture
 
-To provide the desired assistance, the tool is structured as a set of processing and analysis modeules, and its output is tailored to different user interfaces for different use cases. 
+The Privacy Analysis tool is structured as a set of processing and analysis modeules, and its output is tailored to different user interfaces for different use cases. 
 
 <p align="center">
   <img src="https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/6049673e-3508-4e03-8649-55b6f938abb9" width="70%" height="100%">
