@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 export const getTab = async (
-  tabId: number
+  tabId: number | string
 ): Promise<chrome.tabs.Tab | null> => {
   let tab: chrome.tabs.Tab | null = null;
 
@@ -23,7 +23,7 @@ export const getTab = async (
   }
 
   try {
-    tab = await chrome.tabs.get(tabId);
+    tab = await chrome.tabs.get(Number(tabId));
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log(error);
