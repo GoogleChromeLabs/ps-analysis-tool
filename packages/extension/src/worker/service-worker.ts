@@ -35,8 +35,6 @@ chrome.webRequest.onResponseStarted.addListener(
       return;
     }
 
-    // @todo: Fix ts error.
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const cookies: CookieData[] | [] = responseHeaders
       .map((header: Header): CookieData | null =>
