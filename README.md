@@ -101,7 +101,7 @@ The tool produces output for three different access points, serving the needs of
 #### Google Admin Console
 - For enterprise users
 - Extend Google Admin UI with 3PCD/PS analysis information
--  
+ 
 ### Data Gathering
 
 The data provided as input to the tool are gathered using [Chrome APIs](https://developer.chrome.com/docs/extensions/reference/), which include all the web platform standard APIs, and chrome-secific APIs such as Chome Enterprise APIs, and DevTools APIs.
