@@ -13,22 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * External dependencies.
- */
-import { BounceTrackingTab } from './BounceTrackingTab';
-import { CookieTab } from './CookiesTab';
-import { FingerprintingTab } from './FingerprintingTab';
-
-export const TABS = [
-  { display_name: 'Cookies', Component: CookieTab },
-  {
-    display_name: 'Bounce Tracking',
-    Component: BounceTrackingTab,
-  },
-  {
-    display_name: 'Fingerprinting',
-    Component: FingerprintingTab,
-  },
-];
+export type Header = {
+  name: string;
+  value: string;
+};

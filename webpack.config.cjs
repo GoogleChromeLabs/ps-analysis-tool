@@ -38,7 +38,26 @@ const commonConfig = {
       },
       {
         test: /\.css$/i,
-        use: ['style-loader', 'css-loader', 'postcss-loader'],
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [
+                  [
+                    'tailwindcss',
+                    {
+                      config: './packages/extension/tailwind.config.cjs',
+                    },
+                  ],
+                  ['autoprefixer'],
+                ],
+              },
+            },
+          },
+        ],
       },
       {
         // svg
@@ -56,7 +75,7 @@ const commonConfig = {
 
 const root = {
   entry: {
-    'service-worker': './packages/extension/src/service-worker.ts',
+    'service-worker': './packages/extension/src/worker/service-worker.ts',
   },
   output: {
     path: path.resolve(__dirname, './dist/extension'),
@@ -79,8 +98,8 @@ const root = {
 
 const devTools = {
   entry: {
-    index: './packages/extension/src/devtools/index.tsx',
-    devtools: './packages/extension/src/devtools/devtools.ts',
+    index: './packages/extension/src/view/devtools/index.tsx',
+    devtools: './packages/extension/src/view/devtools/devtools.ts',
   },
   output: {
     path: path.resolve(__dirname, './dist/extension/devtools'),
@@ -93,13 +112,13 @@ const devTools = {
     }),
     new HtmlWebpackPlugin({
       title: 'CAT Devtool',
-      template: './packages/extension/src/devtools/index.html',
+      template: './packages/extension/src/view/devtools/index.html',
       filename: 'index.html',
       inject: false,
     }),
     new HtmlWebpackPlugin({
       title: 'CAT',
-      template: './packages/extension/src/devtools/devtools.html',
+      template: './packages/extension/src/view/devtools/devtools.html',
       filename: 'devtools.html',
       inject: false,
     }),

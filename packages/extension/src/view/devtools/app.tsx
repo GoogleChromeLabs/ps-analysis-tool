@@ -13,4 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { TabSelctor } from './tabSelector';
+/**
+ * External dependencies.
+ */
+import React from 'react';
+
+/**
+ * Internal dependencies.
+ */
+import './app.css';
+import { TabSelector } from './components';
+import { TABS } from './components/tabs';
+
+const App: React.FC = () => {
+  return (
+    <div className="w-full h-screen">
+      <TabSelector tabs={TABS} />
+    </div>
+  );
+};
+
+export default App;

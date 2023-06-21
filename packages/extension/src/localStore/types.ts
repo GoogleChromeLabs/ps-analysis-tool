@@ -13,25 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
- * Internal dependencies.
+ * External dependencies.
  */
-import React from 'react';
+import { type Cookie as ParsedCookie } from 'simple-cookie';
 
-/**
- * Internal dependencies.
- */
-import './app.css';
-import { TabSelctor } from './components';
-import { TABS } from './components/tabs';
-
-const App: React.FC = () => {
-  return (
-    <div className="w-full h-screen">
-      <TabSelctor tabs={TABS} />
-    </div>
-  );
+export type CookieData = {
+  parsedCookie: ParsedCookie;
+  url: string;
+  toplevel: string;
+  headerType: 'response' | 'request';
 };
 
-export default App;
+export type TabData = {
+  cookies: {
+    [key: string]: CookieData;
+  };
+  url: string | undefined;
+  focusedAt: number | undefined;
+};
+
+export type Storage = {
+  [tabId: string]: TabData;
+};

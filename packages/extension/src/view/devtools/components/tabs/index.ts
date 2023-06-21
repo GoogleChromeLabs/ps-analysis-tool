@@ -14,11 +14,20 @@
  * limitations under the License.
  */
 /**
- * External dependencies.
+ * Internal dependencies.
  */
-import React from 'react';
-import { TextDecoder, TextEncoder } from 'node:util';
+import { BounceTrackingTab } from './BounceTrackingTab';
+import { CookieTab } from './CookieTab';
+import { FingerprintingTab } from './FingerprintingTab';
 
-global.React = React;
-global.TextDecoder = TextDecoder;
-global.TextEncoder = TextEncoder;
+export const TABS = [
+  { display_name: 'Cookies', Component: CookieTab },
+  {
+    display_name: 'Bounce Tracking',
+    Component: BounceTrackingTab,
+  },
+  {
+    display_name: 'Fingerprinting',
+    Component: FingerprintingTab,
+  },
+];

@@ -13,29 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
+import React from 'react';
 
-const colors = require('tailwindcss/colors');
+/**
+ * Internal dependencies.
+ */
+import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
+import CookieList from './cookieList';
 
-module.exports = {
-  content: ['./packages/**/src/**/*.{tsx,js}'],
-  theme: {
-    extend: {},
-    fontFamily: {
-      normal: ['"Inter"', 'normal'],
-    },
-    textColor: {
-      ...colors,
-      primary: '#000',
-      secondary: '#5F5F5F',
-      'first-party': '#5FA569',
-      'third-party': '#FA752E',
-    },
-    backgroundColor: {
-      ...colors,
-      primary: '#FFF',
-      secondary: '#E5E7EB',
-      tertiary: '#CBD5E1',
-    },
-  },
-  plugins: [],
+export const CookieTab = () => {
+  const cookies = useCookieStore(({ state }) => state.cookies);
+
+  return (
+    <div className="w-full h-full flex flex-col ">
+      <div className="flex-1 overflow-y-scroll ">
+        <CookieList cookies={cookies} />
+      </div>
+    </div>
+  );
 };
