@@ -39,28 +39,31 @@ const formatRawData = async (rawData) => {
 
   // Format the data.
   cookies.forEach((cookie) => {
-    const key = cookie['Cookie / Data Key name'];
-    const controller = cookie['Data Controller'];
+    const platform = cookie['Platform'];
+    const category = cookie['Category'];
+    const name = cookie['Cookie / Data Key name'];
+    const domain = cookie['Domain'];
+    const description = cookie['Description'];
     const retention = cookie['Retention period'];
-    const gdpr = cookie['User Privacy & GDPR Rights Portals'];
-    const wildCard = cookie['Wildcard match'];
-
-    // Remove the keys we don't need.
-    delete cookie['Cookie / Data Key name'];
-    delete cookie['Data Controller'];
-    delete cookie['Retention period'];
-    delete cookie['User Privacy & GDPR Rights Portals'];
-    delete cookie['Wildcard match'];
-
-    // Add the keys we do need.
-    cookie['Key'] = key;
-    cookie['DataController'] = controller;
-    cookie['Retention'] = retention;
-    cookie['GDPR'] = gdpr;
-    cookie['Wildcard'] = `${wildCard}`;
+    const controller = cookie['Data Controller'];
+    const GDPRUrl = cookie['User Privacy & GDPR Rights Portals'];
+    const wildcard = cookie['Wildcard match'];
 
     // Add the cookie to the formatted data.
-    formattedData[key] = [cookie, ...(formattedData[key] || [])];
+    formattedData[name] = [
+      ...(formattedData[name] || []),
+      {
+        platform,
+        category,
+        name,
+        domain,
+        description,
+        retention,
+        controller,
+        GDPRUrl,
+        wildcard,
+      },
+    ];
   });
 
   return formattedData;
