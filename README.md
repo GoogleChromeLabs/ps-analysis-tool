@@ -2,15 +2,17 @@
 <a name="logo" href="https://www.privacysandbox.com"><img align="center" src="https://github.com/GoogleChromeLabs/cookie-analysis-tool/assets/506089/62ae89de-430a-4a5b-b5bf-2a1b2f86c712" alt="Privacy Sandbox" style="width:30%;height:100%"/></a>
 </h1>
 
-## Table of contents
+# Table of contents
 - [Privacy Sandbox](#privacy-sandbox)
 - [Target audience](#target-audience)
 - [Privacy Sandbox Analysis](#privacy-sandbox-analysis)
-- [How the Tool Works](#how-the-tool-works)
+- [Usage Instructions](#usage-instructions)
+- [Browsing Session Analysis](#browsing-session-analysis)
+- [Architecture](#architecture)
 - [Call to action](#call-to-action)
+- [Contributing](#contributing)
 
-
-## Privacy Sandbox
+# Privacy Sandbox
 
 [Privacy Sandbox](https://privacysandbox.com/) is a multi-year [initiative by Google](https://developer.chrome.com/docs/privacy-sandbox/overview/) for building a more private web by defining a set of building blocks (i.e. proposed APIs) enabling [a new privacy model for the web](https://github.com/michaelkleber/privacy-model). This Initiative encompasses three tracks:
 
@@ -22,7 +24,7 @@
 
 Tracks #2 and #3 bring significant changes to how the web operates today, and the purpose of this tool is to shed light, provide insights, and helping you to learn and understand the changes that are happening regarding the deprecation of 3P cookies, and the potential impact on the aspects of your site or product built using cookies. 
 
-## Target Audience
+# Target Audience
 
 **First-party site developers**: responsible for the creation and maintenance of websites. A significant part of their work involves auditing and managing third-party dependencies to ensure that their websites run smoothly and securely. They need to understand the changes to 3P cookie use cases,  how to integrate Privacy Sandbox APIs into their solutions, and how to troubleshoot any issues that arise.
 
@@ -32,13 +34,13 @@ Tracks #2 and #3 bring significant changes to how the web operates today, and th
 
 **Website owners and technology leaders**: responsible for tech and business decision making. They need the ability to get reports and insights about the cookies usage by their sites and the potential impact on user privacy.
 
-## Privacy Sandbox Analysis
+# Privacy Sandbox Analysis
 
 The Privacy Sandbox Analysis tool is designed to provide detailed information about cookie usage during browsing sessions, and shed light on the use and behavior of PS APIs. The tool provides capabilities for tracking and analyzing the cookies that are placed on the browser as you go through your browsing session, and it also provides context and knowledge access points to learn about 3P cookies and [Privacy Sandbox APIs](https://privacysandbox.com/open-web/#proposals-for-the-web). 
 
 This tool can be accessed as a [Chrome Extension](https://developer.chrome.com/docs/extensions/mv3/), or via a CLI on your terminal. The Chrome extension provides capabilities surfaced via the extension pop up, the Side Panel, and as Devtools panel. And the CLI implementation parses a sitemap provided as input, and outputs a JSON file listign all cookies set while navigating through the URLs in the sitemap. 
 
-## Usage instructions
+# Usage instructions
 
 - Clone this Cookie Analysis Tool Repository
 - `npm install` Install all dependencies
@@ -53,7 +55,7 @@ This tool can be accessed as a [Chrome Extension](https://developer.chrome.com/d
 - `npm run cli:build` to genrate a build in `/dist/cli`.
 - Run the cli util providing a sitemap as input. E.g. `node dist/cli/index.js -s https://<example.com>/sitemap_index.xml\`.
 
-## Browsing Session Analysis 
+# Browsing Session Analysis 
 
 The overall goal of [Privacy Sandbox](https://privacysandbox.com/) is to protect users' privacy online. This encompasses reducing cross-site and cross-app tracking. This is done by introducing [a new privacy model for the web](https://github.com/michaelkleber/privacy-model), making changes to how 3P cookies work, and providing developers the platform capabilities they need to build thriving digital businesses. The goal of this tool is to help uers navigate the transition to a more private web, by answering questions such as:
 
@@ -65,7 +67,7 @@ The overall goal of [Privacy Sandbox](https://privacysandbox.com/) is to protect
 * How can I test my web applications to ensure that they are compatible with the cross-site boundary APIs and the upcoming changes to third-party cookies?
 * How can I provide feedback to Google on the cross-site boundary APIs and the third-party cookie deprecation, and what role can I play in shaping the future of web development and privacy standards?
 
-## Architecture
+# Architecture
 
 The Privacy Analysis tool is structured as a set of processing and analysis modeules, and its output is tailored to different user interfaces for different use cases. 
 
@@ -115,7 +117,7 @@ This module provide services shareable to other parts of the tool.
 | Enterprise | |
 
 
-## Call to Action
+# Call to Action
 
 The goal of this tool is to assist [users](#target-audience) on getting knowledge and insights regarding [the upcoming deprecation of the way in which 3P cookies work](https://privacysandbox.com/open-web/#the-privacy-sandbox-timeline), and on the status an dbehaviors of the new Privacy Sandbox APIs. You can use the tool to analyze your site(s), your browsing experience, detect and report breakages, get support from Google on fixes, and, if you are developer of solutions that require functionality of cookis being deprecated, learn how to make them happen leveraging the new platform APIs that allow you to achieve the same goals in a privacy-preserving way. 
 
@@ -128,7 +130,7 @@ If you are a **third-party service providers transitioning away from cookies**, 
 If you are a **website owners and/or technology leader**, use the tool to...
 
 
-## Contributing
+# Contributing
 If you have requests for features you would like to see in this tool, please file an Feature Request or join as a contributor! Please refer to our contribution [guidelines](docs/CONTRIBUTING.md) and [code of conduct](docs/code-of-conduct.md).
 
 [Another form of contributing is by reporting breakages, proposing features, and engage in community discussions]
