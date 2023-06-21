@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 /**
- * External dependencies.
+ * Internal dependencies.
  */
 import { type Cookie as ParsedCookie } from 'simple-cookie';
+import type { CookieAnalytics } from '../utils/fetchCookieDictionary';
 
 export type CookieData = {
   parsedCookie: ParsedCookie;
+  analytics: CookieAnalytics | null;
   url: string;
   toplevel: string;
   headerType: 'response' | 'request';

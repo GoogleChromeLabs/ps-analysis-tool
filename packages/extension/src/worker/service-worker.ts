@@ -19,6 +19,7 @@
 import { type CookieData, CookieStore } from '../localStore';
 import parseResponseCookieHeader from './parseResponseCookieHeader';
 import { getTab } from '../utils/getTab';
+import { fetchDictionary } from '../utils/fetchCookieDictionary';
 
 /**
  * Fires when the browser receives a response from a web server.
@@ -34,9 +35,15 @@ chrome.webRequest.onResponseStarted.addListener(
       return;
     }
 
+    const dictionary = await fetchDictionary();
     const cookies = responseHeaders.reduce<CookieData[]>((acc, header) => {
       if (header.name.toLowerCase() === 'set-cookie' && header.value) {
-        const cookie = parseResponseCookieHeader(url, tab?.url, header.value);
+        const cookie = parseResponseCookieHeader(
+          url,
+          tab?.url,
+          header.value,
+          dictionary
+        );
         return [...acc, cookie];
       }
       return acc;

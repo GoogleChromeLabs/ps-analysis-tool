@@ -22,6 +22,7 @@ import cookie, { type Cookie as ParsedCookie } from 'simple-cookie';
  * Internal dependencies.
  */
 import type { CookieData } from '../localStore';
+import type { CookieDatabase } from '../utils/fetchCookieDictionary';
 
 /**
  * Parse response cookies header.
@@ -29,18 +30,28 @@ import type { CookieData } from '../localStore';
  * @param {string} url URL.
  * @param {string} top Top level url.
  * @param {string} value header value
+ * @param {CookieDatabase} dict Dictionary from open cookie database
  * @returns {CookieData} Parsed cookie object.
  */
 const parseResponseCookieHeader = (
   url: string,
   top: string | undefined,
-  value: string
+  value: string,
+  dict: CookieDatabase
 ): CookieData => {
   const parsedCookie: ParsedCookie = cookie.parse(value);
   const toplevel = top ? new URL(top).origin : '';
 
+  let analytics = null;
+
+  if (dict && Object.keys(dict).includes(parsedCookie.name)) {
+    //@TODO Handle cases where a name has multiple entries by checking other attributes.
+    analytics = dict[parsedCookie.name][0];
+  }
+
   return {
     parsedCookie: parsedCookie,
+    analytics,
     url,
     toplevel,
     headerType: 'response',

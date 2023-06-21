@@ -13,34 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 export type CookieAnalytics = {
-  id: string;
   platform: string;
   category: string;
-  subCategory: string;
-  functionality: string;
+  name: string;
+  domain: string;
   description: string;
+  retention: string;
   dataController: string;
-  GDPRPortal: string;
-  retentionPeriod: string;
-  usage: string;
-  popularity: string;
-  comment: string[];
-};
-
-export type CookieAnalyticsRaw = {
-  ID: string;
-  Platform: string;
-  Category: string;
-  Domain: string;
-  Description: string;
-  Key: string;
-  DataController: string;
-  Retention: string;
-  GDPR: string;
-  Wildcard: string;
+  GDPRUrl: string;
+  wildcard: string;
 };
 
 export type CookieDatabase = {
-  [category: string]: Array<CookieAnalyticsRaw>;
+  [category: string]: Array<CookieAnalytics>;
 };
+
+/**
+ * Fetch dictionary from local data folder.
+ * @returns {Promise<CookieDatabase>} Open Cookie Data base
+ */
+export async function fetchDictionary(): Promise<CookieDatabase> {
+  const url = chrome.runtime.getURL('data/open-cookie-database.json');
+
+  const data = await (await fetch(url)).json();
+  return data;
+}
