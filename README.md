@@ -57,7 +57,7 @@ This tool can be accessed as a [Chrome Extension](https://developer.chrome.com/d
 
 # Browsing Session Analysis 
 
-The overall goal of [Privacy Sandbox](https://privacysandbox.com/) is to protect users' privacy online. This encompasses reducing cross-site and cross-app tracking. This is done by introducing [a new privacy model for the web](https://github.com/michaelkleber/privacy-model), making changes to how 3P cookies work, and providing developers the platform capabilities they need to build thriving digital businesses. The goal of this tool is to help uers navigate the transition to a more private web, by answering questions such as:
+The overall goal of [Privacy Sandbox](https://privacysandbox.com/) is to protect users' privacy online. This encompasses reducing cross-site and cross-app tracking. This is done by introducing [a new privacy model for the web](https://github.com/michaelkleber/privacy-model), making changes to how 3P cookies work, and providing developers the platform capabilities they need to build thriving digital businesses. The goal of this tool is to help users navigate the transition to a more private web, by answering questions such as:
 
 * How can I identify cookies being used on my site? 
 * How can I tell what behaviors a third party cookie is tracking on my website or what it's being used for?
