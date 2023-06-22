@@ -4,8 +4,8 @@
 	"description": "Cookie Analysis Tool and CLI for analysis and understanding of cookie usage on web pages.",
 	"scripts": {
 		"test": "jest --config=jest.config.js",
-		"extension:dev": "webpack --config webpack.config.cjs --watch",
-		"extension:build": "cross-env NODE_ENV=production webpack --config webpack.config.cjs",
+		"dev": "webpack --config webpack.config.cjs --watch",
+		"build": "cross-env NODE_ENV=production webpack --config webpack.config.cjs",
 		"serve": "webpack serve",
 		"lint": "npm-run-all --parallel lint:*",
 		"lint:js": "eslint .",
@@ -15,13 +15,13 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/GoogleChromeLabs/cookie-analysis-tool"
+		"url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool"
 	},
 	"license": "Apache-2.0",
 	"bugs": {
-		"url": "https://github.com/GoogleChromeLabs/cookie-analysis-tool/issues"
+		"url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"
 	},
-	"homepage": "https://github.com/GoogleChromeLabs/cookie-analysis-tool",
+	"homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
 	"devDependencies": {
 		"@babel/plugin-transform-react-jsx": "^7.22.5",
 		"@babel/preset-env": "^7.22.5",

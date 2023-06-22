@@ -32,11 +32,12 @@ interface ICoookieList {
 
 const CookieList = ({ cookies }: ICoookieList) => (
   <ul className="w-full h-full">
-    {Object.entries(cookies).map(([key, value]) => (
-      <li key={key}>
-        <ListItem cookie={value} />
-      </li>
-    ))}
+    {cookies &&
+      Object.entries(cookies).map(([key, value]) => (
+        <li key={key}>
+          <ListItem cookie={value} />
+        </li>
+      ))}
   </ul>
 );
 

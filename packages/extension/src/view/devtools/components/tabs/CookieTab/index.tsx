@@ -25,7 +25,7 @@ import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import CookieList from './cookieList';
 
 export const CookieTab = () => {
-  const cookies = useCookieStore(({ state }) => state.cookies);
+  const cookies = useCookieStore(({ state }) => state?.cookies);
 
   return (
     <div className="w-full h-full flex flex-col ">
