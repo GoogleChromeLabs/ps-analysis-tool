@@ -3,11 +3,11 @@
 </h1>
 
 # Table of contents
+
 - [Privacy Sandbox](#privacy-sandbox)
 - [Call to action](#call-to-action)
-- [Privacy Sandbox Analysis](#privacy-sandbox-analysis)
 - [Browsing Session Analysis](#browsing-session-analysis)
-- [Architecture](#architecture)
+- [Tool Architecture](#tool-architecture)
 - [Usage Instructions](#usage-instructions)
 - [Contributing](#contributing)
 
@@ -35,15 +35,11 @@ The goal of this tool is to assist users on getting knowledge and insights regar
 
 **Website owners and technology leaders**: you are responsible for tech and business decision making. This tool is intended to provide you with reports and insights about the cookies usage by your sites and the potential impact on user privacy.
 
-# Privacy Sandbox Analysis
+# Browsing Session Analysis
 
-The Privacy Sandbox Analysis tool is designed to provide detailed information about cookie usage during browsing sessions, and shed light on the use and behavior of PS APIs. The tool provides capabilities for tracking and analyzing the cookies that are placed on the browser as you go through your browsing session, and it also provides context and knowledge access points to learn about 3P cookies and [Privacy Sandbox APIs](https://privacysandbox.com/open-web/#proposals-for-the-web). 
+The overall goal of [Privacy Sandbox](https://privacysandbox.com/) is to protect users' privacy online. This encompasses reducing cross-site and cross-app tracking. This is done by introducing [a new privacy model for the web](https://github.com/michaelkleber/privacy-model), making changes to how 3P cookies work, and providing developers the platform capabilities they need to build thriving digital businesses.
 
-This tool can be accessed as a [Chrome Extension](https://developer.chrome.com/docs/extensions/mv3/), or via a CLI on your terminal. The Chrome extension provides capabilities surfaced via the extension pop up, the Side Panel, and as Devtools panel. And the CLI implementation parses a sitemap provided as input, and outputs a JSON file listign all cookies set while navigating through the URLs in the sitemap. 
-
-# Browsing Session Analysis 
-
-The overall goal of [Privacy Sandbox](https://privacysandbox.com/) is to protect users' privacy online. This encompasses reducing cross-site and cross-app tracking. This is done by introducing [a new privacy model for the web](https://github.com/michaelkleber/privacy-model), making changes to how 3P cookies work, and providing developers the platform capabilities they need to build thriving digital businesses. The goal of this tool is to help users navigate the transition to a more private web, by answering questions such as:
+The tool is designed to provide detailed information about cookie usage during **browsing sessions**, and shed light on the use and behavior of PS APIs. It provides capabilities for tracking and analyzing the cookies that are placed on the browser as you go through your browsing session, and it also provides context and knowledge access points to learn about 3P cookies and [Privacy Sandbox APIs](https://privacysandbox.com/open-web/#proposals-for-the-web). The goal is to help you answer questions such as:
 
 * How can I identify cookies being used on my site? 
 * How can I tell what behaviors a third party cookie is tracking on my website or what it's being used for?
@@ -53,7 +49,7 @@ The overall goal of [Privacy Sandbox](https://privacysandbox.com/) is to protect
 * How can I test my web applications to ensure that they are compatible with the cross-site boundary APIs and the upcoming changes to third-party cookies?
 * How can I provide feedback to Google on the cross-site boundary APIs and the third-party cookie deprecation, and what role can I play in shaping the future of web development and privacy standards?
 
-# Architecture
+# Tool Architecture
 
 The Privacy Analysis tool is structured as a set of processing and analysis modeules, and its output is tailored to different user interfaces for different use cases. 
 
@@ -103,6 +99,9 @@ This module provide services shareable to other parts of the tool.
 | Enterprise | |
 
 # Usage instructions
+
+This tool can be accessed as a [Chrome Extension](https://developer.chrome.com/docs/extensions/mv3/), or via a CLI on your terminal.
+The Chrome extension provides capabilities surfaced via the extension pop up, the Side Panel, and as Devtools panel. And the CLI implementation parses a sitemap provided as input, and outputs a JSON file listign all cookies set while navigating through the URLs in the sitemap. Follow the following steps to get the extension installed in your browser. 
 
 - Clone this Cookie Analysis Tool Repository
 - `npm install` Install all dependencies
