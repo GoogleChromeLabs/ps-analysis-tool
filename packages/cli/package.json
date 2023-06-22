@@ -4,11 +4,11 @@
   "description": "CLI tool for cookie analysis",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GoogleChromeLabs/cookie-analysis-tool.git"
+    "url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool.git"
   },
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/GoogleChromeLabs/cookie-analysis-tool/issues"
+    "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"
   },
-  "homepage": "https://github.com/GoogleChromeLabs/cookie-analysis-tool#readme"
+  "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool#readme"
 }
