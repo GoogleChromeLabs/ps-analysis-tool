@@ -2,15 +2,17 @@
 <a name="logo" href="https://www.privacysandbox.com"><img align="center" src="https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/62ae89de-430a-4a5b-b5bf-2a1b2f86c712" alt="Privacy Sandbox" style="width:30%;height:100%"/></a>
 </h1>
 
-## Table of contents
+# Table of contents
 - [Privacy Sandbox](#privacy-sandbox)
 - [Target audience](#target-audience)
-- [Cookie Analysis](#cookie-analysis)
-- [How the Tool Works](#how-the-tool-works)
+- [Privacy Sandbox Analysis](#privacy-sandbox-analysis)
+- [Usage Instructions](#usage-instructions)
+- [Browsing Session Analysis](#browsing-session-analysis)
+- [Architecture](#architecture)
 - [Call to action](#call-to-action)
-- [Resources](#resources)
+- [Contributing](#contributing)
 
-## Privacy Sandbox
+# Privacy Sandbox
 
 [Privacy Sandbox](https://privacysandbox.com/) is a multi-year [initiative by Google](https://developer.chrome.com/docs/privacy-sandbox/overview/) for building a more private web by defining a set of building blocks (i.e. proposed APIs) enabling [a new privacy model for the web](https://github.com/michaelkleber/privacy-model). This Initiative encompasses three tracks:
 
@@ -22,7 +24,7 @@
 
 Tracks #2 and #3 bring significant changes to how the web operates today, and the purpose of this tool is to shed light, provide insights, and helping you to learn and understand the changes that are happening regarding the deprecation of 3P cookies, and the potential impact on the aspects of your site or product built using cookies. 
 
-## Target Audience
+# Target Audience
 
 **First-party site developers**: responsible for the creation and maintenance of websites. A significant part of their work involves auditing and managing third-party dependencies to ensure that their websites run smoothly and securely. They need to understand the changes to 3P cookie use cases,  how to integrate Privacy Sandbox APIs into their solutions, and how to troubleshoot any issues that arise.
 
@@ -32,20 +34,13 @@ Tracks #2 and #3 bring significant changes to how the web operates today, and th
 
 **Website owners and technology leaders**: responsible for tech and business decision making. They need the ability to get reports and insights about the cookies usage by their sites and the potential impact on user privacy.
 
-## Cookie Analysis
+# Privacy Sandbox Analysis
 
-This Cookie Analysis Tool is designed to provide detailed information about cookie usage during browsing sessions. It tracks and analyzes the various cookies that websites place on your browser, and it offers a comprehensive overview of their origins, their purposes, their expiry dates, and other relevant information. It also provides context and knowledge access points to about 3P cookies and [Privacy Sandbox APIs](https://privacysandbox.com/open-web/#proposals-for-the-web). 
+The Privacy Sandbox Analysis tool is designed to provide detailed information about cookie usage during browsing sessions, and shed light on the use and behavior of PS APIs. The tool provides capabilities for tracking and analyzing the cookies that are placed on the browser as you go through your browsing session, and it also provides context and knowledge access points to learn about 3P cookies and [Privacy Sandbox APIs](https://privacysandbox.com/open-web/#proposals-for-the-web). 
 
-This tool can be accessed as a [Chrome Extension](https://developer.chrome.com/docs/extensions/mv3/), or via a CLI on your terminal. 
+This tool can be accessed as a [Chrome Extension](https://developer.chrome.com/docs/extensions/mv3/), or via a CLI on your terminal. The Chrome extension provides capabilities surfaced via the extension pop up, the Side Panel, and as Devtools panel. And the CLI implementation parses a sitemap provided as input, and outputs a JSON file listign all cookies set while navigating through the URLs in the sitemap. 
 
-### Extension
-The Chrome extension provides a summary cookie analysis via a pop-up window from the extension icon, as well as detailed cookie anlaysis in a panel inside dev tools.
-
-### CLI
-
-The CLI implementation parses a sitemap provided as input, and outputs a JSON file listign all cookies set while navigating through the URLs in the sitemap. 
-
-## Usage instructions
+# Usage instructions
 
 - Clone this Cookie Analysis Tool Repository
 - `npm install` Install all dependencies
@@ -60,56 +55,71 @@ The CLI implementation parses a sitemap provided as input, and outputs a JSON fi
 - `npm run cli:build` to genrate a build in `/dist/cli`.
 - Run the cli util providing a sitemap as input. E.g. `node dist/cli/index.js -s https://<example.com>/sitemap_index.xml\`.
 
-## How the tool works
-The goal of this tool is to help you to answer questions as these:
+# Browsing Session Analysis 
+
+The overall goal of [Privacy Sandbox](https://privacysandbox.com/) is to protect users' privacy online. This encompasses reducing cross-site and cross-app tracking. This is done by introducing [a new privacy model for the web](https://github.com/michaelkleber/privacy-model), making changes to how 3P cookies work, and providing developers the platform capabilities they need to build thriving digital businesses. The goal of this tool is to help uers navigate the transition to a more private web, by answering questions such as:
 
 * How can I identify cookies being used on my site? 
 * How can I tell what behaviors a third party cookie is tracking on my website or what it's being used for?
 * How can I block third party cookies being set on my site by other websites unrelated to mine?
+* What happens to my browsing session if 3P cookies are being blocked?
 * How can I ensure that my websites are still able to function properly after third-party cookies are deprecated?
-* How can I, as a developer, test my web applications to ensure that they are compatible with the cross-site boundary APIs and the upcoming changes to third-party cookies?
-* How can developers provide feedback to Google on the cross-site boundary APIs and the third-party cookie deprecation, and what role can they play in shaping the future of web development and privacy standards?
+* How can I test my web applications to ensure that they are compatible with the cross-site boundary APIs and the upcoming changes to third-party cookies?
+* How can I provide feedback to Google on the cross-site boundary APIs and the third-party cookie deprecation, and what role can I play in shaping the future of web development and privacy standards?
 
-To provide these kind of assistance the tool encompasses a modular architecture with a set of processing and analysis components, and also different user interface entry points. 
+# Architecture
 
-### User Interface
+The Privacy Analysis tool is structured as a set of processing and analysis modeules, and its output is tailored to different user interfaces for different use cases. 
 
-#### DevTools Panel
+<p align="center">
+  <img src="https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/6049673e-3508-4e03-8649-55b6f938abb9" width="70%" height="100%">
+</p>
 
-#### Extension Icon Popup
+## Input
+The input to the tool is composed of network traffic and browser data during a given browsing session. 
 
-#### Side Panel
+## Output
 
-#### Enterprise Chrome
+The tool produces output for three different access points, serving the needs of the different members of our [target audience](#target-audience): 
 
-### Functional Components
-- Architectural diagrams
-- Clear explanation of what is being tracked/analyzed
-- Code references enabling open source verification of claims
+| Surface | Description |
+|---------|--------|
+|DevTools Panel | Main user interface of the tool. Learning, monitoring, and debugging capabilities for developers responsible for making 1P sites work and developing 3P services |
+|Icon popup and Side Panel| Dynamic monitoring capabilities. Basic privacy-sandbox-related information, such as status of cookies, classification results at any given time (e.g. how many marketing cookies?)|
+|Google Admin Console| For enterprise users. Extend Google Admin UI with 3PCD/PS analysis information |
 
-#### Identifying Cookies
-- Cookie Scanner
-- Tap into Chrome and DevTools APIs to gather cookie information from network streams
+ 
+## Data Gathering
 
-#### Understanding Cookie Bahaviors
-- Leverage existing cookie DBs to classify observed cookies
+The data provided as input to the tool are gathered using [Chrome APIs](https://developer.chrome.com/docs/extensions/reference/), which include all the web platform standard APIs, and chrome-secific APIs such as Chome Enterprise APIs, and DevTools APIs.
 
-#### Manipulating and Mutating Cookies
-- Provide capabilities to toggle cookies on/off, and manipulate their values to test behaviors of sites
+| APIs | Description |
+|-------|---------|
+| Chrome APIs| |
+| DevTools | |
+| Enterprise | |
 
-#### Analysis of Privacy Sandbox APIs
+## Data Processing
 
-The provide dedicated analysis panels for various PS 
+| Module | Description |
+|-------|---------|
+| Parsing| Extract information from network streams|
+| Classification | Leverage and extend existing cookie DBs to classify observed cookies |
+| Insights | "Privacy Sandbox debugging" information|
 
-- Topics
-- Protected Audiences
-- CHIPS
-- Storage Access
+## Services
+This module provide services shareable to other parts of the tool.
 
-## Call to Action
-[Tailored CTAs for each [target audience](#target-audience).]
+| Service | Description |
+|-------|---------|
+| Data Storage| Capabilities for storing and querying data gathered and processed by the tool |
+| Rendering | Components to generate UI/UX for each of the different output modules|
+| Enterprise | |
 
-The goal of this tool is to assist users on understanding cookie behaviors and their impact on browsing experience, and getting insights regarding [the upcoming deprecation of the way in which 3P cookies work](https://privacysandbox.com/open-web/#the-privacy-sandbox-timeline). The way to achieve this is to use the tool to analyze your site(s), your browsing experience, detect and report breakages, get support from Google on fixes, and, if you are developer of solutions that require functionality of cookis being deprecated, learn how to make them happen leveraging the new platform APIs that allow you to achieve the same goals in a privacy-preserving way. 
+
+# Call to Action
+
+The goal of this tool is to assist [users](#target-audience) on getting knowledge and insights regarding [the upcoming deprecation of the way in which 3P cookies work](https://privacysandbox.com/open-web/#the-privacy-sandbox-timeline), and on the status an dbehaviors of the new Privacy Sandbox APIs. You can use the tool to analyze your site(s), your browsing experience, detect and report breakages, get support from Google on fixes, and, if you are developer of solutions that require functionality of cookis being deprecated, learn how to make them happen leveraging the new platform APIs that allow you to achieve the same goals in a privacy-preserving way. 
 
 If you are a **first-party site developer** developing and/or maintaining the site(s) for your organization, use the tool to gain insights into third-party cookie usage in your products and identify and troubleshoot potential issues to ensure your websites run smoothly.
 
@@ -119,14 +129,8 @@ If you are a **third-party service providers transitioning away from cookies**, 
 
 If you are a **website owners and/or technology leader**, use the tool to...
 
-## Resources
-The Privacy Sandbox initiative aims to create technologies that both protect people's privacy online and give companies and developers tools to build thriving digital businesses. The goal of Privacy Sandbox is to reduce cross-site and cross-app tracking while helping to keep online content and services free for all. There are several entry points to sources of information about the Privacy Sandbox in general 
 
-* Privacy Sandbox [main site](https://privacysandbox.com/)
-* Privacy Sandbox for developers: [developer.Chrome](https://developer.chrome.com/privacy-sandbox/), [testing](https://developer.chrome.com/en/docs/privacy-sandbox/chrome-testing/)
-* A Potential New Privacy Model for the Web [explainer](https://github.com/michaelkleber/privacy-model)
-
-## Contributing
+# Contributing
 If you have requests for features you would like to see in this tool, please file an Feature Request or join as a contributor! Please refer to our contribution [guidelines](docs/CONTRIBUTING.md) and [code of conduct](docs/code-of-conduct.md).
 
 [Another form of contributing is by reporting breakages, proposing features, and engage in community discussions]
