@@ -52,7 +52,7 @@ The CLI implementation parses a sitemap provided as input, and outputs a JSON fi
 
 ### Extension
 
-- `npm run extension:dev` or `npm run extension:build` to genrate a build in `/dist/extension`
+- `npm run dev` or `npm run build` to genrate a build in `/dist/extension`
 - Click on "Load Unpacked" button on [chrome://extensions/](chrome://extensions/) and upload `dist/extension` folder
 
 ### CLI
