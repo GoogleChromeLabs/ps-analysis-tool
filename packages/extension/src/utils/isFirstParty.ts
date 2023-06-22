@@ -18,15 +18,20 @@
  * Identifies if a cookie is first party by comparing top and cookie URL.
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
  * @param {string} tabURL Cookie URL (URL of the server which is setting/updating cookies).
- * @param {string} cookieURL Top level url ( URL in tab's address bar ).
+ * @param {string} cookieDomain Top level url ( URL in tab's address bar ).
  * @returns {boolean | null} true for 1p; false for 3p; null for if bad URLs are passed.
  */
-const isFirstParty = (tabURL: string, cookieURL: string): boolean | null => {
+const isFirstParty = (
+  tabURL: string,
+  cookieDomain: string | undefined
+): boolean | null => {
+  if (!cookieDomain) {
+    return true;
+  }
   try {
-    const cookieOrigin = new URL(cookieURL).origin;
     const tabOrigin = new URL(tabURL).origin;
 
-    return cookieOrigin === tabOrigin;
+    return tabOrigin.includes(cookieDomain);
   } catch (error) {
     return null;
   }

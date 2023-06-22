@@ -42,12 +42,7 @@ chrome.webRequest.onResponseStarted.addListener(
         header.value &&
         tab.url
       ) {
-        const cookie = parseResponseCookieHeader(
-          url,
-          tab.url,
-          header.value,
-          dictionary
-        );
+        const cookie = parseResponseCookieHeader(url, header.value, dictionary);
         return [...acc, cookie];
       }
       return acc;

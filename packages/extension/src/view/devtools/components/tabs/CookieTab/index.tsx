@@ -25,12 +25,21 @@ import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import CookieList from './cookieList';
 
 export const CookieTab = () => {
-  const cookies = useCookieStore(({ state }) => state.cookies);
+  const { cookies: _cookies, url: tabURL } = useCookieStore(
+    ({ state: { cookies, url } }) => ({
+      cookies,
+      url,
+    })
+  );
+
+  if (!_cookies || !tabURL) {
+    return <></>;
+  }
 
   return (
     <div className="w-full h-full flex flex-col ">
       <div className="flex-1 overflow-y-scroll ">
-        <CookieList cookies={cookies} />
+        <CookieList cookies={_cookies} tabURL={tabURL} />
       </div>
     </div>
   );

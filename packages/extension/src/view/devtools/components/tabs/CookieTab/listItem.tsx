@@ -22,12 +22,14 @@ import React from 'react';
  * Internal dependencies.
  */
 import { type CookieData } from '../../../../../localStore';
+import isFirstParty from '../../../../../utils/isFirstParty';
 
 interface IListItem {
   cookie: CookieData;
+  tabURL: string;
 }
 
-const ListItem = ({ cookie }: IListItem) => {
+const ListItem = ({ cookie, tabURL }: IListItem) => {
   return (
     <a href="#" className="block hover:bg-secondary">
       <div className="px-4 py-3 sm:px-6 border-b">
@@ -51,10 +53,14 @@ const ListItem = ({ cookie }: IListItem) => {
           </span>
           <span
             className={`font-bold ${
-              cookie.isFirstParty ? 'text-first-party' : 'text-third-party'
+              isFirstParty(tabURL, cookie.parsedCookie.domain)
+                ? 'text-first-party'
+                : 'text-third-party'
             }`}
           >
-            {cookie.isFirstParty ? 'First Party' : 'Third Party'}
+            {isFirstParty(tabURL, cookie.parsedCookie.domain)
+              ? 'First Party'
+              : 'Third Party'}
           </span>
         </div>
       </div>

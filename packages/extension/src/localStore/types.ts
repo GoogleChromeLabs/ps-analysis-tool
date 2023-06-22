@@ -27,7 +27,6 @@ export type CookieData = {
   parsedCookie: ParsedCookie;
   analytics: CookieAnalytics | null;
   url: string;
-  isFirstParty: boolean | null;
   headerType: 'response' | 'request';
 };
 

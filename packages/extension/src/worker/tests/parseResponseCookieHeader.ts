@@ -22,7 +22,6 @@ describe('parseResponseCookieHeader', () => {
   it('Should parse all set-cookie header (response cookies)', () => {
     const parsedCookie = parseResponseCookieHeader(
       'https://example.com/public/api/alerts',
-      'https://example.com/',
       'countryCode=IN; Domain=.example.com; Path=/; SameSite=None; Secure',
       {}
     );
@@ -38,7 +37,6 @@ describe('parseResponseCookieHeader', () => {
         name: 'countryCode',
         value: 'IN',
       },
-      isFirstParty: true,
       analytics: null,
       url: 'https://example.com/public/api/alerts',
       headerType: 'response',
@@ -48,7 +46,6 @@ describe('parseResponseCookieHeader', () => {
   it('Should parse and add add analytics', () => {
     const parsedCookie = parseResponseCookieHeader(
       'https://example.com/public/api/alerts',
-      'https://example.com/',
       'test_cookie=bla; Domain=.example.com; Path=/; SameSite=None; Secure',
       {
         test_cookie: [
@@ -79,7 +76,6 @@ describe('parseResponseCookieHeader', () => {
         name: 'test_cookie',
         value: 'bla',
       },
-      isFirstParty: true,
       analytics: {
         platform: 'DoubleClick/Google Marketing',
         category: 'Functional',
