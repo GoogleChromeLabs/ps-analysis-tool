@@ -6,9 +6,9 @@
 - [Privacy Sandbox](#privacy-sandbox)
 - [Call to action](#call-to-action)
 - [Privacy Sandbox Analysis](#privacy-sandbox-analysis)
-- [Usage Instructions](#usage-instructions)
 - [Browsing Session Analysis](#browsing-session-analysis)
 - [Architecture](#architecture)
+- [Usage Instructions](#usage-instructions)
 - [Contributing](#contributing)
 
 # Privacy Sandbox
