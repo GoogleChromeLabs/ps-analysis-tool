@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
@@ -27,48 +26,37 @@ import '@testing-library/jest-dom';
 import { TabSelector } from '../tabSelector';
 import { TABS } from '../tabs';
 
-// @todo To be fixed.
-describe.skip("loads tabs of Extension's devtools", () => {
-  /**
-   * Test to check if the Cookie Panel is loaded by default.
-   */
-  test('loads Cookie Panel by default', () => {
+describe('TabSelector', () => {
+  it('should be on Cookie Panel by default', () => {
     render(<TabSelector tabs={TABS} />);
     // by default Cookies Panel is selected.
-    expect(screen.getByText('Cookies Panel')).toBeInTheDocument();
+    expect(screen.getByText('Cookies')).toBeInTheDocument();
   });
 
-  /**
-   * Test to check if the Cookie Panel is loaded when the tab is clicked.
-   */
-  test('loads Cookie Panel', async () => {
+  it('should switch to cookie panel when tab is clicked', async () => {
     render(<TabSelector tabs={TABS} />);
     // Move to another tab
     fireEvent.click(screen.getByText('Bounce Tracking'));
 
     fireEvent.click(screen.getByText('Cookies'));
-    expect(await screen.findByText('Cookies Panel')).toBeInTheDocument();
+    expect(await screen.findByText('Cookies')).toBeInTheDocument();
   });
 
-  /**
-   * Test to check if the Bounce Tracking Panel is loaded when the tab is clicked.
-   */
-  test('loads Bounce Tracking Panel', async () => {
+  it('should switch to Bounce Tracking Panel when clicked', async () => {
     render(<TabSelector tabs={TABS} />);
     // Click on Bounce Tracking tab
     fireEvent.click(screen.getByText('Bounce Tracking'));
+
     expect(
       await screen.findByText('Bounce tracking Panel')
     ).toBeInTheDocument();
   });
 
-  /**
-   * Test to check if the FingerPrinting Panel is loaded when the tab is clicked.
-   */
-  test('loads FingerPrinting Panel', async () => {
+  it('should switch to FingerPrinting Panel when clicked', async () => {
     render(<TabSelector tabs={TABS} />);
     // Click on FingerPrinting tab
     fireEvent.click(screen.getByText('Fingerprinting'));
+
     expect(await screen.findByText('Fingerprinting Panel')).toBeInTheDocument();
   });
 });
