@@ -55,7 +55,7 @@ const cookieArray: CookieData[] = [
   },
 ];
 
-describe.only('local store: CookieStore', () => {
+describe('local store: CookieStore', () => {
   let storage: Storage = {};
   beforeAll(() => {
     globalThis.chrome = {

@@ -20,7 +20,7 @@
 import updateStorage from '../updateStorage';
 import { type Storage } from '../types';
 
-describe.only('local store: updateStorage', () => {
+describe('local store: updateStorage', () => {
   let storage: Storage = {};
 
   beforeAll(() => {
@@ -131,7 +131,7 @@ describe.only('local store: updateStorage', () => {
     expect(storage).toStrictEqual({ '123': newData, '234': tab2 });
   });
 
-  it.only('makes space for new updates by deleting tab data by LRU', async () => {
+  it('makes space for new updates by deleting tab data by LRU', async () => {
     const tab1 = {
       cookies: {},
       url: '123',
@@ -145,6 +145,8 @@ describe.only('local store: updateStorage', () => {
     expect(storage).toStrictEqual({
       '123': tab1,
     });
+
+    await new Promise((r) => setTimeout(r, 100));
 
     const tab2 = {
       cookies: {},
@@ -160,6 +162,8 @@ describe.only('local store: updateStorage', () => {
     chrome.storage.local.QUOTA_BYTES = new TextEncoder().encode(
       JSON.stringify({ '123': tab1, '234': tab2 })
     ).length;
+
+    await new Promise((r) => setTimeout(r, 100));
 
     const tab3 = {
       cookies: {},
