@@ -114,8 +114,8 @@ describe('local store: CookieStore', () => {
   it('should add/update tab data', async () => {
     await CookieStore.update('123', cookieArray);
     expect(storage['123'].cookies).toStrictEqual({
-      'countryCode1.example1.com': cookieArray[0],
-      'countryCode2.example2.com': cookieArray[1],
+      countryCode1: cookieArray[0],
+      countryCode2: cookieArray[1],
     });
   });
 
