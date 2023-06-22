@@ -13,6 +13,8 @@
   "homepage": "https://github.com/rtCamp/cookie-analysis-tool#readme",
   "dependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "simple-cookie": "^1.0.15",
+    "use-context-selector": "^1.4.1"
   }
 }

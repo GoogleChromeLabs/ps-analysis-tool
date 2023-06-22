@@ -13,12 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import React from 'react';
-import { TextDecoder, TextEncoder } from 'node:util';
 
-global.React = React;
-global.TextDecoder = TextDecoder;
-global.TextEncoder = TextEncoder;
+const colors = require('tailwindcss/colors');
+
+module.exports = {
+  content: ['./packages/extension/src/**/*.{tsx,js}'],
+  theme: {
+    extend: {},
+    fontFamily: {
+      normal: ['"Inter"', 'normal'],
+    },
+    textColor: {
+      ...colors,
+      primary: '#000',
+      secondary: '#5F5F5F',
+      'first-party': '#5FA569',
+      'third-party': '#FA752E',
+    },
+    backgroundColor: {
+      ...colors,
+      primary: '#FFF',
+      secondary: '#E5E7EB',
+      tertiary: '#CBD5E1',
+    },
+  },
+  plugins: [],
+};

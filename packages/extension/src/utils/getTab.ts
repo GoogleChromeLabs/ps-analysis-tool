@@ -13,12 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import React from 'react';
-import { TextDecoder, TextEncoder } from 'node:util';
+export const getTab = async (
+  tabId: number | string
+): Promise<chrome.tabs.Tab | null> => {
+  let tab: chrome.tabs.Tab | null = null;
 
-global.React = React;
-global.TextDecoder = TextDecoder;
-global.TextEncoder = TextEncoder;
+  if (!tabId || Number(tabId) < 0) {
+    return null;
+  }
+
+  try {
+    tab = await chrome.tabs.get(Number(tabId));
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log(error);
+  }
+
+  if (chrome.runtime.lastError || !tab) {
+    return null;
+  }
+
+  return tab;
+};
