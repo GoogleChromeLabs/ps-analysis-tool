@@ -21,7 +21,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const csvtojson = require('csvtojson');
 const process = require('process');
-const targetDIR = path.resolve(__dirname, '..', 'data');
+const targetDIR = path.resolve(__dirname, '..', 'third_party/data');
 const requestURL =
   'https://raw.githubusercontent.com/jkwakman/Open-Cookie-Database/master/open-cookie-database.csv';
 
