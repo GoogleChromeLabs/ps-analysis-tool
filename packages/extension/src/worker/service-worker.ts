@@ -18,6 +18,7 @@
  */
 import { type CookieData, CookieStore } from '../localStore';
 import parseResponseCookieHeader from './parseResponseCookieHeader';
+import parseRequestCookieHeader from './parseRequestCookieHeader';
 import { getTab } from '../utils/getTab';
 import { fetchDictionary } from '../utils/fetchCookieDictionary';
 
@@ -57,6 +58,25 @@ chrome.webRequest.onResponseStarted.addListener(
   },
   { urls: ['*://*/*'] },
   ['extraHeaders', 'responseHeaders']
+);
+
+chrome.webRequest.onBeforeSendHeaders.addListener(
+  ({ url, requestHeaders, tabId }) => {
+    fetchDictionary().then((dict) => {
+      requestHeaders
+        ?.filter(({ name }) => name.toLowerCase() === 'cookie')
+        .forEach(({ value }) => {
+          const requestCookies = parseRequestCookieHeader(
+            url,
+            value || '',
+            dict
+          );
+          CookieStore.update(tabId.toString(), requestCookies);
+        });
+    });
+  },
+  { urls: ['*://*/*'] },
+  ['extraHeaders', 'requestHeaders']
 );
 
 /**
