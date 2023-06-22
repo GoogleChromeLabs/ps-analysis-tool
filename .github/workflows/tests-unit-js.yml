@@ -1,0 +1,69 @@
+name: JavaScript Unit Tests
+
+on:
+  push:
+    paths:
+      - '**.js'
+      - '**.cjs'
+      - '**.ts'
+      - '**.tsx'
+      - '**/package.json'
+      - 'package-lock.json'
+    branches:
+      - main
+  pull_request:
+    paths:
+      - '**.js'
+      - '**.cjs'
+      - '**.ts'
+      - '**.tsx'
+      - '**/package.json'
+      - 'package-lock.json'
+
+permissions:
+  contents: read
+
+# Cancels all prior workflow runs associated with pull requests that are still in progress.
+concurrency:
+  # The concurrency group contains the workflow name and the (target) branch name.
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unit-js:
+    name: Unit Tests (${{ matrix.shard }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      matrix:
+        # We want to split up the tests into 2 parts running in parallel.
+        shard: ['1/2', '2/2']
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@128a63446a954579617e875aaab7d2978154e969
+        with:
+          disable-sudo: true
+          disable-file-monitoring: true
+          egress-policy: audit
+          allowed-endpoints: >
+            codecov.io:443
+            github.com:443
+            registry.npmjs.org:443
+
+      - name: Checkout
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9
+
+      - name: Setup Node
+        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+
+      - name: Setup Jest cache
+        uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8
+        with:
+          path: .jest-cache
+          key: ${{ runner.os }}-${{ env.NVMRC }}-jest
+
+      - name: Run JavaScript unit tests
+        run: npm run test
