@@ -29,16 +29,16 @@ describe('local store: updateStorage', () => {
         //@ts-ignore local does not implementations of other properties
         local: {
           set: (data) =>
-            new Promise((resolve) => {
+            new Promise<void>((resolve) => {
               storage = data;
               resolve();
             }),
           get: () =>
-            new Promise((resolve) => {
+            new Promise<{ [key: string]: any }>((resolve) => {
               resolve(storage);
             }),
           getBytesInUse: () =>
-            new Promise((resolve) => {
+            new Promise<number>((resolve) => {
               resolve(new TextEncoder().encode(JSON.stringify(storage)).length);
             }),
           QUOTA_BYTES: 10485760,

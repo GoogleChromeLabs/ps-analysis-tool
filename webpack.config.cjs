@@ -121,7 +121,7 @@ const devTools = {
       title: 'CAT',
       template: './packages/extension/src/view/devtools/devtools.html',
       filename: 'devtools.html',
-      inject: false,
+      inject: true,
     }),
   ],
   ...commonConfig,

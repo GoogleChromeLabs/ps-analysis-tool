@@ -23,21 +23,21 @@ interface ITabSelector {
 }
 
 export const TabSelector = ({ tabs }: ITabSelector) => {
-  const [selectedTabInd, setSelectedTabInd] = useState<number>(0);
+  const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
 
-  const TabComponent = tabs[selectedTabInd].Component;
+  const TabComponent = tabs[selectedTabIndex].Component;
 
   return (
     <div className="w-full h-full flex flex-col">
       <div className="w-full h-10 bg-slate-300 flex pt-2">
-        {tabs.map(({ display_name }, ind) => (
+        {tabs.map(({ display_name }, index) => (
           <div
             key={display_name}
             className={`h-full mx-1 px-3 flex justify-ceter items-center rounded-t-lg cursor-pointer ${
-              selectedTabInd === ind ? 'bg-slate-100' : 'bg-slate-200'
+              selectedTabIndex === index ? 'bg-slate-100' : 'bg-slate-200'
             }`}
             onClick={() => {
-              setSelectedTabInd(ind);
+              setSelectedTabIndex(index);
             }}
           >
             <p>{display_name}</p>

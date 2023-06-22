@@ -25,5 +25,5 @@
     "typeRoots": ["./typings", "./node_modules/@types"],
     "types": ["jest", "jest-extended", "node"]
   },
-  "exclude": ["packages/*/node_modules/**", "**/tests/**/*.js"]
+  "exclude": ["packages/*/node_modules/**"]
 }

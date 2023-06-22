@@ -1,6 +1,6 @@
 {
-  "name": "Cookie Analysis Tool",
-  "description": "Cookie analysis tool for analysis and understanding of cookie usage on web pages.",
+  "name": "Privacy Analysis Tool",
+  "description": "Tooling for understanding cookie usage and guidance on new privacy-preserving Chrome APIs.",
   "version": "0.0.1",
   "manifest_version": 3,
   "icons": {

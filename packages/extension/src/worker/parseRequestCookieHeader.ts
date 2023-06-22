@@ -18,7 +18,10 @@
  * Internal dependencies.
  */
 import type { CookieData } from '../localStore';
-import type { CookieDatabase } from '../utils/fetchCookieDictionary';
+import type {
+  CookieAnalytics,
+  CookieDatabase,
+} from '../utils/fetchCookieDictionary';
 
 /**
  * Parse response cookies header.
@@ -40,7 +43,7 @@ const parseRequestCookieHeader = (
     const [, ...rest] = cookieString.split('=');
     name = name.trim();
 
-    let analytics = null;
+    let analytics: CookieAnalytics | null = null;
     if (dict && Object.keys(dict).includes(name)) {
       //@TODO Handle cases where a name has multiple entries by checking other attributes.
       analytics = dict[name] ? dict[name][0] : null;
