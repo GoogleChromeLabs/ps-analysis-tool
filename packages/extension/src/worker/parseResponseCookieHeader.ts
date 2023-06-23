@@ -22,7 +22,46 @@ import cookie, { type Cookie as ParsedCookie } from 'simple-cookie';
  * Internal dependencies.
  */
 import type { CookieData } from '../localStore';
-import type { CookieDatabase } from '../utils/fetchCookieDictionary';
+import type {
+  CookieAnalytics,
+  CookieDatabase,
+} from '../utils/fetchCookieDictionary';
+
+/**
+ *
+ * @param {string} wildcard  Wildcard cookie name.
+ * @param {string} str cookie name to be matched.
+ * @returns {boolean}
+ */
+const wildTest = (wildcard: string, str: string): boolean => {
+  const regExp = wildcard.replace(/[.+^${}()|[\]\\]/g, '\\$&'); // regexp escape
+  const result = new RegExp(
+    `^${regExp.replace(/\*/g, '.*').replace(/\?/g, '.')}$`,
+    'i'
+  );
+  return result.test(str); // remove last 'i' above to have case sensitive
+};
+
+const findAnalyticsMatch = (
+  key: string,
+  dict: CookieDatabase
+): CookieAnalytics | null => {
+  let analytics: CookieAnalytics | null = null;
+  Object.keys(dict).every((dictionaryKey) => {
+    if (key === dictionaryKey) {
+      analytics = dict[dictionaryKey][0];
+      return false;
+    } else if (dictionaryKey.includes('*') && wildTest(dictionaryKey, key)) {
+      analytics = dict[dictionaryKey][0];
+
+      return false;
+    } else {
+      return true;
+    }
+  });
+
+  return analytics;
+};
 
 /**
  * Parse response cookies header.
@@ -39,11 +78,10 @@ const parseResponseCookieHeader = (
 ): CookieData => {
   const parsedCookie: ParsedCookie = cookie.parse(value);
 
-  let analytics = null;
+  let analytics: CookieAnalytics | null = null;
 
-  if (dict && Object.keys(dict).includes(parsedCookie.name)) {
-    //@TODO Handle cases where a name has multiple entries by checking other attributes.
-    analytics = dict[parsedCookie.name] ? dict[parsedCookie.name][0] : null;
+  if (dict) {
+    analytics = findAnalyticsMatch(parsedCookie.name, dict);
   }
 
   return {

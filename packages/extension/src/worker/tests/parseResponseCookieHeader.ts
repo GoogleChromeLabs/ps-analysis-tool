@@ -92,4 +92,68 @@ describe('parseResponseCookieHeader', () => {
       headerType: 'response',
     });
   });
+
+  it.only('Should parse and add add analytics for wild card entries', () => {
+    const parsedCookie = parseResponseCookieHeader(
+      'https://google.com/public/api/alerts',
+      '_ga_123=bla; Domain=.google.com; Path=/; SameSite=None; Secure',
+      {
+        _ga: [
+          {
+            platform: 'Should not match',
+            category: 'Analytics',
+            name: '_ga',
+            domain:
+              "google-analytics.com (3rd party) or advertiser's website domain (1st party)",
+            description: 'ID used to identify users',
+            retention: '2 years',
+            dataController: 'Google',
+            GDPRUrl: 'https://privacy.google.com/take-control.html',
+            wildcard: '0',
+          },
+        ],
+        '_ga_*': [
+          {
+            platform: 'Google Analytics',
+            category: 'Analytics',
+            name: '_ga_',
+            domain:
+              "google-analytics.com (3rd party) or advertiser's website domain (1st party)",
+            description: 'ID used to identify users',
+            retention: '2 years',
+            dataController: 'Google',
+            GDPRUrl: 'https://privacy.google.com/take-control.html',
+            wildcard: '1',
+          },
+        ],
+      }
+    );
+
+    expect(parsedCookie).toEqual({
+      parsedCookie: {
+        expires: 0,
+        httponly: false,
+        secure: true,
+        path: '/',
+        domain: '.google.com',
+        samesite: 'None',
+        name: '_ga_123',
+        value: 'bla',
+      },
+      analytics: {
+        platform: 'Google Analytics',
+        category: 'Analytics',
+        name: '_ga_',
+        domain:
+          "google-analytics.com (3rd party) or advertiser's website domain (1st party)",
+        description: 'ID used to identify users',
+        retention: '2 years',
+        dataController: 'Google',
+        GDPRUrl: 'https://privacy.google.com/take-control.html',
+        wildcard: '1',
+      },
+      url: 'https://google.com/public/api/alerts',
+      headerType: 'response',
+    });
+  });
 });

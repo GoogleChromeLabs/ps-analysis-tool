@@ -12,28 +12,17 @@
       "wildcard": "0"
     }
   ],
-  "CookieConsent": [
+  "CookieConsent*": [
     {
       "platform": "Cookiebot",
       "category": "Functional",
-      "name": "CookieConsent",
+      "name": "CookieConsent*",
       "domain": "cookiebot.com (3rd party) or advertiser's website domain (1st party)",
       "description": "Registers cookie preferences of a user",
       "retention": "1 year",
       "dataController": "Cookiebot",
       "GDPRUrl": "https://www.cookiebot.com/en/cookie-declaration/",
       "wildcard": "1"
-    },
-    {
-      "platform": "Cookiebot",
-      "category": "Functional",
-      "name": "CookieConsent",
-      "domain": "Advertiser's website domain (1st party)",
-      "description": "Stores the user's cookie consent state for the current domain",
-      "retention": "1 year",
-      "dataController": "Cookiebot",
-      "GDPRUrl": "https://www.cookiebot.com/en/cookie-declaration/",
-      "wildcard": "0"
     }
   ],
   "CookieConsentBulkTicket": [
@@ -49,11 +38,11 @@
       "wildcard": "0"
     }
   ],
-  "userlang": [
+  "userlang*": [
     {
       "platform": "Cookiebot",
       "category": "Functional",
-      "name": "userlang",
+      "name": "userlang*",
       "domain": "cookiebot.com (3rd party)",
       "description": "Saves language preferences of user for a website",
       "retention": "1 year",
@@ -114,6 +103,19 @@
       "wildcard": "0"
     }
   ],
+  "CookieConsent": [
+    {
+      "platform": "Cookiebot",
+      "category": "Functional",
+      "name": "CookieConsent",
+      "domain": "Advertiser's website domain (1st party)",
+      "description": "Stores the user's cookie consent state for the current domain",
+      "retention": "1 year",
+      "dataController": "Cookiebot",
+      "GDPRUrl": "https://www.cookiebot.com/en/cookie-declaration/",
+      "wildcard": "0"
+    }
+  ],
   "_ga": [
     {
       "platform": "Google Analytics",
@@ -127,11 +129,11 @@
       "wildcard": "0"
     }
   ],
-  "_ga_": [
+  "_ga_*": [
     {
       "platform": "Google Analytics",
       "category": "Analytics",
-      "name": "_ga_",
+      "name": "_ga_*",
       "domain": "google-analytics.com (3rd party) or advertiser's website domain (1st party)",
       "description": "ID used to identify users",
       "retention": "2 years",
@@ -153,11 +155,11 @@
       "wildcard": "0"
     }
   ],
-  "_gat": [
+  "_gat*": [
     {
       "platform": "Google Analytics",
       "category": "Analytics",
-      "name": "_gat",
+      "name": "_gat*",
       "domain": "google-analytics.com (3rd party) or advertiser's website domain (1st party)",
       "description": "Used to monitor number of Google Analytics server requests when using Google Tag Manager",
       "retention": "1 minute",
@@ -166,11 +168,11 @@
       "wildcard": "1"
     }
   ],
-  "_dc_gtm_": [
+  "_dc_gtm_*": [
     {
       "platform": "Google Analytics",
       "category": "Analytics",
-      "name": "_dc_gtm_",
+      "name": "_dc_gtm_*",
       "domain": "google-analytics.com (3rd party) or advertiser's website domain (1st party)",
       "description": "Used to monitor number of Google Analytics server requests",
       "retention": "1 minute",
@@ -192,11 +194,11 @@
       "wildcard": "0"
     }
   ],
-  "_gat_gtag_": [
+  "_gat_gtag_*": [
     {
       "platform": "Google Analytics",
       "category": "Analytics",
-      "name": "_gat_gtag_",
+      "name": "_gat_gtag_*",
       "domain": "google-analytics.com (3rd party) or advertiser's website domain",
       "description": "Used to set and get tracking data",
       "retention": "1 hour",
@@ -205,11 +207,11 @@
       "wildcard": "1"
     }
   ],
-  "_gac_": [
+  "_gac_*": [
     {
       "platform": "Google Analytics",
       "category": "Marketing",
-      "name": "_gac_",
+      "name": "_gac_*",
       "domain": "google-analytics.com (3rd party) or advertiser's website domain (1st party)",
       "description": "Contains information related to marketing campaigns of the user. These are shared with Google AdWords / Google Ads when the Google Ads and Google Analytics accounts are linked together.",
       "retention": "90 days",
@@ -387,11 +389,11 @@
       "wildcard": "0"
     }
   ],
-  "s_vi": [
+  "s_vi*": [
     {
       "platform": "Adobe Analytics",
       "category": "Analytics",
-      "name": "s_vi",
+      "name": "s_vi*",
       "domain": "Advertiser's website domain (1st party) or 207.net (3rd party)",
       "description": "Contains a unique ID to identify a user",
       "retention": "2 years",
@@ -491,11 +493,11 @@
       "wildcard": "0"
     }
   ],
-  "AMCV_": [
+  "AMCV_*": [
     {
       "platform": "Adobe Audience Manager",
       "category": "Marketing",
-      "name": "AMCV_",
+      "name": "AMCV_*",
       "domain": "Advertiser's website domain (1st party)",
       "description": "Adobe Experience Cloud uses a cookie to store a unique visitor ID that is used across Experience Cloud Solutions.",
       "retention": "2 years",
@@ -504,11 +506,11 @@
       "wildcard": "1"
     }
   ],
-  "AMCVS_": [
+  "AMCVS_*": [
     {
       "platform": "Adobe Audience Manager",
       "category": "Marketing",
-      "name": "AMCVS_",
+      "name": "AMCVS_*",
       "domain": "Advertiser's website domain (1st party)",
       "description": "The AMCVS cookie serves as a flag indicating that the session has been initialized. Its value is always 1 and discontinues when the session has ended.",
       "retention": "Session",
@@ -712,11 +714,11 @@
       "wildcard": "0"
     }
   ],
-  "SR": [
+  "SR*": [
     {
       "platform": "Adform",
       "category": "Marketing",
-      "name": "SR",
+      "name": "SR*",
       "domain": "adform.net (3rd party)",
       "description": "Unique value that records info about consecutive ads - includes: total impressions, daily impressions, total clicks, daily clicks, and last impression date",
       "retention": "1 day",
@@ -725,11 +727,11 @@
       "wildcard": "1"
     }
   ],
-  "CT": [
+  "CT*": [
     {
       "platform": "Adform",
       "category": "Marketing",
-      "name": "CT",
+      "name": "CT*",
       "domain": "adform.net (3rd party)",
       "description": "Identifies the last click membership for third-party pixels on advertiser's pages",
       "retention": "1 hour",
@@ -738,11 +740,11 @@
       "wildcard": "1"
     }
   ],
-  "EBFCD": [
+  "EBFCD*": [
     {
       "platform": "Adform",
       "category": "Marketing",
-      "name": "EBFCD",
+      "name": "EBFCD*",
       "domain": "adform.net (3rd party)",
       "description": "Registers daily max. number of impressions (frequency cap) for expanding advertisements (expandables)",
       "retention": "7 days",
@@ -751,11 +753,11 @@
       "wildcard": "1"
     }
   ],
-  "EBFC": [
+  "EBFC*": [
     {
       "platform": "Adform",
       "category": "Marketing",
-      "name": "EBFC",
+      "name": "EBFC*",
       "domain": "adform.net (3rd party)",
       "description": "Registers max. total number of impressions (frequency cap) for expanding advertisements (expandables)",
       "retention": "7 days",
@@ -764,11 +766,11 @@
       "wildcard": "1"
     }
   ],
-  "CFFC": [
+  "CFFC*": [
     {
       "platform": "Adform",
       "category": "Marketing",
-      "name": "CFFC",
+      "name": "CFFC*",
       "domain": "adform.net (3rd party)",
       "description": "Registers max. number of impressions (frequency cap) for compound banners",
       "retention": "7 days",
@@ -1778,11 +1780,11 @@
       "wildcard": "0"
     }
   ],
-  "nSGt-": [
+  "nSGt-*": [
     {
       "platform": "Azure / Microsoft",
       "category": "Functional",
-      "name": "nSGt-",
+      "name": "nSGt-*",
       "domain": "microsoft.com (3rd party)",
       "description": "This cookie is used by Microsoft to securely verify your Sharepoint login information",
       "retention": "session",
@@ -1830,11 +1832,11 @@
       "wildcard": "0"
     }
   ],
-  "ASPSESSIONID": [
+  "ASPSESSIONID*": [
     {
       "platform": "Azure / Microsoft",
       "category": "Functional",
-      "name": "ASPSESSIONID",
+      "name": "ASPSESSIONID*",
       "domain": "Advertiser's website domain (1st party)",
       "description": "Browsing session: the asterisks identify an alphanumerical code that varies from session to session in automatic mode.",
       "retention": "Session",
@@ -2285,11 +2287,11 @@
       "wildcard": "0"
     }
   ],
-  "cookie-consent-io-timestamp": [
+  "cookie-consent-io-timestamp*": [
     {
       "platform": "CookieConsent.io",
       "category": "Functional",
-      "name": "cookie-consent-io-timestamp",
+      "name": "cookie-consent-io-timestamp*",
       "domain": "Advertiser's website domain (1st party)",
       "description": "Registers user activity timestamp",
       "retention": "30 days",
@@ -2779,11 +2781,11 @@
       "wildcard": "0"
     }
   ],
-  "_hjIncludedInSessionSample": [
+  "_hjIncludedInSessionSample*": [
     {
       "platform": "Hotjar",
       "category": "Functional",
-      "name": "_hjIncludedInSessionSample",
+      "name": "_hjIncludedInSessionSample*",
       "domain": "Advertiser's website domain (1st party)",
       "description": "This cookie is set to let Hotjar know whether that visitor is included in the data sampling defined by your site's daily session limit",
       "retention": "30 minutes",
@@ -2792,11 +2794,11 @@
       "wildcard": "1"
     }
   ],
-  "_hjSession_": [
+  "_hjSession_*": [
     {
       "platform": "Hotjar",
       "category": "Functional",
-      "name": "_hjSession_",
+      "name": "_hjSession_*",
       "domain": "Advertiser's website domain (1st party)",
       "description": "A cookie that holds the current session data. This ensues that subsequent requests within the session window will be attributed to the same Hotjar session.",
       "retention": "30 minutes",
@@ -2805,11 +2807,11 @@
       "wildcard": "1"
     }
   ],
-  "_hjSessionUser_": [
+  "_hjSessionUser_*": [
     {
       "platform": "Hotjar",
       "category": "Functional",
-      "name": "_hjSessionUser_",
+      "name": "_hjSessionUser_*",
       "domain": "Advertiser's website domain (1st party)",
       "description": "Hotjar cookie that is set when a user first lands on a page with the Hotjar script. It is used to persist the Hotjar User ID, unique to that site on the browser. This ensures that behavior in subsequent visits to the same site will be attributed to the same user ID.",
       "retention": "365 days",
@@ -2948,11 +2950,11 @@
       "wildcard": "0"
     }
   ],
-  "ORA_WWV_APP_": [
+  "ORA_WWV_APP_*": [
     {
       "platform": "Oracle",
       "category": "Functional",
-      "name": "ORA_WWV_APP_",
+      "name": "ORA_WWV_APP_*",
       "domain": "Advertiser's website domain (1st party)",
       "description": "Security cookie for applications.",
       "retention": "Session",
@@ -3676,11 +3678,11 @@
       "wildcard": "0"
     }
   ],
-  "OAGEO": [
+  "OAGEO*": [
     {
       "platform": "OpenX",
       "category": "Marketing",
-      "name": "OAGEO",
+      "name": "OAGEO*",
       "domain": "Advertiser's website domain",
       "description": "Used to avoid the repeated display of the same ad. Contains information about the users location.",
       "retention": "Session",
@@ -4014,11 +4016,11 @@
       "wildcard": "0"
     }
   ],
-  ".AspNetCore.Antiforgery.": [
+  ".AspNetCore.Antiforgery.*": [
     {
       "platform": "Microsoft",
       "category": "Functional",
-      "name": ".AspNetCore.Antiforgery.",
+      "name": ".AspNetCore.Antiforgery.*",
       "domain": "Advertiser's website domain",
       "description": "Anti-forgery cookie is a security mechanism to defend against cross-site request forgery (CSRF) attacks.",
       "retention": "Session",
@@ -4027,11 +4029,11 @@
       "wildcard": "1"
     }
   ],
-  "unruly_m": [
+  "unruly_m*": [
     {
       "platform": "Unrulymedia.com",
       "category": "Marketing",
-      "name": "unruly_m",
+      "name": "unruly_m*",
       "domain": "Advertiser's website domain",
       "description": "Pending",
       "retention": "6 days",
@@ -4040,11 +4042,11 @@
       "wildcard": "1"
     }
   ],
-  "KRTBCOOKIE_": [
+  "KRTBCOOKIE_*": [
     {
       "platform": "PubMatic",
       "category": "Marketing",
-      "name": "KRTBCOOKIE_",
+      "name": "KRTBCOOKIE_*",
       "domain": "pubmatic.com",
       "description": "Registers a unique ID that identifies the user's device during return visits across websites that use the same ad network. The ID is used to allow targeted ads.",
       "retention": "29 days",
@@ -4885,11 +4887,11 @@
       "wildcard": "0"
     }
   ],
-  "__RequestVerificationToken": [
+  "__RequestVerificationToken*": [
     {
       "platform": "Microsoft",
       "category": "Functional",
-      "name": "__RequestVerificationToken",
+      "name": "__RequestVerificationToken*",
       "domain": "Advertiser's website domain",
       "description": "This is an anti-forgery cookie set by web applications built using ASP.NET MVC technologies. It is designed to stop unauthorised posting of content to a website, known as Cross-Site Request Forgery.",
       "retention": "session",
@@ -5145,11 +5147,11 @@
       "wildcard": "0"
     }
   ],
-  "uid-bp-": [
+  "uid-bp-*": [
     {
       "platform": "FreeWheel",
       "category": "Marketing",
-      "name": "uid-bp-",
+      "name": "uid-bp-*",
       "domain": "stickyadstv.com",
       "description": "Pending",
       "retention": "2 months",
@@ -5184,11 +5186,11 @@
       "wildcard": "0"
     }
   ],
-  "amplitude_id": [
+  "amplitude_id*": [
     {
       "platform": "Trustpilot",
       "category": "Marketing",
-      "name": "amplitude_id",
+      "name": "amplitude_id*",
       "domain": "trustpilot.com",
       "description": "These cookies are used by the TrustPilot service to identify you and enable you to leave reviews of our products and services.",
       "retention": "1 year",
@@ -5262,11 +5264,11 @@
       "wildcard": "0"
     }
   ],
-  "_ljtrtb_": [
+  "_ljtrtb_*": [
     {
       "platform": "SOVRN",
       "category": "Marketing",
-      "name": "_ljtrtb_",
+      "name": "_ljtrtb_*",
       "domain": "lijit.com",
       "description": "These cookies are used temporarily when multiple partners pass us their ID simultaneously. To avoid technical conflicts that arise from accessing the ljtrtb cookie for multiple partners at the same time, we store each partner’s ID in a separate cookie and then consolidate these IDs into the ljtrtb cookie when it’s available.",
       "retention": "1 year",
@@ -5925,11 +5927,11 @@
       "wildcard": "0"
     }
   ],
-  "dsps:": [
+  "dsps:*": [
     {
       "platform": "PowerLinks Media Limited",
       "category": "Marketing",
-      "name": "dsps:",
+      "name": "dsps:*",
       "domain": "px.powerlinks.com",
       "description": "Service to display targeted advertising to visitors.",
       "retention": "90 days",
@@ -6107,11 +6109,11 @@
       "wildcard": "0"
     }
   ],
-  "_pk_id": [
+  "_pk_id*": [
     {
       "platform": "Matomo",
       "category": "Analytics",
-      "name": "_pk_id",
+      "name": "_pk_id*",
       "domain": "Advertiser's website domain",
       "description": "Used to store a few details about the user such as the unique visitor ID",
       "retention": "13 months",
@@ -6120,11 +6122,11 @@
       "wildcard": "1"
     }
   ],
-  "_pk_ref": [
+  "_pk_ref*": [
     {
       "platform": "Matomo",
       "category": "Analytics",
-      "name": "_pk_ref",
+      "name": "_pk_ref*",
       "domain": "Advertiser's website domain",
       "description": "Used to store the attribution information, the referrer initially used to visit the website",
       "retention": "6 months",
@@ -6133,11 +6135,11 @@
       "wildcard": "1"
     }
   ],
-  "_pk_ses": [
+  "_pk_ses*": [
     {
       "platform": "Matomo",
       "category": "Analytics",
-      "name": "_pk_ses",
+      "name": "_pk_ses*",
       "domain": "Advertiser's website domain",
       "description": "Short lived cookies used to temporarily store data for the visit",
       "retention": "30 minutes",
@@ -6146,11 +6148,11 @@
       "wildcard": "1"
     }
   ],
-  "_pk_cvar": [
+  "_pk_cvar*": [
     {
       "platform": "Matomo",
       "category": "Analytics",
-      "name": "_pk_cvar",
+      "name": "_pk_cvar*",
       "domain": "Advertiser's website domain",
       "description": "Short lived cookies used to temporarily store data for the visit",
       "retention": "30 minutes",
@@ -6159,11 +6161,11 @@
       "wildcard": "1"
     }
   ],
-  "_pk_hsr": [
+  "_pk_hsr*": [
     {
       "platform": "Matomo",
       "category": "Analytics",
-      "name": "_pk_hsr",
+      "name": "_pk_hsr*",
       "domain": "Advertiser's website domain",
       "description": "Short lived cookies used to temporarily store data for the visit",
       "retention": "30 minutes",
@@ -6172,11 +6174,11 @@
       "wildcard": "1"
     }
   ],
-  "_pk_testcookie": [
+  "_pk_testcookie*": [
     {
       "platform": "Matomo",
       "category": "Analytics",
-      "name": "_pk_testcookie",
+      "name": "_pk_testcookie*",
       "domain": "Advertiser's website domain",
       "description": "Cookie is created and should be then directly deleted (used to check whether the visitor’s browser supports cookies)",
       "retention": "session",
@@ -6497,11 +6499,11 @@
       "wildcard": "0"
     }
   ],
-  "TS01": [
+  "TS01*": [
     {
       "platform": "Wix.com",
       "category": "Functional",
-      "name": "TS01",
+      "name": "TS01*",
       "domain": "Advertiser's website domain",
       "description": "Used for security and anti-fraud reasons",
       "retention": "session",
@@ -6926,11 +6928,11 @@
       "wildcard": "0"
     }
   ],
-  "checkout_session_token": [
+  "checkout_session_token*": [
     {
       "platform": "Shopify.com",
       "category": "Functional",
-      "name": "checkout_session_token",
+      "name": "checkout_session_token*",
       "domain": "Advertiser's website domain",
       "description": "Used in connection with checkout.",
       "retention": "3 weeks",
@@ -7433,11 +7435,11 @@
       "wildcard": "0"
     }
   ],
-  "expid_": [
+  "expid_*": [
     {
       "platform": "Salesforce",
       "category": "Marketing",
-      "name": "expid_",
+      "name": "expid_*",
       "domain": "salesforce.com",
       "description": "Used to render pages based on specified brand.",
       "retention": "session",
@@ -7472,11 +7474,11 @@
       "wildcard": "0"
     }
   ],
-  "CookieConsentPolicy": [
+  "CookieConsentPolicy*": [
     {
       "platform": "Salesforce",
       "category": "Functional",
-      "name": "CookieConsentPolicy",
+      "name": "CookieConsentPolicy*",
       "domain": "salesforce.com",
       "description": "Used to apply end-user cookie consent preferences set by our client-side utility.",
       "retention": "1 year",
@@ -7602,11 +7604,11 @@
       "wildcard": "0"
     }
   ],
-  "wp_woocommerce_session_": [
+  "wp_woocommerce_session_*": [
     {
       "platform": "WooCommerce",
       "category": "Functional",
-      "name": "wp_woocommerce_session_",
+      "name": "wp_woocommerce_session_*",
       "domain": "woocommerce.com",
       "description": "Contains a unique code for each customer so that it knows where to find the cart data in the database for each customer.",
       "retention": "2 days",
@@ -7654,11 +7656,11 @@
       "wildcard": "0"
     }
   ],
-  "incap_ses_": [
+  "incap_ses_*": [
     {
       "platform": "Imperva",
       "category": "Functional",
-      "name": "incap_ses_",
+      "name": "incap_ses_*",
       "domain": "Advertiser's website domain",
       "description": "This cookie is set to allow a visitor to receive site content from one out of multiple servers as the visitor browses the site. This allows the visitor's session to be maintained.",
       "retention": "session",
@@ -7667,11 +7669,11 @@
       "wildcard": "1"
     }
   ],
-  "nlbi_": [
+  "nlbi_*": [
     {
       "platform": "Imperva",
       "category": "Functional",
-      "name": "nlbi_",
+      "name": "nlbi_*",
       "domain": "Advertiser's website domain",
       "description": "Incapsula DDoS Protection and Web Application Firewall: Load balancing cookie. To ensure requests by a client are sent to the same origin server.",
       "retention": "session",
@@ -7680,11 +7682,11 @@
       "wildcard": "1"
     }
   ],
-  "visid_incap_": [
+  "visid_incap_*": [
     {
       "platform": "Imperva",
       "category": "Functional",
-      "name": "visid_incap_",
+      "name": "visid_incap_*",
       "domain": "Advertiser's website domain",
       "description": "This cookie is from the incapsula CDN and helps us with reliability, security and the performance of our site.",
       "retention": "1 year",
@@ -7745,11 +7747,11 @@
       "wildcard": "0"
     }
   ],
-  "cc-": [
+  "cc-*": [
     {
       "platform": "Intershop",
       "category": "Functional",
-      "name": "cc-",
+      "name": "cc-*",
       "domain": "Advertiser's website domain",
       "description": "References a cart for anonymous users",
       "retention": "session",
@@ -7758,11 +7760,11 @@
       "wildcard": "1"
     }
   ],
-  "pgid-org-": [
+  "pgid-org-*": [
     {
       "platform": "Intershop",
       "category": "Functional",
-      "name": "pgid-org-",
+      "name": "pgid-org-*",
       "domain": "Advertiser's website domain",
       "description": "Hash of personalization information. Used to cache pages or snippets for users with same personalization information",
       "retention": "session",
@@ -7771,11 +7773,11 @@
       "wildcard": "1"
     }
   ],
-  "SecureSessionID-": [
+  "SecureSessionID-*": [
     {
       "platform": "Intershop",
       "category": "Functional",
-      "name": "SecureSessionID-",
+      "name": "SecureSessionID-*",
       "domain": "Advertiser's website domain",
       "description": "Reference to authenticated user",
       "retention": "session",
@@ -7966,11 +7968,11 @@
       "wildcard": "0"
     }
   ],
-  "_vis_opt_exp_": [
+  "_vis_opt_exp_*": [
     {
       "platform": "Visual Website Optimizer",
       "category": "Functional",
-      "name": "_vis_opt_exp_",
+      "name": "_vis_opt_exp_*",
       "domain": "Advertiser's website domain",
       "description": "This cookie is generated when a goal is created.",
       "retention": "100 days",
@@ -8720,11 +8722,11 @@
       "wildcard": "0"
     }
   ],
-  "_sp_id.": [
+  "_sp_id.*": [
     {
       "platform": "Snowplow",
       "category": "Analytics",
-      "name": "_sp_id.",
+      "name": "_sp_id.*",
       "domain": "Advertiser's website domain",
       "description": "Stores user information that is created when a user first visits a site and updated on subsequent visits. It is used to identify users and track the users activity across a domain. This cookie stores a unique identifier for each user, a unique identifier for the users current session, the number of visits a user has made to the site, the timestamp of the users first visit, the timestamp of their previous visit and the timestamp of their current visit.",
       "retention": "2 years",
@@ -8733,11 +8735,11 @@
       "wildcard": "1"
     }
   ],
-  "_sp_ses.": [
+  "_sp_ses.*": [
     {
       "platform": "Snowplow",
       "category": "Analytics",
-      "name": "_sp_ses.",
+      "name": "_sp_ses.*",
       "domain": "Advertiser's website domain",
       "description": "Used to identify if the user is in an active session on a site or if this is a new session for a user (i.e. cookie doesn’t exist or has expired).",
       "retention": "30 minutes",
@@ -9045,11 +9047,11 @@
       "wildcard": "0"
     }
   ],
-  "_li_id": [
+  "_li_id*": [
     {
       "platform": "Leadinfo",
       "category": "Marketing",
-      "name": "_li_id",
+      "name": "_li_id*",
       "domain": "Advertiser's website domain",
       "description": "These cookies enable us to get insights about the business use of our website, based on IP addresses of the website visitors.",
       "retention": "1 year",
@@ -9058,11 +9060,11 @@
       "wildcard": "1"
     }
   ],
-  "_li_ses": [
+  "_li_ses*": [
     {
       "platform": "Leadinfo",
       "category": "Marketing",
-      "name": "_li_ses",
+      "name": "_li_ses*",
       "domain": "Advertiser's website domain",
       "description": "These cookies enable us to get insights about the business use of our website, based on IP addresses of the website visitors.",
       "retention": "1 year",
@@ -9617,11 +9619,11 @@
       "wildcard": "0"
     }
   ],
-  "Pastease.passive.activated": [
+  "Pastease.passive.activated*": [
     {
       "platform": "Mopinion.com",
       "category": "Analytics",
-      "name": "Pastease.passive.activated",
+      "name": "Pastease.passive.activated*",
       "domain": "Advertiser's website domain",
       "description": "The visitor is selected via this Mopinion cookie and the visitor sees the form.",
       "retention": "1 month",
@@ -9630,11 +9632,11 @@
       "wildcard": "1"
     }
   ],
-  "Pastease.passive.chance": [
+  "Pastease.passive.chance*": [
     {
       "platform": "Mopinion.com",
       "category": "Analytics",
-      "name": "Pastease.passive.chance",
+      "name": "Pastease.passive.chance*",
       "domain": "Advertiser's website domain",
       "description": "This Mopinion cookie determines the chance that the visitor will see the form.",
       "retention": "1 month",
@@ -9706,17 +9708,6 @@
       "dataController": "Audrte",
       "GDPRUrl": "N/A",
       "wildcard": "0"
-    },
-    {
-      "platform": "Audrte.com",
-      "category": "Marketing",
-      "name": "arcki2",
-      "domain": "audrte.com",
-      "description": "Collects data on user behaviour and interaction in order to optimize the website and make advertisement on the website more relevant.",
-      "retention": "15 days",
-      "dataController": "Audrte.com",
-      "GDPRUrl": "N/A",
-      "wildcard": "1"
     }
   ],
   "arcki2_adform": [
@@ -10187,11 +10178,11 @@
       "wildcard": "0"
     }
   ],
-  "BIGipServer": [
+  "BIGipServer*": [
     {
       "platform": "f5 BIG-IP",
       "category": "Functional",
-      "name": "BIGipServer",
+      "name": "BIGipServer*",
       "domain": "Advertiser's website domain",
       "description": "Used by the f5 BIG-IP load balancer to ensure one user's request is always handled by the same server to maintain a consistent user experience",
       "retention": "Unknown",
@@ -10200,11 +10191,11 @@
       "wildcard": "1"
     }
   ],
-  "active_template::": [
+  "active_template::*": [
     {
       "platform": "Ezoic",
       "category": "Functional",
-      "name": "active_template::",
+      "name": "active_template::*",
       "domain": "Advertiser's website domain",
       "description": "Used to store which template you are viewing on this website.",
       "retention": "2 days",
@@ -10226,11 +10217,11 @@
       "wildcard": "0"
     }
   ],
-  "ezoab_": [
+  "ezoab_*": [
     {
       "platform": "Ezoic",
       "category": "Functional",
-      "name": "ezoab_",
+      "name": "ezoab_*",
       "domain": "Advertiser's website domain",
       "description": "Used to split test different features and functionality.",
       "retention": "2 hours",
@@ -10239,11 +10230,11 @@
       "wildcard": "1"
     }
   ],
-  "ezoadgid_": [
+  "ezoadgid_*": [
     {
       "platform": "Ezoic",
       "category": "Analytics",
-      "name": "ezoadgid_",
+      "name": "ezoadgid_*",
       "domain": "Advertiser's website domain",
       "description": "Stores an ID that connects you to an age and gender category.",
       "retention": "30 minutes",
@@ -10265,11 +10256,11 @@
       "wildcard": "0"
     }
   ],
-  "ezopvc_": [
+  "ezopvc_*": [
     {
       "platform": "Ezoic",
       "category": "Analytics",
-      "name": "ezopvc_",
+      "name": "ezopvc_*",
       "domain": "Advertiser's website domain",
       "description": "Used to store the number of pages that you have viewed on this site in this session.",
       "retention": "30 minutes",
@@ -10278,11 +10269,11 @@
       "wildcard": "1"
     }
   ],
-  "ezoref_": [
+  "ezoref_*": [
     {
       "platform": "Ezoic",
       "category": "Analytics",
-      "name": "ezoref_",
+      "name": "ezoref_*",
       "domain": "Advertiser's website domain",
       "description": "Used to store the referring domain (the website you were at before you can to this website).",
       "retention": "2 hours",
@@ -10291,11 +10282,11 @@
       "wildcard": "1"
     }
   ],
-  "ezostid_": [
+  "ezostid_*": [
     {
       "platform": "Ezoic",
       "category": "Functional",
-      "name": "ezostid_",
+      "name": "ezostid_*",
       "domain": "Advertiser's website domain",
       "description": "Used to test different features and functionality and to record which features and functionality are available to you so you receive a consistent experience.",
       "retention": "Unknown",
@@ -10304,11 +10295,11 @@
       "wildcard": "1"
     }
   ],
-  "ezosuigeneris": [
+  "ezosuigeneris*": [
     {
       "platform": "Ezoic",
       "category": "Marketing",
-      "name": "ezosuigeneris",
+      "name": "ezosuigeneris*",
       "domain": "Advertiser's website domain",
       "description": "Used to uniquely identify you across different websites on the internet so your experience can be customized.",
       "retention": "1 year",
@@ -10330,11 +10321,11 @@
       "wildcard": "0"
     }
   ],
-  "ezouid_": [
+  "ezouid_*": [
     {
       "platform": "Ezoic",
       "category": "Analytics",
-      "name": "ezouid_",
+      "name": "ezouid_*",
       "domain": "Advertiser's website domain",
       "description": "Used to uniquely identify you as a visitor on this website. Used for analytics and personalization of your experience.",
       "retention": "Unknown",
@@ -10343,11 +10334,11 @@
       "wildcard": "1"
     }
   ],
-  "ezovid_": [
+  "ezovid_*": [
     {
       "platform": "Ezoic",
       "category": "Analytics",
-      "name": "ezovid_",
+      "name": "ezovid_*",
       "domain": "Advertiser's website domain",
       "description": "Used to uniquely identify a visit by you to this website. Used for analytics and personalization of your experience.",
       "retention": "30 minutes",
@@ -10356,11 +10347,11 @@
       "wildcard": "1"
     }
   ],
-  "ezovuuid_": [
+  "ezovuuid_*": [
     {
       "platform": "Ezoic",
       "category": "Analytics",
-      "name": "ezovuuid_",
+      "name": "ezovuuid_*",
       "domain": "Advertiser's website domain",
       "description": "Used to uniquely identify a visit by you to this website. Used for analytics and personalization of your experience.",
       "retention": "30 minutes",
@@ -10369,11 +10360,11 @@
       "wildcard": "1"
     }
   ],
-  "ezovuuidtime_": [
+  "ezovuuidtime_*": [
     {
       "platform": "Ezoic",
       "category": "Analytics",
-      "name": "ezovuuidtime_",
+      "name": "ezovuuidtime_*",
       "domain": "Advertiser's website domain",
       "description": "Used to record the time of your visit to this website so different visits can be differentiated from each other.",
       "retention": "2 days",
@@ -10382,11 +10373,11 @@
       "wildcard": "1"
     }
   ],
-  "ezux_et_": [
+  "ezux_et_*": [
     {
       "platform": "Ezoic",
       "category": "Analytics",
-      "name": "ezux_et_",
+      "name": "ezux_et_*",
       "domain": "Advertiser's website domain",
       "description": "Used to record the amount of time that you engaged with content on this website. Used for analytics purposes to improve user experience.",
       "retention": "Unknown",
@@ -10395,11 +10386,11 @@
       "wildcard": "1"
     }
   ],
-  "ezux_ifep_": [
+  "ezux_ifep_*": [
     {
       "platform": "Ezoic",
       "category": "Analytics",
-      "name": "ezux_ifep_",
+      "name": "ezux_ifep_*",
       "domain": "Advertiser's website domain",
       "description": "Used to record whether you have engaged with the content on this site. Used for analytics purposes to improve user experience.",
       "retention": "Unknown",
@@ -10408,11 +10399,11 @@
       "wildcard": "1"
     }
   ],
-  "ezux_lpl_": [
+  "ezux_lpl_*": [
     {
       "platform": "Ezoic",
       "category": "Analytics",
-      "name": "ezux_lpl_",
+      "name": "ezux_lpl_*",
       "domain": "Advertiser's website domain",
       "description": "Used to record the time that you loaded the last page on this website.",
       "retention": "Unknown",
@@ -10421,11 +10412,11 @@
       "wildcard": "1"
     }
   ],
-  "ezux_tos_": [
+  "ezux_tos_*": [
     {
       "platform": "Ezoic",
       "category": "Analytics",
-      "name": "ezux_tos_",
+      "name": "ezux_tos_*",
       "domain": "Advertiser's website domain",
       "description": "Used to record the amount of time you have spent on this website.",
       "retention": "Unknown",
@@ -10434,11 +10425,11 @@
       "wildcard": "1"
     }
   ],
-  "ezoawesome_": [
+  "ezoawesome_*": [
     {
       "platform": "Ezoic",
       "category": "Functional",
-      "name": "ezoawesome_",
+      "name": "ezoawesome_*",
       "domain": "Advertiser's website domain",
       "description": "Used for fraud and invalid activity detection.",
       "retention": "Unknown",
@@ -10746,6 +10737,19 @@
       "wildcard": "0"
     }
   ],
+  "arcki2*": [
+    {
+      "platform": "Audrte.com",
+      "category": "Marketing",
+      "name": "arcki2*",
+      "domain": "audrte.com",
+      "description": "Collects data on user behaviour and interaction in order to optimize the website and make advertisement on the website more relevant.",
+      "retention": "15 days",
+      "dataController": "Audrte.com",
+      "GDPRUrl": "N/A",
+      "wildcard": "1"
+    }
+  ],
   "v_usr": [
     {
       "platform": "E-volution.ai",
@@ -10772,11 +10776,11 @@
       "wildcard": "0"
     }
   ],
-  "done_redirects": [
+  "done_redirects*": [
     {
       "platform": "OnAudience",
       "category": "Marketing",
-      "name": "done_redirects",
+      "name": "done_redirects*",
       "domain": "onaudience.com",
       "description": "Used to monitor website performance for statistical purposes.",
       "retention": "1 day",
@@ -10941,11 +10945,11 @@
       "wildcard": "0"
     }
   ],
-  "ab.storage.userId.": [
+  "ab.storage.userId.*": [
     {
       "platform": "Braze",
       "category": "Functional",
-      "name": "ab.storage.userId.",
+      "name": "ab.storage.userId.*",
       "domain": "Advertiser's website domain",
       "description": "Used to determine whether the currently logged-in user has changed and to associate events with the current user.",
       "retention": "Unknown",
@@ -10954,11 +10958,11 @@
       "wildcard": "1"
     }
   ],
-  "ab.storage.sessionId.": [
+  "ab.storage.sessionId.*": [
     {
       "platform": "Braze",
       "category": "Analytics",
-      "name": "ab.storage.sessionId.",
+      "name": "ab.storage.sessionId.*",
       "domain": "Advertiser's website domain",
       "description": "Randomly-generated string used to determine whether the user is starting a new or existing session to sync messages and calculate session analytics.",
       "retention": "Session",
@@ -10967,11 +10971,11 @@
       "wildcard": "1"
     }
   ],
-  "ab.storage.deviceId.": [
+  "ab.storage.deviceId.*": [
     {
       "platform": "Braze",
       "category": "Analytics",
-      "name": "ab.storage.deviceId.",
+      "name": "ab.storage.deviceId.*",
       "domain": "Advertiser's website domain",
       "description": "Randomly-generated string used to identify anonymous users, and to differentiate users’ devices and enables device-based messaging.",
       "retention": "Unknown",

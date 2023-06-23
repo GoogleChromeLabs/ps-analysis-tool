@@ -41,13 +41,15 @@ const formatRawData = async (rawData) => {
   cookies.forEach((cookie) => {
     const platform = cookie['Platform'];
     const category = cookie['Category'];
-    const name = cookie['Cookie / Data Key name'];
+    let name = cookie['Cookie / Data Key name'];
     const domain = cookie['Domain'];
     const description = cookie['Description'];
     const retention = cookie['Retention period'];
     const dataController = cookie['Data Controller'];
     const GDPRUrl = cookie['User Privacy & GDPR Rights Portals'];
     const wildcard = cookie['Wildcard match'];
+
+    name = wildcard === '1' ? name + '*' : name;
 
     // Add the cookie to the formatted data.
     formattedData[name] = [
