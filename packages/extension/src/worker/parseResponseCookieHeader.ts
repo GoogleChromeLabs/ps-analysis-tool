@@ -26,42 +26,7 @@ import type {
   CookieAnalytics,
   CookieDatabase,
 } from '../utils/fetchCookieDictionary';
-
-/**
- *
- * @param {string} wildcard  Wildcard cookie name.
- * @param {string} str cookie name to be matched.
- * @returns {boolean} Flag for match
- */
-const wildTest = (wildcard: string, str: string): boolean => {
-  const regExp = wildcard.replace(/[.+^${}()|[\]\\]/g, '\\$&'); // regexp escape
-  const result = new RegExp(
-    `^${regExp.replace(/\*/g, '.*').replace(/\?/g, '.')}$`,
-    'i'
-  );
-  return result.test(str); // remove last 'i' above to have case sensitive
-};
-
-const findAnalyticsMatch = (
-  key: string,
-  dictionary: CookieDatabase
-): CookieAnalytics | null => {
-  let analytics: CookieAnalytics | null = null;
-  Object.keys(dictionary).every((dictionaryKey) => {
-    if (key === dictionaryKey) {
-      analytics = dictionary[dictionaryKey][0];
-      return false;
-    } else if (dictionaryKey.includes('*') && wildTest(dictionaryKey, key)) {
-      analytics = dictionary[dictionaryKey][0];
-
-      return false;
-    } else {
-      return true;
-    }
-  });
-
-  return analytics;
-};
+import findAnalyticsMatch from './findAnalyticsMatch';
 
 /**
  * Parse response cookies header.

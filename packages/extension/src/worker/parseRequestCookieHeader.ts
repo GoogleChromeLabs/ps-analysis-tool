@@ -22,6 +22,7 @@ import type {
   CookieAnalytics,
   CookieDatabase,
 } from '../utils/fetchCookieDictionary';
+import findAnalyticsMatch from './findAnalyticsMatch';
 
 /**
  * Parse response cookies header.
@@ -44,9 +45,8 @@ const parseRequestCookieHeader = (
     name = name.trim();
 
     let analytics: CookieAnalytics | null = null;
-    if (dictionary && Object.keys(dictionary).includes(name)) {
-      //@TODO Handle cases where a name has multiple entries by checking other attributes.
-      analytics = dictionary[name] ? dictionary[name][0] : null;
+    if (dictionary) {
+      analytics = findAnalyticsMatch(name, dictionary);
     }
     cookies.push({
       parsedCookie: { name, value: rest.join('='), domain: new URL(url).host },
