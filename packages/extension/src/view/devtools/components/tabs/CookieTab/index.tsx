@@ -16,13 +16,14 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 /**
  * Internal dependencies.
  */
 import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import CookieList from './cookieList';
+import CookieDetails from './cookieDetails';
 
 export const CookieTab = () => {
   const { cookies, tabURL } = useCookieStore(({ state }) => ({
@@ -30,10 +31,33 @@ export const CookieTab = () => {
     tabURL: state?.url,
   }));
 
+  const [selectedKey, setSelectedKey] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!selectedKey && Object.keys(cookies).length !== 0) {
+      setSelectedKey(Object.keys(cookies)[0]);
+    }
+  }, [cookies, selectedKey]);
+
+  const selectedCookie = selectedKey ? cookies[selectedKey] : null;
+
   return (
-    <div className="w-full h-full flex flex-col ">
+    <div className="w-full h-full flex flex-col lg:flex-row">
       <div className="flex-1 overflow-y-scroll ">
-        <CookieList cookies={cookies} tabURL={tabURL} />
+        <CookieList
+          cookies={cookies}
+          tabURL={tabURL}
+          selectedKey={selectedKey}
+          onClickItem={setSelectedKey}
+        />
+      </div>
+      <div className="flex-1 overflow-y-scroll border-t-gray-300 border-t-2 lg:border-t-0">
+        {selectedCookie && (
+          <CookieDetails
+            data={selectedCookie.parsedCookie}
+            analytics={selectedCookie.analytics}
+          />
+        )}
       </div>
     </div>
   );

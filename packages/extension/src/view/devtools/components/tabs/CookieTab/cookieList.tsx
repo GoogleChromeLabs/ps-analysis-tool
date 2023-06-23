@@ -29,15 +29,27 @@ interface ICoookieList {
     [key: string]: CookieData;
   };
   tabURL: string | undefined;
+  selectedKey: string | null;
+  onClickItem: (key: string) => void;
 }
 
-const CookieList = ({ cookies, tabURL }: ICoookieList) => (
+const CookieList = ({
+  cookies,
+  tabURL,
+  selectedKey,
+  onClickItem,
+}: ICoookieList) => (
   <ul className="w-full h-full">
     {cookies &&
       tabURL &&
       Object.entries(cookies).map(([key, value]) => (
         <li key={key}>
-          <ListItem cookie={value} tabURL={tabURL} />
+          <ListItem
+            cookie={value}
+            tabURL={tabURL}
+            isSelected={selectedKey === key}
+            onClick={() => onClickItem(key)}
+          />
         </li>
       ))}
   </ul>
