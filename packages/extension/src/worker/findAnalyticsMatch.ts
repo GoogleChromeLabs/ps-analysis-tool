@@ -38,6 +38,12 @@ const wildTest = (wildcard: string, str: string): boolean => {
   return result.test(str); // remove last 'i' above to have case sensitive
 };
 
+/**
+ * Finds analytics in cookie DB for a cookie name.
+ * @param {string} key cookie name to be matched.
+ * @param {CookieDatabase} dictionary cookieDB for finding matches.
+ * @returns {boolean} Flag for match
+ */
 const findAnalyticsMatch = (
   key: string,
   dictionary: CookieDatabase
