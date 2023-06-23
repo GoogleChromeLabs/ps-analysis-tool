@@ -31,7 +31,7 @@ import type {
  *
  * @param {string} wildcard  Wildcard cookie name.
  * @param {string} str cookie name to be matched.
- * @returns {boolean}
+ * @returns {boolean} Flag for match
  */
 const wildTest = (wildcard: string, str: string): boolean => {
   const regExp = wildcard.replace(/[.+^${}()|[\]\\]/g, '\\$&'); // regexp escape
@@ -44,15 +44,15 @@ const wildTest = (wildcard: string, str: string): boolean => {
 
 const findAnalyticsMatch = (
   key: string,
-  dict: CookieDatabase
+  dictionary: CookieDatabase
 ): CookieAnalytics | null => {
   let analytics: CookieAnalytics | null = null;
-  Object.keys(dict).every((dictionaryKey) => {
+  Object.keys(dictionary).every((dictionaryKey) => {
     if (key === dictionaryKey) {
-      analytics = dict[dictionaryKey][0];
+      analytics = dictionary[dictionaryKey][0];
       return false;
     } else if (dictionaryKey.includes('*') && wildTest(dictionaryKey, key)) {
-      analytics = dict[dictionaryKey][0];
+      analytics = dictionary[dictionaryKey][0];
 
       return false;
     } else {
@@ -68,20 +68,20 @@ const findAnalyticsMatch = (
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
  * @param {string} url Cookie URL (URL of the server which is setting/updating cookies).
  * @param {string} value header value
- * @param {CookieDatabase} dict Dictionary from open cookie database
+ * @param {CookieDatabase} dictionary Dictionary from open cookie database
  * @returns {CookieData} Parsed cookie object.
  */
 const parseResponseCookieHeader = (
   url: string,
   value: string,
-  dict: CookieDatabase
+  dictionary: CookieDatabase
 ): CookieData => {
   const parsedCookie: ParsedCookie = cookie.parse(value);
 
   let analytics: CookieAnalytics | null = null;
 
-  if (dict) {
-    analytics = findAnalyticsMatch(parsedCookie.name, dict);
+  if (dictionary) {
+    analytics = findAnalyticsMatch(parsedCookie.name, dictionary);
   }
 
   return {

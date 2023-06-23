@@ -37,17 +37,24 @@ chrome.webRequest.onResponseStarted.addListener(
     }
 
     const dictionary = await fetchDictionary();
-    const cookies = responseHeaders.reduce<CookieData[]>((acc, header) => {
-      if (
-        header.name.toLowerCase() === 'set-cookie' &&
-        header.value &&
-        tab.url
-      ) {
-        const cookie = parseResponseCookieHeader(url, header.value, dictionary);
-        return [...acc, cookie];
-      }
-      return acc;
-    }, []);
+    const cookies = responseHeaders.reduce<CookieData[]>(
+      (accumulator, header) => {
+        if (
+          header.name.toLowerCase() === 'set-cookie' &&
+          header.value &&
+          tab.url
+        ) {
+          const cookie = parseResponseCookieHeader(
+            url,
+            header.value,
+            dictionary
+          );
+          return [...accumulator, cookie];
+        }
+        return accumulator;
+      },
+      []
+    );
 
     if (!cookies.length) {
       return;
@@ -62,14 +69,14 @@ chrome.webRequest.onResponseStarted.addListener(
 
 chrome.webRequest.onBeforeSendHeaders.addListener(
   ({ url, requestHeaders, tabId }) => {
-    fetchDictionary().then((dict) => {
+    fetchDictionary().then((dictionary) => {
       requestHeaders
         ?.filter(({ name }) => name.toLowerCase() === 'cookie')
         .forEach(({ value }) => {
           const requestCookies = parseRequestCookieHeader(
             url,
             value || '',
-            dict
+            dictionary
           );
           CookieStore.update(tabId.toString(), requestCookies);
         });

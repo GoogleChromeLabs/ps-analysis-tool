@@ -28,13 +28,13 @@ import type {
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
  * @param {string} url Cookie URL (URL of the server which is setting/updating cookies).
  * @param {string} value header value
- * @param {CookieDatabase} dict Dictionary from open cookie database
+ * @param {CookieDatabase} dictionary Dictionary from open cookie database
  * @returns {CookieData[]} Parsed cookie object array.
  */
 const parseRequestCookieHeader = (
   url: string,
   value: string,
-  dict: CookieDatabase
+  dictionary: CookieDatabase
 ): CookieData[] => {
   const cookies: CookieData[] = [];
 
@@ -44,9 +44,9 @@ const parseRequestCookieHeader = (
     name = name.trim();
 
     let analytics: CookieAnalytics | null = null;
-    if (dict && Object.keys(dict).includes(name)) {
+    if (dictionary && Object.keys(dictionary).includes(name)) {
       //@TODO Handle cases where a name has multiple entries by checking other attributes.
-      analytics = dict[name] ? dict[name][0] : null;
+      analytics = dictionary[name] ? dictionary[name][0] : null;
     }
     cookies.push({
       parsedCookie: { name, value: rest.join('='), domain: new URL(url).host },
