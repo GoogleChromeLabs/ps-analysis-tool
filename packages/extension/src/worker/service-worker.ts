@@ -21,7 +21,7 @@ import parseResponseCookieHeader from './parseResponseCookieHeader';
 import parseRequestCookieHeader from './parseRequestCookieHeader';
 import { getTab } from '../utils/getTab';
 import {
-  CookieDatabase,
+  type CookieDatabase,
   fetchDictionary,
 } from '../utils/fetchCookieDictionary';
 
