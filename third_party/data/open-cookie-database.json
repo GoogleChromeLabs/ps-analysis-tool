@@ -941,7 +941,7 @@
       "category": "Marketing",
       "name": "s",
       "domain": "facebook.com (3rd party)",
-      "description": "\t\nFacebook browser identification, authentication, marketing, and other Facebook-specific function cookies.",
+      "description": "\nFacebook browser identification, authentication, marketing, and other Facebook-specific function cookies.",
       "retention": "90 days",
       "dataController": "Facebook",
       "GDPRUrl": "https://www.facebook.com/about/privacy/",
@@ -11008,6 +11008,331 @@
       "dataController": "Braze",
       "GDPRUrl": "https://www.braze.com/company/legal/privacy",
       "wildcard": "0"
+    }
+  ],
+  "devicePixelRatio": [
+    {
+      "platform": "wordpress.org",
+      "category": "Functional",
+      "name": "devicePixelRatio",
+      "domain": "website domain (1st party)",
+      "description": "Used to make the site responsive to the visitor’s screen size.",
+      "retention": "1 year",
+      "dataController": "WordPress",
+      "GDPRUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "tk_lr": [
+    {
+      "platform": "wordpress.org",
+      "category": "Marketing",
+      "name": "tk_lr",
+      "domain": "Advertiser's website domain",
+      "description": "Jetpack - Stores the unique identifier for the publisher to enable Jetpack to collect data.",
+      "retention": "1 year",
+      "dataController": "WordPress",
+      "GDPRUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "tk_or": [
+    {
+      "platform": "wordpress.org",
+      "category": "Marketing",
+      "name": "tk_or",
+      "domain": "Advertiser's website domain",
+      "description": "Jetpack - Stores the unique identifier for the publisher to enable Jetpack to collect data.",
+      "retention": "5 Years",
+      "dataController": "WordPress",
+      "GDPRUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "wp-settings-": [
+    {
+      "platform": "wordpress.org",
+      "category": "Functional",
+      "name": "wp-settings-",
+      "domain": "website domain (1st party)",
+      "description": "Used to persist a user’s wp-admin configuration.",
+      "retention": "1 Year",
+      "dataController": "WordPress",
+      "GDPRUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "1"
+    }
+  ],
+  "wporg_logged_in": [
+    {
+      "platform": "wordpress.org",
+      "category": "Functional",
+      "name": "wporg_logged_in",
+      "domain": "website domain (1st party)",
+      "description": "Used to check whether the current visitor is a logged-in WordPress.org user.",
+      "retention": "14 days if you select “Remember Me” when logging in. Otherwise, Session.",
+      "dataController": "WordPress",
+      "GDPRUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "wporg_sec": [
+    {
+      "platform": "wordpress.org",
+      "category": "Functional",
+      "name": "wporg_sec",
+      "domain": "website domain (1st party)",
+      "description": "Used to check whether the current visitor is a logged-in WordPress.org user.",
+      "retention": "14 days if you select “Remember Me” when logging in. Otherwise, Session.",
+      "dataController": "WordPress",
+      "GDPRUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "wporg_locale": [
+    {
+      "platform": "wordpress.org",
+      "category": "Functional",
+      "name": "wporg_locale",
+      "domain": "website domain (1st party)",
+      "description": "Used to persist a user’s locale configuration.",
+      "retention": "1 year",
+      "dataController": "WordPress",
+      "GDPRUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "welcome-": [
+    {
+      "platform": "make.wordpress.org",
+      "category": "Functional",
+      "name": "welcome-",
+      "domain": "website domain (1st party)",
+      "description": "Used to record if you’ve chosen to hide the “Welcome” message at the top of the corresponding blog.",
+      "retention": "permanent",
+      "dataController": "WordPress",
+      "GDPRUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "1"
+    }
+  ],
+  "showComments": [
+    {
+      "platform": "make.wordpress.org",
+      "category": "Functional",
+      "name": "showComments",
+      "domain": "website domain (1st party)",
+      "description": "Used to determine if you prefer comments to be shown or hidden when reading the site.",
+      "retention": "10 years",
+      "dataController": "WordPress",
+      "GDPRUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "trac_form_token": [
+    {
+      "platform": "*.trac.wordpress.org",
+      "category": "Functional",
+      "name": "trac_form_token",
+      "domain": "website domain (1st party)",
+      "description": "Used as a security token for cross-site request forgery protection.",
+      "retention": "session",
+      "dataController": "WordPress",
+      "GDPRUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "trac_session": [
+    {
+      "platform": "*.trac.wordpress.org",
+      "category": "Functional",
+      "name": "trac_session",
+      "domain": "website domain (1st party)",
+      "description": "Used to keep anonymous session information.",
+      "retention": "90 days",
+      "dataController": "WordPress",
+      "GDPRUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "codexToken": [
+    {
+      "platform": "codex.wordpress.org",
+      "category": "Functional",
+      "name": "codexToken",
+      "domain": "website domain (1st party)",
+      "description": "Used to check whether the current visitor is a logged-in WordPress.org user. Only set if you select “Keep me logged in” when logging in.",
+      "retention": "6 months",
+      "dataController": "WordPress",
+      "GDPRUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "codexUserId": [
+    {
+      "platform": "codex.wordpress.org",
+      "category": "Functional",
+      "name": "codexUserId",
+      "domain": "website domain (1st party)",
+      "description": "Used to check whether the current visitor is a logged-in WordPress.org user.",
+      "retention": "6 months",
+      "dataController": "WordPress",
+      "GDPRUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "codexUserName": [
+    {
+      "platform": "codex.wordpress.org",
+      "category": "Functional",
+      "name": "codexUserName",
+      "domain": "website domain (1st party)",
+      "description": "Used to check whether the current visitor is a logged-in WordPress.org user.",
+      "retention": "6 months",
+      "dataController": "WordPress",
+      "GDPRUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "camptix_client_stats": [
+    {
+      "platform": "*.wordcamp.org",
+      "category": "Analytics",
+      "name": "camptix_client_stats",
+      "domain": "website domain",
+      "description": "Used to track unique visitors to tickets page on a WordCamp site",
+      "retention": "1 year",
+      "dataController": "WordPress",
+      "GDPRUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "wp-saving-post": [
+    {
+      "platform": "*.wordcamp.org",
+      "category": "Functional",
+      "name": "wp-saving-post",
+      "domain": "website domain (1st party)",
+      "description": "Used to track if there is saved post exists for a post currently being edited. If exists then let user restore the data",
+      "retention": "1 day",
+      "dataController": "WordPress",
+      "GDPRUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "comment_author_": [
+    {
+      "platform": "*.wordcamp.org",
+      "category": "Functional",
+      "name": "comment_author_",
+      "domain": "website domain (1st party)",
+      "description": "Used to tracked comment author name, if “Save my name, email, and website in this browser for the next time I comment.” is checked",
+      "retention": "347 days",
+      "dataController": "WordPress",
+      "GDPRUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "1"
+    }
+  ],
+  "comment_author_url_": [
+    {
+      "platform": "*.wordcamp.org",
+      "category": "Functional",
+      "name": "comment_author_url_",
+      "domain": "website domain (1st party)",
+      "description": "Used to track comment author url, if “Save my name, email, and website in this browser for the next time I comment.” checkbox is checked",
+      "retention": "347 days",
+      "dataController": "WordPress",
+      "GDPRUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "1"
+    }
+  ],
+  "wp-postpass_": [
+    {
+      "platform": "*.wordcamp.org",
+      "category": "Functional",
+      "name": "wp-postpass_",
+      "domain": "website domain (1st party)",
+      "description": "Used to maintain session if a post is password protected",
+      "retention": "10 days",
+      "dataController": "WordPress",
+      "GDPRUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "1"
+    }
+  ],
+  "wp-settings-time-": [
+    {
+      "platform": "*.wordcamp.org",
+      "category": "Functional",
+      "name": "wp-settings-time-",
+      "domain": "website domain (1st party)",
+      "description": "Time at which wp-settings-{user} was set",
+      "retention": "1 year",
+      "dataController": "WordPress",
+      "GDPRUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "1"
+    }
+  ],
+  "tix_view_token": [
+    {
+      "platform": "*.wordcamp.org",
+      "category": "Functional",
+      "name": "tix_view_token",
+      "domain": "website domain (1st party)",
+      "description": "Used for session managing private CampTix content",
+      "retention": "2 days",
+      "dataController": "WordPress",
+      "GDPRUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "jetpackState": [
+    {
+      "platform": "*.wordcamp.org",
+      "category": "Functional",
+      "name": "jetpackState",
+      "domain": "website domain (1st party)",
+      "description": "Used for maintaining Jetpack State",
+      "retention": "session",
+      "dataController": "WordPress",
+      "GDPRUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "jpp_math_pass": [
+    {
+      "platform": "*.wordcamp.org",
+      "category": "Functional",
+      "name": "jpp_math_pass",
+      "domain": "website domain (1st party)",
+      "description": "Verifies that a user answered the math problem correctly while logging in.",
+      "retention": "session",
+      "dataController": "WordPress",
+      "GDPRUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "stnojs": [
+    {
+      "platform": "*.wordcamp.org",
+      "category": "Functional",
+      "name": "stnojs",
+      "domain": "website domain (1st party)",
+      "description": "Remember if user do not want JavaScript executed",
+      "retention": "2 days",
+      "dataController": "WordPress",
+      "GDPRUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "wordpress_logged_in_": [
+    {
+      "platform": "*.wordcamp.org",
+      "category": "Functional",
+      "name": "wordpress_logged_in_",
+      "domain": "website domain (1st party)",
+      "description": "Remember User session",
+      "retention": "session",
+      "dataController": "WordPress",
+      "GDPRUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "1"
     }
   ]
 }
