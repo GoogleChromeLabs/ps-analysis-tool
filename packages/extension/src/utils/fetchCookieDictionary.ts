@@ -22,7 +22,7 @@ export type CookieAnalytics = {
   description: string;
   retention: string;
   dataController: string;
-  GDPRUrl: string;
+  gdprUrl: string;
   wildcard: string;
 };
 

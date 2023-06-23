@@ -50,7 +50,7 @@ const formatRawData = async (rawData) => {
     const description = cookie['Description'];
     const retention = cookie['Retention period'];
     const dataController = cookie['Data Controller'];
-    const GDPRUrl = cookie['User Privacy & GDPR Rights Portals'];
+    const gdprUrl = cookie['User Privacy & GDPR Rights Portals'];
     const wildcard = cookie['Wildcard match'];
 
     name = wildcard === '1' ? name + '*' : name;
@@ -66,7 +66,7 @@ const formatRawData = async (rawData) => {
         description,
         retention,
         dataController,
-        GDPRUrl,
+        gdprUrl,
         wildcard,
       },
     ];
