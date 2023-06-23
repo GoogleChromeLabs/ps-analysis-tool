@@ -13,10 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import cookie, { type Cookie as ParsedCookie } from 'simple-cookie';
 
 /**
  * Internal dependencies.
@@ -34,27 +30,33 @@ import findAnalyticsMatch from './findAnalyticsMatch';
  * @param {string} url Cookie URL (URL of the server which is setting/updating cookies).
  * @param {string} value header value
  * @param {CookieDatabase} dictionary Dictionary from open cookie database
- * @returns {CookieData} Parsed cookie object.
+ * @returns {CookieData[]} Parsed cookie object array.
  */
-const parseResponseCookieHeader = (
+const parseRequestCookieHeader = (
   url: string,
   value: string,
   dictionary: CookieDatabase
-): CookieData => {
-  const parsedCookie: ParsedCookie = cookie.parse(value);
+): CookieData[] => {
+  const cookies: CookieData[] = [];
 
-  let analytics: CookieAnalytics | null = null;
+  value?.split(';').forEach((cookieString) => {
+    let [name] = cookieString.split('=');
+    const [, ...rest] = cookieString.split('=');
+    name = name.trim();
 
-  if (dictionary) {
-    analytics = findAnalyticsMatch(parsedCookie.name, dictionary);
-  }
+    let analytics: CookieAnalytics | null = null;
+    if (dictionary) {
+      analytics = findAnalyticsMatch(name, dictionary);
+    }
+    cookies.push({
+      parsedCookie: { name, value: rest.join('='), domain: new URL(url).host },
+      analytics,
+      headerType: 'request',
+      url,
+    });
+  });
 
-  return {
-    parsedCookie: parsedCookie,
-    analytics,
-    url,
-    headerType: 'response',
-  };
+  return cookies;
 };
 
-export default parseResponseCookieHeader;
+export default parseRequestCookieHeader;

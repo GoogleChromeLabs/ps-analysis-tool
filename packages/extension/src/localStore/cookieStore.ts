@@ -30,8 +30,7 @@ const CookieStore = {
 
     for (const cookie of cookies) {
       if (cookie) {
-        newCookies[cookie.parsedCookie.name + cookie.parsedCookie.domain] =
-          cookie;
+        newCookies[cookie.parsedCookie.name] = cookie;
       }
     }
 
@@ -73,7 +72,6 @@ const CookieStore = {
     if (storage[tabId]) {
       storage[tabId].focusedAt = Date.now();
     }
-
     await chrome.storage.local.set(storage);
   },
 

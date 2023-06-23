@@ -11,7 +11,8 @@
 		"lint:js": "eslint .",
 		"lint:types": "tsc --project ./packages/**/tsconfig.json",
 		"lint:js:fix": "eslint --fix .",
-		"prepare": "husky install"
+		"prepare": "husky install",
+		"cookie-db:update": "node scripts/update-cookie-db.cjs"
 	},
 	"repository": {
 		"type": "git",
@@ -55,12 +56,14 @@
 		"eslint-plugin-prettier": "^4.2.1",
 		"eslint-plugin-react": "^7.32.2",
 		"eslint-plugin-react-hooks": "^4.6.0",
+		"fs-extra": "^11.1.1",
 		"html-webpack-plugin": "^5.5.2",
 		"husky": "^8.0.3",
 		"jest": "^29.5.0",
 		"jest-environment-jsdom": "^29.5.0",
 		"jest-extended": "^4.0.0",
 		"lint-staged": "^13.2.2",
+		"node-fetch": "^2.6.11",
 		"npm-run-all": "^4.1.5",
 		"postcss-loader": "^7.3.3",
 		"prettier": "^2.8.8",

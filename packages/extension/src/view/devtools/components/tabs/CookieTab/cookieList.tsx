@@ -28,14 +28,16 @@ interface ICoookieList {
   cookies: {
     [key: string]: CookieData;
   };
+  tabURL: string | undefined;
 }
 
-const CookieList = ({ cookies }: ICoookieList) => (
+const CookieList = ({ cookies, tabURL }: ICoookieList) => (
   <ul className="w-full h-full">
     {cookies &&
+      tabURL &&
       Object.entries(cookies).map(([key, value]) => (
         <li key={key}>
-          <ListItem cookie={value} />
+          <ListItem cookie={value} tabURL={tabURL} />
         </li>
       ))}
   </ul>

@@ -18,5 +18,11 @@
   },
   "action": {
     "default_icon": "icons/icon-48.png"
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["third_party/data/*.json"],
+      "matches": ["*://*/*"]
+    }
+  ]
 }

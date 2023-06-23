@@ -22,12 +22,14 @@ import React from 'react';
  * Internal dependencies.
  */
 import { type CookieData } from '../../../../../localStore';
+import isFirstParty from '../../../../../utils/isFirstParty';
 
 interface IListItem {
   cookie: CookieData;
+  tabURL: string;
 }
 
-const ListItem = ({ cookie }: IListItem) => {
+const ListItem = ({ cookie, tabURL }: IListItem) => {
   return (
     <a href="#" className="block hover:bg-secondary">
       <div className="px-4 py-3 sm:px-6 border-b">
@@ -40,6 +42,26 @@ const ListItem = ({ cookie }: IListItem) => {
           <div className="truncate text-xs text-secondary">
             <span>{cookie.parsedCookie.value}</span>
           </div>
+        </div>
+        <div
+          className={
+            'mt-4 flex justify-between items-center text-sm text-secondary'
+          }
+        >
+          <span className="font-bold">
+            {cookie.analytics?.category || 'Uncategorized'}
+          </span>
+          <span
+            className={`font-bold ${
+              isFirstParty(tabURL, cookie.parsedCookie.domain)
+                ? 'text-first-party'
+                : 'text-third-party'
+            }`}
+          >
+            {isFirstParty(tabURL, cookie.parsedCookie.domain)
+              ? 'First Party'
+              : 'Third Party'}
+          </span>
         </div>
       </div>
     </a>
