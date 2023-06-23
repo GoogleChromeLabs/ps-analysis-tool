@@ -1,0 +1,10 @@
+{
+  "private-state-token": {
+    "name": "Private State Token",
+    "description": "Allows websites and services to evaluate a user's authenticity without needing to know the user's identity.   With this API, a website/service can issue a batch of Private State Tokens (renamed to Private state tokens from Trust Tokens)  to a user's browser. The tokens are stored on the user's browser and can then be “redeemed” by other sites and services as a signal of the user's authenticity.",
+    "proposal": "https://github.com/WICG/trust-token-api",
+    "publicDiscussion": "https://github.com/WICG/trust-token-api/issues",
+    "videoOverview": "https://www.youtube.com/watch?v=bXB1Iwq6Eq4",
+    "devDocumentation": "https://developer.chrome.com/docs/privacy-sandbox/trust-tokens/"
+  }
+}
