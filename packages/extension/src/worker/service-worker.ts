@@ -20,7 +20,12 @@ import { type CookieData, CookieStore } from '../localStore';
 import parseResponseCookieHeader from './parseResponseCookieHeader';
 import parseRequestCookieHeader from './parseRequestCookieHeader';
 import { getTab } from '../utils/getTab';
-import { fetchDictionary } from '../utils/fetchCookieDictionary';
+import {
+  CookieDatabase,
+  fetchDictionary,
+} from '../utils/fetchCookieDictionary';
+
+let cookieDB: CookieDatabase | null = null;
 
 /**
  * Fires when the browser receives a response from a web server.
@@ -36,19 +41,19 @@ chrome.webRequest.onResponseStarted.addListener(
       return;
     }
 
-    const dictionary = await fetchDictionary();
+    if (!cookieDB) {
+      cookieDB = await fetchDictionary();
+    }
+
     const cookies = responseHeaders.reduce<CookieData[]>(
       (accumulator, header) => {
         if (
           header.name.toLowerCase() === 'set-cookie' &&
           header.value &&
-          tab.url
+          tab.url &&
+          cookieDB
         ) {
-          const cookie = parseResponseCookieHeader(
-            url,
-            header.value,
-            dictionary
-          );
+          const cookie = parseResponseCookieHeader(url, header.value, cookieDB);
           return [...accumulator, cookie];
         }
         return accumulator;
@@ -69,18 +74,41 @@ chrome.webRequest.onResponseStarted.addListener(
 
 chrome.webRequest.onBeforeSendHeaders.addListener(
   ({ url, requestHeaders, tabId }) => {
-    fetchDictionary().then((dictionary) => {
-      requestHeaders
-        ?.filter(({ name }) => name.toLowerCase() === 'cookie')
-        .forEach(({ value }) => {
-          const requestCookies = parseRequestCookieHeader(
-            url,
-            value || '',
-            dictionary
-          );
-          CookieStore.update(tabId.toString(), requestCookies);
-        });
-    });
+    (async () => {
+      if (!requestHeaders) {
+        return;
+      }
+
+      if (!cookieDB) {
+        cookieDB = await fetchDictionary();
+      }
+
+      const cookies = requestHeaders.reduce<CookieData[]>(
+        (accumulator, header) => {
+          if (
+            header.name.toLowerCase() === 'cookie' &&
+            header.value &&
+            url &&
+            cookieDB
+          ) {
+            const cookieList = parseRequestCookieHeader(
+              url,
+              header.value,
+              cookieDB
+            );
+            return [...accumulator, ...cookieList];
+          }
+          return accumulator;
+        },
+        []
+      );
+
+      if (!cookies.length) {
+        return;
+      }
+
+      await CookieStore.update(tabId.toString(), cookies);
+    })();
   },
   { urls: ['*://*/*'] },
   ['extraHeaders', 'requestHeaders']
