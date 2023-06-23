@@ -93,7 +93,7 @@ describe('parseResponseCookieHeader', () => {
     });
   });
 
-  it.only('Should parse and add add analytics for wild card entries', () => {
+  it('Should parse and add add analytics for wild card entries', () => {
     const parsedCookie = parseResponseCookieHeader(
       'https://google.com/public/api/alerts',
       '_ga_123=bla; Domain=.google.com; Path=/; SameSite=None; Secure',
