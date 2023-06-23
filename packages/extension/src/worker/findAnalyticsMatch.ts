@@ -24,6 +24,7 @@ import type {
 
 /**
  *
+ * Matches wildcard string to a provided string. For eg Foo_* matches Foo_123.
  * @param {string} wildcard  Wildcard cookie name.
  * @param {string} str cookie name to be matched.
  * @returns {boolean} Flag for match
