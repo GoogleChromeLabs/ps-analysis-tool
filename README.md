@@ -53,7 +53,7 @@ This tool aims at supporting the analysis of **browsing sessions** (t,  by shedd
 
 # Tool Architecture
 
-The Privacy Analysis tool is structured as a set of processing and analysis modules, and its output is tailored to different user interfaces for different use cases.
+Chrome Extensions are small programs that can be installed in Chrome to add new features or change the way Chrome works.Extensions can be used to do things like block ads, change the look of Chrome, or add new functionality to Chrome. The Privacy Analysis tool is implementented as a Chrome Extension structured as a set of processing and analysis modules, and producing output tailored to different user interfaces for different use cases. 
 
 <p align="center">
   <img src="https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/6049673e-3508-4e03-8649-55b6f938abb9" width="70%" height="100%">
@@ -75,13 +75,7 @@ The tool produces output for three different access points, serving the needs of
  
 ## Data Gathering
 
-The data provided as input to the tool are gathered using [Chrome APIs](https://developer.chrome.com/docs/extensions/reference/), which include all the web platform standard APIs, and chrome-secific APIs such as Chome Enterprise APIs, and DevTools APIs.
-
-| APIs | Description |
-|-------|---------|
-| Chrome APIs| |
-| DevTools | |
-| Enterprise | |
+[Chrome's APIs](https://developer.chrome.com/docs/extensions/reference/) enable developers to extend and interact with the browser's functionality and gather/manipulate web content. This tool leverages various Chome APIs to power its capabilities: chrome.webRequest, chrome.tabs, chrome.storage, devtools.panels, devtools.network, and others. 
 
 ## Data Processing
 
@@ -98,7 +92,6 @@ This module provide services shareable to other parts of the tool.
 |-------|---------|
 | Data Storage| Capabilities for storing and querying data gathered and processed by the tool |
 | Rendering | Components to generate UI/UX for each of the different output modules|
-| Enterprise | |
 
 # Usage instructions
 
