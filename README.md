@@ -37,9 +37,9 @@ The goal of this tool is to assist users on getting knowledge and insights regar
 
 # Browsing Session Analysis
 
-The overall goal of [Privacy Sandbox](https://privacysandbox.com/) is to protect users' privacy online. This encompasses reducing cross-site and cross-app tracking. This is done by introducing [a new privacy model for the web](https://github.com/michaelkleber/privacy-model), making changes to how 3P cookies work, and providing developers the platform capabilities they need to build thriving digital businesses.
+The overall goal of [Privacy Sandbox](https://privacysandbox.com/) is to protect users' privacy online. This encompasses reducing cross-site and cross-app tracking during browsing sessions and beyond. A "browsing session" refers to the sequence of navigations a user follows over aperiod of time as they are actively engaging on the web, including activities like navigating through pages and sites, making transactions, submitting forms, or downloading content, performing web searches, and so on. 
 
-The tool is designed to provide detailed information about cookie usage during **browsing sessions**, and shed light on the use and behavior of PS APIs. It provides capabilities for tracking and analyzing the cookies that are placed on the browser as you go through your browsing session, and it also provides context and knowledge access points to learn about 3P cookies and [Privacy Sandbox APIs](https://privacysandbox.com/open-web/#proposals-for-the-web). The goal is to help you answer questions such as:
+This tool aims at supporting the analysis of **browsing sessions** (t,  by shedding light on cookie usage and insights, and the use and behavior of PS APIs. The goal is to help answer questions such as:
 
 * How can I identify cookies being used on my site? 
 * How can I tell what behaviors a third party cookie is tracking on my website or what it's being used for?
@@ -47,18 +47,20 @@ The tool is designed to provide detailed information about cookie usage during *
 * What happens to my browsing session if 3P cookies are being blocked?
 * How can I ensure that my websites are still able to function properly after third-party cookies are deprecated?
 * How can I test my web applications to ensure that they are compatible with the cross-site boundary APIs and the upcoming changes to third-party cookies?
-* How can I provide feedback to Google on the cross-site boundary APIs and the third-party cookie deprecation, and what role can I play in shaping the future of web development and privacy standards?
+* How can I play a role in shaping the future of web development and privacy standards?
+* How can I provide feedback to Google on Privacy Sandbox APIs and third-party cookie deprecation?
+
 
 # Tool Architecture
 
-The Privacy Analysis tool is structured as a set of processing and analysis modeules, and its output is tailored to different user interfaces for different use cases. 
+The Privacy Analysis tool is structured as a set of processing and analysis modules, and its output is tailored to different user interfaces for different use cases.
 
 <p align="center">
   <img src="https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/6049673e-3508-4e03-8649-55b6f938abb9" width="70%" height="100%">
 </p>
 
 ## Input
-The input to the tool is composed of network traffic and browser data during a given browsing session. 
+The input to the tool is composed of network traffic and browser data collected during a given browsing session.
 
 ## Output
 
