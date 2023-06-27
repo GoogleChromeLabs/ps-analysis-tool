@@ -83,7 +83,7 @@ The tool produces output for three different access points, serving the needs of
 |-------|---------|
 | Parsing| Extract information from network streams|
 | Classification | Leverage and extend existing cookie DBs to classify observed cookies |
-| Insights | Privacy Sandbox inisghts and "debugging" information|
+| Insights | Privacy Sandbox insights and "debugging" information|
 
 ## Services
 This module provide services shareable to other parts of the tool.
