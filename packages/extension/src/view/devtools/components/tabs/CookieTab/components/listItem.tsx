@@ -21,8 +21,8 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { type CookieData } from '../../../../../localStore';
-import isFirstParty from '../../../../../utils/isFirstParty';
+import { type CookieData } from '../../../../../../localStore';
+import isFirstParty from '../../../../../../utils/isFirstParty';
 
 interface IListItem {
   cookie: CookieData;

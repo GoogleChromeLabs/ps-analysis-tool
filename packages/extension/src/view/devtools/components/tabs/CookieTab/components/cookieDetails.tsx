@@ -17,8 +17,8 @@
  * External dependencies.
  */
 import React from 'react';
-import { Cookie as ParsedCookie } from 'simple-cookie';
-import { type CookieAnalytics } from '../../../../../utils/fetchCookieDictionary';
+import { type Cookie as ParsedCookie } from 'simple-cookie';
+import { type CookieAnalytics } from '../../../../../../utils/fetchCookieDictionary';
 
 interface ICookieDetails {
   data: ParsedCookie;

@@ -14,20 +14,15 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies.
+ * External dependencies.
  */
-import { BounceTrackingTab } from './bounceTrackingTab';
-import { CookieTab } from './CookieTab';
-import { FingerprintingTab } from './fingerprintingTab';
+import '@testing-library/jest-dom';
 
-export const TABS = [
-  { display_name: 'Cookies', Component: CookieTab },
-  {
-    display_name: 'Bounce Tracking',
-    Component: BounceTrackingTab,
-  },
-  {
-    display_name: 'Fingerprinting',
-    Component: FingerprintingTab,
-  },
-];
+describe('CookieTab', () => {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  it.skip('should render a list of cookies with analytics', () => {});
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  it.skip('should show a cookie card with the information on first cookie in the list', () => {});
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  it.skip('should change the selected cookie with clicking', () => {});
+});

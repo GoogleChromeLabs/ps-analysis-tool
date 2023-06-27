@@ -22,8 +22,7 @@ import React, { useEffect, useState } from 'react';
  * Internal dependencies.
  */
 import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
-import CookieList from './cookieList';
-import CookieDetails from './cookieDetails';
+import { CookieList, CookieDetails } from './components';
 
 export const CookieTab = () => {
   const { cookies, tabURL } = useCookieStore(({ state }) => ({
