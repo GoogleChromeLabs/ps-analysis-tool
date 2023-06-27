@@ -23,7 +23,7 @@ import React, { useState } from 'react';
  * Internal dependencies.
  */
 import apis from './PSInfo.json';
-import InfoCardModal from './infoCardModal';
+import ViewMore from './viewMore';
 
 interface IInfoCardProps {
   api: 'private-state-token';
@@ -33,26 +33,39 @@ const InfoCard = ({ api }: IInfoCardProps) => {
   const [openModal, setOpenModal] = useState(false);
 
   return (
-    <div className="flex flex-col gap-2 p-3">
-      <div className="box-border cursor-pointer border border-transparent border-gray-500 rounded-full hover:opacity-80">
-        <button
-          className="w-full h-full px-5 py-3 flex flex-row justify-between items-center"
-          onClick={setOpenModal.bind(null, true)}
-        >
-          <div className="flex flex-col items-start">
-            <h3 className="font-bold text-xl text-sky-600">
-              {apis[api].name} API
-            </h3>
-            <hr className="animate-bounce w-1/3 border border-solid border-sky-600" />
-          </div>
-          <p className="motion-safe:animate-pulse text-gray-500">Learn more</p>
-        </button>
+    <div className="w-full h-full flex flex-col gap-2 p-3">
+      <div className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow">
+        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
+          {apis[api].name} API
+        </h5>
+        <p className="mb-3 text-gray-700">{apis[api].description}</p>
+        {!openModal && (
+          <button
+            className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
+            onClick={setOpenModal.bind(null, !openModal)}
+          >
+            View more
+            <svg
+              aria-hidden="true"
+              className="w-4 h-4 ml-2 -mr-1"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              ></path>
+            </svg>
+          </button>
+        )}
+        <ViewMore
+          api={api}
+          open={openModal}
+          onClose={setOpenModal.bind(null, false)}
+        />
       </div>
-      <InfoCardModal
-        api={api}
-        open={openModal}
-        onClose={setOpenModal.bind(null, false)}
-      />
     </div>
   );
 };
