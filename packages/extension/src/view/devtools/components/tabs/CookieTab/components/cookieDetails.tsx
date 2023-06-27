@@ -26,7 +26,7 @@ interface ICookieDetails {
 }
 
 const CookieDetails = ({ data, analytics }: ICookieDetails) => (
-  <div className="flex flex-col p-4 items-center">
+  <div className="flex flex-col p-4 items-center" data-testid="cookie-card">
     <div className="w-2/3 mb-1 flex flex-col gap-2">
       <h1 className="font-bold text-xl mb-2">
         {data.name +

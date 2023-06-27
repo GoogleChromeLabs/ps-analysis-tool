@@ -25,9 +25,9 @@ import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import { CookieList, CookieDetails } from './components';
 
 export const CookieTab = () => {
-  const { cookies, tabURL } = useCookieStore(({ state }) => ({
+  const { cookies, tabUrl } = useCookieStore(({ state }) => ({
     cookies: state?.cookies,
-    tabURL: state?.url,
+    tabUrl: state?.url,
   }));
 
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
@@ -45,7 +45,7 @@ export const CookieTab = () => {
       <div className="flex-1 overflow-y-scroll ">
         <CookieList
           cookies={cookies}
-          tabURL={tabURL}
+          tabUrl={tabUrl}
           selectedKey={selectedKey}
           onClickItem={setSelectedKey}
         />
