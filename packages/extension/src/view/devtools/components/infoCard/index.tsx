@@ -24,9 +24,10 @@ import React, { useState } from 'react';
  */
 import apis from './PSInfo.json';
 import ViewMore from './viewMore';
+import type { PSAPIKeyType } from './types';
 
 interface IInfoCardProps {
-  api: 'private-state-token';
+  api: PSAPIKeyType;
 }
 
 const InfoCard = ({ api }: IInfoCardProps) => {

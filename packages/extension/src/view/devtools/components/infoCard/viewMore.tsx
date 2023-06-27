@@ -23,9 +23,10 @@ import React from 'react';
  * Internal dependencies.
  */
 import apis from './PSInfo.json';
+import type { PSAPIKeyType } from './types';
 
 interface IViewMore {
-  api: 'private-state-token';
+  api: PSAPIKeyType;
   open: boolean;
   onClose: () => void;
 }
