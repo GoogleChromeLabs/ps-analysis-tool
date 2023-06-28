@@ -53,12 +53,12 @@ const ListItem = ({ cookie, tabURL }: IListItem) => {
           </span>
           <span
             className={`font-bold ${
-              isFirstParty(tabURL, cookie.parsedCookie.domain)
+              isFirstParty(cookie.parsedCookie.domain, tabURL)
                 ? 'text-first-party'
                 : 'text-third-party'
             }`}
           >
-            {isFirstParty(tabURL, cookie.parsedCookie.domain)
+            {isFirstParty(cookie.parsedCookie.domain, tabURL)
               ? 'First Party'
               : 'Third Party'}
           </span>

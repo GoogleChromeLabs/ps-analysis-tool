@@ -19,15 +19,15 @@
 import { parse } from 'tldts';
 
 /**
- * Identifies if a cookie is first party by comparing domain.
- * @param {string} tabURL Cookie URL (URL of the server which is setting/updating cookies).
- * @param {string} cookieDomain Top level url ( URL in tab's address bar ).
+ * Identifies if cookie's domain is first party by comparing domain of the given url.
+ * @param {string} cookieDomain Cookie URL (URL of the server which is setting/updating cookies).
+ * @param {string} tabURL Top level url ( URL in tab's address bar )
  * @returns {boolean | null} true for 1p; false for 3p; null for if no cookie domain was passed.
  */
 const isFirstParty = (
-  tabURL: string,
-  cookieDomain: string | undefined
-): boolean | null => {
+  cookieDomain: string | undefined,
+  tabURL: string
+): boolean => {
   return !cookieDomain || parse(tabURL)?.domain === parse(cookieDomain)?.domain;
 };
 
