@@ -16,9 +16,9 @@
 /**
  * Internal dependencies.
  */
-import { BounceTrackingTab } from './BounceTrackingTab';
-import { CookieTab } from './CookieTab';
-import { FingerprintingTab } from './FingerprintingTab';
+import { BounceTrackingTab } from './bounceTrackingTab';
+import { CookieTab } from './cookieTab';
+import { FingerprintingTab } from './fingerprintingTab';
 
 export const TABS = [
   { display_name: 'Cookies', Component: CookieTab },
