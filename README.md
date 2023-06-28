@@ -64,7 +64,7 @@ The input to the tool is composed of network traffic and browser data collected 
 
 ## Output
 
-The tool produces output for three different access points, serving the needs of the different members of our [target audience](#target-audience): 
+The tool produces output for three different access points, serving the needs of the different members of our [target audience](#call-to-action): 
 
 | Surface | Description |
 |---------|--------|
