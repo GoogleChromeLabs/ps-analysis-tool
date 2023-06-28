@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const parseUrl = (url) => {
+export const parseUrl = (url: string) => {
   try {
     return new URL(url);
   } catch (e) {
