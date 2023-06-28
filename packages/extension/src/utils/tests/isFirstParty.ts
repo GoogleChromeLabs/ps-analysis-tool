@@ -21,27 +21,37 @@ import isFirstParty from '../isFirstParty';
 describe('isFirstParty', () => {
   it('Should return true for first party domains and subdomains', () => {
     expect(
-      isFirstParty('https://newindianexpress.com/', 'newindianexpress.com')
+      isFirstParty('https://newexample.com/', 'newexample.com')
+    ).toBeTruthy();
+
+    expect(isFirstParty('https://example.com/', '.example.com')).toBeTruthy();
+
+    expect(
+      isFirstParty('https://example.com/', 'accounts.example.com')
     ).toBeTruthy();
 
     expect(
-      isFirstParty('https://indianexpress.com/', '.indianexpress.com')
+      isFirstParty('https://example.co.in/', '.example.co.in')
     ).toBeTruthy();
 
     expect(
-      isFirstParty('https://indianexpress.com/', 'accounts.indianexpress.com')
-    ).toBeTruthy();
-
-    expect(
-      isFirstParty('https://indianexpress.co.in/', '.indianexpress.co.in')
-    ).toBeTruthy();
-
-    expect(
-      isFirstParty('https://indianexpress.co.in/', 'api.indianexpress.co.in')
+      isFirstParty('https://example.co.in/', 'api.example.co.in')
     ).toBeTruthy();
 
     expect(
       isFirstParty('https://amazonaws.com/', 'spark-public.s3.amazonaws.com')
+    ).toBeTruthy();
+
+    expect(
+      isFirstParty('https://日本.example.com', 'demo.日本.example.com')
+    ).toBeTruthy();
+
+    expect(
+      isFirstParty('https://example.com', 'https://demo.sub-domain.example.com')
+    ).toBeTruthy();
+
+    expect(
+      isFirstParty('https://example.com', 'https://sub1.sub2.example.com')
     ).toBeTruthy();
   });
 
@@ -49,12 +59,10 @@ describe('isFirstParty', () => {
     expect(isFirstParty('https://xyz.com/', 'xyza.com')).toBeFalsy();
 
     expect(
-      isFirstParty('https://newindianexpress.com/', 'new.indianexpress.com')
+      isFirstParty('https://newexample.com/', 'new.example.com')
     ).toBeFalsy();
 
-    expect(
-      isFirstParty('https://indianexpress.com/', '.indianexpresss.com')
-    ).toBeFalsy();
+    expect(isFirstParty('https://example.com/', '.examples.com')).toBeFalsy();
 
     expect(
       isFirstParty('https://amazonaws.com/', 'spark-public.s3.aamazonaws.com')
