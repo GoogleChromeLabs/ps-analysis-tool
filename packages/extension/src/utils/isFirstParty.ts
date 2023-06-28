@@ -16,19 +16,28 @@
 /**
  * External dependencies.
  */
-import { parse } from 'tldts';
+import { getDomain } from 'tldts';
+
+/**
+ * Internal dependencies.
+ */
+import { parseUrl } from './parseUrl';
 
 /**
  * Identifies if cookie's domain is first party by comparing domain of the given url.
  * @param {string} cookieDomain Cookie URL (URL of the server which is setting/updating cookies).
- * @param {string} tabURL Top level url ( URL in tab's address bar )
- * @returns {boolean | null} true for 1p; false for 3p; null for if no cookie domain was passed.
+ * @param {string} tabUrl Top level url ( URL in tab's address bar )
+ * @returns {boolean | null} true for 1p; false for 3p; null if bad tab URL was passed.
  */
 const isFirstParty = (
   cookieDomain: string | undefined,
-  tabURL: string
-): boolean => {
-  return !cookieDomain || parse(tabURL)?.domain === parse(cookieDomain)?.domain;
+  tabUrl: string
+): boolean | null => {
+  if (!parseUrl(tabUrl)) {
+    return null;
+  }
+
+  return !cookieDomain || getDomain(tabUrl) === getDomain(cookieDomain);
 };
 
 export default isFirstParty;

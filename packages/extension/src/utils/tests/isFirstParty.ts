@@ -72,4 +72,9 @@ describe('isFirstParty', () => {
 
     expect(isFirstParty('demo.xyz.co.uk', 'https://xyz.co.us/')).toBeFalsy();
   });
+
+  it('Should return null if bad url was provided', () => {
+    expect(isFirstParty('xyza.com', 'undefined')).toBeNull();
+    expect(isFirstParty('xyza.com', 'sjfcsd')).toBeNull();
+  });
 });
