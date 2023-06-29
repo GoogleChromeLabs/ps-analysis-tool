@@ -37,7 +37,7 @@ const initialize = async (CookieStore: ICookieStore) => {
   chrome.webRequest.onBeforeSendHeaders.addListener(
     onBeforeSendHeadersListener(CookieStore, cookieDb),
     { urls: ['*://*/*'] },
-    ['extraHeaders', 'responseHeaders']
+    ['extraHeaders', 'requestHeaders']
   );
 };
 
@@ -111,47 +111,7 @@ const onBeforeSendHeadersListener =
       await cookieStore.addCookiesToTabEntry(tabId, cookies);
     })();
   };
-// chrome.webRequest.onBeforeSendHeaders.addListener(
-//   ({ url, requestHeaders, tabId }) => {
-//     (async () => {
-//       if (!requestHeaders) {
-//         return;
-//       }
 
-//       if (!cookieDB) {
-//         cookieDB = await fetchDictionary();
-//       }
-
-//       const cookies = requestHeaders.reduce<CookieData[]>(
-//         (accumulator, header) => {
-//           if (
-//             header.name.toLowerCase() === 'cookie' &&
-//             header.value &&
-//             url &&
-//             cookieDB
-//           ) {
-//             const cookieList = parseRequestCookieHeader(
-//               url,
-//               header.value,
-//               cookieDB
-//             );
-//             return [...accumulator, ...cookieList];
-//           }
-//           return accumulator;
-//         },
-//         []
-//       );
-
-//       if (!cookies.length) {
-//         return;
-//       }
-
-//       await CookieStore.update(tabId.toString(), cookies);
-//     })();
-//   },
-//   { urls: ['*://*/*'] },
-//   ['extraHeaders', 'requestHeaders']
-// );
 const interceptNetworkRoutine = {
   initialize,
 };

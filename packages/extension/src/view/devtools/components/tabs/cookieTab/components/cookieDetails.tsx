@@ -20,55 +20,67 @@ import React from 'react';
 import { type Cookie as ParsedCookie } from 'simple-cookie';
 import { type CookieAnalytics } from '../../../../../../utils/fetchCookieDictionary';
 
+const Header = ({
+  name,
+  platform,
+  description = '',
+}: {
+  name: string;
+  platform: string | undefined;
+  description: string | undefined;
+}) => {
+  return (
+    <div className="w-full h-full bg-gray-200 px-10 flex flex-col justify-center">
+      <h1 className="font-bold text-xl mb-2">
+        {name + (platform ? ` (${platform})` : '')}
+      </h1>
+      <p className="text-xs text-secondary truncate">{description}</p>
+    </div>
+  );
+};
+
+const DetailItem = ({
+  name,
+  value = '',
+}: {
+  name: string;
+  value: string | undefined;
+}) => (
+  <div className="w-full h-12 flex items-center border-b-2 border-gray-100">
+    <h1 className="w-1/4 font-semibold text-lg text-gray-400">{name}</h1>
+    <p className=" w-3/4 text-lg text-secondary truncate">{value}</p>
+  </div>
+);
 interface ICookieDetails {
   data: ParsedCookie;
   analytics: CookieAnalytics | null;
 }
 
+const Details = ({ data, analytics }: ICookieDetails) => (
+  <div className="w-full h-full flex flex-col px-10 pt-6">
+    <DetailItem name="Domain" value={data.domain} />
+    <DetailItem name="Path" value={data.path} />
+    <DetailItem name="Samesite" value={data.samesite} />
+    <DetailItem name="Platform" value={analytics?.platform} />
+    <DetailItem name="GDPR Url" value={analytics?.gdprUrl} />
+    <DetailItem name="Value" value={data.value} />
+  </div>
+);
+
 const CookieDetails = ({ data, analytics }: ICookieDetails) => (
-  <div className="flex flex-col p-4 items-center" data-testid="cookie-card">
-    <div className="w-2/3 mb-1 flex flex-col gap-2">
-      <h1 className="font-bold text-xl mb-2">
-        {data.name +
-          (analytics?.platform ? ' (' + analytics?.platform + ')' : '')}
-      </h1>
-      <p className="my-1 text-xs text-secondary">
-        {analytics?.description || 'No description available.'}
-      </p>
+  <div
+    className="w-full aspect-[4/3] rounded-lg shadow-lg overflow-hidden "
+    data-testid="cookie-card"
+  >
+    <div className="w-full h-[25%]">
+      <Header
+        name={data.name}
+        platform={analytics?.platform}
+        description={analytics?.description}
+      />
     </div>
-    <div className=" w-2/3 flex flex-col gap-2">
-      <div className="flex justify-between items-center">
-        <h1 className="font-semibold text-s">Domain</h1>
-        <p className="text-xs text-secondary  truncate">{data.domain}</p>
-      </div>
-      <div className="flex justify-between items-center">
-        <h1 className="font-semibold text-s">Path</h1>
-        <p className="text-xs text-secondary  truncate">{data.path}</p>
-      </div>
-      <div className="flex justify-between items-center">
-        <h1 className="font-semibold text-s">Samesite</h1>
-        <p className="text-xs text-secondary  truncate">{data.samesite}</p>
-      </div>
-      <div className="flex justify-between items-center">
-        <h1 className="font-semibold text-s">Platform</h1>
-        <p className="text-xs text-secondary  truncate">
-          {analytics?.platform}
-        </p>
-      </div>
-      <div className="flex justify-between items-center">
-        <h1 className="font-semibold text-s">Retention period</h1>
-        <p className="text-xs text-secondary  truncate">
-          {analytics?.retention}
-        </p>
-      </div>
-      <div className="flex justify-between items-center">
-        <h1 className="font-semibold text-s">GDPR Portal</h1>
-        <p className="text-xs text-secondary  truncate">{analytics?.gdprUrl}</p>
-      </div>
-      <div className="flex justify-between items-center">
-        <h1 className="font-semibold text-s mr-2">Value</h1>
-        <p className=" text-xs text-secondary  truncate">{data.value}</p>
-      </div>
+    <div className="w-full h-[75%]">
+      <Details data={data} analytics={analytics} />
     </div>
   </div>
 );

@@ -38,11 +38,14 @@ export const CookieTab = () => {
     }
   }, [cookies, selectedKey]);
 
-  const selectedCookie = selectedKey ? cookies[selectedKey] : null;
+  const selectedCookie =
+    selectedKey && Object.keys(cookies).includes(selectedKey)
+      ? cookies[selectedKey]
+      : null;
 
   return (
     <div className="w-full h-full flex flex-col lg:flex-row">
-      <div className="flex-1 overflow-y-scroll ">
+      <div className="w-[50%] overflow-y-scroll ">
         <CookieList
           cookies={cookies}
           tabUrl={tabUrl}
@@ -50,12 +53,14 @@ export const CookieTab = () => {
           onClickItem={setSelectedKey}
         />
       </div>
-      <div className="flex-1 overflow-y-scroll border-t-gray-300 border-t-2 lg:border-t-0">
+      <div className="w-[50%] flex justify-center items-center border-t-gray-300 border-t-2 lg:border-t-0">
         {selectedCookie && (
-          <CookieDetails
-            data={selectedCookie.parsedCookie}
-            analytics={selectedCookie.analytics}
-          />
+          <div className="w-2/3 aspect-[4/3]">
+            <CookieDetails
+              data={selectedCookie.parsedCookie}
+              analytics={selectedCookie.analytics}
+            />
+          </div>
         )}
       </div>
     </div>
