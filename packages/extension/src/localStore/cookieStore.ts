@@ -61,23 +61,32 @@ const CookieStore = {
   },
 
   addCookiesToTabEntry: async (tabId: number, cookies: CookieData[]) => {
-    const previousVal = await chrome.storage.local.get(tabId.toString());
+    try {
+      const tab = await chrome.tabs.get(tabId);
+      const previousVal = await chrome.storage.local.get(tabId.toString());
 
-    if (Object.keys(previousVal).includes(tabId.toString())) {
-      const newCookies: { [key: string]: CookieData } = {};
+      if (Object.keys(previousVal).includes(tabId.toString())) {
+        const newCookies: { [key: string]: CookieData } = {};
 
-      for (const cookie of cookies) {
-        if (cookie) {
-          newCookies[cookie.parsedCookie.name] = cookie;
+        for (const cookie of cookies) {
+          if (cookie) {
+            newCookies[cookie.parsedCookie.name] = cookie;
+          }
         }
-      }
 
-      await chrome.storage.local.set({
-        [tabId.toString()]: {
-          ...previousVal[tabId.toString()],
-          cookies: { ...previousVal[tabId.toString()].cookies, ...newCookies },
-        },
-      });
+        await chrome.storage.local.set({
+          [tabId.toString()]: {
+            ...previousVal[tabId.toString()],
+            url: tab.url,
+            cookies: {
+              ...previousVal[tabId.toString()].cookies,
+              ...newCookies,
+            },
+          },
+        });
+      }
+    } catch (error) {
+      // Most probably request to add cookies after a tab is closed.
     }
   },
 };
