@@ -35,11 +35,9 @@ The goal of this tool is to assist users on getting knowledge and insights regar
 
 **Website owners and technology leaders**: you are responsible for tech and business decision making. This tool is intended to provide you with reports and insights about the cookies usage by your sites and the potential impact on user privacy.
 
-# Browsing Session Analysis
+# Browsing Session Analyses
 
-The overall goal of [Privacy Sandbox](https://privacysandbox.com/) is to protect users' privacy online. This encompasses reducing cross-site and cross-app tracking during browsing sessions and beyond. A "browsing session" refers to the sequence of navigations a user follows over aperiod of time as they are actively engaging on the web, including activities like navigating through pages and sites, making transactions, submitting forms, or downloading content, performing web searches, and so on. 
-
-This tool aims at supporting the analysis of **browsing sessions** (t,  by shedding light on cookie usage and insights, and the use and behavior of PS APIs. The goal is to help answer questions such as:
+A "browsing session" refers to the sequence of navigations a user follows over aperiod of time as they are actively engaging on the web, including activities like navigating through pages and sites, making transactions, submitting forms, or downloading content, performing web searches, and so on. The overall goal of [Privacy Sandbox](https://privacysandbox.com/) is to protect users' privacy online, including reducing cross-site and cross-app user tracking during browsing sessions. This tool supports the analysis of **browsing sessions** by shedding light on cookie usage and insights, and on use and behavior of PS APIs. The goal is to help answer questions such as:
 
 * How can I identify cookies being used on my site? 
 * How can I tell what behaviors a third party cookie is tracking on my website or what it's being used for?
