@@ -13,7 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const parseUrl = (url: string) => {
+/**
+ * Parses a URL string and returns a new URL object.
+ * If the URL is invalid, it returns null.
+ * @param {string} url - The URL string to parse.
+ * @returns {URL | null} - The parsed URL object or null if the URL is invalid.
+ */
+export const parseUrl = (url: string): URL | null => {
   try {
     return new URL(url);
   } catch (e) {

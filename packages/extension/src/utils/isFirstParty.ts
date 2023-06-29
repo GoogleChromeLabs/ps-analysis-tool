@@ -24,10 +24,10 @@ import { getDomain } from 'tldts';
 import { parseUrl } from './parseUrl';
 
 /**
- * Identifies if cookie's domain is first party by comparing domain of the given url.
- * @param {string} cookieDomain Cookie URL (URL of the server which is setting/updating cookies).
- * @param {string} tabUrl Top level url ( URL in tab's address bar )
- * @returns {boolean | null} true for 1p; false for 3p; null if bad tab URL was passed.
+ * Identifies if a cookie's domain is first party by comparing it with the domain of the given URL.
+ * @param {string | undefined} cookieDomain - The URL of the server that is setting/updating the cookie.
+ * @param {string} tabUrl - The top-level URL (URL in the tab's address bar).
+ * @returns {boolean | null} - true if the cookie is first party, false if it's third party, or null if a bad tab URL was passed.
  */
 const isFirstParty = (
   cookieDomain: string | undefined,
