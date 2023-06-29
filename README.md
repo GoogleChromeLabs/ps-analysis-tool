@@ -6,7 +6,7 @@
 
 - [Privacy Sandbox](#privacy-sandbox)
 - [Call to action](#call-to-action)
-- [Browsing Session Analysis](#browsing-session-analysis)
+- [Browsing Session Analysis](#browsing-session-analyses)
 - [Tool Architecture](#tool-architecture)
 - [Usage Instructions](#usage-instructions)
 - [Contributing](#contributing)
