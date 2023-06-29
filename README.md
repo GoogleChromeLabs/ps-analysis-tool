@@ -51,7 +51,7 @@ A "browsing session" refers to the sequence of navigations a user follows over a
 
 # Tool Architecture
 
-Chrome Extensions are small programs that can be installed in Chrome to add new features or change the way Chrome works.Extensions can be used to do things like block ads, change the look of Chrome, or add new functionality to Chrome. The Privacy Analysis tool is implementented as a Chrome Extension structured as a set of processing and analysis modules, and producing output tailored to different user interfaces for different use cases. 
+Chrome Extensions are small programs that can be installed in Chrome to do things such as blocking ads, changing the look of Chrome, or add new functionality to Chrome. The Privacy Analysis tool is implementented as a Chrome Extension structured as a set of processing and analysis modules, and producing output tailored to different user interfaces for different use cases. 
 
 <p align="center">
   <img src="https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/6049673e-3508-4e03-8649-55b6f938abb9" width="70%" height="100%">
@@ -66,9 +66,9 @@ The tool produces output for three different access points, serving the needs of
 
 | Surface | Description |
 |---------|--------|
-|DevTools Panel | Main user interface of the tool. Learning, monitoring, and debugging capabilities for developers responsible for making 1P sites work and developing 3P services |
-|Icon popup and Side Panel| Dynamic monitoring capabilities. Basic privacy-sandbox-related information, such as status of cookies, classification results at any given time (e.g. how many marketing cookies?)|
-|Google Admin Console| For enterprise users. Extend Google Admin UI with 3PCD/PS analysis information |
+|DevTools Panel | Main user interface of the tool. Debugging Browsing Sessions. Learning, monitoring, and debugging capabilities for developers responsible for making 1P sites work and developing 3P services |
+|Icon popup and Side Panel| Dynamic monitoring of sites. Show basic privacy-sandbox-related information such as status of cookies, classification results at any given time (e.g. how many marketing cookies?)|
+|Google Admin Console| Potential surface for enterprise users. Extend Google Admin UI with 3PCD/PS analysis information |
 
  
 ## Data Gathering
@@ -79,8 +79,8 @@ The tool produces output for three different access points, serving the needs of
 
 | Module | Description |
 |-------|---------|
-| Parsing| Extract information from network streams|
-| Classification | Leverage and extend existing cookie DBs to classify observed cookies |
+| Parsing| Extract information from network streams and Chrome APIs |
+| Classification | Leverage ecosystem cookie DBs to classify observed cookies |
 | Insights | Privacy Sandbox insights and "debugging" information|
 
 ## Services
@@ -93,7 +93,7 @@ This module provide services shareable to other parts of the tool.
 
 # Usage instructions
 
-This tool can be accessed as a [Chrome Extension](https://developer.chrome.com/docs/extensions/mv3/), or via a CLI on your terminal.
+This repository contanis the PS analysis tool as a [Chrome Extension](https://developer.chrome.com/docs/extensions/mv3/), and as a CLI tool.
 The Chrome extension provides capabilities surfaced via the extension pop up, the Side Panel, and as Devtools panel. And the CLI implementation parses a sitemap provided as input, and outputs a JSON file listign all cookies set while navigating through the URLs in the sitemap. Follow the following steps to get the extension installed in your browser. 
 
 - Clone this Cookie Analysis Tool Repository
@@ -112,4 +112,4 @@ The Chrome extension provides capabilities surfaced via the extension pop up, th
 # Contributing
 If you have requests for features you would like to see in this tool, please file an Feature Request or join as a contributor! Please refer to our contribution [guidelines](docs/CONTRIBUTING.md) and [code of conduct](docs/code-of-conduct.md).
 
-[Another form of contributing is by reporting breakages, proposing features, and engage in community discussions]
+Another valuable form of contributing is by reporting breakages, proposing features, and engage in community discussions.
