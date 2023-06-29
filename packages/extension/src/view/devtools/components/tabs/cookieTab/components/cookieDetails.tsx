@@ -34,7 +34,7 @@ const Header = ({
       <h1 className="font-bold text-xl mb-2">
         {name + (platform ? ` (${platform})` : '')}
       </h1>
-      <p className="text-xs text-secondary truncate">{description}</p>
+      <p className="text-sm text-secondary truncate">{description}</p>
     </div>
   );
 };
@@ -47,8 +47,8 @@ const DetailItem = ({
   value: string | undefined;
 }) => (
   <div className="w-full h-12 flex items-center border-b-2 border-gray-100">
-    <h1 className="w-1/4 font-semibold text-lg text-gray-400">{name}</h1>
-    <p className=" w-3/4 text-lg text-secondary truncate">{value}</p>
+    <h1 className="w-1/4 font-semibold text-md text-gray-400">{name}</h1>
+    <p className=" w-3/4 text-md text-secondary truncate">{value}</p>
   </div>
 );
 interface ICookieDetails {
