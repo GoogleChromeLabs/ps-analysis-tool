@@ -53,9 +53,9 @@ export const CookieTab = () => {
           onClickItem={setSelectedKey}
         />
       </div>
-      <div className="lg:w-[50%] h-[50%] lg:h-[100%] flex justify-center items-center border-t-gray-300 border-t-2 lg:border-t-0">
+      <div className="lg:w-[50%] h-[50%] lg:h-[100%] py-32 border-t-gray-300 border-t-2 lg:border-t-0 overflow-y-scroll">
         {selectedCookie && (
-          <div className="w-2/3 aspect-[4/3]">
+          <div className="w-2/3 aspect-[4/3] m-auto">
             <CookieDetails
               data={selectedCookie.parsedCookie}
               analytics={selectedCookie.analytics}

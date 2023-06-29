@@ -31,7 +31,7 @@ const Header = ({
 }) => {
   return (
     <div className="w-full h-full bg-gray-200 px-10 flex flex-col justify-center">
-      <h1 className="font-bold text-xl mb-2">
+      <h1 className="font-bold text-xl mb-2 truncate">
         {name + (platform ? ` (${platform})` : '')}
       </h1>
       <p className="text-sm text-secondary truncate">{description}</p>
