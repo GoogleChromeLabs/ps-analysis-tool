@@ -17,25 +17,38 @@
 /**
  * Internal dependencies.
  */
-import { parse } from 'simple-cookie';
-import type { CookieDataFromNetwork } from '../../localStore';
+import type { CookieData } from '../../localStore';
 import type { ICookieStore } from '../../localStore/cookieStore';
+import {
+  fetchDictionary,
+  type CookieDatabase,
+} from '../../utils/fetchCookieDictionary';
+import parseRequestCookieHeader from '../parseRequestCookieHeader';
+import parseResponseCookieHeader from '../parseResponseCookieHeader';
 
-const initialize = (CookieStore: ICookieStore) => {
+const initialize = async (CookieStore: ICookieStore) => {
+  const cookieDb = await fetchDictionary();
   chrome.webRequest.onResponseStarted.addListener(
-    onResponseStartedListener(CookieStore),
+    onResponseStartedListener(CookieStore, cookieDb),
+    { urls: ['*://*/*'] },
+    ['extraHeaders', 'responseHeaders']
+  );
+
+  chrome.webRequest.onBeforeSendHeaders.addListener(
+    onBeforeSendHeadersListener(CookieStore, cookieDb),
     { urls: ['*://*/*'] },
     ['extraHeaders', 'responseHeaders']
   );
 };
 
 /**
- * @param CookieStore CookieStore
+ * @param cookieStore CookieStore
+ * @param cookieDb Lookup object for cookie analytics
  * @returns EventHandler that intercepts a response
  * and caches name and domain of a cookie sent in the reponse
  */
 const onResponseStartedListener =
-  (CookieStore: ICookieStore) =>
+  (cookieStore: ICookieStore, cookieDb: CookieDatabase) =>
   async (details: chrome.webRequest.WebResponseCacheDetails) => {
     const { tabId, url, responseHeaders } = details;
 
@@ -43,18 +56,11 @@ const onResponseStartedListener =
       return;
     }
 
-    const cookies = responseHeaders.reduce<CookieDataFromNetwork[]>(
+    const cookies = responseHeaders.reduce<CookieData[]>(
       (accumulator, header) => {
         if (header.name.toLowerCase() === 'set-cookie' && header.value) {
-          const cookie = parse(header.value);
-          return [
-            ...accumulator,
-            {
-              name: cookie.name,
-              url,
-              headerType: 'response',
-            },
-          ];
+          const cookie = parseResponseCookieHeader(url, header.value, cookieDb);
+          return [...accumulator, cookie];
         }
         return accumulator;
       },
@@ -65,9 +71,87 @@ const onResponseStartedListener =
       return;
     }
 
-    await CookieStore.addCookiesToTabEntry(tabId, cookies);
+    await cookieStore.addCookiesToTabEntry(tabId, cookies);
   };
 
+/**
+ * @param cookieStore CookieStore
+ * @param cookieDb Lookup object for cookie analytics
+ * @returns EventHandler that intercepts a response
+ * and caches name and domain of a cookie sent in the reponse
+ */
+const onBeforeSendHeadersListener =
+  (cookieStore: ICookieStore, cookieDb: CookieDatabase) =>
+  (details: chrome.webRequest.WebRequestHeadersDetails) => {
+    (async () => {
+      const { tabId, url, requestHeaders } = details;
+      if (!requestHeaders) {
+        return;
+      }
+
+      const cookies = requestHeaders.reduce<CookieData[]>(
+        (accumulator, header) => {
+          if (header.name.toLowerCase() === 'cookie' && header.value && url) {
+            const cookieList = parseRequestCookieHeader(
+              url,
+              header.value,
+              cookieDb
+            );
+            return [...accumulator, ...cookieList];
+          }
+          return accumulator;
+        },
+        []
+      );
+
+      if (!cookies.length) {
+        return;
+      }
+
+      await cookieStore.addCookiesToTabEntry(tabId, cookies);
+    })();
+  };
+// chrome.webRequest.onBeforeSendHeaders.addListener(
+//   ({ url, requestHeaders, tabId }) => {
+//     (async () => {
+//       if (!requestHeaders) {
+//         return;
+//       }
+
+//       if (!cookieDB) {
+//         cookieDB = await fetchDictionary();
+//       }
+
+//       const cookies = requestHeaders.reduce<CookieData[]>(
+//         (accumulator, header) => {
+//           if (
+//             header.name.toLowerCase() === 'cookie' &&
+//             header.value &&
+//             url &&
+//             cookieDB
+//           ) {
+//             const cookieList = parseRequestCookieHeader(
+//               url,
+//               header.value,
+//               cookieDB
+//             );
+//             return [...accumulator, ...cookieList];
+//           }
+//           return accumulator;
+//         },
+//         []
+//       );
+
+//       if (!cookies.length) {
+//         return;
+//       }
+
+//       await CookieStore.update(tabId.toString(), cookies);
+//     })();
+//   },
+//   { urls: ['*://*/*'] },
+//   ['extraHeaders', 'requestHeaders']
+// );
 const interceptNetworkRoutine = {
   initialize,
 };

@@ -18,7 +18,7 @@
  * Internal dependencies.
  */
 
-import type { CookieDataFromNetwork, TabData } from './types';
+import type { CookieData, TabData } from './types';
 
 const CookieStore = {
   clearStorage: async () => {
@@ -60,18 +60,15 @@ const CookieStore = {
     }
   },
 
-  addCookiesToTabEntry: async (
-    tabId: number,
-    cookies: CookieDataFromNetwork[]
-  ) => {
+  addCookiesToTabEntry: async (tabId: number, cookies: CookieData[]) => {
     const previousVal = await chrome.storage.local.get(tabId.toString());
 
     if (Object.keys(previousVal).includes(tabId.toString())) {
-      const newCookies: { [key: string]: CookieDataFromNetwork } = {};
+      const newCookies: { [key: string]: CookieData } = {};
 
       for (const cookie of cookies) {
         if (cookie) {
-          newCookies[cookie.name] = cookie;
+          newCookies[cookie.parsedCookie.name] = cookie;
         }
       }
 
