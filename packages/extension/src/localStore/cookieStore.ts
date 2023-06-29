@@ -13,91 +13,78 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * Internal dependencies.
  */
-import updateStorage from './updateStorage';
-import type { TabData, CookieData } from './types';
+
+import type { CookieDataFromNetwork, TabData } from './types';
 
 const CookieStore = {
-  /**
-   * Update cookie store.
-   * @param {string} tabId Tab id.
-   * @param {Array} cookies Cookies data.
-   */
-  async update(tabId: string, cookies: CookieData[]) {
-    const newCookies: { [key: string]: CookieData } = {};
+  clearStorage: async () => {
+    await chrome.storage.local.clear();
+  },
 
-    for (const cookie of cookies) {
-      if (cookie) {
-        newCookies[cookie.parsedCookie.name] = cookie;
-      }
-    }
+  deleteTabEntry: async (tabId: number) => {
+    await chrome.storage.local.remove(tabId.toString());
+  },
 
-    await updateStorage(tabId, (prevState: TabData) => {
-      const updatedCookies = {
-        ...(prevState?.cookies || []),
-        ...newCookies,
-      };
-
-      return {
-        ...prevState,
-        cookies: updatedCookies,
-      };
+  createTabEntry: async (
+    windowId: number,
+    tabId: number,
+    tabUrl: string | undefined,
+    focusedAt: number | undefined
+  ) => {
+    const previousValue = await chrome.storage.local.get();
+    await chrome.storage.local.set({
+      ...previousValue,
+      [tabId.toString()]: {
+        windowId,
+        cookies: {},
+        url: tabUrl,
+        focusedAt,
+      },
     });
   },
 
-  /**
-   * Update tab location.
-   * @param {string} tabId Tab id.
-   * @param {string} url Tab url.
-   * @param {number} focusedAt The timestamp, when the tab was focused.
-   */
-  async updateTabLocation(tabId: string, url: string, focusedAt: number) {
-    await updateStorage(tabId, (prevState: TabData) => ({
-      ...prevState,
-      cookies: {},
-      url,
-      focusedAt,
-    }));
-  },
+  updateTabEntry: async (tabId: number, updates: Partial<TabData>) => {
+    const previousVal = await chrome.storage.local.get(tabId.toString());
 
-  /**
-   * Update the focusedAt timestamp for the tab.
-   * @param {string} tabId The active tab id.
-   */
-  async updateTabFocus(tabId: string) {
-    const storage = await chrome.storage.local.get();
-
-    if (storage[tabId]) {
-      storage[tabId].focusedAt = Date.now();
+    if (Object.keys(previousVal).includes(tabId.toString())) {
+      await chrome.storage.local.set({
+        [tabId.toString()]: {
+          ...previousVal[tabId.toString()],
+          ...updates,
+        },
+      });
     }
-    await chrome.storage.local.set(storage);
   },
 
-  /**
-   * Remove the tab data from the store.
-   * @param {string} tabId The tab id.
-   */
-  async removeTabData(tabId: string) {
-    await chrome.storage.local.remove(tabId);
-  },
+  addCookiesToTabEntry: async (
+    tabId: number,
+    cookies: CookieDataFromNetwork[]
+  ) => {
+    const previousVal = await chrome.storage.local.get(tabId.toString());
 
-  /**
-   * Remove the window's all tabs data from the store.
-   * @param {number} windowId The window id.
-   */
-  async removeWindowData(windowId: number) {
-    const tabs = await chrome.tabs.query({ windowId });
+    if (Object.keys(previousVal).includes(tabId.toString())) {
+      const newCookies: { [key: string]: CookieDataFromNetwork } = {};
 
-    const tabPromises = tabs.map(async (tab) => {
-      if (tab.id) {
-        await CookieStore.removeTabData(tab.id.toString());
+      for (const cookie of cookies) {
+        if (cookie) {
+          newCookies[cookie.name] = cookie;
+        }
       }
-    });
 
-    await Promise.all(tabPromises);
+      await chrome.storage.local.set({
+        [tabId.toString()]: {
+          ...previousVal[tabId.toString()],
+          cookies: { ...previousVal[tabId.toString()].cookies, ...newCookies },
+        },
+      });
+    }
   },
 };
+
+export type ICookieStore = typeof CookieStore;
 
 export default CookieStore;

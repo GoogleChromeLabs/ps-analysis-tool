@@ -14,20 +14,5 @@
  * limitations under the License.
  */
 
-export type CookieDataFromNetwork = {
-  name: string;
-  url: string;
-  headerType: 'response' | 'request';
-};
-
-export type TabData = {
-  cookies: {
-    [key: string]: CookieDataFromNetwork;
-  };
-  url: string | undefined;
-  focusedAt: number | undefined;
-};
-
-export type Storage = {
-  [tabId: string]: TabData;
-};
+export { default as tabManagementRoutine } from './tabManagement';
+export { default as interceptNetworkRoutine } from './interceptNetwork';

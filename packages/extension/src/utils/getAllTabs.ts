@@ -14,20 +14,26 @@
  * limitations under the License.
  */
 
-export type CookieDataFromNetwork = {
-  name: string;
-  url: string;
-  headerType: 'response' | 'request';
+const getAllTabs = async () => {
+  const windowList = await chrome.windows.getAll();
+
+  const tabList = (
+    await Promise.all(
+      windowList.map(async (window) => {
+        const windowTabList = await chrome.tabs.query({ windowId: window.id });
+        return windowTabList.map(({ id, url }) => ({
+          id,
+          url,
+          windowId: window.id,
+        }));
+      })
+    )
+  ).reduce(
+    (accumulator, windowTabList) => [...accumulator, ...windowTabList],
+    []
+  );
+
+  return tabList;
 };
 
-export type TabData = {
-  cookies: {
-    [key: string]: CookieDataFromNetwork;
-  };
-  url: string | undefined;
-  focusedAt: number | undefined;
-};
-
-export type Storage = {
-  [tabId: string]: TabData;
-};
+export default getAllTabs;
