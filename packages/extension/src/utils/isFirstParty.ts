@@ -13,28 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
+import { getDomain } from 'tldts';
 
 /**
- * Identifies if a cookie is first party by comparing top and cookie URL.
- * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
- * @param {string} tabURL Cookie URL (URL of the server which is setting/updating cookies).
- * @param {string} cookieDomain Top level url ( URL in tab's address bar ).
- * @returns {boolean | null} true for 1p; false for 3p; null for if bad URLs are passed.
+ * Internal dependencies.
+ */
+import { parseUrl } from './parseUrl';
+
+/**
+ * Identifies if a cookie's domain is first party by comparing it with the domain of the given URL.
+ * @param {string | undefined} cookieDomain - The URL of the server that is setting/updating the cookie.
+ * @param {string} tabUrl - The top-level URL (URL in the tab's address bar).
+ * @returns {boolean | null} - true if the cookie is first party, false if it's third party, or null if a bad tab URL was passed.
  */
 const isFirstParty = (
-  tabURL: string,
-  cookieDomain: string | undefined
+  cookieDomain: string | undefined,
+  tabUrl: string
 ): boolean | null => {
-  if (!cookieDomain) {
-    return true;
-  }
-  try {
-    const tabOrigin = new URL(tabURL).origin;
-
-    return tabOrigin.includes(cookieDomain);
-  } catch (error) {
+  if (!parseUrl(tabUrl)) {
     return null;
   }
+
+  return !cookieDomain || getDomain(tabUrl) === getDomain(cookieDomain);
 };
 
 export default isFirstParty;
