@@ -33,9 +33,10 @@ interface ICookieDetails {
 const CookieDetails = ({ data, analytics }: ICookieDetails) => {
   const descriptionRef = useRef<HTMLParagraphElement>(null);
 
-  const [shouldShowMoreButton, setShouldShowMoreButton] =
+  const [shouldShowMoreDescriptionButton, setShouldShowMoreDescriptionButton] =
     useState<boolean>(false);
-  const [showMore, setShowMore] = useState<boolean>(false);
+  const [showMoreDescription, setShowMoreDescription] =
+    useState<boolean>(false);
 
   useEffect(() => {
     if (descriptionRef.current) {
@@ -43,9 +44,24 @@ const CookieDetails = ({ data, analytics }: ICookieDetails) => {
         descriptionRef.current.clientHeight <
         descriptionRef.current.scrollHeight;
 
-      setShouldShowMoreButton(isDescriptionTruncated);
+      setShouldShowMoreDescriptionButton(isDescriptionTruncated);
     }
   }, [analytics?.description]);
+
+  const valueRef = useRef<HTMLParagraphElement>(null);
+
+  const [shouldShowMoreValueButton, setShouldShowMoreValueButton] =
+    useState<boolean>(false);
+  const [showMoreValue, setShowMoreValue] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (valueRef.current) {
+      const isValueTruncated =
+        valueRef.current.clientHeight < valueRef.current.scrollHeight;
+
+      setShouldShowMoreValueButton(isValueTruncated);
+    }
+  }, [data.value]);
 
   return (
     <div
@@ -58,19 +74,19 @@ const CookieDetails = ({ data, analytics }: ICookieDetails) => {
           <p
             ref={descriptionRef}
             className={`text-xs ${
-              showMore ? '' : 'line-clamp-2'
+              showMoreDescription ? '' : 'line-clamp-2'
             } text-secondary`}
           >
             {analytics?.description || 'No description available.'}
           </p>
-          {shouldShowMoreButton && (
+          {shouldShowMoreDescriptionButton && (
             <button
               className="text-md font-bold text-[#007185]"
               onClick={() => {
-                setShowMore(!showMore);
+                setShowMoreDescription(!showMoreDescription);
               }}
             >
-              {showMore ? 'Less' : 'More'}
+              {showMoreDescription ? 'Less' : 'More'}
             </button>
           )}
         </div>
@@ -120,7 +136,26 @@ const CookieDetails = ({ data, analytics }: ICookieDetails) => {
         </div>
         <div className="flex items-center py-2 text-[#808080]">
           <h1 className="w-1/4 font-semibold text-s">Value</h1>
-          <p className="w-3/4 text-xs text-tertiary  truncate">{data.value}</p>
+          <div className="w-3/4 inline-block">
+            <p
+              ref={valueRef}
+              className={`text-xs break-words ${
+                showMoreValue ? '' : 'line-clamp-1'
+              } text-secondary`}
+            >
+              {data.value}
+            </p>
+            {shouldShowMoreValueButton && (
+              <button
+                className="text-md font-bold text-[#007185]"
+                onClick={() => {
+                  setShowMoreValue(!showMoreValue);
+                }}
+              >
+                {showMoreValue ? 'Less' : 'More'}
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
