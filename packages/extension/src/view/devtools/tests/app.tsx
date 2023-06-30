@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 /**
@@ -26,9 +26,38 @@ import '@testing-library/jest-dom';
 import App from '../app';
 
 describe('App', () => {
-  it('Should show selected content on switching tab', () => {
+  it('Should show cookies content by default', () => {
     render(<App />);
 
     expect(screen.getByTestId('cookies-content')).toBeInTheDocument();
+  });
+
+  it('should switch to cookie panel when tab is clicked', async () => {
+    render(<App />);
+    // Move to another tab
+    fireEvent.click(screen.getByText('Bounce Tracking'));
+
+    fireEvent.click(screen.getByText('Cookies'));
+    expect(await screen.getByTestId('cookies-content')).toBeInTheDocument();
+  });
+
+  it('should switch to Bounce Tracking Panel when clicked', async () => {
+    render(<App />);
+    // Click on Bounce Tracking tab
+    fireEvent.click(screen.getByText('Bounce Tracking'));
+
+    expect(
+      await screen.getByTestId('bounce-tracking-content')
+    ).toBeInTheDocument();
+  });
+
+  it('should switch to FingerPrinting Panel when clicked', async () => {
+    render(<App />);
+    // Click on FingerPrinting tab
+    fireEvent.click(screen.getByText('Fingerprinting'));
+
+    expect(
+      await screen.getByTestId('fingerprinting-content')
+    ).toBeInTheDocument();
   });
 });
