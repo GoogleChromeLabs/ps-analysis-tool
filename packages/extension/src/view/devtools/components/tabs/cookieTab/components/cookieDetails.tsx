@@ -18,6 +18,11 @@
  */
 import React, { useEffect, useRef, useState } from 'react';
 import { type Cookie as ParsedCookie } from 'simple-cookie';
+
+/**
+ * Internal dependencies.
+ */
+import DomainIcon from '../../../../../../../icons/domain.svg';
 import { type CookieAnalytics } from '../../../../../../utils/fetchCookieDictionary';
 
 interface ICookieDetails {
@@ -60,7 +65,7 @@ const CookieDetails = ({ data, analytics }: ICookieDetails) => {
           </p>
           {shouldShowMoreButton && (
             <button
-              className="text-md font-bold"
+              className="text-md font-bold text-[#007185]"
               onClick={() => {
                 setShowMore(!showMore);
               }}
@@ -73,7 +78,10 @@ const CookieDetails = ({ data, analytics }: ICookieDetails) => {
       <div className="flex flex-col p-8 pt-2 pb-4 divide-y divide-[#F1F1F1]">
         <div className="flex items-center py-2">
           <h1 className="w-1/4 font-semibold text-s text-[#808080]">Domain</h1>
-          <p className="w-3/4 text-xs text-tertiary truncate">{data.domain}</p>
+          <p className="w-3/4 flex gap-1 text-xs text-tertiary truncate">
+            <DomainIcon />
+            {data.domain}
+          </p>
         </div>
         <div className="flex items-center py-2 text-[#808080]">
           <h1 className="w-1/4 font-semibold text-s">Path</h1>
