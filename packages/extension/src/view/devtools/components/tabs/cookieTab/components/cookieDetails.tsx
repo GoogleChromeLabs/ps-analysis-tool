@@ -40,7 +40,8 @@ const CookieDetails = ({ data, analytics }: ICookieDetails) => {
 
       setShouldShowMoreButton(isDescriptionTruncated);
     }
-  }, []);
+  }, [analytics?.description]);
+
   return (
     <div
       className="mt-5 rounded-xl shadow-md border leading-6 w-9/12 lg:w-8/12 mx-auto max-w-[600px] overflow-hidden"
