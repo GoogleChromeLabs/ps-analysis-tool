@@ -53,6 +53,8 @@ describe('isFirstParty', () => {
     expect(
       isFirstParty('https://sub1.sub2.example.com', 'https://example.com')
     ).toBeTruthy();
+
+    expect(isFirstParty('', 'https://example.com')).toBeTruthy();
   });
 
   it('Should return false for third-party domains and subdomains', () => {
