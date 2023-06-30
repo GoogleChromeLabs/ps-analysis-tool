@@ -23,6 +23,7 @@ import React, { useEffect, useState } from 'react';
  */
 import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import { CookieList, CookieDetails } from './components';
+import type { CookieData } from '../../../../../localStore';
 
 export const CookieTab = () => {
   const { cookies, tabUrl } = useCookieStore(({ state }) => ({
@@ -31,21 +32,18 @@ export const CookieTab = () => {
   }));
 
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const [selectedCookie, setSelectedCookie] = useState<CookieData | null>(null);
 
   useEffect(() => {
     if (!selectedKey && Object.keys(cookies).length !== 0) {
       setSelectedKey(Object.keys(cookies)[0]);
+      setSelectedCookie(cookies[Object.keys(cookies)[0]]);
     }
   }, [cookies, selectedKey]);
 
-  const selectedCookie =
-    selectedKey && cookies && Object.keys(cookies).includes(selectedKey)
-      ? cookies[selectedKey]
-      : null;
-
   return (
     <div className="w-full h-full flex flex-col lg:flex-row">
-      <div className="lg:w-[50%] h-[50%] lg:h-[100%] overflow-y-scroll ">
+      <div className="basis-1/2 lg:basis-1/3 overflow-y-scroll border-r ">
         <CookieList
           cookies={cookies}
           tabUrl={tabUrl}
@@ -53,15 +51,15 @@ export const CookieTab = () => {
           onClickItem={setSelectedKey}
         />
       </div>
-      <div className="lg:w-[50%] h-[50%] lg:h-[100%] py-32 border-t-gray-300 border-t-2 lg:border-t-0 overflow-y-scroll">
-        {selectedCookie && (
-          <div className="w-2/3 aspect-[4/3] m-auto">
+      <div className=" basis-1/2 lg:basis-2/3 overflow-y-scroll pb-28">
+        <div className="border-t-gray-300 border-t-2 lg:border-t-0 ">
+          {selectedCookie && (
             <CookieDetails
               data={selectedCookie.parsedCookie}
               analytics={selectedCookie.analytics}
             />
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
