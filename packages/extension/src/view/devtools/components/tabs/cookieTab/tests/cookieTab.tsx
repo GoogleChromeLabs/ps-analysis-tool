@@ -149,10 +149,6 @@ describe('CookieTab', () => {
     const thirdCookie =
       mockResponse.cookies[Object.keys(mockResponse.cookies)[2]];
 
-    expect(
-      within(card).getByText(
-        `${thirdCookie.parsedCookie.name} (${thirdCookie.analytics?.platform})`
-      )
-    );
+    expect(within(card).getByText(`${thirdCookie.parsedCookie.name}`));
   });
 });

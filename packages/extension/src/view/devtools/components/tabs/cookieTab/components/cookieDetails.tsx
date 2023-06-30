@@ -26,7 +26,10 @@ interface ICookieDetails {
 }
 
 const CookieDetails = ({ data, analytics }: ICookieDetails) => (
-  <div className="mt-5 rounded-xl shadow-md border leading-6 w-9/12 lg:w-8/12 mx-auto max-w-[600px] overflow-hidden">
+  <div
+    className="mt-5 rounded-xl shadow-md border leading-6 w-9/12 lg:w-8/12 mx-auto max-w-[600px] overflow-hidden"
+    data-testid="cookie-card"
+  >
     <div className="mb-2 py-3 px-8 flex flex-col bg-[#F1F1F1] border-b border-[#CACACA]">
       <h1 className="font-bold text-xl truncate mb-3">{data.name}</h1>
       <p className="text-xs text-secondary">
