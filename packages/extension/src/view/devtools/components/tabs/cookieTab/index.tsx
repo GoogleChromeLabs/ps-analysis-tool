@@ -38,6 +38,12 @@ export const CookieTab = () => {
     if (!selectedKey && Object.keys(cookies).length !== 0) {
       setSelectedKey(Object.keys(cookies)[0]);
       setSelectedCookie(cookies[Object.keys(cookies)[0]]);
+    } else if (
+      selectedKey &&
+      Object.keys(cookies).length !== 0 &&
+      Object.keys(cookies).includes(selectedKey)
+    ) {
+      setSelectedCookie(cookies[selectedKey]);
     }
   }, [cookies, selectedKey]);
 
