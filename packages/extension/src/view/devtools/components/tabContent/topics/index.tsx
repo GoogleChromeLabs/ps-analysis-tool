@@ -20,7 +20,10 @@ import React from 'react';
 
 const Topics = () => {
   return (
-    <div className="w-full h-full flex justify-center items-center">
+    <div
+      className="w-full h-full flex justify-center items-center"
+      data-testid="topics-content"
+    >
       <p>Topics API Panel</p>
     </div>
   );

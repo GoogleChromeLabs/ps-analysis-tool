@@ -20,7 +20,10 @@ import React from 'react';
 
 const Attribution = () => {
   return (
-    <div className="w-full h-full flex justify-center items-center">
+    <div
+      className="w-full h-full flex justify-center items-center"
+      data-testid="attribution-content"
+    >
       <p>Attribution API Panel</p>
     </div>
   );

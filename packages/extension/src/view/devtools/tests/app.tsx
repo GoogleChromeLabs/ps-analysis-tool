@@ -17,26 +17,18 @@
  * External dependencies.
  */
 import React from 'react';
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 
 /**
  * Internal dependencies.
  */
-import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
-import CookieList from './cookieList';
+import App from '../app';
 
-const Cookies = () => {
-  const { cookies, tabURL } = useCookieStore(({ state }) => ({
-    cookies: state?.cookies,
-    tabURL: state?.url,
-  }));
+describe('App', () => {
+  it('Should show selected content on switching tab', () => {
+    render(<App />);
 
-  return (
-    <div className="w-full h-full flex flex-col" data-testid="cookies-content">
-      <div className="flex-1 overflow-y-scroll">
-        <CookieList cookies={cookies} tabURL={tabURL} />
-      </div>
-    </div>
-  );
-};
-
-export default Cookies;
+    expect(screen.getByTestId('cookies-content')).toBeInTheDocument();
+  });
+});

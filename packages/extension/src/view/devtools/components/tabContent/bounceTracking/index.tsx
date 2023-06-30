@@ -20,7 +20,10 @@ import React from 'react';
 
 const BounceTracking = () => {
   return (
-    <div className="w-full h-full flex justify-center items-center">
+    <div
+      className="w-full h-full flex justify-center items-center"
+      data-testid="bounce-tracking-content"
+    >
       <p>Bounce tracking API Panel</p>
     </div>
   );

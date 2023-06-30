@@ -20,7 +20,10 @@ import React from 'react';
 
 const Fingerprinting = () => {
   return (
-    <div className="w-full h-full flex justify-center items-center">
+    <div
+      className="w-full h-full flex justify-center items-center"
+      data-testid="fingerprinting-content"
+    >
       <p>Fingerprinting API Panel</p>
     </div>
   );
