@@ -24,7 +24,7 @@ import { type Cookie as ParsedCookie } from 'simple-cookie';
 /**
  * External dependencies.
  */
-import { CookieTab } from '..';
+import CookieTab from '..';
 import type { TabData } from '../../../../../../localStore';
 
 const unknown1pCookie: ParsedCookie = {

@@ -32,6 +32,8 @@ interface IListItem {
 }
 
 const ListItem = ({ cookie, tabUrl, isSelected, onClick }: IListItem) => {
+  const firstParty = isFirstParty(cookie.parsedCookie.domain, tabUrl);
+
   return (
     <a
       href="#"
@@ -64,14 +66,14 @@ const ListItem = ({ cookie, tabUrl, isSelected, onClick }: IListItem) => {
           </span>
           <span
             className={`font-bold ${
-              isFirstParty(tabUrl, cookie.parsedCookie.domain)
-                ? 'text-first-party'
-                : 'text-third-party'
+              firstParty ? 'text-first-party' : 'text-third-party'
             }`}
           >
-            {isFirstParty(tabUrl, cookie.parsedCookie.domain)
-              ? 'First Party'
-              : 'Third Party'}
+            {firstParty !== null
+              ? firstParty
+                ? 'First Party'
+                : 'Third Party'
+              : 'Unknown'}
           </span>
         </div>
       </div>

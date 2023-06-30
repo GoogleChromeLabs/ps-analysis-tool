@@ -25,7 +25,7 @@ import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import { CookieList, CookieDetails } from './components';
 import type { CookieData } from '../../../../../localStore';
 
-export const CookieTab = () => {
+const Cookies = () => {
   const { cookies, tabUrl } = useCookieStore(({ state }) => ({
     cookies: state?.cookies,
     tabUrl: state?.url,
@@ -48,7 +48,10 @@ export const CookieTab = () => {
   }, [cookies, selectedKey]);
 
   return (
-    <div className="w-full h-full flex flex-col lg:flex-row">
+    <div
+      className="w-full h-full flex flex-col lg:flex-row"
+      data-testid="cookies-content"
+    >
       <div className="basis-1/2 lg:basis-1/3 overflow-y-scroll border-r ">
         <CookieList
           cookies={cookies}
@@ -70,3 +73,5 @@ export const CookieTab = () => {
     </div>
   );
 };
+
+export default Cookies;

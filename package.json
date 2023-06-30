@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"description": "Cookie Analysis Tool and CLI for analysis and understanding of cookie usage on web pages.",
 	"scripts": {
-		"test": "jest --config=jest.config.js",
+		"test": "jest --config=tests/jest.config.js",
 		"dev": "webpack --config webpack.config.cjs --watch",
 		"build": "cross-env NODE_ENV=production webpack --config webpack.config.cjs",
 		"serve": "webpack serve",

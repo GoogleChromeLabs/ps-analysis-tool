@@ -13,21 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Internal dependencies.
- */
-import { BounceTrackingTab } from './bounceTrackingTab';
-import { CookieTab } from './cookieTab';
-import { FingerprintingTab } from './fingerprintingTab';
-
-export const TABS = [
-  { display_name: 'Cookies', Component: CookieTab },
-  {
-    display_name: 'Bounce Tracking',
-    Component: BounceTrackingTab,
-  },
-  {
-    display_name: 'Fingerprinting',
-    Component: FingerprintingTab,
-  },
-];
+export default 'https://example.com/path/to/image.png';
