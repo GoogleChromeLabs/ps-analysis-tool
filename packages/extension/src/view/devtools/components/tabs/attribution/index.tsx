@@ -18,23 +18,12 @@
  */
 import React from 'react';
 
-/**
- * Internal dependencies.
- */
-import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
-import CookieList from './cookieList';
-
-export const CookieTab = () => {
-  const { cookies, tabURL } = useCookieStore(({ state }) => ({
-    cookies: state?.cookies,
-    tabURL: state?.url,
-  }));
-
+const Attribution = () => {
   return (
-    <div className="w-full h-full flex flex-col ">
-      <div className="flex-1 overflow-y-scroll ">
-        <CookieList cookies={cookies} tabURL={tabURL} />
-      </div>
+    <div className="w-full h-full flex justify-center items-center">
+      <p>Attribution API Panel</p>
     </div>
   );
 };
+
+export default Attribution;

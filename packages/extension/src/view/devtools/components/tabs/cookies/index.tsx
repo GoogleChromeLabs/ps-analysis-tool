@@ -14,10 +14,29 @@
  * limitations under the License.
  */
 /**
+ * External dependencies.
+ */
+import React from 'react';
+
+/**
  * Internal dependencies.
  */
-export { default as Fingerprinting } from './fingerprinting';
-export { default as BounceTracking } from './bounceTracking';
-export { default as Cookies } from './cookies';
-export { default as Topics } from './topics';
-export { default as Attribution } from './attribution';
+import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
+import CookieList from './cookieList';
+
+const Cookies = () => {
+  const { cookies, tabURL } = useCookieStore(({ state }) => ({
+    cookies: state?.cookies,
+    tabURL: state?.url,
+  }));
+
+  return (
+    <div className="w-full h-full flex flex-col ">
+      <div className="flex-1 overflow-y-scroll ">
+        <CookieList cookies={cookies} tabURL={tabURL} />
+      </div>
+    </div>
+  );
+};
+
+export default Cookies;

@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
 import React from 'react';
 
-export const FingerprintingTab = () => {
+const Fingerprinting = () => {
   return (
     <div className="w-full h-full flex justify-center items-center">
-      <p>Fingerprinting Panel</p>
+      <p>Fingerprinting API Panel</p>
     </div>
   );
 };
+
+export default Fingerprinting;

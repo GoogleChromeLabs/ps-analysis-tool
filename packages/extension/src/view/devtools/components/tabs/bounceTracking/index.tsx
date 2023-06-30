@@ -14,10 +14,16 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies.
+ * External dependencies.
  */
-export { default as Fingerprinting } from './fingerprinting';
-export { default as BounceTracking } from './bounceTracking';
-export { default as Cookies } from './cookies';
-export { default as Topics } from './topics';
-export { default as Attribution } from './attribution';
+import React from 'react';
+
+const BounceTracking = () => {
+  return (
+    <div className="w-full h-full flex justify-center items-center">
+      <p>Bounce tracking API Panel</p>
+    </div>
+  );
+};
+
+export default BounceTracking;
