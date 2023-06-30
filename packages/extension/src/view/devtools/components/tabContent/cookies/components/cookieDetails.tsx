@@ -39,6 +39,7 @@ const CookieDetails = ({ data, analytics }: ICookieDetails) => {
     useState<boolean>(false);
 
   useEffect(() => {
+    setShowMoreDescription(false);
     if (descriptionRef.current) {
       const isDescriptionTruncated =
         descriptionRef.current.clientHeight <
@@ -55,6 +56,7 @@ const CookieDetails = ({ data, analytics }: ICookieDetails) => {
   const [showMoreValue, setShowMoreValue] = useState<boolean>(false);
 
   useEffect(() => {
+    setShowMoreValue(false);
     if (valueRef.current) {
       const isValueTruncated =
         valueRef.current.clientHeight < valueRef.current.scrollHeight;
