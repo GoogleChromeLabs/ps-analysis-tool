@@ -34,6 +34,7 @@ module.exports = {
       ...colors,
       primary: '#000',
       secondary: '#5F5F5F',
+      tertiary: '#808080',
       'first-party': '#5FA569',
       'third-party': '#FA752E',
     },
@@ -44,5 +45,5 @@ module.exports = {
       tertiary: '#CBD5E1',
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/line-clamp')],
 };

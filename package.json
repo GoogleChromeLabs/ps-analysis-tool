@@ -90,5 +90,8 @@
 	"type": "module",
 	"workspaces": [
 		"packages/*"
-	]
+	],
+	"dependencies": {
+		"@tailwindcss/line-clamp": "^0.4.4"
+	}
 }
