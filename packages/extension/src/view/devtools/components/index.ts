@@ -13,4 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './tabs';
+export * from './tabContent';
+export { default as TabHeader } from './tabHeader';

@@ -28,9 +28,10 @@ import {
   Attribution,
   BounceTracking,
   Fingerprinting,
+  TabHeader,
 } from './components';
 
-export const TABS = [
+const TABS = [
   {
     display_name: 'Cookies',
     Component: Cookies,
@@ -56,27 +57,22 @@ export const TABS = [
 const App: React.FC = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
 
-  const TabComponent = TABS[selectedTabIndex].Component;
+  const TabContent = TABS[selectedTabIndex].Component;
+  const tabNames = TABS.map((tab) => tab.display_name);
 
   return (
-    <div className="w-full h-screen">
+    <div className="w-full h-screen overflow-hidden">
       <div className="w-full h-full flex flex-col">
-        <div className="w-full h-10 bg-slate-300 flex pt-2">
-          {TABS.map(({ display_name }, index) => (
-            <div
-              key={display_name}
-              className={`h-full mx-1 px-3 flex justify-ceter items-center rounded-t-lg cursor-pointer ${
-                selectedTabIndex === index ? 'bg-slate-100' : 'bg-slate-200'
-              }`}
-              onClick={() => setSelectedTabIndex(index)}
-            >
-              <p>{display_name}</p>
-            </div>
-          ))}
-        </div>
-        <div style={{ height: 'calc(100% - 48px)' }}>
-          <TabComponent />
-        </div>
+        <header className="w-full h-10 bg-slate-300 flex pt-2">
+          <TabHeader
+            tabsNames={tabNames}
+            selectedIndex={selectedTabIndex}
+            setIndex={setSelectedTabIndex}
+          />
+        </header>
+        <main style={{ height: 'calc(100% - 48px)' }}>
+          <TabContent />
+        </main>
       </div>
     </div>
   );
