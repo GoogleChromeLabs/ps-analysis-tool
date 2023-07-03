@@ -127,4 +127,26 @@ const devTools = {
   ...commonConfig,
 };
 
-module.exports = [root, devTools];
+const popup = {
+  entry: {
+    index: './packages/extension/src/view/popup/index.tsx',
+  },
+  output: {
+    path: path.resolve(__dirname, './dist/extension/popup'),
+    filename: 'index.js',
+  },
+  plugins: [
+    new WebpackBar({
+      name: 'Popup',
+      color: '#fcd8ba',
+    }),
+    new HtmlWebpackPlugin({
+      title: 'CAT Popup',
+      template: './packages/extension/src/view/popup/index.html',
+      inject: false,
+    }),
+  ],
+  ...commonConfig,
+};
+
+module.exports = [root, devTools, popup];
