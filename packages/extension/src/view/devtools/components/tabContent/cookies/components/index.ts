@@ -16,3 +16,4 @@
 
 export { default as CookieDetails } from './cookieDetails';
 export { default as CookieList } from './cookieList';
+export { default as FiltersList } from './filtersList';

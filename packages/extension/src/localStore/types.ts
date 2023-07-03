@@ -30,10 +30,12 @@ export type CookieData = {
   headerType: 'response' | 'request';
 };
 
+export type Cookies = {
+  [key: string]: CookieData;
+};
+
 export type TabData = {
-  cookies: {
-    [key: string]: CookieData;
-  };
+  cookies: Cookies;
   url: string | undefined;
   focusedAt: number | undefined;
 };
