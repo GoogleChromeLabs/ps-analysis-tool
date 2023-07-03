@@ -25,7 +25,7 @@ import React from 'react';
 import './app.css';
 import PieChart from './PieChart';
 import { useCookieStore } from '../stateProviders/syncCookieStore';
-import countCookiesByCategory from './countCookiesByCategory';
+import countCookiesByCategory from '../../utils/countCookiesByCategory';
 
 export type CookieStats = {
   total: number;
@@ -68,17 +68,12 @@ const Legend = () => {
 };
 
 const App: React.FC = () => {
-  const { cookies, tabURL, message } = useCookieStore(({ state }) => ({
+  const { cookies, tabURL } = useCookieStore(({ state }) => ({
     cookies: state?.cookies,
     tabURL: state?.url,
-    message: state?.message || 'No cookies found on this page',
   }));
 
-  const fallback = (
-    <div className="w-96 h-80 flex justify-center items-center">
-      <h1 className="font-bold text-xl">{message}</h1>
-    </div>
-  );
+  const fallback = <></>;
 
   if (!Object.keys(cookies).length || !tabURL) {
     return fallback;

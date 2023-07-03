@@ -17,9 +17,9 @@
 /**
  * Internal dependencies.
  */
-import type { CookieData } from '../../localStore';
-import isFirstParty from '../../utils/isFirstParty';
-import type { CookieStats } from './app';
+import type { CookieData } from '../localStore';
+import isFirstParty from './isFirstParty';
+import type { CookieStats } from '../view/popup/app';
 
 export const emptyStats: CookieStats = {
   total: 0,
@@ -42,7 +42,7 @@ export const emptyStats: CookieStats = {
 /**
  * Categorize cookies count into 1st party and 3rd party cookies and into functional, marketing, analytics and unknown.
  * @param {{ [key: string]: CookieData }} cookies Cookies of a tab.
- * @param {string } tabUrl Tab URL
+ * @param {string} tabUrl Tab URL
  * @returns CookieStats object with the categorized cookies count.
  */
 const countCookiesByCategory = (
