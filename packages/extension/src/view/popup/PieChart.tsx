@@ -33,7 +33,8 @@ const PieChart = ({ count, categoryCountData }: IPieChartProps) => {
     <div className="w-full h-full">
       <div className="w-full h-full relative">
         <VictoryPie
-          innerRadius={100}
+          padding={0}
+          innerRadius={140}
           animate={{ duration: 400 }}
           data={[
             { x: '', y: categoryCountData.countFuntional },
@@ -42,7 +43,7 @@ const PieChart = ({ count, categoryCountData }: IPieChartProps) => {
             { x: '', y: categoryCountData.countUnknown },
           ]}
           labels={() => null}
-          colorScale={['#5FA569', '#FA752E', '#2e97fa', '#fa2e49']}
+          colorScale={['#00B04C', '#FFBF00', '#3D7AFC', '#FC260A']}
         />
         <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-medium text-lg">
           {count}
