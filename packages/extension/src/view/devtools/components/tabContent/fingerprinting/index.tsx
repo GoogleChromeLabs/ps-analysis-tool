@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies.
+ * External dependencies.
  */
-import { BounceTrackingTab } from './BounceTrackingTab';
-import { CookieTab } from './CookieTab';
-import { FingerprintingTab } from './FingerprintingTab';
+import React from 'react';
 
-export const TABS = [
-  { display_name: 'Cookies', Component: CookieTab },
-  {
-    display_name: 'Bounce Tracking',
-    Component: BounceTrackingTab,
-  },
-  {
-    display_name: 'Fingerprinting',
-    Component: FingerprintingTab,
-  },
-];
+const Fingerprinting = () => {
+  return (
+    <div
+      className="w-full h-full flex justify-center items-center"
+      data-testid="fingerprinting-content"
+    >
+      <p>Fingerprinting API Panel</p>
+    </div>
+  );
+};
+
+export default Fingerprinting;

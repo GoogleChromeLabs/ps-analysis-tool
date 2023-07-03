@@ -13,16 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
 import React from 'react';
 
-export const BounceTrackingTab = () => {
+const BounceTracking = () => {
   return (
-    <div className="w-full h-full flex justify-center items-center">
-      <p>Bounce tracking Panel</p>
+    <div
+      className="w-full h-full flex justify-center items-center"
+      data-testid="bounce-tracking-content"
+    >
+      <p>Bounce tracking API Panel</p>
     </div>
   );
 };
+
+export default BounceTracking;

@@ -13,5 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './tabContent';
-export { default as TabHeader } from './tabHeader';
+/**
+ * Internal dependencies.
+ */
+export { default as Fingerprinting } from './fingerprinting';
+export { default as BounceTracking } from './bounceTracking';
+export { default as Cookies } from './cookies';
+export { default as Topics } from './topics';
+export { default as Attribution } from './attribution';

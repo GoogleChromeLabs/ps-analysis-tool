@@ -30,6 +30,8 @@ interface IListItem {
 }
 
 const ListItem = ({ cookie, tabURL }: IListItem) => {
+  const firstParty = isFirstParty(cookie.parsedCookie.domain, tabURL);
+
   return (
     <a href="#" className="block hover:bg-secondary">
       <div className="px-4 py-3 sm:px-6 border-b">
@@ -53,14 +55,15 @@ const ListItem = ({ cookie, tabURL }: IListItem) => {
           </span>
           <span
             className={`font-bold ${
-              isFirstParty(tabURL, cookie.parsedCookie.domain)
-                ? 'text-first-party'
-                : 'text-third-party'
+              firstParty !== null &&
+              (firstParty ? 'text-first-party' : 'text-third-party')
             }`}
           >
-            {isFirstParty(tabURL, cookie.parsedCookie.domain)
-              ? 'First Party'
-              : 'Third Party'}
+            {firstParty !== null
+              ? firstParty
+                ? 'First Party'
+                : 'Third Party'
+              : 'Unknown'}
           </span>
         </div>
       </div>

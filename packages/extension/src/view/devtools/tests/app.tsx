@@ -17,46 +17,47 @@
  * External dependencies.
  */
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 /**
  * Internal dependencies.
  */
-import { TabSelector } from '../tabSelector';
-import { TABS } from '../tabs';
+import App from '../app';
 
-describe('TabSelector', () => {
-  it('should be on Cookie Panel by default', () => {
-    render(<TabSelector tabs={TABS} />);
-    // by default Cookies Panel is selected.
-    expect(screen.getByText('Cookies')).toBeInTheDocument();
+describe('App', () => {
+  it('Should show cookies content by default', () => {
+    render(<App />);
+
+    expect(screen.getByTestId('cookies-content')).toBeInTheDocument();
   });
 
   it('should switch to cookie panel when tab is clicked', async () => {
-    render(<TabSelector tabs={TABS} />);
+    render(<App />);
     // Move to another tab
     fireEvent.click(screen.getByText('Bounce Tracking'));
 
     fireEvent.click(screen.getByText('Cookies'));
-    expect(await screen.findByText('Cookies')).toBeInTheDocument();
+    expect(await screen.getByTestId('cookies-content')).toBeInTheDocument();
   });
 
   it('should switch to Bounce Tracking Panel when clicked', async () => {
-    render(<TabSelector tabs={TABS} />);
+    render(<App />);
     // Click on Bounce Tracking tab
     fireEvent.click(screen.getByText('Bounce Tracking'));
 
     expect(
-      await screen.findByText('Bounce tracking Panel')
+      await screen.getByTestId('bounce-tracking-content')
     ).toBeInTheDocument();
   });
 
   it('should switch to FingerPrinting Panel when clicked', async () => {
-    render(<TabSelector tabs={TABS} />);
+    render(<App />);
     // Click on FingerPrinting tab
     fireEvent.click(screen.getByText('Fingerprinting'));
 
-    expect(await screen.findByText('Fingerprinting Panel')).toBeInTheDocument();
+    expect(
+      await screen.getByTestId('fingerprinting-content')
+    ).toBeInTheDocument();
   });
 });

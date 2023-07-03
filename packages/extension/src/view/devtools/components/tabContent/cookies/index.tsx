@@ -24,17 +24,19 @@ import React from 'react';
 import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import CookieList from './cookieList';
 
-export const CookieTab = () => {
+const Cookies = () => {
   const { cookies, tabURL } = useCookieStore(({ state }) => ({
     cookies: state?.cookies,
     tabURL: state?.url,
   }));
 
   return (
-    <div className="w-full h-full flex flex-col ">
-      <div className="flex-1 overflow-y-scroll ">
+    <div className="w-full h-full flex flex-col" data-testid="cookies-content">
+      <div className="flex-1 overflow-y-scroll">
         <CookieList cookies={cookies} tabURL={tabURL} />
       </div>
     </div>
   );
 };
+
+export default Cookies;

@@ -13,5 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './tabContent';
-export { default as TabHeader } from './tabHeader';
+/**
+ * External dependencies.
+ */
+import React from 'react';
+
+const Attribution = () => {
+  return (
+    <div
+      className="w-full h-full flex justify-center items-center"
+      data-testid="attribution-content"
+    >
+      <p>Attribution API Panel</p>
+    </div>
+  );
+};
+
+export default Attribution;

@@ -13,5 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './tabContent';
-export { default as TabHeader } from './tabHeader';
+/**
+ * External dependencies.
+ */
+import React from 'react';
+
+const Topics = () => {
+  return (
+    <div
+      className="w-full h-full flex justify-center items-center"
+      data-testid="topics-content"
+    >
+      <p>Topics API Panel</p>
+    </div>
+  );
+};
+
+export default Topics;
