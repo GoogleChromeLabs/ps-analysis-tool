@@ -17,114 +17,124 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useState } from 'react';
 
 /**
  * Internal dependencies.
  */
 import PSInfo from './PSInfo.json';
 import type { PSInfoKeyType } from './types';
+import RightArrow from '../../../../assets/svg/right-arrow.svg';
 
 interface ViewMoreProps {
   infoType: PSInfoKeyType;
-  open: boolean;
-  onClose: () => void;
 }
 
-const ViewMore = ({ infoType, open, onClose }: ViewMoreProps) => {
-  return open ? (
+const ViewMore = ({ infoType }: ViewMoreProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
     <>
-      <div className="flow-root border-t border-gray-200">
-        <ul role="list" className="divide-y divide-gray-200">
-          {PSInfo[infoType].proposal && (
-            <li className="py-4">
-              <div className="flex items-center">
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate capitalize">
-                    Proposal
-                  </p>
-                  <a
-                    href={PSInfo[infoType].proposal}
-                    className="text-xs text-blue-600 hover:text-blue-700"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Public explanation for the proposed solution (Chrome)
-                  </a>
+      {isOpen && (
+        <div className="flow-root border-t border-gray-200">
+          <ul role="list" className="divide-y divide-gray-200">
+            {PSInfo[infoType].proposal && (
+              <li className="py-4">
+                <div className="flex items-center">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900 truncate capitalize">
+                      Proposal
+                    </p>
+                    <a
+                      href={PSInfo[infoType].proposal}
+                      className="text-xs text-blue-600 hover:text-blue-700"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Public explanation for the proposed solution (Chrome)
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </li>
-          )}
-          {PSInfo[infoType].publicDiscussion && (
-            <li className="py-4">
-              <div className="flex items-center">
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate capitalize">
-                    Public Discussion
-                  </p>
-                  <a
-                    href={PSInfo[infoType].publicDiscussion}
-                    className="text-xs text-blue-600 hover:text-blue-700"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Public questions and feedback about the proposal
-                  </a>
+              </li>
+            )}
+            {PSInfo[infoType].publicDiscussion && (
+              <li className="py-4">
+                <div className="flex items-center">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900 truncate capitalize">
+                      Public Discussion
+                    </p>
+                    <a
+                      href={PSInfo[infoType].publicDiscussion}
+                      className="text-xs text-blue-600 hover:text-blue-700"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Public questions and feedback about the proposal
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </li>
-          )}
-          {PSInfo[infoType].videoOverview && (
-            <li className="py-4">
-              <div className="flex items-center">
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate capitalize">
-                    Video Overview
-                  </p>
-                  <a
-                    href={PSInfo[infoType].videoOverview as string}
-                    className="text-xs text-blue-600 hover:text-blue-700"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Short summary video
-                  </a>
+              </li>
+            )}
+            {PSInfo[infoType].videoOverview && (
+              <li className="py-4">
+                <div className="flex items-center">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900 truncate capitalize">
+                      Video Overview
+                    </p>
+                    <a
+                      href={PSInfo[infoType].videoOverview as string}
+                      className="text-xs text-blue-600 hover:text-blue-700"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Short summary video
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </li>
-          )}
-          {PSInfo[infoType].devDocumentation && (
-            <li className="py-4">
-              <div className="flex items-center">
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate capitalize">
-                    Dev Documentation
-                  </p>
-                  <a
-                    href={PSInfo[infoType].devDocumentation}
-                    className="text-xs text-blue-600 hover:text-blue-700"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Developer documentation
-                  </a>
+              </li>
+            )}
+            {PSInfo[infoType].devDocumentation && (
+              <li className="py-4">
+                <div className="flex items-center">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900 truncate capitalize">
+                      Dev Documentation
+                    </p>
+                    <a
+                      href={PSInfo[infoType].devDocumentation}
+                      className="text-xs text-blue-600 hover:text-blue-700"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Developer documentation
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </li>
-          )}
-        </ul>
-      </div>
+              </li>
+            )}
+          </ul>
+        </div>
+      )}
       <div className="flex items-center justify-start pt-4 border-t border-gray-200">
         <button
-          className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 float-right"
-          onClick={onClose}
+          className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800"
+          onClick={setIsOpen.bind(null, !isOpen)}
         >
-          Close
+          {isOpen ? (
+            'Close'
+          ) : (
+            <>
+              View more{' '}
+              <span className="w-4 h-4 ml-2">
+                <RightArrow />
+              </span>
+            </>
+          )}
         </button>
       </div>
     </>
-  ) : (
-    <></>
   );
 };
 
