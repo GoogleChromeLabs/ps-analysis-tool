@@ -3,78 +3,96 @@
     "name": "Private State Token",
     "description": "Allows websites and services to evaluate a user's authenticity without needing to know the user's identity.   With this API, a website/service can issue a batch of Private State Tokens (renamed to Private state tokens from Trust Tokens)  to a user's browser. The tokens are stored on the user's browser and can then be “redeemed” by other sites and services as a signal of the user's authenticity.",
     "proposal": "https://github.com/WICG/trust-token-api",
-    "proposal Report": "https://wicg.github.io/trust-token-api/",
-    "public Discussion": "https://github.com/WICG/trust-token-api/issues",
-    "video Overview": "https://www.youtube.com/watch?v=bXB1Iwq6Eq4",
-    "dev Documentation": "https://developer.chrome.com/docs/privacy-sandbox/trust-tokens/"
+    "proposalReport": "https://wicg.github.io/trust-token-api/",
+    "publicDiscussion": "https://github.com/WICG/trust-token-api/issues",
+    "videoOverview": "https://www.youtube.com/watch?v=bXB1Iwq6Eq4",
+    "devDocumentation": "https://developer.chrome.com/docs/privacy-sandbox/trust-tokens/"
   },
   "topics": {
     "name": "Topics",
     "description": "The Topics API is a Privacy Sandbox mechanism designed to preserve privacy while allowing a browser to share information with third parties about a user's interests. It enables interest-based advertising (IBA) without having to resort to tracking the sites a user visits.",
     "proposal": "https://github.com/patcg-individual-drafts/topics",
-    "proposal Report": "https://patcg-individual-drafts.github.io/topics/",
-    "public Discussion": "https://github.com/patcg-individual-drafts/topics/issues",
-    "video Overview": "https://youtu.be/hEBzWuXjeTQ",
-    "dev Documentation": "https://developer.chrome.com/docs/privacy-sandbox/topics/"
+    "proposalReport": "https://patcg-individual-drafts.github.io/topics/",
+    "publicDiscussion": "https://github.com/patcg-individual-drafts/topics/issues",
+    "videoOverview": "https://youtu.be/hEBzWuXjeTQ",
+    "devDocumentation": "https://developer.chrome.com/docs/privacy-sandbox/topics/"
   },
   "protected-audience": {
     "name": "Protected Audience (FLEDGE)",
     "description": "The Protected Audience API is a Privacy Sandbox proposal to serve remarketing and custom audience use cases, designed so third parties cannot track user browsing behavior across sites.",
     "proposal": "https://github.com/WICG/turtledove",
-    "proposal Report": "wicg.github.io/turtledove/",
-    "public Discussion": "https://github.com/WICG/turtledove/issues",
-    "video Overview": "https://www.youtube.com/watch?v=HkvmYKqnytw",
-    "dev Documentation": "https://developer.chrome.com/docs/privacy-sandbox/fledge-api/"
+    "proposalReport": "wicg.github.io/turtledove/",
+    "publicDiscussion": "https://github.com/WICG/turtledove/issues",
+    "videoOverview": "https://www.youtube.com/watch?v=HkvmYKqnytw",
+    "devDocumentation": "https://developer.chrome.com/docs/privacy-sandbox/fledge-api/"
   },
   "attribution-reporting": {
     "name": "Attribution Reporting",
     "description": "The Attribution Reporting API is a Privacy Sandbox proposal to enable advertisers to measure the effectiveness of their ads without compromising user privacy.",
     "proposal": "https://github.com/WICG/attribution-reporting-api",
-    "proposal Report": "https://wicg.github.io/attribution-reporting-api/",
-    "public Discussion": "https://github.com/WICG/attribution-reporting-api/issues",
-    "video Overview": "https://www.youtube.com/watch?v=UGA74CIcom8",
-    "dev Documentation": "https://developer.chrome.com/docs/privacy-sandbox/attribution-reporting/"
+    "proposalReport": "https://wicg.github.io/attribution-reporting-api/",
+    "publicDiscussion": "https://github.com/WICG/attribution-reporting-api/issues",
+    "videoOverview": "https://www.youtube.com/watch?v=UGA74CIcom8",
+    "devDocumentation": "https://developer.chrome.com/docs/privacy-sandbox/attribution-reporting/"
   },
   "first-party-sets": {
     "name": "First-Party Sets",
     "description": "The First-Party Sets API is a Privacy Sandbox proposal to enable browsers to group multiple websites into a single first-party context, allowing them to share information with each other.",
     "proposal": "https://github.com/WICG/first-party-sets",
-    "proposal Report": "https://wicg.github.io/first-party-sets/",
-    "public Discussion": "https://github.com/WICG/first-party-sets/issues",
-    "video Overview": "https://www.youtube.com/watch?v=cNJ8mZ-J3F8",
-    "dev Documentation": "https://developer.chrome.com/docs/privacy-sandbox/first-party-sets/"
+    "proposalReport": "https://wicg.github.io/first-party-sets/",
+    "publicDiscussion": "https://github.com/WICG/first-party-sets/issues",
+    "videoOverview": "https://www.youtube.com/watch?v=cNJ8mZ-J3F8",
+    "devDocumentation": "https://developer.chrome.com/docs/privacy-sandbox/first-party-sets/"
   },
   "shared-storage": {
     "name": "Shared Storage",
     "description": "The Shared Storage API allows sites to store and access unpartitioned cross-site data as to prevent cross-site user tracking, browsers are partitioning all forms of storage (cookies, localStorage, caches, etc). However, there are a number of legitimate use cases that rely on unpartitioned storage which would be impossible without help from new web APIs. ",
     "proposal": "https://github.com/WICG/shared-storage",
-    "proposal Report": "https://wicg.github.io/shared-storage/",
-    "public Discussion": "https://github.com/WICG/shared-storage/issues",
-    "dev Documentation": "https://developer.chrome.com/docs/privacy-sandbox/shared-storage/"
+    "proposalReport": "https://wicg.github.io/shared-storage/",
+    "publicDiscussion": "https://github.com/WICG/shared-storage/issues",
+    "videoOverview": null,
+    "devDocumentation": "https://developer.chrome.com/docs/privacy-sandbox/shared-storage/"
   },
   "chips": {
     "name": "Cookies Having Independent Partitioned State (CHIPS)",
     "description": "CHIPS is a Privacy Sandbox proposal that will allow developers to opt a cookie into \"partitioned\" storage, with separate cookie jars per top-level site.",
     "proposal": "https://github.com/privacycg/CHIPS",
-    "public Discussion": "https://github.com/privacycg/CHIPS/issues",
-    "dev Documentation": "https://developer.chrome.com/docs/privacy-sandbox/chips/"
+    "publicDiscussion": "https://github.com/privacycg/CHIPS/issues",
+    "videoOverview": null,
+    "devDocumentation": "https://developer.chrome.com/docs/privacy-sandbox/chips/"
   },
   "fenced-frames": {
     "name": "Fenced Frames",
     "description": "A fenced frame (<fencedframe>) is a proposed HTML element for embedded content, similar to an iframe. Unlike iframes, a fenced frame restricts communication with its embedding context to allow the frame access to cross-site data without sharing it with the embedding context.",
     "proposal": "https://github.com/WICG/fenced-frame",
-    "proposal Report": "https://wicg.github.io/fenced-frame/",
-    "public Discussion": "https://github.com/WICG/fenced-frame/issues",
-    "video Overview": "https://www.youtube.com/watch?v=CqbluZHZofI",
-    "dev Documentation": "https://developer.chrome.com/docs/privacy-sandbox/fenced-frame/"
+    "proposalReport": "https://wicg.github.io/fenced-frame/",
+    "publicDiscussion": "https://github.com/WICG/fenced-frame/issues",
+    "videoOverview": "https://www.youtube.com/watch?v=CqbluZHZofI",
+    "devDocumentation": "https://developer.chrome.com/docs/privacy-sandbox/fenced-frame/"
   },
   "fedcm": {
     "name": "Federated Credential Management(FedCM)",
     "description": "FedCM is a proposal for a privacy-preserving approach to federated identity services (such as \"Sign in with...\") where users can log into sites without sharing their personal information with the identity service or the site.",
     "proposal": "https://github.com/fedidcg/FedCM",
-    "proposal Report": "https://fedidcg.github.io/FedCM/",
-    "public Discussion": "https://github.com/fedidcg/FedCM/issues",
-    "video Overview": "https://www.youtube.com/watch?v=rSOqIR3lzBk",
-    "dev Documentation": "https://developer.chrome.com/docs/privacy-sandbox/fedcm/"
+    "proposalReport": "https://fedidcg.github.io/FedCM/",
+    "publicDiscussion": "https://github.com/fedidcg/FedCM/issues",
+    "videoOverview": "https://www.youtube.com/watch?v=rSOqIR3lzBk",
+    "devDocumentation": "https://developer.chrome.com/docs/privacy-sandbox/fedcm/"
+  },
+  "bounce-tracking": {
+    "name": "Bounce Tracking Mitigation",
+    "description": "Bounce Tracking Mitigation is a Privacy Sandbox proposal to mitigate bounce tracking, a technique used to track users across sites by abusing the referrer header.",
+    "proposal": "https://github.com/privacycg/nav-tracking-mitigations",
+    "publicDiscussion": "https://github.com/privacycg/nav-tracking-mitigations/issues",
+    "videoOverview": null,
+    "devDocumentation": "https://developer.chrome.com/en/docs/privacy-sandbox/bounce-tracking-mitigations"
+  },
+  "user-agent-reduction": {
+    "name": "User Agent Reduction",
+    "description": "User-Agent (UA) reduction minimizes the identifying information shared in the User-Agent string, which may be used for passive fingerprinting.",
+    "proposal": "https://github.com/miketaylr/user-agent-reduction/",
+    "publicDiscussion": "https://github.com/miketaylr/user-agent-reduction/issues",
+    "videoOverview": null,
+    "devDocumentation": "https://developer.chrome.com/en/docs/privacy-sandbox/user-agent/"
   }
 }

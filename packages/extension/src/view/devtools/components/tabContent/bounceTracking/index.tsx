@@ -18,13 +18,19 @@
  */
 import React from 'react';
 
+/**
+ * Internal dependencies.
+ */
+import InfoCard from '../../infoCard';
+import { PSAPIKey } from '../../infoCard/types';
+
 const BounceTracking = () => {
   return (
     <div
-      className="w-full h-full flex justify-center items-center"
+      className="w-full h-full overflow-auto"
       data-testid="bounce-tracking-content"
     >
-      <p>Bounce tracking API Panel</p>
+      <InfoCard api={PSAPIKey.BounceTracking} />
     </div>
   );
 };

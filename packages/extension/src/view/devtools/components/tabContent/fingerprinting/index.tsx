@@ -18,13 +18,19 @@
  */
 import React from 'react';
 
+/**
+ * Internal dependencies.
+ */
+import InfoCard from '../../infoCard';
+import { PSAPIKey } from '../../infoCard/types';
+
 const Fingerprinting = () => {
   return (
     <div
-      className="w-full h-full flex justify-center items-center"
+      className="w-full h-full overflow-auto"
       data-testid="fingerprinting-content"
     >
-      <p>Fingerprinting API Panel</p>
+      <InfoCard api={PSAPIKey.UserAgentReduction} />
     </div>
   );
 };

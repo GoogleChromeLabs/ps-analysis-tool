@@ -25,41 +25,93 @@ import React from 'react';
 import apis from './PSInfo.json';
 import type { PSAPIKeyType } from './types';
 
-interface IViewMore {
+interface ViewMoreProps {
   api: PSAPIKeyType;
   open: boolean;
   onClose: () => void;
 }
 
-const ViewMore = ({ api, open, onClose }: IViewMore) => {
+const ViewMore = ({ api, open, onClose }: ViewMoreProps) => {
   return open ? (
     <>
       <div className="flow-root border-t border-gray-200">
         <ul role="list" className="divide-y divide-gray-200">
-          {Object.entries(apis[api]).map(([key, value], idx) => {
-            if (idx === 0 || idx === 1) {
-              return null;
-            }
-            return (
-              <li key={idx} className="py-4">
-                <div className="flex items-center">
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate capitalize">
-                      {key}
-                    </p>
-                    <a
-                      href={value}
-                      className="text-xs text-blue-600 hover:text-blue-700"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {value}
-                    </a>
-                  </div>
+          {apis[api].proposal && (
+            <li className="py-4">
+              <div className="flex items-center">
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-900 truncate capitalize">
+                    Proposal
+                  </p>
+                  <a
+                    href={apis[api].proposal}
+                    className="text-xs text-blue-600 hover:text-blue-700"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Public explanation for the proposed solution (Chrome)
+                  </a>
                 </div>
-              </li>
-            );
-          })}
+              </div>
+            </li>
+          )}
+          {apis[api].publicDiscussion && (
+            <li className="py-4">
+              <div className="flex items-center">
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-900 truncate capitalize">
+                    Public Discussion
+                  </p>
+                  <a
+                    href={apis[api].publicDiscussion}
+                    className="text-xs text-blue-600 hover:text-blue-700"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Public questions and feedback about the proposal
+                  </a>
+                </div>
+              </div>
+            </li>
+          )}
+          {apis[api].videoOverview && (
+            <li className="py-4">
+              <div className="flex items-center">
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-900 truncate capitalize">
+                    Video Overview
+                  </p>
+                  <a
+                    href={apis[api].videoOverview as string}
+                    className="text-xs text-blue-600 hover:text-blue-700"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Short summary video
+                  </a>
+                </div>
+              </div>
+            </li>
+          )}
+          {apis[api].devDocumentation && (
+            <li className="py-4">
+              <div className="flex items-center">
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-900 truncate capitalize">
+                    Dev Documentation
+                  </p>
+                  <a
+                    href={apis[api].devDocumentation}
+                    className="text-xs text-blue-600 hover:text-blue-700"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Developer documentation
+                  </a>
+                </div>
+              </div>
+            </li>
+          )}
         </ul>
       </div>
       <div className="flex items-center justify-start pt-4 border-t border-gray-200">

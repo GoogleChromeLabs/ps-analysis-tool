@@ -24,6 +24,8 @@ export enum PSAPIKey {
   'CHIPS' = 'chips',
   'FencedFrames' = 'fenced-frames',
   'FEDCM' = 'fedcm',
+  'BounceTracking' = 'bounce-tracking',
+  'UserAgentReduction' = 'user-agent-reduction',
 }
 
 export type PSAPIKeyType = (typeof PSAPIKey)[keyof typeof PSAPIKey];

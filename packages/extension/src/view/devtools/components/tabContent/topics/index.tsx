@@ -18,13 +18,16 @@
  */
 import React from 'react';
 
+/**
+ * Internal dependencies.
+ */
+import InfoCard from '../../infoCard';
+import { PSAPIKey } from '../../infoCard/types';
+
 const Topics = () => {
   return (
-    <div
-      className="w-full h-full flex justify-center items-center"
-      data-testid="topics-content"
-    >
-      <p>Topics API Panel</p>
+    <div className="w-full h-full overflow-auto" data-testid="topics-content">
+      <InfoCard api={PSAPIKey.Topics} />
     </div>
   );
 };
