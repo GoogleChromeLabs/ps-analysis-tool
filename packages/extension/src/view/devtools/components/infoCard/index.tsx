@@ -23,7 +23,7 @@ import React from 'react';
  * Internal dependencies.
  */
 import PSInfo from './PSInfo.json';
-import ViewMore from './viewMore';
+import LearnMoreDropdown from './learnMoreDropdown';
 import type { PSInfoKeyType } from './types';
 
 interface InfoCardProps {
@@ -37,7 +37,7 @@ const InfoCard = ({ infoType }: InfoCardProps) => {
         {PSInfo[infoType].name}
       </h5>
       <p className="mb-3 text-gray-700">{PSInfo[infoType].description}</p>
-      <ViewMore infoType={infoType} />
+      <LearnMoreDropdown infoType={infoType} />
     </div>
   );
 };

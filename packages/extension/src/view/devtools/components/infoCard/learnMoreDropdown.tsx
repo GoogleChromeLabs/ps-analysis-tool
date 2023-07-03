@@ -26,11 +26,11 @@ import PSInfo from './PSInfo.json';
 import type { PSInfoKeyType } from './types';
 import RightArrow from '../../../../assets/svg/right-arrow.svg';
 
-interface ViewMoreProps {
+interface LearnMoreDropdownProps {
   infoType: PSInfoKeyType;
 }
 
-const ViewMore = ({ infoType }: ViewMoreProps) => {
+const LearnMoreDropdown = ({ infoType }: LearnMoreDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -126,7 +126,7 @@ const ViewMore = ({ infoType }: ViewMoreProps) => {
             'Close'
           ) : (
             <>
-              View more{' '}
+              Learn more{' '}
               <span className="w-4 h-4 ml-2">
                 <RightArrow />
               </span>
@@ -138,4 +138,4 @@ const ViewMore = ({ infoType }: ViewMoreProps) => {
   );
 };
 
-export default ViewMore;
+export default LearnMoreDropdown;
