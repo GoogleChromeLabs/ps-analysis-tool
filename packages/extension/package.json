@@ -18,5 +18,8 @@
     "tldts": "^6.0.8",
     "use-context-selector": "^1.4.1", 
     "victory": "^36.6.11"
+  },
+  "devDependencies":{
+    "@tailwindcss/line-clamp": "^0.4.4"
   }
 }
