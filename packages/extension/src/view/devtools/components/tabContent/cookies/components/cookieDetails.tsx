@@ -25,18 +25,22 @@ import { type Cookie as ParsedCookie } from 'simple-cookie';
 import DomainIcon from '../../../../../../../icons/domain.svg';
 import { type CookieAnalytics } from '../../../../../../utils/fetchCookieDictionary';
 
-interface ICookieDetails {
+interface CookieDetailsProps {
   data: ParsedCookie;
   analytics: CookieAnalytics | null;
 }
 
-const CookieDetails = ({ data, analytics }: ICookieDetails) => {
+const CookieDetails = ({ data, analytics }: CookieDetailsProps) => {
   const descriptionRef = useRef<HTMLParagraphElement>(null);
+  const valueRef = useRef<HTMLParagraphElement>(null);
 
   const [shouldShowMoreDescriptionButton, setShouldShowMoreDescriptionButton] =
     useState<boolean>(false);
+  const [shouldShowMoreValueButton, setShouldShowMoreValueButton] =
+    useState<boolean>(false);
   const [showMoreDescription, setShowMoreDescription] =
     useState<boolean>(false);
+  const [showMoreValue, setShowMoreValue] = useState<boolean>(false);
 
   useEffect(() => {
     setShowMoreDescription(false);
@@ -49,12 +53,6 @@ const CookieDetails = ({ data, analytics }: ICookieDetails) => {
     }
   }, [analytics?.description]);
 
-  const valueRef = useRef<HTMLParagraphElement>(null);
-
-  const [shouldShowMoreValueButton, setShouldShowMoreValueButton] =
-    useState<boolean>(false);
-  const [showMoreValue, setShowMoreValue] = useState<boolean>(false);
-
   useEffect(() => {
     setShowMoreValue(false);
     if (valueRef.current) {
@@ -64,6 +62,12 @@ const CookieDetails = ({ data, analytics }: ICookieDetails) => {
       setShouldShowMoreValueButton(isValueTruncated);
     }
   }, [data.value]);
+
+  const openGDPRPortal = () => {
+    if (analytics?.gdprUrl) {
+      chrome.tabs.create({ url: analytics?.gdprUrl });
+    }
+  };
 
   return (
     <div
@@ -127,11 +131,7 @@ const CookieDetails = ({ data, analytics }: ICookieDetails) => {
           <h1 className="w-1/4 font-semibold text-s">GDPR Portal</h1>
           <p
             className="w-3/4 text-xs text-tertiary truncate hover:underline cursor-pointer"
-            onClick={() => {
-              if (analytics?.gdprUrl) {
-                chrome.tabs.create({ url: analytics?.gdprUrl });
-              }
-            }}
+            onClick={openGDPRPortal}
           >
             {analytics?.gdprUrl}
           </p>

@@ -123,6 +123,7 @@ describe('CookieTab', () => {
     expect(screen.getAllByText('Uncategorized').length).toBe(2);
     expect(screen.getAllByText('Marketing').length).toBe(2);
   });
+
   it('should show a cookie card with the information on first cookie in the list', () => {
     render(<CookieTab />);
 
@@ -149,6 +150,8 @@ describe('CookieTab', () => {
     const thirdCookie =
       mockResponse.cookies[Object.keys(mockResponse.cookies)[2]];
 
-    expect(within(card).getByText(`${thirdCookie.parsedCookie.name}`));
+    expect(
+      within(card).getByText(`${thirdCookie.parsedCookie.name}`)
+    ).toBeInTheDocument();
   });
 });

@@ -24,7 +24,7 @@ import React from 'react';
 import { type CookieData } from '../../../../../../localStore';
 import ListItem from './listItem';
 
-interface ICoookieList {
+interface CoookieListProps {
   cookies: {
     [key: string]: CookieData;
   };
@@ -38,7 +38,7 @@ const CookieList = ({
   tabUrl,
   selectedKey,
   onClickItem,
-}: ICoookieList) => (
+}: CoookieListProps) => (
   <ul className="w-full h-full">
     {cookies &&
       tabUrl &&
