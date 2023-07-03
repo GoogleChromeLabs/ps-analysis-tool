@@ -1,6 +1,6 @@
 {
 	"name": "cookie-analysis-tool",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "Cookie Analysis Tool and CLI for analysis and understanding of cookie usage on web pages.",
 	"scripts": {
 		"test": "jest --config=jest.config.js",
