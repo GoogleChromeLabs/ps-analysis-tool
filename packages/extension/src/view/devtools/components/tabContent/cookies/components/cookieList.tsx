@@ -21,23 +21,35 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { type CookieData } from '../../../../../localStore';
+import { type CookieData } from '../../../../../../localStore';
 import ListItem from './listItem';
 
-interface ICoookieList {
+interface CoookieListProps {
   cookies: {
     [key: string]: CookieData;
   };
-  tabURL: string | undefined;
+  tabUrl: string | undefined;
+  selectedKey: string | null;
+  onClickItem: (key: string) => void;
 }
 
-const CookieList = ({ cookies, tabURL }: ICoookieList) => (
+const CookieList = ({
+  cookies,
+  tabUrl,
+  selectedKey,
+  onClickItem,
+}: CoookieListProps) => (
   <ul className="w-full h-full">
     {cookies &&
-      tabURL &&
+      tabUrl &&
       Object.entries(cookies).map(([key, value]) => (
         <li key={key}>
-          <ListItem cookie={value} tabURL={tabURL} />
+          <ListItem
+            cookie={value}
+            tabUrl={tabUrl}
+            isSelected={selectedKey === key}
+            onClick={() => onClickItem(key)}
+          />
         </li>
       ))}
   </ul>

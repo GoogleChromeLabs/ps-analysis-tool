@@ -54,7 +54,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
     const tabData = await chrome.storage.local.get();
 
-    setState(tabData[tabId]);
+    const tabInfo = tabData?.[tabId];
+    if (tabInfo?.cookies && tabInfo?.url) {
+      setState(tabInfo);
+    }
   }, []);
 
   useEffect(() => {
