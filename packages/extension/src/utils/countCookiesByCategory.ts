@@ -18,26 +18,8 @@
  * Internal dependencies.
  */
 import type { CookieData } from '../localStore';
+import type { CookieStats } from '../view/popup/types';
 import isFirstParty from './isFirstParty';
-import type { CookieStats } from '../view/popup/app';
-
-export const emptyStats: CookieStats = {
-  total: 0,
-  firstParty: {
-    total: 0,
-    functional: 0,
-    marketing: 0,
-    analytics: 0,
-    unknown: 0,
-  },
-  thirdParty: {
-    total: 0,
-    functional: 0,
-    marketing: 0,
-    analytics: 0,
-    unknown: 0,
-  },
-};
 
 /**
  * Categorize cookies count into 1st party and 3rd party cookies and into functional, marketing, analytics and unknown.
@@ -49,7 +31,23 @@ const countCookiesByCategory = (
   cookies: { [key: string]: CookieData },
   tabUrl: string
 ) => {
-  const stats = structuredClone(emptyStats);
+  const stats: CookieStats = {
+    total: 0,
+    firstParty: {
+      total: 0,
+      functional: 0,
+      marketing: 0,
+      analytics: 0,
+      unknown: 0,
+    },
+    thirdParty: {
+      total: 0,
+      functional: 0,
+      marketing: 0,
+      analytics: 0,
+      unknown: 0,
+    },
+  };
 
   const cookieList = Object.values(cookies);
 

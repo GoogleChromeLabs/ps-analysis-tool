@@ -21,61 +21,103 @@ import countCookiesByCategory from '../countCookiesByCategory';
 
 const functional1pCookie = {
   parsedCookie: {
-    name: 'cookie_name',
+    name: 'cookie_name_1',
     value: 'val',
     domain: 'example.com',
   },
   analytics: {
-    category: 'Funtional',
+    category: 'functional',
   },
   url: 'https://example.com/public/api/alerts',
   headerType: 'request',
 };
 
 const marketing1pCookie = {
-  ...functional1pCookie,
-  analytics: {
-    category: 'Marketing',
+  parsedCookie: {
+    name: 'cookie_name_2',
+    value: 'val',
+    domain: 'example.com',
   },
+  analytics: {
+    category: 'marketing',
+  },
+  url: 'https://example.com/public/api/alerts',
+  headerType: 'request',
 };
 
 const analytics1pCookie = {
-  ...functional1pCookie,
-  analytics: {
-    category: 'Analytics',
+  parsedCookie: {
+    name: 'cookie_name_3',
+    value: 'val',
+    domain: 'example.com',
   },
+  analytics: {
+    category: 'analytics',
+  },
+  url: 'https://example.com/public/api/alerts',
+  headerType: 'request',
 };
 
-const unknown1pCookie = { ...functional1pCookie, analytics: null };
+const unknown1pCookie = {
+  parsedCookie: {
+    name: 'cookie_name_4',
+    value: 'val',
+    domain: 'example.com',
+  },
+  analytics: null,
+  url: 'https://example.com/public/api/alerts',
+  headerType: 'request',
+};
 
 const functional3pCookie = {
   parsedCookie: {
-    name: 'cookie_name',
+    name: 'cookie_name_5',
     value: 'val',
     domain: 'other.server.com',
   },
   analytics: {
-    category: 'Funtional',
+    category: 'functional',
   },
   url: 'https://other.server.com/public/api/alerts',
   headerType: 'request',
 };
 
 const marketing3pCookie = {
-  ...functional3pCookie,
-  analytics: {
-    category: 'Marketing',
+  parsedCookie: {
+    name: 'cookie_name_6',
+    value: 'val',
+    domain: 'other.server.com',
   },
+  analytics: {
+    category: 'marketing',
+  },
+  url: 'https://other.server.com/public/api/alerts',
+  headerType: 'request',
 };
 
 const analytics3pCookie = {
-  ...functional3pCookie,
-  analytics: {
-    category: 'Analytics',
+  parsedCookie: {
+    name: 'cookie_name_7',
+    value: 'val',
+    domain: 'other.server.com',
   },
+  analytics: {
+    category: 'analytics',
+  },
+  url: 'https://other.server.com/public/api/alerts',
+  headerType: 'request',
 };
 
-const unknown3pCookie = { ...functional3pCookie, analytics: null };
+const unknown3pCookie = {
+  parsedCookie: {
+    name: 'cookie_name_8',
+    value: 'val',
+    domain: 'other.server.com',
+  },
+  analytics: null,
+  url: 'https://other.server.com/public/api/alerts',
+  headerType: 'request',
+};
 
 const emptyStats = {
   total: 0,

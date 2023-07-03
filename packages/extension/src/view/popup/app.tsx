@@ -23,65 +23,9 @@ import React from 'react';
  * Internal dependencies.
  */
 import './app.css';
-import PieChart from './PieChart';
+import { PieChart, Legend } from './components';
 import { useCookieStore } from '../stateProviders/syncCookieStore';
 import countCookiesByCategory from '../../utils/countCookiesByCategory';
-
-interface LegendIconProps {
-  color: string;
-}
-
-const LegendIcon = ({ color }: LegendIconProps) => (
-  <div
-    className="w-4 h-4 rounded-full flex items-center justify-center mr-2"
-    style={{ backgroundColor: color }}
-  >
-    <div className="w-2 h-2 rounded-full flex items-center justify-center bg-white"></div>
-  </div>
-);
-
-export type CookieStats = {
-  total: number;
-  firstParty: {
-    total: number;
-    functional: number;
-    marketing: number;
-    analytics: number;
-    unknown: number;
-  };
-  thirdParty: {
-    total: number;
-    functional: number;
-    marketing: number;
-    analytics: number;
-    unknown: number;
-  };
-};
-
-const LEGEND = [
-  { color: '#00B04C', label: 'Functional' },
-  { color: '#FFBF00', label: 'Marketing' },
-  { color: '#3D7AFC', label: 'Analytics' },
-  { color: '#FC260A', label: 'Unknown' },
-];
-
-interface LegendProps {
-  counts: number[];
-}
-
-const Legend = ({ counts }: LegendProps) => {
-  return (
-    <div className="flex flex-col">
-      {LEGEND.map(({ color, label }, idx) => (
-        <div key={idx} className="w-36 flex items-center justify-center my-1">
-          <LegendIcon color={color} />
-          <p className="flex-1 text-[#111B21] text-xs">{label}</p>
-          <p className=" text-[#111B21] text-xs"> {counts[idx]} </p>
-        </div>
-      ))}
-    </div>
-  );
-};
 
 const App: React.FC = () => {
   const { cookies, tabURL } = useCookieStore(({ state }) => ({
