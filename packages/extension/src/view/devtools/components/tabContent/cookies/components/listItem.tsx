@@ -37,7 +37,9 @@ const ListItem = ({ cookie, tabUrl, isSelected, onClick }: IListItem) => {
   return (
     <a
       href="#"
-      className={`block hover:bg-secondary ${isSelected && 'bg-secondary'}`}
+      className={`block hover:bg-secondary ${
+        isSelected && 'bg-secondary border-r-4 border-gray-400'
+      }`}
       onClick={onClick}
       data-testid="cookie-list-item"
     >
@@ -58,7 +60,7 @@ const ListItem = ({ cookie, tabUrl, isSelected, onClick }: IListItem) => {
         </div>
         <div
           className={
-            'mt-4 flex justify-between items-center text-sm text-secondary'
+            'mt-4 flex justify-between items-center text-xs text-secondary'
           }
         >
           <span className="font-bold">
