@@ -17,5 +17,8 @@
     "simple-cookie": "^1.0.15",
     "tldts": "^6.0.8",
     "use-context-selector": "^1.4.1"
+  },
+  "devDependencies":{
+    "@tailwindcss/line-clamp": "^0.4.4"
   }
 }
