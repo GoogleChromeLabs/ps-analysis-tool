@@ -75,7 +75,9 @@ chrome.webRequest.onResponseStarted.addListener(
 chrome.webRequest.onBeforeSendHeaders.addListener(
   ({ url, requestHeaders, tabId }) => {
     (async () => {
-      if (!requestHeaders) {
+      const tab = await getTab(tabId);
+
+      if (!tab || !requestHeaders) {
         return;
       }
 

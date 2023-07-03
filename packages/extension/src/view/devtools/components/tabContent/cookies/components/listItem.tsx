@@ -21,19 +21,28 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { type CookieData } from '../../../../../localStore';
-import isFirstParty from '../../../../../utils/isFirstParty';
+import { type CookieData } from '../../../../../../localStore';
+import isFirstParty from '../../../../../../utils/isFirstParty';
 
 interface IListItem {
   cookie: CookieData;
-  tabURL: string;
+  tabUrl: string;
+  isSelected: boolean;
+  onClick: () => void;
 }
 
-const ListItem = ({ cookie, tabURL }: IListItem) => {
-  const firstParty = isFirstParty(cookie.parsedCookie.domain, tabURL);
+const ListItem = ({ cookie, tabUrl, isSelected, onClick }: IListItem) => {
+  const firstParty = isFirstParty(cookie.parsedCookie.domain, tabUrl);
 
   return (
-    <a href="#" className="block hover:bg-secondary">
+    <a
+      href="#"
+      className={`block hover:bg-secondary ${
+        isSelected && 'bg-secondary border-r-4 border-gray-400'
+      }`}
+      onClick={onClick}
+      data-testid="cookie-list-item"
+    >
       <div className="px-4 py-3 sm:px-6 border-b">
         <div className="flex items-center justify-between">
           <div className="font-medium w-full flex items-center justify-between">
@@ -41,13 +50,17 @@ const ListItem = ({ cookie, tabURL }: IListItem) => {
           </div>
         </div>
         <div className="mt-0.5">
-          <div className="truncate text-xs text-secondary">
+          <div
+            className={`${
+              isSelected ? 'font-bold' : 'font-medium'
+            } truncate text-xs text-secondary`}
+          >
             <span>{cookie.parsedCookie.value}</span>
           </div>
         </div>
         <div
           className={
-            'mt-4 flex justify-between items-center text-sm text-secondary'
+            'mt-4 flex justify-between items-center text-xs text-secondary'
           }
         >
           <span className="font-bold">
@@ -55,8 +68,7 @@ const ListItem = ({ cookie, tabURL }: IListItem) => {
           </span>
           <span
             className={`font-bold ${
-              firstParty !== null &&
-              (firstParty ? 'text-first-party' : 'text-third-party')
+              firstParty ? 'text-first-party' : 'text-third-party'
             }`}
           >
             {firstParty !== null
