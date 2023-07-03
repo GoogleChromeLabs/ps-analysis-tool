@@ -29,6 +29,7 @@
 		"@babel/preset-react": "^7.22.5",
 		"@babel/preset-typescript": "^7.22.5",
 		"@svgr/webpack": "^8.0.1",
+		"@tailwindcss/line-clamp": "^0.4.4",
 		"@testing-library/jest-dom": "^5.16.5",
 		"@testing-library/react": "^14.0.0",
 		"@types/chrome": "^0.0.237",
@@ -90,8 +91,5 @@
 	"type": "module",
 	"workspaces": [
 		"packages/*"
-	],
-	"dependencies": {
-		"@tailwindcss/line-clamp": "^0.4.4"
-	}
+	]
 }
