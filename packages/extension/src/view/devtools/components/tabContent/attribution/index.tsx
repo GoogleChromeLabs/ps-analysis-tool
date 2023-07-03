@@ -22,7 +22,7 @@ import React from 'react';
  * Internal dependencies.
  */
 import InfoCard from '../../infoCard';
-import { PSAPIKey } from '../../infoCard/types';
+import { PSInfoKey } from '../../infoCard/types';
 
 const Attribution = () => {
   return (
@@ -30,7 +30,7 @@ const Attribution = () => {
       className="w-full h-full overflow-auto"
       data-testid="attribution-content"
     >
-      <InfoCard api={PSAPIKey.AttributionReporting} />
+      <InfoCard infoType={PSInfoKey.AttributionReporting} />
     </div>
   );
 };

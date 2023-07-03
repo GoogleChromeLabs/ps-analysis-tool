@@ -22,23 +22,23 @@ import React, { useState } from 'react';
 /**
  * Internal dependencies.
  */
-import apis from './PSInfo.json';
+import PSInfo from './PSInfo.json';
 import ViewMore from './viewMore';
-import type { PSAPIKeyType } from './types';
+import type { PSInfoKeyType } from './types';
 
 interface InfoCardProps {
-  api: PSAPIKeyType;
+  infoType: PSInfoKeyType;
 }
 
-const InfoCard = ({ api }: InfoCardProps) => {
+const InfoCard = ({ infoType }: InfoCardProps) => {
   const [openModal, setOpenModal] = useState(false);
 
   return (
     <div className="max-w-sm p-6 m-3 bg-white border border-gray-200 rounded-lg shadow">
       <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
-        {apis[api].name}
+        {PSInfo[infoType].name}
       </h5>
-      <p className="mb-3 text-gray-700">{apis[api].description}</p>
+      <p className="mb-3 text-gray-700">{PSInfo[infoType].description}</p>
       {!openModal && (
         <button
           className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
@@ -61,7 +61,7 @@ const InfoCard = ({ api }: InfoCardProps) => {
         </button>
       )}
       <ViewMore
-        api={api}
+        infoType={infoType}
         open={openModal}
         onClose={setOpenModal.bind(null, false)}
       />

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-export enum PSAPIKey {
+export enum PSInfoKey {
   'PrivateStateToken' = 'private-state-token',
   'Topics' = 'topics',
   'ProtectedAudience' = 'protected-audience',
@@ -28,4 +28,4 @@ export enum PSAPIKey {
   'UserAgentReduction' = 'user-agent-reduction',
 }
 
-export type PSAPIKeyType = (typeof PSAPIKey)[keyof typeof PSAPIKey];
+export type PSInfoKeyType = (typeof PSInfoKey)[keyof typeof PSInfoKey];

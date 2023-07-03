@@ -22,7 +22,7 @@ import React from 'react';
  * Internal dependencies.
  */
 import InfoCard from '../../infoCard';
-import { PSAPIKey } from '../../infoCard/types';
+import { PSInfoKey } from '../../infoCard/types';
 
 const BounceTracking = () => {
   return (
@@ -30,7 +30,7 @@ const BounceTracking = () => {
       className="w-full h-full overflow-auto"
       data-testid="bounce-tracking-content"
     >
-      <InfoCard api={PSAPIKey.BounceTracking} />
+      <InfoCard infoType={PSInfoKey.BounceTracking} />
     </div>
   );
 };

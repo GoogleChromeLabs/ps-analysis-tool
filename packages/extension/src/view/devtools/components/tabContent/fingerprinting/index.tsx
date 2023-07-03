@@ -22,7 +22,7 @@ import React from 'react';
  * Internal dependencies.
  */
 import InfoCard from '../../infoCard';
-import { PSAPIKey } from '../../infoCard/types';
+import { PSInfoKey } from '../../infoCard/types';
 
 const Fingerprinting = () => {
   return (
@@ -30,7 +30,7 @@ const Fingerprinting = () => {
       className="w-full h-full overflow-auto"
       data-testid="fingerprinting-content"
     >
-      <InfoCard api={PSAPIKey.UserAgentReduction} />
+      <InfoCard infoType={PSInfoKey.UserAgentReduction} />
     </div>
   );
 };

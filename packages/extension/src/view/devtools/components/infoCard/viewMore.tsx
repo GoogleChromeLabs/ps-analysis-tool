@@ -22,21 +22,21 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import apis from './PSInfo.json';
-import type { PSAPIKeyType } from './types';
+import PSInfo from './PSInfo.json';
+import type { PSInfoKeyType } from './types';
 
 interface ViewMoreProps {
-  api: PSAPIKeyType;
+  infoType: PSInfoKeyType;
   open: boolean;
   onClose: () => void;
 }
 
-const ViewMore = ({ api, open, onClose }: ViewMoreProps) => {
+const ViewMore = ({ infoType, open, onClose }: ViewMoreProps) => {
   return open ? (
     <>
       <div className="flow-root border-t border-gray-200">
         <ul role="list" className="divide-y divide-gray-200">
-          {apis[api].proposal && (
+          {PSInfo[infoType].proposal && (
             <li className="py-4">
               <div className="flex items-center">
                 <div className="flex-1 min-w-0">
@@ -44,7 +44,7 @@ const ViewMore = ({ api, open, onClose }: ViewMoreProps) => {
                     Proposal
                   </p>
                   <a
-                    href={apis[api].proposal}
+                    href={PSInfo[infoType].proposal}
                     className="text-xs text-blue-600 hover:text-blue-700"
                     target="_blank"
                     rel="noreferrer"
@@ -55,7 +55,7 @@ const ViewMore = ({ api, open, onClose }: ViewMoreProps) => {
               </div>
             </li>
           )}
-          {apis[api].publicDiscussion && (
+          {PSInfo[infoType].publicDiscussion && (
             <li className="py-4">
               <div className="flex items-center">
                 <div className="flex-1 min-w-0">
@@ -63,7 +63,7 @@ const ViewMore = ({ api, open, onClose }: ViewMoreProps) => {
                     Public Discussion
                   </p>
                   <a
-                    href={apis[api].publicDiscussion}
+                    href={PSInfo[infoType].publicDiscussion}
                     className="text-xs text-blue-600 hover:text-blue-700"
                     target="_blank"
                     rel="noreferrer"
@@ -74,7 +74,7 @@ const ViewMore = ({ api, open, onClose }: ViewMoreProps) => {
               </div>
             </li>
           )}
-          {apis[api].videoOverview && (
+          {PSInfo[infoType].videoOverview && (
             <li className="py-4">
               <div className="flex items-center">
                 <div className="flex-1 min-w-0">
@@ -82,7 +82,7 @@ const ViewMore = ({ api, open, onClose }: ViewMoreProps) => {
                     Video Overview
                   </p>
                   <a
-                    href={apis[api].videoOverview as string}
+                    href={PSInfo[infoType].videoOverview as string}
                     className="text-xs text-blue-600 hover:text-blue-700"
                     target="_blank"
                     rel="noreferrer"
@@ -93,7 +93,7 @@ const ViewMore = ({ api, open, onClose }: ViewMoreProps) => {
               </div>
             </li>
           )}
-          {apis[api].devDocumentation && (
+          {PSInfo[infoType].devDocumentation && (
             <li className="py-4">
               <div className="flex items-center">
                 <div className="flex-1 min-w-0">
@@ -101,7 +101,7 @@ const ViewMore = ({ api, open, onClose }: ViewMoreProps) => {
                     Dev Documentation
                   </p>
                   <a
-                    href={apis[api].devDocumentation}
+                    href={PSInfo[infoType].devDocumentation}
                     className="text-xs text-blue-600 hover:text-blue-700"
                     target="_blank"
                     rel="noreferrer"
