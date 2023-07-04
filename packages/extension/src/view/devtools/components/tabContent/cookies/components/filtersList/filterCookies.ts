@@ -17,6 +17,7 @@
  * Internal dependencies.
  */
 import type { Cookies } from '../../../../../../../localStore';
+import { FILTER_MAPPING } from './constants';
 
 type SelectedFilters = {
   [keys: string]: Set<string>;
@@ -43,13 +44,14 @@ const filterCookies = (
         cookieData[rootKey] && cookieData[rootKey][subKey]
           ? cookieData[rootKey][subKey]
           : '';
+      const filterMap = FILTER_MAPPING.find((config) => config.keys === keys);
 
-      if (['parsedCookie.secure', 'parsedCookie.httponly'].includes(keys)) {
+      if ('Boolean' === filterMap?.type) {
         value = value ? 'True' : 'False';
       }
 
-      if ('analytics.category' === keys && !value) {
-        value = 'Uncategorized';
+      if (!value && filterMap?.default) {
+        value = filterMap.default;
       }
 
       canShow = value && selectedFilter?.has(value);

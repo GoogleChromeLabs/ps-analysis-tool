@@ -17,6 +17,7 @@
  * Internal dependencies.
  */
 import type { Cookies } from '../../../../../../../localStore';
+import { FILTER_MAPPING } from './constants';
 
 interface Filter {
   name: string;
@@ -25,41 +26,6 @@ interface Filter {
   type?: string;
   default?: string;
 }
-
-const FILTER_MAPPING: Filter[] = [
-  {
-    name: 'Category',
-    keys: 'analytics.category',
-    default: 'Uncategorized',
-  },
-  {
-    name: 'Expiration Date',
-    keys: 'parsedCookie.expires',
-    type: 'date',
-  },
-  {
-    name: 'Domain',
-    keys: 'parsedCookie.domain',
-  },
-  {
-    name: 'Path',
-    keys: 'parsedCookie.path',
-  },
-  {
-    name: 'Same Site',
-    keys: 'parsedCookie.samesite',
-  },
-  {
-    name: 'Secure',
-    keys: 'parsedCookie.secure',
-    type: 'boolean',
-  },
-  {
-    name: 'HttpOnly',
-    keys: 'parsedCookie.httponly',
-    type: 'boolean',
-  },
-];
 
 const getFilters = (cookies: Cookies) => {
   const filters: Filter[] = [...FILTER_MAPPING];
