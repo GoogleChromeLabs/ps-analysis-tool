@@ -120,7 +120,9 @@ const LearnMoreDropdown = ({ infoKey }: LearnMoreDropdownProps) => {
       <div className="flex items-center justify-start pt-4 border-t border-gray-200">
         <button
           className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800"
-          onClick={setIsOpen.bind(null, !isOpen)}
+          onClick={() => {
+            setIsOpen(!isOpen);
+          }}
         >
           {isOpen ? (
             'Close'
