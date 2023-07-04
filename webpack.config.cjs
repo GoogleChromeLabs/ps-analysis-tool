@@ -112,13 +112,13 @@ const devTools = {
       color: '#357BB5',
     }),
     new HtmlWebpackPlugin({
-      title: 'CAT Devtool',
+      title: 'PSAT Devtool',
       template: './packages/extension/src/view/devtools/index.html',
       filename: 'index.html',
       inject: false,
     }),
     new HtmlWebpackPlugin({
-      title: 'CAT',
+      title: 'PSAT',
       template: './packages/extension/src/view/devtools/devtools.html',
       filename: 'devtools.html',
       inject: true,
@@ -141,7 +141,7 @@ const popup = {
       color: '#fcd8ba',
     }),
     new HtmlWebpackPlugin({
-      title: 'CAT Popup',
+      title: 'PSAT Popup',
       template: './packages/extension/src/view/popup/index.html',
       inject: false,
     }),

@@ -53,33 +53,24 @@ const countCookiesByCategory = (
 
   stats.total = cookieList.length;
 
-  for (const {
-    analytics,
-    parsedCookie: { domain },
-  } of cookieList) {
-    const _isFirstParty = isFirstParty(domain, tabUrl);
+  for (const cookie of cookieList) {
+    const {
+      analytics,
+      parsedCookie: { domain },
+    } = cookie;
+    const isFirstPartyCookie = isFirstParty(domain, tabUrl);
+    const category = analytics?.category?.toLowerCase() as
+      | keyof CookieStats['firstParty']
+      | undefined;
 
-    _isFirstParty ? stats.firstParty.total++ : stats.thirdParty.total++;
-
-    if (analytics) {
-      if (analytics.category.toLowerCase() === 'functional') {
-        _isFirstParty
-          ? stats.firstParty.functional++
-          : stats.thirdParty.functional++;
-      } else if (analytics.category.toLowerCase() === 'marketing') {
-        _isFirstParty
-          ? stats.firstParty.marketing++
-          : stats.thirdParty.marketing++;
-      } else if (analytics.category.toLowerCase() === 'analytics') {
-        _isFirstParty
-          ? stats.firstParty.analytics++
-          : stats.thirdParty.analytics++;
-      }
+    if (isFirstPartyCookie) {
+      stats.firstParty.total++;
+      stats.firstParty[category ? category : 'unknown']++;
     } else {
-      _isFirstParty ? stats.firstParty.unknown++ : stats.thirdParty.unknown++;
+      stats.thirdParty.total++;
+      stats.thirdParty[category ? category : 'unknown']++;
     }
   }
-
   return stats;
 };
 
