@@ -61,6 +61,7 @@ const countCookiesByCategory = (
     const isFirstPartyCookie = isFirstParty(domain, tabUrl);
     const category = analytics?.category?.toLowerCase() as
       | keyof CookieStats['firstParty']
+      | keyof CookieStats['thirdParty']
       | undefined;
 
     if (isFirstPartyCookie) {
