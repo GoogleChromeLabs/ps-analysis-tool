@@ -27,17 +27,17 @@ import LearnMoreDropdown from './learnMoreDropdown';
 import type { PSInfoKeyType } from './types';
 
 interface InfoCardProps {
-  infoType: PSInfoKeyType;
+  infoKey: PSInfoKeyType;
 }
 
-const InfoCard = ({ infoType }: InfoCardProps) => {
+const InfoCard = ({ infoKey }: InfoCardProps) => {
   return (
     <div className="max-w-sm p-6 m-3 bg-white border border-gray-200 rounded-lg shadow">
       <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
-        {PSInfo[infoType].name}
+        {PSInfo[infoKey].name}
       </h5>
-      <p className="mb-3 text-gray-700">{PSInfo[infoType].description}</p>
-      <LearnMoreDropdown infoType={infoType} />
+      <p className="mb-3 text-gray-700">{PSInfo[infoKey].description}</p>
+      <LearnMoreDropdown infoKey={infoKey} />
     </div>
   );
 };

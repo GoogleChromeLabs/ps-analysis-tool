@@ -27,10 +27,10 @@ import type { PSInfoKeyType } from './types';
 import RightArrow from '../../../../assets/svg/right-arrow.svg';
 
 interface LearnMoreDropdownProps {
-  infoType: PSInfoKeyType;
+  infoKey: PSInfoKeyType;
 }
 
-const LearnMoreDropdown = ({ infoType }: LearnMoreDropdownProps) => {
+const LearnMoreDropdown = ({ infoKey }: LearnMoreDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -38,7 +38,7 @@ const LearnMoreDropdown = ({ infoType }: LearnMoreDropdownProps) => {
       {isOpen && (
         <div className="flow-root border-t border-gray-200">
           <ul role="list" className="divide-y divide-gray-200">
-            {PSInfo[infoType].proposal && (
+            {PSInfo[infoKey].proposal && (
               <li className="py-4">
                 <div className="flex items-center">
                   <div className="flex-1 min-w-0">
@@ -46,7 +46,7 @@ const LearnMoreDropdown = ({ infoType }: LearnMoreDropdownProps) => {
                       Proposal
                     </p>
                     <a
-                      href={PSInfo[infoType].proposal}
+                      href={PSInfo[infoKey].proposal}
                       className="text-xs text-blue-600 hover:text-blue-700"
                       target="_blank"
                       rel="noreferrer"
@@ -57,7 +57,7 @@ const LearnMoreDropdown = ({ infoType }: LearnMoreDropdownProps) => {
                 </div>
               </li>
             )}
-            {PSInfo[infoType].publicDiscussion && (
+            {PSInfo[infoKey].publicDiscussion && (
               <li className="py-4">
                 <div className="flex items-center">
                   <div className="flex-1 min-w-0">
@@ -65,7 +65,7 @@ const LearnMoreDropdown = ({ infoType }: LearnMoreDropdownProps) => {
                       Public Discussion
                     </p>
                     <a
-                      href={PSInfo[infoType].publicDiscussion}
+                      href={PSInfo[infoKey].publicDiscussion}
                       className="text-xs text-blue-600 hover:text-blue-700"
                       target="_blank"
                       rel="noreferrer"
@@ -76,7 +76,7 @@ const LearnMoreDropdown = ({ infoType }: LearnMoreDropdownProps) => {
                 </div>
               </li>
             )}
-            {PSInfo[infoType].videoOverview && (
+            {PSInfo[infoKey].videoOverview && (
               <li className="py-4">
                 <div className="flex items-center">
                   <div className="flex-1 min-w-0">
@@ -84,7 +84,7 @@ const LearnMoreDropdown = ({ infoType }: LearnMoreDropdownProps) => {
                       Video Overview
                     </p>
                     <a
-                      href={PSInfo[infoType].videoOverview as string}
+                      href={PSInfo[infoKey].videoOverview as string}
                       className="text-xs text-blue-600 hover:text-blue-700"
                       target="_blank"
                       rel="noreferrer"
@@ -95,7 +95,7 @@ const LearnMoreDropdown = ({ infoType }: LearnMoreDropdownProps) => {
                 </div>
               </li>
             )}
-            {PSInfo[infoType].devDocumentation && (
+            {PSInfo[infoKey].devDocumentation && (
               <li className="py-4">
                 <div className="flex items-center">
                   <div className="flex-1 min-w-0">
@@ -103,7 +103,7 @@ const LearnMoreDropdown = ({ infoType }: LearnMoreDropdownProps) => {
                       Dev Documentation
                     </p>
                     <a
-                      href={PSInfo[infoType].devDocumentation}
+                      href={PSInfo[infoKey].devDocumentation}
                       className="text-xs text-blue-600 hover:text-blue-700"
                       target="_blank"
                       rel="noreferrer"

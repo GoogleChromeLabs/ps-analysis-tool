@@ -30,7 +30,7 @@ const Attribution = () => {
       className="w-full h-full overflow-auto"
       data-testid="attribution-content"
     >
-      <InfoCard infoType={PSInfoKey.AttributionReporting} />
+      <InfoCard infoKey={PSInfoKey.AttributionReporting} />
     </div>
   );
 };

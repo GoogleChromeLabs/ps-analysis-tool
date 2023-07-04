@@ -28,10 +28,10 @@ import PSInfo from '../PSInfo.json';
 import { fireEvent, render, screen } from '@testing-library/react';
 import InfoCard from '..';
 
-const tests = Object.values(PSInfoKey).map((infoType) => {
+const tests = Object.values(PSInfoKey).map((infoKey) => {
   return {
-    input: infoType,
-    output: PSInfo[infoType],
+    input: infoKey,
+    output: PSInfo[infoKey],
   };
 });
 
@@ -39,7 +39,7 @@ describe('should match the json file data with the component', () => {
   test.each(tests)(
     'should match component with enum key prop to json data',
     ({ input, output }) => {
-      render(<InfoCard infoType={input} />);
+      render(<InfoCard infoKey={input} />);
 
       const name = screen.getByText(output.name);
       expect(name).toBeInTheDocument();

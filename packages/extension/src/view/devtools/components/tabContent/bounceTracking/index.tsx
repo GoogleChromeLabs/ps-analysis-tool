@@ -30,7 +30,7 @@ const BounceTracking = () => {
       className="w-full h-full overflow-auto"
       data-testid="bounce-tracking-content"
     >
-      <InfoCard infoType={PSInfoKey.BounceTracking} />
+      <InfoCard infoKey={PSInfoKey.BounceTracking} />
     </div>
   );
 };

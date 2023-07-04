@@ -30,7 +30,7 @@ const Fingerprinting = () => {
       className="w-full h-full overflow-auto"
       data-testid="fingerprinting-content"
     >
-      <InfoCard infoType={PSInfoKey.UserAgentReduction} />
+      <InfoCard infoKey={PSInfoKey.UserAgentReduction} />
     </div>
   );
 };

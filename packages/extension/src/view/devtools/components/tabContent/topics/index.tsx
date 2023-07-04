@@ -27,7 +27,7 @@ import { PSInfoKey } from '../../infoCard/types';
 const Topics = () => {
   return (
     <div className="w-full h-full overflow-auto" data-testid="topics-content">
-      <InfoCard infoType={PSInfoKey.Topics} />
+      <InfoCard infoKey={PSInfoKey.Topics} />
     </div>
   );
 };
