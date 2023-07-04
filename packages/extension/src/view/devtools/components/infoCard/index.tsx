@@ -17,28 +17,47 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 /**
  * Internal dependencies.
  */
-import PSInfo from './PSInfo.json';
 import LearnMoreDropdown from './learnMoreDropdown';
-import type { PSInfoKeyType } from './types';
+import {
+  fetchPSInfo,
+  type PSInfo as PSInfoType,
+  type PSInfoKeyType,
+} from '../../../../utils/fetchPSInfo';
 
 interface InfoCardProps {
   infoKey: PSInfoKeyType;
 }
 
 const InfoCard = ({ infoKey }: InfoCardProps) => {
+  const [PSInfo, setPSInfo] = useState({} as PSInfoType);
+
+  useEffect(() => {
+    (async function () {
+      const info = await fetchPSInfo(infoKey);
+
+      setPSInfo(info);
+    })();
+  }, [infoKey]);
+
   return (
-    <div className="max-w-sm p-6 m-3 bg-white border border-gray-200 rounded-lg shadow">
-      <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
-        {PSInfo[infoKey].name}
-      </h5>
-      <p className="mb-3 text-gray-700">{PSInfo[infoKey].description}</p>
-      <LearnMoreDropdown infoKey={infoKey} />
-    </div>
+    <>
+      {PSInfo ? (
+        <div className="max-w-sm p-6 m-3 bg-white border border-gray-200 rounded-lg shadow">
+          <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
+            {PSInfo.name}
+          </h5>
+          <p className="mb-3 text-gray-700">{PSInfo.description}</p>
+          <LearnMoreDropdown PSInfo={PSInfo} />
+        </div>
+      ) : (
+        <></>
+      )}
+    </>
   );
 };
 

@@ -22,15 +22,14 @@ import React, { useState } from 'react';
 /**
  * Internal dependencies.
  */
-import PSInfo from './PSInfo.json';
-import type { PSInfoKeyType } from './types';
 import RightArrow from '../../../../../icons/right-arrow.svg';
+import type { PSInfo as PSInfoType } from '../../../../utils/fetchPSInfo';
 
 interface LearnMoreDropdownProps {
-  infoKey: PSInfoKeyType;
+  PSInfo: PSInfoType;
 }
 
-const LearnMoreDropdown = ({ infoKey }: LearnMoreDropdownProps) => {
+const LearnMoreDropdown = ({ PSInfo }: LearnMoreDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -38,7 +37,7 @@ const LearnMoreDropdown = ({ infoKey }: LearnMoreDropdownProps) => {
       {isOpen && (
         <div className="flow-root border-t border-gray-200">
           <ul role="list" className="divide-y divide-gray-200">
-            {PSInfo[infoKey].proposal && (
+            {PSInfo.proposal && (
               <li className="py-4">
                 <div className="flex items-center">
                   <div className="flex-1 min-w-0">
@@ -46,7 +45,7 @@ const LearnMoreDropdown = ({ infoKey }: LearnMoreDropdownProps) => {
                       Proposal
                     </p>
                     <a
-                      href={PSInfo[infoKey].proposal}
+                      href={PSInfo.proposal}
                       className="text-xs text-blue-600 hover:text-blue-700"
                       target="_blank"
                       rel="noreferrer"
@@ -57,7 +56,7 @@ const LearnMoreDropdown = ({ infoKey }: LearnMoreDropdownProps) => {
                 </div>
               </li>
             )}
-            {PSInfo[infoKey].publicDiscussion && (
+            {PSInfo.publicDiscussion && (
               <li className="py-4">
                 <div className="flex items-center">
                   <div className="flex-1 min-w-0">
@@ -65,7 +64,7 @@ const LearnMoreDropdown = ({ infoKey }: LearnMoreDropdownProps) => {
                       Public Discussion
                     </p>
                     <a
-                      href={PSInfo[infoKey].publicDiscussion}
+                      href={PSInfo.publicDiscussion}
                       className="text-xs text-blue-600 hover:text-blue-700"
                       target="_blank"
                       rel="noreferrer"
@@ -76,7 +75,7 @@ const LearnMoreDropdown = ({ infoKey }: LearnMoreDropdownProps) => {
                 </div>
               </li>
             )}
-            {PSInfo[infoKey].videoOverview && (
+            {PSInfo.videoOverview && (
               <li className="py-4">
                 <div className="flex items-center">
                   <div className="flex-1 min-w-0">
@@ -84,7 +83,7 @@ const LearnMoreDropdown = ({ infoKey }: LearnMoreDropdownProps) => {
                       Video Overview
                     </p>
                     <a
-                      href={PSInfo[infoKey].videoOverview as string}
+                      href={PSInfo.videoOverview as string}
                       className="text-xs text-blue-600 hover:text-blue-700"
                       target="_blank"
                       rel="noreferrer"
@@ -95,7 +94,7 @@ const LearnMoreDropdown = ({ infoKey }: LearnMoreDropdownProps) => {
                 </div>
               </li>
             )}
-            {PSInfo[infoKey].devDocumentation && (
+            {PSInfo.devDocumentation && (
               <li className="py-4">
                 <div className="flex items-center">
                   <div className="flex-1 min-w-0">
@@ -103,7 +102,7 @@ const LearnMoreDropdown = ({ infoKey }: LearnMoreDropdownProps) => {
                       Dev Documentation
                     </p>
                     <a
-                      href={PSInfo[infoKey].devDocumentation}
+                      href={PSInfo.devDocumentation}
                       className="text-xs text-blue-600 hover:text-blue-700"
                       target="_blank"
                       rel="noreferrer"

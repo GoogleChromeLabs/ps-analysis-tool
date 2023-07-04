@@ -22,7 +22,7 @@ import React from 'react';
  * Internal dependencies.
  */
 import InfoCard from '../../infoCard';
-import { PSInfoKey } from '../../infoCard/types';
+import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
 
 const Topics = () => {
   return (

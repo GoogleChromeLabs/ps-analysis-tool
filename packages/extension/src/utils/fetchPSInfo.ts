@@ -29,3 +29,25 @@ export enum PSInfoKey {
 }
 
 export type PSInfoKeyType = (typeof PSInfoKey)[keyof typeof PSInfoKey];
+
+export type PSInfo = {
+  name: string;
+  description: string;
+  proposal: string;
+  publicDiscussion: string;
+  videoOverview: string;
+  devDocumentation: string;
+};
+
+/**
+ * Fetch PSInfo from local data folder.
+ * @param infoKey {PSInfoKeyType} PSInfo key to fetch
+ * @returns {Promise<PSInfo>} PSInfo data object
+ */
+export async function fetchPSInfo(infoKey: PSInfoKeyType): Promise<PSInfo> {
+  const url = chrome.runtime.getURL('data/PSInfo.json');
+
+  const data = await (await fetch(url)).json();
+
+  return data[infoKey];
+}
