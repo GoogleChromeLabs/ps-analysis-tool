@@ -24,6 +24,7 @@ import React, { useState } from 'react';
  */
 import RightArrow from '../../../../../icons/right-arrow.svg';
 import type { PSInfo as PSInfoType } from '../../../../utils/fetchPSInfo';
+import RenderLink from './renderLink';
 
 interface LearnMoreDropdownProps {
   PSInfo: PSInfoType;
@@ -38,80 +39,32 @@ const LearnMoreDropdown = ({ PSInfo }: LearnMoreDropdownProps) => {
         <div className="flow-root border-t border-gray-200">
           <ul role="list" className="divide-y divide-gray-200">
             {PSInfo.proposal && (
-              <li className="py-4">
-                <div className="flex items-center">
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate capitalize">
-                      Proposal
-                    </p>
-                    <a
-                      href={PSInfo.proposal}
-                      className="text-xs text-blue-600 hover:text-blue-700"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Public explanation for the proposed solution (Chrome)
-                    </a>
-                  </div>
-                </div>
-              </li>
+              <RenderLink
+                label="Proposal"
+                link={PSInfo.proposal}
+                linkLabel="Public explanation for the proposed solution (Chrome)"
+              />
             )}
             {PSInfo.publicDiscussion && (
-              <li className="py-4">
-                <div className="flex items-center">
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate capitalize">
-                      Public Discussion
-                    </p>
-                    <a
-                      href={PSInfo.publicDiscussion}
-                      className="text-xs text-blue-600 hover:text-blue-700"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Public questions and feedback about the proposal
-                    </a>
-                  </div>
-                </div>
-              </li>
+              <RenderLink
+                label="Public Discussion"
+                link={PSInfo.publicDiscussion}
+                linkLabel="Public questions and feedback about the proposal"
+              />
             )}
             {PSInfo.videoOverview && (
-              <li className="py-4">
-                <div className="flex items-center">
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate capitalize">
-                      Video Overview
-                    </p>
-                    <a
-                      href={PSInfo.videoOverview as string}
-                      className="text-xs text-blue-600 hover:text-blue-700"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Short summary video
-                    </a>
-                  </div>
-                </div>
-              </li>
+              <RenderLink
+                label="Video Overview"
+                link={PSInfo.videoOverview}
+                linkLabel="Short summary video"
+              />
             )}
             {PSInfo.devDocumentation && (
-              <li className="py-4">
-                <div className="flex items-center">
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate capitalize">
-                      Dev Documentation
-                    </p>
-                    <a
-                      href={PSInfo.devDocumentation}
-                      className="text-xs text-blue-600 hover:text-blue-700"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Developer documentation
-                    </a>
-                  </div>
-                </div>
-              </li>
+              <RenderLink
+                label="Dev Documentation"
+                link={PSInfo.devDocumentation}
+                linkLabel="Developer documentation"
+              />
             )}
           </ul>
         </div>
