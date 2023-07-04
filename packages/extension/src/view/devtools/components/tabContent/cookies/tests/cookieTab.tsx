@@ -115,13 +115,17 @@ jest.mock('../../../../../stateProviders/syncCookieStore', () => {
 describe('CookieTab', () => {
   it('should render a list of cookies with analytics', () => {
     render(<CookieTab />);
+    // cookie-list-column
+    const cookieListColumn = screen.getByTestId('cookie-list-column');
 
     expect(screen.getAllByTestId('cookie-list-item').length).toBe(4);
-    expect(screen.getAllByText('First Party').length).toBe(2);
-    expect(screen.getAllByText('Third Party').length).toBe(2);
+    expect(within(cookieListColumn).getAllByText('First Party').length).toBe(2);
+    expect(within(cookieListColumn).getAllByText('Third Party').length).toBe(2);
 
-    expect(screen.getAllByText('Uncategorized').length).toBe(2);
-    expect(screen.getAllByText('Marketing').length).toBe(2);
+    expect(within(cookieListColumn).getAllByText('Uncategorized').length).toBe(
+      2
+    );
+    expect(within(cookieListColumn).getAllByText('Marketing').length).toBe(2);
   });
 
   it('should show a cookie card with the information on first cookie in the list', () => {

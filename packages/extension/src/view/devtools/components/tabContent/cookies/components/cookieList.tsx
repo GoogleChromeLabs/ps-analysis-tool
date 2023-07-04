@@ -39,7 +39,7 @@ const CookieList = ({
   selectedKey,
   onClickItem,
 }: CoookieListProps) => (
-  <ul className="w-full h-full">
+  <ul className="w-full h-full" data-testid="cookie-list-column">
     {cookies &&
       tabUrl &&
       Object.entries(cookies).map(([key, value]) => (
