@@ -31,7 +31,7 @@ export type CookieData = {
 };
 
 export type Cookies = {
-  [key: string]: CookieData;
+  [cookieName: string]: CookieData;
 };
 
 export type TabData = {

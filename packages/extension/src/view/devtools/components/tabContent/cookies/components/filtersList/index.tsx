@@ -35,29 +35,39 @@ interface FiltersListProps {
   setSelectedFilters: (Filter) => void;
 }
 
+type SelectedFilters = {
+  [keys: string]: Set<string>;
+};
+
 const FiltersList = ({ cookies, setSelectedFilters }: FiltersListProps) => {
   const [filters, setFilters] = useState<Filter[]>([]);
 
   const handleFilterChange = (
     checked: boolean,
-    filterKeys: string,
-    filterValue: string
+    keys: string,
+    value: string
   ) => {
-    setSelectedFilters((prevState: Filter) => {
-      const newValue = prevState[filterKeys]
-        ? prevState[filterKeys]
-        : new Set();
+    setSelectedFilters((prevState: SelectedFilters) => {
+      const newValue = prevState[keys] ? prevState[keys] : new Set();
 
       if (checked) {
-        newValue.add(filterValue);
+        newValue.add(value);
       } else {
-        newValue.delete(filterValue);
+        newValue.delete(value);
       }
 
-      return {
-        ...prevState,
-        [filterKeys]: newValue,
-      };
+      if (newValue.size) {
+        return {
+          ...prevState,
+          [keys]: newValue,
+        };
+      } else {
+        delete prevState[keys];
+
+        return {
+          ...prevState,
+        };
+      }
     });
   };
 

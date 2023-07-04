@@ -23,19 +23,39 @@ import React, { useEffect, useState } from 'react';
  */
 import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import { CookieList, CookieDetails, FiltersList } from './components';
-import type { CookieData } from '../../../../../localStore';
+import type {
+  CookieData,
+  Cookies as CookiesType,
+} from '../../../../../localStore';
+import filterCookies from './components/filtersList/filterCookies';
+
+type UseCookieStoreReturnType = {
+  cookies: CookiesType;
+  tabUrl: string;
+};
+
+type SelectedFilters = {
+  [key: string]: Set<string>;
+};
 
 const Cookies = () => {
-  const { cookies, tabUrl } = useCookieStore(({ state }) => ({
-    cookies: state?.cookies,
-    tabUrl: state?.url,
-  }));
+  const { cookies, tabUrl } = useCookieStore(
+    ({ state }) =>
+      ({
+        cookies: state?.cookies,
+        tabUrl: state?.url,
+      } as UseCookieStoreReturnType)
+  );
 
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [selectedCookie, setSelectedCookie] = useState<CookieData | null>(null);
-  const [selectedFilters, setSelectedFilters] = useState({});
+  const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({});
 
   useEffect(() => {
+    if (!cookies) {
+      return;
+    }
+
     if (!selectedKey && Object.keys(cookies).length !== 0) {
       setSelectedKey(Object.keys(cookies)[0]);
       setSelectedCookie(cookies[Object.keys(cookies)[0]]);
@@ -48,6 +68,12 @@ const Cookies = () => {
     }
   }, [cookies, selectedKey]);
 
+  if (!cookies) {
+    return null;
+  }
+
+  const filteredCookies = filterCookies(cookies, selectedFilters);
+
   return (
     <div
       className="w-full h-full flex flex-col lg:flex-row"
@@ -56,13 +82,12 @@ const Cookies = () => {
       <div className="basis-1/6 border-r p-3 pt-1 overflow-y-scroll">
         <FiltersList
           cookies={cookies}
-          selectedFilters={selectedFilters}
           setSelectedFilters={setSelectedFilters}
         />
       </div>
       <div className="basis-3/10 lg:basis-1/3 overflow-y-scroll border-r ">
         <CookieList
-          cookies={cookies}
+          cookies={filteredCookies}
           tabUrl={tabUrl}
           selectedKey={selectedKey}
           onClickItem={setSelectedKey}

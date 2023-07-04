@@ -18,7 +18,13 @@
  */
 import type { Cookies } from '../../../../../../../localStore';
 
-const FILTER_MAPPING = [
+interface Filter {
+  name: string;
+  keys: string;
+  filters?: Set<string>;
+}
+
+const FILTER_MAPPING: Filter[] = [
   {
     name: 'Category',
     keys: 'analytics.category',
@@ -49,12 +55,6 @@ const FILTER_MAPPING = [
   },
 ];
 
-interface Filter {
-  name: string;
-  keys: string;
-  filters?: Set<string>;
-}
-
 const getFilters = (cookies: Cookies) => {
   const filters: Filter[] = [...FILTER_MAPPING];
 
@@ -62,12 +62,18 @@ const getFilters = (cookies: Cookies) => {
     return FILTER_MAPPING;
   }
 
-  FILTER_MAPPING.forEach((filterMap, key) => {
+  FILTER_MAPPING.forEach((filterMap: Filter, key: number) => {
     filters[key].filters = new Set();
 
     Object.entries(cookies).forEach(([, cookie]) => {
       const keys = filterMap.keys.split('.');
-      let value = cookie && cookie[keys[0]] ? cookie[keys[0]][keys[1]] : '';
+      const rootKey = keys[0];
+      const subKey = keys[1];
+
+      let value =
+        cookie[rootKey] && cookie[rootKey][subKey]
+          ? cookie[rootKey][subKey]
+          : '';
 
       if (
         ['parsedCookie.secure', 'parsedCookie.httponly'].includes(
