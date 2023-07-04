@@ -82,6 +82,13 @@ const FiltersList = ({ cookies, setSelectedFilters }: FiltersListProps) => {
 
   return (
     <div className="pt-2">
+      <div className="mb-3">
+        <input
+          type="search"
+          placeholder="Filter.."
+          className="p-2 pl-0 pb-1 focus:outline-none outline-none border-b"
+        />
+      </div>
       <ul>
         {filters
           .filter((filter) => Boolean(filter.filters?.size))
@@ -90,7 +97,10 @@ const FiltersList = ({ cookies, setSelectedFilters }: FiltersListProps) => {
               <p className="font-bold">{filter.name}</p>
               <ul>
                 {[...filter.filters].sort().map((filterValue, subIndex) => (
-                  <li className="ml-2 mt-1" key={subIndex}>
+                  <li
+                    className={subIndex > 2 ? 'ml-2 mt-1 hidden' : 'ml-2 mt-1'}
+                    key={subIndex}
+                  >
                     <label className="flex gap-x-2 cursor-pointer">
                       <input
                         type="checkbox"
@@ -109,6 +119,11 @@ const FiltersList = ({ cookies, setSelectedFilters }: FiltersListProps) => {
                   </li>
                 ))}
               </ul>
+              {filter.filters?.size > 3 && (
+                <a className="text-md text-[#007185] ml-2 mt-1 block" href="#">
+                  Show More
+                </a>
+              )}
             </li>
           ))}
       </ul>
