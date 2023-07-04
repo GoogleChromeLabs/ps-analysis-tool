@@ -24,7 +24,7 @@ import React, { useState } from 'react';
  */
 import PSInfo from './PSInfo.json';
 import type { PSInfoKeyType } from './types';
-import RightArrow from '../../../../assets/svg/right-arrow.svg';
+import RightArrow from '../../../../../icons/right-arrow.svg';
 
 interface LearnMoreDropdownProps {
   infoKey: PSInfoKeyType;
