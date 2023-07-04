@@ -39,10 +39,18 @@ const filterCookies = (
       const _keys = keys.split('.');
       const rootKey = _keys[0];
       const subKey = _keys[1];
-      const value =
+      let value =
         cookieData[rootKey] && cookieData[rootKey][subKey]
           ? cookieData[rootKey][subKey]
           : '';
+
+      if (['parsedCookie.secure', 'parsedCookie.httponly'].includes(keys)) {
+        value = value ? 'True' : 'False';
+      }
+
+      if ('analytics.category' === keys && !value) {
+        value = 'Uncategorized';
+      }
 
       canShow = value && selectedFilter?.has(value);
     });

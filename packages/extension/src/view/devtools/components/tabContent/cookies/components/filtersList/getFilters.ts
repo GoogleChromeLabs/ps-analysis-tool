@@ -22,16 +22,20 @@ interface Filter {
   name: string;
   keys: string;
   filters?: Set<string>;
+  type?: string;
+  default?: string;
 }
 
 const FILTER_MAPPING: Filter[] = [
   {
     name: 'Category',
     keys: 'analytics.category',
+    default: 'Uncategorized',
   },
   {
     name: 'Expiration Date',
     keys: 'parsedCookie.expires',
+    type: 'date',
   },
   {
     name: 'Domain',
@@ -48,10 +52,12 @@ const FILTER_MAPPING: Filter[] = [
   {
     name: 'Secure',
     keys: 'parsedCookie.secure',
+    type: 'boolean',
   },
   {
     name: 'HttpOnly',
     keys: 'parsedCookie.httponly',
+    type: 'boolean',
   },
 ];
 
@@ -75,19 +81,19 @@ const getFilters = (cookies: Cookies) => {
           ? cookie[rootKey][subKey]
           : '';
 
-      if (
-        ['parsedCookie.secure', 'parsedCookie.httponly'].includes(
-          filterMap.keys
-        )
-      ) {
+      if ('Boolean' === filterMap?.type) {
         value = value ? 'True' : 'False';
+      }
+
+      if (!value && filterMap?.default) {
+        value = filterMap.default;
       }
 
       if (!value) {
         return;
       }
 
-      if (filterMap.keys === 'parsedCookie.expires') {
+      if (filterMap?.type === 'date') {
         if (value instanceof Date) {
           value = value.toUTCString();
         } else if (typeof value !== 'string') {
