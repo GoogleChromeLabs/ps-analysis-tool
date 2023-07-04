@@ -22,7 +22,7 @@ interface LegendIconProps {
   color: string;
 }
 
-const LegendIcon = ({ color }: LegendIconProps) => (
+const Circle = ({ color }: LegendIconProps) => (
   <div
     className="w-4 h-4 rounded-full flex items-center justify-center mr-2"
     style={{ backgroundColor: color }}
@@ -31,25 +31,18 @@ const LegendIcon = ({ color }: LegendIconProps) => (
   </div>
 );
 
-const LEGEND = [
-  { color: '#00B04C', label: 'Functional' },
-  { color: '#FFBF00', label: 'Marketing' },
-  { color: '#3D7AFC', label: 'Analytics' },
-  { color: '#FC260A', label: 'Unknown' },
-];
-
 interface LegendProps {
-  counts: number[];
+  legendItemList: { label: string; count: number; color: string }[];
 }
 
-const Legend = ({ counts }: LegendProps) => {
+const Legend = ({ legendItemList }: LegendProps) => {
   return (
     <div className="flex flex-col">
-      {LEGEND.map(({ color, label }, idx) => (
+      {legendItemList.map(({ label, count, color }, idx) => (
         <div key={idx} className="w-36 flex items-center justify-center my-1">
-          <LegendIcon color={color} />
-          <p className="flex-1 text-[#111B21] text-xs">{label}</p>
-          <p className=" text-[#111B21] text-xs"> {counts[idx]} </p>
+          <Circle color={color} />
+          <p className="flex-1 text-chart-label text-xs">{label}</p>
+          <p className=" text-chart-label text-xs"> {count} </p>
         </div>
       ))}
     </div>

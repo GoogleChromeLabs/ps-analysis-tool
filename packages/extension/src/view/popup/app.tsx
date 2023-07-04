@@ -26,6 +26,7 @@ import './app.css';
 import { PieChart, Legend } from './components';
 import { useCookieStore } from '../stateProviders/syncCookieStore';
 import countCookiesByCategory from '../../utils/countCookiesByCategory';
+import { colourMap } from './const';
 
 const App: React.FC = () => {
   const { cookies, tabURL } = useCookieStore(({ state }) => ({
@@ -41,6 +42,70 @@ const App: React.FC = () => {
 
   const cookieStats = countCookiesByCategory(cookies, tabURL || '');
 
+  const legendData = [
+    {
+      label: 'Functional',
+      count:
+        cookieStats.firstParty.functional + cookieStats.thirdParty.functional,
+      color: colourMap.funtional,
+    },
+    {
+      label: 'Marketing',
+      count:
+        cookieStats.firstParty.marketing + cookieStats.thirdParty.marketing,
+      color: colourMap.marketing,
+    },
+    {
+      label: 'Analytics',
+      count:
+        cookieStats.firstParty.analytics + cookieStats.thirdParty.analytics,
+      color: colourMap.analytics,
+    },
+    {
+      label: 'Unknown',
+      count: cookieStats.firstParty.unknown + cookieStats.thirdParty.unknown,
+      color: colourMap.unknown,
+    },
+  ];
+
+  const firstPartyPiechartData = [
+    {
+      count: cookieStats.firstParty.functional,
+      color: colourMap.funtional,
+    },
+    {
+      count: cookieStats.firstParty.marketing,
+      color: colourMap.marketing,
+    },
+    {
+      count: cookieStats.firstParty.analytics,
+      color: colourMap.analytics,
+    },
+    {
+      count: cookieStats.firstParty.unknown,
+      color: colourMap.unknown,
+    },
+  ];
+
+  const thirdPartyPiechartData = [
+    {
+      count: cookieStats.thirdParty.functional,
+      color: colourMap.funtional,
+    },
+    {
+      count: cookieStats.thirdParty.marketing,
+      color: colourMap.marketing,
+    },
+    {
+      count: cookieStats.thirdParty.analytics,
+      color: colourMap.analytics,
+    },
+    {
+      count: cookieStats.thirdParty.unknown,
+      color: colourMap.unknown,
+    },
+  ];
+
   return (
     <>
       {cookieStats?.firstParty.total || cookieStats?.thirdParty.total ? (
@@ -50,13 +115,8 @@ const App: React.FC = () => {
               <div className="flex-1 w-full h-ful">
                 {cookieStats.firstParty.total ? (
                   <PieChart
-                    count={cookieStats.firstParty.total}
-                    categoryCountData={{
-                      countFuntional: cookieStats.firstParty.functional,
-                      countMarketing: cookieStats.firstParty.marketing,
-                      countAnalytics: cookieStats.firstParty.analytics,
-                      countUnknown: cookieStats.firstParty.unknown,
-                    }}
+                    centerCount={cookieStats.firstParty.total}
+                    data={firstPartyPiechartData}
                   />
                 ) : (
                   <div className="w-full h-full flex justify-center items-center">
@@ -72,13 +132,8 @@ const App: React.FC = () => {
               <div className="flex-1 w-full h-full">
                 {cookieStats.thirdParty.total ? (
                   <PieChart
-                    count={cookieStats.thirdParty.total}
-                    categoryCountData={{
-                      countFuntional: cookieStats.thirdParty.functional,
-                      countMarketing: cookieStats.thirdParty.marketing,
-                      countAnalytics: cookieStats.thirdParty.analytics,
-                      countUnknown: cookieStats.thirdParty.unknown,
-                    }}
+                    centerCount={cookieStats.thirdParty.total}
+                    data={thirdPartyPiechartData}
                   />
                 ) : (
                   <div className="w-full h-full flex justify-center items-center">
@@ -92,20 +147,10 @@ const App: React.FC = () => {
             </div>
           </div>
           <div className="mt-3">
-            <Legend
-              counts={[
-                cookieStats.firstParty.functional +
-                  cookieStats.thirdParty.functional,
-                cookieStats.firstParty.marketing +
-                  cookieStats.thirdParty.marketing,
-                cookieStats.firstParty.analytics +
-                  cookieStats.thirdParty.analytics,
-                cookieStats.firstParty.unknown + cookieStats.thirdParty.unknown,
-              ]}
-            />
+            <Legend legendItemList={legendData} />
           </div>
           <div className="w-full text-center mt-5 px-3 mb-3">
-            <p className="text-[#111B21] text-xs">
+            <p className="text-chart-label text-xs">
               {'Inspect cookies in the "Privacy Sandbox" panel of DevTools'}
             </p>
           </div>

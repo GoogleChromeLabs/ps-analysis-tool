@@ -37,6 +37,7 @@ module.exports = {
       tertiary: '#808080',
       'first-party': '#5FA569',
       'third-party': '#FA752E',
+      'chart-label': '#111B21',
     },
     backgroundColor: {
       ...colors,

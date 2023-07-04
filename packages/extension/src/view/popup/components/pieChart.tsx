@@ -20,15 +20,10 @@ import React from 'react';
 import { VictoryPie } from 'victory';
 
 interface IPieChartProps {
-  count: number;
-  categoryCountData: {
-    countMarketing: number;
-    countAnalytics: number;
-    countFuntional: number;
-    countUnknown: number;
-  };
+  centerCount: number;
+  data: { count: number; color: string }[];
 }
-const PieChart = ({ count, categoryCountData }: IPieChartProps) => {
+const PieChart = ({ centerCount, data }: IPieChartProps) => {
   return (
     <div className="w-full h-full">
       <div className="w-full h-full relative">
@@ -36,17 +31,12 @@ const PieChart = ({ count, categoryCountData }: IPieChartProps) => {
           padding={0}
           innerRadius={140}
           animate={{ duration: 400 }}
-          data={[
-            { x: '', y: categoryCountData.countFuntional },
-            { x: '', y: categoryCountData.countMarketing },
-            { x: '', y: categoryCountData.countAnalytics },
-            { x: '', y: categoryCountData.countUnknown },
-          ]}
+          data={data.map(({ count }) => ({ x: '', y: count }))}
           labels={() => null}
-          colorScale={['#00B04C', '#FFBF00', '#3D7AFC', '#FC260A']}
+          colorScale={data.map(({ color }) => color)}
         />
         <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-medium text-lg">
-          {count}
+          {centerCount}
         </p>
       </div>
     </div>
