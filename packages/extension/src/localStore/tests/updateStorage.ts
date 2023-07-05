@@ -25,6 +25,11 @@ describe('local store: updateStorage', () => {
 
   beforeAll(() => {
     globalThis.chrome = {
+      //@ts-ignore local does not implementations of other properties
+      action: {
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        setBadgeText: async () => {},
+      },
       storage: {
         //@ts-ignore local does not implementations of other properties
         local: {
