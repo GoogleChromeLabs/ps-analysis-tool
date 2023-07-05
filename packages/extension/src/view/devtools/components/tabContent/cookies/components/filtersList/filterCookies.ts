@@ -18,6 +18,7 @@
  */
 import type { Cookies } from '../../../../../../../localStore';
 import { FILTER_MAPPING } from './constants';
+import getFilterValue from './getFilterValue';
 
 type SelectedFilters = {
   [keys: string]: Set<string>;
@@ -37,12 +38,8 @@ const filterCookies = (
     let canShow = false;
 
     Object.entries(selectedFilters).forEach(([keys, selectedFilter]) => {
-      const _keys = keys.split('.');
-      const rootKey = _keys[0];
-      const subKey = _keys[1];
-      let value = cookieData[rootKey][subKey]
-        ? cookieData[rootKey][subKey]
-        : cookieData[rootKey];
+      let value = getFilterValue(keys, cookieData);
+
       const filterMap = FILTER_MAPPING.find((config) => config.keys === keys);
 
       if ('boolean' === filterMap?.type) {
@@ -53,7 +50,7 @@ const filterCookies = (
         value = filterMap.default;
       }
 
-      canShow = value && selectedFilter?.has(value);
+      canShow = selectedFilter?.has(value);
     });
 
     if (canShow) {

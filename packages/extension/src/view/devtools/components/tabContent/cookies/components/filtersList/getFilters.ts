@@ -18,6 +18,7 @@
  */
 import type { Cookies } from '../../../../../../../localStore';
 import { FILTER_MAPPING } from './constants';
+import getFilterValue from './getFilterValue';
 
 interface Filter {
   name: string;
@@ -38,23 +39,7 @@ const getFilters = (cookies: Cookies): Filter[] => {
     filters[key].filters = new Set();
 
     Object.entries(cookies).forEach(([, cookie]) => {
-      if (!filterMap.keys) {
-        return;
-      }
-
-      const keys = filterMap.keys.split('.');
-      const rootKey = keys[0];
-      const subKey = keys[1];
-      let value = '';
-
-      if (!subKey) {
-        value = cookie[rootKey] || '';
-      } else {
-        value =
-          cookie[rootKey] && cookie[rootKey][subKey]
-            ? cookie[rootKey][subKey]
-            : '';
-      }
+      let value = getFilterValue(filterMap.keys, cookie);
 
       if ('boolean' === filterMap?.type) {
         value = value ? 'True' : 'False';
@@ -62,14 +47,6 @@ const getFilters = (cookies: Cookies): Filter[] => {
 
       if (!value && filterMap?.default) {
         value = filterMap.default;
-      }
-
-      if (!value) {
-        return;
-      }
-
-      if (filterMap?.type === 'date') {
-        value = value?.toString();
       }
 
       if (value) {

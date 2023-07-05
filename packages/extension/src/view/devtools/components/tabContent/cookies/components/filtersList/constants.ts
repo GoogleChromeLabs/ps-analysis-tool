@@ -20,11 +20,6 @@ export const FILTER_MAPPING = [
     default: 'Uncategorized',
   },
   {
-    name: 'Expiration Date',
-    keys: 'parsedCookie.expires',
-    type: 'date',
-  },
-  {
     name: 'Domain',
     keys: 'parsedCookie.domain',
   },
@@ -35,6 +30,10 @@ export const FILTER_MAPPING = [
   {
     name: 'Same Site',
     keys: 'parsedCookie.samesite',
+  },
+  {
+    name: 'Retention Period',
+    keys: 'analytics.retention',
   },
   {
     name: 'Third Party',
