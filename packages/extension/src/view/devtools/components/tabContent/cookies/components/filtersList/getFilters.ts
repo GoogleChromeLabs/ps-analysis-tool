@@ -27,7 +27,7 @@ interface Filter {
   default?: string;
 }
 
-const getFilters = (cookies: Cookies) => {
+const getFilters = (cookies: Cookies): Filter[] => {
   const filters: Filter[] = [...FILTER_MAPPING];
 
   if (!Object.entries(cookies).length) {

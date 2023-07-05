@@ -41,6 +41,7 @@ type SelectedFilters = {
 
 const FiltersList = ({ cookies, setSelectedFilters }: FiltersListProps) => {
   const [filters, setFilters] = useState<Filter[]>([]);
+  const [isExpanded, setExpanded] = useState(false);
 
   const handleFilterChange = (
     checked: boolean,
@@ -71,6 +72,10 @@ const FiltersList = ({ cookies, setSelectedFilters }: FiltersListProps) => {
     });
   };
 
+  const handleShowMoreClick = () => {
+    setExpanded(!isExpanded);
+  };
+
   useEffect(() => {
     const updatedFilters = getFilters(cookies);
     setFilters(updatedFilters);
@@ -98,7 +103,11 @@ const FiltersList = ({ cookies, setSelectedFilters }: FiltersListProps) => {
               <ul>
                 {[...filter.filters].sort().map((filterValue, subIndex) => (
                   <li
-                    className={subIndex > 2 ? 'ml-2 mt-1 hidden' : 'ml-2 mt-1'}
+                    className={
+                      subIndex > 3 && !isExpanded
+                        ? 'ml-2 mt-1 hidden'
+                        : 'ml-2 mt-1'
+                    }
                     key={subIndex}
                   >
                     <label className="flex gap-x-2 cursor-pointer">
@@ -119,9 +128,13 @@ const FiltersList = ({ cookies, setSelectedFilters }: FiltersListProps) => {
                   </li>
                 ))}
               </ul>
-              {filter.filters?.size > 3 && (
-                <a className="text-md text-[#007185] ml-2 mt-1 block" href="#">
-                  Show More
+              {filter.filters?.size > 4 && (
+                <a
+                  onClick={handleShowMoreClick}
+                  className="text-md text-[#007185] ml-2 mt-1 block"
+                  href="#"
+                >
+                  {isExpanded ? 'Show Less' : 'Show More'}
                 </a>
               )}
             </li>
