@@ -27,7 +27,7 @@ import type {
   CookieData,
   Cookies as CookiesType,
 } from '../../../../../localStore';
-import filterCookies from './components/filtersList/filterCookies';
+import filterCookies from './components/filterColumn/filterCookies';
 
 type UseCookieStoreReturnType = {
   cookies: CookiesType;

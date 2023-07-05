@@ -13,7 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
+import React from 'react';
 
-export { default as CookieDetails } from './cookieDetails';
-export { default as CookieList } from './cookieList';
-export { default as FiltersList } from './filterColumn';
+const Chip: React.FC<{ text: string }> = ({ text }) => {
+  return (
+    <div className="flex items-center bg-gray-200 rounded-full text-[10px]/[13px] text-gray-700 px-2 py-1 mr-1 mb-1">
+      <span className="mr-1 block whitespace-nowrap">{text}</span>
+      <button className="text-gray-600 hover:text-gray-800 focus:outline-none">
+        x
+      </button>
+    </div>
+  );
+};
+
+export default Chip;

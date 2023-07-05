@@ -13,7 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
+import React from 'react';
 
-export { default as CookieDetails } from './cookieDetails';
-export { default as CookieList } from './cookieList';
-export { default as FiltersList } from './filterColumn';
+/**
+ * Internal dependencies.
+ */
+import Chip from './chip';
+
+const Chips = () => {
+  return (
+    <div className="flex flex-wrap max-w-full">
+      <Chip text="First party" />
+      <Chip text="Third party" />
+      <Chip text="Functional" />
+      <Chip text="Marketing" />
+    </div>
+  );
+};
+
+export default Chips;

@@ -23,6 +23,7 @@ import React, { useEffect, useState } from 'react';
  */
 import getFilters from './getFilters';
 import type { Cookies } from '../../../../../../../localStore';
+import Chips from './chips';
 
 interface Filter {
   name: string;
@@ -105,6 +106,9 @@ const FiltersList = ({
           className="p-2 pl-0 pb-1 focus:outline-none outline-none border-b"
           onInput={handleOnInput}
         />
+      </div>
+      <div className="my-2">
+        <Chips />
       </div>
       <ul>
         {filters
