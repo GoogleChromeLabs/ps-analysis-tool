@@ -120,7 +120,7 @@ describe('CookieTab', () => {
     expect(screen.getAllByText('First Party').length).toBe(2);
     expect(screen.getAllByText('Third Party').length).toBe(2);
 
-    expect(screen.getAllByText('Uncategorized').length).toBe(2);
+    expect(screen.getAllByText('Unknown').length).toBe(2);
     expect(screen.getAllByText('Marketing').length).toBe(2);
   });
 
