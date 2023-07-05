@@ -26,11 +26,37 @@ import RightArrow from '../../../../../icons/right-arrow.svg';
 import type { PSInfo as PSInfoType } from '../../../../utils/fetchPSInfo';
 import RenderLink from './renderLink';
 
+/**
+ * @type {Array} LABELS - Array of objects containing the label and link label for each dropdown item.
+ * @property {string} label - The label for the dropdown item.
+ * @property {string} linkLabel - The label for the link.
+ */
+const LABELS = [
+  {
+    label: 'Proposal',
+    linkLabel: 'Public explanation for the proposed solution (Chrome)',
+  },
+  {
+    label: 'Public Discussion',
+    linkLabel: 'Public questions and feedback about the proposal',
+  },
+  {
+    label: 'Video Overview',
+    linkLabel: 'Short summary video',
+  },
+  {
+    label: 'Dev Documentation',
+    linkLabel: 'Developer documentation',
+  },
+];
+
 interface LearnMoreDropdownProps {
   PSInfo: PSInfoType;
 }
 
-const LearnMoreDropdown = ({ PSInfo }: LearnMoreDropdownProps) => {
+const LearnMoreDropdown = ({
+  PSInfo: { proposal, publicDiscussion, videoOverview, devDocumentation },
+}: LearnMoreDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -38,33 +64,15 @@ const LearnMoreDropdown = ({ PSInfo }: LearnMoreDropdownProps) => {
       {isOpen && (
         <div className="flow-root border-t border-gray-200">
           <ul role="list" className="divide-y divide-gray-200">
-            {PSInfo.proposal && (
-              <RenderLink
-                label="Proposal"
-                link={PSInfo.proposal}
-                linkLabel="Public explanation for the proposed solution (Chrome)"
-              />
-            )}
-            {PSInfo.publicDiscussion && (
-              <RenderLink
-                label="Public Discussion"
-                link={PSInfo.publicDiscussion}
-                linkLabel="Public questions and feedback about the proposal"
-              />
-            )}
-            {PSInfo.videoOverview && (
-              <RenderLink
-                label="Video Overview"
-                link={PSInfo.videoOverview}
-                linkLabel="Short summary video"
-              />
-            )}
-            {PSInfo.devDocumentation && (
-              <RenderLink
-                label="Dev Documentation"
-                link={PSInfo.devDocumentation}
-                linkLabel="Developer documentation"
-              />
+            {[proposal, publicDiscussion, videoOverview, devDocumentation].map(
+              (value, index) => (
+                <RenderLink
+                  key={index}
+                  link={value}
+                  label={LABELS[index].label}
+                  linkLabel={LABELS[index].linkLabel}
+                />
+              )
             )}
           </ul>
         </div>

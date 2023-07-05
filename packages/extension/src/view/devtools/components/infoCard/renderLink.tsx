@@ -26,23 +26,29 @@ interface RenderLinkProps {
 }
 
 const RenderLink = ({ label, link, linkLabel }: RenderLinkProps) => (
-  <li className="py-4">
-    <div className="flex items-center">
-      <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-gray-900 truncate capitalize">
-          {label}
-        </p>
-        <a
-          href={link}
-          className="text-xs text-blue-600 hover:text-blue-700"
-          target="_blank"
-          rel="noreferrer"
-        >
-          {linkLabel}
-        </a>
-      </div>
-    </div>
-  </li>
+  <>
+    {link ? (
+      <li className="py-4">
+        <div className="flex items-center">
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-gray-900 truncate capitalize">
+              {label}
+            </p>
+            <a
+              href={link}
+              className="text-xs text-blue-600 hover:text-blue-700"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {linkLabel}
+            </a>
+          </div>
+        </div>
+      </li>
+    ) : (
+      <></>
+    )}
+  </>
 );
 
 export default RenderLink;
