@@ -28,20 +28,18 @@ import { useCookieStore } from '../stateProviders/syncCookieStore';
 import countCookiesByCategory from '../../utils/countCookiesByCategory';
 import { colourMap } from './const';
 
-const Fallback = () => (
-  <div className="w-96 h-80 flex justify-center items-center flex-col">
-    <p className="font-bold text-lg">Please refresh this tab</p>
-  </div>
-);
-
 const App: React.FC = () => {
   const { cookies, tabURL } = useCookieStore(({ state }) => ({
     cookies: state?.cookies,
     tabURL: state?.url,
   }));
 
-  if (!Object.keys(cookies).length || !tabURL) {
-    return <Fallback />;
+  if (!cookies) {
+    return (
+      <div className="w-96 h-80 flex justify-center items-center flex-col">
+        <p className="font-bold text-lg">Please refresh this tab</p>
+      </div>
+    );
   }
 
   const cookieStats = countCookiesByCategory(cookies, tabURL || '');
@@ -160,7 +158,9 @@ const App: React.FC = () => {
           </div>
         </div>
       ) : (
-        <Fallback />
+        <div className="w-96 h-80 flex justify-center items-center flex-col">
+          <p className="font-bold text-lg">No cookies</p>
+        </div>
       )}
     </>
   );
