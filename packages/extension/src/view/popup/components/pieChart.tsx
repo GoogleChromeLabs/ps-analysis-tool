@@ -19,11 +19,11 @@
 import React from 'react';
 import { VictoryPie } from 'victory';
 
-interface IPieChartProps {
+interface PieChartProps {
   centerCount: number;
   data: { count: number; color: string }[];
 }
-const PieChart = ({ centerCount, data }: IPieChartProps) => {
+const PieChart = ({ centerCount, data }: PieChartProps) => {
   return (
     <div className="w-full h-full">
       <div className="w-full h-full relative">
@@ -32,7 +32,7 @@ const PieChart = ({ centerCount, data }: IPieChartProps) => {
           innerRadius={140}
           animate={{ duration: 400 }}
           data={data.map(({ count }) => ({ x: '', y: count }))}
-          labels={() => null}
+          labels={() => ''}
           colorScale={data.map(({ color }) => color)}
         />
         <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-medium text-lg">

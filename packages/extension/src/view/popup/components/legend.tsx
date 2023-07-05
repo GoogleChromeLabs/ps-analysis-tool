@@ -27,7 +27,7 @@ const Circle = ({ color }: LegendIconProps) => (
     className="w-4 h-4 rounded-full flex items-center justify-center mr-2"
     style={{ backgroundColor: color }}
   >
-    <div className="w-2 h-2 rounded-full flex items-center justify-center bg-white"></div>
+    <div className="w-2 h-2 rounded-full flex items-center justify-center bg-white" />
   </div>
 );
 
@@ -38,8 +38,8 @@ interface LegendProps {
 const Legend = ({ legendItemList }: LegendProps) => {
   return (
     <div className="flex flex-col">
-      {legendItemList.map(({ label, count, color }, idx) => (
-        <div key={idx} className="w-36 flex items-center justify-center my-1">
+      {legendItemList.map(({ label, count, color }, index) => (
+        <div key={index} className="w-36 flex items-center justify-center my-1">
           <Circle color={color} />
           <p className="flex-1 text-chart-label text-xs">{label}</p>
           <p className=" text-chart-label text-xs"> {count} </p>
