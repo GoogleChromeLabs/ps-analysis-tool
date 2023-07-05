@@ -19,45 +19,61 @@
  */
 import React from 'react';
 import '@testing-library/jest-dom';
+import SinonChrome from 'sinon-chrome';
 
 /**
  * Internal dependencies.
  */
-import { PSInfoKey } from '../types';
-import PSInfo from '../PSInfo.json';
 import { fireEvent, render, screen } from '@testing-library/react';
 import InfoCard from '..';
-
-const tests = Object.values(PSInfoKey).map((infoKey) => {
-  return {
-    input: infoKey,
-    output: PSInfo[infoKey],
-  };
-});
+import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
+//@ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import PSInfo from 'cookie-analysis-tool/data/PSInfo.json';
 
 describe('should match the json file data with the component', () => {
+  const tests = Object.values(PSInfoKey).map((infoKey) => {
+    return {
+      input: infoKey,
+      output: PSInfo[infoKey],
+    };
+  });
+
+  beforeAll(() => {
+    globalThis.chrome = SinonChrome as unknown as typeof chrome;
+
+    globalThis.fetch = function () {
+      return Promise.resolve({
+        json: () =>
+          Promise.resolve({
+            ...PSInfo,
+          }),
+      });
+    } as unknown as typeof fetch;
+  });
+
   test.each(tests)(
     'should match component with enum key prop to json data',
-    ({ input, output }) => {
+    async ({ input, output }) => {
       render(<InfoCard infoKey={input} />);
 
-      const name = screen.getByText(output.name);
+      const name = await screen.findByText(output.name);
       expect(name).toBeInTheDocument();
 
-      const learnMoreButton = screen.getByText('Learn more');
+      const learnMoreButton = await screen.findByText('Learn more');
       fireEvent.click(learnMoreButton);
 
-      const closeButton = screen.getByText('Close');
+      const closeButton = await screen.findByText('Close');
       expect(closeButton).toBeInTheDocument();
 
       if (output.proposal) {
-        const proposal = screen.getByText('Proposal').nextSibling;
+        const proposal = (await screen.findByText('Proposal')).nextSibling;
         expect(proposal).toHaveAttribute('href', output.proposal);
       }
 
       if (output.publicDiscussion) {
-        const publicDiscussion =
-          screen.getByText('Public Discussion').nextSibling;
+        const publicDiscussion = (await screen.findByText('Public Discussion'))
+          .nextSibling;
         expect(publicDiscussion).toHaveAttribute(
           'href',
           output.publicDiscussion
@@ -65,13 +81,14 @@ describe('should match the json file data with the component', () => {
       }
 
       if (output.videoOverview) {
-        const videoOverview = screen.getByText('Video Overview').nextSibling;
+        const videoOverview = (await screen.findByText('Video Overview'))
+          .nextSibling;
         expect(videoOverview).toHaveAttribute('href', output.videoOverview);
       }
 
       if (output.devDocumentation) {
-        const devDocumentation =
-          screen.getByText('Dev Documentation').nextSibling;
+        const devDocumentation = (await screen.findByText('Dev Documentation'))
+          .nextSibling;
         expect(devDocumentation).toHaveAttribute(
           'href',
           output.devDocumentation
@@ -79,4 +96,9 @@ describe('should match the json file data with the component', () => {
       }
     }
   );
+
+  afterAll(() => {
+    globalThis.chrome = undefined as unknown as typeof chrome;
+    globalThis.fetch = undefined as unknown as typeof fetch;
+  });
 });

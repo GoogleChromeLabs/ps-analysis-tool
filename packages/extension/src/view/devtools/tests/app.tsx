@@ -19,13 +19,30 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import SinonChrome from 'sinon-chrome';
 
 /**
  * Internal dependencies.
  */
 import App from '../app';
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import PSInfo from 'cookie-analysis-tool/data/PSInfo.json';
 
 describe('App', () => {
+  beforeAll(() => {
+    globalThis.chrome = SinonChrome as unknown as typeof chrome;
+
+    globalThis.fetch = function () {
+      return Promise.resolve({
+        json: () =>
+          Promise.resolve({
+            ...PSInfo,
+          }),
+      });
+    } as unknown as typeof fetch;
+  });
+
   it('Should show cookies content by default', () => {
     render(<App />);
 
@@ -38,7 +55,7 @@ describe('App', () => {
     fireEvent.click(screen.getByText('Bounce Tracking'));
 
     fireEvent.click(screen.getByText('Cookies'));
-    expect(await screen.getByTestId('cookies-content')).toBeInTheDocument();
+    expect(await screen.findByTestId('cookies-content')).toBeInTheDocument();
   });
 
   it('should switch to Bounce Tracking Panel when clicked', async () => {
@@ -47,7 +64,7 @@ describe('App', () => {
     fireEvent.click(screen.getByText('Bounce Tracking'));
 
     expect(
-      await screen.getByTestId('bounce-tracking-content')
+      await screen.findByTestId('bounce-tracking-content')
     ).toBeInTheDocument();
   });
 
@@ -57,7 +74,12 @@ describe('App', () => {
     fireEvent.click(screen.getByText('Fingerprinting'));
 
     expect(
-      await screen.getByTestId('fingerprinting-content')
+      await screen.findByTestId('fingerprinting-content')
     ).toBeInTheDocument();
+  });
+
+  afterAll(() => {
+    globalThis.chrome = undefined as unknown as typeof chrome;
+    globalThis.fetch = undefined as unknown as typeof fetch;
   });
 });
