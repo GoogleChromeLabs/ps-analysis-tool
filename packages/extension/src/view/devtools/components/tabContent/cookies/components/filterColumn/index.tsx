@@ -33,23 +33,25 @@ interface Filter {
   default?: string;
 }
 
+type SelectedFilters = {
+  [key: string]: Set<string>;
+};
+
 interface FiltersListProps {
   cookies: Cookies;
+  selectedFilters: SelectedFilters;
   setSelectedFilters: (Filter) => void;
   setSearchTerm: (string) => void;
 }
 
-type SelectedFilters = {
-  [keys: string]: Set<string>;
-};
-
 const FiltersList = ({
   cookies,
+  selectedFilters,
   setSelectedFilters,
   setSearchTerm,
 }: FiltersListProps) => {
   const [filters, setFilters] = useState<Filter[]>([]);
-  const [isExpanded, setExpanded] = useState(false);
+  const [isExpanded, setExpanded] = useState<boolean>(false);
 
   const handleFilterChange = (
     checked: boolean,
@@ -107,9 +109,10 @@ const FiltersList = ({
           onInput={handleOnInput}
         />
       </div>
-      <div className="my-2">
-        <Chips />
-      </div>
+      <Chips
+        selectedFilters={selectedFilters}
+        setSelectedFilters={setSelectedFilters}
+      />
       <ul>
         {filters
           .filter((filter) => Boolean(filter.filters?.size))

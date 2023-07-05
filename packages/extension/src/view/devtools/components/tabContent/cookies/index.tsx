@@ -81,6 +81,7 @@ const Cookies = () => {
       <div className="basis-1/6 border-r p-3 pt-1 overflow-y-scroll">
         <FiltersList
           cookies={cookies}
+          selectedFilters={selectedFilters}
           setSelectedFilters={setSelectedFilters}
           setSearchTerm={setSearchTerm}
         />

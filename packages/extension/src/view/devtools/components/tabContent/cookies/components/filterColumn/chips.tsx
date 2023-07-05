@@ -23,13 +23,35 @@ import React from 'react';
  */
 import Chip from './chip';
 
-const Chips = () => {
+type SelectedFilters = {
+  [key: string]: Set<string>;
+};
+
+interface ChipsProps {
+  setSelectedFilters: (SelectedFilters) => void;
+  selectedFilters: SelectedFilters;
+}
+
+const Chips: React.FC<ChipsProps> = ({
+  selectedFilters,
+  setSelectedFilters,
+}) => {
+  if (!Object.keys(selectedFilters).length) {
+    return null;
+  }
+
   return (
-    <div className="flex flex-wrap max-w-full">
-      <Chip text="First party" />
-      <Chip text="Third party" />
-      <Chip text="Functional" />
-      <Chip text="Marketing" />
+    <div className="flex flex-wrap max-w-full my-2">
+      {Object.entries(selectedFilters).map(([key, filters]) => {
+        return [...filters].map((filterName, index) => (
+          <Chip
+            key={key + index}
+            text={filterName}
+            filterKey={key}
+            setSelectedFilters={setSelectedFilters}
+          />
+        ));
+      })}
     </div>
   );
 };
