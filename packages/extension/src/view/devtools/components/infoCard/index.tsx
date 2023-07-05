@@ -56,7 +56,7 @@ const InfoCard = ({ infoKey }: InfoCardProps) => {
         </div>
       ) : (
         <div className="p-6">
-          <div className="w-10 h-10 rounded-full animate-spin border-t-transparent border-solid border-blue-700 border-4"></div>
+          <div className="w-10 h-10 rounded-full animate-spin border-t-transparent border-solid border-blue-700 border-4" />
         </div>
       )}
     </div>
