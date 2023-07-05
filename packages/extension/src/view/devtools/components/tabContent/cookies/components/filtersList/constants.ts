@@ -37,6 +37,11 @@ export const FILTER_MAPPING = [
     keys: 'parsedCookie.samesite',
   },
   {
+    name: 'Third Party',
+    keys: 'thirdParty',
+    type: 'boolean',
+  },
+  {
     name: 'Secure',
     keys: 'parsedCookie.secure',
     type: 'boolean',

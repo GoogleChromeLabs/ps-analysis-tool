@@ -31,7 +31,6 @@ import filterCookies from './components/filtersList/filterCookies';
 
 type UseCookieStoreReturnType = {
   cookies: CookiesType;
-  tabUrl: string;
 };
 
 type SelectedFilters = {
@@ -39,11 +38,10 @@ type SelectedFilters = {
 };
 
 const Cookies = () => {
-  const { cookies, tabUrl } = useCookieStore(
+  const { cookies } = useCookieStore(
     ({ state }) =>
       ({
         cookies: state?.cookies,
-        tabUrl: state?.url,
       } as UseCookieStoreReturnType)
   );
 
@@ -88,7 +86,6 @@ const Cookies = () => {
       <div className="basis-3/10 lg:basis-1/3 overflow-y-scroll border-r ">
         <CookieList
           cookies={filteredCookies}
-          tabUrl={tabUrl}
           selectedKey={selectedKey}
           onClickItem={setSelectedKey}
         />

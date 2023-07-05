@@ -27,17 +27,20 @@ import type {
   CookieDatabase,
 } from '../utils/fetchCookieDictionary';
 import findAnalyticsMatch from './findAnalyticsMatch';
+import isFirstParty from '../utils/isFirstParty';
 
 /**
  * Parse response cookies header.
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
  * @param {string} url Cookie URL (URL of the server which is setting/updating cookies).
+ * @param {string} tabUrl Tab url
  * @param {string} value header value
  * @param {CookieDatabase} dictionary Dictionary from open cookie database
  * @returns {CookieData} Parsed cookie object.
  */
 const parseResponseCookieHeader = (
   url: string,
+  tabUrl: string,
   value: string,
   dictionary: CookieDatabase
 ): CookieData => {
@@ -53,6 +56,7 @@ const parseResponseCookieHeader = (
     parsedCookie: parsedCookie,
     analytics,
     url,
+    thirdParty: !isFirstParty(parsedCookie.domain, tabUrl),
     headerType: 'response',
   };
 };

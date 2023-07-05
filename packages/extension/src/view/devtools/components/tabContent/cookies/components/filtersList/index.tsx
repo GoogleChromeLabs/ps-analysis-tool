@@ -28,6 +28,8 @@ interface Filter {
   name: string;
   keys: string;
   filters?: Set<string>;
+  type?: string;
+  default?: string;
 }
 
 interface FiltersListProps {
@@ -123,7 +125,7 @@ const FiltersList = ({ cookies, setSelectedFilters }: FiltersListProps) => {
                           )
                         }
                       />
-                      <span>{filterValue}</span>
+                      <span>{String(filterValue)}</span>
                     </label>
                   </li>
                 ))}

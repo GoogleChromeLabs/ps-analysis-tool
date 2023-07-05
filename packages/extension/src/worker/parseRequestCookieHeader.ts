@@ -23,17 +23,20 @@ import type {
   CookieDatabase,
 } from '../utils/fetchCookieDictionary';
 import findAnalyticsMatch from './findAnalyticsMatch';
+import isFirstParty from '../utils/isFirstParty';
 
 /**
  * Parse response cookies header.
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
  * @param {string} url Cookie URL (URL of the server which is setting/updating cookies).
+ * @param {string} tabUrl Tab url.
  * @param {string} value header value
  * @param {CookieDatabase} dictionary Dictionary from open cookie database
  * @returns {CookieData[]} Parsed cookie object array.
  */
 const parseRequestCookieHeader = (
   url: string,
+  tabUrl: string,
   value: string,
   dictionary: CookieDatabase
 ): CookieData[] => {
@@ -48,10 +51,14 @@ const parseRequestCookieHeader = (
     if (dictionary) {
       analytics = findAnalyticsMatch(name, dictionary);
     }
+
+    const domain = new URL(url).host;
+
     cookies.push({
-      parsedCookie: { name, value: rest.join('='), domain: new URL(url).host },
+      parsedCookie: { name, value: rest.join('='), domain },
       analytics,
       headerType: 'request',
+      thirdParty: !isFirstParty(domain, tabUrl),
       url,
     });
   });

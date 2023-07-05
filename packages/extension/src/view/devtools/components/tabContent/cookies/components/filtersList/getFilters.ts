@@ -38,16 +38,25 @@ const getFilters = (cookies: Cookies): Filter[] => {
     filters[key].filters = new Set();
 
     Object.entries(cookies).forEach(([, cookie]) => {
+      if (!filterMap.keys) {
+        return;
+      }
+
       const keys = filterMap.keys.split('.');
       const rootKey = keys[0];
       const subKey = keys[1];
+      let value = '';
 
-      let value =
-        cookie[rootKey] && cookie[rootKey][subKey]
-          ? cookie[rootKey][subKey]
-          : '';
+      if (!subKey) {
+        value = cookie[rootKey] || '';
+      } else {
+        value =
+          cookie[rootKey] && cookie[rootKey][subKey]
+            ? cookie[rootKey][subKey]
+            : '';
+      }
 
-      if ('Boolean' === filterMap?.type) {
+      if ('boolean' === filterMap?.type) {
         value = value ? 'True' : 'False';
       }
 
@@ -60,11 +69,7 @@ const getFilters = (cookies: Cookies): Filter[] => {
       }
 
       if (filterMap?.type === 'date') {
-        if (value instanceof Date) {
-          value = value.toUTCString();
-        } else if (typeof value !== 'string') {
-          value = '';
-        }
+        value = value?.toString();
       }
 
       if (value) {

@@ -40,13 +40,12 @@ const filterCookies = (
       const _keys = keys.split('.');
       const rootKey = _keys[0];
       const subKey = _keys[1];
-      let value =
-        cookieData[rootKey] && cookieData[rootKey][subKey]
-          ? cookieData[rootKey][subKey]
-          : '';
+      let value = cookieData[rootKey][subKey]
+        ? cookieData[rootKey][subKey]
+        : cookieData[rootKey];
       const filterMap = FILTER_MAPPING.find((config) => config.keys === keys);
 
-      if ('Boolean' === filterMap?.type) {
+      if ('boolean' === filterMap?.type) {
         value = value ? 'True' : 'False';
       }
 

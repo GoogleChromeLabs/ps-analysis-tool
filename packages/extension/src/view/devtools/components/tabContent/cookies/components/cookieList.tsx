@@ -24,7 +24,7 @@ import React from 'react';
 import { type CookieData } from '../../../../../../localStore';
 import ListItem from './listItem';
 
-interface CoookieListProps {
+interface CookieListProps {
   cookies: {
     [key: string]: CookieData;
   };
@@ -33,20 +33,13 @@ interface CoookieListProps {
   onClickItem: (key: string) => void;
 }
 
-const CookieList = ({
-  cookies,
-  tabUrl,
-  selectedKey,
-  onClickItem,
-}: CoookieListProps) => (
+const CookieList = ({ cookies, selectedKey, onClickItem }: CookieListProps) => (
   <ul className="w-full h-full" data-testid="cookie-list-column">
     {cookies &&
-      tabUrl &&
       Object.entries(cookies).map(([key, value]) => (
         <li key={key}>
           <ListItem
             cookie={value}
-            tabUrl={tabUrl}
             isSelected={selectedKey === key}
             onClick={() => onClickItem(key)}
           />
