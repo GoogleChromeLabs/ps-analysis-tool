@@ -35,13 +35,18 @@ interface Filter {
 interface FiltersListProps {
   cookies: Cookies;
   setSelectedFilters: (Filter) => void;
+  setSearchTerm: (string) => void;
 }
 
 type SelectedFilters = {
   [keys: string]: Set<string>;
 };
 
-const FiltersList = ({ cookies, setSelectedFilters }: FiltersListProps) => {
+const FiltersList = ({
+  cookies,
+  setSelectedFilters,
+  setSearchTerm,
+}: FiltersListProps) => {
   const [filters, setFilters] = useState<Filter[]>([]);
   const [isExpanded, setExpanded] = useState(false);
 
@@ -78,6 +83,10 @@ const FiltersList = ({ cookies, setSelectedFilters }: FiltersListProps) => {
     setExpanded(!isExpanded);
   };
 
+  const handleOnInput = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
   useEffect(() => {
     const updatedFilters = getFilters(cookies);
     setFilters(updatedFilters);
@@ -94,6 +103,7 @@ const FiltersList = ({ cookies, setSelectedFilters }: FiltersListProps) => {
           type="search"
           placeholder="Filter.."
           className="p-2 pl-0 pb-1 focus:outline-none outline-none border-b"
+          onInput={handleOnInput}
         />
       </div>
       <ul>

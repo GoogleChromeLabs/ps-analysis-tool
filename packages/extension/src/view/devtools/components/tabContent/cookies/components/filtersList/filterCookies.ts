@@ -26,35 +26,57 @@ type SelectedFilters = {
 
 const filterCookies = (
   cookies: Cookies,
-  selectedFilters: SelectedFilters
+  selectedFilters: SelectedFilters,
+  searchTerm: string
 ): Cookies => {
   const filteredCookies = {};
 
-  if (!cookies || !Object.keys(selectedFilters).length) {
+  if (!cookies || (!searchTerm && !Object.keys(selectedFilters).length)) {
     return cookies;
   }
 
   Object.entries(cookies).forEach(([cookieName, cookieData]) => {
     let canShow = false;
 
-    Object.entries(selectedFilters).forEach(([keys, selectedFilter]) => {
-      let value = getFilterValue(keys, cookieData);
+    const matchTerm = () => {
+      const lowerCaseTerm = searchTerm.toLowerCase();
+      return (
+        cookieName.toLowerCase().includes(lowerCaseTerm) ||
+        cookieData.parsedCookie.domain.toLowerCase().includes(lowerCaseTerm) ||
+        cookieData.analytics?.retention?.toLowerCase()?.includes(lowerCaseTerm)
+      );
+    };
 
-      const filterMap = FILTER_MAPPING.find((config) => config.keys === keys);
+    if (Object.keys(selectedFilters).length) {
+      Object.entries(selectedFilters).forEach(([keys, selectedFilter]) => {
+        let value = getFilterValue(keys, cookieData);
 
-      if ('boolean' === filterMap?.type) {
-        value = value ? 'True' : 'False';
+        const filterMap = FILTER_MAPPING.find((config) => config.keys === keys);
+
+        if ('boolean' === filterMap?.type) {
+          value = value ? 'True' : 'False';
+        }
+
+        if (!value && filterMap?.default) {
+          value = filterMap.default;
+        }
+
+        canShow = selectedFilter?.has(value);
+      });
+
+      if (canShow) {
+        if (searchTerm) {
+          if (matchTerm()) {
+            filteredCookies[cookieName] = cookieData;
+          }
+        } else {
+          filteredCookies[cookieName] = cookieData;
+        }
       }
-
-      if (!value && filterMap?.default) {
-        value = filterMap.default;
+    } else {
+      if (matchTerm()) {
+        filteredCookies[cookieName] = cookieData;
       }
-
-      canShow = selectedFilter?.has(value);
-    });
-
-    if (canShow) {
-      filteredCookies[cookieName] = cookieData;
     }
   });
 

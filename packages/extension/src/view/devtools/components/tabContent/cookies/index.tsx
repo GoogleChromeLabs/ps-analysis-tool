@@ -48,6 +48,7 @@ const Cookies = () => {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [selectedCookie, setSelectedCookie] = useState<CookieData | null>(null);
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({});
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   useEffect(() => {
     if (!cookies) {
@@ -70,7 +71,7 @@ const Cookies = () => {
     return null;
   }
 
-  const filteredCookies = filterCookies(cookies, selectedFilters);
+  const filteredCookies = filterCookies(cookies, selectedFilters, searchTerm);
 
   return (
     <div
@@ -81,6 +82,7 @@ const Cookies = () => {
         <FiltersList
           cookies={cookies}
           setSelectedFilters={setSelectedFilters}
+          setSearchTerm={setSearchTerm}
         />
       </div>
       <div className="basis-3/10 lg:basis-1/3 overflow-y-scroll border-r ">
