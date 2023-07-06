@@ -22,8 +22,8 @@ import { type Cookie as ParsedCookie } from 'simple-cookie';
 /**
  * Internal dependencies.
  */
-import DomainIcon from '../../../../../../../icons/domain.svg';
-import { type CookieAnalytics } from '../../../../../../utils/fetchCookieDictionary';
+import DomainIcon from '../../../../../../../../icons/domain.svg';
+import { type CookieAnalytics } from '../../../../../../../utils/fetchCookieDictionary';
 
 interface CookieDetailsProps {
   data: ParsedCookie;
