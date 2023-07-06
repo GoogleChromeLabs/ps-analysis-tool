@@ -45,7 +45,7 @@ const InfoCard = ({ infoKey }: InfoCardProps) => {
   }, [infoKey]);
 
   return (
-    <div className="max-w-sm bg-white m-3">
+    <div className="max-w-2xl bg-white m-3">
       {Object.keys(PSInfo).length ? (
         <div className="p-6 border border-gray-200 rounded-lg shadow">
           <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
