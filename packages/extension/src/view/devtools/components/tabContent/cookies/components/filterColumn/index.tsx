@@ -133,6 +133,10 @@ const FiltersList = ({
                       <input
                         type="checkbox"
                         name={filter.keys}
+                        checked={
+                          selectedFilters[filter.keys] &&
+                          selectedFilters[filter.keys].has(filterValue)
+                        }
                         value={filterValue}
                         onChange={(event) =>
                           handleFilterChange(
