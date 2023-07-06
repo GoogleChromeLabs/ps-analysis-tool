@@ -28,7 +28,7 @@ import isFirstParty from './isFirstParty';
  * @returns CookieStats object with the categorized cookies count.
  */
 const countCookiesByCategory = (
-  cookies: { [key: string]: CookieData },
+  cookies: { [key: string]: CookieData } | null,
   tabUrl: string
 ) => {
   const stats: CookieStats = {
@@ -48,6 +48,10 @@ const countCookiesByCategory = (
       unknown: 0,
     },
   };
+
+  if (!cookies) {
+    return stats;
+  }
 
   const cookieList = Object.values(cookies);
 

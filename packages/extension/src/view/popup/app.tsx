@@ -34,6 +34,9 @@ const App: React.FC = () => {
     tabURL: state?.url,
     message: state.message,
   }));
+  if (!cookies) {
+    chrome.tabs.reload();
+  }
 
   const cookieStats = countCookiesByCategory(cookies, tabURL || '');
 
