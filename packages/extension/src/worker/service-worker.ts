@@ -100,7 +100,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
           ) {
             const cookieList = parseRequestCookieHeader(
               url,
-              tab.url,
+              tab.url || '',
               header.value,
               cookieDB
             );

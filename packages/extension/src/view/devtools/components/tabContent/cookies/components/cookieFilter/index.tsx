@@ -47,27 +47,23 @@ const FiltersList = ({
     keys: string,
     value: string
   ) => {
-    setSelectedFilters((prevState) => {
-      const newValue = prevState[keys] ? prevState[keys] : new Set();
+    setSelectedFilters((prevState: SelectedFilters) => {
+      const newValue: SelectedFilters = { ...prevState };
+      const newValueForKey: Set<string> = newValue[keys] || new Set<string>();
 
       if (checked) {
-        newValue.add(value);
+        newValueForKey.add(value);
       } else {
-        newValue.delete(value);
+        newValueForKey.delete(value);
       }
 
-      if (newValue.size) {
-        return {
-          ...prevState,
-          [keys]: newValue,
-        };
+      if (newValueForKey.size) {
+        newValue[keys] = newValueForKey;
       } else {
-        delete prevState[keys];
-
-        return {
-          ...prevState,
-        };
+        delete newValue[keys];
       }
+
+      return newValue;
     });
   };
 
