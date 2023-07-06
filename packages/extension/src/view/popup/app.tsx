@@ -107,7 +107,7 @@ const App: React.FC = () => {
         <div className="w-96 h-80 flex justify-center items-center flex-col">
           <div className="w-full flex-1 flex gap-16 pt-6 px-12">
             <div className="w-full h-full flex flex-col justify-center items-center">
-              <div className="flex-1 w-full h-ful">
+              <div className="flex-1 w-full">
                 {cookieStats.firstParty.total ? (
                   <PieChart
                     centerCount={cookieStats.firstParty.total}
@@ -121,7 +121,9 @@ const App: React.FC = () => {
                   </div>
                 )}
               </div>
-              <p className="font-bold text-xs">1st Party Cookies</p>
+              {cookieStats.firstParty.total ? (
+                <p className="font-bold text-xs">1st Party Cookies</p>
+              ) : null}
             </div>
             <div className="w-full h-full flex flex-col justify-center items-center">
               <div className="flex-1 w-full h-full">
@@ -138,7 +140,9 @@ const App: React.FC = () => {
                   </div>
                 )}
               </div>
-              <p className="font-bold text-xs">3rd Party Cookies</p>
+              {cookieStats.thirdParty.total ? (
+                <p className="font-bold text-xs">3rd Party Cookies</p>
+              ) : null}
             </div>
           </div>
           <div className="mt-3">
