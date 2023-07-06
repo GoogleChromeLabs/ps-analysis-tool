@@ -55,7 +55,14 @@ export const Provider = ({ children }: PropsWithChildren) => {
     const tabData = await chrome.storage.local.get();
 
     const tabInfo = tabData?.[tabId];
-    if (tabInfo?.cookies && tabInfo?.url) {
+    if (!tabInfo) {
+      setState({
+        cookies: {},
+        url: '',
+        message: 'Please refresh the page to list all cookies',
+        focusedAt: undefined,
+      });
+    } else if (tabInfo?.cookies && tabInfo?.url) {
       setState(tabInfo);
     }
   }, []);
