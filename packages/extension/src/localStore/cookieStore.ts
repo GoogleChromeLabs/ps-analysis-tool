@@ -18,6 +18,7 @@
  */
 import updateStorage from './updateStorage';
 import type { TabData, CookieData } from './types';
+import { getCurrentTab } from '../utils/getCurrentTabId';
 
 const CookieStore = {
   /**
@@ -27,6 +28,9 @@ const CookieStore = {
    */
   async update(tabId: string, cookies: CookieData[]) {
     const newCookies: { [key: string]: CookieData } = {};
+    const [tabData] = await getCurrentTab();
+
+    const tabUrl = tabData?.url;
 
     for (const cookie of cookies) {
       if (cookie) {
@@ -42,6 +46,7 @@ const CookieStore = {
 
       return {
         ...prevState,
+        url: tabUrl,
         cookies: updatedCookies,
       };
     });
