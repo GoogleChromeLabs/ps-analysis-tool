@@ -34,6 +34,7 @@ const cookieArray: CookieData[] = [
     },
     analytics: null,
     url: 'https://example.com',
+    thirdParty: false,
     headerType: 'response',
   },
   {
@@ -49,6 +50,7 @@ const cookieArray: CookieData[] = [
     },
     analytics: null,
     url: 'https://example.com',
+    thirdParty: true,
     headerType: 'response',
   },
 ];

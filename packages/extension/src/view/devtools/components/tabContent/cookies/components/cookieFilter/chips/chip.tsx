@@ -25,13 +25,13 @@ import type { SelectedFilters } from '../types';
 
 interface ChipProps {
   text: string;
-  setSelectedFilters: (SelectedFilters) => void;
+  setSelectedFilters: React.Dispatch<React.SetStateAction<SelectedFilters>>;
   filterKey: string;
 }
 
 const Chip: React.FC<ChipProps> = ({ text, setSelectedFilters, filterKey }) => {
   const handleOnClick = () => {
-    setSelectedFilters((prevState: SelectedFilters) => {
+    setSelectedFilters((prevState) => {
       if (prevState[filterKey] && prevState[filterKey].has(text)) {
         prevState[filterKey].delete(text);
 
@@ -40,7 +40,7 @@ const Chip: React.FC<ChipProps> = ({ text, setSelectedFilters, filterKey }) => {
         }
       }
 
-      return prevState;
+      return { ...prevState };
     });
   };
 

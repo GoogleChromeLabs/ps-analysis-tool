@@ -18,19 +18,14 @@
  */
 import type { CookieData } from '../../../../../../../localStore';
 
-const getFilterValue = (keys: string, cookieData: CookieData): string => {
+const getFilterValue = (keys: string, cookieData: CookieData) => {
   const _keys = keys.split('.');
-  const rootKey = _keys[0];
-  const subKey = _keys[1];
-  let value = '';
+  const rootKey = _keys[0] as keyof CookieData;
+  const subKey = _keys[1] as keyof CookieData[keyof CookieData];
+  let value: any = ''; // eslint-disable-line @typescript-eslint/no-explicit-any -- Value can of any
 
-  if (!subKey) {
-    value = cookieData[rootKey] || '';
-  } else {
-    value =
-      cookieData[rootKey] && cookieData[rootKey][subKey]
-        ? cookieData[rootKey][subKey]
-        : '';
+  if (cookieData && cookieData[rootKey]) {
+    value = subKey ? cookieData[rootKey]?.[subKey] : cookieData[rootKey];
   }
 
   return value;

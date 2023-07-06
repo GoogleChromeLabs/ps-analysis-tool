@@ -42,8 +42,8 @@ const getFilters = (cookies: Cookies): Filter[] => {
         value = filterMap.default;
       }
 
-      if (value) {
-        filters[key].filters.add(value);
+      if (value && filters[key]) {
+        filters[key].filters?.add(value);
       }
     });
   });

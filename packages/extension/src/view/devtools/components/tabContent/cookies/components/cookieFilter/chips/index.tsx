@@ -25,7 +25,7 @@ import Chip from './chip';
 import type { SelectedFilters } from '../types';
 
 interface ChipsProps {
-  setSelectedFilters: (SelectedFilters) => void;
+  setSelectedFilters: React.Dispatch<React.SetStateAction<SelectedFilters>>;
   selectedFilters: SelectedFilters;
 }
 

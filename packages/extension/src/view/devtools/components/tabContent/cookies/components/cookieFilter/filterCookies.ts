@@ -26,7 +26,7 @@ const filterCookies = (
   selectedFilters: SelectedFilters,
   searchTerm: string
 ): Cookies => {
-  const filteredCookies = {};
+  const filteredCookies: Cookies = {};
 
   if (!cookies || (!searchTerm && !Object.keys(selectedFilters).length)) {
     return cookies;
@@ -39,7 +39,9 @@ const filterCookies = (
       const lowerCaseTerm = searchTerm.toLowerCase();
       return (
         cookieName.toLowerCase().includes(lowerCaseTerm) ||
-        cookieData.parsedCookie.domain.toLowerCase().includes(lowerCaseTerm) ||
+        cookieData.parsedCookie.domain
+          ?.toLowerCase()
+          ?.includes(lowerCaseTerm) ||
         cookieData.analytics?.retention?.toLowerCase()?.includes(lowerCaseTerm)
       );
     };

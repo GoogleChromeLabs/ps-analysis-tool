@@ -29,8 +29,8 @@ import type { Filter, SelectedFilters } from './types';
 interface FiltersListProps {
   cookies: Cookies;
   selectedFilters: SelectedFilters;
-  setSelectedFilters: (Filter) => void;
-  setSearchTerm: (string) => void;
+  setSelectedFilters: React.Dispatch<React.SetStateAction<SelectedFilters>>;
+  setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const FiltersList = ({
@@ -47,7 +47,7 @@ const FiltersList = ({
     keys: string,
     value: string
   ) => {
-    setSelectedFilters((prevState: SelectedFilters) => {
+    setSelectedFilters((prevState) => {
       const newValue = prevState[keys] ? prevState[keys] : new Set();
 
       if (checked) {
@@ -75,7 +75,7 @@ const FiltersList = ({
     setExpanded(!isExpanded);
   };
 
-  const handleOnInput = (event) => {
+  const handleOnInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
@@ -109,37 +109,38 @@ const FiltersList = ({
             <li key={index} className="mb-4">
               <p className="font-bold">{filter.name}</p>
               <ul>
-                {[...filter.filters].sort().map((filterValue, subIndex) => (
-                  <li
-                    className={
-                      subIndex > 3 && !isExpanded
-                        ? 'ml-2 mt-1 hidden'
-                        : 'ml-2 mt-1'
-                    }
-                    key={subIndex}
-                  >
-                    <label className="flex gap-x-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        name={filter.keys}
-                        checked={
-                          selectedFilters[filter.keys] &&
-                          selectedFilters[filter.keys].has(filterValue)
-                        }
-                        onChange={(event) =>
-                          handleFilterChange(
-                            event?.target?.checked,
-                            filter.keys,
-                            filterValue
-                          )
-                        }
-                      />
-                      <span>{String(filterValue)}</span>
-                    </label>
-                  </li>
-                ))}
+                {filter?.filters &&
+                  [...filter.filters].sort().map((filterValue, subIndex) => (
+                    <li
+                      className={
+                        subIndex > 3 && !isExpanded
+                          ? 'ml-2 mt-1 hidden'
+                          : 'ml-2 mt-1'
+                      }
+                      key={subIndex}
+                    >
+                      <label className="flex gap-x-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          name={filter.keys}
+                          checked={
+                            selectedFilters[filter.keys] &&
+                            selectedFilters[filter.keys].has(filterValue)
+                          }
+                          onChange={(event) =>
+                            handleFilterChange(
+                              event?.target?.checked,
+                              filter.keys,
+                              filterValue
+                            )
+                          }
+                        />
+                        <span>{String(filterValue)}</span>
+                      </label>
+                    </li>
+                  ))}
               </ul>
-              {filter.filters?.size > 4 && (
+              {Number(filter?.filters?.size) > 4 && (
                 <a
                   onClick={handleShowMoreClick}
                   className="text-md text-[#007185] ml-2 mt-1 block"
