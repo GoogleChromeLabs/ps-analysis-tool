@@ -29,11 +29,11 @@ import countCookiesByCategory from '../../utils/countCookiesByCategory';
 import { colourMap } from './const';
 
 const App: React.FC = () => {
-  const { cookies, tabURL, message } = useCookieStore(({ state }) => ({
+  const { cookies, tabURL } = useCookieStore(({ state }) => ({
     cookies: state?.cookies,
     tabURL: state?.url,
-    message: state.message,
   }));
+
   if (!cookies) {
     chrome.tabs.reload();
   }
@@ -159,7 +159,7 @@ const App: React.FC = () => {
         </div>
       ) : (
         <div className="w-96 h-80 flex justify-center items-center flex-col">
-          <p className="font-bold text-lg">{message}</p>
+          <p className="font-bold text-lg">{'No cookies found'}</p>
         </div>
       )}
     </>

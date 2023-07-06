@@ -34,7 +34,6 @@ export type TabData = {
   cookies: {
     [key: string]: CookieData;
   } | null;
-  message: string | undefined;
   url: string | undefined;
   focusedAt: number | undefined;
 };

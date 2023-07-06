@@ -19,8 +19,7 @@
 import { type TabData } from './types';
 
 export const emptyTabData: TabData = {
-  cookies: null,
+  cookies: {},
   url: undefined,
-  message: 'No Cookies found',
   focusedAt: undefined,
 };

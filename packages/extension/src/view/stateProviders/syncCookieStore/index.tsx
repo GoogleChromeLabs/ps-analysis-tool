@@ -59,7 +59,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     if (!tabInfo) {
       setState({
         ...emptyTabData,
-        message: 'Please refresh the page to list all cookies',
+        cookies: null,
       });
     } else if (tabInfo?.cookies && tabInfo?.url) {
       setState({ ...emptyTabData, ...tabInfo });
