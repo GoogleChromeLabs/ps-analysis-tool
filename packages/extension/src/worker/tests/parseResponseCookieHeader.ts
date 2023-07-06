@@ -22,6 +22,7 @@ describe('parseResponseCookieHeader', () => {
   it('Should parse all set-cookie header (response cookies)', () => {
     const parsedCookie = parseResponseCookieHeader(
       'https://example.com/public/api/alerts',
+      'https://example.com',
       'countryCode=IN; Domain=.example.com; Path=/; SameSite=None; Secure',
       {}
     );
@@ -39,6 +40,7 @@ describe('parseResponseCookieHeader', () => {
       },
       analytics: null,
       url: 'https://example.com/public/api/alerts',
+      thirdParty: false,
       headerType: 'response',
     });
   });
@@ -46,6 +48,7 @@ describe('parseResponseCookieHeader', () => {
   it('Should parse and add add analytics', () => {
     const parsedCookie = parseResponseCookieHeader(
       'https://example.com/public/api/alerts',
+      'https://example.com',
       'test_cookie=bla; Domain=.example.com; Path=/; SameSite=None; Secure',
       {
         test_cookie: [
@@ -89,6 +92,7 @@ describe('parseResponseCookieHeader', () => {
         wildcard: '0',
       },
       url: 'https://example.com/public/api/alerts',
+      thirdParty: false,
       headerType: 'response',
     });
   });
@@ -96,6 +100,7 @@ describe('parseResponseCookieHeader', () => {
   it('Should parse and add add analytics for wild card entries', () => {
     const parsedCookie = parseResponseCookieHeader(
       'https://google.com/public/api/alerts',
+      'https://google.com',
       '_ga_123=bla; Domain=.google.com; Path=/; SameSite=None; Secure',
       {
         _ga: [
@@ -153,6 +158,7 @@ describe('parseResponseCookieHeader', () => {
         wildcard: '1',
       },
       url: 'https://google.com/public/api/alerts',
+      thirdParty: false,
       headerType: 'response',
     });
   });

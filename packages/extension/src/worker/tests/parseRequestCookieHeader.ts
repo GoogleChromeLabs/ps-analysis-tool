@@ -26,6 +26,7 @@ const normalCookie1 = {
   },
   analytics: null,
   url: 'https://example.com/public/api/alerts',
+  thirdParty: false,
   headerType: 'request',
 };
 
@@ -37,6 +38,7 @@ const normalCookie2 = {
   },
   analytics: null,
   url: 'https://example.com/public/api/alerts',
+  thirdParty: false,
   headerType: 'request',
 };
 
@@ -48,6 +50,7 @@ const specialCookie = {
   },
   analytics: null,
   url: 'https://example.com/public/api/alerts',
+  thirdParty: false,
   headerType: 'request',
 };
 
@@ -70,6 +73,7 @@ const wildcardCookie = {
     wildcard: '1',
   },
   url: 'https://example.com/public/api/alerts',
+  thirdParty: false,
   headerType: 'request',
 };
 
@@ -83,6 +87,7 @@ describe('parseRequestCookieHeader', () => {
     const header = `${normalCookie1Header}; ${normalCookie2Header}; ${specialCookieHeader}`;
     const parsedCookie = parseRequestCookieHeader(
       'https://example.com/public/api/alerts',
+      'https://example.com',
       header,
       {}
     );
@@ -93,6 +98,7 @@ describe('parseRequestCookieHeader', () => {
     const header = `${normalCookie1Header}; ${normalCookie2Header}; ${specialCookieHeader}; ${wildcardCookieHeader}`;
     const parsedCookie = parseRequestCookieHeader(
       'https://example.com/public/api/alerts',
+      'https://example.com',
       header,
       {
         Wildcard: [

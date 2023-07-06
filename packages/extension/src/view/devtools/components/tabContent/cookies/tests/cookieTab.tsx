@@ -19,7 +19,6 @@
 import React from 'react';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { type Cookie as ParsedCookie } from 'simple-cookie';
 
 /**
  * External dependencies.
@@ -27,46 +26,36 @@ import { type Cookie as ParsedCookie } from 'simple-cookie';
 import CookieTab from '..';
 import type { TabData } from '../../../../../../localStore';
 
-const unknown1pCookie: ParsedCookie = {
-  name: '_cb',
-  value: 'unknown1pCookie',
-  domain: '.cnn.com',
-};
-
-const unknown3pCookie: ParsedCookie = {
-  name: 'pubsyncexp',
-  value: 'unknown3pCookie',
-  domain: '.ads.pubmatic.com',
-};
-
-const known1pCookie: ParsedCookie = {
-  name: '__qca',
-  value: 'known1pCookie',
-  domain: '.cnn.com',
-};
-
-const known3pCookie: ParsedCookie = {
-  name: 'KRTBCOOKIE_290',
-  value: 'known3pCookie',
-  domain: '.pubmatic.com',
-};
-
 const mockResponse: TabData = {
   cookies: {
-    [unknown1pCookie.name]: {
-      parsedCookie: unknown1pCookie,
+    _cb: {
+      parsedCookie: {
+        name: '_cb',
+        value: 'unknown1pCookie',
+        domain: '.cnn.com',
+      },
       analytics: null,
       url: 'https://edition.cnn.com/whatever/api',
+      thirdParty: false,
       headerType: 'response',
     },
-    [unknown3pCookie.name]: {
-      parsedCookie: unknown3pCookie,
+    pubsyncexp: {
+      parsedCookie: {
+        name: 'pubsyncexp',
+        value: 'unknown3pCookie',
+        domain: '.ads.pubmatic.com',
+      },
       analytics: null,
       url: 'https://api.pubmatic.com/whatever/api',
+      thirdParty: true,
       headerType: 'response',
     },
-    [known1pCookie.name]: {
-      parsedCookie: known1pCookie,
+    __qca: {
+      parsedCookie: {
+        name: '__qca',
+        value: 'known1pCookie',
+        domain: '.cnn.com',
+      },
       analytics: {
         platform: 'Quantcast',
         category: 'Marketing',
@@ -80,10 +69,15 @@ const mockResponse: TabData = {
         wildcard: '0',
       },
       url: 'https://edition.cnn.com/whatever/api',
+      thirdParty: false,
       headerType: 'response',
     },
-    [known3pCookie.name]: {
-      parsedCookie: known3pCookie,
+    KRTBCOOKIE_290: {
+      parsedCookie: {
+        name: 'KRTBCOOKIE_290',
+        value: 'known3pCookie',
+        domain: '.pubmatic.com',
+      },
       analytics: {
         platform: 'PubMatic',
         category: 'Marketing',
@@ -97,6 +91,7 @@ const mockResponse: TabData = {
         wildcard: '1',
       },
       url: 'https://api.pubmatic.com/whatever/api',
+      thirdParty: true,
       headerType: 'response',
     },
   },
