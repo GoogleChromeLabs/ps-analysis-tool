@@ -18,9 +18,10 @@
  */
 import React from 'react';
 
-type SelectedFilters = {
-  [key: string]: Set<string>;
-};
+/**
+ * Internal dependencies.
+ */
+import type { SelectedFilters } from '../types';
 
 interface ChipProps {
   text: string;

@@ -13,7 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+export type SelectedFilters = {
+  [key: string]: Set<string>;
+};
 
-export { default as CookieDetails } from './cookieDetails';
-export { default as CookieList } from './cookieList';
-export { default as FiltersList } from './cookieFilter';
+export interface Filter {
+  name: string;
+  keys: string;
+  filters?: Set<string>;
+  type?: string;
+  default?: string;
+}

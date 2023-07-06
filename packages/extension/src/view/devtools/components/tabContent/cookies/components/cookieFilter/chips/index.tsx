@@ -22,10 +22,7 @@ import React from 'react';
  * Internal dependencies.
  */
 import Chip from './chip';
-
-type SelectedFilters = {
-  [key: string]: Set<string>;
-};
+import type { SelectedFilters } from '../types';
 
 interface ChipsProps {
   setSelectedFilters: (SelectedFilters) => void;

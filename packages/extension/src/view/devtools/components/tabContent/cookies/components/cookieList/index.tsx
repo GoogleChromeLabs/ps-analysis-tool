@@ -28,7 +28,6 @@ interface CookieListProps {
   cookies: {
     [key: string]: CookieData;
   };
-  tabUrl: string | undefined;
   selectedKey: string | null;
   onClickItem: (key: string) => void;
 }

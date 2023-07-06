@@ -27,14 +27,11 @@ import type {
   CookieData,
   Cookies as CookiesType,
 } from '../../../../../localStore';
-import filterCookies from './components/filterColumn/filterCookies';
+import filterCookies from './components/cookieFilter/filterCookies';
+import type { SelectedFilters } from './components/cookieFilter/types';
 
 type UseCookieStoreReturnType = {
   cookies: CookiesType;
-};
-
-type SelectedFilters = {
-  [key: string]: Set<string>;
 };
 
 const Cookies = () => {

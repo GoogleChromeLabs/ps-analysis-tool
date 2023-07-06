@@ -19,10 +19,7 @@
 import type { Cookies } from '../../../../../../../localStore';
 import { FILTER_MAPPING } from './constants';
 import getFilterValue from './getFilterValue';
-
-type SelectedFilters = {
-  [keys: string]: Set<string>;
-};
+import type { SelectedFilters } from './types';
 
 const filterCookies = (
   cookies: Cookies,

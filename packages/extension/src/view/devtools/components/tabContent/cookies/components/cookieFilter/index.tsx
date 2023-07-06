@@ -24,18 +24,7 @@ import React, { useEffect, useState } from 'react';
 import getFilters from './getFilters';
 import type { Cookies } from '../../../../../../../localStore';
 import Chips from './chips';
-
-interface Filter {
-  name: string;
-  keys: string;
-  filters?: Set<string>;
-  type?: string;
-  default?: string;
-}
-
-type SelectedFilters = {
-  [key: string]: Set<string>;
-};
+import type { Filter, SelectedFilters } from './types';
 
 interface FiltersListProps {
   cookies: Cookies;
