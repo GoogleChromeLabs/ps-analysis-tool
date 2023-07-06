@@ -30,6 +30,7 @@ import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
 //@ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'cookie-analysis-tool/data/PSInfo.json';
+import { parseUrl } from '../../../../../utils/parseUrl';
 
 describe('should match the json file data with the component', () => {
   const tests = Object.values(PSInfoKey).map((infoKey) => {
@@ -66,12 +67,12 @@ describe('should match the json file data with the component', () => {
       const closeButton = await screen.findByText('Close');
       expect(closeButton).toBeInTheDocument();
 
-      if (output.proposal) {
+      if (parseUrl(output.proposal)) {
         const proposal = (await screen.findByText('Proposal')).nextSibling;
         expect(proposal).toHaveAttribute('href', output.proposal);
       }
 
-      if (output.publicDiscussion) {
+      if (parseUrl(output.publicDiscussion)) {
         const publicDiscussion = (await screen.findByText('Public Discussion'))
           .nextSibling;
         expect(publicDiscussion).toHaveAttribute(
@@ -80,13 +81,13 @@ describe('should match the json file data with the component', () => {
         );
       }
 
-      if (output.videoOverview) {
+      if (parseUrl(output.videoOverview)) {
         const videoOverview = (await screen.findByText('Video Overview'))
           .nextSibling;
         expect(videoOverview).toHaveAttribute('href', output.videoOverview);
       }
 
-      if (output.devDocumentation) {
+      if (parseUrl(output.devDocumentation)) {
         const devDocumentation = (await screen.findByText('Dev Documentation'))
           .nextSibling;
         expect(devDocumentation).toHaveAttribute(
