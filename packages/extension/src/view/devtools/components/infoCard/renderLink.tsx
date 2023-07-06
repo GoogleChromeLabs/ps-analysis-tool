@@ -19,11 +19,6 @@
  */
 import React from 'react';
 
-/**
- * Internal dependencies.
- */
-import { parseUrl } from '../../../../utils/parseUrl';
-
 interface RenderLinkProps {
   label: string;
   link: string;
@@ -32,7 +27,7 @@ interface RenderLinkProps {
 
 const RenderLink = ({ label, link, linkLabel }: RenderLinkProps) => (
   <>
-    {parseUrl(link) ? (
+    {link ? (
       <li className="py-4">
         <div className="flex items-center">
           <div className="flex-1 min-w-0">
