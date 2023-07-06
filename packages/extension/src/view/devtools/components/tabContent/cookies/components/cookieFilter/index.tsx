@@ -126,7 +126,6 @@ const FiltersList = ({
                           selectedFilters[filter.keys] &&
                           selectedFilters[filter.keys].has(filterValue)
                         }
-                        value={filterValue}
                         onChange={(event) =>
                           handleFilterChange(
                             event?.target?.checked,

@@ -34,6 +34,10 @@ const Chip: React.FC<ChipProps> = ({ text, setSelectedFilters, filterKey }) => {
     setSelectedFilters((prevState: SelectedFilters) => {
       if (prevState[filterKey] && prevState[filterKey].has(text)) {
         prevState[filterKey].delete(text);
+
+        if (!prevState[filterKey].size) {
+          delete prevState[filterKey];
+        }
       }
 
       return prevState;
