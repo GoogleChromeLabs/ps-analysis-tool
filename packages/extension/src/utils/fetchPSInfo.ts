@@ -15,15 +15,8 @@
  */
 
 export enum PSInfoKey {
-  'PrivateStateToken' = 'private-state-token',
   'Topics' = 'topics',
-  'ProtectedAudience' = 'protected-audience',
   'AttributionReporting' = 'attribution-reporting',
-  'FirstPartySets' = 'first-party-sets',
-  'SharedStorage' = 'shared-storage',
-  'CHIPS' = 'chips',
-  'FencedFrames' = 'fenced-frames',
-  'FEDCM' = 'fedcm',
   'BounceTracking' = 'bounce-tracking',
   'UserAgentReduction' = 'user-agent-reduction',
 }
