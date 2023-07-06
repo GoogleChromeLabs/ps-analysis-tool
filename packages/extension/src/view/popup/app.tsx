@@ -116,7 +116,7 @@ const App: React.FC = () => {
                 ) : (
                   <div className="w-full h-full flex justify-center items-center">
                     <h1 className="text-center">
-                      No first party cookies found
+                      First Party Cookies Not Found
                     </h1>
                   </div>
                 )}
@@ -135,7 +135,7 @@ const App: React.FC = () => {
                 ) : (
                   <div className="w-full h-full flex justify-center items-center">
                     <h1 className="text-center">
-                      No third party cookies found
+                      Third Party Cookies Not Found
                     </h1>
                   </div>
                 )}
