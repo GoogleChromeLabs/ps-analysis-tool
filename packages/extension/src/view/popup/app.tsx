@@ -34,10 +34,6 @@ const App: React.FC = () => {
     tabURL: state?.url,
   }));
 
-  if (!cookies) {
-    chrome.tabs.reload();
-  }
-
   const cookieStats = countCookiesByCategory(cookies, tabURL || '');
 
   const legendData = [
@@ -108,7 +104,7 @@ const App: React.FC = () => {
 
   return (
     <>
-      {cookieStats?.firstParty.total || cookieStats?.thirdParty.total ? (
+      {cookieStats?.firstParty.total && cookieStats?.thirdParty.total ? (
         <div className="w-96 h-80 flex justify-center items-center flex-col">
           <div className="w-full flex-1 flex gap-16 pt-6 px-12">
             <div className="w-full h-full flex flex-col justify-center items-center">
@@ -161,7 +157,9 @@ const App: React.FC = () => {
         </div>
       ) : (
         <div className="w-96 h-80 flex justify-center items-center flex-col">
-          <p className="font-bold text-lg">No cookies found</p>
+          <p className="font-bold text-lg">
+            {cookies === null ? 'Please refresh this page' : 'No cookies found'}
+          </p>
         </div>
       )}
     </>
