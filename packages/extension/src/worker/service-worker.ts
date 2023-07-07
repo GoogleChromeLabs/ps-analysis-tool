@@ -25,7 +25,7 @@ import {
   fetchDictionary,
 } from '../utils/fetchCookieDictionary';
 
-//clear data from previous sessions or version of the extention
+//clear data from previous sessions or version of the extension ( or when extension is refreshed )
 chrome.storage.local.clear();
 
 let cookieDB: CookieDatabase | null = null;
