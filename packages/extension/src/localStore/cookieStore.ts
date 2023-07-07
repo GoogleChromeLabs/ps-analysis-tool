@@ -40,7 +40,7 @@ const CookieStore = {
 
     await updateStorage(tabId, (prevState: TabData) => {
       const updatedCookies = {
-        ...(prevState?.cookies || []),
+        ...(prevState?.cookies || {}),
         ...newCookies,
       };
 

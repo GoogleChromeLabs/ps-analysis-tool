@@ -51,7 +51,11 @@ const known3pCookie: ParsedCookie = {
   domain: '.pubmatic.com',
 };
 
-const mockResponse: TabData = {
+const mockResponse: {
+  cookies: NonNullable<TabData['cookies']>;
+  url: NonNullable<TabData['url']>;
+  focusedAt: NonNullable<TabData['focusedAt']>;
+} = {
   cookies: {
     [unknown1pCookie.name]: {
       parsedCookie: unknown1pCookie,
@@ -134,7 +138,9 @@ describe('CookieTab', () => {
     const firstCookie =
       mockResponse.cookies[Object.keys(mockResponse.cookies)[0]];
 
-    expect(within(card).getByText(firstCookie.parsedCookie.name));
+    expect(
+      within(card).getByText(firstCookie.parsedCookie.name)
+    ).toBeInTheDocument();
   });
 
   it('should change the selected cookie with clicking', () => {
