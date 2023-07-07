@@ -29,6 +29,7 @@ import type {
 } from '../../../../../localStore';
 import filterCookies from './components/cookieFilter/filterCookies';
 import type { SelectedFilters } from './components/cookieFilter/types';
+import CookiesProvider from './cookiesProvider';
 
 type UseCookieStoreReturnType = {
   cookies: CookiesType;
@@ -71,7 +72,7 @@ const Cookies = () => {
   const filteredCookies = filterCookies(cookies, selectedFilters, searchTerm);
 
   return (
-    <>
+    <CookiesProvider>
       <div className="p-2 px-3 border-b">Header Bar</div>
       <div
         className="w-full h-full flex flex-col lg:flex-row"
@@ -105,7 +106,7 @@ const Cookies = () => {
           </div>
         </div>
       </div>
-    </>
+    </CookiesProvider>
   );
 };
 
