@@ -18,13 +18,19 @@
  */
 import React from 'react';
 
+/**
+ * Internal dependencies.
+ */
+import InfoCard from '../../infoCard';
+import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
+
 const Attribution = () => {
   return (
     <div
-      className="w-full h-full flex justify-center items-center"
+      className="w-full h-full overflow-auto"
       data-testid="attribution-content"
     >
-      <p>Attribution API Panel</p>
+      <InfoCard infoKey={PSInfoKey.AttributionReporting} />
     </div>
   );
 };
