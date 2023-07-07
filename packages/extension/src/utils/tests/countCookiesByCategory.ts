@@ -58,7 +58,7 @@ const analytics1pCookie = {
   headerType: 'request',
 };
 
-const unknown1pCookie = {
+const uncategorised1pCookie = {
   parsedCookie: {
     name: 'cookie_name_4',
     value: 'val',
@@ -108,7 +108,7 @@ const analytics3pCookie = {
   headerType: 'request',
 };
 
-const unknown3pCookie = {
+const uncategorised3pCookie = {
   parsedCookie: {
     name: 'cookie_name_8',
     value: 'val',
@@ -126,14 +126,14 @@ const emptyStats = {
     functional: 0,
     marketing: 0,
     analytics: 0,
-    unknown: 0,
+    uncategorised: 0,
   },
   thirdParty: {
     total: 0,
     functional: 0,
     marketing: 0,
     analytics: 0,
-    unknown: 0,
+    uncategorised: 0,
   },
 };
 
@@ -152,8 +152,8 @@ describe('countCookiesByCategory : ', () => {
       [marketing3pCookie.parsedCookie.name]: marketing3pCookie,
       [analytics1pCookie.parsedCookie.name]: analytics1pCookie,
       [analytics3pCookie.parsedCookie.name]: analytics3pCookie,
-      [unknown1pCookie.parsedCookie.name]: unknown1pCookie,
-      [unknown3pCookie.parsedCookie.name]: unknown3pCookie,
+      [uncategorised1pCookie.parsedCookie.name]: uncategorised1pCookie,
+      [uncategorised3pCookie.parsedCookie.name]: uncategorised3pCookie,
     };
 
     const expectedStats = {
@@ -163,14 +163,14 @@ describe('countCookiesByCategory : ', () => {
         functional: 1,
         marketing: 1,
         analytics: 1,
-        unknown: 1,
+        uncategorised: 1,
       },
       thirdParty: {
         total: 4,
         functional: 1,
         marketing: 1,
         analytics: 1,
-        unknown: 1,
+        uncategorised: 1,
       },
     };
     //@ts-ignore Missing properties are not requird in the function.

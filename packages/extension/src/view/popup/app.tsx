@@ -60,9 +60,11 @@ const App: React.FC = () => {
       color: colourMap.analytics,
     },
     {
-      label: 'Unknown',
-      count: cookieStats.firstParty.unknown + cookieStats.thirdParty.unknown,
-      color: colourMap.unknown,
+      label: 'Uncategorised',
+      count:
+        cookieStats.firstParty.uncategorised +
+        cookieStats.thirdParty.uncategorised,
+      color: colourMap.uncategorised,
     },
   ];
 
@@ -80,8 +82,8 @@ const App: React.FC = () => {
       color: colourMap.analytics,
     },
     {
-      count: cookieStats.firstParty.unknown,
-      color: colourMap.unknown,
+      count: cookieStats.firstParty.uncategorised,
+      color: colourMap.uncategorised,
     },
   ];
 
@@ -99,8 +101,8 @@ const App: React.FC = () => {
       color: colourMap.analytics,
     },
     {
-      count: cookieStats.thirdParty.unknown,
-      color: colourMap.unknown,
+      count: cookieStats.thirdParty.uncategorised,
+      color: colourMap.uncategorised,
     },
   ];
 

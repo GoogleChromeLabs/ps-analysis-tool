@@ -18,5 +18,5 @@ export const colourMap = {
   funtional: '#00B04C',
   marketing: '#FFBF00',
   analytics: '#3D7AFC',
-  unknown: '#FC260A',
+  uncategorised: '#FC260A',
 };
