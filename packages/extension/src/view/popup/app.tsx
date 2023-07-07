@@ -26,7 +26,7 @@ import './app.css';
 import { PieChart, Legend } from './components';
 import { useCookieStore } from '../stateProviders/syncCookieStore';
 import countCookiesByCategory from '../../utils/countCookiesByCategory';
-import { colourMap } from './const';
+import { COLOR_MAP } from './const';
 
 const App: React.FC = () => {
   const { cookies, tabURL } = useCookieStore(({ state }) => ({
@@ -45,64 +45,64 @@ const App: React.FC = () => {
       label: 'Functional',
       count:
         cookieStats.firstParty.functional + cookieStats.thirdParty.functional,
-      color: colourMap.functional,
+      color: COLOR_MAP.functional,
     },
     {
       label: 'Marketing',
       count:
         cookieStats.firstParty.marketing + cookieStats.thirdParty.marketing,
-      color: colourMap.marketing,
+      color: COLOR_MAP.marketing,
     },
     {
       label: 'Analytics',
       count:
         cookieStats.firstParty.analytics + cookieStats.thirdParty.analytics,
-      color: colourMap.analytics,
+      color: COLOR_MAP.analytics,
     },
     {
       label: 'Uncategorised',
       count:
         cookieStats.firstParty.uncategorised +
         cookieStats.thirdParty.uncategorised,
-      color: colourMap.uncategorised,
+      color: COLOR_MAP.uncategorised,
     },
   ];
 
   const firstPartyPiechartData = [
     {
       count: cookieStats.firstParty.functional,
-      color: colourMap.functional,
+      color: COLOR_MAP.functional,
     },
     {
       count: cookieStats.firstParty.marketing,
-      color: colourMap.marketing,
+      color: COLOR_MAP.marketing,
     },
     {
       count: cookieStats.firstParty.analytics,
-      color: colourMap.analytics,
+      color: COLOR_MAP.analytics,
     },
     {
       count: cookieStats.firstParty.uncategorised,
-      color: colourMap.uncategorised,
+      color: COLOR_MAP.uncategorised,
     },
   ];
 
   const thirdPartyPiechartData = [
     {
       count: cookieStats.thirdParty.functional,
-      color: colourMap.functional,
+      color: COLOR_MAP.functional,
     },
     {
       count: cookieStats.thirdParty.marketing,
-      color: colourMap.marketing,
+      color: COLOR_MAP.marketing,
     },
     {
       count: cookieStats.thirdParty.analytics,
-      color: colourMap.analytics,
+      color: COLOR_MAP.analytics,
     },
     {
       count: cookieStats.thirdParty.uncategorised,
-      color: colourMap.uncategorised,
+      color: COLOR_MAP.uncategorised,
     },
   ];
 

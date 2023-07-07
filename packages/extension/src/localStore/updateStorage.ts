@@ -69,12 +69,12 @@ const updateStorage = async (
     }
   }
   try {
-    if (Object.keys(newStorageValue[tabId].cookies || {}).length > 0) {
+    const tabCookies = newStorageValue[tabId].cookies || {};
+    const numCookies = Object.keys(tabCookies).length;
+    if (numCookies > 0) {
       await chrome.action.setBadgeText({
         tabId: parseInt(tabId),
-        text: Object.keys(
-          newStorageValue[tabId].cookies || {}
-        ).length.toString(),
+        text: numCookies.toString(),
       });
     }
   } catch (error) {

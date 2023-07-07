@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-export const colourMap = {
+export const COLOR_MAP = {
   functional: '#00B04C',
   marketing: '#FFBF00',
   analytics: '#3D7AFC',

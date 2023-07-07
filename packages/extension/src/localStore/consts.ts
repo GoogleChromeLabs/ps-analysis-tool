@@ -18,7 +18,7 @@
  */
 import { type TabData } from './types';
 
-export const emptyTabData: TabData = {
+export const EMPTY_TAB_DATA: TabData = {
   cookies: {},
   url: undefined,
   focusedAt: undefined,

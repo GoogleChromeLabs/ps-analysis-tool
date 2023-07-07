@@ -34,7 +34,7 @@ const Legend = ({ legendItemList }: LegendProps) => {
         <div key={index} className="w-36 flex items-center justify-center my-1">
           <Circle color={color} />
           <p className="flex-1 text-chart-label text-xs">{label}</p>
-          <p className=" text-chart-label text-xs"> {count} </p>
+          <p className="text-chart-label text-xs">{count}</p>
         </div>
       ))}
     </div>
