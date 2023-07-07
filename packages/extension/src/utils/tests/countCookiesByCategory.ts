@@ -119,7 +119,7 @@ const uncategorised3pCookie = {
   headerType: 'request',
 };
 
-const emptyStats = {
+const EMPTY_STATS = {
   total: 0,
   firstParty: {
     total: 0,
@@ -140,7 +140,7 @@ const emptyStats = {
 describe('countCookiesByCategory : ', () => {
   it('Gives empty stats with cookies', () => {
     expect(countCookiesByCategory({}, 'https://example.com/page')).toEqual(
-      emptyStats
+      EMPTY_STATS
     );
   });
 
