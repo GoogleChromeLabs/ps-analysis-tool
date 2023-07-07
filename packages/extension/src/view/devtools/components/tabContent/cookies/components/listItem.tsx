@@ -64,7 +64,7 @@ const ListItem = ({ cookie, tabUrl, isSelected, onClick }: IListItem) => {
           }
         >
           <span className="font-bold">
-            {cookie.analytics?.category || 'Uncategorized'}
+            {cookie.analytics?.category || 'Uncategorised'}
           </span>
           <span
             className={`font-bold ${

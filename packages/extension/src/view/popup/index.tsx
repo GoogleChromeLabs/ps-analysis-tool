@@ -13,13 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/**
+ * External dependencies.
+ */
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+
 /**
  * Internal dependencies.
  */
-import { type TabData } from './types';
+import App from './app';
+import { Provider as ExternalStoreProvider } from '../stateProviders/syncCookieStore';
 
-export const EMPTY_TAB_DATA: TabData = {
-  cookies: {},
-  url: undefined,
-  focusedAt: undefined,
-};
+const root = document.getElementById('root');
+
+if (root) {
+  createRoot(root).render(
+    <ExternalStoreProvider>
+      <App />
+    </ExternalStoreProvider>
+  );
+}

@@ -16,28 +16,29 @@
 /**
  * External dependencies.
  */
-import { type Cookie as ParsedCookie } from 'simple-cookie';
+import React from 'react';
 
 /**
  * Internal dependencies.
  */
-import type { CookieAnalytics } from '../utils/fetchCookieDictionary';
+import Circle from './circle';
 
-export type CookieData = {
-  parsedCookie: ParsedCookie;
-  analytics: CookieAnalytics | null;
-  url: string;
-  headerType: 'response' | 'request';
+interface LegendProps {
+  legendItemList: { label: string; count: number; color: string }[];
+}
+
+const Legend = ({ legendItemList }: LegendProps) => {
+  return (
+    <div className="flex flex-col">
+      {legendItemList.map(({ label, count, color }, index) => (
+        <div key={index} className="w-36 flex items-center justify-center my-1">
+          <Circle color={color} />
+          <p className="flex-1 text-chart-label text-xs">{label}</p>
+          <p className="text-chart-label text-xs">{count}</p>
+        </div>
+      ))}
+    </div>
+  );
 };
 
-export type TabData = {
-  cookies: {
-    [key: string]: CookieData;
-  } | null;
-  url: string | undefined;
-  focusedAt: number | undefined;
-};
-
-export type Storage = {
-  [tabId: string]: TabData;
-};
+export default Legend;

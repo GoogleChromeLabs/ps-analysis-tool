@@ -27,15 +27,15 @@ import { type Cookie as ParsedCookie } from 'simple-cookie';
 import CookieTab from '..';
 import type { TabData } from '../../../../../../localStore';
 
-const unknown1pCookie: ParsedCookie = {
+const uncategorised1pCookie: ParsedCookie = {
   name: '_cb',
-  value: 'unknown1pCookie',
+  value: 'uncategorised1pCookie',
   domain: '.cnn.com',
 };
 
-const unknown3pCookie: ParsedCookie = {
+const uncategorised3pCookie: ParsedCookie = {
   name: 'pubsyncexp',
-  value: 'unknown3pCookie',
+  value: 'uncategorised3pCookie',
   domain: '.ads.pubmatic.com',
 };
 
@@ -51,16 +51,20 @@ const known3pCookie: ParsedCookie = {
   domain: '.pubmatic.com',
 };
 
-const mockResponse: TabData = {
+const mockResponse: {
+  cookies: NonNullable<TabData['cookies']>;
+  url: NonNullable<TabData['url']>;
+  focusedAt: NonNullable<TabData['focusedAt']>;
+} = {
   cookies: {
-    [unknown1pCookie.name]: {
-      parsedCookie: unknown1pCookie,
+    [uncategorised1pCookie.name]: {
+      parsedCookie: uncategorised1pCookie,
       analytics: null,
       url: 'https://edition.cnn.com/whatever/api',
       headerType: 'response',
     },
-    [unknown3pCookie.name]: {
-      parsedCookie: unknown3pCookie,
+    [uncategorised3pCookie.name]: {
+      parsedCookie: uncategorised3pCookie,
       analytics: null,
       url: 'https://api.pubmatic.com/whatever/api',
       headerType: 'response',
@@ -120,7 +124,7 @@ describe('CookieTab', () => {
     expect(screen.getAllByText('First Party').length).toBe(2);
     expect(screen.getAllByText('Third Party').length).toBe(2);
 
-    expect(screen.getAllByText('Uncategorized').length).toBe(2);
+    expect(screen.getAllByText('Uncategorised').length).toBe(2);
     expect(screen.getAllByText('Marketing').length).toBe(2);
   });
 
@@ -134,7 +138,9 @@ describe('CookieTab', () => {
     const firstCookie =
       mockResponse.cookies[Object.keys(mockResponse.cookies)[0]];
 
-    expect(within(card).getByText(firstCookie.parsedCookie.name));
+    expect(
+      within(card).getByText(firstCookie.parsedCookie.name)
+    ).toBeInTheDocument();
   });
 
   it('should change the selected cookie with clicking', () => {

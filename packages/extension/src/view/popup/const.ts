@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Internal dependencies.
- */
-import { type TabData } from './types';
 
-export const EMPTY_TAB_DATA: TabData = {
-  cookies: {},
-  url: undefined,
-  focusedAt: undefined,
+export const COLOR_MAP = {
+  functional: '#00B04C',
+  marketing: '#FFBF00',
+  analytics: '#3D7AFC',
+  uncategorised: '#FC260A',
 };

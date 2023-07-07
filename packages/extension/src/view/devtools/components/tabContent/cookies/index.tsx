@@ -35,11 +35,12 @@ const Cookies = () => {
   const [selectedCookie, setSelectedCookie] = useState<CookieData | null>(null);
 
   useEffect(() => {
-    if (!selectedKey && Object.keys(cookies).length !== 0) {
+    if (!selectedKey && cookies !== null && Object.keys(cookies).length !== 0) {
       setSelectedKey(Object.keys(cookies)[0]);
       setSelectedCookie(cookies[Object.keys(cookies)[0]]);
     } else if (
       selectedKey &&
+      cookies !== null &&
       Object.keys(cookies).length !== 0 &&
       Object.keys(cookies).includes(selectedKey)
     ) {
@@ -54,7 +55,7 @@ const Cookies = () => {
     >
       <div className="basis-1/2 lg:basis-1/3 overflow-y-scroll border-r ">
         <CookieList
-          cookies={cookies}
+          cookies={cookies || {}}
           tabUrl={tabUrl}
           selectedKey={selectedKey}
           onClickItem={setSelectedKey}

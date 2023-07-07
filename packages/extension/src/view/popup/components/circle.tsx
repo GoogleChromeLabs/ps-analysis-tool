@@ -14,12 +14,21 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies.
+ * External dependencies.
  */
-import { type TabData } from './types';
+import React from 'react';
 
-export const EMPTY_TAB_DATA: TabData = {
-  cookies: {},
-  url: undefined,
-  focusedAt: undefined,
-};
+interface CircleProps {
+  color: string;
+}
+
+const Circle = ({ color }: CircleProps) => (
+  <div
+    className="w-4 h-4 rounded-full flex items-center justify-center mr-2"
+    style={{ backgroundColor: color }}
+  >
+    <div className="w-2 h-2 rounded-full flex items-center justify-center bg-white" />
+  </div>
+);
+
+export default Circle;

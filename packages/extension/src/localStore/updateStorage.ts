@@ -68,7 +68,18 @@ const updateStorage = async (
       }
     }
   }
-
+  try {
+    const tabCookies = newStorageValue[tabId].cookies || {};
+    const numCookies = Object.keys(tabCookies).length;
+    if (numCookies > 0) {
+      await chrome.action.setBadgeText({
+        tabId: parseInt(tabId),
+        text: numCookies.toString(),
+      });
+    }
+  } catch (error) {
+    // do nothing
+  }
   //Apply update to the chrome local store
   await chrome.storage.local.set(newStorageValue);
 };

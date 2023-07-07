@@ -27,7 +27,7 @@ import React, {
 /**
  * Internal dependencies.
  */
-import { type TabData, emptyTabData } from '../../../localStore';
+import { type TabData, EMPTY_TAB_DATA } from '../../../localStore';
 import { getCurrentTabId } from '../../../utils/getCurrentTabId';
 
 export interface ICookieStoreContext {
@@ -36,14 +36,14 @@ export interface ICookieStoreContext {
 }
 
 const initialState: ICookieStoreContext = {
-  state: emptyTabData,
+  state: EMPTY_TAB_DATA,
   actions: {},
 };
 
 export const Context = createContext<ICookieStoreContext>(initialState);
 
 export const Provider = ({ children }: PropsWithChildren) => {
-  const [state, setState] = useState<TabData>(emptyTabData);
+  const [state, setState] = useState<TabData>(EMPTY_TAB_DATA);
 
   const syncState = useCallback(async () => {
     const tabId = await getCurrentTabId();
@@ -55,8 +55,14 @@ export const Provider = ({ children }: PropsWithChildren) => {
     const tabData = await chrome.storage.local.get();
 
     const tabInfo = tabData?.[tabId];
-    if (tabInfo?.cookies && tabInfo?.url) {
-      setState(tabInfo);
+
+    if (!tabInfo) {
+      setState({
+        ...EMPTY_TAB_DATA,
+        cookies: null,
+      });
+    } else if (tabInfo?.cookies && tabInfo?.url) {
+      setState({ ...EMPTY_TAB_DATA, ...tabInfo });
     }
   }, []);
 

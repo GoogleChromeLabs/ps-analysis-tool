@@ -13,13 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Internal dependencies.
- */
-import { type TabData } from './types';
 
-export const EMPTY_TAB_DATA: TabData = {
-  cookies: {},
-  url: undefined,
-  focusedAt: undefined,
+export type CookieStats = {
+  total: number;
+  firstParty: {
+    total: number;
+    functional: number;
+    marketing: number;
+    analytics: number;
+    uncategorised: number;
+  };
+  thirdParty: {
+    total: number;
+    functional: number;
+    marketing: number;
+    analytics: number;
+    uncategorised: number;
+  };
 };
