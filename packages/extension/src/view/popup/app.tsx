@@ -158,7 +158,9 @@ const App: React.FC = () => {
       ) : (
         <div className="w-96 h-80 flex justify-center items-center flex-col">
           <p className="font-bold text-lg">
-            {cookies === null ? 'Please refresh this page' : 'No cookies found'}
+            {cookies === null
+              ? 'Please refresh this page to view cookies'
+              : 'No cookies found on this page'}
           </p>
         </div>
       )}
