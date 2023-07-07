@@ -18,27 +18,17 @@
  */
 import React from 'react';
 
-/**
- * Internal dependencies.
- */
-import Circle from './circle';
-
-interface LegendProps {
-  legendItemList: { label: string; count: number; color: string }[];
+interface CircleProps {
+  color: string;
 }
 
-const Legend = ({ legendItemList }: LegendProps) => {
-  return (
-    <div className="flex flex-col">
-      {legendItemList.map(({ label, count, color }, index) => (
-        <div key={index} className="w-36 flex items-center justify-center my-1">
-          <Circle color={color} />
-          <p className="flex-1 text-chart-label text-xs">{label}</p>
-          <p className=" text-chart-label text-xs"> {count} </p>
-        </div>
-      ))}
-    </div>
-  );
-};
+const Circle = ({ color }: CircleProps) => (
+  <div
+    className="w-4 h-4 rounded-full flex items-center justify-center mr-2"
+    style={{ backgroundColor: color }}
+  >
+    <div className="w-2 h-2 rounded-full flex items-center justify-center bg-white" />
+  </div>
+);
 
-export default Legend;
+export default Circle;

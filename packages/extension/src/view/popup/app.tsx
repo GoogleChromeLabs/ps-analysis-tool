@@ -45,7 +45,7 @@ const App: React.FC = () => {
       label: 'Functional',
       count:
         cookieStats.firstParty.functional + cookieStats.thirdParty.functional,
-      color: colourMap.funtional,
+      color: colourMap.functional,
     },
     {
       label: 'Marketing',
@@ -71,7 +71,7 @@ const App: React.FC = () => {
   const firstPartyPiechartData = [
     {
       count: cookieStats.firstParty.functional,
-      color: colourMap.funtional,
+      color: colourMap.functional,
     },
     {
       count: cookieStats.firstParty.marketing,
@@ -90,7 +90,7 @@ const App: React.FC = () => {
   const thirdPartyPiechartData = [
     {
       count: cookieStats.thirdParty.functional,
-      color: colourMap.funtional,
+      color: colourMap.functional,
     },
     {
       count: cookieStats.thirdParty.marketing,
@@ -161,7 +161,7 @@ const App: React.FC = () => {
         </div>
       ) : (
         <div className="w-96 h-80 flex justify-center items-center flex-col">
-          <p className="font-bold text-lg">{'No cookies found'}</p>
+          <p className="font-bold text-lg">No cookies found</p>
         </div>
       )}
     </>
