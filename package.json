@@ -13,6 +13,7 @@
 		"lint:types": "tsc --project ./packages/**/tsconfig.json",
 		"lint:js:fix": "eslint --fix .",
 		"prepare": "husky install",
+		"start": "npm i && npm run dev",
 		"cookie-db:update": "node scripts/update-cookie-db.cjs"
 	},
 	"repository": {
