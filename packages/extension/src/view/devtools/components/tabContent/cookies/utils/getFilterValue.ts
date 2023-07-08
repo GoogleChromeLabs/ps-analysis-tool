@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import type { CookieData } from '../../../../../../../localStore';
+import type { CookieData } from '../../../../../../localStore';
 
 const getFilterValue = (keys: string, cookieData: CookieData) => {
   const _keys = keys.split('.');

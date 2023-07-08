@@ -21,11 +21,10 @@ import React, { useEffect, useState } from 'react';
 /**
  * Internal dependencies.
  */
-import getFilters from './getFilters';
-import type { Cookies } from '../../../../../../../localStore';
-import Chips from './chips';
-import type { Filter, SelectedFilters } from './types';
+import getFilters from '../../utils/getFilters';
 import useCookies from '../../useCookies';
+import type { Cookies } from '../../../../../../../localStore';
+import type { Filter, SelectedFilters } from '../../types';
 
 interface FiltersListProps {
   cookies: Cookies;
@@ -101,10 +100,6 @@ const FiltersList = () => {
           onInput={handleOnInput}
         />
       </div>
-      <Chips
-        selectedFilters={selectedFilters}
-        setSelectedFilters={setSelectedFilters}
-      />
       <ul>
         {filters
           .filter((filter) => Boolean(filter.filters?.size))

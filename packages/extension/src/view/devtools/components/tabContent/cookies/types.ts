@@ -17,7 +17,22 @@
  * Internal dependencies.
  */
 import type { Cookies, CookieData } from '../../../../../localStore';
-import type { SelectedFilters } from './components/cookieFilter/types';
+
+export type UseCookieStoreReturnType = {
+  cookies: Cookies;
+};
+
+export type SelectedFilters = {
+  [key: string]: Set<string>;
+};
+
+export interface Filter {
+  name: string;
+  keys: string;
+  filters?: Set<string>;
+  type?: string;
+  default?: string;
+}
 
 export interface CookiesContextState {
   state: {
@@ -35,11 +50,3 @@ export interface CookiesContextState {
     setSearchTerm: (term: string) => void;
   };
 }
-
-export type UseCookieReturnType = {
-  cookies: Cookies;
-};
-
-export type UseCookieStoreReturnType = {
-  cookies: Cookies;
-};

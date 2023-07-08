@@ -23,10 +23,9 @@ import React, { type ReactNode, useEffect, useState } from 'react';
  */
 import CookiesContext from './context';
 import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
-import { UseCookieStoreReturnType } from './types';
-import { CookieData } from '../../../../../localStore';
-import { SelectedFilters } from './components/cookieFilter/types';
-import filterCookies from './components/cookieFilter/filterCookies';
+import filterCookies from './utils/filterCookies';
+import type { UseCookieStoreReturnType, SelectedFilters } from './types';
+import type { CookieData } from '../../../../../localStore';
 
 interface CookiesProviderProps {
   children: ReactNode;

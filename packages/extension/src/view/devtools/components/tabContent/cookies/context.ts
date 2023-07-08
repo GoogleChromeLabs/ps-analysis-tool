@@ -21,9 +21,8 @@ import { createContext } from 'use-context-selector';
 /**
  * Internal dependencies.
  */
-import type { CookiesContextState } from './types';
+import type { CookiesContextState, SelectedFilters } from './types';
 import type { Cookies, CookieData } from '../../../../../localStore';
-import type { SelectedFilters } from './components/cookieFilter/types';
 import { noop } from '../../../../../utils/noop';
 
 const initialValue = {

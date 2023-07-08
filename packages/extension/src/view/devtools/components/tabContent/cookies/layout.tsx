@@ -24,6 +24,7 @@ import React from 'react';
 import { CookieList, CookieDetails, FiltersList } from './components';
 import type { Cookies as CookiesType } from '../../../../../localStore';
 import useCookies from './useCookies';
+import CookieHeaderBar from './components/cookieHeaderBar';
 
 type UseCookieStoreReturnType = {
   cookies: CookiesType;
@@ -43,7 +44,7 @@ const Layout = () => {
 
   return (
     <>
-      <div className="p-2 px-3 border-b">Header Bar</div>
+      <CookieHeaderBar />
       <div
         className="w-full h-full flex flex-col lg:flex-row"
         data-testid="cookies-content"

@@ -13,14 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export type SelectedFilters = {
-  [key: string]: Set<string>;
+/**
+ * External dependencies.
+ */
+import React from 'react';
+
+/**
+ * Internal dependencies.
+ */
+import Chips from '../cookieFilter/chips';
+import useCookies from '../../useCookies';
+
+const CookieHeaderBar = () => {
+  const { selectedFilters } = useCookies(({ state }) => ({
+    selectedFilters: state.selectedFilters,
+  }));
+
+  if (!Object.entries(selectedFilters).length) {
+    return null;
+  }
+
+  return (
+    <div className="p-2 px-3 border-b">
+      <Chips />
+    </div>
+  );
 };
 
-export interface Filter {
-  name: string;
-  keys: string;
-  filters?: Set<string>;
-  type?: string;
-  default?: string;
-}
+export default CookieHeaderBar;

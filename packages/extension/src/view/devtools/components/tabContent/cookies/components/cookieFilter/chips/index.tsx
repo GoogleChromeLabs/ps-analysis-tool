@@ -22,23 +22,29 @@ import React from 'react';
  * Internal dependencies.
  */
 import Chip from './chip';
-import type { SelectedFilters } from '../types';
+import type { SelectedFilters } from '../../../types';
+import useCookies from '../../../useCookies';
 
 interface ChipsProps {
   setSelectedFilters: React.Dispatch<React.SetStateAction<SelectedFilters>>;
   selectedFilters: SelectedFilters;
 }
 
-const Chips: React.FC<ChipsProps> = ({
-  selectedFilters,
-  setSelectedFilters,
-}) => {
+const Chips: React.FC = () => {
+  const { selectedFilters, setSelectedFilters } = useCookies(
+    ({ state, actions }) =>
+      ({
+        selectedFilters: state.selectedFilters,
+        setSelectedFilters: actions.setSelectedFilters,
+      } as ChipsProps)
+  );
+
   if (!Object.keys(selectedFilters).length) {
     return null;
   }
 
   return (
-    <div className="flex flex-wrap max-w-full my-2">
+    <div className="flex flex-wrap max-w-full">
       {Object.entries(selectedFilters).map(([key, filters]) => {
         return [...filters].map((filterName, index) => (
           <Chip

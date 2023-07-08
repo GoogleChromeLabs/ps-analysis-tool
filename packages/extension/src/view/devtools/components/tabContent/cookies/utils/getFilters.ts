@@ -16,10 +16,10 @@
 /**
  * Internal dependencies.
  */
-import type { Cookies } from '../../../../../../../localStore';
-import { FILTER_MAPPING } from './constants';
+import type { Cookies } from '../../../../../../localStore';
+import { FILTER_MAPPING } from '../constants';
 import getFilterValue from './getFilterValue';
-import type { Filter } from './types';
+import type { Filter } from '../types';
 
 const getFilters = (cookies: Cookies): Filter[] => {
   const filters: Filter[] = [...FILTER_MAPPING];
