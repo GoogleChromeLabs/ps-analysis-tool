@@ -45,7 +45,7 @@ const Chip: React.FC<ChipProps> = ({ text, setSelectedFilters, filterKey }) => {
   };
 
   return (
-    <div className="flex items-center bg-gray-200 rounded-full text-[10px]/[13px] text-gray-700 px-2 py-1 mr-1">
+    <div className="flex items-center bg-gray-200 rounded-full text-xs text-gray-700 px-2 py-1 mr-1">
       <span className="mr-1 block whitespace-nowrap">{text}</span>
       <button
         onClick={handleOnClick}

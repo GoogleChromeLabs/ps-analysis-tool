@@ -95,7 +95,7 @@ const CookieDetails = () => {
           </p>
           {shouldShowMoreDescriptionButton && (
             <button
-              className="text-md font-bold text-[#007185]"
+              className="text-md font-bold text-link"
               onClick={() => {
                 setShowMoreDescription(!showMoreDescription);
               }}
@@ -157,7 +157,7 @@ const CookieDetails = () => {
             </p>
             {shouldShowMoreValueButton && (
               <button
-                className="text-md font-bold text-[#007185]"
+                className="text-md font-bold text-link"
                 onClick={() => {
                   setShowMoreValue(!showMoreValue);
                 }}

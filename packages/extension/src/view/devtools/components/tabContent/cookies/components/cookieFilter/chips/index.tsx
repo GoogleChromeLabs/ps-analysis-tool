@@ -44,7 +44,7 @@ const Chips: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-wrap max-w-full">
+    <div className="flex flex-nowrap max-w-full">
       {Object.entries(selectedFilters).map(([key, filters]) => {
         return [...filters].map((filterName, index) => (
           <Chip

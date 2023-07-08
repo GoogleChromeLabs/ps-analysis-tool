@@ -37,6 +37,7 @@ module.exports = {
       tertiary: '#808080',
       'first-party': '#5FA569',
       'third-party': '#FA752E',
+      link: '#007185',
     },
     backgroundColor: {
       ...colors,

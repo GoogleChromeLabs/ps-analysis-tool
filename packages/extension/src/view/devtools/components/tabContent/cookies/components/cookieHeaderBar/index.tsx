@@ -25,16 +25,37 @@ import Chips from '../cookieFilter/chips';
 import useCookies from '../../useCookies';
 
 const CookieHeaderBar = () => {
-  const { selectedFilters } = useCookies(({ state }) => ({
-    selectedFilters: state.selectedFilters,
-  }));
+  const { selectedFilters, setSelectedFilters } = useCookies(
+    ({ state, actions }) => ({
+      selectedFilters: state.selectedFilters,
+      setSelectedFilters: actions.setSelectedFilters,
+    })
+  );
 
-  if (!Object.entries(selectedFilters).length) {
+  const selectedFilterCount = Object.entries(selectedFilters).reduce(
+    (size, [, filters]) => size + filters.size,
+    0
+  );
+
+  const clearAll = () => {
+    setSelectedFilters({});
+  };
+
+  if (!selectedFilterCount) {
     return null;
   }
 
   return (
-    <div className="p-2 px-3 border-b">
+    <div className="p-2 px-3 border-b flex items-center overflow-y-scroll">
+      {selectedFilterCount > 1 && (
+        <a
+          href="#"
+          className="min-w-[46px] text-link mr-3 text-xs"
+          onClick={clearAll}
+        >
+          Clear all
+        </a>
+      )}
       <Chips />
     </div>
   );

@@ -121,10 +121,10 @@ const FiltersList = () => {
                         <input
                           type="checkbox"
                           name={filter.keys}
-                          checked={
+                          checked={Boolean(
                             selectedFilters[filter.keys] &&
-                            selectedFilters[filter.keys].has(filterValue)
-                          }
+                              selectedFilters[filter.keys].has(filterValue)
+                          )}
                           onChange={(event) =>
                             handleFilterChange(
                               event?.target?.checked,
@@ -141,7 +141,7 @@ const FiltersList = () => {
               {Number(filter?.filters?.size) > 4 && (
                 <a
                   onClick={handleShowMoreClick}
-                  className="text-md text-[#007185] ml-2 mt-1 block"
+                  className="text-md text-link ml-2 mt-1 block"
                   href="#"
                 >
                   {isExpanded ? 'Show Less' : 'Show More'}
