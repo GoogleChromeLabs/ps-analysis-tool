@@ -16,21 +16,68 @@
 /**
  * External dependencies.
  */
-import React, { type ReactNode } from 'react';
+import React, { type ReactNode, useEffect, useState } from 'react';
 
 /**
  * Internal dependencies.
  */
 import CookiesContext from './context';
+import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
+import { UseCookieStoreReturnType } from './types';
+import { CookieData } from '../../../../../localStore';
+import { SelectedFilters } from './components/cookieFilter/types';
+import filterCookies from './components/cookieFilter/filterCookies';
 
 interface CookiesProviderProps {
   children: ReactNode;
 }
 
 const CookiesProvider: React.FC<CookiesProviderProps> = ({ children }) => {
+  const { cookies } = useCookieStore(
+    ({ state }) =>
+      ({
+        cookies: state?.cookies,
+      } as UseCookieStoreReturnType)
+  );
+  const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const [selectedCookie, setSelectedCookie] = useState<CookieData | null>(null);
+  const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({});
+  const [searchTerm, setSearchTerm] = useState<string>('');
+
+  useEffect(() => {
+    if (!cookies) {
+      return;
+    }
+
+    if (!selectedKey && Object.keys(cookies).length !== 0) {
+      setSelectedKey(Object.keys(cookies)[0]);
+      setSelectedCookie(cookies[Object.keys(cookies)[0]]);
+    } else if (
+      selectedKey &&
+      Object.keys(cookies).length !== 0 &&
+      Object.keys(cookies).includes(selectedKey)
+    ) {
+      setSelectedCookie(cookies[selectedKey]);
+    }
+  }, [cookies, selectedKey]);
+
+  const filteredCookies = filterCookies(cookies, selectedFilters, searchTerm);
+
   const value = {
-    state: {},
-    actions: {},
+    state: {
+      cookies,
+      filteredCookies,
+      selectedKey,
+      selectedCookie,
+      selectedFilters,
+      searchTerm,
+    },
+    actions: {
+      setSelectedKey,
+      setSelectedCookie,
+      setSelectedFilters,
+      setSearchTerm,
+    },
   };
 
   return (

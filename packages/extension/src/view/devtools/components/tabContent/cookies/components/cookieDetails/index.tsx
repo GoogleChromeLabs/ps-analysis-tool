@@ -24,15 +24,23 @@ import { type Cookie as ParsedCookie } from 'simple-cookie';
  */
 import DomainIcon from '../../../../../../../../icons/domain.svg';
 import { type CookieAnalytics } from '../../../../../../../utils/fetchCookieDictionary';
+import useCookies from '../../useCookies';
 
 interface CookieDetailsProps {
-  data: ParsedCookie;
-  analytics: CookieAnalytics | null;
+  data?: ParsedCookie;
+  analytics?: CookieAnalytics | null;
 }
 
-const CookieDetails = ({ data, analytics }: CookieDetailsProps) => {
+const CookieDetails = () => {
   const descriptionRef = useRef<HTMLParagraphElement>(null);
   const valueRef = useRef<HTMLParagraphElement>(null);
+  const { data, analytics } = useCookies(
+    ({ state }) =>
+      ({
+        data: state?.selectedCookie?.parsedCookie || {},
+        analytics: state?.selectedCookie?.analytics || {},
+      } as CookieDetailsProps)
+  );
 
   const [shouldShowMoreDescriptionButton, setShouldShowMoreDescriptionButton] =
     useState<boolean>(false);

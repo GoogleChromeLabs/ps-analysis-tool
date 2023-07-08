@@ -21,30 +21,40 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { type CookieData } from '../../../../../../../localStore';
 import ListItem from './listItem';
+import useCookies from '../../useCookies';
+import type { CookieData, Cookies } from '../../../../../../../localStore';
 
 interface CookieListProps {
-  cookies: {
-    [key: string]: CookieData;
-  };
+  cookies: Cookies;
   selectedKey: string | null;
   onClickItem: (key: string) => void;
 }
 
-const CookieList = ({ cookies, selectedKey, onClickItem }: CookieListProps) => (
-  <ul className="w-full h-full" data-testid="cookie-list-column">
-    {cookies &&
-      Object.entries(cookies).map(([key, value]) => (
-        <li key={key}>
-          <ListItem
-            cookie={value}
-            isSelected={selectedKey === key}
-            onClick={() => onClickItem(key)}
-          />
-        </li>
-      ))}
-  </ul>
-);
+const CookieList = () => {
+  const { cookies, selectedKey, onClickItem } = useCookies(
+    ({ state, actions }) =>
+      ({
+        cookies: state?.filteredCookies,
+        selectedKey: state?.selectedKey,
+        onClickItem: actions?.setSelectedKey,
+      } as CookieListProps)
+  );
+
+  return (
+    <ul className="w-full h-full" data-testid="cookie-list-column">
+      {cookies &&
+        Object.entries(cookies).map(([key, value]) => (
+          <li key={key}>
+            <ListItem
+              cookie={value as CookieData}
+              isSelected={selectedKey === key}
+              onClick={() => onClickItem(key)}
+            />
+          </li>
+        ))}
+    </ul>
+  );
+};
 
 export default CookieList;

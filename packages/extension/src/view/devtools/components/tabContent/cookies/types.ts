@@ -13,11 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Internal dependencies.
+ */
+import type { Cookies, CookieData } from '../../../../../localStore';
+import type { SelectedFilters } from './components/cookieFilter/types';
+
 export interface CookiesContextState {
   state: {
-    [key: string]: string;
+    cookies: Cookies;
+    filteredCookies: Cookies;
+    selectedKey: string | null;
+    selectedCookie: CookieData;
+    selectedFilters: SelectedFilters;
+    searchTerm: string;
   };
   actions: {
-    [key: string]: string;
+    setSelectedKey: (key: string) => void;
+    setSelectedCookie: (cookie: CookieData) => void;
+    setSelectedFilters: (filter: SelectedFilters) => void;
+    setSearchTerm: (term: string) => void;
   };
 }
+
+export type UseCookieReturnType = {
+  cookies: Cookies;
+};
+
+export type UseCookieStoreReturnType = {
+  cookies: Cookies;
+};

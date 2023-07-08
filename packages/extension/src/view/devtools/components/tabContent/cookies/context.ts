@@ -18,9 +18,31 @@
  */
 import { createContext } from 'use-context-selector';
 
-const CookiesContext = createContext({
-  state: {},
-  actions: {},
-});
+/**
+ * Internal dependencies.
+ */
+import type { CookiesContextState } from './types';
+import type { Cookies, CookieData } from '../../../../../localStore';
+import type { SelectedFilters } from './components/cookieFilter/types';
+import { noop } from '../../../../../utils/noop';
+
+const initialValue = {
+  state: {
+    cookies: {} as Cookies,
+    filteredCookies: {} as Cookies,
+    selectedKey: null,
+    selectedCookie: {} as CookieData,
+    selectedFilters: {} as SelectedFilters,
+    searchTerm: '' as string,
+  },
+  actions: {
+    setSelectedKey: noop,
+    setSelectedCookie: noop,
+    setSelectedFilters: noop,
+    setSearchTerm: noop,
+  },
+};
+
+const CookiesContext = createContext<CookiesContextState>(initialValue);
 
 export default CookiesContext;

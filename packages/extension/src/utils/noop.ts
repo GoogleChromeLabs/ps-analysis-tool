@@ -13,26 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import React from 'react';
-
-/**
- * Internal dependencies.
- */
-import CookiesProvider from './cookiesProvider';
-import { Provider as ExternalStoreProvider } from '../../../../stateProviders/syncCookieStore';
-import Layout from './layout';
-
-const Cookies = () => {
-  return (
-    <ExternalStoreProvider>
-      <CookiesProvider>
-        <Layout />
-      </CookiesProvider>
-    </ExternalStoreProvider>
-  );
+export const noop = () => {
+  return;
 };
-
-export default Cookies;

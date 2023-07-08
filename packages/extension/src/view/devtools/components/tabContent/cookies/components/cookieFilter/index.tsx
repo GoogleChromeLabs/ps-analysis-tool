@@ -25,6 +25,7 @@ import getFilters from './getFilters';
 import type { Cookies } from '../../../../../../../localStore';
 import Chips from './chips';
 import type { Filter, SelectedFilters } from './types';
+import useCookies from '../../useCookies';
 
 interface FiltersListProps {
   cookies: Cookies;
@@ -33,12 +34,18 @@ interface FiltersListProps {
   setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const FiltersList = ({
-  cookies,
-  selectedFilters,
-  setSelectedFilters,
-  setSearchTerm,
-}: FiltersListProps) => {
+const FiltersList = () => {
+  const { cookies, selectedFilters, setSelectedFilters, setSearchTerm } =
+    useCookies(
+      ({ state, actions }) =>
+        ({
+          cookies: state?.cookies,
+          selectedFilters: state?.selectedFilters,
+          setSelectedFilters: actions?.setSelectedFilters,
+          setSearchTerm: actions?.setSearchTerm,
+        } as FiltersListProps)
+    );
+
   const [filters, setFilters] = useState<Filter[]>([]);
   const [isExpanded, setExpanded] = useState<boolean>(false);
 

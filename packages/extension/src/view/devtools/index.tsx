@@ -23,14 +23,9 @@ import { createRoot } from 'react-dom/client';
  * Internal dependencies.
  */
 import App from './app';
-import { Provider as ExternalStoreProvider } from '../stateProviders/syncCookieStore';
 
 const root = document.getElementById('root');
 
 if (root) {
-  createRoot(root).render(
-    <ExternalStoreProvider>
-      <App />
-    </ExternalStoreProvider>
-  );
+  createRoot(root).render(<App />);
 }
