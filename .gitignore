@@ -24,6 +24,7 @@ out
 # Other
 .cache
 .env
+packages/**/third_party
 
 # tsc output
 *.tsbuildinfo

@@ -25,6 +25,7 @@ import getFilters from '../../utils/getFilters';
 import useCookies from '../../useCookies';
 import type { Cookies } from '../../../../../../../localStore';
 import type { Filter, SelectedFilters } from '../../types';
+import ArrowRight from '../../../../../../../../icons/third_party/right-arrow.svg';
 
 interface FiltersListProps {
   cookies: Cookies;
@@ -105,7 +106,10 @@ const FiltersList = () => {
           .filter((filter) => Boolean(filter.filters?.size))
           .map((filter, index) => (
             <li key={index} className="mb-4">
-              <p className="font-bold">{filter.name}</p>
+              <span className="flex items-center">
+                <ArrowRight />
+                <p className="font-bold">{filter.name}</p>
+              </span>
               <ul>
                 {filter?.filters &&
                   [...filter.filters].sort().map((filterValue, subIndex) => (

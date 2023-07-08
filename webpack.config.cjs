@@ -17,6 +17,8 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const WebpackBar = require('webpackbar');
+const EventHooksPlugin = require('event-hooks-webpack-plugin');
+const fs = require('fs-extra');
 
 const isProduction = process.env.NODE_ENV === 'production';
 const mode = isProduction ? 'production' : 'development';
@@ -82,6 +84,15 @@ const root = {
     filename: 'service-worker.js',
   },
   plugins: [
+    new EventHooksPlugin({
+      initialize: (compilation, done) => {
+        fs.copy(
+          'third_party/icons',
+          'packages/extension/icons/third_party',
+          done
+        );
+      },
+    }),
     new CopyPlugin({
       patterns: [
         { from: './packages/extension/src/manifest.json', to: '' },
