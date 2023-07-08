@@ -25,6 +25,7 @@ import getFilters from '../../utils/getFilters';
 import useCookies from '../../useCookies';
 import type { Cookies } from '../../../../../../../localStore';
 import type { Filter, SelectedFilters } from '../../types';
+import ListItem from './listItem';
 import ArrowRight from '../../../../../../../../icons/third_party/right-arrow.svg';
 
 interface FiltersListProps {
@@ -112,35 +113,19 @@ const FiltersList = () => {
               </span>
               <ul>
                 {filter?.filters &&
-                  [...filter.filters].sort().map((filterValue, subIndex) => (
-                    <li
-                      className={
-                        subIndex > 3 && !isExpanded
-                          ? 'ml-2 mt-1 hidden'
-                          : 'ml-2 mt-1'
-                      }
-                      key={subIndex}
-                    >
-                      <label className="flex gap-x-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          name={filter.keys}
-                          checked={Boolean(
-                            selectedFilters[filter.keys] &&
-                              selectedFilters[filter.keys].has(filterValue)
-                          )}
-                          onChange={(event) =>
-                            handleFilterChange(
-                              event?.target?.checked,
-                              filter.keys,
-                              filterValue
-                            )
-                          }
-                        />
-                        <span>{String(filterValue)}</span>
-                      </label>
-                    </li>
-                  ))}
+                  [...filter.filters]
+                    .sort()
+                    .map((filterValue, subIndex) => (
+                      <ListItem
+                        key={subIndex}
+                        filterKeys={filter.keys}
+                        index={subIndex}
+                        isExpanded={isExpanded}
+                        selectedFilters={selectedFilters}
+                        filterValue={filterValue}
+                        handleFilterChange={handleFilterChange}
+                      />
+                    ))}
               </ul>
               {Number(filter?.filters?.size) > 4 && (
                 <a
