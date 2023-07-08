@@ -26,7 +26,6 @@ import useCookies from '../../useCookies';
 import type { Cookies } from '../../../../../../../localStore';
 import type { Filter, SelectedFilters } from '../../types';
 import ListItem from './listItem';
-import ArrowRight from '../../../../../../../../icons/third_party/right-arrow.svg';
 
 interface FiltersListProps {
   cookies: Cookies;
@@ -48,36 +47,6 @@ const FiltersList = () => {
     );
 
   const [filters, setFilters] = useState<Filter[]>([]);
-  const [isExpanded, setExpanded] = useState<boolean>(false);
-
-  const handleFilterChange = (
-    checked: boolean,
-    keys: string,
-    value: string
-  ) => {
-    setSelectedFilters((prevState: SelectedFilters) => {
-      const newValue: SelectedFilters = { ...prevState };
-      const newValueForKey: Set<string> = newValue[keys] || new Set<string>();
-
-      if (checked) {
-        newValueForKey.add(value);
-      } else {
-        newValueForKey.delete(value);
-      }
-
-      if (newValueForKey.size) {
-        newValue[keys] = newValueForKey;
-      } else {
-        delete newValue[keys];
-      }
-
-      return newValue;
-    });
-  };
-
-  const handleShowMoreClick = () => {
-    setExpanded(!isExpanded);
-  };
 
   const handleOnInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -93,7 +62,7 @@ const FiltersList = () => {
   }
 
   return (
-    <div className="pt-2">
+    <div>
       <div className="mb-3">
         <input
           type="search"
@@ -106,37 +75,12 @@ const FiltersList = () => {
         {filters
           .filter((filter) => Boolean(filter.filters?.size))
           .map((filter, index) => (
-            <li key={index} className="mb-4">
-              <span className="flex items-center">
-                <ArrowRight />
-                <p className="font-bold">{filter.name}</p>
-              </span>
-              <ul>
-                {filter?.filters &&
-                  [...filter.filters]
-                    .sort()
-                    .map((filterValue, subIndex) => (
-                      <ListItem
-                        key={subIndex}
-                        filterKeys={filter.keys}
-                        index={subIndex}
-                        isExpanded={isExpanded}
-                        selectedFilters={selectedFilters}
-                        filterValue={filterValue}
-                        handleFilterChange={handleFilterChange}
-                      />
-                    ))}
-              </ul>
-              {Number(filter?.filters?.size) > 4 && (
-                <a
-                  onClick={handleShowMoreClick}
-                  className="text-md text-link ml-2 mt-1 block"
-                  href="#"
-                >
-                  {isExpanded ? 'Show Less' : 'Show More'}
-                </a>
-              )}
-            </li>
+            <ListItem
+              key={index}
+              filter={filter}
+              selectedFilters={selectedFilters}
+              setSelectedFilters={setSelectedFilters}
+            />
           ))}
       </ul>
     </div>

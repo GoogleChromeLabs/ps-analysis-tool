@@ -16,46 +16,93 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useState } from 'react';
 
 /**
  * Internal dependencies.
  */
-import type { SelectedFilters } from '../../types';
+import ArrowRight from '../../../../../../../../icons/third_party/right-arrow.svg';
+import SubList from './subList';
+import type { SelectedFilters, Filter } from '../../types';
 
-interface ListItem {
-  index: number;
-  isExpanded: boolean;
-  filterKeys: string;
+interface ListItemProps {
+  filter: Filter;
   selectedFilters: SelectedFilters;
-  filterValue: string;
-  handleFilterChange: () => void;
+  setSelectedFilters: () => void;
 }
 
-const ListItem: React.FC<ListItem> = ({
-  index,
-  isExpanded,
-  filterKeys,
+const ListItem: React.FC<ListItemProps> = ({
+  filter,
   selectedFilters,
-  filterValue,
-  handleFilterChange,
+  setSelectedFilters,
 }) => {
+  const [isExpanded, setExpanded] = useState<boolean>(false);
+  const [showSubList, setShowSubList] = useState<boolean>(false);
+
+  const toggleShowMore = () => {
+    setExpanded(!isExpanded);
+  };
+
+  const toggleSubList = () => {
+    setShowSubList(!showSubList);
+  };
+
+  const handleFilterChange = (
+    checked: boolean,
+    keys: string,
+    value: string
+  ) => {
+    setSelectedFilters((prevState: SelectedFilters) => {
+      const newValue: SelectedFilters = { ...prevState };
+      const newValueForKey: Set<string> = newValue[keys] || new Set<string>();
+
+      if (checked) {
+        newValueForKey.add(value);
+      } else {
+        newValueForKey.delete(value);
+      }
+
+      if (newValueForKey.size) {
+        newValue[keys] = newValueForKey;
+      } else {
+        delete newValue[keys];
+      }
+
+      return newValue;
+    });
+  };
+
   return (
-    <li className={index > 3 && !isExpanded ? 'ml-2 mt-1 hidden' : 'ml-2 mt-1'}>
-      <label className="flex gap-x-2 cursor-pointer">
-        <input
-          type="checkbox"
-          name={filterKeys}
-          checked={Boolean(
-            selectedFilters[filterKeys] &&
-              selectedFilters[filterKeys].has(filterValue)
+    <li className="mb-4">
+      <a
+        href="#"
+        className="flex items-center text-black"
+        onClick={toggleSubList}
+      >
+        <span className={showSubList ? 'rotate-90' : ''}>
+          <ArrowRight />
+        </span>
+        <p className="font-bold">{filter.name}</p>
+      </a>
+      {showSubList && (
+        <>
+          <SubList
+            filter={filter}
+            selectedFilters={selectedFilters}
+            handleFilterChange={handleFilterChange}
+            isExpanded={isExpanded}
+          />
+          {Number(filter?.filters?.size) > 4 && (
+            <a
+              onClick={toggleShowMore}
+              className="text-md text-link ml-2 mt-1 block"
+              href="#"
+            >
+              {isExpanded ? 'Show Less' : 'Show More'}
+            </a>
           )}
-          onChange={(event) =>
-            handleFilterChange(event?.target?.checked, filterKeys, filterValue)
-          }
-        />
-        <span>{String(filterValue)}</span>
-      </label>
+        </>
+      )}
     </li>
   );
 };
