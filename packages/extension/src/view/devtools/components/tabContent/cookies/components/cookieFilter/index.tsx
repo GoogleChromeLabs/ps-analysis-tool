@@ -26,6 +26,7 @@ import useCookies from '../../useCookies';
 import type { Cookies } from '../../../../../../../localStore';
 import type { Filter, SelectedFilters } from '../../types';
 import ListItem from './listItem';
+import SearchIcon from '../../../../../../../../icons/third_party/search-icon.svg';
 
 interface FiltersListProps {
   cookies: Cookies;
@@ -63,11 +64,14 @@ const FiltersList = () => {
 
   return (
     <div>
-      <div className="mb-3">
+      <div className="mb-3 relative overflow-hidden">
+        <span className="absolute left-0 bottom-[8px]">
+          <SearchIcon />
+        </span>
         <input
           type="search"
           placeholder="Filter.."
-          className="p-2 pl-0 pb-1 focus:outline-none outline-none border-b"
+          className="p-2 pl-4 pb-1 focus:outline-none outline-none border-b"
           onInput={handleOnInput}
         />
       </div>
