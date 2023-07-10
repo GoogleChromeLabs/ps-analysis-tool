@@ -21,7 +21,7 @@ import { createContext } from 'use-context-selector';
 /**
  * Internal dependencies.
  */
-import type { CookiesContextState, SelectedFilters } from './types';
+import type { CookiesContextState, Filter, SelectedFilters } from './types';
 import type { Cookies, CookieData } from '../../../../../localStore';
 import { noop } from '../../../../../utils/noop';
 
@@ -32,7 +32,10 @@ const initialValue = {
     selectedKey: null,
     selectedCookie: {} as CookieData,
     selectedFilters: {} as SelectedFilters,
+    filters: [] as Filter[],
     searchTerm: '' as string,
+    isFilterExpanded: false,
+    showFilterSubList: false,
   },
   actions: {
     setSelectedKey: noop,

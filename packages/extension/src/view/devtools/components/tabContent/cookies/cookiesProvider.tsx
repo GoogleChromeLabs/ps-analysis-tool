@@ -24,8 +24,15 @@ import React, { type ReactNode, useEffect, useState } from 'react';
 import CookiesContext from './context';
 import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import filterCookies from './utils/filterCookies';
-import type { UseCookieStoreReturnType, SelectedFilters } from './types';
-import type { CookieData } from '../../../../../localStore';
+import getFilters from './utils/getFilters';
+import saveSelectedCookies from './utils/saveSelectedCookies';
+import getSavedSelectedCookies from './utils/getSavedSelectedCookies';
+import { type CookieData } from '../../../../../localStore';
+import type {
+  UseCookieStoreReturnType,
+  SelectedFilters,
+  Filter,
+} from './types';
 
 interface CookiesProviderProps {
   children: ReactNode;
@@ -42,6 +49,23 @@ const CookiesProvider: React.FC<CookiesProviderProps> = ({ children }) => {
   const [selectedCookie, setSelectedCookie] = useState<CookieData | null>(null);
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({});
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [filters, setFilters] = useState<Filter[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      const savedFilters = await getSavedSelectedCookies();
+
+      if (savedFilters) {
+        setSelectedFilters(savedFilters);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      await saveSelectedCookies(selectedFilters);
+    })();
+  }, [selectedFilters]);
 
   useEffect(() => {
     if (!cookies) {
@@ -60,6 +84,11 @@ const CookiesProvider: React.FC<CookiesProviderProps> = ({ children }) => {
     }
   }, [cookies, selectedKey]);
 
+  useEffect(() => {
+    const updatedFilters = getFilters(cookies);
+    setFilters(updatedFilters);
+  }, [cookies]);
+
   const filteredCookies = filterCookies(cookies, selectedFilters, searchTerm);
 
   const value = {
@@ -69,6 +98,7 @@ const CookiesProvider: React.FC<CookiesProviderProps> = ({ children }) => {
       selectedKey,
       selectedCookie,
       selectedFilters,
+      filters,
       searchTerm,
     },
     actions: {

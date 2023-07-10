@@ -16,15 +16,14 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 /**
  * Internal dependencies.
  */
-import getFilters from '../../utils/getFilters';
 import useCookies from '../../useCookies';
 import type { Cookies } from '../../../../../../../localStore';
-import type { Filter, SelectedFilters } from '../../types';
+import type { SelectedFilters } from '../../types';
 import ListItem from './listItem';
 import SearchIcon from '../../../../../../../../icons/third_party/search-icon.svg';
 
@@ -36,27 +35,20 @@ interface FiltersListProps {
 }
 
 const FiltersList = () => {
-  const { cookies, selectedFilters, setSelectedFilters, setSearchTerm } =
+  const { filters, selectedFilters, setSelectedFilters, setSearchTerm } =
     useCookies(
       ({ state, actions }) =>
         ({
-          cookies: state?.cookies,
           selectedFilters: state?.selectedFilters,
+          filters: state?.filters,
           setSelectedFilters: actions?.setSelectedFilters,
           setSearchTerm: actions?.setSearchTerm,
         } as FiltersListProps)
     );
 
-  const [filters, setFilters] = useState<Filter[]>([]);
-
   const handleOnInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
-
-  useEffect(() => {
-    const updatedFilters = getFilters(cookies);
-    setFilters(updatedFilters);
-  }, [cookies]);
 
   if (!filters.length) {
     return null;

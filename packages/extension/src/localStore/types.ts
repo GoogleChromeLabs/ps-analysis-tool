@@ -22,6 +22,7 @@ import { type Cookie as ParsedCookie } from 'simple-cookie';
  * Internal dependencies.
  */
 import type { CookieAnalytics } from '../utils/fetchCookieDictionary';
+import type { SavedSelectedFilters } from '../view/devtools/components/tabContent/cookies/types';
 
 export type CookieData = {
   parsedCookie: ParsedCookie;
@@ -39,6 +40,9 @@ export type TabData = {
   cookies: Cookies;
   url: string | undefined;
   focusedAt: number | undefined;
+  extState?: {
+    selectedFilters?: SavedSelectedFilters;
+  };
 };
 
 export type Storage = {

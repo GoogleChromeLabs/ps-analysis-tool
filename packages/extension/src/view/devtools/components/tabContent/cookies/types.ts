@@ -26,6 +26,10 @@ export type SelectedFilters = {
   [key: string]: Set<string>;
 };
 
+export type SavedSelectedFilters = {
+  [key: string]: string[];
+};
+
 export interface Filter {
   name: string;
   keys: string;
@@ -41,12 +45,17 @@ export interface CookiesContextState {
     selectedKey: string | null;
     selectedCookie: CookieData;
     selectedFilters: SelectedFilters;
+    filters: Filter[];
     searchTerm: string;
+    isFilterExpanded: boolean;
+    showFilterSubList: boolean;
   };
   actions: {
     setSelectedKey: (key: string) => void;
     setSelectedCookie: (cookie: CookieData) => void;
     setSelectedFilters: (filter: SelectedFilters) => void;
     setSearchTerm: (term: string) => void;
+    setFilterExpanded: (isFilterExpanded: boolean) => void;
+    setShowFilterSubList: (showFilterSubList: boolean) => void;
   };
 }
