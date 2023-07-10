@@ -104,7 +104,7 @@ const App: React.FC = () => {
 
   return (
     <>
-      {cookieStats?.firstParty.total && cookieStats?.thirdParty.total ? (
+      {cookieStats?.firstParty.total || cookieStats?.thirdParty.total ? (
         <div className="w-96 h-80 flex justify-center items-center flex-col">
           <div className="w-full flex-1 flex gap-16 pt-6 px-12">
             <div className="w-full h-full flex flex-col justify-center items-center">
