@@ -15,6 +15,11 @@
  */
 
 /**
+ * External dependencies.
+ */
+import type { Cookie as ParsedCookie } from 'simple-cookie';
+
+/**
  * Internal dependencies.
  */
 import type { CookieData } from '../localStore';
@@ -22,6 +27,7 @@ import type {
   CookieAnalytics,
   CookieDatabase,
 } from '../utils/fetchCookieDictionary';
+import { createCookieObject } from './createCookieObject';
 import findAnalyticsMatch from './findAnalyticsMatch';
 
 /**
@@ -30,31 +36,38 @@ import findAnalyticsMatch from './findAnalyticsMatch';
  * @param {string} url Cookie URL (URL of the server which is setting/updating cookies).
  * @param {string} value header value
  * @param {CookieDatabase} dictionary Dictionary from open cookie database
- * @returns {CookieData[]} Parsed cookie object array.
+ * @returns {Promise<CookieData[]>} Parsed cookie object array.
  */
-const parseRequestCookieHeader = (
+const parseRequestCookieHeader = async (
   url: string,
   value: string,
   dictionary: CookieDatabase
-): CookieData[] => {
-  const cookies: CookieData[] = [];
+): Promise<CookieData[]> => {
+  const cookies: CookieData[] = await Promise.all(
+    value?.split(';').map(async (cookieString) => {
+      let [name] = cookieString.split('=');
+      const [, ...rest] = cookieString.split('=');
+      name = name.trim();
 
-  value?.split(';').forEach((cookieString) => {
-    let [name] = cookieString.split('=');
-    const [, ...rest] = cookieString.split('=');
-    name = name.trim();
+      let analytics: CookieAnalytics | null = null;
+      if (dictionary) {
+        analytics = findAnalyticsMatch(name, dictionary);
+      }
 
-    let analytics: CookieAnalytics | null = null;
-    if (dictionary) {
-      analytics = findAnalyticsMatch(name, dictionary);
-    }
-    cookies.push({
-      parsedCookie: { name, value: rest.join('='), domain: new URL(url).host },
-      analytics,
-      headerType: 'request',
-      url,
-    });
-  });
+      let parsedCookie = {
+        name,
+        value: rest.join('='),
+      } as ParsedCookie;
+      parsedCookie = await createCookieObject(parsedCookie, url);
+
+      return {
+        parsedCookie,
+        analytics,
+        headerType: 'request',
+        url,
+      };
+    })
+  );
 
   return cookies;
 };

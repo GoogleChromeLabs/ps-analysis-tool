@@ -48,20 +48,24 @@ chrome.webRequest.onResponseStarted.addListener(
       cookieDB = await fetchDictionary();
     }
 
-    const cookies = responseHeaders.reduce<CookieData[]>(
-      (accumulator, header) => {
+    const cookies = await responseHeaders.reduce<Promise<CookieData[]>>(
+      async (accumulator, header) => {
         if (
           header.name.toLowerCase() === 'set-cookie' &&
           header.value &&
           tab.url &&
           cookieDB
         ) {
-          const cookie = parseResponseCookieHeader(url, header.value, cookieDB);
-          return [...accumulator, cookie];
+          const cookie = await parseResponseCookieHeader(
+            url,
+            header.value,
+            cookieDB
+          );
+          return [...(await accumulator), cookie];
         }
         return accumulator;
       },
-      []
+      Promise.resolve([])
     );
 
     if (!cookies.length) {
@@ -88,24 +92,24 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
         cookieDB = await fetchDictionary();
       }
 
-      const cookies = requestHeaders.reduce<CookieData[]>(
-        (accumulator, header) => {
+      const cookies = await requestHeaders.reduce<Promise<CookieData[]>>(
+        async (accumulator, header) => {
           if (
             header.name.toLowerCase() === 'cookie' &&
             header.value &&
             url &&
             cookieDB
           ) {
-            const cookieList = parseRequestCookieHeader(
+            const cookieList = await parseRequestCookieHeader(
               url,
               header.value,
               cookieDB
             );
-            return [...accumulator, ...cookieList];
+            return [...(await accumulator), ...cookieList];
           }
           return accumulator;
         },
-        []
+        Promise.resolve([])
       );
 
       if (!cookies.length) {
