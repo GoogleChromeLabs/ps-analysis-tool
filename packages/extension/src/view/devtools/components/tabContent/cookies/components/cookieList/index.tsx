@@ -32,14 +32,35 @@ interface CookieListProps {
 }
 
 const CookieList = () => {
-  const { cookies, selectedKey, onClickItem } = useCookies(
-    ({ state, actions }) =>
-      ({
-        cookies: state?.filteredCookies,
-        selectedKey: state?.selectedKey,
-        onClickItem: actions?.setSelectedKey,
-      } as CookieListProps)
-  );
+  const { cookies, selectedKey, selectedFilters, searchTerm, onClickItem } =
+    useCookies(
+      ({ state, actions }) =>
+        ({
+          cookies: state?.filteredCookies,
+          selectedKey: state?.selectedKey,
+          selectedFilters: state?.selectedFilters,
+          searchTerm: state?.searchTerm,
+          onClickItem: actions?.setSelectedKey,
+        } as CookieListProps)
+    );
+
+  if (!Object.entries(cookies).length) {
+    if (Object.entries(selectedFilters).length) {
+      return (
+        <div className="h-full items-center justify-center flex">
+          <p className="p-3 text-sm">
+            No cookies found for the selected filters
+          </p>
+        </div>
+      );
+    } else if (searchTerm) {
+      return (
+        <div className="h-full items-center justify-center flex">
+          <p className="p-3 text-sm">No cookies found for {searchTerm}</p>
+        </div>
+      );
+    }
+  }
 
   return (
     <ul className="w-full h-full" data-testid="cookie-list-column">
