@@ -159,7 +159,7 @@ const CookieDetails = ({ data, analytics, url }: CookieDetailsProps) => {
         </div>
         <div className="flex items-center py-2 text-[#808080]">
           <h1 className="w-1/4 font-semibold text-s">
-            <abbr title="IBC (Incrementally Better Cookies): A proposed standard aiming to enhance cookie security and privacy. Key changes include treating cookies as 'SameSite=Lax' by default and requiring explicit 'SameSite=None; Secure' declaration for cross-site delivery. The draft incrementally improves cookie handling for better user protection.">
+            <abbr title="IBC (Incrementally Better Cookies): A proposed standard aiming to enhance cookie security and privacy. Key changes include treating cookies as 'SameSite=Lax' by default and requiring explicit 'SameSite=None; Secure' declaration for cross-site delivery. If any of conditions are met, the cookie should be set and treated as IBC compliant.">
               IBC Compliant
             </abbr>
           </h1>
@@ -171,7 +171,11 @@ const CookieDetails = ({ data, analytics, url }: CookieDetailsProps) => {
                 {isCookieIBCCompliant ? (
                   <span className="text-green-500">Yes</span>
                 ) : (
-                  <span className="text-red-500">No</span>
+                  <span className="text-red-500">
+                    <abbr title="Cookies might be blocked due to user preferences or browser/extension's settings">
+                      No
+                    </abbr>
+                  </span>
                 )}
               </p>
             </>
