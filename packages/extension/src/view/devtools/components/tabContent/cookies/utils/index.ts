@@ -19,3 +19,4 @@ export { default as getFilterValue } from './getFilterValue';
 export { default as getFilters } from './getFilters';
 export { default as filterCookies } from './filterCookies';
 export { default as saveSelectedCookies } from './saveSelectedCookies';
+export { default as sortRetentionPeriod } from './sortRetentionPeriod';

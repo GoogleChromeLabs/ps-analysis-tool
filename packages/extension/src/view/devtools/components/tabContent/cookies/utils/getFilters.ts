@@ -20,6 +20,7 @@ import type { Cookies } from '../../../../../../localStore';
 import { FILTER_MAPPING } from '../constants';
 import getFilterValue from './getFilterValue';
 import type { Filter } from '../types';
+import sortRetentionPeriod from './sortRetentionPeriod';
 
 const getFilters = (cookies: Cookies): Filter[] => {
   const filters: Filter[] = [...FILTER_MAPPING];
@@ -47,15 +48,21 @@ const getFilters = (cookies: Cookies): Filter[] => {
       }
     });
 
-    const setFilters = filters[key]?.filters;
+    const collectedFilters = filters[key]?.filters;
 
     // Formatting and sorting.
-    if (filterMap?.sort && setFilters) {
-      filters[key].filters = new Set([...setFilters].sort());
+    if (filterMap?.sort && collectedFilters) {
+      filters[key].filters = new Set([...collectedFilters].sort());
     }
 
-    if ('boolean' === filterMap?.type && setFilters) {
-      filters[key].filters = new Set([...setFilters].sort().reverse()); // To bring [True, False]
+    if ('boolean' === filterMap?.type && collectedFilters) {
+      filters[key].filters = new Set([...collectedFilters].sort().reverse()); // To bring [True, False]
+    }
+
+    if (filterMap?.keys === 'analytics.retention' && collectedFilters) {
+      filters[key].filters = new Set(
+        sortRetentionPeriod([...collectedFilters])
+      );
     }
   });
 
