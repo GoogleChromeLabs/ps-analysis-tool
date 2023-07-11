@@ -13,11 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as saveSearchTerm } from './saveSearchTerm';
-export { default as getSavedSelectedCookies } from './getSavedSelectedCookies';
-export { default as getFilterValue } from './getFilterValue';
-export { default as getFilters } from './getFilters';
-export { default as filterCookies } from './filterCookies';
-export { default as saveSelectedCookies } from './saveSelectedCookies';
-export { default as sortRetentionPeriod } from './sortRetentionPeriod';
-export { default as sortStringArray } from './sortStringArray';
+const sortStringArray = (textArray: string[]): string[] => {
+  return textArray.sort((textString1: string, textString2: string) => {
+    const trimmedDomainA: string = textString1.replace(/^\./, '').toLowerCase();
+    const trimmedDomainB: string = textString2.replace(/^\./, '').toLowerCase();
+
+    if (trimmedDomainA < trimmedDomainB) {
+      return -1;
+    }
+    if (trimmedDomainA > trimmedDomainB) {
+      return 1;
+    }
+    return 0;
+  });
+};
+
+export default sortStringArray;

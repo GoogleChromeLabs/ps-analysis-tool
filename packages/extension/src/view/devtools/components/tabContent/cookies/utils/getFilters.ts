@@ -21,6 +21,7 @@ import { FILTER_MAPPING } from '../constants';
 import getFilterValue from './getFilterValue';
 import type { Filter } from '../types';
 import sortRetentionPeriod from './sortRetentionPeriod';
+import { sortStringArray } from '.';
 
 const getFilters = (cookies: Cookies): Filter[] => {
   const filters: Filter[] = [...FILTER_MAPPING];
@@ -52,7 +53,7 @@ const getFilters = (cookies: Cookies): Filter[] => {
 
     // Formatting and sorting.
     if (filterMap?.sort && collectedFilters) {
-      filters[key].filters = new Set([...collectedFilters].sort());
+      filters[key].filters = new Set(sortStringArray([...collectedFilters]));
     }
 
     if ('boolean' === filterMap?.type && collectedFilters) {
