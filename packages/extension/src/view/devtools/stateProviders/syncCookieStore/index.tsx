@@ -89,7 +89,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     [tabId]
   );
 
-  const tabUpdateListner = useCallback(
+  const tabUpdateListener = useCallback(
     (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
       if (tabId === _tabId && changeInfo.url) {
         setTabUrl(changeInfo.url);
@@ -101,12 +101,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     intitialSync();
     chrome.storage.local.onChanged.addListener(storeChangeListener);
-    chrome.tabs.onUpdated.addListener(tabUpdateListner);
+    chrome.tabs.onUpdated.addListener(tabUpdateListener);
     return () => {
       chrome.storage.local.onChanged.removeListener(storeChangeListener);
-      chrome.tabs.onUpdated.removeListener(tabUpdateListner);
+      chrome.tabs.onUpdated.removeListener(tabUpdateListener);
     };
-  }, [intitialSync, storeChangeListener, tabUpdateListner]);
+  }, [intitialSync, storeChangeListener, tabUpdateListener]);
 
   return (
     <Context.Provider value={{ state: { tabCookies, tabUrl }, actions: {} }}>

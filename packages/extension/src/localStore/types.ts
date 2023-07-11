@@ -34,7 +34,7 @@ export type TabData = {
   cookies: {
     [key: string]: CookieData;
   } | null;
-  focusedAt: number | undefined;
+  focusedAt: number | null;
 };
 
 export type Storage = {
