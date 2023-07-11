@@ -24,13 +24,16 @@ import { type Cookie as ParsedCookie } from 'simple-cookie';
  */
 import DomainIcon from '../../../../../../../icons/domain.svg';
 import { type CookieAnalytics } from '../../../../../../utils/fetchCookieDictionary';
+import { checkIBCCompliance } from '../../../../../../worker/checkIBCCompliance';
+import { getCookie } from '../../../../../../utils/getCookie';
 
 interface CookieDetailsProps {
   data: ParsedCookie;
   analytics: CookieAnalytics | null;
+  url: string;
 }
 
-const CookieDetails = ({ data, analytics }: CookieDetailsProps) => {
+const CookieDetails = ({ data, analytics, url }: CookieDetailsProps) => {
   const descriptionRef = useRef<HTMLParagraphElement>(null);
   const valueRef = useRef<HTMLParagraphElement>(null);
 
@@ -41,6 +44,33 @@ const CookieDetails = ({ data, analytics }: CookieDetailsProps) => {
   const [showMoreDescription, setShowMoreDescription] =
     useState<boolean>(false);
   const [showMoreValue, setShowMoreValue] = useState<boolean>(false);
+
+  const [chromeCookieStoreHasCookie, setChromeCookieStoreHasCookie] = useState<
+    boolean | null
+  >(null);
+  const [isCookieIBCCompliant, setisCookieIBCCompliant] = useState<
+    boolean | null
+  >(null);
+
+  useEffect(() => {
+    setChromeCookieStoreHasCookie(null);
+    setisCookieIBCCompliant(null);
+
+    (async () => {
+      const _chromeCookieStoreHasCookie = Boolean(
+        await getCookie(data.name, url)
+      );
+      setChromeCookieStoreHasCookie(_chromeCookieStoreHasCookie);
+
+      setisCookieIBCCompliant(
+        checkIBCCompliance(
+          data.samesite,
+          data.secure,
+          _chromeCookieStoreHasCookie
+        )
+      );
+    })();
+  }, [data.name, data.samesite, data.secure, url]);
 
   useEffect(() => {
     setShowMoreDescription(false);
@@ -126,6 +156,44 @@ const CookieDetails = ({ data, analytics }: CookieDetailsProps) => {
           <p className="w-3/4 text-xs text-tertiary  truncate">
             {analytics?.retention}
           </p>
+        </div>
+        <div className="flex items-center py-2 text-[#808080]">
+          <h1 className="w-1/4 font-semibold text-s">
+            <abbr title="IBC (Incrementally Better Cookies): A proposed standard aiming to enhance cookie security and privacy. Key changes include treating cookies as 'SameSite=Lax' by default and requiring explicit 'SameSite=None; Secure' declaration for cross-site delivery. The draft incrementally improves cookie handling for better user protection.">
+              IBC Compliant
+            </abbr>
+          </h1>
+          {isCookieIBCCompliant === null ? (
+            <>Loading...</>
+          ) : (
+            <>
+              <p className="w-3/4 text-xs text-tertiary  truncate">
+                {isCookieIBCCompliant ? (
+                  <span className="text-green-500">Yes</span>
+                ) : (
+                  <span className="text-red-500">No</span>
+                )}
+              </p>
+            </>
+          )}
+        </div>
+        <div className="flex items-center py-2 text-[#808080]">
+          <h1 className="w-1/4 font-semibold text-s">
+            <abbr title="Whether the cookie has been set by the website">
+              Cookie Set
+            </abbr>
+          </h1>
+          {chromeCookieStoreHasCookie === null ? (
+            <>Loading...</>
+          ) : (
+            <p className="w-3/4 text-xs text-tertiary  truncate">
+              {chromeCookieStoreHasCookie ? (
+                <span className="text-green-500">Yes</span>
+              ) : (
+                <span className="text-red-500">No</span>
+              )}
+            </p>
+          )}
         </div>
         <div className="flex items-center py-2 text-[#808080]">
           <h1 className="w-1/4 font-semibold text-s">GDPR Portal</h1>
