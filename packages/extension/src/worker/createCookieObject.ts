@@ -38,7 +38,7 @@ export async function createCookieObject(cookie: ParsedCookie, url: string) {
 
   const prevCookieObj = (
     await findPrevCookieDataObject(
-      (await getCurrentTabId()) as string,
+      (await getCurrentTabId()) || ('0' as string),
       cookie.name
     )
   )?.parsedCookie;

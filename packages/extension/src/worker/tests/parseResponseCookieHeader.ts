@@ -13,14 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/**
+ * External dependencies.
+ */
+import SinonChrome from 'sinon-chrome';
+
 /**
  * Internal dependencies.
  */
 import parseResponseCookieHeader from '../parseResponseCookieHeader';
 
 describe('parseResponseCookieHeader', () => {
-  it('Should parse all set-cookie header (response cookies)', () => {
-    const parsedCookie = parseResponseCookieHeader(
+  beforeAll(() => {
+    globalThis.chrome = SinonChrome as unknown as typeof chrome;
+  });
+
+  it('Should parse all set-cookie header (response cookies)', async () => {
+    const parsedCookie = await parseResponseCookieHeader(
       'https://example.com/public/api/alerts',
       'countryCode=IN; Domain=.example.com; Path=/; SameSite=None; Secure',
       {}
@@ -43,8 +53,8 @@ describe('parseResponseCookieHeader', () => {
     });
   });
 
-  it('Should parse and add add analytics', () => {
-    const parsedCookie = parseResponseCookieHeader(
+  it('Should parse and add add analytics', async () => {
+    const parsedCookie = await parseResponseCookieHeader(
       'https://example.com/public/api/alerts',
       'test_cookie=bla; Domain=.example.com; Path=/; SameSite=None; Secure',
       {
@@ -93,8 +103,8 @@ describe('parseResponseCookieHeader', () => {
     });
   });
 
-  it('Should parse and add add analytics for wild card entries', () => {
-    const parsedCookie = parseResponseCookieHeader(
+  it('Should parse and add add analytics for wild card entries', async () => {
+    const parsedCookie = await parseResponseCookieHeader(
       'https://google.com/public/api/alerts',
       '_ga_123=bla; Domain=.google.com; Path=/; SameSite=None; Secure',
       {
