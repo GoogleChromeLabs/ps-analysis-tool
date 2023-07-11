@@ -42,7 +42,7 @@ const SubList: React.FC<SubListProps> = ({
 
   return (
     <ul>
-      {[...filter.filters].sort().map((filterValue, index) => (
+      {[...filter.filters].map((filterValue, index) => (
         <li
           key={index}
           className={

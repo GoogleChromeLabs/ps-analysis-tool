@@ -46,6 +46,7 @@ export interface Filter {
   filters?: Set<string>;
   type?: string;
   default?: string;
+  sort?: boolean;
 }
 
 export interface CookiesContextState {

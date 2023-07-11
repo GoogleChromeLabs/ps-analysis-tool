@@ -46,6 +46,17 @@ const getFilters = (cookies: Cookies): Filter[] => {
         filters[key].filters?.add(value);
       }
     });
+
+    const setFilters = filters[key]?.filters;
+
+    // Formatting and sorting.
+    if (filterMap?.sort && setFilters) {
+      filters[key].filters = new Set([...setFilters].sort());
+    }
+
+    if ('boolean' === filterMap?.type && setFilters) {
+      filters[key].filters = new Set([...setFilters].sort().reverse()); // To bring [True, False]
+    }
   });
 
   return filters;

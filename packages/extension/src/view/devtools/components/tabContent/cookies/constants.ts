@@ -18,10 +18,12 @@ export const FILTER_MAPPING = [
     name: 'Category',
     keys: 'analytics.category',
     default: 'Uncategorized',
+    sort: true,
   },
   {
     name: 'Domain',
     keys: 'parsedCookie.domain',
+    sort: true,
   },
   {
     name: 'Path',
