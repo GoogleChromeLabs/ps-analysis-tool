@@ -18,7 +18,7 @@
  */
 import updateStorage from './updateStorage';
 import type { TabData, CookieData } from './types';
-import type { SavedSelectedFilters } from '../view/devtools/components/tabContent/cookies/types';
+import type { SettingsToSave } from '../view/devtools/components/tabContent/cookies/types';
 
 const CookieStore = {
   /**
@@ -66,16 +66,14 @@ const CookieStore = {
   /**
    * Update selected filters.
    * @param {number} tabId Tab id.
-   * @param {Array} selectedFilters Selected filters.
+   * @param {object} settingsToSave
    */
-  async updateSelectedFilters(
-    tabId: string,
-    selectedFilters: SavedSelectedFilters
-  ) {
+  async updateExtState(tabId: string, settingsToSave: SettingsToSave) {
     await updateStorage(tabId, (prevState: TabData) => ({
       ...prevState,
       extState: {
-        selectedFilters,
+        ...(prevState?.extState || {}),
+        ...settingsToSave,
       },
     }));
   },

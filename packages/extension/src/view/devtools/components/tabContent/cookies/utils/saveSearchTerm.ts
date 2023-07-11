@@ -13,29 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Internal dependencies.
- */
-import { CookieStore } from '../../../../../../localStore';
-import type { SelectedFilters, SavedSelectedFilters } from '../types';
+import CookieStore from '../../../../../../localStore/cookieStore';
 
-const saveSelectedCookies = async (
+const saveSearchTerm = async (
   tabId: string | undefined,
-  selectedFilters: SelectedFilters
+  searchTerm: string
 ) => {
-  const filtersToSave = Object.entries(selectedFilters).reduce(
-    (toSave: SavedSelectedFilters, [keys, filters]) => {
-      toSave[keys] = [...filters];
-      return toSave;
-    },
-    {}
-  );
-
-  if (tabId) {
-    await CookieStore.updateExtState(tabId, {
-      selectedFilters: filtersToSave,
-    });
+  if (!tabId) {
+    return;
   }
+
+  await CookieStore.updateExtState(tabId, {
+    searchTerm,
+  });
 };
 
-export default saveSelectedCookies;
+export default saveSearchTerm;

@@ -42,6 +42,7 @@ export type TabData = {
   focusedAt: number | undefined;
   extState?: {
     selectedFilters?: SavedSelectedFilters;
+    searchTerm?: string;
   };
 };
 

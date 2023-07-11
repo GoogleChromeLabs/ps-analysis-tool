@@ -32,19 +32,26 @@ interface FiltersListProps {
   selectedFilters: SelectedFilters;
   setSelectedFilters: React.Dispatch<React.SetStateAction<SelectedFilters>>;
   setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
+  searchTerm: string;
 }
 
 const FiltersList = () => {
-  const { filters, selectedFilters, setSelectedFilters, setSearchTerm } =
-    useCookies(
-      ({ state, actions }) =>
-        ({
-          selectedFilters: state?.selectedFilters,
-          filters: state?.filters,
-          setSelectedFilters: actions?.setSelectedFilters,
-          setSearchTerm: actions?.setSearchTerm,
-        } as FiltersListProps)
-    );
+  const {
+    filters,
+    selectedFilters,
+    setSelectedFilters,
+    setSearchTerm,
+    searchTerm,
+  } = useCookies(
+    ({ state, actions }) =>
+      ({
+        selectedFilters: state?.selectedFilters,
+        searchTerm: state?.searchTerm,
+        filters: state?.filters,
+        setSelectedFilters: actions?.setSelectedFilters,
+        setSearchTerm: actions?.setSearchTerm,
+      } as FiltersListProps)
+  );
 
   const handleOnInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -65,6 +72,7 @@ const FiltersList = () => {
           placeholder="Filter.."
           className="p-2 pl-4 pb-1 focus:outline-none outline-none border-b"
           onInput={handleOnInput}
+          value={searchTerm || ''}
         />
       </div>
       <ul>

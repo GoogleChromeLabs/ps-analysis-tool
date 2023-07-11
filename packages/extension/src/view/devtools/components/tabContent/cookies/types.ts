@@ -30,6 +30,16 @@ export type SavedSelectedFilters = {
   [key: string]: string[];
 };
 
+export interface ExtState {
+  selectedFilters?: SavedSelectedFilters;
+  searchTerm?: string;
+}
+
+export interface SettingsToSave {
+  selectedFilters?: SavedSelectedFilters;
+  searchTerm?: string;
+}
+
 export interface Filter {
   name: string;
   keys: string;

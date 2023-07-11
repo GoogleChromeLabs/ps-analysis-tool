@@ -16,27 +16,18 @@
 /**
  * Internal dependencies.
  */
-import { getCurrentTabId } from '../../../../../../utils/getCurrentTabId';
-import { Storage } from '../../../../../../localStore';
 import { SavedSelectedFilters, SelectedFilters } from '../types';
+import { Storage } from '../../../../../../localStore';
 
-const getSavedSelectedCookies = async () => {
-  const tabId = await getCurrentTabId();
-
-  if (!tabId) {
+const getSavedSelectedCookies = (
+  tabId: string | undefined,
+  storage: Storage
+): SelectedFilters | null => {
+  if (!tabId || !storage[tabId] || !storage[tabId]?.extState) {
     return null;
   }
 
-  const currentStorageSnapshot: Storage = await chrome.storage.local.get();
-
-  if (
-    !currentStorageSnapshot[tabId] ||
-    !currentStorageSnapshot[tabId]?.extState
-  ) {
-    return null;
-  }
-
-  const savedSelectedFilters = currentStorageSnapshot[tabId].extState
+  const savedSelectedFilters = storage[tabId].extState
     ?.selectedFilters as SavedSelectedFilters;
 
   if (!savedSelectedFilters) {

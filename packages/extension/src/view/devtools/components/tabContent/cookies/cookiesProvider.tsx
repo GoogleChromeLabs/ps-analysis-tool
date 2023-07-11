@@ -23,16 +23,20 @@ import React, { type ReactNode, useEffect, useState } from 'react';
  */
 import CookiesContext from './context';
 import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
-import filterCookies from './utils/filterCookies';
-import getFilters from './utils/getFilters';
-import saveSelectedCookies from './utils/saveSelectedCookies';
-import getSavedSelectedCookies from './utils/getSavedSelectedCookies';
-import { type CookieData } from '../../../../../localStore';
+import {
+  filterCookies,
+  getFilters,
+  saveSelectedCookies,
+  getSavedSelectedCookies,
+  saveSearchTerm,
+} from './utils';
+import { type CookieData, Storage } from '../../../../../localStore';
 import type {
   UseCookieStoreReturnType,
   SelectedFilters,
   Filter,
 } from './types';
+import { getCurrentTabId } from '../../../../../utils/getCurrentTabId';
 
 interface CookiesProviderProps {
   children: ReactNode;
@@ -50,22 +54,44 @@ const CookiesProvider: React.FC<CookiesProviderProps> = ({ children }) => {
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({});
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [filters, setFilters] = useState<Filter[]>([]);
+  const [currentTabId, setCurrentTabId] = useState<string | undefined>('');
 
   useEffect(() => {
     (async () => {
-      const savedFilters = await getSavedSelectedCookies();
-
-      if (savedFilters) {
-        setSelectedFilters(savedFilters);
-      }
+      const tabId = await getCurrentTabId();
+      setCurrentTabId(tabId);
     })();
   }, []);
 
   useEffect(() => {
     (async () => {
-      await saveSelectedCookies(selectedFilters);
+      await saveSearchTerm(currentTabId, searchTerm);
     })();
-  }, [selectedFilters]);
+  }, [searchTerm, currentTabId]);
+
+  useEffect(() => {
+    (async () => {
+      if (currentTabId) {
+        const storage: Storage = await chrome.storage.local.get();
+        const savedFilters = getSavedSelectedCookies(currentTabId, storage);
+        const savedSearchTerm = storage[currentTabId]?.extState?.searchTerm;
+
+        if (savedSearchTerm) {
+          setSearchTerm(savedSearchTerm);
+        }
+
+        if (savedFilters) {
+          setSelectedFilters(savedFilters);
+        }
+      }
+    })();
+  }, [currentTabId]);
+
+  useEffect(() => {
+    (async () => {
+      await saveSelectedCookies(currentTabId, selectedFilters);
+    })();
+  }, [selectedFilters, currentTabId]);
 
   useEffect(() => {
     if (!cookies) {
