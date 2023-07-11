@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useEffect } from 'react';
 
 /**
  * Internal dependencies.
@@ -32,17 +32,30 @@ interface CookieListProps {
 }
 
 const CookieList = () => {
-  const { cookies, selectedKey, selectedFilters, searchTerm, onClickItem } =
-    useCookies(
-      ({ state, actions }) =>
-        ({
-          cookies: state?.filteredCookies,
-          selectedKey: state?.selectedKey,
-          selectedFilters: state?.selectedFilters,
-          searchTerm: state?.searchTerm,
-          onClickItem: actions?.setSelectedKey,
-        } as CookieListProps)
-    );
+  const {
+    cookies,
+    selectedKey,
+    setSelectedKey,
+    selectedFilters,
+    searchTerm,
+    onClickItem,
+  } = useCookies(
+    ({ state, actions }) =>
+      ({
+        cookies: state?.filteredCookies,
+        selectedKey: state?.selectedKey,
+        setSelectedKey: actions?.setSelectedKey,
+        selectedFilters: state?.selectedFilters,
+        searchTerm: state?.searchTerm,
+        onClickItem: actions?.setSelectedKey,
+      } as CookieListProps)
+  );
+
+  useEffect(() => {
+    if (Object.keys(cookies).length && !cookies[selectedKey]) {
+      setSelectedKey(Object.keys(cookies)[0]);
+    }
+  }, [cookies, selectedKey, setSelectedKey]);
 
   if (!Object.entries(cookies).length) {
     if (Object.entries(selectedFilters).length) {
