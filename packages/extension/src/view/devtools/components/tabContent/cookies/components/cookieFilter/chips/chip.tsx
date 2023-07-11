@@ -21,22 +21,27 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import type { SelectedFilters } from '../../../types';
+import type { SelectedFilters, Filter } from '../../../types';
+import { FILTER_MAPPING } from '../../../constants';
 
 interface ChipProps {
   text: string;
   setSelectedFilters: React.Dispatch<React.SetStateAction<SelectedFilters>>;
-  filterKey: string;
+  filterKeys: string;
 }
 
-const Chip: React.FC<ChipProps> = ({ text, setSelectedFilters, filterKey }) => {
+const Chip: React.FC<ChipProps> = ({
+  text,
+  setSelectedFilters,
+  filterKeys,
+}) => {
   const handleOnClick = () => {
     setSelectedFilters((prevState) => {
-      if (prevState[filterKey] && prevState[filterKey].has(text)) {
-        prevState[filterKey].delete(text);
+      if (prevState[filterKeys] && prevState[filterKeys].has(text)) {
+        prevState[filterKeys].delete(text);
 
-        if (!prevState[filterKey].size) {
-          delete prevState[filterKey];
+        if (!prevState[filterKeys].size) {
+          delete prevState[filterKeys];
         }
       }
 
@@ -44,9 +49,22 @@ const Chip: React.FC<ChipProps> = ({ text, setSelectedFilters, filterKey }) => {
     });
   };
 
+  let label = text;
+
+  if (['True', 'False'].includes(text)) {
+    const filterMap =
+      FILTER_MAPPING.find((_filterMap: Filter) => {
+        return _filterMap.keys === filterKeys;
+      }) || ({} as Filter);
+
+    if (filterMap.name) {
+      label = filterMap.name + ':' + text;
+    }
+  }
+
   return (
     <div className="flex items-center bg-gray-200 rounded-full text-xs text-gray-700 px-2 py-1 mr-1">
-      <span className="mr-1 block whitespace-nowrap">{text}</span>
+      <span className="mr-1 block whitespace-nowrap">{label}</span>
       <button
         onClick={handleOnClick}
         className="text-gray-600 hover:text-gray-800 focus:outline-none"
