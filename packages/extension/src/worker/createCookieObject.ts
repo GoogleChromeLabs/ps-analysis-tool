@@ -104,7 +104,7 @@ export async function createCookieObject(cookie: ParsedCookie, url: string) {
 /**
  * Parse cookie attribute values from cookieStore API cookie object, previously saved parsed cookie object if any, and recently captured request/response cookie header.
  * @param type Cookie attribute type.
- * @param parseCookieValue Cookie attribute value from the parsed cookie object.
+ * @param parsedCookieValue Cookie attribute value from the parsed cookie object.
  * @param chromeStoreCookieValue Cookie attribute value from the cookieStore API cookie object.
  * @param prevParsedCookieValue Cookie attribute value from the previously saved parsed cookie object.
  * @param url URL of the cookie from the request/response. (Only required for domain attribute)
@@ -112,13 +112,13 @@ export async function createCookieObject(cookie: ParsedCookie, url: string) {
  */
 function parseAttributeValues(
   type: string,
-  parseCookieValue: string | boolean | number | Date | undefined,
+  parsedCookieValue: string | boolean | number | Date | undefined,
   chromeStoreCookieValue: string | boolean | number | Date | undefined,
   prevParsedCookieValue: string | boolean | number | Date | undefined,
   url?: string | undefined
 ) {
   let value =
-    parseCookieValue || chromeStoreCookieValue || prevParsedCookieValue;
+    parsedCookieValue || chromeStoreCookieValue || prevParsedCookieValue;
 
   if (type === 'domain' && url) {
     value = value || '.' + getDomain(url);
