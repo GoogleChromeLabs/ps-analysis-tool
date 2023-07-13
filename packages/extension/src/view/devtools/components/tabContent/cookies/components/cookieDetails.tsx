@@ -24,7 +24,7 @@ import { type Cookie as ParsedCookie } from 'simple-cookie';
  */
 import DomainIcon from '../../../../../../../icons/domain.svg';
 import { type CookieAnalytics } from '../../../../../../utils/fetchCookieDictionary';
-import { checkIBCCompliance } from '../../../../../../worker/checkIBCCompliance';
+import { checkIBCCompliance } from '../../../../../../utils/checkIBCCompliance';
 import { getCookie } from '../../../../../../utils/getCookie';
 
 interface CookieDetailsProps {
