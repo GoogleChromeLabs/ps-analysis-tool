@@ -82,7 +82,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const storeChangeListener = useCallback(
     (changes: { [key: string]: chrome.storage.StorageChange }) => {
-      if (tabId && Object.keys(changes).includes(tabId.toString())) {
+      if (
+        tabId &&
+        Object.keys(changes).includes(tabId.toString()) &&
+        changes[tabId.toString()]?.newValue?.cookies
+      ) {
         setTabCookies(changes[tabId.toString()].newValue.cookies);
       }
     },
