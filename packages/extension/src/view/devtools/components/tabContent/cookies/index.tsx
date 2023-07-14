@@ -21,14 +21,14 @@ import React, { useEffect, useState } from 'react';
 /**
  * Internal dependencies.
  */
-import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
+import { useCookieStore } from '../../../stateProviders/syncCookieStore';
 import { CookieList, CookieDetails } from './components';
 import type { CookieData } from '../../../../../localStore';
 
 const Cookies = () => {
   const { cookies, tabUrl } = useCookieStore(({ state }) => ({
-    cookies: state?.cookies,
-    tabUrl: state?.url,
+    cookies: state.tabCookies,
+    tabUrl: state.tabUrl,
   }));
 
   const [selectedKey, setSelectedKey] = useState<string | null>(null);

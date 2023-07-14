@@ -25,7 +25,7 @@ import { type Cookie as ParsedCookie } from 'simple-cookie';
  * External dependencies.
  */
 import CookieTab from '..';
-import type { TabData } from '../../../../../../localStore';
+import type { CookieStoreContext } from '../../../../stateProviders/syncCookieStore';
 
 const uncategorised1pCookie: ParsedCookie = {
   name: '_cb',
@@ -52,11 +52,10 @@ const known3pCookie: ParsedCookie = {
 };
 
 const mockResponse: {
-  cookies: NonNullable<TabData['cookies']>;
-  url: NonNullable<TabData['url']>;
-  focusedAt: NonNullable<TabData['focusedAt']>;
+  tabCookies: NonNullable<CookieStoreContext['state']['tabCookies']>;
+  tabUrl: NonNullable<CookieStoreContext['state']['tabUrl']>;
 } = {
-  cookies: {
+  tabCookies: {
     [uncategorised1pCookie.name]: {
       parsedCookie: uncategorised1pCookie,
       analytics: null,
@@ -104,14 +103,13 @@ const mockResponse: {
       headerType: 'response',
     },
   },
-  url: 'https://edition.cnn.com/',
-  focusedAt: 123,
+  tabUrl: 'https://edition.cnn.com/',
 };
 
-jest.mock('../../../../../stateProviders/syncCookieStore', () => {
+jest.mock('../../../../stateProviders/syncCookieStore', () => {
   return {
     useCookieStore: () => {
-      return { cookies: mockResponse.cookies, tabUrl: mockResponse.url };
+      return { cookies: mockResponse.tabCookies, tabUrl: mockResponse.tabUrl };
     },
   };
 });
@@ -136,7 +134,7 @@ describe('CookieTab', () => {
     expect(card).toBeInTheDocument();
 
     const firstCookie =
-      mockResponse.cookies[Object.keys(mockResponse.cookies)[0]];
+      mockResponse.tabCookies[Object.keys(mockResponse.tabCookies)[0]];
 
     expect(
       within(card).getByText(firstCookie.parsedCookie.name)
@@ -154,7 +152,7 @@ describe('CookieTab', () => {
     expect(card).toBeInTheDocument();
 
     const thirdCookie =
-      mockResponse.cookies[Object.keys(mockResponse.cookies)[2]];
+      mockResponse.tabCookies[Object.keys(mockResponse.tabCookies)[2]];
 
     expect(
       within(card).getByText(`${thirdCookie.parsedCookie.name}`)

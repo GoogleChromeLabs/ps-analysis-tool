@@ -24,18 +24,34 @@ import React from 'react';
  */
 import './app.css';
 import { PieChart, Legend } from './components';
-import { useCookieStore } from '../stateProviders/syncCookieStore';
-import countCookiesByCategory from '../../utils/countCookiesByCategory';
+import { useCookieStore } from './stateProviders/syncCookieStore';
 import { COLOR_MAP } from './const';
 
 const App: React.FC = () => {
-  const { cookies, tabURL } = useCookieStore(({ state }) => ({
-    cookies: state?.cookies,
-    tabURL: state?.url,
+  const { cookieStats } = useCookieStore(({ state }) => ({
+    cookieStats: state.tabCookieStats,
   }));
 
-  const cookieStats = countCookiesByCategory(cookies, tabURL || '');
+  if (!cookieStats) {
+    return (
+      <div className="w-96 h-80 flex justify-center items-center flex-col">
+        <p className="font-bold text-lg">
+          Please refresh this page to view cookies
+        </p>
+      </div>
+    );
+  }
 
+  if (
+    cookieStats.firstParty.total === 0 &&
+    cookieStats.thirdParty.total === 0
+  ) {
+    return (
+      <div className="w-96 h-80 flex justify-center items-center flex-col">
+        <p className="font-bold text-lg">No cookies found on this page</p>
+      </div>
+    );
+  }
   const legendData = [
     {
       label: 'Functional',
@@ -103,68 +119,52 @@ const App: React.FC = () => {
   ];
 
   return (
-    <>
-      {cookieStats?.firstParty.total && cookieStats?.thirdParty.total ? (
-        <div className="w-96 h-80 flex justify-center items-center flex-col">
-          <div className="w-full flex-1 flex gap-16 pt-6 px-12">
-            <div className="w-full h-full flex flex-col justify-center items-center">
-              <div className="flex-1 w-full">
-                {cookieStats.firstParty.total ? (
-                  <PieChart
-                    centerCount={cookieStats.firstParty.total}
-                    data={firstPartyPiechartData}
-                  />
-                ) : (
-                  <div className="w-full h-full flex justify-center items-center">
-                    <h1 className="text-center">
-                      First Party Cookies Not Found
-                    </h1>
-                  </div>
-                )}
+    <div className="w-96 h-80 flex justify-center items-center flex-col">
+      <div className="w-full flex-1 flex gap-16 pt-6 px-12">
+        <div className="w-full h-full flex flex-col justify-center items-center">
+          <div className="flex-1 w-full">
+            {cookieStats.firstParty.total ? (
+              <PieChart
+                centerCount={cookieStats.firstParty.total}
+                data={firstPartyPiechartData}
+              />
+            ) : (
+              <div className="w-full h-full flex justify-center items-center">
+                <h1 className="text-center">First Party Cookies Not Found</h1>
               </div>
-              {cookieStats.firstParty.total ? (
-                <p className="font-bold text-xs">1st Party Cookies</p>
-              ) : null}
-            </div>
-            <div className="w-full h-full flex flex-col justify-center items-center">
-              <div className="flex-1 w-full h-full">
-                {cookieStats.thirdParty.total ? (
-                  <PieChart
-                    centerCount={cookieStats.thirdParty.total}
-                    data={thirdPartyPiechartData}
-                  />
-                ) : (
-                  <div className="w-full h-full flex justify-center items-center">
-                    <h1 className="text-center">
-                      Third Party Cookies Not Found
-                    </h1>
-                  </div>
-                )}
+            )}
+          </div>
+          {cookieStats.firstParty.total ? (
+            <p className="font-bold text-xs">1st Party Cookies</p>
+          ) : null}
+        </div>
+        <div className="w-full h-full flex flex-col justify-center items-center">
+          <div className="flex-1 w-full h-full">
+            {cookieStats.thirdParty.total ? (
+              <PieChart
+                centerCount={cookieStats.thirdParty.total}
+                data={thirdPartyPiechartData}
+              />
+            ) : (
+              <div className="w-full h-full flex justify-center items-center">
+                <h1 className="text-center">Third Party Cookies Not Found</h1>
               </div>
-              {cookieStats.thirdParty.total ? (
-                <p className="font-bold text-xs">3rd Party Cookies</p>
-              ) : null}
-            </div>
+            )}
           </div>
-          <div className="mt-3">
-            <Legend legendItemList={legendData} />
-          </div>
-          <div className="w-full text-center mt-5 px-3 mb-3">
-            <p className="text-chart-label text-xs">
-              {'Inspect cookies in the "Privacy Sandbox" panel of DevTools'}
-            </p>
-          </div>
+          {cookieStats.thirdParty.total ? (
+            <p className="font-bold text-xs">3rd Party Cookies</p>
+          ) : null}
         </div>
-      ) : (
-        <div className="w-96 h-80 flex justify-center items-center flex-col">
-          <p className="font-bold text-lg">
-            {cookies === null
-              ? 'Please refresh this page to view cookies'
-              : 'No cookies found on this page'}
-          </p>
-        </div>
-      )}
-    </>
+      </div>
+      <div className="mt-3">
+        <Legend legendItemList={legendData} />
+      </div>
+      <div className="w-full text-center mt-5 px-3 mb-3">
+        <p className="text-chart-label text-xs">
+          {'Inspect cookies in the "Privacy Sandbox" panel of DevTools'}
+        </p>
+      </div>
+    </div>
   );
 };
 

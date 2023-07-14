@@ -18,7 +18,6 @@
  */
 import updateStorage from './updateStorage';
 import type { TabData, CookieData } from './types';
-import { getCurrentTab } from '../utils/getCurrentTabId';
 
 const CookieStore = {
   /**
@@ -28,9 +27,6 @@ const CookieStore = {
    */
   async update(tabId: string, cookies: CookieData[]) {
     const newCookies: { [key: string]: CookieData } = {};
-    const [tabData] = await getCurrentTab();
-
-    const tabUrl = tabData?.url;
 
     for (const cookie of cookies) {
       if (cookie) {
@@ -46,25 +42,9 @@ const CookieStore = {
 
       return {
         ...prevState,
-        url: tabUrl,
         cookies: updatedCookies,
       };
     });
-  },
-
-  /**
-   * Update tab location.
-   * @param {string} tabId Tab id.
-   * @param {string} url Tab url.
-   * @param {number} focusedAt The timestamp, when the tab was focused.
-   */
-  async updateTabLocation(tabId: string, url: string, focusedAt: number) {
-    await updateStorage(tabId, (prevState: TabData) => ({
-      ...prevState,
-      cookies: {},
-      url,
-      focusedAt,
-    }));
   },
 
   /**
@@ -78,6 +58,19 @@ const CookieStore = {
       storage[tabId].focusedAt = Date.now();
     }
     await chrome.storage.local.set(storage);
+  },
+
+  /**
+   * creates an entry for a tab
+   * @param {string} tabId The tab id.
+   */
+  async addTabData(tabId: string) {
+    await chrome.storage.local.set({
+      [tabId]: {
+        cookies: {},
+        focusedAt: Date.now(),
+      },
+    });
   },
 
   /**
