@@ -29,7 +29,7 @@ import React, {
  */
 import type { CookieData } from '../../../../localStore';
 
-export interface ICookieStoreContext {
+export interface CookieStoreContext {
   state: {
     tabCookies: {
       [key: string]: CookieData;
@@ -39,7 +39,7 @@ export interface ICookieStoreContext {
   actions: object;
 }
 
-const initialState: ICookieStoreContext = {
+const initialState: CookieStoreContext = {
   state: {
     tabCookies: null,
     tabUrl: null,
@@ -47,16 +47,16 @@ const initialState: ICookieStoreContext = {
   actions: {},
 };
 
-export const Context = createContext<ICookieStoreContext>(initialState);
+export const Context = createContext<CookieStoreContext>(initialState);
 
 export const Provider = ({ children }: PropsWithChildren) => {
   const [tabId, setTabId] = useState<number | null>(null);
 
   const [tabCookies, setTabCookies] =
-    useState<ICookieStoreContext['state']['tabCookies']>(null);
+    useState<CookieStoreContext['state']['tabCookies']>(null);
 
   const [tabUrl, setTabUrl] =
-    useState<ICookieStoreContext['state']['tabUrl']>(null);
+    useState<CookieStoreContext['state']['tabUrl']>(null);
 
   const intitialSync = useCallback(async () => {
     const _tabId = chrome.devtools.inspectedWindow.tabId;
@@ -119,9 +119,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
   );
 };
 
-export function useCookieStore(): ICookieStoreContext;
+export function useCookieStore(): CookieStoreContext;
 export function useCookieStore<T>(
-  selector: (state: ICookieStoreContext) => T
+  selector: (state: CookieStoreContext) => T
 ): T;
 
 /**
@@ -130,7 +130,7 @@ export function useCookieStore<T>(
  * @returns selected part of the state
  */
 export function useCookieStore<T>(
-  selector: (state: ICookieStoreContext) => T | ICookieStoreContext = (state) =>
+  selector: (state: CookieStoreContext) => T | CookieStoreContext = (state) =>
     state
 ) {
   return useContextSelector(Context, selector);

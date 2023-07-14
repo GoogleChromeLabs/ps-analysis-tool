@@ -31,14 +31,14 @@ import { getCurrentTab } from '../../../../utils/getCurrentTabId';
 import type { CookieStats } from '../../types';
 import countCookiesByCategory from '../../../../utils/countCookiesByCategory';
 
-export interface ICookieStoreContext {
+export interface CookieStoreContext {
   state: {
     tabCookieStats: CookieStats | null;
   };
   actions: object;
 }
 
-const initialState: ICookieStoreContext = {
+const initialState: CookieStoreContext = {
   state: {
     tabCookieStats: {
       total: 0,
@@ -61,7 +61,7 @@ const initialState: ICookieStoreContext = {
   actions: {},
 };
 
-export const Context = createContext<ICookieStoreContext>(initialState);
+export const Context = createContext<CookieStoreContext>(initialState);
 
 export const Provider = ({ children }: PropsWithChildren) => {
   const [tabId, setTabId] = useState<number | null>(null);
@@ -69,7 +69,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [tabUrl, setTabUrl] = useState<string | null>(null);
 
   const [tabCookieStats, setTabCookieStats] =
-    useState<ICookieStoreContext['state']['tabCookieStats']>(null);
+    useState<CookieStoreContext['state']['tabCookieStats']>(null);
 
   const intitialSync = useCallback(async () => {
     const [tab] = await getCurrentTab();
@@ -136,9 +136,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
   );
 };
 
-export function useCookieStore(): ICookieStoreContext;
+export function useCookieStore(): CookieStoreContext;
 export function useCookieStore<T>(
-  selector: (state: ICookieStoreContext) => T
+  selector: (state: CookieStoreContext) => T
 ): T;
 
 /**
@@ -147,7 +147,7 @@ export function useCookieStore<T>(
  * @returns selected part of the state
  */
 export function useCookieStore<T>(
-  selector: (state: ICookieStoreContext) => T | ICookieStoreContext = (state) =>
+  selector: (state: CookieStoreContext) => T | CookieStoreContext = (state) =>
     state
 ) {
   return useContextSelector(Context, selector);

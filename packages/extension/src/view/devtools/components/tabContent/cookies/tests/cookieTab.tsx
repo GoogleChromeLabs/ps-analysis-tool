@@ -25,7 +25,7 @@ import { type Cookie as ParsedCookie } from 'simple-cookie';
  * External dependencies.
  */
 import CookieTab from '..';
-import type { ICookieStoreContext } from '../../../../stateProviders/syncCookieStore';
+import type { CookieStoreContext } from '../../../../stateProviders/syncCookieStore';
 
 const uncategorised1pCookie: ParsedCookie = {
   name: '_cb',
@@ -52,8 +52,8 @@ const known3pCookie: ParsedCookie = {
 };
 
 const mockResponse: {
-  tabCookies: NonNullable<ICookieStoreContext['state']['tabCookies']>;
-  tabUrl: NonNullable<ICookieStoreContext['state']['tabUrl']>;
+  tabCookies: NonNullable<CookieStoreContext['state']['tabCookies']>;
+  tabUrl: NonNullable<CookieStoreContext['state']['tabUrl']>;
 } = {
   tabCookies: {
     [uncategorised1pCookie.name]: {
