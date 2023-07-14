@@ -43,33 +43,35 @@ const parseRequestCookieHeader = async (
   value: string,
   dictionary: CookieDatabase
 ): Promise<CookieData[]> => {
-  const cookies: CookieData[] = await Promise.all(
-    value?.split(';').map(async (cookieString) => {
-      let [name] = cookieString.split('=');
-      const [, ...rest] = cookieString.split('=');
-      name = name.trim();
+  try {
+    return await Promise.all(
+      value?.split(';').map(async (cookieString) => {
+        let [name] = cookieString.split('=');
+        const [, ...rest] = cookieString.split('=');
+        name = name.trim();
 
-      let analytics: CookieAnalytics | null = null;
-      if (dictionary) {
-        analytics = findAnalyticsMatch(name, dictionary);
-      }
+        let analytics: CookieAnalytics | null = null;
+        if (dictionary) {
+          analytics = findAnalyticsMatch(name, dictionary);
+        }
 
-      let parsedCookie = {
-        name,
-        value: rest.join('='),
-      } as ParsedCookie;
-      parsedCookie = await createCookieObject(parsedCookie, url);
+        let parsedCookie = {
+          name,
+          value: rest.join('='),
+        } as ParsedCookie;
+        parsedCookie = await createCookieObject(parsedCookie, url);
 
-      return {
-        parsedCookie,
-        analytics,
-        headerType: 'request',
-        url,
-      };
-    })
-  );
-
-  return cookies;
+        return {
+          parsedCookie,
+          analytics,
+          headerType: 'request',
+          url,
+        };
+      })
+    );
+  } catch (error) {
+    return [];
+  }
 };
 
 export default parseRequestCookieHeader;

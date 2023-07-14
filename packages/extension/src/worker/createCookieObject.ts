@@ -24,70 +24,75 @@ import { getDomain } from 'tldts';
  * Internal dependencies.
  */
 import { getCurrentTabId } from '../utils/getCurrentTabId';
-import { findPrevCookieDataObject } from './findPrevCookieDataObject';
-import { getCookie } from '../utils/getCookie';
+import { findPreviousCookieDataObject } from './findPreviousCookieDataObject';
 
 /**
  * Create cookie object from cookieStore API cookie object, previously saved parsed cookie object if any, and recently captured request/response cookie header.
- * @param cookie Cookie object.
+ * @param parsedCookie Parsed cookie object from request/response.
  * @param url URL of the cookie from the request/response.
  * @returns {Promise<{ParsedCookie}>} Cookie object.
  */
-export async function createCookieObject(cookie: ParsedCookie, url: string) {
-  const cookieObj = await getCookie(cookie.name, url);
+export async function createCookieObject(
+  parsedCookie: ParsedCookie,
+  url: string
+) {
+  const chromeStoreCookie = await chrome.cookies.get({
+    name: parsedCookie.name,
+    url,
+  });
 
-  const prevCookieObj = (
-    await findPrevCookieDataObject(
-      (await getCurrentTabId()) || ('0' as string),
-      cookie.name
+  const prevParsedCookie = (
+    await findPreviousCookieDataObject(
+      (await getCurrentTabId()) || '0',
+      parsedCookie.name
     )
   )?.parsedCookie;
 
-  const name = cookie.name;
-  const value = cookie.value;
+  const name = parsedCookie.name;
+  const value = parsedCookie.value;
   const domain = parseAttributeValues(
     'domain',
-    cookie.domain,
-    cookieObj?.domain,
-    prevCookieObj?.domain,
+    parsedCookie.domain,
+    chromeStoreCookie?.domain,
+    prevParsedCookie?.domain,
     url
   );
   const path = parseAttributeValues(
     'path',
-    cookie.path,
-    cookieObj?.path,
-    prevCookieObj?.path
+    parsedCookie.path,
+    chromeStoreCookie?.path,
+    prevParsedCookie?.path
   );
 
   const secure = parseAttributeValues(
     'secure',
-    cookie.secure,
-    cookieObj?.secure,
-    prevCookieObj?.secure
+    parsedCookie.secure,
+    chromeStoreCookie?.secure,
+    prevParsedCookie?.secure
   );
 
   const httponly = parseAttributeValues(
     'httponly',
-    cookie.httponly,
-    cookieObj?.httpOnly,
-    prevCookieObj?.httponly
+    parsedCookie.httponly,
+    chromeStoreCookie?.httpOnly,
+    prevParsedCookie?.httponly
   );
 
   const samesite = parseAttributeValues(
     'samesite',
-    cookie.samesite,
-    cookieObj?.sameSite,
-    prevCookieObj?.samesite
+    parsedCookie.samesite,
+    chromeStoreCookie?.sameSite,
+    prevParsedCookie?.samesite
   );
 
   const expires = parseAttributeValues(
     'expires',
-    cookie.expires,
-    cookieObj?.expirationDate,
-    prevCookieObj?.expires
+    parsedCookie.expires,
+    chromeStoreCookie?.expirationDate,
+    prevParsedCookie?.expires
   );
 
-  const parsedCookie = {
+  return {
     name,
     value,
     domain,
@@ -97,8 +102,6 @@ export async function createCookieObject(cookie: ParsedCookie, url: string) {
     samesite,
     expires,
   } as ParsedCookie;
-
-  return parsedCookie;
 }
 
 /**
@@ -137,12 +140,11 @@ function parseAttributeValues(
   }
 
   if (type === 'samesite') {
-    value =
-      value === 'no_restriction'
-        ? 'none'
-        : value === 'unspecified'
-        ? ''
-        : value;
+    if (value === 'no_restriction') {
+      value = 'none';
+    } else if (value === 'unspecified') {
+      value = '';
+    }
   }
 
   if (type === 'expires') {
