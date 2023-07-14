@@ -28,7 +28,7 @@ interface CoookieListProps {
   cookies: {
     [key: string]: CookieData;
   };
-  tabUrl: string | undefined;
+  tabUrl: string | null;
   selectedKey: string | null;
   onClickItem: (key: string) => void;
 }
