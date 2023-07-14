@@ -23,11 +23,8 @@ const csvtojson = require('csvtojson');
 const process = require('process');
 const fetch = require('node-fetch');
 const targetDIR = path.resolve(__dirname, '..', 'third_party/data');
-
-// @todo Update to https://raw.githubusercontent.com/jkwakman/Open-Cookie-Database/master/open-cookie-database.csv after
-// https://github.com/jkwakman/Open-Cookie-Database/pull/32 is merged.
 const requestURL =
-  'https://raw.githubusercontent.com/rtCamp/Open-Cookie-Database/add-wordpress-cookies/open-cookie-database.csv';
+  'https://raw.githubusercontent.com/jkwakman/Open-Cookie-Database/master/open-cookie-database.csv';
 
 /**
  * Format the raw csv data to a JSON object and return it.
