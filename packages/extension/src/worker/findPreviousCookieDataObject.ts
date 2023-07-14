@@ -25,12 +25,15 @@ import type { CookieData } from '../localStore';
  * @param cookieName Cookie name.
  * @returns {Promise<CookieData | null>} Cookie object.
  */
-export async function findPrevCookieDataObject(
+export async function findPreviousCookieDataObject(
   tabId: string,
   cookieName: string
 ) {
-  const cookie: CookieData = (await chrome.storage.local.get())?.[tabId]
-    ?.cookies?.[cookieName];
-
-  return cookie;
+  try {
+    return (await chrome.storage.local.get())?.[tabId]?.cookies?.[
+      cookieName
+    ] as CookieData | null;
+  } catch (error) {
+    return null;
+  }
 }
