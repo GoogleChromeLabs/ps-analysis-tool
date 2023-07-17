@@ -86,6 +86,8 @@ const root = {
       patterns: [
         { from: './packages/extension/src/manifest.json', to: '' },
         { from: './packages/extension/icons', to: 'icons' },
+        { from: './data/third_party/', to: 'third_party/data' },
+        { from: './data/PSInfo.json', to: './data/PSInfo.json' },
       ],
     }),
     new WebpackBar({
@@ -111,13 +113,13 @@ const devTools = {
       color: '#357BB5',
     }),
     new HtmlWebpackPlugin({
-      title: 'CAT Devtool',
+      title: 'PSAT Devtool',
       template: './packages/extension/src/view/devtools/index.html',
       filename: 'index.html',
       inject: false,
     }),
     new HtmlWebpackPlugin({
-      title: 'CAT',
+      title: 'PSAT',
       template: './packages/extension/src/view/devtools/devtools.html',
       filename: 'devtools.html',
       inject: true,
@@ -126,4 +128,26 @@ const devTools = {
   ...commonConfig,
 };
 
-module.exports = [root, devTools];
+const popup = {
+  entry: {
+    index: './packages/extension/src/view/popup/index.tsx',
+  },
+  output: {
+    path: path.resolve(__dirname, './dist/extension/popup'),
+    filename: 'index.js',
+  },
+  plugins: [
+    new WebpackBar({
+      name: 'Popup',
+      color: '#fcd8ba',
+    }),
+    new HtmlWebpackPlugin({
+      title: 'PSAT Popup',
+      template: './packages/extension/src/view/popup/index.html',
+      inject: false,
+    }),
+  ],
+  ...commonConfig,
+};
+
+module.exports = [root, devTools, popup];

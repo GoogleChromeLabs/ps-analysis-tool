@@ -37,7 +37,7 @@ The goal of this tool is to assist users on getting knowledge and insights regar
 
 # Browsing Session Analyses
 
-A "browsing session" refers to the sequence of navigations a user follows over aperiod of time as they are actively engaging on the web, including activities like navigating through pages and sites, making transactions, submitting forms, or downloading content, performing web searches, and so on. The overall goal of [Privacy Sandbox](https://privacysandbox.com/) is to protect users' privacy online, including reducing cross-site and cross-app user tracking during browsing sessions. This tool supports the analysis of **browsing sessions** by shedding light on cookie usage and insights, and on use and behavior of PS APIs. The goal is to help answer questions such as:
+A "browsing session" refers to the sequence of navigations a user follows over a period of time as they are actively engaging on the web, including activities like navigating through pages and sites, making transactions, submitting forms, or downloading content, performing web searches, and so on. The overall goal of [Privacy Sandbox](https://privacysandbox.com/) is to protect users' privacy online, including reducing cross-site and cross-app user tracking during browsing sessions. This tool supports the analysis of **browsing sessions** by shedding light on cookie usage and insights, and on use and behavior of PS APIs. The goal is to help answer questions such as:
 
 * How can I identify cookies being used on my site? 
 * How can I tell what behaviors a third party cookie is tracking on my website or what it's being used for?

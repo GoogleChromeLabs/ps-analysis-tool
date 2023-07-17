@@ -32,8 +32,8 @@ const cookieArray: CookieData[] = [
       name: 'countryCode1',
       value: 'IN',
     },
+    analytics: null,
     url: 'https://example.com',
-    toplevel: 'https://example.com',
     headerType: 'response',
   },
   {
@@ -47,8 +47,8 @@ const cookieArray: CookieData[] = [
       name: 'countryCode2',
       value: 'IN',
     },
+    analytics: null,
     url: 'https://example.com',
-    toplevel: 'https://example.com',
     headerType: 'response',
   },
 ];
@@ -108,24 +108,15 @@ describe('local store: CookieStore', () => {
     chrome.storage.local.clear();
 
     //mock navigation to a URL
-    CookieStore.updateTabLocation('123', 'https://example.com', Date.now());
+    CookieStore.addTabData('123');
   });
 
   it('should add/update tab data', async () => {
     await CookieStore.update('123', cookieArray);
     expect(storage['123'].cookies).toStrictEqual({
-      'countryCode1.example1.com': cookieArray[0],
-      'countryCode2.example2.com': cookieArray[1],
+      countryCode1: cookieArray[0],
+      countryCode2: cookieArray[1],
     });
-  });
-
-  it('should update tab location and clear cookies', async () => {
-    await CookieStore.update('123', cookieArray);
-
-    const now = Date.now();
-    await CookieStore.updateTabLocation('123', 'https://new_site.com', now);
-
-    expect(storage['123'].cookies).toStrictEqual({});
   });
 
   it('should update tab foucusedAt value', async () => {

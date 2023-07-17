@@ -18,19 +18,23 @@
  */
 import { type Cookie as ParsedCookie } from 'simple-cookie';
 
+/**
+ * Internal dependencies.
+ */
+import type { CookieAnalytics } from '../utils/fetchCookieDictionary';
+
 export type CookieData = {
   parsedCookie: ParsedCookie;
+  analytics: CookieAnalytics | null;
   url: string;
-  toplevel: string;
   headerType: 'response' | 'request';
 };
 
 export type TabData = {
   cookies: {
     [key: string]: CookieData;
-  };
-  url: string | undefined;
-  focusedAt: number | undefined;
+  } | null;
+  focusedAt: number | null;
 };
 
 export type Storage = {

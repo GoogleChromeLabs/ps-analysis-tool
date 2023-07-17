@@ -34,8 +34,10 @@ module.exports = {
       ...colors,
       primary: '#000',
       secondary: '#5F5F5F',
+      tertiary: '#808080',
       'first-party': '#5FA569',
       'third-party': '#FA752E',
+      'chart-label': '#111B21',
     },
     backgroundColor: {
       ...colors,
@@ -44,5 +46,4 @@ module.exports = {
       tertiary: '#CBD5E1',
     },
   },
-  plugins: [],
 };
