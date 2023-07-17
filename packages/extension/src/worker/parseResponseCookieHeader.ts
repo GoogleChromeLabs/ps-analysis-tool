@@ -22,27 +22,37 @@ import cookie, { type Cookie as ParsedCookie } from 'simple-cookie';
  * Internal dependencies.
  */
 import type { CookieData } from '../localStore';
+import type {
+  CookieAnalytics,
+  CookieDatabase,
+} from '../utils/fetchCookieDictionary';
+import findAnalyticsMatch from './findAnalyticsMatch';
 
 /**
  * Parse response cookies header.
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
- * @param {string} url URL.
- * @param {string} top Top level url.
+ * @param {string} url Cookie URL (URL of the server which is setting/updating cookies).
  * @param {string} value header value
+ * @param {CookieDatabase} dictionary Dictionary from open cookie database
  * @returns {CookieData} Parsed cookie object.
  */
 const parseResponseCookieHeader = (
   url: string,
-  top: string | undefined,
-  value: string
+  value: string,
+  dictionary: CookieDatabase
 ): CookieData => {
   const parsedCookie: ParsedCookie = cookie.parse(value);
-  const toplevel = top ? new URL(top).origin : '';
+
+  let analytics: CookieAnalytics | null = null;
+
+  if (dictionary) {
+    analytics = findAnalyticsMatch(parsedCookie.name, dictionary);
+  }
 
   return {
     parsedCookie: parsedCookie,
+    analytics,
     url,
-    toplevel,
     headerType: 'response',
   };
 };

@@ -25,20 +25,26 @@ describe('local store: updateStorage', () => {
 
   beforeAll(() => {
     globalThis.chrome = {
+      //@ts-ignore local does not need implementations of other properties
+      action: {
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        setBadgeText: async () => {},
+      },
       storage: {
         //@ts-ignore local does not implementations of other properties
         local: {
           set: (data) =>
-            new Promise((resolve) => {
+            new Promise<void>((resolve) => {
               storage = data;
               resolve();
             }),
           get: () =>
-            new Promise((resolve) => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            new Promise<{ [key: string]: any }>((resolve) => {
               resolve(storage);
             }),
           getBytesInUse: () =>
-            new Promise((resolve) => {
+            new Promise<number>((resolve) => {
               resolve(new TextEncoder().encode(JSON.stringify(storage)).length);
             }),
           QUOTA_BYTES: 10485760,
@@ -131,8 +137,7 @@ describe('local store: updateStorage', () => {
     expect(storage).toStrictEqual({ '123': newData, '234': tab2 });
   });
 
-  // @todo To be fixed.
-  it.skip('makes space for new updates by deleting tab data by LRU', async () => {
+  it('makes space for new updates by deleting tab data by LRU', async () => {
     const tab1 = {
       cookies: {},
       url: '123',
@@ -146,6 +151,8 @@ describe('local store: updateStorage', () => {
     expect(storage).toStrictEqual({
       '123': tab1,
     });
+
+    await new Promise((r) => setTimeout(r, 100));
 
     const tab2 = {
       cookies: {},
@@ -161,6 +168,8 @@ describe('local store: updateStorage', () => {
     chrome.storage.local.QUOTA_BYTES = new TextEncoder().encode(
       JSON.stringify({ '123': tab1, '234': tab2 })
     ).length;
+
+    await new Promise((r) => setTimeout(r, 100));
 
     const tab3 = {
       cookies: {},

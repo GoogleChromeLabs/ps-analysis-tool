@@ -18,7 +18,14 @@
  */
 import { type CookieData, CookieStore } from '../localStore';
 import parseResponseCookieHeader from './parseResponseCookieHeader';
+import parseRequestCookieHeader from './parseRequestCookieHeader';
 import { getTab } from '../utils/getTab';
+import {
+  type CookieDatabase,
+  fetchDictionary,
+} from '../utils/fetchCookieDictionary';
+
+let cookieDB: CookieDatabase | null = null;
 
 /**
  * Fires when the browser receives a response from a web server.
@@ -34,13 +41,25 @@ chrome.webRequest.onResponseStarted.addListener(
       return;
     }
 
-    const cookies = responseHeaders.reduce<CookieData[]>((acc, header) => {
-      if (header.name.toLowerCase() === 'set-cookie' && header.value) {
-        const cookie = parseResponseCookieHeader(url, tab?.url, header.value);
-        return [...acc, cookie];
-      }
-      return acc;
-    }, []);
+    if (!cookieDB) {
+      cookieDB = await fetchDictionary();
+    }
+
+    const cookies = responseHeaders.reduce<CookieData[]>(
+      (accumulator, header) => {
+        if (
+          header.name.toLowerCase() === 'set-cookie' &&
+          header.value &&
+          tab.url &&
+          cookieDB
+        ) {
+          const cookie = parseResponseCookieHeader(url, header.value, cookieDB);
+          return [...accumulator, cookie];
+        }
+        return accumulator;
+      },
+      []
+    );
 
     if (!cookies.length) {
       return;
@@ -53,20 +72,53 @@ chrome.webRequest.onResponseStarted.addListener(
   ['extraHeaders', 'responseHeaders']
 );
 
-/**
- * Update tab metadata when the browser is about to navigate to a new page.
- * @see https://developer.chrome.com/docs/extensions/reference/webNavigation/
- */
-chrome.webNavigation.onBeforeNavigate.addListener((details) => {
-  const { tabId, url, frameType } = details;
+chrome.webRequest.onBeforeSendHeaders.addListener(
+  ({ url, requestHeaders, tabId }) => {
+    (async () => {
+      const tab = await getTab(tabId);
 
-  if (url && frameType === 'outermost_frame') {
-    // Updates the location of the tab in the cookies object.
-    CookieStore.updateTabLocation(
-      tabId.toString(),
-      new URL(url).origin,
-      Date.now()
-    );
+      if (!tab || !requestHeaders) {
+        return;
+      }
+
+      if (!cookieDB) {
+        cookieDB = await fetchDictionary();
+      }
+
+      const cookies = requestHeaders.reduce<CookieData[]>(
+        (accumulator, header) => {
+          if (
+            header.name.toLowerCase() === 'cookie' &&
+            header.value &&
+            url &&
+            cookieDB
+          ) {
+            const cookieList = parseRequestCookieHeader(
+              url,
+              header.value,
+              cookieDB
+            );
+            return [...accumulator, ...cookieList];
+          }
+          return accumulator;
+        },
+        []
+      );
+
+      if (!cookies.length) {
+        return;
+      }
+
+      await CookieStore.update(tabId.toString(), cookies);
+    })();
+  },
+  { urls: ['*://*/*'] },
+  ['extraHeaders', 'requestHeaders']
+);
+
+chrome.tabs.onCreated.addListener(async (tab) => {
+  if (tab.id) {
+    await CookieStore.addTabData(tab.id.toString());
   }
 });
 

@@ -4,5 +4,9 @@
     "rootDir": "src",
     "types": ["chrome"]
   },
-  "include": ["src", "../../node_modules/@types/jest/index.d.ts"]
+  "include": [
+    "src",
+    "../../node_modules/@types/jest/index.d.ts",
+    "src/**/*.json"
+  ]
 }
