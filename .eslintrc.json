@@ -137,8 +137,7 @@
       },
       "rules": {
         "eslint-comments/require-description": "off",
-        "@typescript-eslint/no-var-requires": "off",
-        "no-console": "off"
+        "@typescript-eslint/no-var-requires": "off"
       }
     }
   ]

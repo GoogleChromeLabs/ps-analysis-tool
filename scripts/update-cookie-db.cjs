@@ -77,7 +77,7 @@ const formatRawData = async (rawData) => {
  * @param {Error} err error object
  */
 const errorHandler = (err) => {
-  console.error(err.message);
+  console.error(err.message); // eslint-disable-line no-console
   process.exit(1);
 };
 
@@ -85,7 +85,7 @@ const errorHandler = (err) => {
  * Download the csv file from the Open Cookie DB, format the data and write it to open-cookie-database.json.
  */
 const main = async () => {
-  console.log('Downloading the csv file from the Open Cookie DB...');
+  console.log('Downloading the csv file from the Open Cookie DB...'); // eslint-disable-line no-console
   try {
     const response = await fetch(requestURL);
 
@@ -96,8 +96,8 @@ const main = async () => {
     }
 
     const rawData = await response.text();
-    console.log('Downloaded the csv file from the Open Cookie DB.\n');
-    console.log('Formatting the data...');
+    console.log('Downloaded the csv file from the Open Cookie DB.\n'); // eslint-disable-line no-console
+    console.log('Formatting the data...'); // eslint-disable-line no-console
 
     // Format the raw data.
     const formattedData = await formatRawData(rawData);
@@ -109,7 +109,7 @@ const main = async () => {
       JSON.stringify(formattedData, null, 2)
     );
 
-    console.log('Formatted data written to open-cookie-database.json file.');
+    console.log('Formatted data written to open-cookie-database.json file.'); // eslint-disable-line no-console
   } catch (error) {
     errorHandler(error);
   }
