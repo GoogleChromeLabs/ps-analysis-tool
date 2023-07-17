@@ -13,7 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
 import type { Meta, StoryObj } from '@storybook/react';
+
+/**
+ * Internal dependencies.
+ */
 import Button from './button';
 
 // @todo To be removed after we add any story.

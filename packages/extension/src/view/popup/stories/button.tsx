@@ -20,7 +20,7 @@ import React from 'react';
 
 // @todo To be removed after we add any story.
 const Button = () => {
-  return <p>Button</p>;
+  return <button>Example button</button>;
 };
 
 export default Button;
