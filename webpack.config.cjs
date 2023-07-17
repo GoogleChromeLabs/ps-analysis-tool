@@ -86,7 +86,7 @@ const root = {
       patterns: [
         { from: './packages/extension/src/manifest.json', to: '' },
         { from: './packages/extension/icons', to: 'icons' },
-        { from: './third_party/', to: 'third_party' },
+        { from: './third_party/', to: './third_party' },
         { from: './data/PSInfo.json', to: './data/PSInfo.json' },
       ],
     }),

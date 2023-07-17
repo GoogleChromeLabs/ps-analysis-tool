@@ -13401,5 +13401,57 @@
       "gdprUrl": "https://adhese.com/images/Privacy%20Policy_Doggybites.pdf",
       "wildcard": "1"
     }
+  ],
+  "pmaAuth-*": [
+    {
+      "platform": "phpMyAdmin",
+      "category": "Functional",
+      "name": "pmaAuth-*",
+      "domain": "website domain (1st party)",
+      "description": "Per server authentication",
+      "retention": "session",
+      "dataController": "phpMyAdmin",
+      "gdprUrl": "N/A",
+      "wildcard": "1"
+    }
+  ],
+  "phpMyAdmin": [
+    {
+      "platform": "phpMyAdmin",
+      "category": "Functional",
+      "name": "phpMyAdmin",
+      "domain": "website domain (1st party)",
+      "description": "Session identifier",
+      "retention": "session",
+      "dataController": "phpMyAdmin",
+      "gdprUrl": "N/A",
+      "wildcard": "0"
+    }
+  ],
+  "pmaUser-*": [
+    {
+      "platform": "phpMyAdmin",
+      "category": "Functional",
+      "name": "pmaUser-*",
+      "domain": "website domain (1st party)",
+      "description": "Per server username",
+      "retention": "30 days",
+      "dataController": "phpMyAdmin",
+      "gdprUrl": "N/A",
+      "wildcard": "1"
+    }
+  ],
+  "pma_lang": [
+    {
+      "platform": "phpMyAdmin",
+      "category": "Functional",
+      "name": "pma_lang",
+      "domain": "website domain (1st party)",
+      "description": "Language preference",
+      "retention": "30 days",
+      "dataController": "phpMyAdmin",
+      "gdprUrl": "N/A",
+      "wildcard": "0"
+    }
   ]
 }
