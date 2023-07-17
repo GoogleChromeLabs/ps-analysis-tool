@@ -4863,26 +4863,26 @@
   ],
   "lidid": [
     {
-      "platform": "liadm.com",
+      "platform": "LiveIntent",
       "category": "Marketing",
       "name": "lidid",
       "domain": "liadm.com",
       "description": "Collects data on visitors' behaviour and interaction - This is used to make advertisement on the website more relevant. The cookie also allows the website to detect any referrals from other websites.",
       "retention": "2 years",
-      "dataController": "liadm.com",
+      "dataController": "LiveIntent",
       "gdprUrl": "N/A",
       "wildcard": "0"
     }
   ],
   "tluid": [
     {
-      "platform": "3Lift.com",
+      "platform": "TripleLift",
       "category": "Marketing",
       "name": "tluid",
       "domain": "3lift.com",
       "description": "This cookie is used to identify the visitor and optimize ad-relevance by collecting visitor data from multiple websites – this exchange of visitor data is normally provided by a third-party data-center or ad-exchange.",
       "retention": "3 months",
-      "dataController": "3lift.com",
+      "dataController": "TripleLift",
       "gdprUrl": "N/A",
       "wildcard": "0"
     }
@@ -7177,7 +7177,7 @@
   ],
   "_ab": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Functional",
       "name": "_ab",
       "domain": "shopify.com",
@@ -7190,7 +7190,7 @@
   ],
   "_secure_session_id": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Functional",
       "name": "_secure_session_id",
       "domain": "shopify.com",
@@ -7203,7 +7203,7 @@
   ],
   "Cart": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Functional",
       "name": "Cart",
       "domain": "shopify.com",
@@ -7216,7 +7216,7 @@
   ],
   "cart_sig": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Functional",
       "name": "cart_sig",
       "domain": "shopify.com",
@@ -7229,7 +7229,7 @@
   ],
   "cart_ts": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Functional",
       "name": "cart_ts",
       "domain": "shopify.com",
@@ -7242,7 +7242,7 @@
   ],
   "checkout_token": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Functional",
       "name": "checkout_token",
       "domain": "shopify.com",
@@ -7255,7 +7255,7 @@
   ],
   "Secret": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Functional",
       "name": "Secret",
       "domain": "shopify.com",
@@ -7268,7 +7268,7 @@
   ],
   "Secure_customer_sig": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Functional",
       "name": "Secure_customer_sig",
       "domain": "shopify.com",
@@ -7281,7 +7281,7 @@
   ],
   "storefront_digest": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Functional",
       "name": "storefront_digest",
       "domain": "shopify.com",
@@ -7294,7 +7294,7 @@
   ],
   "_shopify_u": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Functional",
       "name": "_shopify_u",
       "domain": "shopify.com",
@@ -7307,7 +7307,7 @@
   ],
   "_tracking_consent": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Marketing",
       "name": "_tracking_consent",
       "domain": "shopify.com",
@@ -7320,7 +7320,7 @@
   ],
   "_landing_page": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Marketing",
       "name": "_landing_page",
       "domain": "shopify.com",
@@ -7333,7 +7333,7 @@
   ],
   "_orig_referrer": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Marketing",
       "name": "_orig_referrer",
       "domain": "shopify.com",
@@ -7346,7 +7346,7 @@
   ],
   "_s": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Analytics",
       "name": "_s",
       "domain": "shopify.com",
@@ -7359,7 +7359,7 @@
   ],
   "_shopify_fs": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Analytics",
       "name": "_shopify_fs",
       "domain": "shopify.com",
@@ -7372,7 +7372,7 @@
   ],
   "_shopify_s": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Analytics",
       "name": "_shopify_s",
       "domain": "shopify.com",
@@ -7385,7 +7385,7 @@
   ],
   "_shopify_sa_p": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Marketing",
       "name": "_shopify_sa_p",
       "domain": "shopify.com",
@@ -7398,7 +7398,7 @@
   ],
   "_shopify_sa_t": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Marketing",
       "name": "_shopify_sa_t",
       "domain": "shopify.com",
@@ -7411,7 +7411,7 @@
   ],
   "_shopify_uniq": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Analytics",
       "name": "_shopify_uniq",
       "domain": "shopify.com",
@@ -7424,7 +7424,7 @@
   ],
   "_shopify_visit": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Analytics",
       "name": "_shopify_visit",
       "domain": "shopify.com",
@@ -7437,7 +7437,7 @@
   ],
   "_shopify_y": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Analytics",
       "name": "_shopify_y",
       "domain": "shopify.com",
@@ -7450,7 +7450,7 @@
   ],
   "_y": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Analytics",
       "name": "_y",
       "domain": "shopify.com",
@@ -7463,7 +7463,7 @@
   ],
   "tracked_start_checkout": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Analytics",
       "name": "tracked_start_checkout",
       "domain": "shopify.com",
@@ -7476,7 +7476,7 @@
   ],
   "ki_r": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Analytics",
       "name": "ki_r",
       "domain": "shopify.com",
@@ -7489,7 +7489,7 @@
   ],
   "ki_t": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Analytics",
       "name": "ki_t",
       "domain": "shopify.com",
@@ -7502,7 +7502,7 @@
   ],
   "_Brochure_session": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Analytics",
       "name": "_Brochure_session",
       "domain": "shopify.com",
@@ -7515,7 +7515,7 @@
   ],
   "shopify_pay_redirect": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Functional",
       "name": "shopify_pay_redirect",
       "domain": "shopify.com",
@@ -7528,7 +7528,7 @@
   ],
   "cart_currency": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Functional",
       "name": "cart_currency",
       "domain": "shopify.com",
@@ -7541,7 +7541,7 @@
   ],
   "dynamic_checkout_shown_on_cart": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Functional",
       "name": "dynamic_checkout_shown_on_cart",
       "domain": "shopify.com",
@@ -7554,7 +7554,7 @@
   ],
   "keep_alive": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Functional",
       "name": "keep_alive",
       "domain": "shopify.com",
@@ -7567,7 +7567,7 @@
   ],
   "checkout_session_token*": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Functional",
       "name": "checkout_session_token*",
       "domain": "Advertiser's website domain",
@@ -7580,7 +7580,7 @@
   ],
   "checkout_session_lookup": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Functional",
       "name": "checkout_session_lookup",
       "domain": "Advertiser's website domain",
@@ -7593,7 +7593,7 @@
   ],
   "cart_ver": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Functional",
       "name": "cart_ver",
       "domain": "Advertiser's website domain",
@@ -7606,7 +7606,7 @@
   ],
   "localization": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Functional",
       "name": "localization",
       "domain": "Advertiser's website domain",
@@ -7619,7 +7619,7 @@
   ],
   "locale_bar_accepted": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Functional",
       "name": "locale_bar_accepted",
       "domain": "Advertiser's website domain",
@@ -7632,7 +7632,7 @@
   ],
   "_cmp_a": [
     {
-      "platform": "Shopify.com",
+      "platform": "Shopify",
       "category": "Functional",
       "name": "_cmp_a",
       "domain": "Advertiser's website domain",
@@ -7645,7 +7645,7 @@
   ],
   "__hs_opt_out": [
     {
-      "platform": "Hubspot.com",
+      "platform": "Hubspot",
       "category": "Functional",
       "name": "__hs_opt_out",
       "domain": "hubspot.com",
@@ -7658,7 +7658,7 @@
   ],
   "__hs_do_not_track": [
     {
-      "platform": "Hubspot.com",
+      "platform": "Hubspot",
       "category": "Functional",
       "name": "__hs_do_not_track",
       "domain": "hubspot.com",
@@ -7671,7 +7671,7 @@
   ],
   "__hs_initial_opt_in": [
     {
-      "platform": "Hubspot.com",
+      "platform": "Hubspot",
       "category": "Functional",
       "name": "__hs_initial_opt_in",
       "domain": "hubspot.com",
@@ -7684,7 +7684,7 @@
   ],
   "hs_ab_test": [
     {
-      "platform": "Hubspot.com",
+      "platform": "Hubspot",
       "category": "Functional",
       "name": "hs_ab_test",
       "domain": "hubspot.com",
@@ -7697,7 +7697,7 @@
   ],
   "hs-messages-is-open": [
     {
-      "platform": "Hubspot.com",
+      "platform": "Hubspot",
       "category": "Functional",
       "name": "hs-messages-is-open",
       "domain": "hubspot.com",
@@ -7710,7 +7710,7 @@
   ],
   "hs-messages-hide-welcome-message": [
     {
-      "platform": "Hubspot.com",
+      "platform": "Hubspot",
       "category": "Functional",
       "name": "hs-messages-hide-welcome-message",
       "domain": "hubspot.com",
@@ -7723,7 +7723,7 @@
   ],
   "__hsmem": [
     {
-      "platform": "Hubspot.com",
+      "platform": "Hubspot",
       "category": "Functional",
       "name": "__hsmem",
       "domain": "hubspot.com",
@@ -7736,7 +7736,7 @@
   ],
   "hs-membership-csrf": [
     {
-      "platform": "Hubspot.com",
+      "platform": "Hubspot",
       "category": "Functional",
       "name": "hs-membership-csrf",
       "domain": "hubspot.com",
@@ -7749,7 +7749,7 @@
   ],
   "hs_langswitcher_choice": [
     {
-      "platform": "Hubspot.com",
+      "platform": "Hubspot",
       "category": "Functional",
       "name": "hs_langswitcher_choice",
       "domain": "hubspot.com",
@@ -7762,7 +7762,7 @@
   ],
   "__hstc": [
     {
-      "platform": "Hubspot.com",
+      "platform": "Hubspot",
       "category": "Marketing",
       "name": "__hstc",
       "domain": "hubspot.com",
@@ -7775,7 +7775,7 @@
   ],
   "hubspotutk": [
     {
-      "platform": "Hubspot.com",
+      "platform": "Hubspot",
       "category": "Marketing",
       "name": "hubspotutk",
       "domain": "hubspot.com",
@@ -7788,7 +7788,7 @@
   ],
   "__hssc": [
     {
-      "platform": "Hubspot.com",
+      "platform": "Hubspot",
       "category": "Marketing",
       "name": "__hssc",
       "domain": "hubspot.com",
@@ -7801,7 +7801,7 @@
   ],
   "__hssrc": [
     {
-      "platform": "Hubspot.com",
+      "platform": "Hubspot",
       "category": "Marketing",
       "name": "__hssrc",
       "domain": "hubspot.com",
@@ -7814,7 +7814,7 @@
   ],
   "messagesUtk": [
     {
-      "platform": "Hubspot.com",
+      "platform": "Hubspot",
       "category": "Marketing",
       "name": "messagesUtk",
       "domain": "hubspot.com",
@@ -8571,7 +8571,7 @@
       "platform": "Snapchat",
       "category": "Marketing",
       "name": "sc_at",
-      "domain": "forbusiness.snapchat.com",
+      "domain": "snapchat.com",
       "description": "Used to identify a visitor across multiple domains.",
       "retention": "1 year",
       "dataController": "Snapchat",
@@ -8607,13 +8607,13 @@
   ],
   "X-AB": [
     {
-      "platform": "sc-static.net",
+      "platform": "Snapchat",
       "category": "Functional",
       "name": "X-AB",
       "domain": "Advertiser's website domain",
       "description": "This cookie is used by the website’s operator in context with multi-variate testing. This is a tool used to combine or change content on the website. This allows the website to find the best variation/edition of the site.",
       "retention": "1 day",
-      "dataController": "sc-static.net",
+      "dataController": "Snapchat",
       "gdprUrl": "N/A",
       "wildcard": "0"
     }
@@ -11779,7 +11779,7 @@
   ],
   "devicePixelRatio": [
     {
-      "platform": "wordpress.org",
+      "platform": "WordPress",
       "category": "Functional",
       "name": "devicePixelRatio",
       "domain": "website domain (1st party)",
@@ -11792,7 +11792,7 @@
   ],
   "tk_lr": [
     {
-      "platform": "wordpress.org",
+      "platform": "WordPress",
       "category": "Marketing",
       "name": "tk_lr",
       "domain": "Advertiser's website domain",
@@ -11805,7 +11805,7 @@
   ],
   "tk_or": [
     {
-      "platform": "wordpress.org",
+      "platform": "WordPress",
       "category": "Marketing",
       "name": "tk_or",
       "domain": "Advertiser's website domain",
@@ -11818,7 +11818,7 @@
   ],
   "wp-settings-*": [
     {
-      "platform": "wordpress.org",
+      "platform": "WordPress",
       "category": "Functional",
       "name": "wp-settings-*",
       "domain": "website domain (1st party)",
@@ -11831,7 +11831,7 @@
   ],
   "wporg_logged_in": [
     {
-      "platform": "wordpress.org",
+      "platform": "WordPress",
       "category": "Functional",
       "name": "wporg_logged_in",
       "domain": "website domain (1st party)",
@@ -11844,7 +11844,7 @@
   ],
   "wporg_sec": [
     {
-      "platform": "wordpress.org",
+      "platform": "WordPress",
       "category": "Functional",
       "name": "wporg_sec",
       "domain": "website domain (1st party)",
@@ -11857,7 +11857,7 @@
   ],
   "wporg_locale": [
     {
-      "platform": "wordpress.org",
+      "platform": "WordPress",
       "category": "Functional",
       "name": "wporg_locale",
       "domain": "website domain (1st party)",
@@ -11870,7 +11870,7 @@
   ],
   "welcome-*": [
     {
-      "platform": "make.wordpress.org",
+      "platform": "WordPress",
       "category": "Functional",
       "name": "welcome-*",
       "domain": "website domain (1st party)",
@@ -11883,7 +11883,7 @@
   ],
   "showComments": [
     {
-      "platform": "make.wordpress.org",
+      "platform": "WordPress",
       "category": "Functional",
       "name": "showComments",
       "domain": "website domain (1st party)",
@@ -11896,7 +11896,7 @@
   ],
   "trac_form_token": [
     {
-      "platform": "*.trac.wordpress.org",
+      "platform": "WordPress",
       "category": "Functional",
       "name": "trac_form_token",
       "domain": "website domain (1st party)",
@@ -11909,7 +11909,7 @@
   ],
   "trac_session": [
     {
-      "platform": "*.trac.wordpress.org",
+      "platform": "WordPress",
       "category": "Functional",
       "name": "trac_session",
       "domain": "website domain (1st party)",
@@ -11922,7 +11922,7 @@
   ],
   "codexToken": [
     {
-      "platform": "codex.wordpress.org",
+      "platform": "WordPress",
       "category": "Functional",
       "name": "codexToken",
       "domain": "website domain (1st party)",
@@ -11935,7 +11935,7 @@
   ],
   "codexUserId": [
     {
-      "platform": "codex.wordpress.org",
+      "platform": "WordPress",
       "category": "Functional",
       "name": "codexUserId",
       "domain": "website domain (1st party)",
@@ -11948,7 +11948,7 @@
   ],
   "codexUserName": [
     {
-      "platform": "codex.wordpress.org",
+      "platform": "WordPress",
       "category": "Functional",
       "name": "codexUserName",
       "domain": "website domain (1st party)",
@@ -11961,7 +11961,7 @@
   ],
   "camptix_client_stats": [
     {
-      "platform": "*.wordcamp.org",
+      "platform": "WordPress",
       "category": "Analytics",
       "name": "camptix_client_stats",
       "domain": "website domain",
@@ -11974,7 +11974,7 @@
   ],
   "wp-saving-post": [
     {
-      "platform": "*.wordcamp.org",
+      "platform": "WordPress",
       "category": "Functional",
       "name": "wp-saving-post",
       "domain": "website domain (1st party)",
@@ -11987,7 +11987,7 @@
   ],
   "comment_author_*": [
     {
-      "platform": "*.wordcamp.org",
+      "platform": "WordPress",
       "category": "Functional",
       "name": "comment_author_*",
       "domain": "website domain (1st party)",
@@ -12000,7 +12000,7 @@
   ],
   "comment_author_url_*": [
     {
-      "platform": "*.wordcamp.org",
+      "platform": "WordPress",
       "category": "Functional",
       "name": "comment_author_url_*",
       "domain": "website domain (1st party)",
@@ -12013,7 +12013,7 @@
   ],
   "wp-postpass_*": [
     {
-      "platform": "*.wordcamp.org",
+      "platform": "WordPress",
       "category": "Functional",
       "name": "wp-postpass_*",
       "domain": "website domain (1st party)",
@@ -12026,7 +12026,7 @@
   ],
   "wp-settings-time-*": [
     {
-      "platform": "*.wordcamp.org",
+      "platform": "WordPress",
       "category": "Functional",
       "name": "wp-settings-time-*",
       "domain": "website domain (1st party)",
@@ -12039,7 +12039,7 @@
   ],
   "tix_view_token": [
     {
-      "platform": "*.wordcamp.org",
+      "platform": "WordPress",
       "category": "Functional",
       "name": "tix_view_token",
       "domain": "website domain (1st party)",
@@ -12052,7 +12052,7 @@
   ],
   "jetpackState": [
     {
-      "platform": "*.wordcamp.org",
+      "platform": "WordPress",
       "category": "Functional",
       "name": "jetpackState",
       "domain": "website domain (1st party)",
@@ -12065,7 +12065,7 @@
   ],
   "jpp_math_pass": [
     {
-      "platform": "*.wordcamp.org",
+      "platform": "WordPress",
       "category": "Functional",
       "name": "jpp_math_pass",
       "domain": "website domain (1st party)",
@@ -12078,7 +12078,7 @@
   ],
   "stnojs": [
     {
-      "platform": "*.wordcamp.org",
+      "platform": "WordPress",
       "category": "Functional",
       "name": "stnojs",
       "domain": "website domain (1st party)",
@@ -12091,7 +12091,7 @@
   ],
   "wordpress_logged_in_*": [
     {
-      "platform": "*.wordcamp.org",
+      "platform": "WordPress",
       "category": "Functional",
       "name": "wordpress_logged_in_*",
       "domain": "website domain (1st party)",
@@ -13212,8 +13212,8 @@
       "platform": "SAP",
       "category": "Functional",
       "name": "gltexp_*",
-      "domain": "Login Token Expiration.",
-      "description": "website domain (1st party)",
+      "domain": "website domain (1st party)",
+      "description": "Login Token Expiration.",
       "retention": "session",
       "dataController": "SAP",
       "gdprUrl": "https://www.sap.com/privacy",
@@ -13225,8 +13225,8 @@
       "platform": "SAP",
       "category": "Marketing",
       "name": "_gig_*",
-      "domain": "Callback for listener.",
-      "description": "website domain (1st party)",
+      "domain": "website domain (1st party)",
+      "description": "Callback for listener.",
       "retention": "12 months",
       "dataController": "SAP",
       "gdprUrl": "https://www.sap.com/privacy",
@@ -13238,8 +13238,8 @@
       "platform": "SAP",
       "category": "Functional",
       "name": "ua_*",
-      "domain": "COPPA (under age).",
-      "description": "website domain (1st party)",
+      "domain": "website domain (1st party)",
+      "description": "COPPA (under age).",
       "retention": "1 day",
       "dataController": "SAP",
       "gdprUrl": "https://www.sap.com/privacy",
@@ -13251,8 +13251,8 @@
       "platform": "SAP",
       "category": "Marketing",
       "name": "ucid",
-      "domain": "Unique computer identifier used for generating reports, and used by the Web SDK to get saved response.",
-      "description": "website domain (1st party)",
+      "domain": "website domain (1st party)",
+      "description": "Unique computer identifier used for generating reports, and used by the Web SDK to get saved response.",
       "retention": "13 months",
       "dataController": "SAP",
       "gdprUrl": "https://www.sap.com/privacy",
@@ -13264,8 +13264,8 @@
       "platform": "The Ozone Project",
       "category": "Marketing",
       "name": "ozone_uid",
-      "domain": "This cookie contains unique randomly-generated values that enable the Ozone Project to distinguish browsers and mobile devices.",
-      "description": "the-ozone-project.com",
+      "domain": "the-ozone-project.com",
+      "description": "This cookie contains unique randomly-generated values that enable the Ozone Project to distinguish browsers and mobile devices.",
       "retention": "90 days",
       "dataController": "The Ozone Project",
       "gdprUrl": "https://www.ozoneproject.com/privacy-matters",
@@ -13277,8 +13277,8 @@
       "platform": "Mailchimp",
       "category": "Analytics",
       "name": "mc_cid",
-      "domain": "Mailchimp campaign ID",
-      "description": "website domain (1st party)",
+      "domain": "website domain (1st party)",
+      "description": "Mailchimp campaign ID",
       "retention": "14 days",
       "dataController": "Mailchimp",
       "gdprUrl": "https://mailchimp.com/legal/",
@@ -13290,8 +13290,8 @@
       "platform": "Mailchimp",
       "category": "Analytics",
       "name": "mc_eid",
-      "domain": "Mailchimp email ID",
-      "description": "website domain (1st party)",
+      "domain": "website domain (1st party)",
+      "description": "Mailchimp email ID",
       "retention": "14 days",
       "dataController": "Mailchimp",
       "gdprUrl": "https://mailchimp.com/legal/",
@@ -13303,8 +13303,8 @@
       "platform": "Mailchimp",
       "category": "Analytics",
       "name": "mc_landing_site",
-      "domain": "Page visitor entered your site on",
-      "description": "website domain (1st party)",
+      "domain": "website domain (1st party)",
+      "description": "Page visitor entered your site on",
       "retention": "14 days",
       "dataController": "Mailchimp",
       "gdprUrl": "https://mailchimp.com/legal/",
@@ -13316,8 +13316,8 @@
       "platform": "Beamer",
       "category": "Marketing",
       "name": "_BEAMER_FIRST_VISIT_*",
-      "domain": "Set by Beamer (hotjar.com) to store the date of the user’s first interaction with insights.",
-      "description": "hotjar.com",
+      "domain": "hotjar.com",
+      "description": "Set by Beamer (hotjar.com) to store the date of the user’s first interaction with insights.",
       "retention": "3000 days",
       "dataController": "Hotjar",
       "gdprUrl": "https://www.getbeamer.com/privacy-policy",
@@ -13329,8 +13329,8 @@
       "platform": "Beamer",
       "category": "Marketing",
       "name": "_BEAMER_USER_ID_*",
-      "domain": "Set by Beamer (hotjar.com) to store an internal ID for a user.",
-      "description": "hotjar.com",
+      "domain": "hotjar.com",
+      "description": "Set by Beamer (hotjar.com) to store an internal ID for a user.",
       "retention": "300 days",
       "dataController": "Hotjar",
       "gdprUrl": "https://www.getbeamer.com/privacy-policy",
@@ -13342,9 +13342,9 @@
       "platform": "Beamer",
       "category": "Marketing",
       "name": "_BEAMER_DATE_*",
-      "domain": "Set by Beamer (hotjar.com). Stores the latest date in which the feed or page was opened.",
-      "description": "300 days",
-      "retention": "hotjar.com",
+      "domain": "hotjar.com",
+      "description": "Set by Beamer (hotjar.com). Stores the latest date in which the feed or page was opened.",
+      "retention": "300 days",
       "dataController": "Hotjar",
       "gdprUrl": "https://www.getbeamer.com/privacy-policy",
       "wildcard": "1"
@@ -13355,8 +13355,8 @@
       "platform": "Beamer",
       "category": "Marketing",
       "name": "_BEAMER_LAST_POST_SHOWN_*",
-      "domain": "Set by Beamer (hotjar.com). Stores the timestamp for the last time the number of unread posts was updated for the user.",
-      "description": "hotjar.com",
+      "domain": "hotjar.com",
+      "description": "Set by Beamer (hotjar.com). Stores the timestamp for the last time the number of unread posts was updated for the user.",
       "retention": "300 days",
       "dataController": "Hotjar",
       "gdprUrl": "https://www.getbeamer.com/privacy-policy",
@@ -13368,9 +13368,9 @@
       "platform": "Beamer",
       "category": "Marketing",
       "name": "_BEAMER_FILTER_BY_URL_*",
-      "domain": "This cookie is set by Beamer to store whether to apply URL filtering on the feed",
-      "description": "20 minutes",
-      "retention": "hotjar.com",
+      "domain": "hotjar.com",
+      "description": "This cookie is set by Beamer to store whether to apply URL filtering on the feed",
+      "retention": "20 minutes",
       "dataController": "Hotjar",
       "gdprUrl": "https://www.getbeamer.com/privacy-policy",
       "wildcard": "1"
@@ -13381,8 +13381,8 @@
       "platform": "Adhese",
       "category": "Analytics",
       "name": "adhese2",
-      "domain": "Unique Reach reporting",
-      "description": "ads-[account].adhese.com",
+      "domain": "ads-[account].adhese.com",
+      "description": "Unique Reach reporting",
       "retention": "30 days",
       "dataController": "Adhese",
       "gdprUrl": "https://adhese.com/images/Privacy%20Policy_Doggybites.pdf",
@@ -13394,8 +13394,8 @@
       "platform": "Adhese",
       "category": "Marketing",
       "name": "cap*",
-      "domain": "Frequency Capping",
-      "description": "ads-[account].adhese.com",
+      "domain": "ads-[account].adhese.com",
+      "description": "Frequency Capping",
       "retention": "30 days",
       "dataController": "Adhese",
       "gdprUrl": "https://adhese.com/images/Privacy%20Policy_Doggybites.pdf",
