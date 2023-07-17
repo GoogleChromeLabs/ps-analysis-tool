@@ -36,12 +36,7 @@
   "rules": {
     "array-callback-return": "error",
     "block-scoped-var": "error",
-    "complexity": [
-      "error",
-      {
-        "max": 20
-      }
-    ],
+    "complexity": ["error", { "max": 20 }],
     "consistent-return": "error",
     "curly": ["error", "all"],
     "default-case": "error",
