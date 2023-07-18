@@ -171,7 +171,7 @@ const CookieDetails = ({ data, analytics, url }: CookieDetailsProps) => {
                   <span className="text-green-500">Yes</span>
                 ) : (
                   <span className="text-red-500">
-                    <abbr title="Cookies might be blocked due to user preferences or browser/extension's settings">
+                    <abbr title="Cookie might be blocked due to user preferences or browser/extension's settings">
                       No
                     </abbr>
                   </span>
