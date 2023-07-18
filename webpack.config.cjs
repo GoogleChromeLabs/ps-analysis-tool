@@ -86,8 +86,8 @@ const root = {
       patterns: [
         { from: './packages/extension/src/manifest.json', to: '' },
         { from: './packages/extension/icons', to: 'icons' },
-        { from: './data/third_party/', to: 'third_party/data' },
-        { from: './data/PSInfo.json', to: './data/PSInfo.json' },
+        { from: './third_party/data', to: 'third_party/data' },
+        { from: './data/PSInfo.json', to: 'data/PSInfo.json' },
       ],
     }),
     new WebpackBar({

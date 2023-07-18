@@ -46,5 +46,4 @@ module.exports = {
       tertiary: '#CBD5E1',
     },
   },
-  plugins: [require('@tailwindcss/line-clamp')],
 };
