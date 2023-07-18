@@ -13,6 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/**
+ * External dependencies.
+ */
+import SinonChrome from 'sinon-chrome';
+
 /**
  * Internal dependencies.
  */
@@ -22,7 +28,12 @@ const normalCookie1 = {
   parsedCookie: {
     name: 'cookieKey1',
     value: 'value1',
-    domain: 'example.com',
+    domain: '.example.com',
+    expires: 0,
+    path: '/',
+    httponly: false,
+    secure: false,
+    samesite: undefined,
   },
   analytics: null,
   url: 'https://example.com/public/api/alerts',
@@ -33,7 +44,12 @@ const normalCookie2 = {
   parsedCookie: {
     name: 'CookieKey2',
     value: 'value2',
-    domain: 'example.com',
+    domain: '.example.com',
+    expires: 0,
+    path: '/',
+    httponly: false,
+    secure: false,
+    samesite: undefined,
   },
   analytics: null,
   url: 'https://example.com/public/api/alerts',
@@ -44,7 +60,12 @@ const specialCookie = {
   parsedCookie: {
     name: 'SpecialCookie',
     value: 'Special=Value',
-    domain: 'example.com',
+    domain: '.example.com',
+    expires: 0,
+    path: '/',
+    httponly: false,
+    secure: false,
+    samesite: undefined,
   },
   analytics: null,
   url: 'https://example.com/public/api/alerts',
@@ -55,7 +76,12 @@ const wildcardCookie = {
   parsedCookie: {
     name: 'Wildcard_123',
     value: 'val',
-    domain: 'example.com',
+    domain: '.example.com',
+    expires: 0,
+    path: '/',
+    httponly: false,
+    secure: false,
+    samesite: undefined,
   },
   analytics: {
     platform: 'Google Analytics',
@@ -79,9 +105,13 @@ const specialCookieHeader = `${specialCookie.parsedCookie.name}=${specialCookie.
 const wildcardCookieHeader = `${wildcardCookie.parsedCookie.name}=${wildcardCookie.parsedCookie.value}`;
 
 describe('parseRequestCookieHeader', () => {
-  it('Should parse all cookie header (request cookies)', () => {
+  beforeAll(() => {
+    globalThis.chrome = SinonChrome as unknown as typeof chrome;
+  });
+
+  it('Should parse all cookie header (request cookies)', async () => {
     const header = `${normalCookie1Header}; ${normalCookie2Header}; ${specialCookieHeader}`;
-    const parsedCookie = parseRequestCookieHeader(
+    const parsedCookie = await parseRequestCookieHeader(
       'https://example.com/public/api/alerts',
       header,
       {}
@@ -89,9 +119,9 @@ describe('parseRequestCookieHeader', () => {
 
     expect(parsedCookie).toEqual([normalCookie1, normalCookie2, specialCookie]);
   });
-  it('Should parse cookie header and add analytics', () => {
+  it('Should parse cookie header and add analytics', async () => {
     const header = `${normalCookie1Header}; ${normalCookie2Header}; ${specialCookieHeader}; ${wildcardCookieHeader}`;
-    const parsedCookie = parseRequestCookieHeader(
+    const parsedCookie = await parseRequestCookieHeader(
       'https://example.com/public/api/alerts',
       header,
       {

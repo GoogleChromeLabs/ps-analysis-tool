@@ -24,13 +24,15 @@ import { type Cookie as ParsedCookie } from 'simple-cookie';
  */
 import DomainIcon from '../../../../../../../icons/domain.svg';
 import { type CookieAnalytics } from '../../../../../../utils/fetchCookieDictionary';
+import { checkIBCCompliance } from '../../../../../../utils/checkIBCCompliance';
 
 interface CookieDetailsProps {
   data: ParsedCookie;
   analytics: CookieAnalytics | null;
+  url: string;
 }
 
-const CookieDetails = ({ data, analytics }: CookieDetailsProps) => {
+const CookieDetails = ({ data, analytics, url }: CookieDetailsProps) => {
   const descriptionRef = useRef<HTMLParagraphElement>(null);
   const valueRef = useRef<HTMLParagraphElement>(null);
 
@@ -41,6 +43,33 @@ const CookieDetails = ({ data, analytics }: CookieDetailsProps) => {
   const [showMoreDescription, setShowMoreDescription] =
     useState<boolean>(false);
   const [showMoreValue, setShowMoreValue] = useState<boolean>(false);
+
+  const [chromeCookieStoreHasCookie, setChromeCookieStoreHasCookie] = useState<
+    boolean | null
+  >(null);
+  const [isCookieIBCCompliant, setisCookieIBCCompliant] = useState<
+    boolean | null
+  >(null);
+
+  useEffect(() => {
+    setChromeCookieStoreHasCookie(null);
+    setisCookieIBCCompliant(null);
+
+    (async () => {
+      const _chromeCookieStoreHasCookie = Boolean(
+        await chrome.cookies.get({ name: data.name, url })
+      );
+      setChromeCookieStoreHasCookie(_chromeCookieStoreHasCookie);
+
+      setisCookieIBCCompliant(
+        checkIBCCompliance(
+          data.samesite,
+          data.secure,
+          _chromeCookieStoreHasCookie
+        )
+      );
+    })();
+  }, [data.name, data.samesite, data.secure, url]);
 
   useEffect(() => {
     setShowMoreDescription(false);
@@ -74,7 +103,7 @@ const CookieDetails = ({ data, analytics }: CookieDetailsProps) => {
       className="mt-5 rounded-xl shadow-md border leading-6 w-9/12 lg:w-8/12 mx-auto max-w-[600px] overflow-hidden"
       data-testid="cookie-card"
     >
-      <div className="mb-2 py-3 px-8 flex flex-col bg-[#F1F1F1] border-b border-[#CACACA]">
+      <div className="mb-2 py-3 px-8 flex flex-col bg-neutral-100 border-b border-slate-300">
         <h1 className="font-bold text-xl truncate mb-3">{data.name}</h1>
         <div className="inline-block">
           <p
@@ -87,7 +116,7 @@ const CookieDetails = ({ data, analytics }: CookieDetailsProps) => {
           </p>
           {shouldShowMoreDescriptionButton && (
             <button
-              className="text-md font-bold text-[#007185]"
+              className="text-md font-bold text-cyan-700"
               onClick={() => {
                 setShowMoreDescription(!showMoreDescription);
               }}
@@ -97,37 +126,79 @@ const CookieDetails = ({ data, analytics }: CookieDetailsProps) => {
           )}
         </div>
       </div>
-      <div className="flex flex-col p-8 pt-2 pb-4 divide-y divide-[#F1F1F1]">
+      <div className="flex flex-col p-8 pt-2 pb-4 divide-y divide-slate-200">
         <div className="flex items-center py-2">
-          <h1 className="w-1/4 font-semibold text-s text-[#808080]">Domain</h1>
+          <h1 className="w-1/4 font-semibold text-s text-tertiary">Domain</h1>
           <p className="w-3/4 flex gap-1 text-xs text-tertiary truncate">
             <DomainIcon />
             {data.domain}
           </p>
         </div>
-        <div className="flex items-center py-2 text-[#808080]">
+        <div className="flex items-center py-2 text-tertiary">
           <h1 className="w-1/4 font-semibold text-s">Path</h1>
           <p className="w-3/4 text-xs text-tertiary  truncate">{data.path}</p>
         </div>
-        <div className="flex items-center py-2 text-[#808080]">
+        <div className="flex items-center py-2 text-tertiary">
           <h1 className="w-1/4 font-semibold text-s">Samesite</h1>
           <p className="w-3/4 text-xs text-tertiary  truncate">
             {data.samesite}
           </p>
         </div>
-        <div className="flex items-center py-2 text-[#808080]">
+        <div className="flex items-center py-2 text-tertiary">
           <h1 className="w-1/4 font-semibold text-s">Platform</h1>
           <p className="w-3/4 text-xs text-tertiary  truncate">
             {analytics?.platform}
           </p>
         </div>
-        <div className="flex items-center py-2 text-[#808080]">
+        <div className="flex items-center py-2 text-tertiary">
           <h1 className="w-1/4 font-semibold text-s">Retention period</h1>
           <p className="w-3/4 text-xs text-tertiary  truncate">
             {analytics?.retention}
           </p>
         </div>
-        <div className="flex items-center py-2 text-[#808080]">
+        <div className="flex items-center py-2 text-tertiary">
+          <h1 className="w-1/4 font-semibold text-s">
+            <abbr title="IBC (Incrementally Better Cookies): A proposed standard aiming to enhance cookie security and privacy. Key changes include treating cookies as 'SameSite=Lax' by default and requiring an explicit 'SameSite=None; Secure' declaration for cross-site delivery. If any of the conditions are met, the cookie should be set and treated as IBC compliant.">
+              IBC Compliant
+            </abbr>
+          </h1>
+          {isCookieIBCCompliant === null ? (
+            <>Loading...</>
+          ) : (
+            <>
+              <p className="w-3/4 text-xs text-tertiary  truncate">
+                {isCookieIBCCompliant ? (
+                  <span className="text-green-500">Yes</span>
+                ) : (
+                  <span className="text-red-500">
+                    <abbr title="Cookie might be blocked due to user preferences or browser/extension's settings">
+                      No
+                    </abbr>
+                  </span>
+                )}
+              </p>
+            </>
+          )}
+        </div>
+        <div className="flex items-center py-2 text-tertiary">
+          <h1 className="w-1/4 font-semibold text-s">
+            <abbr title="Whether the website has stored the cookie in the Chrome Browser's Cookie Store, which was captured in HTTP request/response headers.">
+              Cookie Set
+            </abbr>
+          </h1>
+          {chromeCookieStoreHasCookie === null ? (
+            <>Loading...</>
+          ) : (
+            <p className="w-3/4 text-xs text-tertiary truncate">
+              {chromeCookieStoreHasCookie ? (
+                <span className="text-green-500">Yes</span>
+              ) : (
+                <span className="text-red-500">No</span>
+              )}
+            </p>
+          )}
+        </div>
+        <div className="flex items-center py-2 text-tertiary">
           <h1 className="w-1/4 font-semibold text-s">GDPR Portal</h1>
           <p
             className="w-3/4 text-xs text-tertiary truncate hover:underline cursor-pointer"
@@ -136,7 +207,7 @@ const CookieDetails = ({ data, analytics }: CookieDetailsProps) => {
             {analytics?.gdprUrl}
           </p>
         </div>
-        <div className="flex items-center py-2 text-[#808080]">
+        <div className="flex items-center py-2 text-tertiary">
           <h1 className="w-1/4 font-semibold text-s">Value</h1>
           <div className="w-3/4 inline-block">
             <p
@@ -149,7 +220,7 @@ const CookieDetails = ({ data, analytics }: CookieDetailsProps) => {
             </p>
             {shouldShowMoreValueButton && (
               <button
-                className="text-md font-bold text-[#007185]"
+                className="text-md font-bold text-cyan-700"
                 onClick={() => {
                   setShowMoreValue(!showMoreValue);
                 }}
