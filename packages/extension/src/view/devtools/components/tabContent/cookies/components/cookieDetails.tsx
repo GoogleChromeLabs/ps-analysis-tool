@@ -103,7 +103,7 @@ const CookieDetails = ({ data, analytics, url }: CookieDetailsProps) => {
       className="mt-5 rounded-xl shadow-md border leading-6 w-9/12 lg:w-8/12 mx-auto max-w-[600px] overflow-hidden"
       data-testid="cookie-card"
     >
-      <div className="mb-2 py-3 px-8 flex flex-col bg-slate-100 border-b border-slate-500">
+      <div className="mb-2 py-3 px-8 flex flex-col bg-neutral-100 border-b border-slate-300">
         <h1 className="font-bold text-xl truncate mb-3">{data.name}</h1>
         <div className="inline-block">
           <p
@@ -116,7 +116,7 @@ const CookieDetails = ({ data, analytics, url }: CookieDetailsProps) => {
           </p>
           {shouldShowMoreDescriptionButton && (
             <button
-              className="text-md font-bold text-teal-500"
+              className="text-md font-bold text-cyan-700"
               onClick={() => {
                 setShowMoreDescription(!showMoreDescription);
               }}
@@ -182,14 +182,14 @@ const CookieDetails = ({ data, analytics, url }: CookieDetailsProps) => {
         </div>
         <div className="flex items-center py-2 text-tertiary">
           <h1 className="w-1/4 font-semibold text-s">
-            <abbr title="Whether the cookie has been set by the website">
+            <abbr title="Whether the website has stored the cookie in the Chrome Browser's Cookie Store, which was captured in HTTP request/response headers.">
               Cookie Set
             </abbr>
           </h1>
           {chromeCookieStoreHasCookie === null ? (
             <>Loading...</>
           ) : (
-            <p className="w-3/4 text-xs text-tertiary  truncate">
+            <p className="w-3/4 text-xs text-tertiary truncate">
               {chromeCookieStoreHasCookie ? (
                 <span className="text-green-500">Yes</span>
               ) : (
@@ -220,7 +220,7 @@ const CookieDetails = ({ data, analytics, url }: CookieDetailsProps) => {
             </p>
             {shouldShowMoreValueButton && (
               <button
-                className="text-md font-bold text-teal-500"
+                className="text-md font-bold text-cyan-700"
                 onClick={() => {
                   setShowMoreValue(!showMoreValue);
                 }}
