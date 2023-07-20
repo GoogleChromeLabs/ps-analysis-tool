@@ -987,6 +987,32 @@
       "wildcard": "0"
     }
   ],
+  "FCCDCF": [
+    {
+      "platform": "Google",
+      "category": "Analytics",
+      "name": "FCCDCF",
+      "domain": "Advertiser's website domain (1st party)",
+      "description": "Cookie for Google Funding Choices API which allows for functionality specific to consent gathering for things like GDPR consent and CCPA opt-out.",
+      "retention": "13 months",
+      "dataController": "Google",
+      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "wildcard": "0"
+    }
+  ],
+  "FCNEC": [
+    {
+      "platform": "Google",
+      "category": "Analytics",
+      "name": "FCNEC",
+      "domain": "Advertiser's website domain (1st party)",
+      "description": "Cookie for Google Funding Choices API which allows for functionality specific to consent gathering for things like GDPR consent and CCPA opt-out.",
+      "retention": "13 months",
+      "dataController": "Google",
+      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "wildcard": "0"
+    }
+  ],
   "IDE": [
     {
       "platform": "DoubleClick/Google Marketing",
@@ -1112,8 +1138,8 @@
       "domain": "Advertiser's website domain (1st party)",
       "description": "Used to determine if browser of user accepts cookies or not",
       "retention": "End of session (browser)",
-      "dataController": "Advertiser's website",
-      "gdprUrl": "N/A",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/nl/privacy.html",
       "wildcard": "0"
     }
   ],
@@ -1125,8 +1151,8 @@
       "domain": "Advertiser's website domain (1st party)",
       "description": "Used to register the previous link clicked by the user",
       "retention": "End of session (browser)",
-      "dataController": "Advertiser's website",
-      "gdprUrl": "N/A",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/nl/privacy.html",
       "wildcard": "0"
     }
   ],
@@ -1138,8 +1164,8 @@
       "domain": "Advertiser's website domain (1st party) or 207.net (3rd party)",
       "description": "Contains a unique ID to identify a user",
       "retention": "2 years",
-      "dataController": "Advertiser's website",
-      "gdprUrl": "N/A",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/nl/privacy.html",
       "wildcard": "1"
     }
   ],
@@ -1151,8 +1177,8 @@
       "domain": "Advertiser's website domain (1st party)",
       "description": "Alternative cookie with unique user ID / timestamp when the s_vi cookie can not be set for technical reasons",
       "retention": "5 years",
-      "dataController": "Advertiser's website",
-      "gdprUrl": "N/A",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/nl/privacy.html",
       "wildcard": "0"
     }
   ],
@@ -1164,8 +1190,60 @@
       "domain": "Advertiser's website domain (1st party)",
       "description": "If other visitor ID methods fail, Adobe sets a fallback cookie or uses a combination of IP address and user agent to identify the visitor.",
       "retention": "2 years",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/nl/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "s_ecid": [
+    {
+      "platform": "Adobe Analytics",
+      "category": "Marketing",
+      "name": "s_ecid",
+      "domain": "Advertiser's website domain (1st party)",
+      "description": "This cookie is set by the customer's domain after the AMCV cookie is set by the client. The purpose of this cookie is to allow persistent ID tracking in the 1st-party state and is used as a reference ID if the AMCV cookie has expired.",
+      "retention": "2 years",
       "dataController": "Advertiser's website",
-      "gdprUrl": "N/A",
+      "gdprUrl": "https://www.adobe.com/nl/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "s_ppv": [
+    {
+      "platform": "Adobe Analytics",
+      "category": "Analytics",
+      "name": "s_ppv",
+      "domain": "Advertiser's website domain (1st party)",
+      "description": "Stores information on the percentage of the page displayed",
+      "retention": "session",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/nl/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "s_tp": [
+    {
+      "platform": "Adobe Analytics",
+      "category": "Analytics",
+      "name": "s_tp",
+      "domain": "Advertiser's website domain (1st party)",
+      "description": "This lets us know how much of the page you viewed.",
+      "retention": "session",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/nl/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "sat_track": [
+    {
+      "platform": "Adobe Analytics",
+      "category": "Functional",
+      "name": "sat_track",
+      "domain": "Advertiser's website domain",
+      "description": "The sat_track cookie is a part of Adobe Analytics. It controls the enabling and disabling of cookies and whether they are loaded onto the site.",
+      "retention": "90 days",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy",
       "wildcard": "0"
     }
   ],
@@ -1307,32 +1385,6 @@
       "domain": "Advertiser's website domain (1st party)",
       "description": "DPM is an abbreviation for Data Provider Match. It tells internal, Adobe systems that a call from Audience Manager or the Adobe Experience Cloud ID Service is passing in customer data for synchronization or requesting an ID.",
       "retention": "180 days",
-      "dataController": "Adobe",
-      "gdprUrl": "https://www.adobe.com/nl/privacy.html",
-      "wildcard": "0"
-    }
-  ],
-  "s_ppv": [
-    {
-      "platform": "Adobe Analytics",
-      "category": "Analytics",
-      "name": "s_ppv",
-      "domain": "Advertiser's website domain (1st party)",
-      "description": "Stores information on the percentage of the page displayed",
-      "retention": "session",
-      "dataController": "Adobe",
-      "gdprUrl": "https://www.adobe.com/nl/privacy.html",
-      "wildcard": "0"
-    }
-  ],
-  "s_tp": [
-    {
-      "platform": "Adobe Analytics",
-      "category": "Analytics",
-      "name": "s_tp",
-      "domain": "Advertiser's website domain (1st party)",
-      "description": "This lets us know how much of the page you viewed.",
-      "retention": "session",
       "dataController": "Adobe",
       "gdprUrl": "https://www.adobe.com/nl/privacy.html",
       "wildcard": "0"
@@ -1852,6 +1904,19 @@
       "name": "wd",
       "domain": "facebook.com (3rd party)",
       "description": "This cookie stores the browser window dimensions and is used by Facebook to optimise the rendering of the page.",
+      "retention": "Session",
+      "dataController": "Facebook",
+      "gdprUrl": "https://www.facebook.com/about/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "usida": [
+    {
+      "platform": "Facebook",
+      "category": "Marketing",
+      "name": "usida",
+      "domain": "facebook.com (3rd party)",
+      "description": "Collects a combination of the user’s browser and unique identifier, used to tailor advertising to users.",
       "retention": "Session",
       "dataController": "Facebook",
       "gdprUrl": "https://www.facebook.com/about/privacy/",
@@ -3548,19 +3613,6 @@
       "wildcard": "0"
     }
   ],
-  "_kuid_": [
-    {
-      "platform": "Salesforce",
-      "category": "Marketing",
-      "name": "_kuid_",
-      "domain": "krxd.net (3rd party)",
-      "description": "Registers a unique ID that identifies a returning user's device. The ID is used for targeted ads.",
-      "retention": "6 months",
-      "dataController": "Salesforce",
-      "gdprUrl": "https://www.salesforce.com/products/marketing-cloud/sfmc/salesforce-dmp-privacy",
-      "wildcard": "0"
-    }
-  ],
   "_twitter_sess": [
     {
       "platform": "Twitter",
@@ -3943,6 +3995,19 @@
       "platform": "Amazon Web Services",
       "category": "Functional",
       "name": "AWSALBTGCORS",
+      "domain": "Advertiser's website domain (1st party)",
+      "description": "For continued stickiness support with CORS use cases after the Chromium update, we are creating additional stickiness cookies for each of these duration-based stickiness features named AWSELBCORS (ALB).",
+      "retention": "Session",
+      "dataController": "Amazon Web Services",
+      "gdprUrl": "https://aws.amazon.com/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "AWSALBTG": [
+    {
+      "platform": "Amazon Web Services",
+      "category": "Functional",
+      "name": "AWSALBTG",
       "domain": "Advertiser's website domain (1st party)",
       "description": "For continued stickiness support with CORS use cases after the Chromium update, we are creating additional stickiness cookies for each of these duration-based stickiness features named AWSELBCORS (ALB).",
       "retention": "Session",
@@ -4362,8 +4427,268 @@
       "domain": "simage2.pubmatic.com",
       "description": "This cookie name is associated with the BIG-IP product suite from company F5. It is used to monitor page load speed, as part of site performance monitoring.",
       "retention": "Session",
-      "dataController": "simage2.pubmatic.com",
-      "gdprUrl": "N/A",
+      "dataController": "Pubmatic",
+      "gdprUrl": "https://pubmatic.com/legal/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "KTPCACOOKIE": [
+    {
+      "platform": "PubMatic",
+      "category": "Functional",
+      "name": "KTPCACOOKIE",
+      "domain": "pubmatic.com",
+      "description": "We use this cookie to check if third-party cookies are enabled on the user’s browser.",
+      "retention": "90 days",
+      "dataController": "Pubmatic",
+      "gdprUrl": "https://pubmatic.com/legal/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "COKENBLD": [
+    {
+      "platform": "PubMatic",
+      "category": "Functional",
+      "name": "COKENBLD",
+      "domain": "pubmatic.com",
+      "description": "This cookie sets a flag to “true” if cookies are enabled on the user’s browser.",
+      "retention": "1 day",
+      "dataController": "Pubmatic",
+      "gdprUrl": "https://pubmatic.com/legal/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "USCC": [
+    {
+      "platform": "PubMatic",
+      "category": "Marketing",
+      "name": "USCC",
+      "domain": "pubmatic.com",
+      "description": "This cookie enables PubMatic to sync user IDs properly in situations where multiple advertisements might appear on the same webpage.",
+      "retention": "1 day",
+      "dataController": "Pubmatic",
+      "gdprUrl": "https://pubmatic.com/legal/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "DPPIX_ON": [
+    {
+      "platform": "PubMatic",
+      "category": "Marketing",
+      "name": "DPPIX_ON",
+      "domain": "pubmatic.com",
+      "description": "These cookies enable PubMatic to properly sync cookie IDs with our partners by ensuring that our partners do not override each other during the sync process.",
+      "retention": "20 seconds",
+      "dataController": "Pubmatic",
+      "gdprUrl": "https://pubmatic.com/legal/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "SYNCUPPIX_ON": [
+    {
+      "platform": "PubMatic",
+      "category": "Marketing",
+      "name": "SYNCUPPIX_ON",
+      "domain": "pubmatic.com",
+      "description": "These cookies enable PubMatic to properly sync cookie IDs with our partners by ensuring that our partners do not override each other during the sync process.",
+      "retention": "20 seconds",
+      "dataController": "Pubmatic",
+      "gdprUrl": "https://pubmatic.com/legal/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "PUBUIDSYNCUPFQ": [
+    {
+      "platform": "PubMatic",
+      "category": "Functional",
+      "name": "PUBUIDSYNCUPFQ",
+      "domain": "pubmatic.com",
+      "description": "This cookie indicates the last time that we synced IDs with our partner.",
+      "retention": "3 months",
+      "dataController": "Pubmatic",
+      "gdprUrl": "https://pubmatic.com/legal/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "camfreq_*": [
+    {
+      "platform": "PubMatic",
+      "category": "Marketing",
+      "name": "camfreq_*",
+      "domain": "pubmatic.com",
+      "description": "This cookie is set for each campaign and indicates the number of times (e.g., frequency) that a particular advertisement may have been shown on the applicable publisher site.",
+      "retention": "30 days",
+      "dataController": "Pubmatic",
+      "gdprUrl": "https://pubmatic.com/legal/privacy/",
+      "wildcard": "1"
+    }
+  ],
+  "pubfreq_*": [
+    {
+      "platform": "PubMatic",
+      "category": "Marketing",
+      "name": "pubfreq_*",
+      "domain": "pubmatic.com",
+      "description": "This cookie is set for each advertising network and indicates the number of times (e.g., frequency) that a particular advertisement may have been shown on the applicable publisher site.",
+      "retention": "30 days",
+      "dataController": "Pubmatic",
+      "gdprUrl": "https://pubmatic.com/legal/privacy/",
+      "wildcard": "1"
+    }
+  ],
+  "pubtime_*": [
+    {
+      "platform": "PubMatic",
+      "category": "Functional",
+      "name": "pubtime_*",
+      "domain": "pubmatic.com",
+      "description": "This cookie stores the period of time after which ad frequency counters reset.",
+      "retention": "1 day",
+      "dataController": "Pubmatic",
+      "gdprUrl": "https://pubmatic.com/legal/privacy/",
+      "wildcard": "1"
+    }
+  ],
+  "PMFREQ_ON": [
+    {
+      "platform": "PubMatic",
+      "category": "Functional",
+      "name": "PMFREQ_ON",
+      "domain": "pubmatic.com",
+      "description": "This cookie ensures the proper functioning of the camfreq and pubfreq cookies, described above, in situations where one cookie may override the other.",
+      "retention": "1 day",
+      "dataController": "Pubmatic",
+      "gdprUrl": "https://pubmatic.com/legal/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "DPFQ": [
+    {
+      "platform": "PubMatic",
+      "category": "Marketing",
+      "name": "DPFQ",
+      "domain": "pubmatic.com",
+      "description": "This cookie stores information regarding the number of times that a partner’s pixel is loaded by a user’s browser. This enables us to cap the number of times that a pixel is used to record a user’s visit to a website within a specific period of time.",
+      "retention": "90 days",
+      "dataController": "Pubmatic",
+      "gdprUrl": "https://pubmatic.com/legal/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "pi": [
+    {
+      "platform": "PubMatic",
+      "category": "Marketing",
+      "name": "pi",
+      "domain": "pubmatic.com",
+      "description": "This cookie enables us to determine which set of pixels needs to be executed on the browser.",
+      "retention": "1 day",
+      "dataController": "Pubmatic",
+      "gdprUrl": "https://pubmatic.com/legal/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "FPtrust": [
+    {
+      "platform": "PubMatic",
+      "category": "Functional",
+      "name": "FPtrust",
+      "domain": "pubmatic.com",
+      "description": "This cookie is a session cookie used to  support the opt-out process via the Network Advertising Initiative.",
+      "retention": "1 day",
+      "dataController": "Pubmatic",
+      "gdprUrl": "https://pubmatic.com/legal/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "_curtime": [
+    {
+      "platform": "PubMatic",
+      "category": "Functional",
+      "name": "_curtime",
+      "domain": "pubmatic.com",
+      "description": "This cookie stores the current timestamp.",
+      "retention": "1 day",
+      "dataController": "Pubmatic",
+      "gdprUrl": "https://pubmatic.com/legal/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "PMDTSHR": [
+    {
+      "platform": "PubMatic",
+      "category": "Functional",
+      "name": "PMDTSHR",
+      "domain": "pubmatic.com",
+      "description": "This cookie is set for Komli ad server and is used for default impression when other data is not available.",
+      "retention": "1 day",
+      "dataController": "Pubmatic",
+      "gdprUrl": "https://pubmatic.com/legal/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "chk": [
+    {
+      "platform": "PubMatic",
+      "category": "Functional",
+      "name": "chk",
+      "domain": "pubmatic.com",
+      "description": "This cookie is set on Google Chrome browsers that have a version less 67 or non-Chrome browsers, and is used for testing purposes.",
+      "retention": "3 months",
+      "dataController": "Pubmatic",
+      "gdprUrl": "https://pubmatic.com/legal/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "chkSecSet": [
+    {
+      "platform": "PubMatic",
+      "category": "Functional",
+      "name": "chkSecSet",
+      "domain": "pubmatic.com",
+      "description": "This cookie is set on Google Chrome browsers that have a version less 67 or non-Chrome browsers, and is used for testing purposes.",
+      "retention": "3 months",
+      "dataController": "Pubmatic",
+      "gdprUrl": "https://pubmatic.com/legal/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "chkChromeAb67": [
+    {
+      "platform": "PubMatic",
+      "category": "Functional",
+      "name": "chkChromeAb67",
+      "domain": "pubmatic.com",
+      "description": "This cookie is set on Google Chrome browsers that have a version above 67 and is used for testing purposes.",
+      "retention": "3 months",
+      "dataController": "Pubmatic",
+      "gdprUrl": "https://pubmatic.com/legal/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "chkChromeAb67Sec": [
+    {
+      "platform": "PubMatic",
+      "category": "Functional",
+      "name": "chkChromeAb67Sec",
+      "domain": "pubmatic.com",
+      "description": "This cookie is set on Google Chrome browsers that have a version above 67 and is used for testing purposes.",
+      "retention": "3 months",
+      "dataController": "Pubmatic",
+      "gdprUrl": "https://pubmatic.com/legal/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "pubsyncexp": [
+    {
+      "platform": "PubMatic",
+      "category": "Functional",
+      "name": "pubsyncexp",
+      "domain": "pubmatic.com",
+      "description": "Sets a unique ID for the visitor, that allows third party advertisers to target the visitor with relevant advertisement. This pairing service is provided by third party advertisement hubs, which facilitates real-time bidding for advertisers.",
+      "retention": "1 day",
+      "dataController": "Pubmatic",
+      "gdprUrl": "https://pubmatic.com/legal/privacy/",
       "wildcard": "0"
     }
   ],
@@ -5758,6 +6083,45 @@
       "wildcard": "0"
     }
   ],
+  "panoramaId": [
+    {
+      "platform": "Lotame",
+      "category": "Marketing",
+      "name": "panoramaId",
+      "domain": "Advertiser's website domain",
+      "description": "Registers data on visitors from multiple visits and on multiple websites. This information is used to measure the efficiency of advertisement on websites.",
+      "retention": "session",
+      "dataController": "Lotame",
+      "gdprUrl": "https://www.lotame.com/about-lotame/privacy/lotames-products-services-privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "panoramaId_expiry": [
+    {
+      "platform": "Lotame",
+      "category": "Marketing",
+      "name": "panoramaId_expiry",
+      "domain": "Advertiser's website domain",
+      "description": "Registers data on visitors from multiple visits and on multiple websites. This information is used to measure the efficiency of advertisement on websites.",
+      "retention": "session",
+      "dataController": "Lotame",
+      "gdprUrl": "https://www.lotame.com/about-lotame/privacy/lotames-products-services-privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "panoramaId_expiry_exp": [
+    {
+      "platform": "Lotame",
+      "category": "Marketing",
+      "name": "panoramaId_expiry_exp",
+      "domain": "Advertiser's website domain",
+      "description": "Contains the expiry-date for the cookie with corresponding name.",
+      "retention": "session",
+      "dataController": "Lotame",
+      "gdprUrl": "https://www.lotame.com/about-lotame/privacy/lotames-products-services-privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
   "ab": [
     {
       "platform": "Neustar",
@@ -6156,6 +6520,58 @@
       "domain": "pinterest.com",
       "description": "Allows users to share pictures via Pinterest / the Pin It button. Pinterest can collect statistical information about usage of their service.",
       "retention": "1 day",
+      "dataController": "Pinterest",
+      "gdprUrl": "https://policy.pinterest.com/en/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "_derived_epik": [
+    {
+      "platform": "Pinterest",
+      "category": "Marketing",
+      "name": "_derived_epik",
+      "domain": "pinterest.com",
+      "description": "Cookie is placed by the Pinterest tag when a match is identified when no cookies are present, such as enhanced match.",
+      "retention": "1 year",
+      "dataController": "Pinterest",
+      "gdprUrl": "https://policy.pinterest.com/en/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "_pinterest_ct": [
+    {
+      "platform": "Pinterest",
+      "category": "Marketing",
+      "name": "_pinterest_ct",
+      "domain": "Advertiser's website domain",
+      "description": "They contain a user ID and the timestamp at which the cookie was created.",
+      "retention": "1 year",
+      "dataController": "Pinterest",
+      "gdprUrl": "https://policy.pinterest.com/en/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "_pinterest_ct_rt": [
+    {
+      "platform": "Pinterest",
+      "category": "Marketing",
+      "name": "_pinterest_ct_rt",
+      "domain": "Advertiser's website domain",
+      "description": "They contain a user ID and the timestamp at which the cookie was created.",
+      "retention": "1 year",
+      "dataController": "Pinterest",
+      "gdprUrl": "https://policy.pinterest.com/en/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "_epik": [
+    {
+      "platform": "Pinterest",
+      "category": "Marketing",
+      "name": "_epik",
+      "domain": "pinterest.com",
+      "description": "Cookie is placed by the JavaScript tag based on information sent from Pinterest with promoted traffic to help identify the user.",
+      "retention": "1 year",
       "dataController": "Pinterest",
       "gdprUrl": "https://policy.pinterest.com/en/privacy-policy",
       "wildcard": "0"
@@ -6668,19 +7084,6 @@
       "wildcard": "0"
     }
   ],
-  "sat_track": [
-    {
-      "platform": "Adobe Analytics",
-      "category": "Functional",
-      "name": "sat_track",
-      "domain": "Advertiser's website domain",
-      "description": "The sat_track cookie is a part of Adobe Analytics. It controls the enabling and disabling of cookies and whether they are loaded onto the site.",
-      "retention": "90 days",
-      "dataController": "Adobe",
-      "gdprUrl": "https://www.adobe.com/privacy",
-      "wildcard": "0"
-    }
-  ],
   "koitk": [
     {
       "platform": "Sharpspring",
@@ -6689,8 +7092,8 @@
       "domain": ".marketingautomation.services",
       "description": "Collects data on visitors behavior and interaction - This is used to optimize the website and make advertisement on the website more relevant.",
       "retention": "3 years",
-      "dataController": "Sharpspring",
-      "gdprUrl": "https://sharpspring.com/legal/privacy/",
+      "dataController": "Constant Contact",
+      "gdprUrl": "https://www.constantcontact.com/legal/privacy-notice",
       "wildcard": "0"
     }
   ],
@@ -6702,8 +7105,8 @@
       "domain": "Advertiser's website domain",
       "description": "This cookie contains information about where the visitor came from, called the source for the visit.",
       "retention": "6 hours",
-      "dataController": "Sharpspring",
-      "gdprUrl": "https://sharpspring.com/legal/privacy/",
+      "dataController": "Constant Contact",
+      "gdprUrl": "https://www.constantcontact.com/legal/privacy-notice",
       "wildcard": "0"
     }
   ],
@@ -6715,8 +7118,8 @@
       "domain": "Advertiser's website domain",
       "description": "This is Sharspring’s token cookie which enables user tracking. It ensures that the visit to website is connected to the user independent of the session and the source.",
       "retention": "25 years",
-      "dataController": "Sharpspring",
-      "gdprUrl": "https://sharpspring.com/legal/privacy/",
+      "dataController": "Constant Contact",
+      "gdprUrl": "https://www.constantcontact.com/legal/privacy-notice",
       "wildcard": "0"
     }
   ],
@@ -6728,8 +7131,8 @@
       "domain": "Advertiser's website domain",
       "description": "This cookie is storing the session ID for your visit. It is used in combination with _ss_tk to group website visits in reports for a single user.",
       "retention": "30 minutes",
-      "dataController": "Sharpspring",
-      "gdprUrl": "https://sharpspring.com/legal/privacy/",
+      "dataController": "Constant Contact",
+      "gdprUrl": "https://www.constantcontact.com/legal/privacy-notice",
       "wildcard": "0"
     }
   ],
@@ -6772,17 +7175,17 @@
       "wildcard": "1"
     }
   ],
-  "_pk_cvar*": [
+  "_pk_cvar": [
     {
       "platform": "Matomo",
       "category": "Analytics",
-      "name": "_pk_cvar*",
+      "name": "_pk_cvar",
       "domain": "Advertiser's website domain",
-      "description": "Short lived cookies used to temporarily store data for the visit",
-      "retention": "30 minutes",
-      "dataController": "Matomo",
-      "gdprUrl": "https://matomo.org/privacy-policy/",
-      "wildcard": "1"
+      "description": "Short lcts data on visitors behavior and interaction - This is used to optimize the website and make advertisement on the website more relevant.",
+      "retention": "3 years",
+      "dataController": "Sharpspring",
+      "gdprUrl": "https://sharpspring.com/legal/privacy/",
+      "wildcard": "0"
     }
   ],
   "_pk_hsr*": [
@@ -6912,6 +7315,19 @@
       "retention": "1 year",
       "dataController": "OneTrust",
       "gdprUrl": "https://www.onetrust.com/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "OptanonControl": [
+    {
+      "platform": "OneTrust",
+      "category": "Functional",
+      "name": "OptanonControl",
+      "domain": "Advertiser's website domain",
+      "description": "This cookie is set by the cookie compliance solution from OneTrust. It stores information about the categories of cookies the site uses and whether visitors have given or withdrawn consent for the use of each category. This enables site owners to prevent cookies in each category from being set in the user’s browser, when consent is not given. The cookie has a normal lifespan of one year, so that returning visitors to the site will have their preferences remembered. It contains no information that can identify the site visitor.",
+      "retention": "1 year",
+      "dataController": "OneTrust",
+      "gdprUrl": "https://www.onetrust.com/privacy-notice/",
       "wildcard": "0"
     }
   ],
@@ -8124,6 +8540,32 @@
       "wildcard": "1"
     }
   ],
+  "_kuid_": [
+    {
+      "platform": "Salesforce",
+      "category": "Marketing",
+      "name": "_kuid_",
+      "domain": "krxd.net (3rd party)",
+      "description": "Registers a unique ID that identifies a returning user's device. The ID is used for targeted ads.",
+      "retention": "6 months",
+      "dataController": "Salesforce",
+      "gdprUrl": "https://www.salesforce.com/products/marketing-cloud/sfmc/salesforce-dmp-privacy",
+      "wildcard": "0"
+    }
+  ],
+  "visitor_id*": [
+    {
+      "platform": "Salesforce",
+      "category": "Marketing",
+      "name": "visitor_id*",
+      "domain": "pi.pardot.com",
+      "description": "The visitor cookie includes a unique visitor ID and the unique identifier for your account.",
+      "retention": "1 year",
+      "dataController": "Salesforce",
+      "gdprUrl": "https://www.salesforce.com/products/marketing-cloud/sfmc/salesforce-dmp-privacy",
+      "wildcard": "1"
+    }
+  ],
   "vuid": [
     {
       "platform": "Vimeo",
@@ -8316,6 +8758,17 @@
       "retention": "session",
       "dataController": "WooCommerce / Jetpack",
       "gdprUrl": "https://automattic.com/privacy/",
+      "wildcard": "0"
+    },
+    {
+      "platform": "WordPress",
+      "category": "Analytics",
+      "name": "tk_ai",
+      "domain": "website domain (1st party)",
+      "description": "JetPack sets this cookie to store a randomly-generated anonymous ID which is used only within the admin area and for general analytics tracking.",
+      "retention": "30 minutes",
+      "dataController": "WordPress",
+      "gdprUrl": "https://wordpress.org/about/privacy/",
       "wildcard": "0"
     }
   ],
@@ -11790,6 +12243,19 @@
       "wildcard": "0"
     }
   ],
+  "tk_qs": [
+    {
+      "platform": "WordPress",
+      "category": "Analytics",
+      "name": "tk_qs",
+      "domain": "website domain (1st party)",
+      "description": "JetPack sets this cookie to store a randomly-generated anonymous ID which is used only within the admin area and for general analytics tracking.",
+      "retention": "30 minutes",
+      "dataController": "WordPress",
+      "gdprUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "0"
+    }
+  ],
   "tk_lr": [
     {
       "platform": "WordPress",
@@ -11811,6 +12277,32 @@
       "domain": "Advertiser's website domain",
       "description": "Jetpack - Stores the unique identifier for the publisher to enable Jetpack to collect data.",
       "retention": "5 Years",
+      "dataController": "WordPress",
+      "gdprUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "tk_r3d": [
+    {
+      "platform": "WordPress",
+      "category": "Analytics",
+      "name": "tk_r3d",
+      "domain": "website domain (1st party)",
+      "description": "JetPack installs this cookie to collect internal metrics for user activity and in turn improve user experience.",
+      "retention": "3 days",
+      "dataController": "WordPress",
+      "gdprUrl": "https://wordpress.org/about/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "tk_tc": [
+    {
+      "platform": "WordPress",
+      "category": "Analytics",
+      "name": "tk_tc",
+      "domain": "website domain (1st party)",
+      "description": "JetPack sets this cookie to record details on how user's use the website.",
+      "retention": "session",
       "dataController": "WordPress",
       "gdprUrl": "https://wordpress.org/about/privacy/",
       "wildcard": "0"
@@ -12609,6 +13101,162 @@
       "wildcard": "0"
     }
   ],
+  "cmplz_statistics": [
+    {
+      "platform": "Complianz",
+      "category": "Functional",
+      "name": "cmplz_statistics",
+      "domain": "website domain (1st party)",
+      "description": "Stores the setting of the statistic level of the cookie agreement.",
+      "retention": "1 year",
+      "dataController": "Complianz",
+      "gdprUrl": "https://complianz.io/legal/privacy-statement/",
+      "wildcard": "0"
+    }
+  ],
+  "cmplz_preferences": [
+    {
+      "platform": "Complianz",
+      "category": "Functional",
+      "name": "cmplz_preferences",
+      "domain": "website domain (1st party)",
+      "description": "Stores the setting of the preferences level of the cookie agreement.",
+      "retention": "1 year",
+      "dataController": "Complianz",
+      "gdprUrl": "https://complianz.io/legal/privacy-statement/",
+      "wildcard": "0"
+    }
+  ],
+  "cmplz_functional": [
+    {
+      "platform": "Complianz",
+      "category": "Functional",
+      "name": "cmplz_functional",
+      "domain": "website domain (1st party)",
+      "description": "Stores the setting of the functional level of the cookie agreement.",
+      "retention": "1 year",
+      "dataController": "Complianz",
+      "gdprUrl": "https://complianz.io/legal/privacy-statement/",
+      "wildcard": "0"
+    }
+  ],
+  "cmplz_stats": [
+    {
+      "platform": "Complianz",
+      "category": "Functional",
+      "name": "cmplz_stats",
+      "domain": "website domain (1st party)",
+      "description": "Stores the setting of the stats level of the cookie agreement.",
+      "retention": "1 year",
+      "dataController": "Complianz",
+      "gdprUrl": "https://complianz.io/legal/privacy-statement/",
+      "wildcard": "0"
+    }
+  ],
+  "cmplz_choice": [
+    {
+      "platform": "Complianz",
+      "category": "Functional",
+      "name": "cmplz_choice",
+      "domain": "website domain (1st party)",
+      "description": "Store if a message has been dismissed",
+      "retention": "1 year",
+      "dataController": "Complianz",
+      "gdprUrl": "https://complianz.io/legal/privacy-statement/",
+      "wildcard": "0"
+    }
+  ],
+  "cmplz_id": [
+    {
+      "platform": "Complianz",
+      "category": "Functional",
+      "name": "cmplz_id",
+      "domain": "website domain (1st party)",
+      "description": "Store cookie consent preferences",
+      "retention": "1 year",
+      "dataController": "Complianz",
+      "gdprUrl": "https://complianz.io/legal/privacy-statement/",
+      "wildcard": "0"
+    }
+  ],
+  "cmplz_user_data": [
+    {
+      "platform": "Complianz",
+      "category": "Functional",
+      "name": "cmplz_user_data",
+      "domain": "website domain (1st party)",
+      "description": "Read to determine which cookie banner to show",
+      "retention": "1 year",
+      "dataController": "Complianz",
+      "gdprUrl": "https://complianz.io/legal/privacy-statement/",
+      "wildcard": "0"
+    }
+  ],
+  "cmplz_saved_services": [
+    {
+      "platform": "Complianz",
+      "category": "Functional",
+      "name": "cmplz_saved_services",
+      "domain": "website domain (1st party)",
+      "description": "Store cookie consent preferences",
+      "retention": "1 year",
+      "dataController": "Complianz",
+      "gdprUrl": "https://complianz.io/legal/privacy-statement/",
+      "wildcard": "0"
+    }
+  ],
+  "cmplz_consented_services": [
+    {
+      "platform": "Complianz",
+      "category": "Functional",
+      "name": "cmplz_consented_services",
+      "domain": "website domain (1st party)",
+      "description": "Store cookie consent preferences",
+      "retention": "1 year",
+      "dataController": "Complianz",
+      "gdprUrl": "https://complianz.io/legal/privacy-statement/",
+      "wildcard": "0"
+    }
+  ],
+  "cmplz_policy_id": [
+    {
+      "platform": "Complianz",
+      "category": "Functional",
+      "name": "cmplz_policy_id",
+      "domain": "website domain (1st party)",
+      "description": "Store accepted cookie policy ID",
+      "retention": "1 year",
+      "dataController": "Complianz",
+      "gdprUrl": "https://complianz.io/legal/privacy-statement/",
+      "wildcard": "0"
+    }
+  ],
+  "cmplz_saved_categories": [
+    {
+      "platform": "Complianz",
+      "category": "Functional",
+      "name": "cmplz_saved_categories",
+      "domain": "website domain (1st party)",
+      "description": "Store cookie consent preferences",
+      "retention": "1 year",
+      "dataController": "Complianz",
+      "gdprUrl": "https://complianz.io/legal/privacy-statement/",
+      "wildcard": "0"
+    }
+  ],
+  "cookie_notice_accepted": [
+    {
+      "platform": "Digital Factory",
+      "category": "Functional",
+      "name": "cookie_notice_accepted",
+      "domain": "website domain (1st party)",
+      "description": "Identifies whether the user has accepted the use of cookies on this web site",
+      "retention": "3 months",
+      "dataController": "Digital Factory",
+      "gdprUrl": "https://dfactory.co/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
   "moove_gdpr_popup": [
     {
       "platform": "Moove",
@@ -13402,6 +14050,58 @@
       "wildcard": "1"
     }
   ],
+  "pubmatic_uid": [
+    {
+      "platform": "Adhese",
+      "category": "Marketing",
+      "name": "pubmatic_uid",
+      "domain": ".adhese.com",
+      "description": "When Adhese is used as server connection to SSPs or DSPs with whom the Account holder has a contract, a user syncing process can be installed where the SSP user_uid is stored in an Adhese cookie. This is dependent of consent for all parties involved (Accountholder, SSP, Adhese)",
+      "retention": "7 days",
+      "dataController": "Adhese",
+      "gdprUrl": "https://adhese.com/images/Privacy%20Policy_Doggybites.pdf",
+      "wildcard": "0"
+    }
+  ],
+  "improvedigital_uid": [
+    {
+      "platform": "Adhese",
+      "category": "Marketing",
+      "name": "improvedigital_uid",
+      "domain": ".adhese.com",
+      "description": "When Adhese is used as server connection to SSPs or DSPs with whom the Account holder has a contract, a user syncing process can be installed where the SSP user_uid is stored in an Adhese cookie. This is dependent of consent for all parties involved (Accountholder, SSP, Adhese)",
+      "retention": "7 days",
+      "dataController": "Adhese",
+      "gdprUrl": "https://adhese.com/images/Privacy%20Policy_Doggybites.pdf",
+      "wildcard": "0"
+    }
+  ],
+  "rubicon_uid": [
+    {
+      "platform": "Adhese",
+      "category": "Marketing",
+      "name": "rubicon_uid",
+      "domain": ".adhese.com",
+      "description": "When Adhese is used as server connection to SSPs or DSPs with whom the Account holder has a contract, a user syncing process can be installed where the SSP user_uid is stored in an Adhese cookie. This is dependent of consent for all parties involved (Accountholder, SSP, Adhese)",
+      "retention": "7 days",
+      "dataController": "Adhese",
+      "gdprUrl": "https://adhese.com/images/Privacy%20Policy_Doggybites.pdf",
+      "wildcard": "0"
+    }
+  ],
+  "adform_uid": [
+    {
+      "platform": "Adhese",
+      "category": "Marketing",
+      "name": "adform_uid",
+      "domain": ".adhese.com",
+      "description": "When Adhese is used as server connection to SSPs or DSPs with whom the Account holder has a contract, a user syncing process can be installed where the SSP user_uid is stored in an Adhese cookie. This is dependent of consent for all parties involved (Accountholder, SSP, Adhese)",
+      "retention": "7 days",
+      "dataController": "Adhese",
+      "gdprUrl": "https://adhese.com/images/Privacy%20Policy_Doggybites.pdf",
+      "wildcard": "0"
+    }
+  ],
   "pmaAuth-*": [
     {
       "platform": "phpMyAdmin",
@@ -13451,6 +14151,266 @@
       "retention": "30 days",
       "dataController": "phpMyAdmin",
       "gdprUrl": "N/A",
+      "wildcard": "0"
+    }
+  ],
+  "PLESKSESSID": [
+    {
+      "platform": "Plesk",
+      "category": "Functional",
+      "name": "PLESKSESSID",
+      "domain": "website domain (1st party)",
+      "description": "Keeps a Plesk session",
+      "retention": "session",
+      "dataController": "Plesk",
+      "gdprUrl": "https://www.plesk.com/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "plesk-items-per-page": [
+    {
+      "platform": "Plesk",
+      "category": "Functional",
+      "name": "plesk-items-per-page",
+      "domain": "website domain (1st party)",
+      "description": "Save the state of UI elements in Plesk",
+      "retention": "session",
+      "dataController": "Plesk",
+      "gdprUrl": "https://www.plesk.com/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "plek-list-type": [
+    {
+      "platform": "Plesk",
+      "category": "Functional",
+      "name": "plek-list-type",
+      "domain": "website domain (1st party)",
+      "description": "Save the state of UI elements in Plesk",
+      "retention": "session",
+      "dataController": "Plesk",
+      "gdprUrl": "https://www.plesk.com/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "plesk-sort-dir": [
+    {
+      "platform": "Plesk",
+      "category": "Functional",
+      "name": "plesk-sort-dir",
+      "domain": "website domain (1st party)",
+      "description": "Save the state of UI elements in Plesk",
+      "retention": "session",
+      "dataController": "Plesk",
+      "gdprUrl": "https://www.plesk.com/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "plesk-sort-field": [
+    {
+      "platform": "Plesk",
+      "category": "Functional",
+      "name": "plesk-sort-field",
+      "domain": "website domain (1st party)",
+      "description": "Save the state of UI elements in Plesk",
+      "retention": "session",
+      "dataController": "Plesk",
+      "gdprUrl": "https://www.plesk.com/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "sites-active-list-state-collapsed": [
+    {
+      "platform": "Plesk",
+      "category": "Functional",
+      "name": "sites-active-list-state-collapsed",
+      "domain": "website domain (1st party)",
+      "description": "Save the state of UI elements in Plesk",
+      "retention": "session",
+      "dataController": "Plesk",
+      "gdprUrl": "https://www.plesk.com/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "lists-state": [
+    {
+      "platform": "Plesk",
+      "category": "Functional",
+      "name": "lists-state",
+      "domain": "website domain (1st party)",
+      "description": "Save the state of UI elements in Plesk",
+      "retention": "session",
+      "dataController": "Plesk",
+      "gdprUrl": "https://www.plesk.com/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "fe_typo_user": [
+    {
+      "platform": "TYPO3",
+      "category": "Functional",
+      "name": "fe_typo_user",
+      "domain": "website domain (1st party)",
+      "description": "Used to identify a session ID when logged-in to the TYPO3 Frontend",
+      "retention": "session",
+      "dataController": "TYPO3",
+      "gdprUrl": "https://typo3.org/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "be_typo_user": [
+    {
+      "platform": "TYPO3",
+      "category": "Functional",
+      "name": "be_typo_user",
+      "domain": "website domain (1st party)",
+      "description": "Used to identify a backend session when a Backend User logged in to TYPO3 Backend or Frontend",
+      "retention": "session",
+      "dataController": "TYPO3",
+      "gdprUrl": "https://typo3.org/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "Typo3InstallTool": [
+    {
+      "platform": "TYPO3",
+      "category": "Functional",
+      "name": "Typo3InstallTool",
+      "domain": "website domain (1st party)",
+      "description": "Used to validate a session for the System Maintenance Area / Install Tool",
+      "retention": "session",
+      "dataController": "TYPO3",
+      "gdprUrl": "https://typo3.org/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "be_lastLoginProvider": [
+    {
+      "platform": "TYPO3",
+      "category": "Functional",
+      "name": "be_lastLoginProvider",
+      "domain": "website domain (1st party)",
+      "description": "Stores information about the last login provider when logging into TYPO3 Backend",
+      "retention": "session",
+      "dataController": "TYPO3",
+      "gdprUrl": "https://typo3.org/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "KelkooID": [
+    {
+      "platform": "Kelkoo",
+      "category": "Marketing",
+      "name": "KelkooID",
+      "domain": "kelkoogroup.net",
+      "description": "This cookie identifies the user for statistics and ad retargeting.",
+      "retention": "1 year",
+      "dataController": "Kelkoo",
+      "gdprUrl": "https://www.kelkoogroup.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "_cio": [
+    {
+      "platform": "Customer.io",
+      "category": "Marketing",
+      "name": "_cio",
+      "domain": "website domain (1st party)",
+      "description": "Used to identify visitors in order to send transactional and targeted email messages.",
+      "retention": "1 day",
+      "dataController": "Customer.io",
+      "gdprUrl": "https://customer.io/legal/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "_cioid": [
+    {
+      "platform": "Customer.io",
+      "category": "Marketing",
+      "name": "_cioid",
+      "domain": "website domain (1st party)",
+      "description": "Used to identify visitors in order to send transactional and targeted email messages.",
+      "retention": "1 year",
+      "dataController": "Customer.io",
+      "gdprUrl": "https://customer.io/legal/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "_cioanonid": [
+    {
+      "platform": "Customer.io",
+      "category": "Marketing",
+      "name": "_cioanonid",
+      "domain": "website domain (1st party)",
+      "description": "Used to identify visitors in order to send transactional and targeted email messages.",
+      "retention": "1 year",
+      "dataController": "Customer.io",
+      "gdprUrl": "https://customer.io/legal/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "cioFT": [
+    {
+      "platform": "Customer.io",
+      "category": "Marketing",
+      "name": "cioFT",
+      "domain": "website domain (1st party)",
+      "description": "Used to identify visitors in order to send transactional and targeted email messages.",
+      "retention": "1 year",
+      "dataController": "Customer.io",
+      "gdprUrl": "https://customer.io/legal/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "cioLT": [
+    {
+      "platform": "Customer.io",
+      "category": "Marketing",
+      "name": "cioLT",
+      "domain": "website domain (1st party)",
+      "description": "Used to identify visitors in order to send transactional and targeted email messages.",
+      "retention": "1 year",
+      "dataController": "Customer.io",
+      "gdprUrl": "https://customer.io/legal/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "_chartbeat2": [
+    {
+      "platform": "Chartbeat",
+      "category": "Analytics",
+      "name": "_chartbeat2",
+      "domain": "website domain (1st party)",
+      "description": "Cookie is used to register if a person has visited the domain before (to calculate new vs returning users).",
+      "retention": "30 days",
+      "dataController": "Chartbeat",
+      "gdprUrl": "https://chartbeat.com/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "_SUPERFLY_nosample": [
+    {
+      "platform": "Chartbeat",
+      "category": "Analytics",
+      "name": "_SUPERFLY_nosample",
+      "domain": "website domain (1st party)",
+      "description": "Cookie is used only if you go over your plan's traffic limit. At that point the cookie is set and will disable the beacon from that visitor for one hour.",
+      "retention": "1 hour",
+      "dataController": "Chartbeat",
+      "gdprUrl": "https://chartbeat.com/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "Datadome": [
+    {
+      "platform": "Datadome",
+      "category": "Functional",
+      "name": "Datadome",
+      "domain": "website domain (1st party)",
+      "description": "This a security cookie based upon detecting BOTS and malicious traffic.",
+      "retention": "1 year",
+      "dataController": "Datadome",
+      "gdprUrl": "https://datadome.co/privacy-policy/",
       "wildcard": "0"
     }
   ]
