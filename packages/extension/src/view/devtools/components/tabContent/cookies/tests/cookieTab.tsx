@@ -20,9 +20,10 @@ import React from 'react';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { type Cookie as ParsedCookie } from 'simple-cookie';
+import SinonChrome from 'sinon-chrome';
 
 /**
- * External dependencies.
+ * Internal dependencies.
  */
 import CookieTab from '..';
 import type { CookieStoreContext } from '../../../../stateProviders/syncCookieStore';
@@ -115,21 +116,25 @@ jest.mock('../../../../stateProviders/syncCookieStore', () => {
 });
 
 describe('CookieTab', () => {
-  it('should render a list of cookies with analytics', () => {
-    render(<CookieTab />);
-
-    expect(screen.getAllByTestId('cookie-list-item').length).toBe(4);
-    expect(screen.getAllByText('First Party').length).toBe(2);
-    expect(screen.getAllByText('Third Party').length).toBe(2);
-
-    expect(screen.getAllByText('Uncategorised').length).toBe(2);
-    expect(screen.getAllByText('Marketing').length).toBe(2);
+  beforeAll(() => {
+    globalThis.chrome = SinonChrome as unknown as typeof chrome;
   });
 
-  it('should show a cookie card with the information on first cookie in the list', () => {
+  it('should render a list of cookies with analytics', async () => {
     render(<CookieTab />);
 
-    const card = screen.getByTestId('cookie-card');
+    expect((await screen.findAllByTestId('cookie-list-item')).length).toBe(4);
+    expect((await screen.findAllByText('First Party')).length).toBe(2);
+    expect((await screen.findAllByText('Third Party')).length).toBe(2);
+
+    expect((await screen.findAllByText('Uncategorised')).length).toBe(2);
+    expect((await screen.findAllByText('Marketing')).length).toBe(2);
+  });
+
+  it('should show a cookie card with the information on first cookie in the list', async () => {
+    render(<CookieTab />);
+
+    const card = await screen.findByTestId('cookie-card');
 
     expect(card).toBeInTheDocument();
 
@@ -141,14 +146,14 @@ describe('CookieTab', () => {
     ).toBeInTheDocument();
   });
 
-  it('should change the selected cookie with clicking', () => {
+  it('should change the selected cookie with clicking', async () => {
     render(<CookieTab />);
 
     //click on the 3rd cookie in the list
-    const items = screen.getAllByTestId('cookie-list-item');
+    const items = await screen.findAllByTestId('cookie-list-item');
     fireEvent.click(items[2]);
 
-    const card = screen.getByTestId('cookie-card');
+    const card = await screen.findByTestId('cookie-card');
     expect(card).toBeInTheDocument();
 
     const thirdCookie =

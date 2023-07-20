@@ -27,6 +27,7 @@ import type {
   CookieDatabase,
 } from '../utils/fetchCookieDictionary';
 import findAnalyticsMatch from './findAnalyticsMatch';
+import { createCookieObject } from './createCookieObject';
 
 /**
  * Parse response cookies header.
@@ -34,23 +35,23 @@ import findAnalyticsMatch from './findAnalyticsMatch';
  * @param {string} url Cookie URL (URL of the server which is setting/updating cookies).
  * @param {string} value header value
  * @param {CookieDatabase} dictionary Dictionary from open cookie database
- * @returns {CookieData} Parsed cookie object.
+ * @returns {Promise<CookieData>} Parsed cookie object.
  */
-const parseResponseCookieHeader = (
+const parseResponseCookieHeader = async (
   url: string,
   value: string,
   dictionary: CookieDatabase
-): CookieData => {
-  const parsedCookie: ParsedCookie = cookie.parse(value);
+): Promise<CookieData> => {
+  let parsedCookie: ParsedCookie = cookie.parse(value);
+  parsedCookie = await createCookieObject(parsedCookie, url);
 
   let analytics: CookieAnalytics | null = null;
-
   if (dictionary) {
     analytics = findAnalyticsMatch(parsedCookie.name, dictionary);
   }
 
   return {
-    parsedCookie: parsedCookie,
+    parsedCookie,
     analytics,
     url,
     headerType: 'response',

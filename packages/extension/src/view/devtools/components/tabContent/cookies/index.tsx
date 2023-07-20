@@ -67,6 +67,7 @@ const Cookies = () => {
             <CookieDetails
               data={selectedCookie.parsedCookie}
               analytics={selectedCookie.analytics}
+              url={selectedCookie.url}
             />
           )}
         </div>
