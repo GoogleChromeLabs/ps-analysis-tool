@@ -51,24 +51,22 @@ const CookieDetails = ({ data, analytics, url }: CookieDetailsProps) => {
     boolean | null
   >(null);
 
-  const calculateCookieAttributes = useCallback(() => {
+  const calculateCookieAttributes = useCallback(async () => {
     setChromeCookieStoreHasCookie(null);
     setisCookieIBCCompliant(null);
 
-    (async () => {
-      const _chromeCookieStoreHasCookie = Boolean(
-        await chrome.cookies.get({ name: data.name, url })
-      );
-      setChromeCookieStoreHasCookie(_chromeCookieStoreHasCookie);
+    const _chromeCookieStoreHasCookie = Boolean(
+      await chrome.cookies.get({ name: data.name, url })
+    );
+    setChromeCookieStoreHasCookie(_chromeCookieStoreHasCookie);
 
-      setisCookieIBCCompliant(
-        checkIBCCompliance(
-          data.samesite,
-          data.secure,
-          _chromeCookieStoreHasCookie
-        )
-      );
-    })();
+    setisCookieIBCCompliant(
+      checkIBCCompliance(
+        data.samesite,
+        data.secure,
+        _chromeCookieStoreHasCookie
+      )
+    );
   }, [data.name, data.samesite, data.secure, url]);
 
   useEffect(() => {
