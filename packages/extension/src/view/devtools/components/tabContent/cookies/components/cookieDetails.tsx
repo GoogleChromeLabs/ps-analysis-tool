@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { type Cookie as ParsedCookie } from 'simple-cookie';
 
 /**
@@ -50,42 +50,41 @@ const CookieDetails = ({ data, analytics, url }: CookieDetailsProps) => {
   const [isCookieIBCCompliant, setisCookieIBCCompliant] = useState<
     boolean | null
   >(null);
-  const [calculateCookieAttributes, setCalculateCookieAttributes] =
-    useState<boolean>(true);
 
-  // Set up a listener for cookie changes and causes a recalculation of the IBC compliance and whether the cookie is set in the Chrome Cookie Store.
+  const calculateCookieAttributes = useCallback(() => {
+    setChromeCookieStoreHasCookie(null);
+    setisCookieIBCCompliant(null);
+
+    (async () => {
+      const _chromeCookieStoreHasCookie = Boolean(
+        await chrome.cookies.get({ name: data.name, url })
+      );
+      setChromeCookieStoreHasCookie(_chromeCookieStoreHasCookie);
+
+      setisCookieIBCCompliant(
+        checkIBCCompliance(
+          data.samesite,
+          data.secure,
+          _chromeCookieStoreHasCookie
+        )
+      );
+    })();
+  }, [data.name, data.samesite, data.secure, url]);
+
   useEffect(() => {
-    chrome.cookies.onChanged.addListener((changeInfo) => {
+    calculateCookieAttributes();
+
+    const listener = (changeInfo: chrome.cookies.CookieChangeInfo) => {
       if (changeInfo.cookie.name === data.name) {
-        setCalculateCookieAttributes(true);
+        calculateCookieAttributes();
       }
-    });
-  }, [data.name]);
+    };
 
-  // Calculate IBC compliance and whether the cookie is set in the Chrome Cookie Store.
-  useEffect(() => {
-    if (calculateCookieAttributes) {
-      setChromeCookieStoreHasCookie(null);
-      setisCookieIBCCompliant(null);
-
-      (async () => {
-        const _chromeCookieStoreHasCookie = Boolean(
-          await chrome.cookies.get({ name: data.name, url })
-        );
-        setChromeCookieStoreHasCookie(_chromeCookieStoreHasCookie);
-
-        setisCookieIBCCompliant(
-          checkIBCCompliance(
-            data.samesite,
-            data.secure,
-            _chromeCookieStoreHasCookie
-          )
-        );
-      })();
-
-      setCalculateCookieAttributes(false);
-    }
-  }, [data.name, data.samesite, data.secure, calculateCookieAttributes, url]);
+    chrome.cookies.onChanged.addListener(listener);
+    return () => {
+      chrome.cookies.onChanged.removeListener(listener);
+    };
+  }, [calculateCookieAttributes, data.name, data.samesite, data.secure, url]);
 
   useEffect(() => {
     setShowMoreDescription(false);
