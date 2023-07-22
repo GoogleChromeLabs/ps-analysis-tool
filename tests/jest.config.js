@@ -42,4 +42,12 @@ export default {
     '<rootDir>/node_modules',
     '<rootDir>/tests',
   ],
+  coveragePathIgnorePatterns: [
+    '<rootDir>/node_modules',
+    '<rootDir>/dist',
+    '<rootDir>/third_party',
+    '<rootDir>/data',
+  ],
+  coverageReporters: ['lcov'],
+  collectCoverageFrom: ['<rootDir>/packages/**/*.{js,jsx,ts,tsx}'],
 };
