@@ -16,7 +16,8 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useState } from 'react';
+import Accordion from './accordion';
 
 interface TabHeaderProps {
   tabsNames: string[];
@@ -29,17 +30,26 @@ const TabHeader: React.FC<TabHeaderProps> = ({
   selectedIndex,
   setIndex,
 }) => {
+  const [accordionState, setAccordionState] = useState(false);
   return (
     <>
       {tabsNames.map((name, index: number) => (
         <div
           key={name}
-          className={`h-full mx-1 px-3 flex justify-center items-center rounded-t-lg cursor-pointer ${
+          className={`mx-1 px-3 flex items-center cursor-pointer ${
             selectedIndex === index ? 'bg-slate-100' : 'bg-slate-200'
-          }`}
+          } overflow-x-clip`}
           onClick={() => setIndex(index)}
         >
-          <p>{name}</p>
+          {name === 'Cookies' ? (
+            <Accordion
+              tabName={name}
+              accordionState={accordionState}
+              setAccordionState={setAccordionState}
+            />
+          ) : (
+            <p className="my-1">{name}</p>
+          )}
         </div>
       ))}
     </>
