@@ -16,7 +16,8 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
+import { Resizable, type ResizeDirection, type NumberSize } from 're-resizable';
 
 /**
  * Internal dependencies.
@@ -56,21 +57,51 @@ const TABS = [
 
 const App: React.FC = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
+  const [width, setWidth] = useState<number>(135);
+  const setWidthOnResizeStop = useCallback(
+    (
+      _: MouseEvent | TouchEvent,
+      __: ResizeDirection,
+      ___: HTMLElement,
+      d: NumberSize
+    ): void => {
+      if (width + d.width > 0) {
+        setWidth(width + d.width);
+      } else {
+        setWidth(135);
+      }
+    },
+    [width]
+  );
 
   const TabContent = TABS[selectedTabIndex].Component;
   const tabNames = TABS.map((tab) => tab.display_name);
-
   return (
     <div className="w-full h-screen overflow-hidden">
-      <div className="w-full h-full flex flex-col">
-        <header className="w-full h-10 bg-slate-300 flex pt-2">
+      <div className="w-full h-full flex flex-row">
+        <Resizable
+          minWidth={'135px'}
+          size={{ width: width, height: '100%' }}
+          enable={{
+            top: false,
+            right: true,
+            bottom: false,
+            left: false,
+            topRight: false,
+            bottomRight: false,
+            bottomLeft: false,
+            topLeft: false,
+          }}
+          onResizeStop={setWidthOnResizeStop}
+          className="w-1/4 h-full bg-slate-300 flex flex-col pt-2"
+        >
           <TabHeader
             tabsNames={tabNames}
             selectedIndex={selectedTabIndex}
             setIndex={setSelectedTabIndex}
           />
-        </header>
-        <main style={{ height: 'calc(100% - 48px)' }}>
+        </Resizable>
+        <main className="w-full" style={{ height: 'calc(100% - 48px)' }}>
           <TabContent />
         </main>
       </div>
