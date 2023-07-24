@@ -23,7 +23,7 @@ import type { Meta, StoryObj } from '@storybook/react';
  * Internal dependencies.
  */
 import CookieTable from '.';
-import { TempData } from './tempData';
+import { TempCookieData } from './tempData';
 
 const meta = {
   title: 'Extension/CookiesPanel/CookieTable',
@@ -36,6 +36,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    cookies: TempData,
+    cookies: TempCookieData,
   },
 };
