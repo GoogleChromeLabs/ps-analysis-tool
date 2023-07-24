@@ -8,5 +8,6 @@
     "src",
     "../../node_modules/@types/jest/index.d.ts",
     "src/**/*.json"
-  ]
+  ],
+  "files": ["src/icons/custom.d.ts"]
 }
