@@ -28,6 +28,7 @@ export type CookieData = {
   analytics: CookieAnalytics | null;
   url: string;
   headerType: 'response' | 'request';
+  frameIdList: number[];
 };
 
 export type TabData = {
