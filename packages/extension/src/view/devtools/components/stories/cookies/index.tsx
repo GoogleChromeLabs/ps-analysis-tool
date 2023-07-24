@@ -25,6 +25,7 @@ import { Resizable } from 're-resizable';
  */
 import type { CookieData } from '../../../../../localStore';
 import CookieTable from './cookieTable';
+import CookieDetails from './cookieDetails';
 
 export interface CookiesProps {
   cookies: CookieData[];
@@ -57,6 +58,9 @@ const Cookies = ({ cookies }: CookiesProps) => {
           onRowClick={setselectedCookie}
         />
       </Resizable>
+      <div className="h-full">
+        <CookieDetails cookieData={selectedCookie} />
+      </div>
     </div>
   );
 };
