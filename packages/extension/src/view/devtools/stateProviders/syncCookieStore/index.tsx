@@ -35,6 +35,7 @@ export interface CookieStoreContext {
       [key: string]: CookieData;
     } | null;
     tabUrl: string | null;
+    tabFrames: chrome.webNavigation.GetAllFrameResultDetails[] | null;
   };
   actions: object;
 }
@@ -43,6 +44,7 @@ const initialState: CookieStoreContext = {
   state: {
     tabCookies: null,
     tabUrl: null,
+    tabFrames: null,
   },
   actions: {},
 };
@@ -57,9 +59,15 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const [tabUrl, setTabUrl] =
     useState<CookieStoreContext['state']['tabUrl']>(null);
+  const [tabFrames, setTabFrames] =
+    useState<CookieStoreContext['state']['tabFrames']>(null);
 
   const intitialSync = useCallback(async () => {
     const _tabId = chrome.devtools.inspectedWindow.tabId;
+    const currentTabFrames = await chrome.webNavigation.getAllFrames({
+      tabId: _tabId,
+    });
+    setTabFrames(currentTabFrames);
     setTabId(_tabId);
 
     const tabData = (await chrome.storage.local.get([_tabId.toString()]))[
@@ -113,7 +121,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
   }, [intitialSync, storeChangeListener, tabUpdateListener]);
 
   return (
-    <Context.Provider value={{ state: { tabCookies, tabUrl }, actions: {} }}>
+    <Context.Provider
+      value={{ state: { tabCookies, tabUrl, tabFrames }, actions: {} }}
+    >
       {children}
     </Context.Provider>
   );
