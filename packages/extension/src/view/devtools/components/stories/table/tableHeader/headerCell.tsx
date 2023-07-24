@@ -36,12 +36,19 @@ const HeaderCell = ({ header }: HeaderCellProps) => {
       colSpan={header.colSpan}
       style={{ maxWidth: header.getSize() }}
       className="border relative hover:bg-slate-100 select-none touch-none cursor-pointer"
+      onClick={header.column.getToggleSortingHandler()}
     >
       <div className="w-full h-full flex items-center justify-between">
         <p className="p-1 truncate">
           {header.isPlaceholder
             ? null
             : flexRender(header.column.columnDef.header, header.getContext())}
+        </p>
+        <p className="mr-2">
+          {{
+            asc: ' 🔼',
+            desc: ' 🔽',
+          }[header.column.getIsSorted() as string] ?? null}
         </p>
       </div>
       <HeaderResizer header={header} />
