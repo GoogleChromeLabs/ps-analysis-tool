@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import type { Table as ReactTable } from '@tanstack/react-table';
 
 /**
@@ -26,6 +26,7 @@ import type { Table as ReactTable } from '@tanstack/react-table';
 import TableHeader from './tableHeader';
 import TableBody from './tableBody';
 import type { CookieData } from '../../../../../localStore';
+import ColumnMenu from './columnMenu';
 
 export type TData = CookieData;
 
@@ -36,11 +37,30 @@ interface TableProps {
 }
 
 const Table = ({ table, selectedKey, onRowClick }: TableProps) => {
+  const [showColumnsMenu, setShowColumnsMenu] = useState(false);
+
+  const handleRightClick = useCallback(
+    (e: React.MouseEvent<HTMLElement>) => {
+      e.preventDefault();
+      document.body.style.overflow = showColumnsMenu ? 'auto' : 'hidden';
+      setShowColumnsMenu(!showColumnsMenu);
+    },
+    [showColumnsMenu]
+  );
   return (
     <>
+      <ColumnMenu
+        open={showColumnsMenu}
+        onClose={setShowColumnsMenu}
+        table={table}
+        columns={table.getAllLeafColumns()}
+      />
       <div className="w-full h-full overflow-auto">
         <table className="w-full">
-          <TableHeader headerGroups={table.getHeaderGroups()} />
+          <TableHeader
+            headerGroups={table.getHeaderGroups()}
+            onRightClick={handleRightClick}
+          />
           <TableBody
             rows={table.getRowModel().rows}
             selectedKey={selectedKey}

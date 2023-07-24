@@ -28,11 +28,14 @@ import type { TData } from '..';
 
 interface TableHeaderProps {
   headerGroups: HeaderGroup<TData>[];
+  onRightClick: (
+    event: React.MouseEvent<HTMLTableSectionElement, MouseEvent>
+  ) => void;
 }
 
-const TableHeader = ({ headerGroups }: TableHeaderProps) => {
+const TableHeader = ({ headerGroups, onRightClick }: TableHeaderProps) => {
   return (
-    <thead>
+    <thead onContextMenu={onRightClick}>
       {headerGroups.map((headerGroup) => (
         <HeaderRow key={headerGroup.id} headerGroup={headerGroup} />
       ))}
