@@ -18,6 +18,7 @@
  */
 import React, { useState } from 'react';
 import Accordion from './accordion';
+import { File } from '../../../../icons';
 
 interface TabHeaderProps {
   tabsNames: string[];
@@ -52,7 +53,10 @@ const TabHeader: React.FC<TabHeaderProps> = ({
               setAccordionState={setAccordionState}
             />
           ) : (
-            <p className="m-1">{name}</p>
+            <span className="flex items-center">
+              <File className="text-white" />
+              <span className="m-1">{name}</span>
+            </span>
           )}
         </div>
       ))}
