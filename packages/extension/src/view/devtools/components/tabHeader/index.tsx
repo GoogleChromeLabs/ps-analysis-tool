@@ -53,7 +53,7 @@ const TabHeader: React.FC<TabHeaderProps> = ({
               setAccordionState={setAccordionState}
             />
           ) : (
-            <span className="flex items-center">
+            <span className="flex items-center pl-2">
               <File className="text-white" />
               <span className="m-1">{name}</span>
             </span>
