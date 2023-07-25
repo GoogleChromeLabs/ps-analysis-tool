@@ -34,9 +34,14 @@ const Accordion: React.FC<TabHeaderProps> = ({
   setAccordionState,
   tabName,
 }) => {
-  const { tabFrames } = useCookieStore(({ state }) => ({
-    tabFrames: state.tabFrames,
-  }));
+  const { tabFrames, setSelectedFrame, selectedFrame } = useCookieStore(
+    ({ state, actions }) => ({
+      tabFrames: state.tabFrames,
+      setSelectedFrame: actions.setSelectedFrame,
+      selectedFrame: state.selectedFrame,
+    })
+  );
+
   return (
     <div className="flex flex-col my-1">
       <span
@@ -47,14 +52,18 @@ const Accordion: React.FC<TabHeaderProps> = ({
         <span className="flex items-center">{tabName}</span>
       </span>
       <div className={`${accordionState ? 'flex flex-col' : 'hidden'}`}>
-        {tabFrames?.map(({ url }) => (
-          <div
-            key={url}
-            className="mx-1 my-1 px-3 flex justify-center items-center rounded-t-lg cursor-pointer"
-          >
-            <p className="whitespace-nowrap">{url}</p>
-          </div>
-        ))}
+        {tabFrames &&
+          Object.keys(tabFrames)?.map((key) => (
+            <div
+              key={key}
+              onClick={() => setSelectedFrame(key)}
+              className={`mx-1 my-1 px-3 flex items-center rounded-lg cursor-pointer ${
+                selectedFrame === key ? 'bg-red-200' : ''
+              }`}
+            >
+              <p className="whitespace-nowrap">{key}</p>
+            </div>
+          ))}
       </div>
     </div>
   );
