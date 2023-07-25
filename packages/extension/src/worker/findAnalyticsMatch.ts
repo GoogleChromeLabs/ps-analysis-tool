@@ -47,8 +47,19 @@ const wildTest = (wildcard: string, str: string): boolean => {
 const findAnalyticsMatch = (
   key: string,
   dictionary: CookieDatabase
-): CookieAnalytics | null => {
-  let analytics: CookieAnalytics | null = null;
+): CookieAnalytics => {
+  let analytics: CookieAnalytics = {
+    platform: '',
+    category: '',
+    name: '',
+    domain: '',
+    description: '',
+    retention: '',
+    dataController: '',
+    gdprUrl: '',
+    wildcard: '',
+  };
+
   Object.keys(dictionary).every((dictionaryKey) => {
     if (key === dictionaryKey) {
       analytics = dictionary[dictionaryKey][0];
