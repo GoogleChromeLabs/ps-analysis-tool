@@ -28,8 +28,8 @@ import {
 /**
  * Internal dependencies.
  */
-import type { CookieData } from '../../../../../../localStore';
-import Table from '../../table';
+import type { CookieData } from '../../../../../../../localStore';
+import Table from '../../../../table';
 
 export interface CookieTableProps {
   cookies: CookieData[];
@@ -78,7 +78,9 @@ const CookieTable = ({
       {
         header: 'SameSite',
         accessorKey: 'parsedCookie.samesite',
-        cell: (info) => info.getValue(),
+        cell: (info) => (
+          <span className="capitalize">{info.getValue() as string}</span>
+        ),
       },
       {
         header: 'Secure',
