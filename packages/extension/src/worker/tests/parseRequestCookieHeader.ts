@@ -38,6 +38,7 @@ const normalCookie1 = {
   analytics: null,
   url: 'https://example.com/public/api/alerts',
   headerType: 'request',
+  frameIdList: [1],
 };
 
 const normalCookie2 = {
@@ -54,6 +55,7 @@ const normalCookie2 = {
   analytics: null,
   url: 'https://example.com/public/api/alerts',
   headerType: 'request',
+  frameIdList: [1],
 };
 
 const specialCookie = {
@@ -70,6 +72,7 @@ const specialCookie = {
   analytics: null,
   url: 'https://example.com/public/api/alerts',
   headerType: 'request',
+  frameIdList: [1],
 };
 
 const wildcardCookie = {
@@ -97,6 +100,7 @@ const wildcardCookie = {
   },
   url: 'https://example.com/public/api/alerts',
   headerType: 'request',
+  frameIdList: [1],
 };
 
 const normalCookie1Header = `${normalCookie1.parsedCookie.name}=${normalCookie1.parsedCookie.value}`;
@@ -114,7 +118,8 @@ describe('parseRequestCookieHeader', () => {
     const parsedCookie = await parseRequestCookieHeader(
       'https://example.com/public/api/alerts',
       header,
-      {}
+      {},
+      1
     );
 
     expect(parsedCookie).toEqual([normalCookie1, normalCookie2, specialCookie]);
@@ -153,7 +158,8 @@ describe('parseRequestCookieHeader', () => {
             wildcard: '1',
           },
         ],
-      }
+      },
+      1
     );
 
     expect(parsedCookie).toEqual([
