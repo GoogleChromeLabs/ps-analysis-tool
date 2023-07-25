@@ -25,6 +25,8 @@ import {
   ArrowDown,
   CookieGray,
   CookieWhite,
+  ArrowDownWhite,
+  ArrowRightWhite,
 } from '../../../../../icons';
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
 
@@ -64,7 +66,17 @@ const Accordion: React.FC<TabHeaderProps> = ({
           setSelectedFrame(null);
         }}
       >
-        {accordionState ? <ArrowDown /> : <ArrowRight />}
+        {accordionState ? (
+          selectedIndex === index && !selectedFrame ? (
+            <ArrowDownWhite />
+          ) : (
+            <ArrowDown />
+          )
+        ) : selectedIndex === index && !selectedFrame ? (
+          <ArrowRightWhite />
+        ) : (
+          <ArrowRight />
+        )}
         <span className="flex items-center pl-1">
           {selectedIndex === index && !selectedFrame ? (
             <CookieWhite />

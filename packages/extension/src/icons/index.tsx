@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 export { default as ArrowDown } from './arrow-down.svg';
+export { default as ArrowDownWhite } from './arrow-down-white.svg';
 export { default as ArrowRight } from './arrow-right.svg';
+export { default as ArrowRightWhite } from './arrow-right-white.svg';
 export { default as CookieGray } from './cookie-gray.svg';
 export { default as CookieWhite } from './cookie-white.svg';
 export { default as File } from './file.svg';
+export { default as FileWhite } from './file-white.svg';

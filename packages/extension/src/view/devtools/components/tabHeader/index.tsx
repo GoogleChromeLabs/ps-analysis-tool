@@ -18,7 +18,7 @@
  */
 import React, { useState } from 'react';
 import Accordion from './accordion';
-import { File } from '../../../../icons';
+import { File, FileWhite } from '../../../../icons';
 
 interface TabHeaderProps {
   tabsNames: string[];
@@ -54,7 +54,7 @@ const TabHeader: React.FC<TabHeaderProps> = ({
             />
           ) : (
             <span className="flex items-center pl-2">
-              <File className="text-white" />
+              {selectedIndex === index ? <FileWhite /> : <File />}
               <span className="m-1">{name}</span>
             </span>
           )}
