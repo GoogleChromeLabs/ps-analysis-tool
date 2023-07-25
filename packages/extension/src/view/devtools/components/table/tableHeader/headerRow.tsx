@@ -32,7 +32,7 @@ interface HeaderRowProps {
 
 const HeaderRow = ({ headerGroup }: HeaderRowProps) => {
   return (
-    <tr>
+    <tr className="bg-white">
       {headerGroup.headers.map((header) => (
         <HeaderCell key={header.id} header={header} />
       ))}
