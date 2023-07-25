@@ -90,7 +90,7 @@ const CookieTable = ({
       {
         header: 'Category',
         accessorKey: 'analytics.category',
-        cell: (info) => info.getValue(),
+        cell: (info) => (info.getValue() ? info.getValue() : 'Uncategorised'),
       },
       {
         header: 'Platform',
