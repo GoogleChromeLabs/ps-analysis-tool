@@ -37,7 +37,9 @@ const TabHeader: React.FC<TabHeaderProps> = ({
         <div
           key={name}
           className={`flex items-center cursor-pointer ${
-            selectedIndex === index && name !== 'Cookies' ? 'bg-[#3971e0]' : ''
+            selectedIndex === index && name !== 'Cookies'
+              ? 'bg-[#3971e0] text-white'
+              : ''
           }`}
           onClick={() => setIndex(index)}
         >

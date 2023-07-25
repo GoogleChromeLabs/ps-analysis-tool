@@ -20,7 +20,12 @@ import React from 'react';
 /**
  * Internal dependencies
  */
-import { ArrowRight, ArrowDown, CookieGray } from '../../../../../icons';
+import {
+  ArrowRight,
+  ArrowDown,
+  CookieGray,
+  CookieWhite,
+} from '../../../../../icons';
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
 
 interface TabHeaderProps {
@@ -50,7 +55,9 @@ const Accordion: React.FC<TabHeaderProps> = ({
     <div className="flex flex-col my-1 w-full">
       <span
         className={`flex flex-row items-center pl-1 ${
-          selectedIndex === index && !selectedFrame ? 'bg-[#3971e0]' : ''
+          selectedIndex === index && !selectedFrame
+            ? 'bg-[#3971e0] text-white'
+            : ''
         }`}
         onClick={() => {
           setAccordionState(!accordionState);
@@ -59,7 +66,11 @@ const Accordion: React.FC<TabHeaderProps> = ({
       >
         {accordionState ? <ArrowDown /> : <ArrowRight />}
         <span className="flex items-center pl-1">
-          <CookieGray />
+          {selectedIndex === index && !selectedFrame ? (
+            <CookieWhite />
+          ) : (
+            <CookieGray />
+          )}
           {tabName}
         </span>
       </span>
@@ -75,7 +86,9 @@ const Accordion: React.FC<TabHeaderProps> = ({
                 selectedFrame === key ? 'bg-[#3971e0]' : ''
               }`}
             >
-              <CookieGray />
+              <div>
+                {selectedFrame === key ? <CookieWhite /> : <CookieGray />}
+              </div>
               <p className="truncate">{key}</p>
             </div>
           ))}
