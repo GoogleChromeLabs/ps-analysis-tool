@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -42,6 +42,9 @@ const CookieTable = ({
   selectedKey,
   onRowClick,
 }: CookieTableProps) => {
+  const [tableColumnSize, setTableColumnSize] = useState(100);
+  const tableRef = useRef<HTMLTableElement>(null);
+
   const columns = React.useMemo<ColumnDef<CookieData>[]>(
     () => [
       {
@@ -49,31 +52,37 @@ const CookieTable = ({
         accessorKey: 'parsedCookie.name',
         cell: (info) => info.getValue(),
         enableHiding: false,
+        size: tableColumnSize,
       },
       {
         header: 'Value',
         accessorKey: 'parsedCookie.value',
         cell: (info) => info.getValue(),
+        size: tableColumnSize,
       },
       {
         header: 'Domain',
         accessorKey: 'parsedCookie.domain',
         cell: (info) => info.getValue(),
+        size: tableColumnSize,
       },
       {
         header: 'Path',
         accessorKey: 'parsedCookie.path',
         cell: (info) => info.getValue(),
+        size: tableColumnSize,
       },
       {
         header: 'Retention Period / Expires',
         accessorKey: 'analytics.retention',
         cell: (info) => info.getValue(),
+        size: tableColumnSize,
       },
       {
         header: 'HttpOnly',
         accessorKey: 'parsedCookie.httponly',
         cell: (info) => (info.getValue() ? '✓' : ''),
+        size: tableColumnSize,
       },
       {
         header: 'SameSite',
@@ -81,21 +90,25 @@ const CookieTable = ({
         cell: (info) => (
           <span className="capitalize">{info.getValue() as string}</span>
         ),
+        size: tableColumnSize,
       },
       {
         header: 'Secure',
         accessorKey: 'parsedCookie.secure',
         cell: (info) => (info.getValue() ? '✓' : ''),
+        size: tableColumnSize,
       },
       {
         header: 'Category',
         accessorKey: 'analytics.category',
         cell: (info) => (info.getValue() ? info.getValue() : 'Uncategorised'),
+        size: tableColumnSize,
       },
       {
         header: 'Platform',
         accessorKey: 'analytics.platform',
         cell: (info) => info.getValue(),
+        size: tableColumnSize,
       },
       {
         header: 'GDPR Portal',
@@ -110,10 +123,24 @@ const CookieTable = ({
             {info.getValue() as string}
           </a>
         ),
+        size: tableColumnSize,
       },
     ],
-    []
+    [tableColumnSize]
   );
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (tableRef.current) {
+        setTableColumnSize(tableRef.current.offsetWidth / columns.length);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, [columns.length]);
 
   const table = useReactTable({
     data,
@@ -125,7 +152,9 @@ const CookieTable = ({
   });
 
   return (
-    <Table table={table} selectedKey={selectedKey} onRowClick={onRowClick} />
+    <div ref={tableRef} className="w-full h-full overflow-auto">
+      <Table table={table} selectedKey={selectedKey} onRowClick={onRowClick} />
+    </div>
   );
 };
 
