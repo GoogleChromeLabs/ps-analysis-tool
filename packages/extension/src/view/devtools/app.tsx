@@ -70,7 +70,7 @@ const App: React.FC = () => {
             setIndex={setSelectedTabIndex}
           />
         </header>
-        <main style={{ height: 'calc(100% - 48px)' }}>
+        <main style={{ height: 'calc(100% - 40px)' }}>
           <TabContent />
         </main>
       </div>

@@ -27,26 +27,42 @@ import SinonChrome from 'sinon-chrome';
  */
 import CookieTab from '..';
 import type { CookieStoreContext } from '../../../../stateProviders/syncCookieStore';
+import { emptyAnalytics } from '../../../../../../worker/findAnalyticsMatch';
+
+const emptyCookie = {
+  name: '',
+  value: '',
+  domain: '',
+  samesite: '',
+  secure: false,
+  httponly: false,
+  path: '',
+  expires: '',
+};
 
 const uncategorised1pCookie: ParsedCookie = {
+  ...emptyCookie,
   name: '_cb',
   value: 'uncategorised1pCookie',
   domain: '.cnn.com',
 };
 
 const uncategorised3pCookie: ParsedCookie = {
+  ...emptyCookie,
   name: 'pubsyncexp',
   value: 'uncategorised3pCookie',
   domain: '.ads.pubmatic.com',
 };
 
 const known1pCookie: ParsedCookie = {
+  ...emptyCookie,
   name: '__qca',
   value: 'known1pCookie',
   domain: '.cnn.com',
 };
 
 const known3pCookie: ParsedCookie = {
+  ...emptyCookie,
   name: 'KRTBCOOKIE_290',
   value: 'known3pCookie',
   domain: '.pubmatic.com',
@@ -59,13 +75,13 @@ const mockResponse: {
   tabCookies: {
     [uncategorised1pCookie.name]: {
       parsedCookie: uncategorised1pCookie,
-      analytics: null,
+      analytics: { ...emptyAnalytics },
       url: 'https://edition.cnn.com/whatever/api',
       headerType: 'response',
     },
     [uncategorised3pCookie.name]: {
       parsedCookie: uncategorised3pCookie,
-      analytics: null,
+      analytics: { ...emptyAnalytics },
       url: 'https://api.pubmatic.com/whatever/api',
       headerType: 'response',
     },
@@ -123,9 +139,7 @@ describe('CookieTab', () => {
   it('should render a list of cookies with analytics', async () => {
     render(<CookieTab />);
 
-    expect((await screen.findAllByTestId('cookie-list-item')).length).toBe(4);
-    expect((await screen.findAllByText('First Party')).length).toBe(2);
-    expect((await screen.findAllByText('Third Party')).length).toBe(2);
+    expect((await screen.findAllByTestId('body-row')).length).toBe(4);
 
     expect((await screen.findAllByText('Uncategorised')).length).toBe(2);
     expect((await screen.findAllByText('Marketing')).length).toBe(2);
@@ -133,6 +147,9 @@ describe('CookieTab', () => {
 
   it('should show a cookie card with the information on first cookie in the list', async () => {
     render(<CookieTab />);
+
+    const items = await screen.findAllByTestId('body-row');
+    fireEvent.click(items[0]);
 
     const card = await screen.findByTestId('cookie-card');
 
@@ -142,7 +159,7 @@ describe('CookieTab', () => {
       mockResponse.tabCookies[Object.keys(mockResponse.tabCookies)[0]];
 
     expect(
-      within(card).getByText(firstCookie.parsedCookie.name)
+      within(card).getByText(firstCookie.parsedCookie.value)
     ).toBeInTheDocument();
   });
 
@@ -150,7 +167,7 @@ describe('CookieTab', () => {
     render(<CookieTab />);
 
     //click on the 3rd cookie in the list
-    const items = await screen.findAllByTestId('cookie-list-item');
+    const items = await screen.findAllByTestId('body-row');
     fireEvent.click(items[2]);
 
     const card = await screen.findByTestId('cookie-card');
@@ -160,7 +177,7 @@ describe('CookieTab', () => {
       mockResponse.tabCookies[Object.keys(mockResponse.tabCookies)[2]];
 
     expect(
-      within(card).getByText(`${thirdCookie.parsedCookie.name}`)
+      within(card).getByText(`${thirdCookie.parsedCookie.value}`)
     ).toBeInTheDocument();
   });
 });

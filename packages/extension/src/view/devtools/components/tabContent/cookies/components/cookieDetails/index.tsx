@@ -22,7 +22,7 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import type { CookieData } from '../../../../../../localStore';
+import type { CookieData } from '../../../../../../../localStore';
 
 export interface CookieDetailsProps {
   cookieData: CookieData | undefined;
@@ -30,11 +30,11 @@ export interface CookieDetailsProps {
 
 const CookieDetails = ({ cookieData }: CookieDetailsProps) => {
   return (
-    <div className="w-full h-full p-6 bg-white border border-gray-200  shadow">
+    <div data-testid="cookie-card">
       {cookieData ? (
         <div className="bg-gray-100 p-4 rounded-lg">
           <p className="text-base font-bold text-gray-800">Cookie Value :</p>
-          <p className="text-base font-semibold text-gray-700 mb-10">
+          <p className="text-base font-semibold text-gray-700 mb-10 break-words">
             {cookieData.parsedCookie.value}
           </p>
           <p className="text-sm text-gray-600">

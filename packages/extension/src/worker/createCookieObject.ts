@@ -123,8 +123,12 @@ function parseAttributeValues(
   let value =
     parsedCookieValue || chromeStoreCookieValue || prevParsedCookieValue;
 
-  if (type === 'domain' && url) {
-    value = value || '.' + getDomain(url);
+  if (type === 'domain') {
+    if (url) {
+      value = value || '.' + getDomain(url);
+    } else {
+      value = value || '';
+    }
   }
 
   if (type === 'path') {
@@ -145,6 +149,7 @@ function parseAttributeValues(
     } else if (value === 'unspecified') {
       value = '';
     }
+    value = value || '';
   }
 
   if (type === 'expires') {
