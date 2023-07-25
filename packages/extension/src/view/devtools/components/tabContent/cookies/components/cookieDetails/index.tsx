@@ -30,7 +30,7 @@ export interface CookieDetailsProps {
 
 const CookieDetails = ({ cookieData }: CookieDetailsProps) => {
   return (
-    <>
+    <div data-testid="cookie-card">
       {cookieData ? (
         <div className="bg-gray-100 p-4 rounded-lg">
           <p className="text-base font-bold text-gray-800">Cookie Value :</p>
@@ -48,7 +48,7 @@ const CookieDetails = ({ cookieData }: CookieDetailsProps) => {
           </p>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

@@ -23,6 +23,7 @@ import SinonChrome from 'sinon-chrome';
  * Internal dependencies.
  */
 import parseResponseCookieHeader from '../parseResponseCookieHeader';
+import { emptyAnalytics } from '../findAnalyticsMatch';
 
 describe('parseResponseCookieHeader', () => {
   beforeAll(() => {
@@ -47,7 +48,7 @@ describe('parseResponseCookieHeader', () => {
         name: 'countryCode',
         value: 'IN',
       },
-      analytics: null,
+      analytics: { ...emptyAnalytics },
       url: 'https://example.com/public/api/alerts',
       headerType: 'response',
     });

@@ -38,6 +38,18 @@ const wildTest = (wildcard: string, str: string): boolean => {
   return result.test(str); // remove last 'i' above to have case sensitive
 };
 
+export const emptyAnalytics = {
+  platform: '',
+  category: '',
+  name: '',
+  domain: '',
+  description: '',
+  retention: '',
+  dataController: '',
+  gdprUrl: '',
+  wildcard: '',
+};
+
 /**
  * Finds analytics in cookie DB for a cookie name.
  * @param {string} key cookie name to be matched.
@@ -48,17 +60,7 @@ const findAnalyticsMatch = (
   key: string,
   dictionary: CookieDatabase
 ): CookieAnalytics => {
-  let analytics: CookieAnalytics = {
-    platform: '',
-    category: '',
-    name: '',
-    domain: '',
-    description: '',
-    retention: '',
-    dataController: '',
-    gdprUrl: '',
-    wildcard: '',
-  };
+  let analytics: CookieAnalytics = { ...emptyAnalytics };
 
   Object.keys(dictionary).every((dictionaryKey) => {
     if (key === dictionaryKey) {

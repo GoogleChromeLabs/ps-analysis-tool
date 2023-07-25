@@ -23,6 +23,7 @@ import SinonChrome from 'sinon-chrome';
  * Internal dependencies.
  */
 import parseRequestCookieHeader from '../parseRequestCookieHeader';
+import { emptyAnalytics } from '../findAnalyticsMatch';
 
 const normalCookie1 = {
   parsedCookie: {
@@ -33,9 +34,9 @@ const normalCookie1 = {
     path: '/',
     httponly: false,
     secure: false,
-    samesite: undefined,
+    samesite: '',
   },
-  analytics: null,
+  analytics: { ...emptyAnalytics },
   url: 'https://example.com/public/api/alerts',
   headerType: 'request',
 };
@@ -49,9 +50,9 @@ const normalCookie2 = {
     path: '/',
     httponly: false,
     secure: false,
-    samesite: undefined,
+    samesite: '',
   },
-  analytics: null,
+  analytics: { ...emptyAnalytics },
   url: 'https://example.com/public/api/alerts',
   headerType: 'request',
 };
@@ -65,9 +66,9 @@ const specialCookie = {
     path: '/',
     httponly: false,
     secure: false,
-    samesite: undefined,
+    samesite: '',
   },
-  analytics: null,
+  analytics: { ...emptyAnalytics },
   url: 'https://example.com/public/api/alerts',
   headerType: 'request',
 };
@@ -81,7 +82,7 @@ const wildcardCookie = {
     path: '/',
     httponly: false,
     secure: false,
-    samesite: undefined,
+    samesite: '',
   },
   analytics: {
     platform: 'Google Analytics',

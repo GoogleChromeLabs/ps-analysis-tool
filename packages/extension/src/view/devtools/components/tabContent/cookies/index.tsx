@@ -36,7 +36,7 @@ const Cookies = () => {
   );
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col" data-testid="cookies-content">
       <Resizable
         defaultSize={{
           width: '100%',
