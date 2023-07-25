@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 
 /**
  * Internal dependencies.
@@ -26,10 +26,14 @@ import { CookieList, CookieDetails } from './components';
 import type { CookieData } from '../../../../../localStore';
 
 const Cookies = () => {
-  const { cookies, tabUrl } = useCookieStore(({ state }) => ({
-    cookies: state.tabCookies,
-    tabUrl: state.tabUrl,
-  }));
+  const { cookies, tabUrl, selectedFrame, tabFrames } = useCookieStore(
+    ({ state }) => ({
+      cookies: state.tabCookies,
+      tabUrl: state.tabUrl,
+      selectedFrame: state.selectedFrame,
+      tabFrames: state.tabFrames,
+    })
+  );
 
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [selectedCookie, setSelectedCookie] = useState<CookieData | null>(null);
@@ -47,7 +51,19 @@ const Cookies = () => {
       setSelectedCookie(cookies[selectedKey]);
     }
   }, [cookies, selectedKey]);
-
+  const calculatedCookies = useMemo(() => {
+    const frameFilteredCookies: { [key: string]: CookieData } = {};
+    if (cookies && selectedFrame && tabFrames) {
+      Object.entries(cookies).forEach(([key, cookie]) => {
+        tabFrames[selectedFrame].frameIds.forEach((frameId) => {
+          if (cookie.frameIdList?.includes(frameId)) {
+            frameFilteredCookies[key] = cookie;
+          }
+        });
+      });
+    }
+    return frameFilteredCookies;
+  }, [cookies, selectedFrame, tabFrames]);
   return (
     <div
       className="w-full h-full flex flex-col lg:flex-row"
@@ -55,7 +71,7 @@ const Cookies = () => {
     >
       <div className="basis-1/2 lg:basis-1/3 overflow-y-scroll border-r ">
         <CookieList
-          cookies={cookies || {}}
+          cookies={calculatedCookies || {}}
           tabUrl={tabUrl}
           selectedKey={selectedKey}
           onClickItem={setSelectedKey}

@@ -43,7 +43,7 @@ const Accordion: React.FC<TabHeaderProps> = ({
   );
 
   return (
-    <div className="flex flex-col my-1">
+    <div className="flex flex-col my-1 w-full">
       <span
         className="flex flex-row"
         onClick={() => setAccordionState(!accordionState)}
@@ -59,11 +59,11 @@ const Accordion: React.FC<TabHeaderProps> = ({
             <div
               key={key}
               onClick={() => setSelectedFrame(key)}
-              className={`mx-1 my-1 px-3 flex items-center rounded-lg cursor-pointer ${
+              className={`mx-1 my-1 flex items-center rounded-lg cursor-pointer ${
                 selectedFrame === key ? 'bg-red-200' : ''
               }`}
             >
-              <p className="whitespace-nowrap">{key}</p>
+              <p className="truncate">{key}</p>
             </div>
           ))}
       </div>

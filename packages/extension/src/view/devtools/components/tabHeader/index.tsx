@@ -36,7 +36,7 @@ const TabHeader: React.FC<TabHeaderProps> = ({
       {tabsNames.map((name, index: number) => (
         <div
           key={name}
-          className={`px-3 flex items-center cursor-pointer ${
+          className={`flex items-center cursor-pointer ${
             selectedIndex === index ? 'bg-slate-100' : 'bg-slate-200'
           }`}
           onClick={() => setIndex(index)}
