@@ -40,10 +40,10 @@ const Cookies = () => {
       <Resizable
         defaultSize={{
           width: '100%',
-          height: '70%',
+          height: '60%',
         }}
-        minHeight="30%"
-        maxHeight="70%"
+        minHeight="40%"
+        maxHeight="60%"
         enable={{
           top: false,
           right: false,
