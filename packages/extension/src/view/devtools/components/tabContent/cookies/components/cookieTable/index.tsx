@@ -43,7 +43,7 @@ const CookieTable = ({
   onRowClick,
 }: CookieTableProps) => {
   const [tableColumnSize, setTableColumnSize] = useState(100);
-  const tableRef = useRef<HTMLTableElement>(null);
+  const tableContainerRef = useRef<HTMLTableElement>(null);
 
   const columns = React.useMemo<ColumnDef<CookieData>[]>(
     () => [
@@ -131,8 +131,10 @@ const CookieTable = ({
 
   useEffect(() => {
     const handleResize = () => {
-      if (tableRef.current) {
-        setTableColumnSize(tableRef.current.offsetWidth / columns.length);
+      if (tableContainerRef.current) {
+        setTableColumnSize(
+          tableContainerRef.current.offsetWidth / columns.length
+        );
       }
     };
 
@@ -152,7 +154,7 @@ const CookieTable = ({
   });
 
   return (
-    <div ref={tableRef} className="w-full h-full overflow-auto">
+    <div ref={tableContainerRef} className="w-full h-full overflow-auto">
       <Table table={table} selectedKey={selectedKey} onRowClick={onRowClick} />
     </div>
   );
