@@ -62,12 +62,14 @@ const mockResponse: {
       analytics: null,
       url: 'https://edition.cnn.com/whatever/api',
       headerType: 'response',
+      isFirstParty: true,
     },
     [uncategorised3pCookie.name]: {
       parsedCookie: uncategorised3pCookie,
       analytics: null,
       url: 'https://api.pubmatic.com/whatever/api',
       headerType: 'response',
+      isFirstParty: false,
     },
     [known1pCookie.name]: {
       parsedCookie: known1pCookie,
@@ -85,6 +87,7 @@ const mockResponse: {
       },
       url: 'https://edition.cnn.com/whatever/api',
       headerType: 'response',
+      isFirstParty: true,
     },
     [known3pCookie.name]: {
       parsedCookie: known3pCookie,
@@ -102,6 +105,7 @@ const mockResponse: {
       },
       url: 'https://api.pubmatic.com/whatever/api',
       headerType: 'response',
+      isFirstParty: false,
     },
   },
   tabUrl: 'https://edition.cnn.com/',

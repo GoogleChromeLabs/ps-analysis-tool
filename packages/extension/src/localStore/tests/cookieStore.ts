@@ -35,6 +35,7 @@ const cookieArray: CookieData[] = [
     analytics: null,
     url: 'https://example.com',
     headerType: 'response',
+    isFirstParty: false,
   },
   {
     parsedCookie: {
@@ -50,6 +51,7 @@ const cookieArray: CookieData[] = [
     analytics: null,
     url: 'https://example.com',
     headerType: 'response',
+    isFirstParty: false,
   },
 ];
 
