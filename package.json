@@ -40,7 +40,6 @@
 		"@storybook/react-webpack5": "^7.0.27",
 		"@storybook/testing-library": "^0.0.14-next.2",
 		"@svgr/webpack": "^8.0.1",
-		"@tanstack/react-table": "^8.9.3",
 		"@testing-library/jest-dom": "^5.16.5",
 		"@testing-library/react": "^14.0.0",
 		"@types/chrome": "^0.0.237",
@@ -82,7 +81,6 @@
 		"postcss-loader": "^7.3.3",
 		"prettier": "^2.8.8",
 		"prop-types": "^15.8.1",
-		"re-resizable": "^6.9.9",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-test-renderer": "^18.2.0",
@@ -110,5 +108,9 @@
 	"type": "module",
 	"workspaces": [
 		"packages/*"
-	]
+	],
+	"dependencies": {
+		"@tanstack/react-table": "^8.9.3",
+		"re-resizable": "^6.9.9"
+	}
 }
