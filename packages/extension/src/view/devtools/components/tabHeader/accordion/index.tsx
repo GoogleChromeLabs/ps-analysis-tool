@@ -74,15 +74,13 @@ const Accordion: React.FC<TabHeaderProps> = ({
           {tabName}
         </span>
       </span>
-      <div
-        className={`${accordionState ? 'flex flex-col ml-[32px]' : 'hidden'}`}
-      >
+      <div className={`${accordionState ? 'flex flex-col' : 'hidden'}`}>
         {tabFrames &&
           Object.keys(tabFrames)?.map((key) => (
             <div
               key={key}
               onClick={() => setSelectedFrame(key)}
-              className={`mx-1 my-1 flex items-center cursor-pointer ${
+              className={`mx-1 my-1 pl-[32px] flex items-center cursor-pointer ${
                 selectedFrame === key ? 'bg-[#3971e0]' : ''
               }`}
             >
