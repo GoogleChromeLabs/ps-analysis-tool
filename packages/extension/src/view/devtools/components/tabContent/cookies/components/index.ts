@@ -15,4 +15,4 @@
  */
 
 export { default as CookieDetails } from './cookieDetails';
-export { default as CookieList } from './cookieList';
+export { default as CookieTable } from './cookieTable';
