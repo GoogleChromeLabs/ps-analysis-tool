@@ -46,7 +46,10 @@ const Accordion: React.FC<TabHeaderProps> = ({
     <div className="flex flex-col my-1 w-full">
       <span
         className="flex flex-row"
-        onClick={() => setAccordionState(!accordionState)}
+        onClick={() => {
+          setAccordionState(!accordionState);
+          setSelectedFrame(null);
+        }}
       >
         {accordionState ? <ChevronUpSmall /> : <ChevronDownSmall />}
         <span className="flex items-center">{tabName}</span>

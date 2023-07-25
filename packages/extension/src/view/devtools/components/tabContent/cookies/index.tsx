@@ -51,11 +51,12 @@ const Cookies = () => {
       setSelectedCookie(cookies[selectedKey]);
     }
   }, [cookies, selectedKey]);
+
   const calculatedCookies = useMemo(() => {
     const frameFilteredCookies: { [key: string]: CookieData } = {};
-    if (cookies && selectedFrame && tabFrames) {
+    if (cookies && selectedFrame && tabFrames && tabFrames[selectedFrame]) {
       Object.entries(cookies).forEach(([key, cookie]) => {
-        tabFrames[selectedFrame].frameIds.forEach((frameId) => {
+        tabFrames[selectedFrame].frameIds?.forEach((frameId) => {
           if (cookie.frameIdList?.includes(frameId)) {
             frameFilteredCookies[key] = cookie;
           }
@@ -64,30 +65,37 @@ const Cookies = () => {
     }
     return frameFilteredCookies;
   }, [cookies, selectedFrame, tabFrames]);
+
   return (
     <div
       className="w-full h-full flex flex-col lg:flex-row"
       data-testid="cookies-content"
     >
-      <div className="basis-1/2 lg:basis-1/3 overflow-y-scroll border-r ">
-        <CookieList
-          cookies={calculatedCookies || {}}
-          tabUrl={tabUrl}
-          selectedKey={selectedKey}
-          onClickItem={setSelectedKey}
-        />
-      </div>
-      <div className=" basis-1/2 lg:basis-2/3 overflow-y-scroll pb-28">
-        <div className="border-t-gray-300 border-t-2 lg:border-t-0 ">
-          {selectedCookie && (
-            <CookieDetails
-              data={selectedCookie.parsedCookie}
-              analytics={selectedCookie.analytics}
-              url={selectedCookie.url}
+      {selectedFrame ? (
+        <>
+          <div className="basis-1/2 lg:basis-1/3 overflow-y-scroll border-r ">
+            <CookieList
+              cookies={calculatedCookies || {}}
+              tabUrl={tabUrl}
+              selectedKey={selectedKey}
+              onClickItem={setSelectedKey}
             />
-          )}
-        </div>
-      </div>
+          </div>
+          <div className=" basis-1/2 lg:basis-2/3 overflow-y-scroll pb-28">
+            <div className="border-t-gray-300 border-t-2 lg:border-t-0 ">
+              {selectedCookie && (
+                <CookieDetails
+                  data={selectedCookie.parsedCookie}
+                  analytics={selectedCookie.analytics}
+                  url={selectedCookie.url}
+                />
+              )}
+            </div>
+          </div>
+        </>
+      ) : (
+        <p> landing page placeholder</p>
+      )}
     </div>
   );
 };
