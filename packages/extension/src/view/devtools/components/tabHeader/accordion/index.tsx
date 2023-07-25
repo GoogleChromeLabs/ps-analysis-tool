@@ -51,7 +51,9 @@ const Accordion: React.FC<TabHeaderProps> = ({
         {accordionState ? <ChevronUpSmall /> : <ChevronDownSmall />}
         <span className="flex items-center">{tabName}</span>
       </span>
-      <div className={`${accordionState ? 'flex flex-col' : 'hidden'}`}>
+      <div
+        className={`${accordionState ? 'flex flex-col ml-[32px]' : 'hidden'}`}
+      >
         {tabFrames &&
           Object.keys(tabFrames)?.map((key) => (
             <div
