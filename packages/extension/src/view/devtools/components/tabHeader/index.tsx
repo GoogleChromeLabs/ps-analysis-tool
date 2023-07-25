@@ -36,9 +36,9 @@ const TabHeader: React.FC<TabHeaderProps> = ({
       {tabsNames.map((name, index: number) => (
         <div
           key={name}
-          className={`mx-1 px-3 flex items-center cursor-pointer ${
+          className={`px-3 flex items-center cursor-pointer ${
             selectedIndex === index ? 'bg-slate-100' : 'bg-slate-200'
-          } h-[32px]`}
+          }`}
           onClick={() => setIndex(index)}
         >
           {name === 'Cookies' ? (
@@ -48,7 +48,7 @@ const TabHeader: React.FC<TabHeaderProps> = ({
               setAccordionState={setAccordionState}
             />
           ) : (
-            <p className="my-1 ml-[32px]">{name}</p>
+            <p className="my-1 ml-[32px] h-[32px]">{name}</p>
           )}
         </div>
       ))}
