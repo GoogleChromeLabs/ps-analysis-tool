@@ -20,19 +20,23 @@ import React from 'react';
 /**
  * Internal dependencies
  */
-import { ChevronUpSmall, ChevronDownSmall } from '../../../../../icons';
+import { ArrowRight, ArrowDown, CookieGray } from '../../../../../icons';
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
 
 interface TabHeaderProps {
   accordionState: boolean;
   setAccordionState: (state: boolean) => void;
   tabName: string;
+  index: number;
+  selectedIndex: number;
 }
 
 const Accordion: React.FC<TabHeaderProps> = ({
   accordionState,
   setAccordionState,
   tabName,
+  index,
+  selectedIndex,
 }) => {
   const { tabFrames, setSelectedFrame, selectedFrame } = useCookieStore(
     ({ state, actions }) => ({
@@ -45,14 +49,19 @@ const Accordion: React.FC<TabHeaderProps> = ({
   return (
     <div className="flex flex-col my-1 w-full">
       <span
-        className="flex flex-row"
+        className={`flex flex-row items-center pl-1 ${
+          selectedIndex === index && !selectedFrame ? 'bg-[#3971e0]' : ''
+        }`}
         onClick={() => {
           setAccordionState(!accordionState);
           setSelectedFrame(null);
         }}
       >
-        {accordionState ? <ChevronUpSmall /> : <ChevronDownSmall />}
-        <span className="flex items-center">{tabName}</span>
+        {accordionState ? <ArrowDown /> : <ArrowRight />}
+        <span className="flex items-center pl-1">
+          <CookieGray />
+          {tabName}
+        </span>
       </span>
       <div
         className={`${accordionState ? 'flex flex-col ml-[32px]' : 'hidden'}`}
@@ -62,10 +71,11 @@ const Accordion: React.FC<TabHeaderProps> = ({
             <div
               key={key}
               onClick={() => setSelectedFrame(key)}
-              className={`mx-1 my-1 flex items-center rounded-lg cursor-pointer ${
-                selectedFrame === key ? 'bg-red-200' : ''
+              className={`mx-1 my-1 flex items-center cursor-pointer ${
+                selectedFrame === key ? 'bg-[#3971e0]' : ''
               }`}
             >
+              <CookieGray />
               <p className="truncate">{key}</p>
             </div>
           ))}

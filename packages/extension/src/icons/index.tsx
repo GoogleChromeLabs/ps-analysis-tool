@@ -13,5 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as ChevronDownSmall } from './chevron_down_small.svg';
-export { default as ChevronUpSmall } from './chevron_up_small.svg';
+export { default as ArrowDown } from './arrow-down.svg';
+export { default as ArrowRight } from './arrow-right.svg';
+export { default as CookieGray } from './cookie-gray.svg';

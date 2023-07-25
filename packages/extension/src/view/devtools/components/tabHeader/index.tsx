@@ -37,18 +37,20 @@ const TabHeader: React.FC<TabHeaderProps> = ({
         <div
           key={name}
           className={`flex items-center cursor-pointer ${
-            selectedIndex === index ? 'bg-slate-100' : 'bg-slate-200'
+            selectedIndex === index && name !== 'Cookies' ? 'bg-[#3971e0]' : ''
           }`}
           onClick={() => setIndex(index)}
         >
           {name === 'Cookies' ? (
             <Accordion
+              selectedIndex={selectedIndex}
+              index={index}
               tabName={name}
               accordionState={accordionState}
               setAccordionState={setAccordionState}
             />
           ) : (
-            <p className="my-1 ml-[32px] h-[32px]">{name}</p>
+            <p className="m-1">{name}</p>
           )}
         </div>
       ))}
