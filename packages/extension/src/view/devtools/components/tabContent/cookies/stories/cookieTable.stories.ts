@@ -17,27 +17,25 @@
 /**
  * External dependencies.
  */
-import React from 'react';
-import { flexRender, type Cell } from '@tanstack/react-table';
+import type { Meta, StoryObj } from '@storybook/react';
 
 /**
  * Internal dependencies.
  */
-import type { TData } from '..';
+import { TempCookieData } from './tempData';
+import { CookieTable } from '../components';
 
-interface BodyCellProps {
-  cell: Cell<TData, unknown>;
-}
+const meta = {
+  title: 'Extension/CookiesPanel/CookieTable',
+  component: CookieTable,
+  tags: ['autodocs'],
+} as Meta<typeof CookieTable>;
 
-const BodyCell = ({ cell }: BodyCellProps) => {
-  return (
-    <td
-      style={{ maxWidth: cell.column.getSize() }}
-      className="border p-2 truncate"
-    >
-      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-    </td>
-  );
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Primary: Story = {
+  args: {
+    cookies: TempCookieData,
+  },
 };
-
-export default BodyCell;

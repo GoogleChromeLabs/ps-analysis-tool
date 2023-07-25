@@ -37,18 +37,14 @@ interface TableProps {
 
 const Table = ({ table, selectedKey, onRowClick }: TableProps) => {
   return (
-    <>
-      <div className="w-full h-full overflow-auto">
-        <table className="w-full">
-          <TableHeader headerGroups={table.getHeaderGroups()} />
-          <TableBody
-            rows={table.getRowModel().rows}
-            selectedKey={selectedKey}
-            onRowClick={onRowClick}
-          />
-        </table>
-      </div>
-    </>
+    <table className="w-full">
+      <TableHeader headerGroups={table.getHeaderGroups()} />
+      <TableBody
+        rows={table.getRowModel().rows}
+        selectedKey={selectedKey}
+        onRowClick={onRowClick}
+      />
+    </table>
   );
 };
 
