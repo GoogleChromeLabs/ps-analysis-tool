@@ -34,10 +34,6 @@ import {
 
 const TABS = [
   {
-    display_name: 'Cookies',
-    Component: Cookies,
-  },
-  {
     display_name: 'Topics',
     Component: Topics,
   },
@@ -53,11 +49,15 @@ const TABS = [
     display_name: 'Fingerprinting',
     Component: Fingerprinting,
   },
+  {
+    display_name: 'Cookies',
+    Component: Cookies,
+  },
 ];
 
 const App: React.FC = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
-  const [width, setWidth] = useState<number>(135);
+  const [width, setWidth] = useState<number>(200);
   const setWidthOnResizeStop = useCallback(
     (
       _: MouseEvent | TouchEvent,
@@ -68,7 +68,7 @@ const App: React.FC = () => {
       if (width + d.width > 0) {
         setWidth(width + d.width);
       } else {
-        setWidth(135);
+        setWidth(200);
       }
     },
     [width]
@@ -80,7 +80,7 @@ const App: React.FC = () => {
     <div className="w-full h-screen overflow-hidden">
       <div className="w-full h-full flex flex-row">
         <Resizable
-          minWidth={'135px'}
+          minWidth={'200px'}
           size={{ width: width, height: '100%' }}
           enable={{
             top: false,
@@ -93,7 +93,7 @@ const App: React.FC = () => {
             topLeft: false,
           }}
           onResizeStop={setWidthOnResizeStop}
-          className="w-1/4 h-full px-1 flex flex-col pt-2 truncate overflow-y-auto border-solid border-2 border-neutral-300"
+          className="w-1/4 h-full flex flex-col pt-[14px] overflow-y-auto overflow-x-clip border-solid border-[1px] border-[#CBCDD1]"
         >
           <TabHeader
             tabsNames={tabNames}

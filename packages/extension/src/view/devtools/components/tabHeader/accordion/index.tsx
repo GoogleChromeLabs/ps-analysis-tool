@@ -54,11 +54,11 @@ const Accordion: React.FC<TabHeaderProps> = ({
   );
 
   return (
-    <div className="flex flex-col my-1 w-full">
-      <span
+    <div className="flex flex-col w-full">
+      <div
         className={`flex flex-row items-center pl-1 ${
           selectedIndex === index && !selectedFrame
-            ? 'bg-[#3971e0] text-white'
+            ? 'bg-[#3871E0] text-white'
             : ''
         }`}
         onClick={() => {
@@ -66,40 +66,42 @@ const Accordion: React.FC<TabHeaderProps> = ({
           setSelectedFrame(null);
         }}
       >
-        {accordionState ? (
-          selectedIndex === index && !selectedFrame ? (
-            <ArrowDownWhite />
+        <div>
+          {accordionState ? (
+            selectedIndex === index && !selectedFrame ? (
+              <ArrowDownWhite />
+            ) : (
+              <ArrowDown />
+            )
+          ) : selectedIndex === index && !selectedFrame ? (
+            <ArrowRightWhite />
           ) : (
-            <ArrowDown />
-          )
-        ) : selectedIndex === index && !selectedFrame ? (
-          <ArrowRightWhite />
-        ) : (
-          <ArrowRight />
-        )}
-        <span className="flex items-center pl-1">
+            <ArrowRight />
+          )}
+        </div>
+        <div className="pl-[4px]">
           {selectedIndex === index && !selectedFrame ? (
             <CookieWhite />
           ) : (
             <CookieGray />
           )}
-          {tabName}
-        </span>
-      </span>
+        </div>
+        <p className="pl-[6px] truncate">{tabName}</p>
+      </div>
       <div className={`${accordionState ? 'flex flex-col' : 'hidden'}`}>
         {tabFrames &&
           Object.keys(tabFrames)?.map((key) => (
             <div
               key={key}
               onClick={() => setSelectedFrame(key)}
-              className={`mx-1 my-1 pl-[32px] flex items-center cursor-pointer ${
-                selectedFrame === key ? 'bg-[#3971e0]' : ''
+              className={`pl-[32px] flex items-center cursor-pointer ${
+                selectedFrame === key ? 'bg-[#3871E0] text-white' : ''
               }`}
             >
               <div>
                 {selectedFrame === key ? <CookieWhite /> : <CookieGray />}
               </div>
-              <p className="truncate">{key}</p>
+              <p className="pl-[5px] truncate">{key}</p>
             </div>
           ))}
       </div>

@@ -39,7 +39,7 @@ const TabHeader: React.FC<TabHeaderProps> = ({
           key={name}
           className={`flex items-center cursor-pointer ${
             selectedIndex === index && name !== 'Cookies'
-              ? 'bg-[#3971e0] text-white'
+              ? 'bg-[#3871E0] text-white'
               : ''
           }`}
           onClick={() => setIndex(index)}
@@ -55,7 +55,7 @@ const TabHeader: React.FC<TabHeaderProps> = ({
           ) : (
             <span className="flex items-center pl-2">
               {selectedIndex === index ? <FileWhite /> : <File />}
-              <span className="m-1">{name}</span>
+              <span className="pl-[10px]">{name}</span>
             </span>
           )}
         </div>
