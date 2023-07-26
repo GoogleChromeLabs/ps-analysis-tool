@@ -35,7 +35,7 @@ const HeaderCell = ({ header }: HeaderCellProps) => {
     <th
       colSpan={header.colSpan}
       style={{ maxWidth: header.getSize() }}
-      className="border border-t-0 relative hover:bg-slate-100 select-none touch-none cursor-pointer"
+      className="border border-t-0 relative hover:bg-slate-100 select-none touch-none cursor-pointer font-normal"
     >
       <div className="w-full h-full flex items-center justify-between">
         <p className="p-1 truncate">

@@ -34,9 +34,10 @@ const CookieDetails = ({ cookieData }: CookieDetailsProps) => {
       {cookieData ? (
         <div className="bg-gray-100 p-4 rounded-lg">
           <p className="text-base font-bold text-gray-800">Cookie Value :</p>
-          <p className="text-base font-semibold text-gray-700 mb-10 break-words">
+          <p className="text-sm text-gray-700 mb-4 break-words">
             {cookieData.parsedCookie.value}
           </p>
+          <p className="text-base font-bold text-gray-800">Description :</p>
           <p className="text-sm text-gray-600">
             {cookieData.analytics?.description || 'No description available.'}
           </p>

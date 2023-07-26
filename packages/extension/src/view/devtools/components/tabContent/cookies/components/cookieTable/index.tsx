@@ -120,7 +120,9 @@ const CookieTable = ({
             href={info.getValue() as string}
             rel="noreferrer"
           >
-            {info.getValue() as string}
+            <abbr title={info.getValue() as string}>
+              {info.getValue() as string}
+            </abbr>
           </a>
         ),
         size: tableColumnSize,
