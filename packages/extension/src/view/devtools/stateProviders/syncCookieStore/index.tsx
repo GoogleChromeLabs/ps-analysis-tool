@@ -28,11 +28,14 @@ import React, {
  * Internal dependencies.
  */
 import type { CookieData } from '../../../../localStore';
+import { checkIbcCompliance } from '../../../../utils/checkIBCCompliance';
 
 export interface CookieStoreContext {
   state: {
     tabCookies: {
-      [key: string]: CookieData;
+      [key: string]: CookieData & {
+        isIbcCompliant: boolean | null;
+      };
     } | null;
     tabUrl: string | null;
   };
@@ -81,13 +84,30 @@ export const Provider = ({ children }: PropsWithChildren) => {
   }, []);
 
   const storeChangeListener = useCallback(
-    (changes: { [key: string]: chrome.storage.StorageChange }) => {
+    async (changes: { [key: string]: chrome.storage.StorageChange }) => {
       if (
         tabId &&
         Object.keys(changes).includes(tabId.toString()) &&
         changes[tabId.toString()]?.newValue?.cookies
       ) {
-        setTabCookies(changes[tabId.toString()].newValue.cookies);
+        const _cookies: NonNullable<CookieStoreContext['state']['tabCookies']> =
+          {};
+
+        await Promise.all(
+          Object.entries(
+            changes[tabId.toString()].newValue.cookies as {
+              [key: string]: CookieData;
+            }
+          ).map(async ([key, value]) => {
+            const isIbcCompliant = await checkIbcCompliance(value);
+            _cookies[key] = {
+              ...value,
+              isIbcCompliant,
+            };
+          })
+        );
+
+        setTabCookies(_cookies);
       }
     },
     [tabId]

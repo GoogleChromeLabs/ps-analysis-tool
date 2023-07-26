@@ -24,15 +24,20 @@ import { type Cookie as ParsedCookie } from 'simple-cookie';
  */
 import DomainIcon from '../../../../../../../icons/domain.svg';
 import { type CookieAnalytics } from '../../../../../../utils/fetchCookieDictionary';
-import { checkIBCCompliance } from '../../../../../../utils/checkIBCCompliance';
 
 interface CookieDetailsProps {
   data: ParsedCookie;
   analytics: CookieAnalytics | null;
   url: string;
+  isIbcCompliant: boolean | null;
 }
 
-const CookieDetails = ({ data, analytics, url }: CookieDetailsProps) => {
+const CookieDetails = ({
+  data,
+  analytics,
+  url,
+  isIbcCompliant,
+}: CookieDetailsProps) => {
   const descriptionRef = useRef<HTMLParagraphElement>(null);
   const valueRef = useRef<HTMLParagraphElement>(null);
 
@@ -47,27 +52,15 @@ const CookieDetails = ({ data, analytics, url }: CookieDetailsProps) => {
   const [chromeCookieStoreHasCookie, setChromeCookieStoreHasCookie] = useState<
     boolean | null
   >(null);
-  const [isCookieIBCCompliant, setisCookieIBCCompliant] = useState<
-    boolean | null
-  >(null);
 
   useEffect(() => {
     setChromeCookieStoreHasCookie(null);
-    setisCookieIBCCompliant(null);
 
     (async () => {
       const _chromeCookieStoreHasCookie = Boolean(
         await chrome.cookies.get({ name: data.name, url })
       );
       setChromeCookieStoreHasCookie(_chromeCookieStoreHasCookie);
-
-      setisCookieIBCCompliant(
-        checkIBCCompliance(
-          data.samesite,
-          data.secure,
-          _chromeCookieStoreHasCookie
-        )
-      );
     })();
   }, [data.name, data.samesite, data.secure, url]);
 
@@ -162,12 +155,12 @@ const CookieDetails = ({ data, analytics, url }: CookieDetailsProps) => {
               IBC Compliant
             </abbr>
           </h1>
-          {isCookieIBCCompliant === null ? (
+          {isIbcCompliant === null ? (
             <>Loading...</>
           ) : (
             <>
               <p className="w-3/4 text-xs text-tertiary  truncate">
-                {isCookieIBCCompliant ? (
+                {isIbcCompliant ? (
                   <span className="text-green-500">Yes</span>
                 ) : (
                   <span className="text-red-500">
