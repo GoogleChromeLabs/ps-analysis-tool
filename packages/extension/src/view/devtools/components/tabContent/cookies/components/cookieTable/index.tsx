@@ -73,10 +73,19 @@ const CookieTable = ({
         size: tableColumnSize,
       },
       {
-        header: 'Retention Period / Expires',
-        accessorKey: 'analytics.retention',
-        cell: (info) => info.getValue(),
+        header: 'Expires / Max-Age',
+        accessorKey: 'parsedCookie.expires',
+        cell: (info) => (info.getValue() ? info.getValue() : 'Session'),
         size: tableColumnSize,
+      },
+      {
+        header: 'Retention Period',
+        accessorKey: 'analytics.retention',
+        cell: (info) => (
+          <span className="capitalize">{info.getValue() as string}</span>
+        ),
+        size: tableColumnSize,
+        enableSorting: false,
       },
       {
         header: 'HttpOnly',

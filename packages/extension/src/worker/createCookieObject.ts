@@ -88,7 +88,7 @@ export async function createCookieObject(
   const expires = parseAttributeValues(
     'expires',
     parsedCookie.expires,
-    chromeStoreCookie?.expirationDate,
+    (chromeStoreCookie?.expirationDate || 0) * 1000,
     prevParsedCookie?.expires
   );
 
@@ -152,8 +152,8 @@ function parseAttributeValues(
     value = value || '';
   }
 
-  if (type === 'expires') {
-    value = new Date(value as string).getTime() / 1000 || 0;
+  if (type === 'expires' && value !== 0) {
+    value = new Date(value as string).toJSON() || 0;
   }
 
   return value;
