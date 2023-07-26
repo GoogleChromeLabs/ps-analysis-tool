@@ -14,21 +14,24 @@
  * limitations under the License.
  */
 
-import type { CookieData } from '../localStore';
-
 /**
  * Check if cookie is compliant with IBC(Incrementally Better Cookies) proposal.
- * @param cookie Cookie data
+ * @param samesite Cookie SameSite attribute
+ * @param secure Cookie secure attribute
+ * @param name Cookie name
+ * @param url Cookie url
  * @returns {boolean} True if cookie is compliant with IBC proposal.
  */
-export async function checkIbcCompliance(cookie: CookieData): Promise<boolean> {
-  const samesite = cookie.parsedCookie.samesite || 'lax';
-  const secure = cookie.parsedCookie.secure || false;
-
+export async function checkIbcCompliance(
+  samesite = 'lax',
+  secure = false,
+  name: string,
+  url: string
+): Promise<boolean> {
   const chromeCookieStoreHasCookie = Boolean(
     await chrome.cookies.get({
-      name: cookie.parsedCookie.name,
-      url: cookie.url,
+      name: name,
+      url: url,
     })
   );
 

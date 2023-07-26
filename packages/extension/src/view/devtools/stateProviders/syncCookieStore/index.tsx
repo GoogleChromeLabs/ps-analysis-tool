@@ -100,7 +100,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
               [key: string]: CookieData;
             }
           ).map(async ([key, value]) => {
-            const isIbcCompliant = await checkIbcCompliance(value);
+            const isIbcCompliant = await checkIbcCompliance(
+              value.parsedCookie.samesite,
+              value.parsedCookie.secure,
+              key,
+              value.url
+            );
             const isCookieSet = Boolean(
               await chrome.cookies.get({ name: key, url: value.url })
             );
@@ -127,15 +132,57 @@ export const Provider = ({ children }: PropsWithChildren) => {
     [tabId]
   );
 
+  const cookieStoreListener = useCallback(
+    async (changeInfo: chrome.cookies.CookieChangeInfo) => {
+      if (
+        tabCookies &&
+        Object.keys(tabCookies).includes(changeInfo.cookie.name)
+      ) {
+        const isIbcCompliant = await checkIbcCompliance(
+          changeInfo.cookie.sameSite,
+          changeInfo.cookie.secure,
+          changeInfo.cookie.name,
+          tabCookies[changeInfo.cookie.name].url
+        );
+
+        const isCookieSet = Boolean(
+          await chrome.cookies.get({
+            name: changeInfo.cookie.name,
+            url: tabCookies[changeInfo.cookie.name].url,
+          })
+        );
+
+        const newCookieData = {
+          ...tabCookies[changeInfo.cookie.name],
+          isIbcCompliant,
+          isCookieSet,
+        };
+
+        setTabCookies({
+          ...tabCookies,
+          [changeInfo.cookie.name]: newCookieData,
+        });
+      }
+    },
+    [tabCookies]
+  );
+
   useEffect(() => {
     intitialSync();
     chrome.storage.local.onChanged.addListener(storeChangeListener);
     chrome.tabs.onUpdated.addListener(tabUpdateListener);
+    chrome.cookies.onChanged.addListener(cookieStoreListener);
     return () => {
       chrome.storage.local.onChanged.removeListener(storeChangeListener);
       chrome.tabs.onUpdated.removeListener(tabUpdateListener);
+      chrome.cookies.onChanged.removeListener(cookieStoreListener);
     };
-  }, [intitialSync, storeChangeListener, tabUpdateListener]);
+  }, [
+    cookieStoreListener,
+    intitialSync,
+    storeChangeListener,
+    tabUpdateListener,
+  ]);
 
   return (
     <Context.Provider value={{ state: { tabCookies, tabUrl }, actions: {} }}>
