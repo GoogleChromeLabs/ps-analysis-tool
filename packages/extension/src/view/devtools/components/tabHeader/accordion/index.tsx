@@ -56,7 +56,7 @@ const Accordion: React.FC<AccordionProps> = ({
   return (
     <div className="flex flex-col w-full">
       <div
-        className={`flex flex-row items-center pl-[16px] ${
+        className={`flex h-full flex-row items-center pl-[16px] pt-[6px] ${
           selectedIndex === index && !selectedFrame
             ? 'bg-[#3871E0] text-white'
             : ''
