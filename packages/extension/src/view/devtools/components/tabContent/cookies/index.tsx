@@ -33,7 +33,11 @@ const Cookies = () => {
 
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [selectedCookie, setSelectedCookie] = useState<
-    (CookieData & { isIbcCompliant: boolean | null }) | null
+    | (CookieData & {
+        isIbcCompliant: boolean | null;
+        isCookieSet: boolean | null;
+      })
+    | null
   >(null);
 
   useEffect(() => {
@@ -69,8 +73,8 @@ const Cookies = () => {
             <CookieDetails
               data={selectedCookie.parsedCookie}
               analytics={selectedCookie.analytics}
-              url={selectedCookie.url}
               isIbcCompliant={selectedCookie.isIbcCompliant}
+              isCookieSet={selectedCookie.isCookieSet}
             />
           )}
         </div>

@@ -35,6 +35,7 @@ export interface CookieStoreContext {
     tabCookies: {
       [key: string]: CookieData & {
         isIbcCompliant: boolean | null;
+        isCookieSet: boolean | null;
       };
     } | null;
     tabUrl: string | null;
@@ -100,9 +101,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
             }
           ).map(async ([key, value]) => {
             const isIbcCompliant = await checkIbcCompliance(value);
+            const isCookieSet = Boolean(
+              await chrome.cookies.get({ name: key, url: value.url })
+            );
             _cookies[key] = {
               ...value,
               isIbcCompliant,
+              isCookieSet,
             };
           })
         );

@@ -28,15 +28,15 @@ import { type CookieAnalytics } from '../../../../../../utils/fetchCookieDiction
 interface CookieDetailsProps {
   data: ParsedCookie;
   analytics: CookieAnalytics | null;
-  url: string;
   isIbcCompliant: boolean | null;
+  isCookieSet: boolean | null;
 }
 
 const CookieDetails = ({
   data,
   analytics,
-  url,
   isIbcCompliant,
+  isCookieSet,
 }: CookieDetailsProps) => {
   const descriptionRef = useRef<HTMLParagraphElement>(null);
   const valueRef = useRef<HTMLParagraphElement>(null);
@@ -48,21 +48,6 @@ const CookieDetails = ({
   const [showMoreDescription, setShowMoreDescription] =
     useState<boolean>(false);
   const [showMoreValue, setShowMoreValue] = useState<boolean>(false);
-
-  const [chromeCookieStoreHasCookie, setChromeCookieStoreHasCookie] = useState<
-    boolean | null
-  >(null);
-
-  useEffect(() => {
-    setChromeCookieStoreHasCookie(null);
-
-    (async () => {
-      const _chromeCookieStoreHasCookie = Boolean(
-        await chrome.cookies.get({ name: data.name, url })
-      );
-      setChromeCookieStoreHasCookie(_chromeCookieStoreHasCookie);
-    })();
-  }, [data.name, data.samesite, data.secure, url]);
 
   useEffect(() => {
     setShowMoreDescription(false);
@@ -179,11 +164,11 @@ const CookieDetails = ({
               Cookie Set
             </abbr>
           </h1>
-          {chromeCookieStoreHasCookie === null ? (
+          {isCookieSet === null ? (
             <>Loading...</>
           ) : (
             <p className="w-3/4 text-xs text-tertiary truncate">
-              {chromeCookieStoreHasCookie ? (
+              {isCookieSet ? (
                 <span className="text-green-500">Yes</span>
               ) : (
                 <span className="text-red-500">No</span>
