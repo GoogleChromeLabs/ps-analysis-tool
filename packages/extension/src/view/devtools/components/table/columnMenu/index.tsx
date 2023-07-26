@@ -42,12 +42,12 @@ const ColumnMenu = ({ table, columns, open, onClose }: ColumnMenuProps) => {
 
   return (
     <>
-      {open && (
-        <>
-          <div className="relative">
-            <div className="absolute z-20 bg-white rounded-lg max-w-lg w-fit border shadow-2xl shadow-slate-500 border-grsy-300 divide-y py-4">
-              <div className="flex justify-between items-center p-4 pt-0">
-                <p className="font-bold mr-4 leading-none text-gray-900 text-center">
+      {open &&
+        createPortal(
+          <>
+            <div className="absolute top-10 left-2 z-20 bg-white rounded-lg max-w-lg w-fit border shadow-2xl shadow-slate-500 border-gray-300 py-3 mr-2 divide-y max-h-[80vh] overflow-auto">
+              <div className="flex justify-between items-center px-3 pt-0 pb-4">
+                <p className="font-bold mr-4 leading-none text-base text-gray-900 text-center">
                   Toggle Columns Visibility
                 </p>
                 <button
@@ -57,7 +57,7 @@ const ColumnMenu = ({ table, columns, open, onClose }: ColumnMenuProps) => {
                   Close
                 </button>
               </div>
-              <label className="block w-full px-8 py-4 font-semibold hover:bg-gray-100 cursor-pointer">
+              <label className="block w-full px-8 py-2 font-semibold hover:bg-gray-100 cursor-pointer">
                 <input
                   type="checkbox"
                   className="mr-2 cursor-pointer"
@@ -68,16 +68,14 @@ const ColumnMenu = ({ table, columns, open, onClose }: ColumnMenuProps) => {
               </label>
               <ColumnList columns={columns} />
             </div>
-          </div>
-          {createPortal(
+
             <div
               onClick={handleClose}
               className="absolute w-screen h-screen z-10 bg-white opacity-80 top-0 left-0"
-            />,
-            document.body
-          )}
-        </>
-      )}
+            />
+          </>,
+          document.body
+        )}
     </>
   );
 };
