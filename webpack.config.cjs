@@ -45,15 +45,7 @@ const commonConfig = {
             loader: 'postcss-loader',
             options: {
               postcssOptions: {
-                plugins: [
-                  [
-                    'tailwindcss',
-                    {
-                      config: './packages/extension/tailwind.config.cjs',
-                    },
-                  ],
-                  ['autoprefixer'],
-                ],
+                config: path.resolve(__dirname, './postcss.config.cjs'),
               },
             },
           },

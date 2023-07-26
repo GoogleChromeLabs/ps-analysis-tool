@@ -6,12 +6,20 @@ import type { StorybookConfig } from '@storybook/react-webpack5';
 const config: StorybookConfig = {
   stories: [
     '../packages/**/src/**/stories/*.mdx',
-    '../packages/**/src/**/stories/**/*.stories.@(js|jsx|ts|tsx)'
+    '../packages/**/src/**/stories/**/*.stories.@(js|jsx|ts|tsx)',
   ],
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-essentials',
     '@storybook/addon-interactions',
+    {
+      name: '@storybook/addon-styling',
+      options: {
+        postCss: {
+          implementation: require('postcss'),
+        },
+      },
+    },
   ],
   framework: {
     name: '@storybook/react-webpack5',
