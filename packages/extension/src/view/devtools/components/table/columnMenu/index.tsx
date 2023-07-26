@@ -23,9 +23,9 @@ import type { Column, Table } from '@tanstack/react-table';
 /**
  * Internal dependencies.
  */
-import ColumnList from './columnList';
 import type { TData } from '..';
 import { createPortal } from 'react-dom';
+import ColumnList from './columnList';
 
 interface ColumnMenuProps {
   table: Table<TData>;

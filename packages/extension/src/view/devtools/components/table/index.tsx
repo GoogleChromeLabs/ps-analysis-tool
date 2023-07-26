@@ -25,7 +25,7 @@ import type { Table as ReactTable } from '@tanstack/react-table';
  */
 import TableHeader from './tableHeader';
 import TableBody from './tableBody';
-import type { CookieData } from '../../../../../localStore';
+import type { CookieData } from '../../../../localStore';
 import ColumnMenu from './columnMenu';
 
 export type TData = CookieData;
@@ -55,19 +55,17 @@ const Table = ({ table, selectedKey, onRowClick }: TableProps) => {
         table={table}
         columns={table.getAllLeafColumns()}
       />
-      <div className="w-full h-full overflow-auto">
-        <table className="w-full">
-          <TableHeader
-            headerGroups={table.getHeaderGroups()}
-            onRightClick={handleRightClick}
-          />
-          <TableBody
-            rows={table.getRowModel().rows}
-            selectedKey={selectedKey}
-            onRowClick={onRowClick}
-          />
-        </table>
-      </div>
+      <table className="w-full">
+        <TableHeader
+          headerGroups={table.getHeaderGroups()}
+          onRightClick={handleRightClick}
+        />
+        <TableBody
+          rows={table.getRowModel().rows}
+          selectedKey={selectedKey}
+          onRowClick={onRowClick}
+        />
+      </table>
     </>
   );
 };

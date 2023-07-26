@@ -13,64 +13,52 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * External dependencies.
  */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { Resizable } from 're-resizable';
 
 /**
  * Internal dependencies.
  */
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import { CookieList, CookieDetails } from './components';
 import type { CookieData } from '../../../../../localStore';
+import { CookieDetails, CookieTable } from './components';
 
 const Cookies = () => {
-  const { cookies, tabUrl } = useCookieStore(({ state }) => ({
-    cookies: state.tabCookies,
-    tabUrl: state.tabUrl,
+  const { cookies } = useCookieStore(({ state }) => ({
+    cookies: state.tabCookies || {},
   }));
-
-  const [selectedKey, setSelectedKey] = useState<string | null>(null);
-  const [selectedCookie, setSelectedCookie] = useState<CookieData | null>(null);
-
-  useEffect(() => {
-    if (!selectedKey && cookies !== null && Object.keys(cookies).length !== 0) {
-      setSelectedKey(Object.keys(cookies)[0]);
-      setSelectedCookie(cookies[Object.keys(cookies)[0]]);
-    } else if (
-      selectedKey &&
-      cookies !== null &&
-      Object.keys(cookies).length !== 0 &&
-      Object.keys(cookies).includes(selectedKey)
-    ) {
-      setSelectedCookie(cookies[selectedKey]);
-    }
-  }, [cookies, selectedKey]);
+  const [selectedCookie, setselectedCookie] = useState<CookieData | undefined>(
+    undefined
+  );
 
   return (
-    <div
-      className="w-full h-full flex flex-col lg:flex-row"
-      data-testid="cookies-content"
-    >
-      <div className="basis-1/2 lg:basis-1/3 overflow-y-scroll border-r ">
-        <CookieList
-          cookies={cookies || {}}
-          tabUrl={tabUrl}
-          selectedKey={selectedKey}
-          onClickItem={setSelectedKey}
+    <div className="h-full flex flex-col" data-testid="cookies-content">
+      <Resizable
+        defaultSize={{
+          width: '100%',
+          height: '60%',
+        }}
+        minHeight="40%"
+        maxHeight="60%"
+        enable={{
+          top: false,
+          right: false,
+          bottom: true,
+          left: false,
+        }}
+      >
+        <CookieTable
+          cookies={Object.values(cookies)}
+          selectedKey={selectedCookie?.parsedCookie.name}
+          onRowClick={setselectedCookie}
         />
-      </div>
-      <div className=" basis-1/2 lg:basis-2/3 overflow-y-scroll pb-28">
-        <div className="border-t-gray-300 border-t-2 lg:border-t-0 ">
-          {selectedCookie && (
-            <CookieDetails
-              data={selectedCookie.parsedCookie}
-              analytics={selectedCookie.analytics}
-              url={selectedCookie.url}
-            />
-          )}
-        </div>
+      </Resizable>
+      <div className="w-full h-full p-6 bg-white border border-gray-200 shadow overflow-auto">
+        <CookieDetails cookieData={selectedCookie} />
       </div>
     </div>
   );

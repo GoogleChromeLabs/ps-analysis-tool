@@ -18,26 +18,26 @@
  * External dependencies.
  */
 import React from 'react';
-import { flexRender, type Cell } from '@tanstack/react-table';
+import { type HeaderGroup } from '@tanstack/react-table';
 
 /**
  * Internal dependencies.
  */
 import type { TData } from '..';
+import HeaderCell from './headerCell';
 
-interface BodyCellProps {
-  cell: Cell<TData, unknown>;
+interface HeaderRowProps {
+  headerGroup: HeaderGroup<TData>;
 }
 
-const BodyCell = ({ cell }: BodyCellProps) => {
+const HeaderRow = ({ headerGroup }: HeaderRowProps) => {
   return (
-    <td
-      style={{ maxWidth: cell.column.getSize() }}
-      className="border p-2 truncate min-w-[100px]"
-    >
-      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-    </td>
+    <tr className="bg-white">
+      {headerGroup.headers.map((header) => (
+        <HeaderCell key={header.id} header={header} />
+      ))}
+    </tr>
   );
 };
 
-export default BodyCell;
+export default HeaderRow;

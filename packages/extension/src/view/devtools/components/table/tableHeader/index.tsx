@@ -17,25 +17,30 @@
 /**
  * External dependencies.
  */
-import type { Meta, StoryObj } from '@storybook/react';
+import React from 'react';
+import type { HeaderGroup } from '@tanstack/react-table';
 
 /**
  * Internal dependencies.
  */
-import CookieTable from '.';
-import { TempCookieData } from './tempData';
+import HeaderRow from './headerRow';
+import type { TData } from '..';
 
-const meta = {
-  title: 'Extension/CookiesPanel/CookieTable',
-  component: CookieTable,
-  tags: ['autodocs'],
-} as Meta<typeof CookieTable>;
+interface TableHeaderProps {
+  headerGroups: HeaderGroup<TData>[];
+  onRightClick: (
+    event: React.MouseEvent<HTMLTableSectionElement, MouseEvent>
+  ) => void;
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Primary: Story = {
-  args: {
-    cookies: TempCookieData,
-  },
+const TableHeader = ({ headerGroups, onRightClick }: TableHeaderProps) => {
+  return (
+    <thead onContextMenu={onRightClick} className="sticky top-0">
+      {headerGroups.map((headerGroup) => (
+        <HeaderRow key={headerGroup.id} headerGroup={headerGroup} />
+      ))}
+    </thead>
+  );
 };
+
+export default TableHeader;

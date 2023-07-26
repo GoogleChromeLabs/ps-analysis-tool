@@ -18,29 +18,26 @@
  * External dependencies.
  */
 import React from 'react';
-import type { HeaderGroup } from '@tanstack/react-table';
+import { flexRender, type Cell } from '@tanstack/react-table';
 
 /**
  * Internal dependencies.
  */
-import HeaderRow from './headerRow';
 import type { TData } from '..';
 
-interface TableHeaderProps {
-  headerGroups: HeaderGroup<TData>[];
-  onRightClick: (
-    event: React.MouseEvent<HTMLTableSectionElement, MouseEvent>
-  ) => void;
+interface BodyCellProps {
+  cell: Cell<TData, unknown>;
 }
 
-const TableHeader = ({ headerGroups, onRightClick }: TableHeaderProps) => {
+const BodyCell = ({ cell }: BodyCellProps) => {
   return (
-    <thead onContextMenu={onRightClick}>
-      {headerGroups.map((headerGroup) => (
-        <HeaderRow key={headerGroup.id} headerGroup={headerGroup} />
-      ))}
-    </thead>
+    <td
+      style={{ maxWidth: cell.column.getSize() }}
+      className="border p-2 truncate"
+    >
+      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+    </td>
   );
 };
 
-export default TableHeader;
+export default BodyCell;

@@ -43,6 +43,7 @@ const BodyRow = ({ row, index, selectedKey, onRowClick }: BodyRowProps) => {
       onClick={() => {
         onRowClick(row.original);
       }}
+      data-testid="body-row"
     >
       {row.getVisibleCells().map((cell) => (
         <BodyCell key={cell.id} cell={cell} />

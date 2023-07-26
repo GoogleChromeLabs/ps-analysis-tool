@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -28,8 +28,8 @@ import {
 /**
  * Internal dependencies.
  */
-import type { CookieData } from '../../../../../../localStore';
-import Table from '../../table';
+import type { CookieData } from '../../../../../../../localStore';
+import Table from '../../../../table';
 
 export interface CookieTableProps {
   cookies: CookieData[];
@@ -42,6 +42,9 @@ const CookieTable = ({
   selectedKey,
   onRowClick,
 }: CookieTableProps) => {
+  const [tableColumnSize, setTableColumnSize] = useState(100);
+  const tableContainerRef = useRef<HTMLTableElement>(null);
+
   const columns = React.useMemo<ColumnDef<CookieData>[]>(
     () => [
       {
@@ -49,51 +52,72 @@ const CookieTable = ({
         accessorKey: 'parsedCookie.name',
         cell: (info) => info.getValue(),
         enableHiding: false,
+        size: tableColumnSize,
       },
       {
         header: 'Value',
         accessorKey: 'parsedCookie.value',
         cell: (info) => info.getValue(),
+        size: tableColumnSize,
       },
       {
         header: 'Domain',
         accessorKey: 'parsedCookie.domain',
         cell: (info) => info.getValue(),
+        size: tableColumnSize,
       },
       {
         header: 'Path',
         accessorKey: 'parsedCookie.path',
         cell: (info) => info.getValue(),
+        size: tableColumnSize,
       },
       {
-        header: 'Retention Period / Expires',
+        header: 'Expires / Max-Age',
+        accessorKey: 'parsedCookie.expires',
+        cell: (info) => (info.getValue() ? info.getValue() : 'Session'),
+        size: tableColumnSize,
+      },
+      {
+        header: 'Retention Period',
         accessorKey: 'analytics.retention',
-        cell: (info) => info.getValue(),
+        cell: (info) => (
+          <span className="capitalize">{info.getValue() as string}</span>
+        ),
+        size: tableColumnSize,
+        enableSorting: false,
       },
       {
         header: 'HttpOnly',
         accessorKey: 'parsedCookie.httponly',
         cell: (info) => (info.getValue() ? '✓' : ''),
+        size: tableColumnSize,
       },
       {
         header: 'SameSite',
         accessorKey: 'parsedCookie.samesite',
-        cell: (info) => info.getValue(),
+        cell: (info) => (
+          <span className="capitalize">{info.getValue() as string}</span>
+        ),
+        size: tableColumnSize,
       },
       {
         header: 'Secure',
         accessorKey: 'parsedCookie.secure',
         cell: (info) => (info.getValue() ? '✓' : ''),
+        size: tableColumnSize,
       },
       {
         header: 'Category',
         accessorKey: 'analytics.category',
-        cell: (info) => info.getValue(),
+        cell: (info) => (info.getValue() ? info.getValue() : 'Uncategorised'),
+        size: tableColumnSize,
       },
       {
         header: 'Platform',
         accessorKey: 'analytics.platform',
         cell: (info) => info.getValue(),
+        size: tableColumnSize,
       },
       {
         header: 'GDPR Portal',
@@ -108,10 +132,26 @@ const CookieTable = ({
             {info.getValue() as string}
           </a>
         ),
+        size: tableColumnSize,
       },
     ],
-    []
+    [tableColumnSize]
   );
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (tableContainerRef.current) {
+        setTableColumnSize(
+          tableContainerRef.current.offsetWidth / columns.length
+        );
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, [columns.length]);
 
   const table = useReactTable({
     data,
@@ -123,7 +163,9 @@ const CookieTable = ({
   });
 
   return (
-    <Table table={table} selectedKey={selectedKey} onRowClick={onRowClick} />
+    <div ref={tableContainerRef} className="w-full h-full overflow-auto">
+      <Table table={table} selectedKey={selectedKey} onRowClick={onRowClick} />
+    </div>
   );
 };
 
