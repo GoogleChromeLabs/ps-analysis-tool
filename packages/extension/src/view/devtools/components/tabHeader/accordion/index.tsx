@@ -30,7 +30,7 @@ import {
 } from '../../../../../icons';
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
 
-interface TabHeaderProps {
+interface AccordionProps {
   accordionState: boolean;
   setAccordionState: (state: boolean) => void;
   tabName: string;
@@ -38,7 +38,7 @@ interface TabHeaderProps {
   selectedIndex: number;
 }
 
-const Accordion: React.FC<TabHeaderProps> = ({
+const Accordion: React.FC<AccordionProps> = ({
   accordionState,
   setAccordionState,
   tabName,
