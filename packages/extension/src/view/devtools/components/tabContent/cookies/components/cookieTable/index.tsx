@@ -79,15 +79,6 @@ const CookieTable = ({
         size: tableColumnSize,
       },
       {
-        header: 'Retention Period',
-        accessorKey: 'analytics.retention',
-        cell: (info) => (
-          <span className="capitalize">{info.getValue() as string}</span>
-        ),
-        size: tableColumnSize,
-        enableSorting: false,
-      },
-      {
         header: 'HttpOnly',
         accessorKey: 'parsedCookie.httponly',
         cell: (info) => (info.getValue() ? '✓' : ''),

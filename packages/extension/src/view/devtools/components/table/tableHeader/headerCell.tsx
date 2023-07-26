@@ -25,6 +25,7 @@ import { flexRender, type Header } from '@tanstack/react-table';
  */
 import type { TData } from '..';
 import HeaderResizer from './headerResizer';
+import ArrowDown from '../../../../../../icons/arrow-down.svg';
 
 interface HeaderCellProps {
   header: Header<TData, unknown>;
@@ -46,8 +47,8 @@ const HeaderCell = ({ header }: HeaderCellProps) => {
         </p>
         <p className="mr-2">
           {{
-            asc: ' 🔼',
-            desc: ' 🔽',
+            asc: <ArrowDown className="transform rotate-180" />,
+            desc: <ArrowDown />,
           }[header.column.getIsSorted() as string] ?? null}
         </p>
       </div>
