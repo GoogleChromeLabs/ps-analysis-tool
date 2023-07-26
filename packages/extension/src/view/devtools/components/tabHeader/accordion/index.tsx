@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback } from 'react';
+import React from 'react';
 /**
  * Internal dependencies
  */
@@ -53,13 +53,6 @@ const Accordion: React.FC<AccordionProps> = ({
     })
   );
 
-  const unselectFrameAndSelectTab = useCallback(() => {
-    setAccordionState(!accordionState);
-    if (selectedFrame) {
-      setSelectedFrame(null);
-    }
-  }, [selectedFrame, accordionState]);
-
   return (
     <div className="flex flex-col w-full">
       <div
@@ -68,7 +61,10 @@ const Accordion: React.FC<AccordionProps> = ({
             ? 'bg-[#3871E0] text-white'
             : ''
         }`}
-        onClick={unselectFrameAndSelectTab}
+        onClick={() => {
+          setAccordionState(!accordionState);
+          setSelectedFrame(null);
+        }}
       >
         <div>
           {accordionState ? (
