@@ -45,7 +45,7 @@ describe('App', () => {
 
   it('Should show cookies content by default', () => {
     render(<App />);
-
+    fireEvent.click(screen.getByText('Cookies'));
     expect(screen.getByTestId('cookies-content')).toBeInTheDocument();
   });
 
