@@ -94,7 +94,7 @@ const Accordion: React.FC<AccordionProps> = ({
             <div
               key={key}
               onClick={() => setSelectedFrame(key)}
-              className={`pl-[32px] py-[2px] h-[20px] flex items-center cursor-pointer ${
+              className={`pl-[38px] py-[2px] h-[20px] flex items-center cursor-pointer ${
                 selectedFrame === key ? 'bg-[#3871E0] text-white' : ''
               }`}
             >
