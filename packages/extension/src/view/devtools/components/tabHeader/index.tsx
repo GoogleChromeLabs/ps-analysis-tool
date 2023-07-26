@@ -53,10 +53,12 @@ const TabHeader: React.FC<TabHeaderProps> = ({
               setAccordionState={setAccordionState}
             />
           ) : (
-            <span className="flex items-center pl-[24px]">
-              {selectedIndex === index ? <FileWhite /> : <File />}
-              <span className="pl-[10px]">{name}</span>
-            </span>
+            <div className="flex items-center pl-[24px] py-[2px]">
+              <div className="h-[16px]">
+                {selectedIndex === index ? <FileWhite /> : <File />}
+              </div>
+              <span className="pl-[9px]">{name}</span>
+            </div>
           )}
         </div>
       ))}

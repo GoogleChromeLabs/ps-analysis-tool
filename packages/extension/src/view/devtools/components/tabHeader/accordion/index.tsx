@@ -94,14 +94,14 @@ const Accordion: React.FC<AccordionProps> = ({
             <div
               key={key}
               onClick={() => setSelectedFrame(key)}
-              className={`pl-[32px] flex items-center cursor-pointer ${
+              className={`pl-[32px] py-[2px] h-[20px] flex items-center cursor-pointer ${
                 selectedFrame === key ? 'bg-[#3871E0] text-white' : ''
               }`}
             >
-              <div>
+              <div className="h-[16px]">
                 {selectedFrame === key ? <CookieWhite /> : <CookieGray />}
               </div>
-              <p className="pl-[5px] truncate">{key}</p>
+              <p className="pl-[6px] truncate">{key}</p>
             </div>
           ))}
       </div>
