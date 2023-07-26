@@ -56,7 +56,7 @@ const Accordion: React.FC<TabHeaderProps> = ({
   return (
     <div className="flex flex-col w-full">
       <div
-        className={`flex flex-row items-center pl-1 ${
+        className={`flex flex-row items-center pl-[16px] ${
           selectedIndex === index && !selectedFrame
             ? 'bg-[#3871E0] text-white'
             : ''
