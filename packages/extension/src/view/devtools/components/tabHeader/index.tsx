@@ -19,6 +19,7 @@
 import React, { useState } from 'react';
 import Accordion from './accordion';
 import { File, FileWhite } from '../../../../icons';
+import { useCookieStore } from '../../stateProviders/syncCookieStore';
 
 interface TabHeaderProps {
   tabsNames: string[];
@@ -32,6 +33,12 @@ const TabHeader: React.FC<TabHeaderProps> = ({
   setIndex,
 }) => {
   const [accordionState, setAccordionState] = useState(false);
+  const { setSelectedFrame, selectedFrame } = useCookieStore(
+    ({ state, actions }) => ({
+      setSelectedFrame: actions.setSelectedFrame,
+      selectedFrame: state.selectedFrame,
+    })
+  );
   return (
     <>
       {tabsNames.map((name, index: number) => (
@@ -42,7 +49,12 @@ const TabHeader: React.FC<TabHeaderProps> = ({
               ? 'bg-[#3871E0] text-white'
               : ''
           }`}
-          onClick={() => setIndex(index)}
+          onClick={() => {
+            setIndex(index);
+            if (selectedFrame) {
+              setSelectedFrame(null);
+            }
+          }}
         >
           {name === 'Cookies' ? (
             <Accordion
