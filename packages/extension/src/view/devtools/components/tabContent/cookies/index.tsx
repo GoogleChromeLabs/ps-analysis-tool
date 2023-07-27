@@ -17,22 +17,22 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React from 'react';
 import { Resizable } from 're-resizable';
 
 /**
  * Internal dependencies.
  */
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import type { CookieData } from '../../../../../localStore';
 import { CookieDetails, CookieTable } from './components';
 
 const Cookies = () => {
-  const { cookies } = useCookieStore(({ state }) => ({
-    cookies: state.tabCookies || {},
-  }));
-  const [selectedCookie, setselectedCookie] = useState<CookieData | undefined>(
-    undefined
+  const { cookies, selectedCookie, setSelectedCookie } = useCookieStore(
+    ({ state, actions }) => ({
+      cookies: state.tabCookies || {},
+      selectedCookie: state.selectedCookie,
+      setSelectedCookie: actions.setSelectedCookie,
+    })
   );
 
   return (
@@ -54,7 +54,7 @@ const Cookies = () => {
         <CookieTable
           cookies={Object.values(cookies)}
           selectedKey={selectedCookie?.parsedCookie.name}
-          onRowClick={setselectedCookie}
+          onRowClick={setSelectedCookie}
         />
       </Resizable>
       <div className="w-full h-full p-6 bg-white border border-gray-200 shadow overflow-auto">

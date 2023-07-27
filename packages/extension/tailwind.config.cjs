@@ -27,9 +27,6 @@ module.exports = {
   content: ['./packages/extension/src/**/*.{tsx,js}'],
   theme: {
     extend: {},
-    fontFamily: {
-      normal: ['"Inter"', 'normal'],
-    },
     textColor: {
       ...colors,
       primary: '#000',
