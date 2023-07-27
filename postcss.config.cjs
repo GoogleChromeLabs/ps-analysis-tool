@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import React from 'react';
 
-// @todo To be removed after we add any story.
-const Button = () => {
-  return <button className="text-red-500">Example button</button>;
+const path = require('path');
+
+module.exports = {
+  plugins: {
+    tailwindcss: {
+      config: path.join(__dirname, './packages/extension/tailwind.config.cjs'),
+    },
+    autoprefixer: {},
+  },
 };
-
-export default Button;
