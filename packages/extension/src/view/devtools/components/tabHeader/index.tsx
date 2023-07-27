@@ -33,9 +33,10 @@ const TabHeader: React.FC<TabHeaderProps> = ({
   setIndex,
 }) => {
   const [accordionState, setAccordionState] = useState(false);
-  const { setSelectedFrame, selectedFrame } = useCookieStore(
+  const { setSelectedFrame, selectedFrame, tabFrames } = useCookieStore(
     ({ state, actions }) => ({
       setSelectedFrame: actions.setSelectedFrame,
+      tabFrames: state.tabFrames,
       selectedFrame: state.selectedFrame,
     })
   );
@@ -58,6 +59,9 @@ const TabHeader: React.FC<TabHeaderProps> = ({
         >
           {name === 'Cookies' ? (
             <Accordion
+              tabFrames={tabFrames}
+              setSelectedFrame={setSelectedFrame}
+              selectedFrame={selectedFrame}
               selectedIndex={selectedIndex}
               index={index}
               tabName={name}

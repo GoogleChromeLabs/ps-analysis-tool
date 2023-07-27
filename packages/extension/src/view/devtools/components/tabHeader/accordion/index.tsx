@@ -28,7 +28,6 @@ import {
   ArrowDownWhite,
   ArrowRightWhite,
 } from '../../../../../icons';
-import { useCookieStore } from '../../../stateProviders/syncCookieStore';
 
 interface AccordionProps {
   accordionState: boolean;
@@ -36,6 +35,13 @@ interface AccordionProps {
   tabName: string;
   index: number;
   selectedIndex: number;
+  tabFrames: {
+    [key: string]: {
+      frameIds: number[];
+    };
+  } | null;
+  setSelectedFrame: (state: string | null) => void;
+  selectedFrame: string | null;
 }
 
 const Accordion: React.FC<AccordionProps> = ({
@@ -44,15 +50,10 @@ const Accordion: React.FC<AccordionProps> = ({
   tabName,
   index,
   selectedIndex,
+  tabFrames,
+  setSelectedFrame,
+  selectedFrame,
 }) => {
-  const { tabFrames, setSelectedFrame, selectedFrame } = useCookieStore(
-    ({ state, actions }) => ({
-      tabFrames: state.tabFrames,
-      setSelectedFrame: actions.setSelectedFrame,
-      selectedFrame: state.selectedFrame,
-    })
-  );
-
   return (
     <div className="flex flex-col w-full">
       <div
