@@ -25,7 +25,7 @@ import React from 'react';
 import type { CookieData } from '../../../../../../../localStore';
 
 export interface CookieDetailsProps {
-  cookieData: CookieData | undefined;
+  cookieData: CookieData | null;
 }
 
 const CookieDetails = ({ cookieData }: CookieDetailsProps) => {
