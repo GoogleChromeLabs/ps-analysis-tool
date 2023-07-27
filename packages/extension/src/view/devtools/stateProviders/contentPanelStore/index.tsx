@@ -16,8 +16,13 @@
 /**
  * External dependencies.
  */
+import React, {
+  useState,
+  type PropsWithChildren,
+  useRef,
+  useEffect,
+} from 'react';
 import { useContextSelector, createContext } from 'use-context-selector';
-import React, { useState, type PropsWithChildren, useRef } from 'react';
 
 /**
  * Internal dependencies.
@@ -60,6 +65,19 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [tableColumnSize, setTableColumnSize] = useState(100);
 
   const tableContainerRef = useRef<HTMLTableElement>(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (tableContainerRef.current) {
+        setTableColumnSize(tableContainerRef.current.offsetWidth);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, [setTableColumnSize, tableContainerRef]);
 
   return (
     <Context.Provider

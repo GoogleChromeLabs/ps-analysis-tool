@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect } from 'react';
+import React, { useMemo } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -36,121 +36,99 @@ export interface CookieTableProps {
   cookies: CookieData[];
 }
 
+const tableColumns: ColumnDef<CookieData>[] = [
+  {
+    header: 'Name',
+    accessorKey: 'parsedCookie.name',
+    cell: (info) => info.getValue(),
+    enableHiding: false,
+  },
+  {
+    header: 'Value',
+    accessorKey: 'parsedCookie.value',
+    cell: (info) => info.getValue(),
+  },
+  {
+    header: 'Domain',
+    accessorKey: 'parsedCookie.domain',
+    cell: (info) => info.getValue(),
+  },
+  {
+    header: 'Path',
+    accessorKey: 'parsedCookie.path',
+    cell: (info) => info.getValue(),
+  },
+  {
+    header: 'Expires / Max-Age',
+    accessorKey: 'parsedCookie.expires',
+    cell: (info) => (info.getValue() ? info.getValue() : 'Session'),
+  },
+  {
+    header: 'HttpOnly',
+    accessorKey: 'parsedCookie.httponly',
+    cell: (info) => (info.getValue() ? '✓' : ''),
+  },
+  {
+    header: 'SameSite',
+    accessorKey: 'parsedCookie.samesite',
+    cell: (info) => (
+      <span className="capitalize">{info.getValue() as string}</span>
+    ),
+  },
+  {
+    header: 'Secure',
+    accessorKey: 'parsedCookie.secure',
+    cell: (info) => (info.getValue() ? '✓' : ''),
+  },
+  {
+    header: 'Category',
+    accessorKey: 'analytics.category',
+    cell: (info) => (info.getValue() ? info.getValue() : 'Uncategorised'),
+  },
+  {
+    header: 'Platform',
+    accessorKey: 'analytics.platform',
+    cell: (info) => info.getValue(),
+  },
+  {
+    header: 'GDPR Portal',
+    accessorKey: 'analytics.gdprUrl',
+    cell: (info) => (
+      <a
+        className="text-blue-500 hover:underline"
+        target="_blank"
+        href={info.getValue() as string}
+        rel="noreferrer"
+      >
+        <abbr title={info.getValue() as string}>
+          {info.getValue() as string}
+        </abbr>
+      </a>
+    ),
+  },
+];
+
 const CookieTable = ({ cookies: data }: CookieTableProps) => {
   const {
     selectedCookie,
     setSelectedCookie,
     tableColumnSize,
-    setTableColumnSize,
     tableContainerRef,
   } = useContentPanelStore(({ state, actions }) => ({
     selectedCookie: state.selectedCookie,
     setSelectedCookie: actions.setSelectedCookie,
     tableColumnSize: state.tableColumnSize,
-    setTableColumnSize: actions.setTableColumnSize,
     tableContainerRef: state.tableContainerRef,
   }));
 
-  const columns = React.useMemo<ColumnDef<CookieData>[]>(
-    () => [
-      {
-        header: 'Name',
-        accessorKey: 'parsedCookie.name',
-        cell: (info) => info.getValue(),
-        enableHiding: false,
-        size: tableColumnSize,
-      },
-      {
-        header: 'Value',
-        accessorKey: 'parsedCookie.value',
-        cell: (info) => info.getValue(),
-        size: tableColumnSize,
-      },
-      {
-        header: 'Domain',
-        accessorKey: 'parsedCookie.domain',
-        cell: (info) => info.getValue(),
-        size: tableColumnSize,
-      },
-      {
-        header: 'Path',
-        accessorKey: 'parsedCookie.path',
-        cell: (info) => info.getValue(),
-        size: tableColumnSize,
-      },
-      {
-        header: 'Expires / Max-Age',
-        accessorKey: 'parsedCookie.expires',
-        cell: (info) => (info.getValue() ? info.getValue() : 'Session'),
-        size: tableColumnSize,
-      },
-      {
-        header: 'HttpOnly',
-        accessorKey: 'parsedCookie.httponly',
-        cell: (info) => (info.getValue() ? '✓' : ''),
-        size: tableColumnSize,
-      },
-      {
-        header: 'SameSite',
-        accessorKey: 'parsedCookie.samesite',
-        cell: (info) => (
-          <span className="capitalize">{info.getValue() as string}</span>
-        ),
-        size: tableColumnSize,
-      },
-      {
-        header: 'Secure',
-        accessorKey: 'parsedCookie.secure',
-        cell: (info) => (info.getValue() ? '✓' : ''),
-        size: tableColumnSize,
-      },
-      {
-        header: 'Category',
-        accessorKey: 'analytics.category',
-        cell: (info) => (info.getValue() ? info.getValue() : 'Uncategorised'),
-        size: tableColumnSize,
-      },
-      {
-        header: 'Platform',
-        accessorKey: 'analytics.platform',
-        cell: (info) => info.getValue(),
-        size: tableColumnSize,
-      },
-      {
-        header: 'GDPR Portal',
-        accessorKey: 'analytics.gdprUrl',
-        cell: (info) => (
-          <a
-            className="text-blue-500 hover:underline"
-            target="_blank"
-            href={info.getValue() as string}
-            rel="noreferrer"
-          >
-            <abbr title={info.getValue() as string}>
-              {info.getValue() as string}
-            </abbr>
-          </a>
-        ),
-        size: tableColumnSize,
-      },
-    ],
+  const columns: ColumnDef<CookieData>[] = useMemo(
+    () =>
+      tableColumns.map((column) => ({
+        ...column,
+        size: tableColumnSize / tableColumns.length,
+      })),
     [tableColumnSize]
   );
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (tableContainerRef.current) {
-        setTableColumnSize(
-          tableContainerRef.current.offsetWidth / columns.length
-        );
-      }
-    };
-
-    handleResize();
-    window.addEventListener('resize', handleResize);
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, [columns.length, setTableColumnSize, tableContainerRef]);
 
   const table = useReactTable({
     data,
