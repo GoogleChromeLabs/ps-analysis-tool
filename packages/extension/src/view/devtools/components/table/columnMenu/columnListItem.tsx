@@ -31,23 +31,28 @@ interface ColumnListItemProps {
 
 const ColumnListItem = ({ column }: ColumnListItemProps) => {
   return (
-    <>
-      {column.columnDef.header !== 'Name' && (
-        <li
-          key={column.id}
-          className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
-          onClick={column.getToggleVisibilityHandler()}
+    <li
+      key={column.id}
+      className={`${
+        column.columnDef.header === 'Name'
+          ? 'pointer-events-none opacity-50'
+          : ''
+      }`}
+    >
+      <button
+        className="w-full rounded-lg px-4 py-2 flex items-center hover:bg-gray-100 select-none touch-none"
+        onClick={column.getToggleVisibilityHandler()}
+      >
+        <span
+          className={`mr-2 font-bold ${
+            column.getIsVisible() ? 'opacity-100' : 'opacity-0'
+          }`}
         >
-          <input
-            type="checkbox"
-            className="mr-2 cursor-pointer"
-            checked={column.getIsVisible()}
-            onChange={column.getToggleVisibilityHandler()}
-          />
-          {column.columnDef.header as string}
-        </li>
-      )}
-    </>
+          ✓
+        </span>
+        <span>{column.columnDef.header as string}</span>
+      </button>
+    </li>
   );
 };
 

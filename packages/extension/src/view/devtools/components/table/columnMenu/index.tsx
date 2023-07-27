@@ -46,26 +46,19 @@ const ColumnMenu = ({ table, columns, open, onClose }: ColumnMenuProps) => {
         createPortal(
           <>
             <div className="absolute top-10 left-2 z-20 bg-white rounded-lg max-w-lg w-fit border shadow-2xl shadow-slate-500 border-gray-300 py-3 mr-2 divide-y max-h-[80vh] overflow-auto">
-              <div className="flex justify-between items-center px-3 pt-0 pb-4">
-                <p className="font-bold mr-4 leading-none text-base text-gray-900 text-center">
-                  Toggle Columns Visibility
-                </p>
-                <button
-                  className="px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800"
-                  onClick={handleClose}
+              <button
+                className="block w-full px-6 py-2 flex items-center font-semibold hover:bg-gray-100 cursor-pointer"
+                onClick={table.getToggleAllColumnsVisibilityHandler()}
+              >
+                <span
+                  className={`mr-2 font-bold ${
+                    table.getIsAllColumnsVisible() ? 'opacity-100' : 'opacity-0'
+                  }`}
                 >
-                  Close
-                </button>
-              </div>
-              <label className="block w-full px-8 py-2 font-semibold hover:bg-gray-100 cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="mr-2 cursor-pointer"
-                  checked={table.getIsAllColumnsVisible()}
-                  onChange={table.getToggleAllColumnsVisibilityHandler()}
-                />
-                Toggle All
-              </label>
+                  ✓
+                </span>
+                <span>Toggle All</span>
+              </button>
               <ColumnList columns={columns} />
             </div>
 

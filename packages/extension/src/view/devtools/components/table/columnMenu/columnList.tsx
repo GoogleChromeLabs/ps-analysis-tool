@@ -32,7 +32,7 @@ interface ColumnListProps {
 
 const ColumnList = ({ columns }: ColumnListProps) => {
   return (
-    <ul className="px-4 text-basic text-gray-700 divide-y">
+    <ul className="px-2 text-basic text-gray-700">
       {columns.map((column) => (
         <ColumnListItem key={column.id} column={column} />
       ))}
