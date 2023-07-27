@@ -71,7 +71,31 @@ export const Provider = ({ children }: PropsWithChildren) => {
     ];
 
     if (tabData && tabData.cookies) {
-      setTabCookies(tabData.cookies);
+      const _cookies: NonNullable<CookieStoreContext['state']['tabCookies']> =
+        {};
+
+      await Promise.all(
+        Object.entries(tabData.cookies as { [key: string]: CookieData }).map(
+          async ([key, value]: [string, CookieData]) => {
+            const isIbcCompliant = await checkIbcCompliance(
+              value.parsedCookie.samesite,
+              value.parsedCookie.secure,
+              key,
+              value.url
+            );
+            const isCookieSet = Boolean(
+              await chrome.cookies.get({ name: key, url: value.url })
+            );
+            _cookies[key] = {
+              ...value,
+              isIbcCompliant,
+              isCookieSet,
+            };
+          }
+        )
+      );
+
+      setTabCookies(_cookies);
     }
 
     chrome.devtools.inspectedWindow.eval(
