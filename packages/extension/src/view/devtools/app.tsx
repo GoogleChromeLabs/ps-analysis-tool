@@ -93,7 +93,7 @@ const App: React.FC = () => {
             topLeft: false,
           }}
           onResizeStop={setWidthOnResizeStop}
-          className="w-1/4 h-full flex flex-col pt-[14px] overflow-y-auto overflow-x-clip border-solid border-r-[1px] border-b-[1px] border-t-[1px] border-[#CBCDD1]"
+          className="w-1/4 h-full flex flex-col pt-3.5 overflow-y-auto overflow-x-clip border-solid border-r border-b border-t border-selected-background-color"
         >
           <TabHeader
             tabsNames={tabNames}

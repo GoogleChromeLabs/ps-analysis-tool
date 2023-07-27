@@ -56,9 +56,9 @@ const Accordion: React.FC<AccordionProps> = ({
   return (
     <div className="flex flex-col w-full">
       <div
-        className={`flex h-full flex-row items-center pl-[16px] pt-[6px] ${
+        className={`flex h-full flex-row items-center pl-4 pt-[6px] ${
           selectedIndex === index && !selectedFrame
-            ? 'bg-[#3871E0] text-white'
+            ? 'bg-selected-background-color text-white'
             : ''
         }`}
         onClick={() => {
@@ -79,14 +79,14 @@ const Accordion: React.FC<AccordionProps> = ({
             <ArrowRight />
           )}
         </div>
-        <div className="pl-[4px]">
+        <div className="pl-1">
           {selectedIndex === index && !selectedFrame ? (
             <CookieWhite />
           ) : (
             <CookieGray />
           )}
         </div>
-        <p className="pl-[6px] truncate">{tabName}</p>
+        <p className="pl-1.5 truncate">{tabName}</p>
       </div>
       <div className={`${accordionState ? 'flex flex-col' : 'hidden'}`}>
         {tabFrames &&
@@ -94,14 +94,16 @@ const Accordion: React.FC<AccordionProps> = ({
             <div
               key={key}
               onClick={() => setSelectedFrame(key)}
-              className={`pl-[38px] py-[2px] h-[20px] flex items-center cursor-pointer ${
-                selectedFrame === key ? 'bg-[#3871E0] text-white' : ''
+              className={`pl-9 py-0.5 h-5 flex items-center cursor-pointer ${
+                selectedFrame === key
+                  ? 'bg-selected-background-color text-white'
+                  : ''
               }`}
             >
-              <div className="h-[16px]">
+              <div className="h-4">
                 {selectedFrame === key ? <CookieWhite /> : <CookieGray />}
               </div>
-              <p className="pl-[6px] truncate">{key}</p>
+              <p className="pl-1.5 truncate">{key}</p>
             </div>
           ))}
       </div>

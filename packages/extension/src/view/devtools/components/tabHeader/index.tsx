@@ -46,7 +46,7 @@ const TabHeader: React.FC<TabHeaderProps> = ({
           key={name}
           className={`flex items-center cursor-pointer ${
             selectedIndex === index && name !== 'Cookies'
-              ? 'bg-[#3871E0] text-white'
+              ? 'bg-selected-background-color text-white'
               : ''
           }`}
           onClick={() => {
@@ -65,11 +65,11 @@ const TabHeader: React.FC<TabHeaderProps> = ({
               setAccordionState={setAccordionState}
             />
           ) : (
-            <div className="flex items-center pl-[24px] py-[2px] pt-[6px]">
-              <div className="h-[16px]">
+            <div className="flex items-center pl-6 py-0.5 pt-1.5">
+              <div className="h-4">
                 {selectedIndex === index ? <FileWhite /> : <File />}
               </div>
-              <span className="pl-[9px]">{name}</span>
+              <span className="pl-2.5">{name}</span>
             </div>
           )}
         </div>

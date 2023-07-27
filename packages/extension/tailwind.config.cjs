@@ -44,6 +44,7 @@ module.exports = {
       primary: '#FFF',
       secondary: '#E5E7EB',
       tertiary: '#CBD5E1',
+      'selected-background-color': '#3871E0',
     },
   },
 };
