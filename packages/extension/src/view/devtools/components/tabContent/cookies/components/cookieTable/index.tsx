@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -30,20 +30,26 @@ import {
  */
 import type { CookieData } from '../../../../../../../localStore';
 import Table from '../../../../table';
+import { useContentPanelStore } from '../../../../../stateProviders/contentPanelStore';
 
 export interface CookieTableProps {
   cookies: CookieData[];
-  selectedKey: string | undefined;
-  onRowClick: (key: CookieData) => void;
 }
 
-const CookieTable = ({
-  cookies: data,
-  selectedKey,
-  onRowClick,
-}: CookieTableProps) => {
-  const [tableColumnSize, setTableColumnSize] = useState(100);
-  const tableContainerRef = useRef<HTMLTableElement>(null);
+const CookieTable = ({ cookies: data }: CookieTableProps) => {
+  const {
+    selectedCookie,
+    setSelectedCookie,
+    tableColumnSize,
+    setTableColumnSize,
+    tableContainerRef,
+  } = useContentPanelStore(({ state, actions }) => ({
+    selectedCookie: state.selectedCookie,
+    setSelectedCookie: actions.setSelectedCookie,
+    tableColumnSize: state.tableColumnSize,
+    setTableColumnSize: actions.setTableColumnSize,
+    tableContainerRef: state.tableContainerRef,
+  }));
 
   const columns = React.useMemo<ColumnDef<CookieData>[]>(
     () => [
@@ -144,7 +150,7 @@ const CookieTable = ({
     window.addEventListener('resize', handleResize);
 
     return () => window.removeEventListener('resize', handleResize);
-  }, [columns.length]);
+  }, [columns.length, setTableColumnSize, tableContainerRef]);
 
   const table = useReactTable({
     data,
@@ -157,7 +163,11 @@ const CookieTable = ({
 
   return (
     <div ref={tableContainerRef} className="w-full h-full overflow-auto">
-      <Table table={table} selectedKey={selectedKey} onRowClick={onRowClick} />
+      <Table
+        table={table}
+        selectedKey={selectedCookie?.parsedCookie.name}
+        onRowClick={setSelectedCookie}
+      />
     </div>
   );
 };

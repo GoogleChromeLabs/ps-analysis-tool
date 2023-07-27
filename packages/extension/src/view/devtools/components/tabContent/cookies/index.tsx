@@ -27,13 +27,9 @@ import { useCookieStore } from '../../../stateProviders/syncCookieStore';
 import { CookieDetails, CookieTable } from './components';
 
 const Cookies = () => {
-  const { cookies, selectedCookie, setSelectedCookie } = useCookieStore(
-    ({ state, actions }) => ({
-      cookies: state.tabCookies || {},
-      selectedCookie: state.selectedCookie,
-      setSelectedCookie: actions.setSelectedCookie,
-    })
-  );
+  const { cookies } = useCookieStore(({ state }) => ({
+    cookies: state.tabCookies || {},
+  }));
 
   return (
     <div className="h-full flex flex-col" data-testid="cookies-content">
@@ -51,14 +47,10 @@ const Cookies = () => {
           left: false,
         }}
       >
-        <CookieTable
-          cookies={Object.values(cookies)}
-          selectedKey={selectedCookie?.parsedCookie.name}
-          onRowClick={setSelectedCookie}
-        />
+        <CookieTable cookies={Object.values(cookies)} />
       </Resizable>
       <div className="w-full h-full p-6 bg-white border border-gray-200 shadow overflow-auto">
-        <CookieDetails cookieData={selectedCookie} />
+        <CookieDetails />
       </div>
     </div>
   );
