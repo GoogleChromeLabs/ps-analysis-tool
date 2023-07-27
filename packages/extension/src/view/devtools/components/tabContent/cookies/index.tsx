@@ -32,9 +32,9 @@ const Cookies = () => {
   }));
 
   return (
-    <>
+    <div data-testid="cookies-content">
       {cookies.length > 0 ? (
-        <div className="h-full flex flex-col" data-testid="cookies-content">
+        <div className="h-full flex flex-col">
           <Resizable
             defaultSize={{
               width: '100%',
@@ -60,7 +60,7 @@ const Cookies = () => {
           <div className="w-10 h-10 rounded-full animate-spin border-t-transparent border-solid border-blue-700 border-4" />
         </div>
       )}
-    </>
+    </div>
   );
 };
 

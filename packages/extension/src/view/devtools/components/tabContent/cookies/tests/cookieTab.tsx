@@ -127,7 +127,10 @@ const mockResponse: {
 jest.mock('../../../../stateProviders/syncCookieStore', () => {
   return {
     useCookieStore: () => {
-      return { cookies: mockResponse.tabCookies, tabUrl: mockResponse.tabUrl };
+      return {
+        cookies: Object.values(mockResponse.tabCookies),
+        tabUrl: mockResponse.tabUrl,
+      };
     },
   };
 });
