@@ -15,6 +15,7 @@
  */
 
 const colors = require('tailwindcss/colors');
+const defaultTheme = require('tailwindcss/defaultTheme');
 
 // @see https://github.com/tailwindlabs/tailwindcss/issues/4690#issuecomment-1046087220
 delete colors['lightBlue'];
@@ -28,6 +29,7 @@ module.exports = {
   theme: {
     extend: {},
     fontFamily: {
+      ...defaultTheme.fontFamily,
       normal: ['"Inter"', 'normal'],
     },
     textColor: {
