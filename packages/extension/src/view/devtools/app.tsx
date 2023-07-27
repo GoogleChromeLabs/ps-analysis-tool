@@ -34,6 +34,10 @@ import {
 
 const TABS = [
   {
+    display_name: 'Cookies',
+    Component: Cookies,
+  },
+  {
     display_name: 'Topics',
     Component: Topics,
   },
@@ -48,10 +52,6 @@ const TABS = [
   {
     display_name: 'Fingerprinting',
     Component: Fingerprinting,
-  },
-  {
-    display_name: 'Cookies',
-    Component: Cookies,
   },
 ];
 
