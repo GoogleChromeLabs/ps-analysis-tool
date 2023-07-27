@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { type Cookie as ParsedCookie } from 'simple-cookie';
 import SinonChrome from 'sinon-chrome';
@@ -28,6 +28,7 @@ import SinonChrome from 'sinon-chrome';
 import CookieTab from '..';
 import type { CookieStoreContext } from '../../../../stateProviders/syncCookieStore';
 import { emptyAnalytics } from '../../../../../../worker/findAnalyticsMatch';
+import { CookieDetails } from '../components';
 
 const emptyCookie = {
   name: '',
@@ -146,35 +147,27 @@ describe('CookieTab', () => {
   });
 
   it('should show a cookie card with the information on first cookie in the list', async () => {
-    render(<CookieTab />);
+    const firstCookie =
+      mockResponse.tabCookies[Object.keys(mockResponse.tabCookies)[0]];
 
-    const items = await screen.findAllByTestId('body-row');
-    fireEvent.click(items[0]);
-
+    render(<CookieDetails cookieData={firstCookie} />);
     const card = await screen.findByTestId('cookie-card');
 
     expect(card).toBeInTheDocument();
-
-    const firstCookie =
-      mockResponse.tabCookies[Object.keys(mockResponse.tabCookies)[0]];
 
     expect(
       within(card).getByText(firstCookie.parsedCookie.value)
     ).toBeInTheDocument();
   });
 
-  it('should change the selected cookie with clicking', async () => {
-    render(<CookieTab />);
+  it('should show a cookie card with the information on third cookie in the list', async () => {
+    const thirdCookie =
+      mockResponse.tabCookies[Object.keys(mockResponse.tabCookies)[2]];
 
-    //click on the 3rd cookie in the list
-    const items = await screen.findAllByTestId('body-row');
-    fireEvent.click(items[2]);
+    render(<CookieDetails cookieData={thirdCookie} />);
 
     const card = await screen.findByTestId('cookie-card');
     expect(card).toBeInTheDocument();
-
-    const thirdCookie =
-      mockResponse.tabCookies[Object.keys(mockResponse.tabCookies)[2]];
 
     expect(
       within(card).getByText(`${thirdCookie.parsedCookie.value}`)

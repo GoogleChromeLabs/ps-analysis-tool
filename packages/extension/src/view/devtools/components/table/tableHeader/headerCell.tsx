@@ -36,7 +36,7 @@ const HeaderCell = ({ header }: HeaderCellProps) => {
     <th
       colSpan={header.colSpan}
       style={{ maxWidth: header.getSize() }}
-      className="border border-t-0 relative hover:bg-slate-100 select-none touch-none cursor-pointer"
+      className="border border-t-0 relative hover:bg-slate-100 select-none touch-none cursor-pointer font-normal"
       onClick={header.column.getToggleSortingHandler()}
     >
       <div className="w-full h-full flex items-center justify-between">
@@ -45,7 +45,7 @@ const HeaderCell = ({ header }: HeaderCellProps) => {
             ? null
             : flexRender(header.column.columnDef.header, header.getContext())}
         </p>
-        <p className="mr-2">
+        <p className="mr-2 scale-150">
           {{
             asc: <ArrowDown className="transform rotate-180" />,
             desc: <ArrowDown />,

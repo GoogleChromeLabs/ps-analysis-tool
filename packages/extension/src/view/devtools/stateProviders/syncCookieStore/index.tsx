@@ -35,16 +35,24 @@ export interface CookieStoreContext {
       [key: string]: CookieData;
     } | null;
     tabUrl: string | null;
+    selectedCookie: CookieData | null;
   };
-  actions: object;
+  actions: {
+    setSelectedCookie: (cookie: CookieData) => void;
+  };
 }
 
 const initialState: CookieStoreContext = {
   state: {
     tabCookies: null,
     tabUrl: null,
+    selectedCookie: null,
   },
-  actions: {},
+  actions: {
+    setSelectedCookie: () => {
+      // Do nothing.
+    },
+  },
 };
 
 export const Context = createContext<CookieStoreContext>(initialState);
@@ -57,6 +65,8 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const [tabUrl, setTabUrl] =
     useState<CookieStoreContext['state']['tabUrl']>(null);
+
+  const [selectedCookie, setSelectedCookie] = useState<CookieData | null>(null);
 
   const intitialSync = useCallback(async () => {
     const _tabId = chrome.devtools.inspectedWindow.tabId;
@@ -113,7 +123,14 @@ export const Provider = ({ children }: PropsWithChildren) => {
   }, [intitialSync, storeChangeListener, tabUpdateListener]);
 
   return (
-    <Context.Provider value={{ state: { tabCookies, tabUrl }, actions: {} }}>
+    <Context.Provider
+      value={{
+        state: { tabCookies, tabUrl, selectedCookie },
+        actions: {
+          setSelectedCookie,
+        },
+      }}
+    >
       {children}
     </Context.Provider>
   );
