@@ -32,27 +32,35 @@ const Cookies = () => {
   }));
 
   return (
-    <div className="h-full flex flex-col" data-testid="cookies-content">
-      <Resizable
-        defaultSize={{
-          width: '100%',
-          height: '60%',
-        }}
-        minHeight="40%"
-        maxHeight="60%"
-        enable={{
-          top: false,
-          right: false,
-          bottom: true,
-          left: false,
-        }}
-      >
-        <CookieTable cookies={Object.values(cookies)} />
-      </Resizable>
-      <div className="w-full h-full p-6 bg-white border border-gray-200 shadow overflow-auto">
-        <CookieDetails />
-      </div>
-    </div>
+    <>
+      {Object.keys(cookies).length > 0 ? (
+        <div className="h-full flex flex-col" data-testid="cookies-content">
+          <Resizable
+            defaultSize={{
+              width: '100%',
+              height: '60%',
+            }}
+            minHeight="40%"
+            maxHeight="60%"
+            enable={{
+              top: false,
+              right: false,
+              bottom: true,
+              left: false,
+            }}
+          >
+            <CookieTable cookies={Object.values(cookies)} />
+          </Resizable>
+          <div className="w-full h-full p-6 bg-white border border-gray-200 shadow overflow-auto">
+            <CookieDetails />
+          </div>
+        </div>
+      ) : (
+        <div className="w-full h-full flex items-center justify-center">
+          <div className="w-10 h-10 rounded-full animate-spin border-t-transparent border-solid border-blue-700 border-4" />
+        </div>
+      )}
+    </>
   );
 };
 
