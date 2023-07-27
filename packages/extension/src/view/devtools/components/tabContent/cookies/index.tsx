@@ -28,12 +28,12 @@ import { CookieDetails, CookieTable } from './components';
 
 const Cookies = () => {
   const { cookies } = useCookieStore(({ state }) => ({
-    cookies: state.tabCookies || {},
+    cookies: Object.values(state.tabCookies || {}),
   }));
 
   return (
     <>
-      {Object.keys(cookies).length > 0 ? (
+      {cookies.length > 0 ? (
         <div className="h-full flex flex-col" data-testid="cookies-content">
           <Resizable
             defaultSize={{
@@ -49,7 +49,7 @@ const Cookies = () => {
               left: false,
             }}
           >
-            <CookieTable cookies={Object.values(cookies)} />
+            <CookieTable cookies={cookies} />
           </Resizable>
           <div className="w-full h-full p-6 bg-white border border-gray-200 shadow overflow-auto">
             <CookieDetails />
