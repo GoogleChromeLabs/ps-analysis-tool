@@ -45,7 +45,7 @@ const HeaderCell = ({ header }: HeaderCellProps) => {
             ? null
             : flexRender(header.column.columnDef.header, header.getContext())}
         </p>
-        <p className="mr-2">
+        <p className="mr-2 scale-150">
           {{
             asc: <ArrowDown className="transform rotate-180" />,
             desc: <ArrowDown />,
