@@ -156,7 +156,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     [tabId]
   );
 
-  const cookieStoreListener = useCallback(
+  const cookieChangeListener = useCallback(
     async (changeInfo: chrome.cookies.CookieChangeInfo) => {
       if (
         tabCookies &&
@@ -195,14 +195,14 @@ export const Provider = ({ children }: PropsWithChildren) => {
     intitialSync();
     chrome.storage.local.onChanged.addListener(storeChangeListener);
     chrome.tabs.onUpdated.addListener(tabUpdateListener);
-    chrome.cookies.onChanged.addListener(cookieStoreListener);
+    chrome.cookies.onChanged.addListener(cookieChangeListener);
     return () => {
       chrome.storage.local.onChanged.removeListener(storeChangeListener);
       chrome.tabs.onUpdated.removeListener(tabUpdateListener);
-      chrome.cookies.onChanged.removeListener(cookieStoreListener);
+      chrome.cookies.onChanged.removeListener(cookieChangeListener);
     };
   }, [
-    cookieStoreListener,
+    cookieChangeListener,
     intitialSync,
     storeChangeListener,
     tabUpdateListener,

@@ -165,3 +165,11 @@ chrome.windows.onRemoved.addListener(async (windowId) => {
 chrome.runtime.onInstalled.addListener(async () => {
   await chrome.storage.local.clear();
 });
+
+chrome.cookies.onChanged.addListener(
+  async (changeInfo: chrome.cookies.CookieChangeInfo) => {
+    if (changeInfo.cause === 'explicit' && changeInfo.removed === true) {
+      await CookieStore.deleteCookie(changeInfo.cookie.name);
+    }
+  }
+);
