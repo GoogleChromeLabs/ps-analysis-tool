@@ -32,7 +32,7 @@ const Cookies = () => {
   }));
 
   return (
-    <div data-testid="cookies-content">
+    <div className="h-full" data-testid="cookies-content">
       {cookies.length > 0 ? (
         <div className="h-full flex flex-col">
           <Resizable
