@@ -2,6 +2,7 @@
  * External dependencies.
  */
 import type { StorybookConfig } from '@storybook/react-webpack5';
+import type { RuleSetRule } from 'webpack';
 
 const config: StorybookConfig = {
   stories: [
@@ -28,6 +29,24 @@ const config: StorybookConfig = {
   docs: {
     autodocs: 'tag',
   },
+  webpackFinal: config => { 
+    // Default rule for images /\.(svg|ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/
+    //@todo find the right method to correct this error.
+    // @ts-ignore this property exists on webpack RuleSetRule still ts is showing error.
+    const fileLoaderRule = config?.module?.rules?.find(rule => rule.test && rule.test.test('.svg'));
+    if(fileLoaderRule){
+      // @ts-ignore this property exists on webpack RuleSetRule still ts is showing error.
+      fileLoaderRule.exclude = /\.svg$/;  
+    }
+
+    config?.module?.rules?.push({
+      test: /\.svg$/,
+      enforce: 'pre',
+      loader: require.resolve('@svgr/webpack'),
+    });
+
+    return config;
+} 
 };
 
 export default config;
