@@ -132,6 +132,20 @@ jest.mock('../../../../stateProviders/syncCookieStore', () => {
   };
 });
 
+jest.mock('../../../../stateProviders/contentPanelStore', () => {
+  return {
+    useContentPanelStore: () => {
+      return {
+        selectedCookie:
+          mockResponse.tabCookies[Object.keys(mockResponse.tabCookies)[0]],
+        tableContainerRef: { current: null },
+        tableColumnSize: 100,
+        setTableColumnSize: jest.fn(),
+      };
+    },
+  };
+});
+
 describe('CookieTab', () => {
   beforeAll(() => {
     globalThis.chrome = SinonChrome as unknown as typeof chrome;
@@ -150,27 +164,13 @@ describe('CookieTab', () => {
     const firstCookie =
       mockResponse.tabCookies[Object.keys(mockResponse.tabCookies)[0]];
 
-    render(<CookieDetails cookieData={firstCookie} />);
+    render(<CookieDetails />);
     const card = await screen.findByTestId('cookie-card');
 
     expect(card).toBeInTheDocument();
 
     expect(
       within(card).getByText(firstCookie.parsedCookie.value)
-    ).toBeInTheDocument();
-  });
-
-  it('should show a cookie card with the information on third cookie in the list', async () => {
-    const thirdCookie =
-      mockResponse.tabCookies[Object.keys(mockResponse.tabCookies)[2]];
-
-    render(<CookieDetails cookieData={thirdCookie} />);
-
-    const card = await screen.findByTestId('cookie-card');
-    expect(card).toBeInTheDocument();
-
-    expect(
-      within(card).getByText(`${thirdCookie.parsedCookie.value}`)
     ).toBeInTheDocument();
   });
 });
