@@ -121,6 +121,17 @@ describe('local store: CookieStore', () => {
     });
   });
 
+  it('should add/update tab data and merge frame id list', async () => {
+    await CookieStore.update('123', [
+      cookieArray[0],
+      { ...cookieArray[0], frameIdList: [2] },
+      { ...cookieArray[0], frameIdList: [2] },
+    ]);
+    expect(storage['123'].cookies).toStrictEqual({
+      countryCode1: { ...cookieArray[0], frameIdList: [1, 2] },
+    });
+  });
+
   it('should update tab foucusedAt value', async () => {
     await CookieStore.update('123', cookieArray);
     const prevFocusedAt = storage['123'].focusedAt;
