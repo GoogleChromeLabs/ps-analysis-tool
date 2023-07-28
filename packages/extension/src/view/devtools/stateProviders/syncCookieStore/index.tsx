@@ -28,7 +28,7 @@ import React, {
  * Internal dependencies.
  */
 import type { CookieData } from '../../../../localStore';
-import { checkIbcCompliance } from '../../../../utils/checkIBCCompliance';
+import { checkIbcCompliance } from '../../../../utils/checkIbcCompliance';
 
 export interface CookieStoreContext {
   state: {
