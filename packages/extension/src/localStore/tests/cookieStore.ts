@@ -32,6 +32,7 @@ const cookieArray: CookieData[] = [
       name: 'countryCode1',
       value: 'IN',
     },
+    frameIdList: [1],
     analytics: null,
     url: 'https://example.com',
     headerType: 'response',
@@ -47,6 +48,7 @@ const cookieArray: CookieData[] = [
       name: 'countryCode2',
       value: 'IN',
     },
+    frameIdList: [1],
     analytics: null,
     url: 'https://example.com',
     headerType: 'response',
@@ -116,6 +118,17 @@ describe('local store: CookieStore', () => {
     expect(storage['123'].cookies).toStrictEqual({
       countryCode1: cookieArray[0],
       countryCode2: cookieArray[1],
+    });
+  });
+
+  it('should add/update tab data and merge frame id list', async () => {
+    await CookieStore.update('123', [
+      cookieArray[0],
+      { ...cookieArray[0], frameIdList: [2] },
+      { ...cookieArray[0], frameIdList: [2] },
+    ]);
+    expect(storage['123'].cookies).toStrictEqual({
+      countryCode1: { ...cookieArray[0], frameIdList: [1, 2] },
     });
   });
 
