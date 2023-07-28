@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+//@todo remove justify-center and align-center after landing page PR is merged.
 /**
  * External dependencies.
  */
@@ -68,7 +69,9 @@ const Cookies = () => {
 
   return (
     <div
-      className="w-full h-full flex flex-col lg:flex-row"
+      className={`w-full h-full flex flex-col lg:flex-row ${
+        selectedFrame ? '' : 'items-center justify-center'
+      }`}
       data-testid="cookies-content"
     >
       {selectedFrame ? (
