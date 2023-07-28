@@ -36,12 +36,14 @@ import findAnalyticsMatch from './findAnalyticsMatch';
  * @param {string} url Cookie URL (URL of the server which is setting/updating cookies).
  * @param {string} value header value
  * @param {CookieDatabase} dictionary Dictionary from open cookie database
+ * @param {number} frameId Id of the frame the cookie is used in.
  * @returns {Promise<CookieData[]>} Parsed cookie object array.
  */
 const parseRequestCookieHeader = async (
   url: string,
   value: string,
-  dictionary: CookieDatabase
+  dictionary: CookieDatabase,
+  frameId: number
 ): Promise<CookieData[]> => {
   try {
     return await Promise.all(
@@ -66,6 +68,7 @@ const parseRequestCookieHeader = async (
           analytics,
           headerType: 'request',
           url,
+          frameIdList: [frameId],
         };
       })
     );
