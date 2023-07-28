@@ -35,12 +35,14 @@ import { createCookieObject } from './createCookieObject';
  * @param {string} url Cookie URL (URL of the server which is setting/updating cookies).
  * @param {string} value header value
  * @param {CookieDatabase} dictionary Dictionary from open cookie database
+ * @param {number} frameId Id of a frame in which this cookie is used.
  * @returns {Promise<CookieData>} Parsed cookie object.
  */
 const parseResponseCookieHeader = async (
   url: string,
   value: string,
-  dictionary: CookieDatabase
+  dictionary: CookieDatabase,
+  frameId: number
 ): Promise<CookieData> => {
   let parsedCookie: ParsedCookie = cookie.parse(value);
   parsedCookie = await createCookieObject(parsedCookie, url);
@@ -55,6 +57,7 @@ const parseResponseCookieHeader = async (
     analytics,
     url,
     headerType: 'response',
+    frameIdList: [frameId],
   };
 };
 
