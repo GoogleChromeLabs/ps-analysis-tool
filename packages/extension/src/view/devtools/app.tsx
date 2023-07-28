@@ -30,6 +30,7 @@ import {
   Fingerprinting,
   TabHeader,
 } from './components';
+import { Provider as ContentPanelProvider } from './stateProviders/contentPanelStore';
 
 const TABS = [
   {
@@ -71,7 +72,9 @@ const App: React.FC = () => {
           />
         </header>
         <main style={{ height: 'calc(100% - 40px)' }}>
-          <TabContent />
+          <ContentPanelProvider>
+            <TabContent />
+          </ContentPanelProvider>
         </main>
       </div>
     </div>

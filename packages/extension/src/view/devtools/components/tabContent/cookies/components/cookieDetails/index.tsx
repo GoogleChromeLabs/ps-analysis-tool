@@ -22,29 +22,30 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import type { CookieData } from '../../../../../../../localStore';
+import { useContentPanelStore } from '../../../../../stateProviders/contentPanelStore';
 
-export interface CookieDetailsProps {
-  cookieData: CookieData | null;
-}
+const CookieDetails = () => {
+  const { selectedCookie } = useContentPanelStore(({ state }) => ({
+    selectedCookie: state.selectedCookie,
+  }));
 
-const CookieDetails = ({ cookieData }: CookieDetailsProps) => {
   return (
     <div data-testid="cookie-card">
-      {cookieData ? (
+      {selectedCookie ? (
         <div className="bg-gray-100 p-4 rounded-lg">
           <p className="text-base font-bold text-gray-800">Cookie Value :</p>
           <p className="text-sm text-gray-700 mb-4 break-words">
-            {cookieData.parsedCookie.value}
+            {selectedCookie.parsedCookie.value}
           </p>
           <p className="text-base font-bold text-gray-800">Description :</p>
           <p className="text-sm text-gray-600">
-            {cookieData.analytics?.description || 'No description available.'}
+            {selectedCookie.analytics?.description ||
+              'No description available.'}
           </p>
         </div>
       ) : (
         <div className="h-full flex justify-center items-center">
-          <p className="text-3xl font-bold text-gray-700">
+          <p className="text-3xl font-bold text-zinc-600">
             Select a cookie to preview its details
           </p>
         </div>
