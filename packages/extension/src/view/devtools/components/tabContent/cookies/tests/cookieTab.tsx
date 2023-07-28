@@ -159,6 +159,34 @@ describe('CookieTab', () => {
     expect((await screen.findAllByText('Marketing')).length).toBe(2);
   });
 
+  it('should sort cookies by name', async () => {
+    render(<CookieTab />);
+
+    const headerCell = (await screen.findAllByTestId('header-cell'))[0];
+    fireEvent.click(headerCell);
+
+    const firstRow = (await screen.findAllByTestId('body-row'))[0];
+
+    expect(
+      await within(firstRow).findByText('KRTBCOOKIE_290')
+    ).toBeInTheDocument();
+
+    const lastRow = (await screen.findAllByTestId('body-row'))[3];
+    expect(await within(lastRow).findByText('pubsyncexp')).toBeInTheDocument();
+
+    fireEvent.click(headerCell);
+
+    const firstRowAfterReverse = (await screen.findAllByTestId('body-row'))[0];
+    expect(
+      await within(firstRowAfterReverse).findByText('pubsyncexp')
+    ).toBeInTheDocument();
+
+    const lastRowAfterReverse = (await screen.findAllByTestId('body-row'))[3];
+    expect(
+      await within(lastRowAfterReverse).findByText('KRTBCOOKIE_290')
+    ).toBeInTheDocument();
+  });
+
   it('should render a cookie card with placeholder text when no cookie is selected', async () => {
     mockUseContentPanelStore.mockReturnValue({
       selectedCookie: null,

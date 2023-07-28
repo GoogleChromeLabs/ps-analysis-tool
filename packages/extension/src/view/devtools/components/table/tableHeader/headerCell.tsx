@@ -38,6 +38,7 @@ const HeaderCell = ({ header }: HeaderCellProps) => {
       style={{ maxWidth: header.getSize() }}
       onClick={header.column.getToggleSortingHandler()}
       className="border border-zinc-300 relative hover:bg-gray-300 select-none touch-none cursor-pointer font-normal"
+      data-testid="header-cell"
     >
       <div className="w-full h-full flex items-center justify-between">
         <p className="p-0.5 truncate">
