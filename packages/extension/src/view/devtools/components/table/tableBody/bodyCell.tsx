@@ -33,7 +33,7 @@ const BodyCell = ({ cell }: BodyCellProps) => {
   return (
     <td
       style={{ maxWidth: cell.column.getSize() }}
-      className="border p-2 truncate"
+      className="border border-y-0 p-1 truncate border-zinc-300"
     >
       {flexRender(cell.column.columnDef.cell, cell.getContext())}
     </td>

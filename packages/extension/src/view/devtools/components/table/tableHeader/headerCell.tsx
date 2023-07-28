@@ -36,11 +36,12 @@ const HeaderCell = ({ header }: HeaderCellProps) => {
     <th
       colSpan={header.colSpan}
       style={{ maxWidth: header.getSize() }}
-      className="border border-t-0 relative hover:bg-slate-100 select-none touch-none cursor-pointer font-normal"
       onClick={header.column.getToggleSortingHandler()}
+      className="border border-zinc-300 relative hover:bg-gray-300 select-none touch-none cursor-pointer font-normal"
+      data-testid="header-cell"
     >
       <div className="w-full h-full flex items-center justify-between">
-        <p className="p-1 truncate">
+        <p className="p-0.5 truncate">
           {header.isPlaceholder
             ? null
             : flexRender(header.column.columnDef.header, header.getContext())}

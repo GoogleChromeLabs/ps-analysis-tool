@@ -27,39 +27,39 @@ import { useCookieStore } from '../../../stateProviders/syncCookieStore';
 import { CookieDetails, CookieTable } from './components';
 
 const Cookies = () => {
-  const { cookies, selectedCookie, setSelectedCookie } = useCookieStore(
-    ({ state, actions }) => ({
-      cookies: state.tabCookies || {},
-      selectedCookie: state.selectedCookie,
-      setSelectedCookie: actions.setSelectedCookie,
-    })
-  );
+  const { cookies } = useCookieStore(({ state }) => ({
+    cookies: Object.values(state.tabCookies || {}),
+  }));
 
   return (
-    <div className="h-full flex flex-col" data-testid="cookies-content">
-      <Resizable
-        defaultSize={{
-          width: '100%',
-          height: '60%',
-        }}
-        minHeight="40%"
-        maxHeight="60%"
-        enable={{
-          top: false,
-          right: false,
-          bottom: true,
-          left: false,
-        }}
-      >
-        <CookieTable
-          cookies={Object.values(cookies)}
-          selectedKey={selectedCookie?.parsedCookie.name}
-          onRowClick={setSelectedCookie}
-        />
-      </Resizable>
-      <div className="w-full h-full p-6 bg-white border border-gray-200 shadow overflow-auto">
-        <CookieDetails cookieData={selectedCookie} />
-      </div>
+    <div className="h-full" data-testid="cookies-content">
+      {cookies.length > 0 ? (
+        <div className="h-full flex flex-col">
+          <Resizable
+            defaultSize={{
+              width: '100%',
+              height: '60%',
+            }}
+            minHeight="40%"
+            maxHeight="60%"
+            enable={{
+              top: false,
+              right: false,
+              bottom: true,
+              left: false,
+            }}
+          >
+            <CookieTable cookies={cookies} />
+          </Resizable>
+          <div className="w-full h-full p-6 bg-white border border-gray-200 shadow overflow-auto">
+            <CookieDetails />
+          </div>
+        </div>
+      ) : (
+        <div className="w-full h-full flex items-center justify-center">
+          <div className="w-10 h-10 rounded-full animate-spin border-t-transparent border-solid border-blue-700 border-4" />
+        </div>
+      )}
     </div>
   );
 };
