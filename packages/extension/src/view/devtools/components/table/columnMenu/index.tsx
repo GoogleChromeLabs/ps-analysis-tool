@@ -35,20 +35,33 @@ interface ColumnMenuProps {
 }
 
 const ColumnMenu = ({ table, columns, open, onClose }: ColumnMenuProps) => {
+  const [startAnimation, setStartAnimation] = React.useState(false);
+
   const handleClose = () => {
     document.body.style.overflow = open ? 'auto' : 'hidden';
-    onClose(!open);
+    setStartAnimation(true);
+    setTimeout(() => {
+      onClose(!open);
+      setStartAnimation(false);
+    }, 300);
   };
 
   return (
     <>
       {open &&
         createPortal(
-          <>
-            <div className="absolute top-10 left-2 z-20 bg-white rounded-lg w-screen max-w-[15rem] w-fit border shadow-2xl shadow-slate-500 border-gray-300 py-2 mr-2 divide-y divide-neutral-300 max-h-[80vh] overflow-auto bg-stone-200">
+          <div
+            className={`transition duration-300 ${
+              startAnimation ? 'opacity-0' : 'opacity-100'
+            }`}
+          >
+            <div className="absolute top-10 left-2 z-20 bg-white rounded-lg w-screen max-w-[15rem] border shadow-2xl shadow-slate-500 border-gray-300 py-2 mr-2 divide-y divide-neutral-300 max-h-[80vh] overflow-auto bg-stone-200">
               <button
-                className="block w-full text-sm px-4 py-2 flex items-center font-semibold text-slate-700 hover:bg-blue-400 hover:text-white cursor-pointer"
-                onClick={table.getToggleAllColumnsVisibilityHandler()}
+                className="block w-full text-sm px-4 py-2 flex items-center font-semibold hover:bg-royal-blue hover:text-white cursor-pointer"
+                onClick={(e) => {
+                  table.getToggleAllColumnsVisibilityHandler()(e);
+                  handleClose();
+                }}
               >
                 <span
                   className={`mr-2 font-bold ${
@@ -59,14 +72,14 @@ const ColumnMenu = ({ table, columns, open, onClose }: ColumnMenuProps) => {
                 </span>
                 <span>Toggle All</span>
               </button>
-              <ColumnList columns={columns} />
+              <ColumnList columns={columns} handleClose={handleClose} />
             </div>
 
             <div
               onClick={handleClose}
-              className="absolute w-screen h-screen z-10 bg-white opacity-80 top-0 left-0"
+              className="absolute w-screen h-screen z-10 top-0 left-0"
             />
-          </>,
+          </div>,
           document.body
         )}
     </>

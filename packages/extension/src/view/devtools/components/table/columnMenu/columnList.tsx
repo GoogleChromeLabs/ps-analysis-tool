@@ -28,13 +28,18 @@ import type { TData } from '..';
 
 interface ColumnListProps {
   columns: Column<TData, unknown>[];
+  handleClose: () => void;
 }
 
-const ColumnList = ({ columns }: ColumnListProps) => {
+const ColumnList = ({ columns, handleClose }: ColumnListProps) => {
   return (
     <ul className="px-2 text-basic text-gray-700">
       {columns.map((column) => (
-        <ColumnListItem key={column.id} column={column} />
+        <ColumnListItem
+          key={column.id}
+          column={column}
+          handleClose={handleClose}
+        />
       ))}
     </ul>
   );

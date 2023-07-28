@@ -27,9 +27,10 @@ import type { TData } from '..';
 
 interface ColumnListItemProps {
   column: Column<TData, unknown>;
+  handleClose: () => void;
 }
 
-const ColumnListItem = ({ column }: ColumnListItemProps) => {
+const ColumnListItem = ({ column, handleClose }: ColumnListItemProps) => {
   return (
     <li
       key={column.id}
@@ -40,8 +41,11 @@ const ColumnListItem = ({ column }: ColumnListItemProps) => {
       }`}
     >
       <button
-        className="w-full rounded-md text-xs px-2 py-1.5 flex items-center text-slate-700 hover:bg-blue-400 hover:text-white select-none touch-none"
-        onClick={column.getToggleVisibilityHandler()}
+        className="w-full rounded-md text-xs px-2 py-1.5 flex items-center hover:bg-royal-blue hover:text-white select-none touch-none"
+        onClick={(e) => {
+          column.getToggleVisibilityHandler()(e);
+          handleClose();
+        }}
       >
         <span
           className={`mr-2 font-bold ${
