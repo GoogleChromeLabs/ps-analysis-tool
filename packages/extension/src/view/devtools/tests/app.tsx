@@ -78,6 +78,16 @@ describe('App', () => {
     ).toBeInTheDocument();
   });
 
+  it('should switch to Attribution Panel when clicked', async () => {
+    render(<App />);
+    // Click on FingerPrinting tab
+    fireEvent.click(screen.getByText('Attribution'));
+
+    expect(
+      await screen.findByTestId('attribution-content')
+    ).toBeInTheDocument();
+  });
+
   afterAll(() => {
     globalThis.chrome = undefined as unknown as typeof chrome;
     globalThis.fetch = undefined as unknown as typeof fetch;
