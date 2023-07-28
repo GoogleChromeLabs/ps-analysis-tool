@@ -29,20 +29,22 @@ const CookieStore = {
     const newCookies: { [key: string]: CookieData } = {};
 
     for (const cookie of cookies) {
-      if (cookie.parsedCookie.name) {
-        if (Object.keys(newCookies).includes(cookie.parsedCookie.name)) {
-          newCookies[cookie.parsedCookie.name] = {
-            ...newCookies[cookie.parsedCookie.name],
-            frameIdList: Array.from(
-              new Set([
-                ...newCookies[cookie.parsedCookie.name].frameIdList,
-                ...cookie.frameIdList,
-              ])
-            ),
-          };
-        } else {
-          newCookies[cookie.parsedCookie.name] = cookie;
-        }
+      if (!cookie.parsedCookie.name) {
+        continue;
+      }
+
+      if (Object.keys(newCookies).includes(cookie.parsedCookie.name)) {
+        newCookies[cookie.parsedCookie.name] = {
+          ...newCookies[cookie.parsedCookie.name],
+          frameIdList: Array.from(
+            new Set([
+              ...newCookies[cookie.parsedCookie.name].frameIdList,
+              ...cookie.frameIdList,
+            ])
+          ),
+        };
+      } else {
+        newCookies[cookie.parsedCookie.name] = cookie;
       }
     }
 
