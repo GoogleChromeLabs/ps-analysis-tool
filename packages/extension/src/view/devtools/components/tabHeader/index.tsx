@@ -17,6 +17,9 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
+/**
+ * Internal dependencies
+ */
 import Accordion from './accordion';
 import { File, FileWhite } from '../../../../icons';
 import { useCookieStore } from '../../stateProviders/syncCookieStore';
@@ -45,6 +48,7 @@ const TabHeader: React.FC<TabHeaderProps> = ({
       {tabsNames.map((name, index: number) => (
         <div
           key={name}
+          data-testid={name}
           className={`flex items-center cursor-pointer ${
             selectedIndex === index && name !== 'Cookies'
               ? 'bg-selected-background-color text-white'
