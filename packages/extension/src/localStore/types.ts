@@ -29,6 +29,7 @@ export type CookieData = {
   url: string;
   headerType: 'response' | 'request';
   isFirstParty: boolean | null;
+  frameIdList: number[];
 };
 
 export type TabData = {

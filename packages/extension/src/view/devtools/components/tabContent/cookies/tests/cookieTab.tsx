@@ -65,6 +65,7 @@ const mockResponse: {
       isFirstParty: true,
       isIbcCompliant: true,
       isCookieSet: true,
+      frameIdList: [1],
     },
     [uncategorised3pCookie.name]: {
       parsedCookie: uncategorised3pCookie,
@@ -74,6 +75,7 @@ const mockResponse: {
       isFirstParty: false,
       isIbcCompliant: true,
       isCookieSet: true,
+      frameIdList: [1],
     },
     [known1pCookie.name]: {
       parsedCookie: known1pCookie,
@@ -94,6 +96,7 @@ const mockResponse: {
       isFirstParty: true,
       isIbcCompliant: true,
       isCookieSet: true,
+      frameIdList: [1],
     },
     [known3pCookie.name]: {
       parsedCookie: known3pCookie,
@@ -114,6 +117,7 @@ const mockResponse: {
       isFirstParty: false,
       isIbcCompliant: true,
       isCookieSet: true,
+      frameIdList: [1],
     },
   },
   tabUrl: 'https://edition.cnn.com/',

@@ -38,13 +38,15 @@ import isFirstParty from '../utils/isFirstParty';
  * @param {string} value header value
  * @param {CookieDatabase} dictionary Dictionary from open cookie database
  * @param {string} tabUrl top url of the tab from which the request originated.
+ * @param {number} frameId Id of the frame the cookie is used in.
  * @returns {Promise<CookieData[]>} Parsed cookie object array.
  */
 const parseRequestCookieHeader = async (
   url: string,
   value: string,
   dictionary: CookieDatabase,
-  tabUrl: string
+  tabUrl: string,
+  frameId: number
 ): Promise<CookieData[]> => {
   try {
     return await Promise.all(
@@ -72,6 +74,7 @@ const parseRequestCookieHeader = async (
           headerType: 'request',
           url,
           isFirstParty: _isFirstParty,
+          frameIdList: [frameId],
         };
       })
     );
