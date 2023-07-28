@@ -57,6 +57,7 @@ const Accordion: React.FC<AccordionProps> = ({
   return (
     <div className="flex flex-col w-full">
       <div
+        data-testid="cookies-tab-heading-wrapper"
         className={`flex h-full flex-row items-center pl-4 pt-1.5 ${
           selectedIndex === index && !selectedFrame
             ? 'bg-selected-background-color text-white'
@@ -89,10 +90,14 @@ const Accordion: React.FC<AccordionProps> = ({
         </div>
         <p className="pl-1.5 truncate">{tabName}</p>
       </div>
-      <div className={`${accordionState ? 'flex flex-col' : 'hidden'}`}>
+      <div
+        data-testid="cookie-frames-container"
+        className={`${accordionState ? 'flex flex-col' : 'hidden'}`}
+      >
         {tabFrames &&
           Object.keys(tabFrames)?.map((key) => (
             <div
+              data-testid={key}
               key={key}
               onClick={() => setSelectedFrame(key)}
               className={`pl-9 py-0.5 h-5 flex items-center cursor-pointer ${
