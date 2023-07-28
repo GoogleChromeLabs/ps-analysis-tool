@@ -22,8 +22,8 @@ import type { Cookie as ParsedCookie } from 'simple-cookie';
 /**
  * Internal dependencies.
  */
-import type { CookieAnalytics } from '../../../../../../utils/fetchCookieDictionary';
-import type { CookieData } from '../../../../../../localStore';
+import type { CookieAnalytics } from '../../../../../../../../utils/fetchCookieDictionary';
+import type { CookieData } from '../../../../../../../../localStore';
 
 export const TempCookieData: CookieData[] = [
   {
@@ -48,6 +48,7 @@ export const TempCookieData: CookieData[] = [
     } as CookieAnalytics,
     url: 'https://example.com',
     headerType: 'response',
+    frameIdList: [],
   },
   {
     parsedCookie: {
@@ -70,6 +71,7 @@ export const TempCookieData: CookieData[] = [
     } as CookieAnalytics,
     url: 'https://example.com',
     headerType: 'response',
+    frameIdList: [],
   },
   {
     parsedCookie: {
@@ -92,6 +94,7 @@ export const TempCookieData: CookieData[] = [
     } as CookieAnalytics,
     url: 'https://example.com',
     headerType: 'response',
+    frameIdList: [],
   },
   {
     parsedCookie: {
@@ -114,6 +117,7 @@ export const TempCookieData: CookieData[] = [
     } as CookieAnalytics,
     url: 'https://example.com',
     headerType: 'response',
+    frameIdList: [],
   },
   {
     parsedCookie: {
@@ -136,6 +140,7 @@ export const TempCookieData: CookieData[] = [
     } as CookieAnalytics,
     url: 'https://example.com',
     headerType: 'response',
+    frameIdList: [],
   },
   {
     parsedCookie: {
@@ -158,6 +163,7 @@ export const TempCookieData: CookieData[] = [
     } as CookieAnalytics,
     url: 'https://example.com',
     headerType: 'response',
+    frameIdList: [],
   },
   {
     parsedCookie: {
@@ -180,6 +186,7 @@ export const TempCookieData: CookieData[] = [
     } as CookieAnalytics,
     url: 'https://example.com',
     headerType: 'response',
+    frameIdList: [],
   },
   {
     parsedCookie: {
@@ -202,6 +209,7 @@ export const TempCookieData: CookieData[] = [
     } as CookieAnalytics,
     url: 'https://example.com',
     headerType: 'response',
+    frameIdList: [],
   },
   {
     parsedCookie: {
@@ -224,6 +232,7 @@ export const TempCookieData: CookieData[] = [
     } as CookieAnalytics,
     url: 'https://example.com',
     headerType: 'response',
+    frameIdList: [],
   },
   {
     parsedCookie: {
@@ -246,6 +255,7 @@ export const TempCookieData: CookieData[] = [
     } as CookieAnalytics,
     url: 'https://example.com',
     headerType: 'response',
+    frameIdList: [],
   },
   {
     parsedCookie: {
@@ -268,6 +278,7 @@ export const TempCookieData: CookieData[] = [
     } as CookieAnalytics,
     url: 'https://example.com',
     headerType: 'response',
+    frameIdList: [],
   },
   {
     parsedCookie: {
@@ -290,6 +301,7 @@ export const TempCookieData: CookieData[] = [
     } as CookieAnalytics,
     url: 'https://example.com',
     headerType: 'response',
+    frameIdList: [],
   },
   {
     parsedCookie: {
@@ -312,6 +324,7 @@ export const TempCookieData: CookieData[] = [
     } as CookieAnalytics,
     url: 'https://example.com',
     headerType: 'response',
+    frameIdList: [],
   },
   {
     parsedCookie: {
@@ -334,6 +347,7 @@ export const TempCookieData: CookieData[] = [
     } as CookieAnalytics,
     url: 'https://example.com',
     headerType: 'response',
+    frameIdList: [],
   },
   {
     parsedCookie: {
@@ -356,6 +370,7 @@ export const TempCookieData: CookieData[] = [
     } as CookieAnalytics,
     url: 'https://example.com',
     headerType: 'response',
+    frameIdList: [],
   },
   {
     parsedCookie: {
@@ -378,6 +393,7 @@ export const TempCookieData: CookieData[] = [
     } as CookieAnalytics,
     url: 'https://example.com',
     headerType: 'response',
+    frameIdList: [],
   },
   {
     parsedCookie: {
@@ -400,6 +416,7 @@ export const TempCookieData: CookieData[] = [
     } as CookieAnalytics,
     url: 'https://example.com',
     headerType: 'response',
+    frameIdList: [],
   },
   {
     parsedCookie: {
@@ -422,6 +439,7 @@ export const TempCookieData: CookieData[] = [
     } as CookieAnalytics,
     url: 'https://example.com',
     headerType: 'response',
+    frameIdList: [],
   },
   {
     parsedCookie: {
@@ -444,6 +462,7 @@ export const TempCookieData: CookieData[] = [
     } as CookieAnalytics,
     url: 'https://example.com',
     headerType: 'response',
+    frameIdList: [],
   },
   {
     parsedCookie: {
@@ -466,5 +485,6 @@ export const TempCookieData: CookieData[] = [
     } as CookieAnalytics,
     url: 'https://example.com',
     headerType: 'response',
+    frameIdList: [],
   },
 ];

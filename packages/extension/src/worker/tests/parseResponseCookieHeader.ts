@@ -34,7 +34,8 @@ describe('parseResponseCookieHeader', () => {
     const parsedCookie = await parseResponseCookieHeader(
       'https://example.com/public/api/alerts',
       'countryCode=IN; Domain=.example.com; Path=/; SameSite=None; Secure',
-      {}
+      {},
+      1
     );
 
     expect(parsedCookie).toEqual({
@@ -51,10 +52,11 @@ describe('parseResponseCookieHeader', () => {
       analytics: { ...emptyAnalytics },
       url: 'https://example.com/public/api/alerts',
       headerType: 'response',
+      frameIdList: [1],
     });
   });
 
-  it('Should parse and add add analytics', async () => {
+  it('Should parse and add analytics', async () => {
     const parsedCookie = await parseResponseCookieHeader(
       'https://example.com/public/api/alerts',
       'test_cookie=bla; Domain=.example.com; Path=/; SameSite=None; Secure',
@@ -73,7 +75,8 @@ describe('parseResponseCookieHeader', () => {
             wildcard: '0',
           },
         ],
-      }
+      },
+      1
     );
 
     expect(parsedCookie).toEqual({
@@ -101,10 +104,11 @@ describe('parseResponseCookieHeader', () => {
       },
       url: 'https://example.com/public/api/alerts',
       headerType: 'response',
+      frameIdList: [1],
     });
   });
 
-  it('Should parse and add add analytics for wild card entries', async () => {
+  it('Should parse and add analytics for wild card entries', async () => {
     const parsedCookie = await parseResponseCookieHeader(
       'https://google.com/public/api/alerts',
       '_ga_123=bla; Domain=.google.com; Path=/; SameSite=None; Secure',
@@ -137,7 +141,8 @@ describe('parseResponseCookieHeader', () => {
             wildcard: '1',
           },
         ],
-      }
+      },
+      1
     );
 
     expect(parsedCookie).toEqual({
@@ -165,6 +170,7 @@ describe('parseResponseCookieHeader', () => {
       },
       url: 'https://google.com/public/api/alerts',
       headerType: 'response',
+      frameIdList: [1],
     });
   });
 });
