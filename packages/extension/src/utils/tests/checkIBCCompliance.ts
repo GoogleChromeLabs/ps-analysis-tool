@@ -20,19 +20,29 @@
 import { checkIBCCompliance } from '../checkIBCCompliance';
 
 describe('checkIBCCompliance: ', () => {
-  it('Should be true when samesite is none, secure is false and chromeCookieStore is false', () => {
-    expect(checkIBCCompliance('none', false, false)).toBe(true);
+  it('Should be true when SameSite=None, Secure=True and cookie is not present in cookieStore', () => {
+    expect(checkIBCCompliance('none', true, false)).toBe(false);
   });
 
-  it('Should be false when samesite is none, secure is false and chromeCookieStore is true', () => {
+  it('Should be false when SameSite=None, Secure=true and cookie is present in cookieStore', () => {
     expect(checkIBCCompliance('none', false, true)).toBe(false);
   });
 
-  it('Should be false when samesite is lax, secure is false and chromeCookieStore is false', () => {
-    expect(checkIBCCompliance('lax', false, false)).toBe(false);
+  it('Should be true when SameSite=None, Secure=false and cookie not is present in cookieStore', () => {
+    expect(checkIBCCompliance('none', false, false)).toBe(true);
   });
 
-  it('Should be true when samesite is lax, secure is false and chromeCookieStore is true', () => {
+  it('Should be false when SameSite=None, Secure=false and cookie is present in cookieStore', () => {
+    expect(checkIBCCompliance('none', false, true)).toBe(false);
+  });
+
+  it('Should be true when SameSite=Lax or Strict, Secure=false and cookie is present in cookieStore', () => {
     expect(checkIBCCompliance('lax', false, true)).toBe(true);
+    expect(checkIBCCompliance('Strict', false, true)).toBe(true);
+  });
+
+  it('Should be false when SameSite=Lax or Strict, Secure=false and cookie not is present in cookieStore', () => {
+    expect(checkIBCCompliance('lax', false, false)).toBe(false);
+    expect(checkIBCCompliance('Strict', false, false)).toBe(false);
   });
 });
