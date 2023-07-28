@@ -40,7 +40,7 @@ const ColumnListItem = ({ column }: ColumnListItemProps) => {
       }`}
     >
       <button
-        className="w-full rounded-lg px-4 py-2 flex items-center hover:bg-gray-100 select-none touch-none"
+        className="w-full rounded-md text-xs px-2 py-1.5 flex items-center text-slate-700 hover:bg-blue-400 hover:text-white select-none touch-none"
         onClick={column.getToggleVisibilityHandler()}
       >
         <span
