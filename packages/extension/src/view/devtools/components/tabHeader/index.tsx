@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 /**
  * Internal dependencies
  */
@@ -43,6 +43,17 @@ const TabHeader: React.FC<TabHeaderProps> = ({
       selectedFrame: state.selectedFrame,
     })
   );
+
+  const mainMenuTabSelector = useCallback(
+    (index: number) => {
+      setIndex(index);
+      if (selectedFrame && index !== selectedIndex) {
+        setSelectedFrame(null);
+      }
+    },
+    [selectedFrame, setIndex, setSelectedFrame, selectedIndex]
+  );
+
   return (
     <>
       {tabsNames.map((name, index: number) => (
@@ -54,12 +65,7 @@ const TabHeader: React.FC<TabHeaderProps> = ({
               ? 'bg-selected-background-color text-white'
               : ''
           }`}
-          onClick={() => {
-            setIndex(index);
-            if (selectedFrame) {
-              setSelectedFrame(null);
-            }
-          }}
+          onClick={() => mainMenuTabSelector(index)}
         >
           {name === 'Cookies' ? (
             <Accordion

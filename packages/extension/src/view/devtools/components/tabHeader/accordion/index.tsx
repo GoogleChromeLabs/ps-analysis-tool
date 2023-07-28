@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useCallback } from 'react';
 /**
  * Internal dependencies
  */
@@ -54,6 +54,11 @@ const Accordion: React.FC<AccordionProps> = ({
   setSelectedFrame,
   selectedFrame,
 }) => {
+  const subMenuSelected = useCallback(() => {
+    setAccordionState(!accordionState);
+    setSelectedFrame(null);
+  }, [accordionState, setAccordionState, setSelectedFrame]);
+
   return (
     <div className="flex flex-col w-full">
       <div
@@ -63,10 +68,7 @@ const Accordion: React.FC<AccordionProps> = ({
             ? 'bg-selected-background-color text-white'
             : ''
         }`}
-        onClick={() => {
-          setAccordionState(!accordionState);
-          setSelectedFrame(null);
-        }}
+        onClick={subMenuSelected}
       >
         <div>
           {accordionState ? (
