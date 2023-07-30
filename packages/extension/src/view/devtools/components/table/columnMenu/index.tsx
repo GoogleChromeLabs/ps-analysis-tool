@@ -55,9 +55,9 @@ const ColumnMenu = ({ table, columns, open, onClose }: ColumnMenuProps) => {
               startAnimation ? 'opacity-0' : 'opacity-100'
             }`}
           >
-            <div className="absolute top-10 left-2 z-20 bg-white rounded-lg w-screen max-w-[15rem] border shadow-2xl shadow-slate-500 border-gray-300 py-2 mr-2 divide-y divide-neutral-300 max-h-[80vh] overflow-auto bg-stone-200">
+            <div className="absolute top-10 left-2 z-20 bg-white rounded-lg w-screen max-w-[15rem] border shadow-2xl shadow-slate-500 border-gray-300 px-2 py-2 mr-2 divide-y divide-neutral-300 max-h-[80vh] overflow-auto bg-stone-200">
               <button
-                className="block w-full text-sm px-4 py-2 flex items-center font-semibold hover:bg-royal-blue hover:text-white cursor-pointer"
+                className="block w-full text-sm rounded px-4 py-1 mt-1 mb-2 flex items-center font-semibold hover:bg-royal-blue hover:text-white cursor-pointer"
                 onClick={(e) => {
                   table.getToggleAllColumnsVisibilityHandler()(e);
                   handleClose();
