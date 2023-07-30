@@ -191,6 +191,51 @@ describe('CookieTab', () => {
     ).toBeInTheDocument();
   });
 
+  it('should open column menu when right click on header cell', async () => {
+    render(<CookieTab />);
+
+    const headerCell = (await screen.findAllByTestId('header-cell'))[0];
+    fireEvent.contextMenu(headerCell);
+
+    expect(await screen.findByTestId('column-menu')).toBeInTheDocument();
+
+    const toggleAll = await screen.findByText('Toggle All');
+    fireEvent.click(toggleAll);
+
+    expect(await screen.findAllByTestId('header-cell')).toHaveLength(1);
+
+    fireEvent.contextMenu(headerCell);
+    fireEvent.click(toggleAll);
+  });
+
+  it('should remove one columne when click on column menu list item', async () => {
+    render(<CookieTab />);
+
+    const headerCell = (await screen.findAllByTestId('header-cell'))[0];
+    fireEvent.contextMenu(headerCell);
+
+    const columnMenu = await screen.findByTestId('column-menu');
+
+    const value = await within(columnMenu).findByText('Value');
+    fireEvent.click(value);
+
+    expect(await screen.findAllByTestId('header-cell')).not.toContain(value);
+  });
+
+  it('should columnMenu close when click on outside', async () => {
+    render(<CookieTab />);
+
+    const headerCell = (await screen.findAllByTestId('header-cell'))[0];
+    fireEvent.contextMenu(headerCell);
+
+    const columnMenuOverlay = await screen.findByTestId('column-menu-overlay');
+    fireEvent.click(columnMenuOverlay);
+
+    setTimeout(() => {
+      expect(screen.queryByTestId('column-menu')).not.toBeInTheDocument();
+    }, 1000);
+  });
+
   it('should render a cookie card with placeholder text when no cookie is selected', async () => {
     mockUseContentPanelStore.mockReturnValue({
       selectedCookie: null,

@@ -54,6 +54,7 @@ const ColumnMenu = ({ table, columns, open, onClose }: ColumnMenuProps) => {
             className={`transition duration-300 ${
               startAnimation ? 'opacity-0' : 'opacity-100'
             }`}
+            data-testid="column-menu"
           >
             <div className="absolute top-10 left-2 z-20 bg-white rounded-lg w-screen max-w-[15rem] border shadow-2xl shadow-slate-500 border-gray-300 px-2 py-2 mr-2 divide-y divide-neutral-300 max-h-[80vh] overflow-auto bg-stone-200">
               <button
@@ -76,6 +77,7 @@ const ColumnMenu = ({ table, columns, open, onClose }: ColumnMenuProps) => {
             </div>
 
             <div
+              data-testid="column-menu-overlay"
               onClick={handleClose}
               className="absolute w-screen h-screen z-10 top-0 left-0"
             />
