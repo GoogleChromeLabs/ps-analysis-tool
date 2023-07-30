@@ -66,7 +66,9 @@ const tableColumns: ColumnDef<CookieData>[] = [
   {
     header: 'HttpOnly',
     accessorKey: 'parsedCookie.httponly',
-    cell: (info) => (info.getValue() ? '✓' : ''),
+    cell: (info) => (
+      <p className="text-center w-full">{info.getValue() ? '✓' : ''}</p>
+    ),
   },
   {
     header: 'SameSite',
@@ -78,7 +80,9 @@ const tableColumns: ColumnDef<CookieData>[] = [
   {
     header: 'Secure',
     accessorKey: 'parsedCookie.secure',
-    cell: (info) => (info.getValue() ? '✓' : ''),
+    cell: (info) => (
+      <p className="text-center w-full">{info.getValue() ? '✓' : ''}</p>
+    ),
   },
   {
     header: 'Category',

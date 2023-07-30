@@ -33,7 +33,9 @@ const BodyCell = ({ cell }: BodyCellProps) => {
   return (
     <td
       style={{ maxWidth: cell.column.getSize() }}
-      className="border border-y-0 p-1 truncate border-zinc-300"
+      className={`border border-y-0 px-1 py-px truncate border-american-silver h-5 text-xs ${
+        cell.column.columnDef.header === 'Name' ? 'pl-5' : ''
+      }`}
     >
       {flexRender(cell.column.columnDef.cell, cell.getContext())}
     </td>
