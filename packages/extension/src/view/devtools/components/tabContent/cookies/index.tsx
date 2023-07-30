@@ -38,10 +38,10 @@ const Cookies = () => {
           <Resizable
             defaultSize={{
               width: '100%',
-              height: '60%',
+              height: '80%',
             }}
-            minHeight="40%"
-            maxHeight="60%"
+            minHeight="20%"
+            maxHeight="80%"
             enable={{
               top: false,
               right: false,
@@ -51,7 +51,7 @@ const Cookies = () => {
           >
             <CookieTable cookies={cookies} />
           </Resizable>
-          <div className="w-full h-full p-6 bg-white border border-gray-200 shadow overflow-auto">
+          <div className="w-full h-full px-1.5 py-0.5 bg-white border-2 border-gray-200 shadow overflow-auto">
             <CookieDetails />
           </div>
         </div>
