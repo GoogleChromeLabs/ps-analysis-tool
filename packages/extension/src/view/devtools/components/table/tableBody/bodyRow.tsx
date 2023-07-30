@@ -37,8 +37,8 @@ const BodyRow = ({ row, index, selectedKey, onRowClick }: BodyRowProps) => {
   return (
     <tr
       key={row.id}
-      className={`${index % 2 ? 'bg-gray-100' : ''} ${
-        row.original.parsedCookie.name === selectedKey ? 'bg-gray-300' : ''
+      className={`${index % 2 ? 'bg-anti-flash-white' : ''} ${
+        row.original.parsedCookie.name === selectedKey ? 'bg-gainsboro' : ''
       } hover:bg-gray-200 cursor-pointer`}
       onClick={() => {
         onRowClick(row.original);

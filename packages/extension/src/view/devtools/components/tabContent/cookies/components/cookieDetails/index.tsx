@@ -30,22 +30,24 @@ const CookieDetails = () => {
   }));
 
   return (
-    <div data-testid="cookie-card">
+    <div data-testid="cookie-card" className="h-full">
       {selectedCookie ? (
-        <div className="bg-gray-100 p-4 rounded-lg">
-          <p className="text-base font-bold text-gray-800">Cookie Value :</p>
-          <p className="text-sm text-gray-700 mb-4 break-words">
+        <div className="text-xs rounded-lg">
+          <p className="font-bold text-granite-gray mb-1 text-semibold">
+            Cookie Value
+          </p>
+          <p className="mb-4 break-words">
             {selectedCookie.parsedCookie.value}
           </p>
-          <p className="text-base font-bold text-gray-800">Description :</p>
-          <p className="text-sm text-gray-600">
+          <p className="font-bold text-granite-gray mb-1">Description</p>
+          <p>
             {selectedCookie.analytics?.description ||
               'No description available.'}
           </p>
         </div>
       ) : (
         <div className="h-full flex justify-center items-center">
-          <p className="text-3xl font-bold text-zinc-600">
+          <p className="text-lg font-bold text-granite-gray">
             Select a cookie to preview its details
           </p>
         </div>

@@ -35,12 +35,19 @@ module.exports = {
       'first-party': '#5FA569',
       'third-party': '#FA752E',
       'chart-label': '#111B21',
+      'granite-gray': '#5F6369',
     },
     backgroundColor: {
       ...colors,
       primary: '#FFF',
       secondary: '#E5E7EB',
       tertiary: '#CBD5E1',
+      'anti-flash-white': '#F1F3F4',
+      gainsboro: '#DADCE0',
+    },
+    borderColor: {
+      ...colors,
+      'american-silver': '#CBCDD1',
     },
   },
 };

@@ -35,10 +35,10 @@ const HeaderCell = ({ header }: HeaderCellProps) => {
     <th
       colSpan={header.colSpan}
       style={{ maxWidth: header.getSize() }}
-      className="border border-zinc-300 relative hover:bg-gray-300 select-none touch-none cursor-pointer font-normal"
+      className="border border-american-silver relative hover:bg-gainsboro select-none touch-none cursor-pointer font-normal"
     >
       <div className="w-full h-full flex items-center justify-between">
-        <p className="p-0.5 truncate">
+        <p className="px-1 py-px truncate text-xs">
           {header.isPlaceholder
             ? null
             : flexRender(header.column.columnDef.header, header.getContext())}
