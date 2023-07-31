@@ -69,7 +69,7 @@ const tableColumns: ColumnDef<CookieData>[] = [
     accessorKey: 'parsedCookie.httponly',
     cell: (info) => (
       <p className="flex justify-center items-center">
-        {info.getValue() ? <CheckIcon /> : ''}
+        {info.getValue() ? <CheckIcon className="scale-125" /> : ''}
       </p>
     ),
   },
@@ -85,7 +85,7 @@ const tableColumns: ColumnDef<CookieData>[] = [
     accessorKey: 'parsedCookie.secure',
     cell: (info) => (
       <p className="flex justify-center items-center">
-        {info.getValue() ? <CheckIcon /> : ''}
+        {info.getValue() ? <CheckIcon className="scale-125" /> : ''}
       </p>
     ),
   },
