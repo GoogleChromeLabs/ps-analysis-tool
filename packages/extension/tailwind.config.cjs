@@ -36,6 +36,7 @@ module.exports = {
       'third-party': '#FA752E',
       'chart-label': '#111B21',
       'granite-gray': '#5F6369',
+      'outer-space': '#303942',
     },
     backgroundColor: {
       ...colors,
@@ -44,6 +45,7 @@ module.exports = {
       tertiary: '#CBD5E1',
       'anti-flash-white': '#F1F3F4',
       gainsboro: '#DADCE0',
+      'american-silver': '#CBCDD1',
     },
     borderColor: {
       ...colors,
