@@ -28,6 +28,7 @@ import type {
 } from '../utils/fetchCookieDictionary';
 import findAnalyticsMatch from './findAnalyticsMatch';
 import { createCookieObject } from './createCookieObject';
+import isFirstParty from '../utils/isFirstParty';
 
 /**
  * Parse response cookies header.
@@ -35,6 +36,7 @@ import { createCookieObject } from './createCookieObject';
  * @param {string} url Cookie URL (URL of the server which is setting/updating cookies).
  * @param {string} value header value
  * @param {CookieDatabase} dictionary Dictionary from open cookie database
+ * @param {string} tabUrl top url of the tab from which the request originated.
  * @param {number} frameId Id of a frame in which this cookie is used.
  * @returns {Promise<CookieData>} Parsed cookie object.
  */
@@ -42,6 +44,7 @@ const parseResponseCookieHeader = async (
   url: string,
   value: string,
   dictionary: CookieDatabase,
+  tabUrl: string,
   frameId: number
 ): Promise<CookieData> => {
   let parsedCookie: ParsedCookie = cookie.parse(value);
@@ -52,11 +55,14 @@ const parseResponseCookieHeader = async (
     analytics = findAnalyticsMatch(parsedCookie.name, dictionary);
   }
 
+  const _isFirstParty = isFirstParty(parsedCookie.domain || '', tabUrl);
+
   return {
     parsedCookie,
     analytics,
     url,
     headerType: 'response',
+    isFirstParty: _isFirstParty,
     frameIdList: [frameId],
   };
 };
