@@ -123,6 +123,14 @@ describe('local store: CookieStore', () => {
     });
   });
 
+  it('should delte cookies', async () => {
+    await CookieStore.update('123', cookieArray);
+    await CookieStore.deleteCookie('countryCode1');
+    expect(storage['123'].cookies).toStrictEqual({
+      countryCode2: cookieArray[1],
+    });
+  });
+
   it('should add/update tab data and merge frame id list', async () => {
     await CookieStore.update('123', [
       cookieArray[0],
