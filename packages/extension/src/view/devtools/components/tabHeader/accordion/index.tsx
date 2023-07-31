@@ -118,7 +118,12 @@ const Accordion: React.FC<AccordionProps> = ({
               <div className="h-4">
                 {selectedFrame === key ? <CookieWhite /> : <CookieGray />}
               </div>
-              <p className="pl-1.5 truncate">{key}</p>
+              <p
+                className="pl-1.5 truncate"
+                title={`Cookies used by frames ${key}`}
+              >
+                {key}
+              </p>
             </div>
           ))}
       </div>
