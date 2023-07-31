@@ -29,8 +29,6 @@ describe('Accordion', () => {
   it('Should frames listed under accordion', () => {
     render(
       <Accordion
-        accordionState={true}
-        setAccordionState={() => undefined}
         tabName={'Cookies'}
         index={1}
         selectedIndex={1}
@@ -52,8 +50,6 @@ describe('Accordion', () => {
   it('should unselect cookie header and show frame as selected', () => {
     render(
       <Accordion
-        accordionState={true}
-        setAccordionState={() => undefined}
         tabName={'Cookies'}
         index={1}
         selectedIndex={1}
@@ -81,8 +77,6 @@ describe('Accordion', () => {
   it('should not display anything when there are not tabFrames', () => {
     render(
       <Accordion
-        accordionState={true}
-        setAccordionState={() => undefined}
         tabName={'Cookies'}
         index={1}
         selectedIndex={1}
@@ -100,8 +94,6 @@ describe('Accordion', () => {
   it('should not display tabFrames if not opened.', () => {
     render(
       <Accordion
-        accordionState={false}
-        setAccordionState={() => undefined}
         tabName={'Cookies'}
         index={1}
         selectedIndex={1}
@@ -122,8 +114,6 @@ describe('Accordion', () => {
   it('should not display tabFrames if not opened.', () => {
     const renderedAccordion = render(
       <Accordion
-        accordionState={false}
-        setAccordionState={() => undefined}
         tabName={'Cookies'}
         index={1}
         selectedIndex={1}
@@ -147,8 +137,6 @@ describe('Accordion', () => {
     fireEvent.click(secondFrame);
     renderedAccordion.rerender(
       <Accordion
-        accordionState={false}
-        setAccordionState={() => undefined}
         tabName={'Cookies'}
         index={1}
         selectedIndex={1}
