@@ -247,7 +247,7 @@ describe('CookieTab', () => {
     render(<CookieDetails />);
 
     expect(
-      await screen.findByText('Select a cookie to preview its details')
+      await screen.findByText('Select a cookie to preview its value')
     ).toBeInTheDocument();
   });
 
