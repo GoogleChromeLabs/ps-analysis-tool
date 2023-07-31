@@ -114,7 +114,7 @@ const Accordion: React.FC<AccordionProps> = ({
               </div>
               <p
                 className="pl-1.5 truncate"
-                title={`Cookies used by frames ${key}`}
+                title={`Cookies used by frames from ${key}`}
               >
                 {key}
               </p>
