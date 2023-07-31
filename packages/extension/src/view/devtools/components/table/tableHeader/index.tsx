@@ -32,7 +32,7 @@ interface TableHeaderProps {
 
 const TableHeader = ({ headerGroups }: TableHeaderProps) => {
   return (
-    <thead className="sticky -top-px">
+    <thead className="sticky top-0">
       {headerGroups.map((headerGroup) => (
         <HeaderRow key={headerGroup.id} headerGroup={headerGroup} />
       ))}

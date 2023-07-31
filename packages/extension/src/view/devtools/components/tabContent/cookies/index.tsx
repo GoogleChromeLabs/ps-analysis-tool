@@ -32,7 +32,10 @@ const Cookies = () => {
   }));
 
   return (
-    <div className="h-full" data-testid="cookies-content">
+    <div
+      className="h-full border border-american-silver"
+      data-testid="cookies-content"
+    >
       {cookies.length > 0 ? (
         <div className="h-full flex flex-col">
           <Resizable
@@ -51,7 +54,7 @@ const Cookies = () => {
           >
             <CookieTable cookies={cookies} />
           </Resizable>
-          <div className="w-full h-full bg-white border-2 border-gray-200 shadow overflow-auto">
+          <div className="w-full h-full bg-white border-2 border-gray-300 shadow overflow-auto">
             <CookieDetails />
           </div>
         </div>

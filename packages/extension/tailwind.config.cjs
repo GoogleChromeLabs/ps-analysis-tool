@@ -45,6 +45,7 @@ module.exports = {
       tertiary: '#CBD5E1',
       'anti-flash-white': '#F1F3F4',
       gainsboro: '#DADCE0',
+      'american-silver': '#CBCDD1',
     },
     borderColor: {
       ...colors,
