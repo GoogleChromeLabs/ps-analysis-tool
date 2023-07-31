@@ -24,13 +24,13 @@ import Accordion from './accordion';
 import { File, FileWhite } from '../../../../icons';
 import { useCookieStore } from '../../stateProviders/syncCookieStore';
 
-interface TabHeaderProps {
+interface SidebarProps {
   tabsNames: string[];
   selectedIndex: number;
   setIndex: (index: number) => void;
 }
 
-const TabHeader: React.FC<TabHeaderProps> = ({
+const Sidebar: React.FC<SidebarProps> = ({
   tabsNames,
   selectedIndex,
   setIndex,
@@ -90,4 +90,4 @@ const TabHeader: React.FC<TabHeaderProps> = ({
   );
 };
 
-export default TabHeader;
+export default Sidebar;

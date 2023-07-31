@@ -24,7 +24,7 @@ import { type Cookie as ParsedCookie } from 'simple-cookie';
 /**
  * Internal dependencies.
  */
-import TabHeader from '..';
+import Sidebar from '..';
 import {
   useCookieStore,
   type CookieStoreContext,
@@ -139,7 +139,7 @@ jest.mock('../../../stateProviders/syncCookieStore', () => ({
 
 const mockUseCookieStore = useCookieStore as jest.Mock;
 
-describe('TabHeader', () => {
+describe('Sidebar', () => {
   it('Should render with first menu item selected', () => {
     mockUseCookieStore.mockReturnValue({
       cookies: mockResponse.tabCookies,
@@ -149,7 +149,7 @@ describe('TabHeader', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     render(
-      <TabHeader
+      <Sidebar
         tabsNames={tabNames}
         selectedIndex={0}
         setIndex={() => undefined}
@@ -168,8 +168,8 @@ describe('TabHeader', () => {
       selectedFrame: null,
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
-    const tabHeaderRender = render(
-      <TabHeader
+    const sidebarRenderer = render(
+      <Sidebar
         tabsNames={tabNames}
         selectedIndex={0}
         setIndex={() => undefined}
@@ -187,8 +187,8 @@ describe('TabHeader', () => {
 
     fireEvent.click(attributionContainer);
 
-    tabHeaderRender.rerender(
-      <TabHeader
+    sidebarRenderer.rerender(
+      <Sidebar
         tabsNames={tabNames}
         selectedIndex={2}
         setIndex={() => undefined}
@@ -211,7 +211,7 @@ describe('TabHeader', () => {
     });
 
     render(
-      <TabHeader
+      <Sidebar
         tabsNames={tabNames}
         selectedIndex={0}
         setIndex={() => undefined}
@@ -240,7 +240,7 @@ describe('TabHeader', () => {
     });
 
     const tahHeaderContainer = render(
-      <TabHeader
+      <Sidebar
         tabsNames={tabNames}
         selectedIndex={0}
         setIndex={() => undefined}
@@ -268,7 +268,7 @@ describe('TabHeader', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     tahHeaderContainer.rerender(
-      <TabHeader
+      <Sidebar
         tabsNames={tabNames}
         selectedIndex={2}
         setIndex={() => undefined}

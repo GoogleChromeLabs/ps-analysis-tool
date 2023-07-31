@@ -29,7 +29,7 @@ import {
   Attribution,
   BounceTracking,
   Fingerprinting,
-  TabHeader,
+  Sidebar,
 } from './components';
 
 const TABS = [
@@ -95,7 +95,7 @@ const App: React.FC = () => {
           onResizeStop={setWidthOnResizeStop}
           className="w-1/4 h-full flex flex-col pt-3.5 overflow-y-auto overflow-x-clip border-solid border-r border-b border-t border-selected-background-color"
         >
-          <TabHeader
+          <Sidebar
             tabsNames={tabNames}
             selectedIndex={selectedTabIndex}
             setIndex={setSelectedTabIndex}
