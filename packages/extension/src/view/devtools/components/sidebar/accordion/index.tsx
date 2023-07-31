@@ -21,12 +21,10 @@ import React, { useCallback, useState } from 'react';
  * Internal dependencies
  */
 import {
-  ArrowRight,
   ArrowDown,
   CookieGray,
   CookieWhite,
   ArrowDownWhite,
-  ArrowRightWhite,
 } from '../../../../../icons';
 
 interface AccordionProps {
@@ -69,17 +67,16 @@ const Accordion: React.FC<AccordionProps> = ({
         }`}
         onClick={() => setIndex(index)}
       >
-        <div onClick={subMenuSelected}>
-          {accordionState ? (
-            selectedIndex === index && !selectedFrame ? (
-              <ArrowDownWhite />
-            ) : (
-              <ArrowDown />
-            )
-          ) : selectedIndex === index && !selectedFrame ? (
-            <ArrowRightWhite />
+        <div
+          className={`origin-center transition-transform ${
+            accordionState ? '' : '-rotate-90'
+          }`}
+          onClick={subMenuSelected}
+        >
+          {selectedIndex === index && !selectedFrame ? (
+            <ArrowDownWhite />
           ) : (
-            <ArrowRight />
+            <ArrowDown />
           )}
         </div>
         <div className="pl-1">
