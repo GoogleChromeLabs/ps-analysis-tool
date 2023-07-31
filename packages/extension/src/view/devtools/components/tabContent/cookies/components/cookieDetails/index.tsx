@@ -47,13 +47,13 @@ const CookieDetails = () => {
               <span>Show URL-decoded</span>
             </label>
           </p>
-          <p className="mb-4 break-words">
+          <p className="mb-4 break-words text-outer-space">
             {showUrlDecoded
               ? decodeURIComponent(selectedCookie.parsedCookie.value)
               : selectedCookie.parsedCookie.value}
           </p>
           <p className="font-bold text-granite-gray mb-1">Description</p>
-          <p>
+          <p className="text-outer-space">
             {selectedCookie.analytics?.description ||
               'No description available.'}
           </p>

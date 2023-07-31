@@ -36,6 +36,7 @@ const cookieArray: CookieData[] = [
     analytics: null,
     url: 'https://example.com',
     headerType: 'response',
+    isFirstParty: false,
   },
   {
     parsedCookie: {
@@ -52,6 +53,7 @@ const cookieArray: CookieData[] = [
     analytics: null,
     url: 'https://example.com',
     headerType: 'response',
+    isFirstParty: false,
   },
 ];
 
@@ -117,6 +119,14 @@ describe('local store: CookieStore', () => {
     await CookieStore.update('123', cookieArray);
     expect(storage['123'].cookies).toStrictEqual({
       countryCode1: cookieArray[0],
+      countryCode2: cookieArray[1],
+    });
+  });
+
+  it('should delte cookies', async () => {
+    await CookieStore.update('123', cookieArray);
+    await CookieStore.deleteCookie('countryCode1');
+    expect(storage['123'].cookies).toStrictEqual({
       countryCode2: cookieArray[1],
     });
   });
