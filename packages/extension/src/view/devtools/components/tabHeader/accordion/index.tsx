@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 /**
  * Internal dependencies
  */
@@ -30,8 +30,6 @@ import {
 } from '../../../../../icons';
 
 interface AccordionProps {
-  accordionState: boolean;
-  setAccordionState: (state: boolean) => void;
   tabName: string;
   index: number;
   selectedIndex: number;
@@ -46,8 +44,6 @@ interface AccordionProps {
 }
 
 const Accordion: React.FC<AccordionProps> = ({
-  accordionState,
-  setAccordionState,
   tabName,
   index,
   selectedIndex,
@@ -56,6 +52,7 @@ const Accordion: React.FC<AccordionProps> = ({
   selectedFrame,
   setIndex,
 }) => {
+  const [accordionState, setAccordionState] = useState(false);
   const subMenuSelected = useCallback(() => {
     setAccordionState(!accordionState);
     setSelectedFrame(null);

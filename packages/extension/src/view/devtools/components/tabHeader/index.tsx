@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 /**
  * Internal dependencies
  */
@@ -35,7 +35,6 @@ const TabHeader: React.FC<TabHeaderProps> = ({
   selectedIndex,
   setIndex,
 }) => {
-  const [accordionState, setAccordionState] = useState(false);
   const { setSelectedFrame, selectedFrame, tabFrames } = useCookieStore(
     ({ state, actions }) => ({
       setSelectedFrame: actions.setSelectedFrame,
@@ -72,8 +71,6 @@ const TabHeader: React.FC<TabHeaderProps> = ({
               selectedIndex={selectedIndex}
               index={index}
               tabName={name}
-              accordionState={accordionState}
-              setAccordionState={setAccordionState}
               setIndex={mainMenuTabSelector}
             />
           ) : (
