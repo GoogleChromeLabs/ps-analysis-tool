@@ -32,11 +32,19 @@ interface HeaderRowProps {
 
 const HeaderRow = ({ headerGroup }: HeaderRowProps) => {
   return (
-    <tr className="bg-anti-flash-white">
-      {headerGroup.headers.map((header) => (
-        <HeaderCell key={header.id} header={header} />
-      ))}
-    </tr>
+    <>
+      <tr className="bg-anti-flash-white">
+        {headerGroup.headers.map((header) => (
+          <HeaderCell key={header.id} header={header} />
+        ))}
+      </tr>
+      <tr>
+        <th
+          className="w-full h-px pt-0 bg-american-silver"
+          colSpan={headerGroup.headers.length}
+        />
+      </tr>
+    </>
   );
 };
 
