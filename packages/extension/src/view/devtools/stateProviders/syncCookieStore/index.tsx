@@ -28,11 +28,15 @@ import React, {
  * Internal dependencies.
  */
 import type { CookieData } from '../../../../localStore';
+import { checkIbcCompliance } from '../../../../utils/checkIbcCompliance';
 
 export interface CookieStoreContext {
   state: {
     tabCookies: {
-      [key: string]: CookieData;
+      [key: string]: CookieData & {
+        isIbcCompliant: boolean | null;
+        isCookieSet: boolean | null;
+      };
     } | null;
     tabUrl: string | null;
   };
@@ -67,7 +71,31 @@ export const Provider = ({ children }: PropsWithChildren) => {
     ];
 
     if (tabData && tabData.cookies) {
-      setTabCookies(tabData.cookies);
+      const _cookies: NonNullable<CookieStoreContext['state']['tabCookies']> =
+        {};
+
+      await Promise.all(
+        Object.entries(tabData.cookies as { [key: string]: CookieData }).map(
+          async ([key, value]: [string, CookieData]) => {
+            const isIbcCompliant = await checkIbcCompliance(
+              value.parsedCookie.samesite,
+              value.parsedCookie.secure,
+              key,
+              value.url
+            );
+            const isCookieSet = Boolean(
+              await chrome.cookies.get({ name: key, url: value.url })
+            );
+            _cookies[key] = {
+              ...value,
+              isIbcCompliant,
+              isCookieSet,
+            };
+          }
+        )
+      );
+
+      setTabCookies(_cookies);
     }
 
     chrome.devtools.inspectedWindow.eval(
@@ -81,13 +109,39 @@ export const Provider = ({ children }: PropsWithChildren) => {
   }, []);
 
   const storeChangeListener = useCallback(
-    (changes: { [key: string]: chrome.storage.StorageChange }) => {
+    async (changes: { [key: string]: chrome.storage.StorageChange }) => {
       if (
         tabId &&
         Object.keys(changes).includes(tabId.toString()) &&
         changes[tabId.toString()]?.newValue?.cookies
       ) {
-        setTabCookies(changes[tabId.toString()].newValue.cookies);
+        const _cookies: NonNullable<CookieStoreContext['state']['tabCookies']> =
+          {};
+
+        await Promise.all(
+          Object.entries(
+            changes[tabId.toString()].newValue.cookies as {
+              [key: string]: CookieData;
+            }
+          ).map(async ([key, value]) => {
+            const isIbcCompliant = await checkIbcCompliance(
+              value.parsedCookie.samesite,
+              value.parsedCookie.secure,
+              key,
+              value.url
+            );
+            const isCookieSet = Boolean(
+              await chrome.cookies.get({ name: key, url: value.url })
+            );
+            _cookies[key] = {
+              ...value,
+              isIbcCompliant,
+              isCookieSet,
+            };
+          })
+        );
+
+        setTabCookies(_cookies);
       }
     },
     [tabId]
@@ -102,15 +156,57 @@ export const Provider = ({ children }: PropsWithChildren) => {
     [tabId]
   );
 
+  const cookieChangeListener = useCallback(
+    async (changeInfo: chrome.cookies.CookieChangeInfo) => {
+      if (
+        tabCookies &&
+        Object.keys(tabCookies).includes(changeInfo.cookie.name)
+      ) {
+        const isIbcCompliant = await checkIbcCompliance(
+          changeInfo.cookie.sameSite,
+          changeInfo.cookie.secure,
+          changeInfo.cookie.name,
+          tabCookies[changeInfo.cookie.name].url
+        );
+
+        const isCookieSet = Boolean(
+          await chrome.cookies.get({
+            name: changeInfo.cookie.name,
+            url: tabCookies[changeInfo.cookie.name].url,
+          })
+        );
+
+        const newCookieData = {
+          ...tabCookies[changeInfo.cookie.name],
+          isIbcCompliant,
+          isCookieSet,
+        };
+
+        setTabCookies({
+          ...tabCookies,
+          [changeInfo.cookie.name]: newCookieData,
+        });
+      }
+    },
+    [tabCookies]
+  );
+
   useEffect(() => {
     intitialSync();
     chrome.storage.local.onChanged.addListener(storeChangeListener);
     chrome.tabs.onUpdated.addListener(tabUpdateListener);
+    chrome.cookies.onChanged.addListener(cookieChangeListener);
     return () => {
       chrome.storage.local.onChanged.removeListener(storeChangeListener);
       chrome.tabs.onUpdated.removeListener(tabUpdateListener);
+      chrome.cookies.onChanged.removeListener(cookieChangeListener);
     };
-  }, [intitialSync, storeChangeListener, tabUpdateListener]);
+  }, [
+    cookieChangeListener,
+    intitialSync,
+    storeChangeListener,
+    tabUpdateListener,
+  ]);
 
   return (
     <Context.Provider
