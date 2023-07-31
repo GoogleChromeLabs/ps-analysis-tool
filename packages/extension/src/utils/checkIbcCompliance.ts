@@ -35,9 +35,13 @@ export async function checkIbcCompliance(
     })
   );
 
-  if (samesite.toLowerCase() === 'none') {
-    return secure ? chromeCookieStoreHasCookie : !chromeCookieStoreHasCookie;
+  if (samesite.toLowerCase() !== 'none' && chromeCookieStoreHasCookie) {
+    return true;
+  } else if (samesite.toLowerCase() === 'none' && secure) {
+    return chromeCookieStoreHasCookie;
+  } else if (samesite.toLowerCase() === 'none' && !secure) {
+    return !chromeCookieStoreHasCookie;
+  } else {
+    return true;
   }
-
-  return chromeCookieStoreHasCookie;
 }
