@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useState } from 'react';
 
 /**
  * Internal dependencies.
@@ -29,15 +29,28 @@ const CookieDetails = () => {
     selectedCookie: state.selectedCookie,
   }));
 
+  const [showUrlDecoded, setShowUrlDecoded] = useState(false);
+
   return (
     <div data-testid="cookie-card" className="h-full">
       {selectedCookie ? (
         <div className="text-xs py-1 px-1.5">
-          <p className="font-bold text-granite-gray mb-1 text-semibold">
-            Cookie Value
+          <p className="font-bold text-granite-gray mb-1 text-semibold flex items-center">
+            <span>Cookie Value</span>
+            <label className="text-granite-gray text-xs font-normal flex items-center">
+              <input
+                type="checkbox"
+                className="ml-3 mr-1 cursor-pointer"
+                checked={showUrlDecoded}
+                onChange={() => setShowUrlDecoded(!showUrlDecoded)}
+              />
+              <span>Show URL-decoded</span>
+            </label>
           </p>
           <p className="mb-4 break-words">
-            {selectedCookie.parsedCookie.value}
+            {showUrlDecoded
+              ? decodeURIComponent(selectedCookie.parsedCookie.value)
+              : selectedCookie.parsedCookie.value}
           </p>
           <p className="font-bold text-granite-gray mb-1">Description</p>
           <p>
