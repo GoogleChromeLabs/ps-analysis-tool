@@ -47,9 +47,7 @@ const TabHeader: React.FC<TabHeaderProps> = ({
   const mainMenuTabSelector = useCallback(
     (index: number) => {
       setIndex(index);
-      if (selectedFrame && index !== selectedIndex) {
-        setSelectedFrame(null);
-      }
+      setSelectedFrame(null);
     },
     [selectedFrame, setIndex, setSelectedFrame, selectedIndex]
   );
@@ -65,7 +63,6 @@ const TabHeader: React.FC<TabHeaderProps> = ({
               ? 'bg-selected-background-color text-white'
               : ''
           }`}
-          onClick={() => mainMenuTabSelector(index)}
         >
           {name === 'Cookies' ? (
             <Accordion
@@ -77,9 +74,13 @@ const TabHeader: React.FC<TabHeaderProps> = ({
               tabName={name}
               accordionState={accordionState}
               setAccordionState={setAccordionState}
+              setIndex={mainMenuTabSelector}
             />
           ) : (
-            <div className="flex items-center pl-6 py-0.5 pt-1.5">
+            <div
+              className="flex items-center pl-6 py-0.5 pt-1.5"
+              onClick={() => mainMenuTabSelector(index)}
+            >
               <div className="h-4">
                 {selectedIndex === index ? <FileWhite /> : <File />}
               </div>

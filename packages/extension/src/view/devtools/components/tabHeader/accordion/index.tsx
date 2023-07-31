@@ -42,6 +42,7 @@ interface AccordionProps {
   } | null;
   setSelectedFrame: (state: string | null) => void;
   selectedFrame: string | null;
+  setIndex: (state: number) => void;
 }
 
 const Accordion: React.FC<AccordionProps> = ({
@@ -53,11 +54,19 @@ const Accordion: React.FC<AccordionProps> = ({
   tabFrames,
   setSelectedFrame,
   selectedFrame,
+  setIndex,
 }) => {
   const subMenuSelected = useCallback(() => {
     setAccordionState(!accordionState);
     setSelectedFrame(null);
-  }, [accordionState, setAccordionState, setSelectedFrame]);
+  }, [
+    accordionState,
+    setAccordionState,
+    setSelectedFrame,
+    index,
+    selectedIndex,
+    setIndex,
+  ]);
 
   return (
     <div className="flex flex-col w-full">
@@ -68,9 +77,9 @@ const Accordion: React.FC<AccordionProps> = ({
             ? 'bg-selected-background-color text-white'
             : ''
         }`}
-        onClick={subMenuSelected}
+        onClick={() => setIndex(index)}
       >
-        <div>
+        <div onClick={subMenuSelected}>
           {accordionState ? (
             selectedIndex === index && !selectedFrame ? (
               <ArrowDownWhite />
@@ -101,7 +110,12 @@ const Accordion: React.FC<AccordionProps> = ({
             <div
               data-testid={key}
               key={key}
-              onClick={() => setSelectedFrame(key)}
+              onClick={() => {
+                if (selectedIndex !== index) {
+                  setIndex(index);
+                }
+                setSelectedFrame(key);
+              }}
               className={`pl-9 py-0.5 h-5 flex items-center cursor-pointer ${
                 selectedFrame === key
                   ? 'bg-selected-background-color text-white'
