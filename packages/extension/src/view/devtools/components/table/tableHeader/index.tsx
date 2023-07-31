@@ -35,7 +35,7 @@ interface TableHeaderProps {
 
 const TableHeader = ({ headerGroups, onRightClick }: TableHeaderProps) => {
   return (
-    <thead onContextMenu={onRightClick} className="sticky top-0">
+    <thead onContextMenu={onRightClick} className="sticky top-0 z-50">
       {headerGroups.map((headerGroup) => (
         <HeaderRow key={headerGroup.id} headerGroup={headerGroup} />
       ))}

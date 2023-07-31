@@ -28,16 +28,16 @@ import {
 /**
  * Internal dependencies.
  */
-import type { CookieData } from '../../../../../../../localStore';
 import Table from '../../../../table';
 import { useContentPanelStore } from '../../../../../stateProviders/contentPanelStore';
 import CheckIcon from '../../../../../../../../icons/check.svg';
+import type { CookieTableData } from '../../../../../stateProviders/syncCookieStore';
 
 export interface CookieTableProps {
-  cookies: CookieData[];
+  cookies: CookieTableData[];
 }
 
-const tableColumns: ColumnDef<CookieData>[] = [
+const tableColumns: ColumnDef<CookieTableData>[] = [
   {
     header: 'Name',
     accessorKey: 'parsedCookie.name',
@@ -95,6 +95,15 @@ const tableColumns: ColumnDef<CookieData>[] = [
     cell: (info) => (info.getValue() ? info.getValue() : 'Uncategorised'),
   },
   {
+    header: 'Third Party',
+    accessorKey: 'isFirstParty',
+    cell: (info) => (
+      <p className="flex justify-center items-center">
+        {!info.getValue() ? <CheckIcon className="scale-125" /> : ''}
+      </p>
+    ),
+  },
+  {
     header: 'Platform',
     accessorKey: 'analytics.platform',
     cell: (info) => info.getValue(),
@@ -115,6 +124,24 @@ const tableColumns: ColumnDef<CookieData>[] = [
       </a>
     ),
   },
+  {
+    header: 'IBC Compliant',
+    accessorKey: 'isIbcCompliant',
+    cell: (info) => (
+      <p className="flex justify-center items-center">
+        {info.getValue() ? <CheckIcon className="scale-125" /> : ''}
+      </p>
+    ),
+  },
+  {
+    header: 'Cookie Accepted',
+    accessorKey: 'isCookieSet',
+    cell: (info) => (
+      <p className="flex justify-center items-center">
+        {info.getValue() ? <CheckIcon className="scale-125" /> : ''}
+      </p>
+    ),
+  },
 ];
 
 const CookieTable = ({ cookies: data }: CookieTableProps) => {
@@ -130,7 +157,7 @@ const CookieTable = ({ cookies: data }: CookieTableProps) => {
     tableContainerRef: state.tableContainerRef,
   }));
 
-  const columns: ColumnDef<CookieData>[] = useMemo(
+  const columns = useMemo(
     () =>
       tableColumns.map((column) => ({
         ...column,
