@@ -37,9 +37,7 @@ const HeaderResizer = ({ header }: HeaderResizerProps) => {
       onClick={(e) => {
         e.stopPropagation();
       }}
-      className={`cursor-col-resize absolute right-0 top-0 w-2 h-full hover:bg-slate-200 ${
-        header.column.getIsResizing() ? 'bg-slate-200' : ''
-      }`}
+      className="cursor-col-resize absolute right-0 top-0 w-1 h-full"
     />
   );
 };

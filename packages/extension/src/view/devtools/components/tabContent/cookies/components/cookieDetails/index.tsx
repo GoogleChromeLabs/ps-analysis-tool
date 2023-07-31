@@ -32,7 +32,7 @@ const CookieDetails = () => {
   return (
     <div data-testid="cookie-card" className="h-full">
       {selectedCookie ? (
-        <div className="text-xs rounded-lg">
+        <div className="text-xs py-1 px-1.5">
           <p className="font-bold text-granite-gray mb-1 text-semibold">
             Cookie Value
           </p>
@@ -46,7 +46,7 @@ const CookieDetails = () => {
           </p>
         </div>
       ) : (
-        <div className="h-full flex justify-center items-center">
+        <div className="h-full p-8 flex justify-center items-center">
           <p className="text-lg font-bold text-granite-gray">
             Select a cookie to preview its details
           </p>
