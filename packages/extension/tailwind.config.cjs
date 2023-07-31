@@ -36,6 +36,7 @@ module.exports = {
       'third-party': '#FA752E',
       'chart-label': '#111B21',
       'granite-gray': '#5F6369',
+      'outer-space': '#303942',
     },
     backgroundColor: {
       ...colors,

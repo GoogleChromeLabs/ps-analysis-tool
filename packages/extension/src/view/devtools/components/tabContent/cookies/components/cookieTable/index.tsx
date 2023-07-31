@@ -31,6 +31,7 @@ import {
 import type { CookieData } from '../../../../../../../localStore';
 import Table from '../../../../table';
 import { useContentPanelStore } from '../../../../../stateProviders/contentPanelStore';
+import CheckIcon from '../../../../../../../../icons/check.svg';
 
 export interface CookieTableProps {
   cookies: CookieData[];
@@ -67,7 +68,9 @@ const tableColumns: ColumnDef<CookieData>[] = [
     header: 'HttpOnly',
     accessorKey: 'parsedCookie.httponly',
     cell: (info) => (
-      <p className="text-center w-full">{info.getValue() ? '✓' : ''}</p>
+      <p className="flex justify-center items-center">
+        {info.getValue() ? <CheckIcon /> : ''}
+      </p>
     ),
   },
   {
@@ -81,7 +84,9 @@ const tableColumns: ColumnDef<CookieData>[] = [
     header: 'Secure',
     accessorKey: 'parsedCookie.secure',
     cell: (info) => (
-      <p className="text-center w-full">{info.getValue() ? '✓' : ''}</p>
+      <p className="flex justify-center items-center">
+        {info.getValue() ? <CheckIcon /> : ''}
+      </p>
     ),
   },
   {
@@ -144,7 +149,10 @@ const CookieTable = ({ cookies: data }: CookieTableProps) => {
   });
 
   return (
-    <div ref={tableContainerRef} className="w-full h-full overflow-auto">
+    <div
+      ref={tableContainerRef}
+      className="w-full h-full overflow-auto text-outer-space"
+    >
       <Table
         table={table}
         selectedKey={selectedCookie?.parsedCookie.name}
