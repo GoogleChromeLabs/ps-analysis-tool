@@ -72,7 +72,7 @@ const Accordion: React.FC<AccordionProps> = ({
     <div className="flex flex-col w-full">
       <div
         data-testid="cookies-tab-heading-wrapper"
-        className={`flex h-full flex-row items-center pl-4 pt-1.5 py-0.5 ${
+        className={`flex h-full flex-row items-center pl-4 py-0.5 ${
           selectedIndex === index && !selectedFrame
             ? 'bg-selected-background-color text-white'
             : ''

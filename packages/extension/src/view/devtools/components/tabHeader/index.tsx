@@ -58,7 +58,7 @@ const TabHeader: React.FC<TabHeaderProps> = ({
         <div
           key={name}
           data-testid={name}
-          className={`flex items-center cursor-pointer ${
+          className={`flex items-center cursor-pointer gap-y-1.5 ${
             selectedIndex === index && name !== 'Cookies'
               ? 'bg-selected-background-color text-white'
               : ''
@@ -78,7 +78,7 @@ const TabHeader: React.FC<TabHeaderProps> = ({
             />
           ) : (
             <div
-              className="flex items-center pl-6 py-0.5 pt-1.5"
+              className="flex items-center pl-6 py-0.5"
               onClick={() => mainMenuTabSelector(index)}
             >
               <div className="h-4">
