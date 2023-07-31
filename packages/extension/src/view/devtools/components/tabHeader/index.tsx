@@ -49,7 +49,7 @@ const TabHeader: React.FC<TabHeaderProps> = ({
       setIndex(index);
       setSelectedFrame(null);
     },
-    [selectedFrame, setIndex, setSelectedFrame, selectedIndex]
+    [setIndex, setSelectedFrame]
   );
 
   return (

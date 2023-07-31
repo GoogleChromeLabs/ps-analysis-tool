@@ -59,14 +59,7 @@ const Accordion: React.FC<AccordionProps> = ({
   const subMenuSelected = useCallback(() => {
     setAccordionState(!accordionState);
     setSelectedFrame(null);
-  }, [
-    accordionState,
-    setAccordionState,
-    setSelectedFrame,
-    index,
-    selectedIndex,
-    setIndex,
-  ]);
+  }, [accordionState, setAccordionState, setSelectedFrame]);
 
   return (
     <div className="flex flex-col w-full">

@@ -41,6 +41,7 @@ describe('Accordion', () => {
         }}
         setSelectedFrame={() => undefined}
         selectedFrame={null}
+        setIndex={() => undefined}
       />
     );
     const container = screen.getByTestId('cookies-tab-heading-wrapper');
@@ -63,6 +64,7 @@ describe('Accordion', () => {
         }}
         setSelectedFrame={() => undefined}
         selectedFrame={'https://edition.cnn.com'}
+        setIndex={() => undefined}
       />
     );
     const cookieHeaderContainer = screen.getByTestId(
@@ -87,6 +89,7 @@ describe('Accordion', () => {
         tabFrames={{}}
         setSelectedFrame={() => undefined}
         selectedFrame={null}
+        setIndex={() => undefined}
       />
     );
     const framesContainer = screen.getByTestId('cookie-frames-container');
@@ -109,6 +112,7 @@ describe('Accordion', () => {
         }}
         setSelectedFrame={() => undefined}
         selectedFrame={null}
+        setIndex={() => undefined}
       />
     );
     const framesContainer = screen.getByTestId('cookie-frames-container');
@@ -130,6 +134,7 @@ describe('Accordion', () => {
         }}
         setSelectedFrame={() => undefined}
         selectedFrame={'https://edition.cnn.com'}
+        setIndex={() => undefined}
       />
     );
     const firstFrame = screen.getByTestId('https://edition.cnn.com');
@@ -154,6 +159,7 @@ describe('Accordion', () => {
         }}
         setSelectedFrame={() => undefined}
         selectedFrame={'https://crxd.net'}
+        setIndex={() => undefined}
       />
     );
 
