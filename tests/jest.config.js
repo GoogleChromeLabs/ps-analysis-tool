@@ -47,6 +47,7 @@ export default {
     '<rootDir>/dist',
     '<rootDir>/third_party',
     '<rootDir>/data',
+    '/stories/',
   ],
   coverageReporters: ['lcov'],
   collectCoverageFrom: ['<rootDir>/packages/**/*.{js,jsx,ts,tsx}'],
