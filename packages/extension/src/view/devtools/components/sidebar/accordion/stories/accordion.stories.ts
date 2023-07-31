@@ -29,7 +29,6 @@ const meta: Meta<typeof Accordion> = {
   title: 'Extension/Accordion',
   component: Accordion,
   argTypes: {
-    accordionState: { control: 'boolean' },
     tabName: { control: 'text' },
     index: { control: 'number' },
     selectedIndex: { control: 'number' },
@@ -41,8 +40,6 @@ export default meta;
 
 export const Primary: StoryObj<typeof Accordion> = {
   args: {
-    accordionState: true,
-    setAccordionState: () => undefined,
     tabName: 'Cookies',
     index: 1,
     selectedIndex: 1,
