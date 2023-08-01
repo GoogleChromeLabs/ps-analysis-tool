@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 /**
  * Internal dependencies
  */
@@ -28,6 +28,9 @@ import {
 } from '../../../../../icons';
 
 interface AccordionProps {
+  accordionState: boolean;
+  keyboardNavigator: (event: React.KeyboardEvent<HTMLDivElement>) => void;
+  setAccordionState: (state: boolean) => void;
   tabName: string;
   index: number;
   selectedIndex: number;
@@ -42,6 +45,9 @@ interface AccordionProps {
 }
 
 const Accordion: React.FC<AccordionProps> = ({
+  keyboardNavigator,
+  accordionState,
+  setAccordionState,
   tabName,
   index,
   selectedIndex,
@@ -50,7 +56,6 @@ const Accordion: React.FC<AccordionProps> = ({
   selectedFrame,
   setIndex,
 }) => {
-  const [accordionState, setAccordionState] = useState(false);
   const subMenuSelected = useCallback(() => {
     setAccordionState(!accordionState);
     setSelectedFrame(null);
@@ -60,12 +65,14 @@ const Accordion: React.FC<AccordionProps> = ({
     <div className="flex flex-col w-full">
       <div
         data-testid="cookies-tab-heading-wrapper"
-        className={`flex h-full flex-row items-center pl-3 py-0.5 ${
+        className={`flex h-full flex-row items-center pl-3 py-0.5 outline-0 ${
           selectedIndex === index && !selectedFrame
             ? 'bg-selected-background-color text-white'
             : ''
         }`}
+        tabIndex={0}
         onClick={() => setIndex(index)}
+        onKeyDown={(event) => keyboardNavigator(event)}
       >
         <div
           className={`origin-center transition-transform ${
@@ -95,6 +102,7 @@ const Accordion: React.FC<AccordionProps> = ({
         {tabFrames &&
           Object.keys(tabFrames)?.map((key) => (
             <div
+              tabIndex={0}
               data-testid={key}
               key={key}
               onClick={() => {
@@ -103,7 +111,8 @@ const Accordion: React.FC<AccordionProps> = ({
                 }
                 setSelectedFrame(key);
               }}
-              className={`pl-9 py-0.5 h-5 flex items-center cursor-pointer ${
+              role="treeitem"
+              className={`pl-9 py-0.5 h-5 flex items-center cursor-default outline-0 ${
                 selectedFrame === key
                   ? 'bg-selected-background-color text-white'
                   : ''

@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 /**
  * Internal dependencies
  */
@@ -43,6 +43,8 @@ const Sidebar: React.FC<SidebarProps> = ({
     })
   );
 
+  const [accordionState, setAccordionState] = useState(false);
+
   const mainMenuTabSelector = useCallback(
     (index: number) => {
       setIndex(index);
@@ -51,20 +53,109 @@ const Sidebar: React.FC<SidebarProps> = ({
     [setIndex, setSelectedFrame]
   );
 
+  const keyboardNavigator = useCallback(
+    // eslint-disable-next-line complexity
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (!tabFrames) {
+        return;
+      }
+      const keys = Object.keys(tabFrames);
+      const currIndex = keys.findIndex((frame) => frame === selectedFrame);
+      switch (event.code) {
+        case 'ArrowUp':
+          if (accordionState) {
+            if (selectedFrame) {
+              if (currIndex === 0) {
+                mainMenuTabSelector(0);
+              } else {
+                setSelectedFrame(keys[currIndex - 1]);
+              }
+            } else {
+              if (tabsNames[selectedIndex] === 'Topics') {
+                setIndex(0);
+                setSelectedFrame(keys[keys.length - 1]);
+              } else {
+                if (selectedIndex > 0) {
+                  setIndex(selectedIndex - 1);
+                }
+              }
+            }
+          } else {
+            if (selectedIndex > 0) {
+              setIndex(selectedIndex - 1);
+            }
+          }
+          break;
+        case 'ArrowDown':
+          if (accordionState) {
+            if (selectedFrame) {
+              if (currIndex === keys.length - 1) {
+                mainMenuTabSelector(1);
+              } else {
+                setSelectedFrame(keys[currIndex + 1]);
+              }
+            } else {
+              if (selectedIndex === 0) {
+                setSelectedFrame(keys[0]);
+              } else if (selectedIndex < tabsNames.length - 1) {
+                setIndex(selectedIndex + 1);
+              }
+            }
+          } else {
+            if (selectedIndex < tabsNames.length - 1) {
+              setIndex(selectedIndex + 1);
+            }
+          }
+          break;
+        case 'ArrowLeft':
+          if (accordionState) {
+            if (selectedFrame) {
+              mainMenuTabSelector(0);
+            } else {
+              setAccordionState(false);
+            }
+          }
+          break;
+        case 'ArrowRight':
+          if (!accordionState) {
+            setAccordionState(true);
+          }
+          break;
+        default:
+          break;
+      }
+    },
+    [
+      accordionState,
+      mainMenuTabSelector,
+      selectedFrame,
+      selectedIndex,
+      tabFrames,
+      setSelectedFrame,
+      setIndex,
+      tabsNames,
+    ]
+  );
+
   return (
     <>
       {tabsNames.map((name, index: number) => (
         <div
           key={name}
           data-testid={name}
-          className={`flex items-center cursor-pointer gap-y-1.5 ${
+          className={`flex items-center cursor-default gap-y-1.5 outline-0 ${
             selectedIndex === index && name !== 'Cookies'
               ? 'bg-selected-background-color text-white'
               : ''
           }`}
+          tabIndex={0}
+          onKeyDown={(event) => keyboardNavigator(event)}
         >
           {name === 'Cookies' ? (
             <Accordion
+              keyboardNavigator={keyboardNavigator}
+              accordionState={accordionState}
+              setAccordionState={setAccordionState}
               tabFrames={tabFrames}
               setSelectedFrame={setSelectedFrame}
               selectedFrame={selectedFrame}

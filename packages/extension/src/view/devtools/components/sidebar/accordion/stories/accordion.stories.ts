@@ -29,6 +29,7 @@ const meta: Meta<typeof Accordion> = {
   title: 'Extension/Accordion',
   component: Accordion,
   argTypes: {
+    accordionState: { control: 'boolean' },
     tabName: { control: 'text' },
     index: { control: 'number' },
     selectedIndex: { control: 'number' },
