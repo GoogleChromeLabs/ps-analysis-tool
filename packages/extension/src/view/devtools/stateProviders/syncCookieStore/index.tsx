@@ -39,16 +39,26 @@ export interface CookieStoreContext {
       };
     } | null;
     tabUrl: string | null;
+    tabFrames: {
+      [key: string]: { frameIds: number[] };
+    } | null;
+    selectedFrame: string | null;
   };
-  actions: object;
+  actions: {
+    setSelectedFrame: React.Dispatch<React.SetStateAction<string | null>>;
+  };
 }
 
 const initialState: CookieStoreContext = {
   state: {
     tabCookies: null,
     tabUrl: null,
+    tabFrames: null,
+    selectedFrame: null,
   },
-  actions: {},
+  actions: {
+    setSelectedFrame: () => undefined,
+  },
 };
 
 export const Context = createContext<CookieStoreContext>(initialState);
@@ -59,11 +69,47 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [tabCookies, setTabCookies] =
     useState<CookieStoreContext['state']['tabCookies']>(null);
 
+  const [selectedFrame, setSelectedFrame] =
+    useState<CookieStoreContext['state']['selectedFrame']>(null);
+
   const [tabUrl, setTabUrl] =
     useState<CookieStoreContext['state']['tabUrl']>(null);
+  const [tabFrames, setTabFrames] =
+    useState<CookieStoreContext['state']['tabFrames']>(null);
+
+  const getAllFramesForCurrentTab = useCallback(
+    async (_tabId: number | null) => {
+      if (!_tabId) {
+        return;
+      }
+      const regexForFrameUrl =
+        /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:/\n?]+)/;
+      const currentTabFrames = await chrome.webNavigation.getAllFrames({
+        tabId: _tabId,
+      });
+      const modifiedTabFrames: {
+        [key: string]: { frameIds: number[] };
+      } = {};
+      currentTabFrames?.forEach(({ url, frameId }) => {
+        if (url && url !== 'about:blank') {
+          const parsedUrl = regexForFrameUrl.exec(url);
+          if (parsedUrl && parsedUrl[0]) {
+            if (modifiedTabFrames[parsedUrl[0]]) {
+              modifiedTabFrames[parsedUrl[0]].frameIds.push(frameId);
+            } else {
+              modifiedTabFrames[parsedUrl[0]] = { frameIds: [frameId] };
+            }
+          }
+        }
+      });
+      setTabFrames(modifiedTabFrames);
+    },
+    []
+  );
 
   const intitialSync = useCallback(async () => {
     const _tabId = chrome.devtools.inspectedWindow.tabId;
+    await getAllFramesForCurrentTab(_tabId);
     setTabId(_tabId);
 
     const tabData = (await chrome.storage.local.get([_tabId.toString()]))[
@@ -106,7 +152,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
       }
     );
-  }, []);
+  }, [getAllFramesForCurrentTab]);
 
   const storeChangeListener = useCallback(
     async (changes: { [key: string]: chrome.storage.StorageChange }) => {
@@ -140,20 +186,21 @@ export const Provider = ({ children }: PropsWithChildren) => {
             };
           })
         );
-
+        await getAllFramesForCurrentTab(tabId);
         setTabCookies(_cookies);
       }
     },
-    [tabId]
+    [tabId, getAllFramesForCurrentTab]
   );
 
   const tabUpdateListener = useCallback(
-    (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
+    async (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
       if (tabId === _tabId && changeInfo.url) {
         setTabUrl(changeInfo.url);
       }
+      await getAllFramesForCurrentTab(_tabId);
     },
-    [tabId]
+    [tabId, getAllFramesForCurrentTab]
   );
 
   useEffect(() => {
@@ -167,7 +214,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
   }, [intitialSync, storeChangeListener, tabUpdateListener]);
 
   return (
-    <Context.Provider value={{ state: { tabCookies, tabUrl }, actions: {} }}>
+    <Context.Provider
+      value={{
+        state: { tabCookies, tabUrl, tabFrames, selectedFrame },
+        actions: { setSelectedFrame },
+      }}
+    >
       {children}
     </Context.Provider>
   );
