@@ -23,11 +23,11 @@ import { flexRender, type Header } from '@tanstack/react-table';
 /**
  * Internal dependencies.
  */
-import type { TData } from '..';
+import type { TableData } from '..';
 import HeaderResizer from './headerResizer';
 
 interface HeaderCellProps {
-  header: Header<TData, unknown>;
+  header: Header<TableData, unknown>;
 }
 
 const HeaderCell = ({ header }: HeaderCellProps) => {

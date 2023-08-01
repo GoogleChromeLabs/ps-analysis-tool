@@ -27,12 +27,12 @@ import TableHeader from './tableHeader';
 import TableBody from './tableBody';
 import type { CookieData } from '../../../../localStore';
 
-export type TData = CookieData;
+export type TableData = CookieData;
 
 interface TableProps {
-  table: ReactTable<TData>;
+  table: ReactTable<TableData>;
   selectedKey: string | undefined;
-  onRowClick: (row: TData) => void;
+  onRowClick: (row: TableData) => void;
 }
 
 const Table = ({ table, selectedKey, onRowClick }: TableProps) => {

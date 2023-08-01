@@ -23,11 +23,11 @@ import { type HeaderGroup } from '@tanstack/react-table';
 /**
  * Internal dependencies.
  */
-import type { TData } from '..';
+import type { TableData } from '..';
 import HeaderCell from './headerCell';
 
 interface HeaderRowProps {
-  headerGroup: HeaderGroup<TData>;
+  headerGroup: HeaderGroup<TableData>;
 }
 
 const HeaderRow = ({ headerGroup }: HeaderRowProps) => {
