@@ -30,13 +30,15 @@ import React, {
 import type { CookieData } from '../../../../localStore';
 import { checkIbcCompliance } from '../../../../utils/checkIbcCompliance';
 
+export type CookieTableData = CookieData & {
+  isIbcCompliant: boolean | null;
+  isCookieSet: boolean | null;
+};
+
 export interface CookieStoreContext {
   state: {
     tabCookies: {
-      [key: string]: CookieData & {
-        isIbcCompliant: boolean | null;
-        isCookieSet: boolean | null;
-      };
+      [key: string]: CookieTableData;
     } | null;
     tabUrl: string | null;
     tabFrames: {

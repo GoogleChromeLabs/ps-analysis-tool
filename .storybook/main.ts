@@ -29,14 +29,16 @@ const config: StorybookConfig = {
   docs: {
     autodocs: 'tag',
   },
-  webpackFinal: config => { 
+  webpackFinal: (config) => {
     // Default rule for images /\.(svg|ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/
     //@todo find the right method to correct this error.
     // @ts-ignore this property exists on webpack RuleSetRule still ts is showing error.
-    const fileLoaderRule = config?.module?.rules?.find(rule => rule.test && rule.test.test('.svg'));
-    if(fileLoaderRule){
+    const fileLoaderRule = config?.module?.rules?.find(
+      (rule) => rule.test && rule.test.test('.svg')
+    );
+    if (fileLoaderRule) {
       // @ts-ignore this property exists on webpack RuleSetRule still ts is showing error.
-      fileLoaderRule.exclude = /\.svg$/;  
+      fileLoaderRule.exclude = /\.svg$/;
     }
 
     config?.module?.rules?.push({
@@ -46,7 +48,7 @@ const config: StorybookConfig = {
     });
 
     return config;
-} 
+  },
 };
 
 export default config;

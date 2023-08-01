@@ -88,7 +88,7 @@ export async function createCookieObject(
   const expires = parseAttributeValues(
     'expires',
     parsedCookie.expires,
-    chromeStoreCookie?.expirationDate,
+    (chromeStoreCookie?.expirationDate || 0) * 1000,
     prevParsedCookie?.expires
   );
 
@@ -123,8 +123,12 @@ function parseAttributeValues(
   let value =
     parsedCookieValue || chromeStoreCookieValue || prevParsedCookieValue;
 
-  if (type === 'domain' && url) {
-    value = value || '.' + getDomain(url);
+  if (type === 'domain') {
+    if (url) {
+      value = value || '.' + getDomain(url);
+    } else {
+      value = value || '';
+    }
   }
 
   if (type === 'path') {
@@ -145,10 +149,11 @@ function parseAttributeValues(
     } else if (value === 'unspecified') {
       value = '';
     }
+    value = value || '';
   }
 
-  if (type === 'expires') {
-    value = new Date(value as string).getTime() / 1000 || 0;
+  if (type === 'expires' && value !== 0) {
+    value = new Date(value as string).toJSON() || 0;
   }
 
   return value;

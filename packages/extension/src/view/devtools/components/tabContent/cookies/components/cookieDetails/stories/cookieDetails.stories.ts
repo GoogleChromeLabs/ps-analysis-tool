@@ -13,6 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
+import type { Meta, StoryObj } from '@storybook/react';
 
-export { default as CookieDetails } from './cookieDetails';
-export { default as CookieTable } from './cookieTable';
+/**
+ * Internal dependencies.
+ */
+
+import { CookieDetails } from '../..';
+
+const meta = {
+  title: 'Extension/CookiesPanel/CookieDetails',
+  component: CookieDetails,
+  tags: ['autodocs'],
+} as Meta<typeof CookieDetails>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Primary: Story = {
+  args: {},
+};
