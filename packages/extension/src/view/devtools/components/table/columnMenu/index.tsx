@@ -58,7 +58,7 @@ const ColumnMenu = ({ table, columns, open, onClose }: ColumnMenuProps) => {
           >
             <div className="absolute top-10 left-2 z-50 text-raisin-black rounded-lg w-screen max-w-[13rem] border shadow-2xl shadow-slate-700 border-stone-300 p-1.5 mr-2 divide-y divide-neutral-300 max-h-[80vh] overflow-auto bg-stone-200">
               <button
-                className="block w-full text-[13px] rounded px-2 py-0.5 mb-1.5 flex items-center hover:bg-royal-blue hover:text-white cursor-pointer"
+                className="block w-full text-[13px] rounded px-2 py-0.5 mb-1.5 flex items-center hover:bg-royal-blue hover:text-white cursor-default"
                 onClick={(e) => {
                   table.getToggleAllColumnsVisibilityHandler()(e);
                   handleClose();
