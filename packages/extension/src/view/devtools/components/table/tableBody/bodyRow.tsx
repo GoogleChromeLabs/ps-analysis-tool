@@ -23,17 +23,17 @@ import { type Row } from '@tanstack/react-table';
 /**
  * Internal dependencies.
  */
-import type { TData } from '..';
+import type { TableData } from '..';
 import BodyCell from './bodyCell';
 
 interface BodyRowProps {
-  row: Row<TData>;
+  row: Row<TableData>;
   index: number;
   selectedKey: string | undefined;
-  onRowClick: (key: TData) => void;
+  onRowClick: (key: TableData) => void;
   onKeyDown: (
     e: React.KeyboardEvent<HTMLTableRowElement>,
-    row: Row<TData>
+    row: Row<TableData>
   ) => void;
 }
 

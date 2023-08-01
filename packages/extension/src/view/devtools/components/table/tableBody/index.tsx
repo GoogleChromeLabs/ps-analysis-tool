@@ -24,19 +24,19 @@ import type { Row } from '@tanstack/react-table';
  * Internal dependencies.
  */
 import BodyRow from './bodyRow';
-import type { TData } from '..';
+import type { TableData } from '..';
 
 interface TableBodyProps {
-  rows: Row<TData>[];
+  rows: Row<TableData>[];
   selectedKey: string | undefined;
-  onRowClick: (key: TData) => void;
+  onRowClick: (key: TableData) => void;
 }
 
 const TableBody = ({ rows, selectedKey, onRowClick }: TableBodyProps) => {
   const tableBodyRef = useRef(null);
 
   const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLTableRowElement>, row: Row<TData>) => {
+    (event: React.KeyboardEvent<HTMLTableRowElement>, row: Row<TableData>) => {
       event.preventDefault();
       event.stopPropagation();
       // @ts-ignore - the `children` property will be available on the `current` property.

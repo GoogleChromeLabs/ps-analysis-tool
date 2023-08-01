@@ -23,12 +23,12 @@ import { flexRender, type Header } from '@tanstack/react-table';
 /**
  * Internal dependencies.
  */
-import type { TData } from '..';
+import type { TableData } from '..';
 import HeaderResizer from './headerResizer';
 import ArrowDown from '../../../../../../icons/arrow-down.svg';
 
 interface HeaderCellProps {
-  header: Header<TData, unknown>;
+  header: Header<TableData, unknown>;
 }
 
 const HeaderCell = ({ header }: HeaderCellProps) => {

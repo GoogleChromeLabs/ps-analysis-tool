@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 export * from './tabContent';
-export { default as TabHeader } from './tabHeader';
+export { default as Sidebar } from './sidebar';

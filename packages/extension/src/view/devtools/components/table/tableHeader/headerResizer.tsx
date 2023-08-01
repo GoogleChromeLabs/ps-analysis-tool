@@ -23,10 +23,10 @@ import type { Header } from '@tanstack/react-table';
 /**
  * Internal dependencies.
  */
-import type { TData } from '..';
+import type { TableData } from '..';
 
 interface HeaderResizerProps {
-  header: Header<TData, unknown>;
+  header: Header<TableData, unknown>;
 }
 
 const HeaderResizer = ({ header }: HeaderResizerProps) => {

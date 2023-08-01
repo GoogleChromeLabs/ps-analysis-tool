@@ -21,32 +21,40 @@ import type { Meta, StoryObj } from '@storybook/react';
 /**
  * Internal dependencies.
  */
-import Button from './button';
+import Accordion from '..';
 
 // @todo To be removed after we add any story.
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction
-const meta = {
-  title: 'Extension/Button',
-  component: Button,
+const meta: Meta<typeof Accordion> = {
+  title: 'Extension/Accordion',
+  component: Accordion,
   tags: ['autodocs'],
   argTypes: {
-    backgroundColor: { control: 'color' },
-  },
-} satisfies Meta<typeof Button>;
-
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-// More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
-export const Primary: Story = {
-  args: {
-    primary: true,
-    label: 'Button',
+    accordionState: { control: 'boolean' },
+    tabName: { control: 'text' },
+    index: { control: 'number' },
+    selectedIndex: { control: 'number' },
+    selectedFrame: { control: 'text' },
   },
 };
 
-export const Secondary: Story = {
+export default meta;
+
+export const Primary: StoryObj<typeof Accordion> = {
   args: {
-    label: 'Button',
+    tabName: 'Cookies',
+    index: 1,
+    selectedIndex: 1,
+    tabFrames: {
+      'https://edition.cnn.com': { frameIds: [1] },
+      'https://crxd.net': { frameIds: [2] },
+      'https://pubmatic.com': { frameIds: [3] },
+    },
+    setSelectedFrame: () => undefined,
+    selectedFrame: 'https://edition.cnn.com',
+    accordionState: false,
+    keyboardNavigator: () => undefined,
+    setAccordionState: () => undefined,
+    setIndex: () => undefined,
   },
 };

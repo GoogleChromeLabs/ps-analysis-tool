@@ -23,10 +23,10 @@ import { flexRender, type Cell } from '@tanstack/react-table';
 /**
  * Internal dependencies.
  */
-import type { TData } from '..';
+import type { TableData } from '..';
 
 interface BodyCellProps {
-  cell: Cell<TData, unknown>;
+  cell: Cell<TableData, unknown>;
 }
 
 const BodyCell = ({ cell }: BodyCellProps) => {

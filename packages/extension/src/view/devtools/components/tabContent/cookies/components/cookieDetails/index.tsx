@@ -23,7 +23,7 @@ import React from 'react';
  * Internal dependencies.
  */
 import { useContentPanelStore } from '../../../../../stateProviders/contentPanelStore';
-import { Details } from './components';
+import Details from './details';
 
 const CookieDetails = () => {
   const { selectedCookie } = useContentPanelStore(({ state }) => ({
@@ -31,12 +31,12 @@ const CookieDetails = () => {
   }));
 
   return (
-    <div data-testid="cookie-card" className="h-full">
+    <div data-testid="cookie-card" className="h-full min-w-[10rem]">
       {selectedCookie ? (
         <Details selectedCookie={selectedCookie} />
       ) : (
-        <div className="h-full p-8 flex justify-center items-center">
-          <p className="text-lg font-bold text-granite-gray">
+        <div className="h-full p-8 flex items-center">
+          <p className="text-lg w-full font-bold text-granite-gray text-center">
             Select a cookie to preview its value
           </p>
         </div>
