@@ -17,47 +17,23 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React from 'react';
 
 /**
  * Internal dependencies.
  */
 import { useContentPanelStore } from '../../../../../stateProviders/contentPanelStore';
+import { Details } from './components';
 
 const CookieDetails = () => {
   const { selectedCookie } = useContentPanelStore(({ state }) => ({
     selectedCookie: state.selectedCookie,
   }));
 
-  const [showUrlDecoded, setShowUrlDecoded] = useState(false);
-
   return (
     <div data-testid="cookie-card" className="h-full">
       {selectedCookie ? (
-        <div className="text-xs py-1 px-1.5">
-          <p className="font-bold text-granite-gray mb-1 text-semibold flex items-center">
-            <span>Cookie Value</span>
-            <label className="text-granite-gray text-xs font-normal flex items-center">
-              <input
-                type="checkbox"
-                className="ml-3 mr-1 cursor-pointer"
-                checked={showUrlDecoded}
-                onChange={() => setShowUrlDecoded(!showUrlDecoded)}
-              />
-              <span>Show URL-decoded</span>
-            </label>
-          </p>
-          <p className="mb-4 break-words text-outer-space">
-            {showUrlDecoded
-              ? decodeURIComponent(selectedCookie.parsedCookie.value)
-              : selectedCookie.parsedCookie.value}
-          </p>
-          <p className="font-bold text-granite-gray mb-1">Description</p>
-          <p className="text-outer-space">
-            {selectedCookie.analytics?.description ||
-              'No description available.'}
-          </p>
-        </div>
+        <Details selectedCookie={selectedCookie} />
       ) : (
         <div className="h-full p-8 flex justify-center items-center">
           <p className="text-lg font-bold text-granite-gray">

@@ -13,34 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
-import React from 'react';
-import { flexRender, type Cell } from '@tanstack/react-table';
+import type { Meta, StoryObj } from '@storybook/react';
 
 /**
  * Internal dependencies.
  */
-import type { TData } from '..';
+import Details from '../details';
+import type { CookieData } from '../../../../../../../../../localStore';
 
-interface BodyCellProps {
-  cell: Cell<TData, unknown>;
-}
+const meta = {
+  title: 'Extension/CookiesPanel/CookieDetails/Details',
+  component: Details,
+  tags: ['autodocs'],
+} as Meta<typeof Details>;
 
-const BodyCell = ({ cell }: BodyCellProps) => {
-  return (
-    <td
-      tabIndex={0}
-      style={{ maxWidth: cell.column.getSize() }}
-      className={`border border-y-0 px-1 py-px truncate border-american-silver h-5 text-xs cursor-default ${
-        cell.column.columnDef.header === 'Name' ? 'pl-5' : ''
-      }`}
-    >
-      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-    </td>
-  );
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Primary: Story = {
+  args: {
+    selectedCookie: {
+      parsedCookie: {
+        name: 'test',
+        value: 'v1%3A168740954476563235',
+      },
+      analytics: {
+        description: 'A description of the cookie',
+      },
+    } as CookieData,
+  },
 };
-
-export default BodyCell;

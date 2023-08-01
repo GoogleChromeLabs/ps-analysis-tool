@@ -21,7 +21,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 /**
  * Internal dependencies.
  */
-import type { CookieData } from '../../../../../../../../localStore';
+
 import { CookieDetails } from '../..';
 
 const meta = {
@@ -35,21 +35,5 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
-  args: {
-    cookieData: {
-      parsedCookie: {
-        name: 'test',
-        value: 'test',
-      },
-      analytics: {
-        description: 'A description of the cookie',
-      },
-    } as CookieData,
-  },
-};
-
-export const Secondary: Story = {
-  args: {
-    cookieData: undefined,
-  },
+  args: {},
 };

@@ -23,9 +23,9 @@ import type { Cookie as ParsedCookie } from 'simple-cookie';
  * Internal dependencies.
  */
 import type { CookieAnalytics } from '../../../../../../../../utils/fetchCookieDictionary';
-import type { CookieTableData } from '../../../../../../stateProviders/syncCookieStore';
+import type { CookieData } from '../../../../../../../../localStore';
 
-export const TempCookieData: CookieTableData[] = [
+export const TempCookieData: CookieData[] = [
   {
     parsedCookie: {
       name: 'cookie1',
@@ -49,9 +49,6 @@ export const TempCookieData: CookieTableData[] = [
     url: 'https://example.com',
     headerType: 'response',
     frameIdList: [],
-    isCookieSet: false,
-    isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -75,9 +72,6 @@ export const TempCookieData: CookieTableData[] = [
     url: 'https://example.com',
     headerType: 'response',
     frameIdList: [],
-    isCookieSet: false,
-    isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -101,9 +95,6 @@ export const TempCookieData: CookieTableData[] = [
     url: 'https://example.com',
     headerType: 'response',
     frameIdList: [],
-    isCookieSet: false,
-    isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -127,9 +118,6 @@ export const TempCookieData: CookieTableData[] = [
     url: 'https://example.com',
     headerType: 'response',
     frameIdList: [],
-    isCookieSet: false,
-    isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -153,9 +141,6 @@ export const TempCookieData: CookieTableData[] = [
     url: 'https://example.com',
     headerType: 'response',
     frameIdList: [],
-    isCookieSet: false,
-    isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -179,9 +164,6 @@ export const TempCookieData: CookieTableData[] = [
     url: 'https://example.com',
     headerType: 'response',
     frameIdList: [],
-    isCookieSet: false,
-    isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -205,9 +187,6 @@ export const TempCookieData: CookieTableData[] = [
     url: 'https://example.com',
     headerType: 'response',
     frameIdList: [],
-    isCookieSet: false,
-    isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -231,9 +210,6 @@ export const TempCookieData: CookieTableData[] = [
     url: 'https://example.com',
     headerType: 'response',
     frameIdList: [],
-    isCookieSet: false,
-    isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -257,9 +233,6 @@ export const TempCookieData: CookieTableData[] = [
     url: 'https://example.com',
     headerType: 'response',
     frameIdList: [],
-    isCookieSet: false,
-    isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -283,9 +256,6 @@ export const TempCookieData: CookieTableData[] = [
     url: 'https://example.com',
     headerType: 'response',
     frameIdList: [],
-    isCookieSet: false,
-    isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -309,9 +279,6 @@ export const TempCookieData: CookieTableData[] = [
     url: 'https://example.com',
     headerType: 'response',
     frameIdList: [],
-    isCookieSet: false,
-    isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -335,9 +302,6 @@ export const TempCookieData: CookieTableData[] = [
     url: 'https://example.com',
     headerType: 'response',
     frameIdList: [],
-    isCookieSet: false,
-    isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -361,9 +325,6 @@ export const TempCookieData: CookieTableData[] = [
     url: 'https://example.com',
     headerType: 'response',
     frameIdList: [],
-    isCookieSet: false,
-    isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -387,9 +348,6 @@ export const TempCookieData: CookieTableData[] = [
     url: 'https://example.com',
     headerType: 'response',
     frameIdList: [],
-    isCookieSet: false,
-    isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -413,9 +371,6 @@ export const TempCookieData: CookieTableData[] = [
     url: 'https://example.com',
     headerType: 'response',
     frameIdList: [],
-    isCookieSet: false,
-    isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -439,9 +394,6 @@ export const TempCookieData: CookieTableData[] = [
     url: 'https://example.com',
     headerType: 'response',
     frameIdList: [],
-    isCookieSet: false,
-    isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -465,9 +417,6 @@ export const TempCookieData: CookieTableData[] = [
     url: 'https://example.com',
     headerType: 'response',
     frameIdList: [],
-    isCookieSet: false,
-    isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -491,9 +440,6 @@ export const TempCookieData: CookieTableData[] = [
     url: 'https://example.com',
     headerType: 'response',
     frameIdList: [],
-    isCookieSet: false,
-    isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -517,9 +463,6 @@ export const TempCookieData: CookieTableData[] = [
     url: 'https://example.com',
     headerType: 'response',
     frameIdList: [],
-    isCookieSet: false,
-    isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -543,8 +486,5 @@ export const TempCookieData: CookieTableData[] = [
     url: 'https://example.com',
     headerType: 'response',
     frameIdList: [],
-    isCookieSet: false,
-    isFirstParty: true,
-    isIbcCompliant: false,
   },
 ];
