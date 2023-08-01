@@ -25,6 +25,7 @@ import { flexRender, type Header } from '@tanstack/react-table';
  */
 import type { TableData } from '..';
 import HeaderResizer from './headerResizer';
+import ArrowDown from '../../../../../../icons/arrow-down.svg';
 
 interface HeaderCellProps {
   header: Header<TableData, unknown>;
@@ -35,13 +36,21 @@ const HeaderCell = ({ header }: HeaderCellProps) => {
     <th
       colSpan={header.colSpan}
       style={{ maxWidth: header.getSize() }}
+      onClick={header.column.getToggleSortingHandler()}
       className="border-x border-american-silver relative hover:bg-gainsboro select-none touch-none font-normal"
+      data-testid="header-cell"
     >
       <div className="w-full h-full flex items-center justify-between">
         <p className="px-1 py-px truncate text-xs">
           {header.isPlaceholder
             ? null
             : flexRender(header.column.columnDef.header, header.getContext())}
+        </p>
+        <p className="mr-2 scale-125">
+          {{
+            asc: <ArrowDown className="transform rotate-180" />,
+            desc: <ArrowDown />,
+          }[header.column.getIsSorted() as string] ?? null}
         </p>
       </div>
       <HeaderResizer header={header} />
