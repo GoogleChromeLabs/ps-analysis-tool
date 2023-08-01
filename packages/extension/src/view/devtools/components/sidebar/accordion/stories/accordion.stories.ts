@@ -51,5 +51,9 @@ export const Primary: StoryObj<typeof Accordion> = {
     },
     setSelectedFrame: () => undefined,
     selectedFrame: 'https://edition.cnn.com',
+    accordionState: false,
+    keyboardNavigator: () => undefined,
+    setAccordionState: () => undefined,
+    setIndex: () => undefined,
   },
 };
