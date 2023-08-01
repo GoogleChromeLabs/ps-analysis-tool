@@ -102,7 +102,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
           }
         }
       });
-
       setTabFrames(modifiedTabFrames);
     },
     []
@@ -187,10 +186,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
             };
           })
         );
-
+        await getAllFramesForCurrentTab(tabId);
         setTabCookies(_cookies);
       }
-      await getAllFramesForCurrentTab(tabId);
     },
     [tabId, getAllFramesForCurrentTab]
   );
