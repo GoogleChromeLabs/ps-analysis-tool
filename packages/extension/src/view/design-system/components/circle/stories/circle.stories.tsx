@@ -16,19 +16,23 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import type { Meta } from '@storybook/react';
 
-interface CircleProps {
-  color: string;
-}
+/**
+ * Internal dependencies.
+ */
+import Circle from '..';
+import { COLOR_MAP } from '../../../theme/colors';
 
-const Circle = ({ color }: CircleProps) => (
-  <div
-    className="w-4 h-4 rounded-full flex items-center justify-center mr-2"
-    style={{ backgroundColor: color }}
-  >
-    <div className="w-2 h-2 rounded-full flex items-center justify-center bg-white" />
-  </div>
-);
+const meta: Meta<typeof Circle> = {
+  title: 'Extension/DesignSystem/Circle',
+  component: Circle,
+};
 
-export default Circle;
+export default meta;
+
+export const Primary = {
+  args: {
+    color: COLOR_MAP.functional,
+  },
+};

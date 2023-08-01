@@ -13,32 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
 import React from 'react';
+import { render } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect'; // For additional matchers
 
 /**
  * Internal dependencies.
  */
-import Circle from './circle';
+import Circle from '..'; // Adjust the path based on your folder structure
 
-interface LegendProps {
-  legendItemList: { label: string; count: number; color: string }[];
-}
+describe('Circle', () => {
+  const testColor = 'red';
 
-const Legend = ({ legendItemList }: LegendProps) => {
-  return (
-    <div className="flex flex-col">
-      {legendItemList.map(({ label, count, color }, index) => (
-        <div key={index} className="w-36 flex items-center justify-center my-1">
-          <Circle color={color} />
-          <p className="flex-1 text-chart-label text-xs">{label}</p>
-          <p className="text-chart-label text-xs">{count}</p>
-        </div>
-      ))}
-    </div>
-  );
-};
+  it('renders the Circle with the correct background color', () => {
+    const { container } = render(<Circle color={testColor} />);
 
-export default Legend;
+    // Check if the Circle div has the correct background color style
+    const circleDiv = container.querySelector('.rounded-full');
+    expect(circleDiv).toHaveStyle(`background-color: ${testColor}`);
+  });
+});
