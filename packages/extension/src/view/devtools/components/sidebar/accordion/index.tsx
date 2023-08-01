@@ -75,6 +75,7 @@ const Accordion: React.FC<AccordionProps> = ({
         onKeyDown={(event) => keyboardNavigator(event)}
       >
         <div
+          data-testid="accordion-opener"
           className={`origin-center transition-transform ${
             accordionState ? '' : '-rotate-90'
           }`}

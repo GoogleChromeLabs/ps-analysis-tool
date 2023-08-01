@@ -123,6 +123,7 @@ describe('Accordion', () => {
 
     expect(framesContainer).toHaveClass('hidden');
   });
+
   it('should not display tabFrames if not opened.', () => {
     const renderedAccordion = render(
       <Accordion

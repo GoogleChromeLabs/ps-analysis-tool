@@ -291,4 +291,37 @@ describe('Sidebar', () => {
     );
     expect(attributionContainer).toHaveClass('bg-selected-background-color');
   });
+
+  it('should close accordion and deselect the frame.', () => {
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: 'https://edition.cnn.com/',
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    render(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    const accordionOpener = screen.getByTestId('accordion-opener');
+    fireEvent.click(accordionOpener);
+    expect(accordionOpener).not.toHaveClass('-rotate-90');
+
+    fireEvent.click(screen.getByTestId('https://edition.cnn.com/'));
+
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+
+    fireEvent.click(accordionOpener);
+    expect(accordionOpener).toHaveClass('-rotate-90');
+  });
 });
