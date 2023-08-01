@@ -38,6 +38,8 @@ const normalCookie1 = {
   analytics: null,
   url: 'https://example.com/public/api/alerts',
   headerType: 'request',
+  isFirstParty: false,
+  frameIdList: [1],
 };
 
 const normalCookie2 = {
@@ -54,6 +56,8 @@ const normalCookie2 = {
   analytics: null,
   url: 'https://example.com/public/api/alerts',
   headerType: 'request',
+  isFirstParty: false,
+  frameIdList: [1],
 };
 
 const specialCookie = {
@@ -70,6 +74,8 @@ const specialCookie = {
   analytics: null,
   url: 'https://example.com/public/api/alerts',
   headerType: 'request',
+  isFirstParty: false,
+  frameIdList: [1],
 };
 
 const wildcardCookie = {
@@ -97,6 +103,8 @@ const wildcardCookie = {
   },
   url: 'https://example.com/public/api/alerts',
   headerType: 'request',
+  isFirstParty: false,
+  frameIdList: [1],
 };
 
 const normalCookie1Header = `${normalCookie1.parsedCookie.name}=${normalCookie1.parsedCookie.value}`;
@@ -114,11 +122,14 @@ describe('parseRequestCookieHeader', () => {
     const parsedCookie = await parseRequestCookieHeader(
       'https://example.com/public/api/alerts',
       header,
-      {}
+      {},
+      'https://docs.google.com/',
+      1
     );
 
     expect(parsedCookie).toEqual([normalCookie1, normalCookie2, specialCookie]);
   });
+
   it('Should parse cookie header and add analytics', async () => {
     const header = `${normalCookie1Header}; ${normalCookie2Header}; ${specialCookieHeader}; ${wildcardCookieHeader}`;
     const parsedCookie = await parseRequestCookieHeader(
@@ -153,7 +164,9 @@ describe('parseRequestCookieHeader', () => {
             wildcard: '1',
           },
         ],
-      }
+      },
+      'https://docs.google.com/',
+      1
     );
 
     expect(parsedCookie).toEqual([

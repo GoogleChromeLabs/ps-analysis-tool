@@ -13,5 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './tabContent';
-export { default as Sidebar } from './sidebar';
+
+const path = require('path');
+
+module.exports = {
+  plugins: {
+    tailwindcss: {
+      config: path.join(__dirname, './packages/extension/tailwind.config.cjs'),
+    },
+    autoprefixer: {},
+  },
+};

@@ -33,7 +33,7 @@ let cookieDB: CookieDatabase | null = null;
  */
 chrome.webRequest.onResponseStarted.addListener(
   async (details: chrome.webRequest.WebResponseCacheDetails) => {
-    const { tabId, url, responseHeaders } = details;
+    const { tabId, url, responseHeaders, frameId } = details;
 
     const tab = await getTab(tabId);
 
@@ -56,7 +56,9 @@ chrome.webRequest.onResponseStarted.addListener(
           const cookie = await parseResponseCookieHeader(
             url,
             header.value,
-            cookieDB
+            cookieDB,
+            tab.url,
+            frameId
           );
           return [...(await accumulator), cookie];
         }
@@ -77,7 +79,7 @@ chrome.webRequest.onResponseStarted.addListener(
 );
 
 chrome.webRequest.onBeforeSendHeaders.addListener(
-  ({ url, requestHeaders, tabId }) => {
+  ({ url, requestHeaders, tabId, frameId }) => {
     (async () => {
       const tab = await getTab(tabId);
 
@@ -95,12 +97,15 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
             header.name.toLowerCase() === 'cookie' &&
             header.value &&
             url &&
+            tab.url &&
             cookieDB
           ) {
             const cookieList = await parseRequestCookieHeader(
               url,
               header.value,
-              cookieDB
+              cookieDB,
+              tab.url,
+              frameId
             );
             return [...(await accumulator), ...cookieList];
           }
