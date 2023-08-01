@@ -22,10 +22,10 @@ import React, { useState } from 'react';
 /**
  * Internal dependencies.
  */
-import type { CookieTableData } from '../../../../../../stateProviders/syncCookieStore';
+import type { CookieData } from '../../../../../../../../localStore';
 
 export interface DetailsProps {
-  selectedCookie: CookieTableData;
+  selectedCookie: CookieData;
 }
 
 const Details = ({ selectedCookie }: DetailsProps) => {

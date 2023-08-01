@@ -29,15 +29,10 @@ import React, {
  */
 import type { CookieData } from '../../../../localStore';
 
-export type CookieTableData = CookieData & {
-  isIbcCompliant: boolean | null;
-  isCookieSet: boolean | null;
-};
-
 export interface CookieStoreContext {
   state: {
     tabCookies: {
-      [key: string]: CookieTableData;
+      [key: string]: CookieData;
     } | null;
     tabUrl: string | null;
   };
