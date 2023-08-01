@@ -16,8 +16,8 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useState } from 'react';
-import { Resizable, type ResizeDirection, type NumberSize } from 're-resizable';
+import React, { useState } from 'react';
+import { Resizable } from 're-resizable';
 
 /**
  * Internal dependencies.
@@ -58,22 +58,6 @@ const TABS = [
 
 const App: React.FC = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
-  const [width, setWidth] = useState<number>(200);
-  const setWidthOnResizeStop = useCallback(
-    (
-      _: MouseEvent | TouchEvent,
-      __: ResizeDirection,
-      ___: HTMLElement,
-      d: NumberSize
-    ): void => {
-      if (width + d.width > 0) {
-        setWidth(width + d.width);
-      } else {
-        setWidth(200);
-      }
-    },
-    [width]
-  );
 
   const TabContent = TABS[selectedTabIndex].Component;
   const tabNames = TABS.map((tab) => tab.display_name);
@@ -81,8 +65,9 @@ const App: React.FC = () => {
     <div className="w-full h-screen overflow-hidden">
       <div className="w-full h-full flex flex-row">
         <Resizable
-          minWidth={'200px'}
-          size={{ width: width, height: '100%' }}
+          defaultSize={{ width: '200px', height: '100%' }}
+          minWidth={'150px'}
+          maxWidth={'95%'}
           enable={{
             top: false,
             right: true,
@@ -93,8 +78,7 @@ const App: React.FC = () => {
             bottomLeft: false,
             topLeft: false,
           }}
-          onResizeStop={setWidthOnResizeStop}
-          className="w-1/4 h-full flex flex-col pt-3.5 overflow-y-auto overflow-x-clip border-solid border-r border-b border-t border-gray-300"
+          className="h-full flex flex-col pt-3.5 overflow-auto border-solid border-r border-b border-t border-gray-300"
         >
           <Sidebar
             tabsNames={tabNames}
@@ -102,7 +86,7 @@ const App: React.FC = () => {
             setIndex={setSelectedTabIndex}
           />
         </Resizable>
-        <main className="w-full h-full">
+        <main className="h-full flex-1 overflow-auto">
           <ContentPanelProvider>
             <TabContent />
           </ContentPanelProvider>
