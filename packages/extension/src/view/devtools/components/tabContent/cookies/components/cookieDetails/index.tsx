@@ -23,7 +23,7 @@ import React from 'react';
  * Internal dependencies.
  */
 import { useContentPanelStore } from '../../../../../stateProviders/contentPanelStore';
-import { Details } from './components';
+import Details from './details';
 
 const CookieDetails = () => {
   const { selectedCookie } = useContentPanelStore(({ state }) => ({

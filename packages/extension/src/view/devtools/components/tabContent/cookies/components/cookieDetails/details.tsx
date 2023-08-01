@@ -22,7 +22,7 @@ import React, { useState } from 'react';
 /**
  * Internal dependencies.
  */
-import type { CookieData } from '../../../../../../../../localStore';
+import type { CookieData } from '../../../../../../../localStore';
 
 export interface DetailsProps {
   selectedCookie: CookieData;
