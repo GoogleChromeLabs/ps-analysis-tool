@@ -63,4 +63,15 @@ describe('checkIbcCompliance', () => {
 
     expect(isIbcCompliant).toBeTruthy();
   });
+
+  it('Should work with no samesite set to none and secure attribute', async () => {
+    const isIbcCompliant = await checkIbcCompliance(
+      'none',
+      true,
+      'cookieName',
+      'https://example.com'
+    );
+
+    expect(isIbcCompliant).toBeTruthy();
+  });
 });

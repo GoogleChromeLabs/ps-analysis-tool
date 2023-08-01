@@ -144,6 +144,12 @@ describe('countCookiesByCategory : ', () => {
     );
   });
 
+  it('Gives empty stats with null passed as cookies', () => {
+    expect(countCookiesByCategory(null, 'https://example.com/page')).toEqual(
+      EMPTY_STATS
+    );
+  });
+
   it('Generates correct tests', () => {
     const cookies = {
       [functional1pCookie.parsedCookie.name]: functional1pCookie,
