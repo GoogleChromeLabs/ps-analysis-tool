@@ -77,20 +77,6 @@ const CookieStore = {
   },
 
   /**
-   * Deletes a cookie
-   * @param {string} cookieName Name of the cookie.
-   */
-  async deleteCookie(cookieName: string) {
-    const storage = await chrome.storage.local.get();
-
-    Object.values(storage).forEach((tabData) => {
-      delete tabData.cookies[cookieName];
-    });
-
-    await chrome.storage.local.set(storage);
-  },
-
-  /**
    * Update the focusedAt timestamp for the tab.
    * @param {string} tabId The active tab id.
    */

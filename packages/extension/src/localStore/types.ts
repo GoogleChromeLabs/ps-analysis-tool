@@ -28,7 +28,6 @@ export type CookieData = {
   analytics: CookieAnalytics | null;
   url: string;
   headerType: 'response' | 'request';
-  isFirstParty: boolean | null;
   frameIdList: number[];
 };
 
