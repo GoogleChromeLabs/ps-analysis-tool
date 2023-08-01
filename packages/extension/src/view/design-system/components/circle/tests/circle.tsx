@@ -15,21 +15,20 @@
  */
 import React from 'react';
 import { render } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect'; // For additional matchers
+import '@testing-library/jest-dom/extend-expect';
 
 /**
  * Internal dependencies.
  */
-import Circle from '..'; // Adjust the path based on your folder structure
+import Circle from '..';
+import { COLOR_MAP } from '../../../theme/colors';
 
 describe('Circle', () => {
-  const testColor = 'red';
-
   it('renders the Circle with the correct background color', () => {
-    const { container } = render(<Circle color={testColor} />);
+    const { container } = render(<Circle color={COLOR_MAP.functional} />);
 
     // Check if the Circle div has the correct background color style
     const circleDiv = container.querySelector('.rounded-full');
-    expect(circleDiv).toHaveStyle(`background-color: ${testColor}`);
+    expect(circleDiv).toHaveStyle(`background-color: ${COLOR_MAP.functional}`);
   });
 });

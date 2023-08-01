@@ -21,7 +21,7 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { Circle } from '../../design-system/components';
+import { Circle } from '../../../design-system/components';
 
 interface LegendProps {
   legendItemList: { label: string; count: number; color: string }[];

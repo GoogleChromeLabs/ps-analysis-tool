@@ -15,7 +15,7 @@
  */
 import React from 'react';
 import { render } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect'; // For additional matchers
+import '@testing-library/jest-dom/extend-expect';
 
 /**
  * Internal dependencies.
@@ -47,7 +47,7 @@ describe('CirclePieChart', () => {
 
     // Check if the centerCount text is rendered
     const text: string = centerCount.toString();
-    const centerCountElement = getByText(text as HTMLElement);
+    const centerCountElement = getByText(text);
     expect(centerCountElement).toBeInTheDocument();
   });
 });
