@@ -31,18 +31,29 @@ interface BodyRowProps {
   index: number;
   selectedKey: string | undefined;
   onRowClick: (key: TData) => void;
+  onKeyDown: (
+    e: React.KeyboardEvent<HTMLTableRowElement>,
+    row: Row<TData>
+  ) => void;
 }
 
-const BodyRow = ({ row, index, selectedKey, onRowClick }: BodyRowProps) => {
+const BodyRow = ({
+  row,
+  index,
+  selectedKey,
+  onRowClick,
+  onKeyDown,
+}: BodyRowProps) => {
   return (
     <tr
-      key={row.id}
+      id={row.id}
       className={`${index % 2 ? 'bg-anti-flash-white' : ''} ${
         row.original.parsedCookie.name === selectedKey ? 'bg-gainsboro' : ''
-      } hover:bg-gray-200 cursor-pointer`}
+      } outline-0`}
       onClick={() => {
         onRowClick(row.original);
       }}
+      onKeyDown={(e) => onKeyDown(e, row)}
       data-testid="body-row"
     >
       {row.getVisibleCells().map((cell) => (

@@ -35,7 +35,6 @@ describe('parseResponseCookieHeader', () => {
       'https://example.com/public/api/alerts',
       'countryCode=IN; Domain=.example.com; Path=/; SameSite=None; Secure',
       {},
-      'https://docs.google.com/',
       1
     );
 
@@ -53,7 +52,6 @@ describe('parseResponseCookieHeader', () => {
       analytics: { ...emptyAnalytics },
       url: 'https://example.com/public/api/alerts',
       headerType: 'response',
-      isFirstParty: false,
       frameIdList: [1],
     });
   });
@@ -78,7 +76,6 @@ describe('parseResponseCookieHeader', () => {
           },
         ],
       },
-      'https://docs.google.com/',
       1
     );
 
@@ -107,7 +104,6 @@ describe('parseResponseCookieHeader', () => {
       },
       url: 'https://example.com/public/api/alerts',
       headerType: 'response',
-      isFirstParty: false,
       frameIdList: [1],
     });
   });
@@ -146,7 +142,6 @@ describe('parseResponseCookieHeader', () => {
           },
         ],
       },
-      'https://docs.google.com/',
       1
     );
 
@@ -175,7 +170,6 @@ describe('parseResponseCookieHeader', () => {
       },
       url: 'https://google.com/public/api/alerts',
       headerType: 'response',
-      isFirstParty: true,
       frameIdList: [1],
     });
   });

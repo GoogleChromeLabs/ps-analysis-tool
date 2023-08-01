@@ -16,32 +16,19 @@
 
 /**
  * Check if cookie is compliant with IBC(Incrementally Better Cookies) proposal.
- * @param samesite Cookie SameSite attribute
- * @param secure Cookie secure attribute
- * @param name Cookie name
- * @param url Cookie url
+ * @param samesite SameSite attribute value.
+ * @param secure Secure attribute value.
+ * @param chromeCookieStoreHasCookie True if cookie is stored in Chrome store.
  * @returns {boolean} True if cookie is compliant with IBC proposal.
  */
-export async function checkIbcCompliance(
+export function checkIBCCompliance(
   samesite = 'lax',
   secure = false,
-  name: string,
-  url: string
-): Promise<boolean> {
-  const chromeCookieStoreHasCookie = Boolean(
-    await chrome.cookies.get({
-      name: name,
-      url: url,
-    })
-  );
-
-  if (samesite.toLowerCase() !== 'none' && chromeCookieStoreHasCookie) {
-    return true;
-  } else if (samesite.toLowerCase() === 'none' && secure) {
-    return chromeCookieStoreHasCookie;
-  } else if (samesite.toLowerCase() === 'none' && !secure) {
-    return !chromeCookieStoreHasCookie;
-  } else {
-    return true;
+  chromeCookieStoreHasCookie = false
+): boolean {
+  if (samesite.toLowerCase() === 'none') {
+    return secure ? chromeCookieStoreHasCookie : !chromeCookieStoreHasCookie;
   }
+
+  return chromeCookieStoreHasCookie;
 }

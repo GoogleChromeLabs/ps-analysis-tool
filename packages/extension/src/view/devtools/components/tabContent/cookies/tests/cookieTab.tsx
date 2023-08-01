@@ -80,9 +80,6 @@ const mockResponse: {
       analytics: { ...emptyAnalytics },
       url: 'https://edition.cnn.com/whatever/api',
       headerType: 'response',
-      isFirstParty: true,
-      isIbcCompliant: true,
-      isCookieSet: true,
       frameIdList: [1],
     },
     [uncategorised3pCookie.name]: {
@@ -90,9 +87,6 @@ const mockResponse: {
       analytics: { ...emptyAnalytics },
       url: 'https://api.pubmatic.com/whatever/api',
       headerType: 'response',
-      isFirstParty: false,
-      isIbcCompliant: true,
-      isCookieSet: true,
       frameIdList: [1],
     },
     [known1pCookie.name]: {
@@ -111,9 +105,6 @@ const mockResponse: {
       },
       url: 'https://edition.cnn.com/whatever/api',
       headerType: 'response',
-      isFirstParty: true,
-      isIbcCompliant: true,
-      isCookieSet: true,
       frameIdList: [1],
     },
     [known3pCookie.name]: {
@@ -132,9 +123,6 @@ const mockResponse: {
       },
       url: 'https://api.pubmatic.com/whatever/api',
       headerType: 'response',
-      isFirstParty: false,
-      isIbcCompliant: true,
-      isCookieSet: true,
       frameIdList: [1],
     },
   },
@@ -320,7 +308,7 @@ describe('CookieTab', () => {
     ).toBeInTheDocument();
   });
 
-  it('should get the cookie object when row is clicked', async () => {
+  it('should get the cookie object when row is clicked or Arrow up/down pressed', async () => {
     const setStateMock = jest.fn();
     mockUseContentPanelStore.mockReturnValue({
       selectedCookie: null,
@@ -343,6 +331,12 @@ describe('CookieTab', () => {
 
     const row = (await screen.findAllByTestId('body-row'))[0];
     fireEvent.click(row);
+
+    expect(setStateMock).toHaveBeenCalledWith(
+      mockResponse.tabCookies[uncategorised1pCookie.name]
+    );
+
+    fireEvent.keyDown(row, { key: 'ArrowDown', code: 'ArrowDown' });
 
     expect(setStateMock).toHaveBeenCalledWith(
       mockResponse.tabCookies[uncategorised1pCookie.name]

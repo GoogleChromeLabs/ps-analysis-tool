@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import type { Row } from '@tanstack/react-table';
 
 /**
@@ -33,8 +33,41 @@ interface TableBodyProps {
 }
 
 const TableBody = ({ rows, selectedKey, onRowClick }: TableBodyProps) => {
+  const tableBodyRef = useRef(null);
+
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLTableRowElement>, row: Row<TData>) => {
+      event.preventDefault();
+      event.stopPropagation();
+      // @ts-ignore - the `children` property will be available on the `current` property.
+      const currentRow = tableBodyRef.current?.children.namedItem(row.id);
+
+      let newRowId: string | null = null;
+      let rowElement: HTMLTableRowElement | null = null;
+      if (event.key === 'ArrowUp') {
+        rowElement = currentRow?.previousElementSibling;
+      } else if (event.key === 'ArrowDown') {
+        rowElement = currentRow?.nextElementSibling;
+      }
+
+      if (rowElement) {
+        rowElement.tabIndex = -1;
+        rowElement.focus();
+        newRowId = rowElement.id;
+      }
+
+      if (newRowId) {
+        const newRow = rows.find((_row) => _row.id === newRowId);
+        if (newRow) {
+          onRowClick(newRow.original);
+        }
+      }
+    },
+    [onRowClick, rows]
+  );
+
   return (
-    <tbody>
+    <tbody ref={tableBodyRef}>
       {rows.map((row, index) => (
         <BodyRow
           key={row.id}
@@ -42,6 +75,7 @@ const TableBody = ({ rows, selectedKey, onRowClick }: TableBodyProps) => {
           row={row}
           selectedKey={selectedKey}
           onRowClick={onRowClick}
+          onKeyDown={handleKeyDown}
         />
       ))}
     </tbody>
