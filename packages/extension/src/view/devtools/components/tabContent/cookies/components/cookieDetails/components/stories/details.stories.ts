@@ -39,7 +39,7 @@ export const Primary: Story = {
     selectedCookie: {
       parsedCookie: {
         name: 'test',
-        value: 'test',
+        value: 'v1%3A168740954476563235',
       },
       analytics: {
         description: 'A description of the cookie',
