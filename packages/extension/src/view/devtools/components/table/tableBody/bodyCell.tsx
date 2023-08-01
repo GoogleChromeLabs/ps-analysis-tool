@@ -32,8 +32,9 @@ interface BodyCellProps {
 const BodyCell = ({ cell }: BodyCellProps) => {
   return (
     <td
+      tabIndex={0}
       style={{ maxWidth: cell.column.getSize() }}
-      className={`border border-y-0 px-1 py-px truncate border-american-silver h-5 text-xs ${
+      className={`border border-y-0 px-1 py-px truncate border-american-silver h-5 text-xs  ${
         cell.column.columnDef.header === 'Name' ? 'pl-5' : ''
       }`}
     >
