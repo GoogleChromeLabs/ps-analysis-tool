@@ -33,7 +33,7 @@ interface ColumnListProps {
 
 const ColumnList = ({ columns, handleClose }: ColumnListProps) => {
   return (
-    <ul className="text-basic">
+    <ul className="text-basic mt-1.5">
       {columns.map((column) => (
         <ColumnListItem
           key={column.id}

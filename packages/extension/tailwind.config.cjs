@@ -47,6 +47,7 @@ module.exports = {
       'anti-flash-white': '#F1F3F4',
       gainsboro: '#DADCE0',
       'american-silver': '#CBCDD1',
+      'raisin-black': '#202124',
     },
     borderColor: {
       ...colors,

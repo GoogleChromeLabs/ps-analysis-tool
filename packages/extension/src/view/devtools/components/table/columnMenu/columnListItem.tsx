@@ -41,7 +41,7 @@ const ColumnListItem = ({ column, handleClose }: ColumnListItemProps) => {
       }`}
     >
       <button
-        className="w-full rounded text-sm px-4 py-0.5 my-1 flex items-center hover:bg-royal-blue hover:text-white select-none touch-none"
+        className="w-full rounded text-[13px] px-2 py-0.5 flex items-center hover:bg-royal-blue hover:text-white select-none touch-none"
         onClick={(e) => {
           column.getToggleVisibilityHandler()(e);
           handleClose();

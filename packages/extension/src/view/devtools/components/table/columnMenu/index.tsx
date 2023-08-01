@@ -56,9 +56,9 @@ const ColumnMenu = ({ table, columns, open, onClose }: ColumnMenuProps) => {
             }`}
             data-testid="column-menu"
           >
-            <div className="absolute top-10 left-2 z-20 bg-white rounded-lg w-screen max-w-[15rem] border shadow-2xl shadow-slate-500 border-gray-300 px-2 py-2 mr-2 divide-y divide-neutral-300 max-h-[80vh] overflow-auto bg-stone-200">
+            <div className="absolute top-10 left-2 z-50 text-raisin-black rounded-lg w-screen max-w-[13rem] border shadow-2xl shadow-slate-700 border-stone-300 p-1.5 mr-2 divide-y divide-neutral-300 max-h-[80vh] overflow-auto bg-stone-200">
               <button
-                className="block w-full text-sm rounded px-4 py-1 mt-1 mb-2 flex items-center font-semibold hover:bg-royal-blue hover:text-white cursor-pointer"
+                className="block w-full text-[13px] rounded px-2 py-0.5 mb-1.5 flex items-center hover:bg-royal-blue hover:text-white cursor-pointer"
                 onClick={(e) => {
                   table.getToggleAllColumnsVisibilityHandler()(e);
                   handleClose();
@@ -73,7 +73,9 @@ const ColumnMenu = ({ table, columns, open, onClose }: ColumnMenuProps) => {
                 </span>
                 <span>Toggle All</span>
               </button>
-              <ColumnList columns={columns} handleClose={handleClose} />
+              <div>
+                <ColumnList columns={columns} handleClose={handleClose} />
+              </div>
             </div>
 
             <div
