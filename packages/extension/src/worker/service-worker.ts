@@ -167,15 +167,3 @@ chrome.windows.onRemoved.addListener(async (windowId) => {
 chrome.runtime.onInstalled.addListener(async () => {
   await chrome.storage.local.clear();
 });
-
-/**
- * Listen to changes in cookie store and sync extension local store
- * when any cookies are delted ( through application tab in devtools )
- */
-chrome.cookies.onChanged.addListener(
-  async (changeInfo: chrome.cookies.CookieChangeInfo) => {
-    if (changeInfo.cause === 'explicit' && changeInfo.removed) {
-      await CookieStore.deleteCookie(changeInfo.cookie.name);
-    }
-  }
-);
