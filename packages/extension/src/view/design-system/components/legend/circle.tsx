@@ -13,4 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as Legend } from './legend';
+/**
+ * External dependencies.
+ */
+import React from 'react';
+
+interface CircleProps {
+  color: string;
+}
+
+const Circle = ({ color }: CircleProps) => (
+  <div
+    className="w-4 h-4 rounded-full flex items-center justify-center mr-2"
+    style={{ backgroundColor: color }}
+  >
+    <div className="w-2 h-2 rounded-full flex items-center justify-center bg-white" />
+  </div>
+);
+
+export default Circle;
