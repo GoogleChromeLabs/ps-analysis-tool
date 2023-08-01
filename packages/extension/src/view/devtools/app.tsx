@@ -94,7 +94,7 @@ const App: React.FC = () => {
             topLeft: false,
           }}
           onResizeStop={setWidthOnResizeStop}
-          className="w-1/4 h-full flex flex-col pt-3.5 overflow-y-auto overflow-x-clip border-solid border-r border-b border-t border-selected-background-color"
+          className="w-1/4 h-full flex flex-col pt-3.5 overflow-y-auto overflow-x-clip border-solid border-r border-b border-t border-gray-300"
         >
           <Sidebar
             tabsNames={tabNames}
@@ -102,7 +102,7 @@ const App: React.FC = () => {
             setIndex={setSelectedTabIndex}
           />
         </Resizable>
-        <main style={{ height: 'calc(100% - 40px)' }}>
+        <main className="w-full h-full">
           <ContentPanelProvider>
             <TabContent />
           </ContentPanelProvider>
