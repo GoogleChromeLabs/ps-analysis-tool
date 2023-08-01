@@ -21,19 +21,29 @@ import type { Meta, StoryObj } from '@storybook/react';
 /**
  * Internal dependencies.
  */
-
-import { CookieDetails } from '../..';
+import Details from '../details';
+import type { CookieTableData } from '../../../../../../../stateProviders/syncCookieStore';
 
 const meta = {
-  title: 'Extension/CookiesPanel/CookieDetails',
-  component: CookieDetails,
+  title: 'Extension/CookiesPanel/CookieDetails/Details',
+  component: Details,
   tags: ['autodocs'],
-} as Meta<typeof CookieDetails>;
+} as Meta<typeof Details>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
-  args: {},
+  args: {
+    selectedCookie: {
+      parsedCookie: {
+        name: 'test',
+        value: 'test',
+      },
+      analytics: {
+        description: 'A description of the cookie',
+      },
+    } as CookieTableData,
+  },
 };
