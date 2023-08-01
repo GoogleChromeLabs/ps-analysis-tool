@@ -73,6 +73,8 @@ const known3pCookie: ParsedCookie = {
 const mockResponse: {
   tabCookies: NonNullable<CookieStoreContext['state']['tabCookies']>;
   tabUrl: NonNullable<CookieStoreContext['state']['tabUrl']>;
+  tabFrames: NonNullable<CookieStoreContext['state']['tabFrames']>;
+  selectedFrame: NonNullable<CookieStoreContext['state']['selectedFrame']>;
 } = {
   tabCookies: {
     [uncategorised1pCookie.name]: {
@@ -139,6 +141,12 @@ const mockResponse: {
     },
   },
   tabUrl: 'https://edition.cnn.com/',
+  tabFrames: {
+    'https://edition.cnn.com/': {
+      frameIds: [1],
+    },
+  },
+  selectedFrame: 'https://edition.cnn.com/',
 };
 
 jest.mock('../../../../stateProviders/syncCookieStore', () => {
@@ -147,6 +155,8 @@ jest.mock('../../../../stateProviders/syncCookieStore', () => {
       return {
         cookies: Object.values(mockResponse.tabCookies),
         tabUrl: mockResponse.tabUrl,
+        tabFrames: mockResponse.tabFrames,
+        selectedFrame: mockResponse.selectedFrame,
       };
     },
   };

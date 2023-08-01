@@ -13,5 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './tabContent';
-export { default as Sidebar } from './sidebar';
+export { default as ArrowDown } from './arrow-down.svg';
+export { default as ArrowDownWhite } from './arrow-down-white.svg';
+export { default as CookieGray } from './cookie-gray.svg';
+export { default as CookieWhite } from './cookie-white.svg';
+export { default as File } from './file.svg';
+export { default as FileWhite } from './file-white.svg';
