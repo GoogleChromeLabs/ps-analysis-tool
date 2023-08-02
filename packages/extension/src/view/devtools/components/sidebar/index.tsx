@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 /**
  * Internal dependencies
  */
@@ -28,9 +28,13 @@ interface SidebarProps {
   tabsNames: string[];
   selectedIndex: number;
   setIndex: (index: number) => void;
+  accordionState: boolean;
+  setAccordionState: (state: boolean) => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
+  accordionState,
+  setAccordionState,
   tabsNames,
   selectedIndex,
   setIndex,
@@ -42,8 +46,6 @@ const Sidebar: React.FC<SidebarProps> = ({
       selectedFrame: state.selectedFrame,
     })
   );
-
-  const [accordionState, setAccordionState] = useState(false);
 
   const mainMenuTabSelector = useCallback(
     (index: number) => {
@@ -126,14 +128,15 @@ const Sidebar: React.FC<SidebarProps> = ({
       }
     },
     [
+      tabFrames,
+      selectedFrame,
       accordionState,
       mainMenuTabSelector,
-      selectedFrame,
-      selectedIndex,
-      tabFrames,
       setSelectedFrame,
-      setIndex,
       tabsNames,
+      selectedIndex,
+      setIndex,
+      setAccordionState,
     ]
   );
 

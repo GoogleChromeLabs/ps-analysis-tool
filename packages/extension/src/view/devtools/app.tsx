@@ -58,6 +58,7 @@ const TABS = [
 
 const App: React.FC = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
+  const [accordionState, setAccordionState] = useState<boolean>(false);
 
   const TabContent = TABS[selectedTabIndex].Component;
   const tabNames = TABS.map((tab) => tab.display_name);
@@ -78,13 +79,19 @@ const App: React.FC = () => {
             bottomLeft: false,
             topLeft: false,
           }}
-          className="h-full flex flex-col pt-3.5 overflow-auto border-solid border-r border-b border-t border-gray-300"
+          className="h-full flex flex-col pt-3.5 overflow-auto border-solid border-r border-b border-gray-300"
         >
-          <Sidebar
-            tabsNames={tabNames}
-            selectedIndex={selectedTabIndex}
-            setIndex={setSelectedTabIndex}
-          />
+          <div
+            className={`h-full flex flex-col ${accordionState ? 'w-fit' : ''}`}
+          >
+            <Sidebar
+              accordionState={accordionState}
+              setAccordionState={setAccordionState}
+              tabsNames={tabNames}
+              selectedIndex={selectedTabIndex}
+              setIndex={setSelectedTabIndex}
+            />
+          </div>
         </Resizable>
         <main className="h-full flex-1 overflow-auto">
           <ContentPanelProvider>
