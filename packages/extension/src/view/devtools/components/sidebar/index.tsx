@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 /**
  * Internal dependencies
  */
@@ -28,13 +28,9 @@ interface SidebarProps {
   tabsNames: string[];
   selectedIndex: number;
   setIndex: (index: number) => void;
-  accordionState: boolean;
-  setAccordionState: (state: boolean) => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
-  accordionState,
-  setAccordionState,
   tabsNames,
   selectedIndex,
   setIndex,
@@ -46,6 +42,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       selectedFrame: state.selectedFrame,
     })
   );
+  const [accordionState, setAccordionState] = useState<boolean>(false);
 
   const mainMenuTabSelector = useCallback(
     (index: number) => {
@@ -136,12 +133,11 @@ const Sidebar: React.FC<SidebarProps> = ({
       tabsNames,
       selectedIndex,
       setIndex,
-      setAccordionState,
     ]
   );
 
   return (
-    <>
+    <div className="overflow-auto h-full">
       {tabsNames.map((name, index: number) => (
         <div
           key={name}
@@ -169,18 +165,20 @@ const Sidebar: React.FC<SidebarProps> = ({
             />
           ) : (
             <div
-              className="flex items-center pl-6 py-0.5"
+              className="flex w-full items-center pl-6 py-0.5"
               onClick={() => mainMenuTabSelector(index)}
             >
               <div className="h-4">
                 {selectedIndex === index ? <FileWhite /> : <File />}
               </div>
-              <span className="pl-2.5">{name}</span>
+              <div className="block">
+                <span className="pl-2.5">{name}</span>
+              </div>
             </div>
           )}
         </div>
       ))}
-    </>
+    </div>
   );
 };
 
