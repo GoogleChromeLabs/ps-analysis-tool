@@ -13,98 +13,55 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-//@todo remove justify-center and align-center after landing page PR is merged.
+
 /**
  * External dependencies.
  */
-import React, { useEffect, useState, useMemo } from 'react';
+import React from 'react';
+import { Resizable } from 're-resizable';
 
 /**
  * Internal dependencies.
  */
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import { CookieList, CookieDetails } from './components';
-import type { CookieData } from '../../../../../localStore';
+import { CookieDetails, CookieTable } from './components';
 
 const Cookies = () => {
-  const { cookies, tabUrl, selectedFrame, tabFrames } = useCookieStore(
-    ({ state }) => ({
-      cookies: state.tabCookies,
-      tabUrl: state.tabUrl,
-      selectedFrame: state.selectedFrame,
-      tabFrames: state.tabFrames,
-    })
-  );
-
-  const [selectedKey, setSelectedKey] = useState<string | null>(null);
-  const [selectedCookie, setSelectedCookie] = useState<
-    | (CookieData & {
-        isIbcCompliant: boolean | null;
-        isCookieSet: boolean | null;
-      })
-    | null
-  >(null);
-
-  useEffect(() => {
-    if (!selectedKey && cookies !== null && Object.keys(cookies).length !== 0) {
-      setSelectedKey(Object.keys(cookies)[0]);
-      setSelectedCookie(cookies[Object.keys(cookies)[0]]);
-    } else if (
-      selectedKey &&
-      cookies !== null &&
-      Object.keys(cookies).length !== 0 &&
-      Object.keys(cookies).includes(selectedKey)
-    ) {
-      setSelectedCookie(cookies[selectedKey]);
-    }
-  }, [cookies, selectedKey]);
-
-  const calculatedCookies = useMemo(() => {
-    const frameFilteredCookies: { [key: string]: CookieData } = {};
-    if (cookies && selectedFrame && tabFrames && tabFrames[selectedFrame]) {
-      Object.entries(cookies).forEach(([key, cookie]) => {
-        tabFrames[selectedFrame].frameIds?.forEach((frameId) => {
-          if (cookie.frameIdList?.includes(frameId)) {
-            frameFilteredCookies[key] = cookie;
-          }
-        });
-      });
-    }
-    return frameFilteredCookies;
-  }, [cookies, selectedFrame, tabFrames]);
+  const { cookies } = useCookieStore(({ state }) => ({
+    cookies: Object.values(state.tabCookies || {}),
+  }));
 
   return (
     <div
-      className={`w-full h-full flex flex-col lg:flex-row ${
-        selectedFrame ? '' : 'items-center justify-center'
-      }`}
+      className="h-full border border-american-silver"
       data-testid="cookies-content"
     >
-      {selectedFrame ? (
-        <>
-          <div className="basis-1/2 lg:basis-1/3 overflow-y-scroll border-r ">
-            <CookieList
-              cookies={calculatedCookies || {}}
-              tabUrl={tabUrl}
-              selectedKey={selectedKey}
-              onClickItem={setSelectedKey}
-            />
+      {cookies.length > 0 ? (
+        <div className="h-full flex flex-col">
+          <Resizable
+            defaultSize={{
+              width: '100%',
+              height: '80%',
+            }}
+            minHeight="6%"
+            maxHeight="98%"
+            enable={{
+              top: false,
+              right: false,
+              bottom: true,
+              left: false,
+            }}
+          >
+            <CookieTable cookies={cookies} />
+          </Resizable>
+          <div className="w-full h-full bg-white border-2 border-gray-300 shadow overflow-auto">
+            <CookieDetails />
           </div>
-          <div className=" basis-1/2 lg:basis-2/3 overflow-y-scroll pb-28">
-            <div className="border-t-gray-300 border-t-2 lg:border-t-0 ">
-              {selectedCookie && (
-                <CookieDetails
-                  data={selectedCookie.parsedCookie}
-                  analytics={selectedCookie.analytics}
-                  isIbcCompliant={selectedCookie.isIbcCompliant}
-                  isCookieSet={selectedCookie.isCookieSet}
-                />
-              )}
-            </div>
-          </div>
-        </>
+        </div>
       ) : (
-        <p> landing page placeholder</p>
+        <div className="w-full h-full flex items-center justify-center">
+          <div className="w-10 h-10 rounded-full animate-spin border-t-transparent border-solid border-blue-700 border-4" />
+        </div>
       )}
     </div>
   );

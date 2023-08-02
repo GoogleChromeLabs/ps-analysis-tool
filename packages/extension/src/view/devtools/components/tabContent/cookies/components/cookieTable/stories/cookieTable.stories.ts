@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * External dependencies.
  */
@@ -21,32 +22,20 @@ import type { Meta, StoryObj } from '@storybook/react';
 /**
  * Internal dependencies.
  */
-import Button from './button';
+import { TempCookieData } from './tempData';
+import { CookieTable } from '../..';
 
-// @todo To be removed after we add any story.
-// More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction
 const meta = {
-  title: 'Extension/Button',
-  component: Button,
+  title: 'Extension/CookiesPanel/CookieTable',
+  component: CookieTable,
   tags: ['autodocs'],
-  argTypes: {
-    backgroundColor: { control: 'color' },
-  },
-} satisfies Meta<typeof Button>;
+} as Meta<typeof CookieTable>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const Primary: Story = {
   args: {
-    primary: true,
-    label: 'Button',
-  },
-};
-
-export const Secondary: Story = {
-  args: {
-    label: 'Button',
+    cookies: TempCookieData,
   },
 };

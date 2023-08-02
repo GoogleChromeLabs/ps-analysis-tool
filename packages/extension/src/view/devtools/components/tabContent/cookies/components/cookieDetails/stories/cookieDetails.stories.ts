@@ -16,11 +16,24 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-// @todo To be removed after we add any story.
-const Button = () => {
-  return <button className="text-red-500">Example button</button>;
+/**
+ * Internal dependencies.
+ */
+
+import { CookieDetails } from '../..';
+
+const meta = {
+  title: 'Extension/CookiesPanel/CookieDetails',
+  component: CookieDetails,
+  tags: ['autodocs'],
+} as Meta<typeof CookieDetails>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Primary: Story = {
+  args: {},
 };
-
-export default Button;

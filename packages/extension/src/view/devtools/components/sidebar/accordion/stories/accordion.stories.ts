@@ -28,6 +28,7 @@ import Accordion from '..';
 const meta: Meta<typeof Accordion> = {
   title: 'Extension/Accordion',
   component: Accordion,
+  tags: ['autodocs'],
   argTypes: {
     accordionState: { control: 'boolean' },
     tabName: { control: 'text' },

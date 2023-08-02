@@ -14,5 +14,30 @@
  * limitations under the License.
  */
 
-export { default as CookieDetails } from './cookieDetails';
-export { default as CookieTable } from './cookieTable';
+/**
+ * External dependencies.
+ */
+import React from 'react';
+import type { HeaderGroup } from '@tanstack/react-table';
+
+/**
+ * Internal dependencies.
+ */
+import HeaderRow from './headerRow';
+import type { TableData } from '..';
+
+interface TableHeaderProps {
+  headerGroups: HeaderGroup<TableData>[];
+}
+
+const TableHeader = ({ headerGroups }: TableHeaderProps) => {
+  return (
+    <thead className="sticky top-0 z-50">
+      {headerGroups.map((headerGroup) => (
+        <HeaderRow key={headerGroup.id} headerGroup={headerGroup} />
+      ))}
+    </thead>
+  );
+};
+
+export default TableHeader;

@@ -27,26 +27,44 @@ import SinonChrome from 'sinon-chrome';
  */
 import CookieTab from '..';
 import type { CookieStoreContext } from '../../../../stateProviders/syncCookieStore';
+import { emptyAnalytics } from '../../../../../../worker/findAnalyticsMatch';
+import { CookieDetails } from '../components';
+import { useContentPanelStore } from '../../../../stateProviders/contentPanelStore';
+
+const emptyCookie = {
+  name: '',
+  value: '',
+  domain: '',
+  samesite: '',
+  secure: false,
+  httponly: false,
+  path: '',
+  expires: '',
+};
 
 const uncategorised1pCookie: ParsedCookie = {
+  ...emptyCookie,
   name: '_cb',
   value: 'uncategorised1pCookie',
   domain: '.cnn.com',
 };
 
 const uncategorised3pCookie: ParsedCookie = {
+  ...emptyCookie,
   name: 'pubsyncexp',
   value: 'uncategorised3pCookie',
   domain: '.ads.pubmatic.com',
 };
 
 const known1pCookie: ParsedCookie = {
+  ...emptyCookie,
   name: '__qca',
   value: 'known1pCookie',
   domain: '.cnn.com',
 };
 
 const known3pCookie: ParsedCookie = {
+  ...emptyCookie,
   name: 'KRTBCOOKIE_290',
   value: 'known3pCookie',
   domain: '.pubmatic.com',
@@ -61,7 +79,7 @@ const mockResponse: {
   tabCookies: {
     [uncategorised1pCookie.name]: {
       parsedCookie: uncategorised1pCookie,
-      analytics: null,
+      analytics: { ...emptyAnalytics },
       url: 'https://edition.cnn.com/whatever/api',
       headerType: 'response',
       isFirstParty: true,
@@ -71,7 +89,7 @@ const mockResponse: {
     },
     [uncategorised3pCookie.name]: {
       parsedCookie: uncategorised3pCookie,
-      analytics: null,
+      analytics: { ...emptyAnalytics },
       url: 'https://api.pubmatic.com/whatever/api',
       headerType: 'response',
       isFirstParty: false,
@@ -135,13 +153,22 @@ jest.mock('../../../../stateProviders/syncCookieStore', () => {
   return {
     useCookieStore: () => {
       return {
-        cookies: mockResponse.tabCookies,
+        cookies: Object.values(mockResponse.tabCookies),
         tabUrl: mockResponse.tabUrl,
         tabFrames: mockResponse.tabFrames,
         selectedFrame: mockResponse.selectedFrame,
       };
     },
   };
+});
+
+jest.mock('../../../../stateProviders/contentPanelStore');
+const mockUseContentPanelStore = useContentPanelStore as jest.Mock;
+mockUseContentPanelStore.mockReturnValue({
+  selectedCookie: mockResponse.tabCookies[uncategorised1pCookie.name],
+  tableContainerRef: { current: null },
+  tableColumnSize: 100,
+  setTableColumnSize: jest.fn(),
 });
 
 describe('CookieTab', () => {
@@ -152,44 +179,144 @@ describe('CookieTab', () => {
   it('should render a list of cookies with analytics', async () => {
     render(<CookieTab />);
 
-    expect((await screen.findAllByTestId('cookie-list-item')).length).toBe(4);
-    expect((await screen.findAllByText('First Party')).length).toBe(2);
-    expect((await screen.findAllByText('Third Party')).length).toBe(2);
+    expect((await screen.findAllByTestId('body-row')).length).toBe(4);
 
     expect((await screen.findAllByText('Uncategorised')).length).toBe(2);
     expect((await screen.findAllByText('Marketing')).length).toBe(2);
   });
 
-  it('should show a cookie card with the information on first cookie in the list', async () => {
+  it('should sort cookies by name', async () => {
     render(<CookieTab />);
 
-    const card = await screen.findByTestId('cookie-card');
+    const headerCell = (await screen.findAllByTestId('header-cell'))[0];
+    fireEvent.click(headerCell);
 
-    expect(card).toBeInTheDocument();
-
-    const firstCookie =
-      mockResponse.tabCookies[Object.keys(mockResponse.tabCookies)[0]];
+    const firstRow = (await screen.findAllByTestId('body-row'))[0];
 
     expect(
-      within(card).getByText(firstCookie.parsedCookie.name)
+      await within(firstRow).findByText('KRTBCOOKIE_290')
+    ).toBeInTheDocument();
+
+    const lastRow = (await screen.findAllByTestId('body-row'))[3];
+    expect(await within(lastRow).findByText('pubsyncexp')).toBeInTheDocument();
+
+    fireEvent.click(headerCell);
+
+    const firstRowAfterReverse = (await screen.findAllByTestId('body-row'))[0];
+    expect(
+      await within(firstRowAfterReverse).findByText('pubsyncexp')
+    ).toBeInTheDocument();
+
+    const lastRowAfterReverse = (await screen.findAllByTestId('body-row'))[3];
+    expect(
+      await within(lastRowAfterReverse).findByText('KRTBCOOKIE_290')
     ).toBeInTheDocument();
   });
 
-  it('should change the selected cookie with clicking', async () => {
-    render(<CookieTab />);
+  it('should render a cookie card with placeholder text when no cookie is selected', async () => {
+    mockUseContentPanelStore.mockReturnValue({
+      selectedCookie: null,
+      tableContainerRef: { current: null },
+      tableColumnSize: 100,
+      setTableColumnSize: jest.fn(),
+    });
 
-    //click on the 3rd cookie in the list
-    const items = await screen.findAllByTestId('cookie-list-item');
-    fireEvent.click(items[2]);
-
-    const card = await screen.findByTestId('cookie-card');
-    expect(card).toBeInTheDocument();
-
-    const thirdCookie =
-      mockResponse.tabCookies[Object.keys(mockResponse.tabCookies)[2]];
+    render(<CookieDetails />);
 
     expect(
-      within(card).getByText(`${thirdCookie.parsedCookie.name}`)
+      await screen.findByText('Select a cookie to preview its value')
     ).toBeInTheDocument();
+  });
+
+  it('should show a cookie card with the information on first cookie in the list', async () => {
+    const firstCookie =
+      mockResponse.tabCookies[Object.keys(mockResponse.tabCookies)[0]];
+
+    mockUseContentPanelStore.mockReturnValue({
+      selectedCookie: firstCookie,
+      tableContainerRef: { current: null },
+      tableColumnSize: 100,
+      setTableColumnSize: jest.fn(),
+    });
+
+    render(<CookieDetails />);
+    const card = await screen.findByTestId('cookie-card');
+
+    expect(card).toBeInTheDocument();
+
+    expect(
+      await within(card).findByText(firstCookie.parsedCookie.value)
+    ).toBeInTheDocument();
+  });
+
+  it('should show a cookie card with the description about cookie', async () => {
+    mockUseContentPanelStore.mockReturnValue({
+      selectedCookie: mockResponse.tabCookies[known1pCookie.name],
+      tableContainerRef: { current: null },
+      tableColumnSize: 100,
+      setTableColumnSize: jest.fn(),
+    });
+
+    render(<CookieDetails />);
+
+    const card = await screen.findByTestId('cookie-card');
+
+    const description =
+      mockResponse.tabCookies?.[known1pCookie.name]?.analytics?.description ||
+      'No description available.';
+
+    expect(await within(card).findByText(description)).toBeInTheDocument();
+  });
+
+  it('should show a cookie card with no description about cookie', async () => {
+    mockUseContentPanelStore.mockReturnValue({
+      selectedCookie: mockResponse.tabCookies[uncategorised1pCookie.name],
+      tableContainerRef: { current: null },
+      tableColumnSize: 100,
+      setTableColumnSize: jest.fn(),
+    });
+
+    render(<CookieDetails />);
+
+    const card = await screen.findByTestId('cookie-card');
+
+    expect(
+      await within(card).findByText('No description available.')
+    ).toBeInTheDocument();
+  });
+
+  it('should get the cookie object when row is clicked or Arrow up/down pressed', async () => {
+    const setStateMock = jest.fn();
+    mockUseContentPanelStore.mockReturnValue({
+      selectedCookie: null,
+      setSelectedCookie: setStateMock,
+      tableContainerRef: {
+        current: {
+          offsetWidth: 1000,
+        },
+      },
+      tableColumnSize: 100,
+      setTableColumnSize: jest.fn(),
+    });
+
+    render(<CookieTab />);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const useStateMock: any = (initState: any) => [initState, setStateMock];
+    jest.spyOn(React, 'useState').mockImplementation(useStateMock);
+    jest.spyOn(React, 'useEffect').mockImplementation((f) => f());
+
+    const row = (await screen.findAllByTestId('body-row'))[0];
+    fireEvent.click(row);
+
+    expect(setStateMock).toHaveBeenCalledWith(
+      mockResponse.tabCookies[uncategorised1pCookie.name]
+    );
+
+    fireEvent.keyDown(row, { key: 'ArrowDown', code: 'ArrowDown' });
+
+    expect(setStateMock).toHaveBeenCalledWith(
+      mockResponse.tabCookies[uncategorised1pCookie.name]
+    );
   });
 });
