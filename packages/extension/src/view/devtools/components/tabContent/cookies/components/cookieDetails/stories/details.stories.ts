@@ -25,7 +25,7 @@ import Details from '../details';
 import type { CookieTableData } from '../../../../../../stateProviders/syncCookieStore';
 
 const meta = {
-  title: 'Extension/CookiesPanel/CookieDetails/Details',
+  title: 'Extension/DevTools/CookiesPanel/CookieDetails/Details',
   component: Details,
   tags: ['autodocs'],
 } as Meta<typeof Details>;
