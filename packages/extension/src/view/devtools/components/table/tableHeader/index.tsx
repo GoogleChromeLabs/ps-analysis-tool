@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useCallback } from 'react';
 import type { HeaderGroup } from '@tanstack/react-table';
 
 /**
@@ -28,14 +28,30 @@ import type { TableData } from '..';
 
 interface TableHeaderProps {
   headerGroups: HeaderGroup<TableData>[];
+  setColumnPosition: (position: { x: number; y: number }) => void;
   onRightClick: (
     event: React.MouseEvent<HTMLTableSectionElement, MouseEvent>
   ) => void;
 }
 
-const TableHeader = ({ headerGroups, onRightClick }: TableHeaderProps) => {
+const TableHeader = ({
+  headerGroups,
+  setColumnPosition,
+  onRightClick,
+}: TableHeaderProps) => {
+  const handleRightClick = useCallback(
+    (e: React.MouseEvent<HTMLTableSectionElement>) => {
+      const x = e.clientX,
+        y = e.clientY;
+
+      setColumnPosition({ x, y });
+      onRightClick(e);
+    },
+    [onRightClick, setColumnPosition]
+  );
+
   return (
-    <thead onContextMenu={onRightClick} className="sticky top-0 z-10">
+    <thead onContextMenu={handleRightClick} className="sticky top-0 z-10">
       {headerGroups.map((headerGroup) => (
         <HeaderRow key={headerGroup.id} headerGroup={headerGroup} />
       ))}

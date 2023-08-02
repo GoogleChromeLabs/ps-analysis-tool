@@ -30,11 +30,18 @@ import ColumnList from './columnList';
 interface ColumnMenuProps {
   table: Table<TableData>;
   columns: Column<TableData, unknown>[];
+  position: { x: number; y: number };
   open: boolean;
   onClose: (value: boolean) => void;
 }
 
-const ColumnMenu = ({ table, columns, open, onClose }: ColumnMenuProps) => {
+const ColumnMenu = ({
+  table,
+  columns,
+  position,
+  open,
+  onClose,
+}: ColumnMenuProps) => {
   const [startAnimation, setStartAnimation] = React.useState(false);
 
   const handleClose = () => {
@@ -56,7 +63,13 @@ const ColumnMenu = ({ table, columns, open, onClose }: ColumnMenuProps) => {
             }`}
             data-testid="column-menu"
           >
-            <div className="absolute top-10 left-2 z-50 text-raisin-black rounded-lg w-screen max-w-[15rem] border shadow-2xl shadow-slate-700 border-stone-300 p-1.5 mr-2 divide-y divide-neutral-300 max-h-[80vh] overflow-auto bg-stone-200">
+            <div
+              className="absolute z-50 text-raisin-black rounded-lg w-screen max-w-[15rem] border shadow-2xl shadow-slate-700 border-stone-300 p-1.5 mr-2 divide-y divide-neutral-300 max-h-[80vh] overflow-auto bg-stone-200"
+              style={{
+                left: 'min( calc( 100vw - 15rem),' + position.x + 'px )',
+                top: position.y + 'px',
+              }}
+            >
               <button
                 className="block w-full text-[13px] rounded px-2 py-0.5 mb-1.5 flex items-center hover:bg-royal-blue hover:text-white cursor-default"
                 onClick={(e) => {

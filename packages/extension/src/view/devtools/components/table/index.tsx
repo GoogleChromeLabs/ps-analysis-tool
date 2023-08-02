@@ -38,6 +38,10 @@ interface TableProps {
 
 const Table = ({ table, selectedKey, onRowClick }: TableProps) => {
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
+  const [columnPosition, setColumnPosition] = useState({
+    x: 0,
+    y: 0,
+  });
 
   const handleRightClick = useCallback(
     (e: React.MouseEvent<HTMLElement>) => {
@@ -54,10 +58,12 @@ const Table = ({ table, selectedKey, onRowClick }: TableProps) => {
         onClose={setShowColumnsMenu}
         table={table}
         columns={table.getAllLeafColumns()}
+        position={columnPosition}
       />
       <table className="w-full">
         <TableHeader
           headerGroups={table.getHeaderGroups()}
+          setColumnPosition={setColumnPosition}
           onRightClick={handleRightClick}
         />
         <TableBody
