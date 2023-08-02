@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import type { Meta } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 
 /**
  * Internal dependencies.
@@ -27,11 +27,12 @@ import { COLOR_MAP } from '../../../theme/colors';
 const meta: Meta<typeof Circle> = {
   title: 'Extension/DesignSystem/Circle',
   component: Circle,
+  tags: ['autodocs'],
 };
 
 export default meta;
 
-export const Primary = {
+export const Primary: StoryObj<typeof meta> = {
   args: {
     color: COLOR_MAP.functional,
   },

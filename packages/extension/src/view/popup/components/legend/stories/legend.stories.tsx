@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import type { Meta } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 
 /**
  * Internal dependencies.
@@ -25,13 +25,14 @@ import Legend from '..';
 import { COLOR_MAP } from '../../../../design-system/theme/colors';
 
 const meta: Meta<typeof Legend> = {
-  title: 'Extension/Popup/components',
+  title: 'Extension/Popup/Legend',
   component: Legend,
+  tags: ['autodocs'],
 };
 
 export default meta;
 
-export const Primary = {
+export const Primary: StoryObj<typeof meta> = {
   args: {
     legendItemList: [
       { label: 'Functional', count: 10, color: COLOR_MAP.functional },

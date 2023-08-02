@@ -26,7 +26,7 @@ import { TempCookieData } from './tempData';
 import { CookieTable } from '../..';
 
 const meta = {
-  title: 'Extension/CookiesPanel/CookieTable',
+  title: 'Extension/DevTools/CookiesPanel/CookieTable',
   component: CookieTable,
   tags: ['autodocs'],
 } as Meta<typeof CookieTable>;

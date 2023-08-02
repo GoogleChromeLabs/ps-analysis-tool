@@ -36,8 +36,8 @@
     "**/node_modules/**",
     "dist/**",
     "out/**",
-    "data/",
-    "coverage/"
+    "data/**",
+    "coverage/**"
   ],
   "rules": {
     "array-callback-return": "error",

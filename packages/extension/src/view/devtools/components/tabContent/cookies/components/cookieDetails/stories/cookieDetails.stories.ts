@@ -25,7 +25,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { CookieDetails } from '../..';
 
 const meta = {
-  title: 'Extension/CookiesPanel/CookieDetails',
+  title: 'Extension/DevTools/CookiesPanel/CookieDetails',
   component: CookieDetails,
   tags: ['autodocs'],
 } as Meta<typeof CookieDetails>;
