@@ -19,6 +19,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import userEvent from '@testing-library/user-event';
 import { type Cookie as ParsedCookie } from 'simple-cookie';
 
 /**
@@ -323,5 +324,544 @@ describe('Sidebar', () => {
 
     fireEvent.click(accordionOpener);
     expect(accordionOpener).toHaveClass('-rotate-90');
+  });
+
+  it('Left Arrow should close accordion', () => {
+    render(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    // Click on FingerPrinting tab
+    userEvent.tab();
+    userEvent.keyboard('{ArrowRight}');
+    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+      '-rotate-90'
+    );
+    userEvent.keyboard('{ArrowLeft}');
+    expect(screen.getByTestId('accordion-opener')).toHaveClass('-rotate-90');
+  });
+
+  it('Left Arrow should unselect selected frame and select the Cookies menu', () => {
+    const sidebarRender = render(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    // Click on FingerPrinting tab
+    userEvent.tab();
+    userEvent.keyboard('{ArrowRight}');
+    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+      '-rotate-90'
+    );
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: 'https://edition.cnn.com/',
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    userEvent.keyboard('{ArrowDown}');
+    expect(screen.getByTestId('https://edition.cnn.com/')).toHaveClass(
+      'bg-selected-background-color'
+    );
+
+    userEvent.keyboard('{ArrowLeft}');
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('https://edition.cnn.com/')).not.toHaveClass(
+      'bg-selected-background-color'
+    );
+    expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
+      'bg-selected-background-color'
+    );
+  });
+
+  it('Down Arrow should select next frame', () => {
+    const sidebarRender = render(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    // Click on FingerPrinting tab
+    userEvent.tab();
+    userEvent.keyboard('{ArrowRight}');
+    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+      '-rotate-90'
+    );
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: 'https://edition.cnn.com/',
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    userEvent.keyboard('{ArrowDown}');
+    expect(screen.getByTestId('https://edition.cnn.com/')).toHaveClass(
+      'bg-selected-background-color'
+    );
+
+    userEvent.keyboard('{ArrowDown}');
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: 'https://crxt.net/',
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('https://edition.cnn.com/')).not.toHaveClass(
+      'bg-selected-background-color'
+    );
+    expect(screen.getByTestId('https://crxt.net/')).toHaveClass(
+      'bg-selected-background-color'
+    );
+  });
+
+  it('Up Arrow should select previous frame', () => {
+    const sidebarRender = render(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    // Click on FingerPrinting tab
+    userEvent.tab();
+    userEvent.keyboard('{ArrowRight}');
+    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+      '-rotate-90'
+    );
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: 'https://edition.cnn.com/',
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    userEvent.keyboard('{ArrowDown}');
+    expect(screen.getByTestId('https://edition.cnn.com/')).toHaveClass(
+      'bg-selected-background-color'
+    );
+
+    userEvent.keyboard('{ArrowDown}');
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: 'https://crxt.net/',
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('https://edition.cnn.com/')).not.toHaveClass(
+      'bg-selected-background-color'
+    );
+    expect(screen.getByTestId('https://crxt.net/')).toHaveClass(
+      'bg-selected-background-color'
+    );
+
+    userEvent.keyboard('{ArrowUp}');
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: 'https://edition.cnn.com/',
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('https://edition.cnn.com/')).toHaveClass(
+      'bg-selected-background-color'
+    );
+    expect(screen.getByTestId('https://crxt.net/')).not.toHaveClass(
+      'bg-selected-background-color'
+    );
+  });
+
+  it('Up Arrow should unselect selected frame and select the Cookies menu', () => {
+    const sidebarRender = render(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    // Click on FingerPrinting tab
+    userEvent.tab();
+    userEvent.keyboard('{ArrowRight}');
+    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+      '-rotate-90'
+    );
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: 'https://edition.cnn.com/',
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    userEvent.keyboard('{ArrowDown}');
+    expect(screen.getByTestId('https://edition.cnn.com/')).toHaveClass(
+      'bg-selected-background-color'
+    );
+
+    userEvent.keyboard('{ArrowUp}');
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('https://edition.cnn.com/')).not.toHaveClass(
+      'bg-selected-background-color'
+    );
+    expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
+      'bg-selected-background-color'
+    );
+  });
+
+  it('Down Arrow on last frame should select the next main menu tab.', () => {
+    const sidebarRender = render(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    // Click on FingerPrinting tab
+    userEvent.tab();
+    userEvent.keyboard('{ArrowRight}');
+    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+      '-rotate-90'
+    );
+
+    fireEvent.click(screen.getByTestId('https://crxt.net/'));
+
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: 'https://crxt.net/',
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('https://crxt.net/')).toHaveClass(
+      'bg-selected-background-color'
+    );
+
+    userEvent.keyboard('{ArrowDown}');
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={1}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('https://crxt.net/')).not.toHaveClass(
+      'bg-selected-background-color'
+    );
+    expect(screen.getByTestId('Topics')).toHaveClass(
+      'bg-selected-background-color'
+    );
+  });
+
+  it('Up Arrow on Topics menu should select last frame in accordion.', () => {
+    const sidebarRender = render(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    // Click on FingerPrinting tab
+    userEvent.tab();
+    userEvent.keyboard('{ArrowRight}');
+    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+      '-rotate-90'
+    );
+
+    fireEvent.click(screen.getByTestId('Topics'));
+
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={1}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('Topics')).toHaveClass(
+      'bg-selected-background-color'
+    );
+
+    userEvent.keyboard('{ArrowUp}');
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: 'https://crxt.net/',
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('https://crxt.net/')).toHaveClass(
+      'bg-selected-background-color'
+    );
+    expect(screen.getByTestId('Topics')).not.toHaveClass(
+      'bg-selected-background-color'
+    );
+  });
+
+  it('Up Arrow on Attribution menu should select Topics Menu.', () => {
+    const sidebarRender = render(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    // Click on FingerPrinting tab
+    userEvent.tab();
+    userEvent.keyboard('{ArrowRight}');
+    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+      '-rotate-90'
+    );
+
+    fireEvent.click(screen.getByTestId('Attribution'));
+
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={2}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('Attribution')).toHaveClass(
+      'bg-selected-background-color'
+    );
+
+    userEvent.keyboard('{ArrowUp}');
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={1}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('Topics')).toHaveClass(
+      'bg-selected-background-color'
+    );
+    expect(screen.getByTestId('Attribution')).not.toHaveClass(
+      'bg-selected-background-color'
+    );
+  });
+
+  it('Down Arrow on cookies menu with open accordion should first frame.', () => {
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    const sidebarRender = render(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    // Click on FingerPrinting tab
+    userEvent.tab();
+    userEvent.keyboard('{ArrowRight}');
+    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+      '-rotate-90'
+    );
+
+    userEvent.keyboard('{ArrowDown}');
+
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: 'https://edition.cnn.com/',
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('https://edition.cnn.com/')).toHaveClass(
+      'bg-selected-background-color'
+    );
+  });
+
+  it('Down Arrow on Topics menu should select Attribution Menu.', () => {
+    const sidebarRender = render(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    // Click on FingerPrinting tab
+    userEvent.tab();
+    userEvent.keyboard('{ArrowRight}');
+    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+      '-rotate-90'
+    );
+
+    fireEvent.click(screen.getByTestId('Topics'));
+
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={1}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('Topics')).toHaveClass(
+      'bg-selected-background-color'
+    );
+
+    userEvent.keyboard('{ArrowDown}');
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={2}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('Attribution')).toHaveClass(
+      'bg-selected-background-color'
+    );
+    expect(screen.getByTestId('Topics')).not.toHaveClass(
+      'bg-selected-background-color'
+    );
   });
 });

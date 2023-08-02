@@ -18,6 +18,7 @@
  */
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import SinonChrome from 'sinon-chrome';
 
@@ -94,6 +95,27 @@ describe('App', () => {
     fireEvent.click(screen.getByText('Topics'));
 
     expect(await screen.findByTestId('topics-content')).toBeInTheDocument();
+  });
+
+  it('Down Keyboard navigation should work.', () => {
+    render(<App />);
+    // Click on FingerPrinting tab
+    userEvent.tab();
+    userEvent.keyboard('{ArrowDown}');
+    expect(screen.getByTestId('Topics')).toHaveClass(
+      'bg-selected-background-color'
+    );
+  });
+
+  it('Up Keyboard navigation should work.', () => {
+    render(<App />);
+    // Click on FingerPrinting tab
+    userEvent.tab();
+    userEvent.keyboard('{ArrowDown}');
+    userEvent.keyboard('{ArrowUp}');
+    expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
+      'bg-selected-background-color'
+    );
   });
 
   afterAll(() => {
