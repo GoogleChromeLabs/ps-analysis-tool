@@ -2,6 +2,7 @@
  * External dependencies.
  */
 import type { StorybookConfig } from '@storybook/react-webpack5';
+import type { RuleSetRule } from 'webpack';
 
 const config: StorybookConfig = {
   stories: [

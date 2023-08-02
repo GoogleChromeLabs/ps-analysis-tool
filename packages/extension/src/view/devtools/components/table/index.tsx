@@ -25,15 +25,15 @@ import type { Table as ReactTable } from '@tanstack/react-table';
  */
 import TableHeader from './tableHeader';
 import TableBody from './tableBody';
-import type { CookieData } from '../../../../localStore';
+import type { CookieTableData } from '../../stateProviders/syncCookieStore';
 import ColumnMenu from './columnMenu';
 
-export type TData = CookieData;
+export type TableData = CookieTableData;
 
 interface TableProps {
-  table: ReactTable<TData>;
+  table: ReactTable<TableData>;
   selectedKey: string | undefined;
-  onRowClick: (row: TData) => void;
+  onRowClick: (row: TableData) => void;
 }
 
 const Table = ({ table, selectedKey, onRowClick }: TableProps) => {

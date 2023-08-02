@@ -108,9 +108,5 @@
 	"type": "module",
 	"workspaces": [
 		"packages/*"
-	],
-	"dependencies": {
-		"@tanstack/react-table": "^8.9.3",
-		"re-resizable": "^6.9.9"
-	}
+	]
 }

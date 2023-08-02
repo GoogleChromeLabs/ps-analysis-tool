@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
+import { Resizable } from 're-resizable';
 
 /**
  * Internal dependencies.
@@ -28,7 +29,7 @@ import {
   Attribution,
   BounceTracking,
   Fingerprinting,
-  TabHeader,
+  Sidebar,
 } from './components';
 import { Provider as ContentPanelProvider } from './stateProviders/contentPanelStore';
 
@@ -60,18 +61,32 @@ const App: React.FC = () => {
 
   const TabContent = TABS[selectedTabIndex].Component;
   const tabNames = TABS.map((tab) => tab.display_name);
-
   return (
     <div className="w-full h-screen overflow-hidden">
-      <div className="w-full h-full flex flex-col">
-        <header className="w-full h-10 bg-slate-300 flex pt-2">
-          <TabHeader
+      <div className="w-full h-full flex flex-row">
+        <Resizable
+          defaultSize={{ width: '200px', height: '100%' }}
+          minWidth={'150px'}
+          maxWidth={'95%'}
+          enable={{
+            top: false,
+            right: true,
+            bottom: false,
+            left: false,
+            topRight: false,
+            bottomRight: false,
+            bottomLeft: false,
+            topLeft: false,
+          }}
+          className="h-full flex flex-col pt-3.5 overflow-auto border-solid border-r border-b border-t border-gray-300"
+        >
+          <Sidebar
             tabsNames={tabNames}
             selectedIndex={selectedTabIndex}
             setIndex={setSelectedTabIndex}
           />
-        </header>
-        <main style={{ height: 'calc(100% - 40px)' }}>
+        </Resizable>
+        <main className="h-full flex-1 overflow-auto">
           <ContentPanelProvider>
             <TabContent />
           </ContentPanelProvider>

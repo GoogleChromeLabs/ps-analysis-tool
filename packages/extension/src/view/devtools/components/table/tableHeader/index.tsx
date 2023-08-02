@@ -24,10 +24,10 @@ import type { HeaderGroup } from '@tanstack/react-table';
  * Internal dependencies.
  */
 import HeaderRow from './headerRow';
-import type { TData } from '..';
+import type { TableData } from '..';
 
 interface TableHeaderProps {
-  headerGroups: HeaderGroup<TData>[];
+  headerGroups: HeaderGroup<TableData>[];
   onRightClick: (
     event: React.MouseEvent<HTMLTableSectionElement, MouseEvent>
   ) => void;

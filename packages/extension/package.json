@@ -12,6 +12,8 @@
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool#readme",
   "dependencies": {
+    "@tanstack/react-table": "^8.9.3",
+    "re-resizable": "^6.9.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "simple-cookie": "^1.0.15",

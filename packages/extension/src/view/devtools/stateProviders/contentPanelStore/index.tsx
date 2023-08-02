@@ -27,16 +27,16 @@ import { useContextSelector, createContext } from 'use-context-selector';
 /**
  * Internal dependencies.
  */
-import type { CookieData } from '../../../../localStore';
+import type { CookieTableData } from '../syncCookieStore';
 
 export interface ContentPanelStore {
   state: {
-    selectedCookie: CookieData | null;
+    selectedCookie: CookieTableData | null;
     tableColumnSize: number;
     tableContainerRef: React.RefObject<HTMLTableElement>;
   };
   actions: {
-    setSelectedCookie: (cookie: CookieData) => void;
+    setSelectedCookie: (cookie: CookieTableData) => void;
     setTableColumnSize: (size: number) => void;
   };
 }
@@ -60,7 +60,9 @@ const initialState: ContentPanelStore = {
 export const Context = createContext<ContentPanelStore>(initialState);
 
 export const Provider = ({ children }: PropsWithChildren) => {
-  const [selectedCookie, setSelectedCookie] = useState<CookieData | null>(null);
+  const [selectedCookie, setSelectedCookie] = useState<CookieTableData | null>(
+    null
+  );
 
   const [tableColumnSize, setTableColumnSize] = useState(100);
 

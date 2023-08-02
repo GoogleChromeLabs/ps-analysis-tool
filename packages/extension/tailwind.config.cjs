@@ -15,6 +15,7 @@
  */
 
 const colors = require('tailwindcss/colors');
+const defaultTheme = require('tailwindcss/defaultTheme');
 
 // @see https://github.com/tailwindlabs/tailwindcss/issues/4690#issuecomment-1046087220
 delete colors['lightBlue'];
@@ -27,6 +28,9 @@ module.exports = {
   content: ['./packages/extension/src/**/*.{tsx,js}'],
   theme: {
     extend: {},
+    fontFamily: {
+      ...defaultTheme.fontFamily,
+    },
     textColor: {
       ...colors,
       primary: '#000',
@@ -48,6 +52,7 @@ module.exports = {
       gainsboro: '#DADCE0',
       'american-silver': '#CBCDD1',
       'raisin-black': '#202124',
+      'selected-background-color': '#3871E0',
     },
     borderColor: {
       ...colors,

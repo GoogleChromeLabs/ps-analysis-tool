@@ -49,5 +49,8 @@ export default {
     '<rootDir>/data',
   ],
   coverageReporters: ['lcov'],
-  collectCoverageFrom: ['<rootDir>/packages/**/*.{js,jsx,ts,tsx}'],
+  collectCoverageFrom: [
+    '<rootDir>/packages/**/*.{js,jsx,ts,tsx}',
+    '!<rootDir>/packages/**/stories/*.{js,jsx,ts,tsx}',
+  ],
 };

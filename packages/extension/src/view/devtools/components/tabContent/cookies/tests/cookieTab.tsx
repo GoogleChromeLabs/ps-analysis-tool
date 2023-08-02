@@ -73,6 +73,8 @@ const known3pCookie: ParsedCookie = {
 const mockResponse: {
   tabCookies: NonNullable<CookieStoreContext['state']['tabCookies']>;
   tabUrl: NonNullable<CookieStoreContext['state']['tabUrl']>;
+  tabFrames: NonNullable<CookieStoreContext['state']['tabFrames']>;
+  selectedFrame: NonNullable<CookieStoreContext['state']['selectedFrame']>;
 } = {
   tabCookies: {
     [uncategorised1pCookie.name]: {
@@ -80,6 +82,9 @@ const mockResponse: {
       analytics: { ...emptyAnalytics },
       url: 'https://edition.cnn.com/whatever/api',
       headerType: 'response',
+      isFirstParty: true,
+      isIbcCompliant: true,
+      isCookieSet: true,
       frameIdList: [1],
     },
     [uncategorised3pCookie.name]: {
@@ -87,6 +92,9 @@ const mockResponse: {
       analytics: { ...emptyAnalytics },
       url: 'https://api.pubmatic.com/whatever/api',
       headerType: 'response',
+      isFirstParty: false,
+      isIbcCompliant: true,
+      isCookieSet: true,
       frameIdList: [1],
     },
     [known1pCookie.name]: {
@@ -105,6 +113,9 @@ const mockResponse: {
       },
       url: 'https://edition.cnn.com/whatever/api',
       headerType: 'response',
+      isFirstParty: true,
+      isIbcCompliant: true,
+      isCookieSet: true,
       frameIdList: [1],
     },
     [known3pCookie.name]: {
@@ -123,10 +134,19 @@ const mockResponse: {
       },
       url: 'https://api.pubmatic.com/whatever/api',
       headerType: 'response',
+      isFirstParty: false,
+      isIbcCompliant: true,
+      isCookieSet: true,
       frameIdList: [1],
     },
   },
   tabUrl: 'https://edition.cnn.com/',
+  tabFrames: {
+    'https://edition.cnn.com/': {
+      frameIds: [1],
+    },
+  },
+  selectedFrame: 'https://edition.cnn.com/',
 };
 
 jest.mock('../../../../stateProviders/syncCookieStore', () => {
@@ -135,6 +155,8 @@ jest.mock('../../../../stateProviders/syncCookieStore', () => {
       return {
         cookies: Object.values(mockResponse.tabCookies),
         tabUrl: mockResponse.tabUrl,
+        tabFrames: mockResponse.tabFrames,
+        selectedFrame: mockResponse.selectedFrame,
       };
     },
   };

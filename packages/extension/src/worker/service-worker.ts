@@ -57,6 +57,7 @@ chrome.webRequest.onResponseStarted.addListener(
             url,
             header.value,
             cookieDB,
+            tab.url,
             frameId
           );
           return [...(await accumulator), cookie];
@@ -96,12 +97,14 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
             header.name.toLowerCase() === 'cookie' &&
             header.value &&
             url &&
+            tab.url &&
             cookieDB
           ) {
             const cookieList = await parseRequestCookieHeader(
               url,
               header.value,
               cookieDB,
+              tab.url,
               frameId
             );
             return [...(await accumulator), ...cookieList];
