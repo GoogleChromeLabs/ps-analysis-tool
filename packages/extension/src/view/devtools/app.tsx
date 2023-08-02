@@ -82,7 +82,9 @@ const App: React.FC = () => {
           className="h-full flex flex-col pt-3.5 overflow-auto border-solid border-r border-b border-gray-300"
         >
           <div
-            className={`h-full flex flex-col ${accordionState ? 'w-fit' : ''}`}
+            className={`h-full flex flex-col ${
+              accordionState ? 'w-screen' : ''
+            }`}
           >
             <Sidebar
               accordionState={accordionState}
