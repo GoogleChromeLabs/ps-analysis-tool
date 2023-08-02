@@ -24,10 +24,10 @@ import type { Column } from '@tanstack/react-table';
  * Internal dependencies.
  */
 import ColumnListItem from './columnListItem';
-import type { TData } from '..';
+import type { TableData } from '..';
 
 interface ColumnListProps {
-  columns: Column<TData, unknown>[];
+  columns: Column<TableData, unknown>[];
   handleClose: () => void;
 }
 

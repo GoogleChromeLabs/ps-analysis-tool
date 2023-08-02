@@ -23,13 +23,13 @@ import type { Column, Table } from '@tanstack/react-table';
 /**
  * Internal dependencies.
  */
-import type { TData } from '..';
+import type { TableData } from '..';
 import { createPortal } from 'react-dom';
 import ColumnList from './columnList';
 
 interface ColumnMenuProps {
-  table: Table<TData>;
-  columns: Column<TData, unknown>[];
+  table: Table<TableData>;
+  columns: Column<TableData, unknown>[];
   open: boolean;
   onClose: (value: boolean) => void;
 }
