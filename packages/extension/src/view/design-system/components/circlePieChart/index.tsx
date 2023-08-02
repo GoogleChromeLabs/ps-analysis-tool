@@ -19,13 +19,13 @@
 import React from 'react';
 import { VictoryPie } from 'victory';
 
-interface PieChartProps {
+interface CirclePieChartProps {
   centerCount: number;
   data: { count: number; color: string }[];
 }
-const PieChart = ({ centerCount, data }: PieChartProps) => {
+const CirclePieChart = ({ centerCount, data }: CirclePieChartProps) => {
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full max-w-xs">
       <div className="w-full h-full relative">
         <VictoryPie
           padding={0}
@@ -43,4 +43,4 @@ const PieChart = ({ centerCount, data }: PieChartProps) => {
   );
 };
 
-export default PieChart;
+export default CirclePieChart;

@@ -23,9 +23,10 @@ import React from 'react';
  * Internal dependencies.
  */
 import './app.css';
-import { PieChart, Legend } from './components';
+import { Legend } from './components';
 import { useCookieStore } from './stateProviders/syncCookieStore';
-import { COLOR_MAP } from './const';
+import { COLOR_MAP } from '../design-system/theme/colors';
+import { CirclePieChart } from '../design-system/components';
 
 const App: React.FC = () => {
   const { cookieStats } = useCookieStore(({ state }) => ({
@@ -124,7 +125,7 @@ const App: React.FC = () => {
         <div className="w-full h-full flex flex-col justify-center items-center">
           <div className="flex-1 w-full">
             {cookieStats.firstParty.total ? (
-              <PieChart
+              <CirclePieChart
                 centerCount={cookieStats.firstParty.total}
                 data={firstPartyPiechartData}
               />
@@ -141,7 +142,7 @@ const App: React.FC = () => {
         <div className="w-full h-full flex flex-col justify-center items-center">
           <div className="flex-1 w-full h-full">
             {cookieStats.thirdParty.total ? (
-              <PieChart
+              <CirclePieChart
                 centerCount={cookieStats.thirdParty.total}
                 data={thirdPartyPiechartData}
               />

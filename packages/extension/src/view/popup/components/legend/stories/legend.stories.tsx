@@ -16,29 +16,29 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
 /**
  * Internal dependencies.
  */
-import Circle from './circle';
+import Legend from '..';
+import { COLOR_MAP } from '../../../../design-system/theme/colors';
 
-interface LegendProps {
-  legendItemList: { label: string; count: number; color: string }[];
-}
-
-const Legend = ({ legendItemList }: LegendProps) => {
-  return (
-    <div className="flex flex-col">
-      {legendItemList.map(({ label, count, color }, index) => (
-        <div key={index} className="w-36 flex items-center justify-center my-1">
-          <Circle color={color} />
-          <p className="flex-1 text-chart-label text-xs">{label}</p>
-          <p className="text-chart-label text-xs">{count}</p>
-        </div>
-      ))}
-    </div>
-  );
+const meta: Meta<typeof Legend> = {
+  title: 'Extension/Popup/Legend',
+  component: Legend,
+  tags: ['autodocs'],
 };
 
-export default Legend;
+export default meta;
+
+export const Primary: StoryObj<typeof meta> = {
+  args: {
+    legendItemList: [
+      { label: 'Functional', count: 10, color: COLOR_MAP.functional },
+      { label: 'Marketing', count: 20, color: COLOR_MAP.marketing },
+      { label: 'Analytics', count: 22, color: COLOR_MAP.analytics },
+      { label: 'Uncategorised', count: 11, color: COLOR_MAP.uncategorised },
+    ],
+  },
+};
