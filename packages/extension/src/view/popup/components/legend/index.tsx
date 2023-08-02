@@ -13,29 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
-import type { Meta, StoryObj } from '@storybook/react';
+import React from 'react';
 
 /**
  * Internal dependencies.
  */
-import { TempCookieData } from './tempData';
-import { CookieTable } from '../..';
+import { Circle } from '../../../design-system/components';
 
-const meta = {
-  title: 'Extension/DevTools/CookiesPanel/CookieTable',
-  component: CookieTable,
-  tags: ['autodocs'],
-} as Meta<typeof CookieTable>;
+interface LegendProps {
+  legendItemList: { label: string; count: number; color: string }[];
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Primary: Story = {
-  args: {
-    cookies: TempCookieData,
-  },
+const Legend = ({ legendItemList }: LegendProps) => {
+  return (
+    <div className="flex flex-col">
+      {legendItemList.map(({ label, count, color }, index) => (
+        <div key={index} className="w-36 flex items-center justify-center my-1">
+          <Circle color={color} />
+          <p className="flex-1 text-chart-label text-xs">{label}</p>
+          <p className="text-chart-label text-xs">{count}</p>
+        </div>
+      ))}
+    </div>
+  );
 };
+
+export default Legend;

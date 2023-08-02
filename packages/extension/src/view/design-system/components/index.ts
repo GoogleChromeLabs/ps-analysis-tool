@@ -13,29 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * External dependencies.
- */
-import type { Meta, StoryObj } from '@storybook/react';
-
-/**
- * Internal dependencies.
- */
-import { TempCookieData } from './tempData';
-import { CookieTable } from '../..';
-
-const meta = {
-  title: 'Extension/DevTools/CookiesPanel/CookieTable',
-  component: CookieTable,
-  tags: ['autodocs'],
-} as Meta<typeof CookieTable>;
-
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Primary: Story = {
-  args: {
-    cookies: TempCookieData,
-  },
-};
+export { default as CirclePieChart } from './circlePieChart';
+export { default as Circle } from './circle';

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
@@ -22,20 +21,37 @@ import type { Meta, StoryObj } from '@storybook/react';
 /**
  * Internal dependencies.
  */
-import { TempCookieData } from './tempData';
-import { CookieTable } from '../..';
+import CirclePieChart from '..';
+import { COLOR_MAP } from '../../../theme/colors';
 
-const meta = {
-  title: 'Extension/DevTools/CookiesPanel/CookieTable',
-  component: CookieTable,
+const meta: Meta<typeof CirclePieChart> = {
+  title: 'Extension/DesignSystem/CirclePieChart',
+  component: CirclePieChart,
   tags: ['autodocs'],
-} as Meta<typeof CookieTable>;
+};
 
 export default meta;
-type Story = StoryObj<typeof meta>;
 
-export const Primary: Story = {
+export const Primary: StoryObj<typeof meta> = {
   args: {
-    cookies: TempCookieData,
+    centerCount: 5,
+    data: [
+      {
+        count: 5,
+        color: COLOR_MAP.functional,
+      },
+      {
+        count: 4,
+        color: COLOR_MAP.marketing,
+      },
+      {
+        count: 0,
+        color: COLOR_MAP.analytics,
+      },
+      {
+        count: 9,
+        color: COLOR_MAP.uncategorised,
+      },
+    ],
   },
 };
