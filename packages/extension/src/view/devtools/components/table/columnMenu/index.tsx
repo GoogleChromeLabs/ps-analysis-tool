@@ -78,7 +78,7 @@ const ColumnMenu = ({
                 }}
               >
                 <span
-                  className={`mr-2 font-bold ${
+                  className={`mr-2 font-semibold ${
                     table.getIsAllColumnsVisible() ? 'opacity-100' : 'opacity-0'
                   }`}
                 >

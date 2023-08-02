@@ -48,7 +48,7 @@ const ColumnListItem = ({ column, handleClose }: ColumnListItemProps) => {
         }}
       >
         <span
-          className={`mr-2 font-bold ${
+          className={`mr-2 font-semibold ${
             column.getIsVisible() ? 'opacity-100' : 'opacity-0'
           }`}
         >
