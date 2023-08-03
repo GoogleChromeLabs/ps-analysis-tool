@@ -30,12 +30,14 @@ import {
 import { CookieDetails, CookieTable } from './components';
 
 const Cookies = () => {
-  const { cookies, selectedFrame, tabFrames } = useCookieStore(({ state }) => ({
-    cookies: state.tabCookies,
-    tabUrl: state.tabUrl,
-    selectedFrame: state.selectedFrame,
-    tabFrames: state.tabFrames,
-  }));
+  const { cookies, tabUrl, selectedFrame, tabFrames } = useCookieStore(
+    ({ state }) => ({
+      cookies: state.tabCookies,
+      tabUrl: state.tabUrl,
+      selectedFrame: state.selectedFrame,
+      tabFrames: state.tabFrames,
+    })
+  );
 
   const calculatedCookies = useMemo(() => {
     const frameFilteredCookies: { [key: string]: CookieTableData } = {};
@@ -77,6 +79,7 @@ const Cookies = () => {
             <CookieTable
               cookies={calculatedCookies}
               selectedFrame={selectedFrame}
+              tabUrl={tabUrl}
             />
           </Resizable>
           <div className="w-full h-full bg-white border-t-2 border-gray-300 shadow overflow-auto">

@@ -36,6 +36,7 @@ import type { CookieTableData } from '../../../../../stateProviders/syncCookieSt
 export interface CookieTableProps {
   cookies: CookieTableData[];
   selectedFrame: string;
+  tabUrl: string | null;
 }
 
 const tableColumns: ColumnDef<CookieTableData>[] = [
@@ -145,7 +146,11 @@ const tableColumns: ColumnDef<CookieTableData>[] = [
   },
 ];
 
-const CookieTable = ({ cookies: data, selectedFrame }: CookieTableProps) => {
+const CookieTable = ({
+  cookies: data,
+  selectedFrame,
+  tabUrl,
+}: CookieTableProps) => {
   const {
     selectedCookie,
     setSelectedCookie,
@@ -160,7 +165,7 @@ const CookieTable = ({ cookies: data, selectedFrame }: CookieTableProps) => {
 
   useEffect(() => {
     setSelectedCookie(null);
-  }, [selectedFrame, setSelectedCookie]);
+  }, [selectedFrame, tabUrl, setSelectedCookie]);
 
   const columns = useMemo(
     () =>
