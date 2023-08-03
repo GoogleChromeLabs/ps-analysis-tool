@@ -13,29 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * External dependencies.
- */
-import type { Meta, StoryObj } from '@storybook/react';
+import React from 'react';
+import { render } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 
 /**
  * Internal dependencies.
  */
-import { TempCookieData } from './tempData';
-import { CookieTable } from '../..';
+import Circle from '..';
+import { COLOR_MAP } from '../../../theme/colors';
 
-const meta = {
-  title: 'Extension/DevTools/CookiesPanel/CookieTable',
-  component: CookieTable,
-  tags: ['autodocs'],
-} as Meta<typeof CookieTable>;
+describe('Circle', () => {
+  it('renders the Circle with the correct background color', () => {
+    const { container } = render(<Circle color={COLOR_MAP.functional} />);
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Primary: Story = {
-  args: {
-    cookies: TempCookieData,
-  },
-};
+    // Check if the Circle div has the correct background color style
+    const circleDiv = container.querySelector('.rounded-full');
+    expect(circleDiv).toHaveStyle(`background-color: ${COLOR_MAP.functional}`);
+  });
+});

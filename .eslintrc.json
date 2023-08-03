@@ -32,7 +32,13 @@
       }
     }
   },
-  "ignorePatterns": ["**/node_modules/**", "dist/**", "out/**", "data/"],
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "dist/**",
+    "out/**",
+    "data/**",
+    "coverage/**"
+  ],
   "rules": {
     "array-callback-return": "error",
     "block-scoped-var": "error",
