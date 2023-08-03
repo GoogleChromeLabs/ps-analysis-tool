@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -35,6 +35,7 @@ import type { CookieTableData } from '../../../../../stateProviders/syncCookieSt
 
 export interface CookieTableProps {
   cookies: CookieTableData[];
+  selectedFrame: string;
 }
 
 const tableColumns: ColumnDef<CookieTableData>[] = [
@@ -144,7 +145,7 @@ const tableColumns: ColumnDef<CookieTableData>[] = [
   },
 ];
 
-const CookieTable = ({ cookies: data }: CookieTableProps) => {
+const CookieTable = ({ cookies: data, selectedFrame }: CookieTableProps) => {
   const {
     selectedCookie,
     setSelectedCookie,
@@ -156,6 +157,10 @@ const CookieTable = ({ cookies: data }: CookieTableProps) => {
     tableColumnSize: state.tableColumnSize,
     tableContainerRef: state.tableContainerRef,
   }));
+
+  useEffect(() => {
+    setSelectedCookie(null);
+  }, [selectedFrame, setSelectedCookie]);
 
   const columns = useMemo(
     () =>

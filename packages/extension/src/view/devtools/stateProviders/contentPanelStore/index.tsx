@@ -36,7 +36,7 @@ export interface ContentPanelStore {
     tableContainerRef: React.RefObject<HTMLTableElement>;
   };
   actions: {
-    setSelectedCookie: (cookie: CookieTableData) => void;
+    setSelectedCookie: (cookie: CookieTableData | null) => void;
     setTableColumnSize: (size: number) => void;
   };
 }
