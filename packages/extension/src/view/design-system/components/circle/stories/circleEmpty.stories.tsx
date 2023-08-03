@@ -13,11 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
+import type { Meta, StoryObj } from '@storybook/react';
 
-export const COLOR_MAP = {
-  functional: '#5CC971',
-  marketing: '#F3AE4E',
-  analytics: '#4C79F4',
-  uncategorised: '#EC7159',
-  brightGray: '#EBEBEB',
+/**
+ * Internal dependencies.
+ */
+import CircleEmpty from '../circleEmpty';
+import { COLOR_MAP } from '../../../theme/colors';
+
+const meta: Meta<typeof CircleEmpty> = {
+  title: 'Extension/DesignSystem/CircleEmpty',
+  component: CircleEmpty,
+  tags: ['autodocs'],
+};
+
+export default meta;
+
+export const Primary: StoryObj<typeof meta> = {
+  args: {
+    color: COLOR_MAP.functional,
+  },
 };

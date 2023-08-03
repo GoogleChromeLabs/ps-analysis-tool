@@ -13,11 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
+import React from 'react';
 
-export const COLOR_MAP = {
-  functional: '#5CC971',
-  marketing: '#F3AE4E',
-  analytics: '#4C79F4',
-  uncategorised: '#EC7159',
-  brightGray: '#EBEBEB',
-};
+interface CircleEmptyProps {
+  color: string;
+}
+
+const CircleEmpty = ({ color }: CircleEmptyProps) => (
+  <div
+    className="w-2.5 h-2.5 rounded-full flex items-center justify-center"
+    style={{ backgroundColor: color }}
+  >
+    <div className="w-1.5 h-1.5 rounded-full flex items-center justify-center bg-white" />
+  </div>
+);
+
+export default CircleEmpty;
