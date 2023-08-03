@@ -25,7 +25,7 @@ interface CirclePieChartProps {
   data: { count: number; color: string }[];
 }
 
-const MAX_COUNT = 999;
+export const MAX_COUNT = 999;
 
 const CirclePieChart = ({ centerCount, data }: CirclePieChartProps) => {
   const fontSizeClass = centerCount <= MAX_COUNT ? 'text-2xl' : 'text-l';

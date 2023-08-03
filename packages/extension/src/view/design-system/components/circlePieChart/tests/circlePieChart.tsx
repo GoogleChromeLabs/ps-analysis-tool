@@ -20,34 +20,55 @@ import '@testing-library/jest-dom/extend-expect';
 /**
  * Internal dependencies.
  */
-import CirclePieChart from '..';
+import CirclePieChart, { MAX_COUNT } from '..';
 
 describe('CirclePieChart', () => {
-  const testData = [
-    { count: 25, color: 'red' },
-    { count: 50, color: 'blue' },
-    { count: 75, color: 'green' },
-  ];
-  const centerCount = 150;
+  it('renders the centerCount correctly with a valid number', () => {
+    const centerCount = 123;
+    const data = [
+      { count: 50, color: 'red' },
+      { count: 73, color: 'blue' },
+    ];
 
-  it('renders the VictoryPie chart with the correct data', () => {
-    const { container } = render(
-      <CirclePieChart centerCount={centerCount} data={testData} />
+    const { getByText } = render(
+      <CirclePieChart centerCount={centerCount} data={data} />
     );
 
-    // Check if the VictoryPie is rendered with the correct data
-    const paths = container.querySelectorAll('path[role="presentation"]');
-    expect(paths.length).toBe(testData.length);
+    // Check if the centerCount is rendered correctly
+    const centerCountElement = getByText(centerCount.toString());
+    expect(centerCountElement).toBeInTheDocument();
   });
 
-  it('renders the centerCount text', () => {
+  it('renders the centerCount correctly when it exceeds MAX_COUNT', () => {
+    const centerCount = MAX_COUNT + 1; // Exceeds MAX_COUNT (999)
+    const data = [
+      { count: 50, color: 'red' },
+      { count: 73, color: 'blue' },
+    ];
+
     const { getByText } = render(
-      <CirclePieChart centerCount={centerCount} data={testData} />
+      <CirclePieChart centerCount={centerCount} data={data} />
     );
 
-    // Check if the centerCount text is rendered
-    const text: string = centerCount.toString();
-    const centerCountElement = getByText(text);
+    // Check if the centerCount displays MAX_COUNT + '+' when it exceeds MAX_COUNT
+    const maxCountText = MAX_COUNT + '+';
+    const centerCountElement = getByText(maxCountText);
     expect(centerCountElement).toBeInTheDocument();
+  });
+
+  it('renders the correct number of slices on the VictoryPie chart', () => {
+    const centerCount = 123;
+    const data = [
+      { count: 50, color: 'red' },
+      { count: 73, color: 'blue' },
+    ];
+
+    const { container } = render(
+      <CirclePieChart centerCount={centerCount} data={data} />
+    );
+
+    // Check if the VictoryPie is rendered with the correct number of data points
+    const slices = container.querySelectorAll('path[role="presentation"]');
+    expect(slices.length).toBe(data.length);
   });
 });

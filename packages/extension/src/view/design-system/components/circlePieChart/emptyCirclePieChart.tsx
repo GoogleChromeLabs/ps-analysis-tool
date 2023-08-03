@@ -35,7 +35,7 @@ const EmptyCirclePieChart = ({ fallbackText }: EmptyCirclePieChartProps) => {
         <VictoryPie
           padding={0}
           innerRadius={0}
-          colorScale={[COLOR_MAP.emptyPieChart]}
+          colorScale={[COLOR_MAP.brightGray]}
         />
         <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xs text-center text-raisin-black opacity-40 leading-4">
           {fallbackText || 'Not Found'}
