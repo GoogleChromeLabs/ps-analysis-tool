@@ -37,12 +37,13 @@ interface TableProps {
 
 const Table = ({ table, selectedKey, onRowClick }: TableProps) => {
   return (
-    <table className="w-full">
+    <table className="w-full h-full">
       <TableHeader headerGroups={table.getHeaderGroups()} />
       <TableBody
         rows={table.getRowModel().rows}
         selectedKey={selectedKey}
         onRowClick={onRowClick}
+        emptyRowCellCount={table.getAllColumns().length}
       />
     </table>
   );

@@ -30,9 +30,15 @@ interface TableBodyProps {
   rows: Row<TableData>[];
   selectedKey: string | undefined;
   onRowClick: (key: TableData) => void;
+  emptyRowCellCount: number;
 }
 
-const TableBody = ({ rows, selectedKey, onRowClick }: TableBodyProps) => {
+const TableBody = ({
+  rows,
+  selectedKey,
+  onRowClick,
+  emptyRowCellCount,
+}: TableBodyProps) => {
   const tableBodyRef = useRef(null);
 
   const handleKeyDown = useCallback(
@@ -67,7 +73,7 @@ const TableBody = ({ rows, selectedKey, onRowClick }: TableBodyProps) => {
   );
 
   return (
-    <tbody ref={tableBodyRef}>
+    <tbody ref={tableBodyRef} className="h-full">
       {rows.map((row, index) => (
         <BodyRow
           key={row.id}
@@ -78,6 +84,16 @@ const TableBody = ({ rows, selectedKey, onRowClick }: TableBodyProps) => {
           onKeyDown={handleKeyDown}
         />
       ))}
+      <tr className="h-full">
+        {[...Array(emptyRowCellCount)].map((_, index) => (
+          <td
+            key={index}
+            className={`h-full border border-y-0 border-american-silver px-1 py-px ${
+              index === 0 ? 'pl-5' : ''
+            }`}
+          ></td>
+        ))}
+      </tr>
     </tbody>
   );
 };
