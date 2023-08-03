@@ -37,7 +37,7 @@ const CookieDetails = () => {
       ) : (
         <div className="h-full p-8 flex items-center">
           <p className="text-lg w-full font-bold text-granite-gray text-center">
-            Select a cookie to preview its value
+            Select cookies to preview its value
           </p>
         </div>
       )}
