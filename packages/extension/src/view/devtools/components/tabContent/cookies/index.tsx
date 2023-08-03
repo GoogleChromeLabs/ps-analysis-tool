@@ -18,7 +18,6 @@
  * External dependencies.
  */
 import React, { useMemo } from 'react';
-import { Resizable } from 're-resizable';
 
 /**
  * Internal dependencies.
@@ -27,7 +26,7 @@ import {
   useCookieStore,
   type CookieTableData,
 } from '../../../stateProviders/syncCookieStore';
-import { CookieDetails, CookieTable } from './components';
+import CookieTablePanel from './components/cookieTablePanel';
 
 const Cookies = () => {
   const { cookies, tabUrl, selectedFrame, tabFrames } = useCookieStore(
@@ -60,35 +59,13 @@ const Cookies = () => {
       }`}
       data-testid="cookies-content"
     >
-      {selectedFrame ? (
-        <div className="h-full flex flex-col">
-          <Resizable
-            defaultSize={{
-              width: '100%',
-              height: '80%',
-            }}
-            minHeight="6%"
-            maxHeight="98%"
-            enable={{
-              top: false,
-              right: false,
-              bottom: true,
-              left: false,
-            }}
-          >
-            <CookieTable
-              cookies={calculatedCookies}
-              selectedFrame={selectedFrame}
-              tabUrl={tabUrl}
-            />
-          </Resizable>
-          <div className="w-full h-full bg-white border-t-2 border-gray-300 shadow overflow-auto">
-            <CookieDetails />
-          </div>
-        </div>
-      ) : (
-        <p> landing page placeholder</p>
-      )}
+      <CookieTablePanel
+        cookies={calculatedCookies}
+        selectedFrame={selectedFrame}
+        tabUrl={tabUrl}
+      />
+
+      {!selectedFrame && <p> landing page placeholder</p>}
     </div>
   );
 };
