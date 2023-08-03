@@ -16,6 +16,7 @@
 /**
  * External dependencies.
  */
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 /**
@@ -24,11 +25,31 @@ import type { Meta, StoryObj } from '@storybook/react';
 import EmptyCirclePieChart from '../emptyCirclePieChart';
 
 const meta: Meta<typeof EmptyCirclePieChart> = {
-  title: 'Extension/DesignSystem/EmptyCirclePieChart',
+  title: 'Extension/DesignSystem/CirclePieChart/EmptyCirclePieChart',
   component: EmptyCirclePieChart,
   tags: ['autodocs'],
 };
 
 export default meta;
 
-export const Primary: StoryObj<typeof meta> = {};
+export const Primary: StoryObj<typeof meta> = {
+  render: (args) => (
+    <div className="w-16 text-center">
+      <EmptyCirclePieChart {...args} />
+    </div>
+  ),
+  args: {
+    title: '3rd party cookies',
+  },
+};
+
+export const Secondary: StoryObj<typeof meta> = {
+  render: (args) => (
+    <div className="w-28 text-center">
+      <EmptyCirclePieChart {...args} />
+    </div>
+  ),
+  args: {
+    title: '3rd party cookies',
+  },
+};

@@ -16,6 +16,7 @@
 /**
  * External dependencies.
  */
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 /**
@@ -35,6 +36,7 @@ export default meta;
 export const Primary: StoryObj<typeof meta> = {
   args: {
     centerCount: 39,
+    title: '1st party cookies',
     data: [
       {
         count: 5,
@@ -54,4 +56,39 @@ export const Primary: StoryObj<typeof meta> = {
       },
     ],
   },
+  render: (args) => (
+    <div className="w-16">
+      <CirclePieChart {...args} />
+    </div>
+  ),
+};
+
+export const Secondary: StoryObj<typeof meta> = {
+  args: {
+    centerCount: 39,
+    title: '1st party cookies',
+    data: [
+      {
+        count: 5,
+        color: COLOR_MAP.functional,
+      },
+      {
+        count: 4,
+        color: COLOR_MAP.marketing,
+      },
+      {
+        count: 0,
+        color: COLOR_MAP.analytics,
+      },
+      {
+        count: 9,
+        color: COLOR_MAP.uncategorised,
+      },
+    ],
+  },
+  render: (args) => (
+    <div className="w-28 text-center">
+      <CirclePieChart {...args} />
+    </div>
+  ),
 };

@@ -23,34 +23,40 @@ import classNames from 'classnames';
 interface CirclePieChartProps {
   centerCount: number;
   data: { count: number; color: string }[];
+  title?: string;
 }
 
 export const MAX_COUNT = 999;
 
-const CirclePieChart = ({ centerCount, data }: CirclePieChartProps) => {
+const CirclePieChart = ({ centerCount, data, title }: CirclePieChartProps) => {
   const fontSizeClass = centerCount <= MAX_COUNT ? 'text-2xl' : 'text-l';
 
   return (
-    <div className="h-full w-16">
-      <div className="w-full h-full relative">
-        <VictoryPie
-          padding={0}
-          innerRadius={175}
-          animate={{ duration: 400 }}
-          data={data.map(({ count }) => ({ x: '', y: count }))}
-          labels={() => ''}
-          colorScale={data.map(({ color }) => color)}
-        />
-        <p
-          className={classNames(
-            'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-medium',
-            fontSizeClass
-          )}
-        >
-          {centerCount <= MAX_COUNT ? centerCount : MAX_COUNT + '+'}
-        </p>
+    <>
+      <div className="h-full w-16 inline-block align-bottom">
+        <div className="w-full h-full relative">
+          <VictoryPie
+            padding={0}
+            innerRadius={175}
+            animate={{ duration: 400 }}
+            data={data.map(({ count }) => ({ x: '', y: count }))}
+            labels={() => ''}
+            colorScale={data.map(({ color }) => color)}
+          />
+          <p
+            className={classNames(
+              'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-medium',
+              fontSizeClass
+            )}
+          >
+            {centerCount <= MAX_COUNT ? centerCount : MAX_COUNT + '+'}
+          </p>
+        </div>
       </div>
-    </div>
+      {title && (
+        <p className="text-xs text-center font-semibold mt-2">{title}</p>
+      )}
+    </>
   );
 };
 

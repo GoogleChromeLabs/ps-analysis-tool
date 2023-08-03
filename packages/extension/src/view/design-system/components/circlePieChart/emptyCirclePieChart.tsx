@@ -26,22 +26,31 @@ import { COLOR_MAP } from '../../theme/colors';
 
 interface EmptyCirclePieChartProps {
   fallbackText?: string;
+  title?: string;
 }
 
-const EmptyCirclePieChart = ({ fallbackText }: EmptyCirclePieChartProps) => {
+const EmptyCirclePieChart = ({
+  fallbackText,
+  title,
+}: EmptyCirclePieChartProps) => {
   return (
-    <div className="h-full max-w-xs w-16">
-      <div className="w-full h-full relative">
-        <VictoryPie
-          padding={0}
-          innerRadius={0}
-          colorScale={[COLOR_MAP.brightGray]}
-        />
-        <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xs text-center text-raisin-black opacity-40 leading-4">
-          {fallbackText || 'Not Found'}
-        </p>
+    <>
+      <div className="h-full max-w-xs w-16 inline-block align-bottom">
+        <div className="w-full h-full relative">
+          <VictoryPie
+            padding={0}
+            innerRadius={0}
+            colorScale={[COLOR_MAP.brightGray]}
+          />
+          <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xs text-center text-raisin-black opacity-40 leading-4">
+            {fallbackText || 'Not Found'}
+          </p>
+        </div>
       </div>
-    </div>
+      {title && (
+        <p className="text-xs text-center font-semibold mt-2">{title}</p>
+      )}
+    </>
   );
 };
 
