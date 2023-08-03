@@ -21,37 +21,14 @@ import type { Meta, StoryObj } from '@storybook/react';
 /**
  * Internal dependencies.
  */
-import CirclePieChart from '..';
-import { COLOR_MAP } from '../../../theme/colors';
+import EmptyCirclePieChart from '../emptyCirclePieChart';
 
-const meta: Meta<typeof CirclePieChart> = {
-  title: 'Extension/DesignSystem/CirclePieChart',
-  component: CirclePieChart,
+const meta: Meta<typeof EmptyCirclePieChart> = {
+  title: 'Extension/DesignSystem/EmptyCirclePieChart',
+  component: EmptyCirclePieChart,
   tags: ['autodocs'],
 };
 
 export default meta;
 
-export const Primary: StoryObj<typeof meta> = {
-  args: {
-    centerCount: 39,
-    data: [
-      {
-        count: 5,
-        color: COLOR_MAP.functional,
-      },
-      {
-        count: 4,
-        color: COLOR_MAP.marketing,
-      },
-      {
-        count: 0,
-        color: COLOR_MAP.analytics,
-      },
-      {
-        count: 9,
-        color: COLOR_MAP.uncategorised,
-      },
-    ],
-  },
-};
+export const Primary: StoryObj<typeof meta> = {};

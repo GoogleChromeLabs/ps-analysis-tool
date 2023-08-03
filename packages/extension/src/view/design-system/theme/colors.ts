@@ -19,4 +19,5 @@ export const COLOR_MAP = {
   marketing: '#FFBF00',
   analytics: '#3D7AFC',
   uncategorised: '#FC260A',
+  emptyPieChart: '#EBEBEB',
 };

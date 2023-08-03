@@ -18,40 +18,31 @@
  */
 import React from 'react';
 import { VictoryPie } from 'victory';
-import classNames from 'classnames';
 
-interface CirclePieChartProps {
-  centerCount: number;
-  data: { count: number; color: string }[];
+/**
+ * Internal dependencies.
+ */
+import { COLOR_MAP } from '../../theme/colors';
+
+interface EmptyCirclePieChartProps {
+  fallbackText?: string;
 }
 
-const MAX_COUNT = 999;
-
-const CirclePieChart = ({ centerCount, data }: CirclePieChartProps) => {
-  const fontSizeClass = centerCount <= MAX_COUNT ? 'text-2xl' : 'text-l';
-
+const EmptyCirclePieChart = ({ fallbackText }: EmptyCirclePieChartProps) => {
   return (
-    <div className="h-full w-16">
+    <div className="h-full max-w-xs w-16">
       <div className="w-full h-full relative">
         <VictoryPie
           padding={0}
-          innerRadius={175}
-          animate={{ duration: 400 }}
-          data={data.map(({ count }) => ({ x: '', y: count }))}
-          labels={() => ''}
-          colorScale={data.map(({ color }) => color)}
+          innerRadius={0}
+          colorScale={[COLOR_MAP.emptyPieChart]}
         />
-        <p
-          className={classNames(
-            'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-medium',
-            fontSizeClass
-          )}
-        >
-          {centerCount <= MAX_COUNT ? centerCount : MAX_COUNT + '+'}
+        <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xs text-center text-raisin-black opacity-40 leading-4">
+          {fallbackText || 'Not Found'}
         </p>
       </div>
     </div>
   );
 };
 
-export default CirclePieChart;
+export default EmptyCirclePieChart;
