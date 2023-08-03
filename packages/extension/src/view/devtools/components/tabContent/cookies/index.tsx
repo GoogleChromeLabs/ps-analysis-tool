@@ -17,26 +17,47 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Resizable } from 're-resizable';
 
 /**
  * Internal dependencies.
  */
-import { useCookieStore } from '../../../stateProviders/syncCookieStore';
+import {
+  useCookieStore,
+  type CookieTableData,
+} from '../../../stateProviders/syncCookieStore';
 import { CookieDetails, CookieTable } from './components';
 
 const Cookies = () => {
-  const { cookies } = useCookieStore(({ state }) => ({
-    cookies: Object.values(state.tabCookies || {}),
+  const { cookies, selectedFrame, tabFrames } = useCookieStore(({ state }) => ({
+    cookies: state.tabCookies,
+    selectedFrame: state.selectedFrame,
+    tabFrames: state.tabFrames,
   }));
+
+  const calculatedCookies = useMemo(() => {
+    const frameFilteredCookies: { [key: string]: CookieTableData } = {};
+    if (cookies && selectedFrame && tabFrames && tabFrames[selectedFrame]) {
+      Object.entries(cookies).forEach(([key, cookie]) => {
+        tabFrames[selectedFrame].frameIds?.forEach((frameId) => {
+          if (cookie.frameIdList?.includes(frameId)) {
+            frameFilteredCookies[key] = cookie;
+          }
+        });
+      });
+    }
+    return Object.values(frameFilteredCookies);
+  }, [cookies, selectedFrame, tabFrames]);
 
   return (
     <div
-      className="h-full border border-american-silver"
+      className={`h-full border border-american-silver ${
+        selectedFrame ? '' : 'flex items-center justify-center'
+      }`}
       data-testid="cookies-content"
     >
-      {cookies.length > 0 ? (
+      {selectedFrame ? (
         <div className="h-full flex flex-col">
           <Resizable
             defaultSize={{
@@ -52,16 +73,14 @@ const Cookies = () => {
               left: false,
             }}
           >
-            <CookieTable cookies={cookies} />
+            <CookieTable cookies={calculatedCookies} />
           </Resizable>
           <div className="w-full h-full bg-white border-2 border-gray-300 shadow overflow-auto">
             <CookieDetails />
           </div>
         </div>
       ) : (
-        <div className="w-full h-full flex items-center justify-center">
-          <div className="w-10 h-10 rounded-full animate-spin border-t-transparent border-solid border-blue-700 border-4" />
-        </div>
+        <p> landing page placeholder</p>
       )}
     </div>
   );
