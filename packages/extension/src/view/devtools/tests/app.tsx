@@ -118,6 +118,19 @@ describe('App', () => {
     );
   });
 
+  it('Up Keyboard navigation should work.', () => {
+    render(<App />);
+    // Click on FingerPrinting tab
+    userEvent.tab();
+    expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
+      'bg-selected-background-color'
+    );
+    userEvent.keyboard('{Enter}');
+    expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
+      'bg-selected-background-color'
+    );
+  });
+
   afterAll(() => {
     globalThis.chrome = undefined as unknown as typeof chrome;
     globalThis.fetch = undefined as unknown as typeof fetch;
