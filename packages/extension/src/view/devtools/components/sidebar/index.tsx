@@ -125,14 +125,14 @@ const Sidebar: React.FC<SidebarProps> = ({
       }
     },
     [
-      tabFrames,
-      selectedFrame,
       accordionState,
       mainMenuTabSelector,
-      setSelectedFrame,
-      tabsNames,
+      selectedFrame,
       selectedIndex,
+      tabFrames,
+      setSelectedFrame,
       setIndex,
+      tabsNames,
     ]
   );
 
