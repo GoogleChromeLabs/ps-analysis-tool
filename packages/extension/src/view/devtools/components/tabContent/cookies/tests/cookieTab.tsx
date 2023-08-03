@@ -30,6 +30,7 @@ import type { CookieStoreContext } from '../../../../stateProviders/syncCookieSt
 import { emptyAnalytics } from '../../../../../../worker/findAnalyticsMatch';
 import { CookieDetails } from '../components';
 import { useContentPanelStore } from '../../../../stateProviders/contentPanelStore';
+import Details from '../components/cookieDetails/details';
 
 const emptyCookie = {
   name: '',
@@ -45,7 +46,7 @@ const emptyCookie = {
 const uncategorised1pCookie: ParsedCookie = {
   ...emptyCookie,
   name: '_cb',
-  value: 'uncategorised1pCookie',
+  value: 'v1%3A168740954476563235',
   domain: '.cnn.com',
 };
 
@@ -270,6 +271,29 @@ describe('CookieTab', () => {
 
     expect(
       await screen.findByText('Select a cookie to preview its value')
+    ).toBeInTheDocument();
+  });
+
+  it('should decode cookie value when input show URI decoded is checked', async () => {
+    render(
+      <Details
+        selectedCookie={mockResponse.tabCookies[uncategorised1pCookie.name]}
+      />
+    );
+
+    const checkbox = screen.getByRole('checkbox', {
+      checked: false,
+    });
+    fireEvent.click(checkbox);
+
+    expect(
+      await screen.findByText(decodeURIComponent(uncategorised1pCookie.value))
+    ).toBeInTheDocument();
+
+    fireEvent.click(checkbox);
+
+    expect(
+      await screen.findByText(uncategorised1pCookie.value)
     ).toBeInTheDocument();
   });
 
