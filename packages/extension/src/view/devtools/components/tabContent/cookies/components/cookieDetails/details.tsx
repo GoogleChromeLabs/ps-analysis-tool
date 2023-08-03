@@ -37,6 +37,7 @@ const Details = ({ selectedCookie }: DetailsProps) => {
         <span>Cookie Value</span>
         <label className="text-granite-gray text-xs font-normal flex items-center">
           <input
+            data-testid="show-url-decoded-checkbox"
             type="checkbox"
             className="ml-3 mr-1 cursor-pointer"
             checked={showUrlDecoded}
