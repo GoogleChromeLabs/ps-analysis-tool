@@ -77,7 +77,7 @@ const App: React.FC = () => {
             bottomLeft: false,
             topLeft: false,
           }}
-          className="h-full flex flex-col pt-0.5 border-solid border-r border-b border-gray-300"
+          className="h-full flex flex-col pt-0.5 border border-l-0 border-t-0 border-gray-300"
         >
           <Sidebar
             tabsNames={tabNames}

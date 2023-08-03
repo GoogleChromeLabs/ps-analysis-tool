@@ -53,7 +53,7 @@ const Cookies = () => {
 
   return (
     <div
-      className={`h-full border border-american-silver ${
+      className={`h-full ${
         selectedFrame ? '' : 'flex items-center justify-center'
       }`}
       data-testid="cookies-content"
@@ -76,7 +76,7 @@ const Cookies = () => {
           >
             <CookieTable cookies={calculatedCookies} />
           </Resizable>
-          <div className="w-full h-full bg-white border-2 border-gray-300 shadow overflow-auto">
+          <div className="w-full h-full bg-white border-t-2 border-gray-300 shadow overflow-auto">
             <CookieDetails />
           </div>
         </div>
