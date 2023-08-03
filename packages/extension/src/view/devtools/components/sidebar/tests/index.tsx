@@ -864,4 +864,40 @@ describe('Sidebar', () => {
       'bg-selected-background-color'
     );
   });
+
+  it('Down Arrow on Topics menu should select Attribution Menu.', () => {
+    const setIndexMock = jest.fn();
+    const sidebarRender = render(
+      <Sidebar tabsNames={tabNames} selectedIndex={0} setIndex={setIndexMock} />
+    );
+    // Click on FingerPrinting tab
+    fireEvent.click(screen.getByTestId('accordion-opener'));
+
+    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+      '-rotate-90'
+    );
+
+    fireEvent.click(screen.getByTestId('Topics'));
+
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={1}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('Topics')).toHaveClass(
+      'bg-selected-background-color'
+    );
+
+    fireEvent.click(screen.getByTestId('https://crxt.net/'));
+    expect(setIndexMock).toHaveBeenCalled();
+  });
 });
