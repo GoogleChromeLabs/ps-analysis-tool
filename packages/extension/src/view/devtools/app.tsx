@@ -31,7 +31,6 @@ import {
   Fingerprinting,
   Sidebar,
 } from './components';
-import { Provider as ContentPanelProvider } from './stateProviders/contentPanelStore';
 
 const TABS = [
   {
@@ -67,7 +66,6 @@ const App: React.FC = () => {
         <Resizable
           defaultSize={{ width: '200px', height: '100%' }}
           minWidth={'150px'}
-          maxWidth={'95%'}
           enable={{
             top: false,
             right: true,
@@ -78,7 +76,7 @@ const App: React.FC = () => {
             bottomLeft: false,
             topLeft: false,
           }}
-          className="h-full flex flex-col pt-3.5 overflow-auto border-solid border-r border-b border-t border-gray-300"
+          className="h-full flex flex-col pt-0.5 border-solid border-r border-b border-gray-300"
         >
           <Sidebar
             tabsNames={tabNames}
@@ -87,9 +85,7 @@ const App: React.FC = () => {
           />
         </Resizable>
         <main className="h-full flex-1 overflow-auto">
-          <ContentPanelProvider>
-            <TabContent />
-          </ContentPanelProvider>
+          <TabContent />
         </main>
       </div>
     </div>

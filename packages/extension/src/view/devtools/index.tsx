@@ -24,13 +24,16 @@ import { createRoot } from 'react-dom/client';
  */
 import App from './app';
 import { Provider as ExternalStoreProvider } from './stateProviders/syncCookieStore';
+import { Provider as ContentPanelProvider } from './stateProviders/contentPanelStore';
 
 const root = document.getElementById('root');
 
 if (root) {
   createRoot(root).render(
     <ExternalStoreProvider>
-      <App />
+      <ContentPanelProvider>
+        <App />
+      </ContentPanelProvider>
     </ExternalStoreProvider>
   );
 }
