@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
+import React from 'react';
 
-export const COLOR_MAP = {
-  functional: '#5CC971',
-  marketing: '#F3AE4E',
-  analytics: '#4C79F4',
-  uncategorised: '#EC7159',
-  brightGray: '#EBEBEB',
-  mediumGray: '#BDBDBD',
+const CookiesLanding = () => {
+  return <p>Landing page placeholder</p>;
 };
+
+export default CookiesLanding;

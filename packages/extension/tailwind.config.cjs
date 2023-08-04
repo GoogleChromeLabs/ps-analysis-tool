@@ -31,6 +31,10 @@ module.exports = {
     fontFamily: {
       ...defaultTheme.fontFamily,
     },
+    fontSize: {
+      ...defaultTheme.fontSize,
+      xxxs: '0.625rem', // 10px - Only for edge cases
+    },
     textColor: {
       ...colors,
       primary: '#000',
@@ -41,6 +45,7 @@ module.exports = {
       'chart-label': '#111B21',
       'granite-gray': '#5F6369',
       'outer-space': '#303942',
+      'raisin-black': '#212121',
     },
     backgroundColor: {
       ...colors,

@@ -23,7 +23,7 @@ import type { Meta, StoryObj } from '@storybook/react';
  * Internal dependencies.
  */
 import { TempCookieData } from './tempData';
-import { CookieTable } from '../..';
+import CookieTable from '..';
 
 const meta = {
   title: 'Extension/DevTools/CookiesPanel/CookieTable',
