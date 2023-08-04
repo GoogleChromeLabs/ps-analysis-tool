@@ -31,7 +31,6 @@ import {
   Fingerprinting,
   Sidebar,
 } from './components';
-import { Provider as ContentPanelProvider } from './stateProviders/contentPanelStore';
 
 const TABS = [
   {
@@ -86,9 +85,7 @@ const App: React.FC = () => {
           />
         </Resizable>
         <main className="h-full flex-1 overflow-auto">
-          <ContentPanelProvider>
-            <TabContent />
-          </ContentPanelProvider>
+          <TabContent />
         </main>
       </div>
     </div>

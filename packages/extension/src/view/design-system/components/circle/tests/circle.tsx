@@ -28,7 +28,7 @@ describe('Circle', () => {
     const { container } = render(<Circle color={COLOR_MAP.functional} />);
 
     // Check if the Circle div has the correct background color style
-    const circleDiv = container.querySelector('.rounded-full');
+    const circleDiv = container.querySelector('div');
     expect(circleDiv).toHaveStyle(`background-color: ${COLOR_MAP.functional}`);
   });
 });

@@ -17,41 +17,19 @@
 /**
  * External dependencies.
  */
-import React, { useMemo } from 'react';
-import { Resizable } from 're-resizable';
+import React from 'react';
 
 /**
  * Internal dependencies.
  */
-import {
-  useCookieStore,
-  type CookieTableData,
-} from '../../../stateProviders/syncCookieStore';
-import { CookieDetails, CookieTable } from './components';
+import { useCookieStore } from '../../../stateProviders/syncCookieStore';
+import CookiesListing from './cookiesListing';
+import CookiesLanding from './cookiesLanding';
 
 const Cookies = () => {
-  const { cookies, tabUrl, selectedFrame, tabFrames } = useCookieStore(
-    ({ state }) => ({
-      cookies: state.tabCookies,
-      tabUrl: state.tabUrl,
-      selectedFrame: state.selectedFrame,
-      tabFrames: state.tabFrames,
-    })
-  );
-
-  const calculatedCookies = useMemo(() => {
-    const frameFilteredCookies: { [key: string]: CookieTableData } = {};
-    if (cookies && selectedFrame && tabFrames && tabFrames[selectedFrame]) {
-      Object.entries(cookies).forEach(([key, cookie]) => {
-        tabFrames[selectedFrame].frameIds?.forEach((frameId) => {
-          if (cookie.frameIdList?.includes(frameId)) {
-            frameFilteredCookies[key] = cookie;
-          }
-        });
-      });
-    }
-    return Object.values(frameFilteredCookies);
-  }, [cookies, selectedFrame, tabFrames]);
+  const { selectedFrame } = useCookieStore(({ state }) => ({
+    selectedFrame: state.selectedFrame,
+  }));
 
   return (
     <div
@@ -60,35 +38,7 @@ const Cookies = () => {
       }`}
       data-testid="cookies-content"
     >
-      {selectedFrame ? (
-        <div className="h-full flex flex-col">
-          <Resizable
-            defaultSize={{
-              width: '100%',
-              height: '80%',
-            }}
-            minHeight="6%"
-            maxHeight="98%"
-            enable={{
-              top: false,
-              right: false,
-              bottom: true,
-              left: false,
-            }}
-          >
-            <CookieTable
-              cookies={calculatedCookies}
-              selectedFrame={selectedFrame}
-              tabUrl={tabUrl}
-            />
-          </Resizable>
-          <div className="w-full h-full bg-white border-t-2 border-gray-300 shadow overflow-auto">
-            <CookieDetails />
-          </div>
-        </div>
-      ) : (
-        <p> landing page placeholder</p>
-      )}
+      {selectedFrame ? <CookiesListing /> : <CookiesLanding />}
     </div>
   );
 };

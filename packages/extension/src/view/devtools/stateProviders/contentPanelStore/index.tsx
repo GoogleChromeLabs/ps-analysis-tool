@@ -27,7 +27,7 @@ import { useContextSelector, createContext } from 'use-context-selector';
 /**
  * Internal dependencies.
  */
-import type { CookieTableData } from '../syncCookieStore';
+import { useCookieStore, type CookieTableData } from '../syncCookieStore';
 
 export interface ContentPanelStore {
   state: {
@@ -63,7 +63,15 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [selectedCookie, setSelectedCookie] = useState<CookieTableData | null>(
     null
   );
+  const { selectedFrame } = useCookieStore(({ state }) => ({
+    selectedFrame: state.selectedFrame,
+  }));
 
+  useEffect(() => {
+    if (!selectedFrame) {
+      setSelectedCookie(null);
+    }
+  }, [selectedFrame]);
   const [tableColumnSize, setTableColumnSize] = useState(100);
 
   const tableContainerRef = useRef<HTMLTableElement>(null);
