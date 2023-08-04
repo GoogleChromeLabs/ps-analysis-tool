@@ -28,9 +28,9 @@ import SinonChrome from 'sinon-chrome';
 import CookieTab from '..';
 import type { CookieStoreContext } from '../../../../stateProviders/syncCookieStore';
 import { emptyAnalytics } from '../../../../../../worker/findAnalyticsMatch';
-import { CookieDetails } from '../components';
+import CookieDetails from '../cookiesListing/cookieDetails';
 import { useContentPanelStore } from '../../../../stateProviders/contentPanelStore';
-import Details from '../components/cookieDetails/details';
+import Details from '../cookiesListing/cookieDetails/details';
 
 const emptyCookie = {
   name: '',

@@ -18,51 +18,27 @@
  * External dependencies.
  */
 import React from 'react';
-import { Resizable } from 're-resizable';
 
 /**
  * Internal dependencies.
  */
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import { CookieDetails, CookieTable } from './components';
+import CookiesListing from './cookiesListing';
+import CookiesLanding from './cookiesLanding';
 
 const Cookies = () => {
-  const { cookies } = useCookieStore(({ state }) => ({
-    cookies: Object.values(state.tabCookies || {}),
+  const { selectedFrame } = useCookieStore(({ state }) => ({
+    selectedFrame: state.selectedFrame,
   }));
 
   return (
     <div
-      className="h-full border border-american-silver"
+      className={`h-full border border-american-silver ${
+        selectedFrame ? '' : 'flex items-center justify-center'
+      }`}
       data-testid="cookies-content"
     >
-      {cookies.length > 0 ? (
-        <div className="h-full flex flex-col">
-          <Resizable
-            defaultSize={{
-              width: '100%',
-              height: '80%',
-            }}
-            minHeight="6%"
-            maxHeight="98%"
-            enable={{
-              top: false,
-              right: false,
-              bottom: true,
-              left: false,
-            }}
-          >
-            <CookieTable cookies={cookies} />
-          </Resizable>
-          <div className="w-full h-full bg-white border-2 border-gray-300 shadow overflow-auto">
-            <CookieDetails />
-          </div>
-        </div>
-      ) : (
-        <div className="w-full h-full flex items-center justify-center">
-          <div className="w-10 h-10 rounded-full animate-spin border-t-transparent border-solid border-blue-700 border-4" />
-        </div>
-      )}
+      {selectedFrame ? <CookiesListing /> : <CookiesLanding />}
     </div>
   );
 };

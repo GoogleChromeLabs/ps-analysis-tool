@@ -17,23 +17,22 @@
  * External dependencies.
  */
 import React from 'react';
-import { createRoot } from 'react-dom/client';
+import { render } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 
 /**
  * Internal dependencies.
  */
-import App from './app';
-import { Provider as ExternalStoreProvider } from './stateProviders/syncCookieStore';
-import { Provider as ContentPanelProvider } from './stateProviders/contentPanelStore';
+import CircleEmpty from '../circleEmpty';
 
-const root = document.getElementById('root');
+describe('CircleEmpty', () => {
+  const testColor = 'red';
 
-if (root) {
-  createRoot(root).render(
-    <ExternalStoreProvider>
-      <ContentPanelProvider>
-        <App />
-      </ContentPanelProvider>
-    </ExternalStoreProvider>
-  );
-}
+  it('renders the CircleEmpty with the correct background color', () => {
+    const { container } = render(<CircleEmpty color={testColor} />);
+
+    // Check if the CircleEmpty div has the correct background color style
+    const circleEmptyDiv = container.querySelector('div');
+    expect(circleEmptyDiv).toHaveStyle(`background-color: ${testColor}`);
+  });
+});

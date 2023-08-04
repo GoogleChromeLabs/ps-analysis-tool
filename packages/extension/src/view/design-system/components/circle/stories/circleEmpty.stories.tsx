@@ -13,6 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
+import type { Meta, StoryObj } from '@storybook/react';
 
-export { default as CookieDetails } from './cookieDetails';
-export { default as CookieTable } from './cookieTable';
+/**
+ * Internal dependencies.
+ */
+import CircleEmpty from '../circleEmpty';
+
+const meta: Meta<typeof CircleEmpty> = {
+  title: 'Extension/DesignSystem/CircleEmpty',
+  component: CircleEmpty,
+  tags: ['autodocs'],
+};
+
+export default meta;
+
+export const Primary: StoryObj<typeof meta> = {};
