@@ -18,7 +18,7 @@
  */
 import React from 'react';
 import { render } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect'; // For additional matchers
+import '@testing-library/jest-dom/extend-expect';
 
 /**
  * Internal Dependencies
@@ -27,7 +27,7 @@ import EmptyCirclePieChart from '../emptyCirclePieChart';
 
 describe('EmptyCirclePieChart', () => {
   it('renders the fallback text correctly when provided', () => {
-    const fallbackText = 'No Data Available';
+    const fallbackText = 'No data';
 
     const { getByText } = render(
       <EmptyCirclePieChart fallbackText={fallbackText} />
