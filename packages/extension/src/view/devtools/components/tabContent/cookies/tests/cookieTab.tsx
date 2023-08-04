@@ -30,6 +30,7 @@ import type { CookieStoreContext } from '../../../../stateProviders/syncCookieSt
 import { emptyAnalytics } from '../../../../../../worker/findAnalyticsMatch';
 import CookieDetails from '../cookiesListing/cookieDetails';
 import { useContentPanelStore } from '../../../../stateProviders/contentPanelStore';
+import Details from '../cookiesListing/cookieDetails/details';
 
 const emptyCookie = {
   name: '',
@@ -45,7 +46,7 @@ const emptyCookie = {
 const uncategorised1pCookie: ParsedCookie = {
   ...emptyCookie,
   name: '_cb',
-  value: 'uncategorised1pCookie',
+  value: 'v1%3A168740954476563235',
   domain: '.cnn.com',
 };
 
@@ -213,6 +214,51 @@ describe('CookieTab', () => {
     ).toBeInTheDocument();
   });
 
+  it('should open column menu when right click on header cell', async () => {
+    render(<CookieTab />);
+
+    const headerCell = (await screen.findAllByTestId('header-cell'))[0];
+    fireEvent.contextMenu(headerCell);
+
+    expect(await screen.findByTestId('column-menu')).toBeInTheDocument();
+
+    const toggleAll = await screen.findByText('Toggle All');
+    fireEvent.click(toggleAll);
+
+    expect(await screen.findAllByTestId('header-cell')).toHaveLength(1);
+
+    fireEvent.contextMenu(headerCell);
+    fireEvent.click(toggleAll);
+  });
+
+  it('should remove one columne when click on column menu list item', async () => {
+    render(<CookieTab />);
+
+    const headerCell = (await screen.findAllByTestId('header-cell'))[0];
+    fireEvent.contextMenu(headerCell);
+
+    const columnMenu = await screen.findByTestId('column-menu');
+
+    const value = await within(columnMenu).findByText('Value');
+    fireEvent.click(value);
+
+    expect(await screen.findAllByTestId('header-cell')).not.toContain(value);
+  });
+
+  it('should columnMenu close when click on outside', async () => {
+    render(<CookieTab />);
+
+    const headerCell = (await screen.findAllByTestId('header-cell'))[0];
+    fireEvent.contextMenu(headerCell);
+
+    const columnMenuOverlay = await screen.findByTestId('column-menu-overlay');
+    fireEvent.click(columnMenuOverlay);
+
+    setTimeout(() => {
+      expect(screen.queryByTestId('column-menu')).not.toBeInTheDocument();
+    }, 1000);
+  });
+
   it('should render a cookie card with placeholder text when no cookie is selected', async () => {
     mockUseContentPanelStore.mockReturnValue({
       selectedCookie: null,
@@ -225,6 +271,29 @@ describe('CookieTab', () => {
 
     expect(
       await screen.findByText('Select a cookie to preview its value')
+    ).toBeInTheDocument();
+  });
+
+  it('should decode cookie value when input show URI decoded is checked', async () => {
+    render(
+      <Details
+        selectedCookie={mockResponse.tabCookies[uncategorised1pCookie.name]}
+      />
+    );
+
+    const checkbox = screen.getByRole('checkbox', {
+      checked: false,
+    });
+    fireEvent.click(checkbox);
+
+    expect(
+      await screen.findByText(decodeURIComponent(uncategorised1pCookie.value))
+    ).toBeInTheDocument();
+
+    fireEvent.click(checkbox);
+
+    expect(
+      await screen.findByText(uncategorised1pCookie.value)
     ).toBeInTheDocument();
   });
 

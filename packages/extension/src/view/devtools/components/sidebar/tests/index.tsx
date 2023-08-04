@@ -169,7 +169,7 @@ describe('Sidebar', () => {
     );
     const container = screen.getByTestId('cookies-tab-heading-wrapper');
 
-    expect(container).toHaveClass('bg-selected-background-color');
+    expect(container).toHaveClass('bg-royal-blue');
   });
 
   it('should unselect cookie header and show other header as selected', () => {
@@ -192,10 +192,8 @@ describe('Sidebar', () => {
     );
     const attributionContainer = screen.getByTestId('Attribution');
 
-    expect(cookieHeaderContainer).toHaveClass('bg-selected-background-color');
-    expect(attributionContainer).not.toHaveClass(
-      'bg-selected-background-color'
-    );
+    expect(cookieHeaderContainer).toHaveClass('bg-royal-blue');
+    expect(attributionContainer).not.toHaveClass('bg-royal-blue');
 
     fireEvent.click(attributionContainer);
 
@@ -207,10 +205,8 @@ describe('Sidebar', () => {
       />
     );
 
-    expect(cookieHeaderContainer).not.toHaveClass(
-      'bg-selected-background-color'
-    );
-    expect(attributionContainer).toHaveClass('bg-selected-background-color');
+    expect(cookieHeaderContainer).not.toHaveClass('bg-royal-blue');
+    expect(attributionContainer).toHaveClass('bg-royal-blue');
   });
 
   it('should select cookie and show the listed frames under cookie menu.', () => {
@@ -235,11 +231,9 @@ describe('Sidebar', () => {
     );
     const mainFrame = screen.getByTestId('https://edition.cnn.com/');
 
-    expect(cookieHeaderContainer).not.toHaveClass(
-      'bg-selected-background-color'
-    );
+    expect(cookieHeaderContainer).not.toHaveClass('bg-royal-blue');
     expect(mainFrame).toBeInTheDocument();
-    expect(mainFrame).toHaveClass('bg-selected-background-color');
+    expect(mainFrame).toHaveClass('bg-royal-blue');
   });
 
   it('should select another menu and close cookie accordion', () => {
@@ -265,11 +259,9 @@ describe('Sidebar', () => {
     const mainFrame = screen.getByTestId('https://edition.cnn.com/');
     const attributionContainer = screen.getByTestId('Attribution');
 
-    expect(cookieHeaderContainer).not.toHaveClass(
-      'bg-selected-background-color'
-    );
+    expect(cookieHeaderContainer).not.toHaveClass('bg-royal-blue');
     expect(mainFrame).toBeInTheDocument();
-    expect(mainFrame).toHaveClass('bg-selected-background-color');
+    expect(mainFrame).toHaveClass('bg-royal-blue');
 
     fireEvent.click(attributionContainer);
     mockUseCookieStore.mockReturnValueOnce({
@@ -286,9 +278,7 @@ describe('Sidebar', () => {
         setIndex={() => undefined}
       />
     );
-    expect(cookieHeaderContainer).not.toHaveClass(
-      'bg-selected-background-color'
-    );
-    expect(attributionContainer).toHaveClass('bg-selected-background-color');
+    expect(cookieHeaderContainer).not.toHaveClass('bg-royal-blue');
+    expect(attributionContainer).toHaveClass('bg-royal-blue');
   });
 });
