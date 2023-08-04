@@ -84,6 +84,16 @@ const TableBody = ({
           onKeyDown={handleKeyDown}
         />
       ))}
+      <tr className="h-5">
+        {[...Array(emptyRowCellCount)].map((_, index) => (
+          <td
+            key={index}
+            className={`border border-y-0 border-american-silver px-1 py-px ${
+              index === 0 ? 'pl-5' : ''
+            } ${rows.length % 2 ? 'bg-anti-flash-white' : ''}`}
+          ></td>
+        ))}
+      </tr>
       <tr className="h-full">
         {[...Array(emptyRowCellCount)].map((_, index) => (
           <td
