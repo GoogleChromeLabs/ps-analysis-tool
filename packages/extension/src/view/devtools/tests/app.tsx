@@ -81,7 +81,7 @@ describe('App', () => {
 
   it('should switch to Attribution Panel when clicked', async () => {
     render(<App />);
-    // Click on FingerPrinting tab
+    // Click on Attribution tab
     fireEvent.click(screen.getByText('Attribution'));
 
     expect(
@@ -91,7 +91,8 @@ describe('App', () => {
 
   it('should switch to Topics Panel when clicked', async () => {
     render(<App />);
-    // Click on FingerPrinting tab
+
+    // Click on Topics tab
     fireEvent.click(screen.getByText('Topics'));
 
     expect(await screen.findByTestId('topics-content')).toBeInTheDocument();
@@ -99,8 +100,9 @@ describe('App', () => {
 
   it('Down Keyboard navigation should work.', () => {
     render(<App />);
-    // Click on FingerPrinting tab
+    // Focus on the first menu item.
     userEvent.tab();
+    // Press arrow down
     userEvent.keyboard('{ArrowDown}');
     expect(screen.getByTestId('Topics')).toHaveClass(
       'bg-selected-background-color'
@@ -109,9 +111,11 @@ describe('App', () => {
 
   it('Up Keyboard navigation should work.', () => {
     render(<App />);
-    // Click on FingerPrinting tab
+    // Focus on the first menu item.
     userEvent.tab();
+    // Press arrow down to go to next menu
     userEvent.keyboard('{ArrowDown}');
+    // Press arrow down to go to previous menu
     userEvent.keyboard('{ArrowUp}');
     expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
       'bg-selected-background-color'
@@ -120,7 +124,7 @@ describe('App', () => {
 
   it('Up Keyboard navigation should work.', () => {
     render(<App />);
-    // Click on FingerPrinting tab
+    // Focus on the first menu item.
     userEvent.tab();
     expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
       'bg-selected-background-color'
