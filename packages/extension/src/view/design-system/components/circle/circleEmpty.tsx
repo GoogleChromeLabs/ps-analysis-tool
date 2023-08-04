@@ -18,11 +18,16 @@
  */
 import React from 'react';
 
+/**
+ * Internal dependencies.
+ */
+import { COLOR_MAP } from '../../theme/colors';
+
 interface CircleEmptyProps {
   color: string;
 }
 
-const CircleEmpty = ({ color }: CircleEmptyProps) => (
+const CircleEmpty = ({ color = COLOR_MAP.mediumGray }: CircleEmptyProps) => (
   <div
     className="w-2.5 h-2.5 rounded-full flex items-center justify-center"
     style={{ backgroundColor: color }}

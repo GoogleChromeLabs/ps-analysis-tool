@@ -16,19 +16,23 @@
 /**
  * External dependencies.
  */
-import type { Meta, StoryObj } from '@storybook/react';
+import React from 'react';
+import { render } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 
 /**
  * Internal dependencies.
  */
 import CircleEmpty from '../circleEmpty';
 
-const meta: Meta<typeof CircleEmpty> = {
-  title: 'Extension/DesignSystem/CircleEmpty',
-  component: CircleEmpty,
-  tags: ['autodocs'],
-};
+describe('CircleEmpty', () => {
+  const testColor = 'red';
 
-export default meta;
+  it('renders the CircleEmpty with the correct background color', () => {
+    const { container } = render(<CircleEmpty color={testColor} />);
 
-export const Primary: StoryObj<typeof meta> = {};
+    // Check if the CircleEmpty div has the correct background color style
+    const circleEmptyDiv = container.querySelector('div:first-child');
+    expect(circleEmptyDiv).toHaveStyle(`background-color: ${testColor}`);
+  });
+});

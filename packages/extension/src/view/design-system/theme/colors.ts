@@ -20,4 +20,5 @@ export const COLOR_MAP = {
   analytics: '#4C79F4',
   uncategorised: '#EC7159',
   brightGray: '#EBEBEB',
+  mediumGray: '#BDBDBD',
 };
