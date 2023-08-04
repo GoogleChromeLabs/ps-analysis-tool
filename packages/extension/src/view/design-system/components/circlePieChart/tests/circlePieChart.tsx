@@ -23,52 +23,127 @@ import '@testing-library/jest-dom/extend-expect';
 import CirclePieChart, { MAX_COUNT } from '..';
 
 describe('CirclePieChart', () => {
-  it('renders the centerCount correctly with a valid number', () => {
-    const centerCount = 123;
-    const data = [
-      { count: 50, color: 'red' },
-      { count: 73, color: 'blue' },
-    ];
+  const testData = [
+    { count: 50, color: 'red' },
+    { count: 73, color: 'blue' },
+  ];
+
+  it('renders EmptyCirclePieChart when centerCount is 0', () => {
+    const centerCount = 0;
+    const title = 'Empty Chart';
+    const fallbackText = 'No Data';
 
     const { getByText } = render(
-      <CirclePieChart centerCount={centerCount} data={data} />
+      <CirclePieChart
+        centerCount={centerCount}
+        data={testData}
+        title={title}
+        fallbackText={fallbackText}
+      />
     );
 
-    // Check if the centerCount is rendered correctly
-    const centerCountElement = getByText(centerCount.toString());
-    expect(centerCountElement).toBeInTheDocument();
+    // Check if the EmptyCirclePieChart is rendered when centerCount is 0
+    const emptyChartTitle = getByText(title);
+    expect(emptyChartTitle).toBeInTheDocument();
+    const fallbackTextElement = getByText(fallbackText);
+    expect(fallbackTextElement).toBeInTheDocument();
   });
 
-  it('renders the centerCount correctly when it exceeds MAX_COUNT', () => {
-    const centerCount = MAX_COUNT + 1; // Exceeds MAX_COUNT (999)
-    const data = [
-      { count: 50, color: 'red' },
-      { count: 73, color: 'blue' },
-    ];
+  it('renders CirclePieChart with correct centerCount when centerCount is less than or equal to MAX_COUNT', () => {
+    const centerCount = 123;
+    const title = '1st Party cookies';
+
+    const { getByText, container } = render(
+      <CirclePieChart centerCount={centerCount} data={testData} title={title} />
+    );
+
+    // Check if the CirclePieChart is rendered with the correct centerCount
+    const centerCountText = getByText(centerCount.toString());
+    expect(centerCountText).toBeInTheDocument();
+
+    // Check if the VictoryPie is rendered with the correct data points
+    const slices = container.querySelectorAll('path[role="presentation"]');
+    expect(slices.length).toBe(testData.length);
+  });
+
+  it('renders CirclePieChart with MAX_COUNT+ when centerCount exceeds MAX_COUNT', () => {
+    const centerCount = MAX_COUNT + 100; // Exceeds MAX_COUNT (999)
+    const title = '3rd party cookies';
 
     const { getByText } = render(
-      <CirclePieChart centerCount={centerCount} data={data} />
+      <CirclePieChart centerCount={centerCount} data={testData} title={title} />
     );
 
-    // Check if the centerCount displays MAX_COUNT + '+' when it exceeds MAX_COUNT
-    const maxCountText = MAX_COUNT + '+';
-    const centerCountElement = getByText(maxCountText);
-    expect(centerCountElement).toBeInTheDocument();
+    // Check if the CirclePieChart displays MAX_COUNT+ when centerCount exceeds MAX_COUNT
+    const maxCountText = `${MAX_COUNT}+`;
+    const centerCountText = getByText(maxCountText);
+    expect(centerCountText).toBeInTheDocument();
   });
 
-  it('renders the correct number of slices on the VictoryPie chart', () => {
-    const centerCount = 123;
-    const data = [
-      { count: 50, color: 'red' },
-      { count: 73, color: 'blue' },
-    ];
+  it('renders CirclePieChart with the provided title', () => {
+    const centerCount = 80;
+    const title = 'Total cookies';
+
+    const { getByText } = render(
+      <CirclePieChart centerCount={centerCount} data={testData} title={title} />
+    );
+
+    // Check if the CirclePieChart renders the provided title
+    const chartTitle = getByText(title);
+    expect(chartTitle).toBeInTheDocument();
+  });
+
+  it('renders CirclePieChart with default primary container width class', () => {
+    const centerCount = 50;
 
     const { container } = render(
-      <CirclePieChart centerCount={centerCount} data={data} />
+      <CirclePieChart centerCount={centerCount} data={testData} />
     );
 
-    // Check if the VictoryPie is rendered with the correct number of data points
-    const slices = container.querySelectorAll('path[role="presentation"]');
-    expect(slices.length).toBe(data.length);
+    // Check if the CirclePieChart renders with the default primary container width class
+    const primaryContainer = container.querySelector('.w-16');
+    expect(primaryContainer).toBeInTheDocument();
+  });
+
+  it('renders CirclePieChart with custom container width class when isPrimary is false', () => {
+    const centerCount = 60;
+
+    const { container } = render(
+      <CirclePieChart
+        centerCount={centerCount}
+        data={testData}
+        isPrimary={false}
+      />
+    );
+
+    // Check if the CirclePieChart renders with the custom container width class for non-primary charts
+    const secondaryContainer = container.querySelector('.w-8');
+    expect(secondaryContainer).toBeInTheDocument();
+  });
+
+  it('renders CirclePieChart with the correct font size class for primary and non-primary charts', () => {
+    const primaryCenterCount = 100;
+    const secondaryCenterCount = MAX_COUNT + 1; // Exceeds MAX_COUNT (999)
+
+    const { getByText, rerender } = render(
+      <CirclePieChart centerCount={primaryCenterCount} data={testData} />
+    );
+
+    // Check if the CirclePieChart renders with the correct font size class for primary charts
+    const primaryFontSizeClass = getByText(primaryCenterCount.toString());
+    expect(primaryFontSizeClass).toHaveClass('text-2xl');
+
+    // Rerender with non-primary centerCount
+    rerender(
+      <CirclePieChart
+        centerCount={secondaryCenterCount}
+        data={testData}
+        isPrimary={false}
+      />
+    );
+
+    // Check if the CirclePieChart renders with the correct font size class for non-primary charts
+    const nonPrimaryFontSizeClass = getByText(MAX_COUNT + '+');
+    expect(nonPrimaryFontSizeClass).toHaveClass('text-xxxs');
   });
 });
