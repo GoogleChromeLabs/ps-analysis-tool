@@ -19,6 +19,7 @@
  */
 import React, { useEffect, useRef, useState } from 'react';
 import type { Column, Table } from '@tanstack/react-table';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -68,9 +69,10 @@ const ColumnMenu = ({
       {open &&
         createPortal(
           <div
-            className={`transition duration-100 ${
+            className={classNames(
+              'transition duration-100',
               startAnimation ? 'opacity-0' : 'opacity-100'
-            }`}
+            )}
             data-testid="column-menu"
           >
             <div
@@ -89,9 +91,10 @@ const ColumnMenu = ({
                 }}
               >
                 <span
-                  className={`mr-2 font-semibold ${
+                  className={classNames(
+                    'mr-2 font-semibold',
                     table.getIsAllColumnsVisible() ? 'opacity-100' : 'opacity-0'
-                  }`}
+                  )}
                 >
                   ✓
                 </span>
