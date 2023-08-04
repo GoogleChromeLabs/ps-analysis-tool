@@ -62,7 +62,7 @@ const Accordion: React.FC<AccordionProps> = ({
   }, [accordionState, setAccordionState, setSelectedFrame]);
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-screen">
       <div
         data-testid="cookies-tab-heading-wrapper"
         className={`flex h-full flex-row items-center pl-3 py-0.5 outline-0 ${
@@ -123,7 +123,7 @@ const Accordion: React.FC<AccordionProps> = ({
                 {selectedFrame === key ? <CookieWhite /> : <CookieGray />}
               </div>
               <p
-                className="pl-1.5 truncate"
+                className="pl-1.5 whitespace-nowrap"
                 title={`Cookies used by frames from ${key}`}
               >
                 {key}
