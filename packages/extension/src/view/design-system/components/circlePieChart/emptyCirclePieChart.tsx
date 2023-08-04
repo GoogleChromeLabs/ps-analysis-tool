@@ -18,6 +18,7 @@
  */
 import React from 'react';
 import { VictoryPie } from 'victory';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -27,22 +28,39 @@ import { COLOR_MAP } from '../../theme/colors';
 interface EmptyCirclePieChartProps {
   fallbackText?: string;
   title?: string;
+  isSmall?: boolean;
 }
 
 const EmptyCirclePieChart = ({
   fallbackText,
   title,
+  isSmall = false,
 }: EmptyCirclePieChartProps) => {
+  const containerWidthClass = isSmall ? 'w-8' : 'w-16';
+  const centerTitleClasses = isSmall
+    ? 'text-[7px] leading-[7px]' // Font size and line height are added as an exception to handle edge case.
+    : 'text-xs leading-4';
+
   return (
     <>
-      <div className="h-full max-w-xs w-16 inline-block align-bottom">
+      <div
+        className={classNames(
+          'h-full max-w-xs inline-block align-bottom',
+          containerWidthClass
+        )}
+      >
         <div className="w-full h-full relative">
           <VictoryPie
             padding={0}
             innerRadius={0}
             colorScale={[COLOR_MAP.brightGray]}
           />
-          <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xs text-center text-raisin-black opacity-40 leading-4">
+          <p
+            className={classNames(
+              'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-raisin-black opacity-40',
+              centerTitleClasses
+            )}
+          >
             {fallbackText || 'Not Found'}
           </p>
         </div>

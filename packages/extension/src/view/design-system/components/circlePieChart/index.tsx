@@ -20,20 +20,53 @@ import React from 'react';
 import { VictoryPie } from 'victory';
 import classNames from 'classnames';
 
+/**
+ * Internal dependencies.
+ */
+import EmptyCirclePieChart from './emptyCirclePieChart';
+
 interface CirclePieChartProps {
   centerCount: number;
   data: { count: number; color: string }[];
   title?: string;
+  isSmall?: boolean;
+  fallbackText?: string;
 }
 
 export const MAX_COUNT = 999;
 
-const CirclePieChart = ({ centerCount, data, title }: CirclePieChartProps) => {
-  const fontSizeClass = centerCount <= MAX_COUNT ? 'text-2xl' : 'text-l';
+const CirclePieChart = ({
+  centerCount,
+  data,
+  title,
+  isSmall = false,
+  fallbackText,
+}: CirclePieChartProps) => {
+  let centerTitleClasses = centerCount <= MAX_COUNT ? 'text-2xl' : 'text-l';
+  const containerWidthClass = isSmall ? 'w-8' : 'w-16';
+
+  if (isSmall) {
+    centerTitleClasses = centerCount <= MAX_COUNT ? 'text-xs' : 'text-xxxs';
+  }
+
+  if (centerCount <= 0) {
+    return (
+      <EmptyCirclePieChart
+        title={title}
+        isSmall={isSmall}
+        fallbackText={fallbackText}
+      />
+    );
+  }
 
   return (
     <>
-      <div className="h-full w-16 inline-block align-bottom">
+      <div
+        className={classNames(
+          'h-full inline-block align-bottom',
+          containerWidthClass
+        )}
+      >
         <div className="w-full h-full relative">
           <VictoryPie
             padding={0}
@@ -46,7 +79,7 @@ const CirclePieChart = ({ centerCount, data, title }: CirclePieChartProps) => {
           <p
             className={classNames(
               'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-medium',
-              fontSizeClass
+              centerTitleClasses
             )}
           >
             {centerCount <= MAX_COUNT ? centerCount : MAX_COUNT + '+'}

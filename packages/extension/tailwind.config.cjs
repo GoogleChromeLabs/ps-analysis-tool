@@ -31,6 +31,10 @@ module.exports = {
     fontFamily: {
       ...defaultTheme.fontFamily,
     },
+    fontSize: {
+      ...defaultTheme.fontSize,
+      xxxs: '0.625rem', // 10px - Only for edge cases
+    },
     textColor: {
       ...colors,
       primary: '#000',

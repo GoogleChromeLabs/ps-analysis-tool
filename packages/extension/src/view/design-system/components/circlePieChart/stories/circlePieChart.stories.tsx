@@ -92,3 +92,33 @@ export const Secondary: StoryObj<typeof meta> = {
     </div>
   ),
 };
+
+export const Small: StoryObj<typeof meta> = {
+  args: {
+    centerCount: 39,
+    isSmall: true,
+    data: [
+      {
+        count: 5,
+        color: COLOR_MAP.functional,
+      },
+      {
+        count: 4,
+        color: COLOR_MAP.marketing,
+      },
+      {
+        count: 0,
+        color: COLOR_MAP.analytics,
+      },
+      {
+        count: 9,
+        color: COLOR_MAP.uncategorised,
+      },
+    ],
+  },
+  render: (args) => (
+    <div className="w-8 text-center">
+      <CirclePieChart {...args} />
+    </div>
+  ),
+};
