@@ -19,6 +19,7 @@
  */
 import React from 'react';
 import type { Column } from '@tanstack/react-table';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -34,11 +35,9 @@ const ColumnListItem = ({ column, handleClose }: ColumnListItemProps) => {
   return (
     <li
       key={column.id}
-      className={`${
-        column.columnDef.header === 'Name'
-          ? 'pointer-events-none opacity-50'
-          : ''
-      }`}
+      className={classNames({
+        'pointer-events-none opacity-50': column.columnDef.header === 'Name',
+      })}
     >
       <button
         className="w-full rounded text-xs px-1 py-[3px] my-px flex items-center hover:bg-royal-blue hover:text-white select-none touch-none cursor-default"
