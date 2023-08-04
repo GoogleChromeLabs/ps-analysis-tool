@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import type { Table as ReactTable } from '@tanstack/react-table';
 
 /**
@@ -26,6 +26,7 @@ import type { Table as ReactTable } from '@tanstack/react-table';
 import TableHeader from './tableHeader';
 import TableBody from './tableBody';
 import type { CookieTableData } from '../../stateProviders/syncCookieStore';
+import ColumnMenu from './columnMenu';
 
 export type TableData = CookieTableData;
 
@@ -36,15 +37,42 @@ interface TableProps {
 }
 
 const Table = ({ table, selectedKey, onRowClick }: TableProps) => {
+  const [showColumnsMenu, setShowColumnsMenu] = useState(false);
+  const [columnPosition, setColumnPosition] = useState({
+    x: 0,
+    y: 0,
+  });
+
+  const handleRightClick = useCallback(
+    (e: React.MouseEvent<HTMLElement>) => {
+      e.preventDefault();
+      document.body.style.overflow = showColumnsMenu ? 'auto' : 'hidden';
+      setShowColumnsMenu(!showColumnsMenu);
+    },
+    [showColumnsMenu]
+  );
   return (
-    <table className="w-full">
-      <TableHeader headerGroups={table.getHeaderGroups()} />
-      <TableBody
-        rows={table.getRowModel().rows}
-        selectedKey={selectedKey}
-        onRowClick={onRowClick}
+    <>
+      <ColumnMenu
+        open={showColumnsMenu}
+        onClose={setShowColumnsMenu}
+        table={table}
+        columns={table.getAllLeafColumns()}
+        position={columnPosition}
       />
-    </table>
+      <table className="w-full">
+        <TableHeader
+          headerGroups={table.getHeaderGroups()}
+          setColumnPosition={setColumnPosition}
+          onRightClick={handleRightClick}
+        />
+        <TableBody
+          rows={table.getRowModel().rows}
+          selectedKey={selectedKey}
+          onRowClick={onRowClick}
+        />
+      </table>
+    </>
   );
 };
 
