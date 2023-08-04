@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import type { Column, Table } from '@tanstack/react-table';
 
 /**
@@ -42,16 +42,26 @@ const ColumnMenu = ({
   open,
   onClose,
 }: ColumnMenuProps) => {
-  const [startAnimation, setStartAnimation] = React.useState(false);
+  const [startAnimation, setStartAnimation] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleClose = () => {
     document.body.style.overflow = open ? 'auto' : 'hidden';
     setStartAnimation(true);
-    setTimeout(() => {
+
+    timeoutRef.current = setTimeout(() => {
       onClose(!open);
       setStartAnimation(false);
     }, 100);
   };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <>
