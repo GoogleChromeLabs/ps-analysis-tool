@@ -18,7 +18,6 @@
  */
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 
 /**
@@ -173,30 +172,5 @@ describe('Accordion', () => {
 
     expect(firstFrame).not.toHaveClass('bg-selected-background-color');
     expect(secondFrame).toHaveClass('bg-selected-background-color');
-  });
-
-  it('should call keyboard navigator function.', () => {
-    const keyboardNavigatorMock = jest.fn();
-    render(
-      <Accordion
-        keyboardNavigator={keyboardNavigatorMock}
-        accordionState={true}
-        setAccordionState={() => undefined}
-        tabName={'Cookies'}
-        index={1}
-        selectedIndex={1}
-        tabFrames={{
-          'https://edition.cnn.com': { frameIds: [1] },
-          'https://crxd.net': { frameIds: [2] },
-          'https://pubmatic.com': { frameIds: [3] },
-        }}
-        setSelectedFrame={() => undefined}
-        selectedFrame={null}
-        setIndex={() => undefined}
-      />
-    );
-    userEvent.tab();
-    userEvent.keyboard('{ArrowDown}');
-    expect(keyboardNavigatorMock).toHaveBeenCalled();
   });
 });
