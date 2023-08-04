@@ -22,8 +22,8 @@ import type { Cookie as ParsedCookie } from 'simple-cookie';
 /**
  * Internal dependencies.
  */
-import type { CookieAnalytics } from '../../../../../../../../../utils/fetchCookieDictionary';
-import type { CookieTableData } from '../../../../../../../stateProviders/syncCookieStore';
+import type { CookieAnalytics } from '../../../../../../../../utils/fetchCookieDictionary';
+import type { CookieTableData } from '../../../../../../stateProviders/syncCookieStore';
 
 export const TempCookieData: CookieTableData[] = [
   {

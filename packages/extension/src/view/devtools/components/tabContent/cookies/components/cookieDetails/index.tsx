@@ -22,7 +22,7 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { useContentPanelStore } from '../../../../../../stateProviders/contentPanelStore';
+import { useContentPanelStore } from '../../../../../stateProviders/contentPanelStore';
 import Details from './details';
 
 const CookieDetails = () => {

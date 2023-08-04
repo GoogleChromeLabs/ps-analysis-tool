@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -28,13 +28,15 @@ import {
 /**
  * Internal dependencies.
  */
-import Table from '../../../../../table';
-import { useContentPanelStore } from '../../../../../../stateProviders/contentPanelStore';
-import CheckIcon from '../../../../../../../../../icons/check.svg';
-import type { CookieTableData } from '../../../../../../stateProviders/syncCookieStore';
+import Table from '../../../../table';
+import { useContentPanelStore } from '../../../../../stateProviders/contentPanelStore';
+import CheckIcon from '../../../../../../../../icons/check.svg';
+import type { CookieTableData } from '../../../../../stateProviders/syncCookieStore';
 
 export interface CookieTableProps {
   cookies: CookieTableData[];
+  selectedFrame: string;
+  tabUrl: string | null;
 }
 
 const tableColumns: ColumnDef<CookieTableData>[] = [
@@ -144,7 +146,11 @@ const tableColumns: ColumnDef<CookieTableData>[] = [
   },
 ];
 
-const CookieTable = ({ cookies: data }: CookieTableProps) => {
+const CookieTable = ({
+  cookies: data,
+  selectedFrame,
+  tabUrl,
+}: CookieTableProps) => {
   const {
     selectedCookie,
     setSelectedCookie,
@@ -156,6 +162,10 @@ const CookieTable = ({ cookies: data }: CookieTableProps) => {
     tableColumnSize: state.tableColumnSize,
     tableContainerRef: state.tableContainerRef,
   }));
+
+  useEffect(() => {
+    setSelectedCookie(null);
+  }, [selectedFrame, tabUrl, setSelectedCookie]);
 
   const columns = useMemo(
     () =>

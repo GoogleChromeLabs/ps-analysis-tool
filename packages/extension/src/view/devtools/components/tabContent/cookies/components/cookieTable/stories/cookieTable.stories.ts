@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * External dependencies.
  */
@@ -21,29 +22,20 @@ import type { Meta, StoryObj } from '@storybook/react';
 /**
  * Internal dependencies.
  */
-import Details from '../details';
-import type { CookieTableData } from '../../../../../../../stateProviders/syncCookieStore';
+import { TempCookieData } from './tempData';
+import { CookieTable } from '../..';
 
 const meta = {
-  title: 'Extension/DevTools/CookiesPanel/CookieDetails/Details',
-  component: Details,
+  title: 'Extension/DevTools/CookiesPanel/CookieTable',
+  component: CookieTable,
   tags: ['autodocs'],
-} as Meta<typeof Details>;
+} as Meta<typeof CookieTable>;
 
 export default meta;
-
 type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    selectedCookie: {
-      parsedCookie: {
-        name: 'test',
-        value: 'v1%3A168740954476563235',
-      },
-      analytics: {
-        description: 'A description of the cookie',
-      },
-    } as CookieTableData,
+    cookies: TempCookieData,
   },
 };
