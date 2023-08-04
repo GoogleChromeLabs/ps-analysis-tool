@@ -13,34 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
 import React from 'react';
 
-/**
- * Internal dependencies.
- */
-import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import CookiesListing from './cookiesListing';
-import CookiesLanding from './cookiesLanding';
-
-const Cookies = () => {
-  const { selectedFrame } = useCookieStore(({ state }) => ({
-    selectedFrame: state.selectedFrame,
-  }));
-
-  return (
-    <div
-      className={`h-full border border-american-silver ${
-        selectedFrame ? '' : 'flex items-center justify-center'
-      }`}
-      data-testid="cookies-content"
-    >
-      {selectedFrame ? <CookiesListing /> : <CookiesLanding />}
-    </div>
-  );
+const CookiesLanding = () => {
+  return <p>Landing page placeholder</p>;
 };
 
-export default Cookies;
+export default CookiesLanding;

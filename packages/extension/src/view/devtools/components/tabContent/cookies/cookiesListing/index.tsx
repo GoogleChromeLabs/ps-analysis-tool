@@ -29,7 +29,7 @@ import {
 import CookieDetails from './cookieDetails';
 import CookieTable from './cookieTable';
 
-const CookieListing = () => {
+const CookiesListing = () => {
   const { cookies, selectedFrame, tabFrames } = useCookieStore(({ state }) => ({
     cookies: state.tabCookies,
     selectedFrame: state.selectedFrame,
@@ -75,4 +75,4 @@ const CookieListing = () => {
   );
 };
 
-export default CookieListing;
+export default CookiesListing;
