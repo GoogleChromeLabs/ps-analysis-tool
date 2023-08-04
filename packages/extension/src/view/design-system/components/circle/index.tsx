@@ -24,11 +24,9 @@ interface CircleProps {
 
 const Circle = ({ color }: CircleProps) => (
   <div
-    className="w-4 h-4 rounded-full flex items-center justify-center mr-2"
+    className="w-2.5 h-2.5 rounded-full flex items-center justify-center"
     style={{ backgroundColor: color }}
-  >
-    <div className="w-2 h-2 rounded-full flex items-center justify-center bg-white" />
-  </div>
+  />
 );
 
 export default Circle;

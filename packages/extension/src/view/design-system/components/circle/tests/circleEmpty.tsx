@@ -13,34 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
 import React from 'react';
+import { render } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 
 /**
  * Internal dependencies.
  */
-import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import CookiesListing from './cookiesListing';
-import CookiesLanding from './cookiesLanding';
+import CircleEmpty from '../circleEmpty';
 
-const Cookies = () => {
-  const { selectedFrame } = useCookieStore(({ state }) => ({
-    selectedFrame: state.selectedFrame,
-  }));
+describe('CircleEmpty', () => {
+  const testColor = 'red';
 
-  return (
-    <div
-      className={`h-full border border-american-silver ${
-        selectedFrame ? '' : 'flex items-center justify-center'
-      }`}
-      data-testid="cookies-content"
-    >
-      {selectedFrame ? <CookiesListing /> : <CookiesLanding />}
-    </div>
-  );
-};
+  it('renders the CircleEmpty with the correct background color', () => {
+    const { container } = render(<CircleEmpty color={testColor} />);
 
-export default Cookies;
+    // Check if the CircleEmpty div has the correct background color style
+    const circleEmptyDiv = container.querySelector('div');
+    expect(circleEmptyDiv).toHaveStyle(`background-color: ${testColor}`);
+  });
+});

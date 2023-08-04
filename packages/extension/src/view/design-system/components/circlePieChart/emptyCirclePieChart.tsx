@@ -23,66 +23,45 @@ import classNames from 'classnames';
 /**
  * Internal dependencies.
  */
-import EmptyCirclePieChart from './emptyCirclePieChart';
+import { COLOR_MAP } from '../../theme/colors';
 
-interface CirclePieChartProps {
-  centerCount: number;
-  data: { count: number; color: string }[];
+interface EmptyCirclePieChartProps {
+  fallbackText?: string;
   title?: string;
   isPrimary?: boolean;
-  fallbackText?: string;
 }
 
-export const MAX_COUNT = 999;
-
-const CirclePieChart = ({
-  centerCount,
-  data,
+const EmptyCirclePieChart = ({
+  fallbackText,
   title,
   isPrimary = true,
-  fallbackText,
-}: CirclePieChartProps) => {
-  let centerTitleClasses = centerCount <= MAX_COUNT ? 'text-2xl' : 'text-l';
+}: EmptyCirclePieChartProps) => {
   const containerWidthClass = isPrimary ? 'w-16' : 'w-8';
-
-  if (!isPrimary) {
-    centerTitleClasses = centerCount <= MAX_COUNT ? 'text-xs' : 'text-xxxs';
-  }
-
-  if (centerCount <= 0) {
-    return (
-      <EmptyCirclePieChart
-        title={title}
-        isPrimary={isPrimary}
-        fallbackText={fallbackText}
-      />
-    );
-  }
+  const centerTitleClasses = isPrimary
+    ? 'text-xs leading-4'
+    : 'text-[7px] leading-[7px]'; // Font size and line height are added as an exception to handle edge case.
 
   return (
     <>
       <div
         className={classNames(
-          'h-full inline-block align-bottom',
+          'h-full max-w-xs inline-block align-bottom',
           containerWidthClass
         )}
       >
         <div className="w-full h-full relative">
           <VictoryPie
             padding={0}
-            innerRadius={175}
-            animate={{ duration: 400 }}
-            data={data.map(({ count }) => ({ x: '', y: count }))}
-            labels={() => ''}
-            colorScale={data.map(({ color }) => color)}
+            innerRadius={0}
+            colorScale={[COLOR_MAP.brightGray]}
           />
           <p
             className={classNames(
-              'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-medium',
+              'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-raisin-black opacity-40',
               centerTitleClasses
             )}
           >
-            {centerCount <= MAX_COUNT ? centerCount : MAX_COUNT + '+'}
+            {fallbackText || 'Not Found'}
           </p>
         </div>
       </div>
@@ -93,4 +72,4 @@ const CirclePieChart = ({
   );
 };
 
-export default CirclePieChart;
+export default EmptyCirclePieChart;
