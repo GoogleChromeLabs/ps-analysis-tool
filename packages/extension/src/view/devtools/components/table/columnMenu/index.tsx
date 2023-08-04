@@ -64,14 +64,15 @@ const ColumnMenu = ({
             data-testid="column-menu"
           >
             <div
-              className="absolute z-50 text-raisin-black rounded-lg w-screen max-w-[15rem] border shadow-2xl shadow-slate-700 border-stone-300 p-1.5 mr-2 divide-y divide-neutral-300 max-h-[80vh] overflow-auto bg-stone-200"
+              className="absolute z-50 text-raisin-black rounded-lg backdrop-blur-2xl w-screen max-w-[15rem] p-1.5 mr-2 divide-y divide-neutral-300 max-h-[80vh] overflow-auto bg-stone-200 shadow-3xl"
               style={{
                 left: 'min( calc( 100vw - 15rem),' + position.x + 'px )',
                 top: position.y + 'px',
+                border: '0.5px solid rgba(0, 0, 0, 0.20)',
               }}
             >
               <button
-                className="block w-full text-[13px] rounded px-2 py-0.5 mb-1.5 flex items-center hover:bg-royal-blue hover:text-white cursor-default"
+                className="block w-full text-xs rounded px-2 py-[3px] mb-1.5 flex items-center hover:bg-royal-blue hover:text-white cursor-default"
                 onClick={(e) => {
                   table.getToggleAllColumnsVisibilityHandler()(e);
                   handleClose();
