@@ -62,7 +62,6 @@ module.exports = {
       gainsboro: '#DADCE0',
       'american-silver': '#CBCDD1',
       'raisin-black': '#212121',
-      'selected-background-color': '#3871E0',
       cultured: '#F6F6F699',
     },
     borderColor: {

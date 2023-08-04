@@ -47,7 +47,7 @@ describe('Accordion', () => {
     );
     const container = screen.getByTestId('cookies-tab-heading-wrapper');
 
-    expect(container).toHaveClass('bg-selected-background-color');
+    expect(container).toHaveClass('bg-royal-blue');
   });
 
   it('should unselect cookie header and show frame as selected', () => {
@@ -74,10 +74,8 @@ describe('Accordion', () => {
     );
     const cookieFrameContainer = screen.getByTestId('https://edition.cnn.com');
 
-    expect(cookieHeaderContainer).not.toHaveClass(
-      'bg-selected-background-color'
-    );
-    expect(cookieFrameContainer).toHaveClass('bg-selected-background-color');
+    expect(cookieHeaderContainer).not.toHaveClass('bg-royal-blue');
+    expect(cookieFrameContainer).toHaveClass('bg-royal-blue');
   });
 
   it('should not display anything when there are not tabFrames', () => {
@@ -145,8 +143,8 @@ describe('Accordion', () => {
     const firstFrame = screen.getByTestId('https://edition.cnn.com');
     const secondFrame = screen.getByTestId('https://crxd.net');
 
-    expect(firstFrame).toHaveClass('bg-selected-background-color');
-    expect(secondFrame).not.toHaveClass('bg-selected-background-color');
+    expect(firstFrame).toHaveClass('bg-royal-blue');
+    expect(secondFrame).not.toHaveClass('bg-royal-blue');
 
     //click on second frame
     fireEvent.click(secondFrame);
@@ -169,7 +167,7 @@ describe('Accordion', () => {
       />
     );
 
-    expect(firstFrame).not.toHaveClass('bg-selected-background-color');
-    expect(secondFrame).toHaveClass('bg-selected-background-color');
+    expect(firstFrame).not.toHaveClass('bg-royal-blue');
+    expect(secondFrame).toHaveClass('bg-royal-blue');
   });
 });
