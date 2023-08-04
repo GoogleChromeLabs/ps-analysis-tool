@@ -166,6 +166,7 @@ jest.mock('../../../../stateProviders/contentPanelStore');
 const mockUseContentPanelStore = useContentPanelStore as jest.Mock;
 mockUseContentPanelStore.mockReturnValue({
   selectedCookie: mockResponse.tabCookies[uncategorised1pCookie.name],
+  setSelectedCookie: jest.fn(),
   tableContainerRef: { current: null },
   tableColumnSize: 100,
   setTableColumnSize: jest.fn(),
@@ -224,7 +225,7 @@ describe('CookieTab', () => {
     render(<CookieDetails />);
 
     expect(
-      await screen.findByText('Select a cookie to preview its value')
+      await screen.findByText('Select cookies to preview its value')
     ).toBeInTheDocument();
   });
 
