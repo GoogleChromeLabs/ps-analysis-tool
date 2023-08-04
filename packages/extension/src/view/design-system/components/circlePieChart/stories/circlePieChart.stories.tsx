@@ -63,7 +63,7 @@ export const Primary: StoryObj<typeof meta> = {
   ),
 };
 
-export const Secondary: StoryObj<typeof meta> = {
+export const Wide: StoryObj<typeof meta> = {
   args: {
     centerCount: 39,
     title: '1st party cookies',
@@ -93,10 +93,10 @@ export const Secondary: StoryObj<typeof meta> = {
   ),
 };
 
-export const Small: StoryObj<typeof meta> = {
+export const Secondary: StoryObj<typeof meta> = {
   args: {
     centerCount: 39,
-    isSmall: true,
+    isPrimary: false,
     data: [
       {
         count: 5,

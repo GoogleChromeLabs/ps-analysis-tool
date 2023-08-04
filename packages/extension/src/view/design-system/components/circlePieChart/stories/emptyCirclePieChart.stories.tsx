@@ -43,7 +43,7 @@ export const Primary: StoryObj<typeof meta> = {
   },
 };
 
-export const Secondary: StoryObj<typeof meta> = {
+export const Wide: StoryObj<typeof meta> = {
   render: (args) => (
     <div className="w-28 text-center">
       <EmptyCirclePieChart {...args} />
@@ -54,13 +54,13 @@ export const Secondary: StoryObj<typeof meta> = {
   },
 };
 
-export const Small: StoryObj<typeof meta> = {
+export const Secondary: StoryObj<typeof meta> = {
   render: (args) => (
     <div className="w-8 text-center">
       <EmptyCirclePieChart {...args} />
     </div>
   ),
   args: {
-    isSmall: true,
+    isPrimary: false,
   },
 };

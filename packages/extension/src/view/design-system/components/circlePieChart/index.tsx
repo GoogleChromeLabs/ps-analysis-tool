@@ -29,7 +29,7 @@ interface CirclePieChartProps {
   centerCount: number;
   data: { count: number; color: string }[];
   title?: string;
-  isSmall?: boolean;
+  isPrimary?: boolean;
   fallbackText?: string;
 }
 
@@ -39,13 +39,13 @@ const CirclePieChart = ({
   centerCount,
   data,
   title,
-  isSmall = false,
+  isPrimary = true,
   fallbackText,
 }: CirclePieChartProps) => {
   let centerTitleClasses = centerCount <= MAX_COUNT ? 'text-2xl' : 'text-l';
-  const containerWidthClass = isSmall ? 'w-8' : 'w-16';
+  const containerWidthClass = isPrimary ? 'w-16' : 'w-8';
 
-  if (isSmall) {
+  if (!isPrimary) {
     centerTitleClasses = centerCount <= MAX_COUNT ? 'text-xs' : 'text-xxxs';
   }
 
@@ -53,7 +53,7 @@ const CirclePieChart = ({
     return (
       <EmptyCirclePieChart
         title={title}
-        isSmall={isSmall}
+        isPrimary={isPrimary}
         fallbackText={fallbackText}
       />
     );

@@ -28,18 +28,18 @@ import { COLOR_MAP } from '../../theme/colors';
 interface EmptyCirclePieChartProps {
   fallbackText?: string;
   title?: string;
-  isSmall?: boolean;
+  isPrimary?: boolean;
 }
 
 const EmptyCirclePieChart = ({
   fallbackText,
   title,
-  isSmall = false,
+  isPrimary = true,
 }: EmptyCirclePieChartProps) => {
-  const containerWidthClass = isSmall ? 'w-8' : 'w-16';
-  const centerTitleClasses = isSmall
-    ? 'text-[7px] leading-[7px]' // Font size and line height are added as an exception to handle edge case.
-    : 'text-xs leading-4';
+  const containerWidthClass = isPrimary ? 'w-16' : 'w-8';
+  const centerTitleClasses = isPrimary
+    ? 'text-xs leading-4'
+    : 'text-[7px] leading-[7px]'; // Font size and line height are added as an exception to handle edge case.
 
   return (
     <>
