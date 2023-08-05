@@ -17,30 +17,39 @@
  * External dependencies.
  */
 import React from 'react';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
  */
 import Circle from '../circle';
-import { COLOR_MAP } from '../../theme/colors';
 
-const MatrixComponent = () => {
+interface MatrixComponentProps {
+  color: string;
+  title: string;
+  description: string;
+  expand?: boolean;
+  textClassName: string;
+}
+
+const MatrixComponent = ({
+  color,
+  title,
+  description,
+  expand = false,
+  textClassName,
+}: MatrixComponentProps) => {
+  const countClasses = classNames(textClassName, 'text-2xl mb-1');
+
   return (
-    <div className="flex gap-[15px]">
+    <div className="flex gap-4">
       <div>
-        <Circle color={COLOR_MAP.functional} />
+        <Circle color={color} />
       </div>
       <div className="w-[265px]">
-        <h4 className="mt-[-3px] mb-1 font-semibold text-xs">
-          Functional Cookies
-        </h4>
-        <div className="text-functional text-2xl mb-1">3</div>
-        <p className="text-xs">
-          These are essential cookies that are necessary for a website to
-          function properly. They enable basic functionalities such as page
-          navigation, access to secure areas, and remembering user preferences
-          (e.g., language, font size).
-        </p>
+        <h4 className="-mt-[3px] mb-1 font-semibold text-xs">{title}</h4>
+        <div className={countClasses}>3</div>
+        {description && expand && <p className="text-xs">{description}</p>}
       </div>
     </div>
   );

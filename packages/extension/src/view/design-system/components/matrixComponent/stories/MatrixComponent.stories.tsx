@@ -22,6 +22,7 @@ import type { Meta, StoryObj } from '@storybook/react';
  * Internal dependencies.
  */
 import MatrixComponent from '..';
+import { COLOR_MAP } from '../../../theme/colors';
 
 const meta: Meta<typeof MatrixComponent> = {
   title: 'Extension/DesignSystem/MatrixComponent',
@@ -32,5 +33,12 @@ const meta: Meta<typeof MatrixComponent> = {
 export default meta;
 
 export const Primary: StoryObj<typeof meta> = {
-  args: {},
+  args: {
+    title: 'Functional Cookies',
+    description:
+      'These are essential cookies that are necessary for a website to function properly. They enable basic functionalities such as page navigation, access to secure areas, and remembering user preferences (e.g., language, font size).',
+    color: COLOR_MAP.functional,
+    expand: true,
+    textClassName: 'text-functional',
+  },
 };
