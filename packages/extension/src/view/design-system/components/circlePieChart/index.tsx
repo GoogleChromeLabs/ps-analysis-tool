@@ -62,10 +62,7 @@ const CirclePieChart = ({
   return (
     <>
       <div
-        className={classNames(
-          'h-full inline-block align-bottom',
-          containerWidthClass
-        )}
+        className={classNames('inline-block align-bottom', containerWidthClass)}
       >
         <div className="w-full h-full relative">
           <VictoryPie

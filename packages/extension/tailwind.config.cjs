@@ -67,6 +67,7 @@ module.exports = {
     borderColor: {
       ...colors,
       'american-silver': '#CBCDD1',
+      'hex-gray': '#E0E0E0',
     },
   },
 };
