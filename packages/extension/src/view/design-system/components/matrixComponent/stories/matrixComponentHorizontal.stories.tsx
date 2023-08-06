@@ -16,24 +16,25 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
 /**
  * Internal dependencies.
  */
-import { COLOR_MAP } from '../../theme/colors';
+import MatrixComponentHorizontal from '../matrixComponentHorizontal';
 
-interface CircleEmptyProps {
-  color?: string;
-}
+const meta: Meta<typeof MatrixComponentHorizontal> = {
+  title: 'Extension/DesignSystem/MatrixComponent/Horizontal',
+  component: MatrixComponentHorizontal,
+};
 
-const CircleEmpty = ({ color = COLOR_MAP.mediumGray }: CircleEmptyProps) => (
-  <div
-    className="w-2.5 h-2.5 rounded-full flex items-center justify-center"
-    style={{ backgroundColor: color }}
-  >
-    <div className="w-1.5 h-1.5 rounded-full flex items-center justify-center bg-white" />
-  </div>
-);
+export default meta;
 
-export default CircleEmpty;
+export const Default: StoryObj<typeof meta> = {
+  args: {
+    title: 'Invalid Cookies',
+    description:
+      'The cookies which could not be stored in the cookie jar of the browser as they were invalid.',
+    expand: false,
+  },
+};

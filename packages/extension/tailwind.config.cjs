@@ -53,6 +53,7 @@ module.exports = {
       uncategorized: '#EC7159',
       'chart-label': '#111B21',
       'granite-gray': '#5F6369',
+      'dark-gray': '#757575',
       'outer-space': '#303942',
       'raisin-black': '#212121',
     },
