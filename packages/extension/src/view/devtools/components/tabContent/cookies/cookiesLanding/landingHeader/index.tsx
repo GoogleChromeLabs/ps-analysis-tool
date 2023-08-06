@@ -35,7 +35,7 @@ interface DataMapping {
 
 interface LandingHeaderProps {
   dataMapping: DataMapping[];
-  isSticky: boolean;
+  isSticky?: boolean;
 }
 
 const LandingHeader = ({ dataMapping, isSticky }: LandingHeaderProps) => {
