@@ -22,6 +22,7 @@ import React from 'react';
  * Internal dependencies.
  */
 import { CirclePieChart } from '../../../../../../design-system/components';
+import classNames from 'classnames';
 
 interface DataMapping {
   title: string;
@@ -34,19 +35,37 @@ interface DataMapping {
 
 interface LandingHeaderProps {
   dataMapping: DataMapping[];
+  isSticky: boolean;
 }
 
-const LandingHeader = ({ dataMapping }: LandingHeaderProps) => {
+const LandingHeader = ({ dataMapping, isSticky }: LandingHeaderProps) => {
+  const containerClassNames = classNames(
+    'flex justify-center border-b border-hex-gray',
+    {
+      'pt-20 pb-[35px]': !isSticky,
+      'py-4': isSticky,
+    }
+  );
+  const wrapperClassNames = classNames('flex', {
+    'gap-[35px]': !isSticky,
+    'gap-[15px]': isSticky,
+  });
+  const circleContainerClassNames = classNames('text-center', {
+    'w-16': !isSticky,
+    'w-8': isSticky,
+  });
+
   return (
-    <div className="flex justify-center pt-20 pb-[35px] border-b border-hex-gray">
-      <div className="flex gap-[35px]">
+    <div className={containerClassNames}>
+      <div className={wrapperClassNames}>
         {dataMapping.map((circleData, index) => {
           return (
-            <div key={index} className="text-center w-16">
+            <div key={index} className={circleContainerClassNames}>
               <CirclePieChart
-                title={circleData.title}
+                title={!isSticky ? circleData.title : ''}
                 centerCount={circleData.count}
                 data={circleData.data}
+                isPrimary={!isSticky}
               />
             </div>
           );
