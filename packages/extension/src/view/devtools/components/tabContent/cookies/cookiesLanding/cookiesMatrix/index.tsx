@@ -18,10 +18,56 @@
  */
 import React from 'react';
 
+/**
+ * Internal dependencies.
+ */
+import {
+  MatrixComponent,
+  MatrixComponentHorizontal,
+} from '../../../../../../design-system/components';
+import { COLOR_MAP } from '../../../../../../design-system/theme/colors';
+
 const CookiesMatrix = () => {
+  const matrixComponentProps = {
+    title: 'Functional Cookies',
+    description:
+      'These are essential cookies that are necessary for a website to function properly. They enable basic functionalities such as page navigation, access to secure areas, and remembering user preferences (e.g., language, font size).',
+    color: COLOR_MAP.functional,
+    expand: true,
+    textClassName: 'text-functional',
+    containerClasses: 'mb-5 pb-5 pl-3 border-b border-bright-gray',
+  };
+  const matrixComponentHorizontalProps = {
+    title: 'Invalid Cookies',
+    description:
+      'The cookies which could not be stored in the cookie jar of the browser as they were invalid.',
+    expand: false,
+    containerClasses: 'mb-5 pl-3',
+  };
+
   return (
-    <div>
-      <h1>CookiesMatrix</h1>
+    <div className="max-w-[700px]">
+      <div className="flex gap-5">
+        <div>
+          <h4 className="mb-5 pb-3 border-b border-bright-gray text-xs font-bold text-darkest-gray">
+            CookiesMatrix
+          </h4>
+          <MatrixComponent {...matrixComponentProps} />
+          <MatrixComponent {...matrixComponentProps} />
+        </div>
+        <div>
+          <h4 className="mb-5 pb-3 border-b border-bright-gray text-xs font-bold text-darkest-gray text-right">
+            <button>Expand View</button>
+          </h4>
+          <MatrixComponent {...matrixComponentProps} />
+          <MatrixComponent {...matrixComponentProps} />
+        </div>
+      </div>
+      <div>
+        <MatrixComponentHorizontal {...matrixComponentHorizontalProps} />
+        <MatrixComponentHorizontal {...matrixComponentHorizontalProps} />
+        <MatrixComponentHorizontal {...matrixComponentHorizontalProps} />
+      </div>
     </div>
   );
 };

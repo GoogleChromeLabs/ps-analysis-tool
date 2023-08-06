@@ -30,6 +30,7 @@ interface MatrixComponentProps {
   description: string;
   expand?: boolean;
   textClassName: string;
+  containerClasses: string;
 }
 
 const MatrixComponent = ({
@@ -38,16 +39,19 @@ const MatrixComponent = ({
   description,
   expand = false,
   textClassName,
+  containerClasses,
 }: MatrixComponentProps) => {
   const countClasses = classNames(textClassName, 'text-2xl mb-1');
 
   return (
-    <div className="flex gap-4">
-      <Circle color={color} />
-      <div className="w-[265px]">
-        <h4 className="-mt-[3px] mb-1 font-semibold text-xs">{title}</h4>
-        <div className={countClasses}>3</div>
-        {description && expand && <p className="text-xs">{description}</p>}
+    <div className={containerClasses}>
+      <div className="flex gap-4">
+        <Circle color={color} />
+        <div className="w-[267px] mr-8">
+          <h4 className="-mt-[3px] mb-1 font-semibold text-xs">{title}</h4>
+          <div className={countClasses}>3</div>
+          {description && expand && <p className="text-xs">{description}</p>}
+        </div>
       </div>
     </div>
   );

@@ -15,3 +15,5 @@
  */
 export { default as CirclePieChart } from './circlePieChart';
 export { default as Circle } from './circle';
+export { default as MatrixComponent } from './matrixComponent';
+export { default as MatrixComponentHorizontal } from './matrixComponent/matrixComponentHorizontal';

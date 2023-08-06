@@ -24,31 +24,34 @@ import React from 'react';
 import CircleEmpty from '../circle/circleEmpty';
 
 interface MatrixComponentHorizontalProps {
-  color: string;
   title: string;
   description: string;
   expand?: boolean;
+  containerClasses?: string;
 }
 
 const MatrixComponentHorizontal = ({
   title,
   description,
   expand = false,
+  containerClasses,
 }: MatrixComponentHorizontalProps) => {
   return (
-    <div className="max-w-[672px]">
-      <div className="flex justify-between items-center">
-        <div className="flex gap-4 items-center">
-          <CircleEmpty />
-          <h4 className="font-semibold text-xs">{title}</h4>
+    <div className={containerClasses}>
+      <div className="max-w-[672px]">
+        <div className="flex justify-between items-center">
+          <div className="flex gap-4 items-center">
+            <CircleEmpty />
+            <h4 className="font-semibold text-xs">{title}</h4>
+          </div>
+          <div className="flex gap-4 items-center">
+            <div className="w-[100px] h-1 bg-light-gray" />
+            <div className="text-xs text-dark-gray font-semibold">3</div>
+          </div>
         </div>
-        <div className="flex gap-4 items-center">
-          <div className="w-[100px] h-1 bg-light-gray" />
-          <div className="text-xs text-dark-gray font-semibold">3</div>
+        <div className="mt-2 ml-6 pl-px">
+          {description && expand && <p className="text-xs">{description}</p>}
         </div>
-      </div>
-      <div className="mt-2 ml-6 pl-px">
-        {description && expand && <p className="text-xs">{description}</p>}
       </div>
     </div>
   );

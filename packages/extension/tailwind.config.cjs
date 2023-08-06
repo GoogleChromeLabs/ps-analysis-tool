@@ -54,6 +54,7 @@ module.exports = {
       'chart-label': '#111B21',
       'granite-gray': '#5F6369',
       'dark-gray': '#757575',
+      'darkest-gray': '#616161',
       'outer-space': '#303942',
       'raisin-black': '#212121',
     },
@@ -74,6 +75,7 @@ module.exports = {
       ...colors,
       'american-silver': '#CBCDD1',
       'hex-gray': '#E0E0E0',
+      'bright-gray': '#EBEBEB',
     },
   },
 };
