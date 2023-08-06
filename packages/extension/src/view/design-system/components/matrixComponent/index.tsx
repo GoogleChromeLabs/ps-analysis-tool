@@ -43,9 +43,7 @@ const MatrixComponent = ({
 
   return (
     <div className="flex gap-4">
-      <div>
-        <Circle color={color} />
-      </div>
+      <Circle color={color} />
       <div className="w-[265px]">
         <h4 className="-mt-[3px] mb-1 font-semibold text-xs">{title}</h4>
         <div className={countClasses}>3</div>

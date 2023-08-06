@@ -68,6 +68,7 @@ module.exports = {
       'american-silver': '#CBCDD1',
       'raisin-black': '#212121',
       cultured: '#F6F6F699',
+      'light-gray': '#F1F1F1',
     },
     borderColor: {
       ...colors,

@@ -26,6 +26,7 @@ import MatrixComponentHorizontal from '../matrixComponentHorizontal';
 const meta: Meta<typeof MatrixComponentHorizontal> = {
   title: 'Extension/DesignSystem/MatrixComponent/Horizontal',
   component: MatrixComponentHorizontal,
+  tags: ['autodocs'],
 };
 
 export default meta;

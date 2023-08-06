@@ -37,12 +37,15 @@ const MatrixComponentHorizontal = ({
 }: MatrixComponentHorizontalProps) => {
   return (
     <div className="max-w-[672px]">
-      <div className="flex justify-between">
-        <div className="flex gap-4">
+      <div className="flex justify-between items-center">
+        <div className="flex gap-4 items-center">
           <CircleEmpty />
-          <h4 className="-mt-[3px] font-semibold text-xs">{title}</h4>
+          <h4 className="font-semibold text-xs">{title}</h4>
         </div>
-        <div className="text-xs text-dark-gray font-semibold -mt-[2px]">3</div>
+        <div className="flex gap-4 items-center">
+          <div className="w-[100px] h-1 bg-light-gray" />
+          <div className="text-xs text-dark-gray font-semibold">3</div>
+        </div>
       </div>
       <div className="mt-2 ml-6 pl-px">
         {description && expand && <p className="text-xs">{description}</p>}
