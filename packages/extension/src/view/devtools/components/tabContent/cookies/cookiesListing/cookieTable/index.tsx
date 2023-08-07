@@ -160,7 +160,8 @@ const CookieTable = ({ cookies: data, selectedFrame }: CookieTableProps) => {
 
   useEffect(() => {
     if (
-      selectedFrame !== null &&
+      selectedFrame &&
+      selectedFrameCookie &&
       selectedFrameCookie[selectedFrame] === undefined
     ) {
       setSelectedFrameCookie(null);
@@ -201,7 +202,9 @@ const CookieTable = ({ cookies: data, selectedFrame }: CookieTableProps) => {
     >
       <Table
         table={table}
-        selectedKey={Object.values(selectedFrameCookie)[0]?.parsedCookie.name}
+        selectedKey={
+          Object.values(selectedFrameCookie ?? {})[0]?.parsedCookie.name
+        }
         onRowClick={onRowClick}
       />
     </div>
