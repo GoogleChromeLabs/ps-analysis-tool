@@ -59,9 +59,9 @@ const CookiesLanding = () => {
   };
 
   return (
-    <div>
+    <div className="lg:max-w-[700px] h-full w-full px-4">
       <LandingHeader {...ladingHeaderProps} />
-      <div className="flex justify-center mt-10">
+      <div className="flex justify-center mt-10 pb-28">
         <CookiesMatrix />
       </div>
     </div>

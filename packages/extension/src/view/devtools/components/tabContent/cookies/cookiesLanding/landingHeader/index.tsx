@@ -42,7 +42,7 @@ const LandingHeader = ({ dataMapping, isSticky }: LandingHeaderProps) => {
   const containerClassNames = classNames(
     'flex justify-center border-b border-hex-gray',
     {
-      'pt-20 pb-[35px]': !isSticky,
+      'pt-5 pb-[20px]': !isSticky,
       'py-4': isSticky,
     }
   );

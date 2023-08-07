@@ -97,7 +97,7 @@ const CookiesMatrix = () => {
   ];
 
   return (
-    <div className="lg:w-[700px] w-full">
+    <div className="w-full">
       <div>
         <div className="flex gap-5 justify-between">
           <h4 className="mb-5 pb-3 grow border-b border-bright-gray text-xs font-bold text-darkest-gray">
