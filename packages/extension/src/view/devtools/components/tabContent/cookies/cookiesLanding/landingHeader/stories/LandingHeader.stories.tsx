@@ -34,7 +34,6 @@ import type { Meta, StoryObj } from '@storybook/react';
  * Internal dependencies.
  */
 import LandingHeader from '..';
-import { COLOR_MAP } from '../../../../../../../design-system/theme/colors';
 
 const meta: Meta<typeof LandingHeader> = {
   title: 'Extension/DevTools/CookiesLandingPage/Header',
@@ -44,70 +43,11 @@ const meta: Meta<typeof LandingHeader> = {
 export default meta;
 
 export const Primary: StoryObj<typeof meta> = {
-  args: {
-    dataMapping: [
-      {
-        title: 'Total cookies',
-        count: 20,
-        data: [
-          { count: 5, color: COLOR_MAP.functional },
-          { count: 7, color: COLOR_MAP.marketing },
-          { count: 7, color: COLOR_MAP.analytics },
-          { count: 3, color: COLOR_MAP.uncategorised },
-        ],
-      },
-      {
-        title: '1st party cookies',
-        count: 10,
-        data: [
-          { count: 7, color: COLOR_MAP.functional },
-          { count: 3, color: COLOR_MAP.marketing },
-          { count: 10, color: COLOR_MAP.analytics },
-        ],
-      },
-      {
-        title: '3rd party cookies',
-        count: 10,
-        data: [
-          { count: 5, color: COLOR_MAP.functional },
-          { count: 10, color: COLOR_MAP.marketing },
-        ],
-      },
-    ],
-  },
+  args: {},
 };
 
 export const Sticky: StoryObj<typeof meta> = {
   args: {
     isSticky: true,
-    dataMapping: [
-      {
-        title: 'Total cookies',
-        count: 20,
-        data: [
-          { count: 5, color: COLOR_MAP.functional },
-          { count: 7, color: COLOR_MAP.marketing },
-          { count: 7, color: COLOR_MAP.analytics },
-          { count: 3, color: COLOR_MAP.uncategorised },
-        ],
-      },
-      {
-        title: '1st party cookies',
-        count: 10,
-        data: [
-          { count: 7, color: COLOR_MAP.functional },
-          { count: 3, color: COLOR_MAP.marketing },
-          { count: 10, color: COLOR_MAP.analytics },
-        ],
-      },
-      {
-        title: '3rd party cookies',
-        count: 10,
-        data: [
-          { count: 5, color: COLOR_MAP.functional },
-          { count: 10, color: COLOR_MAP.marketing },
-        ],
-      },
-    ],
   },
 };
