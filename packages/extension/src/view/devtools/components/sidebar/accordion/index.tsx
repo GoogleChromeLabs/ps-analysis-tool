@@ -17,6 +17,8 @@
  * External dependencies.
  */
 import React, { useCallback } from 'react';
+import classNames from 'classnames';
+
 /**
  * Internal dependencies
  */
@@ -65,11 +67,13 @@ const Accordion: React.FC<AccordionProps> = ({
     <div className="flex flex-col w-screen">
       <div
         data-testid="cookies-tab-heading-wrapper"
-        className={`flex h-full flex-row items-center pl-3 py-0.5 outline-0 ${
-          selectedIndex === index && !selectedFrame
-            ? 'bg-selected-background-color text-white'
-            : ''
-        }`}
+        className={classNames(
+          'flex h-full flex-row items-center pl-3 py-0.5 outline-0',
+          {
+            'bg-royal-blue text-white':
+              selectedIndex === index && !selectedFrame,
+          }
+        )}
         tabIndex={0}
         onClick={() => setIndex(index)}
         onKeyDown={(event) => keyboardNavigator(event)}
@@ -112,11 +116,12 @@ const Accordion: React.FC<AccordionProps> = ({
                 setSelectedFrame(key);
               }}
               role="treeitem"
-              className={`pl-9 py-0.5 h-5 flex items-center cursor-default outline-0 ${
-                selectedFrame === key
-                  ? 'bg-selected-background-color text-white'
-                  : ''
-              }`}
+              className={classNames(
+                'pl-9 py-0.5 h-5 flex items-center cursor-default outline-0',
+                {
+                  'bg-royal-blue text-white': selectedFrame === key,
+                }
+              )}
             >
               <div className="h-4">
                 {selectedFrame === key ? <CookieWhite /> : <CookieGray />}

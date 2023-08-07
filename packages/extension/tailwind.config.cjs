@@ -27,7 +27,12 @@ delete colors['blueGray'];
 module.exports = {
   content: ['./packages/extension/src/**/*.{tsx,js}'],
   theme: {
-    extend: {},
+    extend: {
+      boxShadow: {
+        '3xl':
+          '0px 38px 90px 0px rgba(0, 0, 0, 0.25), 0px 0px 2px 0px rgba(0, 0, 0, 0.05), 0px 0px 1px 0px rgba(0, 0, 0, 0.60)',
+      },
+    },
     fontFamily: {
       ...defaultTheme.fontFamily,
     },
@@ -52,10 +57,12 @@ module.exports = {
       primary: '#FFF',
       secondary: '#E5E7EB',
       tertiary: '#CBD5E1',
+      'royal-blue': '#3871E0',
       'anti-flash-white': '#F1F3F4',
       gainsboro: '#DADCE0',
       'american-silver': '#CBCDD1',
-      'selected-background-color': '#3871E0',
+      'raisin-black': '#212121',
+      cultured: '#F6F6F699',
     },
     borderColor: {
       ...colors,
