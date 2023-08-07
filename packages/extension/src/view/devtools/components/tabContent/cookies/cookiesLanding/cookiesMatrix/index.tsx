@@ -36,6 +36,7 @@ const CookiesMatrix = () => {
       description:
         'These are essential cookies that are necessary for a website to function properly. They enable basic functionalities such as page navigation, access to secure areas, and remembering user preferences (e.g., language, font size).',
       color: COLOR_MAP.functional,
+      count: 20,
       expand: isExpanded,
       textClassName: 'text-functional',
       containerClasses: 'mb-5 pb-3 pl-3 border-b border-bright-gray',
@@ -45,6 +46,7 @@ const CookiesMatrix = () => {
       description:
         "They are used to track visitors across websites to gather information about their browsing habits. The data collected is often used by advertisers to deliver targeted advertisements that are relevant to the user's interests.",
       color: COLOR_MAP.marketing,
+      count: 40,
       expand: isExpanded,
       textClassName: 'text-marketing',
       containerClasses: 'mb-5 pb-3 pl-3 border-b border-bright-gray',
@@ -53,6 +55,7 @@ const CookiesMatrix = () => {
       title: 'Analytics Cookies',
       description:
         'Used to gather information about how users interact with a website. They provide website owners with insights into user behavior, such as the number of visitors, the most popular pages, and the average time spent on the site. This data helps website owners understand and improve the user experience, optimize content, and identify areas for enhancement.',
+      count: 4,
       color: COLOR_MAP.analytics,
       expand: isExpanded,
       textClassName: 'text-analytics',
@@ -62,6 +65,7 @@ const CookiesMatrix = () => {
       title: 'Uncategorized Cookies',
       description:
         'We were unable to categorize these cookies as they are not available in our current database. However, you can try visiting websites such as cookiedatabase.org and cookiesearch.org to find more information about these cookies.',
+      count: 10,
       color: COLOR_MAP.uncategorised,
       expand: isExpanded,
       textClassName: 'text-uncategorized',

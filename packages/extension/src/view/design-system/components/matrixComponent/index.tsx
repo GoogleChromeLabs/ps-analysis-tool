@@ -28,6 +28,7 @@ interface MatrixComponentProps {
   color: string;
   title: string;
   description: string;
+  count: number;
   expand?: boolean;
   textClassName: string;
   containerClasses: string;
@@ -37,6 +38,7 @@ const MatrixComponent = ({
   color,
   title,
   description,
+  count,
   expand = false,
   textClassName,
   containerClasses,
@@ -49,7 +51,7 @@ const MatrixComponent = ({
         <Circle color={color} />
         <div className="lg:max-w-[80%] lg:mr-8">
           <h4 className="-mt-[3px] mb-1 font-semibold text-xs">{title}</h4>
-          <div className={countClasses}>3</div>
+          <div className={countClasses}>{count}</div>
           {description && expand && <p className="text-xs">{description}</p>}
         </div>
       </div>
