@@ -38,6 +38,7 @@ const CookiesListing = () => {
 
   const calculatedCookies = useMemo(() => {
     const frameFilteredCookies: { [key: string]: CookieTableData } = {};
+
     if (cookies && selectedFrame && tabFrames && tabFrames[selectedFrame]) {
       Object.entries(cookies).forEach(([key, cookie]) => {
         tabFrames[selectedFrame].frameIds?.forEach((frameId) => {
@@ -47,6 +48,7 @@ const CookiesListing = () => {
         });
       });
     }
+
     return Object.values(frameFilteredCookies);
   }, [cookies, selectedFrame, tabFrames]);
 

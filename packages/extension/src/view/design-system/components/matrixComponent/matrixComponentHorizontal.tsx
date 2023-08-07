@@ -26,6 +26,7 @@ import CircleEmpty from '../circle/circleEmpty';
 interface MatrixComponentHorizontalProps {
   title: string;
   description: string;
+  count: number;
   expand?: boolean;
   containerClasses?: string;
 }
@@ -33,6 +34,7 @@ interface MatrixComponentHorizontalProps {
 const MatrixComponentHorizontal = ({
   title,
   description,
+  count,
   expand = false,
   containerClasses,
 }: MatrixComponentHorizontalProps) => {
@@ -46,7 +48,7 @@ const MatrixComponentHorizontal = ({
           </div>
           <div className="flex gap-4 items-center">
             <div className="w-[100px] h-1 bg-light-gray" />
-            <div className="text-xs text-dark-gray font-semibold">3</div>
+            <div className="text-xs text-dark-gray font-semibold">{count}</div>
           </div>
         </div>
         <div className="mt-2 ml-6 pl-px">
