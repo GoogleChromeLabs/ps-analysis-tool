@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -147,20 +147,25 @@ const tableColumns: ColumnDef<CookieTableData>[] = [
 
 const CookieTable = ({ cookies: data, selectedFrame }: CookieTableProps) => {
   const {
-    selectedCookie,
-    setSelectedCookie,
+    selectedFrameCookie,
+    setSelectedFrameCookie,
     tableColumnSize,
     tableContainerRef,
   } = useContentPanelStore(({ state, actions }) => ({
-    selectedCookie: state.selectedCookie,
-    setSelectedCookie: actions.setSelectedCookie,
+    selectedFrameCookie: state.selectedFrameCookie || {},
+    setSelectedFrameCookie: actions.setSelectedFrameCookie,
     tableColumnSize: state.tableColumnSize,
     tableContainerRef: state.tableContainerRef,
   }));
 
   useEffect(() => {
-    setSelectedCookie(null);
-  }, [selectedFrame, setSelectedCookie]);
+    if (
+      selectedFrame !== null &&
+      selectedFrameCookie[selectedFrame] === undefined
+    ) {
+      setSelectedFrameCookie(null);
+    }
+  }, [selectedFrameCookie, selectedFrame, setSelectedFrameCookie]);
 
   const columns = useMemo(
     () =>
@@ -180,6 +185,15 @@ const CookieTable = ({ cookies: data, selectedFrame }: CookieTableProps) => {
     getSortedRowModel: getSortedRowModel(),
   });
 
+  const onRowClick = useCallback(
+    (cookieData: CookieTableData) => {
+      setSelectedFrameCookie({
+        [selectedFrame as string]: cookieData,
+      });
+    },
+    [selectedFrame, setSelectedFrameCookie]
+  );
+
   return (
     <div
       ref={tableContainerRef}
@@ -187,8 +201,8 @@ const CookieTable = ({ cookies: data, selectedFrame }: CookieTableProps) => {
     >
       <Table
         table={table}
-        selectedKey={selectedCookie?.parsedCookie.name}
-        onRowClick={setSelectedCookie}
+        selectedKey={Object.values(selectedFrameCookie)[0]?.parsedCookie.name}
+        onRowClick={onRowClick}
       />
     </div>
   );

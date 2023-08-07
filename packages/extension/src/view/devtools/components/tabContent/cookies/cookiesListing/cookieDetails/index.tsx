@@ -27,7 +27,7 @@ import Details from './details';
 
 const CookieDetails = () => {
   const { selectedCookie } = useContentPanelStore(({ state }) => ({
-    selectedCookie: state.selectedCookie,
+    selectedCookie: Object.values(state.selectedFrameCookie ?? {})[0],
   }));
 
   return (
