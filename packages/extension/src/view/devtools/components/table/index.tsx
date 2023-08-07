@@ -60,7 +60,7 @@ const Table = ({ table, selectedKey, onRowClick }: TableProps) => {
         columns={table.getAllLeafColumns()}
         position={columnPosition}
       />
-      <table className="w-full">
+      <table className="w-full h-full">
         <TableHeader
           headerGroups={table.getHeaderGroups()}
           setColumnPosition={setColumnPosition}
