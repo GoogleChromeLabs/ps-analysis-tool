@@ -91,7 +91,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
       });
       const modifiedTabFrames: {
         [key: string]: { frameIds: number[] };
-      } = {};
+      } = {
+        ...tabFrames,
+      };
+
       currentTabFrames?.forEach(({ url, frameId }) => {
         if (url && url !== 'about:blank') {
           const parsedUrl = regexForFrameUrl.exec(url);
@@ -106,7 +109,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       });
       setTabFrames(modifiedTabFrames);
     },
-    []
+    [tabFrames]
   );
 
   const intitialSync = useCallback(async () => {
