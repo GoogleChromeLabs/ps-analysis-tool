@@ -25,53 +25,47 @@ import {
   MatrixComponent,
   MatrixComponentHorizontal,
 } from '../../../../../../design-system/components';
-import { COLOR_MAP } from '../../../../../../design-system/theme/colors';
 
-const CookiesMatrix = () => {
+const LEGEND_DATA = {
+  Functional: {
+    title: 'Functional Cookies',
+    description:
+      'These are essential cookies that are necessary for a website to function properly. They enable basic functionalities such as page navigation, access to secure areas, and remembering user preferences (e.g., language, font size).',
+    textClassName: 'text-functional',
+  },
+  Marketing: {
+    title: 'Marketing Cookies',
+    description:
+      "They are used to track visitors across websites to gather information about their browsing habits. The data collected is often used by advertisers to deliver targeted advertisements that are relevant to the user's interests.",
+    textClassName: 'text-marketing',
+  },
+  Analytics: {
+    title: 'Analytics Cookies',
+    description:
+      'Used to gather information about how users interact with a website. They provide website owners with insights into user behavior, such as the number of visitors, the most popular pages, and the average time spent on the site. This data helps website owners understand and improve the user experience, optimize content, and identify areas for enhancement.',
+    textClassName: 'text-analytics',
+  },
+  Uncategorised: {
+    title: 'Uncategorized Cookies',
+    description:
+      'We were unable to categorize these cookies as they are not available in our current database. However, you can try visiting websites such as cookiedatabase.org and cookiesearch.org to find more information about these cookies.',
+    textClassName: 'text-uncategorized',
+  },
+};
+
+const CookiesMatrix = ({ cookiesStatsComponents, totalFrames }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const matrixComponents = {
-    functional: {
-      title: 'Functional Cookies',
-      description:
-        'These are essential cookies that are necessary for a website to function properly. They enable basic functionalities such as page navigation, access to secure areas, and remembering user preferences (e.g., language, font size).',
-      color: COLOR_MAP.functional,
-      count: 20,
-      expand: isExpanded,
-      textClassName: 'text-functional',
+  const dataComponents = cookiesStatsComponents.legend.map((dataComponent) => {
+    const additionalDataComponent = LEGEND_DATA[dataComponent.label] || {};
+
+    return {
+      ...dataComponent,
+      ...additionalDataComponent,
+      isExpanded,
       containerClasses: 'mb-5 pb-3 pl-3 border-b border-bright-gray',
-    },
-    marketing: {
-      title: 'Marketing Cookies',
-      description:
-        "They are used to track visitors across websites to gather information about their browsing habits. The data collected is often used by advertisers to deliver targeted advertisements that are relevant to the user's interests.",
-      color: COLOR_MAP.marketing,
-      count: 40,
-      expand: isExpanded,
-      textClassName: 'text-marketing',
-      containerClasses: 'mb-5 pb-3 pl-3 border-b border-bright-gray',
-    },
-    analytics: {
-      title: 'Analytics Cookies',
-      description:
-        'Used to gather information about how users interact with a website. They provide website owners with insights into user behavior, such as the number of visitors, the most popular pages, and the average time spent on the site. This data helps website owners understand and improve the user experience, optimize content, and identify areas for enhancement.',
-      count: 4,
-      color: COLOR_MAP.analytics,
-      expand: isExpanded,
-      textClassName: 'text-analytics',
-      containerClasses: 'mb-5 pb-3 pl-3 border-b border-bright-gray',
-    },
-    uncategorised: {
-      title: 'Uncategorized Cookies',
-      description:
-        'We were unable to categorize these cookies as they are not available in our current database. However, you can try visiting websites such as cookiedatabase.org and cookiesearch.org to find more information about these cookies.',
-      count: 10,
-      color: COLOR_MAP.uncategorised,
-      expand: isExpanded,
-      textClassName: 'text-uncategorized',
-      containerClasses: 'mb-5 pb-3 pl-3 border-b border-bright-gray',
-    },
-  };
+    };
+  });
 
   const matrixHorizontalComponents = [
     {
@@ -86,7 +80,7 @@ const CookiesMatrix = () => {
       title: 'Number of frames',
       description:
         'The cookies which could not be stored in the cookie jar of the browser as they were invalid.',
-      count: 8,
+      count: totalFrames,
       expand: isExpanded,
       containerClasses: 'mb-5 pl-3',
     },
@@ -114,10 +108,9 @@ const CookiesMatrix = () => {
           </h4>
         </div>
         <div className="grid grid-cols-2 gap-5">
-          <MatrixComponent {...matrixComponents.functional} />
-          <MatrixComponent {...matrixComponents.marketing} />
-          <MatrixComponent {...matrixComponents.analytics} />
-          <MatrixComponent {...matrixComponents.uncategorised} />
+          {dataComponents.map((dataComponent, index) => (
+            <MatrixComponent key={index} {...dataComponent} />
+          ))}
         </div>
       </div>
       <div>

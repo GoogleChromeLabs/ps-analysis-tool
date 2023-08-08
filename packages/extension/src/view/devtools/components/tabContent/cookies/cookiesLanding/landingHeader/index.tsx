@@ -23,7 +23,6 @@ import classNames from 'classnames';
  * Internal dependencies.
  */
 import { CirclePieChart } from '../../../../../../design-system/components';
-import { COLOR_MAP } from '../../../../../../design-system/theme/colors';
 
 interface DataMapping {
   title: string;
@@ -35,37 +34,31 @@ interface DataMapping {
 }
 
 interface LandingHeaderProps {
+  cookieStats: any;
+  cookiesStatsComponents: any;
   isSticky?: boolean;
 }
 
-const LandingHeader = ({ isSticky = false }: LandingHeaderProps) => {
+const LandingHeader = ({
+  cookieStats,
+  cookiesStatsComponents,
+  isSticky = false,
+}: LandingHeaderProps) => {
   const dataMapping: DataMapping[] = [
     {
       title: 'Total cookies',
-      count: 20,
-      data: [
-        { count: 5, color: COLOR_MAP.functional },
-        { count: 7, color: COLOR_MAP.marketing },
-        { count: 7, color: COLOR_MAP.analytics },
-        { count: 3, color: COLOR_MAP.uncategorised },
-      ],
+      count: cookieStats.total,
+      data: cookiesStatsComponents.legend,
     },
     {
       title: '1st party cookies',
-      count: 10,
-      data: [
-        { count: 7, color: COLOR_MAP.functional },
-        { count: 3, color: COLOR_MAP.marketing },
-        { count: 10, color: COLOR_MAP.analytics },
-      ],
+      count: cookieStats.firstParty.total,
+      data: cookiesStatsComponents.firstParty,
     },
     {
       title: '3rd party cookies',
-      count: 10,
-      data: [
-        { count: 5, color: COLOR_MAP.functional },
-        { count: 10, color: COLOR_MAP.marketing },
-      ],
+      count: cookieStats.thirdParty.total,
+      data: cookiesStatsComponents.thirdParty,
     },
   ];
 

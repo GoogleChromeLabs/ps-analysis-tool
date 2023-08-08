@@ -23,13 +23,36 @@ import React from 'react';
  */
 import LandingHeader from './landingHeader';
 import CookiesMatrix from './cookiesMatrix';
+import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
+import countCookiesByCategory from '../../../../../../utils/countCookiesByCategory';
+import { getCookieStatsComponents } from '../../../../../../utils/getCookieStatsComponents';
 
 const CookiesLanding = () => {
+  const { tabCookies, tabFrames, tabUrl } = useCookieStore(({ state }) => ({
+    tabFrames: state.tabFrames,
+    tabCookies: state.tabCookies,
+    tabUrl: state.tabUrl,
+  }));
+
+  const cookieStats = countCookiesByCategory(tabCookies, tabUrl);
+
+  if (!cookieStats) {
+    return null;
+  }
+
+  const cookiesStatsComponents = getCookieStatsComponents(cookieStats);
+
   return (
     <div className="lg:max-w-[700px] h-full w-full px-4">
-      <LandingHeader />
+      <LandingHeader
+        cookieStats={cookieStats}
+        cookiesStatsComponents={cookiesStatsComponents}
+      />
       <div className="flex justify-center mt-10 pb-28">
-        <CookiesMatrix />
+        <CookiesMatrix
+          cookiesStatsComponents={cookiesStatsComponents}
+          totalFrames={tabFrames ? Object.keys(tabFrames).length : 0}
+        />
       </div>
     </div>
   );
