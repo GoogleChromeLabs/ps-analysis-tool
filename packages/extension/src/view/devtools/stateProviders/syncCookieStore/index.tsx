@@ -89,27 +89,31 @@ export const Provider = ({ children }: PropsWithChildren) => {
       const currentTabFrames = await chrome.webNavigation.getAllFrames({
         tabId: _tabId,
       });
-      const modifiedTabFrames: {
-        [key: string]: { frameIds: number[] };
-      } = {
-        ...tabFrames,
-      };
 
-      currentTabFrames?.forEach(({ url, frameId }) => {
-        if (url && url !== 'about:blank') {
-          const parsedUrl = regexForFrameUrl.exec(url);
-          if (parsedUrl && parsedUrl[0]) {
-            if (modifiedTabFrames[parsedUrl[0]]) {
-              modifiedTabFrames[parsedUrl[0]].frameIds.push(frameId);
-            } else {
-              modifiedTabFrames[parsedUrl[0]] = { frameIds: [frameId] };
+      setTabFrames((prevState) => {
+        const modifiedTabFrames: {
+          [key: string]: { frameIds: number[] };
+        } = {
+          ...prevState,
+        };
+
+        currentTabFrames?.forEach(({ url, frameId }) => {
+          if (url && url !== 'about:blank') {
+            const parsedUrl = regexForFrameUrl.exec(url);
+            if (parsedUrl && parsedUrl[0]) {
+              if (modifiedTabFrames[parsedUrl[0]]) {
+                modifiedTabFrames[parsedUrl[0]].frameIds.push(frameId);
+              } else {
+                modifiedTabFrames[parsedUrl[0]] = { frameIds: [frameId] };
+              }
             }
           }
-        }
+        });
+
+        return modifiedTabFrames;
       });
-      setTabFrames(modifiedTabFrames);
     },
-    [tabFrames]
+    []
   );
 
   const intitialSync = useCallback(async () => {
