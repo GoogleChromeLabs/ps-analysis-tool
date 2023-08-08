@@ -26,48 +26,30 @@ const CookieStore = {
    * @param {Array} cookies Cookies data.
    */
   async update(tabId: string, cookies: CookieData[]) {
-    const newCookies: { [key: string]: CookieData } = {};
-
-    for (const cookie of cookies) {
-      if (!cookie.parsedCookie.name) {
-        continue;
-      }
-
-      if (Object.keys(newCookies).includes(cookie.parsedCookie.name)) {
-        newCookies[cookie.parsedCookie.name] = {
-          ...newCookies[cookie.parsedCookie.name],
-          frameIdList: Array.from(
-            new Set([
-              ...newCookies[cookie.parsedCookie.name].frameIdList,
-              ...cookie.frameIdList,
-            ])
-          ),
-        };
-      } else {
-        newCookies[cookie.parsedCookie.name] = cookie;
-      }
-    }
-
     await updateStorage(tabId, (prevState: TabData) => {
       const _prevCookies = prevState?.cookies || {};
-
       const _updatedCookies = _prevCookies;
 
-      Object.keys(newCookies).forEach((newCookieKey) => {
-        if (Object.keys(_prevCookies).includes(newCookieKey)) {
-          _updatedCookies[newCookieKey] = {
-            ...newCookies[newCookieKey],
+      for (const cookie of cookies) {
+        if (!cookie.parsedCookie.name) {
+          continue;
+        }
+
+        const cookieName = cookie.parsedCookie.name;
+        if (_updatedCookies?.[cookieName]) {
+          _updatedCookies[cookieName] = {
+            ...cookie,
             frameIdList: Array.from(
               new Set<number>([
-                ...newCookies[newCookieKey].frameIdList,
-                ..._prevCookies[newCookieKey].frameIdList,
+                ...cookie.frameIdList,
+                ..._updatedCookies[cookieName].frameIdList,
               ])
             ),
           };
         } else {
-          _updatedCookies[newCookieKey] = newCookies[newCookieKey];
+          _updatedCookies[cookieName] = cookie;
         }
-      });
+      }
 
       return {
         ...prevState,
