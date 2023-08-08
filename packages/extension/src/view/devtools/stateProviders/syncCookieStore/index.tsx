@@ -199,9 +199,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
     async (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
       if (tabId === _tabId && changeInfo.url) {
         setTabUrl(changeInfo.url);
+        setSelectedFrame(null);
+        await getAllFramesForCurrentTab(_tabId);
       }
-      setSelectedFrame(null);
-      await getAllFramesForCurrentTab(_tabId);
     },
     [tabId, getAllFramesForCurrentTab]
   );
