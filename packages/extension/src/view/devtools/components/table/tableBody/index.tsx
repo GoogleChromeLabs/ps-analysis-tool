@@ -132,7 +132,7 @@ const TableBody = ({
         {[...Array(emptyRowCellCount)].map((_, index) => (
           <td
             key={index}
-            className={`border border-y-0 border-american-silver px-1 py-px ${
+            className={`border border-y-0 border-american-silver px-1 py-px outline-0 ${
               index === 0 ? 'pl-5' : ''
             }`}
           />
@@ -142,7 +142,7 @@ const TableBody = ({
         {[...Array(emptyRowCellCount)].map((_, index) => (
           <td
             key={index}
-            className={`h-full border border-y-0 border-american-silver px-1 py-px ${
+            className={`h-full border border-y-0 border-american-silver px-1 py-px outline-0 ${
               index === 0 ? 'pl-5' : ''
             }`}
           />
