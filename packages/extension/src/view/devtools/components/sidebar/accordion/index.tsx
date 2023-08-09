@@ -65,7 +65,7 @@ const Accordion: React.FC<AccordionProps> = ({
     <div className="flex flex-col w-screen">
       <div
         data-testid="cookies-tab-heading-wrapper"
-        className={`flex h-full flex-row items-center pl-3 py-0.5 outline-0 ${
+        className={`flex h-full flex-row items-center pl-2 py-0.5 outline-0 ${
           selectedIndex === index && !selectedFrame
             ? 'bg-selected-background-color text-white'
             : ''
@@ -76,7 +76,7 @@ const Accordion: React.FC<AccordionProps> = ({
       >
         <div
           data-testid="accordion-opener"
-          className={`origin-center transition-transform ${
+          className={`origin-center transition-transform h-3.5 w-3.5 flex items-center justify-center ${
             accordionState ? '' : '-rotate-90'
           }`}
           onClick={subMenuSelected}
@@ -87,7 +87,7 @@ const Accordion: React.FC<AccordionProps> = ({
             <ArrowDown />
           )}
         </div>
-        <div className="pl-1">
+        <div>
           {selectedIndex === index && !selectedFrame ? (
             <CookieWhite />
           ) : (
