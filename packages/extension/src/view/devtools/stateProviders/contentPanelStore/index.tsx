@@ -27,28 +27,34 @@ import { useContextSelector, createContext } from 'use-context-selector';
 /**
  * Internal dependencies.
  */
-import { useCookieStore, type CookieTableData } from '../syncCookieStore';
+import { type CookieTableData } from '../syncCookieStore';
 
 export interface ContentPanelStore {
   state: {
-    selectedCookie: CookieTableData | null;
+    selectedFrameCookie: {
+      [frame: string]: CookieTableData | null;
+    } | null;
     tableColumnSize: number;
-    tableContainerRef: React.RefObject<HTMLTableElement>;
+    tableContainerRef: React.RefObject<HTMLDivElement>;
   };
   actions: {
-    setSelectedCookie: (cookie: CookieTableData | null) => void;
+    setSelectedFrameCookie: (
+      cookie: {
+        [frame: string]: CookieTableData | null;
+      } | null
+    ) => void;
     setTableColumnSize: (size: number) => void;
   };
 }
 
 const initialState: ContentPanelStore = {
   state: {
-    selectedCookie: null,
+    selectedFrameCookie: null,
     tableColumnSize: 100,
-    tableContainerRef: React.createRef<HTMLTableElement>(),
+    tableContainerRef: React.createRef<HTMLDivElement>(),
   },
   actions: {
-    setSelectedCookie: () => {
+    setSelectedFrameCookie: () => {
       // Do nothing.
     },
     setTableColumnSize: () => {
@@ -60,21 +66,12 @@ const initialState: ContentPanelStore = {
 export const Context = createContext<ContentPanelStore>(initialState);
 
 export const Provider = ({ children }: PropsWithChildren) => {
-  const [selectedCookie, setSelectedCookie] = useState<CookieTableData | null>(
-    null
-  );
-  const { selectedFrame } = useCookieStore(({ state }) => ({
-    selectedFrame: state.selectedFrame,
-  }));
+  const [selectedFrameCookie, setSelectedFrameCookie] =
+    useState<ContentPanelStore['state']['selectedFrameCookie']>(null);
 
-  useEffect(() => {
-    if (!selectedFrame) {
-      setSelectedCookie(null);
-    }
-  }, [selectedFrame]);
   const [tableColumnSize, setTableColumnSize] = useState(100);
 
-  const tableContainerRef = useRef<HTMLTableElement>(null);
+  const tableContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -93,12 +90,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
     <Context.Provider
       value={{
         state: {
-          selectedCookie,
+          selectedFrameCookie,
           tableColumnSize,
           tableContainerRef,
         },
         actions: {
-          setSelectedCookie,
+          setSelectedFrameCookie,
           setTableColumnSize,
         },
       }}

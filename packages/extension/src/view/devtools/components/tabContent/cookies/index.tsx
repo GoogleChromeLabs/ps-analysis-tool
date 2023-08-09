@@ -33,7 +33,7 @@ const Cookies = () => {
 
   return (
     <div
-      className={`h-full border border-american-silver ${
+      className={`h-full ${
         selectedFrame ? '' : 'flex items-center justify-center'
       }`}
       data-testid="cookies-content"

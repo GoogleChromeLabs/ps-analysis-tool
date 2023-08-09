@@ -79,7 +79,7 @@ const Accordion: React.FC<AccordionProps> = ({
         onKeyDown={(event) => keyboardNavigator(event)}
       >
         <div
-          className={`origin-center transition-transform ${
+          className={`origin-center transition-transform scale-125 p-0.5 ${
             accordionState ? '' : '-rotate-90'
           }`}
           onClick={subMenuSelected}
