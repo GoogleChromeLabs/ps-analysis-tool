@@ -123,8 +123,9 @@ describe('App', () => {
           //@ts-ignore
           inspectedWindow: {
             tabId: 40245632,
+            //@ts-ignore
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            eval: (command: string, callback: any) => {
+            eval: (_, callback: any) => {
               callback('https://edition.cnn.com');
             },
           },
