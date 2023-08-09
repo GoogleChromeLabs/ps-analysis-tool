@@ -187,13 +187,15 @@ const CookieTable = ({ cookies: data, selectedFrame }: CookieTableProps) => {
   });
 
   const onRowClick = useCallback(
-    (cookieData: CookieTableData) => {
+    (cookieData: CookieTableData | null) => {
       setSelectedFrameCookie({
         [selectedFrame as string]: cookieData,
       });
     },
     [selectedFrame, setSelectedFrameCookie]
   );
+
+  const selectedKey = Object.values(selectedFrameCookie ?? {})[0];
 
   return (
     <div
@@ -203,7 +205,7 @@ const CookieTable = ({ cookies: data, selectedFrame }: CookieTableProps) => {
       <Table
         table={table}
         selectedKey={
-          Object.values(selectedFrameCookie ?? {})[0]?.parsedCookie.name
+          selectedKey === null ? null : selectedKey?.parsedCookie?.name
         }
         onRowClick={onRowClick}
       />

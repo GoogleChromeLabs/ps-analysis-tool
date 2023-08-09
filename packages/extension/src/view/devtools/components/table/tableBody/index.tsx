@@ -19,6 +19,7 @@
  */
 import React, { useCallback, useRef } from 'react';
 import type { Row } from '@tanstack/react-table';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -28,8 +29,8 @@ import type { TableData } from '..';
 
 interface TableBodyProps {
   rows: Row<TableData>[];
-  selectedKey: string | undefined;
-  onRowClick: (key: TableData) => void;
+  selectedKey: string | undefined | null;
+  onRowClick: (key: TableData | null) => void;
   emptyRowCellCount: number;
 }
 
@@ -56,18 +57,46 @@ const TableBody = ({
         rowElement = currentRow?.nextElementSibling;
       }
 
-      if (rowElement) {
-        rowElement.tabIndex = -1;
-        rowElement.focus();
-        newRowId = rowElement.id;
+      if (!rowElement) {
+        return;
       }
 
-      if (newRowId) {
-        const newRow = rows.find((_row) => _row.id === newRowId);
-        if (newRow) {
-          onRowClick(newRow.original);
-        }
+      rowElement.tabIndex = -1;
+      rowElement.focus();
+      newRowId = rowElement.id;
+
+      if (!newRowId) {
+        onRowClick(null);
+        return;
       }
+
+      const newRow = rows.find((_row) => _row.id === newRowId);
+      if (newRow) {
+        onRowClick(newRow.original);
+      }
+    },
+    [onRowClick, rows]
+  );
+
+  const handleEmptyRowKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLTableRowElement>) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (event.key === 'ArrowDown' || !rows.length) {
+        return;
+      }
+
+      const newRow = rows[rows.length - 1];
+      // @ts-ignore - the `children` property will be available on the `current` property.
+      const rowElement = tableBodyRef.current?.children.namedItem(newRow.id);
+      if (!rowElement) {
+        return;
+      }
+
+      rowElement.tabIndex = -1;
+      rowElement.focus();
+      onRowClick(newRow.original);
     },
     [onRowClick, rows]
   );
@@ -84,24 +113,39 @@ const TableBody = ({
           onKeyDown={handleKeyDown}
         />
       ))}
-      <tr className="h-5">
+      <tr
+        className={classNames(
+          'h-5 outline-0',
+          {
+            'bg-gainsboro': selectedKey === null,
+          },
+          {
+            'bg-anti-flash-white': rows.length % 2,
+          }
+        )}
+        tabIndex={0}
+        onClick={() => {
+          onRowClick(null);
+        }}
+        onKeyDown={handleEmptyRowKeyDown}
+      >
         {[...Array(emptyRowCellCount)].map((_, index) => (
           <td
             key={index}
             className={`border border-y-0 border-american-silver px-1 py-px ${
               index === 0 ? 'pl-5' : ''
-            } ${rows.length % 2 ? 'bg-anti-flash-white' : ''}`}
-          ></td>
+            }`}
+          />
         ))}
       </tr>
-      <tr className="h-full">
+      <tr className="h-full outline-0">
         {[...Array(emptyRowCellCount)].map((_, index) => (
           <td
             key={index}
             className={`h-full border border-y-0 border-american-silver px-1 py-px ${
               index === 0 ? 'pl-5' : ''
             }`}
-          ></td>
+          />
         ))}
       </tr>
     </tbody>

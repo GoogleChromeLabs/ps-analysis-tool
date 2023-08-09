@@ -29,7 +29,7 @@ import BodyCell from './bodyCell';
 interface BodyRowProps {
   row: Row<TableData>;
   index: number;
-  selectedKey: string | undefined;
+  selectedKey: string | undefined | null;
   onRowClick: (key: TableData) => void;
   onKeyDown: (
     e: React.KeyboardEvent<HTMLTableRowElement>,
