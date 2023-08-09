@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -35,6 +35,7 @@ import type { CookieTableData } from '../../../../../stateProviders/syncCookieSt
 
 export interface CookieTableProps {
   cookies: CookieTableData[];
+  selectedFrame: string | null;
 }
 
 const tableColumns: ColumnDef<CookieTableData>[] = [
@@ -144,18 +145,28 @@ const tableColumns: ColumnDef<CookieTableData>[] = [
   },
 ];
 
-const CookieTable = ({ cookies: data }: CookieTableProps) => {
+const CookieTable = ({ cookies: data, selectedFrame }: CookieTableProps) => {
   const {
-    selectedCookie,
-    setSelectedCookie,
+    selectedFrameCookie,
+    setSelectedFrameCookie,
     tableColumnSize,
     tableContainerRef,
   } = useContentPanelStore(({ state, actions }) => ({
-    selectedCookie: state.selectedCookie,
-    setSelectedCookie: actions.setSelectedCookie,
+    selectedFrameCookie: state.selectedFrameCookie || {},
+    setSelectedFrameCookie: actions.setSelectedFrameCookie,
     tableColumnSize: state.tableColumnSize,
     tableContainerRef: state.tableContainerRef,
   }));
+
+  useEffect(() => {
+    if (
+      selectedFrame &&
+      selectedFrameCookie &&
+      selectedFrameCookie[selectedFrame] === undefined
+    ) {
+      setSelectedFrameCookie(null);
+    }
+  }, [selectedFrameCookie, selectedFrame, setSelectedFrameCookie]);
 
   const columns = useMemo(
     () =>
@@ -175,6 +186,15 @@ const CookieTable = ({ cookies: data }: CookieTableProps) => {
     getSortedRowModel: getSortedRowModel(),
   });
 
+  const onRowClick = useCallback(
+    (cookieData: CookieTableData) => {
+      setSelectedFrameCookie({
+        [selectedFrame as string]: cookieData,
+      });
+    },
+    [selectedFrame, setSelectedFrameCookie]
+  );
+
   return (
     <div
       ref={tableContainerRef}
@@ -182,8 +202,10 @@ const CookieTable = ({ cookies: data }: CookieTableProps) => {
     >
       <Table
         table={table}
-        selectedKey={selectedCookie?.parsedCookie.name}
-        onRowClick={setSelectedCookie}
+        selectedKey={
+          Object.values(selectedFrameCookie ?? {})[0]?.parsedCookie.name
+        }
+        onRowClick={onRowClick}
       />
     </div>
   );

@@ -91,7 +91,7 @@ const CookiesMatrix = ({
       expand: isExpanded,
     },
     {
-      title: 'Number of frames',
+      title: 'Number of Frames',
       description: 'Number of frames found on the page.',
       count: totalFrames,
       expand: isExpanded,
