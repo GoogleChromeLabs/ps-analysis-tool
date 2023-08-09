@@ -66,6 +66,7 @@ const App: React.FC = () => {
         <Resizable
           defaultSize={{ width: '200px', height: '100%' }}
           minWidth={'150px'}
+          maxWidth={'98%'}
           enable={{
             top: false,
             right: true,
