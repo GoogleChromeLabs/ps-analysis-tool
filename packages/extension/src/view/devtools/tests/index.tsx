@@ -195,7 +195,7 @@ describe('Index', () => {
       )
     );
     expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
-      'bg-selected-background-color'
+      'bg-royal-blue'
     );
   });
 
@@ -210,7 +210,7 @@ describe('Index', () => {
       )
     );
     expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
-      'bg-selected-background-color'
+      'bg-royal-blue'
     );
   });
   afterAll(() => {

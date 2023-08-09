@@ -368,7 +368,7 @@ describe('Sidebar', () => {
     //Simulate down arrow key down
     userEvent.keyboard('{ArrowDown}');
     expect(screen.getByTestId('https://edition.cnn.com/')).toHaveClass(
-      'bg-selected-background-color'
+      'bg-royal-blue'
     );
     //Simulate left arrow key down
     userEvent.keyboard('{ArrowLeft}');
@@ -387,10 +387,10 @@ describe('Sidebar', () => {
       />
     );
     expect(screen.getByTestId('https://edition.cnn.com/')).not.toHaveClass(
-      'bg-selected-background-color'
+      'bg-royal-blue'
     );
     expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
-      'bg-selected-background-color'
+      'bg-royal-blue'
     );
   });
 
@@ -426,7 +426,7 @@ describe('Sidebar', () => {
     //Simulate down arrow key keydown to select frame
     userEvent.keyboard('{ArrowDown}');
     expect(screen.getByTestId('https://edition.cnn.com/')).toHaveClass(
-      'bg-selected-background-color'
+      'bg-royal-blue'
     );
     //Simulate down arrow key keydown to select next frame
     userEvent.keyboard('{ArrowDown}');
@@ -445,10 +445,10 @@ describe('Sidebar', () => {
       />
     );
     expect(screen.getByTestId('https://edition.cnn.com/')).not.toHaveClass(
-      'bg-selected-background-color'
+      'bg-royal-blue'
     );
     expect(screen.getByTestId('https://crxt.net/')).toHaveClass(
-      'bg-selected-background-color'
+      'bg-royal-blue'
     );
   });
 
@@ -484,7 +484,7 @@ describe('Sidebar', () => {
     //Simulate down arrow key keydown to select first frame
     userEvent.keyboard('{ArrowDown}');
     expect(screen.getByTestId('https://edition.cnn.com/')).toHaveClass(
-      'bg-selected-background-color'
+      'bg-royal-blue'
     );
     //Simulate down arrow key keydown to select next frame
     userEvent.keyboard('{ArrowDown}');
@@ -503,10 +503,10 @@ describe('Sidebar', () => {
       />
     );
     expect(screen.getByTestId('https://edition.cnn.com/')).not.toHaveClass(
-      'bg-selected-background-color'
+      'bg-royal-blue'
     );
     expect(screen.getByTestId('https://crxt.net/')).toHaveClass(
-      'bg-selected-background-color'
+      'bg-royal-blue'
     );
     //Simulate up arrow key keydown to select previous frame
     userEvent.keyboard('{ArrowUp}');
@@ -525,10 +525,10 @@ describe('Sidebar', () => {
       />
     );
     expect(screen.getByTestId('https://edition.cnn.com/')).toHaveClass(
-      'bg-selected-background-color'
+      'bg-royal-blue'
     );
     expect(screen.getByTestId('https://crxt.net/')).not.toHaveClass(
-      'bg-selected-background-color'
+      'bg-royal-blue'
     );
   });
 
@@ -564,7 +564,7 @@ describe('Sidebar', () => {
     //Simulate down arrow key keydown to select first frame
     userEvent.keyboard('{ArrowDown}');
     expect(screen.getByTestId('https://edition.cnn.com/')).toHaveClass(
-      'bg-selected-background-color'
+      'bg-royal-blue'
     );
     //Simulate up arrow key keydown to select cookie menu header
     userEvent.keyboard('{ArrowUp}');
@@ -583,10 +583,10 @@ describe('Sidebar', () => {
       />
     );
     expect(screen.getByTestId('https://edition.cnn.com/')).not.toHaveClass(
-      'bg-selected-background-color'
+      'bg-royal-blue'
     );
     expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
-      'bg-selected-background-color'
+      'bg-royal-blue'
     );
   });
 
@@ -622,7 +622,7 @@ describe('Sidebar', () => {
       />
     );
     expect(screen.getByTestId('https://crxt.net/')).toHaveClass(
-      'bg-selected-background-color'
+      'bg-royal-blue'
     );
     //Simulate arrow down key to go to Topics menu
     userEvent.keyboard('{ArrowDown}');
@@ -641,11 +641,9 @@ describe('Sidebar', () => {
       />
     );
     expect(screen.getByTestId('https://crxt.net/')).not.toHaveClass(
-      'bg-selected-background-color'
+      'bg-royal-blue'
     );
-    expect(screen.getByTestId('Topics')).toHaveClass(
-      'bg-selected-background-color'
-    );
+    expect(screen.getByTestId('Topics')).toHaveClass('bg-royal-blue');
   });
 
   it('Up Arrow on Topics menu should select last frame in accordion.', () => {
@@ -679,9 +677,7 @@ describe('Sidebar', () => {
         setIndex={() => undefined}
       />
     );
-    expect(screen.getByTestId('Topics')).toHaveClass(
-      'bg-selected-background-color'
-    );
+    expect(screen.getByTestId('Topics')).toHaveClass('bg-royal-blue');
     //Simulate arrow up to select last frame in the list.
     userEvent.keyboard('{ArrowUp}');
     mockUseCookieStore.mockReturnValueOnce({
@@ -699,11 +695,9 @@ describe('Sidebar', () => {
       />
     );
     expect(screen.getByTestId('https://crxt.net/')).toHaveClass(
-      'bg-selected-background-color'
+      'bg-royal-blue'
     );
-    expect(screen.getByTestId('Topics')).not.toHaveClass(
-      'bg-selected-background-color'
-    );
+    expect(screen.getByTestId('Topics')).not.toHaveClass('bg-royal-blue');
   });
 
   it('Up Arrow on Attribution menu should select Topics Menu.', () => {
@@ -737,9 +731,7 @@ describe('Sidebar', () => {
         setIndex={() => undefined}
       />
     );
-    expect(screen.getByTestId('Attribution')).toHaveClass(
-      'bg-selected-background-color'
-    );
+    expect(screen.getByTestId('Attribution')).toHaveClass('bg-royal-blue');
     // Focus on cookie header menu and simulate right arrow to open accordion
     userEvent.keyboard('{ArrowUp}');
     mockUseCookieStore.mockReturnValueOnce({
@@ -756,12 +748,8 @@ describe('Sidebar', () => {
         setIndex={() => undefined}
       />
     );
-    expect(screen.getByTestId('Topics')).toHaveClass(
-      'bg-selected-background-color'
-    );
-    expect(screen.getByTestId('Attribution')).not.toHaveClass(
-      'bg-selected-background-color'
-    );
+    expect(screen.getByTestId('Topics')).toHaveClass('bg-royal-blue');
+    expect(screen.getByTestId('Attribution')).not.toHaveClass('bg-royal-blue');
   });
 
   it('Down Arrow on cookies menu with open accordion should select first frame.', () => {
@@ -803,7 +791,7 @@ describe('Sidebar', () => {
       />
     );
     expect(screen.getByTestId('https://edition.cnn.com/')).toHaveClass(
-      'bg-selected-background-color'
+      'bg-royal-blue'
     );
   });
 
@@ -838,9 +826,7 @@ describe('Sidebar', () => {
         setIndex={() => undefined}
       />
     );
-    expect(screen.getByTestId('Topics')).toHaveClass(
-      'bg-selected-background-color'
-    );
+    expect(screen.getByTestId('Topics')).toHaveClass('bg-royal-blue');
     // Simulate down arrow to go to next menu.
     userEvent.keyboard('{ArrowDown}');
     mockUseCookieStore.mockReturnValueOnce({
@@ -857,12 +843,8 @@ describe('Sidebar', () => {
         setIndex={() => undefined}
       />
     );
-    expect(screen.getByTestId('Attribution')).toHaveClass(
-      'bg-selected-background-color'
-    );
-    expect(screen.getByTestId('Topics')).not.toHaveClass(
-      'bg-selected-background-color'
-    );
+    expect(screen.getByTestId('Attribution')).toHaveClass('bg-royal-blue');
+    expect(screen.getByTestId('Topics')).not.toHaveClass('bg-royal-blue');
   });
 
   it('Down Arrow on Topics menu should select Attribution Menu.', () => {
@@ -893,9 +875,7 @@ describe('Sidebar', () => {
         setIndex={() => undefined}
       />
     );
-    expect(screen.getByTestId('Topics')).toHaveClass(
-      'bg-selected-background-color'
-    );
+    expect(screen.getByTestId('Topics')).toHaveClass('bg-royal-blue');
 
     fireEvent.click(screen.getByTestId('https://crxt.net/'));
     // Check if setIndex was called.

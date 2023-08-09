@@ -104,9 +104,7 @@ describe('App', () => {
     userEvent.tab();
     // Press arrow down
     userEvent.keyboard('{ArrowDown}');
-    expect(screen.getByTestId('Topics')).toHaveClass(
-      'bg-selected-background-color'
-    );
+    expect(screen.getByTestId('Topics')).toHaveClass('bg-royal-blue');
   });
 
   it('Up Keyboard navigation should work.', () => {
@@ -118,7 +116,7 @@ describe('App', () => {
     // Press arrow down to go to previous menu
     userEvent.keyboard('{ArrowUp}');
     expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
-      'bg-selected-background-color'
+      'bg-royal-blue'
     );
   });
 
@@ -127,11 +125,11 @@ describe('App', () => {
     // Focus on the first menu item.
     userEvent.tab();
     expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
-      'bg-selected-background-color'
+      'bg-royal-blue'
     );
     userEvent.keyboard('{Enter}');
     expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
-      'bg-selected-background-color'
+      'bg-royal-blue'
     );
   });
 

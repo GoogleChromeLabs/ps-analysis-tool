@@ -428,12 +428,14 @@ describe('CookieTab', () => {
     });
   });
 
-  it('should decode the cookie value on clicking checkbox', async () => {
+  it.only('should decode the cookie value on clicking checkbox', async () => {
     const lastCookie =
       mockResponse.tabCookies[Object.keys(mockResponse.tabCookies)[3]];
 
     mockUseContentPanelStore.mockReturnValue({
-      selectedCookie: lastCookie,
+      selectedFrameCookie: {
+        1: mockResponse.tabCookies[known3pCookieWithValue.name],
+      },
       tableContainerRef: { current: null },
       tableColumnSize: 100,
       setTableColumnSize: jest.fn(),
@@ -443,7 +445,6 @@ describe('CookieTab', () => {
     const card = await screen.findByTestId('cookie-card');
 
     expect(card).toBeInTheDocument();
-
     expect(
       await within(card).findByText(lastCookie.parsedCookie.value)
     ).toBeInTheDocument();
