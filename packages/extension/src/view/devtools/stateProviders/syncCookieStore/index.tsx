@@ -200,6 +200,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       if (tabId === _tabId && changeInfo.url) {
         setTabUrl(changeInfo.url);
       }
+      setSelectedFrame(null);
       await getAllFramesForCurrentTab(_tabId);
     },
     [tabId, getAllFramesForCurrentTab]

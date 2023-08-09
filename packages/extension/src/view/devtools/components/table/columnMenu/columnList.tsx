@@ -18,29 +18,31 @@
  * External dependencies.
  */
 import React from 'react';
+import type { Column } from '@tanstack/react-table';
 
 /**
  * Internal dependencies.
  */
-import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import CookiesListing from './cookiesListing';
-import CookiesLanding from './cookiesLanding';
+import ColumnListItem from './columnListItem';
+import type { TableData } from '..';
 
-const Cookies = () => {
-  const { selectedFrame } = useCookieStore(({ state }) => ({
-    selectedFrame: state.selectedFrame,
-  }));
+interface ColumnListProps {
+  columns: Column<TableData, unknown>[];
+  handleClose: () => void;
+}
 
+const ColumnList = ({ columns, handleClose }: ColumnListProps) => {
   return (
-    <div
-      className={`h-full ${
-        selectedFrame ? '' : 'flex items-center justify-center'
-      }`}
-      data-testid="cookies-content"
-    >
-      {selectedFrame ? <CookiesListing /> : <CookiesLanding />}
-    </div>
+    <ul className="text-basic mt-1.5">
+      {columns.map((column) => (
+        <ColumnListItem
+          key={column.id}
+          column={column}
+          handleClose={handleClose}
+        />
+      ))}
+    </ul>
   );
 };
 
-export default Cookies;
+export default ColumnList;

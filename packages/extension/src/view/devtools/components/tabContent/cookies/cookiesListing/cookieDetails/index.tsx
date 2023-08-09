@@ -26,9 +26,10 @@ import { useContentPanelStore } from '../../../../../stateProviders/contentPanel
 import Details from './details';
 
 const CookieDetails = () => {
-  const { selectedCookie } = useContentPanelStore(({ state }) => ({
-    selectedCookie: state.selectedCookie,
+  const { selectedFrameCookie } = useContentPanelStore(({ state }) => ({
+    selectedFrameCookie: state.selectedFrameCookie,
   }));
+  const selectedCookie = Object.values(selectedFrameCookie ?? {})[0];
 
   return (
     <div data-testid="cookie-card" className="h-full min-w-[10rem]">
@@ -37,7 +38,7 @@ const CookieDetails = () => {
       ) : (
         <div className="h-full p-8 flex items-center">
           <p className="text-lg w-full font-bold text-granite-gray text-center">
-            Select a cookie to preview its value
+            Select cookies to preview its value
           </p>
         </div>
       )}

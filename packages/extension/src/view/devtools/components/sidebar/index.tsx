@@ -17,6 +17,8 @@
  * External dependencies.
  */
 import React, { useCallback, useState } from 'react';
+import classNames from 'classnames';
+
 /**
  * Internal dependencies
  */
@@ -143,11 +145,13 @@ const Sidebar: React.FC<SidebarProps> = ({
         <div
           key={name}
           data-testid={name}
-          className={`flex items-center cursor-default gap-y-1.5 outline-0 ${
-            selectedIndex === index && name !== 'Cookies'
-              ? 'bg-selected-background-color text-white'
-              : ''
-          }`}
+          className={classNames(
+            'flex items-center cursor-default gap-y-1.5 outline-0',
+            {
+              'bg-royal-blue text-white':
+                selectedIndex === index && name !== 'Cookies',
+            }
+          )}
           tabIndex={0}
           onKeyDown={(event) => keyboardNavigator(event)}
         >

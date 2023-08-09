@@ -30,6 +30,7 @@ import type { CookieStoreContext } from '../../../../stateProviders/syncCookieSt
 import { emptyAnalytics } from '../../../../../../worker/findAnalyticsMatch';
 import CookieDetails from '../cookiesListing/cookieDetails';
 import { useContentPanelStore } from '../../../../stateProviders/contentPanelStore';
+import Details from '../cookiesListing/cookieDetails/details';
 
 const emptyCookie = {
   name: '',
@@ -45,7 +46,7 @@ const emptyCookie = {
 const uncategorised1pCookie: ParsedCookie = {
   ...emptyCookie,
   name: '_cb',
-  value: 'uncategorised1pCookie',
+  value: 'v1%3A168740954476563235',
   domain: '.cnn.com',
 };
 
@@ -193,7 +194,10 @@ jest.mock('../../../../stateProviders/syncCookieStore', () => {
 jest.mock('../../../../stateProviders/contentPanelStore');
 const mockUseContentPanelStore = useContentPanelStore as jest.Mock;
 mockUseContentPanelStore.mockReturnValue({
-  selectedCookie: mockResponse.tabCookies[uncategorised1pCookie.name],
+  selectedFrameCookie: {
+    1: mockResponse.tabCookies[uncategorised1pCookie.name],
+  },
+  setSelectedFrameCookie: jest.fn(),
   tableContainerRef: { current: null },
   tableColumnSize: 100,
   setTableColumnSize: jest.fn(),
@@ -241,9 +245,54 @@ describe('CookieTab', () => {
     ).toBeInTheDocument();
   });
 
+  it('should open column menu when right click on header cell', async () => {
+    render(<CookieTab />);
+
+    const headerCell = (await screen.findAllByTestId('header-cell'))[0];
+    fireEvent.contextMenu(headerCell);
+
+    expect(await screen.findByTestId('column-menu')).toBeInTheDocument();
+
+    const toggleAll = await screen.findByText('Toggle All');
+    fireEvent.click(toggleAll);
+
+    expect(await screen.findAllByTestId('header-cell')).toHaveLength(1);
+
+    fireEvent.contextMenu(headerCell);
+    fireEvent.click(toggleAll);
+  });
+
+  it('should remove one columne when click on column menu list item', async () => {
+    render(<CookieTab />);
+
+    const headerCell = (await screen.findAllByTestId('header-cell'))[0];
+    fireEvent.contextMenu(headerCell);
+
+    const columnMenu = await screen.findByTestId('column-menu');
+
+    const value = await within(columnMenu).findByText('Value');
+    fireEvent.click(value);
+
+    expect(await screen.findAllByTestId('header-cell')).not.toContain(value);
+  });
+
+  it('should columnMenu close when click on outside', async () => {
+    render(<CookieTab />);
+
+    const headerCell = (await screen.findAllByTestId('header-cell'))[0];
+    fireEvent.contextMenu(headerCell);
+
+    const columnMenuOverlay = await screen.findByTestId('column-menu-overlay');
+    fireEvent.click(columnMenuOverlay);
+
+    setTimeout(() => {
+      expect(screen.queryByTestId('column-menu')).not.toBeInTheDocument();
+    }, 1000);
+  });
+
   it('should render a cookie card with placeholder text when no cookie is selected', async () => {
     mockUseContentPanelStore.mockReturnValue({
-      selectedCookie: null,
+      selectedFrameCookie: null,
       tableContainerRef: { current: null },
       tableColumnSize: 100,
       setTableColumnSize: jest.fn(),
@@ -252,7 +301,30 @@ describe('CookieTab', () => {
     render(<CookieDetails />);
 
     expect(
-      await screen.findByText('Select a cookie to preview its value')
+      await screen.findByText('Select cookies to preview its value')
+    ).toBeInTheDocument();
+  });
+
+  it('should decode cookie value when input show URI decoded is checked', async () => {
+    render(
+      <Details
+        selectedCookie={mockResponse.tabCookies[uncategorised1pCookie.name]}
+      />
+    );
+
+    const checkbox = screen.getByRole('checkbox', {
+      checked: false,
+    });
+    fireEvent.click(checkbox);
+
+    expect(
+      await screen.findByText(decodeURIComponent(uncategorised1pCookie.value))
+    ).toBeInTheDocument();
+
+    fireEvent.click(checkbox);
+
+    expect(
+      await screen.findByText(uncategorised1pCookie.value)
     ).toBeInTheDocument();
   });
 
@@ -261,7 +333,9 @@ describe('CookieTab', () => {
       mockResponse.tabCookies[Object.keys(mockResponse.tabCookies)[0]];
 
     mockUseContentPanelStore.mockReturnValue({
-      selectedCookie: firstCookie,
+      selectedFrameCookie: {
+        1: firstCookie,
+      },
       tableContainerRef: { current: null },
       tableColumnSize: 100,
       setTableColumnSize: jest.fn(),
@@ -279,7 +353,9 @@ describe('CookieTab', () => {
 
   it('should show a cookie card with the description about cookie', async () => {
     mockUseContentPanelStore.mockReturnValue({
-      selectedCookie: mockResponse.tabCookies[known1pCookie.name],
+      selectedFrameCookie: {
+        1: mockResponse.tabCookies[known1pCookie.name],
+      },
       tableContainerRef: { current: null },
       tableColumnSize: 100,
       setTableColumnSize: jest.fn(),
@@ -298,7 +374,9 @@ describe('CookieTab', () => {
 
   it('should show a cookie card with no description about cookie', async () => {
     mockUseContentPanelStore.mockReturnValue({
-      selectedCookie: mockResponse.tabCookies[uncategorised1pCookie.name],
+      selectedFrameCookie: {
+        1: mockResponse.tabCookies[uncategorised1pCookie.name],
+      },
       tableContainerRef: { current: null },
       tableColumnSize: 100,
       setTableColumnSize: jest.fn(),
@@ -316,8 +394,8 @@ describe('CookieTab', () => {
   it('should get the cookie object when row is clicked or Arrow up/down pressed', async () => {
     const setStateMock = jest.fn();
     mockUseContentPanelStore.mockReturnValue({
-      selectedCookie: null,
-      setSelectedCookie: setStateMock,
+      selectedFrameCookie: null,
+      setSelectedFrameCookie: setStateMock,
       tableContainerRef: {
         current: {
           offsetWidth: 1000,
@@ -337,15 +415,17 @@ describe('CookieTab', () => {
     const row = (await screen.findAllByTestId('body-row'))[0];
     fireEvent.click(row);
 
-    expect(setStateMock).toHaveBeenCalledWith(
-      mockResponse.tabCookies[uncategorised1pCookie.name]
-    );
+    expect(setStateMock).toHaveBeenCalledWith({
+      'https://edition.cnn.com/':
+        mockResponse.tabCookies[uncategorised1pCookie.name],
+    });
 
     fireEvent.keyDown(row, { key: 'ArrowDown', code: 'ArrowDown' });
 
-    expect(setStateMock).toHaveBeenCalledWith(
-      mockResponse.tabCookies[uncategorised1pCookie.name]
-    );
+    expect(setStateMock).toHaveBeenCalledWith({
+      'https://edition.cnn.com/':
+        mockResponse.tabCookies[uncategorised1pCookie.name],
+    });
   });
 
   it('should decode the cookie value on clicking checkbox', async () => {
