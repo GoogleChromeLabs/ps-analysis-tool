@@ -98,7 +98,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         };
 
         currentTabFrames?.forEach(({ url, frameId }) => {
-          if (url && url !== 'about:blank') {
+          if (url && url.includes('http')) {
             const parsedUrl = regexForFrameUrl.exec(url);
             if (parsedUrl && parsedUrl[0]) {
               if (modifiedTabFrames[parsedUrl[0]]) {
