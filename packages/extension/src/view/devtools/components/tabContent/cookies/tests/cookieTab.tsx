@@ -166,7 +166,10 @@ jest.mock('../../../../stateProviders/syncCookieStore', () => {
 jest.mock('../../../../stateProviders/contentPanelStore');
 const mockUseContentPanelStore = useContentPanelStore as jest.Mock;
 mockUseContentPanelStore.mockReturnValue({
-  selectedCookie: mockResponse.tabCookies[uncategorised1pCookie.name],
+  selectedFrameCookie: {
+    1: mockResponse.tabCookies[uncategorised1pCookie.name],
+  },
+  setSelectedFrameCookie: jest.fn(),
   tableContainerRef: { current: null },
   tableColumnSize: 100,
   setTableColumnSize: jest.fn(),
@@ -261,7 +264,7 @@ describe('CookieTab', () => {
 
   it('should render a cookie card with placeholder text when no cookie is selected', async () => {
     mockUseContentPanelStore.mockReturnValue({
-      selectedCookie: null,
+      selectedFrameCookie: null,
       tableContainerRef: { current: null },
       tableColumnSize: 100,
       setTableColumnSize: jest.fn(),
@@ -270,7 +273,7 @@ describe('CookieTab', () => {
     render(<CookieDetails />);
 
     expect(
-      await screen.findByText('Select a cookie to preview its value')
+      await screen.findByText('Select cookies to preview its value')
     ).toBeInTheDocument();
   });
 
@@ -302,7 +305,9 @@ describe('CookieTab', () => {
       mockResponse.tabCookies[Object.keys(mockResponse.tabCookies)[0]];
 
     mockUseContentPanelStore.mockReturnValue({
-      selectedCookie: firstCookie,
+      selectedFrameCookie: {
+        1: firstCookie,
+      },
       tableContainerRef: { current: null },
       tableColumnSize: 100,
       setTableColumnSize: jest.fn(),
@@ -320,7 +325,9 @@ describe('CookieTab', () => {
 
   it('should show a cookie card with the description about cookie', async () => {
     mockUseContentPanelStore.mockReturnValue({
-      selectedCookie: mockResponse.tabCookies[known1pCookie.name],
+      selectedFrameCookie: {
+        1: mockResponse.tabCookies[known1pCookie.name],
+      },
       tableContainerRef: { current: null },
       tableColumnSize: 100,
       setTableColumnSize: jest.fn(),
@@ -339,7 +346,9 @@ describe('CookieTab', () => {
 
   it('should show a cookie card with no description about cookie', async () => {
     mockUseContentPanelStore.mockReturnValue({
-      selectedCookie: mockResponse.tabCookies[uncategorised1pCookie.name],
+      selectedFrameCookie: {
+        1: mockResponse.tabCookies[uncategorised1pCookie.name],
+      },
       tableContainerRef: { current: null },
       tableColumnSize: 100,
       setTableColumnSize: jest.fn(),
@@ -357,8 +366,8 @@ describe('CookieTab', () => {
   it('should get the cookie object when row is clicked or Arrow up/down pressed', async () => {
     const setStateMock = jest.fn();
     mockUseContentPanelStore.mockReturnValue({
-      selectedCookie: null,
-      setSelectedCookie: setStateMock,
+      selectedFrameCookie: null,
+      setSelectedFrameCookie: setStateMock,
       tableContainerRef: {
         current: {
           offsetWidth: 1000,
@@ -378,14 +387,16 @@ describe('CookieTab', () => {
     const row = (await screen.findAllByTestId('body-row'))[0];
     fireEvent.click(row);
 
-    expect(setStateMock).toHaveBeenCalledWith(
-      mockResponse.tabCookies[uncategorised1pCookie.name]
-    );
+    expect(setStateMock).toHaveBeenCalledWith({
+      'https://edition.cnn.com/':
+        mockResponse.tabCookies[uncategorised1pCookie.name],
+    });
 
     fireEvent.keyDown(row, { key: 'ArrowDown', code: 'ArrowDown' });
 
-    expect(setStateMock).toHaveBeenCalledWith(
-      mockResponse.tabCookies[uncategorised1pCookie.name]
-    );
+    expect(setStateMock).toHaveBeenCalledWith({
+      'https://edition.cnn.com/':
+        mockResponse.tabCookies[uncategorised1pCookie.name],
+    });
   });
 });
