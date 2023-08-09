@@ -51,7 +51,7 @@ const CookiesLanding = () => {
       <div className="flex justify-center mt-10 pb-28">
         <CookiesMatrix
           cookiesStatsComponents={cookiesStatsComponents}
-          totalFrames={tabFrames ? Object.keys(tabFrames).length : 0}
+          tabFrames={tabFrames}
           tabCookies={tabCookies}
         />
       </div>

@@ -29,13 +29,13 @@ interface TabFrames {
 export const filterCookiesByFrame = (
   cookies: Cookies | null,
   tabFrames: TabFrames | null,
-  frame: string | null
+  frameUrl: string | null
 ) => {
   const frameFilteredCookies: { [key: string]: CookieTableData } = {};
 
-  if (cookies && frame && tabFrames && tabFrames[frame]) {
+  if (cookies && frameUrl && tabFrames && tabFrames[frameUrl]) {
     Object.entries(cookies).forEach(([key, cookie]) => {
-      tabFrames[frame].frameIds?.forEach((frameId) => {
+      tabFrames[frameUrl].frameIds?.forEach((frameId) => {
         if (cookie.frameIdList?.includes(frameId)) {
           frameFilteredCookies[key] = cookie;
         }

@@ -25,13 +25,14 @@ import {
   MatrixComponent,
   MatrixComponentHorizontal,
 } from '../../../../../../design-system/components';
-import { getInvalidCookies } from '../../../../../../../utils/getInvalidCookies';
+import { getInvalidCookies } from '../../utils/getInvalidCookies';
+import { filterFramesWithCookies } from '../../utils/filterFramesWithCookies';
 
 const LEGEND_DATA = {
   Functional: {
     title: 'Functional Cookies',
     description:
-      'These are essential cookies that are necessary for a website to function properly. They enable basic functionalities such as page navigation, access to secure areas, and remembering user preferences (e.g., language, font size).',
+      'These are essential cookies that are necessary for a website to function properly. They enable basic functionalities such as page navigation, access to secure areas, and remembering user preferences (e.g., language, font size), etc.',
     textClassName: 'text-functional',
   },
   Marketing: {
@@ -49,12 +50,22 @@ const LEGEND_DATA = {
   Uncategorised: {
     title: 'Uncategorized Cookies',
     description:
-      'We were unable to categorize these cookies as they are not available in our current database. However, you can try visiting websites such as cookiedatabase.org and cookiesearch.org to find more information about these cookies.',
+      'We are unable to categorize certain cookies since we do not possess any relevant information about them. Nonetheless, you may visit sites like cookiedatabase.org and cookiesearch.org to acquire additional details about these cookies.',
     textClassName: 'text-uncategorized',
   },
 };
 
-const CookiesMatrix = ({ tabCookies, cookiesStatsComponents, totalFrames }) => {
+interface CookiesMatrixProps {
+  tabCookies: any;
+  cookiesStatsComponents: any;
+  tabFrames: any;
+}
+
+const CookiesMatrix = ({
+  tabCookies,
+  cookiesStatsComponents,
+  tabFrames,
+}: CookiesMatrixProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const dataComponents = cookiesStatsComponents.legend.map((dataComponent) => {
@@ -64,36 +75,32 @@ const CookiesMatrix = ({ tabCookies, cookiesStatsComponents, totalFrames }) => {
       ...dataComponent,
       ...additionalDataComponent,
       isExpanded,
-      containerClasses: 'mb-5 pb-3 pl-3 border-b border-bright-gray',
     };
   });
 
   const invalidCookies = getInvalidCookies(tabCookies);
+  const totalFrames = tabFrames ? Object.keys(tabFrames).length : 0;
+  const framesWithCookies = filterFramesWithCookies(tabCookies, tabFrames);
 
   const matrixHorizontalComponents = [
     {
       title: 'Invalid Cookies',
       description:
-        'The cookies which could not be stored in the cookie jar of the browser as they were invalid.',
+        "Cookies which were deemed invalid and therefore not saved in the browser's cookie store.",
       count: invalidCookies ? Object.keys(invalidCookies).length : 0,
       expand: isExpanded,
-      containerClasses: 'mb-5 pl-3',
     },
     {
       title: 'Number of frames',
-      description:
-        'The cookies which could not be stored in the cookie jar of the browser as they were invalid.',
+      description: 'Number of frames found on the page.',
       count: totalFrames,
       expand: isExpanded,
-      containerClasses: 'mb-5 pl-3',
     },
     {
       title: 'Number of Frames with Associated Cookies',
-      description:
-        'The cookies which could not be stored in the cookie jar of the browser as they were invalid.',
-      count: 5,
+      description: 'Frames that have cookies associated with them',
+      count: framesWithCookies ? Object.keys(framesWithCookies).length : 0,
       expand: isExpanded,
-      containerClasses: 'mb-5 pl-3',
     },
   ];
 
@@ -112,7 +119,11 @@ const CookiesMatrix = ({ tabCookies, cookiesStatsComponents, totalFrames }) => {
         </div>
         <div className="grid grid-cols-2 gap-5">
           {dataComponents.map((dataComponent, index) => (
-            <MatrixComponent key={index} {...dataComponent} />
+            <MatrixComponent
+              key={index}
+              {...dataComponent}
+              containerClasses="mb-5 pb-3 pl-3 border-b border-bright-gray"
+            />
           ))}
         </div>
       </div>
@@ -121,6 +132,7 @@ const CookiesMatrix = ({ tabCookies, cookiesStatsComponents, totalFrames }) => {
           <MatrixComponentHorizontal
             key={index}
             {...matrixHorizontalComponent}
+            containerClasses="mb-5 pl-3"
           />
         ))}
       </div>
