@@ -25,6 +25,7 @@ import {
   MatrixComponent,
   MatrixComponentHorizontal,
 } from '../../../../../../design-system/components';
+import { getInvalidCookies } from '../../../../../../../utils/getInvalidCookies';
 
 const LEGEND_DATA = {
   Functional: {
@@ -53,7 +54,7 @@ const LEGEND_DATA = {
   },
 };
 
-const CookiesMatrix = ({ cookiesStatsComponents, totalFrames }) => {
+const CookiesMatrix = ({ tabCookies, cookiesStatsComponents, totalFrames }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const dataComponents = cookiesStatsComponents.legend.map((dataComponent) => {
@@ -67,12 +68,14 @@ const CookiesMatrix = ({ cookiesStatsComponents, totalFrames }) => {
     };
   });
 
+  const invalidCookies = getInvalidCookies(tabCookies);
+
   const matrixHorizontalComponents = [
     {
       title: 'Invalid Cookies',
       description:
         'The cookies which could not be stored in the cookie jar of the browser as they were invalid.',
-      count: 2,
+      count: invalidCookies ? Object.keys(invalidCookies).length : 0,
       expand: isExpanded,
       containerClasses: 'mb-5 pl-3',
     },

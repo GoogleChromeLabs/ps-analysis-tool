@@ -52,6 +52,7 @@ const CookiesLanding = () => {
         <CookiesMatrix
           cookiesStatsComponents={cookiesStatsComponents}
           totalFrames={tabFrames ? Object.keys(tabFrames).length : 0}
+          tabCookies={tabCookies}
         />
       </div>
     </div>
