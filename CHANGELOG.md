@@ -26,6 +26,7 @@
 - Add Cookie Table and Details Components with Tabular UI [PR#82](https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/82)
 - Vertical menu items [PR#86](https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/86)
 - Add Column Sorting Functionality [PR#84](https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/84)
+- Feature: Add Column Visibility Functionality [PR#87](https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/87)
 
 **Refactoring**
 
