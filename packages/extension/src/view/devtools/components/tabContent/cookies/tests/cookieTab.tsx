@@ -428,7 +428,7 @@ describe('CookieTab', () => {
     });
   });
 
-  it.only('should decode the cookie value on clicking checkbox', async () => {
+  it('should decode the cookie value on clicking checkbox', async () => {
     const lastCookie =
       mockResponse.tabCookies[Object.keys(mockResponse.tabCookies)[3]];
 
