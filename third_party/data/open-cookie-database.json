@@ -64,6 +64,19 @@
       "wildcard": "1"
     }
   ],
+  "consentUUID": [
+    {
+      "platform": "Cookiebot",
+      "category": "Functional",
+      "name": "consentUUID",
+      "domain": "website domain (1st party)",
+      "description": "This cookie is used as a unique identification for the users who has accepted the cookie consent box.",
+      "retention": "1 year",
+      "dataController": "Cookiebot",
+      "gdprUrl": "https://www.cookiebot.com/en/cookie-declaration/",
+      "wildcard": "0"
+    }
+  ],
   "cookieconsent_variant": [
     {
       "platform": "Maxlead",
@@ -5108,16 +5121,198 @@
       "wildcard": "0"
     }
   ],
+  "cnfq": [
+    {
+      "platform": "Smartadserver",
+      "category": "Marketing",
+      "name": "cnfq",
+      "domain": "smartadserver.com",
+      "description": "Technical cookie used to trigger the injection of monitoring scripts from a CNAME",
+      "retention": "360 minutes",
+      "dataController": "Equativ.com",
+      "gdprUrl": "https://equativ.com/end-users-privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "lcsrc": [
+    {
+      "platform": "Smartadserver",
+      "category": "Marketing",
+      "name": "lcsrc",
+      "domain": "smartadserver.com",
+      "description": "Technical cookie used to refresh date serialized in ISO format",
+      "retention": "13 months",
+      "dataController": "Equativ.com",
+      "gdprUrl": "https://equativ.com/end-users-privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "dyncdn": [
+    {
+      "platform": "Smartadserver",
+      "category": "Functional",
+      "name": "dyncdn",
+      "domain": "smartadserver.com",
+      "description": "End-point and traffic data",
+      "retention": "1 day",
+      "dataController": "Equativ.com",
+      "gdprUrl": "https://equativ.com/end-users-privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "gid": [
+    {
+      "platform": "Smartadserver",
+      "category": "Marketing",
+      "name": "gid",
+      "domain": "smartadserver.com",
+      "description": "Global unique ID cross domains associated with an end-user",
+      "retention": "13 months",
+      "dataController": "Equativ.com",
+      "gdprUrl": "https://equativ.com/end-users-privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "csfq": [
+    {
+      "platform": "Smartadserver",
+      "category": "Marketing",
+      "name": "csfq",
+      "domain": "smartadserver.com",
+      "description": "Technical cookie used to trigger the injection of monitoring scripts",
+      "retention": "6 hours",
+      "dataController": "Equativ.com",
+      "gdprUrl": "https://equativ.com/end-users-privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "partner-*": [
+    {
+      "platform": "Smartadserver",
+      "category": "Marketing",
+      "name": "partner-*",
+      "domain": "smartadserver.com",
+      "description": "Labeling end-users with keywords defined by a client.",
+      "retention": "13 months",
+      "dataController": "Equativ.com",
+      "gdprUrl": "https://equativ.com/end-users-privacy-policy/",
+      "wildcard": "1"
+    }
+  ],
+  "vs": [
+    {
+      "platform": "Smartadserver",
+      "category": "Analytics",
+      "name": "vs",
+      "domain": "smartadserver.com",
+      "description": "Counting new visits",
+      "retention": "session",
+      "dataController": "Equativ.com",
+      "gdprUrl": "https://equativ.com/end-users-privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "Comp": [
+    {
+      "platform": "Smartadserver",
+      "category": "Marketing",
+      "name": "Comp",
+      "domain": "smartadserver.com",
+      "description": "Labeling end-users with keywords defined by a client.",
+      "retention": "13 months",
+      "dataController": "Equativ.com",
+      "gdprUrl": "https://equativ.com/end-users-privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "Pwb": [
+    {
+      "platform": "Smartadserver",
+      "category": "Marketing",
+      "name": "Pwb",
+      "domain": "smartadserver.com",
+      "description": "Allows for the display of ads in the correct format based on browser, screen size, and OS.",
+      "retention": "2 days",
+      "dataController": "Equativ.com",
+      "gdprUrl": "https://equativ.com/end-users-privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "Pdomid": [
+    {
+      "platform": "Smartadserver",
+      "category": "Functional",
+      "name": "Pdomid",
+      "domain": "smartadserver.com",
+      "description": "Technical cookie used to distribute the traffic between Smart's servers",
+      "retention": "13 months",
+      "dataController": "Equativ.com",
+      "gdprUrl": "https://equativ.com/end-users-privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "sasd": [
+    {
+      "platform": "Smartadserver",
+      "category": "Marketing",
+      "name": "sasd",
+      "domain": "smartadserver.com",
+      "description": "Geolocation collection",
+      "retention": "1 day",
+      "dataController": "Equativ.com",
+      "gdprUrl": "https://equativ.com/end-users-privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "sasd2": [
+    {
+      "platform": "Smartadserver",
+      "category": "Marketing",
+      "name": "sasd2",
+      "domain": "smartadserver.com",
+      "description": "Geolocation collection",
+      "retention": "1 day",
+      "dataController": "Equativ.com",
+      "gdprUrl": "https://equativ.com/end-users-privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "TestIfCookie": [
+    {
+      "platform": "Smartadserver",
+      "category": "Marketing",
+      "name": "TestIfCookie",
+      "domain": "Advertiser's website domain",
+      "description": "Technical cookie used to test if persistent cookies are accepted",
+      "retention": "session cookie",
+      "dataController": "Equativ.com",
+      "gdprUrl": "https://equativ.com/end-users-privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "csync": [
+    {
+      "platform": "Smartadserver",
+      "category": "Marketing",
+      "name": "csync",
+      "domain": "smartadserver.com",
+      "description": "Optimises ad display based on the user's movement combined and various advertiser bids for displaying user ads.",
+      "retention": "1 day",
+      "dataController": "Smartadserver",
+      "gdprUrl": "http://smartadserver.fr/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
   "TestIfCookieP": [
     {
       "platform": "Smartadserver",
       "category": "Marketing",
       "name": "TestIfCookieP",
-      "domain": "Advertiser's website domain",
-      "description": "SmartAdServer is a remote ad serving system. Sites and Advertisers are using the system to manage the delivery of their online advertising campaigns. They can collect anonymous statistical data on their visitors to follow the delivery of their campaign and to increase their performance.",
-      "retention": "2 years",
-      "dataController": "Smartadserver",
-      "gdprUrl": "http://smartadserver.fr/privacy-policy",
+      "domain": "smartadserver.com",
+      "description": "Technical cookie used to test if persistent cookies are accepted",
+      "retention": "13 months",
+      "dataController": "Equativ.com",
+      "gdprUrl": "https://equativ.com/end-users-privacy-policy/",
       "wildcard": "0"
     }
   ],
@@ -5127,10 +5322,10 @@
       "category": "Marketing",
       "name": "pid",
       "domain": "Advertiser's website domain",
-      "description": "SmartAdServer is a remote ad serving system. Sites and Advertisers are using the system to manage the delivery of their online advertising campaigns. They can collect anonymous statistical data on their visitors to follow the delivery of their campaign and to increase their performance.",
-      "retention": "2 years",
-      "dataController": "Smartadserver",
-      "gdprUrl": "http://smartadserver.fr/privacy-policy",
+      "description": "Unique ID associated with an end-user (according to a domain and browser)",
+      "retention": "13 months",
+      "dataController": "Equativ.com",
+      "gdprUrl": "https://equativ.com/end-users-privacy-policy/",
       "wildcard": "0"
     }
   ],
@@ -5173,19 +5368,6 @@
       "wildcard": "0"
     }
   ],
-  "csync": [
-    {
-      "platform": "Smartadserver",
-      "category": "Marketing",
-      "name": "csync",
-      "domain": "smartadserverMarketing.com",
-      "description": "Optimises ad display based on the user's movement combined and various advertiser bids for displaying user ads.",
-      "retention": "1 day",
-      "dataController": "Smartadserver",
-      "gdprUrl": "http://smartadserver.fr/privacy-policy",
-      "wildcard": "0"
-    }
-  ],
   "lidid": [
     {
       "platform": "LiveIntent",
@@ -5194,6 +5376,19 @@
       "domain": "liadm.com",
       "description": "Collects data on visitors' behaviour and interaction - This is used to make advertisement on the website more relevant. The cookie also allows the website to detect any referrals from other websites.",
       "retention": "2 years",
+      "dataController": "LiveIntent",
+      "gdprUrl": "N/A",
+      "wildcard": "0"
+    }
+  ],
+  "_li_ss": [
+    {
+      "platform": "LiveIntent",
+      "category": "Marketing",
+      "name": "_li_ss",
+      "domain": "liadm.com",
+      "description": "Sets a unique ID for the visitor, that allows third party advertisers to target the visitor with relevant advertisement. This pairing service is provided by third party advertisement hubs, which facilitates real-time bidding for advertisers.",
+      "retention": "1 month",
       "dataController": "LiveIntent",
       "gdprUrl": "N/A",
       "wildcard": "0"
@@ -6265,6 +6460,19 @@
       "wildcard": "0"
     }
   ],
+  "TapAd_3WAY_SYNCS": [
+    {
+      "platform": "Tapad",
+      "category": "Marketing",
+      "name": "TapAd_3WAY_SYNCS",
+      "domain": "Advertiser's website domain",
+      "description": "Used for data-synchronization with advertisement networks",
+      "retention": "2 months",
+      "dataController": "Tapad",
+      "gdprUrl": "https://www.tapad.com/privacy",
+      "wildcard": "0"
+    }
+  ],
   "TDCPM": [
     {
       "platform": "The Tradedesk",
@@ -6297,11 +6505,24 @@
       "category": "Marketing",
       "name": "uid-bp-*",
       "domain": "stickyadstv.com",
-      "description": "Pending",
+      "description": "The uid cookie is used by FreeWheel to generate statistics to show how many people may have seen a particular ad. Whereas the other cookies recognize returning users for the purpose of presenting users with relevant advertisements.",
       "retention": "2 months",
       "dataController": "FreeWheel",
       "gdprUrl": "https://www.freewheel.com/privacy-policy",
       "wildcard": "1"
+    }
+  ],
+  "MRM_UID": [
+    {
+      "platform": "FreeWheel",
+      "category": "Marketing",
+      "name": "MRM_UID",
+      "domain": "stickyadstv.com",
+      "description": "Used to track the visitor across multiple devices including TV",
+      "retention": "1 month",
+      "dataController": "FreeWheel",
+      "gdprUrl": "https://www.freewheel.com/privacy-policy",
+      "wildcard": "0"
     }
   ],
   "uuidc": [
@@ -7004,19 +7225,6 @@
       "dataController": "PowerLinks Media Limited",
       "gdprUrl": "https://www.powerlinks.com/privacy-policy/",
       "wildcard": "1"
-    }
-  ],
-  "TapAd_3WAY_SYNCS": [
-    {
-      "platform": "Tapad",
-      "category": "Marketing",
-      "name": "TapAd_3WAY_SYNCS",
-      "domain": "Advertiser's website domain",
-      "description": "Pending",
-      "retention": "2 months",
-      "dataController": "Tapad",
-      "gdprUrl": "https://www.tapad.com/privacy",
-      "wildcard": "0"
     }
   ],
   "_mb": [
@@ -8758,17 +8966,6 @@
       "retention": "session",
       "dataController": "WooCommerce / Jetpack",
       "gdprUrl": "https://automattic.com/privacy/",
-      "wildcard": "0"
-    },
-    {
-      "platform": "WordPress",
-      "category": "Analytics",
-      "name": "tk_ai",
-      "domain": "website domain (1st party)",
-      "description": "JetPack sets this cookie to store a randomly-generated anonymous ID which is used only within the admin area and for general analytics tracking.",
-      "retention": "30 minutes",
-      "dataController": "WordPress",
-      "gdprUrl": "https://wordpress.org/about/privacy/",
       "wildcard": "0"
     }
   ],
@@ -13244,6 +13441,19 @@
       "wildcard": "0"
     }
   ],
+  "cmplz_banner-status": [
+    {
+      "platform": "Complianz",
+      "category": "Functional",
+      "name": "cmplz_banner-status",
+      "domain": "website domain (1st party)",
+      "description": "This cookie stores if the cookie banner has been dismissed",
+      "retention": "1 year",
+      "dataController": "Complianz",
+      "gdprUrl": "https://complianz.io/legal/privacy-statement/",
+      "wildcard": "0"
+    }
+  ],
   "cookie_notice_accepted": [
     {
       "platform": "Digital Factory",
@@ -14411,6 +14621,409 @@
       "retention": "1 year",
       "dataController": "Datadome",
       "gdprUrl": "https://datadome.co/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "TXCSDMN_*": [
+    {
+      "platform": "Tappx",
+      "category": "Marketing",
+      "name": "TXCSDMN_*",
+      "domain": "tappx.com",
+      "description": "This cookie is associated with Tappx, an AdTech platform.",
+      "retention": "1 month",
+      "dataController": "Tappx",
+      "gdprUrl": "https://www.tappx.com/legal/privacy-policy",
+      "wildcard": "1"
+    }
+  ],
+  "TXCD": [
+    {
+      "platform": "Tappx",
+      "category": "Marketing",
+      "name": "TXCD",
+      "domain": "tappx.com",
+      "description": "This cookie is associated with Tappx, an AdTech platform.",
+      "retention": "1 month",
+      "dataController": "Tappx",
+      "gdprUrl": "https://www.tappx.com/legal/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "rai-pltn-pl-*": [
+    {
+      "platform": "richAudience",
+      "category": "Marketing",
+      "name": "rai-pltn-pl-*",
+      "domain": "richaudience.com",
+      "description": "Ad-serving frequency control, optimization and Brand Safety.",
+      "retention": "1 day",
+      "dataController": "richAudience",
+      "gdprUrl": "https://richaudience.com/en/privacy/",
+      "wildcard": "1"
+    }
+  ],
+  "avcid-*": [
+    {
+      "platform": "richAudience",
+      "category": "Marketing",
+      "name": "avcid-*",
+      "domain": "richaudience.com",
+      "description": "ID Syncing with DSP / SSP for communications using Open RTB protocol",
+      "retention": "90 days",
+      "dataController": "richAudience",
+      "gdprUrl": "https://richaudience.com/en/privacy/",
+      "wildcard": "1"
+    }
+  ],
+  "pdid": [
+    {
+      "platform": "richAudience",
+      "category": "Marketing",
+      "name": "pdid",
+      "domain": "richaudience.com",
+      "description": "Randomly generated user ID.",
+      "retention": "1 month",
+      "dataController": "richAudience",
+      "gdprUrl": "https://richaudience.com/en/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "data-*": [
+    {
+      "platform": "Media.net",
+      "category": "Marketing",
+      "name": "data-*",
+      "domain": "contextual.media.net",
+      "description": "Cookie used to record your browsing activity, with the purpose of displaying targeted ads.",
+      "retention": "1 year",
+      "dataController": "Media.net",
+      "gdprUrl": "https://www.media.net/privacy-policy/",
+      "wildcard": "1"
+    }
+  ],
+  "visitor-id": [
+    {
+      "platform": "Media.net",
+      "category": "Marketing",
+      "name": "visitor-id",
+      "domain": "contextual.media.net",
+      "description": "This cookie is used to collect information on the visitor, which we then use for analytics purposes.",
+      "retention": "1 year",
+      "dataController": "Media.net",
+      "gdprUrl": "https://www.media.net/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "gdpr_status": [
+    {
+      "platform": "Media.net",
+      "category": "Marketing",
+      "name": "gdpr_status",
+      "domain": "contextual.media.net",
+      "description": "Determines whether you have accepted the cookie consent box, to prevent it being shown the next time you visit",
+      "retention": "6 months",
+      "dataController": "Media.net",
+      "gdprUrl": "https://www.media.net/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "_pbjs_userid_consent_data": [
+    {
+      "platform": "Prebid",
+      "category": "Functional",
+      "name": "_pbjs_userid_consent_data",
+      "domain": "website domain (1st party)",
+      "description": "This cookie is used to know if the user's consent choices have changed since the last page load. It is a hashed (cyrb53Hash) value of the consent string with a 30 day expiration.",
+      "retention": "30 days",
+      "dataController": "Prebid",
+      "gdprUrl": "https://prebidprd.wpengine.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "DotomiUser": [
+    {
+      "platform": "Dotomi",
+      "category": "Marketing",
+      "name": "DotomiUser",
+      "domain": "dotomi.com",
+      "description": "This cookie is set by the provider Dotomi. This cookie is used for sales/lead correlation and for targeting and marketing purposes. it is used to store unique surfer ID.",
+      "retention": "13 months",
+      "dataController": "Epsilon",
+      "gdprUrl": "https://legal.epsilon.com/global-privacy-policies/",
+      "wildcard": "0"
+    }
+  ],
+  "cjae": [
+    {
+      "platform": "Dotomi",
+      "category": "Marketing",
+      "name": "cjae",
+      "domain": "dotomi.com",
+      "description": "The cookie is set by the provider Dotomi. This cookie is used to record visitor behaviour.",
+      "retention": "1 month",
+      "dataController": "Epsilon",
+      "gdprUrl": "https://legal.epsilon.com/global-privacy-policies/",
+      "wildcard": "0"
+    }
+  ],
+  "DotomiStatus": [
+    {
+      "platform": "Dotomi",
+      "category": "Marketing",
+      "name": "DotomiStatus",
+      "domain": "dotomi.com",
+      "description": "Used to honor device-level opt-out preferences.",
+      "retention": "5 years",
+      "dataController": "Epsilon",
+      "gdprUrl": "https://legal.epsilon.com/global-privacy-policies/",
+      "wildcard": "0"
+    }
+  ],
+  "DotomiSession_*": [
+    {
+      "platform": "Dotomi",
+      "category": "Marketing",
+      "name": "DotomiSession_*",
+      "domain": "dotomi.com",
+      "description": "Pseudonymous session id",
+      "retention": "session",
+      "dataController": "Epsilon",
+      "gdprUrl": "https://legal.epsilon.com/global-privacy-policies/",
+      "wildcard": "1"
+    }
+  ],
+  "DotomiSync": [
+    {
+      "platform": "Dotomi",
+      "category": "Marketing",
+      "name": "DotomiSync",
+      "domain": "dotomi.com",
+      "description": "Used to identify which sync pixels we set on users via registration tags",
+      "retention": "1 year",
+      "dataController": "Epsilon",
+      "gdprUrl": "https://legal.epsilon.com/global-privacy-policies/",
+      "wildcard": "0"
+    }
+  ],
+  "dtm_token": [
+    {
+      "platform": "Dotomi",
+      "category": "Marketing",
+      "name": "dtm_token",
+      "domain": "website domain (1st party)",
+      "description": "Manage cookie level profile, freq. cap, retargeting",
+      "retention": "13 months",
+      "dataController": "Epsilon",
+      "gdprUrl": "https://legal.epsilon.com/global-privacy-policies/",
+      "wildcard": "0"
+    }
+  ],
+  "dtm_token_exp": [
+    {
+      "platform": "Dotomi",
+      "category": "Marketing",
+      "name": "dtm_token_exp",
+      "domain": "website domain (1st party)",
+      "description": "Logs timestamp for dtm_token cookie",
+      "retention": "session",
+      "dataController": "Epsilon",
+      "gdprUrl": "https://legal.epsilon.com/global-privacy-policies/",
+      "wildcard": "0"
+    }
+  ],
+  "dtm_tcdata": [
+    {
+      "platform": "Dotomi",
+      "category": "Marketing",
+      "name": "dtm_tcdata",
+      "domain": "website domain (1st party)",
+      "description": "Stores consent for vendors that participate in the IAB Transparency and Consent Framework.",
+      "retention": "1 day",
+      "dataController": "Epsilon",
+      "gdprUrl": "https://legal.epsilon.com/global-privacy-policies/",
+      "wildcard": "0"
+    }
+  ],
+  "dtm_tcdata_exp": [
+    {
+      "platform": "Dotomi",
+      "category": "Marketing",
+      "name": "dtm_tcdata_exp",
+      "domain": "website domain (1st party)",
+      "description": "Logs timestamp for dtm_tcdata cookie",
+      "retention": "session",
+      "dataController": "Epsilon",
+      "gdprUrl": "https://legal.epsilon.com/global-privacy-policies/",
+      "wildcard": "0"
+    }
+  ],
+  "dtm_token_sc": [
+    {
+      "platform": "Dotomi",
+      "category": "Marketing",
+      "name": "dtm_token_sc",
+      "domain": "website domain (1st party)",
+      "description": "Our first party cookie set via headers on registration tags",
+      "retention": "13 months",
+      "dataController": "Epsilon",
+      "gdprUrl": "https://legal.epsilon.com/global-privacy-policies/",
+      "wildcard": "0"
+    }
+  ],
+  "dtm_user_id": [
+    {
+      "platform": "Dotomi",
+      "category": "Marketing",
+      "name": "dtm_user_id",
+      "domain": "website domain (1st party)",
+      "description": "Used to identify users registration",
+      "retention": "13 months",
+      "dataController": "Epsilon",
+      "gdprUrl": "https://legal.epsilon.com/global-privacy-policies/",
+      "wildcard": "0"
+    }
+  ],
+  "dtm_user_id_sc": [
+    {
+      "platform": "Dotomi",
+      "category": "Marketing",
+      "name": "dtm_user_id_sc",
+      "domain": "website domain (1st party)",
+      "description": "Used to identify users registration",
+      "retention": "13 months",
+      "dataController": "Epsilon",
+      "gdprUrl": "https://legal.epsilon.com/global-privacy-policies/",
+      "wildcard": "0"
+    }
+  ],
+  "dtm_gdpr_delete": [
+    {
+      "platform": "Dotomi",
+      "category": "Marketing",
+      "name": "dtm_gdpr_delete",
+      "domain": "dotomi.com",
+      "description": "Set when GDPR data delete is executed. Life span is 30 days. When this cookie exists, GDPR consent is considered revoked.",
+      "retention": "30 days",
+      "dataController": "Epsilon",
+      "gdprUrl": "https://legal.epsilon.com/global-privacy-policies/",
+      "wildcard": "0"
+    }
+  ],
+  "dtm_gpc_optout": [
+    {
+      "platform": "Dotomi",
+      "category": "Marketing",
+      "name": "dtm_gpc_optout",
+      "domain": "dotomi.com",
+      "description": "Set when GPC Optout is initiated. Presence of this cookie helps us prevent multiple downstream optout requests for the same user",
+      "retention": "30 days",
+      "dataController": "Epsilon",
+      "gdprUrl": "https://legal.epsilon.com/global-privacy-policies/",
+      "wildcard": "0"
+    }
+  ],
+  "pluto2": [
+    {
+      "platform": "Fastclick",
+      "category": "Marketing",
+      "name": "pluto2",
+      "domain": "fastclick.net",
+      "description": "This is a temporary cookie that is created in the case when no PLUTO cookie is set AND the user hits the advertiser site where a Re-Targeting pixel has been executed.",
+      "retention": "13 months",
+      "dataController": "Epsilon",
+      "gdprUrl": "https://legal.epsilon.com/global-privacy-policies/",
+      "wildcard": "0"
+    }
+  ],
+  "pluto": [
+    {
+      "platform": "Fastclick",
+      "category": "Marketing",
+      "name": "pluto",
+      "domain": "fastclick.net",
+      "description": "The Session ID is used to track preference information.",
+      "retention": "13 months",
+      "dataController": "Epsilon",
+      "gdprUrl": "https://legal.epsilon.com/global-privacy-policies/",
+      "wildcard": "0"
+    }
+  ],
+  "fastclick": [
+    {
+      "platform": "Fastclick",
+      "category": "Functional",
+      "name": "fastclick",
+      "domain": "fastclick.net",
+      "description": "Tells the delivery system that the browser had opted out of the network",
+      "retention": "10 years",
+      "dataController": "Epsilon",
+      "gdprUrl": "https://legal.epsilon.com/global-privacy-policies/",
+      "wildcard": "0"
+    }
+  ],
+  "svid": [
+    {
+      "platform": "Mediaplex",
+      "category": "Marketing",
+      "name": "svid",
+      "domain": "mediaplex.com",
+      "description": "Used to relate preference information for marketing purposes",
+      "retention": "13 months",
+      "dataController": "Epsilon",
+      "gdprUrl": "https://legal.epsilon.com/global-privacy-policies/",
+      "wildcard": "0"
+    }
+  ],
+  "rts": [
+    {
+      "platform": "Mediaplex",
+      "category": "Marketing",
+      "name": "rts",
+      "domain": "mediaplex.com",
+      "description": "Used to track last time browser was redirected through Corporate Cookie Service / Dotomi.com domain",
+      "retention": "13 months",
+      "dataController": "Epsilon",
+      "gdprUrl": "https://legal.epsilon.com/global-privacy-policies/",
+      "wildcard": "0"
+    }
+  ],
+  "lhc_per": [
+    {
+      "platform": "Live helper chat",
+      "category": "Functional",
+      "name": "lhc_per",
+      "domain": "website domain (1st party)",
+      "description": "Stores persistent information about chat id to be able to keep same chat while customer is navigating through pages.",
+      "retention": "180 days",
+      "dataController": "Live helper chat",
+      "gdprUrl": "https://livehelperchat.com/gdpr-compliance-504a.html",
+      "wildcard": "0"
+    }
+  ],
+  "lhc_ldep": [
+    {
+      "platform": "Live helper chat",
+      "category": "Functional",
+      "name": "lhc_ldep",
+      "domain": "website domain (1st party)",
+      "description": "Stores required department id. To disable user to change department.",
+      "retention": "Unknown",
+      "dataController": "Live helper chat",
+      "gdprUrl": "https://livehelperchat.com/gdpr-compliance-504a.html",
+      "wildcard": "0"
+    }
+  ],
+  "lhc_ses": [
+    {
+      "platform": "Live helper chat",
+      "category": "Functional",
+      "name": "lhc_ses",
+      "domain": "website domain (1st party)",
+      "description": "Stores temporary information about chat. Was invitation to chat shown or not.",
+      "retention": "session",
+      "dataController": "Live helper chat",
+      "gdprUrl": "https://livehelperchat.com/gdpr-compliance-504a.html",
       "wildcard": "0"
     }
   ]
