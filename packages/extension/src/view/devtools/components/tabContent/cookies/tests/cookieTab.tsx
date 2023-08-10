@@ -30,6 +30,7 @@ import type { CookieStoreContext } from '../../../../stateProviders/syncCookieSt
 import { emptyAnalytics } from '../../../../../../worker/findAnalyticsMatch';
 import CookieDetails from '../cookiesListing/cookieDetails';
 import { useContentPanelStore } from '../../../../stateProviders/contentPanelStore';
+import { useFilterManagementStore } from '../../../../stateProviders/filterManagementStore';
 import Details from '../cookiesListing/cookieDetails/details';
 
 const emptyCookie = {
@@ -173,6 +174,14 @@ mockUseContentPanelStore.mockReturnValue({
   tableContainerRef: { current: null },
   tableColumnSize: 100,
   setTableColumnSize: jest.fn(),
+});
+
+jest.mock('../../../../stateProviders/filterManagementStore');
+const mockFilterManagementStore = useFilterManagementStore as jest.Mock;
+mockFilterManagementStore.mockReturnValue({
+  selectedFilters: {},
+  filters: [],
+  filteredCookies: Object.values(mockResponse.tabCookies),
 });
 
 describe('CookieTab', () => {
