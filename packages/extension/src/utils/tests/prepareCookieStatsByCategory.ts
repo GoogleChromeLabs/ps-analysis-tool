@@ -145,9 +145,9 @@ describe('prepareCookieStatsByCategory : ', () => {
   });
 
   it('Gives empty stats with null passed as cookies', () => {
-    expect(countCookiesByCategory(null, 'https://example.com/page')).toEqual(
-      EMPTY_STATS
-    );
+    expect(
+      prepareCookieStatsByCategory(null, 'https://example.com/page')
+    ).toEqual(EMPTY_STATS);
   });
 
   it('Generates correct tests', () => {
