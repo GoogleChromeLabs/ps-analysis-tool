@@ -16,39 +16,26 @@
 /**
  * External dependencies.
  */
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Resizable } from 're-resizable';
 
 /**
  * Internal dependencies.
  */
-import {
-  type CookieTableData,
-  useCookieStore,
-} from '../../../../stateProviders/syncCookieStore';
+import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import CookieDetails from './cookieDetails';
 import CookieTable from './cookieTable';
+import FiltersList from '../../../cookieFilter';
+import { useFilterManagementStore } from '../../../../stateProviders/filterManagementStore';
 
 const CookiesListing = () => {
-  const { cookies, selectedFrame, tabFrames } = useCookieStore(({ state }) => ({
-    cookies: state.tabCookies,
+  const { selectedFrame } = useCookieStore(({ state }) => ({
     selectedFrame: state.selectedFrame,
-    tabFrames: state.tabFrames,
   }));
 
-  const calculatedCookies = useMemo(() => {
-    const frameFilteredCookies: { [key: string]: CookieTableData } = {};
-    if (cookies && selectedFrame && tabFrames && tabFrames[selectedFrame]) {
-      Object.entries(cookies).forEach(([key, cookie]) => {
-        tabFrames[selectedFrame].frameIds?.forEach((frameId) => {
-          if (cookie.frameIdList?.includes(frameId)) {
-            frameFilteredCookies[key] = cookie;
-          }
-        });
-      });
-    }
-    return Object.values(frameFilteredCookies);
-  }, [cookies, selectedFrame, tabFrames]);
+  const filteredCookies = useFilterManagementStore(
+    ({ state }) => state.filteredCookies
+  );
 
   return (
     <div className="h-full flex flex-col">
@@ -66,10 +53,32 @@ const CookiesListing = () => {
           left: false,
         }}
       >
-        <CookieTable
-          cookies={calculatedCookies}
-          selectedFrame={selectedFrame}
-        />
+        <div className="h-full flex">
+          <Resizable
+            defaultSize={{
+              width: '20%',
+              height: '100%',
+            }}
+            minWidth="10%"
+            maxWidth="80%"
+            enable={{
+              top: false,
+              right: true,
+              bottom: false,
+              left: false,
+            }}
+            className="overflow-y-scroll overflow-x-hidden"
+          >
+            <FiltersList />
+          </Resizable>
+
+          <div className="flex-1">
+            <CookieTable
+              cookies={filteredCookies}
+              selectedFrame={selectedFrame}
+            />
+          </div>
+        </div>
       </Resizable>
       <div className="w-full h-full bg-white border-2 border-gray-300 shadow overflow-auto">
         <CookieDetails />
