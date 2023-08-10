@@ -29,7 +29,7 @@ import React, {
  */
 import { getCurrentTab } from '../../../../utils/getCurrentTabId';
 import type { CookieStats } from '../../types';
-import countCookiesByCategory from '../../../../utils/countCookiesByCategory';
+import PrepareCookieStatsByCategory from '../../../../utils/prepareCookieStatsByCategory';
 
 export interface CookieStoreContext {
   state: {
@@ -47,14 +47,14 @@ const initialState: CookieStoreContext = {
         functional: 0,
         marketing: 0,
         analytics: 0,
-        uncategorised: 0,
+        uncategorized: 0,
       },
       thirdParty: {
         total: 0,
         functional: 0,
         marketing: 0,
         analytics: 0,
-        uncategorised: 0,
+        uncategorized: 0,
       },
     },
   },
@@ -87,7 +87,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     ];
 
     if (tabData && tabData.cookies) {
-      setTabCookieStats(countCookiesByCategory(tabData.cookies, _tabUrl));
+      setTabCookieStats(PrepareCookieStatsByCategory(tabData.cookies, _tabUrl));
     }
   }, []);
 
@@ -100,7 +100,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         changes[tabId.toString()]?.newValue?.cookies
       ) {
         setTabCookieStats(
-          countCookiesByCategory(
+          PrepareCookieStatsByCategory(
             changes[tabId.toString()].newValue.cookies,
             tabUrl
           )

@@ -45,7 +45,7 @@ const EmptyCirclePieChart = ({
     <>
       <div
         className={classNames(
-          'h-full max-w-xs inline-block align-bottom',
+          'max-w-xs inline-block align-bottom',
           containerWidthClass
         )}
       >

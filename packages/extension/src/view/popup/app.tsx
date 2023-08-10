@@ -26,7 +26,7 @@ import './app.css';
 import { Legend } from './components';
 import { useCookieStore } from './stateProviders/syncCookieStore';
 import { CirclePieChart } from '../design-system/components';
-import { getCookieStatsComponents } from '../../utils/getCookieStatsComponents';
+import { prepareCookieStatsComponents } from '../../utils/prepareCookieStatsComponents';
 
 const App: React.FC = () => {
   const { cookieStats } = useCookieStore(({ state }) => ({
@@ -54,7 +54,7 @@ const App: React.FC = () => {
     );
   }
 
-  const statsComponents = getCookieStatsComponents(cookieStats);
+  const statsComponents = prepareCookieStatsComponents(cookieStats);
 
   return (
     <div className="w-96 h-80 flex justify-center items-center flex-col">

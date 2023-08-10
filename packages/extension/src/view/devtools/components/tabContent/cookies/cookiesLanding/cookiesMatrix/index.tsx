@@ -27,6 +27,17 @@ import {
 } from '../../../../../../design-system/components';
 import { getInvalidCookies } from '../../utils/getInvalidCookies';
 import { filterFramesWithCookies } from '../../utils/filterFramesWithCookies';
+import type {
+  TabCookies,
+  TabFrames,
+  CookieStatsComponents,
+} from '../../../../../cookies.types';
+
+interface CookiesMatrixProps {
+  tabCookies: TabCookies | null;
+  cookiesStatsComponents: CookieStatsComponents;
+  tabFrames: TabFrames | null;
+}
 
 const LEGEND_DATA = {
   Functional: {
@@ -47,19 +58,13 @@ const LEGEND_DATA = {
       'Used to gather information about how users interact with a website. They provide website owners with insights into user behavior, such as the number of visitors, the most popular pages, and the average time spent on the site. This data helps website owners understand and improve the user experience, optimize content, and identify areas for enhancement.',
     textClassName: 'text-analytics',
   },
-  Uncategorised: {
+  Uncategorized: {
     title: 'Uncategorized Cookies',
     description:
       'We are unable to categorize certain cookies since we do not possess any relevant information about them. Nonetheless, you may visit sites like cookiedatabase.org and cookiesearch.org to acquire additional details about these cookies.',
     textClassName: 'text-uncategorized',
   },
 };
-
-interface CookiesMatrixProps {
-  tabCookies: any;
-  cookiesStatsComponents: any;
-  tabFrames: any;
-}
 
 const CookiesMatrix = ({
   tabCookies,

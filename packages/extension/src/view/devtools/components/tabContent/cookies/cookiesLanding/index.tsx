@@ -24,8 +24,8 @@ import React from 'react';
 import LandingHeader from './landingHeader';
 import CookiesMatrix from './cookiesMatrix';
 import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
-import countCookiesByCategory from '../../../../../../utils/countCookiesByCategory';
-import { getCookieStatsComponents } from '../../../../../../utils/getCookieStatsComponents';
+import PrepareCookieStatsByCategory from '../../../../../../utils/prepareCookieStatsByCategory';
+import { prepareCookieStatsComponents } from '../../../../../../utils/prepareCookieStatsComponents';
 
 const CookiesLanding = () => {
   const { tabCookies, tabFrames, tabUrl } = useCookieStore(({ state }) => ({
@@ -34,13 +34,8 @@ const CookiesLanding = () => {
     tabUrl: state.tabUrl,
   }));
 
-  const cookieStats = countCookiesByCategory(tabCookies, tabUrl);
-
-  if (!cookieStats) {
-    return null;
-  }
-
-  const cookiesStatsComponents = getCookieStatsComponents(cookieStats);
+  const cookieStats = PrepareCookieStatsByCategory(tabCookies, tabUrl);
+  const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
 
   return (
     <div className="lg:max-w-[700px] h-full w-full px-4">
@@ -50,9 +45,9 @@ const CookiesLanding = () => {
       />
       <div className="flex justify-center mt-10 pb-28">
         <CookiesMatrix
+          tabCookies={tabCookies}
           cookiesStatsComponents={cookiesStatsComponents}
           tabFrames={tabFrames}
-          tabCookies={tabCookies}
         />
       </div>
     </div>

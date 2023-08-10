@@ -18,7 +18,7 @@ export const COLOR_MAP = {
   functional: '#5CC971',
   marketing: '#F3AE4E',
   analytics: '#4C79F4',
-  uncategorised: '#EC7159',
+  uncategorized: '#EC7159',
   brightGray: '#EBEBEB',
   mediumGray: '#BDBDBD',
 };

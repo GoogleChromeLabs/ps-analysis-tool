@@ -93,7 +93,7 @@ const tableColumns: ColumnDef<CookieTableData>[] = [
   {
     header: 'Category',
     accessorKey: 'analytics.category',
-    cell: (info) => (info.getValue() ? info.getValue() : 'Uncategorised'),
+    cell: (info) => (info.getValue() ? info.getValue() : 'Uncategorized'),
   },
   {
     header: 'Third Party',

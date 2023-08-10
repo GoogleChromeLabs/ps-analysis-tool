@@ -29,21 +29,13 @@ import React, {
  */
 import type { CookieData } from '../../../../localStore';
 import { checkIbcCompliance } from '../../../../utils/checkIbcCompliance';
-
-export type CookieTableData = CookieData & {
-  isIbcCompliant: boolean | null;
-  isCookieSet: boolean | null;
-};
+import type { TabCookies, TabFrames } from '../../cookies.types';
 
 export interface CookieStoreContext {
   state: {
-    tabCookies: {
-      [key: string]: CookieTableData;
-    } | null;
+    tabCookies: TabCookies | null;
     tabUrl: string | null;
-    tabFrames: {
-      [key: string]: { frameIds: number[] };
-    } | null;
+    tabFrames: TabFrames | null;
     selectedFrame: string | null;
   };
   actions: {

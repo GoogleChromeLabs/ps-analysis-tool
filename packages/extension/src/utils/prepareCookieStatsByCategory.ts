@@ -22,14 +22,14 @@ import type { CookieStats } from '../view/popup/types';
 import isFirstParty from './isFirstParty';
 
 /**
- * Categorize cookies count into 1st party and 3rd party cookies and into functional, marketing, analytics and Uncategorised.
+ * Categorize cookies count into 1st party and 3rd party cookies and into functional, marketing, analytics and Uncategorized.
  * @param {{ [key: string]: CookieData }} cookies Cookies of a tab.
  * @param {string} tabUrl Tab URL
  * @returns CookieStats object with the categorized cookies count.
  */
-const countCookiesByCategory = (
+const PrepareCookieStatsByCategory = (
   cookies: { [key: string]: CookieData } | null,
-  tabUrl: string
+  tabUrl: string | null
 ) => {
   const stats: CookieStats = {
     total: 0,
@@ -38,18 +38,18 @@ const countCookiesByCategory = (
       functional: 0,
       marketing: 0,
       analytics: 0,
-      uncategorised: 0,
+      uncategorized: 0,
     },
     thirdParty: {
       total: 0,
       functional: 0,
       marketing: 0,
       analytics: 0,
-      uncategorised: 0,
+      uncategorized: 0,
     },
   };
 
-  if (!cookies) {
+  if (!cookies || !tabUrl) {
     return stats;
   }
 
@@ -70,13 +70,13 @@ const countCookiesByCategory = (
 
     if (isFirstPartyCookie) {
       stats.firstParty.total++;
-      stats.firstParty[category ? category : 'uncategorised']++;
+      stats.firstParty[category ? category : 'uncategorized']++;
     } else {
       stats.thirdParty.total++;
-      stats.thirdParty[category ? category : 'uncategorised']++;
+      stats.thirdParty[category ? category : 'uncategorized']++;
     }
   }
   return stats;
 };
 
-export default countCookiesByCategory;
+export default PrepareCookieStatsByCategory;

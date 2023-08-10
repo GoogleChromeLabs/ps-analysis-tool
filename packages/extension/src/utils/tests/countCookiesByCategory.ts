@@ -17,7 +17,7 @@
 /**
  * Internal dependencies.
  */
-import countCookiesByCategory from '../countCookiesByCategory';
+import PrepareCookieStatsByCategory from '../prepareCookieStatsByCategory';
 
 const functional1pCookie = {
   parsedCookie: {
@@ -58,7 +58,7 @@ const analytics1pCookie = {
   headerType: 'request',
 };
 
-const uncategorised1pCookie = {
+const uncategorized1pCookie = {
   parsedCookie: {
     name: 'cookie_name_4',
     value: 'val',
@@ -108,7 +108,7 @@ const analytics3pCookie = {
   headerType: 'request',
 };
 
-const uncategorised3pCookie = {
+const uncategorized3pCookie = {
   parsedCookie: {
     name: 'cookie_name_8',
     value: 'val',
@@ -126,22 +126,22 @@ const EMPTY_STATS = {
     functional: 0,
     marketing: 0,
     analytics: 0,
-    uncategorised: 0,
+    uncategorized: 0,
   },
   thirdParty: {
     total: 0,
     functional: 0,
     marketing: 0,
     analytics: 0,
-    uncategorised: 0,
+    uncategorized: 0,
   },
 };
 
-describe('countCookiesByCategory : ', () => {
+describe('PrepareCookieStatsByCategory : ', () => {
   it('Gives empty stats with cookies', () => {
-    expect(countCookiesByCategory({}, 'https://example.com/page')).toEqual(
-      EMPTY_STATS
-    );
+    expect(
+      PrepareCookieStatsByCategory({}, 'https://example.com/page')
+    ).toEqual(EMPTY_STATS);
   });
 
   it('Generates correct tests', () => {
@@ -152,8 +152,8 @@ describe('countCookiesByCategory : ', () => {
       [marketing3pCookie.parsedCookie.name]: marketing3pCookie,
       [analytics1pCookie.parsedCookie.name]: analytics1pCookie,
       [analytics3pCookie.parsedCookie.name]: analytics3pCookie,
-      [uncategorised1pCookie.parsedCookie.name]: uncategorised1pCookie,
-      [uncategorised3pCookie.parsedCookie.name]: uncategorised3pCookie,
+      [uncategorized1pCookie.parsedCookie.name]: uncategorized1pCookie,
+      [uncategorized3pCookie.parsedCookie.name]: uncategorized3pCookie,
     };
 
     const expectedStats = {
@@ -163,19 +163,19 @@ describe('countCookiesByCategory : ', () => {
         functional: 1,
         marketing: 1,
         analytics: 1,
-        uncategorised: 1,
+        uncategorized: 1,
       },
       thirdParty: {
         total: 4,
         functional: 1,
         marketing: 1,
         analytics: 1,
-        uncategorised: 1,
+        uncategorized: 1,
       },
     };
     //@ts-ignore Missing properties are not requird in the function.
-    expect(countCookiesByCategory(cookies, 'https://example.com/page')).toEqual(
-      expectedStats
-    );
+    expect(
+      PrepareCookieStatsByCategory(cookies, 'https://example.com/page')
+    ).toEqual(expectedStats);
   });
 });

@@ -17,70 +17,74 @@
  * Internal dependencies.
  */
 import { COLOR_MAP } from '../view/design-system/theme/colors';
+import type { CookieStats } from '../view/popup/types';
+import type { CookieStatsComponents } from '../view/devtools/cookies.types';
 
-export const getCookieStatsComponents = (cookiesData) => {
+export const prepareCookieStatsComponents = (
+  cookieStats: CookieStats
+): CookieStatsComponents => {
   return {
     legend: [
       {
         label: 'Functional',
         count:
-          cookiesData.firstParty.functional + cookiesData.thirdParty.functional,
+          cookieStats.firstParty.functional + cookieStats.thirdParty.functional,
         color: COLOR_MAP.functional,
       },
       {
         label: 'Marketing',
         count:
-          cookiesData.firstParty.marketing + cookiesData.thirdParty.marketing,
+          cookieStats.firstParty.marketing + cookieStats.thirdParty.marketing,
         color: COLOR_MAP.marketing,
       },
       {
         label: 'Analytics',
         count:
-          cookiesData.firstParty.analytics + cookiesData.thirdParty.analytics,
+          cookieStats.firstParty.analytics + cookieStats.thirdParty.analytics,
         color: COLOR_MAP.analytics,
       },
       {
-        label: 'Uncategorised',
+        label: 'Uncategorized',
         count:
-          cookiesData.firstParty.uncategorised +
-          cookiesData.thirdParty.uncategorised,
-        color: COLOR_MAP.uncategorised,
+          cookieStats.firstParty.uncategorized +
+          cookieStats.thirdParty.uncategorized,
+        color: COLOR_MAP.uncategorized,
       },
     ],
     firstParty: [
       {
-        count: cookiesData.firstParty.functional,
+        count: cookieStats.firstParty.functional,
         color: COLOR_MAP.functional,
       },
       {
-        count: cookiesData.firstParty.marketing,
+        count: cookieStats.firstParty.marketing,
         color: COLOR_MAP.marketing,
       },
       {
-        count: cookiesData.firstParty.analytics,
+        count: cookieStats.firstParty.analytics,
         color: COLOR_MAP.analytics,
       },
       {
-        count: cookiesData.firstParty.uncategorised,
-        color: COLOR_MAP.uncategorised,
+        count: cookieStats.firstParty.uncategorized,
+        color: COLOR_MAP.uncategorized,
       },
     ],
     thirdParty: [
       {
-        count: cookiesData.thirdParty.functional,
+        count: cookieStats.thirdParty.functional,
         color: COLOR_MAP.functional,
       },
       {
-        count: cookiesData.thirdParty.marketing,
+        count: cookieStats.thirdParty.marketing,
         color: COLOR_MAP.marketing,
       },
       {
-        count: cookiesData.thirdParty.analytics,
+        count: cookieStats.thirdParty.analytics,
         color: COLOR_MAP.analytics,
       },
       {
-        count: cookiesData.thirdParty.uncategorised,
-        color: COLOR_MAP.uncategorised,
+        count: cookieStats.thirdParty.uncategorized,
+        color: COLOR_MAP.uncategorized,
       },
     ],
   };

@@ -21,13 +21,13 @@ export type CookieStats = {
     functional: number;
     marketing: number;
     analytics: number;
-    uncategorised: number;
+    uncategorized: number;
   };
   thirdParty: {
     total: number;
     functional: number;
     marketing: number;
     analytics: number;
-    uncategorised: number;
+    uncategorized: number;
   };
 };

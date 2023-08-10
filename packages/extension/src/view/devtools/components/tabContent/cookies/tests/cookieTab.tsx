@@ -43,17 +43,17 @@ const emptyCookie = {
   expires: '',
 };
 
-const uncategorised1pCookie: ParsedCookie = {
+const uncategorized1pCookie: ParsedCookie = {
   ...emptyCookie,
   name: '_cb',
   value: 'v1%3A168740954476563235',
   domain: '.cnn.com',
 };
 
-const uncategorised3pCookie: ParsedCookie = {
+const uncategorized3pCookie: ParsedCookie = {
   ...emptyCookie,
   name: 'pubsyncexp',
-  value: 'uncategorised3pCookie',
+  value: 'uncategorized3pCookie',
   domain: '.ads.pubmatic.com',
 };
 
@@ -78,8 +78,8 @@ const mockResponse: {
   selectedFrame: NonNullable<CookieStoreContext['state']['selectedFrame']>;
 } = {
   tabCookies: {
-    [uncategorised1pCookie.name]: {
-      parsedCookie: uncategorised1pCookie,
+    [uncategorized1pCookie.name]: {
+      parsedCookie: uncategorized1pCookie,
       analytics: { ...emptyAnalytics },
       url: 'https://edition.cnn.com/whatever/api',
       headerType: 'response',
@@ -88,8 +88,8 @@ const mockResponse: {
       isCookieSet: true,
       frameIdList: [1],
     },
-    [uncategorised3pCookie.name]: {
-      parsedCookie: uncategorised3pCookie,
+    [uncategorized3pCookie.name]: {
+      parsedCookie: uncategorized3pCookie,
       analytics: { ...emptyAnalytics },
       url: 'https://api.pubmatic.com/whatever/api',
       headerType: 'response',
@@ -167,7 +167,7 @@ jest.mock('../../../../stateProviders/contentPanelStore');
 const mockUseContentPanelStore = useContentPanelStore as jest.Mock;
 mockUseContentPanelStore.mockReturnValue({
   selectedFrameCookie: {
-    1: mockResponse.tabCookies[uncategorised1pCookie.name],
+    1: mockResponse.tabCookies[uncategorized1pCookie.name],
   },
   setSelectedFrameCookie: jest.fn(),
   tableContainerRef: { current: null },
@@ -185,7 +185,7 @@ describe('CookieTab', () => {
 
     expect((await screen.findAllByTestId('body-row')).length).toBe(4);
 
-    expect((await screen.findAllByText('Uncategorised')).length).toBe(2);
+    expect((await screen.findAllByText('Uncategorized')).length).toBe(2);
     expect((await screen.findAllByText('Marketing')).length).toBe(2);
   });
 
@@ -280,7 +280,7 @@ describe('CookieTab', () => {
   it('should decode cookie value when input show URI decoded is checked', async () => {
     render(
       <Details
-        selectedCookie={mockResponse.tabCookies[uncategorised1pCookie.name]}
+        selectedCookie={mockResponse.tabCookies[uncategorized1pCookie.name]}
       />
     );
 
@@ -290,13 +290,13 @@ describe('CookieTab', () => {
     fireEvent.click(checkbox);
 
     expect(
-      await screen.findByText(decodeURIComponent(uncategorised1pCookie.value))
+      await screen.findByText(decodeURIComponent(uncategorized1pCookie.value))
     ).toBeInTheDocument();
 
     fireEvent.click(checkbox);
 
     expect(
-      await screen.findByText(uncategorised1pCookie.value)
+      await screen.findByText(uncategorized1pCookie.value)
     ).toBeInTheDocument();
   });
 
@@ -347,7 +347,7 @@ describe('CookieTab', () => {
   it('should show a cookie card with no description about cookie', async () => {
     mockUseContentPanelStore.mockReturnValue({
       selectedFrameCookie: {
-        1: mockResponse.tabCookies[uncategorised1pCookie.name],
+        1: mockResponse.tabCookies[uncategorized1pCookie.name],
       },
       tableContainerRef: { current: null },
       tableColumnSize: 100,
@@ -389,14 +389,14 @@ describe('CookieTab', () => {
 
     expect(setStateMock).toHaveBeenCalledWith({
       'https://edition.cnn.com/':
-        mockResponse.tabCookies[uncategorised1pCookie.name],
+        mockResponse.tabCookies[uncategorized1pCookie.name],
     });
 
     fireEvent.keyDown(row, { key: 'ArrowDown', code: 'ArrowDown' });
 
     expect(setStateMock).toHaveBeenCalledWith({
       'https://edition.cnn.com/':
-        mockResponse.tabCookies[uncategorised1pCookie.name],
+        mockResponse.tabCookies[uncategorized1pCookie.name],
     });
   });
 });
