@@ -79,6 +79,7 @@ const Accordion: React.FC<AccordionProps> = ({
         onKeyDown={(event) => keyboardNavigator(event)}
       >
         <div
+          data-testid="accordion-opener"
           className={`origin-center transition-transform scale-125 p-0.5 ${
             accordionState ? '' : '-rotate-90'
           }`}
@@ -90,7 +91,7 @@ const Accordion: React.FC<AccordionProps> = ({
             <ArrowDown />
           )}
         </div>
-        <div className="pl-1">
+        <div>
           {selectedIndex === index && !selectedFrame ? (
             <CookieWhite />
           ) : (

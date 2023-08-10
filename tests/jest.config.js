@@ -47,6 +47,10 @@ export default {
     '<rootDir>/dist',
     '<rootDir>/third_party',
     '<rootDir>/data',
+    '/stories/',
+    '<rootDir>/packages/extension/src/view/devtools/index.tsx',
+    '<rootDir>/packages/extension/src/view/popup/index.tsx',
+    '<rootDir>/packages/extension/src/view/devtools/devtools.ts',
   ],
   coverageReporters: ['lcov'],
   collectCoverageFrom: [
