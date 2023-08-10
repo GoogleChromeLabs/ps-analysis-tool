@@ -33,9 +33,9 @@ const CookiesListing = () => {
     selectedFrame: state.selectedFrame,
   }));
 
-  const { filteredCookies } = useFilterManagementStore(({ state }) => ({
-    filteredCookies: state.filteredCookies,
-  }));
+  const filteredCookies = useFilterManagementStore(
+    ({ state }) => state.filteredCookies
+  );
 
   return (
     <div className="h-full flex flex-col">

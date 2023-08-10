@@ -178,10 +178,15 @@ mockUseContentPanelStore.mockReturnValue({
 
 jest.mock('../../../../stateProviders/filterManagementStore');
 const mockFilterManagementStore = useFilterManagementStore as jest.Mock;
-mockFilterManagementStore.mockReturnValue({
-  selectedFilters: {},
-  filters: [],
-  filteredCookies: Object.values(mockResponse.tabCookies),
+mockFilterManagementStore.mockImplementation((selector) => {
+  return selector({
+    state: {
+      selectedFilters: {},
+      filters: [],
+      filteredCookies: Object.values(mockResponse.tabCookies),
+    },
+    actions: {},
+  });
 });
 
 describe('CookieTab', () => {
