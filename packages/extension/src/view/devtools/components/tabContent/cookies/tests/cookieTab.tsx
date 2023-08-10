@@ -72,6 +72,13 @@ const known3pCookie: ParsedCookie = {
   domain: '.pubmatic.com',
 };
 
+const known3pCookieWithValue: ParsedCookie = {
+  ...emptyCookie,
+  name: 'KRTBCOOKIE_290',
+  value: 'known3p_Cookie-with%20value',
+  domain: '.pubmatic.com',
+};
+
 const mockResponse: {
   tabCookies: NonNullable<CookieStoreContext['state']['tabCookies']>;
   tabUrl: NonNullable<CookieStoreContext['state']['tabUrl']>;
@@ -122,6 +129,27 @@ const mockResponse: {
     },
     [known3pCookie.name]: {
       parsedCookie: known3pCookie,
+      analytics: {
+        platform: 'PubMatic',
+        category: 'Marketing',
+        name: 'KRTBCOOKIE_*',
+        domain: 'pubmatic.com',
+        description:
+          "Registers a unique ID that identifies the user's device during return visits across websites that use the same ad network. The ID is used to allow targeted ads.",
+        retention: '29 days',
+        dataController: 'Pubmatic',
+        gdprUrl: 'N/A',
+        wildcard: '1',
+      },
+      url: 'https://api.pubmatic.com/whatever/api',
+      headerType: 'response',
+      isFirstParty: false,
+      isIbcCompliant: true,
+      isCookieSet: true,
+      frameIdList: [1],
+    },
+    [known3pCookieWithValue.name]: {
+      parsedCookie: known3pCookieWithValue,
       analytics: {
         platform: 'PubMatic',
         category: 'Marketing',
@@ -412,5 +440,33 @@ describe('CookieTab', () => {
       'https://edition.cnn.com/':
         mockResponse.tabCookies[uncategorised1pCookie.name],
     });
+  });
+
+  it('should decode the cookie value on clicking checkbox', async () => {
+    const lastCookie =
+      mockResponse.tabCookies[Object.keys(mockResponse.tabCookies)[3]];
+
+    mockUseContentPanelStore.mockReturnValue({
+      selectedFrameCookie: {
+        1: mockResponse.tabCookies[known3pCookieWithValue.name],
+      },
+      tableContainerRef: { current: null },
+      tableColumnSize: 100,
+      setTableColumnSize: jest.fn(),
+    });
+
+    render(<CookieDetails />);
+    const card = await screen.findByTestId('cookie-card');
+
+    expect(card).toBeInTheDocument();
+    expect(
+      await within(card).findByText(lastCookie.parsedCookie.value)
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId('show-url-decoded-checkbox'));
+
+    expect(
+      await within(card).findByText('known3p_Cookie-with value')
+    ).toBeInTheDocument();
   });
 });
