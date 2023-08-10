@@ -31,7 +31,7 @@ import {
 import Table from '../../../../table';
 import { useContentPanelStore } from '../../../../../stateProviders/contentPanelStore';
 import CheckIcon from '../../../../../../../../icons/check.svg';
-import type { CookieTableData } from '../../../../../stateProviders/syncCookieStore';
+import type { CookieTableData } from '../../../../../cookies.types';
 
 export interface CookieTableProps {
   cookies: CookieTableData[];

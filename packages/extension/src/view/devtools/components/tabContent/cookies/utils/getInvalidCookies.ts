@@ -13,8 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const getInvalidCookies = (cookies) => {
-  const invalidCookies = {};
+/**
+ * Internal dependencies.
+ */
+import type { TabCookies } from '../../../../cookies.types';
+
+export const getInvalidCookies = (cookies: TabCookies | null): TabCookies => {
+  const invalidCookies: TabCookies = {};
 
   if (cookies) {
     Object.entries(cookies).forEach(([name, cookie]) => {

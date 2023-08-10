@@ -31,26 +31,22 @@ export interface TabFrames {
   [key: string]: { frameIds: number[] };
 }
 
-export enum CookieCategory {
-  Functional = 'Functional',
-  Marketing = 'Marketing',
-  Analytics = 'Analytics',
-  Uncategorized = 'Uncategorized',
-}
-
-type CookieStats = {
-  [category in CookieCategory]: {
-    count: number;
-    color: string;
-  }[];
-};
-
 export interface CookieStatsComponents {
   legend: {
-    label: CookieCategory;
+    label: string;
     count: number;
     color: string;
   }[];
-  firstParty: CookieStats;
-  thirdParty: CookieStats;
+  firstParty: {
+    count: number;
+    color: string;
+  }[];
+  thirdParty: {
+    count: number;
+    color: string;
+  }[];
+}
+
+export interface FramesWithCookies {
+  [key: string]: { frameIds: number[] };
 }

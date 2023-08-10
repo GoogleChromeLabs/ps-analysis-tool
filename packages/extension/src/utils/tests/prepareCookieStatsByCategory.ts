@@ -173,8 +173,8 @@ describe('prepareCookieStatsByCategory : ', () => {
         uncategorized: 1,
       },
     };
-    //@ts-ignore Missing properties are not requird in the function.
     expect(
+      //@ts-ignore Missing properties are not required in the function.
       prepareCookieStatsByCategory(cookies, 'https://example.com/page')
     ).toEqual(expectedStats);
   });

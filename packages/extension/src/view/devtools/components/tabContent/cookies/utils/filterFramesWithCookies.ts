@@ -17,9 +17,17 @@
  * Internal dependencies.
  */
 import { filterCookiesByFrame } from './filterCookiesByFrame';
+import type {
+  TabCookies,
+  TabFrames,
+  FramesWithCookies,
+} from '../../../../cookies.types';
 
-export const filterFramesWithCookies = (tabCookies, tabFrames) => {
-  const framesWithCookies = {};
+export const filterFramesWithCookies = (
+  tabCookies: TabCookies | null,
+  tabFrames: TabFrames | null
+): FramesWithCookies => {
+  const framesWithCookies: FramesWithCookies = {};
 
   if (!tabCookies || !tabFrames) {
     return framesWithCookies;

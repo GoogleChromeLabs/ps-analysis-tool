@@ -38,7 +38,7 @@ export const Primary: StoryObj<typeof meta> = {
     description:
       'These are essential cookies that are necessary for a website to function properly. They enable basic functionalities such as page navigation, access to secure areas, and remembering user preferences (e.g., language, font size).',
     color: COLOR_MAP.functional,
-    expand: true,
+    isExpanded: true,
     textClassName: 'text-functional',
   },
 };

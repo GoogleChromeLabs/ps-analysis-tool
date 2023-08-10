@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import { type CookieTableData } from '../../../../stateProviders/syncCookieStore';
+import { type CookieTableData } from '../../../../cookies.types';
 
 interface Cookies {
   [key: string]: CookieTableData;

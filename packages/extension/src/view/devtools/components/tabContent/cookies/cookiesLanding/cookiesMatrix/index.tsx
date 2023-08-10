@@ -39,7 +39,15 @@ interface CookiesMatrixProps {
   tabFrames: TabFrames | null;
 }
 
-const LEGEND_DATA = {
+interface LegendData {
+  [key: string]: {
+    title: string;
+    description: string;
+    textClassName: string;
+  };
+}
+
+const LEGEND_DATA: LegendData = {
   Functional: {
     title: 'Functional Cookies',
     description:
