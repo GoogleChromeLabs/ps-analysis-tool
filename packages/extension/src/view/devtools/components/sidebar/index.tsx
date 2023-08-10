@@ -57,11 +57,12 @@ const Sidebar: React.FC<SidebarProps> = ({
   const keyboardNavigator = useCallback(
     // eslint-disable-next-line complexity
     (event: React.KeyboardEvent<HTMLDivElement>) => {
-      if (!tabFrames) {
-        return;
+      let keys: string[] = [];
+      let currIndex = 0;
+      if (tabFrames) {
+        keys = Object.keys(tabFrames);
+        currIndex = keys.findIndex((frame) => frame === selectedFrame);
       }
-      const keys = Object.keys(tabFrames);
-      const currIndex = keys.findIndex((frame) => frame === selectedFrame);
       switch (event.code) {
         case 'ArrowUp':
           if (accordionState) {

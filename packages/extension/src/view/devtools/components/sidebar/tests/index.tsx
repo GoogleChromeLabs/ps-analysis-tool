@@ -19,6 +19,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import userEvent from '@testing-library/user-event';
 import { type Cookie as ParsedCookie } from 'simple-cookie';
 
 /**
@@ -236,7 +237,7 @@ describe('Sidebar', () => {
     expect(mainFrame).toHaveClass('bg-royal-blue');
   });
 
-  it('should select another menu and close cookie accordion', () => {
+  it('should select another menu and unselect cookie accordion', () => {
     mockUseCookieStore.mockReturnValueOnce({
       cookies: mockResponse.tabCookies,
       tabUrl: mockResponse.tabUrl,
@@ -280,5 +281,604 @@ describe('Sidebar', () => {
     );
     expect(cookieHeaderContainer).not.toHaveClass('bg-royal-blue');
     expect(attributionContainer).toHaveClass('bg-royal-blue');
+  });
+
+  it('should close accordion and deselect the frame.', () => {
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: 'https://edition.cnn.com/',
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    render(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    const accordionOpener = screen.getByTestId('accordion-opener');
+    fireEvent.click(accordionOpener);
+    expect(accordionOpener).not.toHaveClass('-rotate-90');
+
+    fireEvent.click(screen.getByTestId('https://edition.cnn.com/'));
+
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+
+    fireEvent.click(accordionOpener);
+    expect(accordionOpener).toHaveClass('-rotate-90');
+  });
+
+  it('Left Arrow should close accordion', () => {
+    render(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    // Focus on the cookie heading
+    userEvent.tab();
+    // Simulate right arrow key down
+    userEvent.keyboard('{ArrowRight}');
+    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+      '-rotate-90'
+    );
+    // Simulate left arrow key down
+    userEvent.keyboard('{ArrowLeft}');
+    expect(screen.getByTestId('accordion-opener')).toHaveClass('-rotate-90');
+  });
+
+  it('Left Arrow should unselect selected frame and select the Cookies menu', () => {
+    const sidebarRender = render(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    //Should focus on cookies menu
+    userEvent.tab();
+    //Simulate right arrow key down
+    userEvent.keyboard('{ArrowRight}');
+    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+      '-rotate-90'
+    );
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: 'https://edition.cnn.com/',
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    //Simulate down arrow key down
+    userEvent.keyboard('{ArrowDown}');
+    expect(screen.getByTestId('https://edition.cnn.com/')).toHaveClass(
+      'bg-royal-blue'
+    );
+    //Simulate left arrow key down
+    userEvent.keyboard('{ArrowLeft}');
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('https://edition.cnn.com/')).not.toHaveClass(
+      'bg-royal-blue'
+    );
+    expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
+      'bg-royal-blue'
+    );
+  });
+
+  it('Down Arrow should select next frame', () => {
+    const sidebarRender = render(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    //Focus on the cookies menu
+    userEvent.tab();
+    //Simulate right arrow key keydown to open accordion
+    userEvent.keyboard('{ArrowRight}');
+    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+      '-rotate-90'
+    );
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: 'https://edition.cnn.com/',
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    //Simulate down arrow key keydown to select frame
+    userEvent.keyboard('{ArrowDown}');
+    expect(screen.getByTestId('https://edition.cnn.com/')).toHaveClass(
+      'bg-royal-blue'
+    );
+    //Simulate down arrow key keydown to select next frame
+    userEvent.keyboard('{ArrowDown}');
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: 'https://crxt.net/',
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('https://edition.cnn.com/')).not.toHaveClass(
+      'bg-royal-blue'
+    );
+    expect(screen.getByTestId('https://crxt.net/')).toHaveClass(
+      'bg-royal-blue'
+    );
+  });
+
+  it('Up Arrow should select previous frame', () => {
+    const sidebarRender = render(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    //Focus on cookie menu header
+    userEvent.tab();
+    //Simulate right arrow key keydown to simulate accordion opening.
+    userEvent.keyboard('{ArrowRight}');
+    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+      '-rotate-90'
+    );
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: 'https://edition.cnn.com/',
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    //Simulate down arrow key keydown to select first frame
+    userEvent.keyboard('{ArrowDown}');
+    expect(screen.getByTestId('https://edition.cnn.com/')).toHaveClass(
+      'bg-royal-blue'
+    );
+    //Simulate down arrow key keydown to select next frame
+    userEvent.keyboard('{ArrowDown}');
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: 'https://crxt.net/',
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('https://edition.cnn.com/')).not.toHaveClass(
+      'bg-royal-blue'
+    );
+    expect(screen.getByTestId('https://crxt.net/')).toHaveClass(
+      'bg-royal-blue'
+    );
+    //Simulate up arrow key keydown to select previous frame
+    userEvent.keyboard('{ArrowUp}');
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: 'https://edition.cnn.com/',
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('https://edition.cnn.com/')).toHaveClass(
+      'bg-royal-blue'
+    );
+    expect(screen.getByTestId('https://crxt.net/')).not.toHaveClass(
+      'bg-royal-blue'
+    );
+  });
+
+  it('Up Arrow should unselect selected frame and select the Cookies menu', () => {
+    const sidebarRender = render(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    //Focus on cookie menu header
+    userEvent.tab();
+    //Simulate right arrow key keydown to simulate accordion opening.
+    userEvent.keyboard('{ArrowRight}');
+    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+      '-rotate-90'
+    );
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: 'https://edition.cnn.com/',
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    //Simulate down arrow key keydown to select first frame
+    userEvent.keyboard('{ArrowDown}');
+    expect(screen.getByTestId('https://edition.cnn.com/')).toHaveClass(
+      'bg-royal-blue'
+    );
+    //Simulate up arrow key keydown to select cookie menu header
+    userEvent.keyboard('{ArrowUp}');
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('https://edition.cnn.com/')).not.toHaveClass(
+      'bg-royal-blue'
+    );
+    expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
+      'bg-royal-blue'
+    );
+  });
+
+  it('Down Arrow on last frame should select the next main menu tab.', () => {
+    const sidebarRender = render(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    // Focus on cookie header menu and simulate right arrow to open accordion
+    userEvent.tab();
+    userEvent.keyboard('{ArrowRight}');
+    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+      '-rotate-90'
+    );
+
+    fireEvent.click(screen.getByTestId('https://crxt.net/'));
+
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: 'https://crxt.net/',
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('https://crxt.net/')).toHaveClass(
+      'bg-royal-blue'
+    );
+    //Simulate arrow down key to go to Topics menu
+    userEvent.keyboard('{ArrowDown}');
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={1}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('https://crxt.net/')).not.toHaveClass(
+      'bg-royal-blue'
+    );
+    expect(screen.getByTestId('Topics')).toHaveClass('bg-royal-blue');
+  });
+
+  it('Up Arrow on Topics menu should select last frame in accordion.', () => {
+    const sidebarRender = render(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    // Focus on cookie header menu and simulate right arrow to open accordion
+    userEvent.tab();
+    userEvent.keyboard('{ArrowRight}');
+    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+      '-rotate-90'
+    );
+    // Click on Topics tab
+    fireEvent.click(screen.getByTestId('Topics'));
+
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={1}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('Topics')).toHaveClass('bg-royal-blue');
+    //Simulate arrow up to select last frame in the list.
+    userEvent.keyboard('{ArrowUp}');
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: 'https://crxt.net/',
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('https://crxt.net/')).toHaveClass(
+      'bg-royal-blue'
+    );
+    expect(screen.getByTestId('Topics')).not.toHaveClass('bg-royal-blue');
+  });
+
+  it('Up Arrow on Attribution menu should select Topics Menu.', () => {
+    const sidebarRender = render(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    // Focus on cookie header menu and simulate right arrow to open accordion
+    userEvent.tab();
+    userEvent.keyboard('{ArrowRight}');
+    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+      '-rotate-90'
+    );
+    // Click on Attribution tab
+    fireEvent.click(screen.getByTestId('Attribution'));
+
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={2}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('Attribution')).toHaveClass('bg-royal-blue');
+    // Focus on cookie header menu and simulate right arrow to open accordion
+    userEvent.keyboard('{ArrowUp}');
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={1}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('Topics')).toHaveClass('bg-royal-blue');
+    expect(screen.getByTestId('Attribution')).not.toHaveClass('bg-royal-blue');
+  });
+
+  it('Down Arrow on cookies menu with open accordion should select first frame.', () => {
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    const sidebarRender = render(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    // Focus on cookie header menu and simulate right arrow to open accordion
+    userEvent.tab();
+    userEvent.keyboard('{ArrowRight}');
+    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+      '-rotate-90'
+    );
+    //Simulate arrow down key to select first frame.
+    userEvent.keyboard('{ArrowDown}');
+
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: 'https://edition.cnn.com/',
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('https://edition.cnn.com/')).toHaveClass(
+      'bg-royal-blue'
+    );
+  });
+
+  it('Down Arrow on Topics menu should select Attribution Menu.', () => {
+    const sidebarRender = render(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={0}
+        setIndex={() => undefined}
+      />
+    );
+    // Focus on cookie header menu and simulate right arrow to open accordion
+    userEvent.tab();
+    userEvent.keyboard('{ArrowRight}');
+    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+      '-rotate-90'
+    );
+    // Click on Topics tab
+    fireEvent.click(screen.getByTestId('Topics'));
+
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={1}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('Topics')).toHaveClass('bg-royal-blue');
+    // Simulate down arrow to go to next menu.
+    userEvent.keyboard('{ArrowDown}');
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={2}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('Attribution')).toHaveClass('bg-royal-blue');
+    expect(screen.getByTestId('Topics')).not.toHaveClass('bg-royal-blue');
+  });
+
+  it('Down Arrow on Topics menu should select Attribution Menu.', () => {
+    const setIndexMock = jest.fn();
+    const sidebarRender = render(
+      <Sidebar tabsNames={tabNames} selectedIndex={0} setIndex={setIndexMock} />
+    );
+    // Click on accordion opener button.
+    fireEvent.click(screen.getByTestId('accordion-opener'));
+
+    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+      '-rotate-90'
+    );
+    // Click on Topics menu
+    fireEvent.click(screen.getByTestId('Topics'));
+
+    mockUseCookieStore.mockReturnValueOnce({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar
+        tabsNames={tabNames}
+        selectedIndex={1}
+        setIndex={() => undefined}
+      />
+    );
+    expect(screen.getByTestId('Topics')).toHaveClass('bg-royal-blue');
+
+    fireEvent.click(screen.getByTestId('https://crxt.net/'));
+    // Check if setIndex was called.
+    expect(setIndexMock).toHaveBeenCalled();
   });
 });
