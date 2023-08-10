@@ -67,7 +67,7 @@ const CookiesListing = () => {
               bottom: false,
               left: false,
             }}
-            className="overflow-y-scroll overflow-x-hidden"
+            className="overflow-y-scroll overflow-x-hidden pt-5 pl-5"
           >
             <FiltersList />
           </Resizable>

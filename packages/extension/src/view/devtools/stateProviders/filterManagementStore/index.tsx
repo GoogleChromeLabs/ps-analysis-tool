@@ -26,6 +26,7 @@ import React, {
 import type { SelectedFilters, Filter } from './types';
 import { useCookieStore, type CookieTableData } from '../syncCookieStore';
 import getFilters from './utils/getFilters';
+import filterCookies from './utils/filterCookies';
 
 export interface filterManagementStore {
   state: {
@@ -63,34 +64,44 @@ export const Provider = ({ children }: PropsWithChildren) => {
     tabFrames: state.tabFrames,
   }));
 
-  const calculatedCookies = useMemo(() => {
-    const frameFilteredCookies: { [key: string]: CookieTableData } = {};
+  const frameFilteredCookies = useMemo(() => {
+    const _frameFilteredCookies: { [key: string]: CookieTableData } = {};
     if (cookies && selectedFrame && tabFrames && tabFrames[selectedFrame]) {
       Object.entries(cookies).forEach(([key, cookie]) => {
         tabFrames[selectedFrame].frameIds?.forEach((frameId) => {
           if (cookie.frameIdList?.includes(frameId)) {
-            frameFilteredCookies[key] = cookie;
+            _frameFilteredCookies[key] = cookie;
           }
         });
       });
     }
-    return Object.values(frameFilteredCookies);
+    return _frameFilteredCookies;
   }, [cookies, selectedFrame, tabFrames]);
 
+  const filteredCookies = useMemo(() => {
+    return Object.values(
+      filterCookies(frameFilteredCookies, selectedFilters, '')
+    );
+  }, [frameFilteredCookies, selectedFilters]);
+
   useEffect(() => {
-    if (calculatedCookies && calculatedCookies.length) {
-      const updatedFilters = getFilters(calculatedCookies);
+    if (Object.keys(frameFilteredCookies).length !== 0) {
+      const updatedFilters = getFilters(Object.values(frameFilteredCookies));
 
       setFilters(updatedFilters);
     } else {
       setFilters([]);
     }
-  }, [calculatedCookies]);
+  }, [frameFilteredCookies]);
+
+  useEffect(() => {
+    setSelectedFilters({});
+  }, [selectedFrame]);
 
   return (
     <Context.Provider
       value={{
-        state: { selectedFilters, filters, filteredCookies: calculatedCookies },
+        state: { selectedFilters, filters, filteredCookies },
         actions: { setSelectedFilters },
       }}
     >
