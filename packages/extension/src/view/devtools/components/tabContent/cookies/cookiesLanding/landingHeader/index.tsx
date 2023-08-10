@@ -23,6 +23,8 @@ import classNames from 'classnames';
  * Internal dependencies.
  */
 import { CirclePieChart } from '../../../../../../design-system/components';
+import type { CookieStats } from '../../../../../../popup/types';
+import type { CookieStatsComponents } from '../../../../../cookies.types';
 
 interface DataMapping {
   title: string;
@@ -34,8 +36,8 @@ interface DataMapping {
 }
 
 interface LandingHeaderProps {
-  cookieStats: any;
-  cookiesStatsComponents: any;
+  cookieStats: CookieStats;
+  cookiesStatsComponents: CookieStatsComponents;
   isSticky?: boolean;
 }
 

@@ -17,7 +17,7 @@
 /**
  * Internal dependencies.
  */
-import PrepareCookieStatsByCategory from '../prepareCookieStatsByCategory';
+import prepareCookieStatsByCategory from '../prepareCookieStatsByCategory';
 
 const functional1pCookie = {
   parsedCookie: {
@@ -137,10 +137,10 @@ const EMPTY_STATS = {
   },
 };
 
-describe('PrepareCookieStatsByCategory : ', () => {
+describe('prepareCookieStatsByCategory : ', () => {
   it('Gives empty stats with cookies', () => {
     expect(
-      PrepareCookieStatsByCategory({}, 'https://example.com/page')
+      prepareCookieStatsByCategory({}, 'https://example.com/page')
     ).toEqual(EMPTY_STATS);
   });
 
@@ -175,7 +175,7 @@ describe('PrepareCookieStatsByCategory : ', () => {
     };
     //@ts-ignore Missing properties are not requird in the function.
     expect(
-      PrepareCookieStatsByCategory(cookies, 'https://example.com/page')
+      prepareCookieStatsByCategory(cookies, 'https://example.com/page')
     ).toEqual(expectedStats);
   });
 });

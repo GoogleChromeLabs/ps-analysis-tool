@@ -27,7 +27,7 @@ import isFirstParty from './isFirstParty';
  * @param {string} tabUrl Tab URL
  * @returns CookieStats object with the categorized cookies count.
  */
-const PrepareCookieStatsByCategory = (
+const prepareCookieStatsByCategory = (
   cookies: { [key: string]: CookieData } | null,
   tabUrl: string | null
 ) => {
@@ -79,4 +79,4 @@ const PrepareCookieStatsByCategory = (
   return stats;
 };
 
-export default PrepareCookieStatsByCategory;
+export default prepareCookieStatsByCategory;
