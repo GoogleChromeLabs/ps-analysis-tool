@@ -22,6 +22,7 @@ import React, {
   useEffect,
   useState,
   useMemo,
+  useCallback,
 } from 'react';
 import type { SelectedFilters, Filter } from './types';
 import { useCookieStore, type CookieTableData } from '../syncCookieStore';
@@ -35,7 +36,9 @@ export interface filterManagementStore {
     filteredCookies: CookieTableData[];
   };
   actions: {
-    setSelectedFilters: React.Dispatch<React.SetStateAction<SelectedFilters>>;
+    setSelectedFilters: (
+      update: (prevState: SelectedFilters) => SelectedFilters
+    ) => void;
   };
 }
 
@@ -55,8 +58,12 @@ const initialState: filterManagementStore = {
 export const Context = createContext<filterManagementStore>(initialState);
 
 export const Provider = ({ children }: PropsWithChildren) => {
-  const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({});
-  const [filters, setFilters] = useState<Filter[]>([]);
+  const [selectedFrameFilters, setSelectedFrameFilters] = useState<{
+    [frameKey: string]: { selectedFilters: SelectedFilters };
+  }>({});
+  const [filters, setFilters] = useState<{
+    [frameKey: string]: { filters: Filter[] };
+  }>({});
 
   const { cookies, selectedFrame, tabFrames } = useCookieStore(({ state }) => ({
     cookies: state.tabCookies,
@@ -79,35 +86,74 @@ export const Provider = ({ children }: PropsWithChildren) => {
   }, [cookies, selectedFrame, tabFrames]);
 
   const filteredCookies = useMemo(() => {
-    return Object.values(
-      filterCookies(frameFilteredCookies, selectedFilters, '')
-    );
-  }, [frameFilteredCookies, selectedFilters]);
+    if (selectedFrame) {
+      return Object.values(
+        filterCookies(
+          frameFilteredCookies,
+          selectedFrameFilters[selectedFrame]?.selectedFilters || {},
+          ''
+        )
+      );
+    } else {
+      return [];
+    }
+  }, [frameFilteredCookies, selectedFrameFilters, selectedFrame]);
 
   useEffect(() => {
     if (Object.keys(frameFilteredCookies).length !== 0) {
       const updatedFilters = getFilters(Object.values(frameFilteredCookies));
 
-      setFilters(updatedFilters);
+      selectedFrame &&
+        setFilters((prev) => ({
+          ...prev,
+          [selectedFrame]: { filters: updatedFilters },
+        }));
     } else {
-      setFilters([]);
+      selectedFrame &&
+        setFilters((prev) => ({
+          ...prev,
+          [selectedFrame]: { filters: [] },
+        }));
     }
-  }, [frameFilteredCookies]);
+  }, [frameFilteredCookies, selectedFrame]);
 
-  useEffect(() => {
-    setSelectedFilters({});
-  }, [selectedFrame]);
-
-  return (
-    <Context.Provider
-      value={{
-        state: { selectedFilters, filters, filteredCookies },
-        actions: { setSelectedFilters },
-      }}
-    >
-      {children}
-    </Context.Provider>
+  const setSelectedFilters = useCallback(
+    (update: (prevState: SelectedFilters) => SelectedFilters) => {
+      if (selectedFrame) {
+        setSelectedFrameFilters((prev) => ({
+          ...prev,
+          [selectedFrame]: {
+            selectedFilters: update(prev[selectedFrame]?.selectedFilters || {}),
+          },
+        }));
+      }
+    },
+    [selectedFrame]
   );
+
+  const value: filterManagementStore = useMemo(
+    () => ({
+      state: {
+        selectedFilters: selectedFrame
+          ? selectedFrameFilters[selectedFrame]?.selectedFilters || {}
+          : {},
+        filters: selectedFrame ? filters[selectedFrame]?.filters || {} : [],
+        filteredCookies,
+      },
+      actions: {
+        setSelectedFilters,
+      },
+    }),
+    [
+      selectedFrame,
+      selectedFrameFilters,
+      filters,
+      filteredCookies,
+      setSelectedFilters,
+    ]
+  );
+
+  return <Context.Provider value={value}>{children}</Context.Provider>;
 };
 
 export function useFilterManagementStore(): filterManagementStore;

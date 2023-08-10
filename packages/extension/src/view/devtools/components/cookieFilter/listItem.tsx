@@ -32,7 +32,9 @@ import type {
 interface ListItemProps {
   filter: Filter;
   selectedFilters: SelectedFilters;
-  setSelectedFilters: React.Dispatch<React.SetStateAction<SelectedFilters>>;
+  setSelectedFilters: (
+    update: (prevState: SelectedFilters) => SelectedFilters
+  ) => void;
 }
 
 const ListItem: React.FC<ListItemProps> = ({
