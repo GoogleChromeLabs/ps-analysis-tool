@@ -27,9 +27,6 @@ import SinonChrome from 'sinon-chrome';
  */
 import App from '../app';
 import { Provider as ExternalStoreProvider } from '../stateProviders/syncCookieStore';
-// @ts-ignore
-// eslint-disable-next-line import/no-unresolved
-import PSInfo from 'cookie-analysis-tool/data/PSInfo.json';
 
 const tabCookies = {
   _cb: {
@@ -124,7 +121,7 @@ describe('App', () => {
           inspectedWindow: {
             tabId: 40245632,
             //@ts-ignore
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
             eval: (_, callback: any) => {
               callback('https://edition.cnn.com');
             },
@@ -143,26 +140,18 @@ describe('App', () => {
           },
         },
       };
-      globalThis.fetch = function () {
-        return Promise.resolve({
-          json: () =>
-            Promise.resolve({
-              ...PSInfo,
-            }),
-        });
-      } as unknown as typeof fetch;
     });
 
     it('ExternalStoreProvider should be added to DOM', async () => {
-      await act(() =>
+      act(() =>
         render(
           <ExternalStoreProvider>
             <App />
           </ExternalStoreProvider>
         )
       );
-      expect(screen.getByText('1st Party Cookies')).toBeInTheDocument();
-      expect(screen.getByText('3rd Party Cookies')).toBeInTheDocument();
+      expect(await screen.findByText('1st Party Cookies')).toBeInTheDocument();
+      expect(await screen.findByText('3rd Party Cookies')).toBeInTheDocument();
     });
 
     it('Initial render will show please refresh page to see cookies', () => {

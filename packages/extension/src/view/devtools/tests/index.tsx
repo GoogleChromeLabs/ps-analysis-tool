@@ -160,7 +160,7 @@ describe('Index', () => {
         //@ts-ignore
         inspectedWindow: {
           tabId: 40245632,
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
           eval: (_, callback: any) => {
             callback('https://edition.cnn.com');
           },
@@ -185,7 +185,7 @@ describe('Index', () => {
   });
 
   it('Both Providers should be added to DOM', async () => {
-    await act(() =>
+    act(() =>
       render(
         <ExternalStoreProvider>
           <ContentPanelProvider>
@@ -194,13 +194,13 @@ describe('Index', () => {
         </ExternalStoreProvider>
       )
     );
-    expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
-      'bg-royal-blue'
-    );
+    expect(
+      await screen.findByTestId('cookies-tab-heading-wrapper')
+    ).toHaveClass('bg-royal-blue');
   });
 
   it('Content Panel Provider should be added to DOM', async () => {
-    await act(() =>
+    act(() =>
       render(
         <ExternalStoreProvider>
           <ContentPanelProvider>
@@ -209,9 +209,9 @@ describe('Index', () => {
         </ExternalStoreProvider>
       )
     );
-    expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
-      'bg-royal-blue'
-    );
+    expect(
+      await screen.findByTestId('cookies-tab-heading-wrapper')
+    ).toHaveClass('bg-royal-blue');
   });
   afterAll(() => {
     globalThis.chrome = undefined as unknown as typeof chrome;
