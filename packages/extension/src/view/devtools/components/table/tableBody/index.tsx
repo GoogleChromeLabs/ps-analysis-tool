@@ -142,9 +142,7 @@ const TableBody = ({
         {[...Array(emptyRowCellCount)].map((_, index) => (
           <td
             key={index}
-            className={`h-full border border-y-0 border-american-silver px-1 py-px outline-0 ${
-              index === 0 ? 'pl-5' : ''
-            }`}
+            className={`h-full border border-y-0 border-american-silver outline-0 p-0`}
           />
         ))}
       </tr>
