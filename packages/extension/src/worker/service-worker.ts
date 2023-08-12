@@ -169,6 +169,18 @@ chrome.tabs.onRemoved.addListener(async (tabId) => {
 });
 
 /**
+ * Fires when a tab is updated.
+ * @see https://developer.chrome.com/docs/extensions/reference/tabs/#event-onUpdated
+ */
+chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+  await PROMISE_QUEUE.add(async () => {
+    if (changeInfo.status === 'loading' && tab.url) {
+      await CookieStore.removeTabData(tabId.toString());
+    }
+  });
+});
+
+/**
  * Fires when a window is removed (closed).
  * @see https://developer.chrome.com/docs/extensions/reference/windows/#event-onRemoved
  */
