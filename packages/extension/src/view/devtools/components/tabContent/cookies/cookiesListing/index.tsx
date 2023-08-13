@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useState } from 'react';
 import { Resizable } from 're-resizable';
 
 /**
@@ -28,6 +28,7 @@ import CookieTable from './cookieTable';
 import FiltersList from '../../../cookieFilter';
 import { useFilterManagementStore } from '../../../../stateProviders/filterManagementStore';
 import ChipsBar from '../../../cookieFilter/chips';
+import CookieTopBar from '../../../cookieTopBar';
 
 const CookiesListing = () => {
   const { selectedFrame } = useCookieStore(({ state }) => ({
@@ -38,12 +39,21 @@ const CookiesListing = () => {
     ({ state }) => state.filteredCookies
   );
 
+  const [isFilterMenuOpen, setIsFilterMenuOpen] = useState<boolean>(false);
+
+  const toggleFilterMenu = () => {
+    setIsFilterMenuOpen((p) => !p);
+  };
+
   return (
     <div className="w-full h-full flex flex-col">
       <div className="w-full h-7">
+        <CookieTopBar toggleFilterMenu={toggleFilterMenu} />
+      </div>
+      <div className="w-full h-7">
         <ChipsBar />
       </div>
-      <div className="w-full h-[calc(100%-1.75rem)]">
+      <div className="w-full h-[calc(100%-3.5rem)]">
         <div className="h-full flex flex-col">
           <Resizable
             defaultSize={{
@@ -60,23 +70,25 @@ const CookiesListing = () => {
             }}
           >
             <div className="h-full flex">
-              <Resizable
-                defaultSize={{
-                  width: '20%',
-                  height: '100%',
-                }}
-                minWidth="10%"
-                maxWidth="80%"
-                enable={{
-                  top: false,
-                  right: true,
-                  bottom: false,
-                  left: false,
-                }}
-                className="overflow-y-scroll overflow-x-hidden pt-5 pl-5"
-              >
-                <FiltersList />
-              </Resizable>
+              {isFilterMenuOpen && (
+                <Resizable
+                  defaultSize={{
+                    width: '20%',
+                    height: '100%',
+                  }}
+                  minWidth="10%"
+                  maxWidth="80%"
+                  enable={{
+                    top: false,
+                    right: true,
+                    bottom: false,
+                    left: false,
+                  }}
+                  className="overflow-y-scroll overflow-x-hidden pt-5 pl-5"
+                >
+                  <FiltersList />
+                </Resizable>
+              )}
 
               <div className="flex-1">
                 <CookieTable

@@ -34,11 +34,13 @@ export interface filterManagementStore {
     selectedFilters: SelectedFilters;
     filters: Filter[];
     filteredCookies: CookieTableData[];
+    searchTerm: string;
   };
   actions: {
     setSelectedFilters: (
       update: (prevState: SelectedFilters) => SelectedFilters
     ) => void;
+    setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
   };
 }
 
@@ -47,10 +49,14 @@ const initialState: filterManagementStore = {
     selectedFilters: {},
     filters: [],
     filteredCookies: [],
+    searchTerm: '',
   },
   actions: {
     setSelectedFilters: () => {
       //Do nothing
+    },
+    setSearchTerm: () => {
+      //Do Nothing
     },
   },
 };
@@ -64,6 +70,8 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [filters, setFilters] = useState<{
     [frameKey: string]: { filters: Filter[] };
   }>({});
+
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   const { cookies, selectedFrame, tabFrames } = useCookieStore(({ state }) => ({
     cookies: state.tabCookies,
@@ -91,13 +99,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
         filterCookies(
           frameFilteredCookies,
           selectedFrameFilters[selectedFrame]?.selectedFilters || {},
-          ''
+          searchTerm
         )
       );
     } else {
       return [];
     }
-  }, [frameFilteredCookies, selectedFrameFilters, selectedFrame]);
+  }, [selectedFrame, frameFilteredCookies, selectedFrameFilters, searchTerm]);
 
   useEffect(() => {
     if (Object.keys(frameFilteredCookies).length !== 0) {
@@ -139,9 +147,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
           : {},
         filters: selectedFrame ? filters[selectedFrame]?.filters || {} : [],
         filteredCookies,
+        searchTerm,
       },
       actions: {
         setSelectedFilters,
+        setSearchTerm,
       },
     }),
     [
@@ -149,6 +159,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       selectedFrameFilters,
       filters,
       filteredCookies,
+      searchTerm,
       setSelectedFilters,
     ]
   );
