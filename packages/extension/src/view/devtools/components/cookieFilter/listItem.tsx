@@ -22,7 +22,7 @@ import React, { useState } from 'react';
  * Internal dependencies.
  */
 // eslint-disable-next-line import/no-relative-packages
-import ArrowRight from '../../../../../../../third_party/icons/right-arrow.svg';
+import ArrowDown from '../../../../icons/arrow-down.svg';
 import SubList from './subList';
 import type {
   SelectedFilters,
@@ -79,16 +79,16 @@ const ListItem: React.FC<ListItemProps> = ({
   };
 
   return (
-    <li className="mb-4">
+    <li className="py-1">
       <a
         href="#"
         className="flex items-center text-black"
         onClick={toggleSubList}
       >
-        <span className={showSubList ? 'rotate-90' : ''}>
-          <ArrowRight />
+        <span className={showSubList ? '-rotate-90' : ''}>
+          <ArrowDown />
         </span>
-        <p className="text-outer-space">{filter.name}</p>
+        <p className="ml-1">{filter.name}</p>
       </a>
       {showSubList && (
         <>
@@ -101,7 +101,7 @@ const ListItem: React.FC<ListItemProps> = ({
           {Number(filter?.filters?.size) > 4 && (
             <a
               onClick={toggleShowMore}
-              className="text-md text-link ml-2 mt-1 block"
+              className="text-md text-link ml-2 mt-1 block font-bold"
               href="#"
             >
               {isExpanded ? 'Show Less' : 'Show More'}

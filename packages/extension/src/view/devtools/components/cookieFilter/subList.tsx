@@ -52,11 +52,11 @@ const SubList: React.FC<SubListProps> = ({
             index > 3 && !isExpanded ? 'ml-3 mt-1 hidden' : 'ml-3 mt-1'
           }
         >
-          <label className="flex gap-x-2 cursor-pointer">
+          <label className="flex gap-x-2 cursor-pointer items-center">
             <input
               type="checkbox"
               name={filter.keys}
-              className="text-royal-blue"
+              className="text-royal-blue w-3 h-3"
               checked={Boolean(
                 selectedFilters[filter.keys] &&
                   selectedFilters[filter.keys].has(filterValue)
