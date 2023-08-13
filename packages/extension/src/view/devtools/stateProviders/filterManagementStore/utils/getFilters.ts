@@ -18,7 +18,6 @@
  */
 import { FILTER_MAPPING } from '../constants';
 import getFilterValue from './getFilterValue';
-import sortRetentionPeriod from './sortRetentionPeriod';
 import sortStringArray from './sortStringArray';
 import type { Filter } from '../types';
 import type { CookieTableData } from '../../syncCookieStore';
@@ -58,12 +57,6 @@ const getFilters = (cookies: CookieTableData[]): Filter[] => {
 
     if ('boolean' === filterMap?.type && collectedFilters) {
       filters[key].filters = new Set([...collectedFilters].sort().reverse()); // To bring [True, False]
-    }
-
-    if (filterMap?.keys === 'analytics.retention' && collectedFilters) {
-      filters[key].filters = new Set(
-        sortRetentionPeriod([...collectedFilters])
-      );
     }
   });
 

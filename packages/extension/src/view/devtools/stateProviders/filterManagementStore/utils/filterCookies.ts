@@ -45,10 +45,7 @@ const filterCookies = (
       const lowerCaseTerm = searchTerm.toLowerCase();
       return (
         cookieName.toLowerCase().includes(lowerCaseTerm) ||
-        cookieData.parsedCookie.domain
-          ?.toLowerCase()
-          ?.includes(lowerCaseTerm) ||
-        cookieData.analytics?.retention?.toLowerCase()?.includes(lowerCaseTerm)
+        cookieData.parsedCookie.domain?.toLowerCase()?.includes(lowerCaseTerm)
       );
     };
 

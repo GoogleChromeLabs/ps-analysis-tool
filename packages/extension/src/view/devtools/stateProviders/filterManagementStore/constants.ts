@@ -34,10 +34,6 @@ export const FILTER_MAPPING = [
     keys: 'parsedCookie.samesite',
   },
   {
-    name: 'Retention Period',
-    keys: 'analytics.retention',
-  },
-  {
     name: 'Third Party',
     keys: 'thirdParty',
     type: 'boolean',
