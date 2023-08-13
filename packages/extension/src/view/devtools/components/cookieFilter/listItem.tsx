@@ -85,7 +85,7 @@ const ListItem: React.FC<ListItemProps> = ({
         className="flex items-center text-black"
         onClick={toggleSubList}
       >
-        <span className={showSubList ? '-rotate-90' : ''}>
+        <span className={showSubList ? '' : '-rotate-90'}>
           <ArrowDown />
         </span>
         <p className="ml-1">{filter.name}</p>
