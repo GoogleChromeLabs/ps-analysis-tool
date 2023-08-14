@@ -99,7 +99,11 @@ const filterCookies = (
           );
 
           if ('boolean' === filterMap?.type) {
-            value = value ? 'True' : 'False';
+            if (filterMap.keys === 'isFirstParty') {
+              value = !value ? 'True' : 'False';
+            } else {
+              value = value ? 'True' : 'False';
+            }
           }
 
           if (!value && filterMap?.default) {

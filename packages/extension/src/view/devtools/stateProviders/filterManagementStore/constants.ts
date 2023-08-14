@@ -35,7 +35,7 @@ export const FILTER_MAPPING = [
   },
   {
     name: 'Third Party',
-    keys: 'thirdParty',
+    keys: 'isFirstParty',
     type: 'boolean',
   },
   {
