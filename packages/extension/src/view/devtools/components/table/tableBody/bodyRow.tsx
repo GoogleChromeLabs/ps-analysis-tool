@@ -30,8 +30,9 @@ import BodyCell from './bodyCell';
 interface BodyRowProps {
   row: Row<TableData>;
   index: number;
+  isRowFocused: boolean;
   selectedKey: string | undefined | null;
-  onRowClick: (key: TableData) => void;
+  onRowClick: () => void;
   onKeyDown: (
     e: React.KeyboardEvent<HTMLTableRowElement>,
     row: Row<TableData>
@@ -42,6 +43,7 @@ const BodyRow = ({
   row,
   index,
   selectedKey,
+  isRowFocused,
   onRowClick,
   onKeyDown,
 }: BodyRowProps) => {
@@ -56,12 +58,14 @@ const BodyRow = ({
             : 'bg-white dark:bg-raisin-black'),
         {
           'bg-gainsboro dark:bg-outer-space':
-            row.original.parsedCookie.name === selectedKey,
+            row.original.parsedCookie.name === selectedKey && isRowFocused,
+        },
+        {
+          'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver':
+            row.original.parsedCookie.name === selectedKey && !isRowFocused,
         }
       )}
-      onClick={() => {
-        onRowClick(row.original);
-      }}
+      onClick={onRowClick}
       onKeyDown={(e) => onKeyDown(e, row)}
       data-testid="body-row"
     >

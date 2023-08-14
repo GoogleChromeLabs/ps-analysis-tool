@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import type { Table as ReactTable } from '@tanstack/react-table';
 
 /**
@@ -42,6 +42,15 @@ const Table = ({ table, selectedKey, onRowClick }: TableProps) => {
     x: 0,
     y: 0,
   });
+  const [isRowFocused, setIsRowFocused] = useState(false);
+
+  useEffect(() => {
+    if (selectedKey === undefined) {
+      setIsRowFocused(false);
+    } else {
+      setIsRowFocused(true);
+    }
+  }, [selectedKey]);
 
   const handleRightClick = useCallback(
     (e: React.MouseEvent<HTMLElement>) => {
@@ -65,9 +74,12 @@ const Table = ({ table, selectedKey, onRowClick }: TableProps) => {
           headerGroups={table.getHeaderGroups()}
           setColumnPosition={setColumnPosition}
           onRightClick={handleRightClick}
+          setIsRowFocused={setIsRowFocused}
         />
         <TableBody
           rows={table.getRowModel().rows}
+          isRowFocused={isRowFocused}
+          setIsRowFocused={setIsRowFocused}
           selectedKey={selectedKey}
           onRowClick={onRowClick}
           emptyRowCellCount={table.getHeaderGroups()[0].headers.length}

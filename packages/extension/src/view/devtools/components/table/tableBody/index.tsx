@@ -29,6 +29,8 @@ import type { TableData } from '..';
 
 interface TableBodyProps {
   rows: Row<TableData>[];
+  isRowFocused: boolean;
+  setIsRowFocused: (state: boolean) => void;
   selectedKey: string | undefined | null;
   onRowClick: (key: TableData | null) => void;
   emptyRowCellCount: number;
@@ -36,6 +38,8 @@ interface TableBodyProps {
 
 const TableBody = ({
   rows,
+  isRowFocused,
+  setIsRowFocused,
   selectedKey,
   onRowClick,
   emptyRowCellCount,
@@ -109,7 +113,11 @@ const TableBody = ({
           index={index}
           row={row}
           selectedKey={selectedKey}
-          onRowClick={onRowClick}
+          isRowFocused={isRowFocused}
+          onRowClick={() => {
+            onRowClick(row.original);
+            setIsRowFocused(true);
+          }}
           onKeyDown={handleKeyDown}
         />
       ))}
@@ -117,17 +125,23 @@ const TableBody = ({
         className={classNames(
           'h-5 outline-0',
           {
-            'bg-gainsboro dark:bg-outer-space': selectedKey === null,
+            'bg-gainsboro dark:bg-outer-space':
+              selectedKey === null && isRowFocused,
           },
           selectedKey !== null &&
             (rows.length % 2
               ? 'bg-anti-flash-white dark:bg-charleston-green'
-              : 'bg-white dark:bg-raisin-black')
+              : 'bg-white dark:bg-raisin-black'),
+          {
+            'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver':
+              !isRowFocused && selectedKey === null,
+          }
         )}
         data-testid="empty-row"
         tabIndex={0}
         onClick={() => {
           onRowClick(null);
+          setIsRowFocused(true);
         }}
         onKeyDown={handleEmptyRowKeyDown}
       >
@@ -140,7 +154,12 @@ const TableBody = ({
           />
         ))}
       </tr>
-      <tr className="h-full outline-0">
+      <tr
+        className="h-full outline-0"
+        onClick={() => {
+          setIsRowFocused(false);
+        }}
+      >
         {[...Array(emptyRowCellCount)].map((_, index) => (
           <td
             key={index}
