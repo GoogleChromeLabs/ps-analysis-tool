@@ -49,3 +49,15 @@ export const FILTER_MAPPING = [
     type: 'boolean',
   },
 ];
+
+export const RETENTION_PERIOD_FILTER = {
+  name: 'Retention Period',
+  keys: 'retentionPeriod',
+  filters: new Set([
+    'Session',
+    'less than a day',
+    'a day to a week',
+    'a week to a month',
+    'more than a month',
+  ]),
+};

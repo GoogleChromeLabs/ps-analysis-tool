@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import { FILTER_MAPPING } from '../constants';
+import { FILTER_MAPPING, RETENTION_PERIOD_FILTER } from '../constants';
 import getFilterValue from './getFilterValue';
 import sortStringArray from './sortStringArray';
 import type { Filter } from '../types';
@@ -59,6 +59,8 @@ const getFilters = (cookies: CookieTableData[]): Filter[] => {
       filters[key].filters = new Set([...collectedFilters].sort().reverse()); // To bring [True, False]
     }
   });
+
+  filters.push(RETENTION_PERIOD_FILTER);
 
   return filters;
 };

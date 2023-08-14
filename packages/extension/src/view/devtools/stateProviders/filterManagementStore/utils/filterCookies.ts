@@ -18,7 +18,7 @@
  */
 import type { SelectedFilters } from '../types';
 import type { CookieTableData } from '../../syncCookieStore';
-import { FILTER_MAPPING } from '../constants';
+import { FILTER_MAPPING, RETENTION_PERIOD_FILTER } from '../constants';
 import getFilterValue from './getFilterValue';
 
 const filterCookies = (
@@ -51,19 +51,63 @@ const filterCookies = (
 
     if (Object.keys(selectedFilters).length) {
       Object.entries(selectedFilters).forEach(([keys, selectedFilter]) => {
-        let value = getFilterValue(keys, cookieData);
+        if (keys === RETENTION_PERIOD_FILTER.keys) {
+          selectedFilter.forEach((retentionFilter) => {
+            if (canShow) {
+              return;
+            }
+            switch (retentionFilter) {
+              case 'Session':
+                canShow = cookieData.parsedCookie.expires === 0;
+                break;
+              case 'less than a day':
+                if (typeof cookieData.parsedCookie.expires === 'string') {
+                  const diff =
+                    Date.parse(cookieData.parsedCookie.expires) - Date.now();
+                  canShow = diff < 86400000;
+                }
+                break;
+              case 'a day to a week':
+                if (typeof cookieData.parsedCookie.expires === 'string') {
+                  const diff =
+                    Date.parse(cookieData.parsedCookie.expires) - Date.now();
+                  canShow = diff >= 86400000 && diff < 604800000;
+                }
+                break;
+              case 'a week to a month':
+                if (typeof cookieData.parsedCookie.expires === 'string') {
+                  const diff =
+                    Date.parse(cookieData.parsedCookie.expires) - Date.now();
+                  canShow = diff >= 604800000 && diff < 2629743833;
+                }
+                break;
+              case 'more than a month':
+                if (typeof cookieData.parsedCookie.expires === 'string') {
+                  const diff =
+                    Date.parse(cookieData.parsedCookie.expires) - Date.now();
+                  canShow = diff >= 2629743833;
+                }
+                break;
+              default:
+            }
+          });
+        } else {
+          let value = getFilterValue(keys, cookieData);
 
-        const filterMap = FILTER_MAPPING.find((config) => config.keys === keys);
+          const filterMap = FILTER_MAPPING.find(
+            (config) => config.keys === keys
+          );
 
-        if ('boolean' === filterMap?.type) {
-          value = value ? 'True' : 'False';
+          if ('boolean' === filterMap?.type) {
+            value = value ? 'True' : 'False';
+          }
+
+          if (!value && filterMap?.default) {
+            value = filterMap.default;
+          }
+
+          canShow = selectedFilter?.has(value);
         }
-
-        if (!value && filterMap?.default) {
-          value = filterMap.default;
-        }
-
-        canShow = selectedFilter?.has(value);
       });
 
       if (canShow) {
