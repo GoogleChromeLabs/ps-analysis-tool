@@ -149,7 +149,7 @@ const App: React.FC = () => {
           {'Inspect cookies in the "Privacy Sandbox" panel of DevTools'}
         </p>
         <p className="text-xxxs mt-4">
-          *Please disable ad/cookie blocking extensions for best results.
+          *Please disable ad/cookie blocking extensions for best results
         </p>
       </div>
     </div>

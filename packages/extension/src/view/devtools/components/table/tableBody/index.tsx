@@ -117,10 +117,15 @@ const TableBody = ({
         className={classNames(
           'h-5 outline-0',
           {
-            'bg-gainsboro': selectedKey === null,
+            'bg-gainsboro dark:bg-outer-space': selectedKey === null,
           },
+          selectedKey !== null &&
+            (rows.length % 2
+              ? 'bg-anti-flash-white dark:bg-raisin-black'
+              : 'bg-white dark:bg-charleston-green'),
           {
-            'bg-anti-flash-white': rows.length % 2,
+            'bg-white dark:bg-raisin-black':
+              !rows.length && selectedKey !== null,
           }
         )}
         tabIndex={0}
@@ -132,7 +137,7 @@ const TableBody = ({
         {[...Array(emptyRowCellCount)].map((_, index) => (
           <td
             key={index}
-            className={`border border-y-0 border-american-silver px-1 py-px outline-0 ${
+            className={`border border-y-0 border-american-silver dark:border-quartz px-1 py-px outline-0 ${
               index === 0 ? 'pl-5' : ''
             }`}
           />
@@ -142,7 +147,7 @@ const TableBody = ({
         {[...Array(emptyRowCellCount)].map((_, index) => (
           <td
             key={index}
-            className={`h-full border border-y-0 border-american-silver outline-0 p-0`}
+            className="h-full border border-y-0 border-american-silver dark:border-quartz outline-0 p-0"
           />
         ))}
       </tr>

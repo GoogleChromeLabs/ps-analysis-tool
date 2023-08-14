@@ -34,7 +34,7 @@ const BodyCell = ({ cell }: BodyCellProps) => {
     <td
       tabIndex={0}
       style={{ maxWidth: cell.column.getSize() }}
-      className={`outline-0 border border-y-0 px-1 py-px truncate border-american-silver h-5 text-xs cursor-default ${
+      className={`outline-0 border border-y-0 px-1 py-px truncate border-american-silver dark:border-quartz h-5 text-xs dark:text-bright-gray cursor-default ${
         cell.column.columnDef.header === 'Name' ? 'pl-5' : ''
       }`}
     >

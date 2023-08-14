@@ -176,7 +176,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                 {selectedIndex === index ? <FileWhite /> : <File />}
               </div>
               <div className="block">
-                <span className="pl-2.5">{name}</span>
+                <span className="pl-2.5 dark:text-bright-gray">{name}</span>
               </div>
             </div>
           )}

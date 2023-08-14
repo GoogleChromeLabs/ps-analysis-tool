@@ -37,7 +37,7 @@ const CookieDetails = () => {
         <Details selectedCookie={selectedCookie} />
       ) : (
         <div className="h-full p-8 flex items-center">
-          <p className="text-lg w-full font-bold text-granite-gray text-center">
+          <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">
             Select cookies to preview its value
           </p>
         </div>

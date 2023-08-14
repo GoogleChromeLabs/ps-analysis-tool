@@ -19,6 +19,7 @@
  */
 import React from 'react';
 import { type Row } from '@tanstack/react-table';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -47,9 +48,17 @@ const BodyRow = ({
   return (
     <tr
       id={row.id}
-      className={`${index % 2 ? 'bg-anti-flash-white' : ''} ${
-        row.original.parsedCookie.name === selectedKey ? 'bg-gainsboro' : ''
-      } outline-0`}
+      className={classNames(
+        'outline-0',
+        row.original.parsedCookie.name !== selectedKey &&
+          (index % 2
+            ? 'bg-anti-flash-white dark:bg-raisin-black'
+            : 'bg-white dark:bg-charleston-green'),
+        {
+          'bg-gainsboro dark:bg-outer-space':
+            row.original.parsedCookie.name === selectedKey,
+        }
+      )}
       onClick={() => {
         onRowClick(row.original);
       }}

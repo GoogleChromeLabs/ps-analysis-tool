@@ -47,12 +47,14 @@ const InfoCard = ({ infoKey }: InfoCardProps) => {
   return (
     <>
       {Object.keys(PSInfo).length ? (
-        <div className="max-w-2xl bg-white m-3">
-          <div className="p-6 border border-gray-200 rounded-lg shadow">
-            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
+        <div className="max-w-2xl m-3">
+          <div className="p-6 dark:bg-davys-grey border border-gray-200 dark:border-quartz rounded-lg shadow">
+            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-bright-gray">
               {PSInfo.name}
             </h5>
-            <p className="mb-3 text-gray-700">{PSInfo.description}</p>
+            <p className="mb-3 text-gray-700 dark:text-bright-gray">
+              {PSInfo.description}
+            </p>
             <LearnMoreDropdown PSInfo={PSInfo} />
           </div>
         </div>
