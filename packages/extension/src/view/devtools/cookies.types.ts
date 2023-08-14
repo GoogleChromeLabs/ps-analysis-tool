@@ -36,6 +36,7 @@ export interface CookieStatsComponents {
     label: string;
     count: number;
     color: string;
+    textColorClass: string;
   }[];
   firstParty: {
     count: number;

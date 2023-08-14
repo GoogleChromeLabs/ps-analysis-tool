@@ -27,7 +27,7 @@ import Circle from '../circle';
 interface MatrixComponentProps {
   color: string;
   title: string;
-  description: string;
+  description?: string;
   count: number;
   isExpanded?: boolean;
   textClassName: string;
@@ -37,7 +37,7 @@ interface MatrixComponentProps {
 const MatrixComponent = ({
   color,
   title,
-  description,
+  description = '',
   count,
   isExpanded = false,
   textClassName,

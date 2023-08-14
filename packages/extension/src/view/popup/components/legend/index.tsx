@@ -17,25 +17,39 @@
  * External dependencies.
  */
 import React from 'react';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
  */
-import { Circle } from '../../../design-system/components';
+import { MatrixComponent } from '../../../design-system/components';
 
 interface LegendProps {
-  legendItemList: { label: string; count: number; color: string }[];
+  legendItemList: {
+    label: string;
+    count: number;
+    color: string;
+    textColorClass: string;
+  }[];
 }
 
 const Legend = ({ legendItemList }: LegendProps) => {
   return (
-    <div className="flex flex-col">
-      {legendItemList.map(({ label, count, color }, index) => (
-        <div key={index} className="w-36 flex items-center justify-center my-1">
-          <Circle color={color} />
-          <p className="flex-1 text-chart-label text-xs ml-2">{label}</p>
-          <p className="text-chart-label text-xs">{count}</p>
-        </div>
+    <div className="grid grid-cols-2 gap-x-5">
+      {legendItemList.map(({ label, count, color, textColorClass }, index) => (
+        <MatrixComponent
+          key={index}
+          color={color}
+          title={label}
+          count={count}
+          textClassName={`${textColorClass} text-sm`}
+          containerClasses={classNames(
+            'border-bright-gray border-t pt-2 mb-1',
+            {
+              'border-b pb-1': [2, 3].includes(index),
+            }
+          )}
+        />
       ))}
     </div>
   );

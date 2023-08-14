@@ -27,8 +27,18 @@ import Legend from '..';
 
 describe('Legend', () => {
   const testData = [
-    { label: 'Functional', count: 10, color: 'red' },
-    { label: 'Marketing', count: 20, color: 'blue' },
+    {
+      label: 'Functional',
+      count: 10,
+      color: 'red',
+      textColorClass: 'text-fuctional',
+    },
+    {
+      label: 'Marketing',
+      count: 20,
+      color: 'blue',
+      textColorClass: 'text-marketing',
+    },
   ];
 
   it('renders the correct label and count for each legend item', () => {

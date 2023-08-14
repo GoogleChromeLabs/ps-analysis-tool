@@ -35,10 +35,30 @@ export default meta;
 export const Primary: StoryObj<typeof meta> = {
   args: {
     legendItemList: [
-      { label: 'Functional', count: 10, color: COLOR_MAP.functional },
-      { label: 'Marketing', count: 20, color: COLOR_MAP.marketing },
-      { label: 'Analytics', count: 22, color: COLOR_MAP.analytics },
-      { label: 'Uncategorized', count: 11, color: COLOR_MAP.uncategorized },
+      {
+        label: 'Functional',
+        count: 10,
+        color: COLOR_MAP.functional,
+        textColorClass: 'text-fuctional',
+      },
+      {
+        label: 'Marketing',
+        count: 20,
+        color: COLOR_MAP.marketing,
+        textColorClass: 'text-marketing',
+      },
+      {
+        label: 'Analytics',
+        count: 22,
+        color: COLOR_MAP.analytics,
+        textColorClass: 'text-analytics',
+      },
+      {
+        label: 'Uncategorized',
+        count: 11,
+        color: COLOR_MAP.uncategorized,
+        textColorClass: 'text-uncategorized',
+      },
     ],
   },
 };

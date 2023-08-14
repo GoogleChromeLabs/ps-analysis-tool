@@ -35,7 +35,7 @@ const App: React.FC = () => {
 
   if (!cookieStats) {
     return (
-      <div className="w-96 h-80 flex justify-center items-center flex-col">
+      <div className="w-96 h-fit p-5 flex justify-center items-center flex-col">
         <p className="font-bold text-lg">
           Please refresh this page to view cookies
         </p>
@@ -48,7 +48,7 @@ const App: React.FC = () => {
     cookieStats.thirdParty.total === 0
   ) {
     return (
-      <div className="w-96 h-80 flex justify-center items-center flex-col">
+      <div className="w-96 h-fit p-5 flex justify-center items-center flex-col">
         <p className="font-bold text-lg">No cookies found on this page</p>
       </div>
     );
@@ -57,31 +57,27 @@ const App: React.FC = () => {
   const statsComponents = prepareCookieStatsComponents(cookieStats);
 
   return (
-    <div className="w-96 h-80 flex justify-center items-center flex-col">
-      <div className="w-full flex-1 flex gap-16 px-12">
-        <div className="w-full h-full flex flex-col justify-center items-center">
-          <div className="w-full text-center">
-            <CirclePieChart
-              centerCount={cookieStats.firstParty.total}
-              data={statsComponents.firstParty}
-              title="1st Party Cookies"
-            />
-          </div>
+    <div className="w-96 h-fit p-5 flex justify-center items-center flex-col">
+      <div className="w-full flex gap-x-6 justify-center">
+        <div className="w-28 text-center">
+          <CirclePieChart
+            centerCount={cookieStats.firstParty.total}
+            data={statsComponents.firstParty}
+            title="1st Party Cookies"
+          />
         </div>
-        <div className="w-full h-full flex flex-col justify-center items-center">
-          <div className="w-full text-center">
-            <CirclePieChart
-              centerCount={cookieStats.thirdParty.total}
-              data={statsComponents.thirdParty}
-              title="3rd Party Cookies"
-            />
-          </div>
+        <div className="w-28 text-center">
+          <CirclePieChart
+            centerCount={cookieStats.thirdParty.total}
+            data={statsComponents.thirdParty}
+            title="3rd Party Cookies"
+          />
         </div>
       </div>
-      <div className="mt-3">
+      <div className="w-full mt-8 mb-5">
         <Legend legendItemList={statsComponents.legend} />
       </div>
-      <div className="w-full text-center mt-5 px-3 mb-3">
+      <div className="w-full text-center mt-2">
         <p className="text-chart-label text-xs">
           {'Inspect cookies in the "Privacy Sandbox" panel of DevTools'}
         </p>

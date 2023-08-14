@@ -30,18 +30,21 @@ export const prepareCookieStatsComponents = (
         count:
           cookieStats.firstParty.functional + cookieStats.thirdParty.functional,
         color: COLOR_MAP.functional,
+        textColorClass: 'text-functional',
       },
       {
         label: 'Marketing',
         count:
           cookieStats.firstParty.marketing + cookieStats.thirdParty.marketing,
         color: COLOR_MAP.marketing,
+        textColorClass: 'text-marketing',
       },
       {
         label: 'Analytics',
         count:
           cookieStats.firstParty.analytics + cookieStats.thirdParty.analytics,
         color: COLOR_MAP.analytics,
+        textColorClass: 'text-analytics',
       },
       {
         label: 'Uncategorized',
@@ -49,6 +52,7 @@ export const prepareCookieStatsComponents = (
           cookieStats.firstParty.uncategorized +
           cookieStats.thirdParty.uncategorized,
         color: COLOR_MAP.uncategorized,
+        textColorClass: 'text-uncategorized',
       },
     ],
     firstParty: [
