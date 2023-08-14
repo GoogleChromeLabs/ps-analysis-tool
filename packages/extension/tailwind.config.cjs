@@ -72,6 +72,7 @@ module.exports = {
       'davys-grey': '#5D5D5D99',
       'outer-space-crayola': '#303942',
       'outer-space': '#454545',
+      'medium-persian-blue': '#0E639C',
     },
     borderColor: {
       ...colors,

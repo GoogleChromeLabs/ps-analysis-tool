@@ -70,7 +70,7 @@ const Accordion: React.FC<AccordionProps> = ({
         className={classNames(
           'flex h-full flex-row items-center pl-3 py-0.5 outline-0 dark:text-bright-gray',
           {
-            'bg-royal-blue text-white dark:text-chinese-silver':
+            'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver':
               selectedIndex === index && !selectedFrame,
           }
         )}
@@ -120,7 +120,7 @@ const Accordion: React.FC<AccordionProps> = ({
               className={classNames(
                 'pl-9 py-0.5 h-5 flex items-center cursor-default outline-0 dark:text-bright-gray',
                 {
-                  'bg-royal-blue text-white dark:text-chinese-silver':
+                  'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver':
                     selectedFrame === key,
                 }
               )}
