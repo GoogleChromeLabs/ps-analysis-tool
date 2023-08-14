@@ -33,7 +33,15 @@ import PSInfo from 'cookie-analysis-tool/data/PSInfo.json';
 
 describe('App', () => {
   beforeAll(() => {
-    globalThis.chrome = SinonChrome as unknown as typeof chrome;
+    globalThis.chrome = {
+      ...SinonChrome,
+      devtools: {
+        // @ts-ignore
+        panels: {
+          themeName: 'dark',
+        },
+      },
+    };
 
     globalThis.fetch = function () {
       return Promise.resolve({

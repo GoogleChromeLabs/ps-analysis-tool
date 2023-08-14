@@ -165,6 +165,10 @@ describe('Index', () => {
             callback('https://edition.cnn.com');
           },
         },
+        //@ts-ignore
+        panels: {
+          themeName: 'dark',
+        },
       },
       tabs: {
         //@ts-ignore
