@@ -28,6 +28,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
 import type { Meta, StoryObj } from '@storybook/react';
 
 /**
@@ -44,10 +47,4 @@ export default meta;
 
 export const Primary: StoryObj<typeof meta> = {
   args: {},
-};
-
-export const Sticky: StoryObj<typeof meta> = {
-  args: {
-    isSticky: true,
-  },
 };

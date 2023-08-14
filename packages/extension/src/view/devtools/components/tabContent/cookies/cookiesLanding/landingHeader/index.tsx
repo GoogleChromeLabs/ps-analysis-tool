@@ -17,7 +17,6 @@
  * External dependencies.
  */
 import React from 'react';
-import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -38,13 +37,11 @@ interface DataMapping {
 interface LandingHeaderProps {
   cookieStats: CookieStats;
   cookiesStatsComponents: CookieStatsComponents;
-  isSticky?: boolean;
 }
 
 const LandingHeader = ({
   cookieStats,
   cookiesStatsComponents,
-  isSticky = false,
 }: LandingHeaderProps) => {
   const dataMapping: DataMapping[] = [
     {
@@ -64,33 +61,16 @@ const LandingHeader = ({
     },
   ];
 
-  const containerClassNames = classNames(
-    'flex justify-center border-b border-hex-gray',
-    {
-      'pt-5 pb-[20px]': !isSticky,
-      'py-4': isSticky,
-    }
-  );
-  const wrapperClassNames = classNames('flex', {
-    'gap-[35px]': !isSticky,
-    'gap-[15px]': isSticky,
-  });
-  const circleContainerClassNames = classNames('text-center', {
-    'w-16': !isSticky,
-    'w-8': isSticky,
-  });
-
   return (
-    <div className={containerClassNames}>
-      <div className={wrapperClassNames}>
+    <div className="flex justify-center border-b border-hex-gray pt-5 pb-5">
+      <div className="flex gap-9">
         {dataMapping.map((circleData, index) => {
           return (
-            <div key={index} className={circleContainerClassNames}>
+            <div key={index} className="text-center w-16">
               <CirclePieChart
-                title={!isSticky ? circleData.title : ''}
+                title={circleData.title}
                 centerCount={circleData.count}
                 data={circleData.data}
-                isPrimary={!isSticky}
               />
             </div>
           );
