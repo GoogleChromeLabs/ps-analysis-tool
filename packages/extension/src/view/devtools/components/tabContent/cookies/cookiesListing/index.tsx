@@ -58,7 +58,7 @@ const CookiesListing = () => {
           height: '80%',
         }}
         minHeight="6%"
-        maxHeight="98%"
+        maxHeight="95%"
         enable={{
           top: false,
           right: false,
