@@ -40,7 +40,7 @@ const Details = ({ selectedCookie }: DetailsProps) => {
             data-testid="show-url-decoded-checkbox"
             role="checkbox"
             type="checkbox"
-            className="ml-3 mr-1 cursor-pointer"
+            className="ml-3 mr-1 cursor-pointer dark:accent-orange-400"
             checked={showUrlDecoded}
             onChange={() => setShowUrlDecoded(!showUrlDecoded)}
           />
