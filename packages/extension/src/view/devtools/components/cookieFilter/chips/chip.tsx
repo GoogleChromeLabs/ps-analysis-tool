@@ -70,13 +70,13 @@ const Chip: React.FC<ChipProps> = ({
   }
 
   return (
-    <div className="flex items-center px-2 py-[1px] rounded-sm bg-[#DADCE0] mx-1">
+    <div className="flex items-center px-2 rounded-sm bg-[#DADCE0] mx-1 h-4">
       <span className="block whitespace-nowrap text-[#323941]">{label}</span>
       <button
         onClick={handleOnClick}
-        className="text-gray-600 hover:text-gray-800 focus:outline-none ml-1"
+        className="w-[6px] h-[6px] text-gray-600 hover:text-gray-800 focus:outline-none ml-1"
       >
-        <CrossIcon />
+        <CrossIcon className="text-[#AFB0B1]" />
       </button>
     </div>
   );
