@@ -52,7 +52,7 @@ const CookieSearch = ({ toggleFilterMenu }: CookieSearchProps) => {
       </button>
       <input
         type="search"
-        className="h-5 w-80 mx-2 p-2 outline-offset-2"
+        className="h-5 w-80 mx-2 p-2 outline-none border-[1px] border-[#DADCE0] focus:border-royal-blue"
         placeholder="Search"
         value={searchTerm}
         onInput={handleInput}

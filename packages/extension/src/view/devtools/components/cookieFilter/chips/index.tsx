@@ -44,15 +44,16 @@ const ChipsBar: React.FC = () => {
   };
 
   return (
-    <div className="w-full h-full py-1 px-2 flex items-center overflow-y-scrol bg-anti-flash-white border-b border-gray-300">
+    <div className="w-full h-full py-1 px-2 flex items-center overflow-x-scroll no-scrollbar bg-anti-flash-white border-b border-gray-300">
       {selectedFilterCount > 1 && (
         <a
           href="#"
-          className="min-w-[46px] text-link mr-3 text-xs flex"
+          className="min-w-[66px] h-full flex items-center text-link text-xs whitespace-nowrap"
           onClick={clearAll}
         >
           <ClearIcon />
-          <span className="ml-1">Clear all</span>
+          <span className="mx-1">Clear all</span>
+          <div className="w-[2px] bg-[#DADCE0] h-[20px]"></div>
         </a>
       )}
       <ChipList />

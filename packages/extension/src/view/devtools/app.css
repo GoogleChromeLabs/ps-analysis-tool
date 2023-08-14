@@ -1,8 +1,23 @@
 @tailwind base;
-@layer base {
-    body {
-        @apply font-sans;
+
+@layer utilities {
+  @variants responsive {
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
     }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+    }
+  }
+}
+@layer base {
+  body {
+    @apply font-sans;
+  }
 }
 @tailwind components;
 @tailwind utilities;
