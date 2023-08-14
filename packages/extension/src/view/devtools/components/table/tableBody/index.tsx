@@ -128,6 +128,7 @@ const TableBody = ({
               !rows.length && selectedKey !== null,
           }
         )}
+        data-testid="empty-row"
         tabIndex={0}
         onClick={() => {
           onRowClick(null);
