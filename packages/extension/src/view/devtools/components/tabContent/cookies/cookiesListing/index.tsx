@@ -48,7 +48,10 @@ const CookiesListing = () => {
   return (
     <div className="w-full h-full flex flex-col">
       <div className="w-full h-[25px]">
-        <CookieTopBar toggleFilterMenu={toggleFilterMenu} />
+        <CookieTopBar
+          isFilterMenuOpen={isFilterMenuOpen}
+          toggleFilterMenu={toggleFilterMenu}
+        />
       </div>
       <div className="w-full h-[25px]">
         <ChipsBar />

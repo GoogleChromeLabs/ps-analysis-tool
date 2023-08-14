@@ -24,13 +24,19 @@ import React, { useCallback } from 'react';
 
 // eslint-disable-next-line import/no-relative-packages
 import FilterIcon from '../../../../../../../third_party/icons/filter-icon.svg';
+// eslint-disable-next-line import/no-relative-packages
+import CrossIcon from '../../../../../../../third_party/icons/cross-icon.svg';
 import { useFilterManagementStore } from '../../stateProviders/filterManagementStore';
 
 interface CookieSearchProps {
+  isFilterMenuOpen: boolean;
   toggleFilterMenu: () => void;
 }
 
-const CookieSearch = ({ toggleFilterMenu }: CookieSearchProps) => {
+const CookieSearch = ({
+  isFilterMenuOpen,
+  toggleFilterMenu,
+}: CookieSearchProps) => {
   const { searchTerm, setSearchTerm } = useFilterManagementStore(
     ({ state, actions }) => ({
       searchTerm: state.searchTerm,
@@ -47,8 +53,14 @@ const CookieSearch = ({ toggleFilterMenu }: CookieSearchProps) => {
 
   return (
     <div className="w-full h-full px-2 flex items-center border-b border-american-silver bg-anti-flash-white">
-      <button className="w-3 h-3" onClick={toggleFilterMenu}>
-        <FilterIcon />
+      <button
+        className="w-3 h-3"
+        onClick={toggleFilterMenu}
+        title="Open filter options"
+      >
+        <FilterIcon
+          className={isFilterMenuOpen ? 'text-royal-blue' : 'text-[#AFB0B1]'}
+        />
       </button>
       <input
         type="search"
@@ -57,6 +69,15 @@ const CookieSearch = ({ toggleFilterMenu }: CookieSearchProps) => {
         value={searchTerm}
         onInput={handleInput}
       />
+      <button
+        onClick={() => {
+          setSearchTerm('');
+        }}
+        className="w-3 h-3"
+        title="Clear Search"
+      >
+        <CrossIcon className="text-[#AFB0B1]" />
+      </button>
     </div>
   );
 };

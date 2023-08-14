@@ -52,6 +52,7 @@ module.exports = {
       'outer-space': '#303942',
       'raisin-black': '#212121',
       gray: '#6E6E6E',
+      'royal-blue': '#3871E0',
     },
     backgroundColor: {
       ...colors,
