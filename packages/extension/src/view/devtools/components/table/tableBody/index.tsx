@@ -121,12 +121,8 @@ const TableBody = ({
           },
           selectedKey !== null &&
             (rows.length % 2
-              ? 'bg-anti-flash-white dark:bg-raisin-black'
-              : 'bg-white dark:bg-charleston-green'),
-          {
-            'bg-white dark:bg-raisin-black':
-              !rows.length && selectedKey !== null,
-          }
+              ? 'bg-anti-flash-white dark:bg-charleston-green'
+              : 'bg-white dark:bg-raisin-black')
         )}
         data-testid="empty-row"
         tabIndex={0}
