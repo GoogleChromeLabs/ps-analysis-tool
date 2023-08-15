@@ -121,10 +121,10 @@ const CookiesMatrix = ({
     <div className="w-full">
       <div>
         <div className="flex gap-x-5 justify-between">
-          <h4 className="pb-3 flex-1 grow border-b border-bright-gray text-xs font-bold text-darkest-gray uppercase">
+          <h4 className="pb-3 flex-1 grow border-b border-bright-gray text-xs font-bold text-darkest-gray dark:text-bright-gray uppercase">
             Cookies Matrix
           </h4>
-          <h4 className="pb-3 flex-1 grow border-b border-bright-gray text-xs font-bold text-darkest-gray text-right">
+          <h4 className="pb-3 flex-1 grow border-b border-bright-gray text-xs font-bold text-darkest-gray dark:text-bright-gray text-right">
             <button onClick={() => setIsExpanded((state) => !state)}>
               {isExpanded ? 'Collapse View' : 'Expand View'}
             </button>
