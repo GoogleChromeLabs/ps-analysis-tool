@@ -29,11 +29,9 @@ interface CircleEmptyProps {
 
 const CircleEmpty = ({ color = COLOR_MAP.mediumGray }: CircleEmptyProps) => (
   <div
-    className="w-2.5 h-2.5 rounded-full flex items-center justify-center"
-    style={{ backgroundColor: color }}
-  >
-    <div className="w-1.5 h-1.5 rounded-full flex items-center justify-center bg-white" />
-  </div>
+    className="w-2.5 h-2.5 flex-shrink-0 rounded-full border-2 border-solid"
+    style={{ borderColor: color }}
+  />
 );
 
 export default CircleEmpty;

@@ -120,7 +120,7 @@ const CookiesMatrix = ({
           <h4 className="pb-3 flex-1 grow border-b border-bright-gray text-xs font-bold text-darkest-gray uppercase">
             Cookies Matrix
           </h4>
-          <h4 className="pb-3 grow border-b border-bright-gray text-xs font-bold text-darkest-gray text-right">
+          <h4 className="pb-3 flex-1 grow border-b border-bright-gray text-xs font-bold text-darkest-gray text-right">
             <button onClick={() => setIsExpanded((state) => !state)}>
               {isExpanded ? 'Collapse View' : 'Expand View'}
             </button>
