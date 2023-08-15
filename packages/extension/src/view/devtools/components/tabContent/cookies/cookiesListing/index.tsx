@@ -57,7 +57,7 @@ const CookiesListing = () => {
       >
         <CookieTable cookies={filteredCookies} selectedFrame={selectedFrame} />
       </Resizable>
-      <div className="w-full h-full bg-white border-2 border-gray-300 shadow overflow-auto">
+      <div className="w-full h-full border border-gray-300 dark:border-quartz shadow overflow-auto">
         <CookieDetails />
       </div>
     </div>

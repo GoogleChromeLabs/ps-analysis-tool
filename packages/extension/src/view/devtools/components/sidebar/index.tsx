@@ -146,9 +146,9 @@ const Sidebar: React.FC<SidebarProps> = ({
           key={name}
           data-testid={name}
           className={classNames(
-            'flex items-center cursor-default gap-y-1.5 outline-0',
+            'flex items-center cursor-default gap-y-1.5 outline-0 dark:text-bright-gray',
             {
-              'bg-royal-blue text-white':
+              'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver':
                 selectedIndex === index && name !== 'Cookies',
             }
           )}

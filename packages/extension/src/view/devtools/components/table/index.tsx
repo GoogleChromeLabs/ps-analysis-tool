@@ -32,8 +32,8 @@ export type TableData = CookieTableData;
 
 interface TableProps {
   table: ReactTable<TableData>;
-  selectedKey: string | undefined;
-  onRowClick: (row: TableData) => void;
+  selectedKey: string | undefined | null;
+  onRowClick: (row: TableData | null) => void;
 }
 
 const Table = ({ table, selectedKey, onRowClick }: TableProps) => {
@@ -70,7 +70,7 @@ const Table = ({ table, selectedKey, onRowClick }: TableProps) => {
           rows={table.getRowModel().rows}
           selectedKey={selectedKey}
           onRowClick={onRowClick}
-          emptyRowCellCount={table.getAllColumns().length}
+          emptyRowCellCount={table.getHeaderGroups()[0].headers.length}
         />
       </table>
     </>

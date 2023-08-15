@@ -89,14 +89,14 @@ describe('App', () => {
           analytics: 1,
           marketing: 1,
           functional: 1,
-          uncategorised: 0,
+          uncategorized: 0,
         },
         thirdParty: {
           total: 3,
           analytics: 1,
           marketing: 1,
           functional: 1,
-          uncategorised: 0,
+          uncategorized: 0,
         },
       },
     });
