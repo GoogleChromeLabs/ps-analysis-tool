@@ -60,13 +60,12 @@ const App: React.FC = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
   const TabContent = TABS[selectedTabIndex].Component;
   const tabNames = TABS.map((tab) => tab.display_name);
-
-  const shouldBeDarkMode = chrome.devtools.panels.themeName === 'dark';
+  const isDarkMode = chrome.devtools.panels.themeName === 'dark';
 
   return (
     <div
       className={classNames({
-        dark: shouldBeDarkMode,
+        dark: isDarkMode,
       })}
     >
       <div className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black">
