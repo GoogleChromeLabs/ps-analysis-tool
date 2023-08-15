@@ -44,6 +44,8 @@ describe('Accordion', () => {
         setSelectedFrame={() => undefined}
         selectedFrame={null}
         setIndex={() => undefined}
+        isTabFocused={true}
+        setIsTabFocused={() => undefined}
       />
     );
     const container = screen.getByTestId('cookies-tab-heading-wrapper');
@@ -68,6 +70,8 @@ describe('Accordion', () => {
         setSelectedFrame={() => undefined}
         selectedFrame={'https://edition.cnn.com'}
         setIndex={() => undefined}
+        isTabFocused={true}
+        setIsTabFocused={() => undefined}
       />
     );
     const cookieHeaderContainer = screen.getByTestId(
@@ -92,6 +96,8 @@ describe('Accordion', () => {
         setSelectedFrame={() => undefined}
         selectedFrame={null}
         setIndex={() => undefined}
+        isTabFocused={true}
+        setIsTabFocused={() => undefined}
       />
     );
     const framesContainer = screen.getByTestId('cookie-frames-container');
@@ -116,6 +122,8 @@ describe('Accordion', () => {
         setSelectedFrame={() => undefined}
         selectedFrame={null}
         setIndex={() => undefined}
+        isTabFocused={true}
+        setIsTabFocused={() => undefined}
       />
     );
     const framesContainer = screen.getByTestId('cookie-frames-container');
@@ -140,6 +148,8 @@ describe('Accordion', () => {
         setSelectedFrame={() => undefined}
         selectedFrame={'https://edition.cnn.com'}
         setIndex={() => undefined}
+        isTabFocused={true}
+        setIsTabFocused={() => undefined}
       />
     );
     const firstFrame = screen.getByTestId('https://edition.cnn.com');
@@ -166,6 +176,8 @@ describe('Accordion', () => {
         setSelectedFrame={() => undefined}
         selectedFrame={'https://crxd.net'}
         setIndex={() => undefined}
+        isTabFocused={true}
+        setIsTabFocused={() => undefined}
       />
     );
 
@@ -191,6 +203,8 @@ describe('Accordion', () => {
         setSelectedFrame={() => undefined}
         selectedFrame={null}
         setIndex={() => undefined}
+        isTabFocused={true}
+        setIsTabFocused={() => undefined}
       />
     );
     userEvent.tab();
