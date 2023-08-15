@@ -63,7 +63,7 @@ const LandingHeader = ({
 
   return (
     <div className="flex justify-center border-b border-hex-gray pt-5 pb-5">
-      <div className="lg:max-w-[700px] flex gap-9 px-4">
+      <div className="lg:max-w-[729px] flex gap-9 px-4">
         {dataMapping.map((circleData, index) => {
           return (
             <div key={index} className="text-center w-16">

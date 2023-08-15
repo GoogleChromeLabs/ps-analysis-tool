@@ -43,7 +43,7 @@ const CookiesLanding = () => {
         cookieStats={cookieStats}
         cookiesStatsComponents={cookiesStatsComponents}
       />
-      <div className="lg:max-w-[700px] mx-auto flex justify-center mt-10 pb-28 px-4">
+      <div className="lg:max-w-[729px] mx-auto flex justify-center mt-10 pb-28 px-4">
         <CookiesMatrix
           tabCookies={tabCookies}
           cookiesStatsComponents={cookiesStatsComponents}

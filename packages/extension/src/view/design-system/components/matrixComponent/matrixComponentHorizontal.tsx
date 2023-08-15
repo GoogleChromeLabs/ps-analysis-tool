@@ -44,16 +44,18 @@ const MatrixComponentHorizontal = ({
         <div className="flex justify-between items-center">
           <div className="flex gap-4 items-center">
             <CircleEmpty />
-            <h4 className="font-semibold text-xs">{title}</h4>
+            <h4 className="text-xs">{title}</h4>
           </div>
           <div className="flex gap-4 items-center">
             <div className="w-[100px] h-1 bg-light-gray" />
             <div className="text-xs text-dark-gray font-semibold">{count}</div>
           </div>
         </div>
-        <div className="mt-2 ml-6 pl-px">
-          {description && expand && <p className="text-xs">{description}</p>}
-        </div>
+        {description && expand && (
+          <div className="mt-2 ml-6 pl-px">
+            <p className="text-xs mt-1.5">{description}</p>
+          </div>
+        )}
       </div>
     </div>
   );

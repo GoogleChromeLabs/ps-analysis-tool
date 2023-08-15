@@ -43,17 +43,17 @@ const MatrixComponent = ({
   textClassName,
   containerClasses,
 }: MatrixComponentProps) => {
-  const countClasses = classNames(textClassName, 'text-2xl mb-1');
+  const countClasses = classNames(textClassName, 'text-xl2 leading-none');
 
   return (
     <div className={containerClasses}>
-      <div className="flex gap-4">
+      <div className="flex gap-x-4">
         <Circle color={color} />
         <div className="lg:max-w-[80%] lg:mr-8">
-          <h4 className="-mt-[3px] mb-1 font-semibold text-xs">{title}</h4>
+          <h4 className="-mt-[3px] mb-1.5 text-xs">{title}</h4>
           <div className={countClasses}>{count}</div>
           {description && isExpanded && (
-            <p className="text-xs">{description}</p>
+            <p className="text-xs mt-1.5">{description}</p>
           )}
         </div>
       </div>

@@ -41,7 +41,6 @@ interface CookiesMatrixProps {
 
 interface LegendData {
   [key: string]: {
-    title: string;
     description: string;
     textClassName: string;
   };
@@ -49,25 +48,21 @@ interface LegendData {
 
 const LEGEND_DATA: LegendData = {
   Functional: {
-    title: 'Functional Cookies',
     description:
       'These are essential cookies that are necessary for a website to function properly. They enable basic functionalities such as page navigation, access to secure areas, and remembering user preferences (e.g., language, font size), etc.',
     textClassName: 'text-functional',
   },
   Marketing: {
-    title: 'Marketing Cookies',
     description:
       "They are used to track visitors across websites to gather information about their browsing habits. The data collected is often used by advertisers to deliver targeted advertisements that are relevant to the user's interests.",
     textClassName: 'text-marketing',
   },
   Analytics: {
-    title: 'Analytics Cookies',
     description:
       'Used to gather information about how users interact with a website. They provide website owners with insights into user behavior, such as the number of visitors, the most popular pages, and the average time spent on the site. This data helps website owners understand and improve the user experience, optimize content, and identify areas for enhancement.',
     textClassName: 'text-analytics',
   },
   Uncategorized: {
-    title: 'Uncategorized Cookies',
     description:
       'We are unable to categorize certain cookies since we do not possess any relevant information about them. Nonetheless, you may visit sites like cookiedatabase.org and cookiesearch.org to acquire additional details about these cookies.',
     textClassName: 'text-uncategorized',
@@ -81,12 +76,13 @@ const CookiesMatrix = ({
 }: CookiesMatrixProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const dataComponents = cookiesStatsComponents.legend.map((dataComponent) => {
-    const additionalDataComponent = LEGEND_DATA[dataComponent.label] || {};
+  const dataComponents = cookiesStatsComponents.legend.map((component) => {
+    const additionalDataComponent = LEGEND_DATA[component.label] || {};
 
     return {
-      ...dataComponent,
+      ...component,
       ...additionalDataComponent,
+      title: component.label,
       isExpanded,
     };
   });
@@ -120,22 +116,22 @@ const CookiesMatrix = ({
   return (
     <div className="w-full">
       <div>
-        <div className="flex gap-5 justify-between">
-          <h4 className="mb-5 pb-3 grow border-b border-bright-gray text-xs font-bold text-darkest-gray">
+        <div className="flex gap-x-5 justify-between">
+          <h4 className="pb-3 flex-1 grow border-b border-bright-gray text-xs font-bold text-darkest-gray uppercase">
             Cookies Matrix
           </h4>
-          <h4 className="mb-5 pb-3 grow border-b border-bright-gray text-xs font-bold text-darkest-gray text-right">
+          <h4 className="pb-3 grow border-b border-bright-gray text-xs font-bold text-darkest-gray text-right">
             <button onClick={() => setIsExpanded((state) => !state)}>
               {isExpanded ? 'Collapse View' : 'Expand View'}
             </button>
           </h4>
         </div>
-        <div className="grid grid-cols-2 gap-5">
+        <div className="grid grid-cols-2 gap-x-5">
           {dataComponents.map((dataComponent, index) => (
             <MatrixComponent
               key={index}
               {...dataComponent}
-              containerClasses="mb-5 pb-3 pl-3 border-b border-bright-gray"
+              containerClasses="p-3.5 border-b border-bright-gray"
             />
           ))}
         </div>
@@ -145,7 +141,7 @@ const CookiesMatrix = ({
           <MatrixComponentHorizontal
             key={index}
             {...matrixHorizontalComponent}
-            containerClasses="mb-5 pl-3"
+            containerClasses="px-3.5 py-4"
           />
         ))}
       </div>
