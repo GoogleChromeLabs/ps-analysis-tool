@@ -45,7 +45,7 @@ const ColumnMenu = ({
 }: ColumnMenuProps) => {
   const [startAnimation, setStartAnimation] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const shouldBeDarkMode = chrome.devtools.panels.themeName === 'dark';
+  const isDarkMode = chrome.devtools.panels.themeName === 'dark';
 
   const handleClose = () => {
     document.body.style.overflow = open ? 'auto' : 'hidden';
@@ -73,7 +73,7 @@ const ColumnMenu = ({
             className={classNames(
               'transition duration-100',
               startAnimation ? 'opacity-0' : 'opacity-100',
-              { dark: shouldBeDarkMode }
+              { dark: isDarkMode }
             )}
             data-testid="column-menu"
           >

@@ -45,20 +45,22 @@ const BodyRow = ({
   onRowClick,
   onKeyDown,
 }: BodyRowProps) => {
+  const tableRowClassName = classNames(
+    'outline-0',
+    row.original.parsedCookie.name !== selectedKey &&
+      (index % 2
+        ? 'bg-anti-flash-white dark:bg-charleston-green'
+        : 'bg-white dark:bg-raisin-black'),
+    {
+      'bg-gainsboro dark:bg-outer-space':
+        row.original.parsedCookie.name === selectedKey,
+    }
+  );
+
   return (
     <tr
       id={row.id}
-      className={classNames(
-        'outline-0',
-        row.original.parsedCookie.name !== selectedKey &&
-          (index % 2
-            ? 'bg-anti-flash-white dark:bg-charleston-green'
-            : 'bg-white dark:bg-raisin-black'),
-        {
-          'bg-gainsboro dark:bg-outer-space':
-            row.original.parsedCookie.name === selectedKey,
-        }
-      )}
+      className={tableRowClassName}
       onClick={() => {
         onRowClick(row.original);
       }}
