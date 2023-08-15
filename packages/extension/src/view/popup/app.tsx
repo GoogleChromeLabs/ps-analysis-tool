@@ -58,7 +58,7 @@ const App: React.FC = () => {
 
   return (
     <div className="w-96 h-fit p-5 flex justify-center items-center flex-col">
-      <div className="w-full flex gap-x-6 justify-center">
+      <div className="w-full flex gap-x-6 justify-center border-b border-hex-gray pb-3.5">
         <div className="w-28 text-center">
           <CirclePieChart
             centerCount={cookieStats.firstParty.total}
@@ -74,10 +74,10 @@ const App: React.FC = () => {
           />
         </div>
       </div>
-      <div className="w-full mt-8 mb-5">
+      <div className="w-full mb-4">
         <Legend legendItemList={statsComponents.legend} />
       </div>
-      <div className="w-full text-center mt-2">
+      <div className="w-full text-center">
         <p className="text-chart-label text-xs">
           {'Inspect cookies in the "Privacy Sandbox" panel of DevTools'}
         </p>
