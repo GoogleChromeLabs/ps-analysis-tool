@@ -148,9 +148,6 @@ const App: React.FC = () => {
         <p className="text-chart-label text-xs">
           {'Inspect cookies in the "Privacy Sandbox" panel of DevTools'}
         </p>
-        <p className="text-xxxs mt-4">
-          *Please disable ad/cookie blocking extensions for best results
-        </p>
       </div>
     </div>
   );
