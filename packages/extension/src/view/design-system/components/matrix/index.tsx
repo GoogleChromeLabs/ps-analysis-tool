@@ -33,7 +33,7 @@ const Matrix = ({ dataComponents }: MatrixProps) => {
   }
 
   return (
-    <div className="grid grid-cols-2 gap-x-5">
+    <div className="grid grid-cols-2 gap-x-5" data-testid="matrix">
       {dataComponents.map((dataComponent, index) => (
         <MatrixComponent
           key={index}
