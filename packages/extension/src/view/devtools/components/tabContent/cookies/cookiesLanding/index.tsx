@@ -38,12 +38,12 @@ const CookiesLanding = () => {
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
 
   return (
-    <div className="lg:max-w-[700px] h-full w-full px-4">
+    <div className="h-full w-full">
       <LandingHeader
         cookieStats={cookieStats}
         cookiesStatsComponents={cookiesStatsComponents}
       />
-      <div className="flex justify-center mt-10 pb-28">
+      <div className="lg:max-w-[700px] mx-auto flex justify-center mt-10 pb-28 px-4">
         <CookiesMatrix
           tabCookies={tabCookies}
           cookiesStatsComponents={cookiesStatsComponents}

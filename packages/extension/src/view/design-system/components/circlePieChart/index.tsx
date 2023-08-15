@@ -75,7 +75,7 @@ const CirclePieChart = ({
           />
           <p
             className={classNames(
-              'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-medium',
+              'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-regular',
               centerTitleClasses
             )}
           >
@@ -84,7 +84,9 @@ const CirclePieChart = ({
         </div>
       </div>
       {title && (
-        <p className="text-xs text-center font-semibold mt-2">{title}</p>
+        <p className="text-xs text-center font-semibold mt-2 leading-relaxed">
+          {title}
+        </p>
       )}
     </>
   );
