@@ -22,9 +22,9 @@ import React, { useState } from 'react';
 /**
  * Internal dependencies.
  */
-import RightArrow from '../../../../../icons/right-arrow.svg';
 import type { PSInfo as PSInfoType } from '../../../../utils/fetchPSInfo';
 import RenderLink from './renderLink';
+import { ArrowRight } from '../../../../icons';
 
 /**
  * @type {Array} LABELS - Array of objects containing the label and link label for each dropdown item.
@@ -62,8 +62,11 @@ const LearnMoreDropdown = ({
   return (
     <>
       {isOpen && (
-        <div className="flow-root border-t border-gray-200">
-          <ul role="list" className="divide-y divide-gray-200">
+        <div className="flow-root border-t border-gray-200 dark:border-gray-500">
+          <ul
+            role="list"
+            className="divide-y divide-gray-200 dark:divide-gray-500"
+          >
             {[proposal, publicDiscussion, videoOverview, devDocumentation].map(
               (value, index) => (
                 <RenderLink
@@ -77,9 +80,9 @@ const LearnMoreDropdown = ({
           </ul>
         </div>
       )}
-      <div className="flex items-center justify-start pt-4 border-t border-gray-200">
+      <div className="flex items-center justify-start pt-4 border-t border-gray-200 dark:border-gray-500">
         <button
-          className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800"
+          className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700"
           onClick={() => {
             setIsOpen(!isOpen);
           }}
@@ -90,7 +93,7 @@ const LearnMoreDropdown = ({
             <>
               Learn more{' '}
               <span className="w-4 h-4 ml-2">
-                <RightArrow />
+                <ArrowRight />
               </span>
             </>
           )}

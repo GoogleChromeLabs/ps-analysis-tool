@@ -59,6 +59,7 @@
 		"csvtojson": "^2.0.10",
 		"eslint": "^8.42.0",
 		"eslint-config-prettier": "^8.8.0",
+		"eslint-import-resolver-typescript": "^3.5.5",
 		"eslint-plugin-eslint-comments": "^3.2.0",
 		"eslint-plugin-header": "^3.1.1",
 		"eslint-plugin-import": "^2.27.5",

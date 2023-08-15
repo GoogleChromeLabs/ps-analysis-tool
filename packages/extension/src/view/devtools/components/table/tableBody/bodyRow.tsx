@@ -19,6 +19,7 @@
  */
 import React from 'react';
 import { type Row } from '@tanstack/react-table';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -29,7 +30,7 @@ import BodyCell from './bodyCell';
 interface BodyRowProps {
   row: Row<TableData>;
   index: number;
-  selectedKey: string | undefined;
+  selectedKey: string | undefined | null;
   onRowClick: (key: TableData) => void;
   onKeyDown: (
     e: React.KeyboardEvent<HTMLTableRowElement>,
@@ -44,12 +45,22 @@ const BodyRow = ({
   onRowClick,
   onKeyDown,
 }: BodyRowProps) => {
+  const tableRowClassName = classNames(
+    'outline-0',
+    row.original.parsedCookie.name !== selectedKey &&
+      (index % 2
+        ? 'bg-anti-flash-white dark:bg-charleston-green'
+        : 'bg-white dark:bg-raisin-black'),
+    {
+      'bg-gainsboro dark:bg-outer-space':
+        row.original.parsedCookie.name === selectedKey,
+    }
+  );
+
   return (
     <tr
       id={row.id}
-      className={`${index % 2 ? 'bg-anti-flash-white' : ''} ${
-        row.original.parsedCookie.name === selectedKey ? 'bg-gainsboro' : ''
-      } outline-0`}
+      className={tableRowClassName}
       onClick={() => {
         onRowClick(row.original);
       }}

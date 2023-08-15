@@ -23,6 +23,7 @@ import React, {
   useState,
   useCallback,
 } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 
 /**
  * Internal dependencies.
@@ -71,6 +72,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [tabCookieStats, setTabCookieStats] =
     useState<CookieStoreContext['state']['tabCookieStats']>(null);
 
+  const setDebouncedStats = useDebouncedCallback((value) => {
+    setTabCookieStats(value);
+  }, 100);
+
   const intitialSync = useCallback(async () => {
     const [tab] = await getCurrentTab();
     if (!tab.id || !tab.url) {
@@ -87,9 +92,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
     ];
 
     if (tabData && tabData.cookies) {
-      setTabCookieStats(countCookiesByCategory(tabData.cookies, _tabUrl));
+      setDebouncedStats(countCookiesByCategory(tabData.cookies, _tabUrl));
     }
-  }, []);
+  }, [setDebouncedStats]);
 
   const storeChangeListener = useCallback(
     (changes: { [key: string]: chrome.storage.StorageChange }) => {
@@ -99,7 +104,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         Object.keys(changes).includes(tabId.toString()) &&
         changes[tabId.toString()]?.newValue?.cookies
       ) {
-        setTabCookieStats(
+        setDebouncedStats(
           countCookiesByCategory(
             changes[tabId.toString()].newValue.cookies,
             tabUrl
@@ -107,7 +112,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         );
       }
     },
-    [tabId, tabUrl]
+    [setDebouncedStats, tabId, tabUrl]
   );
 
   const tabUpdateListener = useCallback(
