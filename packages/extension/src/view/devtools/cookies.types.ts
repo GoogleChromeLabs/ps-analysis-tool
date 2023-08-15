@@ -31,13 +31,15 @@ export interface TabFrames {
   [key: string]: { frameIds: number[] };
 }
 
+export interface Legend {
+  label: string;
+  count: number;
+  color: string;
+  countClassName: string;
+}
+
 export interface CookieStatsComponents {
-  legend: {
-    label: string;
-    count: number;
-    color: string;
-    textColorClass: string;
-  }[];
+  legend: Legend[];
   firstParty: {
     count: number;
     color: string;

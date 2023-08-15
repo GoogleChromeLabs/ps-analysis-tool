@@ -21,30 +21,27 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import {
-  Matrix,
-  type MatrixComponentProps,
-} from '../../../design-system/components';
-import { type Legend as LegendProp } from '../../../devtools/cookies.types';
+import MatrixComponent, { type MatrixComponentProps } from './matrixComponent';
 
-interface LegendProps {
-  legendItemList: LegendProp[];
+interface MatrixProps {
+  dataComponents: MatrixComponentProps[];
 }
 
-const Legend = ({ legendItemList }: LegendProps) => {
-  const dataComponents: MatrixComponentProps[] = legendItemList.map(
-    ({ label, count, color, countClassName }) => {
-      return {
-        color,
-        title: label,
-        count,
-        countClassName: countClassName,
-        containerClasses: '',
-      };
-    }
+const Matrix = ({ dataComponents }: MatrixProps) => {
+  return (
+    <div className="grid grid-cols-2 gap-x-5">
+      {dataComponents.map((dataComponent, index) => (
+        <MatrixComponent
+          key={index}
+          {...dataComponent}
+          containerClasses="p-3.5 border-b border-bright-gray"
+          countClassName={
+            dataComponent.countClassName + ' text-xl2 leading-none'
+          }
+        />
+      ))}
+    </div>
   );
-
-  return <Matrix dataComponents={dataComponents} />;
 };
 
-export default Legend;
+export default Matrix;

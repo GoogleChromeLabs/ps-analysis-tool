@@ -22,8 +22,9 @@ import React, { useState } from 'react';
  * Internal dependencies.
  */
 import {
-  MatrixComponent,
   MatrixComponentHorizontal,
+  Matrix,
+  type MatrixComponentProps,
 } from '../../../../../../design-system/components';
 import { getInvalidCookies } from '../../utils/getInvalidCookies';
 import { filterFramesWithCookies } from '../../utils/filterFramesWithCookies';
@@ -42,7 +43,7 @@ interface CookiesMatrixProps {
 interface LegendData {
   [key: string]: {
     description: string;
-    textClassName: string;
+    countClassName: string;
   };
 }
 
@@ -50,22 +51,22 @@ const LEGEND_DATA: LegendData = {
   Functional: {
     description:
       'These are essential cookies that are necessary for a website to function properly. They enable basic functionalities such as page navigation, access to secure areas, and remembering user preferences (e.g., language, font size), etc.',
-    textClassName: 'text-functional',
+    countClassName: 'text-functional',
   },
   Marketing: {
     description:
       "They are used to track visitors across websites to gather information about their browsing habits. The data collected is often used by advertisers to deliver targeted advertisements that are relevant to the user's interests.",
-    textClassName: 'text-marketing',
+    countClassName: 'text-marketing',
   },
   Analytics: {
     description:
       'Used to gather information about how users interact with a website. They provide website owners with insights into user behavior, such as the number of visitors, the most popular pages, and the average time spent on the site. This data helps website owners understand and improve the user experience, optimize content, and identify areas for enhancement.',
-    textClassName: 'text-analytics',
+    countClassName: 'text-analytics',
   },
   Uncategorized: {
     description:
       'We are unable to categorize certain cookies since we do not possess any relevant information about them. Nonetheless, you may visit sites like cookiedatabase.org and cookiesearch.org to acquire additional details about these cookies.',
-    textClassName: 'text-uncategorized',
+    countClassName: 'text-uncategorized',
   },
 };
 
@@ -76,16 +77,19 @@ const CookiesMatrix = ({
 }: CookiesMatrixProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const dataComponents = cookiesStatsComponents.legend.map((component) => {
-    const additionalDataComponent = LEGEND_DATA[component.label] || {};
+  const dataComponents: MatrixComponentProps[] =
+    cookiesStatsComponents.legend.map((component) => {
+      const additionalDataComponent = LEGEND_DATA[component.label] || {};
+      const comp = {
+        ...component,
+        ...additionalDataComponent,
+        title: component.label,
+        isExpanded,
+        containerClasses: '',
+      };
 
-    return {
-      ...component,
-      ...additionalDataComponent,
-      title: component.label,
-      isExpanded,
-    };
-  });
+      return comp;
+    });
 
   const invalidCookies = getInvalidCookies(tabCookies);
   const totalFrames = tabFrames ? Object.keys(tabFrames).length : 0;
@@ -126,15 +130,7 @@ const CookiesMatrix = ({
             </button>
           </h4>
         </div>
-        <div className="grid grid-cols-2 gap-x-5">
-          {dataComponents.map((dataComponent, index) => (
-            <MatrixComponent
-              key={index}
-              {...dataComponent}
-              containerClasses="p-3.5 border-b border-bright-gray"
-            />
-          ))}
-        </div>
+        <Matrix dataComponents={dataComponents} />
       </div>
       <div>
         {matrixHorizontalComponents.map((matrixHorizontalComponent, index) => (

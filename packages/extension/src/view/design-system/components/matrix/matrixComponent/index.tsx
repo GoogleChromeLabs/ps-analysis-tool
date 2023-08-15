@@ -21,44 +21,41 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import CircleEmpty from '../circle/circleEmpty';
+import Circle from '../../circle';
 
-interface MatrixComponentHorizontalProps {
+export interface MatrixComponentProps {
+  color: string;
   title: string;
-  description: string;
+  description?: string;
   count: number;
-  expand?: boolean;
-  containerClasses?: string;
+  isExpanded?: boolean;
+  countClassName: string;
+  containerClasses: string;
 }
 
-const MatrixComponentHorizontal = ({
+const MatrixComponent = ({
+  color,
   title,
-  description,
+  description = '',
   count,
-  expand = false,
+  isExpanded = false,
+  countClassName,
   containerClasses,
-}: MatrixComponentHorizontalProps) => {
+}: MatrixComponentProps) => {
   return (
     <div className={containerClasses}>
-      <div className="max-w-[672px]">
-        <div className="flex justify-between items-center">
-          <div className="flex gap-4 items-center">
-            <CircleEmpty />
-            <h4 className="text-xs font-medium">{title}</h4>
-          </div>
-          <div className="flex gap-4 items-center">
-            <div className="w-[100px] h-1 bg-light-gray" />
-            <div className="text-xs text-dark-gray font-semibold">{count}</div>
-          </div>
-        </div>
-        {description && expand && (
-          <div className="mt-2 ml-6 pl-px">
+      <div className="flex gap-x-4">
+        <Circle color={color} />
+        <div className="lg:max-w-[80%] lg:mr-8">
+          <h4 className="-mt-[3px] mb-1.5 text-xs font-medium">{title}</h4>
+          <div className={countClassName}>{count}</div>
+          {description && isExpanded && (
             <p className="text-xs mt-1.5 text-darkest-gray">{description}</p>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
-export default MatrixComponentHorizontal;
+export default MatrixComponent;
