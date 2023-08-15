@@ -26,6 +26,9 @@ import App from './app';
 import { Provider as ExternalStoreProvider } from './stateProviders/syncCookieStore';
 import { Provider as ContentPanelProvider } from './stateProviders/contentPanelStore';
 
+const isDarkMode = chrome.devtools.panels.themeName === 'dark';
+document.body.classList.add(isDarkMode ? 'dark' : 'light');
+
 const root = document.getElementById('root');
 
 if (root) {
