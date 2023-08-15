@@ -46,5 +46,87 @@ const meta: Meta<typeof LandingHeader> = {
 export default meta;
 
 export const Primary: StoryObj<typeof meta> = {
-  args: {},
+  args: {
+    cookieStats: {
+      total: 7,
+      firstParty: {
+        total: 6,
+        functional: 0,
+        marketing: 0,
+        analytics: 2,
+        uncategorized: 4,
+      },
+      thirdParty: {
+        total: 1,
+        functional: 1,
+        marketing: 0,
+        analytics: 0,
+        uncategorized: 0,
+      },
+    },
+    cookiesStatsComponents: {
+      legend: [
+        {
+          label: 'Functional',
+          count: 1,
+          color: '#5CC971',
+          countClassName: 'text-functional',
+        },
+        {
+          label: 'Marketing',
+          count: 0,
+          color: '#F3AE4E',
+          countClassName: 'text-marketing',
+        },
+        {
+          label: 'Analytics',
+          count: 2,
+          color: '#4C79F4',
+          countClassName: 'text-analytics',
+        },
+        {
+          label: 'Uncategorized',
+          count: 4,
+          color: '#EC7159',
+          countClassName: 'text-uncategorized',
+        },
+      ],
+      firstParty: [
+        {
+          count: 0,
+          color: '#5CC971',
+        },
+        {
+          count: 0,
+          color: '#F3AE4E',
+        },
+        {
+          count: 2,
+          color: '#4C79F4',
+        },
+        {
+          count: 4,
+          color: '#EC7159',
+        },
+      ],
+      thirdParty: [
+        {
+          count: 1,
+          color: '#5CC971',
+        },
+        {
+          count: 0,
+          color: '#F3AE4E',
+        },
+        {
+          count: 0,
+          color: '#4C79F4',
+        },
+        {
+          count: 0,
+          color: '#EC7159',
+        },
+      ],
+    },
+  },
 };
