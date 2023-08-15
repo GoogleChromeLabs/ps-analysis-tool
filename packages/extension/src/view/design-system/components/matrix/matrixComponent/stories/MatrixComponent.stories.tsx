@@ -25,7 +25,7 @@ import MatrixComponent from '..';
 import { COLOR_MAP } from '../../../../theme/colors';
 
 const meta: Meta<typeof MatrixComponent> = {
-  title: 'Extension/DesignSystem/MatrixComponent',
+  title: 'Extension/DesignSystem/Matrix/Component',
   component: MatrixComponent,
   tags: ['autodocs'],
 };

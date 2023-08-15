@@ -24,7 +24,6 @@ import type { Meta, StoryObj } from '@storybook/react';
  */
 import App from '../app';
 import { Provider as ExternalStoreProvider } from '../stateProviders/syncCookieStore';
-import { dummyData } from './data';
 
 const meta: Meta<typeof App> = {
   title: 'Extension/Popup/Page',
@@ -33,6 +32,74 @@ const meta: Meta<typeof App> = {
 };
 
 export default meta;
+
+const dummyData = {
+  '2141247110': {
+    cookies: {
+      '1P_JAR': {
+        analytics: {
+          category: 'Marketing',
+        },
+        isFirstParty: false,
+        parsedCookie: {
+          domain: '.google.com',
+        },
+        url: 'https://www.google.com/recaptcha/api2/aframe',
+      },
+      APC: {
+        analytics: {
+          category: '',
+        },
+        isFirstParty: false,
+        parsedCookie: {
+          domain: 'doubleclick.net',
+        },
+        url: 'https://googleads.g.doubleclick.net/pagead/interaction/?ai=&sigh=BpnfxIaauQU&cid=CAQSTgBpAlJWJhG957iiPQM-u9Qi61mWPR6eFTTarfv0pqg0yxpObU1_f5mCWO4La9fQkQf2SlgLdpmUB0N0XlWgQmSnfEk9qN-Hfek6Nz3Jgg&label=window_focus&gqid&qqid=COK0kMOX24ADFZKjZgIdQBMBDQ&fg=1',
+      },
+      AWSALB: {
+        analytics: {
+          category: 'Functional',
+        },
+        isFirstParty: false,
+        parsedCookie: {
+          domain: '.dotmetrics.net',
+        },
+        url: 'https://uk-script.dotmetrics.net/BeaconEvent.dotmetrics?1691982913096',
+      },
+      AWSALBCORS: {
+        analytics: {
+          category: 'Functional',
+        },
+        isFirstParty: false,
+        parsedCookie: {
+          domain: 'uk-script.dotmetrics.net',
+        },
+        url: 'https://uk-script.dotmetrics.net/BeaconEvent.dotmetrics?1691982913096',
+      },
+      AWSALBTG: {
+        analytics: {
+          category: 'Functional',
+        },
+        isFirstParty: false,
+        parsedCookie: {
+          domain: '.the-ozone-project.com',
+        },
+        url: 'https://elb.the-ozone-project.com/cookie_sync',
+      },
+      AWSALBTGCORS: {
+        analytics: {
+          category: 'Functional',
+        },
+        isFirstParty: false,
+        parsedCookie: {
+          domain: 'elb.the-ozone-project.com',
+        },
+        url: 'https://elb.the-ozone-project.com/cookie_sync',
+      },
+    },
+    focusedAt: 1691983869724,
+  },
+};
 
 const withExternalStoreProvider = () => {
   // @todo Try to use sinon-chrome to mock the chrome API.

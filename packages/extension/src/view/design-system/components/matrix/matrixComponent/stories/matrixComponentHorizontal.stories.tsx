@@ -24,7 +24,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import MatrixComponentHorizontal from '../matrixComponentHorizontal';
 
 const meta: Meta<typeof MatrixComponentHorizontal> = {
-  title: 'Extension/DesignSystem/MatrixComponent/Horizontal',
+  title: 'Extension/DesignSystem/Matrix/ComponentHorizontal',
   component: MatrixComponentHorizontal,
   tags: ['autodocs'],
 };
@@ -36,6 +36,7 @@ export const Default: StoryObj<typeof meta> = {
     title: 'Invalid Cookies',
     description:
       'The cookies which could not be stored in the cookie jar of the browser as they were invalid.',
-    expand: false,
+    count: 20,
+    expand: true,
   },
 };
