@@ -109,8 +109,5 @@
 	"type": "module",
 	"workspaces": [
 		"packages/*"
-	],
-	"dependencies": {
-		"p-queue": "^7.3.4"
-	}
+	]
 }

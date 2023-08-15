@@ -47,24 +47,26 @@ const BodyRow = ({
   onRowClick,
   onKeyDown,
 }: BodyRowProps) => {
+  const tableRowClassName = classNames(
+    'outline-0',
+    row.original.parsedCookie.name !== selectedKey &&
+      (index % 2
+        ? 'bg-anti-flash-white dark:bg-charleston-green'
+        : 'bg-white dark:bg-raisin-black'),
+    {
+      'bg-gainsboro dark:bg-outer-space':
+        row.original.parsedCookie.name === selectedKey && isRowFocused,
+    },
+    {
+      'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver':
+        row.original.parsedCookie.name === selectedKey && !isRowFocused,
+    }
+  );
+
   return (
     <tr
       id={row.id}
-      className={classNames(
-        'outline-0',
-        row.original.parsedCookie.name !== selectedKey &&
-          (index % 2
-            ? 'bg-anti-flash-white dark:bg-charleston-green'
-            : 'bg-white dark:bg-raisin-black'),
-        {
-          'bg-gainsboro dark:bg-outer-space':
-            row.original.parsedCookie.name === selectedKey && isRowFocused,
-        },
-        {
-          'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver':
-            row.original.parsedCookie.name === selectedKey && !isRowFocused,
-        }
-      )}
+      className={tableRowClassName}
       onClick={onRowClick}
       onKeyDown={(e) => onKeyDown(e, row)}
       data-testid="body-row"

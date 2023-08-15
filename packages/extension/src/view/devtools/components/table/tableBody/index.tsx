@@ -50,11 +50,12 @@ const TableBody = ({
     (event: React.KeyboardEvent<HTMLTableRowElement>, row: Row<TableData>) => {
       event.preventDefault();
       event.stopPropagation();
+
       // @ts-ignore - the `children` property will be available on the `current` property.
       const currentRow = tableBodyRef.current?.children.namedItem(row.id);
-
       let newRowId: string | null = null;
       let rowElement: HTMLTableRowElement | null = null;
+
       if (event.key === 'ArrowUp') {
         rowElement = currentRow?.previousElementSibling;
       } else if (event.key === 'ArrowDown') {
@@ -75,6 +76,7 @@ const TableBody = ({
       }
 
       const newRow = rows.find((_row) => _row.id === newRowId);
+
       if (newRow) {
         onRowClick(newRow.original);
       }
@@ -94,6 +96,7 @@ const TableBody = ({
       const newRow = rows[rows.length - 1];
       // @ts-ignore - the `children` property will be available on the `current` property.
       const rowElement = tableBodyRef.current?.children.namedItem(newRow.id);
+
       if (!rowElement) {
         return;
       }
@@ -103,6 +106,21 @@ const TableBody = ({
       onRowClick(newRow.original);
     },
     [onRowClick, rows]
+  );
+
+  const tableRowClassName = classNames(
+    'h-5 outline-0',
+    {
+      'bg-gainsboro dark:bg-outer-space': selectedKey === null && isRowFocused,
+    },
+    selectedKey !== null &&
+      (rows.length % 2
+        ? 'bg-anti-flash-white dark:bg-charleston-green'
+        : 'bg-white dark:bg-raisin-black'),
+    {
+      'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver':
+        !isRowFocused && selectedKey === null,
+    }
   );
 
   return (
@@ -122,21 +140,7 @@ const TableBody = ({
         />
       ))}
       <tr
-        className={classNames(
-          'h-5 outline-0',
-          {
-            'bg-gainsboro dark:bg-outer-space':
-              selectedKey === null && isRowFocused,
-          },
-          selectedKey !== null &&
-            (rows.length % 2
-              ? 'bg-anti-flash-white dark:bg-charleston-green'
-              : 'bg-white dark:bg-raisin-black'),
-          {
-            'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver':
-              !isRowFocused && selectedKey === null,
-          }
-        )}
+        className={tableRowClassName}
         data-testid="empty-row"
         tabIndex={0}
         onClick={() => {

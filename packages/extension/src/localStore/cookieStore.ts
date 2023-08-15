@@ -31,11 +31,12 @@ const CookieStore = {
       const _updatedCookies = _prevCookies;
 
       for (const cookie of cookies) {
-        if (!cookie.parsedCookie.name) {
+        const cookieName = cookie.parsedCookie.name;
+
+        if (!cookieName) {
           continue;
         }
 
-        const cookieName = cookie.parsedCookie.name;
         if (_updatedCookies?.[cookieName]) {
           _updatedCookies[cookieName] = {
             ...cookie,
