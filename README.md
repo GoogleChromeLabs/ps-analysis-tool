@@ -7,7 +7,7 @@
 - [Privacy Sandbox](#privacy-sandbox)
 - [Call to action](#call-to-action)
 - [Browsing Session Analysis](#browsing-session-analyses)
-- [Tool Architecture](#tool-architecture)
+- [Tool Functional Areas](#tool-functional-areas)
 - [Usage Instructions](#usage-instructions)
 - [Contributing](#contributing)
 
@@ -48,48 +48,19 @@ A "browsing session" refers to the sequence of navigations a user follows over a
 * How can I play a role in shaping the future of web development and privacy standards?
 * How can I provide feedback to Google on Privacy Sandbox APIs and third-party cookie deprecation?
 
+# Tool Functional Areas
 
-# Tool Architecture
+## Advanced Data Analysis
+DevTools provides access to lots of information regarding every functional aspect of the browser, including cookies. This extensions expands a bit the capabilities of DevTools and providing additional ways to slice and dice cookie data, making it easier for everyone to understand the behaviors of cookies on different scenarios.
 
-Chrome Extensions are small programs that can be installed in Chrome to do things such as blocking ads, changing the look of Chrome, or add new functionality to Chrome. The Privacy Analysis tool is implementented as a Chrome Extension structured as a set of processing and analysis modules, and producing output tailored to different user interfaces for different use cases. 
+## Frame Overlays
+Cookies are used as a state management mechanism to power varying features and capabilities of sites. For example, a embedded video component from some 3P provider could set and manipulate 3P cookies to serve authenticated videos without users having to re-authenticate repeatedly. This extension provides a frame overlay capability, making it easy to associate, when possible, componets on a web page and the set of cookies that are associated with it. 
 
-<p align="center">
-  <img src="https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/6049673e-3508-4e03-8649-55b6f938abb9" width="70%" height="100%">
-</p>
+## Reporting
+This tool provides capabilities to make it easy for users to report breakages, and connect with existing Privacy Sandbox feedback and bug reporting channels. As you leverage the capabilities of the tool to anlyze and debug your cirtical user journeys, you can report breakages or questions about your use cases and directly send them to the proper feedback channel. This way you would geet answers to your issues, and will contribute to our collective effort to ensure the ecosystem is ready for a world without 3P cookies as we know them today.
 
-## Input
-The input to the tool is composed of network traffic and browser data collected during a given browsing session.
-
-## Output
-
-The tool produces output for three different access points, serving the needs of the different members of our [target audience](#call-to-action): 
-
-| Surface | Description |
-|---------|--------|
-|DevTools Panel | Main user interface of the tool. Debugging Browsing Sessions. Learning, monitoring, and debugging capabilities for developers responsible for making 1P sites work and developing 3P services |
-|Icon popup and Side Panel| Dynamic monitoring of sites. Show basic privacy-sandbox-related information such as status of cookies, classification results at any given time (e.g. how many marketing cookies?)|
-|Google Admin Console| Potential surface for enterprise users. Extend Google Admin UI with 3PCD/PS analysis information |
-
- 
-## Data Gathering
-
-[Chrome's APIs](https://developer.chrome.com/docs/extensions/reference/) enable developers to extend and interact with the browser's functionality and gather/manipulate web content. This tool leverages various Chome APIs to power its capabilities: chrome.webRequest, chrome.tabs, chrome.storage, devtools.panels, devtools.network, and others. 
-
-## Data Processing
-
-| Module | Description |
-|-------|---------|
-| Parsing| Extract information from network streams and Chrome APIs |
-| Classification | Leverage ecosystem cookie DBs to classify observed cookies |
-| Insights | Privacy Sandbox insights and "debugging" information|
-
-## Services
-This module provide services shareable to other parts of the tool.
-
-| Service | Description |
-|-------|---------|
-| Data Storage| Capabilities for storing and querying data gathered and processed by the tool |
-| Rendering | Components to generate UI/UX for each of the different output modules|
+## Knowledge Access Points
+The final goal of this tool is to make it easy to understand the role of 3P cookies on critical user journeys all the relevant aspects of Privacy Sandbox and the phasin out of 3P cookies. As you use the tool to analyze and debug your use cases, you will encounter links to documentation and other sources of information to support your learning and understanding as you navigate the transition to a more private web. 
 
 # Usage instructions
 
