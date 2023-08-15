@@ -17,11 +17,11 @@
  * Internal dependencies.
  */
 import { COLOR_MAP } from '../view/design-system/theme/colors';
-import type { CookieStats } from '../view/popup/types';
+import type { CookiesCount } from '../view/popup/types';
 import type { CookieStatsComponents } from '../view/devtools/cookies.types';
 
 export const prepareCookieStatsComponents = (
-  cookieStats: CookieStats
+  cookieStats: CookiesCount
 ): CookieStatsComponents => {
   return {
     legend: [

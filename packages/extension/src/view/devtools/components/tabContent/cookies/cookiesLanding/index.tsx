@@ -24,7 +24,7 @@ import React from 'react';
 import LandingHeader from './landingHeader';
 import CookiesMatrix from './cookiesMatrix';
 import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
-import prepareCookieStatsByCategory from '../../../../../../utils/prepareCookieStatsByCategory';
+import prepareCookiesCount from '../../../../../../utils/prepareCookiesCount';
 import { prepareCookieStatsComponents } from '../../../../../../utils/prepareCookieStatsComponents';
 
 const CookiesLanding = () => {
@@ -34,7 +34,7 @@ const CookiesLanding = () => {
     tabUrl: state.tabUrl,
   }));
 
-  const cookieStats = prepareCookieStatsByCategory(tabCookies, tabUrl);
+  const cookieStats = prepareCookiesCount(tabCookies, tabUrl);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
 
   return (

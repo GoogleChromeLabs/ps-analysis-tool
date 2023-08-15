@@ -22,7 +22,7 @@ import React from 'react';
  * Internal dependencies.
  */
 import { CirclePieChart } from '../../../../../../design-system/components';
-import type { CookieStats } from '../../../../../../popup/types';
+import type { CookiesCount } from '../../../../../../popup/types';
 import type { CookieStatsComponents } from '../../../../../cookies.types';
 
 interface DataMapping {
@@ -35,7 +35,7 @@ interface DataMapping {
 }
 
 interface LandingHeaderProps {
-  cookieStats: CookieStats;
+  cookieStats: CookiesCount;
   cookiesStatsComponents: CookieStatsComponents;
 }
 

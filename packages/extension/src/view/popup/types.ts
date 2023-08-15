@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-export type CookieStats = {
+export type CookiesCount = {
   total: number;
   firstParty: {
     total: number;
