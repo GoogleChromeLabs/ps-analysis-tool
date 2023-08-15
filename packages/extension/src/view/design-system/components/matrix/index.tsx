@@ -28,6 +28,10 @@ interface MatrixProps {
 }
 
 const Matrix = ({ dataComponents }: MatrixProps) => {
+  if (!dataComponents || dataComponents.length === 0) {
+    return null;
+  }
+
   return (
     <div className="grid grid-cols-2 gap-x-5">
       {dataComponents.map((dataComponent, index) => (

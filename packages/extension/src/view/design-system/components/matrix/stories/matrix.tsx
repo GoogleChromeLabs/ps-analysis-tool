@@ -21,44 +21,16 @@ import type { Meta, StoryObj } from '@storybook/react';
 /**
  * Internal dependencies.
  */
-import Legend from '..';
-import { COLOR_MAP } from '../../../../design-system/theme/colors';
+import Matrix from '..';
 
-const meta: Meta<typeof Legend> = {
-  title: 'Extension/Popup/Legend',
-  component: Legend,
+const meta: Meta<typeof Matrix> = {
+  title: 'Extension/DesignSystem/Matrix',
+  component: Matrix,
   tags: ['autodocs'],
 };
 
 export default meta;
 
 export const Primary: StoryObj<typeof meta> = {
-  args: {
-    legendItemList: [
-      {
-        label: 'Functional',
-        count: 10,
-        color: COLOR_MAP.functional,
-        countClassName: 'text-fuctional',
-      },
-      {
-        label: 'Marketing',
-        count: 20,
-        color: COLOR_MAP.marketing,
-        countClassName: 'text-marketing',
-      },
-      {
-        label: 'Analytics',
-        count: 22,
-        color: COLOR_MAP.analytics,
-        countClassName: 'text-analytics',
-      },
-      {
-        label: 'Uncategorized',
-        count: 11,
-        color: COLOR_MAP.uncategorized,
-        countClassName: 'text-uncategorized',
-      },
-    ],
-  },
+  args: {},
 };

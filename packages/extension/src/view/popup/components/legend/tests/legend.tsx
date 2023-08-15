@@ -31,13 +31,13 @@ describe('Legend', () => {
       label: 'Functional',
       count: 10,
       color: 'red',
-      textColorClass: 'text-fuctional',
+      countClassName: 'text-fuctional',
     },
     {
       label: 'Marketing',
       count: 20,
       color: 'blue',
-      textColorClass: 'text-marketing',
+      countClassName: 'text-marketing',
     },
   ];
 
