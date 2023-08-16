@@ -23,8 +23,8 @@ import classNames from 'classnames';
  * Internal dependencies
  */
 import Accordion from './accordion';
-import { File, FileWhite } from '../../../../icons';
 import { useCookieStore } from '../../stateProviders/syncCookieStore';
+import MenuItem from './menuItem';
 
 interface SidebarProps {
   tabsNames: string[];
@@ -169,17 +169,11 @@ const Sidebar: React.FC<SidebarProps> = ({
               setIndex={mainMenuTabSelector}
             />
           ) : (
-            <div
-              className="flex w-full items-center pl-6 py-0.5"
-              onClick={() => mainMenuTabSelector(index)}
-            >
-              <div className="h-4">
-                {selectedIndex === index ? <FileWhite /> : <File />}
-              </div>
-              <div className="block">
-                <span className="pl-2.5">{name}</span>
-              </div>
-            </div>
+            <MenuItem
+              handleClick={() => mainMenuTabSelector(index)}
+              isActive={selectedIndex === index}
+              name={name}
+            />
           )}
         </div>
       ))}

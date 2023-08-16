@@ -25,7 +25,7 @@ export { default as AttributionIcon } from './attribution.svg';
 export { default as AttributionIconWhite } from './attribution-white.svg';
 export { default as BounceTrackingIcon } from './bounce-tracking.svg';
 export { default as BounceTrackingIconWhite } from './bounce-tracking-white.svg';
-export { default as TopicsIcons } from './topics.svg';
+export { default as TopicsIcon } from './topics.svg';
 export { default as TopicsIconWhite } from './topics-white.svg';
 export { default as FingerPrintingIcon } from './fingerprinting.svg';
 export { default as FingerPrintingIconWhite } from './fingerprinting-white.svg';
