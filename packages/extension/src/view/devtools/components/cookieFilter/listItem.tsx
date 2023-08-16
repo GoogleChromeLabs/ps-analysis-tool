@@ -82,7 +82,7 @@ const ListItem: React.FC<ListItemProps> = ({
     <li className="py-1">
       <a
         href="#"
-        className="flex items-center text-black"
+        className="flex items-center text-black dark:text-bright-gray"
         onClick={toggleSubList}
       >
         <span className={showSubList ? '' : '-rotate-90'}>

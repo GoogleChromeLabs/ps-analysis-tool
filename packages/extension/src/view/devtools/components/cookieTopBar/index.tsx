@@ -61,7 +61,7 @@ const CookieSearch = ({
         <FilterIcon
           className={
             isFilterMenuOpen
-              ? 'text-royal-blue dark:bg-medium-persian-blue'
+              ? 'text-royal-blue dark:text-medium-persian-blue'
               : 'text-[#AFB0B1]'
           }
         />

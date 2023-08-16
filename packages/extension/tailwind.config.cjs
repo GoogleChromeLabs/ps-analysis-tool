@@ -57,6 +57,7 @@ module.exports = {
       manatee: '#9AA0A6',
       'bright-gray': '#E8EAED',
       'chinese-silver': '#CDCDCD',
+      'medium-persian-blue': '#0E639C',
     },
     backgroundColor: {
       ...colors,
@@ -86,6 +87,8 @@ module.exports = {
       ...colors,
       'royal-blue': '#3871E0',
       quartz: '#494C50',
+      'medium-persian-blue': '#0E639C',
+      'charleston-green': '#292A2D',
     },
     stroke: {
       'bright-gray': '#E8EAED',
