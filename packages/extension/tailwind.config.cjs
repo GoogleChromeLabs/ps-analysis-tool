@@ -66,6 +66,7 @@ module.exports = {
       'bright-gray': '#E8EAED',
       'chinese-silver': '#CDCDCD',
       'medium-persian-blue': '#0E639C',
+      mischka: '#AFB0B1',
     },
     backgroundColor: {
       ...colors,
@@ -93,6 +94,7 @@ module.exports = {
       'medium-persian-blue': '#0E639C',
       'hex-gray': '#E0E0E0',
       'bright-gray': '#E8EAED',
+      gainsboro: '#DADCE0',
     },
     colors: {
       ...colors,

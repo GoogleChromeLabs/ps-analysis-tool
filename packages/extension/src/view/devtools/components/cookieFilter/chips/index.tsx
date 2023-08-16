@@ -55,7 +55,7 @@ const ChipsBar: React.FC = () => {
           <span className="ml-2 mr-1 dark:text-bright-gray bg-transparent">
             Clear all
           </span>
-          <div className="w-[1px] bg-[#DADCE0] h-[20px]"></div>
+          <div className="w-[1px] bg-gainsboro h-[20px]"></div>
         </a>
       )}
       <ChipList />

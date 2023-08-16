@@ -62,13 +62,13 @@ const CookieSearch = ({
           className={
             isFilterMenuOpen
               ? 'text-royal-blue dark:text-medium-persian-blue'
-              : 'text-[#AFB0B1]'
+              : 'text-mischka'
           }
         />
       </button>
       <input
         type="text"
-        className="h-5 w-80 mx-2 p-2 outline-none dark:bg-charleston-green border-[1px] border-[#DADCE0] focus:border-royal-blue focus:dark:border-medium-persian-blue dark:text-[#AFB0B1]"
+        className="h-5 w-80 mx-2 p-2 outline-none dark:bg-charleston-green border-[1px] border-gainsboro focus:border-royal-blue focus:dark:border-medium-persian-blue dark:text-mischka"
         placeholder="Search"
         value={searchTerm}
         onInput={handleInput}
@@ -80,7 +80,7 @@ const CookieSearch = ({
         className="w-3 h-3"
         title="Clear Search"
       >
-        <CrossIcon className="text-[#AFB0B1]" />
+        <CrossIcon className="text-mischka" />
       </button>
     </div>
   );
