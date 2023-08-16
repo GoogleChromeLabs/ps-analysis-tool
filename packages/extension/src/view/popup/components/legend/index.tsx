@@ -21,24 +21,30 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { Circle } from '../../../design-system/components';
+import {
+  Matrix,
+  type MatrixComponentProps,
+} from '../../../design-system/components';
+import { type Legend as LegendProp } from '../../../devtools/cookies.types';
 
 interface LegendProps {
-  legendItemList: { label: string; count: number; color: string }[];
+  legendItemList: LegendProp[];
 }
 
 const Legend = ({ legendItemList }: LegendProps) => {
-  return (
-    <div className="flex flex-col">
-      {legendItemList.map(({ label, count, color }, index) => (
-        <div key={index} className="w-36 flex items-center justify-center my-1">
-          <Circle color={color} />
-          <p className="flex-1 text-chart-label text-xs ml-2">{label}</p>
-          <p className="text-chart-label text-xs">{count}</p>
-        </div>
-      ))}
-    </div>
+  const dataComponents: MatrixComponentProps[] = legendItemList.map(
+    ({ label, count, color, countClassName }) => {
+      return {
+        color,
+        title: label,
+        count,
+        countClassName: countClassName,
+        containerClasses: '',
+      };
+    }
   );
+
+  return <Matrix dataComponents={dataComponents} />;
 };
 
 export default Legend;

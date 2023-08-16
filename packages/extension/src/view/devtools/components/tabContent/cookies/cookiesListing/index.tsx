@@ -25,10 +25,10 @@ import { Resizable } from 're-resizable';
 import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import CookieDetails from './cookieDetails';
 import CookieTable from './cookieTable';
-import FiltersList from '../../../cookieFilter';
 import { useFilterManagementStore } from '../../../../stateProviders/filterManagementStore';
 import ChipsBar from '../../../cookieFilter/chips';
 import CookieTopBar from '../../../cookieTopBar';
+import FiltersList from '../../../cookieFilter';
 
 const CookiesListing = () => {
   const { selectedFrame } = useCookieStore(({ state }) => ({

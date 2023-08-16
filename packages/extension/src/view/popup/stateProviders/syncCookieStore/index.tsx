@@ -29,12 +29,12 @@ import { useDebouncedCallback } from 'use-debounce';
  * Internal dependencies.
  */
 import { getCurrentTab } from '../../../../utils/getCurrentTabId';
-import type { CookieStats } from '../../types';
-import countCookiesByCategory from '../../../../utils/countCookiesByCategory';
+import type { CookiesCount } from '../../types';
+import prepareCookiesCount from '../../../../utils/prepareCookiesCount';
 
 export interface CookieStoreContext {
   state: {
-    tabCookieStats: CookieStats | null;
+    tabCookieStats: CookiesCount | null;
   };
   actions: object;
 }
@@ -48,14 +48,14 @@ const initialState: CookieStoreContext = {
         functional: 0,
         marketing: 0,
         analytics: 0,
-        uncategorised: 0,
+        uncategorized: 0,
       },
       thirdParty: {
         total: 0,
         functional: 0,
         marketing: 0,
         analytics: 0,
-        uncategorised: 0,
+        uncategorized: 0,
       },
     },
   },
@@ -92,7 +92,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     ];
 
     if (tabData && tabData.cookies) {
-      setDebouncedStats(countCookiesByCategory(tabData.cookies, _tabUrl));
+      setDebouncedStats(prepareCookiesCount(tabData.cookies, _tabUrl));
     }
   }, [setDebouncedStats]);
 
@@ -105,7 +105,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         changes[tabId.toString()]?.newValue?.cookies
       ) {
         setDebouncedStats(
-          countCookiesByCategory(
+          prepareCookiesCount(
             changes[tabId.toString()].newValue.cookies,
             tabUrl
           )
