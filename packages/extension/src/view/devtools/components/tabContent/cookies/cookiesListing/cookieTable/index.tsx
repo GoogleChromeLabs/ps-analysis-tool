@@ -30,7 +30,6 @@ import {
  */
 import Table from '../../../../table';
 import { useContentPanelStore } from '../../../../../stateProviders/contentPanelStore';
-import { Check } from '../../../../../../../icons';
 import type { CookieTableData } from '../../../../../cookies.types';
 
 export interface CookieTableProps {
@@ -70,11 +69,7 @@ const tableColumns: ColumnDef<CookieTableData>[] = [
     accessorKey: 'parsedCookie.httponly',
     cell: (info) => (
       <p className="flex justify-center items-center">
-        {info.getValue() ? (
-          <Check className="scale-125 stroke-onyx dark:stroke-bright-gray" />
-        ) : (
-          ''
-        )}
+        {info.getValue() ? <span className="font-serif">✓</span> : ''}
       </p>
     ),
   },
@@ -90,11 +85,7 @@ const tableColumns: ColumnDef<CookieTableData>[] = [
     accessorKey: 'parsedCookie.secure',
     cell: (info) => (
       <p className="flex justify-center items-center">
-        {info.getValue() ? (
-          <Check className="scale-125 stroke-onyx dark:stroke-bright-gray" />
-        ) : (
-          ''
-        )}
+        {info.getValue() ? <span className="font-serif">✓</span> : ''}
       </p>
     ),
   },
@@ -108,11 +99,7 @@ const tableColumns: ColumnDef<CookieTableData>[] = [
     accessorKey: 'isFirstParty',
     cell: (info) => (
       <p className="flex justify-center items-center">
-        {!info.getValue() ? (
-          <Check className="scale-125 stroke-onyx dark:stroke-bright-gray" />
-        ) : (
-          ''
-        )}
+        {!info.getValue() ? <span className="font-serif">✓</span> : ''}
       </p>
     ),
   },
@@ -142,11 +129,7 @@ const tableColumns: ColumnDef<CookieTableData>[] = [
     accessorKey: 'isCookieSet',
     cell: (info) => (
       <p className="flex justify-center items-center">
-        {info.getValue() ? (
-          <Check className="scale-125 stroke-onyx dark:stroke-bright-gray" />
-        ) : (
-          ''
-        )}
+        {info.getValue() ? <span className="font-serif">✓</span> : ''}
       </p>
     ),
   },

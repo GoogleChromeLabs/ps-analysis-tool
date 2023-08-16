@@ -47,7 +47,7 @@ const ChipsBar: React.FC = () => {
     <div
       className={`${
         selectedFilterCount === 0 && 'hidden'
-      } w-full h-[25px] py-1 px-2 flex items-center overflow-x-scroll no-scrollbar bg-anti-flash-white dark:bg-raisin-black border-b border-gray-300`}
+      } w-full h-[25px] py-1 px-2 flex items-center overflow-x-scroll no-scrollbar bg-anti-flash-white dark:bg-raisin-black border-b border-gray-300 dark:border-quartz`}
     >
       {selectedFilterCount > 1 && (
         <a
@@ -59,7 +59,7 @@ const ChipsBar: React.FC = () => {
           <span className="ml-1 mr-1 dark:text-bright-gray bg-transparent">
             Clear all
           </span>
-          <div className="w-[1px] bg-gainsboro h-[20px]"></div>
+          <div className="w-[1px] bg-gainsboro dark:bg-quartz h-[20px]"></div>
         </a>
       )}
       <ChipList />

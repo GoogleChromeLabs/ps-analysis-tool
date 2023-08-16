@@ -28,14 +28,19 @@ import HeaderCell from './headerCell';
 
 interface HeaderRowProps {
   headerGroup: HeaderGroup<TableData>;
+  setIsRowFocused: (state: boolean) => void;
 }
 
-const HeaderRow = ({ headerGroup }: HeaderRowProps) => {
+const HeaderRow = ({ headerGroup, setIsRowFocused }: HeaderRowProps) => {
   return (
     <>
       <tr className="bg-anti-flash-white dark:bg-charleston-green">
         {headerGroup.headers.map((header) => (
-          <HeaderCell key={header.id} header={header} />
+          <HeaderCell
+            key={header.id}
+            header={header}
+            setIsRowFocused={setIsRowFocused}
+          />
         ))}
       </tr>
       <tr>

@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 
 /**
@@ -45,11 +45,29 @@ const Sidebar: React.FC<SidebarProps> = ({
     })
   );
   const [accordionState, setAccordionState] = useState<boolean>(false);
+  const [isTabFocused, setIsTabFocused] = useState<boolean>(true);
+  const sidebarContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        sidebarContainerRef.current &&
+        !sidebarContainerRef.current.contains(event.target as Node)
+      ) {
+        setIsTabFocused(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  }, []);
 
   const mainMenuTabSelector = useCallback(
     (index: number) => {
       setIndex(index);
       setSelectedFrame(null);
+      setIsTabFocused(true);
     },
     [setIndex, setSelectedFrame]
   );
@@ -141,48 +159,57 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <div className="overflow-auto h-full">
-      {tabsNames.map((name, index: number) => (
-        <div
-          key={name}
-          data-testid={name}
-          className={classNames(
-            'flex items-center cursor-default gap-y-1.5 outline-0 dark:text-bright-gray',
-            {
-              'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver':
-                selectedIndex === index && name !== 'Cookies',
-            }
-          )}
-          tabIndex={0}
-          onKeyDown={(event) => keyboardNavigator(event)}
-        >
-          {name === 'Cookies' ? (
-            <Accordion
-              keyboardNavigator={keyboardNavigator}
-              accordionState={accordionState}
-              setAccordionState={setAccordionState}
-              tabFrames={tabFrames}
-              setSelectedFrame={setSelectedFrame}
-              selectedFrame={selectedFrame}
-              selectedIndex={selectedIndex}
-              index={index}
-              tabName={name}
-              setIndex={mainMenuTabSelector}
-            />
-          ) : (
-            <div
-              className="flex w-full items-center pl-6 py-0.5"
-              onClick={() => mainMenuTabSelector(index)}
-            >
-              <div className="h-4">
-                {selectedIndex === index ? <FileWhite /> : <File />}
+      <div ref={sidebarContainerRef}>
+        {tabsNames.map((name, index: number) => (
+          <div
+            key={name}
+            data-testid={name}
+            className={classNames(
+              'flex items-center cursor-default gap-y-1.5 outline-0 dark:text-bright-gray',
+              selectedIndex === index &&
+                name !== 'Cookies' &&
+                (isTabFocused
+                  ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
+                  : 'bg-gainsboro dark:bg-outer-space')
+            )}
+            tabIndex={0}
+            onKeyDown={(event) => keyboardNavigator(event)}
+          >
+            {name === 'Cookies' ? (
+              <Accordion
+                keyboardNavigator={keyboardNavigator}
+                accordionState={accordionState}
+                setAccordionState={setAccordionState}
+                tabFrames={tabFrames}
+                setSelectedFrame={setSelectedFrame}
+                selectedFrame={selectedFrame}
+                selectedIndex={selectedIndex}
+                index={index}
+                tabName={name}
+                setIndex={mainMenuTabSelector}
+                isTabFocused={isTabFocused}
+                setIsTabFocused={setIsTabFocused}
+              />
+            ) : (
+              <div
+                className="flex w-full items-center pl-6 py-0.5"
+                onClick={() => mainMenuTabSelector(index)}
+              >
+                <div className="h-4">
+                  {selectedIndex === index && isTabFocused ? (
+                    <FileWhite />
+                  ) : (
+                    <File />
+                  )}
+                </div>
+                <div className="block">
+                  <span className="pl-2.5">{name}</span>
+                </div>
               </div>
-              <div className="block">
-                <span className="pl-2.5">{name}</span>
-              </div>
-            </div>
-          )}
-        </div>
-      ))}
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

@@ -33,9 +33,7 @@ const Cookies = () => {
 
   return (
     <div
-      className={`h-full ${
-        selectedFrame ? '' : 'flex items-center justify-center'
-      }`}
+      className={`h-full ${selectedFrame ? '' : 'flex items-center'}`}
       data-testid="cookies-content"
     >
       {selectedFrame ? <CookiesListing /> : <CookiesLanding />}
