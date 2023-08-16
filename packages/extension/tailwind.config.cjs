@@ -87,7 +87,7 @@ module.exports = {
       ...colors,
       'american-silver': '#CBCDD1',
       'hex-gray': '#E0E0E0',
-      'bright-gray': '#EBEBEB',
+      'bright-gray': '#E8EAED',
       quartz: '#494C50',
     },
     stroke: {
