@@ -22,6 +22,7 @@ import type { Meta, StoryObj } from '@storybook/react';
  * Internal dependencies.
  */
 import CookiesMatrix from '..';
+import cookiesStatsComponents from '../../../../../../../../utils/test-data/cookiesStatsComponents';
 
 const meta: Meta<typeof CookiesMatrix> = {
   title: 'Extension/DevTools/CookiesLandingPage/CookiesMatrix',
@@ -61,70 +62,7 @@ export const Primary: StoryObj<typeof meta> = {
         isCookieSet: true,
       },
     },
-    cookiesStatsComponents: {
-      legend: [
-        {
-          label: 'Functional',
-          count: 1,
-          color: '#5CC971',
-          countClassName: 'text-functional',
-        },
-        {
-          label: 'Marketing',
-          count: 0,
-          color: '#F3AE4E',
-          countClassName: 'text-marketing',
-        },
-        {
-          label: 'Analytics',
-          count: 2,
-          color: '#4C79F4',
-          countClassName: 'text-analytics',
-        },
-        {
-          label: 'Uncategorized',
-          count: 4,
-          color: '#EC7159',
-          countClassName: 'text-uncategorized',
-        },
-      ],
-      firstParty: [
-        {
-          count: 0,
-          color: '#5CC971',
-        },
-        {
-          count: 0,
-          color: '#F3AE4E',
-        },
-        {
-          count: 2,
-          color: '#4C79F4',
-        },
-        {
-          count: 4,
-          color: '#EC7159',
-        },
-      ],
-      thirdParty: [
-        {
-          count: 1,
-          color: '#5CC971',
-        },
-        {
-          count: 0,
-          color: '#F3AE4E',
-        },
-        {
-          count: 0,
-          color: '#4C79F4',
-        },
-        {
-          count: 0,
-          color: '#EC7159',
-        },
-      ],
-    },
+    cookiesStatsComponents: cookiesStatsComponents,
     tabFrames: {
       'https://example.com': {
         frameIds: [0, 0],
