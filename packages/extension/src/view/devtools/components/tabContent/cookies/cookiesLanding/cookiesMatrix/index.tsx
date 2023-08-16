@@ -118,7 +118,7 @@ const CookiesMatrix = ({
   ];
 
   return (
-    <div className="w-full">
+    <div className="w-full" data-testid="cookies-matrix">
       <div>
         <div className="flex gap-x-5 justify-between">
           <h4 className="pb-3 flex-1 grow border-b border-bright-gray text-xs font-bold text-darkest-gray dark:text-bright-gray uppercase">
