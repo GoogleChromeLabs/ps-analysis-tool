@@ -22,7 +22,7 @@ import type { Meta, StoryObj } from '@storybook/react';
  * Internal dependencies.
  */
 import Details from '../details';
-import type { CookieTableData } from '../../../../../../stateProviders/syncCookieStore';
+import type { CookieTableData } from '../../../../../../cookies.types';
 
 const meta = {
   title: 'Extension/DevTools/CookiesPanel/CookieDetails/Details',

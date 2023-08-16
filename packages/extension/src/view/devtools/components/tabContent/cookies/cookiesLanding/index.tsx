@@ -18,8 +18,40 @@
  */
 import React from 'react';
 
+/**
+ * Internal dependencies.
+ */
+import LandingHeader from './landingHeader';
+import CookiesMatrix from './cookiesMatrix';
+import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
+import prepareCookiesCount from '../../../../../../utils/prepareCookiesCount';
+import { prepareCookieStatsComponents } from '../../../../../../utils/prepareCookieStatsComponents';
+
 const CookiesLanding = () => {
-  return <p>Landing page placeholder</p>;
+  const { tabCookies, tabFrames, tabUrl } = useCookieStore(({ state }) => ({
+    tabFrames: state.tabFrames,
+    tabCookies: state.tabCookies,
+    tabUrl: state.tabUrl,
+  }));
+
+  const cookieStats = prepareCookiesCount(tabCookies, tabUrl);
+  const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
+
+  return (
+    <div className="h-full w-full" data-testid="cookies-landing">
+      <LandingHeader
+        cookieStats={cookieStats}
+        cookiesStatsComponents={cookiesStatsComponents}
+      />
+      <div className="lg:max-w-[729px] mx-auto flex justify-center mt-10 pb-28 px-4">
+        <CookiesMatrix
+          tabCookies={tabCookies}
+          cookiesStatsComponents={cookiesStatsComponents}
+          tabFrames={tabFrames}
+        />
+      </div>
+    </div>
+  );
 };
 
 export default CookiesLanding;

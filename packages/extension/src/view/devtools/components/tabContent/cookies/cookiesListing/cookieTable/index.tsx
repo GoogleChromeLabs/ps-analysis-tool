@@ -30,7 +30,7 @@ import {
  */
 import Table from '../../../../table';
 import { useContentPanelStore } from '../../../../../stateProviders/contentPanelStore';
-import type { CookieTableData } from '../../../../../stateProviders/syncCookieStore';
+import type { CookieTableData } from '../../../../../cookies.types';
 
 export interface CookieTableProps {
   cookies: CookieTableData[];
@@ -92,7 +92,7 @@ const tableColumns: ColumnDef<CookieTableData>[] = [
   {
     header: 'Category',
     accessorKey: 'analytics.category',
-    cell: (info) => (info.getValue() ? info.getValue() : 'Uncategorised'),
+    cell: (info) => (info.getValue() ? info.getValue() : 'Uncategorized'),
   },
   {
     header: 'Third Party',

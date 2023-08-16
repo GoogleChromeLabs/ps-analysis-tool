@@ -25,8 +25,8 @@ import React from 'react';
 import './app.css';
 import { Legend } from './components';
 import { useCookieStore } from './stateProviders/syncCookieStore';
-import { COLOR_MAP } from '../design-system/theme/colors';
 import { CirclePieChart } from '../design-system/components';
+import { prepareCookieStatsComponents } from '../../utils/prepareCookieStatsComponents';
 
 const App: React.FC = () => {
   const { cookieStats, loading } = useCookieStore(({ state }) => ({
@@ -44,7 +44,7 @@ const App: React.FC = () => {
 
   if (!cookieStats) {
     return (
-      <div className="w-96 h-80 flex justify-center items-center flex-col">
+      <div className="w-96 h-fit p-5 flex justify-center items-center flex-col">
         <p className="font-bold text-lg">
           Please refresh this page to view cookies
         </p>
@@ -57,103 +57,36 @@ const App: React.FC = () => {
     cookieStats.thirdParty.total === 0
   ) {
     return (
-      <div className="w-96 h-80 flex justify-center items-center flex-col">
+      <div className="w-96 h-fit p-5 flex justify-center items-center flex-col">
         <p className="font-bold text-lg">No cookies found on this page</p>
       </div>
     );
   }
-  const legendData = [
-    {
-      label: 'Functional',
-      count:
-        cookieStats.firstParty.functional + cookieStats.thirdParty.functional,
-      color: COLOR_MAP.functional,
-    },
-    {
-      label: 'Marketing',
-      count:
-        cookieStats.firstParty.marketing + cookieStats.thirdParty.marketing,
-      color: COLOR_MAP.marketing,
-    },
-    {
-      label: 'Analytics',
-      count:
-        cookieStats.firstParty.analytics + cookieStats.thirdParty.analytics,
-      color: COLOR_MAP.analytics,
-    },
-    {
-      label: 'Uncategorised',
-      count:
-        cookieStats.firstParty.uncategorised +
-        cookieStats.thirdParty.uncategorised,
-      color: COLOR_MAP.uncategorised,
-    },
-  ];
 
-  const firstPartyPiechartData = [
-    {
-      count: cookieStats.firstParty.functional,
-      color: COLOR_MAP.functional,
-    },
-    {
-      count: cookieStats.firstParty.marketing,
-      color: COLOR_MAP.marketing,
-    },
-    {
-      count: cookieStats.firstParty.analytics,
-      color: COLOR_MAP.analytics,
-    },
-    {
-      count: cookieStats.firstParty.uncategorised,
-      color: COLOR_MAP.uncategorised,
-    },
-  ];
-
-  const thirdPartyPiechartData = [
-    {
-      count: cookieStats.thirdParty.functional,
-      color: COLOR_MAP.functional,
-    },
-    {
-      count: cookieStats.thirdParty.marketing,
-      color: COLOR_MAP.marketing,
-    },
-    {
-      count: cookieStats.thirdParty.analytics,
-      color: COLOR_MAP.analytics,
-    },
-    {
-      count: cookieStats.thirdParty.uncategorised,
-      color: COLOR_MAP.uncategorised,
-    },
-  ];
+  const statsComponents = prepareCookieStatsComponents(cookieStats);
 
   return (
-    <div className="w-96 h-80 flex justify-center items-center flex-col">
-      <div className="w-full flex-1 flex gap-16 px-12">
-        <div className="w-full h-full flex flex-col justify-center items-center">
-          <div className="w-full text-center">
-            <CirclePieChart
-              centerCount={cookieStats.firstParty.total}
-              data={firstPartyPiechartData}
-              title="1st Party Cookies"
-            />
-          </div>
+    <div className="w-96 h-fit p-5 flex justify-center items-center flex-col">
+      <div className="w-full flex gap-x-6 justify-center border-b border-hex-gray pb-3.5">
+        <div className="w-28 text-center">
+          <CirclePieChart
+            centerCount={cookieStats.firstParty.total}
+            data={statsComponents.firstParty}
+            title="1st Party Cookies"
+          />
         </div>
-        <div className="w-full h-full flex flex-col justify-center items-center">
-          <div className="w-full text-center">
-            <CirclePieChart
-              centerCount={cookieStats.thirdParty.total}
-              data={thirdPartyPiechartData}
-              title="3rd Party Cookies"
-            />
-          </div>
+        <div className="w-28 text-center">
+          <CirclePieChart
+            centerCount={cookieStats.thirdParty.total}
+            data={statsComponents.thirdParty}
+            title="3rd Party Cookies"
+          />
         </div>
       </div>
-      <div className="mt-3">
-        <Legend legendItemList={legendData} />
+      <div className="w-full mb-4">
+        <Legend legendItemList={statsComponents.legend} />
       </div>
-      <div className="w-full text-center mt-5 px-3 mb-3">
+      <div className="w-full text-center">
         <p className="text-chart-label text-xs">
           {'Inspect cookies in the "Privacy Sandbox" panel of DevTools'}
         </p>

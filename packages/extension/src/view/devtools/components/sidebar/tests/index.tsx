@@ -38,15 +38,15 @@ const tabNames = [
   'Bounce Tracking',
   'Fingerprinting',
 ];
-const uncategorised1pCookie: ParsedCookie = {
+const uncategorized1pCookie: ParsedCookie = {
   name: '_cb',
-  value: 'uncategorised1pCookie',
+  value: 'uncategorized1pCookie',
   domain: '.cnn.com',
 };
 
-const uncategorised3pCookie: ParsedCookie = {
+const uncategorized3pCookie: ParsedCookie = {
   name: 'pubsyncexp',
-  value: 'uncategorised3pCookie',
+  value: 'uncategorized3pCookie',
   domain: '.ads.pubmatic.com',
 };
 
@@ -70,8 +70,8 @@ const mockResponse: {
   setSelectedFrame: CookieStoreContext['actions']['setSelectedFrame'];
 } = {
   tabCookies: {
-    [uncategorised1pCookie.name]: {
-      parsedCookie: uncategorised1pCookie,
+    [uncategorized1pCookie.name]: {
+      parsedCookie: uncategorized1pCookie,
       analytics: null,
       url: 'https://edition.cnn.com/whatever/api',
       headerType: 'response',
@@ -80,8 +80,8 @@ const mockResponse: {
       isIbcCompliant: true,
       isCookieSet: true,
     },
-    [uncategorised3pCookie.name]: {
-      parsedCookie: uncategorised3pCookie,
+    [uncategorized3pCookie.name]: {
+      parsedCookie: uncategorized3pCookie,
       analytics: null,
       url: 'https://api.pubmatic.com/whatever/api',
       headerType: 'response',

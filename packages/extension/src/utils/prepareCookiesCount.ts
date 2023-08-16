@@ -18,44 +18,44 @@
  * Internal dependencies.
  */
 import type { CookieData } from '../localStore';
-import type { CookieStats } from '../view/popup/types';
+import type { CookiesCount } from '../view/popup/types';
 import isFirstParty from './isFirstParty';
 
 /**
- * Categorize cookies count into 1st party and 3rd party cookies and into functional, marketing, analytics and Uncategorised.
+ * Categorize cookies count into 1st party and 3rd party cookies and then into functional, marketing, analytics and uncategorized.
  * @param {{ [key: string]: CookieData }} cookies Cookies of a tab.
  * @param {string} tabUrl Tab URL
- * @returns CookieStats object with the categorized cookies count.
+ * @returns CookiesCount object with the categorized cookies count.
  */
-const countCookiesByCategory = (
+const prepareCookiesCount = (
   cookies: { [key: string]: CookieData } | null,
-  tabUrl: string
+  tabUrl: string | null
 ) => {
-  const stats: CookieStats = {
+  const cookiesCount: CookiesCount = {
     total: 0,
     firstParty: {
       total: 0,
       functional: 0,
       marketing: 0,
       analytics: 0,
-      uncategorised: 0,
+      uncategorized: 0,
     },
     thirdParty: {
       total: 0,
       functional: 0,
       marketing: 0,
       analytics: 0,
-      uncategorised: 0,
+      uncategorized: 0,
     },
   };
 
-  if (!cookies) {
-    return stats;
+  if (!cookies || !tabUrl) {
+    return cookiesCount;
   }
 
   const cookieList = Object.values(cookies);
 
-  stats.total = cookieList.length;
+  cookiesCount.total = cookieList.length;
 
   for (const cookie of cookieList) {
     const {
@@ -64,19 +64,19 @@ const countCookiesByCategory = (
     } = cookie;
     const isFirstPartyCookie = isFirstParty(domain, tabUrl);
     const category = analytics?.category?.toLowerCase() as
-      | keyof CookieStats['firstParty']
-      | keyof CookieStats['thirdParty']
+      | keyof CookiesCount['firstParty']
+      | keyof CookiesCount['thirdParty']
       | undefined;
 
     if (isFirstPartyCookie) {
-      stats.firstParty.total++;
-      stats.firstParty[category ? category : 'uncategorised']++;
+      cookiesCount.firstParty.total++;
+      cookiesCount.firstParty[category ? category : 'uncategorized']++;
     } else {
-      stats.thirdParty.total++;
-      stats.thirdParty[category ? category : 'uncategorised']++;
+      cookiesCount.thirdParty.total++;
+      cookiesCount.thirdParty[category ? category : 'uncategorized']++;
     }
   }
-  return stats;
+  return cookiesCount;
 };
 
-export default countCookiesByCategory;
+export default prepareCookiesCount;
