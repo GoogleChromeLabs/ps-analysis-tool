@@ -80,6 +80,7 @@ module.exports = {
       ...colors,
       'american-silver': '#CBCDD1',
       'royal-blue': '#3871E0',
+      'medium-persian-blue': '#0E639C',
     },
     colors: {
       ...colors,

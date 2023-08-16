@@ -52,19 +52,23 @@ const CookieSearch = ({
   );
 
   return (
-    <div className="w-full h-full px-2 flex items-center border-b border-american-silver bg-anti-flash-white">
+    <div className="w-full h-full px-2 flex items-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green">
       <button
         className="w-3 h-3"
         onClick={toggleFilterMenu}
         title="Open filter options"
       >
         <FilterIcon
-          className={isFilterMenuOpen ? 'text-royal-blue' : 'text-[#AFB0B1]'}
+          className={
+            isFilterMenuOpen
+              ? 'text-royal-blue dark:bg-medium-persian-blue'
+              : 'text-[#AFB0B1]'
+          }
         />
       </button>
       <input
         type="text"
-        className="h-5 w-80 mx-2 p-2 outline-none border-[1px] border-[#DADCE0] focus:border-royal-blue"
+        className="h-5 w-80 mx-2 p-2 outline-none dark:bg-charleston-green border-[1px] border-[#DADCE0] focus:border-royal-blue focus:dark:border-medium-persian-blue dark:text-[#AFB0B1]"
         placeholder="Search"
         value={searchTerm}
         onInput={handleInput}
