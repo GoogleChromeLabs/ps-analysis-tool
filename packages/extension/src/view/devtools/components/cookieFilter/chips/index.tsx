@@ -52,7 +52,7 @@ const ChipsBar: React.FC = () => {
           onClick={clearAll}
         >
           <ClearIcon className="min-w-[14px] min-h-[14px]" />
-          <span className="ml-2 mr-1 dark:text-bright-gray bg-transparent">
+          <span className="ml-1 mr-1 dark:text-bright-gray bg-transparent">
             Clear all
           </span>
           <div className="w-[1px] bg-gainsboro h-[20px]"></div>

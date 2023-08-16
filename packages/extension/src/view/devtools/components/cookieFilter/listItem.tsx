@@ -79,7 +79,7 @@ const ListItem: React.FC<ListItemProps> = ({
   };
 
   return (
-    <li className="py-1">
+    <li className="py-[3px]">
       <a
         href="#"
         className="flex items-center text-black dark:text-bright-gray"
@@ -101,7 +101,7 @@ const ListItem: React.FC<ListItemProps> = ({
           {Number(filter?.filters?.size) > 4 && (
             <a
               onClick={toggleShowMore}
-              className="text-md text-link ml-2 mt-1 block font-bold dark:text-manatee"
+              className="text-md text-link ml-2 mt-1 block text-royal-blue dark:text-medium-persian-blue"
               href="#"
             >
               {isExpanded ? 'Show Less' : 'Show More'}

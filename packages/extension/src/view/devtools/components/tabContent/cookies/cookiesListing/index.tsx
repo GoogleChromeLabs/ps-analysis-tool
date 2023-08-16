@@ -75,10 +75,6 @@ const CookiesListing = () => {
             <div className="h-full flex">
               {isFilterMenuOpen && (
                 <Resizable
-                  defaultSize={{
-                    width: '20%',
-                    height: '100%',
-                  }}
                   minWidth="10%"
                   maxWidth="80%"
                   enable={{
@@ -87,7 +83,7 @@ const CookiesListing = () => {
                     bottom: false,
                     left: false,
                   }}
-                  className="overflow-y-scroll overflow-x-hidden pt-5 pl-5"
+                  className="overflow-y-scroll overflow-x-hidden pt-[18px] pl-[18px]"
                 >
                   <FiltersList />
                 </Resizable>
