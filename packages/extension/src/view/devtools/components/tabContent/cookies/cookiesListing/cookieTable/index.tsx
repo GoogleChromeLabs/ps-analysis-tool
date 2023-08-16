@@ -125,15 +125,6 @@ const tableColumns: ColumnDef<CookieTableData>[] = [
     ),
   },
   {
-    header: 'IBC Compliant',
-    accessorKey: 'isIbcCompliant',
-    cell: (info) => (
-      <p className="flex justify-center items-center">
-        {info.getValue() ? <span className="font-serif">✓</span> : ''}
-      </p>
-    ),
-  },
-  {
     header: 'Cookie Accepted',
     accessorKey: 'isCookieSet',
     cell: (info) => (

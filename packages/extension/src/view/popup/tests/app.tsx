@@ -36,7 +36,6 @@ const tabCookies = {
     headerType: 'response',
     frameIdList: [1],
     isFirstParty: true,
-    isIbcCompliant: true,
     isCookieSet: true,
   },
   pubsyncexp: {
@@ -46,7 +45,6 @@ const tabCookies = {
     headerType: 'response',
     frameIdList: [1],
     isFirstParty: false,
-    isIbcCompliant: true,
     isCookieSet: true,
   },
   __qca: {
@@ -67,7 +65,6 @@ const tabCookies = {
     headerType: 'response',
     frameIdList: [1],
     isFirstParty: true,
-    isIbcCompliant: true,
     isCookieSet: true,
   },
   KRTBCOOKIE_290: {
@@ -88,7 +85,6 @@ const tabCookies = {
     headerType: 'response',
     frameIdList: [1],
     isFirstParty: false,
-    isIbcCompliant: true,
     isCookieSet: true,
   },
 };

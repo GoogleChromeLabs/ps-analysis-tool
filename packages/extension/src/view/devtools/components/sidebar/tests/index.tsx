@@ -77,7 +77,6 @@ const mockResponse: {
       headerType: 'response',
       frameIdList: [1],
       isFirstParty: true,
-      isIbcCompliant: true,
       isCookieSet: true,
     },
     [uncategorized3pCookie.name]: {
@@ -87,7 +86,6 @@ const mockResponse: {
       headerType: 'response',
       frameIdList: [1],
       isFirstParty: false,
-      isIbcCompliant: true,
       isCookieSet: true,
     },
     [known1pCookie.name]: {
@@ -108,7 +106,6 @@ const mockResponse: {
       headerType: 'response',
       frameIdList: [1],
       isFirstParty: true,
-      isIbcCompliant: true,
       isCookieSet: true,
     },
     [known3pCookie.name]: {
@@ -129,7 +126,6 @@ const mockResponse: {
       headerType: 'response',
       frameIdList: [1],
       isFirstParty: false,
-      isIbcCompliant: true,
       isCookieSet: true,
     },
   },
