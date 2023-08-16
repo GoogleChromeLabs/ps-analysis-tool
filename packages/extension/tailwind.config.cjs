@@ -89,6 +89,7 @@ module.exports = {
       'hex-gray': '#E0E0E0',
       'bright-gray': '#E8EAED',
       quartz: '#494C50',
+      manatee: '#9AA0A6',
     },
     stroke: {
       'bright-gray': '#E8EAED',

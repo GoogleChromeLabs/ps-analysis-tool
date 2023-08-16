@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -31,6 +32,13 @@ export interface DetailsProps {
 const Details = ({ selectedCookie }: DetailsProps) => {
   const [showUrlDecoded, setShowUrlDecoded] = useState(false);
 
+  const checkboxClasses = !showUrlDecoded
+    ? 'min-h-0 min-w-0 h-[13px] w-[13px] appearance-none bg-outer-space border border-manatee rounded-sm'
+        .split(' ')
+        .map((className) => `dark:${className}`)
+        .join(' ')
+    : '';
+
   return (
     <div className="text-xs py-1 px-1.5">
       <p className="font-bold text-granite-gray dark:text-manatee mb-1 text-semibold flex items-center">
@@ -40,7 +48,10 @@ const Details = ({ selectedCookie }: DetailsProps) => {
             data-testid="show-url-decoded-checkbox"
             role="checkbox"
             type="checkbox"
-            className="ml-3 mr-1 cursor-pointer dark:accent-orange-400"
+            className={classNames(
+              'ml-3 mr-1 cursor-pointer dark:accent-orange-400',
+              checkboxClasses
+            )}
             checked={showUrlDecoded}
             onChange={() => setShowUrlDecoded(!showUrlDecoded)}
           />
