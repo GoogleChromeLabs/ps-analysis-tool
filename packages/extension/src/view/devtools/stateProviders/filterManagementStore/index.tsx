@@ -29,6 +29,7 @@ import { useCookieStore } from '../syncCookieStore';
 import type { CookieTableData } from '../../cookies.types';
 import getFilters from './utils/getFilters';
 import filterCookies from './utils/filterCookies';
+import { noop } from '../../../../utils/noop';
 
 export interface filterManagementStore {
   state: {
@@ -53,12 +54,8 @@ const initialState: filterManagementStore = {
     searchTerm: '',
   },
   actions: {
-    setSelectedFilters: () => {
-      //Do nothing
-    },
-    setSearchTerm: () => {
-      //Do Nothing
-    },
+    setSelectedFilters: noop,
+    setSearchTerm: noop,
   },
 };
 
@@ -95,17 +92,17 @@ export const Provider = ({ children }: PropsWithChildren) => {
   }, [cookies, selectedFrame, tabFrames]);
 
   const filteredCookies = useMemo(() => {
-    if (selectedFrame) {
-      return Object.values(
-        filterCookies(
-          frameFilteredCookies,
-          selectedFrameFilters[selectedFrame]?.selectedFilters || {},
-          searchTerm
-        )
-      );
-    } else {
+    if (!selectedFrame) {
       return [];
     }
+
+    return Object.values(
+      filterCookies(
+        frameFilteredCookies,
+        selectedFrameFilters[selectedFrame]?.selectedFilters || {},
+        searchTerm
+      )
+    );
   }, [selectedFrame, frameFilteredCookies, selectedFrameFilters, searchTerm]);
 
   useEffect(() => {
@@ -113,14 +110,14 @@ export const Provider = ({ children }: PropsWithChildren) => {
       const updatedFilters = getFilters(Object.values(frameFilteredCookies));
 
       selectedFrame &&
-        setFilters((prev) => ({
-          ...prev,
+        setFilters((previousFilters) => ({
+          ...previousFilters,
           [selectedFrame]: { filters: updatedFilters },
         }));
     } else {
       selectedFrame &&
-        setFilters((prev) => ({
-          ...prev,
+        setFilters((previousFilters) => ({
+          ...previousFilters,
           [selectedFrame]: { filters: [] },
         }));
     }
@@ -129,10 +126,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const setSelectedFilters = useCallback(
     (update: (prevState: SelectedFilters) => SelectedFilters) => {
       if (selectedFrame) {
-        setSelectedFrameFilters((prev) => ({
-          ...prev,
+        setSelectedFrameFilters((previousFrameFilters) => ({
+          ...previousFrameFilters,
           [selectedFrame]: {
-            selectedFilters: update(prev[selectedFrame]?.selectedFilters || {}),
+            selectedFilters: update(
+              previousFrameFilters[selectedFrame]?.selectedFilters || {}
+            ),
           },
         }));
       }
