@@ -22,6 +22,7 @@ import React, {
   useEffect,
   useState,
   useCallback,
+  useRef,
 } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
@@ -35,6 +36,7 @@ import prepareCookiesCount from '../../../../utils/prepareCookiesCount';
 export interface CookieStoreContext {
   state: {
     tabCookieStats: CookiesCount | null;
+    loading: boolean;
   };
   actions: object;
 }
@@ -58,6 +60,7 @@ const initialState: CookieStoreContext = {
         uncategorized: 0,
       },
     },
+    loading: true,
   },
   actions: {},
 };
@@ -72,8 +75,25 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [tabCookieStats, setTabCookieStats] =
     useState<CookieStoreContext['state']['tabCookieStats']>(null);
 
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    timeoutRef.current = setTimeout(() => {
+      setLoading(false);
+    }, 10000);
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
   const setDebouncedStats = useDebouncedCallback((value) => {
     setTabCookieStats(value);
+    setLoading(false);
   }, 100);
 
   const intitialSync = useCallback(async () => {
@@ -135,7 +155,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
   }, [intitialSync, storeChangeListener, tabUpdateListener]);
 
   return (
-    <Context.Provider value={{ state: { tabCookieStats }, actions: {} }}>
+    <Context.Provider
+      value={{ state: { tabCookieStats, loading }, actions: {} }}
+    >
       {children}
     </Context.Provider>
   );

@@ -32,12 +32,14 @@ interface TableHeaderProps {
   onRightClick: (
     event: React.MouseEvent<HTMLTableSectionElement, MouseEvent>
   ) => void;
+  setIsRowFocused: (state: boolean) => void;
 }
 
 const TableHeader = ({
   headerGroups,
   setColumnPosition,
   onRightClick,
+  setIsRowFocused,
 }: TableHeaderProps) => {
   const handleRightClick = useCallback(
     (e: React.MouseEvent<HTMLTableSectionElement>) => {
@@ -53,7 +55,11 @@ const TableHeader = ({
   return (
     <thead onContextMenu={handleRightClick} className="sticky top-0 z-10">
       {headerGroups.map((headerGroup) => (
-        <HeaderRow key={headerGroup.id} headerGroup={headerGroup} />
+        <HeaderRow
+          key={headerGroup.id}
+          headerGroup={headerGroup}
+          setIsRowFocused={setIsRowFocused}
+        />
       ))}
     </thead>
   );

@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import type { Table as ReactTable } from '@tanstack/react-table';
 
 /**
@@ -42,6 +42,31 @@ const Table = ({ table, selectedKey, onRowClick }: TableProps) => {
     x: 0,
     y: 0,
   });
+  const [isRowFocused, setIsRowFocused] = useState(false);
+  const tableRef = useRef<HTMLTableElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        tableRef.current &&
+        !tableRef.current.contains(event.target as Node)
+      ) {
+        setIsRowFocused(true);
+      }
+    };
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (selectedKey === undefined) {
+      setIsRowFocused(false);
+    } else {
+      setIsRowFocused(true);
+    }
+  }, [selectedKey]);
 
   const handleRightClick = useCallback(
     (e: React.MouseEvent<HTMLElement>) => {
@@ -51,6 +76,7 @@ const Table = ({ table, selectedKey, onRowClick }: TableProps) => {
     },
     [showColumnsMenu]
   );
+
   return (
     <>
       <ColumnMenu
@@ -60,14 +86,17 @@ const Table = ({ table, selectedKey, onRowClick }: TableProps) => {
         columns={table.getAllLeafColumns()}
         position={columnPosition}
       />
-      <table className="w-full h-full">
+      <table className="w-full h-full" ref={tableRef}>
         <TableHeader
           headerGroups={table.getHeaderGroups()}
           setColumnPosition={setColumnPosition}
           onRightClick={handleRightClick}
+          setIsRowFocused={setIsRowFocused}
         />
         <TableBody
           rows={table.getRowModel().rows}
+          isRowFocused={isRowFocused}
+          setIsRowFocused={setIsRowFocused}
           selectedKey={selectedKey}
           onRowClick={onRowClick}
           emptyRowCellCount={table.getHeaderGroups()[0].headers.length}

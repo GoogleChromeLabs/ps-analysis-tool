@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import '@testing-library/jest-dom';
 import SinonChrome from 'sinon-chrome';
@@ -36,7 +36,6 @@ const tabCookies = {
     headerType: 'response',
     frameIdList: [1],
     isFirstParty: true,
-    isIbcCompliant: true,
     isCookieSet: true,
   },
   pubsyncexp: {
@@ -46,7 +45,6 @@ const tabCookies = {
     headerType: 'response',
     frameIdList: [1],
     isFirstParty: false,
-    isIbcCompliant: true,
     isCookieSet: true,
   },
   __qca: {
@@ -67,7 +65,6 @@ const tabCookies = {
     headerType: 'response',
     frameIdList: [1],
     isFirstParty: true,
-    isIbcCompliant: true,
     isCookieSet: true,
   },
   KRTBCOOKIE_290: {
@@ -88,7 +85,6 @@ const tabCookies = {
     headerType: 'response',
     frameIdList: [1],
     isFirstParty: false,
-    isIbcCompliant: true,
     isCookieSet: true,
   },
 };
@@ -160,9 +156,15 @@ describe('App', () => {
           <App />
         </ExternalStoreProvider>
       );
-      expect(
-        screen.getByText('Please refresh this page to view cookies')
-      ).toBeInTheDocument();
+      waitFor(
+        () =>
+          expect(
+            screen.getByText('Please refresh this page to view cookies')
+          ).toBeInTheDocument(),
+        {
+          timeout: 11000,
+        }
+      );
     });
   });
 

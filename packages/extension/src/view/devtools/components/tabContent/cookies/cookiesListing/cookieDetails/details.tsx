@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -40,7 +41,13 @@ const Details = ({ selectedCookie }: DetailsProps) => {
             data-testid="show-url-decoded-checkbox"
             role="checkbox"
             type="checkbox"
-            className="ml-3 mr-1 cursor-pointer"
+            className={classNames(
+              'ml-3 mr-1 cursor-pointer dark:accent-orange-400',
+              {
+                'dark:min-h-0 dark:min-w-0 dark:h-[13px] dark:w-[13px] dark:appearance-none dark:bg-outer-space dark:border dark:border-manatee dark:rounded-[3px]':
+                  !showUrlDecoded,
+              }
+            )}
             checked={showUrlDecoded}
             onChange={() => setShowUrlDecoded(!showUrlDecoded)}
           />

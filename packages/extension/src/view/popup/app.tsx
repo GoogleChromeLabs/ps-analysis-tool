@@ -29,9 +29,18 @@ import { CirclePieChart } from '../design-system/components';
 import { prepareCookieStatsComponents } from '../../utils/prepareCookieStatsComponents';
 
 const App: React.FC = () => {
-  const { cookieStats } = useCookieStore(({ state }) => ({
+  const { cookieStats, loading } = useCookieStore(({ state }) => ({
     cookieStats: state.tabCookieStats,
+    loading: state.loading,
   }));
+
+  if (loading) {
+    return (
+      <div className="w-96 h-80 flex items-center justify-center">
+        <div className="w-10 h-10 rounded-full animate-spin border-t-transparent border-solid border-blue-700 border-4" />
+      </div>
+    );
+  }
 
   if (!cookieStats) {
     return (

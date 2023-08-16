@@ -27,6 +27,7 @@ import SinonChrome from 'sinon-chrome';
 import CookieTab from '..';
 import CookieDetails from '../cookiesListing/cookieDetails';
 import { useContentPanelStore } from '../../../../stateProviders/contentPanelStore';
+import { useFilterManagementStore } from '../../../../stateProviders/filterManagementStore';
 import Details from '../cookiesListing/cookieDetails/details';
 import mockResponse, {
   uncategorized1pCookie,
@@ -57,6 +58,19 @@ mockUseContentPanelStore.mockReturnValue({
   tableContainerRef: { current: null },
   tableColumnSize: 100,
   setTableColumnSize: jest.fn(),
+});
+
+jest.mock('../../../../stateProviders/filterManagementStore');
+const mockFilterManagementStore = useFilterManagementStore as jest.Mock;
+mockFilterManagementStore.mockImplementation((selector) => {
+  return selector({
+    state: {
+      selectedFilters: {},
+      filters: [],
+      filteredCookies: Object.values(mockResponse.tabCookies),
+    },
+    actions: {},
+  });
 });
 
 describe('CookieTab', () => {

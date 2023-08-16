@@ -13,32 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * External dependencies.
- */
-import React from 'react';
-
 /**
  * Internal dependencies.
  */
-import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import CookiesListing from './cookiesListing';
-import CookiesLanding from './cookiesLanding';
+import type { CookieTableData } from '../../../cookies.types';
 
-const Cookies = () => {
-  const { selectedFrame } = useCookieStore(({ state }) => ({
-    selectedFrame: state.selectedFrame,
-  }));
+const getFilterValue = (keys: string, cookieData: CookieTableData) => {
+  const _keys = keys.split('.');
+  const rootKey = _keys[0] as keyof CookieTableData;
+  const subKey = _keys[1] as keyof CookieTableData[keyof CookieTableData];
+  let value: any = ''; // eslint-disable-line @typescript-eslint/no-explicit-any -- Value can of any
 
-  return (
-    <div
-      className={`h-full ${selectedFrame ? '' : 'flex items-center'}`}
-      data-testid="cookies-content"
-    >
-      {selectedFrame ? <CookiesListing /> : <CookiesLanding />}
-    </div>
-  );
+  if (cookieData && cookieData[rootKey]) {
+    value = subKey ? cookieData[rootKey]?.[subKey] : cookieData[rootKey];
+  }
+
+  return value;
 };
 
-export default Cookies;
+export default getFilterValue;

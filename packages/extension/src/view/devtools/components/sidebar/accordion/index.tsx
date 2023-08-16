@@ -44,6 +44,8 @@ interface AccordionProps {
   setSelectedFrame: (state: string | null) => void;
   selectedFrame: string | null;
   setIndex: (state: number) => void;
+  isTabFocused: boolean;
+  setIsTabFocused: (state: boolean) => void;
 }
 
 const Accordion: React.FC<AccordionProps> = ({
@@ -57,6 +59,8 @@ const Accordion: React.FC<AccordionProps> = ({
   setSelectedFrame,
   selectedFrame,
   setIndex,
+  isTabFocused,
+  setIsTabFocused,
 }) => {
   const subMenuSelected = useCallback(() => {
     setAccordionState(!accordionState);
@@ -69,10 +73,11 @@ const Accordion: React.FC<AccordionProps> = ({
         data-testid="cookies-tab-heading-wrapper"
         className={classNames(
           'flex h-full flex-row items-center pl-3 py-0.5 outline-0 dark:text-bright-gray',
-          {
-            'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver':
-              selectedIndex === index && !selectedFrame,
-          }
+          selectedIndex === index &&
+            !selectedFrame &&
+            (isTabFocused
+              ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
+              : 'bg-gainsboro dark:bg-outer-space')
         )}
         tabIndex={0}
         onClick={() => setIndex(index)}
@@ -80,19 +85,19 @@ const Accordion: React.FC<AccordionProps> = ({
       >
         <div
           data-testid="accordion-opener"
-          className={`origin-center transition-transform scale-125 p-0.5 ${
+          className={`origin-center transition-transform scale-125 p-0.5 mr-1 ${
             accordionState ? '' : '-rotate-90'
           }`}
           onClick={subMenuSelected}
         >
-          {selectedIndex === index && !selectedFrame ? (
+          {selectedIndex === index && !selectedFrame && isTabFocused ? (
             <ArrowDownWhite />
           ) : (
             <ArrowDown />
           )}
         </div>
         <div>
-          {selectedIndex === index && !selectedFrame ? (
+          {selectedIndex === index && !selectedFrame && isTabFocused ? (
             <CookieWhite />
           ) : (
             <CookieGray />
@@ -115,18 +120,23 @@ const Accordion: React.FC<AccordionProps> = ({
                   setIndex(index);
                 }
                 setSelectedFrame(key);
+                setIsTabFocused(true);
               }}
               role="treeitem"
               className={classNames(
                 'pl-9 py-0.5 h-5 flex items-center cursor-default outline-0 dark:text-bright-gray',
-                {
-                  'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver':
-                    selectedFrame === key,
-                }
+                selectedFrame === key &&
+                  (isTabFocused
+                    ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
+                    : 'bg-gainsboro dark:bg-outer-space')
               )}
             >
               <div className="h-4">
-                {selectedFrame === key ? <CookieWhite /> : <CookieGray />}
+                {selectedFrame === key && isTabFocused ? (
+                  <CookieWhite />
+                ) : (
+                  <CookieGray />
+                )}
               </div>
               <p
                 className="pl-1.5 whitespace-nowrap"

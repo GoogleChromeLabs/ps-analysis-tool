@@ -28,7 +28,6 @@ import React, {
  * Internal dependencies.
  */
 import type { CookieData } from '../../../../localStore';
-import { checkIbcCompliance } from '../../../../utils/checkIbcCompliance';
 import type { TabCookies, TabFrames } from '../../cookies.types';
 
 export interface CookieStoreContext {
@@ -124,18 +123,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
       await Promise.all(
         Object.entries(tabData.cookies as { [key: string]: CookieData }).map(
           async ([key, value]: [string, CookieData]) => {
-            const isIbcCompliant = await checkIbcCompliance(
-              value.parsedCookie.samesite,
-              value.parsedCookie.secure,
-              key,
-              value.url
-            );
             const isCookieSet = Boolean(
               await chrome.cookies.get({ name: key, url: value.url })
             );
             _cookies[key] = {
               ...value,
-              isIbcCompliant,
               isCookieSet,
             };
           }
@@ -171,18 +163,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
               [key: string]: CookieData;
             }
           ).map(async ([key, value]) => {
-            const isIbcCompliant = await checkIbcCompliance(
-              value.parsedCookie.samesite,
-              value.parsedCookie.secure,
-              key,
-              value.url
-            );
             const isCookieSet = Boolean(
               await chrome.cookies.get({ name: key, url: value.url })
             );
             _cookies[key] = {
               ...value,
-              isIbcCompliant,
               isCookieSet,
             };
           })

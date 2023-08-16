@@ -38,7 +38,7 @@ const CookiesLanding = () => {
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
 
   return (
-    <div className="h-full w-full" data-testid="cookies-landing">
+    <div className="h-full w-full min-w-[20rem]" data-testid="cookies-landing">
       <LandingHeader
         cookieStats={cookieStats}
         cookiesStatsComponents={cookiesStatsComponents}

@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useMemo } from 'react';
+import React, { useState } from 'react';
 import { Resizable } from 're-resizable';
 
 /**
@@ -25,40 +25,78 @@ import { Resizable } from 're-resizable';
 import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import CookieDetails from './cookieDetails';
 import CookieTable from './cookieTable';
-import { filterCookiesByFrame } from '../utils/filterCookiesByFrame';
+import { useFilterManagementStore } from '../../../../stateProviders/filterManagementStore';
+import ChipsBar from '../cookieFilter/chips';
+import CookieTopBar from '../cookieTopBar';
+import FiltersList from '../cookieFilter';
 
 const CookiesListing = () => {
-  const { cookies, selectedFrame, tabFrames } = useCookieStore(({ state }) => ({
-    cookies: state.tabCookies,
+  const { selectedFrame } = useCookieStore(({ state }) => ({
     selectedFrame: state.selectedFrame,
-    tabFrames: state.tabFrames,
   }));
 
-  const filteredCookies = useMemo(
-    () => filterCookiesByFrame(cookies, tabFrames, selectedFrame),
-    [cookies, selectedFrame, tabFrames]
+  const filteredCookies = useFilterManagementStore(
+    ({ state }) => state.filteredCookies
   );
 
+  const [isFilterMenuOpen, setIsFilterMenuOpen] = useState<boolean>(false);
+
+  const toggleFilterMenu = () => {
+    setIsFilterMenuOpen((p) => !p);
+  };
+
   return (
-    <div className="h-full flex flex-col">
-      <Resizable
-        defaultSize={{
-          width: '100%',
-          height: '80%',
-        }}
-        minHeight="6%"
-        maxHeight="98%"
-        enable={{
-          top: false,
-          right: false,
-          bottom: true,
-          left: false,
-        }}
-      >
-        <CookieTable cookies={filteredCookies} selectedFrame={selectedFrame} />
-      </Resizable>
-      <div className="w-full h-full border border-gray-300 dark:border-quartz shadow overflow-auto">
-        <CookieDetails />
+    <div className="w-full h-full flex flex-col">
+      <CookieTopBar
+        isFilterMenuOpen={isFilterMenuOpen}
+        toggleFilterMenu={toggleFilterMenu}
+      />
+      <ChipsBar />
+      <div className="w-full flex-1 overflow-hidden">
+        <div className="h-full flex flex-col">
+          <Resizable
+            defaultSize={{
+              width: '100%',
+              height: '80%',
+            }}
+            minHeight="6%"
+            maxHeight="98%"
+            enable={{
+              top: false,
+              right: false,
+              bottom: true,
+              left: false,
+            }}
+          >
+            <div className="h-full flex">
+              {isFilterMenuOpen && (
+                <Resizable
+                  minWidth="10%"
+                  maxWidth="80%"
+                  enable={{
+                    top: false,
+                    right: true,
+                    bottom: false,
+                    left: false,
+                  }}
+                  className="overflow-y-scroll overflow-x-hidden p-3"
+                >
+                  <FiltersList />
+                </Resizable>
+              )}
+
+              <div className="flex-1">
+                <CookieTable
+                  cookies={filteredCookies}
+                  selectedFrame={selectedFrame}
+                />
+              </div>
+            </div>
+          </Resizable>
+          <div className="w-full h-full border border-gray-300 dark:border-quartz shadow overflow-auto">
+            <CookieDetails />
+          </div>
+        </div>
       </div>
     </div>
   );

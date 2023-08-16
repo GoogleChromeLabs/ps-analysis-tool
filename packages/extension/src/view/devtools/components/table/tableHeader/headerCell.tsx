@@ -29,9 +29,10 @@ import { ArrowDown } from '../../../../../icons';
 
 interface HeaderCellProps {
   header: Header<TableData, unknown>;
+  setIsRowFocused: (state: boolean) => void;
 }
 
-const HeaderCell = ({ header }: HeaderCellProps) => {
+const HeaderCell = ({ header, setIsRowFocused }: HeaderCellProps) => {
   return (
     <th
       colSpan={header.colSpan}
@@ -40,7 +41,10 @@ const HeaderCell = ({ header }: HeaderCellProps) => {
       className="border-x border-american-silver dark:border-quartz relative hover:bg-gainsboro dark:hover:bg-outer-space select-none touch-none font-normal"
       data-testid="header-cell"
     >
-      <div className="w-full h-full flex items-center justify-between dark:text-bright-gray">
+      <div
+        className="w-full h-full flex items-center justify-between dark:text-bright-gray"
+        onClick={() => setIsRowFocused(false)}
+      >
         <p className="px-1 py-px truncate text-xs">
           {header.isPlaceholder
             ? null
