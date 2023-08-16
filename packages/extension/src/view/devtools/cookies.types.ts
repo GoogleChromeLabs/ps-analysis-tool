@@ -19,7 +19,6 @@
 import type { CookieData } from '../../localStore';
 
 export type CookieTableData = CookieData & {
-  isIbcCompliant: boolean | null;
   isCookieSet: boolean | null;
 };
 

@@ -51,7 +51,6 @@ export const TempCookieData: CookieTableData[] = [
     frameIdList: [],
     isCookieSet: false,
     isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -77,7 +76,6 @@ export const TempCookieData: CookieTableData[] = [
     frameIdList: [],
     isCookieSet: false,
     isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -103,7 +101,6 @@ export const TempCookieData: CookieTableData[] = [
     frameIdList: [],
     isCookieSet: false,
     isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -129,7 +126,6 @@ export const TempCookieData: CookieTableData[] = [
     frameIdList: [],
     isCookieSet: false,
     isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -155,7 +151,6 @@ export const TempCookieData: CookieTableData[] = [
     frameIdList: [],
     isCookieSet: false,
     isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -181,7 +176,6 @@ export const TempCookieData: CookieTableData[] = [
     frameIdList: [],
     isCookieSet: false,
     isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -207,7 +201,6 @@ export const TempCookieData: CookieTableData[] = [
     frameIdList: [],
     isCookieSet: false,
     isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -233,7 +226,6 @@ export const TempCookieData: CookieTableData[] = [
     frameIdList: [],
     isCookieSet: false,
     isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -259,7 +251,6 @@ export const TempCookieData: CookieTableData[] = [
     frameIdList: [],
     isCookieSet: false,
     isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -285,7 +276,6 @@ export const TempCookieData: CookieTableData[] = [
     frameIdList: [],
     isCookieSet: false,
     isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -311,7 +301,6 @@ export const TempCookieData: CookieTableData[] = [
     frameIdList: [],
     isCookieSet: false,
     isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -337,7 +326,6 @@ export const TempCookieData: CookieTableData[] = [
     frameIdList: [],
     isCookieSet: false,
     isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -363,7 +351,6 @@ export const TempCookieData: CookieTableData[] = [
     frameIdList: [],
     isCookieSet: false,
     isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -389,7 +376,6 @@ export const TempCookieData: CookieTableData[] = [
     frameIdList: [],
     isCookieSet: false,
     isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -415,7 +401,6 @@ export const TempCookieData: CookieTableData[] = [
     frameIdList: [],
     isCookieSet: false,
     isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -441,7 +426,6 @@ export const TempCookieData: CookieTableData[] = [
     frameIdList: [],
     isCookieSet: false,
     isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -467,7 +451,6 @@ export const TempCookieData: CookieTableData[] = [
     frameIdList: [],
     isCookieSet: false,
     isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -493,7 +476,6 @@ export const TempCookieData: CookieTableData[] = [
     frameIdList: [],
     isCookieSet: false,
     isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -519,7 +501,6 @@ export const TempCookieData: CookieTableData[] = [
     frameIdList: [],
     isCookieSet: false,
     isFirstParty: true,
-    isIbcCompliant: false,
   },
   {
     parsedCookie: {
@@ -545,6 +526,5 @@ export const TempCookieData: CookieTableData[] = [
     frameIdList: [],
     isCookieSet: false,
     isFirstParty: true,
-    isIbcCompliant: false,
   },
 ];
