@@ -63,7 +63,7 @@ const CookieSearch = ({
         />
       </button>
       <input
-        type="search"
+        type="text"
         className="h-5 w-80 mx-2 p-2 outline-none border-[1px] border-[#DADCE0] focus:border-royal-blue"
         placeholder="Search"
         value={searchTerm}
