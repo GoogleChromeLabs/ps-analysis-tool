@@ -166,16 +166,11 @@ const Sidebar: React.FC<SidebarProps> = ({
             data-testid={name}
             className={classNames(
               'flex items-center cursor-default gap-y-1.5 outline-0 dark:text-bright-gray',
-              {
-                'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver':
-                  selectedIndex === index && isTabFocused && name !== 'Cookies',
-              },
-              {
-                'bg-gainsboro dark:bg-outer-space':
-                  selectedIndex === index &&
-                  !isTabFocused &&
-                  name !== 'Cookies',
-              }
+              selectedIndex === index &&
+                name !== 'Cookies' &&
+                (isTabFocused
+                  ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
+                  : 'bg-gainsboro dark:bg-outer-space')
             )}
             tabIndex={0}
             onKeyDown={(event) => keyboardNavigator(event)}
