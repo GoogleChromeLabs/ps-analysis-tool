@@ -94,6 +94,7 @@ module.exports = {
       'medium-persian-blue': '#0E639C',
       'hex-gray': '#E0E0E0',
       'bright-gray': '#E8EAED',
+      quartz: '#494C50',
       gainsboro: '#DADCE0',
     },
     colors: {
