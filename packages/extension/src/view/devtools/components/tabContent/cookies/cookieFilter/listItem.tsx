@@ -22,12 +22,12 @@ import React, { useState } from 'react';
  * Internal dependencies.
  */
 // eslint-disable-next-line import/no-relative-packages
-import ArrowDown from '../../../../icons/arrow-down.svg';
+import { ArrowDown } from '../../../../../../icons';
 import SubList from './subList';
 import type {
   SelectedFilters,
   Filter,
-} from '../../stateProviders/filterManagementStore/types';
+} from '../../../../stateProviders/filterManagementStore/types';
 
 interface ListItemProps {
   filter: Filter;

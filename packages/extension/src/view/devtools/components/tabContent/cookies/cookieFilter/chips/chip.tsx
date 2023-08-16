@@ -24,10 +24,10 @@ import React from 'react';
 import type {
   SelectedFilters,
   Filter,
-} from '../../../stateProviders/filterManagementStore/types';
-import { FILTER_MAPPING } from '../../../stateProviders/filterManagementStore/constants';
+} from '../../../../../stateProviders/filterManagementStore/types';
+import { FILTER_MAPPING } from '../../../../../stateProviders/filterManagementStore/constants';
 // eslint-disable-next-line import/no-relative-packages
-import CrossIcon from '../../../../../../../../third_party/icons/cross-icon.svg';
+import CrossIcon from '../../../../../../../../../../third_party/icons/cross-icon.svg';
 
 interface ChipProps {
   text: string;
@@ -76,7 +76,7 @@ const Chip: React.FC<ChipProps> = ({
       </span>
       <button
         onClick={handleOnClick}
-        className="w-[6px] h-[6px] text-gray-600 hover:text-gray-800 focus:outline-none ml-1"
+        className="w-1.5 h-1.5 text-gray-600 hover:text-gray-800 focus:outline-none ml-1"
       >
         <CrossIcon className="text-mischka" />
       </button>

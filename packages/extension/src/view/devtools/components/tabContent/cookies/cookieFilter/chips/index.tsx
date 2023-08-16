@@ -21,10 +21,10 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { useFilterManagementStore } from '../../../stateProviders/filterManagementStore';
+import { useFilterManagementStore } from '../../../../../stateProviders/filterManagementStore';
 import ChipList from './chipList';
 // eslint-disable-next-line import/no-relative-packages
-import ClearIcon from '../../../../../../../../third_party/icons/clear-icon.svg';
+import ClearIcon from '../../../../../../../../../../third_party/icons/clear-icon.svg';
 
 const ChipsBar: React.FC = () => {
   const { selectedFilters, setSelectedFilters } = useFilterManagementStore(

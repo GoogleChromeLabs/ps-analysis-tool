@@ -21,35 +21,35 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import ListItem from './listItem';
-import { useFilterManagementStore } from '../../stateProviders/filterManagementStore';
+import Chip from './chip';
+import { useFilterManagementStore } from '../../../../../stateProviders/filterManagementStore';
 
-const FiltersList = () => {
-  const { filters, selectedFilters, setSelectedFilters } =
-    useFilterManagementStore(({ state, actions }) => ({
-      filters: state.filters,
+const ChipList: React.FC = () => {
+  const { selectedFilters, setSelectedFilters } = useFilterManagementStore(
+    ({ state, actions }) => ({
       selectedFilters: state.selectedFilters,
       setSelectedFilters: actions.setSelectedFilters,
-    }));
+    })
+  );
 
-  if (!filters.length) {
+  if (!Object.keys(selectedFilters).length) {
     return null;
   }
 
   return (
-    <ul>
-      {filters
-        .filter((filter) => Boolean(filter.filters?.size))
-        .map((filter, index) => (
-          <ListItem
-            key={index}
-            filter={filter}
-            selectedFilters={selectedFilters}
+    <div className="flex flex-nowrap max-w-full">
+      {Object.entries(selectedFilters).map(([keys, filters]) => {
+        return [...filters].map((filterName, index) => (
+          <Chip
+            key={keys + index}
+            text={filterName}
+            filterKeys={keys}
             setSelectedFilters={setSelectedFilters}
           />
-        ))}
-    </ul>
+        ));
+      })}
+    </div>
   );
 };
 
-export default FiltersList;
+export default ChipList;

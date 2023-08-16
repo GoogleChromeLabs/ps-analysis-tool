@@ -23,10 +23,10 @@ import React, { useCallback } from 'react';
  */
 
 // eslint-disable-next-line import/no-relative-packages
-import FilterIcon from '../../../../../../../third_party/icons/filter-icon.svg';
+import FilterIcon from '../../../../../../../../../third_party/icons/filter-icon.svg';
 // eslint-disable-next-line import/no-relative-packages
-import CrossIcon from '../../../../../../../third_party/icons/cross-icon.svg';
-import { useFilterManagementStore } from '../../stateProviders/filterManagementStore';
+import CrossIcon from '../../../../../../../../../third_party/icons/cross-icon.svg';
+import { useFilterManagementStore } from '../../../../stateProviders/filterManagementStore';
 
 interface CookieSearchProps {
   isFilterMenuOpen: boolean;

@@ -24,7 +24,7 @@ import React from 'react';
 import type {
   Filter,
   SelectedFilters,
-} from '../../stateProviders/filterManagementStore/types';
+} from '../../../../stateProviders/filterManagementStore/types';
 
 interface SubListProps {
   filter: Filter;
