@@ -40,7 +40,7 @@ module.exports = {
     fontSize: {
       ...defaultTheme.fontSize,
       xxxs: '0.625rem', // 10px - Only for edge cases
-      xl2: '1.375rem', // 22px
+      xxl: '1.375rem', // 22px
     },
     textColor: {
       ...colors,
