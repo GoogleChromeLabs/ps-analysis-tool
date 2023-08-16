@@ -85,7 +85,7 @@ const Accordion: React.FC<AccordionProps> = ({
       >
         <div
           data-testid="accordion-opener"
-          className={`origin-center transition-transform scale-125 p-0.5 ${
+          className={`origin-center transition-transform scale-125 p-0.5 mr-1 ${
             accordionState ? '' : '-rotate-90'
           }`}
           onClick={subMenuSelected}
