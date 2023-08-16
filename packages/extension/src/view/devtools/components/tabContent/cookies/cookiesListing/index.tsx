@@ -22,12 +22,10 @@ import { Resizable } from 're-resizable';
 /**
  * Internal dependencies.
  */
-import {
-  type CookieTableData,
-  useCookieStore,
-} from '../../../../stateProviders/syncCookieStore';
+import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import CookieDetails from './cookieDetails';
 import CookieTable from './cookieTable';
+import { filterCookiesByFrame } from '../utils/filterCookiesByFrame';
 
 const CookiesListing = () => {
   const { cookies, selectedFrame, tabFrames } = useCookieStore(({ state }) => ({
@@ -36,19 +34,10 @@ const CookiesListing = () => {
     tabFrames: state.tabFrames,
   }));
 
-  const calculatedCookies = useMemo(() => {
-    const frameFilteredCookies: { [key: string]: CookieTableData } = {};
-    if (cookies && selectedFrame && tabFrames && tabFrames[selectedFrame]) {
-      Object.entries(cookies).forEach(([key, cookie]) => {
-        tabFrames[selectedFrame].frameIds?.forEach((frameId) => {
-          if (cookie.frameIdList?.includes(frameId)) {
-            frameFilteredCookies[key] = cookie;
-          }
-        });
-      });
-    }
-    return Object.values(frameFilteredCookies);
-  }, [cookies, selectedFrame, tabFrames]);
+  const filteredCookies = useMemo(
+    () => filterCookiesByFrame(cookies, tabFrames, selectedFrame),
+    [cookies, selectedFrame, tabFrames]
+  );
 
   return (
     <div className="h-full flex flex-col">
@@ -66,10 +55,7 @@ const CookiesListing = () => {
           left: false,
         }}
       >
-        <CookieTable
-          cookies={calculatedCookies}
-          selectedFrame={selectedFrame}
-        />
+        <CookieTable cookies={filteredCookies} selectedFrame={selectedFrame} />
       </Resizable>
       <div className="w-full h-full border border-gray-300 dark:border-quartz shadow overflow-auto">
         <CookieDetails />

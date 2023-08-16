@@ -52,7 +52,7 @@ export const Primary: StoryObj<typeof meta> = {
       },
       {
         count: 9,
-        color: COLOR_MAP.uncategorised,
+        color: COLOR_MAP.uncategorized,
       },
     ],
   },
@@ -82,7 +82,7 @@ export const Wide: StoryObj<typeof meta> = {
       },
       {
         count: 9,
-        color: COLOR_MAP.uncategorised,
+        color: COLOR_MAP.uncategorized,
       },
     ],
   },
@@ -112,7 +112,7 @@ export const Secondary: StoryObj<typeof meta> = {
       },
       {
         count: 9,
-        color: COLOR_MAP.uncategorised,
+        color: COLOR_MAP.uncategorized,
       },
     ],
   },

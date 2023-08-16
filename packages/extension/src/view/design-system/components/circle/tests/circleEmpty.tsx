@@ -33,6 +33,6 @@ describe('CircleEmpty', () => {
 
     // Check if the CircleEmpty div has the correct background color style
     const circleEmptyDiv = container.querySelector('div');
-    expect(circleEmptyDiv).toHaveStyle(`background-color: ${testColor}`);
+    expect(circleEmptyDiv).toHaveStyle(`border-color: ${testColor}`);
   });
 });

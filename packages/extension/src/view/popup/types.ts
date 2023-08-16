@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-export type CookieStats = {
+export type CookiesCount = {
   total: number;
   firstParty: {
     total: number;
     functional: number;
     marketing: number;
     analytics: number;
-    uncategorised: number;
+    uncategorized: number;
   };
   thirdParty: {
     total: number;
     functional: number;
     marketing: number;
     analytics: number;
-    uncategorised: number;
+    uncategorized: number;
   };
 };

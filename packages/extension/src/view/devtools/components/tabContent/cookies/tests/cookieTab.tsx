@@ -19,164 +19,20 @@
 import React from 'react';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { type Cookie as ParsedCookie } from 'simple-cookie';
 import SinonChrome from 'sinon-chrome';
 
 /**
  * Internal dependencies.
  */
 import CookieTab from '..';
-import type { CookieStoreContext } from '../../../../stateProviders/syncCookieStore';
-import { emptyAnalytics } from '../../../../../../worker/findAnalyticsMatch';
 import CookieDetails from '../cookiesListing/cookieDetails';
 import { useContentPanelStore } from '../../../../stateProviders/contentPanelStore';
 import Details from '../cookiesListing/cookieDetails/details';
-
-const emptyCookie = {
-  name: '',
-  value: '',
-  domain: '',
-  samesite: '',
-  secure: false,
-  httponly: false,
-  path: '',
-  expires: '',
-};
-
-const uncategorised1pCookie: ParsedCookie = {
-  ...emptyCookie,
-  name: '_cb',
-  value: 'v1%3A168740954476563235',
-  domain: '.cnn.com',
-};
-
-const uncategorised3pCookie: ParsedCookie = {
-  ...emptyCookie,
-  name: 'pubsyncexp',
-  value: 'uncategorised3pCookie',
-  domain: '.ads.pubmatic.com',
-};
-
-const known1pCookie: ParsedCookie = {
-  ...emptyCookie,
-  name: '__qca',
-  value: 'known1pCookie',
-  domain: '.cnn.com',
-};
-
-const known3pCookie: ParsedCookie = {
-  ...emptyCookie,
-  name: 'KRTBCOOKIE_290',
-  value: 'known3pCookie',
-  domain: '.pubmatic.com',
-};
-
-const known3pCookieWithValue: ParsedCookie = {
-  ...emptyCookie,
-  name: 'KRTBCOOKIE_290',
-  value: 'known3p_Cookie-with%20value',
-  domain: '.pubmatic.com',
-};
-
-const mockResponse: {
-  tabCookies: NonNullable<CookieStoreContext['state']['tabCookies']>;
-  tabUrl: NonNullable<CookieStoreContext['state']['tabUrl']>;
-  tabFrames: NonNullable<CookieStoreContext['state']['tabFrames']>;
-  selectedFrame: NonNullable<CookieStoreContext['state']['selectedFrame']>;
-} = {
-  tabCookies: {
-    [uncategorised1pCookie.name]: {
-      parsedCookie: uncategorised1pCookie,
-      analytics: { ...emptyAnalytics },
-      url: 'https://edition.cnn.com/whatever/api',
-      headerType: 'response',
-      isFirstParty: true,
-      isIbcCompliant: true,
-      isCookieSet: true,
-      frameIdList: [1],
-    },
-    [uncategorised3pCookie.name]: {
-      parsedCookie: uncategorised3pCookie,
-      analytics: { ...emptyAnalytics },
-      url: 'https://api.pubmatic.com/whatever/api',
-      headerType: 'response',
-      isFirstParty: false,
-      isIbcCompliant: true,
-      isCookieSet: true,
-      frameIdList: [1],
-    },
-    [known1pCookie.name]: {
-      parsedCookie: known1pCookie,
-      analytics: {
-        platform: 'Quantcast',
-        category: 'Marketing',
-        name: '__qca',
-        domain: "Advertiser's website domain",
-        description:
-          'This cookie is set by Quantcast, who present targeted advertising. Stores browser and HTTP request information.',
-        retention: '1 year',
-        dataController: 'Quantcast',
-        gdprUrl: 'https://www.quantcast.com/privacy/',
-        wildcard: '0',
-      },
-      url: 'https://edition.cnn.com/whatever/api',
-      headerType: 'response',
-      isFirstParty: true,
-      isIbcCompliant: true,
-      isCookieSet: true,
-      frameIdList: [1],
-    },
-    [known3pCookie.name]: {
-      parsedCookie: known3pCookie,
-      analytics: {
-        platform: 'PubMatic',
-        category: 'Marketing',
-        name: 'KRTBCOOKIE_*',
-        domain: 'pubmatic.com',
-        description:
-          "Registers a unique ID that identifies the user's device during return visits across websites that use the same ad network. The ID is used to allow targeted ads.",
-        retention: '29 days',
-        dataController: 'Pubmatic',
-        gdprUrl: 'N/A',
-        wildcard: '1',
-      },
-      url: 'https://api.pubmatic.com/whatever/api',
-      headerType: 'response',
-      isFirstParty: false,
-      isIbcCompliant: true,
-      isCookieSet: true,
-      frameIdList: [1],
-    },
-    [known3pCookieWithValue.name]: {
-      parsedCookie: known3pCookieWithValue,
-      analytics: {
-        platform: 'PubMatic',
-        category: 'Marketing',
-        name: 'KRTBCOOKIE_*',
-        domain: 'pubmatic.com',
-        description:
-          "Registers a unique ID that identifies the user's device during return visits across websites that use the same ad network. The ID is used to allow targeted ads.",
-        retention: '29 days',
-        dataController: 'Pubmatic',
-        gdprUrl: 'N/A',
-        wildcard: '1',
-      },
-      url: 'https://api.pubmatic.com/whatever/api',
-      headerType: 'response',
-      isFirstParty: false,
-      isIbcCompliant: true,
-      isCookieSet: true,
-      frameIdList: [1],
-    },
-  },
-  tabUrl: 'https://edition.cnn.com/',
-  tabFrames: {
-    'https://edition.cnn.com/': {
-      frameIds: [1],
-    },
-  },
-  selectedFrame: 'https://edition.cnn.com/',
-};
+import mockResponse, {
+  uncategorized1pCookie,
+  known1pCookie,
+  known3pCookieWithValue,
+} from '../../../../../../utils/test-data/cookieMockData';
 
 jest.mock('../../../../stateProviders/syncCookieStore', () => {
   return {
@@ -195,7 +51,7 @@ jest.mock('../../../../stateProviders/contentPanelStore');
 const mockUseContentPanelStore = useContentPanelStore as jest.Mock;
 mockUseContentPanelStore.mockReturnValue({
   selectedFrameCookie: {
-    1: mockResponse.tabCookies[uncategorised1pCookie.name],
+    1: mockResponse.tabCookies[uncategorized1pCookie.name],
   },
   setSelectedFrameCookie: jest.fn(),
   tableContainerRef: { current: null },
@@ -213,7 +69,7 @@ describe('CookieTab', () => {
 
     expect((await screen.findAllByTestId('body-row')).length).toBe(4);
 
-    expect((await screen.findAllByText('Uncategorised')).length).toBe(2);
+    expect((await screen.findAllByText('Uncategorized')).length).toBe(2);
     expect((await screen.findAllByText('Marketing')).length).toBe(2);
   });
 
@@ -308,7 +164,7 @@ describe('CookieTab', () => {
   it('should decode cookie value when input show URI decoded is checked', async () => {
     render(
       <Details
-        selectedCookie={mockResponse.tabCookies[uncategorised1pCookie.name]}
+        selectedCookie={mockResponse.tabCookies[uncategorized1pCookie.name]}
       />
     );
 
@@ -318,13 +174,13 @@ describe('CookieTab', () => {
     fireEvent.click(checkbox);
 
     expect(
-      await screen.findByText(decodeURIComponent(uncategorised1pCookie.value))
+      await screen.findByText(decodeURIComponent(uncategorized1pCookie.value))
     ).toBeInTheDocument();
 
     fireEvent.click(checkbox);
 
     expect(
-      await screen.findByText(uncategorised1pCookie.value)
+      await screen.findByText(uncategorized1pCookie.value)
     ).toBeInTheDocument();
   });
 
@@ -375,7 +231,7 @@ describe('CookieTab', () => {
   it('should show a cookie card with no description about cookie', async () => {
     mockUseContentPanelStore.mockReturnValue({
       selectedFrameCookie: {
-        1: mockResponse.tabCookies[uncategorised1pCookie.name],
+        1: mockResponse.tabCookies[uncategorized1pCookie.name],
       },
       tableContainerRef: { current: null },
       tableColumnSize: 100,
@@ -417,14 +273,14 @@ describe('CookieTab', () => {
 
     expect(setStateMock).toHaveBeenCalledWith({
       'https://edition.cnn.com/':
-        mockResponse.tabCookies[uncategorised1pCookie.name],
+        mockResponse.tabCookies[uncategorized1pCookie.name],
     });
 
     fireEvent.keyDown(row, { key: 'ArrowDown', code: 'ArrowDown' });
 
     expect(setStateMock).toHaveBeenCalledWith({
       'https://edition.cnn.com/':
-        mockResponse.tabCookies[uncategorised1pCookie.name],
+        mockResponse.tabCookies[uncategorized1pCookie.name],
     });
 
     const emptyRow = await screen.findByTestId('empty-row');
@@ -444,7 +300,7 @@ describe('CookieTab', () => {
 
     expect(setStateMock).toHaveBeenCalledWith({
       'https://edition.cnn.com/':
-        mockResponse.tabCookies[uncategorised1pCookie.name],
+        mockResponse.tabCookies[uncategorized1pCookie.name],
     });
   });
 

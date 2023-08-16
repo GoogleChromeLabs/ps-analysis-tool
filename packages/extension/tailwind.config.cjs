@@ -40,6 +40,7 @@ module.exports = {
     fontSize: {
       ...defaultTheme.fontSize,
       xxxs: '0.625rem', // 10px - Only for edge cases
+      xxl: '1.375rem', // 22px
     },
     textColor: {
       ...colors,
@@ -48,9 +49,16 @@ module.exports = {
       tertiary: '#808080',
       'first-party': '#5FA569',
       'third-party': '#FA752E',
+      functional: '#5CC971',
+      marketing: '#F3AE4E',
+      analytics: '#4C79F4',
+      uncategorized: '#EC7159',
       'chart-label': '#111B21',
       'granite-gray': '#5F6369',
       'outer-space-crayola': '#303942',
+      'dark-gray': '#757575',
+      'darkest-gray': '#616161',
+      'outer-space': '#303942',
       'raisin-black': '#212121',
       manatee: '#9AA0A6',
       'bright-gray': '#E8EAED',
@@ -67,6 +75,7 @@ module.exports = {
       'american-silver': '#CBCDD1',
       'raisin-black': '#212121',
       cultured: '#F6F6F699',
+      'light-gray': '#F1F1F1',
       'charleston-green': '#292A2D',
       quartz: '#494C50',
       'davys-grey': '#5D5D5D99',
@@ -77,6 +86,8 @@ module.exports = {
     borderColor: {
       ...colors,
       'american-silver': '#CBCDD1',
+      'hex-gray': '#E0E0E0',
+      'bright-gray': '#E8EAED',
       quartz: '#494C50',
     },
     stroke: {
