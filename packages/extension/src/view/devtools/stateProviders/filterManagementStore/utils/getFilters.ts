@@ -20,7 +20,7 @@ import { FILTER_MAPPING, RETENTION_PERIOD_FILTER } from '../constants';
 import getFilterValue from './getFilterValue';
 import sortStringArray from './sortStringArray';
 import type { Filter } from '../types';
-import type { CookieTableData } from '../../syncCookieStore';
+import type { CookieTableData } from '../../../cookies.types';
 
 const getFilters = (cookies: CookieTableData[]): Filter[] => {
   const filters: Filter[] = [...FILTER_MAPPING];

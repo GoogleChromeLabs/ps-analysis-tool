@@ -25,7 +25,8 @@ import React, {
   useCallback,
 } from 'react';
 import type { SelectedFilters, Filter } from './types';
-import { useCookieStore, type CookieTableData } from '../syncCookieStore';
+import { useCookieStore } from '../syncCookieStore';
+import type { CookieTableData } from '../../cookies.types';
 import getFilters from './utils/getFilters';
 import filterCookies from './utils/filterCookies';
 

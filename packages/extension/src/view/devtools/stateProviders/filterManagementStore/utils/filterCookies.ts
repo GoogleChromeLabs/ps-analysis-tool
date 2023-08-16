@@ -17,7 +17,7 @@
  * Internal dependencies.
  */
 import type { SelectedFilters } from '../types';
-import type { CookieTableData } from '../../syncCookieStore';
+import type { CookieTableData } from '../../../cookies.types';
 import { FILTER_MAPPING, RETENTION_PERIOD_FILTER } from '../constants';
 import getFilterValue from './getFilterValue';
 

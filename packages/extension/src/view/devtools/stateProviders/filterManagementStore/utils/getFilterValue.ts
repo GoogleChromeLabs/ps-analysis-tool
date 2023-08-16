@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import type { CookieTableData } from '../../syncCookieStore';
+import type { CookieTableData } from '../../../cookies.types';
 
 const getFilterValue = (keys: string, cookieData: CookieTableData) => {
   const _keys = keys.split('.');
