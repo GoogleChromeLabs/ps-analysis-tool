@@ -69,7 +69,7 @@ const MenuItem = ({ handleClick, name, isActive }: MenuItemProps) => {
 
   return (
     <div className="flex w-full items-center pl-6 py-0.5" onClick={handleClick}>
-      <div className="h-4">
+      <div className="h-3">
         <Icon />
       </div>
       <div className="block">

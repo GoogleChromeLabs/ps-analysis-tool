@@ -193,7 +193,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             ) : (
               <MenuItem
                 handleClick={() => mainMenuTabSelector(index)}
-                isActive={selectedIndex === index}
+                isActive={selectedIndex === index && isTabFocused}
                 name={name}
               />
             )}
