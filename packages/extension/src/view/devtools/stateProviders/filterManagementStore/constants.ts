@@ -48,6 +48,11 @@ export const FILTER_MAPPING = [
     keys: 'parsedCookie.httponly',
     type: 'boolean',
   },
+  {
+    name: 'Cookie Accepted',
+    keys: 'isCookieSet',
+    type: 'boolean',
+  },
 ];
 
 export const RETENTION_PERIOD_FILTER = {
