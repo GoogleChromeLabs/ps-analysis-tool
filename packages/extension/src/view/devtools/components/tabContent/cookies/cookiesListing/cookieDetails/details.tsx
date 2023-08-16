@@ -33,9 +33,9 @@ const Details = ({ selectedCookie }: DetailsProps) => {
 
   return (
     <div className="text-xs py-1 px-1.5">
-      <p className="font-bold text-granite-gray mb-1 text-semibold flex items-center">
+      <p className="font-bold text-granite-gray dark:text-manatee mb-1 text-semibold flex items-center">
         <span>Cookie Value</span>
-        <label className="text-granite-gray text-xs font-normal flex items-center">
+        <label className="text-granite-gray dark:text-manatee text-xs font-normal flex items-center">
           <input
             data-testid="show-url-decoded-checkbox"
             role="checkbox"
@@ -47,13 +47,15 @@ const Details = ({ selectedCookie }: DetailsProps) => {
           <span>Show URL-decoded</span>
         </label>
       </p>
-      <p className="mb-4 break-words text-outer-space">
+      <p className="mb-4 break-words text-outer-space-crayola dark:text-bright-gray">
         {showUrlDecoded
           ? decodeURIComponent(selectedCookie.parsedCookie.value)
           : selectedCookie.parsedCookie.value}
       </p>
-      <p className="font-bold text-granite-gray mb-1">Description</p>
-      <p className="text-outer-space">
+      <p className="font-bold text-granite-gray dark:text-manatee mb-1">
+        Description
+      </p>
+      <p className="text-outer-space-crayola dark:text-bright-gray">
         {selectedCookie.analytics?.description || 'No description available.'}
       </p>
     </div>

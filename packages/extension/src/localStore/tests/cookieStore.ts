@@ -138,7 +138,7 @@ describe('local store: CookieStore', () => {
       { ...cookieArray[0], frameIdList: [2] },
     ]);
     expect(storage['123'].cookies).toStrictEqual({
-      countryCode1: { ...cookieArray[0], frameIdList: [1, 2] },
+      countryCode1: { ...cookieArray[0], frameIdList: [2, 1] },
     });
   });
 

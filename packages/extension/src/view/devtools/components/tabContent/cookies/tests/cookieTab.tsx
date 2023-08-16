@@ -440,6 +440,26 @@ describe('CookieTab', () => {
       'https://edition.cnn.com/':
         mockResponse.tabCookies[uncategorised1pCookie.name],
     });
+
+    const emptyRow = await screen.findByTestId('empty-row');
+    fireEvent.click(emptyRow);
+
+    expect(setStateMock).toHaveBeenCalledWith({
+      'https://edition.cnn.com/': null,
+    });
+
+    fireEvent.keyDown(emptyRow, { key: 'ArrowDown', code: 'ArrowDown' });
+
+    expect(setStateMock).toHaveBeenCalledWith({
+      'https://edition.cnn.com/': null,
+    });
+
+    fireEvent.keyDown(emptyRow, { key: 'ArrowUp', code: 'ArrowUp' });
+
+    expect(setStateMock).toHaveBeenCalledWith({
+      'https://edition.cnn.com/':
+        mockResponse.tabCookies[uncategorised1pCookie.name],
+    });
   });
 
   it('should decode the cookie value on clicking checkbox', async () => {

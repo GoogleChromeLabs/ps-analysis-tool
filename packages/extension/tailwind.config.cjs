@@ -25,6 +25,7 @@ delete colors['coolGray'];
 delete colors['blueGray'];
 
 module.exports = {
+  darkMode: 'class',
   content: ['./packages/extension/src/**/*.{tsx,js}'],
   theme: {
     extend: {
@@ -49,10 +50,13 @@ module.exports = {
       'third-party': '#FA752E',
       'chart-label': '#111B21',
       'granite-gray': '#5F6369',
-      'outer-space': '#303942',
+      'outer-space-crayola': '#303942',
       'raisin-black': '#212121',
       gray: '#6E6E6E',
       'royal-blue': '#3871E0',
+      manatee: '#9AA0A6',
+      'bright-gray': '#E8EAED',
+      'chinese-silver': '#CDCDCD',
     },
     backgroundColor: {
       ...colors,
@@ -65,6 +69,12 @@ module.exports = {
       'american-silver': '#CBCDD1',
       'raisin-black': '#212121',
       cultured: '#F6F6F699',
+      'charleston-green': '#292A2D',
+      quartz: '#494C50',
+      'davys-grey': '#5D5D5D99',
+      'outer-space-crayola': '#303942',
+      'outer-space': '#454545',
+      'medium-persian-blue': '#0E639C',
     },
     borderColor: {
       ...colors,
@@ -74,6 +84,11 @@ module.exports = {
     colors: {
       ...colors,
       'royal-blue': '#3871E0',
+      quartz: '#494C50',
+    },
+    stroke: {
+      'bright-gray': '#E8EAED',
+      onyx: '#323941',
     },
   },
 };

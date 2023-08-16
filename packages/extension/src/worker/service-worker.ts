@@ -13,6 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/**
+ * External dependencies.
+ */
+import PQueue from 'p-queue';
+
 /**
  * Internal dependencies.
  */
@@ -27,63 +33,21 @@ import {
 
 let cookieDB: CookieDatabase | null = null;
 
+// Global promise queue.
+const PROMISE_QUEUE = new PQueue({ concurrency: 1 });
+
 /**
  * Fires when the browser receives a response from a web server.
  * @see https://developer.chrome.com/docs/extensions/reference/webRequest/
  */
 chrome.webRequest.onResponseStarted.addListener(
   async (details: chrome.webRequest.WebResponseCacheDetails) => {
-    const { tabId, url, responseHeaders, frameId } = details;
+    await PROMISE_QUEUE.add(async () => {
+      const { tabId, url, responseHeaders, frameId } = details;
 
-    const tab = await getTab(tabId);
-
-    if (!tab || !responseHeaders) {
-      return;
-    }
-
-    if (!cookieDB) {
-      cookieDB = await fetchDictionary();
-    }
-
-    const cookies = await responseHeaders.reduce<Promise<CookieData[]>>(
-      async (accumulator, header) => {
-        if (
-          header.name.toLowerCase() === 'set-cookie' &&
-          header.value &&
-          tab.url &&
-          cookieDB
-        ) {
-          const cookie = await parseResponseCookieHeader(
-            url,
-            header.value,
-            cookieDB,
-            tab.url,
-            frameId
-          );
-          return [...(await accumulator), cookie];
-        }
-        return accumulator;
-      },
-      Promise.resolve([])
-    );
-
-    if (!cookies.length) {
-      return;
-    }
-
-    // Adds the cookies from the request headers to the cookies object.
-    await CookieStore.update(tabId.toString(), cookies);
-  },
-  { urls: ['*://*/*'] },
-  ['extraHeaders', 'responseHeaders']
-);
-
-chrome.webRequest.onBeforeSendHeaders.addListener(
-  ({ url, requestHeaders, tabId, frameId }) => {
-    (async () => {
       const tab = await getTab(tabId);
 
-      if (!tab || !requestHeaders) {
+      if (!tab || !responseHeaders) {
         return;
       }
 
@@ -91,23 +55,22 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
         cookieDB = await fetchDictionary();
       }
 
-      const cookies = await requestHeaders.reduce<Promise<CookieData[]>>(
+      const cookies = await responseHeaders.reduce<Promise<CookieData[]>>(
         async (accumulator, header) => {
           if (
-            header.name.toLowerCase() === 'cookie' &&
+            header.name.toLowerCase() === 'set-cookie' &&
             header.value &&
-            url &&
             tab.url &&
             cookieDB
           ) {
-            const cookieList = await parseRequestCookieHeader(
+            const cookie = await parseResponseCookieHeader(
               url,
               header.value,
               cookieDB,
               tab.url,
               frameId
             );
-            return [...(await accumulator), ...cookieList];
+            return [...(await accumulator), cookie];
           }
           return accumulator;
         },
@@ -118,7 +81,57 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
         return;
       }
 
+      // Adds the cookies from the request headers to the cookies object.
       await CookieStore.update(tabId.toString(), cookies);
+    });
+  },
+  { urls: ['*://*/*'] },
+  ['extraHeaders', 'responseHeaders']
+);
+
+chrome.webRequest.onBeforeSendHeaders.addListener(
+  ({ url, requestHeaders, tabId, frameId }) => {
+    (async () => {
+      await PROMISE_QUEUE.add(async () => {
+        const tab = await getTab(tabId);
+
+        if (!tab || !requestHeaders) {
+          return;
+        }
+
+        if (!cookieDB) {
+          cookieDB = await fetchDictionary();
+        }
+
+        const cookies = await requestHeaders.reduce<Promise<CookieData[]>>(
+          async (accumulator, header) => {
+            if (
+              header.name.toLowerCase() === 'cookie' &&
+              header.value &&
+              url &&
+              tab.url &&
+              cookieDB
+            ) {
+              const cookieList = await parseRequestCookieHeader(
+                url,
+                header.value,
+                cookieDB,
+                tab.url,
+                frameId
+              );
+              return [...(await accumulator), ...cookieList];
+            }
+            return accumulator;
+          },
+          Promise.resolve([])
+        );
+
+        if (!cookies.length) {
+          return;
+        }
+
+        await CookieStore.update(tabId.toString(), cookies);
+      });
     })();
   },
   { urls: ['*://*/*'] },
@@ -126,9 +139,11 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 );
 
 chrome.tabs.onCreated.addListener(async (tab) => {
-  if (tab.id) {
-    await CookieStore.addTabData(tab.id.toString());
-  }
+  await PROMISE_QUEUE.add(async () => {
+    if (tab.id) {
+      await CookieStore.addTabData(tab.id.toString());
+    }
+  });
 });
 
 /**
@@ -138,7 +153,9 @@ chrome.tabs.onCreated.addListener(async (tab) => {
  * @see https://developer.chrome.com/docs/extensions/reference/tabs/#event-onActivated
  */
 chrome.tabs.onActivated.addListener(async (activeInfo) => {
-  await CookieStore.updateTabFocus(activeInfo.tabId.toString());
+  await PROMISE_QUEUE.add(async () => {
+    await CookieStore.updateTabFocus(activeInfo.tabId.toString());
+  });
 });
 
 /**
@@ -146,7 +163,21 @@ chrome.tabs.onActivated.addListener(async (activeInfo) => {
  * @see https://developer.chrome.com/docs/extensions/reference/tabs/#event-onRemoved
  */
 chrome.tabs.onRemoved.addListener(async (tabId) => {
-  await CookieStore.removeTabData(tabId.toString());
+  await PROMISE_QUEUE.add(async () => {
+    await CookieStore.removeTabData(tabId.toString());
+  });
+});
+
+/**
+ * Fires when a tab is updated.
+ * @see https://developer.chrome.com/docs/extensions/reference/tabs/#event-onUpdated
+ */
+chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+  await PROMISE_QUEUE.add(async () => {
+    if (changeInfo.status === 'loading' && tab.url) {
+      await CookieStore.removeTabData(tabId.toString());
+    }
+  });
 });
 
 /**
@@ -154,7 +185,9 @@ chrome.tabs.onRemoved.addListener(async (tabId) => {
  * @see https://developer.chrome.com/docs/extensions/reference/windows/#event-onRemoved
  */
 chrome.windows.onRemoved.addListener(async (windowId) => {
-  await CookieStore.removeWindowData(windowId);
+  await PROMISE_QUEUE.add(async () => {
+    await CookieStore.removeWindowData(windowId);
+  });
 });
 
 /**
@@ -165,5 +198,7 @@ chrome.windows.onRemoved.addListener(async (windowId) => {
  * @see https://developer.chrome.com/docs/extensions/reference/runtime/#event-onInstalled
  */
 chrome.runtime.onInstalled.addListener(async () => {
-  await chrome.storage.local.clear();
+  await PROMISE_QUEUE.add(async () => {
+    await chrome.storage.local.clear();
+  });
 });

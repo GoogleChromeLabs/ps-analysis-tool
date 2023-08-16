@@ -33,14 +33,14 @@ interface HeaderRowProps {
 const HeaderRow = ({ headerGroup }: HeaderRowProps) => {
   return (
     <>
-      <tr className="bg-anti-flash-white">
+      <tr className="bg-anti-flash-white dark:bg-charleston-green">
         {headerGroup.headers.map((header) => (
           <HeaderCell key={header.id} header={header} />
         ))}
       </tr>
       <tr>
         <th
-          className="w-full h-px pt-0 bg-american-silver"
+          className="w-full h-px pt-0 bg-american-silver dark:bg-quartz"
           colSpan={headerGroup.headers.length}
         />
       </tr>

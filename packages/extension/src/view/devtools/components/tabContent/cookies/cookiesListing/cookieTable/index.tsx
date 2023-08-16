@@ -30,7 +30,7 @@ import {
  */
 import Table from '../../../../table';
 import { useContentPanelStore } from '../../../../../stateProviders/contentPanelStore';
-import CheckIcon from '../../../../../../../../icons/check.svg';
+import { Check } from '../../../../../../../icons';
 import type { CookieTableData } from '../../../../../stateProviders/syncCookieStore';
 
 export interface CookieTableProps {
@@ -70,7 +70,11 @@ const tableColumns: ColumnDef<CookieTableData>[] = [
     accessorKey: 'parsedCookie.httponly',
     cell: (info) => (
       <p className="flex justify-center items-center">
-        {info.getValue() ? <CheckIcon className="scale-125" /> : ''}
+        {info.getValue() ? (
+          <Check className="scale-125 stroke-onyx dark:stroke-bright-gray" />
+        ) : (
+          ''
+        )}
       </p>
     ),
   },
@@ -86,7 +90,11 @@ const tableColumns: ColumnDef<CookieTableData>[] = [
     accessorKey: 'parsedCookie.secure',
     cell: (info) => (
       <p className="flex justify-center items-center">
-        {info.getValue() ? <CheckIcon className="scale-125" /> : ''}
+        {info.getValue() ? (
+          <Check className="scale-125 stroke-onyx dark:stroke-bright-gray" />
+        ) : (
+          ''
+        )}
       </p>
     ),
   },
@@ -100,7 +108,11 @@ const tableColumns: ColumnDef<CookieTableData>[] = [
     accessorKey: 'isFirstParty',
     cell: (info) => (
       <p className="flex justify-center items-center">
-        {!info.getValue() ? <CheckIcon className="scale-125" /> : ''}
+        {!info.getValue() ? (
+          <Check className="scale-125 stroke-onyx dark:stroke-bright-gray" />
+        ) : (
+          ''
+        )}
       </p>
     ),
   },
@@ -130,7 +142,11 @@ const tableColumns: ColumnDef<CookieTableData>[] = [
     accessorKey: 'isIbcCompliant',
     cell: (info) => (
       <p className="flex justify-center items-center">
-        {info.getValue() ? <CheckIcon className="scale-125" /> : ''}
+        {info.getValue() ? (
+          <Check className="scale-125 stroke-onyx dark:stroke-bright-gray" />
+        ) : (
+          ''
+        )}
       </p>
     ),
   },
@@ -139,7 +155,11 @@ const tableColumns: ColumnDef<CookieTableData>[] = [
     accessorKey: 'isCookieSet',
     cell: (info) => (
       <p className="flex justify-center items-center">
-        {info.getValue() ? <CheckIcon className="scale-125" /> : ''}
+        {info.getValue() ? (
+          <Check className="scale-125 stroke-onyx dark:stroke-bright-gray" />
+        ) : (
+          ''
+        )}
       </p>
     ),
   },
@@ -187,7 +207,7 @@ const CookieTable = ({ cookies: data, selectedFrame }: CookieTableProps) => {
   });
 
   const onRowClick = useCallback(
-    (cookieData: CookieTableData) => {
+    (cookieData: CookieTableData | null) => {
       setSelectedFrameCookie({
         [selectedFrame as string]: cookieData,
       });
@@ -195,15 +215,17 @@ const CookieTable = ({ cookies: data, selectedFrame }: CookieTableProps) => {
     [selectedFrame, setSelectedFrameCookie]
   );
 
+  const selectedKey = Object.values(selectedFrameCookie ?? {})[0];
+
   return (
     <div
       ref={tableContainerRef}
-      className="w-full h-full overflow-auto text-outer-space"
+      className="w-full h-full overflow-auto text-outer-space-crayola"
     >
       <Table
         table={table}
         selectedKey={
-          Object.values(selectedFrameCookie ?? {})[0]?.parsedCookie.name
+          selectedKey === null ? null : selectedKey?.parsedCookie?.name
         }
         onRowClick={onRowClick}
       />
