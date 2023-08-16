@@ -32,13 +32,6 @@ export interface DetailsProps {
 const Details = ({ selectedCookie }: DetailsProps) => {
   const [showUrlDecoded, setShowUrlDecoded] = useState(false);
 
-  const checkboxClasses = !showUrlDecoded
-    ? 'min-h-0 min-w-0 h-[13px] w-[13px] appearance-none bg-outer-space border border-manatee rounded-sm'
-        .split(' ')
-        .map((className) => `dark:${className}`)
-        .join(' ')
-    : '';
-
   return (
     <div className="text-xs py-1 px-1.5">
       <p className="font-bold text-granite-gray dark:text-manatee mb-1 text-semibold flex items-center">
@@ -50,7 +43,10 @@ const Details = ({ selectedCookie }: DetailsProps) => {
             type="checkbox"
             className={classNames(
               'ml-3 mr-1 cursor-pointer dark:accent-orange-400',
-              checkboxClasses
+              {
+                'dark:min-h-0 dark:min-w-0 dark:h-[13px] dark:w-[13px] dark:appearance-none dark:bg-outer-space dark:border dark:border-manatee dark:rounded-[3px]':
+                  !showUrlDecoded,
+              }
             )}
             checked={showUrlDecoded}
             onChange={() => setShowUrlDecoded(!showUrlDecoded)}
