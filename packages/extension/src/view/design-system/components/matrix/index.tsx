@@ -28,7 +28,7 @@ interface MatrixProps {
 }
 
 const Matrix = ({ dataComponents }: MatrixProps) => {
-  if (!dataComponents || dataComponents.length === 0) {
+  if (!dataComponents || !dataComponents.length) {
     return null;
   }
 
