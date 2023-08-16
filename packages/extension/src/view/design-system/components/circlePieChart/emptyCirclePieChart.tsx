@@ -66,7 +66,9 @@ const EmptyCirclePieChart = ({
         </div>
       </div>
       {title && (
-        <p className="text-xs text-center font-semibold mt-2">{title}</p>
+        <p className="text-xs text-center font-semibold mt-2 leading-relaxed dark:text-bright-gray">
+          {title}
+        </p>
       )}
     </>
   );
