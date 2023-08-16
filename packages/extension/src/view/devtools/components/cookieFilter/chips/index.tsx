@@ -53,7 +53,7 @@ const ChipsBar: React.FC = () => {
         >
           <ClearIcon />
           <span className="ml-2 mr-1">Clear all</span>
-          <div className="w-[2px] bg-[#DADCE0] h-[20px]"></div>
+          <div className="w-[1px] bg-[#DADCE0] h-[20px]"></div>
         </a>
       )}
       <ChipList />
