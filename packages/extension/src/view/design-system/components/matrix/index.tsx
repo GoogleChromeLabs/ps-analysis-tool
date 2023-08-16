@@ -38,7 +38,7 @@ const Matrix = ({ dataComponents }: MatrixProps) => {
         <MatrixComponent
           key={index}
           {...dataComponent}
-          containerClasses="p-3.5 border-b border-bright-gray"
+          containerClasses="p-3.5 border-b border-bright-gray dark:border-quartz"
           countClassName={
             dataComponent.countClassName + ' text-xl2 leading-none'
           }
