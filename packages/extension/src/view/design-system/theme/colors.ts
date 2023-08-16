@@ -19,6 +19,6 @@ export const COLOR_MAP = {
   marketing: '#F3AE4E',
   analytics: '#4C79F4',
   uncategorized: '#EC7159',
-  brightGray: '#EBEBEB',
+  brightGray: '#E8EAED',
   mediumGray: '#BDBDBD',
 };
