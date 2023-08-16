@@ -91,6 +91,8 @@ module.exports = {
       'american-silver': '#CBCDD1',
       'royal-blue': '#3871E0',
       'medium-persian-blue': '#0E639C',
+      'hex-gray': '#E0E0E0',
+      'bright-gray': '#E8EAED',
     },
     colors: {
       ...colors,
