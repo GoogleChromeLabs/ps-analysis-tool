@@ -25,6 +25,7 @@ import { createRoot } from 'react-dom/client';
 import App from './app';
 import { Provider as ExternalStoreProvider } from './stateProviders/syncCookieStore';
 import { Provider as ContentPanelProvider } from './stateProviders/contentPanelStore';
+import { Provider as FilterManagementProvider } from './stateProviders/filterManagementStore';
 
 const root = document.getElementById('root');
 
@@ -32,7 +33,9 @@ if (root) {
   createRoot(root).render(
     <ExternalStoreProvider>
       <ContentPanelProvider>
-        <App />
+        <FilterManagementProvider>
+          <App />
+        </FilterManagementProvider>
       </ContentPanelProvider>
     </ExternalStoreProvider>
   );
