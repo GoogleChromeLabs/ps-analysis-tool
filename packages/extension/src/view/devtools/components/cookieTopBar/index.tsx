@@ -52,7 +52,7 @@ const CookieSearch = ({
   );
 
   return (
-    <div className="w-full h-full px-2 flex items-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green">
+    <div className="w-full h-[25px] px-2 flex items-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green">
       <button
         className="w-3 h-3"
         onClick={toggleFilterMenu}

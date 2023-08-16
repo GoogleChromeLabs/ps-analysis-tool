@@ -47,16 +47,12 @@ const CookiesListing = () => {
 
   return (
     <div className="w-full h-full flex flex-col">
-      <div className="w-full h-[25px]">
-        <CookieTopBar
-          isFilterMenuOpen={isFilterMenuOpen}
-          toggleFilterMenu={toggleFilterMenu}
-        />
-      </div>
-      <div className="w-full h-[25px]">
-        <ChipsBar />
-      </div>
-      <div className="w-full h-[calc(100%-3.5rem)]">
+      <CookieTopBar
+        isFilterMenuOpen={isFilterMenuOpen}
+        toggleFilterMenu={toggleFilterMenu}
+      />
+      <ChipsBar />
+      <div className="w-full flex-1 overflow-hidden">
         <div className="h-full flex flex-col">
           <Resizable
             defaultSize={{
@@ -83,7 +79,7 @@ const CookiesListing = () => {
                     bottom: false,
                     left: false,
                   }}
-                  className="overflow-y-scroll overflow-x-hidden pt-[18px] pl-[18px]"
+                  className="overflow-y-scroll overflow-x-hidden py-[18px] px-[18px]"
                 >
                   <FiltersList />
                 </Resizable>

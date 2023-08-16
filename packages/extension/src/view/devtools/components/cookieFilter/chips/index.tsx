@@ -44,7 +44,11 @@ const ChipsBar: React.FC = () => {
   };
 
   return (
-    <div className="w-full h-full py-1 px-2 flex items-center overflow-x-scroll no-scrollbar bg-anti-flash-white dark:bg-raisin-black border-b border-gray-300">
+    <div
+      className={`${
+        selectedFilterCount === 0 && 'hidden'
+      } w-full h-[25px] py-1 px-2 flex items-center overflow-x-scroll no-scrollbar bg-anti-flash-white dark:bg-raisin-black border-b border-gray-300`}
+    >
       {selectedFilterCount > 1 && (
         <a
           href="#"

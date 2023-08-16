@@ -49,7 +49,7 @@ const SubList: React.FC<SubListProps> = ({
         <li
           key={index}
           className={
-            index > 3 && !isExpanded ? 'ml-3 mt-1 hidden' : 'ml-3 mt-1'
+            index > 3 && !isExpanded ? 'ml-3 mt-1 hidden' : 'mx-3 mt-1'
           }
         >
           <label className="flex gap-x-2 cursor-pointer items-center">
