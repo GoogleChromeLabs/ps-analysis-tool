@@ -101,7 +101,7 @@ const ListItem: React.FC<ListItemProps> = ({
           {Number(filter?.filters?.size) > 4 && (
             <a
               onClick={toggleShowMore}
-              className="text-md text-link ml-2 mt-1 block font-bold"
+              className="text-md text-link ml-2 mt-1 block font-bold dark:text-manatee"
               href="#"
             >
               {isExpanded ? 'Show Less' : 'Show More'}

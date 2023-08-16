@@ -70,8 +70,10 @@ const Chip: React.FC<ChipProps> = ({
   }
 
   return (
-    <div className="flex items-center px-2 rounded-sm bg-[#DADCE0] mx-1 h-4">
-      <span className="block whitespace-nowrap text-[#323941]">{label}</span>
+    <div className="flex items-center px-2 rounded-sm bg-[#DADCE0] dark:bg-charleston-green mx-1 h-4">
+      <span className="block whitespace-nowrap text-[#323941] dark:text-manatee">
+        {label}
+      </span>
       <button
         onClick={handleOnClick}
         className="w-[6px] h-[6px] text-gray-600 hover:text-gray-800 focus:outline-none ml-1"
