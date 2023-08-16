@@ -110,17 +110,14 @@ const TableBody = ({
 
   const tableRowClassName = classNames(
     'h-5 outline-0',
-    {
-      'bg-gainsboro dark:bg-outer-space': selectedKey === null && isRowFocused,
-    },
+    selectedKey === null &&
+      (isRowFocused
+        ? 'bg-gainsboro dark:bg-outer-space'
+        : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
     selectedKey !== null &&
       (rows.length % 2
         ? 'bg-anti-flash-white dark:bg-charleston-green'
-        : 'bg-white dark:bg-raisin-black'),
-    {
-      'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver':
-        !isRowFocused && selectedKey === null,
-    }
+        : 'bg-white dark:bg-raisin-black')
   );
 
   return (

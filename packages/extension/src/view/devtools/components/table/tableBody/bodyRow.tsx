@@ -53,14 +53,10 @@ const BodyRow = ({
       (index % 2
         ? 'bg-anti-flash-white dark:bg-charleston-green'
         : 'bg-white dark:bg-raisin-black'),
-    {
-      'bg-gainsboro dark:bg-outer-space':
-        row.original.parsedCookie.name === selectedKey && isRowFocused,
-    },
-    {
-      'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver':
-        row.original.parsedCookie.name === selectedKey && !isRowFocused,
-    }
+    row.original.parsedCookie.name === selectedKey &&
+      (isRowFocused
+        ? 'bg-gainsboro dark:bg-outer-space'
+        : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver')
   );
 
   return (
