@@ -34,7 +34,7 @@ import {
 let cookieDB: CookieDatabase | null = null;
 
 // Global promise queue.
-const PROMISE_QUEUE = new PQueue({ concurrency: 100 });
+const PROMISE_QUEUE = new PQueue({ concurrency: 1 });
 
 /**
  * Fires when the browser receives a response from a web server.
