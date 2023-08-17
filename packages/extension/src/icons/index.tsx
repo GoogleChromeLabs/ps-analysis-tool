@@ -29,3 +29,4 @@ export { default as TopicsIcon } from './topics.svg';
 export { default as TopicsIconWhite } from './topics-white.svg';
 export { default as FingerPrintingIcon } from './fingerprinting.svg';
 export { default as FingerPrintingIconWhite } from './fingerprinting-white.svg';
+export { default as InfoIcon } from './info.svg';

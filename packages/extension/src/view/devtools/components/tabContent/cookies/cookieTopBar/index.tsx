@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import React, { useCallback } from 'react';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -29,11 +30,13 @@ import CrossIcon from '../../../../../../../../../third_party/icons/cross-icon.s
 import { useFilterManagementStore } from '../../../../stateProviders/filterManagementStore';
 
 interface CookieSearchProps {
+  cookiesAvailable: boolean;
   isFilterMenuOpen: boolean;
   toggleFilterMenu: () => void;
 }
 
 const CookieSearch = ({
+  cookiesAvailable,
   isFilterMenuOpen,
   toggleFilterMenu,
 }: CookieSearchProps) => {
@@ -54,9 +57,12 @@ const CookieSearch = ({
   return (
     <div className="w-full h-[25px] px-2 flex items-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green">
       <button
-        className="w-3 h-3"
+        className={classNames('w-3 h-3', {
+          'opacity-20': !cookiesAvailable,
+        })}
         onClick={toggleFilterMenu}
         title="Open filter options"
+        disabled={!cookiesAvailable}
       >
         <FilterIcon
           className={

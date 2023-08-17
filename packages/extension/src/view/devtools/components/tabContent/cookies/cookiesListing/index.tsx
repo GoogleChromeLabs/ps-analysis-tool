@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
 
 /**
@@ -45,13 +45,18 @@ const CookiesListing = () => {
     setIsFilterMenuOpen((p) => !p);
   };
 
+  const cookiesAvailable = useMemo(() => {
+    return Boolean(filteredCookies.length);
+  }, [filteredCookies.length]);
+
   return (
     <div className="w-full h-full flex flex-col">
       <CookieTopBar
+        cookiesAvailable={cookiesAvailable}
         isFilterMenuOpen={isFilterMenuOpen}
         toggleFilterMenu={toggleFilterMenu}
       />
-      <ChipsBar />
+      {cookiesAvailable && <ChipsBar />}
       <div className="w-full flex-1 overflow-hidden">
         <div className="h-full flex flex-col">
           <Resizable
@@ -60,7 +65,7 @@ const CookiesListing = () => {
               height: '80%',
             }}
             minHeight="6%"
-            maxHeight="98%"
+            maxHeight="95%"
             enable={{
               top: false,
               right: false,
@@ -69,10 +74,10 @@ const CookiesListing = () => {
             }}
           >
             <div className="h-full flex">
-              {isFilterMenuOpen && (
+              {isFilterMenuOpen && cookiesAvailable && (
                 <Resizable
                   minWidth="10%"
-                  maxWidth="80%"
+                  maxWidth="50%"
                   enable={{
                     top: false,
                     right: true,
@@ -85,7 +90,7 @@ const CookiesListing = () => {
                 </Resizable>
               )}
 
-              <div className="flex-1">
+              <div className="flex-1 overflow-auto">
                 <CookieTable
                   cookies={filteredCookies}
                   selectedFrame={selectedFrame}

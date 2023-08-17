@@ -72,7 +72,7 @@ const Accordion: React.FC<AccordionProps> = ({
       <div
         data-testid="cookies-tab-heading-wrapper"
         className={classNames(
-          'flex h-full flex-row items-center pl-3 py-0.5 outline-0 dark:text-bright-gray',
+          'flex h-full flex-row items-center pl-[9px] py-0.5 outline-0 dark:text-bright-gray',
           selectedIndex === index &&
             !selectedFrame &&
             (isTabFocused
