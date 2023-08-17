@@ -48,6 +48,7 @@ const CookiesListing = () => {
   return (
     <div className="w-full h-full flex flex-col">
       <CookieTopBar
+        cookiesAvailable={Boolean(filteredCookies.length)}
         isFilterMenuOpen={isFilterMenuOpen}
         toggleFilterMenu={toggleFilterMenu}
       />
