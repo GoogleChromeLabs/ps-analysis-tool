@@ -75,6 +75,8 @@ const findAnalyticsMatch = (
     }
   });
 
+  analytics.category = analytics.category || 'Uncategorized';
+
   return analytics;
 };
 export default findAnalyticsMatch;
