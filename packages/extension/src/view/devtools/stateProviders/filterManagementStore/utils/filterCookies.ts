@@ -63,6 +63,24 @@ const filterCookies = (
       searchTerm
     );
   }
+  const filteredCookies: {
+    [key: string]: CookieTableData;
+  } = {};
+  Object.entries(cookies).forEach(([cookieName, cookieData]) => {
+    const matchTerm = () => {
+      const lowerCaseTerm = searchTerm.toLowerCase();
+      return (
+        cookieName.toLowerCase().includes(lowerCaseTerm) ||
+        cookieData.parsedCookie.domain?.toLowerCase()?.includes(lowerCaseTerm)
+      );
+    };
+    if (matchTerm()) {
+      filteredCookies[cookieName] = cookieData;
+    }
+  });
+  if (searchTerm) {
+    return filteredCookies;
+  }
   return cookies;
 };
 

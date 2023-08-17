@@ -95,6 +95,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     if (!selectedFrame) {
       return [];
     }
+
     return Object.values(
       filterCookies(
         frameFilteredCookies,
