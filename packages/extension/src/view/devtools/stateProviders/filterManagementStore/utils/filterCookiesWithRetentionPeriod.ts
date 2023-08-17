@@ -90,10 +90,7 @@ const filterCookiesWithRetentionPeriod = (
       }
     }
   });
-  if (Object.keys(filteredCookies).length > 0) {
-    return filteredCookies;
-  }
-  return cookies;
+  return filteredCookies;
 };
 
 export default filterCookiesWithRetentionPeriod;
