@@ -61,7 +61,7 @@ const CookiesListing = () => {
               height: '80%',
             }}
             minHeight="6%"
-            maxHeight="98%"
+            maxHeight="95%"
             enable={{
               top: false,
               right: false,
@@ -73,7 +73,7 @@ const CookiesListing = () => {
               {isFilterMenuOpen && (
                 <Resizable
                   minWidth="10%"
-                  maxWidth="80%"
+                  maxWidth="50%"
                   enable={{
                     top: false,
                     right: true,
@@ -86,7 +86,7 @@ const CookiesListing = () => {
                 </Resizable>
               )}
 
-              <div className="flex-1">
+              <div className="flex-1 overflow-auto">
                 <CookieTable
                   cookies={filteredCookies}
                   selectedFrame={selectedFrame}
