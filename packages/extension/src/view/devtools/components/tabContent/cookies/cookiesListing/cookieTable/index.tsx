@@ -150,18 +150,20 @@ const CookieTable = ({ cookies: data, selectedFrame }: CookieTableProps) => {
 
   useEffect(() => {
     if (
-      selectedFrame &&
-      selectedFrameCookie &&
-      selectedFrameCookie[selectedFrame] === undefined
+      (selectedFrame &&
+        selectedFrameCookie &&
+        selectedFrameCookie[selectedFrame] === undefined) ||
+      data.length === 0
     ) {
       setSelectedFrameCookie(null);
     }
-  }, [selectedFrameCookie, selectedFrame, setSelectedFrameCookie]);
+  }, [selectedFrameCookie, selectedFrame, setSelectedFrameCookie, data]);
 
-  const columns = useMemo(
+  const columns: ColumnDef<CookieTableData>[] = useMemo(
     () =>
       tableColumns.map((column) => ({
         ...column,
+        sortingFn: 'alphanumericCaseSensitive',
         size: tableColumnSize / tableColumns.length,
       })),
     [tableColumnSize]
