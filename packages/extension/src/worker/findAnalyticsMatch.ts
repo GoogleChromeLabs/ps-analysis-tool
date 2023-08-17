@@ -40,7 +40,7 @@ const wildTest = (wildcard: string, str: string): boolean => {
 
 export const emptyAnalytics = {
   platform: '',
-  category: '',
+  category: 'Uncategorized',
   name: '',
   domain: '',
   description: '',
@@ -74,6 +74,8 @@ const findAnalyticsMatch = (
       return true;
     }
   });
+
+  analytics.category = analytics.category || 'Uncategorized';
 
   return analytics;
 };

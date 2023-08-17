@@ -92,7 +92,7 @@ const tableColumns: ColumnDef<CookieTableData>[] = [
   {
     header: 'Category',
     accessorKey: 'analytics.category',
-    cell: (info) => (info.getValue() ? info.getValue() : 'Uncategorized'),
+    cell: (info) => info.getValue(),
   },
   {
     header: 'Third Party',
@@ -149,19 +149,21 @@ const CookieTable = ({ cookies: data, selectedFrame }: CookieTableProps) => {
   }));
 
   useEffect(() => {
-    if (
-      selectedFrame &&
-      selectedFrameCookie &&
-      selectedFrameCookie[selectedFrame] === undefined
-    ) {
-      setSelectedFrameCookie(null);
+    if (selectedFrame && selectedFrameCookie) {
+      if (
+        selectedFrameCookie[selectedFrame] === undefined ||
+        (selectedFrameCookie[selectedFrame] !== null && data.length === 0)
+      ) {
+        setSelectedFrameCookie(null);
+      }
     }
-  }, [selectedFrameCookie, selectedFrame, setSelectedFrameCookie]);
+  }, [selectedFrameCookie, selectedFrame, setSelectedFrameCookie, data.length]);
 
-  const columns = useMemo(
+  const columns: ColumnDef<CookieTableData>[] = useMemo(
     () =>
       tableColumns.map((column) => ({
         ...column,
+        sortingFn: 'alphanumericCaseSensitive',
         size: tableColumnSize / tableColumns.length,
       })),
     [tableColumnSize]

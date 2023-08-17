@@ -24,6 +24,7 @@ import classNames from 'classnames';
  * Internal dependencies.
  */
 import EmptyCirclePieChart from './emptyCirclePieChart';
+import { InfoIcon } from '../../../../icons';
 
 interface CirclePieChartProps {
   centerCount: number;
@@ -84,9 +85,16 @@ const CirclePieChart = ({
         </div>
       </div>
       {title && (
-        <p className="text-xs text-center font-semibold mt-2 leading-relaxed dark:text-bright-gray">
-          {title}
-        </p>
+        <div className="flex items-center justify-center gap-1 mt-2">
+          <p className="text-xs text-center font-semibold leading-relaxed dark:text-bright-gray">
+            {title}
+          </p>
+          {title.toLocaleLowerCase() === '3rd party cookies' && (
+            <p title="An active ad-blocker or other cookie extensions may affect the results.">
+              <InfoIcon />
+            </p>
+          )}
+        </div>
       )}
     </>
   );

@@ -68,14 +68,14 @@ const App: React.FC = () => {
   return (
     <div className="w-96 h-fit p-5 flex justify-center items-center flex-col">
       <div className="w-full flex gap-x-6 justify-center border-b border-hex-gray pb-3.5">
-        <div className="w-28 text-center">
+        <div className="w-32 text-center">
           <CirclePieChart
             centerCount={cookieStats.firstParty.total}
             data={statsComponents.firstParty}
             title="1st Party Cookies"
           />
         </div>
-        <div className="w-28 text-center">
+        <div className="w-32 text-center">
           <CirclePieChart
             centerCount={cookieStats.thirdParty.total}
             data={statsComponents.thirdParty}
