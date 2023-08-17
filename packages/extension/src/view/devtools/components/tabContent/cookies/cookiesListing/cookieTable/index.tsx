@@ -149,15 +149,15 @@ const CookieTable = ({ cookies: data, selectedFrame }: CookieTableProps) => {
   }));
 
   useEffect(() => {
-    if (
-      (selectedFrame &&
-        selectedFrameCookie &&
-        selectedFrameCookie[selectedFrame] === undefined) ||
-      data.length === 0
-    ) {
-      setSelectedFrameCookie(null);
+    if (selectedFrame && selectedFrameCookie) {
+      if (
+        selectedFrameCookie[selectedFrame] === undefined ||
+        (selectedFrameCookie[selectedFrame] !== null && data.length === 0)
+      ) {
+        setSelectedFrameCookie(null);
+      }
     }
-  }, [selectedFrameCookie, selectedFrame, setSelectedFrameCookie, data]);
+  }, [selectedFrameCookie, selectedFrame, setSelectedFrameCookie, data.length]);
 
   const columns: ColumnDef<CookieTableData>[] = useMemo(
     () =>
