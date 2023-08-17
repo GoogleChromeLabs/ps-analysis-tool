@@ -24,6 +24,9 @@ import React, {
   useMemo,
   useCallback,
 } from 'react';
+/**
+ * Internal dependencies.
+ */
 import type { SelectedFilters, Filter } from './types';
 import { useCookieStore } from '../syncCookieStore';
 import type { CookieTableData } from '../../cookies.types';
