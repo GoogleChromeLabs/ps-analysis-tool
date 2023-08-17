@@ -30,6 +30,7 @@ import type { CookieTableData } from '../../cookies.types';
 import getFilters from './utils/getFilters';
 import filterCookies from './utils/filterCookies';
 import { noop } from '../../../../utils/noop';
+import filterCookiesWithRetentionPeriod from './utils/filterCookiesWithRetentionPeriod';
 
 export interface filterManagementStore {
   state: {
@@ -95,10 +96,14 @@ export const Provider = ({ children }: PropsWithChildren) => {
     if (!selectedFrame) {
       return [];
     }
-
+    const retentionPeriodFilteredCookies = filterCookiesWithRetentionPeriod(
+      frameFilteredCookies,
+      selectedFrameFilters[selectedFrame]?.selectedFilters || {},
+      searchTerm
+    );
     return Object.values(
       filterCookies(
-        frameFilteredCookies,
+        retentionPeriodFilteredCookies,
         selectedFrameFilters[selectedFrame]?.selectedFilters || {},
         searchTerm
       )

@@ -39,7 +39,7 @@ const filterCookies = (
   }
 
   Object.entries(cookies).forEach(([cookieName, cookieData]) => {
-    let canShow = false;
+    const canShow: boolean[] = [];
 
     const matchTerm = () => {
       const lowerCaseTerm = searchTerm.toLowerCase();
@@ -51,49 +51,8 @@ const filterCookies = (
 
     if (Object.keys(selectedFilters).length) {
       Object.entries(selectedFilters).forEach(([keys, selectedFilter]) => {
-        if (keys === RETENTION_PERIOD_FILTER.keys) {
-          selectedFilter.forEach((retentionFilter) => {
-            if (canShow) {
-              return;
-            }
-            switch (retentionFilter) {
-              case 'Session':
-                canShow = cookieData.parsedCookie.expires === 0;
-                break;
-              case 'less than a day':
-                if (typeof cookieData.parsedCookie.expires === 'string') {
-                  const diff =
-                    Date.parse(cookieData.parsedCookie.expires) - Date.now();
-                  canShow = diff < 86400000;
-                }
-                break;
-              case 'a day to a week':
-                if (typeof cookieData.parsedCookie.expires === 'string') {
-                  const diff =
-                    Date.parse(cookieData.parsedCookie.expires) - Date.now();
-                  canShow = diff >= 86400000 && diff < 604800000;
-                }
-                break;
-              case 'a week to a month':
-                if (typeof cookieData.parsedCookie.expires === 'string') {
-                  const diff =
-                    Date.parse(cookieData.parsedCookie.expires) - Date.now();
-                  canShow = diff >= 604800000 && diff < 2629743833;
-                }
-                break;
-              case 'more than a month':
-                if (typeof cookieData.parsedCookie.expires === 'string') {
-                  const diff =
-                    Date.parse(cookieData.parsedCookie.expires) - Date.now();
-                  canShow = diff >= 2629743833;
-                }
-                break;
-              default:
-            }
-          });
-        } else {
+        if (keys !== RETENTION_PERIOD_FILTER.keys) {
           let value = getFilterValue(keys, cookieData);
-
           const filterMap = FILTER_MAPPING.find(
             (config) => config.keys === keys
           );
@@ -110,11 +69,11 @@ const filterCookies = (
             value = filterMap.default;
           }
 
-          canShow = selectedFilter?.has(value);
+          canShow.push(selectedFilter?.has(value));
         }
       });
 
-      if (canShow) {
+      if (canShow.length > 0 && !canShow.includes(false)) {
         if (searchTerm) {
           if (matchTerm()) {
             filteredCookies[cookieName] = cookieData;
