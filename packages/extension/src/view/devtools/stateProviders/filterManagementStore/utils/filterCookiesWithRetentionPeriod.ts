@@ -40,6 +40,14 @@ const filterCookiesWithRetentionPeriod = (
   Object.entries(cookies).forEach(([cookieName, cookieData]) => {
     let canShow = false;
 
+    const matchTerm = () => {
+      const lowerCaseTerm = searchTerm.toLowerCase();
+      return (
+        cookieName.toLowerCase().includes(lowerCaseTerm) ||
+        cookieData.parsedCookie.domain?.toLowerCase()?.includes(lowerCaseTerm)
+      );
+    };
+
     if (Object.keys(selectedFilters).length) {
       Object.entries(selectedFilters).forEach(([keys, selectedFilter]) => {
         if (keys === RETENTION_PERIOD_FILTER.keys) {
@@ -86,7 +94,13 @@ const filterCookiesWithRetentionPeriod = (
       });
 
       if (canShow) {
-        filteredCookies[cookieName] = cookieData;
+        if (searchTerm) {
+          if (matchTerm()) {
+            filteredCookies[cookieName] = cookieData;
+          }
+        } else {
+          filteredCookies[cookieName] = cookieData;
+        }
       }
     }
   });
