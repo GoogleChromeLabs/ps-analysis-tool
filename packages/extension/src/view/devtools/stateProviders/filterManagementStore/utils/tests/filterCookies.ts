@@ -31,6 +31,7 @@ describe('FilterCookies:', () => {
       frameFilteredCookies
     );
   });
+
   it('Should return cookies with only those whose retention period is filter passing.', () => {
     expect(
       filterCookies(
@@ -41,35 +42,44 @@ describe('FilterCookies:', () => {
         ''
       )
     ).toStrictEqual({
-      _parsely_session: {
-        analytics: {
-          category: '',
-          dataController: '',
-          description: '',
-          domain: '',
-          gdprUrl: '',
-          name: '',
-          platform: '',
-          retention: '',
-          wildcard: '',
+      _parsely_session: frameFilteredCookies['_parsely_session'],
+    });
+  });
+
+  it('Should return cookies with only those whose filter except retention period is set.', () => {
+    expect(
+      filterCookies(
+        frameFilteredCookies,
+        {
+          'analytics.category': new Set<string>(['Analytics']),
         },
-        frameIdList: [0],
-        headerType: 'request',
-        isFirstParty: true,
-        parsedCookie: {
-          domain: '.rtcamp.com',
-          expires: '2023-08-17T10:05:20.000Z',
-          httponly: false,
-          name: '_parsely_session',
-          path: '/',
-          samesite: '',
-          secure: false,
-          value:
-            '{%22sid%22:8%2C%22surl%22:%22https://rtcamp.com/%22%2C%22sref%22:%22%22%2C%22sts%22:1692264828254%2C%22slts%22:1692261902478}',
+        ''
+      )
+    ).toStrictEqual({
+      _ga: frameFilteredCookies['_ga'],
+      _ga_7HKDVLRRV4: frameFilteredCookies['_ga_7HKDVLRRV4'],
+    });
+  });
+
+  it('Should return cookies with only those whose filter except retention period is set.', () => {
+    expect(
+      filterCookies(
+        frameFilteredCookies,
+        {
+          'analytics.category': new Set<string>(['Analytics']),
+          retentionPeriod: new Set<string>(['more than a month']),
         },
-        url: 'https://rtcamp.com/wp-content/mu-plugins/jetpack-12.4/css/jetpack.css?ver=12.4',
-        isCookieSet: false,
-      },
+        ''
+      )
+    ).toStrictEqual({
+      _ga: frameFilteredCookies['_ga'],
+      _ga_7HKDVLRRV4: frameFilteredCookies['_ga_7HKDVLRRV4'],
+    });
+  });
+
+  it('Should search for cookie using name.', () => {
+    expect(filterCookies(frameFilteredCookies, {}, 'LSOLH')).toStrictEqual({
+      LSOLH: frameFilteredCookies['LSOLH'],
     });
   });
 });
