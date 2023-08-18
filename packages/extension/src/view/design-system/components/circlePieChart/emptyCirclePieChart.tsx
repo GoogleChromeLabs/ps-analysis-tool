@@ -24,17 +24,20 @@ import classNames from 'classnames';
  * Internal dependencies.
  */
 import { COLOR_MAP } from '../../theme/colors';
+import { InfoIcon } from '../../../../icons';
 
 interface EmptyCirclePieChartProps {
   fallbackText?: string;
   title?: string;
   isPrimary?: boolean;
+  infoIconClassName?: string;
 }
 
 const EmptyCirclePieChart = ({
   fallbackText,
   title,
   isPrimary = true,
+  infoIconClassName = '',
 }: EmptyCirclePieChartProps) => {
   const containerWidthClass = isPrimary ? 'w-16' : 'w-8';
   const centerTitleClasses = isPrimary
@@ -67,9 +70,19 @@ const EmptyCirclePieChart = ({
         </div>
       </div>
       {title && (
-        <p className="text-xs text-center font-semibold mt-2 leading-relaxed dark:text-bright-gray">
-          {title}
-        </p>
+        <div className="flex items-center justify-center gap-1 mt-2 relative">
+          <p className="text-xs text-center font-semibold mt-2 leading-relaxed dark:text-bright-gray">
+            {title}
+          </p>
+          {title.toLocaleLowerCase() === '3rd party cookies' && (
+            <p
+              className={infoIconClassName}
+              title="An active ad-blocker or other cookie extensions may affect the results."
+            >
+              <InfoIcon />
+            </p>
+          )}
+        </div>
       )}
     </>
   );

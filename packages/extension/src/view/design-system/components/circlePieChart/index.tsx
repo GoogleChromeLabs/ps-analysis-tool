@@ -58,6 +58,7 @@ const CirclePieChart = ({
         title={title}
         isPrimary={isPrimary}
         fallbackText={fallbackText}
+        infoIconClassName={infoIconClassName}
       />
     );
   }
