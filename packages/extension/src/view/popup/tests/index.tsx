@@ -57,7 +57,7 @@ describe('App', () => {
     render(<App />);
 
     expect(
-      screen.getByText('Please refresh this page to view cookies')
+      screen.getByText('Please try reloading the page')
     ).toBeInTheDocument();
   });
 
