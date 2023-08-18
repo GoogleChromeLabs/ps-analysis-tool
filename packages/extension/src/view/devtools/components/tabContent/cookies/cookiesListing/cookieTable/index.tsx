@@ -95,11 +95,11 @@ const tableColumns: ColumnDef<CookieTableData>[] = [
     cell: (info) => info.getValue(),
   },
   {
-    header: 'Third Party',
+    header: 'Scope',
     accessorKey: 'isFirstParty',
     cell: (info) => (
       <p className="flex justify-center items-center">
-        {!info.getValue() ? <span className="font-serif">✓</span> : ''}
+        {!info.getValue() ? 'Third Party' : 'First Party'}
       </p>
     ),
   },

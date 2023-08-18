@@ -18,7 +18,7 @@
  */
 import type { SelectedFilters } from '../types';
 import type { CookieTableData } from '../../../cookies.types';
-import { FILTER_MAPPING, RETENTION_PERIOD_FILTER } from '../constants';
+import { FILTER_MAPPING, CUSTOM_FILTER_MAPPING } from '../constants';
 import getFilterValue from './getFilterValue';
 
 const filterCookies = (
@@ -51,44 +51,65 @@ const filterCookies = (
 
     if (Object.keys(selectedFilters).length) {
       Object.entries(selectedFilters).forEach(([keys, selectedFilter]) => {
-        if (keys === RETENTION_PERIOD_FILTER.keys) {
-          selectedFilter.forEach((retentionFilter) => {
+        const customFilterKeys = Object.values(CUSTOM_FILTER_MAPPING).map(
+          (mapping) => mapping.keys
+        );
+
+        if (customFilterKeys.includes(keys)) {
+          selectedFilter.forEach((filterName) => {
             if (canShow) {
               return;
             }
-            switch (retentionFilter) {
-              case 'Session':
-                canShow = cookieData.parsedCookie.expires === 0;
-                break;
-              case 'less than a day':
-                if (typeof cookieData.parsedCookie.expires === 'string') {
-                  const diff =
-                    Date.parse(cookieData.parsedCookie.expires) - Date.now();
-                  canShow = diff < 86400000;
-                }
-                break;
-              case 'a day to a week':
-                if (typeof cookieData.parsedCookie.expires === 'string') {
-                  const diff =
-                    Date.parse(cookieData.parsedCookie.expires) - Date.now();
-                  canShow = diff >= 86400000 && diff < 604800000;
-                }
-                break;
-              case 'a week to a month':
-                if (typeof cookieData.parsedCookie.expires === 'string') {
-                  const diff =
-                    Date.parse(cookieData.parsedCookie.expires) - Date.now();
-                  canShow = diff >= 604800000 && diff < 2629743833;
-                }
-                break;
-              case 'more than a month':
-                if (typeof cookieData.parsedCookie.expires === 'string') {
-                  const diff =
-                    Date.parse(cookieData.parsedCookie.expires) - Date.now();
-                  canShow = diff >= 2629743833;
-                }
-                break;
-              default:
+
+            if (keys === CUSTOM_FILTER_MAPPING.retentionPeriod.keys) {
+              switch (filterName) {
+                case 'Session':
+                  canShow = cookieData.parsedCookie.expires === 0;
+                  break;
+                case 'less than a day':
+                  if (typeof cookieData.parsedCookie.expires === 'string') {
+                    const diff =
+                      Date.parse(cookieData.parsedCookie.expires) - Date.now();
+                    canShow = diff < 86400000;
+                  }
+                  break;
+                case 'a day to a week':
+                  if (typeof cookieData.parsedCookie.expires === 'string') {
+                    const diff =
+                      Date.parse(cookieData.parsedCookie.expires) - Date.now();
+                    canShow = diff >= 86400000 && diff < 604800000;
+                  }
+                  break;
+                case 'a week to a month':
+                  if (typeof cookieData.parsedCookie.expires === 'string') {
+                    const diff =
+                      Date.parse(cookieData.parsedCookie.expires) - Date.now();
+                    canShow = diff >= 604800000 && diff < 2629743833;
+                  }
+                  break;
+                case 'more than a month':
+                  if (typeof cookieData.parsedCookie.expires === 'string') {
+                    const diff =
+                      Date.parse(cookieData.parsedCookie.expires) - Date.now();
+                    canShow = diff >= 2629743833;
+                  }
+                  break;
+                default:
+              }
+            } else if (keys === CUSTOM_FILTER_MAPPING.scope.keys) {
+              switch (filterName) {
+                case 'Third Party':
+                  {
+                    canShow = !cookieData.isFirstParty;
+                  }
+                  break;
+                case 'First Party':
+                  {
+                    canShow = Boolean(cookieData.isFirstParty);
+                  }
+                  break;
+                default:
+              }
             }
           });
         } else {
@@ -99,11 +120,7 @@ const filterCookies = (
           );
 
           if ('boolean' === filterMap?.type) {
-            if (filterMap.keys === 'isFirstParty') {
-              value = !value ? 'True' : 'False';
-            } else {
-              value = value ? 'True' : 'False';
-            }
+            value = value ? 'True' : 'False';
           }
 
           if (!value && filterMap?.default) {
