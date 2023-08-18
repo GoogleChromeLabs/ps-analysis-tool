@@ -24,7 +24,7 @@ interface CircleProps {
 
 const Circle = ({ color }: CircleProps) => (
   <div
-    className="w-2.5 basis-0 h-2.5 rounded-full flex items-center justify-center"
+    className="w-2.5 flex-shrink-0 h-2.5 rounded-full flex items-center justify-center"
     style={{ backgroundColor: color }}
   />
 );

@@ -32,6 +32,7 @@ interface CirclePieChartProps {
   title?: string;
   isPrimary?: boolean;
   fallbackText?: string;
+  infoIconClassName?: string;
 }
 
 export const MAX_COUNT = 999;
@@ -42,6 +43,7 @@ const CirclePieChart = ({
   title,
   isPrimary = true,
   fallbackText,
+  infoIconClassName = '',
 }: CirclePieChartProps) => {
   let centerTitleClasses = centerCount <= MAX_COUNT ? 'text-2xl' : 'text-l';
   const containerWidthClass = isPrimary ? 'w-16' : 'w-8';
@@ -85,12 +87,15 @@ const CirclePieChart = ({
         </div>
       </div>
       {title && (
-        <div className="flex items-center justify-center gap-1 mt-2">
+        <div className="flex items-center justify-center gap-1 mt-2 relative">
           <p className="text-xs text-center font-semibold leading-relaxed dark:text-bright-gray">
             {title}
           </p>
           {title.toLocaleLowerCase() === '3rd party cookies' && (
-            <p title="An active ad-blocker or other cookie extensions may affect the results.">
+            <p
+              className={infoIconClassName}
+              title="An active ad-blocker or other cookie extensions may affect the results."
+            >
               <InfoIcon />
             </p>
           )}
