@@ -40,6 +40,7 @@ export interface filterManagementStore {
     filters: Filter[];
     filteredCookies: CookieTableData[];
     searchTerm: string;
+    cookiesAvailable: boolean;
   };
   actions: {
     setSelectedFilters: (
@@ -55,6 +56,7 @@ const initialState: filterManagementStore = {
     filters: [],
     filteredCookies: [],
     searchTerm: '',
+    cookiesAvailable: false,
   },
   actions: {
     setSelectedFilters: noop,
@@ -93,6 +95,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
     }
     return _frameFilteredCookies;
   }, [cookies, selectedFrame, tabFrames]);
+
+  const cookiesAvailable = useMemo(() => {
+    return Boolean(
+      frameFilteredCookies && Object.keys(frameFilteredCookies).length
+    );
+  }, [frameFilteredCookies]);
 
   const filteredCookies = useMemo(() => {
     if (!selectedFrame) {
@@ -151,6 +159,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         filters: selectedFrame ? filters[selectedFrame]?.filters || {} : [],
         filteredCookies,
         searchTerm,
+        cookiesAvailable,
       },
       actions: {
         setSelectedFilters,
@@ -164,6 +173,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       filteredCookies,
       searchTerm,
       setSelectedFilters,
+      cookiesAvailable,
     ]
   );
 

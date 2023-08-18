@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { Resizable } from 're-resizable';
 
 /**
@@ -29,44 +29,24 @@ import { useFilterManagementStore } from '../../../../stateProviders/filterManag
 import ChipsBar from '../cookieFilter/chips';
 import CookieTopBar from '../cookieTopBar';
 import FiltersList from '../cookieFilter';
-import { type CookieTableData } from '../../../../cookies.types';
 
 const CookiesListing = () => {
-  const { cookies, selectedFrame, tabFrames } = useCookieStore(({ state }) => ({
-    cookies: state.tabCookies,
+  const { selectedFrame } = useCookieStore(({ state }) => ({
     selectedFrame: state.selectedFrame,
-    tabFrames: state.tabFrames,
   }));
 
-  const filteredCookies = useFilterManagementStore(
-    ({ state }) => state.filteredCookies
+  const { filteredCookies, cookiesAvailable } = useFilterManagementStore(
+    ({ state }) => ({
+      filteredCookies: state.filteredCookies,
+      cookiesAvailable: state.cookiesAvailable,
+    })
   );
-
-  const frameFilteredCookies = useMemo(() => {
-    const _frameFilteredCookies: { [key: string]: CookieTableData } = {};
-    if (cookies && selectedFrame && tabFrames && tabFrames[selectedFrame]) {
-      Object.entries(cookies).forEach(([key, cookie]) => {
-        tabFrames[selectedFrame].frameIds?.forEach((frameId) => {
-          if (cookie.frameIdList?.includes(frameId)) {
-            _frameFilteredCookies[key] = cookie;
-          }
-        });
-      });
-    }
-    return _frameFilteredCookies;
-  }, [cookies, selectedFrame, tabFrames]);
 
   const [isFilterMenuOpen, setIsFilterMenuOpen] = useState<boolean>(false);
 
   const toggleFilterMenu = () => {
     setIsFilterMenuOpen((p) => !p);
   };
-
-  const cookiesAvailable = useMemo(() => {
-    return Boolean(
-      frameFilteredCookies && Object.keys(frameFilteredCookies).length
-    );
-  }, [frameFilteredCookies]);
 
   return (
     <div className="w-full h-full flex flex-col">
