@@ -41,22 +41,7 @@ describe('FilterCookiesWithoutRetentionPeriod:', () => {
       filterCookiesWithoutRetentionPeriod(
         frameFilteredCookies,
         {
-          isFirstParty: new Set(['True']),
-        },
-        ''
-      )
-    ).toStrictEqual({
-      LSOLH: frameFilteredCookies['LSOLH'],
-      NID: frameFilteredCookies['NID'],
-    });
-  });
-
-  it('Should return thirdparty cookies', () => {
-    expect(
-      filterCookiesWithoutRetentionPeriod(
-        frameFilteredCookies,
-        {
-          isFirstParty: new Set(['False']),
+          isFirstParty: new Set(['First Party']),
         },
         ''
       )
@@ -65,6 +50,21 @@ describe('FilterCookiesWithoutRetentionPeriod:', () => {
       _parsely_session_expiry: frameFilteredCookies['_parsely_session_expiry'],
       _ga_7HKDVLRRV4: frameFilteredCookies['_ga_7HKDVLRRV4'],
       _ga: frameFilteredCookies['_ga'],
+    });
+  });
+
+  it('Should return thirdparty cookies', () => {
+    expect(
+      filterCookiesWithoutRetentionPeriod(
+        frameFilteredCookies,
+        {
+          isFirstParty: new Set(['Third Party']),
+        },
+        ''
+      )
+    ).toStrictEqual({
+      LSOLH: frameFilteredCookies['LSOLH'],
+      NID: frameFilteredCookies['NID'],
     });
   });
 
@@ -82,12 +82,12 @@ describe('FilterCookiesWithoutRetentionPeriod:', () => {
     });
   });
 
-  it('Should return firstparty cookies in result', () => {
+  it('Should return firstparty cookies in result and search for cookies with _parsely_session', () => {
     expect(
       filterCookiesWithoutRetentionPeriod(
         frameFilteredCookies,
         {
-          isFirstParty: new Set(['False']),
+          isFirstParty: new Set(['First Party']),
         },
         '_parsely_session'
       )
