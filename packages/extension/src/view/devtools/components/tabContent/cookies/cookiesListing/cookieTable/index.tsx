@@ -163,7 +163,7 @@ const CookieTable = ({ cookies: data, selectedFrame }: CookieTableProps) => {
     () =>
       tableColumns.map((column) => ({
         ...column,
-        sortingFn: 'alphanumericCaseSensitive',
+        sortingFn: 'basic',
         size: tableColumnSize / tableColumns.length,
       })),
     [tableColumnSize]
