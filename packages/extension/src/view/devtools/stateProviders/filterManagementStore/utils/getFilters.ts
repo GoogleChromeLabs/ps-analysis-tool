@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import { FILTER_MAPPING, RETENTION_PERIOD_FILTER } from '../constants';
+import { FILTER_MAPPING, CUSTOM_FILTER_MAPPING } from '../constants';
 import getFilterValue from './getFilterValue';
 import sortStringArray from './sortStringArray';
 import type { Filter } from '../types';
@@ -36,11 +36,7 @@ const getFilters = (cookies: CookieTableData[]): Filter[] => {
       let value = getFilterValue(filterMap.keys, cookie);
 
       if ('boolean' === filterMap?.type) {
-        if (filterMap.keys === 'isFirstParty') {
-          value = !value ? 'True' : 'False';
-        } else {
-          value = value ? 'True' : 'False';
-        }
+        value = value ? 'True' : 'False';
       }
 
       if (!value && filterMap?.default) {
@@ -64,7 +60,7 @@ const getFilters = (cookies: CookieTableData[]): Filter[] => {
     }
   });
 
-  filters.push(RETENTION_PERIOD_FILTER);
+  filters.push(...Object.values(CUSTOM_FILTER_MAPPING));
 
   return filters;
 };
