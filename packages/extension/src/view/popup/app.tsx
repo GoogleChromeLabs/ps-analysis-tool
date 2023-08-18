@@ -29,36 +29,35 @@ import { CirclePieChart } from '../design-system/components';
 import { prepareCookieStatsComponents } from '../../utils/prepareCookieStatsComponents';
 
 const App: React.FC = () => {
-  const { cookieStats, loading } = useCookieStore(({ state }) => ({
-    cookieStats: state.tabCookieStats,
-    loading: state.loading,
-  }));
+  const { cookieStats, loading, showLoadingText } = useCookieStore(
+    ({ state }) => ({
+      cookieStats: state.tabCookieStats,
+      loading: state.loading,
+      showLoadingText: state.showLoadingText,
+    })
+  );
 
   if (loading) {
     return (
-      <div className="w-96 h-80 flex items-center justify-center">
+      <div className="w-96 min-h-[20rem] flex items-center justify-center flex-col gap-2">
         <div className="w-10 h-10 rounded-full animate-spin border-t-transparent border-solid border-blue-700 border-4" />
-      </div>
-    );
-  }
-
-  if (!cookieStats) {
-    return (
-      <div className="w-96 h-fit p-5 flex justify-center items-center flex-col">
-        <p className="font-bold text-lg">
-          Please refresh this page to view cookies
-        </p>
+        {showLoadingText && (
+          <p className="text-blue-700 text-lg ml-2">Listening to cookies...</p>
+        )}
       </div>
     );
   }
 
   if (
-    cookieStats.firstParty.total === 0 &&
-    cookieStats.thirdParty.total === 0
+    !cookieStats ||
+    (cookieStats.firstParty.total === 0 && cookieStats.thirdParty.total === 0)
   ) {
     return (
       <div className="w-96 h-fit p-5 flex justify-center items-center flex-col">
         <p className="font-bold text-lg">No cookies found on this page</p>
+        <p className="text-chart-label text-xs">
+          Please reload the page to see cookies
+        </p>
       </div>
     );
   }

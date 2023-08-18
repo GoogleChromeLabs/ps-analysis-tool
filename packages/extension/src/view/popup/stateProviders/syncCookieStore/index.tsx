@@ -37,6 +37,7 @@ export interface CookieStoreContext {
   state: {
     tabCookieStats: CookiesCount | null;
     loading: boolean;
+    showLoadingText: boolean;
   };
   actions: object;
 }
@@ -61,6 +62,7 @@ const initialState: CookieStoreContext = {
       },
     },
     loading: true,
+    showLoadingText: false,
   },
   actions: {},
 };
@@ -77,16 +79,27 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const [loading, setLoading] = useState<boolean>(true);
 
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [showLoadingText, setShowLoadingText] = useState<boolean>(false);
+
+  const loadingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const loadingTextTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    timeoutRef.current = setTimeout(() => {
+    loadingTimeout.current = setTimeout(() => {
       setLoading(false);
-    }, 10000);
+    }, 7000);
+
+    loadingTextTimeout.current = setTimeout(() => {
+      setShowLoadingText(true);
+    }, 3000);
 
     return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
+      if (loadingTimeout.current) {
+        clearTimeout(loadingTimeout.current);
+      }
+
+      if (loadingTextTimeout.current) {
+        clearTimeout(loadingTextTimeout.current);
       }
     };
   }, []);
@@ -94,6 +107,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const setDebouncedStats = useDebouncedCallback((value) => {
     setTabCookieStats(value);
     setLoading(false);
+    setShowLoadingText(false);
   }, 100);
 
   const intitialSync = useCallback(async () => {
@@ -156,7 +170,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   return (
     <Context.Provider
-      value={{ state: { tabCookieStats, loading }, actions: {} }}
+      value={{
+        state: { tabCookieStats, loading, showLoadingText },
+        actions: {},
+      }}
     >
       {children}
     </Context.Provider>
