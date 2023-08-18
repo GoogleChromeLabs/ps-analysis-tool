@@ -56,7 +56,7 @@ const App: React.FC = () => {
       <div className="w-96 h-fit p-5 flex justify-center items-center flex-col">
         <p className="font-bold text-lg">No cookies found on this page</p>
         <p className="text-chart-label text-xs">
-          Please reload the page to see cookies
+          Please try reloading the page
         </p>
       </div>
     );
