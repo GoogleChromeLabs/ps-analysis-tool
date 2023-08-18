@@ -29,15 +29,32 @@ import { useFilterManagementStore } from '../../../../stateProviders/filterManag
 import ChipsBar from '../cookieFilter/chips';
 import CookieTopBar from '../cookieTopBar';
 import FiltersList from '../cookieFilter';
+import { type CookieTableData } from '../../../../cookies.types';
 
 const CookiesListing = () => {
-  const { selectedFrame } = useCookieStore(({ state }) => ({
+  const { cookies, selectedFrame, tabFrames } = useCookieStore(({ state }) => ({
+    cookies: state.tabCookies,
     selectedFrame: state.selectedFrame,
+    tabFrames: state.tabFrames,
   }));
 
   const filteredCookies = useFilterManagementStore(
     ({ state }) => state.filteredCookies
   );
+
+  const frameFilteredCookies = useMemo(() => {
+    const _frameFilteredCookies: { [key: string]: CookieTableData } = {};
+    if (cookies && selectedFrame && tabFrames && tabFrames[selectedFrame]) {
+      Object.entries(cookies).forEach(([key, cookie]) => {
+        tabFrames[selectedFrame].frameIds?.forEach((frameId) => {
+          if (cookie.frameIdList?.includes(frameId)) {
+            _frameFilteredCookies[key] = cookie;
+          }
+        });
+      });
+    }
+    return _frameFilteredCookies;
+  }, [cookies, selectedFrame, tabFrames]);
 
   const [isFilterMenuOpen, setIsFilterMenuOpen] = useState<boolean>(false);
 
@@ -46,8 +63,10 @@ const CookiesListing = () => {
   };
 
   const cookiesAvailable = useMemo(() => {
-    return Boolean(filteredCookies.length);
-  }, [filteredCookies.length]);
+    return Boolean(
+      frameFilteredCookies && Object.keys(frameFilteredCookies).length
+    );
+  }, [frameFilteredCookies]);
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -74,21 +93,23 @@ const CookiesListing = () => {
             }}
           >
             <div className="h-full flex">
-              {isFilterMenuOpen && cookiesAvailable && (
-                <Resizable
-                  minWidth="10%"
-                  maxWidth="50%"
-                  enable={{
-                    top: false,
-                    right: true,
-                    bottom: false,
-                    left: false,
-                  }}
-                  className="overflow-y-scroll overflow-x-hidden p-3"
-                >
-                  <FiltersList />
-                </Resizable>
-              )}
+              {cookiesAvailable
+                ? isFilterMenuOpen && (
+                    <Resizable
+                      minWidth="10%"
+                      maxWidth="50%"
+                      enable={{
+                        top: false,
+                        right: true,
+                        bottom: false,
+                        left: false,
+                      }}
+                      className="overflow-y-scroll overflow-x-hidden p-3"
+                    >
+                      <FiltersList />
+                    </Resizable>
+                  )
+                : null}
 
               <div className="flex-1 overflow-auto">
                 <CookieTable
