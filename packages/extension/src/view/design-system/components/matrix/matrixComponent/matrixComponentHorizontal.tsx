@@ -56,7 +56,7 @@ const MatrixComponentHorizontal = ({
           </div>
         </div>
         {description && expand && (
-          <div className="mt-2 ml-6 pl-px">
+          <div className="mt-2 ml-6 pl-px lg:max-w-[45%] max-w-[60%]">
             <p className="text-xs mt-1.5 text-darkest-gray dark:text-manatee">
               {description}
             </p>
