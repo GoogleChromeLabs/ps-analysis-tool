@@ -53,7 +53,7 @@ const App: React.FC = () => {
     (cookieStats.firstParty.total === 0 && cookieStats.thirdParty.total === 0)
   ) {
     return (
-      <div className="w-96 h-fit p-5 flex justify-center items-center flex-col">
+      <div className="w-96 min-h-[318px] h-fit p-5 flex justify-center items-center flex-col">
         <p className="font-bold text-lg">No cookies found on this page</p>
         <p className="text-chart-label text-xs">
           Please try reloading the page
@@ -65,7 +65,7 @@ const App: React.FC = () => {
   const statsComponents = prepareCookieStatsComponents(cookieStats);
 
   return (
-    <div className="w-96 h-fit p-5 flex justify-center items-center flex-col">
+    <div className="w-96 min-h-[318px] h-fit p-5 flex justify-center items-center flex-col">
       <div className="w-full flex gap-x-6 justify-center border-b border-hex-gray pb-3.5">
         <div className="w-32 text-center">
           <CirclePieChart
