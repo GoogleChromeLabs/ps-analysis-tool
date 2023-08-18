@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import { useContextSelector, createContext } from 'use-context-selector';
+import { createContext } from 'use-context-selector';
 import React, {
   type PropsWithChildren,
   useEffect,
@@ -33,6 +33,7 @@ import type { CookieTableData } from '../../cookies.types';
 import getFilters from './utils/getFilters';
 import filterCookies from './utils/filterCookies';
 import { noop } from '../../../../utils/noop';
+import useContextSelector from '../../../../utils/useContextSelector';
 
 export interface filterManagementStore {
   state: {

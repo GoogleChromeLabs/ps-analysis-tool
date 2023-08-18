@@ -35,11 +35,11 @@ const CookiesListing = () => {
     selectedFrame: state.selectedFrame,
   }));
 
-  const filteredCookies = useFilterManagementStore(
-    ({ state }) => state.filteredCookies
-  );
-  const cookiesAvailable = useFilterManagementStore(
-    ({ state }) => state.cookiesAvailable
+  const { filteredCookies, cookiesAvailable } = useFilterManagementStore(
+    ({ state }) => ({
+      filteredCookies: state.filteredCookies,
+      cookiesAvailable: state.cookiesAvailable,
+    })
   );
 
   const [isFilterMenuOpen, setIsFilterMenuOpen] = useState<boolean>(false);
