@@ -50,7 +50,7 @@ const MatrixComponentHorizontal = ({
           </div>
           <div className="flex gap-4 items-center">
             <div className="w-[100px] h-1 bg-light-gray dark:bg-cultured" />
-            <div className="text-xs text-dark-gray font-semibold dark:text-bright-gray min-w-[24px]">
+            <div className="text-xs font-semibold dark:text-bright-gray min-w-[24px]">
               {count}
             </div>
           </div>
