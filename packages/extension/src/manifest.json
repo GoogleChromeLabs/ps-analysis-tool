@@ -15,8 +15,7 @@
     "webNavigation",
     "webRequest",
     "cookies",
-    "unlimitedStorage",
-    "debugger"
+    "unlimitedStorage"
   ],
   "host_permissions": ["*://*/*"],
   "devtools_page": "devtools/devtools.html",
