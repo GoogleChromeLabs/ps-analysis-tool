@@ -18,7 +18,7 @@
  */
 import type { SelectedFilters } from '../types';
 import type { CookieTableData } from '../../../cookies.types';
-import { RETENTION_PERIOD_FILTER } from '../constants';
+import { CUSTOM_FILTER_MAPPING } from '../constants';
 
 const filterCookiesWithRetentionPeriod = (
   cookies: {
@@ -50,7 +50,7 @@ const filterCookiesWithRetentionPeriod = (
 
     if (Object.keys(selectedFilters).length) {
       Object.entries(selectedFilters).forEach(([keys, selectedFilter]) => {
-        if (keys === RETENTION_PERIOD_FILTER.keys) {
+        if (keys === CUSTOM_FILTER_MAPPING.retentionPeriod.keys) {
           selectedFilter.forEach((retentionFilter) => {
             if (canShow) {
               return;

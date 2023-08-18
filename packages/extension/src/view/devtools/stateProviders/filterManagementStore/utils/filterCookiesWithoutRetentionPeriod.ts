@@ -18,7 +18,7 @@
  */
 import type { SelectedFilters } from '../types';
 import type { CookieTableData } from '../../../cookies.types';
-import { FILTER_MAPPING, RETENTION_PERIOD_FILTER } from '../constants';
+import { FILTER_MAPPING, CUSTOM_FILTER_MAPPING } from '../constants';
 import getFilterValue from './getFilterValue';
 
 const filterCookiesWithoutRetentionPeriod = (
@@ -51,18 +51,17 @@ const filterCookiesWithoutRetentionPeriod = (
 
     if (Object.keys(selectedFilters).length) {
       Object.entries(selectedFilters).forEach(([keys, selectedFilter]) => {
-        if (keys !== RETENTION_PERIOD_FILTER.keys) {
+        if (
+          keys !== CUSTOM_FILTER_MAPPING.retentionPeriod.keys &&
+          keys !== CUSTOM_FILTER_MAPPING.scope.keys
+        ) {
           let value = getFilterValue(keys, cookieData);
           const filterMap = FILTER_MAPPING.find(
             (config) => config.keys === keys
           );
 
           if ('boolean' === filterMap?.type) {
-            if (filterMap.keys === 'isFirstParty') {
-              value = !value ? 'True' : 'False';
-            } else {
-              value = value ? 'True' : 'False';
-            }
+            value = value ? 'True' : 'False';
           }
 
           if (!value && filterMap?.default) {
@@ -70,6 +69,12 @@ const filterCookiesWithoutRetentionPeriod = (
           }
 
           canShow.push(selectedFilter?.has(value));
+        } else if (keys === CUSTOM_FILTER_MAPPING.scope.keys) {
+          if (selectedFilter.has('Third Party')) {
+            canShow.push(!cookieData.isFirstParty);
+          } else if (selectedFilter.has('First Party')) {
+            canShow.push(Boolean(cookieData.isFirstParty));
+          }
         }
       });
 

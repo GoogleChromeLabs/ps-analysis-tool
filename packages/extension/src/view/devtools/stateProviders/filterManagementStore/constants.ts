@@ -39,11 +39,6 @@ export const FILTER_MAPPING = [
     keys: 'parsedCookie.samesite',
   },
   {
-    name: 'Third Party',
-    keys: 'isFirstParty',
-    type: 'boolean',
-  },
-  {
     name: 'Secure',
     keys: 'parsedCookie.secure',
     type: 'boolean',
@@ -60,16 +55,23 @@ export const FILTER_MAPPING = [
   },
 ];
 
-export const RETENTION_PERIOD_FILTER = {
-  name: 'Retention Period',
-  keys: 'retentionPeriod',
-  filters: new Set([
-    'Session',
-    'less than a day',
-    'a day to a week',
-    'a week to a month',
-    'more than a month',
-  ]),
+export const CUSTOM_FILTER_MAPPING = {
+  scope: {
+    name: 'Scope',
+    keys: 'isFirstParty',
+    filters: new Set(['First Party', 'Third Party']),
+  },
+  retentionPeriod: {
+    name: 'Retention Period',
+    keys: 'retentionPeriod',
+    filters: new Set([
+      'Session',
+      'less than a day',
+      'a day to a week',
+      'a week to a month',
+      'more than a month',
+    ]),
+  },
 };
 
 export const frameFilteredCookies: { [key: string]: CookieTableData } = {

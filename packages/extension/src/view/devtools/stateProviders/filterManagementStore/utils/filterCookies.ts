@@ -63,22 +63,23 @@ const filterCookies = (
       searchTerm
     );
   }
-  const filteredCookies: {
-    [key: string]: CookieTableData;
-  } = {};
-  Object.entries(cookies).forEach(([cookieName, cookieData]) => {
-    const matchTerm = () => {
-      const lowerCaseTerm = searchTerm.toLowerCase();
-      return (
-        cookieName.toLowerCase().includes(lowerCaseTerm) ||
-        cookieData.parsedCookie.domain?.toLowerCase()?.includes(lowerCaseTerm)
-      );
-    };
-    if (matchTerm()) {
-      filteredCookies[cookieName] = cookieData;
-    }
-  });
+  // This is when there are no filters but only search term.
   if (searchTerm) {
+    const filteredCookies: {
+      [key: string]: CookieTableData;
+    } = {};
+    Object.entries(cookies).forEach(([cookieName, cookieData]) => {
+      const matchTerm = () => {
+        const lowerCaseTerm = searchTerm.toLowerCase();
+        return (
+          cookieName.toLowerCase().includes(lowerCaseTerm) ||
+          cookieData.parsedCookie.domain?.toLowerCase()?.includes(lowerCaseTerm)
+        );
+      };
+      if (matchTerm()) {
+        filteredCookies[cookieName] = cookieData;
+      }
+    });
     return filteredCookies;
   }
   return cookies;
