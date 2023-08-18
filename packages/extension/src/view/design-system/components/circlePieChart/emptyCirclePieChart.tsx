@@ -54,6 +54,7 @@ const EmptyCirclePieChart = ({
             padding={0}
             innerRadius={0}
             colorScale={[COLOR_MAP.brightGray]}
+            data={[{ x: 'Not Found', y: 100 }]}
           />
           <p
             className={classNames(
