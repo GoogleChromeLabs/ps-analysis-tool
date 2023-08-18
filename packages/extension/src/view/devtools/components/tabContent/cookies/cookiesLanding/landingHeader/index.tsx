@@ -69,11 +69,12 @@ const LandingHeader = ({
       <div className="lg:max-w-[729px] flex gap-9 px-4">
         {dataMapping.map((circleData, index) => {
           return (
-            <div key={index} className="text-center w-20">
+            <div key={index} className="text-center w-16">
               <CirclePieChart
                 title={circleData.title}
                 centerCount={circleData.count}
                 data={circleData.data}
+                infoIconClassName="absolute -right-3"
               />
             </div>
           );
