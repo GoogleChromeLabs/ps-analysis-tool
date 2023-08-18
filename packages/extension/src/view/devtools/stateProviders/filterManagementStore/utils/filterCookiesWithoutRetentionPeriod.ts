@@ -70,10 +70,18 @@ const filterCookiesWithoutRetentionPeriod = (
 
           canShow.push(selectedFilter?.has(value));
         } else if (keys === CUSTOM_FILTER_MAPPING.scope.keys) {
-          if (selectedFilter.has('Third Party')) {
+          if (
+            selectedFilter.has('Third Party') &&
+            !selectedFilter.has('First Party')
+          ) {
             canShow.push(!cookieData.isFirstParty);
-          } else if (selectedFilter.has('First Party')) {
+          } else if (
+            !selectedFilter.has('Third Party') &&
+            selectedFilter.has('First Party')
+          ) {
             canShow.push(Boolean(cookieData.isFirstParty));
+          } else {
+            canShow.push(true);
           }
         }
       });
