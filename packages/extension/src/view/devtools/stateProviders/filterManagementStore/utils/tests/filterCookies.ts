@@ -23,7 +23,7 @@ import '@testing-library/jest-dom';
  * Internal dependencies.
  */
 import filterCookies from '../filterCookies';
-import { frameFilteredCookies } from '../../constants';
+import { frameFilteredCookies } from '../../../../../../test-utils/constants';
 
 describe('FilterCookies:', () => {
   it('Should return cookies as is if no filter is selected', () => {

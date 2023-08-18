@@ -23,7 +23,7 @@ import '@testing-library/jest-dom';
  * Internal dependencies.
  */
 import filterCookiesWithRetentionPeriod from '../filterCookiesWithRetentionPeriod';
-import { frameFilteredCookies } from '../../constants';
+import { frameFilteredCookies } from '../../../../../../test-utils/constants';
 
 describe('FilterCookiesWithoutRetentionPeriod:', () => {
   it('Should return cookies as is if no filter is selected', () => {
