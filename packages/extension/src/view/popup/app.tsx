@@ -29,36 +29,37 @@ import { CirclePieChart } from '../design-system/components';
 import { prepareCookieStatsComponents } from '../../utils/prepareCookieStatsComponents';
 
 const App: React.FC = () => {
-  const { cookieStats, loading } = useCookieStore(({ state }) => ({
-    cookieStats: state.tabCookieStats,
-    loading: state.loading,
-  }));
+  const { cookieStats, loading, showLoadingText } = useCookieStore(
+    ({ state }) => ({
+      cookieStats: state.tabCookieStats,
+      loading: state.loading,
+      showLoadingText: state.showLoadingText,
+    })
+  );
 
   if (loading) {
     return (
-      <div className="w-96 h-80 flex items-center justify-center">
+      <div className="w-96 min-h-[20rem] flex items-center justify-center flex-col gap-2 relative">
         <div className="w-10 h-10 rounded-full animate-spin border-t-transparent border-solid border-blue-700 border-4" />
-      </div>
-    );
-  }
-
-  if (!cookieStats) {
-    return (
-      <div className="w-96 h-fit p-5 flex justify-center items-center flex-col">
-        <p className="font-bold text-lg">
-          Please refresh this page to view cookies
-        </p>
+        {showLoadingText && (
+          <p className="absolute bottom-10 text-blue-700 text-lg ml-2">
+            Still listening to cookies, please wait...
+          </p>
+        )}
       </div>
     );
   }
 
   if (
-    cookieStats.firstParty.total === 0 &&
-    cookieStats.thirdParty.total === 0
+    !cookieStats ||
+    (cookieStats.firstParty.total === 0 && cookieStats.thirdParty.total === 0)
   ) {
     return (
-      <div className="w-96 h-fit p-5 flex justify-center items-center flex-col">
+      <div className="w-96 min-h-[318px] h-fit p-5 flex justify-center items-center flex-col">
         <p className="font-bold text-lg">No cookies found on this page</p>
+        <p className="text-chart-label text-xs">
+          Please try reloading the page
+        </p>
       </div>
     );
   }
@@ -66,7 +67,7 @@ const App: React.FC = () => {
   const statsComponents = prepareCookieStatsComponents(cookieStats);
 
   return (
-    <div className="w-96 h-fit p-5 flex justify-center items-center flex-col">
+    <div className="w-96 min-h-[318px] h-fit p-5 flex justify-center items-center flex-col">
       <div className="w-full flex gap-x-6 justify-center border-b border-hex-gray pb-3.5">
         <div className="w-32 text-center">
           <CirclePieChart

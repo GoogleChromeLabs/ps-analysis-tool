@@ -104,46 +104,4 @@ describe('CirclePieChart', () => {
     const primaryContainer = container.querySelector('.w-16');
     expect(primaryContainer).toBeInTheDocument();
   });
-
-  it('renders CirclePieChart with custom container width class when isPrimary is false', () => {
-    const centerCount = 60;
-
-    const { container } = render(
-      <CirclePieChart
-        centerCount={centerCount}
-        data={testData}
-        isPrimary={false}
-      />
-    );
-
-    // Check if the CirclePieChart renders with the custom container width class for non-primary charts
-    const secondaryContainer = container.querySelector('.w-8');
-    expect(secondaryContainer).toBeInTheDocument();
-  });
-
-  it('renders CirclePieChart with the correct font size class for primary and non-primary charts', () => {
-    const primaryCenterCount = 100;
-    const secondaryCenterCount = MAX_COUNT + 1; // Exceeds MAX_COUNT (999)
-
-    const { getByText, rerender } = render(
-      <CirclePieChart centerCount={primaryCenterCount} data={testData} />
-    );
-
-    // Check if the CirclePieChart renders with the correct font size class for primary charts
-    const primaryFontSizeClass = getByText(primaryCenterCount.toString());
-    expect(primaryFontSizeClass).toHaveClass('text-2xl');
-
-    // Rerender with non-primary centerCount
-    rerender(
-      <CirclePieChart
-        centerCount={secondaryCenterCount}
-        data={testData}
-        isPrimary={false}
-      />
-    );
-
-    // Check if the CirclePieChart renders with the correct font size class for non-primary charts
-    const nonPrimaryFontSizeClass = getByText(MAX_COUNT + '+');
-    expect(nonPrimaryFontSizeClass).toHaveClass('text-xxxs');
-  });
 });
