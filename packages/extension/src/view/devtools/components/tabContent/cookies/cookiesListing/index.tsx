@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { Resizable } from 're-resizable';
 
 /**
@@ -35,8 +35,11 @@ const CookiesListing = () => {
     selectedFrame: state.selectedFrame,
   }));
 
-  const filteredCookies = useFilterManagementStore(
-    ({ state }) => state.filteredCookies
+  const { filteredCookies, cookiesAvailable } = useFilterManagementStore(
+    ({ state }) => ({
+      filteredCookies: state.filteredCookies,
+      cookiesAvailable: state.cookiesAvailable,
+    })
   );
 
   const [isFilterMenuOpen, setIsFilterMenuOpen] = useState<boolean>(false);
@@ -44,10 +47,6 @@ const CookiesListing = () => {
   const toggleFilterMenu = () => {
     setIsFilterMenuOpen((p) => !p);
   };
-
-  const cookiesAvailable = useMemo(() => {
-    return Boolean(filteredCookies.length);
-  }, [filteredCookies.length]);
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -74,21 +73,23 @@ const CookiesListing = () => {
             }}
           >
             <div className="h-full flex">
-              {isFilterMenuOpen && cookiesAvailable && (
-                <Resizable
-                  minWidth="10%"
-                  maxWidth="50%"
-                  enable={{
-                    top: false,
-                    right: true,
-                    bottom: false,
-                    left: false,
-                  }}
-                  className="overflow-y-scroll overflow-x-hidden p-3"
-                >
-                  <FiltersList />
-                </Resizable>
-              )}
+              {cookiesAvailable
+                ? isFilterMenuOpen && (
+                    <Resizable
+                      minWidth="10%"
+                      maxWidth="50%"
+                      enable={{
+                        top: false,
+                        right: true,
+                        bottom: false,
+                        left: false,
+                      }}
+                      className="overflow-y-scroll overflow-x-hidden p-3"
+                    >
+                      <FiltersList />
+                    </Resizable>
+                  )
+                : null}
 
               <div className="flex-1 overflow-auto">
                 <CookieTable
