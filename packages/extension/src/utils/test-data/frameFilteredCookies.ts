@@ -16,7 +16,7 @@
 /**
  * Internal dependencies
  */
-import { type CookieTableData } from '../view/devtools/cookies.types';
+import { type CookieTableData } from '../../view/devtools/cookies.types';
 
 export const frameFilteredCookies: { [key: string]: CookieTableData } = {
   LSOLH: {
