@@ -53,14 +53,3 @@ export const Wide: StoryObj<typeof meta> = {
     title: '3rd party cookies',
   },
 };
-
-export const Secondary: StoryObj<typeof meta> = {
-  render: (args) => (
-    <div className="w-8 text-center">
-      <EmptyCirclePieChart {...args} />
-    </div>
-  ),
-  args: {
-    isPrimary: false,
-  },
-};
