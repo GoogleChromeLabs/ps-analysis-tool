@@ -38,9 +38,7 @@ export const Primary: StoryObj<typeof meta> = {
       <EmptyCirclePieChart {...args} />
     </div>
   ),
-  args: {
-    title: '3rd party cookies',
-  },
+  args: {},
 };
 
 export const Wide: StoryObj<typeof meta> = {
@@ -49,7 +47,5 @@ export const Wide: StoryObj<typeof meta> = {
       <EmptyCirclePieChart {...args} />
     </div>
   ),
-  args: {
-    title: '3rd party cookies',
-  },
+  args: {},
 };
