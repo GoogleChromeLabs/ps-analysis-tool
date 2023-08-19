@@ -39,10 +39,12 @@ const App: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="w-96 min-h-[20rem] flex items-center justify-center flex-col gap-2">
+      <div className="w-96 min-h-[20rem] flex items-center justify-center flex-col gap-2 relative">
         <div className="w-10 h-10 rounded-full animate-spin border-t-transparent border-solid border-blue-700 border-4" />
         {showLoadingText && (
-          <p className="text-blue-700 text-lg ml-2">Listening to cookies...</p>
+          <p className="absolute bottom-10 text-blue-700 text-lg ml-2">
+            Still listening to cookies, please wait...
+          </p>
         )}
       </div>
     );

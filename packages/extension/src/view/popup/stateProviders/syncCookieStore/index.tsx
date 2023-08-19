@@ -87,11 +87,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     loadingTimeout.current = setTimeout(() => {
       setLoading(false);
-    }, 7000);
+    }, 6500);
 
     loadingTextTimeout.current = setTimeout(() => {
       setShowLoadingText(true);
-    }, 3000);
+    }, 2500);
 
     return () => {
       if (loadingTimeout.current) {
