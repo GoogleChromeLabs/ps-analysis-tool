@@ -3,6 +3,9 @@
 	"version": "0.0.2",
 	"description": "Cookie Analysis Tool and CLI for analysis and understanding of cookie usage on web pages.",
 	"scripts": {
+		"cli:dev": "npm run dev --workspace=@cookie-analysis-tool/cli",
+		"cli:build": "npm run build --workspace=@cookie-analysis-tool/cli",
+		"cli":"node dist/cli/index.js",
 		"test": "jest --config=tests/jest.config.js",
 		"test:coverage": "npm run test -- --collectCoverage && open coverage/lcov-report/index.html",
 		"dev": "webpack --config webpack.config.cjs --watch",
@@ -106,7 +109,6 @@
 		"*.(xml|xml.dist)": "prettier --write",
 		"*.yml": "prettier --write"
 	},
-	"type": "module",
 	"workspaces": [
 		"packages/*"
 	]

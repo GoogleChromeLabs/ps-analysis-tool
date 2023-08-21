@@ -1,14 +1,38 @@
 {
   "name": "@cookie-analysis-tool/cli",
-  "version": "0.0.2",
-  "description": "CLI tool for cookie analysis",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc-watch"
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool.git"
+    "url": "git+https://github.com/rtCamp/cookie-analysis-tool.git"
   },
-  "license": "Apache-2.0",
+  "author": "",
+  "license": "ISC",
   "bugs": {
-    "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"
+    "url": "https://github.com/rtCamp/cookie-analysis-tool/issues"
   },
-  "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool#readme"
+  "homepage": "https://github.com/rtCamp/cookie-analysis-tool#readme",
+  "dependencies": {
+    "commander": "^10.0.1",
+    "fs-extra": "^11.1.1",
+    "promptly": "^3.2.0",
+    "puppeteer": "^21.0.3",
+    "simple-cookie": "^1.0.15",
+    "sitemapper": "^3.2.6",
+    "tldts": "^6.0.14",
+    "wappalyzer": "^6.10.66",
+    "@cookie-analysis-tool/common":"*"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.1",
+    "@types/node": "^20.2.3",
+    "@types/promptly": "^3.0.2",
+    "tsc-watch": "^6.0.4",
+    "typescript": "^5.0.4"
+  }
 }
