@@ -38,8 +38,13 @@ A "browsing session" refers to the sequence of navigations a user follows over a
 
 # Tool Functional Areas
 
-## Advanced Data Analysis
+<img width="937" alt="Screenshot 2023-08-21 at 10 35 19 AM" src="https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/3b13e478-2f67-42b3-879e-333f9a3b9357">
+
+## Cookie Data Manipulation and Analysis
 DevTools provides access to lots of information regarding every functional aspect of the browser, including cookies. This extensions expands a bit the capabilities of DevTools and providing additional ways to slice and dice cookie data, making it easier for everyone to understand the behaviors of cookies on different scenarios.
+
+<img width="946" alt="Screenshot 2023-08-21 at 1 41 13 PM" src="https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/e20cb6d0-f682-4c20-98c7-3b5e69be32df">
+
 
 ## Frame Overlays
 Cookies are used as a state management mechanism to power varying features and capabilities of sites. For example, a embedded video component from some 3P provider could set and manipulate 3P cookies to serve authenticated videos without users having to re-authenticate repeatedly. This extension provides a frame overlay capability, making it easy to associate, when possible, componets on a web page and the set of cookies that are associated with it. 
@@ -52,7 +57,8 @@ The final goal of this tool is to make it easy to understand the role of 3P cook
 
 # Usage instructions
 
-This repository contanis the PS analysis tool as a [Chrome Extension](https://developer.chrome.com/docs/extensions/mv3/), and as a CLI tool.
+🚧 This [Chrome Extension](https://developer.chrome.com/docs/extensions/mv3/) is currently being developed and the functionality is evolving rapidly. 🚧 
+
 The Chrome extension provides capabilities surfaced via the extension pop up, the Side Panel, and as Devtools panel. And the CLI implementation parses a sitemap provided as input, and outputs a JSON file listign all cookies set while navigating through the URLs in the sitemap. Follow the following steps to get the extension installed in your browser. 
 
 - Clone this Cookie Analysis Tool Repository
@@ -66,22 +72,30 @@ The Chrome extension provides capabilities surfaced via the extension pop up, th
 ### CLI
 
 - `npm run cli:build` to genrate a build in `/dist/cli`.
-- Run the cli util providing a sitemap as input. E.g. `node dist/cli/index.js -s https://<example.com>/sitemap_index.xml\`.
+- Run the cli, providing a URL or a sitemap as input.
+  - E.g. `npm run cli -- -s https://<example.com>/sitemap_index.xml\`.
+  - E.g. `npm run cli -- -u https://bbc.com`.
 
-## Unpacked Extension
+### Unpacked Extension
 
+- [Download](https://github.com/GoogleChromeLabs/ps-analysis-tool/releases/download/untagged-2b221120a2a509e7f7b2/extension-v0.1.0.zip) the tool as a zip file
+- From the folder containing the dowloaded file, run `unzip extension-v0.1.0.zip`
+- Click on "Load Unpacked" button on [chrome://extensions/](chrome://extensions/) and upload the unziped `extension`
 
 # Call to Action
 
 The goal of this tool is to assist users on getting knowledge and insights regarding [the upcoming deprecation of the way in which 3P cookies work](https://privacysandbox.com/open-web/#the-privacy-sandbox-timeline), and on the status an behaviors of the new Privacy Sandbox APIs. You can use the tool to analyze your site(s), your browsing experience, detect and report breakages, get support from Google on fixes, and, if you are developer of solutions that require cookie capabilities being deprecated, learn how to make them happen leveraging the new platform APIs that allow you to achieve the same goals in a privacy-preserving way. 
 
-**First-party site developers**: you are responsible for the creation and maintenance of websites. A significant part of your work involves auditing and managing third-party dependencies to ensure that your websites run smoothly and securely. This tool helps you understand the changes to 3P cookie use cases, how to integrate Privacy Sandbox APIs into your solutions, and how to troubleshoot issues that may arise.
+If you are a **first-party site developer**, you are responsible for the creation and maintenance of websites. A significant part of your work involves auditing and managing third-party dependencies to ensure that your websites run smoothly and securely. Leverage the guidance and the tooling available to help you understand the changes to third-party cookie use cases, how to integrate Privacy Sandbox APIs into your solutions, and how to troubleshoot issues that may arise.
 
-**Third-Party Service Providers using valid cookie use cases**: you are responsible for creating and maintaining services that are integrated into other websites as third-party dependencies, and rely on cookies for various functions, such as maintaining user sessions or tracking user preferences. This tool helps you to stay informed and guided on the effective and responsible use of cookies.
+If you are a **third-party service developer using valid cookie use cases**, you are responsible for creating and maintaining services that are integrated into other websites as third-party dependencies. If your technologies rely on cookies for various functions, such as maintaining user sessions or tracking user preferences, leverage the guidance and tooling provided to help you stay informed about the effective and responsible use of cookies.
 
-**Third-Party Service Providers transitioning away from cookies** : you are responsible for developing third-party services that rely on cookies (e.g. tracking, data storage, or user session management), which need to transition to alternate methods due to evolving regulations and platform changes. This tool provides you with guidance and technical support on integrating Privacy Sandbox APIs into your solutions, and troubleshoot any issues that may arise.
+If you are a **third-party service provider transitioning away from cookies**, you are responsible for developing third-party services that rely on cookies (such as tracking, data storage, or user session management), which need to transition to alternate methods due to evolving regulations and platform changes. Leverage the guidance and tooling available to help you integrate Privacy Sandbox APIs into your solutions, and helps troubleshoot any issues that may arise.
 
-**Website owners and technology leaders**: you are responsible for tech and business decision making. This tool is intended to provide you with reports and insights about the cookies usage by your sites and the potential impact on user privacy.
+If you are a **Website owners or technology leader**, you are responsible for technical and business decision making, and you can leverage the guidance and tooling available to get a thorough understanding of the transformative shift that is taking place for 3P Cookies and the potential impact on user experience and privacy.
+
+Ultimately, the web ecosystem, together, will navigate successfully this crucial transition towards a more private web platform. Let's make it happen!
+
 
 # Contributing
 If you have requests for features you would like to see in this tool, please file an Feature Request or join as a contributor! Please refer to our contribution [guidelines](docs/CONTRIBUTING.md) and [code of conduct](docs/code-of-conduct.md).
