@@ -25,6 +25,7 @@ import type {
   Filter,
   SelectedFilters,
 } from '../../../../stateProviders/filterManagementStore/types';
+import classNames from 'classnames';
 
 interface SubListProps {
   filter: Filter;
@@ -57,7 +58,16 @@ const SubList: React.FC<SubListProps> = ({
               role="checkbox"
               type="checkbox"
               name={filter.keys}
-              className="accent-royal-blue dark:bg-charleston-green dark:accent-orange-400 w-3 h-3"
+              className={classNames(
+                'accent-royal-blue dark:accent-orange-400 w-3 h-3 dark:bg-outer-space dark:min-h-0 dark:min-w-0 dark:h-[13px] dark:w-[13px]',
+                {
+                  'dark:appearance-none dark:text-manatee dark:border dark:rounded-[3px]':
+                    !(
+                      selectedFilters[filter.keys] &&
+                      selectedFilters[filter.keys].has(filterValue)
+                    ),
+                }
+              )}
               checked={Boolean(
                 selectedFilters[filter.keys] &&
                   selectedFilters[filter.keys].has(filterValue)
@@ -70,7 +80,7 @@ const SubList: React.FC<SubListProps> = ({
                 )
               }
             />
-            <span className="text:asteriod-black dark:text-bright-gray leading-normal font-semi-thick">
+            <span className="text-asteriod-black dark:text-bright-gray leading-normal font-semi-thick">
               {String(filterValue)}
             </span>
           </label>
