@@ -36,12 +36,12 @@ describe('FilterCookiesWithoutRetentionPeriod:', () => {
     expect(filterCookiesWithRetentionPeriod({}, {}, '')).toStrictEqual({});
   });
 
-  it('Should return cookies which are going to expire in less than a day', () => {
+  it('Should return cookies which are going to expire in Short Term (< 24h)', () => {
     expect(
       filterCookiesWithRetentionPeriod(
         frameFilteredCookies,
         {
-          retentionPeriod: new Set(['less than a day']),
+          retentionPeriod: new Set(['Short Term (< 24h)']),
         },
         ''
       )
@@ -64,36 +64,36 @@ describe('FilterCookiesWithoutRetentionPeriod:', () => {
     });
   });
 
-  it('Should return nothing for a day to a week cookies', () => {
+  it('Should return nothing for Medium Term (24h - 1 week) cookies', () => {
     expect(
       filterCookiesWithRetentionPeriod(
         frameFilteredCookies,
         {
-          retentionPeriod: new Set(['a day to a week']),
+          retentionPeriod: new Set(['Medium Term (24h - 1 week)']),
         },
         ''
       )
     ).toStrictEqual({});
   });
 
-  it('Should return nothing for a week to a month cookies', () => {
+  it('Should return nothing for Long Term (1 week - 1 month) cookies', () => {
     expect(
       filterCookiesWithRetentionPeriod(
         frameFilteredCookies,
         {
-          retentionPeriod: new Set(['a week to a month']),
+          retentionPeriod: new Set(['Long Term (1 week - 1 month)']),
         },
         ''
       )
     ).toStrictEqual({});
   });
 
-  it('Should return nothing for more than a month cookies', () => {
+  it('Should return nothing for Extended Term (> 1 month) cookies', () => {
     expect(
       filterCookiesWithRetentionPeriod(
         frameFilteredCookies,
         {
-          retentionPeriod: new Set(['more than a month']),
+          retentionPeriod: new Set(['Extended Term (> 1 month)']),
         },
         ''
       )

@@ -70,7 +70,7 @@ export const CUSTOM_FILTER_MAPPING = {
       'Short Term (< 24h)',
       'Medium Term (24h - 1 week)',
       'Long Term (1 week - 1 month)',
-      'Extended Term (1 month +)',
+      'Extended Term (> 1 month)',
     ]),
   },
 };

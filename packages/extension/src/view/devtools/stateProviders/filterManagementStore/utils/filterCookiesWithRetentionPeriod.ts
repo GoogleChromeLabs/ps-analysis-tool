@@ -59,28 +59,28 @@ const filterCookiesWithRetentionPeriod = (
               case 'Session':
                 canShow = cookieData.parsedCookie.expires === 0;
                 break;
-              case 'less than a day':
+              case 'Short Term (< 24h)':
                 if (typeof cookieData.parsedCookie.expires === 'string') {
                   const diff =
                     Date.parse(cookieData.parsedCookie.expires) - Date.now();
                   canShow = diff < 86400000;
                 }
                 break;
-              case 'a day to a week':
+              case 'Medium Term (24h - 1 week)':
                 if (typeof cookieData.parsedCookie.expires === 'string') {
                   const diff =
                     Date.parse(cookieData.parsedCookie.expires) - Date.now();
                   canShow = diff >= 86400000 && diff < 604800000;
                 }
                 break;
-              case 'a week to a month':
+              case 'Long Term (1 week - 1 month)':
                 if (typeof cookieData.parsedCookie.expires === 'string') {
                   const diff =
                     Date.parse(cookieData.parsedCookie.expires) - Date.now();
                   canShow = diff >= 604800000 && diff < 2629743833;
                 }
                 break;
-              case 'more than a month':
+              case 'Extended Term (> 1 month)':
                 if (typeof cookieData.parsedCookie.expires === 'string') {
                   const diff =
                     Date.parse(cookieData.parsedCookie.expires) - Date.now();
