@@ -43,6 +43,7 @@ module.exports = {
       xxl: '1.375rem', // 22px
     },
     fontWeight: {
+      ...defaultTheme.fontWeight,
       'semi-thick': 510,
     },
     textColor: {
