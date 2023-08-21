@@ -28,7 +28,7 @@ import mockResponse from '../../../../../../../../utils/test-data/cookieMockData
 import cookiesStatsComponents from '../../../../../../../../utils/test-data/cookiesStatsComponents';
 
 describe('CookiesMatrix', () => {
-  it('should render the cookies matrix', () => {
+  it('should render the cookies insights', () => {
     const tabCookies = mockResponse.tabCookies;
     const tabFrames = mockResponse.tabFrames;
 

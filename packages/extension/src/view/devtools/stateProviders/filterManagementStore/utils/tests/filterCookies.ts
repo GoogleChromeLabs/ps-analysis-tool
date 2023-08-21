@@ -37,7 +37,7 @@ describe('FilterCookies:', () => {
       filterCookies(
         frameFilteredCookies,
         {
-          retentionPeriod: new Set<string>(['less than a day']),
+          retentionPeriod: new Set<string>(['Short Term (< 24h)']),
         },
         ''
       )
@@ -67,7 +67,7 @@ describe('FilterCookies:', () => {
         frameFilteredCookies,
         {
           'analytics.category': new Set<string>(['Analytics']),
-          retentionPeriod: new Set<string>(['more than a month']),
+          retentionPeriod: new Set<string>(['Extended Term (> 1 month)']),
         },
         ''
       )
