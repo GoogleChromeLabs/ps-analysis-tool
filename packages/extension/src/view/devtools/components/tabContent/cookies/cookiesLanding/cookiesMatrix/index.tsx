@@ -102,7 +102,7 @@ const CookiesMatrix = ({
     },
     {
       title: 'Number of Frames with Associated Cookies',
-      description: 'Frames that have cookies associated with them',
+      description: 'Frames that have cookies associated with them.',
       count: framesWithCookies ? Object.keys(framesWithCookies).length : 0,
       expand: isExpanded,
     },
