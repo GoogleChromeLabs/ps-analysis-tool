@@ -61,6 +61,8 @@ export const FILTER_MAPPING = [
     keys: 'isCookieSet',
     type: 'boolean',
     order: 10,
+    description:
+      "Whether the cookie was accepted(set) in Chrome's Cookie Store",
   },
 ];
 
