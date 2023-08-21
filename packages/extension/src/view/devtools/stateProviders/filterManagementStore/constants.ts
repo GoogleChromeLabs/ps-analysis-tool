@@ -26,40 +26,41 @@ export const FILTER_MAPPING = [
     name: 'Domain',
     keys: 'parsedCookie.domain',
     sort: true,
-    order: 2,
-  },
-  {
-    name: 'Platform',
-    keys: 'analytics.platform',
-    sort: true,
-  },
-  {
-    name: 'Path',
-    keys: 'parsedCookie.path',
     order: 3,
-  },
-  {
-    name: 'Same Site',
-    keys: 'parsedCookie.samesite',
-    order: 4,
-  },
-  {
-    name: 'Secure',
-    keys: 'parsedCookie.secure',
-    type: 'boolean',
-    order: 5,
   },
   {
     name: 'HttpOnly',
     keys: 'parsedCookie.httponly',
     type: 'boolean',
+    order: 4,
+  },
+  {
+    name: 'Same Site',
+    keys: 'parsedCookie.samesite',
+    order: 5,
+  },
+  {
+    name: 'Secure',
+    keys: 'parsedCookie.secure',
+    type: 'boolean',
     order: 6,
+  },
+  {
+    name: 'Path',
+    keys: 'parsedCookie.path',
+    order: 7,
+  },
+  {
+    name: 'Platform',
+    keys: 'analytics.platform',
+    sort: true,
+    order: 9,
   },
   {
     name: 'Cookie Accepted',
     keys: 'isCookieSet',
     type: 'boolean',
-    order: 7,
+    order: 10,
   },
 ];
 
@@ -68,7 +69,7 @@ export const CUSTOM_FILTER_MAPPING = {
     name: 'Scope',
     keys: 'isFirstParty',
     filters: new Set(['First Party', 'Third Party']),
-    order: 8,
+    order: 2,
   },
   retentionPeriod: {
     name: 'Retention Period',
@@ -80,6 +81,6 @@ export const CUSTOM_FILTER_MAPPING = {
       'Long Term (1 week - 1 month)',
       'Extended Term (> 1 month)',
     ]),
-    order: 9,
+    order: 8,
   },
 };
