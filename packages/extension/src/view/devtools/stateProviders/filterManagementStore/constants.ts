@@ -27,6 +27,11 @@ export const FILTER_MAPPING = [
     sort: true,
   },
   {
+    name: 'Platform',
+    keys: 'analytics.platform',
+    sort: true,
+  },
+  {
     name: 'Path',
     keys: 'parsedCookie.path',
   },
