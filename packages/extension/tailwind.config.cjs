@@ -67,6 +67,7 @@ module.exports = {
       'chinese-silver': '#CDCDCD',
       'medium-persian-blue': '#0E639C',
       mischka: '#AFB0B1',
+      onyx: '#323941',
     },
     backgroundColor: {
       ...colors,

@@ -42,7 +42,7 @@ const HeaderCell = ({ header, setIsRowFocused }: HeaderCellProps) => {
       data-testid="header-cell"
     >
       <div
-        className="w-full h-full flex items-center justify-between dark:text-bright-gray"
+        className="w-full h-full flex items-center justify-between text-onyx dark:text-bright-gray"
         onClick={() => setIsRowFocused(false)}
       >
         <p className="px-1 py-px truncate text-xs">
