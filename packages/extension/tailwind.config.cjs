@@ -70,7 +70,7 @@ module.exports = {
       'chinese-silver': '#CDCDCD',
       'medium-persian-blue': '#0E639C',
       mischka: '#AFB0B1',
-      onyx: '#323941',
+      'cool-grey': '#323941',
       'asteriod-black': '#2B2C2F',
     },
     backgroundColor: {
