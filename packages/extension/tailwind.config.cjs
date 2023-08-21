@@ -42,6 +42,10 @@ module.exports = {
       xxxs: '0.625rem', // 10px - Only for edge cases
       xxl: '1.375rem', // 22px
     },
+    fontWeight: {
+      ...defaultTheme.fontWeight,
+      'semi-thick': 510,
+    },
     textColor: {
       ...colors,
       primary: '#000',
@@ -67,6 +71,8 @@ module.exports = {
       'chinese-silver': '#CDCDCD',
       'medium-persian-blue': '#0E639C',
       mischka: '#AFB0B1',
+      'cool-grey': '#323941',
+      'asteriod-black': '#2B2C2F',
     },
     backgroundColor: {
       ...colors,
