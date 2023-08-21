@@ -54,9 +54,10 @@ const SubList: React.FC<SubListProps> = ({
         >
           <label className="flex gap-x-2 cursor-pointer items-center">
             <input
+              role="checkbox"
               type="checkbox"
               name={filter.keys}
-              className="accent-royal-blue dark:accent-medium-persian-blue dark:bg-charleston-green w-3 h-3"
+              className="accent-royal-blue dark:bg-charleston-green dark:accent-orange-400 w-3 h-3"
               checked={Boolean(
                 selectedFilters[filter.keys] &&
                   selectedFilters[filter.keys].has(filterValue)
