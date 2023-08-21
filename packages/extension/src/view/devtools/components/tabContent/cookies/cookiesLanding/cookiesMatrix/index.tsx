@@ -26,7 +26,6 @@ import {
   Matrix,
   type MatrixComponentProps,
 } from '../../../../../../design-system/components';
-import { getInvalidCookies } from '../../utils/getInvalidCookies';
 import { filterFramesWithCookies } from '../../utils/filterFramesWithCookies';
 import type {
   TabCookies,
@@ -91,18 +90,10 @@ const CookiesMatrix = ({
       return comp;
     });
 
-  const invalidCookies = getInvalidCookies(tabCookies);
   const totalFrames = tabFrames ? Object.keys(tabFrames).length : 0;
   const framesWithCookies = filterFramesWithCookies(tabCookies, tabFrames);
 
   const matrixHorizontalComponents = [
-    {
-      title: 'Invalid Cookies',
-      description:
-        "Cookies which were deemed invalid and therefore not saved in the browser's cookie store.",
-      count: invalidCookies ? Object.keys(invalidCookies).length : 0,
-      expand: isExpanded,
-    },
     {
       title: 'Number of Frames',
       description: 'Number of frames found on the page.',

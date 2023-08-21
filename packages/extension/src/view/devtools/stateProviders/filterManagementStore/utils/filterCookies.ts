@@ -18,8 +18,8 @@
  */
 import type { SelectedFilters } from '../types';
 import type { CookieTableData } from '../../../cookies.types';
-import { FILTER_MAPPING, CUSTOM_FILTER_MAPPING } from '../constants';
-import getFilterValue from './getFilterValue';
+import filterCookiesWithRetentionPeriod from './filterCookiesWithRetentionPeriod';
+import filterCookiesWithoutRetentionPeriod from './filterCookiesWithoutRetentionPeriod';
 
 const filterCookies = (
   cookies: {
@@ -30,124 +30,59 @@ const filterCookies = (
 ): {
   [key: string]: CookieTableData;
 } => {
-  const filteredCookies: {
-    [key: string]: CookieTableData;
-  } = {};
-
-  if (!cookies || (!searchTerm && !Object.keys(selectedFilters).length)) {
-    return cookies;
+  // Case when both filters are present
+  if (
+    selectedFilters['retentionPeriod'] &&
+    Object.keys(selectedFilters).length > 1
+  ) {
+    const cookiesFilteredWithoutRetentionPeriod =
+      filterCookiesWithoutRetentionPeriod(cookies, selectedFilters, searchTerm);
+    return filterCookiesWithRetentionPeriod(
+      cookiesFilteredWithoutRetentionPeriod,
+      selectedFilters,
+      searchTerm
+    );
+  } else if (
+    selectedFilters['retentionPeriod'] &&
+    Object.keys(selectedFilters).length === 1
+  ) {
+    // Case when only retention period is present.
+    return filterCookiesWithRetentionPeriod(
+      cookies,
+      selectedFilters,
+      searchTerm
+    );
+  } else if (
+    !selectedFilters['retentionPeriod'] &&
+    Object.keys(selectedFilters).length >= 1
+  ) {
+    // All other filters except retention period is present.
+    return filterCookiesWithoutRetentionPeriod(
+      cookies,
+      selectedFilters,
+      searchTerm
+    );
   }
-
-  Object.entries(cookies).forEach(([cookieName, cookieData]) => {
-    let canShow = false;
-
-    const matchTerm = () => {
-      const lowerCaseTerm = searchTerm.toLowerCase();
-      return (
-        cookieName.toLowerCase().includes(lowerCaseTerm) ||
-        cookieData.parsedCookie.domain?.toLowerCase()?.includes(lowerCaseTerm)
-      );
-    };
-
-    if (Object.keys(selectedFilters).length) {
-      Object.entries(selectedFilters).forEach(([keys, selectedFilter]) => {
-        const customFilterKeys = Object.values(CUSTOM_FILTER_MAPPING).map(
-          (mapping) => mapping.keys
+  // This is when there are no filters but only search term.
+  if (searchTerm) {
+    const filteredCookies: {
+      [key: string]: CookieTableData;
+    } = {};
+    Object.entries(cookies).forEach(([cookieName, cookieData]) => {
+      const matchTerm = () => {
+        const lowerCaseTerm = searchTerm.toLowerCase();
+        return (
+          cookieName.toLowerCase().includes(lowerCaseTerm) ||
+          cookieData.parsedCookie.domain?.toLowerCase()?.includes(lowerCaseTerm)
         );
-
-        if (customFilterKeys.includes(keys)) {
-          selectedFilter.forEach((filterName) => {
-            if (canShow) {
-              return;
-            }
-
-            if (keys === CUSTOM_FILTER_MAPPING.retentionPeriod.keys) {
-              switch (filterName) {
-                case 'Session':
-                  canShow = cookieData.parsedCookie.expires === 0;
-                  break;
-                case 'less than a day':
-                  if (typeof cookieData.parsedCookie.expires === 'string') {
-                    const diff =
-                      Date.parse(cookieData.parsedCookie.expires) - Date.now();
-                    canShow = diff < 86400000;
-                  }
-                  break;
-                case 'a day to a week':
-                  if (typeof cookieData.parsedCookie.expires === 'string') {
-                    const diff =
-                      Date.parse(cookieData.parsedCookie.expires) - Date.now();
-                    canShow = diff >= 86400000 && diff < 604800000;
-                  }
-                  break;
-                case 'a week to a month':
-                  if (typeof cookieData.parsedCookie.expires === 'string') {
-                    const diff =
-                      Date.parse(cookieData.parsedCookie.expires) - Date.now();
-                    canShow = diff >= 604800000 && diff < 2629743833;
-                  }
-                  break;
-                case 'more than a month':
-                  if (typeof cookieData.parsedCookie.expires === 'string') {
-                    const diff =
-                      Date.parse(cookieData.parsedCookie.expires) - Date.now();
-                    canShow = diff >= 2629743833;
-                  }
-                  break;
-                default:
-              }
-            } else if (keys === CUSTOM_FILTER_MAPPING.scope.keys) {
-              switch (filterName) {
-                case 'Third Party':
-                  {
-                    canShow = !cookieData.isFirstParty;
-                  }
-                  break;
-                case 'First Party':
-                  {
-                    canShow = Boolean(cookieData.isFirstParty);
-                  }
-                  break;
-                default:
-              }
-            }
-          });
-        } else {
-          let value = getFilterValue(keys, cookieData);
-
-          const filterMap = FILTER_MAPPING.find(
-            (config) => config.keys === keys
-          );
-
-          if ('boolean' === filterMap?.type) {
-            value = value ? 'True' : 'False';
-          }
-
-          if (!value && filterMap?.default) {
-            value = filterMap.default;
-          }
-
-          canShow = selectedFilter?.has(value);
-        }
-      });
-
-      if (canShow) {
-        if (searchTerm) {
-          if (matchTerm()) {
-            filteredCookies[cookieName] = cookieData;
-          }
-        } else {
-          filteredCookies[cookieName] = cookieData;
-        }
-      }
-    } else {
+      };
       if (matchTerm()) {
         filteredCookies[cookieName] = cookieData;
       }
-    }
-  });
-
-  return filteredCookies;
+    });
+    return filteredCookies;
+  }
+  return cookies;
 };
 
 export default filterCookies;

@@ -30,8 +30,8 @@ interface CirclePieChartProps {
   centerCount: number;
   data: { count: number; color: string }[];
   title?: string;
-  isPrimary?: boolean;
   fallbackText?: string;
+  infoIconClassName?: string;
 }
 
 export const MAX_COUNT = 999;
@@ -40,57 +40,47 @@ const CirclePieChart = ({
   centerCount,
   data,
   title,
-  isPrimary = true,
   fallbackText,
+  infoIconClassName = '',
 }: CirclePieChartProps) => {
-  let centerTitleClasses = centerCount <= MAX_COUNT ? 'text-2xl' : 'text-l';
-  const containerWidthClass = isPrimary ? 'w-16' : 'w-8';
-
-  if (!isPrimary) {
-    centerTitleClasses = centerCount <= MAX_COUNT ? 'text-xs' : 'text-xxxs';
-  }
-
-  if (centerCount <= 0) {
-    return (
-      <EmptyCirclePieChart
-        title={title}
-        isPrimary={isPrimary}
-        fallbackText={fallbackText}
-      />
-    );
-  }
+  const centerTitleClasses = centerCount <= MAX_COUNT ? 'text-2xl' : 'text-l';
 
   return (
     <>
-      <div
-        className={classNames('inline-block align-bottom', containerWidthClass)}
-      >
-        <div className="w-full h-full relative">
-          <VictoryPie
-            padding={0}
-            innerRadius={175}
-            animate={{ duration: 400 }}
-            data={data.map(({ count }) => ({ x: '', y: count }))}
-            labels={() => ''}
-            colorScale={data.map(({ color }) => color)}
-          />
-          <p
-            className={classNames(
-              'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-regular dark:text-bright-gray',
-              centerTitleClasses
-            )}
-          >
-            {centerCount <= MAX_COUNT ? centerCount : MAX_COUNT + '+'}
-          </p>
-        </div>
+      <div className="inline-block align-bottom w-16">
+        {centerCount <= 0 ? (
+          <EmptyCirclePieChart fallbackText={fallbackText} />
+        ) : (
+          <div className="w-full h-full relative">
+            <VictoryPie
+              padding={0}
+              innerRadius={175}
+              animate={{ duration: 400 }}
+              data={data.map(({ count }) => ({ x: '', y: count }))}
+              labels={() => ''}
+              colorScale={data.map(({ color }) => color)}
+            />
+            <p
+              className={classNames(
+                'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-regular dark:text-bright-gray',
+                centerTitleClasses
+              )}
+            >
+              {centerCount <= MAX_COUNT ? centerCount : MAX_COUNT + '+'}
+            </p>
+          </div>
+        )}
       </div>
       {title && (
-        <div className="flex items-center justify-center gap-1 mt-2">
+        <div className="flex items-center justify-center gap-1 mt-2 relative">
           <p className="text-xs text-center font-semibold leading-relaxed dark:text-bright-gray">
             {title}
           </p>
           {title.toLocaleLowerCase() === '3rd party cookies' && (
-            <p title="An active ad-blocker or other cookie extensions may affect the results.">
+            <p
+              className={infoIconClassName}
+              title="An active ad-blocker or other cookie extensions may affect the results."
+            >
               <InfoIcon />
             </p>
           )}

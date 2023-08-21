@@ -149,7 +149,7 @@ function parseAttributeValues(
     } else if (value === 'unspecified') {
       value = '';
     }
-    value = value || '';
+    value = ((value || '') as string).toLowerCase();
   }
 
   if (type === 'expires' && value !== 0) {

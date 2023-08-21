@@ -14,20 +14,22 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies.
+ * External dependencies
  */
-import type { TabCookies } from '../../../../cookies.types';
+import { shallowEqualArrays, shallowEqualObjects } from 'shallow-equal';
 
-export const getInvalidCookies = (cookies: TabCookies | null): TabCookies => {
-  const invalidCookies: TabCookies = {};
-
-  if (cookies) {
-    Object.entries(cookies).forEach(([name, cookie]) => {
-      if (false === cookie.isCookieSet) {
-        invalidCookies[name] = cookie;
-      }
-    });
+export const shallowEqual = (a: unknown, b: unknown): boolean => {
+  if (a === b) {
+    return true;
   }
 
-  return invalidCookies;
+  if (Array.isArray(a) && Array.isArray(b)) {
+    return shallowEqualArrays(a, b);
+  }
+
+  if (typeof a === 'object' && typeof b === 'object') {
+    return shallowEqualObjects(a, b);
+  }
+
+  return false;
 };
