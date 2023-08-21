@@ -35,8 +35,8 @@ import type { CookieTableData } from '../../../../../cookies.types';
 export interface CookieTableProps {
   cookies: CookieTableData[];
   selectedFrame: string | null;
-  mouseInsideHeader: boolean;
-  setMouseInsideHeader: React.Dispatch<React.SetStateAction<boolean>>;
+  isMouseInsideHeader: boolean;
+  setIsMouseInsideHeader: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const tableColumns: ColumnDef<CookieTableData>[] = [
@@ -140,8 +140,8 @@ const tableColumns: ColumnDef<CookieTableData>[] = [
 const CookieTable = ({
   cookies,
   selectedFrame,
-  mouseInsideHeader,
-  setMouseInsideHeader,
+  isMouseInsideHeader,
+  setIsMouseInsideHeader,
 }: CookieTableProps) => {
   const {
     selectedFrameCookie,
@@ -158,10 +158,10 @@ const CookieTable = ({
   const [data, setData] = useState<CookieTableData[]>(cookies);
 
   useEffect(() => {
-    if (!mouseInsideHeader) {
+    if (!isMouseInsideHeader) {
       setData(cookies);
     }
-  }, [cookies, mouseInsideHeader]);
+  }, [cookies, isMouseInsideHeader]);
 
   useEffect(() => {
     if (selectedFrame && selectedFrameCookie) {
@@ -215,8 +215,8 @@ const CookieTable = ({
           selectedKey === null ? null : selectedKey?.parsedCookie?.name
         }
         onRowClick={onRowClick}
-        onMouseEnter={() => setMouseInsideHeader(true)}
-        onMouseLeave={() => setMouseInsideHeader(false)}
+        onMouseEnter={() => setIsMouseInsideHeader(true)}
+        onMouseLeave={() => setIsMouseInsideHeader(false)}
       />
     </div>
   );

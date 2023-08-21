@@ -31,11 +31,11 @@ import CookieTopBar from '../cookieTopBar';
 import FiltersList from '../cookieFilter';
 
 const CookiesListing = () => {
-  const { selectedFrame, mouseInsideHeader, setMouseInsideHeader } =
+  const { selectedFrame, isMouseInsideHeader, setIsMouseInsideHeader } =
     useCookieStore(({ state, actions }) => ({
       selectedFrame: state.selectedFrame,
-      mouseInsideHeader: state.mouseInsideHeader,
-      setMouseInsideHeader: actions.setMouseInsideHeader,
+      isMouseInsideHeader: state.isMouseInsideHeader,
+      setIsMouseInsideHeader: actions.setIsMouseInsideHeader,
     }));
 
   const { filteredCookies, cookiesAvailable } = useFilterManagementStore(
@@ -98,8 +98,8 @@ const CookiesListing = () => {
                 <CookieTable
                   cookies={filteredCookies}
                   selectedFrame={selectedFrame}
-                  mouseInsideHeader={mouseInsideHeader}
-                  setMouseInsideHeader={setMouseInsideHeader}
+                  isMouseInsideHeader={isMouseInsideHeader}
+                  setIsMouseInsideHeader={setIsMouseInsideHeader}
                 />
               </div>
             </div>

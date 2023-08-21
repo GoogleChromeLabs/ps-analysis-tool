@@ -36,11 +36,11 @@ export interface CookieStoreContext {
     tabUrl: string | null;
     tabFrames: TabFrames | null;
     selectedFrame: string | null;
-    mouseInsideHeader: boolean;
+    isMouseInsideHeader: boolean;
   };
   actions: {
     setSelectedFrame: React.Dispatch<React.SetStateAction<string | null>>;
-    setMouseInsideHeader: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsMouseInsideHeader: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
@@ -50,11 +50,11 @@ const initialState: CookieStoreContext = {
     tabUrl: null,
     tabFrames: null,
     selectedFrame: null,
-    mouseInsideHeader: false,
+    isMouseInsideHeader: false,
   },
   actions: {
     setSelectedFrame: () => undefined,
-    setMouseInsideHeader: () => undefined,
+    setIsMouseInsideHeader: () => undefined,
   },
 };
 
@@ -74,7 +74,8 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [tabFrames, setTabFrames] =
     useState<CookieStoreContext['state']['tabFrames']>(null);
 
-  const [mouseInsideHeader, setMouseInsideHeader] = useState<boolean>(false);
+  const [isMouseInsideHeader, setIsMouseInsideHeader] =
+    useState<boolean>(false);
 
   const getAllFramesForCurrentTab = useCallback(
     async (_tabId: number | null) => {
@@ -215,9 +216,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
           tabUrl,
           tabFrames,
           selectedFrame,
-          mouseInsideHeader,
+          isMouseInsideHeader,
         },
-        actions: { setSelectedFrame, setMouseInsideHeader },
+        actions: { setSelectedFrame, setIsMouseInsideHeader },
       }}
     >
       {children}
