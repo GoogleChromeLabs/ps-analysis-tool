@@ -29,6 +29,11 @@ export const FILTER_MAPPING = [
     order: 2,
   },
   {
+    name: 'Platform',
+    keys: 'analytics.platform',
+    sort: true,
+  },
+  {
     name: 'Path',
     keys: 'parsedCookie.path',
     order: 3,
@@ -70,10 +75,10 @@ export const CUSTOM_FILTER_MAPPING = {
     keys: 'retentionPeriod',
     filters: new Set([
       'Session',
-      'less than a day',
-      'a day to a week',
-      'a week to a month',
-      'more than a month',
+      'Short Term (< 24h)',
+      'Medium Term (24h - 1 week)',
+      'Long Term (1 week - 1 month)',
+      'Extended Term (> 1 month)',
     ]),
     order: 9,
   },
