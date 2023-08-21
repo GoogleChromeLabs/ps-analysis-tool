@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -35,6 +35,8 @@ import type { CookieTableData } from '../../../../../cookies.types';
 export interface CookieTableProps {
   cookies: CookieTableData[];
   selectedFrame: string | null;
+  mouseInsideHeader: boolean;
+  setMouseInsideHeader: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const tableColumns: ColumnDef<CookieTableData>[] = [
@@ -135,7 +137,12 @@ const tableColumns: ColumnDef<CookieTableData>[] = [
   },
 ];
 
-const CookieTable = ({ cookies: data, selectedFrame }: CookieTableProps) => {
+const CookieTable = ({
+  cookies,
+  selectedFrame,
+  mouseInsideHeader,
+  setMouseInsideHeader,
+}: CookieTableProps) => {
   const {
     selectedFrameCookie,
     setSelectedFrameCookie,
@@ -147,6 +154,14 @@ const CookieTable = ({ cookies: data, selectedFrame }: CookieTableProps) => {
     tableColumnSize: state.tableColumnSize,
     tableContainerRef: state.tableContainerRef,
   }));
+
+  const [data, setData] = useState<CookieTableData[]>(cookies);
+
+  useEffect(() => {
+    if (!mouseInsideHeader) {
+      setData(cookies);
+    }
+  }, [cookies, mouseInsideHeader]);
 
   useEffect(() => {
     if (selectedFrame && selectedFrameCookie) {
@@ -200,9 +215,11 @@ const CookieTable = ({ cookies: data, selectedFrame }: CookieTableProps) => {
           selectedKey === null ? null : selectedKey?.parsedCookie?.name
         }
         onRowClick={onRowClick}
+        onMouseEnter={() => setMouseInsideHeader(true)}
+        onMouseLeave={() => setMouseInsideHeader(false)}
       />
     </div>
   );
 };
 
-export default CookieTable;
+export default memo(CookieTable);

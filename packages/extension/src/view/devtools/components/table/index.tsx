@@ -34,9 +34,17 @@ interface TableProps {
   table: ReactTable<TableData>;
   selectedKey: string | undefined | null;
   onRowClick: (row: TableData | null) => void;
+  onMouseEnter: (event: React.MouseEvent<HTMLElement>) => void;
+  onMouseLeave: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
-const Table = ({ table, selectedKey, onRowClick }: TableProps) => {
+const Table = ({
+  table,
+  selectedKey,
+  onRowClick,
+  onMouseEnter,
+  onMouseLeave,
+}: TableProps) => {
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
   const [columnPosition, setColumnPosition] = useState({
     x: 0,
@@ -92,6 +100,8 @@ const Table = ({ table, selectedKey, onRowClick }: TableProps) => {
           setColumnPosition={setColumnPosition}
           onRightClick={handleRightClick}
           setIsRowFocused={setIsRowFocused}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
         />
         <TableBody
           rows={table.getRowModel().rows}
