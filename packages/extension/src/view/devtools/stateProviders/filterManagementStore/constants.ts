@@ -67,10 +67,10 @@ export const CUSTOM_FILTER_MAPPING = {
     keys: 'retentionPeriod',
     filters: new Set([
       'Session',
-      'less than a day',
-      'a day to a week',
-      'a week to a month',
-      'more than a month',
+      'Less than a day',
+      'A day to a week',
+      'A week to a month',
+      'More than a month',
     ]),
   },
 };
