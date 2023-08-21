@@ -21,8 +21,7 @@ import React, { useState } from 'react';
 /**
  * Internal dependencies.
  */
-// eslint-disable-next-line import/no-relative-packages
-import { ArrowDown } from '../../../../../../icons';
+import { ArrowDown, InfoIcon } from '../../../../../../icons';
 import SubList from './subList';
 import type {
   SelectedFilters,
@@ -80,16 +79,23 @@ const ListItem: React.FC<ListItemProps> = ({
 
   return (
     <li className="py-[3px]">
-      <a
-        href="#"
-        className="flex items-center text-asteriod-black dark:text-bright-gray"
-        onClick={toggleSubList}
-      >
-        <span className={showSubList ? '' : '-rotate-90'}>
-          <ArrowDown />
-        </span>
-        <p className="ml-1 leading-normal font-semi-thick">{filter.name}</p>
-      </a>
+      <div className="flex gap-2 items-center">
+        <a
+          href="#"
+          className="flex items-center text-asteriod-black dark:text-bright-gray"
+          onClick={toggleSubList}
+        >
+          <span className={showSubList ? '' : '-rotate-90'}>
+            <ArrowDown />
+          </span>
+          <p className="ml-1 leading-normal font-semi-thick">{filter.name}</p>
+        </a>
+        {filter.description && (
+          <p title={filter.description}>
+            <InfoIcon />
+          </p>
+        )}
+      </div>
       {showSubList && (
         <>
           <SubList
