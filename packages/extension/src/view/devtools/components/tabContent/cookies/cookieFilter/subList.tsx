@@ -69,7 +69,9 @@ const SubList: React.FC<SubListProps> = ({
                 )
               }
             />
-            <span className="dark:text-bright-gray">{String(filterValue)}</span>
+            <span className="text:asteriod-black dark:text-bright-gray leading-normal font-semi-thick">
+              {String(filterValue)}
+            </span>
           </label>
         </li>
       ))}

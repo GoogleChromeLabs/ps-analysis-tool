@@ -82,13 +82,13 @@ const ListItem: React.FC<ListItemProps> = ({
     <li className="py-[3px]">
       <a
         href="#"
-        className="flex items-center text-black dark:text-bright-gray"
+        className="flex items-center text-asteriod-black dark:text-bright-gray"
         onClick={toggleSubList}
       >
         <span className={showSubList ? '' : '-rotate-90'}>
           <ArrowDown />
         </span>
-        <p className="ml-1">{filter.name}</p>
+        <p className="ml-1 leading-normal font-semi-thick">{filter.name}</p>
       </a>
       {showSubList && (
         <>

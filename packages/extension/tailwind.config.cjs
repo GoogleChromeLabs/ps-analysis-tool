@@ -42,6 +42,9 @@ module.exports = {
       xxxs: '0.625rem', // 10px - Only for edge cases
       xxl: '1.375rem', // 22px
     },
+    fontWeight: {
+      'semi-thick': 510,
+    },
     textColor: {
       ...colors,
       primary: '#000',
@@ -68,6 +71,7 @@ module.exports = {
       'medium-persian-blue': '#0E639C',
       mischka: '#AFB0B1',
       onyx: '#323941',
+      'asteriod-black': '#2B2C2F',
     },
     backgroundColor: {
       ...colors,
