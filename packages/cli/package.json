@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rtCamp/cookie-analysis-tool.git"
+    "url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/rtCamp/cookie-analysis-tool/issues"
+    "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"
   },
-  "homepage": "https://github.com/rtCamp/cookie-analysis-tool#readme",
+  "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
   "dependencies": {
     "commander": "^10.0.1",
     "fs-extra": "^11.1.1",
