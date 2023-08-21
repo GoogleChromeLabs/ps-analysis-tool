@@ -45,15 +45,7 @@ const commonConfig = {
             loader: 'postcss-loader',
             options: {
               postcssOptions: {
-                plugins: [
-                  [
-                    'tailwindcss',
-                    {
-                      config: './packages/extension/tailwind.config.cjs',
-                    },
-                  ],
-                  ['autoprefixer'],
-                ],
+                config: path.resolve(__dirname, './postcss.config.cjs'),
               },
             },
           },
@@ -84,10 +76,10 @@ const root = {
   plugins: [
     new CopyPlugin({
       patterns: [
-        { from: './packages/extension/src/manifest.json', to: '' },
-        { from: './packages/extension/icons', to: 'icons' },
-        { from: './data/third_party/', to: 'third_party/data' },
-        { from: './data/PSInfo.json', to: './data/PSInfo.json' },
+        { from: 'packages/extension/src/manifest.json', to: '' },
+        { from: 'packages/extension/icons', to: 'icons' },
+        { from: 'third_party', to: 'third_party' },
+        { from: 'data/PSInfo.json', to: 'data/PSInfo.json' },
       ],
     }),
     new WebpackBar({

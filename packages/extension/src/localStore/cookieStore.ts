@@ -26,25 +26,51 @@ const CookieStore = {
    * @param {Array} cookies Cookies data.
    */
   async update(tabId: string, cookies: CookieData[]) {
-    const newCookies: { [key: string]: CookieData } = {};
-
-    for (const cookie of cookies) {
-      if (cookie) {
-        newCookies[cookie.parsedCookie.name] = cookie;
-      }
-    }
-
     await updateStorage(tabId, (prevState: TabData) => {
-      const updatedCookies = {
-        ...(prevState?.cookies || {}),
-        ...newCookies,
-      };
+      const _prevCookies = prevState?.cookies || {};
+      const _updatedCookies = _prevCookies;
+
+      for (const cookie of cookies) {
+        const cookieName = cookie.parsedCookie.name;
+
+        if (!cookieName) {
+          continue;
+        }
+
+        if (_updatedCookies?.[cookieName]) {
+          _updatedCookies[cookieName] = {
+            ...cookie,
+            frameIdList: Array.from(
+              new Set<number>([
+                ...cookie.frameIdList,
+                ..._updatedCookies[cookieName].frameIdList,
+              ])
+            ),
+          };
+        } else {
+          _updatedCookies[cookieName] = cookie;
+        }
+      }
 
       return {
         ...prevState,
-        cookies: updatedCookies,
+        cookies: _updatedCookies,
       };
     });
+  },
+
+  /**
+   * Deletes a cookie
+   * @param {string} cookieName Name of the cookie.
+   */
+  async deleteCookie(cookieName: string) {
+    const storage = await chrome.storage.local.get();
+
+    Object.values(storage).forEach((tabData) => {
+      delete tabData.cookies[cookieName];
+    });
+
+    await chrome.storage.local.set(storage);
   },
 
   /**

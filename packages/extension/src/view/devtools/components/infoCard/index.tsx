@@ -45,21 +45,25 @@ const InfoCard = ({ infoKey }: InfoCardProps) => {
   }, [infoKey]);
 
   return (
-    <div className="max-w-2xl bg-white m-3">
+    <>
       {Object.keys(PSInfo).length ? (
-        <div className="p-6 border border-gray-200 rounded-lg shadow">
-          <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
-            {PSInfo.name}
-          </h5>
-          <p className="mb-3 text-gray-700">{PSInfo.description}</p>
-          <LearnMoreDropdown PSInfo={PSInfo} />
+        <div className="max-w-2xl m-3">
+          <div className="p-6 dark:bg-davys-grey border border-gray-200 dark:border-quartz rounded-lg shadow">
+            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-bright-gray">
+              {PSInfo.name}
+            </h5>
+            <p className="mb-3 text-gray-700 dark:text-bright-gray">
+              {PSInfo.description}
+            </p>
+            <LearnMoreDropdown PSInfo={PSInfo} />
+          </div>
         </div>
       ) : (
-        <div className="p-6">
+        <div className="w-full h-full flex items-center justify-center">
           <div className="w-10 h-10 rounded-full animate-spin border-t-transparent border-solid border-blue-700 border-4" />
         </div>
       )}
-    </div>
+    </>
   );
 };
 

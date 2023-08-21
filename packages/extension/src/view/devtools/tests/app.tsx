@@ -18,6 +18,8 @@
  */
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
+import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import SinonChrome from 'sinon-chrome';
 
@@ -31,7 +33,15 @@ import PSInfo from 'cookie-analysis-tool/data/PSInfo.json';
 
 describe('App', () => {
   beforeAll(() => {
-    globalThis.chrome = SinonChrome as unknown as typeof chrome;
+    globalThis.chrome = {
+      ...SinonChrome,
+      devtools: {
+        // @ts-ignore
+        panels: {
+          themeName: 'dark',
+        },
+      },
+    };
 
     globalThis.fetch = function () {
       return Promise.resolve({
@@ -43,14 +53,14 @@ describe('App', () => {
     } as unknown as typeof fetch;
   });
 
-  it('Should show cookies content by default', () => {
-    render(<App />);
+  it('Should show cookies content by default', async () => {
+    await act(() => render(<App />));
 
     expect(screen.getByTestId('cookies-content')).toBeInTheDocument();
   });
 
   it('should switch to cookie panel when tab is clicked', async () => {
-    render(<App />);
+    await act(() => render(<App />));
     // Move to another tab
     fireEvent.click(screen.getByText('Bounce Tracking'));
 
@@ -59,7 +69,7 @@ describe('App', () => {
   });
 
   it('should switch to Bounce Tracking Panel when clicked', async () => {
-    render(<App />);
+    await act(() => render(<App />));
     // Click on Bounce Tracking tab
     fireEvent.click(screen.getByText('Bounce Tracking'));
 
@@ -69,13 +79,67 @@ describe('App', () => {
   });
 
   it('should switch to FingerPrinting Panel when clicked', async () => {
-    render(<App />);
+    await act(() => render(<App />));
     // Click on FingerPrinting tab
     fireEvent.click(screen.getByText('Fingerprinting'));
 
     expect(
       await screen.findByTestId('fingerprinting-content')
     ).toBeInTheDocument();
+  });
+
+  it('should switch to Attribution Panel when clicked', async () => {
+    await act(() => render(<App />));
+    // Click on Attribution tab
+    fireEvent.click(screen.getByText('Attribution'));
+
+    expect(
+      await screen.findByTestId('attribution-content')
+    ).toBeInTheDocument();
+  });
+
+  it('should switch to Topics Panel when clicked', async () => {
+    await act(() => render(<App />));
+
+    // Click on Topics tab
+    fireEvent.click(screen.getByText('Topics'));
+
+    expect(await screen.findByTestId('topics-content')).toBeInTheDocument();
+  });
+
+  it('Down Keyboard navigation should work.', async () => {
+    await act(() => render(<App />));
+    // Focus on the first menu item.
+    userEvent.tab();
+    // Press arrow down
+    userEvent.keyboard('{ArrowDown}');
+    expect(await screen.findByTestId('Topics')).toHaveClass('bg-royal-blue');
+  });
+
+  it('Up Keyboard navigation should work.', async () => {
+    await act(() => render(<App />));
+    // Focus on the first menu item.
+    userEvent.tab();
+    // Press arrow down to go to next menu
+    userEvent.keyboard('{ArrowDown}');
+    // Press arrow down to go to previous menu
+    userEvent.keyboard('{ArrowUp}');
+    expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
+      'bg-royal-blue'
+    );
+  });
+
+  it('Up Keyboard navigation should work.', async () => {
+    await act(() => render(<App />));
+    // Focus on the first menu item.
+    userEvent.tab();
+    expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
+      'bg-royal-blue'
+    );
+    userEvent.keyboard('{Enter}');
+    expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
+      'bg-royal-blue'
+    );
   });
 
   afterAll(() => {

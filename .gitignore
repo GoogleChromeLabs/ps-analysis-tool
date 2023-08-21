@@ -17,6 +17,7 @@ Thumbs.db
 # Build directories
 dist
 data/temp-cookies
+coverage
 
 # output from cli
 out

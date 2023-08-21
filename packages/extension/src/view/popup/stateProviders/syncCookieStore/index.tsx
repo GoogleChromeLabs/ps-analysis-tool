@@ -22,18 +22,22 @@ import React, {
   useEffect,
   useState,
   useCallback,
+  useRef,
 } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 
 /**
  * Internal dependencies.
  */
 import { getCurrentTab } from '../../../../utils/getCurrentTabId';
-import type { CookieStats } from '../../types';
-import countCookiesByCategory from '../../../../utils/countCookiesByCategory';
+import type { CookiesCount } from '../../types';
+import prepareCookiesCount from '../../../../utils/prepareCookiesCount';
 
 export interface CookieStoreContext {
   state: {
-    tabCookieStats: CookieStats | null;
+    tabCookieStats: CookiesCount | null;
+    loading: boolean;
+    showLoadingText: boolean;
   };
   actions: object;
 }
@@ -47,16 +51,18 @@ const initialState: CookieStoreContext = {
         functional: 0,
         marketing: 0,
         analytics: 0,
-        uncategorised: 0,
+        uncategorized: 0,
       },
       thirdParty: {
         total: 0,
         functional: 0,
         marketing: 0,
         analytics: 0,
-        uncategorised: 0,
+        uncategorized: 0,
       },
     },
+    loading: true,
+    showLoadingText: false,
   },
   actions: {},
 };
@@ -70,6 +76,39 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const [tabCookieStats, setTabCookieStats] =
     useState<CookieStoreContext['state']['tabCookieStats']>(null);
+
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const [showLoadingText, setShowLoadingText] = useState<boolean>(false);
+
+  const loadingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const loadingTextTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    loadingTimeout.current = setTimeout(() => {
+      setLoading(false);
+    }, 6500);
+
+    loadingTextTimeout.current = setTimeout(() => {
+      setShowLoadingText(true);
+    }, 2500);
+
+    return () => {
+      if (loadingTimeout.current) {
+        clearTimeout(loadingTimeout.current);
+      }
+
+      if (loadingTextTimeout.current) {
+        clearTimeout(loadingTextTimeout.current);
+      }
+    };
+  }, []);
+
+  const setDebouncedStats = useDebouncedCallback((value) => {
+    setTabCookieStats(value);
+    setLoading(false);
+    setShowLoadingText(false);
+  }, 100);
 
   const intitialSync = useCallback(async () => {
     const [tab] = await getCurrentTab();
@@ -87,9 +126,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
     ];
 
     if (tabData && tabData.cookies) {
-      setTabCookieStats(countCookiesByCategory(tabData.cookies, _tabUrl));
+      setDebouncedStats(prepareCookiesCount(tabData.cookies, _tabUrl));
     }
-  }, []);
+  }, [setDebouncedStats]);
 
   const storeChangeListener = useCallback(
     (changes: { [key: string]: chrome.storage.StorageChange }) => {
@@ -99,15 +138,15 @@ export const Provider = ({ children }: PropsWithChildren) => {
         Object.keys(changes).includes(tabId.toString()) &&
         changes[tabId.toString()]?.newValue?.cookies
       ) {
-        setTabCookieStats(
-          countCookiesByCategory(
+        setDebouncedStats(
+          prepareCookiesCount(
             changes[tabId.toString()].newValue.cookies,
             tabUrl
           )
         );
       }
     },
-    [tabId, tabUrl]
+    [setDebouncedStats, tabId, tabUrl]
   );
 
   const tabUpdateListener = useCallback(
@@ -130,7 +169,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
   }, [intitialSync, storeChangeListener, tabUpdateListener]);
 
   return (
-    <Context.Provider value={{ state: { tabCookieStats }, actions: {} }}>
+    <Context.Provider
+      value={{
+        state: { tabCookieStats, loading, showLoadingText },
+        actions: {},
+      }}
+    >
       {children}
     </Context.Provider>
   );

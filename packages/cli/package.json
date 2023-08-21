@@ -1,6 +1,6 @@
 {
   "name": "@cookie-analysis-tool/cli",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "CLI tool for cookie analysis",
   "repository": {
     "type": "git",

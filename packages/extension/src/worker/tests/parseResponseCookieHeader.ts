@@ -13,17 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/**
+ * External dependencies.
+ */
+import SinonChrome from 'sinon-chrome';
+
 /**
  * Internal dependencies.
  */
 import parseResponseCookieHeader from '../parseResponseCookieHeader';
+import { emptyAnalytics } from '../findAnalyticsMatch';
 
 describe('parseResponseCookieHeader', () => {
-  it('Should parse all set-cookie header (response cookies)', () => {
-    const parsedCookie = parseResponseCookieHeader(
+  beforeAll(() => {
+    globalThis.chrome = SinonChrome as unknown as typeof chrome;
+  });
+
+  it('Should parse all set-cookie header (response cookies)', async () => {
+    const parsedCookie = await parseResponseCookieHeader(
       'https://example.com/public/api/alerts',
       'countryCode=IN; Domain=.example.com; Path=/; SameSite=None; Secure',
-      {}
+      {},
+      'https://docs.google.com/',
+      1
     );
 
     expect(parsedCookie).toEqual({
@@ -33,18 +46,20 @@ describe('parseResponseCookieHeader', () => {
         secure: true,
         path: '/',
         domain: '.example.com',
-        samesite: 'None',
+        samesite: 'none',
         name: 'countryCode',
         value: 'IN',
       },
-      analytics: null,
+      analytics: { ...emptyAnalytics },
       url: 'https://example.com/public/api/alerts',
       headerType: 'response',
+      isFirstParty: false,
+      frameIdList: [1],
     });
   });
 
-  it('Should parse and add add analytics', () => {
-    const parsedCookie = parseResponseCookieHeader(
+  it('Should parse and add analytics', async () => {
+    const parsedCookie = await parseResponseCookieHeader(
       'https://example.com/public/api/alerts',
       'test_cookie=bla; Domain=.example.com; Path=/; SameSite=None; Secure',
       {
@@ -62,7 +77,9 @@ describe('parseResponseCookieHeader', () => {
             wildcard: '0',
           },
         ],
-      }
+      },
+      'https://docs.google.com/',
+      1
     );
 
     expect(parsedCookie).toEqual({
@@ -72,7 +89,7 @@ describe('parseResponseCookieHeader', () => {
         secure: true,
         path: '/',
         domain: '.example.com',
-        samesite: 'None',
+        samesite: 'none',
         name: 'test_cookie',
         value: 'bla',
       },
@@ -90,11 +107,13 @@ describe('parseResponseCookieHeader', () => {
       },
       url: 'https://example.com/public/api/alerts',
       headerType: 'response',
+      isFirstParty: false,
+      frameIdList: [1],
     });
   });
 
-  it('Should parse and add add analytics for wild card entries', () => {
-    const parsedCookie = parseResponseCookieHeader(
+  it('Should parse and add analytics for wild card entries', async () => {
+    const parsedCookie = await parseResponseCookieHeader(
       'https://google.com/public/api/alerts',
       '_ga_123=bla; Domain=.google.com; Path=/; SameSite=None; Secure',
       {
@@ -126,7 +145,9 @@ describe('parseResponseCookieHeader', () => {
             wildcard: '1',
           },
         ],
-      }
+      },
+      'https://docs.google.com/',
+      1
     );
 
     expect(parsedCookie).toEqual({
@@ -136,7 +157,7 @@ describe('parseResponseCookieHeader', () => {
         secure: true,
         path: '/',
         domain: '.google.com',
-        samesite: 'None',
+        samesite: 'none',
         name: '_ga_123',
         value: 'bla',
       },
@@ -154,6 +175,8 @@ describe('parseResponseCookieHeader', () => {
       },
       url: 'https://google.com/public/api/alerts',
       headerType: 'response',
+      isFirstParty: true,
+      frameIdList: [1],
     });
   });
 });
