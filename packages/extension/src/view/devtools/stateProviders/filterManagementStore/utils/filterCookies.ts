@@ -32,7 +32,7 @@ const filterCookies = (
 } => {
   // Case when both filters are present
   if (
-    selectedFilters['retentionPeriod'] &&
+    selectedFilters['parsedCookie.expires'] &&
     Object.keys(selectedFilters).length > 1
   ) {
     const cookiesFilteredWithoutRetentionPeriod =
@@ -43,7 +43,7 @@ const filterCookies = (
       searchTerm
     );
   } else if (
-    selectedFilters['retentionPeriod'] &&
+    selectedFilters['parsedCookie.expires'] &&
     Object.keys(selectedFilters).length === 1
   ) {
     // Case when only retention period is present.
@@ -53,7 +53,7 @@ const filterCookies = (
       searchTerm
     );
   } else if (
-    !selectedFilters['retentionPeriod'] &&
+    !selectedFilters['parsedCookie.expires'] &&
     Object.keys(selectedFilters).length >= 1
   ) {
     // All other filters except retention period is present.

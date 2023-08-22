@@ -40,7 +40,7 @@ export function filterCookiesWithCustomMapping(
     canShow = filterWithScope(selectedFilter, value);
   } else if (keys === CUSTOM_FILTER_MAPPING.sameSite.keys) {
     canShow = filterWithSameSite(selectedFilter, value);
-  } else if (keys !== CUSTOM_FILTER_MAPPING.retentionPeriod.keys) {
+  } else {
     canShow = filterBoolean(selectedFilter, value);
   }
 

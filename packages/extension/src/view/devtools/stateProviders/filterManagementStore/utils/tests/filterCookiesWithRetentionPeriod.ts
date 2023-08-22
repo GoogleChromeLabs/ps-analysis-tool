@@ -41,7 +41,7 @@ describe('FilterCookiesWithoutRetentionPeriod:', () => {
       filterCookiesWithRetentionPeriod(
         frameFilteredCookies,
         {
-          retentionPeriod: new Set(['Short Term (< 24h)']),
+          'parsedCookie.expires': new Set(['Short Term (< 24h)']),
         },
         ''
       )
@@ -55,7 +55,7 @@ describe('FilterCookiesWithoutRetentionPeriod:', () => {
       filterCookiesWithRetentionPeriod(
         frameFilteredCookies,
         {
-          retentionPeriod: new Set(['Session']),
+          'parsedCookie.expires': new Set(['Session']),
         },
         ''
       )
@@ -69,7 +69,7 @@ describe('FilterCookiesWithoutRetentionPeriod:', () => {
       filterCookiesWithRetentionPeriod(
         frameFilteredCookies,
         {
-          retentionPeriod: new Set(['Medium Term (24h - 1 week)']),
+          'parsedCookie.expires': new Set(['Medium Term (24h - 1 week)']),
         },
         ''
       )
@@ -81,7 +81,7 @@ describe('FilterCookiesWithoutRetentionPeriod:', () => {
       filterCookiesWithRetentionPeriod(
         frameFilteredCookies,
         {
-          retentionPeriod: new Set(['Long Term (1 week - 1 month)']),
+          'parsedCookie.expires': new Set(['Long Term (1 week - 1 month)']),
         },
         ''
       )
@@ -93,7 +93,7 @@ describe('FilterCookiesWithoutRetentionPeriod:', () => {
       filterCookiesWithRetentionPeriod(
         frameFilteredCookies,
         {
-          retentionPeriod: new Set(['Extended Term (> 1 month)']),
+          'parsedCookie.expires': new Set(['Extended Term (> 1 month)']),
         },
         ''
       )
@@ -110,7 +110,7 @@ describe('FilterCookiesWithoutRetentionPeriod:', () => {
       filterCookiesWithRetentionPeriod(
         frameFilteredCookies,
         {
-          retentionPeriod: new Set(['Session']),
+          'parsedCookie.expires': new Set(['Session']),
         },
         '_parsely_session_expiry'
       )

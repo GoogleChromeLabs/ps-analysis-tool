@@ -67,7 +67,7 @@ const filterCookiesWithoutRetentionPeriod = (
           }
 
           canShow.push(selectedFilter?.has(value));
-        } else {
+        } else if (keys !== CUSTOM_FILTER_MAPPING.retentionPeriod.keys) {
           canShow.push(
             filterCookiesWithCustomMapping(selectedFilter, cookieData, keys)
           );

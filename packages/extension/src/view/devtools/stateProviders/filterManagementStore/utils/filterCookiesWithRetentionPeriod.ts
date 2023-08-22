@@ -18,7 +18,8 @@
  */
 import type { SelectedFilters } from '../types';
 import type { CookieTableData } from '../../../cookies.types';
-import { CUSTOM_FILTER_MAPPING } from '../constants';
+import { CUSTOM_FILTER_MAPPING, RetentionPeriodFilter } from '../constants';
+import getFilterValue from './getFilterValue';
 
 const filterCookiesWithRetentionPeriod = (
   cookies: {
@@ -55,35 +56,33 @@ const filterCookiesWithRetentionPeriod = (
             if (canShow) {
               return;
             }
+
+            const value = getFilterValue(keys, cookieData);
             switch (retentionFilter) {
-              case 'Session':
-                canShow = cookieData.parsedCookie.expires === 0;
+              case RetentionPeriodFilter.Session:
+                canShow = value === 0;
                 break;
-              case 'Short Term (< 24h)':
-                if (typeof cookieData.parsedCookie.expires === 'string') {
-                  const diff =
-                    Date.parse(cookieData.parsedCookie.expires) - Date.now();
+              case RetentionPeriodFilter.ShortTerm:
+                if (typeof value === 'string') {
+                  const diff = Date.parse(value) - Date.now();
                   canShow = diff < 86400000;
                 }
                 break;
-              case 'Medium Term (24h - 1 week)':
-                if (typeof cookieData.parsedCookie.expires === 'string') {
-                  const diff =
-                    Date.parse(cookieData.parsedCookie.expires) - Date.now();
+              case RetentionPeriodFilter.MediumTerm:
+                if (typeof value === 'string') {
+                  const diff = Date.parse(value) - Date.now();
                   canShow = diff >= 86400000 && diff < 604800000;
                 }
                 break;
-              case 'Long Term (1 week - 1 month)':
-                if (typeof cookieData.parsedCookie.expires === 'string') {
-                  const diff =
-                    Date.parse(cookieData.parsedCookie.expires) - Date.now();
+              case RetentionPeriodFilter.LongTerm:
+                if (typeof value === 'string') {
+                  const diff = Date.parse(value) - Date.now();
                   canShow = diff >= 604800000 && diff < 2629743833;
                 }
                 break;
-              case 'Extended Term (> 1 month)':
-                if (typeof cookieData.parsedCookie.expires === 'string') {
-                  const diff =
-                    Date.parse(cookieData.parsedCookie.expires) - Date.now();
+              case RetentionPeriodFilter.ExtendedTerm:
+                if (typeof value === 'string') {
+                  const diff = Date.parse(value) - Date.now();
                   canShow = diff >= 2629743833;
                 }
                 break;

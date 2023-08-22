@@ -41,6 +41,14 @@ export const FILTER_MAPPING = [
   },
 ];
 
+export enum RetentionPeriodFilter {
+  'Session' = 'Session',
+  'ShortTerm' = 'Short Term (< 24h)',
+  'MediumTerm' = 'Medium Term (24h - 1 week)',
+  'LongTerm' = 'Long Term (1 week - 1 month)',
+  'ExtendedTerm' = 'Extended Term (> 1 month)',
+}
+
 export const CUSTOM_FILTER_MAPPING = {
   scope: {
     name: 'Scope',
@@ -77,13 +85,7 @@ export const CUSTOM_FILTER_MAPPING = {
   retentionPeriod: {
     name: 'Retention Period',
     keys: 'parsedCookie.expires',
-    filters: new Set([
-      'Session',
-      'Short Term (< 24h)',
-      'Medium Term (24h - 1 week)',
-      'Long Term (1 week - 1 month)',
-      'Extended Term (> 1 month)',
-    ]),
+    filters: new Set(Object.values(RetentionPeriodFilter)),
     order: 8,
   },
 };
