@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useCallback } from 'react';
 import { flexRender, type Header } from '@tanstack/react-table';
 
 /**
@@ -26,6 +26,7 @@ import { flexRender, type Header } from '@tanstack/react-table';
 import type { TableData } from '..';
 import HeaderResizer from './headerResizer';
 import { ArrowDown } from '../../../../../icons';
+import { usePreferenceStore } from '../../../stateProviders/preferenceStore';
 
 interface HeaderCellProps {
   header: Header<TableData, unknown>;
@@ -33,11 +34,26 @@ interface HeaderCellProps {
 }
 
 const HeaderCell = ({ header, setIsRowFocused }: HeaderCellProps) => {
+  const { updatePreference } = usePreferenceStore(({ actions }) => ({
+    updatePreference: actions.updatePreference,
+  }));
+  const handleOnClick = useCallback(() => {
+    updatePreference('columnSorting', [
+      {
+        id: header.id,
+        desc: header.column.getNextSortingOrder() === 'desc' ? true : false,
+      },
+    ]);
+    header.column.toggleSorting();
+    updatePreference('columnSizing', {
+      [header.id]: header.column.getSize(),
+    });
+  }, [header.column, header.id, updatePreference]);
   return (
     <th
       colSpan={header.colSpan}
       style={{ maxWidth: header.getSize() }}
-      onClick={header.column.getToggleSortingHandler()}
+      onClick={handleOnClick}
       className="border-x border-american-silver dark:border-quartz relative hover:bg-gainsboro dark:hover:bg-outer-space select-none touch-none font-normal"
       data-testid="header-cell"
     >

@@ -17,11 +17,7 @@
  * External dependencies.
  */
 import { type Cookie as ParsedCookie } from 'simple-cookie';
-import {
-  type SortingState,
-  type VisibilityState,
-  type ColumnSizingTableState,
-} from '@tanstack/react-table';
+import { type SortingState, type VisibilityState } from '@tanstack/react-table';
 
 /**
  * Internal dependencies.
@@ -37,19 +33,23 @@ export type CookieData = {
   isFirstParty: boolean | null;
   frameIdList: number[];
 };
-export type persistenceData = {
-  sortingState: SortingState;
-  columnResizing: ColumnSizingTableState;
-  selectedFrame: string;
-  selectedFilters: SelectedFilters;
-  selectedColumns: VisibilityState;
+
+export type PreferenceDataValues =
+  | SortingState
+  | Record<string, number>
+  | string
+  | SelectedFilters
+  | VisibilityState
+  | null;
+export type PreferenceData = {
+  [key: string]: PreferenceDataValues;
 };
 export type TabData = {
   cookies: {
     [key: string]: CookieData;
   } | null;
   focusedAt: number | null;
-  preferences: persistenceData;
+  preferences: PreferenceData;
 };
 
 export type Storage = {

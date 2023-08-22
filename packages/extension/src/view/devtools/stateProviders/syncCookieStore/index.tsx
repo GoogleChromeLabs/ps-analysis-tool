@@ -27,7 +27,7 @@ import React, {
 /**
  * Internal dependencies.
  */
-import type { CookieData } from '../../../../localStore/cookieStore';
+import type { CookieData } from '../../../../localStore';
 import type { TabCookies, TabFrames } from '../../cookies.types';
 
 export interface CookieStoreContext {
@@ -37,6 +37,7 @@ export interface CookieStoreContext {
     tabFrames: TabFrames | null;
     selectedFrame: string | null;
     isMouseInsideHeader: boolean;
+    tabId: number | null;
   };
   actions: {
     setSelectedFrame: React.Dispatch<React.SetStateAction<string | null>>;
@@ -51,6 +52,7 @@ const initialState: CookieStoreContext = {
     tabFrames: null,
     selectedFrame: null,
     isMouseInsideHeader: false,
+    tabId: null,
   },
   actions: {
     setSelectedFrame: () => undefined,
@@ -217,6 +219,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           tabFrames,
           selectedFrame,
           isMouseInsideHeader,
+          tabId,
         },
         actions: { setSelectedFrame, setIsMouseInsideHeader },
       }}
