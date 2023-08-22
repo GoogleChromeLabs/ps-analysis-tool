@@ -25,7 +25,10 @@ import type {
   SelectedFilters,
   Filter,
 } from '../../../../../stateProviders/filterManagementStore/types';
-import { FILTER_MAPPING } from '../../../../../stateProviders/filterManagementStore/constants';
+import {
+  CUSTOM_FILTER_MAPPING,
+  FILTER_MAPPING,
+} from '../../../../../stateProviders/filterManagementStore/constants';
 // eslint-disable-next-line import/no-relative-packages
 import CrossIcon from '../../../../../../../../../../third_party/icons/cross-icon.svg';
 
@@ -60,9 +63,11 @@ const Chip: React.FC<ChipProps> = ({
 
   if (['True', 'False'].includes(text)) {
     const filterMap =
-      FILTER_MAPPING.find((_filterMap: Filter) => {
-        return _filterMap.keys === filterKeys;
-      }) || ({} as Filter);
+      [...FILTER_MAPPING, ...Object.values(CUSTOM_FILTER_MAPPING)].find(
+        (_filterMap: Filter) => {
+          return _filterMap.keys === filterKeys;
+        }
+      ) || ({} as Filter);
 
     if (filterMap.name) {
       label = filterMap.name + ':' + text;
