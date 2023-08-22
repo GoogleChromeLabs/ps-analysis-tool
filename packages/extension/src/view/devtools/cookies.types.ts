@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import type { CookieData } from '../../localStore';
+import type { CookieData } from '../../localStore/cookieStore';
 
 export type CookieTableData = CookieData & {
   isCookieSet: boolean | null;

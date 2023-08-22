@@ -21,7 +21,7 @@ import cookie, { type Cookie as ParsedCookie } from 'simple-cookie';
 /**
  * Internal dependencies.
  */
-import type { CookieData } from '../localStore';
+import type { CookieData } from '../localStore/cookieStore';
 import type {
   CookieAnalytics,
   CookieDatabase,

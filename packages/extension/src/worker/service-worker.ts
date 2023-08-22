@@ -22,7 +22,7 @@ import PQueue from 'p-queue';
 /**
  * Internal dependencies.
  */
-import { type CookieData, CookieStore } from '../localStore';
+import { type CookieData, CookieStore } from '../localStore/cookieStore';
 import parseResponseCookieHeader from './parseResponseCookieHeader';
 import parseRequestCookieHeader from './parseRequestCookieHeader';
 import { getTab } from '../utils/getTab';

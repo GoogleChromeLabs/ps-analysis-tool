@@ -17,10 +17,16 @@
  * External dependencies.
  */
 import { type Cookie as ParsedCookie } from 'simple-cookie';
+import {
+  type SortingState,
+  type VisibilityState,
+  type ColumnSizingTableState,
+} from '@tanstack/react-table';
 
 /**
  * Internal dependencies.
  */
+import type { SelectedFilters } from '../view/devtools/stateProviders/filterManagementStore/types';
 import type { CookieAnalytics } from '../utils/fetchCookieDictionary';
 
 export type CookieData = {
@@ -31,12 +37,19 @@ export type CookieData = {
   isFirstParty: boolean | null;
   frameIdList: number[];
 };
-
+export type persistenceData = {
+  sortingState: SortingState;
+  columnResizing: ColumnSizingTableState;
+  selectedFrame: string;
+  selectedFilters: SelectedFilters;
+  selectedColumns: VisibilityState;
+};
 export type TabData = {
   cookies: {
     [key: string]: CookieData;
   } | null;
   focusedAt: number | null;
+  preferences: persistenceData;
 };
 
 export type Storage = {

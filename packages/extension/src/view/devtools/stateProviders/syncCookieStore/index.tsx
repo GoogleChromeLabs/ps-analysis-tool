@@ -27,7 +27,7 @@ import React, {
 /**
  * Internal dependencies.
  */
-import type { CookieData } from '../../../../localStore';
+import type { CookieData } from '../../../../localStore/cookieStore';
 import type { TabCookies, TabFrames } from '../../cookies.types';
 
 export interface CookieStoreContext {

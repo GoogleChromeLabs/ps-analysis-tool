@@ -17,7 +17,7 @@
 /**
  * Internal dependencies.
  */
-import type { CookieData } from '../localStore';
+import type { CookieData } from '../localStore/cookieStore';
 import type { CookiesCount } from '../view/popup/types';
 import isFirstParty from './isFirstParty';
 
