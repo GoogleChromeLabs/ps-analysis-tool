@@ -29,23 +29,6 @@ export const FILTER_MAPPING = [
     order: 3,
   },
   {
-    name: 'HttpOnly',
-    keys: 'parsedCookie.httponly',
-    type: 'boolean',
-    order: 4,
-  },
-  {
-    name: 'Same Site',
-    keys: 'parsedCookie.samesite',
-    order: 5,
-  },
-  {
-    name: 'Secure',
-    keys: 'parsedCookie.secure',
-    type: 'boolean',
-    order: 6,
-  },
-  {
     name: 'Path',
     keys: 'parsedCookie.path',
     order: 7,
@@ -73,9 +56,27 @@ export const CUSTOM_FILTER_MAPPING = {
     filters: new Set(['First Party', 'Third Party']),
     order: 2,
   },
+  sameSite: {
+    name: 'Same Site',
+    keys: 'parsedCookie.samesite',
+    order: 5,
+    filters: new Set(['None', 'Lax', 'Strict']),
+  },
+  httpOnly: {
+    name: 'HttpOnly',
+    keys: 'parsedCookie.httponly',
+    filters: new Set(['True', 'False']),
+    order: 4,
+  },
+  secure: {
+    name: 'Secure',
+    keys: 'parsedCookie.secure',
+    filters: new Set(['True', 'False']),
+    order: 6,
+  },
   retentionPeriod: {
     name: 'Retention Period',
-    keys: 'retentionPeriod',
+    keys: 'parsedCookie.expires',
     filters: new Set([
       'Session',
       'Short Term (< 24h)',
