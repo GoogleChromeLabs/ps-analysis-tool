@@ -17,7 +17,7 @@
  * Internal dependencies.
  */
 import updateStorage from './updateStorage';
-import type { TabData, CookieData } from './types';
+import type { TabData, CookieData } from '../types';
 
 const CookieStore = {
   /**
