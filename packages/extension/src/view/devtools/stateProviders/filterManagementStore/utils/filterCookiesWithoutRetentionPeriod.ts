@@ -21,6 +21,7 @@ import type { CookieTableData } from '../../../cookies.types';
 import { FILTER_MAPPING, CUSTOM_FILTER_MAPPING } from '../constants';
 import getFilterValue from './getFilterValue';
 import { filterCookiesWithCustomMapping } from './filterCookiesWithCustomMapping';
+import { matchTerm } from './matchTerm';
 
 const filterCookiesWithoutRetentionPeriod = (
   cookies: {
@@ -42,14 +43,6 @@ const filterCookiesWithoutRetentionPeriod = (
   Object.entries(cookies).forEach(([cookieName, cookieData]) => {
     const canShow: boolean[] = [];
 
-    const matchTerm = () => {
-      const lowerCaseTerm = searchTerm.toLowerCase();
-      return (
-        cookieName.toLowerCase().includes(lowerCaseTerm) ||
-        cookieData.parsedCookie.domain?.toLowerCase()?.includes(lowerCaseTerm)
-      );
-    };
-
     if (Object.keys(selectedFilters).length) {
       Object.entries(selectedFilters).forEach(([keys, selectedFilter]) => {
         if (
@@ -67,7 +60,7 @@ const filterCookiesWithoutRetentionPeriod = (
           }
 
           canShow.push(selectedFilter?.has(value));
-        } else if (keys !== CUSTOM_FILTER_MAPPING.retentionPeriod.keys) {
+        } else {
           canShow.push(
             filterCookiesWithCustomMapping(selectedFilter, cookieData, keys)
           );
@@ -76,7 +69,7 @@ const filterCookiesWithoutRetentionPeriod = (
 
       if (canShow.length > 0 && !canShow.includes(false)) {
         if (searchTerm) {
-          if (matchTerm()) {
+          if (matchTerm(searchTerm, cookieData)) {
             filteredCookies[cookieName] = cookieData;
           }
         } else {
@@ -84,7 +77,7 @@ const filterCookiesWithoutRetentionPeriod = (
         }
       }
     } else {
-      if (matchTerm()) {
+      if (matchTerm(searchTerm, cookieData)) {
         filteredCookies[cookieName] = cookieData;
       }
     }

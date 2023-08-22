@@ -18,7 +18,7 @@
  * Internal dependencies.
  */
 import type { CookieTableData } from '../../../cookies.types';
-import { CUSTOM_FILTER_MAPPING } from '../constants';
+import { CUSTOM_FILTER_MAPPING, RetentionPeriodFilter } from '../constants';
 import getFilterValue from './getFilterValue';
 
 /**
@@ -40,8 +40,10 @@ export function filterCookiesWithCustomMapping(
     canShow = filterWithScope(selectedFilter, value);
   } else if (keys === CUSTOM_FILTER_MAPPING.sameSite.keys) {
     canShow = filterWithSameSite(selectedFilter, value);
+  } else if (keys === CUSTOM_FILTER_MAPPING.retentionPeriod.keys) {
+    canShow = filterWithRetentionPeriod(selectedFilter, value);
   } else {
-    canShow = filterBoolean(selectedFilter, value);
+    canShow = filterWithBoolean(selectedFilter, value);
   }
 
   return canShow;
@@ -101,7 +103,7 @@ function filterWithSameSite(selectedFilter: Set<string>, value: string) {
  * @param value Value of the cookie key to be filtered
  * @returns boolean whether the cookie should be shown or not
  */
-function filterBoolean(selectedFilter: Set<string>, value: string) {
+function filterWithBoolean(selectedFilter: Set<string>, value: string) {
   let canShow = false;
   if (
     (selectedFilter.has('True') && selectedFilter.has('False')) ||
@@ -115,6 +117,58 @@ function filterBoolean(selectedFilter: Set<string>, value: string) {
   } else {
     canShow = !value;
   }
+
+  return canShow;
+}
+
+/**
+ * Filter cookies based on the retention period of the cookie.
+ * @param selectedFilter Set<string> of selected filters
+ * @param value Value of the cookie key to be filtered
+ * @returns boolean whether the cookie should be shown or not
+ */
+function filterWithRetentionPeriod(
+  selectedFilter: Set<string>,
+  value: string | number
+) {
+  let canShow = false;
+
+  selectedFilter.forEach((retentionFilter) => {
+    if (canShow) {
+      return;
+    }
+
+    switch (retentionFilter) {
+      case RetentionPeriodFilter.Session:
+        canShow = value === 0;
+        break;
+      case RetentionPeriodFilter.ShortTerm:
+        if (typeof value === 'string') {
+          const diff = Date.parse(value) - Date.now();
+          canShow = diff < 86400000;
+        }
+        break;
+      case RetentionPeriodFilter.MediumTerm:
+        if (typeof value === 'string') {
+          const diff = Date.parse(value) - Date.now();
+          canShow = diff >= 86400000 && diff < 604800000;
+        }
+        break;
+      case RetentionPeriodFilter.LongTerm:
+        if (typeof value === 'string') {
+          const diff = Date.parse(value) - Date.now();
+          canShow = diff >= 604800000 && diff < 2629743833;
+        }
+        break;
+      case RetentionPeriodFilter.ExtendedTerm:
+        if (typeof value === 'string') {
+          const diff = Date.parse(value) - Date.now();
+          canShow = diff >= 2629743833;
+        }
+        break;
+      default:
+    }
+  });
 
   return canShow;
 }

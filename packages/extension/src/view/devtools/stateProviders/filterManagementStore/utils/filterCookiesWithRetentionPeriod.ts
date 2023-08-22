@@ -20,6 +20,7 @@ import type { SelectedFilters } from '../types';
 import type { CookieTableData } from '../../../cookies.types';
 import { CUSTOM_FILTER_MAPPING, RetentionPeriodFilter } from '../constants';
 import getFilterValue from './getFilterValue';
+import { matchTerm } from './matchTerm';
 
 const filterCookiesWithRetentionPeriod = (
   cookies: {
@@ -40,14 +41,6 @@ const filterCookiesWithRetentionPeriod = (
 
   Object.entries(cookies).forEach(([cookieName, cookieData]) => {
     let canShow = false;
-
-    const matchTerm = () => {
-      const lowerCaseTerm = searchTerm.toLowerCase();
-      return (
-        cookieName.toLowerCase().includes(lowerCaseTerm) ||
-        cookieData.parsedCookie.domain?.toLowerCase()?.includes(lowerCaseTerm)
-      );
-    };
 
     if (Object.keys(selectedFilters).length) {
       Object.entries(selectedFilters).forEach(([keys, selectedFilter]) => {
@@ -94,7 +87,7 @@ const filterCookiesWithRetentionPeriod = (
 
       if (canShow) {
         if (searchTerm) {
-          if (matchTerm()) {
+          if (matchTerm(searchTerm, cookieData)) {
             filteredCookies[cookieName] = cookieData;
           }
         } else {
