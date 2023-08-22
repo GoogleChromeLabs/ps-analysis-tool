@@ -28,66 +28,67 @@ export const prepareCookieStatsComponents = (
       {
         label: 'Functional',
         count:
-          cookieStats.firstParty.functional + cookieStats.thirdParty.functional,
+          cookieStats?.firstParty.functional +
+          cookieStats?.thirdParty.functional,
         color: COLOR_MAP.functional,
         countClassName: 'text-functional',
       },
       {
         label: 'Marketing',
         count:
-          cookieStats.firstParty.marketing + cookieStats.thirdParty.marketing,
+          cookieStats?.firstParty.marketing + cookieStats?.thirdParty.marketing,
         color: COLOR_MAP.marketing,
         countClassName: 'text-marketing',
       },
       {
         label: 'Analytics',
         count:
-          cookieStats.firstParty.analytics + cookieStats.thirdParty.analytics,
+          cookieStats?.firstParty.analytics + cookieStats?.thirdParty.analytics,
         color: COLOR_MAP.analytics,
         countClassName: 'text-analytics',
       },
       {
         label: 'Uncategorized',
         count:
-          cookieStats.firstParty.uncategorized +
-          cookieStats.thirdParty.uncategorized,
+          cookieStats?.firstParty.uncategorized +
+          cookieStats?.thirdParty.uncategorized,
         color: COLOR_MAP.uncategorized,
         countClassName: 'text-uncategorized',
       },
     ],
     firstParty: [
       {
-        count: cookieStats.firstParty.functional,
+        count: cookieStats?.firstParty.functional,
         color: COLOR_MAP.functional,
       },
       {
-        count: cookieStats.firstParty.marketing,
+        count: cookieStats?.firstParty.marketing,
         color: COLOR_MAP.marketing,
       },
       {
-        count: cookieStats.firstParty.analytics,
+        count: cookieStats?.firstParty.analytics,
         color: COLOR_MAP.analytics,
       },
       {
-        count: cookieStats.firstParty.uncategorized,
+        count: cookieStats?.firstParty.uncategorized,
         color: COLOR_MAP.uncategorized,
       },
     ],
     thirdParty: [
       {
-        count: cookieStats.thirdParty.functional,
+        count: cookieStats?.thirdParty.functional,
         color: COLOR_MAP.functional,
       },
       {
-        count: cookieStats.thirdParty.marketing,
+        count: cookieStats?.thirdParty.marketing,
         color: COLOR_MAP.marketing,
       },
       {
-        count: cookieStats.thirdParty.analytics,
+        count: cookieStats?.thirdParty.analytics,
         color: COLOR_MAP.analytics,
       },
       {
-        count: cookieStats.thirdParty.uncategorized,
+        count: cookieStats?.thirdParty.uncategorized,
         color: COLOR_MAP.uncategorized,
       },
     ],

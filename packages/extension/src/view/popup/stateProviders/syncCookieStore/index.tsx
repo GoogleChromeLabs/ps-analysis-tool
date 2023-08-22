@@ -38,6 +38,8 @@ export interface CookieStoreContext {
     tabCookieStats: CookiesCount | null;
     loading: boolean;
     showLoadingText: boolean;
+    initialProcessed: boolean;
+    tabId: number | null;
   };
   actions: object;
 }
@@ -63,6 +65,8 @@ const initialState: CookieStoreContext = {
     },
     loading: true,
     showLoadingText: false,
+    initialProcessed: false,
+    tabId: null,
   },
   actions: {},
 };
@@ -73,6 +77,8 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [tabId, setTabId] = useState<number | null>(null);
 
   const [tabUrl, setTabUrl] = useState<string | null>(null);
+
+  const [initialProcessed, setInitialProcessed] = useState<boolean>(false);
 
   const [tabCookieStats, setTabCookieStats] =
     useState<CookieStoreContext['state']['tabCookieStats']>(null);
@@ -128,6 +134,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
     if (tabData && tabData.cookies) {
       setDebouncedStats(prepareCookiesCount(tabData.cookies, _tabUrl));
     }
+    if (typeof tabData?.initialProcessed !== 'undefined') {
+      setInitialProcessed(tabData.initialProcessed);
+    }
   }, [setDebouncedStats]);
 
   const storeChangeListener = useCallback(
@@ -138,6 +147,14 @@ export const Provider = ({ children }: PropsWithChildren) => {
         Object.keys(changes).includes(tabId.toString()) &&
         changes[tabId.toString()]?.newValue?.cookies
       ) {
+        if (
+          typeof changes[tabId.toString()]?.newValue?.initialProcessed !==
+          'undefined'
+        ) {
+          setInitialProcessed(
+            changes[tabId.toString()]?.newValue?.initialProcessed
+          );
+        }
         setDebouncedStats(
           prepareCookiesCount(
             changes[tabId.toString()].newValue.cookies,
@@ -171,7 +188,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
   return (
     <Context.Provider
       value={{
-        state: { tabCookieStats, loading, showLoadingText },
+        state: {
+          tabCookieStats,
+          loading,
+          showLoadingText,
+          initialProcessed,
+          tabId,
+        },
         actions: {},
       }}
     >

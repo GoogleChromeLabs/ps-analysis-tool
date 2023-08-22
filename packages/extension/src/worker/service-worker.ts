@@ -26,6 +26,7 @@ import { type CookieData, CookieStore } from '../localStore';
 import parseResponseCookieHeader from './parseResponseCookieHeader';
 import parseRequestCookieHeader from './parseRequestCookieHeader';
 import { getTab } from '../utils/getTab';
+import { getCurrentTabId } from '../utils/getCurrentTabId';
 import {
   type CookieDatabase,
   fetchDictionary,
@@ -88,7 +89,30 @@ chrome.webRequest.onResponseStarted.addListener(
   { urls: ['*://*/*'] },
   ['extraHeaders', 'responseHeaders']
 );
-
+PROMISE_QUEUE.on('idle', async () => {
+  const currentTabId = await getCurrentTabId();
+  if (currentTabId) {
+    const currentTabData = await chrome.storage.local.get([
+      currentTabId.toString(),
+    ]);
+    if (currentTabData[currentTabId]) {
+      currentTabData[currentTabId]['initialProcessed'] = true;
+      chrome.storage.local.set(currentTabData);
+    }
+  }
+});
+PROMISE_QUEUE.on('active', async () => {
+  const currentTabId = await getCurrentTabId();
+  if (currentTabId) {
+    const currentTabData = await chrome.storage.local.get([
+      currentTabId.toString(),
+    ]);
+    if (currentTabData[currentTabId]) {
+      currentTabData[currentTabId]['initialProcessed'] = false;
+      chrome.storage.local.set(currentTabData);
+    }
+  }
+});
 chrome.webRequest.onBeforeSendHeaders.addListener(
   ({ url, requestHeaders, tabId, frameId }) => {
     (async () => {
