@@ -39,14 +39,6 @@ export const FILTER_MAPPING = [
     sort: true,
     order: 9,
   },
-  {
-    name: 'Cookie Accepted',
-    keys: 'isCookieSet',
-    type: 'boolean',
-    order: 10,
-    description:
-      "Whether the cookie was accepted(set) in Chrome's Cookie Store",
-  },
 ];
 
 export const CUSTOM_FILTER_MAPPING = {
@@ -73,6 +65,14 @@ export const CUSTOM_FILTER_MAPPING = {
     keys: 'parsedCookie.secure',
     filters: new Set(['True', 'False']),
     order: 6,
+  },
+  cookieAccepted: {
+    name: 'Cookie Accepted',
+    keys: 'isCookieSet',
+    filters: new Set(['True', 'False']),
+    order: 10,
+    description:
+      "Whether the cookie was accepted(set) in Chrome's Cookie Store",
   },
   retentionPeriod: {
     name: 'Retention Period',

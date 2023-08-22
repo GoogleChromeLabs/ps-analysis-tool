@@ -62,10 +62,6 @@ const filterCookiesWithoutRetentionPeriod = (
             (config) => config.keys === keys
           );
 
-          if ('boolean' === filterMap?.type) {
-            value = value ? 'True' : 'False';
-          }
-
           if (!value && filterMap?.default) {
             value = filterMap.default;
           }

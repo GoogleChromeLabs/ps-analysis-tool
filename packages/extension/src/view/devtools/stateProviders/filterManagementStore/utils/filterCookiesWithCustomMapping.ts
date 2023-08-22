@@ -42,7 +42,8 @@ export function filterCookiesWithCustomMapping(
     canShow = filterWithSameSite(selectedFilter, value);
   } else if (
     keys === CUSTOM_FILTER_MAPPING.httpOnly.keys ||
-    keys === CUSTOM_FILTER_MAPPING.secure.keys
+    keys === CUSTOM_FILTER_MAPPING.secure.keys ||
+    keys === CUSTOM_FILTER_MAPPING.cookieAccepted.keys
   ) {
     canShow = filterBoolean(selectedFilter, value);
   }
