@@ -18,8 +18,8 @@
  */
 import type { SelectedFilters } from '../types';
 import type { CookieTableData } from '../../../cookies.types';
-import filterCookiesWithRetentionPeriod from './filterCookiesWithRetentionPeriod';
-import filterCookiesWithoutRetentionPeriod from './filterCookiesWithoutRetentionPeriod';
+import filterCookiesWithMapping from './filterCookiesWithMapping';
+import matchTerm from './matchTerm';
 
 const filterCookies = (
   cookies: {
@@ -27,61 +27,19 @@ const filterCookies = (
   },
   selectedFilters: SelectedFilters,
   searchTerm = ''
-): {
-  [key: string]: CookieTableData;
-} => {
-  // Case when both filters are present
-  if (
-    selectedFilters['parsedCookie.expires'] &&
-    Object.keys(selectedFilters).length > 1
-  ) {
-    const cookiesFilteredWithoutRetentionPeriod =
-      filterCookiesWithoutRetentionPeriod(cookies, selectedFilters, searchTerm);
-    return filterCookiesWithRetentionPeriod(
-      cookiesFilteredWithoutRetentionPeriod,
-      selectedFilters,
-      searchTerm
-    );
-  } else if (
-    selectedFilters['parsedCookie.expires'] &&
-    Object.keys(selectedFilters).length === 1
-  ) {
-    // Case when only retention period is present.
-    return filterCookiesWithRetentionPeriod(
-      cookies,
-      selectedFilters,
-      searchTerm
-    );
-  } else if (
-    !selectedFilters['parsedCookie.expires'] &&
-    Object.keys(selectedFilters).length >= 1
-  ) {
-    // All other filters except retention period is present.
-    return filterCookiesWithoutRetentionPeriod(
-      cookies,
-      selectedFilters,
-      searchTerm
-    );
-  }
-  // This is when there are no filters but only search term.
-  if (searchTerm) {
-    const filteredCookies: {
-      [key: string]: CookieTableData;
-    } = {};
-    Object.entries(cookies).forEach(([cookieName, cookieData]) => {
-      const matchTerm = () => {
-        const lowerCaseTerm = searchTerm.toLowerCase();
-        return (
-          cookieName.toLowerCase().includes(lowerCaseTerm) ||
-          cookieData.parsedCookie.domain?.toLowerCase()?.includes(lowerCaseTerm)
-        );
-      };
-      if (matchTerm()) {
-        filteredCookies[cookieName] = cookieData;
-      }
+) => {
+  if (Object.keys(selectedFilters).length) {
+    return filterCookiesWithMapping(cookies, selectedFilters, searchTerm);
+  } else if (searchTerm) {
+    const filteredCookies = {} as { [key: string]: CookieTableData };
+
+    Object.entries(cookies).forEach(([, cookieData]) => {
+      matchTerm(searchTerm, cookieData, filteredCookies);
     });
+
     return filteredCookies;
   }
+
   return cookies;
 };
 

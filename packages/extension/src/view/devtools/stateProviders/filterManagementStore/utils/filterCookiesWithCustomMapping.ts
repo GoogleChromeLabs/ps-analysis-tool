@@ -28,7 +28,7 @@ import getFilterValue from './getFilterValue';
  * @param keys string of the filter key
  * @returns boolean whether the cookie should be shown or not
  */
-export function filterCookiesWithCustomMapping(
+export default function filterCookiesWithCustomMapping(
   selectedFilter: Set<string>,
   cookieData: CookieTableData,
   keys: string

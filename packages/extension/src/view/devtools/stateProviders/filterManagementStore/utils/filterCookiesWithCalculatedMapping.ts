@@ -18,29 +18,27 @@
  * Internal dependencies.
  */
 import type { CookieTableData } from '../../../cookies.types';
+import { FILTER_MAPPING } from '../constants';
+import getFilterValue from './getFilterValue';
 
 /**
- * Matches the search term with the cookie name and domain and adds it to the filtered cookies object.
- * @param searchTerm The search term.
- * @param cookieData The cookie data.
+ * Filter cookies based on attributes calculated from the cookie.
+ * @param keys string of the filter key
+ * @param cookieData CookieTableData object to be filtered
+ * @param selectedFilter Set<string> of selected filters
+ * @returns boolean whether the cookie should be shown or not
  */
-export default function matchTerm(
-  searchTerm: string,
+export default function filterWithCalculatedMapping(
+  keys: string,
   cookieData: CookieTableData,
-  filteredCookies: { [key: string]: CookieTableData }
+  selectedFilter: Set<string>
 ) {
-  const cookieName = cookieData.parsedCookie.name;
+  let value = getFilterValue(keys, cookieData);
+  const filterMap = FILTER_MAPPING.find((config) => config.keys === keys);
 
-  if (!searchTerm) {
-    filteredCookies[cookieName] = cookieData;
+  if (!value && filterMap?.default) {
+    value = filterMap.default;
   }
 
-  const lowerCaseTerm = searchTerm.toLowerCase();
-  const didSearchTermMatch =
-    cookieName.toLowerCase().includes(lowerCaseTerm) ||
-    cookieData.parsedCookie.domain?.toLowerCase()?.includes(lowerCaseTerm);
-
-  if (didSearchTermMatch) {
-    filteredCookies[cookieName] = cookieData;
-  }
+  return selectedFilter?.has(value);
 }
