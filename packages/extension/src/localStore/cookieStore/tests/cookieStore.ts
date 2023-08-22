@@ -17,8 +17,8 @@
 /**
  * Internal dependencies.
  */
-import CookieStore from '../cookieStore';
-import type { CookieData, Storage } from '../types';
+import { CookieStore } from '..';
+import type { CookieData, Storage } from '../../types';
 
 const cookieArray: CookieData[] = [
   {
