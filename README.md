@@ -67,7 +67,7 @@ The Chrome extension provides capabilities surfaced via the extension pop up, th
 ### Extension
 
 - `npm run dev` or `npm run build` to genrate a build in `/dist/extension`
-- Click on "Load Unpacked" button on [chrome://extensions/](chrome://extensions/) and upload `dist/extension` folder
+- Click on "Load Unpacked" button on `chrome://extensions` and upload `dist/extension` folder
 
 ### CLI
 
@@ -80,7 +80,7 @@ The Chrome extension provides capabilities surfaced via the extension pop up, th
 
 - [Download](https://github.com/GoogleChromeLabs/ps-analysis-tool/releases/download/untagged-2b221120a2a509e7f7b2/extension-v0.1.0.zip) the tool as a zip file
 - From the folder containing the dowloaded file, run `unzip extension-v0.1.0.zip`
-- Click on "Load Unpacked" button on [chrome://extensions/](chrome://extensions/) and upload the unziped `extension`
+- Click on "Load Unpacked" button on `chrome://extensions` and upload the unziped `extension`
 
 # Call to Action
 
