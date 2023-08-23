@@ -13,7 +13,7 @@
 		"serve": "webpack serve",
 		"lint": "npm-run-all --parallel lint:*",
 		"lint:js": "eslint .",
-		"lint:types": "tsc --project ./packages/**/tsconfig.json",
+		"lint:types": "tsc ",
 		"lint:js:fix": "eslint --fix .",
 		"prepare": "husky install",
 		"cookie-db:update": "node scripts/update-cookie-db.cjs",

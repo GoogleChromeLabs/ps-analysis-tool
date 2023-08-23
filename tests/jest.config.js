@@ -16,12 +16,9 @@
 /**
  * External dependencies.
  */
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+const { join } = require('path');
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-export default {
+module.exports = {
   rootDir: '../',
   transform: {
     '^.+\\.[jt]sx?$': 'babel-jest',

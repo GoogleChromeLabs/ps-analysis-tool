@@ -16,8 +16,8 @@
 /**
  * External dependencies.
  */
-import React from 'react';
-import { TextDecoder, TextEncoder } from 'node:util';
+const React = require('react');
+const { TextEncoder, TextDecoder } = require('node:util');
 
 global.React = React;
 global.TextDecoder = TextDecoder;
