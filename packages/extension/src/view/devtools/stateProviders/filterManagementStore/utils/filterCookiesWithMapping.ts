@@ -42,13 +42,13 @@ export default function filterCookiesWithMapping(
   }
 
   const filteredCookies = {} as { [key: string]: CookieTableData };
-  const cookiesArray = Object.entries(cookies);
+  const cookiesArray = Object.values(cookies);
   const selectedFiltersArray = Object.entries(selectedFilters);
   const customKeys = Object.values(CUSTOM_FILTER_MAPPING).map(
     (value) => value.keys
   );
 
-  cookiesArray.forEach(([, cookieData]) => {
+  cookiesArray.forEach((cookieData) => {
     const canShow: boolean[] = [];
 
     selectedFiltersArray.forEach(([keys, selectedFilter]) => {
