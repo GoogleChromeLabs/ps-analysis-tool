@@ -99,6 +99,14 @@ PROMISE_QUEUE.on('idle', async () => {
       currentTabData[currentTabId]['initialProcessed'] = true;
       currentTabData[currentTabId]['totalProcessed'] = 100;
       chrome.storage.local.set(currentTabData);
+    } else {
+      Object.assign(currentTabData, {
+        [currentTabId]: {
+          initialProcessed: true,
+          totalProcessed: 100,
+        },
+      });
+      chrome.storage.local.set(currentTabData);
     }
   }
 });
