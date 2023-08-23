@@ -17,7 +17,7 @@
  * Internal dependencies.
  */
 import updateStorage from './updateStorage';
-import type { TabData, PreferenceData } from '../types';
+import type { TabData } from '../types';
 
 const PreferenceStore = {
   /**
@@ -25,7 +25,12 @@ const PreferenceStore = {
    * @param {string} tabId Tab id.
    * @param {Array} persistenceData Cookies data.
    */
-  async update(tabId: string, persistenceData: PreferenceData) {
+  async update(
+    tabId: string,
+    persistenceData: {
+      [key: string]: unknown;
+    }
+  ) {
     await updateStorage(tabId, (prevState: TabData) => {
       const _updatedPreferences = persistenceData || {};
       return {

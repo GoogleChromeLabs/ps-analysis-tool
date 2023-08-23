@@ -31,6 +31,7 @@ import {
 import Table from '../../../../table';
 import { useContentPanelStore } from '../../../../../stateProviders/contentPanelStore';
 import type { CookieTableData } from '../../../../../cookies.types';
+import { usePreferenceStore } from '../../../../../stateProviders/preferenceStore';
 
 export interface CookieTableProps {
   cookies: CookieTableData[];
@@ -184,6 +185,10 @@ const CookieTable = ({
     [tableColumnSize]
   );
 
+  const { columnSorting } = usePreferenceStore(({ state }) => ({
+    columnSorting: state?.columnSorting,
+  }));
+
   const table = useReactTable({
     data,
     columns,
@@ -191,8 +196,10 @@ const CookieTable = ({
     columnResizeMode: 'onChange',
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    initialState: {
+      sorting: columnSorting,
+    },
   });
-
   const onRowClick = useCallback(
     (cookieData: CookieTableData | null) => {
       setSelectedFrameCookie({

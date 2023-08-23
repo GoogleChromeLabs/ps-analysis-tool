@@ -39,17 +39,31 @@ export type PreferenceDataValues =
   | Record<string, number>
   | string
   | SelectedFilters
-  | VisibilityState
-  | null;
-export type PreferenceData = {
-  [key: string]: PreferenceDataValues;
-};
+  | VisibilityState;
+
+export type PreferenceKeyValues =
+  | 'columnSorting'
+  | 'selectedFrame'
+  | 'columnSizing'
+  | 'selectedColumns'
+  | 'selectedFilter';
+
+export interface PreferenceData {
+  columnSorting: SortingState;
+  selectedFrame: string;
+  columnSizing: Record<string, number>;
+  selectedColumns: VisibilityState;
+  selectedFilters: SelectedFilters;
+}
+
 export type TabData = {
   cookies: {
     [key: string]: CookieData;
   } | null;
   focusedAt: number | null;
-  preferences: PreferenceData;
+  preferences: {
+    [key: string]: unknown;
+  };
 };
 
 export type Storage = {

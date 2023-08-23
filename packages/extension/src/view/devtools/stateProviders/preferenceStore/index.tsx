@@ -23,6 +23,7 @@ import React, {
   useMemo,
   useCallback,
   useEffect,
+  useRef,
 } from 'react';
 /**
  * Internal dependencies.
@@ -30,43 +31,47 @@ import React, {
 import { useCookieStore } from '../syncCookieStore';
 import { noop } from '../../../../utils/noop';
 import useContextSelector from '../../../../utils/useContextSelector';
-import type {
-  PreferenceData,
-  PreferenceDataValues,
-} from '../../../../localStore/types';
+import type { PreferenceDataValues } from '../../../../localStore/types';
 import { useFilterManagementStore } from '../filterManagementStore';
 import { PreferenceStore } from '../../../../localStore';
+import { getCurrentTabId } from '../../../../utils/getCurrentTabId';
 
-export interface preferenceStore {
-  state: null;
+export interface PreferenceStore {
+  state: {
+    [key: string]: unknown;
+  };
   actions: {
     updatePreference: (key: string, value: PreferenceDataValues) => void;
   };
 }
 
-const initialState: preferenceStore = {
-  state: null,
+const initialState: PreferenceStore = {
+  state: {},
   actions: {
     updatePreference: noop,
   },
 };
 
-export const Context = createContext<preferenceStore>(initialState);
+export const Context = createContext<PreferenceStore>(initialState);
 
 export const Provider = ({ children }: PropsWithChildren) => {
-  const [preferences, setPreferences] = useState<
-    PreferenceData | Record<string, never>
-  >({});
+  const [preferences, setPreferences] = useState<PreferenceStore['state']>({});
+  const mountedRef = useRef<boolean>(false);
 
   const updatePreference = useCallback(
     (key: string, value: PreferenceDataValues) => {
-      const _updatedPreferences = preferences;
-      if (_updatedPreferences && Object.keys(_updatedPreferences).length > 0) {
-        _updatedPreferences[key] = value;
-      } else {
-        _updatedPreferences[key] = value;
+      if (preferences) {
+        const _updatedPreferences: PreferenceStore['state'] = preferences;
+        if (
+          _updatedPreferences &&
+          Object.keys(_updatedPreferences).length > 0
+        ) {
+          _updatedPreferences[key] = value;
+        } else {
+          _updatedPreferences[key] = value;
+        }
+        setPreferences(_updatedPreferences);
       }
-      setPreferences(_updatedPreferences);
     },
     [preferences]
   );
@@ -80,45 +85,64 @@ export const Provider = ({ children }: PropsWithChildren) => {
     tabId: state?.tabId,
   }));
 
+  const getPreviousPreferences = useCallback(async () => {
+    const currentTabId = await getCurrentTabId();
+    const previousPreferences = await chrome.storage.local.get(
+      currentTabId?.toString()
+    );
+    return previousPreferences;
+  }, []);
+
   const memoisedPreferences = useMemo(() => {
     return {
       selectedFilters,
       selectedFrame,
-      columnSorting: preferences.columnSorting || {},
-      columnSizing: preferences.columnSizing || {},
+      columnSorting: preferences?.columnSorting || {},
+      columnSizing: preferences?.columnSizing || {},
       selectedColumns: [],
     };
   }, [
-    preferences.columnSizing,
-    preferences.columnSorting,
+    preferences?.columnSizing,
+    preferences?.columnSorting,
     selectedFilters,
     selectedFrame,
   ]);
 
   useEffect(() => {
-    if (tabId) {
-      (async () => {
-        await PreferenceStore.update(tabId.toString(), memoisedPreferences);
-      })();
-    }
-  }, [tabId, memoisedPreferences]);
+    mountedRef.current = true;
+  }, []);
 
-  const value: preferenceStore = useMemo(
+  useEffect(() => {
+    if (tabId) {
+      if (mountedRef.current) {
+        (async () => {
+          await PreferenceStore.update(tabId.toString(), memoisedPreferences);
+        })();
+      } else {
+        (async () => {
+          const previousPreferences = await getPreviousPreferences();
+          setPreferences(previousPreferences);
+        })();
+      }
+    }
+  }, [tabId, memoisedPreferences, getPreviousPreferences]);
+
+  const value: PreferenceStore = useMemo(
     () => ({
-      state: null,
+      state: preferences,
       actions: {
         updatePreference,
       },
     }),
-    [updatePreference]
+    [updatePreference, preferences]
   );
 
   return <Context.Provider value={value}>{children}</Context.Provider>;
 };
 
-export function usePreferenceStore(): preferenceStore;
+export function usePreferenceStore(): PreferenceStore;
 export function usePreferenceStore<T>(
-  selector: (state: preferenceStore) => T
+  selector: (state: PreferenceStore) => T
 ): T;
 
 /**
@@ -127,7 +151,7 @@ export function usePreferenceStore<T>(
  * @returns selected part of the state
  */
 export function usePreferenceStore<T>(
-  selector: (state: preferenceStore) => T | preferenceStore = (state) => state
+  selector: (state: PreferenceStore) => T | PreferenceStore = (state) => state
 ) {
   return useContextSelector(Context, selector);
 }
