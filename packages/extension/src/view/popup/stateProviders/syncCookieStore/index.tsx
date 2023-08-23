@@ -40,6 +40,7 @@ export interface CookieStoreContext {
     showLoadingText: boolean;
     initialProcessed: boolean;
     tabId: number | null;
+    totalProcessed: number;
   };
   actions: object;
 }
@@ -66,6 +67,7 @@ const initialState: CookieStoreContext = {
     loading: true,
     showLoadingText: false,
     initialProcessed: false,
+    totalProcessed: 0,
     tabId: null,
   },
   actions: {},
@@ -79,6 +81,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [tabUrl, setTabUrl] = useState<string | null>(null);
 
   const [initialProcessed, setInitialProcessed] = useState<boolean>(false);
+  const [totalProcessed, setTotalProcessed] = useState<number>(0);
 
   const [tabCookieStats, setTabCookieStats] =
     useState<CookieStoreContext['state']['tabCookieStats']>(null);
@@ -137,6 +140,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
     if (typeof tabData?.initialProcessed !== 'undefined') {
       setInitialProcessed(tabData.initialProcessed);
     }
+    if (typeof tabData?.totalProcessed !== 'undefined') {
+      setTotalProcessed(tabData?.totalProcessed);
+    }
   }, [setDebouncedStats]);
 
   const storeChangeListener = useCallback(
@@ -153,6 +159,14 @@ export const Provider = ({ children }: PropsWithChildren) => {
         ) {
           setInitialProcessed(
             changes[tabId.toString()]?.newValue?.initialProcessed
+          );
+        }
+        if (
+          typeof changes[tabId.toString()]?.newValue?.totalProcessed !==
+          'undefined'
+        ) {
+          setTotalProcessed(
+            changes[tabId.toString()]?.newValue?.totalProcessed
           );
         }
         setDebouncedStats(
@@ -194,6 +208,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           showLoadingText,
           initialProcessed,
           tabId,
+          totalProcessed,
         },
         actions: {},
       }}

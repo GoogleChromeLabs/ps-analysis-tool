@@ -97,6 +97,7 @@ PROMISE_QUEUE.on('idle', async () => {
     ]);
     if (currentTabData[currentTabId]) {
       currentTabData[currentTabId]['initialProcessed'] = true;
+      currentTabData[currentTabId]['totalProcessed'] = 100;
       chrome.storage.local.set(currentTabData);
     }
   }
@@ -107,8 +108,14 @@ PROMISE_QUEUE.on('active', async () => {
     const currentTabData = await chrome.storage.local.get([
       currentTabId.toString(),
     ]);
-    if (currentTabData[currentTabId]) {
+
+    if (
+      currentTabData[currentTabId] &&
+      !currentTabData[currentTabId]['initialProcessed']
+    ) {
       currentTabData[currentTabId]['initialProcessed'] = false;
+      currentTabData[currentTabId]['totalProcessed'] =
+        100 - (PROMISE_QUEUE.pending / PROMISE_QUEUE.size) * 100;
       chrome.storage.local.set(currentTabData);
     }
   }

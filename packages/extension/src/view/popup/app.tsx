@@ -29,13 +29,20 @@ import { CirclePieChart } from '../design-system/components';
 import { prepareCookieStatsComponents } from '../../utils/prepareCookieStatsComponents';
 
 const App: React.FC = () => {
-  const { cookieStats, loading, showLoadingText, initialProcessed } =
-    useCookieStore(({ state }) => ({
-      cookieStats: state.tabCookieStats,
-      loading: state.loading,
-      showLoadingText: state.showLoadingText,
-      initialProcessed: state.initialProcessed,
-    }));
+  const {
+    cookieStats,
+    loading,
+    showLoadingText,
+    initialProcessed,
+    totalProcessed,
+  } = useCookieStore(({ state }) => ({
+    cookieStats: state.tabCookieStats,
+    loading: state.loading,
+    showLoadingText: state.showLoadingText,
+    initialProcessed: state.initialProcessed,
+    totalProcessed: state.totalProcessed,
+  }));
+
   if (loading) {
     return (
       <div className="w-96 min-h-[20rem] flex items-center justify-center flex-col gap-2 relative">
@@ -58,9 +65,13 @@ const App: React.FC = () => {
       <div className="w-96 min-h-[20rem] flex items-center justify-center flex-col gap-2 relative">
         <div className="w-10 h-10 rounded-full animate-spin border-t-transparent border-solid border-blue-700 border-4" />
         {showLoadingText && (
-          <p className="absolute bottom-10 text-blue-700 text-lg ml-2 text-center">
-            Cookies in promise queue are being processed, please wait...
-          </p>
+          <>
+            <p className="absolute bottom-10 text-blue-700 text-lg ml-2 text-center">
+              Cookies in promise queue are being processed, please wait...
+              <br />
+              {totalProcessed}% cookie processed
+            </p>
+          </>
         )}
       </div>
     );
