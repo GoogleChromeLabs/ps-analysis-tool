@@ -56,8 +56,7 @@ export const Context = createContext<PreferenceStore>(initialState);
 
 export const Provider = ({ children }: PropsWithChildren) => {
   const [preferences, setPreferences] = useState<PreferenceStore['state']>({});
-  const mountedRef = useRef<boolean>(false);
-
+  const fetchedInitialValueRef = useRef<boolean>(false);
   const updatePreference = useCallback(
     (key: string, value: PreferenceDataValues) => {
       if (preferences) {
@@ -80,17 +79,19 @@ export const Provider = ({ children }: PropsWithChildren) => {
     selectedFilters: state?.selectedFilters,
   }));
 
-  const { selectedFrame, tabId } = useCookieStore(({ state }) => ({
-    selectedFrame: state?.selectedFrame,
-    tabId: state?.tabId,
-  }));
+  const { selectedFrame, setSelectedFrame } = useCookieStore(
+    ({ state, actions }) => ({
+      selectedFrame: state?.selectedFrame,
+      setSelectedFrame: actions?.setSelectedFrame,
+    })
+  );
 
   const getPreviousPreferences = useCallback(async () => {
     const currentTabId = await getCurrentTabId();
-    const previousPreferences = await chrome.storage.local.get(
+    const storedTabData = await chrome.storage.local.get(
       currentTabId?.toString()
     );
-    return previousPreferences;
+    return Promise.resolve(storedTabData.preferences);
   }, []);
 
   const memoisedPreferences = useMemo(() => {
@@ -107,25 +108,37 @@ export const Provider = ({ children }: PropsWithChildren) => {
     selectedFilters,
     selectedFrame,
   ]);
-
-  useEffect(() => {
-    mountedRef.current = true;
-  }, []);
-
-  useEffect(() => {
-    if (tabId) {
-      if (mountedRef.current) {
-        (async () => {
-          await PreferenceStore.update(tabId.toString(), memoisedPreferences);
-        })();
-      } else {
-        (async () => {
-          const previousPreferences = await getPreviousPreferences();
-          setPreferences(previousPreferences);
-        })();
+  const saveToLocalStorage = useCallback(async () => {
+    if (fetchedInitialValueRef.current) {
+      const currentTabId = await getCurrentTabId();
+      if (currentTabId) {
+        await PreferenceStore.update(
+          currentTabId?.toString(),
+          memoisedPreferences
+        );
       }
     }
-  }, [tabId, memoisedPreferences, getPreviousPreferences]);
+  }, [memoisedPreferences]);
+
+  useEffect(() => {
+    saveToLocalStorage();
+  }, [saveToLocalStorage]);
+
+  useEffect(() => {
+    (async () => {
+      const currentTabId = await getCurrentTabId();
+      if (currentTabId) {
+        const storedTabData = (
+          await chrome.storage.local.get(currentTabId?.toString())
+        )[currentTabId];
+        setPreferences(storedTabData?.preferences);
+        if (storedTabData?.preferences?.selectedFrame) {
+          setSelectedFrame(storedTabData?.preferences?.selectedFrame);
+        }
+        fetchedInitialValueRef.current = true;
+      }
+    })();
+  }, [getPreviousPreferences, setSelectedFrame]);
 
   const value: PreferenceStore = useMemo(
     () => ({

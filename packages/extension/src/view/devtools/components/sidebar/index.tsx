@@ -63,6 +63,12 @@ const Sidebar: React.FC<SidebarProps> = ({
     };
   }, []);
 
+  useEffect(() => {
+    if (selectedFrame && !accordionState) {
+      setAccordionState(true);
+    }
+  }, [accordionState, selectedFrame]);
+
   const mainMenuTabSelector = useCallback(
     (index: number) => {
       setIndex(index);
