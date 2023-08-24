@@ -25,11 +25,11 @@ Tracks #2 and #3 bring significant changes to how the web operates today, and th
 
 # Browsing Session Analyses
 
-A "browsing session" refers to the sequence of navigations a user follows over a period of time as they are actively engaging on the web, including activities like navigating through pages and sites, making transactions, submitting forms, or downloading content, performing web searches, and so on. The overall goal of [Privacy Sandbox](https://privacysandbox.com/) is to protect users' privacy online, including reducing cross-site and cross-app user tracking during browsing sessions. This tool supports the analysis of **browsing sessions** by shedding light on cookie usage and insights, and on use and behavior of PS APIs. The goal is to help answer questions such as:
+A "browsing session" refers to the sequence of navigations a user follows over a period of time as they are actively engaging on the web, including activities like navigating through pages and sites, making transactions, submitting forms, downloading content, performing web searches, and so on. The overall goal of [Privacy Sandbox](https://privacysandbox.com/) is to protect users' privacy online, including reducing cross-site and cross-app user tracking during browsing sessions. This tool supports the analysis of **browsing sessions** by shedding light on cookie usage and insights and on the use and behavior of PS APIs. The goal is to help answer questions such as:
 
 * How can I identify cookies being used on my site? 
-* How can I tell what behaviors a third party cookie is tracking on my website or what it's being used for?
-* How can I block third party cookies being set on my site by other websites unrelated to mine?
+* How can I tell what behaviors a third-party cookie is tracking on my website or what it's being used for?
+* How can I block third-party cookies being set on my site by other websites unrelated to mine?
 * What happens to my browsing session if 3P cookies are being blocked?
 * How can I ensure that my websites are still able to function properly after third-party cookies are deprecated?
 * How can I test my web applications to ensure that they are compatible with the cross-site boundary APIs and the upcoming changes to third-party cookies?
@@ -37,21 +37,21 @@ A "browsing session" refers to the sequence of navigations a user follows over a
 * How can I provide feedback to Google on Privacy Sandbox APIs and third-party cookie deprecation?
 
 # Tool Functional Areas
-The features and capabilities of this tool help you (developers) with the transition towards a more private web, by shedding light on data and context as you go abou implementing privacy-presetving solutions to the features and capabilities of your web sites and apps. The main functional areas of the tool are the following. 
+The features and capabilities of this tool help you (developers) with the transition towards a more private web, by shedding light on data and context as you go about implementing privacy-preserving solutions to the features and capabilities of your websites and apps. The main functional areas of the tool are the following. 
 
 <img width="937" alt="Screenshot 2023-08-21 at 10 35 19 AM" src="https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/3b13e478-2f67-42b3-879e-333f9a3b9357">
 
 ## Cookie Data Manipulation and Analysis
-DevTools provides access to lots of information regarding every functional aspect of the browser, including cookies. This extensions expands a bit the capabilities of DevTools and providing additional ways to slice and dice cookie data, making it easier for everyone to understand the behaviors of cookies on different scenarios.
+DevTools provides access to lots of information regarding every functional aspect of the browser, including cookies. This extension expands a bit the capabilities of DevTools and providing additional ways to slice and dice cookie data, making it easier for everyone to understand the behaviors of cookies on different scenarios.
 
 <img width="946" alt="Screenshot 2023-08-21 at 1 41 13 PM" src="https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/e20cb6d0-f682-4c20-98c7-3b5e69be32df">
 
 
 ## Frame Overlays
-Cookies are used as a state management mechanism to power varying features and capabilities of sites. For example, a embedded video component from some 3P provider could set and manipulate 3P cookies to serve authenticated videos without users having to re-authenticate repeatedly. This extension provides a frame overlay capability, making it easy to associate, when possible, componets on a web page and the set of cookies that are associated with it. 
+Cookies are used as a state management mechanism to power varying features and capabilities of sites. For example, a embedded video component from some 3P provider could set and manipulate 3P cookies to serve authenticated videos without users having to re-authenticate repeatedly. This extension provides a frame overlay capability, making it easy to associate, when possible, components on a web page and the set of cookies that are associated with it. 
 
 ## Reporting
-This tool provides capabilities to make it easy for users to report breakages, and connect with existing Privacy Sandbox feedback and bug reporting channels. As you leverage the capabilities of the tool to anlyze and debug your cirtical user journeys, you can report breakages or questions about your use cases and directly send them to the proper feedback channel. This way you would geet answers to your issues, and will contribute to our collective effort to ensure the ecosystem is ready for a world without 3P cookies as we know them today.
+This tool provides capabilities to make it easy for users to report breakages, and connect with existing Privacy Sandbox feedback and bug reporting channels. As you leverage the capabilities of the tool to analyze and debug your critical user journeys, you can report breakages or questions about your use cases and directly send them to the proper feedback channel. This way you would get answers to your issues, and will contribute to our collective effort to ensure the ecosystem is ready for a world without 3P cookies as we know them today.
 
 ## Knowledge Access Points
 The final goal of this tool is to make it easy to understand the role of 3P cookies on critical user journeys all the relevant aspects of Privacy Sandbox and the phasin out of 3P cookies. As you use the tool to analyze and debug your use cases, you will encounter links to documentation and other sources of information to support your learning and understanding as you navigate the transition to a more private web. 
@@ -79,9 +79,9 @@ The Chrome extension provides capabilities surfaced via the extension pop up, th
 
 ### Unpacked Extension
 
-- [Download](https://github.com/GoogleChromeLabs/ps-analysis-tool/releases/download/untagged-2b221120a2a509e7f7b2/extension-v0.1.0.zip) the tool as a zip file
-- From the folder containing the dowloaded file, run `unzip extension-v0.1.0.zip`
-- Click on "Load Unpacked" button on `chrome://extensions` and upload the unziped `extension`
+- Download and unzip the extension zip file from the [latest release](https://github.com/GoogleChromeLabs/ps-analysis-tool/releases)
+- Turn the "Developer mode" on `chrome://extensions`
+- Click on the "Load unpacked" button and upload the unzipped extension folder.
 
 # Call to Action
 
