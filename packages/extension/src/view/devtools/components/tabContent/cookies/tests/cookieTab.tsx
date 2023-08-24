@@ -17,7 +17,13 @@
  * External dependencies.
  */
 import React from 'react';
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SinonChrome from 'sinon-chrome';
 
@@ -76,6 +82,7 @@ mockFilterManagementStore.mockImplementation((selector) => {
 describe('CookieTab', () => {
   beforeAll(() => {
     globalThis.chrome = SinonChrome as unknown as typeof chrome;
+    globalThis.Promise = Promise;
   });
 
   it('should render a list of cookies with analytics', async () => {
@@ -91,28 +98,56 @@ describe('CookieTab', () => {
     render(<CookieTab />);
 
     const headerCell = (await screen.findAllByTestId('header-cell'))[0];
+    fireEvent.mouseEnter(headerCell);
+    waitFor(
+      async () => {
+        await new Promise((r) => setTimeout(r, 100));
+      },
+      { timeout: 1000 }
+    );
     fireEvent.click(headerCell);
 
     const firstRow = (await screen.findAllByTestId('body-row'))[0];
-
-    expect(
-      await within(firstRow).findByText('KRTBCOOKIE_290')
-    ).toBeInTheDocument();
+    waitFor(
+      async () => {
+        expect(
+          await within(firstRow).findByText('KRTBCOOKIE_290')
+        ).toBeInTheDocument();
+      },
+      { interval: 1000 }
+    );
 
     const lastRow = (await screen.findAllByTestId('body-row'))[3];
-    expect(await within(lastRow).findByText('pubsyncexp')).toBeInTheDocument();
+    waitFor(
+      async () => {
+        expect(
+          await within(lastRow).findByText('pubsyncexp')
+        ).toBeInTheDocument();
+      },
+      { interval: 1000 }
+    );
 
     fireEvent.click(headerCell);
 
     const firstRowAfterReverse = (await screen.findAllByTestId('body-row'))[0];
-    expect(
-      await within(firstRowAfterReverse).findByText('pubsyncexp')
-    ).toBeInTheDocument();
+    waitFor(
+      async () => {
+        expect(
+          await within(firstRowAfterReverse).findByText('pubsyncexp')
+        ).toBeInTheDocument();
+      },
+      { interval: 1000 }
+    );
 
     const lastRowAfterReverse = (await screen.findAllByTestId('body-row'))[3];
-    expect(
-      await within(lastRowAfterReverse).findByText('KRTBCOOKIE_290')
-    ).toBeInTheDocument();
+    waitFor(
+      async () => {
+        expect(
+          await within(lastRowAfterReverse).findByText('KRTBCOOKIE_290')
+        ).toBeInTheDocument();
+      },
+      { interval: 1000 }
+    );
   });
 
   it('should open column menu when right click on header cell', async () => {
