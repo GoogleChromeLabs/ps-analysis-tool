@@ -75,9 +75,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
     [preferences]
   );
 
-  const { selectedFilters } = useFilterManagementStore(({ state }) => ({
-    selectedFilters: state?.selectedFilters,
-  }));
+  const { selectedFilters, setSelectedFilters } = useFilterManagementStore(
+    ({ state, actions }) => ({
+      selectedFilters: state?.selectedFilters,
+      setSelectedFilters: actions?.setSelectedFilters,
+    })
+  );
 
   const { selectedFrame, setSelectedFrame } = useCookieStore(
     ({ state, actions }) => ({
@@ -100,11 +103,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
       selectedFrame,
       columnSorting: preferences?.columnSorting || {},
       columnSizing: preferences?.columnSizing || {},
-      selectedColumns: [],
+      selectedColumns: preferences?.selectedColumns || {},
     };
   }, [
     preferences?.columnSizing,
     preferences?.columnSorting,
+    preferences?.selectedColumns,
     selectedFilters,
     selectedFrame,
   ]);
@@ -138,7 +142,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         fetchedInitialValueRef.current = true;
       }
     })();
-  }, [getPreviousPreferences, setSelectedFrame]);
+  }, [getPreviousPreferences, setSelectedFilters, setSelectedFrame]);
 
   const value: PreferenceStore = useMemo(
     () => ({

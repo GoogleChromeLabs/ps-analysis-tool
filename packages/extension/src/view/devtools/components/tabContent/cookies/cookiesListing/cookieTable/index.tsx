@@ -24,6 +24,7 @@ import {
   type ColumnDef,
   getSortedRowModel,
   type ColumnSort,
+  type VisibilityState,
 } from '@tanstack/react-table';
 
 /**
@@ -186,9 +187,12 @@ const CookieTable = ({
     [tableColumnSize]
   );
 
-  const { columnSorting } = usePreferenceStore(({ state }) => ({
-    columnSorting: state?.columnSorting as ColumnSort[],
-  }));
+  const { columnSorting, selectedColumns } = usePreferenceStore(
+    ({ state }) => ({
+      columnSorting: state?.columnSorting as ColumnSort[],
+      selectedColumns: state?.selectedColumns as VisibilityState,
+    })
+  );
 
   const table = useReactTable({
     data,
@@ -199,6 +203,10 @@ const CookieTable = ({
     getSortedRowModel: getSortedRowModel(),
     initialState: {
       sorting: columnSorting && columnSorting?.length > 0 ? columnSorting : [],
+      columnVisibility:
+        selectedColumns && Object.keys(selectedColumns).length > 0
+          ? selectedColumns
+          : {},
     },
   });
   const onRowClick = useCallback(

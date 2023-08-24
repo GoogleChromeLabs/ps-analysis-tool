@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useEffect } from 'react';
 import type { Column } from '@tanstack/react-table';
 
 /**
@@ -25,6 +25,7 @@ import type { Column } from '@tanstack/react-table';
  */
 import ColumnListItem from './columnListItem';
 import type { TableData } from '..';
+import { usePreferenceStore } from '../../../stateProviders/preferenceStore';
 
 interface ColumnListProps {
   columns: Column<TableData, unknown>[];
@@ -32,6 +33,20 @@ interface ColumnListProps {
 }
 
 const ColumnList = ({ columns, handleClose }: ColumnListProps) => {
+  const { updatePreference } = usePreferenceStore(({ actions }) => ({
+    updatePreference: actions?.updatePreference,
+  }));
+
+  useEffect(() => {
+    return () => {
+      const visibleColumns: Record<string, boolean> = {};
+      columns.forEach((column) => {
+        visibleColumns[column.id] = column.getIsVisible();
+      });
+      updatePreference('selectedColumns', visibleColumns);
+    };
+  }, [columns, updatePreference]);
+
   return (
     <ul className="text-basic mt-1.5">
       {columns.map((column) => (
