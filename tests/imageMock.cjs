@@ -13,4 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export default 'https://example.com/path/to/image.png';
+module.exports = 'https://example.com/path/to/image.png';

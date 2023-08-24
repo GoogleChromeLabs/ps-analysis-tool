@@ -24,14 +24,14 @@ module.exports = {
     '^.+\\.[jt]sx?$': 'babel-jest',
   },
   moduleNameMapper: {
-    '\\.svg': join(__dirname, '/svgMock.js'),
-    '\\.css': join(__dirname, '/styleMock.js'),
-    '\\.png': join(__dirname, '/imageMock.js'),
+    '\\.svg': join(__dirname, '/svgMock.cjs'),
+    '\\.css': join(__dirname, '/styleMock.cjs'),
+    '\\.png': join(__dirname, '/imageMock.cjs'),
   },
   testEnvironment: 'jsdom',
   testMatch: ['**/tests/**/*.{js,jsx,ts,tsx}'],
   globals: {},
-  setupFilesAfterEnv: ['<rootDir>/tests/jest.setup'],
+  setupFilesAfterEnv: ['<rootDir>/tests/jest.setup.cjs'],
   testPathIgnorePatterns: [
     '<rootDir>/.git',
     '<rootDir>/dist',
