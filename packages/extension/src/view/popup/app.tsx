@@ -27,6 +27,7 @@ import { Legend } from './components';
 import { useCookieStore } from './stateProviders/syncCookieStore';
 import { CirclePieChart } from '../design-system/components';
 import { prepareCookieStatsComponents } from '../../utils/prepareCookieStatsComponents';
+import ProgressBar from '../design-system/components/progressBar';
 
 const App: React.FC = () => {
   const { cookieStats, loading, initialProcessed, totalProcessed } =
@@ -59,20 +60,7 @@ const App: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="w-96 min-h-[20rem] flex items-center justify-center flex-col gap-2 relative">
-        <p className="mb-6 text-center text-comet-black text-sm font-bold ml-2">
-          Analyzing previous tabs, please wait...
-        </p>
-        <div className="mb-6 h-1 w-full bg-gainsboro dark:bg-neutral-600">
-          <div
-            className="h-1 bg-royal-blue"
-            style={{ width: `${intervalCounter}px` }}
-          ></div>
-        </div>
-        <p className="mt-7 text-center text-comet-black text-xxxs ml-2">
-          This tool works best with maximum 2 tabs.
-        </p>
-      </div>
+      <ProgressBar intervalCounter={intervalCounter} initialProcessed={true} />
     );
   }
   if (
@@ -82,20 +70,11 @@ const App: React.FC = () => {
         cookieStats?.thirdParty.total === 0))
   ) {
     return (
-      <div className="w-96 min-h-[20rem] flex items-center justify-center flex-col gap-2 relative">
-        <p className="mb-6 text-center text-comet-black text-sm font-bold ml-2">
-          Analyzing previous tabs, please wait...
-        </p>
-        <div className="mb-6 h-1 w-full bg-gainsboro dark:bg-neutral-600">
-          <div
-            className="h-1 bg-royal-blue"
-            style={{ width: `calc(${totalProcessed}% + 50px )` }}
-          ></div>
-        </div>
-        <p className="mt-7 text-center text-comet-black text-xxxs ml-2">
-          This tool works best with maximum 2 tabs.
-        </p>
-      </div>
+      <ProgressBar
+        intervalCounter={intervalCounter}
+        initialProcessed={initialProcessed}
+        totalProcessed={totalProcessed}
+      />
     );
   }
 

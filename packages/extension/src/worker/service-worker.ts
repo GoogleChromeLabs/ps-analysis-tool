@@ -78,10 +78,6 @@ chrome.webRequest.onResponseStarted.addListener(
         Promise.resolve([])
       );
 
-      if (!cookies.length) {
-        return;
-      }
-
       // Adds the cookies from the request headers to the cookies object.
       await CookieStore.update(tabId.toString(), cookies);
     });
@@ -98,14 +94,6 @@ PROMISE_QUEUE.on('idle', async () => {
     if (currentTabData[currentTabId]) {
       currentTabData[currentTabId]['initialProcessed'] = true;
       currentTabData[currentTabId]['totalProcessed'] = 100;
-      chrome.storage.local.set(currentTabData);
-    } else {
-      Object.assign(currentTabData, {
-        [currentTabId]: {
-          initialProcessed: true,
-          totalProcessed: 100,
-        },
-      });
       chrome.storage.local.set(currentTabData);
     }
   }
@@ -164,10 +152,6 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
           },
           Promise.resolve([])
         );
-
-        if (!cookies.length) {
-          return;
-        }
 
         await CookieStore.update(tabId.toString(), cookies);
       });
