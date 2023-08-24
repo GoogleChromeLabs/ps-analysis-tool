@@ -133,10 +133,13 @@ export const initialize = async () => {
       urls.map(async (_url) => {
         const cookies = await generatePageVisitCookies(new URL(_url), browser);
 
-        const cookiesDetails: Array<object> = [];
+        const cookiesDetails: Array<CookieLogDetails> = [];
         if (cookies) {
           cookies.forEach((theCookie) => {
-            const cookie: object | null = normalizeCookie(theCookie, url);
+            const cookie: CookieLogDetails | null = normalizeCookie(
+              theCookie,
+              url
+            );
             if (cookie) {
               cookiesDetails.push(cookie);
             }
@@ -147,7 +150,50 @@ export const initialize = async () => {
       })
     );
 
-    console.log('resources', resources);
+    const cookieList: CookieLogDetails[] = [];
+
+    resources.forEach(({ cookies }) => {
+      cookies.forEach((cookie) => {
+        const ind = cookieList.findIndex(
+          ({ name, domain }) => cookie.name === name && cookie.domain === domain
+        );
+
+        if (ind === -1) {
+          cookieList.push(cookie);
+        }
+      });
+    });
+
+    const csvCookies: string = getCSVbyObject(cookieList);
+
+    await ensureFile('./out/cookies.csv');
+    await writeFile('./out/cookies.csv', csvCookies);
+
+    const technologies = await Promise.all(
+      urls.map((_url) => {
+        return generateTechnology(_url);
+      })
+    );
+
+    const techMap = technologies
+      .reduce((acc, curr) => [...acc, ...curr])
+      .reduce<{ name: string; frequency: number }[]>((acc, curr) => {
+        const ind = acc.findIndex(({ name }) => name === curr.name);
+        if (ind === -1) {
+          return [...acc, { name: curr.name, frequency: 1 }];
+        } else {
+          return [
+            ...acc.slice(0, ind),
+            { name: curr.name, frequency: acc[ind].frequency + 1 },
+            ...acc.slice(ind + 1),
+          ];
+        }
+      }, []);
+
+    const csvTechnologies: string = getCSVbyObject(techMap);
+
+    await ensureFile('./out/technologies.csv');
+    await writeFile('./out/technologies.csv', csvTechnologies);
   }
 
   await browser.close();
