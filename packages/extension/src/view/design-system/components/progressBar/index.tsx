@@ -22,15 +22,19 @@ interface ProgressBarProps {
   intervalCounter: number;
   initialProcessed?: boolean;
   totalProcessed?: number;
+  additionalStyles?: string;
 }
 const ProgressBar = ({
   intervalCounter,
   initialProcessed,
   totalProcessed,
+  additionalStyles = '',
 }: ProgressBarProps) => {
   return (
-    <div className="w-96 min-h-[20rem] flex items-center justify-center flex-col gap-2 relative">
-      <p className="mb-6 text-center text-comet-black text-sm font-bold ml-2">
+    <div
+      className={`${additionalStyles} flex items-center justify-center flex-col gap-2 relative`}
+    >
+      <p className="mb-6 text-left dark:text-bright-gray text-comet-black text-sm font-bold ml-2">
         Analyzing previous tabs, please wait...
       </p>
       <div className="mb-6 h-1 w-full bg-gainsboro dark:bg-neutral-600">
@@ -41,11 +45,17 @@ const ProgressBar = ({
         {intervalCounter >= 50 && !initialProcessed && (
           <div
             className="h-1 bg-royal-blue absolute left-12"
-            style={{ width: `${totalProcessed}%` }}
+            style={{
+              width: `${
+                totalProcessed && totalProcessed > 0
+                  ? `${totalProcessed}% - 50px`
+                  : `${totalProcessed}%`
+              }`,
+            }}
           ></div>
         )}
       </div>
-      <p className="mt-7 text-center text-comet-black text-xxxs ml-2">
+      <p className="mt-7 text-center dark:text-bright-gray text-comet-black text-xxxs ml-2">
         This tool works best with maximum 2 tabs.
       </p>
     </div>

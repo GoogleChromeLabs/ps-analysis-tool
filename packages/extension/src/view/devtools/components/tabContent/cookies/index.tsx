@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 
 /**
  * Internal dependencies.
@@ -25,11 +25,46 @@ import React from 'react';
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
 import CookiesListing from './cookiesListing';
 import CookiesLanding from './cookiesLanding';
+import ProgressBar from '../../../../design-system/components/progressBar';
 
 const Cookies = () => {
-  const { selectedFrame } = useCookieStore(({ state }) => ({
-    selectedFrame: state.selectedFrame,
-  }));
+  const { tabCookies, selectedFrame, initialProcessed, totalProcessed } =
+    useCookieStore(({ state }) => ({
+      selectedFrame: state.selectedFrame,
+      initialProcessed: state.initialProcessed,
+      totalProcessed: state.totalProcessed,
+      tabCookies: state.tabCookies,
+    }));
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [intervalCounter, setIntervalCounter] = useState<number>(0);
+
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      setIntervalCounter((prevState) => {
+        if (prevState < 50) {
+          return prevState + 1;
+        }
+        return 50;
+      });
+    }, 760);
+  }, [intervalCounter]);
+
+  useEffect(() => {
+    if (intervalCounter > 50 && intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+  }, [intervalCounter]);
+
+  if (!initialProcessed && tabCookies && Object.keys(tabCookies).length <= 0) {
+    return (
+      <ProgressBar
+        additionalStyles="h-full"
+        intervalCounter={intervalCounter}
+        initialProcessed={initialProcessed}
+        totalProcessed={totalProcessed}
+      />
+    );
+  }
 
   return (
     <div

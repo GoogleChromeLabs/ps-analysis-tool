@@ -60,7 +60,11 @@ const App: React.FC = () => {
 
   if (loading) {
     return (
-      <ProgressBar intervalCounter={intervalCounter} initialProcessed={true} />
+      <ProgressBar
+        additionalStyles="w-96 min-h-[20rem]"
+        intervalCounter={intervalCounter}
+        initialProcessed={true}
+      />
     );
   }
   if (
@@ -71,6 +75,7 @@ const App: React.FC = () => {
   ) {
     return (
       <ProgressBar
+        additionalStyles="w-96 min-h-[20rem]"
         intervalCounter={intervalCounter}
         initialProcessed={initialProcessed}
         totalProcessed={totalProcessed}
