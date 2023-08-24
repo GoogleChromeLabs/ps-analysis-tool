@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 /**
  * Internal dependencies.
@@ -29,29 +29,49 @@ import { CirclePieChart } from '../design-system/components';
 import { prepareCookieStatsComponents } from '../../utils/prepareCookieStatsComponents';
 
 const App: React.FC = () => {
-  const {
-    cookieStats,
-    loading,
-    showLoadingText,
-    initialProcessed,
-    totalProcessed,
-  } = useCookieStore(({ state }) => ({
-    cookieStats: state.tabCookieStats,
-    loading: state.loading,
-    showLoadingText: state.showLoadingText,
-    initialProcessed: state.initialProcessed,
-    totalProcessed: state.totalProcessed,
-  }));
+  const { cookieStats, loading, initialProcessed, totalProcessed } =
+    useCookieStore(({ state }) => ({
+      cookieStats: state.tabCookieStats,
+      loading: state.loading,
+      initialProcessed: state.initialProcessed,
+      totalProcessed: state.totalProcessed,
+    }));
+
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [intervalCounter, setIntervalCounter] = useState<number>(0);
+
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      setIntervalCounter((prevState) => {
+        if (prevState < 50) {
+          return prevState + 1;
+        }
+        return 50;
+      });
+    }, 760);
+  }, [intervalCounter]);
+
+  useEffect(() => {
+    if (intervalCounter > 50 && intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+  }, [intervalCounter]);
 
   if (loading) {
     return (
       <div className="w-96 min-h-[20rem] flex items-center justify-center flex-col gap-2 relative">
-        <div className="w-10 h-10 rounded-full animate-spin border-t-transparent border-solid border-blue-700 border-4" />
-        {showLoadingText && (
-          <p className="absolute bottom-10 text-blue-700 text-lg ml-2">
-            Still listening to cookies, please wait...
-          </p>
-        )}
+        <p className="mb-6 text-center text-comet-black text-sm font-bold ml-2">
+          Analyzing previous tabs, please wait...
+        </p>
+        <div className="mb-6 h-1 w-full bg-gainsboro dark:bg-neutral-600">
+          <div
+            className="h-1 bg-royal-blue"
+            style={{ width: `${intervalCounter}px` }}
+          ></div>
+        </div>
+        <p className="mt-7 text-center text-comet-black text-xxxs ml-2">
+          This tool works best with maximum 2 tabs.
+        </p>
       </div>
     );
   }
@@ -63,16 +83,18 @@ const App: React.FC = () => {
   ) {
     return (
       <div className="w-96 min-h-[20rem] flex items-center justify-center flex-col gap-2 relative">
-        <div className="w-10 h-10 rounded-full animate-spin border-t-transparent border-solid border-blue-700 border-4" />
-        {showLoadingText && (
-          <>
-            <p className="absolute bottom-10 text-blue-700 text-lg ml-2 text-center">
-              Cookies in promise queue are being processed, please wait...
-              <br />
-              {totalProcessed}% cookie processed
-            </p>
-          </>
-        )}
+        <p className="mb-6 text-center text-comet-black text-sm font-bold ml-2">
+          Analyzing previous tabs, please wait...
+        </p>
+        <div className="mb-6 h-1 w-full bg-gainsboro dark:bg-neutral-600">
+          <div
+            className="h-1 bg-royal-blue"
+            style={{ width: `calc(${totalProcessed}% + 50px )` }}
+          ></div>
+        </div>
+        <p className="mt-7 text-center text-comet-black text-xxxs ml-2">
+          This tool works best with maximum 2 tabs.
+        </p>
       </div>
     );
   }

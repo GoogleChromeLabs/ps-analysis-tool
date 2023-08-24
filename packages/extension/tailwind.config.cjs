@@ -73,6 +73,7 @@ module.exports = {
       mischka: '#AFB0B1',
       'cool-grey': '#323941',
       'asteriod-black': '#2B2C2F',
+      'comet-black': '#202124',
     },
     backgroundColor: {
       ...colors,
