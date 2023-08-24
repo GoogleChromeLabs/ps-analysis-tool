@@ -55,7 +55,7 @@ const Cookies = () => {
     }
   }, [intervalCounter]);
 
-  if (!initialProcessed && tabCookies && Object.keys(tabCookies).length <= 0) {
+  if (!initialProcessed && !tabCookies) {
     return (
       <ProgressBar
         additionalStyles="h-full"

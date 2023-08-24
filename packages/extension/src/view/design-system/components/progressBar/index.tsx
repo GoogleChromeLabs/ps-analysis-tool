@@ -32,7 +32,7 @@ const ProgressBar = ({
 }: ProgressBarProps) => {
   return (
     <div
-      className={`${additionalStyles} flex items-center justify-center flex-col gap-2 relative`}
+      className={`${additionalStyles} flex justify-center flex-col gap-2 relative`}
     >
       <p className="mb-6 text-left dark:text-bright-gray text-comet-black text-sm font-bold ml-2">
         Analyzing previous tabs, please wait...
