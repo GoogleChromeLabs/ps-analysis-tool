@@ -79,9 +79,11 @@ The Chrome extension provides capabilities surfaced via the extension pop up, th
 
 ### Unpacked Extension
 
-- Download and unzip the extension zip file from the [latest release](https://github.com/GoogleChromeLabs/ps-analysis-tool/releases)
-- Turn the "Developer mode" on `chrome://extensions`
-- Click on the "Load unpacked" button and upload the unzipped extension folder.
+- Download the extension zip file from the [latest release](https://github.com/GoogleChromeLabs/ps-analysis-tool/releases) and unzip it.
+- Turn on "Developer mode" in `chrome://extensions` to [load the unpacked extension](https://developer.chrome.com/docs/extensions/mv3/getstarted/development-basics/#load-unpacked)
+- Click the "Load unpacked" button and select the unzipped extension folder.
+
+
 
 # Call to Action
 
