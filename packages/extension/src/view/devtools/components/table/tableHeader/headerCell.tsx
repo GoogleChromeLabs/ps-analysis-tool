@@ -26,7 +26,10 @@ import { flexRender, type Header } from '@tanstack/react-table';
 import type { TableData } from '..';
 import HeaderResizer from './headerResizer';
 import { ArrowDown } from '../../../../../icons';
-import { usePreferenceStore } from '../../../stateProviders/preferenceStore';
+import {
+  usePreferenceStore,
+  type PreferenceStore,
+} from '../../../stateProviders/preferenceStore';
 
 interface HeaderCellProps {
   header: Header<TableData, unknown>;
@@ -38,16 +41,27 @@ const HeaderCell = ({ header, setIsRowFocused }: HeaderCellProps) => {
     updatePreference: actions.updatePreference,
   }));
   const handleOnClick = useCallback(() => {
-    updatePreference('columnSorting', [
+    updatePreference('columnSorting', () => [
       {
         id: header.id,
         desc: header.column.getNextSortingOrder() === 'desc' ? true : false,
       },
     ]);
     header.column.toggleSorting();
-    updatePreference('columnSizing', {
-      [header.id]: header.column.getSize(),
-    });
+
+    updatePreference(
+      'columnSizing',
+      (prevStatePreferences: PreferenceStore['state']) => {
+        const currentPreferences = prevStatePreferences || {};
+        const currentSizes = {
+          ...(currentPreferences['columnSizing']
+            ? currentPreferences['columnSizing']
+            : null),
+          [header.id]: header.column.getSize(),
+        };
+        return currentSizes;
+      }
+    );
   }, [header.column, header.id, updatePreference]);
   return (
     <th

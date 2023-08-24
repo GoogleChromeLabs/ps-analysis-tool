@@ -43,7 +43,7 @@ const ColumnList = ({ columns, handleClose }: ColumnListProps) => {
       columns.forEach((column) => {
         visibleColumns[column.id] = column.getIsVisible();
       });
-      updatePreference('selectedColumns', visibleColumns);
+      updatePreference('selectedColumns', () => visibleColumns);
     };
   }, [columns, updatePreference]);
 

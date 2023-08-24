@@ -31,9 +31,11 @@ import React, {
 import { useCookieStore } from '../syncCookieStore';
 import { noop } from '../../../../utils/noop';
 import useContextSelector from '../../../../utils/useContextSelector';
-import type { PreferenceDataValues } from '../../../../localStore/types';
 import { useFilterManagementStore } from '../filterManagementStore';
-import { PreferenceStore } from '../../../../localStore';
+import {
+  PreferenceStore,
+  type PreferenceDataValues,
+} from '../../../../localStore';
 import { getCurrentTabId } from '../../../../utils/getCurrentTabId';
 import type { SelectedFilters } from '../filterManagementStore/types';
 
@@ -42,7 +44,12 @@ export interface PreferenceStore {
     [key: string]: unknown;
   };
   actions: {
-    updatePreference: (key: string, value: PreferenceDataValues) => void;
+    updatePreference: (
+      key: string,
+      updater: (
+        prevStatePreferences: PreferenceStore['state']
+      ) => PreferenceDataValues
+    ) => void;
   };
 }
 
@@ -59,21 +66,20 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [preferences, setPreferences] = useState<PreferenceStore['state']>({});
   const fetchedInitialValueRef = useRef<boolean>(false);
   const updatePreference = useCallback(
-    (key: string, value: PreferenceDataValues) => {
-      if (preferences) {
-        const _updatedPreferences: PreferenceStore['state'] = preferences;
-        if (
-          _updatedPreferences &&
-          Object.keys(_updatedPreferences).length > 0
-        ) {
-          _updatedPreferences[key] = value;
-        } else {
-          _updatedPreferences[key] = value;
-        }
-        setPreferences(_updatedPreferences);
-      }
+    (
+      key: string,
+      updater: (
+        prevStatePreferences: PreferenceStore['state']
+      ) => PreferenceDataValues
+    ) => {
+      setPreferences((prevStatePreferences) => {
+        return {
+          ...prevStatePreferences,
+          [key]: updater(prevStatePreferences),
+        };
+      });
     },
-    [preferences]
+    []
   );
 
   const { selectedFilters, setSelectedFilters } = useFilterManagementStore(
