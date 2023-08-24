@@ -145,20 +145,20 @@ export const Provider = ({ children }: PropsWithChildren) => {
         setPreferences(storedTabData?.preferences);
         if (storedTabData?.preferences?.selectedFrame) {
           setSelectedFrame(storedTabData?.preferences?.selectedFrame);
-        }
-        if (
-          storedTabData?.preferences?.selectedFilters &&
-          Object.keys(storedTabData?.preferences?.selectedFilters).length > 0
-        ) {
-          setSelectedFilters((prevState: SelectedFilters) => {
-            const newValue: SelectedFilters = { ...prevState };
-            const setFilters = storedTabData?.preferences?.selectedFilters;
-            // eslint-disable-next-line guard-for-in
-            for (const filter in setFilters) {
-              newValue[filter] = new Set(setFilters[filter]);
-            }
-            return newValue;
-          });
+          if (
+            storedTabData?.preferences?.selectedFilters &&
+            Object.keys(storedTabData?.preferences?.selectedFilters).length > 0
+          ) {
+            setSelectedFilters((prevState: SelectedFilters) => {
+              const newValue: SelectedFilters = { ...prevState };
+              const setFilters = storedTabData?.preferences?.selectedFilters;
+              // eslint-disable-next-line guard-for-in
+              for (const filter in setFilters) {
+                newValue[filter] = new Set(setFilters[filter]);
+              }
+              return newValue;
+            });
+          }
         }
         fetchedInitialValueRef.current = true;
       }
