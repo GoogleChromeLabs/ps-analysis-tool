@@ -32,6 +32,7 @@ import type {
   TabFrames,
   CookieStatsComponents,
 } from '../../../../../cookies.types';
+import { InfoIcon } from '../../../../../../../icons';
 
 interface CookiesMatrixProps {
   tabCookies: TabCookies | null;
@@ -102,7 +103,7 @@ const CookiesMatrix = ({
     },
     {
       title: 'Number of Frames with Associated Cookies',
-      description: 'Frames that have cookies associated with them',
+      description: 'Frames that have cookies associated with them.',
       count: framesWithCookies ? Object.keys(framesWithCookies).length : 0,
       expand: isExpanded,
     },
@@ -112,8 +113,11 @@ const CookiesMatrix = ({
     <div className="w-full" data-testid="cookies-matrix">
       <div>
         <div className="flex gap-x-5 justify-between">
-          <h4 className="pb-3 flex-1 grow border-b border-bright-gray dark:border-quartz text-xs font-bold text-darkest-gray dark:text-bright-gray uppercase">
-            Cookies Insights
+          <h4 className="flex items-center gap-1 pb-3 flex-1 grow border-b border-bright-gray dark:border-quartz text-xs font-bold text-darkest-gray dark:text-bright-gray uppercase">
+            <span>Cookies Insights</span>
+            <span title="An active ad-blocker or other cookie extensions may affect the results.">
+              <InfoIcon />
+            </span>
           </h4>
           <h4 className="pb-3 flex-1 grow border-b border-bright-gray dark:border-quartz text-xs font-bold text-darkest-gray dark:text-bright-gray text-right">
             <button onClick={() => setIsExpanded((state) => !state)}>

@@ -24,4 +24,6 @@ export interface Filter {
   type?: string;
   default?: string;
   sort?: boolean;
+  order: number;
+  description?: string;
 }

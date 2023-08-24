@@ -1,7 +1,7 @@
 {
   "name": "@cookie-analysis-tool/cli",
   "version": "0.0.1",
-  "description": "",
+  "description": "Cli tool for analysis",
   "main": "index.js",
   "scripts": {
     "build": "tsc",

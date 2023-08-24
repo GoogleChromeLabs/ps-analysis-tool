@@ -62,7 +62,7 @@ const getFilters = (cookies: CookieTableData[]): Filter[] => {
 
   filters.push(...Object.values(CUSTOM_FILTER_MAPPING));
 
-  return filters;
+  return filters.sort((a: Filter, b: Filter) => a.order - b.order);
 };
 
 export default getFilters;

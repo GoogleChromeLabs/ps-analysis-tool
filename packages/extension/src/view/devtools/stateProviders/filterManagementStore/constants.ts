@@ -20,39 +20,49 @@ export const FILTER_MAPPING = [
     keys: 'analytics.category',
     default: 'Uncategorized',
     sort: true,
+    order: 1,
   },
   {
     name: 'Domain',
     keys: 'parsedCookie.domain',
     sort: true,
-  },
-  {
-    name: 'Platform',
-    keys: 'analytics.platform',
-    sort: true,
-  },
-  {
-    name: 'Path',
-    keys: 'parsedCookie.path',
-  },
-  {
-    name: 'Same Site',
-    keys: 'parsedCookie.samesite',
-  },
-  {
-    name: 'Secure',
-    keys: 'parsedCookie.secure',
-    type: 'boolean',
+    order: 3,
   },
   {
     name: 'HttpOnly',
     keys: 'parsedCookie.httponly',
     type: 'boolean',
+    order: 4,
+  },
+  {
+    name: 'Same Site',
+    keys: 'parsedCookie.samesite',
+    order: 5,
+  },
+  {
+    name: 'Secure',
+    keys: 'parsedCookie.secure',
+    type: 'boolean',
+    order: 6,
+  },
+  {
+    name: 'Path',
+    keys: 'parsedCookie.path',
+    order: 7,
+  },
+  {
+    name: 'Platform',
+    keys: 'analytics.platform',
+    sort: true,
+    order: 9,
   },
   {
     name: 'Cookie Accepted',
     keys: 'isCookieSet',
     type: 'boolean',
+    order: 10,
+    description:
+      "Whether the cookie was accepted(set) in Chrome's Cookie Store",
   },
 ];
 
@@ -61,6 +71,7 @@ export const CUSTOM_FILTER_MAPPING = {
     name: 'Scope',
     keys: 'isFirstParty',
     filters: new Set(['First Party', 'Third Party']),
+    order: 2,
   },
   retentionPeriod: {
     name: 'Retention Period',
@@ -72,5 +83,6 @@ export const CUSTOM_FILTER_MAPPING = {
       'Long Term (1 week - 1 month)',
       'Extended Term (> 1 month)',
     ]),
+    order: 8,
   },
 };
