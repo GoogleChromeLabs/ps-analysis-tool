@@ -37,6 +37,7 @@ A "browsing session" refers to the sequence of navigations a user follows over a
 * How can I provide feedback to Google on Privacy Sandbox APIs and third-party cookie deprecation?
 
 # Tool Functional Areas
+The features and capabilities of this tool help you (developers) with the transition towards a more private web, by shedding light on data and context as you go abou implementing privacy-presetving solutions to the features and capabilities of your web sites and apps. The main functional areas of the tool are the following. 
 
 <img width="937" alt="Screenshot 2023-08-21 at 10 35 19 AM" src="https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/3b13e478-2f67-42b3-879e-333f9a3b9357">
 
