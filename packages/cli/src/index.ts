@@ -40,7 +40,6 @@ program
 
 program.parse();
 
-const ProfilePath = './tmp';
 const isHeadless = Boolean(program.opts().headless);
 
 export const initialize = async () => {
@@ -52,7 +51,6 @@ export const initialize = async () => {
   const browser = await puppeteer.launch({
     devtools: true,
     headless: isHeadless ? 'new' : false,
-    args: [`--user-data-dir=${ProfilePath}`],
   });
 
   if (url) {
