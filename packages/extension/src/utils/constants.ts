@@ -13,24 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import React from 'react';
-
-interface ProgressBarProps {
-  additionalStyles?: string;
-}
-const ProgressBar = ({ additionalStyles = '' }: ProgressBarProps) => {
-  return (
-    <div
-      className={`${additionalStyles} flex justify-center flex-col gap-2 relative overflow-hidden`}
-    >
-      <div className="mb-6 h-1 w-full bg-gainsboro dark:bg-neutral-600 overflow-hidden">
-        <div className="h-1 w-1/2 bg-royal-blue absolute animate-horizontal-spinner"></div>
-      </div>
-    </div>
-  );
-};
-
-export default ProgressBar;
+export const ALLOWED_NUMBER_OF_TABS = 1;

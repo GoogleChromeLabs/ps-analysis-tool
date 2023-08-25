@@ -33,6 +33,15 @@ module.exports = {
         '3xl':
           '0px 38px 90px 0px rgba(0, 0, 0, 0.25), 0px 0px 2px 0px rgba(0, 0, 0, 0.05), 0px 0px 1px 0px rgba(0, 0, 0, 0.60)',
       },
+      keyframes: {
+        'horizontal-spinner-keyframes': {
+          '0%': { left: '0%', transform: 'translateX(-100%)' },
+          '100%': { left: '100%', transform: 'translateX(0%)' },
+        },
+      },
+      animation: {
+        'horizontal-spinner': 'horizontal-spinner-keyframes 2s linear infinite',
+      },
     },
     fontFamily: {
       ...defaultTheme.fontFamily,
@@ -93,6 +102,7 @@ module.exports = {
       'outer-space-crayola': '#303942',
       'outer-space': '#454545',
       'medium-persian-blue': '#0E639C',
+      'dark-blue': '#0535C1',
     },
     borderColor: {
       ...colors,

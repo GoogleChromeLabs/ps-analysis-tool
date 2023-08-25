@@ -29,20 +29,26 @@ import { useDebouncedCallback } from 'use-debounce';
 /**
  * Internal dependencies.
  */
-import { getCurrentTab } from '../../../../utils/getCurrentTabId';
+import {
+  getCurrentTab,
+  getCurrentTabId,
+} from '../../../../utils/getCurrentTabId';
 import type { CookiesCount } from '../../types';
 import prepareCookiesCount from '../../../../utils/prepareCookiesCount';
+import { CookieStore } from '../../../../localStore';
+import { noop } from '../../../../utils/noop';
 
 export interface CookieStoreContext {
   state: {
     tabCookieStats: CookiesCount | null;
+    isCurrentTabBeingListenedTo: boolean;
     loading: boolean;
     showLoadingText: boolean;
-    initialProcessed: boolean;
     tabId: number | null;
-    totalProcessed: number;
   };
-  actions: object;
+  actions: {
+    changeListeningToThisTab: () => void;
+  };
 }
 
 const initialState: CookieStoreContext = {
@@ -64,13 +70,14 @@ const initialState: CookieStoreContext = {
         uncategorized: 0,
       },
     },
+    isCurrentTabBeingListenedTo: false,
     loading: true,
     showLoadingText: false,
-    initialProcessed: false,
-    totalProcessed: 0,
     tabId: null,
   },
-  actions: {},
+  actions: {
+    changeListeningToThisTab: noop,
+  },
 };
 
 export const Context = createContext<CookieStoreContext>(initialState);
@@ -80,13 +87,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const [tabUrl, setTabUrl] = useState<string | null>(null);
 
-  const [initialProcessed, setInitialProcessed] = useState<boolean>(false);
-  const [totalProcessed, setTotalProcessed] = useState<number>(0);
-
   const [tabCookieStats, setTabCookieStats] =
     useState<CookieStoreContext['state']['tabCookieStats']>(null);
 
   const [loading, setLoading] = useState<boolean>(true);
+
+  const [isCurrentTabBeingListenedTo, setIsCurrentTabBeingListenedTo] =
+    useState<boolean>(false);
 
   const [showLoadingText, setShowLoadingText] = useState<boolean>(false);
 
@@ -121,6 +128,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const intitialSync = useCallback(async () => {
     const [tab] = await getCurrentTab();
+
     if (!tab.id || !tab.url) {
       return;
     }
@@ -129,6 +137,17 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
     setTabId(tab.id);
     setTabUrl(tab.url);
+    const getTabBeingListenedTo = await chrome.storage.local.get();
+
+    if (
+      getTabBeingListenedTo &&
+      tab?.id.toString() !== getTabBeingListenedTo?.tabToRead
+    ) {
+      setIsCurrentTabBeingListenedTo(false);
+      return;
+    } else {
+      setIsCurrentTabBeingListenedTo(true);
+    }
 
     const tabData = (await chrome.storage.local.get([_tabId.toString()]))[
       _tabId.toString()
@@ -137,38 +156,16 @@ export const Provider = ({ children }: PropsWithChildren) => {
     if (tabData && tabData.cookies) {
       setDebouncedStats(prepareCookiesCount(tabData.cookies, _tabUrl));
     }
-    if (typeof tabData?.initialProcessed !== 'undefined') {
-      setInitialProcessed(tabData.initialProcessed);
-    }
-    if (typeof tabData?.totalProcessed !== 'undefined') {
-      setTotalProcessed(tabData?.totalProcessed);
-    }
   }, [setDebouncedStats]);
 
   const storeChangeListener = useCallback(
-    (changes: { [key: string]: chrome.storage.StorageChange }) => {
+    async (changes: { [key: string]: chrome.storage.StorageChange }) => {
       if (
         tabId &&
         tabUrl &&
         Object.keys(changes).includes(tabId.toString()) &&
         changes[tabId.toString()]?.newValue?.cookies
       ) {
-        if (
-          typeof changes[tabId.toString()]?.newValue?.initialProcessed !==
-          'undefined'
-        ) {
-          setInitialProcessed(
-            changes[tabId.toString()]?.newValue?.initialProcessed
-          );
-        }
-        if (
-          typeof changes[tabId.toString()]?.newValue?.totalProcessed !==
-          'undefined'
-        ) {
-          setTotalProcessed(
-            changes[tabId.toString()]?.newValue?.totalProcessed
-          );
-        }
         setDebouncedStats(
           prepareCookiesCount(
             changes[tabId.toString()].newValue.cookies,
@@ -176,9 +173,55 @@ export const Provider = ({ children }: PropsWithChildren) => {
           )
         );
       }
+      if (tabId) {
+        const getTabBeingListenedTo = await chrome.storage.local.get();
+
+        if (
+          getTabBeingListenedTo &&
+          tabId.toString() !== getTabBeingListenedTo?.tabToRead
+        ) {
+          setIsCurrentTabBeingListenedTo(false);
+          return;
+        } else {
+          setIsCurrentTabBeingListenedTo(true);
+        }
+      }
     },
     [setDebouncedStats, tabId, tabUrl]
   );
+
+  const changeListeningToThisTab = useCallback(async () => {
+    const changedTabId = await getCurrentTabId();
+    if (!changedTabId) {
+      return;
+    }
+    await CookieStore.addTabData(changedTabId?.toString());
+    const storedTabData = Object.keys(await chrome.storage.local.get());
+    // eslint-disable-next-line guard-for-in
+    await Promise.all(
+      storedTabData.map(async (tabIdToBeDeleted) => {
+        if (
+          tabIdToBeDeleted !== changedTabId &&
+          tabIdToBeDeleted !== 'tabToRead'
+        ) {
+          await CookieStore.removeTabData(tabIdToBeDeleted);
+          await chrome.action.setBadgeText({
+            tabId: parseInt(tabIdToBeDeleted),
+            text: '',
+          });
+          const checkIfTabDataDeleted = await chrome.storage.local.get();
+          if (Object.keys(checkIfTabDataDeleted).includes(tabIdToBeDeleted)) {
+            return Promise.reject(new Error('Couldnt delete object'));
+          } else {
+            return Promise.resolve();
+          }
+        }
+        return Promise.resolve();
+      })
+    );
+    await chrome.tabs.reload(Number(changedTabId));
+    setIsCurrentTabBeingListenedTo(true);
+  }, []);
 
   const tabUpdateListener = useCallback(
     (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
@@ -204,13 +247,14 @@ export const Provider = ({ children }: PropsWithChildren) => {
       value={{
         state: {
           tabCookieStats,
+          isCurrentTabBeingListenedTo,
           loading,
           showLoadingText,
-          initialProcessed,
           tabId,
-          totalProcessed,
         },
-        actions: {},
+        actions: {
+          changeListeningToThisTab,
+        },
       }}
     >
       {children}

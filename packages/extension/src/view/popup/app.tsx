@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 
 /**
  * Internal dependencies.
@@ -28,58 +28,44 @@ import { useCookieStore } from './stateProviders/syncCookieStore';
 import { CirclePieChart } from '../design-system/components';
 import { prepareCookieStatsComponents } from '../../utils/prepareCookieStatsComponents';
 import ProgressBar from '../design-system/components/progressBar';
+import { ALLOWED_NUMBER_OF_TABS } from '../../utils/constants';
 
 const App: React.FC = () => {
-  const { cookieStats, loading, initialProcessed, totalProcessed } =
-    useCookieStore(({ state }) => ({
-      cookieStats: state.tabCookieStats,
-      loading: state.loading,
-      initialProcessed: state.initialProcessed,
-      totalProcessed: state.totalProcessed,
-    }));
-
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const [intervalCounter, setIntervalCounter] = useState<number>(0);
-
-  useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      setIntervalCounter((prevState) => {
-        if (prevState < 50) {
-          return prevState + 1;
-        }
-        return 50;
-      });
-    }, 760);
-  }, [intervalCounter]);
-
-  useEffect(() => {
-    if (intervalCounter > 50 && intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-  }, [intervalCounter]);
+  const {
+    cookieStats,
+    loading,
+    isCurrentTabBeingListenedTo,
+    changeListeningToThisTab,
+  } = useCookieStore(({ state, actions }) => ({
+    cookieStats: state.tabCookieStats,
+    isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
+    loading: state.loading,
+    changeListeningToThisTab: actions.changeListeningToThisTab,
+  }));
 
   if (loading) {
-    return (
-      <ProgressBar
-        additionalStyles="w-96 min-h-[20rem]"
-        intervalCounter={intervalCounter}
-        initialProcessed={true}
-      />
-    );
+    return <ProgressBar additionalStyles="w-96 min-h-[20rem]" />;
   }
-  if (
-    !initialProcessed &&
-    (!cookieStats ||
-      (cookieStats?.firstParty.total === 0 &&
-        cookieStats?.thirdParty.total === 0))
-  ) {
+
+  if (ALLOWED_NUMBER_OF_TABS > 0 && !isCurrentTabBeingListenedTo) {
     return (
-      <ProgressBar
-        additionalStyles="w-96 min-h-[20rem]"
-        intervalCounter={intervalCounter}
-        initialProcessed={initialProcessed}
-        totalProcessed={totalProcessed}
-      />
+      <div className="w-96 min-h-[20rem] flex flex-col items-center justify-center">
+        <p className="dark:text-bright-gray">
+          This tool works best with single tab.
+        </p>
+        <p className="dark:text-bright-gray">
+          Currently analyzing different tab.
+        </p>
+        <p>
+          Want to analyze this tab?
+          <button
+            onClick={changeListeningToThisTab}
+            className="p-0.5 ml-0.5 text-white bg-dark-blue rounded"
+          >
+            Analyze this tab
+          </button>
+        </p>
+      </div>
     );
   }
 

@@ -96,6 +96,7 @@ const CookieStore = {
         cookies: {},
         focusedAt: Date.now(),
       },
+      tabToRead: tabId,
     });
   },
 

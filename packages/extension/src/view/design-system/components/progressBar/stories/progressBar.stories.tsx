@@ -16,21 +16,23 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-interface ProgressBarProps {
-  additionalStyles?: string;
-}
-const ProgressBar = ({ additionalStyles = '' }: ProgressBarProps) => {
-  return (
-    <div
-      className={`${additionalStyles} flex justify-center flex-col gap-2 relative overflow-hidden`}
-    >
-      <div className="mb-6 h-1 w-full bg-gainsboro dark:bg-neutral-600 overflow-hidden">
-        <div className="h-1 w-1/2 bg-royal-blue absolute animate-horizontal-spinner"></div>
-      </div>
-    </div>
-  );
+/**
+ * Internal dependencies.
+ */
+import ProgressBar from '..';
+
+const meta: Meta<typeof ProgressBar> = {
+  title: 'Extension/DesignSystem/ProgressBar',
+  component: ProgressBar,
+  tags: ['autodocs'],
 };
 
-export default ProgressBar;
+export default meta;
+
+export const Primary: StoryObj<typeof meta> = {
+  args: {
+    additionalStyles: 'w-96 min-h-[20rem]',
+  },
+};

@@ -31,23 +31,44 @@ import {
   type CookieDatabase,
   fetchDictionary,
 } from '../utils/fetchCookieDictionary';
+import { ALLOWED_NUMBER_OF_TABS } from '../utils/constants';
 
 let cookieDB: CookieDatabase | null = null;
 
 // Global promise queue.
 const PROMISE_QUEUE = new PQueue({ concurrency: 1 });
-
 /**
  * Fires when the browser receives a response from a web server.
  * @see https://developer.chrome.com/docs/extensions/reference/webRequest/
  */
 chrome.webRequest.onResponseStarted.addListener(
   async (details: chrome.webRequest.WebResponseCacheDetails) => {
+    if (ALLOWED_NUMBER_OF_TABS > 0) {
+      const currentTabId = await getCurrentTabId();
+      const tabsBeingListenedTo = await chrome.storage.local.get();
+      if (!currentTabId) {
+        return;
+      }
+      if (
+        tabsBeingListenedTo &&
+        currentTabId !== tabsBeingListenedTo?.tabToRead
+      ) {
+        return;
+      }
+    }
+
     await PROMISE_QUEUE.add(async () => {
       const { tabId, url, responseHeaders, frameId } = details;
-
       const tab = await getTab(tabId);
-
+      const tabsBeingListenedTo = await chrome.storage.local.get();
+      if (ALLOWED_NUMBER_OF_TABS > 0) {
+        if (
+          tabsBeingListenedTo &&
+          tabId.toString() !== tabsBeingListenedTo?.tabToRead
+        ) {
+          return;
+        }
+      }
       if (!tab || !responseHeaders) {
         return;
       }
@@ -85,47 +106,38 @@ chrome.webRequest.onResponseStarted.addListener(
   { urls: ['*://*/*'] },
   ['extraHeaders', 'responseHeaders']
 );
-PROMISE_QUEUE.on('idle', async () => {
-  const currentTabId = await getCurrentTabId();
-  if (currentTabId) {
-    const currentTabData = await chrome.storage.local.get([
-      currentTabId.toString(),
-    ]);
-    if (currentTabData[currentTabId]) {
-      currentTabData[currentTabId]['initialProcessed'] = true;
-      currentTabData[currentTabId]['totalProcessed'] = 100;
-      chrome.storage.local.set(currentTabData);
-    }
-  }
-});
-PROMISE_QUEUE.on('active', async () => {
-  const currentTabId = await getCurrentTabId();
-  if (currentTabId) {
-    const currentTabData = await chrome.storage.local.get([
-      currentTabId.toString(),
-    ]);
 
-    if (
-      currentTabData[currentTabId] &&
-      !currentTabData[currentTabId]['initialProcessed']
-    ) {
-      currentTabData[currentTabId]['initialProcessed'] = false;
-      currentTabData[currentTabId]['totalProcessed'] =
-        100 - (PROMISE_QUEUE.pending / PROMISE_QUEUE.size) * 100;
-      chrome.storage.local.set(currentTabData);
-    }
-  }
-});
 chrome.webRequest.onBeforeSendHeaders.addListener(
   ({ url, requestHeaders, tabId, frameId }) => {
     (async () => {
+      if (ALLOWED_NUMBER_OF_TABS > 0) {
+        const currentTabId = await getCurrentTabId();
+        const tabsBeingListenedTo = await chrome.storage.local.get();
+        if (!currentTabId) {
+          return;
+        }
+        if (ALLOWED_NUMBER_OF_TABS > 0) {
+          if (
+            tabsBeingListenedTo &&
+            tabId.toString() !== tabsBeingListenedTo?.tabToRead
+          ) {
+            return;
+          }
+        }
+      }
       await PROMISE_QUEUE.add(async () => {
         const tab = await getTab(tabId);
 
         if (!tab || !requestHeaders) {
           return;
         }
-
+        const tabsBeingListenedTo = await chrome.storage.local.get();
+        if (
+          tabsBeingListenedTo &&
+          tabId.toString() !== tabsBeingListenedTo?.tabToRead
+        ) {
+          return;
+        }
         if (!cookieDB) {
           cookieDB = await fetchDictionary();
         }
@@ -164,6 +176,11 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 chrome.tabs.onCreated.addListener(async (tab) => {
   await PROMISE_QUEUE.add(async () => {
     if (tab.id) {
+      const previousTabData = await chrome.storage.local.get();
+      if (Object.keys(previousTabData).length >= ALLOWED_NUMBER_OF_TABS) {
+        return;
+      }
+      await chrome.storage.local.set({ tabToRead: tab.id.toString() });
       await CookieStore.addTabData(tab.id.toString());
     }
   });

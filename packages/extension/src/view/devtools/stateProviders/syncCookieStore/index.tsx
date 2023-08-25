@@ -37,8 +37,7 @@ export interface CookieStoreContext {
     tabFrames: TabFrames | null;
     selectedFrame: string | null;
     isMouseInsideHeader: boolean;
-    initialProcessed: boolean;
-    totalProcessed: number;
+    iseCurrentTabBeingListenedTo: boolean;
   };
   actions: {
     setSelectedFrame: React.Dispatch<React.SetStateAction<string | null>>;
@@ -53,8 +52,7 @@ const initialState: CookieStoreContext = {
     tabFrames: null,
     selectedFrame: null,
     isMouseInsideHeader: false,
-    initialProcessed: false,
-    totalProcessed: 0,
+    iseCurrentTabBeingListenedTo: false,
   },
   actions: {
     setSelectedFrame: () => undefined,
@@ -66,8 +64,8 @@ export const Context = createContext<CookieStoreContext>(initialState);
 
 export const Provider = ({ children }: PropsWithChildren) => {
   const [tabId, setTabId] = useState<number | null>(null);
-  const [initialProcessed, setInitialProcessed] = useState<boolean>(false);
-  const [totalProcessed, setTotalProcessed] = useState<number>(0);
+  const [iseCurrentTabBeingListenedTo, setIsCurrentTabBeingListenedTo] =
+    useState<boolean>(false);
 
   const [tabCookies, setTabCookies] =
     useState<CookieStoreContext['state']['tabCookies']>(null);
@@ -125,6 +123,18 @@ export const Provider = ({ children }: PropsWithChildren) => {
     await getAllFramesForCurrentTab(_tabId);
     setTabId(_tabId);
 
+    if (_tabId) {
+      const getTabBeingListenedTo = Object.keys(
+        await chrome.storage.local.get()
+      );
+      if (!getTabBeingListenedTo.includes(_tabId.toString())) {
+        setIsCurrentTabBeingListenedTo(false);
+        return;
+      } else {
+        setIsCurrentTabBeingListenedTo(true);
+      }
+    }
+
     const tabData = (await chrome.storage.local.get([_tabId.toString()]))[
       _tabId.toString()
     ];
@@ -148,12 +158,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
       );
 
       setTabCookies(_cookies);
-    }
-    if (typeof tabData?.initialProcessed !== 'undefined') {
-      setInitialProcessed(tabData.initialProcessed);
-    }
-    if (typeof tabData?.totalProcessed !== 'undefined') {
-      setTotalProcessed(tabData?.totalProcessed);
     }
 
     chrome.devtools.inspectedWindow.eval(
@@ -191,21 +195,17 @@ export const Provider = ({ children }: PropsWithChildren) => {
             };
           })
         );
-        if (
-          typeof changes[tabId.toString()]?.newValue?.initialProcessed !==
-          'undefined'
-        ) {
-          setInitialProcessed(
-            changes[tabId.toString()]?.newValue?.initialProcessed
+        if (tabId) {
+          const getTabBeingListenedTo = Object.keys(
+            await chrome.storage.local.get()
           );
-        }
-        if (
-          typeof changes[tabId.toString()]?.newValue?.totalProcessed !==
-          'undefined'
-        ) {
-          setTotalProcessed(
-            changes[tabId.toString()]?.newValue?.totalProcessed
-          );
+
+          if (!getTabBeingListenedTo.includes(tabId.toString())) {
+            setIsCurrentTabBeingListenedTo(false);
+            return;
+          } else {
+            setIsCurrentTabBeingListenedTo(true);
+          }
         }
         await getAllFramesForCurrentTab(tabId);
         setTabCookies(_cookies);
@@ -245,8 +245,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           tabFrames,
           selectedFrame,
           isMouseInsideHeader,
-          initialProcessed,
-          totalProcessed,
+          iseCurrentTabBeingListenedTo,
         },
         actions: { setSelectedFrame, setIsMouseInsideHeader },
       }}
