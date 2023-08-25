@@ -43,7 +43,7 @@ const App: React.FC = () => {
     changeListeningToThisTab: actions.changeListeningToThisTab,
   }));
 
-  if (loading) {
+  if (loading && isCurrentTabBeingListenedTo) {
     return <ProgressBar additionalStyles="w-96 min-h-[20rem]" />;
   }
 
@@ -52,9 +52,6 @@ const App: React.FC = () => {
       <div className="w-96 min-h-[20rem] flex flex-col items-center justify-center">
         <p className="dark:text-bright-gray">
           This tool works best with single tab.
-        </p>
-        <p className="dark:text-bright-gray">
-          Currently analyzing different tab.
         </p>
         <p>
           Want to analyze this tab?

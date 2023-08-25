@@ -204,6 +204,21 @@ chrome.tabs.onActivated.addListener(async (activeInfo) => {
  */
 chrome.tabs.onRemoved.addListener(async (tabId) => {
   await PROMISE_QUEUE.add(async () => {
+    const totalTabs = await chrome.tabs.query({});
+    const previousTabData = await chrome.storage.local.get();
+    if (
+      totalTabs.length === ALLOWED_NUMBER_OF_TABS &&
+      totalTabs.filter(
+        (tab) => tab?.id?.toString() === previousTabData?.tabToRead
+      ).length === 0
+    ) {
+      const currentTabId = await getCurrentTabId();
+      if (currentTabId) {
+        await chrome.storage.local.set({ tabToRead: currentTabId });
+        await CookieStore.addTabData(currentTabId);
+        await chrome.tabs.reload(Number(currentTabId));
+      }
+    }
     await CookieStore.removeTabData(tabId.toString());
   });
 });
