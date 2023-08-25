@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useRef, useEffect, useState } from 'react';
+import React from 'react';
 
 /**
  * Internal dependencies.
@@ -26,55 +26,21 @@ import CookiesMatrix from './cookiesMatrix';
 import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import prepareCookiesCount from '../../../../../../utils/prepareCookiesCount';
 import { prepareCookieStatsComponents } from '../../../../../../utils/prepareCookieStatsComponents';
-import ProgressBar from '../../../../../design-system/components/progressBar';
 
 const CookiesLanding = () => {
-  const { tabCookies, tabFrames, tabUrl, initialProcessed, totalProcessed } =
-    useCookieStore(({ state }) => ({
-      tabFrames: state.tabFrames,
-      tabCookies: state.tabCookies,
-      tabUrl: state.tabUrl,
-      initialProcessed: state.initialProcessed,
-      totalProcessed: state.totalProcessed,
-    }));
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const [intervalCounter, setIntervalCounter] = useState<number>(0);
-
-  useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      setIntervalCounter((prevState) => {
-        if (prevState < 50) {
-          return prevState + 1;
-        }
-        return 50;
-      });
-    }, 760);
-  }, [intervalCounter]);
-
-  useEffect(() => {
-    if (intervalCounter > 50 && intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-  }, [intervalCounter]);
+  const { tabCookies, tabFrames, tabUrl } = useCookieStore(({ state }) => ({
+    tabFrames: state.tabFrames,
+    tabCookies: state.tabCookies,
+    tabUrl: state.tabUrl,
+  }));
 
   const cookieStats = prepareCookiesCount(tabCookies, tabUrl);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
 
   return (
     <div className="w-full h-full">
-      {(!initialProcessed && !tabCookies) ||
-        (tabCookies && Object.keys(tabCookies).length <= 0 && (
-          <div className="absolute inset-0 z-10 w-full h-full backdrop-blur-sm">
-            <ProgressBar
-              additionalStyles="w-96 h-44 top-5 inset-x-1/3 dark:bg-raisin-black bg-white border border-american-silver dark:border-quartz"
-              intervalCounter={intervalCounter}
-              initialProcessed={initialProcessed}
-              totalProcessed={totalProcessed}
-            />
-          </div>
-        ))}
       <div
-        className="absolute inset-0 z-0 h-full w-full min-w-[20rem]"
+        className="absolute h-full w-full min-w-[20rem]"
         data-testid="cookies-landing"
       >
         <LandingHeader
