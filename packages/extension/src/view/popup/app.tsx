@@ -53,15 +53,12 @@ const App: React.FC = () => {
         <p className="dark:text-bright-gray">
           This tool works best with single tab.
         </p>
-        <p>
-          Want to analyze this tab?
-          <button
-            onClick={changeListeningToThisTab}
-            className="p-0.5 ml-0.5 text-white bg-dark-blue rounded"
-          >
-            Analyze this tab
-          </button>
-        </p>
+        <button
+          onClick={changeListeningToThisTab}
+          className="p-0.5 ml-0.5 text-white bg-dark-blue rounded"
+        >
+          Analyze this tab
+        </button>
       </div>
     );
   }
