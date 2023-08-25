@@ -177,7 +177,11 @@ chrome.tabs.onCreated.addListener(async (tab) => {
   await PROMISE_QUEUE.add(async () => {
     if (tab.id) {
       const previousTabData = await chrome.storage.local.get();
-      if (Object.keys(previousTabData).length >= ALLOWED_NUMBER_OF_TABS) {
+      const doesTabExist = await getTab(previousTabData?.tabToRead);
+      if (
+        Object.keys(previousTabData).length - 1 >= ALLOWED_NUMBER_OF_TABS &&
+        doesTabExist
+      ) {
         return;
       }
       await chrome.storage.local.set({ tabToRead: tab.id.toString() });
