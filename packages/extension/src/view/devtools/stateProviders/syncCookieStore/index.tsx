@@ -36,12 +36,10 @@ export interface CookieStoreContext {
     tabUrl: string | null;
     tabFrames: TabFrames | null;
     selectedFrame: string | null;
-    isMouseInsideHeader: boolean;
-    iseCurrentTabBeingListenedTo: boolean;
+    isCurrentTabBeingListenedTo: boolean;
   };
   actions: {
     setSelectedFrame: React.Dispatch<React.SetStateAction<string | null>>;
-    setIsMouseInsideHeader: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
@@ -51,12 +49,10 @@ const initialState: CookieStoreContext = {
     tabUrl: null,
     tabFrames: null,
     selectedFrame: null,
-    isMouseInsideHeader: false,
-    iseCurrentTabBeingListenedTo: false,
+    isCurrentTabBeingListenedTo: false,
   },
   actions: {
     setSelectedFrame: () => undefined,
-    setIsMouseInsideHeader: () => undefined,
   },
 };
 
@@ -64,7 +60,7 @@ export const Context = createContext<CookieStoreContext>(initialState);
 
 export const Provider = ({ children }: PropsWithChildren) => {
   const [tabId, setTabId] = useState<number | null>(null);
-  const [iseCurrentTabBeingListenedTo, setIsCurrentTabBeingListenedTo] =
+  const [isCurrentTabBeingListenedTo, setIsCurrentTabBeingListenedTo] =
     useState<boolean>(false);
 
   const [tabCookies, setTabCookies] =
@@ -77,9 +73,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
     useState<CookieStoreContext['state']['tabUrl']>(null);
   const [tabFrames, setTabFrames] =
     useState<CookieStoreContext['state']['tabFrames']>(null);
-
-  const [isMouseInsideHeader, setIsMouseInsideHeader] =
-    useState<boolean>(false);
 
   const getAllFramesForCurrentTab = useCallback(
     async (_tabId: number | null) => {
@@ -244,10 +237,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
           tabUrl,
           tabFrames,
           selectedFrame,
-          isMouseInsideHeader,
-          iseCurrentTabBeingListenedTo,
+          isCurrentTabBeingListenedTo,
         },
-        actions: { setSelectedFrame, setIsMouseInsideHeader },
+        actions: { setSelectedFrame },
       }}
     >
       {children}
