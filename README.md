@@ -42,18 +42,28 @@ The features and capabilities of this tool help you (developers) with the transi
 <img width="937" alt="Screenshot 2023-08-21 at 10 35 19 AM" src="https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/3b13e478-2f67-42b3-879e-333f9a3b9357">
 
 ## Cookie Data Manipulation and Analysis
+🚧 Work in Progress 🚧
+
 DevTools provides access to lots of information regarding every functional aspect of the browser, including cookies. This extension expands a bit the capabilities of DevTools and providing additional ways to slice and dice cookie data, making it easier for everyone to understand the behaviors of cookies on different scenarios.
 
 <img width="946" alt="Screenshot 2023-08-21 at 1 41 13 PM" src="https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/e20cb6d0-f682-4c20-98c7-3b5e69be32df">
 
 
 ## Frame Overlays
+🚧 Work in Progress 🚧
+
 Cookies are used as a state management mechanism to power varying features and capabilities of sites. For example, a embedded video component from some 3P provider could set and manipulate 3P cookies to serve authenticated videos without users having to re-authenticate repeatedly. This extension provides a frame overlay capability, making it easy to associate, when possible, components on a web page and the set of cookies that are associated with it. 
 
 ## Reporting
+
+🚧 Work in Progress 🚧
+
 This tool provides capabilities to make it easy for users to report breakages, and connect with existing Privacy Sandbox feedback and bug reporting channels. As you leverage the capabilities of the tool to analyze and debug your critical user journeys, you can report breakages or questions about your use cases and directly send them to the proper feedback channel. This way you would get answers to your issues, and will contribute to our collective effort to ensure the ecosystem is ready for a world without 3P cookies as we know them today.
 
 ## Knowledge Access Points
+
+🚧 Work in Progress 🚧
+
 The final goal of this tool is to make it easy to understand the role of 3P cookies on critical user journeys all the relevant aspects of Privacy Sandbox and the phasin out of 3P cookies. As you use the tool to analyze and debug your use cases, you will encounter links to documentation and other sources of information to support your learning and understanding as you navigate the transition to a more private web. 
 
 # Usage instructions
