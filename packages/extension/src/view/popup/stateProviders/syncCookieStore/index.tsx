@@ -37,12 +37,14 @@ import type { CookiesCount } from '../../types';
 import prepareCookiesCount from '../../../../utils/prepareCookiesCount';
 import { CookieStore } from '../../../../localStore';
 import { noop } from '../../../../utils/noop';
+import { ALLOWED_NUMBER_OF_TABS } from '../../../../utils/constants';
 
 export interface CookieStoreContext {
   state: {
     tabCookieStats: CookiesCount | null;
     isCurrentTabBeingListenedTo: boolean;
     loading: boolean;
+    returningToSingleTab: boolean;
     showLoadingText: boolean;
     tabId: number | null;
   };
@@ -73,6 +75,7 @@ const initialState: CookieStoreContext = {
     isCurrentTabBeingListenedTo: false,
     loading: true,
     showLoadingText: false,
+    returningToSingleTab: false,
     tabId: null,
   },
   actions: {
@@ -89,6 +92,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const [tabCookieStats, setTabCookieStats] =
     useState<CookieStoreContext['state']['tabCookieStats']>(null);
+
+  const [returningToSingleTab, setReturningToSingleTab] =
+    useState<CookieStoreContext['state']['returningToSingleTab']>(false);
 
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -138,7 +144,16 @@ export const Provider = ({ children }: PropsWithChildren) => {
     setTabId(tab.id);
     setTabUrl(tab.url);
     const getTabBeingListenedTo = await chrome.storage.local.get();
-
+    const availableTabs = await chrome.tabs.query({});
+    if (
+      availableTabs.length === ALLOWED_NUMBER_OF_TABS &&
+      availableTabs.filter(
+        (processingTab) =>
+          processingTab.id?.toString() === getTabBeingListenedTo?.tabToRead
+      )
+    ) {
+      setReturningToSingleTab(true);
+    }
     if (
       getTabBeingListenedTo &&
       tab?.id.toString() !== getTabBeingListenedTo?.tabToRead
@@ -175,7 +190,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
       }
       if (tabId) {
         const getTabBeingListenedTo = await chrome.storage.local.get();
-
         if (
           getTabBeingListenedTo &&
           tabId.toString() !== getTabBeingListenedTo?.tabToRead
@@ -251,6 +265,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           loading,
           showLoadingText,
           tabId,
+          returningToSingleTab,
         },
         actions: {
           changeListeningToThisTab,

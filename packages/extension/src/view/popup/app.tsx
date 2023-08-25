@@ -35,11 +35,13 @@ const App: React.FC = () => {
     cookieStats,
     loading,
     isCurrentTabBeingListenedTo,
+    returningToSingleTab,
     changeListeningToThisTab,
   } = useCookieStore(({ state, actions }) => ({
     cookieStats: state.tabCookieStats,
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
     loading: state.loading,
+    returningToSingleTab: state.returningToSingleTab,
     changeListeningToThisTab: actions.changeListeningToThisTab,
   }));
 
@@ -50,9 +52,11 @@ const App: React.FC = () => {
   if (ALLOWED_NUMBER_OF_TABS > 0 && !isCurrentTabBeingListenedTo) {
     return (
       <div className="w-96 min-h-[20rem] flex flex-col items-center justify-center">
-        <p className="dark:text-bright-gray">
-          This tool works best with single tab.
-        </p>
+        {!returningToSingleTab && (
+          <p className="dark:text-bright-gray">
+            This tool works best with single tab.
+          </p>
+        )}
         <button
           onClick={changeListeningToThisTab}
           className="p-0.5 ml-0.5 text-white bg-dark-blue rounded"
