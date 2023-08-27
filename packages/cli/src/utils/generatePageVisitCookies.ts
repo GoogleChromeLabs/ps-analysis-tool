@@ -13,8 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/**
+ * External dependencies.
+ */
 import { Browser, Protocol } from 'puppeteer';
+
+/**
+ * Internal dependencies.
+ */
 import delay from './delay';
 
 const generatePageVisitCookies: (

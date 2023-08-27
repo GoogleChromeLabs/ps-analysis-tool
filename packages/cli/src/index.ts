@@ -73,6 +73,7 @@ export const initialize = async () => {
     if (cookies) {
       cookies.forEach((theCookie) => {
         const cookie = normalizeCookie(theCookie, url);
+
         if (cookie) {
           cookiesDetails.push(cookie);
         }
@@ -117,8 +118,6 @@ export const initialize = async () => {
       )
     );
   } else if (sitemapURL) {
-    // Site Map.
-
     const siteMapper = new Sitemapper({
       url: sitemapURL,
       timeout: 3000, // 3 seconds
@@ -132,7 +131,7 @@ export const initialize = async () => {
 
     const countInput: number = parseInt(
       await promptly.prompt(
-        `Provided sitemap has ${urls.length} sites. How many do you want to check`,
+        `Provided sitemap has ${urls.length} sites. Please enter the number of pages you want to analyze:`,
         (err, val) => {
           if (
             (parseInt(val) && parseInt(val) < 0) ||
@@ -151,12 +150,14 @@ export const initialize = async () => {
         const cookies = await generatePageVisitCookies(new URL(_url), browser);
 
         const cookiesDetails: Array<CookieLogDetails> = [];
+
         if (cookies) {
           cookies.forEach((theCookie) => {
             const cookie: CookieLogDetails | null = normalizeCookie(
               theCookie,
               url
             );
+
             if (cookie) {
               cookiesDetails.push(cookie);
             }
@@ -195,14 +196,15 @@ export const initialize = async () => {
     const techMap = technologies
       .reduce((acc, curr) => [...acc, ...curr])
       .reduce<{ name: string; frequency: number }[]>((acc, curr) => {
-        const ind = acc.findIndex(({ name }) => name === curr.name);
-        if (ind === -1) {
+        const index = acc.findIndex(({ name }) => name === curr.name);
+
+        if (index === -1) {
           return [...acc, { name: curr.name, frequency: 1 }];
         } else {
           return [
-            ...acc.slice(0, ind),
-            { name: curr.name, frequency: acc[ind].frequency + 1 },
-            ...acc.slice(ind + 1),
+            ...acc.slice(0, index),
+            { name: curr.name, frequency: acc[index].frequency + 1 },
+            ...acc.slice(index + 1),
           ];
         }
       }, []);

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// @todo Create and use from a common package.
 /**
  * Parses a URL string and returns a new URL object.
  * If the URL is invalid, it returns null.

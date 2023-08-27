@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
 //@ts-ignore package does not support typescript
 import Wapplalyzer from 'wappalyzer';
 
