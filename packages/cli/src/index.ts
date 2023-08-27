@@ -13,21 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/**
+ * External dependencies.
+ */
 import { Command } from 'commander';
 import puppeteer from 'puppeteer';
 import Sitemapper from 'sitemapper';
+import promptly from 'promptly';
+import ora from 'ora';
+import clc from 'cli-color';
+import { ensureFile, writeFile } from 'fs-extra';
+
+/**
+ * Internal dependencies.
+ */
 import {
   generatePageVisitCookies,
   generateTechnology,
   getCSVbyObject,
   normalizeCookie,
 } from './utils';
-import promptly from 'promptly';
 import { CookieLogDetails } from './types';
-import { ensureFile, writeFile } from 'fs-extra';
 
 const program = new Command();
+
 program
   .version('0.0.1')
   .description('CLI to test a URL for 3p cookies')
@@ -47,7 +56,7 @@ export const initialize = async () => {
   const sitemapURL = program.opts().sitemapUrl;
 
   // Browser.
-  // see https://developer.chrome.com/articles/new-headless/
+  // @see https://developer.chrome.com/articles/new-headless/
   const browser = await puppeteer.launch({
     devtools: true,
     headless: isHeadless ? 'new' : false,
@@ -55,11 +64,12 @@ export const initialize = async () => {
 
   if (url) {
     // Single URL.
-    console.log('Fetching cookies set on first page visit');
+    let spinner = ora('Analyzing cookies set on first page visit...').start();
 
     const cookies = await generatePageVisitCookies(new URL(url), browser);
 
     const cookiesDetails: Array<CookieLogDetails> = [];
+
     if (cookies) {
       cookies.forEach((theCookie) => {
         const cookie = normalizeCookie(theCookie, url);
@@ -71,8 +81,10 @@ export const initialize = async () => {
 
     const csvCookies: string = getCSVbyObject(cookiesDetails);
 
-    console.log('Done fetching Cookies');
-    console.log('Starting technology analysis');
+    spinner.stop();
+    console.log(clc.green('Done analyzing cookies!'));
+
+    spinner = ora('Analyzing technologies used on the page...').start();
 
     const technologies = await generateTechnology(url);
 
@@ -80,7 +92,14 @@ export const initialize = async () => {
       technologies.map(({ name }) => ({ name }))
     );
 
-    console.log('Done analysing technologies');
+    spinner.stop();
+    console.log(clc.green('Done analyzing technologies!'));
+    console.log(
+      'The following output files were generated in the "out" directory'
+    );
+    console.log('- cookies.csv (Cookie report)');
+    console.log('- technologies. (Technologies report)');
+    console.log('- data.json (Both reports in JSON)');
 
     await ensureFile('./out/cookies.csv');
     await writeFile('./out/cookies.csv', csvCookies);

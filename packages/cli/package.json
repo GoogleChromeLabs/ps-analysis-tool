@@ -18,8 +18,10 @@
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
   "dependencies": {
+    "cli-color": "^2.0.3",
     "commander": "^10.0.1",
     "fs-extra": "^11.1.1",
+    "ora": "^7.0.1",
     "promptly": "^3.2.0",
     "puppeteer": "^21.0.3",
     "simple-cookie": "^1.0.15",
@@ -28,6 +30,7 @@
     "wappalyzer": "^6.10.66"
   },
   "devDependencies": {
+    "@types/cli-color": "^2.0.2",
     "@types/fs-extra": "^11.0.1",
     "@types/node": "^20.2.3",
     "@types/promptly": "^3.0.2",
