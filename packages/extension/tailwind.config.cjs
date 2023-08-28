@@ -102,7 +102,8 @@ module.exports = {
       'outer-space-crayola': '#303942',
       'outer-space': '#454545',
       'medium-persian-blue': '#0E639C',
-      'dark-blue': '#0535C1',
+      'dark-blue': '#0B57D0',
+      'light-blue': '#ABC7FA',
     },
     borderColor: {
       ...colors,

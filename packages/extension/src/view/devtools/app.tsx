@@ -113,7 +113,7 @@ const App: React.FC = () => {
         )}
         <button
           onClick={changeListeningToThisTab}
-          className="p-0.5 ml-0.5 text-white bg-dark-blue rounded"
+          className="p-0.5 mt-1 ml-0.5 text-white dark:text-comet-black dark:bg-light-blue bg-dark-blue rounded"
         >
           Analyze this tab
         </button>
