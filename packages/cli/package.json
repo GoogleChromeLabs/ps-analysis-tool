@@ -1,7 +1,7 @@
 {
   "name": "@cookie-analysis-tool/cli",
-  "version": "0.0.1",
-  "description": "Cli tool for analysis",
+  "version": "0.2.0",
+  "description": "CLI tool for analysis",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
@@ -12,7 +12,7 @@
     "url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool"
   },
   "author": "",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"
   },
