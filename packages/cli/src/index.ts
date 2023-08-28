@@ -154,7 +154,7 @@ export const initialize = async () => {
 
     for (let i = 0; i < countInput / BATCH_SIZE; i++) {
       const spinner = ora(
-        `Collecting cookies from website - ${i * BATCH_SIZE + 1} to  ${Math.min(
+        `Collecting cookies from pages - ${i * BATCH_SIZE + 1} to  ${Math.min(
           (i + 1) * BATCH_SIZE,
           countInput
         )}`
@@ -216,7 +216,7 @@ export const initialize = async () => {
 
     for (let i = 0; i < countInput / BATCH_SIZE; i++) {
       const spinner = ora(
-        `Processing technologies from website - ${
+        `Processing technologies from pages - ${
           i * BATCH_SIZE + 1
         } to  ${Math.min((i + 1) * BATCH_SIZE, countInput)}`
       ).start();
