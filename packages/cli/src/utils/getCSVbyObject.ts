@@ -25,6 +25,7 @@ const getCSVbyObject = (data: Array<object>): string => {
 
   allData.forEach((rowData) => {
     const row = Object.values(rowData);
+
     csvRows.push(
       row
         .map(String)

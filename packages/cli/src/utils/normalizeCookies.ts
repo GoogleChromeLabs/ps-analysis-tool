@@ -30,6 +30,7 @@ const normalizeCookie = (
   tabUrl: string
 ): CookieLogDetails | null => {
   const cookieName: any = 'name' in theCookie ? theCookie.name : '';
+
   if (!cookieName) {
     return null;
   }
@@ -37,6 +38,7 @@ const normalizeCookie = (
   const openCookiesData: { [key: string]: any } = getOpenCookiesDetails();
   let cookieDetail: { [key: string]: any } =
     cookieName in openCookiesData ? openCookiesData[cookieName] : null;
+
   if (!cookieDetail) {
     cookieDetail = {
       Platform: 'Unknown Platform',
