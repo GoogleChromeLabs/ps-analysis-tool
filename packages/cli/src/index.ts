@@ -126,16 +126,19 @@ export const initialize = async () => {
       url: sitemapURL,
       timeout: 3000, // 3 seconds
     });
-
-    const { sites: urls } = await siteMapper.fetch();
-
-    if (urls.length === 0) {
-      throw new Error('Unable to parse sitemap');
+    let urls: string[] = [];
+    try {
+      const { sites } = await siteMapper.fetch();
+      urls = sites;
+    } catch (error) {
+      console.log('Error: error parsing sitemap ');
+      process.exit(1);
     }
 
     const countInput: number = parseInt(
       await promptly.prompt(
-        `Provided sitemap has ${urls.length} sites. Please enter the number of pages you want to analyze:`,
+        `Provided sitemap has ${urls.length} sites. Please enter the number of pages you want to analyze (Default ${urls.length}):`,
+        { default: urls.length.toString() },
         (err, val) => {
           if (
             (parseInt(val) && parseInt(val) < 0) ||
