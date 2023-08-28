@@ -40,7 +40,6 @@ import mockResponse, {
   known1pCookie,
   known3pCookieWithValue,
 } from '../../../../../../utils/test-data/cookieMockData';
-
 jest.mock('../../../../stateProviders/syncCookieStore', () => {
   return {
     useCookieStore: () => {
