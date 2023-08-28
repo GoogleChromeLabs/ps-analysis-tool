@@ -137,7 +137,7 @@ export const initialize = async () => {
 
     const countInput: number = parseInt(
       await promptly.prompt(
-        `Provided sitemap has ${urls.length} sites. Please enter the number of pages you want to analyze (Default ${urls.length}):`,
+        `Provided sitemap has ${urls.length} pages. Please enter the number of pages you want to analyze (Default ${urls.length}):`,
         { default: urls.length.toString() },
         (err, val) => {
           if (
