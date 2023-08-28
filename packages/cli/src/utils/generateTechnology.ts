@@ -16,9 +16,16 @@
 /**
  * External dependencies.
  */
-import React from 'react';
-import { TextDecoder, TextEncoder } from 'node:util';
+//@ts-ignore package does not support typescript
+import Wapplalyzer from 'wappalyzer';
 
-global.React = React;
-global.TextDecoder = TextDecoder;
-global.TextEncoder = TextEncoder;
+const generateTechnology = async (url: string): Promise<{ name: string }[]> => {
+  const wappalyzer = new Wapplalyzer();
+  await wappalyzer.init();
+  const site = await wappalyzer.open(url);
+  const results = await site.analyze();
+
+  return results.technologies;
+};
+
+export default generateTechnology;

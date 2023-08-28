@@ -13,4 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export default 'https://example.com/path/to/image.png';
+const getCSVbyObject = (data: Array<object>): string => {
+  if (!data.length) {
+    return '';
+  }
+
+  const keys = Object.keys(data[0]);
+  const allData = [keys, ...data];
+
+  const csvRows: Array<string> = [];
+
+  allData.forEach((rowData) => {
+    const row = Object.values(rowData);
+
+    csvRows.push(
+      row
+        .map(String)
+        .map((v) => v.replace('"', '""')) // escape double colons
+        .map((v) => `"${v}"`) // quote it
+        .join(',') // comma-separated
+    );
+  });
+
+  return csvRows.join('\r\n'); // rows starting on new lines
+};
+
+export default getCSVbyObject;

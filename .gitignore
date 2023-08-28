@@ -28,3 +28,7 @@ out
 
 # tsc output
 *.tsbuildinfo
+
+#puppeteer artifact
+tmp
+
