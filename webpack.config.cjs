@@ -142,4 +142,26 @@ const popup = {
   ...commonConfig,
 };
 
-module.exports = [root, devTools, popup];
+const settings = {
+  entry: {
+    index: './packages/extension/src/view/settings/index.tsx',
+  },
+  output: {
+    path: path.resolve(__dirname, './dist/extension/settings'),
+    filename: 'index.js',
+  },
+  plugins: [
+    new WebpackBar({
+      name: 'Settings',
+      color: '#fcd8ba',
+    }),
+    new HtmlWebpackPlugin({
+      title: 'PSAT Settings',
+      template: './packages/extension/src/view/settings/index.html',
+      inject: false,
+    }),
+  ],
+  ...commonConfig,
+};
+
+module.exports = [root, devTools, popup, settings];
