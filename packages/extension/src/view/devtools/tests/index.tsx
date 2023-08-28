@@ -175,6 +175,28 @@ describe('Index', () => {
           addListener: () => undefined,
           removeListener: () => undefined,
         },
+        query: () => {
+          return Promise.resolve([
+            {
+              groupId: 12,
+              autoDiscardable: false,
+              discarded: false,
+              selected: true,
+              incognito: false,
+              active: true,
+              windowId: 1,
+              highlighted: false,
+              pinned: false,
+              index: 1,
+              id: 40245632,
+            },
+          ]);
+        },
+        //@ts-ignore
+        onRemoved: {
+          addListener: () => undefined,
+          removeListener: () => undefined,
+        },
       },
     };
     globalThis.fetch = function () {
