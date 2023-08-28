@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useMemo } from 'react';
+import React from 'react';
 
 /**
  * Internal dependencies.
@@ -33,31 +33,23 @@ const CookiesLanding = () => {
     tabCookies: state.tabCookies,
     tabUrl: state.tabUrl,
   }));
-  const cookieStats = useMemo(
-    () => prepareCookiesCount(tabCookies, tabUrl),
-    [tabCookies, tabUrl]
-  );
-  const cookiesStatsComponents = useMemo(
-    () => prepareCookieStatsComponents(cookieStats),
-    [cookieStats]
-  );
+  const cookieStats = prepareCookiesCount(tabCookies, tabUrl);
+  const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
   return (
-    <div className="w-full h-full">
-      <div
-        className="absolute h-full w-full min-w-[20rem]"
-        data-testid="cookies-landing"
-      >
-        <LandingHeader
-          cookieStats={cookieStats}
+    <div
+      className="absolute h-full w-full min-w-[20rem]"
+      data-testid="cookies-landing"
+    >
+      <LandingHeader
+        cookieStats={cookieStats}
+        cookiesStatsComponents={cookiesStatsComponents}
+      />
+      <div className="lg:max-w-[729px] mx-auto flex justify-center mt-10 pb-28 px-4">
+        <CookiesMatrix
+          tabCookies={tabCookies}
           cookiesStatsComponents={cookiesStatsComponents}
+          tabFrames={tabFrames}
         />
-        <div className="lg:max-w-[729px] mx-auto flex justify-center mt-10 pb-28 px-4">
-          <CookiesMatrix
-            tabCookies={tabCookies}
-            cookiesStatsComponents={cookiesStatsComponents}
-            tabFrames={tabFrames}
-          />
-        </div>
       </div>
     </div>
   );
