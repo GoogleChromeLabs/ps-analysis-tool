@@ -34,9 +34,11 @@ const generatePageVisitCookies: (
 ) => {
   const page = await browserContext.newPage();
 
-  await page.goto(url.href, {
-    timeout: 200000,
-  });
+  try {
+    await page.goto(url.href);
+  } catch (error) {
+    //Do nothing
+  }
 
   await delay(stayTime);
 

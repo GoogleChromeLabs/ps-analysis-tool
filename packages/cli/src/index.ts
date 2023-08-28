@@ -22,6 +22,7 @@ import Sitemapper from 'sitemapper';
 import promptly from 'promptly';
 import ora from 'ora';
 import clc from 'cli-color';
+import events from 'events';
 import { ensureFile, writeFile } from 'fs-extra';
 
 /**
@@ -34,6 +35,9 @@ import {
   normalizeCookie,
 } from './utils';
 import { CookieLogDetails } from './types';
+
+const BATCH_SIZE = 5;
+events.EventEmitter.defaultMaxListeners = 15;
 
 const program = new Command();
 
@@ -123,7 +127,7 @@ export const initialize = async () => {
       timeout: 3000, // 3 seconds
     });
 
-    let { sites: urls } = await siteMapper.fetch();
+    const { sites: urls } = await siteMapper.fetch();
 
     if (urls.length === 0) {
       throw new Error('Unable to parse sitemap');
@@ -137,36 +141,52 @@ export const initialize = async () => {
             (parseInt(val) && parseInt(val) < 0) ||
             parseInt(val) > urls.length
           ) {
-            throw new Error('Bad Input');
+            throw new Error(`Bad Input : ${val}`);
           }
         }
       )
     );
 
-    urls = urls.slice(0, countInput);
+    const resources: { url: string; cookies: CookieLogDetails[] }[] = [];
 
-    const resources = await Promise.all(
-      urls.map(async (_url) => {
-        const cookies = await generatePageVisitCookies(new URL(_url), browser);
+    for (let i = 0; i < countInput / BATCH_SIZE; i++) {
+      const spinner = ora(
+        `Collecting cookies from website - ${i * BATCH_SIZE + 1} to  ${Math.min(
+          (i + 1) * BATCH_SIZE,
+          countInput
+        )}`
+      ).start();
 
-        const cookiesDetails: Array<CookieLogDetails> = [];
-
-        if (cookies) {
-          cookies.forEach((theCookie) => {
-            const cookie: CookieLogDetails | null = normalizeCookie(
-              theCookie,
-              url
+      // eslint-disable-next-line no-await-in-loop
+      const _resources = await Promise.all(
+        urls
+          .slice(i * BATCH_SIZE, Math.min((i + 1) * BATCH_SIZE, countInput))
+          .map(async (_url) => {
+            const cookies = await generatePageVisitCookies(
+              new URL(_url),
+              browser
             );
 
-            if (cookie) {
-              cookiesDetails.push(cookie);
+            const cookiesDetails: Array<CookieLogDetails> = [];
+            if (cookies) {
+              cookies.forEach((theCookie) => {
+                const cookie: CookieLogDetails | null = normalizeCookie(
+                  theCookie,
+                  url
+                );
+                if (cookie) {
+                  cookiesDetails.push(cookie);
+                }
+              });
             }
-          });
-        }
 
-        return { url, cookies: cookiesDetails };
-      })
-    );
+            return { url: _url, cookies: cookiesDetails };
+          })
+      );
+
+      resources.push(..._resources);
+      spinner.stop();
+    }
 
     const cookieList: CookieLogDetails[] = [];
 
@@ -187,11 +207,28 @@ export const initialize = async () => {
     await ensureFile('./out/cookies.csv');
     await writeFile('./out/cookies.csv', csvCookies);
 
-    const technologies = await Promise.all(
-      urls.map((_url) => {
-        return generateTechnology(_url);
-      })
-    );
+    console.log(clc.green('Done analyzing cookies!'));
+
+    const technologies = [];
+
+    for (let i = 0; i < countInput / BATCH_SIZE; i++) {
+      const spinner = ora(
+        `Processing technologies from website - ${
+          i * BATCH_SIZE + 1
+        } to  ${Math.min((i + 1) * BATCH_SIZE, countInput)}`
+      ).start();
+      // eslint-disable-next-line no-await-in-loop
+      const _technologies = await Promise.all(
+        urls
+          .slice(i * BATCH_SIZE, Math.min((i + 1) * BATCH_SIZE, countInput))
+          .map((_url) => {
+            return generateTechnology(_url);
+          })
+      );
+
+      technologies.push(..._technologies);
+      spinner.stop();
+    }
 
     const techMap = technologies
       .reduce((acc, curr) => [...acc, ...curr])
@@ -213,6 +250,15 @@ export const initialize = async () => {
 
     await ensureFile('./out/technologies.csv');
     await writeFile('./out/technologies.csv', csvTechnologies);
+
+    console.log(clc.green('Done analyzing technologies!'));
+
+    console.log(
+      'The following output files were generated in the "out" directory'
+    );
+    console.log('- cookies.csv (Cookie report)');
+    console.log('- technologies. (Technologies report)');
+    console.log('- data.json (Both reports in JSON)');
   }
 
   await browser.close();
