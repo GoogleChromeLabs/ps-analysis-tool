@@ -123,7 +123,7 @@ describe('local store: CookieStore', () => {
     });
   });
 
-  it('should delte cookies', async () => {
+  it('should delete cookies', async () => {
     await CookieStore.update('123', cookieArray);
     await CookieStore.deleteCookie('countryCode1');
     expect(storage['123'].cookies).toStrictEqual({
@@ -164,7 +164,7 @@ describe('local store: CookieStore', () => {
     await CookieStore.update('123', cookieArray);
     await CookieStore.removeWindowData(123);
     expect(storage['123']).toBeUndefined();
-    expect(storage).toStrictEqual({});
+    expect(storage).toStrictEqual({ tabToRead: '123' });
     globalThis.chrome.tabs = tmpTabRef;
   });
 });
