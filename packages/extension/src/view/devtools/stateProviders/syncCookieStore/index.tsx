@@ -209,31 +209,30 @@ export const Provider = ({ children }: PropsWithChildren) => {
             };
           })
         );
-        if (tabId) {
-          const getTabBeingListenedTo = await chrome.storage.local.get();
-          const availableTabs = await chrome.tabs.query({});
-          if (
-            availableTabs.length === ALLOWED_NUMBER_OF_TABS &&
-            availableTabs.filter(
-              (processingTab) =>
-                processingTab.id?.toString() ===
-                getTabBeingListenedTo?.tabToRead
-            )
-          ) {
-            setReturningToSingleTab(true);
-          }
-          if (
-            getTabBeingListenedTo &&
-            tabId?.toString() !== getTabBeingListenedTo?.tabToRead
-          ) {
-            setIsCurrentTabBeingListenedTo(false);
-            return;
-          } else {
-            setIsCurrentTabBeingListenedTo(true);
-          }
-        }
         await getAllFramesForCurrentTab(tabId);
         setTabCookies(_cookies);
+      }
+      if (tabId) {
+        const getTabBeingListenedTo = await chrome.storage.local.get();
+        const availableTabs = await chrome.tabs.query({});
+        if (
+          availableTabs.length === ALLOWED_NUMBER_OF_TABS &&
+          availableTabs.filter(
+            (processingTab) =>
+              processingTab.id?.toString() === getTabBeingListenedTo?.tabToRead
+          )
+        ) {
+          setReturningToSingleTab(true);
+        }
+        if (
+          getTabBeingListenedTo &&
+          tabId?.toString() !== getTabBeingListenedTo?.tabToRead
+        ) {
+          setIsCurrentTabBeingListenedTo(false);
+          return;
+        } else {
+          setIsCurrentTabBeingListenedTo(true);
+        }
       }
     },
     [tabId, getAllFramesForCurrentTab]
@@ -269,6 +268,14 @@ export const Provider = ({ children }: PropsWithChildren) => {
       })
     );
     await chrome.tabs.reload(Number(changedTabId));
+    chrome.devtools.inspectedWindow.eval(
+      'window.location.href',
+      (result, isException) => {
+        if (!isException && typeof result === 'string') {
+          setTabUrl(result);
+        }
+      }
+    );
     setIsCurrentTabBeingListenedTo(true);
   }, []);
 

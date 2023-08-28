@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useMemo } from 'react';
 
 /**
  * Internal dependencies.
@@ -33,10 +33,14 @@ const CookiesLanding = () => {
     tabCookies: state.tabCookies,
     tabUrl: state.tabUrl,
   }));
-
-  const cookieStats = prepareCookiesCount(tabCookies, tabUrl);
-  const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
-
+  const cookieStats = useMemo(
+    () => prepareCookiesCount(tabCookies, tabUrl),
+    [tabCookies, tabUrl]
+  );
+  const cookiesStatsComponents = useMemo(
+    () => prepareCookieStatsComponents(cookieStats),
+    [cookieStats]
+  );
   return (
     <div className="w-full h-full">
       <div
