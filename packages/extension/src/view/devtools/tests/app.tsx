@@ -30,9 +30,23 @@ import App from '../app';
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'cookie-analysis-tool/data/PSInfo.json';
+import { useCookieStore } from '../stateProviders/syncCookieStore';
+import { noop } from '../../../utils/noop';
+
+jest.mock('../stateProviders/syncCookieStore', () => ({
+  useCookieStore: jest.fn(),
+}));
+
+const mockUseCookieStore = useCookieStore as jest.Mock;
 
 describe('App', () => {
   beforeAll(() => {
+    mockUseCookieStore.mockReturnValue({
+      isCurrentTabBeingListenedTo: true,
+      returningToSingleTab: false,
+      changeListeningToThisTab: noop,
+      setSelectedFrame: noop,
+    });
     globalThis.chrome = {
       ...SinonChrome,
       devtools: {
