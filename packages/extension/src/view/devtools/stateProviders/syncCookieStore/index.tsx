@@ -232,6 +232,14 @@ export const Provider = ({ children }: PropsWithChildren) => {
           return;
         } else {
           setIsCurrentTabBeingListenedTo(true);
+          chrome.devtools.inspectedWindow.eval(
+            'window.location.href',
+            (result, isException) => {
+              if (!isException && typeof result === 'string') {
+                setTabUrl(result);
+              }
+            }
+          );
         }
       }
     },
@@ -267,7 +275,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
         return Promise.resolve();
       })
     );
-    await chrome.tabs.reload(Number(changedTabId));
     chrome.devtools.inspectedWindow.eval(
       'window.location.href',
       (result, isException) => {
@@ -276,6 +283,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
       }
     );
+    await chrome.tabs.reload(Number(changedTabId));
     setIsCurrentTabBeingListenedTo(true);
   }, []);
 
