@@ -37,14 +37,25 @@ const App: React.FC = () => {
     isCurrentTabBeingListenedTo,
     returningToSingleTab,
     changeListeningToThisTab,
+    onChromeUrl,
   } = useCookieStore(({ state, actions }) => ({
     cookieStats: state.tabCookieStats,
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
     loading: state.loading,
     returningToSingleTab: state.returningToSingleTab,
     changeListeningToThisTab: actions.changeListeningToThisTab,
+    onChromeUrl: state.onChromeUrl,
   }));
-
+  if (onChromeUrl) {
+    return (
+      <div className="w-96 min-h-[318px] h-fit p-5 flex justify-center items-center flex-col">
+        <p className="font-bold text-lg">No url provided</p>
+        <p className="text-chart-label text-xs">
+          Cannot process cookies on empty tab.
+        </p>
+      </div>
+    );
+  }
   if (loading && isCurrentTabBeingListenedTo) {
     return <ProgressBar additionalStyles="w-96 min-h-[20rem]" />;
   }

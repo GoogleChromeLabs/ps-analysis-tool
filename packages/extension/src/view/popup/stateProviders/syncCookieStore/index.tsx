@@ -47,6 +47,7 @@ export interface CookieStoreContext {
     returningToSingleTab: boolean;
     showLoadingText: boolean;
     tabId: number | null;
+    onChromeUrl: boolean;
   };
   actions: {
     changeListeningToThisTab: () => void;
@@ -76,6 +77,7 @@ const initialState: CookieStoreContext = {
     loading: true,
     showLoadingText: false,
     returningToSingleTab: false,
+    onChromeUrl: false,
     tabId: null,
   },
   actions: {
@@ -102,7 +104,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     useState<boolean>(false);
 
   const [showLoadingText, setShowLoadingText] = useState<boolean>(false);
-
+  const [onChromeUrl, setOnChromeUrl] = useState<boolean>(false);
   const loadingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const loadingTextTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -137,6 +139,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
     if (!tab.id || !tab.url) {
       return;
+    }
+    if (tab.url.startsWith('chrome:')) {
+      setOnChromeUrl(true);
+    } else {
+      setOnChromeUrl(false);
     }
     const _tabId = tab.id;
     const _tabUrl = tab.url;
@@ -187,6 +194,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
             tabUrl
           )
         );
+      }
+      if (tabUrl) {
+        if (tabUrl.startsWith('chrome:')) {
+          setOnChromeUrl(true);
+        } else {
+          setOnChromeUrl(false);
+        }
       }
       if (tabId) {
         const getTabBeingListenedTo = await chrome.storage.local.get();
@@ -266,6 +280,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           showLoadingText,
           tabId,
           returningToSingleTab,
+          onChromeUrl,
         },
         actions: {
           changeListeningToThisTab,
