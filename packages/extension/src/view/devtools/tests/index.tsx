@@ -28,6 +28,7 @@ import SinonChrome from 'sinon-chrome';
 import App from '../app';
 import { Provider as ExternalStoreProvider } from '../stateProviders/syncCookieStore';
 import { Provider as ContentPanelProvider } from '../stateProviders/contentPanelStore';
+import { Provider as FilterManagementProvider } from '../stateProviders/filterManagementStore';
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'cookie-analysis-tool/data/PSInfo.json';
@@ -214,7 +215,9 @@ describe('Index', () => {
       render(
         <ExternalStoreProvider>
           <ContentPanelProvider>
-            <App />
+            <FilterManagementProvider>
+              <App />
+            </FilterManagementProvider>
           </ContentPanelProvider>
         </ExternalStoreProvider>
       )
