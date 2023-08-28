@@ -106,8 +106,9 @@ The Chrome extension provides capabilities surfaced via the extension pop up, th
 
 ### CLI
 
-- `npm run cli:build` to genrate a build in `/dist/cli`.
-- Run the cli util providing a sitemap as input. E.g. `node dist/cli/index.js -s https://<example.com>/sitemap_index.xml\`.
+- `npm run cli:build` to genrate a build in `/dist/cli`
+- Analyize websites with `npm run cli -- -u <siteurl>`. This will create 2 csv files in ./out one has the cookies stored while visiting a website and other has a list of technologies used.
+- Analyize sitemaps with `npm run cli -- -s <url-to-sitemap.xml>`. This will create 2 csv files in ./out one has the cookies stored while visiting a website and other has a list of technologies used with no of websites using them. 
 
 # Contributing
 If you have requests for features you would like to see in this tool, please file an Feature Request or join as a contributor! Please refer to our contribution [guidelines](docs/CONTRIBUTING.md) and [code of conduct](docs/code-of-conduct.md).
