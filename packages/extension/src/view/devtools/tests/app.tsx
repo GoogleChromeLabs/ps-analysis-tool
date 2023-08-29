@@ -46,6 +46,7 @@ describe('App', () => {
       returningToSingleTab: false,
       changeListeningToThisTab: noop,
       setSelectedFrame: noop,
+      allowedNumberOfTabs: 'single-tab',
     });
     globalThis.chrome = {
       ...SinonChrome,

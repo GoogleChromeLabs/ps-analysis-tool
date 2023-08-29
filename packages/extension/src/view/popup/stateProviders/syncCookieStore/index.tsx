@@ -146,6 +146,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     const storageAllowedNumberOfTabs = (
       await chrome.storage.sync.get('allowedNumberOfTabs')
     )['allowedNumberOfTabs'];
+
     if (storageAllowedNumberOfTabs) {
       setAllowedNumberOfTabs(storageAllowedNumberOfTabs);
     }

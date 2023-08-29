@@ -132,6 +132,14 @@ export const Provider = ({ children }: PropsWithChildren) => {
     await getAllFramesForCurrentTab(_tabId);
     setTabId(_tabId);
 
+    const storageAllowedNumberOfTabs = (
+      await chrome.storage.sync.get('allowedNumberOfTabs')
+    )['allowedNumberOfTabs'];
+
+    if (storageAllowedNumberOfTabs) {
+      setAllowedNumberOfTabs(storageAllowedNumberOfTabs);
+    }
+
     if (_tabId) {
       const getTabBeingListenedTo = await chrome.storage.local.get();
       const availableTabs = await chrome.tabs.query({});
