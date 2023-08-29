@@ -39,11 +39,13 @@ const normalizeCookie = (
   let cookieDetail: { [key: string]: any } =
     cookieName in openCookiesData ? openCookiesData[cookieName] : null;
 
+  console.log(cookieDetail);
+
   if (!cookieDetail) {
     cookieDetail = {
-      Platform: 'Unknown Platform',
-      Category: 'Unknown Category',
-      Description: '-',
+      platform: 'Unknown Platform',
+      category: 'Unknown Category',
+      description: '-',
     };
   }
 
@@ -56,9 +58,9 @@ const normalizeCookie = (
     httpOnly: theCookie.httpOnly,
     secure: theCookie.secure,
     sameSite: theCookie.sameSite || 'Lax',
-    Platform: cookieDetail.Platform,
-    Category: cookieDetail.Category,
-    Description: cookieDetail.Description,
+    Platform: cookieDetail.platform,
+    Category: cookieDetail.category,
+    Description: cookieDetail.description,
     isFirstParty: isFirstParty(theCookie.domain, tabUrl) ? 'Yes' : 'No',
   };
 };
