@@ -108,7 +108,7 @@ const App: React.FC = () => {
     <div className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black">
       <div className="w-full h-full flex flex-col items-center justify-center">
         {!returningToSingleTab && (
-          <p className="dark:text-bright-gray text-chart-label text-base">
+          <p className="dark:text-bright-gray text-chart-label text-base mb-5">
             This tool works best with single tab.
           </p>
         )}

@@ -64,7 +64,7 @@ const App: React.FC = () => {
     return (
       <div className="w-96 min-h-[20rem] flex flex-col items-center justify-center">
         {!returningToSingleTab && (
-          <p className="dark:text-bright-gray text-chart-label text-base">
+          <p className="dark:text-bright-gray text-chart-label text-base mb-5">
             This tool works best with single tab.
           </p>
         )}
