@@ -32,6 +32,7 @@ import {
   Sidebar,
 } from './components';
 import { useCookieStore } from './stateProviders/syncCookieStore';
+import { Button } from '../design-system/components';
 
 const TABS = [
   {
@@ -111,12 +112,7 @@ const App: React.FC = () => {
             This tool works best with single tab.
           </p>
         )}
-        <button
-          onClick={changeListeningToThisTab}
-          className="py-1 px-2 text-white dark:text-comet-black dark:bg-light-blue bg-dark-blue rounded"
-        >
-          Analyze this tab
-        </button>
+        <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
       </div>
     </div>
   );

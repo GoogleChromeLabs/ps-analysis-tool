@@ -25,7 +25,7 @@ import React from 'react';
 import './app.css';
 import { Legend } from './components';
 import { useCookieStore } from './stateProviders/syncCookieStore';
-import { CirclePieChart } from '../design-system/components';
+import { Button, CirclePieChart } from '../design-system/components';
 import { prepareCookieStatsComponents } from '../../utils/prepareCookieStatsComponents';
 import ProgressBar from '../design-system/components/progressBar';
 import { ALLOWED_NUMBER_OF_TABS } from '../../utils/constants';
@@ -68,12 +68,7 @@ const App: React.FC = () => {
             This tool works best with single tab.
           </p>
         )}
-        <button
-          onClick={changeListeningToThisTab}
-          className="py-1 px-2 mt-1 text-white bg-dark-blue rounded"
-        >
-          Analyze this tab
-        </button>
+        <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
       </div>
     );
   }
