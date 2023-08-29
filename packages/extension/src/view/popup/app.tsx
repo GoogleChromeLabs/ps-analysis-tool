@@ -64,13 +64,13 @@ const App: React.FC = () => {
     return (
       <div className="w-96 min-h-[20rem] flex flex-col items-center justify-center">
         {!returningToSingleTab && (
-          <p className="dark:text-bright-gray text-chart-label">
+          <p className="dark:text-bright-gray text-chart-label text-base">
             This tool works best with single tab.
           </p>
         )}
         <button
           onClick={changeListeningToThisTab}
-          className="p-0.5 mt-1 ml-0.5 text-white bg-dark-blue rounded"
+          className="py-1 px-2 mt-1 text-white bg-dark-blue rounded"
         >
           Analyze this tab
         </button>
