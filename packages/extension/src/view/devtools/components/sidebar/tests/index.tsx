@@ -312,7 +312,7 @@ describe('Sidebar', () => {
     expect(accordionOpener).toHaveClass('-rotate-90');
   });
 
-  it('Left Arrow should close accordion', () => {
+  it('Left Arrow should close accordion', async () => {
     render(
       <Sidebar
         tabsNames={tabNames}
@@ -324,15 +324,17 @@ describe('Sidebar', () => {
     userEvent.tab();
     // Simulate right arrow key down
     userEvent.keyboard('{ArrowRight}');
-    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+    expect(await screen.findByTestId('accordion-opener')).not.toHaveClass(
       '-rotate-90'
     );
     // Simulate left arrow key down
     userEvent.keyboard('{ArrowLeft}');
-    expect(screen.getByTestId('accordion-opener')).toHaveClass('-rotate-90');
+    expect(await screen.findByTestId('accordion-opener')).toHaveClass(
+      '-rotate-90'
+    );
   });
 
-  it('Left Arrow should unselect selected frame and select the Cookies menu', () => {
+  it('Left Arrow should unselect selected frame and select the Cookies menu', async () => {
     const sidebarRender = render(
       <Sidebar
         tabsNames={tabNames}
@@ -344,7 +346,7 @@ describe('Sidebar', () => {
     userEvent.tab();
     //Simulate right arrow key down
     userEvent.keyboard('{ArrowRight}');
-    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+    expect(await screen.findByTestId('accordion-opener')).not.toHaveClass(
       '-rotate-90'
     );
     mockUseCookieStore.mockReturnValueOnce({
@@ -390,7 +392,7 @@ describe('Sidebar', () => {
     );
   });
 
-  it('Down Arrow should select next frame', () => {
+  it('Down Arrow should select next frame', async () => {
     const sidebarRender = render(
       <Sidebar
         tabsNames={tabNames}
@@ -402,7 +404,7 @@ describe('Sidebar', () => {
     userEvent.tab();
     //Simulate right arrow key keydown to open accordion
     userEvent.keyboard('{ArrowRight}');
-    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+    expect(await screen.findByTestId('accordion-opener')).not.toHaveClass(
       '-rotate-90'
     );
     mockUseCookieStore.mockReturnValueOnce({
@@ -448,7 +450,7 @@ describe('Sidebar', () => {
     );
   });
 
-  it('Up Arrow should select previous frame', () => {
+  it('Up Arrow should select previous frame', async () => {
     const sidebarRender = render(
       <Sidebar
         tabsNames={tabNames}
@@ -460,7 +462,7 @@ describe('Sidebar', () => {
     userEvent.tab();
     //Simulate right arrow key keydown to simulate accordion opening.
     userEvent.keyboard('{ArrowRight}');
-    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+    expect(await screen.findByTestId('accordion-opener')).not.toHaveClass(
       '-rotate-90'
     );
     mockUseCookieStore.mockReturnValueOnce({
@@ -528,7 +530,7 @@ describe('Sidebar', () => {
     );
   });
 
-  it('Up Arrow should unselect selected frame and select the Cookies menu', () => {
+  it('Up Arrow should unselect selected frame and select the Cookies menu', async () => {
     const sidebarRender = render(
       <Sidebar
         tabsNames={tabNames}
@@ -540,7 +542,7 @@ describe('Sidebar', () => {
     userEvent.tab();
     //Simulate right arrow key keydown to simulate accordion opening.
     userEvent.keyboard('{ArrowRight}');
-    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+    expect(await screen.findByTestId('accordion-opener')).not.toHaveClass(
       '-rotate-90'
     );
     mockUseCookieStore.mockReturnValueOnce({
@@ -586,7 +588,7 @@ describe('Sidebar', () => {
     );
   });
 
-  it('Down Arrow on last frame should select the next main menu tab.', () => {
+  it('Down Arrow on last frame should select the next main menu tab.', async () => {
     const sidebarRender = render(
       <Sidebar
         tabsNames={tabNames}
@@ -597,7 +599,7 @@ describe('Sidebar', () => {
     // Focus on cookie header menu and simulate right arrow to open accordion
     userEvent.tab();
     userEvent.keyboard('{ArrowRight}');
-    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+    expect(await screen.findByTestId('accordion-opener')).not.toHaveClass(
       '-rotate-90'
     );
 
@@ -642,7 +644,7 @@ describe('Sidebar', () => {
     expect(screen.getByTestId('Topics')).toHaveClass('bg-royal-blue');
   });
 
-  it('Up Arrow on Topics menu should select last frame in accordion.', () => {
+  it('Up Arrow on Topics menu should select last frame in accordion.', async () => {
     const sidebarRender = render(
       <Sidebar
         tabsNames={tabNames}
@@ -653,7 +655,7 @@ describe('Sidebar', () => {
     // Focus on cookie header menu and simulate right arrow to open accordion
     userEvent.tab();
     userEvent.keyboard('{ArrowRight}');
-    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+    expect(await screen.findByTestId('accordion-opener')).not.toHaveClass(
       '-rotate-90'
     );
     // Click on Topics tab
@@ -696,7 +698,7 @@ describe('Sidebar', () => {
     expect(screen.getByTestId('Topics')).not.toHaveClass('bg-royal-blue');
   });
 
-  it('Up Arrow on Attribution menu should select Topics Menu.', () => {
+  it('Up Arrow on Attribution menu should select Topics Menu.', async () => {
     const sidebarRender = render(
       <Sidebar
         tabsNames={tabNames}
@@ -707,7 +709,7 @@ describe('Sidebar', () => {
     // Focus on cookie header menu and simulate right arrow to open accordion
     userEvent.tab();
     userEvent.keyboard('{ArrowRight}');
-    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+    expect(await screen.findByTestId('accordion-opener')).not.toHaveClass(
       '-rotate-90'
     );
     // Click on Attribution tab
@@ -727,7 +729,9 @@ describe('Sidebar', () => {
         setIndex={() => undefined}
       />
     );
-    expect(screen.getByTestId('Attribution')).toHaveClass('bg-royal-blue');
+    expect(await screen.findByTestId('Attribution')).toHaveClass(
+      'bg-royal-blue'
+    );
     // Focus on cookie header menu and simulate right arrow to open accordion
     userEvent.keyboard('{ArrowUp}');
     mockUseCookieStore.mockReturnValueOnce({
@@ -748,7 +752,7 @@ describe('Sidebar', () => {
     expect(screen.getByTestId('Attribution')).not.toHaveClass('bg-royal-blue');
   });
 
-  it('Down Arrow on cookies menu with open accordion should select first frame.', () => {
+  it('Down Arrow on cookies menu with open accordion should select first frame.', async () => {
     mockUseCookieStore.mockReturnValueOnce({
       cookies: mockResponse.tabCookies,
       tabUrl: mockResponse.tabUrl,
@@ -766,7 +770,7 @@ describe('Sidebar', () => {
     // Focus on cookie header menu and simulate right arrow to open accordion
     userEvent.tab();
     userEvent.keyboard('{ArrowRight}');
-    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+    expect(await screen.findByTestId('accordion-opener')).not.toHaveClass(
       '-rotate-90'
     );
     //Simulate arrow down key to select first frame.
@@ -791,7 +795,7 @@ describe('Sidebar', () => {
     );
   });
 
-  it('Down Arrow on Topics menu should select Attribution Menu.', () => {
+  it('Down Arrow on Topics menu should select Attribution Menu.', async () => {
     const sidebarRender = render(
       <Sidebar
         tabsNames={tabNames}
@@ -802,7 +806,7 @@ describe('Sidebar', () => {
     // Focus on cookie header menu and simulate right arrow to open accordion
     userEvent.tab();
     userEvent.keyboard('{ArrowRight}');
-    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+    expect(await screen.findByTestId('accordion-opener')).not.toHaveClass(
       '-rotate-90'
     );
     // Click on Topics tab

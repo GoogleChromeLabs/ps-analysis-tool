@@ -3,14 +3,17 @@
 	"version": "0.1.0",
 	"description": "Cookie Analysis Tool and CLI for analysis and understanding of cookie usage on web pages.",
 	"scripts": {
-		"test": "jest --config=tests/jest.config.js",
+		"cli:dev": "npm run dev --workspace=@cookie-analysis-tool/cli",
+		"cli:build": "npm run build --workspace=@cookie-analysis-tool/cli",
+		"cli":"node dist/cli/index.js",
+		"test": "jest --config=tests/jest.config.cjs",
 		"test:coverage": "npm run test -- --collectCoverage && open coverage/lcov-report/index.html",
 		"dev": "webpack --config webpack.config.cjs --watch",
 		"build": "cross-env NODE_ENV=production webpack --config webpack.config.cjs",
 		"serve": "webpack serve",
 		"lint": "npm-run-all --parallel lint:*",
 		"lint:js": "eslint .",
-		"lint:types": "tsc --project ./packages/**/tsconfig.json",
+		"lint:types": "tsc ",
 		"lint:js:fix": "eslint --fix .",
 		"prepare": "husky install",
 		"cookie-db:update": "node scripts/update-cookie-db.cjs",
@@ -106,7 +109,6 @@
 		"*.(xml|xml.dist)": "prettier --write",
 		"*.yml": "prettier --write"
 	},
-	"type": "module",
 	"workspaces": [
 		"packages/*"
 	]

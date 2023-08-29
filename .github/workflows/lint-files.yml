@@ -62,6 +62,8 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: true
 
       - name: JS Lint
         run: npm run lint:js
