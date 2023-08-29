@@ -17,21 +17,27 @@
  * External dependencies.
  */
 import React from 'react';
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 
-interface ButtonProps {
-  text: string;
-  onClick: () => void;
-}
-const Button = ({ onClick, text }: ButtonProps) => {
-  return (
-    <button
-      data-test-id="blue-color-button"
-      onClick={onClick}
-      className="py-1 px-2 text-white dark:text-comet-black dark:bg-light-blue bg-dark-blue rounded"
-    >
-      {text}
-    </button>
-  );
-};
+/**
+ * Internal dependencies.
+ */
+import MessageBox from '..';
 
-export default Button;
+describe('MessageBox', () => {
+  it('renders the headerText and bodyText', () => {
+    render(
+      <MessageBox
+        headerText={'No cookies found on this page'}
+        bodyText="Please try refreshing this page"
+      />
+    );
+    expect(
+      screen.getByText('No cookies found on this page')
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('Please try refreshing this page')
+    ).toBeInTheDocument();
+  });
+});
