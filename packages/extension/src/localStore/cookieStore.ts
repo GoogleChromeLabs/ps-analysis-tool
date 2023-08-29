@@ -65,9 +65,10 @@ const CookieStore = {
    */
   async deleteCookie(cookieName: string) {
     const storage = await chrome.storage.local.get();
-
     Object.values(storage).forEach((tabData) => {
-      delete tabData.cookies[cookieName];
+      if (tabData.cookies && tabData.cookies[cookieName]) {
+        delete tabData.cookies[cookieName];
+      }
     });
 
     await chrome.storage.local.set(storage);
@@ -96,6 +97,7 @@ const CookieStore = {
         cookies: {},
         focusedAt: Date.now(),
       },
+      tabToRead: tabId,
     });
   },
 

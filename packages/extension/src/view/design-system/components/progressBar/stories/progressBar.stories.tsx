@@ -13,11 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as CirclePieChart } from './circlePieChart';
-export { default as Circle } from './circle';
-export { default as MatrixComponent } from './matrix/matrixComponent';
-export { default as MatrixComponentHorizontal } from './matrix/matrixComponent/matrixComponentHorizontal';
-export { default as Matrix } from './matrix';
-export { default as Button } from './Button';
+/**
+ * External dependencies.
+ */
+import type { Meta, StoryObj } from '@storybook/react';
 
-export type { MatrixComponentProps } from './matrix/matrixComponent';
+/**
+ * Internal dependencies.
+ */
+import ProgressBar from '..';
+
+const meta: Meta<typeof ProgressBar> = {
+  title: 'Extension/DesignSystem/ProgressBar',
+  component: ProgressBar,
+  tags: ['autodocs'],
+};
+
+export default meta;
+
+export const Primary: StoryObj<typeof meta> = {
+  args: {
+    additionalStyles: 'w-96 min-h-[20rem]',
+  },
+};

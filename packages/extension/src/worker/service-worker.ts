@@ -26,27 +26,52 @@ import { type CookieData, CookieStore } from '../localStore';
 import parseResponseCookieHeader from './parseResponseCookieHeader';
 import parseRequestCookieHeader from './parseRequestCookieHeader';
 import { getTab } from '../utils/getTab';
+import { getCurrentTabId } from '../utils/getCurrentTabId';
 import {
   type CookieDatabase,
   fetchDictionary,
 } from '../utils/fetchCookieDictionary';
+import { ALLOWED_NUMBER_OF_TABS } from '../utils/constants';
 
 let cookieDB: CookieDatabase | null = null;
 
 // Global promise queue.
 const PROMISE_QUEUE = new PQueue({ concurrency: 1 });
-
 /**
  * Fires when the browser receives a response from a web server.
  * @see https://developer.chrome.com/docs/extensions/reference/webRequest/
  */
 chrome.webRequest.onResponseStarted.addListener(
   async (details: chrome.webRequest.WebResponseCacheDetails) => {
+    if (ALLOWED_NUMBER_OF_TABS > 0) {
+      const currentTabId = await getCurrentTabId();
+
+      if (!currentTabId) {
+        return;
+      }
+
+      const tabsBeingListenedTo = await chrome.storage.local.get();
+
+      if (
+        tabsBeingListenedTo &&
+        currentTabId !== tabsBeingListenedTo?.tabToRead
+      ) {
+        return;
+      }
+    }
+
     await PROMISE_QUEUE.add(async () => {
       const { tabId, url, responseHeaders, frameId } = details;
-
       const tab = await getTab(tabId);
-
+      const tabsBeingListenedTo = await chrome.storage.local.get();
+      if (ALLOWED_NUMBER_OF_TABS > 0) {
+        if (
+          tabsBeingListenedTo &&
+          tabId.toString() !== tabsBeingListenedTo?.tabToRead
+        ) {
+          return;
+        }
+      }
       if (!tab || !responseHeaders) {
         return;
       }
@@ -77,10 +102,6 @@ chrome.webRequest.onResponseStarted.addListener(
         Promise.resolve([])
       );
 
-      if (!cookies.length) {
-        return;
-      }
-
       // Adds the cookies from the request headers to the cookies object.
       await CookieStore.update(tabId.toString(), cookies);
     });
@@ -92,13 +113,36 @@ chrome.webRequest.onResponseStarted.addListener(
 chrome.webRequest.onBeforeSendHeaders.addListener(
   ({ url, requestHeaders, tabId, frameId }) => {
     (async () => {
+      if (ALLOWED_NUMBER_OF_TABS > 0) {
+        const currentTabId = await getCurrentTabId();
+
+        if (!currentTabId) {
+          return;
+        }
+
+        const tabsBeingListenedTo = await chrome.storage.local.get();
+
+        if (
+          tabsBeingListenedTo &&
+          currentTabId !== tabsBeingListenedTo?.tabToRead
+        ) {
+          return;
+        }
+      }
+
       await PROMISE_QUEUE.add(async () => {
         const tab = await getTab(tabId);
 
         if (!tab || !requestHeaders) {
           return;
         }
-
+        const tabsBeingListenedTo = await chrome.storage.local.get();
+        if (
+          tabsBeingListenedTo &&
+          tabId.toString() !== tabsBeingListenedTo?.tabToRead
+        ) {
+          return;
+        }
         if (!cookieDB) {
           cookieDB = await fetchDictionary();
         }
@@ -126,10 +170,6 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
           Promise.resolve([])
         );
 
-        if (!cookies.length) {
-          return;
-        }
-
         await CookieStore.update(tabId.toString(), cookies);
       });
     })();
@@ -141,6 +181,15 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 chrome.tabs.onCreated.addListener(async (tab) => {
   await PROMISE_QUEUE.add(async () => {
     if (tab.id) {
+      const previousTabData = await chrome.storage.local.get();
+      const doesTabExist = await getTab(previousTabData?.tabToRead);
+      if (
+        Object.keys(previousTabData).length - 1 >= ALLOWED_NUMBER_OF_TABS &&
+        doesTabExist
+      ) {
+        return;
+      }
+      await chrome.storage.local.set({ tabToRead: tab.id.toString() });
       await CookieStore.addTabData(tab.id.toString());
     }
   });

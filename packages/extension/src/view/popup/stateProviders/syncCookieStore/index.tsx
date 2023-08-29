@@ -29,17 +29,29 @@ import { useDebouncedCallback } from 'use-debounce';
 /**
  * Internal dependencies.
  */
-import { getCurrentTab } from '../../../../utils/getCurrentTabId';
+import {
+  getCurrentTab,
+  getCurrentTabId,
+} from '../../../../utils/getCurrentTabId';
 import type { CookiesCount } from '../../types';
 import prepareCookiesCount from '../../../../utils/prepareCookiesCount';
+import { CookieStore } from '../../../../localStore';
+import { noop } from '../../../../utils/noop';
+import { ALLOWED_NUMBER_OF_TABS } from '../../../../utils/constants';
 
 export interface CookieStoreContext {
   state: {
     tabCookieStats: CookiesCount | null;
+    isCurrentTabBeingListenedTo: boolean;
     loading: boolean;
+    returningToSingleTab: boolean;
     showLoadingText: boolean;
+    tabId: number | null;
+    onChromeUrl: boolean;
   };
-  actions: object;
+  actions: {
+    changeListeningToThisTab: () => void;
+  };
 }
 
 const initialState: CookieStoreContext = {
@@ -61,10 +73,16 @@ const initialState: CookieStoreContext = {
         uncategorized: 0,
       },
     },
+    isCurrentTabBeingListenedTo: false,
     loading: true,
     showLoadingText: false,
+    returningToSingleTab: false,
+    onChromeUrl: false,
+    tabId: null,
   },
-  actions: {},
+  actions: {
+    changeListeningToThisTab: noop,
+  },
 };
 
 export const Context = createContext<CookieStoreContext>(initialState);
@@ -77,10 +95,16 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [tabCookieStats, setTabCookieStats] =
     useState<CookieStoreContext['state']['tabCookieStats']>(null);
 
+  const [returningToSingleTab, setReturningToSingleTab] =
+    useState<CookieStoreContext['state']['returningToSingleTab']>(false);
+
   const [loading, setLoading] = useState<boolean>(true);
 
-  const [showLoadingText, setShowLoadingText] = useState<boolean>(false);
+  const [isCurrentTabBeingListenedTo, setIsCurrentTabBeingListenedTo] =
+    useState<boolean>(false);
 
+  const [showLoadingText, setShowLoadingText] = useState<boolean>(false);
+  const [onChromeUrl, setOnChromeUrl] = useState<boolean>(false);
   const loadingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const loadingTextTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -112,14 +136,40 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const intitialSync = useCallback(async () => {
     const [tab] = await getCurrentTab();
+
     if (!tab.id || !tab.url) {
       return;
+    }
+    if (tab.url.startsWith('chrome:')) {
+      setOnChromeUrl(true);
+    } else {
+      setOnChromeUrl(false);
     }
     const _tabId = tab.id;
     const _tabUrl = tab.url;
 
     setTabId(tab.id);
     setTabUrl(tab.url);
+    const getTabBeingListenedTo = await chrome.storage.local.get();
+    const availableTabs = await chrome.tabs.query({});
+    if (
+      availableTabs.length === ALLOWED_NUMBER_OF_TABS &&
+      availableTabs.filter(
+        (processingTab) =>
+          processingTab.id?.toString() === getTabBeingListenedTo?.tabToRead
+      )
+    ) {
+      setReturningToSingleTab(true);
+    }
+    if (
+      getTabBeingListenedTo &&
+      tab?.id.toString() !== getTabBeingListenedTo?.tabToRead
+    ) {
+      setIsCurrentTabBeingListenedTo(false);
+      return;
+    } else {
+      setIsCurrentTabBeingListenedTo(true);
+    }
 
     const tabData = (await chrome.storage.local.get([_tabId.toString()]))[
       _tabId.toString()
@@ -131,7 +181,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   }, [setDebouncedStats]);
 
   const storeChangeListener = useCallback(
-    (changes: { [key: string]: chrome.storage.StorageChange }) => {
+    async (changes: { [key: string]: chrome.storage.StorageChange }) => {
       if (
         tabId &&
         tabUrl &&
@@ -145,9 +195,61 @@ export const Provider = ({ children }: PropsWithChildren) => {
           )
         );
       }
+      if (tabUrl) {
+        if (tabUrl.startsWith('chrome:')) {
+          setOnChromeUrl(true);
+        } else {
+          setOnChromeUrl(false);
+        }
+      }
+      if (tabId) {
+        const getTabBeingListenedTo = await chrome.storage.local.get();
+        if (
+          getTabBeingListenedTo &&
+          tabId.toString() !== getTabBeingListenedTo?.tabToRead
+        ) {
+          setIsCurrentTabBeingListenedTo(false);
+          return;
+        } else {
+          setIsCurrentTabBeingListenedTo(true);
+        }
+      }
     },
     [setDebouncedStats, tabId, tabUrl]
   );
+
+  const changeListeningToThisTab = useCallback(async () => {
+    const changedTabId = await getCurrentTabId();
+    if (!changedTabId) {
+      return;
+    }
+    await CookieStore.addTabData(changedTabId?.toString());
+    const storedTabData = Object.keys(await chrome.storage.local.get());
+    // eslint-disable-next-line guard-for-in
+    await Promise.all(
+      storedTabData.map(async (tabIdToBeDeleted) => {
+        if (
+          tabIdToBeDeleted !== changedTabId &&
+          tabIdToBeDeleted !== 'tabToRead'
+        ) {
+          await CookieStore.removeTabData(tabIdToBeDeleted);
+          await chrome.action.setBadgeText({
+            tabId: parseInt(tabIdToBeDeleted),
+            text: '',
+          });
+          const checkIfTabDataDeleted = await chrome.storage.local.get();
+          if (Object.keys(checkIfTabDataDeleted).includes(tabIdToBeDeleted)) {
+            return Promise.reject(new Error('Couldnt delete object'));
+          } else {
+            return Promise.resolve();
+          }
+        }
+        return Promise.resolve();
+      })
+    );
+    await chrome.tabs.reload(Number(changedTabId));
+    setIsCurrentTabBeingListenedTo(true);
+  }, []);
 
   const tabUpdateListener = useCallback(
     (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
@@ -171,8 +273,18 @@ export const Provider = ({ children }: PropsWithChildren) => {
   return (
     <Context.Provider
       value={{
-        state: { tabCookieStats, loading, showLoadingText },
-        actions: {},
+        state: {
+          tabCookieStats,
+          isCurrentTabBeingListenedTo,
+          loading,
+          showLoadingText,
+          tabId,
+          returningToSingleTab,
+          onChromeUrl,
+        },
+        actions: {
+          changeListeningToThisTab,
+        },
       }}
     >
       {children}

@@ -25,34 +25,57 @@ import React from 'react';
 import './app.css';
 import { Legend } from './components';
 import { useCookieStore } from './stateProviders/syncCookieStore';
-import { CirclePieChart } from '../design-system/components';
+import { Button, CirclePieChart } from '../design-system/components';
 import { prepareCookieStatsComponents } from '../../utils/prepareCookieStatsComponents';
+import ProgressBar from '../design-system/components/progressBar';
+import { ALLOWED_NUMBER_OF_TABS } from '../../utils/constants';
 
 const App: React.FC = () => {
-  const { cookieStats, loading, showLoadingText } = useCookieStore(
-    ({ state }) => ({
-      cookieStats: state.tabCookieStats,
-      loading: state.loading,
-      showLoadingText: state.showLoadingText,
-    })
-  );
-
-  if (loading) {
+  const {
+    cookieStats,
+    loading,
+    isCurrentTabBeingListenedTo,
+    returningToSingleTab,
+    changeListeningToThisTab,
+    onChromeUrl,
+  } = useCookieStore(({ state, actions }) => ({
+    cookieStats: state.tabCookieStats,
+    isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
+    loading: state.loading,
+    returningToSingleTab: state.returningToSingleTab,
+    changeListeningToThisTab: actions.changeListeningToThisTab,
+    onChromeUrl: state.onChromeUrl,
+  }));
+  if (onChromeUrl) {
     return (
-      <div className="w-96 min-h-[20rem] flex items-center justify-center flex-col gap-2 relative">
-        <div className="w-10 h-10 rounded-full animate-spin border-t-transparent border-solid border-blue-700 border-4" />
-        {showLoadingText && (
-          <p className="absolute bottom-10 text-blue-700 text-lg ml-2">
-            Still listening to cookies, please wait...
+      <div className="w-96 min-h-[318px] h-fit p-5 flex justify-center items-center flex-col">
+        <p className="font-bold text-lg">No url provided</p>
+        <p className="text-chart-label text-xs">
+          Cannot process cookies on empty tab.
+        </p>
+      </div>
+    );
+  }
+  if (loading && isCurrentTabBeingListenedTo) {
+    return <ProgressBar additionalStyles="w-96 min-h-[20rem]" />;
+  }
+
+  if (ALLOWED_NUMBER_OF_TABS > 0 && !isCurrentTabBeingListenedTo) {
+    return (
+      <div className="w-96 min-h-[20rem] flex flex-col items-center justify-center">
+        {!returningToSingleTab && (
+          <p className="dark:text-bright-gray text-chart-label text-base mb-5">
+            This tool works best with single tab.
           </p>
         )}
+        <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
       </div>
     );
   }
 
   if (
     !cookieStats ||
-    (cookieStats.firstParty.total === 0 && cookieStats.thirdParty.total === 0)
+    (cookieStats?.firstParty.total === 0 && cookieStats?.thirdParty.total === 0)
   ) {
     return (
       <div className="w-96 min-h-[318px] h-fit p-5 flex justify-center items-center flex-col">
@@ -63,7 +86,6 @@ const App: React.FC = () => {
       </div>
     );
   }
-
   const statsComponents = prepareCookieStatsComponents(cookieStats);
 
   return (

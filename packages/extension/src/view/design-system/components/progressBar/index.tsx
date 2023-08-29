@@ -13,11 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as CirclePieChart } from './circlePieChart';
-export { default as Circle } from './circle';
-export { default as MatrixComponent } from './matrix/matrixComponent';
-export { default as MatrixComponentHorizontal } from './matrix/matrixComponent/matrixComponentHorizontal';
-export { default as Matrix } from './matrix';
-export { default as Button } from './Button';
+/**
+ * External dependencies.
+ */
+import React from 'react';
 
-export type { MatrixComponentProps } from './matrix/matrixComponent';
+interface ProgressBarProps {
+  additionalStyles?: string;
+}
+const ProgressBar = ({ additionalStyles = '' }: ProgressBarProps) => {
+  return (
+    <div
+      className={`${additionalStyles} flex justify-center flex-col gap-2 relative overflow-hidden`}
+    >
+      <div className="mb-6 h-1 w-full bg-gainsboro dark:bg-neutral-600 overflow-hidden">
+        <div className="h-1 w-1/2 bg-royal-blue absolute animate-horizontal-spinner"></div>
+      </div>
+    </div>
+  );
+};
+
+export default ProgressBar;

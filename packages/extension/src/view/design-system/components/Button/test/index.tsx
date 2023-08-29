@@ -13,11 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as CirclePieChart } from './circlePieChart';
-export { default as Circle } from './circle';
-export { default as MatrixComponent } from './matrix/matrixComponent';
-export { default as MatrixComponentHorizontal } from './matrix/matrixComponent/matrixComponentHorizontal';
-export { default as Matrix } from './matrix';
-export { default as Button } from './Button';
+/**
+ * External dependencies.
+ */
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 
-export type { MatrixComponentProps } from './matrix/matrixComponent';
+/**
+ * Internal dependencies.
+ */
+import Button from '..';
+
+describe('Button', () => {
+  it('renders the text inside a button', () => {
+    render(<Button onClick={() => undefined} text="Analyze this tab" />);
+    expect(screen.getByText('Analyze this tab')).toBeInTheDocument();
+  });
+});
