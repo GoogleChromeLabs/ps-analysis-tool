@@ -26,6 +26,7 @@ import CookiesMatrix from './cookiesMatrix';
 import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import prepareCookiesCount from '../../../../../../utils/prepareCookiesCount';
 import { prepareCookieStatsComponents } from '../../../../../../utils/prepareCookieStatsComponents';
+import MessageBox from '../../../../../design-system/components/messageBox';
 
 const CookiesLanding = () => {
   const { tabCookies, tabFrames, tabUrl } = useCookieStore(({ state }) => ({
@@ -43,7 +44,15 @@ const CookiesLanding = () => {
         cookieStats={cookieStats}
         cookiesStatsComponents={cookiesStatsComponents}
       />
-      <div className="lg:max-w-[729px] mx-auto flex justify-center mt-10 pb-28 px-4">
+      <div className="lg:max-w-[729px] mx-auto flex justify-center flex-col mt-10 pb-28 px-4">
+        {!cookieStats ||
+          (cookieStats?.firstParty.total === 0 &&
+            cookieStats?.thirdParty.total === 0 && (
+              <MessageBox
+                headerText="No cookies found on this page"
+                bodyText="Please try reloading the page"
+              />
+            ))}
         <CookiesMatrix
           tabCookies={tabCookies}
           cookiesStatsComponents={cookiesStatsComponents}

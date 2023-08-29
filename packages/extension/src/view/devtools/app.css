@@ -12,6 +12,10 @@
   body {
     @apply font-sans;
   }
+  :root{
+    --color-message-box-dark: 33deg 14% 18%;
+    --color-message-box-light: 30deg 100% 75%;
+  }
 }
 @tailwind components;
 @tailwind utilities;
