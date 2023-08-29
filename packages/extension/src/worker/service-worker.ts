@@ -45,10 +45,13 @@ chrome.webRequest.onResponseStarted.addListener(
   async (details: chrome.webRequest.WebResponseCacheDetails) => {
     if (ALLOWED_NUMBER_OF_TABS > 0) {
       const currentTabId = await getCurrentTabId();
-      const tabsBeingListenedTo = await chrome.storage.local.get();
+
       if (!currentTabId) {
         return;
       }
+
+      const tabsBeingListenedTo = await chrome.storage.local.get();
+
       if (
         tabsBeingListenedTo &&
         currentTabId !== tabsBeingListenedTo?.tabToRead
@@ -112,19 +115,21 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
     (async () => {
       if (ALLOWED_NUMBER_OF_TABS > 0) {
         const currentTabId = await getCurrentTabId();
-        const tabsBeingListenedTo = await chrome.storage.local.get();
+
         if (!currentTabId) {
           return;
         }
-        if (ALLOWED_NUMBER_OF_TABS > 0) {
-          if (
-            tabsBeingListenedTo &&
-            tabId.toString() !== tabsBeingListenedTo?.tabToRead
-          ) {
-            return;
-          }
+
+        const tabsBeingListenedTo = await chrome.storage.local.get();
+
+        if (
+          tabsBeingListenedTo &&
+          currentTabId !== tabsBeingListenedTo?.tabToRead
+        ) {
+          return;
         }
       }
+
       await PROMISE_QUEUE.add(async () => {
         const tab = await getTab(tabId);
 
