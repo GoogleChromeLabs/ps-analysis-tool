@@ -144,6 +144,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       ) {
         setReturningToSingleTab(true);
       }
+
       if (
         getTabBeingListenedTo &&
         _tabId?.toString() !== getTabBeingListenedTo?.tabToRead &&
@@ -219,6 +220,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         await getAllFramesForCurrentTab(tabId);
         setTabCookies(_cookies);
       }
+
       if (tabId && allowedNumberOfTabs !== 'no-restriction') {
         const getTabBeingListenedTo = await chrome.storage.local.get();
         const availableTabs = await chrome.tabs.query({});
@@ -231,6 +233,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         ) {
           setReturningToSingleTab(true);
         }
+
         if (
           getTabBeingListenedTo &&
           tabId?.toString() !== getTabBeingListenedTo?.tabToRead &&
@@ -272,11 +275,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
       }
       return Promise.resolve();
     });
+
     chrome.tabs.query({ active: true }, (tab) => {
       if (tab[0]?.url) {
         setTabUrl(tab[0]?.url);
       }
     });
+
     await chrome.tabs.reload(Number(changedTabId));
     setIsCurrentTabBeingListenedTo(true);
   }, []);
