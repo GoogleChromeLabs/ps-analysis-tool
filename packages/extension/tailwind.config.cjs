@@ -85,6 +85,7 @@ module.exports = {
       'comet-black': '#202124',
       'warning-red': '#C33300',
       'warning-orange': '#FA3',
+      'jet-black': '#202142',
     },
     backgroundColor: {
       ...colors,
