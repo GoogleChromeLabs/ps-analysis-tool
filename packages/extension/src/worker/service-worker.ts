@@ -43,7 +43,10 @@ const PROMISE_QUEUE = new PQueue({ concurrency: 1 });
  */
 chrome.webRequest.onResponseStarted.addListener(
   async (details: chrome.webRequest.WebResponseCacheDetails) => {
-    if (ALLOWED_NUMBER_OF_TABS > 0) {
+    const allowedNumberOfTabs = (
+      await chrome.storage.sync.get('allowedNumberOfTabs')
+    )['allowedNumberOfTabs'];
+    if (allowedNumberOfTabs && allowedNumberOfTabs !== 'no-restriction') {
       const currentTabId = await getCurrentTabId();
 
       if (!currentTabId) {
@@ -63,13 +66,15 @@ chrome.webRequest.onResponseStarted.addListener(
     await PROMISE_QUEUE.add(async () => {
       const { tabId, url, responseHeaders, frameId } = details;
       const tab = await getTab(tabId);
-      const tabsBeingListenedTo = await chrome.storage.local.get();
-      if (ALLOWED_NUMBER_OF_TABS > 0) {
-        if (
-          tabsBeingListenedTo &&
-          tabId.toString() !== tabsBeingListenedTo?.tabToRead
-        ) {
-          return;
+      if (allowedNumberOfTabs && allowedNumberOfTabs !== 'no-restriction') {
+        const tabsBeingListenedTo = await chrome.storage.local.get();
+        if (ALLOWED_NUMBER_OF_TABS > 0) {
+          if (
+            tabsBeingListenedTo &&
+            tabId.toString() !== tabsBeingListenedTo?.tabToRead
+          ) {
+            return;
+          }
         }
       }
       if (!tab || !responseHeaders) {
@@ -113,7 +118,10 @@ chrome.webRequest.onResponseStarted.addListener(
 chrome.webRequest.onBeforeSendHeaders.addListener(
   ({ url, requestHeaders, tabId, frameId }) => {
     (async () => {
-      if (ALLOWED_NUMBER_OF_TABS > 0) {
+      const allowedNumberOfTabs = (
+        await chrome.storage.sync.get('allowedNumberOfTabs')
+      )['allowedNumberOfTabs'];
+      if (allowedNumberOfTabs && allowedNumberOfTabs !== 'no-restriction') {
         const currentTabId = await getCurrentTabId();
 
         if (!currentTabId) {
@@ -136,12 +144,14 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
         if (!tab || !requestHeaders) {
           return;
         }
-        const tabsBeingListenedTo = await chrome.storage.local.get();
-        if (
-          tabsBeingListenedTo &&
-          tabId.toString() !== tabsBeingListenedTo?.tabToRead
-        ) {
-          return;
+        if (allowedNumberOfTabs && allowedNumberOfTabs !== 'no-restriction') {
+          const tabsBeingListenedTo = await chrome.storage.local.get();
+          if (
+            tabsBeingListenedTo &&
+            tabId.toString() !== tabsBeingListenedTo?.tabToRead
+          ) {
+            return;
+          }
         }
         if (!cookieDB) {
           cookieDB = await fetchDictionary();
@@ -181,16 +191,23 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 chrome.tabs.onCreated.addListener(async (tab) => {
   await PROMISE_QUEUE.add(async () => {
     if (tab.id) {
-      const previousTabData = await chrome.storage.local.get();
-      const doesTabExist = await getTab(previousTabData?.tabToRead);
-      if (
-        Object.keys(previousTabData).length - 1 >= ALLOWED_NUMBER_OF_TABS &&
-        doesTabExist
-      ) {
-        return;
+      const allowedNumberOfTabs = (
+        await chrome.storage.sync.get('allowedNumberOfTabs')
+      )['allowedNumberOfTabs'];
+      if (allowedNumberOfTabs && allowedNumberOfTabs !== 'no-restriction') {
+        const previousTabData = await chrome.storage.local.get();
+        const doesTabExist = await getTab(previousTabData?.tabToRead);
+        if (
+          Object.keys(previousTabData).length - 1 >= ALLOWED_NUMBER_OF_TABS &&
+          doesTabExist
+        ) {
+          return;
+        }
+        await chrome.storage.local.set({ tabToRead: tab.id.toString() });
+        await CookieStore.addTabData(tab.id.toString());
+      } else {
+        await CookieStore.addTabData(tab.id.toString());
       }
-      await chrome.storage.local.set({ tabToRead: tab.id.toString() });
-      await CookieStore.addTabData(tab.id.toString());
     }
   });
 });

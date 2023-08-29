@@ -92,13 +92,26 @@ const CookieStore = {
    * @param {string} tabId The tab id.
    */
   async addTabData(tabId: string) {
-    await chrome.storage.local.set({
-      [tabId]: {
-        cookies: {},
-        focusedAt: Date.now(),
-      },
-      tabToRead: tabId,
-    });
+    const allowedNumberOfTabs = (
+      await chrome.storage.sync.get('allowedNumberOfTabs')
+    )['allowedNumberOfTabs'];
+
+    if (allowedNumberOfTabs && allowedNumberOfTabs !== 'no-restriction') {
+      await chrome.storage.local.set({
+        [tabId]: {
+          cookies: {},
+          focusedAt: Date.now(),
+        },
+        tabToRead: tabId,
+      });
+    } else {
+      await chrome.storage.local.set({
+        [tabId]: {
+          cookies: {},
+          focusedAt: Date.now(),
+        },
+      });
+    }
   },
 
   /**

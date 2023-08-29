@@ -65,13 +65,19 @@ const App: React.FC = () => {
     isCurrentTabBeingListenedTo,
     returningToSingleTab,
     changeListeningToThisTab,
+    allowedNumberOfTabs,
   } = useCookieStore(({ state, actions }) => ({
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
     returningToSingleTab: state.returningToSingleTab,
     changeListeningToThisTab: actions.changeListeningToThisTab,
+    allowedNumberOfTabs: state.allowedNumberOfTabs,
   }));
 
-  if (isCurrentTabBeingListenedTo) {
+  if (
+    isCurrentTabBeingListenedTo &&
+    allowedNumberOfTabs &&
+    allowedNumberOfTabs !== 'no-restriction'
+  ) {
     return (
       <div className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black">
         <div className="w-full h-full flex flex-row">

@@ -41,6 +41,7 @@ export interface CookieStoreContext {
     selectedFrame: string | null;
     returningToSingleTab: boolean;
     isCurrentTabBeingListenedTo: boolean;
+    allowedNumberOfTabs: string | null;
   };
   actions: {
     setSelectedFrame: React.Dispatch<React.SetStateAction<string | null>>;
@@ -56,6 +57,7 @@ const initialState: CookieStoreContext = {
     selectedFrame: null,
     isCurrentTabBeingListenedTo: false,
     returningToSingleTab: false,
+    allowedNumberOfTabs: null,
   },
   actions: {
     setSelectedFrame: noop,
@@ -72,6 +74,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const [returningToSingleTab, setReturningToSingleTab] =
     useState<CookieStoreContext['state']['returningToSingleTab']>(false);
+
+  const [allowedNumberOfTabs, setAllowedNumberOfTabs] = useState<string | null>(
+    null
+  );
 
   const [tabCookies, setTabCookies] =
     useState<CookieStoreContext['state']['tabCookies']>(null);
@@ -140,7 +146,8 @@ export const Provider = ({ children }: PropsWithChildren) => {
       }
       if (
         getTabBeingListenedTo &&
-        _tabId?.toString() !== getTabBeingListenedTo?.tabToRead
+        _tabId?.toString() !== getTabBeingListenedTo?.tabToRead &&
+        allowedNumberOfTabs !== 'no-restriction'
       ) {
         setIsCurrentTabBeingListenedTo(false);
         return;
@@ -182,7 +189,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
       }
     );
-  }, [getAllFramesForCurrentTab]);
+  }, [allowedNumberOfTabs, getAllFramesForCurrentTab]);
 
   const storeChangeListener = useCallback(
     async (changes: { [key: string]: chrome.storage.StorageChange }) => {
@@ -212,7 +219,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         await getAllFramesForCurrentTab(tabId);
         setTabCookies(_cookies);
       }
-      if (tabId) {
+      if (tabId && allowedNumberOfTabs !== 'no-restriction') {
         const getTabBeingListenedTo = await chrome.storage.local.get();
         const availableTabs = await chrome.tabs.query({});
         if (
@@ -226,7 +233,8 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
         if (
           getTabBeingListenedTo &&
-          tabId?.toString() !== getTabBeingListenedTo?.tabToRead
+          tabId?.toString() !== getTabBeingListenedTo?.tabToRead &&
+          allowedNumberOfTabs !== 'no-restriction'
         ) {
           setIsCurrentTabBeingListenedTo(false);
           return;
@@ -240,7 +248,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
       }
     },
-    [tabId, getAllFramesForCurrentTab]
+    [tabId, allowedNumberOfTabs, getAllFramesForCurrentTab]
   );
 
   const changeListeningToThisTab = useCallback(async () => {
@@ -299,21 +307,36 @@ export const Provider = ({ children }: PropsWithChildren) => {
     }
   }, []);
 
+  const changeAllowedTabsListener = useCallback(async () => {
+    const storageAllowedNumberOfTabs = (
+      await chrome.storage.sync.get('allowedNumberOfTabs')
+    )['allowedNumberOfTabs'];
+    if (storageAllowedNumberOfTabs) {
+      setAllowedNumberOfTabs(storageAllowedNumberOfTabs);
+    }
+    if (storageAllowedNumberOfTabs !== 'no-restriction') {
+      await chrome.storage.local.clear();
+    }
+  }, []);
+
   useEffect(() => {
     intitialSync();
     chrome.storage.local.onChanged.addListener(storeChangeListener);
+    chrome.storage.sync.onChanged.addListener(changeAllowedTabsListener);
     chrome.tabs.onUpdated.addListener(tabUpdateListener);
     chrome.tabs.onRemoved.addListener(tabRemovedListener);
     return () => {
       chrome.storage.local.onChanged.removeListener(storeChangeListener);
       chrome.tabs.onUpdated.removeListener(tabUpdateListener);
       chrome.tabs.onRemoved.removeListener(tabRemovedListener);
+      chrome.storage.sync.onChanged.removeListener(changeAllowedTabsListener);
     };
   }, [
     intitialSync,
     storeChangeListener,
     tabUpdateListener,
     tabRemovedListener,
+    changeAllowedTabsListener,
   ]);
 
   return (
@@ -326,6 +349,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           selectedFrame,
           isCurrentTabBeingListenedTo,
           returningToSingleTab,
+          allowedNumberOfTabs,
         },
         actions: { setSelectedFrame, changeListeningToThisTab },
       }}

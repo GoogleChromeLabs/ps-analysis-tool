@@ -38,12 +38,14 @@ const App: React.FC = () => {
     returningToSingleTab,
     changeListeningToThisTab,
     onChromeUrl,
+    allowedNumberOfTabs,
   } = useCookieStore(({ state, actions }) => ({
     cookieStats: state.tabCookieStats,
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
     loading: state.loading,
     returningToSingleTab: state.returningToSingleTab,
     changeListeningToThisTab: actions.changeListeningToThisTab,
+    allowedNumberOfTabs: state.allowedNumberOfTabs,
     onChromeUrl: state.onChromeUrl,
   }));
   if (onChromeUrl) {
@@ -56,11 +58,21 @@ const App: React.FC = () => {
       </div>
     );
   }
-  if (loading && isCurrentTabBeingListenedTo) {
+  if (
+    loading &&
+    isCurrentTabBeingListenedTo &&
+    allowedNumberOfTabs &&
+    allowedNumberOfTabs !== 'no-restriction'
+  ) {
     return <ProgressBar additionalStyles="w-96 min-h-[20rem]" />;
   }
 
-  if (ALLOWED_NUMBER_OF_TABS > 0 && !isCurrentTabBeingListenedTo) {
+  if (
+    ALLOWED_NUMBER_OF_TABS > 0 &&
+    !isCurrentTabBeingListenedTo &&
+    allowedNumberOfTabs &&
+    allowedNumberOfTabs !== 'no-restriction'
+  ) {
     return (
       <div className="w-96 min-h-[20rem] flex flex-col items-center justify-center">
         {!returningToSingleTab && (
