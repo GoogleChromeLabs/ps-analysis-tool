@@ -37,6 +37,7 @@ const tabNames = [
   'Attribution',
   'Bounce Tracking',
   'Fingerprinting',
+  'First Party Sets',
 ];
 const uncategorized1pCookie: ParsedCookie = {
   name: '_cb',

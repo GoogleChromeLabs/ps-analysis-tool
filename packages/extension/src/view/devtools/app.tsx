@@ -30,6 +30,7 @@ import {
   BounceTracking,
   Fingerprinting,
   Sidebar,
+  FirstPartySets,
 } from './components';
 
 const TABS = [
@@ -52,6 +53,10 @@ const TABS = [
   {
     display_name: 'Fingerprinting',
     Component: Fingerprinting,
+  },
+  {
+    display_name: 'First Party Sets',
+    Component: FirstPartySets,
   },
 ];
 

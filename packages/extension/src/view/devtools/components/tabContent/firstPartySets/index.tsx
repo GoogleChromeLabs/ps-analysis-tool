@@ -14,11 +14,22 @@
  * limitations under the License.
  */
 /**
+ * External dependencies.
+ */
+import React from 'react';
+
+/**
  * Internal dependencies.
  */
-export { default as Fingerprinting } from './fingerprinting';
-export { default as BounceTracking } from './bounceTracking';
-export { default as Cookies } from './cookies';
-export { default as Topics } from './topics';
-export { default as Attribution } from './attribution';
-export { default as FirstPartySets } from './firstPartySets';
+import InfoCard from '../../infoCard';
+import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
+
+const FirstPartySets = () => {
+  return (
+    <div className="w-full h-full overflow-auto" data-testid="fps-content">
+      <InfoCard infoKey={PSInfoKey.FirstPartySets} />
+    </div>
+  );
+};
+
+export default FirstPartySets;

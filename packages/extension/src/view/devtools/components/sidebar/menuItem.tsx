@@ -26,6 +26,8 @@ import {
   AttributionIconWhite,
   BounceTrackingIcon,
   BounceTrackingIconWhite,
+  File,
+  FileWhite,
   FingerPrintingIcon,
   FingerPrintingIconWhite,
   TopicsIcon,
@@ -62,6 +64,10 @@ const MenuItem = ({ handleClick, name, isActive }: MenuItemProps) => {
     'Bounce Tracking': {
       default: BounceTrackingIcon,
       selected: BounceTrackingIconWhite,
+    },
+    'First Party Sets': {
+      default: File,
+      selected: FileWhite,
     },
   };
 

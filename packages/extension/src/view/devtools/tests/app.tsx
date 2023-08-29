@@ -88,6 +88,14 @@ describe('App', () => {
     ).toBeInTheDocument();
   });
 
+  it('should switch to First Party Sets Panel when clicked', async () => {
+    await act(() => render(<App />));
+    // Click on First Party Sets tab
+    fireEvent.click(screen.getByText('First Party Sets'));
+
+    expect(await screen.findByTestId('fps-content')).toBeInTheDocument();
+  });
+
   it('should switch to Attribution Panel when clicked', async () => {
     await act(() => render(<App />));
     // Click on Attribution tab
