@@ -13,7 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './antiCovertTracking';
-export * from './privateAdvertising';
-export { default as Cookies } from './cookies';
-export { default as Sidebar } from './sidebar';
+/**
+ * External dependencies.
+ */
+import React from 'react';
+
+const Chips = () => {
+  return <h3>Chips</h3>;
+};
+
+export default Chips;

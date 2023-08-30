@@ -13,7 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './antiCovertTracking';
-export * from './privateAdvertising';
-export { default as Cookies } from './cookies';
-export { default as Sidebar } from './sidebar';
+export { default as Attribution } from './attribution';
+export { default as Topics } from './topics';
