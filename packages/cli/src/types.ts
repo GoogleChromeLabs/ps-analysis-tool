@@ -29,9 +29,9 @@ export interface CookieLogDetails
     | 'sourceScheme'
     | 'sourcePort'
   > {
-  Platform: string;
-  Category: string;
-  Description: string;
+  platform: string;
+  category: string;
+  description: string;
   isFirstParty: 'Yes' | 'No';
   sameSite: string;
 }
