@@ -25,7 +25,7 @@ import type { Table as ReactTable } from '@tanstack/react-table';
  */
 import TableHeader from './tableHeader';
 import TableBody from './tableBody';
-import type { CookieTableData } from '../../cookies.types';
+import type { CookieTableData } from '../../../devtools/cookies.types';
 import ColumnMenu from './columnMenu';
 
 export type TableData = CookieTableData;
