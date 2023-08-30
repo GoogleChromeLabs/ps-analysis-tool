@@ -39,8 +39,6 @@ const normalizeCookie = (
   let cookieDetail: { [key: string]: any } =
     cookieName in openCookiesData ? openCookiesData[cookieName] : null;
 
-  console.log(cookieDetail);
-
   if (!cookieDetail) {
     cookieDetail = {
       platform: 'Unknown Platform',
