@@ -34,9 +34,10 @@ const StopRequestProcessing: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-1">
-      <h3>Stop processing request after 30 minutes:</h3>
+      <h3 className="text-sm">Stop processing request after 30 minutes:</h3>
       <div className="flex flex-row gap-1">
         <input
+          className="text-xs"
           value="true"
           type="radio"
           name="yes"
@@ -49,6 +50,7 @@ const StopRequestProcessing: React.FC = () => {
       </div>
       <div className="flex flex-row gap-1">
         <input
+          className="text-xs"
           value="false"
           type="radio"
           name="no"

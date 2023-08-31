@@ -39,7 +39,7 @@ const TabHeader = ({
           <li
             onClick={() => setSelectedTabIndex(index)}
             key={tab}
-            className={`${
+            className={`text-base ${
               index === selectedTabIndex ? 'border-b border-color-black' : ''
             }`}
           >

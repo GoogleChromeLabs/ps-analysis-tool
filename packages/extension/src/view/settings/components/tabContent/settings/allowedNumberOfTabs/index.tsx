@@ -33,21 +33,25 @@ const AllowedNumberOfTabs: React.FC = () => {
   );
   return (
     <div className="flex flex-col gap-1">
-      <h3>Total number of allowed tabs to be processed together.</h3>
+      <h3 className="text-sm">
+        Total number of allowed tabs to be processed together:
+      </h3>
       <div className="flex flex-row gap-1">
         <input
           value="single-tab"
           type="radio"
           name="allowed-number-of-tabs"
+          className="text-xs"
           onChange={(e) =>
             setSettingsInStorage('allowedNumberOfTabs', e.target?.value)
           }
           checked={allowedNumberOfTabs === 'single-tab'}
         />
-        Single tab Processing
+        Single tab processing
       </div>
       <div className="flex flex-row gap-1">
         <input
+          className="text-xs"
           value="no-restriction"
           type="radio"
           name="allowed-number-of-tabs"
@@ -56,7 +60,7 @@ const AllowedNumberOfTabs: React.FC = () => {
           }
           checked={allowedNumberOfTabs === 'no-restriction'}
         />
-        No restriction Processing
+        No restriction processing
       </div>
     </div>
   );
