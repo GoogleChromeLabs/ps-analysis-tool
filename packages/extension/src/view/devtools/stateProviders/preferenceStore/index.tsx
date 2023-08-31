@@ -144,7 +144,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     (async () => {
       const currentTabId = await getCurrentTabId();
-      if (currentTabId) {
+      if (currentTabId && !fetchedInitialValueRef.current) {
         const storedTabData = (
           await chrome.storage.local.get(currentTabId?.toString())
         )[currentTabId];
