@@ -49,6 +49,7 @@ export interface CookieStoreContext {
     tabId: number | null;
     onChromeUrl: boolean;
     allowedNumberOfTabs: string | null;
+    stopRequestProcessing: boolean;
   };
   actions: {
     changeListeningToThisTab: () => void;
@@ -81,6 +82,7 @@ const initialState: CookieStoreContext = {
     onChromeUrl: false,
     tabId: null,
     allowedNumberOfTabs: null,
+    stopRequestProcessing: false,
   },
   actions: {
     changeListeningToThisTab: noop,
@@ -97,6 +99,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [allowedNumberOfTabs, setAllowedNumberOfTabs] = useState<string | null>(
     null
   );
+
+  const [stopRequestProcessing, setStopRequestProcessing] =
+    useState<boolean>(false);
 
   const [tabCookieStats, setTabCookieStats] =
     useState<CookieStoreContext['state']['tabCookieStats']>(null);
@@ -143,12 +148,15 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const intitialSync = useCallback(async () => {
     const [tab] = await getCurrentTab();
 
-    const storageAllowedNumberOfTabs = (
-      await chrome.storage.sync.get('allowedNumberOfTabs')
-    )['allowedNumberOfTabs'];
+    const extensionStorage = await chrome.storage.sync.get();
 
-    if (storageAllowedNumberOfTabs) {
-      setAllowedNumberOfTabs(storageAllowedNumberOfTabs);
+    if (extensionStorage?.allowedNumberOfTabs) {
+      setAllowedNumberOfTabs(extensionStorage?.allowedNumberOfTabs);
+    }
+    if (extensionStorage?.stopRequestProcessing) {
+      setStopRequestProcessing(
+        extensionStorage?.stopRequestProcessing === true
+      );
     }
 
     if (!tab.id || !tab.url) {
@@ -167,7 +175,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     setTabId(tab.id);
     setTabUrl(tab.url);
 
-    if (storageAllowedNumberOfTabs?.allowedNumberOfTabs === 'single-tab') {
+    if (extensionStorage?.allowedNumberOfTabs === 'single-tab') {
       const getTabBeingListenedTo = await chrome.storage.local.get();
       const availableTabs = await chrome.tabs.query({});
       if (
@@ -224,11 +232,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
       }
       if (tabId) {
-        const storageAllowedNumberOfTabs = (
-          await chrome.storage.sync.get('allowedNumberOfTabs')
-        )['allowedNumberOfTabs'];
+        const extensionStorage = await chrome.storage.sync.get();
 
-        if (storageAllowedNumberOfTabs?.allowedNumberOfTabs === 'single-tab') {
+        if (extensionStorage?.allowedNumberOfTabs === 'single-tab') {
           const getTabBeingListenedTo = await chrome.storage.local.get();
           const availableTabs = await chrome.tabs.query({});
 
@@ -292,12 +298,15 @@ export const Provider = ({ children }: PropsWithChildren) => {
     setIsCurrentTabBeingListenedTo(true);
   }, []);
 
-  const changeAllowedTabsListener = useCallback(async () => {
-    const storageAllowedNumberOfTabs = (
-      await chrome.storage.sync.get('allowedNumberOfTabs')
-    )['allowedNumberOfTabs'];
-    if (storageAllowedNumberOfTabs) {
-      setAllowedNumberOfTabs(storageAllowedNumberOfTabs);
+  const changeSyncStorageListener = useCallback(async () => {
+    const extensionStorage = await chrome.storage.sync.get();
+    if (extensionStorage?.allowedNumberOfTabs) {
+      setAllowedNumberOfTabs(extensionStorage?.allowedNumberOfTabs);
+    }
+    if (extensionStorage?.stopRequestProcessing) {
+      setStopRequestProcessing(
+        extensionStorage?.stopRequestProcessing === true
+      );
     }
   }, []);
 
@@ -313,18 +322,18 @@ export const Provider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     intitialSync();
     chrome.storage.local.onChanged.addListener(storeChangeListener);
-    chrome.storage.sync.onChanged.addListener(changeAllowedTabsListener);
+    chrome.storage.sync.onChanged.addListener(changeSyncStorageListener);
     chrome.tabs.onUpdated.addListener(tabUpdateListener);
     return () => {
       chrome.storage.local.onChanged.removeListener(storeChangeListener);
       chrome.tabs.onUpdated.removeListener(tabUpdateListener);
-      chrome.storage.sync.onChanged.removeListener(changeAllowedTabsListener);
+      chrome.storage.sync.onChanged.removeListener(changeSyncStorageListener);
     };
   }, [
     intitialSync,
     storeChangeListener,
     tabUpdateListener,
-    changeAllowedTabsListener,
+    changeSyncStorageListener,
   ]);
 
   return (
@@ -339,6 +348,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           returningToSingleTab,
           onChromeUrl,
           allowedNumberOfTabs,
+          stopRequestProcessing,
         },
         actions: {
           changeListeningToThisTab,
