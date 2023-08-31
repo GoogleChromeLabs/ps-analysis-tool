@@ -13,4 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export default 'span';
+/**
+ * External dependencies.
+ */
+const React = require('react');
+const { TextEncoder, TextDecoder } = require('node:util');
+
+global.React = React;
+global.TextDecoder = TextDecoder;
+global.TextEncoder = TextEncoder;

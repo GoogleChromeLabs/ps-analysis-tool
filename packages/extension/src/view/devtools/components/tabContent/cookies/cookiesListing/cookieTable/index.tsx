@@ -27,6 +27,7 @@ import {
   type VisibilityState,
   type ColumnSizingState,
 } from '@tanstack/react-table';
+import { useDebouncedCallback } from 'use-debounce';
 
 /**
  * Internal dependencies.
@@ -39,8 +40,6 @@ import { usePreferenceStore } from '../../../../../stateProviders/preferenceStor
 export interface CookieTableProps {
   cookies: CookieTableData[];
   selectedFrame: string | null;
-  isMouseInsideHeader: boolean;
-  setIsMouseInsideHeader: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const tableColumns: ColumnDef<CookieTableData>[] = [
@@ -141,12 +140,7 @@ const tableColumns: ColumnDef<CookieTableData>[] = [
   },
 ];
 
-const CookieTable = ({
-  cookies,
-  selectedFrame,
-  isMouseInsideHeader,
-  setIsMouseInsideHeader,
-}: CookieTableProps) => {
+const CookieTable = ({ cookies, selectedFrame }: CookieTableProps) => {
   const {
     selectedFrameCookie,
     setSelectedFrameCookie,
@@ -160,12 +154,21 @@ const CookieTable = ({
   }));
 
   const [data, setData] = useState<CookieTableData[]>(cookies);
+  const [isMouseInsideHeader, setIsMouseInsideHeader] =
+    useState<boolean>(false);
+  const [enableSorting, setEnableSorting] = useState<boolean>(false);
+  const setDebouncedEnableSorting = useDebouncedCallback((value) => {
+    setEnableSorting(value);
+  }, 10);
 
   useEffect(() => {
-    if (!isMouseInsideHeader) {
+    if (isMouseInsideHeader) {
+      setDebouncedEnableSorting(true);
+    } else {
       setData(cookies);
+      setDebouncedEnableSorting(false);
     }
-  }, [cookies, isMouseInsideHeader]);
+  }, [cookies, isMouseInsideHeader, setDebouncedEnableSorting]);
 
   useEffect(() => {
     if (selectedFrame && selectedFrameCookie) {
@@ -200,6 +203,7 @@ const CookieTable = ({
     data,
     columns,
     enableColumnResizing: true,
+    enableSorting,
     columnResizeMode: 'onChange',
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
