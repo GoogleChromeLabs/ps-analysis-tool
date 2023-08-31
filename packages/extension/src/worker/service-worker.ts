@@ -43,14 +43,15 @@ const PROMISE_QUEUE = new PQueue({ concurrency: 1 });
  */
 chrome.webRequest.onResponseStarted.addListener(
   async (details: chrome.webRequest.WebResponseCacheDetails) => {
-    const allowedNumberOfTabs = (
-      await chrome.storage.sync.get('allowedNumberOfTabs')
-    )['allowedNumberOfTabs'];
+    const extensionSettings = await chrome.storage.sync.get();
     const tabData = (
       await chrome.storage.local.get(details?.tabId?.toString())
     )[details?.tabId?.toString()];
 
-    if (allowedNumberOfTabs && allowedNumberOfTabs !== 'no-restriction') {
+    if (
+      extensionSettings &&
+      extensionSettings?.allowedNumberOfTabs !== 'no-restriction'
+    ) {
       const currentTabId = await getCurrentTabId();
 
       if (!currentTabId) {
@@ -66,14 +67,20 @@ chrome.webRequest.onResponseStarted.addListener(
         return;
       }
     }
-    if (Date.now() - tabData?.firstRequestProcessed > 1800000) {
+    if (
+      Date.now() - tabData?.firstRequestProcessed > 1800000 &&
+      extensionSettings?.stopRequestProcessing === 'true'
+    ) {
       return;
     }
 
     await PROMISE_QUEUE.add(async () => {
       const { tabId, url, responseHeaders, frameId } = details;
       const tab = await getTab(tabId);
-      if (allowedNumberOfTabs && allowedNumberOfTabs !== 'no-restriction') {
+      if (
+        extensionSettings &&
+        extensionSettings?.allowedNumberOfTabs !== 'no-restriction'
+      ) {
         const tabsBeingListenedTo = await chrome.storage.local.get();
 
         if (ALLOWED_NUMBER_OF_TABS > 0) {
@@ -126,14 +133,15 @@ chrome.webRequest.onResponseStarted.addListener(
 chrome.webRequest.onBeforeSendHeaders.addListener(
   ({ url, requestHeaders, tabId, frameId }) => {
     (async () => {
-      const allowedNumberOfTabs = (
-        await chrome.storage.sync.get('allowedNumberOfTabs')
-      )['allowedNumberOfTabs'];
+      const extensionSettings = await chrome.storage.sync.get();
       const tabData = (await chrome.storage.local.get(tabId.toString()))[
         tabId.toString()
       ];
 
-      if (allowedNumberOfTabs && allowedNumberOfTabs !== 'no-restriction') {
+      if (
+        extensionSettings &&
+        extensionSettings?.allowedNumberOfTabs !== 'no-restriction'
+      ) {
         const currentTabId = await getCurrentTabId();
 
         if (!currentTabId) {
@@ -149,7 +157,10 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
           return;
         }
       }
-      if (Date.now() - tabData?.firstRequestProcessed > 1800000) {
+      if (
+        Date.now() - tabData?.firstRequestProcessed > 1800000 &&
+        extensionSettings?.stopRequestProcessing === 'true'
+      ) {
         return;
       }
 
@@ -159,7 +170,10 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
         if (!tab || !requestHeaders) {
           return;
         }
-        if (allowedNumberOfTabs && allowedNumberOfTabs !== 'no-restriction') {
+        if (
+          extensionSettings &&
+          extensionSettings?.allowedNumberOfTabs !== 'no-restriction'
+        ) {
           const tabsBeingListenedTo = await chrome.storage.local.get();
           if (
             tabsBeingListenedTo &&
@@ -278,8 +292,15 @@ chrome.windows.onRemoved.addListener(async (windowId) => {
  * when Chrome is updated to a new version.
  * @see https://developer.chrome.com/docs/extensions/reference/runtime/#event-onInstalled
  */
-chrome.runtime.onInstalled.addListener(async () => {
+chrome.runtime.onInstalled.addListener(async (details) => {
   await PROMISE_QUEUE.add(async () => {
     await chrome.storage.local.clear();
+    if (details.reason === 'install') {
+      await chrome.storage.sync.clear();
+      await chrome.storage.sync.set({
+        allowedNumberOfTabs: 'single-tab',
+        stopRequestProcessing: 'false',
+      });
+    }
   });
 });
