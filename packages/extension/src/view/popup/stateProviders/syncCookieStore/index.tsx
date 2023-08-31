@@ -155,7 +155,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     }
     if (extensionStorage?.stopRequestProcessing) {
       setStopRequestProcessing(
-        extensionStorage?.stopRequestProcessing === true
+        extensionStorage?.stopRequestProcessing === 'true'
       );
     }
 
@@ -305,7 +305,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     }
     if (extensionStorage?.stopRequestProcessing) {
       setStopRequestProcessing(
-        extensionStorage?.stopRequestProcessing === true
+        extensionStorage?.stopRequestProcessing === 'true'
       );
     }
   }, []);
