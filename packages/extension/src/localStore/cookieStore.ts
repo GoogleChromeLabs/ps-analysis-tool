@@ -29,7 +29,6 @@ const CookieStore = {
     await updateStorage(tabId, (prevState: TabData) => {
       const _prevCookies = prevState?.cookies || {};
       const _updatedCookies = _prevCookies;
-
       for (const cookie of cookies) {
         const cookieName = cookie.parsedCookie.name;
 
@@ -52,8 +51,15 @@ const CookieStore = {
         }
       }
 
+      if (prevState?.firstRequestProcessed) {
+        return {
+          ...prevState,
+          cookies: _updatedCookies,
+        };
+      }
       return {
         ...prevState,
+        firstRequestProcessed: Date.now(),
         cookies: _updatedCookies,
       };
     });
