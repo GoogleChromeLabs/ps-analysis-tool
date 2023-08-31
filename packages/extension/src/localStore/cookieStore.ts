@@ -101,6 +101,7 @@ const CookieStore = {
         [tabId]: {
           cookies: {},
           focusedAt: Date.now(),
+          firstRequestProcessed: Date.now(),
         },
         tabToRead: tabId,
       });
@@ -109,6 +110,7 @@ const CookieStore = {
         [tabId]: {
           cookies: {},
           focusedAt: Date.now(),
+          firstRequestProcessed: Date.now(),
         },
       });
     }

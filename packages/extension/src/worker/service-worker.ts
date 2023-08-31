@@ -46,6 +46,10 @@ chrome.webRequest.onResponseStarted.addListener(
     const allowedNumberOfTabs = (
       await chrome.storage.sync.get('allowedNumberOfTabs')
     )['allowedNumberOfTabs'];
+    const tabData = (
+      await chrome.storage.local.get(details?.tabId?.toString())
+    )[details?.tabId?.toString()];
+
     if (allowedNumberOfTabs && allowedNumberOfTabs !== 'no-restriction') {
       const currentTabId = await getCurrentTabId();
 
@@ -62,12 +66,16 @@ chrome.webRequest.onResponseStarted.addListener(
         return;
       }
     }
+    if (Date.now() - tabData?.firstRequestProcessed > 1800000) {
+      return;
+    }
 
     await PROMISE_QUEUE.add(async () => {
       const { tabId, url, responseHeaders, frameId } = details;
       const tab = await getTab(tabId);
       if (allowedNumberOfTabs && allowedNumberOfTabs !== 'no-restriction') {
         const tabsBeingListenedTo = await chrome.storage.local.get();
+
         if (ALLOWED_NUMBER_OF_TABS > 0) {
           if (
             tabsBeingListenedTo &&
@@ -121,6 +129,10 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
       const allowedNumberOfTabs = (
         await chrome.storage.sync.get('allowedNumberOfTabs')
       )['allowedNumberOfTabs'];
+      const tabData = (await chrome.storage.local.get(tabId.toString()))[
+        tabId.toString()
+      ];
+
       if (allowedNumberOfTabs && allowedNumberOfTabs !== 'no-restriction') {
         const currentTabId = await getCurrentTabId();
 
@@ -136,6 +148,9 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
         ) {
           return;
         }
+      }
+      if (Date.now() - tabData?.firstRequestProcessed > 1800000) {
+        return;
       }
 
       await PROMISE_QUEUE.add(async () => {
