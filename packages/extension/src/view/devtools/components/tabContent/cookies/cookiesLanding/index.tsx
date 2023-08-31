@@ -46,6 +46,30 @@ const CookiesLanding = () => {
     updateFirstRequestProcessed: actions.updateFirstRequestProcessed,
   }));
 
+  let fetchedDate: Date;
+  let dateWritten = '';
+
+  if (firstRequestProcessedTime) {
+    fetchedDate = new Date(firstRequestProcessedTime + 30 * 60000);
+    dateWritten =
+      String(
+        new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(
+          fetchedDate
+        ) +
+          ', ' +
+          fetchedDate.toLocaleString('en-us', { month: 'long' })
+      ) +
+      ' ' +
+      fetchedDate.getDate() +
+      ', ' +
+      fetchedDate.getFullYear() +
+      ' at ' +
+      fetchedDate.getHours() +
+      ':' +
+      fetchedDate.getMinutes() +
+      ':' +
+      fetchedDate.getSeconds();
+  }
   const cookieStats = prepareCookiesCount(tabCookies, tabUrl);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
 
@@ -68,9 +92,7 @@ const CookiesLanding = () => {
           <div className="flex flex-col w-full items-center justify-center">
             <MessageBox
               headerText="Cookie processing information"
-              bodyText={`Request processing on this tab will be paused after ${new Date(
-                firstRequestProcessedTime + 30 * 60000
-              )}. Click on the button below to reset timer.`}
+              bodyText={`Request processing on this tab will be paused after ${dateWritten}. Click on the button below to the reset timer.`}
             />
             <div>
               <Button
