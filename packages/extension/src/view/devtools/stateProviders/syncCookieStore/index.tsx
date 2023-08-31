@@ -43,10 +43,12 @@ export interface CookieStoreContext {
     isCurrentTabBeingListenedTo: boolean;
     allowedNumberOfTabs: string | null;
     stopRequestProcessing: boolean;
+    firstRequestProcessedTime: number | null;
   };
   actions: {
     setSelectedFrame: React.Dispatch<React.SetStateAction<string | null>>;
     changeListeningToThisTab: () => void;
+    updateFirstRequestProcessed: () => void;
   };
 }
 
@@ -60,10 +62,12 @@ const initialState: CookieStoreContext = {
     returningToSingleTab: false,
     allowedNumberOfTabs: null,
     stopRequestProcessing: false,
+    firstRequestProcessedTime: null,
   },
   actions: {
     setSelectedFrame: noop,
     changeListeningToThisTab: noop,
+    updateFirstRequestProcessed: noop,
   },
 };
 
@@ -83,6 +87,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const [stopRequestProcessing, setStopRequestProcessing] =
     useState<boolean>(false);
+
+  const [firstRequestProcessedTime, setFirstRequestProcessedTime] = useState<
+    number | null
+  >(null);
 
   const [tabCookies, setTabCookies] =
     useState<CookieStoreContext['state']['tabCookies']>(null);
@@ -144,7 +152,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     }
     if (extensionStorage?.stopRequestProcessing) {
       setStopRequestProcessing(
-        extensionStorage?.stopRequestProcessing === true
+        extensionStorage?.stopRequestProcessing === 'true'
       );
     }
 
@@ -181,6 +189,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
     if (tabData && tabData.cookies) {
       const _cookies: NonNullable<CookieStoreContext['state']['tabCookies']> =
         {};
+      if (tabData?.firstRequestProcessed) {
+        setFirstRequestProcessedTime(tabData.firstRequestProcessed);
+      }
 
       await Promise.all(
         Object.entries(tabData.cookies as { [key: string]: CookieData }).map(
@@ -236,6 +247,18 @@ export const Provider = ({ children }: PropsWithChildren) => {
         );
         await getAllFramesForCurrentTab(tabId);
         setTabCookies(_cookies);
+      }
+
+      if (
+        tabId &&
+        Object.keys(changes).includes(tabId.toString()) &&
+        changes[tabId.toString()]?.newValue?.firstRequestProcessed
+      ) {
+        if (changes[tabId.toString()]?.newValue?.firstRequestProcessed) {
+          setFirstRequestProcessedTime(
+            changes[tabId.toString()]?.newValue?.firstRequestProcessed
+          );
+        }
       }
 
       if (tabId) {
@@ -334,6 +357,16 @@ export const Provider = ({ children }: PropsWithChildren) => {
     }
   }, []);
 
+  const updateFirstRequestProcessed = useCallback(async () => {
+    if (tabId) {
+      const storageData = await chrome.storage.local.get([tabId.toString()]);
+      const updatedTime = Date.now();
+      storageData[tabId]['firstRequestProcessed'] = updatedTime;
+      await chrome.storage.local.set(storageData);
+      setFirstRequestProcessedTime(updatedTime);
+    }
+  }, [tabId]);
+
   const changeSyncStorageListener = useCallback(async () => {
     const extensionStorage = await chrome.storage.sync.get();
     if (extensionStorage?.allowedNumberOfTabs) {
@@ -341,7 +374,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     }
     if (extensionStorage?.stopRequestProcessing) {
       setStopRequestProcessing(
-        extensionStorage?.stopRequestProcessing === true
+        extensionStorage?.stopRequestProcessing === 'true'
       );
     }
   }, []);
@@ -378,8 +411,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
           returningToSingleTab,
           allowedNumberOfTabs,
           stopRequestProcessing,
+          firstRequestProcessedTime,
         },
-        actions: { setSelectedFrame, changeListeningToThisTab },
+        actions: {
+          setSelectedFrame,
+          changeListeningToThisTab,
+          updateFirstRequestProcessed,
+        },
       }}
     >
       {children}

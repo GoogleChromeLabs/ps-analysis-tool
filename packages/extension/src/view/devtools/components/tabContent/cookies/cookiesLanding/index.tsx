@@ -27,12 +27,23 @@ import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import prepareCookiesCount from '../../../../../../utils/prepareCookiesCount';
 import { prepareCookieStatsComponents } from '../../../../../../utils/prepareCookieStatsComponents';
 import MessageBox from '../../../../../design-system/components/messageBox';
+import { Button } from '../../../../../design-system/components';
 
 const CookiesLanding = () => {
-  const { tabCookies, tabFrames, tabUrl } = useCookieStore(({ state }) => ({
+  const {
+    tabCookies,
+    tabFrames,
+    tabUrl,
+    stopRequestProcessing,
+    firstRequestProcessedTime,
+    updateFirstRequestProcessed,
+  } = useCookieStore(({ state, actions }) => ({
     tabFrames: state.tabFrames,
     tabCookies: state.tabCookies,
     tabUrl: state.tabUrl,
+    stopRequestProcessing: state.stopRequestProcessing,
+    firstRequestProcessedTime: state.firstRequestProcessedTime,
+    updateFirstRequestProcessed: actions.updateFirstRequestProcessed,
   }));
 
   const cookieStats = prepareCookiesCount(tabCookies, tabUrl);
@@ -53,6 +64,22 @@ const CookiesLanding = () => {
                 bodyText="Please try reloading the page"
               />
             ))}
+        {stopRequestProcessing && firstRequestProcessedTime && (
+          <div className="flex flex-col w-full items-center justify-center">
+            <MessageBox
+              headerText="Cookie processing information"
+              bodyText={`Request processing on this tab will be paused after ${new Date(
+                firstRequestProcessedTime + 30 * 60000
+              )}. Click on the button below to reset timer.`}
+            />
+            <div>
+              <Button
+                onClick={updateFirstRequestProcessed}
+                text="Reset timer"
+              />
+            </div>
+          </div>
+        )}
         <CookiesMatrix
           tabCookies={tabCookies}
           cookiesStatsComponents={cookiesStatsComponents}
