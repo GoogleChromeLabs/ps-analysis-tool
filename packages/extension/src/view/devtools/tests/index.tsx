@@ -226,7 +226,7 @@ describe('Index', () => {
     } as unknown as typeof fetch;
   });
 
-  it('Both Providers should be added to DOM', async () => {
+  it('All Providers should be added to DOM', async () => {
     act(() =>
       render(
         <ExternalStoreProvider>

@@ -167,7 +167,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     setTabId(tab.id);
     setTabUrl(tab.url);
 
-    if (storageAllowedNumberOfTabs === 'single-tab') {
+    if (storageAllowedNumberOfTabs?.allowedNumberOfTabs === 'single-tab') {
       const getTabBeingListenedTo = await chrome.storage.local.get();
       const availableTabs = await chrome.tabs.query({});
       if (
@@ -228,7 +228,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           await chrome.storage.sync.get('allowedNumberOfTabs')
         )['allowedNumberOfTabs'];
 
-        if (storageAllowedNumberOfTabs === 'single-tab') {
+        if (storageAllowedNumberOfTabs?.allowedNumberOfTabs === 'single-tab') {
           const getTabBeingListenedTo = await chrome.storage.local.get();
           const availableTabs = await chrome.tabs.query({});
 

@@ -110,6 +110,7 @@ const App: React.FC = () => {
       </div>
     );
   }
+
   return (
     <div className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black">
       <div className="w-full h-full flex flex-col items-center justify-center">
