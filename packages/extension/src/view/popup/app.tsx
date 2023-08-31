@@ -58,11 +58,13 @@ const App: React.FC = () => {
       </div>
     );
   }
+
   if (
-    loading &&
-    isCurrentTabBeingListenedTo &&
-    allowedNumberOfTabs &&
-    allowedNumberOfTabs !== 'no-restriction'
+    loading ||
+    (loading &&
+      isCurrentTabBeingListenedTo &&
+      allowedNumberOfTabs &&
+      allowedNumberOfTabs === 'single-tab')
   ) {
     return <ProgressBar additionalStyles="w-96 min-h-[20rem]" />;
   }

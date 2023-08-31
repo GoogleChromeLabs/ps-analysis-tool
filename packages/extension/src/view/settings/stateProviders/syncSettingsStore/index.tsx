@@ -67,12 +67,24 @@ export const Provider = ({ children }: PropsWithChildren) => {
   }, []);
 
   const storeChangeListener = useCallback(
-    (changes: { [key: string]: chrome.storage.StorageChange }) => {
+    async (changes: { [key: string]: chrome.storage.StorageChange }) => {
       if (
         Object.keys(changes).includes('allowedNumberOfTabs') &&
         changes['allowedNumberOfTabs']?.newValue
       ) {
         setAllowedNumberOfTabs(changes['allowedNumberOfTabs']?.newValue);
+        if (changes['allowedNumberOfTabs']?.newValue === 'single-tab') {
+          chrome.tabs.query({}, (tabs) => {
+            tabs.map((tab) => {
+              chrome.action.setBadgeText({
+                tabId: tab?.id,
+                text: '',
+              });
+              return tab;
+            });
+          });
+          await chrome.storage.local.clear();
+        }
       }
     },
     []

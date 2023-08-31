@@ -154,37 +154,42 @@ export const Provider = ({ children }: PropsWithChildren) => {
     if (!tab.id || !tab.url) {
       return;
     }
+
     if (tab.url.startsWith('chrome:')) {
       setOnChromeUrl(true);
     } else {
       setOnChromeUrl(false);
     }
+
     const _tabId = tab.id;
     const _tabUrl = tab.url;
 
     setTabId(tab.id);
     setTabUrl(tab.url);
 
-    const getTabBeingListenedTo = await chrome.storage.local.get();
-    const availableTabs = await chrome.tabs.query({});
-    if (
-      availableTabs.length === ALLOWED_NUMBER_OF_TABS &&
-      availableTabs.filter(
-        (processingTab) =>
-          processingTab.id?.toString() === getTabBeingListenedTo?.tabToRead
-      )
-    ) {
-      setReturningToSingleTab(true);
-    }
+    if (storageAllowedNumberOfTabs === 'single-tab') {
+      const getTabBeingListenedTo = await chrome.storage.local.get();
+      const availableTabs = await chrome.tabs.query({});
+      if (
+        availableTabs.length === ALLOWED_NUMBER_OF_TABS &&
+        availableTabs.filter(
+          (processingTab) =>
+            processingTab.id?.toString() === getTabBeingListenedTo?.tabToRead
+        )
+      ) {
+        setReturningToSingleTab(true);
+      }
 
-    if (
-      getTabBeingListenedTo &&
-      tab?.id.toString() !== getTabBeingListenedTo?.tabToRead
-    ) {
-      setIsCurrentTabBeingListenedTo(false);
-      return;
-    } else {
-      setIsCurrentTabBeingListenedTo(true);
+      if (
+        getTabBeingListenedTo &&
+        tab?.id.toString() !== getTabBeingListenedTo?.tabToRead
+      ) {
+        setIsCurrentTabBeingListenedTo(false);
+        setLoading(false);
+        return;
+      } else {
+        setIsCurrentTabBeingListenedTo(true);
+      }
     }
 
     const tabData = (await chrome.storage.local.get([_tabId.toString()]))[
@@ -219,15 +224,35 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
       }
       if (tabId) {
-        const getTabBeingListenedTo = await chrome.storage.local.get();
-        if (
-          getTabBeingListenedTo &&
-          tabId.toString() !== getTabBeingListenedTo?.tabToRead
-        ) {
-          setIsCurrentTabBeingListenedTo(false);
-          return;
-        } else {
-          setIsCurrentTabBeingListenedTo(true);
+        const storageAllowedNumberOfTabs = (
+          await chrome.storage.sync.get('allowedNumberOfTabs')
+        )['allowedNumberOfTabs'];
+
+        if (storageAllowedNumberOfTabs === 'single-tab') {
+          const getTabBeingListenedTo = await chrome.storage.local.get();
+          const availableTabs = await chrome.tabs.query({});
+
+          if (
+            availableTabs.length === ALLOWED_NUMBER_OF_TABS &&
+            availableTabs.filter(
+              (processingTab) =>
+                processingTab.id?.toString() ===
+                getTabBeingListenedTo?.tabToRead
+            )
+          ) {
+            setReturningToSingleTab(true);
+          }
+
+          if (
+            getTabBeingListenedTo &&
+            tabId.toString() !== getTabBeingListenedTo?.tabToRead
+          ) {
+            setIsCurrentTabBeingListenedTo(false);
+            setLoading(false);
+            return;
+          } else {
+            setIsCurrentTabBeingListenedTo(true);
+          }
         }
       }
     },

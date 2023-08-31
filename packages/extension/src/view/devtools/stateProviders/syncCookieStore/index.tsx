@@ -141,27 +141,28 @@ export const Provider = ({ children }: PropsWithChildren) => {
     }
 
     if (_tabId) {
-      const getTabBeingListenedTo = await chrome.storage.local.get();
-      const availableTabs = await chrome.tabs.query({});
-      if (
-        availableTabs.length === ALLOWED_NUMBER_OF_TABS &&
-        availableTabs.filter(
-          (processingTab) =>
-            processingTab.id?.toString() === getTabBeingListenedTo?.tabToRead
-        )
-      ) {
-        setReturningToSingleTab(true);
-      }
+      if (storageAllowedNumberOfTabs === 'single-tab') {
+        const getTabBeingListenedTo = await chrome.storage.local.get();
+        const availableTabs = await chrome.tabs.query({});
+        if (
+          availableTabs.length === ALLOWED_NUMBER_OF_TABS &&
+          availableTabs.filter(
+            (processingTab) =>
+              processingTab.id?.toString() === getTabBeingListenedTo?.tabToRead
+          )
+        ) {
+          setReturningToSingleTab(true);
+        }
 
-      if (
-        getTabBeingListenedTo &&
-        _tabId?.toString() !== getTabBeingListenedTo?.tabToRead &&
-        allowedNumberOfTabs !== 'no-restriction'
-      ) {
-        setIsCurrentTabBeingListenedTo(false);
-        return;
-      } else {
-        setIsCurrentTabBeingListenedTo(true);
+        if (
+          getTabBeingListenedTo &&
+          _tabId.toString() !== getTabBeingListenedTo?.tabToRead
+        ) {
+          setIsCurrentTabBeingListenedTo(false);
+          return;
+        } else {
+          setIsCurrentTabBeingListenedTo(true);
+        }
       }
     }
 
@@ -198,7 +199,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
       }
     );
-  }, [allowedNumberOfTabs, getAllFramesForCurrentTab]);
+  }, [getAllFramesForCurrentTab]);
 
   const storeChangeListener = useCallback(
     async (changes: { [key: string]: chrome.storage.StorageChange }) => {
@@ -229,37 +230,44 @@ export const Provider = ({ children }: PropsWithChildren) => {
         setTabCookies(_cookies);
       }
 
-      if (tabId && allowedNumberOfTabs !== 'no-restriction') {
-        const getTabBeingListenedTo = await chrome.storage.local.get();
-        const availableTabs = await chrome.tabs.query({});
-        if (
-          availableTabs.length === ALLOWED_NUMBER_OF_TABS &&
-          availableTabs.filter(
-            (processingTab) =>
-              processingTab.id?.toString() === getTabBeingListenedTo?.tabToRead
-          )
-        ) {
-          setReturningToSingleTab(true);
-        }
+      if (tabId) {
+        const storageAllowedNumberOfTabs = (
+          await chrome.storage.sync.get('allowedNumberOfTabs')
+        )['allowedNumberOfTabs'];
 
-        if (
-          getTabBeingListenedTo &&
-          tabId?.toString() !== getTabBeingListenedTo?.tabToRead &&
-          allowedNumberOfTabs !== 'no-restriction'
-        ) {
-          setIsCurrentTabBeingListenedTo(false);
-          return;
-        } else {
-          setIsCurrentTabBeingListenedTo(true);
-          chrome.tabs.query({ active: true }, (tab) => {
-            if (tab[0]?.url) {
-              setTabUrl(tab[0]?.url);
-            }
-          });
+        if (storageAllowedNumberOfTabs === 'single-tab') {
+          const getTabBeingListenedTo = await chrome.storage.local.get();
+          const availableTabs = await chrome.tabs.query({});
+
+          if (
+            availableTabs.length === ALLOWED_NUMBER_OF_TABS &&
+            availableTabs.filter(
+              (processingTab) =>
+                processingTab.id?.toString() ===
+                getTabBeingListenedTo?.tabToRead
+            )
+          ) {
+            setReturningToSingleTab(true);
+          }
+
+          if (
+            getTabBeingListenedTo &&
+            tabId.toString() !== getTabBeingListenedTo?.tabToRead
+          ) {
+            setIsCurrentTabBeingListenedTo(false);
+            return;
+          } else {
+            setIsCurrentTabBeingListenedTo(true);
+            chrome.tabs.query({ active: true }, (tab) => {
+              if (tab[0]?.url) {
+                setTabUrl(tab[0]?.url);
+              }
+            });
+          }
         }
       }
     },
-    [tabId, allowedNumberOfTabs, getAllFramesForCurrentTab]
+    [tabId, getAllFramesForCurrentTab]
   );
 
   const changeListeningToThisTab = useCallback(async () => {
