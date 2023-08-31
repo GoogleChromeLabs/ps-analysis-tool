@@ -24,27 +24,27 @@ import React from 'react';
  */
 import { useSettingsStore } from '../../../../stateProviders/syncSettingsStore';
 
-const AllowedNumberOfTabs: React.FC = () => {
-  const { allowedNumberOfTabs, setSettingsInStorage } = useSettingsStore(
+const StopRequestProcessing: React.FC = () => {
+  const { stopRequestProcessing, setSettingsInStorage } = useSettingsStore(
     ({ state, actions }) => ({
-      allowedNumberOfTabs: state.allowedNumberOfTabs,
+      stopRequestProcessing: state.stopRequestProcessing,
       setSettingsInStorage: actions.setSettingsInStorage,
     })
   );
   return (
     <div className="flex flex-col gap-1">
-      <h3>Total number of allowed tabs to be processed together.</h3>
+      <h3>Stop processing request after 30 minutes:</h3>
       <div className="flex flex-row gap-1">
         <input
           value="single-tab"
           type="radio"
           name="allowed-number-of-tabs"
           onChange={(e) =>
-            setSettingsInStorage('allowedNumberOfTabs', e.target?.value)
+            setSettingsInStorage('stopRequestProcessing', e.target?.value)
           }
-          checked={allowedNumberOfTabs === 'single-tab'}
+          checked={stopRequestProcessing}
         />
-        Single tab Processing
+        Yes
       </div>
       <div className="flex flex-row gap-1">
         <input
@@ -52,14 +52,14 @@ const AllowedNumberOfTabs: React.FC = () => {
           type="radio"
           name="allowed-number-of-tabs"
           onChange={(e) =>
-            setSettingsInStorage('allowedNumberOfTabs', e.target?.value)
+            setSettingsInStorage('stopRequestProcessing', e.target?.value)
           }
-          checked={allowedNumberOfTabs === 'no-restriction'}
+          checked={stopRequestProcessing}
         />
-        No restriction Processing
+        No
       </div>
     </div>
   );
 };
 
-export default AllowedNumberOfTabs;
+export default StopRequestProcessing;
