@@ -27,7 +27,7 @@ import StopRequestProcessing from './stopRequestProcessing';
 
 const Settings: React.FC = () => {
   return (
-    <div className="w-full h-full flex">
+    <div className="w-full h-full flex flex-col gap-5">
       <AllowedNumberOfTabs />
       <StopRequestProcessing />
     </div>

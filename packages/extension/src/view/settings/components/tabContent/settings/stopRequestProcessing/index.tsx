@@ -31,30 +31,31 @@ const StopRequestProcessing: React.FC = () => {
       setSettingsInStorage: actions.setSettingsInStorage,
     })
   );
+
   return (
     <div className="flex flex-col gap-1">
       <h3>Stop processing request after 30 minutes:</h3>
       <div className="flex flex-row gap-1">
         <input
-          value="single-tab"
+          value="true"
           type="radio"
-          name="allowed-number-of-tabs"
+          name="yes"
           onChange={(e) =>
             setSettingsInStorage('stopRequestProcessing', e.target?.value)
           }
-          checked={stopRequestProcessing}
+          checked={stopRequestProcessing === true}
         />
         Yes
       </div>
       <div className="flex flex-row gap-1">
         <input
-          value="no-restriction"
+          value="false"
           type="radio"
-          name="allowed-number-of-tabs"
+          name="no"
           onChange={(e) =>
             setSettingsInStorage('stopRequestProcessing', e.target?.value)
           }
-          checked={stopRequestProcessing}
+          checked={stopRequestProcessing === false}
         />
         No
       </div>

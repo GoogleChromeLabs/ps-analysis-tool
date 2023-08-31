@@ -61,7 +61,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const intitialSync = useCallback(async () => {
     const currentSettings = await chrome.storage.sync.get();
     setAllowedNumberOfTabs(currentSettings?.allowedNumberOfTabs);
-    setStopRequestProcessing(currentSettings?.stopRequestProcessing);
+    setStopRequestProcessing(currentSettings?.stopRequestProcessing === 'true');
   }, []);
 
   const setSettingsInStorage = useCallback(async (key: string, value: any) => {
@@ -96,7 +96,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
         Object.keys(changes).includes('stopRequestProcessing') &&
         changes['stopRequestProcessing']?.newValue
       ) {
-        setStopRequestProcessing(changes['stopRequestProcessing']?.newValue);
+        setStopRequestProcessing(
+          changes['stopRequestProcessing']?.newValue === 'true'
+        );
       }
     },
     []
