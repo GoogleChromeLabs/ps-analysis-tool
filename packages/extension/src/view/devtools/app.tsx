@@ -74,9 +74,10 @@ const App: React.FC = () => {
   }));
 
   if (
-    isCurrentTabBeingListenedTo &&
-    allowedNumberOfTabs &&
-    allowedNumberOfTabs !== 'no-restriction'
+    (isCurrentTabBeingListenedTo &&
+      allowedNumberOfTabs &&
+      allowedNumberOfTabs === 'single-tab') ||
+    (allowedNumberOfTabs && allowedNumberOfTabs === 'no-restriction')
   ) {
     return (
       <div className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black">
