@@ -51,15 +51,9 @@ const CookieStore = {
         }
       }
 
-      if (prevState?.firstRequestProcessed) {
-        return {
-          ...prevState,
-          cookies: _updatedCookies,
-        };
-      }
       return {
         ...prevState,
-        firstRequestProcessed: Date.now(),
+        firstRequestProcessed: prevState?.firstRequestProcessed || Date.now(),
         cookies: _updatedCookies,
       };
     });
@@ -86,9 +80,20 @@ const CookieStore = {
    */
   async updateTabFocus(tabId: string) {
     const storage = await chrome.storage.local.get();
-
     if (storage[tabId]) {
       storage[tabId].focusedAt = Date.now();
+    }
+    await chrome.storage.local.set(storage);
+  },
+
+  /**
+   * Clear cookie data
+   * @param {string} tabId The active tab id.
+   */
+  async removeCookieData(tabId: string) {
+    const storage = await chrome.storage.local.get();
+    if (storage[tabId]) {
+      storage[tabId].cookies = {};
     }
     await chrome.storage.local.set(storage);
   },
@@ -108,7 +113,6 @@ const CookieStore = {
         [tabId]: {
           cookies: {},
           focusedAt: Date.now(),
-          firstRequestProcessed: Date.now(),
         },
         tabToRead: tabId,
       });
@@ -117,7 +121,6 @@ const CookieStore = {
         [tabId]: {
           cookies: {},
           focusedAt: Date.now(),
-          firstRequestProcessed: Date.now(),
         },
       });
     }

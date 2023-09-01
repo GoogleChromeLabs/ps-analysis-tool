@@ -67,6 +67,7 @@ chrome.webRequest.onResponseStarted.addListener(
         return;
       }
     }
+
     if (
       Date.now() - tabData?.firstRequestProcessed > 1800000 &&
       extensionSettings?.stopRequestProcessing === 'true'
@@ -92,7 +93,8 @@ chrome.webRequest.onResponseStarted.addListener(
           }
         }
       }
-      if (!tab || !responseHeaders) {
+
+      if (!tab || !responseHeaders || tab.url === 'chrome://newtab/') {
         return;
       }
 
@@ -167,7 +169,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
       await PROMISE_QUEUE.add(async () => {
         const tab = await getTab(tabId);
 
-        if (!tab || !requestHeaders) {
+        if (!tab || !requestHeaders || tab.url === 'chrome://newtab/') {
           return;
         }
         if (
@@ -220,10 +222,11 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 chrome.tabs.onCreated.addListener(async (tab) => {
   await PROMISE_QUEUE.add(async () => {
     if (tab.id) {
-      const allowedNumberOfTabs = (
-        await chrome.storage.sync.get('allowedNumberOfTabs')
-      )['allowedNumberOfTabs'];
-      if (allowedNumberOfTabs && allowedNumberOfTabs !== 'no-restriction') {
+      const extensionSettings = await chrome.storage.sync.get();
+      if (
+        extensionSettings?.allowedNumberOfTabs &&
+        extensionSettings?.allowedNumberOfTabs !== 'no-restriction'
+      ) {
         const previousTabData = await chrome.storage.local.get();
         const doesTabExist = await getTab(previousTabData?.tabToRead);
         if (
@@ -232,7 +235,6 @@ chrome.tabs.onCreated.addListener(async (tab) => {
         ) {
           return;
         }
-        await chrome.storage.local.set({ tabToRead: tab.id.toString() });
         await CookieStore.addTabData(tab.id.toString());
       } else {
         await CookieStore.addTabData(tab.id.toString());
@@ -270,7 +272,7 @@ chrome.tabs.onRemoved.addListener(async (tabId) => {
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   await PROMISE_QUEUE.add(async () => {
     if (changeInfo.status === 'loading' && tab.url) {
-      await CookieStore.removeTabData(tabId.toString());
+      await CookieStore.removeCookieData(tabId.toString());
     }
   });
 });
