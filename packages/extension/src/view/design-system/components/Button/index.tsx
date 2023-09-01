@@ -27,7 +27,7 @@ const Button = ({ onClick, text }: ButtonProps) => {
     <button
       data-test-id="blue-color-button"
       onClick={onClick}
-      className="py-1 px-2 text-white dark:text-jet-black dark:bg-light-blue bg-dark-blue rounded"
+      className="py-1 px-2 text-white dark:text-jet-black dark:bg-light-blue bg-dark-blue rounded font-medium"
     >
       {text}
     </button>

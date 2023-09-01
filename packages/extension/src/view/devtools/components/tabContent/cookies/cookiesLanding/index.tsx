@@ -92,7 +92,7 @@ const CookiesLanding = () => {
           <div className="flex flex-col w-full items-center justify-center">
             <MessageBox
               headerText="Cookie processing information"
-              bodyText={`Request processing on this tab will be paused after ${dateWritten}. Click on the button below to the reset timer.`}
+              bodyText={`Request processing on this tab will be paused after ${dateWritten}. Click on the button below to reset the timer.`}
             />
             <div>
               <Button
