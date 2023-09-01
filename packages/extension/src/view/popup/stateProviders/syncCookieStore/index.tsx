@@ -273,27 +273,26 @@ export const Provider = ({ children }: PropsWithChildren) => {
     await CookieStore.addTabData(changedTabId?.toString());
     const storedTabData = Object.keys(await chrome.storage.local.get());
     // eslint-disable-next-line guard-for-in
-    await Promise.all(
-      storedTabData.map(async (tabIdToBeDeleted) => {
-        if (
-          tabIdToBeDeleted !== changedTabId &&
-          tabIdToBeDeleted !== 'tabToRead'
-        ) {
-          await CookieStore.removeTabData(tabIdToBeDeleted);
-          await chrome.action.setBadgeText({
-            tabId: parseInt(tabIdToBeDeleted),
-            text: '',
-          });
-          const checkIfTabDataDeleted = await chrome.storage.local.get();
-          if (Object.keys(checkIfTabDataDeleted).includes(tabIdToBeDeleted)) {
-            return Promise.reject(new Error('Couldnt delete object'));
-          } else {
-            return Promise.resolve();
-          }
-        }
-        return Promise.resolve();
-      })
-    );
+    storedTabData.map(async (tabIdToBeDeleted) => {
+      if (
+        tabIdToBeDeleted !== changedTabId &&
+        tabIdToBeDeleted !== 'tabToRead'
+      ) {
+        await CookieStore.removeTabData(tabIdToBeDeleted);
+        await chrome.action.setBadgeText({
+          tabId: parseInt(tabIdToBeDeleted),
+          text: '',
+        });
+      }
+      return Promise.resolve();
+    });
+
+    chrome.tabs.query({ active: true }, (tab) => {
+      if (tab[0]?.url) {
+        setTabUrl(tab[0]?.url);
+      }
+    });
+
     await chrome.tabs.reload(Number(changedTabId));
     setIsCurrentTabBeingListenedTo(true);
   }, []);
