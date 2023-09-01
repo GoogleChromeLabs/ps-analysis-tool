@@ -68,6 +68,14 @@ export const initialize = async () => {
 
   if (url) {
     // Single URL.
+
+    const prefix = await promptly.prompt(
+      `Please add a prefix to easily identify output files later - `
+    );
+    const cookiesFilePath = `./out/${prefix}-cookies.csv`;
+    const technologiesFilePath = `./out/${prefix}-cookies.csv`;
+    const dataFilePath = `./out/${prefix}-data.json`;
+
     let spinner = ora('Analyzing cookies set on first page visit...').start();
 
     const cookies = await generatePageVisitCookies(new URL(url), browser);
@@ -97,30 +105,30 @@ export const initialize = async () => {
       technologies.map(({ name }) => ({ name }))
     );
 
-    spinner.stop();
-    console.log(clc.green('Done analyzing technologies!'));
-    console.log(
-      'The following output files were generated in the "out" directory'
-    );
-    console.log('- cookies.csv (Cookie report)');
-    console.log('- technologies. (Technologies report)');
-    console.log('- data.json (Both reports in JSON)');
+    await ensureFile(cookiesFilePath);
+    await writeFile(cookiesFilePath, csvCookies);
 
-    await ensureFile('./out/cookies.csv');
-    await writeFile('./out/cookies.csv', csvCookies);
+    await ensureFile(technologiesFilePath);
+    await writeFile(technologiesFilePath, csvTechnologies);
 
-    await ensureFile('./out/technologies.csv');
-    await writeFile('./out/technologies.csv', csvTechnologies);
-
-    await ensureFile('./out/data.json');
+    await ensureFile(dataFilePath);
     await writeFile(
-      './out/data.json',
+      dataFilePath,
       JSON.stringify(
         { cookies: cookiesDetails, technologies: technologies },
         undefined,
         2
       )
     );
+
+    spinner.stop();
+    console.log(clc.green('Done analyzing technologies!'));
+    console.log(
+      'The following output files were generated in the "out" directory'
+    );
+    console.log(`- ${prefix}-cookies.csv (Cookie report)`);
+    console.log(`- ${prefix}-technologies. (Technologies report)`);
+    console.log(`- ${prefix}-data.json (Both reports in JSON)`);
   } else if (sitemapURL) {
     const siteMapper = new Sitemapper({
       url: sitemapURL,
@@ -150,6 +158,13 @@ export const initialize = async () => {
       )
     );
 
+    const prefix = await promptly.prompt(
+      `Please add a prefix to easily identify output files later - `
+    );
+    const cookiesFilePath = `./out/${prefix}-cookies.csv`;
+    const technologiesFilePath = `./out/${prefix}-technologies.csv`;
+    const dataFilePath = `./out/${prefix}-data.json`;
+
     const resources: { url: string; cookies: CookieLogDetails[] }[] = [];
 
     for (let i = 0; i < countInput / BATCH_SIZE; i++) {
@@ -175,7 +190,7 @@ export const initialize = async () => {
               cookies.forEach((theCookie) => {
                 const cookie: CookieLogDetails | null = normalizeCookie(
                   theCookie,
-                  url
+                  _url
                 );
                 if (cookie) {
                   cookiesDetails.push(cookie);
@@ -195,20 +210,16 @@ export const initialize = async () => {
 
     resources.forEach(({ cookies }) => {
       cookies.forEach((cookie) => {
-        const ind = cookieList.findIndex(
-          ({ name, domain }) => cookie.name === name && cookie.domain === domain
-        );
+        console.log(cookie);
 
-        if (ind === -1) {
-          cookieList.push(cookie);
-        }
+        cookieList.push(cookie);
       });
     });
 
     const csvCookies: string = getCSVbyObject(cookieList);
 
-    await ensureFile('./out/cookies.csv');
-    await writeFile('./out/cookies.csv', csvCookies);
+    await ensureFile(cookiesFilePath);
+    await writeFile(cookiesFilePath, csvCookies);
 
     console.log(clc.green('Done analyzing cookies!'));
 
@@ -251,17 +262,27 @@ export const initialize = async () => {
 
     const csvTechnologies: string = getCSVbyObject(techMap);
 
-    await ensureFile('./out/technologies.csv');
-    await writeFile('./out/technologies.csv', csvTechnologies);
+    await ensureFile(technologiesFilePath);
+    await writeFile(technologiesFilePath, csvTechnologies);
+
+    await ensureFile(dataFilePath);
+    await writeFile(
+      dataFilePath,
+      JSON.stringify(
+        { cookies: cookieList, technologies: technologies },
+        undefined,
+        2
+      )
+    );
 
     console.log(clc.green('Done analyzing technologies!'));
 
     console.log(
       'The following output files were generated in the "out" directory'
     );
-    console.log('- cookies.csv (Cookie report)');
-    console.log('- technologies. (Technologies report)');
-    console.log('- data.json (Both reports in JSON)');
+    console.log(`- ${prefix}-cookies.csv (Cookie report)`);
+    console.log(`- ${prefix}-technologies. (Technologies report)`);
+    console.log(`- ${prefix}-data.json (Both reports in JSON)`);
   }
 
   await browser.close();

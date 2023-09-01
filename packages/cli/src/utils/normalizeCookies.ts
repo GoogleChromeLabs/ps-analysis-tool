@@ -60,6 +60,7 @@ const normalizeCookie = (
     category: cookieDetail.category,
     description: cookieDetail.description,
     isFirstParty: isFirstParty(theCookie.domain, tabUrl) ? 'Yes' : 'No',
+    pageUrl: tabUrl,
   };
 };
 
