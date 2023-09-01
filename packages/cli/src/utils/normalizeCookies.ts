@@ -22,8 +22,9 @@ import { Protocol } from 'puppeteer';
  * Internal dependencies.
  */
 import getOpenCookiesDetails from './getOpenCookieDetails';
-import isFirstParty from './isFirstParty';
 import { CookieLogDetails } from '../types';
+
+import { isFirstParty } from '@cookie-analysis-tool/common';
 
 const normalizeCookie = (
   theCookie: Protocol.Network.Cookie,
@@ -38,8 +39,6 @@ const normalizeCookie = (
   const openCookiesData: { [key: string]: any } = getOpenCookiesDetails();
   let cookieDetail: { [key: string]: any } =
     cookieName in openCookiesData ? openCookiesData[cookieName] : null;
-
-  console.log(cookieDetail);
 
   if (!cookieDetail) {
     cookieDetail = {

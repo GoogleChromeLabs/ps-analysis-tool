@@ -13,10 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as parseUrl } from './parseUrl';
-export { default as delay } from './delay';
-export { default as generatePageVisitCookies } from './generatePageVisitCookies';
-export { default as normalizeCookie } from './normalizeCookies';
-export { default as getOpenCookieDetails } from './getOpenCookieDetails';
-export { default as getCSVbyObject } from './getCSVbyObject';
-export { default as generateTechnology } from './generateTechnology';
+/**
+ * Parses a URL string and returns a new URL object.
+ * If the URL is invalid, it returns null.
+ * @param {string} url - The URL string to parse.
+ * @returns {URL | null} - The parsed URL object or null if the URL is invalid.
+ */
+export const parseUrl = (url: string): URL | null => {
+  try {
+    return new URL(url);
+  } catch (e) {
+    return null;
+  }
+};

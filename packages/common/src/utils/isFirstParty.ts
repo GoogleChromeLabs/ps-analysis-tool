@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// @todo Create and use from a common package.
 /**
  * External dependencies.
  */
@@ -22,7 +21,7 @@ import { getDomain } from 'tldts';
 /**
  * Internal dependencies.
  */
-import parseUrl from './parseUrl';
+import { parseUrl } from './parseUrl';
 
 /**
  * Identifies if a cookie's domain is first party by comparing it with the domain of the given URL.

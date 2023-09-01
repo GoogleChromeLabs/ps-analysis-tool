@@ -27,7 +27,8 @@
     "simple-cookie": "^1.0.15",
     "sitemapper": "^3.2.6",
     "tldts": "^6.0.14",
-    "wappalyzer": "^6.10.66"
+    "wappalyzer": "^6.10.66",
+    "@cookie-analysis-tool/common":"*"
   },
   "devDependencies": {
     "@types/cli-color": "^2.0.2",
