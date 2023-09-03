@@ -29,10 +29,6 @@ import TABS from './tabs';
 const App: React.FC = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
   const TabContent = TABS[selectedTabIndex].component;
-  const tabs = TABS.map((tab) => ({
-    id: tab.id,
-    name: tab.display_name,
-  }));
 
   return (
     <div className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black">
@@ -54,7 +50,6 @@ const App: React.FC = () => {
           className="h-full flex flex-col pt-0.5 border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
         >
           <Sidebar
-            tabs={tabs}
             selectedIndex={selectedTabIndex}
             setIndex={setSelectedTabIndex}
           />

@@ -25,6 +25,7 @@ import classNames from 'classnames';
 import Accordion from './accordion';
 import { useCookieStore } from '../../stateProviders/syncCookieStore';
 import MenuItem from './menuItem';
+import TABS from '../../tabs';
 
 interface Tab {
   id: string;
@@ -32,12 +33,11 @@ interface Tab {
 }
 
 interface SidebarProps {
-  tabs: Tab[];
   selectedIndex: number;
   setIndex: (index: number) => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ tabs, selectedIndex, setIndex }) => {
+const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
   const { setSelectedFrame, selectedFrame, tabFrames } = useCookieStore(
     ({ state, actions }) => ({
       setSelectedFrame: actions.setSelectedFrame,
@@ -48,6 +48,10 @@ const Sidebar: React.FC<SidebarProps> = ({ tabs, selectedIndex, setIndex }) => {
   const [accordionState, setAccordionState] = useState<boolean>(false);
   const [isTabFocused, setIsTabFocused] = useState<boolean>(true);
   const sidebarContainerRef = useRef<HTMLDivElement>(null);
+  const tabs: Tab[] = TABS.map((tab) => ({
+    id: tab.id,
+    name: tab.display_name,
+  }));
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -58,7 +62,9 @@ const Sidebar: React.FC<SidebarProps> = ({ tabs, selectedIndex, setIndex }) => {
         setIsTabFocused(false);
       }
     };
+
     document.addEventListener('click', handleClickOutside, true);
+
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
@@ -78,10 +84,12 @@ const Sidebar: React.FC<SidebarProps> = ({ tabs, selectedIndex, setIndex }) => {
     (event: React.KeyboardEvent<HTMLDivElement>) => {
       let keys: string[] = [];
       let currIndex = 0;
+
       if (tabFrames) {
         keys = Object.keys(tabFrames);
         currIndex = keys.findIndex((frame) => frame === selectedFrame);
       }
+
       switch (event.code) {
         case 'ArrowUp':
           if (accordionState) {
@@ -161,46 +169,50 @@ const Sidebar: React.FC<SidebarProps> = ({ tabs, selectedIndex, setIndex }) => {
   return (
     <div className="overflow-auto h-full">
       <div ref={sidebarContainerRef}>
-        {tabs.map(({ id, name }, index: number) => (
-          <div
-            key={id}
-            data-testid={id}
-            className={classNames(
-              'flex items-center cursor-default gap-y-1.5 outline-0 dark:text-bright-gray',
-              selectedIndex === index &&
-                name !== 'Cookies' &&
-                (isTabFocused
-                  ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
-                  : 'bg-gainsboro dark:bg-outer-space')
-            )}
-            tabIndex={0}
-            onKeyDown={(event) => keyboardNavigator(event)}
-          >
-            {id === 'cookies' ? (
-              <Accordion
-                keyboardNavigator={keyboardNavigator}
-                accordionState={accordionState}
-                setAccordionState={setAccordionState}
-                tabFrames={tabFrames}
-                setSelectedFrame={setSelectedFrame}
-                selectedFrame={selectedFrame}
-                selectedIndex={selectedIndex}
-                index={index}
-                tabName={name}
-                setIndex={mainMenuTabSelector}
-                isTabFocused={isTabFocused}
-                setIsTabFocused={setIsTabFocused}
-              />
-            ) : (
-              <MenuItem
-                handleClick={() => mainMenuTabSelector(index)}
-                isActive={selectedIndex === index && isTabFocused}
-                tabName={name}
-                tabId={id}
-              />
-            )}
-          </div>
-        ))}
+        {tabs.map(({ id, name }, index: number) => {
+          const containerClass = classNames(
+            'flex items-center cursor-default gap-y-1.5 outline-0 dark:text-bright-gray',
+            selectedIndex === index &&
+              id !== 'cookies' &&
+              (isTabFocused
+                ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
+                : 'bg-gainsboro dark:bg-outer-space')
+          );
+
+          return (
+            <div
+              key={id}
+              data-testid={id}
+              className={containerClass}
+              tabIndex={0}
+              onKeyDown={(event) => keyboardNavigator(event)}
+            >
+              {id === 'cookies' ? (
+                <Accordion
+                  keyboardNavigator={keyboardNavigator}
+                  accordionState={accordionState}
+                  setAccordionState={setAccordionState}
+                  tabFrames={tabFrames}
+                  setSelectedFrame={setSelectedFrame}
+                  selectedFrame={selectedFrame}
+                  selectedIndex={selectedIndex}
+                  index={index}
+                  tabName={name}
+                  setIndex={mainMenuTabSelector}
+                  isTabFocused={isTabFocused}
+                  setIsTabFocused={setIsTabFocused}
+                />
+              ) : (
+                <MenuItem
+                  handleClick={() => mainMenuTabSelector(index)}
+                  isActive={selectedIndex === index && isTabFocused}
+                  tabName={name}
+                  tabId={id}
+                />
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

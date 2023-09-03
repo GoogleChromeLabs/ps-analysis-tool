@@ -67,18 +67,20 @@ const Accordion: React.FC<AccordionProps> = ({
     setSelectedFrame(null);
   }, [accordionState, setAccordionState, setSelectedFrame]);
 
+  const headingContainerClass = classNames(
+    'flex h-full flex-row items-center pl-[9px] py-0.5 outline-0 dark:text-bright-gray',
+    selectedIndex === index &&
+      !selectedFrame &&
+      (isTabFocused
+        ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
+        : 'bg-gainsboro dark:bg-outer-space')
+  );
+
   return (
     <div className="flex flex-col w-screen">
       <div
         data-testid="cookies-tab-heading-wrapper"
-        className={classNames(
-          'flex h-full flex-row items-center pl-[9px] py-0.5 outline-0 dark:text-bright-gray',
-          selectedIndex === index &&
-            !selectedFrame &&
-            (isTabFocused
-              ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
-              : 'bg-gainsboro dark:bg-outer-space')
-        )}
+        className={headingContainerClass}
         tabIndex={0}
         onClick={() => setIndex(index)}
         onKeyDown={(event) => keyboardNavigator(event)}
