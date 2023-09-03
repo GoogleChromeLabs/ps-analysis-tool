@@ -15,3 +15,4 @@
  */
 export { default as BounceTracking } from './bounceTracking';
 export { default as Fingerprinting } from './fingerprinting';
+export { default as AntiCovertTracking } from './antiCovertTracking';

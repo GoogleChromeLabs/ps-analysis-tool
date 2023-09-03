@@ -18,8 +18,8 @@
  */
 import React from 'react';
 
-const Fps = () => {
-  return <h3>Fps</h3>;
+const PrivateAdvertising = () => {
+  return <h2>Private Advertising</h2>;
 };
 
-export default Fps;
+export default PrivateAdvertising;

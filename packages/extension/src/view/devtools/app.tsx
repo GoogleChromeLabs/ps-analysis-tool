@@ -25,6 +25,10 @@ import { Resizable } from 're-resizable';
 import './app.css';
 import {
   Cookies,
+  SiteBoundaries,
+  Chips,
+  RelatedWebsiteSets,
+  PrivateAdvertising,
   Topics,
   Attribution,
   BounceTracking,
@@ -36,6 +40,22 @@ const TABS = [
   {
     display_name: 'Cookies',
     Component: Cookies,
+  },
+  {
+    display_name: 'Site Boundaries',
+    Component: SiteBoundaries,
+  },
+  {
+    display_name: 'CHIPS',
+    Component: Chips,
+  },
+  {
+    display_name: 'Related Website Sets',
+    Component: RelatedWebsiteSets,
+  },
+  {
+    display_name: 'Private Advertising',
+    Component: PrivateAdvertising,
   },
   {
     display_name: 'Topics',

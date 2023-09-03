@@ -14,4 +14,5 @@
  * limitations under the License.
  */
 export { default as Chips } from './chips';
-export { default as Fps } from './fps';
+export { default as RelatedWebsiteSets } from './relatedWebsiteSets';
+export { default as SiteBoundaries } from './siteBoundaries';

@@ -47,6 +47,22 @@ interface Icons {
 
 const MenuItem = ({ handleClick, name, isActive }: MenuItemProps) => {
   const icons: Icons = {
+    'Site Boundaries': {
+      default: TopicsIcon,
+      selected: TopicsIconWhite,
+    },
+    CHIPS: {
+      default: TopicsIcon,
+      selected: TopicsIconWhite,
+    },
+    'Related Website Sets': {
+      default: TopicsIcon,
+      selected: TopicsIconWhite,
+    },
+    'Private Advertising': {
+      default: TopicsIcon,
+      selected: TopicsIconWhite,
+    },
     Topics: {
       default: TopicsIcon,
       selected: TopicsIconWhite,

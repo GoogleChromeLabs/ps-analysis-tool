@@ -13,8 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './antiCovertTracking';
-export * from './privateAdvertising';
-export * from './siteBoundaries';
-export { default as Cookies } from './cookies';
-export { default as Sidebar } from './sidebar';
+/**
+ * External dependencies.
+ */
+import React from 'react';
+
+const RelatedWebsiteSets = () => {
+  return <h3>Related Website Sets</h3>;
+};
+
+export default RelatedWebsiteSets;
