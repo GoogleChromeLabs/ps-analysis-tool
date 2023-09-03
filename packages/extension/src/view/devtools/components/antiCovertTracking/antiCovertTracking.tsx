@@ -19,7 +19,7 @@
 import React from 'react';
 
 const AntiCovertTracking = () => {
-  return <h2>Anit Covert Tracking</h2>;
+  return <h2 className="p-2 text-xl">Anit Covert Tracking</h2>;
 };
 
 export default AntiCovertTracking;

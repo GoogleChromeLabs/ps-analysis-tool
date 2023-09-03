@@ -18,8 +18,18 @@
  */
 import React from 'react';
 
+/**
+ * Internal dependencies.
+ */
+import InfoCard from '../../../../design-system/components/infoCard';
+import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
+
 const RelatedWebsiteSets = () => {
-  return <h3>Related Website Sets</h3>;
+  return (
+    <div className="w-full h-full overflow-auto" data-testid="topics-content">
+      <InfoCard infoKey={PSInfoKey.RelatedWebsiteSets} />
+    </div>
+  );
 };
 
 export default RelatedWebsiteSets;

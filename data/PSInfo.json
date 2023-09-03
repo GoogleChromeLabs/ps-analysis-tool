@@ -31,9 +31,9 @@
     "videoOverview": "https://www.youtube.com/watch?v=UGA74CIcom8",
     "devDocumentation": "https://developer.chrome.com/docs/privacy-sandbox/attribution-reporting/"
   },
-  "first-party-sets": {
-    "name": "First-Party Sets",
-    "description": "The First-Party Sets API is a Privacy Sandbox proposal to enable browsers to group multiple websites into a single first-party context, allowing them to share information with each other.",
+  "related-website-sets": {
+    "name": "Related Website Sets",
+    "description": "The Related Website Sets (previously known as First Party Sets) API is a Privacy Sandbox proposal to enable browsers to group multiple websites into a single first-party context, allowing them to share information with each other.",
     "proposal": "https://github.com/WICG/first-party-sets",
     "publicDiscussion": "https://github.com/WICG/first-party-sets/issues",
     "videoOverview": "https://www.youtube.com/watch?v=cNJ8mZ-J3F8",
