@@ -27,11 +27,6 @@ import { useCookieStore } from '../../stateProviders/syncCookieStore';
 import MenuItem from './menuItem';
 import TABS from '../../tabs';
 
-interface Tab {
-  id: string;
-  name: string;
-}
-
 interface SidebarProps {
   selectedIndex: number;
   setIndex: (index: number) => void;
@@ -48,10 +43,6 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
   const [accordionState, setAccordionState] = useState<boolean>(false);
   const [isTabFocused, setIsTabFocused] = useState<boolean>(true);
   const sidebarContainerRef = useRef<HTMLDivElement>(null);
-  const tabs: Tab[] = TABS.map((tab) => ({
-    id: tab.id,
-    name: tab.display_name,
-  }));
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -100,7 +91,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                 setSelectedFrame(keys[currIndex - 1]);
               }
             } else {
-              if (tabs[selectedIndex].id === 'topics') {
+              if (TABS[selectedIndex].id === 'topics') {
                 setIndex(0);
                 setSelectedFrame(keys[keys.length - 1]);
               } else {
@@ -126,12 +117,12 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
             } else {
               if (selectedIndex === 0) {
                 setSelectedFrame(keys[0]);
-              } else if (selectedIndex < tabs.length - 1) {
+              } else if (selectedIndex < TABS.length - 1) {
                 setIndex(selectedIndex + 1);
               }
             }
           } else {
-            if (selectedIndex < tabs.length - 1) {
+            if (selectedIndex < TABS.length - 1) {
               setIndex(selectedIndex + 1);
             }
           }
@@ -162,14 +153,13 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
       tabFrames,
       setSelectedFrame,
       setIndex,
-      tabs,
     ]
   );
 
   return (
     <div className="overflow-auto h-full">
       <div ref={sidebarContainerRef}>
-        {tabs.map(({ id, name }, index: number) => {
+        {TABS.map(({ id, display_name: name }, index: number) => {
           const containerClass = classNames(
             'flex items-center cursor-default gap-y-1.5 outline-0 dark:text-bright-gray',
             selectedIndex === index &&
