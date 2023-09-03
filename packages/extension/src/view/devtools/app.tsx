@@ -23,67 +23,16 @@ import { Resizable } from 're-resizable';
  * Internal dependencies.
  */
 import './app.css';
-import {
-  Cookies,
-  SiteBoundaries,
-  Chips,
-  RelatedWebsiteSets,
-  PrivateAdvertising,
-  AntiCovertTracking,
-  Topics,
-  Attribution,
-  BounceTracking,
-  Fingerprinting,
-  Sidebar,
-} from './components';
-
-const TABS = [
-  {
-    display_name: 'Cookies',
-    Component: Cookies,
-  },
-  {
-    display_name: 'Site Boundaries',
-    Component: SiteBoundaries,
-  },
-  {
-    display_name: 'CHIPS',
-    Component: Chips,
-  },
-  {
-    display_name: 'Related Website Sets',
-    Component: RelatedWebsiteSets,
-  },
-  {
-    display_name: 'Private Advertising',
-    Component: PrivateAdvertising,
-  },
-  {
-    display_name: 'Topics',
-    Component: Topics,
-  },
-  {
-    display_name: 'Attribution',
-    Component: Attribution,
-  },
-  {
-    display_name: 'Anti-Covert tracking',
-    Component: AntiCovertTracking,
-  },
-  {
-    display_name: 'Bounce Tracking',
-    Component: BounceTracking,
-  },
-  {
-    display_name: 'Fingerprinting',
-    Component: Fingerprinting,
-  },
-];
+import { Sidebar } from './components';
+import TABS from './tabs';
 
 const App: React.FC = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
-  const TabContent = TABS[selectedTabIndex].Component;
-  const tabNames = TABS.map((tab) => tab.display_name);
+  const TabContent = TABS[selectedTabIndex].component;
+  const tabs = TABS.map((tab) => ({
+    id: tab.id,
+    name: tab.display_name,
+  }));
 
   return (
     <div className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black">
@@ -105,7 +54,7 @@ const App: React.FC = () => {
           className="h-full flex flex-col pt-0.5 border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
         >
           <Sidebar
-            tabsNames={tabNames}
+            tabs={tabs}
             selectedIndex={selectedTabIndex}
             setIndex={setSelectedTabIndex}
           />

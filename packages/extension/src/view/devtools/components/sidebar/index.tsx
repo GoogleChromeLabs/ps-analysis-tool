@@ -26,17 +26,18 @@ import Accordion from './accordion';
 import { useCookieStore } from '../../stateProviders/syncCookieStore';
 import MenuItem from './menuItem';
 
+interface Tab {
+  id: string;
+  name: string;
+}
+
 interface SidebarProps {
-  tabsNames: string[];
+  tabs: Tab[];
   selectedIndex: number;
   setIndex: (index: number) => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({
-  tabsNames,
-  selectedIndex,
-  setIndex,
-}) => {
+const Sidebar: React.FC<SidebarProps> = ({ tabs, selectedIndex, setIndex }) => {
   const { setSelectedFrame, selectedFrame, tabFrames } = useCookieStore(
     ({ state, actions }) => ({
       setSelectedFrame: actions.setSelectedFrame,
@@ -91,7 +92,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                 setSelectedFrame(keys[currIndex - 1]);
               }
             } else {
-              if (tabsNames[selectedIndex] === 'Topics') {
+              if (tabs[selectedIndex].id === 'topics') {
                 setIndex(0);
                 setSelectedFrame(keys[keys.length - 1]);
               } else {
@@ -117,12 +118,12 @@ const Sidebar: React.FC<SidebarProps> = ({
             } else {
               if (selectedIndex === 0) {
                 setSelectedFrame(keys[0]);
-              } else if (selectedIndex < tabsNames.length - 1) {
+              } else if (selectedIndex < tabs.length - 1) {
                 setIndex(selectedIndex + 1);
               }
             }
           } else {
-            if (selectedIndex < tabsNames.length - 1) {
+            if (selectedIndex < tabs.length - 1) {
               setIndex(selectedIndex + 1);
             }
           }
@@ -153,17 +154,17 @@ const Sidebar: React.FC<SidebarProps> = ({
       tabFrames,
       setSelectedFrame,
       setIndex,
-      tabsNames,
+      tabs,
     ]
   );
 
   return (
     <div className="overflow-auto h-full">
       <div ref={sidebarContainerRef}>
-        {tabsNames.map((name, index: number) => (
+        {tabs.map(({ id, name }, index: number) => (
           <div
-            key={name}
-            data-testid={name}
+            key={id}
+            data-testid={id}
             className={classNames(
               'flex items-center cursor-default gap-y-1.5 outline-0 dark:text-bright-gray',
               selectedIndex === index &&
@@ -175,7 +176,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             tabIndex={0}
             onKeyDown={(event) => keyboardNavigator(event)}
           >
-            {name === 'Cookies' ? (
+            {id === 'cookies' ? (
               <Accordion
                 keyboardNavigator={keyboardNavigator}
                 accordionState={accordionState}
@@ -194,7 +195,8 @@ const Sidebar: React.FC<SidebarProps> = ({
               <MenuItem
                 handleClick={() => mainMenuTabSelector(index)}
                 isActive={selectedIndex === index && isTabFocused}
-                name={name}
+                tabName={name}
+                tabId={id}
               />
             )}
           </div>
