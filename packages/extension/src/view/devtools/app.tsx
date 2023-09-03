@@ -29,6 +29,7 @@ import {
   Chips,
   RelatedWebsiteSets,
   PrivateAdvertising,
+  AntiCovertTracking,
   Topics,
   Attribution,
   BounceTracking,
@@ -64,6 +65,10 @@ const TABS = [
   {
     display_name: 'Attribution',
     Component: Attribution,
+  },
+  {
+    display_name: 'Anti-Covert tracking',
+    Component: AntiCovertTracking,
   },
   {
     display_name: 'Bounce Tracking',

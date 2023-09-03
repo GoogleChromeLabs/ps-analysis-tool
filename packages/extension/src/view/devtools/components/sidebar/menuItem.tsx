@@ -22,6 +22,16 @@ import React, { type ComponentType, type SVGProps } from 'react';
  * Internal dependencies.
  */
 import {
+  SiteBoundariesIcon,
+  SiteBoundariesIconWhite,
+  ChipsIcon,
+  ChipsIconWhite,
+  RelatedWebsiteSetsIcon,
+  RelatedWebsiteSetsIconWhite,
+  PrivateAdvertisingIcon,
+  PrivateAdvertisingIconWhite,
+  AntiCovertTrackingIcon,
+  AntiCovertTrackingIconWhite,
   AttributionIcon,
   AttributionIconWhite,
   BounceTrackingIcon,
@@ -48,20 +58,20 @@ interface Icons {
 const MenuItem = ({ handleClick, name, isActive }: MenuItemProps) => {
   const icons: Icons = {
     'Site Boundaries': {
-      default: TopicsIcon,
-      selected: TopicsIconWhite,
+      default: SiteBoundariesIcon,
+      selected: SiteBoundariesIconWhite,
     },
     CHIPS: {
-      default: TopicsIcon,
-      selected: TopicsIconWhite,
+      default: ChipsIcon,
+      selected: ChipsIconWhite,
     },
     'Related Website Sets': {
-      default: TopicsIcon,
-      selected: TopicsIconWhite,
+      default: RelatedWebsiteSetsIcon,
+      selected: RelatedWebsiteSetsIconWhite,
     },
     'Private Advertising': {
-      default: TopicsIcon,
-      selected: TopicsIconWhite,
+      default: PrivateAdvertisingIcon,
+      selected: PrivateAdvertisingIconWhite,
     },
     Topics: {
       default: TopicsIcon,
@@ -71,13 +81,17 @@ const MenuItem = ({ handleClick, name, isActive }: MenuItemProps) => {
       default: AttributionIcon,
       selected: AttributionIconWhite,
     },
-    Fingerprinting: {
-      default: FingerPrintingIcon,
-      selected: FingerPrintingIconWhite,
+    'Anti-Covert tracking': {
+      default: AntiCovertTrackingIcon,
+      selected: AntiCovertTrackingIconWhite,
     },
     'Bounce Tracking': {
       default: BounceTrackingIcon,
       selected: BounceTrackingIconWhite,
+    },
+    Fingerprinting: {
+      default: FingerPrintingIcon,
+      selected: FingerPrintingIconWhite,
     },
   };
 
