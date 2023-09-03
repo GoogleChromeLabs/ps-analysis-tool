@@ -210,8 +210,6 @@ export const initialize = async () => {
 
     resources.forEach(({ cookies }) => {
       cookies.forEach((cookie) => {
-        console.log(cookie);
-
         cookieList.push(cookie);
       });
     });
