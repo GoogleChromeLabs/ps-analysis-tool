@@ -30,6 +30,8 @@ import {
 } from './components';
 
 import {
+  CookieIcon,
+  CookieIconWhite,
   SiteBoundariesIcon,
   SiteBoundariesIconWhite,
   ChipsIcon,
@@ -55,6 +57,10 @@ const TABS = [
     display_name: 'Cookies',
     component: Cookies,
     id: 'cookies',
+    icons: {
+      default: CookieIcon,
+      selected: CookieIconWhite,
+    },
   },
   {
     display_name: 'Site Boundaries',

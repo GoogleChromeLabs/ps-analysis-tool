@@ -26,7 +26,6 @@ import Accordion from './accordion';
 import { useCookieStore } from '../../stateProviders/syncCookieStore';
 import MenuItem from './menuItem';
 import TABS from '../../tabs';
-
 interface SidebarProps {
   selectedIndex: number;
   setIndex: (index: number) => void;

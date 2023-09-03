@@ -24,8 +24,8 @@ import classNames from 'classnames';
  */
 import {
   ArrowDown,
-  CookieGray,
-  CookieWhite,
+  CookieIcon,
+  CookieIconWhite,
   ArrowDownWhite,
 } from '../../../../../icons';
 
@@ -66,7 +66,6 @@ const Accordion: React.FC<AccordionProps> = ({
     setAccordionState(!accordionState);
     setSelectedFrame(null);
   }, [accordionState, setAccordionState, setSelectedFrame]);
-
   const headingContainerClass = classNames(
     'flex h-full flex-row items-center pl-[9px] py-0.5 outline-0 dark:text-bright-gray',
     selectedIndex === index &&
@@ -100,9 +99,9 @@ const Accordion: React.FC<AccordionProps> = ({
         </div>
         <div>
           {selectedIndex === index && !selectedFrame && isTabFocused ? (
-            <CookieWhite />
+            <CookieIconWhite />
           ) : (
-            <CookieGray />
+            <CookieIcon />
           )}
         </div>
         <p className="pl-1.5 truncate">{tabName}</p>
@@ -135,9 +134,9 @@ const Accordion: React.FC<AccordionProps> = ({
             >
               <div className="h-4">
                 {selectedFrame === key && isTabFocused ? (
-                  <CookieWhite />
+                  <CookieIconWhite />
                 ) : (
-                  <CookieGray />
+                  <CookieIcon />
                 )}
               </div>
               <p
