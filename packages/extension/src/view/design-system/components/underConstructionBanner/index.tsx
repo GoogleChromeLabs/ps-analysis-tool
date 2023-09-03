@@ -21,17 +21,19 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import InfoCard from '../../../../design-system/components/infoCard';
-import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
-import { UnderContstructionBanner } from '../../../../design-system/components';
+// eslint-disable-next-line import/no-relative-packages
+import UnderContruction from '../../../../../../../third_party/icons/under-construction.svg';
 
-const Chips = () => {
+interface UnderContstructionBannerProps {
+  text: string;
+}
+const UnderContstructionBanner = ({ text }: UnderContstructionBannerProps) => {
   return (
-    <div className="w-full h-full overflow-auto" data-testid="chips-content">
-      <InfoCard infoKey={PSInfoKey.Chips} />
-      <UnderContstructionBanner text="CHIPS insights are coming soon.." />
+    <div className="bg-tertiary dark:hsl-dark p-4 mb-5 mt-10 mx-3 rounded-md leading-5 max-w-2xl flex">
+      <UnderContruction className="mr-2" />
+      <p className="text-raisin-black dark:text-warning-orange">{text}</p>
     </div>
   );
 };
 
-export default Chips;
+export default UnderContstructionBanner;

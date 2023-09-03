@@ -18,5 +18,6 @@ export { default as Circle } from './circle';
 export { default as MatrixComponent } from './matrix/matrixComponent';
 export { default as MatrixComponentHorizontal } from './matrix/matrixComponent/matrixComponentHorizontal';
 export { default as Matrix } from './matrix';
+export { default as UnderContstructionBanner } from './underConstructionBanner';
 
 export type { MatrixComponentProps } from './matrix/matrixComponent';

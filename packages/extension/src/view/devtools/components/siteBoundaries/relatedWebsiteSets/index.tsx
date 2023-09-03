@@ -23,11 +23,16 @@ import React from 'react';
  */
 import InfoCard from '../../../../design-system/components/infoCard';
 import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
+import { UnderContstructionBanner } from '../../../../design-system/components';
 
 const RelatedWebsiteSets = () => {
   return (
-    <div className="w-full h-full overflow-auto" data-testid="topics-content">
+    <div
+      className="w-full h-full overflow-auto"
+      data-testid="related-website-sets-content"
+    >
       <InfoCard infoKey={PSInfoKey.RelatedWebsiteSets} />
+      <UnderContstructionBanner text="Insights and a JSON generator for RWS registration are coming soon" />
     </div>
   );
 };
