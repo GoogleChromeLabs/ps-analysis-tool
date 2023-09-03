@@ -73,6 +73,7 @@ const TABS = [
       default: ChipsIcon,
       selected: ChipsIconWhite,
     },
+    parentId: 'siteBoundaries',
   },
   {
     display_name: 'Related Website Sets',
@@ -82,6 +83,7 @@ const TABS = [
       default: RelatedWebsiteSetsIcon,
       selected: RelatedWebsiteSetsIconWhite,
     },
+    parentId: 'siteBoundaries',
   },
   {
     display_name: 'Private Advertising',
@@ -100,6 +102,7 @@ const TABS = [
       default: TopicsIcon,
       selected: TopicsIconWhite,
     },
+    parentId: 'privateAdvertising',
   },
   {
     display_name: 'Attribution',
@@ -109,6 +112,7 @@ const TABS = [
       default: AttributionIcon,
       selected: AttributionIconWhite,
     },
+    parentId: 'privateAdvertising',
   },
   {
     display_name: 'Anti-Covert tracking',
@@ -127,6 +131,7 @@ const TABS = [
       default: BounceTrackingIcon,
       selected: BounceTrackingIconWhite,
     },
+    parentId: 'antiCovertTracking',
   },
   {
     display_name: 'Fingerprinting',
@@ -136,6 +141,7 @@ const TABS = [
       default: FingerPrintingIcon,
       selected: FingerPrintingIconWhite,
     },
+    parentId: 'antiCovertTracking',
   },
 ];
 
