@@ -54,7 +54,7 @@ const AccordionChildren: React.FC<AccordionChildrenProps> = ({
             : 'bg-gainsboro dark:bg-outer-space')
       )}
     >
-      <div className="h-4">
+      <div className="h-4 flex items-center">
         {isAccordionChildSelected && isTabFocused ? (
           <SelectedIcon />
         ) : (
