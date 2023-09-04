@@ -145,7 +145,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
               if (
                 accordionState &&
                 (accordionState[TABS[selectedIndex].id] || //@ts-ignore Since we are using Boolean this will default to false
-                  Boolean(accordionState[TABS[selectedIndex + 1].parentId]))
+                  Boolean(accordionState[TABS[selectedIndex - 1].parentId]))
               ) {
                 setSelectedAccordionChild(TABS[selectedIndex - 1].id);
                 setIndex(selectedIndex - 1);
@@ -316,14 +316,14 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                               />
                             );
                           }
-                          return <></>;
+                          return null;
                         })}
                   </Accordion>
                 )}
               </div>
             );
           }
-          return <></>;
+          return null;
         })}
       </div>
     </div>

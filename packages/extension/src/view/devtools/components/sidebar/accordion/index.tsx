@@ -70,7 +70,7 @@ const Accordion = ({
         onKeyDown={(event) => keyboardNavigator(event)}
       >
         <div
-          data-testid="accordion-opener"
+          data-testid={`${tabId}-accordion-opener`}
           className={`origin-center transition-transform scale-125 p-0.5 mr-1 ${
             accordionState ? '' : '-rotate-90'
           }`}
