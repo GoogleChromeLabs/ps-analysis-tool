@@ -16,137 +16,88 @@
 /**
  * External dependencies.
  */
-import React, { useCallback } from 'react';
+import React, { type PropsWithChildren } from 'react';
 import classNames from 'classnames';
 
 /**
  * Internal dependencies
  */
-import {
-  ArrowDown,
-  CookieIcon,
-  CookieIconWhite,
-  ArrowDownWhite,
-} from '../../../../../icons';
+import { ArrowDown, ArrowDownWhite } from '../../../../../icons';
+import TABS from '../../../tabs';
 
 interface AccordionProps {
   accordionState: boolean;
-  keyboardNavigator: (event: React.KeyboardEvent<HTMLDivElement>) => void;
-  setAccordionState: (state: boolean) => void;
-  tabName: string;
   index: number;
-  selectedIndex: number;
-  tabFrames: {
-    [key: string]: {
-      frameIds: number[];
-    };
-  } | null;
-  setSelectedFrame: (state: string | null) => void;
-  selectedFrame: string | null;
-  setIndex: (state: number) => void;
   isTabFocused: boolean;
-  setIsTabFocused: (state: boolean) => void;
+  isAccordionHeaderSelected: boolean;
+  tabId: string;
+  tabName: string;
+  keyboardNavigator: (
+    event: React.KeyboardEvent<HTMLDivElement>,
+    id: string
+  ) => void;
+  onAccordionHeaderClick: () => void;
+  setIndex: (state: number) => void;
 }
 
-const Accordion: React.FC<AccordionProps> = ({
-  keyboardNavigator,
+const Accordion = ({
   accordionState,
-  setAccordionState,
-  tabName,
+  children,
   index,
-  selectedIndex,
-  tabFrames,
-  setSelectedFrame,
-  selectedFrame,
-  setIndex,
   isTabFocused,
-  setIsTabFocused,
-}) => {
-  const subMenuSelected = useCallback(() => {
-    setAccordionState(!accordionState);
-    setSelectedFrame(null);
-  }, [accordionState, setAccordionState, setSelectedFrame]);
+  isAccordionHeaderSelected,
+  tabId,
+  tabName,
+  setIndex,
+  keyboardNavigator,
+  onAccordionHeaderClick,
+}: PropsWithChildren<AccordionProps>) => {
   const headingContainerClass = classNames(
     'flex h-full flex-row items-center pl-[9px] py-0.5 outline-0 dark:text-bright-gray',
-    selectedIndex === index &&
-      !selectedFrame &&
+    isAccordionHeaderSelected &&
       (isTabFocused
         ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
         : 'bg-gainsboro dark:bg-outer-space')
   );
+  const DefaultIcon = TABS[index].icons.default;
+  const SelectedIcon = TABS[index].icons.selected;
 
   return (
     <div className="flex flex-col w-screen">
       <div
-        data-testid="cookies-tab-heading-wrapper"
+        data-testid={`${tabId}-tab-heading-wrapper`}
         className={headingContainerClass}
         tabIndex={0}
         onClick={() => setIndex(index)}
-        onKeyDown={(event) => keyboardNavigator(event)}
+        onKeyDown={(event) => keyboardNavigator(event, tabId)}
       >
         <div
           data-testid="accordion-opener"
           className={`origin-center transition-transform scale-125 p-0.5 mr-1 ${
             accordionState ? '' : '-rotate-90'
           }`}
-          onClick={subMenuSelected}
+          onClick={onAccordionHeaderClick}
         >
-          {selectedIndex === index && !selectedFrame && isTabFocused ? (
+          {isAccordionHeaderSelected && isTabFocused ? (
             <ArrowDownWhite />
           ) : (
             <ArrowDown />
           )}
         </div>
         <div>
-          {selectedIndex === index && !selectedFrame && isTabFocused ? (
-            <CookieIconWhite />
+          {isAccordionHeaderSelected && isTabFocused ? (
+            <SelectedIcon />
           ) : (
-            <CookieIcon />
+            <DefaultIcon />
           )}
         </div>
         <p className="pl-1.5 truncate">{tabName}</p>
       </div>
       <div
-        data-testid="cookie-frames-container"
+        data-testid={`${tabId}-frames-container`}
         className={`${accordionState ? 'flex flex-col' : 'hidden'}`}
       >
-        {tabFrames &&
-          Object.keys(tabFrames)?.map((key) => (
-            <div
-              tabIndex={0}
-              data-testid={key}
-              key={key}
-              onClick={() => {
-                if (selectedIndex !== index) {
-                  setIndex(index);
-                }
-                setSelectedFrame(key);
-                setIsTabFocused(true);
-              }}
-              role="treeitem"
-              className={classNames(
-                'pl-9 py-0.5 h-5 flex items-center cursor-default outline-0 dark:text-bright-gray',
-                selectedFrame === key &&
-                  (isTabFocused
-                    ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
-                    : 'bg-gainsboro dark:bg-outer-space')
-              )}
-            >
-              <div className="h-4">
-                {selectedFrame === key && isTabFocused ? (
-                  <CookieIconWhite />
-                ) : (
-                  <CookieIcon />
-                )}
-              </div>
-              <p
-                className="pl-1.5 whitespace-nowrap"
-                title={`Cookies used by frames from ${key}`}
-              >
-                {key}
-              </p>
-            </div>
-          ))}
+        {children}
       </div>
     </div>
   );
