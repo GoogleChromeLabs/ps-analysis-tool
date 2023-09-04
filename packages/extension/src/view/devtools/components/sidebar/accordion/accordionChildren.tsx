@@ -43,6 +43,7 @@ const AccordionChildren: React.FC<AccordionChildrenProps> = ({
   return (
     <div
       tabIndex={0}
+      data-testid={accordionMenuItemName}
       onClick={onAccordionChildClick}
       role="treeitem"
       className={classNames(

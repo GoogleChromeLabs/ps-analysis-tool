@@ -129,7 +129,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                   if (
                     accordionState &&
                     (accordionState[TABS[selectedIndex].id] || //@ts-ignore We have already set the parents in useEffect
-                      Boolean(accordionState[TABS[selectedIndex + 1].parentId]))
+                      Boolean(accordionState[TABS[selectedIndex - 1].parentId]))
                   ) {
                     setSelectedAccordionChild(TABS[selectedIndex - 1].id);
                     setIndex(selectedIndex - 1);
