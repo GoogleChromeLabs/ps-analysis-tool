@@ -39,7 +39,6 @@ const App: React.FC = () => {
     changeListeningToThisTab,
     onChromeUrl,
     allowedNumberOfTabs,
-    stopRequestProcessing,
   } = useCookieStore(({ state, actions }) => ({
     cookieStats: state.tabCookieStats,
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
@@ -130,13 +129,6 @@ const App: React.FC = () => {
           {'Inspect cookies in the "Privacy Sandbox" panel of DevTools'}
         </p>
       </div>
-      {stopRequestProcessing && (
-        <div className="w-full text-center mt-4">
-          <p className="text-chart-label text-xs">
-            {'To save resources we will stop processing request after 30 mins.'}
-          </p>
-        </div>
-      )}
     </div>
   );
 };
