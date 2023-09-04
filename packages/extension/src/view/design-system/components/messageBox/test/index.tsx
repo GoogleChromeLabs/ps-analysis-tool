@@ -17,27 +17,27 @@
  * External dependencies.
  */
 import React from 'react';
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 
 /**
  * Internal dependencies.
  */
-import InfoCard from '../../../../design-system/components/infoCard';
-import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
-import { MessageBox } from '../../../../design-system/components';
+import MessageBox from '..';
 
-const RelatedWebsiteSets = () => {
-  return (
-    <div
-      className="w-full h-full overflow-auto"
-      data-testid="related-website-sets-content"
-    >
-      <InfoCard infoKey={PSInfoKey.RelatedWebsiteSets} />
+describe('MessageBox', () => {
+  it('renders the headerText and bodyText', () => {
+    render(
       <MessageBox
-        bodyText="Insights and a JSON generator for RWS registration are coming soon..."
-        headerText="Under Construction"
+        headerText={'No cookies found on this page'}
+        bodyText="Please try refreshing this page"
       />
-    </div>
-  );
-};
-
-export default RelatedWebsiteSets;
+    );
+    expect(
+      screen.getByText('No cookies found on this page')
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('Please try refreshing this page')
+    ).toBeInTheDocument();
+  });
+});

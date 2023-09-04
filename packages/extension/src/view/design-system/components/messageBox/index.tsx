@@ -18,26 +18,17 @@
  */
 import React from 'react';
 
-/**
- * Internal dependencies.
- */
-import InfoCard from '../../../../design-system/components/infoCard';
-import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
-import { MessageBox } from '../../../../design-system/components';
-
-const RelatedWebsiteSets = () => {
+interface MessageBoxProps {
+  headerText: string;
+  bodyText: string;
+}
+const MessageBox = ({ headerText, bodyText }: MessageBoxProps) => {
   return (
-    <div
-      className="w-full h-full overflow-auto"
-      data-testid="related-website-sets-content"
-    >
-      <InfoCard infoKey={PSInfoKey.RelatedWebsiteSets} />
-      <MessageBox
-        bodyText="Insights and a JSON generator for RWS registration are coming soon..."
-        headerText="Under Construction"
-      />
+    <div className="bg-hsl-light dark:hsl-dark p-4 m-3 leading-5 max-w-2xl">
+      <p className="text-warning-red dark:text-warning-orange">{headerText}</p>
+      <p className="text-raisin-black dark:text-bright-gray">{bodyText}</p>
     </div>
   );
 };
 
-export default RelatedWebsiteSets;
+export default MessageBox;

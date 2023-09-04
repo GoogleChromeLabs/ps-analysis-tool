@@ -23,13 +23,16 @@ import React from 'react';
  */
 import InfoCard from '../../../../design-system/components/infoCard';
 import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
-import { UnderContstructionBanner } from '../../../../design-system/components';
+import { MessageBox } from '../../../../design-system/components';
 
 const Chips = () => {
   return (
     <div className="w-full h-full overflow-auto" data-testid="chips-content">
       <InfoCard infoKey={PSInfoKey.Chips} />
-      <UnderContstructionBanner text="CHIPS insights are coming soon.." />
+      <MessageBox
+        bodyText="CHIPS insights are coming soon..."
+        headerText="Under Construction"
+      />
     </div>
   );
 };

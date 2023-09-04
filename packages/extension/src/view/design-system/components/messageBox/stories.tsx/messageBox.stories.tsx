@@ -16,28 +16,24 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
 /**
  * Internal dependencies.
  */
-import InfoCard from '../../../../design-system/components/infoCard';
-import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
-import { MessageBox } from '../../../../design-system/components';
+import MessageBox from '..';
 
-const RelatedWebsiteSets = () => {
-  return (
-    <div
-      className="w-full h-full overflow-auto"
-      data-testid="related-website-sets-content"
-    >
-      <InfoCard infoKey={PSInfoKey.RelatedWebsiteSets} />
-      <MessageBox
-        bodyText="Insights and a JSON generator for RWS registration are coming soon..."
-        headerText="Under Construction"
-      />
-    </div>
-  );
+const meta: Meta<typeof MessageBox> = {
+  title: 'Extension/DesignSystem/MessageBox',
+  component: MessageBox,
+  tags: ['autodocs'],
 };
 
-export default RelatedWebsiteSets;
+export default meta;
+
+export const Primary: StoryObj<typeof meta> = {
+  args: {
+    headerText: 'No cookies found on this page',
+    bodyText: 'Please try reloading the page',
+  },
+};

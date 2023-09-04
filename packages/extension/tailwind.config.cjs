@@ -73,6 +73,8 @@ module.exports = {
       mischka: '#AFB0B1',
       'cool-grey': '#323941',
       'asteriod-black': '#2B2C2F',
+      'warning-red': '#C33300',
+      'warning-orange': '#FA3',
     },
     backgroundColor: {
       ...colors,
@@ -92,6 +94,8 @@ module.exports = {
       'outer-space-crayola': '#303942',
       'outer-space': '#454545',
       'medium-persian-blue': '#0E639C',
+      'hsl-dark': '	hsl(var(--color-message-box-dark))',
+      'hsl-light': 'hsla(var(--color-message-box-light) / 10%)',
     },
     borderColor: {
       ...colors,
