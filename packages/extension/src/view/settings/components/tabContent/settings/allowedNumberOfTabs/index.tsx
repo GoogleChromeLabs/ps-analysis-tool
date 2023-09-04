@@ -33,7 +33,7 @@ const AllowedNumberOfTabs: React.FC = () => {
   );
   return (
     <div className="flex flex-col gap-1">
-      <h3 className="text-sm">
+      <h3 className="text-sm font-medium">
         Total number of allowed tabs to be processed together:
       </h3>
       <div className="flex flex-row gap-1">
