@@ -31,7 +31,6 @@ import { noop } from '../../../../utils/noop';
 export interface SettingStoreContext {
   state: {
     allowedNumberOfTabs: string | null;
-    stopRequestProcessing: boolean;
   };
   actions: {
     setSettingsInStorage: (key: string, value: any) => void;
@@ -41,7 +40,6 @@ export interface SettingStoreContext {
 const initialState: SettingStoreContext = {
   state: {
     allowedNumberOfTabs: null,
-    stopRequestProcessing: false,
   },
   actions: {
     setSettingsInStorage: noop,
@@ -55,13 +53,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
     null
   );
 
-  const [stopRequestProcessing, setStopRequestProcessing] =
-    useState<boolean>(false);
-
   const intitialSync = useCallback(async () => {
     const currentSettings = await chrome.storage.sync.get();
     setAllowedNumberOfTabs(currentSettings?.allowedNumberOfTabs);
-    setStopRequestProcessing(currentSettings?.stopRequestProcessing === 'true');
   }, []);
 
   const setSettingsInStorage = useCallback(async (key: string, value: any) => {
@@ -92,14 +86,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
           await chrome.storage.local.clear();
         }
       }
-      if (
-        Object.keys(changes).includes('stopRequestProcessing') &&
-        changes['stopRequestProcessing']?.newValue
-      ) {
-        setStopRequestProcessing(
-          changes['stopRequestProcessing']?.newValue === 'true'
-        );
-      }
     },
     []
   );
@@ -117,7 +103,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
       value={{
         state: {
           allowedNumberOfTabs,
-          stopRequestProcessing,
         },
         actions: {
           setSettingsInStorage,
