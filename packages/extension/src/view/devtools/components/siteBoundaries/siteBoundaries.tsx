@@ -13,13 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import React from 'react';
-
 const SiteBoundaries = () => {
-  return <h2 className="p-2 text-xl dark:text-bright-gray">Site Boundaries</h2>;
+  return null;
 };
 
 export default SiteBoundaries;

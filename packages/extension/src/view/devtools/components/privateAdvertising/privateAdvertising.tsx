@@ -13,15 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import React from 'react';
-
 const PrivateAdvertising = () => {
-  return (
-    <h2 className="p-2 text-xl dark:text-bright-gray">Private Advertising</h2>
-  );
+  return null;
 };
 
 export default PrivateAdvertising;

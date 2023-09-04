@@ -23,11 +23,16 @@ import React from 'react';
  */
 import InfoCard from '../../../../design-system/components/infoCard';
 import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
+import { MessageBox } from '../../../../design-system/components';
 
 const Topics = () => {
   return (
     <div className="w-full h-full overflow-auto" data-testid="topics-content">
       <InfoCard infoKey={PSInfoKey.Topics} />
+      <MessageBox
+        bodyText="Topics insight is coming soon..."
+        headerText="🚧  Under Construction"
+      />
     </div>
   );
 };

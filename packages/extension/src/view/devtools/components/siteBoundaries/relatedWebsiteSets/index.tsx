@@ -34,7 +34,7 @@ const RelatedWebsiteSets = () => {
       <InfoCard infoKey={PSInfoKey.RelatedWebsiteSets} />
       <MessageBox
         bodyText="Insights and a JSON generator for RWS registration are coming soon..."
-        headerText="Under Construction"
+        headerText="🚧 Under Construction"
       />
     </div>
   );

@@ -31,7 +31,7 @@ const Chips = () => {
       <InfoCard infoKey={PSInfoKey.Chips} />
       <MessageBox
         bodyText="CHIPS insights are coming soon..."
-        headerText="Under Construction"
+        headerText="🚧  Under Construction"
       />
     </div>
   );
