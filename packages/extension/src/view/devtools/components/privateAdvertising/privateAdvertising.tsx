@@ -19,7 +19,9 @@
 import React from 'react';
 
 const PrivateAdvertising = () => {
-  return <h2 className="p-2 text-xl">Private Advertising</h2>;
+  return (
+    <h2 className="p-2 text-xl dark:text-bright-gray">Private Advertising</h2>
+  );
 };
 
 export default PrivateAdvertising;

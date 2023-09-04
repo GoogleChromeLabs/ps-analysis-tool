@@ -28,16 +28,14 @@ import TABS from '../../../tabs';
 interface AccordionProps {
   accordionState: boolean;
   index: number;
+  isCookiesTabOpen: boolean;
   isTabFocused: boolean;
   isAccordionHeaderSelected: boolean;
   tabId: string;
   tabName: string;
-  keyboardNavigator: (
-    event: React.KeyboardEvent<HTMLDivElement>,
-    id: string
-  ) => void;
+  keyboardNavigator: (event: React.KeyboardEvent<HTMLDivElement>) => void;
+  onAccordionOpenerClick: () => void;
   onAccordionHeaderClick: () => void;
-  setIndex: (state: number) => void;
 }
 
 const Accordion = ({
@@ -48,8 +46,8 @@ const Accordion = ({
   isAccordionHeaderSelected,
   tabId,
   tabName,
-  setIndex,
   keyboardNavigator,
+  onAccordionOpenerClick,
   onAccordionHeaderClick,
 }: PropsWithChildren<AccordionProps>) => {
   const headingContainerClass = classNames(
@@ -63,20 +61,20 @@ const Accordion = ({
   const SelectedIcon = TABS[index].icons.selected;
 
   return (
-    <div className="flex flex-col w-screen">
+    <div className="flex flex-col w-full">
       <div
         data-testid={`${tabId}-tab-heading-wrapper`}
         className={headingContainerClass}
         tabIndex={0}
-        onClick={() => setIndex(index)}
-        onKeyDown={(event) => keyboardNavigator(event, tabId)}
+        onClick={onAccordionHeaderClick}
+        onKeyDown={(event) => keyboardNavigator(event)}
       >
         <div
           data-testid="accordion-opener"
           className={`origin-center transition-transform scale-125 p-0.5 mr-1 ${
             accordionState ? '' : '-rotate-90'
           }`}
-          onClick={onAccordionHeaderClick}
+          onClick={onAccordionOpenerClick}
         >
           {isAccordionHeaderSelected && isTabFocused ? (
             <ArrowDownWhite />

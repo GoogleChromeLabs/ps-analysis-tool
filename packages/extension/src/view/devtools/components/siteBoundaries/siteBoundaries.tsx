@@ -19,7 +19,7 @@
 import React from 'react';
 
 const SiteBoundaries = () => {
-  return <h2 className="p-2 text-xl">Site Boundaries</h2>;
+  return <h2 className="p-2 text-xl dark:text-bright-gray">Site Boundaries</h2>;
 };
 
 export default SiteBoundaries;
