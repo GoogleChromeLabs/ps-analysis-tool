@@ -293,6 +293,7 @@ chrome.windows.onRemoved.addListener(async (windowId) => {
  * when the extension is updated to a new version,
  * when Chrome is updated to a new version.
  * @see https://developer.chrome.com/docs/extensions/reference/runtime/#event-onInstalled
+ * @todo Shouldn't have to reinstall the extension.
  */
 chrome.runtime.onInstalled.addListener(async (details) => {
   await PROMISE_QUEUE.add(async () => {

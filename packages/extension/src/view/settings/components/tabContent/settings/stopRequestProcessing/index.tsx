@@ -59,7 +59,7 @@ const StopRequestProcessing: React.FC = () => {
           }
           checked={stopRequestProcessing === false}
         />
-        No
+        No (May cause browser to slow down when left processing for a long time)
       </div>
     </div>
   );

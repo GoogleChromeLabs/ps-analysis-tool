@@ -60,7 +60,8 @@ const AllowedNumberOfTabs: React.FC = () => {
           }
           checked={allowedNumberOfTabs === 'no-restriction'}
         />
-        No restriction processing
+        No restriction processing (Processing too many tabs may cause browser to
+        slow down or crash)
       </div>
     </div>
   );

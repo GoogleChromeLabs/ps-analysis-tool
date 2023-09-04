@@ -53,7 +53,7 @@ const App: React.FC = () => {
   if (onChromeUrl) {
     return (
       <div className="w-96 min-h-[318px] h-fit p-5 flex justify-center items-center flex-col">
-        <p className="font-bold text-lg">No url provided</p>
+        <p className="font-bold text-lg">Empty Tab</p>
         <p className="text-chart-label text-xs">
           Cannot process cookies on empty tab.
         </p>
