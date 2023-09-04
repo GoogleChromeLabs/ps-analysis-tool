@@ -44,9 +44,6 @@ const PROMISE_QUEUE = new PQueue({ concurrency: 1 });
 chrome.webRequest.onResponseStarted.addListener(
   async (details: chrome.webRequest.WebResponseCacheDetails) => {
     const extensionSettings = await chrome.storage.sync.get();
-    const tabData = (
-      await chrome.storage.local.get(details?.tabId?.toString())
-    )[details?.tabId?.toString()];
 
     if (
       extensionSettings &&
@@ -66,13 +63,6 @@ chrome.webRequest.onResponseStarted.addListener(
       ) {
         return;
       }
-    }
-
-    if (
-      Date.now() - tabData?.firstRequestProcessed > 1800000 &&
-      extensionSettings?.stopRequestProcessing === 'true'
-    ) {
-      return;
     }
 
     await PROMISE_QUEUE.add(async () => {
@@ -136,9 +126,6 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
   ({ url, requestHeaders, tabId, frameId }) => {
     (async () => {
       const extensionSettings = await chrome.storage.sync.get();
-      const tabData = (await chrome.storage.local.get(tabId.toString()))[
-        tabId.toString()
-      ];
 
       if (
         extensionSettings &&
@@ -158,12 +145,6 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
         ) {
           return;
         }
-      }
-      if (
-        Date.now() - tabData?.firstRequestProcessed > 1800000 &&
-        extensionSettings?.stopRequestProcessing === 'true'
-      ) {
-        return;
       }
 
       await PROMISE_QUEUE.add(async () => {
@@ -302,7 +283,16 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       await chrome.storage.sync.clear();
       await chrome.storage.sync.set({
         allowedNumberOfTabs: 'single-tab',
-        stopRequestProcessing: 'false',
+      });
+    }
+    if (details.reason === 'update') {
+      const preSetSettings = chrome.storage.sync.get();
+      if (Object.keys(preSetSettings).length === 2) {
+        return;
+      }
+      await chrome.storage.sync.clear();
+      await chrome.storage.sync.set({
+        allowedNumberOfTabs: 'single-tab',
       });
     }
   });

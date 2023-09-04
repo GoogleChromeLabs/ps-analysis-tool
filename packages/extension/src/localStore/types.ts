@@ -37,7 +37,6 @@ export type TabData = {
     [key: string]: CookieData;
   } | null;
   focusedAt: number | null;
-  firstRequestProcessed: number;
 };
 
 export type Storage = {

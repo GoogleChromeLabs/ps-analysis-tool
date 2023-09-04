@@ -53,7 +53,6 @@ const CookieStore = {
 
       return {
         ...prevState,
-        firstRequestProcessed: prevState?.firstRequestProcessed || Date.now(),
         cookies: _updatedCookies,
       };
     });

@@ -27,49 +27,14 @@ import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import prepareCookiesCount from '../../../../../../utils/prepareCookiesCount';
 import { prepareCookieStatsComponents } from '../../../../../../utils/prepareCookieStatsComponents';
 import MessageBox from '../../../../../design-system/components/messageBox';
-import { Button } from '../../../../../design-system/components';
 
 const CookiesLanding = () => {
-  const {
-    tabCookies,
-    tabFrames,
-    tabUrl,
-    stopRequestProcessing,
-    firstRequestProcessedTime,
-    updateFirstRequestProcessed,
-  } = useCookieStore(({ state, actions }) => ({
+  const { tabCookies, tabFrames, tabUrl } = useCookieStore(({ state }) => ({
     tabFrames: state.tabFrames,
     tabCookies: state.tabCookies,
     tabUrl: state.tabUrl,
-    stopRequestProcessing: state.stopRequestProcessing,
-    firstRequestProcessedTime: state.firstRequestProcessedTime,
-    updateFirstRequestProcessed: actions.updateFirstRequestProcessed,
   }));
 
-  let fetchedDate: Date;
-  let dateWritten = '';
-
-  if (firstRequestProcessedTime) {
-    fetchedDate = new Date(firstRequestProcessedTime + 30 * 60000);
-    dateWritten =
-      String(
-        new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(
-          fetchedDate
-        ) +
-          ', ' +
-          fetchedDate.toLocaleString('en-us', { month: 'long' })
-      ) +
-      ' ' +
-      fetchedDate.getDate() +
-      ', ' +
-      fetchedDate.getFullYear() +
-      ' at ' +
-      fetchedDate.getHours() +
-      ':' +
-      fetchedDate.getMinutes() +
-      ':' +
-      fetchedDate.getSeconds();
-  }
   const cookieStats = prepareCookiesCount(tabCookies, tabUrl);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
 
@@ -88,20 +53,6 @@ const CookiesLanding = () => {
                 bodyText="Please try reloading the page"
               />
             ))}
-        {stopRequestProcessing && firstRequestProcessedTime && (
-          <div className="flex flex-col w-full items-center justify-center">
-            <MessageBox
-              headerText="Cookie processing information"
-              bodyText={`Request processing on this tab will be paused after ${dateWritten}. Click on the button below to reset the timer.`}
-            />
-            <div>
-              <Button
-                onClick={updateFirstRequestProcessed}
-                text="Reset timer"
-              />
-            </div>
-          </div>
-        )}
         <CookiesMatrix
           tabCookies={tabCookies}
           cookiesStatsComponents={cookiesStatsComponents}

@@ -49,7 +49,6 @@ export interface CookieStoreContext {
     tabId: number | null;
     onChromeUrl: boolean;
     allowedNumberOfTabs: string | null;
-    stopRequestProcessing: boolean;
   };
   actions: {
     changeListeningToThisTab: () => void;
@@ -82,7 +81,6 @@ const initialState: CookieStoreContext = {
     onChromeUrl: false,
     tabId: null,
     allowedNumberOfTabs: null,
-    stopRequestProcessing: false,
   },
   actions: {
     changeListeningToThisTab: noop,
@@ -99,9 +97,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [allowedNumberOfTabs, setAllowedNumberOfTabs] = useState<string | null>(
     null
   );
-
-  const [stopRequestProcessing, setStopRequestProcessing] =
-    useState<boolean>(false);
 
   const [tabCookieStats, setTabCookieStats] =
     useState<CookieStoreContext['state']['tabCookieStats']>(null);
@@ -152,11 +147,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
     if (extensionStorage?.allowedNumberOfTabs) {
       setAllowedNumberOfTabs(extensionStorage?.allowedNumberOfTabs);
-    }
-    if (extensionStorage?.stopRequestProcessing) {
-      setStopRequestProcessing(
-        extensionStorage?.stopRequestProcessing === 'true'
-      );
     }
 
     if (!tab.id || !tab.url) {
@@ -302,11 +292,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
     if (extensionStorage?.allowedNumberOfTabs) {
       setAllowedNumberOfTabs(extensionStorage?.allowedNumberOfTabs);
     }
-    if (extensionStorage?.stopRequestProcessing) {
-      setStopRequestProcessing(
-        extensionStorage?.stopRequestProcessing === 'true'
-      );
-    }
   }, []);
 
   const tabUpdateListener = useCallback(
@@ -347,7 +332,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
           returningToSingleTab,
           onChromeUrl,
           allowedNumberOfTabs,
-          stopRequestProcessing,
         },
         actions: {
           changeListeningToThisTab,

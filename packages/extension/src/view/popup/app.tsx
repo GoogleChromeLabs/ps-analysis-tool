@@ -46,7 +46,6 @@ const App: React.FC = () => {
     returningToSingleTab: state.returningToSingleTab,
     allowedNumberOfTabs: state.allowedNumberOfTabs,
     onChromeUrl: state.onChromeUrl,
-    stopRequestProcessing: state.stopRequestProcessing,
     changeListeningToThisTab: actions.changeListeningToThisTab,
   }));
   if (onChromeUrl) {
