@@ -27,6 +27,7 @@ interface TabHeaderProps {
   selectedTabIndex: number;
   setSelectedTabIndex: (index: number) => void;
 }
+
 const TabHeader = ({
   tabs,
   selectedTabIndex,

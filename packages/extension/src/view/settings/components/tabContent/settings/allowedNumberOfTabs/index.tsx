@@ -31,6 +31,7 @@ const AllowedNumberOfTabs: React.FC = () => {
       setSettingsInStorage: actions.setSettingsInStorage,
     })
   );
+
   return (
     <div className="flex flex-col gap-1">
       <h3 className="text-sm font-medium">
@@ -60,8 +61,8 @@ const AllowedNumberOfTabs: React.FC = () => {
           }
           checked={allowedNumberOfTabs === 'unlimited'}
         />
-        No restriction processing (Processing too many tabs may cause browser to
-        slow down or crash)
+        No restriction (Processing too many tabs may cause the browser to slow
+        down)
       </div>
     </div>
   );

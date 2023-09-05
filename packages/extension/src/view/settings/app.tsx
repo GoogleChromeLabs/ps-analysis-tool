@@ -34,6 +34,7 @@ const TABS = [
 const App: React.FC = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
   const TabContent = TABS[selectedTabIndex].Component;
+
   return (
     <div className="w-full h-full flex items-center justify-center flex-col p-3 gap-3">
       <header className="w-full h-full flex flex-col">

@@ -23,11 +23,12 @@ import React, {
   useState,
   useCallback,
 } from 'react';
-import { noop } from '../../../../utils/noop';
 
 /**
  * Internal dependencies.
  */
+import { noop } from '../../../../utils/noop';
+
 export interface SettingStoreContext {
   state: {
     allowedNumberOfTabs: string | null;

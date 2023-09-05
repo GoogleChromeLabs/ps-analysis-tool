@@ -48,6 +48,7 @@ const App: React.FC = () => {
     onChromeUrl: state.onChromeUrl,
     changeListeningToThisTab: actions.changeListeningToThisTab,
   }));
+
   if (onChromeUrl) {
     return (
       <div className="w-96 min-h-[318px] h-fit p-5 flex justify-center items-center flex-col">

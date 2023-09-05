@@ -95,8 +95,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
       if (!_tabId) {
         return;
       }
+
       const regexForFrameUrl =
         /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:/\n?]+)/;
+
       const currentTabFrames = await chrome.webNavigation.getAllFrames({
         tabId: _tabId,
       });
@@ -129,7 +131,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const intitialSync = useCallback(async () => {
     const _tabId = chrome.devtools.inspectedWindow.tabId;
+
     await getAllFramesForCurrentTab(_tabId);
+
     setTabId(_tabId);
 
     const extensionStorage = await chrome.storage.sync.get();
@@ -268,11 +272,15 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const changeListeningToThisTab = useCallback(async () => {
     const changedTabId = await getCurrentTabId();
+
     if (!changedTabId) {
       return;
     }
+
     await CookieStore.addTabData(changedTabId?.toString());
+
     const storedTabData = Object.keys(await chrome.storage.local.get());
+
     // eslint-disable-next-line guard-for-in
     storedTabData.map(async (tabIdToBeDeleted) => {
       if (
@@ -313,6 +321,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const tabRemovedListener = useCallback(async () => {
     const getTabBeingListenedTo = await chrome.storage.local.get();
     const availableTabs = await chrome.tabs.query({});
+
     if (
       availableTabs.length === ALLOWED_NUMBER_OF_TABS &&
       availableTabs.filter(
@@ -326,6 +335,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const changeSyncStorageListener = useCallback(async () => {
     const extensionStorage = await chrome.storage.sync.get();
+
     if (extensionStorage?.allowedNumberOfTabs) {
       setAllowedNumberOfTabs(extensionStorage?.allowedNumberOfTabs);
     }
