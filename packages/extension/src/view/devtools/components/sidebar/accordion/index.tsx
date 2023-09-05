@@ -28,7 +28,6 @@ import TABS from '../../../tabs';
 interface AccordionProps {
   accordionState: boolean;
   index: number;
-  isCookiesTabOpen: boolean;
   isTabFocused: boolean;
   isAccordionHeaderSelected: boolean;
   tabId: string;
