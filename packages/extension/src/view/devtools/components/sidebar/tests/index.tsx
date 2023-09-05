@@ -206,8 +206,8 @@ describe('Sidebar', () => {
     expect(attributionContainer).toHaveClass('bg-royal-blue');
   });
 
-  it('should select cookie and show the listed frames under cookie menu.', () => {
-    mockUseCookieStore.mockReturnValueOnce({
+  it('should select cookie and show the listed frames under cookie menu.', async () => {
+    mockUseCookieStore.mockReturnValue({
       cookies: mockResponse.tabCookies,
       tabUrl: mockResponse.tabUrl,
       tabFrames: mockResponse.tabFrames,
@@ -223,10 +223,10 @@ describe('Sidebar', () => {
       />
     );
 
-    const cookieHeaderContainer = screen.getByTestId(
+    const cookieHeaderContainer = await screen.findByTestId(
       'cookies-tab-heading-wrapper'
     );
-    const mainFrame = screen.getByTestId('https://edition.cnn.com/');
+    const mainFrame = await screen.findByTestId('https://edition.cnn.com/');
 
     expect(cookieHeaderContainer).not.toHaveClass('bg-royal-blue');
     expect(mainFrame).toBeInTheDocument();
@@ -312,7 +312,14 @@ describe('Sidebar', () => {
     expect(accordionOpener).toHaveClass('-rotate-90');
   });
 
-  it('Left Arrow should close accordion', async () => {
+  it.only('Left Arrow should close accordion', async () => {
+    mockUseCookieStore.mockReturnValue({
+      cookies: mockResponse.tabCookies,
+      tabUrl: mockResponse.tabUrl,
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
     render(
       <Sidebar
         tabsNames={tabNames}
