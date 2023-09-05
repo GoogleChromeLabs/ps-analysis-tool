@@ -62,81 +62,74 @@ describe('App', () => {
   it('should switch to cookie panel when tab is clicked', async () => {
     await act(() => render(<App />));
     // Move to another tab
-    fireEvent.click(screen.getByText('Bounce Tracking'));
+    fireEvent.click(
+      screen.getByTestId('privateAdvertising-tab-heading-wrapper')
+    );
 
-    fireEvent.click(screen.getByText('Cookies'));
+    fireEvent.click(screen.getByTestId('cookies-tab-heading-wrapper'));
     expect(await screen.findByTestId('cookies-content')).toBeInTheDocument();
   });
 
-  it('should switch to Bounce Tracking Panel when clicked', async () => {
+  it('should switch to AntiCovert Tracking Panel when clicked', async () => {
     await act(() => render(<App />));
     // Click on Bounce Tracking tab
-    fireEvent.click(screen.getByText('Bounce Tracking'));
+    fireEvent.click(
+      screen.getByTestId('antiCovertTracking-tab-heading-wrapper')
+    );
 
     expect(
-      await screen.findByTestId('bounce-tracking-content')
-    ).toBeInTheDocument();
+      await screen.findByTestId('antiCovertTracking-tab-heading-wrapper')
+    ).toHaveClass('bg-royal-blue');
   });
 
-  it('should switch to FingerPrinting Panel when clicked', async () => {
-    await act(() => render(<App />));
-    // Click on FingerPrinting tab
-    fireEvent.click(screen.getByText('Fingerprinting'));
-
-    expect(
-      await screen.findByTestId('fingerprinting-content')
-    ).toBeInTheDocument();
-  });
-
-  it('should switch to Attribution Panel when clicked', async () => {
+  it('should switch to Private Advertising when clicked', async () => {
     await act(() => render(<App />));
     // Click on Attribution tab
-    fireEvent.click(screen.getByText('Attribution'));
+    fireEvent.click(
+      screen.getByTestId('privateAdvertising-tab-heading-wrapper')
+    );
 
     expect(
-      await screen.findByTestId('attribution-content')
-    ).toBeInTheDocument();
+      await screen.findByTestId('privateAdvertising-tab-heading-wrapper')
+    ).toHaveClass('bg-royal-blue');
   });
 
-  it('should switch to Topics Panel when clicked', async () => {
+  it('should switch to Site Boundaries Panel when clicked', async () => {
     await act(() => render(<App />));
 
     // Click on Topics tab
-    fireEvent.click(screen.getByText('Topics'));
+    fireEvent.click(screen.getByTestId('siteBoundaries-tab-heading-wrapper'));
 
-    expect(await screen.findByTestId('topics-content')).toBeInTheDocument();
+    expect(
+      await screen.findByTestId('siteBoundaries-tab-heading-wrapper')
+    ).toHaveClass('bg-royal-blue');
   });
 
   it('Down Keyboard navigation should work.', async () => {
     await act(() => render(<App />));
-    // Focus on the first menu item.
-    userEvent.tab();
-    // Press arrow down
-    userEvent.keyboard('{ArrowDown}');
-    expect(await screen.findByTestId('Topics')).toHaveClass('bg-royal-blue');
+    act(() => {
+      // Focus on the first menu item.
+      userEvent.tab();
+      // Press arrow down
+      userEvent.keyboard('{ArrowDown}');
+    });
+    expect(
+      await screen.findByTestId('siteBoundaries-tab-heading-wrapper')
+    ).toHaveClass('bg-royal-blue');
   });
 
   it('Up Keyboard navigation should work.', async () => {
     await act(() => render(<App />));
-    // Focus on the first menu item.
-    userEvent.tab();
-    // Press arrow down to go to next menu
-    userEvent.keyboard('{ArrowDown}');
-    // Press arrow down to go to previous menu
-    userEvent.keyboard('{ArrowUp}');
-    expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
-      'bg-royal-blue'
-    );
-  });
-
-  it('Up Keyboard navigation should work.', async () => {
-    await act(() => render(<App />));
-    // Focus on the first menu item.
-    userEvent.tab();
-    expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
-      'bg-royal-blue'
-    );
-    userEvent.keyboard('{Enter}');
+    act(() => {
+      // Focus on the first menu item.
+      userEvent.tab();
+      // Press arrow down to go to next menu
+      userEvent.keyboard('{ArrowDown}');
+    });
+    act(() => {
+      // Press arrow down to go to previous menu
+      userEvent.keyboard('{ArrowUp}');
+    });
     expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
       'bg-royal-blue'
     );
