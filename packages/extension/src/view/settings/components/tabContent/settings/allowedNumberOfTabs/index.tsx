@@ -52,13 +52,13 @@ const AllowedNumberOfTabs: React.FC = () => {
       <div className="flex flex-row gap-1">
         <input
           className="text-xs"
-          value="no-restriction"
+          value="unlimited"
           type="radio"
           name="allowed-number-of-tabs"
           onChange={(e) =>
             setSettingsInStorage('allowedNumberOfTabs', e.target?.value)
           }
-          checked={allowedNumberOfTabs === 'no-restriction'}
+          checked={allowedNumberOfTabs === 'unlimited'}
         />
         No restriction processing (Processing too many tabs may cause browser to
         slow down or crash)

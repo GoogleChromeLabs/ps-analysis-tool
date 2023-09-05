@@ -47,7 +47,7 @@ chrome.webRequest.onResponseStarted.addListener(
 
     if (
       extensionSettings &&
-      extensionSettings?.allowedNumberOfTabs !== 'no-restriction'
+      extensionSettings?.allowedNumberOfTabs !== 'unlimited'
     ) {
       const currentTabId = await getCurrentTabId();
 
@@ -70,7 +70,7 @@ chrome.webRequest.onResponseStarted.addListener(
       const tab = await getTab(tabId);
       if (
         extensionSettings &&
-        extensionSettings?.allowedNumberOfTabs !== 'no-restriction'
+        extensionSettings?.allowedNumberOfTabs !== 'unlimited'
       ) {
         const tabsBeingListenedTo = await chrome.storage.local.get();
 
@@ -129,7 +129,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 
       if (
         extensionSettings &&
-        extensionSettings?.allowedNumberOfTabs !== 'no-restriction'
+        extensionSettings?.allowedNumberOfTabs !== 'unlimited'
       ) {
         const currentTabId = await getCurrentTabId();
 
@@ -155,7 +155,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
         }
         if (
           extensionSettings &&
-          extensionSettings?.allowedNumberOfTabs !== 'no-restriction'
+          extensionSettings?.allowedNumberOfTabs !== 'unlimited'
         ) {
           const tabsBeingListenedTo = await chrome.storage.local.get();
           if (
@@ -206,7 +206,7 @@ chrome.tabs.onCreated.addListener(async (tab) => {
       const extensionSettings = await chrome.storage.sync.get();
       if (
         extensionSettings?.allowedNumberOfTabs &&
-        extensionSettings?.allowedNumberOfTabs !== 'no-restriction'
+        extensionSettings?.allowedNumberOfTabs !== 'unlimited'
       ) {
         const previousTabData = await chrome.storage.local.get();
         const doesTabExist = await getTab(previousTabData?.tabToRead);

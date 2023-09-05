@@ -73,7 +73,7 @@ const App: React.FC = () => {
     ALLOWED_NUMBER_OF_TABS > 0 &&
     !isCurrentTabBeingListenedTo &&
     allowedNumberOfTabs &&
-    allowedNumberOfTabs !== 'no-restriction'
+    allowedNumberOfTabs !== 'unlimited'
   ) {
     return (
       <div className="w-96 min-h-[20rem] flex flex-col items-center justify-center">

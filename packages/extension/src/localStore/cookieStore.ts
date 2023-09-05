@@ -29,6 +29,7 @@ const CookieStore = {
     await updateStorage(tabId, (prevState: TabData) => {
       const _prevCookies = prevState?.cookies || {};
       const _updatedCookies = _prevCookies;
+
       for (const cookie of cookies) {
         const cookieName = cookie.parsedCookie.name;
 
@@ -64,6 +65,7 @@ const CookieStore = {
    */
   async deleteCookie(cookieName: string) {
     const storage = await chrome.storage.local.get();
+
     Object.values(storage).forEach((tabData) => {
       if (tabData.cookies && tabData.cookies[cookieName]) {
         delete tabData.cookies[cookieName];
@@ -79,9 +81,11 @@ const CookieStore = {
    */
   async updateTabFocus(tabId: string) {
     const storage = await chrome.storage.local.get();
+
     if (storage[tabId]) {
       storage[tabId].focusedAt = Date.now();
     }
+
     await chrome.storage.local.set(storage);
   },
 
@@ -91,9 +95,11 @@ const CookieStore = {
    */
   async removeCookieData(tabId: string) {
     const storage = await chrome.storage.local.get();
+
     if (storage[tabId]) {
       storage[tabId].cookies = {};
     }
+
     await chrome.storage.local.set(storage);
   },
 
@@ -103,11 +109,9 @@ const CookieStore = {
    */
   async addTabData(tabId: string) {
     const extensionStorage = await chrome.storage.sync.get();
+    const allowedTabs = extensionStorage?.allowedNumberOfTabs;
 
-    if (
-      extensionStorage?.allowedNumberOfTabs &&
-      extensionStorage?.allowedNumberOfTabs !== 'no-restriction'
-    ) {
+    if (allowedTabs && allowedTabs !== 'unlimited') {
       await chrome.storage.local.set({
         [tabId]: {
           cookies: {},
