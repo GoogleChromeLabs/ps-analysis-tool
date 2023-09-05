@@ -73,7 +73,7 @@ export const initialize = async () => {
       `Please add a prefix to easily identify output files later - `
     );
     const cookiesFilePath = `./out/${prefix}-cookies.csv`;
-    const technologiesFilePath = `./out/${prefix}-cookies.csv`;
+    const technologiesFilePath = `./out/${prefix}-technologies.csv`;
     const dataFilePath = `./out/${prefix}-data.json`;
 
     let spinner = ora('Analyzing cookies set on first page visit...').start();
