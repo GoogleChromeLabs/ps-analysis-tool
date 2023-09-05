@@ -160,6 +160,13 @@ const CookieTable = ({ cookies, selectedFrame }: CookieTableProps) => {
   const setDebouncedEnableSorting = useDebouncedCallback((value) => {
     setEnableSorting(value);
   }, 10);
+  const { columnSorting, selectedColumns, columnSizing } = usePreferenceStore(
+    ({ state }) => ({
+      columnSorting: state?.columnSorting as ColumnSort[],
+      selectedColumns: state?.selectedColumns as VisibilityState,
+      columnSizing: state?.columnSizing as ColumnSizingState,
+    })
+  );
 
   useEffect(() => {
     if (isMouseInsideHeader) {
@@ -168,7 +175,7 @@ const CookieTable = ({ cookies, selectedFrame }: CookieTableProps) => {
       setData(cookies);
       setDebouncedEnableSorting(false);
     }
-  }, [cookies, isMouseInsideHeader, setDebouncedEnableSorting]);
+  }, [columnSorting, cookies, isMouseInsideHeader, setDebouncedEnableSorting]);
 
   useEffect(() => {
     if (selectedFrame && selectedFrameCookie) {
@@ -191,19 +198,12 @@ const CookieTable = ({ cookies, selectedFrame }: CookieTableProps) => {
     [tableColumnSize]
   );
 
-  const { columnSorting, selectedColumns, columnSizing } = usePreferenceStore(
-    ({ state }) => ({
-      columnSorting: state?.columnSorting as ColumnSort[],
-      selectedColumns: state?.selectedColumns as VisibilityState,
-      columnSizing: state?.columnSizing as ColumnSizingState,
-    })
-  );
-
   const table = useReactTable({
-    data,
+    data: columnSorting && columnSorting?.length > 0 ? cookies : data,
     columns,
     enableColumnResizing: true,
-    enableSorting,
+    enableSorting:
+      columnSorting && columnSorting?.length > 0 ? true : enableSorting,
     columnResizeMode: 'onChange',
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
