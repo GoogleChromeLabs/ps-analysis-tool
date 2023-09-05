@@ -76,7 +76,7 @@ const App: React.FC = () => {
   if (
     (isCurrentTabBeingListenedTo &&
       allowedNumberOfTabs &&
-      allowedNumberOfTabs === 'single-tab') ||
+      allowedNumberOfTabs === 'single') ||
     (allowedNumberOfTabs && allowedNumberOfTabs === 'unlimited')
   ) {
     return (

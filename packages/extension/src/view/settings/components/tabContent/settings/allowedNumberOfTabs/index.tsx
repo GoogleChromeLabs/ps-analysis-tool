@@ -38,14 +38,14 @@ const AllowedNumberOfTabs: React.FC = () => {
       </h3>
       <div className="flex flex-row gap-1">
         <input
-          value="single-tab"
+          value="single"
           type="radio"
           name="allowed-number-of-tabs"
           className="text-xs"
           onChange={(e) =>
             setSettingsInStorage('allowedNumberOfTabs', e.target?.value)
           }
-          checked={allowedNumberOfTabs === 'single-tab'}
+          checked={allowedNumberOfTabs === 'single'}
         />
         Single tab processing
       </div>

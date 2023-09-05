@@ -121,7 +121,7 @@ describe('App', () => {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               new Promise<{ [key: string]: any }>((resolve) => {
                 resolve({
-                  allowedNumberOfTabs: 'single-tab',
+                  allowedNumberOfTabs: 'single',
                 });
               }),
             //@ts-ignore

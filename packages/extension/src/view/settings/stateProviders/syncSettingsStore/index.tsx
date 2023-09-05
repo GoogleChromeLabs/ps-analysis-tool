@@ -73,7 +73,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         changes['allowedNumberOfTabs']?.newValue
       ) {
         setAllowedNumberOfTabs(changes['allowedNumberOfTabs']?.newValue);
-        if (changes['allowedNumberOfTabs']?.newValue === 'single-tab') {
+        if (changes['allowedNumberOfTabs']?.newValue === 'single') {
           chrome.tabs.query({}, (tabs) => {
             tabs.map((tab) => {
               chrome.action.setBadgeText({

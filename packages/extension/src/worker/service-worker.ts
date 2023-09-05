@@ -282,7 +282,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     if (details.reason === 'install') {
       await chrome.storage.sync.clear();
       await chrome.storage.sync.set({
-        allowedNumberOfTabs: 'single-tab',
+        allowedNumberOfTabs: 'single',
       });
     }
     if (details.reason === 'update') {
@@ -292,7 +292,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       }
       await chrome.storage.sync.clear();
       await chrome.storage.sync.set({
-        allowedNumberOfTabs: 'single-tab',
+        allowedNumberOfTabs: 'single',
       });
     }
   });
