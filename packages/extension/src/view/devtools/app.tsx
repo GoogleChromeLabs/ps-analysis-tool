@@ -73,6 +73,7 @@ const App: React.FC = () => {
     allowedNumberOfTabs: state.allowedNumberOfTabs,
   }));
 
+  // @todo Can this condition be simplified?
   if (
     (isCurrentTabBeingListenedTo &&
       allowedNumberOfTabs &&
@@ -117,7 +118,7 @@ const App: React.FC = () => {
       <div className="w-full h-full flex flex-col items-center justify-center">
         {!returningToSingleTab && (
           <p className="dark:text-bright-gray text-chart-label text-base mb-5">
-            This tool works best with single tab.
+            This tool works best with a single tab.
           </p>
         )}
         <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
