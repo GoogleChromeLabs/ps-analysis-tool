@@ -31,7 +31,7 @@ import { CookieStore, type CookieData } from '../../../../localStore';
 import type { TabCookies, TabFrames } from '../../cookies.types';
 import { noop } from '../../../../utils/noop';
 import { getCurrentTabId } from '../../../../utils/getCurrentTabId';
-import { ALLOWED_NUMBER_OF_TABS } from '../../../../utils/constants';
+import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
 
 export interface CookieStoreContext {
   state: {

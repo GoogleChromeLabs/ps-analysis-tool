@@ -37,7 +37,7 @@ import type { CookiesCount } from '../../types';
 import prepareCookiesCount from '../../../../utils/prepareCookiesCount';
 import { CookieStore } from '../../../../localStore';
 import { noop } from '../../../../utils/noop';
-import { ALLOWED_NUMBER_OF_TABS } from '../../../../utils/constants';
+import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
 
 export interface CookieStoreContext {
   state: {

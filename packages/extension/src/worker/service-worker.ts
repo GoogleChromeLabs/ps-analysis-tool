@@ -31,7 +31,7 @@ import {
   type CookieDatabase,
   fetchDictionary,
 } from '../utils/fetchCookieDictionary';
-import { ALLOWED_NUMBER_OF_TABS } from '../utils/constants';
+import { ALLOWED_NUMBER_OF_TABS } from '../constants';
 
 let cookieDB: CookieDatabase | null = null;
 

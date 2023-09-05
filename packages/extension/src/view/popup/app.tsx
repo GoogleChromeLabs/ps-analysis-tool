@@ -28,7 +28,7 @@ import { useCookieStore } from './stateProviders/syncCookieStore';
 import { Button, CirclePieChart } from '../design-system/components';
 import { prepareCookieStatsComponents } from '../../utils/prepareCookieStatsComponents';
 import ProgressBar from '../design-system/components/progressBar';
-import { ALLOWED_NUMBER_OF_TABS } from '../../utils/constants';
+import { ALLOWED_NUMBER_OF_TABS } from '../../constants';
 
 const App: React.FC = () => {
   const {
