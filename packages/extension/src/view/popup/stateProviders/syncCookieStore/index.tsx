@@ -45,7 +45,6 @@ export interface CookieStoreContext {
     isCurrentTabBeingListenedTo: boolean;
     loading: boolean;
     returningToSingleTab: boolean;
-    showLoadingText: boolean;
     tabId: number | null;
     onChromeUrl: boolean;
     allowedNumberOfTabs: string | null;
@@ -76,7 +75,6 @@ const initialState: CookieStoreContext = {
     },
     isCurrentTabBeingListenedTo: false,
     loading: true,
-    showLoadingText: false,
     returningToSingleTab: false,
     onChromeUrl: false,
     tabId: null,
@@ -109,27 +107,17 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [isCurrentTabBeingListenedTo, setIsCurrentTabBeingListenedTo] =
     useState<boolean>(false);
 
-  const [showLoadingText, setShowLoadingText] = useState<boolean>(false);
   const [onChromeUrl, setOnChromeUrl] = useState<boolean>(false);
   const loadingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const loadingTextTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     loadingTimeout.current = setTimeout(() => {
       setLoading(false);
     }, 6500);
 
-    loadingTextTimeout.current = setTimeout(() => {
-      setShowLoadingText(true);
-    }, 2500);
-
     return () => {
       if (loadingTimeout.current) {
         clearTimeout(loadingTimeout.current);
-      }
-
-      if (loadingTextTimeout.current) {
-        clearTimeout(loadingTextTimeout.current);
       }
     };
   }, []);
@@ -137,7 +125,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const setDebouncedStats = useDebouncedCallback((value) => {
     setTabCookieStats(value);
     setLoading(false);
-    setShowLoadingText(false);
   }, 100);
 
   const intitialSync = useCallback(async () => {
@@ -285,6 +272,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
     await chrome.tabs.reload(Number(changedTabId));
     setIsCurrentTabBeingListenedTo(true);
+    setLoading(true);
   }, []);
 
   const changeSyncStorageListener = useCallback(async () => {
@@ -327,7 +315,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
           tabCookieStats,
           isCurrentTabBeingListenedTo,
           loading,
-          showLoadingText,
           tabId,
           returningToSingleTab,
           onChromeUrl,
