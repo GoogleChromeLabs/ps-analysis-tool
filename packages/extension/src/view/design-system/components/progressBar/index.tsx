@@ -16,22 +16,21 @@
 /**
  * External dependencies.
  */
-import { Protocol } from 'puppeteer';
+import React from 'react';
 
-export interface CookieLogDetails
-  extends Omit<
-    Protocol.Network.Cookie,
-    | 'sameSite'
-    | 'size'
-    | 'session'
-    | 'priority'
-    | 'sameParty'
-    | 'sourceScheme'
-    | 'sourcePort'
-  > {
-  platform: string;
-  category: string;
-  description: string;
-  isFirstParty: 'Yes' | 'No';
-  sameSite: string;
+interface ProgressBarProps {
+  additionalStyles?: string;
 }
+const ProgressBar = ({ additionalStyles = '' }: ProgressBarProps) => {
+  return (
+    <div
+      className={`${additionalStyles} flex justify-center flex-col gap-2 relative overflow-hidden`}
+    >
+      <div className="mb-6 h-1 w-full bg-gainsboro dark:bg-neutral-600 overflow-hidden">
+        <div className="h-1 w-1/2 bg-royal-blue absolute animate-horizontal-spinner"></div>
+      </div>
+    </div>
+  );
+};
+
+export default ProgressBar;

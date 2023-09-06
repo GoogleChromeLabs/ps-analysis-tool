@@ -16,22 +16,18 @@
 /**
  * External dependencies.
  */
-import { Protocol } from 'puppeteer';
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 
-export interface CookieLogDetails
-  extends Omit<
-    Protocol.Network.Cookie,
-    | 'sameSite'
-    | 'size'
-    | 'session'
-    | 'priority'
-    | 'sameParty'
-    | 'sourceScheme'
-    | 'sourcePort'
-  > {
-  platform: string;
-  category: string;
-  description: string;
-  isFirstParty: 'Yes' | 'No';
-  sameSite: string;
-}
+/**
+ * Internal dependencies.
+ */
+import Button from '..';
+
+describe('Button', () => {
+  it('renders the text inside a button', () => {
+    render(<Button onClick={() => undefined} text="Analyze this tab" />);
+    expect(screen.getByText('Analyze this tab')).toBeInTheDocument();
+  });
+});

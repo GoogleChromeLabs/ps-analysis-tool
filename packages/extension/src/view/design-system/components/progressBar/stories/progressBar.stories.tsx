@@ -16,22 +16,23 @@
 /**
  * External dependencies.
  */
-import { Protocol } from 'puppeteer';
+import type { Meta, StoryObj } from '@storybook/react';
 
-export interface CookieLogDetails
-  extends Omit<
-    Protocol.Network.Cookie,
-    | 'sameSite'
-    | 'size'
-    | 'session'
-    | 'priority'
-    | 'sameParty'
-    | 'sourceScheme'
-    | 'sourcePort'
-  > {
-  platform: string;
-  category: string;
-  description: string;
-  isFirstParty: 'Yes' | 'No';
-  sameSite: string;
-}
+/**
+ * Internal dependencies.
+ */
+import ProgressBar from '..';
+
+const meta: Meta<typeof ProgressBar> = {
+  title: 'Extension/DesignSystem/ProgressBar',
+  component: ProgressBar,
+  tags: ['autodocs'],
+};
+
+export default meta;
+
+export const Primary: StoryObj<typeof meta> = {
+  args: {
+    additionalStyles: 'w-96 min-h-[20rem]',
+  },
+};

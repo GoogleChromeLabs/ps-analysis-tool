@@ -13,25 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * External dependencies.
  */
-import { Protocol } from 'puppeteer';
+import React from 'react';
 
-export interface CookieLogDetails
-  extends Omit<
-    Protocol.Network.Cookie,
-    | 'sameSite'
-    | 'size'
-    | 'session'
-    | 'priority'
-    | 'sameParty'
-    | 'sourceScheme'
-    | 'sourcePort'
-  > {
-  platform: string;
-  category: string;
-  description: string;
-  isFirstParty: 'Yes' | 'No';
-  sameSite: string;
-}
+/**
+ * Internal dependencies.
+ */
+import AllowedNumberOfTabs from './allowedNumberOfTabs';
+
+const Settings: React.FC = () => {
+  return (
+    <div className="w-full h-full flex flex-col gap-5">
+      <AllowedNumberOfTabs />
+    </div>
+  );
+};
+
+export default Settings;

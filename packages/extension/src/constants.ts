@@ -13,25 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import { Protocol } from 'puppeteer';
-
-export interface CookieLogDetails
-  extends Omit<
-    Protocol.Network.Cookie,
-    | 'sameSite'
-    | 'size'
-    | 'session'
-    | 'priority'
-    | 'sameParty'
-    | 'sourceScheme'
-    | 'sourcePort'
-  > {
-  platform: string;
-  category: string;
-  description: string;
-  isFirstParty: 'Yes' | 'No';
-  sameSite: string;
-}
+export const ALLOWED_NUMBER_OF_TABS = 1;

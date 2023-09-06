@@ -13,25 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * External dependencies.
  */
-import { Protocol } from 'puppeteer';
+import React from 'react';
+import { createRoot } from 'react-dom/client';
 
-export interface CookieLogDetails
-  extends Omit<
-    Protocol.Network.Cookie,
-    | 'sameSite'
-    | 'size'
-    | 'session'
-    | 'priority'
-    | 'sameParty'
-    | 'sourceScheme'
-    | 'sourcePort'
-  > {
-  platform: string;
-  category: string;
-  description: string;
-  isFirstParty: 'Yes' | 'No';
-  sameSite: string;
+/**
+ * Internal dependencies.
+ */
+import App from './app';
+import { Provider as ExternalStoreProvider } from './stateProviders/syncSettingsStore';
+
+const root = document.getElementById('root');
+
+if (root) {
+  createRoot(root).render(
+    <ExternalStoreProvider>
+      <App />
+    </ExternalStoreProvider>
+  );
 }

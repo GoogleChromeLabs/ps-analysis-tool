@@ -16,22 +16,19 @@
 /**
  * External dependencies.
  */
-import { Protocol } from 'puppeteer';
+import React from 'react';
 
-export interface CookieLogDetails
-  extends Omit<
-    Protocol.Network.Cookie,
-    | 'sameSite'
-    | 'size'
-    | 'session'
-    | 'priority'
-    | 'sameParty'
-    | 'sourceScheme'
-    | 'sourcePort'
-  > {
-  platform: string;
-  category: string;
-  description: string;
-  isFirstParty: 'Yes' | 'No';
-  sameSite: string;
+interface MessageBoxProps {
+  headerText: string;
+  bodyText: string;
 }
+const MessageBox = ({ headerText, bodyText }: MessageBoxProps) => {
+  return (
+    <div className="bg-hsl-light dark:hsl-dark p-4 mb-5 leading-5">
+      <p className="text-warning-red dark:text-warning-orange">{headerText}</p>
+      <p className="text-raisin-black dark:text-bright-gray">{bodyText}</p>
+    </div>
+  );
+};
+
+export default MessageBox;

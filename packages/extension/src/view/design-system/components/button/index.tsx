@@ -16,22 +16,22 @@
 /**
  * External dependencies.
  */
-import { Protocol } from 'puppeteer';
+import React from 'react';
 
-export interface CookieLogDetails
-  extends Omit<
-    Protocol.Network.Cookie,
-    | 'sameSite'
-    | 'size'
-    | 'session'
-    | 'priority'
-    | 'sameParty'
-    | 'sourceScheme'
-    | 'sourcePort'
-  > {
-  platform: string;
-  category: string;
-  description: string;
-  isFirstParty: 'Yes' | 'No';
-  sameSite: string;
+interface ButtonProps {
+  text: string;
+  onClick: () => void;
 }
+const Button = ({ onClick, text }: ButtonProps) => {
+  return (
+    <button
+      data-test-id="button"
+      onClick={onClick}
+      className="py-1 px-2 text-white dark:text-jet-black dark:bg-light-blue bg-dark-blue rounded font-medium"
+    >
+      {text}
+    </button>
+  );
+};
+
+export default Button;

@@ -16,22 +16,24 @@
 /**
  * External dependencies.
  */
-import { Protocol } from 'puppeteer';
+import type { Meta, StoryObj } from '@storybook/react';
 
-export interface CookieLogDetails
-  extends Omit<
-    Protocol.Network.Cookie,
-    | 'sameSite'
-    | 'size'
-    | 'session'
-    | 'priority'
-    | 'sameParty'
-    | 'sourceScheme'
-    | 'sourcePort'
-  > {
-  platform: string;
-  category: string;
-  description: string;
-  isFirstParty: 'Yes' | 'No';
-  sameSite: string;
-}
+/**
+ * Internal dependencies.
+ */
+import Button from '..';
+
+const meta: Meta<typeof Button> = {
+  title: 'Extension/DesignSystem/Button',
+  component: Button,
+  tags: ['autodocs'],
+};
+
+export default meta;
+
+export const Primary: StoryObj<typeof meta> = {
+  args: {
+    text: 'Analyze this tab',
+    onClick: () => undefined,
+  },
+};
