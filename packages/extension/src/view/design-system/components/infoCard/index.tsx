@@ -52,9 +52,10 @@ const InfoCard = ({ infoKey }: InfoCardProps) => {
             <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-bright-gray">
               {PSInfo.name}
             </h5>
-            <p className="mb-3 text-gray-700 dark:text-bright-gray">
-              {PSInfo.description}
-            </p>
+            <p
+              className="mb-3 text-gray-700 dark:text-bright-gray"
+              dangerouslySetInnerHTML={{ __html: PSInfo.description }}
+            />
             <LearnMoreDropdown PSInfo={PSInfo} />
           </div>
         </div>

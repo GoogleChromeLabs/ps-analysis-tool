@@ -9,7 +9,7 @@
   },
   "topics": {
     "name": "Topics",
-    "description": "Provide a way to for advertising to reach users based on interests inferred from the sites or apps the user visits, without needing to know the specific sites or apps the user has visited",
+    "description": "Provide a way for advertising to reach users based on interests inferred from the sites or apps the user visits, without needing to know the specific sites or apps the user has visited",
     "proposal": "https://github.com/patcg-individual-drafts/topics",
     "publicDiscussion": "https://github.com/patcg-individual-drafts/topics/issues",
     "videoOverview": "https://youtu.be/hEBzWuXjeTQ",
@@ -25,7 +25,7 @@
   },
   "attribution-reporting": {
     "name": "Attribution Reporting",
-    "description": "Allow the recording and matching of ad events with conversion events to occur on-device. Event-level:  Determine the effectiveness of specific ad interactions to help drive optimization. Summary Reporting: Allows for more detail about the overall conversions (e.g. region, revenue, time of day, etc) that their advertising has delivered, while minimizing details about individual conversions.",
+    "description": "Allow the recording and matching of ad events with conversion events to occur on-device. </br> Event-level: Determine the effectiveness of specific ad interactions to help drive optimization. </br>Summary Reporting: Allows for more detail about the overall conversions (e.g. region, revenue, time of day, etc) that their advertising has delivered, while minimizing details about individual conversions.",
     "proposal": "https://github.com/WICG/attribution-reporting-api",
     "publicDiscussion": "https://github.com/WICG/attribution-reporting-api/issues",
     "videoOverview": "https://www.youtube.com/watch?v=UGA74CIcom8",
