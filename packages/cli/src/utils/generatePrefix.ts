@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as parseUrl } from './parseUrl';
-export { default as isFirstParty } from './isFirstParty';
-export { default as delay } from './delay';
-export { default as generatePageVisitCookies } from './generatePageVisitCookies';
-export { default as normalizeCookie } from './normalizeCookies';
-export { default as getOpenCookieDetails } from './getOpenCookieDetails';
-export { default as getCSVbyObject } from './getCSVbyObject';
-export { default as generateTechnology } from './generateTechnology';
-export { default as generatePrefix } from './generatePrefix';
+/**
+ * @param {string} url Url in a string format.
+ * @returns {string} string with protocol removed and special characters replaces with -
+ */
+export default function generatePrefix(url: string): string {
+  const urlObject = new URL(url);
+
+  return (urlObject.hostname + urlObject.pathname).replace(
+    /[^a-zA-Z0-9 ]/g,
+    '-'
+  );
+}

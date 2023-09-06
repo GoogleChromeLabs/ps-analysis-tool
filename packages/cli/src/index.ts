@@ -30,6 +30,7 @@ import { ensureFile, writeFile } from 'fs-extra';
  */
 import {
   generatePageVisitCookies,
+  generatePrefix,
   generateTechnology,
   getCSVbyObject,
   normalizeCookie,
@@ -69,8 +70,11 @@ export const initialize = async () => {
   if (url) {
     // Single URL.
 
+    const defaultPrefix = generatePrefix(url);
+
     const prefix = await promptly.prompt(
-      `Please add a prefix to easily identify output files later - `
+      `Please add a prefix to easily identify output files later (default:${defaultPrefix}) - `,
+      { default: defaultPrefix }
     );
     const cookiesFilePath = `./out/${prefix}-cookies.csv`;
     const technologiesFilePath = `./out/${prefix}-technologies.csv`;
@@ -170,8 +174,11 @@ export const initialize = async () => {
       )
     );
 
+    const defaultPrefix = generatePrefix(sitemapURL);
+
     const prefix = await promptly.prompt(
-      `Please add a prefix to easily identify output files later - `
+      `Please add a prefix to easily identify output files later (default:${defaultPrefix}) - `,
+      { default: defaultPrefix }
     );
     const cookiesFilePath = `./out/${prefix}-cookies.csv`;
     const technologiesFilePath = `./out/${prefix}-technologies.csv`;
