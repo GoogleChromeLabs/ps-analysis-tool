@@ -63,6 +63,10 @@ const commonConfig = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
   },
+  performance: {
+    maxEntrypointSize: 1024000,
+    maxAssetSize: 1024000,
+  },
 };
 
 const root = {
