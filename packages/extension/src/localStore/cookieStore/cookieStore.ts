@@ -67,7 +67,9 @@ const CookieStore = {
     const storage = await chrome.storage.local.get();
 
     Object.values(storage).forEach((tabData) => {
-      delete tabData.cookies[cookieName];
+      if (tabData.cookies && tabData.cookies[cookieName]) {
+        delete tabData.cookies[cookieName];
+      }
     });
 
     await chrome.storage.local.set(storage);
@@ -83,20 +85,48 @@ const CookieStore = {
     if (storage[tabId]) {
       storage[tabId].focusedAt = Date.now();
     }
+
     await chrome.storage.local.set(storage);
   },
 
   /**
-   * creates an entry for a tab
+   * Clear cookie data
+   * @param {string} tabId The active tab id.
+   */
+  async removeCookieData(tabId: string) {
+    const storage = await chrome.storage.local.get();
+
+    if (storage[tabId]) {
+      storage[tabId].cookies = {};
+    }
+
+    await chrome.storage.local.set(storage);
+  },
+
+  /**
+   * Creates an entry for a tab
    * @param {string} tabId The tab id.
    */
   async addTabData(tabId: string) {
-    await chrome.storage.local.set({
-      [tabId]: {
-        cookies: {},
-        focusedAt: Date.now(),
-      },
-    });
+    const extensionStorage = await chrome.storage.sync.get();
+    const allowedTabs = extensionStorage?.allowedNumberOfTabs;
+
+    if (allowedTabs && allowedTabs !== 'unlimited') {
+      await chrome.storage.local.set({
+        [tabId]: {
+          cookies: {},
+          focusedAt: Date.now(),
+        },
+        tabToRead: tabId,
+      });
+    } else {
+      await chrome.storage.local.set({
+        [tabId]: {
+          cookies: {},
+          focusedAt: Date.now(),
+        },
+      });
+    }
   },
 
   /**

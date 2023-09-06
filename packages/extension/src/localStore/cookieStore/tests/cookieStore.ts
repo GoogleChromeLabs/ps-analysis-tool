@@ -103,6 +103,22 @@ describe('local store: CookieStore', () => {
               resolve();
             }),
         },
+        sync: {
+          //@ts-ignore
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          get: (_, __) =>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            new Promise<{ [key: string]: any }>((resolve) => {
+              resolve({
+                allowedNumberOfTabs: { allowedNumberOfTabs: 'single' },
+              });
+            }),
+          //@ts-ignore
+          onChanged: {
+            addListener: () => undefined,
+            removeListener: () => undefined,
+          },
+        },
       },
     };
   });
@@ -123,7 +139,7 @@ describe('local store: CookieStore', () => {
     });
   });
 
-  it('should delte cookies', async () => {
+  it('should delete cookies', async () => {
     await CookieStore.update('123', cookieArray);
     await CookieStore.deleteCookie('countryCode1');
     expect(storage['123'].cookies).toStrictEqual({
@@ -164,7 +180,7 @@ describe('local store: CookieStore', () => {
     await CookieStore.update('123', cookieArray);
     await CookieStore.removeWindowData(123);
     expect(storage['123']).toBeUndefined();
-    expect(storage).toStrictEqual({});
+    expect(storage).toStrictEqual({ tabToRead: '123' });
     globalThis.chrome.tabs = tmpTabRef;
   });
 });
