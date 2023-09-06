@@ -34,4 +34,5 @@ export interface CookieLogDetails
   description: string;
   isFirstParty: 'Yes' | 'No';
   sameSite: string;
+  pageUrl: string;
 }
