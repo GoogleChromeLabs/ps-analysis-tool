@@ -13,11 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as CirclePieChart } from './circlePieChart';
-export { default as Circle } from './circle';
-export { default as MatrixComponent } from './matrix/matrixComponent';
-export { default as MatrixComponentHorizontal } from './matrix/matrixComponent/matrixComponentHorizontal';
-export { default as Matrix } from './matrix';
-export { default as Button } from './button';
 
-export type { MatrixComponentProps } from './matrix/matrixComponent';
+/**
+ * External dependencies.
+ */
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+
+/**
+ * Internal dependencies.
+ */
+import App from './app';
+import { Provider as ExternalStoreProvider } from './stateProviders/syncSettingsStore';
+
+const root = document.getElementById('root');
+
+if (root) {
+  createRoot(root).render(
+    <ExternalStoreProvider>
+      <App />
+    </ExternalStoreProvider>
+  );
+}

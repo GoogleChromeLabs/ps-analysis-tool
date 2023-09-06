@@ -103,7 +103,26 @@ describe('App', () => {
             get: (_, __) =>
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               new Promise<{ [key: string]: any }>((resolve) => {
-                resolve({ 40245632: { cookies: tabCookies } });
+                resolve({
+                  40245632: { cookies: tabCookies },
+                  tabToRead: '40245632',
+                });
+              }),
+            //@ts-ignore
+            onChanged: {
+              addListener: () => undefined,
+              removeListener: () => undefined,
+            },
+          },
+          sync: {
+            //@ts-ignore
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            get: (_, __) =>
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              new Promise<{ [key: string]: any }>((resolve) => {
+                resolve({
+                  allowedNumberOfTabs: 'single',
+                });
               }),
             //@ts-ignore
             onChanged: {
