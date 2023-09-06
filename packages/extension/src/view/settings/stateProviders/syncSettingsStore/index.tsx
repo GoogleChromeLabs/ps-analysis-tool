@@ -56,11 +56,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const intitialSync = useCallback(async () => {
     const currentSettings = await chrome.storage.sync.get();
+
     setAllowedNumberOfTabs(currentSettings?.allowedNumberOfTabs);
   }, []);
 
   const setSettingsInStorage = useCallback(async (key: string, value: any) => {
     const currentSettings = await chrome.storage.sync.get();
+
     chrome.storage.sync.set({
       ...currentSettings,
       [key]: value,
@@ -74,6 +76,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         changes['allowedNumberOfTabs']?.newValue
       ) {
         setAllowedNumberOfTabs(changes['allowedNumberOfTabs']?.newValue);
+
         if (changes['allowedNumberOfTabs']?.newValue === 'single') {
           chrome.tabs.query({}, (tabs) => {
             tabs.map((tab) => {
@@ -81,9 +84,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
                 tabId: tab?.id,
                 text: '',
               });
+
               return tab;
             });
           });
+
           await chrome.storage.local.clear();
         }
       }
@@ -94,6 +99,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     intitialSync();
     chrome.storage.sync.onChanged.addListener(storeChangeListener);
+
     return () => {
       chrome.storage.sync.onChanged.removeListener(storeChangeListener);
     };

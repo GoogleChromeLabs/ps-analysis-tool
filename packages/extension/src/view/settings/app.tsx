@@ -25,12 +25,14 @@ import React, { useState } from 'react';
 import './app.css';
 import Settings from './components/tabContent/settings';
 import TabHeader from './components/tabHeader';
+
 const TABS = [
   {
     display_name: 'Settings',
     Component: Settings,
   },
 ];
+
 const App: React.FC = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
   const TabContent = TABS[selectedTabIndex].Component;

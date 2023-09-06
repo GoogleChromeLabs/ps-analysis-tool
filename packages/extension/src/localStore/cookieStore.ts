@@ -104,7 +104,7 @@ const CookieStore = {
   },
 
   /**
-   * creates an entry for a tab
+   * Creates an entry for a tab
    * @param {string} tabId The tab id.
    */
   async addTabData(tabId: string) {

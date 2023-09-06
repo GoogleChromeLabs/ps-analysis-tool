@@ -52,9 +52,9 @@ const App: React.FC = () => {
   if (onChromeUrl) {
     return (
       <div className="w-96 min-h-[318px] h-fit p-5 flex justify-center items-center flex-col">
-        <p className="font-bold text-lg">Empty Tab</p>
+        <p className="font-bold text-lg mb-2">Not much to analyze here</p>
         <p className="text-chart-label text-xs">
-          Cannot process cookies on empty tab.
+          Its emptier than a cookie jar after a midnight snack! 🌌
         </p>
       </div>
     );
