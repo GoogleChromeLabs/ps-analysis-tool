@@ -102,7 +102,19 @@ export const initialize = async () => {
     const technologies = await generateTechnology(url);
 
     const csvTechnologies: string = getCSVbyObject(
-      technologies.map(({ name }) => ({ name }))
+      technologies.map(
+        ({ name, description, confidence, website, categories }) => {
+          return {
+            name,
+            description,
+            confidence: confidence + '%',
+            website,
+            categories: categories
+              .reduce<string>((acc, cat) => acc + '|' + cat.name, '')
+              .slice(1),
+          };
+        }
+      )
     );
 
     await ensureFile(cookiesFilePath);
