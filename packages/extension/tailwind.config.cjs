@@ -33,6 +33,15 @@ module.exports = {
         '3xl':
           '0px 38px 90px 0px rgba(0, 0, 0, 0.25), 0px 0px 2px 0px rgba(0, 0, 0, 0.05), 0px 0px 1px 0px rgba(0, 0, 0, 0.60)',
       },
+      keyframes: {
+        'horizontal-spinner-keyframes': {
+          '0%': { left: '0%', transform: 'translateX(-100%)' },
+          '100%': { left: '100%', transform: 'translateX(0%)' },
+        },
+      },
+      animation: {
+        'horizontal-spinner': 'horizontal-spinner-keyframes 2s linear infinite',
+      },
     },
     fontFamily: {
       ...defaultTheme.fontFamily,
@@ -73,6 +82,8 @@ module.exports = {
       mischka: '#AFB0B1',
       'cool-grey': '#323941',
       'asteriod-black': '#2B2C2F',
+      'comet-black': '#202124',
+      'jet-black': '#202142',
       'warning-red': '#C33300',
       'warning-orange': '#FA3',
     },
@@ -96,6 +107,8 @@ module.exports = {
       'medium-persian-blue': '#0E639C',
       'hsl-dark': '	hsl(var(--color-message-box-dark))',
       'hsl-light': 'hsla(var(--color-message-box-light) / 10%)',
+      'dark-blue': '#0B57D0',
+      'light-blue': '#ABC7FA',
     },
     borderColor: {
       ...colors,

@@ -53,6 +53,7 @@ describe('App', () => {
   it('Should show refresh page message if cookie stats are not available', () => {
     mockUseCookieStore.mockReturnValueOnce({
       tabCookieStats: {},
+      isCurrentTabBeingListenedTo: true,
     });
     render(<App />);
 
@@ -63,6 +64,7 @@ describe('App', () => {
 
   it('Should show No cookies found on this page message if no firstParty and thirdParty cookies are not available', () => {
     mockUseCookieStore.mockReturnValueOnce({
+      isCurrentTabBeingListenedTo: true,
       cookieStats: {
         total: 0,
         firstParty: {
@@ -72,6 +74,8 @@ describe('App', () => {
           total: 0,
         },
       },
+      initialProcessed: true,
+      totalProcessed: 100,
     });
     render(<App />);
 
@@ -80,8 +84,9 @@ describe('App', () => {
     ).toBeInTheDocument();
   });
 
-  it('Should show No cookies found on this page message if no firstParty and thirdParty cookies are not available', () => {
+  it('Should not show No cookies found on this page message if no firstParty and thirdParty cookies are not available', () => {
     mockUseCookieStore.mockReturnValueOnce({
+      isCurrentTabBeingListenedTo: true,
       cookieStats: {
         total: 6,
         firstParty: {

@@ -13,12 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as CirclePieChart } from './circlePieChart';
-export { default as Circle } from './circle';
-export { default as MatrixComponent } from './matrix/matrixComponent';
-export { default as MatrixComponentHorizontal } from './matrix/matrixComponent/matrixComponentHorizontal';
-export { default as Matrix } from './matrix';
-export { default as MessageBox } from './messageBox';
-export { default as Button } from './button';
 
-export type { MatrixComponentProps } from './matrix/matrixComponent';
+/**
+ * External dependencies.
+ */
+import React from 'react';
+
+/**
+ * Internal dependencies.
+ */
+import AllowedNumberOfTabs from './allowedNumberOfTabs';
+
+const Settings: React.FC = () => {
+  return (
+    <div className="w-full h-full flex flex-col gap-5">
+      <AllowedNumberOfTabs />
+    </div>
+  );
+};
+
+export default Settings;
