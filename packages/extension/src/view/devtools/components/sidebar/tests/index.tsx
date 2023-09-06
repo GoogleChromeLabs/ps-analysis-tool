@@ -30,6 +30,7 @@ import {
   useCookieStore,
   type CookieStoreContext,
 } from '../../../stateProviders/syncCookieStore';
+import { act } from 'react-dom/test-utils';
 
 const uncategorized1pCookie: ParsedCookie = {
   name: '_cb',
@@ -182,7 +183,7 @@ describe('Sidebar', () => {
   });
 
   it('should select cookie and show the listed frames under cookie menu.', () => {
-    mockUseCookieStore.mockReturnValueOnce({
+    mockUseCookieStore.mockReturnValue({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: 'https://edition.cnn.com/',
       setSelectedFrame: mockResponse.setSelectedFrame,
@@ -201,7 +202,7 @@ describe('Sidebar', () => {
   });
 
   it('should select another menu and unselect cookie accordion', () => {
-    mockUseCookieStore.mockReturnValueOnce({
+    mockUseCookieStore.mockReturnValue({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: 'https://edition.cnn.com/',
       setSelectedFrame: mockResponse.setSelectedFrame,
@@ -215,39 +216,41 @@ describe('Sidebar', () => {
       'cookies-tab-heading-wrapper'
     );
     const mainFrame = screen.getByTestId('https://edition.cnn.com/');
-    const attributionContainer = screen.getByTestId('Attribution');
+    const siteBoundariesContainer = screen.getByTestId(
+      'siteBoundaries-tab-heading-wrapper'
+    );
 
     expect(cookieHeaderContainer).not.toHaveClass('bg-royal-blue');
     expect(mainFrame).toBeInTheDocument();
     expect(mainFrame).toHaveClass('bg-royal-blue');
 
-    fireEvent.click(attributionContainer);
-    mockUseCookieStore.mockReturnValueOnce({
+    fireEvent.click(siteBoundariesContainer);
+    mockUseCookieStore.mockReturnValue({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: null,
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     tahHeaderContainer.rerender(
-      <Sidebar selectedIndex={2} setIndex={() => undefined} />
+      <Sidebar selectedIndex={1} setIndex={() => undefined} />
     );
     expect(cookieHeaderContainer).not.toHaveClass('bg-royal-blue');
-    expect(attributionContainer).toHaveClass('bg-royal-blue');
+    expect(siteBoundariesContainer).toHaveClass('bg-royal-blue');
   });
 
   it('should close accordion and deselect the frame.', () => {
-    mockUseCookieStore.mockReturnValueOnce({
+    mockUseCookieStore.mockReturnValue({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: 'https://edition.cnn.com/',
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     render(<Sidebar selectedIndex={0} setIndex={() => undefined} />);
-    const accordionOpener = screen.getByTestId('accordion-opener');
+    const accordionOpener = screen.getByTestId('cookies-accordion-opener');
     fireEvent.click(accordionOpener);
     expect(accordionOpener).not.toHaveClass('-rotate-90');
 
     fireEvent.click(screen.getByTestId('https://edition.cnn.com/'));
 
-    mockUseCookieStore.mockReturnValueOnce({
+    mockUseCookieStore.mockReturnValue({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: null,
       setSelectedFrame: mockResponse.setSelectedFrame,
@@ -258,33 +261,50 @@ describe('Sidebar', () => {
   });
 
   it('Left Arrow should close accordion', async () => {
+    mockUseCookieStore.mockReturnValue({
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
     render(<Sidebar selectedIndex={0} setIndex={() => undefined} />);
     // Focus on the cookie heading
-    userEvent.tab();
-    // Simulate right arrow key down
-    userEvent.keyboard('{ArrowRight}');
-    expect(await screen.findByTestId('accordion-opener')).not.toHaveClass(
-      '-rotate-90'
-    );
+    act(() => {
+      userEvent.tab();
+      // Simulate right arrow key down
+      userEvent.keyboard('{ArrowRight}');
+    });
+    expect(
+      await screen.findByTestId('cookies-accordion-opener')
+    ).not.toHaveClass('-rotate-90');
     // Simulate left arrow key down
-    userEvent.keyboard('{ArrowLeft}');
-    expect(await screen.findByTestId('accordion-opener')).toHaveClass(
+    act(() => {
+      userEvent.keyboard('{ArrowLeft}');
+    });
+    expect(await screen.findByTestId('cookies-accordion-opener')).toHaveClass(
       '-rotate-90'
     );
   });
 
   it('Left Arrow should unselect selected frame and select the Cookies menu', async () => {
+    mockUseCookieStore.mockReturnValue({
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
     const sidebarRender = render(
       <Sidebar selectedIndex={0} setIndex={() => undefined} />
     );
     //Should focus on cookies menu
-    userEvent.tab();
-    //Simulate right arrow key down
-    userEvent.keyboard('{ArrowRight}');
-    expect(await screen.findByTestId('accordion-opener')).not.toHaveClass(
-      '-rotate-90'
-    );
-    mockUseCookieStore.mockReturnValueOnce({
+    act(() => {
+      userEvent.tab();
+      //Simulate right arrow key down
+      userEvent.keyboard('{ArrowRight}');
+    });
+    expect(
+      await screen.findByTestId('cookies-accordion-opener')
+    ).not.toHaveClass('-rotate-90');
+
+    mockUseCookieStore.mockReturnValue({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: 'https://edition.cnn.com/',
       setSelectedFrame: mockResponse.setSelectedFrame,
@@ -292,14 +312,16 @@ describe('Sidebar', () => {
     sidebarRender.rerender(
       <Sidebar selectedIndex={0} setIndex={() => undefined} />
     );
-    //Simulate down arrow key down
-    userEvent.keyboard('{ArrowDown}');
+    act(() => {
+      //Simulate down arrow key down
+      userEvent.keyboard('{ArrowDown}');
+    });
     expect(screen.getByTestId('https://edition.cnn.com/')).toHaveClass(
       'bg-royal-blue'
     );
     //Simulate left arrow key down
     userEvent.keyboard('{ArrowLeft}');
-    mockUseCookieStore.mockReturnValueOnce({
+    mockUseCookieStore.mockReturnValue({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: null,
       setSelectedFrame: mockResponse.setSelectedFrame,
@@ -316,16 +338,23 @@ describe('Sidebar', () => {
   });
 
   it('Down Arrow should select next frame', async () => {
+    mockUseCookieStore.mockReturnValue({
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
     const sidebarRender = render(
       <Sidebar selectedIndex={0} setIndex={() => undefined} />
     );
-    //Focus on the cookies menu
-    userEvent.tab();
-    //Simulate right arrow key keydown to open accordion
-    userEvent.keyboard('{ArrowRight}');
-    expect(await screen.findByTestId('accordion-opener')).not.toHaveClass(
-      '-rotate-90'
-    );
+    act(() => {
+      //Focus on the cookies menu
+      userEvent.tab();
+      //Simulate right arrow key keydown to open accordion
+      userEvent.keyboard('{ArrowRight}');
+    });
+    expect(
+      await screen.findByTestId('cookies-accordion-opener')
+    ).not.toHaveClass('-rotate-90');
     mockUseCookieStore.mockReturnValueOnce({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: 'https://edition.cnn.com/',
@@ -335,12 +364,16 @@ describe('Sidebar', () => {
       <Sidebar selectedIndex={0} setIndex={() => undefined} />
     );
     //Simulate down arrow key keydown to select frame
-    userEvent.keyboard('{ArrowDown}');
+    act(() => {
+      userEvent.keyboard('{ArrowDown}');
+    });
     expect(screen.getByTestId('https://edition.cnn.com/')).toHaveClass(
       'bg-royal-blue'
     );
     //Simulate down arrow key keydown to select next frame
-    userEvent.keyboard('{ArrowDown}');
+    act(() => {
+      userEvent.keyboard('{ArrowDown}');
+    });
     mockUseCookieStore.mockReturnValueOnce({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: 'https://crxt.net/',
@@ -358,17 +391,24 @@ describe('Sidebar', () => {
   });
 
   it('Up Arrow should select previous frame', async () => {
+    mockUseCookieStore.mockReturnValue({
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
     const sidebarRender = render(
       <Sidebar selectedIndex={0} setIndex={() => undefined} />
     );
-    //Focus on cookie menu header
-    userEvent.tab();
-    //Simulate right arrow key keydown to simulate accordion opening.
-    userEvent.keyboard('{ArrowRight}');
-    expect(await screen.findByTestId('accordion-opener')).not.toHaveClass(
-      '-rotate-90'
-    );
-    mockUseCookieStore.mockReturnValueOnce({
+    act(() => {
+      //Focus on cookie menu header
+      userEvent.tab();
+      //Simulate right arrow key keydown to simulate accordion opening.
+      userEvent.keyboard('{ArrowRight}');
+    });
+    expect(
+      await screen.findByTestId('cookies-accordion-opener')
+    ).not.toHaveClass('-rotate-90');
+    mockUseCookieStore.mockReturnValue({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: 'https://edition.cnn.com/',
       setSelectedFrame: mockResponse.setSelectedFrame,
@@ -376,14 +416,18 @@ describe('Sidebar', () => {
     sidebarRender.rerender(
       <Sidebar selectedIndex={0} setIndex={() => undefined} />
     );
-    //Simulate down arrow key keydown to select first frame
-    userEvent.keyboard('{ArrowDown}');
+    act(() => {
+      //Simulate down arrow key keydown to select first frame
+      userEvent.keyboard('{ArrowDown}');
+    });
     expect(screen.getByTestId('https://edition.cnn.com/')).toHaveClass(
       'bg-royal-blue'
     );
-    //Simulate down arrow key keydown to select next frame
-    userEvent.keyboard('{ArrowDown}');
-    mockUseCookieStore.mockReturnValueOnce({
+    act(() => {
+      //Simulate down arrow key keydown to select next frame
+      userEvent.keyboard('{ArrowDown}');
+    });
+    mockUseCookieStore.mockReturnValue({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: 'https://crxt.net/',
       setSelectedFrame: mockResponse.setSelectedFrame,
@@ -397,9 +441,11 @@ describe('Sidebar', () => {
     expect(screen.getByTestId('https://crxt.net/')).toHaveClass(
       'bg-royal-blue'
     );
-    //Simulate up arrow key keydown to select previous frame
-    userEvent.keyboard('{ArrowUp}');
-    mockUseCookieStore.mockReturnValueOnce({
+    act(() => {
+      //Simulate up arrow key keydown to select previous frame
+      userEvent.keyboard('{ArrowUp}');
+    });
+    mockUseCookieStore.mockReturnValue({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: 'https://edition.cnn.com/',
       setSelectedFrame: mockResponse.setSelectedFrame,
@@ -416,17 +462,24 @@ describe('Sidebar', () => {
   });
 
   it('Up Arrow should unselect selected frame and select the Cookies menu', async () => {
+    mockUseCookieStore.mockReturnValue({
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
     const sidebarRender = render(
       <Sidebar selectedIndex={0} setIndex={() => undefined} />
     );
-    //Focus on cookie menu header
-    userEvent.tab();
-    //Simulate right arrow key keydown to simulate accordion opening.
-    userEvent.keyboard('{ArrowRight}');
-    expect(await screen.findByTestId('accordion-opener')).not.toHaveClass(
-      '-rotate-90'
-    );
-    mockUseCookieStore.mockReturnValueOnce({
+    act(() => {
+      //Focus on cookie menu header
+      userEvent.tab();
+      //Simulate right arrow key keydown to simulate accordion opening.
+      userEvent.keyboard('{ArrowRight}');
+    });
+    expect(
+      await screen.findByTestId('cookies-accordion-opener')
+    ).not.toHaveClass('-rotate-90');
+    mockUseCookieStore.mockReturnValue({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: 'https://edition.cnn.com/',
       setSelectedFrame: mockResponse.setSelectedFrame,
@@ -434,14 +487,18 @@ describe('Sidebar', () => {
     sidebarRender.rerender(
       <Sidebar selectedIndex={0} setIndex={() => undefined} />
     );
-    //Simulate down arrow key keydown to select first frame
-    userEvent.keyboard('{ArrowDown}');
+    act(() => {
+      //Simulate down arrow key keydown to select first frame
+      userEvent.keyboard('{ArrowDown}');
+    });
     expect(screen.getByTestId('https://edition.cnn.com/')).toHaveClass(
       'bg-royal-blue'
     );
-    //Simulate up arrow key keydown to select cookie menu header
-    userEvent.keyboard('{ArrowUp}');
-    mockUseCookieStore.mockReturnValueOnce({
+    act(() => {
+      //Simulate up arrow key keydown to select cookie menu header
+      userEvent.keyboard('{ArrowUp}');
+    });
+    mockUseCookieStore.mockReturnValue({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: null,
       setSelectedFrame: mockResponse.setSelectedFrame,
@@ -458,19 +515,26 @@ describe('Sidebar', () => {
   });
 
   it('Down Arrow on last frame should select the next main menu tab.', async () => {
+    mockUseCookieStore.mockReturnValue({
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
     const sidebarRender = render(
       <Sidebar selectedIndex={0} setIndex={() => undefined} />
     );
-    // Focus on cookie header menu and simulate right arrow to open accordion
-    userEvent.tab();
-    userEvent.keyboard('{ArrowRight}');
-    expect(await screen.findByTestId('accordion-opener')).not.toHaveClass(
-      '-rotate-90'
-    );
+    act(() => {
+      // Focus on cookie header menu and simulate right arrow to open accordion
+      userEvent.tab();
+      userEvent.keyboard('{ArrowRight}');
+    });
+    expect(
+      await screen.findByTestId('cookies-accordion-opener')
+    ).not.toHaveClass('-rotate-90');
 
     fireEvent.click(screen.getByTestId('https://crxt.net/'));
 
-    mockUseCookieStore.mockReturnValueOnce({
+    mockUseCookieStore.mockReturnValue({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: 'https://crxt.net/',
       setSelectedFrame: mockResponse.setSelectedFrame,
@@ -481,9 +545,11 @@ describe('Sidebar', () => {
     expect(screen.getByTestId('https://crxt.net/')).toHaveClass(
       'bg-royal-blue'
     );
-    //Simulate arrow down key to go to Topics menu
-    userEvent.keyboard('{ArrowDown}');
-    mockUseCookieStore.mockReturnValueOnce({
+    act(() => {
+      //Simulate arrow down key to go to Site Boundaries menu
+      userEvent.keyboard('{ArrowDown}');
+    });
+    mockUseCookieStore.mockReturnValue({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: null,
       setSelectedFrame: mockResponse.setSelectedFrame,
@@ -494,23 +560,32 @@ describe('Sidebar', () => {
     expect(screen.getByTestId('https://crxt.net/')).not.toHaveClass(
       'bg-royal-blue'
     );
-    expect(screen.getByTestId('Topics')).toHaveClass('bg-royal-blue');
+    expect(
+      screen.getByTestId('siteBoundaries-tab-heading-wrapper')
+    ).toHaveClass('bg-royal-blue');
   });
 
-  it('Up Arrow on Topics menu should select last frame in accordion.', async () => {
+  it('Up Arrow on Site Boundaries menu should select last frame in accordion.', async () => {
+    mockUseCookieStore.mockReturnValue({
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
     const sidebarRender = render(
       <Sidebar selectedIndex={0} setIndex={() => undefined} />
     );
-    // Focus on cookie header menu and simulate right arrow to open accordion
-    userEvent.tab();
-    userEvent.keyboard('{ArrowRight}');
-    expect(await screen.findByTestId('accordion-opener')).not.toHaveClass(
-      '-rotate-90'
-    );
+    act(() => {
+      // Focus on cookie header menu and simulate right arrow to open accordion
+      userEvent.tab();
+      userEvent.keyboard('{ArrowRight}');
+    });
+    expect(
+      await screen.findByTestId('cookies-accordion-opener')
+    ).not.toHaveClass('-rotate-90');
     // Click on Topics tab
-    fireEvent.click(screen.getByTestId('Topics'));
+    fireEvent.click(screen.getByTestId('siteBoundaries-tab-heading-wrapper'));
 
-    mockUseCookieStore.mockReturnValueOnce({
+    mockUseCookieStore.mockReturnValue({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: null,
       setSelectedFrame: mockResponse.setSelectedFrame,
@@ -518,9 +593,13 @@ describe('Sidebar', () => {
     sidebarRender.rerender(
       <Sidebar selectedIndex={1} setIndex={() => undefined} />
     );
-    expect(screen.getByTestId('Topics')).toHaveClass('bg-royal-blue');
-    //Simulate arrow up to select last frame in the list.
-    userEvent.keyboard('{ArrowUp}');
+    expect(
+      screen.getByTestId('siteBoundaries-tab-heading-wrapper')
+    ).toHaveClass('bg-royal-blue');
+    act(() => {
+      //Simulate arrow up to select last frame in the list.
+      userEvent.keyboard('{ArrowUp}');
+    });
     mockUseCookieStore.mockReturnValueOnce({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: 'https://crxt.net/',
@@ -532,36 +611,47 @@ describe('Sidebar', () => {
     expect(screen.getByTestId('https://crxt.net/')).toHaveClass(
       'bg-royal-blue'
     );
-    expect(screen.getByTestId('Topics')).not.toHaveClass('bg-royal-blue');
+    expect(
+      screen.getByTestId('siteBoundaries-tab-heading-wrapper')
+    ).not.toHaveClass('bg-royal-blue');
   });
 
-  it('Up Arrow on Attribution menu should select Topics Menu.', async () => {
+  it('Up Arrow on Private Advertising menu should select Site Boundaries Menu.', async () => {
+    mockUseCookieStore.mockReturnValue({
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
     const sidebarRender = render(
       <Sidebar selectedIndex={0} setIndex={() => undefined} />
     );
-    // Focus on cookie header menu and simulate right arrow to open accordion
-    userEvent.tab();
-    userEvent.keyboard('{ArrowRight}');
-    expect(await screen.findByTestId('accordion-opener')).not.toHaveClass(
-      '-rotate-90'
-    );
+    act(() => {
+      // Focus on cookie header menu and simulate right arrow to open accordion
+      userEvent.tab();
+      userEvent.keyboard('{ArrowRight}');
+    });
+    expect(
+      await screen.findByTestId('cookies-accordion-opener')
+    ).not.toHaveClass('-rotate-90');
     // Click on Attribution tab
-    fireEvent.click(screen.getByTestId('Attribution'));
+    fireEvent.click(screen.getByTestId('siteBoundaries-tab-heading-wrapper'));
 
-    mockUseCookieStore.mockReturnValueOnce({
+    mockUseCookieStore.mockReturnValue({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: null,
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     sidebarRender.rerender(
-      <Sidebar selectedIndex={2} setIndex={() => undefined} />
+      <Sidebar selectedIndex={4} setIndex={() => undefined} />
     );
-    expect(await screen.findByTestId('Attribution')).toHaveClass(
-      'bg-royal-blue'
-    );
-    // Focus on cookie header menu and simulate right arrow to open accordion
-    userEvent.keyboard('{ArrowUp}');
-    mockUseCookieStore.mockReturnValueOnce({
+    expect(
+      await screen.findByTestId('privateAdvertising-tab-heading-wrapper')
+    ).toHaveClass('bg-royal-blue');
+    act(() => {
+      // Focus on cookie header menu and simulate right arrow to open accordion
+      userEvent.keyboard('{ArrowUp}');
+    });
+    mockUseCookieStore.mockReturnValue({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: null,
       setSelectedFrame: mockResponse.setSelectedFrame,
@@ -569,12 +659,16 @@ describe('Sidebar', () => {
     sidebarRender.rerender(
       <Sidebar selectedIndex={1} setIndex={() => undefined} />
     );
-    expect(screen.getByTestId('Topics')).toHaveClass('bg-royal-blue');
-    expect(screen.getByTestId('Attribution')).not.toHaveClass('bg-royal-blue');
+    expect(
+      screen.getByTestId('siteBoundaries-tab-heading-wrapper')
+    ).toHaveClass('bg-royal-blue');
+    expect(
+      screen.getByTestId('privateAdvertising-tab-heading-wrapper')
+    ).not.toHaveClass('bg-royal-blue');
   });
 
   it('Down Arrow on cookies menu with open accordion should select first frame.', async () => {
-    mockUseCookieStore.mockReturnValueOnce({
+    mockUseCookieStore.mockReturnValue({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: null,
       setSelectedFrame: mockResponse.setSelectedFrame,
@@ -582,16 +676,20 @@ describe('Sidebar', () => {
     const sidebarRender = render(
       <Sidebar selectedIndex={0} setIndex={() => undefined} />
     );
-    // Focus on cookie header menu and simulate right arrow to open accordion
-    userEvent.tab();
-    userEvent.keyboard('{ArrowRight}');
-    expect(await screen.findByTestId('accordion-opener')).not.toHaveClass(
-      '-rotate-90'
-    );
-    //Simulate arrow down key to select first frame.
-    userEvent.keyboard('{ArrowDown}');
+    act(() => {
+      // Focus on cookie header menu and simulate right arrow to open accordion
+      userEvent.tab();
+      userEvent.keyboard('{ArrowRight}');
+    });
+    expect(
+      await screen.findByTestId('cookies-accordion-opener')
+    ).not.toHaveClass('-rotate-90');
+    act(() => {
+      //Simulate arrow down key to select first frame.
+      userEvent.keyboard('{ArrowDown}');
+    });
 
-    mockUseCookieStore.mockReturnValueOnce({
+    mockUseCookieStore.mockReturnValue({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: 'https://edition.cnn.com/',
       setSelectedFrame: mockResponse.setSelectedFrame,
@@ -604,7 +702,7 @@ describe('Sidebar', () => {
     );
   });
 
-  it.only('Down SiteBoundaries on Topics menu should select Attribution Menu.', async () => {
+  it('Down SiteBoundaries on Topics menu should select Attribution Menu.', async () => {
     mockUseCookieStore.mockReturnValue({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: null,
@@ -645,7 +743,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     sidebarRender.rerender(
-      <Sidebar selectedIndex={2} setIndex={() => undefined} />
+      <Sidebar selectedIndex={4} setIndex={() => undefined} />
     );
     await waitFor(() => {
       expect(
@@ -657,19 +755,24 @@ describe('Sidebar', () => {
     });
   });
 
-  it('Down Arrow on Topics menu should select Attribution Menu.', () => {
+  it('Check if clicking on frame calls setIndex function', () => {
+    mockUseCookieStore.mockReturnValue({
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
     const setIndexMock = jest.fn();
     const sidebarRender = render(
       <Sidebar selectedIndex={0} setIndex={setIndexMock} />
     );
     // Click on accordion opener button.
-    fireEvent.click(screen.getByTestId('accordion-opener'));
+    fireEvent.click(screen.getByTestId('cookies-accordion-opener'));
 
-    expect(screen.getByTestId('accordion-opener')).not.toHaveClass(
+    expect(screen.getByTestId('cookies-accordion-opener')).not.toHaveClass(
       '-rotate-90'
     );
-    // Click on Topics menu
-    fireEvent.click(screen.getByTestId('Topics'));
+    // Click on siteBoundaries menu
+    fireEvent.click(screen.getByTestId('siteBoundaries-tab-heading-wrapper'));
 
     mockUseCookieStore.mockReturnValueOnce({
       tabFrames: mockResponse.tabFrames,
@@ -679,7 +782,9 @@ describe('Sidebar', () => {
     sidebarRender.rerender(
       <Sidebar selectedIndex={1} setIndex={() => undefined} />
     );
-    expect(screen.getByTestId('Topics')).toHaveClass('bg-royal-blue');
+    expect(
+      screen.getByTestId('siteBoundaries-tab-heading-wrapper')
+    ).toHaveClass('bg-royal-blue');
 
     fireEvent.click(screen.getByTestId('https://crxt.net/'));
     // Check if setIndex was called.
