@@ -20,8 +20,7 @@
 export default function generatePrefix(url: string): string {
   const urlObject = new URL(url);
 
-  return (urlObject.hostname + urlObject.pathname).replace(
-    /[^a-zA-Z0-9 ]/g,
-    '-'
-  );
+  return (urlObject.hostname + urlObject.pathname)
+    .replace(/[^a-zA-Z0-9 ]/g, '-')
+    .slice(0, 1);
 }
