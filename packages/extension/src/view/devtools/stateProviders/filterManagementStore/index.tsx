@@ -44,6 +44,11 @@ export interface filterManagementStore {
     cookiesAvailable: boolean;
   };
   actions: {
+    setSelectedFrameFilters: React.Dispatch<
+      React.SetStateAction<{
+        [frameKey: string]: { selectedFilters: SelectedFilters };
+      }>
+    >;
     setSelectedFilters: (
       update: (prevState: SelectedFilters) => SelectedFilters
     ) => void;
@@ -60,6 +65,7 @@ const initialState: filterManagementStore = {
     cookiesAvailable: false,
   },
   actions: {
+    setSelectedFrameFilters: noop,
     setSelectedFilters: noop,
     setSearchTerm: noop,
   },
@@ -165,6 +171,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       actions: {
         setSelectedFilters,
         setSearchTerm,
+        setSelectedFrameFilters,
       },
     }),
     [

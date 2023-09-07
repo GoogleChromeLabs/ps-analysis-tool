@@ -82,10 +82,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
     []
   );
 
-  const { selectedFilters, setSelectedFilters } = useFilterManagementStore(
+  const { selectedFilters, setSelectedFrameFilters } = useFilterManagementStore(
     ({ state, actions }) => ({
       selectedFilters: state?.selectedFilters,
-      setSelectedFilters: actions?.setSelectedFilters,
+      setSelectedFrameFilters: actions?.setSelectedFrameFilters,
     })
   );
 
@@ -155,7 +155,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
             storedTabData?.preferences?.selectedFilters &&
             Object.keys(storedTabData?.preferences?.selectedFilters).length > 0
           ) {
-            setSelectedFilters((prevState: SelectedFilters) => {
+            const newFiltersGenerator = (prevState: object) => {
               const newValue: SelectedFilters = { ...prevState };
               const setFilters = storedTabData?.preferences?.selectedFilters;
               // eslint-disable-next-line guard-for-in
@@ -163,13 +163,23 @@ export const Provider = ({ children }: PropsWithChildren) => {
                 newValue[filter] = new Set(setFilters[filter]);
               }
               return newValue;
-            });
+            };
+            setSelectedFrameFilters((previousFrameFilters) => ({
+              ...previousFrameFilters,
+              [storedTabData?.preferences?.selectedFrame]: {
+                selectedFilters: newFiltersGenerator(
+                  previousFrameFilters[
+                    storedTabData?.preferences?.selectedFrame
+                  ]?.selectedFilters || {}
+                ),
+              },
+            }));
           }
         }
         fetchedInitialValueRef.current = true;
       }
     })();
-  }, [getPreviousPreferences, setSelectedFilters, setSelectedFrame]);
+  }, [getPreviousPreferences, setSelectedFrame, setSelectedFrameFilters]);
 
   const value: PreferenceStore = useMemo(
     () => ({
