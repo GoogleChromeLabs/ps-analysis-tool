@@ -22,5 +22,5 @@ export default function generatePrefix(url: string): string {
 
   return (urlObject.hostname + urlObject.pathname)
     .replace(/[^a-zA-Z0-9 ]/g, '-')
-    .slice(0, 1);
+    .slice(0, -1);
 }
