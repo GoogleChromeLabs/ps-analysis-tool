@@ -146,23 +146,6 @@ describe('Index', () => {
             new Promise<{ [key: string]: any }>((resolve) => {
               resolve({
                 40245632: { cookies: tabCookies },
-                tabToRead: '40245632',
-              });
-            }),
-          //@ts-ignore
-          onChanged: {
-            addListener: () => undefined,
-            removeListener: () => undefined,
-          },
-        },
-        sync: {
-          //@ts-ignore
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          get: (_, __) =>
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            new Promise<{ [key: string]: any }>((resolve) => {
-              resolve({
-                allowedNumberOfTabs: 'single',
               });
             }),
           //@ts-ignore
@@ -184,35 +167,6 @@ describe('Index', () => {
         //@ts-ignore
         panels: {
           themeName: 'dark',
-        },
-      },
-      tabs: {
-        //@ts-ignore
-        onUpdated: {
-          addListener: () => undefined,
-          removeListener: () => undefined,
-        },
-        query: () => {
-          return Promise.resolve([
-            {
-              groupId: 12,
-              autoDiscardable: false,
-              discarded: false,
-              selected: true,
-              incognito: false,
-              active: true,
-              windowId: 1,
-              highlighted: false,
-              pinned: false,
-              index: 1,
-              id: 40245632,
-            },
-          ]);
-        },
-        //@ts-ignore
-        onRemoved: {
-          addListener: () => undefined,
-          removeListener: () => undefined,
         },
       },
     };
