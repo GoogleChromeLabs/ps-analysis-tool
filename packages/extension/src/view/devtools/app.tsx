@@ -23,49 +23,13 @@ import { Resizable } from 're-resizable';
  * Internal dependencies.
  */
 import './app.css';
-import {
-  Cookies,
-  Topics,
-  Attribution,
-  BounceTracking,
-  Fingerprinting,
-  Sidebar,
-  FirstPartySets,
-} from './components';
+import TABS from './tabs';
+import { Sidebar } from './components';
 import { useCookieStore } from './stateProviders/syncCookieStore';
 import { Button } from '../design-system/components';
 
-const TABS = [
-  {
-    display_name: 'Cookies',
-    Component: Cookies,
-  },
-  {
-    display_name: 'Topics',
-    Component: Topics,
-  },
-  {
-    display_name: 'Attribution',
-    Component: Attribution,
-  },
-  {
-    display_name: 'Bounce Tracking',
-    Component: BounceTracking,
-  },
-  {
-    display_name: 'Fingerprinting',
-    Component: Fingerprinting,
-  },
-  {
-    display_name: 'First Party Sets',
-    Component: FirstPartySets,
-  },
-];
-
 const App: React.FC = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
-  const TabContent = TABS[selectedTabIndex].Component;
-  const tabNames = TABS.map((tab) => tab.display_name);
   const {
     isCurrentTabBeingListenedTo,
     returningToSingleTab,
@@ -77,8 +41,8 @@ const App: React.FC = () => {
     changeListeningToThisTab: actions.changeListeningToThisTab,
     allowedNumberOfTabs: state.allowedNumberOfTabs,
   }));
+  const TabContent = TABS[selectedTabIndex].component;
 
-  // @todo Can this condition be simplified?
   if (
     (isCurrentTabBeingListenedTo &&
       allowedNumberOfTabs &&
@@ -105,7 +69,6 @@ const App: React.FC = () => {
             className="h-full flex flex-col pt-0.5 border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
           >
             <Sidebar
-              tabsNames={tabNames}
               selectedIndex={selectedTabIndex}
               setIndex={setSelectedTabIndex}
             />

@@ -19,7 +19,8 @@ export enum PSInfoKey {
   'AttributionReporting' = 'attribution-reporting',
   'BounceTracking' = 'bounce-tracking',
   'UserAgentReduction' = 'user-agent-reduction',
-  'FirstPartySets' = 'first-party-sets',
+  'RelatedWebsiteSets' = 'related-website-sets',
+  'Chips' = 'chips',
 }
 
 export type PSInfoKeyType = (typeof PSInfoKey)[keyof typeof PSInfoKey];

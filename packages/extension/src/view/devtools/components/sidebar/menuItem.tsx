@@ -16,70 +16,29 @@
 /**
  * External dependencies.
  */
-import React, { type ComponentType, type SVGProps } from 'react';
+import React from 'react';
 
 /**
  * Internal dependencies.
  */
-import {
-  AttributionIcon,
-  AttributionIconWhite,
-  BounceTrackingIcon,
-  BounceTrackingIconWhite,
-  File,
-  FileWhite,
-  FingerPrintingIcon,
-  FingerPrintingIconWhite,
-  TopicsIcon,
-  TopicsIconWhite,
-} from '../../../../icons';
+import TABS from '../../tabs';
 
 interface MenuItemProps {
   handleClick: () => void;
-  name: string;
+  tabName: string;
+  tabId: string;
   isActive: boolean;
 }
 
-interface Icons {
-  [name: string]: {
-    default: ComponentType<SVGProps<SVGSVGElement>>;
-    selected: ComponentType<SVGProps<SVGSVGElement>>;
-  };
-}
-
-const MenuItem = ({ handleClick, name, isActive }: MenuItemProps) => {
-  const icons: Icons = {
-    Topics: {
-      default: TopicsIcon,
-      selected: TopicsIconWhite,
-    },
-    Attribution: {
-      default: AttributionIcon,
-      selected: AttributionIconWhite,
-    },
-    Fingerprinting: {
-      default: FingerPrintingIcon,
-      selected: FingerPrintingIconWhite,
-    },
-    'Bounce Tracking': {
-      default: BounceTrackingIcon,
-      selected: BounceTrackingIconWhite,
-    },
-    'First Party Sets': {
-      default: File,
-      selected: FileWhite,
-    },
-  };
-
-  const Icon = isActive ? icons[name].selected : icons[name].default;
+const MenuItem = ({ handleClick, tabName, tabId, isActive }: MenuItemProps) => {
+  const selectedTab = TABS.find((tab) => tab.id === tabId)?.icons;
+  const Icon = isActive ? selectedTab?.selected : selectedTab?.default;
 
   return (
     <div className="flex w-full items-center pl-6 py-0.5" onClick={handleClick}>
-      <div className="h-3">
-        <Icon />
-      </div>
+      <div className="h-3">{Icon && <Icon />}</div>
       <div className="block">
-        <span className="pl-2.5">{name}</span>
+        <span className="pl-2.5">{tabName}</span>
       </div>
     </div>
   );

@@ -83,9 +83,9 @@ module.exports = {
       'cool-grey': '#323941',
       'asteriod-black': '#2B2C2F',
       'comet-black': '#202124',
+      'jet-black': '#202142',
       'warning-red': '#C33300',
       'warning-orange': '#FA3',
-      'jet-black': '#202142',
     },
     backgroundColor: {
       ...colors,
@@ -105,10 +105,10 @@ module.exports = {
       'outer-space-crayola': '#303942',
       'outer-space': '#454545',
       'medium-persian-blue': '#0E639C',
-      'dark-blue': '#0B57D0',
-      'light-blue': '#ABC7FA',
       'hsl-dark': '	hsl(var(--color-message-box-dark))',
       'hsl-light': 'hsla(var(--color-message-box-light) / 10%)',
+      'dark-blue': '#0B57D0',
+      'light-blue': '#ABC7FA',
     },
     borderColor: {
       ...colors,
