@@ -27,11 +27,9 @@ import React, {
 /**
  * Internal dependencies.
  */
-import { CookieStore, type CookieData } from '../../../../localStore';
+import { type CookieData } from '../../../../localStore';
 import type { TabCookies, TabFrames } from '../../cookies.types';
 import { noop } from '../../../../utils/noop';
-import { getCurrentTabId } from '../../../../utils/getCurrentTabId';
-import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
 
 export interface CookieStoreContext {
   state: {
@@ -39,13 +37,9 @@ export interface CookieStoreContext {
     tabUrl: string | null;
     tabFrames: TabFrames | null;
     selectedFrame: string | null;
-    returningToSingleTab: boolean;
-    isCurrentTabBeingListenedTo: boolean;
-    allowedNumberOfTabs: string | null;
   };
   actions: {
     setSelectedFrame: React.Dispatch<React.SetStateAction<string | null>>;
-    changeListeningToThisTab: () => void;
   };
 }
 
@@ -55,13 +49,9 @@ const initialState: CookieStoreContext = {
     tabUrl: null,
     tabFrames: null,
     selectedFrame: null,
-    isCurrentTabBeingListenedTo: false,
-    returningToSingleTab: false,
-    allowedNumberOfTabs: null,
   },
   actions: {
     setSelectedFrame: noop,
-    changeListeningToThisTab: noop,
   },
 };
 
@@ -69,15 +59,6 @@ export const Context = createContext<CookieStoreContext>(initialState);
 
 export const Provider = ({ children }: PropsWithChildren) => {
   const [tabId, setTabId] = useState<number | null>(null);
-  const [isCurrentTabBeingListenedTo, setIsCurrentTabBeingListenedTo] =
-    useState<boolean>(false);
-
-  const [returningToSingleTab, setReturningToSingleTab] =
-    useState<CookieStoreContext['state']['returningToSingleTab']>(false);
-
-  const [allowedNumberOfTabs, setAllowedNumberOfTabs] = useState<string | null>(
-    null
-  );
 
   const [tabCookies, setTabCookies] =
     useState<CookieStoreContext['state']['tabCookies']>(null);
@@ -135,38 +116,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
     await getAllFramesForCurrentTab(_tabId);
 
     setTabId(_tabId);
-
-    const extensionStorage = await chrome.storage.sync.get();
-
-    if (extensionStorage?.allowedNumberOfTabs) {
-      setAllowedNumberOfTabs(extensionStorage?.allowedNumberOfTabs);
-    }
-
-    if (_tabId) {
-      if (extensionStorage?.allowedNumberOfTabs === 'single') {
-        const getTabBeingListenedTo = await chrome.storage.local.get();
-        const availableTabs = await chrome.tabs.query({});
-        if (
-          availableTabs.length === ALLOWED_NUMBER_OF_TABS &&
-          availableTabs.filter(
-            (processingTab) =>
-              processingTab.id?.toString() === getTabBeingListenedTo?.tabToRead
-          )
-        ) {
-          setReturningToSingleTab(true);
-        }
-
-        if (
-          getTabBeingListenedTo &&
-          _tabId.toString() !== getTabBeingListenedTo?.tabToRead
-        ) {
-          setIsCurrentTabBeingListenedTo(false);
-          return;
-        } else {
-          setIsCurrentTabBeingListenedTo(true);
-        }
-      }
-    }
 
     const tabData = (await chrome.storage.local.get([_tabId.toString()]))[
       _tabId.toString()
@@ -231,80 +180,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
         await getAllFramesForCurrentTab(tabId);
         setTabCookies(_cookies);
       }
-
-      if (tabId) {
-        const extensionStorage = await chrome.storage.sync.get();
-
-        if (extensionStorage?.allowedNumberOfTabs === 'single') {
-          const getTabBeingListenedTo = await chrome.storage.local.get();
-          const availableTabs = await chrome.tabs.query({});
-
-          if (
-            availableTabs.length === ALLOWED_NUMBER_OF_TABS &&
-            availableTabs.filter(
-              (processingTab) =>
-                processingTab.id?.toString() ===
-                getTabBeingListenedTo?.tabToRead
-            )
-          ) {
-            setReturningToSingleTab(true);
-          }
-
-          if (
-            getTabBeingListenedTo &&
-            tabId.toString() !== getTabBeingListenedTo?.tabToRead
-          ) {
-            setIsCurrentTabBeingListenedTo(false);
-            return;
-          } else {
-            setIsCurrentTabBeingListenedTo(true);
-            chrome.tabs.query({ active: true }, (tab) => {
-              if (tab[0]?.url) {
-                setTabUrl(tab[0]?.url);
-              }
-            });
-          }
-        }
-      }
     },
     [tabId, getAllFramesForCurrentTab]
   );
-
-  const changeListeningToThisTab = useCallback(async () => {
-    const changedTabId = await getCurrentTabId();
-
-    if (!changedTabId) {
-      return;
-    }
-
-    await CookieStore.addTabData(changedTabId?.toString());
-
-    const storedTabData = Object.keys(await chrome.storage.local.get());
-
-    // eslint-disable-next-line guard-for-in
-    storedTabData.map(async (tabIdToBeDeleted) => {
-      if (
-        tabIdToBeDeleted !== changedTabId &&
-        tabIdToBeDeleted !== 'tabToRead'
-      ) {
-        await CookieStore.removeTabData(tabIdToBeDeleted);
-        await chrome.action.setBadgeText({
-          tabId: parseInt(tabIdToBeDeleted),
-          text: '',
-        });
-      }
-      return Promise.resolve();
-    });
-
-    chrome.tabs.query({ active: true }, (tab) => {
-      if (tab[0]?.url) {
-        setTabUrl(tab[0]?.url);
-      }
-    });
-
-    await chrome.tabs.reload(Number(changedTabId));
-    setIsCurrentTabBeingListenedTo(true);
-  }, []);
 
   const tabUpdateListener = useCallback(
     async (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
@@ -318,48 +196,15 @@ export const Provider = ({ children }: PropsWithChildren) => {
     [tabId, getAllFramesForCurrentTab]
   );
 
-  const tabRemovedListener = useCallback(async () => {
-    const getTabBeingListenedTo = await chrome.storage.local.get();
-    const availableTabs = await chrome.tabs.query({});
-
-    if (
-      availableTabs.length === ALLOWED_NUMBER_OF_TABS &&
-      availableTabs.filter(
-        (processingTab) =>
-          processingTab.id?.toString() === getTabBeingListenedTo?.tabToRead
-      )
-    ) {
-      setReturningToSingleTab(true);
-    }
-  }, []);
-
-  const changeSyncStorageListener = useCallback(async () => {
-    const extensionStorage = await chrome.storage.sync.get();
-
-    if (extensionStorage?.allowedNumberOfTabs) {
-      setAllowedNumberOfTabs(extensionStorage?.allowedNumberOfTabs);
-    }
-  }, []);
-
   useEffect(() => {
     intitialSync();
     chrome.storage.local.onChanged.addListener(storeChangeListener);
-    chrome.storage.sync.onChanged.addListener(changeSyncStorageListener);
     chrome.tabs.onUpdated.addListener(tabUpdateListener);
-    chrome.tabs.onRemoved.addListener(tabRemovedListener);
     return () => {
       chrome.storage.local.onChanged.removeListener(storeChangeListener);
       chrome.tabs.onUpdated.removeListener(tabUpdateListener);
-      chrome.tabs.onRemoved.removeListener(tabRemovedListener);
-      chrome.storage.sync.onChanged.removeListener(changeSyncStorageListener);
     };
-  }, [
-    intitialSync,
-    storeChangeListener,
-    tabUpdateListener,
-    tabRemovedListener,
-    changeSyncStorageListener,
-  ]);
+  }, [intitialSync, storeChangeListener, tabUpdateListener]);
 
   return (
     <Context.Provider
@@ -369,13 +214,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
           tabUrl,
           tabFrames,
           selectedFrame,
-          isCurrentTabBeingListenedTo,
-          returningToSingleTab,
-          allowedNumberOfTabs,
         },
         actions: {
           setSelectedFrame,
-          changeListeningToThisTab,
         },
       }}
     >
