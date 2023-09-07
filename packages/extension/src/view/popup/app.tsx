@@ -25,28 +25,15 @@ import React from 'react';
 import './app.css';
 import { Legend } from './components';
 import { useCookieStore } from './stateProviders/syncCookieStore';
-import { Button, CirclePieChart } from '../design-system/components';
+import { CirclePieChart } from '../design-system/components';
 import { prepareCookieStatsComponents } from '../../utils/prepareCookieStatsComponents';
 import ProgressBar from '../design-system/components/progressBar';
-import { ALLOWED_NUMBER_OF_TABS } from '../../constants';
 
 const App: React.FC = () => {
-  const {
-    cookieStats,
-    loading,
-    isCurrentTabBeingListenedTo,
-    returningToSingleTab,
-    changeListeningToThisTab,
-    onChromeUrl,
-    allowedNumberOfTabs,
-  } = useCookieStore(({ state, actions }) => ({
+  const { cookieStats, loading, onChromeUrl } = useCookieStore(({ state }) => ({
     cookieStats: state.tabCookieStats,
-    isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
     loading: state.loading,
-    returningToSingleTab: state.returningToSingleTab,
-    allowedNumberOfTabs: state.allowedNumberOfTabs,
     onChromeUrl: state.onChromeUrl,
-    changeListeningToThisTab: actions.changeListeningToThisTab,
   }));
 
   if (onChromeUrl) {
@@ -60,32 +47,8 @@ const App: React.FC = () => {
     );
   }
 
-  if (
-    loading ||
-    (loading &&
-      isCurrentTabBeingListenedTo &&
-      allowedNumberOfTabs &&
-      allowedNumberOfTabs === 'single')
-  ) {
+  if (loading) {
     return <ProgressBar additionalStyles="w-96 min-h-[20rem]" />;
-  }
-
-  if (
-    ALLOWED_NUMBER_OF_TABS > 0 &&
-    !isCurrentTabBeingListenedTo &&
-    allowedNumberOfTabs &&
-    allowedNumberOfTabs !== 'unlimited'
-  ) {
-    return (
-      <div className="w-96 min-h-[20rem] flex flex-col items-center justify-center">
-        {!returningToSingleTab && (
-          <p className="dark:text-bright-gray text-chart-label text-base mb-5">
-            This tool works best with a single tab.
-          </p>
-        )}
-        <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
-      </div>
-    );
   }
 
   if (
