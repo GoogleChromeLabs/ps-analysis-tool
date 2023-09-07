@@ -164,7 +164,7 @@ describe('local store: CookieStore', () => {
     await CookieStore.update('123', cookieArray);
     await CookieStore.removeWindowData(123);
     expect(storage['123']).toBeUndefined();
-    expect(storage).toStrictEqual({ tabToRead: '123' });
+    expect(storage).toStrictEqual({});
     globalThis.chrome.tabs = tmpTabRef;
   });
 });
