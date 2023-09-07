@@ -20,5 +20,6 @@ export { default as MatrixComponentHorizontal } from './matrix/matrixComponent/m
 export { default as Matrix } from './matrix';
 export { default as MessageBox } from './messageBox';
 export { default as Button } from './button';
+export { default as ProgressBar } from './progressBar';
 
 export type { MatrixComponentProps } from './matrix/matrixComponent';

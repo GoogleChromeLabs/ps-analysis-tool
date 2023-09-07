@@ -26,7 +26,7 @@ import './app.css';
 import TABS from './tabs';
 import { Sidebar } from './components';
 import { useCookieStore } from './stateProviders/syncCookieStore';
-import { Button } from '../design-system/components';
+import { Button, ProgressBar } from '../design-system/components';
 
 const App: React.FC = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
@@ -35,14 +35,28 @@ const App: React.FC = () => {
     returningToSingleTab,
     changeListeningToThisTab,
     allowedNumberOfTabs,
+    loading,
   } = useCookieStore(({ state, actions }) => ({
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
     returningToSingleTab: state.returningToSingleTab,
     changeListeningToThisTab: actions.changeListeningToThisTab,
     allowedNumberOfTabs: state.allowedNumberOfTabs,
+    loading: state.loading,
   }));
   const TabContent = TABS[selectedTabIndex].component;
-
+  if (
+    loading ||
+    (loading &&
+      isCurrentTabBeingListenedTo &&
+      allowedNumberOfTabs &&
+      allowedNumberOfTabs === 'single')
+  ) {
+    return (
+      <div className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black">
+        <ProgressBar />
+      </div>
+    );
+  }
   if (
     (isCurrentTabBeingListenedTo &&
       allowedNumberOfTabs &&
