@@ -103,22 +103,6 @@ describe('local store: CookieStore', () => {
               resolve();
             }),
         },
-        sync: {
-          //@ts-ignore
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          get: (_, __) =>
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            new Promise<{ [key: string]: any }>((resolve) => {
-              resolve({
-                allowedNumberOfTabs: { allowedNumberOfTabs: 'single' },
-              });
-            }),
-          //@ts-ignore
-          onChanged: {
-            addListener: () => undefined,
-            removeListener: () => undefined,
-          },
-        },
       },
     };
   });
