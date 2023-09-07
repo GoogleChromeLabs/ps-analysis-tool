@@ -166,7 +166,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
           _tabId.toString() !== getTabBeingListenedTo?.tabToRead
         ) {
           setIsCurrentTabBeingListenedTo(false);
-          setLoading(false);
           return;
         } else {
           setIsCurrentTabBeingListenedTo(true);
@@ -198,6 +197,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
       setTabCookies(_cookies);
     }
+    setLoading(false);
 
     chrome.devtools.inspectedWindow.eval(
       'window.location.href',
@@ -261,7 +261,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
             tabId.toString() !== getTabBeingListenedTo?.tabToRead
           ) {
             setIsCurrentTabBeingListenedTo(false);
-            setLoading(false);
             return;
           } else {
             setIsCurrentTabBeingListenedTo(true);
@@ -273,6 +272,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           }
         }
       }
+      setLoading(false);
     },
     [tabId, getAllFramesForCurrentTab]
   );

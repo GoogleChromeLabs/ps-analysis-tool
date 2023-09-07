@@ -52,8 +52,8 @@ const App: React.FC = () => {
       allowedNumberOfTabs === 'single')
   ) {
     return (
-      <div className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black">
-        <ProgressBar />
+      <div className="w-full h-screen flex items-center justify-center overflow-hidden bg-white dark:bg-raisin-black">
+        <ProgressBar additionalStyles="w-full" />
       </div>
     );
   }
