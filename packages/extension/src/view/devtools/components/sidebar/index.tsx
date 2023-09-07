@@ -48,6 +48,12 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
   const sidebarContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (selectedFrame && accordionState && !accordionState['cookies']) {
+      setAccordionState((prevState) => ({ ...prevState, cookies: true }));
+    }
+  }, [selectedFrame, accordionState]);
+
+  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
         sidebarContainerRef.current &&
