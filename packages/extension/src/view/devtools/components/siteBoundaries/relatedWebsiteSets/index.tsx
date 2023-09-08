@@ -16,26 +16,40 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useState } from 'react';
 
 /**
  * Internal dependencies.
  */
 import InfoCard from '../../../../design-system/components/infoCard';
 import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
-import { MessageBox } from '../../../../design-system/components';
+import { Button } from '../../../../design-system/components';
+import Insights from './insights';
 
 const RelatedWebsiteSets = () => {
+  const [showForm, setShowForm] = useState(false);
+
   return (
     <div
       className="w-full h-full overflow-auto"
       data-testid="related-website-sets-content"
     >
-      <InfoCard infoKey={PSInfoKey.RelatedWebsiteSets} />
-      <MessageBox
-        bodyText="Insights and a JSON generator for RWS registration are coming soon..."
-        headerText="🚧 Under Construction"
-      />
+      {showForm ? (
+        <>Placeholder</>
+      ) : (
+        <>
+          <InfoCard infoKey={PSInfoKey.RelatedWebsiteSets} />
+          <div className="text-raisin-black dark:text-bright-gray max-w-2xl dark:bg-davys-grey border border-gray-200 dark:border-quartz rounded-lg shadow p-6 m-3 flex flex-col gap-4 divide-y divide-gray-200 dark:divide-gray-500">
+            <Insights />
+            <div className="pt-3">
+              <Button
+                text="Generate RWS JSON Resources"
+                onClick={() => setShowForm(!showForm)}
+              />
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
