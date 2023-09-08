@@ -279,15 +279,9 @@ chrome.windows.onRemoved.addListener(async (windowId) => {
 chrome.runtime.onInstalled.addListener(async (details) => {
   await PROMISE_QUEUE.add(async () => {
     await chrome.storage.local.clear();
-    if (details.reason === 'install') {
-      await chrome.storage.sync.clear();
-      await chrome.storage.sync.set({
-        allowedNumberOfTabs: 'single',
-      });
-    }
     if (details.reason === 'update') {
-      const preSetSettings = chrome.storage.sync.get();
-      if (Object.keys(preSetSettings).length === 2) {
+      const preSetSettings = await chrome.storage.sync.get();
+      if (preSetSettings?.allowedNumberOfTabs) {
         return;
       }
       await chrome.storage.sync.clear();

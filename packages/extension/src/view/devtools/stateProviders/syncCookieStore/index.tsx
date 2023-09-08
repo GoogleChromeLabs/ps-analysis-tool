@@ -142,10 +142,17 @@ export const Provider = ({ children }: PropsWithChildren) => {
     setTabId(_tabId);
 
     const extensionStorage = await chrome.storage.sync.get();
+    const _allowedNumberOfTabs =
+      extensionStorage?.allowedNumberOfTabs || 'single';
 
-    if (extensionStorage?.allowedNumberOfTabs) {
-      setAllowedNumberOfTabs(extensionStorage?.allowedNumberOfTabs);
+    if (!extensionStorage?.allowedNumberOfTabs) {
+      await chrome.storage.sync.clear();
+      await chrome.storage.sync.set({
+        allowedNumberOfTabs: 'single',
+      });
     }
+
+    setAllowedNumberOfTabs(_allowedNumberOfTabs);
 
     if (_tabId) {
       if (extensionStorage?.allowedNumberOfTabs === 'single') {
