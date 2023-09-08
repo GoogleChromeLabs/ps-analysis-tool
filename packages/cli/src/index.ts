@@ -35,7 +35,11 @@ import {
   getCSVbyObject,
   normalizeCookie,
 } from './utils';
-import { CookieLogDetails } from './types';
+import {
+  CookieLogDetails,
+  TechnologieDetails,
+  TechnologieDetailsSitemap,
+} from './types';
 
 const BATCH_SIZE = 5;
 events.EventEmitter.defaultMaxListeners = 15;
@@ -249,7 +253,7 @@ export const initialize = async () => {
 
     console.log(clc.green('Done analyzing cookies!'));
 
-    const technologies = [];
+    const technologies: Array<TechnologieDetails> = [];
 
     if (shouldSearchTechnology) {
       for (let i = 0; i < countInput / BATCH_SIZE; i++) {
@@ -267,27 +271,57 @@ export const initialize = async () => {
             })
         );
 
-        technologies.push(..._technologies);
+        _technologies.forEach((technologiesPerWebsite) => {
+          technologies.push(...technologiesPerWebsite);
+        });
+
         spinner.stop();
       }
 
-      const techMap = technologies
-        .reduce((acc, curr) => [...acc, ...curr])
-        .reduce<{ name: string; frequency: number }[]>((acc, curr) => {
-          const index = acc.findIndex(({ name }) => name === curr.name);
+      let techMap: Array<TechnologieDetailsSitemap> = [];
 
-          if (index === -1) {
-            return [...acc, { name: curr.name, frequency: 1 }];
-          } else {
-            return [
-              ...acc.slice(0, index),
-              { name: curr.name, frequency: acc[index].frequency + 1 },
-              ...acc.slice(index + 1),
-            ];
+      technologies.forEach((technologiesPerWebsite) => {
+        const index = techMap.findIndex(
+          ({ name }) => name === technologiesPerWebsite.name
+        );
+
+        if (index === -1) {
+          techMap = [...techMap, { ...technologiesPerWebsite, frequency: 1 }];
+        } else {
+          techMap = [
+            ...techMap.slice(0, index),
+            {
+              ...technologiesPerWebsite,
+              frequency: techMap[index].frequency + 1,
+            },
+            ...techMap.slice(index + 1),
+          ];
+        }
+      }, []);
+
+      const csvTechnologies: string = getCSVbyObject(
+        techMap.map(
+          ({
+            name,
+            description,
+            confidence,
+            website,
+            categories,
+            frequency,
+          }) => {
+            return {
+              name,
+              description,
+              confidence: confidence + '%',
+              website,
+              categories: categories
+                .reduce<string>((acc, cat) => acc + '|' + cat.name, '')
+                .slice(1),
+              frequency,
+            };
           }
-        }, []);
-
-      const csvTechnologies: string = getCSVbyObject(techMap);
+        )
+      );
 
       await ensureFile(technologiesFilePath);
       await writeFile(technologiesFilePath, csvTechnologies);
