@@ -24,6 +24,7 @@ import React, { useState } from 'react';
 import InfoCard from '../../../../design-system/components/infoCard';
 import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
 import { Button } from '../../../../design-system/components';
+import RWSJsonGenerator from './jsonGenerator';
 import Insights from './insights';
 
 const RelatedWebsiteSets = () => {
@@ -35,7 +36,10 @@ const RelatedWebsiteSets = () => {
       data-testid="related-website-sets-content"
     >
       {showForm ? (
-        <>Placeholder</>
+        <RWSJsonGenerator
+          open={showForm}
+          close={() => setShowForm(!showForm)}
+        />
       ) : (
         <>
           <InfoCard infoKey={PSInfoKey.RelatedWebsiteSets} />
