@@ -35,7 +35,11 @@ import {
   getCSVbyObject,
   normalizeCookie,
 } from './utils';
-import { CookieLogDetails } from './types';
+import {
+  CookieLogDetails,
+  TechnologieDetails,
+  TechnologieDetailsSitemap,
+} from './types';
 
 const BATCH_SIZE = 5;
 events.EventEmitter.defaultMaxListeners = 15;
@@ -50,11 +54,13 @@ program
   .option(
     '-nh, --no-headless ',
     'flag for running puppeteer in non headless mode'
-  );
+  )
+  .option('-nt, --no-technologies ', 'flag for skipping technology analysis');
 
 program.parse();
 
 const isHeadless = Boolean(program.opts().headless);
+const shouldSearchTechnology = program.opts().technologies;
 
 export const initialize = async () => {
   const url = program.opts().url;
@@ -98,36 +104,42 @@ export const initialize = async () => {
 
     const csvCookies: string = getCSVbyObject(cookiesDetails);
 
-    spinner.stop();
-    console.log(clc.green('Done analyzing cookies!'));
-
-    spinner = ora('Analyzing technologies used on the page...').start();
-
-    const technologies = await generateTechnology(url);
-
-    const csvTechnologies: string = getCSVbyObject(
-      technologies.map(
-        ({ name, description, confidence, website, categories }) => {
-          return {
-            name,
-            description,
-            confidence: confidence + '%',
-            website,
-            categories: categories
-              .reduce<string>((acc, cat) => acc + '|' + cat.name, '')
-              .slice(1),
-          };
-        }
-      )
-    );
-
     await ensureFile(cookiesFilePath);
     await writeFile(cookiesFilePath, csvCookies);
 
-    await ensureFile(technologiesFilePath);
-    await writeFile(technologiesFilePath, csvTechnologies);
+    spinner.stop();
+    console.log(clc.green('Done analyzing cookies!'));
 
-    await ensureFile(dataFilePath);
+    let technologies;
+
+    if (shouldSearchTechnology) {
+      spinner = ora('Analyzing technologies used on the page...').start();
+
+      technologies = await generateTechnology(url);
+
+      const csvTechnologies: string = getCSVbyObject(
+        technologies.map(
+          ({ name, description, confidence, website, categories }) => {
+            return {
+              name,
+              description,
+              confidence: confidence + '%',
+              website,
+              categories: categories
+                .reduce<string>((acc, cat) => acc + '|' + cat.name, '')
+                .slice(1),
+            };
+          }
+        )
+      );
+
+      await ensureFile(technologiesFilePath);
+      await writeFile(technologiesFilePath, csvTechnologies);
+
+      spinner.stop();
+      console.log(clc.green('Done analyzing technologies!'));
+    }
+
     await writeFile(
       dataFilePath,
       JSON.stringify(
@@ -137,14 +149,19 @@ export const initialize = async () => {
       )
     );
 
-    spinner.stop();
-    console.log(clc.green('Done analyzing technologies!'));
     console.log(
       'The following output files were generated in the "out" directory'
     );
     console.log(`- ${prefix}-cookies.csv (Cookie report)`);
-    console.log(`- ${prefix}-technologies. (Technologies report)`);
-    console.log(`- ${prefix}-data.json (Both reports in JSON)`);
+
+    shouldSearchTechnology &&
+      console.log(`- ${prefix}-technologies. (Technologies report)`);
+
+    console.log(
+      `- ${prefix}-data.json ${
+        shouldSearchTechnology ? '(Both reports in JSON)' : ''
+      }`
+    );
   } else if (sitemapURL) {
     const siteMapper = new Sitemapper({
       url: sitemapURL,
@@ -240,47 +257,81 @@ export const initialize = async () => {
 
     console.log(clc.green('Done analyzing cookies!'));
 
-    const technologies = [];
+    const technologies: Array<TechnologieDetails> = [];
 
-    for (let i = 0; i < countInput / BATCH_SIZE; i++) {
-      const spinner = ora(
-        `Processing technologies from pages - ${
-          i * BATCH_SIZE + 1
-        } to  ${Math.min((i + 1) * BATCH_SIZE, countInput)}`
-      ).start();
-      // eslint-disable-next-line no-await-in-loop
-      const _technologies = await Promise.all(
-        urls
-          .slice(i * BATCH_SIZE, Math.min((i + 1) * BATCH_SIZE, countInput))
-          .map((_url) => {
-            return generateTechnology(_url);
-          })
-      );
+    if (shouldSearchTechnology) {
+      for (let i = 0; i < countInput / BATCH_SIZE; i++) {
+        const spinner = ora(
+          `Processing technologies from pages - ${
+            i * BATCH_SIZE + 1
+          } to  ${Math.min((i + 1) * BATCH_SIZE, countInput)}`
+        ).start();
+        // eslint-disable-next-line no-await-in-loop
+        const _technologies = await Promise.all(
+          urls
+            .slice(i * BATCH_SIZE, Math.min((i + 1) * BATCH_SIZE, countInput))
+            .map((_url) => {
+              return generateTechnology(_url);
+            })
+        );
 
-      technologies.push(..._technologies);
-      spinner.stop();
-    }
+        _technologies.forEach((technologiesPerWebsite) => {
+          technologies.push(...technologiesPerWebsite);
+        });
 
-    const techMap = technologies
-      .reduce((acc, curr) => [...acc, ...curr])
-      .reduce<{ name: string; frequency: number }[]>((acc, curr) => {
-        const index = acc.findIndex(({ name }) => name === curr.name);
+        spinner.stop();
+      }
+
+      let techMap: Array<TechnologieDetailsSitemap> = [];
+
+      technologies.forEach((technologiesPerWebsite) => {
+        const index = techMap.findIndex(
+          ({ name }) => name === technologiesPerWebsite.name
+        );
 
         if (index === -1) {
-          return [...acc, { name: curr.name, frequency: 1 }];
+          techMap = [...techMap, { ...technologiesPerWebsite, frequency: 1 }];
         } else {
-          return [
-            ...acc.slice(0, index),
-            { name: curr.name, frequency: acc[index].frequency + 1 },
-            ...acc.slice(index + 1),
+          techMap = [
+            ...techMap.slice(0, index),
+            {
+              ...technologiesPerWebsite,
+              frequency: techMap[index].frequency + 1,
+            },
+            ...techMap.slice(index + 1),
           ];
         }
       }, []);
 
-    const csvTechnologies: string = getCSVbyObject(techMap);
+      const csvTechnologies: string = getCSVbyObject(
+        techMap.map(
+          ({
+            name,
+            description,
+            confidence,
+            website,
+            categories,
+            frequency,
+          }) => {
+            return {
+              name,
+              description,
+              confidence: confidence + '%',
+              website,
+              categories: categories
+                .reduce<string>((acc, cat) => acc + '|' + cat.name, '')
+                .slice(1),
+              frequency,
+            };
+          }
+        )
+      );
 
-    await ensureFile(technologiesFilePath);
-    await writeFile(technologiesFilePath, csvTechnologies);
+      await ensureFile(technologiesFilePath);
+      await writeFile(technologiesFilePath, csvTechnologies);
+
+      console.log(clc.green('Done analyzing technologies!'));
+    }
 
     await ensureFile(dataFilePath);
     await writeFile(
@@ -292,14 +343,17 @@ export const initialize = async () => {
       )
     );
 
-    console.log(clc.green('Done analyzing technologies!'));
-
     console.log(
       'The following output files were generated in the "out" directory'
     );
     console.log(`- ${prefix}-cookies.csv (Cookie report)`);
-    console.log(`- ${prefix}-technologies. (Technologies report)`);
-    console.log(`- ${prefix}-data.json (Both reports in JSON)`);
+    shouldSearchTechnology &&
+      console.log(`- ${prefix}-technologies. (Technologies report)`);
+    console.log(
+      `- ${prefix}-data.json ${
+        shouldSearchTechnology ? '(Both reports in JSON)' : ''
+      }`
+    );
   }
 
   await browser.close();
