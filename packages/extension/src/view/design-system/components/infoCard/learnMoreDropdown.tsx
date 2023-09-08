@@ -82,7 +82,7 @@ const LearnMoreDropdown = ({
       )}
       <div className="flex items-center justify-start pt-4 border-t border-gray-200 dark:border-gray-500">
         <button
-          className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700"
+          className="inline-flex items-center px-3 py-2 text-sm font-medium text-center rounded-lg dark:hover:bg-blue-700 text-white dark:bg-absolute-zero-crayola bg-absolute-zero-crayola hover:bg-ocean-boat-blue"
           onClick={() => {
             setIsOpen(!isOpen);
           }}

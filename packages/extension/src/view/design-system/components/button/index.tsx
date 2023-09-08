@@ -38,7 +38,7 @@ const Button = ({
       type={type}
       onClick={onClick ? onClick : undefined}
       className={classNames('py-1 px-2 rounded font-medium', {
-        'text-white dark:text-jet-black dark:bg-light-blue bg-dark-blue':
+        'text-white dark:bg-absolute-zero-crayola bg-absolute-zero-crayola hover:bg-ocean-boat-blue':
           variant === 'primary',
         'bg-transparent dark:bg-transparent dark:text-bright-gray text-raisin-black':
           variant === 'secondary',
