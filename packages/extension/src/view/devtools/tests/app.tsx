@@ -30,9 +30,24 @@ import App from '../app';
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'cookie-analysis-tool/data/PSInfo.json';
+import { useCookieStore } from '../stateProviders/syncCookieStore';
+import { noop } from '../../../utils/noop';
+
+jest.mock('../stateProviders/syncCookieStore', () => ({
+  useCookieStore: jest.fn(),
+}));
+
+const mockUseCookieStore = useCookieStore as jest.Mock;
 
 describe('App', () => {
   beforeAll(() => {
+    mockUseCookieStore.mockReturnValue({
+      isCurrentTabBeingListenedTo: true,
+      returningToSingleTab: false,
+      changeListeningToThisTab: noop,
+      setSelectedFrame: noop,
+      allowedNumberOfTabs: 'single',
+    });
     globalThis.chrome = {
       ...SinonChrome,
       devtools: {
@@ -62,81 +77,130 @@ describe('App', () => {
   it('should switch to cookie panel when tab is clicked', async () => {
     await act(() => render(<App />));
     // Move to another tab
-    fireEvent.click(screen.getByText('Bounce Tracking'));
+    fireEvent.click(
+      screen.getByTestId('privateAdvertising-tab-heading-wrapper')
+    );
 
-    fireEvent.click(screen.getByText('Cookies'));
+    fireEvent.click(screen.getByTestId('cookies-tab-heading-wrapper'));
     expect(await screen.findByTestId('cookies-content')).toBeInTheDocument();
   });
 
-  it('should switch to Bounce Tracking Panel when clicked', async () => {
+  it('should open bounce tracking panel when selected from accordion.', async () => {
     await act(() => render(<App />));
-    // Click on Bounce Tracking tab
-    fireEvent.click(screen.getByText('Bounce Tracking'));
-
+    // Move to another tab
+    fireEvent.click(screen.getByTestId('antiCovertTracking-accordion-opener'));
+    fireEvent.click(screen.getByTestId('Bounce Tracking'));
     expect(
       await screen.findByTestId('bounce-tracking-content')
     ).toBeInTheDocument();
   });
 
-  it('should switch to FingerPrinting Panel when clicked', async () => {
+  it('should open fingerprinting panel when selected from accordion.', async () => {
     await act(() => render(<App />));
-    // Click on FingerPrinting tab
-    fireEvent.click(screen.getByText('Fingerprinting'));
-
+    // Move to another tab
+    fireEvent.click(screen.getByTestId('antiCovertTracking-accordion-opener'));
+    fireEvent.click(screen.getByTestId('Fingerprinting'));
     expect(
       await screen.findByTestId('fingerprinting-content')
     ).toBeInTheDocument();
   });
 
-  it('should switch to Attribution Panel when clicked', async () => {
+  it('should open attribution panel when selected from accordion.', async () => {
     await act(() => render(<App />));
-    // Click on Attribution tab
-    fireEvent.click(screen.getByText('Attribution'));
-
+    // Move to another tab
+    fireEvent.click(screen.getByTestId('privateAdvertising-accordion-opener'));
+    fireEvent.click(screen.getByTestId('Attribution'));
     expect(
       await screen.findByTestId('attribution-content')
     ).toBeInTheDocument();
   });
 
-  it('should switch to Topics Panel when clicked', async () => {
+  it('should open topics panel when selected from accordion.', async () => {
+    await act(() => render(<App />));
+    // Move to another tab
+    fireEvent.click(screen.getByTestId('privateAdvertising-accordion-opener'));
+    fireEvent.click(screen.getByTestId('Topics'));
+    expect(await screen.findByTestId('topics-content')).toBeInTheDocument();
+  });
+
+  it('should open CHIPS panel when selected from accordion.', async () => {
+    await act(() => render(<App />));
+    // Move to another tab
+    fireEvent.click(screen.getByTestId('siteBoundaries-accordion-opener'));
+    fireEvent.click(screen.getByTestId('CHIPS'));
+    expect(await screen.findByTestId('chips-content')).toBeInTheDocument();
+  });
+
+  it('should open Related Website Sets panel when selected from accordion.', async () => {
+    await act(() => render(<App />));
+    // Move to another tab
+    fireEvent.click(screen.getByTestId('siteBoundaries-accordion-opener'));
+    fireEvent.click(screen.getByTestId('Related Website Sets'));
+    expect(
+      await screen.findByTestId('related-website-sets-content')
+    ).toBeInTheDocument();
+  });
+
+  it('should switch to AntiCovert Tracking Panel when clicked', async () => {
+    await act(() => render(<App />));
+    // Click on Bounce Tracking tab
+    fireEvent.click(
+      screen.getByTestId('antiCovertTracking-tab-heading-wrapper')
+    );
+
+    expect(
+      await screen.findByTestId('antiCovertTracking-tab-heading-wrapper')
+    ).toHaveClass('bg-royal-blue');
+  });
+
+  it('should switch to Private Advertising when clicked', async () => {
+    await act(() => render(<App />));
+    // Click on Attribution tab
+    fireEvent.click(
+      screen.getByTestId('privateAdvertising-tab-heading-wrapper')
+    );
+
+    expect(
+      await screen.findByTestId('privateAdvertising-tab-heading-wrapper')
+    ).toHaveClass('bg-royal-blue');
+  });
+
+  it('should switch to Site Boundaries Panel when clicked', async () => {
     await act(() => render(<App />));
 
     // Click on Topics tab
-    fireEvent.click(screen.getByText('Topics'));
+    fireEvent.click(screen.getByTestId('siteBoundaries-tab-heading-wrapper'));
 
-    expect(await screen.findByTestId('topics-content')).toBeInTheDocument();
+    expect(
+      await screen.findByTestId('siteBoundaries-tab-heading-wrapper')
+    ).toHaveClass('bg-royal-blue');
   });
 
   it('Down Keyboard navigation should work.', async () => {
     await act(() => render(<App />));
-    // Focus on the first menu item.
-    userEvent.tab();
-    // Press arrow down
-    userEvent.keyboard('{ArrowDown}');
-    expect(await screen.findByTestId('Topics')).toHaveClass('bg-royal-blue');
+    act(() => {
+      // Focus on the first menu item.
+      userEvent.tab();
+      // Press arrow down
+      userEvent.keyboard('{ArrowDown}');
+    });
+    expect(
+      await screen.findByTestId('siteBoundaries-tab-heading-wrapper')
+    ).toHaveClass('bg-royal-blue');
   });
 
   it('Up Keyboard navigation should work.', async () => {
     await act(() => render(<App />));
-    // Focus on the first menu item.
-    userEvent.tab();
-    // Press arrow down to go to next menu
-    userEvent.keyboard('{ArrowDown}');
-    // Press arrow down to go to previous menu
-    userEvent.keyboard('{ArrowUp}');
-    expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
-      'bg-royal-blue'
-    );
-  });
-
-  it('Up Keyboard navigation should work.', async () => {
-    await act(() => render(<App />));
-    // Focus on the first menu item.
-    userEvent.tab();
-    expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
-      'bg-royal-blue'
-    );
-    userEvent.keyboard('{Enter}');
+    act(() => {
+      // Focus on the first menu item.
+      userEvent.tab();
+      // Press arrow down to go to next menu
+      userEvent.keyboard('{ArrowDown}');
+    });
+    act(() => {
+      // Press arrow down to go to previous menu
+      userEvent.keyboard('{ArrowUp}');
+    });
     expect(screen.getByTestId('cookies-tab-heading-wrapper')).toHaveClass(
       'bg-royal-blue'
     );

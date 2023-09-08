@@ -28,6 +28,7 @@ import SinonChrome from 'sinon-chrome';
 import App from '../app';
 import { Provider as ExternalStoreProvider } from '../stateProviders/syncCookieStore';
 import { Provider as ContentPanelProvider } from '../stateProviders/contentPanelStore';
+import { Provider as FilterManagementProvider } from '../stateProviders/filterManagementStore';
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'cookie-analysis-tool/data/PSInfo.json';
@@ -143,7 +144,26 @@ describe('Index', () => {
           get: (_, __) =>
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             new Promise<{ [key: string]: any }>((resolve) => {
-              resolve({ 40245632: { cookies: tabCookies } });
+              resolve({
+                40245632: { cookies: tabCookies },
+                tabToRead: '40245632',
+              });
+            }),
+          //@ts-ignore
+          onChanged: {
+            addListener: () => undefined,
+            removeListener: () => undefined,
+          },
+        },
+        sync: {
+          //@ts-ignore
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          get: (_, __) =>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            new Promise<{ [key: string]: any }>((resolve) => {
+              resolve({
+                allowedNumberOfTabs: 'single',
+              });
             }),
           //@ts-ignore
           onChanged: {
@@ -172,6 +192,28 @@ describe('Index', () => {
           addListener: () => undefined,
           removeListener: () => undefined,
         },
+        query: () => {
+          return Promise.resolve([
+            {
+              groupId: 12,
+              autoDiscardable: false,
+              discarded: false,
+              selected: true,
+              incognito: false,
+              active: true,
+              windowId: 1,
+              highlighted: false,
+              pinned: false,
+              index: 1,
+              id: 40245632,
+            },
+          ]);
+        },
+        //@ts-ignore
+        onRemoved: {
+          addListener: () => undefined,
+          removeListener: () => undefined,
+        },
       },
     };
     globalThis.fetch = function () {
@@ -184,12 +226,14 @@ describe('Index', () => {
     } as unknown as typeof fetch;
   });
 
-  it('Both Providers should be added to DOM', async () => {
+  it('All Providers should be added to DOM', async () => {
     act(() =>
       render(
         <ExternalStoreProvider>
           <ContentPanelProvider>
-            <App />
+            <FilterManagementProvider>
+              <App />
+            </FilterManagementProvider>
           </ContentPanelProvider>
         </ExternalStoreProvider>
       )

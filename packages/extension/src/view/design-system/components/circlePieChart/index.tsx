@@ -76,7 +76,7 @@ const CirclePieChart = ({
           <p className="text-xs text-center font-semibold leading-relaxed dark:text-bright-gray">
             {title}
           </p>
-          {title.toLocaleLowerCase() === '3rd party cookies' && (
+          {title === '3rd Party Cookies' && (
             <p
               className={infoIconClassName}
               title="An active ad-blocker or other cookie extensions may affect the results."

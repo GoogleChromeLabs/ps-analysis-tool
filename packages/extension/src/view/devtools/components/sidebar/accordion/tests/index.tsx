@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 
@@ -30,22 +30,15 @@ describe('Accordion', () => {
   it('Should frames listed under accordion', () => {
     render(
       <Accordion
-        keyboardNavigator={() => undefined}
         accordionState={true}
-        setAccordionState={() => undefined}
-        tabName={'Cookies'}
         index={1}
-        selectedIndex={1}
-        tabFrames={{
-          'https://edition.cnn.com': { frameIds: [1] },
-          'https://crxd.net': { frameIds: [2] },
-          'https://pubmatic.com': { frameIds: [3] },
-        }}
-        setSelectedFrame={() => undefined}
-        selectedFrame={null}
-        setIndex={() => undefined}
         isTabFocused={true}
-        setIsTabFocused={() => undefined}
+        isAccordionHeaderSelected={true}
+        tabId="cookies"
+        keyboardNavigator={() => undefined}
+        tabName={'Cookies'}
+        onAccordionHeaderClick={() => undefined}
+        onAccordionOpenerClick={() => undefined}
       />
     );
     const container = screen.getByTestId('cookies-tab-heading-wrapper');
@@ -53,158 +46,19 @@ describe('Accordion', () => {
     expect(container).toHaveClass('bg-royal-blue');
   });
 
-  it('should unselect cookie header and show frame as selected', () => {
-    render(
-      <Accordion
-        keyboardNavigator={() => undefined}
-        accordionState={true}
-        setAccordionState={() => undefined}
-        tabName={'Cookies'}
-        index={1}
-        selectedIndex={1}
-        tabFrames={{
-          'https://edition.cnn.com': { frameIds: [1] },
-          'https://crxd.net': { frameIds: [2] },
-          'https://pubmatic.com': { frameIds: [3] },
-        }}
-        setSelectedFrame={() => undefined}
-        selectedFrame={'https://edition.cnn.com'}
-        setIndex={() => undefined}
-        isTabFocused={true}
-        setIsTabFocused={() => undefined}
-      />
-    );
-    const cookieHeaderContainer = screen.getByTestId(
-      'cookies-tab-heading-wrapper'
-    );
-    const cookieFrameContainer = screen.getByTestId('https://edition.cnn.com');
-
-    expect(cookieHeaderContainer).not.toHaveClass('bg-royal-blue');
-    expect(cookieFrameContainer).toHaveClass('bg-royal-blue');
-  });
-
-  it('should not display anything when there are not tabFrames', () => {
-    render(
-      <Accordion
-        keyboardNavigator={() => undefined}
-        accordionState={true}
-        setAccordionState={() => undefined}
-        tabName={'Cookies'}
-        index={1}
-        selectedIndex={1}
-        tabFrames={{}}
-        setSelectedFrame={() => undefined}
-        selectedFrame={null}
-        setIndex={() => undefined}
-        isTabFocused={true}
-        setIsTabFocused={() => undefined}
-      />
-    );
-    const framesContainer = screen.getByTestId('cookie-frames-container');
-
-    expect(framesContainer.childNodes.length).toBe(0);
-  });
-
-  it('should not display tabFrames if not opened.', () => {
-    render(
-      <Accordion
-        keyboardNavigator={() => undefined}
-        accordionState={false}
-        setAccordionState={() => undefined}
-        tabName={'Cookies'}
-        index={1}
-        selectedIndex={1}
-        tabFrames={{
-          'https://edition.cnn.com': { frameIds: [1] },
-          'https://crxd.net': { frameIds: [2] },
-          'https://pubmatic.com': { frameIds: [3] },
-        }}
-        setSelectedFrame={() => undefined}
-        selectedFrame={null}
-        setIndex={() => undefined}
-        isTabFocused={true}
-        setIsTabFocused={() => undefined}
-      />
-    );
-    const framesContainer = screen.getByTestId('cookie-frames-container');
-
-    expect(framesContainer).toHaveClass('hidden');
-  });
-
-  it('should not display tabFrames if not opened.', () => {
-    const renderedAccordion = render(
-      <Accordion
-        keyboardNavigator={() => undefined}
-        accordionState={false}
-        setAccordionState={() => undefined}
-        tabName={'Cookies'}
-        index={1}
-        selectedIndex={1}
-        tabFrames={{
-          'https://edition.cnn.com': { frameIds: [1] },
-          'https://crxd.net': { frameIds: [2] },
-          'https://pubmatic.com': { frameIds: [3] },
-        }}
-        setSelectedFrame={() => undefined}
-        selectedFrame={'https://edition.cnn.com'}
-        setIndex={() => undefined}
-        isTabFocused={true}
-        setIsTabFocused={() => undefined}
-      />
-    );
-    const firstFrame = screen.getByTestId('https://edition.cnn.com');
-    const secondFrame = screen.getByTestId('https://crxd.net');
-
-    expect(firstFrame).toHaveClass('bg-royal-blue');
-    expect(secondFrame).not.toHaveClass('bg-royal-blue');
-
-    //click on second frame
-    fireEvent.click(secondFrame);
-    renderedAccordion.rerender(
-      <Accordion
-        keyboardNavigator={() => undefined}
-        accordionState={false}
-        setAccordionState={() => undefined}
-        tabName={'Cookies'}
-        index={1}
-        selectedIndex={1}
-        tabFrames={{
-          'https://edition.cnn.com': { frameIds: [1] },
-          'https://crxd.net': { frameIds: [2] },
-          'https://pubmatic.com': { frameIds: [3] },
-        }}
-        setSelectedFrame={() => undefined}
-        selectedFrame={'https://crxd.net'}
-        setIndex={() => undefined}
-        isTabFocused={true}
-        setIsTabFocused={() => undefined}
-      />
-    );
-
-    expect(firstFrame).not.toHaveClass('bg-royal-blue');
-    expect(secondFrame).toHaveClass('bg-royal-blue');
-  });
-
   it('should call keyboard navigator function.', () => {
     const keyboardNavigatorMock = jest.fn();
     render(
       <Accordion
-        keyboardNavigator={keyboardNavigatorMock}
         accordionState={true}
-        setAccordionState={() => undefined}
-        tabName={'Cookies'}
         index={1}
-        selectedIndex={1}
-        tabFrames={{
-          'https://edition.cnn.com': { frameIds: [1] },
-          'https://crxd.net': { frameIds: [2] },
-          'https://pubmatic.com': { frameIds: [3] },
-        }}
-        setSelectedFrame={() => undefined}
-        selectedFrame={null}
-        setIndex={() => undefined}
         isTabFocused={true}
-        setIsTabFocused={() => undefined}
+        isAccordionHeaderSelected={true}
+        tabId="cookies"
+        keyboardNavigator={keyboardNavigatorMock}
+        tabName={'Cookies'}
+        onAccordionHeaderClick={() => undefined}
+        onAccordionOpenerClick={() => undefined}
       />
     );
     userEvent.tab();
