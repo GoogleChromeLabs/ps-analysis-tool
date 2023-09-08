@@ -166,6 +166,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           _tabId.toString() !== getTabBeingListenedTo?.tabToRead
         ) {
           setIsCurrentTabBeingListenedTo(false);
+          setLoading(false);
           return;
         } else {
           setIsCurrentTabBeingListenedTo(true);
@@ -261,6 +262,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
             tabId.toString() !== getTabBeingListenedTo?.tabToRead
           ) {
             setIsCurrentTabBeingListenedTo(false);
+            setLoading(false);
             return;
           } else {
             setIsCurrentTabBeingListenedTo(true);
