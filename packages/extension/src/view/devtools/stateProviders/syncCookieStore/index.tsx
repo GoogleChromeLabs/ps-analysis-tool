@@ -264,11 +264,14 @@ export const Provider = ({ children }: PropsWithChildren) => {
             return;
           } else {
             setIsCurrentTabBeingListenedTo(true);
-            chrome.tabs.query({ active: true }, (tab) => {
-              if (tab[0]?.url) {
-                setTabUrl(tab[0]?.url);
+            chrome.devtools.inspectedWindow.eval(
+              'window.location.href',
+              (result, isException) => {
+                if (!isException && typeof result === 'string') {
+                  setTabUrl(result);
+                }
               }
-            });
+            );
           }
         }
       }
@@ -303,11 +306,14 @@ export const Provider = ({ children }: PropsWithChildren) => {
       return Promise.resolve();
     });
 
-    chrome.tabs.query({ active: true }, (tab) => {
-      if (tab[0]?.url) {
-        setTabUrl(tab[0]?.url);
+    chrome.devtools.inspectedWindow.eval(
+      'window.location.href',
+      (result, isException) => {
+        if (!isException && typeof result === 'string') {
+          setTabUrl(result);
+        }
       }
-    });
+    );
 
     await chrome.tabs.reload(Number(changedTabId));
     setIsCurrentTabBeingListenedTo(true);
