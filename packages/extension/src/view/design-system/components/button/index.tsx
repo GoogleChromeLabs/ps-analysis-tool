@@ -16,18 +16,35 @@
 /**
  * External dependencies.
  */
+import classNames from 'classnames';
 import React from 'react';
 
 interface ButtonProps {
   text: string;
-  onClick: () => void;
+  onClick?: () => void;
+  loading?: boolean;
+  type?: 'button' | 'submit' | 'reset';
+  variant?: 'primary' | 'secondary' | 'danger';
 }
-const Button = ({ onClick, text }: ButtonProps) => {
+const Button = ({
+  text,
+  onClick = undefined,
+  type = 'button',
+  variant = 'primary',
+}: ButtonProps) => {
   return (
     <button
       data-test-id="button"
-      onClick={onClick}
-      className="py-1 px-2 text-white dark:text-jet-black dark:bg-light-blue bg-dark-blue rounded font-medium"
+      type={type}
+      onClick={onClick ? onClick : undefined}
+      className={classNames('py-1 px-2 rounded font-medium', {
+        'text-white dark:text-jet-black dark:bg-light-blue bg-dark-blue':
+          variant === 'primary',
+        'bg-transparent dark:bg-transparent dark:text-bright-gray text-raisin-black':
+          variant === 'secondary',
+        'text-white dark:text-white dark:bg-red-500 bg-red-500':
+          variant === 'danger',
+      })}
     >
       {text}
     </button>
