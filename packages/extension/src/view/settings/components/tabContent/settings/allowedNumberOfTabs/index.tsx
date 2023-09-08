@@ -62,7 +62,7 @@ const AllowedNumberOfTabs: React.FC = () => {
           checked={allowedNumberOfTabs === 'unlimited'}
         />
         No restriction (Processing too many tabs may cause the browser to slow
-        down)
+        down.) - Tabs would need to be refreshed
       </div>
     </div>
   );
