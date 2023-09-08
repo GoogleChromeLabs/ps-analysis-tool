@@ -44,6 +44,7 @@ const App: React.FC = () => {
     loading: state.loading,
   }));
   const TabContent = TABS[selectedTabIndex].component;
+
   if (
     loading ||
     (loading &&
@@ -57,6 +58,7 @@ const App: React.FC = () => {
       </div>
     );
   }
+
   if (
     (isCurrentTabBeingListenedTo &&
       allowedNumberOfTabs &&
