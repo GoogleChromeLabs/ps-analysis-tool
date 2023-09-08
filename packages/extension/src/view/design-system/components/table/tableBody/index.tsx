@@ -48,7 +48,6 @@ const TableBody = ({
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLTableRowElement>, row: Row<TableData>) => {
-      event.preventDefault();
       event.stopPropagation();
 
       // @ts-ignore - the `children` property will be available on the `current` property.
