@@ -5,7 +5,7 @@
 	"scripts": {
 		"cli:dev": "npm run dev --workspace=@cookie-analysis-tool/cli",
 		"cli:build": "npm run build --workspace=@cookie-analysis-tool/cli",
-		"cli":"node dist/cli/index.js",
+		"cli":" node dist/cli/index.js",
 		"test": "jest --config=tests/jest.config.cjs",
 		"test:coverage": "npm run test -- --collectCoverage && open coverage/lcov-report/index.html",
 		"dev": "webpack --config webpack.config.cjs --watch",
@@ -17,6 +17,7 @@
 		"lint:js:fix": "eslint --fix .",
 		"prepare": "husky install",
 		"cookie-db:update": "node scripts/update-cookie-db.cjs",
+		"rws-json:update": "node scripts/update-rws-json.cjs",
 		"storybook": "storybook dev -p 6006",
 		"build-storybook": "storybook build"
 	},
