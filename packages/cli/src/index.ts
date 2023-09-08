@@ -153,7 +153,11 @@ export const initialize = async () => {
     shouldSearchTechnology &&
       console.log(`- ${prefix}-technologies. (Technologies report)`);
 
-    console.log(`- ${prefix}-data.json (Both reports in JSON)`);
+    console.log(
+      `- ${prefix}-data.json ${
+        shouldSearchTechnology ? '(Both reports in JSON)' : ''
+      }`
+    );
   } else if (sitemapURL) {
     const siteMapper = new Sitemapper({
       url: sitemapURL,
@@ -311,7 +315,11 @@ export const initialize = async () => {
     console.log(`- ${prefix}-cookies.csv (Cookie report)`);
     shouldSearchTechnology &&
       console.log(`- ${prefix}-technologies. (Technologies report)`);
-    console.log(`- ${prefix}-data.json (Both reports in JSON)`);
+    console.log(
+      `- ${prefix}-data.json ${
+        shouldSearchTechnology ? '(Both reports in JSON)' : ''
+      }`
+    );
   }
 
   await browser.close();
