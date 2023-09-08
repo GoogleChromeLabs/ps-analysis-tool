@@ -1,5 +1,5 @@
 {
-  "name": "Privacy Analysis Tool",
+  "name": "Privacy Sandbox Analysis Tool",
   "description": "Tooling for understanding cookie usage and guidance on new privacy-preserving Chrome APIs.",
   "version": "0.1.0",
   "manifest_version": 3,

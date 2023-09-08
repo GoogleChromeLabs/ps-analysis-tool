@@ -249,9 +249,6 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                       accordionState && accordionState[id]
                     )}
                     index={index}
-                    isCookiesTabOpen={Boolean(
-                      accordionState && accordionState['cookies']
-                    )}
                     isAccordionHeaderSelected={
                       selectedIndex === index && !selectedFrame
                     }

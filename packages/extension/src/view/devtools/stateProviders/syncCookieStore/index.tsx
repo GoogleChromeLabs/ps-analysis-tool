@@ -22,6 +22,7 @@ import React, {
   useEffect,
   useState,
   useCallback,
+  useRef,
 } from 'react';
 
 /**
@@ -37,6 +38,7 @@ export interface CookieStoreContext {
   state: {
     tabCookies: TabCookies | null;
     tabUrl: string | null;
+    loading: boolean;
     tabFrames: TabFrames | null;
     selectedFrame: string | null;
     returningToSingleTab: boolean;
@@ -55,6 +57,7 @@ const initialState: CookieStoreContext = {
     tabUrl: null,
     tabFrames: null,
     selectedFrame: null,
+    loading: true,
     isCurrentTabBeingListenedTo: false,
     returningToSingleTab: false,
     allowedNumberOfTabs: null,
@@ -69,6 +72,8 @@ export const Context = createContext<CookieStoreContext>(initialState);
 
 export const Provider = ({ children }: PropsWithChildren) => {
   const [tabId, setTabId] = useState<number | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const loadingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isCurrentTabBeingListenedTo, setIsCurrentTabBeingListenedTo] =
     useState<boolean>(false);
 
@@ -137,10 +142,17 @@ export const Provider = ({ children }: PropsWithChildren) => {
     setTabId(_tabId);
 
     const extensionStorage = await chrome.storage.sync.get();
+    const _allowedNumberOfTabs =
+      extensionStorage?.allowedNumberOfTabs || 'single';
 
-    if (extensionStorage?.allowedNumberOfTabs) {
-      setAllowedNumberOfTabs(extensionStorage?.allowedNumberOfTabs);
+    if (!extensionStorage?.allowedNumberOfTabs) {
+      await chrome.storage.sync.clear();
+      await chrome.storage.sync.set({
+        allowedNumberOfTabs: 'single',
+      });
     }
+
+    setAllowedNumberOfTabs(_allowedNumberOfTabs);
 
     if (_tabId) {
       if (extensionStorage?.allowedNumberOfTabs === 'single') {
@@ -161,6 +173,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           _tabId.toString() !== getTabBeingListenedTo?.tabToRead
         ) {
           setIsCurrentTabBeingListenedTo(false);
+          setLoading(false);
           return;
         } else {
           setIsCurrentTabBeingListenedTo(true);
@@ -192,6 +205,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
       setTabCookies(_cookies);
     }
+    setLoading(false);
 
     chrome.devtools.inspectedWindow.eval(
       'window.location.href',
@@ -255,17 +269,22 @@ export const Provider = ({ children }: PropsWithChildren) => {
             tabId.toString() !== getTabBeingListenedTo?.tabToRead
           ) {
             setIsCurrentTabBeingListenedTo(false);
+            setLoading(false);
             return;
           } else {
             setIsCurrentTabBeingListenedTo(true);
-            chrome.tabs.query({ active: true }, (tab) => {
-              if (tab[0]?.url) {
-                setTabUrl(tab[0]?.url);
+            chrome.devtools.inspectedWindow.eval(
+              'window.location.href',
+              (result, isException) => {
+                if (!isException && typeof result === 'string') {
+                  setTabUrl(result);
+                }
               }
-            });
+            );
           }
         }
       }
+      setLoading(false);
     },
     [tabId, getAllFramesForCurrentTab]
   );
@@ -296,14 +315,18 @@ export const Provider = ({ children }: PropsWithChildren) => {
       return Promise.resolve();
     });
 
-    chrome.tabs.query({ active: true }, (tab) => {
-      if (tab[0]?.url) {
-        setTabUrl(tab[0]?.url);
+    chrome.devtools.inspectedWindow.eval(
+      'window.location.href',
+      (result, isException) => {
+        if (!isException && typeof result === 'string') {
+          setTabUrl(result);
+        }
       }
-    });
+    );
 
     await chrome.tabs.reload(Number(changedTabId));
     setIsCurrentTabBeingListenedTo(true);
+    setLoading(false);
   }, []);
 
   const tabUpdateListener = useCallback(
@@ -361,6 +384,18 @@ export const Provider = ({ children }: PropsWithChildren) => {
     changeSyncStorageListener,
   ]);
 
+  useEffect(() => {
+    loadingTimeout.current = setTimeout(() => {
+      setLoading(false);
+    }, 6500);
+
+    return () => {
+      if (loadingTimeout.current) {
+        clearTimeout(loadingTimeout.current);
+      }
+    };
+  }, []);
+
   return (
     <Context.Provider
       value={{
@@ -368,6 +403,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           tabCookies,
           tabUrl,
           tabFrames,
+          loading,
           selectedFrame,
           isCurrentTabBeingListenedTo,
           returningToSingleTab,
