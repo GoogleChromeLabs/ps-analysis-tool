@@ -22,7 +22,6 @@ import { getDomain } from 'tldts';
 /**
  * Internal dependencies.
  */
-import type { PrimaryWellKnownOutputType } from '../../jsonGenerator/types';
 import fetchRWSInfo from './fetchRWSInfo';
 import getInspectedTabDomain from './getInspectedTabDomain';
 
@@ -30,26 +29,37 @@ export type CheckURLInRWSOutputType = {
   isURLInRWS: boolean;
   primary?: boolean;
   domain?: string;
-  relatedWebsiteSet?: PrimaryWellKnownOutputType;
+  relatedWebsiteSet?: RelatedWebsiteSetType;
+};
+
+type RelatedWebsiteSetType = {
+  primary: string;
+  contact: string;
+  associatedSites?: string[];
+  serviceSites?: string[];
+  ccTLDs?: {
+    [site: string]: string;
+  };
+  rationaleBySite?: {
+    [url: string]: string;
+  };
 };
 
 const checkURLInRWS = async () => {
   const tabDomain = (await getInspectedTabDomain()) || '';
-  const rwsSets: PrimaryWellKnownOutputType[] = (await fetchRWSInfo()).sets;
+  const rwsSets: RelatedWebsiteSetType[] = (await fetchRWSInfo()).sets;
 
-  const urlInRWS: PrimaryWellKnownOutputType | undefined = rwsSets.find(
-    (rws) => {
-      const rwsURLs: string[] = Object.keys(rws.rationaleBySite || {}).map(
-        (_url) => getDomain(_url) || ''
-      );
+  const urlInRWS: RelatedWebsiteSetType | undefined = rwsSets.find((rws) => {
+    const rwsURLs: string[] = Object.keys(rws.rationaleBySite || {}).map(
+      (_url) => getDomain(_url) || ''
+    );
 
-      if (tabDomain === getDomain(rws.primary)) {
-        return true;
-      }
-
-      return rwsURLs.includes(tabDomain);
+    if (tabDomain === getDomain(rws.primary)) {
+      return true;
     }
-  );
+
+    return rwsURLs.includes(tabDomain);
+  });
 
   if (!urlInRWS) {
     return {
