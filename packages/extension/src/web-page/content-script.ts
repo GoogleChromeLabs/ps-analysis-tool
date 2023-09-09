@@ -45,3 +45,7 @@ const handleMouseEvent = (event: MouseEvent): void => {
 
 document.addEventListener('mouseover', handleMouseEvent);
 document.addEventListener('mouseout', handleMouseEvent);
+
+port.onMessage.addListener((message) => {
+  console.log(message);
+});

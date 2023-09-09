@@ -16,27 +16,35 @@
 /**
  * External dependencies.
  */
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 interface useFrameOverlayProps {
   selectedFrame: string | null;
 }
 
 const useFrameOverlay = ({ selectedFrame }: useFrameOverlayProps) => {
-  useEffect(() => {
-    console.log(selectedFrame, 'selectedFrame');
+  const portRef = useRef(null);
 
+  useEffect(() => {
     chrome.runtime.onConnect.addListener((port) => {
       console.log('Connected');
 
-      port.onMessage.addListener((payload) => {
-        console.log(payload);
-        if (payload.hover) {
-          port.postMessage({ reply: 'message received!' });
-        }
-      });
+      portRef.current = port;
+
+      port.onMessage.addListener(console.log);
     });
   }, []);
+
+  useEffect(() => {
+    console.log(selectedFrame, 'selectedFrame');
+    console.log(portRef.current);
+
+    if (selectedFrame && portRef.current) {
+      portRef.current.postMessage({
+        selectedFrame,
+      });
+    }
+  }, [selectedFrame]);
 };
 
 export default useFrameOverlay;
