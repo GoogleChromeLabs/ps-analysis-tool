@@ -72,10 +72,11 @@ const commonConfig = {
 const root = {
   entry: {
     'service-worker': './packages/extension/src/worker/service-worker.ts',
+    'content-script': './packages/extension/src/web-page/content-script.ts',
   },
   output: {
     path: path.resolve(__dirname, './dist/extension'),
-    filename: 'service-worker.js',
+    filename: '[name].js',
   },
   plugins: [
     new CopyPlugin({

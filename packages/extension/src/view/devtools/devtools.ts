@@ -16,5 +16,20 @@
 chrome.devtools.panels.create(
   'Privacy Sandbox',
   'icons/icon.svg',
-  'devtools/index.html'
+  'devtools/index.html',
+  () => {
+    chrome.runtime.onConnect.addListener((port) => {
+      console.assert(port.name === 'psat-tool');
+
+      console.log('content-script: devtoolMessage');
+
+      port.onMessage.addListener((msg) => {
+        console.log('content-script: onMessage', msg);
+        if (msg.hover) {
+          // Reply back to conent script.
+          port.postMessage({ reply: 'message received!' });
+        }
+      });
+    });
+  }
 );
