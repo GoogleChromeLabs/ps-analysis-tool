@@ -16,15 +16,5 @@
 chrome.devtools.panels.create(
   'Privacy Sandbox',
   'icons/icon.svg',
-  'devtools/index.html',
-  () => {
-    chrome.runtime.onConnect.addListener((port) => {
-      port.onMessage.addListener((payload) => {
-        console.log(payload);
-        if (payload.hover) {
-          port.postMessage({ reply: 'message received!' });
-        }
-      });
-    });
-  }
+  'devtools/index.html'
 );

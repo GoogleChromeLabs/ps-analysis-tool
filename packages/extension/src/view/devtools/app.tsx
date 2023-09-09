@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Resizable } from 're-resizable';
 
 /**
@@ -44,6 +44,17 @@ const App: React.FC = () => {
     loading: state.loading,
   }));
   const TabContent = TABS[selectedTabIndex].component;
+
+  useEffect(() => {
+    chrome.runtime.onConnect.addListener((port) => {
+      port.onMessage.addListener((payload) => {
+        console.log(payload);
+        if (payload.hover) {
+          port.postMessage({ reply: 'message received!' });
+        }
+      });
+    });
+  }, []);
 
   if (
     loading ||
