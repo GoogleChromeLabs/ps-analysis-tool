@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Resizable } from 're-resizable';
 
 /**
@@ -27,6 +27,7 @@ import TABS from './tabs';
 import { Sidebar } from './components';
 import { useCookieStore } from './stateProviders/syncCookieStore';
 import { Button, ProgressBar } from '../design-system/components';
+import useFrameOverlay from './hooks/useFrameOverlay';
 
 const App: React.FC = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
@@ -35,26 +36,21 @@ const App: React.FC = () => {
     returningToSingleTab,
     changeListeningToThisTab,
     allowedNumberOfTabs,
+    selectedFrame,
     loading,
   } = useCookieStore(({ state, actions }) => ({
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
     returningToSingleTab: state.returningToSingleTab,
     changeListeningToThisTab: actions.changeListeningToThisTab,
     allowedNumberOfTabs: state.allowedNumberOfTabs,
+    selectedFrame: state.selectedFrame,
     loading: state.loading,
   }));
   const TabContent = TABS[selectedTabIndex].component;
 
-  useEffect(() => {
-    chrome.runtime.onConnect.addListener((port) => {
-      port.onMessage.addListener((payload) => {
-        console.log(payload);
-        if (payload.hover) {
-          port.postMessage({ reply: 'message received!' });
-        }
-      });
-    });
-  }, []);
+  useFrameOverlay({
+    selectedFrame,
+  });
 
   if (
     loading ||
