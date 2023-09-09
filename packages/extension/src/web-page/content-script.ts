@@ -35,7 +35,7 @@ const getAttributes = (iframe: HTMLIFrameElement): IframeAttributes => {
 const handleMouseEvent = (event: MouseEvent): void => {
   if ((event.target as HTMLElement).tagName === 'IFRAME') {
     const payload = {
-      hover: event.type === 'mouseover',
+      hover: event?.type === 'mouseover',
       attributes: getAttributes(event.target as HTMLIFrameElement),
     };
 
@@ -46,6 +46,32 @@ const handleMouseEvent = (event: MouseEvent): void => {
 document.addEventListener('mouseover', handleMouseEvent);
 document.addEventListener('mouseout', handleMouseEvent);
 
-port.onMessage.addListener((message) => {
-  console.log(message);
+const addFrameOverlay = (selectedFrame: string) => {
+  const iframes = document.querySelectorAll('iframe');
+
+  // Iterate through each iframe and check its src attribute
+  for (const iframe of iframes) {
+    const src = iframe.getAttribute('src');
+
+    if (src && src.startsWith(selectedFrame)) {
+      iframe.style.border = '5px solid red';
+      iframe.style.boxShadow = '1px 5px 10px';
+
+      iframe.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+        inline: 'nearest',
+      });
+    } else {
+      iframe.style.border = '';
+      iframe.style.boxShadow = '';
+    }
+  }
+};
+
+port.onMessage.addListener((response) => {
+  if (response?.selectedFrame) {
+    addFrameOverlay(response.selectedFrame);
+  }
+  console.log(response);
 });
