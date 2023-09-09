@@ -13,26 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-console.log('content-script: runtime');
+interface Attribute {
+  name: string;
+  value: string;
+}
 
-// Setup the connection for messaging.
+type IframeAttributes = Record<string, string>;
+
 const port = chrome.runtime.connect({ name: 'psat-tool' });
 
-// listen the devtool for any reply.
-port.onMessage.addListener((msg) => {
-  console.log('content-script: onMessage', msg);
-});
+const getAttributes = (iframe: HTMLIFrameElement): IframeAttributes => {
+  return Array.from(iframe.attributes).reduce(
+    (attributes: IframeAttributes, attribute: Attribute) => {
+      attributes[attribute.name] = attribute.value;
+      return attributes;
+    },
+    {}
+  );
+};
 
-// DOMContentLoad is already triggered. directly can use the code to get iframes.
-const iframes = document.getElementsByTagName('iframe');
-for (const frame of iframes) {
-  frame.addEventListener('mouseover', () => {
-    // Let devtool know that user is hovering over an iframe.
-    port.postMessage({ hover: true });
-  });
+const handleMouseEvent = (event: MouseEvent): void => {
+  if ((event.target as HTMLElement).tagName === 'IFRAME') {
+    const payload = {
+      hover: event.type === 'mouseover',
+      attributes: getAttributes(event.target as HTMLIFrameElement),
+    };
 
-  frame.addEventListener('mouseout', () => {
-    // Let devtool know that user is exited the iframe.
-    port.postMessage({ hover: false });
-  });
-}
+    port.postMessage(payload);
+  }
+};
+
+document.addEventListener('mouseover', handleMouseEvent);
+document.addEventListener('mouseout', handleMouseEvent);

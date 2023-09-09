@@ -19,14 +19,9 @@ chrome.devtools.panels.create(
   'devtools/index.html',
   () => {
     chrome.runtime.onConnect.addListener((port) => {
-      console.assert(port.name === 'psat-tool');
-
-      console.log('content-script: devtoolMessage');
-
-      port.onMessage.addListener((msg) => {
-        console.log('content-script: onMessage', msg);
-        if (msg.hover) {
-          // Reply back to conent script.
+      port.onMessage.addListener((payload) => {
+        console.log(payload);
+        if (payload.hover) {
           port.postMessage({ reply: 'message received!' });
         }
       });
