@@ -16,13 +16,17 @@
 /**
  * External dependencies.
  */
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
-interface useFrameOverlayProps {
+interface UseFrameOverlayProps {
   selectedFrame: string | null;
+  setInspectedFrame: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-const useFrameOverlay = ({ selectedFrame }: useFrameOverlayProps) => {
+const useFrameOverlay = ({
+  selectedFrame,
+  setInspectedFrame,
+}: UseFrameOverlayProps) => {
   const portRef = useRef(null);
 
   useEffect(() => {
@@ -31,14 +35,15 @@ const useFrameOverlay = ({ selectedFrame }: useFrameOverlayProps) => {
 
       portRef.current = port;
 
-      port.onMessage.addListener(console.log);
+      port.onMessage.addListener((response) => {
+        if (response?.attributes?.src) {
+          setInspectedFrame(response.attributes.src);
+        }
+      });
     });
-  }, []);
+  }, [setInspectedFrame]);
 
   useEffect(() => {
-    console.log(selectedFrame, 'selectedFrame');
-    console.log(portRef.current);
-
     if (selectedFrame && portRef.current) {
       portRef.current.postMessage({
         selectedFrame,

@@ -35,6 +35,7 @@ const App: React.FC = () => {
     isCurrentTabBeingListenedTo,
     returningToSingleTab,
     changeListeningToThisTab,
+    setInspectedFrame,
     allowedNumberOfTabs,
     selectedFrame,
     loading,
@@ -42,6 +43,7 @@ const App: React.FC = () => {
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
     returningToSingleTab: state.returningToSingleTab,
     changeListeningToThisTab: actions.changeListeningToThisTab,
+    setInspectedFrame: actions.setInspectedFrame,
     allowedNumberOfTabs: state.allowedNumberOfTabs,
     selectedFrame: state.selectedFrame,
     loading: state.loading,
@@ -50,6 +52,7 @@ const App: React.FC = () => {
 
   useFrameOverlay({
     selectedFrame,
+    setInspectedFrame,
   });
 
   if (
