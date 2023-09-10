@@ -13,30 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-interface Attribute {
-  name: string;
-  value: string;
-}
-
-type IframeAttributes = Record<string, string>;
+/**
+ * Internal dependencies.
+ */
+import addFrameOverlay from './addFrameOverlay';
+import getFrameAttributes from './getFrameAttributes';
 
 const port = chrome.runtime.connect({ name: 'psat-tool' });
 
-const getAttributes = (iframe: HTMLIFrameElement): IframeAttributes => {
-  return Array.from(iframe.attributes).reduce(
-    (attributes: IframeAttributes, attribute: Attribute) => {
-      attributes[attribute.name] = attribute.value;
-      return attributes;
-    },
-    {}
-  );
-};
+port.onMessage.addListener((response) => {
+  if (response?.selectedFrame) {
+    addFrameOverlay(response.selectedFrame);
+  }
+  console.log(response);
+});
 
 const handleMouseEvent = (event: MouseEvent): void => {
   if ((event.target as HTMLElement).tagName === 'IFRAME') {
     const payload = {
       hover: event?.type === 'mouseover',
-      attributes: getAttributes(event.target as HTMLIFrameElement),
+      attributes: getFrameAttributes(event.target as HTMLIFrameElement),
     };
 
     port.postMessage(payload);
@@ -45,33 +41,3 @@ const handleMouseEvent = (event: MouseEvent): void => {
 
 document.addEventListener('mouseover', handleMouseEvent);
 document.addEventListener('mouseout', handleMouseEvent);
-
-const addFrameOverlay = (selectedFrame: string) => {
-  const iframes = document.querySelectorAll('iframe');
-
-  // Iterate through each iframe and check its src attribute
-  for (const iframe of iframes) {
-    const src = iframe.getAttribute('src');
-
-    if (src && src.startsWith(selectedFrame)) {
-      iframe.style.border = '5px solid red';
-      iframe.style.boxShadow = '1px 5px 10px';
-
-      iframe.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-        inline: 'nearest',
-      });
-    } else {
-      iframe.style.border = '';
-      iframe.style.boxShadow = '';
-    }
-  }
-};
-
-port.onMessage.addListener((response) => {
-  if (response?.selectedFrame) {
-    addFrameOverlay(response.selectedFrame);
-  }
-  console.log(response);
-});
