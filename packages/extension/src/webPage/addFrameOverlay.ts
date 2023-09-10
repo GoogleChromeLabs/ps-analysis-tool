@@ -24,6 +24,8 @@ const createFrameOverlay = (frame: HTMLElement) => {
     height: frameHeight,
   } = frame.getBoundingClientRect();
 
+  console.log(frame.getBoundingClientRect());
+
   if (frameHeight === 0 || frameWidth === 0) {
     return null;
   }
@@ -62,14 +64,16 @@ const removeAllOverlays = () => {
 
 const addFrameOverlay = (selectedFrame: string) => {
   const iframes = document.querySelectorAll('iframe');
+  let frameFound = false;
 
   // Iterate through each iframe and check its src attribute
   for (const iframe of iframes) {
-    const src = iframe.getAttribute('src');
+    const src = iframe.getAttribute('src') || '';
+    const srcHost = new URL(src).host.replace('www.', ''); // @todo Not the right way.
+    const selectedFrameHost = new URL(selectedFrame).host.replace('www.', '');
 
-    if (src && src.startsWith(selectedFrame)) {
-      removeAllOverlays();
-
+    // @todo Very loosley checked for initial POC, needs more work.
+    if (srcHost === selectedFrameHost) {
       const overlay = createFrameOverlay(iframe);
 
       const body = document.querySelector('body');
@@ -78,6 +82,9 @@ const addFrameOverlay = (selectedFrame: string) => {
         return;
       }
 
+      frameFound = true;
+
+      removeAllOverlays();
       body.appendChild(overlay);
 
       iframe.scrollIntoView({
@@ -86,6 +93,10 @@ const addFrameOverlay = (selectedFrame: string) => {
         inline: 'nearest',
       });
     }
+  }
+
+  if (!frameFound) {
+    removeAllOverlays();
   }
 };
 
