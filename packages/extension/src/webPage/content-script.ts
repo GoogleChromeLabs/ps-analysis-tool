@@ -20,6 +20,12 @@ import addFrameOverlay from './addFrameOverlay';
 import getFrameAttributes from './getFrameAttributes';
 
 const port = chrome.runtime.connect({ name: 'psat-tool' });
+let portConnected = true;
+
+port.onDisconnect.addListener(() => {
+  portConnected = false;
+  console.log('Port disconnected!');
+});
 
 port.onMessage.addListener((response) => {
   if (response?.selectedFrame) {
@@ -35,7 +41,9 @@ const handleMouseEvent = (event: MouseEvent): void => {
       attributes: getFrameAttributes(event.target as HTMLIFrameElement),
     };
 
-    port.postMessage(payload);
+    if (portConnected) {
+      port.postMessage(payload);
+    }
   }
 };
 
