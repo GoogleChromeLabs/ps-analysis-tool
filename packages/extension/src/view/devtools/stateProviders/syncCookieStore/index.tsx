@@ -237,7 +237,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
             }
           ).map(async ([key, value]) => {
             const isCookieSet = Boolean(
-              await chrome.cookies.get({ name: key, url: value.url })
+              await chrome.cookies.get({
+                name: value?.parsedCookie?.name,
+                url: value.url,
+              })
             );
             _cookies[key] = {
               ...value,
