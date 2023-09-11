@@ -4,6 +4,11 @@
   "description": "",
   "main": "dist/index.js",
   "types": "dist-types/index.d.ts",
+  "customExports": {
+    ".": {
+      "default": "./src/index.ts"
+    }
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsc-watch"
