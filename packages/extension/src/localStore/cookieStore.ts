@@ -32,13 +32,14 @@ const CookieStore = {
 
       for (const cookie of cookies) {
         const cookieName = cookie.parsedCookie.name;
-
-        if (!cookieName) {
+        const cookieDomain = cookie.parsedCookie.domain;
+        const cookiePath = cookie.parsedCookie.path;
+        if (!cookieName || !cookieDomain || !cookiePath) {
           continue;
         }
 
-        if (_updatedCookies?.[cookieName]) {
-          _updatedCookies[cookieName] = {
+        if (_updatedCookies?.[cookieName + cookieDomain + cookiePath]) {
+          _updatedCookies[cookieName + cookieDomain + cookiePath] = {
             ...cookie,
             frameIdList: Array.from(
               new Set<number>([
@@ -48,7 +49,7 @@ const CookieStore = {
             ),
           };
         } else {
-          _updatedCookies[cookieName] = cookie;
+          _updatedCookies[cookieName + cookieDomain + cookiePath] = cookie;
         }
       }
 
