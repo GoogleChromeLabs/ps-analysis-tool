@@ -27,7 +27,11 @@
       "version": "detect"
     },
     "import/resolver": {
-      "node": {
+      "@cookie-analysis-tool/eslint-import-resolver": {
+        "mapping": {
+          "^@cookie-analysis-tool\\/(.*)\\/(.*)": "./packages/$1/src/$2",
+          "^@cookie-analysis-tool\\/(.*)": "./packages/$1/src/"
+        },
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       },
       "typescript": {}
