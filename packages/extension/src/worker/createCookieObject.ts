@@ -44,7 +44,7 @@ export async function createCookieObject(
   const prevParsedCookie = (
     await findPreviousCookieDataObject(
       (await getCurrentTabId()) || '0',
-      parsedCookie.name
+      parsedCookie.name + parsedCookie.domain + parsedCookie.path
     )
   )?.parsedCookie;
 

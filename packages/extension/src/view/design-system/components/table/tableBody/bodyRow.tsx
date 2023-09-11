@@ -49,11 +49,17 @@ const BodyRow = ({
 }: BodyRowProps) => {
   const tableRowClassName = classNames(
     'outline-0',
-    row.original.parsedCookie.name !== selectedKey &&
+    row.original.parsedCookie.name +
+      row.original.parsedCookie.domain +
+      row.original.parsedCookie.path !==
+      selectedKey &&
       (index % 2
         ? 'bg-anti-flash-white dark:bg-charleston-green'
         : 'bg-white dark:bg-raisin-black'),
-    row.original.parsedCookie.name === selectedKey &&
+    row.original.parsedCookie.name +
+      row.original.parsedCookie.domain +
+      row.original.parsedCookie.path ===
+      selectedKey &&
       (isRowFocused
         ? 'bg-gainsboro dark:bg-outer-space'
         : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver')

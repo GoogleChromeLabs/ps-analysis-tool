@@ -216,7 +216,11 @@ const CookieTable = ({ cookies, selectedFrame }: CookieTableProps) => {
       <Table
         table={table}
         selectedKey={
-          selectedKey === null ? null : selectedKey?.parsedCookie?.name
+          selectedKey === null
+            ? null
+            : selectedKey?.parsedCookie?.name +
+              selectedKey?.parsedCookie?.domain +
+              selectedKey?.parsedCookie?.path
         }
         onRowClick={onRowClick}
         onMouseEnter={() => setIsMouseInsideHeader(true)}

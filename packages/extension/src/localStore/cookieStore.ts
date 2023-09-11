@@ -44,7 +44,8 @@ const CookieStore = {
             frameIdList: Array.from(
               new Set<number>([
                 ...cookie.frameIdList,
-                ..._updatedCookies[cookieName].frameIdList,
+                ..._updatedCookies[cookieName + cookieDomain + cookiePath]
+                  .frameIdList,
               ])
             ),
           };
