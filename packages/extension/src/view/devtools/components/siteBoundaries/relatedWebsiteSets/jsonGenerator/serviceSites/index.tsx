@@ -99,7 +99,7 @@ const ServiceSites = ({
               <div className="flex-1">
                 <RWSInput
                   inputLabel={`Rationale Domain #${idx + 1}`}
-                  inputPlaceholder="Connected to primary domain because..."
+                  inputPlaceholder="Connected to the primary domain because..."
                   inputValue={rationale}
                   inputChangeHandler={(e) => {
                     updateServiceSites(idx, 'rationale', e.target.value);

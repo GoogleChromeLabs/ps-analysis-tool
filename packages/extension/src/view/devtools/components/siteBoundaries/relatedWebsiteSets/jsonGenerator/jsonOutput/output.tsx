@@ -46,7 +46,9 @@ const Output = ({ data }: OutputProps) => {
       >
         <button className="float-right">{copied ? 'Copied!' : 'Copy'}</button>
       </CopyToClipboard>
-      <code>{data && JSON.stringify(data, null, 2)}</code>
+      <code data-testid="rws-output">
+        {data && JSON.stringify(data, null, 2)}
+      </code>
     </pre>
   );
 };
