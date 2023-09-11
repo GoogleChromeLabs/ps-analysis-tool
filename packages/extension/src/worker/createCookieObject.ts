@@ -25,6 +25,7 @@ import { getDomain } from 'tldts';
  */
 import { getCurrentTabId } from '../utils/getCurrentTabId';
 import { findPreviousCookieDataObject } from './findPreviousCookieDataObject';
+import { getCookieKey } from '../utils/getCookieKey';
 
 /**
  * Create cookie object from cookieStore API cookie object, previously saved parsed cookie object if any, and recently captured request/response cookie header.
@@ -44,7 +45,7 @@ export async function createCookieObject(
   const prevParsedCookie = (
     await findPreviousCookieDataObject(
       (await getCurrentTabId()) || '0',
-      parsedCookie.name + parsedCookie.domain + parsedCookie.path
+      getCookieKey(parsedCookie)
     )
   )?.parsedCookie;
 

@@ -18,6 +18,7 @@
  */
 import updateStorage from './updateStorage';
 import type { TabData, CookieData } from './types';
+import { getCookieKey } from '../utils/getCookieKey';
 
 const CookieStore = {
   /**
@@ -31,26 +32,26 @@ const CookieStore = {
       const _updatedCookies = _prevCookies;
 
       for (const cookie of cookies) {
-        const cookieName = cookie.parsedCookie.name;
-        const cookieDomain = cookie.parsedCookie.domain;
-        const cookiePath = cookie.parsedCookie.path;
-        if (!cookieName || !cookieDomain || !cookiePath) {
+        const { name, domain, path } = cookie.parsedCookie;
+
+        if (!name || !domain || !path) {
           continue;
         }
 
-        if (_updatedCookies?.[cookieName + cookieDomain + cookiePath]) {
-          _updatedCookies[cookieName + cookieDomain + cookiePath] = {
+        const cookieKey = getCookieKey(cookie.parsedCookie);
+
+        if (_updatedCookies?.[cookieKey]) {
+          _updatedCookies[cookieKey] = {
             ...cookie,
             frameIdList: Array.from(
               new Set<number>([
                 ...cookie.frameIdList,
-                ..._updatedCookies[cookieName + cookieDomain + cookiePath]
-                  .frameIdList,
+                ..._updatedCookies[cookieKey].frameIdList,
               ])
             ),
           };
         } else {
-          _updatedCookies[cookieName + cookieDomain + cookiePath] = cookie;
+          _updatedCookies[cookieKey] = cookie;
         }
       }
 
