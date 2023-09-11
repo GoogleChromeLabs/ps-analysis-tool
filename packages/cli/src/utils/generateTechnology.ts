@@ -18,8 +18,11 @@
  */
 //@ts-ignore package does not support typescript
 import Wapplalyzer from 'wappalyzer';
+import { TechnologieDetails } from '../types';
 
-const generateTechnology = async (url: string): Promise<{ name: string }[]> => {
+const generateTechnology = async (
+  url: string
+): Promise<TechnologieDetails[]> => {
   const wappalyzer = new Wapplalyzer();
   await wappalyzer.init();
   const site = await wappalyzer.open(url);

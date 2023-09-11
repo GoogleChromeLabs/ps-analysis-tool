@@ -57,10 +57,11 @@ const normalizeCookie = (
     httpOnly: theCookie.httpOnly,
     secure: theCookie.secure,
     sameSite: theCookie.sameSite || 'Lax',
-    Platform: cookieDetail.platform,
-    Category: cookieDetail.category,
-    Description: cookieDetail.description,
+    platform: cookieDetail.platform,
+    category: cookieDetail.category,
+    description: cookieDetail.description,
     isFirstParty: isFirstParty(theCookie.domain, tabUrl) ? 'Yes' : 'No',
+    pageUrl: tabUrl,
   };
 };
 

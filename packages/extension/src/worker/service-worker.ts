@@ -26,28 +26,65 @@ import { type CookieData, CookieStore } from '../localStore';
 import parseResponseCookieHeader from './parseResponseCookieHeader';
 import parseRequestCookieHeader from './parseRequestCookieHeader';
 import { getTab } from '../utils/getTab';
+import { getCurrentTabId } from '../utils/getCurrentTabId';
 import {
   type CookieDatabase,
   fetchDictionary,
 } from '../utils/fetchCookieDictionary';
+import { ALLOWED_NUMBER_OF_TABS } from '../constants';
 
 let cookieDB: CookieDatabase | null = null;
 
 // Global promise queue.
 const PROMISE_QUEUE = new PQueue({ concurrency: 1 });
-
 /**
  * Fires when the browser receives a response from a web server.
  * @see https://developer.chrome.com/docs/extensions/reference/webRequest/
  */
 chrome.webRequest.onResponseStarted.addListener(
   async (details: chrome.webRequest.WebResponseCacheDetails) => {
+    const extensionSettings = await chrome.storage.sync.get();
+
+    if (
+      extensionSettings &&
+      extensionSettings?.allowedNumberOfTabs !== 'unlimited'
+    ) {
+      const currentTabId = await getCurrentTabId();
+
+      if (!currentTabId) {
+        return;
+      }
+
+      const tabsBeingListenedTo = await chrome.storage.local.get();
+
+      if (
+        tabsBeingListenedTo &&
+        currentTabId !== tabsBeingListenedTo?.tabToRead
+      ) {
+        return;
+      }
+    }
+
     await PROMISE_QUEUE.add(async () => {
       const { tabId, url, responseHeaders, frameId } = details;
-
       const tab = await getTab(tabId);
+      if (
+        extensionSettings &&
+        extensionSettings?.allowedNumberOfTabs !== 'unlimited'
+      ) {
+        const tabsBeingListenedTo = await chrome.storage.local.get();
 
-      if (!tab || !responseHeaders) {
+        if (ALLOWED_NUMBER_OF_TABS > 0) {
+          if (
+            tabsBeingListenedTo &&
+            tabId.toString() !== tabsBeingListenedTo?.tabToRead
+          ) {
+            return;
+          }
+        }
+      }
+
+      if (!tab || !responseHeaders || tab.url === 'chrome://newtab/') {
         return;
       }
 
@@ -77,10 +114,6 @@ chrome.webRequest.onResponseStarted.addListener(
         Promise.resolve([])
       );
 
-      if (!cookies.length) {
-        return;
-      }
-
       // Adds the cookies from the request headers to the cookies object.
       await CookieStore.update(tabId.toString(), cookies);
     });
@@ -92,13 +125,46 @@ chrome.webRequest.onResponseStarted.addListener(
 chrome.webRequest.onBeforeSendHeaders.addListener(
   ({ url, requestHeaders, tabId, frameId }) => {
     (async () => {
-      await PROMISE_QUEUE.add(async () => {
-        const tab = await getTab(tabId);
+      const extensionSettings = await chrome.storage.sync.get();
 
-        if (!tab || !requestHeaders) {
+      if (
+        extensionSettings &&
+        extensionSettings?.allowedNumberOfTabs !== 'unlimited'
+      ) {
+        const currentTabId = await getCurrentTabId();
+
+        if (!currentTabId) {
           return;
         }
 
+        const tabsBeingListenedTo = await chrome.storage.local.get();
+
+        if (
+          tabsBeingListenedTo &&
+          currentTabId !== tabsBeingListenedTo?.tabToRead
+        ) {
+          return;
+        }
+      }
+
+      await PROMISE_QUEUE.add(async () => {
+        const tab = await getTab(tabId);
+
+        if (!tab || !requestHeaders || tab.url === 'chrome://newtab/') {
+          return;
+        }
+        if (
+          extensionSettings &&
+          extensionSettings?.allowedNumberOfTabs !== 'unlimited'
+        ) {
+          const tabsBeingListenedTo = await chrome.storage.local.get();
+          if (
+            tabsBeingListenedTo &&
+            tabId.toString() !== tabsBeingListenedTo?.tabToRead
+          ) {
+            return;
+          }
+        }
         if (!cookieDB) {
           cookieDB = await fetchDictionary();
         }
@@ -126,10 +192,6 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
           Promise.resolve([])
         );
 
-        if (!cookies.length) {
-          return;
-        }
-
         await CookieStore.update(tabId.toString(), cookies);
       });
     })();
@@ -141,7 +203,23 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 chrome.tabs.onCreated.addListener(async (tab) => {
   await PROMISE_QUEUE.add(async () => {
     if (tab.id) {
-      await CookieStore.addTabData(tab.id.toString());
+      const extensionSettings = await chrome.storage.sync.get();
+      if (
+        extensionSettings?.allowedNumberOfTabs &&
+        extensionSettings?.allowedNumberOfTabs !== 'unlimited'
+      ) {
+        const previousTabData = await chrome.storage.local.get();
+        const doesTabExist = await getTab(previousTabData?.tabToRead);
+        if (
+          Object.keys(previousTabData).length - 1 >= ALLOWED_NUMBER_OF_TABS &&
+          doesTabExist
+        ) {
+          return;
+        }
+        await CookieStore.addTabData(tab.id.toString());
+      } else {
+        await CookieStore.addTabData(tab.id.toString());
+      }
     }
   });
 });
@@ -175,7 +253,7 @@ chrome.tabs.onRemoved.addListener(async (tabId) => {
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   await PROMISE_QUEUE.add(async () => {
     if (changeInfo.status === 'loading' && tab.url) {
-      await CookieStore.removeTabData(tabId.toString());
+      await CookieStore.removeCookieData(tabId.toString());
     }
   });
 });
@@ -196,9 +274,26 @@ chrome.windows.onRemoved.addListener(async (windowId) => {
  * when the extension is updated to a new version,
  * when Chrome is updated to a new version.
  * @see https://developer.chrome.com/docs/extensions/reference/runtime/#event-onInstalled
+ * @todo Shouldn't have to reinstall the extension.
  */
-chrome.runtime.onInstalled.addListener(async () => {
+chrome.runtime.onInstalled.addListener(async (details) => {
   await PROMISE_QUEUE.add(async () => {
     await chrome.storage.local.clear();
+    if (details.reason === 'install') {
+      await chrome.storage.sync.clear();
+      await chrome.storage.sync.set({
+        allowedNumberOfTabs: 'single',
+      });
+    }
+    if (details.reason === 'update') {
+      const preSetSettings = await chrome.storage.sync.get();
+      if (preSetSettings?.allowedNumberOfTabs) {
+        return;
+      }
+      await chrome.storage.sync.clear();
+      await chrome.storage.sync.set({
+        allowedNumberOfTabs: 'single',
+      });
+    }
   });
 });

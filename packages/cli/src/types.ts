@@ -29,9 +29,22 @@ export interface CookieLogDetails
     | 'sourceScheme'
     | 'sourcePort'
   > {
-  Platform: string;
-  Category: string;
-  Description: string;
+  platform: string;
+  category: string;
+  description: string;
   isFirstParty: 'Yes' | 'No';
   sameSite: string;
+  pageUrl: string;
+}
+
+export interface TechnologieDetails {
+  name: string;
+  description: string;
+  confidence: number;
+  website: string;
+  categories: { name: string }[];
+}
+
+export interface TechnologieDetailsSitemap extends TechnologieDetails {
+  frequency: number;
 }
