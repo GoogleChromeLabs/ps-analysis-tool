@@ -26,6 +26,7 @@ import classNames from 'classnames';
  */
 import type { TableData } from '..';
 import BodyCell from './bodyCell';
+import { getCookieKey } from '../../../../../utils/getCookieKey';
 
 interface BodyRowProps {
   row: Row<TableData>;
@@ -47,13 +48,15 @@ const BodyRow = ({
   onRowClick,
   onKeyDown,
 }: BodyRowProps) => {
+  const cookieKey = getCookieKey(row.original.parsedCookie);
+
   const tableRowClassName = classNames(
     'outline-0',
-    row.original.parsedCookie.name !== selectedKey &&
+    cookieKey !== selectedKey &&
       (index % 2
         ? 'bg-anti-flash-white dark:bg-charleston-green'
         : 'bg-white dark:bg-raisin-black'),
-    row.original.parsedCookie.name === selectedKey &&
+    cookieKey === selectedKey &&
       (isRowFocused
         ? 'bg-gainsboro dark:bg-outer-space'
         : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver')

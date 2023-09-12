@@ -23,19 +23,12 @@ import React, { useState } from 'react';
  * Internal dependencies.
  */
 import './app.css';
-import Settings from './components/tabContent/settings';
+import TABS from './tabs';
 import TabHeader from './components/tabHeader';
-
-const TABS = [
-  {
-    display_name: 'Settings',
-    Component: Settings,
-  },
-];
 
 const App: React.FC = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
-  const TabContent = TABS[selectedTabIndex].Component;
+  const TabContent = TABS[selectedTabIndex].component;
 
   return (
     <div className="w-full h-full flex items-center justify-center flex-col p-3 gap-3">
