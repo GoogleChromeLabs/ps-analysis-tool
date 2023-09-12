@@ -34,8 +34,8 @@ const PullRequestOutput = ({
 }: PullRequestOutputProps) => {
   return (
     <div className="py-3 mb-3">
-      <div className="flex gap-2 items-center mb-4">
-        <p className="text-xs w-5 h-5 flex items-center justify-center bg-bright-navy-blue text-white rounded-full">
+      <div className="flex gap-2 items-start mb-4">
+        <p className="text-xs leading-6 min-w-[1.5rem] min-h-[1.5rem] flex items-center justify-center bg-bright-navy-blue text-white rounded-full">
           3
         </p>
         <p className="text-base">
