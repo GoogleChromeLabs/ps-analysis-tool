@@ -26,6 +26,7 @@ import type { ServiceSiteType } from '../types';
 import { validateRationale, validateUrl } from '../utils';
 import { RWSInput } from '../components';
 import { Button } from '../../../../../../design-system/components';
+import { Add, Cross } from '../../../../../../../icons';
 
 interface ServiceSitesProps {
   serviceSites: ServiceSiteType[];
@@ -78,7 +79,7 @@ const ServiceSites = ({
     <div className="p-3">
       <div className="flex justify-between items-center">
         <p className="text-base">Service Subset</p>
-        <Button text="Add" onClick={addServiceSite} />
+        <Button text={<Add />} onClick={addServiceSite} variant="secondary" />
       </div>
       <div id="serviceDomains">
         {serviceSites.map(
@@ -114,9 +115,9 @@ const ServiceSites = ({
               </div>
               <div className="flex items-center">
                 <Button
-                  text="Remove"
+                  text={<Cross />}
                   type="button"
-                  variant="danger"
+                  variant="secondary"
                   onClick={() => {
                     setServiceSites((prev) => prev.filter((_, i) => i !== idx));
                   }}

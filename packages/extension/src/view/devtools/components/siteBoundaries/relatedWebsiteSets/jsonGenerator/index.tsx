@@ -153,7 +153,7 @@ const RWSJsonGenerator = ({ open }: RWSJsonGeneratorProps) => {
             </a>
             ).
           </p>
-          <div className="mt-4 mb-8 border rounded-xl border-gray-200 dark:border-quartz dark:bg-charleston-green px-4 py-3 shadow">
+          <div className="my-4 border rounded-xl border-gray-200 dark:border-quartz dark:bg-charleston-green px-4 py-3 shadow">
             <p className="text-base my-3">
               Enter your Related Website Sets details below:
             </p>

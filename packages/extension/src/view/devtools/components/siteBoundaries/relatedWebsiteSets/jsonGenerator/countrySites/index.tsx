@@ -26,6 +26,7 @@ import type { CountrySiteType } from '../types';
 import { validateUrl } from '../utils';
 import { RWSInput, RWSSelect } from '../components';
 import { Button } from '../../../../../../design-system/components';
+import { Add, Cross } from '../../../../../../../icons';
 
 interface CountrySitesProps {
   countrySites: CountrySiteType[];
@@ -104,7 +105,7 @@ const CountrySites = ({
         <p className="text-base">
           Country Code Top-level Domains <span>(ccTLDs)</span>
         </p>
-        <Button text="Add" onClick={addCountrySite} />
+        <Button text={<Add />} onClick={addCountrySite} variant="secondary" />
       </div>
       <div id="countryDomains">
         {countrySites.map(({ site, cctld, siteError, cctldError }, idx) => (
@@ -137,9 +138,9 @@ const CountrySites = ({
             </div>
             <div className="flex items-center">
               <Button
-                text="Remove"
+                text={<Cross />}
                 type="button"
-                variant="danger"
+                variant="secondary"
                 onClick={() => {
                   setCountrySites((prev) => prev.filter((_, i) => i !== idx));
                 }}

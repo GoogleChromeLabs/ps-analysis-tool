@@ -23,7 +23,7 @@ import React, { useCallback } from 'react';
  * Internal dependencies.
  */
 import type { AssociatedSiteType } from '../types';
-import { InfoIcon } from '../../../../../../../icons';
+import { Add, Cross, InfoIcon } from '../../../../../../../icons';
 import { validateRationale, validateUrl } from '../utils';
 import { RWSInput } from '../components';
 import { Button } from '../../../../../../design-system/components';
@@ -84,7 +84,12 @@ const AssociatedSites = ({
             <InfoIcon />
           </span>
         </p>
-        <Button text="Add" type="button" onClick={addAssociatedSite} />
+        <Button
+          text={<Add />}
+          type="button"
+          onClick={addAssociatedSite}
+          variant="secondary"
+        />
       </div>
       <div id="associatedDomains">
         {associatedSites.map(
@@ -120,9 +125,9 @@ const AssociatedSites = ({
               </div>
               <div className="flex items-center">
                 <Button
-                  text="Remove"
+                  text={<Cross />}
                   type="button"
-                  variant="danger"
+                  variant="secondary"
                   onClick={() => {
                     setAssociatedSites((prev) => {
                       return prev.filter((_, i) => i !== idx);
