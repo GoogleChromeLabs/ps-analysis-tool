@@ -20,6 +20,7 @@ const { join } = require('path');
 
 module.exports = {
   rootDir: '../',
+  resolver: '@cookie-analysis-tool/jest-import-resolver',
   transform: {
     '^.+\\.[jt]sx?$': 'babel-jest',
   },

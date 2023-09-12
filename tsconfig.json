@@ -1,4 +1,4 @@
 {
-  "references": [{ "path": "packages/cli" }, { "path": "packages/common" }],
+  "references": [{ "path": "packages/common" }, { "path": "packages/cli" }],
   "files": []
 }

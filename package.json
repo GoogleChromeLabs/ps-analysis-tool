@@ -98,7 +98,8 @@
 		"webpack-cli": "^5.1.4",
 		"webpack-dev-server": "^4.15.1",
 		"webpackbar": "^5.0.2",
-		"@cookie-analysis-tool/eslint-import-resolver": "*"
+		"@cookie-analysis-tool/eslint-import-resolver": "*",
+		"@cookie-analysis-tool/jest-import-resolver": "*"
 	},
 	"lint-staged": {
 		"*.(cjs|js|ts|tsx)": [
