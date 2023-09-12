@@ -29,6 +29,8 @@ import type {
 import PrimaryDomainOutput from './primaryDomainOutput';
 import OtherDomainOutput from './otherDomainOutput';
 import PullRequestOutput from './pullRequestOutput';
+import { Button } from '../../../../../../design-system/components';
+import { ArrowRight } from '../../../../../../../icons';
 
 interface JsonOutputProps {
   primaryWellKnownOutput: PrimaryWellKnownOutputType | null;
@@ -58,7 +60,7 @@ const JsonOutput = ({
   return (
     <div ref={resultContainer}>
       {primaryWellKnownOutput && otherWellKnownOutput && (
-        <div className="mt-6 divide-y divide-american-silver">
+        <div className="mt-6 divide-y divide-american-silver dark:divide-quartz">
           <h4 className="text-lg my-4 font-semibold">
             Here are your JSON resources:
             <br />
@@ -75,6 +77,32 @@ const JsonOutput = ({
             otherWellKnownOutput={otherWellKnownOutput}
           />
           <PullRequestOutput primaryWellKnownOutput={primaryWellKnownOutput} />
+          <div className="flex justify-between items-center py-4">
+            <a
+              href="https://github.com/GoogleChrome/first-party-sets/pulls"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Button text={'Create Pull Request'} />
+            </a>
+            <a
+              href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Button
+                text={
+                  <>
+                    View pull request from a fork guide
+                    <span className="w-4 h-4 ml-2 inline-block">
+                      <ArrowRight />
+                    </span>
+                  </>
+                }
+                variant="secondary"
+              />
+            </a>
+          </div>
         </div>
       )}
     </div>
