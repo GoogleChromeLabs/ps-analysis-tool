@@ -21,3 +21,4 @@ export { default as normalizeCookie } from './normalizeCookies';
 export { default as getOpenCookieDetails } from './getOpenCookieDetails';
 export { default as getCSVbyObject } from './getCSVbyObject';
 export { default as generateTechnology } from './generateTechnology';
+export { default as generatePrefix } from './generatePrefix';

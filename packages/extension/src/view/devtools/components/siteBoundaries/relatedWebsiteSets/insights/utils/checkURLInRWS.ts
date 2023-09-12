@@ -47,7 +47,7 @@ type RelatedWebsiteSetType = {
 
 const checkURLInRWS = async () => {
   const tabDomain = (await getInspectedTabDomain()) || '';
-  const rwsSets: RelatedWebsiteSetType[] = (await fetchRWSInfo()).sets;
+  const rwsSets: RelatedWebsiteSetType[] = (await fetchRWSInfo()).sets || [];
 
   const urlInRWS: RelatedWebsiteSetType | undefined = rwsSets.find((rws) => {
     const rwsURLs: string[] = Object.keys(rws.rationaleBySite || {}).map(

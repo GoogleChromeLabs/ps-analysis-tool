@@ -55,8 +55,17 @@ describe('App', () => {
         panels: {
           themeName: 'dark',
         },
+        inspectedWindow: {
+          tabId: 1,
+        },
       },
-    };
+      tabs: {
+        get: () => ({ url: 'https://hindustantimes.com' }),
+      },
+      runtime: {
+        getURL: () => 'data/related_website_sets.json',
+      },
+    } as unknown as typeof chrome;
 
     globalThis.fetch = function () {
       return Promise.resolve({
@@ -83,6 +92,62 @@ describe('App', () => {
 
     fireEvent.click(screen.getByTestId('cookies-tab-heading-wrapper'));
     expect(await screen.findByTestId('cookies-content')).toBeInTheDocument();
+  });
+
+  it('should open bounce tracking panel when selected from accordion.', async () => {
+    await act(() => render(<App />));
+    // Move to another tab
+    fireEvent.click(screen.getByTestId('antiCovertTracking-accordion-opener'));
+    fireEvent.click(screen.getByTestId('Bounce Tracking'));
+    expect(
+      await screen.findByTestId('bounce-tracking-content')
+    ).toBeInTheDocument();
+  });
+
+  it('should open fingerprinting panel when selected from accordion.', async () => {
+    await act(() => render(<App />));
+    // Move to another tab
+    fireEvent.click(screen.getByTestId('antiCovertTracking-accordion-opener'));
+    fireEvent.click(screen.getByTestId('Fingerprinting'));
+    expect(
+      await screen.findByTestId('fingerprinting-content')
+    ).toBeInTheDocument();
+  });
+
+  it('should open attribution panel when selected from accordion.', async () => {
+    await act(() => render(<App />));
+    // Move to another tab
+    fireEvent.click(screen.getByTestId('privateAdvertising-accordion-opener'));
+    fireEvent.click(screen.getByTestId('Attribution'));
+    expect(
+      await screen.findByTestId('attribution-content')
+    ).toBeInTheDocument();
+  });
+
+  it('should open topics panel when selected from accordion.', async () => {
+    await act(() => render(<App />));
+    // Move to another tab
+    fireEvent.click(screen.getByTestId('privateAdvertising-accordion-opener'));
+    fireEvent.click(screen.getByTestId('Topics'));
+    expect(await screen.findByTestId('topics-content')).toBeInTheDocument();
+  });
+
+  it('should open CHIPS panel when selected from accordion.', async () => {
+    await act(() => render(<App />));
+    // Move to another tab
+    fireEvent.click(screen.getByTestId('siteBoundaries-accordion-opener'));
+    fireEvent.click(screen.getByTestId('CHIPS'));
+    expect(await screen.findByTestId('chips-content')).toBeInTheDocument();
+  });
+
+  it('should open Related Website Sets panel when selected from accordion.', async () => {
+    await act(() => render(<App />));
+    // Move to another tab
+    fireEvent.click(screen.getByTestId('siteBoundaries-accordion-opener'));
+    fireEvent.click(screen.getByTestId('Related Website Sets'));
+    expect(
+      await screen.findByTestId('related-website-sets-content')
+    ).toBeInTheDocument();
   });
 
   it('should switch to AntiCovert Tracking Panel when clicked', async () => {

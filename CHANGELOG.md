@@ -45,3 +45,22 @@
 **Chore**
 
 - Add command for test coverage report [PR#78](https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/78)
+
+### 0.2.0
+
+## Cookies
+
+- Relocate info icon from matrix to cookie insights on landing page https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/121
+- Feature: Add a settings page and control the number of tabs being processed https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/128
+- Feature: Add option to process single or multiple tab for better performance https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/136
+
+## CLI
+
+- Feature: CLI tool to analyze websites and sitemap https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/123
+- Debounce the toggling functionality of table sorting https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/125
+- Fix: Missing platform and description https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/129
+- Improvements in the CLI output https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/130
+- Feature: Add optional flag to skip tech analysis https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/137
+
+## Privacy Sandbox API
+- Restructure menu items and add more info cards https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/131
