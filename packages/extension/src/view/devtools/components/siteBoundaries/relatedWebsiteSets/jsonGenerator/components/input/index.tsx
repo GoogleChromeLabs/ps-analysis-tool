@@ -43,10 +43,14 @@ const RWSInput = ({
       <input
         type={'text'}
         className={classNames(
-          'my-1 py-1 px-2 outline-none border dark:bg-raisin-black border-gainsboro dark:border-quartz dark:text-bright-gray text-outer-space-crayola',
-          { 'border-red-500 dark:border-red-500': error && errorOccured },
+          'my-1 py-1 px-2 outline-none border dark:bg-raisin-black dark:text-bright-gray text-outer-space-crayola',
           {
-            'border-green-500 dark:border-green-500': error === '',
+            [errorOccured
+              ? 'border-red-500 dark:border-red-500'
+              : 'border-gainsboro dark:border-quartz']: error,
+          },
+          {
+            'border-green-500 dark:border-green-500': !error,
           }
         )}
         placeholder={inputPlaceholder}

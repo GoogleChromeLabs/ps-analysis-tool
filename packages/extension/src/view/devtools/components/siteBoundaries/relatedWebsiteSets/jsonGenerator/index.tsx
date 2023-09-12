@@ -135,8 +135,8 @@ const RWSJsonGenerator = ({ open }: RWSJsonGeneratorProps) => {
   return (
     <>
       {open && (
-        <div className="text-raisin-black dark:text-bright-gray w-full">
-          <h1 className="text-lg font-semibold">
+        <div className="text-raisin-black dark:text-bright-gray w-full border-b border-american-silver dark:border-quartz">
+          <h1 className="text-lg font-semibold mt-4">
             Related Website Sets JSON Generator
           </h1>
           <p className="text-xs py-3">
