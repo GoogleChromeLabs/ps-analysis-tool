@@ -55,8 +55,17 @@ describe('App', () => {
         panels: {
           themeName: 'dark',
         },
+        inspectedWindow: {
+          tabId: 1,
+        },
       },
-    };
+      tabs: {
+        get: () => ({ url: 'https://hindustantimes.com' }),
+      },
+      runtime: {
+        getURL: () => 'data/related_website_sets.json',
+      },
+    } as unknown as typeof chrome;
 
     globalThis.fetch = function () {
       return Promise.resolve({
