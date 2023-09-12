@@ -58,9 +58,12 @@ const JsonOutput = ({
   }, [primaryWellKnownOutput, otherWellKnownOutput, scrollToResult]);
 
   return (
-    <div ref={resultContainer}>
+    <>
       {primaryWellKnownOutput && otherWellKnownOutput && (
-        <div className="mt-6 divide-y divide-american-silver dark:divide-quartz">
+        <div
+          ref={resultContainer}
+          className="mt-6 divide-y divide-american-silver dark:divide-quartz"
+        >
           <h4 className="text-lg my-4 font-semibold">
             Here are your JSON resources:
             <br />
@@ -105,7 +108,7 @@ const JsonOutput = ({
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

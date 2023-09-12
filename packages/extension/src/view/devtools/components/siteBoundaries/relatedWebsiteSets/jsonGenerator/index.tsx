@@ -204,7 +204,7 @@ const RWSJsonGenerator = ({ open }: RWSJsonGeneratorProps) => {
               </div>
             </form>
           </div>
-          {!loading && (
+          {!loading && !validationFailed && (
             <JsonOutput
               primaryWellKnownOutput={primaryWellKnownOutput}
               otherWellKnownOutput={otherWellKnownOutput}
