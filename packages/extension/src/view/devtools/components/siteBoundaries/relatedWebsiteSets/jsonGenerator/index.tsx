@@ -43,10 +43,9 @@ import { Button } from '../../../../../design-system/components';
 
 interface RWSJsonGeneratorProps {
   open: boolean;
-  close: () => void;
 }
 
-const RWSJsonGenerator = ({ open, close }: RWSJsonGeneratorProps) => {
+const RWSJsonGenerator = ({ open }: RWSJsonGeneratorProps) => {
   const [contact, setContact] = useState<ContactEmailType>({
     email: '',
     emailError: "Contact can't be blank",
@@ -115,10 +114,28 @@ const RWSJsonGenerator = ({ open, close }: RWSJsonGeneratorProps) => {
     [associatedSites, contact, countrySites, primaryDomain, serviceSites]
   );
 
+  const handleReset = useCallback(() => {
+    setContact({
+      email: '',
+      emailError: "Contact can't be blank",
+    });
+    setPrimaryDomain({
+      url: '',
+      urlError: "Url can't be blank",
+    });
+    setAssociatedSites([]);
+    setServiceSites([]);
+    setCountrySites([]);
+    setValidationFailed(false);
+    setPrimaryWellKnownOutput(null);
+    setOtherWellKnownOutput(null);
+    setLoading(false);
+  }, []);
+
   return (
     <>
       {open && (
-        <div className="p-3 text-raisin-black dark:text-bright-gray min-w-[33rem]">
+        <div className="text-raisin-black dark:text-bright-gray w-full">
           <h1 className="text-lg font-semibold">
             Related Website Sets JSON Generator
           </h1>
@@ -136,11 +153,11 @@ const RWSJsonGenerator = ({ open, close }: RWSJsonGeneratorProps) => {
             </a>
             ).
           </p>
-          <div className="my-8 border rounded-xl border-gray-200 dark:border-quartz dark:bg-charleston-green px-4 py-3 shadow">
+          <div className="mt-4 mb-8 border rounded-xl border-gray-200 dark:border-quartz dark:bg-charleston-green px-4 py-3 shadow">
             <p className="text-base my-3">
               Enter your Related Website Sets details below:
             </p>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} onReset={handleReset}>
               <ContactEmail
                 contact={contact}
                 setContact={setContact}
@@ -180,8 +197,8 @@ const RWSJsonGenerator = ({ open, close }: RWSJsonGeneratorProps) => {
                   </div>
                 ) : (
                   <div className="flex gap-2">
-                    <Button text="Generate JSON Resources" type="submit" />
-                    <Button text="Close" onClick={close} />
+                    <Button text="Submit" type="submit" />
+                    <Button text="Reset" type="reset" variant="danger" />
                   </div>
                 )}
               </div>

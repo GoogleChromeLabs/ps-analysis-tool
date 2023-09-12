@@ -26,7 +26,6 @@ import '@testing-library/user-event';
  * Internal dependencies.
  */
 import RWSJsonGenerator from '..';
-import { noop } from '../../../../../../../utils/noop';
 import createPrimaryOutput from '../utils/createOutput';
 import type {
   AssociatedSiteType,
@@ -36,8 +35,12 @@ import type {
 import JsonOutput from '../jsonOutput';
 
 describe('RWSJsonGenerator', () => {
+  beforeAll(() => {
+    window.HTMLElement.prototype.scrollIntoView = jest.fn();
+  });
+
   it('should render form', () => {
-    const screen = render(<RWSJsonGenerator open={true} close={noop} />);
+    const screen = render(<RWSJsonGenerator open={true} />);
 
     expect(
       screen.getByText('Related Website Sets JSON Generator')
@@ -45,10 +48,10 @@ describe('RWSJsonGenerator', () => {
   });
 
   it('should interact with contact email and primary domain', async () => {
-    const screen = render(<RWSJsonGenerator open={true} close={noop} />);
+    const screen = render(<RWSJsonGenerator open={true} />);
 
     const submitButton = screen.getByRole('button', {
-      name: 'Generate JSON Resources',
+      name: 'Submit',
     });
 
     fireEvent.click(submitButton);
@@ -81,7 +84,7 @@ describe('RWSJsonGenerator', () => {
   });
 
   it('should interact with associated sites input', async () => {
-    const screen = render(<RWSJsonGenerator open={true} close={noop} />);
+    const screen = render(<RWSJsonGenerator open={true} />);
 
     const addAssociatedSiteButton = screen.getAllByRole('button', {
       name: 'Add',
@@ -90,7 +93,7 @@ describe('RWSJsonGenerator', () => {
     fireEvent.click(addAssociatedSiteButton);
 
     const submitButton = screen.getByRole('button', {
-      name: 'Generate JSON Resources',
+      name: 'Submit',
     });
 
     fireEvent.click(submitButton);
@@ -134,7 +137,7 @@ describe('RWSJsonGenerator', () => {
   });
 
   it('should interact with service sites input', async () => {
-    const screen = render(<RWSJsonGenerator open={true} close={noop} />);
+    const screen = render(<RWSJsonGenerator open={true} />);
 
     const addServiceSiteButton = screen.getAllByRole('button', {
       name: 'Add',
@@ -143,7 +146,7 @@ describe('RWSJsonGenerator', () => {
     fireEvent.click(addServiceSiteButton);
 
     const submitButton = screen.getByRole('button', {
-      name: 'Generate JSON Resources',
+      name: 'Submit',
     });
 
     fireEvent.click(submitButton);
@@ -183,7 +186,7 @@ describe('RWSJsonGenerator', () => {
   });
 
   it('should interact with country sites input', async () => {
-    const screen = render(<RWSJsonGenerator open={true} close={noop} />);
+    const screen = render(<RWSJsonGenerator open={true} />);
 
     const addCountrySiteButton = screen.getAllByRole('button', {
       name: 'Add',
@@ -192,7 +195,7 @@ describe('RWSJsonGenerator', () => {
     fireEvent.click(addCountrySiteButton);
 
     const submitButton = screen.getByRole('button', {
-      name: 'Generate JSON Resources',
+      name: 'Submit',
     });
 
     fireEvent.click(submitButton);
@@ -258,6 +261,35 @@ describe('RWSJsonGenerator', () => {
     fireEvent.click(removeButton);
 
     expect(screen.queryByText('ccTLD #1')).not.toBeInTheDocument();
+  });
+
+  it('should reset form', () => {
+    const screen = render(<RWSJsonGenerator open={true} />);
+
+    const contactInput = screen.getByPlaceholderText(
+      'Email address or group alias if available'
+    );
+
+    fireEvent.change(contactInput, {
+      target: { value: 'hello@gmail.com' },
+    });
+
+    const primaryDomainInput = screen.getByPlaceholderText(
+      'https://primary.com'
+    );
+
+    fireEvent.change(primaryDomainInput, {
+      target: { value: 'https://primary.com' },
+    });
+
+    const resetButton = screen.getByRole('button', {
+      name: 'Reset',
+    });
+
+    fireEvent.click(resetButton);
+
+    expect(contactInput).toHaveValue('');
+    expect(primaryDomainInput).toHaveValue('');
   });
 
   it('should output json resources', () => {

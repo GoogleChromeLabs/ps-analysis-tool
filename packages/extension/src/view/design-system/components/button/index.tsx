@@ -20,7 +20,7 @@ import classNames from 'classnames';
 import React from 'react';
 
 interface ButtonProps {
-  text: string;
+  text: string | React.ReactNode;
   onClick?: () => void;
   loading?: boolean;
   type?: 'button' | 'submit' | 'reset';
@@ -37,14 +37,17 @@ const Button = ({
       data-test-id="button"
       type={type}
       onClick={onClick ? onClick : undefined}
-      className={classNames('py-1 px-2 rounded font-medium', {
-        'text-white dark:bg-absolute-zero-crayola bg-absolute-zero-crayola hover:bg-ocean-boat-blue':
-          variant === 'primary',
-        'bg-transparent dark:bg-transparent dark:text-bright-gray text-raisin-black':
-          variant === 'secondary',
-        'text-white dark:text-white dark:bg-red-500 bg-red-500':
-          variant === 'danger',
-      })}
+      className={classNames(
+        'py-1 px-2 rounded font-medium flex items-center text-center',
+        {
+          'text-white dark:bg-absolute-zero-crayola bg-absolute-zero-crayola hover:bg-ocean-boat-blue':
+            variant === 'primary',
+          'bg-transparent dark:bg-transparent dark:text-bright-gray text-raisin-black':
+            variant === 'secondary',
+          'text-white dark:text-white dark:bg-red-500 bg-red-500 hover:bg-red-600':
+            variant === 'danger',
+        }
+      )}
     >
       {text}
     </button>

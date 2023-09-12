@@ -35,25 +35,19 @@ const RelatedWebsiteSets = () => {
       className="w-full h-full overflow-auto"
       data-testid="related-website-sets-content"
     >
-      {showForm ? (
-        <RWSJsonGenerator
-          open={showForm}
-          close={() => setShowForm(!showForm)}
-        />
-      ) : (
-        <>
-          <InfoCard infoKey={PSInfoKey.RelatedWebsiteSets} />
-          <div className="text-raisin-black dark:text-bright-gray max-w-2xl dark:bg-davys-grey border border-gray-200 dark:border-quartz rounded-lg shadow p-6 m-3 flex flex-col gap-4 divide-y divide-gray-200 dark:divide-gray-500">
-            <Insights />
-            <div className="pt-3">
-              <Button
-                text="Generate RWS JSON Resources"
-                onClick={() => setShowForm(!showForm)}
-              />
-            </div>
+      <InfoCard infoKey={PSInfoKey.RelatedWebsiteSets} />
+      <div className="text-raisin-black dark:text-bright-gray max-w-2xl dark:bg-davys-grey border border-gray-200 dark:border-quartz rounded-lg shadow p-6 m-3 flex flex-col gap-4 divide-y divide-gray-200 dark:divide-gray-500">
+        <Insights />
+        <div className="pt-4">
+          <RWSJsonGenerator open={showForm} />
+          <div className="flex gap-2">
+            <Button
+              text={showForm ? 'Close' : 'Generate RWS JSON Resources'}
+              onClick={() => setShowForm(!showForm)}
+            />
           </div>
-        </>
-      )}
+        </div>
+      </div>
     </div>
   );
 };

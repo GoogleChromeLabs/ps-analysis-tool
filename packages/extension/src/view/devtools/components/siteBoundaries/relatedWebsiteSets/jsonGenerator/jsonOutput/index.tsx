@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 
 /**
  * Internal dependencies.
@@ -39,14 +39,30 @@ const JsonOutput = ({
   primaryWellKnownOutput,
   otherWellKnownOutput,
 }: JsonOutputProps) => {
+  const resultContainer = useRef(null);
+
+  const scrollToResult = useCallback(() => {
+    const resultContainerElement = resultContainer.current;
+
+    if (resultContainerElement) {
+      (resultContainerElement as HTMLElement).scrollIntoView({
+        behavior: 'smooth',
+      });
+    }
+  }, [resultContainer]);
+
+  useEffect(() => {
+    scrollToResult();
+  }, [primaryWellKnownOutput, otherWellKnownOutput, scrollToResult]);
+
   return (
-    <>
+    <div ref={resultContainer}>
       {primaryWellKnownOutput && otherWellKnownOutput && (
         <div className="mt-6 divide-y divide-american-silver">
           <h4 className="text-lg my-4 font-semibold">
             Here are your JSON resources:
             <br />
-            <span className="text-xs">
+            <span className="text-xs font-normal">
               Please follow the steps below to submit your Related Website Set
               to the canonical list.
             </span>
@@ -61,7 +77,7 @@ const JsonOutput = ({
           <PullRequestOutput primaryWellKnownOutput={primaryWellKnownOutput} />
         </div>
       )}
-    </>
+    </div>
   );
 };
 
