@@ -38,6 +38,7 @@ import prepareCookiesCount from '../../../../utils/prepareCookiesCount';
 import { CookieStore } from '../../../../localStore';
 import { noop } from '../../../../utils/noop';
 import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
+import getDocumentCookies from '../../../../utils/getDocumentCookies';
 
 export interface CookieStoreContext {
   state: {
@@ -180,6 +181,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     const tabData = (await chrome.storage.local.get([_tabId.toString()]))[
       _tabId.toString()
     ];
+    await getDocumentCookies(_tabId?.toString());
 
     if (tabData && tabData.cookies) {
       setDebouncedStats(prepareCookiesCount(tabData.cookies, _tabUrl));
@@ -194,6 +196,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         Object.keys(changes).includes(tabId.toString()) &&
         changes[tabId.toString()]?.newValue?.cookies
       ) {
+        await getDocumentCookies(tabId?.toString());
         setDebouncedStats(
           prepareCookiesCount(
             changes[tabId.toString()].newValue.cookies,

@@ -33,6 +33,7 @@ import type { TabCookies, TabFrames } from '../../cookies.types';
 import { noop } from '../../../../utils/noop';
 import { getCurrentTabId } from '../../../../utils/getCurrentTabId';
 import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
+import getDocumentCookies from '../../../../utils/getDocumentCookies';
 
 export interface CookieStoreContext {
   state: {
@@ -208,8 +209,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
       setTabCookies(_cookies);
     }
-    setLoading(false);
-
+    await getDocumentCookies(_tabId?.toString());
     chrome.devtools.inspectedWindow.eval(
       'window.location.href',
       (result, isException) => {
@@ -218,6 +218,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
       }
     );
+    setLoading(false);
   }, [getAllFramesForCurrentTab]);
 
   const storeChangeListener = useCallback(
@@ -289,6 +290,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
             );
           }
         }
+        await getDocumentCookies(tabId?.toString());
       }
       setLoading(false);
     },
