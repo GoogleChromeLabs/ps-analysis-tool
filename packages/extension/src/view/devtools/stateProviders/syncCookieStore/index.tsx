@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import { useContextSelector, createContext } from 'use-context-selector';
+import { createContext } from 'use-context-selector';
 import React, {
   type PropsWithChildren,
   useEffect,
@@ -28,6 +28,7 @@ import React, {
 /**
  * Internal dependencies.
  */
+import useContextSelector from '../../../../utils/useContextSelector';
 import { CookieStore, type CookieData } from '../../../../localStore';
 import type { TabCookies, TabFrames } from '../../cookies.types';
 import { noop } from '../../../../utils/noop';
