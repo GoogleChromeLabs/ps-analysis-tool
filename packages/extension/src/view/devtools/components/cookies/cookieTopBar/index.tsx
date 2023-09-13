@@ -28,6 +28,9 @@ import FilterIcon from '../../../../../../../../third_party/icons/filter-icon.sv
 // eslint-disable-next-line import/no-relative-packages
 import CrossIcon from '../../../../../../../../third_party/icons/cross-icon.svg';
 import { useFilterManagementStore } from '../../../stateProviders/filterManagementStore';
+import { useCookieStore } from '../../../stateProviders/syncCookieStore';
+import { useContentPanelStore } from '../../../stateProviders/contentPanelStore';
+import { getCookieKey } from '../../../../../utils/getCookieKey';
 
 interface CookieSearchProps {
   cookiesAvailable: boolean;
@@ -46,6 +49,12 @@ const CookieSearch = ({
       setSearchTerm: actions.setSearchTerm,
     })
   );
+  const selectedFrameCookie = useContentPanelStore(
+    ({ state }) => state.selectedFrameCookie || {}
+  );
+  const { deleteCookie } = useCookieStore(({ actions }) => ({
+    deleteCookie: actions.deleteCookie,
+  }));
 
   const handleInput = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,38 +65,54 @@ const CookieSearch = ({
 
   return (
     <div className="w-full h-[25px] px-2 flex items-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green">
-      <button
-        className={classNames('w-3 h-3', {
-          'opacity-20': !cookiesAvailable,
-        })}
-        onClick={toggleFilterMenu}
-        title="Open filter options"
-        disabled={!cookiesAvailable}
-      >
-        <FilterIcon
-          className={
-            isFilterMenuOpen
-              ? 'text-royal-blue dark:text-medium-persian-blue'
-              : 'text-mischka'
-          }
+      <div className="flex items-center bg-anti-flash-white dark:bg-charleston-green">
+        <button
+          className={classNames('w-3 h-3', {
+            'opacity-20': !cookiesAvailable,
+          })}
+          onClick={toggleFilterMenu}
+          title="Open filter options"
+          disabled={!cookiesAvailable}
+        >
+          <FilterIcon
+            className={
+              isFilterMenuOpen
+                ? 'text-royal-blue dark:text-medium-persian-blue'
+                : 'text-mischka'
+            }
+          />
+        </button>
+        <input
+          type="text"
+          className="h-5 w-80 mx-2 p-2 outline-none dark:bg-charleston-green border-[1px] border-gainsboro dark:border-quartz focus:border-royal-blue focus:dark:border-medium-persian-blue dark:text-bright-gray text-outer-space-crayola"
+          placeholder="Search"
+          value={searchTerm}
+          onInput={handleInput}
         />
-      </button>
-      <input
-        type="text"
-        className="h-5 w-80 mx-2 p-2 outline-none dark:bg-charleston-green border-[1px] border-gainsboro dark:border-quartz focus:border-royal-blue focus:dark:border-medium-persian-blue dark:text-bright-gray text-outer-space-crayola"
-        placeholder="Search"
-        value={searchTerm}
-        onInput={handleInput}
-      />
-      <button
-        onClick={() => {
-          setSearchTerm('');
-        }}
-        className="w-3 h-3"
-        title="Clear Search"
-      >
-        <CrossIcon className="text-mischka" />
-      </button>
+        <button
+          onClick={() => {
+            setSearchTerm('');
+          }}
+          className="w-3 h-3"
+          title="Clear Search"
+        >
+          <CrossIcon className="text-mischka" />
+        </button>
+      </div>
+      <div className="border-l border-american-silver dark:border-quartz px-2 h-full flex items-center justify-center">
+        <button
+          onClick={() => {
+            const selectedKey = Object.values(selectedFrameCookie ?? {})[0];
+            if (selectedKey !== null && selectedKey.parsedCookie) {
+              deleteCookie(getCookieKey(selectedKey.parsedCookie));
+            }
+          }}
+          className="w-3 h-3"
+          title="Clear Search"
+        >
+          <CrossIcon className="text-mischka" />
+        </button>
+      </div>
     </div>
   );
 };

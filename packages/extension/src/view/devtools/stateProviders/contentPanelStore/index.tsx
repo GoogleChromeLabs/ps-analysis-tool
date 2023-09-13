@@ -22,12 +22,13 @@ import React, {
   useRef,
   useEffect,
 } from 'react';
-import { useContextSelector, createContext } from 'use-context-selector';
+import { createContext } from 'use-context-selector';
 
 /**
  * Internal dependencies.
  */
 import { type CookieTableData } from '../../cookies.types';
+import useContextSelector from '../../../../utils/useContextSelector';
 
 export interface ContentPanelStore {
   state: {

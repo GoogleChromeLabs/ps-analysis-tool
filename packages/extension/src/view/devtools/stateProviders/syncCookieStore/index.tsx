@@ -48,6 +48,7 @@ export interface CookieStoreContext {
   actions: {
     setSelectedFrame: React.Dispatch<React.SetStateAction<string | null>>;
     changeListeningToThisTab: () => void;
+    deleteCookie: (cookieName: string) => void;
   };
 }
 
@@ -65,6 +66,7 @@ const initialState: CookieStoreContext = {
   actions: {
     setSelectedFrame: noop,
     changeListeningToThisTab: noop,
+    deleteCookie: noop,
   },
 };
 
@@ -370,6 +372,22 @@ export const Provider = ({ children }: PropsWithChildren) => {
     }
   }, []);
 
+  const deleteCookie = useCallback(
+    async (cookieKey: string) => {
+      const localStorage = await chrome.storage.local.get();
+      if (tabId) {
+        const tabData = localStorage[tabId];
+        const cookieDetails = tabData.cookies[cookieKey];
+        await CookieStore.deleteCookie(cookieKey);
+        await chrome.cookies.remove({
+          name: cookieDetails?.parsedCookie?.name,
+          url: cookieDetails?.url,
+        });
+      }
+    },
+    [tabId]
+  );
+
   useEffect(() => {
     intitialSync();
     chrome.storage.local.onChanged.addListener(storeChangeListener);
@@ -418,6 +436,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         actions: {
           setSelectedFrame,
           changeListeningToThisTab,
+          deleteCookie,
         },
       }}
     >
