@@ -32,6 +32,7 @@ import {
   fetchDictionary,
 } from '../utils/fetchCookieDictionary';
 import { ALLOWED_NUMBER_OF_TABS } from '../constants';
+import getDocumentCookies from '../utils/getDocumentCookies';
 
 let cookieDB: CookieDatabase | null = null;
 
@@ -254,6 +255,9 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   await PROMISE_QUEUE.add(async () => {
     if (changeInfo.status === 'loading' && tab.url) {
       await CookieStore.removeCookieData(tabId.toString());
+    }
+    if (changeInfo.status === 'complete' && tab.url) {
+      await getDocumentCookies(tabId?.toString());
     }
   });
 });
