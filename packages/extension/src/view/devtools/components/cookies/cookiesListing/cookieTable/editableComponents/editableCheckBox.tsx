@@ -25,6 +25,7 @@ import React, { useCallback, useState, useRef, useEffect } from 'react';
 import type { CookieTableData } from '../../../../../cookies.types';
 import { useCookieStore } from '../../../../../stateProviders/syncCookieStore';
 import { getCookieKey } from '../../../../../../../utils/getCookieKey';
+import classNames from 'classnames';
 
 interface EditableCheckBoxInputProps {
   info: CellContext<CookieTableData, unknown>;
@@ -81,7 +82,7 @@ const EditableCheckBoxInput = ({
 
   return (
     <div
-      className="h-full w-full"
+      className="h-full w-full flex items-center"
       onClick={(event) => handleDoubleClick(event)}
     >
       {editing ? (
@@ -89,7 +90,13 @@ const EditableCheckBoxInput = ({
           ref={divRef}
           type="checkbox"
           checked={localValue}
-          className="mx-2 outline-none dark:bg-charleston-green border-[1px] border-gainsboro dark:border-quartz focus:border-royal-blue focus:dark:border-medium-persian-blue dark:text-bright-gray text-outer-space-crayola"
+          className={classNames(
+            'accent-royal-blue dark:accent-orange-400 w-3 h-3 dark:bg-outer-space dark:min-h-0 dark:min-w-0 dark:h-[13px] dark:w-[13px]',
+            {
+              'dark:appearance-none dark:text-manatee dark:border dark:rounded-[3px]':
+                !localValue,
+            }
+          )}
           onChange={(e) => setLocalValue(e.target.checked)}
         />
       ) : (
