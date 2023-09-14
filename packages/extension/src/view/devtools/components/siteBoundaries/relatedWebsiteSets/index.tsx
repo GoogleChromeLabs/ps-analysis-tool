@@ -38,15 +38,13 @@ const RelatedWebsiteSets = () => {
       <InfoCard infoKey={PSInfoKey.RelatedWebsiteSets} />
       <div className="text-raisin-black dark:text-bright-gray max-w-2xl dark:bg-davys-grey border border-gray-200 dark:border-quartz rounded-lg shadow p-6 m-3 flex flex-col gap-3 divide-y divide-gray-200 dark:divide-gray-500">
         <Insights />
-        <>
-          <RWSJsonGenerator open={showForm} />
-          <div className="pt-4">
-            <Button
-              text={showForm ? 'Close' : 'Generate RWS JSON Resources'}
-              onClick={() => setShowForm(!showForm)}
-            />
-          </div>
-        </>
+        <RWSJsonGenerator open={showForm} />
+        <div className="pt-4">
+          <Button
+            text={showForm ? 'Close' : 'Generate RWS JSON Resources'}
+            onClick={() => setShowForm(!showForm)}
+          />
+        </div>
       </div>
     </div>
   );

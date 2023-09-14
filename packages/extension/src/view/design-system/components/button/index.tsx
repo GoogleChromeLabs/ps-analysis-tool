@@ -42,7 +42,7 @@ const Button = ({
         {
           'text-white dark:bg-absolute-zero-crayola bg-absolute-zero-crayola hover:bg-ocean-boat-blue':
             variant === 'primary',
-          'bg-transparent dark:bg-transparent dark:text-bright-gray text-raisin-black':
+          'bg-transparent dark:bg-transparent dark:text-bright-gray text-raisin-black active:opacity-60':
             variant === 'secondary',
           'text-white dark:text-white dark:bg-red-500 bg-red-500 hover:bg-red-600':
             variant === 'danger',

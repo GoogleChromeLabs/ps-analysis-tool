@@ -50,7 +50,7 @@ const Insights = () => {
           {insightsData?.isURLInRWS ? (
             <div>
               <h4 className="text-lg font-semibold">
-                This site belongs to a Related Website Set
+                This site belongs to a Related Website Sets
               </h4>
               <p className="text-sm">
                 Primary Domain:{' '}
@@ -82,14 +82,14 @@ const Insights = () => {
                   </>
                 ) : (
                   <p className="mt-4">
-                    This site is the primary domain of the Related Website Set.
+                    This site is the primary domain of the Related Website Sets.
                   </p>
                 )}
               </div>
             </div>
           ) : (
             <h4 className="text-lg font-semibold">
-              This site does not belong to a Related Website Set
+              This site does not belong to a Related Website Sets
             </h4>
           )}
         </div>
