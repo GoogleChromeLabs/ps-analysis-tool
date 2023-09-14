@@ -30,7 +30,7 @@ const RenderLink = ({ label, link, linkLabel }: RenderLinkProps) => (
     {link ? (
       <li className="py-4">
         <div className="flex items-center">
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0 flex flex-col gap-2">
             <p className="text-sm font-medium text-gray-900 dark:text-bright-gray truncate capitalize">
               {label}
             </p>

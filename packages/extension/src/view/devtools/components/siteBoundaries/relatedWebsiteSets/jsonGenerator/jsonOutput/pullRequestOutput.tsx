@@ -48,7 +48,8 @@ const PullRequestOutput = ({
           >
             canonical list
           </a>{' '}
-          by adding the content below as a new item to the sets list.
+          by adding the content below as a new item to the &quot;sets&quot;
+          list.
         </p>
       </div>
       <Output data={primaryWellKnownOutput} />

@@ -109,7 +109,7 @@ const CountrySites = ({
       </div>
       <div id="countryDomains">
         {countrySites.map(({ site, cctld, siteError, cctldError }, idx) => (
-          <div key={idx} className="flex gap-10 my-3">
+          <div key={idx} className="flex gap-10 my-5">
             <div className="flex-1">
               <RWSSelect
                 selectLabel="For which site is this ccTLD?"

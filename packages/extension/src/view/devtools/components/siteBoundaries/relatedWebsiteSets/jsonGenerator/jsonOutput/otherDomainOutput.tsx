@@ -55,7 +55,9 @@ const OtherDomainOutput = ({
               <p className="text-sm">Associated Sites</p>
               <div className="pl-4">
                 {primaryWellKnownOutput.associatedSites.map((url) => (
-                  <li key={url}>{url}/.well-known/first-party-set.json</li>
+                  <li key={url} className="text-sm">
+                    {url}/.well-known/first-party-set.json
+                  </li>
                 ))}
               </div>
             </div>
@@ -65,7 +67,9 @@ const OtherDomainOutput = ({
               <p className="text-sm">Service Sites</p>
               <div className="pl-4">
                 {primaryWellKnownOutput.serviceSites.map((url) => (
-                  <li key={url}>{url}/.well-known/first-party-set.json</li>
+                  <li key={url} className="text-sm">
+                    {url}/.well-known/first-party-set.json
+                  </li>
                 ))}
               </div>
             </div>
@@ -76,7 +80,7 @@ const OtherDomainOutput = ({
               <div className="pl-4">
                 {Object.values(primaryWellKnownOutput.ccTLDs).map((cctlds) =>
                   cctlds.map((cctld) => (
-                    <li key={cctld}>
+                    <li key={cctld} className="text-sm">
                       {cctld}/.well-known/first-party-set.json
                     </li>
                   ))

@@ -94,7 +94,7 @@ const AssociatedSites = ({
       <div id="associatedDomains">
         {associatedSites.map(
           ({ url, rationale, urlError, rationaleError }, idx) => (
-            <div key={idx} className="flex gap-10 my-3">
+            <div key={idx} className="flex gap-10 my-5">
               <div className="flex-1">
                 <RWSInput
                   inputLabel={`Associated Domain #${idx + 1}`}
@@ -111,7 +111,7 @@ const AssociatedSites = ({
                 <RWSInput
                   inputLabel={`Rationale Domain #${idx + 1}`}
                   inputValue={rationale}
-                  inputPlaceholder="Connected to the primary domain because..."
+                  inputPlaceholder="Affiliation to primary domain"
                   inputChangeHandler={(e) => {
                     updateAssociatedSites(idx, 'rationale', e.target.value);
                   }}

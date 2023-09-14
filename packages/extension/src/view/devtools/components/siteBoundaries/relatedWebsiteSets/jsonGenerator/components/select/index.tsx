@@ -44,7 +44,7 @@ const RWSSelect = ({
       <label className="text-sm">{selectLabel}</label>
       <select
         className={classNames(
-          'my-1 py-1 px-2 outline-none border dark:bg-raisin-black dark:text-bright-gray text-outer-space-crayola',
+          'my-1 p-1 outline-none border dark:bg-raisin-black dark:text-bright-gray text-outer-space-crayola',
           {
             [errorOccured
               ? 'border-red-500 dark:border-red-500'

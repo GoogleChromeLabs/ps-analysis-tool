@@ -44,7 +44,7 @@ const PrimaryDomainOutput = ({
         </p>
       </div>
       <ul className="mb-2">
-        <li id="primaryOutput">
+        <li id="primaryOutput" className="text-sm">
           {primaryWellKnownOutput && primaryWellKnownOutput.primary
             ? primaryWellKnownOutput.primary +
               '/.well-known/first-party-set.json'

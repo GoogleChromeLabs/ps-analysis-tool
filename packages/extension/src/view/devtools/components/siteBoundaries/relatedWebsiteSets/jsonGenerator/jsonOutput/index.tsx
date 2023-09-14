@@ -67,7 +67,7 @@ const JsonOutput = ({
           <h4 className="text-lg my-4 font-semibold">
             Here are your JSON resources:
             <br />
-            <span className="text-xs font-normal">
+            <span className="text-sm font-normal">
               Please follow the steps below to submit your Related Website Set
               to the canonical list.
             </span>
@@ -96,7 +96,7 @@ const JsonOutput = ({
               <Button
                 text={
                   <>
-                    View pull request from a fork guide
+                    View pull request guide
                     <span className="w-4 h-4 ml-2 inline-block">
                       <ArrowRight />
                     </span>

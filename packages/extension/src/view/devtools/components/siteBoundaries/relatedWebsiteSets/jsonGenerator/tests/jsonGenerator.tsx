@@ -114,7 +114,7 @@ describe('RWSJsonGenerator', () => {
     expect(domainInput).toHaveValue('https://associated.com');
 
     const rationaleInput = screen.getByPlaceholderText(
-      'Connected to the primary domain because...'
+      'Affiliation to primary domain'
     );
 
     fireEvent.change(rationaleInput, {
@@ -167,7 +167,7 @@ describe('RWSJsonGenerator', () => {
     expect(domainInput).toHaveValue('https://service.com');
 
     const rationaleInput = screen.getByPlaceholderText(
-      'Connected to the primary domain because...'
+      'Affiliation to primary domain'
     );
 
     fireEvent.change(rationaleInput, {
@@ -231,7 +231,7 @@ describe('RWSJsonGenerator', () => {
     });
 
     const rationaleInput = screen.getByPlaceholderText(
-      'Connected to the primary domain because...'
+      'Affiliation to primary domain'
     );
 
     fireEvent.change(rationaleInput, {

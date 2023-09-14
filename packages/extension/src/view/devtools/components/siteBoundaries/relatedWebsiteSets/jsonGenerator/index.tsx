@@ -135,81 +135,83 @@ const RWSJsonGenerator = ({ open }: RWSJsonGeneratorProps) => {
   return (
     <>
       {open && (
-        <div className="overflow-auto text-raisin-black dark:text-bright-gray w-full border-b border-american-silver dark:border-quartz min-w-[33rem]">
-          <h1 className="text-lg font-semibold mt-4">
-            Related Website Sets JSON Generator
-          </h1>
-          <p className="text-xs py-3">
-            This tool generates the JSON resources needed to make a Related
-            Website Sets(RWS) submission. It <b>does not</b> perform all the
-            required technical validations (see full requirements{' '}
-            <a
-              className="text-blue-500 hover:opacity-70"
-              href="https://github.com/GoogleChrome/first-party-sets/blob/main/FPS-Submission_Guidelines.md"
-              target="_blank"
-              rel="noreferrer"
-            >
-              here
-            </a>
-            ).
-          </p>
-          <div className="my-4 border rounded-xl border-gray-200 dark:border-quartz dark:bg-charleston-green px-4 py-3 shadow">
-            <p className="text-base my-3">
-              Enter your Related Website Sets details below:
+        <div className="overflow-auto">
+          <div className="text-raisin-black dark:text-bright-gray w-full border-b border-american-silver dark:border-quartz min-w-[33rem]">
+            <h1 className="text-lg font-semibold mt-4">
+              Related Website Sets JSON Generator
+            </h1>
+            <p className="text-xs py-3">
+              This tool generates the JSON resources needed to make a Related
+              Website Sets(RWS) submission. It <b>does not</b> perform all the
+              required technical validations (see full requirements{' '}
+              <a
+                className="text-blue-500 hover:opacity-70"
+                href="https://github.com/GoogleChrome/first-party-sets/blob/main/FPS-Submission_Guidelines.md"
+                target="_blank"
+                rel="noreferrer"
+              >
+                here
+              </a>
+              ).
             </p>
-            <form onSubmit={handleSubmit} onReset={handleReset}>
-              <ContactEmail
-                contact={contact}
-                setContact={setContact}
-                validationFailed={validationFailed}
+            <div className="my-4 border rounded-xl border-gray-200 dark:border-quartz dark:bg-charleston-green px-4 py-3 shadow">
+              <p className="text-base my-3">
+                Enter your Related Website Sets details below:
+              </p>
+              <form onSubmit={handleSubmit} onReset={handleReset}>
+                <ContactEmail
+                  contact={contact}
+                  setContact={setContact}
+                  validationFailed={validationFailed}
+                />
+                <PrimaryDomain
+                  primaryDomain={primaryDomain}
+                  setPrimaryDomain={setPrimaryDomain}
+                  validationFailed={validationFailed}
+                />
+                <div className="divide-y divide-american-silver dark:divide-quartz">
+                  <AssociatedSites
+                    associatedSites={associatedSites}
+                    setAssociatedSites={setAssociatedSites}
+                    validationFailed={validationFailed}
+                  />
+                  <ServiceSites
+                    serviceSites={serviceSites}
+                    setServiceSites={setServiceSites}
+                    validationFailed={validationFailed}
+                  />
+                  <CountrySites
+                    countrySites={countrySites}
+                    setCountrySites={setCountrySites}
+                    availableSites={[
+                      primaryDomain.url,
+                      ...associatedSites.map(({ url }) => url),
+                      ...serviceSites.map(({ url }) => url),
+                    ].filter((url) => Boolean(url))}
+                    validationFailed={validationFailed}
+                  />
+                </div>
+                <div className="my-3 flex items-center justify-start">
+                  {loading ? (
+                    <div className="flex items-center justify-center">
+                      <div className="w-6 h-6 rounded-full animate-spin border-t-transparent border-solid border-blue-700 border-2" />
+                    </div>
+                  ) : (
+                    <div className="flex gap-2">
+                      <Button text="Submit" type="submit" />
+                      <Button text="Reset" type="reset" variant="danger" />
+                    </div>
+                  )}
+                </div>
+              </form>
+            </div>
+            {!loading && !validationFailed && (
+              <JsonOutput
+                primaryWellKnownOutput={primaryWellKnownOutput}
+                otherWellKnownOutput={otherWellKnownOutput}
               />
-              <PrimaryDomain
-                primaryDomain={primaryDomain}
-                setPrimaryDomain={setPrimaryDomain}
-                validationFailed={validationFailed}
-              />
-              <div className="divide-y divide-american-silver dark:divide-quartz">
-                <AssociatedSites
-                  associatedSites={associatedSites}
-                  setAssociatedSites={setAssociatedSites}
-                  validationFailed={validationFailed}
-                />
-                <ServiceSites
-                  serviceSites={serviceSites}
-                  setServiceSites={setServiceSites}
-                  validationFailed={validationFailed}
-                />
-                <CountrySites
-                  countrySites={countrySites}
-                  setCountrySites={setCountrySites}
-                  availableSites={[
-                    primaryDomain.url,
-                    ...associatedSites.map(({ url }) => url),
-                    ...serviceSites.map(({ url }) => url),
-                  ].filter((url) => Boolean(url))}
-                  validationFailed={validationFailed}
-                />
-              </div>
-              <div className="my-3 flex items-center justify-start">
-                {loading ? (
-                  <div className="flex items-center justify-center">
-                    <div className="w-6 h-6 rounded-full animate-spin border-t-transparent border-solid border-blue-700 border-2" />
-                  </div>
-                ) : (
-                  <div className="flex gap-2">
-                    <Button text="Submit" type="submit" />
-                    <Button text="Reset" type="reset" variant="danger" />
-                  </div>
-                )}
-              </div>
-            </form>
+            )}
           </div>
-          {!loading && !validationFailed && (
-            <JsonOutput
-              primaryWellKnownOutput={primaryWellKnownOutput}
-              otherWellKnownOutput={otherWellKnownOutput}
-            />
-          )}
         </div>
       )}
     </>
