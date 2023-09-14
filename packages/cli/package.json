@@ -25,7 +25,7 @@
     "promptly": "^3.2.0",
     "puppeteer": "^21.0.3",
     "simple-cookie": "^1.0.15",
-    "sitemapper": "^3.2.6",
+    "sitemapper": "^3.1.8",
     "tldts": "^6.0.14",
     "wappalyzer": "^6.10.66"
   },
