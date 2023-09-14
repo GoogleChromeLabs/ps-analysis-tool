@@ -50,6 +50,12 @@ export interface CookieStoreContext {
     setSelectedFrame: React.Dispatch<React.SetStateAction<string | null>>;
     changeListeningToThisTab: () => void;
     deleteCookie: (cookieName: string) => void;
+    modifyCookie: (
+      cookieName: string,
+      changedKey: string,
+      changedValue: string | boolean,
+      previousValue: string | null
+    ) => void;
   };
 }
 
@@ -68,6 +74,7 @@ const initialState: CookieStoreContext = {
     setSelectedFrame: noop,
     changeListeningToThisTab: noop,
     deleteCookie: noop,
+    modifyCookie: noop,
   },
 };
 
@@ -389,6 +396,150 @@ export const Provider = ({ children }: PropsWithChildren) => {
     [tabId]
   );
 
+  const modifierForNonNameUpdate = useCallback(
+    async (
+      cookieKey: string,
+      changedKey: string,
+      changedValue: string | boolean
+    ) => {
+      const localStorage = await chrome.storage.local.get();
+      if (tabId) {
+        const newTabData = localStorage[tabId];
+        let newCookieKey = cookieKey;
+        const { [cookieKey]: cookieDetails, ...restOfCookies } =
+          newTabData.cookies;
+        if (changedKey === 'domain') {
+          newCookieKey =
+            cookieDetails.parsedCookie.name +
+            changedValue +
+            cookieDetails.parsedCookie.path;
+        } else if (changedKey === 'path') {
+          newCookieKey =
+            cookieDetails.parsedCookie.name +
+            cookieDetails.parsedCookie.domain +
+            changedValue;
+        }
+
+        await chrome.storage.local.set({
+          ...localStorage,
+          [tabId]: {
+            cookies: {
+              ...restOfCookies,
+              [newCookieKey]: {
+                ...cookieDetails,
+                parsedCookie: {
+                  ...cookieDetails.parsedCookie,
+                  [changedKey.toLowerCase()]: changedValue,
+                },
+              },
+            },
+          },
+        });
+        const currentCookie = await chrome.cookies.get({
+          name: cookieDetails.parsedCookie.name,
+          url: cookieDetails.url,
+        });
+
+        chrome.cookies.set({
+          domain: currentCookie?.domain,
+          expirationDate: currentCookie?.expirationDate,
+          httpOnly: currentCookie?.httpOnly,
+          name: currentCookie?.name,
+          path: currentCookie?.path,
+          sameSite: currentCookie?.sameSite,
+          secure: currentCookie?.secure,
+          storeId: currentCookie?.storeId,
+          value: currentCookie?.value,
+          [changedKey]: changedValue,
+          url: cookieDetails.url,
+        });
+      }
+    },
+    [tabId]
+  );
+
+  const modifierForNameUpdate = useCallback(
+    async (
+      cookieKey: string,
+      changedKey: string,
+      changedValue: string,
+      previousValue: string
+    ) => {
+      const localStorage = await chrome.storage.local.get();
+      if (tabId) {
+        const newTabData = localStorage[tabId];
+        const { [cookieKey]: cookieDetails, ...restOfCookies } =
+          newTabData.cookies;
+        await chrome.storage.local.set({
+          ...localStorage,
+          [tabId]: {
+            cookies: {
+              ...restOfCookies,
+              [changedValue +
+              cookieDetails.parsedCookie.domain +
+              cookieDetails.parsedCookie.path]: {
+                ...cookieDetails,
+                analytics: {
+                  ...cookieDetails?.analytics,
+                  name: changedValue,
+                },
+                parsedCookie: {
+                  ...cookieDetails.parsedCookie,
+                  [changedKey]: changedValue,
+                },
+              },
+            },
+          },
+        });
+
+        const currentCookie = await chrome.cookies.get({
+          name: previousValue,
+          url: cookieDetails.url,
+        });
+        await chrome.cookies.remove({
+          name: previousValue,
+          url: cookieDetails.url,
+        });
+
+        chrome.cookies.set({
+          domain: currentCookie?.domain,
+          expirationDate: currentCookie?.expirationDate,
+          httpOnly: currentCookie?.httpOnly,
+          name: currentCookie?.name,
+          path: currentCookie?.path,
+          sameSite: currentCookie?.sameSite,
+          secure: currentCookie?.secure,
+          storeId: currentCookie?.storeId,
+          value: currentCookie?.value,
+          [changedKey]: changedValue,
+          url: cookieDetails.url,
+        });
+      }
+    },
+    [tabId]
+  );
+
+  const modifyCookie = useCallback(
+    async (
+      cookieKey: string,
+      changedKey: string,
+      changedValue: string | boolean,
+      previousValue: string | null
+    ) => {
+      if (previousValue) {
+        await modifierForNameUpdate(
+          cookieKey,
+          changedKey,
+          changedValue as string,
+          previousValue
+        );
+        return;
+      }
+      await modifierForNonNameUpdate(cookieKey, changedKey, changedValue);
+    },
+    [modifierForNameUpdate, modifierForNonNameUpdate]
+  );
+
   useEffect(() => {
     intitialSync();
     chrome.storage.local.onChanged.addListener(storeChangeListener);
@@ -438,6 +589,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           setSelectedFrame,
           changeListeningToThisTab,
           deleteCookie,
+          modifyCookie,
         },
       }}
     >

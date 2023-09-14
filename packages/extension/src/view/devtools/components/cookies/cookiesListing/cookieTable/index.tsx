@@ -33,6 +33,8 @@ import Table from '../../../../../design-system/components/table';
 import { useContentPanelStore } from '../../../../stateProviders/contentPanelStore';
 import type { CookieTableData } from '../../../../cookies.types';
 import { getCookieKey } from '../../../../../../utils/getCookieKey';
+import EditableTextInput from './editableComponents/editableTextInput';
+import EditableCheckBoxInput from './editableComponents/editableCheckBox';
 
 export interface CookieTableProps {
   cookies: CookieTableData[];
@@ -43,23 +45,23 @@ const tableColumns: ColumnDef<CookieTableData>[] = [
   {
     header: 'Name',
     accessorKey: 'parsedCookie.name',
-    cell: (info) => info.getValue(),
+    cell: (info) => <EditableTextInput info={info} changedKey="name" />,
     enableHiding: false,
   },
   {
     header: 'Value',
     accessorKey: 'parsedCookie.value',
-    cell: (info) => info.getValue(),
+    cell: (info) => <EditableTextInput info={info} changedKey="value" />,
   },
   {
     header: 'Domain',
     accessorKey: 'parsedCookie.domain',
-    cell: (info) => info.getValue(),
+    cell: (info) => <EditableTextInput info={info} changedKey="domain" />,
   },
   {
     header: 'Path',
     accessorKey: 'parsedCookie.path',
-    cell: (info) => info.getValue(),
+    cell: (info) => <EditableTextInput info={info} changedKey="path" />,
   },
   {
     header: 'Expires / Max-Age',
@@ -69,27 +71,17 @@ const tableColumns: ColumnDef<CookieTableData>[] = [
   {
     header: 'HttpOnly',
     accessorKey: 'parsedCookie.httponly',
-    cell: (info) => (
-      <p className="flex justify-center items-center">
-        {info.getValue() ? <span className="font-serif">✓</span> : ''}
-      </p>
-    ),
+    cell: (info) => <EditableCheckBoxInput info={info} changedKey="httpOnly" />,
   },
   {
     header: 'SameSite',
     accessorKey: 'parsedCookie.samesite',
-    cell: (info) => (
-      <span className="capitalize">{info.getValue() as string}</span>
-    ),
+    cell: (info) => <EditableTextInput info={info} changedKey="sameSite" />,
   },
   {
     header: 'Secure',
     accessorKey: 'parsedCookie.secure',
-    cell: (info) => (
-      <p className="flex justify-center items-center">
-        {info.getValue() ? <span className="font-serif">✓</span> : ''}
-      </p>
-    ),
+    cell: (info) => <EditableCheckBoxInput info={info} changedKey="secure" />,
   },
   {
     header: 'Category',
