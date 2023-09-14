@@ -5,6 +5,8 @@
 	"scripts": {
 		"cli:dev": "tsc-watch",
 		"cli:build": "tsc --build",
+		"cli-report:dev": "npm run dev --workspace=@cookie-analysis-tool/cli-report",
+		"cli-report:build": "npm run build --workspace=@cookie-analysis-tool/cli-report",
 		"cli":"node dist/cli/index.js",
 		"test": "jest --config=tests/jest.config.cjs",
 		"test:coverage": "npm run test -- --collectCoverage && open coverage/lcov-report/index.html",
