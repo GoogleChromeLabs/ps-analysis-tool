@@ -52,6 +52,8 @@ const addFrameOverlay = (selectedFrame: string) => {
       removeAllOverlays();
       body.appendChild(overlay);
 
+      overlay.showPopover();
+
       iframe.scrollIntoView({
         behavior: 'smooth',
         block: 'start',

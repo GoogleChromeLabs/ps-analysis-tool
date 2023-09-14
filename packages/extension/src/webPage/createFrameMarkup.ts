@@ -42,19 +42,22 @@ export const createFrameOverlay = (frame: HTMLElement) => {
 
   const styles: Record<string, string> = {
     position: 'absolute',
-    backgroundColor: '#33be3377',
-    zIndex: '2147483647', // max possible z index
+    backgroundColor: '#1a73e859',
     pointerEvents: 'none',
     width: frameWidth + 'px',
     height: frameHeight + 'px',
     top: frameY + Number(window.scrollY) + 'px',
     left: frameX + Number(window.scrollX) + 'px',
+    border: '0px',
+    margin: 'initial',
   };
 
   // eslint-disable-next-line guard-for-in
   for (const key in styles) {
     frameOverlay.style[key] = styles[key];
   }
+
+  frameOverlay.popover = 'auto';
 
   return frameOverlay;
 };
@@ -78,8 +81,6 @@ export const createIframeInfoBlock = (frame) => {
     backgroundColor: 'white',
     margin: '10px',
     padding: '10px',
-    position: 'relative',
-    zIndex: '2147483647',
   };
 
   // eslint-disable-next-line guard-for-in
