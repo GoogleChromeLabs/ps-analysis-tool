@@ -35,8 +35,9 @@ const RenderLink = ({ label, link, linkLabel }: RenderLinkProps) => (
               {label}
             </p>
             <a
+              title={link}
               href={link}
-              className="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-500"
+              className="text-xs text-bright-navy-blue dark:text-jordy-blue hover:opacity-80"
               target="_blank"
               rel="noreferrer"
             >

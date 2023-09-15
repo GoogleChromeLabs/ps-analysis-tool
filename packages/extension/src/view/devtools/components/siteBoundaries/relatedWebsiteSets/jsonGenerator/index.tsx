@@ -78,7 +78,8 @@ const RWSJsonGenerator = ({ open }: RWSJsonGeneratorProps) => {
               Website Sets(RWS) submission. It <b>does not</b> perform all the
               required technical validations (see full requirements{' '}
               <a
-                className="text-blue-500 hover:opacity-70"
+                className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80"
+                title="https://github.com/GoogleChrome/first-party-sets/blob/main/FPS-Submission_Guidelines.md"
                 href="https://github.com/GoogleChrome/first-party-sets/blob/main/FPS-Submission_Guidelines.md"
                 target="_blank"
                 rel="noreferrer"
