@@ -111,5 +111,8 @@
 	},
 	"workspaces": [
 		"packages/*"
-	]
+	],
+	"overrides": {
+		"xml2js": "^0.5.0"
+	}
 }
