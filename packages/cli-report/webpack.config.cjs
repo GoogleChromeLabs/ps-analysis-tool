@@ -45,7 +45,7 @@ const commonConfig = {
             loader: 'postcss-loader',
             options: {
               postcssOptions: {
-                config: path.resolve(__dirname, './postcss.config.cjs'),
+                config: path.resolve(__dirname, '../../postcss.config.cjs'),
               },
             },
           },

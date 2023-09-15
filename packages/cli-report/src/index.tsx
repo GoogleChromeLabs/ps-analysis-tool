@@ -19,8 +19,13 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 
+/**
+ * Internal dependencies.
+ */
+import '../app.css';
+
 const root = document.getElementById('root');
 
 if (root) {
-  createRoot(root).render(<p>Hello</p>);
+  createRoot(root).render(<p className="">Hello</p>);
 }
