@@ -26,7 +26,7 @@ delete colors['blueGray'];
 
 module.exports = {
   darkMode: 'class',
-  content: ['./packages/extension/src/**/*.{tsx,js}'],
+  content: ['./src/**/*.{tsx,js}'],
   theme: {
     extend: {
       boxShadow: {
