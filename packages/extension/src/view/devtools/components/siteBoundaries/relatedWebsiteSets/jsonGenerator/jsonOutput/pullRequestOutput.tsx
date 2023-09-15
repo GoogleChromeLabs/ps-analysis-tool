@@ -42,6 +42,7 @@ const PullRequestOutput = ({
           Submit a GitHub PR with your Related Site Set to the{' '}
           <a
             className="text-blue-500 hover:opacity-70"
+            title="https://github.com/GoogleChrome/first-party-sets/blob/main/first_party_sets.JSON"
             href="https://github.com/GoogleChrome/first-party-sets/blob/main/first_party_sets.JSON"
             target="_blank"
             rel="noreferrer"
