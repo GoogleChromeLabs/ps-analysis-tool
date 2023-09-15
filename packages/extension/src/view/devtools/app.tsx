@@ -36,12 +36,14 @@ const App: React.FC = () => {
     changeListeningToThisTab,
     allowedNumberOfTabs,
     loading,
+    contextInvalidated,
   } = useCookieStore(({ state, actions }) => ({
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
     returningToSingleTab: state.returningToSingleTab,
     changeListeningToThisTab: actions.changeListeningToThisTab,
     allowedNumberOfTabs: state.allowedNumberOfTabs,
     loading: state.loading,
+    contextInvalidated: state.contextInvalidated,
   }));
   const TabContent = TABS[selectedTabIndex].component;
 
@@ -100,12 +102,19 @@ const App: React.FC = () => {
   return (
     <div className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black">
       <div className="w-full h-full flex flex-col items-center justify-center">
-        {!returningToSingleTab && (
+        {!returningToSingleTab && !contextInvalidated && (
           <p className="dark:text-bright-gray text-chart-label text-base mb-5">
             This tool works best with a single tab.
           </p>
         )}
-        <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
+        {contextInvalidated ? (
+          <p className="dark:text-bright-gray text-chart-label text-base mb-5">
+            Uh Oh! Looks like extension has been updated since devtools was
+            open. Please close and reopen the devtools panel.
+          </p>
+        ) : (
+          <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
+        )}
       </div>
     </div>
   );
