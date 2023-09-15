@@ -39,7 +39,7 @@ const ServiceSites = ({
   addServiceSite,
   removeServiceSite,
   setServiceSites,
-  validationFailed: errorOccured,
+  validationFailed: formValidationFailed,
 }: ServiceSitesProps) => {
   return (
     <div className="p-3">
@@ -60,7 +60,7 @@ const ServiceSites = ({
                     setServiceSites({ idx, key: 'url', value: e.target.value });
                   }}
                   error={urlError}
-                  errorOccured={errorOccured}
+                  formValidationFailed={formValidationFailed}
                 />
               </div>
               <div className="flex-1">
@@ -76,7 +76,7 @@ const ServiceSites = ({
                     });
                   }}
                   error={rationaleError}
-                  errorOccured={errorOccured}
+                  formValidationFailed={formValidationFailed}
                 />
                 <span>
                   How is the affiliation across domains presented and why users

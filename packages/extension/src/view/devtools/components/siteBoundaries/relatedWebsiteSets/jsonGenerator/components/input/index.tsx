@@ -26,7 +26,7 @@ interface RWSInputProps {
   inputPlaceholder: string;
   inputChangeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void;
   error: string;
-  errorOccured: boolean;
+  formValidationFailed: boolean;
 }
 
 const RWSInput = ({
@@ -35,7 +35,7 @@ const RWSInput = ({
   inputPlaceholder,
   inputChangeHandler,
   error,
-  errorOccured,
+  formValidationFailed,
 }: RWSInputProps) => {
   return (
     <div className="flex flex-col gap">
@@ -45,7 +45,7 @@ const RWSInput = ({
         className={classNames(
           'my-1 py-1 px-2 outline-none border dark:bg-raisin-black dark:text-bright-gray text-outer-space-crayola',
           {
-            [errorOccured
+            [formValidationFailed
               ? 'border-red-500 dark:border-red-500'
               : 'border-gainsboro dark:border-quartz']: error,
           },
@@ -57,7 +57,7 @@ const RWSInput = ({
         value={inputValue}
         onChange={inputChangeHandler}
       />
-      {error && errorOccured && (
+      {error && formValidationFailed && (
         <span className="text-red-500 text-xs mt-2">{error}</span>
       )}
     </div>

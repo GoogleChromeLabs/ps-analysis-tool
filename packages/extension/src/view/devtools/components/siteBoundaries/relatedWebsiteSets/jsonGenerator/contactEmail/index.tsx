@@ -34,7 +34,7 @@ interface ContactEmailProps {
 const ContactEmail = ({
   contact,
   setContact,
-  validationFailed: errorOccured,
+  validationFailed: formValidationFailed,
 }: ContactEmailProps) => {
   return (
     <div className="my-4">
@@ -44,7 +44,7 @@ const ContactEmail = ({
         inputValue={contact.email}
         inputChangeHandler={(e) => setContact(e.target.value)}
         error={contact.emailError}
-        errorOccured={errorOccured}
+        formValidationFailed={formValidationFailed}
       />
     </div>
   );

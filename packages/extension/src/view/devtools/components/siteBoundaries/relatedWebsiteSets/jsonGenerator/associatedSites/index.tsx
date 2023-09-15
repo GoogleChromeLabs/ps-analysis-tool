@@ -40,7 +40,7 @@ const AssociatedSites = ({
   addAssociatedSite,
   removeAssociatedSite,
   setAssociatedSites,
-  validationFailed: errorOccured,
+  validationFailed: formValidationFailed,
 }: AssociatedSitesProps) => {
   return (
     <div className="p-3">
@@ -70,7 +70,7 @@ const AssociatedSites = ({
                     });
                   }}
                   error={urlError}
-                  errorOccured={errorOccured}
+                  formValidationFailed={formValidationFailed}
                 />
               </div>
               <div className="flex-1">
@@ -86,7 +86,7 @@ const AssociatedSites = ({
                     });
                   }}
                   error={rationaleError}
-                  errorOccured={errorOccured}
+                  formValidationFailed={formValidationFailed}
                 />
                 <span>
                   How is the affiliation across domains presented and why users

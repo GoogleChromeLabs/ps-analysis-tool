@@ -34,7 +34,7 @@ interface PrimaryDomainProps {
 const PrimaryDomain = ({
   primaryDomain,
   setPrimaryDomain,
-  validationFailed: errorOccured,
+  validationFailed: formValidationFailed,
 }: PrimaryDomainProps) => {
   return (
     <div className="my-4">
@@ -44,7 +44,7 @@ const PrimaryDomain = ({
         inputValue={primaryDomain.url}
         inputChangeHandler={(e) => setPrimaryDomain(e.target.value)}
         error={primaryDomain.urlError}
-        errorOccured={errorOccured}
+        formValidationFailed={formValidationFailed}
       />
     </div>
   );

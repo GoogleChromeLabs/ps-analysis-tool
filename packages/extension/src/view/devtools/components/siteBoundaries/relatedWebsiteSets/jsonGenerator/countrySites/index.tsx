@@ -41,7 +41,7 @@ const CountrySites = ({
   addCountrySite,
   removeCountrySite,
   setCountrySites,
-  validationFailed: errorOccured,
+  validationFailed: formValidationFailed,
 }: CountrySitesProps) => {
   useEffect(() => {
     const siteDiff = countrySites.map((countrySite) => {
@@ -82,7 +82,7 @@ const CountrySites = ({
                 defaultOption="Select a site"
                 options={availableSites}
                 error={siteError}
-                errorOccured={errorOccured}
+                formValidationFailed={formValidationFailed}
               />
             </div>
             <div className="flex-1">
@@ -94,7 +94,7 @@ const CountrySites = ({
                   setCountrySites({ idx, key: 'cctld', value: e.target.value });
                 }}
                 error={cctldError}
-                errorOccured={errorOccured}
+                formValidationFailed={formValidationFailed}
               />
               <span>Country code top-level domain related to the site</span>
             </div>

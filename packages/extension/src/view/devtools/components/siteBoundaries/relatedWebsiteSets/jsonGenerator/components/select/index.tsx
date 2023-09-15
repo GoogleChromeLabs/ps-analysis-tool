@@ -27,7 +27,7 @@ interface RWSSelectProps {
   options: string[];
   selectChangeHandler: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   error: string;
-  errorOccured: boolean;
+  formValidationFailed: boolean;
 }
 
 const RWSSelect = ({
@@ -37,7 +37,7 @@ const RWSSelect = ({
   options,
   selectChangeHandler,
   error,
-  errorOccured,
+  formValidationFailed,
 }: RWSSelectProps) => {
   return (
     <div className="flex flex-col gap">
@@ -46,7 +46,7 @@ const RWSSelect = ({
         className={classNames(
           'my-1 p-1 outline-none border dark:bg-raisin-black dark:text-bright-gray text-outer-space-crayola',
           {
-            [errorOccured
+            [formValidationFailed
               ? 'border-red-500 dark:border-red-500'
               : 'border-gainsboro dark:border-quartz']: error,
           },
@@ -66,7 +66,7 @@ const RWSSelect = ({
           </option>
         ))}
       </select>
-      {error && errorOccured && (
+      {error && formValidationFailed && (
         <span className="text-red-500 text-xs mt-2">{error}</span>
       )}
     </div>
