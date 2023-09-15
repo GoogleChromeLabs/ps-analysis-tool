@@ -50,6 +50,7 @@ export interface CookieStoreContext {
   actions: {
     setSelectedFrame: React.Dispatch<React.SetStateAction<string | null>>;
     changeListeningToThisTab: () => void;
+    getCookiesSetByJavascript: () => void;
   };
 }
 
@@ -68,6 +69,7 @@ const initialState: CookieStoreContext = {
   actions: {
     setSelectedFrame: noop,
     changeListeningToThisTab: noop,
+    getCookiesSetByJavascript: noop,
   },
 };
 
@@ -300,6 +302,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
     },
     [tabId, getAllFramesForCurrentTab]
   );
+  const getCookiesSetByJavascript = useCallback(async () => {
+    if (tabId) {
+      await getDocumentCookies(tabId.toString());
+    }
+  }, [tabId]);
 
   const changeListeningToThisTab = useCallback(async () => {
     try {
@@ -433,6 +440,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         actions: {
           setSelectedFrame,
           changeListeningToThisTab,
+          getCookiesSetByJavascript,
         },
       }}
     >

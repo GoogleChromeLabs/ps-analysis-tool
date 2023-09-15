@@ -28,6 +28,8 @@ import FilterIcon from '../../../../../../../../third_party/icons/filter-icon.sv
 // eslint-disable-next-line import/no-relative-packages
 import CrossIcon from '../../../../../../../../third_party/icons/cross-icon.svg';
 import { useFilterManagementStore } from '../../../stateProviders/filterManagementStore';
+import { Refresh } from '../../../../../icons';
+import { useCookieStore } from '../../../stateProviders/syncCookieStore';
 
 interface CookieSearchProps {
   cookiesAvailable: boolean;
@@ -46,6 +48,10 @@ const CookieSearch = ({
       setSearchTerm: actions.setSearchTerm,
     })
   );
+
+  const { getCookiesSetByJavascript } = useCookieStore(({ actions }) => ({
+    getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
+  }));
 
   const handleInput = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,6 +93,10 @@ const CookieSearch = ({
         title="Clear Search"
       >
         <CrossIcon className="text-mischka" />
+      </button>
+      <div className="h-full w-px bg-american-silver dark:bg-quartz mx-3" />
+      <button onClick={getCookiesSetByJavascript} title="Refresh">
+        <Refresh className="text-mischka" />
       </button>
     </div>
   );

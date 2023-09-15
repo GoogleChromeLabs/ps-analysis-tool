@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import cookie, { type Cookie as ParsedCookie } from 'simple-cookie';
+import { type Cookie as ParsedCookie } from 'simple-cookie';
 
 /**
  * Internal dependencies.
@@ -39,57 +39,68 @@ async function getDocumentCookies(tabId: string) {
   chrome.devtools.inspectedWindow.eval(
     'document.cookie.split(";")',
     (result: string[], isException) => {
-      if (!isException && result.length > 0) {
+      if (!isException && result.length > 1) {
         documentCookies = result;
+        chrome.devtools.inspectedWindow.eval(
+          'window.location.href',
+          async (tabUrlResult: string, tabUrlIsException) => {
+            if (!tabUrlIsException && typeof tabUrlResult === 'string') {
+              tabUrl = tabUrlResult;
+
+              const frames = await chrome.webNavigation.getAllFrames({
+                tabId: Number(tabId),
+              });
+
+              const outerMostFrame = frames?.filter(
+                (frame) => frame.frameType === 'outermost_frame'
+              );
+
+              parsedCookieData = await Promise.all(
+                documentCookies.map(async (singleCookie) => {
+                  const cookieValue = singleCookie.split('=')[1]?.trim();
+                  const cookieName = singleCookie.split('=')[0]?.trim();
+                  let analytics;
+
+                  let parsedCookie = {
+                    name: cookieName,
+                    value: cookieValue,
+                  } as ParsedCookie;
+                  parsedCookie = await createCookieObject(parsedCookie, tabUrl);
+                  if (dictionary) {
+                    analytics = findAnalyticsMatch(
+                      parsedCookie.name,
+                      dictionary
+                    );
+                  }
+                  const isFirstPartyCookie = isFirstParty(
+                    parsedCookie.domain || '',
+                    tabUrl
+                  );
+                  return Promise.resolve({
+                    parsedCookie,
+                    analytics:
+                      analytics && Object.keys(analytics).length > 0
+                        ? analytics
+                        : null,
+                    url: tabUrl,
+                    headerType: 'document',
+                    isFirstParty: isFirstPartyCookie || null,
+                    frameIdList: [
+                      outerMostFrame && outerMostFrame[0]
+                        ? outerMostFrame[0]?.frameId
+                        : 0,
+                    ],
+                  });
+                })
+              );
+              await CookieStore.update(tabId, parsedCookieData);
+            }
+          }
+        );
       } else {
         return;
       }
     }
   );
-  chrome.devtools.inspectedWindow.eval(
-    'window.location.href',
-    (result, isException) => {
-      if (!isException && typeof result === 'string') {
-        tabUrl = result;
-      }
-    }
-  );
-
-  const frames = await chrome.webNavigation.getAllFrames({
-    tabId: Number(tabId),
-  });
-  const outerMostFrame = frames?.filter(
-    (frame) => frame.frameType === 'outermost_frame'
-  );
-
-  parsedCookieData = await Promise.all(
-    documentCookies.map(async (singleCookie) => {
-      const cookieValue = singleCookie.split('=')[1];
-      let analytics;
-
-      let parsedCookie: ParsedCookie = cookie.parse(cookieValue);
-      parsedCookie = await createCookieObject(parsedCookie, tabUrl);
-
-      if (dictionary) {
-        analytics = findAnalyticsMatch(parsedCookie.name, dictionary);
-      }
-      const isFirstPartyCookie = isFirstParty(
-        parsedCookie.domain || '',
-        tabUrl
-      );
-      return Promise.resolve({
-        parsedCookie,
-        analytics:
-          analytics && Object.keys(analytics).length > 0 ? analytics : null,
-        url: tabUrl,
-        headerType: 'document',
-        isFirstParty: isFirstPartyCookie || null,
-        frameIdList: [
-          outerMostFrame && outerMostFrame[0] ? outerMostFrame[0]?.frameId : 0,
-        ],
-      });
-    })
-  );
-  await CookieStore.update(tabId, parsedCookieData);
 }
 export default getDocumentCookies;
