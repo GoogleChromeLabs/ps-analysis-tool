@@ -63,7 +63,7 @@ describe('RelatedWebsiteSets Insights', () => {
     render(<Insights />);
 
     expect(
-      await screen.findByText('This site belongs to a Related Website Set')
+      await screen.findByText('This site belongs to a Related Website Sets')
     ).toBeInTheDocument();
 
     expect(
@@ -83,7 +83,7 @@ describe('RelatedWebsiteSets Insights', () => {
 
     expect(
       await screen.findByText(
-        'This site does not belong to a Related Website Set'
+        'This site does not belong to a Related Website Sets'
       )
     ).toBeInTheDocument();
   });
@@ -99,7 +99,7 @@ describe('RelatedWebsiteSets Insights', () => {
     render(<Insights />);
 
     expect(
-      await screen.findByText('This site belongs to a Related Website Set')
+      await screen.findByText('This site belongs to a Related Website Sets')
     ).toBeInTheDocument();
 
     expect(
