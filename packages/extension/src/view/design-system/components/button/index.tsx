@@ -21,6 +21,7 @@ import React from 'react';
 
 interface ButtonProps {
   text: string | React.ReactNode;
+  name?: string;
   onClick?: () => void;
   loading?: boolean;
   type?: 'button' | 'submit' | 'reset';
@@ -28,6 +29,7 @@ interface ButtonProps {
 }
 const Button = ({
   text,
+  name = 'button',
   onClick = undefined,
   type = 'button',
   variant = 'primary',
@@ -36,6 +38,7 @@ const Button = ({
     <button
       data-test-id="button"
       type={type}
+      name={name}
       onClick={onClick ? onClick : undefined}
       className={classNames(
         'py-1 px-2 rounded font-medium flex items-center text-center',

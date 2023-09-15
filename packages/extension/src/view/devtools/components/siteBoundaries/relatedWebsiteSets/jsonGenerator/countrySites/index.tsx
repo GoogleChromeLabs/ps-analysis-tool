@@ -22,11 +22,9 @@ import React, { useEffect } from 'react';
 /**
  * Internal dependencies.
  */
-import { RWSInput, RWSSelect } from '../components';
-import { Button } from '../../../../../../design-system/components';
-import { Add, Cross } from '../../../../../../../icons';
 import type { CountrySiteType } from '../types';
 import type { SitePayloadType } from '../useGeneratorForm/types';
+import { AddButton, RWSInput, RWSSelect, RemoveButton } from '../components';
 
 interface CountrySitesProps {
   countrySites: CountrySiteType[];
@@ -69,7 +67,7 @@ const CountrySites = ({
         <p className="text-base">
           Country Code Top-level Domains <span>(ccTLDs)</span>
         </p>
-        <Button text={<Add />} onClick={addCountrySite} variant="secondary" />
+        <AddButton onClick={addCountrySite} />
       </div>
       <div id="countryDomains">
         {countrySites.map(({ site, cctld, siteError, cctldError }, idx) => (
@@ -101,12 +99,7 @@ const CountrySites = ({
               <span>Country code top-level domain related to the site</span>
             </div>
             <div className="flex items-center">
-              <Button
-                text={<Cross />}
-                type="button"
-                variant="secondary"
-                onClick={() => removeCountrySite(idx)}
-              />
+              <RemoveButton onClick={() => removeCountrySite(idx)} />
             </div>
           </div>
         ))}

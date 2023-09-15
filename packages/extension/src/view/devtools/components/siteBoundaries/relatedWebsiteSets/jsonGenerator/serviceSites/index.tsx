@@ -22,11 +22,9 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { RWSInput } from '../components';
-import { Button } from '../../../../../../design-system/components';
-import { Add, Cross } from '../../../../../../../icons';
 import type { ServiceSiteType } from '../types';
 import type { SitePayloadType } from '../useGeneratorForm/types';
+import { AddButton, RWSInput, RemoveButton } from '../components';
 
 interface ServiceSitesProps {
   serviceSites: ServiceSiteType[];
@@ -47,7 +45,7 @@ const ServiceSites = ({
     <div className="p-3">
       <div className="flex justify-between items-center">
         <p className="text-base">Service Subset</p>
-        <Button text={<Add />} onClick={addServiceSite} variant="secondary" />
+        <AddButton onClick={addServiceSite} />
       </div>
       <div id="serviceDomains">
         {serviceSites.map(
@@ -86,12 +84,7 @@ const ServiceSites = ({
                 </span>
               </div>
               <div className="flex items-center">
-                <Button
-                  text={<Cross />}
-                  type="button"
-                  variant="secondary"
-                  onClick={() => removeServiceSite(idx)}
-                />
+                <RemoveButton onClick={() => removeServiceSite(idx)} />
               </div>
             </div>
           )

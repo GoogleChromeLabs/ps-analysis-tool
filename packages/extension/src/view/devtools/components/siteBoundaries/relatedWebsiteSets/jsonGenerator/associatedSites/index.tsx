@@ -23,9 +23,8 @@ import React from 'react';
  * Internal dependencies.
  */
 import type { AssociatedSiteType } from '../types';
-import { Add, Cross, InfoIcon } from '../../../../../../../icons';
-import { RWSInput } from '../components';
-import { Button } from '../../../../../../design-system/components';
+import { InfoIcon } from '../../../../../../../icons';
+import { RWSInput, AddButton, RemoveButton } from '../components';
 import type { SitePayloadType } from '../useGeneratorForm/types';
 
 interface AssociatedSitesProps {
@@ -52,12 +51,7 @@ const AssociatedSites = ({
             <InfoIcon />
           </span>
         </p>
-        <Button
-          text={<Add />}
-          type="button"
-          onClick={addAssociatedSite}
-          variant="secondary"
-        />
+        <AddButton onClick={addAssociatedSite} />
       </div>
       <div id="associatedDomains">
         {associatedSites.map(
@@ -100,14 +94,7 @@ const AssociatedSites = ({
                 </span>
               </div>
               <div className="flex items-center">
-                <Button
-                  text={<Cross />}
-                  type="button"
-                  variant="secondary"
-                  onClick={() => {
-                    removeAssociatedSite(idx);
-                  }}
-                />
+                <RemoveButton onClick={() => removeAssociatedSite(idx)} />
               </div>
             </div>
           )

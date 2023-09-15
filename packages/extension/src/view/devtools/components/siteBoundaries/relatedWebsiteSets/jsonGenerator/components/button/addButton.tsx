@@ -14,7 +14,34 @@
  * limitations under the License.
  */
 
-export { default as RWSInput } from './input';
-export { default as RWSSelect } from './select';
-export { default as AddButton } from './button/addButton';
-export { default as RemoveButton } from './button/removeButton';
+/**
+ * External dependencies.
+ */
+import React from 'react';
+
+/**
+ * Internal dependencies.
+ */
+import { Button } from '../../../../../../../design-system/components';
+import { Add } from '../../../../../../../../icons';
+
+interface AddButtonProps {
+  onClick: () => void;
+}
+
+const AddButton = ({ onClick }: AddButtonProps) => {
+  return (
+    <Button
+      text={
+        <div data-testid="rws-add-button">
+          <Add />
+        </div>
+      }
+      name="add"
+      onClick={onClick}
+      variant="secondary"
+    />
+  );
+};
+
+export default AddButton;

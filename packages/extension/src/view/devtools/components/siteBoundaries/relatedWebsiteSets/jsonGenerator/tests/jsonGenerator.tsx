@@ -57,7 +57,7 @@ describe('RWSJsonGenerator', () => {
     fireEvent.click(submitButton);
 
     expect(
-      await screen.findByText("Contact can't be blank")
+      await screen.findByText('Contact is not a valid email')
     ).toBeInTheDocument();
 
     const contactInput = screen.getByPlaceholderText(
@@ -70,7 +70,11 @@ describe('RWSJsonGenerator', () => {
 
     expect(contactInput).toHaveValue('hello@gmail.com');
 
-    expect(await screen.findByText("Url can't be blank")).toBeInTheDocument();
+    expect(
+      await screen.findByText(
+        'Url should be matching the format https://<example.com>'
+      )
+    ).toBeInTheDocument();
 
     const primaryDomainInput = screen.getByPlaceholderText(
       'https://primary.com'
@@ -86,9 +90,7 @@ describe('RWSJsonGenerator', () => {
   it('should interact with associated sites input', async () => {
     const screen = render(<RWSJsonGenerator open={true} />);
 
-    const addAssociatedSiteButton = screen.getAllByRole('button', {
-      name: 'Add',
-    })[0];
+    const addAssociatedSiteButton = screen.getAllByTestId('rws-add-button')[0];
 
     fireEvent.click(addAssociatedSiteButton);
 
@@ -99,7 +101,11 @@ describe('RWSJsonGenerator', () => {
     fireEvent.click(submitButton);
 
     expect(
-      (await screen.findAllByText("Url can't be blank"))[1]
+      (
+        await screen.findAllByText(
+          'Url should be matching the format https://<example.com>'
+        )
+      )[0]
     ).toBeInTheDocument();
     expect(
       await screen.findByText("Rationale can't be blank")
@@ -127,9 +133,7 @@ describe('RWSJsonGenerator', () => {
       "Connected to the primary domain because it's a subset"
     );
 
-    const removeButton = screen.getByRole('button', {
-      name: 'Remove',
-    });
+    const removeButton = screen.getByTestId('rws-remove-button');
 
     fireEvent.click(removeButton);
 
@@ -139,9 +143,7 @@ describe('RWSJsonGenerator', () => {
   it('should interact with service sites input', async () => {
     const screen = render(<RWSJsonGenerator open={true} />);
 
-    const addServiceSiteButton = screen.getAllByRole('button', {
-      name: 'Add',
-    })[1];
+    const addServiceSiteButton = screen.getAllByTestId('rws-add-button')[1];
 
     fireEvent.click(addServiceSiteButton);
 
@@ -152,7 +154,11 @@ describe('RWSJsonGenerator', () => {
     fireEvent.click(submitButton);
 
     expect(
-      (await screen.findAllByText("Url can't be blank"))[1]
+      (
+        await screen.findAllByText(
+          'Url should be matching the format https://<example.com>'
+        )
+      )[1]
     ).toBeInTheDocument();
     expect(
       await screen.findByText("Rationale can't be blank")
@@ -176,9 +182,7 @@ describe('RWSJsonGenerator', () => {
       },
     });
 
-    const removeButton = screen.getByRole('button', {
-      name: 'Remove',
-    });
+    const removeButton = screen.getByTestId('rws-remove-button');
 
     fireEvent.click(removeButton);
 
@@ -188,9 +192,7 @@ describe('RWSJsonGenerator', () => {
   it('should interact with country sites input', async () => {
     const screen = render(<RWSJsonGenerator open={true} />);
 
-    const addCountrySiteButton = screen.getAllByRole('button', {
-      name: 'Add',
-    })[2];
+    const addCountrySiteButton = screen.getAllByTestId('rws-add-button')[2];
 
     fireEvent.click(addCountrySiteButton);
 
@@ -201,11 +203,19 @@ describe('RWSJsonGenerator', () => {
     fireEvent.click(submitButton);
 
     expect(
-      (await screen.findAllByText("Url can't be blank"))[1]
+      (
+        await screen.findAllByText(
+          'Url should be matching the format https://<example.com>'
+        )
+      )[1]
     ).toBeInTheDocument();
 
     expect(
-      (await screen.findAllByText("Url can't be blank"))[2]
+      (
+        await screen.findAllByText(
+          'Url should be matching the format https://<example.com>'
+        )
+      )[2]
     ).toBeInTheDocument();
 
     const domainInput = screen.getByPlaceholderText('https://cctld.com');
@@ -216,9 +226,7 @@ describe('RWSJsonGenerator', () => {
 
     expect(domainInput).toHaveValue('https://cctld.com');
 
-    const addAssociatedSiteButton = screen.getAllByRole('button', {
-      name: 'Add',
-    })[0];
+    const addAssociatedSiteButton = screen.getAllByTestId('rws-add-button')[0];
 
     fireEvent.click(addAssociatedSiteButton);
 
@@ -254,9 +262,7 @@ describe('RWSJsonGenerator', () => {
 
     expect(select).toHaveValue('');
 
-    const removeButton = screen.getAllByRole('button', {
-      name: 'Remove',
-    })[1];
+    const removeButton = screen.getAllByTestId('rws-remove-button')[1];
 
     fireEvent.click(removeButton);
 
