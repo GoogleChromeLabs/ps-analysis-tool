@@ -82,6 +82,7 @@ const JsonOutput = ({
           <PullRequestOutput primaryWellKnownOutput={primaryWellKnownOutput} />
           <div className="flex justify-between items-center py-4">
             <a
+              title="https://github.com/GoogleChrome/first-party-sets/pulls"
               href="https://github.com/GoogleChrome/first-party-sets/pulls"
               target="_blank"
               rel="noreferrer"
@@ -89,6 +90,7 @@ const JsonOutput = ({
               <Button text={'Create Pull Request'} />
             </a>
             <a
+              title="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork"
               href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork"
               target="_blank"
               rel="noreferrer"
