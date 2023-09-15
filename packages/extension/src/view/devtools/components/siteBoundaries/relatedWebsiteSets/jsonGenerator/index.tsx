@@ -17,126 +17,59 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 
 /**
  * Internal dependencies.
  */
-import type {
-  AssociatedSiteType,
-  ContactEmailType,
-  CountrySiteType,
-  OtherWellKnownOutputType,
-  PrimaryDomainType,
-  PrimaryWellKnownOutputType,
-  ServiceSiteType,
-} from './types';
 import ContactEmail from './contactEmail';
 import PrimaryDomain from './primaryDomain';
 import AssociatedSites from './associatedSites';
 import ServiceSites from './serviceSites';
 import CountrySites from './countrySites';
 import JsonOutput from './jsonOutput';
-import { validateForm } from './utils';
-import createPrimaryOutput from './utils/createOutput';
 import { Button } from '../../../../../design-system/components';
+import useGeneratorForm from './useGeneratorForm';
 
 interface RWSJsonGeneratorProps {
   open: boolean;
 }
 
 const RWSJsonGenerator = ({ open }: RWSJsonGeneratorProps) => {
-  const [contact, setContact] = useState<ContactEmailType>({
-    email: '',
-    emailError: "Contact can't be blank",
-  });
-
-  const [primaryDomain, setPrimaryDomain] = useState<PrimaryDomainType>({
-    url: '',
-    urlError: "Url can't be blank",
-  });
-
-  const [associatedSites, setAssociatedSites] = useState<AssociatedSiteType[]>(
-    []
-  );
-
-  const [serviceSites, setServiceSites] = useState<ServiceSiteType[]>([]);
-
-  const [countrySites, setCountrySites] = useState<CountrySiteType[]>([]);
-
-  const [validationFailed, setValidationFailed] = useState(false);
-
-  const [primaryWellKnownOutput, setPrimaryWellKnownOutput] =
-    useState<PrimaryWellKnownOutputType | null>(null);
-
-  const [otherWellKnownOutput, setOtherWellKnownOutput] =
-    useState<OtherWellKnownOutputType | null>(null);
-
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      setLoading(true);
-      setValidationFailed(false);
-
-      if (
-        validateForm(
-          primaryDomain,
-          contact,
-          associatedSites,
-          serviceSites,
-          countrySites
-        ) !== true
-      ) {
-        setValidationFailed(true);
-      } else {
-        const _primaryWellKnownOutput = createPrimaryOutput(
-          contact.email,
-          primaryDomain.url,
-          associatedSites,
-          serviceSites,
-          countrySites
-        );
-
-        const _otherWellKnownOutput = {
-          primary: primaryDomain.url,
-        };
-
-        setPrimaryWellKnownOutput(_primaryWellKnownOutput);
-        setOtherWellKnownOutput(_otherWellKnownOutput);
-      }
-
-      setTimeout(() => {
-        setLoading(false);
-      }, 100);
+  const {
+    state: {
+      contact,
+      primaryDomain,
+      associatedSites,
+      serviceSites,
+      countrySites,
+      loading,
+      validationPassed,
+      primaryWellKnownOutput,
+      otherWellKnownOutput,
     },
-    [associatedSites, contact, countrySites, primaryDomain, serviceSites]
-  );
-
-  const handleReset = useCallback(() => {
-    setContact({
-      email: '',
-      emailError: "Contact can't be blank",
-    });
-    setPrimaryDomain({
-      url: '',
-      urlError: "Url can't be blank",
-    });
-    setAssociatedSites([]);
-    setServiceSites([]);
-    setCountrySites([]);
-    setValidationFailed(false);
-    setPrimaryWellKnownOutput(null);
-    setOtherWellKnownOutput(null);
-    setLoading(false);
-  }, []);
+    actions: {
+      setContact,
+      setPrimaryDomain,
+      addAssociatedSite,
+      setAssociatedSites,
+      removeAssociatedSite,
+      addServiceSite,
+      setServiceSites,
+      removeServiceSite,
+      addCountrySite,
+      setCountrySites,
+      removeCountrySite,
+      submitForm,
+      resetForm,
+    },
+  } = useGeneratorForm();
 
   return (
     <>
       {open && (
         <div className="overflow-auto">
-          <div className="text-raisin-black dark:text-bright-gray w-full border-b border-american-silver dark:border-quartz min-w-[33rem]">
+          <div className="text-raisin-black dark:text-bright-gray w-full min-w-[33rem]">
             <h1 className="text-lg font-semibold mt-4">
               Related Website Sets JSON Generator
             </h1>
@@ -158,37 +91,49 @@ const RWSJsonGenerator = ({ open }: RWSJsonGeneratorProps) => {
               <p className="text-base my-3">
                 Enter your Related Website Sets details below:
               </p>
-              <form onSubmit={handleSubmit} onReset={handleReset}>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  submitForm();
+                }}
+                onReset={resetForm}
+              >
                 <ContactEmail
                   contact={contact}
                   setContact={setContact}
-                  validationFailed={validationFailed}
+                  validationFailed={!validationPassed}
                 />
                 <PrimaryDomain
                   primaryDomain={primaryDomain}
                   setPrimaryDomain={setPrimaryDomain}
-                  validationFailed={validationFailed}
+                  validationFailed={!validationPassed}
                 />
                 <div className="divide-y divide-american-silver dark:divide-quartz">
                   <AssociatedSites
                     associatedSites={associatedSites}
                     setAssociatedSites={setAssociatedSites}
-                    validationFailed={validationFailed}
+                    removeAssociatedSite={removeAssociatedSite}
+                    addAssociatedSite={addAssociatedSite}
+                    validationFailed={!validationPassed}
                   />
                   <ServiceSites
                     serviceSites={serviceSites}
                     setServiceSites={setServiceSites}
-                    validationFailed={validationFailed}
+                    removeServiceSite={removeServiceSite}
+                    addServiceSite={addServiceSite}
+                    validationFailed={!validationPassed}
                   />
                   <CountrySites
                     countrySites={countrySites}
                     setCountrySites={setCountrySites}
+                    removeCountrySite={removeCountrySite}
+                    addCountrySite={addCountrySite}
                     availableSites={[
                       primaryDomain.url,
                       ...associatedSites.map(({ url }) => url),
                       ...serviceSites.map(({ url }) => url),
                     ].filter((url) => Boolean(url))}
-                    validationFailed={validationFailed}
+                    validationFailed={!validationPassed}
                   />
                 </div>
                 <div className="my-3 flex items-center justify-start">
@@ -205,7 +150,7 @@ const RWSJsonGenerator = ({ open }: RWSJsonGeneratorProps) => {
                 </div>
               </form>
             </div>
-            {!loading && !validationFailed && (
+            {!loading && validationPassed && (
               <JsonOutput
                 primaryWellKnownOutput={primaryWellKnownOutput}
                 otherWellKnownOutput={otherWellKnownOutput}

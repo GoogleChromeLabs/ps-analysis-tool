@@ -17,20 +17,17 @@
 /**
  * External dependencies.
  */
-import React, { useCallback } from 'react';
+import React from 'react';
 
 /**
  * Internal dependencies.
  */
 import type { PrimaryDomainType } from '../types';
-import { validateUrl } from '../utils';
 import { RWSInput } from '../components';
 
 interface PrimaryDomainProps {
   primaryDomain: PrimaryDomainType;
-  setPrimaryDomain: (
-    prev: (prev: PrimaryDomainType) => PrimaryDomainType
-  ) => void;
+  setPrimaryDomain: (value: string) => void;
   validationFailed: boolean;
 }
 
@@ -39,28 +36,13 @@ const PrimaryDomain = ({
   setPrimaryDomain,
   validationFailed: errorOccured,
 }: PrimaryDomainProps) => {
-  const updatePrimaryDomain = useCallback(
-    (value: string) => {
-      value = value.trim();
-
-      setPrimaryDomain((prev) => {
-        const newPrimaryDomain = { ...prev };
-        newPrimaryDomain.url = value;
-        newPrimaryDomain.urlError = validateUrl(value);
-
-        return newPrimaryDomain;
-      });
-    },
-    [setPrimaryDomain]
-  );
-
   return (
     <div className="my-4">
       <RWSInput
         inputLabel="Set Primary Domain"
         inputPlaceholder="https://primary.com"
         inputValue={primaryDomain.url}
-        inputChangeHandler={(e) => updatePrimaryDomain(e.target.value)}
+        inputChangeHandler={(e) => setPrimaryDomain(e.target.value)}
         error={primaryDomain.urlError}
         errorOccured={errorOccured}
       />

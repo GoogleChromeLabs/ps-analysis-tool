@@ -17,64 +17,32 @@
 /**
  * External dependencies.
  */
-import React, { useCallback } from 'react';
+import React from 'react';
 
 /**
  * Internal dependencies.
  */
 import type { AssociatedSiteType } from '../types';
 import { Add, Cross, InfoIcon } from '../../../../../../../icons';
-import { validateRationale, validateUrl } from '../utils';
 import { RWSInput } from '../components';
 import { Button } from '../../../../../../design-system/components';
+import type { SitePayloadType } from '../useGeneratorForm/types';
 
 interface AssociatedSitesProps {
   associatedSites: AssociatedSiteType[];
-  setAssociatedSites: (
-    prev: (prev: AssociatedSiteType[]) => AssociatedSiteType[]
-  ) => void;
+  addAssociatedSite: () => void;
+  removeAssociatedSite: (idx: number) => void;
+  setAssociatedSites: (value: SitePayloadType) => void;
   validationFailed: boolean;
 }
 
 const AssociatedSites = ({
   associatedSites,
+  addAssociatedSite,
+  removeAssociatedSite,
   setAssociatedSites,
   validationFailed: errorOccured,
 }: AssociatedSitesProps) => {
-  const updateAssociatedSites = useCallback(
-    (idx: number, key: string, value: string) => {
-      setAssociatedSites((prev) => {
-        const newAssociatedSites = [...prev];
-        if (key === 'url') {
-          value = value.trim();
-
-          newAssociatedSites[idx].url = value;
-          newAssociatedSites[idx].urlError = validateUrl(value);
-        }
-
-        if (key === 'rationale') {
-          newAssociatedSites[idx].rationale = value;
-          newAssociatedSites[idx].rationaleError = validateRationale(value);
-        }
-
-        return newAssociatedSites;
-      });
-    },
-    [setAssociatedSites]
-  );
-
-  const addAssociatedSite = useCallback(() => {
-    setAssociatedSites((prev) => [
-      ...prev,
-      {
-        url: '',
-        rationale: '',
-        urlError: "Url can't be blank",
-        rationaleError: "Rationale can't be blank",
-      },
-    ]);
-  }, [setAssociatedSites]);
-
   return (
     <div className="p-3">
       <div className="flex justify-between items-center">
@@ -101,7 +69,11 @@ const AssociatedSites = ({
                   inputValue={url}
                   inputPlaceholder="https://associated.com"
                   inputChangeHandler={(e) => {
-                    updateAssociatedSites(idx, 'url', e.target.value);
+                    setAssociatedSites({
+                      idx,
+                      key: 'url',
+                      value: e.target.value,
+                    });
                   }}
                   error={urlError}
                   errorOccured={errorOccured}
@@ -113,7 +85,11 @@ const AssociatedSites = ({
                   inputValue={rationale}
                   inputPlaceholder="Affiliation to primary domain"
                   inputChangeHandler={(e) => {
-                    updateAssociatedSites(idx, 'rationale', e.target.value);
+                    setAssociatedSites({
+                      idx,
+                      key: 'rationale',
+                      value: e.target.value,
+                    });
                   }}
                   error={rationaleError}
                   errorOccured={errorOccured}
@@ -129,9 +105,7 @@ const AssociatedSites = ({
                   type="button"
                   variant="secondary"
                   onClick={() => {
-                    setAssociatedSites((prev) => {
-                      return prev.filter((_, i) => i !== idx);
-                    });
+                    removeAssociatedSite(idx);
                   }}
                 />
               </div>

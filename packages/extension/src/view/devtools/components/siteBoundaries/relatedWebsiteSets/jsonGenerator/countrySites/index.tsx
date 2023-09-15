@@ -17,66 +17,34 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 /**
  * Internal dependencies.
  */
-import type { CountrySiteType } from '../types';
-import { validateUrl } from '../utils';
 import { RWSInput, RWSSelect } from '../components';
 import { Button } from '../../../../../../design-system/components';
 import { Add, Cross } from '../../../../../../../icons';
+import type { CountrySiteType } from '../types';
+import type { SitePayloadType } from '../useGeneratorForm/types';
 
 interface CountrySitesProps {
   countrySites: CountrySiteType[];
-  setCountrySites: (
-    prev: (prev: CountrySiteType[]) => CountrySiteType[]
-  ) => void;
   availableSites: string[];
+  addCountrySite: () => void;
+  removeCountrySite: (idx: number) => void;
+  setCountrySites: (value: SitePayloadType) => void;
   validationFailed: boolean;
 }
 
 const CountrySites = ({
   countrySites,
-  setCountrySites,
   availableSites,
+  addCountrySite,
+  removeCountrySite,
+  setCountrySites,
   validationFailed: errorOccured,
 }: CountrySitesProps) => {
-  const updateCountrySites = useCallback(
-    (idx: number, key: string, value: string) => {
-      value = value.trim();
-
-      setCountrySites((prev) => {
-        const newCountrySites = [...prev];
-        if (key === 'site') {
-          newCountrySites[idx].site = value;
-          newCountrySites[idx].siteError = validateUrl(value);
-        }
-
-        if (key === 'cctld') {
-          newCountrySites[idx].cctld = value;
-          newCountrySites[idx].cctldError = validateUrl(value);
-        }
-
-        return newCountrySites;
-      });
-    },
-    [setCountrySites]
-  );
-
-  const addCountrySite = useCallback(() => {
-    setCountrySites((prev) => [
-      ...prev,
-      {
-        site: '',
-        cctld: '',
-        siteError: "Url can't be blank",
-        cctldError: "Url can't be blank",
-      },
-    ]);
-  }, [setCountrySites]);
-
   useEffect(() => {
     const siteDiff = countrySites.map((countrySite) => {
       if (countrySite.site && !availableSites.includes(countrySite.site)) {
@@ -86,15 +54,11 @@ const CountrySites = ({
     });
 
     if (siteDiff.includes(true)) {
-      setCountrySites((prev) => {
-        const newCountrySites = [...prev];
-        newCountrySites.forEach((countrySite, idx) => {
-          if (siteDiff[idx]) {
-            countrySite.site = '';
-            countrySite.siteError = "Url can't be blank";
-          }
-        });
-        return newCountrySites;
+      const idx = siteDiff.indexOf(true);
+      setCountrySites({
+        idx,
+        key: 'site',
+        value: '',
       });
     }
   }, [availableSites, countrySites, setCountrySites]);
@@ -115,7 +79,7 @@ const CountrySites = ({
                 selectLabel="For which site is this ccTLD?"
                 selectValue={site}
                 selectChangeHandler={(e) => {
-                  updateCountrySites(idx, 'site', e.target.value);
+                  setCountrySites({ idx, key: 'site', value: e.target.value });
                 }}
                 defaultOption="Select a site"
                 options={availableSites}
@@ -129,7 +93,7 @@ const CountrySites = ({
                 inputValue={cctld}
                 inputPlaceholder="https://cctld.com"
                 inputChangeHandler={(e) => {
-                  updateCountrySites(idx, 'cctld', e.target.value);
+                  setCountrySites({ idx, key: 'cctld', value: e.target.value });
                 }}
                 error={cctldError}
                 errorOccured={errorOccured}
@@ -141,9 +105,7 @@ const CountrySites = ({
                 text={<Cross />}
                 type="button"
                 variant="secondary"
-                onClick={() => {
-                  setCountrySites((prev) => prev.filter((_, i) => i !== idx));
-                }}
+                onClick={() => removeCountrySite(idx)}
               />
             </div>
           </div>

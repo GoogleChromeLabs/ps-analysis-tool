@@ -51,7 +51,7 @@ const RWSSelect = ({
               : 'border-gainsboro dark:border-quartz']: error,
           },
           {
-            'border-green-500 dark:border-green-500': !error,
+            'border-green-500 dark:border-green-500': !error && selectValue,
           }
         )}
         value={selectValue}

@@ -17,18 +17,17 @@
 /**
  * External dependencies.
  */
-import React, { useCallback } from 'react';
+import React from 'react';
 
 /**
  * Internal dependencies
  */
 import type { ContactEmailType } from '../types';
-import { validateContactEmail } from '../utils';
 import { RWSInput } from '../components';
 
 interface ContactEmailProps {
   contact: ContactEmailType;
-  setContact: (prev: (prev: ContactEmailType) => ContactEmailType) => void;
+  setContact: (value: string) => void;
   validationFailed: boolean;
 }
 
@@ -37,28 +36,13 @@ const ContactEmail = ({
   setContact,
   validationFailed: errorOccured,
 }: ContactEmailProps) => {
-  const updateContact = useCallback(
-    (contactEmail: string) => {
-      contactEmail = contactEmail.trim();
-
-      setContact((prev) => {
-        const newContact = { ...prev };
-        newContact.email = contactEmail;
-        newContact.emailError = validateContactEmail(contactEmail);
-
-        return newContact;
-      });
-    },
-    [setContact]
-  );
-
   return (
     <div className="my-4">
       <RWSInput
         inputLabel="Contact"
         inputPlaceholder="Email address or group alias if available"
         inputValue={contact.email}
-        inputChangeHandler={(e) => updateContact(e.target.value)}
+        inputChangeHandler={(e) => setContact(e.target.value)}
         error={contact.emailError}
         errorOccured={errorOccured}
       />

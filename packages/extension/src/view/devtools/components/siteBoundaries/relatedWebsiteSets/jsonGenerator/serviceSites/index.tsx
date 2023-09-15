@@ -17,64 +17,32 @@
 /**
  * External dependencies.
  */
-import React, { useCallback } from 'react';
+import React from 'react';
 
 /**
  * Internal dependencies.
  */
-import type { ServiceSiteType } from '../types';
-import { validateRationale, validateUrl } from '../utils';
 import { RWSInput } from '../components';
 import { Button } from '../../../../../../design-system/components';
 import { Add, Cross } from '../../../../../../../icons';
+import type { ServiceSiteType } from '../types';
+import type { SitePayloadType } from '../useGeneratorForm/types';
 
 interface ServiceSitesProps {
   serviceSites: ServiceSiteType[];
-  setServiceSites: (
-    prev: (prev: ServiceSiteType[]) => ServiceSiteType[]
-  ) => void;
+  addServiceSite: () => void;
+  removeServiceSite: (idx: number) => void;
+  setServiceSites: (value: SitePayloadType) => void;
   validationFailed: boolean;
 }
 
 const ServiceSites = ({
   serviceSites,
+  addServiceSite,
+  removeServiceSite,
   setServiceSites,
   validationFailed: errorOccured,
 }: ServiceSitesProps) => {
-  const updateServiceSites = useCallback(
-    (idx: number, key: string, value: string) => {
-      setServiceSites((prev) => {
-        const newServiceSites = [...prev];
-        if (key === 'url') {
-          value = value.trim();
-
-          newServiceSites[idx].url = value;
-          newServiceSites[idx].urlError = validateUrl(value);
-        }
-
-        if (key === 'rationale') {
-          newServiceSites[idx].rationale = value;
-          newServiceSites[idx].rationaleError = validateRationale(value);
-        }
-
-        return newServiceSites;
-      });
-    },
-    [setServiceSites]
-  );
-
-  const addServiceSite = useCallback(() => {
-    setServiceSites((prev) => [
-      ...prev,
-      {
-        url: '',
-        rationale: '',
-        urlError: "Url can't be blank",
-        rationaleError: "Rationale can't be blank",
-      },
-    ]);
-  }, [setServiceSites]);
-
   return (
     <div className="p-3">
       <div className="flex justify-between items-center">
@@ -91,7 +59,7 @@ const ServiceSites = ({
                   inputPlaceholder="https://service.com"
                   inputValue={url}
                   inputChangeHandler={(e) => {
-                    updateServiceSites(idx, 'url', e.target.value);
+                    setServiceSites({ idx, key: 'url', value: e.target.value });
                   }}
                   error={urlError}
                   errorOccured={errorOccured}
@@ -103,7 +71,11 @@ const ServiceSites = ({
                   inputPlaceholder="Affiliation to primary domain"
                   inputValue={rationale}
                   inputChangeHandler={(e) => {
-                    updateServiceSites(idx, 'rationale', e.target.value);
+                    setServiceSites({
+                      idx,
+                      key: 'rationale',
+                      value: e.target.value,
+                    });
                   }}
                   error={rationaleError}
                   errorOccured={errorOccured}
@@ -118,9 +90,7 @@ const ServiceSites = ({
                   text={<Cross />}
                   type="button"
                   variant="secondary"
-                  onClick={() => {
-                    setServiceSites((prev) => prev.filter((_, i) => i !== idx));
-                  }}
+                  onClick={() => removeServiceSite(idx)}
                 />
               </div>
             </div>
