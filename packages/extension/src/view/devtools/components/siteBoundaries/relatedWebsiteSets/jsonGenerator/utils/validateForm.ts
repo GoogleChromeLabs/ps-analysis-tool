@@ -24,6 +24,9 @@ import type {
   PrimaryDomainType,
   ServiceSiteType,
 } from '../types';
+import validateContactEmail from './validateContactEmail';
+import validateRationale from './validateRationale';
+import validateUrl from './validateUrl';
 
 const validateForm = (
   primaryDomain: PrimaryDomainType,
@@ -32,29 +35,59 @@ const validateForm = (
   serviceSites: ServiceSiteType[],
   countrySites: CountrySiteType[]
 ) => {
+  primaryDomain.urlError = validateUrl(primaryDomain.url);
+  contact.emailError = validateContactEmail(contact.email);
+
   const associatedSiteErrors: string[] = [];
   const serviceSiteErrors: string[] = [];
   const countrySiteErrors: string[] = [];
 
-  associatedSites.forEach(({ urlError, rationaleError }) => {
+  associatedSites.forEach((site) => {
+    const urlError = validateUrl(site.url);
+    const rationaleError = validateRationale(site.rationale);
+
     associatedSiteErrors.push(urlError, rationaleError);
+
+    site.urlError = urlError;
+    site.rationaleError = rationaleError;
   });
 
-  serviceSites.forEach(({ urlError, rationaleError }) => {
+  serviceSites.forEach((site) => {
+    const urlError = validateUrl(site.url);
+    const rationaleError = validateRationale(site.rationale);
+
     serviceSiteErrors.push(urlError, rationaleError);
+
+    site.urlError = urlError;
+    site.rationaleError = rationaleError;
   });
 
-  countrySites.forEach(({ siteError, cctldError }) => {
+  countrySites.forEach((site) => {
+    const siteError = validateUrl(site.site);
+    const cctldError = validateUrl(site.cctld);
+
     countrySiteErrors.push(siteError, cctldError);
+
+    site.siteError = siteError;
+    site.cctldError = cctldError;
   });
 
-  return ![
+  const validationPassed = ![
     contact.emailError,
     primaryDomain.urlError,
     ...associatedSiteErrors,
     ...serviceSiteErrors,
     ...countrySiteErrors,
   ].filter((error) => Boolean(error)).length;
+
+  return {
+    validationPassed,
+    primaryDomain,
+    contact,
+    associatedSites,
+    serviceSites,
+    countrySites,
+  };
 };
 
 export default validateForm;
