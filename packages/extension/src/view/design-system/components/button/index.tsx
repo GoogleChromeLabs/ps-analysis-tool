@@ -43,7 +43,7 @@ const Button = ({
       className={classNames(
         'py-1 px-2 rounded font-medium flex items-center text-center',
         {
-          'text-white dark:baby-blue-eyes bg-sapphire hover:bg-tufts-blue dark:hover:pale-cornflower-blue':
+          'text-white dark:bg-baby-blue-eyes bg-sapphire hover:bg-tufts-blue dark:hover:bg-pale-cornflower-blue dark:text-raisin-black':
             variant === 'primary',
           'bg-transparent dark:bg-transparent dark:text-bright-gray text-raisin-black active:opacity-60 hover:opacity-80':
             variant === 'secondary',
