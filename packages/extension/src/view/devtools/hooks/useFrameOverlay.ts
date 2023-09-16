@@ -18,28 +18,37 @@
  */
 import React, { useEffect, useRef } from 'react';
 
+/**
+ * Internal dependencies.
+ */
+import { DEVTOOL_PORT_NAME } from '../../../constants';
+
 interface UseFrameOverlayProps {
   selectedFrame: string | null;
   setInspectedFrame: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
+interface Response {
+  attributes: { src: React.SetStateAction<string | null> };
 }
 
 const useFrameOverlay = ({
   selectedFrame,
   setInspectedFrame,
 }: UseFrameOverlayProps) => {
-  const portRef = useRef(null);
+  const portRef = useRef<chrome.runtime.Port | null>(null);
 
   useEffect(() => {
-    chrome.runtime.onConnect.addListener((port) => {
-      console.log('Connected');
+    portRef.current = chrome.runtime.connect({ name: DEVTOOL_PORT_NAME });
 
-      portRef.current = port;
+    portRef.current.onDisconnect.addListener(() => {
+      console.log('DevTool Port disconnected!');
+    });
 
-      port.onMessage.addListener((response) => {
-        if (response?.attributes?.src) {
-          setInspectedFrame(response.attributes.src);
-        }
-      });
+    portRef.current.onMessage.addListener((response: Response) => {
+      if (response?.attributes?.src) {
+        setInspectedFrame(response.attributes.src);
+      }
     });
   }, [setInspectedFrame]);
 

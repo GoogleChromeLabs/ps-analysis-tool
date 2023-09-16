@@ -14,3 +14,5 @@
  * limitations under the License.
  */
 export const ALLOWED_NUMBER_OF_TABS = 1;
+export const WEBPAGE_PORT_NAME = 'psat-tool-content';
+export const DEVTOOL_PORT_NAME = 'psat-tool-devtool';

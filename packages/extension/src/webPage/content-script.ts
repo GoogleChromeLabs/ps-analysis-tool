@@ -19,12 +19,17 @@
 import addFrameOverlay from './addFrameOverlay';
 import getFrameAttributes from './getFrameAttributes';
 
-const port = chrome.runtime.connect({ name: 'psat-tool' });
+/**
+ * Internal dependencies.
+ */
+import { WEBPAGE_PORT_NAME } from '../constants';
+
+const port = chrome.runtime.connect({ name: WEBPAGE_PORT_NAME });
 let portConnected = true;
 
 port.onDisconnect.addListener(() => {
   portConnected = false;
-  console.log('Port disconnected!');
+  console.log(' Web page port disconnected!');
 });
 
 port.onMessage.addListener((response) => {
