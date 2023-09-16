@@ -1,0 +1,38 @@
+.ps-overlay[popover], .ps-infobox[popover] {
+    position: absolute;
+    background-color: #1a73e859;
+    pointer-events: none;
+    border: 0px;
+    margin: initial;
+    padding: 0px;
+}
+
+.ps-infobox[popover] {
+    background-color: transparent;
+    padding: 10px 10px 15px 10px;
+}
+
+.ps-infobox[popover] > .content {
+    background-color: white;
+    display: grid;
+    align-items: self-start;
+    column-gap: 5px;
+    border: 0px;
+    border-radius: 3px;
+    box-shadow: color-mix(in srgb, #3c4043 30%, transparent) 0 1px 2px 0,color-mix(in srgb, #3c4043 15%, transparent) 0 2px 6px 2px; /* from chrome console penal */
+    margin: initial;
+    padding: 0px 10px;
+}
+
+.ps-infobox[popover] > .content:after {
+    content: " ";
+    position: absolute;
+    bottom: 9px;
+    left: 20px;
+    border-width: 7px;
+    border-style: solid;
+    border-color: white transparent transparent transparent;
+    background-color: white;
+    box-shadow: color-mix(in srgb, #3c4043 15%, transparent) -3px 3px 4px 1px;
+    transform: rotate(320deg);
+  }

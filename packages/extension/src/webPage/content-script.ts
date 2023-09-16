@@ -16,13 +16,10 @@
 /**
  * Internal dependencies.
  */
-import addFrameOverlay from './addFrameOverlay';
+import { addFrameOverlay, removeAllPopovers } from './addFrameOverlay';
 import getFrameAttributes from './getFrameAttributes';
-
-/**
- * Internal dependencies.
- */
 import { WEBPAGE_PORT_NAME } from '../constants';
+import './style.css';
 
 const port = chrome.runtime.connect({ name: WEBPAGE_PORT_NAME });
 let portConnected = true;
@@ -54,3 +51,4 @@ const handleMouseEvent = (event: MouseEvent): void => {
 
 document.addEventListener('mouseover', handleMouseEvent);
 document.addEventListener('mouseout', handleMouseEvent);
+document.addEventListener('click', removeAllPopovers);

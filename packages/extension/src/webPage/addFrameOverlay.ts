@@ -16,19 +16,20 @@
 /**
  * Internal dependencies.
  */
-import { OVERLAY_CLASS, createFrameOverlay } from './createFrameMarkup';
+import { createFrameOverlay, createIframeInfoBlock } from './createFrameMarkup';
+import { OVERLAY_CLASS, INFOBOX_CLASS } from './constants';
 
-const removeAllOverlays = () => {
-  const existingOverlays = Array.from(
-    document.getElementsByClassName(OVERLAY_CLASS)
+export const removeAllPopovers = () => {
+  const existingPopovers = Array.from(
+    document.querySelectorAll('.' + OVERLAY_CLASS + ', .' + INFOBOX_CLASS)
   );
 
-  existingOverlays.forEach((element) => {
+  existingPopovers.forEach((element) => {
     element.parentNode.removeChild(element);
   });
 };
 
-const addFrameOverlay = (selectedFrame: string) => {
+export const addFrameOverlay = (selectedFrame: string) => {
   const iframes = document.querySelectorAll('iframe');
   let frameFound = false;
 
@@ -40,6 +41,7 @@ const addFrameOverlay = (selectedFrame: string) => {
     // @todo Very loosley checked for initial POC, needs more work.
     if (srcHost === selectedFrameHost) {
       const overlay = createFrameOverlay(iframe);
+      const frameInfoBox = createIframeInfoBlock(iframe);
 
       const body = document.querySelector('body');
 
@@ -49,12 +51,21 @@ const addFrameOverlay = (selectedFrame: string) => {
 
       frameFound = true;
 
-      removeAllOverlays();
+      removeAllPopovers();
       body.appendChild(overlay);
+      body.appendChild(frameInfoBox);
 
       overlay.showPopover();
+      frameInfoBox.showPopover();
 
-      iframe.scrollIntoView({
+      // because element is not rendered so we can't set the top property properly before.
+      frameInfoBox.style.top =
+        Number(frameInfoBox.offsetTop) -
+        Number(frameInfoBox.offsetHeight) +
+        5 +
+        'px';
+
+      frameInfoBox.scrollIntoView({
         behavior: 'smooth',
         block: 'start',
         inline: 'nearest',
@@ -63,8 +74,6 @@ const addFrameOverlay = (selectedFrame: string) => {
   }
 
   if (!frameFound) {
-    removeAllOverlays();
+    removeAllPopovers();
   }
 };
-
-export default addFrameOverlay;

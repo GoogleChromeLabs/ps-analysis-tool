@@ -17,9 +17,7 @@
  * Internal dependencies.
  */
 import getFrameAttributes from './getFrameAttributes';
-import isFirstParty from '../utils/isFirstParty';
-
-export const OVERLAY_CLASS = 'ps-overlay';
+import { OVERLAY_CLASS, INFOBOX_CLASS } from './constants';
 
 export const createFrameOverlay = (frame: HTMLElement) => {
   const {
@@ -36,20 +34,11 @@ export const createFrameOverlay = (frame: HTMLElement) => {
   const frameOverlay = document.createElement('div');
   frameOverlay.classList.add(OVERLAY_CLASS);
 
-  const frameInfoBox = createIframeInfoBlock(frame);
-
-  frameOverlay.appendChild(frameInfoBox);
-
   const styles: Record<string, string> = {
-    position: 'absolute',
-    backgroundColor: '#1a73e859',
-    pointerEvents: 'none',
     width: frameWidth + 'px',
     height: frameHeight + 'px',
     top: frameY + Number(window.scrollY) + 'px',
     left: frameX + Number(window.scrollX) + 'px',
-    border: '0px',
-    margin: 'initial',
   };
 
   // eslint-disable-next-line guard-for-in
@@ -57,30 +46,49 @@ export const createFrameOverlay = (frame: HTMLElement) => {
     frameOverlay.style[key] = styles[key];
   }
 
-  frameOverlay.popover = 'auto';
+  frameOverlay.popover = 'manual';
 
   return frameOverlay;
 };
 
-const createInfoLine = (label: string, value: string) => {
+const createInfoLine = (label: string, value: string, column: number) => {
   const p = document.createElement('p');
 
-  p.style.fontSize = '12px';
-  p.style.lineHeight = '1';
+  const styles: Record<string, string> = {
+    fontSize: '12px',
+    fontWeight: '400',
+    color: '#5f6368',
+    lineHeight: '1',
+    gridColumn: column.toString(),
+  };
 
-  p.innerHTML = `<strong>${label}</strong>: ${value}`;
+  // eslint-disable-next-line guard-for-in
+  for (const key in styles) {
+    p.style[key] = styles[key];
+  }
+
+  p.innerHTML = `<strong style="color:#202124">${label}</strong>: ${value}`;
 
   return p;
 };
 
-export const createIframeInfoBlock = (frame) => {
+export const createIframeInfoBlock = (frame: HTMLIFrameElement) => {
   const infoBlock = document.createElement('div');
+  const content = document.createElement('div');
   const attributes = getFrameAttributes(frame);
+  const {
+    x: frameX,
+    y: frameY,
+    width: frameWidth,
+  } = frame.getBoundingClientRect();
+
+  infoBlock.classList.add(INFOBOX_CLASS);
+  content.classList.add('content');
 
   const styles: Record<string, string> = {
-    backgroundColor: 'white',
-    margin: '10px',
-    padding: '10px',
+    top: frameY + Number(window.scrollY) + 'px',
+    left: frameX + Number(window.scrollX) + 'px',
+    maxWidth: frameWidth - 40 + 'px',
   };
 
   // eslint-disable-next-line guard-for-in
@@ -93,23 +101,24 @@ export const createIframeInfoBlock = (frame) => {
   const info = {
     Type: 'iframe',
     Origin: `<a href="${origin}">${origin}</a>`,
-    Title: attributes.title,
-    'Is first-party': isFirstParty(origin, window.location.href)
-      ? 'true'
-      : 'false',
     'Allowed features': attributes.allow,
   };
 
+  let i = 1;
   // eslint-disable-next-line guard-for-in
   for (const label in info) {
     const value = info[label];
 
     if (value) {
-      infoBlock.appendChild(createInfoLine(label, info[label]));
+      content.appendChild(createInfoLine(label, info[label], i++));
     }
   }
 
+  infoBlock.appendChild(content);
+
   console.log(attributes, 'attributes');
+
+  infoBlock.popover = 'manual';
 
   return infoBlock;
 };
