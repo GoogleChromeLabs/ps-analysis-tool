@@ -199,7 +199,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
         Object.entries(tabData.cookies as { [key: string]: CookieData }).map(
           async ([key, value]: [string, CookieData]) => {
             const isCookieSet = Boolean(
-              await chrome.cookies.get({ name: key, url: value.url })
+              await chrome.cookies.get({
+                name: value?.parsedCookie?.name,
+                url: value.url,
+              })
             );
             _cookies[key] = {
               ...value,
@@ -240,7 +243,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
             }
           ).map(async ([key, value]) => {
             const isCookieSet = Boolean(
-              await chrome.cookies.get({ name: key, url: value.url })
+              await chrome.cookies.get({
+                name: value?.parsedCookie?.name,
+                url: value.url,
+              })
             );
             _cookies[key] = {
               ...value,
