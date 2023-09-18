@@ -58,12 +58,23 @@ export const addFrameOverlay = (selectedFrame: string) => {
       overlay.showPopover();
       frameInfoBox.showPopover();
 
-      // because element is not rendered so we can't set the top property properly before.
-      frameInfoBox.style.top =
-        Number(frameInfoBox.offsetTop) -
-        Number(frameInfoBox.offsetHeight) +
-        5 +
-        'px';
+      // Show info box at bottom if we don't have enough space at top
+      if (frameInfoBox.offsetHeight > iframe.offsetTop) {
+        frameInfoBox.style.top =
+          Number(frameInfoBox.offsetTop) +
+          Number(iframe.offsetHeight) -
+          1 +
+          'px';
+
+        // Set infobox tip at top of box.
+        frameInfoBox.firstElementChild?.classList.add('toptip');
+      } else {
+        frameInfoBox.style.top =
+          Number(frameInfoBox.offsetTop) -
+          Number(frameInfoBox.offsetHeight) +
+          5 +
+          'px';
+      }
 
       frameInfoBox.scrollIntoView({
         behavior: 'smooth',

@@ -51,7 +51,7 @@ export const createFrameOverlay = (frame: HTMLElement) => {
   return frameOverlay;
 };
 
-const createInfoLine = (label: string, value: string, column: number) => {
+const createInfoLine = (label: string, value: string) => {
   const p = document.createElement('p');
 
   const styles: Record<string, string> = {
@@ -59,7 +59,6 @@ const createInfoLine = (label: string, value: string, column: number) => {
     fontWeight: '400',
     color: '#5f6368',
     lineHeight: '1',
-    gridColumn: column.toString(),
   };
 
   // eslint-disable-next-line guard-for-in
@@ -104,13 +103,12 @@ export const createIframeInfoBlock = (frame: HTMLIFrameElement) => {
     'Allowed features': attributes.allow,
   };
 
-  let i = 1;
   // eslint-disable-next-line guard-for-in
   for (const label in info) {
     const value = info[label];
 
     if (value) {
-      content.appendChild(createInfoLine(label, info[label], i++));
+      content.appendChild(createInfoLine(label, info[label]));
     }
   }
 
