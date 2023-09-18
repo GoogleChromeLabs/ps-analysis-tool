@@ -27,6 +27,8 @@ out
 .env
 
 # tsc output
+packages/*/dist
+packages/*/dist-types
 *.tsbuildinfo
 
 #puppeteer artifact
