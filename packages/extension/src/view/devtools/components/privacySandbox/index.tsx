@@ -13,9 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './antiCovertTracking';
-export * from './privateAdvertising';
-export * from './siteBoundaries';
-export { default as Cookies } from './cookies';
-export { default as Sidebar } from './sidebar';
-export { default as PrivacySandbox } from './privacySandbox';
+/**
+ * Internal dependencies.
+ */
+import React from 'react';
+
+const PrivacySandbox = () => {
+  return (
+    <iframe src="https://privacysandbox.com" width="100%" height="400px" />
+  );
+};
+
+export default PrivacySandbox;

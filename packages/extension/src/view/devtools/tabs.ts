@@ -27,6 +27,7 @@ import {
   Attribution,
   BounceTracking,
   Fingerprinting,
+  PrivacySandbox,
 } from './components';
 
 import {
@@ -53,6 +54,15 @@ import {
 } from '../../icons';
 
 const TABS = [
+  {
+    display_name: 'Privacy Sandbox',
+    component: PrivacySandbox,
+    id: 'privacySandbox',
+    icons: {
+      default: FingerPrintingIcon,
+      selected: FingerPrintingIconWhite,
+    },
+  },
   {
     display_name: 'Cookies',
     component: Cookies,
