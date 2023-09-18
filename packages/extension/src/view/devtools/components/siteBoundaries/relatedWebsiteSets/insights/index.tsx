@@ -42,19 +42,29 @@ const Insights = () => {
 
   useEffect(() => {
     insightsListener();
+  }, [insightsListener]);
 
-    chrome.tabs.onUpdated.addListener((tabId: number) => {
-      if (tabId !== chrome.devtools.inspectedWindow.tabId) {
-        return;
+  useEffect(() => {
+    chrome.tabs.onUpdated.addListener(
+      (tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
+        if (changeInfo.url) {
+          if (
+            tabId !== chrome.devtools.inspectedWindow.tabId ||
+            (tabId === chrome.devtools.inspectedWindow.tabId &&
+              getDomain(changeInfo.url) === insightsData?.domain)
+          ) {
+            return;
+          }
+
+          insightsListener();
+        }
       }
-
-      insightsListener();
-    });
+    );
 
     return () => {
       chrome.tabs.onUpdated.removeListener(insightsListener);
     };
-  }, [insightsListener]);
+  }, [insightsData?.domain, insightsListener]);
 
   return (
     <div>
