@@ -6,8 +6,6 @@ import type { RuleSetRule } from 'webpack';
 
 const config: StorybookConfig = {
   stories: [
-    '../packages/design-system/src/**/stories/*.mdx',
-    '../packages/design-system/src/**/stories/**/*.stories.@(js|jsx|ts|tsx)',
     '../packages/extension/src/**/stories/*.mdx',
     '../packages/extension/src/**/stories/**/*.stories.@(js|jsx|ts|tsx)',
   ],
