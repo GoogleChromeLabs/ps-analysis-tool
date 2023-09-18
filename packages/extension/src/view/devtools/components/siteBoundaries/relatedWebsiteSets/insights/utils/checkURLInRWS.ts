@@ -38,7 +38,7 @@ type RelatedWebsiteSetType = {
   associatedSites?: string[];
   serviceSites?: string[];
   ccTLDs?: {
-    [site: string]: string;
+    [site: string]: string[];
   };
   rationaleBySite?: {
     [url: string]: string;

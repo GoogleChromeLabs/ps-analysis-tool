@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 /**
  * Internal dependencies
@@ -26,6 +26,7 @@ import checkURLInRWS, {
   type CheckURLInRWSOutputType,
 } from './utils/checkURLInRWS';
 import { getDomain } from 'tldts';
+import SitesList from './sitesList';
 
 const Insights = () => {
   const [insightsData, setInsightsData] =
@@ -65,6 +66,17 @@ const Insights = () => {
       chrome.tabs.onUpdated.removeListener(insightsListener);
     };
   }, [insightsData?.domain, insightsListener]);
+
+  const cctlds = useMemo(
+    () =>
+      Object.values(insightsData?.relatedWebsiteSet?.ccTLDs || {}).reduce(
+        (prev, current) => {
+          return prev.concat(current);
+        },
+        []
+      ),
+    [insightsData?.relatedWebsiteSet?.ccTLDs]
+  );
 
   return (
     <div>
@@ -113,6 +125,18 @@ const Insights = () => {
                     This site is the primary domain of the Related Website Sets.
                   </p>
                 )}
+              </div>
+
+              <div className="divide-y divide-gray-200 dark:divide-gray-500">
+                <SitesList
+                  title="Associated Sites"
+                  sites={insightsData.relatedWebsiteSet?.associatedSites || []}
+                />
+                <SitesList
+                  title="Service Sites"
+                  sites={insightsData.relatedWebsiteSet?.serviceSites || []}
+                />
+                <SitesList title="ccTLDs" sites={cctlds} />
               </div>
             </div>
           ) : (
