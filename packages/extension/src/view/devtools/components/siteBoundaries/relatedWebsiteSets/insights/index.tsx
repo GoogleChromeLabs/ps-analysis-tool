@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 /**
  * Internal dependencies
@@ -32,19 +32,37 @@ const Insights = () => {
     useState<CheckURLInRWSOutputType | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    (async () => {
-      const result = await checkURLInRWS();
+  const insightsListener = useCallback(async () => {
+    setLoading(true);
+    const result = await checkURLInRWS();
 
-      setInsightsData(result);
-      setLoading(false);
-    })();
+    setInsightsData(result);
+    setTimeout(() => setLoading(false), 1000);
   }, []);
+
+  useEffect(() => {
+    insightsListener();
+
+    chrome.tabs.onUpdated.addListener((tabId: number) => {
+      if (tabId !== chrome.devtools.inspectedWindow.tabId) {
+        return;
+      }
+
+      insightsListener();
+    });
+
+    return () => {
+      chrome.tabs.onUpdated.removeListener(insightsListener);
+    };
+  }, [insightsListener]);
 
   return (
     <div>
       {loading ? (
-        <p className="text-base">Loading...</p>
+        <div className="flex gap-2 items-center justify-start">
+          <p className="text-sm">Loading...</p>
+          <div className="w-6 h-6 rounded-full animate-spin border-t-transparent border-solid border-blue-700 border-2" />
+        </div>
       ) : (
         <div>
           {insightsData?.isURLInRWS ? (
