@@ -36,6 +36,10 @@ async function getDocumentCookies(tabId: string) {
   let tabUrl = '';
   const dictionary = await fetchDictionary();
 
+  if (!tabId || tabId === '') {
+    return;
+  }
+
   chrome.devtools.inspectedWindow.eval(
     'document.cookie.split(";")',
     (result: string[], isException) => {
