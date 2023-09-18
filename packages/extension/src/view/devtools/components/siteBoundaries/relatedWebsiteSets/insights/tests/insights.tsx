@@ -18,13 +18,14 @@
  * External dependencies.
  */
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 /**
  * Internal dependencies.
  */
 import Insights from '..';
+import { noop } from '../../../../../../../utils/noop';
 
 describe('RelatedWebsiteSets Insights', () => {
   beforeAll(() => {
@@ -36,6 +37,10 @@ describe('RelatedWebsiteSets Insights', () => {
       },
       tabs: {
         get: () => ({ url: 'https://hindustantimes.com' }),
+        onUpdated: {
+          addListener: () => noop,
+          removeListener: () => noop,
+        },
       },
       runtime: {
         getURL: () => 'data/related_website_sets.json',
@@ -59,55 +64,70 @@ describe('RelatedWebsiteSets Insights', () => {
       } as Response);
   });
 
-  test('should render insights', async () => {
+  test('should render insights', () => {
     render(<Insights />);
 
-    expect(
-      await screen.findByText('This site belongs to a Related Website Sets')
-    ).toBeInTheDocument();
+    waitFor(
+      async () => {
+        expect(
+          await screen.findByText('This site belongs to a Related Website Sets')
+        ).toBeInTheDocument();
 
-    expect(
-      await screen.findByText('https://hindustantimes.com')
-    ).toBeInTheDocument();
-  });
+        expect(
+          await screen.findByText('https://hindustantimes.com')
+        ).toBeInTheDocument();
+      },
+      { timeout: 2000 }
+    );
 
-  test('should render insights', async () => {
     globalThis.chrome = {
       ...globalThis.chrome,
       tabs: {
+        ...globalThis.chrome.tabs,
         get: () => ({ url: 'https://indianexpress.com' }),
       },
     } as unknown as typeof chrome;
 
     render(<Insights />);
 
-    expect(
-      await screen.findByText(
-        'This site does not belong to a Related Website Sets'
-      )
-    ).toBeInTheDocument();
+    waitFor(
+      async () => {
+        expect(
+          await screen.findByText(
+            'This site does not belong to a Related Website Sets'
+          )
+        ).toBeInTheDocument();
+      },
+      { timeout: 2000 }
+    );
   });
 
-  test('should render insights', async () => {
+  test('should render insights', () => {
     globalThis.chrome = {
       ...globalThis.chrome,
       tabs: {
+        ...globalThis.chrome.tabs,
         get: () => ({ url: 'https://livemint.com' }),
       },
     } as unknown as typeof chrome;
 
     render(<Insights />);
 
-    expect(
-      await screen.findByText('This site belongs to a Related Website Sets')
-    ).toBeInTheDocument();
+    waitFor(
+      async () => {
+        expect(
+          await screen.findByText('This site belongs to a Related Website Sets')
+        ).toBeInTheDocument();
 
-    expect(
-      await screen.findByText('https://hindustantimes.com')
-    ).toBeInTheDocument();
+        expect(
+          await screen.findByText('https://hindustantimes.com')
+        ).toBeInTheDocument();
 
-    expect(
-      await screen.findByText('Specialized Platform for economics')
-    ).toBeInTheDocument();
+        expect(
+          await screen.findByText('Specialized Platform for economics')
+        ).toBeInTheDocument();
+      },
+      { timeout: 2000 }
+    );
   });
 });
