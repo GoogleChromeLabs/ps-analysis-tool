@@ -1,0 +1,21 @@
+{
+  "name": "@cookie-analysis-tool/eslint-import-resolver",
+  "version": "0.2.0",
+  "description": "",
+  "main": "src/index.cjs",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"
+  },
+  "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
+  "dependencies": {
+    "eslint-import-resolver-node": "^0.3.7"
+  }
+}
