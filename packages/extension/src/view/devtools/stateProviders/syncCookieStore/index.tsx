@@ -296,7 +296,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
             );
           }
         }
-        await getDocumentCookies(tabId?.toString());
       }
       setLoading(false);
     },
