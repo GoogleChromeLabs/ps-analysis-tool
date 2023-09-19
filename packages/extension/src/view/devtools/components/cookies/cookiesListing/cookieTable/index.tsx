@@ -36,6 +36,7 @@ import { usePreferenceStore } from '../../../../stateProviders/preferenceStore';
 import Table from '../../../../../design-system/components/table';
 import { useContentPanelStore } from '../../../../stateProviders/contentPanelStore';
 import type { CookieTableData } from '../../../../cookies.types';
+import { getCookieKey } from '../../../../../../utils/getCookieKey';
 
 export interface CookieTableProps {
   cookies: CookieTableData[];
@@ -238,7 +239,7 @@ const CookieTable = ({ cookies, selectedFrame }: CookieTableProps) => {
       <Table
         table={table}
         selectedKey={
-          selectedKey === null ? null : selectedKey?.parsedCookie?.name
+          selectedKey === null ? null : getCookieKey(selectedKey?.parsedCookie)
         }
         onRowClick={onRowClick}
         onMouseEnter={() => setIsMouseInsideHeader(true)}

@@ -97,6 +97,8 @@ The Chrome extension provides capabilities surfaced via the extension pop-up, th
 - Run the CLI, providing a URL or a sitemap as input.
   - E.g. `npm run cli -- -s https://example.com/sitemap_index.xml`.
   - E.g. `npm run cli -- -u https://bbc.com`.
+- Please note that the dependency (Wappalyzer), which analyzes page technologies, may require permission to use its instance of Chromium. If this happens, you have the option to skip the technology analysis by using the `nt` flag for uninterrupted analysis of cookies.
+  - E.g. `npm run cli -- -u https://bbc.com -nt`. 
 
 
 

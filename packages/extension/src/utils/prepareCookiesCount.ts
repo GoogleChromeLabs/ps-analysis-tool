@@ -19,7 +19,7 @@
  */
 import type { CookieData } from '../localStore/cookieStore';
 import type { CookiesCount } from '../view/popup/types';
-import isFirstParty from './isFirstParty';
+import { isFirstParty } from '@cookie-analysis-tool/common';
 
 /**
  * Categorize cookies count into 1st party and 3rd party cookies and then into functional, marketing, analytics and uncategorized.

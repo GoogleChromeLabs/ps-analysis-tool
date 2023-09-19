@@ -17,8 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SinonChrome from 'sinon-chrome';
 
@@ -26,165 +25,91 @@ import SinonChrome from 'sinon-chrome';
  * Internal dependencies.
  */
 import App from '../app';
-import { Provider as ExternalStoreProvider } from '../stateProviders/syncCookieStore';
+import { useCookieStore } from '../stateProviders/syncCookieStore';
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import PSInfo from 'cookie-analysis-tool/data/PSInfo.json';
 
-const tabCookies = {
-  _cb: {
-    parsedCookie: '_cb',
-    analytics: null,
-    url: 'https://edition.cnn.com/whatever/api',
-    headerType: 'response',
-    frameIdList: [1],
-    isFirstParty: true,
-    isCookieSet: true,
-  },
-  pubsyncexp: {
-    parsedCookie: 'pubsyncexp',
-    analytics: null,
-    url: 'https://api.pubmatic.com/whatever/api',
-    headerType: 'response',
-    frameIdList: [1],
-    isFirstParty: false,
-    isCookieSet: true,
-  },
-  __qca: {
-    parsedCookie: '__qca',
-    analytics: {
-      platform: 'Quantcast',
-      category: 'Marketing',
-      name: '__qca',
-      domain: "Advertiser's website domain",
-      description:
-        'This cookie is set by Quantcast, who present targeted advertising. Stores browser and HTTP request information.',
-      retention: '1 year',
-      dataController: 'Quantcast',
-      gdprUrl: 'https://www.quantcast.com/privacy/',
-      wildcard: '0',
-    },
-    url: 'https://edition.cnn.com/whatever/api',
-    headerType: 'response',
-    frameIdList: [1],
-    isFirstParty: true,
-    isCookieSet: true,
-  },
-  KRTBCOOKIE_290: {
-    parsedCookie: 'KRTBCOOKIE_290',
-    analytics: {
-      platform: 'PubMatic',
-      category: 'Marketing',
-      name: 'KRTBCOOKIE_*',
-      domain: 'pubmatic.com',
-      description:
-        "Registers a unique ID that identifies the user's device during return visits across websites that use the same ad network. The ID is used to allow targeted ads.",
-      retention: '29 days',
-      dataController: 'Pubmatic',
-      gdprUrl: 'N/A',
-      wildcard: '1',
-    },
-    url: 'https://api.pubmatic.com/whatever/api',
-    headerType: 'response',
-    frameIdList: [1],
-    isFirstParty: false,
-    isCookieSet: true,
-  },
-};
+jest.mock('../stateProviders/syncCookieStore', () => ({
+  useCookieStore: jest.fn(),
+}));
+
+const mockUseCookieStore = useCookieStore as jest.Mock;
 
 describe('App', () => {
-  describe('When Tab ID is available', () => {
-    beforeAll(() => {
-      globalThis.chrome = SinonChrome as unknown as typeof chrome;
-      globalThis.chrome = {
-        ...SinonChrome,
-        storage: {
-          //@ts-ignore
-          local: {
-            //@ts-ignore
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            get: (_, __) =>
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              new Promise<{ [key: string]: any }>((resolve) => {
-                resolve({
-                  40245632: { cookies: tabCookies },
-                  tabToRead: '40245632',
-                });
-              }),
-            //@ts-ignore
-            onChanged: {
-              addListener: () => undefined,
-              removeListener: () => undefined,
-            },
-          },
-          sync: {
-            //@ts-ignore
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            get: (_, __) =>
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              new Promise<{ [key: string]: any }>((resolve) => {
-                resolve({
-                  allowedNumberOfTabs: 'single',
-                });
-              }),
-            //@ts-ignore
-            onChanged: {
-              addListener: () => undefined,
-              removeListener: () => undefined,
-            },
-          },
-        },
-        devtools: {
-          //@ts-ignore
-          inspectedWindow: {
-            tabId: 40245632,
-            //@ts-ignore
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-            eval: (_, callback: any) => {
-              callback('https://edition.cnn.com');
-            },
-          },
-        },
-        tabs: {
-          //@ts-ignore
-          onUpdated: {
-            addListener: () => undefined,
-            removeListener: () => undefined,
-          },
-          //@ts-ignore
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          query: (_, __) => {
-            return [{ id: 40245632, url: 'https://edition.cnn.com' }];
-          },
-        },
-      };
-    });
+  beforeAll(() => {
+    globalThis.chrome = SinonChrome as unknown as typeof chrome;
 
-    it('ExternalStoreProvider should be added to DOM', async () => {
-      act(() =>
-        render(
-          <ExternalStoreProvider>
-            <App />
-          </ExternalStoreProvider>
-        )
-      );
-      expect(await screen.findByText('1st Party Cookies')).toBeInTheDocument();
-      expect(await screen.findByText('3rd Party Cookies')).toBeInTheDocument();
-    });
+    globalThis.fetch = function () {
+      return Promise.resolve({
+        json: () =>
+          Promise.resolve({
+            ...PSInfo,
+          }),
+      });
+    } as unknown as typeof fetch;
+  });
 
-    it('Initial render will show please refresh page to see cookies', () => {
-      render(
-        <ExternalStoreProvider>
-          <App />
-        </ExternalStoreProvider>
-      );
-      waitFor(
-        () =>
-          expect(
-            screen.getByText('Please refresh this page to view cookies')
-          ).toBeInTheDocument(),
-        {
-          timeout: 11000,
-        }
-      );
+  it('Should show refresh page message if cookie stats are not available', () => {
+    mockUseCookieStore.mockReturnValueOnce({
+      tabCookieStats: {},
+      isCurrentTabBeingListenedTo: true,
     });
+    render(<App />);
+
+    expect(
+      screen.getByText('Please try reloading the page')
+    ).toBeInTheDocument();
+  });
+
+  it('Should show No cookies found on this page message if no firstParty and thirdParty cookies are not available', () => {
+    mockUseCookieStore.mockReturnValueOnce({
+      isCurrentTabBeingListenedTo: true,
+      cookieStats: {
+        total: 0,
+        firstParty: {
+          total: 0,
+        },
+        thirdParty: {
+          total: 0,
+        },
+      },
+      initialProcessed: true,
+      totalProcessed: 100,
+    });
+    render(<App />);
+
+    expect(
+      screen.getByText('No cookies found on this page')
+    ).toBeInTheDocument();
+  });
+
+  it('Should not show No cookies found on this page message if no firstParty and thirdParty cookies are not available', () => {
+    mockUseCookieStore.mockReturnValueOnce({
+      isCurrentTabBeingListenedTo: true,
+      cookieStats: {
+        total: 6,
+        firstParty: {
+          total: 3,
+          analytics: 1,
+          marketing: 1,
+          functional: 1,
+          uncategorized: 0,
+        },
+        thirdParty: {
+          total: 3,
+          analytics: 1,
+          marketing: 1,
+          functional: 1,
+          uncategorized: 0,
+        },
+      },
+    });
+    render(<App />);
+
+    expect(screen.getAllByText('3').length).toBe(2);
+    expect(screen.getByText('1st Party Cookies')).toBeInTheDocument();
+    expect(screen.getByText('3rd Party Cookies')).toBeInTheDocument();
   });
 
   afterAll(() => {
