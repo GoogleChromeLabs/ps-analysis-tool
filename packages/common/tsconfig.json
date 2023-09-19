@@ -3,11 +3,12 @@
     "rootDir": "src",
     "target": "es6",
     "module": "commonjs",
-    "outDir": "../../dist/cli",
+    "outDir": "dist",
+    "declarationDir": "dist-types",
+    "composite": true,
     "strict": true,
     "sourceMap": true,
     "esModuleInterop": true,
     "moduleResolution": "node"
-  },
-  "references": [{ "path": "../common" }]
+  }
 }
