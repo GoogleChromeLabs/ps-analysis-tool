@@ -8,7 +8,7 @@
     "src",
     "../../node_modules/@types/jest/index.d.ts",
     "src/**/*.json",
-    "src/view/design-system/components/circle"
+    "../design-system/src/components/circle"
   ],
   "references": [{ "path": "../common" }]
 }

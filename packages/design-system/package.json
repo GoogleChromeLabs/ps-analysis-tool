@@ -24,7 +24,9 @@
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
   "dependencies": {
-    "tldts": "^6.0.8"
+    "tldts": "^6.0.8",
+    "@cookie-analysis-tool/common":"*",
+    "simple-cookie": "^1.0.15"
   },
   "devDependencies": {
   }

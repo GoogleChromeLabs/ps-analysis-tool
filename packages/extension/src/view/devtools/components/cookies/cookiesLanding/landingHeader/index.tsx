@@ -21,7 +21,7 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { CirclePieChart } from '../../../../../design-system/components';
+import { CirclePieChart } from '@cookie-analysis-tool/design-system';
 import type { CookiesCount } from '../../../../../popup/types';
 import type { CookieStatsComponents } from '../../../../cookies.types';
 

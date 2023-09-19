@@ -21,9 +21,8 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import InfoCard from '../../../../design-system/components/infoCard';
-import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
-import { MessageBox } from '../../../../design-system/components';
+import { InfoCard, MessageBox } from '@cookie-analysis-tool/design-system';
+import { PSInfoKey } from '@cookie-analysis-tool/common';
 
 const RelatedWebsiteSets = () => {
   return (

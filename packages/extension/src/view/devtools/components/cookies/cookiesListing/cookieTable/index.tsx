@@ -29,7 +29,7 @@ import { useDebouncedCallback } from 'use-debounce';
 /**
  * Internal dependencies.
  */
-import Table from '../../../../../design-system/components/table';
+import { Table } from '@cookie-analysis-tool/design-system';
 import { useContentPanelStore } from '../../../../stateProviders/contentPanelStore';
 import type { CookieTableData } from '../../../../cookies.types';
 

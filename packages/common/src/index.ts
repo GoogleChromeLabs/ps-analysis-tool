@@ -15,3 +15,6 @@
  */
 
 export { default as isFirstParty } from './utils/isFirstParty';
+export { default as fetchPSInfo } from './utils/fetchPSInfo';
+
+export { PSInfoKeyType, PSInfoKey } from './utils/fetchPSInfo';

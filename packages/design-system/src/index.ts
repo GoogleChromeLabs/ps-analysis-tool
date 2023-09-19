@@ -14,4 +14,5 @@
  * limitations under the License.
  */
 
-export { default as Button } from './button';
+export * from './components';
+export * from './theme/colors';

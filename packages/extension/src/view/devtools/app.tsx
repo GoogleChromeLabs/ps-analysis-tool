@@ -26,8 +26,7 @@ import './app.css';
 import TABS from './tabs';
 import { Sidebar } from './components';
 import { useCookieStore } from './stateProviders/syncCookieStore';
-import { ProgressBar } from '../design-system/components';
-import { Button } from '@cookie-analysis-tool/design-system';
+import { Button, ProgressBar } from '@cookie-analysis-tool/design-system';
 
 const App: React.FC = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);

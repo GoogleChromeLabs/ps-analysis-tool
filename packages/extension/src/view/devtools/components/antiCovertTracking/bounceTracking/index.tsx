@@ -21,8 +21,8 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import InfoCard from '../../../../design-system/components/infoCard';
-import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
+import { InfoCard } from '@cookie-analysis-tool/design-system';
+import { PSInfoKey } from '@cookie-analysis-tool/common';
 
 const BounceTracking = () => {
   return (

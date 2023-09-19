@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import { COLOR_MAP } from '../view/design-system/theme/colors';
+import { COLOR_MAP } from '@cookie-analysis-tool/design-system';
 import type { CookiesCount } from '../view/popup/types';
 import type { CookieStatsComponents } from '../view/devtools/cookies.types';
 

@@ -24,7 +24,7 @@ import React from 'react';
 import {
   Matrix,
   type MatrixComponentProps,
-} from '../../../design-system/components';
+} from '@cookie-analysis-tool/design-system';
 import { type Legend as LegendProp } from '../../../devtools/cookies.types';
 
 interface LegendProps {

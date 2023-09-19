@@ -25,7 +25,7 @@ import {
   MatrixComponentHorizontal,
   Matrix,
   type MatrixComponentProps,
-} from '../../../../../design-system/components';
+} from '@cookie-analysis-tool/design-system';
 import { filterFramesWithCookies } from '../../utils/filterFramesWithCookies';
 import type {
   TabCookies,
