@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 /**
  * Internal dependencies.
@@ -65,10 +65,24 @@ const RWSJsonGenerator = ({ open }: RWSJsonGeneratorProps) => {
     },
   } = useGeneratorForm();
 
+  const formContainer = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    if (formContainer.current) {
+      formContainer.current.scrollIntoView({
+        behavior: 'smooth',
+      });
+    }
+  }, [open]);
+
   return (
     <>
       {open && (
-        <div className="overflow-auto">
+        <div className="overflow-auto" ref={formContainer}>
           <div className="text-raisin-black dark:text-bright-gray w-full min-w-[33rem]">
             <h1 className="text-lg font-semibold mt-4">
               Related Website Sets JSON Generator
@@ -88,7 +102,7 @@ const RWSJsonGenerator = ({ open }: RWSJsonGeneratorProps) => {
               </a>
               ).
             </p>
-            <div className="my-4 border rounded-xl border-gray-200 dark:border-quartz dark:bg-charleston-green px-4 py-3 shadow">
+            <div className="my-4 bg-anti-flash-white dark:bg-charleston-green border rounded-xl border-gray-200 dark:border-quartz px-4 py-3 shadow">
               <p className="text-base my-3">
                 Enter your Related Website Sets details below:
               </p>
@@ -145,7 +159,7 @@ const RWSJsonGenerator = ({ open }: RWSJsonGeneratorProps) => {
                   ) : (
                     <div className="flex gap-2">
                       <Button text="Submit" type="submit" />
-                      <Button text="Reset" type="reset" variant="danger" />
+                      <Button text="Reset" type="reset" variant="secondary" />
                     </div>
                   )}
                 </div>

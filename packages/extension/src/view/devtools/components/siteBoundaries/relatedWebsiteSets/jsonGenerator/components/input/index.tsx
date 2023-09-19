@@ -39,18 +39,17 @@ const RWSInput = ({
 }: RWSInputProps) => {
   return (
     <div className="flex flex-col gap">
-      <label className="text-sm">{inputLabel}</label>
+      <label className="text-xs">{inputLabel}</label>
       <input
         type="text"
         className={classNames(
-          'my-1 py-1 px-2 outline-none border dark:bg-raisin-black dark:text-bright-gray text-outer-space-crayola',
+          'my-1 py-px px-1 outline-none border border-gainsboro dark:border-quartz dark:bg-raisin-black dark:text-bright-gray text-outer-space-crayola text-xs leading-normal focus:border-bright-navy-blue focus:dark:border-medium-persian-blue',
           {
-            [formValidationFailed
-              ? 'border-red-500 dark:border-red-500'
-              : 'border-gainsboro dark:border-quartz']: error,
+            '!border-red-500 dark:!border-red-500':
+              error && formValidationFailed,
           },
           {
-            'border-green-500 dark:border-green-500': !error && inputValue,
+            '!border-green-500 dark:!border-green-500': !error && inputValue,
           }
         )}
         placeholder={inputPlaceholder}

@@ -90,7 +90,7 @@ const Insights = () => {
           {insightsData?.isURLInRWS ? (
             <div>
               <h4 className="text-lg font-semibold">
-                This site belongs to a Related Website Sets
+                This site belongs to &quot;Related Website Sets&quot;
               </h4>
               <p className="text-sm">
                 Primary Domain:{' '}
@@ -122,12 +122,12 @@ const Insights = () => {
                   </>
                 ) : (
                   <p className="mt-4">
-                    This site is the primary domain of the Related Website Sets.
+                    This site is the primary domain of the Related Website Set.
                   </p>
                 )}
               </div>
 
-              <div className="divide-y divide-gray-200 dark:divide-gray-500">
+              <div className="flex flex-row gap-4 mt-4 overflow-auto">
                 <SitesList
                   title="Associated Sites"
                   sites={insightsData.relatedWebsiteSet?.associatedSites || []}
@@ -141,7 +141,7 @@ const Insights = () => {
             </div>
           ) : (
             <h4 className="text-lg font-semibold">
-              This site does not belong to a Related Website Sets
+              This site does not belong to &quot;Related Website Sets&quot;
             </h4>
           )}
         </div>

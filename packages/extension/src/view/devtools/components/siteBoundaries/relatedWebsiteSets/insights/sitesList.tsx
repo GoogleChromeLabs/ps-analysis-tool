@@ -30,20 +30,16 @@ const SitesList = ({ title, sites }: SitesListProps) => {
   }
 
   return (
-    <div className="py-4">
-      <div className="overflow-auto bg-anti-flash-white dark:bg-davys-grey rounded-md">
-        <div className="max-h-40">
-          <div className="p-3">
-            <h4 className="text-base font-medium text-davys-grey dark:text-anti-flash-white mb-1">
-              {title}
-            </h4>
-            <ul className="list-disc ml-4">
-              {sites.map((site) => (
-                <li key={site}>{site}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
+    <div className="p-3 flex-1 bg-anti-flash-white dark:bg-charleston-green rounded-md">
+      <h4 className="text-base font-medium text-davys-grey dark:text-anti-flash-white mb-1">
+        {title}
+      </h4>
+      <div className="overflow-auto">
+        <ul className="list-disc ml-4 max-h-40">
+          {sites.map((site) => (
+            <li key={site}>{site}</li>
+          ))}
+        </ul>
       </div>
     </div>
   );

@@ -125,6 +125,7 @@ module.exports = {
       'american-silver': '#CBCDD1',
       'royal-blue': '#3871E0',
       'medium-persian-blue': '#0E639C',
+      'bright-navy-blue': '#1A73E8',
       'hex-gray': '#E0E0E0',
       'bright-gray': '#E8EAED',
       quartz: '#494C50',
