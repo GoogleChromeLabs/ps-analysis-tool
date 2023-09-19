@@ -181,6 +181,8 @@ export const Provider = ({ children }: PropsWithChildren) => {
         ) {
           setIsCurrentTabBeingListenedTo(false);
           setLoading(false);
+          setSelectedFrame(null);
+          setTabFrames(null);
           return;
         } else {
           setIsCurrentTabBeingListenedTo(true);
@@ -282,6 +284,8 @@ export const Provider = ({ children }: PropsWithChildren) => {
             tabId.toString() !== getTabBeingListenedTo?.tabToRead
           ) {
             setIsCurrentTabBeingListenedTo(false);
+            setTabFrames(null);
+            setSelectedFrame(null);
             setLoading(false);
             return;
           } else {
