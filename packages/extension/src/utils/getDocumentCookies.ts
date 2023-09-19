@@ -17,14 +17,13 @@
  * External dependencies
  */
 import { type Cookie as ParsedCookie } from 'simple-cookie';
-
+import { isFirstParty } from '@cookie-analysis-tool/common';
 /**
  * Internal dependencies.
  */
 import { createCookieObject } from '../worker/createCookieObject';
 import { fetchDictionary } from './fetchCookieDictionary';
 import findAnalyticsMatch from '../worker/findAnalyticsMatch';
-import isFirstParty from './isFirstParty';
 import { CookieStore, type CookieData } from '../localStore';
 /**
  * Adds the cookies set via document.cookie.
