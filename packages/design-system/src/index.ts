@@ -13,12 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as CirclePieChart } from './circlePieChart';
-export { default as Circle } from './circle';
-export { default as MatrixComponent } from './matrix/matrixComponent';
-export { default as MatrixComponentHorizontal } from './matrix/matrixComponent/matrixComponentHorizontal';
-export { default as Matrix } from './matrix';
-export { default as MessageBox } from './messageBox';
-export { default as ProgressBar } from './progressBar';
 
-export type { MatrixComponentProps } from './matrix/matrixComponent';
+export { default as Button } from './button';
