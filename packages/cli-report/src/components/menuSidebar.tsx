@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * External dependencies.
  */
 import React from 'react';
-import { createRoot } from 'react-dom/client';
 
-/**
- * Internal dependencies.
- */
-import '../app.css';
-import App from './app';
+const MenuSidebar = () => {
+  return <div className="w-full h-full "></div>;
+};
 
-const root = document.getElementById('root');
-
-if (root) {
-  createRoot(root).render(<App />);
-}
+export default MenuSidebar;

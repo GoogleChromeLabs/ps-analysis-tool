@@ -13,20 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * External dependencies.
  */
 import React from 'react';
-import { createRoot } from 'react-dom/client';
 
-/**
- * Internal dependencies.
- */
-import '../app.css';
-import App from './app';
-
-const root = document.getElementById('root');
-
-if (root) {
-  createRoot(root).render(<App />);
+export interface UrlSidebarProps {
+  urls: string[];
+  onSelect: (selectedInd: number) => void;
+  selectedInd: number;
 }
+
+const UrlSidebar = () => {
+  return <div className="w-full h-full"></div>;
+};
+
+export default UrlSidebar;
