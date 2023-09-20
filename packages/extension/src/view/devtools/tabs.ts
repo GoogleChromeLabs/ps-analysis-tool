@@ -51,6 +51,8 @@ import {
   FingerPrintingIconWhite,
   TopicsIcon,
   TopicsIconWhite,
+  PrivacySandboxIcon,
+  PrivacySandboxIconWhite,
 } from '../../icons';
 
 const TABS = [
@@ -59,8 +61,8 @@ const TABS = [
     component: PrivacySandbox,
     id: 'privacySandbox',
     icons: {
-      default: FingerPrintingIcon,
-      selected: FingerPrintingIconWhite,
+      default: PrivacySandboxIcon,
+      selected: PrivacySandboxIconWhite,
     },
   },
   {

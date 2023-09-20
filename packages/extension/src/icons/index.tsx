@@ -40,3 +40,5 @@ export { default as RelatedWebsiteSetsIcon } from './related-website-sets.svg';
 export { default as RelatedWebsiteSetsIconWhite } from './related-website-sets-white.svg';
 export { default as AntiCovertTrackingIcon } from './anti-covert-tracking.svg';
 export { default as AntiCovertTrackingIconWhite } from './anti-covert-tracking-white.svg';
+export { default as PrivacySandboxIcon } from './privacy-sandbox.svg';
+export { default as PrivacySandboxIconWhite } from './privacy-sandbox-white.svg';
