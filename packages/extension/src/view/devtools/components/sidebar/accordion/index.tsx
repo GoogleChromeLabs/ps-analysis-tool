@@ -72,7 +72,7 @@ const Accordion = ({
           data-testid={`${tabId}-accordion-opener`}
           className={`origin-center transition-transform scale-125 p-0.5 mr-1 ${
             accordionState ? '' : '-rotate-90'
-          }`}
+          } ${children?.filter(Boolean)?.length ? '' : 'invisible'}`}
           onClick={onAccordionOpenerClick}
         >
           {isAccordionHeaderSelected && isTabFocused ? (
