@@ -78,16 +78,18 @@ const AccordionChildren: React.FC<AccordionChildrenProps> = ({
 }) => {
   const DefaultIcon = defaultIcon;
   const SelectedIcon = selectedIcon;
+
   if (hasChildren) {
     return (
       <div
         key={tabId}
         data-testid={tabId}
-        className="pl-9 flex items-center cursor-default gap-y-1.5 outline-0 dark:text-bright-gray"
+        className="flex items-center cursor-default gap-y-1.5 outline-0 dark:text-bright-gray"
         tabIndex={0}
         onKeyDown={(event) => keyboardNavigator(event)}
       >
         <Accordion
+          isRecursive
           key={tabId}
           accordionState={Boolean(accordionState && accordionState[tabId])}
           index={currentIndex}
@@ -166,7 +168,7 @@ const AccordionChildren: React.FC<AccordionChildrenProps> = ({
       }
       role="treeitem"
       className={classNames(
-        'pl-11 py-0.5 h-5 flex items-center cursor-default outline-0 dark:text-bright-gray',
+        'pl-16 py-0.5 h-5 flex items-center cursor-default outline-0 dark:text-bright-gray',
         isAccordionChildSelected &&
           (isTabFocused
             ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'

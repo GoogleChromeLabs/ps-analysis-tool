@@ -28,6 +28,7 @@ import TABS from '../../../tabs';
 interface AccordionProps {
   accordionState: boolean;
   index: number;
+  isRecursive: boolean;
   isTabFocused: boolean;
   isAccordionHeaderSelected: boolean;
   tabId: string;
@@ -41,6 +42,7 @@ const Accordion = ({
   accordionState,
   children,
   index,
+  isRecursive,
   isTabFocused,
   isAccordionHeaderSelected,
   tabId,
@@ -50,12 +52,14 @@ const Accordion = ({
   onAccordionHeaderClick,
 }: PropsWithChildren<AccordionProps>) => {
   const headingContainerClass = classNames(
-    'flex h-full flex-row items-center pl-[9px] py-0.5 outline-0 dark:text-bright-gray',
+    'flex h-full flex-row items-center py-0.5 outline-0 dark:text-bright-gray',
     isAccordionHeaderSelected &&
       (isTabFocused
         ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
-        : 'bg-gainsboro dark:bg-outer-space')
+        : 'bg-gainsboro dark:bg-outer-space'),
+    isRecursive ? 'pl-9' : 'pl-[9px]'
   );
+
   const DefaultIcon = TABS[index].icons.default;
   const SelectedIcon = TABS[index].icons.selected;
 
