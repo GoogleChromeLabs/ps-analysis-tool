@@ -101,7 +101,7 @@ const CookieSearch = ({
       <button onClick={getCookiesSetByJavascript} title="Refresh">
         <Refresh className="text-mischka" />
       </button>
-      <div className="text-right w-full text-xxxs">
+      <div className="text-right w-full text-xxxs text-secondary">
         Count: {Number(filteredCookies?.length) || 0}
       </div>
     </div>
