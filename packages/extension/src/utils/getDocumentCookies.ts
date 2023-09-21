@@ -18,6 +18,7 @@
  */
 import { type Cookie as ParsedCookie } from 'simple-cookie';
 import { isFirstParty } from '@cookie-analysis-tool/common';
+
 /**
  * Internal dependencies.
  */
@@ -25,6 +26,7 @@ import { createCookieObject } from '../worker/createCookieObject';
 import { fetchDictionary } from './fetchCookieDictionary';
 import findAnalyticsMatch from '../worker/findAnalyticsMatch';
 import { CookieStore, type CookieData } from '../localStore';
+
 /**
  * Adds the cookies set via document.cookie.
  * @param tabId Id of the tab being listened to.
@@ -33,6 +35,7 @@ async function getDocumentCookies(tabId: string) {
   let documentCookies: string[] = [];
   let parsedCookieData: CookieData[] = [];
   let tabUrl = '';
+
   const dictionary = await fetchDictionary();
 
   if (!tabId || tabId === '') {
@@ -44,6 +47,7 @@ async function getDocumentCookies(tabId: string) {
     (result: string[], isException) => {
       if (!isException && result.length > 1) {
         documentCookies = result;
+
         chrome.devtools.inspectedWindow.eval(
           'window.location.href',
           async (tabUrlResult: string, tabUrlIsException) => {
@@ -68,17 +72,21 @@ async function getDocumentCookies(tabId: string) {
                     name: cookieName,
                     value: cookieValue,
                   } as ParsedCookie;
+
                   parsedCookie = await createCookieObject(parsedCookie, tabUrl);
+
                   if (dictionary) {
                     analytics = findAnalyticsMatch(
                       parsedCookie.name,
                       dictionary
                     );
                   }
+
                   const isFirstPartyCookie = isFirstParty(
                     parsedCookie.domain || '',
                     tabUrl
                   );
+
                   return Promise.resolve({
                     parsedCookie,
                     analytics:

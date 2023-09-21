@@ -26,6 +26,7 @@ import { useCookieStore } from '../../stateProviders/syncCookieStore';
 import CookiesListing from './cookiesListing';
 import CookiesLanding from './cookiesLanding';
 import { Button, ProgressBar } from '../../../design-system/components';
+
 const Cookies = () => {
   const {
     allowedNumberOfTabs,
@@ -44,6 +45,7 @@ const Cookies = () => {
     selectedFrame: state.selectedFrame,
     changeListeningToThisTab: actions.changeListeningToThisTab,
   }));
+
   if (
     loading ||
     (loading &&

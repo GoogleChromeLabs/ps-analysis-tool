@@ -22,13 +22,14 @@ import { Resizable } from 're-resizable';
 /**
  * Internal dependencies.
  */
-import './app.css';
 import TABS from './tabs';
 import { Sidebar } from './components';
+import './app.css';
 
 const App: React.FC = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
   const TabContent = TABS[selectedTabIndex].component;
+
   return (
     <div className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black">
       <div className="w-full h-full flex flex-row">

@@ -217,7 +217,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
       setTabCookies(_cookies);
     }
+
     await getDocumentCookies(_tabId?.toString());
+
     chrome.devtools.inspectedWindow.eval(
       'window.location.href',
       (result, isException) => {
@@ -226,6 +228,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
       }
     );
+
     setLoading(false);
   }, [getAllFramesForCurrentTab]);
 
@@ -257,6 +260,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
             };
           })
         );
+
         await getAllFramesForCurrentTab(tabId);
         setTabCookies(_cookies);
       }
@@ -314,9 +318,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const changeListeningToThisTab = useCallback(async () => {
     try {
       let changedTabId = tabId?.toString();
+
       if (!tabId) {
         changedTabId = await getCurrentTabId();
       }
+
       if (!changedTabId) {
         return;
       }
@@ -350,6 +356,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       );
 
       await chrome.tabs.reload(Number(changedTabId));
+
       setIsCurrentTabBeingListenedTo(true);
       setLoading(false);
     } catch (error) {
