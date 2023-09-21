@@ -30,17 +30,20 @@ import CrossIcon from '../../../../../../../../third_party/icons/cross-icon.svg'
 import { useFilterManagementStore } from '../../../stateProviders/filterManagementStore';
 import { Refresh } from '../../../../../icons';
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
+import { type CookieTableData } from '../../../cookies.types';
 
 interface CookieSearchProps {
   cookiesAvailable: boolean;
   isFilterMenuOpen: boolean;
   toggleFilterMenu: () => void;
+  filteredCookies: CookieTableData[];
 }
 
 const CookieSearch = ({
   cookiesAvailable,
   isFilterMenuOpen,
   toggleFilterMenu,
+  filteredCookies,
 }: CookieSearchProps) => {
   const { searchTerm, setSearchTerm } = useFilterManagementStore(
     ({ state, actions }) => ({
@@ -98,6 +101,9 @@ const CookieSearch = ({
       <button onClick={getCookiesSetByJavascript} title="Refresh">
         <Refresh className="text-mischka" />
       </button>
+      <div className="text-right w-full text-xxxs">
+        Count: {Number(filteredCookies?.length) || 0}
+      </div>
     </div>
   );
 };
