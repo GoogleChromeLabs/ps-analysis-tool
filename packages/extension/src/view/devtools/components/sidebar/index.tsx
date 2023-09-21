@@ -59,7 +59,10 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
     setAccordionState(
       TABS.filter((tab) => Boolean(!tab.parentId || tab.hasChildren)).reduce(
         (accumulator, tab) => {
-          return { ...accumulator, [tab.id]: false };
+          return {
+            ...accumulator,
+            [tab.id]: tab.id === 'privacySandbox' ? true : false,
+          };
         },
         {}
       )
@@ -74,7 +77,11 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
 
   const getPreviousTab = useCallback(() => {
     for (let i = selectedIndex; i > 0; i = i - 1) {
-      if (!TABS[i]?.parentId && TABS[i].id !== TABS[selectedIndex].id) {
+      if (
+        TABS[i]?.parentId &&
+        TABS[i]?.hasChildren &&
+        TABS[i].id !== TABS[selectedIndex].id
+      ) {
         return i;
       }
     }
@@ -83,7 +90,11 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
 
   const getNextTab = useCallback(() => {
     for (let i = selectedIndex; i < TABS.length - 1; i = i + 1) {
-      if (!TABS[i]?.parentId && TABS[i].id !== TABS[selectedIndex].id) {
+      if (
+        TABS[i]?.parentId &&
+        TABS[i]?.hasChildren &&
+        TABS[i].id !== TABS[selectedIndex].id
+      ) {
         return i;
       }
     }
@@ -94,7 +105,6 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
     (index: number) => {
       setIndex(index);
       setSelectedFrame(null);
-      setSelectedAccordionChild(null);
       setIsTabFocused(true);
     },
     [setIndex, setSelectedFrame]
@@ -103,9 +113,12 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
   const keyboardNavigator = useCallback(
     // eslint-disable-next-line complexity
     (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (!selectedAccordionChild) {
+        return;
+      }
       let keys: string[] = [];
       let currIndex = 0;
-      const id = TABS[selectedIndex].id;
+      const id = selectedAccordionChild;
       if (tabFrames) {
         keys = Object.keys(tabFrames);
         currIndex = keys.findIndex((frame) => frame === selectedFrame);
@@ -116,13 +129,14 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
           if (accordionState && accordionState['cookies']) {
             if (selectedFrame) {
               if (currIndex === 0) {
-                mainMenuTabSelector(0);
+                mainMenuTabSelector(1);
+                setSelectedAccordionChild(TABS[1].id);
               } else {
                 setSelectedFrame(keys[currIndex - 1]);
               }
             } else {
               if (TABS[selectedIndex].id === 'siteBoundaries') {
-                setIndex(0);
+                setIndex(2);
                 setSelectedFrame(keys[keys.length - 1]);
               } else {
                 if (selectedIndex > 0) {
@@ -134,8 +148,9 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                     setSelectedAccordionChild(TABS[selectedIndex - 1].id);
                     setIndex(selectedIndex - 1);
                   } else {
-                    setSelectedAccordionChild(null);
-                    setIndex(getPreviousTab());
+                    const previousTab = getPreviousTab();
+                    setSelectedAccordionChild(TABS[previousTab].id);
+                    setIndex(previousTab);
                   }
                 }
               }
@@ -150,8 +165,9 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                 setSelectedAccordionChild(TABS[selectedIndex - 1].id);
                 setIndex(selectedIndex - 1);
               } else {
-                setSelectedAccordionChild(null);
-                setIndex(getPreviousTab());
+                const previousTab = getPreviousTab();
+                setSelectedAccordionChild(TABS[previousTab].id);
+                setIndex(previousTab);
               }
             }
           }
@@ -160,12 +176,13 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
           if (accordionState && accordionState['cookies']) {
             if (selectedFrame) {
               if (currIndex === keys.length - 1) {
-                mainMenuTabSelector(1);
+                mainMenuTabSelector(2);
+                setSelectedAccordionChild(TABS[2].id);
               } else {
                 setSelectedFrame(keys[currIndex + 1]);
               }
             } else {
-              if (selectedIndex === 0) {
+              if (selectedIndex === 1) {
                 setSelectedFrame(keys[0]);
               } else if (selectedIndex < TABS.length - 1) {
                 if (
@@ -176,13 +193,21 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                   setSelectedAccordionChild(TABS[selectedIndex + 1].id);
                   setIndex(selectedIndex + 1);
                 } else {
-                  setSelectedAccordionChild(null);
-                  setIndex(getNextTab());
+                  const nextTab = getNextTab();
+                  setSelectedAccordionChild(TABS[nextTab].id);
+                  setIndex(nextTab);
                 }
               }
             }
           } else {
             if (selectedIndex < TABS.length - 1) {
+              if (
+                accordionState &&
+                !accordionState[TABS[selectedIndex].id] &&
+                selectedIndex === 0
+              ) {
+                return;
+              }
               if (
                 accordionState &&
                 (accordionState[TABS[selectedIndex].id] || //@ts-ignore Since we are using Boolean this will default to false
@@ -191,8 +216,9 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                 setSelectedAccordionChild(TABS[selectedIndex + 1].id);
                 setIndex(selectedIndex + 1);
               } else {
-                setSelectedAccordionChild(null);
-                setIndex(getNextTab());
+                const nextTab = getNextTab();
+                setSelectedAccordionChild(TABS[nextTab].id);
+                setIndex(nextTab);
               }
             }
           }
@@ -200,10 +226,25 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
         case 'ArrowLeft':
           if (accordionState && accordionState[id]) {
             if (selectedFrame) {
-              mainMenuTabSelector(0);
+              mainMenuTabSelector(1);
+              setSelectedAccordionChild(TABS[1].id);
             } else {
               setAccordionState((prevState) => ({ ...prevState, [id]: false }));
             }
+          }
+          if (
+            accordionState &&
+            Object.keys(accordionState).filter(
+              (key) => accordionState[key] === true
+            ).length === 1 &&
+            accordionState['privacySandbox']
+          ) {
+            setSelectedAccordionChild(TABS[0].id);
+            setAccordionState((prevState) => ({
+              ...prevState,
+              privacySandbox: false,
+            }));
+            mainMenuTabSelector(0);
           }
           break;
         case 'ArrowRight':
@@ -217,6 +258,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
       }
     },
     [
+      selectedAccordionChild,
       tabFrames,
       selectedFrame,
       accordionState,
@@ -247,6 +289,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
     },
     [setSelectedFrame]
   );
+
   const onAccordionChildClick = useCallback(
     (tabIdToBeSet: string, currentIndex: number, key?: string) => {
       setIsTabFocused(true);
