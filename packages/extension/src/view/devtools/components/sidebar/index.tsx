@@ -25,6 +25,11 @@ import Accordion from './accordion';
 import { useCookieStore } from '../../stateProviders/syncCookieStore';
 import TABS from '../../tabs';
 import AccordionChildren from './accordion/accordionChildren';
+import {
+  arrowUpHandler,
+  arrowDownHandler,
+  arrowLeftHandler,
+} from './keyboardNavigationHandlers';
 interface SidebarProps {
   selectedIndex: number;
   setIndex: (index: number) => void;
@@ -75,32 +80,6 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
     };
   }, []);
 
-  const getPreviousTab = useCallback(() => {
-    for (let i = selectedIndex; i > 0; i = i - 1) {
-      if (
-        TABS[i]?.parentId &&
-        TABS[i]?.hasChildren &&
-        TABS[i].id !== TABS[selectedIndex].id
-      ) {
-        return i;
-      }
-    }
-    return 0;
-  }, [selectedIndex]);
-
-  const getNextTab = useCallback(() => {
-    for (let i = selectedIndex; i < TABS.length - 1; i = i + 1) {
-      if (
-        TABS[i]?.parentId &&
-        TABS[i]?.hasChildren &&
-        TABS[i].id !== TABS[selectedIndex].id
-      ) {
-        return i;
-      }
-    }
-    return selectedIndex;
-  }, [selectedIndex]);
-
   const mainMenuTabSelector = useCallback(
     (index: number) => {
       setIndex(index);
@@ -126,126 +105,40 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
 
       switch (event.code) {
         case 'ArrowUp':
-          if (accordionState && accordionState['cookies']) {
-            if (selectedFrame) {
-              if (currIndex === 0) {
-                mainMenuTabSelector(1);
-                setSelectedAccordionChild(TABS[1].id);
-              } else {
-                setSelectedFrame(keys[currIndex - 1]);
-              }
-            } else {
-              if (TABS[selectedIndex].id === 'siteBoundaries') {
-                setIndex(2);
-                setSelectedFrame(keys[keys.length - 1]);
-              } else {
-                if (selectedIndex > 0) {
-                  if (
-                    accordionState &&
-                    (accordionState[TABS[selectedIndex].id] || //@ts-ignore We have already set the parents in useEffect
-                      Boolean(accordionState[TABS[selectedIndex - 1].parentId]))
-                  ) {
-                    setSelectedAccordionChild(TABS[selectedIndex - 1].id);
-                    setIndex(selectedIndex - 1);
-                  } else {
-                    const previousTab = getPreviousTab();
-                    setSelectedAccordionChild(TABS[previousTab].id);
-                    setIndex(previousTab);
-                  }
-                }
-              }
-            }
-          } else {
-            if (selectedIndex > 0) {
-              if (
-                accordionState &&
-                (accordionState[TABS[selectedIndex].id] || //@ts-ignore Since we are using Boolean this will default to false
-                  Boolean(accordionState[TABS[selectedIndex - 1].parentId]))
-              ) {
-                setSelectedAccordionChild(TABS[selectedIndex - 1].id);
-                setIndex(selectedIndex - 1);
-              } else {
-                const previousTab = getPreviousTab();
-                setSelectedAccordionChild(TABS[previousTab].id);
-                setIndex(previousTab);
-              }
-            }
-          }
+          arrowUpHandler({
+            accordionState,
+            currIndex,
+            mainMenuTabSelector,
+            setSelectedAccordionChild,
+            selectedFrame,
+            setIndex,
+            setSelectedFrame,
+            selectedIndex,
+            keys,
+          });
           break;
         case 'ArrowDown':
-          if (accordionState && accordionState['cookies']) {
-            if (selectedFrame) {
-              if (currIndex === keys.length - 1) {
-                mainMenuTabSelector(2);
-                setSelectedAccordionChild(TABS[2].id);
-              } else {
-                setSelectedFrame(keys[currIndex + 1]);
-              }
-            } else {
-              if (selectedIndex === 1) {
-                setSelectedFrame(keys[0]);
-              } else if (selectedIndex < TABS.length - 1) {
-                if (
-                  accordionState &&
-                  (accordionState[TABS[selectedIndex].id] || //@ts-ignore Since we are using Boolean this will default to false
-                    Boolean(accordionState[TABS[selectedIndex + 1].parentId]))
-                ) {
-                  setSelectedAccordionChild(TABS[selectedIndex + 1].id);
-                  setIndex(selectedIndex + 1);
-                } else {
-                  const nextTab = getNextTab();
-                  setSelectedAccordionChild(TABS[nextTab].id);
-                  setIndex(nextTab);
-                }
-              }
-            }
-          } else {
-            if (selectedIndex < TABS.length - 1) {
-              if (
-                accordionState &&
-                !accordionState[TABS[selectedIndex].id] &&
-                selectedIndex === 0
-              ) {
-                return;
-              }
-              if (
-                accordionState &&
-                (accordionState[TABS[selectedIndex].id] || //@ts-ignore Since we are using Boolean this will default to false
-                  Boolean(accordionState[TABS[selectedIndex + 1].parentId]))
-              ) {
-                setSelectedAccordionChild(TABS[selectedIndex + 1].id);
-                setIndex(selectedIndex + 1);
-              } else {
-                const nextTab = getNextTab();
-                setSelectedAccordionChild(TABS[nextTab].id);
-                setIndex(nextTab);
-              }
-            }
-          }
+          arrowDownHandler({
+            accordionState,
+            currIndex,
+            mainMenuTabSelector,
+            setSelectedAccordionChild,
+            selectedFrame,
+            setIndex,
+            setSelectedFrame,
+            selectedIndex,
+            keys,
+          });
           break;
         case 'ArrowLeft':
-          if (accordionState && accordionState[id]) {
-            if (selectedFrame) {
-              mainMenuTabSelector(1);
-              setSelectedAccordionChild(TABS[1].id);
-            } else {
-              setAccordionState((prevState) => ({ ...prevState, [id]: false }));
-            }
-          }
-          if (
-            accordionState &&
-            Object.keys(accordionState).filter(
-              (key) => accordionState[key] === true
-            ).length === 1 &&
-            accordionState['privacySandbox']
-          ) {
-            setSelectedAccordionChild(TABS[0].id);
-            setAccordionState((prevState) => ({
-              ...prevState,
-              privacySandbox: false,
-            }));
-            mainMenuTabSelector(0);
-          }
+          arrowLeftHandler({
+            accordionState,
+            mainMenuTabSelector,
+            setSelectedAccordionChild,
+            selectedFrame,
+            setAccordionState,
+            id,
+          });
           break;
         case 'ArrowRight':
           if (accordionState && !accordionState[id]) {
@@ -266,8 +159,6 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
       setSelectedFrame,
       selectedIndex,
       setIndex,
-      getPreviousTab,
-      getNextTab,
     ]
   );
 
