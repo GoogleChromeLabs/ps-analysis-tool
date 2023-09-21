@@ -879,7 +879,6 @@ describe('Sidebar', () => {
     sidebarRender.rerender(
       <Sidebar selectedIndex={0} setIndex={() => undefined} />
     );
-    screen.debug();
     expect(
       screen.getByTestId('privacySandbox-tab-heading-wrapper')
     ).toHaveClass('bg-royal-blue');

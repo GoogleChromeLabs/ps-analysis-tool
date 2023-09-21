@@ -19,7 +19,14 @@
 import React from 'react';
 
 const PrivacySandbox = () => {
-  return <iframe src="https://privacysandbox.com" width="100%" height="100%" />;
+  return (
+    <iframe
+      data-testid="privacy-sandbox-content"
+      src="https://privacysandbox.com"
+      width="100%"
+      height="100%"
+    />
+  );
 };
 
 export default PrivacySandbox;

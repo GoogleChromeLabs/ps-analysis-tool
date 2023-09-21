@@ -239,7 +239,7 @@ describe('Index', () => {
       )
     );
     expect(
-      await screen.findByTestId('cookies-tab-heading-wrapper')
+      await screen.findByTestId('privacySandbox-tab-heading-wrapper')
     ).toHaveClass('bg-royal-blue');
   });
 
@@ -254,7 +254,7 @@ describe('Index', () => {
       )
     );
     expect(
-      await screen.findByTestId('cookies-tab-heading-wrapper')
+      await screen.findByTestId('privacySandbox-tab-heading-wrapper')
     ).toHaveClass('bg-royal-blue');
   });
   afterAll(() => {
