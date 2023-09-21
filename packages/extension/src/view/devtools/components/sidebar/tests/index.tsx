@@ -135,6 +135,7 @@ const mockResponse: {
   selectedFrame: null,
   setSelectedFrame: () => undefined,
 };
+
 const goToCookiesMenu = () => {
   act(() => {
     //Focus on cookie menu header
@@ -825,5 +826,62 @@ describe('Sidebar', () => {
     fireEvent.click(screen.getByTestId('https://crxt.net/'));
     // Check if setIndex was called.
     expect(setIndexMock).toHaveBeenCalled();
+  });
+
+  it('3 left arrow from first frame should close the main accordion', async () => {
+    mockUseCookieStore.mockReturnValue({
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    const sidebarRender = render(
+      <Sidebar selectedIndex={0} setIndex={() => undefined} />
+    );
+    goToFirstFrame();
+    mockUseCookieStore.mockReturnValueOnce({
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: 'https://edition.cnn.com/',
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar selectedIndex={1} setIndex={() => undefined} />
+    );
+    expect(
+      await screen.findByTestId('cookies-accordion-opener')
+    ).not.toHaveClass('-rotate-90');
+    expect(await screen.findByTestId('https://edition.cnn.com/')).toHaveClass(
+      'bg-royal-blue'
+    );
+
+    act(() => {
+      userEvent.keyboard('{ArrowLeft}');
+    });
+    mockUseCookieStore.mockReturnValueOnce({
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar selectedIndex={1} setIndex={() => undefined} />
+    );
+    act(() => {
+      userEvent.keyboard('{ArrowLeft}');
+    });
+    act(() => {
+      userEvent.keyboard('{ArrowLeft}');
+    });
+
+    mockUseCookieStore.mockReturnValueOnce({
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: null,
+      setSelectedFrame: mockResponse.setSelectedFrame,
+    });
+    sidebarRender.rerender(
+      <Sidebar selectedIndex={0} setIndex={() => undefined} />
+    );
+    screen.debug();
+    expect(
+      screen.getByTestId('privacySandbox-tab-heading-wrapper')
+    ).toHaveClass('bg-royal-blue');
   });
 });
