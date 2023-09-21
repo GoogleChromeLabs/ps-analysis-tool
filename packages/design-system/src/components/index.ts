@@ -23,5 +23,7 @@ export { default as MessageBox } from './messageBox';
 export { default as ProgressBar } from './progressBar';
 export { default as InfoCard } from './infoCard';
 export { default as Table } from './table';
+export { default as Accordion } from './accordion';
+export { default as AccordionChildren } from './accordion/accordionChildren';
 
 export type { MatrixComponentProps } from './matrix/matrixComponent';

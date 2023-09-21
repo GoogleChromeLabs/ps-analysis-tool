@@ -16,3 +16,4 @@
 
 export * from './components';
 export * from './theme/colors';
+export * from './icons';

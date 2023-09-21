@@ -23,16 +23,32 @@ import UrlSidebar from './components/urlSidebar';
 import MenuSidebar from './components/menuSidebar';
 
 const App = () => {
-  const [data, setData] = useState<null | object>({});
+  const [urls, setUrls] = useState<string[]>([]);
+  const [frames, setFrames] = useState<string[]>([]);
+  const [selectedUrl, setSelectedUrl] = useState<number>(0);
+  const [selectedFrameInd, setSelectedFrameInd] = useState<number>(0);
 
   useEffect(() => {
     (async () => {
-      const _data = await fetch('/out/rtcamp-com-sitemap-index-xml-data.json');
-      setData(_data);
+      const _data = await (
+        await fetch(
+          '/out/edition-cnn-com-sitemaps-sitemap-section-xml-data.json'
+        )
+      ).json();
+
+      const _urls = new Set();
+
+      _data.cookies.forEach((cookie) => {
+        _urls.add(cookie.pageUrl);
+      });
+
+      setUrls(Array.from(_urls));
+
+      setFrames(Array.from(_urls));
     })();
   }, []);
 
-  if (!data) {
+  if (urls.length === 0) {
     return <p>Loading</p>;
   }
   return (
@@ -53,7 +69,11 @@ const App = () => {
         }}
         className="h-full flex flex-col pt-0.5 border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
       >
-        <UrlSidebar />
+        <UrlSidebar
+          urls={urls}
+          selectedIndex={selectedUrl}
+          setIndex={setSelectedUrl}
+        />
       </Resizable>
       <Resizable
         defaultSize={{ width: '200px', height: '100%' }}
@@ -71,7 +91,11 @@ const App = () => {
         }}
         className="h-full flex flex-col pt-0.5 border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
       >
-        <MenuSidebar />
+        <MenuSidebar
+          frames={frames}
+          selectedIndex={selectedFrameInd}
+          setIndex={setSelectedFrameInd}
+        />
       </Resizable>
       <div className="flex-1 h-full bg-yellow-200"></div>
     </div>

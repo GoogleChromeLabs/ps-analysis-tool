@@ -21,10 +21,12 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 /**
  * Internal dependencies
  */
-import Accordion from './accordion';
+import {
+  Accordion,
+  AccordionChildren,
+} from '@cookie-analysis-tool/design-system';
 import { useCookieStore } from '../../stateProviders/syncCookieStore';
 import TABS from '../../tabs';
-import AccordionChildren from './accordion/accordionChildren';
 interface SidebarProps {
   selectedIndex: number;
   setIndex: (index: number) => void;
@@ -244,6 +246,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
               >
                 {!parentId && (
                   <Accordion
+                    tabs={TABS}
                     key={id}
                     accordionState={Boolean(
                       accordionState && accordionState[id]

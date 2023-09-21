@@ -22,10 +22,21 @@ import classNames from 'classnames';
 /**
  * Internal dependencies
  */
-import { ArrowDown, ArrowDownWhite } from '../../../../../icons';
-import TABS from '../../../tabs';
+import { ArrowDown, ArrowDownWhite } from '../../icons';
+
+export interface tabSidebar {
+  display_name: string;
+  component: () => React.JSX.Element | null;
+  id: string;
+  icons: {
+    default: React.FC<React.SVGProps<SVGSVGElement>>;
+    selected: React.FC<React.SVGProps<SVGSVGElement>>;
+  };
+  parentId?: string;
+}
 
 interface AccordionProps {
+  tabs: tabSidebar[];
   accordionState: boolean;
   index: number;
   isTabFocused: boolean;
@@ -38,6 +49,7 @@ interface AccordionProps {
 }
 
 const Accordion = ({
+  tabs,
   accordionState,
   children,
   index,
@@ -56,8 +68,8 @@ const Accordion = ({
         ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
         : 'bg-gainsboro dark:bg-outer-space')
   );
-  const DefaultIcon = TABS[index].icons.default;
-  const SelectedIcon = TABS[index].icons.selected;
+  const DefaultIcon = tabs[index].icons.default;
+  const SelectedIcon = tabs[index].icons.selected;
 
   return (
     <div className="flex flex-col w-full">

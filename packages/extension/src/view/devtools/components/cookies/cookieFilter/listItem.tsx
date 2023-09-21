@@ -21,7 +21,7 @@ import React, { useState } from 'react';
 /**
  * Internal dependencies.
  */
-import { ArrowDown, InfoIcon } from '../../../../../icons';
+import { ArrowDown, InfoIcon } from '@cookie-analysis-tool/design-system';
 import SubList from './subList';
 import type {
   SelectedFilters,

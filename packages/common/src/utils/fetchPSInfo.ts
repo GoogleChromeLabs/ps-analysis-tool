@@ -39,9 +39,7 @@ export type PSInfo = {
  * @param infoKey {PSInfoKeyType} PSInfo key to fetch
  * @returns {Promise<PSInfo>} PSInfo data object
  */
-export default async function fetchPSInfo(
-  infoKey: PSInfoKeyType
-): Promise<PSInfo> {
+export async function fetchPSInfo(infoKey: PSInfoKeyType): Promise<PSInfo> {
   const url = chrome.runtime.getURL('data/PSInfo.json');
 
   const data = await (await fetch(url)).json();

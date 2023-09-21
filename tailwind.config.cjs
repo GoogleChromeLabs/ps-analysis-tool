@@ -16,6 +16,7 @@
 
 const colors = require('tailwindcss/colors');
 const defaultTheme = require('tailwindcss/defaultTheme');
+const path = require('path');
 
 // @see https://github.com/tailwindlabs/tailwindcss/issues/4690#issuecomment-1046087220
 delete colors['lightBlue'];
@@ -26,7 +27,11 @@ delete colors['blueGray'];
 
 module.exports = {
   darkMode: 'class',
-  content: ['./**/src/**/*.{tsx,js}'],
+  content: [
+    path.join(__dirname, 'packages/extension/src/**/*.{tsx,js}'),
+    path.join(__dirname, 'packages/design-system/src/**/*.{tsx,js}'),
+    path.join(__dirname, 'packages/cli-report/src/**/*.{tsx,js}'),
+  ],
   theme: {
     extend: {
       boxShadow: {

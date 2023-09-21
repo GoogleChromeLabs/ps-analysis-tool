@@ -25,6 +25,7 @@ import {
   MatrixComponentHorizontal,
   Matrix,
   type MatrixComponentProps,
+  InfoIcon,
 } from '@cookie-analysis-tool/design-system';
 import { filterFramesWithCookies } from '../../utils/filterFramesWithCookies';
 import type {
@@ -32,7 +33,6 @@ import type {
   TabFrames,
   CookieStatsComponents,
 } from '../../../../cookies.types';
-import { InfoIcon } from '../../../../../../icons';
 
 interface CookiesMatrixProps {
   tabCookies: TabCookies | null;
