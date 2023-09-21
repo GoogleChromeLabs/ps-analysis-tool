@@ -64,13 +64,6 @@ export const FILTER_MAPPING = [
     description:
       "Whether the cookie was accepted(set) in Chrome's Cookie Store",
   },
-  {
-    name: 'Set Via',
-    keys: 'headerType',
-    order: 11,
-    description:
-      'Whether the cookie was set in the request/repsonse header or using document.cookie',
-  },
 ];
 
 export const CUSTOM_FILTER_MAPPING = {
@@ -91,5 +84,11 @@ export const CUSTOM_FILTER_MAPPING = {
       'Extended Term (> 1 month)',
     ]),
     order: 8,
+  },
+  setVia: {
+    name: 'Set Via',
+    keys: 'headerType',
+    order: 11,
+    filters: new Set(['HTTP', 'JS']),
   },
 };
