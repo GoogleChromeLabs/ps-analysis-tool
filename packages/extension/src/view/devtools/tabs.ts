@@ -64,6 +64,7 @@ const TABS = [
       default: PrivacySandboxIcon,
       selected: PrivacySandboxIconWhite,
     },
+    hasChildren: true,
   },
   {
     display_name: 'Cookies',
@@ -73,6 +74,8 @@ const TABS = [
       default: CookieIcon,
       selected: CookieIconWhite,
     },
+    parentId: 'privacySandbox',
+    hasChildren: true,
   },
   {
     display_name: 'Site Boundaries',
@@ -82,6 +85,8 @@ const TABS = [
       default: SiteBoundariesIcon,
       selected: SiteBoundariesIconWhite,
     },
+    parentId: 'privacySandbox',
+    hasChildren: true,
   },
   {
     display_name: 'CHIPS',
@@ -111,6 +116,8 @@ const TABS = [
       default: PrivateAdvertisingIcon,
       selected: PrivateAdvertisingIconWhite,
     },
+    parentId: 'privacySandbox',
+    hasChildren: true,
   },
   {
     display_name: 'Topics',
@@ -140,6 +147,8 @@ const TABS = [
       default: AntiCovertTrackingIcon,
       selected: AntiCovertTrackingIconWhite,
     },
+    parentId: 'privacySandbox',
+    hasChildren: true,
   },
   {
     display_name: 'Bounce Tracking',

@@ -33,8 +33,8 @@ interface AccordionProps {
   tabId: string;
   tabName: string;
   keyboardNavigator: (event: React.KeyboardEvent<HTMLDivElement>) => void;
-  onAccordionOpenerClick: () => void;
-  onAccordionHeaderClick: () => void;
+  onAccordionOpenerClick: (tabIdToBeSet: string) => void;
+  onAccordionHeaderClick: (tabIdToBeSet: string, index: number) => void;
 }
 
 const Accordion = ({
@@ -65,7 +65,7 @@ const Accordion = ({
         data-testid={`${tabId}-tab-heading-wrapper`}
         className={headingContainerClass}
         tabIndex={0}
-        onClick={onAccordionHeaderClick}
+        onClick={() => onAccordionHeaderClick(tabId, index)}
         onKeyDown={(event) => keyboardNavigator(event)}
       >
         <div
@@ -73,7 +73,7 @@ const Accordion = ({
           className={`origin-center transition-transform scale-125 p-0.5 mr-1 ${
             accordionState ? '' : '-rotate-90'
           } ${children?.filter(Boolean)?.length ? '' : 'invisible'}`}
-          onClick={onAccordionOpenerClick}
+          onClick={() => onAccordionOpenerClick(tabId)}
         >
           {isAccordionHeaderSelected && isTabFocused ? (
             <ArrowDownWhite />

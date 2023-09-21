@@ -44,7 +44,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
   const [isTabFocused, setIsTabFocused] = useState<boolean>(true);
   const [selectedAccordionChild, setSelectedAccordionChild] = useState<
     string | null
-  >(null);
+  >('privacySandbox');
   const sidebarContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -57,7 +57,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
       }
     };
     setAccordionState(
-      TABS.filter((tab) => Boolean(!tab.parentId)).reduce(
+      TABS.filter((tab) => Boolean(!tab.parentId || tab.hasChildren)).reduce(
         (accumulator, tab) => {
           return { ...accumulator, [tab.id]: false };
         },
@@ -229,6 +229,39 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
     ]
   );
 
+  const onAccordionHeaderClick = (tabIdToBeSet: string, index: number) => {
+    mainMenuTabSelector(index);
+    setSelectedAccordionChild(tabIdToBeSet);
+  };
+
+  const onAccordionOpenerClick = useCallback(
+    (tabIdToBeSet: string) => {
+      setAccordionState((prevState) => {
+        return {
+          ...prevState,
+          [tabIdToBeSet]: prevState ? !prevState[tabIdToBeSet] : false,
+        };
+      });
+      setSelectedAccordionChild(null);
+      setSelectedFrame(null);
+    },
+    [setSelectedFrame]
+  );
+  const onAccordionChildClick = useCallback(
+    (tabIdToBeSet: string, currentIndex: number, key?: string) => {
+      setIsTabFocused(true);
+      if (key) {
+        setSelectedFrame(key);
+      } else {
+        setSelectedFrame(null);
+      }
+      setIndex(currentIndex);
+      setSelectedAccordionChild(tabIdToBeSet);
+      setIsTabFocused(true);
+    },
+    [setIndex, setSelectedFrame]
+  );
+
   return (
     <div className="overflow-auto flex h-full">
       <div className="flex flex-col grow" ref={sidebarContainerRef}>
@@ -242,7 +275,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                 tabIndex={0}
                 onKeyDown={(event) => keyboardNavigator(event)}
               >
-                {!parentId && (
+                {
                   <Accordion
                     key={id}
                     accordionState={Boolean(
@@ -250,23 +283,14 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                     )}
                     index={index}
                     isAccordionHeaderSelected={
-                      selectedIndex === index && !selectedFrame
+                      selectedAccordionChild === id && !selectedFrame
                     }
                     isTabFocused={isTabFocused}
                     tabId={id}
                     tabName={name}
                     keyboardNavigator={keyboardNavigator}
-                    onAccordionOpenerClick={() => {
-                      setAccordionState((prevState) => {
-                        return {
-                          ...prevState,
-                          [id]: prevState ? !prevState[id] : false,
-                        };
-                      });
-                      setSelectedAccordionChild(null);
-                      setSelectedFrame(null);
-                    }}
-                    onAccordionHeaderClick={() => mainMenuTabSelector(index)}
+                    onAccordionOpenerClick={onAccordionOpenerClick}
+                    onAccordionHeaderClick={onAccordionHeaderClick}
                   >
                     {id === 'cookies'
                       ? tabFrames &&
@@ -274,19 +298,14 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                           return (
                             <AccordionChildren
                               key={key}
+                              currentIndex={index}
                               accordionMenuItemName={key}
                               defaultIcon={TABS[index].icons.default}
                               isTabFocused={isTabFocused}
                               isAccordionChildSelected={selectedFrame === key}
                               selectedIcon={TABS[index].icons.selected}
-                              onAccordionChildClick={() => {
-                                if (selectedIndex !== index) {
-                                  setIndex(index);
-                                }
-                                setSelectedAccordionChild('cookies');
-                                setSelectedFrame(key);
-                                setIsTabFocused(true);
-                              }}
+                              selectedIndex={selectedIndex}
+                              onAccordionChildClick={onAccordionChildClick}
                               titleForMenuItem={`Cookies used by frames from ${key}`}
                             />
                           );
@@ -295,28 +314,39 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                           if (id === tab?.parentId && Boolean(tab?.parentId)) {
                             return (
                               <AccordionChildren
+                                currentIndex={currentIndex}
                                 key={tab.id}
+                                tabId={tab.id}
+                                index={index}
+                                keyboardNavigator={keyboardNavigator}
+                                accordionState={accordionState}
+                                isAccordionHeaderSelected={
+                                  selectedAccordionChild === tab.id &&
+                                  !selectedFrame
+                                }
+                                hasChildren={Boolean(tab?.hasChildren)}
                                 accordionMenuItemName={tab.display_name}
                                 defaultIcon={tab.icons.default}
                                 isTabFocused={isTabFocused}
                                 isAccordionChildSelected={
                                   tab.id === selectedAccordionChild
                                 }
+                                selectedAccordionChild={selectedAccordionChild}
+                                selectedIndex={selectedIndex}
                                 selectedIcon={tab.icons.selected}
+                                selectedFrame={selectedFrame}
                                 titleForMenuItem={tab.display_name}
-                                onAccordionChildClick={() => {
-                                  setIndex(currentIndex);
-                                  setSelectedAccordionChild(tab.id);
-                                  setSelectedFrame(null);
-                                  setIsTabFocused(true);
-                                }}
+                                tabFrames={tabFrames}
+                                onAccordionChildClick={onAccordionChildClick}
+                                onAccordionOpenerClick={onAccordionOpenerClick}
+                                onAccordionHeaderClick={onAccordionHeaderClick}
                               />
                             );
                           }
                           return null;
                         })}
                   </Accordion>
-                )}
+                }
               </div>
             );
           }
