@@ -309,6 +309,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     },
     [tabId, getAllFramesForCurrentTab]
   );
+
   const getCookiesSetByJavascript = useCallback(async () => {
     if (tabId) {
       await getDocumentCookies(tabId.toString());

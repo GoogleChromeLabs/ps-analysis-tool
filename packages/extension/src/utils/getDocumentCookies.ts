@@ -94,7 +94,7 @@ async function getDocumentCookies(tabId: string) {
                         ? analytics
                         : null,
                     url: tabUrl,
-                    headerType: 'document',
+                    headerType: 'javascript', // @todo Update headerType name.
                     isFirstParty: isFirstPartyCookie || null,
                     frameIdList: [
                       outerMostFrame && outerMostFrame[0]
