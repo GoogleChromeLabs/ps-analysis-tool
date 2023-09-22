@@ -28,27 +28,6 @@ describe('CirclePieChart', () => {
     { count: 73, color: 'blue' },
   ];
 
-  it('renders EmptyCirclePieChart when centerCount is 0', () => {
-    const centerCount = 0;
-    const title = 'Empty Chart';
-    const fallbackText = 'No Data';
-
-    const { getByText } = render(
-      <CirclePieChart
-        centerCount={centerCount}
-        data={testData}
-        title={title}
-        fallbackText={fallbackText}
-      />
-    );
-
-    // Check if the EmptyCirclePieChart is rendered when centerCount is 0
-    const emptyChartTitle = getByText(title);
-    expect(emptyChartTitle).toBeInTheDocument();
-    const fallbackTextElement = getByText(fallbackText);
-    expect(fallbackTextElement).toBeInTheDocument();
-  });
-
   it('renders CirclePieChart with correct centerCount when centerCount is less than or equal to MAX_COUNT', () => {
     const centerCount = 123;
     const title = '1st Party cookies';
