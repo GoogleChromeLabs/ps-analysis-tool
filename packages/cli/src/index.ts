@@ -356,8 +356,8 @@ export const initialize = async () => {
     );
   }
 
-  await browser.close();
-  process.exit(1);
+  // await browser.close();
+  // process.exit(1);
 };
 
 (async () => {

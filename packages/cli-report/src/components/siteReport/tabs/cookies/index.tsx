@@ -14,11 +14,18 @@
  * limitations under the License.
  */
 
-export { default as isFirstParty } from './utils/isFirstParty';
+import React from 'react';
 
-export {
-  fetchPSInfo,
-  type PSInfoKeyType,
-  type PSInfoKey,
-  type PSInfo,
-} from './utils/fetchPSInfo';
+interface CookiesTabProps {
+  selectedFrameUrl?: string | null;
+}
+
+const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
+  return (
+    <div className="w-full h-full flex items-center justify-center">
+      <p>Cookies:{selectedFrameUrl}</p>
+    </div>
+  );
+};
+
+export default CookiesTab;

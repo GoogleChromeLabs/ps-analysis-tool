@@ -21,8 +21,10 @@
   "dependencies": {
     "@cookie-analysis-tool/common": "*",
     "react": "^18.2.0",
+    "classnames": "^2.3.2",
     "react-dom": "^18.2.0",
-    "re-resizable": "^6.9.9"
+    "re-resizable": "^6.9.9",
+    "use-context-selector": "^1.4.1"
   },
   "devDependencies": {
     "@babel/plugin-transform-react-jsx": "^7.22.15",

@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-export { default as isFirstParty } from './utils/isFirstParty';
+import React from 'react';
 
-export {
-  fetchPSInfo,
-  type PSInfoKeyType,
-  type PSInfoKey,
-  type PSInfo,
-} from './utils/fetchPSInfo';
+const AffectedCookiesTab = () => {
+  return (
+    <div className="w-full h-full flex items-center justify-center">
+      <p>Affected Cookies</p>
+    </div>
+  );
+};
+
+export default AffectedCookiesTab;

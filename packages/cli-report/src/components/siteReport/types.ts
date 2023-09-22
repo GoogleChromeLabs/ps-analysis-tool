@@ -14,11 +14,5 @@
  * limitations under the License.
  */
 
-export { default as isFirstParty } from './utils/isFirstParty';
-
-export {
-  fetchPSInfo,
-  type PSInfoKeyType,
-  type PSInfoKey,
-  type PSInfo,
-} from './utils/fetchPSInfo';
+export type CookieData = any;
+export type TechnologyData = any;

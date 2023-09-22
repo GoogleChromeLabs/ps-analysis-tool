@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-export { default as isFirstParty } from './utils/isFirstParty';
+import React from 'react';
 
-export {
-  fetchPSInfo,
-  type PSInfoKeyType,
-  type PSInfoKey,
-  type PSInfo,
-} from './utils/fetchPSInfo';
+const TechnologiesTab = () => {
+  return (
+    <div className="w-full h-full flex items-center justify-center">
+      <p>Technologies</p>
+    </div>
+  );
+};
+
+export default TechnologiesTab;

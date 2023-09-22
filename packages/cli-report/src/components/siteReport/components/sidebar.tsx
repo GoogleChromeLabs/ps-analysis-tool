@@ -17,56 +17,32 @@
 /**
  * External dependencies.
  */
-import React, { useState, useRef, useEffect, useCallback } from 'react';
 import {
-  CookieIcon,
-  CookieIconWhite,
   Accordion,
   AccordionChildren,
 } from '@cookie-analysis-tool/design-system';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-const TABS = [
-  {
-    display_name: 'Cookies',
-    component: () => <div></div>,
-    id: 'cookies',
-    icons: {
-      default: CookieIcon,
-      selected: CookieIconWhite,
-    },
-    parentId: undefined,
-  },
-  {
-    display_name: 'Technologies',
-    component: () => <div></div>,
-    id: 'cookies',
-    icons: {
-      default: CookieIcon,
-      selected: CookieIconWhite,
-    },
-    parentId: undefined,
-  },
-  {
-    display_name: 'Affected Cookies',
-    component: () => <div></div>,
-    id: 'cookies',
-    icons: {
-      default: CookieIcon,
-      selected: CookieIconWhite,
-    },
-    parentId: undefined,
-  },
-];
+/**
+ * Internal dependencies.
+ */
+import { TABS } from '../tabs';
 
-export interface UrlSidebarProps {
-  frames: string[];
+export interface SidebarProps {
+  selectedFrameUrl: string | null;
+  setSelectedFrameUrl: (frameUrl: string | null) => void;
+  frameUrls: string[];
   selectedIndex: number;
   setIndex: (index: number) => void;
 }
 
-const UrlSidebar = ({ frames, selectedIndex, setIndex }: UrlSidebarProps) => {
-  const [selectedUrl, setSelectedUrl] = useState<string | null>();
-
+const Sidebar = ({
+  selectedFrameUrl,
+  setSelectedFrameUrl,
+  frameUrls,
+  selectedIndex,
+  setIndex,
+}: SidebarProps) => {
   const [accordionState, setAccordionState] =
     useState<Record<string, boolean>>();
   const [isTabFocused, setIsTabFocused] = useState<boolean>(true);
@@ -121,11 +97,11 @@ const UrlSidebar = ({ frames, selectedIndex, setIndex }: UrlSidebarProps) => {
   const mainMenuTabSelector = useCallback(
     (index: number) => {
       setIndex(index);
-      setSelectedUrl(null);
+      setSelectedFrameUrl(null);
       setSelectedAccordionChild(null);
       setIsTabFocused(true);
     },
-    [setIndex, setSelectedUrl]
+    [setIndex, setSelectedFrameUrl]
   );
 
   const keyboardNavigator = useCallback(
@@ -133,23 +109,23 @@ const UrlSidebar = ({ frames, selectedIndex, setIndex }: UrlSidebarProps) => {
     (event: React.KeyboardEvent<HTMLDivElement>) => {
       let currIndex = 0;
       const id = TABS[selectedIndex].id;
-      if (frames) {
-        currIndex = frames.findIndex((url) => url === selectedUrl);
+      if (frameUrls) {
+        currIndex = frameUrls.findIndex((frame) => frame === selectedFrameUrl);
       }
 
       switch (event.code) {
         case 'ArrowUp':
           if (accordionState && accordionState['cookies']) {
-            if (selectedUrl) {
+            if (selectedFrameUrl) {
               if (currIndex === 0) {
                 mainMenuTabSelector(0);
               } else {
-                setSelectedUrl(frames[currIndex - 1]);
+                setSelectedFrameUrl(frameUrls[currIndex - 1]);
               }
             } else {
               if (TABS[selectedIndex].id === 'siteBoundaries') {
                 setIndex(0);
-                setSelectedUrl(frames[frames.length - 1]);
+                setSelectedFrameUrl(frameUrls[frameUrls.length - 1]);
               } else {
                 if (selectedIndex > 0) {
                   if (
@@ -184,15 +160,15 @@ const UrlSidebar = ({ frames, selectedIndex, setIndex }: UrlSidebarProps) => {
           break;
         case 'ArrowDown':
           if (accordionState && accordionState['cookies']) {
-            if (selectedUrl) {
-              if (currIndex === frames.length - 1) {
+            if (selectedFrameUrl) {
+              if (currIndex === frameUrls.length - 1) {
                 mainMenuTabSelector(1);
               } else {
-                setSelectedUrl(frames[currIndex + 1]);
+                setSelectedFrameUrl(frameUrls[currIndex + 1]);
               }
             } else {
               if (selectedIndex === 0) {
-                setSelectedUrl(frames[0]);
+                setSelectedFrameUrl(frameUrls[0]);
               } else if (selectedIndex < TABS.length - 1) {
                 if (
                   accordionState &&
@@ -225,7 +201,7 @@ const UrlSidebar = ({ frames, selectedIndex, setIndex }: UrlSidebarProps) => {
           break;
         case 'ArrowLeft':
           if (accordionState && accordionState[id]) {
-            if (selectedUrl) {
+            if (selectedFrameUrl) {
               mainMenuTabSelector(0);
             } else {
               setAccordionState((prevState) => ({ ...prevState, [id]: false }));
@@ -243,16 +219,18 @@ const UrlSidebar = ({ frames, selectedIndex, setIndex }: UrlSidebarProps) => {
       }
     },
     [
-      accordionState,
-      getNextTab,
-      getPreviousTab,
-      mainMenuTabSelector,
       selectedIndex,
-      selectedUrl,
+      frameUrls,
+      selectedFrameUrl,
+      accordionState,
+      mainMenuTabSelector,
+      setSelectedFrameUrl,
       setIndex,
-      frames,
+      getPreviousTab,
+      getNextTab,
     ]
   );
+
   return (
     <div className="overflow-auto flex h-full">
       <div className="flex flex-col grow" ref={sidebarContainerRef}>
@@ -275,7 +253,7 @@ const UrlSidebar = ({ frames, selectedIndex, setIndex }: UrlSidebarProps) => {
                     )}
                     index={index}
                     isAccordionHeaderSelected={
-                      selectedIndex === index && !selectedUrl
+                      selectedIndex === index && !selectedFrameUrl
                     }
                     isTabFocused={isTabFocused}
                     tabId={id}
@@ -289,30 +267,31 @@ const UrlSidebar = ({ frames, selectedIndex, setIndex }: UrlSidebarProps) => {
                         };
                       });
                       setSelectedAccordionChild(null);
-                      setSelectedUrl(null);
+                      setSelectedFrameUrl(null);
                     }}
                     onAccordionHeaderClick={() => mainMenuTabSelector(index)}
                   >
-                    {id === 'report'
-                      ? frames &&
-                        frames.map((frame) => {
+                    {id === 'cookies'
+                      ? frameUrls?.map((key) => {
                           return (
                             <AccordionChildren
-                              key={frame}
-                              accordionMenuItemName={frame}
+                              key={key}
+                              accordionMenuItemName={key}
                               defaultIcon={TABS[index].icons.default}
                               isTabFocused={isTabFocused}
-                              isAccordionChildSelected={selectedUrl === frame}
+                              isAccordionChildSelected={
+                                selectedFrameUrl === key
+                              }
                               selectedIcon={TABS[index].icons.selected}
                               onAccordionChildClick={() => {
                                 if (selectedIndex !== index) {
                                   setIndex(index);
                                 }
-                                setSelectedAccordionChild('report');
-                                setSelectedUrl(frame);
+                                setSelectedAccordionChild('cookies');
+                                setSelectedFrameUrl(key);
                                 setIsTabFocused(true);
                               }}
-                              titleForMenuItem={`Report for ${frame}`}
+                              titleForMenuItem={`Cookies used by frames from ${key}`}
                             />
                           );
                         })
@@ -332,7 +311,7 @@ const UrlSidebar = ({ frames, selectedIndex, setIndex }: UrlSidebarProps) => {
                                 onAccordionChildClick={() => {
                                   setIndex(currentIndex);
                                   setSelectedAccordionChild(tab.id);
-                                  setSelectedUrl(null);
+                                  setSelectedFrameUrl(null);
                                   setIsTabFocused(true);
                                 }}
                               />
@@ -352,4 +331,4 @@ const UrlSidebar = ({ frames, selectedIndex, setIndex }: UrlSidebarProps) => {
   );
 };
 
-export default UrlSidebar;
+export default Sidebar;

@@ -26,7 +26,7 @@ import { ArrowDown, ArrowDownWhite } from '../../icons';
 
 export interface tabSidebar {
   display_name: string;
-  component: () => React.JSX.Element | null;
+  component: (props: any) => React.JSX.Element | null;
   id: string;
   icons: {
     default: React.FC<React.SVGProps<SVGSVGElement>>;

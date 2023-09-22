@@ -13,23 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
 import React from 'react';
 
-import SiteReport from './components/siteReport';
-import { cookies, technologies } from './consts';
+/**
+ * Internal dependencies.
+ */
+import { Provider as ContentStoreProvider } from './stateProviders/contentStore';
+import { CookieData, TechnologyData } from './types';
+import Layout from './components/layout';
 
-const App = () => {
+interface SiteReportProps {
+  cookies: CookieData[];
+  technologies?: TechnologyData;
+}
+
+const SiteReport = ({ cookies, technologies }: SiteReportProps) => {
   return (
-    <div className="w-full h-screen flex">
-      <div className="flex-1 h-full">
-        <SiteReport cookies={cookies} technologies={technologies} />
-      </div>
-    </div>
+    <ContentStoreProvider cookies={cookies} technologies={technologies}>
+      <Layout />
+    </ContentStoreProvider>
   );
 };
 
-export default App;
+export default SiteReport;
