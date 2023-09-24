@@ -25,19 +25,20 @@ import Accordion from './accordion';
 import { useCookieStore } from '../../stateProviders/syncCookieStore';
 import TABS from '../../tabs';
 import AccordionChildren from './accordion/accordionChildren';
+import { InspectIcon, InspectBlueIcon } from '../../../../icons';
 interface SidebarProps {
   selectedIndex: number;
   setIndex: (index: number) => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
-  const { setSelectedFrame, selectedFrame, tabFrames } = useCookieStore(
-    ({ state, actions }) => ({
+  const { setSelectedFrame, selectedFrame, tabFrames, inspectedFrame } =
+    useCookieStore(({ state, actions }) => ({
       setSelectedFrame: actions.setSelectedFrame,
       tabFrames: state.tabFrames,
       selectedFrame: state.selectedFrame,
-    })
-  );
+      inspectedFrame: state.inspectedFrame,
+    }));
 
   const [accordionState, setAccordionState] =
     useState<Record<string, boolean>>();
@@ -46,6 +47,23 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
     string | null
   >(null);
   const sidebarContainerRef = useRef<HTMLDivElement>(null);
+  const [isInspecting, setIsInspecting] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIndex(0);
+    setSelectedAccordionChild('cookies');
+    setSelectedFrame(inspectedFrame);
+    setIsTabFocused(true);
+  }, [inspectedFrame, setSelectedFrame, setIndex]);
+
+  useEffect(() => {
+    if (chrome?.storage) {
+      // Let's update the value in storage. we will use this with storage.onChanged.addListener later
+      chrome.storage.sync.set({
+        isInspecting: isInspecting,
+      });
+    }
+  }, [isInspecting]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -232,6 +250,14 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
   return (
     <div className="overflow-auto flex h-full">
       <div className="flex flex-col grow" ref={sidebarContainerRef}>
+        <div className="mini-status-bar w-full min-h-[25px] px-2 flex items-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green">
+          <span
+            className="psat-inspect inline-block"
+            onClick={() => setIsInspecting(!isInspecting)}
+          >
+            {isInspecting ? <InspectBlueIcon /> : <InspectIcon />}
+          </span>
+        </div>
         {TABS.map(({ id, display_name: name, parentId }, index: number) => {
           if (!parentId) {
             return (

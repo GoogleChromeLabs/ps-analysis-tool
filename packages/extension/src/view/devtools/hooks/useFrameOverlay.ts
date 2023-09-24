@@ -16,12 +16,12 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 
 /**
  * Internal dependencies.
  */
-import { DEVTOOL_PORT_NAME } from '../../../constants';
+import { WEBPAGE_PORT_NAME } from '../../../constants';
 
 interface UseFrameOverlayProps {
   selectedFrame: string | null;
@@ -38,22 +38,52 @@ const useFrameOverlay = ({
 }: UseFrameOverlayProps) => {
   const portRef = useRef<chrome.runtime.Port | null>(null);
 
+  const storageChangeListner = useCallback(
+    (changes: object) => {
+      if (changes?.isInspecting && portRef.current) {
+        if (changes.isInspecting?.newValue) {
+          portRef.current.postMessage({
+            FrameInspect: 'start',
+          });
+        } else {
+          portRef.current.postMessage({
+            FrameInspect: 'stop',
+          });
+        }
+      }
+      console.log('test storage listner');
+    },
+    [portRef]
+  );
+
   useEffect(() => {
-    portRef.current = chrome.runtime.connect({ name: DEVTOOL_PORT_NAME });
+    chrome.runtime.onConnect.addListener((port) => {
+      console.log(port);
+      if (port.name === WEBPAGE_PORT_NAME) {
+        portRef.current = port;
+        console.log('Web port connected.');
+        portRef.current.onMessage.addListener((response: Response) => {
+          console.log(response);
 
-    portRef.current.onDisconnect.addListener(() => {
-      console.log('DevTool Port disconnected!');
-    });
+          if (response?.attributes?.src) {
+            console.log(response.attributes.src);
+            setInspectedFrame(response.attributes.src);
+          }
+        });
 
-    portRef.current.onMessage.addListener((response: Response) => {
-      if (response?.attributes?.src) {
-        setInspectedFrame(response.attributes.src);
+        portRef.current.onDisconnect.addListener(() => {
+          portRef.current = null;
+          console.log('Web port disconnected.');
+        });
       }
     });
-  }, [setInspectedFrame]);
+
+    chrome.storage.onChanged.addListener(storageChangeListner);
+  }, [setInspectedFrame, storageChangeListner]);
 
   useEffect(() => {
     if (selectedFrame && portRef.current) {
+      console.log(selectedFrame);
       portRef.current.postMessage({
         selectedFrame,
       });

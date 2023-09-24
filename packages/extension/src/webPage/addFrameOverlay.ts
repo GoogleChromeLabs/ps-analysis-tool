@@ -29,58 +29,59 @@ export const removeAllPopovers = () => {
   });
 };
 
-export const addFrameOverlay = (selectedFrame: string) => {
+export const addFrameOverlay = (Frame: HTMLIFrameElement): boolean => {
+  const overlay = createFrameOverlay(Frame);
+  const frameInfoBox = createIframeInfoBlock(Frame);
+  const body = document.querySelector('body');
+
+  if (!body || !overlay) {
+    return false;
+  }
+
+  removeAllPopovers();
+  body.appendChild(overlay);
+  body.appendChild(frameInfoBox);
+
+  overlay.showPopover();
+  frameInfoBox.showPopover();
+
+  // Show info box at bottom if we don't have enough space at top
+  if (frameInfoBox.offsetHeight > Frame.offsetTop) {
+    frameInfoBox.style.top =
+      Number(frameInfoBox.offsetTop) + Number(Frame.offsetHeight) - 1 + 'px';
+
+    // Set infobox tip at top of box.
+    frameInfoBox.firstElementChild?.classList.add('toptip');
+  } else {
+    frameInfoBox.style.top =
+      Number(frameInfoBox.offsetTop) -
+      Number(frameInfoBox.offsetHeight) +
+      5 +
+      'px';
+  }
+
+  frameInfoBox.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start',
+    inline: 'nearest',
+  });
+
+  return true;
+};
+
+export const findAndAddFrameOverlay = (selectedFrame: string) => {
   const iframes = document.querySelectorAll('iframe');
   let frameFound = false;
 
   for (const iframe of iframes) {
     const src = iframe.getAttribute('src') || '';
+    console.log(src);
     const srcHost = new URL(src).host.replace('www.', ''); // @todo Not the right way.
     const selectedFrameHost = new URL(selectedFrame).host.replace('www.', '');
 
     // @todo Very loosley checked for initial POC, needs more work.
     if (srcHost === selectedFrameHost) {
-      const overlay = createFrameOverlay(iframe);
-      const frameInfoBox = createIframeInfoBlock(iframe);
-
-      const body = document.querySelector('body');
-
-      if (!body || !overlay) {
-        return;
-      }
-
-      frameFound = true;
-
-      removeAllPopovers();
-      body.appendChild(overlay);
-      body.appendChild(frameInfoBox);
-
-      overlay.showPopover();
-      frameInfoBox.showPopover();
-
-      // Show info box at bottom if we don't have enough space at top
-      if (frameInfoBox.offsetHeight > iframe.offsetTop) {
-        frameInfoBox.style.top =
-          Number(frameInfoBox.offsetTop) +
-          Number(iframe.offsetHeight) -
-          1 +
-          'px';
-
-        // Set infobox tip at top of box.
-        frameInfoBox.firstElementChild?.classList.add('toptip');
-      } else {
-        frameInfoBox.style.top =
-          Number(frameInfoBox.offsetTop) -
-          Number(frameInfoBox.offsetHeight) +
-          5 +
-          'px';
-      }
-
-      frameInfoBox.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-        inline: 'nearest',
-      });
+      frameFound = addFrameOverlay(iframe);
     }
   }
 

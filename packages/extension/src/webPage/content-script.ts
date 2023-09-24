@@ -16,39 +16,85 @@
 /**
  * Internal dependencies.
  */
-import { addFrameOverlay, removeAllPopovers } from './addFrameOverlay';
+import {
+  addFrameOverlay,
+  findAndAddFrameOverlay,
+  removeAllPopovers,
+} from './addFrameOverlay';
 import getFrameAttributes from './getFrameAttributes';
 import { WEBPAGE_PORT_NAME } from '../constants';
 import './style.css';
 
-const port = chrome.runtime.connect({ name: WEBPAGE_PORT_NAME });
-let portConnected = true;
+let port: chrome.runtime.Port | null = null;
 
-port.onDisconnect.addListener(() => {
-  portConnected = false;
-  console.log(' Web page port disconnected!');
-});
+const connectPort = () => {
+  port = chrome.runtime.connect(chrome.runtime.id, {
+    name: WEBPAGE_PORT_NAME,
+  });
 
-port.onMessage.addListener((response) => {
-  if (response?.selectedFrame) {
-    addFrameOverlay(response.selectedFrame);
+  port.onDisconnect.addListener(() => {
+    port = null;
+    console.log(' Webpage port disconnected!');
+  });
+
+  port.onMessage.addListener((response) => {
+    if (response?.FrameInspect) {
+      if (response.FrameInspect === 'start') {
+        attachFrameHighlight();
+      } else {
+        removeFrameHighlight();
+      }
+    }
+    if (response?.selectedFrame) {
+      findAndAddFrameOverlay(response.selectedFrame);
+    }
+    console.log(response);
+  });
+};
+
+chrome.storage.onChanged.addListener((changes: object) => {
+  if (changes?.devToolState) {
+    if (changes.devToolState?.newValue === 'Ready!' && port === null) {
+      console.log('Connection Attempt!');
+      connectPort();
+    }
+    console.log(port, changes);
   }
-  console.log(response);
 });
 
 const handleMouseEvent = (event: MouseEvent): void => {
   if ((event.target as HTMLElement).tagName === 'IFRAME') {
+    const frame = event.target as HTMLIFrameElement;
+    console.log(frame.getAttribute('src'));
+    if (!frame.getAttribute('src')) {
+      return;
+    }
     const payload = {
       hover: event?.type === 'mouseover',
-      attributes: getFrameAttributes(event.target as HTMLIFrameElement),
+      attributes: getFrameAttributes(frame),
     };
 
-    if (portConnected) {
+    addFrameOverlay(frame);
+
+    if (port) {
       port.postMessage(payload);
     }
   }
 };
 
-document.addEventListener('mouseover', handleMouseEvent);
-document.addEventListener('mouseout', handleMouseEvent);
+const attachFrameHighlight = (): void => {
+  document.addEventListener('mouseover', handleMouseEvent);
+  document.addEventListener('mouseout', handleMouseEvent);
+};
+
+const removeFrameHighlight = (): void => {
+  document.removeEventListener('mouseover', handleMouseEvent);
+  document.removeEventListener('mouseout', handleMouseEvent);
+  removeAllPopovers();
+};
+
+// Atempt the connection to devtools
+connectPort();
+
+// Remove all popovers of extension
 document.addEventListener('click', removeAllPopovers);

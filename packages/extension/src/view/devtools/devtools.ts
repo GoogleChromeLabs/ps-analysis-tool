@@ -16,5 +16,28 @@
 chrome.devtools.panels.create(
   'Privacy Sandbox',
   'icons/icon.svg',
-  'devtools/index.html'
+  'devtools/index.html',
+  (penal) => {
+    penal.onShown.addListener(() => {
+      // Make sure context is not changed. it happens if serivce-work script is refreshed or inactive.
+      if (chrome?.storage) {
+        console.log(penal, '');
+
+        // Remove if exist by chance.
+        chrome.storage.session.remove('devToolState');
+
+        // try to communicate with web page.
+        chrome.storage.session.set({
+          devToolState: 'Ready!',
+        });
+      }
+    });
+
+    penal.onHidden.addListener(() => {
+      // Make sure context is not changed. it happens if serivce-work script is refreshed or inactive.
+      if (chrome?.storage) {
+        chrome.storage.session.remove('devToolState');
+      }
+    });
+  }
 );
