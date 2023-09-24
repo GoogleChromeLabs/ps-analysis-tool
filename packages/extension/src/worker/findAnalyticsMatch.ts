@@ -17,10 +17,8 @@
 /**
  * Internal dependencies.
  */
-import type {
-  CookieAnalytics,
-  CookieDatabase,
-} from '../utils/fetchCookieDictionary';
+import type { CookieDatabase } from '../utils/fetchCookieDictionary';
+import { type CookieAnalytics } from '@cookie-analysis-tool/common';
 
 /**
  *

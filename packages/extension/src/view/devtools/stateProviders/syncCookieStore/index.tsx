@@ -28,8 +28,12 @@ import React, {
 /**
  * Internal dependencies.
  */
-import { CookieStore, type CookieData } from '../../../../localStore';
-import type { TabCookies, TabFrames } from '../../cookies.types';
+import { CookieStore } from '../../../../localStore';
+import type {
+  TabCookies,
+  TabFrames,
+  CookieData,
+} from '@cookie-analysis-tool/common';
 import { noop } from '../../../../utils/noop';
 import { getCurrentTabId } from '../../../../utils/getCurrentTabId';
 import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';

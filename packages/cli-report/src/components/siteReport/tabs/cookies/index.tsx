@@ -14,7 +14,16 @@
  * limitations under the License.
  */
 
+/**
+ * External dependencies.
+ */
 import React from 'react';
+
+/**
+ * Internal dependencies.
+ */
+import CookiesLanding from './cookieLanding';
+import CookiesListing from './cookieListing';
 
 interface CookiesTabProps {
   selectedFrameUrl?: string | null;
@@ -23,7 +32,7 @@ interface CookiesTabProps {
 const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
   return (
     <div className="w-full h-full flex items-center justify-center">
-      <p>Cookies:{selectedFrameUrl}</p>
+      {selectedFrameUrl ? <CookiesListing /> : <CookiesLanding />}
     </div>
   );
 };

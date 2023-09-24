@@ -21,9 +21,9 @@ import type {
   TabCookies,
   TabFrames,
   FramesWithCookies,
-} from '../../../cookies.types';
+} from '../cookies.types';
 
-export const filterFramesWithCookies = (
+const filterFramesWithCookies = (
   tabCookies: TabCookies | null,
   tabFrames: TabFrames | null
 ): FramesWithCookies => {
@@ -43,3 +43,5 @@ export const filterFramesWithCookies = (
 
   return framesWithCookies;
 };
+
+export default filterFramesWithCookies;

@@ -7,9 +7,7 @@
   "include": [
     "src",
     "../../node_modules/@types/jest/index.d.ts",
-    "src/**/*.json",
-    "../design-system/src/components/circle",
-    "../design-system/src/components/accordion"
+    "src/**/*.json"
   ],
-  "references": [{ "path": "../common" }]
+  "references": [{ "path": "../common" }, { "path": "../design-system" }]
 }

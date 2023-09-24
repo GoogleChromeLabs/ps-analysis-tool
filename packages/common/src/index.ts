@@ -15,6 +15,7 @@
  */
 
 export { default as isFirstParty } from './utils/isFirstParty';
+export { default as filterFramesWithCookies } from './utils/filterFramesWithCookies';
 
 export {
   fetchPSInfo,
@@ -22,3 +23,5 @@ export {
   type PSInfoKeyType,
   type PSInfo,
 } from './utils/fetchPSInfo';
+
+export * from './cookies.types';

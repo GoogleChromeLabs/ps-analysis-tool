@@ -16,39 +16,32 @@
 /**
  * Internal dependencies.
  */
-import type { CookieData } from '../../localStore';
+import { type CookieTableData } from '../cookies.types';
 
-export type CookieTableData = CookieData & {
-  isCookieSet: boolean | null;
-};
-
-export interface TabCookies {
+interface Cookies {
   [key: string]: CookieTableData;
 }
 
-export interface TabFrames {
+interface TabFrames {
   [key: string]: { frameIds: number[] };
 }
 
-export interface Legend {
-  label: string;
-  count: number;
-  color: string;
-  countClassName: string;
-}
+export const filterCookiesByFrame = (
+  cookies: Cookies | null,
+  tabFrames: TabFrames | null,
+  frameUrl: string | null
+) => {
+  const frameFilteredCookies: { [key: string]: CookieTableData } = {};
 
-export interface CookieStatsComponents {
-  legend: Legend[];
-  firstParty: {
-    count: number;
-    color: string;
-  }[];
-  thirdParty: {
-    count: number;
-    color: string;
-  }[];
-}
+  if (cookies && frameUrl && tabFrames && tabFrames[frameUrl]) {
+    Object.entries(cookies).forEach(([key, cookie]) => {
+      tabFrames[frameUrl].frameIds?.forEach((frameId) => {
+        if (cookie.frameIdList?.includes(frameId)) {
+          frameFilteredCookies[key] = cookie;
+        }
+      });
+    });
+  }
 
-export interface FramesWithCookies {
-  [key: string]: { frameIds: number[] };
-}
+  return Object.values(frameFilteredCookies);
+};

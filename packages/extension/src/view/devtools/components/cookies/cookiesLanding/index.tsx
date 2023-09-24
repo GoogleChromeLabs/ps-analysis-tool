@@ -21,12 +21,14 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import LandingHeader from './landingHeader';
-import CookiesMatrix from './cookiesMatrix';
+import {
+  MessageBox,
+  CookieCharts,
+  CookieMatrix,
+} from '@cookie-analysis-tool/design-system';
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
 import prepareCookiesCount from '../../../../../utils/prepareCookiesCount';
 import { prepareCookieStatsComponents } from '../../../../../utils/prepareCookieStatsComponents';
-import { MessageBox } from '@cookie-analysis-tool/design-system';
 
 const CookiesLanding = () => {
   const { tabCookies, tabFrames, tabUrl } = useCookieStore(({ state }) => ({
@@ -40,7 +42,7 @@ const CookiesLanding = () => {
 
   return (
     <div className="h-full w-full min-w-[20rem]" data-testid="cookies-landing">
-      <LandingHeader
+      <CookieCharts
         cookieStats={cookieStats}
         cookiesStatsComponents={cookiesStatsComponents}
       />
@@ -53,7 +55,7 @@ const CookiesLanding = () => {
                 bodyText="Please try reloading the page"
               />
             ))}
-        <CookiesMatrix
+        <CookieMatrix
           tabCookies={tabCookies}
           cookiesStatsComponents={cookiesStatsComponents}
           tabFrames={tabFrames}

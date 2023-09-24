@@ -25,5 +25,7 @@ export { default as InfoCard } from './infoCard';
 export { default as Table } from './table';
 export { default as Accordion } from './accordion';
 export { default as AccordionChildren } from './accordion/accordionChildren';
+export { default as CookieCharts } from './cookieCharts';
+export { default as CookieMatrix } from './cookieMatrix';
 
 export type { MatrixComponentProps } from './matrix/matrixComponent';

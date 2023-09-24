@@ -14,22 +14,18 @@
  * limitations under the License.
  */
 
-import type { CookieAnalytics } from '@cookie-analysis-tool/common';
+/**
+ * External dependencies.
+ */
+import React from 'react';
 
-export type CookieDatabase = {
-  [category: string]: Array<CookieAnalytics>;
+const CookiesListing = () => {
+  return (
+    <div
+      className="h-full w-full min-w-[20rem]"
+      data-testid="cookies-landing"
+    ></div>
+  );
 };
 
-/**
- * Fetch dictionary from local data folder.
- * @returns {Promise<CookieDatabase>} Open Cookie Data base
- */
-export async function fetchDictionary(): Promise<CookieDatabase> {
-  const url = chrome.runtime.getURL(
-    'third_party/data/open-cookie-database.json'
-  );
-
-  const data = await (await fetch(url)).json();
-
-  return data;
-}
+export default CookiesListing;

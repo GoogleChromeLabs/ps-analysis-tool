@@ -13,24 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import { type Cookie as ParsedCookie } from 'simple-cookie';
 
-/**
- * Internal dependencies.
- */
-import type { CookieAnalytics } from '../utils/fetchCookieDictionary';
-
-export type CookieData = {
-  parsedCookie: ParsedCookie;
-  analytics: CookieAnalytics | null;
-  url: string;
-  headerType: 'response' | 'request';
-  isFirstParty: boolean | null;
-  frameIdList: number[];
-};
+import type { CookieData } from '@cookie-analysis-tool/common';
 
 export type TabData = {
   cookies: {
