@@ -37,7 +37,8 @@ import React from 'react';
  * Internal dependencies.
  */
 import CirclePieChart from '../circlePieChart';
-import type { CookiesCount, CookieStatsComponents } from './type';
+import type { CookieStatsComponents } from './type';
+import type { CookiesCount } from '@cookie-analysis-tool/common';
 
 interface DataMapping {
   title: string;

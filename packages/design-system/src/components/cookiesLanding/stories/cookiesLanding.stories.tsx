@@ -24,7 +24,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import CookiesLanding from '..';
 
 const meta: Meta<typeof CookiesLanding> = {
-  title: 'Extension/DevTools/CookiesLandingPage/Page',
+  title: 'DesignSystem/CookiesLandingPage/Page',
   component: CookiesLanding,
   tags: ['autodocs'],
 };

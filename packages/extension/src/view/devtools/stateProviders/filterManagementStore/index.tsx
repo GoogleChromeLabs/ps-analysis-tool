@@ -29,7 +29,7 @@ import React, {
  */
 import type { SelectedFilters, Filter } from './types';
 import { useCookieStore } from '../syncCookieStore';
-import type { CookieTableData } from '@cookie-analysis-tool/common/src/cookies.types';
+import type { CookieTableData } from '@cookie-analysis-tool/common';
 import getFilters from './utils/getFilters';
 import filterCookies from './utils/filterCookies';
 import { noop } from '../../../../utils/noop';

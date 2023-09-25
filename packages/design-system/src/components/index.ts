@@ -27,5 +27,6 @@ export { default as Accordion } from './accordion';
 export { default as AccordionChildren } from './accordion/accordionChildren';
 export { default as CookieCharts } from './cookieCharts';
 export { default as CookieMatrix } from './cookieMatrix';
+export { default as CookiesLanding } from './cookiesLanding';
 
 export type { MatrixComponentProps } from './matrix/matrixComponent';

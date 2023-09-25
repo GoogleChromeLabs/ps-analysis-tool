@@ -30,7 +30,7 @@ import {
   ProgressBar,
   Button,
 } from '@cookie-analysis-tool/design-system';
-import { prepareCookieStatsComponents } from '../../utils/prepareCookieStatsComponents';
+import { prepareCookieStatsComponents } from '@cookie-analysis-tool/common';
 import { ALLOWED_NUMBER_OF_TABS } from '../../constants';
 
 const App: React.FC = () => {

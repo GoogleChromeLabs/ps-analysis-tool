@@ -31,7 +31,7 @@ import { useDebouncedCallback } from 'use-debounce';
  */
 import { Table } from '@cookie-analysis-tool/design-system';
 import { useContentPanelStore } from '../../../../stateProviders/contentPanelStore';
-import type { CookieTableData } from '@cookie-analysis-tool/common/src/cookies.types';
+import type { CookieTableData } from '@cookie-analysis-tool/common';
 
 export interface CookieTableProps {
   cookies: CookieTableData[];

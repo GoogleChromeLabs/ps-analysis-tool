@@ -13,23 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export type CookiesCount = {
-  total: number;
-  firstParty: {
-    total: number;
-    functional: number;
-    marketing: number;
-    analytics: number;
-    uncategorized: number;
-  };
-  thirdParty: {
-    total: number;
-    functional: number;
-    marketing: number;
-    analytics: number;
-    uncategorized: number;
-  };
-};
 
 export interface Legend {
   label: string;

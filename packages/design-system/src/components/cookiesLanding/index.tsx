@@ -26,18 +26,21 @@ import {
   CookieCharts,
   CookieMatrix,
 } from '@cookie-analysis-tool/design-system';
-import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import prepareCookiesCount from '../../../../../utils/prepareCookiesCount';
-import { prepareCookieStatsComponents } from '../../../../../utils/prepareCookieStatsComponents';
+import {
+  type TabCookies,
+  type TabFrames,
+  prepareCookieStatsComponents,
+  prepareCookiesCount,
+} from '@cookie-analysis-tool/common';
 
-const CookiesLanding = () => {
-  const { tabCookies, tabFrames, tabUrl } = useCookieStore(({ state }) => ({
-    tabFrames: state.tabFrames,
-    tabCookies: state.tabCookies,
-    tabUrl: state.tabUrl,
-  }));
+interface CookieLandingProps {
+  cookies: TabCookies | null;
+  frames: TabFrames | null;
+  topUrl: string | null;
+}
 
-  const cookieStats = prepareCookiesCount(tabCookies, tabUrl);
+const CookiesLanding = ({ cookies, frames, topUrl }: CookieLandingProps) => {
+  const cookieStats = prepareCookiesCount(cookies, topUrl);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
 
   return (
@@ -56,9 +59,9 @@ const CookiesLanding = () => {
               />
             ))}
         <CookieMatrix
-          tabCookies={tabCookies}
+          tabCookies={cookies}
           cookiesStatsComponents={cookiesStatsComponents}
-          tabFrames={tabFrames}
+          tabFrames={frames}
         />
       </div>
     </div>

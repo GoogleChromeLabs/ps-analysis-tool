@@ -7,7 +7,8 @@
   "include": [
     "src",
     "../../node_modules/@types/jest/index.d.ts",
-    "src/**/*.json"
+    "src/**/*.json",
+    "../design-system/src/components/cookiesLanding"
   ],
   "references": [{ "path": "../common" }, { "path": "../design-system" }]
 }

@@ -23,7 +23,7 @@ import classNames from 'classnames';
 /**
  * Internal dependencies.
  */
-import type { CookieTableData } from '@cookie-analysis-tool/common/src/cookies.types';
+import type { CookieTableData } from '@cookie-analysis-tool/common';
 
 export interface DetailsProps {
   selectedCookie: CookieTableData;

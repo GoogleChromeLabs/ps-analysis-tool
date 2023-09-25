@@ -17,10 +17,9 @@
  * Internal dependencies.
  */
 import { COLOR_MAP } from '@cookie-analysis-tool/design-system';
-import type { CookiesCount } from '../view/popup/types';
-import type { CookieStatsComponents } from '@cookie-analysis-tool/common/src/cookies.types';
+import { CookieStatsComponents, CookiesCount } from '../cookies.types';
 
-export const prepareCookieStatsComponents = (
+const prepareCookieStatsComponents = (
   cookieStats: CookiesCount
 ): CookieStatsComponents => {
   return {
@@ -93,3 +92,5 @@ export const prepareCookieStatsComponents = (
     ],
   };
 };
+
+export default prepareCookieStatsComponents;

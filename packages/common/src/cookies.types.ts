@@ -19,6 +19,24 @@
  */
 import { type Cookie as ParsedCookie } from 'simple-cookie';
 
+export type CookiesCount = {
+  total: number;
+  firstParty: {
+    total: number;
+    functional: number;
+    marketing: number;
+    analytics: number;
+    uncategorized: number;
+  };
+  thirdParty: {
+    total: number;
+    functional: number;
+    marketing: number;
+    analytics: number;
+    uncategorized: number;
+  };
+};
+
 export type CookieAnalytics = {
   platform: string;
   category: string;
