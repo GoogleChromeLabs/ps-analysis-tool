@@ -85,4 +85,10 @@ export const CUSTOM_FILTER_MAPPING = {
     ]),
     order: 8,
   },
+  setVia: {
+    name: 'Set Via',
+    keys: 'headerType',
+    order: 11,
+    filters: new Set(['HTTP', 'JS']),
+  },
 };

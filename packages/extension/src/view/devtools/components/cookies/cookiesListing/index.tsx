@@ -54,6 +54,7 @@ const CookiesListing = () => {
         cookiesAvailable={cookiesAvailable}
         isFilterMenuOpen={isFilterMenuOpen}
         toggleFilterMenu={toggleFilterMenu}
+        filteredCookies={filteredCookies}
       />
       {cookiesAvailable && <ChipsBar />}
       <div className="w-full flex-1 overflow-hidden">

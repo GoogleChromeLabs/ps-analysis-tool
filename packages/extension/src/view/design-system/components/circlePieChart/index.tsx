@@ -40,7 +40,6 @@ const CirclePieChart = ({
   centerCount,
   data,
   title,
-  fallbackText,
   infoIconClassName = '',
 }: CirclePieChartProps) => {
   const centerTitleClasses = centerCount <= MAX_COUNT ? 'text-2xl' : 'text-l';
@@ -49,7 +48,7 @@ const CirclePieChart = ({
     <>
       <div className="inline-block align-bottom w-16">
         {centerCount <= 0 ? (
-          <EmptyCirclePieChart fallbackText={fallbackText} />
+          <EmptyCirclePieChart />
         ) : (
           <div className="w-full h-full relative">
             <VictoryPie
