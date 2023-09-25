@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { getDomain } from 'tldts';
 
 /**
  * Internal dependencies
@@ -25,7 +26,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import checkURLInRWS, {
   type CheckURLInRWSOutputType,
 } from './utils/checkURLInRWS';
-import { getDomain } from 'tldts';
 import SitesList from './sitesList';
 
 const Insights = () => {

@@ -47,7 +47,7 @@ const AssociatedSites = ({
       <div className="flex justify-between items-center">
         <p className="text-base flex items-center gap-2 ">
           Associated Subset
-          <span title="Browsers may enforce a limit of Associated Domains (e.g. Chrome's limit is 5)">
+          <span title="Browsers may enforce a limit on Associated Domains (e.g. Chrome's limit is 5)">
             <InfoIcon />
           </span>
         </p>
