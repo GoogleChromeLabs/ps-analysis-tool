@@ -18,31 +18,23 @@
  * External dependencies.
  */
 import React, { useEffect, useRef, useState } from 'react';
-import type { Column, Table } from '@tanstack/react-table';
 import classNames from 'classnames';
 
 /**
  * Internal dependencies.
  */
-import type { TableData } from '..';
 import { createPortal } from 'react-dom';
 import ColumnList from './columnList';
+import type { TableOutput } from '../useTable';
 
 interface ColumnMenuProps {
-  table: Table<TableData>;
-  columns: Column<TableData, unknown>[];
+  table: TableOutput;
   position: { x: number; y: number };
   open: boolean;
   onClose: (value: boolean) => void;
 }
 
-const ColumnMenu = ({
-  table,
-  columns,
-  position,
-  open,
-  onClose,
-}: ColumnMenuProps) => {
+const ColumnMenu = ({ table, position, open, onClose }: ColumnMenuProps) => {
   const [startAnimation, setStartAnimation] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -84,16 +76,16 @@ const ColumnMenu = ({
               }}
             >
               <button
-                className="block w-full text-xs rounded px-1 py-[3px] mb-1.5 flex items-center hover:bg-royal-blue hover:text-white cursor-default"
-                onClick={(e) => {
-                  table.getToggleAllColumnsVisibilityHandler()(e);
+                className="w-full text-xs rounded px-1 py-[3px] mb-1.5 flex items-center hover:bg-royal-blue hover:text-white cursor-default"
+                onClick={() => {
+                  table.toggleVisibility();
                   handleClose();
                 }}
               >
                 <span
                   className={classNames(
                     'mr-2 font-semibold',
-                    table.getIsAllColumnsVisible() ? 'opacity-100' : 'opacity-0'
+                    !table.areAllColumnsVisible ? 'opacity-100' : 'opacity-0'
                   )}
                 >
                   ✓
@@ -101,7 +93,15 @@ const ColumnMenu = ({
                 <span>Toggle All</span>
               </button>
               <div>
-                <ColumnList columns={columns} handleClose={handleClose} />
+                <ColumnList
+                  table={table}
+                  toggleVisibility={(key: string) => {
+                    table.isColumnHidden(key)
+                      ? table.showColumn(key)
+                      : table.hideColumn(key);
+                  }}
+                  handleClose={handleClose}
+                />
               </div>
             </div>
 

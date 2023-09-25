@@ -17,27 +17,35 @@
 /**
  * External dependencies.
  */
-import React from 'react';
-import { flexRender, type Header } from '@tanstack/react-table';
+import React, { useRef } from 'react';
 
 /**
  * Internal dependencies.
  */
-import type { TableData } from '..';
-import HeaderResizer from './headerResizer';
 import { ArrowDown } from '../../../../../icons';
+import type { TableColumn, TableOutput } from '../useTable';
+import HeaderResizer from './headerResizer';
 
 interface HeaderCellProps {
-  header: Header<TableData, unknown>;
+  table: TableOutput;
+  index: number;
+  cell: TableColumn;
   setIsRowFocused: (state: boolean) => void;
 }
 
-const HeaderCell = ({ header, setIsRowFocused }: HeaderCellProps) => {
+const HeaderCell = ({
+  table,
+  index,
+  cell,
+  setIsRowFocused,
+}: HeaderCellProps) => {
+  const columnRef = useRef<HTMLTableHeaderCellElement>(null);
+
   return (
     <th
-      colSpan={header.colSpan}
-      style={{ maxWidth: header.getSize() }}
-      onClick={header.column.getToggleSortingHandler()}
+      ref={columnRef}
+      style={{ maxWidth: cell.width }}
+      onClick={() => table.setSortKey(cell.accessorKey)}
       className="border-x border-american-silver dark:border-quartz relative hover:bg-gainsboro dark:hover:bg-outer-space select-none touch-none font-normal"
       data-testid="header-cell"
     >
@@ -45,19 +53,20 @@ const HeaderCell = ({ header, setIsRowFocused }: HeaderCellProps) => {
         className="w-full h-full flex items-center justify-between text-cool-grey dark:text-bright-gray"
         onClick={() => setIsRowFocused(false)}
       >
-        <p className="px-1 py-px truncate text-xs">
-          {header.isPlaceholder
-            ? null
-            : flexRender(header.column.columnDef.header, header.getContext())}
-        </p>
+        <p className="px-1 py-px truncate text-xs">{cell.header}</p>
         <p className="mr-2 scale-125">
-          {{
-            asc: <ArrowDown className="transform rotate-180" />,
-            desc: <ArrowDown />,
-          }[header.column.getIsSorted() as string] ?? null}
+          {table.sortKey === cell.accessorKey &&
+            {
+              asc: <ArrowDown className="transform rotate-180" />,
+              desc: <ArrowDown />,
+            }[table.sortOrder]}
         </p>
       </div>
-      <HeaderResizer header={header} />
+      <HeaderResizer
+        onMouseDown={() => {
+          table.onMouseDown(columnRef, index);
+        }}
+      />
     </th>
   );
 };

@@ -18,26 +18,19 @@
  * External dependencies.
  */
 import React from 'react';
-import type { Header } from '@tanstack/react-table';
-
-/**
- * Internal dependencies.
- */
-import type { TableData } from '..';
 
 interface HeaderResizerProps {
-  header: Header<TableData, unknown>;
+  onMouseDown: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 
-const HeaderResizer = ({ header }: HeaderResizerProps) => {
+const HeaderResizer = ({ onMouseDown }: HeaderResizerProps) => {
   return (
     <div
-      onMouseDown={header.getResizeHandler()}
-      onTouchStart={header.getResizeHandler()}
+      onMouseDown={onMouseDown}
       onClick={(e) => {
         e.stopPropagation();
       }}
-      className="cursor-col-resize absolute right-0 top-0 w-1 h-full"
+      className="cursor-col-resize absolute right-0 top-0 w-2 h-full active:bg-slate-200 dark:active:bg-slate-800"
     />
   );
 };

@@ -18,26 +18,33 @@
  * External dependencies.
  */
 import React from 'react';
-import type { Column } from '@tanstack/react-table';
 
 /**
  * Internal dependencies.
  */
 import ColumnListItem from './columnListItem';
-import type { TableData } from '..';
+
+import type { TableOutput } from '../useTable';
 
 interface ColumnListProps {
-  columns: Column<TableData, unknown>[];
+  table: TableOutput;
+  toggleVisibility: (key: string) => void;
   handleClose: () => void;
 }
 
-const ColumnList = ({ columns, handleClose }: ColumnListProps) => {
+const ColumnList = ({
+  table,
+  toggleVisibility,
+  handleClose,
+}: ColumnListProps) => {
   return (
     <ul className="text-basic mt-1.5">
-      {columns.map((column) => (
+      {table.hideableColumns.map((column, key) => (
         <ColumnListItem
-          key={column.id}
+          key={key}
           column={column}
+          isColumnHidden={table.isColumnHidden(column.accessorKey)}
+          toggleVisibility={toggleVisibility}
           handleClose={handleClose}
         />
       ))}

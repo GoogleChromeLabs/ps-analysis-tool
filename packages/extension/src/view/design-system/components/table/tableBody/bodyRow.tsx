@@ -18,37 +18,39 @@
  * External dependencies.
  */
 import React from 'react';
-import { type Row } from '@tanstack/react-table';
 import classNames from 'classnames';
 
 /**
  * Internal dependencies.
  */
-import type { TableData } from '..';
 import BodyCell from './bodyCell';
-import { getCookieKey } from '../../../../../utils/getCookieKey';
+import type { TableColumn, TableRow } from '../useTable';
 
 interface BodyRowProps {
-  row: Row<TableData>;
+  row: TableRow;
+  columns: TableColumn[];
   index: number;
   isRowFocused: boolean;
   selectedKey: string | undefined | null;
+  getRowObjectKey: (row: TableRow) => string;
   onRowClick: () => void;
   onKeyDown: (
     e: React.KeyboardEvent<HTMLTableRowElement>,
-    row: Row<TableData>
+    index: number
   ) => void;
 }
 
 const BodyRow = ({
   row,
+  columns,
   index,
   selectedKey,
+  getRowObjectKey,
   isRowFocused,
   onRowClick,
   onKeyDown,
 }: BodyRowProps) => {
-  const cookieKey = getCookieKey(row.original.parsedCookie);
+  const cookieKey = getRowObjectKey(row);
 
   const tableRowClassName = classNames(
     'outline-0',
@@ -64,14 +66,14 @@ const BodyRow = ({
 
   return (
     <tr
-      id={row.id}
+      id={index.toString()}
       className={tableRowClassName}
       onClick={onRowClick}
-      onKeyDown={(e) => onKeyDown(e, row)}
+      onKeyDown={(e) => onKeyDown(e, index)}
       data-testid="body-row"
     >
-      {row.getVisibleCells().map((cell) => (
-        <BodyCell key={cell.id} cell={cell} />
+      {columns.map(({ accessorKey, width }, idx) => (
+        <BodyCell key={idx} cell={row[accessorKey].value} width={width || 0} />
       ))}
     </tr>
   );

@@ -17,14 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
-import {
-  useReactTable,
-  getCoreRowModel,
-  type ColumnDef,
-  getSortedRowModel,
-} from '@tanstack/react-table';
-import { useDebouncedCallback } from 'use-debounce';
+import React, { memo, useCallback, useEffect, useMemo } from 'react';
 
 /**
  * Internal dependencies.
@@ -33,169 +26,141 @@ import Table from '../../../../../design-system/components/table';
 import { useContentPanelStore } from '../../../../stateProviders/contentPanelStore';
 import type { CookieTableData } from '../../../../cookies.types';
 import { getCookieKey } from '../../../../../../utils/getCookieKey';
+import useTable, {
+  type InfoType,
+  type TableColumn,
+  type TableRow,
+} from '../../../../../design-system/components/table/useTable';
 
 export interface CookieTableProps {
   cookies: CookieTableData[];
   selectedFrame: string | null;
 }
 
-const tableColumns: ColumnDef<CookieTableData>[] = [
-  {
-    header: 'Name',
-    accessorKey: 'parsedCookie.name',
-    cell: (info) => info.getValue(),
-    enableHiding: false,
-  },
-  {
-    header: 'Value',
-    accessorKey: 'parsedCookie.value',
-    cell: (info) => info.getValue(),
-  },
-  {
-    header: 'Domain',
-    accessorKey: 'parsedCookie.domain',
-    cell: (info) => info.getValue(),
-  },
-  {
-    header: 'Path',
-    accessorKey: 'parsedCookie.path',
-    cell: (info) => info.getValue(),
-  },
-  {
-    header: 'Expires / Max-Age',
-    accessorKey: 'parsedCookie.expires',
-    cell: (info) => (info.getValue() ? info.getValue() : 'Session'),
-  },
-  {
-    header: 'HttpOnly',
-    accessorKey: 'parsedCookie.httponly',
-    cell: (info) => (
-      <p className="flex justify-center items-center">
-        {info.getValue() ? <span className="font-serif">✓</span> : ''}
-      </p>
-    ),
-  },
-  {
-    header: 'SameSite',
-    accessorKey: 'parsedCookie.samesite',
-    cell: (info) => (
-      <span className="capitalize">{info.getValue() as string}</span>
-    ),
-  },
-  {
-    header: 'Secure',
-    accessorKey: 'parsedCookie.secure',
-    cell: (info) => (
-      <p className="flex justify-center items-center">
-        {info.getValue() ? <span className="font-serif">✓</span> : ''}
-      </p>
-    ),
-  },
-  {
-    header: 'Category',
-    accessorKey: 'analytics.category',
-    cell: (info) => info.getValue(),
-  },
-  {
-    header: 'Scope',
-    accessorKey: 'isFirstParty',
-    cell: (info) => (
-      <p className="flex justify-center items-center">
-        {!info.getValue() ? 'Third Party' : 'First Party'}
-      </p>
-    ),
-  },
-  {
-    header: 'Platform',
-    accessorKey: 'analytics.platform',
-    cell: (info) => info.getValue(),
-  },
-  {
-    header: 'GDPR Portal',
-    accessorKey: 'analytics.gdprUrl',
-    cell: (info) => (
-      <a
-        className="text-blue-500 hover:underline"
-        target="_blank"
-        href={info.getValue() as string}
-        rel="noreferrer"
-      >
-        <abbr title={info.getValue() as string}>
-          {info.getValue() as string}
-        </abbr>
-      </a>
-    ),
-  },
-  {
-    header: 'Cookie Accepted',
-    accessorKey: 'isCookieSet',
-    cell: (info) => (
-      <p className="flex justify-center items-center">
-        {info.getValue() ? <span className="font-serif">✓</span> : ''}
-      </p>
-    ),
-  },
-];
-
 const CookieTable = ({ cookies, selectedFrame }: CookieTableProps) => {
-  const {
-    selectedFrameCookie,
-    setSelectedFrameCookie,
-    tableColumnSize,
-    tableContainerRef,
-  } = useContentPanelStore(({ state, actions }) => ({
-    selectedFrameCookie: state.selectedFrameCookie || {},
-    setSelectedFrameCookie: actions.setSelectedFrameCookie,
-    tableColumnSize: state.tableColumnSize,
-    tableContainerRef: state.tableContainerRef,
-  }));
-
-  const [data, setData] = useState<CookieTableData[]>(cookies);
-  const [isMouseInsideHeader, setIsMouseInsideHeader] =
-    useState<boolean>(false);
-  const [enableSorting, setEnableSorting] = useState<boolean>(false);
-  const setDebouncedEnableSorting = useDebouncedCallback((value) => {
-    setEnableSorting(value);
-  }, 10);
-
-  useEffect(() => {
-    if (isMouseInsideHeader) {
-      setDebouncedEnableSorting(true);
-    } else {
-      setData(cookies);
-      setDebouncedEnableSorting(false);
-    }
-  }, [cookies, isMouseInsideHeader, setDebouncedEnableSorting]);
+  const { selectedFrameCookie, setSelectedFrameCookie } = useContentPanelStore(
+    ({ state, actions }) => ({
+      selectedFrameCookie: state.selectedFrameCookie || {},
+      setSelectedFrameCookie: actions.setSelectedFrameCookie,
+    })
+  );
 
   useEffect(() => {
     if (selectedFrame && selectedFrameCookie) {
       if (
         selectedFrameCookie[selectedFrame] === undefined ||
-        (selectedFrameCookie[selectedFrame] !== null && data.length === 0)
+        (selectedFrameCookie[selectedFrame] !== null && cookies.length === 0)
       ) {
         setSelectedFrameCookie(null);
       }
     }
-  }, [selectedFrameCookie, selectedFrame, setSelectedFrameCookie, data.length]);
+  }, [
+    selectedFrameCookie,
+    selectedFrame,
+    setSelectedFrameCookie,
+    cookies.length,
+  ]);
 
-  const columns: ColumnDef<CookieTableData>[] = useMemo(
-    () =>
-      tableColumns.map((column) => ({
-        ...column,
-        sortingFn: 'basic',
-        size: tableColumnSize / tableColumns.length,
-      })),
-    [tableColumnSize]
+  const tableColumns = useMemo<TableColumn[]>(
+    () => [
+      {
+        header: 'Name',
+        accessorKey: 'parsedCookie.name',
+        cell: (info: InfoType) => info,
+        enableHiding: false,
+      },
+      {
+        header: 'Value',
+        accessorKey: 'parsedCookie.value',
+        cell: (info: InfoType) => info,
+      },
+      {
+        header: 'Domain',
+        accessorKey: 'parsedCookie.domain',
+        cell: (info: InfoType) => info,
+      },
+      {
+        header: 'Path',
+        accessorKey: 'parsedCookie.path',
+        cell: (info: InfoType) => info,
+      },
+      {
+        header: 'Expires / Max-Age',
+        accessorKey: 'parsedCookie.expires',
+        cell: (info: InfoType) => (info ? info : 'Session'),
+      },
+      {
+        header: 'HttpOnly',
+        accessorKey: 'parsedCookie.httponly',
+        cell: (info: InfoType) => (
+          <p className="flex justify-center items-center">
+            {info ? <span className="font-serif">✓</span> : ''}
+          </p>
+        ),
+      },
+      {
+        header: 'SameSite',
+        accessorKey: 'parsedCookie.samesite',
+        cell: (info: InfoType) => <span className="capitalize">{info}</span>,
+      },
+      {
+        header: 'Secure',
+        accessorKey: 'parsedCookie.secure',
+        cell: (info: InfoType) => (
+          <p className="flex justify-center items-center">
+            {info ? <span className="font-serif">✓</span> : ''}
+          </p>
+        ),
+      },
+      {
+        header: 'Category',
+        accessorKey: 'analytics.category',
+        cell: (info: InfoType) => info,
+      },
+      {
+        header: 'Platform',
+        accessorKey: 'analytics.platform',
+        cell: (info: InfoType) => info,
+      },
+      {
+        header: 'Scope',
+        accessorKey: 'isFirstParty',
+        cell: (info: InfoType) => (
+          <p className="truncate w-full">
+            {!info ? 'Third Party' : 'First Party'}
+          </p>
+        ),
+      },
+      {
+        header: 'Cookie Accepted',
+        accessorKey: 'isCookieSet',
+        cell: (info: InfoType) => (
+          <p className="flex justify-center items-center">
+            {info ? <span className="font-serif">✓</span> : ''}
+          </p>
+        ),
+      },
+      {
+        header: 'GDPR Portal',
+        accessorKey: 'analytics.gdprUrl',
+        cell: (info: InfoType) => (
+          <a
+            className="text-blue-500 hover:underline"
+            target="_blank"
+            href={info as string}
+            rel="noreferrer"
+          >
+            <abbr title={info as string}>{info}</abbr>
+          </a>
+        ),
+      },
+    ],
+    []
   );
 
-  const table = useReactTable({
-    data,
-    columns,
-    enableColumnResizing: true,
-    enableSorting,
-    columnResizeMode: 'onChange',
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
+  const table = useTable({
+    tableColumns,
+    data: cookies,
   });
 
   const onRowClick = useCallback(
@@ -207,21 +172,22 @@ const CookieTable = ({ cookies, selectedFrame }: CookieTableProps) => {
     [selectedFrame, setSelectedFrameCookie]
   );
 
-  const selectedKey = Object.values(selectedFrameCookie ?? {})[0];
+  const selectedKey = useMemo(
+    () => Object.values(selectedFrameCookie ?? {})[0],
+    [selectedFrameCookie]
+  );
 
   return (
-    <div
-      ref={tableContainerRef}
-      className="w-full h-full overflow-auto text-outer-space-crayola"
-    >
+    <div className="w-full h-full overflow-auto text-outer-space-crayola">
       <Table
         table={table}
         selectedKey={
           selectedKey === null ? null : getCookieKey(selectedKey?.parsedCookie)
         }
+        getRowObjectKey={(row: TableRow) =>
+          getCookieKey(Object.values(row)?.[0]?.originalData.parsedCookie)
+        }
         onRowClick={onRowClick}
-        onMouseEnter={() => setIsMouseInsideHeader(true)}
-        onMouseLeave={() => setIsMouseInsideHeader(false)}
       />
     </div>
   );

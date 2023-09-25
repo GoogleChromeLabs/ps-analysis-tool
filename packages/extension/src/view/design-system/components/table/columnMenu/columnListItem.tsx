@@ -18,43 +18,44 @@
  * External dependencies.
  */
 import React from 'react';
-import type { Column } from '@tanstack/react-table';
 import classNames from 'classnames';
 
 /**
  * Internal dependencies.
  */
-import type { TableData } from '..';
+import type { TableColumn } from '../useTable';
 
 interface ColumnListItemProps {
-  column: Column<TableData, unknown>;
+  column: TableColumn;
+  isColumnHidden: boolean;
+  toggleVisibility: (key: string) => void;
   handleClose: () => void;
 }
 
-const ColumnListItem = ({ column, handleClose }: ColumnListItemProps) => {
+const ColumnListItem = ({
+  column,
+  isColumnHidden,
+  toggleVisibility,
+  handleClose,
+}: ColumnListItemProps) => {
   return (
-    <li
-      key={column.id}
-      className={classNames({
-        'pointer-events-none opacity-50': column.columnDef.header === 'Name',
-      })}
-    >
+    <li>
       <button
         className="w-full rounded text-xs px-1 py-[3px] my-px flex items-center hover:bg-royal-blue hover:text-white select-none touch-none cursor-default"
-        onClick={(e) => {
-          column.getToggleVisibilityHandler()(e);
+        onClick={() => {
+          toggleVisibility(column.accessorKey);
           handleClose();
         }}
       >
         <span
           className={classNames(
             'mr-2 font-semibold',
-            column.getIsVisible() ? 'opacity-100' : 'opacity-0'
+            !isColumnHidden ? 'opacity-100' : 'opacity-0'
           )}
         >
           ✓
         </span>
-        <span>{column.columnDef.header as string}</span>
+        <span>{column.header}</span>
       </button>
     </li>
   );

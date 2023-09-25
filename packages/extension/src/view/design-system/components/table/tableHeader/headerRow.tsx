@@ -18,27 +18,28 @@
  * External dependencies.
  */
 import React from 'react';
-import { type HeaderGroup } from '@tanstack/react-table';
 
 /**
  * Internal dependencies.
  */
-import type { TableData } from '..';
 import HeaderCell from './headerCell';
+import type { TableOutput } from '../useTable';
 
 interface HeaderRowProps {
-  headerGroup: HeaderGroup<TableData>;
+  table: TableOutput;
   setIsRowFocused: (state: boolean) => void;
 }
 
-const HeaderRow = ({ headerGroup, setIsRowFocused }: HeaderRowProps) => {
+const HeaderRow = ({ table, setIsRowFocused }: HeaderRowProps) => {
   return (
     <>
       <tr className="bg-anti-flash-white dark:bg-charleston-green">
-        {headerGroup.headers.map((header) => (
+        {table.columns?.map((cell, idx) => (
           <HeaderCell
-            key={header.id}
-            header={header}
+            key={idx}
+            index={idx}
+            table={table}
+            cell={cell}
             setIsRowFocused={setIsRowFocused}
           />
         ))}
@@ -46,7 +47,7 @@ const HeaderRow = ({ headerGroup, setIsRowFocused }: HeaderRowProps) => {
       <tr>
         <th
           className="w-full h-px pt-0 bg-american-silver dark:bg-quartz"
-          colSpan={headerGroup.headers.length}
+          colSpan={table.columns.length}
         />
       </tr>
     </>

@@ -18,32 +18,27 @@
  * External dependencies.
  */
 import React, { useCallback } from 'react';
-import type { HeaderGroup } from '@tanstack/react-table';
 
 /**
  * Internal dependencies.
  */
 import HeaderRow from './headerRow';
-import type { TableData } from '..';
+import type { TableOutput } from '../useTable';
 
 interface TableHeaderProps {
-  headerGroups: HeaderGroup<TableData>[];
+  table: TableOutput;
   setColumnPosition: (position: { x: number; y: number }) => void;
   onRightClick: (
     event: React.MouseEvent<HTMLTableSectionElement, MouseEvent>
   ) => void;
   setIsRowFocused: (state: boolean) => void;
-  onMouseEnter: (event: React.MouseEvent<HTMLElement>) => void;
-  onMouseLeave: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
 const TableHeader = ({
-  headerGroups,
+  table,
   setColumnPosition,
   onRightClick,
   setIsRowFocused,
-  onMouseEnter,
-  onMouseLeave,
 }: TableHeaderProps) => {
   const handleRightClick = useCallback(
     (e: React.MouseEvent<HTMLTableSectionElement>) => {
@@ -57,19 +52,8 @@ const TableHeader = ({
   );
 
   return (
-    <thead
-      onContextMenu={handleRightClick}
-      className="sticky top-0 z-10"
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-    >
-      {headerGroups.map((headerGroup) => (
-        <HeaderRow
-          key={headerGroup.id}
-          headerGroup={headerGroup}
-          setIsRowFocused={setIsRowFocused}
-        />
-      ))}
+    <thead onContextMenu={handleRightClick} className="sticky top-0 z-10">
+      <HeaderRow table={table} setIsRowFocused={setIsRowFocused} />
     </thead>
   );
 };

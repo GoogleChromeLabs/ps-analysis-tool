@@ -18,47 +18,49 @@
  * External dependencies.
  */
 import React, { useCallback, useRef } from 'react';
-import type { Row } from '@tanstack/react-table';
 import classNames from 'classnames';
 
 /**
  * Internal dependencies.
  */
 import BodyRow from './bodyRow';
-import type { TableData } from '..';
+import type { TableData, TableOutput, TableRow } from '../useTable';
 
 interface TableBodyProps {
-  rows: Row<TableData>[];
+  table: TableOutput;
+  getRowObjectKey: (row: TableRow) => string;
   isRowFocused: boolean;
   setIsRowFocused: (state: boolean) => void;
   selectedKey: string | undefined | null;
   onRowClick: (key: TableData | null) => void;
-  emptyRowCellCount: number;
 }
 
 const TableBody = ({
-  rows,
+  table,
+  getRowObjectKey,
   isRowFocused,
   setIsRowFocused,
   selectedKey,
   onRowClick,
-  emptyRowCellCount,
 }: TableBodyProps) => {
   const tableBodyRef = useRef(null);
 
   const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLTableRowElement>, row: Row<TableData>) => {
+    (event: React.KeyboardEvent<HTMLTableRowElement>, index: number) => {
+      event.preventDefault();
       event.stopPropagation();
 
-      // @ts-ignore - the `children` property will be available on the `current` property.
-      const currentRow = tableBodyRef.current?.children.namedItem(row.id);
-      let newRowId: string | null = null;
+      //@ts-ignore - the `children` property will be available on the `current` property.
+      const currentRow = tableBodyRef.current?.children.namedItem(index);
+      let newRowId: string | undefined;
       let rowElement: HTMLTableRowElement | null = null;
 
       if (event.key === 'ArrowUp') {
         rowElement = currentRow?.previousElementSibling;
+        newRowId = rowElement?.id;
       } else if (event.key === 'ArrowDown') {
         rowElement = currentRow?.nextElementSibling;
+        newRowId = rowElement?.id;
       }
 
       if (!rowElement) {
@@ -67,20 +69,19 @@ const TableBody = ({
 
       rowElement.tabIndex = -1;
       rowElement.focus();
-      newRowId = rowElement.id;
 
       if (!newRowId) {
         onRowClick(null);
         return;
       }
 
-      const newRow = rows.find((_row) => _row.id === newRowId);
+      const newRow = table.rows.find((_, idx) => idx.toString() === newRowId);
 
       if (newRow) {
-        onRowClick(newRow.original);
+        onRowClick(Object.values(newRow)[0].originalData);
       }
     },
-    [onRowClick, rows]
+    [onRowClick, table.rows]
   );
 
   const handleEmptyRowKeyDown = useCallback(
@@ -88,13 +89,17 @@ const TableBody = ({
       event.preventDefault();
       event.stopPropagation();
 
-      if (event.key === 'ArrowDown' || !rows.length) {
+      const rowsLength = table.rows.length;
+
+      if (event.key === 'ArrowDown' || !rowsLength) {
         return;
       }
 
-      const newRow = rows[rows.length - 1];
+      const newRow = table.rows[rowsLength - 1];
       // @ts-ignore - the `children` property will be available on the `current` property.
-      const rowElement = tableBodyRef.current?.children.namedItem(newRow.id);
+      const rowElement = tableBodyRef.current?.children.namedItem(
+        rowsLength - 1
+      );
 
       if (!rowElement) {
         return;
@@ -102,9 +107,9 @@ const TableBody = ({
 
       rowElement.tabIndex = -1;
       rowElement.focus();
-      onRowClick(newRow.original);
+      onRowClick(Object.values(newRow)[0].originalData);
     },
-    [onRowClick, rows]
+    [onRowClick, table.rows]
   );
 
   const tableRowClassName = classNames(
@@ -114,22 +119,24 @@ const TableBody = ({
         ? 'bg-gainsboro dark:bg-outer-space'
         : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
     selectedKey !== null &&
-      (rows.length % 2
+      (table.rows.length % 2
         ? 'bg-anti-flash-white dark:bg-charleston-green'
         : 'bg-white dark:bg-raisin-black')
   );
 
   return (
     <tbody ref={tableBodyRef} className="h-full">
-      {rows.map((row, index) => (
+      {table.rows.map((row, index) => (
         <BodyRow
-          key={row.id}
+          key={index}
           index={index}
           row={row}
+          columns={table.columns}
           selectedKey={selectedKey}
+          getRowObjectKey={getRowObjectKey}
           isRowFocused={isRowFocused}
           onRowClick={() => {
-            onRowClick(row.original);
+            onRowClick(Object.values(row)[0].originalData);
             setIsRowFocused(true);
           }}
           onKeyDown={handleKeyDown}
@@ -145,7 +152,7 @@ const TableBody = ({
         }}
         onKeyDown={handleEmptyRowKeyDown}
       >
-        {[...Array(emptyRowCellCount)].map((_, index) => (
+        {[...Array(table.columns.length)].map((_, index) => (
           <td
             key={index}
             className={`border border-y-0 border-american-silver dark:border-quartz px-1 py-px outline-0 ${
@@ -160,7 +167,7 @@ const TableBody = ({
           setIsRowFocused(false);
         }}
       >
-        {[...Array(emptyRowCellCount)].map((_, index) => (
+        {[...Array(table.columns.length)].map((_, index) => (
           <td
             key={index}
             className="h-full border border-y-0 border-american-silver dark:border-quartz outline-0 p-0"

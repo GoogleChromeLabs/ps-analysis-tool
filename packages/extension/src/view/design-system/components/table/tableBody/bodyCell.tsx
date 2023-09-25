@@ -18,29 +18,20 @@
  * External dependencies.
  */
 import React from 'react';
-import { flexRender, type Cell } from '@tanstack/react-table';
-import classNames from 'classnames';
-
-/**
- * Internal dependencies.
- */
-import type { TableData } from '..';
-
+import type { InfoType } from '../useTable';
 interface BodyCellProps {
-  cell: Cell<TableData, unknown>;
+  cell: React.JSX.Element | InfoType;
+  width: number;
 }
 
-const BodyCell = ({ cell }: BodyCellProps) => {
+const BodyCell = ({ cell, width }: BodyCellProps) => {
   return (
     <td
       tabIndex={0}
-      style={{ maxWidth: cell.column.getSize() }}
-      className={classNames(
-        'outline-0 border border-y-0 px-1 py-px truncate border-american-silver dark:border-quartz h-5 text-xs dark:text-bright-gray cursor-default',
-        { 'pl-5': cell.column.columnDef.header === 'Name' }
-      )}
+      style={{ maxWidth: width }}
+      className="outline-0 border border-y-0 px-1 py-px truncate border-american-silver dark:border-quartz h-5 text-xs dark:text-bright-gray cursor-default"
     >
-      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+      {cell}
     </td>
   );
 };

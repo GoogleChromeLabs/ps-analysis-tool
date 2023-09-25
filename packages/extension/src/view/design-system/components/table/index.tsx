@@ -18,7 +18,6 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import type { Table as ReactTable } from '@tanstack/react-table';
 
 /**
  * Internal dependencies.
@@ -27,23 +26,22 @@ import TableHeader from './tableHeader';
 import TableBody from './tableBody';
 import type { CookieTableData } from '../../../devtools/cookies.types';
 import ColumnMenu from './columnMenu';
+import type { TableOutput, TableRow } from './useTable';
 
 export type TableData = CookieTableData;
 
 interface TableProps {
-  table: ReactTable<TableData>;
+  table: TableOutput;
   selectedKey: string | undefined | null;
+  getRowObjectKey: (row: TableRow) => string;
   onRowClick: (row: TableData | null) => void;
-  onMouseEnter: (event: React.MouseEvent<HTMLElement>) => void;
-  onMouseLeave: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
 const Table = ({
   table,
   selectedKey,
+  getRowObjectKey,
   onRowClick,
-  onMouseEnter,
-  onMouseLeave,
 }: TableProps) => {
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
   const [columnPosition, setColumnPosition] = useState({
@@ -86,33 +84,30 @@ const Table = ({
   );
 
   return (
-    <>
+    <div ref={table.tableContainerRef} className="relative h-full w-full">
       <ColumnMenu
+        table={table}
         open={showColumnsMenu}
         onClose={setShowColumnsMenu}
-        table={table}
-        columns={table.getAllLeafColumns()}
         position={columnPosition}
       />
-      <table className="w-full h-full" ref={tableRef}>
+      <table className="h-full w-full" ref={tableRef}>
         <TableHeader
-          headerGroups={table.getHeaderGroups()}
+          table={table}
           setColumnPosition={setColumnPosition}
           onRightClick={handleRightClick}
           setIsRowFocused={setIsRowFocused}
-          onMouseEnter={onMouseEnter}
-          onMouseLeave={onMouseLeave}
         />
         <TableBody
-          rows={table.getRowModel().rows}
+          table={table}
+          getRowObjectKey={getRowObjectKey}
           isRowFocused={isRowFocused}
           setIsRowFocused={setIsRowFocused}
           selectedKey={selectedKey}
           onRowClick={onRowClick}
-          emptyRowCellCount={table.getHeaderGroups()[0].headers.length}
         />
       </table>
-    </>
+    </div>
   );
 };
 
