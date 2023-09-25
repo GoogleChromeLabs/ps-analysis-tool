@@ -30,7 +30,7 @@ import {
   updateCountrySites,
   updatePrimaryDomain,
   updateServiceSites,
-} from './utils';
+} from './actions';
 
 /**
  * Reducer for the form.
