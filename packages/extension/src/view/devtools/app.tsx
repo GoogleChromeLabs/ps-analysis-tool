@@ -55,7 +55,9 @@ const App: React.FC = () => {
           />
         </Resizable>
         <main className="h-full flex-1 overflow-auto">
-          <TabContent />
+          <div className="min-w-[20rem] h-full">
+            <TabContent />
+          </div>
         </main>
       </div>
     </div>

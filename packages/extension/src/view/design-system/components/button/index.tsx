@@ -16,18 +16,41 @@
 /**
  * External dependencies.
  */
+import classNames from 'classnames';
 import React from 'react';
 
 interface ButtonProps {
-  text: string;
-  onClick: () => void;
+  text: string | React.ReactNode;
+  name?: string;
+  onClick?: () => void;
+  loading?: boolean;
+  type?: 'button' | 'submit' | 'reset';
+  variant?: 'primary' | 'secondary' | 'danger';
 }
-const Button = ({ onClick, text }: ButtonProps) => {
+const Button = ({
+  text,
+  name = 'button',
+  onClick = undefined,
+  type = 'button',
+  variant = 'primary',
+}: ButtonProps) => {
   return (
     <button
       data-test-id="button"
-      onClick={onClick}
-      className="py-1 px-2 text-white dark:text-jet-black dark:bg-light-blue bg-dark-blue rounded font-medium"
+      type={type}
+      name={name}
+      onClick={onClick ? onClick : undefined}
+      className={classNames(
+        'py-1 px-2 rounded font-medium flex items-center text-center',
+        {
+          'text-white dark:bg-baby-blue-eyes bg-sapphire hover:bg-tufts-blue dark:hover:bg-pale-cornflower-blue dark:text-raisin-black':
+            variant === 'primary',
+          'bg-transparent dark:bg-transparent dark:text-bright-gray text-raisin-black active:opacity-60 hover:opacity-80':
+            variant === 'secondary',
+          'text-white dark:text-white dark:bg-red-500 bg-red-500 hover:bg-red-600':
+            variant === 'danger',
+        }
+      )}
     >
       {text}
     </button>
