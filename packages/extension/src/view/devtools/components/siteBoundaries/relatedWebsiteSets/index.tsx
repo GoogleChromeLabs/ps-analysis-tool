@@ -24,6 +24,7 @@ import React, { useState } from 'react';
 import InfoCard from '../../../../design-system/components/infoCard';
 import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
 import { Button } from '../../../../design-system/components';
+import RWSJsonGenerator from './jsonGenerator';
 import Insights from './insights';
 
 const RelatedWebsiteSets = () => {
@@ -34,22 +35,17 @@ const RelatedWebsiteSets = () => {
       className="w-full h-full overflow-auto"
       data-testid="related-website-sets-content"
     >
-      {showForm ? (
-        <>Placeholder</>
-      ) : (
-        <>
-          <InfoCard infoKey={PSInfoKey.RelatedWebsiteSets} />
-          <div className="text-raisin-black dark:text-bright-gray max-w-2xl dark:bg-davys-grey border border-gray-200 dark:border-quartz rounded-lg shadow p-6 m-3 flex flex-col gap-4 divide-y divide-gray-200 dark:divide-gray-500">
-            <Insights />
-            <div className="pt-3">
-              <Button
-                text="Generate RWS JSON Resources"
-                onClick={() => setShowForm(!showForm)}
-              />
-            </div>
-          </div>
-        </>
-      )}
+      <InfoCard infoKey={PSInfoKey.RelatedWebsiteSets} />
+      <div className="text-raisin-black dark:text-bright-gray max-w-2xl dark:bg-davys-grey border border-gray-200 dark:border-quartz rounded-lg shadow p-6 m-3 flex flex-col gap-3 divide-y divide-gray-200 dark:divide-gray-500">
+        <Insights />
+        <RWSJsonGenerator open={showForm} />
+        <div className="pt-4">
+          <Button
+            text={showForm ? 'Close' : 'Generate RWS JSON Resources'}
+            onClick={() => setShowForm(!showForm)}
+          />
+        </div>
+      </div>
     </div>
   );
 };

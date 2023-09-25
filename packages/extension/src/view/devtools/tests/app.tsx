@@ -61,6 +61,10 @@ describe('App', () => {
       },
       tabs: {
         get: () => ({ url: 'https://hindustantimes.com' }),
+        onUpdated: {
+          addListener: () => noop,
+          removeListener: () => noop,
+        },
       },
       runtime: {
         getURL: () => 'data/related_website_sets.json',

@@ -17,7 +17,8 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { getDomain } from 'tldts';
 
 /**
  * Internal dependencies
@@ -25,32 +26,71 @@ import React, { useEffect, useState } from 'react';
 import checkURLInRWS, {
   type CheckURLInRWSOutputType,
 } from './utils/checkURLInRWS';
-import { getDomain } from 'tldts';
+import SitesList from './sitesList';
 
 const Insights = () => {
   const [insightsData, setInsightsData] =
     useState<CheckURLInRWSOutputType | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    (async () => {
-      const result = await checkURLInRWS();
+  const insightsListener = useCallback(async () => {
+    setLoading(true);
+    const result = await checkURLInRWS();
 
-      setInsightsData(result);
-      setLoading(false);
-    })();
+    setInsightsData(result);
+    setTimeout(() => setLoading(false), 1000);
   }, []);
+
+  useEffect(() => {
+    insightsListener();
+  }, [insightsListener]);
+
+  useEffect(() => {
+    chrome.tabs.onUpdated.addListener(
+      (tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
+        if (changeInfo.url) {
+          if (
+            tabId !== chrome.devtools.inspectedWindow.tabId ||
+            (tabId === chrome.devtools.inspectedWindow.tabId &&
+              getDomain(changeInfo.url) === insightsData?.domain)
+          ) {
+            return;
+          }
+
+          insightsListener();
+        }
+      }
+    );
+
+    return () => {
+      chrome.tabs.onUpdated.removeListener(insightsListener);
+    };
+  }, [insightsData?.domain, insightsListener]);
+
+  const cctlds = useMemo(
+    () =>
+      Object.values(insightsData?.relatedWebsiteSet?.ccTLDs || {}).reduce(
+        (prev, current) => {
+          return prev.concat(current);
+        },
+        []
+      ),
+    [insightsData?.relatedWebsiteSet?.ccTLDs]
+  );
 
   return (
     <div>
       {loading ? (
-        <p className="text-base">Loading...</p>
+        <div className="flex gap-2 items-center justify-start">
+          <p className="text-sm">Loading...</p>
+          <div className="w-6 h-6 rounded-full animate-spin border-t-transparent border-solid border-blue-700 border-2" />
+        </div>
       ) : (
         <div>
           {insightsData?.isURLInRWS ? (
             <div>
               <h4 className="text-lg font-semibold">
-                This site belongs to a Related Website Set
+                This site belongs to &quot;Related Website Sets&quot;
               </h4>
               <p className="text-sm">
                 Primary Domain:{' '}
@@ -86,10 +126,22 @@ const Insights = () => {
                   </p>
                 )}
               </div>
+
+              <div className="flex flex-row gap-4 mt-4 overflow-auto">
+                <SitesList
+                  title="Associated Sites"
+                  sites={insightsData.relatedWebsiteSet?.associatedSites || []}
+                />
+                <SitesList
+                  title="Service Sites"
+                  sites={insightsData.relatedWebsiteSet?.serviceSites || []}
+                />
+                <SitesList title="ccTLDs" sites={cctlds} />
+              </div>
             </div>
           ) : (
             <h4 className="text-lg font-semibold">
-              This site does not belong to a Related Website Set
+              This site does not belong to &quot;Related Website Sets&quot;
             </h4>
           )}
         </div>
