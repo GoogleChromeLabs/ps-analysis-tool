@@ -21,7 +21,7 @@ import '@testing-library/jest-dom/extend-expect';
  * Internal dependencies.
  */
 import Circle from '..';
-import { COLOR_MAP } from '../../../theme/colors';
+import { COLOR_MAP } from '@cookie-analysis-tool/design-system';
 
 describe('Circle', () => {
   it('renders the Circle with the correct background color', () => {

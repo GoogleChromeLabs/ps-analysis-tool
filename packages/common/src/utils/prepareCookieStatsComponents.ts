@@ -16,11 +16,11 @@
 /**
  * Internal dependencies.
  */
-import { COLOR_MAP } from '../view/design-system/theme/colors';
-import type { CookiesCount } from '../view/popup/types';
-import type { CookieStatsComponents } from '../view/devtools/cookies.types';
 
-export const prepareCookieStatsComponents = (
+import { CookieStatsComponents, CookiesCount } from '../cookies.types';
+import { COLOR_MAP } from '@cookie-analysis-tool/design-system';
+
+const prepareCookieStatsComponents = (
   cookieStats: CookiesCount
 ): CookieStatsComponents => {
   return {
@@ -93,3 +93,5 @@ export const prepareCookieStatsComponents = (
     ],
   };
 };
+
+export default prepareCookieStatsComponents;

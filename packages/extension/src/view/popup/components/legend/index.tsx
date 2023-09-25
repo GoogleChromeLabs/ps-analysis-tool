@@ -25,7 +25,7 @@ import {
   Matrix,
   type MatrixComponentProps,
 } from '../../../design-system/components';
-import { type Legend as LegendProp } from '../../../devtools/cookies.types';
+import type { Legend as LegendProp } from '@cookie-analysis-tool/common';
 
 interface LegendProps {
   legendItemList: LegendProp[];

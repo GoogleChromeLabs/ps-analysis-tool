@@ -17,9 +17,8 @@
 /**
  * Internal dependencies.
  */
-import type { CookieData } from '../localStore';
-import type { CookiesCount } from '../view/popup/types';
-import { isFirstParty } from '@cookie-analysis-tool/common';
+import { CookieData, CookiesCount } from '../cookies.types';
+import isFirstParty from './isFirstParty';
 
 /**
  * Categorize cookies count into 1st party and 3rd party cookies and then into functional, marketing, analytics and uncategorized.

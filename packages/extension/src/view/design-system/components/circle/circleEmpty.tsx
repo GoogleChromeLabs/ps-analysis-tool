@@ -21,7 +21,7 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { COLOR_MAP } from '../../theme/colors';
+import { COLOR_MAP } from '@cookie-analysis-tool/design-system';
 
 interface CircleEmptyProps {
   color?: string;

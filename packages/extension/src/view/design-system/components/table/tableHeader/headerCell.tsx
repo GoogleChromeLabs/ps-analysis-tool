@@ -22,9 +22,9 @@ import React, { useRef } from 'react';
 /**
  * Internal dependencies.
  */
-import { ArrowDown } from '../../../../../icons';
 import type { TableColumn, TableOutput } from '../useTable';
 import HeaderResizer from './headerResizer';
+import { ArrowDown } from '@cookie-analysis-tool/design-system';
 
 interface HeaderCellProps {
   table: TableOutput;

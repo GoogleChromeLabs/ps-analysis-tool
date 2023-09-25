@@ -26,9 +26,9 @@ import './app.css';
 import { Legend } from './components';
 import { useCookieStore } from './stateProviders/syncCookieStore';
 import { Button, CirclePieChart } from '../design-system/components';
-import { prepareCookieStatsComponents } from '../../utils/prepareCookieStatsComponents';
 import ProgressBar from '../design-system/components/progressBar';
 import { ALLOWED_NUMBER_OF_TABS } from '../../constants';
+import { prepareCookieStatsComponents } from '@cookie-analysis-tool/common';
 
 const App: React.FC = () => {
   const {

@@ -26,13 +26,13 @@ import {
   Matrix,
   type MatrixComponentProps,
 } from '../../../../../design-system/components';
-import { filterFramesWithCookies } from '../../utils/filterFramesWithCookies';
-import type {
-  TabCookies,
-  TabFrames,
-  CookieStatsComponents,
-} from '../../../../cookies.types';
-import { InfoIcon } from '../../../../../../icons';
+import {
+  filterFramesWithCookies,
+  type CookieStatsComponents,
+  type TabCookies,
+  type TabFrames,
+} from '@cookie-analysis-tool/common';
+import { InfoIcon } from '@cookie-analysis-tool/design-system';
 
 interface CookiesMatrixProps {
   tabCookies: TabCookies | null;

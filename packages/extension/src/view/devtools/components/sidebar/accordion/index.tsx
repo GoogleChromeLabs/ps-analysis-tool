@@ -22,8 +22,8 @@ import classNames from 'classnames';
 /**
  * Internal dependencies
  */
-import { ArrowDown, ArrowDownWhite } from '../../../../../icons';
 import TABS from '../../../tabs';
+import { ArrowDown, ArrowDownWhite } from '@cookie-analysis-tool/design-system';
 
 interface AccordionProps {
   accordionState: boolean;

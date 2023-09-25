@@ -24,9 +24,11 @@ import React from 'react';
 import LandingHeader from './landingHeader';
 import CookiesMatrix from './cookiesMatrix';
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import prepareCookiesCount from '../../../../../utils/prepareCookiesCount';
-import { prepareCookieStatsComponents } from '../../../../../utils/prepareCookieStatsComponents';
 import MessageBox from '../../../../design-system/components/messageBox';
+import {
+  prepareCookieStatsComponents,
+  prepareCookiesCount,
+} from '@cookie-analysis-tool/common';
 
 const CookiesLanding = () => {
   const { tabCookies, tabFrames, tabUrl } = useCookieStore(({ state }) => ({

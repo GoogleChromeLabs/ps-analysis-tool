@@ -24,7 +24,7 @@ import React, { useState } from 'react';
  */
 import type { PSInfo as PSInfoType } from '../../../../utils/fetchPSInfo';
 import RenderLink from './renderLink';
-import { ArrowRight } from '../../../../icons';
+import { ArrowRight } from '@cookie-analysis-tool/design-system';
 
 /**
  * @type {Array} LABELS - Array of objects containing the label and link label for each dropdown item.

@@ -16,14 +16,11 @@
 /**
  * Internal dependencies.
  */
-import { filterCookiesByFrame } from './filterCookiesByFrame';
-import type {
-  TabCookies,
-  TabFrames,
-  FramesWithCookies,
-} from '../../../cookies.types';
 
-export const filterFramesWithCookies = (
+import { FramesWithCookies, TabCookies, TabFrames } from '../cookies.types';
+import filterCookiesByFrame from './filterCookiesByFrame';
+
+const filterFramesWithCookies = (
   tabCookies: TabCookies | null,
   tabFrames: TabFrames | null
 ): FramesWithCookies => {
@@ -43,3 +40,5 @@ export const filterFramesWithCookies = (
 
   return framesWithCookies;
 };
+
+export default filterFramesWithCookies;
