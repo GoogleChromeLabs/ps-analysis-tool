@@ -23,7 +23,7 @@ const PrivacySandbox = () => {
   const [loading, setLoading] = useState(true);
   return (
     <>
-      {loading && <ProgressBar additionalStyles="w-full h-full" />}
+      {loading && <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />}
       <iframe
         className={`${loading ? 'hidden' : 'visible'}`}
         onLoad={() => setLoading(false)}
