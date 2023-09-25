@@ -53,7 +53,8 @@ const filterCookiesWithoutRetentionPeriod = (
       Object.entries(selectedFilters).forEach(([keys, selectedFilter]) => {
         if (
           keys !== CUSTOM_FILTER_MAPPING.retentionPeriod.keys &&
-          keys !== CUSTOM_FILTER_MAPPING.scope.keys
+          keys !== CUSTOM_FILTER_MAPPING.scope.keys &&
+          keys !== CUSTOM_FILTER_MAPPING.setVia.keys
         ) {
           let value = getFilterValue(keys, cookieData);
           const filterMap = FILTER_MAPPING.find(
@@ -82,6 +83,15 @@ const filterCookiesWithoutRetentionPeriod = (
             canShow.push(Boolean(cookieData.isFirstParty));
           } else {
             canShow.push(true);
+          }
+        } else if (keys === CUSTOM_FILTER_MAPPING.setVia.keys) {
+          if (selectedFilter.has('HTTP') && !selectedFilter.has('JS')) {
+            canShow.push(
+              cookieData.headerType === 'request' ||
+                cookieData.headerType === 'response'
+            );
+          } else if (selectedFilter.has('JS') && !selectedFilter.has('HTTP')) {
+            canShow.push(cookieData.headerType === 'javascript');
           }
         }
       });

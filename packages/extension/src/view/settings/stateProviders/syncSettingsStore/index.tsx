@@ -34,7 +34,7 @@ export interface SettingStoreContext {
     allowedNumberOfTabs: string | null;
   };
   actions: {
-    setSettingsInStorage: (key: string, value: any) => void;
+    setSettingsInStorage: (key: string, value: string) => void;
   };
 }
 
@@ -60,14 +60,17 @@ export const Provider = ({ children }: PropsWithChildren) => {
     setAllowedNumberOfTabs(currentSettings?.allowedNumberOfTabs);
   }, []);
 
-  const setSettingsInStorage = useCallback(async (key: string, value: any) => {
-    const currentSettings = await chrome.storage.sync.get();
+  const setSettingsInStorage = useCallback(
+    async (key: string, value: string) => {
+      const currentSettings = await chrome.storage.sync.get();
 
-    chrome.storage.sync.set({
-      ...currentSettings,
-      [key]: value,
-    });
-  }, []);
+      chrome.storage.sync.set({
+        ...currentSettings,
+        [key]: value,
+      });
+    },
+    []
+  );
 
   const storeChangeListener = useCallback(
     async (changes: { [key: string]: chrome.storage.StorageChange }) => {
