@@ -3,8 +3,8 @@
 	"version": "0.2.0",
 	"description": "Cookie Analysis Tool and CLI for analysis and understanding of cookie usage on web pages.",
 	"scripts": {
-		"cli:dev": "npm run dev --workspace=@cookie-analysis-tool/cli",
-		"cli:build": "npm run build --workspace=@cookie-analysis-tool/cli",
+		"cli:dev": "tsc-watch",
+		"cli:build": "tsc --build",
 		"cli":"node dist/cli/index.js",
 		"test": "jest --config=tests/jest.config.cjs",
 		"test:coverage": "npm run test -- --collectCoverage && open coverage/lcov-report/index.html",
@@ -97,7 +97,8 @@
 		"webpack": "^5.86.0",
 		"webpack-cli": "^5.1.4",
 		"webpack-dev-server": "^4.15.1",
-		"webpackbar": "^5.0.2"
+		"webpackbar": "^5.0.2",
+		"@cookie-analysis-tool/eslint-import-resolver": "*"
 	},
 	"lint-staged": {
 		"*.(cjs|js|ts|tsx)": [
