@@ -168,7 +168,7 @@ const AccordionChildren: React.FC<AccordionChildrenProps> = ({
       }
       role="treeitem"
       className={classNames(
-        'pl-16 py-0.5 h-5 flex items-center cursor-default outline-0 dark:text-bright-gray',
+        'pl-12 py-0.5 h-5 flex items-center cursor-default outline-0 dark:text-bright-gray',
         isAccordionChildSelected &&
           (isTabFocused
             ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
