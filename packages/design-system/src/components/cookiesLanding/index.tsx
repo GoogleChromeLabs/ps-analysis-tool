@@ -23,20 +23,25 @@ import React from 'react';
  */
 import LandingHeader from './landingHeader';
 import CookiesMatrix from './cookiesMatrix';
-import { useCookieStore } from '../../../stateProviders/syncCookieStore';
 import {
+  TabCookies,
+  TabFrames,
   prepareCookieStatsComponents,
   prepareCookiesCount,
 } from '@cookie-analysis-tool/common';
 import { MessageBox } from '@cookie-analysis-tool/design-system';
 
-const CookiesLanding = () => {
-  const { tabCookies, tabFrames, tabUrl } = useCookieStore(({ state }) => ({
-    tabFrames: state.tabFrames,
-    tabCookies: state.tabCookies,
-    tabUrl: state.tabUrl,
-  }));
+interface CookiesLandingProps {
+  tabFrames: TabFrames | null;
+  tabCookies: TabCookies | null;
+  tabUrl: string | null;
+}
 
+const CookiesLanding = ({
+  tabCookies,
+  tabFrames,
+  tabUrl,
+}: CookiesLandingProps) => {
   const cookieStats = prepareCookiesCount(tabCookies, tabUrl);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
 

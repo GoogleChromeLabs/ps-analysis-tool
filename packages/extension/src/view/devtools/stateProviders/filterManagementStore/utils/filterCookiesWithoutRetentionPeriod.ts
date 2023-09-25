@@ -17,9 +17,9 @@
  * Internal dependencies.
  */
 import type { SelectedFilters } from '../types';
-import type { CookieTableData } from '../../../cookies.types';
 import { FILTER_MAPPING, CUSTOM_FILTER_MAPPING } from '../constants';
 import getFilterValue from './getFilterValue';
+import type { CookieTableData } from '@cookie-analysis-tool/common';
 
 const filterCookiesWithoutRetentionPeriod = (
   cookies: {

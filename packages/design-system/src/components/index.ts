@@ -24,4 +24,5 @@ export { default as CirclePieChart } from './circlePieChart';
 export { default as Matrix } from './matrix';
 export { default as MatrixComponentHorizontal } from './matrix/matrixComponent/matrixComponentHorizontal';
 export type { MatrixComponentProps } from './matrix/matrixComponent';
+export { default as CookiesLanding } from './cookiesLanding';
 export * from './table';

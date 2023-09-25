@@ -23,23 +23,21 @@ import '@testing-library/jest-dom/extend-expect';
 /**
  * Internal dependencies.
  */
-import CookiesMatrix from '..';
-import mockResponse from '../../../../../../../utils/test-data/cookieMockData';
-import cookiesStatsComponents from '../../../../../../../utils/test-data/cookiesStatsComponents';
+import mockResponse from '../../../test-data/cookieMockData';
+import CookiesLanding from '..';
 
-describe('CookiesMatrix', () => {
-  it('should render the cookies insights', () => {
-    const tabCookies = mockResponse.tabCookies;
-    const tabFrames = mockResponse.tabFrames;
-
+describe('CookiesLanding', () => {
+  it('renders CookiesLanding with data', () => {
     const { getByTestId } = render(
-      <CookiesMatrix
-        tabCookies={tabCookies}
-        cookiesStatsComponents={cookiesStatsComponents}
-        tabFrames={tabFrames}
+      <CookiesLanding
+        tabCookies={mockResponse.tabCookies}
+        tabFrames={mockResponse.tabFrames}
+        tabUrl={mockResponse.tabUrl}
       />
     );
 
+    expect(getByTestId('cookies-landing')).toBeInTheDocument();
+    expect(getByTestId('cookies-landing-header')).toBeInTheDocument();
     expect(getByTestId('cookies-matrix')).toBeInTheDocument();
   });
 });

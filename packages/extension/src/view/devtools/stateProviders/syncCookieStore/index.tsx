@@ -29,10 +29,10 @@ import React, {
  * Internal dependencies.
  */
 import { CookieStore, type CookieData } from '../../../../localStore';
-import type { TabCookies, TabFrames } from '../../cookies.types';
 import { noop } from '../../../../utils/noop';
 import { getCurrentTabId } from '../../../../utils/getCurrentTabId';
 import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
+import type { TabCookies, TabFrames } from '@cookie-analysis-tool/common';
 
 export interface CookieStoreContext {
   state: {

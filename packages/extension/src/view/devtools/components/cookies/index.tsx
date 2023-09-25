@@ -24,19 +24,32 @@ import React from 'react';
  */
 import { useCookieStore } from '../../stateProviders/syncCookieStore';
 import CookiesListing from './cookiesListing';
-import CookiesLanding from './cookiesLanding';
+import { CookiesLanding } from '@cookie-analysis-tool/design-system';
 
 const Cookies = () => {
-  const { selectedFrame } = useCookieStore(({ state }) => ({
-    selectedFrame: state.selectedFrame,
-  }));
+  const { selectedFrame, tabCookies, tabFrames, tabUrl } = useCookieStore(
+    ({ state }) => ({
+      selectedFrame: state.selectedFrame,
+      tabCookies: state.tabCookies,
+      tabFrames: state.tabFrames,
+      tabUrl: state.tabUrl,
+    })
+  );
 
   return (
     <div
       className={`h-full ${selectedFrame ? '' : 'flex items-center'}`}
       data-testid="cookies-content"
     >
-      {selectedFrame ? <CookiesListing /> : <CookiesLanding />}
+      {selectedFrame ? (
+        <CookiesListing />
+      ) : (
+        <CookiesLanding
+          tabCookies={tabCookies}
+          tabFrames={tabFrames}
+          tabUrl={tabUrl}
+        />
+      )}
     </div>
   );
 };

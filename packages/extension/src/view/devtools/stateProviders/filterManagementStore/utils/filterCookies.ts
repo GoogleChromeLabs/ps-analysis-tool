@@ -16,8 +16,8 @@
 /**
  * Internal dependencies.
  */
+import type { CookieTableData } from '@cookie-analysis-tool/common';
 import type { SelectedFilters } from '../types';
-import type { CookieTableData } from '../../../cookies.types';
 import filterCookiesWithRetentionPeriod from './filterCookiesWithRetentionPeriod';
 import filterCookiesWithoutRetentionPeriod from './filterCookiesWithoutRetentionPeriod';
 

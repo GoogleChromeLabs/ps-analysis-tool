@@ -22,7 +22,7 @@ import type { Meta, StoryObj } from '@storybook/react';
  * Internal dependencies.
  */
 import CookiesMatrix from '..';
-import cookiesStatsComponents from '../../../../../../../utils/test-data/cookiesStatsComponents';
+import cookiesStatsComponents from '../../../../test-data/cookiesStatsComponents';
 
 const meta: Meta<typeof CookiesMatrix> = {
   title: 'Extension/DevTools/CookiesLandingPage/CookiesMatrix',

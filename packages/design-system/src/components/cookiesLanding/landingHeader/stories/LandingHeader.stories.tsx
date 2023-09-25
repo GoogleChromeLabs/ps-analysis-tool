@@ -37,11 +37,11 @@ import type { Meta, StoryObj } from '@storybook/react';
  * Internal dependencies.
  */
 import LandingHeader from '..';
-import cookiesStatsComponents from '../../../../../../../utils/test-data/cookiesStatsComponents';
-import cookieStats from '../../../../../../../utils/test-data/cookieStats';
+import cookiesStatsComponents from '../../../../test-data/cookiesStatsComponents';
+import cookieStats from '../../../../test-data/cookieStats';
 
 const meta: Meta<typeof LandingHeader> = {
-  title: 'Extension/DevTools/CookiesLandingPage/Header',
+  title: 'DesignSystem/CookiesLandingPage/Header',
   component: LandingHeader,
 };
 
