@@ -28,7 +28,7 @@ import TABS from '../../../tabs';
 interface AccordionProps {
   accordionState: boolean;
   index: number;
-  isRecursive: boolean;
+  isRecursive?: boolean;
   isTabFocused: boolean;
   isAccordionHeaderSelected: boolean;
   tabId: string;
@@ -42,7 +42,7 @@ const Accordion = ({
   accordionState,
   children,
   index,
-  isRecursive,
+  isRecursive = false,
   isTabFocused,
   isAccordionHeaderSelected,
   tabId,
@@ -57,7 +57,7 @@ const Accordion = ({
       (isTabFocused
         ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
         : 'bg-gainsboro dark:bg-outer-space'),
-    isRecursive ? 'pl-9' : 'pl-[9px]'
+    isRecursive ? 'pl-6' : 'pl-[9px]'
   );
 
   const DefaultIcon = TABS[index].icons.default;
