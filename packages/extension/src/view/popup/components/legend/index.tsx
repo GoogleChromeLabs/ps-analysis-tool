@@ -21,11 +21,11 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
+import type { Legend as LegendProp } from '@cookie-analysis-tool/common';
 import {
   Matrix,
   type MatrixComponentProps,
-} from '../../../design-system/components';
-import type { Legend as LegendProp } from '@cookie-analysis-tool/common';
+} from '@cookie-analysis-tool/design-system';
 
 interface LegendProps {
   legendItemList: LegendProp[];

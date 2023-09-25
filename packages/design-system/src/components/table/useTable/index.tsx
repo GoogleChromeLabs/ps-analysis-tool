@@ -22,7 +22,6 @@ import { useMemo } from 'react';
 /**
  * Internal dependencies.
  */
-import type { CookieTableData } from '../../../../devtools/cookies.types';
 import getValueByKey from '../utils/getValueByKey';
 import useColumnSorting, {
   type ColumnSortingOutput,
@@ -33,6 +32,7 @@ import useColumnVisibility, {
 import useColumnResizing, {
   type ColumnResizingOutput,
 } from '../useColumnResizing';
+import { CookieTableData } from '@cookie-analysis-tool/common';
 
 export type TableData = CookieTableData;
 

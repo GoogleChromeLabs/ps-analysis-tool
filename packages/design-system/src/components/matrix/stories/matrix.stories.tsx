@@ -24,7 +24,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import Matrix from '..';
 
 const meta: Meta<typeof Matrix> = {
-  title: 'Extension/DesignSystem/Matrix',
+  title: 'DesignSystem/Matrix',
   component: Matrix,
   tags: ['autodocs'],
 };

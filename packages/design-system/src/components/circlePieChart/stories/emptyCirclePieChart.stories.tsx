@@ -16,19 +16,36 @@
 /**
  * External dependencies.
  */
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 /**
  * Internal dependencies.
  */
-import CircleEmpty from '../circleEmpty';
+import EmptyCirclePieChart from '../emptyCirclePieChart';
 
-const meta: Meta<typeof CircleEmpty> = {
-  title: 'Extension/DesignSystem/CircleEmpty',
-  component: CircleEmpty,
+const meta: Meta<typeof EmptyCirclePieChart> = {
+  title: 'DesignSystem/CirclePieChart/EmptyCirclePieChart',
+  component: EmptyCirclePieChart,
   tags: ['autodocs'],
 };
 
 export default meta;
 
-export const Primary: StoryObj<typeof meta> = {};
+export const Primary: StoryObj<typeof meta> = {
+  render: (args) => (
+    <div className="w-16 text-center">
+      <EmptyCirclePieChart {...args} />
+    </div>
+  ),
+  args: {},
+};
+
+export const Wide: StoryObj<typeof meta> = {
+  render: (args) => (
+    <div className="w-28 text-center">
+      <EmptyCirclePieChart {...args} />
+    </div>
+  ),
+  args: {},
+};

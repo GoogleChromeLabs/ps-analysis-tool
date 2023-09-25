@@ -13,27 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import type { Meta, StoryObj } from '@storybook/react';
 
-/**
- * Internal dependencies.
- */
-import Circle from '..';
-import { COLOR_MAP } from '@cookie-analysis-tool/design-system';
-
-const meta: Meta<typeof Circle> = {
-  title: 'Extension/DesignSystem/Circle',
-  component: Circle,
-  tags: ['autodocs'],
-};
-
-export default meta;
-
-export const Primary: StoryObj<typeof meta> = {
-  args: {
-    color: COLOR_MAP.functional,
-  },
-};
+export { default as Table } from './table';
+export { default as useTable } from './useTable';
+export * from './useTable';

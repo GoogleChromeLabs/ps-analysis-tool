@@ -21,11 +21,12 @@ import type { Meta, StoryObj } from '@storybook/react';
 /**
  * Internal dependencies.
  */
-import ProgressBar from '..';
+import Circle from '..';
+import { COLOR_MAP } from '@cookie-analysis-tool/design-system';
 
-const meta: Meta<typeof ProgressBar> = {
-  title: 'Extension/DesignSystem/ProgressBar',
-  component: ProgressBar,
+const meta: Meta<typeof Circle> = {
+  title: 'DesignSystem/Circle',
+  component: Circle,
   tags: ['autodocs'],
 };
 
@@ -33,6 +34,6 @@ export default meta;
 
 export const Primary: StoryObj<typeof meta> = {
   args: {
-    additionalStyles: 'w-96 min-h-[20rem]',
+    color: COLOR_MAP.functional,
   },
 };

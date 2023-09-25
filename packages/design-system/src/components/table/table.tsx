@@ -24,9 +24,9 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
  */
 import TableHeader from './tableHeader';
 import TableBody from './tableBody';
-import type { CookieTableData } from '../../../devtools/cookies.types';
 import ColumnMenu from './columnMenu';
-import type { TableOutput, TableRow } from './useTable';
+import { TableOutput, TableRow } from './useTable';
+import { CookieTableData } from '@cookie-analysis-tool/common';
 
 export type TableData = CookieTableData;
 

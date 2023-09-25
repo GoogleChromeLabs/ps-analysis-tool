@@ -25,10 +25,13 @@ import React from 'react';
 import './app.css';
 import { Legend } from './components';
 import { useCookieStore } from './stateProviders/syncCookieStore';
-import { Button, CirclePieChart } from '../design-system/components';
-import ProgressBar from '../design-system/components/progressBar';
 import { ALLOWED_NUMBER_OF_TABS } from '../../constants';
 import { prepareCookieStatsComponents } from '@cookie-analysis-tool/common';
+import {
+  Button,
+  CirclePieChart,
+  ProgressBar,
+} from '@cookie-analysis-tool/design-system';
 
 const App: React.FC = () => {
   const {

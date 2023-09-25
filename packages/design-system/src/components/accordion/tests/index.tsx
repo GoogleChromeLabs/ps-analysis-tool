@@ -25,11 +25,53 @@ import '@testing-library/jest-dom';
  * Internal dependencies.
  */
 import Accordion from '..';
+import {
+  CookieIcon,
+  CookieIconWhite,
+  SiteBoundariesIcon,
+  SiteBoundariesIconWhite,
+} from '../../../icons';
+
+const TABS = [
+  {
+    display_name: 'Cookies',
+    component: () => <div data-test-id="cookies-tab-heading-wrapper"></div>,
+    id: 'cookies',
+    icons: {
+      default: CookieIcon,
+      selected: CookieIconWhite,
+    },
+    parentId: undefined,
+  },
+  {
+    display_name: 'Technologies',
+    component: () => <div data-test-id="technology-tab-heading-wrapper"></div>,
+    id: 'technologies',
+    icons: {
+      default: SiteBoundariesIcon,
+      selected: SiteBoundariesIconWhite,
+    },
+    parentId: undefined,
+  },
+  {
+    display_name: 'Affected Cookies',
+    component: () => (
+      <div data-test-id="affected-cookies-tab-heading-wrapper"></div>
+    ),
+    id: 'addected_cookies',
+    icons: {
+      default: SiteBoundariesIcon,
+      selected: SiteBoundariesIconWhite,
+    },
+    parentId: undefined,
+  },
+];
 
 describe('Accordion', () => {
   it('Should frames listed under accordion', () => {
     render(
       <Accordion
+        tabs={TABS}
         accordionState={true}
         index={1}
         isTabFocused={true}
@@ -50,6 +92,7 @@ describe('Accordion', () => {
     const keyboardNavigatorMock = jest.fn();
     render(
       <Accordion
+        tabs={TABS}
         accordionState={true}
         index={1}
         isTabFocused={true}

@@ -21,11 +21,11 @@ import type { Meta, StoryObj } from '@storybook/react';
 /**
  * Internal dependencies.
  */
-import Button from '..';
+import MessageBox from '..';
 
-const meta: Meta<typeof Button> = {
-  title: 'Extension/DesignSystem/Button',
-  component: Button,
+const meta: Meta<typeof MessageBox> = {
+  title: 'DesignSystem/MessageBox',
+  component: MessageBox,
   tags: ['autodocs'],
 };
 
@@ -33,7 +33,7 @@ export default meta;
 
 export const Primary: StoryObj<typeof meta> = {
   args: {
-    text: 'Analyze this tab',
-    onClick: () => undefined,
+    headerText: 'No cookies found on this page',
+    bodyText: 'Please try reloading the page',
   },
 };

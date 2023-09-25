@@ -24,11 +24,11 @@ import React from 'react';
 import LandingHeader from './landingHeader';
 import CookiesMatrix from './cookiesMatrix';
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import MessageBox from '../../../../design-system/components/messageBox';
 import {
   prepareCookieStatsComponents,
   prepareCookiesCount,
 } from '@cookie-analysis-tool/common';
+import { MessageBox } from '@cookie-analysis-tool/design-system';
 
 const CookiesLanding = () => {
   const { tabCookies, tabFrames, tabUrl } = useCookieStore(({ state }) => ({

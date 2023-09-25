@@ -17,20 +17,22 @@
 /**
  * External dependencies.
  */
-import React, { memo, useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
 /**
  * Internal dependencies.
  */
-import Table from '../../../../../design-system/components/table';
+
 import { useContentPanelStore } from '../../../../stateProviders/contentPanelStore';
-import type { CookieTableData } from '../../../../cookies.types';
 import { getCookieKey } from '../../../../../../utils/getCookieKey';
-import useTable, {
+import type { CookieTableData } from '@cookie-analysis-tool/common';
+import {
+  useTable,
+  Table,
   type InfoType,
   type TableColumn,
   type TableRow,
-} from '../../../../../design-system/components/table/useTable';
+} from '@cookie-analysis-tool/design-system';
 
 export interface CookieTableProps {
   cookies: CookieTableData[];
@@ -158,11 +160,6 @@ const CookieTable = ({ cookies, selectedFrame }: CookieTableProps) => {
     []
   );
 
-  const table = useTable({
-    tableColumns,
-    data: cookies,
-  });
-
   const onRowClick = useCallback(
     (cookieData: CookieTableData | null) => {
       setSelectedFrameCookie({
@@ -176,6 +173,11 @@ const CookieTable = ({ cookies, selectedFrame }: CookieTableProps) => {
     () => Object.values(selectedFrameCookie ?? {})[0],
     [selectedFrameCookie]
   );
+
+  const table = useTable({
+    tableColumns,
+    data: cookies,
+  });
 
   return (
     <div className="w-full h-full overflow-auto text-outer-space-crayola">
@@ -193,4 +195,4 @@ const CookieTable = ({ cookies, selectedFrame }: CookieTableProps) => {
   );
 };
 
-export default memo(CookieTable);
+export default CookieTable;

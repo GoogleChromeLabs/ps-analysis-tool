@@ -26,7 +26,7 @@ import CirclePieChart from '..';
 import { COLOR_MAP } from '@cookie-analysis-tool/design-system';
 
 const meta: Meta<typeof CirclePieChart> = {
-  title: 'Extension/DesignSystem/CirclePieChart',
+  title: 'DesignSystem/CirclePieChart',
   component: CirclePieChart,
   tags: ['autodocs'],
 };

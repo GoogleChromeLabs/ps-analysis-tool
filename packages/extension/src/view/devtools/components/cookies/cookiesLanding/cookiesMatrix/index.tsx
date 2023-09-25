@@ -25,14 +25,14 @@ import {
   MatrixComponentHorizontal,
   Matrix,
   type MatrixComponentProps,
-} from '../../../../../design-system/components';
+  InfoIcon,
+} from '@cookie-analysis-tool/design-system';
 import {
   filterFramesWithCookies,
   type CookieStatsComponents,
   type TabCookies,
   type TabFrames,
 } from '@cookie-analysis-tool/common';
-import { InfoIcon } from '@cookie-analysis-tool/design-system';
 
 interface CookiesMatrixProps {
   tabCookies: TabCookies | null;

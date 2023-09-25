@@ -21,9 +21,11 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { CirclePieChart } from '../../../../../design-system/components';
-import type { CookiesCount } from '../../../../../popup/types';
-import type { CookieStatsComponents } from '../../../../cookies.types';
+import type {
+  CookieStatsComponents,
+  CookiesCount,
+} from '@cookie-analysis-tool/common';
+import { CirclePieChart } from '@cookie-analysis-tool/design-system';
 
 interface DataMapping {
   title: string;
