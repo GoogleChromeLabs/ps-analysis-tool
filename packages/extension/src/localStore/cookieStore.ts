@@ -43,6 +43,10 @@ const CookieStore = {
         if (_updatedCookies?.[cookieKey]) {
           _updatedCookies[cookieKey] = {
             ...cookie,
+            headerType:
+              _updatedCookies[cookieKey].headerType === 'javascript'
+                ? _updatedCookies[cookieKey].headerType
+                : cookie.headerType,
             frameIdList: Array.from(
               new Set<number>([
                 ...cookie.frameIdList,
@@ -84,7 +88,6 @@ const CookieStore = {
    */
   async updateTabFocus(tabId: string) {
     const storage = await chrome.storage.local.get();
-
     if (storage[tabId]) {
       storage[tabId].focusedAt = Date.now();
     }
