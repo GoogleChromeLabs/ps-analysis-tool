@@ -16,16 +16,23 @@
 /**
  * Internal dependencies.
  */
-import React from 'react';
+import React, { useState } from 'react';
+import { ProgressBar } from '../../../design-system/components';
 
 const PrivacySandbox = () => {
+  const [loading, setLoading] = useState(true);
   return (
-    <iframe
-      data-testid="privacy-sandbox-content"
-      src="https://privacysandbox.com"
-      width="100%"
-      height="100%"
-    />
+    <>
+      {loading && <ProgressBar additionalStyles="w-full h-full" />}
+      <iframe
+        className={`${loading ? 'hidden' : 'visible'}`}
+        onLoad={() => setLoading(false)}
+        data-testid="privacy-sandbox-content"
+        src="https://privacysandbox.com"
+        width="100%"
+        height="100%"
+      />
+    </>
   );
 };
 
