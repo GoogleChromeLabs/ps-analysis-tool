@@ -159,6 +159,7 @@ const AccordionChildren: React.FC<AccordionChildrenProps> = ({
       </div>
     );
   }
+
   return (
     <div
       tabIndex={0}

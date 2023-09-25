@@ -17,9 +17,10 @@
  * Internal dependencies
  */
 import TABS from '../../../tabs';
+
 interface ArrowUpHandlerProps {
   accordionState: Record<string, boolean> | undefined;
-  currIndex: number;
+  currentIndex: number;
   mainMenuTabSelector: (index: number) => void;
   setSelectedAccordionChild: React.Dispatch<
     React.SetStateAction<string | null>
@@ -46,7 +47,7 @@ const getNextTab = (selectedIndex: number) => {
 
 export const arrowDownHandler = ({
   accordionState,
-  currIndex,
+  currentIndex,
   mainMenuTabSelector,
   setSelectedAccordionChild,
   selectedFrame,
@@ -57,11 +58,11 @@ export const arrowDownHandler = ({
 }: ArrowUpHandlerProps) => {
   if (accordionState && accordionState['cookies']) {
     if (selectedFrame) {
-      if (currIndex === keys.length - 1) {
+      if (currentIndex === keys.length - 1) {
         mainMenuTabSelector(2);
         setSelectedAccordionChild(TABS[2].id);
       } else {
-        setSelectedFrame(keys[currIndex + 1]);
+        setSelectedFrame(keys[currentIndex + 1]);
       }
     } else {
       if (selectedIndex === 1) {

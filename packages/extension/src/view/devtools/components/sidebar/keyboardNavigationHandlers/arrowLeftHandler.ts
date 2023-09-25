@@ -17,6 +17,7 @@
  * Internal dependencies
  */
 import TABS from '../../../tabs';
+
 interface ArrowUpHandlerProps {
   accordionState: Record<string, boolean> | undefined;
   mainMenuTabSelector: (index: number) => void;

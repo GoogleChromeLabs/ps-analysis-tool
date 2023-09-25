@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies.
+ * External dependencies.
  */
 import React, { useState } from 'react';
+
+/**
+ * Internal dependencies.
+ */
 import { ProgressBar } from '../../../design-system/components';
 
 const PrivacySandbox = () => {
   const [loading, setLoading] = useState(true);
+
   return (
     <>
       {loading && <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />}
