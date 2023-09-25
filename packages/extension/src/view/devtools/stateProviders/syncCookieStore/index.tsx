@@ -48,10 +48,12 @@ export interface CookieStoreContext {
     returningToSingleTab: boolean;
     isCurrentTabBeingListenedTo: boolean;
     allowedNumberOfTabs: string | null;
+    isInspecting: boolean;
   };
   actions: {
     setSelectedFrame: React.Dispatch<React.SetStateAction<string | null>>;
     setInspectedFrame: React.Dispatch<React.SetStateAction<string | null>>;
+    setIsInspecting: React.Dispatch<React.SetStateAction<boolean>>;
     changeListeningToThisTab: () => void;
   };
 }
@@ -67,11 +69,13 @@ const initialState: CookieStoreContext = {
     isCurrentTabBeingListenedTo: false,
     returningToSingleTab: false,
     allowedNumberOfTabs: null,
+    isInspecting: false,
   },
   actions: {
     setSelectedFrame: noop,
     setInspectedFrame: noop,
     changeListeningToThisTab: noop,
+    setIsInspecting: noop,
   },
 };
 
@@ -93,6 +97,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const [tabCookies, setTabCookies] =
     useState<CookieStoreContext['state']['tabCookies']>(null);
+
+  const [isInspecting, setIsInspecting] =
+    useState<CookieStoreContext['state']['isInspecting']>(false);
 
   const [inspectedFrame, setInspectedFrame] =
     useState<CookieStoreContext['state']['inspectedFrame']>(null);
@@ -422,11 +429,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
           isCurrentTabBeingListenedTo,
           returningToSingleTab,
           allowedNumberOfTabs,
+          isInspecting,
         },
         actions: {
           setSelectedFrame,
           setInspectedFrame,
           changeListeningToThisTab,
+          setIsInspecting,
         },
       }}
     >

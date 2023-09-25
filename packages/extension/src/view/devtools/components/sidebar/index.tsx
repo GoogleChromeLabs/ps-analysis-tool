@@ -32,13 +32,21 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
-  const { setSelectedFrame, selectedFrame, tabFrames, inspectedFrame } =
-    useCookieStore(({ state, actions }) => ({
-      setSelectedFrame: actions.setSelectedFrame,
-      tabFrames: state.tabFrames,
-      selectedFrame: state.selectedFrame,
-      inspectedFrame: state.inspectedFrame,
-    }));
+  const {
+    setSelectedFrame,
+    selectedFrame,
+    tabFrames,
+    inspectedFrame,
+    isInspecting,
+    setIsInspecting,
+  } = useCookieStore(({ state, actions }) => ({
+    setSelectedFrame: actions.setSelectedFrame,
+    setIsInspecting: actions.setIsInspecting,
+    tabFrames: state.tabFrames,
+    selectedFrame: state.selectedFrame,
+    inspectedFrame: state.inspectedFrame,
+    isInspecting: state.isInspecting,
+  }));
 
   const [accordionState, setAccordionState] =
     useState<Record<string, boolean>>();
@@ -47,7 +55,6 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
     string | null
   >(null);
   const sidebarContainerRef = useRef<HTMLDivElement>(null);
-  const [isInspecting, setIsInspecting] = useState<boolean>(false);
 
   useEffect(() => {
     setIndex(0);
@@ -55,15 +62,6 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
     setSelectedFrame(inspectedFrame);
     setIsTabFocused(true);
   }, [inspectedFrame, setSelectedFrame, setIndex]);
-
-  useEffect(() => {
-    if (chrome?.storage) {
-      // Let's update the value in storage. we will use this with storage.onChanged.addListener later
-      chrome.storage.sync.set({
-        isInspecting: isInspecting,
-      });
-    }
-  }, [isInspecting]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

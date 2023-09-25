@@ -15,6 +15,5 @@
  */
 export const ALLOWED_NUMBER_OF_TABS = 1;
 export const WEBPAGE_PORT_NAME = 'psat-tool-content';
-export const DEVTOOL_PORT_NAME = 'psat-tool-devtool';
 export const REGEX_FOR_FRAMEURL =
   /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:/\n?]+)/;

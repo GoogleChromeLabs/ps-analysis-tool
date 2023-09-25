@@ -23,20 +23,13 @@ chrome.devtools.panels.create(
       if (chrome?.storage) {
         console.log(penal, '');
 
-        // Remove if exist by chance.
+        // Remove if exist. otherwise onupdate hook will not trigger.
         chrome.storage.session.remove('devToolState');
 
         // try to communicate with web page.
         chrome.storage.session.set({
           devToolState: 'Ready!',
         });
-      }
-    });
-
-    penal.onHidden.addListener(() => {
-      // Make sure context is not changed. it happens if serivce-work script is refreshed or inactive.
-      if (chrome?.storage) {
-        chrome.storage.session.remove('devToolState');
       }
     });
   }

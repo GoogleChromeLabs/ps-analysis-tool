@@ -58,7 +58,6 @@ chrome.storage.onChanged.addListener((changes: object) => {
       console.log('Connection Attempt!');
       connectPort();
     }
-    console.log(port, changes);
   }
 });
 
