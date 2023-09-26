@@ -33,19 +33,21 @@ export interface tabSidebar {
     selected: React.FC<React.SVGProps<SVGSVGElement>>;
   };
   parentId?: string;
+  hasChildren?: boolean;
 }
 
 interface AccordionProps {
   tabs: tabSidebar[];
   accordionState: boolean;
   index: number;
+  isRecursive?: boolean;
   isTabFocused: boolean;
   isAccordionHeaderSelected: boolean;
   tabId: string;
   tabName: string;
   keyboardNavigator: (event: React.KeyboardEvent<HTMLDivElement>) => void;
-  onAccordionOpenerClick: () => void;
-  onAccordionHeaderClick: () => void;
+  onAccordionOpenerClick: (tabIdToBeSet: string) => void;
+  onAccordionHeaderClick: (tabIdToBeSet: string, index: number) => void;
 }
 
 const Accordion = ({
@@ -53,6 +55,7 @@ const Accordion = ({
   accordionState,
   children,
   index,
+  isRecursive = false,
   isTabFocused,
   isAccordionHeaderSelected,
   tabId,
@@ -62,11 +65,12 @@ const Accordion = ({
   onAccordionHeaderClick,
 }: PropsWithChildren<AccordionProps>) => {
   const headingContainerClass = classNames(
-    'flex h-full flex-row items-center pl-[9px] py-0.5 outline-0 dark:text-bright-gray',
+    'flex h-full flex-row items-center py-0.5 outline-0 dark:text-bright-gray',
     isAccordionHeaderSelected &&
       (isTabFocused
         ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
-        : 'bg-gainsboro dark:bg-outer-space')
+        : 'bg-gainsboro dark:bg-outer-space'),
+    isRecursive ? 'pl-6' : 'pl-[9px]'
   );
   const DefaultIcon = tabs[index].icons.default;
   const SelectedIcon = tabs[index].icons.selected;
@@ -77,15 +81,15 @@ const Accordion = ({
         data-testid={`${tabId}-tab-heading-wrapper`}
         className={headingContainerClass}
         tabIndex={0}
-        onClick={onAccordionHeaderClick}
+        onClick={() => onAccordionHeaderClick(tabId, index)}
         onKeyDown={(event) => keyboardNavigator(event)}
       >
         <div
           data-testid={`${tabId}-accordion-opener`}
           className={`origin-center transition-transform scale-125 p-0.5 mr-1 ${
             accordionState ? '' : '-rotate-90'
-          }`}
-          onClick={onAccordionOpenerClick}
+          } ${children?.filter(Boolean)?.length ? '' : 'invisible'}`}
+          onClick={() => onAccordionOpenerClick(tabId)}
         >
           {isAccordionHeaderSelected && isTabFocused ? (
             <ArrowDownWhite />

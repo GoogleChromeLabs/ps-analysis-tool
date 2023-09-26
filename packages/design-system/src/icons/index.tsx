@@ -42,6 +42,8 @@ export { default as AntiCovertTrackingIcon } from './anti-covert-tracking.svg';
 export { default as AntiCovertTrackingIconWhite } from './anti-covert-tracking-white.svg';
 export { default as InspectIcon } from './inspect.svg';
 export { default as InspectBlueIcon } from './inspect-blue.svg';
+export { default as PrivacySandboxIcon } from './privacy-sandbox.svg';
+export { default as PrivacySandboxIconWhite } from './privacy-sandbox-white.svg';
 export { default as Add } from './add.svg';
 export { default as Cross } from './cross.svg';
 export { default as Refresh } from './refresh-icon.svg';
