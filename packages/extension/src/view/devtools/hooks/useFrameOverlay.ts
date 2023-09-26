@@ -44,42 +44,47 @@ const useFrameOverlay = ({
   }));
 
   useEffect(() => {
-    if (portRef.current) {
-      if (isInspecting) {
-        portRef.current.postMessage({
-          FrameInspect: 'start',
-        });
-      } else {
-        portRef.current.postMessage({
-          FrameInspect: 'stop',
-        });
-      }
+    if (!portRef.current) {
+      return;
     }
+
+    portRef.current.postMessage({
+      FrameInspect: isInspecting ? 'start' : 'stop',
+    });
   }, [isInspecting]);
 
   useEffect(() => {
     chrome.runtime.onConnect.addListener((port) => {
-      if (port.name === WEBPAGE_PORT_NAME) {
-        portRef.current = port;
-        console.log('Web port connected.');
-        portRef.current.onMessage.addListener((response: Response) => {
-          if (response?.attributes?.src) {
-            console.log(response.attributes.src);
-            setInspectedFrame(response.attributes.src);
-          }
-        });
-
-        portRef.current.onDisconnect.addListener(() => {
-          portRef.current = null;
-          console.log('Web port disconnected.');
-        });
+      if (port.name !== WEBPAGE_PORT_NAME) {
+        return;
       }
+
+      portRef.current = port;
+
+      // eslint-disable-next-line no-console
+      console.log('Web port connected.');
+
+      portRef.current.onMessage.addListener((response: Response) => {
+        if (response?.attributes?.src) {
+          // eslint-disable-next-line no-console
+          console.log(response.attributes.src);
+          setInspectedFrame(response.attributes.src);
+        }
+      });
+
+      portRef.current.onDisconnect.addListener(() => {
+        portRef.current = null;
+        // eslint-disable-next-line no-console
+        console.log('Web port disconnected.');
+      });
     });
   }, [setInspectedFrame]);
 
   useEffect(() => {
     if (selectedFrame && portRef.current) {
+      // eslint-disable-next-line no-console
       console.log(selectedFrame);
+
       portRef.current.postMessage({
         selectedFrame,
       });

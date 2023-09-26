@@ -31,12 +31,9 @@ import React, {
 import { CookieStore, type CookieData } from '../../../../localStore';
 import { noop } from '../../../../utils/noop';
 import { getCurrentTabId } from '../../../../utils/getCurrentTabId';
+import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
 import type { TabCookies, TabFrames } from '@cookie-analysis-tool/common';
 import setDocumentCookies from '../../../../utils/setDocumentCookies';
-import {
-  ALLOWED_NUMBER_OF_TABS,
-  REGEX_FOR_FRAMEURL,
-} from '../../../../constants';
 
 export interface CookieStoreContext {
   state: {
@@ -124,6 +121,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
         return;
       }
 
+      const regexForFrameUrl =
+        /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:/\n?]+)/;
+
       const currentTabFrames = await chrome.webNavigation.getAllFrames({
         tabId: _tabId,
       });
@@ -137,7 +137,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
         currentTabFrames?.forEach(({ url, frameId }) => {
           if (url && url.includes('http')) {
-            const parsedUrl = REGEX_FOR_FRAMEURL.exec(url);
+            const parsedUrl = regexForFrameUrl.exec(url);
 
             if (parsedUrl && parsedUrl[0]) {
               if (modifiedTabFrames[parsedUrl[0]]) {
