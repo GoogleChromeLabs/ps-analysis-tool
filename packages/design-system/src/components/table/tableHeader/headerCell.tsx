@@ -44,9 +44,9 @@ const HeaderCell = ({
   return (
     <th
       ref={columnRef}
-      style={{ maxWidth: cell.width }}
+      style={{ width: cell.width }}
       onClick={() => table.setSortKey(cell.accessorKey)}
-      className="border-x border-american-silver dark:border-quartz relative hover:bg-gainsboro dark:hover:bg-outer-space select-none touch-none font-normal"
+      className="relative hover:bg-gainsboro dark:hover:bg-outer-space select-none touch-none font-normal"
       data-testid="header-cell"
     >
       <div
