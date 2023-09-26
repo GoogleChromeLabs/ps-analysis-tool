@@ -47,7 +47,7 @@ const App: React.FC = () => {
             bottomLeft: false,
             topLeft: false,
           }}
-          className="h-full flex flex-col pt-0.5 border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
+          className="h-full flex flex-col border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
         >
           <Sidebar
             selectedIndex={selectedTabIndex}
