@@ -17,6 +17,7 @@
 		"lint:js:fix": "eslint --fix .",
 		"prepare": "husky install",
 		"cookie-db:update": "node scripts/update-cookie-db.cjs",
+		"rws-json:update": "node scripts/update-rws-json.cjs",
 		"storybook": "storybook dev -p 6006",
 		"build-storybook": "storybook build"
 	},

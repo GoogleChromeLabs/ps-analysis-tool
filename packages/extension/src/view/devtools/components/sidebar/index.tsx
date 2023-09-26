@@ -36,6 +36,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
     setSelectedFrame,
     selectedFrame,
     tabFrames,
+    isCurrentTabBeingListenedTo,
     inspectedFrame,
     isInspecting,
     setIsInspecting,
@@ -46,6 +47,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
     selectedFrame: state.selectedFrame,
     inspectedFrame: state.inspectedFrame,
     isInspecting: state.isInspecting,
+    isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
   }));
 
   const [accordionState, setAccordionState] =
@@ -244,6 +246,11 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
       getNextTab,
     ]
   );
+  useEffect(() => {
+    if (!isCurrentTabBeingListenedTo) {
+      setAccordionState((prevState) => ({ ...prevState, cookies: false }));
+    }
+  }, [isCurrentTabBeingListenedTo]);
 
   return (
     <div className="overflow-auto flex h-full">

@@ -49,6 +49,9 @@ jest.mock('../../../stateProviders/syncCookieStore', () => {
         tabUrl: mockResponse.tabUrl,
         tabFrames: mockResponse.tabFrames,
         selectedFrame: mockResponse.selectedFrame,
+        isCurrentTabBeingListenedTo: true,
+        allowedNumberOfTabs: 'single',
+        loading: false,
       };
     },
   };

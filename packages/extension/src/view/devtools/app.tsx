@@ -22,9 +22,9 @@ import { Resizable } from 're-resizable';
 /**
  * Internal dependencies.
  */
-import './app.css';
 import TABS from './tabs';
 import { Sidebar } from './components';
+import './app.css';
 import { useCookieStore } from './stateProviders/syncCookieStore';
 import { Button, ProgressBar } from '../design-system/components';
 import useFrameOverlay from './hooks/useFrameOverlay';
@@ -100,7 +100,9 @@ const App: React.FC = () => {
             />
           </Resizable>
           <main className="h-full flex-1 overflow-auto">
-            <TabContent />
+            <div className="min-w-[20rem] h-full">
+              <TabContent />
+            </div>
           </main>
         </div>
       </div>
