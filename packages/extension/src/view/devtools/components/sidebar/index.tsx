@@ -62,11 +62,8 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
   const sidebarContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setIndex(0);
-    setSelectedAccordionChild('cookies');
     setSelectedFrame(inspectedFrame);
-    setIsTabFocused(true);
-  }, [inspectedFrame, setSelectedFrame, setIndex]);
+  }, [inspectedFrame, setSelectedFrame]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
