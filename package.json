@@ -5,6 +5,8 @@
 	"scripts": {
 		"cli:dev": "npm run dev --workspace=@cookie-analysis-tool/cli",
 		"cli:build": "npm run build --workspace=@cookie-analysis-tool/cli",
+		"cli-dashboard:dev": "npm run dev --workspace=@cookie-analysis-tool/cli-dashboard",
+		"cli-dashboard:build": "npm run build --workspace=@cookie-analysis-tool/cli-dashboard",
 		"cli":"node dist/cli/index.js",
 		"test": "jest --config=tests/jest.config.cjs",
 		"test:coverage": "npm run test -- --collectCoverage && open coverage/lcov-report/index.html",
