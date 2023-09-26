@@ -107,7 +107,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
         case 'ArrowUp':
           arrowUpHandler({
             accordionState,
-            currIndex,
+            currentIndex: currIndex,
             mainMenuTabSelector,
             setSelectedAccordionChild,
             selectedFrame,
@@ -120,7 +120,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
         case 'ArrowDown':
           arrowDownHandler({
             accordionState,
-            currIndex,
+            currentIndex: currIndex,
             mainMenuTabSelector,
             setSelectedAccordionChild,
             selectedFrame,

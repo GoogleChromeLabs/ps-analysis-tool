@@ -20,7 +20,7 @@ import TABS from '../../../tabs';
 
 interface ArrowUpHandlerProps {
   accordionState: Record<string, boolean> | undefined;
-  currIndex: number;
+  currentIndex: number;
   mainMenuTabSelector: (index: number) => void;
   setSelectedAccordionChild: React.Dispatch<
     React.SetStateAction<string | null>
@@ -47,7 +47,7 @@ const getPreviousTab = (selectedIndex: number) => {
 
 export const arrowUpHandler = ({
   accordionState,
-  currIndex,
+  currentIndex,
   mainMenuTabSelector,
   setSelectedAccordionChild,
   selectedFrame,
@@ -58,11 +58,11 @@ export const arrowUpHandler = ({
 }: ArrowUpHandlerProps) => {
   if (accordionState && accordionState['cookies']) {
     if (selectedFrame) {
-      if (currIndex === 0) {
+      if (currentIndex === 0) {
         mainMenuTabSelector(1);
         setSelectedAccordionChild(TABS[1].id);
       } else {
-        setSelectedFrame(keys[currIndex - 1]);
+        setSelectedFrame(keys[currentIndex - 1]);
       }
     } else {
       if (TABS[selectedIndex].id === 'siteBoundaries') {
