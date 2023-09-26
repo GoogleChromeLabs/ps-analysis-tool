@@ -26,7 +26,7 @@ const root = {
   },
   output: {
     path: path.resolve(__dirname, '../../dist/extension'),
-    filename: 'service-worker.js',
+    filename: '[name].js',
   },
   plugins: [
     new CopyPlugin({

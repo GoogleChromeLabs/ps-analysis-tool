@@ -26,7 +26,7 @@ import TABS from './tabs';
 import { Sidebar } from './components';
 import './app.css';
 import { useCookieStore } from './stateProviders/syncCookieStore';
-import { Button, ProgressBar } from '../design-system/components';
+import { Button, ProgressBar } from '@cookie-analysis-tool/design-system';
 import useFrameOverlay from './hooks/useFrameOverlay';
 
 const App: React.FC = () => {
