@@ -15,3 +15,8 @@
  */
 
 export { default as isFirstParty } from './utils/isFirstParty';
+export { default as filterFramesWithCookies } from './utils/filterFramesWithCookies';
+export { default as filterCookiesByFrame } from './utils/filterCookiesByFrame';
+export { default as prepareCookiesCount } from './utils/prepareCookiesCount';
+export { default as prepareCookieStatsComponents } from './utils/prepareCookieStatsComponents';
+export * from './cookies.types';

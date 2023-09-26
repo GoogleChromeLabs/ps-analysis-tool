@@ -24,8 +24,11 @@ import React from 'react';
  */
 import { useCookieStore } from '../../stateProviders/syncCookieStore';
 import CookiesListing from './cookiesListing';
-import CookiesLanding from './cookiesLanding';
-import { Button, ProgressBar } from '../../../design-system/components';
+import {
+  Button,
+  CookiesLanding,
+  ProgressBar,
+} from '@cookie-analysis-tool/design-system';
 
 const Cookies = () => {
   const {
@@ -35,6 +38,9 @@ const Cookies = () => {
     loading,
     returningToSingleTab,
     selectedFrame,
+    tabCookies,
+    tabFrames,
+    tabUrl,
     changeListeningToThisTab,
   } = useCookieStore(({ state, actions }) => ({
     allowedNumberOfTabs: state.allowedNumberOfTabs,
@@ -43,6 +49,9 @@ const Cookies = () => {
     loading: state.loading,
     returningToSingleTab: state.returningToSingleTab,
     selectedFrame: state.selectedFrame,
+    tabCookies: state.tabCookies,
+    tabFrames: state.tabFrames,
+    tabUrl: state.tabUrl,
     changeListeningToThisTab: actions.changeListeningToThisTab,
   }));
 
@@ -71,7 +80,15 @@ const Cookies = () => {
         className={`h-full ${selectedFrame ? '' : 'flex items-center'}`}
         data-testid="cookies-content"
       >
-        {selectedFrame ? <CookiesListing /> : <CookiesLanding />}
+        {selectedFrame ? (
+          <CookiesListing />
+        ) : (
+          <CookiesLanding
+            tabCookies={tabCookies}
+            tabFrames={tabFrames}
+            tabUrl={tabUrl}
+          />
+        )}
       </div>
     );
   }

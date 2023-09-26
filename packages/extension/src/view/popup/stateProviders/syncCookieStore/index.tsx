@@ -33,11 +33,13 @@ import {
   getCurrentTab,
   getCurrentTabId,
 } from '../../../../utils/getCurrentTabId';
-import type { CookiesCount } from '../../types';
-import prepareCookiesCount from '../../../../utils/prepareCookiesCount';
 import { CookieStore } from '../../../../localStore';
 import { noop } from '../../../../utils/noop';
 import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
+import {
+  prepareCookiesCount,
+  type CookiesCount,
+} from '@cookie-analysis-tool/common';
 
 export interface CookieStoreContext {
   state: {

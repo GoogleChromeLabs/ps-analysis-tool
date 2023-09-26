@@ -22,8 +22,7 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { Button } from '../../../../../../../design-system/components';
-import { Add } from '../../../../../../../../icons';
+import { Add, Button } from '@cookie-analysis-tool/design-system';
 
 interface AddButtonProps {
   onClick: () => void;

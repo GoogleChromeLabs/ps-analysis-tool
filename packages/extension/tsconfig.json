@@ -9,5 +9,10 @@
     "../../node_modules/@types/jest/index.d.ts",
     "src/**/*.json"
   ],
-  "references": [{ "path": "../common" }]
+  "references": [
+    { "path": "../common" },
+    {
+      "path": "../design-system"
+    }
+  ]
 }

@@ -21,15 +21,17 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 /**
  * Internal dependencies
  */
-import Accordion from './accordion';
 import { useCookieStore } from '../../stateProviders/syncCookieStore';
 import TABS from '../../tabs';
-import AccordionChildren from './accordion/accordionChildren';
 import {
   arrowUpHandler,
   arrowDownHandler,
   arrowLeftHandler,
 } from './keyboardNavigationHandlers';
+import {
+  Accordion,
+  AccordionChildren,
+} from '@cookie-analysis-tool/design-system';
 interface SidebarProps {
   selectedIndex: number;
   setIndex: (index: number) => void;
@@ -221,6 +223,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                 {
                   <Accordion
                     key={id}
+                    tabs={TABS}
                     accordionState={Boolean(
                       accordionState && accordionState[id]
                     )}
@@ -240,6 +243,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                         Object.keys(tabFrames)?.map((key) => {
                           return (
                             <AccordionChildren
+                              tabs={TABS}
                               key={key}
                               currentIndex={index}
                               accordionMenuItemName={key}
@@ -257,6 +261,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                           if (id === tab?.parentId && Boolean(tab?.parentId)) {
                             return (
                               <AccordionChildren
+                                tabs={TABS}
                                 currentIndex={currentIndex}
                                 key={tab.id}
                                 tabId={tab.id}
