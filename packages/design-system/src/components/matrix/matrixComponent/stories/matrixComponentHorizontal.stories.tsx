@@ -24,7 +24,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import MatrixComponentHorizontal from '../matrixComponentHorizontal';
 
 const meta: Meta<typeof MatrixComponentHorizontal> = {
-  title: 'Extension/DesignSystem/Matrix/ComponentHorizontal',
+  title: 'DesignSystem/Matrix/ComponentHorizontal',
   component: MatrixComponentHorizontal,
   tags: ['autodocs'],
 };
