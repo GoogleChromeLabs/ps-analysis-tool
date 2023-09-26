@@ -23,9 +23,8 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
  */
 import { useCookieStore } from '../../stateProviders/syncCookieStore';
 import TABS from '../../tabs';
+import TopBar from './topBar';
 import {
-  InspectIcon,
-  InspectBlueIcon,
   Accordion,
   AccordionChildren,
 } from '@cookie-analysis-tool/design-system';
@@ -41,15 +40,11 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
     tabFrames,
     isCurrentTabBeingListenedTo,
     inspectedFrame,
-    isInspecting,
-    setIsInspecting,
   } = useCookieStore(({ state, actions }) => ({
     setSelectedFrame: actions.setSelectedFrame,
-    setIsInspecting: actions.setIsInspecting,
     tabFrames: state.tabFrames,
     selectedFrame: state.selectedFrame,
     inspectedFrame: state.inspectedFrame,
-    isInspecting: state.isInspecting,
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
   }));
 
@@ -255,14 +250,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
   return (
     <div className="overflow-auto flex h-full">
       <div className="flex flex-col grow" ref={sidebarContainerRef}>
-        <div className="mini-status-bar w-full min-h-[25px] px-2 flex items-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green">
-          <span
-            className="psat-inspect inline-block"
-            onClick={() => setIsInspecting(!isInspecting)}
-          >
-            {isInspecting ? <InspectBlueIcon /> : <InspectIcon />}
-          </span>
-        </div>
+        <TopBar />
         {TABS.map(({ id, display_name: name, parentId }, index: number) => {
           if (!parentId) {
             return (
