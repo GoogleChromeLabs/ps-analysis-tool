@@ -9,7 +9,7 @@
   },
   "topics": {
     "name": "Topics",
-    "description": "Provide a way for advertising to reach users based on interests inferred from the sites or apps the user visits, without needing to know the specific sites or apps the user has visited",
+    "description": "Provide a way for advertising to reach users based on interests inferred from the sites or apps the user visits, without needing to know the specific sites or apps the user has visited.",
     "proposal": "https://github.com/patcg-individual-drafts/topics",
     "publicDiscussion": "https://github.com/patcg-individual-drafts/topics/issues",
     "videoOverview": "https://youtu.be/hEBzWuXjeTQ",
@@ -33,7 +33,7 @@
   },
   "related-website-sets": {
     "name": "Related Website Sets",
-    "description": "A new web platform mechanism that would allow a company that owns multiple sites to declare a collection of related domains as being in a Related Website Sets. Sites that are part of a Related Website Set would be able to access cookies across the set of included domains",
+    "description": "A new web platform mechanism that would allow a company that owns multiple sites to declare a collection of related domains as being in a Related Website Sets. Sites that are part of a Related Website Set would be able to access cookies across the set of included domains.",
     "proposal": "https://github.com/WICG/first-party-sets",
     "publicDiscussion": "https://github.com/WICG/first-party-sets/issues",
     "videoOverview": "https://www.youtube.com/watch?v=cNJ8mZ-J3F8",
@@ -41,7 +41,7 @@
   },
   "shared-storage": {
     "name": "Shared Storage",
-    "description": "The Shared Storage API allows sites to store and access unpartitioned cross-site data as to prevent cross-site user tracking, browsers are partitioning all forms of storage (cookies, localStorage, caches, etc). However, there are a number of legitimate use cases that rely on unpartitioned storage which would be impossible without help from new web APIs. ",
+    "description": "The Shared Storage API allows sites to store and access unpartitioned cross-site data as to prevent cross-site user tracking, browsers are partitioning all forms of storage (cookies, localStorage, caches, etc). However, there are a number of legitimate use cases that rely on unpartitioned storage which would be impossible without help from new web APIs.",
     "proposal": "https://github.com/WICG/shared-storage",
     "publicDiscussion": "https://github.com/WICG/shared-storage/issues",
     "videoOverview": "",

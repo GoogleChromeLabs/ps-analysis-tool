@@ -24,11 +24,7 @@ import { VictoryPie } from 'victory';
  */
 import { COLOR_MAP } from '../../theme/colors';
 
-interface EmptyCirclePieChartProps {
-  fallbackText?: string;
-}
-
-const EmptyCirclePieChart = ({ fallbackText }: EmptyCirclePieChartProps) => {
+const EmptyCirclePieChart = () => {
   return (
     <div className="w-full h-full relative">
       <VictoryPie
@@ -37,8 +33,8 @@ const EmptyCirclePieChart = ({ fallbackText }: EmptyCirclePieChartProps) => {
         colorScale={[COLOR_MAP.brightGray]}
         data={[{ x: '', y: 100 }]}
       />
-      <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-raisin-black opacity-40 text-xs leading-4'">
-        {fallbackText || 'Not Found'}
+      <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center opacity-40 text-2xl leading-4'">
+        0
       </p>
     </div>
   );
