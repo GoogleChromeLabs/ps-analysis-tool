@@ -186,6 +186,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     if (tabData && tabData.cookies) {
       setDebouncedStats(prepareCookiesCount(tabData.cookies, _tabUrl));
     }
+    setLoading(false);
   }, [setDebouncedStats]);
 
   const storeChangeListener = useCallback(

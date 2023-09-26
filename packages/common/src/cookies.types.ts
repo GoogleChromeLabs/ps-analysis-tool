@@ -53,7 +53,7 @@ export type CookieData = {
   parsedCookie: ParsedCookie;
   analytics: CookieAnalytics | null;
   url: string;
-  headerType: 'response' | 'request';
+  headerType: 'response' | 'request' | 'javascript';
   isFirstParty: boolean | null;
   frameIdList: number[];
 };

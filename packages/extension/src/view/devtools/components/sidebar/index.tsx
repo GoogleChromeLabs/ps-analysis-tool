@@ -33,13 +33,17 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
-  const { setSelectedFrame, selectedFrame, tabFrames } = useCookieStore(
-    ({ state, actions }) => ({
-      setSelectedFrame: actions.setSelectedFrame,
-      tabFrames: state.tabFrames,
-      selectedFrame: state.selectedFrame,
-    })
-  );
+  const {
+    setSelectedFrame,
+    selectedFrame,
+    tabFrames,
+    isCurrentTabBeingListenedTo,
+  } = useCookieStore(({ state, actions }) => ({
+    setSelectedFrame: actions.setSelectedFrame,
+    tabFrames: state.tabFrames,
+    selectedFrame: state.selectedFrame,
+    isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
+  }));
 
   const [accordionState, setAccordionState] =
     useState<Record<string, boolean>>();
@@ -230,6 +234,11 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
       getNextTab,
     ]
   );
+  useEffect(() => {
+    if (!isCurrentTabBeingListenedTo) {
+      setAccordionState((prevState) => ({ ...prevState, cookies: false }));
+    }
+  }, [isCurrentTabBeingListenedTo]);
 
   return (
     <div className="overflow-auto flex h-full">
