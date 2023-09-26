@@ -27,7 +27,7 @@ import { useContextSelector, createContext } from 'use-context-selector';
 /**
  * Internal dependencies.
  */
-import { type CookieTableData } from '../../cookies.types';
+import type { CookieTableData } from '@cookie-analysis-tool/common';
 
 export interface ContentPanelStore {
   state: {

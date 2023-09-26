@@ -28,9 +28,9 @@ import FilterIcon from '../../../../../../../../third_party/icons/filter-icon.sv
 // eslint-disable-next-line import/no-relative-packages
 import CrossIcon from '../../../../../../../../third_party/icons/cross-icon.svg';
 import { useFilterManagementStore } from '../../../stateProviders/filterManagementStore';
-import { Refresh } from '../../../../../icons';
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import { type CookieTableData } from '../../../cookies.types';
+import type { CookieTableData } from '@cookie-analysis-tool/common';
+import { Refresh } from '@cookie-analysis-tool/design-system';
 
 interface CookieSearchProps {
   cookiesAvailable: boolean;
