@@ -25,7 +25,7 @@ import React, {
   useRef,
 } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
-
+import { noop } from '@cookie-analysis-tool/design-system';
 /**
  * Internal dependencies.
  */
@@ -34,7 +34,6 @@ import {
   getCurrentTabId,
 } from '../../../../utils/getCurrentTabId';
 import { CookieStore } from '../../../../localStore';
-import { noop } from '../../../../utils/noop';
 import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
 import {
   prepareCookiesCount,

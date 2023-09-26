@@ -23,11 +23,7 @@ import React, {
   useState,
   useCallback,
 } from 'react';
-
-/**
- * Internal dependencies.
- */
-import { noop } from '../../../../utils/noop';
+import { noop } from '@cookie-analysis-tool/design-system';
 
 export interface SettingStoreContext {
   state: {
