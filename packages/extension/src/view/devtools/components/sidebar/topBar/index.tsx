@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useEffect } from 'react';
 
 /**
  * Internal dependencies.
@@ -25,12 +25,17 @@ import { useCookieStore } from '../../../stateProviders/syncCookieStore';
 import InspectButton from './inspectButton';
 
 const TopBar = () => {
-  const { isInspecting, setIsInspecting } = useCookieStore(
-    ({ state, actions }) => ({
+  const { setSelectedFrame, isInspecting, setIsInspecting, inspectedFrame } =
+    useCookieStore(({ state, actions }) => ({
+      setSelectedFrame: actions.setSelectedFrame,
       setIsInspecting: actions.setIsInspecting,
       isInspecting: state.isInspecting,
-    })
-  );
+      inspectedFrame: state.inspectedFrame,
+    }));
+
+  useEffect(() => {
+    setSelectedFrame(inspectedFrame);
+  }, [inspectedFrame, setSelectedFrame]);
 
   return (
     <div className="mini-status-bar w-full min-h-[25px] px-2 flex items-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green">

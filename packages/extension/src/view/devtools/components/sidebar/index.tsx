@@ -39,12 +39,10 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
     selectedFrame,
     tabFrames,
     isCurrentTabBeingListenedTo,
-    inspectedFrame,
   } = useCookieStore(({ state, actions }) => ({
     setSelectedFrame: actions.setSelectedFrame,
     tabFrames: state.tabFrames,
     selectedFrame: state.selectedFrame,
-    inspectedFrame: state.inspectedFrame,
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
   }));
 
@@ -55,10 +53,6 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
     string | null
   >(null);
   const sidebarContainerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setSelectedFrame(inspectedFrame);
-  }, [inspectedFrame, setSelectedFrame]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
