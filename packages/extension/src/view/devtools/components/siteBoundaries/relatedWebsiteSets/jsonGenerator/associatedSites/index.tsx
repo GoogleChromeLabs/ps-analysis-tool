@@ -23,9 +23,9 @@ import React from 'react';
  * Internal dependencies.
  */
 import type { AssociatedSiteType } from '../types';
-import { InfoIcon } from '../../../../../../../icons';
 import { RWSInput, AddButton, RemoveButton } from '../components';
 import type { SitePayloadType } from '../useGeneratorForm/types';
+import { InfoIcon } from '@cookie-analysis-tool/design-system';
 
 interface AssociatedSitesProps {
   associatedSites: AssociatedSiteType[];

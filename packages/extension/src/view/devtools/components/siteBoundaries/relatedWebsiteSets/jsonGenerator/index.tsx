@@ -28,8 +28,8 @@ import AssociatedSites from './associatedSites';
 import ServiceSites from './serviceSites';
 import CountrySites from './countrySites';
 import JsonOutput from './jsonOutput';
-import { Button } from '../../../../../design-system/components';
 import useGeneratorForm from './useGeneratorForm';
+import { Button } from '@cookie-analysis-tool/design-system';
 
 interface RWSJsonGeneratorProps {
   open: boolean;

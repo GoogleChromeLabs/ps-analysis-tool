@@ -50,7 +50,7 @@ import {
   FingerPrintingIconWhite,
   TopicsIcon,
   TopicsIconWhite,
-} from '../../icons';
+} from '@cookie-analysis-tool/design-system';
 
 const TABS = [
   {

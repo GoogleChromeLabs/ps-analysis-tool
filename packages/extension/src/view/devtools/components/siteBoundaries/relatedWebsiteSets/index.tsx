@@ -23,9 +23,9 @@ import React, { useState } from 'react';
  */
 import InfoCard from '../../../../design-system/components/infoCard';
 import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
-import { Button } from '../../../../design-system/components';
 import RWSJsonGenerator from './jsonGenerator';
 import Insights from './insights';
+import { Button } from '@cookie-analysis-tool/design-system';
 
 const RelatedWebsiteSets = () => {
   const [showForm, setShowForm] = useState(false);
