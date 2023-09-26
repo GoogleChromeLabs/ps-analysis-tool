@@ -23,15 +23,29 @@ import React, { useEffect } from 'react';
  */
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
 import InspectButton from './inspectButton';
+import useFrameOverlay from '../../../hooks/useFrameOverlay';
 
 const TopBar = () => {
-  const { setSelectedFrame, isInspecting, setIsInspecting, inspectedFrame } =
-    useCookieStore(({ state, actions }) => ({
-      setSelectedFrame: actions.setSelectedFrame,
-      setIsInspecting: actions.setIsInspecting,
-      isInspecting: state.isInspecting,
-      inspectedFrame: state.inspectedFrame,
-    }));
+  const {
+    setSelectedFrame,
+    isInspecting,
+    setIsInspecting,
+    setInspectedFrame,
+    inspectedFrame,
+    selectedFrame,
+  } = useCookieStore(({ state, actions }) => ({
+    setSelectedFrame: actions.setSelectedFrame,
+    setIsInspecting: actions.setIsInspecting,
+    isInspecting: state.isInspecting,
+    inspectedFrame: state.inspectedFrame,
+    setInspectedFrame: actions.setInspectedFrame,
+    selectedFrame: state.selectedFrame,
+  }));
+
+  useFrameOverlay({
+    selectedFrame,
+    setInspectedFrame,
+  });
 
   useEffect(() => {
     setSelectedFrame(inspectedFrame);
