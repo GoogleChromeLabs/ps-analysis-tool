@@ -29,6 +29,7 @@ import {
   CookiesLanding,
   ProgressBar,
 } from '@cookie-analysis-tool/design-system';
+import useFrameOverlay from '../../hooks/useFrameOverlay';
 
 const Cookies = () => {
   const {
@@ -38,6 +39,7 @@ const Cookies = () => {
     loading,
     returningToSingleTab,
     selectedFrame,
+    setInspectedFrame,
     tabCookies,
     tabFrames,
     tabUrl,
@@ -49,11 +51,17 @@ const Cookies = () => {
     loading: state.loading,
     returningToSingleTab: state.returningToSingleTab,
     selectedFrame: state.selectedFrame,
+    setInspectedFrame: actions.setInspectedFrame,
     tabCookies: state.tabCookies,
     tabFrames: state.tabFrames,
     tabUrl: state.tabUrl,
     changeListeningToThisTab: actions.changeListeningToThisTab,
   }));
+
+  useFrameOverlay({
+    selectedFrame,
+    setInspectedFrame,
+  });
 
   if (
     loading ||

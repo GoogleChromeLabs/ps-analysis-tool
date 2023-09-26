@@ -24,26 +24,11 @@ import { Resizable } from 're-resizable';
  */
 import TABS from './tabs';
 import { Sidebar } from './components';
-import { useCookieStore } from './stateProviders/syncCookieStore';
-import useFrameOverlay from './hooks/useFrameOverlay';
 import './app.css';
 
 const App: React.FC = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
-
-  const { setInspectedFrame, selectedFrame } = useCookieStore(
-    ({ state, actions }) => ({
-      setInspectedFrame: actions.setInspectedFrame,
-      selectedFrame: state.selectedFrame,
-    })
-  );
-
   const TabContent = TABS[selectedTabIndex].component;
-
-  useFrameOverlay({
-    selectedFrame,
-    setInspectedFrame,
-  });
 
   return (
     <div className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black">
