@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+const path = require('path');
+
 const colors = require('tailwindcss/colors');
 const defaultTheme = require('tailwindcss/defaultTheme');
 
@@ -27,8 +29,8 @@ delete colors['blueGray'];
 module.exports = {
   darkMode: 'class',
   content: [
-    './packages/extension/src/**/*.{tsx,js}',
-    './packages/design-system/src/**/*.{tsx,js}',
+    path.resolve(__dirname, './packages/extension/src/**/*.{tsx,js}'),
+    path.resolve(__dirname, './packages/design-system/src/**/*.{tsx,js}'),
   ],
   theme: {
     extend: {

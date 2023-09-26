@@ -11,6 +11,10 @@
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool#readme",
+	"scripts": {
+		"dev": "webpack --config webpack.config.cjs --watch",
+		"build": "cross-env NODE_ENV=production webpack --config webpack.config.cjs"
+	},
   "dependencies": {
     "classnames": "^2.3.2",
     "p-queue": "^7.3.4",
