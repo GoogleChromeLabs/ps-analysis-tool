@@ -25,7 +25,7 @@ import MatrixComponent from '..';
 import { COLOR_MAP } from '@cookie-analysis-tool/design-system';
 
 const meta: Meta<typeof MatrixComponent> = {
-  title: 'Extension/DesignSystem/Matrix/Component',
+  title: 'DesignSystem/Matrix/Component',
   component: MatrixComponent,
   tags: ['autodocs'],
 };
