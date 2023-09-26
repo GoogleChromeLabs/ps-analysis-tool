@@ -24,12 +24,11 @@ import React, {
   useCallback,
   useRef,
 } from 'react';
-
+import { noop } from '@cookie-analysis-tool/design-system';
 /**
  * Internal dependencies.
  */
 import { CookieStore, type CookieData } from '../../../../localStore';
-import { noop } from '../../../../utils/noop';
 import { getCurrentTabId } from '../../../../utils/getCurrentTabId';
 import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
 import type { TabCookies, TabFrames } from '@cookie-analysis-tool/common';

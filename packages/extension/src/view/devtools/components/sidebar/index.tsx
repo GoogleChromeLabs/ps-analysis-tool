@@ -17,7 +17,10 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-
+import {
+  Accordion,
+  AccordionChildren,
+} from '@cookie-analysis-tool/design-system';
 /**
  * Internal dependencies
  */
@@ -28,10 +31,6 @@ import {
   arrowDownHandler,
   arrowLeftHandler,
 } from './keyboardNavigationHandlers';
-import {
-  Accordion,
-  AccordionChildren,
-} from '@cookie-analysis-tool/design-system';
 interface SidebarProps {
   selectedIndex: number;
   setIndex: (index: number) => void;

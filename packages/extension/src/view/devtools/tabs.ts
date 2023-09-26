@@ -14,22 +14,8 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies.
+ * External dependencies
  */
-import {
-  Cookies,
-  SiteBoundaries,
-  Chips,
-  RelatedWebsiteSets,
-  PrivateAdvertising,
-  AntiCovertTracking,
-  Topics,
-  Attribution,
-  BounceTracking,
-  Fingerprinting,
-  PrivacySandbox,
-} from './components';
-
 import {
   CookieIcon,
   CookieIconWhite,
@@ -51,7 +37,26 @@ import {
   FingerPrintingIconWhite,
   TopicsIcon,
   TopicsIconWhite,
+  PrivacySandboxIcon,
+  PrivacySandboxIconWhite,
 } from '@cookie-analysis-tool/design-system';
+
+/**
+ * Internal dependencies.
+ */
+import {
+  Cookies,
+  SiteBoundaries,
+  Chips,
+  RelatedWebsiteSets,
+  PrivateAdvertising,
+  AntiCovertTracking,
+  Topics,
+  Attribution,
+  BounceTracking,
+  Fingerprinting,
+  PrivacySandbox,
+} from './components';
 
 const TABS = [
   {

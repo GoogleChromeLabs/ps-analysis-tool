@@ -22,6 +22,7 @@ import { act } from 'react-dom/test-utils';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import SinonChrome from 'sinon-chrome';
+import { noop } from '@cookie-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
@@ -31,7 +32,6 @@ import App from '../app';
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'cookie-analysis-tool/data/PSInfo.json';
 import { useCookieStore } from '../stateProviders/syncCookieStore';
-import { noop } from '../../../utils/noop';
 
 jest.mock('../stateProviders/syncCookieStore', () => ({
   useCookieStore: jest.fn(),
