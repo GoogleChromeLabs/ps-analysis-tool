@@ -75,7 +75,8 @@ export const findAndAddFrameOverlay = (selectedFrame: string) => {
 
   for (const iframe of iframes) {
     const src = iframe.getAttribute('src') || '';
-    console.log(src);
+    // eslint-disable-next-line no-console
+    console.log(src, 'src');
     const srcHost = new URL(src).host.replace('www.', ''); // @todo Not the right way.
     const selectedFrameHost = new URL(selectedFrame).host.replace('www.', '');
 

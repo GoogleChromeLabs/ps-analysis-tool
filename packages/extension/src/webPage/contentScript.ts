@@ -34,6 +34,7 @@ const connectPort = () => {
 
   port.onDisconnect.addListener(() => {
     port = null;
+    // eslint-disable-next-line no-console
     console.log(' Webpage port disconnected!');
   });
 
@@ -48,6 +49,8 @@ const connectPort = () => {
     if (response?.selectedFrame) {
       findAndAddFrameOverlay(response.selectedFrame);
     }
+
+    // eslint-disable-next-line no-console
     console.log(response);
   });
 };
@@ -55,6 +58,7 @@ const connectPort = () => {
 chrome.storage.onChanged.addListener((changes: object) => {
   if (changes?.devToolState) {
     if (changes.devToolState?.newValue === 'Ready!' && port === null) {
+      // eslint-disable-next-line no-console
       console.log('Connection Attempt!');
       connectPort();
     }
@@ -64,10 +68,13 @@ chrome.storage.onChanged.addListener((changes: object) => {
 const handleMouseEvent = (event: MouseEvent): void => {
   if ((event.target as HTMLElement).tagName === 'IFRAME') {
     const frame = event.target as HTMLIFrameElement;
+    // eslint-disable-next-line no-console
     console.log(frame.getAttribute('src'));
+
     if (!frame.getAttribute('src')) {
       return;
     }
+
     const payload = {
       hover: event?.type === 'mouseover',
       attributes: getFrameAttributes(frame),
