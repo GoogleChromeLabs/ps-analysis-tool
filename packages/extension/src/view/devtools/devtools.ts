@@ -13,24 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const callback = (panel: {
+  onShown: { addListener: (arg0: () => void) => void };
+}) => {
+  // Fires when the user switches to the panel.
+  panel.onShown.addListener(() => {
+    // Make sure the context is not changed. This can occur if the service worker is refreshed or becomes inactive.
+    if (chrome?.storage) {
+      // eslint-disable-next-line no-console
+      console.log(panel, 'panel');
+
+      // Remove if exist. otherwise onupdate hook will not trigger.
+      chrome.storage.session.remove('devToolState');
+
+      // try to communicate with web page.
+      chrome.storage.session.set({
+        devToolState: 'Ready!',
+      });
+    }
+  });
+};
+
 chrome.devtools.panels.create(
   'Privacy Sandbox',
   'icons/icon.svg',
   'devtools/index.html',
-  (penal) => {
-    penal.onShown.addListener(() => {
-      // Make sure context is not changed. it happens if serivce-work script is refreshed or inactive.
-      if (chrome?.storage) {
-        console.log(penal, '');
-
-        // Remove if exist. otherwise onupdate hook will not trigger.
-        chrome.storage.session.remove('devToolState');
-
-        // try to communicate with web page.
-        chrome.storage.session.set({
-          devToolState: 'Ready!',
-        });
-      }
-    });
-  }
+  callback
 );
