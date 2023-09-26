@@ -91,7 +91,7 @@ const Table = ({
         onClose={setShowColumnsMenu}
         position={columnPosition}
       />
-      <table className="h-full w-full" ref={tableRef}>
+      <div className="h-full w-full" ref={tableRef}>
         <TableHeader
           table={table}
           setColumnPosition={setColumnPosition}
@@ -106,7 +106,7 @@ const Table = ({
           selectedKey={selectedKey}
           onRowClick={onRowClick}
         />
-      </table>
+      </div>
     </div>
   );
 };
