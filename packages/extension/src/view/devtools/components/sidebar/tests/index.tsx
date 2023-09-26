@@ -31,6 +31,7 @@ import {
   type CookieStoreContext,
 } from '../../../stateProviders/syncCookieStore';
 import { act } from 'react-dom/test-utils';
+import globalChrome from '../../../../../utils/test-data/globalChrome';
 
 const uncategorized1pCookie: ParsedCookie = {
   name: '_cb',
@@ -143,6 +144,10 @@ jest.mock('../../../stateProviders/syncCookieStore', () => ({
 const mockUseCookieStore = useCookieStore as jest.Mock;
 
 describe('Sidebar', () => {
+  beforeAll(() => {
+    globalThis.chrome = globalChrome;
+  });
+
   it('Should render with first menu item selected', () => {
     mockUseCookieStore.mockReturnValue({
       tabFrames: mockResponse.tabFrames,

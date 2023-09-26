@@ -13,11 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const noop = () => {};
 
-export { default as isFirstParty } from './utils/isFirstParty';
-export { default as filterFramesWithCookies } from './utils/filterFramesWithCookies';
-export { default as filterCookiesByFrame } from './utils/filterCookiesByFrame';
-export { default as prepareCookiesCount } from './utils/prepareCookiesCount';
-export { default as prepareCookieStatsComponents } from './utils/prepareCookieStatsComponents';
-export { default as noop } from './utils/noop';
-export * from './cookies.types';
+export default noop;

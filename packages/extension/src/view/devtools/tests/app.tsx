@@ -21,7 +21,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import SinonChrome from 'sinon-chrome';
 
 /**
  * Internal dependencies.
@@ -32,6 +31,7 @@ import App from '../app';
 import PSInfo from 'cookie-analysis-tool/data/PSInfo.json';
 import { useCookieStore } from '../stateProviders/syncCookieStore';
 import { noop } from '../../../utils/noop';
+import globalChrome from '../../../utils/test-data/globalChrome';
 
 jest.mock('../stateProviders/syncCookieStore', () => ({
   useCookieStore: jest.fn(),
@@ -48,28 +48,8 @@ describe('App', () => {
       setSelectedFrame: noop,
       allowedNumberOfTabs: 'single',
     });
-    globalThis.chrome = {
-      ...SinonChrome,
-      devtools: {
-        // @ts-ignore
-        panels: {
-          themeName: 'dark',
-        },
-        inspectedWindow: {
-          tabId: 1,
-        },
-      },
-      tabs: {
-        get: () => ({ url: 'https://hindustantimes.com' }),
-        onUpdated: {
-          addListener: () => noop,
-          removeListener: () => noop,
-        },
-      },
-      runtime: {
-        getURL: () => 'data/related_website_sets.json',
-      },
-    } as unknown as typeof chrome;
+
+    globalThis.chrome = globalChrome;
 
     globalThis.fetch = function () {
       return Promise.resolve({
