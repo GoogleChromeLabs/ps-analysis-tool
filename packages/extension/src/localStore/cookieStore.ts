@@ -18,7 +18,7 @@
  */
 import updateStorage from './updateStorage';
 import type { TabData, CookieData } from './types';
-import { getCookieKey } from '../utils/getCookieKey';
+import { getCookieKey } from '@cookie-analysis-tool/common';
 
 const CookieStore = {
   /**

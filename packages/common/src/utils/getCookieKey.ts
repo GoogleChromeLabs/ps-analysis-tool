@@ -13,18 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
- * External dependencies
+ * External dependencies.
  */
-import React from 'react';
+import { type Cookie as ParsedCookie } from 'simple-cookie';
 
-const CookieListing = () => {
-  return (
-    <div>
-      <h1>Cookie Listing</h1>
-    </div>
-  );
+const getCookieKey = (parsedCookie: ParsedCookie) => {
+  const cookieName = parsedCookie?.name;
+  const cookieDomain = parsedCookie?.domain;
+  const cookiePath = parsedCookie?.path;
+
+  return cookieName + cookieDomain + cookiePath;
 };
 
-export default CookieListing;
+export default getCookieKey;

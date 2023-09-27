@@ -18,8 +18,8 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import CookiesLanding from './cookieLanding';
 import CookiesListing from './cookieListing';
+import { CookiesLanding } from '@cookie-analysis-tool/design-system';
 
 interface CookiesTabProps {
   selectedFrameUrl?: string | null;
@@ -28,7 +28,11 @@ interface CookiesTabProps {
 const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
   return (
     <div className="w-full h-full flex items-center justify-center">
-      {selectedFrameUrl ? <CookiesListing /> : <CookiesLanding />}
+      {selectedFrameUrl ? (
+        <CookiesListing />
+      ) : (
+        <CookiesLanding tabCookies={{}} tabFrames={{}} tabUrl={''} />
+      )}
     </div>
   );
 };

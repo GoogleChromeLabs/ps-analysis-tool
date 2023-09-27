@@ -17,52 +17,37 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 /**
  * Internal dependencies.
  */
-
-import { useContentPanelStore } from '../../../../stateProviders/contentPanelStore';
-import { getCookieKey } from '../../../../../../utils/getCookieKey';
 import type { CookieTableData } from '@cookie-analysis-tool/common';
 import {
-  useTable,
-  Table,
   type InfoType,
   type TableColumn,
-  type TableRow,
+  CookieTable,
 } from '@cookie-analysis-tool/design-system';
 
-export interface CookieTableProps {
+export interface CookieTableContainerProps {
   cookies: CookieTableData[];
   selectedFrame: string | null;
+  selectedFrameCookie: {
+    [frame: string]: CookieTableData | null;
+  } | null;
+  setSelectedFrameCookie: (
+    cookie: {
+      [frame: string]: CookieTableData | null;
+    } | null
+  ) => void;
 }
 
-const CookieTable = ({ cookies, selectedFrame }: CookieTableProps) => {
-  const { selectedFrameCookie, setSelectedFrameCookie } = useContentPanelStore(
-    ({ state, actions }) => ({
-      selectedFrameCookie: state.selectedFrameCookie || {},
-      setSelectedFrameCookie: actions.setSelectedFrameCookie,
-    })
-  );
-
-  useEffect(() => {
-    if (selectedFrame && selectedFrameCookie) {
-      if (
-        selectedFrameCookie[selectedFrame] === undefined ||
-        (selectedFrameCookie[selectedFrame] !== null && cookies.length === 0)
-      ) {
-        setSelectedFrameCookie(null);
-      }
-    }
-  }, [
-    selectedFrameCookie,
-    selectedFrame,
-    setSelectedFrameCookie,
-    cookies.length,
-  ]);
-
+const CookieTableContainer = ({
+  cookies,
+  selectedFrame,
+  selectedFrameCookie,
+  setSelectedFrameCookie,
+}: CookieTableContainerProps) => {
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
@@ -160,39 +145,15 @@ const CookieTable = ({ cookies, selectedFrame }: CookieTableProps) => {
     []
   );
 
-  const onRowClick = useCallback(
-    (cookieData: CookieTableData | null) => {
-      setSelectedFrameCookie({
-        [selectedFrame as string]: cookieData,
-      });
-    },
-    [selectedFrame, setSelectedFrameCookie]
-  );
-
-  const selectedKey = useMemo(
-    () => Object.values(selectedFrameCookie ?? {})[0],
-    [selectedFrameCookie]
-  );
-
-  const table = useTable({
-    tableColumns,
-    data: cookies,
-  });
-
   return (
-    <div className="w-full h-full overflow-auto text-outer-space-crayola">
-      <Table
-        table={table}
-        selectedKey={
-          selectedKey === null ? null : getCookieKey(selectedKey?.parsedCookie)
-        }
-        getRowObjectKey={(row: TableRow) =>
-          getCookieKey(Object.values(row)?.[0]?.originalData.parsedCookie)
-        }
-        onRowClick={onRowClick}
-      />
-    </div>
+    <CookieTable
+      tableColumns={tableColumns}
+      data={cookies}
+      selectedFrame={selectedFrame}
+      selectedFrameCookie={selectedFrameCookie}
+      setSelectedFrameCookie={setSelectedFrameCookie}
+    />
   );
 };
 
-export default CookieTable;
+export default CookieTableContainer;

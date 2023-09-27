@@ -23,12 +23,14 @@ import { Resizable } from 're-resizable';
  * Internal dependencies.
  */
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import CookieDetails from './cookieDetails';
-import CookieTable from './cookieTable';
+
 import { useFilterManagementStore } from '../../../stateProviders/filterManagementStore';
 import ChipsBar from '../cookieFilter/chips';
 import CookieTopBar from '../cookieTopBar';
 import FiltersList from '../cookieFilter';
+import type { CookieTableData } from '@cookie-analysis-tool/common';
+import { CookieDetails } from '@cookie-analysis-tool/design-system';
+import CookieTableContainer from './cookieTableContainer';
 
 const CookiesListing = () => {
   const { selectedFrame } = useCookieStore(({ state }) => ({
@@ -43,6 +45,10 @@ const CookiesListing = () => {
   );
 
   const [isFilterMenuOpen, setIsFilterMenuOpen] = useState<boolean>(false);
+
+  const [selectedFrameCookie, setSelectedFrameCookie] = useState<{
+    [frame: string]: CookieTableData | null;
+  } | null>(null);
 
   const toggleFilterMenu = () => {
     setIsFilterMenuOpen((p) => !p);
@@ -93,15 +99,17 @@ const CookiesListing = () => {
                 : null}
 
               <div className="flex-1 overflow-auto">
-                <CookieTable
+                <CookieTableContainer
                   cookies={filteredCookies}
                   selectedFrame={selectedFrame}
+                  selectedFrameCookie={selectedFrameCookie}
+                  setSelectedFrameCookie={setSelectedFrameCookie}
                 />
               </div>
             </div>
           </Resizable>
           <div className="w-full h-full border border-gray-300 dark:border-quartz shadow overflow-auto">
-            <CookieDetails />
+            <CookieDetails selectedFrameCookie={selectedFrameCookie} />
           </div>
         </div>
       </div>

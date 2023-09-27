@@ -25,7 +25,7 @@ import { getDomain } from 'tldts';
  */
 import { getCurrentTabId } from '../utils/getCurrentTabId';
 import { findPreviousCookieDataObject } from './findPreviousCookieDataObject';
-import { getCookieKey } from '../utils/getCookieKey';
+import { getCookieKey } from '@cookie-analysis-tool/common';
 
 /**
  * Create cookie object from cookieStore API cookie object, previously saved parsed cookie object if any, and recently captured request/response cookie header.

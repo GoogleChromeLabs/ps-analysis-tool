@@ -22,13 +22,16 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { useContentPanelStore } from '../../../../stateProviders/contentPanelStore';
+import type { CookieTableData } from '@cookie-analysis-tool/common';
 import Details from './details';
 
-const CookieDetails = () => {
-  const { selectedFrameCookie } = useContentPanelStore(({ state }) => ({
-    selectedFrameCookie: state.selectedFrameCookie,
-  }));
+interface CookieDetailsProps {
+  selectedFrameCookie: {
+    [frame: string]: CookieTableData | null;
+  } | null;
+}
+
+const CookieDetails = ({ selectedFrameCookie }: CookieDetailsProps) => {
   const selectedCookie = Object.values(selectedFrameCookie ?? {})[0];
 
   return (
