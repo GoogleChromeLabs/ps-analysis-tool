@@ -42,18 +42,20 @@ const useColumnResizing = (
   useEffect(() => {
     const tableWidth =
       tableContainerRef.current?.getBoundingClientRect().width || 0;
+
     if (options) {
       const newColumns = tableColumns.map((column) => {
         const columnWidth =
           options && Object.keys(options).length && options[column.header]
             ? options[column.header]
             : tableWidth / tableColumns.length - Object.keys(options).length;
-        console.log(columnWidth);
+
         return {
           ...column,
           width: columnWidth,
         };
       });
+
       setColumns(newColumns);
     } else {
       const newColumns = tableColumns.map((column) => {
@@ -62,6 +64,7 @@ const useColumnResizing = (
           width: tableWidth / tableColumns.length,
         };
       });
+
       setColumns(newColumns);
     }
   }, [options, tableColumns]);
