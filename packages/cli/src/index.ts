@@ -19,6 +19,7 @@
 import { Command } from 'commander';
 import events from 'events';
 import { ensureFile, writeFile } from 'fs-extra';
+import ChildProcess from 'child_process';
 
 /**
  * Internal dependencies.
@@ -144,6 +145,11 @@ export const initialize = async () => {
 
   await ensureFile(outputFilePaths.allData);
   await writeFile(outputFilePaths.allData, Utility.prettyJson(allData));
+  ChildProcess.exec(
+    `open -a "Google Chrome" http://localhost:9000?path=${encodeURIComponent(
+      outputFilePaths.allData
+    )}`
+  );
 
   // Clear ./tmp directory.
   fs.rmSync('./tmp', { recursive: true, force: true });
