@@ -82,8 +82,8 @@ const App: React.FC = () => {
     return (
       <div className="w-96 min-h-[20rem] flex flex-col items-center justify-center">
         {!returningToSingleTab && (
-          <p className="dark:text-bright-gray text-chart-label text-base mb-5">
-            This tool works best with a single tab.
+          <p className="dark:text-bright-gray text-chart-label text-base mb-5 text-center">
+            This tool works best with a single tab for cookie analysis.
           </p>
         )}
         <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
