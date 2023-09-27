@@ -15,7 +15,6 @@
  */
 
 const path = require('path');
-
 const colors = require('tailwindcss/colors');
 const defaultTheme = require('tailwindcss/defaultTheme');
 

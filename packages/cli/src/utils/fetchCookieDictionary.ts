@@ -13,22 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * External dependencies.
  */
-//@ts-ignore package does not support typescript
-import Wapplalyzer from 'wappalyzer';
-import { TechnologieDetails } from '../types';
+import fs from 'fs/promises';
+/**
+ * Internal dependencies.
+ */
+import { CookieDatabase } from '../types';
+import path from 'path';
 
-const generateTechnology = async (
-  url: string
-): Promise<TechnologieDetails[]> => {
-  const wappalyzer = new Wapplalyzer();
-  await wappalyzer.init();
-  const site = await wappalyzer.open(url);
-  const results = await site.analyze();
+/**
+ * Fetch dictionary from local data folder.
+ * @returns {Promise<CookieDatabase>} Open Cookie Data base
+ */
+export async function fetchDictionary(): Promise<CookieDatabase> {
+  const data = JSON.parse(
+    await fs.readFile(
+      path.resolve('./third_party/data/open-cookie-database.json'),
+      { encoding: 'utf8' }
+    )
+  );
 
-  return results.technologies;
-};
-
-export default generateTechnology;
+  return data;
+}

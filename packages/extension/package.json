@@ -7,6 +7,10 @@
     "url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool.git"
   },
   "license": "Apache-2.0",
+  "scripts": {
+		"dev": "webpack --config webpack.config.cjs --watch",
+		"build": "cross-env NODE_ENV=production webpack --config webpack.config.cjs"
+  },  
   "bugs": {
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"
   },

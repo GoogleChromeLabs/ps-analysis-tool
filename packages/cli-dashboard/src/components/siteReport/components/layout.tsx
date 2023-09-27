@@ -62,7 +62,9 @@ const Layout = () => {
         <Sidebar
           selectedFrameUrl={selectedFrameUrl}
           setSelectedFrameUrl={setSelectedFrameUrl}
-          frameUrls={Array.from(frameUrlSet)}
+          frameUrls={Array.from(frameUrlSet).filter((url) =>
+            url.includes('http')
+          )}
           selectedIndex={selectedSidebarOptionInd}
           setIndex={setSelectedSidebarOptionInd}
         />

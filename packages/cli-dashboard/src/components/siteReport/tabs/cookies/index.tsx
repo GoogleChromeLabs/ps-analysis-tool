@@ -32,6 +32,43 @@ const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
   }));
 
   const tabCookies1 = Object.fromEntries(
+    tabCookies
+      .filter((cookie) => {
+        return cookie.frameUrl === selectedFrameUrl;
+      })
+      .map((cookie) => {
+        return [
+          cookie.name + cookie.domain + cookie.path,
+          {
+            parsedCookie: {
+              name: cookie.name,
+              value: cookie.value,
+              domain: cookie.domain,
+              path: cookie.path,
+              expires: cookie.expires,
+              httponly: cookie.httpOnly,
+              secure: cookie.secure,
+              samesite: cookie.sameSite,
+            },
+            analytics: {
+              platform: cookie.platform,
+              category:
+                cookie.category === 'Unknown Category'
+                  ? 'Uncategorized'
+                  : cookie.category,
+              description: cookie.description,
+            },
+            url: cookie.pageUrl,
+            headerType: 'response',
+            isFirstParty: cookie.isFirstParty === 'Yes' ? true : false,
+            frameIdList: [],
+            isCookieAccepted: !cookie.isBlocked,
+          },
+        ];
+      })
+  );
+
+  const tabCookies2 = Object.fromEntries(
     tabCookies.map((cookie) => {
       return [
         cookie.name + cookie.domain + cookie.path,
@@ -56,7 +93,7 @@ const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
           },
           url: cookie.pageUrl,
           headerType: 'response',
-          isFirstParty: cookie.isFirstParty,
+          isFirstParty: cookie.isFirstParty === 'Yes' ? true : false,
           frameIdList: [],
           isCookieAccepted: !cookie.isBlocked,
         },
@@ -85,9 +122,9 @@ const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
         />
       ) : (
         <CookiesLanding
-          tabCookies={tabCookies1}
+          tabCookies={tabCookies2}
           tabFrames={tabFrames}
-          tabUrl={'https://indianexpress.com'}
+          tabUrl={tabCookies[0]?.pageUrl}
         />
       )}
     </div>
