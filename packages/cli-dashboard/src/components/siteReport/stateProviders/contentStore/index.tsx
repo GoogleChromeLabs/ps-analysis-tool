@@ -21,7 +21,7 @@ import { useContextSelector, createContext } from 'use-context-selector';
 /**
  * Internal dependencies.
  */
-import { CookieData, TechnologyData } from '../../../../types';
+import type { CookieData, TechnologyData } from '../../../../types';
 
 export interface ContentStore {
   state: {

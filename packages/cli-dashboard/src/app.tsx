@@ -17,16 +17,29 @@
 /**
  * External dependencies
  */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 /**
  * Internal dependencies
  */
 import './app.css';
 import SiteReport from './components/siteReport';
-import { cookies, technologies } from './consts';
+import type { CookieData, TechnologyData } from './types';
 
 const App = () => {
+  const [cookies, setCookies] = useState<CookieData[]>([]);
+  const [technologies, setTechnologies] = useState<TechnologyData[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      const response = await fetch('/out/indianexpress-com/data.json');
+      const data = await response.json();
+
+      setCookies(data.cookies);
+      setTechnologies(data.technologies);
+    })();
+  }, []);
+
   return (
     <div className="w-full h-screen flex">
       <div className="flex-1 h-full">
