@@ -116,8 +116,9 @@ const useFrameOverlay = () => {
     }
   }, [selectedFrame, filteredCookies, isInspecting]);
 
+  // @todo why not directly set setSelectedFrame(response.attributes.src). Why do we need a new state inspectedFrame ?
   useEffect(() => {
-    setSelectedFrame(inspectedFrame);
+    setSelectedFrame(inspectedFrame); // Sets the existing frame.
   }, [inspectedFrame, setSelectedFrame]);
 };
 
