@@ -76,6 +76,7 @@ interface useTableProps {
   options?: {
     columnSizing: Record<string, number>;
     columnSorting: DefaultOptions;
+    selectedColumns: Record<string, boolean>;
   };
 }
 
@@ -91,7 +92,7 @@ const useTable = ({
     areAllColumnsVisible,
     showColumn,
     isColumnHidden,
-  } = useColumnVisibility(tableColumns);
+  } = useColumnVisibility(tableColumns, options?.selectedColumns);
 
   const { columns, tableContainerRef, onMouseDown } = useColumnResizing(
     visibleColumns,

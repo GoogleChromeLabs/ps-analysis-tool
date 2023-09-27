@@ -65,13 +65,13 @@ const CookieTable = ({ cookies, selectedFrame }: CookieTableProps) => {
     setSelectedFrameCookie,
     cookies.length,
   ]);
-  const { updatePreference, columnSorting, columnSizing } = usePreferenceStore(
-    ({ actions, state }) => ({
+  const { updatePreference, columnSorting, columnSizing, selectedColumns } =
+    usePreferenceStore(({ actions, state }) => ({
       updatePreference: actions.updatePreference,
       columnSorting: state.columnSorting as SortingState[],
       columnSizing: state.columnSizing as Record<string, number>,
-    })
-  );
+      selectedColumns: state.selectedColumns as Record<string, boolean>,
+    }));
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
@@ -214,6 +214,10 @@ const CookieTable = ({ cookies, selectedFrame }: CookieTableProps) => {
           : {},
       columnSorting:
         columnSorting && columnSorting.length > 0 ? columnSorting[0] : {},
+      selectedColumns:
+        selectedColumns && Object.keys(selectedColumns).length > 0
+          ? selectedColumns
+          : {},
     },
   });
 
