@@ -35,7 +35,8 @@ const connectPort = () => {
   port.onMessage.addListener((response) => {
     if (response?.isInspecting) {
       if (response.isInspecting === 'True') {
-        attachFrameHighlight();
+        removeHoverEventListeners(); // To avoid duplicate listners.
+        addHoverEventListeners();
       } else {
         removeFrameHighlight();
       }
@@ -91,14 +92,18 @@ const handleMouseEvent = (event: MouseEvent): void => {
   }
 };
 
-const attachFrameHighlight = (): void => {
+const addHoverEventListeners = (): void => {
   document.addEventListener('mouseover', handleMouseEvent);
   document.addEventListener('mouseout', handleMouseEvent);
 };
 
-const removeFrameHighlight = (): void => {
+const removeHoverEventListeners = (): void => {
   document.removeEventListener('mouseover', handleMouseEvent);
   document.removeEventListener('mouseout', handleMouseEvent);
+};
+
+const removeFrameHighlight = (): void => {
+  removeHoverEventListeners();
   removeAllPopovers();
 };
 
