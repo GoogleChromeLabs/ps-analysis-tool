@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 /**
  * Internal dependencies
@@ -30,15 +30,28 @@ const App = () => {
   const [cookies, setCookies] = useState<CookieData[]>([]);
   const [technologies, setTechnologies] = useState<TechnologyData[]>([]);
 
+  const path = useMemo(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('path')?.substring(1) || '';
+  }, []);
+
   useEffect(() => {
     (async () => {
-      const response = await fetch('/out/indianexpress-com/data.json');
+      const response = await fetch(path);
       const data = await response.json();
 
       setCookies(data.cookies);
       setTechnologies(data.technologies);
     })();
-  }, []);
+  }, [path]);
+
+  if (!path) {
+    return (
+      <div className="flex justify-center items-center">
+        <div className="text-2xl">No path provided</div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full h-screen flex">
