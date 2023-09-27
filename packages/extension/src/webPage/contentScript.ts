@@ -16,11 +16,7 @@
 /**
  * Internal dependencies.
  */
-import {
-  addFrameOverlay,
-  findAndAddFrameOverlay,
-  removeAllPopovers,
-} from './addFrameOverlay';
+import { findAndAddFrameOverlay, removeAllPopovers } from './addFrameOverlay';
 import getFrameAttributes from './getFrameAttributes';
 import { WEBPAGE_PORT_NAME } from '../constants';
 import './style.css';
@@ -33,13 +29,11 @@ const connectPort = () => {
   });
 
   port.onMessage.addListener((response) => {
-    if (response?.isInspecting) {
-      if (response.isInspecting === 'True') {
-        removeHoverEventListeners(); // To avoid duplicate listners.
-        addHoverEventListeners();
-      } else {
-        removeFrameHighlight();
-      }
+    if (response.isInspecting) {
+      removeHoverEventListeners(); // To avoid duplicate listners.
+      addHoverEventListeners();
+    } else {
+      removeFrameHighlight();
     }
 
     if (response?.selectedFrame) {
@@ -69,7 +63,7 @@ const onStorageChange = (changes: {
   }
 };
 
-const handleMouseEvent = (event: MouseEvent): void => {
+const handleHoverEvent = (event: MouseEvent): void => {
   if ((event.target as HTMLElement).tagName === 'IFRAME') {
     const frame = event.target as HTMLIFrameElement;
     // eslint-disable-next-line no-console
@@ -84,8 +78,6 @@ const handleMouseEvent = (event: MouseEvent): void => {
       attributes: getFrameAttributes(frame),
     };
 
-    addFrameOverlay(frame);
-
     if (port) {
       port.postMessage(payload);
     }
@@ -93,13 +85,13 @@ const handleMouseEvent = (event: MouseEvent): void => {
 };
 
 const addHoverEventListeners = (): void => {
-  document.addEventListener('mouseover', handleMouseEvent);
-  document.addEventListener('mouseout', handleMouseEvent);
+  document.addEventListener('mouseover', handleHoverEvent);
+  document.addEventListener('mouseout', handleHoverEvent);
 };
 
 const removeHoverEventListeners = (): void => {
-  document.removeEventListener('mouseover', handleMouseEvent);
-  document.removeEventListener('mouseout', handleMouseEvent);
+  document.removeEventListener('mouseover', handleHoverEvent);
+  document.removeEventListener('mouseout', handleHoverEvent);
 };
 
 const removeFrameHighlight = (): void => {

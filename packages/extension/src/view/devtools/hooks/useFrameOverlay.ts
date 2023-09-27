@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 
 /**
  * Internal dependencies.
@@ -25,31 +25,49 @@ import { WEBPAGE_PORT_NAME } from '../../../constants';
 import { useCookieStore } from '../stateProviders/syncCookieStore';
 import { useFilterManagementStore } from '../stateProviders/filterManagementStore';
 
-interface UseFrameOverlayProps {
-  selectedFrame: string | null;
-  setInspectedFrame: React.Dispatch<React.SetStateAction<string | null>>;
-}
-
 interface Response {
   attributes: { src: React.SetStateAction<string | null> };
 }
 
-const useFrameOverlay = ({
-  selectedFrame,
-  setInspectedFrame,
-}: UseFrameOverlayProps) => {
+const getPayload = (filteredCookies, isInspecting, selectedFrame) => {
+  const thirdPartyCookies = filteredCookies
+    ? filteredCookies.filter((cookie) => !cookie.isFirstParty)
+    : [];
+  const firstPartyCookies = filteredCookies
+    ? filteredCookies.filter((cookie) => cookie.isFirstParty)
+    : [];
+
+  return {
+    selectedFrame,
+    thirdPartyCookies: thirdPartyCookies.length,
+    firstPartyCookies: firstPartyCookies.length,
+    isInspecting,
+  };
+};
+
+const useFrameOverlay = () => {
   const portRef = useRef<chrome.runtime.Port | null>(null);
 
-  const { isInspecting } = useCookieStore(({ state }) => ({
+  const {
+    isInspecting,
+    setSelectedFrame,
+    inspectedFrame,
+    selectedFrame,
+    setInspectedFrame,
+  } = useCookieStore(({ state, actions }) => ({
+    setSelectedFrame: actions.setSelectedFrame,
     isInspecting: state.isInspecting,
+    inspectedFrame: state.inspectedFrame,
+    setInspectedFrame: actions.setInspectedFrame,
+    selectedFrame: state.selectedFrame,
   }));
 
   const { filteredCookies } = useFilterManagementStore(({ state }) => ({
     filteredCookies: state.filteredCookies,
   }));
 
-  useEffect(() => {
-    chrome.runtime.onConnect.addListener((port) => {
+  const onConnect = useCallback(
+    (port) => {
       if (port.name !== WEBPAGE_PORT_NAME) {
         return;
       }
@@ -72,8 +90,13 @@ const useFrameOverlay = ({
         // eslint-disable-next-line no-console
         console.log('Web port disconnected.');
       });
-    });
-  }, [setInspectedFrame]);
+    },
+    [setInspectedFrame]
+  );
+
+  useEffect(() => {
+    chrome.runtime.onConnect.addListener(onConnect);
+  }, [onConnect]);
 
   useEffect(() => {
     if (!portRef.current) {
@@ -81,29 +104,21 @@ const useFrameOverlay = ({
     }
 
     portRef.current.postMessage({
-      isInspecting: isInspecting ? 'True' : 'False',
+      isInspecting,
     });
   }, [isInspecting]);
 
   useEffect(() => {
     if (selectedFrame && portRef.current) {
-      // eslint-disable-next-line no-console
-      console.log(selectedFrame);
+      const payload = getPayload(filteredCookies, isInspecting, selectedFrame);
 
-      const thirdPartyCookies = filteredCookies.filter(
-        (cookie) => !cookie.isFirstParty
-      );
-      const firstPartyCookies = filteredCookies.filter(
-        (cookie) => cookie.isFirstParty
-      );
-
-      portRef.current.postMessage({
-        selectedFrame,
-        thirdPartyCookies: thirdPartyCookies.length,
-        firstPartyCookies: firstPartyCookies.length,
-      });
+      portRef.current.postMessage(payload);
     }
-  }, [selectedFrame, filteredCookies]);
+  }, [selectedFrame, filteredCookies, isInspecting]);
+
+  useEffect(() => {
+    setSelectedFrame(inspectedFrame);
+  }, [inspectedFrame, setSelectedFrame]);
 };
 
 export default useFrameOverlay;

@@ -100,8 +100,10 @@ export const createIframeInfoBlock = (frame: HTMLIFrameElement, data) => {
   const info: Record<string, string> = {
     Type: 'iframe',
     Origin: `<a href="${origin}">${origin}</a>`,
-    'First Party Cookies': String(data.firstPartyCookies),
-    'Third Party Cookies': String(data.thirdPartyCookies),
+    'First Party Cookies':
+      0 === data?.firstPartyCookies ? '0' : data?.firstPartyCookies,
+    'Third Party Cookies':
+      0 === data?.thirdPartyCookies ? '0' : data?.thirdPartyCookies,
     'Allowed features': attributes.allow || ' ',
   };
 

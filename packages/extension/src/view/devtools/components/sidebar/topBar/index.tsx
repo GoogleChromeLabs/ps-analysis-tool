@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect } from 'react';
+import React from 'react';
 
 /**
  * Internal dependencies.
@@ -26,30 +26,14 @@ import InspectButton from './inspectButton';
 import useFrameOverlay from '../../../hooks/useFrameOverlay';
 
 const TopBar = () => {
-  const {
-    setSelectedFrame,
-    isInspecting,
-    setIsInspecting,
-    setInspectedFrame,
-    inspectedFrame,
-    selectedFrame,
-  } = useCookieStore(({ state, actions }) => ({
-    setSelectedFrame: actions.setSelectedFrame,
-    setIsInspecting: actions.setIsInspecting,
-    isInspecting: state.isInspecting,
-    inspectedFrame: state.inspectedFrame,
-    setInspectedFrame: actions.setInspectedFrame,
-    selectedFrame: state.selectedFrame,
-  }));
+  const { isInspecting, setIsInspecting } = useCookieStore(
+    ({ state, actions }) => ({
+      setIsInspecting: actions.setIsInspecting,
+      isInspecting: state.isInspecting,
+    })
+  );
 
-  useFrameOverlay({
-    selectedFrame,
-    setInspectedFrame,
-  });
-
-  useEffect(() => {
-    setSelectedFrame(inspectedFrame);
-  }, [inspectedFrame, setSelectedFrame]);
+  useFrameOverlay();
 
   return (
     <div className="mini-status-bar w-full min-h-[25px] px-2 flex items-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green">
