@@ -5,6 +5,7 @@
     border: 0px;
     margin: initial;
     padding: 0px;
+    cursor: default;
 }
 
 .ps-infobox[popover] {

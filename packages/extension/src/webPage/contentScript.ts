@@ -102,5 +102,6 @@ const removeFrameHighlight = (): void => {
 // Atempt the connection to devtools
 connectPort();
 
-// Remove all popovers of extension
-document.addEventListener('click', removeAllPopovers);
+// Remove all popovers and mouse events of extension
+document.addEventListener('click', removeFrameHighlight);
+document.addEventListener('contextmenu', removeFrameHighlight);

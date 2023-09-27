@@ -43,11 +43,13 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
     selectedFrame,
     tabFrames,
     isCurrentTabBeingListenedTo,
+    inspectedFrame,
   } = useCookieStore(({ state, actions }) => ({
     setSelectedFrame: actions.setSelectedFrame,
     tabFrames: state.tabFrames,
     selectedFrame: state.selectedFrame,
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
+    inspectedFrame: state.inspectedFrame,
   }));
 
   const [accordionState, setAccordionState] =
@@ -57,6 +59,14 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
     string | null
   >('privacySandbox');
   const sidebarContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (inspectedFrame) {
+      setIndex(1);
+      setSelectedAccordionChild('');
+      setIsTabFocused(true);
+    }
+  }, [inspectedFrame, setIndex]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
