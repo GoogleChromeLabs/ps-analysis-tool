@@ -17,13 +17,17 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useMemo } from 'react';
 
 /**
  * Internal dependencies.
  */
 import type { CookieTableData } from '@cookie-analysis-tool/common';
-import { CookieTable } from '@cookie-analysis-tool/design-system';
+import {
+  CookieTable,
+  type InfoType,
+  type TableColumn,
+} from '@cookie-analysis-tool/design-system';
 
 interface CookieTableContainerProps {
   cookies: CookieTableData[];
@@ -44,9 +48,92 @@ const CookieTableContainer = ({
   selectedFrameCookie,
   setSelectedFrameCookie,
 }: CookieTableContainerProps) => {
+  const tableColumns = useMemo<TableColumn[]>(
+    () => [
+      {
+        header: 'Name',
+        accessorKey: 'parsedCookie.name',
+        cell: (info: InfoType) => info,
+        enableHiding: false,
+      },
+      {
+        header: 'Value',
+        accessorKey: 'parsedCookie.value',
+        cell: (info: InfoType) => info,
+      },
+      {
+        header: 'Domain',
+        accessorKey: 'parsedCookie.domain',
+        cell: (info: InfoType) => info,
+      },
+      {
+        header: 'Path',
+        accessorKey: 'parsedCookie.path',
+        cell: (info: InfoType) => info,
+      },
+      {
+        header: 'Expires / Max-Age',
+        accessorKey: 'parsedCookie.expires',
+        cell: (info: InfoType) => (info ? info : 'Session'),
+      },
+      {
+        header: 'HttpOnly',
+        accessorKey: 'parsedCookie.httponly',
+        cell: (info: InfoType) => (
+          <p className="flex justify-center items-center">
+            {info ? <span className="font-serif">✓</span> : ''}
+          </p>
+        ),
+      },
+      {
+        header: 'SameSite',
+        accessorKey: 'parsedCookie.samesite',
+        cell: (info: InfoType) => <span className="capitalize">{info}</span>,
+      },
+      {
+        header: 'Secure',
+        accessorKey: 'parsedCookie.secure',
+        cell: (info: InfoType) => (
+          <p className="flex justify-center items-center">
+            {info ? <span className="font-serif">✓</span> : ''}
+          </p>
+        ),
+      },
+      {
+        header: 'Category',
+        accessorKey: 'analytics.category',
+        cell: (info: InfoType) => info,
+      },
+      {
+        header: 'Platform',
+        accessorKey: 'analytics.platform',
+        cell: (info: InfoType) => info,
+      },
+      {
+        header: 'Scope',
+        accessorKey: 'isFirstParty',
+        cell: (info: InfoType) => (
+          <p className="truncate w-full">
+            {!info ? 'Third Party' : 'First Party'}
+          </p>
+        ),
+      },
+      {
+        header: 'Cookie Accepted',
+        accessorKey: 'isCookieAccepted',
+        cell: (info: InfoType) => (
+          <p className="flex justify-center items-center">
+            {info ? <span className="font-serif">✓</span> : ''}
+          </p>
+        ),
+      },
+    ],
+    []
+  );
+
   return (
     <CookieTable
-      tableColumns={[]}
+      tableColumns={tableColumns}
       data={cookies}
       selectedFrame={selectedFrame}
       selectedFrameCookie={selectedFrameCookie}

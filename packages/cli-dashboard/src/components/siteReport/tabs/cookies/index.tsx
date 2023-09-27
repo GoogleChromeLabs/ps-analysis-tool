@@ -58,6 +58,7 @@ const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
           headerType: 'response',
           isFirstParty: cookie.isFirstParty,
           frameIdList: [],
+          isCookieAccepted: !cookie.isBlocked,
         },
       ];
     })
@@ -78,7 +79,10 @@ const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
   return (
     <div className="w-full h-full flex items-center justify-center">
       {selectedFrameUrl ? (
-        <CookiesListing />
+        <CookiesListing
+          selectedFrameUrl={selectedFrameUrl}
+          cookies={Object.values(tabCookies1)}
+        />
       ) : (
         <CookiesLanding
           tabCookies={tabCookies1}

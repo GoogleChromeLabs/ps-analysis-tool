@@ -23,7 +23,12 @@ import { CookieDetails } from '@cookie-analysis-tool/design-system';
 import type { CookieTableData } from '@cookie-analysis-tool/common';
 import CookieTableContainer from './cookieTableContainer';
 
-const CookieListing = () => {
+interface CookieListingProps {
+  selectedFrameUrl: string;
+  cookies: CookieTableData[];
+}
+
+const CookieListing = ({ selectedFrameUrl, cookies }: CookieListingProps) => {
   const [selectedFrameCookie, setSelectedFrameCookie] = useState<{
     [frame: string]: CookieTableData | null;
   } | null>(null);
@@ -47,8 +52,8 @@ const CookieListing = () => {
           className="h-full flex"
         >
           <CookieTableContainer
-            cookies={[]}
-            selectedFrame={''}
+            cookies={cookies}
+            selectedFrame={selectedFrameUrl}
             selectedFrameCookie={selectedFrameCookie}
             setSelectedFrameCookie={setSelectedFrameCookie}
           />
