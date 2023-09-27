@@ -32,11 +32,11 @@ import useColumnVisibility, {
 import useColumnResizing, {
   type ColumnResizingOutput,
 } from '../useColumnResizing';
-import { CookieTableData } from '@cookie-analysis-tool/common';
+import { CookieTableData, TechnologyData } from '@cookie-analysis-tool/common';
 
-export type TableData = CookieTableData;
+export type TableData = CookieTableData | TechnologyData;
 
-export type InfoType = number | string | boolean;
+export type InfoType = number | string | boolean | [];
 
 export type TableColumn = {
   header: string;
@@ -49,8 +49,8 @@ export type TableColumn = {
 export type TableRow = {
   [accessorKey: string]: {
     value: React.JSX.Element | InfoType;
-    originalData: TableData;
   };
+  originalData: TableData;
 };
 
 export type TableOutput = {
@@ -93,13 +93,14 @@ const useTable = ({ tableColumns, data }: useTableProps): TableOutput => {
 
   const rows = useMemo(() => {
     return sortedData.map((_data) => {
-      const row = {} as TableRow;
+      const row = {
+        originalData: _data,
+      } as TableRow;
 
       columns.forEach((column) => {
         const value = getValueByKey(column.accessorKey, _data);
         row[column.accessorKey] = {
           value: column.cell?.(value) ?? value,
-          originalData: _data,
         };
       });
 

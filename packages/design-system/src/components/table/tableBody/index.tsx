@@ -78,7 +78,7 @@ const TableBody = ({
       const newRow = table.rows.find((_, idx) => idx.toString() === newRowId);
 
       if (newRow) {
-        onRowClick(Object.values(newRow)[0].originalData);
+        onRowClick(newRow?.originalData);
       }
     },
     [onRowClick, table.rows]
@@ -107,7 +107,7 @@ const TableBody = ({
 
       rowElement.tabIndex = -1;
       rowElement.focus();
-      onRowClick(Object.values(newRow)[0].originalData);
+      onRowClick(newRow?.originalData);
     },
     [onRowClick, table.rows]
   );
@@ -136,7 +136,7 @@ const TableBody = ({
           getRowObjectKey={getRowObjectKey}
           isRowFocused={isRowFocused}
           onRowClick={() => {
-            onRowClick(Object.values(row)[0].originalData);
+            onRowClick(row?.originalData);
             setIsRowFocused(true);
           }}
           onKeyDown={handleKeyDown}

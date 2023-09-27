@@ -62,6 +62,8 @@ export type CookieTableData = CookieData & {
   isCookieSet: boolean | null;
 };
 
+export type TechnologyData = any;
+
 export interface TabCookies {
   [key: string]: CookieTableData;
 }

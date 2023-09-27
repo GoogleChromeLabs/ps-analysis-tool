@@ -89,7 +89,7 @@ const CookieTable = ({
         }
         onRowClick={onRowClick}
         getRowObjectKey={(row: TableRow) =>
-          getCookieKey(Object.values(row)?.[0]?.originalData.parsedCookie)
+          getCookieKey(row?.originalData.parsedCookie)
         }
       />
     </div>

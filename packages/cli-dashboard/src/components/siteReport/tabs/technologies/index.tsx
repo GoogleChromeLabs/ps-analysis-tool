@@ -17,12 +17,71 @@
 /**
  * External dependencies
  */
-import React from 'react';
+import React, { useMemo } from 'react';
+
+/**
+ * Internal dependencies
+ */
+import {
+  Table,
+  noop,
+  useTable,
+  type TableColumn,
+  type InfoType,
+} from '@cookie-analysis-tool/design-system';
+import { useContentStore } from '../../stateProviders/contentStore';
 
 const Technologies = () => {
+  const data = useContentStore(({ state }) => state.technologies || []);
+
+  const tableColumns = useMemo<TableColumn[]>(
+    () => [
+      {
+        header: 'Name',
+        accessorKey: 'name',
+        cell: (info: InfoType) => info,
+        enableHiding: false,
+      },
+      {
+        header: 'Description',
+        accessorKey: 'description',
+        cell: (info: InfoType) => info,
+      },
+      {
+        header: 'Confidence',
+        accessorKey: 'confidence',
+        cell: (info: InfoType) => info,
+      },
+      {
+        header: 'Website',
+        accessorKey: 'website',
+        cell: (info: InfoType) => info,
+      },
+      {
+        header: 'Category',
+        accessorKey: 'categories',
+        cell: (info: InfoType) =>
+          (info as Array<{ id: number; slug: string; name: string }>)
+            .map((i) => i.name)
+            .join(' | '),
+      },
+    ],
+    []
+  );
+
+  const table = useTable({
+    tableColumns,
+    data,
+  });
+
   return (
-    <div>
-      <h1>Technologies</h1>
+    <div className="w-full h-full overflow-auto text-outer-space-crayola border-x border-american-silver dark:border-quartz">
+      <Table
+        table={table}
+        selectedKey={undefined}
+        onRowClick={noop}
+        getRowObjectKey={() => ''}
+      />
     </div>
   );
 };
