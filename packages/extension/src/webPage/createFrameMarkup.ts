@@ -71,10 +71,17 @@ const createInfoLine = (label: string, value: string): HTMLParagraphElement => {
   return p;
 };
 
-export const createIframeInfoBlock = (frame: HTMLIFrameElement, data) => {
+export const createIframeInfoBlock = (
+  frame: HTMLIFrameElement | HTMLElement,
+  data
+) => {
+  const isMainFrame = document.location.origin === data.selectedFrame;
+  let isHidden = false;
   const infoBlock = document.createElement('div');
   const content = document.createElement('div');
-  const attributes = getFrameAttributes(frame);
+  const attributes = isMainFrame
+    ? {}
+    : getFrameAttributes(frame as HTMLIFrameElement);
   const {
     x: frameX,
     y: frameY,
@@ -92,6 +99,7 @@ export const createIframeInfoBlock = (frame: HTMLIFrameElement, data) => {
   };
 
   if (frameHeight === 0 && frameWidth === 0) {
+    isHidden = true;
     styles = {
       top: Number(window.innerHeight) + 'px',
       left: '10px',
@@ -105,10 +113,12 @@ export const createIframeInfoBlock = (frame: HTMLIFrameElement, data) => {
     infoBlock.style[key] = styles[key];
   }
 
-  const origin = new URL(attributes.src || '').origin;
+  const origin = isMainFrame
+    ? data.selectedFrame
+    : new URL(attributes.src || '').origin;
 
   const info: Record<string, string> = {
-    Type: 'iframe',
+    Type: 'iframe' + (isHidden ? ' (Hidden Frame)' : ''),
     Origin: `<a href="${origin}">${origin}</a>`,
     'First Party Cookies':
       0 === data?.firstPartyCookies ? '0' : data?.firstPartyCookies,

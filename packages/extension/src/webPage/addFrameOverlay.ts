@@ -35,7 +35,10 @@ export const removeAllPopovers = () => {
   });
 };
 
-export const addFrameOverlay = (Frame: HTMLIFrameElement, data): boolean => {
+export const addFrameOverlay = (
+  Frame: HTMLIFrameElement | HTMLElement,
+  data
+): boolean => {
   const overlay = createFrameOverlay(Frame);
   const frameInfoBox = createIframeInfoBlock(Frame, data);
   const body = document.querySelector('body');
@@ -64,9 +67,14 @@ export const addFrameOverlay = (Frame: HTMLIFrameElement, data): boolean => {
     frameInfoBox.style.top =
       Number(window.innerHeight) - Number(frameInfoBox.offsetHeight) + 5 + 'px';
   } else if (frameInfoBox.offsetHeight > Frame.offsetTop) {
-    // Show info box at bottom if we don't have enough space at top
-    frameInfoBox.style.top =
-      Number(frameInfoBox.offsetTop) + Number(Frame.offsetHeight) - 1 + 'px';
+    // is main frame?
+    if (document.location.origin === data.selectedFrame) {
+      frameInfoBox.style.top = '5px';
+    } else {
+      // Show info box at bottom if we don't have enough space at top
+      frameInfoBox.style.top =
+        Number(frameInfoBox.offsetTop) + Number(Frame.offsetHeight) - 1 + 'px';
+    }
 
     // Set infobox tip at top of box.
     frameInfoBox.firstElementChild?.classList.add('toptip');
@@ -91,6 +99,11 @@ export const addFrameOverlay = (Frame: HTMLIFrameElement, data): boolean => {
 };
 
 export const findAndAddFrameOverlay = (response: Response) => {
+  if (response.selectedFrame === document.location.origin) {
+    addFrameOverlay(document.body, response);
+    return;
+  }
+
   const iframes = document.querySelectorAll('iframe');
   let frameFound = false;
 
