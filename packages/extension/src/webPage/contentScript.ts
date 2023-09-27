@@ -17,7 +17,6 @@
  * Internal dependencies.
  */
 import { findAndAddFrameOverlay, removeAllPopovers } from './addFrameOverlay';
-import getFrameAttributes from './getFrameAttributes';
 import { WEBPAGE_PORT_NAME } from '../constants';
 import './style.css';
 
@@ -73,12 +72,24 @@ const handleHoverEvent = (event: MouseEvent): void => {
       return;
     }
 
+    let url: URL;
+
+    try {
+      url = new URL(frame.getAttribute('src') || '');
+    } catch (err) {
+      return;
+    }
+
     const payload = {
       hover: event?.type === 'mouseover',
-      attributes: getFrameAttributes(frame),
+      attributes: {
+        src: url.origin,
+      },
     };
 
     if (port) {
+      // eslint-disable-next-line no-console
+      console.log(payload, 'payload');
       port.postMessage(payload);
     }
   }
