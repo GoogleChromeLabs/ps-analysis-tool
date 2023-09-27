@@ -44,16 +44,6 @@ const useFrameOverlay = ({
   }));
 
   useEffect(() => {
-    if (!portRef.current) {
-      return;
-    }
-
-    portRef.current.postMessage({
-      FrameInspect: isInspecting ? 'start' : 'stop',
-    });
-  }, [isInspecting]);
-
-  useEffect(() => {
     chrome.runtime.onConnect.addListener((port) => {
       if (port.name !== WEBPAGE_PORT_NAME) {
         return;
@@ -79,6 +69,16 @@ const useFrameOverlay = ({
       });
     });
   }, [setInspectedFrame]);
+
+  useEffect(() => {
+    if (!portRef.current) {
+      return;
+    }
+
+    portRef.current.postMessage({
+      isInspecting: isInspecting ? 'True' : 'False',
+    });
+  }, [isInspecting]);
 
   useEffect(() => {
     if (selectedFrame && portRef.current) {

@@ -32,20 +32,15 @@ const connectPort = () => {
     name: WEBPAGE_PORT_NAME,
   });
 
-  port.onDisconnect.addListener(() => {
-    port = null;
-    // eslint-disable-next-line no-console
-    console.log(' Webpage port disconnected!');
-  });
-
   port.onMessage.addListener((response) => {
-    if (response?.FrameInspect) {
-      if (response.FrameInspect === 'start') {
+    if (response?.isInspecting) {
+      if (response.isInspecting === 'True') {
         attachFrameHighlight();
       } else {
         removeFrameHighlight();
       }
     }
+
     if (response?.selectedFrame) {
       findAndAddFrameOverlay(response.selectedFrame);
     }
@@ -53,17 +48,25 @@ const connectPort = () => {
     // eslint-disable-next-line no-console
     console.log(response);
   });
+
+  port.onDisconnect.addListener(() => {
+    port = null;
+    // eslint-disable-next-line no-console
+    console.log(' Webpage port disconnected!');
+  });
 };
 
-chrome.storage.onChanged.addListener((changes: object) => {
-  if (changes?.devToolState) {
-    if (changes.devToolState?.newValue === 'Ready!' && port === null) {
-      // eslint-disable-next-line no-console
-      console.log('Connection Attempt!');
-      connectPort();
-    }
+const onStorageChange = (changes: {
+  [key: string]: chrome.storage.StorageChange;
+}) => {
+  const newDevToolState = changes.devToolState?.newValue;
+
+  if (newDevToolState === 'Ready!' && port === null) {
+    // eslint-disable-next-line no-console
+    console.log('Connection Attempt!');
+    connectPort();
   }
-});
+};
 
 const handleMouseEvent = (event: MouseEvent): void => {
   if ((event.target as HTMLElement).tagName === 'IFRAME') {
@@ -101,6 +104,8 @@ const removeFrameHighlight = (): void => {
 
 // Atempt the connection to devtools
 connectPort();
+
+chrome.storage.onChanged.addListener(onStorageChange);
 
 // Remove all popovers and mouse events of extension
 document.addEventListener('click', removeFrameHighlight);
