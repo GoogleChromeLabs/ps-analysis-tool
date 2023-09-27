@@ -19,7 +19,10 @@
 import { Protocol } from 'puppeteer';
 import { type Cookie as SimpleCookie } from 'simple-cookie';
 
-export type Cookie = Protocol.Network.Cookie;
+export interface Cookie extends Protocol.Network.Cookie {
+  partitionKey?: string;
+}
+
 export type Cookies = Array<Cookie>;
 export type CookiesObjects = { [key: string]: Cookie };
 
@@ -31,11 +34,6 @@ export interface TechnologyDetail {
 }
 
 export type TechnologyDetailList = Array<TechnologyDetail>;
-
-export interface CookieLogsDiff {
-  added: CookieLogDetails[];
-  removed: CookieLogDetails[];
-}
 
 export interface CookieLogDetails
   extends Omit<
@@ -55,6 +53,7 @@ export interface CookieLogDetails
   description: string;
   isFirstParty: 'Yes' | 'No';
   sameSite: string;
+  partitionKey?: string;
   pageUrl: string;
   frameUrl: string;
   isBlocked?: boolean;

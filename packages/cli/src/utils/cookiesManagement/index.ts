@@ -158,6 +158,7 @@ export default class CookiesManagement {
       name: theCookie.name,
       value: theCookie.value,
       domain: theCookie.domain,
+      partitionKey: theCookie.partitionKey ?? '',
       path: theCookie.path,
       expires: theCookie.expires,
       httpOnly: theCookie.httpOnly ?? theCookie.httponly,

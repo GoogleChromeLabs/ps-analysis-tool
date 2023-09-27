@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import puppeteer, { Browser, BrowserContext, Frame } from 'puppeteer';
+import puppeteer, { Browser, Frame } from 'puppeteer';
 import {
   BlockedCookie,
   BlockedCookies,
@@ -40,7 +40,6 @@ export type BrowserManagementOptions = {
 
 export default class BrowserManagement extends AsyncQueue {
   private browser: Browser | null = null;
-  private incognitoContext: BrowserContext | null = null;
   private cookieDictionary: CookieDatabase = {};
   private static SETTINGS_PAGE_TIMEOUT = 100000;
 
@@ -56,8 +55,6 @@ export default class BrowserManagement extends AsyncQueue {
       headless: isHeadless ? 'new' : false,
       args: [`--user-data-dir=${profilePath}`],
     });
-
-    this.incognitoContext = await this.browser.createIncognitoBrowserContext();
 
     if (shouldBlock3pCookies) {
       await this.block3pCookies();
@@ -100,14 +97,14 @@ export default class BrowserManagement extends AsyncQueue {
   }
 
   public async getCookiesByUrl(url: string): Promise<Array<CookieLogDetails>> {
-    if (!this.browser || !this.incognitoContext) {
+    if (!this.browser) {
       return [];
     }
 
     /**
      * Open page in incognito mode.
      */
-    const page = await this.incognitoContext.newPage();
+    const page = await this.browser.newPage();
 
     const cdpSession = await page.createCDPSession();
 
@@ -135,14 +132,20 @@ export default class BrowserManagement extends AsyncQueue {
       }
 
       const requestID: string = response.requestId;
+      const partitionKey: string = response.cookiePartitionKey;
       const requestDetail: RequestDetail = requestDetails[requestID] ?? {
         ...defaultRequestDetail,
       };
 
       if (Object.keys(response.headers).includes('set-cookie')) {
-        requestDetail.allCookies = Utility.parseCookies(
+        const parsedCookies = Utility.parseCookies(
           response.headers['set-cookie']
         );
+
+        requestDetail.allCookies = parsedCookies.filter((cookie: Cookie) => {
+          cookie.partitionKey = partitionKey;
+          return cookie;
+        });
       }
 
       if (response.blockedCookies) {
@@ -158,6 +161,10 @@ export default class BrowserManagement extends AsyncQueue {
      * For request detail.
      */
     cdpSession.on('Network.responseReceived', (response) => {
+      if (!response.requestId) {
+        return;
+      }
+
       const requestID: string = response.requestId;
       const requestDetail: RequestDetail = requestDetails[requestID] ?? {
         ...defaultRequestDetail,
@@ -188,13 +195,20 @@ export default class BrowserManagement extends AsyncQueue {
      */
     const frames = page.frames();
     const frameUrls: { [key: string]: string } = {};
-    frames.forEach((frame: Frame) => {
+
+    const frameCallback = (frame: Frame) => {
       // @ts-ignore
       if (frame._id) {
         // @ts-ignore
         frameUrls[frame._id] = frame.url();
       }
-    });
+
+      if (frame.childFrames()) {
+        frame.childFrames().forEach(frameCallback);
+      }
+    };
+
+    frames.forEach(frameCallback);
 
     const uniqueAllCookies: UniqueCookiesLogDetail = {};
 
@@ -206,6 +220,10 @@ export default class BrowserManagement extends AsyncQueue {
     // eslint-disable-next-line guard-for-in
     for (const requestDetailsKey in requestDetails) {
       const requestDetail = requestDetails[requestDetailsKey];
+
+      if (!requestDetail.requestID) {
+        continue;
+      }
 
       // Make a list of blocked cookies.
       const blockedCookies = [];
@@ -219,22 +237,27 @@ export default class BrowserManagement extends AsyncQueue {
         uniqueBlockedCookies[key] = blockedCookie;
       }
 
-      /// Merge all cookies with frame ID
+      // Merge all cookies with frame ID
       requestDetail.allCookies.map((cookie: Cookie) => {
         const key = CookiesManagement.getCookieKey(cookie);
+        if (!cookie.domain) {
+          const urlObject = new URL(requestDetail.url);
+          cookie.domain = urlObject.hostname;
+        }
 
-        uniqueAllCookies[key] = <CookieLogDetails>(
-          CookiesManagement.normalizeCookie(
-            {
-              ...cookie,
-              pageUrl: url,
-              frameUrl: frameUrls[requestDetail.frameID] ?? '',
-              isBlocked: false,
-              blockedReasons: [],
-            },
-            url
-          )
+        const normalizedCookies = CookiesManagement.normalizeCookie(
+          cookie,
+          url
         );
+        if (normalizedCookies) {
+          uniqueAllCookies[key] = {
+            ...normalizedCookies,
+            pageUrl: url,
+            frameUrl: frameUrls[requestDetail.frameID] ?? '',
+            isBlocked: false,
+            blockedReasons: [],
+          };
+        }
 
         return null;
       });

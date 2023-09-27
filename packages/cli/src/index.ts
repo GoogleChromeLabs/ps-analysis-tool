@@ -39,7 +39,6 @@ program
   .description('CLI to test a URL for 3p cookies')
   .option('-u, --url <value>', 'URL of a site')
   .option('-s, --sitemap-url <value>', 'URL of a sitemap')
-  .option('-e, --experimental', 'With Experimental features.')
   .option(
     '-nh, --no-headless ',
     'flag for running puppeteer in non headless mode'
@@ -49,7 +48,6 @@ program
 program.parse();
 
 const isHeadless = Boolean(program.opts().headless);
-const isExperimental = Boolean(program.opts().experimental);
 const shouldSearchTechnology = program.opts().technologies;
 
 export const initialize = async () => {
@@ -62,7 +60,7 @@ export const initialize = async () => {
   const browserArgs = {
     isHeadless,
     profilePath: './tmp/profilePath',
-    shouldBlock3pCookies: isExperimental,
+    shouldBlock3pCookies: true,
   };
 
   if (url) {
@@ -84,13 +82,8 @@ export const initialize = async () => {
     urlsToProcess = urls.splice(0, numberOfUrls);
   }
 
-  const defaultPrefix = Utility.generatePrefix(
+  const prefix = Utility.generatePrefix(
     [...urlsToProcess].shift() ?? 'unknown'
-  );
-
-  const prefix: string = await Utility.askUserInput(
-    `Add a name for the output folder (Default ${defaultPrefix}):`,
-    { default: defaultPrefix }
   );
   const directory = `./out/${prefix}`;
 
