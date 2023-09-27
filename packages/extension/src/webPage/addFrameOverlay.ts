@@ -40,19 +40,31 @@ export const addFrameOverlay = (Frame: HTMLIFrameElement, data): boolean => {
   const frameInfoBox = createIframeInfoBlock(Frame, data);
   const body = document.querySelector('body');
 
-  if (!body || !overlay) {
+  // Overlay will not exist if frame is hidden.
+  const isHiddenFrame = !overlay;
+
+  if (!body) {
     return false;
   }
 
   removeAllPopovers();
-  body.appendChild(overlay);
-  body.appendChild(frameInfoBox);
 
-  overlay.showPopover();
-  frameInfoBox.showPopover();
+  if (overlay) {
+    body.appendChild(overlay);
+    overlay.showPopover();
+  }
 
-  // Show info box at bottom if we don't have enough space at top
-  if (frameInfoBox.offsetHeight > Frame.offsetTop) {
+  if (frameInfoBox) {
+    body.appendChild(frameInfoBox);
+    frameInfoBox.showPopover();
+  }
+
+  // overlay will not exist for hidden elements. show at bottom of screen.
+  if (isHiddenFrame) {
+    frameInfoBox.style.top =
+      Number(window.innerHeight) - Number(frameInfoBox.offsetHeight) + 5 + 'px';
+  } else if (frameInfoBox.offsetHeight > Frame.offsetTop) {
+    // Show info box at bottom if we don't have enough space at top
     frameInfoBox.style.top =
       Number(frameInfoBox.offsetTop) + Number(Frame.offsetHeight) - 1 + 'px';
 
@@ -66,11 +78,14 @@ export const addFrameOverlay = (Frame: HTMLIFrameElement, data): boolean => {
       'px';
   }
 
-  frameInfoBox.scrollIntoView({
-    behavior: 'smooth',
-    block: 'start',
-    inline: 'nearest',
-  });
+  // no need to scroll if frame is hidden;
+  if (!isHiddenFrame) {
+    frameInfoBox.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+      inline: 'nearest',
+    });
+  }
 
   return true;
 };
@@ -96,6 +111,7 @@ export const findAndAddFrameOverlay = (response: Response) => {
     // @todo Very loosley checked for initial POC, needs more work.
     if (srcHost === selectedFrameHost) {
       frameFound = addFrameOverlay(iframe, response);
+      break;
     }
   }
 

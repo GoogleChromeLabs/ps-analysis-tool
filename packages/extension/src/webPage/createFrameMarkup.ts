@@ -79,16 +79,26 @@ export const createIframeInfoBlock = (frame: HTMLIFrameElement, data) => {
     x: frameX,
     y: frameY,
     width: frameWidth,
+    height: frameHeight,
   } = frame.getBoundingClientRect();
 
   infoBlock.classList.add(INFOBOX_CLASS);
   content.classList.add('content');
 
-  const styles: Record<string, string> = {
+  let styles: Record<string, string> = {
     top: frameY + Number(window.scrollY) + 'px',
     left: frameX + Number(window.scrollX) + 'px',
     maxWidth: frameWidth - 40 + 'px',
   };
+
+  if (frameHeight === 0 && frameWidth === 0) {
+    styles = {
+      top: Number(window.innerHeight) + 'px',
+      left: '10px',
+      maxWidth: '250px',
+      position: 'fixed',
+    };
+  }
 
   // eslint-disable-next-line guard-for-in
   for (const key in styles) {
@@ -119,7 +129,7 @@ export const createIframeInfoBlock = (frame: HTMLIFrameElement, data) => {
   infoBlock.appendChild(content);
 
   // eslint-disable-next-line no-console
-  console.log(attributes, 'attributes');
+  console.log(attributes, 'attributes', infoBlock);
 
   infoBlock.popover = 'manual';
 
