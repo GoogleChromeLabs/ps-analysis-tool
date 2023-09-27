@@ -23,6 +23,7 @@ import React, { useEffect, useRef } from 'react';
  */
 import { WEBPAGE_PORT_NAME } from '../../../constants';
 import { useCookieStore } from '../stateProviders/syncCookieStore';
+import { useFilterManagementStore } from '../stateProviders/filterManagementStore';
 
 interface UseFrameOverlayProps {
   selectedFrame: string | null;
@@ -41,6 +42,10 @@ const useFrameOverlay = ({
 
   const { isInspecting } = useCookieStore(({ state }) => ({
     isInspecting: state.isInspecting,
+  }));
+
+  const { filteredCookies } = useFilterManagementStore(({ state }) => ({
+    filteredCookies: state.filteredCookies,
   }));
 
   useEffect(() => {
@@ -85,11 +90,20 @@ const useFrameOverlay = ({
       // eslint-disable-next-line no-console
       console.log(selectedFrame);
 
+      const thirdPartyCookies = filteredCookies.filter(
+        (cookie) => !cookie.isFirstParty
+      );
+      const firstPartyCookies = filteredCookies.filter(
+        (cookie) => cookie.isFirstParty
+      );
+
       portRef.current.postMessage({
         selectedFrame,
+        thirdPartyCookies: thirdPartyCookies.length,
+        firstPartyCookies: firstPartyCookies.length,
       });
     }
-  }, [selectedFrame]);
+  }, [selectedFrame, filteredCookies]);
 };
 
 export default useFrameOverlay;

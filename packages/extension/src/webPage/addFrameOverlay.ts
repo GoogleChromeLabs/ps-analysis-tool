@@ -19,6 +19,12 @@
 import { createFrameOverlay, createIframeInfoBlock } from './createFrameMarkup';
 import { OVERLAY_CLASS, INFOBOX_CLASS } from './constants';
 
+interface Response {
+  selectedFrame: string;
+  firstPartyCookies: number;
+  thirdPartyCookies: number;
+}
+
 export const removeAllPopovers = () => {
   const existingPopovers = Array.from(
     document.querySelectorAll('.' + OVERLAY_CLASS + ', .' + INFOBOX_CLASS)
@@ -29,9 +35,9 @@ export const removeAllPopovers = () => {
   });
 };
 
-export const addFrameOverlay = (Frame: HTMLIFrameElement): boolean => {
+export const addFrameOverlay = (Frame: HTMLIFrameElement, data): boolean => {
   const overlay = createFrameOverlay(Frame);
-  const frameInfoBox = createIframeInfoBlock(Frame);
+  const frameInfoBox = createIframeInfoBlock(Frame, data);
   const body = document.querySelector('body');
 
   if (!body || !overlay) {
@@ -69,20 +75,27 @@ export const addFrameOverlay = (Frame: HTMLIFrameElement): boolean => {
   return true;
 };
 
-export const findAndAddFrameOverlay = (selectedFrame: string) => {
+export const findAndAddFrameOverlay = (response: Response) => {
   const iframes = document.querySelectorAll('iframe');
   let frameFound = false;
 
   for (const iframe of iframes) {
     const src = iframe.getAttribute('src') || '';
     // eslint-disable-next-line no-console
-    console.log(src, 'src');
+
+    if (!src) {
+      return;
+    }
+
     const srcHost = new URL(src).host.replace('www.', ''); // @todo Not the right way.
-    const selectedFrameHost = new URL(selectedFrame).host.replace('www.', '');
+    const selectedFrameHost = new URL(response.selectedFrame).host.replace(
+      'www.',
+      ''
+    );
 
     // @todo Very loosley checked for initial POC, needs more work.
     if (srcHost === selectedFrameHost) {
-      frameFound = addFrameOverlay(iframe);
+      frameFound = addFrameOverlay(iframe, response);
     }
   }
 

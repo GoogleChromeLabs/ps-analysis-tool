@@ -43,7 +43,7 @@ const connectPort = () => {
     }
 
     if (response?.selectedFrame) {
-      findAndAddFrameOverlay(response.selectedFrame);
+      findAndAddFrameOverlay(response);
     }
 
     // eslint-disable-next-line no-console

@@ -51,8 +51,8 @@ export const createFrameOverlay = (frame: HTMLElement) => {
   return frameOverlay;
 };
 
-const createInfoLine = (label: string, value: string) => {
-  const p = document.createElement('p');
+const createInfoLine = (label: string, value: string): HTMLParagraphElement => {
+  const p: HTMLParagraphElement = document.createElement('p');
 
   const styles: Record<string, string> = {
     fontSize: '12px',
@@ -71,7 +71,7 @@ const createInfoLine = (label: string, value: string) => {
   return p;
 };
 
-export const createIframeInfoBlock = (frame: HTMLIFrameElement) => {
+export const createIframeInfoBlock = (frame: HTMLIFrameElement, data) => {
   const infoBlock = document.createElement('div');
   const content = document.createElement('div');
   const attributes = getFrameAttributes(frame);
@@ -97,10 +97,12 @@ export const createIframeInfoBlock = (frame: HTMLIFrameElement) => {
 
   const origin = new URL(attributes.src || '').origin;
 
-  const info = {
+  const info: Record<string, string> = {
     Type: 'iframe',
     Origin: `<a href="${origin}">${origin}</a>`,
-    'Allowed features': attributes.allow,
+    'First Party Cookies': String(data.firstPartyCookies),
+    'Third Party Cookies': String(data.thirdPartyCookies),
+    'Allowed features': attributes.allow || ' ',
   };
 
   // eslint-disable-next-line guard-for-in
@@ -108,7 +110,7 @@ export const createIframeInfoBlock = (frame: HTMLIFrameElement) => {
     const value = info[label];
 
     if (value) {
-      content.appendChild(createInfoLine(label, info[label]));
+      content.appendChild(createInfoLine(label, value));
     }
   }
 
