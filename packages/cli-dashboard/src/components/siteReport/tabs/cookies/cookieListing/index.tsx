@@ -30,33 +30,30 @@ const CookieListing = () => {
 
   return (
     <div className="w-full h-full flex flex-col">
-      <div className="w-full flex-1 overflow-hidden">
-        <div className="h-full flex flex-col">
-          <Resizable
-            defaultSize={{
-              width: '100%',
-              height: '80%',
-            }}
-            minHeight="6%"
-            maxHeight="95%"
-            enable={{
-              top: false,
-              right: false,
-              bottom: true,
-              left: false,
-            }}
-          >
-            <CookieTableContainer
-              cookies={[]}
-              selectedFrame={''}
-              selectedFrameCookie={selectedFrameCookie}
-              setSelectedFrameCookie={setSelectedFrameCookie}
-            />
-          </Resizable>
-          <div className="w-full h-full border border-gray-300 dark:border-quartz shadow overflow-auto">
-            <CookieDetails selectedFrameCookie={selectedFrameCookie} />
-          </div>
-        </div>
+      <div className="w-full flex-1 overflow-hidden h-full flex flex-col">
+        <Resizable
+          defaultSize={{
+            width: '100%',
+            height: '80%',
+          }}
+          minHeight="6%"
+          maxHeight="95%"
+          enable={{
+            top: false,
+            right: false,
+            bottom: true,
+            left: false,
+          }}
+          className="h-full flex"
+        >
+          <CookieTableContainer
+            cookies={[]}
+            selectedFrame={''}
+            selectedFrameCookie={selectedFrameCookie}
+            setSelectedFrameCookie={setSelectedFrameCookie}
+          />
+        </Resizable>
+        <CookieDetails selectedFrameCookie={selectedFrameCookie} />
       </div>
     </div>
   );
