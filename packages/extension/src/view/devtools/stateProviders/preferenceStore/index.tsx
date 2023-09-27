@@ -149,6 +149,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         const storedTabData = (
           await chrome.storage.local.get(currentTabId?.toString())
         )[currentTabId];
+
         setPreferences(storedTabData?.preferences);
         if (
           storedTabData?.preferences?.selectedFrame &&
@@ -158,6 +159,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           )
         ) {
           setSelectedFrame(storedTabData?.preferences?.selectedFrame);
+
           if (
             storedTabData?.preferences?.selectedFilters &&
             Object.keys(storedTabData?.preferences?.selectedFilters).length > 0

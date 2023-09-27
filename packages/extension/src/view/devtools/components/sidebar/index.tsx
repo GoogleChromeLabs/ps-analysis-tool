@@ -178,6 +178,17 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
     }
   }, [isCurrentTabBeingListenedTo]);
 
+  useEffect(() => {
+    if (selectedFrame) {
+      setAccordionState((prevState) => ({
+        ...prevState,
+        cookies: true,
+      }));
+      setSelectedAccordionChild('cookies');
+      setIndex(1);
+    }
+  }, [isCurrentTabBeingListenedTo, selectedFrame, setIndex]);
+
   const onAccordionHeaderClick = (tabIdToBeSet: string, index: number) => {
     mainMenuTabSelector(index);
     setSelectedAccordionChild(tabIdToBeSet);
