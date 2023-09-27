@@ -125,7 +125,7 @@ const TableBody = ({
   );
 
   return (
-    <div ref={tableBodyRef} className="h-fit flex flex-col">
+    <div ref={tableBodyRef} className="h-full flex flex-col">
       {table.rows.map((row, index) => (
         <BodyRow
           key={index}
@@ -163,7 +163,7 @@ const TableBody = ({
         ))}
       </div>
       <div
-        className="flex-1 outline-0 flex divide-x divide-american-silver dark:divide-quartz"
+        className="grow outline-0 flex divide-x divide-american-silver dark:divide-quartz"
         onClick={() => {
           setIsRowFocused(false);
         }}
@@ -171,7 +171,7 @@ const TableBody = ({
         {table.columns.map(({ width }, index) => (
           <div
             key={index}
-            className="px-1 py-px outline-0"
+            className="px-1 py-px outline-0 h-full"
             style={{
               width,
             }}
