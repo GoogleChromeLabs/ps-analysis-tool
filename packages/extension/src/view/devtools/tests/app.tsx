@@ -22,6 +22,7 @@ import { act } from 'react-dom/test-utils';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import SinonChrome from 'sinon-chrome';
+import { noop } from '@cookie-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
@@ -31,7 +32,6 @@ import App from '../app';
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'cookie-analysis-tool/data/PSInfo.json';
 import { useCookieStore } from '../stateProviders/syncCookieStore';
-import { noop } from '../../../utils/noop';
 
 jest.mock('../stateProviders/syncCookieStore', () => ({
   useCookieStore: jest.fn(),
@@ -84,7 +84,7 @@ describe('App', () => {
   it('Should show cookies content by default', async () => {
     await act(() => render(<App />));
 
-    expect(screen.getByTestId('cookies-content')).toBeInTheDocument();
+    expect(screen.getByTestId('privacy-sandbox-content')).toBeInTheDocument();
   });
 
   it('should switch to cookie panel when tab is clicked', async () => {
@@ -194,7 +194,10 @@ describe('App', () => {
     act(() => {
       // Focus on the first menu item.
       userEvent.tab();
-      // Press arrow down
+      userEvent.keyboard('{ArrowRight}');
+      userEvent.keyboard('{ArrowDown}');
+    });
+    act(() => {
       userEvent.keyboard('{ArrowDown}');
     });
     expect(
@@ -207,7 +210,10 @@ describe('App', () => {
     act(() => {
       // Focus on the first menu item.
       userEvent.tab();
-      // Press arrow down to go to next menu
+      userEvent.keyboard('{ArrowRight}');
+      userEvent.keyboard('{ArrowDown}');
+    });
+    act(() => {
       userEvent.keyboard('{ArrowDown}');
     });
     act(() => {
