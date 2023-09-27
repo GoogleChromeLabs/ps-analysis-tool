@@ -10,8 +10,8 @@
 		"cli":"node dist/cli/index.js",
 		"test": "jest --config=tests/jest.config.cjs",
 		"test:coverage": "npm run test -- --collectCoverage && open coverage/lcov-report/index.html",
-		"extension:dev": "npm run dev --workspace=@cookie-analysis-tool/extension",
-		"extension:build": "npm run build --workspace=@cookie-analysis-tool/extension",
+		"dev": "npm run dev --workspace=@cookie-analysis-tool/extension",
+		"build": "npm run build --workspace=@cookie-analysis-tool/extension",
 		"serve": "webpack serve",
 		"lint": "npm-run-all --parallel lint:*",
 		"lint:js": "eslint .",
@@ -21,7 +21,8 @@
 		"cookie-db:update": "node scripts/update-cookie-db.cjs",
 		"rws-json:update": "node scripts/update-rws-json.cjs",
 		"storybook": "storybook dev -p 6006",
-		"build-storybook": "storybook build"
+		"build-storybook": "storybook build",
+		"start": "npm install && npm run dev"
 	},
 	"repository": {
 		"type": "git",
