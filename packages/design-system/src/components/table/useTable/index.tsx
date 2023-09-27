@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import { useMemo } from 'react';
-
+import { CookieTableData } from '@cookie-analysis-tool/common';
 /**
  * Internal dependencies.
  */
@@ -33,7 +33,6 @@ import useColumnVisibility, {
 import useColumnResizing, {
   type ColumnResizingOutput,
 } from '../useColumnResizing';
-import { CookieTableData } from '@cookie-analysis-tool/common';
 
 export type TableData = CookieTableData;
 
@@ -74,7 +73,10 @@ export type TableOutput = {
 interface useTableProps {
   tableColumns: TableColumn[];
   data: TableData[];
-  options?: DefaultOptions;
+  options?: {
+    columnSizing: Record<string, number>;
+    columnSorting: DefaultOptions;
+  };
 }
 
 const useTable = ({
@@ -91,11 +93,13 @@ const useTable = ({
     isColumnHidden,
   } = useColumnVisibility(tableColumns);
 
-  const { columns, tableContainerRef, onMouseDown } =
-    useColumnResizing(visibleColumns);
+  const { columns, tableContainerRef, onMouseDown } = useColumnResizing(
+    visibleColumns,
+    options?.columnSizing
+  );
 
   const { sortedData, sortKey, sortOrder, setSortKey, setSortOrder } =
-    useColumnSorting(data, options);
+    useColumnSorting(data, options?.columnSorting);
 
   const rows = useMemo(() => {
     return sortedData.map((_data) => {

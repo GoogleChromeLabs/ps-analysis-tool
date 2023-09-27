@@ -18,7 +18,10 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useMemo } from 'react';
-import type { CookieTableData } from '@cookie-analysis-tool/common';
+import type {
+  CookieTableData,
+  SortingState,
+} from '@cookie-analysis-tool/common';
 import {
   useTable,
   Table,
@@ -62,9 +65,13 @@ const CookieTable = ({ cookies, selectedFrame }: CookieTableProps) => {
     setSelectedFrameCookie,
     cookies.length,
   ]);
-  const { updatePreference } = usePreferenceStore(({ actions }) => ({
-    updatePreference: actions.updatePreference,
-  }));
+  const { updatePreference, columnSorting, columnSizing } = usePreferenceStore(
+    ({ actions, state }) => ({
+      updatePreference: actions.updatePreference,
+      columnSorting: state.columnSorting as SortingState[],
+      columnSizing: state.columnSizing as Record<string, number>,
+    })
+  );
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
@@ -200,7 +207,14 @@ const CookieTable = ({ cookies, selectedFrame }: CookieTableProps) => {
   const table = useTable({
     tableColumns,
     data: cookies,
-    options: {},
+    options: {
+      columnSizing:
+        columnSizing && Object.keys(columnSizing).length > 0
+          ? columnSizing
+          : {},
+      columnSorting:
+        columnSorting && columnSorting.length > 0 ? columnSorting[0] : {},
+    },
   });
 
   return (

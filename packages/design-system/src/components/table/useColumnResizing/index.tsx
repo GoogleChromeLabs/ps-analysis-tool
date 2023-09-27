@@ -34,24 +34,37 @@ export type ColumnResizingOutput = {
 };
 
 const useColumnResizing = (
-  tableColumns: TableColumn[]
+  tableColumns: TableColumn[],
+  options?: Record<string, number>
 ): ColumnResizingOutput => {
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const [columns, setColumns] = useState<TableColumn[]>([]);
-
   useEffect(() => {
     const tableWidth =
       tableContainerRef.current?.getBoundingClientRect().width || 0;
-
-    const newColumns = tableColumns.map((column) => {
-      return {
-        ...column,
-        width: tableWidth / tableColumns.length,
-      };
-    });
-
-    setColumns(newColumns);
-  }, [tableColumns]);
+    if (options) {
+      const newColumns = tableColumns.map((column) => {
+        const columnWidth =
+          options && Object.keys(options).length && options[column.header]
+            ? options[column.header]
+            : tableWidth / tableColumns.length - Object.keys(options).length;
+        console.log(columnWidth);
+        return {
+          ...column,
+          width: columnWidth,
+        };
+      });
+      setColumns(newColumns);
+    } else {
+      const newColumns = tableColumns.map((column) => {
+        return {
+          ...column,
+          width: tableWidth / tableColumns.length,
+        };
+      });
+      setColumns(newColumns);
+    }
+  }, [options, tableColumns]);
 
   const onMouseDown = useCallback(
     (

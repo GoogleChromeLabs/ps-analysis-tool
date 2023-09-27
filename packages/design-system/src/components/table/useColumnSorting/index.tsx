@@ -46,7 +46,7 @@ const useColumnSorting = (
     options?.defaultSortKey ?? ''
   );
   const [ascending, setAscending] = useState<boolean>(
-    options?.defaultSortOrder === 'asc' || true
+    options?.defaultSortOrder ? options?.defaultSortOrder === 'asc' : true
   );
 
   const setSortOrder = useCallback((sortOrder: 'asc' | 'desc') => {

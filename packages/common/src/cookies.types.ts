@@ -93,9 +93,9 @@ export interface FramesWithCookies {
   [key: string]: { frameIds: number[] };
 }
 
-type SortingState = {
-  id: string;
-  sortOrder: string;
+export type SortingState = {
+  defaultSortKey?: string;
+  defaultSortOrder?: 'asc' | 'desc';
 };
 
 export type SelectedFilters = {
