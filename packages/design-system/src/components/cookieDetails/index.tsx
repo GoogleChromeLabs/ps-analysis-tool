@@ -35,7 +35,10 @@ const CookieDetails = ({ selectedFrameCookie }: CookieDetailsProps) => {
   const selectedCookie = Object.values(selectedFrameCookie ?? {})[0];
 
   return (
-    <div data-testid="cookie-card" className="h-full min-w-[10rem]">
+    <div
+      data-testid="cookie-card"
+      className="flex-1 border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem]"
+    >
       {selectedCookie ? (
         <Details selectedCookie={selectedCookie} />
       ) : (

@@ -86,7 +86,7 @@ const Table = ({
   return (
     <div
       ref={table.tableContainerRef}
-      className="relative h-full w-full border border-american-silver dark:border-quartz"
+      className="relative h-full w-full border-x border-american-silver dark:border-quartz"
     >
       <ColumnMenu
         table={table}

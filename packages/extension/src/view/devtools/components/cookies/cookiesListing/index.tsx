@@ -63,55 +63,45 @@ const CookiesListing = () => {
         filteredCookies={filteredCookies}
       />
       {cookiesAvailable && <ChipsBar />}
-      <div className="w-full flex-1 overflow-hidden">
-        <div className="h-full flex flex-col">
-          <Resizable
-            defaultSize={{
-              width: '100%',
-              height: '80%',
-            }}
-            minHeight="6%"
-            maxHeight="95%"
-            enable={{
-              top: false,
-              right: false,
-              bottom: true,
-              left: false,
-            }}
-          >
-            <div className="h-full flex">
-              {cookiesAvailable
-                ? isFilterMenuOpen && (
-                    <Resizable
-                      minWidth="10%"
-                      maxWidth="50%"
-                      enable={{
-                        top: false,
-                        right: true,
-                        bottom: false,
-                        left: false,
-                      }}
-                      className="overflow-y-scroll overflow-x-hidden p-3"
-                    >
-                      <FiltersList />
-                    </Resizable>
-                  )
-                : null}
-
-              <div className="flex-1 overflow-auto">
-                <CookieTableContainer
-                  cookies={filteredCookies}
-                  selectedFrame={selectedFrame}
-                  selectedFrameCookie={selectedFrameCookie}
-                  setSelectedFrameCookie={setSelectedFrameCookie}
-                />
-              </div>
-            </div>
-          </Resizable>
-          <div className="w-full h-full border border-gray-300 dark:border-quartz shadow overflow-auto">
-            <CookieDetails selectedFrameCookie={selectedFrameCookie} />
-          </div>
-        </div>
+      <div className="w-full flex-1 overflow-hidden h-full flex flex-col">
+        <Resizable
+          defaultSize={{
+            width: '100%',
+            height: '80%',
+          }}
+          minHeight="6%"
+          maxHeight="95%"
+          enable={{
+            top: false,
+            right: false,
+            bottom: true,
+            left: false,
+          }}
+          className="h-full flex"
+        >
+          {cookiesAvailable && isFilterMenuOpen && (
+            <Resizable
+              minWidth="10%"
+              maxWidth="50%"
+              enable={{
+                top: false,
+                right: true,
+                bottom: false,
+                left: false,
+              }}
+              className="overflow-y-scroll overflow-x-hidden p-3"
+            >
+              <FiltersList />
+            </Resizable>
+          )}
+          <CookieTableContainer
+            cookies={filteredCookies}
+            selectedFrame={selectedFrame}
+            selectedFrameCookie={selectedFrameCookie}
+            setSelectedFrameCookie={setSelectedFrameCookie}
+          />
+        </Resizable>
+        <CookieDetails selectedFrameCookie={selectedFrameCookie} />
       </div>
     </div>
   );

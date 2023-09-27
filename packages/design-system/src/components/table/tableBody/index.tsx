@@ -125,7 +125,7 @@ const TableBody = ({
   );
 
   return (
-    <div ref={tableBodyRef} className="h-full">
+    <div ref={tableBodyRef} className="h-fit flex flex-col">
       {table.rows.map((row, index) => (
         <BodyRow
           key={index}
@@ -163,7 +163,7 @@ const TableBody = ({
         ))}
       </div>
       <div
-        className="h-full outline-0 flex divide-x divide-american-silver dark:divide-quartz"
+        className="flex-1 outline-0 flex divide-x divide-american-silver dark:divide-quartz"
         onClick={() => {
           setIsRowFocused(false);
         }}
