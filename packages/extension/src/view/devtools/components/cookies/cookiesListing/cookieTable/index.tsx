@@ -200,6 +200,7 @@ const CookieTable = ({ cookies, selectedFrame }: CookieTableProps) => {
   const table = useTable({
     tableColumns,
     data: cookies,
+    options: {},
   });
 
   return (

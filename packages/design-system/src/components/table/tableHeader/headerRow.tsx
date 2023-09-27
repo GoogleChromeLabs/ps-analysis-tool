@@ -18,13 +18,12 @@
  * External dependencies.
  */
 import React from 'react';
-
+import { PreferenceDataValues } from '@cookie-analysis-tool/common';
 /**
  * Internal dependencies.
  */
 import HeaderCell from './headerCell';
 import type { TableOutput } from '../useTable';
-import type { PreferenceDataValues } from '../columnMenu/columnList';
 interface HeaderRowProps {
   table: TableOutput;
   setIsRowFocused: (state: boolean) => void;

@@ -18,13 +18,12 @@
  * External dependencies.
  */
 import React, { useCallback } from 'react';
-
+import { PreferenceDataValues } from '@cookie-analysis-tool/common';
 /**
  * Internal dependencies.
  */
 import HeaderRow from './headerRow';
 import type { TableOutput } from '../useTable';
-import { PreferenceDataValues } from '../columnMenu/columnList';
 
 interface TableHeaderProps {
   table: TableOutput;

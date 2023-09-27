@@ -24,6 +24,7 @@ import { useMemo } from 'react';
  */
 import getValueByKey from '../utils/getValueByKey';
 import useColumnSorting, {
+  DefaultOptions,
   type ColumnSortingOutput,
 } from '../useColumnSorting';
 import useColumnVisibility, {
@@ -73,9 +74,14 @@ export type TableOutput = {
 interface useTableProps {
   tableColumns: TableColumn[];
   data: TableData[];
+  options?: DefaultOptions;
 }
 
-const useTable = ({ tableColumns, data }: useTableProps): TableOutput => {
+const useTable = ({
+  tableColumns,
+  data,
+  options,
+}: useTableProps): TableOutput => {
   const {
     visibleColumns,
     hideColumn,
@@ -89,7 +95,7 @@ const useTable = ({ tableColumns, data }: useTableProps): TableOutput => {
     useColumnResizing(visibleColumns);
 
   const { sortedData, sortKey, sortOrder, setSortKey, setSortOrder } =
-    useColumnSorting(data);
+    useColumnSorting(data, options);
 
   const rows = useMemo(() => {
     return sortedData.map((_data) => {

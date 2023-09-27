@@ -26,18 +26,18 @@ import React, {
   useRef,
 } from 'react';
 import { noop } from '@cookie-analysis-tool/design-system';
+import type {
+  PreferenceDataValues,
+  SelectedFilters,
+} from '@cookie-analysis-tool/common';
 /**
  * Internal dependencies.
  */
 import { useCookieStore } from '../syncCookieStore';
 import useContextSelector from '../../../../utils/useContextSelector';
 import { useFilterManagementStore } from '../filterManagementStore';
-import {
-  PreferenceStore,
-  type PreferenceDataValues,
-} from '../../../../localStore';
+import { PreferenceStore } from '../../../../localStore';
 import { getCurrentTabId } from '../../../../utils/getCurrentTabId';
-import type { SelectedFilters } from '../filterManagementStore/types';
 
 export interface PreferenceStore {
   state: {
@@ -89,10 +89,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
     })
   );
 
-  const { selectedFrame, setSelectedFrame } = useCookieStore(
+  const { selectedFrame, setSelectedFrame, tabFrames } = useCookieStore(
     ({ state, actions }) => ({
       selectedFrame: state?.selectedFrame,
       setSelectedFrame: actions?.setSelectedFrame,
+      tabFrames: state.tabFrames,
     })
   );
 
@@ -149,7 +150,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
           await chrome.storage.local.get(currentTabId?.toString())
         )[currentTabId];
         setPreferences(storedTabData?.preferences);
-        if (storedTabData?.preferences?.selectedFrame) {
+        if (
+          storedTabData?.preferences?.selectedFrame &&
+          tabFrames &&
+          Object.keys(tabFrames).includes(
+            storedTabData?.preferences?.selectedFrame
+          )
+        ) {
           setSelectedFrame(storedTabData?.preferences?.selectedFrame);
           if (
             storedTabData?.preferences?.selectedFilters &&
@@ -179,7 +186,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
         fetchedInitialValueRef.current = true;
       }
     })();
-  }, [getPreviousPreferences, setSelectedFrame, setSelectedFrameFilters]);
+  }, [
+    getPreviousPreferences,
+    setSelectedFrame,
+    setSelectedFrameFilters,
+    tabFrames,
+  ]);
 
   const value: PreferenceStore = useMemo(
     () => ({

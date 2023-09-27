@@ -18,13 +18,13 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useRef } from 'react';
-import { ArrowDown } from '@cookie-analysis-tool/design-system';
+import { PreferenceDataValues } from '@cookie-analysis-tool/common';
 /**
  * Internal dependencies.
  */
 import type { TableColumn, TableOutput } from '../useTable';
 import HeaderResizer from './headerResizer';
-import { type PreferenceDataValues } from '../columnMenu/columnList';
+import { ArrowDown } from '../../../icons';
 
 interface HeaderCellProps {
   table: TableOutput;
@@ -72,15 +72,15 @@ const HeaderCell = ({
     };
   }, [resizeHandler]);
 
-  // const handleOnClick = useCallback(() => {
-  //   updatePreference('columnSorting', () => [
-  //     {
-  //       id: cell.header,
-  //       desc: table.sortOrder,
-  //     },
-  //   ]);
-  //   table.setSortKey(cell.accessorKey);
-  // }, [cell.accessorKey, cell.header, table, updatePreference]);
+  const handleOnClick = useCallback(() => {
+    updatePreference('columnSorting', () => [
+      {
+        id: cell.header,
+        sortOrder: table.sortOrder,
+      },
+    ]);
+    table.setSortKey(cell.accessorKey);
+  }, [cell.accessorKey, cell.header, table, updatePreference]);
 
   const columnRef = useRef<HTMLTableHeaderCellElement>(null);
 
@@ -88,7 +88,7 @@ const HeaderCell = ({
     <th
       ref={columnRef}
       style={{ maxWidth: cell.width }}
-      onClick={() => table.setSortKey(cell.accessorKey)}
+      onClick={handleOnClick}
       className="border-x border-american-silver dark:border-quartz relative hover:bg-gainsboro dark:hover:bg-outer-space select-none touch-none font-normal"
       data-testid="header-cell"
     >

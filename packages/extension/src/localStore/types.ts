@@ -17,11 +17,9 @@
  * External dependencies.
  */
 import { type Cookie as ParsedCookie } from 'simple-cookie';
-
 /**
  * Internal dependencies.
  */
-import type { SelectedFilters } from '../view/devtools/stateProviders/filterManagementStore/types';
 import type { CookieAnalytics } from '../utils/fetchCookieDictionary';
 
 export type CookieData = {
@@ -33,25 +31,12 @@ export type CookieData = {
   frameIdList: number[];
 };
 
-export type PreferenceDataValues =
-  | Record<string, number>
-  | string
-  | SelectedFilters;
-
 export type PreferenceKeyValues =
   | 'columnSorting'
   | 'selectedFrame'
   | 'columnSizing'
   | 'selectedColumns'
   | 'selectedFilter';
-
-export interface PreferenceData {
-  columnSorting: SortingState;
-  selectedFrame: string;
-  columnSizing: Record<string, number>;
-  selectedColumns: VisibilityState;
-  selectedFilters: SelectedFilters;
-}
 
 export type TabData = {
   cookies: {

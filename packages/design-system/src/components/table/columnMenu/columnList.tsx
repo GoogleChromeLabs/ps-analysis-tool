@@ -18,19 +18,13 @@
  * External dependencies.
  */
 import React, { useEffect } from 'react';
+import { PreferenceDataValues } from '@cookie-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import ColumnListItem from './columnListItem';
 import type { TableOutput } from '../useTable';
-
-export type PreferenceDataValues =
-  | Record<string, number>
-  | string
-  | {
-      [key: string]: Set<string>;
-    };
 
 interface ColumnListProps {
   table: TableOutput;

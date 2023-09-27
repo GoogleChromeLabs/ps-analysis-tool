@@ -18,7 +18,10 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-
+import {
+  CookieTableData,
+  PreferenceDataValues,
+} from '@cookie-analysis-tool/common';
 /**
  * Internal dependencies.
  */
@@ -26,8 +29,6 @@ import TableHeader from './tableHeader';
 import TableBody from './tableBody';
 import ColumnMenu from './columnMenu';
 import { TableOutput, TableRow } from './useTable';
-import { type PreferenceDataValues } from './columnMenu/columnList';
-import { CookieTableData } from '@cookie-analysis-tool/common';
 
 export type TableData = CookieTableData;
 

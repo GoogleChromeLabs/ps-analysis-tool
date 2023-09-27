@@ -25,7 +25,7 @@ import { useState, useCallback, useMemo } from 'react';
 import getValueByKey from '../utils/getValueByKey';
 import type { TableData } from '../useTable';
 
-type DefaultOptions = {
+export type DefaultOptions = {
   defaultSortKey?: string;
   defaultSortOrder?: 'asc' | 'desc';
 };

@@ -19,12 +19,12 @@
  */
 import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
-
+import { type PreferenceDataValues } from '@cookie-analysis-tool/common';
 /**
  * Internal dependencies.
  */
 import { createPortal } from 'react-dom';
-import ColumnList, { PreferenceDataValues } from './columnList';
+import ColumnList from './columnList';
 import type { TableOutput } from '../useTable';
 
 interface ColumnMenuProps {
