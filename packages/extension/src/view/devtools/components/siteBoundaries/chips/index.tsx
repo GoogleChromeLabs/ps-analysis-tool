@@ -23,7 +23,7 @@ import React from 'react';
  */
 import InfoCard from '../../../../design-system/components/infoCard';
 import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
-import { MessageBox } from '../../../../design-system/components';
+import { MessageBox } from '@cookie-analysis-tool/design-system';
 
 const Chips = () => {
   return (

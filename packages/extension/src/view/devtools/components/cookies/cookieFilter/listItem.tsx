@@ -21,12 +21,12 @@ import React, { useState } from 'react';
 /**
  * Internal dependencies.
  */
-import { ArrowDown, InfoIcon } from '../../../../../icons';
 import SubList from './subList';
 import type {
   SelectedFilters,
   Filter,
 } from '../../../stateProviders/filterManagementStore/types';
+import { ArrowDown, InfoIcon } from '@cookie-analysis-tool/design-system';
 
 interface ListItemProps {
   filter: Filter;

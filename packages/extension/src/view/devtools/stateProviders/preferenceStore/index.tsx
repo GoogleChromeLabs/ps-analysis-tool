@@ -25,11 +25,11 @@ import React, {
   useEffect,
   useRef,
 } from 'react';
+import { noop } from '@cookie-analysis-tool/design-system';
 /**
  * Internal dependencies.
  */
 import { useCookieStore } from '../syncCookieStore';
-import { noop } from '../../../../utils/noop';
 import useContextSelector from '../../../../utils/useContextSelector';
 import { useFilterManagementStore } from '../filterManagementStore';
 import {

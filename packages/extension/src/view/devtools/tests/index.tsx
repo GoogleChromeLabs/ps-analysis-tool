@@ -150,6 +150,13 @@ describe('Index', () => {
               });
             }),
           //@ts-ignore
+          getBytesInUse: () =>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            new Promise<number>((resolve) => {
+              resolve(100);
+            }),
+          set: () => Promise.resolve(),
+          //@ts-ignore
           onChanged: {
             addListener: () => undefined,
             removeListener: () => undefined,
@@ -177,8 +184,15 @@ describe('Index', () => {
         inspectedWindow: {
           tabId: 40245632,
           // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-          eval: (_, callback: any) => {
-            callback('https://edition.cnn.com');
+          eval: (command, callback: any) => {
+            if (command === 'document.cookie.split(";")') {
+              callback([
+                '_ga=GA1.2.91929102.1694767081',
+                ' _gid=GA1.2.626513871.1694767081',
+              ]);
+            } else {
+              callback('https://edition.cnn.com');
+            }
           },
         },
         //@ts-ignore
@@ -239,7 +253,7 @@ describe('Index', () => {
       )
     );
     expect(
-      await screen.findByTestId('cookies-tab-heading-wrapper')
+      await screen.findByTestId('privacySandbox-tab-heading-wrapper')
     ).toHaveClass('bg-royal-blue');
   });
 
@@ -254,7 +268,7 @@ describe('Index', () => {
       )
     );
     expect(
-      await screen.findByTestId('cookies-tab-heading-wrapper')
+      await screen.findByTestId('privacySandbox-tab-heading-wrapper')
     ).toHaveClass('bg-royal-blue');
   });
   afterAll(() => {

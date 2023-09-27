@@ -49,6 +49,9 @@ jest.mock('../../../stateProviders/syncCookieStore', () => {
         tabUrl: mockResponse.tabUrl,
         tabFrames: mockResponse.tabFrames,
         selectedFrame: mockResponse.selectedFrame,
+        isCurrentTabBeingListenedTo: true,
+        allowedNumberOfTabs: 'single',
+        loading: false,
       };
     },
   };
@@ -316,6 +319,9 @@ describe('CookieTab', () => {
     const useStateMock: any = (initState: any) => [initState, setStateMock];
     jest.spyOn(React, 'useState').mockImplementation(useStateMock);
     jest.spyOn(React, 'useEffect').mockImplementation((f) => f());
+    jest.spyOn(React, 'useCallback').mockImplementation((f) => f);
+    jest.spyOn(React, 'useMemo').mockImplementation((f) => f());
+    jest.spyOn(React, 'useRef').mockImplementation(() => ({ current: null }));
 
     const row = (await screen.findAllByTestId('body-row'))[0];
     fireEvent.click(row);

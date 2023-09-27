@@ -24,16 +24,16 @@ import React, {
   useMemo,
   useCallback,
 } from 'react';
+import { noop } from '@cookie-analysis-tool/design-system';
 /**
  * Internal dependencies.
  */
 import type { SelectedFilters, Filter } from './types';
 import { useCookieStore } from '../syncCookieStore';
-import type { CookieTableData } from '../../cookies.types';
 import getFilters from './utils/getFilters';
 import filterCookies from './utils/filterCookies';
-import { noop } from '../../../../utils/noop';
 import useContextSelector from '../../../../utils/useContextSelector';
+import type { CookieTableData } from '@cookie-analysis-tool/common';
 
 export interface filterManagementStore {
   state: {
