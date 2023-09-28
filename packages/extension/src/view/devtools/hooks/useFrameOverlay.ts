@@ -48,19 +48,13 @@ const getPayload = (filteredCookies, isInspecting, selectedFrame) => {
 const useFrameOverlay = () => {
   const portRef = useRef<chrome.runtime.Port | null>(null);
 
-  const {
-    isInspecting,
-    setSelectedFrame,
-    inspectedFrame,
-    selectedFrame,
-    setInspectedFrame,
-  } = useCookieStore(({ state, actions }) => ({
-    setSelectedFrame: actions.setSelectedFrame,
-    isInspecting: state.isInspecting,
-    inspectedFrame: state.inspectedFrame,
-    setInspectedFrame: actions.setInspectedFrame,
-    selectedFrame: state.selectedFrame,
-  }));
+  const { isInspecting, setSelectedFrame, selectedFrame } = useCookieStore(
+    ({ state, actions }) => ({
+      isInspecting: state.isInspecting,
+      setSelectedFrame: actions.setSelectedFrame,
+      selectedFrame: state.selectedFrame,
+    })
+  );
 
   const { filteredCookies } = useFilterManagementStore(({ state }) => ({
     filteredCookies: state.filteredCookies,
@@ -81,7 +75,7 @@ const useFrameOverlay = () => {
         if (response?.attributes?.src) {
           // eslint-disable-next-line no-console
           console.log(response.attributes.src);
-          setInspectedFrame(response.attributes.src);
+          setSelectedFrame(response.attributes.src);
         }
       });
 
@@ -91,7 +85,7 @@ const useFrameOverlay = () => {
         console.log('Web port disconnected.');
       });
     },
-    [setInspectedFrame]
+    [setSelectedFrame]
   );
 
   useEffect(() => {
@@ -115,11 +109,6 @@ const useFrameOverlay = () => {
       portRef.current.postMessage(payload);
     }
   }, [selectedFrame, filteredCookies, isInspecting]);
-
-  // @todo why not directly set setSelectedFrame(response.attributes.src). Why do we need a new state inspectedFrame ?
-  useEffect(() => {
-    setSelectedFrame(inspectedFrame); // Sets the existing frame.
-  }, [inspectedFrame, setSelectedFrame]);
 };
 
 export default useFrameOverlay;

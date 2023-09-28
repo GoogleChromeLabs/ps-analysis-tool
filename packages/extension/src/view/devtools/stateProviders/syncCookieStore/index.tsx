@@ -41,7 +41,6 @@ export interface CookieStoreContext {
     loading: boolean;
     tabFrames: TabFrames | null;
     selectedFrame: string | null;
-    inspectedFrame: string | null;
     returningToSingleTab: boolean;
     isCurrentTabBeingListenedTo: boolean;
     allowedNumberOfTabs: string | null;
@@ -50,7 +49,6 @@ export interface CookieStoreContext {
   };
   actions: {
     setSelectedFrame: React.Dispatch<React.SetStateAction<string | null>>;
-    setInspectedFrame: React.Dispatch<React.SetStateAction<string | null>>;
     setIsInspecting: React.Dispatch<React.SetStateAction<boolean>>;
     changeListeningToThisTab: () => void;
     getCookiesSetByJavascript: () => void;
@@ -63,7 +61,6 @@ const initialState: CookieStoreContext = {
     tabUrl: null,
     tabFrames: null,
     selectedFrame: null,
-    inspectedFrame: null,
     loading: true,
     isCurrentTabBeingListenedTo: false,
     returningToSingleTab: false,
@@ -73,7 +70,6 @@ const initialState: CookieStoreContext = {
   },
   actions: {
     setSelectedFrame: noop,
-    setInspectedFrame: noop,
     changeListeningToThisTab: noop,
     setIsInspecting: noop,
     getCookiesSetByJavascript: noop,
@@ -104,8 +100,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [isInspecting, setIsInspecting] =
     useState<CookieStoreContext['state']['isInspecting']>(false);
 
-  const [inspectedFrame, setInspectedFrame] =
-    useState<CookieStoreContext['state']['inspectedFrame']>(null);
   const [selectedFrame, setSelectedFrame] =
     useState<CookieStoreContext['state']['selectedFrame']>(null);
 
@@ -456,7 +450,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
           tabFrames,
           loading,
           selectedFrame,
-          inspectedFrame,
           isCurrentTabBeingListenedTo,
           returningToSingleTab,
           allowedNumberOfTabs,
@@ -465,7 +458,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
         },
         actions: {
           setSelectedFrame,
-          setInspectedFrame,
           changeListeningToThisTab,
           getCookiesSetByJavascript,
           setIsInspecting,
