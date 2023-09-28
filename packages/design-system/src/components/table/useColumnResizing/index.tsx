@@ -71,20 +71,20 @@ const useColumnResizing = (
           column2Width = column2.width || 0;
         const widthChange = clientXPos - (startOffset + column1Width);
 
-        let newColumn1Width = 50,
-          newColumn2Width = 50;
+        let newColumn1Width = 20,
+          newColumn2Width = 20;
 
         if (widthChange > 0) {
-          newColumn2Width = Math.max(50, column2Width - widthChange);
+          newColumn2Width = Math.max(20, column2Width - widthChange);
           newColumn1Width =
-            newColumn2Width === 50
-              ? column1Width + column2Width - 50
+            newColumn2Width === 20
+              ? column1Width + column2Width - 20
               : column1Width + widthChange;
         } else {
-          newColumn1Width = Math.max(50, column1Width + widthChange);
+          newColumn1Width = Math.max(20, column1Width + widthChange);
           newColumn2Width =
-            newColumn1Width === 50
-              ? column1Width + column2Width - 50
+            newColumn1Width === 20
+              ? column1Width + column2Width - 20
               : column2Width - widthChange;
         }
 
