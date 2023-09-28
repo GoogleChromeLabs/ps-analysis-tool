@@ -40,6 +40,7 @@ export default {
       addListener: () => noop,
       removeListener: () => noop,
     },
+    query: () => noop,
   },
   runtime: {
     getURL: () => 'data/related_website_sets.json',
