@@ -17,6 +17,7 @@
  * Internal dependencies.
  */
 import { updateTabPSPanelState } from '../../utils/psPanelState';
+import { DEVTOOL_PORT_NAME } from '../../constants';
 
 const callback = (panel: {
   onShown: { addListener: (arg0: () => void) => void };
@@ -30,6 +31,10 @@ const callback = (panel: {
   // Only works when devtool tab is switched, not when it is closed.
   panel.onHidden.addListener(async () => {
     await updateTabPSPanelState(false);
+  });
+
+  chrome.runtime.connect(chrome.runtime.id, {
+    name: DEVTOOL_PORT_NAME,
   });
 };
 

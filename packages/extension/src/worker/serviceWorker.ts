@@ -31,7 +31,8 @@ import {
   type CookieDatabase,
   fetchDictionary,
 } from '../utils/fetchCookieDictionary';
-import { ALLOWED_NUMBER_OF_TABS } from '../constants';
+import { ALLOWED_NUMBER_OF_TABS, DEVTOOL_PORT_NAME } from '../constants';
+import { updateTabPSPanelState } from '../utils/psPanelState';
 
 let cookieDB: CookieDatabase | null = null;
 
@@ -295,5 +296,15 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         allowedNumberOfTabs: 'single',
       });
     }
+  });
+});
+
+chrome.runtime.onConnect.addListener((port) => {
+  if (port.name !== DEVTOOL_PORT_NAME) {
+    return;
+  }
+
+  port.onDisconnect.addListener(() => {
+    updateTabPSPanelState(false);
   });
 });

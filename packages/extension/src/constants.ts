@@ -15,3 +15,4 @@
  */
 export const ALLOWED_NUMBER_OF_TABS = 1;
 export const WEBPAGE_PORT_NAME = 'psat-webpage';
+export const DEVTOOL_PORT_NAME = 'psat-devtool';
