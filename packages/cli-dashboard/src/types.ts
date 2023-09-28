@@ -14,6 +14,22 @@
  * limitations under the License.
  */
 
-export type CookieData = any;
-
-export type TechnologyData = any;
+export type CookieJsonDataType = {
+  name: string;
+  value: string;
+  domain: string;
+  partitionKey: string;
+  path: string;
+  expires: string;
+  httpOnly: boolean;
+  secure: boolean;
+  sameSite: string;
+  platform: string;
+  category: string;
+  description: string;
+  isFirstParty: string;
+  pageUrl: string;
+  frameUrl: string;
+  isBlocked: boolean;
+  blockedReasons: string[];
+};

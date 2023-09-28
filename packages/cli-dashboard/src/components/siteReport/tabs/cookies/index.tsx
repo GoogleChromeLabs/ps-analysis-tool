@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from 'react';
+import React, { useMemo } from 'react';
 
 /**
  * Internal dependencies.
@@ -21,6 +21,7 @@ import React from 'react';
 import CookiesListing from './cookieListing';
 import { CookiesLanding } from '@cookie-analysis-tool/design-system';
 import { useContentStore } from '../../stateProviders/contentStore';
+import type { TabFrames } from '@cookie-analysis-tool/common';
 
 interface CookiesTabProps {
   selectedFrameUrl?: string | null;
@@ -28,103 +29,29 @@ interface CookiesTabProps {
 
 const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
   const { tabCookies } = useContentStore(({ state }) => ({
-    tabCookies: state.cookies,
+    tabCookies: state.tabCookies,
   }));
 
-  const tabCookies1 = Object.fromEntries(
-    tabCookies
-      .filter((cookie) => {
-        return cookie.frameUrl === selectedFrameUrl;
-      })
-      .map((cookie) => {
-        return [
-          cookie.name + cookie.domain + cookie.path,
-          {
-            parsedCookie: {
-              name: cookie.name,
-              value: cookie.value,
-              domain: cookie.domain,
-              path: cookie.path,
-              expires: cookie.expires,
-              httponly: cookie.httpOnly,
-              secure: cookie.secure,
-              samesite: cookie.sameSite,
-            },
-            analytics: {
-              platform: cookie.platform,
-              category:
-                cookie.category === 'Unknown Category'
-                  ? 'Uncategorized'
-                  : cookie.category,
-              description: cookie.description,
-            },
-            url: cookie.pageUrl,
-            headerType: 'response',
-            isFirstParty: cookie.isFirstParty === 'Yes' ? true : false,
-            frameIdList: [],
-            isCookieAccepted: !cookie.isBlocked,
-          },
-        ];
-      })
+  const tabFrames = useMemo<TabFrames>(
+    () =>
+      Object.values(tabCookies).reduce((acc, cookie) => {
+        if (cookie.frameUrl?.includes('http')) {
+          acc[cookie.frameUrl] = {} as TabFrames[string];
+        }
+        return acc;
+      }, {} as TabFrames),
+    [tabCookies]
   );
-
-  const tabCookies2 = Object.fromEntries(
-    tabCookies.map((cookie) => {
-      return [
-        cookie.name + cookie.domain + cookie.path,
-        {
-          parsedCookie: {
-            name: cookie.name,
-            value: cookie.value,
-            domain: cookie.domain,
-            path: cookie.path,
-            expires: cookie.expires,
-            httponly: cookie.httpOnly,
-            secure: cookie.secure,
-            samesite: cookie.sameSite,
-          },
-          analytics: {
-            platform: cookie.platform,
-            category:
-              cookie.category === 'Unknown Category'
-                ? 'Uncategorized'
-                : cookie.category,
-            description: cookie.description,
-          },
-          url: cookie.pageUrl,
-          headerType: 'response',
-          isFirstParty: cookie.isFirstParty === 'Yes' ? true : false,
-          frameIdList: [],
-          isCookieAccepted: !cookie.isBlocked,
-        },
-      ];
-    })
-  );
-
-  const frameUrlSet = new Set<string>();
-
-  tabCookies.forEach((cookie) => {
-    frameUrlSet.add(cookie.frameUrl);
-  });
-
-  const tabFrames = {};
-
-  Array.from(frameUrlSet).forEach((frameUrl) => {
-    tabFrames[frameUrl] = [];
-  });
 
   return (
     <div className="w-full h-full flex items-center justify-center">
       {selectedFrameUrl ? (
-        <CookiesListing
-          selectedFrameUrl={selectedFrameUrl}
-          cookies={Object.values(tabCookies1)}
-        />
+        <CookiesListing selectedFrameUrl={selectedFrameUrl} />
       ) : (
         <CookiesLanding
-          tabCookies={tabCookies2}
+          tabCookies={tabCookies}
           tabFrames={tabFrames}
-          tabUrl={tabCookies[0]?.pageUrl}
+          tabUrl={Object.values(tabCookies)[0]?.url}
         />
       )}
     </div>

@@ -37,7 +37,11 @@ interface AffectedCookiesProps {
 }
 
 const AffectedCookies = ({ selectedFrameUrl }: AffectedCookiesProps) => {
-  const cookies = useContentStore(({ state }) => state.cookies || []);
+  const { tabCookies } = useContentStore(({ state }) => ({
+    tabCookies: Object.values(state.tabCookies).filter(
+      (cookie) => !cookie.isCookieSet
+    ),
+  }));
   const [selectedFrameCookie, setSelectedFrameCookie] = useState<{
     [frame: string]: CookieTableData | null;
   } | null>(null);
@@ -116,39 +120,6 @@ const AffectedCookies = ({ selectedFrameUrl }: AffectedCookiesProps) => {
     []
   );
 
-  const tabCookies1 = Object.fromEntries(
-    cookies.map((cookie) => {
-      return [
-        cookie.name + cookie.domain + cookie.path,
-        {
-          parsedCookie: {
-            name: cookie.name,
-            value: cookie.value,
-            domain: cookie.domain,
-            path: cookie.path,
-            expires: cookie.expires,
-            httponly: cookie.httpOnly,
-            secure: cookie.secure,
-            samesite: cookie.sameSite,
-          },
-          analytics: {
-            platform: cookie.platform,
-            category:
-              cookie.category === 'Unknown Category'
-                ? 'Uncategorized'
-                : cookie.category,
-            description: cookie.description,
-          },
-          url: cookie.pageUrl,
-          headerType: 'response',
-          isFirstParty: cookie.isFirstParty,
-          frameIdList: [],
-          isCookieAccepted: !cookie.isBlocked,
-        },
-      ];
-    })
-  );
-
   return (
     <div className="w-full h-full flex flex-col">
       <div className="w-full flex-1 overflow-hidden h-full flex flex-col">
@@ -169,7 +140,7 @@ const AffectedCookies = ({ selectedFrameUrl }: AffectedCookiesProps) => {
         >
           <CookieTable
             tableColumns={tableColumns}
-            data={Object.values(tabCookies1)}
+            data={tabCookies}
             selectedFrame={selectedFrameUrl}
             selectedFrameCookie={selectedFrameCookie}
             setSelectedFrameCookie={setSelectedFrameCookie}

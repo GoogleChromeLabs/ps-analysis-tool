@@ -60,9 +60,25 @@ export type CookieData = {
 
 export type CookieTableData = CookieData & {
   isCookieSet: boolean | null;
+  frameUrl?: string;
 };
 
-export type TechnologyData = any;
+export type TechnologyData = {
+  slug: string;
+  name: string;
+  description: string;
+  confidence: number;
+  version: string | null;
+  icon: string;
+  website: string;
+  cpe: string;
+  categories: {
+    id: number;
+    name: string;
+    slug: string;
+  }[];
+  rootPath: boolean;
+};
 
 export interface TabCookies {
   [key: string]: CookieTableData;

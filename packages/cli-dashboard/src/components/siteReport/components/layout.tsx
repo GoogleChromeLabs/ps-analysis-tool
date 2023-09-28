@@ -27,12 +27,15 @@ import { TABS } from '../tabs';
 import Sidebar from './sidebar';
 
 const Layout = () => {
-  const cookies = useContentStore(({ state }) => state.cookies);
-
-  const frameUrlSet = new Set<string>();
-  cookies.forEach(({ frameUrl }) => {
-    frameUrlSet.add(frameUrl);
-  });
+  const { frameUrls } = useContentStore(({ state }) => ({
+    frameUrls: [
+      ...new Set(
+        Object.values(state.tabCookies)
+          .map((cookie) => cookie.frameUrl)
+          .filter((url) => url?.includes('http')) as string[]
+      ),
+    ],
+  }));
 
   const [selectedSidebarOptionInd, setSelectedSidebarOptionInd] =
     useState<number>(0);
@@ -62,9 +65,7 @@ const Layout = () => {
         <Sidebar
           selectedFrameUrl={selectedFrameUrl}
           setSelectedFrameUrl={setSelectedFrameUrl}
-          frameUrls={Array.from(frameUrlSet).filter((url) =>
-            url.includes('http')
-          )}
+          frameUrls={frameUrls}
           selectedIndex={selectedSidebarOptionInd}
           setIndex={setSelectedSidebarOptionInd}
         />

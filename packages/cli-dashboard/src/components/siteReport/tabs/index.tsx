@@ -51,7 +51,7 @@ export const TABS = [
   {
     display_name: 'Affected Cookies',
     component: AffectedCookiesTab,
-    id: 'addected_cookies',
+    id: 'affected_cookies',
     icons: {
       default: SiteBoundariesIcon,
       selected: SiteBoundariesIconWhite,

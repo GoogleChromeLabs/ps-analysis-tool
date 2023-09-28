@@ -16,23 +16,27 @@
 /**
  * External dependencies.
  */
-import React, { type PropsWithChildren } from 'react';
+import React, { type PropsWithChildren, useMemo } from 'react';
 import { useContextSelector, createContext } from 'use-context-selector';
 /**
  * Internal dependencies.
  */
-import type { CookieData, TechnologyData } from '../../../../types';
+import type { CookieJsonDataType } from '../../../../types';
+import type {
+  CookieTableData,
+  TechnologyData,
+} from '@cookie-analysis-tool/common';
 
 export interface ContentStore {
   state: {
-    cookies: CookieData[];
+    tabCookies: { [key: string]: CookieTableData };
     technologies: TechnologyData[] | undefined;
   };
 }
 
 const initialState: ContentStore = {
   state: {
-    cookies: [],
+    tabCookies: {},
     technologies: [],
   },
 };
@@ -40,7 +44,7 @@ const initialState: ContentStore = {
 export const Context = createContext<ContentStore>(initialState);
 
 interface ContentStoreProviderProps {
-  cookies: CookieData[];
+  cookies: CookieJsonDataType[];
   technologies?: TechnologyData[];
 }
 
@@ -49,11 +53,49 @@ export const Provider = ({
   technologies,
   children,
 }: PropsWithChildren<ContentStoreProviderProps>) => {
+  const tabCookies = useMemo<{ [key: string]: CookieTableData }>(
+    () =>
+      Object.fromEntries(
+        cookies.map((cookie) => {
+          return [
+            cookie.name + cookie.domain + cookie.path,
+            {
+              parsedCookie: {
+                name: cookie.name,
+                value: cookie.value,
+                domain: cookie.domain,
+                path: cookie.path,
+                expires: cookie.expires,
+                httponly: cookie.httpOnly,
+                secure: cookie.secure,
+                samesite: cookie.sameSite,
+              },
+              analytics: {
+                platform: cookie.platform,
+                category:
+                  cookie.category === 'Unknown Category'
+                    ? 'Uncategorized'
+                    : cookie.category,
+                description: cookie.description,
+              } as CookieTableData['analytics'],
+              url: cookie.pageUrl,
+              headerType: 'response',
+              isFirstParty: cookie.isFirstParty === 'Yes' ? true : false,
+              frameIdList: [],
+              isCookieSet: !cookie.isBlocked,
+              frameUrl: cookie.frameUrl,
+            },
+          ];
+        })
+      ),
+    [cookies]
+  );
+
   return (
     <Context.Provider
       value={{
         state: {
-          cookies,
+          tabCookies,
           technologies,
         },
       }}

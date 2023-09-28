@@ -24,10 +24,11 @@ import React, { useEffect, useMemo, useState } from 'react';
  */
 import './app.css';
 import SiteReport from './components/siteReport';
-import type { CookieData, TechnologyData } from './types';
+import type { TechnologyData } from '@cookie-analysis-tool/common';
+import type { CookieJsonDataType } from './types';
 
 const App = () => {
-  const [cookies, setCookies] = useState<CookieData[]>([]);
+  const [cookies, setCookies] = useState<CookieJsonDataType[]>([]);
   const [technologies, setTechnologies] = useState<TechnologyData[]>([]);
 
   const path = useMemo(() => {
@@ -40,8 +41,8 @@ const App = () => {
       const response = await fetch(path);
       const data = await response.json();
 
-      setCookies(data.cookies);
-      setTechnologies(data.technologies);
+      setCookies(data.cookies as CookieJsonDataType[]);
+      setTechnologies(data.technologies as TechnologyData[]);
     })();
   }, [path]);
 

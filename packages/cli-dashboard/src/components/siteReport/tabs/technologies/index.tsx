@@ -30,6 +30,7 @@ import {
   type InfoType,
 } from '@cookie-analysis-tool/design-system';
 import { useContentStore } from '../../stateProviders/contentStore';
+import type { TechnologyData } from '@cookie-analysis-tool/common';
 
 const Technologies = () => {
   const data = useContentStore(({ state }) => state.technologies || []);
@@ -45,7 +46,7 @@ const Technologies = () => {
       {
         header: 'Description',
         accessorKey: 'description',
-        cell: (info: InfoType) => info,
+        cell: (info: InfoType) => <p title={info as string}>{info}</p>,
       },
       {
         header: 'Confidence',
@@ -61,9 +62,7 @@ const Technologies = () => {
         header: 'Category',
         accessorKey: 'categories',
         cell: (info: InfoType) =>
-          (info as Array<{ id: number; slug: string; name: string }>)
-            .map((i) => i.name)
-            .join(' | '),
+          (info as TechnologyData['categories']).map((i) => i.name).join(' | '),
       },
     ],
     []

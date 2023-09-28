@@ -19,16 +19,26 @@
  */
 import React, { useState } from 'react';
 import { Resizable } from 're-resizable';
+
+/**
+ * Internal dependencies
+ */
 import { CookieDetails } from '@cookie-analysis-tool/design-system';
 import type { CookieTableData } from '@cookie-analysis-tool/common';
 import CookieTableContainer from './cookieTableContainer';
+import { useContentStore } from '../../../stateProviders/contentStore';
 
 interface CookieListingProps {
   selectedFrameUrl: string;
-  cookies: CookieTableData[];
 }
 
-const CookieListing = ({ selectedFrameUrl, cookies }: CookieListingProps) => {
+const CookieListing = ({ selectedFrameUrl }: CookieListingProps) => {
+  const { tabCookies } = useContentStore(({ state }) => ({
+    tabCookies: Object.values(state.tabCookies).filter(
+      (cookie) => selectedFrameUrl === cookie.frameUrl
+    ),
+  }));
+
   const [selectedFrameCookie, setSelectedFrameCookie] = useState<{
     [frame: string]: CookieTableData | null;
   } | null>(null);
@@ -52,7 +62,7 @@ const CookieListing = ({ selectedFrameUrl, cookies }: CookieListingProps) => {
           className="h-full flex"
         >
           <CookieTableContainer
-            cookies={cookies}
+            cookies={tabCookies}
             selectedFrame={selectedFrameUrl}
             selectedFrameCookie={selectedFrameCookie}
             setSelectedFrameCookie={setSelectedFrameCookie}

@@ -120,7 +120,7 @@ const CookieTableContainer = ({
       },
       {
         header: 'Cookie Accepted',
-        accessorKey: 'isCookieAccepted',
+        accessorKey: 'isCookieSet',
         cell: (info: InfoType) => (
           <p className="flex justify-center items-center">
             {info ? <span className="font-serif">✓</span> : ''}
