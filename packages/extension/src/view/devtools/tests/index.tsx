@@ -167,7 +167,7 @@ describe('Index', () => {
                         isFirstParty: ['Third Party'],
                       },
                     },
-                    selectedFrame: 'https://edition.cnn.com',
+                    selectedFrame: null,
                   },
                   tabToRead: '40245632',
                 },
