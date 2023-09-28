@@ -18,13 +18,13 @@
  * External dependencies.
  */
 import { useState, useCallback, useMemo } from 'react';
+import { PreferenceDataValues } from '@cookie-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import getValueByKey from '../utils/getValueByKey';
 import type { TableData } from '../useTable';
-import { PreferenceDataValues } from '@cookie-analysis-tool/common';
 
 export type DefaultOptions = {
   defaultSortKey?: string;
@@ -74,22 +74,17 @@ const useColumnSorting = (
     ) => {
       if (newSortKey === sortKey) {
         setAscending(!ascending);
-        preferenceUpdater('columnSorting', () => [
-          {
-            defaultSortKey: newSortKey,
-            defaultSortOrder: ascending ? 'desc' : 'asc',
-          },
-        ]);
       } else {
         _setSortKey(newSortKey);
         setAscending(true);
-        preferenceUpdater('', () => [
-          {
-            defaultSortKey: newSortKey,
-            defaultSortOrder: 'asc',
-          },
-        ]);
       }
+      preferenceUpdater('columnSorting', () => [
+        {
+          defaultSortKey: newSortKey,
+          defaultSortOrder:
+            newSortKey === sortKey ? (ascending ? 'desc' : 'asc') : 'asc',
+        },
+      ]);
     },
     [ascending, sortKey]
   );

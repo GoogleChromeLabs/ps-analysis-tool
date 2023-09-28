@@ -130,13 +130,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       columnSizing: preferences?.columnSizing || {},
       selectedColumns: preferences?.selectedColumns || {},
     };
-  }, [
-    preferences?.columnSizing,
-    preferences?.columnSorting,
-    preferences?.selectedColumns,
-    selectedFrameFilters,
-    selectedFrame,
-  ]);
+  }, [preferences, selectedFrameFilters, selectedFrame]);
 
   const saveToLocalStorage = useCallback(async () => {
     try {
