@@ -16,26 +16,19 @@
 /**
  * Internal dependencies.
  */
-import { updateTabPSPanelState } from '../../utils/psPanelState';
+import { CookieStore } from '../localStore';
+import { getCurrentTabId } from './getCurrentTabId';
 
-const callback = (panel: {
-  onShown: { addListener: (arg0: () => void) => void };
-  onHidden: { addListener: (arg0: () => void) => void };
-}) => {
-  // Fires when the user switches to the panel.
-  panel.onShown.addListener(async () => {
-    await updateTabPSPanelState(true);
-  });
+export const updateTabPSPanelState = async (status: boolean) => {
+  const tabId = await getCurrentTabId();
 
-  // Only works when devtool tab is switched, not when it is closed.
-  panel.onHidden.addListener(async () => {
-    await updateTabPSPanelState(false);
-  });
+  if (tabId) {
+    await CookieStore.updateTabPSPanelState(tabId, status);
+  }
 };
 
-chrome.devtools.panels.create(
-  'Privacy Sandbox',
-  'icons/icon.svg',
-  'devtools/index.html',
-  callback
-);
+export const getTabPSPanelState = async () => {
+  const tabId = await getCurrentTabId();
+
+  return tabId ? CookieStore.getTabPSPanelState(tabId) : false;
+};

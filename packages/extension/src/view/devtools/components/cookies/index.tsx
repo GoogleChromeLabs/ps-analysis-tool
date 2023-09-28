@@ -29,6 +29,7 @@ import {
   CookiesLanding,
   ProgressBar,
 } from '@cookie-analysis-tool/design-system';
+import { updateTabPSPanelState } from '../../../../utils/psPanelState';
 
 const Cookies = () => {
   const {
@@ -107,7 +108,13 @@ const Cookies = () => {
             open. Please close and reopen the devtools panel.
           </p>
         ) : (
-          <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
+          <Button
+            onClick={async () => {
+              changeListeningToThisTab();
+              await updateTabPSPanelState(true);
+            }}
+            text="Analyze this tab"
+          />
         )}
       </div>
     </div>

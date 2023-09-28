@@ -96,6 +96,32 @@ const CookieStore = {
   },
 
   /**
+   * Update the isDevToolPSPanelOpen for the tab.
+   * @param {string} tabId The active tab id.
+   * @param {boolean} status When the privacy sandbox panel is open.
+   */
+  async updateTabPSPanelState(tabId: string, status: boolean) {
+    const storage = await chrome.storage.local.get();
+
+    if (storage[tabId]) {
+      storage[tabId].isDevToolPSPanelOpen = status;
+    }
+
+    await chrome.storage.local.set(storage);
+  },
+
+  /**
+   * Get getTabPSPanelState status for the tab.
+   * @param {string} tabId The active tab id.
+   * @returns {Promise<boolean>}
+   */
+  async getTabPSPanelState(tabId: string): Promise<boolean> {
+    const storage = await chrome.storage.local.get();
+
+    return storage[tabId] ? storage[tabId].isDevToolPSPanelOpen : false;
+  },
+
+  /**
    * Clear cookie data
    * @param {string} tabId The active tab id.
    */
