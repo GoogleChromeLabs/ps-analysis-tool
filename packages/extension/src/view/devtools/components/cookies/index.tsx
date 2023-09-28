@@ -29,7 +29,10 @@ import {
   CookiesLanding,
   ProgressBar,
 } from '@cookie-analysis-tool/design-system';
-import { updateTabPSPanelState } from '../../../../utils/psPanelState';
+import {
+  updateTabPSPanelState,
+  getTabPSPanelState,
+} from '../../../../utils/psPanelState';
 
 const Cookies = () => {
   const {
@@ -76,6 +79,13 @@ const Cookies = () => {
       allowedNumberOfTabs === 'single') ||
     (allowedNumberOfTabs && allowedNumberOfTabs === 'unlimited')
   ) {
+    // When PS panel is open and analyze button is clicked from popup.
+    getTabPSPanelState().then(async (state) => {
+      if (!state) {
+        await updateTabPSPanelState(true);
+      }
+    });
+
     return (
       <div
         className={`h-full ${selectedFrame ? '' : 'flex items-center'}`}
@@ -108,13 +118,7 @@ const Cookies = () => {
             open. Please close and reopen the devtools panel.
           </p>
         ) : (
-          <Button
-            onClick={async () => {
-              await changeListeningToThisTab();
-              await updateTabPSPanelState(true);
-            }}
-            text="Analyze this tab"
-          />
+          <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
         )}
       </div>
     </div>
