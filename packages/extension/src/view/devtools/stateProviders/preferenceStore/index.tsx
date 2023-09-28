@@ -89,7 +89,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     })
   );
 
-  const { selectedFrame, setSelectedFrame, tabFrames } = useCookieStore(
+  const { selectedFrame, setSelectedFrame } = useCookieStore(
     ({ state, actions }) => ({
       selectedFrame: state?.selectedFrame,
       setSelectedFrame: actions?.setSelectedFrame,
@@ -151,13 +151,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         )[currentTabId];
 
         setPreferences(storedTabData?.preferences);
-        if (
-          storedTabData?.preferences?.selectedFrame &&
-          tabFrames &&
-          Object.keys(tabFrames).includes(
-            storedTabData?.preferences?.selectedFrame
-          )
-        ) {
+        if (storedTabData?.preferences?.selectedFrame) {
           setSelectedFrame(storedTabData?.preferences?.selectedFrame);
 
           if (
@@ -188,12 +182,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         fetchedInitialValueRef.current = true;
       }
     })();
-  }, [
-    getPreviousPreferences,
-    setSelectedFrame,
-    setSelectedFrameFilters,
-    tabFrames,
-  ]);
+  }, [getPreviousPreferences, setSelectedFrame, setSelectedFrameFilters]);
 
   const value: PreferenceStore = useMemo(
     () => ({
