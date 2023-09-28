@@ -73,13 +73,7 @@ const HeaderCell = ({
   }, [resizeHandler]);
 
   const handleOnClick = useCallback(() => {
-    updatePreference('columnSorting', () => [
-      {
-        defaultSortKey: cell.accessorKey,
-        defaultSortOrder: table.sortKey === cell.accessorKey ? 'desc' : 'asc',
-      },
-    ]);
-    table.setSortKey(cell.accessorKey);
+    table.setSortKey(cell.accessorKey, updatePreference);
   }, [cell.accessorKey, table, updatePreference]);
 
   const columnRef = useRef<HTMLTableHeaderCellElement>(null);
