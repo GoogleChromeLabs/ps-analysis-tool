@@ -18,6 +18,7 @@
  * External dependencies
  */
 import React, { useEffect, useMemo, useState } from 'react';
+import { Resizable } from 're-resizable';
 
 /**
  * Internal dependencies
@@ -26,14 +27,27 @@ import './app.css';
 import SiteReport from './components/siteReport';
 import type { TechnologyData } from '@cookie-analysis-tool/common';
 import type { CookieJsonDataType } from './types';
+import SiteSelection from './components/siteReport/components/siteSelection';
+
+enum DisplayType {
+  SITEMAP,
+  SITE,
+}
 
 const App = () => {
   const [cookies, setCookies] = useState<CookieJsonDataType[]>([]);
   const [technologies, setTechnologies] = useState<TechnologyData[]>([]);
+  const [selectedSite, setSelectedSite] = useState<string | null>(null);
+  const [sites, setSites] = useState<string[]>([]);
 
-  const path = useMemo(() => {
+  const [type, path] = useMemo(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('path')?.substring(1) || '';
+    return [
+      urlParams.get('type') === 'sitemap'
+        ? DisplayType.SITEMAP
+        : DisplayType.SITE,
+      urlParams.get('path')?.substring(1) || '',
+    ];
   }, []);
 
   useEffect(() => {
@@ -43,6 +57,13 @@ const App = () => {
 
       setCookies(data.cookies as CookieJsonDataType[]);
       setTechnologies(data.technologies as TechnologyData[]);
+
+      const _sites = new Set<string>();
+      data.cookies.forEach((cookie: CookieJsonDataType) => {
+        _sites.add(cookie.pageUrl);
+      });
+
+      setSites(Array.from(_sites));
     })();
   }, [path]);
 
@@ -54,13 +75,36 @@ const App = () => {
     );
   }
 
-  return (
-    <div className="w-full h-screen flex">
-      <div className="flex-1 h-full">
+  if (type === DisplayType.SITEMAP) {
+    return (
+      <div className="w-full h-screen flex">
+        <Resizable
+          defaultSize={{ width: '200px', height: '100%' }}
+          minWidth={'150px'}
+          maxWidth={'98%'}
+          enable={{
+            right: true,
+          }}
+          className="h-full flex flex-col border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
+        >
+          <SiteSelection
+            sites={sites}
+            selectedSite={selectedSite}
+            setSelectedSite={setSelectedSite}
+          />
+        </Resizable>
+        <div className="flex-1 h-full">
+          <SiteReport cookies={cookies} technologies={technologies} />
+        </div>
+      </div>
+    );
+  } else {
+    return (
+      <div className="w-full h-screen flex">
         <SiteReport cookies={cookies} technologies={technologies} />
       </div>
-    </div>
-  );
+    );
+  }
 };
 
 export default App;
