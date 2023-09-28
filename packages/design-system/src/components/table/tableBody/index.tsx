@@ -46,7 +46,7 @@ const TableBody = ({
   const tableBodyRef = useRef(null);
 
   const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLTableRowElement>, index: number) => {
+    (event: React.KeyboardEvent<HTMLDivElement>, index: number) => {
       event.preventDefault();
       event.stopPropagation();
 
@@ -85,7 +85,7 @@ const TableBody = ({
   );
 
   const handleEmptyRowKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLTableRowElement>) => {
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
       event.preventDefault();
       event.stopPropagation();
 
@@ -113,7 +113,7 @@ const TableBody = ({
   );
 
   const tableRowClassName = classNames(
-    'h-5 outline-0',
+    'h-5 outline-0 flex divide-x divide-american-silver dark:divide-quartz',
     selectedKey === null &&
       (isRowFocused
         ? 'bg-gainsboro dark:bg-outer-space'
@@ -125,7 +125,7 @@ const TableBody = ({
   );
 
   return (
-    <tbody ref={tableBodyRef} className="h-full">
+    <div ref={tableBodyRef} className="h-full flex flex-col">
       {table.rows.map((row, index) => (
         <BodyRow
           key={index}
@@ -142,7 +142,7 @@ const TableBody = ({
           onKeyDown={handleKeyDown}
         />
       ))}
-      <tr
+      <div
         className={tableRowClassName}
         data-testid="empty-row"
         tabIndex={0}
@@ -152,29 +152,33 @@ const TableBody = ({
         }}
         onKeyDown={handleEmptyRowKeyDown}
       >
-        {[...Array(table.columns.length)].map((_, index) => (
-          <td
+        {table.columns.map(({ width }, index) => (
+          <div
             key={index}
-            className={`border border-y-0 border-american-silver dark:border-quartz px-1 py-px outline-0 ${
-              index === 0 ? 'pl-5' : ''
-            }`}
+            className="px-1 py-px outline-0"
+            style={{
+              width,
+            }}
           />
         ))}
-      </tr>
-      <tr
-        className="h-full outline-0"
+      </div>
+      <div
+        className="grow outline-0 flex divide-x divide-american-silver dark:divide-quartz"
         onClick={() => {
           setIsRowFocused(false);
         }}
       >
-        {[...Array(table.columns.length)].map((_, index) => (
-          <td
+        {table.columns.map(({ width }, index) => (
+          <div
             key={index}
-            className="h-full border border-y-0 border-american-silver dark:border-quartz outline-0 p-0"
+            className="px-1 py-px outline-0 h-full"
+            style={{
+              width,
+            }}
           />
         ))}
-      </tr>
-    </tbody>
+      </div>
+    </div>
   );
 };
 

@@ -52,9 +52,9 @@ const TableHeader = ({
   );
 
   return (
-    <thead onContextMenu={handleRightClick} className="sticky top-0 z-10">
+    <div onContextMenu={handleRightClick} className="sticky top-0 z-10">
       <HeaderRow table={table} setIsRowFocused={setIsRowFocused} />
-    </thead>
+    </div>
   );
 };
 

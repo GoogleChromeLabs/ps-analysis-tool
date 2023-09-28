@@ -32,25 +32,17 @@ interface HeaderRowProps {
 
 const HeaderRow = ({ table, setIsRowFocused }: HeaderRowProps) => {
   return (
-    <>
-      <tr className="bg-anti-flash-white dark:bg-charleston-green">
-        {table.columns?.map((cell, idx) => (
-          <HeaderCell
-            key={idx}
-            index={idx}
-            table={table}
-            cell={cell}
-            setIsRowFocused={setIsRowFocused}
-          />
-        ))}
-      </tr>
-      <tr>
-        <th
-          className="w-full h-px pt-0 bg-american-silver dark:bg-quartz"
-          colSpan={table.columns.length}
+    <div className="bg-anti-flash-white dark:bg-charleston-green border-b border-american-silver dark:border-quartz divide-x divide-american-silver dark:divide-quartz flex">
+      {table.columns?.map((cell, idx) => (
+        <HeaderCell
+          key={idx}
+          index={idx}
+          table={table}
+          cell={cell}
+          setIsRowFocused={setIsRowFocused}
         />
-      </tr>
-    </>
+      ))}
+    </div>
   );
 };
 

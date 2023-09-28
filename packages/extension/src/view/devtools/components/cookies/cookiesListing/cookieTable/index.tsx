@@ -180,7 +180,7 @@ const CookieTable = ({ cookies, selectedFrame }: CookieTableProps) => {
   });
 
   return (
-    <div className="w-full h-full overflow-auto text-outer-space-crayola">
+    <div className="flex-1 w-full h-full text-outer-space-crayola border-x border-american-silver dark:border-quartz">
       <Table
         table={table}
         selectedKey={
