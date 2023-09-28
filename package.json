@@ -3,8 +3,8 @@
 	"version": "0.2.0",
 	"description": "Cookie Analysis Tool and CLI for analysis and understanding of cookie usage on web pages.",
 	"scripts": {
-		"cli:dev": "npm run dev --workspace=@cookie-analysis-tool/cli",
-		"cli:build": "npm run build --workspace=@cookie-analysis-tool/cli",
+		"cli:dev": "tsc-watch --build",
+		"cli:build": "tsc --build",
 		"cli-dashboard:dev": "npm run dev --workspace=@cookie-analysis-tool/cli-dashboard",
 		"cli-dashboard:build": "npm run build --workspace=@cookie-analysis-tool/cli-dashboard",
 		"cli":"node dist/cli/index.js",
