@@ -164,6 +164,8 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
         setPreferences(storedTabData?.preferences);
         if (storedTabData?.preferences?.selectedFrame) {
+          setSelectedFrame(storedTabData?.preferences?.selectedFrame);
+
           if (
             storedTabData?.preferences?.selectedFilters &&
             Object.keys(storedTabData?.preferences?.selectedFilters).length > 0
