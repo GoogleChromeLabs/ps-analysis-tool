@@ -100,10 +100,11 @@ describe('Index', () => {
     globalThis.chrome = SinonChrome as unknown as typeof chrome;
     globalThis.chrome = {
       ...SinonChrome,
+      //@ts-ignore
       webNavigation: {
         //@ts-ignore
         getAllFrames: () => {
-          return [
+          return Promise.resolve([
             {
               processId: 1,
               frameId: 0,
@@ -134,7 +135,7 @@ describe('Index', () => {
               frameType: 'sub_frame',
               parentFrameId: 0,
             },
-          ];
+          ]);
         },
       },
       storage: {
@@ -277,6 +278,7 @@ describe('Index', () => {
         </ExternalStoreProvider>
       )
     );
+    screen.debug();
     expect(
       await screen.findByTestId('privacySandbox-tab-heading-wrapper')
     ).toHaveClass('bg-royal-blue');
