@@ -74,9 +74,9 @@ interface useTableProps {
   tableColumns: TableColumn[];
   data: TableData[];
   options?: {
-    columnSizing: Record<string, number>;
-    columnSorting: DefaultOptions;
-    selectedColumns: Record<string, boolean>;
+    columnSizing?: Record<string, number>;
+    columnSorting?: DefaultOptions;
+    selectedColumns?: Record<string, boolean>;
   };
 }
 

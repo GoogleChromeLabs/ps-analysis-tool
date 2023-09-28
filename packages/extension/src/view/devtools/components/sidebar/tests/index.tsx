@@ -146,6 +146,7 @@ const goToCookiesMenu = () => {
   });
   act(() => {
     userEvent.keyboard('{ArrowRight}');
+    userEvent.keyboard('{ArrowDown}');
   });
 };
 const goToFirstFrame = () => {
@@ -157,7 +158,6 @@ const goToFirstFrame = () => {
   });
   act(() => {
     userEvent.keyboard('{ArrowRight}');
-    userEvent.keyboard('{ArrowDown}');
   });
 };
 
@@ -837,7 +837,9 @@ describe('Sidebar', () => {
     const sidebarRender = render(
       <Sidebar selectedIndex={0} setIndex={() => undefined} />
     );
+
     goToFirstFrame();
+
     mockUseCookieStore.mockReturnValueOnce({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: 'https://edition.cnn.com/',

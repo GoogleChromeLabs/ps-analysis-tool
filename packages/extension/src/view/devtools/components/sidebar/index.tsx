@@ -60,8 +60,16 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
   useEffect(() => {
     if (selectedFrame && accordionState && !accordionState['cookies']) {
       setAccordionState((prevState) => ({ ...prevState, cookies: true }));
+      setSelectedAccordionChild('cookies');
+      setIndex(1);
     }
-  }, [selectedFrame, accordionState]);
+  }, [selectedFrame, accordionState, setIndex]);
+
+  useEffect(() => {
+    if (!isCurrentTabBeingListenedTo) {
+      setAccordionState((prevState) => ({ ...prevState, cookies: false }));
+    }
+  }, [isCurrentTabBeingListenedTo]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -172,22 +180,6 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
       setIndex,
     ]
   );
-  useEffect(() => {
-    if (!isCurrentTabBeingListenedTo) {
-      setAccordionState((prevState) => ({ ...prevState, cookies: false }));
-    }
-  }, [isCurrentTabBeingListenedTo]);
-
-  useEffect(() => {
-    if (selectedFrame) {
-      setAccordionState((prevState) => ({
-        ...prevState,
-        cookies: true,
-      }));
-      setSelectedAccordionChild('cookies');
-      setIndex(1);
-    }
-  }, [isCurrentTabBeingListenedTo, selectedFrame, setIndex]);
 
   const onAccordionHeaderClick = (tabIdToBeSet: string, index: number) => {
     mainMenuTabSelector(index);
@@ -211,7 +203,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
   const onAccordionChildClick = useCallback(
     (tabIdToBeSet: string, currentIndex: number, key?: string) => {
       setIsTabFocused(true);
-      if (key) {
+      if (key && key.startsWith('http')) {
         setSelectedFrame(key);
       } else {
         setSelectedFrame(null);

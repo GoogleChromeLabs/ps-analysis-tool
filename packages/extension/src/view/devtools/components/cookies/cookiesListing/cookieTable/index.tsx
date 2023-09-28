@@ -169,27 +169,6 @@ const CookieTable = ({ cookies, selectedFrame }: CookieTableProps) => {
     []
   );
 
-  // const table = useReactTable({
-  //   data: columnSorting && columnSorting?.length > 0 ? cookies : data,
-  //   columns,
-  //   enableColumnResizing: true,
-  //   enableSorting:
-  //     columnSorting && columnSorting?.length > 0 ? true : enableSorting,
-  //   columnResizeMode: 'onChange',
-  //   getCoreRowModel: getCoreRowModel(),
-  //   getSortedRowModel: getSortedRowModel(),
-  //   initialState: {
-  //     sorting: columnSorting && columnSorting?.length > 0 ? columnSorting : [],
-  //     columnVisibility:
-  //       selectedColumns && Object.keys(selectedColumns).length > 0
-  //         ? selectedColumns
-  //         : {},
-  //     columnSizing:
-  //       columnSizing && Object.keys(columnSizing).length > 0
-  //         ? columnSizing
-  //         : {},
-  //   },
-  // });
   const onRowClick = useCallback(
     (cookieData: CookieTableData | null) => {
       setSelectedFrameCookie({
@@ -211,13 +190,15 @@ const CookieTable = ({ cookies, selectedFrame }: CookieTableProps) => {
       columnSizing:
         columnSizing && Object.keys(columnSizing).length > 0
           ? columnSizing
-          : {},
+          : undefined,
       columnSorting:
-        columnSorting && columnSorting.length > 0 ? columnSorting[0] : {},
+        columnSorting && columnSorting.length > 0
+          ? columnSorting[0]
+          : undefined,
       selectedColumns:
         selectedColumns && Object.keys(selectedColumns).length > 0
           ? selectedColumns
-          : {},
+          : undefined,
     },
   });
 
