@@ -21,13 +21,15 @@ import { WEBPAGE_PORT_NAME } from '../constants';
 import './style.css';
 
 let port: chrome.runtime.Port | null = null;
+let isDevToolOpen = false;
 
 const connectPort = () => {
+  // Content script has to open the connection, because it doesn't listen to chrome.runtime.onConnect.
   port = chrome.runtime.connect(chrome.runtime.id, {
     name: WEBPAGE_PORT_NAME,
   });
 
-  port.onMessage.addListener((response) => {
+  const onMessage = (response) => {
     if (response.isInspecting) {
       removeHoverEventListeners(); // To avoid duplicate listners.
       addHoverEventListeners();
@@ -41,9 +43,12 @@ const connectPort = () => {
 
     // eslint-disable-next-line no-console
     console.log(response);
-  });
+  };
+
+  port.onMessage.addListener(onMessage);
 
   port.onDisconnect.addListener(() => {
+    port?.onMessage.removeListener(onMessage);
     port = null;
     // eslint-disable-next-line no-console
     console.log(' Webpage port disconnected!');
@@ -53,12 +58,28 @@ const connectPort = () => {
 const onStorageChange = (changes: {
   [key: string]: chrome.storage.StorageChange;
 }) => {
-  const newDevToolState = changes.devToolState?.newValue;
+  const tabIds = Object.keys(changes);
 
-  if (newDevToolState === 'Ready!' && port === null) {
-    // eslint-disable-next-line no-console
-    console.log('Connection Attempt!');
-    connectPort();
+  if (!tabIds.length) {
+    return;
+  }
+
+  const tabId = tabIds[0];
+
+  const value = changes[tabId]?.newValue;
+
+  if (!value || !value.hasOwnProperty('isDevToolPSPanelOpen')) {
+    return;
+  }
+
+  if (isDevToolOpen !== value.isDevToolPSPanelOpen) {
+    isDevToolOpen = value.isDevToolPSPanelOpen;
+
+    if (isDevToolOpen) {
+      connectPort();
+    } else if (port) {
+      port.disconnect();
+    }
   }
 };
 
@@ -109,9 +130,6 @@ const removeFrameHighlight = (): void => {
   removeHoverEventListeners();
   removeAllPopovers();
 };
-
-// Atempt the connection to devtools
-connectPort();
 
 chrome.storage.onChanged.addListener(onStorageChange);
 
