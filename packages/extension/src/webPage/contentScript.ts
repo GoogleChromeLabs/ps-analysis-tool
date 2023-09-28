@@ -68,7 +68,10 @@ const onStorageChange = (changes: {
 
   const value = changes[tabId]?.newValue;
 
-  if (!value || !value.hasOwnProperty('isDevToolPSPanelOpen')) {
+  if (
+    !value ||
+    !Object.prototype.hasOwnProperty.call(value, 'isDevToolPSPanelOpen')
+  ) {
     return;
   }
 
@@ -111,7 +114,13 @@ const handleHoverEvent = (event: MouseEvent): void => {
     if (port) {
       // eslint-disable-next-line no-console
       console.log(payload, 'payload');
-      port.postMessage(payload);
+
+      try {
+        port.postMessage(payload);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log('Webpage port disconnected, probably due to inactivity');
+      }
     }
   }
 };
