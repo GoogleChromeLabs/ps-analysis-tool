@@ -18,6 +18,7 @@
  */
 import { findAndAddFrameOverlay, removeAllPopovers } from './addFrameOverlay';
 import { WEBPAGE_PORT_NAME } from '../constants';
+import type { ResponseType } from './types';
 import './style.css';
 
 let port: chrome.runtime.Port | null = null;
@@ -29,7 +30,7 @@ const connectPort = () => {
     name: WEBPAGE_PORT_NAME,
   });
 
-  const onMessage = (response) => {
+  const onMessage = (response: ResponseType) => {
     if (response.isInspecting) {
       removeHoverEventListeners(); // To avoid duplicate listners.
       addHoverEventListeners();
@@ -42,35 +43,34 @@ const connectPort = () => {
     }
   };
 
-  port.onMessage.addListener(onMessage);
-
-  port.onDisconnect.addListener(() => {
+  const onDisconnect = () => {
     port?.onMessage.removeListener(onMessage);
     port = null;
     // eslint-disable-next-line no-console
     console.log(' Webpage port disconnected!');
-  });
+  };
+
+  port.onMessage.addListener(onMessage);
+  port.onDisconnect.addListener(onDisconnect);
 };
 
 const onStorageChange = (changes: {
   [key: string]: chrome.storage.StorageChange;
 }) => {
-  const tabIds = Object.keys(changes);
+  const tabId = Object.keys(changes).find((key) => {
+    const value = changes[key]?.newValue;
+    const hasStatusKey = Object.prototype.hasOwnProperty.call(
+      value,
+      'isDevToolPSPanelOpen'
+    );
+    return value && hasStatusKey;
+  });
 
-  if (!tabIds.length) {
+  if (!tabId) {
     return;
   }
 
-  const tabId = tabIds[0];
-
-  const value = changes[tabId]?.newValue;
-
-  if (
-    !value ||
-    !Object.prototype.hasOwnProperty.call(value, 'isDevToolPSPanelOpen')
-  ) {
-    return;
-  }
+  const value = changes[tabId].newValue;
 
   if (isDevToolOpen !== value.isDevToolPSPanelOpen) {
     isDevToolOpen = value.isDevToolPSPanelOpen;
@@ -84,36 +84,43 @@ const onStorageChange = (changes: {
 };
 
 const handleHoverEvent = (event: MouseEvent): void => {
-  if ((event.target as HTMLElement).tagName === 'IFRAME') {
-    const frame = event.target as HTMLIFrameElement;
+  const target = event.target as HTMLElement;
 
-    if (!frame.getAttribute('src')) {
-      return;
-    }
+  if (target.tagName !== 'IFRAME') {
+    return;
+  }
 
-    let url: URL;
+  const frame = target as HTMLIFrameElement;
+  const srcAttribute = frame.getAttribute('src');
 
-    try {
-      url = new URL(frame.getAttribute('src') || '');
-    } catch (err) {
-      return;
-    }
+  if (!srcAttribute) {
+    return;
+  }
 
-    const payload = {
-      hover: event?.type === 'mouseover',
-      attributes: {
-        src: url.origin,
-      },
-    };
+  let url: URL;
 
-    if (port) {
-      try {
-        port.postMessage(payload);
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.log('Webpage port disconnected, probably due to inactivity');
-      }
-    }
+  try {
+    url = new URL(srcAttribute);
+  } catch (err) {
+    return;
+  }
+
+  const payload = {
+    hover: event?.type === 'mouseover',
+    attributes: {
+      src: url.origin,
+    },
+  };
+
+  if (!port) {
+    return;
+  }
+
+  try {
+    port.postMessage(payload);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log('Webpage port disconnected, probably due to inactivity');
   }
 };
 

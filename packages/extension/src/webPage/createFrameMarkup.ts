@@ -18,6 +18,7 @@
  */
 import getFrameAttributes from './getFrameAttributes';
 import { OVERLAY_CLASS, INFOBOX_CLASS } from './constants';
+import type { ResponseType } from './types';
 
 export const createFrameOverlay = (frame: HTMLElement) => {
   const {
@@ -73,7 +74,7 @@ const createInfoLine = (label: string, value: string): HTMLParagraphElement => {
 
 export const createIframeInfoBlock = (
   frame: HTMLIFrameElement | HTMLElement,
-  data
+  data: ResponseType
 ) => {
   const isMainFrame = document.location.origin === data.selectedFrame;
   let isHidden = false;
@@ -120,10 +121,8 @@ export const createIframeInfoBlock = (
   const info: Record<string, string> = {
     Type: 'iframe' + (isHidden ? ' (Hidden Frame)' : ''),
     Origin: `<a href="${origin}">${origin}</a>`,
-    'First Party Cookies':
-      0 === data?.firstPartyCookies ? '0' : data?.firstPartyCookies,
-    'Third Party Cookies':
-      0 === data?.thirdPartyCookies ? '0' : data?.thirdPartyCookies,
+    'First Party Cookies': String(data?.firstPartyCookies || '0'),
+    'Third Party Cookies': String(data?.thirdPartyCookies || '0'),
     'Allowed features': attributes.allow || ' ',
   };
 

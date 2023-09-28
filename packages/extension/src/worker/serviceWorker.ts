@@ -299,12 +299,11 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   });
 });
 
+// Since we do not have a reliable way of knowing if the DevTool was closed.
 chrome.runtime.onConnect.addListener((port) => {
-  if (port.name !== DEVTOOL_PORT_NAME) {
-    return;
+  if (port.name === DEVTOOL_PORT_NAME) {
+    port.onDisconnect.addListener(() => {
+      updateTabPSPanelState(false);
+    });
   }
-
-  port.onDisconnect.addListener(() => {
-    updateTabPSPanelState(false);
-  });
 });

@@ -18,26 +18,21 @@
  */
 import { createFrameOverlay, createIframeInfoBlock } from './createFrameMarkup';
 import { OVERLAY_CLASS, INFOBOX_CLASS } from './constants';
-
-interface Response {
-  selectedFrame: string;
-  firstPartyCookies: number;
-  thirdPartyCookies: number;
-}
+import type { ResponseType } from './types';
 
 export const removeAllPopovers = () => {
   const existingPopovers = Array.from(
     document.querySelectorAll('.' + OVERLAY_CLASS + ', .' + INFOBOX_CLASS)
   );
 
-  existingPopovers.forEach((element) => {
-    element.parentNode.removeChild(element);
+  existingPopovers.forEach((element: Element) => {
+    element.parentNode?.removeChild(element);
   });
 };
 
 export const addFrameOverlay = (
   Frame: HTMLIFrameElement | HTMLElement,
-  data
+  data: ResponseType
 ): boolean => {
   const overlay = createFrameOverlay(Frame);
   const frameInfoBox = createIframeInfoBlock(Frame, data);
@@ -98,7 +93,7 @@ export const addFrameOverlay = (
   return true;
 };
 
-export const findAndAddFrameOverlay = (response: Response) => {
+export const findAndAddFrameOverlay = (response: ResponseType) => {
   if (response.selectedFrame === document.location.origin) {
     addFrameOverlay(document.body, response);
     return;
@@ -109,17 +104,15 @@ export const findAndAddFrameOverlay = (response: Response) => {
 
   for (const iframe of iframes) {
     const src = iframe.getAttribute('src') || '';
-    // eslint-disable-next-line no-console
 
     if (!src) {
       return;
     }
 
     const srcHost = new URL(src).host.replace('www.', ''); // @todo Not the right way.
-    const selectedFrameHost = new URL(response.selectedFrame).host.replace(
-      'www.',
-      ''
-    );
+    const selectedFrameHost = new URL(
+      response?.selectedFrame || ''
+    ).host.replace('www.', '');
 
     // @todo Very loosley checked for initial POC, needs more work.
     if (srcHost === selectedFrameHost) {
