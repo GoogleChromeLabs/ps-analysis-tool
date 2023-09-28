@@ -110,7 +110,7 @@ const Cookies = () => {
         ) : (
           <Button
             onClick={async () => {
-              changeListeningToThisTab();
+              await changeListeningToThisTab();
               await updateTabPSPanelState(true);
             }}
             text="Analyze this tab"
