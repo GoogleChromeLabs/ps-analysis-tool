@@ -40,6 +40,9 @@ import useContextSelector from '../../../../utils/useContextSelector';
 
 export interface filterManagementStore {
   state: {
+    selectedFrameFilters: {
+      [frameKey: string]: { selectedFilters: SelectedFilters };
+    };
     selectedFilters: SelectedFilters;
     filters: Filter[];
     filteredCookies: CookieTableData[];
@@ -61,6 +64,7 @@ export interface filterManagementStore {
 
 const initialState: filterManagementStore = {
   state: {
+    selectedFrameFilters: {},
     selectedFilters: {},
     filters: [],
     filteredCookies: [],
@@ -163,6 +167,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const value: filterManagementStore = useMemo(
     () => ({
       state: {
+        selectedFrameFilters,
         selectedFilters: selectedFrame
           ? selectedFrameFilters[selectedFrame]?.selectedFilters || {}
           : {},

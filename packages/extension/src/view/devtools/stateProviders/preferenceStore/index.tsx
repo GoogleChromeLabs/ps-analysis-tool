@@ -82,12 +82,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
     []
   );
 
-  const { selectedFilters, setSelectedFrameFilters } = useFilterManagementStore(
-    ({ state, actions }) => ({
-      selectedFilters: state?.selectedFilters,
+  const { selectedFrameFilters, setSelectedFrameFilters } =
+    useFilterManagementStore(({ state, actions }) => ({
+      selectedFrameFilters: state?.selectedFrameFilters,
       setSelectedFrameFilters: actions?.setSelectedFrameFilters,
-    })
-  );
+    }));
 
   const { selectedFrame, setSelectedFrame } = useCookieStore(
     ({ state, actions }) => ({
@@ -106,10 +105,22 @@ export const Provider = ({ children }: PropsWithChildren) => {
   }, []);
 
   const memoisedPreferences = useMemo(() => {
-    const processedFilters: Record<string, Array<string>> = {};
-    for (const filter in selectedFilters) {
-      if (selectedFilters[filter] instanceof Set) {
-        processedFilters[filter] = Array.from(selectedFilters[filter]);
+    const processedFilters: {
+      [frameKey: string]: { [key: string]: Array<string> };
+    } = {};
+    // eslint-disable-next-line guard-for-in
+    for (const frame in selectedFrameFilters) {
+      for (const filter in selectedFrameFilters[frame]?.selectedFilters) {
+        if (
+          selectedFrameFilters[frame]?.selectedFilters[filter] instanceof Set
+        ) {
+          processedFilters[frame] = {
+            ...processedFilters[frame],
+            [filter]: Array.from(
+              selectedFrameFilters[frame]?.selectedFilters[filter]
+            ),
+          };
+        }
       }
     }
     return {
@@ -123,9 +134,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
     preferences?.columnSizing,
     preferences?.columnSorting,
     preferences?.selectedColumns,
-    selectedFilters,
+    selectedFrameFilters,
     selectedFrame,
   ]);
+
   const saveToLocalStorage = useCallback(async () => {
     if (fetchedInitialValueRef.current) {
       const currentTabId = await getCurrentTabId();
@@ -152,31 +164,31 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
         setPreferences(storedTabData?.preferences);
         if (storedTabData?.preferences?.selectedFrame) {
-          setSelectedFrame(storedTabData?.preferences?.selectedFrame);
-
           if (
             storedTabData?.preferences?.selectedFilters &&
             Object.keys(storedTabData?.preferences?.selectedFilters).length > 0
           ) {
-            const newFiltersGenerator = (prevState: object) => {
-              const newValue: SelectedFilters = { ...prevState };
-              const setFilters = storedTabData?.preferences?.selectedFilters;
-              // eslint-disable-next-line guard-for-in
-              for (const filter in setFilters) {
-                newValue[filter] = new Set(setFilters[filter]);
-              }
-              return newValue;
-            };
-            setSelectedFrameFilters((previousFrameFilters) => ({
-              ...previousFrameFilters,
-              [storedTabData?.preferences?.selectedFrame]: {
-                selectedFilters: newFiltersGenerator(
-                  previousFrameFilters[
-                    storedTabData?.preferences?.selectedFrame
-                  ]?.selectedFilters || {}
-                ),
-              },
-            }));
+            // eslint-disable-next-line guard-for-in
+            for (const frame in storedTabData?.preferences?.selectedFilters) {
+              const newFiltersGenerator = (prevState: object) => {
+                const newValue: SelectedFilters = { ...prevState };
+                const setFilters =
+                  storedTabData?.preferences?.selectedFilters[frame];
+                // eslint-disable-next-line guard-for-in
+                for (const filter in setFilters) {
+                  newValue[filter] = new Set(setFilters[filter]);
+                }
+                return newValue;
+              };
+              setSelectedFrameFilters((previousFrameFilters) => ({
+                ...previousFrameFilters,
+                [frame]: {
+                  selectedFilters: newFiltersGenerator(
+                    previousFrameFilters[frame]?.selectedFilters || {}
+                  ),
+                },
+              }));
+            }
           }
         }
         fetchedInitialValueRef.current = true;

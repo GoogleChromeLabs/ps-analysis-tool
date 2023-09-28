@@ -68,9 +68,9 @@ const CookieTable = ({ cookies, selectedFrame }: CookieTableProps) => {
   const { updatePreference, columnSorting, columnSizing, selectedColumns } =
     usePreferenceStore(({ actions, state }) => ({
       updatePreference: actions.updatePreference,
-      columnSorting: state.columnSorting as SortingState[],
-      columnSizing: state.columnSizing as Record<string, number>,
-      selectedColumns: state.selectedColumns as Record<string, boolean>,
+      columnSorting: state?.columnSorting as SortingState[],
+      columnSizing: state?.columnSizing as Record<string, number>,
+      selectedColumns: state?.selectedColumns as Record<string, boolean>,
     }));
   const tableColumns = useMemo<TableColumn[]>(
     () => [
