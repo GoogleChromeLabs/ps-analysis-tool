@@ -21,17 +21,21 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { InspectBlueIcon, InspectIcon } from '../../icons';
+import { InspectActiveIcon, InspectIcon, InspectWhiteIcon } from '../../icons';
 
 interface InspectButtonProps {
   isInspecting: boolean;
   setIsInspecting: React.Dispatch<React.SetStateAction<boolean>>;
+  isTabFocused: boolean;
 }
 
 const InspectButton = ({
   isInspecting,
   setIsInspecting,
+  isTabFocused,
 }: InspectButtonProps) => {
+  const InactiveInspectIcon = isTabFocused ? InspectWhiteIcon : InspectIcon;
+
   return (
     <span
       className="inline-block"
@@ -39,7 +43,7 @@ const InspectButton = ({
         setIsInspecting(!isInspecting);
       }}
     >
-      {isInspecting ? <InspectBlueIcon /> : <InspectIcon />}
+      {isInspecting ? <InspectActiveIcon /> : <InactiveInspectIcon />}
     </span>
   );
 };

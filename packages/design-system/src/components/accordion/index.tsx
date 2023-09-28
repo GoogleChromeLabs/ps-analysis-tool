@@ -88,6 +88,7 @@ const Accordion = ({
           <InspectButton
             isInspecting={isInspecting}
             setIsInspecting={setIsInspecting}
+            isTabFocused={isAccordionHeaderSelected && isTabFocused}
           />
         </div>
       )}
