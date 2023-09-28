@@ -88,13 +88,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
       setSelectedFrameFilters: actions?.setSelectedFrameFilters,
     }));
 
-  const { selectedFrame, setSelectedFrame } = useCookieStore(
-    ({ state, actions }) => ({
+  const { selectedFrame, setSelectedFrame, setContextInvalidated } =
+    useCookieStore(({ state, actions }) => ({
       selectedFrame: state?.selectedFrame,
       setSelectedFrame: actions?.setSelectedFrame,
       tabFrames: state.tabFrames,
-    })
-  );
+      setContextInvalidated: actions.setContextInvalidated,
+    }));
 
   const getPreviousPreferences = useCallback(async () => {
     const currentTabId = await getCurrentTabId();
@@ -139,16 +139,22 @@ export const Provider = ({ children }: PropsWithChildren) => {
   ]);
 
   const saveToLocalStorage = useCallback(async () => {
-    if (fetchedInitialValueRef.current) {
-      const currentTabId = await getCurrentTabId();
-      if (currentTabId) {
-        await PreferenceStore.update(
-          currentTabId?.toString(),
-          memoisedPreferences
-        );
+    try {
+      if (fetchedInitialValueRef.current) {
+        const currentTabId = await getCurrentTabId();
+        if (currentTabId) {
+          await PreferenceStore.update(
+            currentTabId?.toString(),
+            memoisedPreferences
+          );
+        }
+      }
+    } catch (error) {
+      if ((error as Error).message === 'Extension context invalidated.') {
+        setContextInvalidated(true);
       }
     }
-  }, [memoisedPreferences]);
+  }, [memoisedPreferences, setContextInvalidated]);
 
   useEffect(() => {
     saveToLocalStorage();
@@ -156,47 +162,60 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     (async () => {
-      const currentTabId = await getCurrentTabId();
-      if (currentTabId && !fetchedInitialValueRef.current) {
-        const storedTabData = (
-          await chrome.storage.local.get(currentTabId?.toString())
-        )[currentTabId];
+      try {
+        const currentTabId = await getCurrentTabId();
 
-        setPreferences(storedTabData?.preferences);
-        if (storedTabData?.preferences?.selectedFrame) {
-          setSelectedFrame(storedTabData?.preferences?.selectedFrame);
+        if (currentTabId && !fetchedInitialValueRef.current) {
+          const storedTabData = (
+            await chrome.storage.local.get(currentTabId?.toString())
+          )[currentTabId];
 
-          if (
-            storedTabData?.preferences?.selectedFilters &&
-            Object.keys(storedTabData?.preferences?.selectedFilters).length > 0
-          ) {
-            // eslint-disable-next-line guard-for-in
-            for (const frame in storedTabData?.preferences?.selectedFilters) {
-              const newFiltersGenerator = (prevState: object) => {
-                const newValue: SelectedFilters = { ...prevState };
-                const setFilters =
-                  storedTabData?.preferences?.selectedFilters[frame];
-                // eslint-disable-next-line guard-for-in
-                for (const filter in setFilters) {
-                  newValue[filter] = new Set(setFilters[filter]);
-                }
-                return newValue;
-              };
-              setSelectedFrameFilters((previousFrameFilters) => ({
-                ...previousFrameFilters,
-                [frame]: {
-                  selectedFilters: newFiltersGenerator(
-                    previousFrameFilters[frame]?.selectedFilters || {}
-                  ),
-                },
-              }));
+          setPreferences(storedTabData?.preferences);
+          if (storedTabData?.preferences?.selectedFrame) {
+            setSelectedFrame(storedTabData?.preferences?.selectedFrame);
+
+            if (
+              storedTabData?.preferences?.selectedFilters &&
+              Object.keys(storedTabData?.preferences?.selectedFilters).length >
+                0
+            ) {
+              // eslint-disable-next-line guard-for-in
+              for (const frame in storedTabData?.preferences?.selectedFilters) {
+                const newFiltersGenerator = (prevState: object) => {
+                  const newValue: SelectedFilters = { ...prevState };
+                  const setFilters =
+                    storedTabData?.preferences?.selectedFilters[frame];
+                  // eslint-disable-next-line guard-for-in
+                  for (const filter in setFilters) {
+                    newValue[filter] = new Set(setFilters[filter]);
+                  }
+                  return newValue;
+                };
+                setSelectedFrameFilters((previousFrameFilters) => ({
+                  ...previousFrameFilters,
+                  [frame]: {
+                    selectedFilters: newFiltersGenerator(
+                      previousFrameFilters[frame]?.selectedFilters || {}
+                    ),
+                  },
+                }));
+              }
             }
           }
+          fetchedInitialValueRef.current = true;
         }
-        fetchedInitialValueRef.current = true;
+      } catch (error) {
+        if ((error as Error).message === 'Extension context invalidated.') {
+          setContextInvalidated(true);
+        }
       }
     })();
-  }, [getPreviousPreferences, setSelectedFrame, setSelectedFrameFilters]);
+  }, [
+    getPreviousPreferences,
+    setContextInvalidated,
+    setSelectedFrame,
+    setSelectedFrameFilters,
+  ]);
 
   const value: PreferenceStore = useMemo(
     () => ({
