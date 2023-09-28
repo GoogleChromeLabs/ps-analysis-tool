@@ -278,7 +278,6 @@ describe('Index', () => {
         </ExternalStoreProvider>
       )
     );
-    screen.debug();
     expect(
       await screen.findByTestId('privacySandbox-tab-heading-wrapper')
     ).toHaveClass('bg-royal-blue');
