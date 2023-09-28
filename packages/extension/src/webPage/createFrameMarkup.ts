@@ -138,9 +138,6 @@ export const createIframeInfoBlock = (
 
   infoBlock.appendChild(content);
 
-  // eslint-disable-next-line no-console
-  console.log(attributes, 'attributes', infoBlock);
-
   infoBlock.popover = 'manual';
 
   return infoBlock;

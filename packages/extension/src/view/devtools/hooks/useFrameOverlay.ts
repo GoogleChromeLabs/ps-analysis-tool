@@ -29,22 +29,6 @@ interface Response {
   attributes: { src: React.SetStateAction<string | null> };
 }
 
-const getPayload = (filteredCookies, isInspecting, selectedFrame) => {
-  const thirdPartyCookies = filteredCookies
-    ? filteredCookies.filter((cookie) => !cookie.isFirstParty)
-    : [];
-  const firstPartyCookies = filteredCookies
-    ? filteredCookies.filter((cookie) => cookie.isFirstParty)
-    : [];
-
-  return {
-    selectedFrame,
-    thirdPartyCookies: thirdPartyCookies.length,
-    firstPartyCookies: firstPartyCookies.length,
-    isInspecting,
-  };
-};
-
 const useFrameOverlay = () => {
   const portRef = useRef<chrome.runtime.Port | null>(null);
 
@@ -61,7 +45,7 @@ const useFrameOverlay = () => {
   }));
 
   const onConnect = useCallback(
-    (port) => {
+    (port: chrome.runtime.Port) => {
       if (port.name !== WEBPAGE_PORT_NAME) {
         return;
       }
@@ -73,8 +57,6 @@ const useFrameOverlay = () => {
 
       portRef.current.onMessage.addListener((response: Response) => {
         if (response?.attributes?.src) {
-          // eslint-disable-next-line no-console
-          console.log(response.attributes.src);
           setSelectedFrame(response.attributes.src);
         }
       });
@@ -93,20 +75,28 @@ const useFrameOverlay = () => {
   }, [onConnect]);
 
   useEffect(() => {
-    if (!portRef.current) {
-      return;
+    if (portRef.current) {
+      portRef.current.postMessage({
+        isInspecting,
+      });
     }
-
-    portRef.current.postMessage({
-      isInspecting,
-    });
   }, [isInspecting]);
 
   useEffect(() => {
     if (selectedFrame && portRef.current) {
-      const payload = getPayload(filteredCookies, isInspecting, selectedFrame);
+      const thirdPartyCookies = filteredCookies
+        ? filteredCookies.filter((cookie) => !cookie.isFirstParty)
+        : [];
+      const firstPartyCookies = filteredCookies
+        ? filteredCookies.filter((cookie) => cookie.isFirstParty)
+        : [];
 
-      portRef.current.postMessage(payload);
+      portRef.current.postMessage({
+        selectedFrame,
+        thirdPartyCookies: thirdPartyCookies.length,
+        firstPartyCookies: firstPartyCookies.length,
+        isInspecting,
+      });
     }
   }, [selectedFrame, filteredCookies, isInspecting]);
 };

@@ -40,9 +40,6 @@ const connectPort = () => {
     if (response?.selectedFrame) {
       findAndAddFrameOverlay(response);
     }
-
-    // eslint-disable-next-line no-console
-    console.log(response);
   };
 
   port.onMessage.addListener(onMessage);
@@ -89,8 +86,6 @@ const onStorageChange = (changes: {
 const handleHoverEvent = (event: MouseEvent): void => {
   if ((event.target as HTMLElement).tagName === 'IFRAME') {
     const frame = event.target as HTMLIFrameElement;
-    // eslint-disable-next-line no-console
-    console.log(frame.getAttribute('src'));
 
     if (!frame.getAttribute('src')) {
       return;
@@ -112,9 +107,6 @@ const handleHoverEvent = (event: MouseEvent): void => {
     };
 
     if (port) {
-      // eslint-disable-next-line no-console
-      console.log(payload, 'payload');
-
       try {
         port.postMessage(payload);
       } catch (error) {
