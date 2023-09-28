@@ -21,10 +21,7 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import {
-  InspectBlueIcon,
-  InspectIcon,
-} from '@cookie-analysis-tool/design-system';
+import { InspectBlueIcon, InspectIcon } from '../../icons';
 
 interface InspectButtonProps {
   isInspecting: boolean;
@@ -37,8 +34,10 @@ const InspectButton = ({
 }: InspectButtonProps) => {
   return (
     <span
-      className="psat-inspect inline-block"
-      onClick={() => setIsInspecting(!isInspecting)}
+      className="inline-block"
+      onClick={() => {
+        setIsInspecting(!isInspecting);
+      }}
     >
       {isInspecting ? <InspectBlueIcon /> : <InspectIcon />}
     </span>

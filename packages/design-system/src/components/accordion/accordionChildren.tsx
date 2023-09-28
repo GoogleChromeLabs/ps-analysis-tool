@@ -36,6 +36,8 @@ interface AccordionChildrenProps {
   isTabFocused: boolean;
   isAccordionChildSelected: boolean;
   isAccordionHeaderSelected?: boolean;
+  isInspecting?: boolean;
+  setIsInspecting?: React.Dispatch<React.SetStateAction<boolean>>;
   selectedAccordionChild?: string | null;
   selectedIcon: React.FC<React.SVGProps<SVGSVGElement>>;
   selectedFrame?: string | null;
@@ -64,6 +66,8 @@ const AccordionChildren: React.FC<AccordionChildrenProps> = ({
   isTabFocused,
   isAccordionChildSelected,
   isAccordionHeaderSelected = false,
+  isInspecting = false,
+  setIsInspecting = noop,
   selectedAccordionChild = null,
   selectedIcon,
   selectedFrame = null,
@@ -102,6 +106,8 @@ const AccordionChildren: React.FC<AccordionChildrenProps> = ({
           keyboardNavigator={keyboardNavigator}
           onAccordionOpenerClick={onAccordionOpenerClick}
           onAccordionHeaderClick={onAccordionHeaderClick}
+          setIsInspecting={setIsInspecting}
+          isInspecting={isInspecting}
         >
           {tabId === 'cookies'
             ? tabFrames &&

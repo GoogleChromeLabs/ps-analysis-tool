@@ -23,6 +23,8 @@ import classNames from 'classnames';
  * Internal dependencies
  */
 import { ArrowDown, ArrowDownWhite } from '../../icons';
+import InspectButton from '../inspectButton';
+import { noop } from '../../utils';
 
 export interface tabSidebar {
   display_name: string;
@@ -43,6 +45,8 @@ interface AccordionProps {
   isRecursive?: boolean;
   isTabFocused: boolean;
   isAccordionHeaderSelected: boolean;
+  isInspecting?: boolean;
+  setIsInspecting?: React.Dispatch<React.SetStateAction<boolean>>;
   tabId: string;
   tabName: string;
   keyboardNavigator: (event: React.KeyboardEvent<HTMLDivElement>) => void;
@@ -58,6 +62,8 @@ const Accordion = ({
   isRecursive = false,
   isTabFocused,
   isAccordionHeaderSelected,
+  isInspecting = false,
+  setIsInspecting = noop,
   tabId,
   tabName,
   keyboardNavigator,
@@ -76,7 +82,15 @@ const Accordion = ({
   const SelectedIcon = tabs[index].icons.selected;
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full relative">
+      {tabId === 'cookies' && (
+        <div className="absolute top-1 left-44">
+          <InspectButton
+            isInspecting={isInspecting}
+            setIsInspecting={setIsInspecting}
+          />
+        </div>
+      )}
       <div
         data-testid={`${tabId}-tab-heading-wrapper`}
         className={headingContainerClass}
