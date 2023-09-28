@@ -43,32 +43,33 @@ const useColumnResizing = (
   useEffect(() => {
     const tableWidth =
       tableContainerRef.current?.getBoundingClientRect().width || 0;
-    if (!isDefaultRendered.current) {
-      if (options) {
-        const newColumns = tableColumns.map((column) => {
-          const columnWidth =
-            options && Object.keys(options).length && options[column.header]
-              ? options[column.header]
-              : tableWidth / tableColumns.length - Object.keys(options).length;
+    if (options && !isDefaultRendered.current) {
+      const newColumns = tableColumns.map((column) => {
+        const columnWidth =
+          options && Object.keys(options).length && options[column.header]
+            ? options[column.header]
+            : tableWidth / tableColumns.length - Object.keys(options).length;
 
-          return {
-            ...column,
-            width: columnWidth,
-          };
-        });
-        setColumns(newColumns);
-        isDefaultRendered.current = true;
-      } else {
-        const newColumns = tableColumns.map((column) => {
-          return {
-            ...column,
-            width: tableWidth / tableColumns.length,
-          };
-        });
-
-        setColumns(newColumns);
-      }
+        return {
+          ...column,
+          width: columnWidth,
+        };
+      });
+      setColumns(newColumns);
+      isDefaultRendered.current = true;
     }
+  }, [options, tableColumns]);
+
+  useEffect(() => {
+    const tableWidth =
+      tableContainerRef.current?.getBoundingClientRect().width || 0;
+    const newColumns = tableColumns.map((column) => {
+      return {
+        ...column,
+        width: tableWidth / tableColumns.length,
+      };
+    });
+    setColumns(newColumns);
   }, [options, tableColumns]);
 
   const onMouseDown = useCallback(
