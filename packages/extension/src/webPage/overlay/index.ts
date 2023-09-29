@@ -13,39 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Internal dependencies.
- */
-import { OVERLAY_CLASS } from '../constants';
-
-export const createFrameOverlay = (frame: HTMLElement) => {
-  const {
-    x: frameX,
-    y: frameY,
-    width: frameWidth,
-    height: frameHeight,
-  } = frame.getBoundingClientRect();
-
-  if (frameHeight === 0 || frameWidth === 0) {
-    return null;
-  }
-
-  const frameOverlay = document.createElement('div');
-  frameOverlay.classList.add(OVERLAY_CLASS);
-
-  const styles: Record<string, string> = {
-    width: frameWidth + 'px',
-    height: frameHeight + 'px',
-    top: frameY + Number(window.scrollY) + 'px',
-    left: frameX + Number(window.scrollX) + 'px',
-  };
-
-  // eslint-disable-next-line guard-for-in
-  for (const key in styles) {
-    frameOverlay.style[key] = styles[key];
-  }
-
-  frameOverlay.popover = 'manual';
-
-  return frameOverlay;
-};
+export { default as handleFrameOverlay } from './handleFrameOverlay';
+export { default as removeAllPopovers } from './removeAllPopovers';
+export { default as addFrameOverlay } from './addFrameOverlay';
+export { default as toggleFrameHighlighting } from './toggleFrameHighlighting';

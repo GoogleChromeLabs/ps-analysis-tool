@@ -16,28 +16,23 @@
 /**
  * Internal dependencies.
  */
-import { createFrameOverlay } from '.';
-import { createIframeInfoBlock } from './tooltip';
-import { OVERLAY_CLASS, INFOBOX_CLASS } from '../constants';
+import createFrameOverlay from './createFrameOverlay';
+import createTooltip from './tooltip';
+import removeAllPopovers from './removeAllPopovers';
 import type { ResponseType } from '../types';
-import compareFrameSource from '../utils/compareFrameSource';
 
-export const removeAllPopovers = () => {
-  const existingPopovers = Array.from(
-    document.querySelectorAll('.' + OVERLAY_CLASS + ', .' + INFOBOX_CLASS)
-  );
-
-  existingPopovers.forEach((element: Element) => {
-    element.parentNode?.removeChild(element);
-  });
-};
-
-export const addFrameOverlay = (
+/**
+ * Adds a frame overlay and tooltip to an HTML iframe or element.
+ * @param {HTMLIFrameElement | HTMLElement} Frame - The HTML iframe or element to which the overlay and tooltip are added.
+ * @param {ResponseType} data - The response data containing information to display in the tooltip.
+ * @returns {boolean} Returns `true` if the overlay and tooltip were successfully added, `false` otherwise.
+ */
+const addFrameOverlay = (
   Frame: HTMLIFrameElement | HTMLElement,
   data: ResponseType
 ): boolean => {
   const overlay = createFrameOverlay(Frame);
-  const frameInfoBox = createIframeInfoBlock(Frame, data);
+  const tooltip = createTooltip(Frame, data);
   const body = document.querySelector('body');
 
   // Overlay will not exist if frame is hidden.
@@ -54,37 +49,35 @@ export const addFrameOverlay = (
     overlay.showPopover();
   }
 
-  if (frameInfoBox) {
-    body.appendChild(frameInfoBox);
-    frameInfoBox.showPopover();
+  if (tooltip) {
+    body.appendChild(tooltip);
+    tooltip.showPopover();
   }
+
   // overlay will not exist for hidden elements. show at bottom of screen.
   if (isHiddenFrame) {
-    frameInfoBox.style.top =
-      Number(window.innerHeight) - Number(frameInfoBox.offsetHeight) + 5 + 'px';
-  } else if (frameInfoBox.offsetHeight > Frame.offsetTop) {
+    tooltip.style.top =
+      Number(window.innerHeight) - Number(tooltip.offsetHeight) + 5 + 'px';
+  } else if (tooltip.offsetHeight > Frame.offsetTop) {
     // is main frame?
     if (document.location.origin === data.selectedFrame) {
-      frameInfoBox.style.top = '5px';
+      tooltip.style.top = '5px';
     } else {
       // Show info box at bottom if we don't have enough space at top
-      frameInfoBox.style.top =
-        Number(frameInfoBox.offsetTop) + Number(Frame.offsetHeight) - 1 + 'px';
+      tooltip.style.top =
+        Number(tooltip.offsetTop) + Number(Frame.offsetHeight) - 1 + 'px';
     }
 
     // Set infobox tip at top of box.
-    frameInfoBox.firstElementChild?.classList.add('tooltip');
+    tooltip.firstElementChild?.classList.add('tooltip');
   } else {
-    frameInfoBox.style.top =
-      Number(frameInfoBox.offsetTop) -
-      Number(frameInfoBox.offsetHeight) +
-      5 +
-      'px';
+    tooltip.style.top =
+      Number(tooltip.offsetTop) - Number(tooltip.offsetHeight) + 5 + 'px';
   }
 
   // no need to scroll if frame is hidden;
   if (!isHiddenFrame) {
-    frameInfoBox.scrollIntoView({
+    tooltip.scrollIntoView({
       behavior: 'smooth',
       block: 'start',
       inline: 'nearest',
@@ -94,36 +87,4 @@ export const addFrameOverlay = (
   return true;
 };
 
-export const findAndAddFrameOverlay = (response: ResponseType) => {
-  const selectedOrigin = response.selectedFrame;
-
-  if (!selectedOrigin) {
-    return;
-  }
-
-  if (selectedOrigin === document.location.origin) {
-    addFrameOverlay(document.body, response);
-    return;
-  }
-
-  const iframes = document.querySelectorAll('iframe');
-
-  let frameFound = false;
-
-  for (const iframe of iframes) {
-    const src = iframe.getAttribute('src');
-
-    if (!src) {
-      continue;
-    }
-
-    if (compareFrameSource(selectedOrigin, src)) {
-      frameFound = addFrameOverlay(iframe, response);
-      break;
-    }
-  }
-
-  if (!frameFound) {
-    removeAllPopovers();
-  }
-};
+export default addFrameOverlay;

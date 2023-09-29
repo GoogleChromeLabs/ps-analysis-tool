@@ -17,13 +17,13 @@
  * Internal dependencies.
  */
 import {
-  findAndAddFrameOverlay,
+  handleFrameOverlay,
   removeAllPopovers,
   addFrameOverlay,
-} from './overlay/addFrameOverlay';
+  toggleFrameHighlighting,
+} from './overlay';
 import { WEBPAGE_PORT_NAME } from '../constants';
 import type { ResponseType } from './types';
-import toggleFrameHighlighting from './overlay/toggleFrameHighlighting';
 import './style.css';
 
 /**
@@ -99,7 +99,7 @@ class WebpageContentScript {
     }
 
     if (response?.selectedFrame) {
-      findAndAddFrameOverlay(response);
+      handleFrameOverlay(response);
     } else if (!response.isInspecting) {
       removeAllPopovers();
     }

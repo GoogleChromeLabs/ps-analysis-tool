@@ -16,25 +16,23 @@
 /**
  * Internal dependencies.
  */
-import { INFOBOX_CLASS } from '../../constants';
+import { TOOLTIP_CLASS } from '../../constants';
 import getFrameAttributes from '../../utils/getFrameAttributes';
 import type { ResponseType } from '../../types';
 
-const createInfoLine = (label: string, value: string): HTMLParagraphElement => {
-  const p: HTMLParagraphElement = document.createElement('p');
-
-  p.innerHTML = `<strong style="color:#202124">${label}</strong>: ${value}`;
-
-  return p;
-};
-
-export const createIframeInfoBlock = (
+/**
+ * Creates a tooltip element for an iframe overlay.
+ * @param {HTMLIFrameElement | HTMLElement} frame - The iframe or HTML element for which the tooltip is created.
+ * @param {ResponseType} data - The response data associated with the frame.
+ * @returns {HTMLDivElement} The tooltip element containing information about the frame.
+ */
+const createTooltip = (
   frame: HTMLIFrameElement | HTMLElement,
   data: ResponseType
 ) => {
   const isMainFrame = document.location.origin === data.selectedFrame;
   let isHidden = false;
-  const infoBlock = document.createElement('div');
+  const tooltip = document.createElement('div');
   const content = document.createElement('div');
   const attributes = isMainFrame
     ? {}
@@ -46,7 +44,7 @@ export const createIframeInfoBlock = (
     height: frameHeight,
   } = frame.getBoundingClientRect();
 
-  infoBlock.classList.add(INFOBOX_CLASS);
+  tooltip.classList.add(TOOLTIP_CLASS);
   content.classList.add('content');
 
   let styles: Record<string, string> = {
@@ -67,7 +65,7 @@ export const createIframeInfoBlock = (
 
   // eslint-disable-next-line guard-for-in
   for (const key in styles) {
-    infoBlock.style[key] = styles[key];
+    tooltip.style[key] = styles[key];
   }
 
   const frameOrigin = attributes.src ? new URL(attributes.src).origin : '';
@@ -87,13 +85,19 @@ export const createIframeInfoBlock = (
     const value = info[label];
 
     if (value) {
-      content.appendChild(createInfoLine(label, value));
+      const p: HTMLParagraphElement = document.createElement('p');
+
+      p.innerHTML = `<strong style="color:#202124">${label}</strong>: ${value}`;
+
+      content.appendChild(p);
     }
   }
 
-  infoBlock.appendChild(content);
+  tooltip.appendChild(content);
 
-  infoBlock.popover = 'manual';
+  tooltip.popover = 'manual';
 
-  return infoBlock;
+  return tooltip;
 };
+
+export default createTooltip;

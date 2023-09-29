@@ -13,5 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const OVERLAY_CLASS = 'ps-overlay';
-export const TOOLTIP_CLASS = 'ps-infobox';
+/**
+ * Internal dependencies.
+ */
+import { OVERLAY_CLASS, TOOLTIP_CLASS } from '../constants';
+
+/**
+ * Removes all tooltips and overlays from the current document.
+ * @returns {void}
+ */
+const removeAllPopovers = () => {
+  const existingPopovers = Array.from(
+    document.querySelectorAll('.' + OVERLAY_CLASS + ', .' + TOOLTIP_CLASS)
+  );
+
+  existingPopovers.forEach((element: Element) => {
+    element.parentNode?.removeChild(element);
+  });
+};
+
+export default removeAllPopovers;

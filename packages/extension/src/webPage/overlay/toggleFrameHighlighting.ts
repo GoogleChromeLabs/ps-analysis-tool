@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Toggles highlighting of iframes by adding or removing a CSS class.
+ * @param {boolean} [highlight] - Indicates whether to highlight the iframes (default is true).
+ * @returns {void}
+ */
 const toggleFrameHighlighting = (highlight = true) => {
   const iframes = document.querySelectorAll('iframe');
 
   // Apply styles to each iframe
   iframes.forEach((iframe) => {
-    if (highlight) {
-      iframe.classList.add('psat-highlighted-frame');
-    } else {
-      iframe.classList.remove('psat-highlighted-frame');
-    }
+    iframe.classList.toggle('psat-highlighted-frame', highlight);
   });
 };
 
