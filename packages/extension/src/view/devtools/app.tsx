@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Resizable } from 're-resizable';
 
 /**
@@ -25,11 +25,17 @@ import { Resizable } from 're-resizable';
 import TABS from './tabs';
 import { Sidebar } from './components';
 import './app.css';
+import { updateTabPSPanelState } from '../../utils/psPanelState';
 
 const App: React.FC = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
   const TabContent = TABS[selectedTabIndex].component;
 
+  useEffect(() => {
+    return () => {
+      updateTabPSPanelState(false);
+    };
+  }, []);
   return (
     <div className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black">
       <div className="w-full h-full flex flex-row">

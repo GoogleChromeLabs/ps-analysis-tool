@@ -81,19 +81,26 @@ class WebpageContentScript {
     this.port = null;
   }
 
-  private async onStorageChange() {
+  private async onStorageChange(changes: {
+    [key: string]: chrome.storage.StorageChange;
+  }) {
     const data = await chrome.storage.local.get();
     const tabId = data?.tabToRead;
 
     if (!tabId) {
       return;
     }
+    if (!changes || !Object.keys(changes).includes(tabId)) {
+      return;
+    }
+    if (!changes[tabId].newValue.isDevToolPSPanelOpen) {
+      this.removeFrameHighlight();
+    }
 
-    const value = data[tabId];
+    const value = changes[tabId].newValue;
 
     if (this.isDevToolOpen !== value.isDevToolPSPanelOpen) {
       this.isDevToolOpen = value.isDevToolPSPanelOpen;
-
       if (this.isDevToolOpen) {
         this.connectPort();
       } else if (this.port) {
@@ -146,6 +153,7 @@ class WebpageContentScript {
     try {
       this.port.postMessage(payload);
     } catch (error) {
+      this.removeFrameHighlight();
       // eslint-disable-next-line no-console
       console.log('Webpage port disconnected, probably due to inactivity');
     }
