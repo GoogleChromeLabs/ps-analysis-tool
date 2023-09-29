@@ -69,6 +69,8 @@ class WebpageContentScript {
 
     if (response?.selectedFrame) {
       findAndAddFrameOverlay(response);
+    } else if (!response.isInspecting) {
+      removeAllPopovers();
     }
   }
 

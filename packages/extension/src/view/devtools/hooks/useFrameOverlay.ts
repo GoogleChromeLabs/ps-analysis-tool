@@ -83,7 +83,7 @@ const useFrameOverlay = () => {
   }, [isInspecting]);
 
   useEffect(() => {
-    if (selectedFrame && portRef.current) {
+    if (isInspecting && portRef.current) {
       const thirdPartyCookies = filteredCookies
         ? filteredCookies.filter((cookie) => !cookie.isFirstParty)
         : [];
