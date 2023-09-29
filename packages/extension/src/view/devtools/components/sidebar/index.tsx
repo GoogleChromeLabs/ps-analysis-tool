@@ -68,7 +68,8 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
   useEffect(() => {
     if (isInspecting && selectedFrame) {
       setIndex(1);
-      setSelectedAccordionChild('');
+      setAccordionState((prevState) => ({ ...prevState, cookies: true }));
+      setSelectedAccordionChild('cookies');
       setIsTabFocused(true);
     }
   }, [isInspecting, selectedFrame, setIndex]);
