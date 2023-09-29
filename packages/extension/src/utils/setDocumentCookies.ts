@@ -21,9 +21,9 @@ import { isFirstParty } from '@cookie-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import { createCookieObject } from '../worker/createCookieObject';
+import { createCookieObject } from '../serviceWorker/createCookieObject';
 import { fetchDictionary, type CookieDatabase } from './fetchCookieDictionary';
-import findAnalyticsMatch from '../worker/findAnalyticsMatch';
+import findAnalyticsMatch from '../serviceWorker/findAnalyticsMatch';
 import { CookieStore, type CookieData } from '../localStore';
 
 interface ProcessAndStoreDucmentCookiesProps {
