@@ -46,11 +46,13 @@ const ColumnList = ({
 }: ColumnListProps) => {
   useEffect(() => {
     return () => {
-      const columns: Record<string, boolean> = {};
-      table.columns.forEach((column) => {
-        columns[column.header] = table.isColumnHidden(column.accessorKey);
+      const visibleColumns: Record<string, boolean> = {};
+      table.hideableColumns.forEach((column) => {
+        visibleColumns[column.header] = table.isColumnHidden(
+          column.accessorKey
+        );
       });
-      updatePreference('selectedColumns', () => columns);
+      updatePreference('selectedColumns', () => visibleColumns);
     };
   }, [table, table.hideableColumns, updatePreference]);
   return (
