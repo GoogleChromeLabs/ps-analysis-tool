@@ -19,6 +19,7 @@
 import { createFrameOverlay, createIframeInfoBlock } from './createFrameMarkup';
 import { OVERLAY_CLASS, INFOBOX_CLASS } from './constants';
 import type { ResponseType } from './types';
+import compareFrameSrc from './compareFrameSrc';
 
 export const removeAllPopovers = () => {
   const existingPopovers = Array.from(
@@ -92,34 +93,30 @@ export const addFrameOverlay = (
   return true;
 };
 
-const getHost = (src = '') => {
-  const cleanSrc =
-    src.replace('www.', '').replace('https://', '').replace('http://', '') ||
-    '';
-
-  return cleanSrc;
-};
-
 export const findAndAddFrameOverlay = (response: ResponseType) => {
-  if (response.selectedFrame === document.location.origin) {
+  const selectedOrigin = response.selectedFrame;
+
+  if (!selectedOrigin) {
+    return;
+  }
+
+  if (selectedOrigin === document.location.origin) {
     addFrameOverlay(document.body, response);
     return;
   }
 
   const iframes = document.querySelectorAll('iframe');
+
   let frameFound = false;
 
-  const selectedFrameHost = getHost(response.selectedFrame);
-
   for (const iframe of iframes) {
-    const src = iframe.getAttribute('src') || '';
+    const src = iframe.getAttribute('src');
 
     if (!src) {
       continue;
     }
 
-    // @todo Very loosley checked for initial POC, needs more work.
-    if (src.includes(selectedFrameHost)) {
+    if (compareFrameSrc(selectedOrigin, src)) {
       frameFound = addFrameOverlay(iframe, response);
       break;
     }
