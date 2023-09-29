@@ -93,6 +93,24 @@ export const addFrameOverlay = (
   return true;
 };
 
+const getHost = (src = '') => {
+  const cleanSrc =
+    src.replace('www.', '').replace('https://', '').replace('http://', '') ||
+    '';
+  let host = '';
+
+  if (cleanSrc) {
+    try {
+      host = new URL(cleanSrc).host;
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+    }
+  }
+
+  return host;
+};
+
 export const findAndAddFrameOverlay = (response: ResponseType) => {
   if (response.selectedFrame === document.location.origin) {
     addFrameOverlay(document.body, response);
@@ -102,17 +120,16 @@ export const findAndAddFrameOverlay = (response: ResponseType) => {
   const iframes = document.querySelectorAll('iframe');
   let frameFound = false;
 
+  const selectedFrameHost = getHost(response.selectedFrame);
+
   for (const iframe of iframes) {
     const src = iframe.getAttribute('src') || '';
 
     if (!src) {
-      return;
+      continue;
     }
 
-    const srcHost = new URL(src).host.replace('www.', ''); // @todo Not the right way.
-    const selectedFrameHost = new URL(
-      response?.selectedFrame || ''
-    ).host.replace('www.', '');
+    const srcHost = getHost(src);
 
     // @todo Very loosley checked for initial POC, needs more work.
     if (srcHost === selectedFrameHost) {
