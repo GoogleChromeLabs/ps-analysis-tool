@@ -70,7 +70,7 @@ const useColumnResizing = (
       };
     });
     setColumns(newColumns);
-  }, [options, tableColumns]);
+  }, [tableColumns]);
 
   const onMouseDown = useCallback(
     (
