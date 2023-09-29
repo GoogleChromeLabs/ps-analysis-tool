@@ -16,10 +16,11 @@
 /**
  * Internal dependencies.
  */
-import { createFrameOverlay, createIframeInfoBlock } from './createFrameMarkup';
-import { OVERLAY_CLASS, INFOBOX_CLASS } from './constants';
-import type { ResponseType } from './types';
-import compareFrameSrc from './compareFrameSrc';
+import { createFrameOverlay } from '.';
+import { createIframeInfoBlock } from './tooltip';
+import { OVERLAY_CLASS, INFOBOX_CLASS } from '../constants';
+import type { ResponseType } from '../types';
+import compareFrameSrc from '../utils/compareFrameSrc';
 
 export const removeAllPopovers = () => {
   const existingPopovers = Array.from(

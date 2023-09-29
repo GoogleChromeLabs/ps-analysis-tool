@@ -20,7 +20,7 @@ import {
   findAndAddFrameOverlay,
   removeAllPopovers,
   addFrameOverlay,
-} from './addFrameOverlay';
+} from './overlay/addFrameOverlay';
 import { WEBPAGE_PORT_NAME } from '../constants';
 import type { ResponseType } from './types';
 import './style.css';

@@ -16,41 +16,9 @@
 /**
  * Internal dependencies.
  */
-import getFrameAttributes from './getFrameAttributes';
-import { OVERLAY_CLASS, INFOBOX_CLASS } from './constants';
-import type { ResponseType } from './types';
-
-export const createFrameOverlay = (frame: HTMLElement) => {
-  const {
-    x: frameX,
-    y: frameY,
-    width: frameWidth,
-    height: frameHeight,
-  } = frame.getBoundingClientRect();
-
-  if (frameHeight === 0 || frameWidth === 0) {
-    return null;
-  }
-
-  const frameOverlay = document.createElement('div');
-  frameOverlay.classList.add(OVERLAY_CLASS);
-
-  const styles: Record<string, string> = {
-    width: frameWidth + 'px',
-    height: frameHeight + 'px',
-    top: frameY + Number(window.scrollY) + 'px',
-    left: frameX + Number(window.scrollX) + 'px',
-  };
-
-  // eslint-disable-next-line guard-for-in
-  for (const key in styles) {
-    frameOverlay.style[key] = styles[key];
-  }
-
-  frameOverlay.popover = 'manual';
-
-  return frameOverlay;
-};
+import { INFOBOX_CLASS } from '../../constants';
+import getFrameAttributes from '../../utils/getFrameAttributes';
+import type { ResponseType } from '../../types';
 
 const createInfoLine = (label: string, value: string): HTMLParagraphElement => {
   const p: HTMLParagraphElement = document.createElement('p');
