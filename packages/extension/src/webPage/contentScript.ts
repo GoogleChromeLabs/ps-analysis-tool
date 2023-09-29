@@ -54,9 +54,7 @@ const connectPort = () => {
   port.onDisconnect.addListener(onDisconnect);
 };
 
-const onStorageChange = async (changes: {
-  [key: string]: chrome.storage.StorageChange;
-}) => {
+const onStorageChange = async () => {
   const data = await chrome.storage.local.get();
 
   const tabId = data?.tabToRead;
@@ -65,7 +63,7 @@ const onStorageChange = async (changes: {
     return;
   }
 
-  const value = changes[tabId].newValue;
+  const value = data[tabId];
 
   if (isDevToolOpen !== value.isDevToolPSPanelOpen) {
     isDevToolOpen = value.isDevToolPSPanelOpen;
