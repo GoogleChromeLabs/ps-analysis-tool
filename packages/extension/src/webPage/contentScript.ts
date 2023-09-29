@@ -25,6 +25,7 @@ import './style.css';
 class WebpageContentScript {
   private port: chrome.runtime.Port | null = null;
   private isDevToolOpen = false;
+  private isInspecting = false;
 
   constructor() {
     chrome.storage.local.onChanged.addListener(this.onStorageChange.bind(this));
@@ -60,6 +61,7 @@ class WebpageContentScript {
   }
 
   private onMessage(response: ResponseType) {
+    this.isInspecting = response.isInspecting;
     if (response.isInspecting) {
       this.removeHoverEventListeners();
       this.addHoverEventListeners();
@@ -102,6 +104,9 @@ class WebpageContentScript {
 
   private handleHoverEvent(event: MouseEvent): void {
     const target = event.target as HTMLElement;
+    if (!this.isInspecting) {
+      return;
+    }
 
     if (target.tagName !== 'IFRAME') {
       return;
