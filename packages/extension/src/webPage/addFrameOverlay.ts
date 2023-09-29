@@ -97,18 +97,8 @@ const getHost = (src = '') => {
   const cleanSrc =
     src.replace('www.', '').replace('https://', '').replace('http://', '') ||
     '';
-  let host = '';
 
-  if (cleanSrc) {
-    try {
-      host = new URL(cleanSrc).host;
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error);
-    }
-  }
-
-  return host;
+  return cleanSrc;
 };
 
 export const findAndAddFrameOverlay = (response: ResponseType) => {
@@ -132,7 +122,7 @@ export const findAndAddFrameOverlay = (response: ResponseType) => {
     const srcHost = getHost(src);
 
     // @todo Very loosley checked for initial POC, needs more work.
-    if (srcHost === selectedFrameHost) {
+    if (srcHost.includes(selectedFrameHost)) {
       frameFound = addFrameOverlay(iframe, response);
       break;
     }

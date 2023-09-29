@@ -121,12 +121,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
         tabId: _tabId,
       });
 
-      setTabFrames((prevState) => {
+      setTabFrames(() => {
         const modifiedTabFrames: {
           [key: string]: { frameIds: number[] };
-        } = {
-          ...prevState,
-        };
+        } = {};
 
         currentTabFrames?.forEach(({ url, frameId }) => {
           if (url && url.includes('http')) {
