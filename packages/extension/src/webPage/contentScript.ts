@@ -16,7 +16,11 @@
 /**
  * Internal dependencies.
  */
-import { findAndAddFrameOverlay, removeAllPopovers } from './addFrameOverlay';
+import {
+  findAndAddFrameOverlay,
+  removeAllPopovers,
+  addFrameOverlay,
+} from './addFrameOverlay';
 import { WEBPAGE_PORT_NAME } from '../constants';
 import type { ResponseType } from './types';
 import './style.css';
@@ -87,6 +91,11 @@ const handleHoverEvent = (event: MouseEvent): void => {
   const srcAttribute = frame.getAttribute('src');
 
   if (!srcAttribute) {
+    addFrameOverlay(frame, {
+      isInspecting: true,
+      firstPartyCookies: 0,
+      thirdPartyCookies: 0,
+    });
     return;
   }
 

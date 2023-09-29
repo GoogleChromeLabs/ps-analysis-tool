@@ -114,12 +114,12 @@ export const createIframeInfoBlock = (
     infoBlock.style[key] = styles[key];
   }
 
-  const origin = isMainFrame
-    ? data.selectedFrame
-    : new URL(attributes.src || '').origin;
+  const frameOrigin = attributes.src ? new URL(attributes.src).origin : '';
+
+  const origin = isMainFrame ? data.selectedFrame : frameOrigin;
 
   const info: Record<string, string> = {
-    Type: 'iframe' + (isHidden ? ' (Hidden Frame)' : ''),
+    Type: 'iframe' + (isHidden ? ' (hidden)' : ''),
     Origin: `<a href="${origin}">${origin}</a>`,
     'First Party Cookies': String(data?.firstPartyCookies || '0'),
     'Third Party Cookies': String(data?.thirdPartyCookies || '0'),
