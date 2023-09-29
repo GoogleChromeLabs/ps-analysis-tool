@@ -77,8 +77,8 @@ export const createIframeInfoBlock = (
   const info: Record<string, string> = {
     Type: 'iframe' + (isHidden ? ' (hidden)' : ''),
     Origin: `<a href="${origin}">${origin}</a>`,
-    'First Party Cookies': String(data?.firstPartyCookies || '0'),
-    'Third Party Cookies': String(data?.thirdPartyCookies || '0'),
+    'First-party cookies': String(data?.firstPartyCookies || '0'),
+    'Third-party cookies': String(data?.thirdPartyCookies || '0'),
     'Allowed features': attributes.allow || ' ',
   };
 

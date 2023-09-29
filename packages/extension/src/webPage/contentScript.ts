@@ -62,6 +62,7 @@ class WebpageContentScript {
 
   private onMessage(response: ResponseType) {
     this.isInspecting = response.isInspecting;
+
     if (response.isInspecting) {
       this.removeHoverEventListeners();
       this.addHoverEventListeners();
@@ -84,15 +85,14 @@ class WebpageContentScript {
   private async onStorageChange(changes: {
     [key: string]: chrome.storage.StorageChange;
   }) {
-    const data = await chrome.storage.local.get();
+    const data = await chrome.storage.local.get(); // TODO: Use changes.newValue?
     const tabId = data?.tabToRead;
 
-    if (!tabId) {
+    if (!tabId || !changes || !Object.keys(changes).includes(tabId)) {
       return;
     }
-    if (!changes || !Object.keys(changes).includes(tabId)) {
-      return;
-    }
+
+    // Its important to use changes newValue for latest data.
     if (!changes[tabId].newValue.isDevToolPSPanelOpen) {
       this.removeFrameHighlight();
     }
