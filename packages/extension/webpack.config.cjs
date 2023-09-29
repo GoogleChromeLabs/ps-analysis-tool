@@ -22,7 +22,7 @@ const commonConfig = require('../../webpack.shared.cjs');
 const root = {
   entry: {
     'service-worker': './src/worker/serviceWorker.ts',
-    'content-script': './src/webPage/contentScript.ts',
+    'content-script': './src/contentScript/index.ts',
   },
   output: {
     path: path.resolve(__dirname, '../../dist/extension'),
