@@ -24,6 +24,7 @@ import React, { useEffect, useRef, useCallback } from 'react';
 import { WEBPAGE_PORT_NAME } from '../../../constants';
 import { useCookieStore } from '../stateProviders/syncCookieStore';
 import { useFilterManagementStore } from '../stateProviders/filterManagementStore';
+import { updateTabPSPanelState } from '../../../utils/psPanelState';
 
 interface Response {
   attributes: { src: React.SetStateAction<string | null> };
@@ -74,12 +75,17 @@ const useFrameOverlay = () => {
     chrome.runtime.onConnect.addListener(onConnect);
   }, [onConnect]);
 
+  // When inspect button is clicked.
   useEffect(() => {
-    if (portRef.current) {
-      portRef.current.postMessage({
-        isInspecting,
-      });
-    }
+    (async () => {
+      await updateTabPSPanelState(isInspecting);
+
+      if (portRef.current) {
+        portRef.current.postMessage({
+          isInspecting,
+        });
+      }
+    })();
   }, [isInspecting]);
 
   useEffect(() => {

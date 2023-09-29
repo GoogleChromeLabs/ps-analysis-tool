@@ -29,10 +29,6 @@ import {
   CookiesLanding,
   ProgressBar,
 } from '@cookie-analysis-tool/design-system';
-import {
-  updateTabPSPanelState,
-  getTabPSPanelState,
-} from '../../../../utils/psPanelState';
 
 const Cookies = () => {
   const {
@@ -79,13 +75,6 @@ const Cookies = () => {
       allowedNumberOfTabs === 'single') ||
     (allowedNumberOfTabs && allowedNumberOfTabs === 'unlimited')
   ) {
-    // When PS panel is open and analyze button is clicked from popup.
-    getTabPSPanelState().then(async (state) => {
-      if (!state) {
-        await updateTabPSPanelState(true);
-      }
-    });
-
     return (
       <div
         className={`h-full ${selectedFrame ? '' : 'flex items-center'}`}
