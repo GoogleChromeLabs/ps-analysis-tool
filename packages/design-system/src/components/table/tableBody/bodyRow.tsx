@@ -34,10 +34,7 @@ interface BodyRowProps {
   selectedKey: string | undefined | null;
   getRowObjectKey: (row: TableRow) => string;
   onRowClick: () => void;
-  onKeyDown: (
-    e: React.KeyboardEvent<HTMLTableRowElement>,
-    index: number
-  ) => void;
+  onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>, index: number) => void;
 }
 
 const BodyRow = ({
@@ -53,7 +50,7 @@ const BodyRow = ({
   const cookieKey = getRowObjectKey(row);
 
   const tableRowClassName = classNames(
-    'outline-0',
+    'outline-0 flex divide-x divide-american-silver dark:divide-quartz',
     cookieKey !== selectedKey &&
       (index % 2
         ? 'bg-anti-flash-white dark:bg-charleston-green'
@@ -65,7 +62,7 @@ const BodyRow = ({
   );
 
   return (
-    <tr
+    <div
       id={index.toString()}
       className={tableRowClassName}
       onClick={onRowClick}
@@ -75,7 +72,7 @@ const BodyRow = ({
       {columns.map(({ accessorKey, width }, idx) => (
         <BodyCell key={idx} cell={row[accessorKey].value} width={width || 0} />
       ))}
-    </tr>
+    </div>
   );
 };
 

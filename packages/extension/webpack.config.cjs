@@ -21,7 +21,7 @@ const commonConfig = require('../../webpack.shared.cjs');
 
 const root = {
   entry: {
-    'service-worker': './src/worker/serviceWorker.ts',
+    'service-worker': './src/serviceWorker/index.ts',
     'content-script': './src/contentScript/index.ts',
   },
   output: {
