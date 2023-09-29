@@ -139,7 +139,7 @@ const removeFrameHighlight = (): void => {
   removeAllPopovers();
 };
 
-chrome.storage.onChanged.addListener(onStorageChange);
+chrome.storage.local.onChanged.addListener(onStorageChange);
 
 // Remove all popovers and mouse events of extension
 document.addEventListener('click', removeFrameHighlight);
