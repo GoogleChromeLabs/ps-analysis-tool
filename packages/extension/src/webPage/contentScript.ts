@@ -57,14 +57,8 @@ const connectPort = () => {
 const onStorageChange = (changes: {
   [key: string]: chrome.storage.StorageChange;
 }) => {
-  const tabId = Object.keys(changes).find((key) => {
-    const value = changes[key]?.newValue;
-    const hasStatusKey = Object.prototype.hasOwnProperty.call(
-      value,
-      'isDevToolPSPanelOpen'
-    );
-    return value && hasStatusKey;
-  });
+  const element = document.getElementById('psat-data');
+  const tabId = element?.dataset?.tabId;
 
   if (!tabId) {
     return;

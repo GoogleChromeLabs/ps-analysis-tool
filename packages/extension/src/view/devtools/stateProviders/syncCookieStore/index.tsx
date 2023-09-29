@@ -235,6 +235,15 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
       }
     );
+    chrome.devtools.inspectedWindow.eval(
+      `
+      const span = document.createElement( 'span' );
+      span.setAttribute( 'id', 'psat-data' );
+      span.dataset.tabId = '${_tabId}';
+      span.setAttribute( 'hidden', true );
+      document.body.appendChild( span );
+      `
+    );
 
     setLoading(false);
   }, [getAllFramesForCurrentTab]);
