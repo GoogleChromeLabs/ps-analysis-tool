@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Internal dependencies.
+ */
 import {
   findAndAddFrameOverlay,
   removeAllPopovers,
@@ -23,11 +26,17 @@ import type { ResponseType } from './types';
 import toggleFrameHighlighting from './overlay/toggleFrameHighlighting';
 import './style.css';
 
+/**
+ * Represents the content script for the webpage.
+ */
 class WebpageContentScript {
   private port: chrome.runtime.Port | null = null;
   private isDevToolOpen = false;
   private isInspecting = false;
 
+  /**
+   * Initialize
+   */
   constructor() {
     chrome.storage.local.onChanged.addListener(this.onStorageChange.bind(this));
     document.addEventListener('click', this.removeFrameHighlight.bind(this));
@@ -37,21 +46,33 @@ class WebpageContentScript {
     );
   }
 
+  /**
+   * Adds hover event listeners to the document.
+   */
   private addHoverEventListeners(): void {
     document.addEventListener('mouseover', this.handleHoverEvent.bind(this));
     document.addEventListener('mouseout', this.handleHoverEvent.bind(this));
   }
 
+  /**
+   * Removes hover event listeners from the document.
+   */
   private removeHoverEventListeners(): void {
     document.removeEventListener('mouseover', this.handleHoverEvent.bind(this));
     document.removeEventListener('mouseout', this.handleHoverEvent.bind(this));
   }
 
+  /**
+   * Removes frame highlight and hover event listeners, and all popovers.
+   */
   private removeFrameHighlight(): void {
     this.removeHoverEventListeners();
     removeAllPopovers();
   }
 
+  /**
+   * Connects to the chrome runtime port.
+   */
   private connectPort() {
     this.port = chrome.runtime.connect(chrome.runtime.id, {
       name: WEBPAGE_PORT_NAME,
@@ -61,6 +82,10 @@ class WebpageContentScript {
     this.port.onDisconnect.addListener(this.onDisconnect.bind(this));
   }
 
+  /**
+   * Handles incoming messages from the connected port.
+   * @param {ResponseType} response - The incoming message/response from the port.
+   */
   private onMessage(response: ResponseType) {
     this.isInspecting = response.isInspecting;
 
@@ -80,11 +105,19 @@ class WebpageContentScript {
     }
   }
 
+  /**
+   * Handles the port disconnection event.
+   */
   private onDisconnect() {
     this.port?.onMessage.removeListener(this.onMessage);
     this.port = null;
   }
 
+  /**
+   * Handles the storage change events.
+   * @async
+   * @param {{[key: string]: chrome.storage.StorageChange}} changes - The object representing the storage changes.
+   */
   private async onStorageChange(changes: {
     [key: string]: chrome.storage.StorageChange;
   }) {
@@ -114,6 +147,10 @@ class WebpageContentScript {
     }
   }
 
+  /**
+   * Handles hover events, focusing on IFRAME elements when inspecting is enabled.
+   * @param {MouseEvent} event - The mouse event triggered by user action.
+   */
   private handleHoverEvent(event: MouseEvent): void {
     const target = event.target as HTMLElement;
 

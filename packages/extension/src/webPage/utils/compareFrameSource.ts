@@ -13,14 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const compareFrameSrc = (frameOrigin: string, frameSrc: string) => {
-  const cleanOrigin =
-    frameOrigin
-      .replace('www.', '')
-      .replace('https://', '')
-      .replace('http://', '') || '';
+
+/**
+ * Removes the trailing slash from a given URL if it exists.
+ * @param {string} url - The input URL.
+ * @returns {string} - The URL without a trailing slash.
+ */
+const removeTrailingSlash = (url: string) =>
+  url.endsWith('/') ? url.slice(0, -1) : url;
+
+const compareFrameSource = (frameOrigin: string, frameSrc: string) => {
+  const cleanOrigin = removeTrailingSlash(frameOrigin)
+    .replace('www.', '')
+    .replace('https://', '')
+    .replace('http://', '');
+
+  if (frameSrc && !cleanOrigin) {
+    return false;
+  }
 
   return frameSrc.includes(cleanOrigin);
 };
 
-export default compareFrameSrc;
+export default compareFrameSource;

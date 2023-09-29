@@ -20,7 +20,7 @@ import { createFrameOverlay } from '.';
 import { createIframeInfoBlock } from './tooltip';
 import { OVERLAY_CLASS, INFOBOX_CLASS } from '../constants';
 import type { ResponseType } from '../types';
-import compareFrameSrc from '../utils/compareFrameSrc';
+import compareFrameSource from '../utils/compareFrameSource';
 
 export const removeAllPopovers = () => {
   const existingPopovers = Array.from(
@@ -117,7 +117,7 @@ export const findAndAddFrameOverlay = (response: ResponseType) => {
       continue;
     }
 
-    if (compareFrameSrc(selectedOrigin, src)) {
+    if (compareFrameSource(selectedOrigin, src)) {
       frameFound = addFrameOverlay(iframe, response);
       break;
     }
