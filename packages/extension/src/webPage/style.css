@@ -74,3 +74,8 @@ html body .ps-infobox[popover] > .content.tooltip:after {
     top: 5px !important;
     box-shadow: color-mix(in srgb, #3c4043 15%, transparent) 3px -3px 4px -1px !important;
 }
+
+html body .psat-highlighted-frame {
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3) !important;
+    border: 2px solid #007bff !important;
+}

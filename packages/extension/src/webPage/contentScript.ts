@@ -20,6 +20,7 @@ import {
 } from './overlay/addFrameOverlay';
 import { WEBPAGE_PORT_NAME } from '../constants';
 import type { ResponseType } from './types';
+import toggleFrameHighlighting from './overlay/toggleFrameHighlighting';
 import './style.css';
 
 class WebpageContentScript {
@@ -66,8 +67,10 @@ class WebpageContentScript {
     if (response.isInspecting) {
       this.removeHoverEventListeners();
       this.addHoverEventListeners();
+      toggleFrameHighlighting(true);
     } else {
       this.removeFrameHighlight();
+      toggleFrameHighlighting(false);
     }
 
     if (response?.selectedFrame) {
@@ -95,12 +98,14 @@ class WebpageContentScript {
     // Its important to use changes newValue for latest data.
     if (!changes[tabId].newValue.isDevToolPSPanelOpen) {
       this.removeFrameHighlight();
+      toggleFrameHighlighting(false);
     }
 
     const value = changes[tabId].newValue;
 
     if (this.isDevToolOpen !== value.isDevToolPSPanelOpen) {
       this.isDevToolOpen = value.isDevToolPSPanelOpen;
+
       if (this.isDevToolOpen) {
         this.connectPort();
       } else if (this.port) {
@@ -111,11 +116,8 @@ class WebpageContentScript {
 
   private handleHoverEvent(event: MouseEvent): void {
     const target = event.target as HTMLElement;
-    if (!this.isInspecting) {
-      return;
-    }
 
-    if (target.tagName !== 'IFRAME') {
+    if (!this.isInspecting || target.tagName !== 'IFRAME') {
       return;
     }
 
@@ -128,6 +130,7 @@ class WebpageContentScript {
         firstPartyCookies: 0,
         thirdPartyCookies: 0,
       });
+
       return;
     }
 
@@ -135,7 +138,7 @@ class WebpageContentScript {
 
     try {
       url = new URL(srcAttribute);
-    } catch (err) {
+    } catch (error) {
       return;
     }
 
