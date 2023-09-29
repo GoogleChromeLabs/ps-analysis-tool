@@ -1,50 +1,75 @@
-.ps-overlay[popover], .ps-infobox[popover] {
-    position: absolute;
-    background-color: #1a73e859;
-    pointer-events: none;
-    border: 0px;
-    margin: initial;
-    padding: 0px;
-    cursor: default;
+/* @todo Use shadow dom to get rid of these high specific css! */
+
+html body .ps-overlay[popover], html body .ps-infobox[popover] {
+    position: absolute !important;
+    background-color: #1a73e859 !important;
+    pointer-events: none !important;
+    border: 0px !important;
+    margin: initial !important;
+    padding: 0px !important;
+    cursor: default !important;
 }
 
-.ps-infobox[popover] {
-    background-color: transparent;
-    padding: 10px 10px 15px 10px;
+html body .ps-infobox[popover] {
+    background-color: transparent !important;
+    padding: 10px 10px 15px 10px !important;
 }
 
-.ps-infobox[popover] > .content {
-    background-color: white;
-    border: 0px;
-    border-radius: 3px;
-    box-shadow: color-mix(in srgb, #3c4043 30%, transparent) 0 1px 2px 0,color-mix(in srgb, #3c4043 15%, transparent) 0 2px 6px 2px; /* from chrome console penal */
-    margin: initial;
-    padding: 10px;
+html body .ps-infobox[popover] > .content {
+    background-color: white !important;
+    border: 0px !important;
+    border-radius: 3px !important;
+    box-shadow: color-mix(in srgb, #3c4043 30%, transparent) 0 1px 2px 0, color-mix(in srgb, #3c4043 15%, transparent) 0 2px 6px 2px !important;
+    margin: initial !important;
+    padding: 10px !important;
 }
 
-.ps-infobox[popover] > .content > p:first-child {
-    margin-top: 0;
+html body .ps-infobox[popover] > .content .ps-frame-origin {
+    max-width: 360px !important;
+    display: inline-block !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
 }
 
-.ps-infobox[popover] > .content > p:last-child {
-    margin-bottom: 0;
+html body .ps-infobox[popover] > .content p {
+    line-height: 1.6 !important;
+    font-size: 12px !important;
+    font-weight: 400 !important;
+    color: #5f6368 !important;
+    font-family: "San Francisco", Helvetica, Arial, sans-serif !important;
 }
 
-.ps-infobox[popover] > .content:after {
-    content: " ";
-    position: absolute;
-    bottom: 9px;
-    left: 20px;
-    border-width: 7px;
-    border-style: solid;
-    border-color: white transparent transparent transparent;
-    background-color: white;
-    box-shadow: color-mix(in srgb, #3c4043 15%, transparent) -3px 3px 4px 1px;
-    transform: rotate(315deg);
-  }
+html body .ps-infobox[popover] > .content p:nth-child(2) {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-wrap: nowrap;
+}
 
-  .ps-infobox[popover] > .content.toptip:after {
-    bottom: unset;
-    top: 5px;
-    box-shadow: color-mix(in srgb, #3c4043 15%, transparent) 3px -3px 4px -1px;
-  }
+
+html body .ps-infobox[popover] > .content > p:first-child {
+    margin-top: 0 !important;
+}
+
+html body .ps-infobox[popover] > .content > p:last-child {
+    margin-bottom: 0 !important;
+}
+
+html body .ps-infobox[popover] > .content:after {
+    content: " " !important;
+    position: absolute !important;
+    bottom: 9px !important;
+    left: 20px !important;
+    border-width: 7px !important;
+    border-style: solid !important;
+    border-color: white transparent transparent transparent !important;
+    background-color: white !important;
+    box-shadow: color-mix(in srgb, #3c4043 15%, transparent) -3px 3px 4px 1px !important;
+    transform: rotate(315deg) !important;
+}
+
+html body .ps-infobox[popover] > .content.tooltip:after {
+    bottom: unset !important;
+    top: 5px !important;
+    box-shadow: color-mix(in srgb, #3c4043 15%, transparent) 3px -3px 4px -1px !important;
+}

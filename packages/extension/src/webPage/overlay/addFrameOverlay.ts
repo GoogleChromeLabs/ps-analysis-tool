@@ -73,7 +73,7 @@ export const addFrameOverlay = (
     }
 
     // Set infobox tip at top of box.
-    frameInfoBox.firstElementChild?.classList.add('toptip');
+    frameInfoBox.firstElementChild?.classList.add('tooltip');
   } else {
     frameInfoBox.style.top =
       Number(frameInfoBox.offsetTop) -

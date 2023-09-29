@@ -23,18 +23,6 @@ import type { ResponseType } from '../../types';
 const createInfoLine = (label: string, value: string): HTMLParagraphElement => {
   const p: HTMLParagraphElement = document.createElement('p');
 
-  const styles: Record<string, string> = {
-    fontSize: '12px',
-    fontWeight: '400',
-    color: '#5f6368',
-    lineHeight: '1',
-  };
-
-  // eslint-disable-next-line guard-for-in
-  for (const key in styles) {
-    p.style[key] = styles[key];
-  }
-
   p.innerHTML = `<strong style="color:#202124">${label}</strong>: ${value}`;
 
   return p;
@@ -72,7 +60,7 @@ export const createIframeInfoBlock = (
     styles = {
       top: Number(window.innerHeight) + 'px',
       left: '10px',
-      maxWidth: '250px',
+      maxWidth: '450px',
       position: 'fixed',
     };
   }

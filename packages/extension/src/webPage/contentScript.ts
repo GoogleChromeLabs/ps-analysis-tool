@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Internal dependencies.
- */
 import {
   findAndAddFrameOverlay,
   removeAllPopovers,
@@ -25,124 +22,128 @@ import { WEBPAGE_PORT_NAME } from '../constants';
 import type { ResponseType } from './types';
 import './style.css';
 
-let port: chrome.runtime.Port | null = null;
-let isDevToolOpen = false;
+class WebpageContentScript {
+  private port: chrome.runtime.Port | null = null;
+  private isDevToolOpen = false;
 
-const connectPort = () => {
-  // Content script has to open the connection, because it doesn't listen to chrome.runtime.onConnect.
-  port = chrome.runtime.connect(chrome.runtime.id, {
-    name: WEBPAGE_PORT_NAME,
-  });
+  constructor() {
+    chrome.storage.local.onChanged.addListener(this.onStorageChange.bind(this));
+    document.addEventListener('click', this.removeFrameHighlight.bind(this));
+    document.addEventListener(
+      'contextmenu',
+      this.removeFrameHighlight.bind(this)
+    );
+  }
 
-  const onMessage = (response: ResponseType) => {
+  private addHoverEventListeners(): void {
+    document.addEventListener('mouseover', this.handleHoverEvent.bind(this));
+    document.addEventListener('mouseout', this.handleHoverEvent.bind(this));
+  }
+
+  private removeHoverEventListeners(): void {
+    document.removeEventListener('mouseover', this.handleHoverEvent.bind(this));
+    document.removeEventListener('mouseout', this.handleHoverEvent.bind(this));
+  }
+
+  private removeFrameHighlight(): void {
+    this.removeHoverEventListeners();
+    removeAllPopovers();
+  }
+
+  private connectPort() {
+    this.port = chrome.runtime.connect(chrome.runtime.id, {
+      name: WEBPAGE_PORT_NAME,
+    });
+
+    this.port.onMessage.addListener(this.onMessage.bind(this));
+    this.port.onDisconnect.addListener(this.onDisconnect.bind(this));
+  }
+
+  private onMessage(response: ResponseType) {
     if (response.isInspecting) {
-      removeHoverEventListeners(); // To avoid duplicate listners.
-      addHoverEventListeners();
+      this.removeHoverEventListeners();
+      this.addHoverEventListeners();
     } else {
-      removeFrameHighlight();
+      this.removeFrameHighlight();
     }
 
     if (response?.selectedFrame) {
       findAndAddFrameOverlay(response);
     }
-  };
-
-  const onDisconnect = () => {
-    port?.onMessage.removeListener(onMessage);
-    port = null;
-    // eslint-disable-next-line no-console
-    console.log(' Webpage port disconnected!');
-  };
-
-  port.onMessage.addListener(onMessage);
-  port.onDisconnect.addListener(onDisconnect);
-};
-
-const onStorageChange = async () => {
-  const data = await chrome.storage.local.get();
-
-  const tabId = data?.tabToRead;
-
-  if (!tabId) {
-    return;
   }
 
-  const value = data[tabId];
+  private onDisconnect() {
+    this.port?.onMessage.removeListener(this.onMessage);
+    this.port = null;
+  }
 
-  if (isDevToolOpen !== value.isDevToolPSPanelOpen) {
-    isDevToolOpen = value.isDevToolPSPanelOpen;
+  private async onStorageChange() {
+    const data = await chrome.storage.local.get();
+    const tabId = data?.tabToRead;
 
-    if (isDevToolOpen) {
-      connectPort();
-    } else if (port) {
-      port.disconnect();
+    if (!tabId) {
+      return;
+    }
+
+    const value = data[tabId];
+
+    if (this.isDevToolOpen !== value.isDevToolPSPanelOpen) {
+      this.isDevToolOpen = value.isDevToolPSPanelOpen;
+
+      if (this.isDevToolOpen) {
+        this.connectPort();
+      } else if (this.port) {
+        this.port.disconnect();
+      }
     }
   }
-};
 
-const handleHoverEvent = (event: MouseEvent): void => {
-  const target = event.target as HTMLElement;
+  private handleHoverEvent(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
 
-  if (target.tagName !== 'IFRAME') {
-    return;
+    if (target.tagName !== 'IFRAME') {
+      return;
+    }
+
+    const frame = target as HTMLIFrameElement;
+    const srcAttribute = frame.getAttribute('src');
+
+    if (!srcAttribute) {
+      addFrameOverlay(frame, {
+        isInspecting: true,
+        firstPartyCookies: 0,
+        thirdPartyCookies: 0,
+      });
+      return;
+    }
+
+    let url: URL;
+
+    try {
+      url = new URL(srcAttribute);
+    } catch (err) {
+      return;
+    }
+
+    const payload = {
+      hover: event?.type === 'mouseover',
+      attributes: {
+        src: url.origin,
+      },
+    };
+
+    if (!this.port) {
+      return;
+    }
+
+    try {
+      this.port.postMessage(payload);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log('Webpage port disconnected, probably due to inactivity');
+    }
   }
+}
 
-  const frame = target as HTMLIFrameElement;
-  const srcAttribute = frame.getAttribute('src');
-
-  if (!srcAttribute) {
-    addFrameOverlay(frame, {
-      isInspecting: true,
-      firstPartyCookies: 0,
-      thirdPartyCookies: 0,
-    });
-    return;
-  }
-
-  let url: URL;
-
-  try {
-    url = new URL(srcAttribute);
-  } catch (err) {
-    return;
-  }
-
-  const payload = {
-    hover: event?.type === 'mouseover',
-    attributes: {
-      src: url.origin,
-    },
-  };
-
-  if (!port) {
-    return;
-  }
-
-  try {
-    port.postMessage(payload);
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.log('Webpage port disconnected, probably due to inactivity');
-  }
-};
-
-const addHoverEventListeners = (): void => {
-  document.addEventListener('mouseover', handleHoverEvent);
-  document.addEventListener('mouseout', handleHoverEvent);
-};
-
-const removeHoverEventListeners = (): void => {
-  document.removeEventListener('mouseover', handleHoverEvent);
-  document.removeEventListener('mouseout', handleHoverEvent);
-};
-
-const removeFrameHighlight = (): void => {
-  removeHoverEventListeners();
-  removeAllPopovers();
-};
-
-chrome.storage.local.onChanged.addListener(onStorageChange);
-
-// Remove all popovers and mouse events of extension
-document.addEventListener('click', removeFrameHighlight);
-document.addEventListener('contextmenu', removeFrameHighlight);
+// eslint-disable-next-line no-new
+new WebpageContentScript();
