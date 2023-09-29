@@ -56,7 +56,6 @@ export const addFrameOverlay = (
     body.appendChild(frameInfoBox);
     frameInfoBox.showPopover();
   }
-
   // overlay will not exist for hidden elements. show at bottom of screen.
   if (isHiddenFrame) {
     frameInfoBox.style.top =
@@ -119,10 +118,8 @@ export const findAndAddFrameOverlay = (response: ResponseType) => {
       continue;
     }
 
-    const srcHost = getHost(src);
-
     // @todo Very loosley checked for initial POC, needs more work.
-    if (srcHost.includes(selectedFrameHost)) {
+    if (src.includes(selectedFrameHost)) {
       frameFound = addFrameOverlay(iframe, response);
       break;
     }
