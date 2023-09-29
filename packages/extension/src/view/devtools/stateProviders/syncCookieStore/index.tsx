@@ -169,14 +169,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
     setAllowedNumberOfTabs(_allowedNumberOfTabs);
 
     if (_tabId) {
-      chrome.devtools.inspectedWindow.eval(`
-        const span = document.createElement( 'span' );
-        span.setAttribute( 'id', 'psat-data' );
-        span.dataset.tabId = '${_tabId}';
-        span.setAttribute( 'hidden', true );
-        document.body.appendChild( span );
-      `);
-
       if (extensionStorage?.allowedNumberOfTabs === 'single') {
         const getTabBeingListenedTo = await chrome.storage.local.get();
         const availableTabs = await chrome.tabs.query({});

@@ -305,6 +305,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                                 onAccordionHeaderClick={onAccordionHeaderClick}
                                 setIsInspecting={setIsInspecting}
                                 isInspecting={isInspecting}
+                                showInspectButton={isCurrentTabBeingListenedTo}
                               />
                             );
                           }

@@ -54,11 +54,12 @@ const connectPort = () => {
   port.onDisconnect.addListener(onDisconnect);
 };
 
-const onStorageChange = (changes: {
+const onStorageChange = async (changes: {
   [key: string]: chrome.storage.StorageChange;
 }) => {
-  const element = document.getElementById('psat-data');
-  const tabId = element?.dataset?.tabId;
+  const data = await chrome.storage.local.get();
+
+  const tabId = data?.tabToRead;
 
   if (!tabId) {
     return;

@@ -46,6 +46,7 @@ interface AccordionProps {
   isTabFocused: boolean;
   isAccordionHeaderSelected: boolean;
   isInspecting?: boolean;
+  showInspectButton?: boolean;
   setIsInspecting?: React.Dispatch<React.SetStateAction<boolean>>;
   tabId: string;
   tabName: string;
@@ -63,6 +64,7 @@ const Accordion = ({
   isTabFocused,
   isAccordionHeaderSelected,
   isInspecting = false,
+  showInspectButton = false,
   setIsInspecting = noop,
   tabId,
   tabName,
@@ -83,7 +85,7 @@ const Accordion = ({
 
   return (
     <div className="flex flex-col w-full relative">
-      {tabId === 'cookies' && (
+      {tabId === 'cookies' && showInspectButton && (
         <div className="absolute top-1 left-44">
           <InspectButton
             isInspecting={isInspecting}

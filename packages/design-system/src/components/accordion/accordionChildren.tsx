@@ -37,6 +37,7 @@ interface AccordionChildrenProps {
   isAccordionChildSelected: boolean;
   isAccordionHeaderSelected?: boolean;
   isInspecting?: boolean;
+  showInspectButton?: boolean;
   setIsInspecting?: React.Dispatch<React.SetStateAction<boolean>>;
   selectedAccordionChild?: string | null;
   selectedIcon: React.FC<React.SVGProps<SVGSVGElement>>;
@@ -67,6 +68,7 @@ const AccordionChildren: React.FC<AccordionChildrenProps> = ({
   isAccordionChildSelected,
   isAccordionHeaderSelected = false,
   isInspecting = false,
+  showInspectButton = false,
   setIsInspecting = noop,
   selectedAccordionChild = null,
   selectedIcon,
@@ -108,6 +110,7 @@ const AccordionChildren: React.FC<AccordionChildrenProps> = ({
           onAccordionHeaderClick={onAccordionHeaderClick}
           setIsInspecting={setIsInspecting}
           isInspecting={isInspecting}
+          showInspectButton={showInspectButton}
         >
           {tabId === 'cookies'
             ? tabFrames &&
