@@ -16,46 +16,31 @@
 /**
  * Internal dependencies.
  */
-import type { ResponseType } from '../types';
 import compareFrameSource from '../utils/compareFrameSource';
-import removeAllPopovers from './removeAllPopovers';
-import addPopover from './addPopover';
 
-/**
- * Handles the addition of frame overlays and tooltips based on a given response object.
- * It adds an overlay and tooltip to the main document or an iframe depending on the selected frame's origin.
- * @param {ResponseType} response - The response object containing information about the selected frame.
- * @param isHoveringOnPage
- * @returns {void}
- */
-const togglePopovers = (response: ResponseType, isHoveringOnPage: boolean) => {
-  const selectedOrigin = response.selectedFrame;
-
+const findSelectedFrameElement = (selectedOrigin: string) => {
   if (!selectedOrigin) {
-    return;
+    return null;
   }
 
   if (selectedOrigin === document.location.origin) {
-    addPopover(document.body, response, isHoveringOnPage);
-    return;
+    return document.body; // main frame
   }
 
   const iframes = document.querySelectorAll('iframe');
 
-  let frameFound = false;
+  let selectedFrame = null;
 
   for (const iframe of iframes) {
     const src = iframe.getAttribute('src');
 
     if (src && compareFrameSource(selectedOrigin, src)) {
-      frameFound = addPopover(iframe, response, isHoveringOnPage);
+      selectedFrame = iframe;
       break;
     }
   }
 
-  if (!frameFound) {
-    removeAllPopovers();
-  }
+  return selectedFrame;
 };
 
-export default togglePopovers;
+export default findSelectedFrameElement;

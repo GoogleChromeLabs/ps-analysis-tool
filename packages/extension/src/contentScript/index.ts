@@ -17,7 +17,7 @@
  * Internal dependencies.
  */
 import {
-  togglePopovers,
+  findSelectedFrameElement,
   removeAllPopovers,
   addPopover,
   toggleFrameHighlighting,
@@ -40,8 +40,8 @@ class WebpageContentScript {
    */
   constructor() {
     chrome.storage.local.onChanged.addListener(this.onStorageChange.bind(this));
-    document.addEventListener('click', this.removePopovers.bind(this));
-    document.addEventListener('contextmenu', this.removePopovers.bind(this));
+    document.addEventListener('click', this.clearPage.bind(this));
+    document.addEventListener('contextmenu', this.clearPage.bind(this));
   }
 
   /**
@@ -63,9 +63,10 @@ class WebpageContentScript {
   /**
    * Removes all frame popovers and hover event listeners.
    */
-  removePopovers(): void {
+  clearPage(): void {
     this.removeHoverEventListeners();
     removeAllPopovers();
+    toggleFrameHighlighting(false);
   }
 
   /**
@@ -91,12 +92,18 @@ class WebpageContentScript {
       this.removeHoverEventListeners();
       this.addHoverEventListeners();
       toggleFrameHighlighting(true);
-    } else {
-      this.removePopovers();
-    }
 
-    if (response?.selectedFrame) {
-      togglePopovers(response, this.isHoveringOnPage);
+      if (response?.selectedFrame) {
+        const frameElement = findSelectedFrameElement(response.selectedFrame);
+
+        if (frameElement) {
+          addPopover(frameElement, response, this.isHoveringOnPage);
+        } else {
+          removeAllPopovers();
+        }
+      }
+    } else {
+      this.clearPage();
     }
   }
 
@@ -125,8 +132,7 @@ class WebpageContentScript {
 
     // Its important to use changes newValue for latest data.
     if (!changes[tabId].newValue.isDevToolPSPanelOpen) {
-      this.removePopovers();
-      toggleFrameHighlighting(false);
+      this.clearPage();
     }
 
     const value = changes[tabId].newValue;
@@ -194,7 +200,7 @@ class WebpageContentScript {
     try {
       this.port.postMessage(payload);
     } catch (error) {
-      this.removePopovers();
+      this.clearPage();
       // eslint-disable-next-line no-console
       console.log('Webpage port disconnected, probably due to inactivity');
     }
