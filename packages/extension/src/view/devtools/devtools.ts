@@ -28,6 +28,11 @@ const callback = (panel: {
     await updateTabPSPanelState(true);
   });
 
+  // Only works when devtool tab is switched, not when it is closed.
+  // panel.onHidden.addListener(async () => {
+  //   await updateTabPSPanelState(false);
+  // });
+
   chrome.runtime.connect(chrome.runtime.id, {
     name: DEVTOOL_PORT_NAME,
   });

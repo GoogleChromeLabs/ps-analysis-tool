@@ -43,6 +43,7 @@ class WebpageContentScript {
     this.abortInspection = this.abortInspection.bind(this);
 
     chrome.storage.local.onChanged.addListener(this.onStorageChange.bind(this));
+    document.addEventListener('contextmenu', this.abortInspection);
   }
 
   /**

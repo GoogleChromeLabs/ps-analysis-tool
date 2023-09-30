@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 export const OVERLAY_CLASS = 'ps-overlay';
-export const TOOLTIP_CLASS = 'ps-infobox';
+export const TOOLTIP_CLASS = 'ps-tooltip';

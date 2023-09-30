@@ -18,7 +18,7 @@
  * @param {HTMLElement} tooltip - The tooltip element.
  * @param {boolean} isHiddenFrame - Indicates if the frame is hidden.
  * @param {HTMLElement} frame - The target f element.
- * @param {string | undefined} selectedf - The selected frame's origin.
+ * @param {string | undefined} selectedFrame - The selected frame's origin.
  * @param selectedFrame
  * @returns {void}
  */
@@ -30,7 +30,7 @@ const setTooltipPosition = (
 ) => {
   const {
     x: frameX,
-    x: frameY,
+    y: frameY,
     width: frameWidth,
   } = frame.getBoundingClientRect();
 
@@ -40,7 +40,10 @@ const setTooltipPosition = (
 
   // Overlay will not exist for hidden elements. show at bottom of screen.
   if (isHiddenFrame) {
+    tooltip.classList.add('ps-tooltip-fixed');
     tooltip.style.top = `${window.innerHeight - tooltip.offsetHeight + 5}px`;
+    tooltip.style.left = 'auto';
+    tooltip.style.right = '30px';
 
     return;
   }
