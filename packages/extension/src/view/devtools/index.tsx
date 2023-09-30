@@ -18,6 +18,8 @@
  */
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '@cookie-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
@@ -34,12 +36,14 @@ const root = document.getElementById('root');
 
 if (root) {
   createRoot(root).render(
-    <ExternalStoreProvider>
-      <ContentPanelProvider>
-        <FilterManagementProvider>
-          <App />
-        </FilterManagementProvider>
-      </ContentPanelProvider>
-    </ExternalStoreProvider>
+    <ErrorBoundary fallbackRender={ErrorFallback}>
+      <ExternalStoreProvider>
+        <ContentPanelProvider>
+          <FilterManagementProvider>
+            <App />
+          </FilterManagementProvider>
+        </ContentPanelProvider>
+      </ExternalStoreProvider>
+    </ErrorBoundary>
   );
 }
