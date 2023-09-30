@@ -63,22 +63,6 @@ class WebpageContentScript {
   }
 
   /**
-   * Abort inspection and removes all frame popovers and hover event listeners.
-   */
-  abortInspection(): void {
-    this.removeHoverEventListeners();
-    removeAllPopovers();
-    toggleFrameHighlighting(false);
-
-    try {
-      if (this.port) {
-        this.port.disconnect();
-      }
-      // eslint-disable-next-line no-empty
-    } catch (error) {}
-  }
-
-  /**
    * Connects to the chrome runtime port.
    */
   connectPort() {
@@ -126,6 +110,22 @@ class WebpageContentScript {
   }
 
   /**
+   * Abort inspection and removes all frame popovers and hover event listeners.
+   */
+  abortInspection(): void {
+    this.removeHoverEventListeners();
+    removeAllPopovers();
+    toggleFrameHighlighting(false);
+
+    try {
+      if (this.port) {
+        this.port.disconnect();
+      }
+      // eslint-disable-next-line no-empty
+    } catch (error) {}
+  }
+
+  /**
    * Handles the storage change events.
    * @async
    * @param {{[key: string]: chrome.storage.StorageChange}} changes - The object representing the storage changes.
@@ -141,13 +141,13 @@ class WebpageContentScript {
     }
 
     // Its important to use changes newValue for latest data.
-    if (!changes[tabId].newValue?.isDevToolPSPanelOpen) {
+    if (!changes[tabId]?.newValue?.isDevToolPSPanelOpen) {
       this.abortInspection();
     }
 
-    const value = changes[tabId].newValue;
+    const value = changes[tabId]?.newValue;
 
-    if (this.isDevToolOpen !== value.isDevToolPSPanelOpen) {
+    if (this.isDevToolOpen !== value?.isDevToolPSPanelOpen) {
       this.isDevToolOpen = value.isDevToolPSPanelOpen;
 
       if (this.isDevToolOpen) {
