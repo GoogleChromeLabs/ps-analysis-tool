@@ -28,6 +28,7 @@ const callback = (panel: {
     await updateTabPSPanelState(true);
   });
 
+  // TODO: uncomment after tooltip work is complete.
   // Only works when devtool tab is switched, not when it is closed.
   // panel.onHidden.addListener(async () => {
   //   await updateTabPSPanelState(false);
