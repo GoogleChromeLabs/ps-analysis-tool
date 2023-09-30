@@ -34,38 +34,18 @@ const createTooltip = (
   let isHidden = false;
   const tooltip = document.createElement('div');
   const content = document.createElement('div');
-  const attributes = isMainFrame
-    ? {}
-    : getFrameAttributes(frame as HTMLIFrameElement);
-  const {
-    x: frameX,
-    y: frameY,
-    width: frameWidth,
-    height: frameHeight,
-  } = frame.getBoundingClientRect();
+
+  const attributes = !isMainFrame
+    ? getFrameAttributes(frame as HTMLIFrameElement)
+    : {};
+
+  const { width, height } = frame.getBoundingClientRect();
 
   tooltip.classList.add(TOOLTIP_CLASS);
-  content.classList.add('content');
+  content.classList.add('ps-content');
 
-  let styles: Record<string, string> = {
-    top: frameY + Number(window.scrollY) + 'px',
-    left: frameX + Number(window.scrollX) + 'px',
-    maxWidth: frameWidth - 40 + 'px',
-  };
-
-  if (frameHeight === 0 && frameWidth === 0) {
+  if (height === 0 && width === 0) {
     isHidden = true;
-    styles = {
-      top: Number(window.innerHeight) + 'px',
-      left: '10px',
-      maxWidth: '450px',
-      position: 'fixed',
-    };
-  }
-
-  // eslint-disable-next-line guard-for-in
-  for (const key in styles) {
-    tooltip.style[key] = styles[key];
   }
 
   const frameOrigin = attributes.src ? new URL(attributes.src).origin : '';

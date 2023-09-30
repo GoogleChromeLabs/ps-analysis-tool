@@ -13,14 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
- * Removes the trailing slash from a given URL if it exists.
- * @param {string} url - The input URL.
- * @returns {string} - The URL without a trailing slash.
+ * Internal dependencies.
  */
-const removeTrailingSlash = (url: string) =>
-  url.endsWith('/') ? url.slice(0, -1) : url;
+import removeTrailingSlash from './removeTrailingSlash';
 
 /**
  * Compares the origin of a frame with a frame source URL.

@@ -15,7 +15,7 @@ html body .ps-infobox[popover] {
     padding: 10px 10px 15px 10px !important;
 }
 
-html body .ps-infobox[popover] > .content {
+html body .ps-infobox[popover] > .ps-content {
     background-color: white !important;
     border: 0px !important;
     border-radius: 3px !important;
@@ -24,7 +24,7 @@ html body .ps-infobox[popover] > .content {
     padding: 10px !important;
 }
 
-html body .ps-infobox[popover] > .content .ps-frame-origin {
+html body .ps-infobox[popover] > .ps-content .ps-frame-origin {
     max-width: 360px !important;
     display: inline-block !important;
     white-space: nowrap !important;
@@ -32,7 +32,7 @@ html body .ps-infobox[popover] > .content .ps-frame-origin {
     text-overflow: ellipsis !important;
 }
 
-html body .ps-infobox[popover] > .content p {
+html body .ps-infobox[popover] > .ps-content p {
     line-height: 1.7 !important;
     margin: 0 !important;
     font-size: 12px !important;
@@ -41,22 +41,21 @@ html body .ps-infobox[popover] > .content p {
     font-family: "San Francisco", Helvetica, Arial, sans-serif !important;
 }
 
-html body .ps-infobox[popover] > .content p:nth-child(2) {
+html body .ps-infobox[popover] > .ps-content p:nth-child(2) {
     text-overflow: ellipsis;
     overflow: hidden;
     text-wrap: nowrap;
 }
 
-
-html body .ps-infobox[popover] > .content > p:first-child {
+html body .ps-infobox[popover] > .ps-content > p:first-child {
     margin-top: 0 !important;
 }
 
-html body .ps-infobox[popover] > .content > p:last-child {
+html body .ps-infobox[popover] > .ps-content > p:last-child {
     margin-bottom: 0 !important;
 }
 
-html body .ps-infobox[popover] > .content:after {
+html body .ps-infobox[popover] > .ps-content:after {
     content: " " !important;
     position: absolute !important;
     bottom: 9px !important;
@@ -69,13 +68,13 @@ html body .ps-infobox[popover] > .content:after {
     transform: rotate(315deg) !important;
 }
 
-html body .ps-infobox[popover] > .content.tooltip:after {
+html body .ps-infobox[popover] > .ps-content.tooltip:after {
     bottom: unset !important;
     top: 5px !important;
     box-shadow: color-mix(in srgb, #3c4043 15%, transparent) 3px -3px 4px -1px !important;
 }
 
-html body .psat-highlighted-frame {
+html body .ps-highlighted-frame {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5) !important;
     outline: 2px solid #FF0000 !important;
 }

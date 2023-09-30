@@ -14,16 +14,11 @@
  * limitations under the License.
  */
 /**
- * Toggles highlighting of iframes by adding or removing a CSS class.
- * @param {boolean} [highlight] - Indicates whether to highlight the iframes (default is true).
- * @returns {void}
+ * Removes the trailing slash from a given URL if it exists.
+ * @param {string} url - The input URL.
+ * @returns {string} - The URL without a trailing slash.
  */
-const toggleFrameHighlighting = (highlight = true): void => {
-  const iframes = document.querySelectorAll('iframe');
+const removeTrailingSlash = (url: string) =>
+  url.endsWith('/') ? url.slice(0, -1) : url;
 
-  iframes.forEach((iframe) => {
-    iframe.classList.toggle('ps-highlighted-frame', highlight);
-  });
-};
-
-export default toggleFrameHighlighting;
+export default removeTrailingSlash;

@@ -17,36 +17,50 @@
  * Sets the position of a tooltip element based on various conditions.
  * @param {HTMLElement} tooltip - The tooltip element.
  * @param {boolean} isHiddenFrame - Indicates if the frame is hidden.
- * @param {HTMLElement} Frame - The target frame element.
- * @param {string | undefined} selectedFrame - The selected frame's origin.
+ * @param {HTMLElement} frame - The target f element.
+ * @param {string | undefined} selectedf - The selected frame's origin.
+ * @param selectedFrame
  * @returns {void}
  */
 const setTooltipPosition = (
   tooltip: HTMLElement,
   isHiddenFrame: boolean,
-  Frame: HTMLElement,
+  frame: HTMLElement,
   selectedFrame: string | undefined
 ) => {
-  const tooltipHeight = tooltip.offsetHeight;
-  const frameOffsetTop = Frame.offsetTop;
+  const {
+    x: frameX,
+    x: frameY,
+    width: frameWidth,
+  } = frame.getBoundingClientRect();
+
+  tooltip.style.maxWidth = frameWidth - 40 + 'px';
+  tooltip.style.top = frameY + Number(window.scrollY) + 'px';
+  tooltip.style.left = frameX + Number(window.scrollX) + 'px';
 
   // Overlay will not exist for hidden elements. show at bottom of screen.
   if (isHiddenFrame) {
-    tooltip.style.top = `${window.innerHeight - tooltipHeight + 5}px`;
-  } else if (tooltipHeight > frameOffsetTop) {
+    tooltip.style.top = `${window.innerHeight - tooltip.offsetHeight + 5}px`;
+
+    return;
+  }
+
+  if (tooltip.offsetHeight > frame.offsetTop) {
     // Is it the main frame?
     if (document.location.origin === selectedFrame) {
       tooltip.style.top = '5px';
     } else {
       // Show the tooltip at the bottom if there isn't enough space at the top.
-      tooltip.style.top = `${tooltip.offsetTop + Frame.offsetHeight - 1}px`;
+      tooltip.style.top = `${tooltip.offsetTop + frame.offsetHeight - 1}px`;
     }
 
     // Set tooltip tip at the top of the box.
     tooltip.firstElementChild?.classList.add('tooltip');
-  } else {
-    tooltip.style.top = `${tooltip.offsetTop - tooltipHeight + 5}px`;
+
+    return;
   }
+
+  tooltip.style.top = `${tooltip.offsetTop - tooltip.offsetHeight + 5}px`;
 };
 
 export default setTooltipPosition;
