@@ -23,25 +23,14 @@ const callback = (panel: {
   onShown: { addListener: (arg0: () => void) => void };
   onHidden: { addListener: (arg0: () => void) => void };
 }) => {
-  // Wrapped in try because when context is invalidated, it throws error.
-  try {
-    // Fires when the user switches to the panel.
-    panel.onShown.addListener(async () => {
-      await updateTabPSPanelState(true);
-    });
+  // Fires when the user switches to the panel.
+  panel.onShown.addListener(async () => {
+    await updateTabPSPanelState(true);
+  });
 
-    // Only works when devtool tab is switched, not when it is closed.
-    panel.onHidden.addListener(async () => {
-      await updateTabPSPanelState(false);
-    });
-
-    chrome.runtime.connect(chrome.runtime.id, {
-      name: DEVTOOL_PORT_NAME,
-    });
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.log(error);
-  }
+  chrome.runtime.connect(chrome.runtime.id, {
+    name: DEVTOOL_PORT_NAME,
+  });
 };
 
 chrome.devtools.panels.create(
