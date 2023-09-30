@@ -26,4 +26,5 @@ export { default as MatrixComponentHorizontal } from './matrix/matrixComponent/m
 export type { MatrixComponentProps } from './matrix/matrixComponent';
 export { default as CookiesLanding } from './cookiesLanding';
 export { default as ErrorFallback } from './errorFallback';
+export { default as ContextInvalidatedMessage } from './errorFallback/contextInvalidatedMessage';
 export * from './table';

@@ -28,6 +28,7 @@ import {
   Button,
   CookiesLanding,
   ProgressBar,
+  ContextInvalidatedMessage,
 } from '@cookie-analysis-tool/design-system';
 
 const Cookies = () => {
@@ -102,10 +103,7 @@ const Cookies = () => {
           </p>
         )}
         {contextInvalidated ? (
-          <p className="dark:text-bright-gray text-chart-label text-base mb-5">
-            Uh Oh! Looks like extension has been updated since devtools was
-            open. Please close and reopen the devtools panel.
-          </p>
+          <ContextInvalidatedMessage />
         ) : (
           <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
         )}

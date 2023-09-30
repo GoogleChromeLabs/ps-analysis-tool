@@ -16,33 +16,18 @@
 /**
  * External dependencies.
  */
-import type { Meta, StoryObj } from '@storybook/react';
+import React from 'react';
 
-/**
- * Internal dependencies.
- */
-import ErrorFallback from '..';
-
-const meta: Meta<typeof ErrorFallback> = {
-  title: 'DesignSystem/ErrorFallback',
-  component: ErrorFallback,
-  tags: ['autodocs'],
+const ContextInvalidatedMessage = () => {
+  return (
+    <div className="dark:text-bright-gray text-chart-label text-base mb-5 p-10 text-center">
+      <p>
+        Uh oh! It appears that the extension has been updated while the devtools
+        were open.
+      </p>
+      <p>Please close and reopen the devtools panel.</p>
+    </div>
+  );
 };
 
-export default meta;
-
-export const Primary: StoryObj<typeof meta> = {
-  args: {
-    error: {
-      message: 'Uncaught Error: No code found in this project - Line#22',
-    },
-  },
-};
-
-export const ContextInvalidated: StoryObj<typeof meta> = {
-  args: {
-    error: {
-      message: 'Extension context invalidated.',
-    },
-  },
-};
+export default ContextInvalidatedMessage;
