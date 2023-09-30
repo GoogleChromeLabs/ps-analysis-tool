@@ -76,6 +76,6 @@ html body .ps-infobox[popover] > .content.tooltip:after {
 }
 
 html body .psat-highlighted-frame {
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3) !important;
-    border: 2px solid #007bff !important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5) !important;
+    outline: 2px solid #FF0000 !important;
 }

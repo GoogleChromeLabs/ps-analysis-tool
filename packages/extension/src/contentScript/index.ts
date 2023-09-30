@@ -17,11 +17,11 @@
  * Internal dependencies.
  */
 import {
-  handleFrameOverlay,
+  togglePopovers,
   removeAllPopovers,
-  addFrameOverlay,
+  addPopover,
   toggleFrameHighlighting,
-} from './overlay';
+} from './popovers';
 import { WEBPAGE_PORT_NAME } from '../constants';
 import type { ResponseType } from './types';
 import './style.css';
@@ -99,7 +99,7 @@ class WebpageContentScript {
     }
 
     if (response?.selectedFrame) {
-      handleFrameOverlay(response);
+      togglePopovers(response);
     } else if (!response.isInspecting) {
       removeAllPopovers();
     }
@@ -162,7 +162,7 @@ class WebpageContentScript {
     const srcAttribute = frame.getAttribute('src');
 
     if (!srcAttribute) {
-      addFrameOverlay(frame, {
+      addPopover(frame, {
         isInspecting: true,
         firstPartyCookies: 0,
         thirdPartyCookies: 0,

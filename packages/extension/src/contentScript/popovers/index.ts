@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as handleFrameOverlay } from './handleFrameOverlay';
+export { default as togglePopovers } from './togglePopovers';
 export { default as removeAllPopovers } from './removeAllPopovers';
-export { default as addFrameOverlay } from './addFrameOverlay';
+export { default as addPopover } from './addPopover';
 export { default as toggleFrameHighlighting } from './toggleFrameHighlighting';

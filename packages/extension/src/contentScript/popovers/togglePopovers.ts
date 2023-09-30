@@ -19,7 +19,7 @@
 import type { ResponseType } from '../types';
 import compareFrameSource from '../utils/compareFrameSource';
 import removeAllPopovers from './removeAllPopovers';
-import addFrameOverlay from './addFrameOverlay';
+import addPopover from './addPopover';
 
 /**
  * Handles the addition of frame overlays and tooltips based on a given response object.
@@ -27,7 +27,7 @@ import addFrameOverlay from './addFrameOverlay';
  * @param {ResponseType} response - The response object containing information about the selected frame.
  * @returns {void}
  */
-const handleFrameOverlay = (response: ResponseType) => {
+const togglePopovers = (response: ResponseType) => {
   const selectedOrigin = response.selectedFrame;
 
   if (!selectedOrigin) {
@@ -35,7 +35,7 @@ const handleFrameOverlay = (response: ResponseType) => {
   }
 
   if (selectedOrigin === document.location.origin) {
-    addFrameOverlay(document.body, response);
+    addPopover(document.body, response);
     return;
   }
 
@@ -46,12 +46,8 @@ const handleFrameOverlay = (response: ResponseType) => {
   for (const iframe of iframes) {
     const src = iframe.getAttribute('src');
 
-    if (!src) {
-      continue;
-    }
-
-    if (compareFrameSource(selectedOrigin, src)) {
-      frameFound = addFrameOverlay(iframe, response);
+    if (src && compareFrameSource(selectedOrigin, src)) {
+      frameFound = addPopover(iframe, response);
       break;
     }
   }
@@ -61,4 +57,4 @@ const handleFrameOverlay = (response: ResponseType) => {
   }
 };
 
-export default handleFrameOverlay;
+export default togglePopovers;

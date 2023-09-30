@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import { OVERLAY_CLASS } from '../constants';
+import { OVERLAY_CLASS } from '../../constants';
 
 /**
  * Creates a frame overlay element to cover iframe.
@@ -24,7 +24,7 @@ import { OVERLAY_CLASS } from '../constants';
  * @param {HTMLElement} frame - The HTML element (usually an iframe) for which the overlay is created.
  * @returns {HTMLElement | null} The frame overlay element if it was successfully created, or `null` if the element dimensions are zero.
  */
-const createFrameOverlay = (frame: HTMLElement) => {
+const createFrameOverlay = (frame: HTMLElement): HTMLElement | null => {
   const {
     x: frameX,
     y: frameY,

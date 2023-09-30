@@ -22,11 +22,17 @@
 const removeTrailingSlash = (url: string) =>
   url.endsWith('/') ? url.slice(0, -1) : url;
 
+/**
+ * Compares the origin of a frame with a frame source URL.
+ * @param {string} frameOrigin - The origin to compare.
+ * @param {string} frameSrc - The source URL of the frame.
+ * @returns {boolean} Returns `true` if the frame source URL includes the clean origin; otherwise, `false`.
+ */
 const compareFrameSource = (frameOrigin: string, frameSrc: string) => {
-  const cleanOrigin = removeTrailingSlash(frameOrigin)
-    .replace('www.', '')
-    .replace('https://', '')
-    .replace('http://', '');
+  const cleanOrigin = removeTrailingSlash(frameOrigin).replace(
+    /(www\.|https?:\/\/)/g,
+    ''
+  );
 
   if (frameSrc && !cleanOrigin) {
     return false;

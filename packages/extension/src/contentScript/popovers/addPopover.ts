@@ -16,8 +16,8 @@
 /**
  * Internal dependencies.
  */
-import createFrameOverlay from './createFrameOverlay';
-import createTooltip from './tooltip';
+import { createFrameOverlay } from './overlay';
+import { createTooltip, setTooltipPosition } from './tooltip';
 import removeAllPopovers from './removeAllPopovers';
 import type { ResponseType } from '../types';
 
@@ -27,20 +27,21 @@ import type { ResponseType } from '../types';
  * @param {ResponseType} data - The response data containing information to display in the tooltip.
  * @returns {boolean} Returns `true` if the overlay and tooltip were successfully added, `false` otherwise.
  */
-const addFrameOverlay = (
+const addPopover = (
   Frame: HTMLIFrameElement | HTMLElement,
   data: ResponseType
 ): boolean => {
-  const overlay = createFrameOverlay(Frame);
-  const tooltip = createTooltip(Frame, data);
   const body = document.querySelector('body');
-
-  // Overlay will not exist if frame is hidden.
-  const isHiddenFrame = !overlay;
 
   if (!body) {
     return false;
   }
+
+  const overlay = createFrameOverlay(Frame);
+  const tooltip = createTooltip(Frame, data);
+
+  // Overlay will not exist if frame is hidden.
+  const isHiddenFrame = !overlay;
 
   removeAllPopovers();
 
@@ -54,26 +55,7 @@ const addFrameOverlay = (
     tooltip.showPopover();
   }
 
-  // overlay will not exist for hidden elements. show at bottom of screen.
-  if (isHiddenFrame) {
-    tooltip.style.top =
-      Number(window.innerHeight) - Number(tooltip.offsetHeight) + 5 + 'px';
-  } else if (tooltip.offsetHeight > Frame.offsetTop) {
-    // is main frame?
-    if (document.location.origin === data.selectedFrame) {
-      tooltip.style.top = '5px';
-    } else {
-      // Show info box at bottom if we don't have enough space at top
-      tooltip.style.top =
-        Number(tooltip.offsetTop) + Number(Frame.offsetHeight) - 1 + 'px';
-    }
-
-    // Set infobox tip at top of box.
-    tooltip.firstElementChild?.classList.add('tooltip');
-  } else {
-    tooltip.style.top =
-      Number(tooltip.offsetTop) - Number(tooltip.offsetHeight) + 5 + 'px';
-  }
+  setTooltipPosition(tooltip, isHiddenFrame, Frame, data.selectedFrame);
 
   // no need to scroll if frame is hidden;
   if (!isHiddenFrame) {
@@ -87,4 +69,4 @@ const addFrameOverlay = (
   return true;
 };
 
-export default addFrameOverlay;
+export default addPopover;
