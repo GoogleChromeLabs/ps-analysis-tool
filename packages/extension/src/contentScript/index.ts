@@ -39,34 +39,44 @@ class WebpageContentScript {
    * Initialize
    */
   constructor() {
+    this.handleHoverEvent = this.handleHoverEvent.bind(this);
+    this.abortInspection = this.abortInspection.bind(this);
+
     chrome.storage.local.onChanged.addListener(this.onStorageChange.bind(this));
-    document.addEventListener('click', this.clearPage.bind(this));
-    document.addEventListener('contextmenu', this.clearPage.bind(this));
+    document.addEventListener('click', this.abortInspection);
+    document.addEventListener('contextmenu', this.abortInspection);
   }
 
   /**
    * Adds hover event listeners to the document.
    */
   addHoverEventListeners(): void {
-    document.addEventListener('mouseover', this.handleHoverEvent.bind(this));
-    document.addEventListener('mouseout', this.handleHoverEvent.bind(this));
+    document.addEventListener('mouseover', this.handleHoverEvent);
+    document.addEventListener('mouseout', this.handleHoverEvent);
   }
 
   /**
    * Removes hover event listeners from the document.
    */
   removeHoverEventListeners(): void {
-    document.removeEventListener('mouseover', this.handleHoverEvent.bind(this));
-    document.removeEventListener('mouseout', this.handleHoverEvent.bind(this));
+    document.removeEventListener('mouseover', this.handleHoverEvent);
+    document.removeEventListener('mouseout', this.handleHoverEvent);
   }
 
   /**
-   * Removes all frame popovers and hover event listeners.
+   * Abort inspection and removes all frame popovers and hover event listeners.
    */
-  clearPage(): void {
+  abortInspection(): void {
     this.removeHoverEventListeners();
     removeAllPopovers();
     toggleFrameHighlighting(false);
+
+    try {
+      if (this.port) {
+        this.port.disconnect();
+      }
+      // eslint-disable-next-line no-empty
+    } catch (error) {}
   }
 
   /**
@@ -103,7 +113,7 @@ class WebpageContentScript {
         }
       }
     } else {
-      this.clearPage();
+      this.abortInspection();
     }
   }
 
@@ -113,6 +123,7 @@ class WebpageContentScript {
   onDisconnect() {
     this.port?.onMessage.removeListener(this.onMessage);
     this.port = null;
+    this.abortInspection();
   }
 
   /**
@@ -131,8 +142,8 @@ class WebpageContentScript {
     }
 
     // Its important to use changes newValue for latest data.
-    if (!changes[tabId].newValue.isDevToolPSPanelOpen) {
-      this.clearPage();
+    if (!changes[tabId].newValue?.isDevToolPSPanelOpen) {
+      this.abortInspection();
     }
 
     const value = changes[tabId].newValue;
@@ -200,9 +211,12 @@ class WebpageContentScript {
     try {
       this.port.postMessage(payload);
     } catch (error) {
-      this.clearPage();
+      this.abortInspection();
       // eslint-disable-next-line no-console
-      console.log('Webpage port disconnected, probably due to inactivity');
+      console.log(
+        'Webpage port disconnected, probably due to inactivity',
+        error
+      );
     }
   }
 }

@@ -33,13 +33,13 @@ interface Response {
 const useFrameOverlay = () => {
   const portRef = useRef<chrome.runtime.Port | null>(null);
 
-  const { isInspecting, setSelectedFrame, selectedFrame } = useCookieStore(
-    ({ state, actions }) => ({
+  const { isInspecting, setIsInspecting, setSelectedFrame, selectedFrame } =
+    useCookieStore(({ state, actions }) => ({
       isInspecting: state.isInspecting,
       setSelectedFrame: actions.setSelectedFrame,
       selectedFrame: state.selectedFrame,
-    })
-  );
+      setIsInspecting: actions.setIsInspecting,
+    }));
 
   const { filteredCookies } = useFilterManagementStore(({ state }) => ({
     filteredCookies: state.filteredCookies,
@@ -64,11 +64,12 @@ const useFrameOverlay = () => {
 
       portRef.current.onDisconnect.addListener(() => {
         portRef.current = null;
+        setIsInspecting(false);
         // eslint-disable-next-line no-console
         console.log('Web port disconnected.');
       });
     },
-    [setSelectedFrame]
+    [setSelectedFrame, setIsInspecting]
   );
 
   useEffect(() => {
