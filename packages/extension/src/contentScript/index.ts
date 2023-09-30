@@ -33,17 +33,15 @@ class WebpageContentScript {
   port: chrome.runtime.Port | null = null;
   isDevToolOpen = false;
   isInspecting = false;
+  isHoveringOnPage = false;
 
   /**
    * Initialize
    */
   constructor() {
     chrome.storage.local.onChanged.addListener(this.onStorageChange.bind(this));
-    document.addEventListener('click', this.removeFrameHighlight.bind(this));
-    document.addEventListener(
-      'contextmenu',
-      this.removeFrameHighlight.bind(this)
-    );
+    document.addEventListener('click', this.removePopovers.bind(this));
+    document.addEventListener('contextmenu', this.removePopovers.bind(this));
   }
 
   /**
@@ -63,9 +61,9 @@ class WebpageContentScript {
   }
 
   /**
-   * Removes frame highlight and hover event listeners, and all popovers.
+   * Removes all frame popovers and hover event listeners.
    */
-  removeFrameHighlight(): void {
+  removePopovers(): void {
     this.removeHoverEventListeners();
     removeAllPopovers();
   }
@@ -94,14 +92,11 @@ class WebpageContentScript {
       this.addHoverEventListeners();
       toggleFrameHighlighting(true);
     } else {
-      this.removeFrameHighlight();
-      toggleFrameHighlighting(false);
+      this.removePopovers();
     }
 
     if (response?.selectedFrame) {
-      togglePopovers(response);
-    } else if (!response.isInspecting) {
-      removeAllPopovers();
+      togglePopovers(response, this.isHoveringOnPage);
     }
   }
 
@@ -121,7 +116,7 @@ class WebpageContentScript {
   async onStorageChange(changes: {
     [key: string]: chrome.storage.StorageChange;
   }) {
-    const data = await chrome.storage.local.get(); // TODO: Use changes.newValue?
+    const data = await chrome.storage.local.get(); // Because we do not know tab id yet.
     const tabId = data?.tabToRead;
 
     if (!tabId || !changes || !Object.keys(changes).includes(tabId)) {
@@ -130,7 +125,7 @@ class WebpageContentScript {
 
     // Its important to use changes newValue for latest data.
     if (!changes[tabId].newValue.isDevToolPSPanelOpen) {
-      this.removeFrameHighlight();
+      this.removePopovers();
       toggleFrameHighlighting(false);
     }
 
@@ -154,19 +149,25 @@ class WebpageContentScript {
   handleHoverEvent(event: MouseEvent): void {
     const target = event.target as HTMLElement;
 
+    this.isHoveringOnPage = false;
+
     if (!this.isInspecting || target.tagName !== 'IFRAME') {
       return;
     }
+
+    this.isHoveringOnPage = true;
 
     const frame = target as HTMLIFrameElement;
     const srcAttribute = frame.getAttribute('src');
 
     if (!srcAttribute) {
-      addPopover(frame, {
-        isInspecting: true,
-        firstPartyCookies: 0,
-        thirdPartyCookies: 0,
-      });
+      addPopover(
+        frame,
+        {
+          isInspecting: true,
+        },
+        this.isHoveringOnPage
+      );
 
       return;
     }
@@ -193,7 +194,7 @@ class WebpageContentScript {
     try {
       this.port.postMessage(payload);
     } catch (error) {
-      this.removeFrameHighlight();
+      this.removePopovers();
       // eslint-disable-next-line no-console
       console.log('Webpage port disconnected, probably due to inactivity');
     }

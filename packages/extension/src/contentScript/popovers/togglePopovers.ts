@@ -25,9 +25,10 @@ import addPopover from './addPopover';
  * Handles the addition of frame overlays and tooltips based on a given response object.
  * It adds an overlay and tooltip to the main document or an iframe depending on the selected frame's origin.
  * @param {ResponseType} response - The response object containing information about the selected frame.
+ * @param isHoveringOnPage
  * @returns {void}
  */
-const togglePopovers = (response: ResponseType) => {
+const togglePopovers = (response: ResponseType, isHoveringOnPage: boolean) => {
   const selectedOrigin = response.selectedFrame;
 
   if (!selectedOrigin) {
@@ -35,7 +36,7 @@ const togglePopovers = (response: ResponseType) => {
   }
 
   if (selectedOrigin === document.location.origin) {
-    addPopover(document.body, response);
+    addPopover(document.body, response, isHoveringOnPage);
     return;
   }
 
@@ -47,7 +48,7 @@ const togglePopovers = (response: ResponseType) => {
     const src = iframe.getAttribute('src');
 
     if (src && compareFrameSource(selectedOrigin, src)) {
-      frameFound = addPopover(iframe, response);
+      frameFound = addPopover(iframe, response, isHoveringOnPage);
       break;
     }
   }
