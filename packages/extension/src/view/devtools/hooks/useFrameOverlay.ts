@@ -33,13 +33,13 @@ interface Response {
 const useFrameOverlay = () => {
   const portRef = useRef<chrome.runtime.Port | null>(null);
 
-  const { isInspecting, setSelectedFrame, selectedFrame } = useCookieStore(
-    ({ state, actions }) => ({
+  const { isInspecting, setIsInspecting, setSelectedFrame, selectedFrame } =
+    useCookieStore(({ state, actions }) => ({
       isInspecting: state.isInspecting,
       setSelectedFrame: actions.setSelectedFrame,
+      setIsInspecting: actions.setIsInspecting,
       selectedFrame: state.selectedFrame,
-    })
-  );
+    }));
 
   const { filteredCookies } = useFilterManagementStore(({ state }) => ({
     filteredCookies: state.filteredCookies,
@@ -75,11 +75,15 @@ const useFrameOverlay = () => {
         }
       });
 
+      portRef.current.onDisconnect.addListener(() => {
+        setIsInspecting(false);
+      });
+
       portRef.current.postMessage({
         isInspecting,
       });
     })();
-  }, [isInspecting, setSelectedFrame]);
+  }, [isInspecting, setSelectedFrame, setIsInspecting]);
 
   useEffect(() => {
     if (isInspecting && portRef.current) {
