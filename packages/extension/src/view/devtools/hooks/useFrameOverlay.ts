@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 /**
  * Internal dependencies.
@@ -24,7 +24,7 @@ import React, { useEffect, useRef, useCallback } from 'react';
 import { WEBPAGE_PORT_NAME } from '../../../constants';
 import { useCookieStore } from '../stateProviders/syncCookieStore';
 import { useFilterManagementStore } from '../stateProviders/filterManagementStore';
-import { updateTabPSPanelState } from '../../../utils/psPanelState';
+import { getCurrentTabId } from '../../../utils/getCurrentTabId';
 
 interface Response {
   attributes: { src: React.SetStateAction<string | null> };
@@ -33,28 +33,39 @@ interface Response {
 const useFrameOverlay = () => {
   const portRef = useRef<chrome.runtime.Port | null>(null);
 
-  const { isInspecting, setIsInspecting, setSelectedFrame, selectedFrame } =
-    useCookieStore(({ state, actions }) => ({
+  const { isInspecting, setSelectedFrame, selectedFrame } = useCookieStore(
+    ({ state, actions }) => ({
       isInspecting: state.isInspecting,
       setSelectedFrame: actions.setSelectedFrame,
       selectedFrame: state.selectedFrame,
-      setIsInspecting: actions.setIsInspecting,
-    }));
+    })
+  );
 
   const { filteredCookies } = useFilterManagementStore(({ state }) => ({
     filteredCookies: state.filteredCookies,
   }));
 
-  const onConnect = useCallback(
-    (port: chrome.runtime.Port) => {
-      if (port.name !== WEBPAGE_PORT_NAME) {
+  // When inspect button is clicked.
+  useEffect(() => {
+    (async () => {
+      if (!isInspecting) {
+        if (portRef.current) {
+          portRef.current.disconnect();
+          portRef.current = null;
+        }
+
         return;
       }
 
-      portRef.current = port;
+      const tabId = await getCurrentTabId();
 
-      // eslint-disable-next-line no-console
-      console.log('Web port connected.');
+      if (!tabId) {
+        return;
+      }
+
+      portRef.current = chrome.tabs.connect(Number(tabId), {
+        name: WEBPAGE_PORT_NAME,
+      });
 
       portRef.current.onMessage.addListener((response: Response) => {
         if (response?.attributes?.src) {
@@ -62,32 +73,11 @@ const useFrameOverlay = () => {
         }
       });
 
-      portRef.current.onDisconnect.addListener(() => {
-        portRef.current = null;
-        setIsInspecting(false);
-        // eslint-disable-next-line no-console
-        console.log('Web port disconnected.');
+      portRef.current.postMessage({
+        isInspecting,
       });
-    },
-    [setSelectedFrame, setIsInspecting]
-  );
-
-  useEffect(() => {
-    chrome.runtime.onConnect.addListener(onConnect);
-  }, [onConnect]);
-
-  // When inspect button is clicked.
-  useEffect(() => {
-    (async () => {
-      await updateTabPSPanelState(isInspecting);
-
-      if (portRef.current) {
-        portRef.current.postMessage({
-          isInspecting,
-        });
-      }
     })();
-  }, [isInspecting]);
+  }, [isInspecting, setSelectedFrame]);
 
   useEffect(() => {
     if (isInspecting && portRef.current) {

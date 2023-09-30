@@ -31,7 +31,6 @@ import './style.css';
  */
 class WebpageContentScript {
   port: chrome.runtime.Port | null = null;
-  isDevToolOpen = false;
   isInspecting = false;
   isHoveringOnPage = false;
 
@@ -41,9 +40,23 @@ class WebpageContentScript {
   constructor() {
     this.handleHoverEvent = this.handleHoverEvent.bind(this);
     this.abortInspection = this.abortInspection.bind(this);
+    this.onMessage = this.onMessage.bind(this);
+    this.onDisconnect = this.onDisconnect.bind(this);
 
-    chrome.storage.local.onChanged.addListener(this.onStorageChange.bind(this));
-    document.addEventListener('contextmenu', this.abortInspection);
+    this.listenToConnection();
+  }
+
+  listenToConnection() {
+    chrome.runtime.onConnect.addListener((port) => {
+      if (port.name !== WEBPAGE_PORT_NAME) {
+        return;
+      }
+
+      this.port = port;
+
+      this.port.onMessage.addListener(this.onMessage);
+      this.port.onDisconnect.addListener(this.onDisconnect);
+    });
   }
 
   /**
@@ -60,18 +73,6 @@ class WebpageContentScript {
   removeHoverEventListeners(): void {
     document.removeEventListener('mouseover', this.handleHoverEvent);
     document.removeEventListener('mouseout', this.handleHoverEvent);
-  }
-
-  /**
-   * Connects to the chrome runtime port.
-   */
-  connectPort() {
-    this.port = chrome.runtime.connect(chrome.runtime.id, {
-      name: WEBPAGE_PORT_NAME,
-    });
-
-    this.port.onMessage.addListener(this.onMessage.bind(this));
-    this.port.onDisconnect.addListener(this.onDisconnect.bind(this));
   }
 
   /**
@@ -116,46 +117,6 @@ class WebpageContentScript {
     this.removeHoverEventListeners();
     removeAllPopovers();
     toggleFrameHighlighting(false);
-
-    try {
-      if (this.port) {
-        this.port.disconnect();
-      }
-      // eslint-disable-next-line no-empty
-    } catch (error) {}
-  }
-
-  /**
-   * Handles the storage change events.
-   * @async
-   * @param {{[key: string]: chrome.storage.StorageChange}} changes - The object representing the storage changes.
-   */
-  async onStorageChange(changes: {
-    [key: string]: chrome.storage.StorageChange;
-  }) {
-    const data = await chrome.storage.local.get(); // Because we do not know tab id yet.
-    const tabId = data?.tabToRead;
-
-    if (!tabId || !changes || !Object.keys(changes).includes(tabId)) {
-      return;
-    }
-
-    // Its important to use changes newValue for latest data.
-    if (!changes[tabId]?.newValue?.isDevToolPSPanelOpen) {
-      this.abortInspection();
-    }
-
-    const value = changes[tabId]?.newValue;
-
-    if (this.isDevToolOpen !== value?.isDevToolPSPanelOpen) {
-      this.isDevToolOpen = value.isDevToolPSPanelOpen;
-
-      if (this.isDevToolOpen) {
-        this.connectPort();
-      } else if (this.port) {
-        this.port.disconnect();
-      }
-    }
   }
 
   /**
@@ -211,11 +172,6 @@ class WebpageContentScript {
       this.port.postMessage(payload);
     } catch (error) {
       this.abortInspection();
-      // eslint-disable-next-line no-console
-      console.log(
-        'Webpage port disconnected, probably due to inactivity',
-        error
-      );
     }
   }
 }
