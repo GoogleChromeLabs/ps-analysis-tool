@@ -48,7 +48,7 @@ class WebpageContentScript {
 
   listenToConnection() {
     chrome.runtime.onConnect.addListener((port) => {
-      if (port.name !== WEBPAGE_PORT_NAME) {
+      if (!port.name.startsWith(WEBPAGE_PORT_NAME)) {
         return;
       }
 

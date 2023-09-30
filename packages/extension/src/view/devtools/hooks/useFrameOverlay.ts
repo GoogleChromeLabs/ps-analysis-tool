@@ -63,8 +63,10 @@ const useFrameOverlay = () => {
         return;
       }
 
+      const portName = `${WEBPAGE_PORT_NAME}-${tabId}`;
+
       portRef.current = chrome.tabs.connect(Number(tabId), {
-        name: WEBPAGE_PORT_NAME,
+        name: portName,
       });
 
       portRef.current.onMessage.addListener((response: Response) => {
