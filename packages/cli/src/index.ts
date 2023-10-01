@@ -49,6 +49,7 @@ program
 program.parse();
 
 const isHeadless = Boolean(program.opts().headless);
+const isUrl = Boolean(program.opts().url);
 const shouldSearchTechnology = program.opts().technologies;
 
 export const initialize = async () => {
@@ -150,7 +151,7 @@ export const initialize = async () => {
   exec(
     `open -a "Google Chrome" http://localhost:9000?path=${encodeURIComponent(
       outputFilePaths.allData
-    )}`
+    )}&type=${isUrl ? 'site' : 'sitemap'}`
   );
 
   // Clear ./tmp directory.
