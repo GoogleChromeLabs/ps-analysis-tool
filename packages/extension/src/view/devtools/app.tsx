@@ -18,20 +18,26 @@
  */
 import React, { useState } from 'react';
 import { Resizable } from 're-resizable';
+import { ExtensionReloadNotification } from '@cookie-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
 import TABS from './tabs';
 import { Sidebar } from './components';
+import { useCookieStore } from './stateProviders/syncCookieStore';
 import './app.css';
 
 const App: React.FC = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
   const TabContent = TABS[selectedTabIndex].component;
+  const { contextInvalidated } = useCookieStore(({ state }) => ({
+    contextInvalidated: state.contextInvalidated,
+  }));
 
   return (
     <div className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black">
+      {contextInvalidated && <ExtensionReloadNotification />}
       <div className="w-full h-full flex flex-row">
         <Resizable
           defaultSize={{ width: '200px', height: '100%' }}

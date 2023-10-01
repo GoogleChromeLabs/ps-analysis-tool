@@ -50,6 +50,7 @@ export interface CookieStoreContext {
   actions: {
     setSelectedFrame: React.Dispatch<React.SetStateAction<string | null>>;
     setIsInspecting: React.Dispatch<React.SetStateAction<boolean>>;
+    setContextInvalidated: React.Dispatch<React.SetStateAction<boolean>>;
     changeListeningToThisTab: () => void;
     getCookiesSetByJavascript: () => void;
   };
@@ -73,6 +74,7 @@ const initialState: CookieStoreContext = {
     changeListeningToThisTab: noop,
     setIsInspecting: noop,
     getCookiesSetByJavascript: noop,
+    setContextInvalidated: noop,
   },
 };
 
@@ -459,6 +461,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           changeListeningToThisTab,
           getCookiesSetByJavascript,
           setIsInspecting,
+          setContextInvalidated,
         },
       }}
     >

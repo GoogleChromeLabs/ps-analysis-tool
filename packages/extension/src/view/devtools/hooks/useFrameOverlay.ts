@@ -33,13 +33,19 @@ interface Response {
 const useFrameOverlay = () => {
   const portRef = useRef<chrome.runtime.Port | null>(null);
 
-  const { isInspecting, setIsInspecting, setSelectedFrame, selectedFrame } =
-    useCookieStore(({ state, actions }) => ({
-      isInspecting: state.isInspecting,
-      setSelectedFrame: actions.setSelectedFrame,
-      setIsInspecting: actions.setIsInspecting,
-      selectedFrame: state.selectedFrame,
-    }));
+  const {
+    isInspecting,
+    setIsInspecting,
+    setSelectedFrame,
+    setContextInvalidated,
+    selectedFrame,
+  } = useCookieStore(({ state, actions }) => ({
+    setContextInvalidated: actions.setContextInvalidated,
+    isInspecting: state.isInspecting,
+    setSelectedFrame: actions.setSelectedFrame,
+    setIsInspecting: actions.setIsInspecting,
+    selectedFrame: state.selectedFrame,
+  }));
 
   const { filteredCookies } = useFilterManagementStore(({ state }) => ({
     filteredCookies: state.filteredCookies,
@@ -50,7 +56,7 @@ const useFrameOverlay = () => {
     (async () => {
       // Indicates that the context was invalidated.
       if (!chrome.runtime?.id) {
-        window.location.reload();
+        setContextInvalidated(true);
         return;
       }
 
@@ -89,7 +95,7 @@ const useFrameOverlay = () => {
         isInspecting,
       });
     })();
-  }, [isInspecting, setSelectedFrame, setIsInspecting]);
+  }, [isInspecting, setSelectedFrame, setIsInspecting, setContextInvalidated]);
 
   useEffect(() => {
     if (isInspecting && portRef.current) {
