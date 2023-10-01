@@ -34,15 +34,10 @@ import { MessageBox } from '@cookie-analysis-tool/design-system';
 interface CookiesLandingProps {
   tabFrames: TabFrames | null;
   tabCookies: TabCookies | null;
-  tabUrl: string | null;
 }
 
-const CookiesLanding = ({
-  tabCookies,
-  tabFrames,
-  tabUrl,
-}: CookiesLandingProps) => {
-  const cookieStats = prepareCookiesCount(tabCookies, tabUrl);
+const CookiesLanding = ({ tabCookies, tabFrames }: CookiesLandingProps) => {
+  const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
 
   return (

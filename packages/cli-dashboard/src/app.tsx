@@ -25,9 +25,15 @@ import { Resizable } from 're-resizable';
  */
 import './app.css';
 import SiteReport from './components/siteReport';
-import type { TechnologyData } from '@cookie-analysis-tool/common';
+import type {
+  CookieTableData,
+  TabCookies,
+  TabFrames,
+  TechnologyData,
+} from '@cookie-analysis-tool/common';
 import type { CookieJsonDataType } from './types';
 import SiteSelection from './components/siteReport/components/siteSelection';
+import { CookiesLanding } from '@cookie-analysis-tool/design-system';
 
 enum DisplayType {
   SITEMAP,
@@ -50,6 +56,62 @@ const App = () => {
     ];
   }, []);
 
+  const frames = useMemo<TabFrames>(
+    () =>
+      cookies.reduce((acc, cookie) => {
+        const frameUrl =
+          Object.values(cookie.frameUrls).length >= 1
+            ? Object.values(cookie.frameUrls)[0]
+            : cookie.pageUrl;
+        if (frameUrl?.includes('http')) {
+          acc[frameUrl] = {} as TabFrames[string];
+        }
+        return acc;
+      }, {} as TabFrames),
+    [cookies]
+  );
+
+  const reshapedCookies = useMemo<TabCookies>(
+    () =>
+      Object.fromEntries(
+        cookies.map((cookie) => {
+          return [
+            cookie.name + cookie.domain + cookie.path,
+            {
+              parsedCookie: {
+                name: cookie.name,
+                value: cookie.value,
+                domain: cookie.domain,
+                path: cookie.path,
+                expires: cookie.expires,
+                httponly: cookie.httpOnly,
+                secure: cookie.secure,
+                samesite: cookie.sameSite,
+              },
+              analytics: {
+                platform: cookie.platform,
+                category:
+                  cookie.category === 'Unknown Category'
+                    ? 'Uncategorized'
+                    : cookie.category,
+                description: cookie.description,
+              } as CookieTableData['analytics'],
+              url: cookie.pageUrl,
+              headerType: 'response',
+              isFirstParty: cookie.isFirstParty === 'Yes' ? true : false,
+              frameIdList: [],
+              isCookieSet: !cookie.isBlocked,
+              frameUrl:
+                Object.values(cookie.frameUrls).length >= 1
+                  ? Object.values(cookie.frameUrls)[0]
+                  : cookie.pageUrl,
+            },
+          ];
+        })
+      ),
+    [cookies]
+  );
+
   useEffect(() => {
     (async () => {
       const response = await fetch(path);
@@ -66,6 +128,10 @@ const App = () => {
       setSites(Array.from(_sites));
     })();
   }, [path]);
+
+  const siteFilteredCookies = useMemo(() => {
+    return cookies.filter((cookie) => cookie.pageUrl === selectedSite);
+  }, [cookies, selectedSite]);
 
   if (!path) {
     return (
@@ -94,7 +160,14 @@ const App = () => {
           />
         </Resizable>
         <div className="flex-1 h-full">
-          <SiteReport cookies={cookies} technologies={technologies} />
+          {selectedSite ? (
+            <SiteReport
+              cookies={siteFilteredCookies}
+              technologies={technologies}
+            />
+          ) : (
+            <CookiesLanding tabFrames={frames} tabCookies={reshapedCookies} />
+          )}
         </div>
       </div>
     );

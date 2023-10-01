@@ -31,10 +31,8 @@ import SinonChrome from 'sinon-chrome';
  * Internal dependencies.
  */
 import CookieTab from '..';
-import CookieDetails from '../cookiesListing/cookieDetails';
-import { useContentPanelStore } from '../../../stateProviders/contentPanelStore';
+import { CookieDetails, Details } from '@cookie-analysis-tool/design-system';
 import { useFilterManagementStore } from '../../../stateProviders/filterManagementStore';
-import Details from '../cookiesListing/cookieDetails/details';
 import mockResponse, {
   uncategorized1pCookie,
   known1pCookie,
@@ -58,16 +56,6 @@ jest.mock('../../../stateProviders/syncCookieStore', () => {
 });
 
 jest.mock('../../../stateProviders/contentPanelStore');
-const mockUseContentPanelStore = useContentPanelStore as jest.Mock;
-mockUseContentPanelStore.mockReturnValue({
-  selectedFrameCookie: {
-    1: mockResponse.tabCookies[uncategorized1pCookie.name],
-  },
-  setSelectedFrameCookie: jest.fn(),
-  tableContainerRef: { current: null },
-  tableColumnSize: 100,
-  setTableColumnSize: jest.fn(),
-});
 
 jest.mock('../../../stateProviders/filterManagementStore');
 const mockFilterManagementStore = useFilterManagementStore as jest.Mock;
@@ -199,14 +187,7 @@ describe('CookieTab', () => {
   });
 
   it('should render a cookie card with placeholder text when no cookie is selected', async () => {
-    mockUseContentPanelStore.mockReturnValue({
-      selectedFrameCookie: null,
-      tableContainerRef: { current: null },
-      tableColumnSize: 100,
-      setTableColumnSize: jest.fn(),
-    });
-
-    render(<CookieDetails />);
+    render(<CookieDetails selectedFrameCookie={null} />);
 
     expect(
       await screen.findByText('Select cookies to preview its value')
@@ -240,16 +221,7 @@ describe('CookieTab', () => {
     const firstCookie =
       mockResponse.tabCookies[Object.keys(mockResponse.tabCookies)[0]];
 
-    mockUseContentPanelStore.mockReturnValue({
-      selectedFrameCookie: {
-        1: firstCookie,
-      },
-      tableContainerRef: { current: null },
-      tableColumnSize: 100,
-      setTableColumnSize: jest.fn(),
-    });
-
-    render(<CookieDetails />);
+    render(<CookieDetails selectedFrameCookie={{ 1: firstCookie }} />);
     const card = await screen.findByTestId('cookie-card');
 
     expect(card).toBeInTheDocument();
@@ -260,16 +232,13 @@ describe('CookieTab', () => {
   });
 
   it('should show a cookie card with the description about cookie', async () => {
-    mockUseContentPanelStore.mockReturnValue({
-      selectedFrameCookie: {
-        1: mockResponse.tabCookies[known1pCookie.name],
-      },
-      tableContainerRef: { current: null },
-      tableColumnSize: 100,
-      setTableColumnSize: jest.fn(),
-    });
-
-    render(<CookieDetails />);
+    render(
+      <CookieDetails
+        selectedFrameCookie={{
+          1: mockResponse.tabCookies[known1pCookie.name],
+        }}
+      />
+    );
 
     const card = await screen.findByTestId('cookie-card');
 
@@ -281,16 +250,13 @@ describe('CookieTab', () => {
   });
 
   it('should show a cookie card with no description about cookie', async () => {
-    mockUseContentPanelStore.mockReturnValue({
-      selectedFrameCookie: {
-        1: mockResponse.tabCookies[uncategorized1pCookie.name],
-      },
-      tableContainerRef: { current: null },
-      tableColumnSize: 100,
-      setTableColumnSize: jest.fn(),
-    });
-
-    render(<CookieDetails />);
+    render(
+      <CookieDetails
+        selectedFrameCookie={{
+          1: mockResponse.tabCookies[uncategorized1pCookie.name],
+        }}
+      />
+    );
 
     const card = await screen.findByTestId('cookie-card');
 
@@ -301,18 +267,6 @@ describe('CookieTab', () => {
 
   it('should get the cookie object when row is clicked or Arrow up/down pressed', async () => {
     const setStateMock = jest.fn();
-    mockUseContentPanelStore.mockReturnValue({
-      selectedFrameCookie: null,
-      setSelectedFrameCookie: setStateMock,
-      tableContainerRef: {
-        current: {
-          offsetWidth: 1000,
-        },
-      },
-      tableColumnSize: 100,
-      setTableColumnSize: jest.fn(),
-    });
-
     render(<CookieTab />);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -363,16 +317,13 @@ describe('CookieTab', () => {
     const lastCookie =
       mockResponse.tabCookies[Object.keys(mockResponse.tabCookies)[3]];
 
-    mockUseContentPanelStore.mockReturnValue({
-      selectedFrameCookie: {
-        1: mockResponse.tabCookies[known3pCookieWithValue.name],
-      },
-      tableContainerRef: { current: null },
-      tableColumnSize: 100,
-      setTableColumnSize: jest.fn(),
-    });
-
-    render(<CookieDetails />);
+    render(
+      <CookieDetails
+        selectedFrameCookie={{
+          1: mockResponse.tabCookies[known3pCookieWithValue.name],
+        }}
+      />
+    );
     const card = await screen.findByTestId('cookie-card');
 
     expect(card).toBeInTheDocument();

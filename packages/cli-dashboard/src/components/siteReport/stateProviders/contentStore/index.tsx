@@ -83,7 +83,10 @@ export const Provider = ({
               isFirstParty: cookie.isFirstParty === 'Yes' ? true : false,
               frameIdList: [],
               isCookieSet: !cookie.isBlocked,
-              frameUrl: cookie.frameUrl,
+              frameUrl:
+                Object.values(cookie.frameUrls).length >= 1
+                  ? Object.values(cookie.frameUrls)[0]
+                  : cookie.pageUrl,
             },
           ];
         })

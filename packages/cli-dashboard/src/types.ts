@@ -29,7 +29,8 @@ export type CookieJsonDataType = {
   description: string;
   isFirstParty: string;
   pageUrl: string;
-  frameUrl: string;
+  requestUrls: { [id: string]: string };
+  frameUrls: { [id: string]: string };
   isBlocked: boolean;
   blockedReasons: string[];
 };

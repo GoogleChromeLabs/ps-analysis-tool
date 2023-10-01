@@ -16,12 +16,13 @@
 /**
  * External dependencies.
  */
+import { ArrowDownWhite } from '@cookie-analysis-tool/design-system';
 import React, { useState } from 'react';
 
 interface SiteSelectionProps {
   sites: string[];
   selectedSite: string | null;
-  setSelectedSite: (site: string) => void;
+  setSelectedSite: (site: string | null) => void;
 }
 
 const SiteSelection = ({
@@ -29,25 +30,38 @@ const SiteSelection = ({
   selectedSite,
   setSelectedSite,
 }: SiteSelectionProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const isSiteSelected = Boolean(selectedSite);
+  const [isOpen, setIsOpen] = useState(isSiteSelected);
   return (
-    <div className="w-full h-full flex justify-center">
+    <div className="w-full h-full">
       <div
-        onClick={() => {
-          setIsOpen(!isOpen);
-        }}
-        className="w-full bg-red-200 py-2 flex justify-center align-center"
+        onClick={() => setSelectedSite(null)}
+        className={`w-full flex items-center pl-6 py-0.5 outline-0 ${
+          isSiteSelected ? 'bg-gainsboro' : 'bg-royal-blue text-white'
+        } cursor-pointer`}
       >
+        <div
+          onClick={() => {
+            setIsOpen(!isOpen);
+          }}
+          className={`origin-center transition-transform scale-125 p-0.5 mr-1 ${
+            !isOpen && '-rotate-90'
+          }`}
+        >
+          <ArrowDownWhite />
+        </div>
         <p>Sitemap report</p>
       </div>
       {isOpen && (
-        <ul>
+        <ul className="pl-6">
           {sites.map((site, id) => (
             <li
               onClick={() => {
                 setSelectedSite(site);
               }}
-              className={`${site === selectedSite} && bg-slate-500`}
+              className={`truncate pl-6 cursor-pointer ${
+                site === selectedSite ? 'bg-royal-blue text-white' : ''
+              }`}
               key={id}
             >
               {site}
