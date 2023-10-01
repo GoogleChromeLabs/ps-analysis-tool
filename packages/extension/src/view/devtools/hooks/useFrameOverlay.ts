@@ -55,7 +55,7 @@ const useFrameOverlay = () => {
   useEffect(() => {
     (async () => {
       // Indicates that the context was invalidated.
-      if (!chrome.runtime?.id) {
+      if (!chrome.runtime?.id && setContextInvalidated) {
         setContextInvalidated(true);
         return;
       }
