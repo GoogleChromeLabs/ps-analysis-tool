@@ -37,9 +37,11 @@ const ErrorFallback = ({ error }: ErrorFallbackProps) => {
   return (
     <div className="p-4 text-center" role="alert">
       <p className="font-bold mb-5 text-xl">Something went wrong!</p>
-      <p className="mb-20">Please try opening this page in a new tab.</p>
-      <pre className="text-red-700 text-xs bg-slate-200 p-5 text-left">
-        {error?.message}
+      <p className="mb-10">Please try opening this page in a new tab.</p>
+      <pre className="text-red-700 text-xs bg-slate-50 p-5 text-left border-l-4">
+        {error?.message} Please try opening this page in a new tab. Please try
+        opening this page in a new tab. Please try opening this page in a new
+        tab.
       </pre>
     </div>
   );
