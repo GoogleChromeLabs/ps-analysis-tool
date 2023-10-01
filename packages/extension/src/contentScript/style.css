@@ -80,5 +80,5 @@ html body .ps-tooltip[popover] > .ps-content.tooltip:after {
 
 html body .ps-highlighted-frame {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5) !important;
-    outline: 2px solid #FF0000 !important;
+    outline: 1px solid #FF0000 !important;
 }

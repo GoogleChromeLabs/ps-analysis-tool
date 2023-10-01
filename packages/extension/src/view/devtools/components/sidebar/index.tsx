@@ -223,6 +223,10 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
     [setIndex, setSelectedFrame]
   );
 
+  const showInspectButton = tabFrames
+    ? Boolean(Object.keys(tabFrames).length)
+    : false;
+
   return (
     <div className="overflow-auto flex h-full">
       <div className="flex flex-col grow" ref={sidebarContainerRef}>
@@ -306,7 +310,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                                 onAccordionHeaderClick={onAccordionHeaderClick}
                                 setIsInspecting={setIsInspecting}
                                 isInspecting={isInspecting}
-                                showInspectButton={isCurrentTabBeingListenedTo}
+                                showInspectButton={showInspectButton}
                               />
                             );
                           }
