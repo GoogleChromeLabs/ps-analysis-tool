@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as findSelectedFrameElement } from './findSelectedFrameElement';
+export { default as findSelectedFrameElements } from './findSelectedFrameElements';
 export { default as removeAllPopovers } from './removeAllPopovers';
 export { default as addPopover } from './addPopover';
 export { default as toggleFrameHighlighting } from './toggleFrameHighlighting';

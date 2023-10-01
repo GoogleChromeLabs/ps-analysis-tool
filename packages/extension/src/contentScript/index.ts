@@ -17,7 +17,7 @@
  * Internal dependencies.
  */
 import {
-  findSelectedFrameElement,
+  findSelectedFrameElements,
   removeAllPopovers,
   addPopover,
   toggleFrameHighlighting,
@@ -88,10 +88,12 @@ class WebpageContentScript {
       toggleFrameHighlighting(true);
 
       if (response?.selectedFrame) {
-        const frameElement = findSelectedFrameElement(response.selectedFrame);
+        const frameElements = findSelectedFrameElements(response.selectedFrame);
 
-        if (frameElement) {
-          addPopover(frameElement, response, this.isHoveringOnPage);
+        if (frameElements.length) {
+          frameElements.forEach((frameElement, index) => {
+            addPopover(frameElement, response, this.isHoveringOnPage, index);
+          });
         } else {
           removeAllPopovers();
         }

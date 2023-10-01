@@ -23,15 +23,17 @@ import type { ResponseType } from '../types';
 
 /**
  * Adds a frame overlay and tooltip to an HTML iframe or element.
- * @param {HTMLIFrameElement | HTMLElement} Frame - The HTML iframe or element to which the overlay and tooltip are added.
+ * @param {HTMLIFrameElement | HTMLElement} frame - The HTML iframe or element to which the overlay and tooltip are added.
  * @param {ResponseType} data - The response data containing information to display in the tooltip.
  * @param isHoveringOnpage
+ * @param index
  * @returns {boolean} Returns `true` if the overlay and tooltip were successfully added, `false` otherwise.
  */
 const addPopover = (
-  Frame: HTMLIFrameElement | HTMLElement,
+  frame: HTMLIFrameElement | HTMLElement,
   data: ResponseType,
-  isHoveringOnpage: boolean
+  isHoveringOnpage: boolean,
+  index: number
 ): boolean => {
   const body = document.querySelector('body');
 
@@ -39,8 +41,8 @@ const addPopover = (
     return false;
   }
 
-  const overlay = createFrameOverlay(Frame);
-  const tooltip = createTooltip(Frame, data);
+  const overlay = createFrameOverlay(frame);
+  const tooltip = createTooltip(frame, data);
 
   // Overlay will not exist if frame is hidden.
   const isHiddenFrame = !overlay;
@@ -57,10 +59,10 @@ const addPopover = (
     tooltip.showPopover();
   }
 
-  setTooltipPosition(tooltip, isHiddenFrame, Frame, data.selectedFrame);
+  setTooltipPosition(tooltip, isHiddenFrame, frame, data.selectedFrame);
 
   // no need to scroll if frame is hidden;
-  if (!isHiddenFrame && !isHoveringOnpage) {
+  if (0 === index && !isHiddenFrame && !isHoveringOnpage) {
     tooltip.scrollIntoView({
       behavior: 'smooth',
       block: 'start',

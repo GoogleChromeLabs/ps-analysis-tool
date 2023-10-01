@@ -18,29 +18,27 @@
  */
 import compareFrameSource from '../utils/compareFrameSource';
 
-const findSelectedFrameElement = (selectedOrigin: string) => {
+const findSelectedFrameElements = (selectedOrigin: string) => {
   if (!selectedOrigin) {
-    return null;
+    return [];
   }
 
   if (selectedOrigin === document.location.origin) {
-    return document.body; // main frame
+    return [document.body]; // main frame
   }
 
   const iframes = document.querySelectorAll('iframe');
-
-  let selectedFrame = null;
+  const elements = [];
 
   for (const iframe of iframes) {
     const src = iframe.getAttribute('src');
 
     if (src && compareFrameSource(selectedOrigin, src)) {
-      selectedFrame = iframe;
-      break;
+      elements.push(iframe);
     }
   }
 
-  return selectedFrame;
+  return elements;
 };
 
-export default findSelectedFrameElement;
+export default findSelectedFrameElements;
