@@ -48,6 +48,12 @@ const useFrameOverlay = () => {
   // When inspect button is clicked.
   useEffect(() => {
     (async () => {
+      // Indicates that the context was invalidated.
+      if (!chrome.runtime?.id) {
+        window.location.reload();
+        return;
+      }
+
       if (!isInspecting) {
         if (portRef.current) {
           portRef.current.disconnect();
