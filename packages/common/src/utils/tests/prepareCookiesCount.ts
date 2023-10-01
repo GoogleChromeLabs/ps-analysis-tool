@@ -139,15 +139,11 @@ const EMPTY_STATS = {
 
 describe('prepareCookiesCount : ', () => {
   it('Gives empty stats with cookies', () => {
-    expect(prepareCookiesCount({}, 'https://example.com/page')).toEqual(
-      EMPTY_STATS
-    );
+    expect(prepareCookiesCount({})).toEqual(EMPTY_STATS);
   });
 
   it('Gives empty stats with null passed as cookies', () => {
-    expect(prepareCookiesCount(null, 'https://example.com/page')).toEqual(
-      EMPTY_STATS
-    );
+    expect(prepareCookiesCount(null)).toEqual(EMPTY_STATS);
   });
 
   it('Generates correct tests', () => {
