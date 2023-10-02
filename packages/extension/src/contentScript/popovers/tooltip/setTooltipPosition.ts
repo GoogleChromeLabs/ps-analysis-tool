@@ -52,6 +52,7 @@ const setTooltipPosition = (
     // Is it the main frame?
     if (document.location.origin === selectedFrame) {
       tooltip.style.top = '5px';
+      tooltip.classList.add('ps-tooltip-fixed');
     } else {
       // Show the tooltip at the bottom if there isn't enough space at the top.
       tooltip.style.top = `${tooltip.offsetTop + frame.offsetHeight - 1}px`;
