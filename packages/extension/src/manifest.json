@@ -23,6 +23,12 @@
     "service_worker": "service-worker.js",
     "type": "module"
   },
+  "content_scripts": [
+    {
+      "js": ["scripts/content.js"],
+      "matches": ["*://*/*"]
+    }
+  ],
   "options_page": "settings/index.html",
   "action": {
     "default_popup": "popup/index.html",
