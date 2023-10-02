@@ -27,11 +27,13 @@ import type { ResponseType } from '../types';
  * @param {ResponseType} data - The response data containing information to display in the tooltip.
  * @param isHoveringOnpage
  * @param index
+ * @param isHoveringOverPage
  * @returns {boolean} Returns `true` if the overlay and tooltip were successfully added, `false` otherwise.
  */
 const addPopover = (
   frame: HTMLIFrameElement | HTMLElement,
-  data: ResponseType
+  data: ResponseType,
+  isHoveringOverPage: boolean
 ): boolean => {
   const body = document.querySelector('body');
 
@@ -58,6 +60,15 @@ const addPopover = (
   }
 
   setTooltipPosition(tooltip, isHiddenFrame, frame, data.selectedFrame);
+
+  // no need to scroll if frame is hidden;
+  if (!isHiddenFrame && !isHoveringOverPage) {
+    tooltip.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+      inline: 'nearest',
+    });
+  }
 
   return true;
 };
