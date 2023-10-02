@@ -33,7 +33,7 @@ const addPopover = (
   frame: HTMLIFrameElement | HTMLElement,
   data: ResponseType,
   isHoveringOnpage: boolean,
-  index: number
+  index = 0
 ): boolean => {
   const body = document.querySelector('body');
 
@@ -47,7 +47,7 @@ const addPopover = (
   // Overlay will not exist if frame is hidden.
   const isHiddenFrame = !overlay;
 
-  removeAllPopovers();
+  removeAllPopovers(); // Remove when supporting multi frames.
 
   if (overlay) {
     body.appendChild(overlay);

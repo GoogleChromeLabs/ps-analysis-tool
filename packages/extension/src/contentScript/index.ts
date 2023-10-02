@@ -91,9 +91,7 @@ class WebpageContentScript {
         const frameElements = findSelectedFrameElements(response.selectedFrame);
 
         if (frameElements.length) {
-          frameElements.forEach((frameElement, index) => {
-            addPopover(frameElement, response, this.isHoveringOnPage, index);
-          });
+          addPopover(frameElements[0], response, this.isHoveringOnPage); // TODO: Handle multi frame.
         } else {
           removeAllPopovers();
         }
@@ -145,8 +143,7 @@ class WebpageContentScript {
         {
           isInspecting: true,
         },
-        this.isHoveringOnPage,
-        0
+        this.isHoveringOnPage
       );
 
       return;
