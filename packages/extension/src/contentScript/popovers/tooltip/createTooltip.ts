@@ -48,7 +48,10 @@ const createTooltip = (
     isHidden = true;
   }
 
-  const frameOrigin = attributes.src ? new URL(attributes.src).origin : '';
+  const frameSrc = attributes.src?.startsWith('//')
+    ? 'https:' + attributes.src
+    : attributes?.src;
+  const frameOrigin = frameSrc ? new URL(frameSrc || '').origin : '';
 
   const origin = isMainFrame ? data.selectedFrame : frameOrigin;
 

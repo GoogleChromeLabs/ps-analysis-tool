@@ -145,7 +145,8 @@ class WebpageContentScript {
         {
           isInspecting: true,
         },
-        this.isHoveringOnPage
+        this.isHoveringOnPage,
+        0
       );
 
       return;
