@@ -57,6 +57,7 @@ describe('App', () => {
         },
         inspectedWindow: {
           tabId: 1,
+          eval: noop,
         },
       },
       tabs: {
