@@ -57,6 +57,13 @@ export const Provider = ({
     () =>
       Object.fromEntries(
         cookies
+          .filter((cookie) => {
+            const frameUrl =
+              Object.values(cookie.frameUrls).length >= 1
+                ? Object.values(cookie.frameUrls)[0]
+                : cookie.pageUrl;
+            return frameUrl?.includes('http');
+          })
           .map((cookie) => {
             return [
               cookie.name + cookie.domain + cookie.path,
@@ -91,7 +98,6 @@ export const Provider = ({
               },
             ];
           })
-          .filter(({ frameUrl }) => frameUrl.includes('http'))
       ),
     [cookies]
   );
