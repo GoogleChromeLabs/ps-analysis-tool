@@ -90,11 +90,12 @@ class WebpageContentScript {
       if (response?.selectedFrame) {
         const frameElements = findSelectedFrameElements(response.selectedFrame);
 
-        if (frameElements.length) {
-          addPopover(frameElements[0], response, this.isHoveringOverPage); // TODO: Handle multi frame.
-        } else {
-          removeAllPopovers();
-        }
+        // Remove previous frames.
+        removeAllPopovers();
+
+        frameElements.forEach((frame, index) => {
+          addPopover(frame, response, this.isHoveringOverPage, index);
+        });
       }
     } else {
       this.abortInspection();
@@ -138,6 +139,9 @@ class WebpageContentScript {
     const srcAttribute = frame.getAttribute('src');
 
     if (!srcAttribute) {
+      // Remove previous Popovers before adding new.
+      removeAllPopovers();
+
       addPopover(
         frame,
         {
