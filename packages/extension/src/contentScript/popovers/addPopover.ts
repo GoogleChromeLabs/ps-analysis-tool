@@ -31,9 +31,7 @@ import type { ResponseType } from '../types';
  */
 const addPopover = (
   frame: HTMLIFrameElement | HTMLElement,
-  data: ResponseType,
-  isHoveringOnpage: boolean,
-  index: number
+  data: ResponseType
 ): boolean => {
   const body = document.querySelector('body');
 
@@ -47,7 +45,7 @@ const addPopover = (
   // Overlay will not exist if frame is hidden.
   const isHiddenFrame = !overlay;
 
-  removeAllPopovers();
+  removeAllPopovers(); // Remove when supporting multi frames.
 
   if (overlay) {
     body.appendChild(overlay);
@@ -60,15 +58,6 @@ const addPopover = (
   }
 
   setTooltipPosition(tooltip, isHiddenFrame, frame, data.selectedFrame);
-
-  // no need to scroll if frame is hidden;
-  if (0 === index && !isHiddenFrame && !isHoveringOnpage) {
-    tooltip.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-      inline: 'nearest',
-    });
-  }
 
   return true;
 };

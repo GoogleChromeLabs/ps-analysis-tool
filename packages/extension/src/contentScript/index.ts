@@ -32,7 +32,6 @@ import './style.css';
 class WebpageContentScript {
   port: chrome.runtime.Port | null = null;
   isInspecting = false;
-  isHoveringOnPage = false;
 
   /**
    * Initialize
@@ -91,9 +90,7 @@ class WebpageContentScript {
         const frameElements = findSelectedFrameElements(response.selectedFrame);
 
         if (frameElements.length) {
-          frameElements.forEach((frameElement, index) => {
-            addPopover(frameElement, response, this.isHoveringOnPage, index);
-          });
+          addPopover(frameElements[0], response); // TODO: Handle multi frame.
         } else {
           removeAllPopovers();
         }
@@ -128,26 +125,17 @@ class WebpageContentScript {
   handleHoverEvent(event: MouseEvent): void {
     const target = event.target as HTMLElement;
 
-    this.isHoveringOnPage = false;
-
     if (!this.isInspecting || target.tagName !== 'IFRAME') {
       return;
     }
-
-    this.isHoveringOnPage = true;
 
     const frame = target as HTMLIFrameElement;
     const srcAttribute = frame.getAttribute('src');
 
     if (!srcAttribute) {
-      addPopover(
-        frame,
-        {
-          isInspecting: true,
-        },
-        this.isHoveringOnPage,
-        0
-      );
+      addPopover(frame, {
+        isInspecting: true,
+      });
 
       return;
     }

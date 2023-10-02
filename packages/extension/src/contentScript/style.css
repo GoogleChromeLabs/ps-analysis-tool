@@ -41,7 +41,7 @@ html body .ps-tooltip[popover] > .ps-content p {
     margin: 0 !important;
     font-size: 12px !important;
     font-weight: 400 !important;
-    color: #5f6368 !important;
+    color: #000000 !important;
     font-family: "San Francisco", Helvetica, Arial, sans-serif !important;
 }
 
