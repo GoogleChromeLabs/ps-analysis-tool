@@ -19,7 +19,6 @@ import BrowserManagement, {
 } from '../utils/browserManagement';
 import Utility from '../utils/utility';
 import CookiesManagement from '../utils/cookiesManagement';
-import ora from 'ora';
 
 /**
  * Procedure to analyze the cookies from give list of urls.
@@ -31,10 +30,6 @@ export async function analyzeCookiesUrls(
   urls: Array<string>,
   browserArgs: BrowserManagementOptions
 ): Promise<Array<CookieLogDetails>> {
-  const cookiesSpinner = ora(
-    'Analyzing cookies set on first page visit...'
-  ).start();
-
   const browserManagement: BrowserManagement = new BrowserManagement();
   await browserManagement.initialize(browserArgs);
   browserManagement.createMultiple(urls);
@@ -51,12 +46,5 @@ export async function analyzeCookiesUrls(
   allCookies = Utility.mergeAll(allCookies);
   allCookies = CookiesManagement.getUnique(allCookies);
 
-  const output: Array<CookieLogDetails> = CookiesManagement.normalizeCookies(
-    allCookies,
-    urls[0]
-  );
-
-  cookiesSpinner.succeed('Done analyzing cookies!');
-
-  return output;
+  return allCookies;
 }

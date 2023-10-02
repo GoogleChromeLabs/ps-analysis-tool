@@ -87,6 +87,16 @@ export default class Utility {
     return JSON.stringify(data, null, 4);
   }
 
+  public static mergeObjects(object1: object, object2: object): object {
+    const output: { [key: string]: any } = { ...object1 };
+
+    Object.entries(object2).forEach(([key, value]) => {
+      output[key] = value;
+    });
+
+    return output;
+  }
+
   /**
    * Merge all the array.
    * @param {Array<Array<any>>} list List of Arrays.
@@ -195,14 +205,14 @@ export default class Utility {
 
     allColumns.forEach((currentValue) => {
       let key: string = currentValue.shift() ?? '';
-      key = decodeURIComponent(key.trim());
+      key = Utility.decodeURI(key);
 
       if ('max-age' === key.toLowerCase()) {
         key = 'expires';
       }
 
       let value = currentValue.join('=');
-      value = decodeURIComponent(value.trim());
+      value = Utility.decodeURI(value);
 
       if (!key) {
         return;
@@ -221,6 +231,17 @@ export default class Utility {
     });
 
     return cookie;
+  }
+
+  public static decodeURI(value: any): any {
+    try {
+      value = decodeURIComponent(value.trim());
+    } catch (exception) {
+      console.error('Utility:decodeURI : ', exception, ' Value : ', value);
+      value = '';
+    }
+
+    return value;
   }
 
   /**

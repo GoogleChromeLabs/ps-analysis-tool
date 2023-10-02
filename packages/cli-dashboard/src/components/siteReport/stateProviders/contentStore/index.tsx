@@ -56,40 +56,42 @@ export const Provider = ({
   const tabCookies = useMemo<{ [key: string]: CookieTableData }>(
     () =>
       Object.fromEntries(
-        cookies.map((cookie) => {
-          return [
-            cookie.name + cookie.domain + cookie.path,
-            {
-              parsedCookie: {
-                name: cookie.name,
-                value: cookie.value,
-                domain: cookie.domain,
-                path: cookie.path,
-                expires: cookie.expires,
-                httponly: cookie.httpOnly,
-                secure: cookie.secure,
-                samesite: cookie.sameSite,
+        cookies
+          .map((cookie) => {
+            return [
+              cookie.name + cookie.domain + cookie.path,
+              {
+                parsedCookie: {
+                  name: cookie.name,
+                  value: cookie.value,
+                  domain: cookie.domain,
+                  path: cookie.path,
+                  expires: cookie.expires,
+                  httponly: cookie.httpOnly,
+                  secure: cookie.secure,
+                  samesite: cookie.sameSite,
+                },
+                analytics: {
+                  platform: cookie.platform,
+                  category:
+                    cookie.category === 'Unknown Category'
+                      ? 'Uncategorized'
+                      : cookie.category,
+                  description: cookie.description,
+                } as CookieTableData['analytics'],
+                url: cookie.pageUrl,
+                headerType: 'response',
+                isFirstParty: cookie.isFirstParty === 'Yes' ? true : false,
+                frameIdList: [],
+                isCookieSet: !cookie.isBlocked,
+                frameUrl:
+                  Object.values(cookie.frameUrls).length >= 1
+                    ? Object.values(cookie.frameUrls)[0]
+                    : cookie.pageUrl,
               },
-              analytics: {
-                platform: cookie.platform,
-                category:
-                  cookie.category === 'Unknown Category'
-                    ? 'Uncategorized'
-                    : cookie.category,
-                description: cookie.description,
-              } as CookieTableData['analytics'],
-              url: cookie.pageUrl,
-              headerType: 'response',
-              isFirstParty: cookie.isFirstParty === 'Yes' ? true : false,
-              frameIdList: [],
-              isCookieSet: !cookie.isBlocked,
-              frameUrl:
-                Object.values(cookie.frameUrls).length >= 1
-                  ? Object.values(cookie.frameUrls)[0]
-                  : cookie.pageUrl,
-            },
-          ];
-        })
+            ];
+          })
+          .filter(({ frameUrl }) => frameUrl.includes('http'))
       ),
     [cookies]
   );

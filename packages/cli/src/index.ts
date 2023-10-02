@@ -19,7 +19,9 @@
 import { Command } from 'commander';
 import events from 'events';
 import { ensureFile, writeFile } from 'fs-extra';
-import { exec } from 'child_process';
+
+// @ts-ignore Package does not support typescript.
+import Spinnies from 'spinnies';
 
 /**
  * Internal dependencies.
@@ -30,6 +32,7 @@ import fs from 'fs';
 import Utility from './utils/utility';
 import { analyzeTechnologiesUrls } from './procedures/analyzeTechnologiesUrls';
 import { analyzeCookiesUrls } from './procedures/analyzeCookiesUrls';
+import { exec } from 'child_process';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
@@ -49,7 +52,6 @@ program
 program.parse();
 
 const isHeadless = Boolean(program.opts().headless);
-const isUrl = Boolean(program.opts().url);
 const shouldSearchTechnology = program.opts().technologies;
 
 export const initialize = async () => {
@@ -113,13 +115,50 @@ export const initialize = async () => {
     technologies?: object;
   } = {};
 
+  const allPromises: Array<Promise<any>> = [];
+
+  const spinnies = new Spinnies();
+
   /**
    * Get Cookies detail for single URL.
    */
-  const cookies: Array<CookieLogDetails> = await analyzeCookiesUrls(
-    urlsToProcess,
-    browserArgs
-  );
+  const cookiesPromise = (async () => {
+    spinnies.add('cookies-spinner', {
+      text: 'Analyzing cookies set on first page visit...',
+    });
+
+    const output = await analyzeCookiesUrls(urlsToProcess, browserArgs);
+
+    spinnies.succeed('cookies-spinner', { text: 'Done analyzing cookies!' });
+    return output;
+  })();
+
+  allPromises.push(cookiesPromise);
+
+  /**
+   * Analyze the technologies for single URL.
+   */
+  if (shouldSearchTechnology) {
+    const technologyPromise = (async () => {
+      spinnies.add('tech-spinner', {
+        text: 'Analyzing technologies used on the page...',
+      });
+
+      const output = await analyzeTechnologiesUrls(urlsToProcess);
+
+      spinnies.succeed('tech-spinner', {
+        text: 'Done analyzing technologies!',
+      });
+      return output;
+    })();
+
+    allPromises.push(technologyPromise);
+  }
+
+  // Resolve all Promises.
+  const output = await Promise.all(allPromises);
+
+  const cookies: Array<CookieLogDetails> = output[0];
   const csvCookies: string = getCSVbyObject(cookies);
   allData.cookies = cookies;
 
@@ -127,13 +166,8 @@ export const initialize = async () => {
   await ensureFile(outputFilePaths.cookies);
   await writeFile(outputFilePaths.cookies, csvCookies);
 
-  /**
-   * Analyze the technologies for single URL.
-   */
   if (shouldSearchTechnology) {
-    const technologies: TechnologyDetailList = await analyzeTechnologiesUrls(
-      urlsToProcess
-    );
+    const technologies: TechnologyDetailList = output[1];
     const csvTechnologies: string = getCSVbyObject(
       technologies.map(({ name }) => ({ name }))
     );
@@ -146,16 +180,23 @@ export const initialize = async () => {
 
   await ensureFile(outputFilePaths.allData);
   await writeFile(outputFilePaths.allData, Utility.prettyJson(allData));
-  exec('npm run cli-dashboard:dev');
-  await delay(3000);
-  exec(
-    `open -a "Google Chrome" http://localhost:9000?path=${encodeURIComponent(
-      outputFilePaths.allData
-    )}&type=${isUrl ? 'site' : 'sitemap'}`
+
+  const reportUrl = new URL('http://localhost:9000');
+  reportUrl.searchParams.append('type', url ? 'site' : 'sitemap');
+  reportUrl.searchParams.append(
+    'path',
+    encodeURIComponent(outputFilePaths.allData)
   );
 
+  exec('npm run cli-dashboard:dev');
+  await delay(3000);
+
+  console.log(
+    `Report server launched. To browse the report go to : \n${reportUrl}`
+  );
   // Clear ./tmp directory.
   fs.rmSync('./tmp', { recursive: true, force: true });
+  // process.exit(1);
 };
 
 (async () => {

@@ -154,13 +154,21 @@ export default class CookiesManagement {
       };
     }
 
+    let formattedDate: string = theCookie.expires;
+    if (formattedDate && !isNaN(parseInt(formattedDate))) {
+      const timestamp = new Date().getTime();
+      const date: Date = new Date(timestamp + parseInt(formattedDate) * 1000);
+      formattedDate = date.toUTCString();
+    }
+
     return {
       name: theCookie.name,
       value: theCookie.value,
       domain: theCookie.domain,
       partitionKey: theCookie.partitionKey ?? '',
       path: theCookie.path,
-      expires: theCookie.expires,
+      // @ts-ignore
+      expires: formattedDate,
       httpOnly: theCookie.httpOnly ?? theCookie.httponly,
       secure: theCookie.secure,
       sameSite: theCookie.sameSite ?? (theCookie.samesite || 'Lax'),
@@ -169,7 +177,8 @@ export default class CookiesManagement {
       description: cookieDetail.description,
       isFirstParty: isFirstParty(theCookie.domain, theUrl) ? 'Yes' : 'No',
       pageUrl: theCookie.pageUrl,
-      frameUrl: theCookie.frameUrl,
+      frameUrls: theCookie.frameUrls ?? {},
+      requestUrls: theCookie.requestUrls ?? {},
       isBlocked: theCookie.isBlocked,
       blockedReasons: theCookie.blockedReasons,
     };

@@ -16,7 +16,6 @@
 import { TechnologyDetailList } from '../types';
 import TechnologiesManagement from '../utils/technologiesManagment';
 import Utility from '../utils/utility';
-import ora from 'ora';
 
 /**
  *
@@ -25,8 +24,6 @@ import ora from 'ora';
 export async function analyzeTechnologiesUrls(
   urls: Array<string>
 ): Promise<TechnologyDetailList> {
-  const techSpinner = ora('Analyzing technologies used on the page...').start();
-
   const technologiesInstance = new TechnologiesManagement();
   technologiesInstance.createMultiple(urls);
   await technologiesInstance.run();
@@ -36,7 +33,6 @@ export async function analyzeTechnologiesUrls(
     'response'
   );
   allTechnologies = Utility.mergeAll(allTechnologies);
-  techSpinner.succeed('Done analyzing technologies!');
 
   return allTechnologies;
 }

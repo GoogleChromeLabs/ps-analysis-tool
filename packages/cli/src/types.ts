@@ -23,6 +23,10 @@ export interface Cookie extends Protocol.Network.Cookie {
   partitionKey?: string;
 }
 
+export type ResponseReceivedExtraInfo =
+  Protocol.Network.ResponseReceivedExtraInfoEvent;
+export type ResponseReceived = Protocol.Network.ResponseReceivedEvent;
+
 export type Cookies = Array<Cookie>;
 export type CookiesObjects = { [key: string]: Cookie };
 
@@ -55,7 +59,8 @@ export interface CookieLogDetails
   sameSite: string;
   partitionKey?: string;
   pageUrl: string;
-  frameUrl: string;
+  requestUrls: { [key: string]: string };
+  frameUrls: { [key: string]: string };
   isBlocked?: boolean;
   blockedReasons: Array<string>;
 }
@@ -63,22 +68,7 @@ export interface CookieLogDetails
 export type BlockedCookie = {
   blockedReasons: Array<string>;
   cookieLine: string;
-  cookie?: {
-    name: string;
-    value: string;
-    domain: string;
-    path: string;
-    expires: string | number | Date;
-    size: number;
-    httpOnly: boolean;
-    secure: boolean;
-    session: boolean;
-    sameSite: string;
-    priority: string;
-    sameParty: boolean;
-    sourceScheme: string;
-    sourcePort: number;
-  };
+  cookie?: Cookie;
 };
 
 export type BlockedCookies = Array<BlockedCookie>;
