@@ -191,9 +191,7 @@ export const initialize = async () => {
   exec('npm run cli-dashboard:dev');
   await delay(3000);
 
-  console.log(
-    `Report server launched. To browse the report go to : \n${reportUrl}`
-  );
+  console.log(`Serving from: \n${reportUrl}`);
   // Clear ./tmp directory.
   fs.rmSync('./tmp', { recursive: true, force: true });
   // process.exit(1);
