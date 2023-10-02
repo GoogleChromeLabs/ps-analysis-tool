@@ -23,16 +23,11 @@ import React from 'react';
  */
 import InfoCard from '../../../../design-system/components/infoCard';
 import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
-import { MessageBox } from '@cookie-analysis-tool/design-system';
 
 const Chips = () => {
   return (
     <div className="w-full h-full overflow-auto" data-testid="chips-content">
       <InfoCard infoKey={PSInfoKey.Chips} />
-      <MessageBox
-        bodyText="CHIPS insights are coming soon..."
-        headerText="🚧  Under Construction"
-      />
     </div>
   );
 };
