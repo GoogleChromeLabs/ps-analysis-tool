@@ -42,7 +42,7 @@ const TopicsList = () => {
   return (
     <div className="max-w-2xl m-3">
       <div className="p-6 dark:bg-davys-grey border border-gray-200 dark:border-quartz rounded-lg shadow">
-        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-bright-gray">
+        <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-bright-gray">
           Topics List
         </h5>
         {topics.length > 0 ? (

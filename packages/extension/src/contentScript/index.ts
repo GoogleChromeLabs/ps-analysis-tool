@@ -17,6 +17,10 @@ import { CookieStore } from '../localStore';
 
 // Handle topics.
 (async () => {
+  if (!document?.browsingTopics) {
+    return;
+  }
+
   const activeTabUrl = window.location.origin;
   const topicsObjArr = await document.browsingTopics();
   const topicsIdArr = topicsObjArr.map(
