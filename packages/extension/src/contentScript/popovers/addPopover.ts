@@ -18,7 +18,6 @@
  */
 import { createFrameOverlay } from './overlay';
 import { createTooltip, setTooltipPosition } from './tooltip';
-import removeAllPopovers from './removeAllPopovers';
 import type { ResponseType } from '../types';
 
 /**
@@ -46,8 +45,6 @@ const addPopover = (
 
   // Overlay will not exist if frame is hidden.
   const isHiddenFrame = !overlay;
-
-  removeAllPopovers(); // Remove when supporting multi frames.
 
   if (overlay) {
     body.appendChild(overlay);
