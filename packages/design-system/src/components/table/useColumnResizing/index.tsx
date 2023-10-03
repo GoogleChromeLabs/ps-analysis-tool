@@ -83,18 +83,29 @@ const useColumnResizing = (
 
         const selectedColumn = index;
 
-        const column1 = columns[selectedColumn];
-        const column2 = columns[selectedColumn + 1];
+        const column1 = columns[selectedColumn],
+          column2 = columns[selectedColumn + 1];
 
-        const column1Width = column1.width || 0;
-        const column2Width = column2.width || 0;
-        const widthChange = clientXPos - startOffset - column1Width;
+        const column1Width = column1.width || 0,
+          column2Width = column2.width || 0;
+        const widthChange = clientXPos - (startOffset + column1Width);
 
-        const newColumn2Width = Math.max(20, column2Width - widthChange);
-        const newColumn1Width =
-          newColumn2Width === 20
-            ? column1Width + column2Width - 20
-            : column1Width + widthChange;
+        let newColumn1Width = 20,
+          newColumn2Width = 20;
+
+        if (widthChange > 0) {
+          newColumn2Width = Math.max(20, column2Width - widthChange);
+          newColumn1Width =
+            newColumn2Width === 20
+              ? column1Width + column2Width - 20
+              : column1Width + widthChange;
+        } else {
+          newColumn1Width = Math.max(20, column1Width + widthChange);
+          newColumn2Width =
+            newColumn1Width === 20
+              ? column1Width + column2Width - 20
+              : column2Width - widthChange;
+        }
 
         setColumns((prev) => {
           const newColumns = [...prev];

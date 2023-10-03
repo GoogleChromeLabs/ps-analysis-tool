@@ -79,11 +79,11 @@ const HeaderCell = ({
   const columnRef = useRef<HTMLTableHeaderCellElement>(null);
 
   return (
-    <th
+    <div
       ref={columnRef}
-      style={{ maxWidth: cell.width }}
+      style={{ width: cell.width }}
       onClick={handleOnClick}
-      className="border-x border-american-silver dark:border-quartz relative hover:bg-gainsboro dark:hover:bg-outer-space select-none touch-none font-normal"
+      className="relative hover:bg-gainsboro dark:hover:bg-outer-space select-none touch-none font-normal truncate"
       data-testid="header-cell"
     >
       <div
@@ -104,7 +104,7 @@ const HeaderCell = ({
           table.onMouseDown(columnRef, index);
         }}
       />
-    </th>
+    </div>
   );
 };
 

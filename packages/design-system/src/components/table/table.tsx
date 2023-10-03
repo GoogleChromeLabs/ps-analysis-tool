@@ -93,7 +93,10 @@ const Table = ({
   );
 
   return (
-    <div ref={table.tableContainerRef} className="relative h-full w-full">
+    <div
+      ref={table.tableContainerRef}
+      className="relative h-full w-full overflow-auto"
+    >
       <ColumnMenu
         updatePreference={updatePreference}
         table={table}
@@ -101,7 +104,7 @@ const Table = ({
         onClose={setShowColumnsMenu}
         position={columnPosition}
       />
-      <table className="h-full w-full" ref={tableRef}>
+      <div className="h-full w-full" ref={tableRef}>
         <TableHeader
           updatePreference={updatePreference}
           table={table}
@@ -117,7 +120,7 @@ const Table = ({
           selectedKey={selectedKey}
           onRowClick={onRowClick}
         />
-      </table>
+      </div>
     </div>
   );
 };

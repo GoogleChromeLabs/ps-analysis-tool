@@ -22,7 +22,7 @@ import { type Cookie as ParsedCookie } from 'simple-cookie';
  * Internal dependencies.
  */
 import type { CookieStoreContext } from '../../view/devtools/stateProviders/syncCookieStore';
-import { emptyAnalytics } from '../../worker/findAnalyticsMatch';
+import { emptyAnalytics } from '../../serviceWorker/findAnalyticsMatch';
 
 const emptyCookie = {
   name: '',
