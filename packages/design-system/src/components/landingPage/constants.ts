@@ -13,14 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-declare module '*.svg' {
-  import React = require('react');
-  const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
-  export default ReactComponent;
-}
-
-type BulletListItem = {
-  title: string;
-  link?: string;
-  key?: string;
-};
+export const QUICK_LINKS = [
+  {
+    title: 'Report a bug',
+    link: 'https://github.com/GoogleChromeLabs/ps-analysis-tool/issues',
+  },
+  {
+    title: 'Report a breakage',
+    link: 'https://github.com/GoogleChromeLabs/privacy-sandbox-dev-support/issues',
+  },
+  {
+    title: 'Join the discussions',
+    link: 'https://github.com/GoogleChromeLabs/ps-analysis-tool/discussions',
+  },
+];
