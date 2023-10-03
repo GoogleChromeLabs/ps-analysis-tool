@@ -55,6 +55,8 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
   const [selectedAccordionChild, setSelectedAccordionChild] = useState<
     string | null
   >('privacySandbox');
+  const [isSameDomainOnUrlChange, setIsSameDomainOnUrlChange] =
+    useState<boolean>(false);
   const sidebarContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -206,6 +208,30 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
     [setIndex, setSelectedFrame]
   );
 
+  useEffect(() => {
+    const onURLChange = (navigation: { url: string }) => {
+      const nextURL = new URL(navigation.url);
+      const nextDomain = nextURL.hostname;
+      chrome.tabs.query(
+        { active: true, currentWindow: true },
+        ([currentTab]) => {
+          const currentURL = new URL(currentTab.url ?? '');
+          const currentDomain = currentURL?.hostname;
+          if (selectedFrame && (nextDomain === currentDomain || !nextURL)) {
+            setIsSameDomainOnUrlChange(true);
+          } else {
+            setIsSameDomainOnUrlChange(false);
+          }
+        }
+      );
+    };
+
+    chrome.webNavigation.onBeforeNavigate?.addListener(onURLChange);
+    return () => {
+      chrome.webNavigation.onBeforeNavigate?.removeListener(onURLChange);
+    };
+  }, [selectedFrame]);
+
   return (
     <div className="overflow-auto flex h-full">
       <div className="flex flex-col grow" ref={sidebarContainerRef}>
@@ -239,7 +265,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                   >
                     {id === 'cookies'
                       ? tabFrames &&
-                        Object.keys(tabFrames)?.map((key) => {
+                        Object.keys(tabFrames)?.map((key, position) => {
                           return (
                             <AccordionChildren
                               tabs={TABS}
@@ -248,6 +274,9 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                               accordionMenuItemName={key}
                               defaultIcon={TABS[index].icons.default}
                               isTabFocused={isTabFocused}
+                              isCookiesFirstChildToBeFocused={
+                                position === 0 && isSameDomainOnUrlChange
+                              }
                               isAccordionChildSelected={selectedFrame === key}
                               selectedIcon={TABS[index].icons.selected}
                               selectedIndex={selectedIndex}

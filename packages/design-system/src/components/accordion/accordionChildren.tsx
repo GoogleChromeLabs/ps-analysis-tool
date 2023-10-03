@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames';
 import type { TabFrames } from '@cookie-analysis-tool/common';
 
@@ -34,6 +34,7 @@ interface AccordionChildrenProps {
   hasChildren?: boolean;
   index?: number;
   isTabFocused: boolean;
+  isCookiesFirstChildToBeFocused?: boolean;
   isAccordionChildSelected: boolean;
   isAccordionHeaderSelected?: boolean;
   selectedAccordionChild?: string | null;
@@ -62,6 +63,7 @@ const AccordionChildren: React.FC<AccordionChildrenProps> = ({
   hasChildren = false,
   index,
   isTabFocused,
+  isCookiesFirstChildToBeFocused,
   isAccordionChildSelected,
   isAccordionHeaderSelected = false,
   selectedAccordionChild = null,
@@ -79,6 +81,18 @@ const AccordionChildren: React.FC<AccordionChildrenProps> = ({
 }) => {
   const DefaultIcon = defaultIcon;
   const SelectedIcon = selectedIcon;
+
+  useEffect(() => {
+    if (isCookiesFirstChildToBeFocused) {
+      onAccordionChildClick(tabId, currentIndex, accordionMenuItemName);
+    }
+  }, [
+    accordionMenuItemName,
+    tabId,
+    currentIndex,
+    isCookiesFirstChildToBeFocused,
+    onAccordionChildClick,
+  ]);
 
   if (hasChildren) {
     return (
@@ -115,6 +129,9 @@ const AccordionChildren: React.FC<AccordionChildrenProps> = ({
                     defaultIcon={tabs[currentIndex].icons.default}
                     isTabFocused={isTabFocused}
                     isAccordionChildSelected={selectedFrame === key}
+                    isCookiesFirstChildToBeFocused={
+                      isCookiesFirstChildToBeFocused
+                    }
                     selectedIcon={tabs[currentIndex].icons.selected}
                     onAccordionChildClick={onAccordionChildClick}
                     titleForMenuItem={`Cookies used by frames from ${key}`}
@@ -144,6 +161,7 @@ const AccordionChildren: React.FC<AccordionChildrenProps> = ({
                       selectedFrame={selectedFrame}
                       defaultIcon={tab.icons.default}
                       isTabFocused={isTabFocused}
+                      isCookiesFirstChildToBeFocused={false}
                       isAccordionChildSelected={
                         tab.id === selectedAccordionChild
                       }
