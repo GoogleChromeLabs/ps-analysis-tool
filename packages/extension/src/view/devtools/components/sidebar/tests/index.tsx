@@ -31,6 +31,7 @@ import {
   type CookieStoreContext,
 } from '../../../stateProviders/syncCookieStore';
 import { act } from 'react-dom/test-utils';
+import SinonChrome from 'sinon-chrome';
 
 const uncategorized1pCookie: ParsedCookie = {
   name: '_cb',
@@ -168,6 +169,10 @@ jest.mock('../../../stateProviders/syncCookieStore', () => ({
 const mockUseCookieStore = useCookieStore as jest.Mock;
 
 describe('Sidebar', () => {
+  beforeAll(() => {
+    globalThis.chrome = SinonChrome as unknown as typeof chrome;
+  });
+
   it('Should render with first menu item selected', () => {
     mockUseCookieStore.mockReturnValue({
       tabFrames: mockResponse.tabFrames,
