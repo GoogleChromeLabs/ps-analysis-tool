@@ -143,7 +143,7 @@ const TABS = [
     parentId: 'privateAdvertising',
   },
   {
-    display_name: 'Anti-Covert tracking',
+    display_name: 'Tracking Protection',
     component: AntiCovertTracking,
     id: 'antiCovertTracking',
     icons: {
