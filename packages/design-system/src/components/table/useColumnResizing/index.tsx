@@ -39,21 +39,31 @@ const useColumnResizing = (
 ): ColumnResizingOutput => {
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const [columns, setColumns] = useState<TableColumn[]>([]);
-
   useEffect(() => {
-    const tableWidth =
-      tableContainerRef.current?.getBoundingClientRect().width || 0;
     if (options) {
-      const newColumns = tableColumns.map((column) => {
-        const columnWidth =
-          options && Object.keys(options).length && options[column.header]
-            ? options[column.header]
-            : tableWidth / tableColumns.length - Object.keys(options).length;
+      const tableWidth =
+        tableContainerRef.current?.getBoundingClientRect().width || 0;
+      let newColumns = tableColumns.map((column) => {
         return {
           ...column,
-          width: columnWidth,
+          width: options[column.accessorKey],
         };
       });
+      if (Object.keys(options).length === tableColumns.length) {
+        newColumns = tableColumns.map((column) => {
+          return {
+            ...column,
+            width: options[column.accessorKey],
+          };
+        });
+      } else {
+        newColumns = tableColumns.map((column) => {
+          return {
+            ...column,
+            width: tableWidth / tableColumns.length,
+          };
+        });
+      }
       setColumns(newColumns);
     }
   }, [options, tableColumns]);

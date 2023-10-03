@@ -47,20 +47,15 @@ const HeaderCell = ({
   updatePreference,
 }: HeaderCellProps) => {
   const resizeHandler = useCallback(() => {
-    updatePreference(
-      'columnSizing',
-      (prevStatePreferences: { [key: string]: unknown }) => {
-        const currentPreferences = prevStatePreferences || {};
-        const currentSizes = {
-          ...(currentPreferences['columnSizing']
-            ? currentPreferences['columnSizing']
-            : null),
-          [cell.header]: cell.width,
-        };
-        return currentSizes;
-      }
-    );
-  }, [cell.header, cell.width, updatePreference]);
+    updatePreference('columnSizing', () => {
+      const currentSizes: { [key: string]: number } = {};
+      table.columns.map((column) => {
+        currentSizes[column.accessorKey] = column.width as number;
+        return column;
+      });
+      return currentSizes;
+    });
+  }, [table, updatePreference]);
 
   useEffect(() => {
     if (columnRef.current) {
@@ -68,7 +63,7 @@ const HeaderCell = ({
     }
     const tempRef = columnRef.current;
     return () => {
-      tempRef?.addEventListener('mouseup', resizeHandler);
+      tempRef?.removeEventListener('mouseup', resizeHandler);
     };
   }, [resizeHandler]);
 
