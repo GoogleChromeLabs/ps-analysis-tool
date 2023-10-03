@@ -13,8 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External Dependencies
+ */
+import React from 'react';
+
+/**
+ * Internal dependencies.
+ */
+import { LandingPage } from '@cookie-analysis-tool/design-system';
+
 const SiteBoundaries = () => {
-  return null;
+  return (
+    <>
+      <LandingPage
+        title="Site Boundaries"
+        embedUrl="https://devchrome.gagan.pro/en/privacy-sandbox/strengthen-privacy-boundaries"
+      />
+    </>
+  );
 };
 
 export default SiteBoundaries;
