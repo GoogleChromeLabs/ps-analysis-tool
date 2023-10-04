@@ -14,10 +14,25 @@
  * limitations under the License.
  */
 const fetchLocalData = async (path: string) => {
-  const url = chrome.runtime.getURL(path);
-  const data = await (await fetch(url)).json();
+  try {
+    const url = chrome.runtime.getURL(path);
+    const response = await fetch(url);
 
-  return data;
+    if (!response.ok) {
+      // eslint-disable-next-line no-console
+      console.warn(`HTTP error! Status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      `Failed to fetch local data from path: ${path}. Error:`,
+      error
+    );
+
+    return [];
+  }
 };
 
 export default fetchLocalData;

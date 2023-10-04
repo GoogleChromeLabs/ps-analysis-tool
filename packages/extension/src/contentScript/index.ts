@@ -18,7 +18,6 @@
  */
 import { CookieStore } from '../localStore';
 
-// Handle topic.
 (async () => {
   if (
     'browsingTopics' in document &&
