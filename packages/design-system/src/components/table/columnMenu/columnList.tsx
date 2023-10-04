@@ -17,18 +17,24 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useEffect } from 'react';
+import { PreferenceDataValues } from '@cookie-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import ColumnListItem from './columnListItem';
-
 import type { TableOutput } from '../useTable';
 
 interface ColumnListProps {
   table: TableOutput;
   toggleVisibility: (key: string) => void;
+  updatePreference: (
+    key: string,
+    updater: (prevStatePreference: {
+      [key: string]: unknown;
+    }) => PreferenceDataValues
+  ) => void;
   handleClose: () => void;
 }
 
@@ -36,7 +42,22 @@ const ColumnList = ({
   table,
   toggleVisibility,
   handleClose,
+  updatePreference,
 }: ColumnListProps) => {
+  useEffect(() => {
+    return () => {
+      const visibleColumns: Record<string, boolean> = {};
+
+      table.hideableColumns.forEach((column) => {
+        visibleColumns[column.header] = table.isColumnHidden(
+          column.accessorKey
+        );
+      });
+
+      updatePreference('selectedColumns', () => visibleColumns);
+    };
+  }, [table, table.hideableColumns, updatePreference]);
+
   return (
     <ul className="text-basic mt-1.5">
       {table.hideableColumns.map((column, key) => (

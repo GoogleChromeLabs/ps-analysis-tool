@@ -92,3 +92,18 @@ export interface CookieStatsComponents {
 export interface FramesWithCookies {
   [key: string]: { frameIds: number[] };
 }
+
+export type SortingState = {
+  defaultSortKey?: string;
+  defaultSortOrder?: 'asc' | 'desc';
+};
+
+export type SelectedFilters = {
+  [key: string]: Set<string>;
+};
+
+export type PreferenceDataValues =
+  | Record<string, number | boolean>
+  | string
+  | SelectedFilters
+  | SortingState[];

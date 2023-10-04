@@ -34,24 +34,49 @@ export type ColumnResizingOutput = {
 };
 
 const useColumnResizing = (
-  tableColumns: TableColumn[]
+  tableColumns: TableColumn[],
+  options?: Record<string, number>
 ): ColumnResizingOutput => {
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const [columns, setColumns] = useState<TableColumn[]>([]);
 
   useEffect(() => {
-    const tableWidth =
-      tableContainerRef.current?.getBoundingClientRect().width || 0;
+    if (options) {
+      const tableWidth =
+        tableContainerRef.current?.getBoundingClientRect().width || 0;
+      let newColumns = tableColumns.map((column) => ({
+        ...column,
+        width: options[column.accessorKey],
+      }));
 
-    const newColumns = tableColumns.map((column) => {
-      return {
+      if (Object.keys(options).length === tableColumns.length) {
+        newColumns = tableColumns.map((column) => ({
+          ...column,
+          width: options[column.accessorKey],
+        }));
+      } else {
+        newColumns = tableColumns.map((column) => ({
+          ...column,
+          width: tableWidth / tableColumns.length,
+        }));
+      }
+
+      setColumns(newColumns);
+    }
+  }, [options, tableColumns]);
+
+  useEffect(() => {
+    if (!options) {
+      const tableWidth =
+        tableContainerRef.current?.getBoundingClientRect().width || 0;
+      const newColumns = tableColumns.map((column) => ({
         ...column,
         width: tableWidth / tableColumns.length,
-      };
-    });
+      }));
 
-    setColumns(newColumns);
-  }, [tableColumns]);
+      setColumns(newColumns);
+    }
+  }, [options, tableColumns]);
 
   const onMouseDown = useCallback(
     (

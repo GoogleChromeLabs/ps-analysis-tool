@@ -50,6 +50,7 @@ export interface CookieStoreContext {
     setSelectedFrame: React.Dispatch<React.SetStateAction<string | null>>;
     changeListeningToThisTab: () => void;
     getCookiesSetByJavascript: () => void;
+    setContextInvalidated: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
@@ -69,6 +70,7 @@ const initialState: CookieStoreContext = {
     setSelectedFrame: noop,
     changeListeningToThisTab: noop,
     getCookiesSetByJavascript: noop,
+    setContextInvalidated: noop,
   },
 };
 
@@ -338,10 +340,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
           tabIdToBeDeleted !== 'tabToRead'
         ) {
           await CookieStore.removeTabData(tabIdToBeDeleted);
-          await chrome.action.setBadgeText({
-            tabId: parseInt(tabIdToBeDeleted),
-            text: '',
-          });
+
+          if (!Number.isNaN(parseInt(tabIdToBeDeleted))) {
+            await chrome.action.setBadgeText({
+              tabId: parseInt(tabIdToBeDeleted),
+              text: '',
+            });
+          }
         }
         return Promise.resolve();
       });
@@ -466,6 +471,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           setSelectedFrame,
           changeListeningToThisTab,
           getCookiesSetByJavascript,
+          setContextInvalidated,
         },
       }}
     >

@@ -13,27 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * Internal dependencies.
  */
-import type { CookieData } from '../localStore/cookieStore';
+import fetchLocalData from './fetchLocalData';
 
-/**
- * Find previous cookie object from local storage for given tabId and cookieName.
- * @param tabId Tab id for which cookie object is to be found.
- * @param cookieName Cookie name.
- * @returns {Promise<CookieData | null>} Cookie object.
- */
-export async function findPreviousCookieDataObject(
-  tabId: string,
-  cookieName: string
-) {
-  try {
-    return (await chrome.storage.local.get())?.[tabId]?.cookies?.[
-      cookieName
-    ] as CookieData | null;
-  } catch (error) {
-    return null;
-  }
-}
+const fetchTopicsTaxonomy = async () => {
+  const data = await fetchLocalData('data/topics-taxonomy-v1.json');
+
+  return data;
+};
+
+export default fetchTopicsTaxonomy;

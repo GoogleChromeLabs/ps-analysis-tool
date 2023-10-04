@@ -18,14 +18,10 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useMemo } from 'react';
-
-/**
- * Internal dependencies.
- */
-
-import { useContentPanelStore } from '../../../../stateProviders/contentPanelStore';
-import { getCookieKey } from '../../../../../../utils/getCookieKey';
-import type { CookieTableData } from '@cookie-analysis-tool/common';
+import type {
+  CookieTableData,
+  SortingState,
+} from '@cookie-analysis-tool/common';
 import {
   useTable,
   Table,
@@ -33,6 +29,13 @@ import {
   type TableColumn,
   type TableRow,
 } from '@cookie-analysis-tool/design-system';
+
+/**
+ * Internal dependencies.
+ */
+import { useContentPanelStore } from '../../../../stateProviders/contentPanelStore';
+import { getCookieKey } from '../../../../../../utils/getCookieKey';
+import { usePreferenceStore } from '../../../../stateProviders/preferenceStore';
 
 export interface CookieTableProps {
   cookies: CookieTableData[];
@@ -62,7 +65,13 @@ const CookieTable = ({ cookies, selectedFrame }: CookieTableProps) => {
     setSelectedFrameCookie,
     cookies.length,
   ]);
-
+  const { updatePreference, columnSorting, columnSizing, selectedColumns } =
+    usePreferenceStore(({ actions, state }) => ({
+      updatePreference: actions.updatePreference,
+      columnSorting: state?.columnSorting as SortingState[],
+      columnSizing: state?.columnSizing as Record<string, number>,
+      selectedColumns: state?.selectedColumns as Record<string, boolean>,
+    }));
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
@@ -177,11 +186,26 @@ const CookieTable = ({ cookies, selectedFrame }: CookieTableProps) => {
   const table = useTable({
     tableColumns,
     data: cookies,
+    options: {
+      columnSizing:
+        columnSizing && Object.keys(columnSizing).length > 0
+          ? columnSizing
+          : undefined,
+      columnSorting:
+        columnSorting && columnSorting.length > 0
+          ? columnSorting[0]
+          : undefined,
+      selectedColumns:
+        selectedColumns && Object.keys(selectedColumns).length > 0
+          ? selectedColumns
+          : undefined,
+    },
   });
 
   return (
     <div className="flex-1 w-full h-full text-outer-space-crayola border-x border-american-silver dark:border-quartz">
       <Table
+        updatePreference={updatePreference}
         table={table}
         selectedKey={
           selectedKey === null ? null : getCookieKey(selectedKey?.parsedCookie)

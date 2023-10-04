@@ -17,20 +17,26 @@
 /**
  * External dependencies.
  */
-import React, { useRef } from 'react';
-
+import React, { useCallback, useEffect, useRef } from 'react';
+import { PreferenceDataValues } from '@cookie-analysis-tool/common';
 /**
  * Internal dependencies.
  */
 import type { TableColumn, TableOutput } from '../useTable';
 import HeaderResizer from './headerResizer';
-import { ArrowDown } from '@cookie-analysis-tool/design-system';
+import { ArrowDown } from '../../../icons';
 
 interface HeaderCellProps {
   table: TableOutput;
   index: number;
   cell: TableColumn;
   setIsRowFocused: (state: boolean) => void;
+  updatePreference: (
+    key: string,
+    callback: (prevStatePreference: {
+      [key: string]: unknown;
+    }) => PreferenceDataValues
+  ) => void;
 }
 
 const HeaderCell = ({
@@ -38,14 +44,46 @@ const HeaderCell = ({
   index,
   cell,
   setIsRowFocused,
+  updatePreference,
 }: HeaderCellProps) => {
+  // Table data is updated on mouseup.
+  const resizeHandler = useCallback(() => {
+    updatePreference('columnSizing', () => {
+      const currentSizes: { [key: string]: number } = {};
+
+      table.columns.map((column) => {
+        currentSizes[column.accessorKey] = column.width as number;
+        return column;
+      });
+      return currentSizes;
+    });
+  }, [table, updatePreference]);
+
+  useEffect(() => {
+    if (columnRef.current) {
+      columnRef.current.addEventListener('mouseup', resizeHandler);
+    }
+
+    const tempRef = columnRef.current;
+
+    return () => {
+      if (tempRef) {
+        tempRef.removeEventListener('mouseup', resizeHandler);
+      }
+    };
+  }, [resizeHandler]);
+
+  const handleOnClick = useCallback(() => {
+    table.setSortKey(cell.accessorKey, updatePreference);
+  }, [cell.accessorKey, table, updatePreference]);
+
   const columnRef = useRef<HTMLTableHeaderCellElement>(null);
 
   return (
     <div
       ref={columnRef}
       style={{ width: cell.width }}
-      onClick={() => table.setSortKey(cell.accessorKey)}
+      onClick={handleOnClick}
       className="relative hover:bg-gainsboro dark:hover:bg-outer-space select-none touch-none font-normal truncate"
       data-testid="header-cell"
     >
