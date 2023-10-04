@@ -17,7 +17,6 @@
  * External dependencies.
  */
 import { type Cookie as ParsedCookie } from 'simple-cookie';
-
 /**
  * Internal dependencies.
  */
@@ -32,11 +31,21 @@ export type CookieData = {
   frameIdList: number[];
 };
 
+export type PreferenceKeyValues =
+  | 'columnSorting'
+  | 'selectedFrame'
+  | 'columnSizing'
+  | 'selectedColumns'
+  | 'selectedFilter';
+
 export type TabData = {
   cookies: {
     [key: string]: CookieData;
   } | null;
   focusedAt: number | null;
+  preferences: {
+    [key: string]: unknown;
+  };
 };
 
 export type Storage = {

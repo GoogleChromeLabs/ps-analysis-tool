@@ -17,7 +17,7 @@
 /**
  * Internal dependencies.
  */
-import updateStorage from '../updateStorage';
+import updateStorage from '../utils/updateStorage';
 import { type Storage } from '../types';
 
 describe('local store: updateStorage', () => {

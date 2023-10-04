@@ -18,7 +18,10 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-
+import {
+  CookieTableData,
+  PreferenceDataValues,
+} from '@cookie-analysis-tool/common';
 /**
  * Internal dependencies.
  */
@@ -26,7 +29,6 @@ import TableHeader from './tableHeader';
 import TableBody from './tableBody';
 import ColumnMenu from './columnMenu';
 import { TableOutput, TableRow } from './useTable';
-import { CookieTableData } from '@cookie-analysis-tool/common';
 
 export type TableData = CookieTableData;
 
@@ -35,6 +37,12 @@ interface TableProps {
   selectedKey: string | undefined | null;
   getRowObjectKey: (row: TableRow) => string;
   onRowClick: (row: TableData | null) => void;
+  updatePreference: (
+    key: string,
+    updater: (prevStatePreference: {
+      [key: string]: unknown;
+    }) => PreferenceDataValues
+  ) => void;
 }
 
 const Table = ({
@@ -42,6 +50,7 @@ const Table = ({
   selectedKey,
   getRowObjectKey,
   onRowClick,
+  updatePreference,
 }: TableProps) => {
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
   const [columnPosition, setColumnPosition] = useState({
@@ -89,6 +98,7 @@ const Table = ({
       className="relative h-full w-full overflow-auto"
     >
       <ColumnMenu
+        updatePreference={updatePreference}
         table={table}
         open={showColumnsMenu}
         onClose={setShowColumnsMenu}
@@ -96,6 +106,7 @@ const Table = ({
       />
       <div className="h-full w-full" ref={tableRef}>
         <TableHeader
+          updatePreference={updatePreference}
           table={table}
           setColumnPosition={setColumnPosition}
           onRightClick={handleRightClick}

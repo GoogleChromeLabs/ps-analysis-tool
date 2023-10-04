@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import { useState, useCallback, useMemo } from 'react';
+import { PreferenceDataValues } from '@cookie-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -25,14 +26,22 @@ import { useState, useCallback, useMemo } from 'react';
 import getValueByKey from '../utils/getValueByKey';
 import type { TableData } from '../useTable';
 
-type DefaultOptions = {
+export type DefaultOptions = {
   defaultSortKey?: string;
   defaultSortOrder?: 'asc' | 'desc';
 };
 
 export type ColumnSortingOutput = {
   sortedData: TableData[];
-  setSortKey: (key: string) => void;
+  setSortKey: (
+    key: string,
+    preferenceUpdater: (
+      key: string,
+      callback: (prevStatePreference: {
+        [key: string]: unknown;
+      }) => PreferenceDataValues
+    ) => void
+  ) => void;
   setSortOrder: (order: 'asc' | 'desc') => void;
   sortKey: string;
   sortOrder: 'asc' | 'desc';
@@ -46,7 +55,7 @@ const useColumnSorting = (
     options?.defaultSortKey ?? ''
   );
   const [ascending, setAscending] = useState<boolean>(
-    options?.defaultSortOrder === 'asc' || true
+    options?.defaultSortOrder === 'asc'
   );
 
   const setSortOrder = useCallback((sortOrder: 'asc' | 'desc') => {
@@ -54,13 +63,28 @@ const useColumnSorting = (
   }, []);
 
   const setSortKey = useCallback(
-    (newSortKey: string) => {
+    (
+      newSortKey: string,
+      preferenceUpdater: (
+        key: string,
+        callback: (prevStatePreference: {
+          [key: string]: unknown;
+        }) => PreferenceDataValues
+      ) => void
+    ) => {
       if (newSortKey === sortKey) {
         setAscending(!ascending);
       } else {
         _setSortKey(newSortKey);
         setAscending(true);
       }
+      preferenceUpdater('columnSorting', () => [
+        {
+          defaultSortKey: newSortKey,
+          defaultSortOrder:
+            newSortKey === sortKey ? (ascending ? 'desc' : 'asc') : 'asc',
+        },
+      ]);
     },
     [ascending, sortKey]
   );

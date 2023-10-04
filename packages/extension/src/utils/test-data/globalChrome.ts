@@ -32,6 +32,7 @@ export default {
     },
     inspectedWindow: {
       tabId: 1,
+      eval: noop,
     },
   },
   tabs: {

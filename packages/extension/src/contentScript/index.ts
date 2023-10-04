@@ -25,6 +25,23 @@ import {
 import { WEBPAGE_PORT_NAME } from '../constants';
 import type { ResponseType } from './types';
 import './style.css';
+import { CookieStore } from '../localStore';
+
+(async () => {
+  if (
+    'browsingTopics' in document &&
+    document.featurePolicy &&
+    document.featurePolicy.allowsFeature('browsing-topics')
+  ) {
+    const activeTabUrl = window.location.origin;
+    const topicsObjArr = await document.browsingTopics();
+    const topicsIdArr = topicsObjArr.map(
+      (topic: { [key: string]: string | number }) => topic.topic
+    );
+
+    CookieStore.setTopics(activeTabUrl, topicsIdArr);
+  }
+})();
 
 /**
  * Represents the content script for the webpage.

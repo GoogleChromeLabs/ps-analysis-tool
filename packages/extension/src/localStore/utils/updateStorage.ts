@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import { type Storage, type TabData } from './types';
+import { type Storage, type TabData } from '../types';
 
 const updateStorage = async (
   tabId: string,

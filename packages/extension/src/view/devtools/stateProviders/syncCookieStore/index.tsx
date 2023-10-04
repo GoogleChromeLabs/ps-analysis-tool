@@ -53,6 +53,7 @@ export interface CookieStoreContext {
     setContextInvalidated: React.Dispatch<React.SetStateAction<boolean>>;
     changeListeningToThisTab: () => void;
     getCookiesSetByJavascript: () => void;
+    setContextInvalidated: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
@@ -346,10 +347,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
           tabIdToBeDeleted !== 'tabToRead'
         ) {
           await CookieStore.removeTabData(tabIdToBeDeleted);
-          await chrome.action.setBadgeText({
-            tabId: parseInt(tabIdToBeDeleted),
-            text: '',
-          });
+
+          if (!Number.isNaN(parseInt(tabIdToBeDeleted))) {
+            await chrome.action.setBadgeText({
+              tabId: parseInt(tabIdToBeDeleted),
+              text: '',
+            });
+          }
         }
         return Promise.resolve();
       });
