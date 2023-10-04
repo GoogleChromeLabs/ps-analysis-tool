@@ -21,20 +21,25 @@ import { CookieStore } from '../localStore';
 declare global {
   interface Document {
     browsingTopics(): Promise<Array<{ [key: string]: string | number }>>;
+    featurePolicy: {
+      allowsFeature: (arg0: string) => boolean;
+    };
   }
 }
 
-// Handle topics.
+// Handle topic.
 (async () => {
-  if (typeof document.browsingTopics !== 'function') {
-    return;
+  if (
+    'browsingTopics' in document &&
+    document.featurePolicy &&
+    document.featurePolicy?.allowsFeature('browsing-topics')
+  ) {
+    const activeTabUrl = window.location.origin;
+    const topicsObjArr = await document.browsingTopics();
+    const topicsIdArr = topicsObjArr.map(
+      (topic: { [key: string]: string | number }) => topic.topic
+    );
+
+    CookieStore.setTopics(activeTabUrl, topicsIdArr);
   }
-
-  const activeTabUrl = window.location.origin;
-  const topicsObjArr = await document.browsingTopics();
-  const topicsIdArr = topicsObjArr.map(
-    (topic: { [key: string]: string | number }) => topic.topic
-  );
-
-  CookieStore.setTopics(activeTabUrl, topicsIdArr);
 })();

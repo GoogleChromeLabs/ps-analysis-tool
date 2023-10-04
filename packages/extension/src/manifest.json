@@ -25,7 +25,7 @@
   },
   "content_scripts": [
     {
-      "js": ["scripts/content.js"],
+      "js": ["content-script.js"],
       "matches": ["*://*/*"]
     }
   ],
