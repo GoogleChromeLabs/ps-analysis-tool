@@ -21,6 +21,8 @@ import {
   Accordion,
   AccordionChildren,
 } from '@cookie-analysis-tool/design-system';
+import type { CookieTableData } from '@cookie-analysis-tool/common';
+
 /**
  * Internal dependencies
  */
@@ -38,11 +40,13 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
   const {
+    cookies,
     setSelectedFrame,
     selectedFrame,
     tabFrames,
     isCurrentTabBeingListenedTo,
   } = useCookieStore(({ state, actions }) => ({
+    cookies: state.tabCookies,
     setSelectedFrame: actions.setSelectedFrame,
     tabFrames: state.tabFrames,
     selectedFrame: state.selectedFrame,
@@ -55,7 +59,35 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
   const [selectedAccordionChild, setSelectedAccordionChild] = useState<
     string | null
   >('privacySandbox');
+  const [greyOutEmptyFrameURL, setGreyOutEmptyFrameURL] = useState<{
+    [key: string]: boolean;
+  }>({});
   const sidebarContainerRef = useRef<HTMLDivElement>(null);
+
+  const calculateGreyOutEmptyFrameURL = useCallback(() => {
+    const __greyOutEmptyFrameURL: { [key: string]: boolean } = {};
+    if (tabFrames) {
+      Object.keys(tabFrames).forEach((cookieSiteURL) => {
+        const _frameFilteredCookies: { [key: string]: CookieTableData } = {};
+        if (cookies && cookieSiteURL && tabFrames && tabFrames[cookieSiteURL]) {
+          Object.entries(cookies).forEach(([key, cookie]) => {
+            tabFrames[cookieSiteURL].frameIds?.forEach((frameId) => {
+              if (cookie.frameIdList?.includes(frameId)) {
+                _frameFilteredCookies[key] = cookie;
+              }
+            });
+          });
+        }
+        __greyOutEmptyFrameURL[cookieSiteURL] =
+          Object.keys(_frameFilteredCookies).length === 0;
+      });
+      setGreyOutEmptyFrameURL(__greyOutEmptyFrameURL);
+    }
+  }, [cookies, tabFrames]);
+
+  useEffect(() => {
+    calculateGreyOutEmptyFrameURL();
+  }, [cookies, tabFrames, calculateGreyOutEmptyFrameURL]);
 
   useEffect(() => {
     if (selectedFrame && accordionState && !accordionState['cookies']) {
@@ -254,9 +286,12 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                               tabs={TABS}
                               key={key}
                               currentIndex={index}
+                              tabId={id}
+                              tabFrames={tabFrames}
                               accordionMenuItemName={key}
                               defaultIcon={TABS[index].icons.default}
                               isTabFocused={isTabFocused}
+                              greyOutEmptyFrameURL={greyOutEmptyFrameURL}
                               isAccordionChildSelected={selectedFrame === key}
                               selectedIcon={TABS[index].icons.selected}
                               selectedIndex={selectedIndex}
@@ -274,6 +309,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                                 key={tab.id}
                                 tabId={tab.id}
                                 index={index}
+                                greyOutEmptyFrameURL={greyOutEmptyFrameURL}
                                 keyboardNavigator={keyboardNavigator}
                                 accordionState={accordionState}
                                 isAccordionHeaderSelected={

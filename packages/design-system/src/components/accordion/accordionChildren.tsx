@@ -32,6 +32,7 @@ interface AccordionChildrenProps {
   currentIndex: number;
   defaultIcon: React.FC<React.SVGProps<SVGSVGElement>>;
   hasChildren?: boolean;
+  greyOutEmptyFrameURL: Record<string, boolean>;
   index?: number;
   isTabFocused: boolean;
   isAccordionChildSelected: boolean;
@@ -60,6 +61,7 @@ const AccordionChildren: React.FC<AccordionChildrenProps> = ({
   currentIndex = 1000,
   defaultIcon,
   hasChildren = false,
+  greyOutEmptyFrameURL,
   index,
   isTabFocused,
   isAccordionChildSelected,
@@ -111,9 +113,11 @@ const AccordionChildren: React.FC<AccordionChildrenProps> = ({
                     tabs={tabs}
                     currentIndex={currentIndex}
                     key={key}
+                    tabId={tabId}
                     accordionMenuItemName={key}
                     defaultIcon={tabs[currentIndex].icons.default}
                     isTabFocused={isTabFocused}
+                    greyOutEmptyFrameURL={greyOutEmptyFrameURL}
                     isAccordionChildSelected={selectedFrame === key}
                     selectedIcon={tabs[currentIndex].icons.selected}
                     onAccordionChildClick={onAccordionChildClick}
@@ -140,6 +144,7 @@ const AccordionChildren: React.FC<AccordionChildrenProps> = ({
                         selectedIndex === currentIndex && !selectedFrame
                       }
                       hasChildren={Boolean(tab?.hasChildren)}
+                      greyOutEmptyFrameURL={greyOutEmptyFrameURL}
                       accordionMenuItemName={tab.display_name}
                       selectedFrame={selectedFrame}
                       defaultIcon={tab.icons.default}
@@ -173,10 +178,13 @@ const AccordionChildren: React.FC<AccordionChildrenProps> = ({
       }
       role="treeitem"
       className={classNames(
-        'pl-12 py-0.5 h-5 flex items-center cursor-default outline-0 dark:text-bright-gray',
+        'pl-12 py-0.5 h-5 flex items-center cursor-default outline-0 dark:text-bright-gray' +
+          (tabId === 'cookies' && greyOutEmptyFrameURL[accordionMenuItemName]
+            ? ' text-slate-400 dark:text-slate-500'
+            : ''),
         isAccordionChildSelected &&
           (isTabFocused
-            ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
+            ? 'bg-royal-blue text-slate-50 dark:bg-medium-persian-blue dark:text-slate-300'
             : 'bg-gainsboro dark:bg-outer-space')
       )}
     >
