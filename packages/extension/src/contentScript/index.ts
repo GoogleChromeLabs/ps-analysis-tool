@@ -18,21 +18,12 @@
  */
 import { CookieStore } from '../localStore';
 
-declare global {
-  interface Document {
-    browsingTopics(): Promise<Array<{ [key: string]: string | number }>>;
-    featurePolicy: {
-      allowsFeature: (arg0: string) => boolean;
-    };
-  }
-}
-
 // Handle topic.
 (async () => {
   if (
     'browsingTopics' in document &&
     document.featurePolicy &&
-    document.featurePolicy?.allowsFeature('browsing-topics')
+    document.featurePolicy.allowsFeature('browsing-topics')
   ) {
     const activeTabUrl = window.location.origin;
     const topicsObjArr = await document.browsingTopics();
