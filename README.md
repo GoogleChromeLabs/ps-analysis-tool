@@ -42,7 +42,6 @@ The features and capabilities of this tool help you (developers) with the transi
 <img width="937" alt="Screenshot 2023-08-21 at 10 35 19 AM" src="https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/3b13e478-2f67-42b3-879e-333f9a3b9357">
 
 ## Cookie Data Manipulation and Analysis
-🚧 Work in Progress 🚧
 
 DevTools provides access to lots of information regarding every functional aspect of the browser, including cookies. This extension expands a bit the capabilities of DevTools and provides additional ways to slice and dice cookie data, making it easier for everyone to understand the behaviors of cookies in different scenarios.
 
@@ -50,9 +49,10 @@ DevTools provides access to lots of information regarding every functional aspec
 
 
 ## Frame Overlays
-🚧 Work in Progress 🚧
 
 Cookies are used as a state management mechanism to power varying features and capabilities of sites. For example, an embedded video component from some 3P provider could set and manipulate 3P cookies to serve authenticated videos without users having to re-authenticate repeatedly. This extension provides a frame overlay capability, making it easy to associate, when possible, components on a web page and the set of cookies that are associated with it. 
+
+<img width="2187" alt="Screenshot 2023-10-04 at 3 32 03 PM" src="https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/82ab33ab-9e19-4fc3-b80f-33805b089756">
 
 ## Reporting
 
