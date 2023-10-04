@@ -230,7 +230,6 @@ async function analyzeCookies(
       cookie.description = analytics.description || '';
     });
   }
-  console.log(frameUrlCookies);
   return Object.fromEntries(frameUrlCookies);
 }
 

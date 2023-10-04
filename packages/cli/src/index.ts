@@ -31,6 +31,7 @@ import Utility from './utils/utility';
 import { fetchDictionary } from './utils/fetchCookieDictionary';
 
 events.EventEmitter.defaultMaxListeners = 15;
+const delayTime = 20000;
 
 const program = new Command();
 
@@ -64,7 +65,7 @@ export const initialize = async () => {
     const cookieData = await analyzeCookiesUrl(
       url,
       isHeadless,
-      10000,
+      delayTime,
       cookieDictionary
     );
     spinnies.succeed('cookie-spinner', {
@@ -107,7 +108,7 @@ export const initialize = async () => {
       const cookieData = await analyzeCookiesUrl(
         siteUrl,
         isHeadless,
-        10000,
+        delayTime,
         cookieDictionary
       );
       const technologyData = await analyzeTechnologiesUrls([siteUrl]);
