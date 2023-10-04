@@ -46,9 +46,11 @@ const HeaderCell = ({
   setIsRowFocused,
   updatePreference,
 }: HeaderCellProps) => {
+  // Table data is updated on mouseup.
   const resizeHandler = useCallback(() => {
     updatePreference('columnSizing', () => {
       const currentSizes: { [key: string]: number } = {};
+
       table.columns.map((column) => {
         currentSizes[column.accessorKey] = column.width as number;
         return column;
@@ -61,9 +63,13 @@ const HeaderCell = ({
     if (columnRef.current) {
       columnRef.current.addEventListener('mouseup', resizeHandler);
     }
+
     const tempRef = columnRef.current;
+
     return () => {
-      tempRef?.removeEventListener('mouseup', resizeHandler);
+      if (tempRef) {
+        tempRef.removeEventListener('mouseup', resizeHandler);
+      }
     };
   }, [resizeHandler]);
 
