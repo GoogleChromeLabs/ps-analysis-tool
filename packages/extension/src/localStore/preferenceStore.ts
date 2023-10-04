@@ -16,8 +16,8 @@
 /**
  * Internal dependencies.
  */
-import updateStorage from './updateStorage';
-import type { TabData } from '../types';
+import updateStorage from './utils/updateStorage';
+import type { TabData } from './types';
 
 const PreferenceStore = {
   /**

@@ -16,9 +16,9 @@
 /**
  * Internal dependencies.
  */
-import updateStorage from './updateStorage';
-import type { TabData, CookieData } from '../types';
-import { getCookieKey } from '../../utils/getCookieKey';
+import updateStorage from './utils/updateStorage';
+import type { TabData, CookieData } from './types';
+import { getCookieKey } from '../utils/getCookieKey';
 
 const CookieStore = {
   /**
