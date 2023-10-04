@@ -14,24 +14,22 @@
  * limitations under the License.
  */
 /**
- * External dependencies.
- */
-import React from 'react';
-
-/**
  * Internal dependencies.
  */
-import InfoCard from '../../../../design-system/components/infoCard';
-import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
-import TopicsList from './topicsList';
+import { CookieStore } from '../localStore';
 
-const Topics = () => {
-  return (
-    <div className="w-full h-full overflow-auto" data-testid="topics-content">
-      <InfoCard infoKey={PSInfoKey.Topics} />
-      <TopicsList />
-    </div>
-  );
-};
+(async () => {
+  if (
+    'browsingTopics' in document &&
+    document.featurePolicy &&
+    document.featurePolicy.allowsFeature('browsing-topics')
+  ) {
+    const activeTabUrl = window.location.origin;
+    const topicsObjArr = await document.browsingTopics();
+    const topicsIdArr = topicsObjArr.map(
+      (topic: { [key: string]: string | number }) => topic.topic
+    );
 
-export default Topics;
+    CookieStore.setTopics(activeTabUrl, topicsIdArr);
+  }
+})();

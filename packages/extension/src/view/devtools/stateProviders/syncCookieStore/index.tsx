@@ -340,10 +340,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
           tabIdToBeDeleted !== 'tabToRead'
         ) {
           await CookieStore.removeTabData(tabIdToBeDeleted);
-          await chrome.action.setBadgeText({
-            tabId: parseInt(tabIdToBeDeleted),
-            text: '',
-          });
+
+          if (!Number.isNaN(parseInt(tabIdToBeDeleted))) {
+            await chrome.action.setBadgeText({
+              tabId: parseInt(tabIdToBeDeleted),
+              text: '',
+            });
+          }
         }
         return Promise.resolve();
       });
