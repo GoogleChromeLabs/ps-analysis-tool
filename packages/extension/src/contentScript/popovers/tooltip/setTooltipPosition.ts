@@ -41,9 +41,10 @@ const setTooltipPosition = (
   // Overlay will not exist for hidden elements. show at bottom of screen.
   if (isHiddenFrame) {
     tooltip.classList.add('ps-tooltip-fixed');
-    tooltip.style.top = `${window.innerHeight - tooltip.offsetHeight + 5}px`;
+    tooltip.style.top = `0`;
     tooltip.style.left = 'auto';
     tooltip.style.right = '30px';
+    tooltip.firstElementChild?.classList.add('ps-tooltip-top-notch');
 
     return;
   }
@@ -59,7 +60,7 @@ const setTooltipPosition = (
     }
 
     // Set tooltip tip at the top of the box.
-    tooltip.firstElementChild?.classList.add('tooltip');
+    tooltip.firstElementChild?.classList.add('ps-tooltip-top-notch');
 
     return;
   }

@@ -72,7 +72,7 @@ html body .ps-tooltip[popover] > .ps-content:after {
     transform: rotate(315deg) !important;
 }
 
-html body .ps-tooltip[popover] > .ps-content.tooltip:after {
+html body .ps-tooltip[popover] > .ps-content.ps-tooltip-top-notch:after {
     bottom: unset !important;
     top: 5px !important;
     box-shadow: color-mix(in srgb, #3c4043 15%, transparent) 3px -3px 4px -1px !important;
