@@ -71,7 +71,7 @@ const LandingPage = ({ title, embedUrl }: LandingPageProps) => {
     <>
       {loading && <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />}
       <div className={classNames(loading && 'hidden')}>
-        <div className="flex gap-2 text-2xl font-bold pl-4 pt-[56px] pb-3 items-baseline border-b border-hex-gray dark:border-quartz">
+        <div className="flex gap-2 text-2xl font-bold pl-4 pt-6 pb-3 items-baseline border-b border-hex-gray dark:border-quartz">
           <h1>{title}</h1>
           <button onClick={() => setOpen((prevOpen) => !prevOpen)}>
             <ArrowUp className={classNames(!open && 'rotate-180 -mt-3')} />
