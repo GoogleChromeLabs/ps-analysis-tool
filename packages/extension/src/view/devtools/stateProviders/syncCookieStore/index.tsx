@@ -369,22 +369,25 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const tabUpdateListener = useCallback(
     async (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
       if (tabId === _tabId && changeInfo.url) {
-        const nextURL = new URL(changeInfo.url);
-        const nextDomain = nextURL.hostname;
-        const currentURL = new URL(tabUrl ?? '');
-        const currentDomain = currentURL?.hostname;
-        setTabFrames(null);
-        await getAllFramesForCurrentTab(_tabId);
-        if (
-          tabFrames &&
-          selectedFrame &&
-          (nextDomain === currentDomain || !nextURL)
-        ) {
-          setSelectedFrame(Object.keys(tabFrames)[0]);
-        } else {
-          setSelectedFrame(null);
+        try {
+          const nextURL = new URL(changeInfo.url);
+          const nextDomain = nextURL?.hostname;
+          const currentURL = new URL(tabUrl ?? '');
+          const currentDomain = currentURL?.hostname;
+
+          setTabFrames(null);
+          await getAllFramesForCurrentTab(_tabId);
+
+          if (tabFrames && selectedFrame && nextDomain === currentDomain) {
+            setSelectedFrame(Object.keys(tabFrames)[0]);
+          } else {
+            setSelectedFrame(null);
+          }
+
+          setTabUrl(changeInfo.url);
+        } catch (error) {
+          /* empty catch block since we dont want to do any thing in catch */
         }
-        setTabUrl(changeInfo.url);
       }
     },
     [tabId, tabUrl, getAllFramesForCurrentTab, tabFrames, selectedFrame]
