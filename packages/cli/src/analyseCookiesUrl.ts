@@ -253,7 +253,7 @@ export async function analyzeCookiesUrl(
   );
   const blockedEnvFrameCookies = await analyzeCookies(
     url,
-    false,
+    true,
     delayTime,
     isHeadless,
     cookieDictionary
