@@ -219,8 +219,6 @@ async function analyzeCookies(
   }
   await browser.close();
 
-  console.log(frameUrlCookies);
-
   for (const [, data] of frameUrlCookies) {
     Object.values(data.frameCookies).forEach((cookie) => {
       const analytics = findAnalyticsMatch(cookie.name, cookieDictionary);
