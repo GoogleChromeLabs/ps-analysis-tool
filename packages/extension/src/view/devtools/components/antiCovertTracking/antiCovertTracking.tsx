@@ -29,7 +29,7 @@ const AntiCovertTracking = () => {
     <>
       <LandingPage
         title="Tracking Protection"
-        embedUrl="https://devchrome.gagan.pro/en/privacy-sandbox/prevent-covert-tracking"
+        embedUrl="https://privacysandbox.info/en/privacy-sandbox/prevent-covert-tracking"
       />
     </>
   );

@@ -28,7 +28,7 @@ const SiteBoundaries = () => {
     <>
       <LandingPage
         title="Site Boundaries"
-        embedUrl="https://devchrome.gagan.pro/en/privacy-sandbox/strengthen-privacy-boundaries"
+        embedUrl="https://privacysandbox.info/en/privacy-sandbox/strengthen-privacy-boundaries"
       />
     </>
   );

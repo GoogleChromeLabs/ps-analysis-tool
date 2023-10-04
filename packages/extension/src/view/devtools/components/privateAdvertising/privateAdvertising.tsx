@@ -29,7 +29,7 @@ const PrivateAdvertising = () => {
     <>
       <LandingPage
         title="Private Advertising"
-        embedUrl="https://devchrome.gagan.pro/en/privacy-sandbox/measure-digital-ads"
+        embedUrl="https://privacysandbox.info/en/privacy-sandbox/measure-digital-ads"
       />
     </>
   );
