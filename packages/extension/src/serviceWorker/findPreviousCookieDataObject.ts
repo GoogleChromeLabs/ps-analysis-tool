@@ -17,7 +17,7 @@
 /**
  * Internal dependencies.
  */
-import type { CookieData } from '../localStore';
+import type { CookieData } from '../localStore/cookieStore';
 
 /**
  * Find previous cookie object from local storage for given tabId and cookieName.

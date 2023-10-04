@@ -146,6 +146,7 @@ const goToCookiesMenu = () => {
   });
   act(() => {
     userEvent.keyboard('{ArrowRight}');
+    userEvent.keyboard('{ArrowDown}');
   });
 };
 const goToFirstFrame = () => {
@@ -157,7 +158,6 @@ const goToFirstFrame = () => {
   });
   act(() => {
     userEvent.keyboard('{ArrowRight}');
-    userEvent.keyboard('{ArrowDown}');
   });
 };
 
@@ -215,7 +215,7 @@ describe('Sidebar', () => {
     expect(siteBoundariesContainer).toHaveClass('bg-royal-blue');
   });
 
-  it('should select cookie and show the listed frames under cookie menu.', () => {
+  it('should select cookie and show the listed frames under cookie menu.', async () => {
     mockUseCookieStore.mockReturnValue({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: 'https://edition.cnn.com/',
@@ -224,10 +224,10 @@ describe('Sidebar', () => {
 
     render(<Sidebar selectedIndex={0} setIndex={() => undefined} />);
 
-    const cookieHeaderContainer = screen.getByTestId(
+    const cookieHeaderContainer = await screen.findByTestId(
       'cookies-tab-heading-wrapper'
     );
-    const mainFrame = screen.getByTestId('https://edition.cnn.com/');
+    const mainFrame = await screen.findByTestId('https://edition.cnn.com/');
 
     expect(cookieHeaderContainer).not.toHaveClass('bg-royal-blue');
     expect(mainFrame).toBeInTheDocument();
@@ -837,7 +837,9 @@ describe('Sidebar', () => {
     const sidebarRender = render(
       <Sidebar selectedIndex={0} setIndex={() => undefined} />
     );
+
     goToFirstFrame();
+
     mockUseCookieStore.mockReturnValueOnce({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: 'https://edition.cnn.com/',

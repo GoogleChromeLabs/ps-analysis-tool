@@ -17,14 +17,11 @@
  * External dependencies.
  */
 import React from 'react';
-
+import type { SelectedFilters } from '@cookie-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import type {
-  Filter,
-  SelectedFilters,
-} from '../../../stateProviders/filterManagementStore/types';
+import type { Filter } from '../../../stateProviders/filterManagementStore/types';
 import classNames from 'classnames';
 
 interface SubListProps {

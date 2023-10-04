@@ -18,12 +18,13 @@
  * External dependencies.
  */
 import { useMemo } from 'react';
-
+import { CookieTableData } from '@cookie-analysis-tool/common';
 /**
  * Internal dependencies.
  */
 import getValueByKey from '../utils/getValueByKey';
 import useColumnSorting, {
+  DefaultOptions,
   type ColumnSortingOutput,
 } from '../useColumnSorting';
 import useColumnVisibility, {
@@ -32,7 +33,6 @@ import useColumnVisibility, {
 import useColumnResizing, {
   type ColumnResizingOutput,
 } from '../useColumnResizing';
-import { CookieTableData } from '@cookie-analysis-tool/common';
 
 export type TableData = CookieTableData;
 
@@ -73,9 +73,18 @@ export type TableOutput = {
 interface useTableProps {
   tableColumns: TableColumn[];
   data: TableData[];
+  options?: {
+    columnSizing?: Record<string, number>;
+    columnSorting?: DefaultOptions;
+    selectedColumns?: Record<string, boolean>;
+  };
 }
 
-const useTable = ({ tableColumns, data }: useTableProps): TableOutput => {
+const useTable = ({
+  tableColumns,
+  data,
+  options,
+}: useTableProps): TableOutput => {
   const {
     visibleColumns,
     hideColumn,
@@ -83,13 +92,15 @@ const useTable = ({ tableColumns, data }: useTableProps): TableOutput => {
     areAllColumnsVisible,
     showColumn,
     isColumnHidden,
-  } = useColumnVisibility(tableColumns);
+  } = useColumnVisibility(tableColumns, options?.selectedColumns);
 
-  const { columns, tableContainerRef, onMouseDown } =
-    useColumnResizing(visibleColumns);
+  const { columns, tableContainerRef, onMouseDown } = useColumnResizing(
+    visibleColumns,
+    options?.columnSizing
+  );
 
   const { sortedData, sortKey, sortOrder, setSortKey, setSortOrder } =
-    useColumnSorting(data);
+    useColumnSorting(data, options?.columnSorting);
 
   const rows = useMemo(() => {
     return sortedData.map((_data) => {
