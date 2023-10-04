@@ -374,13 +374,28 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const tabUpdateListener = useCallback(
     async (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
       if (tabId === _tabId && changeInfo.url) {
-        setTabUrl(changeInfo.url);
-        setSelectedFrame(null);
-        setTabFrames(null);
-        await getAllFramesForCurrentTab(_tabId);
+        try {
+          const nextURL = new URL(changeInfo.url);
+          const nextDomain = nextURL?.hostname;
+          const currentURL = new URL(tabUrl ?? '');
+          const currentDomain = currentURL?.hostname;
+
+          setTabFrames(null);
+          await getAllFramesForCurrentTab(_tabId);
+
+          if (selectedFrame && nextDomain === currentDomain) {
+            setSelectedFrame(nextURL.origin);
+          } else {
+            setSelectedFrame(null);
+          }
+
+          setTabUrl(changeInfo.url);
+        } catch (error) {
+          setSelectedFrame(null);
+        }
       }
     },
-    [tabId, getAllFramesForCurrentTab]
+    [tabId, tabUrl, getAllFramesForCurrentTab, selectedFrame]
   );
 
   const tabRemovedListener = useCallback(async () => {
