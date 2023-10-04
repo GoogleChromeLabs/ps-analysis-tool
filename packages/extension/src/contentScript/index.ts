@@ -13,11 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Internal dependencies.
+ */
 import { CookieStore } from '../localStore';
+
+declare global {
+  interface Document {
+    browsingTopics(): Promise<Array<{ [key: string]: string | number }>>;
+  }
+}
 
 // Handle topics.
 (async () => {
-  if (!document?.browsingTopics) {
+  if (typeof document.browsingTopics !== 'function') {
     return;
   }
 

@@ -165,7 +165,7 @@ const CookieStore = {
    * @param {string} activeTabUrl The active tab origin location.
    * @param {number[]} topics The topics for active tab.
    */
-  async setTopics(activeTabUrl: string, topics: number[] = []) {
+  async setTopics(activeTabUrl: string, topics: (string | number)[] = []) {
     const storage = await chrome.storage.local.get();
 
     if (!storage[activeTabUrl]) {
