@@ -17,6 +17,8 @@
 import puppeteer from 'puppeteer';
 import { delay } from './utils';
 import { parse } from 'simple-cookie';
+import { CookieDatabase } from './types';
+import findAnalyticsMatch from './utils/findAnalyticsMatch';
 
 /**
  *
@@ -24,12 +26,14 @@ import { parse } from 'simple-cookie';
  * @param shouldBlock
  * @param delayTime
  * @param isHeadless
+ * @param cookieDictionary
  */
 async function analyzeCookies(
   url: string,
   shouldBlock: boolean,
   delayTime: number,
-  isHeadless: false
+  isHeadless: false,
+  cookieDictionary: CookieDatabase
 ) {
   const browser = await puppeteer.launch({
     devtools: true,
@@ -214,6 +218,19 @@ async function analyzeCookies(
     });
   }
   await browser.close();
+
+  console.log(frameUrlCookies);
+
+  for (const [, data] of frameUrlCookies) {
+    Object.values(data.frameCookies).forEach((cookie) => {
+      const analytics = findAnalyticsMatch(cookie.name, cookieDictionary);
+
+      cookie.platform = analytics.platform || 'Unknown';
+      cookie.category = analytics.category || 'Uncategorized';
+      cookie.description = analytics.description || '';
+    });
+  }
+  console.log(frameUrlCookies);
   return Object.fromEntries(frameUrlCookies);
 }
 
@@ -222,19 +239,27 @@ async function analyzeCookies(
  * @param url
  * @param isHeadless
  * @param delayTime
+ * @param cookieDictionary
  */
-export async function analyzeCookiesUrl(url: string, isHeadless, delayTime) {
+export async function analyzeCookiesUrl(
+  url: string,
+  isHeadless,
+  delayTime,
+  cookieDictionary
+) {
   const normalEnvFrameCookies = await analyzeCookies(
     url,
     false,
     delayTime,
-    isHeadless
+    isHeadless,
+    cookieDictionary
   );
   const blockedEnvFrameCookies = await analyzeCookies(
     url,
     false,
     delayTime,
-    isHeadless
+    isHeadless,
+    cookieDictionary
   );
 
   const cookieKeysInBlockedEnv = new Set();

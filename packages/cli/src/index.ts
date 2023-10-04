@@ -19,6 +19,8 @@
 import { Command } from 'commander';
 import events from 'events';
 import { ensureFile, writeFile } from 'fs-extra';
+// @ts-ignore Package does not support typescript.
+import Spinnies from 'spinnies';
 
 /**
  * Internal dependencies.
@@ -26,6 +28,7 @@ import { ensureFile, writeFile } from 'fs-extra';
 import { analyzeTechnologiesUrls } from './procedures/analyzeTechnologiesUrls';
 import { analyzeCookiesUrl } from './analyseCookiesUrl';
 import Utility from './utils/utility';
+import { fetchDictionary } from './utils/fetchCookieDictionary';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
@@ -48,20 +51,46 @@ const isHeadless = Boolean(program.opts().headless);
 export const initialize = async () => {
   const url = program.opts().url;
   const sitemapURL = program.opts().sitemapUrl;
+  const cookieDictionary = await fetchDictionary();
   if (url) {
-    const cookieData = await analyzeCookiesUrl(url, isHeadless, 10000);
+    const prefix = Utility.generatePrefix(url ?? 'untitled');
+    const directory = `./out/${prefix}`;
+
+    const spinnies = new Spinnies();
+
+    spinnies.add('cookie-spinner', {
+      text: 'Analysing cookies on the first page visit',
+    });
+    const cookieData = await analyzeCookiesUrl(
+      url,
+      isHeadless,
+      10000,
+      cookieDictionary
+    );
+    spinnies.succeed('cookie-spinner', {
+      text: 'Done Analyzing cookies',
+    });
+
+    spinnies.add('technology-spinner', {
+      text: 'Analysing cookies on the first page visit',
+    });
     const technologyData = await analyzeTechnologiesUrls([url]);
+    spinnies.succeed('technology-spinner', {
+      text: 'Done Analyzing technologies',
+    });
 
     const output = {
       pageUrl: url,
       cookieData,
       technologyData,
     };
-
-    await ensureFile('out.json');
-    await writeFile('out.json', JSON.stringify(output, null, 4));
+    await ensureFile(directory + '/out.json');
+    await writeFile(directory + '/out.json', JSON.stringify(output, null, 4));
   } else {
     const urls: Array<string> = await Utility.getUrlsFromSitemap(sitemapURL);
+
+    const prefix = Utility.generatePrefix([...urls].shift() ?? 'untitled');
+    const directory = `./out/${prefix}`;
     const userInput: any = await Utility.askUserInput(
       `Provided sitemap has ${urls.length} pages. Please enter the number of pages you want to analyze (Default ${urls.length}):`,
       { default: urls.length.toString() }
@@ -75,7 +104,12 @@ export const initialize = async () => {
     const urlsToProcess = urls.splice(0, numberOfUrls);
 
     const promises = urlsToProcess.map(async (siteUrl: string) => {
-      const cookieData = await analyzeCookiesUrl(siteUrl, isHeadless, 10000);
+      const cookieData = await analyzeCookiesUrl(
+        siteUrl,
+        isHeadless,
+        10000,
+        cookieDictionary
+      );
       const technologyData = await analyzeTechnologiesUrls([siteUrl]);
 
       return {
@@ -87,8 +121,8 @@ export const initialize = async () => {
 
     const result = await Promise.all(promises);
 
-    await ensureFile('out.json');
-    await writeFile('out.json', JSON.stringify(result, null, 4));
+    await ensureFile(directory + '/out.json');
+    await writeFile(directory + '/out.json', JSON.stringify(result, null, 4));
   }
   process.exit(1);
 };
