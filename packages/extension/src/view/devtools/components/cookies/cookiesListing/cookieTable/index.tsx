@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import type {
   CookieTableData,
   SortingState,
@@ -72,6 +72,9 @@ const CookieTable = ({ cookies, selectedFrame }: CookieTableProps) => {
       columnSizing: state?.columnSizing as Record<string, number>,
       selectedColumns: state?.selectedColumns as Record<string, boolean>,
     }));
+
+  const [, setForcedUpdate] = useState(false);
+
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
@@ -201,6 +204,13 @@ const CookieTable = ({ cookies, selectedFrame }: CookieTableProps) => {
           : undefined,
     },
   });
+
+  useEffect(() => {
+    window.addEventListener('resize', () => setForcedUpdate(true));
+    return () => {
+      window.removeEventListener('resize', () => setForcedUpdate(true));
+    };
+  }, []);
 
   return (
     <div className="flex-1 w-full h-full text-outer-space-crayola border-x border-american-silver dark:border-quartz">
