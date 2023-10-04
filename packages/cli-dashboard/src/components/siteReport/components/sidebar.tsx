@@ -232,7 +232,7 @@ const Sidebar = ({
   );
 
   return (
-    <div className="overflow-auto flex h-full">
+    <div className="overflow-auto flex h-full text-sm">
       <div className="flex flex-col grow" ref={sidebarContainerRef}>
         {TABS.map(({ id, display_name: name, parentId }, index: number) => {
           if (!parentId) {
