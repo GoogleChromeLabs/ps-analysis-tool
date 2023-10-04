@@ -383,19 +383,19 @@ export const Provider = ({ children }: PropsWithChildren) => {
           setTabFrames(null);
           await getAllFramesForCurrentTab(_tabId);
 
-          if (tabFrames && selectedFrame && nextDomain === currentDomain) {
-            setSelectedFrame(Object.keys(tabFrames)[0]);
+          if (selectedFrame && nextDomain === currentDomain) {
+            setSelectedFrame(nextURL.origin);
           } else {
             setSelectedFrame(null);
           }
 
           setTabUrl(changeInfo.url);
         } catch (error) {
-          /* empty catch block since we dont want to do any thing in catch */
+          setSelectedFrame(null);
         }
       }
     },
-    [tabId, tabUrl, getAllFramesForCurrentTab, tabFrames, selectedFrame]
+    [tabId, tabUrl, getAllFramesForCurrentTab, selectedFrame]
   );
 
   const tabRemovedListener = useCallback(async () => {
