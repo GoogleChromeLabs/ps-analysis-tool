@@ -34,3 +34,9 @@ export type CookieJsonDataType = {
   isBlocked: boolean;
   blockedReasons: string[];
 };
+
+export type CookieFrameStorageType = {
+  [frame: string]: {
+    [cookieKey: string]: CookieJsonDataType;
+  };
+};

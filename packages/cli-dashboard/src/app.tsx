@@ -30,7 +30,7 @@ import type {
   TabFrames,
   TechnologyData,
 } from '@cookie-analysis-tool/common';
-import type { CookieJsonDataType } from './types';
+import type { CookieFrameStorageType, CookieJsonDataType } from './types';
 import SiteSelection from './components/siteReport/components/siteSelection';
 import { CookiesLanding } from '@cookie-analysis-tool/design-system';
 
@@ -40,11 +40,7 @@ enum DisplayType {
 }
 
 const App = () => {
-  const [cookies, setCookies] = useState<{
-    [key: string]: {
-      [key: string]: CookieJsonDataType;
-    };
-  }>({});
+  const [cookies, setCookies] = useState<CookieFrameStorageType>({});
   const [technologies, setTechnologies] = useState<TechnologyData[]>([]);
   const [selectedSite, setSelectedSite] = useState<string | null>(null);
   const [sites, setSites] = useState<string[]>([]);
@@ -121,12 +117,8 @@ const App = () => {
       const response = await fetch(path);
       const data = await response.json();
 
-      let _cookies: {
-          [key: string]: {
-            [key: string]: CookieJsonDataType;
-          };
-        } = {},
-        _technologies;
+      let _cookies: CookieFrameStorageType = {},
+        _technologies: TechnologyData[] = [];
 
       if (type === DisplayType.SITEMAP) {
         _technologies = data.reduce(
@@ -139,10 +131,10 @@ const App = () => {
           ) => {
             return [
               ...acc,
-              ...technologyData.map((technology) => {
-                technology.pageUrl = pageUrl;
-                return technology;
-              }),
+              ...technologyData.map((technology) => ({
+                ...technology,
+                pageUrl,
+              })),
             ];
           },
           [] as TechnologyData[]
@@ -154,23 +146,12 @@ const App = () => {
             pageUrl,
           }: {
             cookieData: {
-              frameCookies: {
-                [key: string]: {
-                  [key: string]: CookieJsonDataType;
-                };
-              };
+              frameCookies: CookieFrameStorageType;
             };
             pageUrl: string;
           }) => {
             const _cookieData = Object.entries(cookieData).reduce(
-              (
-                acc: {
-                  [key: string]: {
-                    [key: string]: CookieJsonDataType;
-                  };
-                },
-                [frame, _data]
-              ) => {
+              (acc: CookieFrameStorageType, [frame, _data]) => {
                 acc[frame] = Object.fromEntries(
                   Object.entries(_data.frameCookies).map(([key, cookie]) => [
                     key + pageUrl,
@@ -187,12 +168,12 @@ const App = () => {
               {}
             );
 
-            Object.entries(_cookieData).forEach(([frame, __cookies]) => {
+            Object.entries(_cookieData).forEach(([frame, _cData]) => {
               if (!_cookies[frame]) {
                 _cookies[frame] = {};
               }
 
-              Object.entries(__cookies).forEach(([key, cookie]) => {
+              Object.entries(_cData).forEach(([key, cookie]) => {
                 _cookies[frame][key] = cookie;
               });
             });
@@ -203,32 +184,22 @@ const App = () => {
 
         _cookies = Object.entries(
           data.cookieData as {
-            [frame: string]: {
-              frameCookies: {
-                [key: string]: CookieJsonDataType;
-              };
-            };
+            frameCookies: CookieFrameStorageType;
           }
-        ).reduce(
-          (
-            acc: { [key: string]: { [key: string]: CookieJsonDataType } },
-            [frame, _data]
-          ) => {
-            acc[frame] = Object.fromEntries(
-              Object.entries(_data.frameCookies).map(([key, cookie]) => [
-                key + data.pageUrl + frame,
-                {
-                  ...cookie,
-                  pageUrl: data.pageUrl,
-                  frameUrl: frame,
-                },
-              ])
-            );
+        ).reduce((acc: CookieFrameStorageType, [frame, _data]) => {
+          acc[frame] = Object.fromEntries(
+            Object.entries(_data.frameCookies).map(([key, cookie]) => [
+              key + data.pageUrl + frame,
+              {
+                ...cookie,
+                pageUrl: data.pageUrl,
+                frameUrl: frame,
+              },
+            ])
+          );
 
-            return acc;
-          },
-          {}
-        );
+          return acc;
+        }, {});
       }
 
       setCookies(_cookies);
@@ -247,14 +218,7 @@ const App = () => {
 
   const siteFilteredCookies = useMemo(() => {
     return Object.entries(cookies).reduce(
-      (
-        acc: {
-          [key: string]: {
-            [key: string]: CookieJsonDataType;
-          };
-        },
-        [frame, _cookies]
-      ) => {
+      (acc: CookieFrameStorageType, [frame, _cookies]) => {
         acc[frame] = Object.fromEntries(
           Object.entries(_cookies).filter(
             ([, cookie]) => cookie.pageUrl === selectedSite
