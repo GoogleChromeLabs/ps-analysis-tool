@@ -17,15 +17,12 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
-
+import type { SelectedFilters } from '@cookie-analysis-tool/common';
 /**
  * Internal dependencies.
  */
 import SubList from './subList';
-import type {
-  SelectedFilters,
-  Filter,
-} from '../../../stateProviders/filterManagementStore/types';
+import type { Filter } from '../../../stateProviders/filterManagementStore/types';
 import { ArrowDown, InfoIcon } from '@cookie-analysis-tool/design-system';
 
 interface ListItemProps {

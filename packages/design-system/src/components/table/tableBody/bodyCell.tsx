@@ -18,6 +18,10 @@
  * External dependencies.
  */
 import React from 'react';
+
+/**
+ * Internal dependencies.
+ */
 import type { InfoType } from '../useTable';
 interface BodyCellProps {
   cell: React.JSX.Element | InfoType;
@@ -28,7 +32,7 @@ const BodyCell = ({ cell, width }: BodyCellProps) => {
   return (
     <div
       tabIndex={0}
-      style={{ width: width }}
+      style={{ width }}
       className="outline-0 px-1 py-px truncate h-5 text-xs dark:text-bright-gray cursor-default"
     >
       {cell}

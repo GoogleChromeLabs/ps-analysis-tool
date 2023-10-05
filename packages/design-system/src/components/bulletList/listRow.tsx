@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * External dependencies.
  */
@@ -21,17 +22,32 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import InfoCard from '../../../../design-system/components/infoCard';
-import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
-import TopicsList from './topicsList';
+import { Ellipse } from '../../icons';
 
-const Topics = () => {
+type Props = {
+  row: BulletListItem;
+};
+
+const ListRow = ({ row }: Props) => {
   return (
-    <div className="w-full h-full overflow-auto" data-testid="topics-content">
-      <InfoCard infoKey={PSInfoKey.Topics} />
-      <TopicsList />
+    <div className="flex gap-4 items-baseline" key={row?.key ?? row.title}>
+      <span>
+        <Ellipse />
+      </span>
+      {row?.link ? (
+        <a
+          href={row.link}
+          target="_blank"
+          rel="noreferrer"
+          className="text-sm text-analytics font-medium leading-6"
+        >
+          {row.title}
+        </a>
+      ) : (
+        <p className="text-sm font-medium leading-6">{row.title}</p>
+      )}
     </div>
   );
 };
 
-export default Topics;
+export default ListRow;

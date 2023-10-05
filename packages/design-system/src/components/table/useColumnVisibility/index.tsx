@@ -33,7 +33,7 @@
 /**
  * External dependencies.
  */
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 /**
  * Internal dependencies.
@@ -50,13 +50,32 @@ export type ColumnVisibilityOutput = {
 };
 
 const useColumnVisibility = (
-  columns: TableColumn[]
+  columns: TableColumn[],
+  options?: Record<string, boolean>
 ): ColumnVisibilityOutput => {
   const [hiddenKeys, setHiddenKeys] = useState<Set<string>>(new Set());
+  const isDefaultRendered = useRef(false);
 
   const hideColumn = useCallback((key: string) => {
     setHiddenKeys((prev) => new Set(prev.add(key)));
   }, []);
+
+  useEffect(() => {
+    if (options && !isDefaultRendered.current) {
+      setHiddenKeys((prev) => {
+        const next = new Set(prev);
+        columns
+          .filter(({ enableHiding }) => enableHiding !== false)
+          .forEach(({ header, accessorKey }) => {
+            if (options[header]) {
+              next.add(accessorKey);
+            }
+          });
+        return next;
+      });
+      isDefaultRendered.current = true;
+    }
+  }, [columns, options]);
 
   const toggleVisibility = useCallback(() => {
     setHiddenKeys((prev) => {

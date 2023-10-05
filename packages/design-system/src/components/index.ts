@@ -28,4 +28,5 @@ export { default as CookiesLanding } from './cookiesLanding';
 export { default as CookieDetails } from './cookieDetails';
 export { default as Details } from './cookieDetails/details';
 export { default as CookieTable } from './cookieTable';
+export { default as LandingPage } from './landingPage';
 export * from './table';

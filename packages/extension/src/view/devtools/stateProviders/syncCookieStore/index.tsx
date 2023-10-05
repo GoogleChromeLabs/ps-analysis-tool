@@ -50,6 +50,7 @@ export interface CookieStoreContext {
     setSelectedFrame: React.Dispatch<React.SetStateAction<string | null>>;
     changeListeningToThisTab: () => void;
     getCookiesSetByJavascript: () => void;
+    setContextInvalidated: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
@@ -69,6 +70,7 @@ const initialState: CookieStoreContext = {
     setSelectedFrame: noop,
     changeListeningToThisTab: noop,
     getCookiesSetByJavascript: noop,
+    setContextInvalidated: noop,
   },
 };
 
@@ -338,10 +340,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
           tabIdToBeDeleted !== 'tabToRead'
         ) {
           await CookieStore.removeTabData(tabIdToBeDeleted);
-          await chrome.action.setBadgeText({
-            tabId: parseInt(tabIdToBeDeleted),
-            text: '',
-          });
+
+          if (!Number.isNaN(parseInt(tabIdToBeDeleted))) {
+            await chrome.action.setBadgeText({
+              tabId: parseInt(tabIdToBeDeleted),
+              text: '',
+            });
+          }
         }
         return Promise.resolve();
       });
@@ -369,13 +374,28 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const tabUpdateListener = useCallback(
     async (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
       if (tabId === _tabId && changeInfo.url) {
-        setTabUrl(changeInfo.url);
-        setSelectedFrame(null);
-        setTabFrames(null);
-        await getAllFramesForCurrentTab(_tabId);
+        try {
+          const nextURL = new URL(changeInfo.url);
+          const nextDomain = nextURL?.hostname;
+          const currentURL = new URL(tabUrl ?? '');
+          const currentDomain = currentURL?.hostname;
+
+          setTabFrames(null);
+          await getAllFramesForCurrentTab(_tabId);
+
+          if (selectedFrame && nextDomain === currentDomain) {
+            setSelectedFrame(nextURL.origin);
+          } else {
+            setSelectedFrame(null);
+          }
+
+          setTabUrl(changeInfo.url);
+        } catch (error) {
+          setSelectedFrame(null);
+        }
       }
     },
-    [tabId, getAllFramesForCurrentTab]
+    [tabId, tabUrl, getAllFramesForCurrentTab, selectedFrame]
   );
 
   const tabRemovedListener = useCallback(async () => {
@@ -451,6 +471,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           setSelectedFrame,
           changeListeningToThisTab,
           getCookiesSetByJavascript,
+          setContextInvalidated,
         },
       }}
     >

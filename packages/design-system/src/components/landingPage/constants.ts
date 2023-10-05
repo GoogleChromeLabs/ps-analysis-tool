@@ -13,25 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import React from 'react';
-
-/**
- * Internal dependencies.
- */
-import InfoCard from '../../../../design-system/components/infoCard';
-import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
-import TopicsList from './topicsList';
-
-const Topics = () => {
-  return (
-    <div className="w-full h-full overflow-auto" data-testid="topics-content">
-      <InfoCard infoKey={PSInfoKey.Topics} />
-      <TopicsList />
-    </div>
-  );
-};
-
-export default Topics;
+export const QUICK_LINKS = [
+  {
+    title: 'Report a bug',
+    link: 'https://github.com/GoogleChromeLabs/ps-analysis-tool/issues',
+  },
+  {
+    title: 'Report a breakage',
+    link: 'https://github.com/GoogleChromeLabs/privacy-sandbox-dev-support/issues',
+  },
+  {
+    title: 'Join the discussions',
+    link: 'https://github.com/GoogleChromeLabs/ps-analysis-tool/discussions',
+  },
+];

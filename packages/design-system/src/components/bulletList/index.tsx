@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * External dependencies.
  */
@@ -21,17 +22,31 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import InfoCard from '../../../../design-system/components/infoCard';
-import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
-import TopicsList from './topicsList';
+import ListRow from './listRow';
 
-const Topics = () => {
+type BulletListProps = {
+  rows: BulletListItem[];
+  heading?: string;
+};
+
+const BulletList = ({ rows, heading }: BulletListProps) => {
   return (
-    <div className="w-full h-full overflow-auto" data-testid="topics-content">
-      <InfoCard infoKey={PSInfoKey.Topics} />
-      <TopicsList />
-    </div>
+    <>
+      {heading && (
+        <>
+          <h2 className="text-xs font-bold uppercase text-darkest-gray">
+            {heading}
+          </h2>
+          <hr className="border-0 border-b border-hex-gray dark:border-quartz" />
+        </>
+      )}
+      <div className="space-y-4">
+        {rows.map((rowItem) => (
+          <ListRow row={rowItem} key={rowItem?.key ?? rowItem.title} />
+        ))}
+      </div>
+    </>
   );
 };
 
-export default Topics;
+export default BulletList;

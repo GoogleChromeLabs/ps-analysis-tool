@@ -13,25 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import React from 'react';
+const fetchLocalData = async (path: string) => {
+  try {
+    const url = chrome.runtime.getURL(path);
+    const response = await fetch(url);
 
-/**
- * Internal dependencies.
- */
-import InfoCard from '../../../../design-system/components/infoCard';
-import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
-import TopicsList from './topicsList';
+    if (!response.ok) {
+      // eslint-disable-next-line no-console
+      console.warn(`HTTP error! Status: ${response.status}`);
+    }
 
-const Topics = () => {
-  return (
-    <div className="w-full h-full overflow-auto" data-testid="topics-content">
-      <InfoCard infoKey={PSInfoKey.Topics} />
-      <TopicsList />
-    </div>
-  );
+    return await response.json();
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      `Failed to fetch local data from path: ${path}. Error:`,
+      error
+    );
+
+    return [];
+  }
 };
 
-export default Topics;
+export default fetchLocalData;
