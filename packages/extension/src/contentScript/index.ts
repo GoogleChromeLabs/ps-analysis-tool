@@ -26,7 +26,8 @@ import { WEBPAGE_PORT_NAME } from '../constants';
 import type { ResponseType } from './types';
 import './style.css';
 import { CookieStore } from '../localStore';
-import setPopoverPosition from './popovers/setPopoverPosition';
+import { setOverlayPosition } from './popovers/overlay';
+import { setTooltipPosition } from './popovers/tooltip';
 
 /**
  * Represents the content script for the webpage.
@@ -106,33 +107,43 @@ class WebpageContentScript {
     // Remove previous frames.
     this.removeAllPopovers();
 
-    frameElements.forEach((frame, index) => {
-      this.insertPopover(frame, response, index);
+    // Its important to insert overlays and tooltips seperately and in the same order, to avoid z-index issue.
+    frameElements.forEach((frame) => {
+      this.insertOverlay(frame, response);
+    });
+
+    frameElements.forEach((frame) => {
+      this.insertTooltip(frame, response);
     });
   }
 
-  insertPopover(frame: HTMLElement, response: ResponseType, index = 0) {
-    const { overlay, tooltip } = addPopover(
-      frame,
-      response,
-      this.isHoveringOverPage,
-      index
-    );
+  insertOverlay(frame: HTMLElement, response: ResponseType) {
+    const overlay = addPopover(frame, response, 'overlay');
 
     const updatePosition = () => {
-      setPopoverPosition({
-        overlay,
-        tooltip,
-        frame,
-        selectedFrame: response.selectedFrame,
-      });
+      setOverlayPosition(overlay, frame);
     };
 
-    this.scrollEventListeners.push(updatePosition);
+    this.addEventListerOnScroll(updatePosition);
+  }
 
-    updatePosition();
+  addEventListerOnScroll(callback: () => void) {
+    this.scrollEventListeners.push(callback);
 
-    window.addEventListener('scroll', updatePosition);
+    callback();
+
+    window.addEventListener('scroll', callback);
+  }
+
+  insertTooltip(frame: HTMLElement, response: ResponseType) {
+    const tooltip = addPopover(frame, response, 'tooltip');
+
+    const updatePosition = () => {
+      const isHidden = !frame.clientWidth; // TODO: Improve how else an element can be hidden.
+      setTooltipPosition(tooltip, frame, isHidden, response.selectedFrame);
+    };
+
+    this.addEventListerOnScroll(updatePosition);
   }
 
   removeAllPopovers() {
@@ -185,7 +196,12 @@ class WebpageContentScript {
 
     if (!srcAttribute) {
       this.removeAllPopovers();
-      this.insertPopover(frame, {
+
+      this.insertOverlay(frame, {
+        isInspecting: true,
+      });
+
+      this.insertTooltip(frame, {
         isInspecting: true,
       });
 
