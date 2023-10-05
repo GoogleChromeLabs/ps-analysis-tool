@@ -107,14 +107,32 @@ class WebpageContentScript {
     // Remove previous frames.
     this.removeAllPopovers();
 
+    if (!frameElements.length) {
+      return;
+    }
+
     // Its important to insert overlays and tooltips seperately and in the same order, to avoid z-index issue.
     frameElements.forEach((frame) => {
       this.insertOverlay(frame, response);
     });
 
+    const tooltips = [];
+
     frameElements.forEach((frame) => {
-      this.insertTooltip(frame, response);
+      tooltips.push(this.insertTooltip(frame, response));
     });
+
+    if (!this.isHoveringOverPage && tooltips.length) {
+      const frameToScrollTo = frameElements[0];
+
+      if (frameToScrollTo.clientWidth) {
+        tooltips[0].scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+          inline: 'nearest',
+        });
+      }
+    }
   }
 
   insertOverlay(frame: HTMLElement, response: ResponseType) {
@@ -125,17 +143,11 @@ class WebpageContentScript {
     };
 
     this.addEventListerOnScroll(updatePosition);
+
+    return overlay;
   }
 
-  addEventListerOnScroll(callback: () => void) {
-    this.scrollEventListeners.push(callback);
-
-    callback();
-
-    window.addEventListener('scroll', callback);
-  }
-
-  insertTooltip(frame: HTMLElement, response: ResponseType) {
+  insertTooltip(frame: HTMLElement, response: ResponseType): HTMLElement {
     const tooltip = addPopover(frame, response, 'tooltip');
 
     const updatePosition = () => {
@@ -144,6 +156,16 @@ class WebpageContentScript {
     };
 
     this.addEventListerOnScroll(updatePosition);
+
+    return tooltip;
+  }
+
+  addEventListerOnScroll(callback: () => void) {
+    this.scrollEventListeners.push(callback);
+
+    callback();
+
+    window.addEventListener('scroll', callback);
   }
 
   removeAllPopovers() {
