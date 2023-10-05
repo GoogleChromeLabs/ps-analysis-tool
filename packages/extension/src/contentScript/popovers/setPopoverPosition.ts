@@ -31,9 +31,10 @@ const setPopoverPosition = ({
   overlay,
   tooltip,
   frame,
-  isHiddenFrame,
   selectedFrame,
 }: Props) => {
+  const isHiddenFrame = !overlay;
+
   setOverlayPosition(overlay, frame);
   setTooltipPosition(tooltip, frame, isHiddenFrame, selectedFrame);
 };

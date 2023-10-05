@@ -26,23 +26,7 @@ import { WEBPAGE_PORT_NAME } from '../constants';
 import type { ResponseType } from './types';
 import './style.css';
 import { CookieStore } from '../localStore';
-
-(async () => {
-  if (
-    !document.prerendering &&
-    'browsingTopics' in document &&
-    document.featurePolicy &&
-    document.featurePolicy.allowsFeature('browsing-topics')
-  ) {
-    const activeTabUrl = window.location.origin;
-    const topicsObjArr = await document.browsingTopics();
-    const topicsIdArr = topicsObjArr.map(
-      (topic: { [key: string]: string | number }) => topic.topic
-    );
-
-    CookieStore.setTopics(activeTabUrl, topicsIdArr);
-  }
-})();
+import setPopoverPosition from './popovers/setPopoverPosition';
 
 /**
  * Represents the content script for the webpage.
@@ -51,6 +35,7 @@ class WebpageContentScript {
   port: chrome.runtime.Port | null = null;
   isInspecting = false;
   isHoveringOverPage = false;
+  scrollEventListeners = [];
 
   /**
    * Initialize
@@ -62,6 +47,7 @@ class WebpageContentScript {
     this.onDisconnect = this.onDisconnect.bind(this);
 
     this.listenToConnection();
+    this.setTopics();
   }
 
   listenToConnection() {
@@ -104,20 +90,57 @@ class WebpageContentScript {
       this.removeHoverEventListeners();
       this.addHoverEventListeners();
       toggleFrameHighlighting(true);
-
-      if (response?.selectedFrame) {
-        const frameElements = findSelectedFrameElements(response.selectedFrame);
-
-        // Remove previous frames.
-        removeAllPopovers();
-
-        frameElements.forEach((frame, index) => {
-          addPopover(frame, response, this.isHoveringOverPage, index);
-        });
-      }
+      this.insertPopovers(response);
     } else {
       this.abortInspection();
     }
+  }
+
+  insertPopovers(response: ResponseType) {
+    if (!response.selectedFrame) {
+      return;
+    }
+
+    const frameElements = findSelectedFrameElements(response.selectedFrame);
+
+    // Remove previous frames.
+    this.removeAllPopovers();
+
+    frameElements.forEach((frame, index) => {
+      const popover = addPopover(
+        frame,
+        response,
+        this.isHoveringOverPage,
+        index
+      );
+
+      const updatePosition = () => {
+        setPopoverPosition({
+          overlay: popover?.overlay,
+          tooltip: popover?.tooltip,
+          frame,
+          selectedFrame: response.selectedFrame,
+        });
+      };
+
+      this.scrollEventListeners.push(updatePosition);
+
+      updatePosition();
+
+      window.addEventListener('scroll', updatePosition);
+    });
+  }
+
+  removeAllPopovers() {
+    if (this.scrollEventListeners.length) {
+      this.scrollEventListeners.forEach((listener) => {
+        window.removeEventListener('scroll', listener);
+      });
+
+      this.scrollEventListeners = [];
+    }
+
+    removeAllPopovers();
   }
 
   /**
@@ -194,6 +217,26 @@ class WebpageContentScript {
       this.port.postMessage(payload);
     } catch (error) {
       this.abortInspection();
+    }
+  }
+
+  /**
+   * Set topics to be used in the Topics landing page.
+   */
+  async setTopics() {
+    if (
+      !document.prerendering &&
+      'browsingTopics' in document &&
+      document.featurePolicy &&
+      document.featurePolicy.allowsFeature('browsing-topics')
+    ) {
+      const activeTabUrl = window.location.origin;
+      const topicsObjArr = await document.browsingTopics();
+      const topicsIdArr = topicsObjArr.map(
+        (topic: { [key: string]: string | number }) => topic.topic
+      );
+
+      CookieStore.setTopics(activeTabUrl, topicsIdArr);
     }
   }
 }

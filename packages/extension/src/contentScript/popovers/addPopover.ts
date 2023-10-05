@@ -18,7 +18,6 @@
  */
 import { createFrameOverlay } from './overlay';
 import { createTooltip } from './tooltip';
-import setPopoverPosition from './setPopoverPosition';
 import type { ResponseType } from '../types';
 
 /**
@@ -34,11 +33,11 @@ const addPopover = (
   data: ResponseType,
   isHoveringOverPage: boolean,
   index = 0
-): boolean => {
+): { overlay?: HTMLElement | null; tooltip?: HTMLElement } => {
   const body = document.querySelector('body');
 
   if (!body) {
-    return false;
+    return {};
   }
 
   const overlay = createFrameOverlay(frame);
@@ -57,14 +56,6 @@ const addPopover = (
     tooltip.showPopover();
   }
 
-  setPopoverPosition({
-    overlay,
-    tooltip,
-    frame,
-    isHiddenFrame,
-    selectedFrame: data.selectedFrame,
-  });
-
   // no need to scroll if frame is hidden;
   if (index === 0 && !isHiddenFrame && !isHoveringOverPage) {
     tooltip.scrollIntoView({
@@ -74,7 +65,10 @@ const addPopover = (
     });
   }
 
-  return true;
+  return {
+    overlay,
+    tooltip,
+  };
 };
 
 export default addPopover;
