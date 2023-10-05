@@ -56,33 +56,16 @@ const App = () => {
         _technologies: TechnologyData[] = [];
 
       if (type === DisplayType.SITEMAP) {
-        _technologies = data.reduce(
-          (
-            acc: TechnologyData[],
-            {
-              technologyData,
-              pageUrl,
-            }: { technologyData: TechnologyData[]; pageUrl: string }
-          ) => {
-            return [
-              ...acc,
-              ...technologyData.map((technology) => ({
-                ...technology,
-                pageUrl,
-              })),
-            ];
-          },
-          [] as TechnologyData[]
-        );
-
         data.forEach(
           ({
             cookieData,
+            technologyData,
             pageUrl,
           }: {
             cookieData: {
               frameCookies: CookieFrameStorageType;
             };
+            technologyData: TechnologyData[];
             pageUrl: string;
           }) => {
             const _cookieData = Object.entries(cookieData).reduce(
@@ -112,6 +95,13 @@ const App = () => {
                 _cookies[frame][key] = cookie;
               });
             });
+
+            _technologies.push(
+              ...technologyData.map((technology) => ({
+                ...technology,
+                pageUrl,
+              }))
+            );
           }
         );
       } else {
