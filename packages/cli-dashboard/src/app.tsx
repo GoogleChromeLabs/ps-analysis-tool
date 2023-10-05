@@ -18,21 +18,15 @@
  * External dependencies
  */
 import React, { useEffect, useMemo, useState } from 'react';
-import { Resizable } from 're-resizable';
 
 /**
  * Internal dependencies
  */
 import './app.css';
 import SiteReport from './components/siteReport';
-import type {
-  CookieTableData,
-  TabFrames,
-  TechnologyData,
-} from '@cookie-analysis-tool/common';
+import type { TechnologyData } from '@cookie-analysis-tool/common';
 import type { CookieFrameStorageType, CookieJsonDataType } from './types';
-import SiteSelection from './components/siteReport/components/siteSelection';
-import { CookiesLanding } from '@cookie-analysis-tool/design-system';
+import SiteMapReport from './components/siteMapReport';
 
 enum DisplayType {
   SITEMAP,
@@ -42,8 +36,6 @@ enum DisplayType {
 const App = () => {
   const [cookies, setCookies] = useState<CookieFrameStorageType>({});
   const [technologies, setTechnologies] = useState<TechnologyData[]>([]);
-  const [selectedSite, setSelectedSite] = useState<string | null>(null);
-  const [sites, setSites] = useState<string[]>([]);
 
   const [type, path] = useMemo(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -54,63 +46,6 @@ const App = () => {
       urlParams.get('path')?.substring(1) || '',
     ];
   }, []);
-
-  const frames = useMemo(() => {
-    return Object.keys(cookies).reduce((acc, frame) => {
-      if (frame?.includes('http')) {
-        acc[frame] = {} as TabFrames[string];
-      }
-      return acc;
-    }, {} as TabFrames);
-  }, [cookies]);
-
-  const reshapedCookies = useMemo(
-    () =>
-      Object.entries(cookies)
-        .filter(([frame]) => frame.includes('http'))
-        .map(([frame, _cookies]) => {
-          const newCookies = Object.fromEntries(
-            Object.entries(_cookies).map(([key, cookie]) => [
-              key,
-              {
-                parsedCookie: {
-                  name: cookie.name,
-                  value: cookie.value,
-                  domain: cookie.domain,
-                  path: cookie.path,
-                  expires: cookie.expires,
-                  httponly: cookie.httpOnly,
-                  secure: cookie.secure,
-                  samesite: cookie.sameSite,
-                },
-                analytics: {
-                  platform: cookie.platform,
-                  category:
-                    cookie.category === 'Unknown Category'
-                      ? 'Uncategorized'
-                      : cookie.category,
-                  description: cookie.description,
-                } as CookieTableData['analytics'],
-                url: cookie.pageUrl,
-                headerType: 'response',
-                isFirstParty: cookie.isFirstParty === 'Yes' ? true : false,
-                frameIdList: [],
-                isCookieSet: !cookie.isBlocked,
-                frameUrl: frame,
-              } as CookieTableData,
-            ])
-          );
-
-          return newCookies;
-        })
-        .reduce((acc, cookieObj) => {
-          return {
-            ...acc,
-            ...cookieObj,
-          };
-        }, {}),
-    [cookies]
-  );
 
   useEffect(() => {
     (async () => {
@@ -189,7 +124,7 @@ const App = () => {
         ).reduce((acc: CookieFrameStorageType, [frame, _data]) => {
           acc[frame] = Object.fromEntries(
             Object.entries(_data.frameCookies).map(([key, cookie]) => [
-              key + data.pageUrl + frame,
+              key,
               {
                 ...cookie,
                 pageUrl: data.pageUrl,
@@ -204,38 +139,8 @@ const App = () => {
 
       setCookies(_cookies);
       setTechnologies(_technologies as TechnologyData[]);
-
-      const _sites = new Set<string>();
-      Object.values(_cookies).forEach((cookieData) => {
-        Object.values(cookieData).forEach((cookie) => {
-          _sites.add(cookie.pageUrl);
-        });
-      });
-
-      setSites(Array.from(_sites));
     })();
   }, [path, type]);
-
-  const siteFilteredCookies = useMemo(() => {
-    return Object.entries(cookies).reduce(
-      (acc: CookieFrameStorageType, [frame, _cookies]) => {
-        acc[frame] = Object.fromEntries(
-          Object.entries(_cookies).filter(
-            ([, cookie]) => cookie.pageUrl === selectedSite
-          )
-        );
-
-        return acc;
-      },
-      {}
-    );
-  }, [cookies, selectedSite]);
-
-  const siteFilteredTechnologies = useMemo(() => {
-    return technologies.filter(
-      (technology) => technology.pageUrl === selectedSite
-    );
-  }, [selectedSite, technologies]);
 
   if (!path) {
     return (
@@ -246,35 +151,7 @@ const App = () => {
   }
 
   if (type === DisplayType.SITEMAP) {
-    return (
-      <div className="w-full h-screen flex">
-        <Resizable
-          defaultSize={{ width: '200px', height: '100%' }}
-          minWidth={'150px'}
-          maxWidth={'98%'}
-          enable={{
-            right: true,
-          }}
-          className="h-full flex flex-col border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
-        >
-          <SiteSelection
-            sites={sites}
-            selectedSite={selectedSite}
-            setSelectedSite={setSelectedSite}
-          />
-        </Resizable>
-        <div className="flex-1 h-full">
-          {selectedSite ? (
-            <SiteReport
-              cookies={siteFilteredCookies}
-              technologies={siteFilteredTechnologies}
-            />
-          ) : (
-            <CookiesLanding tabFrames={frames} tabCookies={reshapedCookies} />
-          )}
-        </div>
-      </div>
-    );
+    return <SiteMapReport cookies={cookies} technologies={technologies} />;
   } else {
     return (
       <div className="w-full h-screen flex">
