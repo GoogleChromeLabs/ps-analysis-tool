@@ -39,16 +39,16 @@ const createFrameOverlay = (frame: HTMLElement): HTMLElement | null => {
   const frameOverlay = document.createElement('div');
   frameOverlay.classList.add(OVERLAY_CLASS);
 
-  const styles: Record<string, string> = {
-    width: frameWidth + 'px',
-    height: frameHeight + 'px',
-    top: frameY + Number(window.scrollY) + 'px',
-    left: frameX + Number(window.scrollX) + 'px',
-  };
-
-  // eslint-disable-next-line guard-for-in
-  for (const key in styles) {
-    frameOverlay.style[key] = styles[key];
+  if (frame.tagName !== 'BODY') {
+    frameOverlay.style.width = frameWidth + 'px';
+    frameOverlay.style.height = frameHeight + 'px';
+    frameOverlay.style.top = frameY + Number(window.scrollY) + 'px';
+    frameOverlay.style.left = frameX + Number(window.scrollX) + 'px';
+  } else {
+    frameOverlay.style.width = '100%';
+    frameOverlay.style.height = '100%';
+    frameOverlay.style.top = '0';
+    frameOverlay.style.left = '0';
   }
 
   frameOverlay.popover = 'manual';

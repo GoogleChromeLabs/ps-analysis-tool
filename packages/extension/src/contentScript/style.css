@@ -39,6 +39,7 @@ html body .ps-tooltip[popover] > .ps-content .ps-frame-origin {
 html body .ps-tooltip[popover] > .ps-content p {
     line-height: 1.7 !important;
     margin: 0 !important;
+    padding: 0 !important;
     font-size: 12px !important;
     font-weight: 400 !important;
     color: #000000 !important;
