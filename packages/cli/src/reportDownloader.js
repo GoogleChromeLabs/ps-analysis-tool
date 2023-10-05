@@ -17,11 +17,12 @@
  * External dependencies
  */
 import JSZip from 'jszip';
-import FileSaver from 'file-saver';
 
 import dummyReport from './out.json' assert { type: 'json' };
+import { createWriteStream } from 'fs';
 
 export const reportDownloader = (report) => {
+  const newReport = report;
   const cookieDataHeader = [
     'name',
     'value',
@@ -47,8 +48,18 @@ export const reportDownloader = (report) => {
     'categories',
   ];
 
+  const summaryDataHeader = ['type', 'value'];
+
   const cookieDataValues = [];
+  const affectedCookiesDataValues = [];
+  const technologyDataValues = [];
+  const summaryDataValues = [];
+
+  let affectedCookiesCount = 0;
+  let totalCookiesCount = 0;
+
   Object.keys(report.cookieData).forEach((frameName) => {
+    newReport.affectedCookies[frameName] = {};
     Object.keys(report.cookieData[frameName].frameCookies).forEach((cookie) => {
       const unSanitisedCookie =
         report.cookieData[frameName].frameCookies[cookie];
@@ -70,14 +81,32 @@ export const reportDownloader = (report) => {
         isCookieSet: !unSanitisedCookie.isBlocked,
         gdprPortal: unSanitisedCookie?.gdprPortal || 'NA',
       };
+
       cookieDataValues.push(Object.values(sanitizedData).join(',') + '\r\n');
+
+      if (unSanitisedCookie.isBlocked) {
+        affectedCookiesCount = affectedCookiesCount + 1;
+
+        newReport.affectedCookies[frameName] = {
+          ...newReport.affectedCookies[frameName],
+          cookie: report.cookieData[frameName].frameCookies[cookie],
+        };
+
+        affectedCookiesDataValues.push(
+          Object.values(sanitizedData).join(',') + '\r\n'
+        );
+      }
     });
+
+    totalCookiesCount =
+      totalCookiesCount + report.cookieData[frameName].cookieCount;
   });
 
-  const cookieDataCSVContent =
-    'data:text/csv;charset=utf-8,' + cookieDataHeader + '\n' + cookieDataValues;
+  const cookieDataCSVContent = cookieDataHeader + '\n' + cookieDataValues;
 
-  const technologyDataValues = [];
+  const affectedCookieDataCSVContent =
+    cookieDataHeader + '\n' + affectedCookiesDataValues;
+
   report.technologyData.forEach((technology) => {
     const singleTechnology = {
       name: technology?.name,
@@ -96,17 +125,42 @@ export const reportDownloader = (report) => {
   });
 
   const technologyDataCSVContent =
-    'data:text/csv;charset=utf-8,' +
-    technologyDataHeader +
-    '\n' +
-    technologyDataValues;
+    technologyDataHeader + '\n' + technologyDataValues;
+
+  const summaryData = {
+    affectedCookies: affectedCookiesCount,
+    totalCookies: totalCookiesCount,
+    thirdPartyCookies: 0,
+    firstPartyCookies: 0,
+    functionalCookies: 0,
+    marketingCookies: 0,
+    uncategorisedCookies: 0,
+    analyticsCookies: 0,
+    affectedFunctionalCookies: 0,
+    affectedMarketingCookies: 0,
+    affectedUncategorisedCookies: 0,
+    affectedAnalyticsCookies: 0,
+  };
+
+  Object.entries(summaryData).forEach(([key, value]) => {
+    summaryDataValues.push(`${key}, ${value}\r\n`);
+  });
+
+  const summaryDataCSVContent = summaryDataHeader + '\n' + summaryDataValues;
+
+  newReport.cookieAnalysisSummary = summaryData;
 
   const zip = new JSZip();
   zip.file('cookieData.csv', cookieDataCSVContent);
   zip.file('technologyData.csv', technologyDataCSVContent);
-  zip.file('completeJson.json', JSON.stringify(report));
-  zip.generateAsync({ type: 'blob' }).then((content) => {
-    FileSaver.saveAs(content, 'download.zip');
-  });
+  zip.file('affectedCookiesData.csv', affectedCookieDataCSVContent);
+  zip.file('summaryData.csv', summaryDataCSVContent);
+  zip.file('completeJson.json', JSON.stringify(newReport));
+  zip
+    .generateNodeStream({ type: 'nodebuffer', streamFiles: true })
+    .pipe(createWriteStream('sample.zip'))
+    .on('finish', () => {
+      console.log('sample.zip written.');
+    });
 };
 reportDownloader(dummyReport);
