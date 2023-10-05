@@ -16,37 +16,31 @@
 /**
  * Internal dependencies.
  */
-import compareFrameSource from '../utils/compareFrameSource';
-import isFrameInsideFrame from '../utils/isframeInsideFrame';
+import compareFrameSource from './compareFrameSource';
 
-const findSelectedFrameElements = (selectedOrigin: string) => {
-  if (!selectedOrigin) {
-    return [];
+const isFrameInsideFrame = (
+  frame: HTMLIFrameElement,
+  selectedOrigin: string
+) => {
+  if (!frame.contentDocument) {
+    return false;
   }
 
-  if (selectedOrigin === document.location.origin) {
-    return [document.body]; // main frame
-  }
+  const iframes = frame.contentDocument.querySelectorAll('iframe');
 
-  const iframes = document.querySelectorAll('iframe');
-  const elements = [];
-
+  // Iterate internal frames.
   for (const iframe of iframes) {
     const src = iframe.getAttribute('src');
 
-    if (!src) {
-      continue;
-    }
+    if (src && compareFrameSource(selectedOrigin, src)) {
+      frame.dataset.psatInsideFrame = src;
 
-    if (
-      compareFrameSource(selectedOrigin, src) ||
-      isFrameInsideFrame(iframe, selectedOrigin)
-    ) {
-      elements.push(iframe);
+      // let's not go through all the frames as we will only highlight parent frame.
+      return true;
     }
   }
 
-  return elements;
+  return false;
 };
 
-export default findSelectedFrameElements;
+export default isFrameInsideFrame;

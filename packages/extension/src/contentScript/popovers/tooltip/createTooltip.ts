@@ -34,10 +34,19 @@ const createTooltip = (
   let isHidden = false;
   const tooltip = document.createElement('div');
   const content = document.createElement('div');
+  let insideFrame: HTMLIFrameElement | null = null;
 
-  const attributes = !isMainFrame
-    ? getFrameAttributes(frame as HTMLIFrameElement)
-    : {};
+  let attributes = {};
+
+  if (!isMainFrame && frame.dataset?.psatInsideFrame) {
+    // we don't need to worry if querySelector will fail becuase there will be no psatInsideFrame if we can't access contentDocument of frame.
+    insideFrame = frame?.contentDocument.querySelector(
+      'iframe[src="' + frame.dataset.psatInsideFrame + '"]'
+    );
+    attributes = getFrameAttributes(insideFrame as HTMLIFrameElement);
+  } else if (!isMainFrame) {
+    attributes = getFrameAttributes(frame as HTMLIFrameElement);
+  }
 
   const { width, height } = frame.getBoundingClientRect();
 
@@ -55,13 +64,28 @@ const createTooltip = (
 
   const origin = isMainFrame ? data.selectedFrame : frameOrigin;
 
+  let frameType = 'iframe';
+
+  if (isHidden) {
+    frameType = 'iframe(hidden)';
+  } else if (insideFrame) {
+    frameType = 'iframe(nested frame)';
+  } else if (frame.tagName === 'BODY') {
+    frameType = 'Main Frame';
+  }
+
   const info: Record<string, string> = {
-    Type: 'iframe' + (isHidden ? ' (hidden)' : ''),
+    Type: frameType,
     Origin: `<a href="${origin}">${origin}</a>`,
     'First-party cookies': String(data?.firstPartyCookies || '0'),
     'Third-party cookies': String(data?.thirdPartyCookies || '0'),
     'Allowed features': attributes.allow || ' ',
   };
+
+  // Reset the dataset of parent frame.
+  if (insideFrame) {
+    frame.dataset.psatInsideFrame = '';
+  }
 
   // eslint-disable-next-line guard-for-in
   for (const label in info) {
