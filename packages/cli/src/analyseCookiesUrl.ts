@@ -19,6 +19,8 @@ import { parse } from 'simple-cookie';
 import { CookieDatabase } from './types';
 // import findAnalyticsMatch from './utils/findAnalyticsMatch';
 import { getDomain } from 'tldts';
+import findAnalyticsMatch from './utils/findAnalyticsMatch';
+import { isFirstParty } from '@cookie-analysis-tool/common';
 
 type Cookie = {
   name: string;
@@ -30,6 +32,10 @@ type Cookie = {
   httpOnly: boolean;
   secure: boolean;
   isBlocked?: boolean;
+  platform?: string;
+  category?: string;
+  GDPR?: string;
+  isFirstParty: boolean;
 };
 
 type ViewportConfig = {
@@ -171,7 +177,6 @@ function parseNetworkDataToCookieData(
 }
 
 class BrowserManagement {
-  cookieDictionary: CookieDatabase;
   viewportConfig: ViewportConfig;
   browser: Browser | null;
   isHeadless: boolean;
@@ -182,13 +187,11 @@ class BrowserManagement {
   shouldLogDebug: boolean;
 
   constructor(
-    cookieDictionary: CookieDatabase,
     viewportConfig: ViewportConfig,
     isHeadless: boolean,
     pageWaitTime: number,
     shouldLogDebug: boolean
   ) {
-    this.cookieDictionary = cookieDictionary;
     this.viewportConfig = viewportConfig;
     this.browser = null;
     this.isHeadless = isHeadless;
@@ -449,7 +452,6 @@ export async function analyzeCookiesUrls(
   cookieDictionary: CookieDatabase
 ) {
   const normalBrowser = new BrowserManagement(
-    cookieDictionary,
     {
       width: 1440,
       height: 790,
@@ -460,7 +462,6 @@ export async function analyzeCookiesUrls(
     false
   );
   const browserWith3pCookiesBlocked = new BrowserManagement(
-    cookieDictionary,
     {
       width: 1440,
       height: 790,
@@ -496,6 +497,26 @@ export async function analyzeCookiesUrls(
       ({ frameCookies }) => {
         Object.keys(frameCookies).forEach((key) => {
           frameCookies[key].isBlocked = !cookieKeysInBlockedEnv.has(key);
+
+          //also add analytics form dictionary
+          const name = frameCookies[key].name;
+          const analytics = findAnalyticsMatch(name, cookieDictionary);
+
+          frameCookies[key].platform = analytics?.platform || 'Unknown';
+          frameCookies[key].category = analytics?.category || 'Uncategorized';
+          frameCookies[key].GDPR = analytics?.gdprUrl || '';
+
+          // some cookies may have their expires value in epoch. Convert them to GMTString
+          const expires = frameCookies[key].expires;
+
+          if (expires === '') {
+            frameCookies[key].expires = 'Session';
+          } else if (typeof expires === 'number') {
+            frameCookies[key].expires = new Date(expires).toUTCString();
+          }
+
+          frameCookies[key].isFirstParty =
+            isFirstParty(frameCookies[key].domain, url) || false;
         });
       }
     );

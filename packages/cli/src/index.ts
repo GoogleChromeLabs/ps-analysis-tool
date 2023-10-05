@@ -116,7 +116,7 @@ export const initialize = async () => {
       return {
         pageUrl: _url,
         technologyData: technologyAnalysisData[ind],
-        cookieData: cookieAnalysisData[ind],
+        cookieData: cookieAnalysisData[ind].cookieData,
       };
     });
 
