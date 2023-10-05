@@ -25,14 +25,9 @@ import { OVERLAY_CLASS } from '../../constants';
  * @returns {HTMLElement | null} The frame overlay element if it was successfully created, or `null` if the element dimensions are zero.
  */
 const createFrameOverlay = (frame: HTMLElement): HTMLElement | null => {
-  const {
-    x: frameX,
-    y: frameY,
-    width: frameWidth,
-    height: frameHeight,
-  } = frame.getBoundingClientRect();
+  const { width, height } = frame.getBoundingClientRect();
 
-  if (frameHeight === 0 || frameWidth === 0) {
+  if (height === 0 || width === 0) {
     return null;
   }
 
@@ -40,15 +35,11 @@ const createFrameOverlay = (frame: HTMLElement): HTMLElement | null => {
   frameOverlay.classList.add(OVERLAY_CLASS);
 
   if (frame.tagName !== 'BODY') {
-    frameOverlay.style.width = frameWidth + 'px';
-    frameOverlay.style.height = frameHeight + 'px';
-    frameOverlay.style.top = frameY + Number(window.scrollY) + 'px';
-    frameOverlay.style.left = frameX + Number(window.scrollX) + 'px';
+    frameOverlay.style.width = width + 'px';
+    frameOverlay.style.height = height + 'px';
   } else {
     frameOverlay.style.width = '100%';
     frameOverlay.style.height = '100%';
-    frameOverlay.style.top = '0';
-    frameOverlay.style.left = '0';
   }
 
   frameOverlay.popover = 'manual';

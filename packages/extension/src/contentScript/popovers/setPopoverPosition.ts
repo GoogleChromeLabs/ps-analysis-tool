@@ -13,5 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as createFrameOverlay } from './createFrameOverlay';
-export { default as setOverlayPosition } from './setOverlayPosition';
+/**
+ * Internal dependencies.
+ */
+import { setOverlayPosition } from './overlay';
+import { setTooltipPosition } from './tooltip';
+
+interface Props {
+  overlay: HTMLElement | null;
+  tooltip: HTMLElement;
+  frame: HTMLElement;
+  isHiddenFrame: boolean;
+  selectedFrame: string | undefined;
+}
+
+const setPopoverPosition = ({
+  overlay,
+  tooltip,
+  frame,
+  isHiddenFrame,
+  selectedFrame,
+}: Props) => {
+  setOverlayPosition(overlay, frame);
+  setTooltipPosition(tooltip, frame, isHiddenFrame, selectedFrame);
+};
+
+export default setPopoverPosition;

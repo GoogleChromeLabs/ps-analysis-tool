@@ -17,7 +17,8 @@
  * Internal dependencies.
  */
 import { createFrameOverlay } from './overlay';
-import { createTooltip, setTooltipPosition } from './tooltip';
+import { createTooltip } from './tooltip';
+import setPopoverPosition from './setPopoverPosition';
 import type { ResponseType } from '../types';
 
 /**
@@ -56,7 +57,13 @@ const addPopover = (
     tooltip.showPopover();
   }
 
-  setTooltipPosition(tooltip, isHiddenFrame, frame, data.selectedFrame);
+  setPopoverPosition({
+    overlay,
+    tooltip,
+    frame,
+    isHiddenFrame,
+    selectedFrame: data.selectedFrame,
+  });
 
   // no need to scroll if frame is hidden;
   if (index === 0 && !isHiddenFrame && !isHoveringOverPage) {

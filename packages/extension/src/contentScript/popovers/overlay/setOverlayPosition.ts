@@ -13,5 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as createFrameOverlay } from './createFrameOverlay';
-export { default as setOverlayPosition } from './setOverlayPosition';
+const setOverlayPosition = (
+  overlay: HTMLElement | null,
+  frame: HTMLElement
+) => {
+  if (!overlay) {
+    return;
+  }
+
+  const { x: frameX, y: frameY } = frame.getBoundingClientRect();
+
+  if (frame.tagName !== 'BODY') {
+    overlay.style.top = frameY + Number(window.scrollY) + 'px';
+    overlay.style.left = frameX + Number(window.scrollX) + 'px';
+  } else {
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+  }
+};
+
+export default setOverlayPosition;
