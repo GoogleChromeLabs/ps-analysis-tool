@@ -15,24 +15,38 @@
  */
 
 /**
- * External Dependencies
+ * External dependencies.
  */
 import React from 'react';
 
 /**
- * Internal Dependencies
+ * Internal dependencies.
  */
-import { LandingPage } from '@cookie-analysis-tool/design-system';
+import ListRow from './listRow';
 
-const PrivateAdvertising = () => {
+type BulletListProps = {
+  rows: BulletListItem[];
+  heading?: string;
+};
+
+const BulletList = ({ rows, heading }: BulletListProps) => {
   return (
     <>
-      <LandingPage
-        title="Private Advertising"
-        embedUrl="https://privacysandbox.info/en/privacy-sandbox/measure-digital-ads"
-      />
+      {heading && (
+        <>
+          <h2 className="text-xs font-bold uppercase text-darkest-gray">
+            {heading}
+          </h2>
+          <hr className="border-0 border-b border-hex-gray dark:border-quartz" />
+        </>
+      )}
+      <div className="space-y-4">
+        {rows.map((rowItem) => (
+          <ListRow row={rowItem} key={rowItem?.key ?? rowItem.title} />
+        ))}
+      </div>
     </>
   );
 };
 
-export default PrivateAdvertising;
+export default BulletList;

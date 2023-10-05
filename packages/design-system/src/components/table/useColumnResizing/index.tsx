@@ -40,7 +40,7 @@ const useColumnResizing = (
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const [columns, setColumns] = useState<TableColumn[]>([]);
 
-  useEffect(() => {
+  const setColumnsCallback = useCallback(() => {
     if (options) {
       const tableWidth =
         tableContainerRef.current?.getBoundingClientRect().width || 0;
@@ -62,11 +62,7 @@ const useColumnResizing = (
       }
 
       setColumns(newColumns);
-    }
-  }, [options, tableColumns]);
-
-  useEffect(() => {
-    if (!options) {
+    } else {
       const tableWidth =
         tableContainerRef.current?.getBoundingClientRect().width || 0;
       const newColumns = tableColumns.map((column) => ({
@@ -77,6 +73,14 @@ const useColumnResizing = (
       setColumns(newColumns);
     }
   }, [options, tableColumns]);
+
+  useEffect(() => {
+    setColumnsCallback();
+    window.addEventListener('resize', setColumnsCallback);
+    return () => {
+      window.removeEventListener('resize', setColumnsCallback);
+    };
+  }, [setColumnsCallback]);
 
   const onMouseDown = useCallback(
     (

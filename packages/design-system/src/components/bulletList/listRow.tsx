@@ -15,24 +15,39 @@
  */
 
 /**
- * External Dependencies
+ * External dependencies.
  */
 import React from 'react';
 
 /**
- * Internal Dependencies
+ * Internal dependencies.
  */
-import { LandingPage } from '@cookie-analysis-tool/design-system';
+import { Ellipse } from '../../icons';
 
-const PrivateAdvertising = () => {
+type Props = {
+  row: BulletListItem;
+};
+
+const ListRow = ({ row }: Props) => {
   return (
-    <>
-      <LandingPage
-        title="Private Advertising"
-        embedUrl="https://privacysandbox.info/en/privacy-sandbox/measure-digital-ads"
-      />
-    </>
+    <div className="flex gap-4 items-baseline" key={row?.key ?? row.title}>
+      <span>
+        <Ellipse />
+      </span>
+      {row?.link ? (
+        <a
+          href={row.link}
+          target="_blank"
+          rel="noreferrer"
+          className="text-sm text-analytics font-medium leading-6"
+        >
+          {row.title}
+        </a>
+      ) : (
+        <p className="text-sm font-medium leading-6">{row.title}</p>
+      )}
+    </div>
   );
 };
 
-export default PrivateAdvertising;
+export default ListRow;

@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 export { default as ArrowDown } from './arrow-down.svg';
+export { default as ArrowUp } from './arrow-up.svg';
 export { default as ArrowDownWhite } from './arrow-down-white.svg';
 export { default as ArrowRight } from './arrow-right.svg';
+export { default as ChevronRight } from './chevron-right.svg';
 export { default as CookieIcon } from './cookie-gray.svg';
 export { default as CookieIconWhite } from './cookie-white.svg';
 export { default as File } from './file.svg';
@@ -48,3 +50,4 @@ export { default as PrivacySandboxIconWhite } from './privacy-sandbox-white.svg'
 export { default as Add } from './add.svg';
 export { default as Cross } from './cross.svg';
 export { default as Refresh } from './refresh-icon.svg';
+export { default as Ellipse } from './ellipse.svg';

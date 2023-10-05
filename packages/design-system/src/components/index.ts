@@ -25,6 +25,7 @@ export { default as Matrix } from './matrix';
 export { default as MatrixComponentHorizontal } from './matrix/matrixComponent/matrixComponentHorizontal';
 export type { MatrixComponentProps } from './matrix/matrixComponent';
 export { default as CookiesLanding } from './cookiesLanding';
+export { default as LandingPage } from './landingPage';
 export { default as ErrorFallback } from './errorFallback';
 export { default as ContextInvalidatedMessage } from './errorFallback/contextInvalidatedMessage';
 export { default as ExtensionReloadNotification } from './errorFallback/extensionReloadNotification';
