@@ -107,28 +107,32 @@ class WebpageContentScript {
     this.removeAllPopovers();
 
     frameElements.forEach((frame, index) => {
-      const { overlay, tooltip } = addPopover(
-        frame,
-        response,
-        this.isHoveringOverPage,
-        index
-      );
-
-      const updatePosition = () => {
-        setPopoverPosition({
-          overlay,
-          tooltip,
-          frame,
-          selectedFrame: response.selectedFrame,
-        });
-      };
-
-      this.scrollEventListeners.push(updatePosition);
-
-      updatePosition();
-
-      window.addEventListener('scroll', updatePosition);
+      this.insertPopover(frame, response, index);
     });
+  }
+
+  insertPopover(frame: HTMLElement, response: ResponseType, index = 0) {
+    const { overlay, tooltip } = addPopover(
+      frame,
+      response,
+      this.isHoveringOverPage,
+      index
+    );
+
+    const updatePosition = () => {
+      setPopoverPosition({
+        overlay,
+        tooltip,
+        frame,
+        selectedFrame: response.selectedFrame,
+      });
+    };
+
+    this.scrollEventListeners.push(updatePosition);
+
+    updatePosition();
+
+    window.addEventListener('scroll', updatePosition);
   }
 
   removeAllPopovers() {
@@ -180,16 +184,10 @@ class WebpageContentScript {
     const srcAttribute = frame.getAttribute('src');
 
     if (!srcAttribute) {
-      // Remove previous Popovers before adding new.
-      removeAllPopovers();
-
-      addPopover(
-        frame,
-        {
-          isInspecting: true,
-        },
-        this.isHoveringOverPage
-      );
+      this.removeAllPopovers();
+      this.insertPopover(frame, {
+        isInspecting: true,
+      });
 
       return;
     }
