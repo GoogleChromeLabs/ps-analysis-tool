@@ -20,6 +20,7 @@ import { CookieStore } from '../localStore';
 
 (async () => {
   if (
+    !document.prerendering &&
     'browsingTopics' in document &&
     document.featurePolicy &&
     document.featurePolicy.allowsFeature('browsing-topics')
