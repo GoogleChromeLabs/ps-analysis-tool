@@ -28,6 +28,7 @@ import {
   SortingState,
   getCookieKey,
 } from '@cookie-analysis-tool/common';
+import { noop } from '../../utils';
 
 interface CookieTableProps {
   tableColumns: TableColumn[];
@@ -58,7 +59,7 @@ const CookieTable = ({
   selectedFrame,
   selectedFrameCookie,
   setSelectedFrameCookie,
-  updatePreference,
+  updatePreference = noop,
   columnSorting,
   columnSizing,
   selectedColumns,
