@@ -33,11 +33,14 @@ const addPopover = (
   data: ResponseType,
   isHoveringOverPage: boolean,
   index = 0
-): { overlay?: HTMLElement | null; tooltip?: HTMLElement } => {
+): { overlay: HTMLElement | null; tooltip: HTMLElement | null } => {
   const body = document.querySelector('body');
 
   if (!body) {
-    return {};
+    return {
+      overlay: null,
+      tooltip: null,
+    };
   }
 
   const overlay = createFrameOverlay(frame);

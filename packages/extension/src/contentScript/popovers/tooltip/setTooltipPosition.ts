@@ -23,11 +23,15 @@
  * @returns {void}
  */
 const setTooltipPosition = (
-  tooltip: HTMLElement,
+  tooltip: HTMLElement | null,
   frame: HTMLElement,
   isHiddenFrame: boolean,
   selectedFrame: string | undefined
 ) => {
+  if (!tooltip) {
+    return;
+  }
+
   const {
     x: frameX,
     y: frameY,

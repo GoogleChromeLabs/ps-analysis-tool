@@ -35,7 +35,7 @@ class WebpageContentScript {
   port: chrome.runtime.Port | null = null;
   isInspecting = false;
   isHoveringOverPage = false;
-  scrollEventListeners = [];
+  scrollEventListeners: Array<() => void> | [] = [];
 
   /**
    * Initialize
@@ -107,7 +107,7 @@ class WebpageContentScript {
     this.removeAllPopovers();
 
     frameElements.forEach((frame, index) => {
-      const popover = addPopover(
+      const { overlay, tooltip } = addPopover(
         frame,
         response,
         this.isHoveringOverPage,
@@ -116,8 +116,8 @@ class WebpageContentScript {
 
       const updatePosition = () => {
         setPopoverPosition({
-          overlay: popover?.overlay,
-          tooltip: popover?.tooltip,
+          overlay,
+          tooltip,
           frame,
           selectedFrame: response.selectedFrame,
         });

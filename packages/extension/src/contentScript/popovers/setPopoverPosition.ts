@@ -21,9 +21,8 @@ import { setTooltipPosition } from './tooltip';
 
 interface Props {
   overlay: HTMLElement | null;
-  tooltip: HTMLElement;
+  tooltip: HTMLElement | null;
   frame: HTMLElement;
-  isHiddenFrame: boolean;
   selectedFrame: string | undefined;
 }
 
