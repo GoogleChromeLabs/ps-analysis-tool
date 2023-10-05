@@ -78,6 +78,7 @@ export type TechnologyData = {
     slug: string;
   }[];
   rootPath: boolean;
+  pageUrl?: string;
 };
 
 export interface TabCookies {

@@ -44,7 +44,11 @@ const initialState: ContentStore = {
 export const Context = createContext<ContentStore>(initialState);
 
 interface ContentStoreProviderProps {
-  cookies: CookieJsonDataType[];
+  cookies: {
+    [frame: string]: {
+      [key: string]: CookieJsonDataType;
+    };
+  };
   technologies?: TechnologyData[];
 }
 
@@ -53,19 +57,13 @@ export const Provider = ({
   technologies,
   children,
 }: PropsWithChildren<ContentStoreProviderProps>) => {
-  const tabCookies = useMemo<{ [key: string]: CookieTableData }>(
+  const tabCookies = useMemo(
     () =>
-      Object.fromEntries(
-        cookies
-          .filter((cookie) => {
-            const frameUrl =
-              Object.values(cookie.frameUrls).length >= 1
-                ? Object.values(cookie.frameUrls)[0]
-                : cookie.pageUrl;
-            return frameUrl?.includes('http');
-          })
-          .map((cookie) => {
-            return [
+      Object.entries(cookies)
+        .filter(([frame]) => frame.includes('http'))
+        .map(([frame, _cookies]) => {
+          const newCookies = Object.fromEntries(
+            Object.values(_cookies).map((cookie) => [
               cookie.name + cookie.domain + cookie.path,
               {
                 parsedCookie: {
@@ -91,15 +89,20 @@ export const Provider = ({
                 isFirstParty: cookie.isFirstParty === 'Yes' ? true : false,
                 frameIdList: [],
                 isCookieSet: !cookie.isBlocked,
-                frameUrl:
-                  Object.values(cookie.frameUrls).length >= 1
-                    ? Object.values(cookie.frameUrls)[0]
-                    : cookie.pageUrl,
-              },
-            ];
-          })
-      ),
-    [cookies]
+                frameUrl: frame,
+              } as CookieTableData,
+            ])
+          );
+
+          return newCookies;
+        })
+        .reduce((acc, cookieObj) => {
+          return {
+            ...acc,
+            ...cookieObj,
+          };
+        }, {}),
+    [cookies] // {frame: cookies}
   );
 
   return (

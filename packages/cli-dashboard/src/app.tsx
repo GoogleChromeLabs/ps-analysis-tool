@@ -27,7 +27,6 @@ import './app.css';
 import SiteReport from './components/siteReport';
 import type {
   CookieTableData,
-  TabCookies,
   TabFrames,
   TechnologyData,
 } from '@cookie-analysis-tool/common';
@@ -41,7 +40,11 @@ enum DisplayType {
 }
 
 const App = () => {
-  const [cookies, setCookies] = useState<CookieJsonDataType[]>([]);
+  const [cookies, setCookies] = useState<{
+    [key: string]: {
+      [key: string]: CookieJsonDataType;
+    };
+  }>({});
   const [technologies, setTechnologies] = useState<TechnologyData[]>([]);
   const [selectedSite, setSelectedSite] = useState<string | null>(null);
   const [sites, setSites] = useState<string[]>([]);
@@ -56,59 +59,60 @@ const App = () => {
     ];
   }, []);
 
-  const frames = useMemo<TabFrames>(
-    () =>
-      cookies.reduce((acc, cookie) => {
-        const frameUrl =
-          Object.values(cookie.frameUrls).length >= 1
-            ? Object.values(cookie.frameUrls)[0]
-            : cookie.pageUrl;
-        if (frameUrl?.includes('http')) {
-          acc[frameUrl] = {} as TabFrames[string];
-        }
-        return acc;
-      }, {} as TabFrames),
-    [cookies]
-  );
+  const frames = useMemo(() => {
+    return Object.keys(cookies).reduce((acc, frame) => {
+      if (frame?.includes('http')) {
+        acc[frame] = {} as TabFrames[string];
+      }
+      return acc;
+    }, {} as TabFrames);
+  }, [cookies]);
 
-  const reshapedCookies = useMemo<TabCookies>(
+  const reshapedCookies = useMemo(
     () =>
-      Object.fromEntries(
-        cookies.map((cookie) => {
-          return [
-            cookie.name + cookie.domain + cookie.path,
-            {
-              parsedCookie: {
-                name: cookie.name,
-                value: cookie.value,
-                domain: cookie.domain,
-                path: cookie.path,
-                expires: cookie.expires,
-                httponly: cookie.httpOnly,
-                secure: cookie.secure,
-                samesite: cookie.sameSite,
-              },
-              analytics: {
-                platform: cookie.platform,
-                category:
-                  cookie.category === 'Unknown Category'
-                    ? 'Uncategorized'
-                    : cookie.category,
-                description: cookie.description,
-              } as CookieTableData['analytics'],
-              url: cookie.pageUrl,
-              headerType: 'response',
-              isFirstParty: cookie.isFirstParty === 'Yes' ? true : false,
-              frameIdList: [],
-              isCookieSet: !cookie.isBlocked,
-              frameUrl:
-                Object.values(cookie.frameUrls).length >= 1
-                  ? Object.values(cookie.frameUrls)[0]
-                  : cookie.pageUrl,
-            },
-          ];
+      Object.entries(cookies)
+        .filter(([frame]) => frame.includes('http'))
+        .map(([frame, _cookies]) => {
+          const newCookies = Object.fromEntries(
+            Object.entries(_cookies).map(([key, cookie]) => [
+              key,
+              {
+                parsedCookie: {
+                  name: cookie.name,
+                  value: cookie.value,
+                  domain: cookie.domain,
+                  path: cookie.path,
+                  expires: cookie.expires,
+                  httponly: cookie.httpOnly,
+                  secure: cookie.secure,
+                  samesite: cookie.sameSite,
+                },
+                analytics: {
+                  platform: cookie.platform,
+                  category:
+                    cookie.category === 'Unknown Category'
+                      ? 'Uncategorized'
+                      : cookie.category,
+                  description: cookie.description,
+                } as CookieTableData['analytics'],
+                url: cookie.pageUrl,
+                headerType: 'response',
+                isFirstParty: cookie.isFirstParty === 'Yes' ? true : false,
+                frameIdList: [],
+                isCookieSet: !cookie.isBlocked,
+                frameUrl: frame,
+              } as CookieTableData,
+            ])
+          );
+
+          return newCookies;
         })
-      ),
+        .reduce((acc, cookieObj) => {
+          return {
+            ...acc,
+            ...cookieObj,
+          };
+        }, {}),
     [cookies]
   );
 
@@ -117,21 +121,157 @@ const App = () => {
       const response = await fetch(path);
       const data = await response.json();
 
-      setCookies(data.cookies as CookieJsonDataType[]);
-      setTechnologies(data.technologies as TechnologyData[]);
+      let _cookies: {
+          [key: string]: {
+            [key: string]: CookieJsonDataType;
+          };
+        } = {},
+        _technologies;
+
+      if (type === DisplayType.SITEMAP) {
+        _technologies = data.reduce(
+          (
+            acc: TechnologyData[],
+            {
+              technologyData,
+              pageUrl,
+            }: { technologyData: TechnologyData[]; pageUrl: string }
+          ) => {
+            return [
+              ...acc,
+              ...technologyData.map((technology) => {
+                technology.pageUrl = pageUrl;
+                return technology;
+              }),
+            ];
+          },
+          [] as TechnologyData[]
+        );
+
+        data.forEach(
+          ({
+            cookieData,
+            pageUrl,
+          }: {
+            cookieData: {
+              frameCookies: {
+                [key: string]: {
+                  [key: string]: CookieJsonDataType;
+                };
+              };
+            };
+            pageUrl: string;
+          }) => {
+            const _cookieData = Object.entries(cookieData).reduce(
+              (
+                acc: {
+                  [key: string]: {
+                    [key: string]: CookieJsonDataType;
+                  };
+                },
+                [frame, _data]
+              ) => {
+                acc[frame] = Object.fromEntries(
+                  Object.entries(_data.frameCookies).map(([key, cookie]) => [
+                    key + pageUrl,
+                    {
+                      ...cookie,
+                      pageUrl,
+                      frameUrl: frame,
+                    } as CookieJsonDataType,
+                  ])
+                );
+
+                return acc;
+              },
+              {}
+            );
+
+            Object.entries(_cookieData).forEach(([frame, __cookies]) => {
+              if (!_cookies[frame]) {
+                _cookies[frame] = {};
+              }
+
+              Object.entries(__cookies).forEach(([key, cookie]) => {
+                _cookies[frame][key] = cookie;
+              });
+            });
+          }
+        );
+      } else {
+        _technologies = data.technologyData;
+
+        _cookies = Object.entries(
+          data.cookieData as {
+            [frame: string]: {
+              frameCookies: {
+                [key: string]: CookieJsonDataType;
+              };
+            };
+          }
+        ).reduce(
+          (
+            acc: { [key: string]: { [key: string]: CookieJsonDataType } },
+            [frame, _data]
+          ) => {
+            acc[frame] = Object.fromEntries(
+              Object.entries(_data.frameCookies).map(([key, cookie]) => [
+                key + data.pageUrl + frame,
+                {
+                  ...cookie,
+                  pageUrl: data.pageUrl,
+                  frameUrl: frame,
+                },
+              ])
+            );
+
+            return acc;
+          },
+          {}
+        );
+      }
+
+      setCookies(_cookies);
+      setTechnologies(_technologies as TechnologyData[]);
 
       const _sites = new Set<string>();
-      data.cookies.forEach((cookie: CookieJsonDataType) => {
-        _sites.add(cookie.pageUrl);
+      Object.values(_cookies).forEach((cookieData) => {
+        Object.values(cookieData).forEach((cookie) => {
+          _sites.add(cookie.pageUrl);
+        });
       });
 
       setSites(Array.from(_sites));
     })();
-  }, [path]);
+  }, [path, type]);
 
   const siteFilteredCookies = useMemo(() => {
-    return cookies.filter((cookie) => cookie.pageUrl === selectedSite);
+    return Object.entries(cookies).reduce(
+      (
+        acc: {
+          [key: string]: {
+            [key: string]: CookieJsonDataType;
+          };
+        },
+        [frame, _cookies]
+      ) => {
+        acc[frame] = Object.fromEntries(
+          Object.entries(_cookies).filter(
+            ([, cookie]) => cookie.pageUrl === selectedSite
+          )
+        );
+
+        return acc;
+      },
+      {}
+    );
   }, [cookies, selectedSite]);
+
+  const siteFilteredTechnologies = useMemo(() => {
+    return technologies.filter(
+      (technology) => technology.pageUrl === selectedSite
+    );
+  }, [selectedSite, technologies]);
 
   if (!path) {
     return (
@@ -163,7 +303,7 @@ const App = () => {
           {selectedSite ? (
             <SiteReport
               cookies={siteFilteredCookies}
-              technologies={technologies}
+              technologies={siteFilteredTechnologies}
             />
           ) : (
             <CookiesLanding tabFrames={frames} tabCookies={reshapedCookies} />
