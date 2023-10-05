@@ -26,7 +26,7 @@ import Spinnies from 'spinnies';
  * Internal dependencies.
  */
 import { analyzeTechnologiesUrls } from './procedures/analyzeTechnologiesUrls';
-import { analyzeCookiesUrl } from './analyseCookiesUrl';
+import { analyzeCookiesUrls } from './analyseCookiesUrl';
 import Utility from './utils/utility';
 import { fetchDictionary } from './utils/fetchCookieDictionary';
 
@@ -62,8 +62,8 @@ export const initialize = async () => {
     spinnies.add('cookie-spinner', {
       text: 'Analysing cookies on the first page visit',
     });
-    const cookieData = await analyzeCookiesUrl(
-      url,
+    const [cookieData] = await analyzeCookiesUrls(
+      [url],
       isHeadless,
       delayTime,
       cookieDictionary
@@ -89,14 +89,12 @@ export const initialize = async () => {
     await writeFile(directory + '/out.json', JSON.stringify(output, null, 4));
   } else {
     const urls: Array<string> = await Utility.getUrlsFromSitemap(sitemapURL);
-
     const prefix = Utility.generatePrefix([...urls].shift() ?? 'untitled');
     const directory = `./out/${prefix}`;
     const userInput: any = await Utility.askUserInput(
       `Provided sitemap has ${urls.length} pages. Please enter the number of pages you want to analyze (Default ${urls.length}):`,
       { default: urls.length.toString() }
     );
-
     let numberOfUrls: number = isNaN(userInput)
       ? urls.length
       : parseInt(userInput);
@@ -104,23 +102,23 @@ export const initialize = async () => {
 
     const urlsToProcess = urls.splice(0, numberOfUrls);
 
-    const promises = urlsToProcess.map(async (siteUrl: string) => {
-      const cookieData = await analyzeCookiesUrl(
-        siteUrl,
-        isHeadless,
-        delayTime,
-        cookieDictionary
-      );
-      const technologyData = await analyzeTechnologiesUrls([siteUrl]);
+    const cookieAnalysisData = await analyzeCookiesUrls(
+      urlsToProcess,
+      isHeadless,
+      delayTime,
+      cookieDictionary
+    );
+    const technologyAnalysisData = await Promise.all(
+      urlsToProcess.map((siteUrl: string) => analyzeTechnologiesUrls([siteUrl]))
+    );
 
+    const result = urlsToProcess.map((_url, ind) => {
       return {
-        pageUrl: siteUrl,
-        technologyData,
-        cookieData,
+        pageUrl: _url,
+        technologyData: technologyAnalysisData[ind],
+        cookieData: cookieAnalysisData[ind],
       };
     });
-
-    const result = await Promise.all(promises);
 
     await ensureFile(directory + '/out.json');
     await writeFile(directory + '/out.json', JSON.stringify(result, null, 4));
