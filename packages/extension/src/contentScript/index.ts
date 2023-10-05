@@ -116,22 +116,28 @@ class WebpageContentScript {
       this.insertOverlay(frame, response);
     });
 
-    const tooltips = [];
+    let firstToolTip: HTMLElement | null = null;
 
-    frameElements.forEach((frame) => {
-      tooltips.push(this.insertTooltip(frame, response));
+    frameElements.forEach((frame, index) => {
+      const tooltip = this.insertTooltip(frame, response);
+
+      if (0 === index) {
+        firstToolTip = tooltip;
+      }
     });
 
-    if (!this.isHoveringOverPage && tooltips.length) {
-      const frameToScrollTo = frameElements[0];
+    const frameToScrollTo = frameElements[0];
 
-      if (frameToScrollTo.clientWidth) {
-        tooltips[0].scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-          inline: 'nearest',
-        });
-      }
+    if (
+      firstToolTip &&
+      !this.isHoveringOverPage &&
+      frameToScrollTo.clientWidth
+    ) {
+      firstToolTip.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+        inline: 'nearest',
+      });
     }
   }
 
@@ -147,11 +153,14 @@ class WebpageContentScript {
     return overlay;
   }
 
-  insertTooltip(frame: HTMLElement, response: ResponseType): HTMLElement {
+  insertTooltip(
+    frame: HTMLElement,
+    response: ResponseType
+  ): HTMLElement | null {
     const tooltip = addPopover(frame, response, 'tooltip');
 
     const updatePosition = () => {
-      const isHidden = !frame.clientWidth; // TODO: Improve how else an element can be hidden.
+      const isHidden = !frame.clientWidth;
       setTooltipPosition(tooltip, frame, isHidden, response.selectedFrame);
     };
 
