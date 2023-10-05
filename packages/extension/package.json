@@ -15,25 +15,22 @@
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool#readme",
-	"scripts": {
-		"dev": "webpack --config webpack.config.cjs --watch",
-		"build": "cross-env NODE_ENV=production webpack --config webpack.config.cjs"
-	},
   "dependencies": {
+    "@cookie-analysis-tool/common": "*",
+    "@cookie-analysis-tool/design-system": "*",
     "classnames": "^2.3.2",
+    "fast-xml-parser": "^4.3.2",
     "p-queue": "^7.3.4",
     "re-resizable": "^6.9.9",
     "react": "^18.2.0",
+    "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.2.0",
     "shallow-equal": "^3.1.0",
     "simple-cookie": "^1.0.15",
     "use-context-selector": "^1.4.1",
     "use-debounce": "^9.0.4",
     "validate.js": "^0.13.1",
-		"react-copy-to-clipboard": "^5.1.0",
-    "victory": "^36.6.11",
-    "@cookie-analysis-tool/common":"*",
-    "@cookie-analysis-tool/design-system":"*"
+    "victory": "^36.6.11"
   },
 	"devDependencies": {
 		"@types/react-copy-to-clipboard": "^5.0.4"

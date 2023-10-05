@@ -34,24 +34,53 @@ export type ColumnResizingOutput = {
 };
 
 const useColumnResizing = (
-  tableColumns: TableColumn[]
+  tableColumns: TableColumn[],
+  options?: Record<string, number>
 ): ColumnResizingOutput => {
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const [columns, setColumns] = useState<TableColumn[]>([]);
 
-  useEffect(() => {
-    const tableWidth =
-      tableContainerRef.current?.getBoundingClientRect().width || 0;
+  const setColumnsCallback = useCallback(() => {
+    if (options) {
+      const tableWidth =
+        tableContainerRef.current?.getBoundingClientRect().width || 0;
+      let newColumns = tableColumns.map((column) => ({
+        ...column,
+        width: options[column.accessorKey],
+      }));
 
-    const newColumns = tableColumns.map((column) => {
-      return {
+      if (Object.keys(options).length === tableColumns.length) {
+        newColumns = tableColumns.map((column) => ({
+          ...column,
+          width: options[column.accessorKey],
+        }));
+      } else {
+        newColumns = tableColumns.map((column) => ({
+          ...column,
+          width: tableWidth / tableColumns.length,
+        }));
+      }
+
+      setColumns(newColumns);
+    } else {
+      const tableWidth =
+        tableContainerRef.current?.getBoundingClientRect().width || 0;
+      const newColumns = tableColumns.map((column) => ({
         ...column,
         width: tableWidth / tableColumns.length,
-      };
-    });
+      }));
 
-    setColumns(newColumns);
-  }, [tableColumns]);
+      setColumns(newColumns);
+    }
+  }, [options, tableColumns]);
+
+  useEffect(() => {
+    setColumnsCallback();
+    window.addEventListener('resize', setColumnsCallback);
+    return () => {
+      window.removeEventListener('resize', setColumnsCallback);
+    };
+  }, [setColumnsCallback]);
 
   const onMouseDown = useCallback(
     (
@@ -71,20 +100,20 @@ const useColumnResizing = (
           column2Width = column2.width || 0;
         const widthChange = clientXPos - (startOffset + column1Width);
 
-        let newColumn1Width = 50,
-          newColumn2Width = 50;
+        let newColumn1Width = 20,
+          newColumn2Width = 20;
 
         if (widthChange > 0) {
-          newColumn2Width = Math.max(50, column2Width - widthChange);
+          newColumn2Width = Math.max(20, column2Width - widthChange);
           newColumn1Width =
-            newColumn2Width === 50
-              ? column1Width + column2Width - 50
+            newColumn2Width === 20
+              ? column1Width + column2Width - 20
               : column1Width + widthChange;
         } else {
-          newColumn1Width = Math.max(50, column1Width + widthChange);
+          newColumn1Width = Math.max(20, column1Width + widthChange);
           newColumn2Width =
-            newColumn1Width === 50
-              ? column1Width + column2Width - 50
+            newColumn1Width === 20
+              ? column1Width + column2Width - 20
               : column2Width - widthChange;
         }
 

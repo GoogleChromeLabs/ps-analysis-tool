@@ -23,6 +23,12 @@
     "service_worker": "service-worker.js",
     "type": "module"
   },
+  "content_scripts": [
+    {
+      "js": ["content-script.js"],
+      "matches": ["*://*/*"]
+    }
+  ],
   "options_page": "settings/index.html",
   "action": {
     "default_popup": "popup/index.html",
@@ -30,7 +36,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["third_party/data/*.json"],
+      "resources": ["third_party/data/*.json", "data/*json"],
       "matches": ["*://*/*"]
     }
   ]

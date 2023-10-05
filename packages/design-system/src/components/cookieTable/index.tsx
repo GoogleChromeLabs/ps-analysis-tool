@@ -16,13 +16,19 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
 
 /**
  * Internal dependencies.
  */
 import { Table, TableColumn, TableData, TableRow, useTable } from '../table';
-import { CookieTableData, getCookieKey } from '@cookie-analysis-tool/common';
+import {
+  CookieTableData,
+  PreferenceDataValues,
+  SortingState,
+  getCookieKey,
+} from '@cookie-analysis-tool/common';
+import { noop } from '../../utils';
 
 interface CookieTableProps {
   tableColumns: TableColumn[];
@@ -36,6 +42,15 @@ interface CookieTableProps {
       [frame: string]: CookieTableData | null;
     } | null
   ) => void;
+  updatePreference: (
+    key: string,
+    updater: (prevStatePreference: {
+      [key: string]: unknown;
+    }) => PreferenceDataValues
+  ) => void;
+  columnSorting: SortingState[];
+  columnSizing: Record<string, number>;
+  selectedColumns: Record<string, boolean>;
 }
 
 const CookieTable = ({
@@ -44,6 +59,10 @@ const CookieTable = ({
   selectedFrame,
   selectedFrameCookie,
   setSelectedFrameCookie,
+  updatePreference = noop,
+  columnSorting,
+  columnSizing,
+  selectedColumns,
 }: CookieTableProps) => {
   useEffect(() => {
     if (selectedFrame && selectedFrameCookie) {
@@ -61,10 +80,12 @@ const CookieTable = ({
     cookies.length,
   ]);
 
+  const [, forceUpdate] = useReducer((x) => x + 1, 0);
+
   const onRowClick = useCallback(
-    (cookieData: CookieTableData | null) => {
+    (cookieData: TableData | null) => {
       setSelectedFrameCookie({
-        [selectedFrame as string]: cookieData,
+        [selectedFrame as string]: cookieData as CookieTableData | null,
       });
     },
     [selectedFrame, setSelectedFrameCookie]
@@ -78,19 +99,41 @@ const CookieTable = ({
   const table = useTable({
     tableColumns,
     data: cookies,
+    options: {
+      columnSizing:
+        columnSizing && Object.keys(columnSizing).length > 0
+          ? columnSizing
+          : undefined,
+      columnSorting:
+        columnSorting && columnSorting.length > 0
+          ? columnSorting[0]
+          : undefined,
+      selectedColumns:
+        selectedColumns && Object.keys(selectedColumns).length > 0
+          ? selectedColumns
+          : undefined,
+    },
   });
 
+  useEffect(() => {
+    window.addEventListener('resize', () => forceUpdate());
+    return () => {
+      window.removeEventListener('resize', () => forceUpdate());
+    };
+  }, []);
+
   return (
-    <div className="w-full h-full overflow-auto text-outer-space-crayola border-x border-american-silver dark:border-quartz">
+    <div className="flex-1 w-full h-full text-outer-space-crayola border-x border-american-silver dark:border-quartz">
       <Table
+        updatePreference={updatePreference}
         table={table}
         selectedKey={
           selectedKey === null ? null : getCookieKey(selectedKey?.parsedCookie)
         }
-        onRowClick={onRowClick}
         getRowObjectKey={(row: TableRow) =>
-          getCookieKey(row?.originalData.parsedCookie)
+          getCookieKey((row?.originalData as CookieTableData).parsedCookie)
         }
+        onRowClick={onRowClick}
       />
     </div>
   );

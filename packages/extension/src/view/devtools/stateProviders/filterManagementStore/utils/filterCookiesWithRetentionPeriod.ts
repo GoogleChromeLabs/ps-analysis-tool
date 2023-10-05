@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 /**
+ * External dependencies
+ */
+import type {
+  CookieTableData,
+  SelectedFilters,
+} from '@cookie-analysis-tool/common';
+/**
  * Internal dependencies.
  */
-import type { SelectedFilters } from '../types';
 import { CUSTOM_FILTER_MAPPING } from '../constants';
-import type { CookieTableData } from '@cookie-analysis-tool/common';
 
 const filterCookiesWithRetentionPeriod = (
   cookies: {

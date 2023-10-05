@@ -28,7 +28,11 @@ import type { TechnologyData } from '@cookie-analysis-tool/common';
 import type { CookieJsonDataType } from '../../types';
 
 interface SiteReportProps {
-  cookies: CookieJsonDataType[];
+  cookies: {
+    [frame: string]: {
+      [key: string]: CookieJsonDataType;
+    };
+  };
   technologies: TechnologyData[];
 }
 

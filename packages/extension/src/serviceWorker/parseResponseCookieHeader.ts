@@ -13,22 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
-import type { Cookie as ParsedCookie } from 'simple-cookie';
+import cookie, { type Cookie as ParsedCookie } from 'simple-cookie';
 
 /**
  * Internal dependencies.
  */
-import type { CookieData } from '../localStore';
+import type { CookieData } from '../localStore/cookieStore';
 import type {
   CookieAnalytics,
   CookieDatabase,
 } from '../utils/fetchCookieDictionary';
-import { createCookieObject } from './createCookieObject';
 import findAnalyticsMatch from './findAnalyticsMatch';
+import { createCookieObject } from './createCookieObject';
 import { isFirstParty } from '@cookie-analysis-tool/common';
 
 /**
@@ -38,49 +37,34 @@ import { isFirstParty } from '@cookie-analysis-tool/common';
  * @param {string} value header value
  * @param {CookieDatabase} dictionary Dictionary from open cookie database
  * @param {string} tabUrl top url of the tab from which the request originated.
- * @param {number} frameId Id of the frame the cookie is used in.
- * @returns {Promise<CookieData[]>} Parsed cookie object array.
+ * @param {number} frameId Id of a frame in which this cookie is used.
+ * @returns {Promise<CookieData>} Parsed cookie object.
  */
-const parseRequestCookieHeader = async (
+const parseResponseCookieHeader = async (
   url: string,
   value: string,
   dictionary: CookieDatabase,
   tabUrl: string,
   frameId: number
-): Promise<CookieData[]> => {
-  try {
-    return await Promise.all(
-      value?.split(';').map(async (cookieString) => {
-        let [name] = cookieString.split('=');
-        const [, ...rest] = cookieString.split('=');
-        name = name.trim();
+): Promise<CookieData> => {
+  let parsedCookie: ParsedCookie = cookie.parse(value);
+  parsedCookie = await createCookieObject(parsedCookie, url);
 
-        let analytics: CookieAnalytics | null = null;
-        if (dictionary) {
-          analytics = findAnalyticsMatch(name, dictionary);
-        }
-
-        let parsedCookie = {
-          name,
-          value: rest.join('='),
-        } as ParsedCookie;
-        parsedCookie = await createCookieObject(parsedCookie, url);
-
-        const _isFirstParty = isFirstParty(parsedCookie.domain || '', tabUrl);
-
-        return {
-          parsedCookie,
-          analytics,
-          headerType: 'request',
-          url,
-          isFirstParty: _isFirstParty,
-          frameIdList: [frameId],
-        };
-      })
-    );
-  } catch (error) {
-    return [];
+  let analytics: CookieAnalytics | null = null;
+  if (dictionary) {
+    analytics = findAnalyticsMatch(parsedCookie.name, dictionary);
   }
+
+  const _isFirstParty = isFirstParty(parsedCookie.domain || '', tabUrl);
+
+  return {
+    parsedCookie,
+    analytics,
+    url,
+    headerType: 'response',
+    isFirstParty: _isFirstParty,
+    frameIdList: [frameId],
+  };
 };
 
-export default parseRequestCookieHeader;
+export default parseResponseCookieHeader;

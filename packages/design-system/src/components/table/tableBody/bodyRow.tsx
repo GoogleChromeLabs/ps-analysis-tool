@@ -25,6 +25,7 @@ import classNames from 'classnames';
  */
 import BodyCell from './bodyCell';
 import type { TableColumn, TableRow } from '../useTable';
+import { CookieTableData } from '@cookie-analysis-tool/common';
 
 interface BodyRowProps {
   row: TableRow;
@@ -51,7 +52,9 @@ const BodyRow = ({
 
   const tableRowClassName = classNames(
     'outline-0 flex divide-x divide-american-silver dark:divide-quartz',
-    { 'bg-burnt-sienna-30': row.originalData?.highlighted },
+    {
+      'bg-burnt-sienna-30': (row.originalData as CookieTableData)?.highlighted,
+    },
     cookieKey !== selectedKey &&
       (index % 2
         ? 'bg-anti-flash-white dark:bg-charleston-green'

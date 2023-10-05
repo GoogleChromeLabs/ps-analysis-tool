@@ -21,11 +21,12 @@ const commonConfig = require('../../webpack.shared.cjs');
 
 const root = {
   entry: {
-    'service-worker': './src/worker/service-worker.ts',
+    'service-worker': './src/serviceWorker/index.ts',
+    'content-script': './src/contentScript/index.ts',
   },
   output: {
     path: path.resolve(__dirname, '../../dist/extension'),
-    filename: 'service-worker.js',
+    filename: '[name].js',
   },
   plugins: [
     new CopyPlugin({

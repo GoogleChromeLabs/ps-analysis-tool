@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import React, { useCallback } from 'react';
-
+import { PreferenceDataValues } from '@cookie-analysis-tool/common';
 /**
  * Internal dependencies.
  */
@@ -32,6 +32,12 @@ interface TableHeaderProps {
     event: React.MouseEvent<HTMLTableSectionElement, MouseEvent>
   ) => void;
   setIsRowFocused: (state: boolean) => void;
+  updatePreference: (
+    key: string,
+    updater: (prevStatePreference: {
+      [key: string]: unknown;
+    }) => PreferenceDataValues
+  ) => void;
 }
 
 const TableHeader = ({
@@ -39,6 +45,7 @@ const TableHeader = ({
   setColumnPosition,
   onRightClick,
   setIsRowFocused,
+  updatePreference,
 }: TableHeaderProps) => {
   const handleRightClick = useCallback(
     (e: React.MouseEvent<HTMLTableSectionElement>) => {
@@ -53,7 +60,11 @@ const TableHeader = ({
 
   return (
     <div onContextMenu={handleRightClick} className="sticky top-0 z-10">
-      <HeaderRow table={table} setIsRowFocused={setIsRowFocused} />
+      <HeaderRow
+        updatePreference={updatePreference}
+        table={table}
+        setIsRowFocused={setIsRowFocused}
+      />
     </div>
   );
 };

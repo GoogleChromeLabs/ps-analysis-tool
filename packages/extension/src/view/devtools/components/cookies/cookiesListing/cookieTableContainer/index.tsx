@@ -22,12 +22,16 @@ import React, { useMemo } from 'react';
 /**
  * Internal dependencies.
  */
-import type { CookieTableData } from '@cookie-analysis-tool/common';
+import type {
+  CookieTableData,
+  SortingState,
+} from '@cookie-analysis-tool/common';
 import {
   type InfoType,
   type TableColumn,
   CookieTable,
 } from '@cookie-analysis-tool/design-system';
+import { usePreferenceStore } from '../../../../stateProviders/preferenceStore';
 
 export interface CookieTableContainerProps {
   cookies: CookieTableData[];
@@ -48,6 +52,14 @@ const CookieTableContainer = ({
   selectedFrameCookie,
   setSelectedFrameCookie,
 }: CookieTableContainerProps) => {
+  const { updatePreference, columnSorting, columnSizing, selectedColumns } =
+    usePreferenceStore(({ actions, state }) => ({
+      updatePreference: actions.updatePreference,
+      columnSorting: state?.columnSorting as SortingState[],
+      columnSizing: state?.columnSizing as Record<string, number>,
+      selectedColumns: state?.selectedColumns as Record<string, boolean>,
+    }));
+
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
@@ -152,6 +164,10 @@ const CookieTableContainer = ({
       selectedFrame={selectedFrame}
       selectedFrameCookie={selectedFrameCookie}
       setSelectedFrameCookie={setSelectedFrameCookie}
+      columnSorting={columnSorting}
+      columnSizing={columnSizing}
+      selectedColumns={selectedColumns}
+      updatePreference={updatePreference}
     />
   );
 };

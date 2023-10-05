@@ -31,6 +31,7 @@ import {
   type CookieStoreContext,
 } from '../../../stateProviders/syncCookieStore';
 import { act } from 'react-dom/test-utils';
+import SinonChrome from 'sinon-chrome';
 
 const uncategorized1pCookie: ParsedCookie = {
   name: '_cb',
@@ -146,6 +147,7 @@ const goToCookiesMenu = () => {
   });
   act(() => {
     userEvent.keyboard('{ArrowRight}');
+    userEvent.keyboard('{ArrowDown}');
   });
 };
 const goToFirstFrame = () => {
@@ -157,7 +159,6 @@ const goToFirstFrame = () => {
   });
   act(() => {
     userEvent.keyboard('{ArrowRight}');
-    userEvent.keyboard('{ArrowDown}');
   });
 };
 
@@ -168,6 +169,10 @@ jest.mock('../../../stateProviders/syncCookieStore', () => ({
 const mockUseCookieStore = useCookieStore as jest.Mock;
 
 describe('Sidebar', () => {
+  beforeAll(() => {
+    globalThis.chrome = SinonChrome as unknown as typeof chrome;
+  });
+
   it('Should render with first menu item selected', () => {
     mockUseCookieStore.mockReturnValue({
       tabFrames: mockResponse.tabFrames,
@@ -215,7 +220,7 @@ describe('Sidebar', () => {
     expect(siteBoundariesContainer).toHaveClass('bg-royal-blue');
   });
 
-  it('should select cookie and show the listed frames under cookie menu.', () => {
+  it('should select cookie and show the listed frames under cookie menu.', async () => {
     mockUseCookieStore.mockReturnValue({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: 'https://edition.cnn.com/',
@@ -224,10 +229,10 @@ describe('Sidebar', () => {
 
     render(<Sidebar selectedIndex={0} setIndex={() => undefined} />);
 
-    const cookieHeaderContainer = screen.getByTestId(
+    const cookieHeaderContainer = await screen.findByTestId(
       'cookies-tab-heading-wrapper'
     );
-    const mainFrame = screen.getByTestId('https://edition.cnn.com/');
+    const mainFrame = await screen.findByTestId('https://edition.cnn.com/');
 
     expect(cookieHeaderContainer).not.toHaveClass('bg-royal-blue');
     expect(mainFrame).toBeInTheDocument();
@@ -837,7 +842,9 @@ describe('Sidebar', () => {
     const sidebarRender = render(
       <Sidebar selectedIndex={0} setIndex={() => undefined} />
     );
+
     goToFirstFrame();
+
     mockUseCookieStore.mockReturnValueOnce({
       tabFrames: mockResponse.tabFrames,
       selectedFrame: 'https://edition.cnn.com/',
