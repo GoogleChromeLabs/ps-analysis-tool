@@ -17,8 +17,6 @@
  * External dependencies
  */
 import JSZip from 'jszip';
-
-import dummyReport from './out.json' assert { type: 'json' };
 import { createWriteStream } from 'fs';
 
 export const reportDownloader = (report) => {
@@ -89,7 +87,7 @@ export const reportDownloader = (report) => {
 
         newReport.affectedCookies[frameName] = {
           ...newReport.affectedCookies[frameName],
-          cookie: report.cookieData[frameName].frameCookies[cookie],
+          [cookie]: report.cookieData[frameName].frameCookies[cookie],
         };
 
         affectedCookiesDataValues.push(
@@ -163,4 +161,3 @@ export const reportDownloader = (report) => {
       console.log('sample.zip written.');
     });
 };
-reportDownloader(dummyReport);
