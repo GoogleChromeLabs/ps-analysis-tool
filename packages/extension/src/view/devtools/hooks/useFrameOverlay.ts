@@ -82,9 +82,7 @@ const useFrameOverlay = () => {
       });
 
       portRef.current.onMessage.addListener((response: Response) => {
-        if (response?.attributes?.iframeOrigin) {
-          setSelectedFrame(response.attributes.iframeOrigin);
-        }
+        setSelectedFrame(response.attributes.iframeOrigin || '');
       });
 
       portRef.current.onDisconnect.addListener(() => {

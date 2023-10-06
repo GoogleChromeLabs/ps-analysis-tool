@@ -236,14 +236,12 @@ class WebpageContentScript {
       this.insertTooltip(frame, {
         isInspecting: true,
       });
-
-      return;
     }
 
-    let url: URL;
+    let url: URL | '';
 
     try {
-      url = new URL(srcAttribute);
+      url = srcAttribute ? new URL(srcAttribute) : '';
     } catch (error) {
       return;
     }
@@ -255,7 +253,7 @@ class WebpageContentScript {
     try {
       this.port.postMessage({
         attributes: {
-          iframeOrigin: url.origin,
+          iframeOrigin: url ? url.origin : '',
         },
       });
     } catch (error) {
