@@ -49,13 +49,10 @@ export type CookieFrameStorageType = {
 export type CompleteJson = {
   pageUrl: string;
   cookieData: {
-    pageUrl: string;
-    cookieData: {
-      [frame: string]: {
-        cookiesCount: number;
-        frameCookies: {
-          [cookieKey: string]: CookieJsonDataType;
-        };
+    [frame: string]: {
+      cookiesCount: number;
+      frameCookies: {
+        [cookieKey: string]: CookieJsonDataType;
       };
     };
   };
