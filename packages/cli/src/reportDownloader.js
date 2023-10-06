@@ -48,59 +48,120 @@ export const reportDownloader = (report) => {
 
   const summaryDataHeader = ['type', 'value'];
 
-  const cookieDataValues = [];
-  const affectedCookiesDataValues = [];
-  const technologyDataValues = [];
-  const summaryDataValues = [];
+  let cookieDataValues = '';
+  let affectedCookiesDataValues = '';
+  let technologyDataValues = '';
+  let summaryDataValues = '';
 
   let affectedCookiesCount = 0;
   let totalCookiesCount = 0;
+  let thirdPartyCookies = 0;
+  let firstPartyCookies = 0;
+  let functionalCookies = 0;
+  let marketingCookies = 0;
+  let uncategorisedCookies = 0;
+  let analyticsCookies = 0;
+  let affectedFunctionalCookies = 0;
+  let affectedMarketingCookies = 0;
+  let affectedUncategorisedCookies = 0;
+  let affectedAnalyticsCookies = 0;
 
-  Object.keys(report.cookieData).forEach((frameName) => {
+  newReport.affectedCookies = {};
+
+  Object.keys(report.cookieData.cookieData).forEach((frameName) => {
     newReport.affectedCookies[frameName] = {};
-    Object.keys(report.cookieData[frameName].frameCookies).forEach((cookie) => {
-      const unSanitisedCookie =
-        report.cookieData[frameName].frameCookies[cookie];
-      const sanitizedData = {
-        name: unSanitisedCookie.name,
-        value: unSanitisedCookie.value.includes(',')
-          ? `"${unSanitisedCookie.value}"`
-          : unSanitisedCookie.value,
-        domain: unSanitisedCookie.domain,
-        path: unSanitisedCookie.path,
-        expires: unSanitisedCookie.expires,
-        httpOnly: unSanitisedCookie.httpOnly,
-        scope: unSanitisedCookie?.scope || 'NA',
-        secure: unSanitisedCookie.secure,
-        session: unSanitisedCookie.session,
-        sameSite: unSanitisedCookie.sameSite,
-        platform: unSanitisedCookie.platform,
-        category: unSanitisedCookie.category,
-        isCookieSet: !unSanitisedCookie.isBlocked,
-        gdprPortal: unSanitisedCookie?.gdprPortal || 'NA',
-      };
-
-      cookieDataValues.push(Object.values(sanitizedData).join(',') + '\r\n');
-
-      if (unSanitisedCookie.isBlocked) {
-        affectedCookiesCount = affectedCookiesCount + 1;
-
-        newReport.affectedCookies[frameName] = {
-          ...newReport.affectedCookies[frameName],
-          [cookie]: report.cookieData[frameName].frameCookies[cookie],
+    Object.keys(report.cookieData.cookieData[frameName].frameCookies).forEach(
+      (cookie) => {
+        const unSanitisedCookie =
+          report.cookieData.cookieData[frameName].frameCookies[cookie];
+        const sanitizedData = {
+          name: unSanitisedCookie.name,
+          value: unSanitisedCookie.value.includes(',')
+            ? `"${unSanitisedCookie.value}"`
+            : unSanitisedCookie.value,
+          domain: unSanitisedCookie.domain,
+          path: unSanitisedCookie.path,
+          expires: unSanitisedCookie.expires.includes(',')
+            ? `"${unSanitisedCookie.expires}"`
+            : unSanitisedCookie.expires,
+          httpOnly: unSanitisedCookie.httpOnly,
+          scope: unSanitisedCookie?.isFirstParty
+            ? 'First Party'
+            : 'Third Party',
+          secure: unSanitisedCookie.secure,
+          session: unSanitisedCookie.session,
+          sameSite: unSanitisedCookie.sameSite,
+          platform: unSanitisedCookie.platform,
+          category: unSanitisedCookie.category,
+          isCookieSet: !unSanitisedCookie.isBlocked,
+          gdprPortal: unSanitisedCookie?.GDPR || 'NA',
         };
 
-        affectedCookiesDataValues.push(
-          Object.values(sanitizedData).join(',') + '\r\n'
-        );
+        cookieDataValues =
+          cookieDataValues + Object.values(sanitizedData).join(',') + '\r\n';
+
+        if (unSanitisedCookie?.isFirstParty) {
+          firstPartyCookies++;
+        } else {
+          thirdPartyCookies++;
+        }
+
+        switch (unSanitisedCookie.category) {
+          case 'Marketing':
+            marketingCookies++;
+            break;
+          case 'Analytics':
+            analyticsCookies++;
+            break;
+          case 'Uncategorized':
+            uncategorisedCookies++;
+            break;
+          case 'Functional':
+            functionalCookies++;
+            break;
+          default:
+            break;
+        }
+
+        if (unSanitisedCookie.isBlocked) {
+          affectedCookiesCount = affectedCookiesCount + 1;
+
+          newReport.affectedCookies[frameName] = {
+            ...newReport.affectedCookies[frameName],
+            [cookie]:
+              report.cookieData.cookieData[frameName].frameCookies[cookie],
+          };
+          switch (unSanitisedCookie.category) {
+            case 'Marketing':
+              affectedMarketingCookies++;
+              break;
+            case 'Analytics':
+              affectedAnalyticsCookies++;
+              break;
+            case 'Uncategorized':
+              affectedUncategorisedCookies++;
+              break;
+            case 'Functional':
+              affectedFunctionalCookies++;
+              break;
+            default:
+              break;
+          }
+          affectedCookiesDataValues =
+            affectedCookiesDataValues +
+            Object.values(sanitizedData).join(',') +
+            '\r\n';
+        }
       }
-    });
+    );
 
     totalCookiesCount =
-      totalCookiesCount + report.cookieData[frameName].cookieCount;
+      totalCookiesCount + report.cookieData.cookieData[frameName].cookiesCount;
   });
 
   const cookieDataCSVContent = cookieDataHeader + '\n' + cookieDataValues;
+
+  console.log(cookieDataCSVContent);
 
   const affectedCookieDataCSVContent =
     cookieDataHeader + '\n' + affectedCookiesDataValues;
@@ -117,9 +178,8 @@ export const reportDownloader = (report) => {
       singleTechnology.categories.push(category.name);
     });
     singleTechnology.categories = singleTechnology.categories.join('|');
-    technologyDataValues.push(
-      Object.values(singleTechnology).join(',') + '\r\n'
-    );
+    technologyDataValues =
+      technologyDataValues + Object.values(singleTechnology).join(',') + '\r\n';
   });
 
   const technologyDataCSVContent =
@@ -128,20 +188,20 @@ export const reportDownloader = (report) => {
   const summaryData = {
     affectedCookies: affectedCookiesCount,
     totalCookies: totalCookiesCount,
-    thirdPartyCookies: 0,
-    firstPartyCookies: 0,
-    functionalCookies: 0,
-    marketingCookies: 0,
-    uncategorisedCookies: 0,
-    analyticsCookies: 0,
-    affectedFunctionalCookies: 0,
-    affectedMarketingCookies: 0,
-    affectedUncategorisedCookies: 0,
-    affectedAnalyticsCookies: 0,
+    thirdPartyCookies,
+    firstPartyCookies,
+    functionalCookies,
+    marketingCookies,
+    uncategorisedCookies,
+    analyticsCookies,
+    affectedFunctionalCookies,
+    affectedMarketingCookies,
+    affectedUncategorisedCookies,
+    affectedAnalyticsCookies,
   };
 
   Object.entries(summaryData).forEach(([key, value]) => {
-    summaryDataValues.push(`${key}, ${value}\r\n`);
+    summaryDataValues = summaryDataValues + `${key}, ${value}\r\n`;
   });
 
   const summaryDataCSVContent = summaryDataHeader + '\n' + summaryDataValues;
@@ -156,7 +216,7 @@ export const reportDownloader = (report) => {
   zip.file('completeJson.json', JSON.stringify(newReport));
   zip
     .generateNodeStream({ type: 'nodebuffer', streamFiles: true })
-    .pipe(createWriteStream('sample.zip'))
+    .pipe(createWriteStream('data.zip'))
     .on('finish', () => {
       console.log('sample.zip written.');
     });
