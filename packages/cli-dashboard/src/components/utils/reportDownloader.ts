@@ -19,7 +19,7 @@
 import JSZip from 'jszip';
 import { createWriteStream } from 'fs';
 
-export const reportDownloader = (report) => {
+export const reportDownloader = (report: Record<string, any>) => {
   const newReport = report;
   const cookieDataHeader = [
     'name',
@@ -216,6 +216,7 @@ export const reportDownloader = (report) => {
     .generateNodeStream({ type: 'nodebuffer', streamFiles: true })
     .pipe(createWriteStream('data.zip'))
     .on('finish', () => {
+      // eslint-disable-next-line no-console
       console.log('sample.zip written.');
     });
 };

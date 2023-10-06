@@ -18,13 +18,12 @@
  * External dependencies
  */
 import React, { useEffect, useMemo, useState } from 'react';
-
+import type { TechnologyData } from '@cookie-analysis-tool/common';
 /**
  * Internal dependencies
  */
 import './app.css';
 import SiteReport from './components/siteReport';
-import type { TechnologyData } from '@cookie-analysis-tool/common';
 import type { CookieFrameStorageType, CookieJsonDataType } from './types';
 import SiteMapReport from './components/siteMapReport';
 
