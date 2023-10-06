@@ -25,6 +25,7 @@ import { PreferenceDataValues } from '@cookie-analysis-tool/common';
 import type { TableColumn, TableOutput } from '../useTable';
 import HeaderResizer from './headerResizer';
 import { ArrowDown } from '../../../icons';
+import { noop } from '../../../utils';
 
 interface HeaderCellProps {
   table: TableOutput;
@@ -44,7 +45,7 @@ const HeaderCell = ({
   index,
   cell,
   setIsRowFocused,
-  updatePreference,
+  updatePreference = noop,
 }: HeaderCellProps) => {
   // Table data is updated on mouseup.
   const resizeHandler = useCallback(() => {

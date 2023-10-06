@@ -26,6 +26,7 @@ import TableHeader from './tableHeader';
 import TableBody from './tableBody';
 import ColumnMenu from './columnMenu';
 import { TableData, TableOutput, TableRow } from './useTable';
+import { noop } from '../../utils';
 
 interface TableProps {
   table: TableOutput;
@@ -45,7 +46,7 @@ const Table = ({
   selectedKey,
   getRowObjectKey,
   onRowClick,
-  updatePreference,
+  updatePreference = noop,
 }: TableProps) => {
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
   const [columnPosition, setColumnPosition] = useState({

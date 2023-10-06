@@ -25,6 +25,7 @@ import { PreferenceDataValues } from '@cookie-analysis-tool/common';
  */
 import ColumnListItem from './columnListItem';
 import type { TableOutput } from '../useTable';
+import { noop } from '../../../utils';
 
 interface ColumnListProps {
   table: TableOutput;
@@ -42,7 +43,7 @@ const ColumnList = ({
   table,
   toggleVisibility,
   handleClose,
-  updatePreference,
+  updatePreference = noop,
 }: ColumnListProps) => {
   useEffect(() => {
     return () => {

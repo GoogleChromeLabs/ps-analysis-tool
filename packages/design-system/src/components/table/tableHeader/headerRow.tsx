@@ -24,6 +24,7 @@ import { PreferenceDataValues } from '@cookie-analysis-tool/common';
  */
 import HeaderCell from './headerCell';
 import type { TableOutput } from '../useTable';
+import { noop } from '../../../utils';
 interface HeaderRowProps {
   table: TableOutput;
   setIsRowFocused: (state: boolean) => void;
@@ -38,7 +39,7 @@ interface HeaderRowProps {
 const HeaderRow = ({
   table,
   setIsRowFocused,
-  updatePreference,
+  updatePreference = noop,
 }: HeaderRowProps) => {
   return (
     <div className="bg-anti-flash-white dark:bg-charleston-green border-b border-american-silver dark:border-quartz divide-x divide-american-silver dark:divide-quartz flex">
