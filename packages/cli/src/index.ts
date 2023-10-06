@@ -27,10 +27,10 @@ import { exec } from 'child_process';
  * Internal dependencies.
  */
 import { analyzeTechnologiesUrls } from './procedures/analyzeTechnologiesUrls';
-import { analyzeCookiesUrls } from './analyseCookiesUrl';
 import Utility from './utils/utility';
 import { fetchDictionary } from './utils/fetchCookieDictionary';
 import { delay } from './utils';
+import { analyzeCookiesUrls } from './procedures/analyzeCookieUrls';
 
 events.EventEmitter.defaultMaxListeners = 15;
 const delayTime = 20000;
