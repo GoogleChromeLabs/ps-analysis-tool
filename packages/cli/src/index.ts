@@ -62,7 +62,7 @@ export const initialize = async () => {
     const spinnies = new Spinnies();
 
     spinnies.add('cookie-spinner', {
-      text: 'Analysing cookies on the first page visit',
+      text: 'Analysing cookies on first page visit',
     });
     const [cookieData] = await analyzeCookiesUrls(
       [url],
@@ -71,15 +71,15 @@ export const initialize = async () => {
       cookieDictionary
     );
     spinnies.succeed('cookie-spinner', {
-      text: 'Done Analyzing cookies',
+      text: 'Done analyzing cookies.',
     });
 
     spinnies.add('technology-spinner', {
-      text: 'Analysing cookies on the first page visit',
+      text: 'Analysing technologies.',
     });
     const technologyData = await analyzeTechnologiesUrls([url]);
     spinnies.succeed('technology-spinner', {
-      text: 'Done Analyzing technologies',
+      text: 'Done analyzing technologies.',
     });
 
     const output = {
@@ -102,6 +102,7 @@ export const initialize = async () => {
   } else {
     const urls: Array<string> = await Utility.getUrlsFromSitemap(sitemapURL);
     const prefix = Utility.generatePrefix([...urls].shift() ?? 'untitled');
+    const spinnies = new Spinnies();
     const directory = `./out/${prefix}`;
     const userInput: any = await Utility.askUserInput(
       `Provided sitemap has ${urls.length} pages. Please enter the number of pages you want to analyze (Default ${urls.length}):`,
@@ -114,16 +115,31 @@ export const initialize = async () => {
 
     const urlsToProcess = urls.splice(0, numberOfUrls);
 
+    spinnies.add('cookie-spinner', {
+      text: 'Analysing cookies on first page visit',
+    });
+
     const cookieAnalysisData = await analyzeCookiesUrls(
       urlsToProcess,
       isHeadless,
       delayTime,
       cookieDictionary
     );
+
+    spinnies.succeed('cookie-spinner', {
+      text: 'Done analyzing cookies.',
+    });
+
+    spinnies.add('technologies-spinner', {
+      text: 'Analysing cookies on first page visit',
+    });
     const technologyAnalysisData = await Promise.all(
       urlsToProcess.map((siteUrl: string) => analyzeTechnologiesUrls([siteUrl]))
     );
 
+    spinnies.succeed('technologies-spinner', {
+      text: 'Done analyzing technologies.',
+    });
     const result = urlsToProcess.map((_url, ind) => {
       return {
         pageUrl: _url,
