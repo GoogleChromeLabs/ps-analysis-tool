@@ -67,7 +67,7 @@ const createTooltip = (
   let frameType = 'iframe';
 
   if (isHidden) {
-    frameType = 'iframe(hidden)';
+    frameType = 'Hidden iframe';
   } else if (insideFrame) {
     frameType = 'iframe(nested frame)';
   } else if (frame.tagName === 'BODY') {
