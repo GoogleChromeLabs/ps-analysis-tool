@@ -82,7 +82,7 @@ export const initialize = async () => {
 
     const output = {
       pageUrl: url,
-      cookieData,
+      cookieData: cookieData.cookieData,
       technologyData,
     };
     await ensureFile(directory + '/out.json');
