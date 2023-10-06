@@ -40,6 +40,7 @@ const createFrameOverlay = (frame: HTMLElement): HTMLElement | null => {
   } else {
     frameOverlay.style.width = '100%';
     frameOverlay.style.height = '100%';
+    frameOverlay.classList.add('ps-fixed');
   }
 
   frameOverlay.popover = 'manual';

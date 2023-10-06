@@ -10,7 +10,7 @@ html body .ps-overlay[popover], html body .ps-tooltip[popover] {
     cursor: default !important;
 }
 
-html body .ps-tooltip.ps-tooltip-fixed[popover] {
+html body .ps-fixed[popover] {
     position: fixed !important;
 }
 

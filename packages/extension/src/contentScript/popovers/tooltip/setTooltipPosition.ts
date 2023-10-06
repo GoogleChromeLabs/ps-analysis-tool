@@ -44,7 +44,7 @@ const setTooltipPosition = (
 
   // Overlay will not exist for hidden elements. show at bottom of screen.
   if (isHiddenFrame) {
-    tooltip.classList.add('ps-tooltip-fixed');
+    tooltip.classList.add('ps-fixed');
     tooltip.style.top = `0`;
     tooltip.style.left = 'auto';
     tooltip.style.right = '30px';
@@ -57,7 +57,7 @@ const setTooltipPosition = (
     // Is it the main frame?
     if (document.location.origin === selectedFrame) {
       tooltip.style.top = '5px';
-      tooltip.classList.add('ps-tooltip-fixed');
+      tooltip.classList.add('ps-fixed');
     } else {
       // Show the tooltip at the bottom if there isn't enough space at the top.
       tooltip.style.top = `${tooltip.offsetTop + frame.offsetHeight - 1}px`;
