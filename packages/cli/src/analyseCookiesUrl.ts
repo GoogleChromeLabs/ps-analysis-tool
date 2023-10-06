@@ -512,7 +512,7 @@ export async function analyzeCookiesUrls(
           if (expires === '') {
             frameCookies[key].expires = 'Session';
           } else if (typeof expires === 'number') {
-            frameCookies[key].expires = new Date(expires).toUTCString();
+            frameCookies[key].expires = new Date(expires).toISOString();
           }
 
           frameCookies[key].isFirstParty =
