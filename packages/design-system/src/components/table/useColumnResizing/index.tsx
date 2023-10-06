@@ -42,8 +42,7 @@ const useColumnResizing = (
 
   const setColumnsCallback = useCallback(() => {
     if (options) {
-      const tableWidth =
-        tableContainerRef.current?.getBoundingClientRect().width || 0;
+      const tableWidth = tableContainerRef.current?.scrollWidth || 0;
       let newColumns = tableColumns.map((column) => ({
         ...column,
         width: options[column.accessorKey],
@@ -63,8 +62,7 @@ const useColumnResizing = (
 
       setColumns(newColumns);
     } else {
-      const tableWidth =
-        tableContainerRef.current?.getBoundingClientRect().width || 0;
+      const tableWidth = tableContainerRef.current?.scrollWidth || 0;
       const newColumns = tableColumns.map((column) => ({
         ...column,
         width: tableWidth / tableColumns.length,
@@ -147,6 +145,18 @@ const useColumnResizing = (
     },
     [columns]
   );
+
+  useEffect(() => {
+    const resizer = new ResizeObserver(() => {
+      setColumnsCallback();
+    });
+
+    if (tableContainerRef.current) {
+      resizer.observe(tableContainerRef.current);
+    }
+
+    return () => resizer.disconnect();
+  }, [setColumnsCallback]);
 
   return {
     columns,
