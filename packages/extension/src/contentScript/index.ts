@@ -46,6 +46,7 @@ class WebpageContentScript {
     this.abortInspection = this.abortInspection.bind(this);
     this.onMessage = this.onMessage.bind(this);
     this.onDisconnect = this.onDisconnect.bind(this);
+    this.handleMouseMove = this.handleMouseMove.bind(this);
 
     this.listenToConnection();
     this.setTopics();
@@ -70,6 +71,16 @@ class WebpageContentScript {
   addHoverEventListeners(): void {
     document.addEventListener('mouseover', this.handleHoverEvent);
     document.addEventListener('mouseout', this.handleHoverEvent);
+    document.addEventListener('visibilitychange', this.handleMouseMove);
+
+    document.documentElement.addEventListener(
+      'mouseleave',
+      this.handleMouseMove
+    );
+    document.documentElement.addEventListener(
+      'mouseenter',
+      this.handleMouseMove
+    );
   }
 
   /**
@@ -78,6 +89,16 @@ class WebpageContentScript {
   removeHoverEventListeners(): void {
     document.removeEventListener('mouseover', this.handleHoverEvent);
     document.removeEventListener('mouseout', this.handleHoverEvent);
+    document.removeEventListener('visibilitychange', this.handleMouseMove);
+
+    document.documentElement.removeEventListener(
+      'mouseleave',
+      this.handleMouseMove
+    );
+    document.documentElement.removeEventListener(
+      'mouseenter',
+      this.handleMouseMove
+    );
   }
 
   /**
@@ -133,7 +154,7 @@ class WebpageContentScript {
       !this.isHoveringOverPage &&
       frameToScrollTo.clientWidth
     ) {
-      firstToolTip.scrollIntoView({
+      (firstToolTip as HTMLElement).scrollIntoView({
         behavior: 'smooth',
         block: 'start',
         inline: 'nearest',
@@ -215,13 +236,11 @@ class WebpageContentScript {
   handleHoverEvent(event: MouseEvent): void {
     const target = event.target as HTMLElement;
 
-    this.isHoveringOverPage = false;
+    this.isHoveringOverPage = true;
 
     if (!this.isInspecting || target.tagName !== 'IFRAME') {
       return;
     }
-
-    this.isHoveringOverPage = true;
 
     const frame = target as HTMLIFrameElement;
     const srcAttribute = frame.getAttribute('src');
@@ -258,6 +277,22 @@ class WebpageContentScript {
       });
     } catch (error) {
       this.abortInspection();
+    }
+  }
+
+  /**
+   * Toggle this.isHoveringOverPage state when mouse or visibility is changed.
+   * @param {MouseEvent} event Mouse event.
+   */
+  handleMouseMove(event?: MouseEvent) {
+    if (event?.type === 'mouseenter') {
+      this.isHoveringOverPage = true;
+    } else if (event?.type === 'mouseleave') {
+      this.isHoveringOverPage = false;
+    }
+
+    if (document.hidden) {
+      this.isHoveringOverPage = false;
     }
   }
 
