@@ -13,41 +13,218 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-//@ts-nocheck
-import puppeteer from 'puppeteer';
+import puppeteer, { Browser, Page, Protocol } from 'puppeteer';
 import { delay } from './utils';
 import { parse } from 'simple-cookie';
 import { CookieDatabase } from './types';
+// import findAnalyticsMatch from './utils/findAnalyticsMatch';
+import { getDomain } from 'tldts';
 import findAnalyticsMatch from './utils/findAnalyticsMatch';
+import { isFirstParty } from '@cookie-analysis-tool/common';
+
+type Cookie = {
+  name: string;
+  domain: string;
+  path: string;
+  value: string;
+  sameSite: string;
+  expires: string;
+  httpOnly: boolean;
+  secure: boolean;
+  isBlocked?: boolean;
+  platform?: string;
+  category?: string;
+  GDPR?: string;
+  isFirstParty: boolean;
+};
+
+type ViewportConfig = {
+  width: number;
+  height: number;
+  deviceScaleFactor: number;
+};
+
+type ResponseData = {
+  frameId: string;
+  serverUrl: string;
+  cookies: Cookie[];
+};
+
+type RequestData = {
+  frameId: string;
+  serverUrl: string;
+  cookies: Cookie[];
+};
 
 /**
  *
- * @param url
- * @param shouldBlock
- * @param delayTime
- * @param isHeadless
- * @param cookieDictionary
+ * @param responseMap
+ * @param requestMap
+ * @param frameIdUrlMap
+ * @param mainFrameId
+ * @param pageUrl
  */
-async function analyzeCookies(
-  url: string,
-  shouldBlock: boolean,
-  delayTime: number,
-  isHeadless: false,
-  cookieDictionary: CookieDatabase
-) {
-  const browser = await puppeteer.launch({
-    devtools: true,
-    headless: isHeadless ? 'new' : false,
-  });
+function parseNetworkDataToCookieData(
+  responseMap: Map<string, ResponseData>,
+  requestMap: Map<string, RequestData>,
+  frameIdUrlMap: Map<string, string>,
+  mainFrameId: string,
+  pageUrl: string
+): {
+  [frameUrl: string]: {
+    cookiesCount: number;
+    frameCookies: {
+      [key: string]: Cookie;
+    };
+  };
+} {
+  const frameIdNetworkDataMap = new Map<
+    string,
+    { responses: ResponseData[]; requests: RequestData[] }
+  >();
 
-  const sitePage = await browser.newPage();
-  sitePage.setViewport({
-    width: 1440,
-    height: 790,
-    deviceScaleFactor: 1,
-  });
-  if (shouldBlock) {
-    const cookiesPage = await browser.newPage();
+  for (const [, response] of responseMap) {
+    if (!response.cookies || response.cookies.length === 0) {
+      continue;
+    }
+    const frameId = response.frameId || mainFrameId;
+    const prevResposes = frameIdNetworkDataMap.get(frameId)?.responses || [];
+    const prevRequests = frameIdNetworkDataMap.get(frameId)?.requests || [];
+
+    frameIdNetworkDataMap.set(frameId, {
+      responses: [...prevResposes, response],
+      requests: prevRequests,
+    });
+  }
+
+  for (const [, request] of requestMap) {
+    if (!request.cookies || request.cookies.length === 0) {
+      continue;
+    }
+    const frameId = request.frameId || mainFrameId;
+    const prevResposes = frameIdNetworkDataMap.get(frameId)?.responses || [];
+    const prevRequests = frameIdNetworkDataMap.get(frameId)?.requests || [];
+
+    frameIdNetworkDataMap.set(frameId, {
+      responses: prevResposes,
+      requests: [...prevRequests, request],
+    });
+  }
+
+  const frameIdCookiesMap = new Map<
+    string,
+    {
+      frameUrl: string;
+      frameCookies: {
+        [key: string]: Cookie;
+      };
+    }
+  >();
+
+  for (const [frameId, data] of frameIdNetworkDataMap) {
+    const _frameCookies = new Map<string, Cookie>();
+
+    data.requests?.forEach((request: RequestData) => {
+      request.cookies.forEach((cookie) => {
+        const key = cookie.name + ':' + cookie.domain + ':' + cookie.path;
+        _frameCookies.set(key, cookie);
+      });
+    });
+
+    data.responses?.forEach((response: ResponseData) => {
+      response.cookies.forEach((cookie) => {
+        // domain update required. Domain based on the server url
+        const parsedDomain =
+          cookie.domain === '' ? getDomain(response.serverUrl) : cookie.domain;
+
+        const key = cookie.name + ':' + parsedDomain + ':' + cookie.path;
+        _frameCookies.set(key, { ...cookie, domain: parsedDomain || '' });
+      });
+    });
+
+    frameIdCookiesMap.set(frameId, {
+      frameUrl: frameIdUrlMap.get(frameId) || pageUrl,
+      frameCookies: Object.fromEntries(_frameCookies),
+    });
+  }
+  const frameUrlCookies = new Map<
+    string,
+    {
+      cookiesCount: number;
+      frameCookies: {
+        [key: string]: Cookie;
+      };
+    }
+  >();
+
+  for (const [, data] of frameIdCookiesMap) {
+    const _url = new URL(data.frameUrl);
+
+    const newFrameCookies = {
+      ...data.frameCookies,
+      ...(frameUrlCookies.get(_url.origin)?.frameCookies || {}),
+    };
+
+    frameUrlCookies.set(_url.origin, {
+      cookiesCount: Object.keys(newFrameCookies)?.length || 0,
+      frameCookies: {
+        ...newFrameCookies,
+      },
+    });
+  }
+
+  return Object.fromEntries(frameUrlCookies);
+}
+
+class BrowserManagement {
+  viewportConfig: ViewportConfig;
+  browser: Browser | null;
+  isHeadless: boolean;
+  pageWaitTime: number;
+  pageMap: Map<string, Page>;
+  pageResponseMaps: Map<string, Map<string, ResponseData>>;
+  pageRequestMaps: Map<string, Map<string, RequestData>>;
+  shouldLogDebug: boolean;
+
+  constructor(
+    viewportConfig: ViewportConfig,
+    isHeadless: boolean,
+    pageWaitTime: number,
+    shouldLogDebug: boolean
+  ) {
+    this.viewportConfig = viewportConfig;
+    this.browser = null;
+    this.isHeadless = isHeadless;
+    this.pageWaitTime = pageWaitTime;
+    this.pageMap = new Map();
+    this.pageResponseMaps = new Map();
+    this.pageRequestMaps = new Map();
+    this.shouldLogDebug = shouldLogDebug;
+  }
+
+  debugLog(msg: any) {
+    if (this.shouldLogDebug) {
+      console.log(msg);
+    }
+  }
+
+  async initializeBrowser(shouldBlock3pCookies: boolean) {
+    this.browser = await puppeteer.launch({
+      devtools: true,
+      headless: this.isHeadless ? 'new' : false,
+    });
+    this.debugLog('browser intialized');
+    if (shouldBlock3pCookies) {
+      await this.blockCookies();
+    }
+  }
+
+  async blockCookies() {
+    if (!this.browser) {
+      throw new Error('Browser not intialized');
+    }
+
+    const cookiesPage = await this.browser.newPage();
     await cookiesPage.goto('chrome://settings/cookies');
 
     const radioButton = await cookiesPage.$(
@@ -62,215 +239,288 @@ async function analyzeCookies(
     }
 
     await cookiesPage.close();
+    this.debugLog('3p cookies blocked');
   }
-  const cdpSession = await sitePage.createCDPSession();
-  await cdpSession.send('Network.enable');
 
-  const responseMap = new Map();
-
-  cdpSession.on('Network.responseReceived', (response) => {
-    responseMap.set(response.requestId, {
-      ...(responseMap.get(response.requestId) || {}),
-      frameId: response.frameId,
-      serverUrl: response.response.url,
+  async openPage(): Promise<Page> {
+    if (!this.browser) {
+      throw new Error('Browser not intialized');
+    }
+    const sitePage = await this.browser.newPage();
+    sitePage.setViewport({
+      width: 1440,
+      height: 790,
+      deviceScaleFactor: 1,
     });
-  });
+    this.debugLog('Page opened');
+    return sitePage;
+  }
 
-  cdpSession.on('Network.responseReceivedExtraInfo', (response) => {
-    const cookies = response.headers['set-cookie']?.split('\n').map(parse);
+  async navigateAndScroll(url: string) {
+    const page = this.pageMap.get(url);
+    if (!page) {
+      throw new Error('no page with the provided id was found');
+    }
+    this.debugLog(`starting navigation to url ${url}`);
+    try {
+      await page.goto(url, { timeout: 10000 });
+    } catch (error) {
+      this.debugLog(
+        `navigation did not finish in 10 seconds moving on to scrolling`
+      );
+      //ignore
+    }
 
-    responseMap.set(response.requestId, {
-      ...(responseMap.get(response.requestId) || {}),
-      cookies: cookies || [],
+    await delay(this.pageWaitTime / 2);
+
+    await page.evaluate(() => {
+      window.scrollBy(0, 10000);
     });
-  });
 
-  const requestMap = new Map();
+    await delay(this.pageWaitTime / 2);
+    this.debugLog(`done navigating and scrolling to url:${url}`);
+  }
 
-  cdpSession.on('Network.requestWillBeSent', (request) => {
-    requestMap.set(request.requestId, {
-      ...(requestMap.get(request.requestId) || {}),
-      frameId: request.frameId,
-      serverUrl: request.request.url,
-    });
-  });
+  async attachNetworkListenersToPage(pageId: string) {
+    const page = this.pageMap.get(pageId);
+    if (!page) {
+      throw new Error(`no page with the provided id was found:${pageId}`);
+    }
+    const cdpSession = await page.createCDPSession();
+    await cdpSession.send('Network.enable');
+    //@ts-ignore
+    const mainFrameId: string = page.mainFrame()._id;
 
-  cdpSession.on('Network.requestWillBeSentExtraInfo', (request) => {
-    if (request.associatedCookies && request.associatedCookies.length !== 0) {
+    const responseMap: Map<string, ResponseData> = new Map();
+    this.pageResponseMaps.set(pageId, responseMap);
+
+    cdpSession.on(
+      'Network.responseReceived',
+      (response: Protocol.Network.ResponseReceivedEvent) => {
+        responseMap.set(response.requestId, {
+          frameId: response.frameId || mainFrameId,
+          serverUrl: response.response.url,
+          cookies: responseMap.get(response.requestId)?.cookies || [],
+        });
+      }
+    );
+
+    cdpSession.on(
+      'Network.responseReceivedExtraInfo',
+      (response: Protocol.Network.ResponseReceivedExtraInfoEvent) => {
+        const cookies = response.headers['set-cookie']
+          ?.split('\n')
+          .map((headerLine) => {
+            const parsedCookie = parse(headerLine);
+            return {
+              name: parsedCookie.name,
+              domain: parsedCookie.domain,
+              path: parsedCookie.path || '/',
+              value: parsedCookie.value,
+              sameSite: parsedCookie.samesite || 'Lax',
+              expires: parsedCookie.expires || 'Session',
+              httpOnly: parsedCookie.httponly || false,
+              secure: parsedCookie.secure || false,
+            };
+          });
+        const prevCookies = responseMap.get(response.requestId)?.cookies || [];
+        const mergedCookies = [...prevCookies, ...(cookies || [])];
+
+        responseMap.set(response.requestId, {
+          frameId: responseMap.get(response.requestId)?.frameId || '',
+          serverUrl: responseMap.get(response.requestId)?.serverUrl || '',
+          // @ts-ignore TODO: fix expires type mismatch
+          cookies: mergedCookies,
+        });
+      }
+    );
+
+    const requestMap = new Map();
+    this.pageRequestMaps.set(pageId, requestMap);
+
+    cdpSession.on('Network.requestWillBeSent', (request) => {
       requestMap.set(request.requestId, {
         ...(requestMap.get(request.requestId) || {}),
-        cookies: request.associatedCookies,
-      });
-    }
-  });
-
-  try {
-    await sitePage.goto(url, { timeout: 10000 });
-  } catch (error) {
-    //ignore
-  }
-
-  await delay(delayTime / 2);
-
-  await sitePage.evaluate(() => {
-    window.scrollBy(0, 10000);
-  });
-
-  await delay(delayTime / 2);
-
-  //make frame id to url maps
-  const frameIdMapFromTree = new Map();
-  const frames = sitePage.frames();
-  const frameCallback = (frame) => {
-    const id = frame._id;
-    const _url = frame.url();
-    frameIdMapFromTree.set(id, _url);
-
-    if (frame.childFrames()) {
-      frame.childFrames().forEach(frameCallback);
-    }
-  };
-
-  frames.forEach(frameCallback);
-
-  const frameCookies = new Map();
-
-  const mainFrameId = sitePage.mainFrame()._id;
-
-  for (const [, response] of responseMap) {
-    if (!response.cookies || response.cookies.length === 0) {
-      continue;
-    }
-    const frameId = response.frameId || mainFrameId;
-
-    frameCookies.set(frameId, {
-      ...frameCookies.get(frameId),
-      responses: [
-        ...(frameCookies.get(frameId)?.responses || []),
-        { ...response },
-      ],
-    });
-  }
-
-  for (const [, request] of requestMap) {
-    if (!request.cookies || request.cookies.length === 0) {
-      continue;
-    }
-    const frameId = request.frameId || mainFrameId;
-
-    frameCookies.set(frameId, {
-      ...frameCookies.get(frameId),
-      requests: [
-        ...(frameCookies.get(frameId)?.requests || []),
-        { ...request },
-      ],
-    });
-  }
-
-  for (const [frameId, data] of frameCookies) {
-    const _frameCookies = new Map();
-
-    data.requests?.forEach((request) => {
-      request.cookies.forEach(({ cookie }) => {
-        const key = cookie.name + ':' + cookie.domain + ':' + cookie.path;
-        _frameCookies.set(key, cookie);
+        frameId: request.frameId,
+        serverUrl: request.request.url,
       });
     });
 
-    data.responses?.forEach((response) => {
-      response.cookies.forEach((cookie) => {
-        const key = cookie.name + ':' + cookie.domain + ':' + cookie.path;
-        _frameCookies.set(key, {
-          expires: cookie.expires,
-          httpOnly: cookie.httponly,
-          secure: cookie.secure,
-          path: cookie.path,
-          domain: cookie.domain,
-          sameSite: cookie.samesite,
-          name: cookie.name,
-          value: cookie.value,
-        });
-      });
-    });
-
-    frameCookies.set(frameId, {
-      frameUrl: frameIdMapFromTree.get(frameId) || url,
-      frameCookies: Object.fromEntries(_frameCookies),
-      cookieCount: frameCookies.size,
-    });
+    cdpSession.on(
+      'Network.requestWillBeSentExtraInfo',
+      (request: Protocol.Network.RequestWillBeSentExtraInfoEvent) => {
+        if (
+          request.associatedCookies &&
+          request.associatedCookies.length !== 0
+        ) {
+          const cookies: Protocol.Network.Cookie[] = [];
+          request.associatedCookies.forEach(({ blockedReasons, cookie }) => {
+            if (blockedReasons.length === 0) {
+              cookies.push(cookie);
+            }
+          });
+          requestMap.set(request.requestId, {
+            ...(requestMap.get(request.requestId) || {}),
+            cookies,
+          });
+        }
+      }
+    );
+    this.debugLog('done attaching network event listeners');
   }
 
-  // Multiple iframes have same URL
+  getPageFrameIdToUrlMap(id: string) {
+    const page = this.pageMap.get(id);
+    if (!page) {
+      throw new Error('no page with the provided id was found');
+    }
+    const frameIdMapFromTree = new Map();
+    const frames = page.frames();
+    const frameCallback = (frame: any) => {
+      const frameId = frame._id;
+      const _url = frame.url();
+      frameIdMapFromTree.set(frameId, _url);
 
-  const frameUrlCookies = new Map();
-
-  for (const [, data] of frameCookies) {
-    const _url = new URL(data.frameUrl);
-
-    const newFrameCookies = {
-      ...data.frameCookies,
-      ...(frameUrlCookies.get(_url.origin)?.frameCookies || {}),
+      if (frame.childFrames()) {
+        frame.childFrames().forEach(frameCallback);
+      }
     };
 
-    frameUrlCookies.set(_url.origin, {
-      frameCookies: newFrameCookies,
-      cookieCount: Object.keys(newFrameCookies).length,
+    frames.forEach(frameCallback);
+    return frameIdMapFromTree;
+  }
+
+  async analyzeCookieUrls(urls: string[]) {
+    for (const url of urls) {
+      const sitePage = await this.openPage();
+      this.pageMap.set(url, sitePage);
+      await this.attachNetworkListenersToPage(url);
+    }
+
+    //start navigation in parallel
+    await Promise.all(
+      urls.map(async (url) => {
+        await this.navigateAndScroll(url);
+      })
+    );
+
+    //parse cookie data in parallel
+
+    return urls.map((url) => {
+      const responseMap = this.pageResponseMaps.get(url);
+      const requestMap = this.pageRequestMaps.get(url);
+
+      const frameIdUrlMap = this.getPageFrameIdToUrlMap(url);
+      // @ts-ignore
+      const mainFrameId = this.pageMap.get(url)?.mainFrame()._id;
+
+      if (!requestMap || !responseMap || !frameIdUrlMap || !mainFrameId) {
+        return {
+          pageUrl: url,
+          cookieData: {},
+        };
+      }
+      return {
+        pageUrl: url,
+        cookieData: parseNetworkDataToCookieData(
+          responseMap,
+          requestMap,
+          frameIdUrlMap,
+          mainFrameId,
+          url
+        ),
+      };
     });
   }
-  await browser.close();
 
-  for (const [, data] of frameUrlCookies) {
-    Object.values(data.frameCookies).forEach((cookie) => {
-      const analytics = findAnalyticsMatch(cookie.name, cookieDictionary);
-
-      cookie.platform = analytics.platform || 'Unknown';
-      cookie.category = analytics.category || 'Uncategorized';
-      cookie.description = analytics.description || '';
-    });
+  async deinitialize() {
+    await this.browser?.close();
   }
-  return Object.fromEntries(frameUrlCookies);
 }
 
 /**
  *
- * @param url
+ * @param urls
  * @param isHeadless
  * @param delayTime
  * @param cookieDictionary
  */
-export async function analyzeCookiesUrl(
-  url: string,
-  isHeadless,
-  delayTime,
-  cookieDictionary
+export async function analyzeCookiesUrls(
+  urls: string[],
+  isHeadless: boolean,
+  delayTime: number,
+  cookieDictionary: CookieDatabase
 ) {
-  const normalEnvFrameCookies = await analyzeCookies(
-    url,
-    false,
-    delayTime,
+  const normalBrowser = new BrowserManagement(
+    {
+      width: 1440,
+      height: 790,
+      deviceScaleFactor: 1,
+    },
     isHeadless,
-    cookieDictionary
-  );
-  const blockedEnvFrameCookies = await analyzeCookies(
-    url,
-    true,
     delayTime,
+    false
+  );
+  const browserWith3pCookiesBlocked = new BrowserManagement(
+    {
+      width: 1440,
+      height: 790,
+      deviceScaleFactor: 1,
+    },
     isHeadless,
-    cookieDictionary
+    delayTime,
+    false
   );
 
-  const cookieKeysInBlockedEnv = new Set();
-  Object.values(blockedEnvFrameCookies).forEach(({ frameCookies }) => {
-    Object.keys(frameCookies).forEach((key) => {
-      cookieKeysInBlockedEnv.add(key);
-    });
-  });
+  await normalBrowser.initializeBrowser(false);
+  await browserWith3pCookiesBlocked.initializeBrowser(true);
 
-  Object.values(normalEnvFrameCookies).forEach(({ frameCookies }) => {
-    Object.keys(frameCookies).forEach((key) => {
-      frameCookies[key].isBlocked = !cookieKeysInBlockedEnv.has(key);
-    });
-  });
+  const [normalCookieAnaysisData, blockedAnalysisData] = await Promise.all([
+    normalBrowser.analyzeCookieUrls(urls),
+    browserWith3pCookiesBlocked.analyzeCookieUrls(urls),
+  ]);
 
-  return normalEnvFrameCookies;
+  await normalBrowser.deinitialize();
+  await browserWith3pCookiesBlocked.deinitialize();
+
+  return urls.map((url, ind) => {
+    const cookieKeysInBlockedEnv = new Set();
+    Object.values(blockedAnalysisData[ind].cookieData).forEach(
+      ({ frameCookies }) => {
+        Object.keys(frameCookies).forEach((key) => {
+          cookieKeysInBlockedEnv.add(key);
+        });
+      }
+    );
+
+    Object.values(normalCookieAnaysisData[ind].cookieData).forEach(
+      ({ frameCookies }) => {
+        Object.keys(frameCookies).forEach((key) => {
+          frameCookies[key].isBlocked = !cookieKeysInBlockedEnv.has(key);
+
+          //also add analytics form dictionary
+          const name = frameCookies[key].name;
+          const analytics = findAnalyticsMatch(name, cookieDictionary);
+
+          frameCookies[key].platform = analytics?.platform || 'Unknown';
+          frameCookies[key].category = analytics?.category || 'Uncategorized';
+          frameCookies[key].GDPR = analytics?.gdprUrl || '';
+
+          // some cookies may have their expires value in epoch. Convert them to GMTString
+          const expires = frameCookies[key].expires;
+
+          if (expires === '') {
+            frameCookies[key].expires = 'Session';
+          } else if (typeof expires === 'number') {
+            frameCookies[key].expires = new Date(expires).toISOString();
+          }
+
+          frameCookies[key].isFirstParty =
+            isFirstParty(frameCookies[key].domain, url) || false;
+        });
+      }
+    );
+
+    return normalCookieAnaysisData[ind];
+  });
 }

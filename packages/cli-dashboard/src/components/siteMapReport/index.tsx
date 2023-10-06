@@ -96,7 +96,7 @@ const SiteMapReport = ({
                 } as CookieTableData['analytics'],
                 url: cookie.pageUrl,
                 headerType: 'response',
-                isFirstParty: cookie.isFirstParty === 'Yes' ? true : false,
+                isFirstParty: cookie.isFirstParty,
                 frameIdList: [],
                 isCookieSet: !cookie.isBlocked,
                 frameUrl: frame,
