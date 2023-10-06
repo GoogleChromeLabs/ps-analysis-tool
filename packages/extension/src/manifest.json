@@ -39,11 +39,5 @@
       "resources": ["third_party/data/*.json", "data/*json"],
       "matches": ["*://*/*"]
     }
-  ],
-  "content_scripts": [
-    {
-      "matches": ["*://*/*"],
-      "js": ["content-script.js"]
-    }
   ]
 }

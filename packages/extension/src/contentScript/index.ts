@@ -205,6 +205,7 @@ class WebpageContentScript {
     this.removeHoverEventListeners();
     removeAllPopovers();
     toggleFrameHighlighting(false);
+    this.isInspecting = false;
   }
 
   /**
@@ -247,19 +248,16 @@ class WebpageContentScript {
       return;
     }
 
-    const payload = {
-      hover: event?.type === 'mouseover',
-      attributes: {
-        src: url.origin,
-      },
-    };
-
     if (!this.port) {
       return;
     }
 
     try {
-      this.port.postMessage(payload);
+      this.port.postMessage({
+        attributes: {
+          iframeOrigin: url.origin,
+        },
+      });
     } catch (error) {
       this.abortInspection();
     }

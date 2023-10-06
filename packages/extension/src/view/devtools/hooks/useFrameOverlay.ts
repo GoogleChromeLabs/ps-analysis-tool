@@ -27,7 +27,7 @@ import { useFilterManagementStore } from '../stateProviders/filterManagementStor
 import { getCurrentTabId } from '../../../utils/getCurrentTabId';
 
 interface Response {
-  attributes: { src: React.SetStateAction<string | null> };
+  attributes: { iframeOrigin: React.SetStateAction<string | null> };
 }
 
 const useFrameOverlay = () => {
@@ -82,8 +82,8 @@ const useFrameOverlay = () => {
       });
 
       portRef.current.onMessage.addListener((response: Response) => {
-        if (response?.attributes?.src) {
-          setSelectedFrame(response.attributes.src);
+        if (response?.attributes?.iframeOrigin) {
+          setSelectedFrame(response.attributes.iframeOrigin);
         }
       });
 
@@ -91,8 +91,9 @@ const useFrameOverlay = () => {
         setIsInspecting(false);
       });
 
+      // For the first time.
       portRef.current.postMessage({
-        isInspecting,
+        isInspecting: true,
       });
     })();
   }, [isInspecting, setSelectedFrame, setIsInspecting, setContextInvalidated]);
