@@ -333,11 +333,13 @@ const Sidebar = ({
           }
           return null;
         })}
+        <div className="mt-6 justify-center w-full flex">
+          <Button
+            text="Download Report"
+            onClick={() => reportDownloader(completeJson)}
+          />
+        </div>
       </div>
-      <Button
-        text="Download Report"
-        onClick={() => reportDownloader(completeJson)}
-      />
     </div>
   );
 };
