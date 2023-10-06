@@ -17,10 +17,34 @@
  * External dependencies
  */
 import JSZip from 'jszip';
-import { createWriteStream } from 'fs';
+import type { TechnologyData } from '@cookie-analysis-tool/common';
+/**
+ * Internal dependencies
+ */
+import type { CompleteJson, CookieFrameStorageType } from '../../types';
 
-export const reportDownloader = (report: Record<string, any>) => {
-  const newReport = report;
+interface NewReport extends CompleteJson {
+  affectedCookies: CookieFrameStorageType;
+  cookieAnalysisSummary: Record<string, number>;
+}
+interface SingleTechnology {
+  name: string;
+  description: string;
+  confidence: number;
+  website: string;
+  categories: TechnologyData['categories'];
+}
+
+export const reportDownloader = (report: CompleteJson | null) => {
+  if (!report) {
+    return;
+  }
+  const newReport: NewReport = {
+    ...report,
+    affectedCookies: {},
+    cookieAnalysisSummary: {},
+  };
+
   const cookieDataHeader = [
     'name',
     'value',
@@ -89,7 +113,6 @@ export const reportDownloader = (report: Record<string, any>) => {
             ? 'First Party'
             : 'Third Party',
           secure: unSanitisedCookie.secure,
-          session: unSanitisedCookie.session,
           sameSite: unSanitisedCookie.sameSite,
           platform: unSanitisedCookie.platform,
           category: unSanitisedCookie.category,
@@ -165,16 +188,18 @@ export const reportDownloader = (report: Record<string, any>) => {
     cookieDataHeader + '\n' + affectedCookiesDataValues;
 
   report.technologyData.forEach((technology) => {
-    const singleTechnology = {
+    const singleTechnology: SingleTechnology = {
       name: technology?.name,
       description: technology?.description?.replaceAll(',', ''),
       confidence: technology?.confidence,
       website: technology?.website,
       categories: [],
     };
-    technology.categories.forEach((category) => {
-      singleTechnology.categories.push(category.name);
-    });
+    technology.categories.forEach(
+      (category: { id: number; name: string; slug: string }) => {
+        singleTechnology.categories.push(category.name);
+      }
+    );
     singleTechnology.categories = singleTechnology.categories.join('|');
     technologyDataValues =
       technologyDataValues + Object.values(singleTechnology).join(',') + '\r\n';

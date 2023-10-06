@@ -25,7 +25,7 @@ import { Resizable } from 're-resizable';
  */
 import SiteSelection from '../siteReport/components/siteSelection';
 import { CookiesLanding } from '@cookie-analysis-tool/design-system';
-import type { CookieFrameStorageType } from '../../types';
+import type { CompleteJson, CookieFrameStorageType } from '../../types';
 import type {
   CookieTableData,
   TabFrames,
@@ -36,9 +36,14 @@ import SiteReport from '../siteReport';
 interface SiteMapReportProps {
   cookies: CookieFrameStorageType;
   technologies: TechnologyData[];
+  completeJson: CompleteJson | null;
 }
 
-const SiteMapReport = ({ cookies, technologies }: SiteMapReportProps) => {
+const SiteMapReport = ({
+  cookies,
+  technologies,
+  completeJson,
+}: SiteMapReportProps) => {
   const [selectedSite, setSelectedSite] = useState<string | null>(null);
   const [sites, setSites] = useState<string[]>([]);
 
@@ -153,6 +158,7 @@ const SiteMapReport = ({ cookies, technologies }: SiteMapReportProps) => {
           <SiteReport
             cookies={siteFilteredCookies}
             technologies={siteFilteredTechnologies}
+            completeJson={completeJson}
           />
         ) : (
           <CookiesLanding tabFrames={frames} tabCookies={reshapedCookies} />

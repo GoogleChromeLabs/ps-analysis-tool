@@ -13,6 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies
+ */
+import type { TechnologyData } from '@cookie-analysis-tool/common';
 
 export type CookieJsonDataType = {
   name: string;
@@ -33,10 +37,27 @@ export type CookieJsonDataType = {
   frameUrls: { [id: string]: string };
   isBlocked: boolean;
   blockedReasons: string[];
+  GDPR?: string;
 };
 
 export type CookieFrameStorageType = {
   [frame: string]: {
     [cookieKey: string]: CookieJsonDataType;
   };
+};
+
+export type CompleteJson = {
+  pageUrl: string;
+  cookieData: {
+    pageUrl: string;
+    cookieData: {
+      [frame: string]: {
+        cookiesCount: number;
+        frameCookies: {
+          [cookieKey: string]: CookieJsonDataType;
+        };
+      };
+    };
+  };
+  technologyData: TechnologyData[];
 };

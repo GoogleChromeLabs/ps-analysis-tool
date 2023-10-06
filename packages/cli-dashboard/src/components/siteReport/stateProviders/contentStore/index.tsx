@@ -21,7 +21,7 @@ import { useContextSelector, createContext } from 'use-context-selector';
 /**
  * Internal dependencies.
  */
-import type { CookieJsonDataType } from '../../../../types';
+import type { CompleteJson, CookieJsonDataType } from '../../../../types';
 import type {
   CookieTableData,
   TechnologyData,
@@ -31,6 +31,7 @@ export interface ContentStore {
   state: {
     tabCookies: { [key: string]: CookieTableData };
     technologies: TechnologyData[] | undefined;
+    completeJson: CompleteJson | null;
   };
 }
 
@@ -38,6 +39,7 @@ const initialState: ContentStore = {
   state: {
     tabCookies: {},
     technologies: [],
+    completeJson: null,
   },
 };
 
@@ -50,11 +52,13 @@ interface ContentStoreProviderProps {
     };
   };
   technologies?: TechnologyData[];
+  completeJson: CompleteJson | null;
 }
 
 export const Provider = ({
   cookies,
   technologies,
+  completeJson,
   children,
 }: PropsWithChildren<ContentStoreProviderProps>) => {
   const tabCookies = useMemo(
@@ -111,6 +115,7 @@ export const Provider = ({
         state: {
           tabCookies,
           technologies,
+          completeJson,
         },
       }}
     >

@@ -24,7 +24,11 @@ import type { TechnologyData } from '@cookie-analysis-tool/common';
  */
 import './app.css';
 import SiteReport from './components/siteReport';
-import type { CookieFrameStorageType, CookieJsonDataType } from './types';
+import type {
+  CompleteJson,
+  CookieFrameStorageType,
+  CookieJsonDataType,
+} from './types';
 import SiteMapReport from './components/siteMapReport';
 
 enum DisplayType {
@@ -35,6 +39,8 @@ enum DisplayType {
 const App = () => {
   const [cookies, setCookies] = useState<CookieFrameStorageType>({});
   const [technologies, setTechnologies] = useState<TechnologyData[]>([]);
+  const [completeJsonReport, setCompleteJsonReport] =
+    useState<CompleteJson | null>(null);
 
   const [type, path] = useMemo(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -50,7 +56,7 @@ const App = () => {
     (async () => {
       const response = await fetch(path);
       const data = await response.json();
-
+      setCompleteJsonReport(data);
       let _cookies: CookieFrameStorageType = {},
         _technologies: TechnologyData[] = [];
 
@@ -140,11 +146,21 @@ const App = () => {
   }
 
   if (type === DisplayType.SITEMAP) {
-    return <SiteMapReport cookies={cookies} technologies={technologies} />;
+    return (
+      <SiteMapReport
+        cookies={cookies}
+        technologies={technologies}
+        completeJson={completeJsonReport}
+      />
+    );
   } else {
     return (
       <div className="w-full h-screen flex">
-        <SiteReport cookies={cookies} technologies={technologies} />
+        <SiteReport
+          cookies={cookies}
+          technologies={technologies}
+          completeJson={completeJsonReport}
+        />
       </div>
     );
   }
