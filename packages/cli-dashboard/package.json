@@ -19,6 +19,8 @@
   "dependencies": {
 		"react": "^18.2.0",
     "classnames": "^2.3.2",
+    "jszip": "^3.10.1",
+    "ora": "^7.0.1",
     "react-dom": "^18.2.0",
     "re-resizable": "^6.9.9",
     "use-context-selector": "^1.4.1",

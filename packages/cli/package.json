@@ -7,6 +7,7 @@
     "build": "tsc",
     "dev": "tsc-watch"
   },
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool"
@@ -22,7 +23,10 @@
     "cli-color": "^2.0.3",
     "cli-table": "^0.3.11",
     "commander": "^10.0.1",
+    "file-saver": "^2.0.5",
     "fs-extra": "^11.1.1",
+    "jszip": "^3.10.1",
+    "ora": "^7.0.1",
     "promptly": "^3.2.0",
     "puppeteer": "^21.0.3",
     "simple-cookie": "^1.0.15",
