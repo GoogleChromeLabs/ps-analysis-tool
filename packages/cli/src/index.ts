@@ -21,6 +21,7 @@ import events from 'events';
 import { ensureFile, writeFile } from 'fs-extra';
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
+import { exec } from 'child_process';
 
 /**
  * Internal dependencies.
@@ -29,6 +30,7 @@ import { analyzeTechnologiesUrls } from './procedures/analyzeTechnologiesUrls';
 import { analyzeCookiesUrls } from './analyseCookiesUrl';
 import Utility from './utils/utility';
 import { fetchDictionary } from './utils/fetchCookieDictionary';
+import { delay } from './utils';
 
 events.EventEmitter.defaultMaxListeners = 15;
 const delayTime = 20000;
@@ -87,6 +89,16 @@ export const initialize = async () => {
     };
     await ensureFile(directory + '/out.json');
     await writeFile(directory + '/out.json', JSON.stringify(output, null, 4));
+
+    exec('npm run cli-dashboard:dev');
+
+    await delay(3000);
+
+    console.log(
+      `Report is being served on URL: http://localhost:9000?path=${encodeURIComponent(
+        directory + '/out.json'
+      )}`
+    );
   } else {
     const urls: Array<string> = await Utility.getUrlsFromSitemap(sitemapURL);
     const prefix = Utility.generatePrefix([...urls].shift() ?? 'untitled');
@@ -122,8 +134,17 @@ export const initialize = async () => {
 
     await ensureFile(directory + '/out.json');
     await writeFile(directory + '/out.json', JSON.stringify(result, null, 4));
+
+    exec('npm run cli-dashboard:dev');
+
+    await delay(3000);
+
+    console.log(
+      `Report is being served on URL: http://localhost:9000?path=${encodeURIComponent(
+        directory + '/out.json'
+      )}&type=sitemap`
+    );
   }
-  process.exit(1);
 };
 
 (async () => {
