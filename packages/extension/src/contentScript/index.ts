@@ -248,11 +248,13 @@ class WebpageContentScript {
     ) {
       removeAllPopovers();
 
-      this.port.postMessage({
-        attributes: {
-          iframeOrigin: '',
-        },
-      });
+      if (chrome.runtime?.id) {
+        this.port.postMessage({
+          attributes: {
+            iframeOrigin: '',
+          },
+        });
+      }
 
       this.bodyHoverStateSent = true;
     }
@@ -291,11 +293,13 @@ class WebpageContentScript {
     }
 
     try {
-      this.port.postMessage({
-        attributes: {
-          iframeOrigin: url ? url.origin : '',
-        },
-      });
+      if (chrome.runtime?.id) {
+        this.port.postMessage({
+          attributes: {
+            iframeOrigin: url ? url.origin : '',
+          },
+        });
+      }
     } catch (error) {
       this.abortInspection();
     }

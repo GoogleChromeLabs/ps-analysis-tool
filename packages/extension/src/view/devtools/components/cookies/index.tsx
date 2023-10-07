@@ -28,7 +28,6 @@ import {
   Button,
   CookiesLanding,
   ProgressBar,
-  ContextInvalidatedMessage,
 } from '@cookie-analysis-tool/design-system';
 
 const Cookies = () => {
@@ -102,11 +101,7 @@ const Cookies = () => {
             This tool works best with a single tab for cookie analysis.
           </p>
         )}
-        {contextInvalidated ? (
-          <ContextInvalidatedMessage />
-        ) : (
-          <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
-        )}
+        <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
       </div>
     </div>
   );

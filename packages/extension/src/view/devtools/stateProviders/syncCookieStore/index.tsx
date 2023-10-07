@@ -50,7 +50,6 @@ export interface CookieStoreContext {
   actions: {
     setSelectedFrame: React.Dispatch<React.SetStateAction<string | null>>;
     setIsInspecting: React.Dispatch<React.SetStateAction<boolean>>;
-    setContextInvalidated: React.Dispatch<React.SetStateAction<boolean>>;
     changeListeningToThisTab: () => void;
     getCookiesSetByJavascript: () => void;
     setContextInvalidated: React.Dispatch<React.SetStateAction<boolean>>;
@@ -325,57 +324,51 @@ export const Provider = ({ children }: PropsWithChildren) => {
   }, [tabId]);
 
   const changeListeningToThisTab = useCallback(async () => {
-    try {
-      let changedTabId = tabId?.toString();
+    let changedTabId = tabId?.toString();
 
-      if (!tabId) {
-        changedTabId = await getCurrentTabId();
-      }
-
-      if (!changedTabId) {
-        return;
-      }
-
-      await CookieStore.addTabData(changedTabId);
-
-      const storedTabData = Object.keys(await chrome.storage.local.get());
-
-      // eslint-disable-next-line guard-for-in
-      storedTabData.map(async (tabIdToBeDeleted) => {
-        if (
-          tabIdToBeDeleted !== changedTabId &&
-          tabIdToBeDeleted !== 'tabToRead'
-        ) {
-          await CookieStore.removeTabData(tabIdToBeDeleted);
-
-          if (!Number.isNaN(parseInt(tabIdToBeDeleted))) {
-            await chrome.action.setBadgeText({
-              tabId: parseInt(tabIdToBeDeleted),
-              text: '',
-            });
-          }
-        }
-        return Promise.resolve();
-      });
-
-      chrome.devtools.inspectedWindow.eval(
-        'window.location.href',
-        (result, isException) => {
-          if (!isException && typeof result === 'string') {
-            setTabUrl(result);
-          }
-        }
-      );
-
-      await chrome.tabs.reload(Number(changedTabId));
-
-      setIsCurrentTabBeingListenedTo(true);
-      setLoading(false);
-    } catch (error) {
-      if ((error as Error).message === 'Extension context invalidated.') {
-        setContextInvalidated(true);
-      }
+    if (!tabId) {
+      changedTabId = await getCurrentTabId();
     }
+
+    if (!changedTabId) {
+      return;
+    }
+
+    await CookieStore.addTabData(changedTabId);
+
+    const storedTabData = Object.keys(await chrome.storage.local.get());
+
+    // eslint-disable-next-line guard-for-in
+    storedTabData.map(async (tabIdToBeDeleted) => {
+      if (
+        tabIdToBeDeleted !== changedTabId &&
+        tabIdToBeDeleted !== 'tabToRead'
+      ) {
+        await CookieStore.removeTabData(tabIdToBeDeleted);
+
+        if (!Number.isNaN(parseInt(tabIdToBeDeleted))) {
+          await chrome.action.setBadgeText({
+            tabId: parseInt(tabIdToBeDeleted),
+            text: '',
+          });
+        }
+      }
+      return Promise.resolve();
+    });
+
+    chrome.devtools.inspectedWindow.eval(
+      'window.location.href',
+      (result, isException) => {
+        if (!isException && typeof result === 'string') {
+          setTabUrl(result);
+        }
+      }
+    );
+
+    await chrome.tabs.reload(Number(changedTabId));
+
+    setIsCurrentTabBeingListenedTo(true);
+    setLoading(false);
   }, [tabId]);
 
   const tabUpdateListener = useCallback(

@@ -24,8 +24,8 @@ import type { ResponseType } from '../types';
  * Adds a frame overlay and tooltip to an HTML iframe or element.
  * @param {HTMLIFrameElement | HTMLElement} frame - The HTML iframe or element to which the overlay and tooltip are added.
  * @param {ResponseType} data - The response data containing information to display in the tooltip.
- * @param type
- * @returns
+ * @param {string} type - The type of popover to add.
+ * @returns {HTMLElement} - The added popover.
  */
 const addPopover = (
   frame: HTMLIFrameElement | HTMLElement,

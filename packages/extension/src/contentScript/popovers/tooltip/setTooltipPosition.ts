@@ -19,7 +19,6 @@
  * @param {HTMLElement} frame - The target f element.
  * @param {boolean} isHiddenFrame - Indicates if the frame is hidden.
  * @param {string | undefined} selectedFrame - The selected frame's origin.
- * @param selectedFrame
  * @returns {void}
  */
 const setTooltipPosition = (
