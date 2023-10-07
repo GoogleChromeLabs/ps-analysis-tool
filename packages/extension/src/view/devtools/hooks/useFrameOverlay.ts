@@ -39,12 +39,16 @@ const useFrameOverlay = () => {
     setSelectedFrame,
     setContextInvalidated,
     selectedFrame,
+    isCurrentTabBeingListenedTo,
+    allowedNumberOfTabs,
   } = useCookieStore(({ state, actions }) => ({
     setContextInvalidated: actions.setContextInvalidated,
     isInspecting: state.isInspecting,
     setSelectedFrame: actions.setSelectedFrame,
     setIsInspecting: actions.setIsInspecting,
     selectedFrame: state.selectedFrame,
+    isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
+    allowedNumberOfTabs: state.allowedNumberOfTabs,
   }));
 
   const { filteredCookies } = useFilterManagementStore(({ state }) => ({
@@ -95,6 +99,18 @@ const useFrameOverlay = () => {
       });
     })();
   }, [isInspecting, setSelectedFrame, setIsInspecting, setContextInvalidated]);
+
+  useEffect(() => {
+    if (
+      allowedNumberOfTabs === 'single' &&
+      !isCurrentTabBeingListenedTo &&
+      chrome.runtime?.id &&
+      portRef.current
+    ) {
+      portRef.current.disconnect();
+      portRef.current = null;
+    }
+  }, [allowedNumberOfTabs, isCurrentTabBeingListenedTo]);
 
   useEffect(() => {
     if (isInspecting && portRef.current) {
