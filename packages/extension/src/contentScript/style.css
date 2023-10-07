@@ -17,6 +17,8 @@ html body .ps-fixed[popover] {
 html body .ps-tooltip[popover] {
     background-color: transparent !important;
     padding: 10px 10px 15px 10px !important;
+    max-width: 500px !important;
+    min-width: 200px !important;
 }
 
 html body .ps-tooltip[popover] > .ps-content {
@@ -26,14 +28,6 @@ html body .ps-tooltip[popover] > .ps-content {
     box-shadow: color-mix(in srgb, #3c4043 30%, transparent) 0 1px 2px 0, color-mix(in srgb, #3c4043 15%, transparent) 0 2px 6px 2px !important;
     margin: initial !important;
     padding: 10px !important;
-}
-
-html body .ps-tooltip[popover] > .ps-content .ps-frame-origin {
-    max-width: 360px !important;
-    display: inline-block !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
 }
 
 html body .ps-tooltip[popover] > .ps-content p {
