@@ -241,10 +241,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const storeChangeListener = useCallback(
     async (changes: { [key: string]: chrome.storage.StorageChange }) => {
-      if (!chrome.runtime?.id) {
-        setContextInvalidated(true);
-      }
-
       if (
         tabId &&
         Object.keys(changes).includes(tabId.toString()) &&
