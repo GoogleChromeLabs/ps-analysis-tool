@@ -35,11 +35,16 @@ import SiteReport from '../siteReport';
 import SiteMapAffectedCookies from './sitemapAffectedCookies';
 
 interface SiteMapReportProps {
+  landingPageCookies: CookieFrameStorageType;
   cookies: CookieFrameStorageType;
   technologies: TechnologyData[];
 }
 
-const SiteMapReport = ({ cookies, technologies }: SiteMapReportProps) => {
+const SiteMapReport = ({
+  cookies,
+  technologies,
+  landingPageCookies,
+}: SiteMapReportProps) => {
   const [selectedSite, setSelectedSite] = useState<string | null>(null);
   const [sites, setSites] = useState<string[]>([]);
   const [selectedTopLevelMenu, setSelectedTopLevelMenu] =
@@ -58,7 +63,7 @@ const SiteMapReport = ({ cookies, technologies }: SiteMapReportProps) => {
 
   const frames = useMemo(() => {
     return Object.keys(cookies).reduce((acc, frame) => {
-      if (frame?.includes('http')) {
+      if (frame?.includes('http') || frame === 'Unknown Frame') {
         acc[frame] = {} as TabFrames[string];
       }
       return acc;
@@ -67,8 +72,10 @@ const SiteMapReport = ({ cookies, technologies }: SiteMapReportProps) => {
 
   const reshapedCookies = useMemo(
     () =>
-      Object.entries(cookies)
-        .filter(([frame]) => frame.includes('http'))
+      Object.entries(landingPageCookies)
+        .filter(
+          ([frame]) => frame.includes('http') || frame === 'Unknown Frame'
+        )
         .map(([frame, _cookies]) => {
           const newCookies = Object.fromEntries(
             Object.entries(_cookies).map(([key, cookie]) => [
@@ -110,7 +117,7 @@ const SiteMapReport = ({ cookies, technologies }: SiteMapReportProps) => {
             ...cookieObj,
           };
         }, {}),
-    [cookies]
+    [landingPageCookies]
   );
 
   const siteFilteredCookies = useMemo(() => {

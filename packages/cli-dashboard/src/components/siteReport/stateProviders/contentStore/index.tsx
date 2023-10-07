@@ -60,7 +60,9 @@ export const Provider = ({
   const tabCookies = useMemo(
     () =>
       Object.entries(cookies)
-        .filter(([frame]) => frame.includes('http'))
+        .filter(
+          ([frame]) => frame.includes('http') || frame === 'Unknown Frame'
+        )
         .map(([frame, _cookies]) => {
           const newCookies = Object.fromEntries(
             Object.values(_cookies).map((cookie) => [

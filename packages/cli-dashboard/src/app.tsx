@@ -35,6 +35,8 @@ enum DisplayType {
 
 const App = () => {
   const [cookies, setCookies] = useState<CookieFrameStorageType>({});
+  const [landingPageCookies, setLandingPageCookies] =
+    useState<CookieFrameStorageType>({});
   const [technologies, setTechnologies] = useState<TechnologyData[]>([]);
 
   const [type, path] = useMemo(() => {
@@ -54,6 +56,7 @@ const App = () => {
 
       let _cookies: CookieFrameStorageType = {},
         _technologies: TechnologyData[] = [];
+      const _landingPageCookies: CookieFrameStorageType = {};
 
       if (type === DisplayType.SITEMAP) {
         data.forEach(
@@ -95,6 +98,36 @@ const App = () => {
                 _cookies[frame][key] = cookie;
               });
             });
+
+            const _landingCData = Object.entries(cookieData).reduce(
+              (acc: CookieFrameStorageType, [frame, _data]) => {
+                acc[frame] = Object.fromEntries(
+                  Object.entries(_data.frameCookies).map(([key, cookie]) => [
+                    key,
+                    {
+                      ...cookie,
+                      pageUrl,
+                      frameUrl: frame,
+                    } as CookieJsonDataType,
+                  ])
+                );
+
+                return acc;
+              },
+              {}
+            );
+
+            Object.entries(_landingCData).forEach(([frame, _cData]) => {
+              if (!_landingPageCookies[frame]) {
+                _landingPageCookies[frame] = {};
+              }
+
+              Object.entries(_cData).forEach(([key, cookie]) => {
+                _landingPageCookies[frame][key] = cookie;
+              });
+            });
+
+            setLandingPageCookies(_landingPageCookies);
 
             _technologies.push(
               ...technologyData.map((technology) => ({
@@ -141,7 +174,13 @@ const App = () => {
   }
 
   if (type === DisplayType.SITEMAP) {
-    return <SiteMapReport cookies={cookies} technologies={technologies} />;
+    return (
+      <SiteMapReport
+        landingPageCookies={landingPageCookies}
+        cookies={cookies}
+        technologies={technologies}
+      />
+    );
   } else {
     return (
       <div className="w-full h-screen flex">

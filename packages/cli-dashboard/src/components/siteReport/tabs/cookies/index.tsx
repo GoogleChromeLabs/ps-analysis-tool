@@ -35,7 +35,10 @@ const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
   const tabFrames = useMemo<TabFrames>(
     () =>
       Object.values(tabCookies).reduce((acc, cookie) => {
-        if (cookie.frameUrl?.includes('http')) {
+        if (
+          cookie.frameUrl?.includes('http') ||
+          cookie.frameUrl === 'Unknown Frame'
+        ) {
           acc[cookie.frameUrl] = {} as TabFrames[string];
         }
         return acc;
