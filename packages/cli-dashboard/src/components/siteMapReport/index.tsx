@@ -127,17 +127,10 @@ const SiteMapReport = ({
 
   const affectedCookies = useMemo(
     () =>
-      Object.entries(reshapedCookies).reduce(
-        (acc, [key, cookie]) => {
-          if (!cookie.isCookieSet) {
-            acc[key] = cookie;
-          }
-
-          return acc;
-        },
-        {} as {
-          [key: string]: CookieTableData;
-        }
+      Object.fromEntries(
+        Object.entries(reshapedCookies).filter(
+          ([, cookie]) => !cookie.isCookieSet
+        )
       ),
     [reshapedCookies]
   );
