@@ -16,9 +16,10 @@
 /**
  * Internal dependencies.
  */
-import { TOOLTIP_CLASS } from '../../constants';
+import { TOOLTIP_CLASS, ALL_ALLOWED_FEATURES } from '../../constants';
 import getFrameAttributes from '../../utils/getFrameAttributes';
 import type { ResponseType } from '../../types';
+import getAllowedFeatures from '../../utils/getAllowedFeatures';
 
 /**
  * Creates a tooltip element for an iframe overlay.
@@ -78,8 +79,7 @@ const createTooltip = (
   }
 
   const origin = isMainFrame ? data.selectedFrame : frameOrigin;
-
-  const allowedFeatures = attributes?.allow ? attributes?.allow.trim() : '';
+  const allowedFeatured = getAllowedFeatures(frame);
 
   const info: Record<string, string> = {};
 
@@ -106,7 +106,8 @@ const createTooltip = (
     : '(empty)';
   info['First-party cookies'] = String(data?.firstPartyCookies || '0');
   info['Third-party cookies'] = String(data?.thirdPartyCookies || '0');
-  info['Allowed features'] = String(allowedFeatures);
+  info['Allowed features'] =
+    allowedFeatured === ALL_ALLOWED_FEATURES ? 'all' : allowedFeatured;
 
   // Reset the dataset of parent frame.
   if (insideFrame) {
