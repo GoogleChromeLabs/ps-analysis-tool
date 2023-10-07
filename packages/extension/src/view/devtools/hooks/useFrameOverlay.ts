@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 /**
  * Internal dependencies.
@@ -54,6 +54,34 @@ const useFrameOverlay = () => {
   const { filteredCookies } = useFilterManagementStore(({ state }) => ({
     filteredCookies: state.filteredCookies,
   }));
+  const [connectedToPort, setConnectedToPort] = useState(false);
+
+  const connectToPort = useCallback(async () => {
+    const tabId = await getCurrentTabId();
+
+    if (!tabId) {
+      return;
+    }
+
+    const portName = `${WEBPAGE_PORT_NAME}-${tabId}`;
+
+    portRef.current = chrome.tabs.connect(Number(tabId), {
+      name: portName,
+    });
+    portRef.current.onMessage.addListener((response: Response) => {
+      setSelectedFrame(response.attributes.iframeOrigin || '');
+    });
+
+    portRef.current.onDisconnect.addListener(() => {
+      setIsInspecting(false);
+    });
+
+    // For the first time.
+    portRef.current.postMessage({
+      isInspecting: true,
+    });
+    setConnectedToPort(true);
+  }, [setIsInspecting, setSelectedFrame]);
 
   // When inspect button is clicked.
   useEffect(() => {
@@ -73,32 +101,15 @@ const useFrameOverlay = () => {
         return;
       }
 
-      const tabId = await getCurrentTabId();
-
-      if (!tabId) {
-        return;
-      }
-
-      const portName = `${WEBPAGE_PORT_NAME}-${tabId}`;
-
-      portRef.current = chrome.tabs.connect(Number(tabId), {
-        name: portName,
-      });
-
-      portRef.current.onMessage.addListener((response: Response) => {
-        setSelectedFrame(response.attributes.iframeOrigin || '');
-      });
-
-      portRef.current.onDisconnect.addListener(() => {
-        setIsInspecting(false);
-      });
-
-      // For the first time.
-      portRef.current.postMessage({
-        isInspecting: true,
-      });
+      await connectToPort();
     })();
-  }, [isInspecting, setSelectedFrame, setIsInspecting, setContextInvalidated]);
+  }, [
+    isInspecting,
+    setSelectedFrame,
+    setIsInspecting,
+    setContextInvalidated,
+    connectToPort,
+  ]);
 
   useEffect(() => {
     if (
@@ -114,22 +125,34 @@ const useFrameOverlay = () => {
   }, [allowedNumberOfTabs, isCurrentTabBeingListenedTo, setIsInspecting]);
 
   useEffect(() => {
-    if (isInspecting && portRef.current) {
-      const thirdPartyCookies = filteredCookies
-        ? filteredCookies.filter((cookie) => !cookie.isFirstParty)
-        : [];
-      const firstPartyCookies = filteredCookies
-        ? filteredCookies.filter((cookie) => cookie.isFirstParty)
-        : [];
-
-      portRef.current.postMessage({
-        selectedFrame,
-        thirdPartyCookies: thirdPartyCookies.length,
-        firstPartyCookies: firstPartyCookies.length,
-        isInspecting,
-      });
-    }
-  }, [selectedFrame, filteredCookies, isInspecting]);
+    (async () => {
+      if (isInspecting) {
+        if (!connectedToPort) {
+          await connectToPort();
+        }
+        if (portRef.current) {
+          const thirdPartyCookies = filteredCookies
+            ? filteredCookies.filter((cookie) => !cookie.isFirstParty)
+            : [];
+          const firstPartyCookies = filteredCookies
+            ? filteredCookies.filter((cookie) => cookie.isFirstParty)
+            : [];
+          portRef.current.postMessage({
+            selectedFrame,
+            thirdPartyCookies: thirdPartyCookies.length,
+            firstPartyCookies: firstPartyCookies.length,
+            isInspecting,
+          });
+        }
+      }
+    })();
+  }, [
+    selectedFrame,
+    filteredCookies,
+    isInspecting,
+    connectToPort,
+    connectedToPort,
+  ]);
 };
 
 export default useFrameOverlay;
