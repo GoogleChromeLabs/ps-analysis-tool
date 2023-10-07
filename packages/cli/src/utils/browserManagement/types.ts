@@ -20,14 +20,14 @@ export type Cookie = {
   path: string;
   value: string;
   sameSite: string;
-  expires: string;
+  expires: string | Date | number;
   httpOnly: boolean;
   secure: boolean;
   isBlocked?: boolean;
   platform?: string;
   category?: string;
   GDPR?: string;
-  isFirstParty: boolean;
+  isFirstParty?: boolean;
 };
 
 export type ViewportConfig = {
