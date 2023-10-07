@@ -13,30 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-declare module '*.svg' {
-  import React = require('react');
-  const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
-  export default ReactComponent;
-}
+/**
+ * External dependencies.
+ */
+import { getDomain } from 'tldts';
 
-declare global {
-  interface Document {
-    browsingTopics(): Promise<Array<{ [key: string]: string | number }>>;
-    featurePolicy: {
-      allowsFeature: (arg0: string) => boolean;
-    };
-  }
-}
+/**
+ * Internal dependencies.
+ */
+import fetchRWSInfo from '../../utils/fetchRWSInfo';
+import type { RelatedWebsiteSetType } from '../../@types';
+import findRWSURLSets from '../../utils/findRWSURLSets';
 
-export type RelatedWebsiteSetType = {
-  primary: string;
-  contact: string;
-  associatedSites?: string[];
-  serviceSites?: string[];
-  ccTLDs?: {
-    [site: string]: string[];
-  };
-  rationaleBySite?: {
-    [url: string]: string;
-  };
+const isOnRWS = async (origin: string) => {
+  const rwsSets: RelatedWebsiteSetType[] = (await fetchRWSInfo()).sets || [];
+
+  const RWSURLSets = findRWSURLSets(getDomain(origin), rwsSets);
+
+  return Boolean(RWSURLSets);
 };
+
+export default isOnRWS;

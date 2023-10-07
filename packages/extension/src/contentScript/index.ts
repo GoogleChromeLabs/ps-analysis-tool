@@ -48,7 +48,6 @@ class WebpageContentScript {
     this.onMessage = this.onMessage.bind(this);
     this.onDisconnect = this.onDisconnect.bind(this);
     this.handleMouseMove = this.handleMouseMove.bind(this);
-
     this.listenToConnection();
     this.setTopics();
   }
