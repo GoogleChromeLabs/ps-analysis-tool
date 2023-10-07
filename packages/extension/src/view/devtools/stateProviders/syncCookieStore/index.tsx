@@ -33,6 +33,7 @@ import { getCurrentTabId } from '../../../../utils/getCurrentTabId';
 import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
 import type { TabCookies, TabFrames } from '@cookie-analysis-tool/common';
 import setDocumentCookies from '../../../../utils/setDocumentCookies';
+import isOnRWS from '../../../../contentScript/utils/isOnRWS';
 
 export interface CookieStoreContext {
   state: {
@@ -122,28 +123,31 @@ export const Provider = ({ children }: PropsWithChildren) => {
       const currentTabFrames = await chrome.webNavigation.getAllFrames({
         tabId: _tabId,
       });
+      const modifiedTabFrames: {
+        [key: string]: { frameIds: number[]; isOnRWS?: boolean };
+      } = {};
 
-      setTabFrames(() => {
-        const modifiedTabFrames: {
-          [key: string]: { frameIds: number[] };
-        } = {};
-
-        currentTabFrames?.forEach(({ url, frameId }) => {
-          if (url && url.includes('http')) {
-            const parsedUrl = regexForFrameUrl.exec(url);
-
-            if (parsedUrl && parsedUrl[0]) {
-              if (modifiedTabFrames[parsedUrl[0]]) {
-                modifiedTabFrames[parsedUrl[0]].frameIds.push(frameId);
-              } else {
-                modifiedTabFrames[parsedUrl[0]] = { frameIds: [frameId] };
-              }
+      currentTabFrames?.forEach(({ url, frameId }) => {
+        if (url && url.includes('http')) {
+          const parsedUrl = regexForFrameUrl.exec(url);
+          if (parsedUrl && parsedUrl[0]) {
+            if (modifiedTabFrames[parsedUrl[0]]) {
+              modifiedTabFrames[parsedUrl[0]].frameIds.push(frameId);
+            } else {
+              modifiedTabFrames[parsedUrl[0]] = {
+                frameIds: [frameId],
+              };
             }
           }
-        });
-
-        return modifiedTabFrames;
+        }
       });
+      await Promise.all(
+        Object.keys(modifiedTabFrames).map(async (tabFrame) => {
+          modifiedTabFrames[tabFrame].isOnRWS = await isOnRWS(tabFrame);
+          return tabFrame;
+        })
+      );
+      setTabFrames(modifiedTabFrames);
     },
     []
   );

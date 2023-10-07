@@ -24,7 +24,7 @@ const callback = (panel: {
 }) => {
   // Fires when the user switches to the panel.
   panel.onShown.addListener(async () => {
-    if (!chrome.runtime.id) {
+    if (!chrome.runtime?.id) {
       return;
     }
 
@@ -40,7 +40,7 @@ const callback = (panel: {
   });
 
   panel.onHidden.addListener(async () => {
-    if (!chrome.runtime.id) {
+    if (!chrome.runtime?.id) {
       return;
     }
 
