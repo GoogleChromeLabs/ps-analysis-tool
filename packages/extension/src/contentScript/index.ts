@@ -125,30 +125,97 @@ class WebpageContentScript {
     }
 
     const frameElements = findSelectedFrameElements(response.selectedFrame);
+    const numberOfFrames = frameElements.length;
 
     // Remove previous frames.
     this.removeAllPopovers();
 
-    if (!frameElements.length) {
+    if (!numberOfFrames) {
       return;
     }
 
-    // Its important to insert overlays and tooltips seperately and in the same order, to avoid z-index issue.
-    frameElements.forEach((frame) => {
-      this.insertOverlay(frame, response);
-    });
-
+    let hiddenIFrameCount = 0;
     let firstToolTip: HTMLElement | null = null;
-
-    frameElements.forEach((frame, index) => {
-      const tooltip = this.insertTooltip(frame, response);
-
-      if (0 === index) {
-        firstToolTip = tooltip;
-      }
-    });
-
     const frameToScrollTo = frameElements[0];
+
+    for (let i = 0; i < numberOfFrames; i++) {
+      const { width, height } = frameElements[i].getBoundingClientRect();
+      if (height === 0 || width === 0) {
+        hiddenIFrameCount++;
+      }
+    }
+
+    const visibleIFrameCount = numberOfFrames - hiddenIFrameCount;
+
+    if (0 === hiddenIFrameCount) {
+      // Its important to insert overlays and tooltips seperately and in the same order, to avoid z-index issue.
+      frameElements.forEach((frame) => {
+        this.insertOverlay(
+          frame,
+          visibleIFrameCount,
+          hiddenIFrameCount,
+          response
+        );
+      });
+
+      frameElements.forEach((frame, index) => {
+        const tooltip = this.insertTooltip(
+          frame,
+          visibleIFrameCount,
+          hiddenIFrameCount,
+          response
+        );
+
+        if (0 === index) {
+          firstToolTip = tooltip;
+        }
+      });
+    } else if (numberOfFrames === hiddenIFrameCount) {
+      const frame = frameElements[0];
+
+      this.insertOverlay(
+        frame,
+        visibleIFrameCount,
+        hiddenIFrameCount,
+        response
+      );
+      this.insertTooltip(
+        frame,
+        visibleIFrameCount,
+        hiddenIFrameCount,
+        response
+      );
+    } else {
+      // Its important to insert overlays and tooltips seperately and in the same order, to avoid z-index issue.
+      frameElements.forEach((frame) => {
+        const { width, height } = frame.getBoundingClientRect();
+
+        if (!(height === 0 || width === 0)) {
+          this.insertOverlay(
+            frame,
+            visibleIFrameCount,
+            hiddenIFrameCount,
+            response
+          );
+        }
+      });
+
+      frameElements.forEach((frame, index) => {
+        const { width, height } = frame.getBoundingClientRect();
+
+        if (!(height === 0 || width === 0)) {
+          const tooltip = this.insertTooltip(
+            frame,
+            visibleIFrameCount,
+            hiddenIFrameCount,
+            response
+          );
+          if (0 === index) {
+            firstToolTip = tooltip;
+          }
+        }
+      });
+    }
 
     if (
       firstToolTip &&
@@ -163,8 +230,19 @@ class WebpageContentScript {
     }
   }
 
-  insertOverlay(frame: HTMLElement, response: ResponseType) {
-    const overlay = addPopover(frame, response, 'overlay');
+  insertOverlay(
+    frame: HTMLElement,
+    numberOfVisibleFrames: number,
+    numberOfHiddenFrames: number,
+    response: ResponseType
+  ) {
+    const overlay = addPopover(
+      frame,
+      response,
+      numberOfVisibleFrames,
+      numberOfHiddenFrames,
+      'overlay'
+    );
 
     const updatePosition = () => {
       setOverlayPosition(overlay, frame);
@@ -177,9 +255,17 @@ class WebpageContentScript {
 
   insertTooltip(
     frame: HTMLElement,
+    numberOfVisibleFrames: number,
+    numberOfHiddenFrames: number,
     response: ResponseType
   ): HTMLElement | null {
-    const tooltip = addPopover(frame, response, 'tooltip');
+    const tooltip = addPopover(
+      frame,
+      response,
+      numberOfVisibleFrames,
+      numberOfHiddenFrames,
+      'tooltip'
+    );
 
     const updatePosition = () => {
       const isHidden = !frame.clientWidth;
@@ -266,16 +352,23 @@ class WebpageContentScript {
     this.bodyHoverStateSent = false;
 
     const frame = target as HTMLIFrameElement;
-    const srcAttribute = frame.getAttribute('src');
+    let srcAttribute = frame.getAttribute('src');
+
+    srcAttribute = srcAttribute === 'about:blank' ? '' : srcAttribute;
 
     if (!srcAttribute) {
+      // User is able to hover over it so it is visible,
+      // also it doesn't have src so it cannot be realted to other frames.
+      const visibleIFrameCount = 1;
+      const hiddenIFrameCount = 0;
+
       this.removeAllPopovers();
 
-      this.insertOverlay(frame, {
+      this.insertOverlay(frame, visibleIFrameCount, hiddenIFrameCount, {
         isInspecting: true,
       });
 
-      this.insertTooltip(frame, {
+      this.insertTooltip(frame, visibleIFrameCount, hiddenIFrameCount, {
         isInspecting: true,
       });
     }

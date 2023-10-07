@@ -24,12 +24,16 @@ import type { ResponseType } from '../types';
  * Adds a frame overlay and tooltip to an HTML iframe or element.
  * @param {HTMLIFrameElement | HTMLElement} frame - The HTML iframe or element to which the overlay and tooltip are added.
  * @param {ResponseType} data - The response data containing information to display in the tooltip.
- * @param {string} type - The type of popover to add.
+ * @param {number} numberOfVisibleFrames - The number of visible frames.
+ * @param {number} numberOfHiddenFrames - The number of hidden frames.
+ * @param {string} type - Type of popover (overlay | tooltip)
  * @returns {HTMLElement} - The added popover.
  */
 const addPopover = (
   frame: HTMLIFrameElement | HTMLElement,
   data: ResponseType,
+  numberOfVisibleFrames: number,
+  numberOfHiddenFrames: number,
   type = 'overlay'
 ): HTMLElement | null => {
   const body = document.querySelector('body');
@@ -48,7 +52,12 @@ const addPopover = (
 
     return overlay;
   } else {
-    const tooltip = createTooltip(frame, data);
+    const tooltip = createTooltip(
+      frame,
+      data,
+      numberOfVisibleFrames,
+      numberOfHiddenFrames
+    );
 
     if (tooltip) {
       body.appendChild(tooltip);
