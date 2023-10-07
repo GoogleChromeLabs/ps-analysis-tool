@@ -24,12 +24,17 @@ import { Resizable } from 're-resizable';
  * Internal dependencies.
  */
 import SiteSelection from '../siteReport/components/siteSelection';
-import { CookiesLanding } from '@cookie-analysis-tool/design-system';
+import {
+  CookiesLanding,
+  CookiesMatrix,
+} from '@cookie-analysis-tool/design-system';
 import type { CookieFrameStorageType } from '../../types';
-import type {
-  CookieTableData,
-  TabFrames,
-  TechnologyData,
+import {
+  prepareCookieStatsComponents,
+  type CookieTableData,
+  type TabFrames,
+  type TechnologyData,
+  prepareCookiesCount,
 } from '@cookie-analysis-tool/common';
 import SiteReport from '../siteReport';
 import SiteMapAffectedCookies from './sitemapAffectedCookies';
@@ -185,7 +190,21 @@ const SiteMapReport = ({
             technologies={siteFilteredTechnologies}
           />
         ) : selectedTopLevelMenu === 'report' ? (
-          <CookiesLanding tabFrames={frames} tabCookies={reshapedCookies} />
+          <>
+            <CookiesLanding tabFrames={frames} tabCookies={reshapedCookies}>
+              <CookiesMatrix
+                tabCookies={reshapedCookies}
+                cookiesStatsComponents={prepareCookieStatsComponents(
+                  prepareCookiesCount(reshapedCookies)
+                )}
+                tabFrames={frames}
+                title="Affected Cookies Insights"
+                description="Following are the insights about cookies that will be affected 3P cookie depreciation."
+                showHorizontalMatrix={false}
+                showInfoIcon={false}
+              />
+            </CookiesLanding>
+          </>
         ) : (
           <SiteMapAffectedCookies
             cookies={Object.values(reshapedCookies).filter(

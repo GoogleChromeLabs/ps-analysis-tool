@@ -34,9 +34,16 @@ import { MessageBox } from '@cookie-analysis-tool/design-system';
 interface CookiesLandingProps {
   tabFrames: TabFrames | null;
   tabCookies: TabCookies | null;
+  children?: React.ReactNode;
+  showInfoIcon?: boolean;
 }
 
-const CookiesLanding = ({ tabCookies, tabFrames }: CookiesLandingProps) => {
+const CookiesLanding = ({
+  tabCookies,
+  tabFrames,
+  children,
+  showInfoIcon = true,
+}: CookiesLandingProps) => {
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
 
@@ -55,10 +62,12 @@ const CookiesLanding = ({ tabCookies, tabFrames }: CookiesLandingProps) => {
                 bodyText="Please try reloading the page"
               />
             ))}
+        {children && <div className="mb-10">{children}</div>}
         <CookiesMatrix
           tabCookies={tabCookies}
           cookiesStatsComponents={cookiesStatsComponents}
           tabFrames={tabFrames}
+          showInfoIcon={showInfoIcon}
         />
       </div>
     </div>

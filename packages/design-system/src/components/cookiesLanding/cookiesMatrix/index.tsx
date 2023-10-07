@@ -38,6 +38,10 @@ interface CookiesMatrixProps {
   tabCookies: TabCookies | null;
   cookiesStatsComponents: CookieStatsComponents;
   tabFrames: TabFrames | null;
+  title?: string;
+  description?: string;
+  showHorizontalMatrix?: boolean;
+  showInfoIcon?: boolean;
 }
 
 interface LegendData {
@@ -74,6 +78,10 @@ const CookiesMatrix = ({
   tabCookies,
   cookiesStatsComponents,
   tabFrames,
+  title = 'Cookies Insights',
+  description = '',
+  showHorizontalMatrix = true,
+  showInfoIcon = true,
 }: CookiesMatrixProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -112,14 +120,19 @@ const CookiesMatrix = ({
   return (
     <div className="w-full" data-testid="cookies-matrix">
       <div>
-        <div className="flex gap-x-5 justify-between">
-          <h4 className="flex items-center gap-1 pb-3 flex-1 grow border-b border-bright-gray dark:border-quartz text-xs font-bold text-darkest-gray dark:text-bright-gray uppercase">
-            <span>Cookies Insights</span>
-            <span title="An active ad-blocker or other cookie extensions may affect the results.">
-              <InfoIcon />
-            </span>
-          </h4>
-          <h4 className="pb-3 flex-1 grow border-b border-bright-gray dark:border-quartz text-xs font-bold text-darkest-gray dark:text-bright-gray text-right">
+        <div className="flex gap-x-5 justify-between border-b border-bright-gray dark:border-quartz">
+          <div className="pb-3">
+            <h4 className="flex items-center gap-1 flex-1 grow text-xs font-bold text-darkest-gray dark:text-bright-gray uppercase">
+              <span>{title}</span>
+              {showInfoIcon && (
+                <span title="An active ad-blocker or other cookie extensions may affect the results.">
+                  <InfoIcon />
+                </span>
+              )}
+            </h4>
+            <p className="text-xs">{description}</p>
+          </div>
+          <h4 className="pb-3 flex-1 grow text-xs font-bold text-darkest-gray dark:text-bright-gray text-right">
             <button onClick={() => setIsExpanded((state) => !state)}>
               {isExpanded ? 'Collapse View' : 'Expand View'}
             </button>
@@ -127,15 +140,19 @@ const CookiesMatrix = ({
         </div>
         <Matrix dataComponents={dataComponents} />
       </div>
-      <div>
-        {matrixHorizontalComponents.map((matrixHorizontalComponent, index) => (
-          <MatrixComponentHorizontal
-            key={index}
-            {...matrixHorizontalComponent}
-            containerClasses="px-3.5 py-4"
-          />
-        ))}
-      </div>
+      {showHorizontalMatrix && (
+        <div>
+          {matrixHorizontalComponents.map(
+            (matrixHorizontalComponent, index) => (
+              <MatrixComponentHorizontal
+                key={index}
+                {...matrixHorizontalComponent}
+                containerClasses="px-3.5 py-4"
+              />
+            )
+          )}
+        </div>
+      )}
     </div>
   );
 };
