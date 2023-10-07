@@ -235,8 +235,19 @@ class WebpageContentScript {
    */
   handleHoverEvent(event: MouseEvent): void {
     const target = event.target as HTMLElement;
+    const isNonIframeElement = target.tagName !== 'IFRAME';
 
     this.isHoveringOverPage = true;
+
+    if (this.isInspecting && isNonIframeElement && this.port) {
+      removeAllPopovers();
+
+      this.port.postMessage({
+        attributes: {
+          iframeOrigin: '',
+        },
+      });
+    }
 
     if (!this.isInspecting || target.tagName !== 'IFRAME') {
       return;
