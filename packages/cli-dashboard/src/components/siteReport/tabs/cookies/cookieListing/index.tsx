@@ -45,6 +45,11 @@ const CookieListing = ({ selectedFrameUrl }: CookieListingProps) => {
 
   return (
     <div className="w-full h-full flex flex-col">
+      <div className="w-full h-[25px] px-2 flex items-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green">
+        <div className="text-right w-full text-xxxs text-secondary">
+          Count: {Number(tabCookies?.length) || 0}
+        </div>
+      </div>
       <div className="w-full flex-1 overflow-hidden h-full flex flex-col">
         <Resizable
           defaultSize={{

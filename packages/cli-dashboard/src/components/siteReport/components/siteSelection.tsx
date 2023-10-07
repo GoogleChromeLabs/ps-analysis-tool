@@ -16,28 +16,39 @@
 /**
  * External dependencies.
  */
-import { ArrowDownWhite } from '@cookie-analysis-tool/design-system';
+import { ArrowDown, ArrowDownWhite } from '@cookie-analysis-tool/design-system';
 import React, { useState } from 'react';
 
 interface SiteSelectionProps {
   sites: string[];
   selectedSite: string | null;
   setSelectedSite: (site: string | null) => void;
+  isSelectedTopLevelMenu: boolean;
+  selectTopLevelMenu: () => void;
 }
 
 const SiteSelection = ({
   sites,
   selectedSite,
   setSelectedSite,
+  isSelectedTopLevelMenu,
+  selectTopLevelMenu,
 }: SiteSelectionProps) => {
   const isSiteSelected = Boolean(selectedSite);
   const [isOpen, setIsOpen] = useState(isSiteSelected);
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full overflow-auto">
       <div
-        onClick={() => setSelectedSite(null)}
+        onClick={() => {
+          setSelectedSite(null);
+          selectTopLevelMenu();
+        }}
         className={`w-full flex items-center pl-6 py-0.5 outline-0 ${
-          isSiteSelected ? 'bg-gainsboro' : 'bg-royal-blue text-white'
+          isSelectedTopLevelMenu
+            ? isSiteSelected
+              ? 'bg-gainsboro'
+              : 'bg-royal-blue text-white'
+            : 'bg-white'
         } cursor-pointer`}
       >
         <div
@@ -48,7 +59,11 @@ const SiteSelection = ({
             !isOpen && '-rotate-90'
           }`}
         >
-          <ArrowDownWhite />
+          {isSiteSelected || !isSelectedTopLevelMenu ? (
+            <ArrowDown />
+          ) : (
+            <ArrowDownWhite />
+          )}
         </div>
         <p>Sitemap report</p>
       </div>
@@ -58,6 +73,7 @@ const SiteSelection = ({
             <li
               onClick={() => {
                 setSelectedSite(site);
+                selectTopLevelMenu();
               }}
               className={`truncate pl-6 cursor-pointer ${
                 site === selectedSite ? 'bg-royal-blue text-white' : ''

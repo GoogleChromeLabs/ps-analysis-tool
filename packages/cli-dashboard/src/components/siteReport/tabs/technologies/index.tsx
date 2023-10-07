@@ -75,6 +75,11 @@ const Technologies = () => {
 
   return (
     <div className="w-full h-full overflow-auto text-outer-space-crayola border-x border-american-silver dark:border-quartz">
+      <div className="w-full h-[25px] px-2 flex items-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green">
+        <div className="text-right w-full text-xxxs text-secondary">
+          Count: {Number(data?.length) || 0}
+        </div>
+      </div>
       <Table
         table={table}
         selectedKey={undefined}
