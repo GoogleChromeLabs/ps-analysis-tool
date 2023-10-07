@@ -41,6 +41,7 @@ const useFrameOverlay = () => {
     selectedFrame,
     isCurrentTabBeingListenedTo,
     allowedNumberOfTabs,
+    tabFrames,
   } = useCookieStore(({ state, actions }) => ({
     setContextInvalidated: actions.setContextInvalidated,
     isInspecting: state.isInspecting,
@@ -49,6 +50,7 @@ const useFrameOverlay = () => {
     selectedFrame: state.selectedFrame,
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
     allowedNumberOfTabs: state.allowedNumberOfTabs,
+    tabFrames: state.tabFrames,
   }));
 
   const { filteredCookies } = useFilterManagementStore(({ state }) => ({
@@ -167,7 +169,7 @@ const useFrameOverlay = () => {
         if (!connectedToPort) {
           await connectToPort();
         }
-        if (portRef.current) {
+        if (portRef.current && tabFrames && selectedFrame) {
           const thirdPartyCookies = filteredCookies
             ? filteredCookies.filter((cookie) => !cookie.isFirstParty)
             : [];
@@ -179,6 +181,7 @@ const useFrameOverlay = () => {
             thirdPartyCookies: thirdPartyCookies.length,
             firstPartyCookies: firstPartyCookies.length,
             isInspecting,
+            isOnRWS: tabFrames[selectedFrame].isOnRWS,
           });
         }
       }
@@ -189,6 +192,7 @@ const useFrameOverlay = () => {
     isInspecting,
     connectToPort,
     connectedToPort,
+    tabFrames,
   ]);
 };
 
