@@ -36,6 +36,7 @@ class WebpageContentScript {
   port: chrome.runtime.Port | null = null;
   isInspecting = false;
   isHoveringOverPage = false;
+  bodyHoverStateSent = false;
   scrollEventListeners: Array<() => void> | [] = [];
 
   /**
@@ -235,12 +236,32 @@ class WebpageContentScript {
    */
   handleHoverEvent(event: MouseEvent): void {
     const target = event.target as HTMLElement;
+    const isNonIframeElement = target.tagName !== 'IFRAME';
 
     this.isHoveringOverPage = true;
+
+    if (
+      !this.bodyHoverStateSent &&
+      this.isInspecting &&
+      isNonIframeElement &&
+      this.port
+    ) {
+      removeAllPopovers();
+
+      this.port.postMessage({
+        attributes: {
+          iframeOrigin: '',
+        },
+      });
+
+      this.bodyHoverStateSent = true;
+    }
 
     if (!this.isInspecting || target.tagName !== 'IFRAME') {
       return;
     }
+
+    this.bodyHoverStateSent = false;
 
     const frame = target as HTMLIFrameElement;
     const srcAttribute = frame.getAttribute('src');
