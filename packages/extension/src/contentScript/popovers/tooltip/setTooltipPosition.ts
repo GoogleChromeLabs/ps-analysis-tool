@@ -51,6 +51,23 @@ const setTooltipPosition = (
 
     return;
   }
+  const tooltips = document.querySelectorAll('.ps-tooltip');
+  const toolTipsTopPositions: {
+    height: number;
+    width: number;
+    top: number;
+    left: number;
+  }[] = [];
+  tooltips.forEach((singleTooltip) => {
+    const dimensions = singleTooltip.getBoundingClientRect();
+    const positions = {
+      height: dimensions.height,
+      width: dimensions.width,
+      top: dimensions.top,
+      left: dimensions.left,
+    };
+    toolTipsTopPositions.push({ ...positions });
+  });
 
   if (tooltip.offsetHeight > frame.offsetTop) {
     // Is it the main frame?
