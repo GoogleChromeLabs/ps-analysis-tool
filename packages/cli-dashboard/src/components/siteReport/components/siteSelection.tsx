@@ -33,7 +33,7 @@ const SiteSelection = ({
   const isSiteSelected = Boolean(selectedSite);
   const [isOpen, setIsOpen] = useState(isSiteSelected);
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full overflow-auto">
       <div
         onClick={() => setSelectedSite(null)}
         className={`w-full flex items-center pl-6 py-0.5 outline-0 ${
