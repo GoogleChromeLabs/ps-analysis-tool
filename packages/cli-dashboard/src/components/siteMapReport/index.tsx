@@ -125,6 +125,23 @@ const SiteMapReport = ({
     [landingPageCookies]
   );
 
+  const affectedCookies = useMemo(
+    () =>
+      Object.entries(reshapedCookies).reduce(
+        (acc, [key, cookie]) => {
+          if (!cookie.isCookieSet) {
+            acc[key] = cookie;
+          }
+
+          return acc;
+        },
+        {} as {
+          [key: string]: CookieTableData;
+        }
+      ),
+    [reshapedCookies]
+  );
+
   const siteFilteredCookies = useMemo(() => {
     return Object.entries(cookies).reduce(
       (acc: CookieFrameStorageType, [frame, _cookies]) => {
@@ -193,9 +210,9 @@ const SiteMapReport = ({
           <>
             <CookiesLanding tabFrames={frames} tabCookies={reshapedCookies}>
               <CookiesMatrix
-                tabCookies={reshapedCookies}
+                tabCookies={affectedCookies}
                 cookiesStatsComponents={prepareCookieStatsComponents(
-                  prepareCookiesCount(reshapedCookies)
+                  prepareCookiesCount(affectedCookies)
                 )}
                 tabFrames={frames}
                 title="Affected Cookies Insights"
