@@ -13,8 +13,51 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Internal dependencies
+ */
+import { getCurrentTabId } from '../../utils/getCurrentTabId';
+
+const callback = (panel: {
+  onShown: { addListener: (arg0: () => void) => void };
+  onHidden: { addListener: (arg0: () => void) => void };
+}) => {
+  // Fires when the user switches to the panel.
+  panel.onShown.addListener(async () => {
+    if (!chrome.runtime.id) {
+      return;
+    }
+
+    const currentTabId = await getCurrentTabId();
+
+    if (!currentTabId) {
+      return;
+    }
+
+    const sessionData = await chrome.storage.session.get();
+    sessionData[currentTabId] = true;
+    await chrome.storage.session.set(sessionData);
+  });
+
+  panel.onHidden.addListener(async () => {
+    if (!chrome.runtime.id) {
+      return;
+    }
+
+    const currentTabId = await getCurrentTabId();
+
+    if (!currentTabId) {
+      return;
+    }
+
+    const sessionData = await chrome.storage.session.get();
+    sessionData[currentTabId] = false;
+    await chrome.storage.session.set(sessionData);
+  });
+};
 chrome.devtools.panels.create(
   'Privacy Sandbox',
   'icons/icon.svg',
-  'devtools/index.html'
+  'devtools/index.html',
+  callback
 );

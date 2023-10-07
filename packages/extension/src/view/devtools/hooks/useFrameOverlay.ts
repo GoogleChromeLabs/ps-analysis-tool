@@ -83,6 +83,31 @@ const useFrameOverlay = () => {
     setConnectedToPort(true);
   }, [setIsInspecting, setSelectedFrame]);
 
+  const sessionStoreChangedListener = useCallback(
+    async (changes: { [key: string]: chrome.storage.StorageChange }) => {
+      try {
+        const currentTabId = await getCurrentTabId();
+
+        if (!currentTabId) {
+          return;
+        }
+
+        if (changes && Object.keys(changes).includes(currentTabId.toString())) {
+          if (!changes[currentTabId].newValue && portRef.current) {
+            portRef.current.disconnect();
+            portRef.current = null;
+            setIsInspecting(false);
+            setConnectedToPort(false);
+          }
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(error);
+      }
+    },
+    [setIsInspecting]
+  );
+
   // When inspect button is clicked.
   useEffect(() => {
     (async () => {
@@ -111,6 +136,15 @@ const useFrameOverlay = () => {
     setContextInvalidated,
     connectToPort,
   ]);
+
+  useEffect(() => {
+    chrome.storage.session.onChanged.addListener(sessionStoreChangedListener);
+    return () => {
+      chrome.storage.session.onChanged.removeListener(
+        sessionStoreChangedListener
+      );
+    };
+  }, [sessionStoreChangedListener]);
 
   useEffect(() => {
     if (
