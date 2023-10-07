@@ -140,9 +140,13 @@ const useFrameOverlay = () => {
   useEffect(() => {
     chrome.storage.session.onChanged.addListener(sessionStoreChangedListener);
     return () => {
-      chrome.storage.session.onChanged.removeListener(
-        sessionStoreChangedListener
-      );
+      try {
+        chrome.storage.session.onChanged.removeListener(
+          sessionStoreChangedListener
+        );
+      } catch (error) {
+        /* do nothing */
+      }
     };
   }, [sessionStoreChangedListener]);
 
