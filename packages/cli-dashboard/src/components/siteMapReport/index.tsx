@@ -32,6 +32,7 @@ import type {
   TechnologyData,
 } from '@cookie-analysis-tool/common';
 import SiteReport from '../siteReport';
+import SiteMapAffectedCookies from './sitemapAffectedCookies';
 
 interface SiteMapReportProps {
   cookies: CookieFrameStorageType;
@@ -41,6 +42,8 @@ interface SiteMapReportProps {
 const SiteMapReport = ({ cookies, technologies }: SiteMapReportProps) => {
   const [selectedSite, setSelectedSite] = useState<string | null>(null);
   const [sites, setSites] = useState<string[]>([]);
+  const [selectedTopLevelMenu, setSelectedTopLevelMenu] =
+    useState<string>('report');
 
   useEffect(() => {
     const _sites = new Set<string>();
@@ -142,11 +145,31 @@ const SiteMapReport = ({ cookies, technologies }: SiteMapReportProps) => {
         }}
         className="h-full flex flex-col border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
       >
-        <SiteSelection
-          sites={sites}
-          selectedSite={selectedSite}
-          setSelectedSite={setSelectedSite}
-        />
+        <div className="flex flex-col">
+          <SiteSelection
+            sites={sites}
+            selectedSite={selectedSite}
+            setSelectedSite={setSelectedSite}
+            isSelectedTopLevelMenu={selectedTopLevelMenu === 'report'}
+            selectTopLevelMenu={() => setSelectedTopLevelMenu('report')}
+          />
+          <div
+            onClick={() => {
+              setSelectedTopLevelMenu('affectedCookies');
+              setSelectedSite(null);
+            }}
+            className={`w-full flex items-center pl-6 py-0.5 outline-0 cursor-pointer 
+							${
+                selectedTopLevelMenu === 'affectedCookies'
+                  ? 'bg-royal-blue text-white'
+                  : 'bg-white'
+              }
+							}
+						`}
+          >
+            <p>Affected Cookies</p>
+          </div>
+        </div>
       </Resizable>
       <div className="flex-1 h-full">
         {selectedSite ? (
@@ -154,8 +177,14 @@ const SiteMapReport = ({ cookies, technologies }: SiteMapReportProps) => {
             cookies={siteFilteredCookies}
             technologies={siteFilteredTechnologies}
           />
-        ) : (
+        ) : selectedTopLevelMenu === 'report' ? (
           <CookiesLanding tabFrames={frames} tabCookies={reshapedCookies} />
+        ) : (
+          <SiteMapAffectedCookies
+            cookies={Object.values(reshapedCookies).filter(
+              (cookie) => !cookie.isCookieSet
+            )}
+          />
         )}
       </div>
     </div>
