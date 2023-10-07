@@ -106,7 +106,7 @@ const createTooltip = (
     : '(empty)';
   info['First-party cookies'] = String(data?.firstPartyCookies || '0');
   info['Third-party cookies'] = String(data?.thirdPartyCookies || '0');
-  info['Belongs to RWS'] = origin ? (data?.isOnRWS ? 'yes' : 'no') : 'NA';
+  info['Belongs to RWS'] = origin ? (data?.isOnRWS ? 'yes' : 'no') : 'N/A';
   info['Allowed features'] =
     allowedFeatured === ALL_ALLOWED_FEATURES ? 'all' : allowedFeatured;
 
