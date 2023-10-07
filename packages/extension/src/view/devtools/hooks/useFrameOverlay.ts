@@ -109,8 +109,9 @@ const useFrameOverlay = () => {
     ) {
       portRef.current.disconnect();
       portRef.current = null;
+      setIsInspecting(false);
     }
-  }, [allowedNumberOfTabs, isCurrentTabBeingListenedTo]);
+  }, [allowedNumberOfTabs, isCurrentTabBeingListenedTo, setIsInspecting]);
 
   useEffect(() => {
     if (isInspecting && portRef.current) {
