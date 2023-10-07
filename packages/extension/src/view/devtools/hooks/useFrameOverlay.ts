@@ -96,6 +96,7 @@ const useFrameOverlay = () => {
         if (portRef.current) {
           portRef.current.disconnect();
           portRef.current = null;
+          setConnectedToPort(false);
         }
 
         return;
@@ -121,6 +122,7 @@ const useFrameOverlay = () => {
       portRef.current.disconnect();
       portRef.current = null;
       setIsInspecting(false);
+      setConnectedToPort(false);
     }
   }, [allowedNumberOfTabs, isCurrentTabBeingListenedTo, setIsInspecting]);
 
