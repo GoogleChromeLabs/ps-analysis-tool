@@ -94,10 +94,7 @@ const useFrameOverlay = () => {
 
         if (changes && Object.keys(changes).includes(currentTabId.toString())) {
           if (!changes[currentTabId].newValue && portRef.current) {
-            portRef.current.disconnect();
-            portRef.current = null;
             setIsInspecting(false);
-            setConnectedToPort(false);
           }
         }
       } catch (error) {
