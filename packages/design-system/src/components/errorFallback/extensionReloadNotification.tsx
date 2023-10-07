@@ -26,10 +26,10 @@ import Button from '../button';
 const ExtensionReloadNotification = () => {
   return (
     <div className="w-full h-full px-2 flex flex-col items-center justify-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green dark:text-white">
-      <p className="text-xl">
+      <p className="text-xl text-center px-4">
         Looks like extension has been updated since devtool was open.
       </p>
-      <div className="ml-2 mt-2">
+      <div className="ml-2 mt-4">
         <Button onClick={() => window.location.reload()} text="Refresh panel" />
       </div>
     </div>
