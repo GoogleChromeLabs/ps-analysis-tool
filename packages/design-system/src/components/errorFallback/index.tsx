@@ -18,21 +18,12 @@
  */
 import React from 'react';
 
-/**
- * Internal dependencies.
- */
-import ContextInvalidatedMessage from './contextInvalidatedMessage';
-
 interface ErrorFallbackProps {
   error: Record<string, string>;
 }
 
 const ErrorFallback = ({ error }: ErrorFallbackProps) => {
   // Call resetErrorBoundary() to reset the error boundary and retry the render.
-
-  if (error?.message?.includes('Extension context invalidated')) {
-    return <ContextInvalidatedMessage />;
-  }
 
   return (
     <div className="p-4 text-center" role="alert">

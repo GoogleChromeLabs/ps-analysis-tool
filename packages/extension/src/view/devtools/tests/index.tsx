@@ -101,6 +101,10 @@ describe('Index', () => {
     globalThis.chrome = {
       ...SinonChrome,
       //@ts-ignore
+      runtime: {
+        id: 'afajkfkjabfkjas',
+      },
+      //@ts-ignore
       webNavigation: {
         //@ts-ignore
         getAllFrames: () => {
@@ -260,6 +264,7 @@ describe('Index', () => {
           Promise.resolve({
             ...PSInfo,
           }),
+        text: () => Promise.resolve({}),
       });
     } as unknown as typeof fetch;
   });
