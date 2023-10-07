@@ -106,9 +106,9 @@ const createTooltip = (
     : '(empty)';
   info['First-party cookies'] = String(data?.firstPartyCookies || '0');
   info['Third-party cookies'] = String(data?.thirdPartyCookies || '0');
+  info['Belongs to RWS'] = origin ? (data?.isOnRWS ? 'yes' : 'no') : 'NA';
   info['Allowed features'] =
     allowedFeatured === ALL_ALLOWED_FEATURES ? 'all' : allowedFeatured;
-  info['Belongs to RWS'] = data?.isOnRWS ? 'True' : 'False';
 
   // Reset the dataset of parent frame.
   if (insideFrame) {
