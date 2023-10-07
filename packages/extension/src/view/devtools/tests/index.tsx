@@ -103,6 +103,7 @@ describe('Index', () => {
       //@ts-ignore
       runtime: {
         id: 'afajkfkjabfkjas',
+        getURL: () => 'data/related_website_sets.json',
       },
       //@ts-ignore
       webNavigation: {
@@ -200,6 +201,13 @@ describe('Index', () => {
                 allowedNumberOfTabs: 'single',
               });
             }),
+          //@ts-ignore
+          onChanged: {
+            addListener: () => undefined,
+            removeListener: () => undefined,
+          },
+        },
+        session: {
           //@ts-ignore
           onChanged: {
             addListener: () => undefined,

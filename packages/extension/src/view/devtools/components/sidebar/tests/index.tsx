@@ -170,7 +170,19 @@ const mockUseCookieStore = useCookieStore as jest.Mock;
 
 describe('Sidebar', () => {
   beforeAll(() => {
-    globalThis.chrome = globalChrome;
+    globalThis.chrome = {
+      ...globalChrome,
+      storage: {
+        // @ts-ignore
+        session: {
+          // @ts-ignore
+          onChanged: {
+            addListener: () => undefined,
+            removeListener: () => undefined,
+          },
+        },
+      },
+    };
   });
 
   it('Should render with first menu item selected', () => {

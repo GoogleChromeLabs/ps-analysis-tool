@@ -49,7 +49,19 @@ describe('App', () => {
       allowedNumberOfTabs: 'single',
     });
 
-    globalThis.chrome = globalChrome;
+    globalThis.chrome = {
+      ...globalChrome,
+      storage: {
+        // @ts-ignore
+        session: {
+          // @ts-ignore
+          onChanged: {
+            addListener: () => undefined,
+            removeListener: () => undefined,
+          },
+        },
+      },
+    };
 
     globalThis.fetch = function () {
       return Promise.resolve({
