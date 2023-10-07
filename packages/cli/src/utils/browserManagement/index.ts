@@ -13,11 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/**
+ * External dependencies.
+ */
 import puppeteer, { Browser, Page, Protocol } from 'puppeteer';
-import { delay } from '..';
 import { parse } from 'simple-cookie';
+/**
+ * Internal dependencies.
+ */
 import { RequestData, ResponseData, ViewportConfig } from './types';
 import { parseNetworkDataToCookieData } from './parseNetworkDataToCookieData';
+import delay from '../delay';
 
 export class BrowserManagement {
   viewportConfig: ViewportConfig;

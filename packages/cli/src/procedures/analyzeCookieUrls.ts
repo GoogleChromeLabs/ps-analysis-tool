@@ -14,7 +14,13 @@
  * limitations under the License.
  */
 
+/**
+ * External dependencies.
+ */
 import { isFirstParty } from '@cookie-analysis-tool/common';
+/**
+ * External dependencies.
+ */
 import { CookieDatabase } from '../types';
 import { BrowserManagement } from '../utils/browserManagement';
 import findAnalyticsMatch from '../utils/findAnalyticsMatch';

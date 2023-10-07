@@ -30,7 +30,7 @@ export default abstract class AsyncQueue {
    * Concurrency.
    * @private
    */
-  private concurrency = 5;
+  private concurrency = 3;
 
   /**
    * Get list of jobs.

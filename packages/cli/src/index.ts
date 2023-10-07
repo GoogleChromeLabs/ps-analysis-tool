@@ -31,6 +31,7 @@ import Utility from './utils/utility';
 import { fetchDictionary } from './utils/fetchCookieDictionary';
 import { delay } from './utils';
 import { analyzeCookiesUrls } from './procedures/analyzeCookieUrls';
+import { analyzeCookiesUrlsInBatches } from './procedures/analyzeCookieUrlsInBatches';
 
 events.EventEmitter.defaultMaxListeners = 15;
 const delayTime = 20000;
@@ -75,7 +76,7 @@ export const initialize = async () => {
     });
 
     spinnies.add('technology-spinner', {
-      text: 'Analysing cookies on the first page visit',
+      text: 'Analysing technologies',
     });
     const technologyData = await analyzeTechnologiesUrls([url]);
     spinnies.succeed('technology-spinner', {
@@ -100,6 +101,7 @@ export const initialize = async () => {
       )}`
     );
   } else {
+    const spinnies = new Spinnies();
     const urls: Array<string> = await Utility.getUrlsFromSitemap(sitemapURL);
     const prefix = Utility.generatePrefix([...urls].shift() ?? 'untitled');
     const directory = `./out/${prefix}`;
@@ -114,15 +116,23 @@ export const initialize = async () => {
 
     const urlsToProcess = urls.splice(0, numberOfUrls);
 
-    const cookieAnalysisData = await analyzeCookiesUrls(
+    const cookieAnalysisData = await analyzeCookiesUrlsInBatches(
       urlsToProcess,
       isHeadless,
       delayTime,
       cookieDictionary
     );
+
+    spinnies.add('technology-spinner', {
+      text: 'Analysing technologies',
+    });
+
     const technologyAnalysisData = await Promise.all(
       urlsToProcess.map((siteUrl: string) => analyzeTechnologiesUrls([siteUrl]))
     );
+    spinnies.succeed('technology-spinner', {
+      text: 'Sone analysing technologies',
+    });
 
     const result = urlsToProcess.map((_url, ind) => {
       return {
