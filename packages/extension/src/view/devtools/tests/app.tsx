@@ -48,6 +48,7 @@ describe('App', () => {
       setSelectedFrame: noop,
       allowedNumberOfTabs: 'single',
     });
+    jest.spyOn(console, 'warn').mockImplementation(() => undefined);
     globalThis.chrome = {
       ...SinonChrome,
       devtools: {
@@ -78,6 +79,7 @@ describe('App', () => {
           Promise.resolve({
             ...PSInfo,
           }),
+        text: () => Promise.resolve({}),
       });
     } as unknown as typeof fetch;
   });
