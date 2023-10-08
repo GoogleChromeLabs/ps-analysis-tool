@@ -35,6 +35,7 @@ import { setTooltipPosition } from './popovers/tooltip';
 class WebpageContentScript {
   port: chrome.runtime.Port | null = null;
   isInspecting = false;
+  isScrolling = false;
   isHoveringOverPage = false;
   bodyHoverStateSent = false;
   scrollEventListeners: Array<() => void> | [] = [];
@@ -48,6 +49,8 @@ class WebpageContentScript {
     this.onMessage = this.onMessage.bind(this);
     this.onDisconnect = this.onDisconnect.bind(this);
     this.handleMouseMove = this.handleMouseMove.bind(this);
+    this.onScrollEnd = this.onScrollEnd.bind(this);
+    this.onScrollStarted = this.onScrollStarted.bind(this);
     this.listenToConnection();
     this.setTopics();
   }
@@ -72,7 +75,8 @@ class WebpageContentScript {
     document.addEventListener('mouseover', this.handleHoverEvent);
     document.addEventListener('mouseout', this.handleHoverEvent);
     document.addEventListener('visibilitychange', this.handleMouseMove);
-
+    document.addEventListener('scrollend', this.onScrollEnd);
+    document.addEventListener('scroll', this.onScrollStarted);
     document.documentElement.addEventListener(
       'mouseleave',
       this.handleMouseMove
@@ -90,7 +94,8 @@ class WebpageContentScript {
     document.removeEventListener('mouseover', this.handleHoverEvent);
     document.removeEventListener('mouseout', this.handleHoverEvent);
     document.removeEventListener('visibilitychange', this.handleMouseMove);
-
+    document.removeEventListener('scrollend', this.onScrollEnd);
+    document.removeEventListener('scroll', this.onScrollStarted);
     document.documentElement.removeEventListener(
       'mouseleave',
       this.handleMouseMove
@@ -116,6 +121,13 @@ class WebpageContentScript {
     } else {
       this.abortInspection();
     }
+  }
+  onScrollEnd() {
+    this.isScrolling = false;
+  }
+
+  onScrollStarted() {
+    this.isScrolling = true;
   }
 
   insertPopovers(response: ResponseType) {
@@ -320,11 +332,15 @@ class WebpageContentScript {
    * Handles hover events, focusing on IFRAME elements when inspecting is enabled.
    * @param {MouseEvent} event - The mouse event triggered by user action.
    */
+  // eslint-disable-next-line complexity
   handleHoverEvent(event: MouseEvent): void {
     const target = event.target as HTMLElement;
     const isNonIframeElement = target.tagName !== 'IFRAME';
 
     this.isHoveringOverPage = true;
+    if (this.isScrolling) {
+      return;
+    }
 
     if (
       !this.bodyHoverStateSent &&
