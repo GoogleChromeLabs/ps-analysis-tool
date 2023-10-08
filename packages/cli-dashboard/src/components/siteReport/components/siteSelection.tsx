@@ -65,7 +65,7 @@ const SiteSelection = ({
             <ArrowDownWhite />
           )}
         </div>
-        <p>Sitemap report</p>
+        <p>Sitemap Report</p>
       </div>
       {isOpen && (
         <ul className="pl-6">

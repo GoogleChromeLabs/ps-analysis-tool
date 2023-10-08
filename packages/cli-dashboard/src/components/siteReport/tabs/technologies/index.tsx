@@ -51,7 +51,7 @@ const Technologies = () => {
       {
         header: 'Confidence',
         accessorKey: 'confidence',
-        cell: (info: InfoType) => info,
+        cell: (info: InfoType) => info + '%',
       },
       {
         header: 'Website',

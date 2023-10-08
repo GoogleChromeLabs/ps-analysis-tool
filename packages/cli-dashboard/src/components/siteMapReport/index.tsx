@@ -209,7 +209,7 @@ const SiteMapReport = ({
                 )}
                 tabFrames={frames}
                 title="Affected Cookies Insights"
-                description="Following are the insights about cookies that will be affected 3P cookie depreciation."
+                description="Following are the insights about cookies that will be affected by 3P cookie depreciation."
                 showHorizontalMatrix={false}
                 showInfoIcon={false}
               />
