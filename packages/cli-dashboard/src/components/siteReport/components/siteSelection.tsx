@@ -37,7 +37,7 @@ const SiteSelection = ({
   const isSiteSelected = Boolean(selectedSite);
   const [isOpen, setIsOpen] = useState(isSiteSelected);
   return (
-    <div className="w-full h-full overflow-auto">
+    <div className="w-full h-full overflow-auto text-sm">
       <div
         onClick={() => {
           setSelectedSite(null);
@@ -68,14 +68,14 @@ const SiteSelection = ({
         <p>Sitemap Report</p>
       </div>
       {isOpen && (
-        <ul className="pl-6">
+        <ul>
           {sites.map((site, id) => (
             <li
               onClick={() => {
                 setSelectedSite(site);
                 selectTopLevelMenu();
               }}
-              className={`truncate pl-6 cursor-pointer ${
+              className={`truncate pl-12 cursor-pointer ${
                 site === selectedSite ? 'bg-royal-blue text-white' : ''
               }`}
               key={id}

@@ -36,6 +36,7 @@ interface CookiesLandingProps {
   tabCookies: TabCookies | null;
   children?: React.ReactNode;
   showInfoIcon?: boolean;
+  showHorizontalMatrix?: boolean;
 }
 
 const CookiesLanding = ({
@@ -43,6 +44,7 @@ const CookiesLanding = ({
   tabFrames,
   children,
   showInfoIcon = true,
+  showHorizontalMatrix = true,
 }: CookiesLandingProps) => {
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
@@ -62,13 +64,14 @@ const CookiesLanding = ({
                 bodyText="Please try reloading the page"
               />
             ))}
-        {children && <div className="mb-10">{children}</div>}
         <CookiesMatrix
           tabCookies={tabCookies}
           cookiesStatsComponents={cookiesStatsComponents}
           tabFrames={tabFrames}
           showInfoIcon={showInfoIcon}
+          showHorizontalMatrix={showHorizontalMatrix}
         />
+        {children && <div className="mt-10">{children}</div>}
       </div>
     </div>
   );

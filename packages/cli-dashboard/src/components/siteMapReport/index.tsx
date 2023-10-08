@@ -180,7 +180,7 @@ const SiteMapReport = ({
               setSelectedTopLevelMenu('affectedCookies');
               setSelectedSite(null);
             }}
-            className={`w-full flex items-center pl-6 py-0.5 outline-0 cursor-pointer 
+            className={`w-full flex items-center pl-6 py-0.5 outline-0 cursor-pointer text-sm 
 							${
                 selectedTopLevelMenu === 'affectedCookies'
                   ? 'bg-royal-blue text-white'
@@ -201,7 +201,12 @@ const SiteMapReport = ({
           />
         ) : selectedTopLevelMenu === 'report' ? (
           <>
-            <CookiesLanding tabFrames={frames} tabCookies={reshapedCookies}>
+            <CookiesLanding
+              tabFrames={frames}
+              tabCookies={reshapedCookies}
+              showInfoIcon={false}
+              showHorizontalMatrix={false}
+            >
               <CookiesMatrix
                 tabCookies={affectedCookies}
                 cookiesStatsComponents={prepareCookieStatsComponents(
@@ -210,7 +215,6 @@ const SiteMapReport = ({
                 tabFrames={frames}
                 title="Affected Cookies Insights"
                 description="Following are the insights about cookies that will be affected by 3P cookie depreciation."
-                showHorizontalMatrix={false}
                 showInfoIcon={false}
               />
             </CookiesLanding>
