@@ -176,7 +176,12 @@ const useFrameOverlay = () => {
         if (!connectedToPort) {
           await connectToPort();
         }
-        if (portRef.current && tabFrames && selectedFrame) {
+        if (
+          chrome.runtime?.id &&
+          portRef.current &&
+          tabFrames &&
+          selectedFrame
+        ) {
           const thirdPartyCookies = filteredCookies
             ? filteredCookies.filter((cookie) => !cookie.isFirstParty)
             : [];
