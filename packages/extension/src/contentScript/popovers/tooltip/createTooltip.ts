@@ -79,7 +79,8 @@ const createTooltip = (
   }
 
   const origin = isMainFrame ? data.selectedFrame : frameOrigin;
-  const allowedFeatured = getAllowedFeatures(frame);
+  const allowedFeatured =
+    frame.tagName !== 'BODY' ? getAllowedFeatures(frame) : 'N/A';
 
   const info: Record<string, string> = {};
 
@@ -88,7 +89,7 @@ const createTooltip = (
   } else if (insideFrame) {
     info['Type'] = 'Nested iframe';
   } else if (frame.tagName === 'BODY') {
-    info['Type'] = 'Main iframe';
+    info['Type'] = 'Main frame';
   } else {
     info['Type'] = 'iframe';
   }
@@ -101,12 +102,10 @@ const createTooltip = (
     info['Hidden iframes'] = String(numberOfHiddenFrames);
   }
 
-  info['Origin'] = origin
-    ? `<a target="_blank" href="${origin}">${origin}</a>`
-    : '(empty)';
+  info['Origin'] = origin ? origin : '(empty)';
   info['First-party cookies'] = String(data?.firstPartyCookies || '0');
   info['Third-party cookies'] = String(data?.thirdPartyCookies || '0');
-  info['Belongs to RWS'] = origin ? (data?.isOnRWS ? 'yes' : 'no') : 'N/A';
+  info['Belongs to RWS'] = origin ? (data?.isOnRWS ? 'Yes' : 'No') : 'N/A';
   info['Allowed features'] =
     allowedFeatured === ALL_ALLOWED_FEATURES ? 'all' : allowedFeatured;
 
