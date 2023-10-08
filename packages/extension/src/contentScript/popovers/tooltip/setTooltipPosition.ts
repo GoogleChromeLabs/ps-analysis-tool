@@ -58,6 +58,7 @@ const setTooltipPosition = (
     top: number;
     left: number;
   }[] = [];
+
   tooltips.forEach((singleTooltip) => {
     const dimensions = singleTooltip.getBoundingClientRect();
     const positions = {

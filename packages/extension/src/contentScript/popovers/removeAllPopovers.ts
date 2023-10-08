@@ -22,7 +22,7 @@ import { OVERLAY_CLASS, TOOLTIP_CLASS } from '../constants';
  * Removes all tooltips and overlays from the current document.
  * @returns {void}
  */
-const removeAllPopovers = () => {
+const removeAllPopovers = (): void => {
   const selectors = `.${OVERLAY_CLASS}, .${TOOLTIP_CLASS}`;
   const existingPopovers = document.querySelectorAll(selectors);
 

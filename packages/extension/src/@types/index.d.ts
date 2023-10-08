@@ -25,6 +25,7 @@ declare global {
     featurePolicy: {
       allowsFeature: (arg0: string) => boolean;
     };
+    prerendering?: boolean;
   }
 }
 
