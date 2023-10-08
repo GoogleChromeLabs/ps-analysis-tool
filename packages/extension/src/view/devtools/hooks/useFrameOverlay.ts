@@ -88,6 +88,10 @@ const useFrameOverlay = () => {
   const sessionStoreChangedListener = useCallback(
     async (changes: { [key: string]: chrome.storage.StorageChange }) => {
       try {
+        const syncStorage = await chrome.storage.sync.get();
+        if (syncStorage.isDev) {
+          return;
+        }
         const currentTabId = await getCurrentTabId();
 
         if (!currentTabId) {
