@@ -166,7 +166,6 @@ const useFrameOverlay = () => {
   useEffect(() => {
     if (!selectedFrame) {
       setIsInspecting(false);
-      setConnectedToPort(false);
     }
   }, [selectedFrame, setIsInspecting]);
 
