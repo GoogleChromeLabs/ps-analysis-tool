@@ -47,6 +47,7 @@ describe('App', () => {
       changeListeningToThisTab: noop,
       setSelectedFrame: noop,
       allowedNumberOfTabs: 'single',
+      setIsInspecting: noop,
     });
 
     globalThis.chrome = {
