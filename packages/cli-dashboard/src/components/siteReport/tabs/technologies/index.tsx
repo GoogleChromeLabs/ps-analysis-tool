@@ -17,23 +17,26 @@
 /**
  * External dependencies
  */
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
+import { Resizable } from 're-resizable';
 
 /**
  * Internal dependencies
  */
 import {
   Table,
-  noop,
   useTable,
   type TableColumn,
   type InfoType,
+  type TableRow,
 } from '@cookie-analysis-tool/design-system';
 import { useContentStore } from '../../stateProviders/contentStore';
 import type { TechnologyData } from '@cookie-analysis-tool/common';
 
 const Technologies = () => {
   const data = useContentStore(({ state }) => state.technologies || []);
+
+  const [selectedRow, setSelectedRow] = useState<TechnologyData>();
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -80,12 +83,58 @@ const Technologies = () => {
           Count: {Number(data?.length) || 0}
         </div>
       </div>
-      <Table
-        table={table}
-        selectedKey={undefined}
-        onRowClick={noop}
-        getRowObjectKey={() => ''}
-      />
+      <div className="w-full flex-1 overflow-hidden h-full flex flex-col">
+        <Resizable
+          defaultSize={{
+            width: '100%',
+            height: '80%',
+          }}
+          minHeight="6%"
+          maxHeight="95%"
+          enable={{
+            top: false,
+            right: false,
+            bottom: true,
+            left: false,
+          }}
+          className="h-full flex"
+        >
+          <Table
+            table={table}
+            selectedKey={selectedRow?.slug}
+            onRowClick={(row) => {
+              setSelectedRow(row as TechnologyData);
+            }}
+            getRowObjectKey={(row: TableRow) => {
+              return (row.originalData as TechnologyData).slug;
+            }}
+          />
+        </Resizable>
+        <div className="flex-1 border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem]">
+          {selectedRow ? (
+            <div className="text-xs py-1 px-1.5">
+              <p className="font-bold text-granite-gray dark:text-manatee mb-1 text-semibold flex items-center">
+                <span>Technology Details</span>
+              </p>
+              <p className="mb-4 break-words text-outer-space-crayola dark:text-bright-gray">
+                {selectedRow.name}
+              </p>
+              <p className="font-bold text-granite-gray dark:text-manatee mb-1">
+                Description
+              </p>
+              <p className="text-outer-space-crayola dark:text-bright-gray">
+                {selectedRow.description}
+              </p>
+            </div>
+          ) : (
+            <div className="h-full p-8 flex items-center">
+              <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">
+                Select row to preview its value
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

@@ -42,6 +42,7 @@ interface CookiesMatrixProps {
   description?: string;
   showHorizontalMatrix?: boolean;
   showInfoIcon?: boolean;
+  count?: boolean | number;
 }
 
 interface LegendData {
@@ -82,6 +83,7 @@ const CookiesMatrix = ({
   description = '',
   showHorizontalMatrix = true,
   showInfoIcon = true,
+  count = false,
 }: CookiesMatrixProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -127,6 +129,11 @@ const CookiesMatrix = ({
               {showInfoIcon && (
                 <span title="An active ad-blocker or other cookie extensions may affect the results.">
                   <InfoIcon />
+                </span>
+              )}
+              {Boolean(count) && (
+                <span className="text-xxxs text-secondary ml-2">
+                  {Number(count) || 0}
                 </span>
               )}
             </h4>
