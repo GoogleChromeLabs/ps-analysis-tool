@@ -3,11 +3,14 @@
 html body .ps-overlay[popover], html body .ps-tooltip[popover] {
     position: absolute !important;
     background-color: #1a73e859 !important;
-    pointer-events: none !important;
     border: 0px !important;
     margin: initial !important;
     padding: 0px !important;
     cursor: default !important;
+}
+
+html body .ps-overlay[popover], html body .ps-tooltip[popover] > .ps-content {
+    pointer-events: none !important;
 }
 
 html body .ps-fixed[popover] {
@@ -25,7 +28,7 @@ html body .ps-tooltip[popover] > .ps-content {
     background-color: white !important;
     border: 0px !important;
     border-radius: 3px !important;
-    box-shadow: rgba(0, 0, 0, 0.8) 0px 0px 15px !important;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.5) !important;
     margin: initial !important;
     padding: 10px !important;
 }
@@ -76,4 +79,31 @@ html body .ps-tooltip[popover] > .ps-content.ps-tooltip-top-notch:after {
 html body .ps-highlighted-frame {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5) !important;
     outline: 1px solid #FF0000 !important;
+}
+
+html body .ps-tooltip-info-toggle-btn-container {
+	display: flex;
+	justify-content: flex-end;
+}
+
+html body .ps-tooltip-info-toggle-btn {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    color: #007FFF !important;
+    background-color: transparent !important;
+    border: none !important;
+    outline: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: 12px !important;
+}
+
+html body .ps-enable-pointer-event {
+	text-decoration: none !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+html body .ps-tooltip[popover]>.ps-content .hidden {
+	display: none !important;
 }
