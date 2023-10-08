@@ -41,35 +41,29 @@ const useColumnResizing = (
   const [columns, setColumns] = useState<TableColumn[]>([]);
 
   const setColumnsCallback = useCallback(() => {
-    if (options) {
-      const tableWidth = tableContainerRef.current?.scrollWidth || 0;
-      let newColumns = tableColumns.map((column) => ({
-        ...column,
-        width: options[column.accessorKey],
-      }));
+    const tableWidth = tableContainerRef.current?.scrollWidth || 0;
+    const newColumns = tableColumns.map((column) => ({
+      ...column,
+      width: options?.[column.accessorKey]
+        ? options[column.accessorKey]
+        : tableWidth / tableColumns.length,
+    }));
 
-      if (Object.keys(options).length === tableColumns.length) {
-        newColumns = tableColumns.map((column) => ({
-          ...column,
-          width: options[column.accessorKey],
-        }));
-      } else {
-        newColumns = tableColumns.map((column) => ({
-          ...column,
-          width: tableWidth / tableColumns.length,
-        }));
-      }
+    const totalWidth = newColumns.reduce(
+      (acc, column) => acc + column.width,
+      0
+    );
 
-      setColumns(newColumns);
-    } else {
-      const tableWidth = tableContainerRef.current?.scrollWidth || 0;
-      const newColumns = tableColumns.map((column) => ({
-        ...column,
-        width: tableWidth / tableColumns.length,
-      }));
+    const diff = tableWidth - totalWidth;
 
-      setColumns(newColumns);
+    if (diff > 0) {
+      const perColumnDiff = diff / newColumns.length;
+      newColumns.forEach((column) => {
+        column.width += perColumnDiff;
+      });
     }
+
+    setColumns(newColumns);
   }, [options, tableColumns]);
 
   useEffect(() => {
