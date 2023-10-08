@@ -19,9 +19,16 @@ import React, { useMemo } from 'react';
  * Internal dependencies.
  */
 import CookiesListing from './cookieListing';
-import { CookiesLanding } from '@cookie-analysis-tool/design-system';
+import {
+  CookiesLanding,
+  CookiesMatrix,
+} from '@cookie-analysis-tool/design-system';
 import { useContentStore } from '../../stateProviders/contentStore';
-import type { TabFrames } from '@cookie-analysis-tool/common';
+import {
+  prepareCookiesCount,
+  prepareCookieStatsComponents,
+  type TabFrames,
+} from '@cookie-analysis-tool/common';
 
 interface CookiesTabProps {
   selectedFrameUrl?: string | null;
@@ -46,16 +53,32 @@ const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
     [tabCookies]
   );
 
+  const affectedCookies = useMemo(
+    () =>
+      Object.fromEntries(
+        Object.entries(tabCookies).filter(([, cookie]) => !cookie.isCookieSet)
+      ),
+    [tabCookies]
+  );
+
   return (
     <div className="w-full h-full flex items-center justify-center">
       {selectedFrameUrl ? (
         <CookiesListing selectedFrameUrl={selectedFrameUrl} />
       ) : (
-        <CookiesLanding
-          tabCookies={tabCookies}
-          tabFrames={tabFrames}
-          tabUrl={Object.values(tabCookies)[0]?.url}
-        />
+        <CookiesLanding tabCookies={tabCookies} tabFrames={tabFrames}>
+          <CookiesMatrix
+            tabCookies={affectedCookies}
+            cookiesStatsComponents={prepareCookieStatsComponents(
+              prepareCookiesCount(affectedCookies)
+            )}
+            tabFrames={tabFrames}
+            title="Affected Cookies Insights"
+            description="Following are the insights about cookies that will be affected 3P cookie depreciation."
+            showHorizontalMatrix={false}
+            showInfoIcon={false}
+          />
+        </CookiesLanding>
       )}
     </div>
   );
