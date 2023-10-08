@@ -164,6 +164,13 @@ const useFrameOverlay = () => {
   }, [allowedNumberOfTabs, isCurrentTabBeingListenedTo, setIsInspecting]);
 
   useEffect(() => {
+    if (!selectedFrame) {
+      setIsInspecting(false);
+      setConnectedToPort(false);
+    }
+  }, [selectedFrame, setIsInspecting]);
+
+  useEffect(() => {
     (async () => {
       if (isInspecting) {
         if (!connectedToPort) {
