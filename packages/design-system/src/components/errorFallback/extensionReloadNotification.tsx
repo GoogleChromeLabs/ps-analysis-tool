@@ -25,7 +25,7 @@ import Button from '../button';
 
 const ExtensionReloadNotification = () => {
   return (
-    <div className="w-full h-full px-2 flex flex-col items-center justify-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green dark:text-white">
+    <div className="w-full h-full px-2 flex flex-col items-center justify-center border-b border-american-silver dark:border-quartz bg-white dark:bg-charleston-green dark:text-white">
       <p className="text-xl text-center px-4">
         Looks like extension has been updated since devtool was open.
       </p>
