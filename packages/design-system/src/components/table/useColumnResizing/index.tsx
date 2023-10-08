@@ -41,37 +41,29 @@ const useColumnResizing = (
   const [columns, setColumns] = useState<TableColumn[]>([]);
 
   const setColumnsCallback = useCallback(() => {
-    if (options) {
-      const tableWidth =
-        tableContainerRef.current?.getBoundingClientRect().width || 0;
-      let newColumns = tableColumns.map((column) => ({
-        ...column,
-        width: options[column.accessorKey],
-      }));
+    const tableWidth = tableContainerRef.current?.scrollWidth || 0;
+    const newColumns = tableColumns.map((column) => ({
+      ...column,
+      width: options?.[column.accessorKey]
+        ? options[column.accessorKey]
+        : tableWidth / tableColumns.length,
+    }));
 
-      if (Object.keys(options).length === tableColumns.length) {
-        newColumns = tableColumns.map((column) => ({
-          ...column,
-          width: options[column.accessorKey],
-        }));
-      } else {
-        newColumns = tableColumns.map((column) => ({
-          ...column,
-          width: tableWidth / tableColumns.length,
-        }));
-      }
+    const totalWidth = newColumns.reduce(
+      (acc, column) => acc + column.width,
+      0
+    );
 
-      setColumns(newColumns);
-    } else {
-      const tableWidth =
-        tableContainerRef.current?.getBoundingClientRect().width || 0;
-      const newColumns = tableColumns.map((column) => ({
-        ...column,
-        width: tableWidth / tableColumns.length,
-      }));
+    const diff = tableWidth - totalWidth;
 
-      setColumns(newColumns);
+    if (diff > 0) {
+      const perColumnDiff = diff / newColumns.length;
+      newColumns.forEach((column) => {
+        column.width += perColumnDiff;
+      });
     }
+
+    setColumns(newColumns);
   }, [options, tableColumns]);
 
   useEffect(() => {
@@ -100,20 +92,20 @@ const useColumnResizing = (
           column2Width = column2.width || 0;
         const widthChange = clientXPos - (startOffset + column1Width);
 
-        let newColumn1Width = 20,
-          newColumn2Width = 20;
+        let newColumn1Width = 40,
+          newColumn2Width = 40;
 
         if (widthChange > 0) {
-          newColumn2Width = Math.max(20, column2Width - widthChange);
+          newColumn2Width = Math.max(40, column2Width - widthChange);
           newColumn1Width =
-            newColumn2Width === 20
-              ? column1Width + column2Width - 20
+            newColumn2Width === 40
+              ? column1Width + column2Width - 40
               : column1Width + widthChange;
         } else {
-          newColumn1Width = Math.max(20, column1Width + widthChange);
+          newColumn1Width = Math.max(40, column1Width + widthChange);
           newColumn2Width =
-            newColumn1Width === 20
-              ? column1Width + column2Width - 20
+            newColumn1Width === 40
+              ? column1Width + column2Width - 40
               : column2Width - widthChange;
         }
 
@@ -147,6 +139,18 @@ const useColumnResizing = (
     },
     [columns]
   );
+
+  useEffect(() => {
+    const resizer = new ResizeObserver(() => {
+      setColumnsCallback();
+    });
+
+    if (tableContainerRef.current) {
+      resizer.observe(tableContainerRef.current);
+    }
+
+    return () => resizer.disconnect();
+  }, [setColumnsCallback]);
 
   return {
     columns,
