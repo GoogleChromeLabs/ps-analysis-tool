@@ -34,7 +34,7 @@ const BulletList = ({ rows, heading }: BulletListProps) => {
     <>
       {heading && (
         <>
-          <h2 className="text-xs font-bold uppercase text-darkest-gray">
+          <h2 className="text-xs font-bold uppercase text-darkest-gray dark:text-bright-gray">
             {heading}
           </h2>
           <hr className="border-0 border-b border-hex-gray dark:border-quartz" />
