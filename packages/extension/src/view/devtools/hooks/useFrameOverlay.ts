@@ -164,23 +164,12 @@ const useFrameOverlay = () => {
   }, [allowedNumberOfTabs, isCurrentTabBeingListenedTo, setIsInspecting]);
 
   useEffect(() => {
-    if (!selectedFrame) {
-      setIsInspecting(false);
-    }
-  }, [selectedFrame, setIsInspecting]);
-
-  useEffect(() => {
     (async () => {
       if (isInspecting) {
         if (!connectedToPort) {
           await connectToPort();
         }
-        if (
-          chrome.runtime?.id &&
-          portRef.current &&
-          tabFrames &&
-          selectedFrame
-        ) {
+        if (chrome.runtime?.id && portRef.current && tabFrames) {
           const thirdPartyCookies = filteredCookies
             ? filteredCookies.filter((cookie) => !cookie.isFirstParty)
             : [];
@@ -192,7 +181,7 @@ const useFrameOverlay = () => {
             thirdPartyCookies: thirdPartyCookies.length,
             firstPartyCookies: firstPartyCookies.length,
             isInspecting,
-            isOnRWS: tabFrames[selectedFrame].isOnRWS,
+            isOnRWS: selectedFrame ? tabFrames[selectedFrame].isOnRWS : false,
           });
         }
       }
