@@ -120,6 +120,7 @@ class WebpageContentScript {
 
   insertPopovers(response: ResponseType) {
     if (!response.selectedFrame) {
+      removeAllPopovers();
       return;
     }
 
