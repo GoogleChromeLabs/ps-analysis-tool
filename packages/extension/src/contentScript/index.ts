@@ -28,6 +28,7 @@ import './style.css';
 import { CookieStore } from '../localStore';
 import { setOverlayPosition } from './popovers/overlay';
 import { setTooltipPosition } from './popovers/tooltip';
+import { TOOLTIP_CLASS } from './constants';
 
 /**
  * Represents the content script for the webpage.
@@ -323,6 +324,14 @@ class WebpageContentScript {
   handleHoverEvent(event: MouseEvent): void {
     const target = event.target as HTMLElement;
     const isNonIframeElement = target.tagName !== 'IFRAME';
+    const isTooltipElement =
+      target.classList.contains(TOOLTIP_CLASS) ||
+      target.classList.contains('ps-tooltip-info-toggle-btn') ||
+      target.classList.contains('ps-enable-pointer-event');
+
+    if (isTooltipElement) {
+      return;
+    }
 
     this.isHoveringOverPage = true;
 
@@ -345,7 +354,7 @@ class WebpageContentScript {
       this.bodyHoverStateSent = true;
     }
 
-    if (!this.isInspecting || target.tagName !== 'IFRAME') {
+    if (!this.isInspecting || isNonIframeElement) {
       return;
     }
 

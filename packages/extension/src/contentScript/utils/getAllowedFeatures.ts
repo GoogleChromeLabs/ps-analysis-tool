@@ -23,7 +23,7 @@ const getAllowedFeatures = (iframe: HTMLElement) => {
   // Then query feature for specific
   const allowed = featurePolicy.allowedFeatures();
 
-  return allowed && allowed.length ? allowed.join(', ') : '';
+  return allowed && allowed.length ? allowed.sort() : 'N/A';
 };
 
 export default getAllowedFeatures;

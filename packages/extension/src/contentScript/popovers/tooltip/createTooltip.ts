@@ -38,6 +38,7 @@ const createTooltip = (
 ) => {
   const isMainFrame = document.location.origin === data.selectedFrame;
   let isHidden = false;
+  const displayShowMoreButton = false;
   const tooltip = document.createElement('div');
   const content = document.createElement('div');
   let insideFrame: HTMLIFrameElement | null = null;
@@ -82,6 +83,25 @@ const createTooltip = (
   const allowedFeatured =
     frame.tagName !== 'BODY' ? getAllowedFeatures(frame) : 'N/A';
 
+  const numberOfAllowedFeaturesInCompactView = 5;
+  let allowedFeatureInExpandedView;
+  let allowedFeaturesInCompactView;
+
+  if (allowedFeatured !== 'N/A') {
+    allowedFeatureInExpandedView = allowedFeatured.join(', ');
+    if (allowedFeatured.length > numberOfAllowedFeaturesInCompactView) {
+      const filteredAllowedFeatures = allowedFeatured.slice(
+        0,
+        numberOfAllowedFeaturesInCompactView
+      );
+      allowedFeaturesInCompactView =
+        filteredAllowedFeatures.join(', ') + ', ...';
+    }
+  } else {
+    allowedFeatureInExpandedView = 'N/A';
+    allowedFeaturesInCompactView = 'N/A';
+  }
+
   const info: Record<string, string> = {};
 
   if (isHidden) {
@@ -94,25 +114,88 @@ const createTooltip = (
     info['Type'] = 'iframe';
   }
 
-  if (numberOfVisibleFrames > 1) {
-    info['Visible frames'] = String(numberOfVisibleFrames);
-  }
-
-  if (numberOfHiddenFrames > 0) {
-    info['Hidden iframes'] = String(numberOfHiddenFrames);
-  }
-
+  info['Visible iframes'] = String(numberOfVisibleFrames);
+  info['Hidden iframes'] = String(numberOfHiddenFrames);
   info['Origin'] = origin ? origin : '(empty)';
   info['First-party cookies'] = String(data?.firstPartyCookies || '0');
   info['Third-party cookies'] = String(data?.thirdPartyCookies || '0');
   info['Belongs to RWS'] = origin ? (data?.isOnRWS ? 'Yes' : 'No') : 'N/A';
+
+  const allowedFeaturedValue = displayShowMoreButton
+    ? allowedFeaturesInCompactView
+    : allowedFeatureInExpandedView;
   info['Allowed features'] =
-    allowedFeatured === ALL_ALLOWED_FEATURES ? 'all' : allowedFeatured;
+    allowedFeaturedValue === ALL_ALLOWED_FEATURES
+      ? 'all'
+      : allowedFeaturedValue;
 
   // Reset the dataset of parent frame.
   if (insideFrame) {
     frame.dataset.psatInsideFrame = '';
   }
+
+  const tooltipShowButtonContainer: HTMLDivElement =
+    document.createElement('div');
+
+  tooltipShowButtonContainer.classList.add(
+    'ps-tooltip-info-toggle-btn-container'
+  );
+
+  const tooltipShowButton: HTMLButtonElement = document.createElement('button');
+
+  tooltipShowButton.classList.add(
+    'ps-tooltip-info-toggle-btn',
+    'ps-tooltip-compact'
+  );
+  tooltipShowButton.innerText = 'Show more';
+
+  tooltipShowButton.onclick = (event) => {
+    const btn = event.target as HTMLElement;
+    const tooltipContainer = btn.parentNode?.parentNode as HTMLElement;
+
+    const allowedFeatures = tooltipContainer.querySelector(
+      '.ps-allowed-features'
+    ) as HTMLElement;
+
+    const compactAllowedFeatures = allowedFeatures.getAttribute(
+      'data-compact-allowed-features'
+    );
+
+    const expandedAllowedFeatures = allowedFeatures.getAttribute(
+      'data-expanded-allowed-features'
+    );
+
+    const isCompact = btn.classList.contains('ps-tooltip-compact');
+
+    if (isCompact) {
+      btn.innerText = 'Show less';
+      btn.classList.remove('ps-tooltip-compact');
+      const hiddenElements = tooltipContainer.querySelectorAll('.hidden');
+      hiddenElements.forEach((element) => {
+        element.classList.remove('hidden');
+      });
+      allowedFeatures.innerText = expandedAllowedFeatures ?? 'N/A';
+    } else {
+      btn.innerText = 'Show more';
+      btn.classList.add('ps-tooltip-compact');
+      const compactViewHiddenElements =
+        tooltipContainer.querySelectorAll('.ps-compact');
+      compactViewHiddenElements.forEach((element) => {
+        element.classList.add('hidden');
+      });
+      allowedFeatures.innerText = compactAllowedFeatures ?? 'N/A';
+    }
+  };
+
+  const infoLabelStyle = `
+    color:#202124 !important;
+    font-weight:bold !important;
+  `;
+
+  const infoValueStyle = `
+    word-break: break-all !important;
+    text-decoration: none !important;
+  `;
 
   // eslint-disable-next-line guard-for-in
   for (const label in info) {
@@ -121,12 +204,38 @@ const createTooltip = (
     if (value) {
       const p: HTMLParagraphElement = document.createElement('p');
 
-      p.innerHTML = `<strong style="color:#202124">${label}</strong>: ${value}`;
+      if (label === 'Visible iframes') {
+        if (numberOfVisibleFrames > 1) {
+          p.innerHTML = `<span style="${infoLabelStyle}">${label}</span>: <span style="${infoValueStyle}">${value}</span>`;
+        } else {
+          p.innerHTML = `<span class="ps-compact hidden"><span style="${infoLabelStyle}">${label}</span>: <span style="${infoValueStyle}">${value}</span></span>`;
+        }
+      } else if (label === 'Hidden iframes') {
+        if (numberOfHiddenFrames > 0) {
+          p.innerHTML = `<span style="${infoLabelStyle}">${label}</span>: <span style="${infoValueStyle}">${value}</span>`;
+        } else {
+          p.innerHTML = `<span class="ps-compact hidden"><span style="${infoLabelStyle}">${label}</span>: <span style="${infoValueStyle}">${value}</span></span>`;
+        }
+      } else if (label === 'Allowed features') {
+        p.innerHTML = `<span style="${infoLabelStyle}">${label}</span>: <span class="ps-allowed-features" data-compact-allowed-features="${allowedFeaturesInCompactView}" data-expanded-allowed-features="${allowedFeatureInExpandedView}" style="${infoValueStyle}">${value}</span>`;
+      } else if (label === 'Origin') {
+        const originLink = `<a href="${value}" target="_blank" class="ps-enable-pointer-event" style="${infoValueStyle}">${value}</a>`;
+        p.innerHTML = `<span style="${infoLabelStyle}">${label}</span>: ${
+          value !== '(empty)' ? originLink : value
+        }`;
+      } else {
+        p.innerHTML = `<span style="${infoLabelStyle}">${label}</span>: <span style="${infoValueStyle}">${value}</span>`;
+      }
 
       content.appendChild(p);
     }
   }
 
+  if (displayShowMoreButton) {
+    tooltipShowButtonContainer.appendChild(tooltipShowButton);
+  }
+
+  content.appendChild(tooltipShowButtonContainer);
   tooltip.appendChild(content);
 
   tooltip.popover = 'manual';
