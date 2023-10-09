@@ -55,8 +55,6 @@ jest.mock('../../../stateProviders/syncCookieStore', () => {
   };
 });
 
-jest.mock('../../../stateProviders/contentPanelStore');
-
 jest.mock('../../../stateProviders/filterManagementStore');
 const mockFilterManagementStore = useFilterManagementStore as jest.Mock;
 mockFilterManagementStore.mockImplementation((selector) => {
