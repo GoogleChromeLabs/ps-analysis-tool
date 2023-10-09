@@ -104,8 +104,6 @@ export async function analyzeCookiesUrls(
             ).toISOString();
           }
 
-          console.log(expires, frameCookies[key].expires);
-
           frameCookies[key].isFirstParty =
             isFirstParty(
               frameCookies[key].domain,
