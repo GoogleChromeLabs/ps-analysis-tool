@@ -28,7 +28,7 @@ import {
   CookiesLanding,
   CookiesMatrix,
 } from '@cookie-analysis-tool/design-system';
-import type { CookieFrameStorageType } from '../../types';
+import type { CompleteJson, CookieFrameStorageType } from '../../types';
 import {
   prepareCookieStatsComponents,
   type CookieTableData,
@@ -50,6 +50,7 @@ const SiteMapReport = ({
   cookies,
   technologies,
   landingPageCookies,
+  completeJson,
 }: SiteMapReportProps) => {
   const [selectedSite, setSelectedSite] = useState<string | null>(null);
   const [sites, setSites] = useState<string[]>([]);
@@ -166,7 +167,7 @@ const SiteMapReport = ({
         enable={{
           right: true,
         }}
-        className="h-full flex flex-col border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
+        className=" max-h-screen overflow-auto flex flex-col border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
       >
         <div className="flex flex-col">
           <SiteSelection

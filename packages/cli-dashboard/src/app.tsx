@@ -184,6 +184,7 @@ const App = () => {
         landingPageCookies={landingPageCookies}
         cookies={cookies}
         technologies={technologies}
+        completeJson={completeJsonReport}
       />
     );
   } else {
