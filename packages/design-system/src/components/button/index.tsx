@@ -26,7 +26,6 @@ interface ButtonProps {
   loading?: boolean;
   type?: 'button' | 'submit' | 'reset';
   variant?: 'primary' | 'secondary' | 'danger';
-  extraClasses: string;
 }
 const Button = ({
   text,
@@ -34,7 +33,6 @@ const Button = ({
   onClick = undefined,
   type = 'button',
   variant = 'primary',
-  extraClasses = '',
 }: ButtonProps) => {
   return (
     <button
@@ -44,7 +42,6 @@ const Button = ({
       onClick={onClick ? onClick : undefined}
       className={classNames(
         'py-1 px-2 rounded font-medium flex items-center text-center',
-        extraClasses,
         {
           'text-white dark:bg-baby-blue-eyes bg-sapphire hover:bg-tufts-blue dark:hover:bg-pale-cornflower-blue dark:text-raisin-black':
             variant === 'primary',

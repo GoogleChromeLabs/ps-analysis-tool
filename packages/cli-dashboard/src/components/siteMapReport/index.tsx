@@ -28,7 +28,7 @@ import {
   CookiesLanding,
   CookiesMatrix,
 } from '@cookie-analysis-tool/design-system';
-import type { CompleteJson, CookieFrameStorageType } from '../../types';
+import type { CookieFrameStorageType } from '../../types';
 import {
   prepareCookieStatsComponents,
   type CookieTableData,
@@ -43,14 +43,12 @@ interface SiteMapReportProps {
   landingPageCookies: CookieFrameStorageType;
   cookies: CookieFrameStorageType;
   technologies: TechnologyData[];
-  completeJson: CompleteJson | null;
 }
 
 const SiteMapReport = ({
   cookies,
   technologies,
   landingPageCookies,
-  completeJson,
 }: SiteMapReportProps) => {
   const [selectedSite, setSelectedSite] = useState<string | null>(null);
   const [sites, setSites] = useState<string[]>([]);
@@ -200,7 +198,6 @@ const SiteMapReport = ({
           <SiteReport
             cookies={siteFilteredCookies}
             technologies={siteFilteredTechnologies}
-            completeJson={completeJson}
           />
         ) : selectedTopLevelMenu === 'report' ? (
           <>

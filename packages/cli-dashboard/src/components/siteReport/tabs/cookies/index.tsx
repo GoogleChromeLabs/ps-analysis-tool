@@ -36,7 +36,6 @@ interface CookiesTabProps {
 const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
   const { tabCookies } = useContentStore(({ state }) => ({
     tabCookies: state.tabCookies,
-    completeJson: state.completeJson,
   }));
 
   const tabFrames = useMemo<TabFrames>(
@@ -66,26 +65,24 @@ const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
       {selectedFrameUrl ? (
         <CookiesListing selectedFrameUrl={selectedFrameUrl} />
       ) : (
-        <div className="flex flex-col w-full">
-          <CookiesLanding
-            tabCookies={tabCookies}
+        <CookiesLanding
+          tabCookies={tabCookies}
+          tabFrames={tabFrames}
+          showInfoIcon={false}
+          showHorizontalMatrix={false}
+        >
+          <CookiesMatrix
+            tabCookies={affectedCookies}
+            cookiesStatsComponents={prepareCookieStatsComponents(
+              prepareCookiesCount(affectedCookies)
+            )}
             tabFrames={tabFrames}
+            title="Affected Cookies Insights"
+            description="Following are the insights about cookies that will be affected 3P cookie depreciation."
             showInfoIcon={false}
-            showHorizontalMatrix={false}
-          >
-            <CookiesMatrix
-              tabCookies={affectedCookies}
-              cookiesStatsComponents={prepareCookieStatsComponents(
-                prepareCookiesCount(affectedCookies)
-              )}
-              tabFrames={tabFrames}
-              title="Affected Cookies Insights"
-              description="Following are the insights about cookies that will be affected 3P cookie depreciation."
-              showInfoIcon={false}
-              count={Object.values(affectedCookies).length}
-            />
-          </CookiesLanding>
-        </div>
+            count={Object.values(affectedCookies).length}
+          />
+        </CookiesLanding>
       )}
     </div>
   );

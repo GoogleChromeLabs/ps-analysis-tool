@@ -25,7 +25,7 @@ import React from 'react';
 import { Provider as ContentStoreProvider } from './stateProviders/contentStore';
 import Layout from './components/layout';
 import type { TechnologyData } from '@cookie-analysis-tool/common';
-import type { CompleteJson, CookieJsonDataType } from '../../types';
+import type { CookieJsonDataType } from '../../types';
 
 interface SiteReportProps {
   cookies: {
@@ -34,20 +34,11 @@ interface SiteReportProps {
     };
   };
   technologies: TechnologyData[];
-  completeJson: CompleteJson | null;
 }
 
-const SiteReport = ({
-  cookies,
-  technologies,
-  completeJson,
-}: SiteReportProps) => {
+const SiteReport = ({ cookies, technologies }: SiteReportProps) => {
   return (
-    <ContentStoreProvider
-      cookies={cookies}
-      technologies={technologies}
-      completeJson={completeJson}
-    >
+    <ContentStoreProvider cookies={cookies} technologies={technologies}>
       <Layout />
     </ContentStoreProvider>
   );
