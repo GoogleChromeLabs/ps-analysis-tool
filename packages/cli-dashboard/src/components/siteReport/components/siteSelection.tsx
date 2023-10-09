@@ -16,7 +16,12 @@
 /**
  * External dependencies.
  */
-import { ArrowDown, ArrowDownWhite } from '@cookie-analysis-tool/design-system';
+import {
+  ArrowDown,
+  ArrowDownWhite,
+  File,
+  FileWhite,
+} from '@cookie-analysis-tool/design-system';
 import React, { useState } from 'react';
 
 interface SiteSelectionProps {
@@ -75,12 +80,13 @@ const SiteSelection = ({
                 setSelectedSite(site);
                 selectTopLevelMenu();
               }}
-              className={`truncate pl-12 cursor-pointer ${
+              className={`truncate pl-12 cursor-pointer flex items-center ${
                 site === selectedSite ? 'bg-royal-blue text-white' : ''
               }`}
               key={id}
             >
-              {site}
+              <span>{site === selectedSite ? <FileWhite /> : <File />}</span>
+              <span className="pl-1.5">{site}</span>
             </li>
           ))}
         </ul>

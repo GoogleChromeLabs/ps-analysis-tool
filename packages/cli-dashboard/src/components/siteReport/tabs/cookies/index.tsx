@@ -66,7 +66,12 @@ const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
       {selectedFrameUrl ? (
         <CookiesListing selectedFrameUrl={selectedFrameUrl} />
       ) : (
-        <CookiesLanding tabCookies={tabCookies} tabFrames={tabFrames}>
+        <CookiesLanding
+          tabCookies={tabCookies}
+          tabFrames={tabFrames}
+          showInfoIcon={false}
+          showHorizontalMatrix={false}
+        >
           <CookiesMatrix
             tabCookies={affectedCookies}
             cookiesStatsComponents={prepareCookieStatsComponents(
@@ -75,8 +80,8 @@ const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
             tabFrames={tabFrames}
             title="Affected Cookies Insights"
             description="Following are the insights about cookies that will be affected 3P cookie depreciation."
-            showHorizontalMatrix={false}
             showInfoIcon={false}
+            count={Object.values(affectedCookies).length}
           />
         </CookiesLanding>
       )}

@@ -123,7 +123,7 @@ const CookiesMatrix = ({
     <div className="w-full" data-testid="cookies-matrix">
       <div>
         <div className="flex gap-x-5 justify-between border-b border-bright-gray dark:border-quartz">
-          <div className="pb-3">
+          <div className="pb-3 flex flex-col gap-1">
             <h4 className="flex items-center gap-1 flex-1 grow text-xs font-bold text-darkest-gray dark:text-bright-gray uppercase">
               <span>{title}</span>
               {showInfoIcon && (
@@ -132,9 +132,7 @@ const CookiesMatrix = ({
                 </span>
               )}
               {Boolean(count) && (
-                <span className="text-xxxs text-secondary ml-2">
-                  {Number(count) || 0}
-                </span>
+                <span className="text-secondary">: {Number(count) || 0}</span>
               )}
             </h4>
             <p className="text-xs">{description}</p>
