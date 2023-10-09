@@ -134,9 +134,6 @@ export const initialize = async () => {
       text: 'Done analysing technologies',
     });
 
-    spinnies.succeed('technologies-spinner', {
-      text: 'Done analyzing technologies.',
-    });
     const result = urlsToProcess.map((_url, ind) => {
       return {
         pageUrl: _url,

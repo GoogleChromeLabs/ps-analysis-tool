@@ -315,8 +315,11 @@ export class BrowserManagement {
           return acc;
         }, {});
 
+        // handles redirection
+        const pageUrl = page.url();
+
         return {
-          pageUrl: url,
+          pageUrl,
           cookieData: {
             ...cookieDataFromNetwork,
             'Unknown Frame': {

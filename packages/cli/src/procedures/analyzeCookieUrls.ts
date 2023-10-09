@@ -93,17 +93,24 @@ export async function analyzeCookiesUrls(
           frameCookies[key].category = analytics?.category || 'Uncategorized';
           frameCookies[key].GDPR = analytics?.gdprUrl || '';
 
-          // some cookies may have their expires value in epoch. Convert them to GMTString
+          // some cookies may have their expires value in epoch. Convert them to string
           const expires = frameCookies[key].expires;
 
           if (expires === '') {
             frameCookies[key].expires = 'Session';
           } else if (typeof expires === 'number') {
-            frameCookies[key].expires = new Date(expires).toISOString();
+            frameCookies[key].expires = new Date(
+              expires + Date.now()
+            ).toISOString();
           }
 
+          console.log(expires, frameCookies[key].expires);
+
           frameCookies[key].isFirstParty =
-            isFirstParty(frameCookies[key].domain, url) || false;
+            isFirstParty(
+              frameCookies[key].domain,
+              normalCookieAnaysisData[ind].pageUrl
+            ) || false;
         });
       }
     );
