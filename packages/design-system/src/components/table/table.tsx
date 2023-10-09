@@ -100,7 +100,7 @@ const Table = ({
         onClose={setShowColumnsMenu}
         position={columnPosition}
       />
-      <div className="h-full w-full" ref={tableRef}>
+      <div className="h-full w-full overflow-auto min-w-[40rem]" ref={tableRef}>
         <TableHeader
           updatePreference={updatePreference}
           table={table}

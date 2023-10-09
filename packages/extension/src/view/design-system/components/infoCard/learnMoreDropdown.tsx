@@ -25,6 +25,7 @@ import React, { useState } from 'react';
 import type { PSInfo as PSInfoType } from '../../../../utils/fetchPSInfo';
 import RenderLink from './renderLink';
 import { ArrowRight, Button } from '@cookie-analysis-tool/design-system';
+import classNames from 'classnames';
 
 /**
  * @type {Array} LABELS - Array of objects containing the label and link label for each dropdown item.
@@ -52,10 +53,12 @@ const LABELS = [
 
 interface LearnMoreDropdownProps {
   PSInfo: PSInfoType;
+  hasSeparator?: boolean;
 }
 
 const LearnMoreDropdown = ({
   PSInfo: { proposal, publicDiscussion, videoOverview, devDocumentation },
+  hasSeparator,
 }: LearnMoreDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -80,7 +83,12 @@ const LearnMoreDropdown = ({
           </ul>
         </div>
       )}
-      <div className="pt-4 border-t border-gray-200 dark:border-gray-500">
+      <div
+        className={classNames(
+          'pt-4',
+          hasSeparator && 'border-t border-gray-200 dark:border-gray-500'
+        )}
+      >
         <Button
           text={
             isOpen ? (

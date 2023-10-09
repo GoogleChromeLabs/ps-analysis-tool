@@ -82,9 +82,9 @@ const HeaderCell = ({
   return (
     <div
       ref={columnRef}
-      style={{ width: cell.width }}
+      style={{ maxWidth: cell.width }}
       onClick={handleOnClick}
-      className="relative hover:bg-gainsboro dark:hover:bg-outer-space select-none touch-none font-normal truncate"
+      className="relative hover:bg-gainsboro dark:hover:bg-outer-space select-none touch-none font-normal truncate flex-1"
       data-testid="header-cell"
     >
       <div

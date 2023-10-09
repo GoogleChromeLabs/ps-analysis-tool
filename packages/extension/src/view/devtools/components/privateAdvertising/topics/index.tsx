@@ -16,21 +16,24 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useState } from 'react';
 
 /**
  * Internal dependencies.
  */
 import InfoCard from '../../../../design-system/components/infoCard';
 import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
-import TopicsList from './topicsList';
+import { LandingPage } from '@cookie-analysis-tool/design-system';
 
 const Topics = () => {
+  const [pageTitle, setPageTitle] = useState('');
+
   return (
-    <div className="w-full h-full overflow-auto" data-testid="topics-content">
-      <InfoCard infoKey={PSInfoKey.Topics} />
-      <TopicsList />
-    </div>
+    <LandingPage title={pageTitle} isLoading={!pageTitle}>
+      <div className="w-full h-full overflow-auto" data-testid="topics-content">
+        <InfoCard infoKey={PSInfoKey.Topics} setTitle={setPageTitle} />
+      </div>
+    </LandingPage>
   );
 };
 
