@@ -30,6 +30,7 @@ const functional1pCookie = {
   },
   url: 'https://example.com/public/api/alerts',
   headerType: 'request',
+  isFirstParty: true,
 };
 
 const marketing1pCookie = {
@@ -43,6 +44,7 @@ const marketing1pCookie = {
   },
   url: 'https://example.com/public/api/alerts',
   headerType: 'request',
+  isFirstParty: true,
 };
 
 const analytics1pCookie = {
@@ -56,6 +58,7 @@ const analytics1pCookie = {
   },
   url: 'https://example.com/public/api/alerts',
   headerType: 'request',
+  isFirstParty: true,
 };
 
 const uncategorized1pCookie = {
@@ -67,6 +70,7 @@ const uncategorized1pCookie = {
   analytics: null,
   url: 'https://example.com/public/api/alerts',
   headerType: 'request',
+  isFirstParty: true,
 };
 
 const functional3pCookie = {
@@ -80,6 +84,7 @@ const functional3pCookie = {
   },
   url: 'https://other.server.com/public/api/alerts',
   headerType: 'request',
+  isFirstParty: false,
 };
 
 const marketing3pCookie = {
@@ -93,6 +98,7 @@ const marketing3pCookie = {
   },
   url: 'https://other.server.com/public/api/alerts',
   headerType: 'request',
+  isFirstParty: false,
 };
 
 const analytics3pCookie = {
@@ -106,6 +112,7 @@ const analytics3pCookie = {
   },
   url: 'https://other.server.com/public/api/alerts',
   headerType: 'request',
+  isFirstParty: false,
 };
 
 const uncategorized3pCookie = {
@@ -117,6 +124,7 @@ const uncategorized3pCookie = {
   analytics: null,
   url: 'https://other.server.com/public/api/alerts',
   headerType: 'request',
+  isFirstParty: false,
 };
 
 const EMPTY_STATS = {
@@ -146,7 +154,7 @@ describe('prepareCookiesCount : ', () => {
     expect(prepareCookiesCount(null)).toEqual(EMPTY_STATS);
   });
 
-  it('Generates correct tests', () => {
+  it('Generates correct stats', () => {
     const cookies = {
       [functional1pCookie.parsedCookie.name]: functional1pCookie,
       [functional3pCookie.parsedCookie.name]: functional3pCookie,
@@ -177,7 +185,7 @@ describe('prepareCookiesCount : ', () => {
     };
     expect(
       //@ts-ignore Missing properties are not required in the function.
-      prepareCookiesCount(cookies, 'https://example.com/page')
+      prepareCookiesCount(cookies)
     ).toEqual(expectedStats);
   });
 });
