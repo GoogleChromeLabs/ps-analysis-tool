@@ -14,29 +14,31 @@
  * limitations under the License.
  */
 import React, { useMemo } from 'react';
-
-/**
- * Internal dependencies.
- */
-import CookiesListing from './cookieListing';
-import {
-  CookiesLanding,
-  CookiesMatrix,
-} from '@cookie-analysis-tool/design-system';
-import { useContentStore } from '../../stateProviders/contentStore';
 import {
   prepareCookiesCount,
   prepareCookieStatsComponents,
   type TabFrames,
 } from '@cookie-analysis-tool/common';
+import {
+  CookiesLanding,
+  CookiesMatrix,
+  Button,
+} from '@cookie-analysis-tool/design-system';
+/**
+ * Internal dependencies.
+ */
+import CookiesListing from './cookieListing';
+import { useContentStore } from '../../stateProviders/contentStore';
+import { reportDownloader } from '../../../utils/reportDownloader';
 
 interface CookiesTabProps {
   selectedFrameUrl?: string | null;
 }
 
 const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
-  const { tabCookies } = useContentStore(({ state }) => ({
+  const { tabCookies, completeJson } = useContentStore(({ state }) => ({
     tabCookies: state.tabCookies,
+    completeJson: state.completeJson,
   }));
 
   const tabFrames = useMemo<TabFrames>(
@@ -66,24 +68,31 @@ const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
       {selectedFrameUrl ? (
         <CookiesListing selectedFrameUrl={selectedFrameUrl} />
       ) : (
-        <CookiesLanding
-          tabCookies={tabCookies}
-          tabFrames={tabFrames}
-          showInfoIcon={false}
-          showHorizontalMatrix={false}
-        >
-          <CookiesMatrix
-            tabCookies={affectedCookies}
-            cookiesStatsComponents={prepareCookieStatsComponents(
-              prepareCookiesCount(affectedCookies)
-            )}
-            tabFrames={tabFrames}
-            title="Affected Cookies Insights"
-            description="Following are the insights about cookies that will be affected 3P cookie depreciation."
-            showInfoIcon={false}
-            count={Object.values(affectedCookies).length}
+        <div className="flex flex-col w-full">
+          <Button
+            extraClasses="absolute top-0 right-0"
+            text="Download Report"
+            onClick={() => reportDownloader(completeJson)}
           />
-        </CookiesLanding>
+          <CookiesLanding
+            tabCookies={tabCookies}
+            tabFrames={tabFrames}
+            showInfoIcon={false}
+            showHorizontalMatrix={false}
+          >
+            <CookiesMatrix
+              tabCookies={affectedCookies}
+              cookiesStatsComponents={prepareCookieStatsComponents(
+                prepareCookiesCount(affectedCookies)
+              )}
+              tabFrames={tabFrames}
+              title="Affected Cookies Insights"
+              description="Following are the insights about cookies that will be affected 3P cookie depreciation."
+              showInfoIcon={false}
+              count={Object.values(affectedCookies).length}
+            />
+          </CookiesLanding>
+        </div>
       )}
     </div>
   );

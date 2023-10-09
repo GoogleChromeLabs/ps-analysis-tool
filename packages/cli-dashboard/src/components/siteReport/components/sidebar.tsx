@@ -20,7 +20,6 @@
 import {
   Accordion,
   AccordionChildren,
-  Button,
 } from '@cookie-analysis-tool/design-system';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -28,8 +27,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
  * Internal dependencies.
  */
 import { TABS } from '../tabs';
-import { reportDownloader } from '../../utils/reportDownloader';
-import { useContentStore } from '../stateProviders/contentStore';
 
 export interface SidebarProps {
   selectedFrameUrl: string | null;
@@ -53,10 +50,6 @@ const Sidebar = ({
     string | null
   >(null);
   const sidebarContainerRef = useRef<HTMLDivElement>(null);
-
-  const { completeJson } = useContentStore(({ state }) => ({
-    completeJson: state.completeJson,
-  }));
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -333,12 +326,6 @@ const Sidebar = ({
           }
           return null;
         })}
-        <div className="mt-6 justify-center w-full flex">
-          <Button
-            text="Download Report"
-            onClick={() => reportDownloader(completeJson)}
-          />
-        </div>
       </div>
     </div>
   );

@@ -39,6 +39,7 @@ export const reportDownloader = (report: CompleteJson | null) => {
   if (!report) {
     return;
   }
+
   const newReport: NewReport = {
     ...report,
     affectedCookies: {},
@@ -103,9 +104,7 @@ export const reportDownloader = (report: CompleteJson | null) => {
           : unSanitisedCookie.value,
         domain: unSanitisedCookie.domain,
         path: unSanitisedCookie.path,
-        expires: unSanitisedCookie.expires.includes(',')
-          ? `"${unSanitisedCookie.expires}"`
-          : unSanitisedCookie.expires,
+        expires: unSanitisedCookie.expires,
         httpOnly: unSanitisedCookie.httpOnly,
         scope: unSanitisedCookie?.isFirstParty ? 'First Party' : 'Third Party',
         secure: unSanitisedCookie.secure,
