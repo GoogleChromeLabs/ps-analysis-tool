@@ -33,10 +33,10 @@ import classNames from 'classnames';
 interface InfoCardProps {
   infoKey: PSInfoKeyType;
   setTitle?: React.Dispatch<React.SetStateAction<string>>;
-  hasHeader?: boolean;
+  className?: string;
 }
 
-const InfoCard = ({ infoKey, setTitle, hasHeader }: InfoCardProps) => {
+const InfoCard = ({ infoKey, setTitle, className }: InfoCardProps) => {
   const [PSInfo, setPSInfo] = useState({} as PSInfoType);
 
   useEffect(() => {
@@ -51,29 +51,12 @@ const InfoCard = ({ infoKey, setTitle, hasHeader }: InfoCardProps) => {
   return (
     <>
       {Object.keys(PSInfo).length ? (
-        <div className={classNames('max-w-2xl', hasHeader && 'm-3')}>
-          <div
-            className={classNames(
-              'p-6 dark:bg-davys-grey',
-              hasHeader
-                ? 'border border-gray-200 dark:border-quartz rounded-lg shadow'
-                : 'pl-4'
-            )}
-          >
-            {hasHeader && (
-              <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-bright-gray">
-                {PSInfo.name}
-              </h5>
-            )}
-            <p
-              className={classNames(
-                'mb-3 text-gray-700 dark:text-bright-gray',
-                !hasHeader && 'text-sm'
-              )}
-              dangerouslySetInnerHTML={{ __html: PSInfo.description }}
-            />
-            <LearnMoreDropdown PSInfo={PSInfo} hasSeparator={hasHeader} />
-          </div>
+        <div className={classNames('py-6 ', className)}>
+          <p
+            className="mb-3 text-gray-700 dark:text-bright-gray text-sm"
+            dangerouslySetInnerHTML={{ __html: PSInfo.description }}
+          />
+          <LearnMoreDropdown PSInfo={PSInfo} />
         </div>
       ) : (
         <div className="w-full h-full flex items-center justify-center">

@@ -30,7 +30,10 @@ const Chips = () => {
 
   return (
     <LandingPage title={pageTitle} isLoading={!pageTitle}>
-      <div className="w-full h-full overflow-auto" data-testid="chips-content">
+      <div
+        className="px-4 max-w-2xl h-full overflow-auto"
+        data-testid="chips-content"
+      >
         <InfoCard infoKey={PSInfoKey.Chips} setTitle={setPageTitle} />
       </div>
     </LandingPage>

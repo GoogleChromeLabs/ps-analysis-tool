@@ -30,7 +30,10 @@ const Topics = () => {
 
   return (
     <LandingPage title={pageTitle} isLoading={!pageTitle}>
-      <div className="w-full h-full overflow-auto" data-testid="topics-content">
+      <div
+        className="px-4 max-w-2xl h-full overflow-auto"
+        data-testid="topics-content"
+      >
         <InfoCard infoKey={PSInfoKey.Topics} setTitle={setPageTitle} />
       </div>
     </LandingPage>

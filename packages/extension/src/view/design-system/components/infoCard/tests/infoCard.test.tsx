@@ -56,10 +56,7 @@ describe('should match the json file data with the component', () => {
   test.each(tests)(
     'should match component with enum key prop to json data',
     async ({ input, output }) => {
-      render(<InfoCard infoKey={input} hasHeader={true} />);
-
-      const name = await screen.findByText(output.name);
-      expect(name).toBeInTheDocument();
+      render(<InfoCard infoKey={input} />);
 
       const learnMoreButton = await screen.findByText('Learn more');
       fireEvent.click(learnMoreButton);
