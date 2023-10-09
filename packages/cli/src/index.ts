@@ -104,7 +104,6 @@ export const initialize = async () => {
     const spinnies = new Spinnies();
     const urls: Array<string> = await Utility.getUrlsFromSitemap(sitemapURL);
     const prefix = Utility.generatePrefix([...urls].shift() ?? 'untitled');
-    const spinnies = new Spinnies();
     const directory = `./out/${prefix}`;
     const userInput: any = await Utility.askUserInput(
       `Provided sitemap has ${urls.length} pages. Please enter the number of pages you want to analyze (Default ${urls.length}):`,
