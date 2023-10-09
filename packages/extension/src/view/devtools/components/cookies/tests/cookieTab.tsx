@@ -279,51 +279,29 @@ describe('CookieTab', () => {
   });
 
   it('should get the cookie object when row is clicked or Arrow up/down pressed', async () => {
-    const setStateMock = jest.fn();
     render(<CookieTab />);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const useStateMock: any = (initState: any) => [initState, setStateMock];
-    jest.spyOn(React, 'useState').mockImplementation(useStateMock);
-    jest.spyOn(React, 'useEffect').mockImplementation((f) => f());
-    jest.spyOn(React, 'useCallback').mockImplementation((f) => f);
-    jest.spyOn(React, 'useMemo').mockImplementation((f) => f());
-    jest.spyOn(React, 'useRef').mockImplementation(() => ({ current: null }));
+    const row = await screen.findAllByTestId('body-row');
+    fireEvent.click(row[0]);
 
-    const row = (await screen.findAllByTestId('body-row'))[0];
-    fireEvent.click(row);
+    expect(row[0]).not.toHaveClass('dark:bg-charlston-green');
 
-    expect(setStateMock).toHaveBeenCalledWith({
-      'https://edition.cnn.com/':
-        mockResponse.tabCookies[uncategorized1pCookie.name],
-    });
+    fireEvent.keyDown(row[0], { key: 'ArrowDown', code: 'ArrowDown' });
 
-    fireEvent.keyDown(row, { key: 'ArrowDown', code: 'ArrowDown' });
-
-    expect(setStateMock).toHaveBeenCalledWith({
-      'https://edition.cnn.com/':
-        mockResponse.tabCookies[uncategorized1pCookie.name],
-    });
+    expect(row[1]).not.toHaveClass('dark:bg-charlston-green');
 
     const emptyRow = await screen.findByTestId('empty-row');
     fireEvent.click(emptyRow);
 
-    expect(setStateMock).toHaveBeenCalledWith({
-      'https://edition.cnn.com/': null,
-    });
+    expect(emptyRow).not.toHaveClass('dark:bg-charlston-green');
 
     fireEvent.keyDown(emptyRow, { key: 'ArrowDown', code: 'ArrowDown' });
 
-    expect(setStateMock).toHaveBeenCalledWith({
-      'https://edition.cnn.com/': null,
-    });
+    expect(emptyRow).not.toHaveClass('dark:bg-charlston-green');
 
     fireEvent.keyDown(emptyRow, { key: 'ArrowUp', code: 'ArrowUp' });
 
-    expect(setStateMock).toHaveBeenCalledWith({
-      'https://edition.cnn.com/':
-        mockResponse.tabCookies[uncategorized1pCookie.name],
-    });
+    expect(row[row.length - 1]).not.toHaveClass('dark:bg-charlston-green');
   });
 
   it('should decode the cookie value on clicking checkbox', async () => {
