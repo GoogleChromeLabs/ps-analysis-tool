@@ -42,15 +42,15 @@ interface CookieTableProps {
       [frame: string]: CookieTableData | null;
     } | null
   ) => void;
-  updatePreference: (
+  updatePreference?: (
     key: string,
     updater: (prevStatePreference: {
       [key: string]: unknown;
     }) => PreferenceDataValues
   ) => void;
-  columnSorting: SortingState[];
-  columnSizing: Record<string, number>;
-  selectedColumns: Record<string, boolean>;
+  columnSorting?: SortingState[];
+  columnSizing?: Record<string, number>;
+  selectedColumns?: Record<string, boolean>;
 }
 
 const CookieTable = ({

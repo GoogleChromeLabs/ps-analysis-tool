@@ -16,28 +16,44 @@
 /**
  * External dependencies.
  */
-import { ArrowDownWhite } from '@cookie-analysis-tool/design-system';
+import {
+  ArrowDown,
+  ArrowDownWhite,
+  File,
+  FileWhite,
+} from '@cookie-analysis-tool/design-system';
 import React, { useState } from 'react';
 
 interface SiteSelectionProps {
   sites: string[];
   selectedSite: string | null;
   setSelectedSite: (site: string | null) => void;
+  isSelectedTopLevelMenu: boolean;
+  selectTopLevelMenu: () => void;
 }
 
 const SiteSelection = ({
   sites,
   selectedSite,
   setSelectedSite,
+  isSelectedTopLevelMenu,
+  selectTopLevelMenu,
 }: SiteSelectionProps) => {
   const isSiteSelected = Boolean(selectedSite);
   const [isOpen, setIsOpen] = useState(isSiteSelected);
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full overflow-auto text-sm">
       <div
-        onClick={() => setSelectedSite(null)}
+        onClick={() => {
+          setSelectedSite(null);
+          selectTopLevelMenu();
+        }}
         className={`w-full flex items-center pl-6 py-0.5 outline-0 ${
-          isSiteSelected ? 'bg-gainsboro' : 'bg-royal-blue text-white'
+          isSelectedTopLevelMenu
+            ? isSiteSelected
+              ? 'bg-gainsboro'
+              : 'bg-royal-blue text-white'
+            : 'bg-white'
         } cursor-pointer`}
       >
         <div
@@ -48,23 +64,29 @@ const SiteSelection = ({
             !isOpen && '-rotate-90'
           }`}
         >
-          <ArrowDownWhite />
+          {isSiteSelected || !isSelectedTopLevelMenu ? (
+            <ArrowDown />
+          ) : (
+            <ArrowDownWhite />
+          )}
         </div>
-        <p>Sitemap report</p>
+        <p>Sitemap Report</p>
       </div>
       {isOpen && (
-        <ul className="pl-6">
+        <ul>
           {sites.map((site, id) => (
             <li
               onClick={() => {
                 setSelectedSite(site);
+                selectTopLevelMenu();
               }}
-              className={`truncate pl-6 cursor-pointer ${
+              className={`truncate pl-12 cursor-pointer flex items-center ${
                 site === selectedSite ? 'bg-royal-blue text-white' : ''
               }`}
               key={id}
             >
-              {site}
+              <span>{site === selectedSite ? <FileWhite /> : <File />}</span>
+              <span className="pl-1.5">{site}</span>
             </li>
           ))}
         </ul>

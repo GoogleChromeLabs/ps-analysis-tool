@@ -19,9 +19,16 @@ import React, { useMemo } from 'react';
  * Internal dependencies.
  */
 import CookiesListing from './cookieListing';
-import { CookiesLanding } from '@cookie-analysis-tool/design-system';
+import {
+  CookiesLanding,
+  CookiesMatrix,
+} from '@cookie-analysis-tool/design-system';
 import { useContentStore } from '../../stateProviders/contentStore';
-import type { TabFrames } from '@cookie-analysis-tool/common';
+import {
+  prepareCookiesCount,
+  prepareCookieStatsComponents,
+  type TabFrames,
+} from '@cookie-analysis-tool/common';
 
 interface CookiesTabProps {
   selectedFrameUrl?: string | null;
@@ -35,11 +42,22 @@ const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
   const tabFrames = useMemo<TabFrames>(
     () =>
       Object.values(tabCookies).reduce((acc, cookie) => {
-        if (cookie.frameUrl?.includes('http')) {
+        if (
+          cookie.frameUrl?.includes('http') ||
+          cookie.frameUrl === 'Unknown Frame'
+        ) {
           acc[cookie.frameUrl] = {} as TabFrames[string];
         }
         return acc;
       }, {} as TabFrames),
+    [tabCookies]
+  );
+
+  const affectedCookies = useMemo(
+    () =>
+      Object.fromEntries(
+        Object.entries(tabCookies).filter(([, cookie]) => !cookie.isCookieSet)
+      ),
     [tabCookies]
   );
 
@@ -51,8 +69,21 @@ const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
         <CookiesLanding
           tabCookies={tabCookies}
           tabFrames={tabFrames}
-          tabUrl={Object.values(tabCookies)[0]?.url}
-        />
+          showInfoIcon={false}
+          showHorizontalMatrix={false}
+        >
+          <CookiesMatrix
+            tabCookies={affectedCookies}
+            cookiesStatsComponents={prepareCookieStatsComponents(
+              prepareCookiesCount(affectedCookies)
+            )}
+            tabFrames={tabFrames}
+            title="Affected Cookies Insights"
+            description="Following are the insights about cookies that will be affected 3P cookie depreciation."
+            showInfoIcon={false}
+            count={Object.values(affectedCookies).length}
+          />
+        </CookiesLanding>
       )}
     </div>
   );

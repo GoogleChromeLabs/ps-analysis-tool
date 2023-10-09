@@ -32,7 +32,6 @@ import SinonChrome from 'sinon-chrome';
  */
 import CookieTab from '..';
 import { CookieDetails, Details } from '@cookie-analysis-tool/design-system';
-import { useFilterManagementStore } from '../../../stateProviders/filterManagementStore';
 import mockResponse, {
   uncategorized1pCookie,
   known1pCookie,
@@ -55,20 +54,35 @@ jest.mock('../../../stateProviders/syncCookieStore', () => {
   };
 });
 
-jest.mock('../../../stateProviders/contentPanelStore');
-
-jest.mock('../../../stateProviders/filterManagementStore');
-const mockFilterManagementStore = useFilterManagementStore as jest.Mock;
-mockFilterManagementStore.mockImplementation((selector) => {
-  return selector({
-    state: {
-      selectedFilters: {},
-      filters: [],
-      filteredCookies: Object.values(mockResponse.tabCookies),
+jest.mock('../../../stateProviders/filterManagementStore', () => {
+  return {
+    useFilterManagementStore: {
+      state: {
+        selectedFilters: {},
+        filters: [],
+        filteredCookies: Object.values(mockResponse.tabCookies),
+      },
+      actions: {},
     },
-    actions: {},
-  });
+  };
 });
+// const mockFilterManagementStore = useFilterManagementStore as jest.Mock;
+// mockFilterManagementStore.mockImplementation((selector) => {
+//   return selector({
+//     state: {
+//       selectedFilters: {},
+//       filters: [],
+//       filteredCookies: Object.values(mockResponse.tabCookies),
+//     },
+//     actions: {},
+//   });
+// });
+
+global.ResizeObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}));
 
 describe('CookieTab', () => {
   beforeAll(() => {

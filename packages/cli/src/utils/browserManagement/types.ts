@@ -13,29 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const getCSVbyObject = (data: Array<object>): string => {
-  if (!data.length) {
-    return '';
-  }
 
-  const keys = Object.keys(data[0]);
-  const allData = [keys, ...data];
-
-  const csvRows: Array<string> = [];
-
-  allData.forEach((rowData) => {
-    const row = Object.values(rowData);
-
-    csvRows.push(
-      row
-        .map(String)
-        .map((v) => v.replace('"', '""')) // escape double colons
-        .map((v) => `"${v}"`) // quote it
-        .join(',') // comma-separated
-    );
-  });
-
-  return csvRows.join('\r\n'); // rows starting on new lines
+export type Cookie = {
+  name: string;
+  domain: string;
+  path: string;
+  value: string;
+  sameSite: string;
+  expires: string | Date | number;
+  httpOnly: boolean;
+  secure: boolean;
+  isBlocked?: boolean;
+  platform?: string;
+  category?: string;
+  GDPR?: string;
+  isFirstParty?: boolean;
 };
 
-export default getCSVbyObject;
+export type ViewportConfig = {
+  width: number;
+  height: number;
+  deviceScaleFactor: number;
+};
+
+export type ResponseData = {
+  frameId: string;
+  serverUrl: string;
+  cookies: Cookie[];
+};
+
+export type RequestData = {
+  frameId: string;
+  serverUrl: string;
+  cookies: Cookie[];
+};

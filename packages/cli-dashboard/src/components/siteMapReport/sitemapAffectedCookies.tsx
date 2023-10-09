@@ -15,7 +15,7 @@
  */
 
 /**
- * External dependencies
+ * External dependencies.
  */
 import React, { useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
@@ -30,18 +30,12 @@ import {
   type TableColumn,
 } from '@cookie-analysis-tool/design-system';
 import type { CookieTableData } from '@cookie-analysis-tool/common';
-import { useContentStore } from '../../stateProviders/contentStore';
 
-interface AffectedCookiesProps {
-  selectedFrameUrl: string | null;
+interface SiteMapAffectedCookiesProps {
+  cookies: CookieTableData[];
 }
 
-const AffectedCookies = ({ selectedFrameUrl }: AffectedCookiesProps) => {
-  const { tabCookies } = useContentStore(({ state }) => ({
-    tabCookies: Object.values(state.tabCookies).filter(
-      (cookie) => !cookie.isCookieSet
-    ),
-  }));
+const SiteMapAffectedCookies = ({ cookies }: SiteMapAffectedCookiesProps) => {
   const [selectedFrameCookie, setSelectedFrameCookie] = useState<{
     [frame: string]: CookieTableData | null;
   } | null>(null);
@@ -124,7 +118,7 @@ const AffectedCookies = ({ selectedFrameUrl }: AffectedCookiesProps) => {
     <div className="w-full h-full flex flex-col">
       <div className="w-full h-[25px] px-2 flex items-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green">
         <div className="text-right w-full text-xxxs text-secondary">
-          Count: {Number(tabCookies?.length) || 0}
+          Count: {Number(cookies?.length) || 0}
         </div>
       </div>
       <div className="w-full flex-1 overflow-hidden h-full flex flex-col">
@@ -145,8 +139,8 @@ const AffectedCookies = ({ selectedFrameUrl }: AffectedCookiesProps) => {
         >
           <CookieTable
             tableColumns={tableColumns}
-            data={tabCookies}
-            selectedFrame={selectedFrameUrl}
+            data={cookies}
+            selectedFrame={'sitemap'}
             selectedFrameCookie={selectedFrameCookie}
             setSelectedFrameCookie={setSelectedFrameCookie}
           />
@@ -157,4 +151,4 @@ const AffectedCookies = ({ selectedFrameUrl }: AffectedCookiesProps) => {
   );
 };
 
-export default AffectedCookies;
+export default SiteMapAffectedCookies;

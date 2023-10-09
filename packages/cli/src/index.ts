@@ -27,10 +27,11 @@ import { exec } from 'child_process';
  * Internal dependencies.
  */
 import { analyzeTechnologiesUrls } from './procedures/analyzeTechnologiesUrls';
-import { analyzeCookiesUrls } from './analyseCookiesUrl';
 import Utility from './utils/utility';
 import { fetchDictionary } from './utils/fetchCookieDictionary';
 import { delay } from './utils';
+import { analyzeCookiesUrls } from './procedures/analyzeCookieUrls';
+import { analyzeCookiesUrlsInBatches } from './procedures/analyzeCookieUrlsInBatches';
 
 events.EventEmitter.defaultMaxListeners = 15;
 const delayTime = 20000;
@@ -75,7 +76,7 @@ export const initialize = async () => {
     });
 
     spinnies.add('technology-spinner', {
-      text: 'Analysing technologies.',
+      text: 'Analysing technologies',
     });
     const technologyData = await analyzeTechnologiesUrls([url]);
     spinnies.succeed('technology-spinner', {
@@ -100,6 +101,7 @@ export const initialize = async () => {
       )}`
     );
   } else {
+    const spinnies = new Spinnies();
     const urls: Array<string> = await Utility.getUrlsFromSitemap(sitemapURL);
     const prefix = Utility.generatePrefix([...urls].shift() ?? 'untitled');
     const spinnies = new Spinnies();
@@ -115,27 +117,23 @@ export const initialize = async () => {
 
     const urlsToProcess = urls.splice(0, numberOfUrls);
 
-    spinnies.add('cookie-spinner', {
-      text: 'Analysing cookies on first page visit',
-    });
-
-    const cookieAnalysisData = await analyzeCookiesUrls(
+    const cookieAnalysisData = await analyzeCookiesUrlsInBatches(
       urlsToProcess,
       isHeadless,
       delayTime,
       cookieDictionary
     );
 
-    spinnies.succeed('cookie-spinner', {
-      text: 'Done analyzing cookies.',
+    spinnies.add('technology-spinner', {
+      text: 'Analysing technologies',
     });
 
-    spinnies.add('technologies-spinner', {
-      text: 'Analysing cookies on first page visit',
-    });
     const technologyAnalysisData = await Promise.all(
       urlsToProcess.map((siteUrl: string) => analyzeTechnologiesUrls([siteUrl]))
     );
+    spinnies.succeed('technology-spinner', {
+      text: 'Sone analysing technologies',
+    });
 
     spinnies.succeed('technologies-spinner', {
       text: 'Done analyzing technologies.',

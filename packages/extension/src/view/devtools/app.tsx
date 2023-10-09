@@ -35,7 +35,7 @@ const App: React.FC = () => {
       <div className="w-full h-full flex flex-row">
         <Resizable
           defaultSize={{ width: '200px', height: '100%' }}
-          minWidth={'150px'}
+          minWidth={'200px'}
           maxWidth={'98%'}
           enable={{
             top: false,

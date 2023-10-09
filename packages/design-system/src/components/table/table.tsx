@@ -33,7 +33,7 @@ interface TableProps {
   selectedKey: string | undefined | null;
   getRowObjectKey: (row: TableRow) => string;
   onRowClick: (row: TableData | null) => void;
-  updatePreference: (
+  updatePreference?: (
     key: string,
     updater: (prevStatePreference: {
       [key: string]: unknown;
@@ -100,7 +100,7 @@ const Table = ({
         onClose={setShowColumnsMenu}
         position={columnPosition}
       />
-      <div className="h-full w-full" ref={tableRef}>
+      <div className="h-full w-full overflow-auto min-w-[40rem]" ref={tableRef}>
         <TableHeader
           updatePreference={updatePreference}
           table={table}

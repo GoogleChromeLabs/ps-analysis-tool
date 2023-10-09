@@ -14,235 +14,222 @@
  * limitations under the License.
  */
 
-import puppeteer, { Browser, Frame } from 'puppeteer';
-import {
-  BlockedCookie,
-  BlockedCookies,
-  Cookie,
-  CookieDatabase,
-  CookieLogDetails,
-  Job,
-  ResponseReceived,
-  ResponseReceivedExtraInfo,
-  UniqueCookiesLogDetail,
-} from '../../types';
-import { fetchDictionary } from '../fetchCookieDictionary';
+/**
+ * External dependencies.
+ */
+import puppeteer, { Browser, Page, Protocol } from 'puppeteer';
+import { parse } from 'simple-cookie';
+/**
+ * Internal dependencies.
+ */
+import { Cookie, RequestData, ResponseData, ViewportConfig } from './types';
+import { parseNetworkDataToCookieData } from './parseNetworkDataToCookieData';
 import delay from '../delay';
-import AsyncQueue from '../asyncQueue';
-import Utility from '../utility';
-import CookiesManagement from '../cookiesManagement';
 
-export type BrowserManagementOptions = {
+export class BrowserManagement {
+  viewportConfig: ViewportConfig;
+  browser: Browser | null;
   isHeadless: boolean;
-  profilePath: string;
-  shouldBlock3pCookies: boolean;
-};
+  pageWaitTime: number;
+  pageMap: Map<string, Page>;
+  pageResponseMaps: Map<string, Map<string, ResponseData>>;
+  pageRequestMaps: Map<string, Map<string, RequestData>>;
+  shouldLogDebug: boolean;
 
-export default class BrowserManagement extends AsyncQueue {
-  private browser: Browser | null = null;
-  private cookieDictionary: CookieDatabase = {};
-  private static SETTINGS_PAGE_TIMEOUT = 100000;
+  constructor(
+    viewportConfig: ViewportConfig,
+    isHeadless: boolean,
+    pageWaitTime: number,
+    shouldLogDebug: boolean
+  ) {
+    this.viewportConfig = viewportConfig;
+    this.browser = null;
+    this.isHeadless = isHeadless;
+    this.pageWaitTime = pageWaitTime;
+    this.pageMap = new Map();
+    this.pageResponseMaps = new Map();
+    this.pageRequestMaps = new Map();
+    this.shouldLogDebug = shouldLogDebug;
+  }
 
-  public async initialize(options: BrowserManagementOptions) {
-    const {
-      isHeadless,
-      profilePath,
-      shouldBlock3pCookies,
-    }: BrowserManagementOptions = options;
+  debugLog(msg: any) {
+    if (this.shouldLogDebug) {
+      console.log(msg);
+    }
+  }
 
+  async initializeBrowser(shouldBlock3pCookies: boolean) {
     this.browser = await puppeteer.launch({
       devtools: true,
-      headless: isHeadless ? 'new' : false,
-      args: [`--user-data-dir=${profilePath}`],
+      headless: this.isHeadless ? 'new' : false,
     });
-
+    this.debugLog('browser intialized');
     if (shouldBlock3pCookies) {
-      await this.block3pCookies();
-    }
-
-    this.cookieDictionary = await fetchDictionary();
-  }
-
-  public async deinitialize() {
-    if (this.browser) {
-      await this.browser.close();
+      await this.blockCookies();
     }
   }
 
-  private async block3pCookies(): Promise<void> {
+  async blockCookies() {
     if (!this.browser) {
-      throw new Error('The browser is not initialized');
+      throw new Error('Browser not intialized');
     }
 
     const cookiesPage = await this.browser.newPage();
-    await cookiesPage.goto('chrome://settings/cookies', {
-      timeout: BrowserManagement.SETTINGS_PAGE_TIMEOUT,
-    });
+    await cookiesPage.goto('chrome://settings/cookies');
 
     const radioButton = await cookiesPage.$(
       'settings-ui >>> settings-main >>> settings-basic-page >>> settings-section settings-privacy-page >>> settings-cookies-page >>> #blockThirdParty >>> #label'
     );
 
     if (radioButton) {
-      //@ts-ignore
+      // @ts-ignore
       await radioButton.evaluate((b) => b.click());
+    } else {
+      console.log('radio button not found');
     }
 
     await cookiesPage.close();
+    this.debugLog('3p cookies blocked');
   }
 
-  public async process(job: Job): Promise<any> {
-    const output: any = await this.getCookiesByUrl(job.data);
-    return output;
-  }
-
-  public async getCookiesByUrl(url: string): Promise<Array<CookieLogDetails>> {
+  async openPage(): Promise<Page> {
     if (!this.browser) {
-      return [];
+      throw new Error('Browser not intialized');
+    }
+    const sitePage = await this.browser.newPage();
+    sitePage.setViewport({
+      width: 1440,
+      height: 790,
+      deviceScaleFactor: 1,
+    });
+    this.debugLog('Page opened');
+    return sitePage;
+  }
+
+  async navigateAndScroll(url: string) {
+    const page = this.pageMap.get(url);
+    if (!page) {
+      throw new Error('no page with the provided id was found');
+    }
+    this.debugLog(`starting navigation to url ${url}`);
+    try {
+      await page.goto(url, { timeout: 10000 });
+    } catch (error) {
+      this.debugLog(
+        `navigation did not finish in 10 seconds moving on to scrolling`
+      );
+      //ignore
     }
 
-    /**
-     * Variables.
-     */
-    let allCookies: UniqueCookiesLogDetail = {};
-    let allBlockedCookies: BlockedCookies = [];
-    const uniqueBlockedCookies: { [key: string]: BlockedCookie } = {};
-    const requestURLs: { [key: string]: string } = {};
-    const frameURLs: { [key: string]: string } = {};
-
-    /**
-     * Open page in incognito mode.
-     */
-    const page = await this.browser.newPage();
-
-    const cdpSession = await page.createCDPSession();
-    await cdpSession.send('Network.enable');
-
-    const mainFrame = page.mainFrame();
-    // @ts-ignore
-    const mainFrameID = mainFrame._id;
-
-    /**
-     * For cookies details.
-     */
-    cdpSession.on(
-      'Network.responseReceivedExtraInfo',
-      (response: ResponseReceivedExtraInfo) => {
-        if (!response.requestId) {
-          return;
-        }
-
-        const requestID: string = response.requestId;
-        const partitionKey: string = response.cookiePartitionKey ?? '';
-
-        // Collect all blocked cookies.
-        if (response.blockedCookies) {
-          // @ts-ignore
-          allBlockedCookies = [
-            ...allBlockedCookies,
-            ...response.blockedCookies,
-          ];
-        }
-
-        if (!Object.keys(response.headers).includes('set-cookie')) {
-          return;
-        }
-
-        const parsedCookies = Utility.parseCookies(
-          response.headers['set-cookie']
-        );
-
-        parsedCookies.filter((theCookie: Cookie) => {
-          if (!theCookie.name) {
-            return false;
-          }
-
-          const cookieKey: string = CookiesManagement.getCookieKey(theCookie);
-
-          // @ts-ignore
-          const cookie: CookieLogDetails = allCookies[cookieKey]
-            ? allCookies[cookieKey]
-            : { ...theCookie };
-
-          cookie.partitionKey = partitionKey;
-          cookie.requestUrls = cookie.requestUrls ?? {};
-
-          /**
-           * Mark that the cookie has been added by current request ID. (URL will update in another URL)
-           */
-          cookie.requestUrls[requestID] = 'Unknown';
-
-          allCookies[cookieKey] = cookie;
-          return cookie;
-        });
-      }
-    );
-
-    /**
-     * For request detail.
-     */
-    cdpSession.on('Network.responseReceived', (response: ResponseReceived) => {
-      if (!response.requestId) {
-        return;
-      }
-
-      const requestID: string = response.requestId;
-      const requestURL: string = response.response.url ?? '';
-      let frameID: string = response.frameId ?? '';
-
-      // Collect request URLs by request ID.
-      requestURLs[requestID] = requestURL;
-
-      // If there is no frame then let's just assume it's main frame.
-      if (!frameID) {
-        frameID = mainFrameID;
-      }
-
-      // eslint-disable-next-line guard-for-in
-      for (const cookiesKey in allCookies) {
-        if (allCookies[cookiesKey] && !allCookies[cookiesKey].requestUrls) {
-          allCookies[cookiesKey].requestUrls = {};
-        }
-
-        /**
-         * Only add frame ID to cookies.
-         * Which has been added by current request.
-         */
-        if (
-          requestURL &&
-          allCookies[cookiesKey] &&
-          requestID in allCookies[cookiesKey].requestUrls
-        ) {
-          // Add URL of frame.
-          allCookies[cookiesKey].frameUrls =
-            allCookies[cookiesKey].frameUrls ?? {};
-          allCookies[cookiesKey].frameUrls[frameID] = 'Unknown';
-        }
-      }
-    });
-
-    await page.goto(url, {
-      timeout: BrowserManagement.SETTINGS_PAGE_TIMEOUT,
-    });
-
-    await delay(1000);
+    await delay(this.pageWaitTime / 2);
 
     await page.evaluate(() => {
       window.scrollBy(0, 10000);
     });
 
-    await delay(6000);
+    await delay(this.pageWaitTime / 2);
+    this.debugLog(`done navigating and scrolling to url:${url}`);
+  }
 
-    /**
-     * Get Frame detail.
-     */
-    const frames = page.frames();
-    const frameCallback = (frame: Frame) => {
-      // @ts-ignore
-      if (frame._id) {
-        // @ts-ignore
-        frameURLs[frame._id] = frame.url();
+  async attachNetworkListenersToPage(pageId: string) {
+    const page = this.pageMap.get(pageId);
+    if (!page) {
+      throw new Error(`no page with the provided id was found:${pageId}`);
+    }
+    const cdpSession = await page.createCDPSession();
+    await cdpSession.send('Network.enable');
+    //@ts-ignore
+    const mainFrameId: string = page.mainFrame()._id;
+
+    const responseMap: Map<string, ResponseData> = new Map();
+    this.pageResponseMaps.set(pageId, responseMap);
+
+    cdpSession.on(
+      'Network.responseReceived',
+      (response: Protocol.Network.ResponseReceivedEvent) => {
+        responseMap.set(response.requestId, {
+          frameId: response.frameId || mainFrameId,
+          serverUrl: response.response.url,
+          cookies: responseMap.get(response.requestId)?.cookies || [],
+        });
       }
+    );
+
+    cdpSession.on(
+      'Network.responseReceivedExtraInfo',
+      (response: Protocol.Network.ResponseReceivedExtraInfoEvent) => {
+        const cookies = response.headers['set-cookie']
+          ?.split('\n')
+          .map((headerLine) => {
+            const parsedCookie = parse(headerLine);
+            return {
+              name: parsedCookie.name,
+              domain: parsedCookie.domain,
+              path: parsedCookie.path || '/',
+              value: parsedCookie.value,
+              sameSite: parsedCookie.samesite || 'Lax',
+              expires: parsedCookie.expires || 'Session',
+              httpOnly: parsedCookie.httponly || false,
+              secure: parsedCookie.secure || false,
+            };
+          });
+        const prevCookies = responseMap.get(response.requestId)?.cookies || [];
+        const mergedCookies = [...prevCookies, ...(cookies || [])];
+
+        responseMap.set(response.requestId, {
+          frameId: responseMap.get(response.requestId)?.frameId || '',
+          serverUrl: responseMap.get(response.requestId)?.serverUrl || '',
+          // @ts-ignore TODO: fix expires type mismatch
+          cookies: mergedCookies,
+        });
+      }
+    );
+
+    const requestMap = new Map();
+    this.pageRequestMaps.set(pageId, requestMap);
+
+    cdpSession.on('Network.requestWillBeSent', (request) => {
+      requestMap.set(request.requestId, {
+        ...(requestMap.get(request.requestId) || {}),
+        frameId: request.frameId,
+        serverUrl: request.request.url,
+      });
+    });
+
+    cdpSession.on(
+      'Network.requestWillBeSentExtraInfo',
+      (request: Protocol.Network.RequestWillBeSentExtraInfoEvent) => {
+        if (
+          request.associatedCookies &&
+          request.associatedCookies.length !== 0
+        ) {
+          const cookies: Protocol.Network.Cookie[] = [];
+          request.associatedCookies.forEach(({ blockedReasons, cookie }) => {
+            if (blockedReasons.length === 0) {
+              cookies.push(cookie);
+            }
+          });
+          requestMap.set(request.requestId, {
+            ...(requestMap.get(request.requestId) || {}),
+            cookies,
+          });
+        }
+      }
+    );
+    this.debugLog('done attaching network event listeners');
+  }
+
+  getPageFrameIdToUrlMap(id: string) {
+    const page = this.pageMap.get(id);
+    if (!page) {
+      throw new Error('no page with the provided id was found');
+    }
+    const frameIdMapFromTree = new Map();
+    const frames = page.frames();
+    const frameCallback = (frame: any) => {
+      const frameId = frame._id;
+      const _url = frame.url();
+      frameIdMapFromTree.set(frameId, _url);
 
       if (frame.childFrames()) {
         frame.childFrames().forEach(frameCallback);
@@ -250,72 +237,100 @@ export default class BrowserManagement extends AsyncQueue {
     };
 
     frames.forEach(frameCallback);
+    return frameIdMapFromTree;
+  }
 
-    /**
-     * Prepare blocked cookies.
-     */
-    allBlockedCookies.forEach((blockedCookie: BlockedCookie) => {
-      if (!blockedCookie.cookie) {
-        blockedCookie.cookie = Utility.parseCookieLine(
-          blockedCookie.cookieLine
-        );
-      }
-
-      const cookieKey = CookiesManagement.getCookieKey(blockedCookie.cookie);
-      uniqueBlockedCookies[cookieKey] = blockedCookie;
-    });
-
-    /**
-     * Merge all the cookies.
-     */
-    const pageCookies = await page.cookies();
-    const pageCookiesObject = CookiesManagement.getUniqueObject(pageCookies);
-
-    // @ts-ignore
-    allCookies = Utility.mergeObjects(pageCookiesObject, allCookies);
-
-    // Close the page.
-    await page.close();
-
-    // eslint-disable-next-line guard-for-in
-    for (const cookieKey in allCookies) {
-      let cookie: CookieLogDetails | null = allCookies[cookieKey];
-      if (!cookie.domain) {
-        const urlObject = new URL(url);
-        cookie.domain = urlObject.hostname;
-      }
-
-      cookie = CookiesManagement.normalizeCookie(cookie, url);
-      if (!cookie) {
-        continue;
-      }
-
-      cookie.pageUrl = url;
-      cookie.isBlocked = false;
-      cookie.blockedReasons = [];
-
-      if (uniqueBlockedCookies[cookieKey]) {
-        cookie.isBlocked = true;
-        cookie.blockedReasons = uniqueBlockedCookies[cookieKey].blockedReasons;
-      }
-
-      // Update request URLs.
-      for (const requestID in cookie.requestUrls) {
-        if (requestURLs[requestID]) {
-          cookie.requestUrls[requestID] = requestURLs[requestID];
-        }
-      }
-
-      // Update frame URLs.
-      for (const frameID in cookie.frameUrls) {
-        if (frameURLs[frameID]) {
-          cookie.frameUrls[frameID] = frameURLs[frameID];
-        }
-      }
-
-      allCookies[cookieKey] = cookie;
+  async analyzeCookieUrls(urls: string[]) {
+    for (const url of urls) {
+      const sitePage = await this.openPage();
+      this.pageMap.set(url, sitePage);
+      await this.attachNetworkListenersToPage(url);
     }
 
-    return Object.values(allCookies);
+    //start navigation in parallel
+    await Promise.all(
+      urls.map(async (url) => {
+        await this.navigateAndScroll(url);
+      })
+    );
+
+    //parse cookie data in parallel
+    const result = await Promise.all(
+      urls.map(async (url) => {
+        const responseMap = this.pageResponseMaps.get(url);
+        const requestMap = this.pageRequestMaps.get(url);
+        const page = this.pageMap.get(url);
+
+        const frameIdUrlMap = this.getPageFrameIdToUrlMap(url);
+        // @ts-ignore
+        const mainFrameId = this.pageMap.get(url)?.mainFrame()._id;
+
+        if (
+          !requestMap ||
+          !responseMap ||
+          !frameIdUrlMap ||
+          !mainFrameId ||
+          !page
+        ) {
+          return {
+            pageUrl: url,
+            cookieData: {},
+          };
+        }
+
+        const cookieDataFromNetwork = parseNetworkDataToCookieData(
+          responseMap,
+          requestMap,
+          frameIdUrlMap,
+          mainFrameId,
+          url
+        );
+
+        const networkCookieKeySet = new Set();
+
+        Object.values(cookieDataFromNetwork).forEach(({ frameCookies }) => {
+          Object.keys(frameCookies).forEach((key) => {
+            networkCookieKeySet.add(key);
+          });
+        });
+
+        //Get cookies from another API
+        const session = await page.createCDPSession();
+
+        const applicationCookies = (await session.send('Page.getCookies'))
+          .cookies;
+
+        const filteredApplicationCookies = applicationCookies.filter(
+          (cookie) =>
+            !networkCookieKeySet.has(
+              `${cookie.name}:${cookie.domain}:${cookie.path}`
+            )
+        );
+
+        const reshapedApplicationCookies = filteredApplicationCookies.reduce<{
+          [key: string]: Cookie;
+        }>((acc, cookie) => {
+          const key = `${cookie.name}:${cookie.domain}:${cookie.path}`;
+          acc[key] = cookie as Cookie;
+          return acc;
+        }, {});
+
+        return {
+          pageUrl: url,
+          cookieData: {
+            ...cookieDataFromNetwork,
+            'Unknown Frame': {
+              frameCookies: reshapedApplicationCookies,
+              cookiesCount: Object.keys(reshapedApplicationCookies).length,
+            },
+          },
+        };
+      })
+    );
+
+    return result;
+  }
+  async deinitialize() {
+    await this.browser?.close();
   }
 }

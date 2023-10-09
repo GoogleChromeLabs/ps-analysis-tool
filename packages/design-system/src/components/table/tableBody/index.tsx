@@ -155,9 +155,9 @@ const TableBody = ({
         {table.columns.map(({ width }, index) => (
           <div
             key={index}
-            className="px-1 py-px outline-0"
+            className="px-1 py-px outline-0 flex-1"
             style={{
-              width,
+              maxWidth: width,
             }}
           />
         ))}
@@ -171,9 +171,9 @@ const TableBody = ({
         {table.columns.map(({ width }, index) => (
           <div
             key={index}
-            className="px-1 py-px outline-0 h-full"
+            className="px-1 py-px outline-0 h-full flex-1"
             style={{
-              width,
+              maxWidth: width,
             }}
           />
         ))}

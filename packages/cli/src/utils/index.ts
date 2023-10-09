@@ -15,5 +15,3 @@
  */
 export { default as parseUrl } from './parseUrl';
 export { default as delay } from './delay';
-export { default as getOpenCookieDetails } from './getOpenCookieDetails';
-export { default as getCSVbyObject } from './getCSVbyObject';

@@ -24,16 +24,23 @@ import { Resizable } from 're-resizable';
  * Internal dependencies.
  */
 import SiteSelection from '../siteReport/components/siteSelection';
-import { CookiesLanding } from '@cookie-analysis-tool/design-system';
-import type { CompleteJson, CookieFrameStorageType } from '../../types';
-import type {
-  CookieTableData,
-  TabFrames,
-  TechnologyData,
+import {
+  CookiesLanding,
+  CookiesMatrix,
+} from '@cookie-analysis-tool/design-system';
+import type { CookieFrameStorageType } from '../../types';
+import {
+  prepareCookieStatsComponents,
+  type CookieTableData,
+  type TabFrames,
+  type TechnologyData,
+  prepareCookiesCount,
 } from '@cookie-analysis-tool/common';
 import SiteReport from '../siteReport';
+import SiteMapAffectedCookies from './sitemapAffectedCookies';
 
 interface SiteMapReportProps {
+  landingPageCookies: CookieFrameStorageType;
   cookies: CookieFrameStorageType;
   technologies: TechnologyData[];
   completeJson: CompleteJson | null;
@@ -42,10 +49,12 @@ interface SiteMapReportProps {
 const SiteMapReport = ({
   cookies,
   technologies,
-  completeJson,
+  landingPageCookies,
 }: SiteMapReportProps) => {
   const [selectedSite, setSelectedSite] = useState<string | null>(null);
   const [sites, setSites] = useState<string[]>([]);
+  const [selectedTopLevelMenu, setSelectedTopLevelMenu] =
+    useState<string>('report');
 
   useEffect(() => {
     const _sites = new Set<string>();
@@ -60,7 +69,7 @@ const SiteMapReport = ({
 
   const frames = useMemo(() => {
     return Object.keys(cookies).reduce((acc, frame) => {
-      if (frame?.includes('http')) {
+      if (frame?.includes('http') || frame === 'Unknown Frame') {
         acc[frame] = {} as TabFrames[string];
       }
       return acc;
@@ -69,8 +78,10 @@ const SiteMapReport = ({
 
   const reshapedCookies = useMemo(
     () =>
-      Object.entries(cookies)
-        .filter(([frame]) => frame.includes('http'))
+      Object.entries(landingPageCookies)
+        .filter(
+          ([frame]) => frame.includes('http') || frame === 'Unknown Frame'
+        )
         .map(([frame, _cookies]) => {
           const newCookies = Object.fromEntries(
             Object.entries(_cookies).map(([key, cookie]) => [
@@ -112,7 +123,17 @@ const SiteMapReport = ({
             ...cookieObj,
           };
         }, {}),
-    [cookies]
+    [landingPageCookies]
+  );
+
+  const affectedCookies = useMemo(
+    () =>
+      Object.fromEntries(
+        Object.entries(reshapedCookies).filter(
+          ([, cookie]) => !cookie.isCookieSet
+        )
+      ),
+    [reshapedCookies]
   );
 
   const siteFilteredCookies = useMemo(() => {
@@ -147,11 +168,31 @@ const SiteMapReport = ({
         }}
         className="h-full flex flex-col border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
       >
-        <SiteSelection
-          sites={sites}
-          selectedSite={selectedSite}
-          setSelectedSite={setSelectedSite}
-        />
+        <div className="flex flex-col">
+          <SiteSelection
+            sites={sites}
+            selectedSite={selectedSite}
+            setSelectedSite={setSelectedSite}
+            isSelectedTopLevelMenu={selectedTopLevelMenu === 'report'}
+            selectTopLevelMenu={() => setSelectedTopLevelMenu('report')}
+          />
+          <div
+            onClick={() => {
+              setSelectedTopLevelMenu('affectedCookies');
+              setSelectedSite(null);
+            }}
+            className={`w-full flex items-center pl-6 py-0.5 outline-0 cursor-pointer text-sm 
+							${
+                selectedTopLevelMenu === 'affectedCookies'
+                  ? 'bg-royal-blue text-white'
+                  : 'bg-white'
+              }
+							}
+						`}
+          >
+            <p>Affected Cookies</p>
+          </div>
+        </div>
       </Resizable>
       <div className="flex-1 h-full">
         {selectedSite ? (
@@ -160,8 +201,33 @@ const SiteMapReport = ({
             technologies={siteFilteredTechnologies}
             completeJson={completeJson}
           />
+        ) : selectedTopLevelMenu === 'report' ? (
+          <>
+            <CookiesLanding
+              tabFrames={frames}
+              tabCookies={reshapedCookies}
+              showInfoIcon={false}
+              showHorizontalMatrix={false}
+            >
+              <CookiesMatrix
+                tabCookies={affectedCookies}
+                cookiesStatsComponents={prepareCookieStatsComponents(
+                  prepareCookiesCount(affectedCookies)
+                )}
+                tabFrames={frames}
+                title="Affected Cookies Insights"
+                description="Following are the insights about cookies that will be affected by 3P cookie depreciation."
+                showInfoIcon={false}
+                count={Object.values(affectedCookies).length}
+              />
+            </CookiesLanding>
+          </>
         ) : (
-          <CookiesLanding tabFrames={frames} tabCookies={reshapedCookies} />
+          <SiteMapAffectedCookies
+            cookies={Object.values(reshapedCookies).filter(
+              (cookie) => !cookie.isCookieSet
+            )}
+          />
         )}
       </div>
     </div>
