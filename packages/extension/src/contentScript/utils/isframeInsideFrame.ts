@@ -28,6 +28,10 @@ const isFrameInsideFrame = (
 
   const iframes = frame.contentDocument.querySelectorAll('iframe');
 
+  if (!iframes.length) {
+    return false;
+  }
+
   // Iterate internal frames.
   for (const iframe of iframes) {
     const src = iframe.getAttribute('src');

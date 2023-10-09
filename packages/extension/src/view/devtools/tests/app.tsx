@@ -49,7 +49,7 @@ describe('App', () => {
       allowedNumberOfTabs: 'single',
       setIsInspecting: noop,
     });
-
+    jest.spyOn(console, 'warn').mockImplementation(() => undefined);
     globalThis.chrome = {
       ...globalChrome,
       storage: {
@@ -70,6 +70,7 @@ describe('App', () => {
           Promise.resolve({
             ...PSInfo,
           }),
+        text: () => Promise.resolve({}),
       });
     } as unknown as typeof fetch;
   });

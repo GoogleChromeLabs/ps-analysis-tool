@@ -51,21 +51,21 @@ const addPopover = (
     }
 
     return overlay;
-  } else {
-    const tooltip = createTooltip(
-      frame,
-      data,
-      numberOfVisibleFrames,
-      numberOfHiddenFrames
-    );
-
-    if (tooltip) {
-      body.appendChild(tooltip);
-      tooltip.showPopover();
-    }
-
-    return tooltip;
   }
+
+  const tooltip = createTooltip(
+    frame,
+    data,
+    numberOfVisibleFrames,
+    numberOfHiddenFrames
+  );
+
+  if (tooltip) {
+    body.appendChild(tooltip);
+    tooltip.showPopover();
+  }
+
+  return tooltip;
 };
 
 export default addPopover;

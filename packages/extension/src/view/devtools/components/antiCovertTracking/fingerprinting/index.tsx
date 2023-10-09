@@ -16,22 +16,30 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useState } from 'react';
 
 /**
  * Internal dependencies.
  */
 import InfoCard from '../../../../design-system/components/infoCard';
 import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
+import { LandingPage } from '@cookie-analysis-tool/design-system';
 
 const Fingerprinting = () => {
+  const [pageTitle, setPageTitle] = useState('');
+
   return (
-    <div
-      className="w-full h-full overflow-auto"
-      data-testid="fingerprinting-content"
-    >
-      <InfoCard infoKey={PSInfoKey.UserAgentReduction} />
-    </div>
+    <LandingPage title={pageTitle} isLoading={!pageTitle}>
+      <div
+        className="w-full h-full overflow-auto"
+        data-testid="fingerprinting-content"
+      >
+        <InfoCard
+          infoKey={PSInfoKey.UserAgentReduction}
+          setTitle={setPageTitle}
+        />
+      </div>
+    </LandingPage>
   );
 };
 

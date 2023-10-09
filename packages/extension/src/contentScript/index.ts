@@ -21,25 +21,33 @@ import {
   removeAllPopovers,
   addPopover,
   toggleFrameHighlighting,
+  setOverlayPosition,
+  setTooltipPosition,
 } from './popovers';
-import { WEBPAGE_PORT_NAME } from '../constants';
 import type { ResponseType } from './types';
-import './style.css';
 import { CookieStore } from '../localStore';
-import { setOverlayPosition } from './popovers/overlay';
-import { setTooltipPosition } from './popovers/tooltip';
 import { TOOLTIP_CLASS } from './constants';
+import { WEBPAGE_PORT_NAME } from '../constants';
+import './style.css';
 
 /**
- * Represents the content script for the webpage.
+ * Represents the webpage's content script functionalities.
  */
 class WebpageContentScript {
+  /**
+   * @property {chrome.runtime.Port | null} port - The connection port.
+   * @property {boolean} isInspecting - If true, the page is currently being inspected.
+   * @property {boolean} isHoveringOverPage - If true, the mouse is currently hovering over the page.
+   * @property {boolean} bodyHoverStateSent - Keeps track if the hover state message has been sent.
+   * @property {Array<() => void>} scrollEventListeners - Array of scroll event listeners.
+   */
   port: chrome.runtime.Port | null = null;
   isInspecting = false;
   isScrolling = false;
   isHoveringOverPage = false;
   bodyHoverStateSent = false;
-  scrollEventListeners: Array<() => void> | [] = [];
+  scrollEventListeners: Array<() => void> = [];
+  docElement: HTMLElement;
 
   /**
    * Initialize
@@ -50,61 +58,45 @@ class WebpageContentScript {
     this.onMessage = this.onMessage.bind(this);
     this.onDisconnect = this.onDisconnect.bind(this);
     this.handleMouseMove = this.handleMouseMove.bind(this);
-    this.onScrollEnd = this.onScrollEnd.bind(this);
-    this.onScrollStarted = this.onScrollStarted.bind(this);
+    this.docElement = document.documentElement;
+
     this.listenToConnection();
     this.setTopics();
   }
 
+  /**
+   * Listens for connection requests from devtool.
+   */
   listenToConnection() {
     chrome.runtime.onConnect.addListener((port) => {
-      if (!port.name.startsWith(WEBPAGE_PORT_NAME)) {
-        return;
+      if (port.name.startsWith(WEBPAGE_PORT_NAME)) {
+        this.port = port;
+        port.onMessage.addListener(this.onMessage);
+        port.onDisconnect.addListener(this.onDisconnect);
       }
-
-      this.port = port;
-
-      this.port.onMessage.addListener(this.onMessage);
-      this.port.onDisconnect.addListener(this.onDisconnect);
     });
   }
 
   /**
    * Adds hover event listeners to the document.
    */
-  addHoverEventListeners(): void {
+  addEventListeners(): void {
     document.addEventListener('mouseover', this.handleHoverEvent);
     document.addEventListener('mouseout', this.handleHoverEvent);
     document.addEventListener('visibilitychange', this.handleMouseMove);
-    document.addEventListener('scrollend', this.onScrollEnd);
-    document.addEventListener('scroll', this.onScrollStarted);
-    document.documentElement.addEventListener(
-      'mouseleave',
-      this.handleMouseMove
-    );
-    document.documentElement.addEventListener(
-      'mouseenter',
-      this.handleMouseMove
-    );
+    this.docElement.addEventListener('mouseleave', this.handleMouseMove);
+    this.docElement.addEventListener('mouseenter', this.handleMouseMove);
   }
 
   /**
    * Removes hover event listeners from the document.
    */
-  removeHoverEventListeners(): void {
+  removeEventListeners(): void {
     document.removeEventListener('mouseover', this.handleHoverEvent);
     document.removeEventListener('mouseout', this.handleHoverEvent);
     document.removeEventListener('visibilitychange', this.handleMouseMove);
-    document.removeEventListener('scrollend', this.onScrollEnd);
-    document.removeEventListener('scroll', this.onScrollStarted);
-    document.documentElement.removeEventListener(
-      'mouseleave',
-      this.handleMouseMove
-    );
-    document.documentElement.removeEventListener(
-      'mouseenter',
-      this.handleMouseMove
-    );
+    this.docElement.removeEventListener('mouseleave', this.handleMouseMove);
+    this.docElement.removeEventListener('mouseenter', this.handleMouseMove);
   }
 
   /**
@@ -115,8 +107,8 @@ class WebpageContentScript {
     this.isInspecting = response.isInspecting;
 
     if (response.isInspecting) {
-      this.removeHoverEventListeners();
-      this.addHoverEventListeners();
+      this.removeEventListeners();
+      this.addEventListeners();
       toggleFrameHighlighting(true);
       this.insertPopovers(response);
     } else {
@@ -131,7 +123,97 @@ class WebpageContentScript {
     this.isScrolling = true;
   }
 
+  insertOverlay(
+    frame: HTMLElement,
+    numberOfVisibleFrames: number,
+    numberOfHiddenFrames: number,
+    response: ResponseType
+  ) {
+    const overlay = addPopover(
+      frame,
+      response,
+      numberOfVisibleFrames,
+      numberOfHiddenFrames,
+      'overlay'
+    );
+
+    const updatePosition = () => {
+      setOverlayPosition(overlay, frame);
+    };
+
+    this.addEventListerOnScroll(updatePosition);
+
+    return overlay;
+  }
+
+  insertTooltip(
+    frame: HTMLElement,
+    numberOfVisibleFrames: number,
+    numberOfHiddenFrames: number,
+    response: ResponseType
+  ): HTMLElement | null {
+    const tooltip = addPopover(
+      frame,
+      response,
+      numberOfVisibleFrames,
+      numberOfHiddenFrames,
+      'tooltip'
+    );
+
+    const updatePosition = () => {
+      const isHidden = !frame.clientWidth;
+      setTooltipPosition(tooltip, frame, isHidden, response.selectedFrame);
+    };
+
+    this.addEventListerOnScroll(updatePosition);
+
+    return tooltip;
+  }
+
+  addEventListerOnScroll(callback: () => void) {
+    this.scrollEventListeners.push(callback);
+    callback();
+    window.addEventListener('scroll', callback);
+  }
+
+  removeAllPopovers() {
+    if (this.scrollEventListeners.length) {
+      this.scrollEventListeners.forEach((listener) => {
+        window.removeEventListener('scroll', listener);
+      });
+
+      this.scrollEventListeners = [];
+    }
+
+    removeAllPopovers();
+  }
+
+  /**
+   * Handles the port disconnection event.
+   */
+  onDisconnect() {
+    this.port?.onMessage.removeListener(this.onMessage);
+    this.port = null;
+    this.abortInspection();
+  }
+
+  /**
+   * Abort inspection and removes all frame popovers and hover event listeners.
+   */
+  abortInspection(): void {
+    this.removeEventListeners();
+    removeAllPopovers();
+    toggleFrameHighlighting(false);
+    this.isInspecting = false;
+  }
+
+  /**
+   * Insert popovers.
+   * @todo Needs refactoring and code improvement.
+   * @param {ResponseType} response - The incoming message/response from the port.
+   */
   insertPopovers(response: ResponseType) {
+    // If the no frame was selected in devtool.
     if (!response.selectedFrame) {
       removeAllPopovers();
       return;
@@ -236,97 +318,11 @@ class WebpageContentScript {
       frameToScrollTo.clientWidth
     ) {
       (firstToolTip as HTMLElement).scrollIntoView({
-        behavior: 'smooth',
+        behavior: 'instant',
         block: 'start',
         inline: 'nearest',
       });
     }
-  }
-
-  insertOverlay(
-    frame: HTMLElement,
-    numberOfVisibleFrames: number,
-    numberOfHiddenFrames: number,
-    response: ResponseType
-  ) {
-    const overlay = addPopover(
-      frame,
-      response,
-      numberOfVisibleFrames,
-      numberOfHiddenFrames,
-      'overlay'
-    );
-
-    const updatePosition = () => {
-      setOverlayPosition(overlay, frame);
-    };
-
-    this.addEventListerOnScroll(updatePosition);
-
-    return overlay;
-  }
-
-  insertTooltip(
-    frame: HTMLElement,
-    numberOfVisibleFrames: number,
-    numberOfHiddenFrames: number,
-    response: ResponseType
-  ): HTMLElement | null {
-    const tooltip = addPopover(
-      frame,
-      response,
-      numberOfVisibleFrames,
-      numberOfHiddenFrames,
-      'tooltip'
-    );
-
-    const updatePosition = () => {
-      const isHidden = !frame.clientWidth;
-      setTooltipPosition(tooltip, frame, isHidden, response.selectedFrame);
-    };
-
-    this.addEventListerOnScroll(updatePosition);
-
-    return tooltip;
-  }
-
-  addEventListerOnScroll(callback: () => void) {
-    this.scrollEventListeners.push(callback);
-
-    callback();
-
-    window.addEventListener('scroll', callback);
-  }
-
-  removeAllPopovers() {
-    if (this.scrollEventListeners.length) {
-      this.scrollEventListeners.forEach((listener) => {
-        window.removeEventListener('scroll', listener);
-      });
-
-      this.scrollEventListeners = [];
-    }
-
-    removeAllPopovers();
-  }
-
-  /**
-   * Handles the port disconnection event.
-   */
-  onDisconnect() {
-    this.port?.onMessage.removeListener(this.onMessage);
-    this.port = null;
-    this.abortInspection();
-  }
-
-  /**
-   * Abort inspection and removes all frame popovers and hover event listeners.
-   */
-  abortInspection(): void {
-    this.removeHoverEventListeners();
-    removeAllPopovers();
-    toggleFrameHighlighting(false);
-    this.isInspecting = false;
   }
 
   /**
@@ -427,7 +423,7 @@ class WebpageContentScript {
    * Toggle this.isHoveringOverPage state when mouse or visibility is changed.
    * @param {MouseEvent} event Mouse event.
    */
-  handleMouseMove(event?: MouseEvent) {
+  handleMouseMove(event: Event) {
     if (event?.type === 'mouseenter') {
       this.isHoveringOverPage = true;
     } else if (event?.type === 'mouseleave') {

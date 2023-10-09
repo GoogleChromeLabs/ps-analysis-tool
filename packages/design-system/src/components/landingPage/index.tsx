@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { XMLParser } from 'fast-xml-parser';
 
@@ -30,14 +30,14 @@ import BulletList from '../bulletList';
 import { QUICK_LINKS } from './constants';
 
 interface LandingPageProps {
-  title: string;
-  embedUrl: string;
+  title?: string;
+  children?: ReactNode;
+  isLoading?: boolean;
 }
 
-const LandingPage = ({ title, embedUrl }: LandingPageProps) => {
-  const [open, setOpen] = useState(true);
+const LandingPage = ({ title, children, isLoading }: LandingPageProps) => {
+  const [open, setOpen] = useState(false);
   const [news, setNews] = useState<BulletListItem[]>([]);
-  const [loading, setLoading] = useState(true);
 
   const fetchLatestNews = async () => {
     try {
@@ -69,52 +69,54 @@ const LandingPage = ({ title, embedUrl }: LandingPageProps) => {
 
   return (
     <>
-      {loading && <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />}
-      <div className={classNames(loading && 'hidden')}>
-        <div className="flex gap-2 text-2xl font-bold pl-4 pt-6 pb-3 items-baseline border-b border-hex-gray dark:border-quartz">
-          <h1>{title}</h1>
-          <button onClick={() => setOpen((prevOpen) => !prevOpen)}>
-            <ArrowUp className={classNames(!open && 'rotate-180 -mt-3')} />
+      {isLoading && <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />}
+      <div className={classNames(isLoading && 'hidden')}>
+        <div className="px-4 pt-6 pb-3 border-b border-hex-gray dark:border-quartz">
+          <button
+            className="flex gap-2 text-2xl font-bold items-baseline dark:text-bright-gray"
+            onClick={() => setOpen((prevOpen) => !prevOpen)}
+          >
+            {title && <h1>{title}</h1>}
+            <ArrowUp
+              className={classNames(!open && 'rotate-180 -translate-y-1')}
+            />
           </button>
         </div>
-        <div className={classNames(!open && 'hidden')}>
-          {/* Section Content */}
-          <div className="pl-4 pt-6 pb-4 h-screen w-full border-b border-hex-gray dark:border-quartz">
-            <iframe
-              src={embedUrl}
-              width="70%"
-              height="100%"
-              onLoad={() => {
-                setLoading(false);
-              }}
-            />
+
+        {/* Section Content */}
+        <div
+          className={classNames(
+            !open && 'hidden',
+            'border-b border-hex-gray dark:border-quartz'
+          )}
+        >
+          {children}
+        </div>
+
+        <div className="md:max-w-[70%] flex flex-col md:flex-row px-4 pt-12 pb-24 gap-10">
+          {/* Quick Links */}
+          <div className="md:w-[35%] flex flex-col gap-4">
+            <BulletList rows={QUICK_LINKS} heading="Quick Links" />
           </div>
 
-          <div className="max-w-[70%] flex pl-4 pt-12 pb-24 gap-10">
-            {/* Quick Links */}
-            <div className="w-[35%] flex flex-col gap-4">
-              <BulletList rows={QUICK_LINKS} heading="Quick Links" />
-            </div>
+          {/* Latest News */}
+          <div className="md:w-[65%] flex flex-col gap-4">
+            <h2 className="text-xs font-bold uppercase text-darkest-gray dark:text-bright-gray">
+              Latest News
+            </h2>
+            <hr className="border-0 border-b border-hex-gray dark:border-quartz" />
+            <div className="space-y-4">
+              <BulletList rows={news} />
 
-            {/* Latest News */}
-            <div className="w-[65%] flex flex-col gap-4">
-              <h2 className="text-xs font-bold uppercase text-darkest-gray">
-                Latest News
-              </h2>
-              <hr className="border-0 border-b border-hex-gray dark:border-quartz" />
-              <div className="space-y-4">
-                <BulletList rows={news} />
-
-                <div className="ml-6">
-                  <a
-                    href="https://privacysandbox.com/news/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="leading-6 text-sm text-analytics font-semibold px-3 border border-hex-gray dark:border-quartz rounded inline-flex gap-2 items-center"
-                  >
-                    View More <ChevronRight />
-                  </a>
-                </div>
+              <div className="ml-6">
+                <a
+                  href="https://privacysandbox.com/news/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="leading-6 text-sm text-analytics font-semibold px-3 border border-american-silver dark:border-quartz rounded inline-flex gap-2 items-center"
+                >
+                  View More <ChevronRight />
+                </a>
               </div>
             </div>
           </div>

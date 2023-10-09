@@ -23,6 +23,7 @@ import getAllowedFeatures from '../../utils/getAllowedFeatures';
 
 /**
  * Creates a tooltip element for an iframe overlay.
+ * @todo Needs refactoring and code improvement.
  * @param {HTMLIFrameElement | HTMLElement} frame - The iframe or HTML element for which the tooltip is created.
  * @param {number} numberOfVisibleFrames - The number of visible frames.
  * @param {number} numberOfHiddenFrames - The number of hidden frames.
