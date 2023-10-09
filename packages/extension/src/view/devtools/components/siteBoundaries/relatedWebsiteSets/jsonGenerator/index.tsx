@@ -108,7 +108,7 @@ const RWSJsonGenerator = ({ open, setOpen }: RWSJsonGeneratorProps) => {
                 onClick={() => {
                   setOpen(false);
                 }}
-                className="float-right"
+                className="float-right pt-1"
               >
                 <Cross />
               </button>
