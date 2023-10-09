@@ -132,7 +132,7 @@ export const initialize = async () => {
       urlsToProcess.map((siteUrl: string) => analyzeTechnologiesUrls([siteUrl]))
     );
     spinnies.succeed('technology-spinner', {
-      text: 'Sone analysing technologies',
+      text: 'Done analysing technologies',
     });
 
     spinnies.succeed('technologies-spinner', {
