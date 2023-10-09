@@ -94,8 +94,8 @@ const RWSJsonGenerator = ({ open, setOpen }: RWSJsonGeneratorProps) => {
               required technical validations (see full requirements{' '}
               <a
                 className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80"
-                title="https://github.com/GoogleChrome/first-party-sets/blob/main/FPS-Submission_Guidelines.md"
-                href="https://github.com/GoogleChrome/first-party-sets/blob/main/FPS-Submission_Guidelines.md"
+                title="https://github.com/GoogleChrome/related-website-sets/blob/main/RWS-Submission_Guidelines.md"
+                href="https://github.com/GoogleChrome/related-website-sets/blob/main/RWS-Submission_Guidelines.md"
                 target="_blank"
                 rel="noreferrer"
               >
