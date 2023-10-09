@@ -26,12 +26,11 @@ import {
 } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SinonChrome from 'sinon-chrome';
-
+import { CookieDetails, Details } from '@cookie-analysis-tool/design-system';
 /**
  * Internal dependencies.
  */
 import CookieTab from '..';
-import { CookieDetails, Details } from '@cookie-analysis-tool/design-system';
 import mockResponse, {
   uncategorized1pCookie,
   known1pCookie,
@@ -43,12 +42,12 @@ jest.mock('../../../stateProviders/syncCookieStore', () => {
     useCookieStore: () => {
       return {
         cookies: Object.values(mockResponse.tabCookies),
-        tabUrl: mockResponse.tabUrl,
         tabFrames: mockResponse.tabFrames,
         selectedFrame: mockResponse.selectedFrame,
         isCurrentTabBeingListenedTo: true,
         allowedNumberOfTabs: 'single',
         loading: false,
+        tabCookies: Object.values(mockResponse.tabCookies),
       };
     },
   };
@@ -56,27 +55,27 @@ jest.mock('../../../stateProviders/syncCookieStore', () => {
 
 jest.mock('../../../stateProviders/filterManagementStore', () => {
   return {
-    useFilterManagementStore: {
-      state: {
+    useFilterManagementStore: () => {
+      return {
         selectedFilters: {},
         filters: [],
         filteredCookies: Object.values(mockResponse.tabCookies),
-      },
-      actions: {},
+      };
     },
   };
 });
-// const mockFilterManagementStore = useFilterManagementStore as jest.Mock;
-// mockFilterManagementStore.mockImplementation((selector) => {
-//   return selector({
-//     state: {
-//       selectedFilters: {},
-//       filters: [],
-//       filteredCookies: Object.values(mockResponse.tabCookies),
-//     },
-//     actions: {},
-//   });
-// });
+jest.mock('../../../stateProviders/preferenceStore', () => {
+  return {
+    usePreferenceStore: () => {
+      return {
+        columnSorting: [],
+        columnSizing: {},
+        selectedColumns: {},
+        updatePreference: () => undefined,
+      };
+    },
+  };
+});
 
 global.ResizeObserver = jest.fn().mockImplementation(() => ({
   observe: jest.fn(),

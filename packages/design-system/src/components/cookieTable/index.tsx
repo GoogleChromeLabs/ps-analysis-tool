@@ -73,14 +73,16 @@ const CookieTable = ({
         setSelectedFrameCookie(null);
       }
     }
-  }, [
-    selectedFrameCookie,
-    selectedFrame,
-    setSelectedFrameCookie,
-    cookies.length,
-  ]);
+  }, [selectedFrameCookie, selectedFrame, setSelectedFrameCookie, cookies]);
 
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
+
+  useEffect(() => {
+    window.addEventListener('resize', () => forceUpdate());
+    return () => {
+      window.removeEventListener('resize', () => forceUpdate());
+    };
+  }, []);
 
   const onRowClick = useCallback(
     (cookieData: TableData | null) => {
@@ -114,13 +116,6 @@ const CookieTable = ({
           : undefined,
     },
   });
-
-  useEffect(() => {
-    window.addEventListener('resize', () => forceUpdate());
-    return () => {
-      window.removeEventListener('resize', () => forceUpdate());
-    };
-  }, []);
 
   return (
     <div className="flex-1 w-full h-full text-outer-space-crayola border-x border-american-silver dark:border-quartz">
