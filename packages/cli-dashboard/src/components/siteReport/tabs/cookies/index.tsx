@@ -22,21 +22,19 @@ import {
 import {
   CookiesLanding,
   CookiesMatrix,
-  Button,
 } from '@cookie-analysis-tool/design-system';
 /**
  * Internal dependencies.
  */
 import CookiesListing from './cookieListing';
 import { useContentStore } from '../../stateProviders/contentStore';
-import { reportDownloader } from '../../../utils/reportDownloader';
 
 interface CookiesTabProps {
   selectedFrameUrl?: string | null;
 }
 
 const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
-  const { tabCookies, completeJson } = useContentStore(({ state }) => ({
+  const { tabCookies } = useContentStore(({ state }) => ({
     tabCookies: state.tabCookies,
     completeJson: state.completeJson,
   }));
@@ -69,11 +67,6 @@ const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
         <CookiesListing selectedFrameUrl={selectedFrameUrl} />
       ) : (
         <div className="flex flex-col w-full">
-          <Button
-            extraClasses="absolute top-0 right-0"
-            text="Download Report"
-            onClick={() => reportDownloader(completeJson)}
-          />
           <CookiesLanding
             tabCookies={tabCookies}
             tabFrames={tabFrames}
