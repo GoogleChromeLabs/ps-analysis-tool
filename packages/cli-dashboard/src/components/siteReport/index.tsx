@@ -35,12 +35,14 @@ interface SiteReportProps {
   };
   technologies: TechnologyData[];
   completeJson: CompleteJson | null;
+  selectedSite?: string;
 }
 
 const SiteReport = ({
   cookies,
   technologies,
   completeJson,
+  selectedSite,
 }: SiteReportProps) => {
   return (
     <ContentStoreProvider
@@ -48,7 +50,7 @@ const SiteReport = ({
       technologies={technologies}
       completeJson={completeJson}
     >
-      <Layout />
+      <Layout selectedSite={selectedSite} />
     </ContentStoreProvider>
   );
 };

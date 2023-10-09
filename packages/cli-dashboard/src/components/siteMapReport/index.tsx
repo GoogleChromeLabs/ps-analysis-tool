@@ -198,6 +198,7 @@ const SiteMapReport = ({
       <div className="flex-1 h-full">
         {selectedSite ? (
           <SiteReport
+            selectedSite={selectedSite}
             cookies={siteFilteredCookies}
             technologies={siteFilteredTechnologies}
             completeJson={completeJson}

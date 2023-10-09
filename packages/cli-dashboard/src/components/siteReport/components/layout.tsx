@@ -26,7 +26,11 @@ import { useContentStore } from '../stateProviders/contentStore';
 import { TABS } from '../tabs';
 import Sidebar from './sidebar';
 
-const Layout = () => {
+interface LayoutProps {
+  selectedSite?: string;
+}
+
+const Layout = ({ selectedSite }: LayoutProps) => {
   const { frameUrls } = useContentStore(({ state }) => ({
     frameUrls: [
       ...new Set(
@@ -73,7 +77,10 @@ const Layout = () => {
         />
       </Resizable>
       <div className="flex-1 h-full">
-        <TabComponent selectedFrameUrl={selectedFrameUrl} />
+        <TabComponent
+          selectedFrameUrl={selectedFrameUrl}
+          selectedSite={selectedSite}
+        />
       </div>
     </div>
   );

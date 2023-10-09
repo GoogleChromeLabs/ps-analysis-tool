@@ -35,9 +35,22 @@ interface SingleTechnology {
   categories: string;
 }
 
-export const reportDownloader = (report: CompleteJson | null) => {
-  if (!report) {
+export const reportDownloader = (
+  jsonToBeConverted: CompleteJson[],
+  selectedPageUrl?: string | null
+) => {
+  if (!jsonToBeConverted) {
     return;
+  }
+
+  let report: CompleteJson = jsonToBeConverted[0];
+
+  if (selectedPageUrl) {
+    report = jsonToBeConverted.find(
+      ({ pageUrl }) => pageUrl === selectedPageUrl
+    ) as CompleteJson;
+  } else {
+    report = jsonToBeConverted[0];
   }
 
   const newReport: NewReport = {
@@ -92,6 +105,7 @@ export const reportDownloader = (report: CompleteJson | null) => {
   let affectedAnalyticsCookies = 0;
 
   newReport.affectedCookies = {};
+
   Object.keys(report.cookieData).forEach((frameName) => {
     newReport.affectedCookies[frameName] = {};
     Object.keys(report.cookieData[frameName].frameCookies).forEach((cookie) => {

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import {
   prepareCookiesCount,
   prepareCookieStatsComponents,
@@ -22,19 +22,22 @@ import {
 import {
   CookiesLanding,
   CookiesMatrix,
+  Button,
 } from '@cookie-analysis-tool/design-system';
 /**
  * Internal dependencies.
  */
 import CookiesListing from './cookieListing';
 import { useContentStore } from '../../stateProviders/contentStore';
+import { reportDownloader } from '../../../utils/reportDownloader';
 
 interface CookiesTabProps {
   selectedFrameUrl?: string | null;
+  selectedSite?: string | null;
 }
 
-const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
-  const { tabCookies } = useContentStore(({ state }) => ({
+const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
+  const { tabCookies, completeJson } = useContentStore(({ state }) => ({
     tabCookies: state.tabCookies,
     completeJson: state.completeJson,
   }));
@@ -60,6 +63,16 @@ const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
       ),
     [tabCookies]
   );
+  const downloadReport = useCallback(() => {
+    if (!completeJson) {
+      return;
+    }
+    if (Array.isArray(completeJson)) {
+      reportDownloader(completeJson, selectedSite);
+    } else if (!Array.isArray(completeJson)) {
+      reportDownloader([completeJson]);
+    }
+  }, [completeJson, selectedSite]);
 
   return (
     <div className="w-full h-full flex items-center justify-center">
@@ -67,6 +80,11 @@ const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
         <CookiesListing selectedFrameUrl={selectedFrameUrl} />
       ) : (
         <div className="flex flex-col w-full">
+          <Button
+            extraClasses="absolute top-0 right-0"
+            text="Download Report"
+            onClick={downloadReport}
+          />
           <CookiesLanding
             tabCookies={tabCookies}
             tabFrames={tabFrames}
