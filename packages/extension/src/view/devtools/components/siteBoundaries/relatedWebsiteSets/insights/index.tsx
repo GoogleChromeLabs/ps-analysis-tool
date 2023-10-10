@@ -27,6 +27,7 @@ import checkURLInRWS, {
   type CheckURLInRWSOutputType,
 } from './utils/checkURLInRWS';
 import SitesList from './sitesList';
+import { Cross } from '@cookie-analysis-tool/design-system';
 
 const Insights = () => {
   const [insightsData, setInsightsData] =
@@ -86,12 +87,16 @@ const Insights = () => {
           <div className="w-6 h-6 rounded-full animate-spin border-t-transparent border-solid border-blue-700 border-2" />
         </div>
       ) : (
-        <div>
+        <div className="space-y-3">
+          <h3 className="text-xl font-semibold">
+            Related Website Sets Membership
+          </h3>
           {insightsData?.isURLInRWS ? (
-            <div>
-              <h4 className="text-lg font-semibold">
-                This site belongs to &quot;Related Website Sets&quot;
-              </h4>
+            <>
+              <p className="text-lg font-medium">
+                <span className="font-serif text-green-700">✓</span> This site
+                belongs to a &quot;Related Website Set&quot;
+              </p>
               <p className="text-sm">
                 Primary Domain:{' '}
                 <a
@@ -104,30 +109,28 @@ const Insights = () => {
                   {insightsData.relatedWebsiteSet?.primary}
                 </a>
               </p>
-              <div>
-                {!insightsData.primary ? (
-                  <>
-                    {Object.entries(
-                      insightsData.relatedWebsiteSet?.rationaleBySite || {}
+              {!insightsData.primary ? (
+                <>
+                  {Object.entries(
+                    insightsData.relatedWebsiteSet?.rationaleBySite || {}
+                  )
+                    .filter(
+                      ([domain]) => getDomain(domain) === insightsData.domain
                     )
-                      .filter(
-                        ([domain]) => getDomain(domain) === insightsData.domain
-                      )
-                      .map(([domain, value]) => (
-                        <p key={domain} className="text-sm mt-4">
-                          Rationale:{' '}
-                          <span className="underline">{value as string}</span>
-                        </p>
-                      ))}
-                  </>
-                ) : (
-                  <p className="mt-4">
-                    This site is the primary domain of the Related Website Set.
-                  </p>
-                )}
-              </div>
+                    .map(([domain, value]) => (
+                      <p key={domain} className="text-sm">
+                        Rationale:{' '}
+                        <span className="underline">{value as string}</span>
+                      </p>
+                    ))}
+                </>
+              ) : (
+                <p>
+                  This site is the primary domain of the Related Website Set.
+                </p>
+              )}
 
-              <div className="flex flex-row gap-4 mt-4 overflow-auto">
+              <div className="flex flex-row gap-4 overflow-auto">
                 <SitesList
                   title="Associated Sites"
                   sites={insightsData.relatedWebsiteSet?.associatedSites || []}
@@ -138,11 +141,12 @@ const Insights = () => {
                 />
                 <SitesList title="ccTLDs" sites={cctlds} />
               </div>
-            </div>
+            </>
           ) : (
-            <h4 className="text-lg font-semibold">
-              This site does not belong to &quot;Related Website Sets&quot;
-            </h4>
+            <p className="text-lg font-medium flex items-center gap-2">
+              <Cross />
+              This site does not belong to a &quot;Related Website Set&quot;
+            </p>
           )}
         </div>
       )}

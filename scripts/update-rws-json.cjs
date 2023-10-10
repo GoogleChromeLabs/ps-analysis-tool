@@ -18,7 +18,7 @@ const fs = require('fs-extra');
 const fetch = require('node-fetch');
 const targetDIR = path.resolve(__dirname, '..', 'data/');
 const requestURL =
-  'https://raw.githubusercontent.com/GoogleChrome/first-party-sets/main/first_party_sets.JSON';
+  'https://raw.githubusercontent.com/GoogleChrome/related-website-sets/main/related_website_sets.JSON';
 
 const errorHandler = (err) => {
   console.error(err.message); // eslint-disable-line no-console

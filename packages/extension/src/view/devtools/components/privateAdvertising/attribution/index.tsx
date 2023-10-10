@@ -31,7 +31,7 @@ const Attribution = () => {
   return (
     <LandingPage title={pageTitle} isLoading={!pageTitle}>
       <div
-        className="w-full h-full overflow-auto"
+        className="px-4 max-w-2xl h-full overflow-auto"
         data-testid="attribution-content"
       >
         <InfoCard

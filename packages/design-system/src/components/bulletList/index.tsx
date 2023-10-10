@@ -41,9 +41,15 @@ const BulletList = ({ rows, heading }: BulletListProps) => {
         </>
       )}
       <div className="space-y-4">
-        {rows.map((rowItem) => (
-          <ListRow row={rowItem} key={rowItem?.key ?? rowItem.title} />
-        ))}
+        {rows.length === 0 ? (
+          <p className="text-darkest-gray dark:text-bright-gray">No News</p>
+        ) : (
+          <>
+            {rows.map((rowItem) => (
+              <ListRow row={rowItem} key={rowItem?.key ?? rowItem.title} />
+            ))}
+          </>
+        )}
       </div>
     </>
   );
