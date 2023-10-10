@@ -22,8 +22,10 @@ import { getDomain } from 'tldts';
 /**
  * Internal dependencies.
  */
-import fetchRWSInfo from './fetchRWSInfo';
+import fetchRWSInfo from '../../../../../../../utils/fetchRWSInfo';
 import getInspectedTabDomain from './getInspectedTabDomain';
+import type { RelatedWebsiteSetType } from '../../../../../../../@types';
+import findRWSURLSets from '../../../../../../../utils/findRWSURLSets';
 
 export type CheckURLInRWSOutputType = {
   isURLInRWS: boolean;
@@ -32,34 +34,14 @@ export type CheckURLInRWSOutputType = {
   relatedWebsiteSet?: RelatedWebsiteSetType;
 };
 
-type RelatedWebsiteSetType = {
-  primary: string;
-  contact: string;
-  associatedSites?: string[];
-  serviceSites?: string[];
-  ccTLDs?: {
-    [site: string]: string[];
-  };
-  rationaleBySite?: {
-    [url: string]: string;
-  };
-};
-
 const checkURLInRWS = async () => {
   const tabDomain = (await getInspectedTabDomain()) || '';
   const rwsSets: RelatedWebsiteSetType[] = (await fetchRWSInfo()).sets || [];
 
-  const urlInRWS: RelatedWebsiteSetType | undefined = rwsSets.find((rws) => {
-    const rwsURLs: string[] = Object.keys(rws.rationaleBySite || {}).map(
-      (_url) => getDomain(_url) || ''
-    );
-
-    if (tabDomain === getDomain(rws.primary)) {
-      return true;
-    }
-
-    return rwsURLs.includes(tabDomain);
-  });
+  const urlInRWS: RelatedWebsiteSetType | undefined = findRWSURLSets(
+    tabDomain,
+    rwsSets
+  );
 
   if (!urlInRWS) {
     return {

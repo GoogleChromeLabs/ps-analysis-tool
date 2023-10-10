@@ -87,7 +87,7 @@ export interface TabCookies {
 }
 
 export interface TabFrames {
-  [key: string]: { frameIds: number[] };
+  [key: string]: { frameIds: number[]; isOnRWS?: boolean };
 }
 
 export interface Legend {
