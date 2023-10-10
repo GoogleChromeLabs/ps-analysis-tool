@@ -43,7 +43,6 @@ class WebpageContentScript {
    */
   port: chrome.runtime.Port | null = null;
   isInspecting = false;
-  isScrolling = false;
   isHoveringOverPage = false;
   bodyHoverStateSent = false;
   scrollEventListeners: Array<() => void> = [];
@@ -114,13 +113,6 @@ class WebpageContentScript {
     } else {
       this.abortInspection();
     }
-  }
-  onScrollEnd() {
-    this.isScrolling = false;
-  }
-
-  onScrollStarted() {
-    this.isScrolling = true;
   }
 
   insertOverlay(
@@ -214,11 +206,13 @@ class WebpageContentScript {
    */
   insertPopovers(response: ResponseType) {
     // If the no frame was selected in devtool.
-    if (!response.selectedFrame) {
+    if (response.removeAllFramePopovers && !response.selectedFrame) {
       removeAllPopovers();
       return;
     }
-
+    if (!response.selectedFrame) {
+      return;
+    }
     const frameElements = findSelectedFrameElements(response.selectedFrame);
     const numberOfFrames = frameElements.length;
 
@@ -343,9 +337,6 @@ class WebpageContentScript {
     }
 
     this.isHoveringOverPage = true;
-    if (this.isScrolling) {
-      return;
-    }
 
     if (
       !this.bodyHoverStateSent &&
@@ -411,6 +402,7 @@ class WebpageContentScript {
         this.port.postMessage({
           attributes: {
             iframeOrigin: url ? url.origin : '',
+            isNullSetFromHover: url ? false : true,
           },
         });
       }

@@ -19,4 +19,5 @@ export interface ResponseType {
   thirdPartyCookies?: number;
   isInspecting: boolean;
   isOnRWS?: boolean;
+  removeAllFramePopovers?: boolean;
 }

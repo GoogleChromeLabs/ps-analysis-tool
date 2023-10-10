@@ -36,7 +36,7 @@ interface LandingPageProps {
 }
 
 const LandingPage = ({ title, children, isLoading }: LandingPageProps) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [news, setNews] = useState<BulletListItem[]>([]);
 
   const fetchLatestNews = async () => {
