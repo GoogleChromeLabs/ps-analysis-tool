@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 /**
  * Internal dependencies.
@@ -27,7 +27,7 @@ import { useFilterManagementStore } from '../stateProviders/filterManagementStor
 import { getCurrentTabId } from '../../../utils/getCurrentTabId';
 
 interface Response {
-  attributes: { iframeOrigin: React.SetStateAction<string | null> };
+  attributes: { iframeOrigin: string | null };
 }
 
 const useFrameOverlay = () => {
@@ -42,6 +42,8 @@ const useFrameOverlay = () => {
     isCurrentTabBeingListenedTo,
     allowedNumberOfTabs,
     tabFrames,
+    isFrameSelectedFromDevTool,
+    setIsFrameSelectedFromDevTool,
   } = useCookieStore(({ state, actions }) => ({
     setContextInvalidated: actions.setContextInvalidated,
     isInspecting: state.isInspecting,
@@ -51,6 +53,8 @@ const useFrameOverlay = () => {
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
     allowedNumberOfTabs: state.allowedNumberOfTabs,
     tabFrames: state.tabFrames,
+    isFrameSelectedFromDevTool: state.isFrameSelectedFromDevTool,
+    setIsFrameSelectedFromDevTool: actions.setIsFrameSelectedFromDevTool,
   }));
 
   const { filteredCookies } = useFilterManagementStore(({ state }) => ({
@@ -71,7 +75,8 @@ const useFrameOverlay = () => {
       name: portName,
     });
     portRef.current.onMessage.addListener((response: Response) => {
-      setSelectedFrame(response.attributes.iframeOrigin || '');
+      setSelectedFrame(response.attributes.iframeOrigin);
+      setIsFrameSelectedFromDevTool(false);
     });
 
     portRef.current.onDisconnect.addListener(() => {
@@ -83,7 +88,7 @@ const useFrameOverlay = () => {
       isInspecting: true,
     });
     setConnectedToPort(true);
-  }, [setIsInspecting, setSelectedFrame]);
+  }, [setIsFrameSelectedFromDevTool, setIsInspecting, setSelectedFrame]);
 
   const sessionStoreChangedListener = useCallback(
     async (changes: { [key: string]: chrome.storage.StorageChange }) => {
@@ -182,6 +187,7 @@ const useFrameOverlay = () => {
             : [];
           portRef.current.postMessage({
             selectedFrame,
+            removeAllFramesPopOver: isFrameSelectedFromDevTool,
             thirdPartyCookies: thirdPartyCookies.length,
             firstPartyCookies: firstPartyCookies.length,
             isInspecting,
@@ -197,6 +203,7 @@ const useFrameOverlay = () => {
     connectToPort,
     connectedToPort,
     tabFrames,
+    isFrameSelectedFromDevTool,
   ]);
 };
 

@@ -206,11 +206,13 @@ class WebpageContentScript {
    */
   insertPopovers(response: ResponseType) {
     // If the no frame was selected in devtool.
-    if (!response.selectedFrame) {
+    if (response.removeAllFramesPopOver && !response.selectedFrame) {
       removeAllPopovers();
       return;
     }
-
+    if (!response.selectedFrame) {
+      return;
+    }
     const frameElements = findSelectedFrameElements(response.selectedFrame);
     const numberOfFrames = frameElements.length;
 
@@ -400,6 +402,7 @@ class WebpageContentScript {
         this.port.postMessage({
           attributes: {
             iframeOrigin: url ? url.origin : '',
+            isNullSetFromHover: url ? false : true,
           },
         });
       }

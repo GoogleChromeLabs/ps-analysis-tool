@@ -47,13 +47,17 @@ export interface CookieStoreContext {
     allowedNumberOfTabs: string | null;
     isInspecting: boolean;
     contextInvalidated: boolean;
+    isFrameSelectedFromDevTool: boolean;
   };
   actions: {
-    setSelectedFrame: React.Dispatch<React.SetStateAction<string | null>>;
+    setSelectedFrame: (key: string | null) => void;
     setIsInspecting: React.Dispatch<React.SetStateAction<boolean>>;
     changeListeningToThisTab: () => void;
     getCookiesSetByJavascript: () => void;
     setContextInvalidated: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsFrameSelectedFromDevTool: React.Dispatch<
+      React.SetStateAction<boolean>
+    >;
   };
 }
 
@@ -69,9 +73,11 @@ const initialState: CookieStoreContext = {
     allowedNumberOfTabs: null,
     isInspecting: false,
     contextInvalidated: false,
+    isFrameSelectedFromDevTool: false,
   },
   actions: {
     setSelectedFrame: noop,
+    setIsFrameSelectedFromDevTool: noop,
     changeListeningToThisTab: noop,
     setIsInspecting: noop,
     getCookiesSetByJavascript: noop,
@@ -103,7 +109,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [isInspecting, setIsInspecting] =
     useState<CookieStoreContext['state']['isInspecting']>(false);
 
-  const [selectedFrame, setSelectedFrame] =
+  const [isFrameSelectedFromDevTool, setIsFrameSelectedFromDevTool] =
+    useState<CookieStoreContext['state']['isFrameSelectedFromDevTool']>(false);
+
+  const [selectedFrame, _setSelectedFrame] =
     useState<CookieStoreContext['state']['selectedFrame']>(null);
 
   const [tabUrl, setTabUrl] =
@@ -152,6 +161,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
     []
   );
 
+  const setSelectedFrame = useCallback((key: string | null) => {
+    _setSelectedFrame(key);
+    setIsFrameSelectedFromDevTool(true);
+  }, []);
+
   const intitialSync = useCallback(async () => {
     const _tabId = chrome.devtools.inspectedWindow.tabId;
 
@@ -192,7 +206,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         ) {
           setIsCurrentTabBeingListenedTo(false);
           setLoading(false);
-          setSelectedFrame(null);
+          _setSelectedFrame(null);
           setTabFrames(null);
           return;
         } else {
@@ -300,7 +314,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           ) {
             setIsCurrentTabBeingListenedTo(false);
             setTabFrames(null);
-            setSelectedFrame(null);
+            _setSelectedFrame(null);
             setLoading(false);
             return;
           } else {
@@ -471,6 +485,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           allowedNumberOfTabs,
           contextInvalidated,
           isInspecting,
+          isFrameSelectedFromDevTool,
         },
         actions: {
           setSelectedFrame,
@@ -478,6 +493,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           getCookiesSetByJavascript,
           setIsInspecting,
           setContextInvalidated,
+          setIsFrameSelectedFromDevTool,
         },
       }}
     >
