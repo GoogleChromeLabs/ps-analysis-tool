@@ -43,7 +43,6 @@ class WebpageContentScript {
    */
   port: chrome.runtime.Port | null = null;
   isInspecting = false;
-  isScrolling = false;
   isHoveringOverPage = false;
   bodyHoverStateSent = false;
   scrollEventListeners: Array<() => void> = [];
@@ -114,13 +113,6 @@ class WebpageContentScript {
     } else {
       this.abortInspection();
     }
-  }
-  onScrollEnd() {
-    this.isScrolling = false;
-  }
-
-  onScrollStarted() {
-    this.isScrolling = true;
   }
 
   insertOverlay(
@@ -343,9 +335,6 @@ class WebpageContentScript {
     }
 
     this.isHoveringOverPage = true;
-    if (this.isScrolling) {
-      return;
-    }
 
     if (
       !this.bodyHoverStateSent &&
