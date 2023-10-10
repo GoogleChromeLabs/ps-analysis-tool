@@ -59,6 +59,9 @@ Cookies are used as a state management mechanism to power varying features and c
 
 This tool provides capabilities to make it easy for users to report breakages, and connect with existing Privacy Sandbox feedback and bug reporting channels. As you leverage the capabilities of the tool to analyze and debug your critical user journeys, you can report breakages or questions about your use cases and directly send them to the proper feedback channel. This way you would get answers to your issues, and will contribute to our collective effort to ensure the ecosystem is ready for a world without 3P cookies as we know them today.
 
+<img width="937" alt="Screenshot 2023-10-10 at 4 02 12 PM" src="https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/67aff95d-4c9e-4eb9-b429-7a1b4c8c46d7">
+
+
 ## Knowledge Access Points
 
 The final goal of this tool is to make it easy to understand the role of 3P cookies on critical user journeys all the relevant aspects of Privacy Sandbox and the phasing out of 3P cookies. As you use the tool to analyze and debug your use cases, you will encounter links to documentation and other sources of information to support your learning and understanding as you navigate the transition to a more private web. 
