@@ -185,9 +185,7 @@ const SiteMapReport = ({
                 selectedTopLevelMenu === 'affectedCookies'
                   ? 'bg-royal-blue text-white'
                   : 'bg-white'
-              }
-							}
-						`}
+              }`}
           >
             <p>Affected Cookies</p>
           </div>
