@@ -101,14 +101,7 @@ const Cookies = () => {
             This tool works best with a single tab for cookie analysis.
           </p>
         )}
-        {contextInvalidated ? (
-          <p className="dark:text-bright-gray text-chart-label text-base mb-5">
-            Uh Oh! Looks like extension has been updated since devtools was
-            open. Please close and reopen the devtools panel.
-          </p>
-        ) : (
-          <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
-        )}
+        <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
       </div>
     </div>
   );

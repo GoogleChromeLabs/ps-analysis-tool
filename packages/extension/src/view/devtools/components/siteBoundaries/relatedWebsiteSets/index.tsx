@@ -35,7 +35,7 @@ const RelatedWebsiteSets = () => {
       className="w-full h-full overflow-auto"
       data-testid="related-website-sets-content"
     >
-      <InfoCard infoKey={PSInfoKey.RelatedWebsiteSets} />
+      <InfoCard infoKey={PSInfoKey.RelatedWebsiteSets} hasHeader={true} />
       <div className="text-raisin-black dark:text-bright-gray max-w-2xl dark:bg-davys-grey border border-gray-200 dark:border-quartz rounded-lg shadow p-6 m-3 flex flex-col gap-3 divide-y divide-gray-200 dark:divide-gray-500">
         <Insights />
         <RWSJsonGenerator open={showForm} />

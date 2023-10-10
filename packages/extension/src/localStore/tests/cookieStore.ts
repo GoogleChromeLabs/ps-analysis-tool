@@ -119,6 +119,24 @@ describe('local store: CookieStore', () => {
             removeListener: () => undefined,
           },
         },
+        session: {
+          //@ts-ignore
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          get: (_, __) =>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            new Promise<{ [key: string]: any }>((resolve) => {
+              resolve({
+                123: true,
+              });
+            }),
+          set: () => Promise.resolve(),
+          remove: () => Promise.resolve(),
+          //@ts-ignore
+          onChanged: {
+            addListener: () => undefined,
+            removeListener: () => undefined,
+          },
+        },
       },
     };
   });

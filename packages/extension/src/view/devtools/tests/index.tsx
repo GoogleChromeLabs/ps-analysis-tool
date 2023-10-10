@@ -101,6 +101,11 @@ describe('Index', () => {
     globalThis.chrome = {
       ...SinonChrome,
       //@ts-ignore
+      runtime: {
+        id: 'afajkfkjabfkjas',
+        getURL: () => 'data/related_website_sets.json',
+      },
+      //@ts-ignore
       webNavigation: {
         //@ts-ignore
         getAllFrames: () => {
@@ -202,6 +207,13 @@ describe('Index', () => {
             removeListener: () => undefined,
           },
         },
+        session: {
+          //@ts-ignore
+          onChanged: {
+            addListener: () => undefined,
+            removeListener: () => undefined,
+          },
+        },
       },
       devtools: {
         //@ts-ignore
@@ -260,6 +272,7 @@ describe('Index', () => {
           Promise.resolve({
             ...PSInfo,
           }),
+        text: () => Promise.resolve({}),
       });
     } as unknown as typeof fetch;
   });

@@ -21,8 +21,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import SinonChrome from 'sinon-chrome';
-import { noop } from '@cookie-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
@@ -32,6 +30,8 @@ import App from '../app';
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'cookie-analysis-tool/data/PSInfo.json';
 import { useCookieStore } from '../stateProviders/syncCookieStore';
+import { noop } from '@cookie-analysis-tool/common';
+import globalChrome from '../../../utils/test-data/globalChrome';
 
 jest.mock('../stateProviders/syncCookieStore', () => ({
   useCookieStore: jest.fn(),
@@ -47,30 +47,22 @@ describe('App', () => {
       changeListeningToThisTab: noop,
       setSelectedFrame: noop,
       allowedNumberOfTabs: 'single',
+      setIsInspecting: noop,
     });
+    jest.spyOn(console, 'warn').mockImplementation(() => undefined);
     globalThis.chrome = {
-      ...SinonChrome,
-      devtools: {
+      ...globalChrome,
+      storage: {
         // @ts-ignore
-        panels: {
-          themeName: 'dark',
-        },
-        inspectedWindow: {
-          tabId: 1,
-          eval: noop,
-        },
-      },
-      tabs: {
-        get: () => ({ url: 'https://hindustantimes.com' }),
-        onUpdated: {
-          addListener: () => noop,
-          removeListener: () => noop,
+        session: {
+          // @ts-ignore
+          onChanged: {
+            addListener: () => undefined,
+            removeListener: () => undefined,
+          },
         },
       },
-      runtime: {
-        getURL: () => 'data/related_website_sets.json',
-      },
-    } as unknown as typeof chrome;
+    };
 
     globalThis.fetch = function () {
       return Promise.resolve({
@@ -78,6 +70,7 @@ describe('App', () => {
           Promise.resolve({
             ...PSInfo,
           }),
+        text: () => Promise.resolve({}),
       });
     } as unknown as typeof fetch;
   });

@@ -16,7 +16,7 @@
 /**
  * External Dependencies
  */
-import React from 'react';
+import React, { useState } from 'react';
 
 /**
  * Internal dependencies.
@@ -24,12 +24,22 @@ import React from 'react';
 import { LandingPage } from '@cookie-analysis-tool/design-system';
 
 const SiteBoundaries = () => {
+  const [loading, setLoading] = useState(true);
+
   return (
     <>
-      <LandingPage
-        title="Site Boundaries"
-        embedUrl="https://privacysandbox.info/en/privacy-sandbox/strengthen-privacy-boundaries"
-      />
+      <LandingPage title="Site Boundaries" isLoading={loading}>
+        <div className="px-4 pt-6 pb-4 h-screen w-full">
+          <iframe
+            src="https://privacysandbox.info/en/privacy-sandbox/strengthen-privacy-boundaries"
+            height="100%"
+            onLoad={() => {
+              setLoading(false);
+            }}
+            className="w-full md:w-[70%]"
+          />
+        </div>
+      </LandingPage>
     </>
   );
 };

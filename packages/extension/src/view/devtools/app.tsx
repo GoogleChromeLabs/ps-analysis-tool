@@ -16,50 +16,86 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Resizable } from 're-resizable';
+import { ExtensionReloadNotification } from '@cookie-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
 import TABS from './tabs';
 import { Sidebar } from './components';
+import { useCookieStore } from './stateProviders/syncCookieStore';
 import './app.css';
 
 const App: React.FC = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
+  const contextInvalidatedRef = useRef(null);
   const TabContent = TABS[selectedTabIndex].component;
 
+  const { contextInvalidated, setContextInvalidated } = useCookieStore(
+    ({ state, actions }) => ({
+      contextInvalidated: state.contextInvalidated,
+      setContextInvalidated: actions.setContextInvalidated,
+    })
+  );
+
+  const listenToMouseChange = useCallback(() => {
+    if (contextInvalidatedRef.current) {
+      if (!chrome.runtime?.id) {
+        setContextInvalidated(true);
+      }
+    }
+  }, [setContextInvalidated]);
+
+  useEffect(() => {
+    window.addEventListener('mouseover', listenToMouseChange);
+
+    return () => {
+      window.removeEventListener('mouseover', listenToMouseChange);
+    };
+  }, [listenToMouseChange]);
+
   return (
-    <div className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black">
-      <div className="w-full h-full flex flex-row">
-        <Resizable
-          defaultSize={{ width: '200px', height: '100%' }}
-          minWidth={'200px'}
-          maxWidth={'98%'}
-          enable={{
-            top: false,
-            right: true,
-            bottom: false,
-            left: false,
-            topRight: false,
-            bottomRight: false,
-            bottomLeft: false,
-            topLeft: false,
-          }}
-          className="h-full flex flex-col pt-0.5 border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
-        >
-          <Sidebar
-            selectedIndex={selectedTabIndex}
-            setIndex={setSelectedTabIndex}
-          />
-        </Resizable>
-        <main className="h-full flex-1 overflow-auto">
-          <div className="min-w-[20rem] h-full">
-            <TabContent />
-          </div>
-        </main>
-      </div>
+    <div
+      className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black"
+      ref={contextInvalidatedRef}
+    >
+      {contextInvalidated && (
+        <div className="flex flex-col items-center justify-center w-full h-full">
+          <ExtensionReloadNotification />
+        </div>
+      )}
+      {!contextInvalidated && (
+        <div className="w-full h-full flex flex-row">
+          <Resizable
+            defaultSize={{ width: '200px', height: '100%' }}
+            minWidth={'200px'}
+            maxWidth={'98%'}
+            enable={{
+              top: false,
+              right: true,
+              bottom: false,
+              left: false,
+              topRight: false,
+              bottomRight: false,
+              bottomLeft: false,
+              topLeft: false,
+            }}
+            className="h-full flex flex-col border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
+          >
+            <Sidebar
+              selectedIndex={selectedTabIndex}
+              setIndex={setSelectedTabIndex}
+            />
+          </Resizable>
+          <main className="h-full flex-1 overflow-auto">
+            <div className="min-w-[20rem] h-full">
+              <TabContent />
+            </div>
+          </main>
+        </div>
+      )}
     </div>
   );
 };
