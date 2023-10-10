@@ -19,12 +19,13 @@
  */
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
+// @ts-ignore Package does not support typescript.
+import Wapplalyzer from 'wappalyzer';
 
 /**
  * Internal dependencies.
  */
 import { TechnologyDetailList } from '../types';
-import { analyzeTechnologiesUrls } from './analyzeTechnologiesUrls';
 
 /**
  *
@@ -34,10 +35,11 @@ import { analyzeTechnologiesUrls } from './analyzeTechnologiesUrls';
 export async function analyzeTechnologiesUrlsInBatches(
   urls: Array<string>,
   batchSize = 3
-): Promise<TechnologyDetailList> {
+): Promise<TechnologyDetailList[]> {
   const spinnies = new Spinnies();
+  const wappalyzer = new Wapplalyzer();
 
-  let report: any[] = [];
+  let report: TechnologyDetailList[] = [];
 
   for (let i = 0; i < urls.length; i += batchSize) {
     const start = i;
@@ -49,7 +51,13 @@ export async function analyzeTechnologiesUrlsInBatches(
 
     const urlsWindow = urls.slice(start, end + 1);
 
-    const technologyAnalysis = await analyzeTechnologiesUrls(urlsWindow);
+    const technologyAnalysis = await Promise.all(
+      urlsWindow.map(async (url) => {
+        const site = await wappalyzer.open(url);
+        const results = await site.analyze();
+        return results.technologies;
+      })
+    );
 
     report = [...report, ...technologyAnalysis];
 
@@ -57,6 +65,8 @@ export async function analyzeTechnologiesUrlsInBatches(
       text: `Done technology in urls ${start + 1} - ${end + 1} `,
     });
   }
+
+  console.log(report);
 
   return report;
 }

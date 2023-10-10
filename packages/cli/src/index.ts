@@ -26,7 +26,6 @@ import { exec } from 'child_process';
 /**
  * Internal dependencies.
  */
-import { analyzeTechnologiesUrls } from './procedures/analyzeTechnologiesUrls';
 import Utility from './utils/utility';
 import { fetchDictionary } from './utils/fetchCookieDictionary';
 import { delay } from './utils';
@@ -79,7 +78,7 @@ export const initialize = async () => {
     spinnies.add('technology-spinner', {
       text: 'Analysing technologies',
     });
-    const technologyData = await analyzeTechnologiesUrls([url]);
+    const technologyData = await analyzeTechnologiesUrlsInBatches([url]);
     spinnies.succeed('technology-spinner', {
       text: 'Done analyzing technologies.',
     });
