@@ -125,7 +125,7 @@ const createTooltip = (
   const allowedFeaturedValue = displayShowMoreButton
     ? allowedFeaturesInCompactView
     : allowedFeatureInExpandedView;
-  info['Allowed features'] =
+  info['Allowed features (PS related)'] =
     allowedFeaturedValue === ALL_ALLOWED_FEATURES
       ? 'all'
       : allowedFeaturedValue;

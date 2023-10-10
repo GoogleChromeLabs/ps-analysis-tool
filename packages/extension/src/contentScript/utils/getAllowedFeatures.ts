@@ -13,6 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Internal dependencies.
+ */
+import { PS_RELATED_ALLOWED_FEATURES } from '../constants';
+
 const getAllowedFeatures = (iframe: HTMLElement) => {
   if (!iframe || !iframe?.featurePolicy) {
     return 'Unknown';
@@ -21,7 +26,11 @@ const getAllowedFeatures = (iframe: HTMLElement) => {
   const featurePolicy = iframe?.featurePolicy;
 
   // Then query feature for specific
-  const allowed = featurePolicy.allowedFeatures();
+  const allAllowedFeatures = featurePolicy.allowedFeatures() || [];
+
+  const allowed = allAllowedFeatures.filter((feature: string) => {
+    return PS_RELATED_ALLOWED_FEATURES.includes(feature);
+  });
 
   return allowed && allowed.length ? allowed.sort() : 'N/A';
 };
