@@ -21,6 +21,7 @@ import {
   Accordion,
   AccordionChildren,
 } from '@cookie-analysis-tool/design-system';
+
 /**
  * Internal dependencies
  */
@@ -31,6 +32,7 @@ import {
   arrowDownHandler,
   arrowLeftHandler,
 } from './keyboardNavigationHandlers';
+import useFrameOverlay from '../../hooks/useFrameOverlay';
 interface SidebarProps {
   selectedIndex: number;
   setIndex: (index: number) => void;
@@ -42,11 +44,15 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
     selectedFrame,
     tabFrames,
     isCurrentTabBeingListenedTo,
+    isInspecting,
+    setIsInspecting,
   } = useCookieStore(({ state, actions }) => ({
     setSelectedFrame: actions.setSelectedFrame,
     tabFrames: state.tabFrames,
     selectedFrame: state.selectedFrame,
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
+    isInspecting: state.isInspecting,
+    setIsInspecting: actions.setIsInspecting,
   }));
 
   const [accordionState, setAccordionState] =
@@ -56,6 +62,17 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
     string | null
   >('privacySandbox');
   const sidebarContainerRef = useRef<HTMLDivElement>(null);
+
+  useFrameOverlay();
+
+  useEffect(() => {
+    if (isInspecting && selectedFrame) {
+      setIndex(1);
+      setAccordionState((prevState) => ({ ...prevState, cookies: true }));
+      setSelectedAccordionChild('cookies');
+      setIsTabFocused(true);
+    }
+  }, [isInspecting, selectedFrame, setIndex]);
 
   useEffect(() => {
     if (selectedFrame && accordionState && !accordionState['cookies']) {
@@ -215,6 +232,10 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
     [setIndex, setSelectedFrame]
   );
 
+  const showInspectButton = tabFrames
+    ? Boolean(Object.keys(tabFrames).length)
+    : false;
+
   return (
     <div className="overflow-auto flex h-full">
       <div className="flex flex-col grow" ref={sidebarContainerRef}>
@@ -296,6 +317,9 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                                 onAccordionChildClick={onAccordionChildClick}
                                 onAccordionOpenerClick={onAccordionOpenerClick}
                                 onAccordionHeaderClick={onAccordionHeaderClick}
+                                setIsInspecting={setIsInspecting}
+                                isInspecting={isInspecting}
+                                showInspectButton={showInspectButton}
                               />
                             );
                           }

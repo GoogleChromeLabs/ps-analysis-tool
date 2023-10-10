@@ -25,5 +25,19 @@ declare global {
     featurePolicy: {
       allowsFeature: (arg0: string) => boolean;
     };
+    prerendering?: boolean;
   }
 }
+
+export type RelatedWebsiteSetType = {
+  primary: string;
+  contact: string;
+  associatedSites?: string[];
+  serviceSites?: string[];
+  ccTLDs?: {
+    [site: string]: string[];
+  };
+  rationaleBySite?: {
+    [url: string]: string;
+  };
+};

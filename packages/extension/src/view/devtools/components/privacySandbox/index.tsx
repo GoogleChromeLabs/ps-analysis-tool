@@ -17,6 +17,10 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
+
+/**
+ * Internal dependencies.
+ */
 import { ProgressBar } from '@cookie-analysis-tool/design-system';
 
 const PrivacySandbox = () => {
