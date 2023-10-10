@@ -32,6 +32,7 @@ import { fetchDictionary } from './utils/fetchCookieDictionary';
 import { delay } from './utils';
 import { analyzeCookiesUrls } from './procedures/analyzeCookieUrls';
 import { analyzeCookiesUrlsInBatches } from './procedures/analyzeCookieUrlsInBatches';
+import { analyzeTechnologiesUrlsInBatches } from './procedures/analyzeTechnologiesUrlsInBatches';
 
 events.EventEmitter.defaultMaxListeners = 15;
 const delayTime = 20000;
@@ -102,7 +103,14 @@ export const initialize = async () => {
     );
   } else {
     const spinnies = new Spinnies();
+
+    spinnies.add('sitemap-spinner', {
+      text: 'Parsing Sitemap',
+    });
     const urls: Array<string> = await Utility.getUrlsFromSitemap(sitemapURL);
+    spinnies.succeed('sitemap-spinner', {
+      text: 'Done parsing Sitemap',
+    });
     const prefix = Utility.generatePrefix([...urls].shift() ?? 'untitled');
     const directory = `./out/${prefix}`;
     const userInput: any = await Utility.askUserInput(
@@ -127,8 +135,9 @@ export const initialize = async () => {
       text: 'Analysing technologies',
     });
 
-    const technologyAnalysisData = await Promise.all(
-      urlsToProcess.map((siteUrl: string) => analyzeTechnologiesUrls([siteUrl]))
+    const technologyAnalysisData = await analyzeTechnologiesUrlsInBatches(
+      urlsToProcess,
+      3
     );
     spinnies.succeed('technology-spinner', {
       text: 'Done analysing technologies',
