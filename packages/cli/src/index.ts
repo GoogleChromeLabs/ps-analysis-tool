@@ -96,7 +96,7 @@ export const initialize = async () => {
     await delay(3000);
 
     console.log(
-      `Report is being served on URL: http://localhost:9000?path=${encodeURIComponent(
+      `Report is being served at the URL: http://localhost:9000?path=${encodeURIComponent(
         directory + '/out.json'
       )}`
     );
@@ -158,7 +158,7 @@ export const initialize = async () => {
     await delay(3000);
 
     console.log(
-      `Report is being served on URL: http://localhost:9000?path=${encodeURIComponent(
+      `Report is being served at the URL: http://localhost:9000?path=${encodeURIComponent(
         directory + '/out.json'
       )}&type=sitemap`
     );

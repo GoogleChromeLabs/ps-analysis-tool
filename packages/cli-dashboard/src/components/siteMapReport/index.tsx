@@ -19,16 +19,6 @@
  */
 import React, { useEffect, useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
-
-/**
- * Internal dependencies.
- */
-import SiteSelection from '../siteReport/components/siteSelection';
-import {
-  CookiesLanding,
-  CookiesMatrix,
-} from '@cookie-analysis-tool/design-system';
-import type { CookieFrameStorageType } from '../../types';
 import {
   prepareCookieStatsComponents,
   type CookieTableData,
@@ -36,6 +26,16 @@ import {
   type TechnologyData,
   prepareCookiesCount,
 } from '@cookie-analysis-tool/common';
+import {
+  CookiesLanding,
+  CookiesMatrix,
+} from '@cookie-analysis-tool/design-system';
+
+/**
+ * Internal dependencies.
+ */
+import SiteSelection from '../siteReport/components/siteSelection';
+import type { CookieFrameStorageType } from '../../types';
 import SiteReport from '../siteReport';
 import SiteMapAffectedCookies from './sitemapAffectedCookies';
 

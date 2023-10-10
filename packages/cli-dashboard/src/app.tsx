@@ -19,6 +19,7 @@
  */
 import React, { useEffect, useMemo, useState } from 'react';
 import type { TechnologyData } from '@cookie-analysis-tool/common';
+
 /**
  * Internal dependencies
  */
@@ -40,6 +41,7 @@ const App = () => {
 
   const [type, path] = useMemo(() => {
     const urlParams = new URLSearchParams(window.location.search);
+
     return [
       urlParams.get('type') === 'sitemap'
         ? DisplayType.SITEMAP
@@ -52,9 +54,10 @@ const App = () => {
     (async () => {
       const response = await fetch(path);
       const data = await response.json();
-      let _cookies: CookieFrameStorageType = {},
-        _technologies: TechnologyData[] = [];
+
       const _landingPageCookies: CookieFrameStorageType = {};
+      let _cookies: CookieFrameStorageType = {};
+      let _technologies: TechnologyData[] = [];
 
       if (type === DisplayType.SITEMAP) {
         data.forEach(
@@ -179,13 +182,13 @@ const App = () => {
         technologies={technologies}
       />
     );
-  } else {
-    return (
-      <div className="w-full h-screen flex">
-        <SiteReport cookies={cookies} technologies={technologies} />
-      </div>
-    );
   }
+
+  return (
+    <div className="w-full h-screen flex">
+      <SiteReport cookies={cookies} technologies={technologies} />
+    </div>
+  );
 };
 
 export default App;

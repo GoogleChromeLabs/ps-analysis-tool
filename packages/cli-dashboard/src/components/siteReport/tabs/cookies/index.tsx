@@ -23,6 +23,7 @@ import {
   CookiesLanding,
   CookiesMatrix,
 } from '@cookie-analysis-tool/design-system';
+
 /**
  * Internal dependencies.
  */
@@ -78,7 +79,7 @@ const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
             )}
             tabFrames={tabFrames}
             title="Affected Cookies Insights"
-            description="Following are the insights about cookies that will be affected 3P cookie depreciation."
+            description="Following are the insights about cookies that will be affected by 3P cookie depreciation."
             showInfoIcon={false}
             count={Object.values(affectedCookies).length}
             showHorizontalMatrix={false}

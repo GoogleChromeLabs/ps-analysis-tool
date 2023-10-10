@@ -19,10 +19,6 @@
  */
 import React, { useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
-
-/**
- * Internal dependencies
- */
 import {
   Table,
   useTable,
@@ -30,8 +26,12 @@ import {
   type InfoType,
   type TableRow,
 } from '@cookie-analysis-tool/design-system';
-import { useContentStore } from '../../stateProviders/contentStore';
 import type { TechnologyData } from '@cookie-analysis-tool/common';
+
+/**
+ * Internal dependencies
+ */
+import { useContentStore } from '../../stateProviders/contentStore';
 
 const Technologies = () => {
   const data = useContentStore(({ state }) => state.technologies || []);
