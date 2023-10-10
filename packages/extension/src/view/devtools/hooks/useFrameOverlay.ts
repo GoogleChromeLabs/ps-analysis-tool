@@ -187,7 +187,7 @@ const useFrameOverlay = () => {
             : [];
           portRef.current.postMessage({
             selectedFrame,
-            removeAllFramesPopOver: isFrameSelectedFromDevTool,
+            removeAllFramePopovers: isFrameSelectedFromDevTool,
             thirdPartyCookies: thirdPartyCookies.length,
             firstPartyCookies: firstPartyCookies.length,
             isInspecting,

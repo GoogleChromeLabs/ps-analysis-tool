@@ -206,7 +206,7 @@ class WebpageContentScript {
    */
   insertPopovers(response: ResponseType) {
     // If the no frame was selected in devtool.
-    if (response.removeAllFramesPopOver && !response.selectedFrame) {
+    if (response.removeAllFramePopovers && !response.selectedFrame) {
       removeAllPopovers();
       return;
     }
