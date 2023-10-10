@@ -34,7 +34,8 @@ import { analyzeCookiesUrlsInBatches } from './procedures/analyzeCookieUrlsInBat
 import { analyzeTechnologiesUrlsInBatches } from './procedures/analyzeTechnologiesUrlsInBatches';
 
 events.EventEmitter.defaultMaxListeners = 15;
-const delayTime = 20000;
+
+const DELAY_TIME = 20000;
 
 const program = new Command();
 
@@ -56,6 +57,7 @@ export const initialize = async () => {
   const url = program.opts().url;
   const sitemapURL = program.opts().sitemapUrl;
   const cookieDictionary = await fetchDictionary();
+
   if (url) {
     const prefix = Utility.generatePrefix(url ?? 'untitled');
     const directory = `./out/${prefix}`;
@@ -68,7 +70,7 @@ export const initialize = async () => {
     const [cookieData] = await analyzeCookiesUrls(
       [url],
       isHeadless,
-      delayTime,
+      DELAY_TIME,
       cookieDictionary
     );
     spinnies.succeed('cookie-spinner', {
@@ -126,7 +128,7 @@ export const initialize = async () => {
     const cookieAnalysisData = await analyzeCookiesUrlsInBatches(
       urlsToProcess,
       isHeadless,
-      delayTime,
+      DELAY_TIME,
       cookieDictionary
     );
 

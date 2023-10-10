@@ -27,15 +27,10 @@ import Wapplalyzer from 'wappalyzer';
  */
 import { TechnologyDetailList } from '../types';
 
-/**
- *
- * @param urls
- * @param batchSize
- */
-export async function analyzeTechnologiesUrlsInBatches(
+export const analyzeTechnologiesUrlsInBatches = async (
   urls: Array<string>,
   batchSize = 3
-): Promise<TechnologyDetailList[]> {
+): Promise<TechnologyDetailList[]> => {
   const spinnies = new Spinnies();
   const wappalyzer = new Wapplalyzer();
 
@@ -69,4 +64,4 @@ export async function analyzeTechnologiesUrlsInBatches(
   console.log(report);
 
   return report;
-}
+};

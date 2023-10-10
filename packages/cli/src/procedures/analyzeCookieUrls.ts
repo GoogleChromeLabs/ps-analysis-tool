@@ -18,26 +18,20 @@
  * External dependencies.
  */
 import { isFirstParty } from '@cookie-analysis-tool/common';
+
 /**
- * External dependencies.
+ * Internal dependencies.
  */
 import { CookieDatabase } from '../types';
 import { BrowserManagement } from '../utils/browserManagement';
 import findAnalyticsMatch from '../utils/findAnalyticsMatch';
 
-/**
- *
- * @param urls
- * @param isHeadless
- * @param delayTime
- * @param cookieDictionary
- */
-export async function analyzeCookiesUrls(
+export const analyzeCookiesUrls = async (
   urls: string[],
   isHeadless: boolean,
   delayTime: number,
   cookieDictionary: CookieDatabase
-) {
+) => {
   const normalBrowser = new BrowserManagement(
     {
       width: 1440,
@@ -115,4 +109,4 @@ export async function analyzeCookiesUrls(
 
     return normalCookieAnaysisData[ind];
   });
-}
+};
