@@ -220,6 +220,7 @@ const SiteMapReport = ({
                 description="Following are the insights about cookies that will be affected by 3P cookie depreciation."
                 showInfoIcon={false}
                 count={Object.values(affectedCookies).length}
+                showHorizontalMatrix={false}
               />
             </CookiesLanding>
           </>

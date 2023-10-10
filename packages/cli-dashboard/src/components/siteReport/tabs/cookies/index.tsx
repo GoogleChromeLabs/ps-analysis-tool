@@ -83,6 +83,7 @@ const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
               description="Following are the insights about cookies that will be affected 3P cookie depreciation."
               showInfoIcon={false}
               count={Object.values(affectedCookies).length}
+              showHorizontalMatrix={false}
             />
           </CookiesLanding>
         </div>
