@@ -65,8 +65,6 @@ The final goal of this tool is to make it easy to understand the role of 3P cook
 
 # Usage instructions
 
-🚧 This [Chrome Extension](https://developer.chrome.com/docs/extensions/mv3/) is currently being developed and the functionality is evolving rapidly. 🚧 
-
 The Chrome extension provides capabilities surfaced via the extension pop-up, the Side Panel, and as Devtools panel. The CLI implementation parses a sitemap provided as input and outputs a JSON file listing all cookies set while navigating through the URLs in the sitemap. Follow the following steps to get the extension installed in your browser. 
 
 - Clone this Cookie Analysis Tool Repository
