@@ -72,7 +72,7 @@ const Layout = () => {
           setIndex={setSelectedSidebarOptionInd}
         />
       </Resizable>
-      <div className="flex-1 h-full">
+      <div className="flex-1 max-h-screen overflow-auto">
         <TabComponent selectedFrameUrl={selectedFrameUrl} />
       </div>
     </div>

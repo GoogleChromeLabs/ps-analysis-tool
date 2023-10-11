@@ -186,7 +186,7 @@ const SiteMapReport = ({
           </div>
         </div>
       </Resizable>
-      <div className="flex-1 h-full">
+      <div className="flex-1 max-h-screen overflow-auto">
         {selectedSite ? (
           <SiteReport
             cookies={siteFilteredCookies}
