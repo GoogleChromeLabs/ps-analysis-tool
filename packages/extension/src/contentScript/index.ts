@@ -28,6 +28,7 @@ import type { ResponseType } from './types';
 import { CookieStore } from '../localStore';
 import { TOOLTIP_CLASS } from './constants';
 import { WEBPAGE_PORT_NAME } from '../constants';
+import elementIsVisibleInViewport from './utils/isElementInViewport';
 import './style.css';
 
 /**
@@ -309,7 +310,8 @@ class WebpageContentScript {
     if (
       firstToolTip &&
       !this.isHoveringOverPage &&
-      frameToScrollTo.clientWidth
+      frameToScrollTo.clientWidth &&
+      !elementIsVisibleInViewport(firstToolTip, true)
     ) {
       (firstToolTip as HTMLElement).scrollIntoView({
         behavior: 'instant',
