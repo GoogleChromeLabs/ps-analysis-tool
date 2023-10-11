@@ -85,6 +85,7 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
             extraClasses="absolute top-0 right-0 mr-2 mt-2"
             text="Download Report"
             onClick={downloadReport}
+            variant="small"
           />
           <CookiesLanding
             tabCookies={tabCookies}

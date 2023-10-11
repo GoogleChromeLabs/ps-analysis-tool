@@ -248,13 +248,13 @@ export const reportDownloader = (
   newReport.cookieAnalysisSummary = summaryData;
 
   const zip = new JSZip();
-  zip.file('cookieData.csv', cookieDataCSVContent);
-  zip.file('technologyData.csv', technologyDataCSVContent);
-  zip.file('affectedCookiesData.csv', affectedCookieDataCSVContent);
-  zip.file('summaryData.csv', summaryDataCSVContent);
-  zip.file('completeJson.json', JSON.stringify(newReport));
+  zip.file('cookies.csv', cookieDataCSVContent);
+  zip.file('technology.csv', technologyDataCSVContent);
+  zip.file('affected-cookies.csv', affectedCookieDataCSVContent);
+  zip.file('report.csv', summaryDataCSVContent);
+  zip.file('report.json', JSON.stringify(newReport));
   zip.generateAsync({ type: 'blob' }).then((content) => {
     // see FileSaver.js
-    saveAs(content, 'example.zip');
+    saveAs(content, 'report.zip');
   });
 };
