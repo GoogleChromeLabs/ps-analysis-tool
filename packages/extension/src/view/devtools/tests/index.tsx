@@ -103,6 +103,11 @@ describe('Index', () => {
       runtime: {
         id: 'afajkfkjabfkjas',
         getURL: () => 'data/related_website_sets.json',
+        //@ts-ignore
+        onMessage: {
+          addListener: () => '',
+          removeListener: () => '',
+        },
       },
       //@ts-ignore
       webNavigation: {
