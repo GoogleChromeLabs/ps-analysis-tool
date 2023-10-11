@@ -237,6 +237,7 @@ class WebpageContentScript {
     }
 
     const visibleIFrameCount = numberOfFrames - hiddenIFrameCount;
+    let frameWithTooltip = null;
 
     if (0 === hiddenIFrameCount) {
       // Its important to insert overlays and tooltips seperately and in the same order, to avoid z-index issue.
@@ -260,6 +261,8 @@ class WebpageContentScript {
         hiddenIFrameCount,
         response
       );
+
+      frameWithTooltip = iframeForTooltip;
     } else if (numberOfFrames === hiddenIFrameCount) {
       const frame = frameElements[0];
 
@@ -294,6 +297,7 @@ class WebpageContentScript {
         const { width, height } = frame.getBoundingClientRect();
 
         if (!(height === 0 || width === 0)) {
+          frameWithTooltip = frame;
           const tooltip = this.insertTooltip(
             frame,
             visibleIFrameCount,
@@ -311,7 +315,7 @@ class WebpageContentScript {
       firstToolTip &&
       !this.isHoveringOverPage &&
       frameToScrollTo.clientWidth &&
-      !elementIsVisibleInViewport(firstToolTip, true)
+      !elementIsVisibleInViewport(frameWithTooltip, true)
     ) {
       (firstToolTip as HTMLElement).scrollIntoView({
         behavior: 'instant',

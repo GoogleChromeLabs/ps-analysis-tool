@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 const elementIsVisibleInViewport = (
-  el: HTMLElement,
+  el: HTMLElement | null,
   partiallyVisible = false
 ) => {
+  if (el) {
+    return false;
+  }
+
   const { top, left, bottom, right } = el.getBoundingClientRect();
   const { innerHeight, innerWidth } = window;
 
