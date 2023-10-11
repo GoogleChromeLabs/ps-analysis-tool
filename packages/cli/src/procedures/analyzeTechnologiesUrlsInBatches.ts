@@ -61,7 +61,5 @@ export const analyzeTechnologiesUrlsInBatches = async (
     });
   }
 
-  console.log(report);
-
   return report;
 };
