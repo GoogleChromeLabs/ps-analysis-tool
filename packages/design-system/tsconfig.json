@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "rootDir": "src",
+    "target": "es6",
+    "module": "commonjs",
+    "outDir": "dist",
+    "declarationDir": "dist-types",
+    "composite": true,
+    "strict": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "jsx": "preserve"
+  },
+  "references": [
+    {
+      "path": "../common"
+    }
+  ]
+}

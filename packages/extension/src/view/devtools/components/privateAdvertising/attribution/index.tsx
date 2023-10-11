@@ -16,22 +16,30 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useState } from 'react';
 
 /**
  * Internal dependencies.
  */
 import InfoCard from '../../../../design-system/components/infoCard';
 import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
+import { LandingPage } from '@cookie-analysis-tool/design-system';
 
 const Attribution = () => {
+  const [pageTitle, setPageTitle] = useState('');
+
   return (
-    <div
-      className="w-full h-full overflow-auto"
-      data-testid="attribution-content"
-    >
-      <InfoCard infoKey={PSInfoKey.AttributionReporting} />
-    </div>
+    <LandingPage title={pageTitle} isLoading={!pageTitle}>
+      <div
+        className="px-4 max-w-2xl h-full overflow-auto"
+        data-testid="attribution-content"
+      >
+        <InfoCard
+          infoKey={PSInfoKey.AttributionReporting}
+          setTitle={setPageTitle}
+        />
+      </div>
+    </LandingPage>
   );
 };
 

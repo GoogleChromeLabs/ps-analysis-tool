@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 /**
+ * External dependencies
+ */
+import type {
+  CookieTableData,
+  SelectedFilters,
+} from '@cookie-analysis-tool/common';
+/**
  * Internal dependencies.
  */
-import type { SelectedFilters } from '../types';
-import type { CookieTableData } from '../../../cookies.types';
 import filterCookiesWithRetentionPeriod from './filterCookiesWithRetentionPeriod';
 import filterCookiesWithoutRetentionPeriod from './filterCookiesWithoutRetentionPeriod';
 

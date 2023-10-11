@@ -24,7 +24,8 @@ import React, { useState } from 'react';
  */
 import type { PSInfo as PSInfoType } from '../../../../utils/fetchPSInfo';
 import RenderLink from './renderLink';
-import { ArrowRight } from '../../../../icons';
+import { ArrowRight, Button } from '@cookie-analysis-tool/design-system';
+import classNames from 'classnames';
 
 /**
  * @type {Array} LABELS - Array of objects containing the label and link label for each dropdown item.
@@ -52,10 +53,12 @@ const LABELS = [
 
 interface LearnMoreDropdownProps {
   PSInfo: PSInfoType;
+  hasSeparator?: boolean;
 }
 
 const LearnMoreDropdown = ({
   PSInfo: { proposal, publicDiscussion, videoOverview, devDocumentation },
+  hasSeparator,
 }: LearnMoreDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -80,24 +83,27 @@ const LearnMoreDropdown = ({
           </ul>
         </div>
       )}
-      <div className="flex items-center justify-start pt-4 border-t border-gray-200 dark:border-gray-500">
-        <button
-          className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700"
-          onClick={() => {
-            setIsOpen(!isOpen);
-          }}
-        >
-          {isOpen ? (
-            'Close'
-          ) : (
-            <>
-              Learn more{' '}
-              <span className="w-4 h-4 ml-2">
-                <ArrowRight />
-              </span>
-            </>
-          )}
-        </button>
+      <div
+        className={classNames(
+          'pt-4',
+          hasSeparator && 'border-t border-gray-200 dark:border-gray-500'
+        )}
+      >
+        <Button
+          text={
+            isOpen ? (
+              'Close'
+            ) : (
+              <>
+                Learn more{' '}
+                <span className="w-4 h-4 ml-2 inline-block">
+                  <ArrowRight />
+                </span>
+              </>
+            )
+          }
+          onClick={() => setIsOpen(!isOpen)}
+        />
       </div>
     </>
   );

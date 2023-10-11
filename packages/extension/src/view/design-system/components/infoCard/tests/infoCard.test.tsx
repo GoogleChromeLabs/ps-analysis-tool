@@ -41,13 +41,14 @@ describe('should match the json file data with the component', () => {
 
   beforeAll(() => {
     globalThis.chrome = SinonChrome as unknown as typeof chrome;
-
+    jest.spyOn(console, 'warn').mockImplementation(() => undefined);
     globalThis.fetch = function () {
       return Promise.resolve({
         json: () =>
           Promise.resolve({
             ...PSInfo,
           }),
+        text: () => Promise.resolve({}),
       });
     } as unknown as typeof fetch;
   });
@@ -56,9 +57,6 @@ describe('should match the json file data with the component', () => {
     'should match component with enum key prop to json data',
     async ({ input, output }) => {
       render(<InfoCard infoKey={input} />);
-
-      const name = await screen.findByText(output.name);
-      expect(name).toBeInTheDocument();
 
       const learnMoreButton = await screen.findByText('Learn more');
       fireEvent.click(learnMoreButton);

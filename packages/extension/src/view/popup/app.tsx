@@ -25,10 +25,13 @@ import React from 'react';
 import './app.css';
 import { Legend } from './components';
 import { useCookieStore } from './stateProviders/syncCookieStore';
-import { Button, CirclePieChart } from '../design-system/components';
-import { prepareCookieStatsComponents } from '../../utils/prepareCookieStatsComponents';
-import ProgressBar from '../design-system/components/progressBar';
 import { ALLOWED_NUMBER_OF_TABS } from '../../constants';
+import { prepareCookieStatsComponents } from '@cookie-analysis-tool/common';
+import {
+  Button,
+  CirclePieChart,
+  ProgressBar,
+} from '@cookie-analysis-tool/design-system';
 
 const App: React.FC = () => {
   const {
@@ -79,8 +82,8 @@ const App: React.FC = () => {
     return (
       <div className="w-96 min-h-[20rem] flex flex-col items-center justify-center">
         {!returningToSingleTab && (
-          <p className="dark:text-bright-gray text-chart-label text-base mb-5">
-            This tool works best with a single tab.
+          <p className="dark:text-bright-gray text-chart-label text-base mb-5 text-center">
+            This tool works best with a single tab for cookie analysis.
           </p>
         )}
         <Button onClick={changeListeningToThisTab} text="Analyze this tab" />

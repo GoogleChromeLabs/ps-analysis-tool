@@ -16,8 +16,10 @@
 /**
  * Internal dependencies.
  */
-import updateStorage from './updateStorage';
+import updateStorage from './utils/updateStorage';
 import type { TabData, CookieData } from './types';
+import { getCookieKey } from '@cookie-analysis-tool/common';
+import fetchTopicsTaxonomy from '../utils/fetchTopicsTaxonomy';
 
 const CookieStore = {
   /**
@@ -31,24 +33,30 @@ const CookieStore = {
       const _updatedCookies = _prevCookies;
 
       for (const cookie of cookies) {
-        const cookieName = cookie.parsedCookie.name;
+        const { name, domain, path } = cookie.parsedCookie;
 
-        if (!cookieName) {
+        if (!name || !domain || !path) {
           continue;
         }
 
-        if (_updatedCookies?.[cookieName]) {
-          _updatedCookies[cookieName] = {
+        const cookieKey = getCookieKey(cookie.parsedCookie);
+
+        if (_updatedCookies?.[cookieKey]) {
+          _updatedCookies[cookieKey] = {
             ...cookie,
+            headerType:
+              _updatedCookies[cookieKey].headerType === 'javascript'
+                ? _updatedCookies[cookieKey].headerType
+                : cookie.headerType,
             frameIdList: Array.from(
               new Set<number>([
                 ...cookie.frameIdList,
-                ..._updatedCookies[cookieName].frameIdList,
+                ..._updatedCookies[cookieKey].frameIdList,
               ])
             ),
           };
         } else {
-          _updatedCookies[cookieName] = cookie;
+          _updatedCookies[cookieKey] = cookie;
         }
       }
 
@@ -81,7 +89,6 @@ const CookieStore = {
    */
   async updateTabFocus(tabId: string) {
     const storage = await chrome.storage.local.get();
-
     if (storage[tabId]) {
       storage[tabId].focusedAt = Date.now();
     }
@@ -127,6 +134,7 @@ const CookieStore = {
         },
       });
     }
+    chrome.storage.session.set({ [tabId]: true });
   },
 
   /**
@@ -135,6 +143,7 @@ const CookieStore = {
    */
   async removeTabData(tabId: string) {
     await chrome.storage.local.remove(tabId);
+    await chrome.storage.session.remove(tabId);
   },
 
   /**
@@ -151,6 +160,42 @@ const CookieStore = {
     });
 
     await Promise.all(tabPromises);
+  },
+
+  /**
+   * Handle topics.
+   * @param {string} activeTabUrl The active tab origin location.
+   * @param {number[]} topics The topics for active tab.
+   */
+  async setTopics(activeTabUrl: string, topics: (string | number)[] = []) {
+    const storage = await chrome.storage.local.get();
+
+    if (!storage[activeTabUrl]) {
+      storage[activeTabUrl] = {};
+    }
+
+    const topicsTaxonomy = await fetchTopicsTaxonomy();
+
+    storage[activeTabUrl].topics = topics.map(
+      (topicsId) => topicsTaxonomy[topicsId]
+    );
+
+    await chrome.storage.local.set(storage);
+  },
+
+  /**
+   * Get topics list.
+   * @param {string} activeTabUrl The host name for which topics is to be fetched.
+   * @returns {Promise<string[]>} The list of topics.
+   */
+  async getTopics(activeTabUrl: string): Promise<string[]> {
+    const storage = await chrome.storage.local.get();
+
+    if (storage && storage[activeTabUrl] && storage[activeTabUrl].topics) {
+      return storage[activeTabUrl].topics;
+    }
+
+    return [];
   },
 };
 

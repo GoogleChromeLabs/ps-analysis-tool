@@ -119,6 +119,24 @@ describe('local store: CookieStore', () => {
             removeListener: () => undefined,
           },
         },
+        session: {
+          //@ts-ignore
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          get: (_, __) =>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            new Promise<{ [key: string]: any }>((resolve) => {
+              resolve({
+                123: true,
+              });
+            }),
+          set: () => Promise.resolve(),
+          remove: () => Promise.resolve(),
+          //@ts-ignore
+          onChanged: {
+            addListener: () => undefined,
+            removeListener: () => undefined,
+          },
+        },
       },
     };
   });
@@ -134,16 +152,16 @@ describe('local store: CookieStore', () => {
   it('should add/update tab data', async () => {
     await CookieStore.update('123', cookieArray);
     expect(storage['123'].cookies).toStrictEqual({
-      countryCode1: cookieArray[0],
-      countryCode2: cookieArray[1],
+      'countryCode1.example1.com/': cookieArray[0],
+      'countryCode2.example2.com/': cookieArray[1],
     });
   });
 
   it('should delete cookies', async () => {
     await CookieStore.update('123', cookieArray);
-    await CookieStore.deleteCookie('countryCode1');
+    await CookieStore.deleteCookie('countryCode1.example1.com/');
     expect(storage['123'].cookies).toStrictEqual({
-      countryCode2: cookieArray[1],
+      'countryCode2.example2.com/': cookieArray[1],
     });
   });
 
@@ -154,7 +172,7 @@ describe('local store: CookieStore', () => {
       { ...cookieArray[0], frameIdList: [2] },
     ]);
     expect(storage['123'].cookies).toStrictEqual({
-      countryCode1: { ...cookieArray[0], frameIdList: [2, 1] },
+      'countryCode1.example1.com/': { ...cookieArray[0], frameIdList: [2, 1] },
     });
   });
 

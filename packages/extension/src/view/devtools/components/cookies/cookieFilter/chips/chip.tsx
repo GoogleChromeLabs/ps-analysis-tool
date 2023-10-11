@@ -17,14 +17,11 @@
  * External dependencies.
  */
 import React from 'react';
-
+import type { SelectedFilters } from '@cookie-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import type {
-  SelectedFilters,
-  Filter,
-} from '../../../../stateProviders/filterManagementStore/types';
+import type { Filter } from '../../../../stateProviders/filterManagementStore/types';
 import { FILTER_MAPPING } from '../../../../stateProviders/filterManagementStore/constants';
 // eslint-disable-next-line import/no-relative-packages
 import CrossIcon from '../../../../../../../../../third_party/icons/cross-icon.svg';

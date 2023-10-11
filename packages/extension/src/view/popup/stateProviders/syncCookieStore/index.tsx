@@ -25,7 +25,7 @@ import React, {
   useRef,
 } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
-
+import { noop } from '@cookie-analysis-tool/design-system';
 /**
  * Internal dependencies.
  */
@@ -33,11 +33,12 @@ import {
   getCurrentTab,
   getCurrentTabId,
 } from '../../../../utils/getCurrentTabId';
-import type { CookiesCount } from '../../types';
-import prepareCookiesCount from '../../../../utils/prepareCookiesCount';
 import { CookieStore } from '../../../../localStore';
-import { noop } from '../../../../utils/noop';
 import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
+import {
+  prepareCookiesCount,
+  type CookiesCount,
+} from '@cookie-analysis-tool/common';
 
 export interface CookieStoreContext {
   state: {
@@ -184,6 +185,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     if (tabData && tabData.cookies) {
       setDebouncedStats(prepareCookiesCount(tabData.cookies, _tabUrl));
     }
+    setLoading(false);
   }, [setDebouncedStats]);
 
   const storeChangeListener = useCallback(
@@ -256,10 +258,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
         tabIdToBeDeleted !== 'tabToRead'
       ) {
         await CookieStore.removeTabData(tabIdToBeDeleted);
-        await chrome.action.setBadgeText({
-          tabId: parseInt(tabIdToBeDeleted),
-          text: '',
-        });
+
+        if (!Number.isNaN(parseInt(tabIdToBeDeleted))) {
+          await chrome.action.setBadgeText({
+            tabId: parseInt(tabIdToBeDeleted),
+            text: '',
+          });
+        }
       }
       return Promise.resolve();
     });

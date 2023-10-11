@@ -24,19 +24,25 @@ import React, {
   useMemo,
   useCallback,
 } from 'react';
+import { noop } from '@cookie-analysis-tool/design-system';
+import type {
+  SelectedFilters,
+  CookieTableData,
+} from '@cookie-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import type { SelectedFilters, Filter } from './types';
+import type { Filter } from './types';
 import { useCookieStore } from '../syncCookieStore';
-import type { CookieTableData } from '../../cookies.types';
 import getFilters from './utils/getFilters';
 import filterCookies from './utils/filterCookies';
-import { noop } from '../../../../utils/noop';
 import useContextSelector from '../../../../utils/useContextSelector';
 
 export interface filterManagementStore {
   state: {
+    selectedFrameFilters: {
+      [frameKey: string]: { selectedFilters: SelectedFilters };
+    };
     selectedFilters: SelectedFilters;
     filters: Filter[];
     filteredCookies: CookieTableData[];
@@ -44,6 +50,11 @@ export interface filterManagementStore {
     cookiesAvailable: boolean;
   };
   actions: {
+    setSelectedFrameFilters: React.Dispatch<
+      React.SetStateAction<{
+        [frameKey: string]: { selectedFilters: SelectedFilters };
+      }>
+    >;
     setSelectedFilters: (
       update: (prevState: SelectedFilters) => SelectedFilters
     ) => void;
@@ -53,6 +64,7 @@ export interface filterManagementStore {
 
 const initialState: filterManagementStore = {
   state: {
+    selectedFrameFilters: {},
     selectedFilters: {},
     filters: [],
     filteredCookies: [],
@@ -60,6 +72,7 @@ const initialState: filterManagementStore = {
     cookiesAvailable: false,
   },
   actions: {
+    setSelectedFrameFilters: noop,
     setSelectedFilters: noop,
     setSearchTerm: noop,
   },
@@ -154,6 +167,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const value: filterManagementStore = useMemo(
     () => ({
       state: {
+        selectedFrameFilters,
         selectedFilters: selectedFrame
           ? selectedFrameFilters[selectedFrame]?.selectedFilters || {}
           : {},
@@ -165,6 +179,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       actions: {
         setSelectedFilters,
         setSearchTerm,
+        setSelectedFrameFilters,
       },
     }),
     [

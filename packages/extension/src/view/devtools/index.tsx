@@ -18,14 +18,17 @@
  */
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '@cookie-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
 import App from './app';
 import { Provider as ExternalStoreProvider } from './stateProviders/syncCookieStore';
-import { Provider as ContentPanelProvider } from './stateProviders/contentPanelStore';
+
 import { Provider as FilterManagementProvider } from './stateProviders/filterManagementStore';
+import { Provider as PreferenceStoreProvider } from './stateProviders/preferenceStore';
 
 const isDarkMode = chrome.devtools.panels.themeName === 'dark';
 document.body.classList.add(isDarkMode ? 'dark' : 'light');
@@ -34,12 +37,14 @@ const root = document.getElementById('root');
 
 if (root) {
   createRoot(root).render(
-    <ExternalStoreProvider>
-      <ContentPanelProvider>
+    <ErrorBoundary fallbackRender={ErrorFallback}>
+      <ExternalStoreProvider>
         <FilterManagementProvider>
-          <App />
+          <PreferenceStoreProvider>
+            <App />
+          </PreferenceStoreProvider>
         </FilterManagementProvider>
-      </ContentPanelProvider>
-    </ExternalStoreProvider>
+      </ExternalStoreProvider>
+    </ErrorBoundary>
   );
 }

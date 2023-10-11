@@ -27,8 +27,8 @@ import SinonChrome from 'sinon-chrome';
  */
 import App from '../app';
 import { Provider as ExternalStoreProvider } from '../stateProviders/syncCookieStore';
-import { Provider as ContentPanelProvider } from '../stateProviders/contentPanelStore';
 import { Provider as FilterManagementProvider } from '../stateProviders/filterManagementStore';
+import { Provider as PreferenceStoreProvider } from '../stateProviders/preferenceStore';
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'cookie-analysis-tool/data/PSInfo.json';
@@ -99,10 +99,21 @@ describe('Index', () => {
     globalThis.chrome = SinonChrome as unknown as typeof chrome;
     globalThis.chrome = {
       ...SinonChrome,
+      //@ts-ignore
+      runtime: {
+        id: 'afajkfkjabfkjas',
+        getURL: () => 'data/related_website_sets.json',
+        //@ts-ignore
+        onMessage: {
+          addListener: () => '',
+          removeListener: () => '',
+        },
+      },
+      //@ts-ignore
       webNavigation: {
         //@ts-ignore
         getAllFrames: () => {
-          return [
+          return Promise.resolve([
             {
               processId: 1,
               frameId: 0,
@@ -133,7 +144,7 @@ describe('Index', () => {
               frameType: 'sub_frame',
               parentFrameId: 0,
             },
-          ];
+          ]);
         },
       },
       storage: {
@@ -145,10 +156,39 @@ describe('Index', () => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             new Promise<{ [key: string]: any }>((resolve) => {
               resolve({
-                40245632: { cookies: tabCookies },
-                tabToRead: '40245632',
+                40245632: {
+                  cookies: tabCookies,
+                  preferences: {
+                    columnSorting: [
+                      {
+                        defaultSortKey: 'parsedCookie.httponly',
+                        defaultSortOrder: 'asc',
+                      },
+                    ],
+                    selectedColumns: {},
+                    selectedFilters: {
+                      'https://edition.cnn.com': {
+                        'analytics.category': [
+                          'Analytics',
+                          'Functional',
+                          'Marketing',
+                        ],
+                        isFirstParty: ['Third Party'],
+                      },
+                    },
+                    selectedFrame: null,
+                  },
+                  tabToRead: '40245632',
+                },
               });
             }),
+          //@ts-ignore
+          getBytesInUse: () =>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            new Promise<number>((resolve) => {
+              resolve(100);
+            }),
+          set: () => Promise.resolve(),
           //@ts-ignore
           onChanged: {
             addListener: () => undefined,
@@ -171,14 +211,28 @@ describe('Index', () => {
             removeListener: () => undefined,
           },
         },
+        session: {
+          //@ts-ignore
+          onChanged: {
+            addListener: () => undefined,
+            removeListener: () => undefined,
+          },
+        },
       },
       devtools: {
         //@ts-ignore
         inspectedWindow: {
           tabId: 40245632,
           // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-          eval: (_, callback: any) => {
-            callback('https://edition.cnn.com');
+          eval: (command, callback: any) => {
+            if (command === 'document.cookie.split(";")') {
+              callback([
+                '_ga=GA1.2.91929102.1694767081',
+                ' _gid=GA1.2.626513871.1694767081',
+              ]);
+            } else {
+              callback('https://edition.cnn.com');
+            }
           },
         },
         //@ts-ignore
@@ -222,6 +276,7 @@ describe('Index', () => {
           Promise.resolve({
             ...PSInfo,
           }),
+        text: () => Promise.resolve({}),
       });
     } as unknown as typeof fetch;
   });
@@ -230,16 +285,16 @@ describe('Index', () => {
     act(() =>
       render(
         <ExternalStoreProvider>
-          <ContentPanelProvider>
-            <FilterManagementProvider>
+          <FilterManagementProvider>
+            <PreferenceStoreProvider>
               <App />
-            </FilterManagementProvider>
-          </ContentPanelProvider>
+            </PreferenceStoreProvider>
+          </FilterManagementProvider>
         </ExternalStoreProvider>
       )
     );
     expect(
-      await screen.findByTestId('cookies-tab-heading-wrapper')
+      await screen.findByTestId('privacySandbox-tab-heading-wrapper')
     ).toHaveClass('bg-royal-blue');
   });
 
@@ -247,14 +302,16 @@ describe('Index', () => {
     act(() =>
       render(
         <ExternalStoreProvider>
-          <ContentPanelProvider>
-            <App />
-          </ContentPanelProvider>
+          <FilterManagementProvider>
+            <PreferenceStoreProvider>
+              <App />
+            </PreferenceStoreProvider>
+          </FilterManagementProvider>
         </ExternalStoreProvider>
       )
     );
     expect(
-      await screen.findByTestId('cookies-tab-heading-wrapper')
+      await screen.findByTestId('privacySandbox-tab-heading-wrapper')
     ).toHaveClass('bg-royal-blue');
   });
   afterAll(() => {

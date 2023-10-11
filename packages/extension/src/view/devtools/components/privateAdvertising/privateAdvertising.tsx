@@ -13,8 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/**
+ * External Dependencies
+ */
+import React, { useState } from 'react';
+
+/**
+ * Internal Dependencies
+ */
+import { LandingPage } from '@cookie-analysis-tool/design-system';
+
 const PrivateAdvertising = () => {
-  return null;
+  const [loading, setLoading] = useState(true);
+
+  return (
+    <>
+      <LandingPage title="Private Advertising" isLoading={loading}>
+        <div className="px-4 pt-6 pb-4 h-screen w-full">
+          <iframe
+            src="https://privacysandbox.info/en/privacy-sandbox/measure-digital-ads"
+            height="100%"
+            onLoad={() => {
+              setLoading(false);
+            }}
+            className="w-full md:w-[70%]"
+          />
+        </div>
+      </LandingPage>
+    </>
+  );
 };
 
 export default PrivateAdvertising;

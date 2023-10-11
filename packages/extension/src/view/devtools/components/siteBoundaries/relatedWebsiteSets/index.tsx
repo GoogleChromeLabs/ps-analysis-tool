@@ -16,27 +16,45 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useState } from 'react';
 
 /**
  * Internal dependencies.
  */
 import InfoCard from '../../../../design-system/components/infoCard';
 import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
-import { MessageBox } from '../../../../design-system/components';
+import RWSJsonGenerator from './jsonGenerator';
+import Insights from './insights';
+import { Button, LandingPage } from '@cookie-analysis-tool/design-system';
 
 const RelatedWebsiteSets = () => {
+  const [showForm, setShowForm] = useState(false);
+  const [pageTitle, setPageTitle] = useState('');
+
   return (
-    <div
-      className="w-full h-full overflow-auto"
-      data-testid="related-website-sets-content"
-    >
-      <InfoCard infoKey={PSInfoKey.RelatedWebsiteSets} />
-      <MessageBox
-        bodyText="Insights and a JSON generator for RWS registration are coming soon..."
-        headerText="🚧 Under Construction"
-      />
-    </div>
+    <LandingPage title={pageTitle} isLoading={!pageTitle}>
+      <div
+        className="px-4 max-w-2xl h-full overflow-auto divide-y divide-gray-200 dark:divide-gray-500"
+        data-testid="related-website-sets-content"
+      >
+        <InfoCard
+          infoKey={PSInfoKey.RelatedWebsiteSets}
+          setTitle={setPageTitle}
+        />
+        <div className="py-6 text-raisin-black dark:text-bright-gray flex flex-col gap-3">
+          <Insights />
+          <RWSJsonGenerator open={showForm} setOpen={setShowForm} />
+          {!showForm && (
+            <div className="pt-4">
+              <Button
+                text="Generate RWS JSON Resources"
+                onClick={() => setShowForm(true)}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    </LandingPage>
   );
 };
 

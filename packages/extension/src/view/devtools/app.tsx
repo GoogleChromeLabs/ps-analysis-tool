@@ -16,61 +16,61 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Resizable } from 're-resizable';
+import { ExtensionReloadNotification } from '@cookie-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
-import './app.css';
 import TABS from './tabs';
 import { Sidebar } from './components';
 import { useCookieStore } from './stateProviders/syncCookieStore';
-import { Button, ProgressBar } from '../design-system/components';
+import './app.css';
 
 const App: React.FC = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
-  const {
-    isCurrentTabBeingListenedTo,
-    returningToSingleTab,
-    changeListeningToThisTab,
-    allowedNumberOfTabs,
-    loading,
-  } = useCookieStore(({ state, actions }) => ({
-    isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
-    returningToSingleTab: state.returningToSingleTab,
-    changeListeningToThisTab: actions.changeListeningToThisTab,
-    allowedNumberOfTabs: state.allowedNumberOfTabs,
-    loading: state.loading,
-  }));
+  const contextInvalidatedRef = useRef(null);
   const TabContent = TABS[selectedTabIndex].component;
 
-  if (
-    loading ||
-    (loading &&
-      isCurrentTabBeingListenedTo &&
-      allowedNumberOfTabs &&
-      allowedNumberOfTabs === 'single')
-  ) {
-    return (
-      <div className="w-full h-screen flex items-center justify-center overflow-hidden bg-white dark:bg-raisin-black">
-        <ProgressBar additionalStyles="w-full" />
-      </div>
-    );
-  }
+  const { contextInvalidated, setContextInvalidated } = useCookieStore(
+    ({ state, actions }) => ({
+      contextInvalidated: state.contextInvalidated,
+      setContextInvalidated: actions.setContextInvalidated,
+    })
+  );
 
-  if (
-    (isCurrentTabBeingListenedTo &&
-      allowedNumberOfTabs &&
-      allowedNumberOfTabs === 'single') ||
-    (allowedNumberOfTabs && allowedNumberOfTabs === 'unlimited')
-  ) {
-    return (
-      <div className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black">
+  const listenToMouseChange = useCallback(() => {
+    if (contextInvalidatedRef.current) {
+      if (!chrome.runtime?.id) {
+        setContextInvalidated(true);
+      }
+    }
+  }, [setContextInvalidated]);
+
+  useEffect(() => {
+    window.addEventListener('mouseover', listenToMouseChange);
+
+    return () => {
+      window.removeEventListener('mouseover', listenToMouseChange);
+    };
+  }, [listenToMouseChange]);
+
+  return (
+    <div
+      className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black"
+      ref={contextInvalidatedRef}
+    >
+      {contextInvalidated && (
+        <div className="flex flex-col items-center justify-center w-full h-full">
+          <ExtensionReloadNotification />
+        </div>
+      )}
+      {!contextInvalidated && (
         <div className="w-full h-full flex flex-row">
           <Resizable
             defaultSize={{ width: '200px', height: '100%' }}
-            minWidth={'150px'}
+            minWidth={'200px'}
             maxWidth={'98%'}
             enable={{
               top: false,
@@ -82,7 +82,7 @@ const App: React.FC = () => {
               bottomLeft: false,
               topLeft: false,
             }}
-            className="h-full flex flex-col pt-0.5 border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
+            className="h-full flex flex-col border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
           >
             <Sidebar
               selectedIndex={selectedTabIndex}
@@ -90,23 +90,12 @@ const App: React.FC = () => {
             />
           </Resizable>
           <main className="h-full flex-1 overflow-auto">
-            <TabContent />
+            <div className="min-w-[20rem] h-full">
+              <TabContent />
+            </div>
           </main>
         </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black">
-      <div className="w-full h-full flex flex-col items-center justify-center">
-        {!returningToSingleTab && (
-          <p className="dark:text-bright-gray text-chart-label text-base mb-5">
-            This tool works best with a single tab.
-          </p>
-        )}
-        <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
-      </div>
+      )}
     </div>
   );
 };

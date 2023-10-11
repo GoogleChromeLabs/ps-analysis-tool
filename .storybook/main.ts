@@ -6,8 +6,10 @@ import type { RuleSetRule } from 'webpack';
 
 const config: StorybookConfig = {
   stories: [
-    '../packages/**/src/**/stories/*.mdx',
-    '../packages/**/src/**/stories/**/*.stories.@(js|jsx|ts|tsx)',
+    '../packages/extension/src/**/stories/*.mdx',
+    '../packages/extension/src/**/stories/**/*.stories.@(js|jsx|ts|tsx)',
+    '../packages/design-system/src/**/stories/*.mdx',
+    '../packages/design-system/src/**/stories/**/*.stories.@(js|jsx|ts|tsx)',
   ],
   addons: [
     '@storybook/addon-links',
@@ -46,6 +48,12 @@ const config: StorybookConfig = {
       enforce: 'pre',
       loader: require.resolve('@svgr/webpack'),
     });
+
+    config.resolve = {
+      // Fixes resolving packages in the monorepo so we use the "src" folder, not "dist".
+      exportsFields: ['customExports', 'exports'],
+      extensions: ['.ts', '.tsx', '.js'],
+    };
 
     return config;
   },

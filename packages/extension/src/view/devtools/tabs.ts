@@ -14,21 +14,8 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies.
+ * External dependencies
  */
-import {
-  Cookies,
-  SiteBoundaries,
-  Chips,
-  RelatedWebsiteSets,
-  PrivateAdvertising,
-  AntiCovertTracking,
-  Topics,
-  Attribution,
-  BounceTracking,
-  Fingerprinting,
-} from './components';
-
 import {
   CookieIcon,
   CookieIconWhite,
@@ -50,9 +37,38 @@ import {
   FingerPrintingIconWhite,
   TopicsIcon,
   TopicsIconWhite,
-} from '../../icons';
+  PrivacySandboxIcon,
+  PrivacySandboxIconWhite,
+} from '@cookie-analysis-tool/design-system';
+
+/**
+ * Internal dependencies.
+ */
+import {
+  Cookies,
+  SiteBoundaries,
+  Chips,
+  RelatedWebsiteSets,
+  PrivateAdvertising,
+  AntiCovertTracking,
+  Topics,
+  Attribution,
+  BounceTracking,
+  Fingerprinting,
+  PrivacySandbox,
+} from './components';
 
 const TABS = [
+  {
+    display_name: 'Privacy Sandbox',
+    component: PrivacySandbox,
+    id: 'privacySandbox',
+    icons: {
+      default: PrivacySandboxIcon,
+      selected: PrivacySandboxIconWhite,
+    },
+    hasChildren: true,
+  },
   {
     display_name: 'Cookies',
     component: Cookies,
@@ -61,6 +77,8 @@ const TABS = [
       default: CookieIcon,
       selected: CookieIconWhite,
     },
+    parentId: 'privacySandbox',
+    hasChildren: true,
   },
   {
     display_name: 'Site Boundaries',
@@ -70,6 +88,8 @@ const TABS = [
       default: SiteBoundariesIcon,
       selected: SiteBoundariesIconWhite,
     },
+    parentId: 'privacySandbox',
+    hasChildren: true,
   },
   {
     display_name: 'CHIPS',
@@ -99,6 +119,8 @@ const TABS = [
       default: PrivateAdvertisingIcon,
       selected: PrivateAdvertisingIconWhite,
     },
+    parentId: 'privacySandbox',
+    hasChildren: true,
   },
   {
     display_name: 'Topics',
@@ -121,13 +143,15 @@ const TABS = [
     parentId: 'privateAdvertising',
   },
   {
-    display_name: 'Anti-Covert tracking',
+    display_name: 'Tracking Protection',
     component: AntiCovertTracking,
     id: 'antiCovertTracking',
     icons: {
       default: AntiCovertTrackingIcon,
       selected: AntiCovertTrackingIconWhite,
     },
+    parentId: 'privacySandbox',
+    hasChildren: true,
   },
   {
     display_name: 'Bounce Tracking',
