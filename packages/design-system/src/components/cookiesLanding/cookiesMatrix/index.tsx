@@ -45,6 +45,7 @@ interface CookiesMatrixProps {
   count?: boolean | number;
   associatedCookiesCount?: number | null;
   allowExpand?: boolean;
+  highlightTitle?: boolean;
 }
 
 interface LegendData {
@@ -88,6 +89,7 @@ const CookiesMatrix = ({
   count = false,
   associatedCookiesCount = null,
   allowExpand = true,
+  highlightTitle = false,
 }: CookiesMatrixProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -131,19 +133,23 @@ const CookiesMatrix = ({
     <div className="w-full" data-testid="cookies-matrix">
       <div>
         <div className="flex gap-x-5 justify-between border-b border-bright-gray dark:border-quartz">
-          <div className="pb-3 flex flex-col gap-1">
-            <h4 className="flex items-center gap-1 flex-1 grow text-xs font-bold text-darkest-gray dark:text-bright-gray uppercase">
+          <div className="pb-3 flex flex-col gap-0.5">
+            <h4
+              className={`flex items-center gap-1 flex-1 grow text-xs font-bold text-darkest-gray dark:text-bright-gray uppercase ${
+                highlightTitle ? 'text-red-500 dark:text-red-500' : ''
+              }`}
+            >
               <span>{title}</span>
               {showInfoIcon && (
                 <span title="An active ad-blocker or other cookie extensions may affect the results.">
                   <InfoIcon />
                 </span>
               )}
-              {Boolean(count) && (
-                <span className="text-secondary">: {Number(count) || 0}</span>
-              )}
+              {Boolean(count) && <span>: {Number(count) || 0}</span>}
             </h4>
-            <p className="text-xs">{description}</p>
+            <p className="text-xs text-darkest-gray dark:text-bright-gray">
+              {description}
+            </p>
           </div>
           {allowExpand && (
             <h4 className="pb-3 flex-1 grow text-xs font-bold text-darkest-gray dark:text-bright-gray text-right">

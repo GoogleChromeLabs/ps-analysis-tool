@@ -37,6 +37,7 @@ interface CookiesLandingProps {
   children?: React.ReactNode;
   showInfoIcon?: boolean;
   showHorizontalMatrix?: boolean;
+  associatedCookiesCount?: number | null;
 }
 
 const CookiesLanding = ({
@@ -45,6 +46,7 @@ const CookiesLanding = ({
   children,
   showInfoIcon = true,
   showHorizontalMatrix = true,
+  associatedCookiesCount = null,
 }: CookiesLandingProps) => {
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
@@ -70,6 +72,7 @@ const CookiesLanding = ({
           tabFrames={tabFrames}
           showInfoIcon={showInfoIcon}
           showHorizontalMatrix={showHorizontalMatrix}
+          associatedCookiesCount={associatedCookiesCount}
         />
         {children && <div className="mt-10">{children}</div>}
       </div>

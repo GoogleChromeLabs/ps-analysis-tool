@@ -45,25 +45,26 @@ const CookiesLandingContainer = ({
       tabFrames={tabFrames}
       tabCookies={tabCookies}
       showInfoIcon={false}
-      showHorizontalMatrix={false}
+      associatedCookiesCount={Object.values(tabFrames).length}
     >
       <div className="flex flex-col">
         <h3 className="text-sm font-bold text-darkest-gray dark:text-bright-gray uppercase">
           Comparative Insights
         </h3>
-        <div className="p-1">
+        <div className="pt-2">
           <CookiesMatrix
             tabCookies={affectedCookies}
             cookiesStatsComponents={prepareCookieStatsComponents(
               prepareCookiesCount(affectedCookies)
             )}
             tabFrames={tabFrames}
-            title="Cookies"
+            title="Affected Cookies"
             description="Following are the insights about cookies that will be affected by 3P cookie depreciation."
             showInfoIcon={false}
+            showHorizontalMatrix={false}
             count={Object.values(affectedCookies).length}
-            associatedCookiesCount={Object.keys(tabFrames).length}
             allowExpand={false}
+            highlightTitle={true}
           />
         </div>
       </div>
