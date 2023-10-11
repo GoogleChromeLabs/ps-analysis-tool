@@ -26,6 +26,7 @@ interface ButtonProps {
   loading?: boolean;
   type?: 'button' | 'submit' | 'reset';
   variant?: 'primary' | 'secondary' | 'danger' | 'small';
+  extraClasses?: string;
 }
 const Button = ({
   text,
@@ -33,6 +34,7 @@ const Button = ({
   onClick = undefined,
   type = 'button',
   variant = 'primary',
+  extraClasses = '',
 }: ButtonProps) => {
   return (
     <button
@@ -40,16 +42,20 @@ const Button = ({
       type={type}
       name={name}
       onClick={onClick ? onClick : undefined}
-      className={classNames('rounded flex items-center text-center', {
-        'py-1 px-2 font-medium': variant !== 'small',
-        'py-0.5 px-1.5 text-xs': variant === 'small',
-        'text-white dark:bg-baby-blue-eyes bg-sapphire hover:bg-tufts-blue dark:hover:bg-pale-cornflower-blue dark:text-raisin-black':
-          ['primary', 'small'].includes(variant),
-        'bg-transparent dark:bg-transparent dark:text-bright-gray text-raisin-black active:opacity-60 hover:opacity-80':
-          variant === 'secondary',
-        'text-white dark:text-white dark:bg-red-500 bg-red-500 hover:bg-red-600':
-          variant === 'danger',
-      })}
+      className={classNames(
+        'rounded flex items-center text-center',
+        extraClasses,
+        {
+          'py-1 px-2 font-medium': variant !== 'small',
+          'py-0.5 px-1.5 text-xs': variant === 'small',
+          'text-white dark:bg-baby-blue-eyes bg-sapphire hover:bg-tufts-blue dark:hover:bg-pale-cornflower-blue dark:text-raisin-black':
+            ['primary', 'small'].includes(variant),
+          'bg-transparent dark:bg-transparent dark:text-bright-gray text-raisin-black active:opacity-60 hover:opacity-80':
+            variant === 'secondary',
+          'text-white dark:text-white dark:bg-red-500 bg-red-500 hover:bg-red-600':
+            variant === 'danger',
+        }
+      )}
     >
       {text}
     </button>

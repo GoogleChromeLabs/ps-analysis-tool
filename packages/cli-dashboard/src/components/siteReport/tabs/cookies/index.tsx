@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
+import { Button } from '@cookie-analysis-tool/design-system';
 import { type TabFrames } from '@cookie-analysis-tool/common';
 
 /**
@@ -21,15 +22,18 @@ import { type TabFrames } from '@cookie-analysis-tool/common';
  */
 import CookiesListing from './cookiesListing';
 import { useContentStore } from '../../stateProviders/contentStore';
+import { reportDownloader } from '../../../utils/reportDownloader';
 import CookiesLandingContainer from './cookiesLandingContainer';
 
 interface CookiesTabProps {
   selectedFrameUrl?: string | null;
+  selectedSite?: string | null;
 }
 
-const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
-  const { tabCookies } = useContentStore(({ state }) => ({
+const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
+  const { tabCookies, completeJson } = useContentStore(({ state }) => ({
     tabCookies: state.tabCookies,
+    completeJson: state.completeJson,
   }));
 
   const tabFrames = useMemo<TabFrames>(
@@ -53,17 +57,34 @@ const CookiesTab = ({ selectedFrameUrl }: CookiesTabProps) => {
       ),
     [tabCookies]
   );
+  const downloadReport = useCallback(() => {
+    if (!completeJson) {
+      return;
+    }
+    if (Array.isArray(completeJson)) {
+      reportDownloader(completeJson, selectedSite);
+    } else if (!Array.isArray(completeJson)) {
+      reportDownloader([completeJson]);
+    }
+  }, [completeJson, selectedSite]);
 
   return (
     <div className="w-full h-full flex items-center justify-center">
       {selectedFrameUrl ? (
         <CookiesListing selectedFrameUrl={selectedFrameUrl} />
       ) : (
-        <CookiesLandingContainer
-          tabFrames={tabFrames}
-          tabCookies={tabCookies}
-          affectedCookies={affectedCookies}
-        />
+        <div className="flex flex-col h-full w-full">
+          <Button
+            extraClasses="absolute top-0 right-0 mr-2 mt-2 text-sm"
+            text="Download Report"
+            onClick={downloadReport}
+          />
+          <CookiesLandingContainer
+            tabFrames={tabFrames}
+            tabCookies={tabCookies}
+            affectedCookies={affectedCookies}
+          />
+        </div>
       )}
     </div>
   );

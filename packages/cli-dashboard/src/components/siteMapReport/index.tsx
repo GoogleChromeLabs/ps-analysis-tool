@@ -29,7 +29,7 @@ import {
  * Internal dependencies.
  */
 import SiteSelection from '../siteReport/components/siteSelection';
-import type { CookieFrameStorageType } from '../../types';
+import type { CookieFrameStorageType, CompleteJson } from '../../types';
 import SiteReport from '../siteReport';
 import SiteMapAffectedCookies from './sitemapAffectedCookies';
 import CookiesLandingContainer from '../siteReport/tabs/cookies/cookiesLandingContainer';
@@ -38,12 +38,14 @@ interface SiteMapReportProps {
   landingPageCookies: CookieFrameStorageType;
   cookies: CookieFrameStorageType;
   technologies: TechnologyData[];
+  completeJson: CompleteJson | null;
 }
 
 const SiteMapReport = ({
   cookies,
   technologies,
   landingPageCookies,
+  completeJson,
 }: SiteMapReportProps) => {
   const [selectedSite, setSelectedSite] = useState<string | null>(null);
   const [sites, setSites] = useState<string[]>([]);
@@ -189,8 +191,10 @@ const SiteMapReport = ({
       <div className="flex-1 max-h-screen overflow-auto">
         {selectedSite ? (
           <SiteReport
+            selectedSite={selectedSite}
             cookies={siteFilteredCookies}
             technologies={siteFilteredTechnologies}
+            completeJson={completeJson}
           />
         ) : selectedTopLevelMenu === 'report' ? (
           <CookiesLandingContainer
