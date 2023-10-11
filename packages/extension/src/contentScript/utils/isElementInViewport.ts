@@ -17,7 +17,7 @@ const elementIsVisibleInViewport = (
   el: HTMLElement | null,
   partiallyVisible = false
 ) => {
-  if (el) {
+  if (!el) {
     return false;
   }
 
