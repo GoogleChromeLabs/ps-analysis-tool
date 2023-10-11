@@ -61,6 +61,11 @@ class WebpageContentScript {
 
     this.listenToConnection();
     this.setTopics();
+    if (chrome.runtime?.id) {
+      chrome.runtime.sendMessage({
+        setInPage: true,
+      });
+    }
   }
 
   /**
