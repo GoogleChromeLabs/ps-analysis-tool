@@ -42,7 +42,11 @@ interface CookiesMatrixProps {
   description?: string;
   showHorizontalMatrix?: boolean;
   showInfoIcon?: boolean;
-  count?: boolean | number;
+  count?: number | null;
+  associatedCookiesCount?: number | null;
+  allowExpand?: boolean;
+  highlightTitle?: boolean;
+  capitalizeTitle?: boolean;
 }
 
 interface LegendData {
@@ -83,7 +87,11 @@ const CookiesMatrix = ({
   description = '',
   showHorizontalMatrix = true,
   showInfoIcon = true,
-  count = false,
+  count = null,
+  associatedCookiesCount = null,
+  allowExpand = true,
+  highlightTitle = false,
+  capitalizeTitle = false,
 }: CookiesMatrixProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -114,7 +122,11 @@ const CookiesMatrix = ({
     {
       title: 'Number of Frames with Associated Cookies',
       description: 'Frames that have cookies associated with them.',
-      count: framesWithCookies ? Object.keys(framesWithCookies).length : 0,
+      count: associatedCookiesCount
+        ? associatedCookiesCount
+        : framesWithCookies
+        ? Object.keys(framesWithCookies).length
+        : 0,
       expand: isExpanded,
     },
   ];
@@ -123,25 +135,31 @@ const CookiesMatrix = ({
     <div className="w-full" data-testid="cookies-matrix">
       <div>
         <div className="flex gap-x-5 justify-between border-b border-bright-gray dark:border-quartz">
-          <div className="pb-3 flex flex-col gap-1">
-            <h4 className="flex items-center gap-1 flex-1 grow text-xs font-bold text-darkest-gray dark:text-bright-gray uppercase">
+          <div className="pb-3 flex flex-col gap-1.5">
+            <h4
+              className={`flex items-center gap-1 flex-1 grow text-xs font-bold text-darkest-gray dark:text-bright-gray ${
+                highlightTitle ? 'text-red-500 dark:text-red-500' : ''
+              } ${capitalizeTitle ? 'capitalize' : 'uppercase'}`}
+            >
               <span>{title}</span>
               {showInfoIcon && (
                 <span title="An active ad-blocker or other cookie extensions may affect the results.">
                   <InfoIcon />
                 </span>
               )}
-              {Boolean(count) && (
-                <span className="text-secondary">: {Number(count) || 0}</span>
-              )}
+              {count !== null && <span>: {Number(count) || 0}</span>}
             </h4>
-            <p className="text-xs">{description}</p>
+            <p className="text-xs text-darkest-gray dark:text-bright-gray">
+              {description}
+            </p>
           </div>
-          <h4 className="pb-3 flex-1 grow text-xs font-bold text-darkest-gray dark:text-bright-gray text-right">
-            <button onClick={() => setIsExpanded((state) => !state)}>
-              {isExpanded ? 'Collapse View' : 'Expand View'}
-            </button>
-          </h4>
+          {allowExpand && (
+            <h4 className="pb-3 flex-1 grow text-xs font-bold text-darkest-gray dark:text-bright-gray text-right">
+              <button onClick={() => setIsExpanded((state) => !state)}>
+                {isExpanded ? 'Collapse View' : 'Expand View'}
+              </button>
+            </h4>
+          )}
         </div>
         <Matrix dataComponents={dataComponents} />
       </div>

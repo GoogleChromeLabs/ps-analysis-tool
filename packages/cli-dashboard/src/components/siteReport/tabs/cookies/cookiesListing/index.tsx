@@ -28,11 +28,11 @@ import type { CookieTableData } from '@cookie-analysis-tool/common';
 import CookieTableContainer from './cookieTableContainer';
 import { useContentStore } from '../../../stateProviders/contentStore';
 
-interface CookieListingProps {
+interface CookiesListingProps {
   selectedFrameUrl: string;
 }
 
-const CookieListing = ({ selectedFrameUrl }: CookieListingProps) => {
+const CookiesListing = ({ selectedFrameUrl }: CookiesListingProps) => {
   const { tabCookies } = useContentStore(({ state }) => ({
     tabCookies: Object.values(state.tabCookies).filter(
       (cookie) => selectedFrameUrl === cookie.frameUrl
@@ -79,4 +79,4 @@ const CookieListing = ({ selectedFrameUrl }: CookieListingProps) => {
   );
 };
 
-export default CookieListing;
+export default CookiesListing;
