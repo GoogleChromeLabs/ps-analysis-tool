@@ -17,13 +17,14 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
+import { LandingPage } from '@cookie-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
 import InfoCard from '../../../../design-system/components/infoCard';
 import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
-import { LandingPage } from '@cookie-analysis-tool/design-system';
+import TopicsList from './topicsList';
 
 const Topics = () => {
   const [pageTitle, setPageTitle] = useState('');
@@ -36,6 +37,7 @@ const Topics = () => {
       >
         <InfoCard infoKey={PSInfoKey.Topics} setTitle={setPageTitle} />
       </div>
+      <TopicsList />
     </LandingPage>
   );
 };
