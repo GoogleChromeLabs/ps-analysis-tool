@@ -26,15 +26,16 @@ import { exec } from 'child_process';
 /**
  * Internal dependencies.
  */
-import { analyzeTechnologiesUrls } from './procedures/analyzeTechnologiesUrls';
 import Utility from './utils/utility';
 import { fetchDictionary } from './utils/fetchCookieDictionary';
 import { delay } from './utils';
 import { analyzeCookiesUrls } from './procedures/analyzeCookieUrls';
 import { analyzeCookiesUrlsInBatches } from './procedures/analyzeCookieUrlsInBatches';
+import { analyzeTechnologiesUrlsInBatches } from './procedures/analyzeTechnologiesUrlsInBatches';
 
 events.EventEmitter.defaultMaxListeners = 15;
-const delayTime = 20000;
+
+const DELAY_TIME = 20000;
 
 const program = new Command();
 
@@ -56,6 +57,7 @@ export const initialize = async () => {
   const url = program.opts().url;
   const sitemapURL = program.opts().sitemapUrl;
   const cookieDictionary = await fetchDictionary();
+
   if (url) {
     const prefix = Utility.generatePrefix(url ?? 'untitled');
     const directory = `./out/${prefix}`;
@@ -65,12 +67,14 @@ export const initialize = async () => {
     spinnies.add('cookie-spinner', {
       text: 'Analysing cookies on first page visit',
     });
+
     const [cookieData] = await analyzeCookiesUrls(
       [url],
       isHeadless,
-      delayTime,
+      DELAY_TIME,
       cookieDictionary
     );
+
     spinnies.succeed('cookie-spinner', {
       text: 'Done analyzing cookies.',
     });
@@ -78,7 +82,9 @@ export const initialize = async () => {
     spinnies.add('technology-spinner', {
       text: 'Analysing technologies',
     });
-    const technologyData = await analyzeTechnologiesUrls([url]);
+
+    const technologyData = await analyzeTechnologiesUrlsInBatches([url]);
+
     spinnies.succeed('technology-spinner', {
       text: 'Done analyzing technologies.',
     });
@@ -88,6 +94,7 @@ export const initialize = async () => {
       cookieData: cookieData.cookieData,
       technologyData,
     };
+
     await ensureFile(directory + '/out.json');
     await writeFile(directory + '/out.json', JSON.stringify(output, null, 4));
 
@@ -96,13 +103,23 @@ export const initialize = async () => {
     await delay(3000);
 
     console.log(
-      `Report is being served on URL: http://localhost:9000?path=${encodeURIComponent(
+      `Report is being served at the URL: http://localhost:9000?path=${encodeURIComponent(
         directory + '/out.json'
       )}`
     );
   } else {
     const spinnies = new Spinnies();
+
+    spinnies.add('sitemap-spinner', {
+      text: 'Parsing Sitemap',
+    });
+
     const urls: Array<string> = await Utility.getUrlsFromSitemap(sitemapURL);
+
+    spinnies.succeed('sitemap-spinner', {
+      text: 'Done parsing Sitemap',
+    });
+
     const prefix = Utility.generatePrefix([...urls].shift() ?? 'untitled');
     const directory = `./out/${prefix}`;
     const userInput: any = await Utility.askUserInput(
@@ -112,6 +129,7 @@ export const initialize = async () => {
     let numberOfUrls: number = isNaN(userInput)
       ? urls.length
       : parseInt(userInput);
+
     numberOfUrls = numberOfUrls < urls.length ? numberOfUrls : urls.length;
 
     const urlsToProcess = urls.splice(0, numberOfUrls);
@@ -119,7 +137,7 @@ export const initialize = async () => {
     const cookieAnalysisData = await analyzeCookiesUrlsInBatches(
       urlsToProcess,
       isHeadless,
-      delayTime,
+      DELAY_TIME,
       cookieDictionary
     );
 
@@ -127,9 +145,11 @@ export const initialize = async () => {
       text: 'Analysing technologies',
     });
 
-    const technologyAnalysisData = await Promise.all(
-      urlsToProcess.map((siteUrl: string) => analyzeTechnologiesUrls([siteUrl]))
+    const technologyAnalysisData = await analyzeTechnologiesUrlsInBatches(
+      urlsToProcess,
+      3
     );
+
     spinnies.succeed('technology-spinner', {
       text: 'Done analysing technologies',
     });
@@ -150,7 +170,7 @@ export const initialize = async () => {
     await delay(3000);
 
     console.log(
-      `Report is being served on URL: http://localhost:9000?path=${encodeURIComponent(
+      `Report is being served at the URL: http://localhost:9000?path=${encodeURIComponent(
         directory + '/out.json'
       )}&type=sitemap`
     );

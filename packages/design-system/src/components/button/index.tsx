@@ -25,8 +25,8 @@ interface ButtonProps {
   onClick?: () => void;
   loading?: boolean;
   type?: 'button' | 'submit' | 'reset';
-  variant?: 'primary' | 'secondary' | 'danger';
-  extraClasses: string;
+  variant?: 'primary' | 'secondary' | 'danger' | 'small';
+  extraClasses?: string;
 }
 const Button = ({
   text,
@@ -43,11 +43,13 @@ const Button = ({
       name={name}
       onClick={onClick ? onClick : undefined}
       className={classNames(
-        'py-1 px-2 rounded font-medium flex items-center text-center',
+        'rounded flex items-center text-center',
         extraClasses,
         {
+          'py-1 px-2 font-medium': variant !== 'small',
+          'py-0.5 px-1.5 text-xs': variant === 'small',
           'text-white dark:bg-baby-blue-eyes bg-sapphire hover:bg-tufts-blue dark:hover:bg-pale-cornflower-blue dark:text-raisin-black':
-            variant === 'primary',
+            ['primary', 'small'].includes(variant),
           'bg-transparent dark:bg-transparent dark:text-bright-gray text-raisin-black active:opacity-60 hover:opacity-80':
             variant === 'secondary',
           'text-white dark:text-white dark:bg-red-500 bg-red-500 hover:bg-red-600':

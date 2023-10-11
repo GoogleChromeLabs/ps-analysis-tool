@@ -19,6 +19,7 @@
  */
 import puppeteer, { Browser, Page, Protocol } from 'puppeteer';
 import { parse } from 'simple-cookie';
+
 /**
  * Internal dependencies.
  */
@@ -333,6 +334,7 @@ export class BrowserManagement {
 
     return result;
   }
+
   async deinitialize() {
     await this.browser?.close();
   }

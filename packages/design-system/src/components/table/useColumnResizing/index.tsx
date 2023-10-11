@@ -31,6 +31,7 @@ export type ColumnResizingOutput = {
     selectedColumnRef: React.RefObject<HTMLTableHeaderCellElement>,
     index: number
   ) => void;
+  isResizing: boolean;
 };
 
 const useColumnResizing = (
@@ -39,6 +40,7 @@ const useColumnResizing = (
 ): ColumnResizingOutput => {
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const [columns, setColumns] = useState<TableColumn[]>([]);
+  const [isResizing, setIsResizing] = useState(false);
 
   const setColumnsCallback = useCallback(() => {
     const tableWidth = tableContainerRef.current?.scrollWidth || 0;
@@ -80,6 +82,7 @@ const useColumnResizing = (
       index: number
     ) => {
       const onMove = (clientXPos: number) => {
+        setIsResizing(true);
         const startOffset =
           selectedColumnRef.current?.getBoundingClientRect().left || 0;
 
@@ -129,6 +132,7 @@ const useColumnResizing = (
       const mouseEvents = {
         moveHandler: (e: MouseEvent) => onMove(e.clientX),
         upHandler: () => {
+          setTimeout(() => setIsResizing(false), 100);
           document.removeEventListener('mousemove', mouseEvents.moveHandler);
           document.removeEventListener('mouseup', mouseEvents.upHandler);
         },
@@ -156,6 +160,7 @@ const useColumnResizing = (
     columns,
     tableContainerRef,
     onMouseDown,
+    isResizing,
   };
 };
 

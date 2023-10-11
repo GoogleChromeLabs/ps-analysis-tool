@@ -81,8 +81,8 @@ const JsonOutput = ({
           <PullRequestOutput primaryWellKnownOutput={primaryWellKnownOutput} />
           <div className="flex justify-between items-center py-4">
             <a
-              title="https://github.com/GoogleChrome/first-party-sets/pulls"
-              href="https://github.com/GoogleChrome/first-party-sets/pulls"
+              title="https://github.com/GoogleChrome/related-website-sets/pulls"
+              href="https://github.com/GoogleChrome/related-website-sets/pulls"
               target="_blank"
               rel="noreferrer"
             >

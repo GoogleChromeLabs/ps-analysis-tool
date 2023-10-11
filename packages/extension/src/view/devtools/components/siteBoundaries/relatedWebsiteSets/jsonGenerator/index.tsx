@@ -29,13 +29,14 @@ import ServiceSites from './serviceSites';
 import CountrySites from './countrySites';
 import JsonOutput from './jsonOutput';
 import useGeneratorForm from './useGeneratorForm';
-import { Button } from '@cookie-analysis-tool/design-system';
+import { Button, Cross } from '@cookie-analysis-tool/design-system';
 
 interface RWSJsonGeneratorProps {
   open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const RWSJsonGenerator = ({ open }: RWSJsonGeneratorProps) => {
+const RWSJsonGenerator = ({ open, setOpen }: RWSJsonGeneratorProps) => {
   const {
     state: {
       contact,
@@ -93,8 +94,8 @@ const RWSJsonGenerator = ({ open }: RWSJsonGeneratorProps) => {
               required technical validations (see full requirements{' '}
               <a
                 className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80"
-                title="https://github.com/GoogleChrome/first-party-sets/blob/main/FPS-Submission_Guidelines.md"
-                href="https://github.com/GoogleChrome/first-party-sets/blob/main/FPS-Submission_Guidelines.md"
+                title="https://github.com/GoogleChrome/related-website-sets/blob/main/RWS-Submission_Guidelines.md"
+                href="https://github.com/GoogleChrome/related-website-sets/blob/main/RWS-Submission_Guidelines.md"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -103,6 +104,14 @@ const RWSJsonGenerator = ({ open }: RWSJsonGeneratorProps) => {
               ).
             </p>
             <div className="my-4 bg-anti-flash-white dark:bg-charleston-green border rounded-xl border-gray-200 dark:border-quartz px-4 py-3 shadow">
+              <button
+                onClick={() => {
+                  setOpen(false);
+                }}
+                className="float-right pt-1"
+              >
+                <Cross />
+              </button>
               <p className="text-base my-3">
                 Enter your Related Website Sets details below:
               </p>
@@ -158,7 +167,7 @@ const RWSJsonGenerator = ({ open }: RWSJsonGeneratorProps) => {
                     </div>
                   ) : (
                     <div className="flex gap-2">
-                      <Button text="Submit" type="submit" />
+                      <Button text="Generate" type="submit" />
                       <Button text="Reset" type="reset" variant="secondary" />
                     </div>
                   )}

@@ -134,6 +134,7 @@ const CookieStore = {
         },
       });
     }
+    chrome.storage.session.set({ [tabId]: true });
   },
 
   /**
@@ -142,6 +143,7 @@ const CookieStore = {
    */
   async removeTabData(tabId: string) {
     await chrome.storage.local.remove(tabId);
+    await chrome.storage.session.remove(tabId);
   },
 
   /**

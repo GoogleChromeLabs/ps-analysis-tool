@@ -13,26 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { TechnologyDetailList } from '../types';
-import TechnologiesManagement from '../utils/technologiesManagment';
-import Utility from '../utils/utility';
+/**
+ * Internal dependencies.
+ */
+import { OVERLAY_CLASS, TOOLTIP_CLASS } from '../constants';
 
 /**
- *
- * @param urls
+ * Removes all tooltips and overlays from the current document.
+ * @returns {void}
  */
-export async function analyzeTechnologiesUrls(
-  urls: Array<string>
-): Promise<TechnologyDetailList> {
-  const technologiesInstance = new TechnologiesManagement();
-  technologiesInstance.createMultiple(urls);
-  await technologiesInstance.run();
+const removeAllPopovers = (): void => {
+  const selectors = `.${OVERLAY_CLASS}, .${TOOLTIP_CLASS}`;
+  const existingPopovers = document.querySelectorAll(selectors);
 
-  let allTechnologies = Utility.listPluck(
-    technologiesInstance.getJobs(),
-    'response'
-  );
-  allTechnologies = Utility.mergeAll(allTechnologies);
+  existingPopovers.forEach((element) => {
+    element.parentNode?.removeChild(element);
+  });
+};
 
-  return allTechnologies;
-}
+export default removeAllPopovers;

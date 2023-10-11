@@ -19,15 +19,16 @@
  */
 import React, { useEffect, useMemo, useState } from 'react';
 import type { TechnologyData } from '@cookie-analysis-tool/common';
+
 /**
  * Internal dependencies
  */
 import './app.css';
 import SiteReport from './components/siteReport';
 import type {
-  CompleteJson,
   CookieFrameStorageType,
   CookieJsonDataType,
+  CompleteJson,
 } from './types';
 import SiteMapReport from './components/siteMapReport';
 
@@ -46,6 +47,7 @@ const App = () => {
 
   const [type, path] = useMemo(() => {
     const urlParams = new URLSearchParams(window.location.search);
+
     return [
       urlParams.get('type') === 'sitemap'
         ? DisplayType.SITEMAP
@@ -59,9 +61,9 @@ const App = () => {
       const response = await fetch(path);
       const data = await response.json();
       setCompleteJsonReport(data);
-      let _cookies: CookieFrameStorageType = {},
-        _technologies: TechnologyData[] = [];
       const _landingPageCookies: CookieFrameStorageType = {};
+      let _cookies: CookieFrameStorageType = {};
+      let _technologies: TechnologyData[] = [];
 
       if (type === DisplayType.SITEMAP) {
         data.forEach(
@@ -187,17 +189,17 @@ const App = () => {
         completeJson={completeJsonReport}
       />
     );
-  } else {
-    return (
-      <div className="w-full h-screen flex">
-        <SiteReport
-          cookies={cookies}
-          technologies={technologies}
-          completeJson={completeJsonReport}
-        />
-      </div>
-    );
   }
+
+  return (
+    <div className="w-full h-screen flex">
+      <SiteReport
+        completeJson={completeJsonReport}
+        cookies={cookies}
+        technologies={technologies}
+      />
+    </div>
+  );
 };
 
 export default App;

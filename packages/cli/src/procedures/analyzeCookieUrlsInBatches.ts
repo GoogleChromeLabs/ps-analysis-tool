@@ -27,21 +27,13 @@ import { CookieDatabase } from '../types';
 import { Cookie } from '../utils/browserManagement/types';
 import { analyzeCookiesUrls } from './analyzeCookieUrls';
 
-/**
- *
- * @param urls
- * @param isHeadless
- * @param delayTime
- * @param cookieDictionary
- * @param batchSize
- */
-export async function analyzeCookiesUrlsInBatches(
+export const analyzeCookiesUrlsInBatches = async (
   urls: string[],
   isHeadless: boolean,
   delayTime: number,
   cookieDictionary: CookieDatabase,
   batchSize = 3
-) {
+) => {
   const spinnies = new Spinnies();
   let report: {
     pageUrl: string;
@@ -80,4 +72,4 @@ export async function analyzeCookiesUrlsInBatches(
   }
 
   return report;
-}
+};

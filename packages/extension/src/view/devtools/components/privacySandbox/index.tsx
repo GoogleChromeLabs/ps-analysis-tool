@@ -17,22 +17,30 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
-import { ProgressBar } from '@cookie-analysis-tool/design-system';
+
+/**
+ * Internal dependencies.
+ */
+import { LandingPage } from '@cookie-analysis-tool/design-system';
 
 const PrivacySandbox = () => {
   const [loading, setLoading] = useState(true);
 
   return (
     <>
-      {loading && <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />}
-      <iframe
-        className={`${loading ? 'hidden' : 'visible'}`}
-        onLoad={() => setLoading(false)}
-        data-testid="privacy-sandbox-content"
-        src="https://privacysandbox.com"
-        width="100%"
-        height="100%"
-      />
+      <LandingPage title="Privacy Sandbox" isLoading={loading}>
+        <div className="px-4 pt-6 pb-4 h-screen w-full">
+          <iframe
+            src="https://privacysandbox.com"
+            data-testid="privacy-sandbox-content"
+            height="100%"
+            onLoad={() => {
+              setLoading(false);
+            }}
+            className="w-full md:w-[70%] border rounded-xl border-hex-gray dark:border-quartz"
+          />
+        </div>
+      </LandingPage>
     </>
   );
 };

@@ -19,16 +19,6 @@
  */
 import React, { useEffect, useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
-
-/**
- * Internal dependencies.
- */
-import SiteSelection from '../siteReport/components/siteSelection';
-import {
-  CookiesLanding,
-  CookiesMatrix,
-} from '@cookie-analysis-tool/design-system';
-import type { CompleteJson, CookieFrameStorageType } from '../../types';
 import {
   prepareCookieStatsComponents,
   type CookieTableData,
@@ -36,6 +26,16 @@ import {
   type TechnologyData,
   prepareCookiesCount,
 } from '@cookie-analysis-tool/common';
+import {
+  CookiesLanding,
+  CookiesMatrix,
+} from '@cookie-analysis-tool/design-system';
+
+/**
+ * Internal dependencies.
+ */
+import SiteSelection from '../siteReport/components/siteSelection';
+import type { CookieFrameStorageType, CompleteJson } from '../../types';
 import SiteReport from '../siteReport';
 import SiteMapAffectedCookies from './sitemapAffectedCookies';
 
@@ -187,9 +187,7 @@ const SiteMapReport = ({
                 selectedTopLevelMenu === 'affectedCookies'
                   ? 'bg-royal-blue text-white'
                   : 'bg-white'
-              }
-							}
-						`}
+              }`}
           >
             <p>Affected Cookies</p>
           </div>
@@ -221,6 +219,7 @@ const SiteMapReport = ({
                 description="Following are the insights about cookies that will be affected by 3P cookie depreciation."
                 showInfoIcon={false}
                 count={Object.values(affectedCookies).length}
+                showHorizontalMatrix={false}
               />
             </CookiesLanding>
           </>

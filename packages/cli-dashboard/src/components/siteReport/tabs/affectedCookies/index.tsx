@@ -19,10 +19,6 @@
  */
 import React, { useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
-
-/**
- * Internal dependencies
- */
 import {
   CookieDetails,
   CookieTable,
@@ -30,6 +26,10 @@ import {
   type TableColumn,
 } from '@cookie-analysis-tool/design-system';
 import type { CookieTableData } from '@cookie-analysis-tool/common';
+
+/**
+ * Internal dependencies
+ */
 import { useContentStore } from '../../stateProviders/contentStore';
 
 interface AffectedCookiesProps {

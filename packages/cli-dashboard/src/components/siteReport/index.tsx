@@ -18,13 +18,13 @@
  * External dependencies
  */
 import React from 'react';
+import type { TechnologyData } from '@cookie-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import { Provider as ContentStoreProvider } from './stateProviders/contentStore';
 import Layout from './components/layout';
-import type { TechnologyData } from '@cookie-analysis-tool/common';
 import type { CompleteJson, CookieJsonDataType } from '../../types';
 
 interface SiteReportProps {

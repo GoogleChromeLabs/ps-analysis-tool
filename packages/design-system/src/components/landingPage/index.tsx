@@ -36,7 +36,7 @@ interface LandingPageProps {
 }
 
 const LandingPage = ({ title, children, isLoading }: LandingPageProps) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [news, setNews] = useState<BulletListItem[]>([]);
 
   const fetchLatestNews = async () => {
@@ -76,7 +76,7 @@ const LandingPage = ({ title, children, isLoading }: LandingPageProps) => {
             className="flex gap-2 text-2xl font-bold items-baseline dark:text-bright-gray"
             onClick={() => setOpen((prevOpen) => !prevOpen)}
           >
-            {title && <h1>{title}</h1>}
+            {title && <h1 className="text-left">{title}</h1>}
             <ArrowUp
               className={classNames(!open && 'rotate-180 -translate-y-1')}
             />
@@ -113,7 +113,7 @@ const LandingPage = ({ title, children, isLoading }: LandingPageProps) => {
                   href="https://privacysandbox.com/news/"
                   target="_blank"
                   rel="noreferrer"
-                  className="leading-6 text-sm text-analytics font-semibold px-3 border border-american-silver dark:border-quartz rounded inline-flex gap-2 items-center"
+                  className="leading-6 text-sm text-analytics dark:text-medium-persian-blue font-semibold px-3 border border-american-silver dark:border-quartz rounded inline-flex gap-2 items-center"
                 >
                   View More <ChevronRight />
                 </a>

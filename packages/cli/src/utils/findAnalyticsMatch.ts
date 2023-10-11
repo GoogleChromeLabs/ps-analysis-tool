@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-import { CookieAnalytics, CookieDatabase } from '../types';
-
 /**
  * Internal dependencies.
  */
+import { CookieAnalytics, CookieDatabase } from '../types';
 
 /**
- *
  * Matches wildcard string to a provided string. For eg Foo_* matches Foo_123.
  * @param {string} wildcard  Wildcard cookie name.
  * @param {string} str cookie name to be matched.
@@ -77,4 +75,5 @@ const findAnalyticsMatch = (
 
   return analytics;
 };
+
 export default findAnalyticsMatch;

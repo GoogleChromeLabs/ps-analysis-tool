@@ -18,11 +18,12 @@
  * External dependencies.
  */
 import fs from 'fs/promises';
+import path from 'path';
+
 /**
  * Internal dependencies.
  */
 import { CookieDatabase } from '../types';
-import path from 'path';
 
 /**
  * Fetch dictionary from local data folder.

@@ -13,19 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// @todo Create and use from a common package.
-/**
- * Parses a URL string and returns a new URL object.
- * If the URL is invalid, it returns null.
- * @param {string} url - The URL string to parse.
- * @returns {URL | null} - The parsed URL object or null if the URL is invalid.
- */
-const parseUrl = (url: string): URL | null => {
-  try {
-    return new URL(url);
-  } catch (e) {
-    return null;
-  }
-};
-
-export default parseUrl;
+export { default as createFrameOverlay } from './createFrameOverlay';
+export { default as setOverlayPosition } from './setOverlayPosition';

@@ -24,6 +24,7 @@ import {
   CookiesMatrix,
   Button,
 } from '@cookie-analysis-tool/design-system';
+
 /**
  * Internal dependencies.
  */
@@ -81,7 +82,7 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
       ) : (
         <div className="flex flex-col w-full">
           <Button
-            extraClasses="absolute top-0 right-0"
+            extraClasses="absolute top-0 right-0 w-fit"
             text="Download Report"
             onClick={downloadReport}
           />
@@ -98,9 +99,10 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
               )}
               tabFrames={tabFrames}
               title="Affected Cookies Insights"
-              description="Following are the insights about cookies that will be affected 3P cookie depreciation."
+              description="Following are the insights about cookies that will be affected by 3P cookie depreciation."
               showInfoIcon={false}
               count={Object.values(affectedCookies).length}
+              showHorizontalMatrix={false}
             />
           </CookiesLanding>
         </div>

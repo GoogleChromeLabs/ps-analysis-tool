@@ -68,6 +68,7 @@ export type TableOutput = {
   isColumnHidden: ColumnVisibilityOutput['isColumnHidden'];
   tableContainerRef: ColumnResizingOutput['tableContainerRef'];
   onMouseDown: ColumnResizingOutput['onMouseDown'];
+  isResizing: ColumnResizingOutput['isResizing'];
 };
 
 interface useTableProps {
@@ -94,10 +95,8 @@ const useTable = ({
     isColumnHidden,
   } = useColumnVisibility(tableColumns, options?.selectedColumns);
 
-  const { columns, tableContainerRef, onMouseDown } = useColumnResizing(
-    visibleColumns,
-    options?.columnSizing
-  );
+  const { columns, tableContainerRef, onMouseDown, isResizing } =
+    useColumnResizing(visibleColumns, options?.columnSizing);
 
   const { sortedData, sortKey, sortOrder, setSortKey, setSortOrder } =
     useColumnSorting(data, options?.columnSorting);
@@ -139,6 +138,7 @@ const useTable = ({
     isColumnHidden,
     tableContainerRef,
     onMouseDown,
+    isResizing,
   };
 };
 

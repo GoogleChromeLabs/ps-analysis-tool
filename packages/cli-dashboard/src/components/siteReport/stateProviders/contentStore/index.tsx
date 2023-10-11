@@ -18,14 +18,15 @@
  */
 import React, { type PropsWithChildren, useMemo } from 'react';
 import { useContextSelector, createContext } from 'use-context-selector';
-/**
- * Internal dependencies.
- */
-import type { CompleteJson, CookieJsonDataType } from '../../../../types';
 import type {
   CookieTableData,
   TechnologyData,
 } from '@cookie-analysis-tool/common';
+
+/**
+ * Internal dependencies.
+ */
+import type { CompleteJson, CookieJsonDataType } from '../../../../types';
 
 export interface ContentStore {
   state: {

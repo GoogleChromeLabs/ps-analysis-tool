@@ -31,7 +31,7 @@ import {
   type CookieStoreContext,
 } from '../../../stateProviders/syncCookieStore';
 import { act } from 'react-dom/test-utils';
-import SinonChrome from 'sinon-chrome';
+import globalChrome from '../../../../../utils/test-data/globalChrome';
 
 const uncategorized1pCookie: ParsedCookie = {
   name: '_cb',
@@ -170,7 +170,19 @@ const mockUseCookieStore = useCookieStore as jest.Mock;
 
 describe('Sidebar', () => {
   beforeAll(() => {
-    globalThis.chrome = SinonChrome as unknown as typeof chrome;
+    globalThis.chrome = {
+      ...globalChrome,
+      storage: {
+        // @ts-ignore
+        session: {
+          // @ts-ignore
+          onChanged: {
+            addListener: () => undefined,
+            removeListener: () => undefined,
+          },
+        },
+      },
+    };
   });
 
   it('Should render with first menu item selected', () => {

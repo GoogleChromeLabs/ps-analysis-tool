@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
- * Internal dependencies.
+ * External dependencies.
  */
 import {
   CookieIcon,
@@ -23,6 +22,10 @@ import {
   SiteBoundariesIcon,
   SiteBoundariesIconWhite,
 } from '@cookie-analysis-tool/design-system';
+
+/**
+ * Internal dependencies.
+ */
 import CookiesTab from './cookies';
 import TechnologiesTab from './technologies';
 import AffectedCookiesTab from './affectedCookies';

@@ -25,28 +25,36 @@ import InfoCard from '../../../../design-system/components/infoCard';
 import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
 import RWSJsonGenerator from './jsonGenerator';
 import Insights from './insights';
-import { Button } from '@cookie-analysis-tool/design-system';
+import { Button, LandingPage } from '@cookie-analysis-tool/design-system';
 
 const RelatedWebsiteSets = () => {
   const [showForm, setShowForm] = useState(false);
+  const [pageTitle, setPageTitle] = useState('');
 
   return (
-    <div
-      className="w-full h-full overflow-auto"
-      data-testid="related-website-sets-content"
-    >
-      <InfoCard infoKey={PSInfoKey.RelatedWebsiteSets} hasHeader={true} />
-      <div className="text-raisin-black dark:text-bright-gray max-w-2xl dark:bg-davys-grey border border-gray-200 dark:border-quartz rounded-lg shadow p-6 m-3 flex flex-col gap-3 divide-y divide-gray-200 dark:divide-gray-500">
-        <Insights />
-        <RWSJsonGenerator open={showForm} />
-        <div className="pt-4">
-          <Button
-            text={showForm ? 'Close' : 'Generate RWS JSON Resources'}
-            onClick={() => setShowForm(!showForm)}
-          />
+    <LandingPage title={pageTitle} isLoading={!pageTitle}>
+      <div
+        className="px-4 max-w-2xl h-full overflow-auto divide-y divide-gray-200 dark:divide-gray-500"
+        data-testid="related-website-sets-content"
+      >
+        <InfoCard
+          infoKey={PSInfoKey.RelatedWebsiteSets}
+          setTitle={setPageTitle}
+        />
+        <div className="py-6 text-raisin-black dark:text-bright-gray flex flex-col gap-3">
+          <Insights />
+          <RWSJsonGenerator open={showForm} setOpen={setShowForm} />
+          {!showForm && (
+            <div className="pt-4">
+              <Button
+                text="Generate RWS JSON Resources"
+                onClick={() => setShowForm(true)}
+              />
+            </div>
+          )}
         </div>
       </div>
-    </div>
+    </LandingPage>
   );
 };
 
