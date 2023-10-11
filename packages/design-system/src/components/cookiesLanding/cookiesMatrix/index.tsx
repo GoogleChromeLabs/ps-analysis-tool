@@ -43,6 +43,8 @@ interface CookiesMatrixProps {
   showHorizontalMatrix?: boolean;
   showInfoIcon?: boolean;
   count?: boolean | number;
+  associatedCookiesCount?: number | null;
+  allowExpand?: boolean;
 }
 
 interface LegendData {
@@ -84,6 +86,8 @@ const CookiesMatrix = ({
   showHorizontalMatrix = true,
   showInfoIcon = true,
   count = false,
+  associatedCookiesCount = null,
+  allowExpand = true,
 }: CookiesMatrixProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -114,7 +118,11 @@ const CookiesMatrix = ({
     {
       title: 'Number of Frames with Associated Cookies',
       description: 'Frames that have cookies associated with them.',
-      count: framesWithCookies ? Object.keys(framesWithCookies).length : 0,
+      count: associatedCookiesCount
+        ? associatedCookiesCount
+        : framesWithCookies
+        ? Object.keys(framesWithCookies).length
+        : 0,
       expand: isExpanded,
     },
   ];
@@ -137,11 +145,13 @@ const CookiesMatrix = ({
             </h4>
             <p className="text-xs">{description}</p>
           </div>
-          <h4 className="pb-3 flex-1 grow text-xs font-bold text-darkest-gray dark:text-bright-gray text-right">
-            <button onClick={() => setIsExpanded((state) => !state)}>
-              {isExpanded ? 'Collapse View' : 'Expand View'}
-            </button>
-          </h4>
+          {allowExpand && (
+            <h4 className="pb-3 flex-1 grow text-xs font-bold text-darkest-gray dark:text-bright-gray text-right">
+              <button onClick={() => setIsExpanded((state) => !state)}>
+                {isExpanded ? 'Collapse View' : 'Expand View'}
+              </button>
+            </h4>
+          )}
         </div>
         <Matrix dataComponents={dataComponents} />
       </div>

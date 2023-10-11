@@ -20,16 +20,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
 import {
-  prepareCookieStatsComponents,
   type CookieTableData,
   type TabFrames,
   type TechnologyData,
-  prepareCookiesCount,
 } from '@cookie-analysis-tool/common';
-import {
-  CookiesLanding,
-  CookiesMatrix,
-} from '@cookie-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
@@ -38,6 +32,7 @@ import SiteSelection from '../siteReport/components/siteSelection';
 import type { CookieFrameStorageType } from '../../types';
 import SiteReport from '../siteReport';
 import SiteMapAffectedCookies from './sitemapAffectedCookies';
+import CookiesLandingContainer from '../siteReport/tabs/cookies/cookiesLandingContainer';
 
 interface SiteMapReportProps {
   landingPageCookies: CookieFrameStorageType;
@@ -198,27 +193,11 @@ const SiteMapReport = ({
             technologies={siteFilteredTechnologies}
           />
         ) : selectedTopLevelMenu === 'report' ? (
-          <>
-            <CookiesLanding
-              tabFrames={frames}
-              tabCookies={reshapedCookies}
-              showInfoIcon={false}
-              showHorizontalMatrix={false}
-            >
-              <CookiesMatrix
-                tabCookies={affectedCookies}
-                cookiesStatsComponents={prepareCookieStatsComponents(
-                  prepareCookiesCount(affectedCookies)
-                )}
-                tabFrames={frames}
-                title="Affected Cookies Insights"
-                description="Following are the insights about cookies that will be affected by 3P cookie depreciation."
-                showInfoIcon={false}
-                count={Object.values(affectedCookies).length}
-                showHorizontalMatrix={false}
-              />
-            </CookiesLanding>
-          </>
+          <CookiesLandingContainer
+            tabCookies={reshapedCookies}
+            tabFrames={frames}
+            affectedCookies={affectedCookies}
+          />
         ) : (
           <SiteMapAffectedCookies
             cookies={Object.values(reshapedCookies).filter(
