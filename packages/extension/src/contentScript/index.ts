@@ -47,6 +47,7 @@ class WebpageContentScript {
   bodyHoverStateSent = false;
   scrollEventListeners: Array<() => void> = [];
   docElement: HTMLElement;
+  hoveredFrame: HTMLElement | null;
 
   /**
    * Initialize
@@ -247,18 +248,17 @@ class WebpageContentScript {
         );
       });
 
-      frameElements.forEach((frame, index) => {
-        const tooltip = this.insertTooltip(
-          frame,
-          visibleIFrameCount,
-          hiddenIFrameCount,
-          response
-        );
+      // @todo Hovered frame should be part of the frameElements.
+      const iframeForTooltip = this.hoveredFrame
+        ? this.hoveredFrame
+        : frameElements[0];
 
-        if (0 === index) {
-          firstToolTip = tooltip;
-        }
-      });
+      firstToolTip = this.insertTooltip(
+        iframeForTooltip,
+        visibleIFrameCount,
+        hiddenIFrameCount,
+        response
+      );
     } else if (numberOfFrames === hiddenIFrameCount) {
       const frame = frameElements[0];
 
@@ -332,6 +332,8 @@ class WebpageContentScript {
       target.classList.contains('ps-tooltip-info-toggle-btn') ||
       target.classList.contains('ps-enable-pointer-event');
 
+    this.hoveredFrame = null;
+
     if (isTooltipElement) {
       return;
     }
@@ -362,6 +364,7 @@ class WebpageContentScript {
     }
 
     this.bodyHoverStateSent = false;
+    this.hoveredFrame = target;
 
     const frame = target as HTMLIFrameElement;
     let srcAttribute = frame.getAttribute('src');
