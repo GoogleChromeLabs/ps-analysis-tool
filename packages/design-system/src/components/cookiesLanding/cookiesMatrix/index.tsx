@@ -42,7 +42,7 @@ interface CookiesMatrixProps {
   description?: string;
   showHorizontalMatrix?: boolean;
   showInfoIcon?: boolean;
-  count?: boolean | number;
+  count?: number | null;
   associatedCookiesCount?: number | null;
   allowExpand?: boolean;
   highlightTitle?: boolean;
@@ -87,7 +87,7 @@ const CookiesMatrix = ({
   description = '',
   showHorizontalMatrix = true,
   showInfoIcon = true,
-  count = false,
+  count = null,
   associatedCookiesCount = null,
   allowExpand = true,
   highlightTitle = false,
@@ -147,7 +147,7 @@ const CookiesMatrix = ({
                   <InfoIcon />
                 </span>
               )}
-              {Boolean(count) && <span>: {Number(count) || 0}</span>}
+              {count !== null && <span>: {Number(count) || 0}</span>}
             </h4>
             <p className="text-xs text-darkest-gray dark:text-bright-gray">
               {description}
