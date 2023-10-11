@@ -159,7 +159,8 @@ export class BrowserManagement {
     cdpSession.on(
       'Network.responseReceivedExtraInfo',
       (response: Protocol.Network.ResponseReceivedExtraInfoEvent) => {
-        const cookies = response.headers['set-cookie']
+        const allowedCookies: any[] = [];
+        const allCookies = response.headers['set-cookie']
           ?.split('\n')
           .map((headerLine) => {
             const parsedCookie = parse(headerLine);
@@ -174,8 +175,21 @@ export class BrowserManagement {
               secure: parsedCookie.secure || false,
             };
           });
+
+        if (allCookies) {
+          allCookies.forEach((allCookie) => {
+            const foundInBlocked = response.blockedCookies.find((c) => {
+              return c.cookie?.name === allCookie.name;
+            });
+
+            if (!foundInBlocked) {
+              allowedCookies.push(allCookie);
+            }
+          });
+        }
+
         const prevCookies = responseMap.get(response.requestId)?.cookies || [];
-        const mergedCookies = [...prevCookies, ...(cookies || [])];
+        const mergedCookies = [...prevCookies, ...(allowedCookies || [])];
 
         responseMap.set(response.requestId, {
           frameId: responseMap.get(response.requestId)?.frameId || '',
