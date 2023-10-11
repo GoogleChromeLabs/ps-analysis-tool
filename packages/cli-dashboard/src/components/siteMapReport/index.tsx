@@ -167,7 +167,7 @@ const SiteMapReport = ({
         }}
         className=" max-h-screen overflow-auto flex flex-col border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
       >
-        <div className="flex flex-col">
+        <div className="flex flex-col pt-1">
           <SiteSelection
             sites={sites}
             selectedSite={selectedSite}
@@ -180,14 +180,14 @@ const SiteMapReport = ({
               setSelectedTopLevelMenu('affectedCookies');
               setSelectedSite(null);
             }}
-            className={`w-full flex items-center pl-6 py-0.5 outline-0 cursor-pointer text-sm 
+            className={`w-full pl-6 py-0.5 outline-0 cursor-pointer text-sm 
 							${
                 selectedTopLevelMenu === 'affectedCookies'
                   ? 'bg-royal-blue text-white'
                   : 'bg-white'
               }`}
           >
-            <p>Affected Cookies</p>
+            <p className="ml-[15px]">Affected Cookies</p>
           </div>
         </div>
       </Resizable>

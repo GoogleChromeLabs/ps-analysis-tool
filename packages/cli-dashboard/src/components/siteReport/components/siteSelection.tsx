@@ -80,7 +80,7 @@ const SiteSelection = ({
                 setSelectedSite(site);
                 selectTopLevelMenu();
               }}
-              className={`truncate pl-12 cursor-pointer flex items-center ${
+              className={`truncate pl-[55px] cursor-pointer flex items-center ${
                 site === selectedSite ? 'bg-royal-blue text-white' : ''
               }`}
               key={id}

@@ -62,7 +62,7 @@ const Layout = () => {
           bottomLeft: false,
           topLeft: false,
         }}
-        className="h-full flex flex-col border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
+        className="h-full flex flex-col border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz pt-1"
       >
         <Sidebar
           selectedFrameUrl={selectedFrameUrl}
