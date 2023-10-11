@@ -18,18 +18,13 @@
  * Internal dependencies.
  */
 import { CookieData, CookiesCount } from '../cookies.types';
-import isFirstParty from './isFirstParty';
 
 /**
  * Categorize cookies count into 1st party and 3rd party cookies and then into functional, marketing, analytics and uncategorized.
  * @param {{ [key: string]: CookieData }} cookies Cookies of a tab.
- * @param {string} tabUrl Tab URL
  * @returns CookiesCount object with the categorized cookies count.
  */
-const prepareCookiesCount = (
-  cookies: { [key: string]: CookieData } | null,
-  tabUrl: string | null
-) => {
+const prepareCookiesCount = (cookies: { [key: string]: CookieData } | null) => {
   const cookiesCount: CookiesCount = {
     total: 0,
     firstParty: {
@@ -48,7 +43,7 @@ const prepareCookiesCount = (
     },
   };
 
-  if (!cookies || !tabUrl) {
+  if (!cookies) {
     return cookiesCount;
   }
 
@@ -57,17 +52,14 @@ const prepareCookiesCount = (
   cookiesCount.total = cookieList.length;
 
   for (const cookie of cookieList) {
-    const {
-      analytics,
-      parsedCookie: { domain },
-    } = cookie;
-    const isFirstPartyCookie = isFirstParty(domain, tabUrl);
+    const { analytics, isFirstParty } = cookie;
+
     const category = analytics?.category?.toLowerCase() as
       | keyof CookiesCount['firstParty']
       | keyof CookiesCount['thirdParty']
       | undefined;
 
-    if (isFirstPartyCookie) {
+    if (isFirstParty) {
       cookiesCount.firstParty.total++;
       cookiesCount.firstParty[category ? category : 'uncategorized']++;
     } else {

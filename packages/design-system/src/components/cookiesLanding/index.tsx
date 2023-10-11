@@ -34,15 +34,19 @@ import { MessageBox } from '@cookie-analysis-tool/design-system';
 interface CookiesLandingProps {
   tabFrames: TabFrames | null;
   tabCookies: TabCookies | null;
-  tabUrl: string | null;
+  children?: React.ReactNode;
+  showInfoIcon?: boolean;
+  showHorizontalMatrix?: boolean;
 }
 
 const CookiesLanding = ({
   tabCookies,
   tabFrames,
-  tabUrl,
+  children,
+  showInfoIcon = true,
+  showHorizontalMatrix = true,
 }: CookiesLandingProps) => {
-  const cookieStats = prepareCookiesCount(tabCookies, tabUrl);
+  const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
 
   return (
@@ -64,7 +68,10 @@ const CookiesLanding = ({
           tabCookies={tabCookies}
           cookiesStatsComponents={cookiesStatsComponents}
           tabFrames={tabFrames}
+          showInfoIcon={showInfoIcon}
+          showHorizontalMatrix={showHorizontalMatrix}
         />
+        {children && <div className="mt-10">{children}</div>}
       </div>
     </div>
   );

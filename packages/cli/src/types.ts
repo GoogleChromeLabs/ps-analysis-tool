@@ -17,10 +17,31 @@
  * External dependencies.
  */
 import { Protocol } from 'puppeteer';
+import { type Cookie as SimpleCookie } from 'simple-cookie';
+
+export interface Cookie extends Protocol.Network.Cookie {
+  partitionKey?: string;
+}
+
+export type ResponseReceivedExtraInfo =
+  Protocol.Network.ResponseReceivedExtraInfoEvent;
+export type ResponseReceived = Protocol.Network.ResponseReceivedEvent;
+
+export type Cookies = Array<Cookie>;
+export type CookiesObjects = { [key: string]: Cookie };
+
+export type ParsedCookie = SimpleCookie;
+
+export interface TechnologyDetail {
+  name: string;
+  categories: string[];
+}
+
+export type TechnologyDetailList = Array<TechnologyDetail>;
 
 export interface CookieLogDetails
   extends Omit<
-    Protocol.Network.Cookie,
+    Cookie,
     | 'sameSite'
     | 'size'
     | 'session'
@@ -29,15 +50,45 @@ export interface CookieLogDetails
     | 'sourceScheme'
     | 'sourcePort'
   > {
+  name: string;
+  domain: string;
   platform: string;
   category: string;
   description: string;
   isFirstParty: 'Yes' | 'No';
   sameSite: string;
+  partitionKey?: string;
   pageUrl: string;
+  requestUrls: { [key: string]: string };
+  frameUrls: { [key: string]: string };
+  isBlocked?: boolean;
+  blockedReasons: Array<string>;
 }
 
-export interface TechnologieDetails {
+export type BlockedCookie = {
+  blockedReasons: Array<string>;
+  cookieLine: string;
+  cookie?: Cookie;
+};
+
+export type BlockedCookies = Array<BlockedCookie>;
+
+export type RequestDetail = {
+  requestID: string;
+  frameID: string;
+  type: string;
+  url: string;
+  frameURL: string;
+  allCookies: Cookies;
+  blockedCookies: BlockedCookies;
+  acceptedCookies: Cookies;
+};
+
+export type RequestDetails = {
+  [requestID: string]: RequestDetail;
+};
+
+export interface TechnologiesDetails {
   name: string;
   description: string;
   confidence: number;
@@ -45,6 +96,43 @@ export interface TechnologieDetails {
   categories: { name: string }[];
 }
 
-export interface TechnologieDetailsSitemap extends TechnologieDetails {
+export interface TechnologiesDetailsSitemap extends TechnologiesDetails {
   frequency: number;
+}
+
+export type CookieLogDetailList = Array<CookieLogDetails>;
+
+export type UniqueCookiesLogDetail = {
+  [key: string]: CookieLogDetails;
+};
+
+export type CookieAnalytics = {
+  platform: string;
+  category: string;
+  name: string;
+  domain: string;
+  description: string;
+  retention: string;
+  dataController: string;
+  gdprUrl: string;
+  wildcard: string;
+};
+
+export type CookieDatabase = {
+  [name: string]: Array<CookieAnalytics>;
+};
+
+export type CookieData = {
+  parsedCookie: ParsedCookie;
+  analytics: CookieAnalytics | null;
+  url: string;
+  headerType: 'response' | 'request';
+  isFirstParty: boolean | null;
+};
+
+export interface Job {
+  data: any;
+  status: string;
+  response: any;
+  message: string;
 }

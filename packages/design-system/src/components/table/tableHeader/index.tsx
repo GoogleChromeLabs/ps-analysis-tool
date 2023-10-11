@@ -24,6 +24,7 @@ import { PreferenceDataValues } from '@cookie-analysis-tool/common';
  */
 import HeaderRow from './headerRow';
 import type { TableOutput } from '../useTable';
+import { noop } from '../../../utils';
 
 interface TableHeaderProps {
   table: TableOutput;
@@ -45,7 +46,7 @@ const TableHeader = ({
   setColumnPosition,
   onRightClick,
   setIsRowFocused,
-  updatePreference,
+  updatePreference = noop,
 }: TableHeaderProps) => {
   const handleRightClick = useCallback(
     (e: React.MouseEvent<HTMLTableSectionElement>) => {

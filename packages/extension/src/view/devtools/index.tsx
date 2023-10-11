@@ -26,7 +26,7 @@ import { ErrorFallback } from '@cookie-analysis-tool/design-system';
  */
 import App from './app';
 import { Provider as ExternalStoreProvider } from './stateProviders/syncCookieStore';
-import { Provider as ContentPanelProvider } from './stateProviders/contentPanelStore';
+
 import { Provider as FilterManagementProvider } from './stateProviders/filterManagementStore';
 import { Provider as PreferenceStoreProvider } from './stateProviders/preferenceStore';
 
@@ -39,13 +39,11 @@ if (root) {
   createRoot(root).render(
     <ErrorBoundary fallbackRender={ErrorFallback}>
       <ExternalStoreProvider>
-        <ContentPanelProvider>
-          <FilterManagementProvider>
-            <PreferenceStoreProvider>
-              <App />
-            </PreferenceStoreProvider>
-          </FilterManagementProvider>
-        </ContentPanelProvider>
+        <FilterManagementProvider>
+          <PreferenceStoreProvider>
+            <App />
+          </PreferenceStoreProvider>
+        </FilterManagementProvider>
       </ExternalStoreProvider>
     </ErrorBoundary>
   );

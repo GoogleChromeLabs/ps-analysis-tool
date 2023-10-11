@@ -15,7 +15,6 @@
  */
 
 const path = require('path');
-
 const colors = require('tailwindcss/colors');
 const defaultTheme = require('tailwindcss/defaultTheme');
 
@@ -113,6 +112,7 @@ module.exports = {
       'tufts-blue': '#4D86E1',
       'pale-cornflower-blue': '#AECBFA',
       cultured: '#F6F6F699',
+      'burnt-sienna-30': '#EC71594D',
       'light-gray': '#F1F1F1',
       'charleston-green': '#292A2D',
       quartz: '#494C50',

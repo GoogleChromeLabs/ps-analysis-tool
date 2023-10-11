@@ -18,26 +18,22 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  CookieTableData,
-  PreferenceDataValues,
-} from '@cookie-analysis-tool/common';
+import { PreferenceDataValues } from '@cookie-analysis-tool/common';
 /**
  * Internal dependencies.
  */
 import TableHeader from './tableHeader';
 import TableBody from './tableBody';
 import ColumnMenu from './columnMenu';
-import { TableOutput, TableRow } from './useTable';
-
-export type TableData = CookieTableData;
+import { TableData, TableOutput, TableRow } from './useTable';
+import { noop } from '../../utils';
 
 interface TableProps {
   table: TableOutput;
   selectedKey: string | undefined | null;
   getRowObjectKey: (row: TableRow) => string;
   onRowClick: (row: TableData | null) => void;
-  updatePreference: (
+  updatePreference?: (
     key: string,
     updater: (prevStatePreference: {
       [key: string]: unknown;
@@ -50,7 +46,7 @@ const Table = ({
   selectedKey,
   getRowObjectKey,
   onRowClick,
-  updatePreference,
+  updatePreference = noop,
 }: TableProps) => {
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
   const [columnPosition, setColumnPosition] = useState({

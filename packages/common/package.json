@@ -2,7 +2,8 @@
   "name": "@cookie-analysis-tool/common",
   "version": "0.2.0",
   "description": "A package for common utilities that are being used in multiple packages",
-  "main": "./src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist-types/index.d.ts",
   "source":"./src/index.ts",
   "customExports": {
     ".": {

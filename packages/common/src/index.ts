@@ -19,5 +19,6 @@ export { default as filterFramesWithCookies } from './utils/filterFramesWithCook
 export { default as filterCookiesByFrame } from './utils/filterCookiesByFrame';
 export { default as prepareCookiesCount } from './utils/prepareCookiesCount';
 export { default as prepareCookieStatsComponents } from './utils/prepareCookieStatsComponents';
+export { default as getCookieKey } from './utils/getCookieKey';
 export { default as noop } from './utils/noop';
 export * from './cookies.types';

@@ -27,7 +27,6 @@ import SinonChrome from 'sinon-chrome';
  */
 import App from '../app';
 import { Provider as ExternalStoreProvider } from '../stateProviders/syncCookieStore';
-import { Provider as ContentPanelProvider } from '../stateProviders/contentPanelStore';
 import { Provider as FilterManagementProvider } from '../stateProviders/filterManagementStore';
 import { Provider as PreferenceStoreProvider } from '../stateProviders/preferenceStore';
 // @ts-ignore
@@ -281,13 +280,11 @@ describe('Index', () => {
     act(() =>
       render(
         <ExternalStoreProvider>
-          <ContentPanelProvider>
-            <FilterManagementProvider>
-              <PreferenceStoreProvider>
-                <App />
-              </PreferenceStoreProvider>
-            </FilterManagementProvider>
-          </ContentPanelProvider>
+          <FilterManagementProvider>
+            <PreferenceStoreProvider>
+              <App />
+            </PreferenceStoreProvider>
+          </FilterManagementProvider>
         </ExternalStoreProvider>
       )
     );
@@ -300,13 +297,11 @@ describe('Index', () => {
     act(() =>
       render(
         <ExternalStoreProvider>
-          <ContentPanelProvider>
-            <FilterManagementProvider>
-              <PreferenceStoreProvider>
-                <App />
-              </PreferenceStoreProvider>
-            </FilterManagementProvider>
-          </ContentPanelProvider>
+          <FilterManagementProvider>
+            <PreferenceStoreProvider>
+              <App />
+            </PreferenceStoreProvider>
+          </FilterManagementProvider>
         </ExternalStoreProvider>
       )
     );

@@ -15,6 +15,7 @@
  */
 
 /**
+ * Delay by using setTimeout.
  * @param ms delay in miliseconds
  * @returns a promise that will resolve in given amount of miliseconds
  */

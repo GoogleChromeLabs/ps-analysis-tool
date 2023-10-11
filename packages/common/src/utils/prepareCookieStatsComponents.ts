@@ -18,7 +18,15 @@
  */
 
 import { CookieStatsComponents, CookiesCount } from '../cookies.types';
-import { COLOR_MAP } from '@cookie-analysis-tool/design-system';
+
+const COLOR_MAP = {
+  functional: '#5CC971',
+  marketing: '#F3AE4E',
+  analytics: '#4C79F4',
+  uncategorized: '#EC7159',
+  brightGray: '#E8EAED',
+  mediumGray: '#BDBDBD',
+};
 
 const prepareCookieStatsComponents = (
   cookieStats: CookiesCount

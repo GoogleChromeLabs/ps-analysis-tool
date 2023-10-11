@@ -26,6 +26,7 @@ import { type PreferenceDataValues } from '@cookie-analysis-tool/common';
 import { createPortal } from 'react-dom';
 import ColumnList from './columnList';
 import type { TableOutput } from '../useTable';
+import { noop } from '../../../utils';
 
 interface ColumnMenuProps {
   table: TableOutput;
@@ -45,7 +46,7 @@ const ColumnMenu = ({
   position,
   open,
   onClose,
-  updatePreference,
+  updatePreference = noop,
 }: ColumnMenuProps) => {
   const [startAnimation, setStartAnimation] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
