@@ -83,7 +83,7 @@ export const initialize = async () => {
       text: 'Analysing technologies',
     });
 
-    const technologyData = await analyzeTechnologiesUrlsInBatches([url]);
+    const [technologyData] = await analyzeTechnologiesUrlsInBatches([url]);
 
     spinnies.succeed('technology-spinner', {
       text: 'Done analyzing technologies.',

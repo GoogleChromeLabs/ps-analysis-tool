@@ -84,9 +84,7 @@ export const reportDownloader = (
   ];
 
   const cookieDataToBeProcessed = report.cookieData;
-  const technologyDataToBeProcessed = selectedPageUrl
-    ? report.technologyData
-    : report.technologyData[0];
+  const technologyDataToBeProcessed = report.technologyData;
 
   const summaryDataHeader = ['type', 'value'];
 
