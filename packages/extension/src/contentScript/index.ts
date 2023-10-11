@@ -28,6 +28,7 @@ import type { ResponseType } from './types';
 import { CookieStore } from '../localStore';
 import { TOOLTIP_CLASS } from './constants';
 import { WEBPAGE_PORT_NAME } from '../constants';
+import elementIsVisibleInViewport from './utils/isElementInViewport';
 import './style.css';
 
 /**
@@ -47,6 +48,7 @@ class WebpageContentScript {
   bodyHoverStateSent = false;
   scrollEventListeners: Array<() => void> = [];
   docElement: HTMLElement;
+  hoveredFrame: HTMLElement | null;
 
   /**
    * Initialize
@@ -240,6 +242,7 @@ class WebpageContentScript {
     }
 
     const visibleIFrameCount = numberOfFrames - hiddenIFrameCount;
+    let frameWithTooltip = null;
 
     if (0 === hiddenIFrameCount) {
       // Its important to insert overlays and tooltips seperately and in the same order, to avoid z-index issue.
@@ -252,18 +255,19 @@ class WebpageContentScript {
         );
       });
 
-      frameElements.forEach((frame, index) => {
-        const tooltip = this.insertTooltip(
-          frame,
-          visibleIFrameCount,
-          hiddenIFrameCount,
-          response
-        );
+      // @todo Hovered frame should be part of the frameElements.
+      const iframeForTooltip = this.hoveredFrame
+        ? this.hoveredFrame
+        : frameElements[0];
 
-        if (0 === index) {
-          firstToolTip = tooltip;
-        }
-      });
+      firstToolTip = this.insertTooltip(
+        iframeForTooltip,
+        visibleIFrameCount,
+        hiddenIFrameCount,
+        response
+      );
+
+      frameWithTooltip = iframeForTooltip;
     } else if (numberOfFrames === hiddenIFrameCount) {
       const frame = frameElements[0];
 
@@ -298,6 +302,7 @@ class WebpageContentScript {
         const { width, height } = frame.getBoundingClientRect();
 
         if (!(height === 0 || width === 0)) {
+          frameWithTooltip = frame;
           const tooltip = this.insertTooltip(
             frame,
             visibleIFrameCount,
@@ -314,7 +319,8 @@ class WebpageContentScript {
     if (
       firstToolTip &&
       !this.isHoveringOverPage &&
-      frameToScrollTo.clientWidth
+      frameToScrollTo.clientWidth &&
+      !elementIsVisibleInViewport(frameWithTooltip, true)
     ) {
       (firstToolTip as HTMLElement).scrollIntoView({
         behavior: 'instant',
@@ -336,6 +342,8 @@ class WebpageContentScript {
       target.classList.contains(TOOLTIP_CLASS) ||
       target.classList.contains('ps-tooltip-info-toggle-btn') ||
       target.classList.contains('ps-enable-pointer-event');
+
+    this.hoveredFrame = null;
 
     if (isTooltipElement) {
       return;
@@ -367,6 +375,7 @@ class WebpageContentScript {
     }
 
     this.bodyHoverStateSent = false;
+    this.hoveredFrame = target;
 
     const frame = target as HTMLIFrameElement;
     let srcAttribute = frame.getAttribute('src');
