@@ -48,6 +48,7 @@ describe('App', () => {
       setSelectedFrame: noop,
       allowedNumberOfTabs: 'single',
       setIsInspecting: noop,
+      setCanStartInspecting: noop,
     });
     jest.spyOn(console, 'warn').mockImplementation(() => undefined);
     globalThis.chrome = {

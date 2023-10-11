@@ -27,7 +27,7 @@ import { useFilterManagementStore } from '../stateProviders/filterManagementStor
 import { getCurrentTabId } from '../../../utils/getCurrentTabId';
 
 interface Response {
-  attributes: { iframeOrigin: string | null };
+  attributes: { iframeOrigin: string | null; setInPage?: boolean };
 }
 
 const useFrameOverlay = () => {
@@ -44,6 +44,8 @@ const useFrameOverlay = () => {
     tabFrames,
     isFrameSelectedFromDevTool,
     setIsFrameSelectedFromDevTool,
+    setCanStartInspecting,
+    canStartInspecting,
   } = useCookieStore(({ state, actions }) => ({
     setContextInvalidated: actions.setContextInvalidated,
     isInspecting: state.isInspecting,
@@ -55,6 +57,8 @@ const useFrameOverlay = () => {
     tabFrames: state.tabFrames,
     isFrameSelectedFromDevTool: state.isFrameSelectedFromDevTool,
     setIsFrameSelectedFromDevTool: actions.setIsFrameSelectedFromDevTool,
+    setCanStartInspecting: actions.setCanStartInspecting,
+    canStartInspecting: state.canStartInspecting,
   }));
 
   const { filteredCookies } = useFilterManagementStore(({ state }) => ({
@@ -89,6 +93,33 @@ const useFrameOverlay = () => {
     });
     setConnectedToPort(true);
   }, [setIsFrameSelectedFromDevTool, setIsInspecting, setSelectedFrame]);
+
+  const listenIfContentScriptSet = useCallback(
+    async (
+      request: { [key: string]: boolean },
+      sender: chrome.runtime.MessageSender
+    ) => {
+      const tabId = await getCurrentTabId();
+      if (request.setInPage && tabId === sender?.tab?.id?.toString()) {
+        setCanStartInspecting(true);
+      }
+    },
+    [setCanStartInspecting]
+  );
+
+  useEffect(() => {
+    if (!canStartInspecting && isCurrentTabBeingListenedTo) {
+      setCanStartInspecting(true);
+    }
+  }, [canStartInspecting, setCanStartInspecting, isCurrentTabBeingListenedTo]);
+
+  useEffect(() => {
+    chrome.runtime.onMessage.addListener(listenIfContentScriptSet);
+
+    return () => {
+      chrome.runtime.onMessage.removeListener(listenIfContentScriptSet);
+    };
+  }, [listenIfContentScriptSet]);
 
   const sessionStoreChangedListener = useCallback(
     async (changes: { [key: string]: chrome.storage.StorageChange }) => {
@@ -197,6 +228,7 @@ const useFrameOverlay = () => {
       }
     })();
   }, [
+    setCanStartInspecting,
     selectedFrame,
     filteredCookies,
     isInspecting,

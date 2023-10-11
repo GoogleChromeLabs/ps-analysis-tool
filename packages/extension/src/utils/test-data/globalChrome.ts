@@ -48,5 +48,9 @@ export default {
     onConnect: {
       addListener: () => '',
     },
+    onMessage: {
+      addListener: () => '',
+      removeListener: () => '',
+    },
   },
 } as unknown as typeof chrome;

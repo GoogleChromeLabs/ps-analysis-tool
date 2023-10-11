@@ -46,6 +46,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
     isCurrentTabBeingListenedTo,
     isInspecting,
     setIsInspecting,
+    canStartInspecting,
   } = useCookieStore(({ state, actions }) => ({
     setSelectedFrame: actions.setSelectedFrame,
     tabFrames: state.tabFrames,
@@ -53,6 +54,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
     isInspecting: state.isInspecting,
     setIsInspecting: actions.setIsInspecting,
+    canStartInspecting: state.canStartInspecting,
   }));
 
   const [accordionState, setAccordionState] =
@@ -232,9 +234,10 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
     [setIndex, setSelectedFrame]
   );
 
-  const showInspectButton = tabFrames
-    ? Boolean(Object.keys(tabFrames).length)
-    : false;
+  const showInspectButton =
+    tabFrames && canStartInspecting
+      ? Boolean(Object.keys(tabFrames).length)
+      : false;
 
   return (
     <div className="overflow-auto flex h-full">

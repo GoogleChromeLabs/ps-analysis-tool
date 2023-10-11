@@ -48,6 +48,7 @@ export interface CookieStoreContext {
     isInspecting: boolean;
     contextInvalidated: boolean;
     isFrameSelectedFromDevTool: boolean;
+    canStartInspecting: boolean;
   };
   actions: {
     setSelectedFrame: (key: string | null) => void;
@@ -58,6 +59,7 @@ export interface CookieStoreContext {
     setIsFrameSelectedFromDevTool: React.Dispatch<
       React.SetStateAction<boolean>
     >;
+    setCanStartInspecting: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
@@ -74,6 +76,7 @@ const initialState: CookieStoreContext = {
     isInspecting: false,
     contextInvalidated: false,
     isFrameSelectedFromDevTool: false,
+    canStartInspecting: false,
   },
   actions: {
     setSelectedFrame: noop,
@@ -82,6 +85,7 @@ const initialState: CookieStoreContext = {
     setIsInspecting: noop,
     getCookiesSetByJavascript: noop,
     setContextInvalidated: noop,
+    setCanStartInspecting: noop,
   },
 };
 
@@ -102,6 +106,8 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [allowedNumberOfTabs, setAllowedNumberOfTabs] = useState<string | null>(
     null
   );
+
+  const [canStartInspecting, setCanStartInspecting] = useState<boolean>(false);
 
   const [tabCookies, setTabCookies] =
     useState<CookieStoreContext['state']['tabCookies']>(null);
@@ -486,6 +492,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           contextInvalidated,
           isInspecting,
           isFrameSelectedFromDevTool,
+          canStartInspecting,
         },
         actions: {
           setSelectedFrame,
@@ -494,6 +501,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           setIsInspecting,
           setContextInvalidated,
           setIsFrameSelectedFromDevTool,
+          setCanStartInspecting,
         },
       }}
     >
