@@ -1,6 +1,6 @@
 {
   "name": "@cookie-analysis-tool/cli-dashboard",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Dashboard for visualizing cli analysis output",
   "repository": {
     "type": "git",

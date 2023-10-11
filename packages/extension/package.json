@@ -1,6 +1,6 @@
 {
   "name": "@cookie-analysis-tool/extension",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Chrome extension for cookie analysis",
   "repository": {
     "type": "git",
