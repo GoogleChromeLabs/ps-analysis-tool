@@ -82,10 +82,9 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
       ) : (
         <div className="flex flex-col h-full w-full">
           <Button
-            extraClasses="absolute top-0 right-0 mr-2 mt-2"
+            extraClasses="absolute top-0 right-0 mr-2 mt-2 text-sm"
             text="Download Report"
             onClick={downloadReport}
-            variant="small"
           />
           <CookiesLanding
             tabCookies={tabCookies}
