@@ -45,6 +45,7 @@ const useFrameOverlay = () => {
     isFrameSelectedFromDevTool,
     setIsFrameSelectedFromDevTool,
     setCanStartInspecting,
+    canStartInspecting,
   } = useCookieStore(({ state, actions }) => ({
     setContextInvalidated: actions.setContextInvalidated,
     isInspecting: state.isInspecting,
@@ -57,6 +58,7 @@ const useFrameOverlay = () => {
     isFrameSelectedFromDevTool: state.isFrameSelectedFromDevTool,
     setIsFrameSelectedFromDevTool: actions.setIsFrameSelectedFromDevTool,
     setCanStartInspecting: actions.setCanStartInspecting,
+    canStartInspecting: state.canStartInspecting,
   }));
 
   const { filteredCookies } = useFilterManagementStore(({ state }) => ({
@@ -104,6 +106,12 @@ const useFrameOverlay = () => {
     },
     [setCanStartInspecting]
   );
+
+  useEffect(() => {
+    if (!canStartInspecting && isCurrentTabBeingListenedTo) {
+      setCanStartInspecting(true);
+    }
+  }, [canStartInspecting, setCanStartInspecting, isCurrentTabBeingListenedTo]);
 
   useEffect(() => {
     chrome.runtime.onMessage.addListener(listenIfContentScriptSet);
@@ -220,6 +228,7 @@ const useFrameOverlay = () => {
       }
     })();
   }, [
+    setCanStartInspecting,
     selectedFrame,
     filteredCookies,
     isInspecting,
