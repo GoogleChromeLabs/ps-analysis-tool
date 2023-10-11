@@ -74,7 +74,7 @@ const CookiesLanding = ({
           showHorizontalMatrix={showHorizontalMatrix}
           associatedCookiesCount={associatedCookiesCount}
         />
-        {children && <div className="mt-10">{children}</div>}
+        {children && <div className="mt-8">{children}</div>}
       </div>
     </div>
   );
