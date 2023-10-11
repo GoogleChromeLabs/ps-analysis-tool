@@ -48,7 +48,7 @@ const CookiesLandingContainer = ({
       associatedCookiesCount={Object.values(tabFrames).length}
     >
       <div className="flex flex-col">
-        <h3 className="text-sm font-bold text-darkest-gray dark:text-bright-gray uppercase">
+        <h3 className="text-xs font-bold text-darkest-gray dark:text-bright-gray uppercase">
           Comparative Insights
         </h3>
         <div className="pt-2">
@@ -65,6 +65,7 @@ const CookiesLandingContainer = ({
             count={Object.values(affectedCookies).length}
             allowExpand={false}
             highlightTitle={true}
+            capitalizeTitle={true}
           />
         </div>
       </div>

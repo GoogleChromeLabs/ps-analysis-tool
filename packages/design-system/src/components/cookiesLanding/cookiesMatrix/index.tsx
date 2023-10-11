@@ -46,6 +46,7 @@ interface CookiesMatrixProps {
   associatedCookiesCount?: number | null;
   allowExpand?: boolean;
   highlightTitle?: boolean;
+  capitalizeTitle?: boolean;
 }
 
 interface LegendData {
@@ -90,6 +91,7 @@ const CookiesMatrix = ({
   associatedCookiesCount = null,
   allowExpand = true,
   highlightTitle = false,
+  capitalizeTitle = false,
 }: CookiesMatrixProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -135,9 +137,9 @@ const CookiesMatrix = ({
         <div className="flex gap-x-5 justify-between border-b border-bright-gray dark:border-quartz">
           <div className="pb-3 flex flex-col gap-0.5">
             <h4
-              className={`flex items-center gap-1 flex-1 grow text-xs font-bold text-darkest-gray dark:text-bright-gray uppercase ${
+              className={`flex items-center gap-1 flex-1 grow text-xs font-bold text-darkest-gray dark:text-bright-gray ${
                 highlightTitle ? 'text-red-500 dark:text-red-500' : ''
-              }`}
+              } ${capitalizeTitle ? 'capitalize' : 'uppercase'}`}
             >
               <span>{title}</span>
               {showInfoIcon && (
