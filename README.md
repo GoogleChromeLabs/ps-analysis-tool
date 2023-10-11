@@ -70,8 +70,8 @@ The final goal of this tool is to make it easy to understand the role of 3P cook
 
 The Chrome extension provides capabilities surfaced via the extension pop-up, the Side Panel, and as Devtools panel. The CLI implementation parses a sitemap provided as input and outputs a JSON file listing all cookies set while navigating through the URLs in the sitemap. Follow the following steps to get the extension installed in your browser. 
 
-- Clone this Cookie Analysis Tool Repository
-- `npm install` Install all dependencies
+- Clone this Privacy Sandbox Analysis Tool Repository
+- Run `npm install` to install all dependencies
 
 ### Extension (from source)
 
