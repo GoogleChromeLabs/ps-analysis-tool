@@ -59,7 +59,7 @@ const CookiesLandingContainer = ({
             )}
             tabFrames={tabFrames}
             title="Affected Cookies"
-            description="Following are the insights about cookies that will be affected by 3P cookie depreciation."
+            description=""
             showInfoIcon={false}
             showHorizontalMatrix={false}
             count={Number(Object.values(affectedCookies).length)}
