@@ -13,19 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/**
+ * External dependencies.
+ */
 import { getDomain } from 'tldts';
-import { Cookie, RequestData, ResponseData } from './types';
 
 /**
- *
- * @param responseMap
- * @param requestMap
- * @param frameIdUrlMap
- * @param mainFrameId
- * @param pageUrl
+ * Internal dependencies.
  */
-export function parseNetworkDataToCookieData(
+import { Cookie, RequestData, ResponseData } from './types';
+
+export const parseNetworkDataToCookieData = (
   responseMap: Map<string, ResponseData>,
   requestMap: Map<string, RequestData>,
   frameIdUrlMap: Map<string, string>,
@@ -38,7 +36,7 @@ export function parseNetworkDataToCookieData(
       [key: string]: Cookie;
     };
   };
-} {
+} => {
   const frameIdNetworkDataMap = new Map<
     string,
     { responses: ResponseData[]; requests: RequestData[] }
@@ -135,4 +133,4 @@ export function parseNetworkDataToCookieData(
   }
 
   return Object.fromEntries(frameUrlCookies);
-}
+};

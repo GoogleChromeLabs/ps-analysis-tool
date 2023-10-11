@@ -67,12 +67,14 @@ export const initialize = async () => {
     spinnies.add('cookie-spinner', {
       text: 'Analysing cookies on first page visit',
     });
+
     const [cookieData] = await analyzeCookiesUrls(
       [url],
       isHeadless,
       DELAY_TIME,
       cookieDictionary
     );
+
     spinnies.succeed('cookie-spinner', {
       text: 'Done analyzing cookies.',
     });
@@ -80,7 +82,9 @@ export const initialize = async () => {
     spinnies.add('technology-spinner', {
       text: 'Analysing technologies',
     });
+
     const technologyData = await analyzeTechnologiesUrlsInBatches([url]);
+
     spinnies.succeed('technology-spinner', {
       text: 'Done analyzing technologies.',
     });
@@ -90,6 +94,7 @@ export const initialize = async () => {
       cookieData: cookieData.cookieData,
       technologyData,
     };
+
     await ensureFile(directory + '/out.json');
     await writeFile(directory + '/out.json', JSON.stringify(output, null, 4));
 
@@ -108,10 +113,13 @@ export const initialize = async () => {
     spinnies.add('sitemap-spinner', {
       text: 'Parsing Sitemap',
     });
+
     const urls: Array<string> = await Utility.getUrlsFromSitemap(sitemapURL);
+
     spinnies.succeed('sitemap-spinner', {
       text: 'Done parsing Sitemap',
     });
+
     const prefix = Utility.generatePrefix([...urls].shift() ?? 'untitled');
     const directory = `./out/${prefix}`;
     const userInput: any = await Utility.askUserInput(
@@ -121,6 +129,7 @@ export const initialize = async () => {
     let numberOfUrls: number = isNaN(userInput)
       ? urls.length
       : parseInt(userInput);
+
     numberOfUrls = numberOfUrls < urls.length ? numberOfUrls : urls.length;
 
     const urlsToProcess = urls.splice(0, numberOfUrls);
@@ -140,6 +149,7 @@ export const initialize = async () => {
       urlsToProcess,
       3
     );
+
     spinnies.succeed('technology-spinner', {
       text: 'Done analysing technologies',
     });

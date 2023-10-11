@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/**
+ * Internal dependencies.
+ */
 import promptly from 'promptly';
 import Sitemapper from 'sitemapper';
 import { Cookie } from '../../types';
@@ -175,6 +177,7 @@ export default class Utility {
   /**
    * Parse cookie line.
    * @param cookieLine
+   * @returns Cookie
    */
   public static parseCookieLine(cookieLine: string): Cookie {
     const regex = /[;]{1,9}/gm;
