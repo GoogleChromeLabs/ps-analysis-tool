@@ -135,7 +135,7 @@ const CookiesMatrix = ({
     <div className="w-full" data-testid="cookies-matrix">
       <div>
         <div className="flex gap-x-5 justify-between border-b border-bright-gray dark:border-quartz">
-          <div className="pb-3 flex flex-col gap-0.5">
+          <div className="pb-3 flex flex-col gap-1.5">
             <h4
               className={`flex items-center gap-1 flex-1 grow text-xs font-bold text-darkest-gray dark:text-bright-gray ${
                 highlightTitle ? 'text-red-500 dark:text-red-500' : ''
