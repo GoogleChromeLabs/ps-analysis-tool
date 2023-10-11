@@ -83,6 +83,11 @@ export const reportDownloader = (
     'categories',
   ];
 
+  const cookieDataToBeProcessed = report.cookieData;
+  const technologyDataToBeProcessed = selectedPageUrl
+    ? report.technologyData
+    : report.technologyData[0];
+
   const summaryDataHeader = ['type', 'value'];
 
   let cookieDataValues = '';
@@ -105,84 +110,88 @@ export const reportDownloader = (
 
   newReport.affectedCookies = {};
 
-  Object.keys(report.cookieData).forEach((frameName) => {
+  Object.keys(cookieDataToBeProcessed).forEach((frameName) => {
     newReport.affectedCookies[frameName] = {};
-    Object.keys(report.cookieData[frameName].frameCookies).forEach((cookie) => {
-      const unSanitisedCookie =
-        report.cookieData[frameName].frameCookies[cookie];
-      const sanitizedData = {
-        name: unSanitisedCookie.name,
-        value: unSanitisedCookie.value.includes(',')
-          ? `"${unSanitisedCookie.value}"`
-          : unSanitisedCookie.value,
-        domain: unSanitisedCookie.domain,
-        path: unSanitisedCookie.path,
-        expires: unSanitisedCookie.expires,
-        httpOnly: unSanitisedCookie.httpOnly,
-        scope: unSanitisedCookie?.isFirstParty ? 'First Party' : 'Third Party',
-        secure: unSanitisedCookie.secure,
-        sameSite: unSanitisedCookie.sameSite,
-        platform: unSanitisedCookie.platform,
-        category: unSanitisedCookie.category,
-        isCookieSet: !unSanitisedCookie.isBlocked,
-        gdprPortal: unSanitisedCookie?.GDPR || 'NA',
-      };
-
-      cookieDataValues =
-        cookieDataValues + Object.values(sanitizedData).join(',') + '\r\n';
-
-      if (unSanitisedCookie?.isFirstParty) {
-        firstPartyCookies++;
-      } else {
-        thirdPartyCookies++;
-      }
-
-      switch (unSanitisedCookie.category) {
-        case 'Marketing':
-          marketingCookies++;
-          break;
-        case 'Analytics':
-          analyticsCookies++;
-          break;
-        case 'Uncategorized':
-          uncategorisedCookies++;
-          break;
-        case 'Functional':
-          functionalCookies++;
-          break;
-        default:
-          break;
-      }
-
-      if (unSanitisedCookie.isBlocked) {
-        affectedCookiesCount = affectedCookiesCount + 1;
-
-        newReport.affectedCookies[frameName] = {
-          ...newReport.affectedCookies[frameName],
-          [cookie]: report.cookieData[frameName].frameCookies[cookie],
+    Object.keys(cookieDataToBeProcessed[frameName].frameCookies).forEach(
+      (cookie) => {
+        const unSanitisedCookie =
+          cookieDataToBeProcessed[frameName].frameCookies[cookie];
+        const sanitizedData = {
+          name: unSanitisedCookie.name,
+          value: unSanitisedCookie.value.includes(',')
+            ? `"${unSanitisedCookie.value}"`
+            : unSanitisedCookie.value,
+          domain: unSanitisedCookie.domain,
+          path: unSanitisedCookie.path,
+          expires: unSanitisedCookie.expires,
+          httpOnly: unSanitisedCookie.httpOnly,
+          scope: unSanitisedCookie?.isFirstParty
+            ? 'First Party'
+            : 'Third Party',
+          secure: unSanitisedCookie.secure,
+          sameSite: unSanitisedCookie.sameSite,
+          platform: unSanitisedCookie.platform,
+          category: unSanitisedCookie.category,
+          isCookieSet: !unSanitisedCookie.isBlocked,
+          gdprPortal: unSanitisedCookie?.GDPR || 'NA',
         };
+
+        cookieDataValues =
+          cookieDataValues + Object.values(sanitizedData).join(',') + '\r\n';
+
+        if (unSanitisedCookie?.isFirstParty) {
+          firstPartyCookies++;
+        } else {
+          thirdPartyCookies++;
+        }
+
         switch (unSanitisedCookie.category) {
           case 'Marketing':
-            affectedMarketingCookies++;
+            marketingCookies++;
             break;
           case 'Analytics':
-            affectedAnalyticsCookies++;
+            analyticsCookies++;
             break;
           case 'Uncategorized':
-            affectedUncategorisedCookies++;
+            uncategorisedCookies++;
             break;
           case 'Functional':
-            affectedFunctionalCookies++;
+            functionalCookies++;
             break;
           default:
             break;
         }
-        affectedCookiesDataValues =
-          affectedCookiesDataValues +
-          Object.values(sanitizedData).join(',') +
-          '\r\n';
+
+        if (unSanitisedCookie.isBlocked) {
+          affectedCookiesCount = affectedCookiesCount + 1;
+
+          newReport.affectedCookies[frameName] = {
+            ...newReport.affectedCookies[frameName],
+            [cookie]: cookieDataToBeProcessed[frameName].frameCookies[cookie],
+          };
+          switch (unSanitisedCookie.category) {
+            case 'Marketing':
+              affectedMarketingCookies++;
+              break;
+            case 'Analytics':
+              affectedAnalyticsCookies++;
+              break;
+            case 'Uncategorized':
+              affectedUncategorisedCookies++;
+              break;
+            case 'Functional':
+              affectedFunctionalCookies++;
+              break;
+            default:
+              break;
+          }
+          affectedCookiesDataValues =
+            affectedCookiesDataValues +
+            Object.values(sanitizedData).join(',') +
+            '\r\n';
+        }
       }
-    });
+    );
 
     totalCookiesCount =
       totalCookiesCount + report.cookieData[frameName].cookiesCount;
@@ -193,7 +202,7 @@ export const reportDownloader = (
   const affectedCookieDataCSVContent =
     cookieDataHeader + '\n' + affectedCookiesDataValues;
 
-  report.technologyData.forEach((technology) => {
+  technologyDataToBeProcessed.forEach((technology) => {
     const singleTechnology: SingleTechnology = {
       name: technology?.name,
       description: technology?.description?.replaceAll(',', ''),

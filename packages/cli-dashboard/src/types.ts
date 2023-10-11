@@ -56,5 +56,5 @@ export type CompleteJson = {
       };
     };
   };
-  technologyData: TechnologyData[];
+  technologyData: [TechnologyData[]];
 };
