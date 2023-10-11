@@ -27,7 +27,7 @@ interface ArrowUpHandlerProps {
   >;
   selectedFrame: string | null;
   setIndex: (index: number) => void;
-  setSelectedFrame: React.Dispatch<React.SetStateAction<string | null>>;
+  setSelectedFrame: (key: string | null) => void;
   selectedIndex: number;
   keys: string[];
 }
