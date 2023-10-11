@@ -51,7 +51,7 @@ const CookiesLandingContainer = ({
         <h3 className="text-xs font-bold text-darkest-gray dark:text-bright-gray uppercase">
           Comparative Insights
         </h3>
-        <div className="pt-2">
+        <div className="pt-4">
           <CookiesMatrix
             tabCookies={affectedCookies}
             cookiesStatsComponents={prepareCookieStatsComponents(
