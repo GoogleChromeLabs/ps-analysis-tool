@@ -68,7 +68,6 @@ export const reportDownloader = (
     'httpOnly',
     'scope',
     'secure',
-    'session',
     'sameSite',
     'platform',
     'category',
