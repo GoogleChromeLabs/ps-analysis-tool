@@ -80,7 +80,7 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
       {selectedFrameUrl ? (
         <CookiesListing selectedFrameUrl={selectedFrameUrl} />
       ) : (
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col h-full w-full">
           <Button
             extraClasses="absolute top-0 right-0 mr-2 mt-2"
             text="Download Report"
