@@ -16,6 +16,7 @@
 export { default as compareFrameSource } from './compareFrameSource';
 export { default as getAllowedFeatures } from './getAllowedFeatures';
 export { default as getFrameAttributes } from './getFrameAttributes';
+export { default as getFrameCount } from './getFrameCount';
 export { default as getFrameOrigin } from './getFrameOrigin';
 export { default as getFrameType } from './getFrameType';
 export { default as getTooltipInfoData } from './getTooltipInfoData';

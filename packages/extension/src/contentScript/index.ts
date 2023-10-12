@@ -29,7 +29,11 @@ import type { ResponseType } from './types';
 import { CookieStore } from '../localStore';
 import { TOOLTIP_CLASS } from './constants';
 import { WEBPAGE_PORT_NAME } from '../constants';
-import { isElementVisibleInViewport } from './utils';
+import {
+  isElementVisibleInViewport,
+  getFrameCount,
+  isFrameHidden,
+} from './utils';
 import './style.css';
 
 /**
@@ -238,6 +242,91 @@ class WebpageContentScript {
   }
 
   /**
+   * Insert popovers for all visible frames.
+   * @param {HTMLElement[]} frameElements An array of frame elements.
+   * @param {number} visibleIFrameCount The number of visible frames.
+   * @param {number} hiddenIFrameCount The number of hidden frames.
+   * @param {number} response Response.
+   * @returns {Record<string, HTMLElement | null>} Popover HTMLElement.
+   */
+  insertPopoversConditionHandler(
+    frameElements: HTMLElement[],
+    visibleIFrameCount: number,
+    hiddenIFrameCount: number,
+    response: ResponseType
+  ): Record<string, HTMLElement | null> {
+    const popoverElement: Record<string, HTMLElement | null> = {
+      frameWithTooltip: null,
+      firstToolTip: null,
+    };
+
+    // All frames are visible.
+    if (0 === hiddenIFrameCount) {
+      // Its important to insert overlays and tooltips seperately and in the same order, to avoid z-index issue.
+      frameElements.forEach((frame) => {
+        this.insertOverlay(frame);
+      });
+
+      // @todo Hovered frame should be part of the frameElements.
+      const iframeForTooltip = this.hoveredFrame
+        ? this.hoveredFrame
+        : frameElements[0];
+
+      popoverElement.firstToolTip = this.insertTooltip(
+        iframeForTooltip,
+        visibleIFrameCount,
+        hiddenIFrameCount,
+        response
+      );
+
+      popoverElement.frameWithTooltip = iframeForTooltip;
+
+      return popoverElement;
+    }
+
+    // All frames are hidden.
+    if (0 === visibleIFrameCount) {
+      const frame = frameElements[0];
+
+      this.insertOverlay(frame);
+      this.insertTooltip(
+        frame,
+        visibleIFrameCount,
+        hiddenIFrameCount,
+        response
+      );
+
+      return popoverElement;
+    }
+
+    // Its important to insert overlays and tooltips seperately and in the same order, to avoid z-index issue.
+    frameElements.forEach((frame) => {
+      if (!isFrameHidden(frame)) {
+        this.insertOverlay(frame);
+      }
+    });
+
+    frameElements.forEach((frame, index) => {
+      if (!isFrameHidden(frame)) {
+        popoverElement.frameWithTooltip = frame;
+
+        const tooltip = this.insertTooltip(
+          frame,
+          visibleIFrameCount,
+          hiddenIFrameCount,
+          response
+        );
+
+        if (0 === index) {
+          popoverElement.firstToolTip = tooltip;
+        }
+      }
+    });
+
+    return popoverElement;
+  }
+
+  /**
    * Insert popovers.
    * @param {ResponseType} response - The incoming message/response from the port.
    */
@@ -253,7 +342,8 @@ class WebpageContentScript {
     }
 
     const frameElements = findSelectedFrameElements(response.selectedFrame);
-    const numberOfFrames = frameElements.length;
+    const frameCount = getFrameCount(frameElements);
+    const numberOfFrames = frameCount['numberOfFrames'];
 
     // Remove previous frames.
     this.removeAllPopovers();
@@ -262,77 +352,19 @@ class WebpageContentScript {
       return;
     }
 
-    let hiddenIFrameCount = 0;
-    let firstToolTip: HTMLElement | null = null;
     const frameToScrollTo = frameElements[0];
+    const visibleIFrameCount = frameCount['numberOfVisibleFrames'];
+    const hiddenIFrameCount = frameCount['numberOfHiddenFrames'];
 
-    for (let i = 0; i < numberOfFrames; i++) {
-      const { width, height } = frameElements[i].getBoundingClientRect();
-      if (height === 0 || width === 0) {
-        hiddenIFrameCount++;
-      }
-    }
+    const popoverElement = this.insertPopoversConditionHandler(
+      frameElements,
+      visibleIFrameCount,
+      hiddenIFrameCount,
+      response
+    );
 
-    const visibleIFrameCount = numberOfFrames - hiddenIFrameCount;
-    let frameWithTooltip = null;
-
-    if (0 === hiddenIFrameCount) {
-      // Its important to insert overlays and tooltips seperately and in the same order, to avoid z-index issue.
-      frameElements.forEach((frame) => {
-        this.insertOverlay(frame);
-      });
-
-      // @todo Hovered frame should be part of the frameElements.
-      const iframeForTooltip = this.hoveredFrame
-        ? this.hoveredFrame
-        : frameElements[0];
-
-      firstToolTip = this.insertTooltip(
-        iframeForTooltip,
-        visibleIFrameCount,
-        hiddenIFrameCount,
-        response
-      );
-
-      frameWithTooltip = iframeForTooltip;
-    } else if (numberOfFrames === hiddenIFrameCount) {
-      const frame = frameElements[0];
-
-      this.insertOverlay(frame);
-      this.insertTooltip(
-        frame,
-        visibleIFrameCount,
-        hiddenIFrameCount,
-        response
-      );
-    } else {
-      // Its important to insert overlays and tooltips seperately and in the same order, to avoid z-index issue.
-      frameElements.forEach((frame) => {
-        const { width, height } = frame.getBoundingClientRect();
-
-        if (!(height === 0 || width === 0)) {
-          this.insertOverlay(frame);
-        }
-      });
-
-      frameElements.forEach((frame, index) => {
-        const { width, height } = frame.getBoundingClientRect();
-
-        if (!(height === 0 || width === 0)) {
-          frameWithTooltip = frame;
-          const tooltip = this.insertTooltip(
-            frame,
-            visibleIFrameCount,
-            hiddenIFrameCount,
-            response
-          );
-
-          if (0 === index) {
-            firstToolTip = tooltip;
-          }
-        }
-      });
-    }
+    const firstToolTip = popoverElement['firstToolTip'];
+    const frameWithTooltip = popoverElement['frameWithTooltip'];
 
     if (
       firstToolTip &&
