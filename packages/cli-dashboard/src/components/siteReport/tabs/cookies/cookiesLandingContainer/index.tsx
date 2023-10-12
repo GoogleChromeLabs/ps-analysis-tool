@@ -34,7 +34,7 @@ interface CookiesLandingContainerProps {
   tabFrames: TabFrames;
   tabCookies: TabCookies;
   affectedCookies: TabCookies;
-  downloadReport: () => void;
+  downloadReport: (() => void) | undefined;
 }
 
 const CookiesLandingContainer = ({
@@ -71,13 +71,15 @@ const CookiesLandingContainer = ({
             capitalizeTitle={true}
           />
         </div>
-        <div className="pt-2 flex justify-center items-center">
-          <Button
-            extraClasses="w-fit text-sm flex justify-center items-center"
-            text="Download Report"
-            onClick={downloadReport}
-          />
-        </div>
+        {downloadReport && (
+          <div className="pt-5 flex justify-center items-center">
+            <Button
+              extraClasses="w-fit text-sm flex justify-center items-center"
+              text="Download Report"
+              onClick={downloadReport}
+            />
+          </div>
+        )}
       </div>
     </CookiesLanding>
   );
