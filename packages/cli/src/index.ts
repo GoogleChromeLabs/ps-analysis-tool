@@ -28,7 +28,6 @@ import { exec } from 'child_process';
  */
 import Utility from './utils/utility';
 import { fetchDictionary } from './utils/fetchCookieDictionary';
-import { delay } from './utils';
 import { analyzeCookiesUrls } from './procedures/analyzeCookieUrls';
 import { analyzeCookiesUrlsInBatches } from './procedures/analyzeCookieUrlsInBatches';
 import { analyzeTechnologiesUrlsInBatches } from './procedures/analyzeTechnologiesUrlsInBatches';
@@ -98,15 +97,17 @@ export const initialize = async () => {
     await ensureFile(directory + '/out.json');
     await writeFile(directory + '/out.json', JSON.stringify(output, null, 4));
 
-    exec('npm run cli-dashboard:dev');
-
-    await delay(3000);
-
-    console.log(
-      `Report is being served at the URL: http://localhost:9000?path=${encodeURIComponent(
-        directory + '/out.json'
-      )}`
-    );
+    exec('npm run cli-dashboard:dev', (error) => {
+      if (!error) {
+        console.log(
+          `Report is being served at the URL: http://localhost:9000?path=${encodeURIComponent(
+            directory + '/out.json'
+          )}&type=sitemap`
+        );
+      } else {
+        console.error('Error starting server');
+      }
+    });
   } else {
     const spinnies = new Spinnies();
 
@@ -165,15 +166,17 @@ export const initialize = async () => {
     await ensureFile(directory + '/out.json');
     await writeFile(directory + '/out.json', JSON.stringify(result, null, 4));
 
-    exec('npm run cli-dashboard:dev');
-
-    await delay(3000);
-
-    console.log(
-      `Report is being served at the URL: http://localhost:9000?path=${encodeURIComponent(
-        directory + '/out.json'
-      )}&type=sitemap`
-    );
+    exec('npm run cli-dashboard:dev', (error) => {
+      if (!error) {
+        console.log(
+          `Report is being served at the URL: http://localhost:9000?path=${encodeURIComponent(
+            directory + '/out.json'
+          )}&type=sitemap`
+        );
+      } else {
+        console.error('Error starting server');
+      }
+    });
   }
 };
 
