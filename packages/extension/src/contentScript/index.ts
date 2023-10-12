@@ -137,7 +137,9 @@ class WebpageContentScript {
     );
 
     const updatePosition = () => {
-      setOverlayPosition(overlay, frame);
+      if (elementIsVisibleInViewport(frame)) {
+        setOverlayPosition(overlay, frame);
+      }
     };
 
     this.addEventListerOnScroll(updatePosition);
@@ -160,8 +162,10 @@ class WebpageContentScript {
     );
 
     const updatePosition = () => {
-      const isHidden = frame ? !frame.clientWidth : false;
-      setTooltipPosition(tooltip, frame, isHidden, response.selectedFrame);
+      if (elementIsVisibleInViewport(frame)) {
+        const isHidden = frame ? !frame.clientWidth : false;
+        setTooltipPosition(tooltip, frame, isHidden, response.selectedFrame);
+      }
     };
 
     this.addEventListerOnScroll(updatePosition);
