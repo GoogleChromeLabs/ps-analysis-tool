@@ -204,7 +204,7 @@ export const initialize = async () => {
         console.log(
           `Report is being served at the URL: http://localhost:9000?path=${encodeURIComponent(
             directory + '/out.json'
-          )}&type=sitemap`
+          )}`
         );
       } else {
         console.error('Error starting server');
