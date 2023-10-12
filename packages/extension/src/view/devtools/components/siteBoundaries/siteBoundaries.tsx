@@ -29,14 +29,14 @@ const SiteBoundaries = () => {
   return (
     <>
       <LandingPage title="Site Boundaries" isLoading={loading}>
-        <div className="px-4 pt-6 pb-4 h-screen w-full">
+        <div className="px-4 pt-6 pb-4 h-[82vh] w-full">
           <iframe
             src="https://privacysandbox.info/en/privacy-sandbox/strengthen-privacy-boundaries"
             height="100%"
             onLoad={() => {
               setLoading(false);
             }}
-            className="w-full md:w-[70%]"
+            className="w-full md:m-auto md:w-[70%]"
           />
         </div>
       </LandingPage>

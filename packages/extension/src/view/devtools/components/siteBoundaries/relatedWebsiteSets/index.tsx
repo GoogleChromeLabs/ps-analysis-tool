@@ -34,7 +34,7 @@ const RelatedWebsiteSets = () => {
   return (
     <LandingPage title={pageTitle} isLoading={!pageTitle}>
       <div
-        className="px-4 max-w-2xl h-full overflow-auto divide-y divide-gray-200 dark:divide-gray-500"
+        className="px-4 max-w-2xl h-fit overflow-auto divide-y divide-american-silver dark:divide-quartz"
         data-testid="related-website-sets-content"
       >
         <InfoCard
