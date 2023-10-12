@@ -257,9 +257,18 @@ class WebpageContentScript {
       });
 
       // @todo Hovered frame should be part of the frameElements.
-      const iframeForTooltip = this.hoveredFrame
+      let iframeForTooltip = this.hoveredFrame
         ? this.hoveredFrame
         : frameElements[0];
+
+      if (!this.hoveredFrame) {
+        frameElements.forEach((frame) => {
+          if (elementIsVisibleInViewport(frame, true)) {
+            iframeForTooltip = frame;
+            return;
+          }
+        });
+      }
 
       firstToolTip = this.insertTooltip(
         iframeForTooltip,
@@ -302,7 +311,12 @@ class WebpageContentScript {
       frameElements.forEach((frame, index) => {
         const { width, height } = frame.getBoundingClientRect();
 
-        if (!(height === 0 || width === 0)) {
+        if (
+          !(
+            (height === 0 || width === 0) &&
+            elementIsVisibleInViewport(frame, true)
+          )
+        ) {
           frameWithTooltip = frame;
           const tooltip = this.insertTooltip(
             frame,
