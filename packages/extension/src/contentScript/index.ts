@@ -38,17 +38,37 @@ import './style.css';
 class WebpageContentScript {
   /**
    * @property {chrome.runtime.Port | null} port - The connection port.
-   * @property {boolean} isInspecting - If true, the page is currently being inspected.
-   * @property {boolean} isHoveringOverPage - If true, the mouse is currently hovering over the page.
-   * @property {boolean} bodyHoverStateSent - Keeps track if the hover state message has been sent.
-   * @property {Array<() => void>} scrollEventListeners - Array of scroll event listeners.
    */
   port: chrome.runtime.Port | null = null;
+
+  /**
+   * @property {boolean} isInspecting - If true, the page is currently being inspected.
+   */
   isInspecting = false;
+
+  /**
+   * @property {boolean} isHoveringOverPage - If true, the mouse is currently hovering over the page.
+   */
   isHoveringOverPage = false;
+
+  /**
+   * @property {boolean} bodyHoverStateSent - Keeps track if the hover state message has been sent.
+   */
   bodyHoverStateSent = false;
+
+  /**
+   * @property {Array<() => void>} scrollEventListeners - Array of scroll event listeners.
+   */
   scrollEventListeners: Array<() => void> = [];
+
+  /**
+   * @property {HTMLElement} docElement - Document element.
+   */
   docElement: HTMLElement;
+
+  /**
+   * @property {HTMLElement} hoveredFrame - Frame that is currently being hovered over.
+   */
   hoveredFrame: HTMLElement | null = null;
 
   /**
@@ -64,6 +84,8 @@ class WebpageContentScript {
 
     this.listenToConnection();
     this.setTopics();
+
+    // Message once on initialize, to let the devtool know that content script has loaded.
     if (chrome.runtime?.id) {
       chrome.runtime.sendMessage({
         setInPage: true,
@@ -85,7 +107,7 @@ class WebpageContentScript {
   }
 
   /**
-   * Adds hover event listeners to the document.
+   * Adds event listeners to the document.
    */
   addEventListeners(): void {
     document.addEventListener('mouseover', this.handleHoverEvent);
@@ -96,7 +118,7 @@ class WebpageContentScript {
   }
 
   /**
-   * Removes hover event listeners from the document.
+   * Removes event listeners from the document.
    */
   removeEventListeners(): void {
     document.removeEventListener('mouseover', this.handleHoverEvent);
@@ -108,7 +130,7 @@ class WebpageContentScript {
 
   /**
    * Handles incoming messages from the connected port.
-   * @param {ResponseType} response - The incoming message/response from the port.
+   * @param {ResponseType} response - The incoming message/response.
    */
   onMessage(response: ResponseType) {
     this.isInspecting = response.isInspecting;
@@ -123,7 +145,12 @@ class WebpageContentScript {
     }
   }
 
-  insertOverlay(frame: HTMLElement) {
+  /**
+   * Inserts overlay
+   * @param frame Frame
+   * @returns {HTMLElement |null} Overlay
+   */
+  insertOverlay(frame: HTMLElement): HTMLElement | null {
     const overlay = addOverlay(frame);
 
     const updatePosition = () => {
@@ -135,6 +162,14 @@ class WebpageContentScript {
     return overlay;
   }
 
+  /**
+   * Insert tooltip.
+   * @param {HTMLElement} frame Frame
+   * @param {number} numberOfVisibleFrames Number of visible frames.
+   * @param {number} numberOfHiddenFrames Number of hidden frames.
+   * @param {ResponseType} response Response.
+   * @returns {HTMLElement} Tooltip.
+   */
   insertTooltip(
     frame: HTMLElement,
     numberOfVisibleFrames: number,
@@ -158,12 +193,19 @@ class WebpageContentScript {
     return tooltip;
   }
 
+  /**
+   * Add event listener on scroll to update overlay and tooltip positions.
+   * @param callback Callback function to update position.
+   */
   addEventListerOnScroll(callback: () => void) {
     this.scrollEventListeners.push(callback);
     callback();
     window.addEventListener('scroll', callback);
   }
 
+  /**
+   * Remove all popovers.
+   */
   removeAllPopovers() {
     if (this.scrollEventListeners.length) {
       this.scrollEventListeners.forEach((listener) => {
