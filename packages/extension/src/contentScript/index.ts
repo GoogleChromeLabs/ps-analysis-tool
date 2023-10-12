@@ -311,12 +311,7 @@ class WebpageContentScript {
       frameElements.forEach((frame, index) => {
         const { width, height } = frame.getBoundingClientRect();
 
-        if (
-          !(
-            (height === 0 || width === 0) &&
-            elementIsVisibleInViewport(frame, true)
-          )
-        ) {
+        if (!(height === 0 || width === 0)) {
           frameWithTooltip = frame;
           const tooltip = this.insertTooltip(
             frame,

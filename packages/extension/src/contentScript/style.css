@@ -60,20 +60,35 @@ html body .ps-tooltip[popover] > .ps-content > p:last-child {
 html body .ps-tooltip[popover] > .ps-content:after {
     content: " " !important;
     position: absolute !important;
-    bottom: 9px !important;
-    left: 20px !important;
     border-width: 7px !important;
     border-style: solid !important;
     border-color: white transparent transparent transparent !important;
     background-color: white !important;
-    box-shadow: color-mix(in srgb, #3c4043 15%, transparent) -3px 3px 4px 1px !important;
     transform: rotate(315deg) !important;
 }
 
-html body .ps-tooltip[popover] > .ps-content.ps-tooltip-top-notch:after {
+html body .ps-tooltip[popover] > .ps-content.ps-tooltip-top-left-notch:after {
     bottom: unset !important;
     top: 5px !important;
     box-shadow: color-mix(in srgb, #3c4043 15%, transparent) 3px -3px 4px -1px !important;
+}
+
+html body .ps-tooltip[popover] > .ps-content.ps-tooltip-top-right-notch:after {
+    bottom: unset !important;
+    top: 5px !important;
+    box-shadow: color-mix(in srgb, #3c4043 15%, transparent) 3px -3px 4px -1px !important;
+    right: 5px !important;
+    left: unset !important;
+}
+
+html body .ps-tooltip[popover] > .ps-content.ps-tooltip-bottom-left-notch:after {
+    bottom: 9px !important;
+    left: 20px !important;
+}
+
+html body .ps-tooltip[popover] > .ps-content.ps-tooltip-bottom-right-notch:after {
+    bottom: 9px !important;
+    right: 15px !important;
 }
 
 html body .ps-highlighted-frame {
