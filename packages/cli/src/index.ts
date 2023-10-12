@@ -31,6 +31,7 @@ import { fetchDictionary } from './utils/fetchCookieDictionary';
 import { analyzeCookiesUrls } from './procedures/analyzeCookieUrls';
 import { analyzeCookiesUrlsInBatches } from './procedures/analyzeCookieUrlsInBatches';
 import { analyzeTechnologiesUrlsInBatches } from './procedures/analyzeTechnologiesUrlsInBatches';
+import { delay } from './utils';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
@@ -97,17 +98,27 @@ export const initialize = async () => {
     await ensureFile(directory + '/out.json');
     await writeFile(directory + '/out.json', JSON.stringify(output, null, 4));
 
+    let isTerminated = false;
+
     exec('npm run cli-dashboard:dev', (error) => {
-      if (!error) {
-        console.log(
-          `Report is being served at the URL: http://localhost:9000?path=${encodeURIComponent(
-            directory + '/out.json'
-          )}&type=sitemap`
-        );
-      } else {
-        console.error('Error starting server');
+      if (error) {
+        isTerminated = true;
+        return;
       }
     });
+
+    await delay(2000);
+
+    //if in 2 seconds dasboard server process is terminated show error
+    if (isTerminated) {
+      console.log('Error starting server');
+    } else {
+      console.log(
+        `Report is being served at the URL: http://localhost:9000?path=${encodeURIComponent(
+          directory + '/out.json'
+        )}&type=sitemap`
+      );
+    }
   } else {
     const spinnies = new Spinnies();
 
@@ -165,6 +176,28 @@ export const initialize = async () => {
 
     await ensureFile(directory + '/out.json');
     await writeFile(directory + '/out.json', JSON.stringify(result, null, 4));
+
+    let isTerminated = false;
+
+    exec('npm run cli-dashboard:dev', (error) => {
+      if (error) {
+        isTerminated = true;
+        return;
+      }
+    });
+
+    await delay(2000);
+
+    //if in 2 seconds dasboard server process is terminated show error
+    if (isTerminated) {
+      console.log('Error starting server');
+    } else {
+      console.log(
+        `Report is being served at the URL: http://localhost:9000?path=${encodeURIComponent(
+          directory + '/out.json'
+        )}&type=sitemap`
+      );
+    }
 
     exec('npm run cli-dashboard:dev', (error) => {
       if (!error) {
