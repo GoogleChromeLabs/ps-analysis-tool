@@ -16,8 +16,7 @@
 /**
  * Internal dependencies.
  */
-import compareFrameSource from '../utils/compareFrameSource';
-import isFrameInsideFrame from '../utils/isFrameInsideFrame';
+import { compareFrameSource, isFrameInsideFrame } from '../utils';
 
 const findSelectedFrameElements = (selectedOrigin: string) => {
   if (!selectedOrigin) {
