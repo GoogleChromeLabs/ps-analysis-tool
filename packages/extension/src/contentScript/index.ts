@@ -19,16 +19,17 @@
 import {
   findSelectedFrameElements,
   removeAllPopovers,
-  addPopover,
   toggleFrameHighlighting,
+  addOverlay,
   setOverlayPosition,
+  addTooltip,
   setTooltipPosition,
 } from './popovers';
 import type { ResponseType } from './types';
 import { CookieStore } from '../localStore';
 import { TOOLTIP_CLASS } from './constants';
 import { WEBPAGE_PORT_NAME } from '../constants';
-import elementIsVisibleInViewport from './utils/isElementInViewport';
+import { isElementVisibleInViewport } from './utils';
 import './style.css';
 
 /**
@@ -48,10 +49,10 @@ class WebpageContentScript {
   bodyHoverStateSent = false;
   scrollEventListeners: Array<() => void> = [];
   docElement: HTMLElement;
-  hoveredFrame: HTMLElement | null;
+  hoveredFrame: HTMLElement | null = null;
 
   /**
-   * Initialize
+   * Initialize.
    */
   constructor() {
     this.handleHoverEvent = this.handleHoverEvent.bind(this);
@@ -122,19 +123,8 @@ class WebpageContentScript {
     }
   }
 
-  insertOverlay(
-    frame: HTMLElement,
-    numberOfVisibleFrames: number,
-    numberOfHiddenFrames: number,
-    response: ResponseType
-  ) {
-    const overlay = addPopover(
-      frame,
-      response,
-      numberOfVisibleFrames,
-      numberOfHiddenFrames,
-      'overlay'
-    );
+  insertOverlay(frame: HTMLElement) {
+    const overlay = addOverlay(frame);
 
     const updatePosition = () => {
       setOverlayPosition(overlay, frame);
@@ -151,12 +141,11 @@ class WebpageContentScript {
     numberOfHiddenFrames: number,
     response: ResponseType
   ): HTMLElement | null {
-    const tooltip = addPopover(
+    const tooltip = addTooltip(
       frame,
       response,
       numberOfVisibleFrames,
-      numberOfHiddenFrames,
-      'tooltip'
+      numberOfHiddenFrames
     );
 
     const updatePosition = () => {
@@ -208,7 +197,6 @@ class WebpageContentScript {
 
   /**
    * Insert popovers.
-   * @todo Needs refactoring and code improvement.
    * @param {ResponseType} response - The incoming message/response from the port.
    */
   insertPopovers(response: ResponseType) {
@@ -217,9 +205,11 @@ class WebpageContentScript {
       removeAllPopovers();
       return;
     }
+
     if (!response.selectedFrame) {
       return;
     }
+
     const frameElements = findSelectedFrameElements(response.selectedFrame);
     const numberOfFrames = frameElements.length;
 
@@ -247,12 +237,7 @@ class WebpageContentScript {
     if (0 === hiddenIFrameCount) {
       // Its important to insert overlays and tooltips seperately and in the same order, to avoid z-index issue.
       frameElements.forEach((frame) => {
-        this.insertOverlay(
-          frame,
-          visibleIFrameCount,
-          hiddenIFrameCount,
-          response
-        );
+        this.insertOverlay(frame);
       });
 
       // @todo Hovered frame should be part of the frameElements.
@@ -271,12 +256,7 @@ class WebpageContentScript {
     } else if (numberOfFrames === hiddenIFrameCount) {
       const frame = frameElements[0];
 
-      this.insertOverlay(
-        frame,
-        visibleIFrameCount,
-        hiddenIFrameCount,
-        response
-      );
+      this.insertOverlay(frame);
       this.insertTooltip(
         frame,
         visibleIFrameCount,
@@ -289,12 +269,7 @@ class WebpageContentScript {
         const { width, height } = frame.getBoundingClientRect();
 
         if (!(height === 0 || width === 0)) {
-          this.insertOverlay(
-            frame,
-            visibleIFrameCount,
-            hiddenIFrameCount,
-            response
-          );
+          this.insertOverlay(frame);
         }
       });
 
@@ -309,6 +284,7 @@ class WebpageContentScript {
             hiddenIFrameCount,
             response
           );
+
           if (0 === index) {
             firstToolTip = tooltip;
           }
@@ -320,7 +296,7 @@ class WebpageContentScript {
       firstToolTip &&
       !this.isHoveringOverPage &&
       frameToScrollTo.clientWidth &&
-      !elementIsVisibleInViewport(frameWithTooltip, true)
+      !isElementVisibleInViewport(frameWithTooltip, true)
     ) {
       (firstToolTip as HTMLElement).scrollIntoView({
         behavior: 'instant',
@@ -342,10 +318,13 @@ class WebpageContentScript {
       target.classList.contains(TOOLTIP_CLASS) ||
       target.classList.contains('ps-tooltip-info-toggle-btn') ||
       target.classList.contains('ps-enable-pointer-event');
+    const isHoverableElement =
+      target.classList.contains(TOOLTIP_CLASS) ||
+      target.classList.contains('ps-hover');
 
     this.hoveredFrame = null;
 
-    if (isTooltipElement) {
+    if (isTooltipElement || isHoverableElement) {
       return;
     }
 
@@ -390,9 +369,7 @@ class WebpageContentScript {
 
       this.removeAllPopovers();
 
-      this.insertOverlay(frame, visibleIFrameCount, hiddenIFrameCount, {
-        isInspecting: true,
-      });
+      this.insertOverlay(frame);
 
       this.insertTooltip(frame, visibleIFrameCount, hiddenIFrameCount, {
         isInspecting: true,
