@@ -54,7 +54,9 @@ const Technologies = () => {
       {
         header: 'Confidence',
         accessorKey: 'confidence',
-        cell: (info: InfoType) => info + '%',
+        cell: (info: InfoType) => (
+          <span className="w-full flex justify-center">{info + '%'}</span>
+        ),
       },
       {
         header: 'Website',

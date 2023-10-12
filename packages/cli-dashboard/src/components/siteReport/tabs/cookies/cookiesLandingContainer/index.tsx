@@ -19,6 +19,7 @@
  */
 import React from 'react';
 import {
+  Button,
   CookiesLanding,
   CookiesMatrix,
 } from '@cookie-analysis-tool/design-system';
@@ -33,12 +34,14 @@ interface CookiesLandingContainerProps {
   tabFrames: TabFrames;
   tabCookies: TabCookies;
   affectedCookies: TabCookies;
+  downloadReport: () => void;
 }
 
 const CookiesLandingContainer = ({
   tabFrames,
   tabCookies,
   affectedCookies,
+  downloadReport,
 }: CookiesLandingContainerProps) => {
   return (
     <CookiesLanding
@@ -66,6 +69,13 @@ const CookiesLandingContainer = ({
             allowExpand={false}
             highlightTitle={true}
             capitalizeTitle={true}
+          />
+        </div>
+        <div className="pt-2 flex justify-center items-center">
+          <Button
+            extraClasses="w-fit text-sm flex justify-center items-center"
+            text="Download Report"
+            onClick={downloadReport}
           />
         </div>
       </div>

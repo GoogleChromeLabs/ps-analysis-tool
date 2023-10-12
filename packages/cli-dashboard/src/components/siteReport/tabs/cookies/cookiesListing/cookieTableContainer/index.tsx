@@ -119,11 +119,11 @@ const CookieTableContainer = ({
         ),
       },
       {
-        header: 'Cookie Accepted',
+        header: 'Cookie Affected',
         accessorKey: 'isCookieSet',
         cell: (info: InfoType) => (
           <p className="flex justify-center items-center">
-            {info ? <span className="font-serif">✓</span> : ''}
+            {!info ? <span className="font-serif">✓</span> : ''}
           </p>
         ),
       },
