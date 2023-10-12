@@ -137,7 +137,7 @@ class WebpageContentScript {
     );
 
     const updatePosition = () => {
-      if (elementIsVisibleInViewport(frame)) {
+      if (elementIsVisibleInViewport(frame, true)) {
         setOverlayPosition(overlay, frame);
       }
     };
@@ -161,8 +161,16 @@ class WebpageContentScript {
       'tooltip'
     );
 
+    const isHiddenForFirstTime = frame ? !frame.clientWidth : false;
+    setTooltipPosition(
+      tooltip,
+      frame,
+      isHiddenForFirstTime,
+      response.selectedFrame
+    );
+
     const updatePosition = () => {
-      if (elementIsVisibleInViewport(frame)) {
+      if (elementIsVisibleInViewport(frame, true)) {
         const isHidden = frame ? !frame.clientWidth : false;
         setTooltipPosition(tooltip, frame, isHidden, response.selectedFrame);
       }
@@ -334,7 +342,7 @@ class WebpageContentScript {
       firstToolTip &&
       !this.isHoveringOverPage &&
       frameToScrollTo.clientWidth &&
-      !elementIsVisibleInViewport(frameWithTooltip, true)
+      !elementIsVisibleInViewport(frameWithTooltip)
     ) {
       (firstToolTip as HTMLElement).scrollIntoView({
         behavior: 'instant',
