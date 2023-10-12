@@ -146,7 +146,7 @@ class WebpageContentScript {
   }
 
   insertTooltip(
-    frame: HTMLElement,
+    frame: HTMLElement | null,
     numberOfVisibleFrames: number,
     numberOfHiddenFrames: number,
     response: ResponseType
@@ -160,7 +160,7 @@ class WebpageContentScript {
     );
 
     const updatePosition = () => {
-      const isHidden = !frame.clientWidth;
+      const isHidden = frame ? !frame.clientWidth : false;
       setTooltipPosition(tooltip, frame, isHidden, response.selectedFrame);
     };
 
@@ -227,6 +227,7 @@ class WebpageContentScript {
     this.removeAllPopovers();
 
     if (!numberOfFrames) {
+      this.insertTooltip(null, 0, 0, response);
       return;
     }
 

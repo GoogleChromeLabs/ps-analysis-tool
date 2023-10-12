@@ -32,7 +32,7 @@ import getAllowedFeatures from '../../utils/getAllowedFeatures';
  */
 // eslint-disable-next-line complexity
 const createTooltip = (
-  frame: HTMLIFrameElement | HTMLElement,
+  frame: HTMLIFrameElement | HTMLElement | null,
   data: ResponseType,
   numberOfVisibleFrames: number,
   numberOfHiddenFrames: number
@@ -46,7 +46,7 @@ const createTooltip = (
 
   let attributes = {};
 
-  if (!isMainFrame) {
+  if (!isMainFrame && frame) {
     if (frame.dataset?.psatInsideFrame) {
       // we don't need to worry if querySelector will fail becuase there will be no psatInsideFrame if we can't access contentDocument of frame.
       insideFrame = frame?.contentDocument.querySelector(
@@ -58,17 +58,19 @@ const createTooltip = (
     }
   }
 
-  const { width, height } = frame.getBoundingClientRect();
+  const { width, height } = frame
+    ? frame.getBoundingClientRect()
+    : { width: -1, height: -1 };
 
   tooltip.classList.add(TOOLTIP_CLASS);
   content.classList.add('ps-content');
 
-  if (height === 0 && width === 0) {
+  if (height === 0 && width === 0 && frame) {
     isHidden = true;
   }
 
-  const frameSrc = attributes.src?.startsWith('//')
-    ? 'https:' + attributes.src
+  const frameSrc = attributes?.src?.startsWith('//')
+    ? 'https:' + attributes?.src
     : attributes?.src;
 
   let frameOrigin = '';
@@ -82,7 +84,7 @@ const createTooltip = (
 
   const origin = isMainFrame ? data.selectedFrame : frameOrigin;
   const allowedFeatured =
-    frame.tagName !== 'BODY' ? getAllowedFeatures(frame) : 'N/A';
+    frame && frame.tagName !== 'BODY' ? getAllowedFeatures(frame) : 'N/A';
 
   const numberOfAllowedFeaturesInCompactView = 5;
   let allowedFeatureInExpandedView;
@@ -109,8 +111,10 @@ const createTooltip = (
     info['Type'] = 'Hidden iframe';
   } else if (insideFrame) {
     info['Type'] = 'Nested iframe';
-  } else if (frame.tagName === 'BODY') {
+  } else if (frame && frame.tagName === 'BODY') {
     info['Type'] = 'Main frame';
+  } else if (!frame) {
+    info['Type'] = 'Unknown';
   } else {
     info['Type'] = 'iframe';
   }
@@ -131,7 +135,7 @@ const createTooltip = (
       : allowedFeaturedValue;
 
   // Reset the dataset of parent frame.
-  if (insideFrame) {
+  if (frame && insideFrame) {
     frame.dataset.psatInsideFrame = '';
   }
 

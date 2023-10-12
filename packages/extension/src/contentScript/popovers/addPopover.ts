@@ -30,7 +30,7 @@ import type { ResponseType } from '../types';
  * @returns {HTMLElement} - The added popover.
  */
 const addPopover = (
-  frame: HTMLIFrameElement | HTMLElement,
+  frame: HTMLIFrameElement | HTMLElement | null,
   data: ResponseType,
   numberOfVisibleFrames: number,
   numberOfHiddenFrames: number,
@@ -42,7 +42,7 @@ const addPopover = (
     return null;
   }
 
-  if ('overlay' === type) {
+  if ('overlay' === type && frame) {
     const overlay = createFrameOverlay(frame);
 
     if (overlay) {

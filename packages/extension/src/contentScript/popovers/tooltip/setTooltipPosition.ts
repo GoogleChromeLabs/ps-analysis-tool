@@ -23,7 +23,7 @@
  */
 const setTooltipPosition = (
   tooltip: HTMLElement | null,
-  frame: HTMLElement,
+  frame: HTMLElement | null,
   isHiddenFrame: boolean,
   selectedFrame: string | undefined
 ) => {
@@ -35,12 +35,20 @@ const setTooltipPosition = (
     x: frameX,
     y: frameY,
     width: frameWidth,
-  } = frame.getBoundingClientRect();
+  } = frame ? frame.getBoundingClientRect() : { x: -1, y: -1, width: -1 };
 
   tooltip.style.maxWidth = frameWidth - 40 + 'px';
   tooltip.style.top = frameY + Number(window.scrollY) + 'px';
   tooltip.style.left = frameX + Number(window.scrollX) + 'px';
+  if (!frame) {
+    tooltip.classList.add('ps-fixed');
+    tooltip.style.top = `0`;
+    tooltip.style.left = 'auto';
+    tooltip.style.right = '30px';
+    tooltip.firstElementChild?.classList.add('ps-tooltip-top-notch');
 
+    return;
+  }
   // Overlay will not exist for hidden elements. show at bottom of screen.
   if (isHiddenFrame) {
     tooltip.classList.add('ps-fixed');
