@@ -214,6 +214,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           setLoading(false);
           _setSelectedFrame(null);
           setTabFrames(null);
+          setCanStartInspecting(false);
           return;
         } else {
           setIsCurrentTabBeingListenedTo(true);
