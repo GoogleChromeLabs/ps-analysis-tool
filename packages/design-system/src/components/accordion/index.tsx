@@ -50,6 +50,7 @@ interface AccordionProps {
   setIsInspecting?: React.Dispatch<React.SetStateAction<boolean>>;
   tabId: string;
   tabName: string;
+  width: number;
   keyboardNavigator: (event: React.KeyboardEvent<HTMLDivElement>) => void;
   onAccordionOpenerClick: (tabIdToBeSet: string) => void;
   onAccordionHeaderClick: (tabIdToBeSet: string, index: number) => void;
@@ -68,6 +69,7 @@ const Accordion = ({
   setIsInspecting = noop,
   tabId,
   tabName,
+  width = 0,
   keyboardNavigator,
   onAccordionOpenerClick,
   onAccordionHeaderClick,
@@ -82,11 +84,10 @@ const Accordion = ({
   );
   const DefaultIcon = tabs[index].icons.default;
   const SelectedIcon = tabs[index].icons.selected;
-
   return (
     <div className="flex flex-col w-full relative">
       {tabId === 'cookies' && showInspectButton && (
-        <div className="absolute top-1 left-44">
+        <div className={`absolute top-1`} style={{ left: width - 20 }}>
           <InspectButton
             isInspecting={isInspecting}
             setIsInspecting={setIsInspecting}

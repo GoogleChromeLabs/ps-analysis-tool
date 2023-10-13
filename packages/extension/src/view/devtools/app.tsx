@@ -30,6 +30,7 @@ import './app.css';
 
 const App: React.FC = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
+  const [width, setWidth] = useState<number>(200);
   const contextInvalidatedRef = useRef(null);
   const TabContent = TABS[selectedTabIndex].component;
 
@@ -69,7 +70,11 @@ const App: React.FC = () => {
       {!contextInvalidated && (
         <div className="w-full h-full flex flex-row">
           <Resizable
+            size={{ width: width, height: '100%' }}
             defaultSize={{ width: '200px', height: '100%' }}
+            onResizeStop={(_, __, ___, d) => {
+              setWidth((prevState) => prevState + d.width);
+            }}
             minWidth={'200px'}
             maxWidth={'98%'}
             enable={{
@@ -85,6 +90,7 @@ const App: React.FC = () => {
             className="h-full flex flex-col border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
           >
             <Sidebar
+              width={width}
               selectedIndex={selectedTabIndex}
               setIndex={setSelectedTabIndex}
             />

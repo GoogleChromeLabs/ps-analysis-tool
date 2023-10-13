@@ -47,6 +47,7 @@ interface AccordionChildrenProps {
   titleForMenuItem: string;
   tabId?: string;
   tabs: tabSidebar[];
+  width?: number;
   keyboardNavigator?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
   onAccordionChildClick?: (
     tabIdToBeSet: string,
@@ -78,6 +79,7 @@ const AccordionChildren: React.FC<AccordionChildrenProps> = ({
   titleForMenuItem,
   tabId = '',
   tabs,
+  width = 0,
   onAccordionChildClick = noop,
   keyboardNavigator = noop,
   onAccordionOpenerClick = noop,
@@ -96,6 +98,7 @@ const AccordionChildren: React.FC<AccordionChildrenProps> = ({
         onKeyDown={(event) => keyboardNavigator(event)}
       >
         <Accordion
+          width={width}
           tabs={tabs}
           isRecursive
           key={tabId}
@@ -117,6 +120,7 @@ const AccordionChildren: React.FC<AccordionChildrenProps> = ({
               Object.keys(tabFrames)?.map((key) => {
                 return (
                   <AccordionChildren
+                    width={width}
                     tabs={tabs}
                     currentIndex={currentIndex}
                     key={key}
@@ -138,6 +142,7 @@ const AccordionChildren: React.FC<AccordionChildrenProps> = ({
                 ) {
                   return (
                     <AccordionChildren
+                      width={width}
                       tabs={tabs}
                       currentIndex={innerIndex}
                       key={tab.id}
