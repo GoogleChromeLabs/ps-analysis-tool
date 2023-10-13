@@ -13,5 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as addOverlay } from './addOverlay';
-export { default as setOverlayPosition } from './setOverlayPosition';
+const isFrameHidden = (frame: HTMLIFrameElement | HTMLElement): boolean => {
+  const { width, height } = frame.getBoundingClientRect();
+
+  if (height === 0 || width === 0) {
+    return true;
+  }
+
+  return false;
+};
+
+export default isFrameHidden;

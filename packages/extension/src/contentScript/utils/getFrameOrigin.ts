@@ -13,5 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as addOverlay } from './addOverlay';
-export { default as setOverlayPosition } from './setOverlayPosition';
+const getFrameOrigin = (attributes: { [key: string]: string }): string => {
+  const frameSrc = attributes.src?.startsWith('//')
+    ? 'https:' + attributes.src
+    : attributes?.src;
+
+  try {
+    if ('about:blank' === frameSrc) {
+      return frameSrc;
+    }
+
+    return frameSrc ? new URL(frameSrc).origin : '';
+  } catch (error) {
+    return '';
+  }
+};
+
+export default getFrameOrigin;

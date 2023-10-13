@@ -27,7 +27,6 @@ import checkURLInRWS, {
   type CheckURLInRWSOutputType,
 } from './utils/checkURLInRWS';
 import SitesList from './sitesList';
-import { Cross } from '@cookie-analysis-tool/design-system';
 
 const Insights = () => {
   const [insightsData, setInsightsData] =
@@ -144,7 +143,7 @@ const Insights = () => {
             </>
           ) : (
             <p className="text-lg font-medium flex items-center gap-2">
-              <Cross />
+              <span className="text-red-500">✗</span>
               This site does not belong to a &quot;Related Website Set&quot;
             </p>
           )}

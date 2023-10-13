@@ -40,8 +40,8 @@ const TopicsList = () => {
   }, []);
 
   return (
-    <div className="max-w-2xl m-3">
-      <div className="p-6 dark:bg-davys-grey border border-gray-200 dark:border-quartz rounded-lg shadow">
+    <div className="max-w-2xl m-3 border-t border-american-silver">
+      <div className="p-6 pl-0 dark:bg-davys-grey ">
         <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-bright-gray">
           Topics List
         </h5>
@@ -52,7 +52,9 @@ const TopicsList = () => {
             ))}
           </ul>
         ) : (
-          <p className="text-gray-700 dark:text-bright-gray">No topics found</p>
+          <p className="text-gray-700 dark:text-bright-gray">
+            No topics found on this page.
+          </p>
         )}
       </div>
     </div>
