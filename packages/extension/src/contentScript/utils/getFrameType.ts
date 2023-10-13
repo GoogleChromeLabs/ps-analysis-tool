@@ -13,5 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as addOverlay } from './addOverlay';
-export { default as setOverlayPosition } from './setOverlayPosition';
+const getFrameType = (
+  isHidden: boolean,
+  insideFrame: HTMLIFrameElement | null,
+  tagName: string
+): string => {
+  if (isHidden) {
+    return 'Hidden iframe';
+  }
+
+  if (insideFrame) {
+    return 'Nested iframe';
+  }
+
+  if (tagName === 'BODY') {
+    return 'Main frame';
+  }
+
+  return 'iframe';
+};
+
+export default getFrameType;

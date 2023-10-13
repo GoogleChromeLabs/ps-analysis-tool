@@ -13,5 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+export { default as addTooltip } from './addTooltip';
 export { default as setTooltipPosition } from './setTooltipPosition';
-export { default as createTooltip } from './createTooltip';
