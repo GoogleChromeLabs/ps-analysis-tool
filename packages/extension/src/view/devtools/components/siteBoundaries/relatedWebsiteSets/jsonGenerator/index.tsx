@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import React, { useEffect, useRef } from 'react';
+import { Button, Cross } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
@@ -29,7 +30,6 @@ import ServiceSites from './serviceSites';
 import CountrySites from './countrySites';
 import JsonOutput from './jsonOutput';
 import useGeneratorForm from './useGeneratorForm';
-import { Button, Cross } from '@cookie-analysis-tool/design-system';
 
 interface RWSJsonGeneratorProps {
   open: boolean;

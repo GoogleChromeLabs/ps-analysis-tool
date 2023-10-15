@@ -17,17 +17,17 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
-
-/**
- * Internal dependencies.
- */
-import { Table, TableColumn, TableData, TableRow, useTable } from '../table';
 import {
   CookieTableData,
   PreferenceDataValues,
   SortingState,
   getCookieKey,
-} from '@cookie-analysis-tool/common';
+} from '@ps-analysis-tool/common';
+
+/**
+ * Internal dependencies.
+ */
+import { Table, TableColumn, TableData, TableRow, useTable } from '../table';
 import { noop } from '../../utils';
 
 interface CookieTableProps {

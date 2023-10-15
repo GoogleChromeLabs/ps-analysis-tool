@@ -19,11 +19,7 @@
  */
 import React, { useState } from 'react';
 import classNames from 'classnames';
-import type { CookieTableData } from '@cookie-analysis-tool/common';
-
-/**
- * Internal dependencies.
- */
+import type { CookieTableData } from '@ps-analysis-tool/common';
 
 export interface DetailsProps {
   selectedCookie: CookieTableData;

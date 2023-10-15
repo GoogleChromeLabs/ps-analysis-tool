@@ -17,10 +17,7 @@
 /**
  * External dependencies.
  */
-import {
-  Accordion,
-  AccordionChildren,
-} from '@cookie-analysis-tool/design-system';
+import { Accordion, AccordionChildren } from '@ps-analysis-tool/design-system';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 /**

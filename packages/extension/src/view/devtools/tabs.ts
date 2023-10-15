@@ -39,7 +39,7 @@ import {
   TopicsIconWhite,
   PrivacySandboxIcon,
   PrivacySandboxIconWhite,
-} from '@cookie-analysis-tool/design-system';
+} from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.

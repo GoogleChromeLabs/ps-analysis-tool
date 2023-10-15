@@ -18,16 +18,13 @@
  * External dependencies.
  */
 import React from 'react';
-import {
-  CookiesLanding,
-  CookiesMatrix,
-} from '@cookie-analysis-tool/design-system';
+import { CookiesLanding, CookiesMatrix } from '@ps-analysis-tool/design-system';
 import {
   prepareCookiesCount,
   prepareCookieStatsComponents,
   type TabCookies,
   type TabFrames,
-} from '@cookie-analysis-tool/common';
+} from '@ps-analysis-tool/common';
 
 interface CookiesLandingContainerProps {
   tabFrames: TabFrames;

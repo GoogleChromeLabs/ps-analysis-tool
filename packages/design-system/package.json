@@ -1,5 +1,5 @@
 {
-  "name": "@cookie-analysis-tool/design-system",
+  "name": "@ps-analysis-tool/design-system",
   "version": "0.3.0",
   "description": "A package for presentational components that are being used in multiple packages",
   "main": "./src/index.ts",
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
   "dependencies": {
-		"@cookie-analysis-tool/common": "*"
+		"@ps-analysis-tool/common": "*"
   },
   "devDependencies": {
   }

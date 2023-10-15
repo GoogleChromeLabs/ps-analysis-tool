@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useRef } from 'react';
+import { ArrowRight, Button } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
@@ -29,7 +30,6 @@ import type {
 import PrimaryDomainOutput from './primaryDomainOutput';
 import OtherDomainOutput from './otherDomainOutput';
 import PullRequestOutput from './pullRequestOutput';
-import { ArrowRight, Button } from '@cookie-analysis-tool/design-system';
 
 interface JsonOutputProps {
   primaryWellKnownOutput: PrimaryWellKnownOutputType | null;

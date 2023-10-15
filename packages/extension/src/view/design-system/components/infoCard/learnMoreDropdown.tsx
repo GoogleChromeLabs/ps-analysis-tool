@@ -18,14 +18,14 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
+import { ArrowRight, Button } from '@ps-analysis-tool/design-system';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
  */
 import type { PSInfo as PSInfoType } from '../../../../utils/fetchPSInfo';
 import RenderLink from './renderLink';
-import { ArrowRight, Button } from '@cookie-analysis-tool/design-system';
-import classNames from 'classnames';
 
 /**
  * @type {Array} LABELS - Array of objects containing the label and link label for each dropdown item.

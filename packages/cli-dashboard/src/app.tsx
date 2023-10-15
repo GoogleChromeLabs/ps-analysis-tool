@@ -18,7 +18,7 @@
  * External dependencies
  */
 import React, { useEffect, useMemo, useState } from 'react';
-import type { TechnologyData } from '@cookie-analysis-tool/common';
+import type { TechnologyData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies

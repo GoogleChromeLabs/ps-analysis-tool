@@ -29,8 +29,8 @@ import FilterIcon from '../../../../../../../../third_party/icons/filter-icon.sv
 import CrossIcon from '../../../../../../../../third_party/icons/cross-icon.svg';
 import { useFilterManagementStore } from '../../../stateProviders/filterManagementStore';
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import type { CookieTableData } from '@cookie-analysis-tool/common';
-import { Refresh } from '@cookie-analysis-tool/design-system';
+import type { CookieTableData } from '@ps-analysis-tool/common';
+import { Refresh } from '@ps-analysis-tool/design-system';
 
 interface CookieSearchProps {
   cookiesAvailable: boolean;

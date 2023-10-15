@@ -21,6 +21,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import { type Cookie as ParsedCookie } from 'simple-cookie';
+import { act } from 'react-dom/test-utils';
 
 /**
  * Internal dependencies.
@@ -30,7 +31,6 @@ import {
   useCookieStore,
   type CookieStoreContext,
 } from '../../../stateProviders/syncCookieStore';
-import { act } from 'react-dom/test-utils';
 import globalChrome from '../../../../../utils/test-data/globalChrome';
 
 const uncategorized1pCookie: ParsedCookie = {
