@@ -30,6 +30,7 @@ import type {
   PreferenceDataValues,
   SelectedFilters,
 } from '@ps-analysis-tool/common';
+
 /**
  * Internal dependencies.
  */

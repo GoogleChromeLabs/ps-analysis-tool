@@ -18,6 +18,12 @@
  * External dependencies.
  */
 import React from 'react';
+import { prepareCookieStatsComponents } from '@ps-analysis-tool/common';
+import {
+  Button,
+  CirclePieChart,
+  ProgressBar,
+} from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
@@ -26,12 +32,6 @@ import './app.css';
 import { Legend } from './components';
 import { useCookieStore } from './stateProviders/syncCookieStore';
 import { ALLOWED_NUMBER_OF_TABS } from '../../constants';
-import { prepareCookieStatsComponents } from '@ps-analysis-tool/common';
-import {
-  Button,
-  CirclePieChart,
-  ProgressBar,
-} from '@ps-analysis-tool/design-system';
 
 const App: React.FC = () => {
   const {

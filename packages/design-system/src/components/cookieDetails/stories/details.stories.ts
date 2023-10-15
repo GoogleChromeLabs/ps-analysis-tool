@@ -17,12 +17,12 @@
  * External dependencies.
  */
 import type { Meta, StoryObj } from '@storybook/react';
+import type { CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import Details from '../details';
-import type { CookieTableData } from '@ps-analysis-tool/common';
 
 const meta = {
   title: 'DesignSystem/CookieDetails/Details',

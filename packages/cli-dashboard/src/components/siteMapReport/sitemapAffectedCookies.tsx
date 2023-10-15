@@ -19,10 +19,6 @@
  */
 import React, { useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
-
-/**
- * Internal dependencies
- */
 import {
   CookieDetails,
   CookieTable,

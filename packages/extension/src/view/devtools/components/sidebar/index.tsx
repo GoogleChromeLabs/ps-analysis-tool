@@ -30,6 +30,7 @@ import {
   arrowLeftHandler,
 } from './keyboardNavigationHandlers';
 import useFrameOverlay from '../../hooks/useFrameOverlay';
+
 interface SidebarProps {
   selectedIndex: number;
   setIndex: (index: number) => void;

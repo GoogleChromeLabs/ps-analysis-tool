@@ -25,13 +25,14 @@ import React, {
   useRef,
 } from 'react';
 import { noop } from '@ps-analysis-tool/design-system';
+import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
+
 /**
  * Internal dependencies.
  */
 import { CookieStore, type CookieData } from '../../../../localStore';
 import { getCurrentTabId } from '../../../../utils/getCurrentTabId';
 import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
-import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
 import setDocumentCookies from '../../../../utils/setDocumentCookies';
 import isOnRWS from '../../../../contentScript/utils/isOnRWS';
 

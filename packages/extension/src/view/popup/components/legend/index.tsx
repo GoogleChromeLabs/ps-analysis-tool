@@ -17,10 +17,6 @@
  * External dependencies.
  */
 import React from 'react';
-
-/**
- * Internal dependencies.
- */
 import type { Legend as LegendProp } from '@ps-analysis-tool/common';
 import {
   Matrix,

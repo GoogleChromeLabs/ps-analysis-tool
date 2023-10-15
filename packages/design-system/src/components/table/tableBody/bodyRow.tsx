@@ -19,13 +19,13 @@
  */
 import React from 'react';
 import classNames from 'classnames';
+import { CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import BodyCell from './bodyCell';
 import type { TableColumn, TableRow } from '../useTable';
-import { CookieTableData } from '@ps-analysis-tool/common';
 
 interface BodyRowProps {
   row: TableRow;

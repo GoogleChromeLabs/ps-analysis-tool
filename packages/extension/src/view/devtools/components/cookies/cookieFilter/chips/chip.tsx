@@ -18,6 +18,7 @@
  */
 import React from 'react';
 import type { SelectedFilters } from '@ps-analysis-tool/common';
+
 /**
  * Internal dependencies.
  */

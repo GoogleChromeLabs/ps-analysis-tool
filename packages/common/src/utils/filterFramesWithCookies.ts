@@ -16,7 +16,6 @@
 /**
  * Internal dependencies.
  */
-
 import { FramesWithCookies, TabCookies, TabFrames } from '../cookies.types';
 import filterCookiesByFrame from './filterCookiesByFrame';
 

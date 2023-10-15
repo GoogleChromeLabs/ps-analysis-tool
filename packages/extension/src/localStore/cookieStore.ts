@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 /**
+ * External dependencies.
+ */
+import { getCookieKey } from '@ps-analysis-tool/common';
+
+/**
  * Internal dependencies.
  */
 import updateStorage from './utils/updateStorage';
 import type { TabData, CookieData } from './types';
-import { getCookieKey } from '@ps-analysis-tool/common';
 import fetchTopicsTaxonomy from '../utils/fetchTopicsTaxonomy';
 
 const CookieStore = {

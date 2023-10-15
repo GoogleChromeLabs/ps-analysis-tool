@@ -18,10 +18,6 @@
  * External dependencies.
  */
 import React from 'react';
-
-/**
- * Internal dependencies.
- */
 import { Add, Button } from '@ps-analysis-tool/design-system';
 
 interface AddButtonProps {

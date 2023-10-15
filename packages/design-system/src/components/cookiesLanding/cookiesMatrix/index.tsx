@@ -17,10 +17,6 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
-
-/**
- * Internal dependencies.
- */
 import {
   MatrixComponentHorizontal,
   Matrix,

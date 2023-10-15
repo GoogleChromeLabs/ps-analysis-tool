@@ -18,10 +18,6 @@
  */
 import React from 'react';
 import { VictoryPie } from 'victory';
-
-/**
- * Internal dependencies.
- */
 import { COLOR_MAP } from '@ps-analysis-tool/design-system';
 
 const EmptyCirclePieChart = () => {

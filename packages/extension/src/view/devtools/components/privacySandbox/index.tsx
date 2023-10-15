@@ -17,10 +17,6 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
-
-/**
- * Internal dependencies.
- */
 import { LandingPage } from '@ps-analysis-tool/design-system';
 
 const PrivacySandbox = () => {

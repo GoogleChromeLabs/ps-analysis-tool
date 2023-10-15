@@ -20,11 +20,11 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import SinonChrome from 'sinon-chrome';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 /**
  * Internal dependencies.
  */
-import { fireEvent, render, screen } from '@testing-library/react';
 import InfoCard from '..';
 import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
 //@ts-ignore

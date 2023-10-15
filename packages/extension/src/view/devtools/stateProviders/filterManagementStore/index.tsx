@@ -29,6 +29,7 @@ import type {
   SelectedFilters,
   CookieTableData,
 } from '@ps-analysis-tool/common';
+
 /**
  * Internal dependencies.
  */

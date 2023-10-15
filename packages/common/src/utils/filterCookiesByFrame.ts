@@ -16,7 +16,6 @@
 /**
  * Internal dependencies.
  */
-
 import { CookieTableData } from '../cookies.types';
 
 interface Cookies {

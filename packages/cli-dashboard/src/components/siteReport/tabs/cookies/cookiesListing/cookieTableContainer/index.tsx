@@ -18,10 +18,6 @@
  * External dependencies.
  */
 import React, { useMemo } from 'react';
-
-/**
- * Internal dependencies.
- */
 import type { CookieTableData } from '@ps-analysis-tool/common';
 import {
   CookieTable,

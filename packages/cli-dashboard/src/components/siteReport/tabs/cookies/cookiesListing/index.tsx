@@ -19,12 +19,12 @@
  */
 import React, { useState } from 'react';
 import { Resizable } from 're-resizable';
+import { CookieDetails } from '@ps-analysis-tool/design-system';
+import type { CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies
  */
-import { CookieDetails } from '@ps-analysis-tool/design-system';
-import type { CookieTableData } from '@ps-analysis-tool/common';
 import CookieTableContainer from './cookieTableContainer';
 import { useContentStore } from '../../../stateProviders/contentStore';
 

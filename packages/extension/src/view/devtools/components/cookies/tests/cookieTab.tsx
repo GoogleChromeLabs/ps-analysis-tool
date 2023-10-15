@@ -27,6 +27,7 @@ import {
 import '@testing-library/jest-dom';
 import SinonChrome from 'sinon-chrome';
 import { CookieDetails, Details } from '@ps-analysis-tool/design-system';
+
 /**
  * Internal dependencies.
  */

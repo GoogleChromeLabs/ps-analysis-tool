@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies.
+ * External dependencies.
  */
-
 import type { CookieTableData } from '@ps-analysis-tool/common';
 
 const getFilterValue = (keys: string, cookieData: CookieTableData) => {

@@ -26,6 +26,11 @@ import React, {
 } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import { noop } from '@ps-analysis-tool/design-system';
+import {
+  prepareCookiesCount,
+  type CookiesCount,
+} from '@ps-analysis-tool/common';
+
 /**
  * Internal dependencies.
  */
@@ -35,10 +40,6 @@ import {
 } from '../../../../utils/getCurrentTabId';
 import { CookieStore } from '../../../../localStore';
 import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
-import {
-  prepareCookiesCount,
-  type CookiesCount,
-} from '@ps-analysis-tool/common';
 
 export interface CookieStoreContext {
   state: {

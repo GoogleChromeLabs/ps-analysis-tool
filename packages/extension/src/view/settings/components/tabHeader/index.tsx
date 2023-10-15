@@ -19,9 +19,6 @@
  */
 import React from 'react';
 
-/**
- * Internal dependencies.
- */
 interface TabHeaderProps {
   tabs: string[];
   selectedTabIndex: number;
