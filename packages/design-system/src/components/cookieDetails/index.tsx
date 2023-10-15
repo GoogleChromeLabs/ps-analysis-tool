@@ -22,7 +22,7 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import type { CookieTableData } from '@cookie-analysis-tool/common';
+import type { CookieTableData } from '@ps-analysis-tool/common';
 import Details from './details';
 
 interface CookieDetailsProps {

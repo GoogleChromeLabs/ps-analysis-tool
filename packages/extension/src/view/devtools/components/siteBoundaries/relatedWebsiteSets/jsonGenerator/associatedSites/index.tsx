@@ -25,7 +25,7 @@ import React from 'react';
 import type { AssociatedSiteType } from '../types';
 import { RWSInput, AddButton, RemoveButton } from '../components';
 import type { SitePayloadType } from '../useGeneratorForm/types';
-import { InfoIcon } from '@cookie-analysis-tool/design-system';
+import { InfoIcon } from '@ps-analysis-tool/design-system';
 
 interface AssociatedSitesProps {
   associatedSites: AssociatedSiteType[];

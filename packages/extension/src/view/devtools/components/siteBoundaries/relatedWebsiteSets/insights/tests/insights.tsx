@@ -20,7 +20,7 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { noop } from '@cookie-analysis-tool/design-system';
+import { noop } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies.
  */

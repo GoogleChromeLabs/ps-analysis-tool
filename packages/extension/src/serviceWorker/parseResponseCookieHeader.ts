@@ -28,7 +28,7 @@ import type {
 } from '../utils/fetchCookieDictionary';
 import findAnalyticsMatch from './findAnalyticsMatch';
 import { createCookieObject } from './createCookieObject';
-import { isFirstParty } from '@cookie-analysis-tool/common';
+import { isFirstParty } from '@ps-analysis-tool/common';
 
 /**
  * Parse response cookies header.

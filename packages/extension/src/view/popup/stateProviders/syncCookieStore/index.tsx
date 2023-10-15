@@ -25,7 +25,7 @@ import React, {
   useRef,
 } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
-import { noop } from '@cookie-analysis-tool/design-system';
+import { noop } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies.
  */
@@ -38,7 +38,7 @@ import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
 import {
   prepareCookiesCount,
   type CookiesCount,
-} from '@cookie-analysis-tool/common';
+} from '@ps-analysis-tool/common';
 
 export interface CookieStoreContext {
   state: {

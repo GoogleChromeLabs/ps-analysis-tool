@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import type { TechnologyData } from '@cookie-analysis-tool/common';
+import type { TechnologyData } from '@ps-analysis-tool/common';
 
 export type CookieJsonDataType = {
   name: string;

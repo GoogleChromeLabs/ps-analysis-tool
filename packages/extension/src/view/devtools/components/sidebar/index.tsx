@@ -17,10 +17,7 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  Accordion,
-  AccordionChildren,
-} from '@cookie-analysis-tool/design-system';
+import { Accordion, AccordionChildren } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies

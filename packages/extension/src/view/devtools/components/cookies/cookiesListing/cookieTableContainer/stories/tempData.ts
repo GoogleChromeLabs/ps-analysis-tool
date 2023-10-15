@@ -22,8 +22,8 @@ import type { Cookie as ParsedCookie } from 'simple-cookie';
 /**
  * Internal dependencies.
  */
-import type { CookieAnalytics } from '@cookie-analysis-tool/extension/src/utils/fetchCookieDictionary';
-import type { CookieTableData } from '@cookie-analysis-tool/common';
+import type { CookieAnalytics } from '@ps-analysis-tool/extension/src/utils/fetchCookieDictionary';
+import type { CookieTableData } from '@ps-analysis-tool/common';
 
 export const TempCookieData: CookieTableData[] = [
   {

@@ -24,8 +24,8 @@ import React from 'react';
 import type {
   CookieStatsComponents,
   CookiesCount,
-} from '@cookie-analysis-tool/common';
-import { CirclePieChart } from '@cookie-analysis-tool/design-system';
+} from '@ps-analysis-tool/common';
+import { CirclePieChart } from '@ps-analysis-tool/design-system';
 
 interface DataMapping {
   title: string;

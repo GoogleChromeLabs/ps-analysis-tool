@@ -21,7 +21,7 @@ import SinonChrome from 'sinon-chrome';
 /**
  * Internal dependencies.
  */
-import { noop } from '@cookie-analysis-tool/common';
+import { noop } from '@ps-analysis-tool/common';
 
 export default {
   ...SinonChrome,

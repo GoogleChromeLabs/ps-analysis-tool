@@ -28,9 +28,9 @@ import '@testing-library/jest-dom';
 import App from '../app';
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
-import PSInfo from 'cookie-analysis-tool/data/PSInfo.json';
+import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
 import { useCookieStore } from '../stateProviders/syncCookieStore';
-import { noop } from '@cookie-analysis-tool/common';
+import { noop } from '@ps-analysis-tool/common';
 import globalChrome from '../../../utils/test-data/globalChrome';
 
 jest.mock('../stateProviders/syncCookieStore', () => ({

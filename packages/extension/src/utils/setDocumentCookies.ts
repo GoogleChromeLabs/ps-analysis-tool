@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import { isFirstParty } from '@cookie-analysis-tool/common';
+import { isFirstParty } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.

@@ -26,13 +26,13 @@ import {
   Matrix,
   type MatrixComponentProps,
   InfoIcon,
-} from '@cookie-analysis-tool/design-system';
+} from '@ps-analysis-tool/design-system';
 import {
   filterFramesWithCookies,
   type CookieStatsComponents,
   type TabCookies,
   type TabFrames,
-} from '@cookie-analysis-tool/common';
+} from '@ps-analysis-tool/common';
 
 interface CookiesMatrixProps {
   tabCookies: TabCookies | null;

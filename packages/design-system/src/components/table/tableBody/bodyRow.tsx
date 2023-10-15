@@ -25,7 +25,7 @@ import classNames from 'classnames';
  */
 import BodyCell from './bodyCell';
 import type { TableColumn, TableRow } from '../useTable';
-import { CookieTableData } from '@cookie-analysis-tool/common';
+import { CookieTableData } from '@ps-analysis-tool/common';
 
 interface BodyRowProps {
   row: TableRow;

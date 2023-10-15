@@ -21,7 +21,7 @@ import React, { useState } from 'react';
 /**
  * Internal dependencies.
  */
-import { LandingPage } from '@cookie-analysis-tool/design-system';
+import { LandingPage } from '@ps-analysis-tool/design-system';
 
 const PrivacySandbox = () => {
   const [loading, setLoading] = useState(true);

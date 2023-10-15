@@ -25,7 +25,7 @@ module.exports = {
     '^.+\\.[jt]sx?$': 'babel-jest',
   },
   moduleNameMapper: {
-    '^@cookie-analysis-tool\\/(.*)': '<rootDir>/packages/$1/src/',
+    '^@ps-analysis-tool\\/(.*)': '<rootDir>/packages/$1/src/',
     '\\.svg': join(__dirname, '/svgMock.cjs'),
     '\\.css': join(__dirname, '/styleMock.cjs'),
     '\\.png': join(__dirname, '/imageMock.cjs'),

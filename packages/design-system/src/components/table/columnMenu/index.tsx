@@ -19,7 +19,7 @@
  */
 import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
-import { type PreferenceDataValues } from '@cookie-analysis-tool/common';
+import { type PreferenceDataValues } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */

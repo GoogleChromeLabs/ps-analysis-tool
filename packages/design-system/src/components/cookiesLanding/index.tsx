@@ -28,8 +28,8 @@ import {
   TabFrames,
   prepareCookieStatsComponents,
   prepareCookiesCount,
-} from '@cookie-analysis-tool/common';
-import { MessageBox } from '@cookie-analysis-tool/design-system';
+} from '@ps-analysis-tool/common';
+import { MessageBox } from '@ps-analysis-tool/design-system';
 
 interface CookiesLandingProps {
   tabFrames: TabFrames | null;

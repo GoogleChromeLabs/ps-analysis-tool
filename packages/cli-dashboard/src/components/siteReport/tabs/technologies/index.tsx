@@ -25,8 +25,8 @@ import {
   type TableColumn,
   type InfoType,
   type TableRow,
-} from '@cookie-analysis-tool/design-system';
-import type { TechnologyData } from '@cookie-analysis-tool/common';
+} from '@ps-analysis-tool/design-system';
+import type { TechnologyData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies

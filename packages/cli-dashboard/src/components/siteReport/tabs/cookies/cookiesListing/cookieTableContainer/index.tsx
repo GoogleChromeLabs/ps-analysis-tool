@@ -22,12 +22,12 @@ import React, { useMemo } from 'react';
 /**
  * Internal dependencies.
  */
-import type { CookieTableData } from '@cookie-analysis-tool/common';
+import type { CookieTableData } from '@ps-analysis-tool/common';
 import {
   CookieTable,
   type InfoType,
   type TableColumn,
-} from '@cookie-analysis-tool/design-system';
+} from '@ps-analysis-tool/design-system';
 
 interface CookieTableContainerProps {
   cookies: CookieTableData[];

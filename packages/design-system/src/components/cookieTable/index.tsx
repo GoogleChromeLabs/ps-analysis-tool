@@ -27,7 +27,7 @@ import {
   PreferenceDataValues,
   SortingState,
   getCookieKey,
-} from '@cookie-analysis-tool/common';
+} from '@ps-analysis-tool/common';
 import { noop } from '../../utils';
 
 interface CookieTableProps {

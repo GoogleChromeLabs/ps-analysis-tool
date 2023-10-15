@@ -25,11 +25,11 @@ import React, {
   useEffect,
   useRef,
 } from 'react';
-import { noop } from '@cookie-analysis-tool/design-system';
+import { noop } from '@ps-analysis-tool/design-system';
 import type {
   PreferenceDataValues,
   SelectedFilters,
-} from '@cookie-analysis-tool/common';
+} from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */

@@ -22,7 +22,7 @@ import React, { useState } from 'react';
 /**
  * Internal Dependencies
  */
-import { LandingPage } from '@cookie-analysis-tool/design-system';
+import { LandingPage } from '@ps-analysis-tool/design-system';
 
 const PrivateAdvertising = () => {
   const [loading, setLoading] = useState(true);

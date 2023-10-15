@@ -19,7 +19,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { ErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback } from '@cookie-analysis-tool/design-system';
+import { ErrorFallback } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.

@@ -24,7 +24,7 @@ import React, { useState } from 'react';
  */
 import type { PSInfo as PSInfoType } from '../../../../utils/fetchPSInfo';
 import RenderLink from './renderLink';
-import { ArrowRight, Button } from '@cookie-analysis-tool/design-system';
+import { ArrowRight, Button } from '@ps-analysis-tool/design-system';
 import classNames from 'classnames';
 
 /**

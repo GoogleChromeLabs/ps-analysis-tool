@@ -33,7 +33,7 @@ import type {
   ServiceSiteType,
 } from '../types';
 import JsonOutput from '../jsonOutput';
-import { noop } from '@cookie-analysis-tool/design-system';
+import { noop } from '@ps-analysis-tool/design-system';
 
 describe('RWSJsonGenerator', () => {
   beforeAll(() => {

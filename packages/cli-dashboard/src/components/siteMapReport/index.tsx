@@ -23,7 +23,7 @@ import {
   type CookieTableData,
   type TabFrames,
   type TechnologyData,
-} from '@cookie-analysis-tool/common';
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.

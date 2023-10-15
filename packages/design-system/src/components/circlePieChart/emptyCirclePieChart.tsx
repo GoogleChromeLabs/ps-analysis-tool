@@ -22,7 +22,7 @@ import { VictoryPie } from 'victory';
 /**
  * Internal dependencies.
  */
-import { COLOR_MAP } from '@cookie-analysis-tool/design-system';
+import { COLOR_MAP } from '@ps-analysis-tool/design-system';
 
 const EmptyCirclePieChart = () => {
   return (

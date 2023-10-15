@@ -22,7 +22,7 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { Add, Button } from '@cookie-analysis-tool/design-system';
+import { Add, Button } from '@ps-analysis-tool/design-system';
 
 interface AddButtonProps {
   onClick: () => void;

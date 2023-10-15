@@ -24,7 +24,7 @@ import classNames from 'classnames';
  * Internal dependencies.
  */
 import EmptyCirclePieChart from './emptyCirclePieChart';
-import { InfoIcon } from '@cookie-analysis-tool/design-system';
+import { InfoIcon } from '@ps-analysis-tool/design-system';
 
 interface CirclePieChartProps {
   centerCount: number;

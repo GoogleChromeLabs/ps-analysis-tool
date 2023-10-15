@@ -25,7 +25,7 @@ import InfoCard from '../../../../design-system/components/infoCard';
 import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
 import RWSJsonGenerator from './jsonGenerator';
 import Insights from './insights';
-import { Button, LandingPage } from '@cookie-analysis-tool/design-system';
+import { Button, LandingPage } from '@ps-analysis-tool/design-system';
 
 const RelatedWebsiteSets = () => {
   const [showForm, setShowForm] = useState(false);

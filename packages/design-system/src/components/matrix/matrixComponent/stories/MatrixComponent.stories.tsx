@@ -22,7 +22,7 @@ import type { Meta, StoryObj } from '@storybook/react';
  * Internal dependencies.
  */
 import MatrixComponent from '..';
-import { COLOR_MAP } from '@cookie-analysis-tool/design-system';
+import { COLOR_MAP } from '@ps-analysis-tool/design-system';
 
 const meta: Meta<typeof MatrixComponent> = {
   title: 'DesignSystem/Matrix/Component',
