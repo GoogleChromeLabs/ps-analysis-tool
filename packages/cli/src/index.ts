@@ -40,7 +40,7 @@ const DELAY_TIME = 20000;
 const program = new Command();
 
 program
-  .version('0.0.1')
+  .version('0.0.3')
   .description('CLI to test a URL for 3p cookies')
   .option('-u, --url <value>', 'URL of a site')
   .option('-s, --sitemap-url <value>', 'URL of a sitemap')
