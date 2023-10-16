@@ -24,6 +24,7 @@ import type { CookieTableData, TechnologyData } from '@ps-analysis-tool/common';
  * Internal dependencies.
  */
 import type { CompleteJson, CookieJsonDataType } from '../../../../types';
+import reshapeCookies from '../../../utils/reshapeCookies';
 
 export interface ContentStore {
   state: {
@@ -59,55 +60,7 @@ export const Provider = ({
   completeJson,
   children,
 }: PropsWithChildren<ContentStoreProviderProps>) => {
-  const tabCookies = useMemo(
-    () =>
-      Object.entries(cookies)
-        .filter(
-          ([frame]) => frame.includes('http') || frame === 'Unknown Frame'
-        )
-        .map(([frame, _cookies]) => {
-          const newCookies = Object.fromEntries(
-            Object.values(_cookies).map((cookie) => [
-              cookie.name + cookie.domain + cookie.path,
-              {
-                parsedCookie: {
-                  name: cookie.name,
-                  value: cookie.value,
-                  domain: cookie.domain,
-                  path: cookie.path,
-                  expires: cookie.expires,
-                  httponly: cookie.httpOnly,
-                  secure: cookie.secure,
-                  samesite: cookie.sameSite,
-                },
-                analytics: {
-                  platform: cookie.platform,
-                  category:
-                    cookie.category === 'Unknown Category'
-                      ? 'Uncategorized'
-                      : cookie.category,
-                  description: cookie.description,
-                } as CookieTableData['analytics'],
-                url: cookie.pageUrl,
-                headerType: 'response',
-                isFirstParty: cookie.isFirstParty,
-                frameIdList: [],
-                isCookieSet: !cookie.isBlocked,
-                frameUrl: frame,
-              } as CookieTableData,
-            ])
-          );
-
-          return newCookies;
-        })
-        .reduce((acc, cookieObj) => {
-          return {
-            ...acc,
-            ...cookieObj,
-          };
-        }, {}),
-    [cookies] // {frame: cookies}
-  );
+  const tabCookies = useMemo(() => reshapeCookies(cookies), [cookies]);
 
   return (
     <Context.Provider
