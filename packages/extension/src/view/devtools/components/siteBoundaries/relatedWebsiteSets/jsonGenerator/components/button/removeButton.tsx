@@ -22,7 +22,7 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { Button, Cross } from '@cookie-analysis-tool/design-system';
+import { Button, Cross } from '@ps-analysis-tool/design-system';
 
 interface RemoveButtonProps {
   onClick: () => void;

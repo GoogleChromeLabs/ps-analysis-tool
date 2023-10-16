@@ -19,11 +19,12 @@
  */
 import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
-import { type PreferenceDataValues } from '@cookie-analysis-tool/common';
+import { type PreferenceDataValues } from '@ps-analysis-tool/common';
+import { createPortal } from 'react-dom';
+
 /**
  * Internal dependencies.
  */
-import { createPortal } from 'react-dom';
 import ColumnList from './columnList';
 import type { TableOutput } from '../useTable';
 import { noop } from '../../../utils';

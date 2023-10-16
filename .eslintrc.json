@@ -27,10 +27,10 @@
       "version": "detect"
     },
     "import/resolver": {
-      "@cookie-analysis-tool/eslint-import-resolver": {
+      "@ps-analysis-tool/eslint-import-resolver": {
         "mapping": {
-          "^@cookie-analysis-tool\\/(.*)\\/(.*)": "./packages/$1/src/$2",
-          "^@cookie-analysis-tool\\/(.*)": "./packages/$1/src/"
+          "^@ps-analysis-tool\\/(.*)\\/(.*)": "./packages/$1/src/$2",
+          "^@ps-analysis-tool\\/(.*)": "./packages/$1/src/"
         },
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       },

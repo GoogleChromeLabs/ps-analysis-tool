@@ -18,19 +18,16 @@
  * External dependencies.
  */
 import React, { useMemo } from 'react';
-
-/**
- * Internal dependencies.
- */
-import type {
-  CookieTableData,
-  SortingState,
-} from '@cookie-analysis-tool/common';
+import type { CookieTableData, SortingState } from '@ps-analysis-tool/common';
 import {
   type InfoType,
   type TableColumn,
   CookieTable,
-} from '@cookie-analysis-tool/design-system';
+} from '@ps-analysis-tool/design-system';
+
+/**
+ * Internal dependencies.
+ */
 import { usePreferenceStore } from '../../../../stateProviders/preferenceStore';
 
 export interface CookieTableContainerProps {

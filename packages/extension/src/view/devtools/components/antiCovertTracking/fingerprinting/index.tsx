@@ -17,13 +17,13 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
+import { LandingPage } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
 import InfoCard from '../../../../design-system/components/infoCard';
 import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
-import { LandingPage } from '@cookie-analysis-tool/design-system';
 
 const Fingerprinting = () => {
   const [pageTitle, setPageTitle] = useState('');

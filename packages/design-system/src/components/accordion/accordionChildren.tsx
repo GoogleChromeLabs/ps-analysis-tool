@@ -18,7 +18,7 @@
  */
 import React from 'react';
 import classNames from 'classnames';
-import type { TabFrames } from '@cookie-analysis-tool/common';
+import type { TabFrames } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.

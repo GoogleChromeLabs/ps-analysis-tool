@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
-import { LandingPage } from '@cookie-analysis-tool/design-system';
+import { LandingPage } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.

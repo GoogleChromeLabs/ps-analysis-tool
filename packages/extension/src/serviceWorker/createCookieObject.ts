@@ -19,13 +19,13 @@
  */
 import { type Cookie as ParsedCookie } from 'simple-cookie';
 import { getDomain } from 'tldts';
+import { getCookieKey } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import { getCurrentTabId } from '../utils/getCurrentTabId';
 import { findPreviousCookieDataObject } from './findPreviousCookieDataObject';
-import { getCookieKey } from '@cookie-analysis-tool/common';
 
 /**
  * Create cookie object from cookieStore API cookie object, previously saved parsed cookie object if any, and recently captured request/response cookie header.

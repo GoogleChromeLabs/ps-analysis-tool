@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 import React, { useMemo, useCallback } from 'react';
-import { Button } from '@cookie-analysis-tool/design-system';
-import { type TabFrames } from '@cookie-analysis-tool/common';
+import { Button } from '@ps-analysis-tool/design-system';
+import { type TabFrames } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.

@@ -13,15 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
 import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
+import { COLOR_MAP } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
 import Circle from '..';
-import { COLOR_MAP } from '@cookie-analysis-tool/design-system';
 
 describe('Circle', () => {
   it('renders the Circle with the correct background color', () => {

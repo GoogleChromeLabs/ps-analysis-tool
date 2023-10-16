@@ -17,19 +17,19 @@
  * External dependencies.
  */
 import React from 'react';
+import {
+  TabCookies,
+  TabFrames,
+  prepareCookieStatsComponents,
+  prepareCookiesCount,
+} from '@ps-analysis-tool/common';
+import { MessageBox } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
 import LandingHeader from './landingHeader';
 import CookiesMatrix from './cookiesMatrix';
-import {
-  TabCookies,
-  TabFrames,
-  prepareCookieStatsComponents,
-  prepareCookiesCount,
-} from '@cookie-analysis-tool/common';
-import { MessageBox } from '@cookie-analysis-tool/design-system';
 
 interface CookiesLandingProps {
   tabFrames: TabFrames | null;

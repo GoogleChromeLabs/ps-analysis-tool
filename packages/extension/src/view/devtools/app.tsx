@@ -18,7 +18,7 @@
  */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Resizable } from 're-resizable';
-import { ExtensionReloadNotification } from '@cookie-analysis-tool/design-system';
+import { ExtensionReloadNotification } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.

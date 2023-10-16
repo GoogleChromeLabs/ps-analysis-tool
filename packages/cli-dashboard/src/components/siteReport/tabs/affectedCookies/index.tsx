@@ -24,8 +24,8 @@ import {
   CookieTable,
   type InfoType,
   type TableColumn,
-} from '@cookie-analysis-tool/design-system';
-import type { CookieTableData } from '@cookie-analysis-tool/common';
+} from '@ps-analysis-tool/design-system';
+import type { CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies
