@@ -99,9 +99,21 @@ const setTooltipPosition = (
     if (frameX + tooltip.offsetWidth > window.innerWidth) {
       const leftOverWidth = tooltip.offsetWidth - (window.innerWidth - frameX);
       tooltip.style.left = `${frameX - leftOverWidth - 10}px`;
+      tooltip.firstElementChild?.classList.remove(
+        'ps-tooltip-top-right-notch',
+        'ps-tooltip-top-left-notch',
+        'ps-tooltip-bottom-left-notch',
+        'ps-tooltip-bottom-right-notch'
+      );
       tooltip.firstElementChild?.classList.add('ps-tooltip-bottom-right-notch');
       return;
     }
+    tooltip.firstElementChild?.classList.remove(
+      'ps-tooltip-top-right-notch',
+      'ps-tooltip-top-left-notch',
+      'ps-tooltip-bottom-left-notch',
+      'ps-tooltip-bottom-right-notch'
+    );
     tooltip.firstElementChild?.classList.add('ps-tooltip-bottom-left-notch');
     return;
   }
@@ -114,11 +126,23 @@ const setTooltipPosition = (
     }px`;
     if (frameX + tooltip.offsetWidth > window.innerWidth) {
       const leftOverWidth = tooltip.offsetWidth - (window.innerWidth - frameX);
-      tooltip.style.left = frameX - leftOverWidth + 20 + 'px';
+      tooltip.style.left = `${frameX - leftOverWidth - 10}px`;
+      tooltip.firstElementChild?.classList.remove(
+        'ps-tooltip-top-right-notch',
+        'ps-tooltip-top-left-notch',
+        'ps-tooltip-bottom-left-notch',
+        'ps-tooltip-bottom-right-notch'
+      );
       tooltip.firstElementChild?.classList.add('ps-tooltip-top-right-notch');
       return;
     }
-    tooltip.style.left = frameX + 'px';
+    tooltip.style.left = frameX + Number(window.scrollX) + 'px';
+    tooltip.firstElementChild?.classList.remove(
+      'ps-tooltip-top-right-notch',
+      'ps-tooltip-top-left-notch',
+      'ps-tooltip-bottom-left-notch',
+      'ps-tooltip-bottom-right-notch'
+    );
     tooltip.firstElementChild?.classList.add('ps-tooltip-top-left-notch');
     return;
   }

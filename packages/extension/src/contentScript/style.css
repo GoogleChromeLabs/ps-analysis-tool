@@ -77,7 +77,7 @@ html body .ps-tooltip[popover] > .ps-content.ps-tooltip-top-right-notch:after {
     bottom: unset !important;
     top: 5px !important;
     box-shadow: color-mix(in srgb, #3c4043 15%, transparent) 3px -3px 4px -1px !important;
-    right: 5px !important;
+    right: 25px !important;
     left: unset !important;
 }
 
@@ -88,7 +88,7 @@ html body .ps-tooltip[popover] > .ps-content.ps-tooltip-bottom-left-notch:after 
 
 html body .ps-tooltip[popover] > .ps-content.ps-tooltip-bottom-right-notch:after {
     bottom: 9px !important;
-    right: 15px !important;
+    right: 25px !important;
 }
 
 html body .ps-highlighted-frame {
