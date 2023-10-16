@@ -34,18 +34,22 @@ const RelatedWebsiteSets = () => {
   return (
     <LandingPage title={pageTitle} isLoading={!pageTitle}>
       <div
-        className="px-4 max-w-2xl h-fit overflow-auto divide-y divide-american-silver dark:divide-quartz"
+        className="max-w-2xl h-fit overflow-auto divide-y divide-american-silver dark:divide-quartz"
         data-testid="related-website-sets-content"
       >
-        <InfoCard
-          infoKey={PSInfoKey.RelatedWebsiteSets}
-          setTitle={setPageTitle}
-        />
+        <div className="px-4">
+          <InfoCard
+            infoKey={PSInfoKey.RelatedWebsiteSets}
+            setTitle={setPageTitle}
+          />
+        </div>
         <div className="py-6 text-raisin-black dark:text-bright-gray flex flex-col gap-3">
-          <Insights />
+          <div className="px-4">
+            <Insights />
+          </div>
           <RWSJsonGenerator open={showForm} setOpen={setShowForm} />
           {!showForm && (
-            <div className="pt-4">
+            <div className="pt-4 px-4">
               <Button
                 text="Generate RWS JSON Resources"
                 onClick={() => setShowForm(true)}
