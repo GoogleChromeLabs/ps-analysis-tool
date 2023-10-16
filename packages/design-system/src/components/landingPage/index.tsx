@@ -97,7 +97,7 @@ const LandingPage = ({ title, children, isLoading }: LandingPageProps) => {
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row px-4 pt-12 pb-24 gap-10">
+        <div className="flex flex-col md:flex-row px-4 pt-6 pb-24 gap-10">
           {/* Quick Links */}
           <div className="md:w-[35%] flex flex-col gap-4">
             <BulletList rows={QUICK_LINKS} heading="Quick Links" />
