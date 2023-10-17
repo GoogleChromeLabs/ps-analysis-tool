@@ -20,16 +20,19 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
 import { type TabFrames, type TechnologyData } from '@ps-analysis-tool/common';
+import { File, FileWhite } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
-import SiteSelection from '../siteReport/components/siteSelection';
 import type { CookieFrameStorageType, CompleteJson } from '../../types';
 import SiteReport from '../siteReport';
 import SiteMapAffectedCookies from './sitemapAffectedCookies';
 import CookiesLandingContainer from '../siteReport/tabs/cookies/cookiesLandingContainer';
 import reshapeCookies from '../utils/reshapeCookies';
+import { Sidebar, useSidebar } from './sidebar';
+import sidebarData from './sidebarData';
+import type { SidebarItem } from './sidebar/useSidebar';
 
 interface SiteMapReportProps {
   landingPageCookies: CookieFrameStorageType;
@@ -44,10 +47,8 @@ const SiteMapReport = ({
   landingPageCookies,
   completeJson,
 }: SiteMapReportProps) => {
-  const [selectedSite, setSelectedSite] = useState<string | null>(null);
   const [sites, setSites] = useState<string[]>([]);
-  const [selectedTopLevelMenu, setSelectedTopLevelMenu] =
-    useState<string>('report');
+  const [data, setData] = useState<SidebarItem[]>(sidebarData);
 
   useEffect(() => {
     const _sites = new Set<string>();
@@ -84,12 +85,20 @@ const SiteMapReport = ({
     [reshapedCookies]
   );
 
+  const {
+    activePanel,
+    sidebarItems,
+    updateSelectedItemKey,
+    isKeyAncestor,
+    isKeySelected,
+  } = useSidebar({ data });
+
   const siteFilteredCookies = useMemo(() => {
     return Object.entries(cookies).reduce(
       (acc: CookieFrameStorageType, [frame, _cookies]) => {
         acc[frame] = Object.fromEntries(
-          Object.entries(_cookies).filter(
-            ([, cookie]) => cookie.pageUrl === selectedSite
+          Object.entries(_cookies).filter(([, cookie]) =>
+            isKeySelected(cookie.pageUrl || '')
           )
         );
 
@@ -97,13 +106,64 @@ const SiteMapReport = ({
       },
       {}
     );
-  }, [cookies, selectedSite]);
+  }, [cookies, isKeySelected]);
 
   const siteFilteredTechnologies = useMemo(() => {
-    return technologies.filter(
-      (technology) => technology.pageUrl === selectedSite
+    return technologies.filter((technology) =>
+      isKeySelected(technology.pageUrl || '')
     );
-  }, [selectedSite, technologies]);
+  }, [isKeySelected, technologies]);
+
+  useEffect(() => {
+    setData((prev) => {
+      const _data = [...prev];
+
+      _data[0].panel = (
+        <CookiesLandingContainer
+          tabCookies={reshapedCookies}
+          tabFrames={frames}
+          affectedCookies={affectedCookies}
+        />
+      );
+
+      _data[0].children = sites.map(
+        (site): SidebarItem => ({
+          key: site,
+          title: site,
+          panel: (
+            <SiteReport
+              selectedSite={isKeySelected(site) ? site : undefined}
+              cookies={siteFilteredCookies}
+              technologies={siteFilteredTechnologies}
+              completeJson={completeJson}
+            />
+          ),
+          children: [],
+          icon: <File />,
+          selectedIcon: <FileWhite />,
+        })
+      );
+
+      _data[1].panel = (
+        <SiteMapAffectedCookies
+          cookies={Object.values(reshapedCookies).filter(
+            (cookie) => !cookie.isCookieSet
+          )}
+        />
+      );
+
+      return _data;
+    });
+  }, [
+    affectedCookies,
+    completeJson,
+    frames,
+    isKeySelected,
+    reshapedCookies,
+    siteFilteredCookies,
+    siteFilteredTechnologies,
+    sites,
+  ]);
 
   return (
     <div className="w-full h-screen flex">
@@ -116,52 +176,14 @@ const SiteMapReport = ({
         }}
         className=" max-h-screen overflow-auto flex flex-col border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
       >
-        <div className="flex flex-col pt-1">
-          <SiteSelection
-            sites={sites}
-            selectedSite={selectedSite}
-            setSelectedSite={setSelectedSite}
-            isSelectedTopLevelMenu={selectedTopLevelMenu === 'report'}
-            selectTopLevelMenu={() => setSelectedTopLevelMenu('report')}
-          />
-          <div
-            onClick={() => {
-              setSelectedTopLevelMenu('affectedCookies');
-              setSelectedSite(null);
-            }}
-            className={`w-full pl-6 py-0.5 outline-0 cursor-pointer text-sm 
-							${
-                selectedTopLevelMenu === 'affectedCookies'
-                  ? 'bg-royal-blue text-white'
-                  : 'bg-white'
-              }`}
-          >
-            <p className="ml-[15px]">Affected Cookies</p>
-          </div>
-        </div>
+        <Sidebar
+          sidebarItems={sidebarItems}
+          updateSelectedItemKey={updateSelectedItemKey}
+          isKeyAncestor={isKeyAncestor}
+          isKeySelected={isKeySelected}
+        />
       </Resizable>
-      <div className="flex-1 max-h-screen overflow-auto">
-        {selectedSite ? (
-          <SiteReport
-            selectedSite={selectedSite}
-            cookies={siteFilteredCookies}
-            technologies={siteFilteredTechnologies}
-            completeJson={completeJson}
-          />
-        ) : selectedTopLevelMenu === 'report' ? (
-          <CookiesLandingContainer
-            tabCookies={reshapedCookies}
-            tabFrames={frames}
-            affectedCookies={affectedCookies}
-          />
-        ) : (
-          <SiteMapAffectedCookies
-            cookies={Object.values(reshapedCookies).filter(
-              (cookie) => !cookie.isCookieSet
-            )}
-          />
-        )}
-      </div>
+      <div className="flex-1 max-h-screen overflow-auto">{activePanel}</div>
     </div>
   );
 };
