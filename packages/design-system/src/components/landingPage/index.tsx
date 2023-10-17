@@ -71,34 +71,37 @@ const LandingPage = ({ title, children, isLoading }: LandingPageProps) => {
     <>
       {isLoading && <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />}
       <div className={classNames(isLoading && 'hidden')}>
-        <div className="px-4 pt-6 pb-3 border-b border-hex-gray dark:border-quartz">
-          <button
-            className="flex gap-2 text-2xl font-bold items-baseline dark:text-bright-gray"
-            onClick={() => setOpen((prevOpen) => !prevOpen)}
+        <div className="flex flex-col">
+          <div className="p-4 border-b border-hex-gray dark:border-quartz">
+            <button
+              className="flex gap-2 text-2xl font-bold items-baseline dark:text-bright-gray cursor-pointer"
+              onClick={() => setOpen((prevOpen) => !prevOpen)}
+            >
+              {title && <h1 className="text-left">{title}</h1>}
+              <div>
+                <ArrowUp
+                  className={classNames(open && 'rotate-180 -translate-y-1')}
+                />
+              </div>
+            </button>
+          </div>
+
+          {/* Section Content */}
+          <div
+            className={classNames(
+              !open && 'hidden',
+              'border-b border-hex-gray dark:border-quartz h-full'
+            )}
           >
-            {title && <h1 className="text-left">{title}</h1>}
-            <ArrowUp
-              className={classNames(!open && 'rotate-180 -translate-y-1')}
-            />
-          </button>
+            {children}
+          </div>
         </div>
 
-        {/* Section Content */}
-        <div
-          className={classNames(
-            !open && 'hidden',
-            'border-b border-hex-gray dark:border-quartz'
-          )}
-        >
-          {children}
-        </div>
-
-        <div className="md:max-w-[70%] flex flex-col md:flex-row px-4 pt-12 pb-24 gap-10">
+        <div className="flex flex-col md:flex-row px-4 pt-6 pb-24 gap-10">
           {/* Quick Links */}
           <div className="md:w-[35%] flex flex-col gap-4">
             <BulletList rows={QUICK_LINKS} heading="Quick Links" />
           </div>
-
           {/* Latest News */}
           <div className="md:w-[65%] flex flex-col gap-4">
             <h2 className="text-xs font-bold uppercase text-darkest-gray dark:text-bright-gray">

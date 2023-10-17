@@ -118,7 +118,7 @@ const CookieTable = ({
   }, []);
 
   return (
-    <div className="flex-1 w-full h-full text-outer-space-crayola border-x border-american-silver dark:border-quartz">
+    <div className="flex-1 w-full h-full overflow-x-auto text-outer-space-crayola border-x border-american-silver dark:border-quartz">
       <Table
         updatePreference={updatePreference}
         table={table}

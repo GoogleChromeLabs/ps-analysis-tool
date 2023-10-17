@@ -31,7 +31,7 @@ const Fingerprinting = () => {
   return (
     <LandingPage title={pageTitle} isLoading={!pageTitle}>
       <div
-        className="px-4 max-w-2xl h-full overflow-auto"
+        className="px-4 max-w-2xl h-fit overflow-auto"
         data-testid="fingerprinting-content"
       >
         <InfoCard
