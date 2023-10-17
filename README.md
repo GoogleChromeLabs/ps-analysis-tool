@@ -5,25 +5,14 @@
 # Table of contents
 
 - [Privacy Sandbox](#privacy-sandbox)
-- [Browsing Session Analysis](#browsing-session-analyses)
 - [Call to action](#call-to-action)
 - [Contributing](#contributing)
 
 # Privacy Sandbox
 
-[Privacy Sandbox](https://privacysandbox.com/) is a multi-year [initiative by Google](https://developer.chrome.com/docs/privacy-sandbox/) for building a more private web by defining a set of building blocks (i.e. proposed APIs) enabling [a new privacy model for the web](https://github.com/michaelkleber/privacy-model). This Initiative encompasses three tracks:
+[Privacy Sandbox](https://privacysandbox.com/) is a multi-year [initiative by Google](https://developer.chrome.com/docs/privacy-sandbox/) for building a more private web by defining a set of building blocks (i.e. proposed APIs) enabling [a new privacy model for the web](https://github.com/michaelkleber/privacy-model). Privacy Sandbox encompasses replacing functionality powered by third-party cookies with privacy-preserving alternatives, deprecating third-party cookies, and ensuring developers have a well-lit path to the new capabilities of the platform, and avoid pursuing tracking via other means. 
 
-1. Replacing functionality powered by third-party cookies with privacy-preserving alternatives.
-
-2. Turning down third-party cookies, while  ensuring that the ecosystem has the technical capabilities for embracing new privacy-preserving solutions (e.g. First Party Sets, Topics, etc.)
-
-3. Mitigating workarounds, by ensuring developers have a well-lit path to the new capabilities of the platform, and avoid pursuing tracking via other means. 
-
-Tracks #2 and #3 bring significant changes to how the web operates today, and the purpose of this tool is to shed light, provide insights, and help you to learn and understand the changes that are happening regarding the deprecation of 3P cookies, and the potential impact on the aspects of your site or product built using cookies. 
-
-# Browsing Session Analyses
-
-A "browsing session" refers to the sequence of navigations a user follows over a period of time as they are actively engaging on the web, including activities like navigating through pages and sites, making transactions, submitting forms, downloading content, performing web searches, and so on. The overall goal of [Privacy Sandbox](https://privacysandbox.com/) is to protect users' privacy online, including reducing cross-site and cross-app user tracking during browsing sessions. This tool supports the analysis of **browsing sessions** by shedding light on cookie usage and insights and on the use and behavior of PS APIs. 
+The purpose of this tool is to shed light, provide insights, and help you to learn and understand the changes that are happening in the context of Privacy Sandbox, and the potential impact on your site or web product.
 
 # Call to Action
 
@@ -43,4 +32,3 @@ Ultimately, the web ecosystem, together, will navigate successfully this crucial
 # Contributing
 If you have requests for features you would like to see in this tool, please file a Feature Request or join as a contributor! Please refer to our contribution [guidelines](docs/CONTRIBUTING.md) and [code of conduct](docs/code-of-conduct.md).
 
-Another valuable form of contributing is by reporting breakages, proposing features, and engaging in community discussions.
