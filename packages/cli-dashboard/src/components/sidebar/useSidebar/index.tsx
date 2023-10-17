@@ -29,6 +29,7 @@ export type SidebarItem = {
 
 export interface SidebarOutput {
   activePanel: React.ReactNode;
+  selectedItemKey: string | null;
   sidebarItems: SidebarItem[];
   updateSelectedItemKey: (key: string | null) => void;
   isKeyAncestor: (key: string) => boolean;
@@ -154,6 +155,7 @@ const useSidebar = ({ data }: useSidebarProps): SidebarOutput => {
 
   return {
     activePanel,
+    selectedItemKey,
     sidebarItems,
     updateSelectedItemKey,
     isKeyAncestor,

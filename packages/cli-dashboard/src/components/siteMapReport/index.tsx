@@ -86,6 +86,7 @@ const SiteMapReport = ({
 
   const {
     activePanel,
+    selectedItemKey,
     sidebarItems,
     updateSelectedItemKey,
     isKeyAncestor,
@@ -164,6 +165,12 @@ const SiteMapReport = ({
     sites,
   ]);
 
+  useEffect(() => {
+    if (selectedItemKey === null && data.length > 0) {
+      updateSelectedItemKey(data[0].key);
+    }
+  }, [data, isKeySelected, selectedItemKey, updateSelectedItemKey]);
+
   return (
     <div className="w-full h-screen flex">
       <Resizable
@@ -173,7 +180,7 @@ const SiteMapReport = ({
         enable={{
           right: true,
         }}
-        className=" max-h-screen overflow-auto flex flex-col border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
+        className="max-h-screen overflow-auto flex flex-col border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
       >
         <Sidebar
           sidebarItems={sidebarItems}
