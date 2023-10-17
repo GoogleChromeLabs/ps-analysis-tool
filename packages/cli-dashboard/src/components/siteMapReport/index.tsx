@@ -30,7 +30,7 @@ import SiteReport from '../siteReport';
 import SiteMapAffectedCookies from './sitemapAffectedCookies';
 import CookiesLandingContainer from '../siteReport/tabs/cookies/cookiesLandingContainer';
 import reshapeCookies from '../utils/reshapeCookies';
-import { Sidebar, useSidebar, type SidebarItem } from './sidebar';
+import { Sidebar, useSidebar, type SidebarItem } from '../sidebar';
 import sidebarData from './sidebarData';
 
 interface SiteMapReportProps {
