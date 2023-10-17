@@ -17,13 +17,13 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
-import { ArrowDown, ArrowDownWhite } from '@ps-analysis-tool/design-system';
+import React from 'react';
 
 /**
  * Internal dependencies.
  */
-import type { SidebarItem } from '.';
+import SidebarChild from './sidebarChild';
+import type { SidebarItem } from './useSidebar';
 
 interface SidebarProps {
   sidebarItems: SidebarItem[];
@@ -41,7 +41,7 @@ const Sidebar = ({
   return (
     <div className="flex flex-col">
       {sidebarItems.map((sidebarItem) => (
-        <SidebarItem
+        <SidebarChild
           sidebarItem={sidebarItem}
           updateSelectedItemKey={updateSelectedItemKey}
           isKeyAncestor={isKeyAncestor}
@@ -50,82 +50,6 @@ const Sidebar = ({
         />
       ))}
     </div>
-  );
-};
-
-interface SidebarItemProps {
-  sidebarItem: SidebarItem;
-  updateSelectedItemKey: (key: string | null) => void;
-  isKeyAncestor: (key: string) => boolean;
-  isKeySelected: (key: string) => boolean;
-}
-
-const SidebarItem = ({
-  sidebarItem,
-  updateSelectedItemKey,
-  isKeyAncestor,
-  isKeySelected,
-}: SidebarItemProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <>
-      <div
-        onClick={() => {
-          updateSelectedItemKey(sidebarItem.key);
-        }}
-        className={`w-full flex items-center pl-6 py-0.5 outline-0 text-sm ${
-          isKeySelected(sidebarItem.key)
-            ? 'bg-royal-blue text-white'
-            : isKeyAncestor(sidebarItem.key)
-            ? 'bg-gainsboro'
-            : 'bg-white'
-        } cursor-pointer`}
-      >
-        {sidebarItem.children?.length !== 0 && (
-          <div
-            onClick={() => {
-              setIsOpen(!isOpen);
-            }}
-            className={`origin-center transition-transform scale-125 p-0.5 mr-1 ${
-              !isOpen && '-rotate-90'
-            }`}
-          >
-            {isKeyAncestor(sidebarItem.key) ||
-            !isKeySelected(sidebarItem.key) ? (
-              <ArrowDown />
-            ) : (
-              <ArrowDownWhite />
-            )}
-          </div>
-        )}
-        {sidebarItem.icon && (
-          <div className="mr-1">
-            {isKeySelected(sidebarItem.key) ? (
-              <>{sidebarItem.selectedIcon}</>
-            ) : (
-              <>{sidebarItem.icon}</>
-            )}
-          </div>
-        )}
-        <p>{sidebarItem.title}</p>
-      </div>
-      <div>
-        {sidebarItem.children?.length !== 0 && isOpen && (
-          <>
-            {sidebarItem.children.map((child) => (
-              <SidebarItem
-                sidebarItem={child}
-                updateSelectedItemKey={updateSelectedItemKey}
-                isKeyAncestor={isKeyAncestor}
-                isKeySelected={isKeySelected}
-                key={child.key}
-              />
-            ))}
-          </>
-        )}
-      </div>
-    </>
   );
 };
 

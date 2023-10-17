@@ -179,7 +179,7 @@ const SiteMapReport = ({
         enable={{
           right: true,
         }}
-        className="max-h-screen overflow-auto flex flex-col border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
+        className="max-h-screen overflow-auto flex flex-col border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz pt-1"
       >
         <Sidebar
           sidebarItems={sidebarItems}
