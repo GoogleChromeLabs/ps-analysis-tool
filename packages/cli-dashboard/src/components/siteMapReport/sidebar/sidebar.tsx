@@ -23,7 +23,7 @@ import { ArrowDown, ArrowDownWhite } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies.
  */
-import type { SidebarItem } from './useSidebar';
+import type { SidebarItem } from '.';
 
 interface SidebarProps {
   sidebarItems: SidebarItem[];

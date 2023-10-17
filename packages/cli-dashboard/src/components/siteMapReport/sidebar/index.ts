@@ -15,4 +15,5 @@
  */
 
 export { default as useSidebar } from './useSidebar';
+export * from './useSidebar';
 export { default as Sidebar } from './sidebar';

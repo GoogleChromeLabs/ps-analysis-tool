@@ -17,7 +17,7 @@
 /**
  * Internal dependencies
  */
-import type { SidebarItem } from './sidebar/useSidebar';
+import type { SidebarItem } from './sidebar';
 
 const sidebarData = [
   {
