@@ -132,7 +132,6 @@ const SiteMapReport = ({
           title: site,
           panel: (
             <SiteReport
-              selectedSite={isKeySelected(site) ? site : undefined}
               cookies={siteFilteredCookies}
               technologies={siteFilteredTechnologies}
               completeJson={completeJson}

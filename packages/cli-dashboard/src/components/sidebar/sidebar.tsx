@@ -74,7 +74,7 @@ const SidebarItem = ({
         onClick={() => {
           updateSelectedItemKey(sidebarItem.key);
         }}
-        className={`w-full flex items-center pl-6 py-0.5 outline-0 ${
+        className={`w-full flex items-center pl-6 py-0.5 outline-0 text-sm ${
           isKeySelected(sidebarItem.key)
             ? 'bg-royal-blue text-white'
             : isKeyAncestor(sidebarItem.key)

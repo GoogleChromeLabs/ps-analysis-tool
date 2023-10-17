@@ -19,7 +19,7 @@
  */
 import type { SidebarItem } from '../sidebar';
 
-const sidebarData = [
+const sidebarData: SidebarItem[] = [
   {
     key: 'sitemap-landing-page',
     title: 'Sitemap Report',
@@ -30,6 +30,6 @@ const sidebarData = [
     title: 'Affected Cookies',
     children: [],
   },
-] as SidebarItem[];
+];
 
 export default sidebarData;

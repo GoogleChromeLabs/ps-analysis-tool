@@ -16,6 +16,7 @@
 /**
  * External dependencies.
  */
+import React from 'react';
 import {
   CookieIcon,
   CookieIconWhite,
@@ -26,39 +27,32 @@ import {
 /**
  * Internal dependencies.
  */
-import CookiesTab from './cookies';
-import TechnologiesTab from './technologies';
-import AffectedCookiesTab from './affectedCookies';
+import type { SidebarItem } from '../../sidebar';
+import Technologies from './technologies';
 
-export const TABS = [
+const Tabs: SidebarItem[] = [
   {
-    display_name: 'Cookies',
-    component: CookiesTab,
-    id: 'cookies',
-    icons: {
-      default: CookieIcon,
-      selected: CookieIconWhite,
-    },
-    parentId: undefined,
+    key: 'cookies',
+    title: 'Cookies',
+    children: [],
+    icon: <CookieIcon />,
+    selectedIcon: <CookieIconWhite />,
   },
   {
-    display_name: 'Technologies',
-    component: TechnologiesTab,
-    id: 'technologies',
-    icons: {
-      default: SiteBoundariesIcon,
-      selected: SiteBoundariesIconWhite,
-    },
-    parentId: undefined,
+    key: 'technologies',
+    title: 'Technologies',
+    children: [],
+    panel: <Technologies />,
+    icon: <SiteBoundariesIcon />,
+    selectedIcon: <SiteBoundariesIconWhite />,
   },
   {
-    display_name: 'Affected Cookies',
-    component: AffectedCookiesTab,
-    id: 'affected_cookies',
-    icons: {
-      default: SiteBoundariesIcon,
-      selected: SiteBoundariesIconWhite,
-    },
-    parentId: undefined,
+    key: 'affected_cookies',
+    title: 'Affected Cookies',
+    children: [],
+    icon: <SiteBoundariesIcon />,
+    selectedIcon: <SiteBoundariesIconWhite />,
   },
 ];
+
+export default Tabs;

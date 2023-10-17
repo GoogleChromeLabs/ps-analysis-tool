@@ -16,21 +16,20 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Resizable } from 're-resizable';
 
 /**
  * Internal dependencies.
  */
 import { useContentStore } from '../stateProviders/contentStore';
-import { TABS } from '../tabs';
-import Sidebar from './sidebar';
+import Tabs from '../tabs';
+import { useSidebar, type SidebarItem, Sidebar } from '../../sidebar';
+import AffectedCookies from '../tabs/affectedCookies';
+import CookiesTab from '../tabs/cookies';
 
-interface LayoutProps {
-  selectedSite?: string;
-}
-
-const Layout = ({ selectedSite }: LayoutProps) => {
+const Layout = () => {
+  const [data, setData] = useState<SidebarItem[]>(Tabs);
   const { frameUrls } = useContentStore(({ state }) => ({
     frameUrls: [
       ...new Set(
@@ -43,12 +42,55 @@ const Layout = ({ selectedSite }: LayoutProps) => {
     ],
   }));
 
-  const [selectedSidebarOptionInd, setSelectedSidebarOptionInd] =
-    useState<number>(0);
+  const {
+    activePanel,
+    selectedItemKey,
+    sidebarItems,
+    updateSelectedItemKey,
+    isKeyAncestor,
+    isKeySelected,
+  } = useSidebar({ data });
 
-  const [selectedFrameUrl, setSelectedFrameUrl] = useState<string | null>(null);
+  useEffect(() => {
+    setData((prev) => {
+      const _data = [...prev];
 
-  const TabComponent = TABS[selectedSidebarOptionInd].component;
+      const keys = selectedItemKey?.split('#') ?? [];
+
+      _data[0].panel = (
+        <CookiesTab
+          selectedFrameUrl={null}
+          selectedSite={keys[keys.length - 2]}
+        />
+      );
+
+      _data[0].children = frameUrls.map(
+        (url): SidebarItem => ({
+          key: url,
+          title: url,
+          panel: (
+            <CookiesTab
+              selectedFrameUrl={keys[keys.length - 1]}
+              selectedSite={keys[keys.length - 2]}
+            />
+          ),
+          children: [],
+        })
+      );
+
+      _data[2].panel = (
+        <AffectedCookies selectedFrameUrl={keys[keys.length - 1]} />
+      );
+
+      return _data;
+    });
+  }, [frameUrls, selectedItemKey]);
+
+  useEffect(() => {
+    if (selectedItemKey === null) {
+      updateSelectedItemKey('cookies');
+    }
+  }, [selectedItemKey, updateSelectedItemKey]);
 
   return (
     <div className="w-full h-full flex">
@@ -57,31 +99,18 @@ const Layout = ({ selectedSite }: LayoutProps) => {
         minWidth={'150px'}
         maxWidth={'98%'}
         enable={{
-          top: false,
           right: true,
-          bottom: false,
-          left: false,
-          topRight: false,
-          bottomRight: false,
-          bottomLeft: false,
-          topLeft: false,
         }}
         className="h-full flex flex-col border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz pt-1"
       >
         <Sidebar
-          selectedFrameUrl={selectedFrameUrl}
-          setSelectedFrameUrl={setSelectedFrameUrl}
-          frameUrls={frameUrls}
-          selectedIndex={selectedSidebarOptionInd}
-          setIndex={setSelectedSidebarOptionInd}
+          sidebarItems={sidebarItems}
+          updateSelectedItemKey={updateSelectedItemKey}
+          isKeyAncestor={isKeyAncestor}
+          isKeySelected={isKeySelected}
         />
       </Resizable>
-      <div className="flex-1 max-h-screen overflow-auto">
-        <TabComponent
-          selectedFrameUrl={selectedFrameUrl}
-          selectedSite={selectedSite}
-        />
-      </div>
+      <div className="flex-1 max-h-screen overflow-auto">{activePanel}</div>
     </div>
   );
 };
