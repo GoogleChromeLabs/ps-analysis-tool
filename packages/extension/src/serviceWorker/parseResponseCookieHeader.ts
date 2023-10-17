@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import cookie, { type Cookie as ParsedCookie } from 'simple-cookie';
+import { isFirstParty } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -28,7 +29,6 @@ import type {
 } from '../utils/fetchCookieDictionary';
 import findAnalyticsMatch from './findAnalyticsMatch';
 import { createCookieObject } from './createCookieObject';
-import { isFirstParty } from '@cookie-analysis-tool/common';
 
 /**
  * Parse response cookies header.

@@ -21,7 +21,7 @@ import {
   ArrowDownWhite,
   File,
   FileWhite,
-} from '@cookie-analysis-tool/design-system';
+} from '@ps-analysis-tool/design-system';
 import React, { useState } from 'react';
 
 interface SiteSelectionProps {

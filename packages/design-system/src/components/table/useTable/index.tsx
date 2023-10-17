@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import { useMemo } from 'react';
-import { CookieTableData, TechnologyData } from '@cookie-analysis-tool/common';
+import { CookieTableData, TechnologyData } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */

@@ -17,10 +17,7 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  Accordion,
-  AccordionChildren,
-} from '@cookie-analysis-tool/design-system';
+import { Accordion, AccordionChildren } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies
@@ -33,6 +30,7 @@ import {
   arrowLeftHandler,
 } from './keyboardNavigationHandlers';
 import useFrameOverlay from '../../hooks/useFrameOverlay';
+
 interface SidebarProps {
   selectedIndex: number;
   setIndex: (index: number) => void;
@@ -130,6 +128,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
   const keyboardNavigator = useCallback(
     // eslint-disable-next-line complexity
     (event: React.KeyboardEvent<HTMLDivElement>) => {
+      event.preventDefault();
       if (!selectedAccordionChild) {
         return;
       }
@@ -229,7 +228,6 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
       }
       setIndex(currentIndex);
       setSelectedAccordionChild(tabIdToBeSet);
-      setIsTabFocused(true);
     },
     [setIndex, setSelectedFrame]
   );
@@ -277,6 +275,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                             <AccordionChildren
                               tabs={TABS}
                               key={key}
+                              tabId="cookies"
                               currentIndex={index}
                               accordionMenuItemName={key}
                               defaultIcon={TABS[index].icons.default}
@@ -285,6 +284,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                               selectedIcon={TABS[index].icons.selected}
                               selectedIndex={selectedIndex}
                               onAccordionChildClick={onAccordionChildClick}
+                              keyboardNavigator={keyboardNavigator}
                               titleForMenuItem={`Cookies used by frames from ${key}`}
                             />
                           );

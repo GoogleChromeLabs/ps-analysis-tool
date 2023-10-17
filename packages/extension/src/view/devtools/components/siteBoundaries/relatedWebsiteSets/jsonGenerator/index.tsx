@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import React, { useEffect, useRef } from 'react';
+import { Button, Cross } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
@@ -29,7 +30,6 @@ import ServiceSites from './serviceSites';
 import CountrySites from './countrySites';
 import JsonOutput from './jsonOutput';
 import useGeneratorForm from './useGeneratorForm';
-import { Button, Cross } from '@cookie-analysis-tool/design-system';
 
 interface RWSJsonGeneratorProps {
   open: boolean;
@@ -83,7 +83,7 @@ const RWSJsonGenerator = ({ open, setOpen }: RWSJsonGeneratorProps) => {
   return (
     <>
       {open && (
-        <div className="overflow-auto" ref={formContainer}>
+        <div className="overflow-auto px-4" ref={formContainer}>
           <div className="text-raisin-black dark:text-bright-gray w-full min-w-[33rem]">
             <h1 className="text-lg font-semibold mt-4">
               Related Website Sets JSON Generator

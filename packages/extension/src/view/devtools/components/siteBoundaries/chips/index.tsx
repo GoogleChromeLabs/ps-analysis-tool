@@ -23,7 +23,7 @@ import React, { useState } from 'react';
  */
 import InfoCard from '../../../../design-system/components/infoCard';
 import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
-import { LandingPage } from '@cookie-analysis-tool/design-system';
+import { LandingPage } from '@ps-analysis-tool/design-system';
 
 const Chips = () => {
   const [pageTitle, setPageTitle] = useState('');
@@ -31,7 +31,7 @@ const Chips = () => {
   return (
     <LandingPage title={pageTitle} isLoading={!pageTitle}>
       <div
-        className="px-4 max-w-2xl h-full overflow-auto"
+        className="px-4 max-w-2xl h-fit overflow-auto"
         data-testid="chips-content"
       >
         <InfoCard infoKey={PSInfoKey.Chips} setTitle={setPageTitle} />

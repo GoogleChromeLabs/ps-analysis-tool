@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const elementIsVisibleInViewport = (
+const isElementVisibleInViewport = (
   el: HTMLElement | null,
   partiallyVisible = false
 ) => {
@@ -31,4 +31,4 @@ const elementIsVisibleInViewport = (
     : top >= 0 && left >= 0 && bottom <= innerHeight && right <= innerWidth;
 };
 
-export default elementIsVisibleInViewport;
+export default isElementVisibleInViewport;

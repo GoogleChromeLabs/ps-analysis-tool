@@ -21,6 +21,7 @@ import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import '@testing-library/user-event';
+import { noop } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
@@ -33,7 +34,6 @@ import type {
   ServiceSiteType,
 } from '../types';
 import JsonOutput from '../jsonOutput';
-import { noop } from '@cookie-analysis-tool/design-system';
 
 describe('RWSJsonGenerator', () => {
   beforeAll(() => {

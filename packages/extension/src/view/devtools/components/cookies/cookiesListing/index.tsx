@@ -28,8 +28,8 @@ import { useFilterManagementStore } from '../../../stateProviders/filterManageme
 import ChipsBar from '../cookieFilter/chips';
 import CookieTopBar from '../cookieTopBar';
 import FiltersList from '../cookieFilter';
-import type { CookieTableData } from '@cookie-analysis-tool/common';
-import { CookieDetails } from '@cookie-analysis-tool/design-system';
+import type { CookieTableData } from '@ps-analysis-tool/common';
+import { CookieDetails } from '@ps-analysis-tool/design-system';
 import CookieTableContainer from './cookieTableContainer';
 
 const CookiesListing = () => {

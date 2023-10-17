@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies.
+ * External dependencies.
  */
 import promptly from 'promptly';
 import Sitemapper from 'sitemapper';
+
+/**
+ * Internal dependencies.
+ */
 import { Cookie } from '../../types';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires

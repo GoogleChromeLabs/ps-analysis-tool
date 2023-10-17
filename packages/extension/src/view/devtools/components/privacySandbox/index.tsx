@@ -17,11 +17,7 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
-
-/**
- * Internal dependencies.
- */
-import { LandingPage } from '@cookie-analysis-tool/design-system';
+import { LandingPage } from '@ps-analysis-tool/design-system';
 
 const PrivacySandbox = () => {
   const [loading, setLoading] = useState(true);
@@ -29,7 +25,7 @@ const PrivacySandbox = () => {
   return (
     <>
       <LandingPage title="Privacy Sandbox" isLoading={loading}>
-        <div className="px-4 pt-6 pb-4 h-screen w-full">
+        <div className="px-4 pt-6 pb-4 h-[82vh] w-full">
           <iframe
             src="https://privacysandbox.com"
             data-testid="privacy-sandbox-content"
@@ -37,7 +33,7 @@ const PrivacySandbox = () => {
             onLoad={() => {
               setLoading(false);
             }}
-            className="w-full md:w-[70%] border rounded-xl border-hex-gray dark:border-quartz"
+            className="w-full md:w-[70%] md:m-auto border rounded-xl border-hex-gray dark:border-quartz"
           />
         </div>
       </LandingPage>
