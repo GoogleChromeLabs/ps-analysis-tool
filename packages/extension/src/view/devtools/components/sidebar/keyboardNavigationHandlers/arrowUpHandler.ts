@@ -66,14 +66,14 @@ export const arrowUpHandler = ({
       }
     } else {
       if (TABS[selectedIndex].id === 'siteBoundaries') {
-        setIndex(2);
+        setIndex(1);
         setSelectedFrame(keys[keys.length - 1]);
       } else {
         if (selectedIndex > 0) {
           if (
-            accordionState &&
-            (accordionState[TABS[selectedIndex].id] || //@ts-ignore We have already set the parents in useEffect
-              Boolean(accordionState[TABS[selectedIndex - 1].parentId]))
+            accordionState && //@ts-ignore We have already set the parents in useEffect
+            accordionState[TABS[selectedIndex].parentId] && //@ts-ignore We have already set the parents in useEffect
+            accordionState[TABS[selectedIndex - 1].parentId]
           ) {
             setSelectedAccordionChild(TABS[selectedIndex - 1].id);
             setIndex(selectedIndex - 1);
@@ -88,9 +88,9 @@ export const arrowUpHandler = ({
   } else {
     if (selectedIndex > 0) {
       if (
-        accordionState &&
-        (accordionState[TABS[selectedIndex].id] || //@ts-ignore Since we are using Boolean this will default to false
-          Boolean(accordionState[TABS[selectedIndex - 1].parentId]))
+        accordionState && //@ts-ignore Since we are using Boolean this will default to false
+        accordionState[TABS[selectedIndex].parentId] && //@ts-ignore Since we are using Boolean this will default to false
+        accordionState[TABS[selectedIndex - 1].parentId]
       ) {
         setSelectedAccordionChild(TABS[selectedIndex - 1].id);
         setIndex(selectedIndex - 1);

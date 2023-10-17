@@ -69,9 +69,9 @@ export const arrowDownHandler = ({
         setSelectedFrame(keys[0]);
       } else if (selectedIndex < TABS.length - 1) {
         if (
-          accordionState &&
-          (accordionState[TABS[selectedIndex].id] || //@ts-ignore Since we are using Boolean this will default to false
-            Boolean(accordionState[TABS[selectedIndex + 1].parentId]))
+          accordionState && //@ts-ignore Since we are using Boolean this will default to false
+          accordionState[TABS[selectedIndex].parentId] && //@ts-ignore Since we are using Boolean this will default to false
+          accordionState[TABS[selectedIndex + 1].parentId]
         ) {
           setSelectedAccordionChild(TABS[selectedIndex + 1].id);
           setIndex(selectedIndex + 1);
@@ -92,9 +92,9 @@ export const arrowDownHandler = ({
         return;
       }
       if (
-        accordionState &&
-        (accordionState[TABS[selectedIndex].id] || //@ts-ignore Since we are using Boolean this will default to false
-          Boolean(accordionState[TABS[selectedIndex + 1].parentId]))
+        accordionState && //@ts-ignore Since we are using Boolean this will default to false
+        accordionState[TABS[selectedIndex].parentId] && //@ts-ignore Since we are using Boolean this will default to false
+        Boolean(accordionState[TABS[selectedIndex + 1].parentId])
       ) {
         setSelectedAccordionChild(TABS[selectedIndex + 1].id);
         setIndex(selectedIndex + 1);
