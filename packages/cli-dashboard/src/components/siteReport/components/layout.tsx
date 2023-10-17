@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
 
 /**
@@ -30,17 +30,22 @@ import CookiesTab from '../tabs/cookies';
 
 const Layout = () => {
   const [data, setData] = useState<SidebarItem[]>(Tabs);
-  const { frameUrls } = useContentStore(({ state }) => ({
-    frameUrls: [
+  const { tabCookies } = useContentStore(({ state }) => ({
+    tabCookies: state.tabCookies,
+  }));
+
+  const frameUrls = useMemo(
+    () => [
       ...new Set(
-        Object.values(state.tabCookies)
+        Object.values(tabCookies)
           .map((cookie) => cookie.frameUrl)
           .filter(
             (url) => url?.includes('http') || url === 'Unknown Frame'
           ) as string[]
       ),
     ],
-  }));
+    [tabCookies]
+  );
 
   const {
     activePanel,
