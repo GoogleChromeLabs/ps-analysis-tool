@@ -8,6 +8,35 @@
 
 The purpose of this tool is to shed light, provide insights, and help you to learn and understand the changes that are happening in the context of Privacy Sandbox, and the potential impact on your site or web product.
 
+## Installing and Running PSAT
+
+### Build PSAT from source
+
+- Clone this Privacy Sandbox Analysis Tool Repository
+- Run `npm install` to install all dependencies
+- `npm run dev` or `npm run build` to generate a build in `/dist/extension`
+- Turn on "Developer mode" in `chrome://extensions` to [load the unpacked extension](https://developer.chrome.com/docs/extensions/mv3/getstarted/development-basics/#load-unpacked)
+- Click on the "Load Unpacked" button and upload the `dist/extension` folder
+
+
+### Install PSAT from zip file
+
+- Alternatively, you can download the extension zip file from the [latest release](https://github.com/GoogleChromeLabs/ps-analysis-tool/releases) and unzip it.
+- Turn on "Developer mode" in `chrome://extensions` to [load the unpacked extension](https://developer.chrome.com/docs/extensions/mv3/getstarted/development-basics/#load-unpacked)
+- Click the "Load unpacked" button and select the unzipped extension folder.
+
+### Build and Run PSAT's CLI
+
+- Clone this Privacy Sandbox Analysis Tool Repository
+- Run `npm install` to install all dependencies
+- `npm run cli:build` to genrate a build in `/dist/cli`.
+- Run the CLI, providing a URL or a sitemap as input.
+  - E.g. `npm run cli -- -s https://example.com/sitemap_index.xml`.
+  - E.g. `npm run cli -- -u https://bbc.com`.
+  - Please note that the dependency (Wappalyzer), which analyzes page technologies, may require permission to use its instance of Chromium. If this happens, you have the option to skip the technology analysis by using the `nt` flag for uninterrupted analysis of cookies.
+  - E.g. `npm run cli -- -u https://bbc.com -nt`. 
+
+
 # Call to Action
 
 The goal of this tool is to assist users in getting knowledge and insights regarding [the upcoming deprecation of the way in which 3P cookies work](https://privacysandbox.com/open-web/#the-privacy-sandbox-timeline), and the status and behaviors of the new Privacy Sandbox APIs. You can use the tool to analyze your site(s), and your browsing experience, detect and report breakages, get support from Google on fixes, and, if you are a developer of solutions that require cookie capabilities being deprecated, learn how to make them happen leveraging the new platform APIs that allow you to achieve the same goals in a privacy-preserving way. 
