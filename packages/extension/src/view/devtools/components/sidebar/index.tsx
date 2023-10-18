@@ -133,6 +133,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   const keyboardNavigator = useCallback(
     // eslint-disable-next-line complexity
     (event: React.KeyboardEvent<HTMLDivElement>) => {
+      event.preventDefault();
       if (!selectedAccordionChild) {
         return;
       }
@@ -232,7 +233,6 @@ const Sidebar: React.FC<SidebarProps> = ({
       }
       setIndex(currentIndex);
       setSelectedAccordionChild(tabIdToBeSet);
-      setIsTabFocused(true);
     },
     [setIndex, setSelectedFrame]
   );
@@ -282,6 +282,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                               width={width}
                               tabs={TABS}
                               key={key}
+                              tabId="cookies"
                               currentIndex={index}
                               accordionMenuItemName={key}
                               defaultIcon={TABS[index].icons.default}
@@ -290,6 +291,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                               selectedIcon={TABS[index].icons.selected}
                               selectedIndex={selectedIndex}
                               onAccordionChildClick={onAccordionChildClick}
+                              keyboardNavigator={keyboardNavigator}
                               titleForMenuItem={`Cookies used by frames from ${key}`}
                             />
                           );

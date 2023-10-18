@@ -36,6 +36,7 @@ const ListRow = ({ row }: Props) => {
       </span>
       {row?.link ? (
         <a
+          title={row.link}
           href={row.link}
           target="_blank"
           rel="noreferrer"

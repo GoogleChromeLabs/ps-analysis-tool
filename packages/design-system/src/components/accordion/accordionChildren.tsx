@@ -124,12 +124,14 @@ const AccordionChildren: React.FC<AccordionChildrenProps> = ({
                     tabs={tabs}
                     currentIndex={currentIndex}
                     key={key}
+                    tabId="cookies"
                     accordionMenuItemName={key}
                     defaultIcon={tabs[currentIndex].icons.default}
                     isTabFocused={isTabFocused}
                     isAccordionChildSelected={selectedFrame === key}
                     selectedIcon={tabs[currentIndex].icons.selected}
                     onAccordionChildClick={onAccordionChildClick}
+                    keyboardNavigator={keyboardNavigator}
                     titleForMenuItem={`Cookies used by frames from ${key}`}
                   />
                 );

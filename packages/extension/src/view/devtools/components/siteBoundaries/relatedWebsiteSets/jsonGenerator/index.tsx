@@ -83,7 +83,7 @@ const RWSJsonGenerator = ({ open, setOpen }: RWSJsonGeneratorProps) => {
   return (
     <>
       {open && (
-        <div className="overflow-auto" ref={formContainer}>
+        <div className="overflow-auto px-4" ref={formContainer}>
           <div className="text-raisin-black dark:text-bright-gray w-full min-w-[33rem]">
             <h1 className="text-lg font-semibold mt-4">
               Related Website Sets JSON Generator
