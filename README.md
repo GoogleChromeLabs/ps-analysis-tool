@@ -8,9 +8,9 @@
 
 The purpose of this tool is to shed light, provide insights, and help you to learn and understand the changes that are happening in the context of Privacy Sandbox, and the potential impact on your site or web product.
 
-## Installing and Running PSAT
+# Installing and Running PSAT
 
-### Build PSAT from source
+## Build PSAT from source
 
 - Clone this Privacy Sandbox Analysis Tool Repository
 - Run `npm install` to install all dependencies
@@ -19,13 +19,13 @@ The purpose of this tool is to shed light, provide insights, and help you to lea
 - Click on the "Load Unpacked" button and upload the `dist/extension` folder
 
 
-### Install PSAT from zip file
+## Install PSAT from zip file
 
 - Alternatively, you can download the extension zip file from the [latest release](https://github.com/GoogleChromeLabs/ps-analysis-tool/releases) and unzip it.
 - Turn on "Developer mode" in `chrome://extensions` to [load the unpacked extension](https://developer.chrome.com/docs/extensions/mv3/getstarted/development-basics/#load-unpacked)
 - Click the "Load unpacked" button and select the unzipped extension folder.
 
-### Build and Run PSAT's CLI
+## Build and Run PSAT's CLI
 
 - Clone this Privacy Sandbox Analysis Tool Repository
 - Run `npm install` to install all dependencies
