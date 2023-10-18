@@ -398,9 +398,7 @@ class WebpageContentScript {
       !isElementVisibleInViewport(frameWithTooltip, true)
     ) {
       (firstToolTip as HTMLElement).scrollIntoView({
-        behavior: 'instant',
         block: 'start',
-        inline: 'nearest',
       });
     }
   }
