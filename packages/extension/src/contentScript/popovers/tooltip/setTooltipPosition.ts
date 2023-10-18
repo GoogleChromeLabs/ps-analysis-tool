@@ -146,14 +146,6 @@ const setTooltipPosition = (
     tooltip.firstElementChild?.classList.add('ps-tooltip-top-left-notch');
     return;
   }
-  tooltip.style.top = `${tooltip.offsetTop - tooltip.offsetHeight + 5}px`;
-  tooltip.firstElementChild?.classList.remove(
-    'ps-tooltip-top-right-notch',
-    'ps-tooltip-top-left-notch',
-    'ps-tooltip-bottom-left-notch',
-    'ps-tooltip-bottom-right-notch'
-  );
-  tooltip.firstElementChild?.classList.add('ps-tooltip-top-left-notch');
 };
 
 export default setTooltipPosition;
