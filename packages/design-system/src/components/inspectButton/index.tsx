@@ -38,6 +38,7 @@ const InspectButton = ({
 
   return (
     <span
+      title="Inspect iFrames"
       className="inline-block"
       onClick={() => {
         setIsInspecting(!isInspecting);
