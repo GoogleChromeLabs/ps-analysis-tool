@@ -326,7 +326,7 @@ class WebpageContentScript {
     });
 
     frameElements.forEach((frame, index) => {
-      if (!isFrameHidden(frame) && !isElementVisibleInViewport(frame, true)) {
+      if (!isFrameHidden(frame)) {
         popoverElement.frameWithTooltip = frame;
 
         const tooltip = this.insertTooltip(

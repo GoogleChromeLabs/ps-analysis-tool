@@ -92,20 +92,29 @@ const setTooltipPosition = (
     frameY > tooltip.offsetHeight + 5 &&
     frameY - (tooltip.offsetHeight + 5) >= 1
   ) {
-    //check for space on right
     tooltip.style.top = `${
       frameY - tooltip.offsetHeight + 5 + Number(window.scrollY)
     }px`;
+    //check for space on right
     if (frameX + tooltip.offsetWidth > window.innerWidth) {
       const leftOverWidth = tooltip.offsetWidth - (window.innerWidth - frameX);
       tooltip.style.left = `${frameX - leftOverWidth - 10}px`;
+      const tooltipXPositionRightSide = frameX + tooltip.offsetWidth - 25;
       tooltip.firstElementChild?.classList.remove(
         'ps-tooltip-top-right-notch',
         'ps-tooltip-top-left-notch',
         'ps-tooltip-bottom-left-notch',
         'ps-tooltip-bottom-right-notch'
       );
-      tooltip.firstElementChild?.classList.add('ps-tooltip-bottom-right-notch');
+      if (tooltipXPositionRightSide < frameX + frameWidth) {
+        tooltip.firstElementChild?.classList.add(
+          'ps-tooltip-bottom-right-notch'
+        );
+      } else {
+        tooltip.firstElementChild?.classList.add(
+          'ps-tooltip-bottom-left-notch'
+        );
+      }
       return;
     }
     tooltip.firstElementChild?.classList.remove(
@@ -127,13 +136,18 @@ const setTooltipPosition = (
     if (frameX + tooltip.offsetWidth > window.innerWidth) {
       const leftOverWidth = tooltip.offsetWidth - (window.innerWidth - frameX);
       tooltip.style.left = `${frameX - leftOverWidth - 10}px`;
+      const tooltipXPositionRightSide = frameX + tooltip.offsetWidth - 25;
       tooltip.firstElementChild?.classList.remove(
         'ps-tooltip-top-right-notch',
         'ps-tooltip-top-left-notch',
         'ps-tooltip-bottom-left-notch',
         'ps-tooltip-bottom-right-notch'
       );
-      tooltip.firstElementChild?.classList.add('ps-tooltip-top-right-notch');
+      if (tooltipXPositionRightSide < frameX + frameWidth) {
+        tooltip.firstElementChild?.classList.add('ps-tooltip-top-right-notch');
+      } else {
+        tooltip.firstElementChild?.classList.add('ps-tooltip-top-left-notch');
+      }
       return;
     }
     tooltip.style.left = frameX + Number(window.scrollX) + 'px';
