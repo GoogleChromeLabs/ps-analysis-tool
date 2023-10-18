@@ -60,24 +60,6 @@ const setTooltipPosition = (
 
     return;
   }
-  const tooltips = document.querySelectorAll('.ps-tooltip');
-  const toolTipsTopPositions: {
-    height: number;
-    width: number;
-    top: number;
-    left: number;
-  }[] = [];
-
-  tooltips.forEach((singleTooltip) => {
-    const dimensions = singleTooltip.getBoundingClientRect();
-    const positions = {
-      height: dimensions.height,
-      width: dimensions.width,
-      top: dimensions.top,
-      left: dimensions.left,
-    };
-    toolTipsTopPositions.push({ ...positions });
-  });
 
   if (document.location.origin === selectedFrame) {
     tooltip.style.top = '5px';
@@ -87,34 +69,23 @@ const setTooltipPosition = (
     return;
   }
 
-  // If tooltop position is on top check space on top and check space on right and left
-  if (
-    frameY > tooltip.offsetHeight + 5 &&
-    frameY - (tooltip.offsetHeight + 5) >= 1
-  ) {
+  // If tooltop position is on top check space on top
+  if (frameY > tooltip.offsetHeight && frameY - tooltip.offsetHeight >= 1) {
     tooltip.style.top = `${
-      frameY - tooltip.offsetHeight + 5 + Number(window.scrollY)
+      frameY - tooltip.offsetHeight + Number(window.scrollY)
     }px`;
+
     //check for space on right
     if (frameX + tooltip.offsetWidth > window.innerWidth) {
       const leftOverWidth = tooltip.offsetWidth - (window.innerWidth - frameX);
       tooltip.style.left = `${frameX - leftOverWidth - 10}px`;
-      const tooltipXPositionRightSide = frameX + tooltip.offsetWidth - 25;
       tooltip.firstElementChild?.classList.remove(
         'ps-tooltip-top-right-notch',
         'ps-tooltip-top-left-notch',
         'ps-tooltip-bottom-left-notch',
         'ps-tooltip-bottom-right-notch'
       );
-      if (tooltipXPositionRightSide < frameX + frameWidth) {
-        tooltip.firstElementChild?.classList.add(
-          'ps-tooltip-bottom-right-notch'
-        );
-      } else {
-        tooltip.firstElementChild?.classList.add(
-          'ps-tooltip-bottom-left-notch'
-        );
-      }
+      tooltip.firstElementChild?.classList.add('ps-tooltip-bottom-right-notch');
       return;
     }
     tooltip.firstElementChild?.classList.remove(
@@ -136,18 +107,13 @@ const setTooltipPosition = (
     if (frameX + tooltip.offsetWidth > window.innerWidth) {
       const leftOverWidth = tooltip.offsetWidth - (window.innerWidth - frameX);
       tooltip.style.left = `${frameX - leftOverWidth - 10}px`;
-      const tooltipXPositionRightSide = frameX + tooltip.offsetWidth - 25;
       tooltip.firstElementChild?.classList.remove(
         'ps-tooltip-top-right-notch',
         'ps-tooltip-top-left-notch',
         'ps-tooltip-bottom-left-notch',
         'ps-tooltip-bottom-right-notch'
       );
-      if (tooltipXPositionRightSide < frameX + frameWidth) {
-        tooltip.firstElementChild?.classList.add('ps-tooltip-top-right-notch');
-      } else {
-        tooltip.firstElementChild?.classList.add('ps-tooltip-top-left-notch');
-      }
+      tooltip.firstElementChild?.classList.add('ps-tooltip-top-right-notch');
       return;
     }
     tooltip.style.left = frameX + Number(window.scrollX) + 'px';
