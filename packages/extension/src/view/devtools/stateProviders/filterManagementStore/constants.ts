@@ -35,11 +35,6 @@ export const FILTER_MAPPING = [
     order: 4,
   },
   {
-    name: 'Same Site',
-    keys: 'parsedCookie.samesite',
-    order: 5,
-  },
-  {
     name: 'Secure',
     keys: 'parsedCookie.secure',
     type: 'boolean',
@@ -84,6 +79,12 @@ export const CUSTOM_FILTER_MAPPING = {
       'Extended Term (> 1 month)',
     ]),
     order: 8,
+  },
+  samesite: {
+    name: 'SameSite',
+    keys: 'samesite',
+    filters: new Set(['Lax', 'None', 'Strict']),
+    order: 5,
   },
   setVia: {
     name: 'Set Via',
