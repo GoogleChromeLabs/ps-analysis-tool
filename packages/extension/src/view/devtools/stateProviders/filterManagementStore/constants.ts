@@ -93,3 +93,20 @@ export const CUSTOM_FILTER_MAPPING = {
     filters: new Set(['HTTP', 'JS']),
   },
 };
+
+export const MAPPING_KEYS_TO_NAME = {
+  // eslint-disable-next-line prettier/prettier
+  'samesite': 'SameSite',
+  'analytics.category': 'Category',
+  'parsedCookie.domain': 'Domain',
+  'parsedCookie.httponly': 'HttpOnly',
+  'parsedCookie.secure': 'Secure',
+  'parsedCookie.path': 'Path',
+  'analytics.platform': 'Platform',
+  // eslint-disable-next-line prettier/prettier
+  'isCookieSet': 'Cookie Accepted',
+  // eslint-disable-next-line prettier/prettier
+  'headerType': 'Set Via',
+  // eslint-disable-next-line prettier/prettier
+  'retentionPeriod': 'Retention Period',
+};
