@@ -43,6 +43,10 @@ html body .ps-tooltip[popover] > .ps-content p {
     font-family: "San Francisco", Helvetica, Arial, sans-serif !important;
 }
 
+html body .ps-tooltip[popover] > .ps-content strong {
+    font-weight: 700 !important;
+}
+
 html body .ps-tooltip[popover] > .ps-content p:nth-child(2) {
     text-overflow: ellipsis;
     overflow: hidden;
