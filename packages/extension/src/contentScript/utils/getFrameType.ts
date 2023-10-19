@@ -31,7 +31,7 @@ const getFrameType = (
   }
 
   if (tagName === 'Unknown') {
-    return 'Unkown';
+    return 'Unknown';
   }
 
   return 'iframe';

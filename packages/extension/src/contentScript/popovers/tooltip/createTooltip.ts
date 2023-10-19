@@ -63,6 +63,9 @@ const createTooltip = (
       attributes = getFrameAttributes(frame as HTMLIFrameElement);
     }
   }
+  if (!frame) {
+    attributes.src = data.selectedFrame;
+  }
 
   tooltip.classList.add(TOOLTIP_CLASS);
   content.classList.add('ps-content');
