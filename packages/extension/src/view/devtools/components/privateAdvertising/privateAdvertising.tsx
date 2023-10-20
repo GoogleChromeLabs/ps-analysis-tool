@@ -30,7 +30,7 @@ const PrivateAdvertising = () => {
   return (
     <>
       <LandingPage title="Private Advertising" isLoading={loading}>
-        <div className="px-4 pt-6 pb-4 h-[82vh] w-full">
+        <div className="px-4 pt-6 pb-4 h-[78vh] w-full">
           <iframe
             src="https://privacysandbox.info/en/privacy-sandbox/measure-digital-ads"
             height="100%"

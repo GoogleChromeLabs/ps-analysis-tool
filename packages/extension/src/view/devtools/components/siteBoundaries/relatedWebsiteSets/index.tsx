@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
-import { Button, LandingPage } from '@ps-analysis-tool/design-system';
+import { LandingPage } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
@@ -28,35 +28,20 @@ import RWSJsonGenerator from './jsonGenerator';
 import Insights from './insights';
 
 const RelatedWebsiteSets = () => {
-  const [showForm, setShowForm] = useState(false);
   const [pageTitle, setPageTitle] = useState('');
 
   return (
     <LandingPage title={pageTitle} isLoading={!pageTitle}>
       <div
-        className="max-w-2xl h-fit overflow-auto divide-y divide-american-silver dark:divide-quartz"
+        className="max-w-2xl h-fit px-4 overflow-auto divide-y divide-american-silver dark:divide-quartz"
         data-testid="related-website-sets-content"
       >
-        <div className="px-4">
-          <InfoCard
-            infoKey={PSInfoKey.RelatedWebsiteSets}
-            setTitle={setPageTitle}
-          />
-        </div>
-        <div className="py-6 text-raisin-black dark:text-bright-gray flex flex-col gap-3">
-          <div className="px-4">
-            <Insights />
-          </div>
-          <RWSJsonGenerator open={showForm} setOpen={setShowForm} />
-          {!showForm && (
-            <div className="pt-4 px-4">
-              <Button
-                text="Generate RWS JSON Resources"
-                onClick={() => setShowForm(true)}
-              />
-            </div>
-          )}
-        </div>
+        <InfoCard
+          infoKey={PSInfoKey.RelatedWebsiteSets}
+          setTitle={setPageTitle}
+        />
+        <Insights />
+        <RWSJsonGenerator />
       </div>
     </LandingPage>
   );

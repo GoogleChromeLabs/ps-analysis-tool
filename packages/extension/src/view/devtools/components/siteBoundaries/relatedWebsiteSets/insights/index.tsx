@@ -79,7 +79,7 @@ const Insights = () => {
   );
 
   return (
-    <div>
+    <div className="py-6 text-raisin-black dark:text-bright-gray">
       {loading ? (
         <div className="flex gap-2 items-center justify-start">
           <p className="text-sm">Loading...</p>

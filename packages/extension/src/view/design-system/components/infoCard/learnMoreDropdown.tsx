@@ -17,9 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
-import { ArrowRight, Button } from '@ps-analysis-tool/design-system';
-import classNames from 'classnames';
+import React from 'react';
 
 /**
  * Internal dependencies.
@@ -58,52 +56,25 @@ interface LearnMoreDropdownProps {
 
 const LearnMoreDropdown = ({
   PSInfo: { proposal, publicDiscussion, videoOverview, devDocumentation },
-  hasSeparator,
 }: LearnMoreDropdownProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-
   return (
     <>
-      {isOpen && (
-        <div className="flow-root border-t border-gray-200 dark:border-gray-500">
-          <ul
-            role="list"
-            className="divide-y divide-gray-200 dark:divide-gray-500"
-          >
-            {[proposal, publicDiscussion, videoOverview, devDocumentation].map(
-              (value, index) => (
-                <RenderLink
-                  key={index}
-                  link={value}
-                  label={LABELS[index].label}
-                  linkLabel={LABELS[index].linkLabel}
-                />
-              )
-            )}
-          </ul>
-        </div>
-      )}
-      <div
-        className={classNames(
-          'pt-4',
-          hasSeparator && 'border-t border-gray-200 dark:border-gray-500'
-        )}
-      >
-        <Button
-          text={
-            isOpen ? (
-              'Close'
-            ) : (
-              <>
-                Learn more{' '}
-                <span className="w-4 h-4 ml-2 inline-block">
-                  <ArrowRight />
-                </span>
-              </>
+      <div className="flow-root border-t border-gray-200 dark:border-gray-500">
+        <ul
+          role="list"
+          className="divide-y divide-gray-200 dark:divide-gray-500"
+        >
+          {[proposal, publicDiscussion, videoOverview, devDocumentation].map(
+            (value, index) => (
+              <RenderLink
+                key={index}
+                link={value}
+                label={LABELS[index].label}
+                linkLabel={LABELS[index].linkLabel}
+              />
             )
-          }
-          onClick={() => setIsOpen(!isOpen)}
-        />
+          )}
+        </ul>
       </div>
     </>
   );

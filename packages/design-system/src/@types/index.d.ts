@@ -23,4 +23,5 @@ type BulletListItem = {
   title: string;
   link?: string;
   key?: string;
+  pubDate?: string;
 };
