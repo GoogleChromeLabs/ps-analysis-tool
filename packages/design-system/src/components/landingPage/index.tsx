@@ -54,11 +54,9 @@ const LandingPage = ({ title, children, isLoading }: LandingPageProps) => {
           .map((item: BulletListItem) => ({
             title: item.title,
             link: item.link,
-            date: new Date(item.pubDate as string).toISOString(),
+            date: item.pubDate ? new Date(item.pubDate).toISOString() : '',
           })) // @ts-ignore
           .sort((a, b) => b.date.localeCompare(a.date));
-
-        console.log('newsArray', newsArray);
 
         setNews(newsArray);
       }
