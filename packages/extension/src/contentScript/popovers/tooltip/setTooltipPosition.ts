@@ -23,7 +23,7 @@
  */
 const setTooltipPosition = (
   tooltip: HTMLElement | null,
-  frame: HTMLElement,
+  frame: HTMLElement | null,
   isHiddenFrame: boolean,
   selectedFrame: string | undefined
 ) => {
@@ -35,58 +35,97 @@ const setTooltipPosition = (
     x: frameX,
     y: frameY,
     width: frameWidth,
-  } = frame.getBoundingClientRect();
+  } = frame ? frame.getBoundingClientRect() : { x: -1, y: -1, width: -1 };
 
   tooltip.style.maxWidth = frameWidth - 40 + 'px';
   tooltip.style.top = frameY + Number(window.scrollY) + 'px';
   tooltip.style.left = frameX + Number(window.scrollX) + 'px';
 
+  if (!frame) {
+    tooltip.classList.add('ps-fixed');
+    tooltip.style.top = `0`;
+    tooltip.style.left = 'auto';
+    tooltip.style.right = '30px';
+    tooltip.firstElementChild?.classList.add('ps-tooltip-top-left-notch');
+
+    return;
+  }
   // Overlay will not exist for hidden elements. show at bottom of screen.
   if (isHiddenFrame) {
     tooltip.classList.add('ps-fixed');
     tooltip.style.top = `0`;
     tooltip.style.left = 'auto';
     tooltip.style.right = '30px';
-    tooltip.firstElementChild?.classList.add('ps-tooltip-top-notch');
+    tooltip.firstElementChild?.classList.add('ps-tooltip-top-left-notch');
 
     return;
   }
-  const tooltips = document.querySelectorAll('.ps-tooltip');
-  const toolTipsTopPositions: {
-    height: number;
-    width: number;
-    top: number;
-    left: number;
-  }[] = [];
 
-  tooltips.forEach((singleTooltip) => {
-    const dimensions = singleTooltip.getBoundingClientRect();
-    const positions = {
-      height: dimensions.height,
-      width: dimensions.width,
-      top: dimensions.top,
-      left: dimensions.left,
-    };
-    toolTipsTopPositions.push({ ...positions });
-  });
+  if (document.location.origin === selectedFrame) {
+    tooltip.style.top = '5px';
+    tooltip.classList.add('ps-fixed');
+    tooltip.firstElementChild?.classList.add('ps-tooltip-top-left-notch');
 
-  if (tooltip.offsetHeight > frame.offsetTop) {
-    // Is it the main frame?
-    if (document.location.origin === selectedFrame) {
-      tooltip.style.top = '5px';
-      tooltip.classList.add('ps-fixed');
-    } else {
-      // Show the tooltip at the bottom if there isn't enough space at the top.
-      tooltip.style.top = `${tooltip.offsetTop + frame.offsetHeight - 1}px`;
+    return;
+  }
+
+  // If tooltop position is on top check space on top
+  if (frameY > tooltip.offsetHeight && frameY - tooltip.offsetHeight >= 1) {
+    tooltip.style.top = `${
+      frameY - tooltip.offsetHeight + Number(window.scrollY)
+    }px`;
+
+    //check for space on right
+    if (frameX + tooltip.offsetWidth > window.innerWidth) {
+      const leftOverWidth = tooltip.offsetWidth - (window.innerWidth - frameX);
+      tooltip.style.left = `${frameX - leftOverWidth - 10}px`;
+      tooltip.firstElementChild?.classList.remove(
+        'ps-tooltip-top-right-notch',
+        'ps-tooltip-top-left-notch',
+        'ps-tooltip-bottom-left-notch',
+        'ps-tooltip-bottom-right-notch'
+      );
+      tooltip.firstElementChild?.classList.add('ps-tooltip-bottom-right-notch');
+      return;
     }
-
-    // Set tooltip tip at the top of the box.
-    tooltip.firstElementChild?.classList.add('ps-tooltip-top-notch');
-
+    tooltip.firstElementChild?.classList.remove(
+      'ps-tooltip-top-right-notch',
+      'ps-tooltip-top-left-notch',
+      'ps-tooltip-bottom-left-notch',
+      'ps-tooltip-bottom-right-notch'
+    );
+    tooltip.firstElementChild?.classList.add('ps-tooltip-bottom-left-notch');
     return;
   }
 
-  tooltip.style.top = `${tooltip.offsetTop - tooltip.offsetHeight + 5}px`;
+  //check for space at bottom of frame
+  if (frameY + frame.offsetHeight + tooltip.offsetHeight < window.innerHeight) {
+    //check for space on right
+    tooltip.style.top = `${
+      frameY + frame.offsetHeight + Number(window.scrollY)
+    }px`;
+    if (frameX + tooltip.offsetWidth > window.innerWidth) {
+      const leftOverWidth = tooltip.offsetWidth - (window.innerWidth - frameX);
+      tooltip.style.left = `${frameX - leftOverWidth - 10}px`;
+      tooltip.firstElementChild?.classList.remove(
+        'ps-tooltip-top-right-notch',
+        'ps-tooltip-top-left-notch',
+        'ps-tooltip-bottom-left-notch',
+        'ps-tooltip-bottom-right-notch'
+      );
+      tooltip.firstElementChild?.classList.add('ps-tooltip-top-right-notch');
+      return;
+    }
+    tooltip.style.left = frameX + Number(window.scrollX) + 'px';
+    tooltip.firstElementChild?.classList.remove(
+      'ps-tooltip-top-right-notch',
+      'ps-tooltip-top-left-notch',
+      'ps-tooltip-bottom-left-notch',
+      'ps-tooltip-bottom-right-notch'
+    );
+    tooltip.firstElementChild?.classList.add('ps-tooltip-top-left-notch');
+    return;
+  }
 };
 
 export default setTooltipPosition;

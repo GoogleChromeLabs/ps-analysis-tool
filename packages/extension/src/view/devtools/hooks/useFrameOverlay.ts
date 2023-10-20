@@ -222,7 +222,7 @@ const useFrameOverlay = () => {
             thirdPartyCookies: thirdPartyCookies.length,
             firstPartyCookies: firstPartyCookies.length,
             isInspecting,
-            isOnRWS: selectedFrame ? tabFrames[selectedFrame].isOnRWS : false,
+            isOnRWS: selectedFrame ? tabFrames[selectedFrame]?.isOnRWS : false,
           });
         }
       }
