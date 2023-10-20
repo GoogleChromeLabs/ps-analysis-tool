@@ -34,9 +34,14 @@ import useFrameOverlay from '../../hooks/useFrameOverlay';
 interface SidebarProps {
   selectedIndex: number;
   setIndex: (index: number) => void;
+  width: number;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
+const Sidebar: React.FC<SidebarProps> = ({
+  selectedIndex,
+  setIndex,
+  width,
+}) => {
   const {
     setSelectedFrame,
     selectedFrame,
@@ -252,6 +257,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
               >
                 {
                   <Accordion
+                    width={width}
                     key={id}
                     tabs={TABS}
                     accordionState={Boolean(
@@ -273,6 +279,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                         Object.keys(tabFrames)?.map((key) => {
                           return (
                             <AccordionChildren
+                              width={width}
                               tabs={TABS}
                               key={key}
                               tabId="cookies"
@@ -293,6 +300,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                           if (id === tab?.parentId && Boolean(tab?.parentId)) {
                             return (
                               <AccordionChildren
+                                width={width}
                                 tabs={TABS}
                                 currentIndex={currentIndex}
                                 key={tab.id}

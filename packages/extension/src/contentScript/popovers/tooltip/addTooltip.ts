@@ -28,7 +28,7 @@ import type { ResponseType } from '../../types';
  * @returns {HTMLElement} - The added tooltip.
  */
 const addTooltip = (
-  frame: HTMLIFrameElement | HTMLElement,
+  frame: HTMLIFrameElement | HTMLElement | null,
   data: ResponseType,
   numberOfVisibleFrames: number,
   numberOfHiddenFrames: number

@@ -53,7 +53,6 @@ const getTooltipInfoData = (
   info['Hidden iframes'] = String(numberOfHiddenFrames);
   info['First-party cookies'] = String(numberOfFirstPartyCookies);
   info['Third-party cookies'] = String(numberOfThirdPartyCookies);
-  info['Belongs to RWS'] = belongsToRWS;
 
   if (Array.isArray(allowedFeatures)) {
     allowedFeatureInExpandedView = allowedFeatures.join(', ');
@@ -77,10 +76,16 @@ const getTooltipInfoData = (
     ? allowedFeaturesInCompactView
     : allowedFeatureInExpandedView;
 
-  attr['allowedFeaturesInCompactView'] = allowedFeaturesInCompactView;
-  attr['allowedFeatureInExpandedView'] = allowedFeatureInExpandedView;
+  if (frameType === 'Unknown') {
+    info['Note'] =
+      'We are unable to detect this frame as it may be an iframe nested inside one or more iframes.';
+  } else {
+    info['Belongs to RWS'] = belongsToRWS;
+    attr['allowedFeaturesInCompactView'] = allowedFeaturesInCompactView;
+    attr['allowedFeatureInExpandedView'] = allowedFeatureInExpandedView;
 
-  info['Allowed Features (PS related)'] = allowedFeaturesValue;
+    info['Allowed Features (PS related)'] = allowedFeaturesValue;
+  }
 
   return infoData;
 };
