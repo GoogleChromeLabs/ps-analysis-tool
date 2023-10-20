@@ -87,13 +87,7 @@ const RWSJsonGenerator = () => {
             <p className="text-base my-3">
               Enter your Related Website Sets details below:
             </p>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                submitForm();
-              }}
-              onReset={resetForm}
-            >
+            <form onSubmit={submitForm} onReset={resetForm}>
               <ContactEmail
                 contact={contact}
                 setContact={setContact}

@@ -59,7 +59,8 @@ const useGeneratorForm = () => {
         dispatch({ type: FORM_ACTIONS.SET_COUNTRY_SITES, payload }),
       removeCountrySite: (payload: number) =>
         dispatch({ type: FORM_ACTIONS.REMOVE_COUNTRY_SITE, payload }),
-      submitForm: () => {
+      submitForm: (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         dispatch({ type: FORM_ACTIONS.SET_LOADING, payload: true });
         dispatch({ type: FORM_ACTIONS.SUBMIT_FORM });
         setTimeout(() => {
