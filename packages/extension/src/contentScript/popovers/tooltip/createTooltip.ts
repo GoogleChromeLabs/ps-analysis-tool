@@ -39,7 +39,7 @@ import createTooltipHTML from './createTooltipHTML';
  * @returns {HTMLDivElement} The tooltip element containing information about the frame.
  */
 const createTooltip = (
-  frame: HTMLIFrameElement | HTMLElement,
+  frame: HTMLIFrameElement | HTMLElement | null,
   data: ResponseType,
   numberOfVisibleFrames: number,
   numberOfHiddenFrames: number
@@ -52,7 +52,7 @@ const createTooltip = (
   let insideFrame: HTMLIFrameElement | null = null;
   let attributes = {};
 
-  if (!isMainFrame) {
+  if (!isMainFrame && frame) {
     if (frame.dataset?.psatInsideFrame) {
       // We don't need to worry if querySelector will fail because there will be no psatInsideFrame if we can't access contentDocument of frame.
       insideFrame = frame?.contentDocument.querySelector(
@@ -63,6 +63,9 @@ const createTooltip = (
       attributes = getFrameAttributes(frame as HTMLIFrameElement);
     }
   }
+  if (!frame) {
+    attributes.src = data.selectedFrame;
+  }
 
   tooltip.classList.add(TOOLTIP_CLASS);
   content.classList.add('ps-content');
@@ -70,15 +73,15 @@ const createTooltip = (
   const origin = isMainFrame ? data.selectedFrame : getFrameOrigin(attributes);
 
   const allowedFeatured =
-    frame.tagName !== 'BODY' ? getAllowedFeatures(frame) : 'N/A';
+    frame && frame.tagName !== 'BODY' ? getAllowedFeatures(frame) : 'N/A';
 
   // Reset the dataset of parent frame.
-  if (insideFrame) {
+  if (frame && insideFrame) {
     frame.dataset.psatInsideFrame = '';
   }
 
   const infoData = getTooltipInfoData(
-    getFrameType(isHidden, insideFrame, frame.tagName),
+    getFrameType(isHidden, insideFrame, frame ? frame.tagName : 'Unknown'),
     origin ?? '',
     numberOfVisibleFrames,
     numberOfHiddenFrames,

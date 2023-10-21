@@ -50,10 +50,13 @@ const LandingPage = ({ title, children, isLoading }: LandingPageProps) => {
       const items = parsedFeed?.rss?.channel?.item;
 
       if (items) {
-        const newsArray = items.map((item: BulletListItem) => ({
-          title: item.title,
-          link: item.link,
-        }));
+        const newsArray = items
+          .map((item: BulletListItem) => ({
+            title: item.title,
+            link: item.link,
+            date: item.pubDate ? new Date(item.pubDate).toISOString() : '',
+          })) // @ts-ignore
+          .sort((a, b) => b.date.localeCompare(a.date));
 
         setNews(newsArray);
       }

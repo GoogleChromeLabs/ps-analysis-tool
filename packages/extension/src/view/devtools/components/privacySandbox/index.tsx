@@ -25,7 +25,7 @@ const PrivacySandbox = () => {
   return (
     <>
       <LandingPage title="Privacy Sandbox" isLoading={loading}>
-        <div className="px-4 pt-6 pb-4 h-[82vh] w-full">
+        <div className="px-4 pt-6 pb-4 h-[78vh] w-full">
           <iframe
             src="https://privacysandbox.com"
             data-testid="privacy-sandbox-content"

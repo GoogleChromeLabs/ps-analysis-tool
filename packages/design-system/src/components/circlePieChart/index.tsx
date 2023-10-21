@@ -78,7 +78,7 @@ const CirclePieChart = ({
           {title === '3rd Party Cookies' && (
             <p
               className={infoIconClassName}
-              title="An active ad-blocker or other cookie extensions may affect the results."
+              title="Cookies must be analyzed on a new, clean Chrome profile for an accurate report"
             >
               <InfoIcon />
             </p>

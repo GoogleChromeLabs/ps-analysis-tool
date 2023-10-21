@@ -163,7 +163,9 @@ class WebpageContentScript {
     const overlay = addOverlay(frame);
 
     const updatePosition = () => {
-      setOverlayPosition(overlay, frame);
+      if (isElementVisibleInViewport(frame, true)) {
+        setOverlayPosition(overlay, frame);
+      }
     };
 
     this.addEventListerOnScroll(updatePosition);
@@ -181,7 +183,7 @@ class WebpageContentScript {
    * @returns {HTMLElement} Tooltip.
    */
   insertTooltip(
-    frame: HTMLElement,
+    frame: HTMLElement | null,
     numberOfVisibleFrames: number,
     numberOfHiddenFrames: number,
     response: ResponseType
@@ -193,9 +195,19 @@ class WebpageContentScript {
       numberOfHiddenFrames
     );
 
+    const isHiddenForFirstTime = frame ? !frame.clientWidth : false;
+    setTooltipPosition(
+      tooltip,
+      frame,
+      isHiddenForFirstTime,
+      response.selectedFrame
+    );
+
     const updatePosition = () => {
-      const isHidden = !frame.clientWidth;
-      setTooltipPosition(tooltip, frame, isHidden, response.selectedFrame);
+      if (isElementVisibleInViewport(frame, true)) {
+        const isHidden = frame ? !frame.clientWidth : false;
+        setTooltipPosition(tooltip, frame, isHidden, response.selectedFrame);
+      }
     };
 
     this.addEventListerOnScroll(updatePosition);
@@ -292,11 +304,18 @@ class WebpageContentScript {
         this.insertOverlay(frame);
       });
 
-      // @todo Hovered frame should be part of the frameElements.
-      const iframeForTooltip = this.hoveredFrame
+      let iframeForTooltip = this.hoveredFrame
         ? this.hoveredFrame
         : frameElements[0];
 
+      if (!this.hoveredFrame) {
+        frameElements.forEach((frame) => {
+          if (isElementVisibleInViewport(frame, true)) {
+            iframeForTooltip = frame;
+            return;
+          }
+        });
+      }
       popoverElement.firstToolTip = this.insertTooltip(
         iframeForTooltip,
         visibleIFrameCount,
@@ -374,6 +393,7 @@ class WebpageContentScript {
     this.removeAllPopovers();
 
     if (!numberOfFrames) {
+      this.insertTooltip(null, 0, 0, response);
       return;
     }
 
@@ -395,7 +415,7 @@ class WebpageContentScript {
       firstToolTip &&
       !this.isHoveringOverPage &&
       frameToScrollTo.clientWidth &&
-      !isElementVisibleInViewport(frameWithTooltip, true)
+      !isElementVisibleInViewport(frameWithTooltip)
     ) {
       (firstToolTip as HTMLElement).scrollIntoView({
         block: 'start',
