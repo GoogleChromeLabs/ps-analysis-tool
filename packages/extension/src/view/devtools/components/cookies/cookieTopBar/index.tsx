@@ -18,7 +18,7 @@
  */
 import React, { useCallback } from 'react';
 import classNames from 'classnames';
-import type { CookieTableData } from '@ps-analysis-tool/common';
+import type { CookieTableData, getCookieKey } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -30,7 +30,6 @@ import FilterIcon from '../../../../../../../../third_party/icons/filter-icon.sv
 import CrossIcon from '../../../../../../../../third_party/icons/cross-icon.svg';
 import { useFilterManagementStore } from '../../../stateProviders/filterManagementStore';
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import { getCookieKey } from '../../../../../utils/getCookieKey';
 import { Refresh } from '@ps-analysis-tool/design-system';
 
 interface CookieSearchProps {

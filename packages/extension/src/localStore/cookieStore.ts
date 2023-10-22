@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies.
+ * External dependencies.
  */
 import { getCookieKey } from '@ps-analysis-tool/common';
 
