@@ -56,7 +56,7 @@ const EditableTextInput = ({
     (event: MouseEvent) => {
       if (divRef.current && !divRef.current.contains(event.target as Node)) {
         setEditing(false);
-        if (localValue !== info && cookieKey) {
+        if (localValue && localValue !== info && cookieKey) {
           modifyCookie(
             cookieKey,
             changedKey,
@@ -67,6 +67,13 @@ const EditableTextInput = ({
       }
     },
     [info, changedKey, localValue, modifyCookie, cookieKey]
+  );
+
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setLocalValue(event.target.value);
+    },
+    []
   );
 
   useEffect(() => {
@@ -81,11 +88,12 @@ const EditableTextInput = ({
     <div onClick={(event) => handleDoubleClick(event)}>
       {editing ? (
         <input
+          name={changedKey}
           ref={divRef}
           type="text"
           className="mx-2 outline-none dark:bg-charleston-green border-[1px] border-gainsboro dark:border-quartz focus:border-royal-blue focus:dark:border-medium-persian-blue dark:text-bright-gray text-outer-space-crayola"
           value={localValue}
-          onChange={(e) => setLocalValue(e.target.value)}
+          onChange={handleChange}
         />
       ) : (
         <p>{localValue}</p>
