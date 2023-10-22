@@ -17,15 +17,16 @@
  * External dependencies.
  */
 import React from 'react';
+import type { SelectedFilters } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import type {
-  SelectedFilters,
-  Filter,
-} from '../../../../stateProviders/filterManagementStore/types';
-import { FILTER_MAPPING } from '../../../../stateProviders/filterManagementStore/constants';
+import type { Filter } from '../../../../stateProviders/filterManagementStore/types';
+import {
+  FILTER_MAPPING,
+  MAPPING_KEYS_TO_NAME,
+} from '../../../../stateProviders/filterManagementStore/constants';
 // eslint-disable-next-line import/no-relative-packages
 import CrossIcon from '../../../../../../../../../third_party/icons/cross-icon.svg';
 
@@ -56,7 +57,7 @@ const Chip: React.FC<ChipProps> = ({
     });
   };
 
-  let label = text;
+  let label = MAPPING_KEYS_TO_NAME[filterKeys] + ': ' + text;
 
   if (['True', 'False'].includes(text)) {
     const filterMap =

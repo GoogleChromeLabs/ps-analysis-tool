@@ -28,7 +28,7 @@ import App from '../app';
 import { useCookieStore } from '../stateProviders/syncCookieStore';
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
-import PSInfo from 'cookie-analysis-tool/data/PSInfo.json';
+import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
 
 jest.mock('../stateProviders/syncCookieStore', () => ({
   useCookieStore: jest.fn(),

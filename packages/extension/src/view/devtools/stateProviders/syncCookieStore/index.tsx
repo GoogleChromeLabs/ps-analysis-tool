@@ -24,16 +24,18 @@ import React, {
   useCallback,
   useRef,
 } from 'react';
+import { noop } from '@ps-analysis-tool/design-system';
+import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import useContextSelector from '../../../../utils/useContextSelector';
-import { CookieStore, type CookieData } from '../../../../localStore';
-import type { TabCookies, TabFrames } from '../../cookies.types';
-import { noop } from '../../../../utils/noop';
 import { getCurrentTabId } from '../../../../utils/getCurrentTabId';
 import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
+import { CookieStore, type CookieData } from '../../../../localStore';
+import setDocumentCookies from '../../../../utils/setDocumentCookies';
+import isOnRWS from '../../../../contentScript/utils/isOnRWS';
 
 export interface CookieStoreContext {
   state: {
@@ -45,10 +47,12 @@ export interface CookieStoreContext {
     returningToSingleTab: boolean;
     isCurrentTabBeingListenedTo: boolean;
     allowedNumberOfTabs: string | null;
+    isInspecting: boolean;
+    contextInvalidated: boolean;
+    isFrameSelectedFromDevTool: boolean;
+    canStartInspecting: boolean;
   };
   actions: {
-    setSelectedFrame: React.Dispatch<React.SetStateAction<string | null>>;
-    changeListeningToThisTab: () => void;
     deleteCookie: (cookieName: string) => void;
     modifyCookie: (
       cookieName: string,
@@ -56,6 +60,15 @@ export interface CookieStoreContext {
       changedValue: string | boolean,
       previousValue: string | null
     ) => void;
+    setSelectedFrame: (key: string | null) => void;
+    setIsInspecting: React.Dispatch<React.SetStateAction<boolean>>;
+    changeListeningToThisTab: () => void;
+    getCookiesSetByJavascript: () => void;
+    setContextInvalidated: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsFrameSelectedFromDevTool: React.Dispatch<
+      React.SetStateAction<boolean>
+    >;
+    setCanStartInspecting: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
@@ -69,12 +82,23 @@ const initialState: CookieStoreContext = {
     isCurrentTabBeingListenedTo: false,
     returningToSingleTab: false,
     allowedNumberOfTabs: null,
+    isInspecting: false,
+    contextInvalidated: false,
+    isFrameSelectedFromDevTool: false,
+    canStartInspecting: false,
   },
   actions: {
     setSelectedFrame: noop,
     changeListeningToThisTab: noop,
     deleteCookie: noop,
     modifyCookie: noop,
+    setSelectedFrame: noop,
+    setIsFrameSelectedFromDevTool: noop,
+    changeListeningToThisTab: noop,
+    setIsInspecting: noop,
+    getCookiesSetByJavascript: noop,
+    setContextInvalidated: noop,
+    setCanStartInspecting: noop,
   },
 };
 
@@ -87,6 +111,8 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [isCurrentTabBeingListenedTo, setIsCurrentTabBeingListenedTo] =
     useState<boolean>(false);
 
+  const [contextInvalidated, setContextInvalidated] = useState<boolean>(false);
+
   const [returningToSingleTab, setReturningToSingleTab] =
     useState<CookieStoreContext['state']['returningToSingleTab']>(false);
 
@@ -97,8 +123,15 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [tabCookies, setTabCookies] =
     useState<CookieStoreContext['state']['tabCookies']>(null);
 
-  const [selectedFrame, setSelectedFrame] =
+  const [selectedFrame, _setSelectedFrame] =
     useState<CookieStoreContext['state']['selectedFrame']>(null);
+  const [canStartInspecting, setCanStartInspecting] = useState<boolean>(false);
+
+  const [isInspecting, setIsInspecting] =
+    useState<CookieStoreContext['state']['isInspecting']>(false);
+
+  const [isFrameSelectedFromDevTool, setIsFrameSelectedFromDevTool] =
+    useState<CookieStoreContext['state']['isFrameSelectedFromDevTool']>(false);
 
   const [tabUrl, setTabUrl] =
     useState<CookieStoreContext['state']['tabUrl']>(null);
@@ -118,31 +151,39 @@ export const Provider = ({ children }: PropsWithChildren) => {
         tabId: _tabId,
       });
 
-      setTabFrames((prevState) => {
-        const modifiedTabFrames: {
-          [key: string]: { frameIds: number[] };
-        } = {
-          ...prevState,
-        };
+      const modifiedTabFrames: {
+        [key: string]: { frameIds: number[]; isOnRWS?: boolean };
+      } = {};
 
-        currentTabFrames?.forEach(({ url, frameId }) => {
-          if (url && url.includes('http')) {
-            const parsedUrl = regexForFrameUrl.exec(url);
-            if (parsedUrl && parsedUrl[0]) {
-              if (modifiedTabFrames[parsedUrl[0]]) {
-                modifiedTabFrames[parsedUrl[0]].frameIds.push(frameId);
-              } else {
-                modifiedTabFrames[parsedUrl[0]] = { frameIds: [frameId] };
-              }
+      currentTabFrames?.forEach(({ url, frameId }) => {
+        if (url && url.includes('http')) {
+          const parsedUrl = regexForFrameUrl.exec(url);
+          if (parsedUrl && parsedUrl[0]) {
+            if (modifiedTabFrames[parsedUrl[0]]) {
+              modifiedTabFrames[parsedUrl[0]].frameIds.push(frameId);
+            } else {
+              modifiedTabFrames[parsedUrl[0]] = {
+                frameIds: [frameId],
+              };
             }
           }
-        });
-
-        return modifiedTabFrames;
+        }
       });
+      await Promise.all(
+        Object.keys(modifiedTabFrames).map(async (tabFrame) => {
+          modifiedTabFrames[tabFrame].isOnRWS = await isOnRWS(tabFrame);
+          return tabFrame;
+        })
+      );
+      setTabFrames(modifiedTabFrames);
     },
     []
   );
+
+  const setSelectedFrame = useCallback((key: string | null) => {
+    _setSelectedFrame(key);
+    setIsFrameSelectedFromDevTool(true);
+  }, []);
 
   const intitialSync = useCallback(async () => {
     const _tabId = chrome.devtools.inspectedWindow.tabId;
@@ -184,6 +225,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
         ) {
           setIsCurrentTabBeingListenedTo(false);
           setLoading(false);
+          _setSelectedFrame(null);
+          setTabFrames(null);
+          setCanStartInspecting(false);
           return;
         } else {
           setIsCurrentTabBeingListenedTo(true);
@@ -218,7 +262,8 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
       setTabCookies(_cookies);
     }
-    setLoading(false);
+
+    await setDocumentCookies(_tabId?.toString());
 
     chrome.devtools.inspectedWindow.eval(
       'window.location.href',
@@ -228,6 +273,8 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
       }
     );
+
+    setLoading(false);
   }, [getAllFramesForCurrentTab]);
 
   const storeChangeListener = useCallback(
@@ -285,7 +332,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
             tabId.toString() !== getTabBeingListenedTo?.tabToRead
           ) {
             setIsCurrentTabBeingListenedTo(false);
+            setTabFrames(null);
+            _setSelectedFrame(null);
             setLoading(false);
+            setCanStartInspecting(false);
             return;
           } else {
             setIsCurrentTabBeingListenedTo(true);
@@ -305,14 +355,24 @@ export const Provider = ({ children }: PropsWithChildren) => {
     [tabId, getAllFramesForCurrentTab]
   );
 
+  const getCookiesSetByJavascript = useCallback(async () => {
+    if (tabId) {
+      await setDocumentCookies(tabId.toString());
+    }
+  }, [tabId]);
+
   const changeListeningToThisTab = useCallback(async () => {
-    const changedTabId = await getCurrentTabId();
+    let changedTabId = tabId?.toString();
+
+    if (!tabId) {
+      changedTabId = await getCurrentTabId();
+    }
 
     if (!changedTabId) {
       return;
     }
 
-    await CookieStore.addTabData(changedTabId?.toString());
+    await CookieStore.addTabData(changedTabId);
 
     const storedTabData = Object.keys(await chrome.storage.local.get());
 
@@ -323,10 +383,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
         tabIdToBeDeleted !== 'tabToRead'
       ) {
         await CookieStore.removeTabData(tabIdToBeDeleted);
-        await chrome.action.setBadgeText({
-          tabId: parseInt(tabIdToBeDeleted),
-          text: '',
-        });
+
+        if (!Number.isNaN(parseInt(tabIdToBeDeleted))) {
+          await chrome.action.setBadgeText({
+            tabId: parseInt(tabIdToBeDeleted),
+            text: '',
+          });
+        }
       }
       return Promise.resolve();
     });
@@ -341,20 +404,37 @@ export const Provider = ({ children }: PropsWithChildren) => {
     );
 
     await chrome.tabs.reload(Number(changedTabId));
+
     setIsCurrentTabBeingListenedTo(true);
     setLoading(false);
-  }, []);
+    setCanStartInspecting(false);
+  }, [tabId]);
 
   const tabUpdateListener = useCallback(
     async (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
       if (tabId === _tabId && changeInfo.url) {
-        setTabUrl(changeInfo.url);
-        setSelectedFrame(null);
-        setTabFrames(null);
-        await getAllFramesForCurrentTab(_tabId);
+        try {
+          const nextURL = new URL(changeInfo.url);
+          const nextDomain = nextURL?.hostname;
+          const currentURL = new URL(tabUrl ?? '');
+          const currentDomain = currentURL?.hostname;
+
+          setTabFrames(null);
+          await getAllFramesForCurrentTab(_tabId);
+
+          if (selectedFrame && nextDomain === currentDomain) {
+            _setSelectedFrame(nextURL.origin);
+          } else {
+            _setSelectedFrame(null);
+          }
+
+          setTabUrl(changeInfo.url);
+        } catch (error) {
+          _setSelectedFrame(null);
+        }
       }
     },
-    [tabId, getAllFramesForCurrentTab]
+    [tabId, tabUrl, getAllFramesForCurrentTab, selectedFrame]
   );
 
   const tabRemovedListener = useCallback(async () => {
@@ -584,12 +664,21 @@ export const Provider = ({ children }: PropsWithChildren) => {
           isCurrentTabBeingListenedTo,
           returningToSingleTab,
           allowedNumberOfTabs,
+          contextInvalidated,
+          isInspecting,
+          isFrameSelectedFromDevTool,
+          canStartInspecting,
         },
         actions: {
           setSelectedFrame,
           changeListeningToThisTab,
           deleteCookie,
           modifyCookie,
+          getCookiesSetByJavascript,
+          setIsInspecting,
+          setContextInvalidated,
+          setIsFrameSelectedFromDevTool,
+          setCanStartInspecting,
         },
       }}
     >

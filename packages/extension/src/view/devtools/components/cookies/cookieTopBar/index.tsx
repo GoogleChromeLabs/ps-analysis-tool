@@ -18,6 +18,7 @@
  */
 import React, { useCallback } from 'react';
 import classNames from 'classnames';
+import type { CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -29,19 +30,21 @@ import FilterIcon from '../../../../../../../../third_party/icons/filter-icon.sv
 import CrossIcon from '../../../../../../../../third_party/icons/cross-icon.svg';
 import { useFilterManagementStore } from '../../../stateProviders/filterManagementStore';
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import { useContentPanelStore } from '../../../stateProviders/contentPanelStore';
 import { getCookieKey } from '../../../../../utils/getCookieKey';
+import { Refresh } from '@ps-analysis-tool/design-system';
 
 interface CookieSearchProps {
   cookiesAvailable: boolean;
   isFilterMenuOpen: boolean;
   toggleFilterMenu: () => void;
+  filteredCookies: CookieTableData[];
 }
 
 const CookieSearch = ({
   cookiesAvailable,
   isFilterMenuOpen,
   toggleFilterMenu,
+  filteredCookies,
 }: CookieSearchProps) => {
   const { searchTerm, setSearchTerm } = useFilterManagementStore(
     ({ state, actions }) => ({
@@ -49,11 +52,9 @@ const CookieSearch = ({
       setSearchTerm: actions.setSearchTerm,
     })
   );
-  const selectedFrameCookie = useContentPanelStore(
-    ({ state }) => state.selectedFrameCookie || {}
-  );
-  const { deleteCookie } = useCookieStore(({ actions }) => ({
-    deleteCookie: actions.deleteCookie,
+
+  const { getCookiesSetByJavascript } = useCookieStore(({ actions }) => ({
+    getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
   }));
 
   const handleInput = useCallback(
@@ -112,6 +113,29 @@ const CookieSearch = ({
         >
           <CrossIcon className="text-mischka" />
         </button>
+        <button
+          className={classNames('w-3 h-3', {
+            'opacity-20': !cookiesAvailable,
+          })}
+          onClick={toggleFilterMenu}
+          title="Open filter options"
+          disabled={!cookiesAvailable}
+        >
+          <FilterIcon
+            className={
+              isFilterMenuOpen
+                ? 'text-royal-blue dark:text-medium-persian-blue'
+                : 'text-mischka'
+            }
+          />
+        </button>
+        <div className="h-full w-px bg-american-silver dark:bg-quartz mx-3" />
+        <button onClick={getCookiesSetByJavascript} title="Refresh">
+          <Refresh className="text-mischka" />
+        </button>
+        <div className="text-right w-full text-xxxs text-secondary">
+          Count: {Number(filteredCookies?.length) || 0}
+        </div>
       </div>
     </div>
   );

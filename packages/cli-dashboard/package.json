@@ -1,0 +1,43 @@
+{
+  "name": "@ps-analysis-tool/cli-dashboard",
+  "version": "0.0.3",
+  "description": "Dashboard for visualizing cli analysis output",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool.git"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"
+  },
+  "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool#readme",
+  "scripts": {
+    "serve": "node ./server/index.cjs",
+    "build": "webpack --config webpack.config.cjs",
+    "dev": "webpack-dev-server --config webpack.config.cjs"
+  },
+  "dependencies": {
+    "@ps-analysis-tool/common": "*",
+    "@ps-analysis-tool/design-system": "*",
+    "classnames": "^2.3.2",
+    "file-saver": "^2.0.5",
+    "jszip": "^3.10.1",
+    "ora": "^7.0.1",
+    "re-resizable": "^6.9.9",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "use-context-selector": "^1.4.1"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-react-jsx": "^7.22.15",
+    "@babel/preset-env": "^7.22.15",
+    "@babel/preset-react": "^7.22.15",
+    "@babel/preset-typescript": "^7.22.15",
+    "@types/file-saver": "^2.0.5",
+    "babel-loader": "^9.1.3",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1",
+    "webpackbar": "^5.0.2"
+  }
+}

@@ -1,15 +1,18 @@
 {
-	"name": "cookie-analysis-tool",
-	"version": "0.2.0",
+	"name": "ps-analysis-tool",
+	"version": "0.3.0",
 	"description": "Cookie Analysis Tool and CLI for analysis and understanding of cookie usage on web pages.",
 	"scripts": {
-		"cli:dev": "npm run dev --workspace=@cookie-analysis-tool/cli",
-		"cli:build": "npm run build --workspace=@cookie-analysis-tool/cli",
-		"cli":"node dist/cli/index.js",
+		"cli:prebuild": "node ./scripts/delete-build-artifacts.cjs",
+		"cli:dev": "tsc-watch --build",
+		"cli:build": "npm run cli:prebuild && tsc --build",
+		"cli-dashboard:dev": "npm run dev --workspace=@ps-analysis-tool/cli-dashboard",
+		"cli-dashboard:build": "npm run build --workspace=@ps-analysis-tool/cli-dashboard",
+		"cli": "node dist/cli/index.js",
 		"test": "jest --config=tests/jest.config.cjs",
 		"test:coverage": "npm run test -- --collectCoverage && open coverage/lcov-report/index.html",
-		"dev": "webpack --config webpack.config.cjs --watch",
-		"build": "cross-env NODE_ENV=production webpack --config webpack.config.cjs",
+		"dev": "npm run dev --workspace=@ps-analysis-tool/extension",
+		"build": "npm run build --workspace=@ps-analysis-tool/extension",
 		"serve": "webpack serve",
 		"lint": "npm-run-all --parallel lint:*",
 		"lint:js": "eslint .",
@@ -17,8 +20,10 @@
 		"lint:js:fix": "eslint --fix .",
 		"prepare": "husky install",
 		"cookie-db:update": "node scripts/update-cookie-db.cjs",
+		"rws-json:update": "node scripts/update-rws-json.cjs",
 		"storybook": "storybook dev -p 6006",
-		"build-storybook": "storybook build"
+		"build-storybook": "storybook build",
+		"start": "npm install && npm run dev"
 	},
 	"repository": {
 		"type": "git",
@@ -34,6 +39,7 @@
 		"@babel/preset-env": "^7.22.5",
 		"@babel/preset-react": "^7.22.5",
 		"@babel/preset-typescript": "^7.22.5",
+		"@ps-analysis-tool/eslint-import-resolver": "*",
 		"@storybook/addon-essentials": "^7.0.27",
 		"@storybook/addon-interactions": "^7.0.27",
 		"@storybook/addon-links": "^7.0.27",
@@ -81,13 +87,14 @@
 		"jest-extended": "^4.0.0",
 		"lint-staged": "^13.2.2",
 		"npm-run-all": "^4.1.5",
-		"postcss": "^8.4.27",
+		"postcss": "^8.4.31",
 		"postcss-loader": "^7.3.3",
 		"prettier": "^2.8.8",
 		"prop-types": "^15.8.1",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-test-renderer": "^18.2.0",
+		"rimraf": "^5.0.5",
 		"sinon-chrome": "^3.0.1",
 		"storybook": "^7.0.27",
 		"style-loader": "^3.3.3",
@@ -111,5 +118,8 @@
 	},
 	"workspaces": [
 		"packages/*"
-	]
+	],
+	"overrides": {
+		"xml2js": "^0.5.0"
+	}
 }

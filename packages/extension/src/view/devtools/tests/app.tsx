@@ -21,7 +21,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import SinonChrome from 'sinon-chrome';
+import { noop } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -29,9 +29,9 @@ import SinonChrome from 'sinon-chrome';
 import App from '../app';
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
-import PSInfo from 'cookie-analysis-tool/data/PSInfo.json';
+import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
 import { useCookieStore } from '../stateProviders/syncCookieStore';
-import { noop } from '../../../utils/noop';
+import globalChrome from '../../../utils/test-data/globalChrome';
 
 jest.mock('../stateProviders/syncCookieStore', () => ({
   useCookieStore: jest.fn(),
@@ -47,13 +47,20 @@ describe('App', () => {
       changeListeningToThisTab: noop,
       setSelectedFrame: noop,
       allowedNumberOfTabs: 'single',
+      setIsInspecting: noop,
+      setCanStartInspecting: noop,
     });
+    jest.spyOn(console, 'warn').mockImplementation(() => undefined);
     globalThis.chrome = {
-      ...SinonChrome,
-      devtools: {
+      ...globalChrome,
+      storage: {
         // @ts-ignore
-        panels: {
-          themeName: 'dark',
+        session: {
+          // @ts-ignore
+          onChanged: {
+            addListener: () => undefined,
+            removeListener: () => undefined,
+          },
         },
       },
     };
@@ -64,6 +71,7 @@ describe('App', () => {
           Promise.resolve({
             ...PSInfo,
           }),
+        text: () => Promise.resolve({}),
       });
     } as unknown as typeof fetch;
   });
@@ -71,7 +79,7 @@ describe('App', () => {
   it('Should show cookies content by default', async () => {
     await act(() => render(<App />));
 
-    expect(screen.getByTestId('cookies-content')).toBeInTheDocument();
+    expect(screen.getByTestId('privacy-sandbox-content')).toBeInTheDocument();
   });
 
   it('should switch to cookie panel when tab is clicked', async () => {
@@ -181,7 +189,10 @@ describe('App', () => {
     act(() => {
       // Focus on the first menu item.
       userEvent.tab();
-      // Press arrow down
+      userEvent.keyboard('{ArrowRight}');
+      userEvent.keyboard('{ArrowDown}');
+    });
+    act(() => {
       userEvent.keyboard('{ArrowDown}');
     });
     expect(
@@ -194,7 +205,10 @@ describe('App', () => {
     act(() => {
       // Focus on the first menu item.
       userEvent.tab();
-      // Press arrow down to go to next menu
+      userEvent.keyboard('{ArrowRight}');
+      userEvent.keyboard('{ArrowDown}');
+    });
+    act(() => {
       userEvent.keyboard('{ArrowDown}');
     });
     act(() => {

@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -31,9 +32,11 @@ import {
 
 interface InfoCardProps {
   infoKey: PSInfoKeyType;
+  setTitle?: React.Dispatch<React.SetStateAction<string>>;
+  className?: string;
 }
 
-const InfoCard = ({ infoKey }: InfoCardProps) => {
+const InfoCard = ({ infoKey, setTitle, className }: InfoCardProps) => {
   const [PSInfo, setPSInfo] = useState({} as PSInfoType);
 
   useEffect(() => {
@@ -41,23 +44,19 @@ const InfoCard = ({ infoKey }: InfoCardProps) => {
       const info = await fetchPSInfo(infoKey);
 
       setPSInfo(info);
+      setTitle?.(info.name);
     })();
-  }, [infoKey]);
+  }, [infoKey, setTitle]);
 
   return (
     <>
       {Object.keys(PSInfo).length ? (
-        <div className="max-w-2xl m-3">
-          <div className="p-6 dark:bg-davys-grey border border-gray-200 dark:border-quartz rounded-lg shadow">
-            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-bright-gray">
-              {PSInfo.name}
-            </h5>
-            <p
-              className="mb-3 text-gray-700 dark:text-bright-gray"
-              dangerouslySetInnerHTML={{ __html: PSInfo.description }}
-            />
-            <LearnMoreDropdown PSInfo={PSInfo} />
-          </div>
+        <div className={classNames('py-6 ', className)}>
+          <p
+            className="mb-3 text-gray-700 dark:text-bright-gray text-sm"
+            dangerouslySetInnerHTML={{ __html: PSInfo.description }}
+          />
+          <LearnMoreDropdown PSInfo={PSInfo} />
         </div>
       ) : (
         <div className="w-full h-full flex items-center justify-center">

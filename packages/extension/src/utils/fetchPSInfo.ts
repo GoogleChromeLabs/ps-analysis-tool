@@ -13,6 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Internal dependencies.
+ */
+import fetchLocalData from './fetchLocalData';
 
 export enum PSInfoKey {
   'Topics' = 'topics',
@@ -40,9 +44,7 @@ export type PSInfo = {
  * @returns {Promise<PSInfo>} PSInfo data object
  */
 export async function fetchPSInfo(infoKey: PSInfoKeyType): Promise<PSInfo> {
-  const url = chrome.runtime.getURL('data/PSInfo.json');
-
-  const data = await (await fetch(url)).json();
+  const data = await fetchLocalData('data/PSInfo.json');
 
   return data[infoKey];
 }

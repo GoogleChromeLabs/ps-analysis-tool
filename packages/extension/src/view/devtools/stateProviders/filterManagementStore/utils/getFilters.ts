@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 /**
+ * External dependencies.
+ */
+import type { CookieTableData } from '@ps-analysis-tool/common';
+
+/**
  * Internal dependencies.
  */
 import { FILTER_MAPPING, CUSTOM_FILTER_MAPPING } from '../constants';
 import getFilterValue from './getFilterValue';
 import sortStringArray from './sortStringArray';
 import type { Filter } from '../types';
-import type { CookieTableData } from '../../../cookies.types';
 
 const getFilters = (cookies: CookieTableData[]): Filter[] => {
   const filters: Filter[] = [...FILTER_MAPPING];

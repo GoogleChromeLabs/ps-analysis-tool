@@ -18,3 +18,26 @@ declare module '*.svg' {
   const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
   export default ReactComponent;
 }
+
+declare global {
+  interface Document {
+    browsingTopics(): Promise<Array<{ [key: string]: string | number }>>;
+    featurePolicy: {
+      allowsFeature: (arg0: string) => boolean;
+    };
+    prerendering?: boolean;
+  }
+}
+
+export type RelatedWebsiteSetType = {
+  primary: string;
+  contact: string;
+  associatedSites?: string[];
+  serviceSites?: string[];
+  ccTLDs?: {
+    [site: string]: string[];
+  };
+  rationaleBySite?: {
+    [url: string]: string;
+  };
+};

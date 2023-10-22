@@ -27,16 +27,26 @@ export type CookieData = {
   parsedCookie: ParsedCookie;
   analytics: CookieAnalytics | null;
   url: string;
-  headerType: 'response' | 'request';
+  headerType: 'response' | 'request' | 'javascript'; // @todo Change headerType key name.
   isFirstParty: boolean | null;
   frameIdList: number[];
 };
+
+export type PreferenceKeyValues =
+  | 'columnSorting'
+  | 'selectedFrame'
+  | 'columnSizing'
+  | 'selectedColumns'
+  | 'selectedFilter';
 
 export type TabData = {
   cookies: {
     [key: string]: CookieData;
   } | null;
   focusedAt: number | null;
+  preferences: {
+    [key: string]: unknown;
+  };
 };
 
 export type Storage = {

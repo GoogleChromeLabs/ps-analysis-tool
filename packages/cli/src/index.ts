@@ -17,347 +17,188 @@
  * External dependencies.
  */
 import { Command } from 'commander';
-import puppeteer from 'puppeteer';
-import Sitemapper from 'sitemapper';
-import promptly from 'promptly';
-import ora from 'ora';
-import clc from 'cli-color';
 import events from 'events';
 import { ensureFile, writeFile } from 'fs-extra';
+// @ts-ignore Package does not support typescript.
+import Spinnies from 'spinnies';
+import { exec } from 'child_process';
 
 /**
  * Internal dependencies.
  */
-import {
-  generatePageVisitCookies,
-  generatePrefix,
-  generateTechnology,
-  getCSVbyObject,
-  normalizeCookie,
-} from './utils';
-import {
-  CookieLogDetails,
-  TechnologieDetails,
-  TechnologieDetailsSitemap,
-} from './types';
+import Utility from './utils/utility';
+import { fetchDictionary } from './utils/fetchCookieDictionary';
+import { analyzeCookiesUrls } from './procedures/analyzeCookieUrls';
+import { analyzeCookiesUrlsInBatches } from './procedures/analyzeCookieUrlsInBatches';
+import { analyzeTechnologiesUrlsInBatches } from './procedures/analyzeTechnologiesUrlsInBatches';
+import { delay } from './utils';
 
-const BATCH_SIZE = 5;
 events.EventEmitter.defaultMaxListeners = 15;
+
+const DELAY_TIME = 20000;
 
 const program = new Command();
 
 program
-  .version('0.0.1')
+  .version('0.0.3')
   .description('CLI to test a URL for 3p cookies')
   .option('-u, --url <value>', 'URL of a site')
   .option('-s, --sitemap-url <value>', 'URL of a sitemap')
   .option(
     '-nh, --no-headless ',
     'flag for running puppeteer in non headless mode'
-  )
-  .option('-nt, --no-technologies ', 'flag for skipping technology analysis');
+  );
 
 program.parse();
 
 const isHeadless = Boolean(program.opts().headless);
-const shouldSearchTechnology = program.opts().technologies;
 
 export const initialize = async () => {
   const url = program.opts().url;
   const sitemapURL = program.opts().sitemapUrl;
-
-  // Browser.
-  // @see https://developer.chrome.com/articles/new-headless/
-  const browser = await puppeteer.launch({
-    devtools: true,
-    headless: isHeadless ? 'new' : false,
-  });
+  const cookieDictionary = await fetchDictionary();
 
   if (url) {
-    // Single URL.
+    const prefix = Utility.generatePrefix(url ?? 'untitled');
+    const directory = `./out/${prefix}`;
 
-    const defaultPrefix = generatePrefix(url);
+    const spinnies = new Spinnies();
 
-    const prefix = await promptly.prompt(
-      `Please add a prefix to easily identify output files later (default:${defaultPrefix}) - `,
-      { default: defaultPrefix }
-    );
-    const cookiesFilePath = `./out/${prefix}-cookies.csv`;
-    const technologiesFilePath = `./out/${prefix}-technologies.csv`;
-    const dataFilePath = `./out/${prefix}-data.json`;
-
-    let spinner = ora('Analyzing cookies set on first page visit...').start();
-
-    const cookies = await generatePageVisitCookies(new URL(url), browser);
-
-    const cookiesDetails: Array<CookieLogDetails> = [];
-
-    if (cookies) {
-      cookies.forEach((theCookie) => {
-        const cookie = normalizeCookie(theCookie, url);
-
-        if (cookie) {
-          cookiesDetails.push(cookie);
-        }
-      });
-    }
-
-    const csvCookies: string = getCSVbyObject(cookiesDetails);
-
-    await ensureFile(cookiesFilePath);
-    await writeFile(cookiesFilePath, csvCookies);
-
-    spinner.stop();
-    console.log(clc.green('Done analyzing cookies!'));
-
-    let technologies;
-
-    if (shouldSearchTechnology) {
-      spinner = ora('Analyzing technologies used on the page...').start();
-
-      technologies = await generateTechnology(url);
-
-      const csvTechnologies: string = getCSVbyObject(
-        technologies.map(
-          ({ name, description, confidence, website, categories }) => {
-            return {
-              name,
-              description,
-              confidence: confidence + '%',
-              website,
-              categories: categories
-                .reduce<string>((acc, cat) => acc + '|' + cat.name, '')
-                .slice(1),
-            };
-          }
-        )
-      );
-
-      await ensureFile(technologiesFilePath);
-      await writeFile(technologiesFilePath, csvTechnologies);
-
-      spinner.stop();
-      console.log(clc.green('Done analyzing technologies!'));
-    }
-
-    await writeFile(
-      dataFilePath,
-      JSON.stringify(
-        { cookies: cookiesDetails, technologies: technologies },
-        undefined,
-        2
-      )
-    );
-
-    console.log(
-      'The following output files were generated in the "out" directory'
-    );
-    console.log(`- ${prefix}-cookies.csv (Cookie report)`);
-
-    shouldSearchTechnology &&
-      console.log(`- ${prefix}-technologies. (Technologies report)`);
-
-    console.log(
-      `- ${prefix}-data.json ${
-        shouldSearchTechnology ? '(Both reports in JSON)' : ''
-      }`
-    );
-  } else if (sitemapURL) {
-    const siteMapper = new Sitemapper({
-      url: sitemapURL,
-      timeout: 3000, // 3 seconds
-    });
-    let urls: string[] = [];
-    try {
-      const { sites } = await siteMapper.fetch();
-      urls = sites;
-    } catch (error) {
-      console.log('Error: error parsing sitemap ');
-      process.exit(1);
-    }
-
-    const countInput: number = parseInt(
-      await promptly.prompt(
-        `Provided sitemap has ${urls.length} pages. Please enter the number of pages you want to analyze (Default ${urls.length}):`,
-        { default: urls.length.toString() },
-        (err, val) => {
-          if (
-            (parseInt(val) && parseInt(val) < 0) ||
-            parseInt(val) > urls.length
-          ) {
-            throw new Error(`Bad Input : ${val}`);
-          }
-        }
-      )
-    );
-
-    const defaultPrefix = generatePrefix(sitemapURL);
-
-    const prefix = await promptly.prompt(
-      `Please add a prefix to easily identify output files later (default:${defaultPrefix}) - `,
-      { default: defaultPrefix }
-    );
-    const cookiesFilePath = `./out/${prefix}-cookies.csv`;
-    const technologiesFilePath = `./out/${prefix}-technologies.csv`;
-    const dataFilePath = `./out/${prefix}-data.json`;
-
-    const resources: { url: string; cookies: CookieLogDetails[] }[] = [];
-
-    for (let i = 0; i < countInput / BATCH_SIZE; i++) {
-      const spinner = ora(
-        `Collecting cookies from pages - ${i * BATCH_SIZE + 1} to  ${Math.min(
-          (i + 1) * BATCH_SIZE,
-          countInput
-        )}`
-      ).start();
-
-      // eslint-disable-next-line no-await-in-loop
-      const _resources = await Promise.all(
-        urls
-          .slice(i * BATCH_SIZE, Math.min((i + 1) * BATCH_SIZE, countInput))
-          .map(async (_url) => {
-            const cookies = await generatePageVisitCookies(
-              new URL(_url),
-              browser
-            );
-
-            const cookiesDetails: Array<CookieLogDetails> = [];
-            if (cookies) {
-              cookies.forEach((theCookie) => {
-                const cookie: CookieLogDetails | null = normalizeCookie(
-                  theCookie,
-                  _url
-                );
-                if (cookie) {
-                  cookiesDetails.push(cookie);
-                }
-              });
-            }
-
-            return { url: _url, cookies: cookiesDetails };
-          })
-      );
-
-      resources.push(..._resources);
-      spinner.stop();
-    }
-
-    const cookieList: CookieLogDetails[] = [];
-
-    resources.forEach(({ cookies }) => {
-      cookies.forEach((cookie) => {
-        cookieList.push(cookie);
-      });
+    spinnies.add('cookie-spinner', {
+      text: 'Analysing cookies on first page visit',
     });
 
-    const csvCookies: string = getCSVbyObject(cookieList);
+    const [cookieData] = await analyzeCookiesUrls(
+      [url],
+      isHeadless,
+      DELAY_TIME,
+      cookieDictionary
+    );
 
-    await ensureFile(cookiesFilePath);
-    await writeFile(cookiesFilePath, csvCookies);
+    spinnies.succeed('cookie-spinner', {
+      text: 'Done analyzing cookies.',
+    });
 
-    console.log(clc.green('Done analyzing cookies!'));
+    spinnies.add('technology-spinner', {
+      text: 'Analysing technologies',
+    });
 
-    const technologies: Array<TechnologieDetails> = [];
+    const [technologyData] = await analyzeTechnologiesUrlsInBatches([url]);
 
-    if (shouldSearchTechnology) {
-      for (let i = 0; i < countInput / BATCH_SIZE; i++) {
-        const spinner = ora(
-          `Processing technologies from pages - ${
-            i * BATCH_SIZE + 1
-          } to  ${Math.min((i + 1) * BATCH_SIZE, countInput)}`
-        ).start();
-        // eslint-disable-next-line no-await-in-loop
-        const _technologies = await Promise.all(
-          urls
-            .slice(i * BATCH_SIZE, Math.min((i + 1) * BATCH_SIZE, countInput))
-            .map((_url) => {
-              return generateTechnology(_url);
-            })
-        );
+    spinnies.succeed('technology-spinner', {
+      text: 'Done analyzing technologies.',
+    });
 
-        _technologies.forEach((technologiesPerWebsite) => {
-          technologies.push(...technologiesPerWebsite);
-        });
+    const output = {
+      pageUrl: url,
+      cookieData: cookieData.cookieData,
+      technologyData,
+    };
 
-        spinner.stop();
+    await ensureFile(directory + '/out.json');
+    await writeFile(directory + '/out.json', JSON.stringify(output, null, 4));
+
+    let isTerminated = false;
+
+    exec('npm run cli-dashboard:dev', (error) => {
+      if (error) {
+        isTerminated = true;
+        return;
       }
+    });
 
-      let techMap: Array<TechnologieDetailsSitemap> = [];
+    await delay(2000);
 
-      technologies.forEach((technologiesPerWebsite) => {
-        const index = techMap.findIndex(
-          ({ name }) => name === technologiesPerWebsite.name
-        );
-
-        if (index === -1) {
-          techMap = [...techMap, { ...technologiesPerWebsite, frequency: 1 }];
-        } else {
-          techMap = [
-            ...techMap.slice(0, index),
-            {
-              ...technologiesPerWebsite,
-              frequency: techMap[index].frequency + 1,
-            },
-            ...techMap.slice(index + 1),
-          ];
-        }
-      }, []);
-
-      const csvTechnologies: string = getCSVbyObject(
-        techMap.map(
-          ({
-            name,
-            description,
-            confidence,
-            website,
-            categories,
-            frequency,
-          }) => {
-            return {
-              name,
-              description,
-              confidence: confidence + '%',
-              website,
-              categories: categories
-                .reduce<string>((acc, cat) => acc + '|' + cat.name, '')
-                .slice(1),
-              frequency,
-            };
-          }
-        )
+    //if in 2 seconds dasboard server process is terminated show error
+    if (isTerminated) {
+      console.log('Error starting server');
+    } else {
+      console.log(
+        `Report is being served at the URL: http://localhost:9000?path=${encodeURIComponent(
+          directory + '/out.json'
+        )}`
       );
-
-      await ensureFile(technologiesFilePath);
-      await writeFile(technologiesFilePath, csvTechnologies);
-
-      console.log(clc.green('Done analyzing technologies!'));
     }
+  } else {
+    const spinnies = new Spinnies();
 
-    await ensureFile(dataFilePath);
-    await writeFile(
-      dataFilePath,
-      JSON.stringify(
-        { cookies: cookieList, technologies: technologies },
-        undefined,
-        2
-      )
+    spinnies.add('sitemap-spinner', {
+      text: 'Parsing Sitemap',
+    });
+
+    const urls: Array<string> = await Utility.getUrlsFromSitemap(sitemapURL);
+
+    spinnies.succeed('sitemap-spinner', {
+      text: 'Done parsing Sitemap',
+    });
+
+    const prefix = Utility.generatePrefix([...urls].shift() ?? 'untitled');
+    const directory = `./out/${prefix}`;
+    const userInput: any = await Utility.askUserInput(
+      `Provided sitemap has ${urls.length} pages. Please enter the number of pages you want to analyze (Default ${urls.length}):`,
+      { default: urls.length.toString() }
+    );
+    let numberOfUrls: number = isNaN(userInput)
+      ? urls.length
+      : parseInt(userInput);
+
+    numberOfUrls = numberOfUrls < urls.length ? numberOfUrls : urls.length;
+
+    const urlsToProcess = urls.splice(0, numberOfUrls);
+
+    const cookieAnalysisData = await analyzeCookiesUrlsInBatches(
+      urlsToProcess,
+      isHeadless,
+      DELAY_TIME,
+      cookieDictionary
     );
 
-    console.log(
-      'The following output files were generated in the "out" directory'
+    spinnies.add('technology-spinner', {
+      text: 'Analysing technologies',
+    });
+
+    const technologyAnalysisData = await analyzeTechnologiesUrlsInBatches(
+      urlsToProcess,
+      3
     );
-    console.log(`- ${prefix}-cookies.csv (Cookie report)`);
-    shouldSearchTechnology &&
-      console.log(`- ${prefix}-technologies. (Technologies report)`);
-    console.log(
-      `- ${prefix}-data.json ${
-        shouldSearchTechnology ? '(Both reports in JSON)' : ''
-      }`
-    );
+
+    spinnies.succeed('technology-spinner', {
+      text: 'Done analysing technologies',
+    });
+
+    const result = urlsToProcess.map((_url, ind) => {
+      return {
+        pageUrl: _url,
+        technologyData: technologyAnalysisData[ind],
+        cookieData: cookieAnalysisData[ind].cookieData,
+      };
+    });
+
+    await ensureFile(directory + '/out.json');
+    await writeFile(directory + '/out.json', JSON.stringify(result, null, 4));
+
+    let isTerminated = false;
+
+    exec('npm run cli-dashboard:dev', (error) => {
+      if (error) {
+        isTerminated = true;
+        return;
+      }
+    });
+
+    await delay(2000);
+
+    //if in 2 seconds dasboard server process is terminated show error
+    if (isTerminated) {
+      console.log('Error starting server');
+    } else {
+      console.log(
+        `Report is being served at the URL: http://localhost:9000?path=${encodeURIComponent(
+          directory + '/out.json'
+        )}&type=sitemap`
+      );
+    }
   }
-
-  await browser.close();
-  process.exit(1);
 };
 
 (async () => {

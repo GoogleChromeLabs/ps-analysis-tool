@@ -17,15 +17,13 @@
  * External dependencies.
  */
 import React from 'react';
+import type { SelectedFilters } from '@ps-analysis-tool/common';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
  */
-import type {
-  Filter,
-  SelectedFilters,
-} from '../../../stateProviders/filterManagementStore/types';
-import classNames from 'classnames';
+import type { Filter } from '../../../stateProviders/filterManagementStore/types';
 
 interface SubListProps {
   filter: Filter;

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 /**
+ * Generate prefix
  * @param {string} url Url in a string format.
  * @returns {string} string with protocol removed and special characters replaces with -
  */

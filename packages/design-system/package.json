@@ -1,0 +1,31 @@
+{
+  "name": "@ps-analysis-tool/design-system",
+  "version": "0.3.0",
+  "description": "A package for presentational components that are being used in multiple packages",
+  "main": "./src/index.ts",
+  "source":"./src/index.ts",
+  "customExports": {
+    ".": {
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc-watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"
+  },
+  "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
+  "dependencies": {
+		"@ps-analysis-tool/common": "*"
+  },
+  "devDependencies": {
+  }
+}

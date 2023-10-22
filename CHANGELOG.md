@@ -1,4 +1,4 @@
-### v0.0.2
+# v0.0.2
 
 **Feature**
 
@@ -19,7 +19,7 @@
 
 ---
 
-### 0.1.0
+# v0.1.0
 
 **Feature**
 
@@ -46,7 +46,7 @@
 
 - Add command for test coverage report [PR#78](https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/78)
 
-### 0.2.0
+# v0.2.0
 
 ## Cookies
 
@@ -64,3 +64,44 @@
 
 ## Privacy Sandbox API
 - Restructure menu items and add more info cards https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/131
+
+
+# v0.3.0
+
+## Cookies
+
+* Feature: Add frame overlays https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/147
+* Feature: List cookies set via `document.cookie` https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/146
+* Update table UI in https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/167
+* Add `isResizing` state inside table hook https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/176
+* Focus on the first frame when navigating to a different page https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/161
+* Frame Overlay: Display only privacy sandbox-related allowed features https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/178
+* PS landing page improvements https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/179
+* Enhance descriptions in Expanded View Cookie Matrix https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/143
+* Replace 'not found' with 0 in the circle pie chart https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/152
+* Fix: Responsive table on changing dock size. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/163
+* Fix `browseTopics` pre-rendering error https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/166
+* Fix: Context invalidated message in https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/168
+* Fix: Missing cookies with same names https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/140
+* Fix: Flickering of iframe overlay on sites and some other fixes https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/177
+
+
+## CLI
+* Feature: Cookie report generation with CLI tool  https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/162
+* Refactor: Set up a workspace named `common` for common utilities between CLI and the extension. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/139
+* Chore: Move presentational components to the design system package in https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/155
+
+
+## Privacy Sandbox API
+* Feature: Add RWS JSON generator form https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/142
+* Feature: Add insights card to RWS panel https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/141
+* Feature: Add data if frame belongs to RWS https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/170
+* Feature: Cookie table settings should be made persistent https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/134
+* Feature: Create landing pages https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/160
+* Feature: Add new "Privacy Sandbox" menu item https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/150
+* Update RWS panel interface https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/148
+* Replace table library with custom hooks https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/154
+* Replace `table` with `div` for better flexibility https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/157
+* Add topic list https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/159
+* Landing page enhancements and fixes https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/173
+* Update RWS panel https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/174

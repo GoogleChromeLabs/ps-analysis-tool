@@ -22,7 +22,7 @@ import type { Meta, StoryObj } from '@storybook/react';
  * Internal dependencies.
  */
 import Legend from '..';
-import { COLOR_MAP } from '../../../../design-system/theme/colors';
+import { COLOR_MAP } from '@ps-analysis-tool/design-system';
 
 const meta: Meta<typeof Legend> = {
   title: 'Extension/Popup/Legend',

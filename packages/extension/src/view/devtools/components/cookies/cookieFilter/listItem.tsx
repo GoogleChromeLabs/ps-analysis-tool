@@ -17,16 +17,14 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
+import type { SelectedFilters } from '@ps-analysis-tool/common';
+import { ArrowDown, InfoIcon } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
-import { ArrowDown, InfoIcon } from '../../../../../icons';
 import SubList from './subList';
-import type {
-  SelectedFilters,
-  Filter,
-} from '../../../stateProviders/filterManagementStore/types';
+import type { Filter } from '../../../stateProviders/filterManagementStore/types';
 
 interface ListItemProps {
   filter: Filter;

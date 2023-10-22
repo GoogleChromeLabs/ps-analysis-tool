@@ -16,27 +16,34 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useState } from 'react';
+import { LandingPage } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
 import InfoCard from '../../../../design-system/components/infoCard';
 import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
-import { MessageBox } from '../../../../design-system/components';
+import RWSJsonGenerator from './jsonGenerator';
+import Insights from './insights';
 
 const RelatedWebsiteSets = () => {
+  const [pageTitle, setPageTitle] = useState('');
+
   return (
-    <div
-      className="w-full h-full overflow-auto"
-      data-testid="related-website-sets-content"
-    >
-      <InfoCard infoKey={PSInfoKey.RelatedWebsiteSets} />
-      <MessageBox
-        bodyText="Insights and a JSON generator for RWS registration are coming soon..."
-        headerText="🚧 Under Construction"
-      />
-    </div>
+    <LandingPage title={pageTitle} isLoading={!pageTitle}>
+      <div
+        className="max-w-2xl h-fit px-4 overflow-auto divide-y divide-american-silver dark:divide-quartz"
+        data-testid="related-website-sets-content"
+      >
+        <InfoCard
+          infoKey={PSInfoKey.RelatedWebsiteSets}
+          setTitle={setPageTitle}
+        />
+        <Insights />
+        <RWSJsonGenerator />
+      </div>
+    </LandingPage>
   );
 };
 

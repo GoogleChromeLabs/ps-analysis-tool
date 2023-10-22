@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies
+ * External dependencies
  */
-import { type CookieTableData } from '../../view/devtools/cookies.types';
+import type { CookieTableData } from '@ps-analysis-tool/common';
 
 export const frameFilteredCookies: { [key: string]: CookieTableData } = {
   LSOLH: {

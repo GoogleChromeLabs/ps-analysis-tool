@@ -15,3 +15,4 @@
  */
 export * from './types';
 export { default as CookieStore } from './cookieStore';
+export { default as PreferenceStore } from './preferenceStore';
