@@ -47,12 +47,13 @@ const App = () => {
 
   const [type, path] = useMemo(() => {
     const urlParams = new URLSearchParams(window.location.search);
+    const folder = urlParams.get('folder');
 
     return [
       urlParams.get('type') === 'sitemap'
         ? DisplayType.SITEMAP
         : DisplayType.SITE,
-      urlParams.get('path')?.substring(1) || '',
+      `/out/${folder}/out.json`,
     ];
   }, []);
 

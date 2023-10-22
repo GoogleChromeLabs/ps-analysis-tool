@@ -61,7 +61,7 @@ export const initialize = async () => {
 
   if (portInUse) {
     console.error(
-      'Error: Report server port already in use. You might be already running CLI'
+      'Error: Report server port (9000) already in use. You might be already running CLI'
     );
     process.exit(1);
   }
@@ -113,8 +113,8 @@ export const initialize = async () => {
 
     await delay(2000);
     console.log(
-      `Report is being served at the URL: http://localhost:9000?path=${encodeURIComponent(
-        directory + '/out.json'
+      `Report is being served at the URL: http://localhost:9000?folder=${encodeURIComponent(
+        prefix
       )}`
     );
   } else {
@@ -180,8 +180,8 @@ export const initialize = async () => {
     await delay(2000);
 
     console.log(
-      `Report is being served at the URL: http://localhost:9000?path=${encodeURIComponent(
-        directory + '/out.json'
+      `Report is being served at the URL: http://localhost:9000?folder=${encodeURIComponent(
+        prefix
       )}&type=sitemap`
     );
   }
