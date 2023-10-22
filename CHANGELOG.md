@@ -104,4 +104,3 @@
 * Replace `table` with `div` for better flexibility https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/157
 * Add topic list https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/159
 * Landing page enhancements and fixes https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/173
-* Update RWS panel https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/174
