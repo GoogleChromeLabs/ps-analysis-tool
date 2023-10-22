@@ -25,6 +25,7 @@ import { CookieDetails } from '@ps-analysis-tool/design-system';
  * Internal dependencies.
  */
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
+
 import { useFilterManagementStore } from '../../../stateProviders/filterManagementStore';
 import ChipsBar from '../cookieFilter/chips';
 import CookieTopBar from '../cookieTopBar';

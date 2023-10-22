@@ -27,6 +27,7 @@ import SinonChrome from 'sinon-chrome';
  */
 import App from '../app';
 import { Provider as SettingsProvider } from '../stateProviders/syncSettingsStore';
+
 describe('Index', () => {
   beforeAll(() => {
     globalThis.chrome = SinonChrome as unknown as typeof chrome;

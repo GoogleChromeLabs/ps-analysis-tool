@@ -191,7 +191,9 @@ describe('Sidebar', () => {
       selectedFrame: null,
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
-    render(<Sidebar selectedIndex={0} setIndex={() => undefined} />);
+    render(
+      <Sidebar width={200} selectedIndex={0} setIndex={() => undefined} />
+    );
     const container = screen.getByTestId('privacySandbox-tab-heading-wrapper');
 
     expect(container).toHaveClass('bg-royal-blue');
@@ -204,13 +206,13 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     const sidebarRenderer = render(
-      <Sidebar selectedIndex={0} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={0} setIndex={() => undefined} />
     );
     fireEvent.click(screen.getByTestId('privacySandbox-accordion-opener'));
     fireEvent.click(screen.getByTestId('cookies-tab-heading-wrapper'));
 
     sidebarRenderer.rerender(
-      <Sidebar selectedIndex={1} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={1} setIndex={() => undefined} />
     );
     const cookieHeaderContainer = screen.getByTestId(
       'cookies-tab-heading-wrapper'
@@ -225,7 +227,7 @@ describe('Sidebar', () => {
     fireEvent.click(siteBoundariesContainer);
 
     sidebarRenderer.rerender(
-      <Sidebar selectedIndex={2} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={2} setIndex={() => undefined} />
     );
 
     expect(cookieHeaderContainer).not.toHaveClass('bg-royal-blue');
@@ -239,7 +241,9 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
 
-    render(<Sidebar selectedIndex={0} setIndex={() => undefined} />);
+    render(
+      <Sidebar width={200} selectedIndex={0} setIndex={() => undefined} />
+    );
 
     const cookieHeaderContainer = await screen.findByTestId(
       'cookies-tab-heading-wrapper'
@@ -259,7 +263,7 @@ describe('Sidebar', () => {
     });
 
     const tahHeaderContainer = render(
-      <Sidebar selectedIndex={0} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={0} setIndex={() => undefined} />
     );
 
     const cookieHeaderContainer = screen.getByTestId(
@@ -281,7 +285,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     tahHeaderContainer.rerender(
-      <Sidebar selectedIndex={1} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={1} setIndex={() => undefined} />
     );
     expect(cookieHeaderContainer).not.toHaveClass('bg-royal-blue');
     expect(siteBoundariesContainer).toHaveClass('bg-royal-blue');
@@ -293,7 +297,9 @@ describe('Sidebar', () => {
       selectedFrame: 'https://edition.cnn.com/',
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
-    render(<Sidebar selectedIndex={0} setIndex={() => undefined} />);
+    render(
+      <Sidebar width={200} selectedIndex={0} setIndex={() => undefined} />
+    );
     const accordionOpener = screen.getByTestId('cookies-accordion-opener');
     fireEvent.click(accordionOpener);
     expect(accordionOpener).not.toHaveClass('-rotate-90');
@@ -316,7 +322,10 @@ describe('Sidebar', () => {
       selectedFrame: null,
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
-    render(<Sidebar selectedIndex={0} setIndex={() => undefined} />);
+
+    render(
+      <Sidebar width={200} selectedIndex={0} setIndex={() => undefined} />
+    );
     // Focus on the cookie heading
     act(() => {
       userEvent.tab();
@@ -342,7 +351,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     const sidebarRender = render(
-      <Sidebar selectedIndex={0} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={0} setIndex={() => undefined} />
     );
     //Should focus on cookies menu
     goToFirstFrame();
@@ -356,7 +365,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     sidebarRender.rerender(
-      <Sidebar selectedIndex={1} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={1} setIndex={() => undefined} />
     );
     expect(screen.getByTestId('https://edition.cnn.com/')).toHaveClass(
       'bg-royal-blue'
@@ -369,7 +378,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     sidebarRender.rerender(
-      <Sidebar selectedIndex={1} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={1} setIndex={() => undefined} />
     );
     expect(screen.getByTestId('https://edition.cnn.com/')).not.toHaveClass(
       'bg-royal-blue'
@@ -386,7 +395,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     const sidebarRender = render(
-      <Sidebar selectedIndex={0} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={0} setIndex={() => undefined} />
     );
     goToCookiesMenu();
 
@@ -403,7 +412,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     sidebarRender.rerender(
-      <Sidebar selectedIndex={1} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={1} setIndex={() => undefined} />
     );
     //Simulate down arrow key keydown to select frame
     act(() => {
@@ -422,7 +431,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     sidebarRender.rerender(
-      <Sidebar selectedIndex={1} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={1} setIndex={() => undefined} />
     );
     expect(screen.getByTestId('https://edition.cnn.com/')).not.toHaveClass(
       'bg-royal-blue'
@@ -439,7 +448,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     const sidebarRender = render(
-      <Sidebar selectedIndex={0} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={0} setIndex={() => undefined} />
     );
     goToCookiesMenu();
 
@@ -457,7 +466,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     sidebarRender.rerender(
-      <Sidebar selectedIndex={1} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={1} setIndex={() => undefined} />
     );
     act(() => {
       //Simulate down arrow key keydown to select first frame
@@ -476,7 +485,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     sidebarRender.rerender(
-      <Sidebar selectedIndex={0} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={0} setIndex={() => undefined} />
     );
     expect(screen.getByTestId('https://edition.cnn.com/')).not.toHaveClass(
       'bg-royal-blue'
@@ -494,7 +503,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     sidebarRender.rerender(
-      <Sidebar selectedIndex={0} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={0} setIndex={() => undefined} />
     );
     expect(screen.getByTestId('https://edition.cnn.com/')).toHaveClass(
       'bg-royal-blue'
@@ -511,7 +520,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     const sidebarRender = render(
-      <Sidebar selectedIndex={0} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={0} setIndex={() => undefined} />
     );
     goToFirstFrame();
 
@@ -528,7 +537,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     sidebarRender.rerender(
-      <Sidebar selectedIndex={1} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={1} setIndex={() => undefined} />
     );
     act(() => {
       //Simulate down arrow key keydown to select first frame
@@ -547,7 +556,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     sidebarRender.rerender(
-      <Sidebar selectedIndex={1} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={1} setIndex={() => undefined} />
     );
     expect(screen.getByTestId('https://edition.cnn.com/')).not.toHaveClass(
       'bg-royal-blue'
@@ -564,7 +573,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     const sidebarRender = render(
-      <Sidebar selectedIndex={0} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={0} setIndex={() => undefined} />
     );
     goToFirstFrame();
     expect(
@@ -580,7 +589,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     sidebarRender.rerender(
-      <Sidebar selectedIndex={1} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={1} setIndex={() => undefined} />
     );
     expect(screen.getByTestId('https://crxt.net/')).toHaveClass(
       'bg-royal-blue'
@@ -594,7 +603,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     sidebarRender.rerender(
-      <Sidebar selectedIndex={2} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={2} setIndex={() => undefined} />
     );
     expect(screen.getByTestId('https://crxt.net/')).not.toHaveClass(
       'bg-royal-blue'
@@ -611,7 +620,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     const sidebarRender = render(
-      <Sidebar selectedIndex={0} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={0} setIndex={() => undefined} />
     );
     goToFirstFrame();
 
@@ -630,7 +639,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     sidebarRender.rerender(
-      <Sidebar selectedIndex={1} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={1} setIndex={() => undefined} />
     );
     expect(
       screen.getByTestId('siteBoundaries-tab-heading-wrapper')
@@ -645,7 +654,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     sidebarRender.rerender(
-      <Sidebar selectedIndex={0} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={0} setIndex={() => undefined} />
     );
     expect(screen.getByTestId('https://crxt.net/')).toHaveClass(
       'bg-royal-blue'
@@ -662,7 +671,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     const sidebarRender = render(
-      <Sidebar selectedIndex={0} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={0} setIndex={() => undefined} />
     );
     act(() => {
       // Focus on cookie header menu and simulate right arrow to open accordion
@@ -676,7 +685,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     sidebarRender.rerender(
-      <Sidebar selectedIndex={2} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={2} setIndex={() => undefined} />
     );
     act(() => {
       userEvent.keyboard('{ArrowDown}');
@@ -692,7 +701,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     sidebarRender.rerender(
-      <Sidebar selectedIndex={5} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={5} setIndex={() => undefined} />
     );
     expect(
       await screen.findByTestId('privateAdvertising-tab-heading-wrapper')
@@ -707,7 +716,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     sidebarRender.rerender(
-      <Sidebar selectedIndex={2} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={2} setIndex={() => undefined} />
     );
     expect(
       screen.getByTestId('siteBoundaries-tab-heading-wrapper')
@@ -724,7 +733,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     const sidebarRender = render(
-      <Sidebar selectedIndex={0} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={0} setIndex={() => undefined} />
     );
     goToCookiesMenu();
     act(() => {
@@ -745,7 +754,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     sidebarRender.rerender(
-      <Sidebar selectedIndex={0} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={0} setIndex={() => undefined} />
     );
     expect(screen.getByTestId('https://edition.cnn.com/')).toHaveClass(
       'bg-royal-blue'
@@ -759,7 +768,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     const sidebarRender = render(
-      <Sidebar selectedIndex={0} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={0} setIndex={() => undefined} />
     );
     act(() => {
       //Focus on cookie menu header
@@ -769,7 +778,7 @@ describe('Sidebar', () => {
       userEvent.keyboard('{ArrowDown}');
     });
     sidebarRender.rerender(
-      <Sidebar selectedIndex={1} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={1} setIndex={() => undefined} />
     );
     act(() => {
       userEvent.keyboard('{ArrowDown}');
@@ -784,7 +793,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     sidebarRender.rerender(
-      <Sidebar selectedIndex={2} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={2} setIndex={() => undefined} />
     );
     expect(
       screen.getByTestId('siteBoundaries-tab-heading-wrapper')
@@ -798,7 +807,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     sidebarRender.rerender(
-      <Sidebar selectedIndex={5} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={5} setIndex={() => undefined} />
     );
     expect(
       screen.getByTestId('privateAdvertising-tab-heading-wrapper')
@@ -816,7 +825,7 @@ describe('Sidebar', () => {
     });
     const setIndexMock = jest.fn();
     const sidebarRender = render(
-      <Sidebar selectedIndex={0} setIndex={setIndexMock} />
+      <Sidebar width={200} selectedIndex={0} setIndex={setIndexMock} />
     );
     // Click on accordion opener button.
     fireEvent.click(screen.getByTestId('cookies-accordion-opener'));
@@ -833,7 +842,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     sidebarRender.rerender(
-      <Sidebar selectedIndex={1} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={1} setIndex={() => undefined} />
     );
     expect(
       screen.getByTestId('siteBoundaries-tab-heading-wrapper')
@@ -851,7 +860,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     const sidebarRender = render(
-      <Sidebar selectedIndex={0} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={0} setIndex={() => undefined} />
     );
 
     goToFirstFrame();
@@ -862,7 +871,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     sidebarRender.rerender(
-      <Sidebar selectedIndex={1} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={1} setIndex={() => undefined} />
     );
     expect(
       await screen.findByTestId('cookies-accordion-opener')
@@ -880,7 +889,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     sidebarRender.rerender(
-      <Sidebar selectedIndex={1} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={1} setIndex={() => undefined} />
     );
     act(() => {
       userEvent.keyboard('{ArrowLeft}');
@@ -895,7 +904,7 @@ describe('Sidebar', () => {
       setSelectedFrame: mockResponse.setSelectedFrame,
     });
     sidebarRender.rerender(
-      <Sidebar selectedIndex={0} setIndex={() => undefined} />
+      <Sidebar width={200} selectedIndex={0} setIndex={() => undefined} />
     );
     expect(
       screen.getByTestId('privacySandbox-tab-heading-wrapper')

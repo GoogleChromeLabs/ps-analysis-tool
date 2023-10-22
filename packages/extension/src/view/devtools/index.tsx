@@ -26,6 +26,7 @@ import { ErrorFallback } from '@ps-analysis-tool/design-system';
  */
 import App from './app';
 import { Provider as ExternalStoreProvider } from './stateProviders/syncCookieStore';
+
 import { Provider as FilterManagementProvider } from './stateProviders/filterManagementStore';
 import { Provider as PreferenceStoreProvider } from './stateProviders/preferenceStore';
 
