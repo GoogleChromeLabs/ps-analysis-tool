@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 export { default as CookieStore } from './cookieStore';
 export { default as PreferenceStore } from './preferenceStore';
 export * from './types';
