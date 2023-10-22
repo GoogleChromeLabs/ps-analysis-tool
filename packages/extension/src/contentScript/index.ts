@@ -24,6 +24,7 @@ import {
   setOverlayPosition,
   addTooltip,
   setTooltipPosition,
+  removeAllTooltips,
 } from './popovers';
 import type { ResponseType } from './types';
 import { CookieStore } from '../localStore';
@@ -375,7 +376,7 @@ class WebpageContentScript {
     const frameToScrollTo = frameElements[0];
     const visibleIFrameCount = frameCount['numberOfVisibleFrames'];
     const hiddenIFrameCount = frameCount['numberOfHiddenFrames'];
-
+    removeAllPopovers();
     const popoverElement = this.insertPopoversConditionHandler(
       frameElements,
       visibleIFrameCount,
@@ -430,15 +431,7 @@ class WebpageContentScript {
       isNonIframeElement &&
       this.port
     ) {
-      removeAllPopovers();
-
-      if (chrome.runtime?.id) {
-        this.port.postMessage({
-          attributes: {
-            iframeOrigin: '',
-          },
-        });
-      }
+      removeAllTooltips();
 
       this.bodyHoverStateSent = true;
     }
@@ -503,6 +496,7 @@ class WebpageContentScript {
   handleMouseMove(event: Event) {
     if (event?.type === 'mouseenter') {
       this.isHoveringOverPage = true;
+      removeAllPopovers();
     } else if (event?.type === 'mouseleave') {
       this.isHoveringOverPage = false;
     }
