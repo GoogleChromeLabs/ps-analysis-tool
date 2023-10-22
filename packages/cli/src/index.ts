@@ -32,6 +32,7 @@ import { analyzeCookiesUrls } from './procedures/analyzeCookieUrls';
 import { analyzeCookiesUrlsInBatches } from './procedures/analyzeCookieUrlsInBatches';
 import { analyzeTechnologiesUrlsInBatches } from './procedures/analyzeTechnologiesUrlsInBatches';
 import { delay } from './utils';
+import { checkPortInUse } from './utils/checkPortInUse';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
@@ -54,10 +55,20 @@ program.parse();
 const isHeadless = Boolean(program.opts().headless);
 
 export const initialize = async () => {
+  //check if devserver port in already in use
+
+  const portInUse = await checkPortInUse(9000);
+
+  if (portInUse) {
+    console.error(
+      'Error: Report server port already in use. You might be already running CLI'
+    );
+    process.exit(1);
+  }
+
   const url = program.opts().url;
   const sitemapURL = program.opts().sitemapUrl;
   const cookieDictionary = await fetchDictionary();
-
   if (url) {
     const prefix = Utility.generatePrefix(url ?? 'untitled');
     const directory = `./out/${prefix}`;
@@ -98,27 +109,14 @@ export const initialize = async () => {
     await ensureFile(directory + '/out.json');
     await writeFile(directory + '/out.json', JSON.stringify(output, null, 4));
 
-    let isTerminated = false;
-
-    exec('npm run cli-dashboard:dev', (error) => {
-      if (error) {
-        isTerminated = true;
-        return;
-      }
-    });
+    exec('npm run cli-dashboard:dev');
 
     await delay(2000);
-
-    //if in 2 seconds dasboard server process is terminated show error
-    if (isTerminated) {
-      console.log('Error starting server');
-    } else {
-      console.log(
-        `Report is being served at the URL: http://localhost:9000?path=${encodeURIComponent(
-          directory + '/out.json'
-        )}`
-      );
-    }
+    console.log(
+      `Report is being served at the URL: http://localhost:9000?path=${encodeURIComponent(
+        directory + '/out.json'
+      )}`
+    );
   } else {
     const spinnies = new Spinnies();
 
@@ -177,27 +175,15 @@ export const initialize = async () => {
     await ensureFile(directory + '/out.json');
     await writeFile(directory + '/out.json', JSON.stringify(result, null, 4));
 
-    let isTerminated = false;
-
-    exec('npm run cli-dashboard:dev', (error) => {
-      if (error) {
-        isTerminated = true;
-        return;
-      }
-    });
+    exec('npm run cli-dashboard:dev');
 
     await delay(2000);
 
-    //if in 2 seconds dasboard server process is terminated show error
-    if (isTerminated) {
-      console.log('Error starting server');
-    } else {
-      console.log(
-        `Report is being served at the URL: http://localhost:9000?path=${encodeURIComponent(
-          directory + '/out.json'
-        )}&type=sitemap`
-      );
-    }
+    console.log(
+      `Report is being served at the URL: http://localhost:9000?path=${encodeURIComponent(
+        directory + '/out.json'
+      )}&type=sitemap`
+    );
   }
 };
 
