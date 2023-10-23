@@ -28,6 +28,7 @@ import { noop } from '@ps-analysis-tool/design-system';
 export interface SettingStoreContext {
   state: {
     allowedNumberOfTabs: string | null;
+    isDev: string | null;
   };
   actions: {
     setSettingsInStorage: (key: string, value: string) => void;
@@ -37,6 +38,7 @@ export interface SettingStoreContext {
 const initialState: SettingStoreContext = {
   state: {
     allowedNumberOfTabs: null,
+    isDev: null,
   },
   actions: {
     setSettingsInStorage: noop,
@@ -49,10 +51,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [allowedNumberOfTabs, setAllowedNumberOfTabs] = useState<string | null>(
     null
   );
+  const [isDev, setIsDev] = useState<string | null>(null);
 
   const intitialSync = useCallback(async () => {
     const currentSettings = await chrome.storage.sync.get();
-
+    setIsDev(currentSettings?.isDev);
     setAllowedNumberOfTabs(currentSettings?.allowedNumberOfTabs);
   }, []);
 
@@ -91,6 +94,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
           await chrome.storage.local.clear();
         }
       }
+      if (
+        Object.keys(changes).includes('isDev') &&
+        changes['isDev']?.newValue
+      ) {
+        setIsDev(changes['isDev']?.newValue);
+      }
     },
     []
   );
@@ -109,6 +118,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       value={{
         state: {
           allowedNumberOfTabs,
+          isDev,
         },
         actions: {
           setSettingsInStorage,

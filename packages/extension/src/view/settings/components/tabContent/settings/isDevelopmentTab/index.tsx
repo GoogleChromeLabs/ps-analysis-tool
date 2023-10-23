@@ -25,9 +25,9 @@ import React from 'react';
 import { useSettingsStore } from '../../../../stateProviders/syncSettingsStore';
 
 const IsInDevelopmentMode: React.FC = () => {
-  const { allowedNumberOfTabs, setSettingsInStorage } = useSettingsStore(
+  const { isDev, setSettingsInStorage } = useSettingsStore(
     ({ state, actions }) => ({
-      allowedNumberOfTabs: state.allowedNumberOfTabs,
+      isDev: state.isDev,
       setSettingsInStorage: actions.setSettingsInStorage,
     })
   );
@@ -39,10 +39,10 @@ const IsInDevelopmentMode: React.FC = () => {
         <input
           value="true"
           type="radio"
-          name="allowed-number-of-tabs"
+          name="allow-debugging-mode"
           className="text-xs"
           onChange={(e) => setSettingsInStorage('isDev', e.target?.value)}
-          checked={allowedNumberOfTabs === 'true'}
+          checked={isDev === 'true'}
         />
         On
       </div>
@@ -51,9 +51,9 @@ const IsInDevelopmentMode: React.FC = () => {
           className="text-xs"
           value="false"
           type="radio"
-          name="allowed-number-of-tabs"
+          name="allow-debugging-mode"
           onChange={(e) => setSettingsInStorage('isDev', e.target?.value)}
-          checked={allowedNumberOfTabs === 'false'}
+          checked={isDev === 'false'}
         />
         Off
       </div>

@@ -289,7 +289,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     }
     if (details.reason === 'update') {
       const preSetSettings = await chrome.storage.sync.get();
-      if (preSetSettings?.allowedNumberOfTabs) {
+      if (preSetSettings?.allowedNumberOfTabs && preSetSettings?.isDev) {
         return;
       }
       await chrome.storage.sync.clear();
