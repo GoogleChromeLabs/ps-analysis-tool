@@ -23,11 +23,13 @@ import React from 'react';
  * Internal dependencies.
  */
 import AllowedNumberOfTabs from './allowedNumberOfTabs';
+import IsInDevelopmentMode from './isDevelopmentTab';
 
 const Settings: React.FC = () => {
   return (
     <div className="w-full h-full flex flex-col gap-5">
       <AllowedNumberOfTabs />
+      <IsInDevelopmentMode />
     </div>
   );
 };

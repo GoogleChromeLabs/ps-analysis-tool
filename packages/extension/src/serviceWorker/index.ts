@@ -252,7 +252,8 @@ chrome.tabs.onRemoved.addListener(async (tabId) => {
  */
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   await PROMISE_QUEUE.add(async () => {
-    if (changeInfo.status === 'loading' && tab.url) {
+    const syncStorage = await chrome.storage.sync.get();
+    if (changeInfo.status === 'loading' && tab.url && !syncStorage.isDev) {
       await CookieStore.removeCookieData(tabId.toString());
     }
   });
