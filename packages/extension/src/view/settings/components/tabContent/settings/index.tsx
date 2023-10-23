@@ -29,7 +29,7 @@ const Settings: React.FC = () => {
   return (
     <div className="w-full h-full flex flex-col gap-5">
       <AllowedNumberOfTabs />
-      <IsInDevelopmentMode />
+      {process.env.NODE_ENV === 'development' && <IsInDevelopmentMode />}
     </div>
   );
 };
