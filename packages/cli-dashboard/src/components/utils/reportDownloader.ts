@@ -61,27 +61,27 @@ export const reportDownloader = (
   };
 
   const cookieDataHeader = [
-    'name',
-    'value',
-    'domain',
-    'path',
-    'expires',
-    'httpOnly',
-    'scope',
-    'secure',
-    'sameSite',
-    'platform',
-    'category',
-    'isCookieSet',
-    'gdprPortal',
+    'Name',
+    'Value',
+    'Domain',
+    'Path',
+    'Expires',
+    'Http Only',
+    'Scope',
+    'Secure',
+    'Same Site',
+    'Platform',
+    'Category',
+    'Cookie Affected',
+    'GDPRPortal',
   ];
 
   const technologyDataHeader = [
-    'name',
-    'description',
-    'confidence',
-    'website',
-    'categories',
+    'Name',
+    'Description',
+    'Confidence',
+    'Website',
+    'Categories',
   ];
 
   const cookieDataToBeProcessed = report.cookieData;
@@ -248,7 +248,7 @@ export const reportDownloader = (
 
   const zip = new JSZip();
   zip.file('cookies.csv', cookieDataCSVContent);
-  zip.file('technology.csv', technologyDataCSVContent);
+  zip.file('technologies.csv', technologyDataCSVContent);
   zip.file('affected-cookies.csv', affectedCookieDataCSVContent);
   zip.file('report.csv', summaryDataCSVContent);
   zip.file('report.json', JSON.stringify(newReport));

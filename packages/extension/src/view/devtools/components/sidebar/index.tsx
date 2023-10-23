@@ -34,9 +34,14 @@ import useFrameOverlay from '../../hooks/useFrameOverlay';
 interface SidebarProps {
   selectedIndex: number;
   setIndex: (index: number) => void;
+  width: number;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
+const Sidebar: React.FC<SidebarProps> = ({
+  selectedIndex,
+  setIndex,
+  width,
+}) => {
   const {
     setSelectedFrame,
     selectedFrame,
@@ -128,6 +133,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
   const keyboardNavigator = useCallback(
     // eslint-disable-next-line complexity
     (event: React.KeyboardEvent<HTMLDivElement>) => {
+      event.preventDefault();
       if (!selectedAccordionChild) {
         return;
       }
@@ -227,7 +233,6 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
       }
       setIndex(currentIndex);
       setSelectedAccordionChild(tabIdToBeSet);
-      setIsTabFocused(true);
     },
     [setIndex, setSelectedFrame]
   );
@@ -252,6 +257,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
               >
                 {
                   <Accordion
+                    width={width}
                     key={id}
                     tabs={TABS}
                     accordionState={Boolean(
@@ -273,8 +279,10 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                         Object.keys(tabFrames)?.map((key) => {
                           return (
                             <AccordionChildren
+                              width={width}
                               tabs={TABS}
                               key={key}
+                              tabId="cookies"
                               currentIndex={index}
                               accordionMenuItemName={key}
                               defaultIcon={TABS[index].icons.default}
@@ -283,6 +291,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                               selectedIcon={TABS[index].icons.selected}
                               selectedIndex={selectedIndex}
                               onAccordionChildClick={onAccordionChildClick}
+                              keyboardNavigator={keyboardNavigator}
                               titleForMenuItem={`Cookies used by frames from ${key}`}
                             />
                           );
@@ -291,6 +300,7 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedIndex, setIndex }) => {
                           if (id === tab?.parentId && Boolean(tab?.parentId)) {
                             return (
                               <AccordionChildren
+                                width={width}
                                 tabs={TABS}
                                 currentIndex={currentIndex}
                                 key={tab.id}

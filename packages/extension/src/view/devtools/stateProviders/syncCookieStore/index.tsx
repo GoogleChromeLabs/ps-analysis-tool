@@ -215,6 +215,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           setLoading(false);
           _setSelectedFrame(null);
           setTabFrames(null);
+          setCanStartInspecting(false);
           return;
         } else {
           setIsCurrentTabBeingListenedTo(true);
@@ -323,6 +324,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
             setTabFrames(null);
             _setSelectedFrame(null);
             setLoading(false);
+            setCanStartInspecting(false);
             return;
           } else {
             setIsCurrentTabBeingListenedTo(true);
@@ -394,6 +396,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
     setIsCurrentTabBeingListenedTo(true);
     setLoading(false);
+    setCanStartInspecting(false);
   }, [tabId]);
 
   const tabUpdateListener = useCallback(
@@ -409,14 +412,14 @@ export const Provider = ({ children }: PropsWithChildren) => {
           await getAllFramesForCurrentTab(_tabId);
 
           if (selectedFrame && nextDomain === currentDomain) {
-            setSelectedFrame(nextURL.origin);
+            _setSelectedFrame(nextURL.origin);
           } else {
-            setSelectedFrame(null);
+            _setSelectedFrame(null);
           }
 
           setTabUrl(changeInfo.url);
         } catch (error) {
-          setSelectedFrame(null);
+          _setSelectedFrame(null);
         }
       }
     },

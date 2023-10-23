@@ -16,12 +16,14 @@
 /**
  * External dependencies.
  */
-import type { CookieTableData } from '@ps-analysis-tool/common';
+import type {
+  CookieTableData,
+  SelectedFilters,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import type { SelectedFilters } from '../types';
 import { FILTER_MAPPING, CUSTOM_FILTER_MAPPING } from '../constants';
 import getFilterValue from './getFilterValue';
 
@@ -54,11 +56,13 @@ const filterCookiesWithoutRetentionPeriod = (
     };
 
     if (Object.keys(selectedFilters).length) {
+      // eslint-disable-next-line complexity
       Object.entries(selectedFilters).forEach(([keys, selectedFilter]) => {
         if (
           keys !== CUSTOM_FILTER_MAPPING.retentionPeriod.keys &&
           keys !== CUSTOM_FILTER_MAPPING.scope.keys &&
-          keys !== CUSTOM_FILTER_MAPPING.setVia.keys
+          keys !== CUSTOM_FILTER_MAPPING.setVia.keys &&
+          keys !== CUSTOM_FILTER_MAPPING.samesite.keys
         ) {
           let value = getFilterValue(keys, cookieData);
           const filterMap = FILTER_MAPPING.find(
@@ -97,6 +101,18 @@ const filterCookiesWithoutRetentionPeriod = (
           } else if (selectedFilter.has('JS') && !selectedFilter.has('HTTP')) {
             canShow.push(cookieData.headerType === 'javascript');
           }
+        } else if (keys === CUSTOM_FILTER_MAPPING.samesite.keys) {
+          let canBeShown = false;
+          if (selectedFilter.has('None') && !canBeShown) {
+            canBeShown = cookieData.parsedCookie.samesite === 'none';
+          }
+          if (selectedFilter.has('Strict') && !canBeShown) {
+            canBeShown = cookieData.parsedCookie.samesite === 'strict';
+          }
+          if (selectedFilter.has('Lax') && !canBeShown) {
+            canBeShown = cookieData.parsedCookie.samesite === 'lax';
+          }
+          canShow.push(canBeShown);
         }
       });
 

@@ -139,7 +139,7 @@ const CookiesMatrix = ({
             >
               <span>{title}</span>
               {showInfoIcon && (
-                <span title="An active ad-blocker or other cookie extensions may affect the results.">
+                <span title="Cookies must be analyzed on a new, clean Chrome profile for an accurate report.">
                   <InfoIcon />
                 </span>
               )}

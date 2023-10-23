@@ -30,6 +30,10 @@ const getFrameType = (
     return 'Main frame';
   }
 
+  if (tagName === 'Unknown') {
+    return 'Unknown';
+  }
+
   return 'iframe';
 };
 

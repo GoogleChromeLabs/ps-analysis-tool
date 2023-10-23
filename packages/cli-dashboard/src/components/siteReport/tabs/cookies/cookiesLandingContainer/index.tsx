@@ -18,7 +18,11 @@
  * External dependencies.
  */
 import React from 'react';
-import { CookiesLanding, CookiesMatrix } from '@ps-analysis-tool/design-system';
+import {
+  Button,
+  CookiesLanding,
+  CookiesMatrix,
+} from '@ps-analysis-tool/design-system';
 import {
   prepareCookiesCount,
   prepareCookieStatsComponents,
@@ -30,12 +34,14 @@ interface CookiesLandingContainerProps {
   tabFrames: TabFrames;
   tabCookies: TabCookies;
   affectedCookies: TabCookies;
+  downloadReport: (() => void) | undefined;
 }
 
 const CookiesLandingContainer = ({
   tabFrames,
   tabCookies,
   affectedCookies,
+  downloadReport,
 }: CookiesLandingContainerProps) => {
   return (
     <CookiesLanding
@@ -65,6 +71,15 @@ const CookiesLandingContainer = ({
             capitalizeTitle={true}
           />
         </div>
+        {downloadReport && (
+          <div className="pt-5 flex justify-center items-center">
+            <Button
+              extraClasses="w-fit text-sm flex justify-center items-center"
+              text="Download Report"
+              onClick={downloadReport}
+            />
+          </div>
+        )}
       </div>
     </CookiesLanding>
   );

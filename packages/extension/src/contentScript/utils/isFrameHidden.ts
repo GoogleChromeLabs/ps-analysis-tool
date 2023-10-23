@@ -13,7 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const isFrameHidden = (frame: HTMLIFrameElement | HTMLElement): boolean => {
+const isFrameHidden = (
+  frame: HTMLIFrameElement | HTMLElement | null
+): boolean => {
+  if (!frame) {
+    return false;
+  }
   const { width, height } = frame.getBoundingClientRect();
 
   if (height === 0 || width === 0) {

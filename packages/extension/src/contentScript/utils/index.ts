@@ -23,5 +23,5 @@ export { default as getTooltipInfoData } from './getTooltipInfoData';
 export { default as isElementVisibleInViewport } from './isElementInViewport';
 export { default as isFrameHidden } from './isFrameHidden';
 export { default as isFrameInsideFrame } from './isFrameInsideFrame';
-export { default as isOnRWS } from './isOnRWS';
 export { default as removeTrailingSlash } from './removeTrailingSlash';
+export { default as isOnRWS } from './isOnRWS';

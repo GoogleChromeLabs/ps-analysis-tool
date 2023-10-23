@@ -28,10 +28,10 @@ import { exec } from 'child_process';
  */
 import Utility from './utils/utility';
 import { fetchDictionary } from './utils/fetchCookieDictionary';
-import { delay } from './utils';
 import { analyzeCookiesUrls } from './procedures/analyzeCookieUrls';
 import { analyzeCookiesUrlsInBatches } from './procedures/analyzeCookieUrlsInBatches';
 import { analyzeTechnologiesUrlsInBatches } from './procedures/analyzeTechnologiesUrlsInBatches';
+import { delay } from './utils';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
@@ -98,15 +98,27 @@ export const initialize = async () => {
     await ensureFile(directory + '/out.json');
     await writeFile(directory + '/out.json', JSON.stringify(output, null, 4));
 
-    exec('npm run cli-dashboard:dev');
+    let isTerminated = false;
 
-    await delay(3000);
+    exec('npm run cli-dashboard:dev', (error) => {
+      if (error) {
+        isTerminated = true;
+        return;
+      }
+    });
 
-    console.log(
-      `Report is being served at the URL: http://localhost:9000?path=${encodeURIComponent(
-        directory + '/out.json'
-      )}`
-    );
+    await delay(2000);
+
+    //if in 2 seconds dasboard server process is terminated show error
+    if (isTerminated) {
+      console.log('Error starting server');
+    } else {
+      console.log(
+        `Report is being served at the URL: http://localhost:9000?path=${encodeURIComponent(
+          directory + '/out.json'
+        )}`
+      );
+    }
   } else {
     const spinnies = new Spinnies();
 
@@ -165,15 +177,27 @@ export const initialize = async () => {
     await ensureFile(directory + '/out.json');
     await writeFile(directory + '/out.json', JSON.stringify(result, null, 4));
 
-    exec('npm run cli-dashboard:dev');
+    let isTerminated = false;
 
-    await delay(3000);
+    exec('npm run cli-dashboard:dev', (error) => {
+      if (error) {
+        isTerminated = true;
+        return;
+      }
+    });
 
-    console.log(
-      `Report is being served at the URL: http://localhost:9000?path=${encodeURIComponent(
-        directory + '/out.json'
-      )}&type=sitemap`
-    );
+    await delay(2000);
+
+    //if in 2 seconds dasboard server process is terminated show error
+    if (isTerminated) {
+      console.log('Error starting server');
+    } else {
+      console.log(
+        `Report is being served at the URL: http://localhost:9000?path=${encodeURIComponent(
+          directory + '/out.json'
+        )}&type=sitemap`
+      );
+    }
   }
 };
 
