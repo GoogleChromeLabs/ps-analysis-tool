@@ -169,7 +169,7 @@ class WebpageContentScript {
     };
 
     this.addEventListerOnScroll(updatePosition);
-    this.addEventListenersOnResize(updatePosition);
+    this.addEventListenersOnResize(() => setOverlayPosition(overlay, frame));
 
     return overlay;
   }
