@@ -83,6 +83,7 @@ const setTooltipPosition = (
      */
     // eslint-disable-next-line prettier/prettier
     if (frameX + frameWidth - window.innerWidth > 0 && frameX + tooltip.offsetWidth > window.innerWidth) {
+
       tooltip.style.left = `unset`;
       tooltip.style.right = `${frameX + frameWidth - window.innerWidth - 10}px`;
       tooltip.firstElementChild?.classList.remove(
@@ -95,6 +96,7 @@ const setTooltipPosition = (
       return;
       // eslint-disable-next-line prettier/prettier
     } else if (frameX + frameWidth - window.innerWidth < 0 && frameX + tooltip.offsetWidth < window.innerWidth) {
+
       tooltip.style.left = frameX + Number(window.scrollX) + 'px';
       tooltip.style.right = `unset`;
       tooltip.firstElementChild?.classList.remove(
@@ -104,8 +106,10 @@ const setTooltipPosition = (
         'ps-tooltip-bottom-right-notch'
       );
       tooltip.firstElementChild?.classList.add('ps-tooltip-bottom-left-notch');
+      return;
     } else {
       const leftOverWidth = tooltip.offsetWidth - (window.innerWidth - frameX);
+
       tooltip.style.left = frameX + Number(window.scrollX) + 'px';
       tooltip.style.maxWidth = frameWidth - leftOverWidth + 'px';
       tooltip.firstElementChild?.classList.remove(
@@ -154,6 +158,7 @@ const setTooltipPosition = (
         'ps-tooltip-bottom-right-notch'
       );
       tooltip.firstElementChild?.classList.add('ps-tooltip-top-left-notch');
+      return;
     } else {
       const leftOverWidth = tooltip.offsetWidth - (window.innerWidth - frameX);
       tooltip.style.left = frameX + Number(window.scrollX) + 'px';
