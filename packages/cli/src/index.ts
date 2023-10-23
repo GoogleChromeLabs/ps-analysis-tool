@@ -113,7 +113,7 @@ export const initialize = async () => {
 
     await delay(2000);
     console.log(
-      `Report is being served at the URL: http://localhost:9000?folder=${encodeURIComponent(
+      `Report is being served at the URL: http://localhost:9000?dir=${encodeURIComponent(
         prefix
       )}`
     );
