@@ -250,7 +250,7 @@ class WebpageContentScript {
 
     if (this.resizeEventListeners.length) {
       this.resizeEventListeners.forEach((listener) => {
-        window.removeEventListener('scroll', listener);
+        window.removeEventListener('resize', listener);
       });
 
       this.resizeEventListeners = [];
