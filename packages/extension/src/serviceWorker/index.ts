@@ -253,7 +253,12 @@ chrome.tabs.onRemoved.addListener(async (tabId) => {
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   await PROMISE_QUEUE.add(async () => {
     const syncStorage = await chrome.storage.sync.get();
-    if (changeInfo.status === 'loading' && tab.url && !syncStorage.isDev) {
+    if (
+      changeInfo.status === 'loading' &&
+      tab.url &&
+      syncStorage.isDev === 'false' &&
+      process.env.NODE_ENV === 'production'
+    ) {
       await CookieStore.removeCookieData(tabId.toString());
     }
   });

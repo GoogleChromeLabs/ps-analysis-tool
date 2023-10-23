@@ -40,7 +40,6 @@ const App: React.FC = () => {
       setContextInvalidated: actions.setContextInvalidated,
     })
   );
-
   const listenToMouseChange = useCallback(() => {
     if (contextInvalidatedRef.current) {
       if (!chrome.runtime?.id) {

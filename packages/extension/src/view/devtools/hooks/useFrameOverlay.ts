@@ -125,7 +125,10 @@ const useFrameOverlay = () => {
     async (changes: { [key: string]: chrome.storage.StorageChange }) => {
       try {
         const syncStorage = await chrome.storage.sync.get();
-        if (syncStorage.isDev === 'true') {
+        if (
+          process.env.NODE_ENV === 'development' &&
+          syncStorage.isDev === 'true'
+        ) {
           return;
         }
         const currentTabId = await getCurrentTabId();
