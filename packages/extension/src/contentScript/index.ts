@@ -351,7 +351,7 @@ class WebpageContentScript {
     });
 
     frameElements.forEach((frame, index) => {
-      if (!isFrameHidden(frame)) {
+      if (!isFrameHidden(frame) && !popoverElement.frameWithTooltip) {
         popoverElement.frameWithTooltip = frame;
 
         const tooltip = this.insertTooltip(
