@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 export const getCurrentTab = () => {
-  return chrome.tabs.query({
-    active: true,
-    currentWindow: true,
-  });
+  try {
+    return chrome.tabs.query({
+      active: true,
+      currentWindow: true,
+    });
+  } catch (error) {
+    //do nothing in this error
+  }
+  return Promise.resolve(undefined);
 };
 
 export const getCurrentTabId = async (tab = null) => {
