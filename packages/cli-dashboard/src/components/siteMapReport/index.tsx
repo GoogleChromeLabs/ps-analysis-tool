@@ -23,6 +23,7 @@ import {
   type CookieTableData,
   type TabFrames,
   type TechnologyData,
+  UNKNOWN_FRAME_KEY,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -65,7 +66,7 @@ const SiteMapReport = ({
 
   const frames = useMemo(() => {
     return Object.keys(cookies).reduce((acc, frame) => {
-      if (frame?.includes('http') || frame === 'Unknown Frame') {
+      if (frame?.includes('http') || frame === UNKNOWN_FRAME_KEY) {
         acc[frame] = {} as TabFrames[string];
       }
       return acc;
@@ -76,7 +77,7 @@ const SiteMapReport = ({
     () =>
       Object.entries(landingPageCookies)
         .filter(
-          ([frame]) => frame.includes('http') || frame === 'Unknown Frame'
+          ([frame]) => frame.includes('http') || frame === UNKNOWN_FRAME_KEY
         )
         .map(([frame, _cookies]) => {
           const newCookies = Object.fromEntries(
@@ -177,7 +178,7 @@ const SiteMapReport = ({
               setSelectedTopLevelMenu('affectedCookies');
               setSelectedSite(null);
             }}
-            className={`w-full pl-6 py-0.5 outline-0 cursor-pointer text-sm 
+            className={`w-full pl-[9px] py-0.5 outline-0 cursor-pointer text-sm 
 							${
                 selectedTopLevelMenu === 'affectedCookies'
                   ? 'bg-royal-blue text-white'
