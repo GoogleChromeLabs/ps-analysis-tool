@@ -18,9 +18,9 @@
  */
 import React, { type PropsWithChildren, useMemo } from 'react';
 import { useContextSelector, createContext } from 'use-context-selector';
-import type {
-  CookieTableData,
-  TechnologyData,
+import {
+  type CookieTableData,
+  type TechnologyData,
   UNKNOWN_FRAME_KEY,
 } from '@ps-analysis-tool/common';
 
