@@ -129,7 +129,7 @@ const SiteMapReport = ({
               setSelectedTopLevelMenu('affectedCookies');
               setSelectedSite(null);
             }}
-            className={`w-full pl-6 py-0.5 outline-0 cursor-pointer text-sm 
+            className={`w-full pl-[9px] py-0.5 outline-0 cursor-pointer text-sm 
 							${
                 selectedTopLevelMenu === 'affectedCookies'
                   ? 'bg-royal-blue text-white'
