@@ -18,6 +18,7 @@
  */
 import React, { useEffect, useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
+import { CookieIcon, CookieIconWhite } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
@@ -80,6 +81,8 @@ const Layout = () => {
             />
           ),
           children: [],
+          icon: <CookieIcon />,
+          selectedIcon: <CookieIconWhite />,
         })
       );
 
@@ -102,11 +105,10 @@ const Layout = () => {
       <Resizable
         defaultSize={{ width: '200px', height: '100%' }}
         minWidth={'150px'}
-        maxWidth={'98%'}
+        maxWidth={'60%'}
         enable={{
           right: true,
         }}
-        className="max-h-screen overflow-auto flex flex-col border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz pt-1"
       >
         <Sidebar
           sidebarItems={sidebarItems}

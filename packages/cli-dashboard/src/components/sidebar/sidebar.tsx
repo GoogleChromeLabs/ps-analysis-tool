@@ -39,16 +39,18 @@ const Sidebar = ({
   isKeySelected,
 }: SidebarProps) => {
   return (
-    <div className="flex flex-col">
-      {sidebarItems.map((sidebarItem) => (
-        <SidebarChild
-          sidebarItem={sidebarItem}
-          updateSelectedItemKey={updateSelectedItemKey}
-          isKeyAncestor={isKeyAncestor}
-          isKeySelected={isKeySelected}
-          key={sidebarItem.key}
-        />
-      ))}
+    <div className="w-full h-full overflow-auto border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz pt-1">
+      <div className="min-w-fit">
+        {sidebarItems.map((sidebarItem) => (
+          <SidebarChild
+            sidebarItem={sidebarItem}
+            updateSelectedItemKey={updateSelectedItemKey}
+            isKeyAncestor={isKeyAncestor}
+            isKeySelected={isKeySelected}
+            key={sidebarItem.key}
+          />
+        ))}
+      </div>
     </div>
   );
 };
