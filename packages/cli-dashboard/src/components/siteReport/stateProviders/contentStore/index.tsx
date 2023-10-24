@@ -18,7 +18,11 @@
  */
 import React, { type PropsWithChildren, useMemo } from 'react';
 import { useContextSelector, createContext } from 'use-context-selector';
-import type { CookieTableData, TechnologyData } from '@ps-analysis-tool/common';
+import type {
+  CookieTableData,
+  TechnologyData,
+  UNKNOWN_FRAME_KEY,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -63,7 +67,7 @@ export const Provider = ({
     () =>
       Object.entries(cookies)
         .filter(
-          ([frame]) => frame.includes('http') || frame === 'Unknown Frame(s)'
+          ([frame]) => frame.includes('http') || frame === UNKNOWN_FRAME_KEY
         )
         .map(([frame, _cookies]) => {
           const newCookies = Object.fromEntries(

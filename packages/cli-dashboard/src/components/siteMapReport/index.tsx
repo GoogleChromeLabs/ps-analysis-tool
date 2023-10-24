@@ -23,6 +23,7 @@ import {
   type CookieTableData,
   type TabFrames,
   type TechnologyData,
+  UNKNOWN_FRAME_KEY,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -65,7 +66,7 @@ const SiteMapReport = ({
 
   const frames = useMemo(() => {
     return Object.keys(cookies).reduce((acc, frame) => {
-      if (frame?.includes('http') || frame === 'Unknown Frame(s)') {
+      if (frame?.includes('http') || frame === UNKNOWN_FRAME_KEY) {
         acc[frame] = {} as TabFrames[string];
       }
       return acc;
@@ -76,7 +77,7 @@ const SiteMapReport = ({
     () =>
       Object.entries(landingPageCookies)
         .filter(
-          ([frame]) => frame.includes('http') || frame === 'Unknown Frame(s)'
+          ([frame]) => frame.includes('http') || frame === UNKNOWN_FRAME_KEY
         )
         .map(([frame, _cookies]) => {
           const newCookies = Object.fromEntries(
