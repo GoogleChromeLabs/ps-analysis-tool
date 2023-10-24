@@ -75,10 +75,17 @@ const setTooltipPosition = (
       frameY - tooltip.offsetHeight + Number(window.scrollY)
     }px`;
 
-    //check for space on right
-    if (frameX + tooltip.offsetWidth > window.innerWidth) {
-      const leftOverWidth = tooltip.offsetWidth - (window.innerWidth - frameX);
-      tooltip.style.left = `${frameX - leftOverWidth - 10}px`;
+    /**
+     * 2 conditions will be checked
+     * 1) If space is available on left and space is not available on right, show on left.
+     * 2) If space is available on right and not on left, show on right.
+     * 3) If above 2 conditions dont work show on left and reduce the width.
+     */
+    // eslint-disable-next-line prettier/prettier
+    if (frameX + frameWidth - window.innerWidth > 0 && frameX + tooltip.offsetWidth > window.innerWidth) {
+
+      tooltip.style.left = `unset`;
+      tooltip.style.right = `${frameX + frameWidth - window.innerWidth - 10}px`;
       tooltip.firstElementChild?.classList.remove(
         'ps-tooltip-top-right-notch',
         'ps-tooltip-top-left-notch',
@@ -87,26 +94,51 @@ const setTooltipPosition = (
       );
       tooltip.firstElementChild?.classList.add('ps-tooltip-bottom-right-notch');
       return;
+      // eslint-disable-next-line prettier/prettier
+    } else if (frameX + frameWidth - window.innerWidth < 0 && frameX + tooltip.offsetWidth < window.innerWidth) {
+
+      tooltip.style.left = frameX + Number(window.scrollX) + 'px';
+      tooltip.style.right = `unset`;
+      tooltip.firstElementChild?.classList.remove(
+        'ps-tooltip-top-right-notch',
+        'ps-tooltip-top-left-notch',
+        'ps-tooltip-bottom-left-notch',
+        'ps-tooltip-bottom-right-notch'
+      );
+      tooltip.firstElementChild?.classList.add('ps-tooltip-bottom-left-notch');
+      return;
+    } else {
+      const leftOverWidth = tooltip.offsetWidth - (window.innerWidth - frameX);
+
+      tooltip.style.left = frameX + Number(window.scrollX) + 'px';
+      tooltip.style.maxWidth = frameWidth - leftOverWidth + 'px';
+      tooltip.firstElementChild?.classList.remove(
+        'ps-tooltip-top-right-notch',
+        'ps-tooltip-top-left-notch',
+        'ps-tooltip-bottom-left-notch',
+        'ps-tooltip-bottom-right-notch'
+      );
+      tooltip.firstElementChild?.classList.add('ps-tooltip-bottom-left-notch');
+      return;
     }
-    tooltip.firstElementChild?.classList.remove(
-      'ps-tooltip-top-right-notch',
-      'ps-tooltip-top-left-notch',
-      'ps-tooltip-bottom-left-notch',
-      'ps-tooltip-bottom-right-notch'
-    );
-    tooltip.firstElementChild?.classList.add('ps-tooltip-bottom-left-notch');
-    return;
   }
 
   //check for space at bottom of frame
   if (frameY + frame.offsetHeight + tooltip.offsetHeight < window.innerHeight) {
-    //check for space on right
     tooltip.style.top = `${
       frameY + frame.offsetHeight + Number(window.scrollY)
     }px`;
-    if (frameX + tooltip.offsetWidth > window.innerWidth) {
-      const leftOverWidth = tooltip.offsetWidth - (window.innerWidth - frameX);
-      tooltip.style.left = `${frameX - leftOverWidth - 10}px`;
+
+    /**
+     * 2 conditions will be checked
+     * 1) If space is available on left and space is not available on right, show on left.
+     * 2) If space is available on right and not on left, show on right.
+     * 3) If above 2 conditions dont work show on left and reduce the width.
+     */
+    // eslint-disable-next-line prettier/prettier
+    if (frameX + frameWidth - window.innerWidth > 0 && frameX + tooltip.offsetWidth > window.innerWidth) {
+      tooltip.style.left = `unset`;
+      tooltip.style.right = `${frameX + frameWidth - window.innerWidth - 10}px`;
       tooltip.firstElementChild?.classList.remove(
         'ps-tooltip-top-right-notch',
         'ps-tooltip-top-left-notch',
@@ -115,17 +147,35 @@ const setTooltipPosition = (
       );
       tooltip.firstElementChild?.classList.add('ps-tooltip-top-right-notch');
       return;
+      // eslint-disable-next-line prettier/prettier
+    } else if (frameX + frameWidth - window.innerWidth < 0 && frameX + tooltip.offsetWidth < window.innerWidth) {
+      tooltip.style.left = frameX + Number(window.scrollX) + 'px';
+      tooltip.style.right = `unset`;
+      tooltip.firstElementChild?.classList.remove(
+        'ps-tooltip-top-right-notch',
+        'ps-tooltip-top-left-notch',
+        'ps-tooltip-bottom-left-notch',
+        'ps-tooltip-bottom-right-notch'
+      );
+      tooltip.firstElementChild?.classList.add('ps-tooltip-top-left-notch');
+      return;
+    } else {
+      const leftOverWidth = tooltip.offsetWidth - (window.innerWidth - frameX);
+      tooltip.style.left = frameX + Number(window.scrollX) + 'px';
+      tooltip.style.maxWidth = frameWidth - leftOverWidth + 'px';
+      tooltip.firstElementChild?.classList.remove(
+        'ps-tooltip-top-right-notch',
+        'ps-tooltip-top-left-notch',
+        'ps-tooltip-bottom-left-notch',
+        'ps-tooltip-bottom-right-notch'
+      );
+      tooltip.firstElementChild?.classList.add('ps-tooltip-top-left-notch');
+      return;
     }
-    tooltip.style.left = frameX + Number(window.scrollX) + 'px';
-    tooltip.firstElementChild?.classList.remove(
-      'ps-tooltip-top-right-notch',
-      'ps-tooltip-top-left-notch',
-      'ps-tooltip-bottom-left-notch',
-      'ps-tooltip-bottom-right-notch'
-    );
-    tooltip.firstElementChild?.classList.add('ps-tooltip-top-left-notch');
-    return;
   }
+
+  tooltip.style.removeProperty('top');
+  tooltip.style.bottom = frameY + 'px';
 };
 
 export default setTooltipPosition;
