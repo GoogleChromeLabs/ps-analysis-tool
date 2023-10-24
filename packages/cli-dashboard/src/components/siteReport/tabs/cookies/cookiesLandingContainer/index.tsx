@@ -34,7 +34,7 @@ interface CookiesLandingContainerProps {
   tabFrames: TabFrames;
   tabCookies: TabCookies;
   affectedCookies: TabCookies;
-  downloadReport: (() => void) | undefined;
+  downloadReport?: () => void;
 }
 
 const CookiesLandingContainer = ({
@@ -49,6 +49,7 @@ const CookiesLandingContainer = ({
       tabCookies={tabCookies}
       showInfoIcon={false}
       associatedCookiesCount={Object.values(tabFrames).length}
+      showMessageBoxBody={false}
     >
       <div className="flex flex-col">
         <h3 className="text-xs font-bold text-darkest-gray dark:text-bright-gray uppercase">

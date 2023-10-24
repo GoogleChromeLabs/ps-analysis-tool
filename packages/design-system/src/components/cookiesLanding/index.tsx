@@ -38,6 +38,7 @@ interface CookiesLandingProps {
   showInfoIcon?: boolean;
   showHorizontalMatrix?: boolean;
   associatedCookiesCount?: number | null;
+  showMessageBoxBody?: boolean;
 }
 
 const CookiesLanding = ({
@@ -47,6 +48,7 @@ const CookiesLanding = ({
   showInfoIcon = true,
   showHorizontalMatrix = true,
   associatedCookiesCount = null,
+  showMessageBoxBody = true,
 }: CookiesLandingProps) => {
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
@@ -63,7 +65,9 @@ const CookiesLanding = ({
             cookieStats?.thirdParty.total === 0 && (
               <MessageBox
                 headerText="No cookies found on this page"
-                bodyText="Please try reloading the page"
+                bodyText={
+                  showMessageBoxBody ? 'Please try reloading the page' : ''
+                }
               />
             ))}
         <CookiesMatrix
