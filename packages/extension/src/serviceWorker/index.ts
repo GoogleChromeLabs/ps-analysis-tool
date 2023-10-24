@@ -256,8 +256,9 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     if (
       changeInfo.status === 'loading' &&
       tab.url &&
-      syncStorage.isDev === 'false' &&
-      process.env.NODE_ENV === 'production'
+      (process.env.NODE_ENV === 'production' ||
+        (process.env.NODE_ENV === 'development' &&
+          syncStorage.isDev === 'false'))
     ) {
       await CookieStore.removeCookieData(tabId.toString());
     }
