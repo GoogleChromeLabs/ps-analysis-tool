@@ -34,7 +34,7 @@ interface CookiesLandingContainerProps {
   tabFrames: TabFrames;
   tabCookies: TabCookies;
   affectedCookies: TabCookies;
-  downloadReport: (() => void) | undefined;
+  downloadReport?: () => void;
 }
 
 const CookiesLandingContainer = ({
