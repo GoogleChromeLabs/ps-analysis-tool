@@ -26,7 +26,7 @@ import type { CookieFrameStorageType, CookieJsonDataType } from '../../types';
 
 const reshapeCookies = (cookies: CookieFrameStorageType) =>
   Object.entries(cookies)
-    .filter(([frame]) => frame.includes('http') || frame === 'Unknown Frame')
+    .filter(([frame]) => frame.includes('http') || frame === 'Unknown Frame(s)')
     .map(([frame, _cookies]) => createCookieObj(frame, _cookies))
     .reduce((acc, cookieObj) => {
       return {
