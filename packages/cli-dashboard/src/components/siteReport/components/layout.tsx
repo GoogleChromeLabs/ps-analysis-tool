@@ -41,7 +41,7 @@ const Layout = () => {
         Object.values(tabCookies)
           .map((cookie) => cookie.frameUrl)
           .filter(
-            (url) => url?.includes('http') || url === 'Unknown Frame'
+            (url) => url?.includes('http') || url === 'Unknown Frame(s)'
           ) as string[]
       ),
     ],
