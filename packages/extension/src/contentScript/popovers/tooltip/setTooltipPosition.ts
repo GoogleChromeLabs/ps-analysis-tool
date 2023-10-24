@@ -112,7 +112,8 @@ const setTooltipPosition = (
     } else {
       const leftOverWidth = tooltip.offsetWidth - (window.innerWidth - frameX);
 
-      tooltip.style.left = frameX + Number(window.scrollX) + 'px';
+      tooltip.style.left =
+        frameX < 0 ? '0px' : frameX + Number(window.scrollX) + 'px';
       tooltip.style.maxWidth = frameWidth - leftOverWidth + 'px';
       tooltip.style.top = `${
         frameY - tooltip.offsetHeight + Number(window.scrollY)
@@ -129,7 +130,7 @@ const setTooltipPosition = (
   }
 
   //check for space at bottom of frame
-  if (frameY + frame.offsetHeight + tooltip.offsetHeight < window.innerHeight) {
+  if (frameY + tooltip.offsetHeight < window.innerHeight) {
     /**
      * 2 conditions will be checked
      * 1) If space is available on left and space is not available on right, show on left.
@@ -168,7 +169,8 @@ const setTooltipPosition = (
       return;
     } else {
       const leftOverWidth = tooltip.offsetWidth - (window.innerWidth - frameX);
-      tooltip.style.left = frameX + Number(window.scrollX) + 'px';
+      tooltip.style.left =
+        frameX < 0 ? '0px' : frameX + Number(window.scrollX) + 'px';
       tooltip.style.maxWidth = frameWidth - leftOverWidth + 'px';
       tooltip.style.top = `${
         frameY + frame.offsetHeight + Number(window.scrollY)
