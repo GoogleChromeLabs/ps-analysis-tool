@@ -13,6 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies
+ */
+import React from 'react';
+import { CookieIcon, CookieIconWhite } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies
@@ -29,6 +34,8 @@ const sidebarData: SidebarItem[] = [
     key: 'sitemap-affected-cookies',
     title: 'Affected Cookies',
     children: [],
+    icon: <CookieIcon />,
+    selectedIcon: <CookieIconWhite />,
   },
 ];
 

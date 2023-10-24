@@ -50,8 +50,8 @@ const Tabs: SidebarItem[] = [
     key: 'affected_cookies',
     title: 'Affected Cookies',
     children: [],
-    icon: <SiteBoundariesIcon />,
-    selectedIcon: <SiteBoundariesIconWhite />,
+    icon: <CookieIcon />,
+    selectedIcon: <CookieIconWhite />,
   },
 ];
 
