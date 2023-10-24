@@ -19,6 +19,7 @@
  */
 import puppeteer, { Browser, Page, Protocol } from 'puppeteer';
 import { parse } from 'simple-cookie';
+import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -337,7 +338,7 @@ export class BrowserManagement {
           pageUrl,
           cookieData: {
             ...cookieDataFromNetwork,
-            'Unknown Frame(s)': {
+            [UNKNOWN_FRAME_KEY]: {
               frameCookies: reshapedApplicationCookies,
               cookiesCount: Object.keys(reshapedApplicationCookies).length,
             },
