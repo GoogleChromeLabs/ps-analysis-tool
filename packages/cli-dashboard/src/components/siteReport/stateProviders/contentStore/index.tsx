@@ -63,7 +63,7 @@ export const Provider = ({
     () =>
       Object.entries(cookies)
         .filter(
-          ([frame]) => frame.includes('http') || frame === 'Unknown Frame'
+          ([frame]) => frame.includes('http') || frame === 'Unknown Frame(s)'
         )
         .map(([frame, _cookies]) => {
           const newCookies = Object.fromEntries(
