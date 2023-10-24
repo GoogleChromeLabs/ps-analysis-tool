@@ -13,7 +13,6 @@ extension_setup() {
 
 # Detect OS
 if [[ "$(uname)" == "Darwin" ]]; then
-  echo "Macintosh"
   # Loads Chrome with a temporary profile that is deleted after Chrome is closed
   launch_chrome() {
       local CHROME_PATH="/Applications/Google Chrome.app"
@@ -26,7 +25,6 @@ if [[ "$(uname)" == "Darwin" ]]; then
           "$@" https://example.com >/dev/null 2>&1 && rm -rf "${DATA_DIR}" &
   }
 elif [[ "$(uname)" == "Linux" ]]; then
-  echo "Linux"
   # Loads Chrome with a temporary profile that is deleted after Chrome is closed
   launch_chrome() {
     local CHROME="google-chrome"
