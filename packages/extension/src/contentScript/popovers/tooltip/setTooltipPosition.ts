@@ -79,9 +79,7 @@ const setTooltipPosition = (
      */
     // eslint-disable-next-line prettier/prettier
     if (frameX + tooltip.offsetWidth > window.innerWidth && frameX - tooltip.offsetWidth > 0) {
-      tooltip.style.left = `${
-        frameX + tooltip.offsetWidth - window.innerWidth
-      }px`;
+      tooltip.style.left = `${frameX - tooltip.offsetWidth}px`;
       tooltip.style.top = `${
         frameY - tooltip.offsetHeight + Number(window.scrollY)
       }px`;
@@ -111,7 +109,6 @@ const setTooltipPosition = (
       return;
     } else {
       const leftOverWidth = tooltip.offsetWidth - (window.innerWidth - frameX);
-
       tooltip.style.left =
         frameX < 0 ? '0px' : frameX + Number(window.scrollX) + 'px';
       tooltip.style.maxWidth = frameWidth - leftOverWidth + 'px';
@@ -140,7 +137,7 @@ const setTooltipPosition = (
     // eslint-disable-next-line prettier/prettier
     if (frameX + frameWidth - window.innerWidth > 0 && frameX + tooltip.offsetWidth > window.innerWidth) {
       tooltip.style.left = `unset`;
-      tooltip.style.right = `${frameX + frameWidth - window.innerWidth}px`;
+      tooltip.style.right = `${frameX + frameWidth}px`;
       tooltip.style.top = `${
         frameY + frame.offsetHeight + Number(window.scrollY)
       }px`;
