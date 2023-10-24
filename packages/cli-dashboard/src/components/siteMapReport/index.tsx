@@ -62,7 +62,7 @@ const SiteMapReport = ({
 
   const frames = useMemo(() => {
     return Object.keys(cookies).reduce((acc, frame) => {
-      if (frame?.includes('http') || frame === 'Unknown Frame') {
+      if (frame?.includes('http') || frame === 'Unknown Frame(s)') {
         acc[frame] = {} as TabFrames[string];
       }
       return acc;

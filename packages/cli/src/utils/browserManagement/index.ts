@@ -337,7 +337,7 @@ export class BrowserManagement {
           pageUrl,
           cookieData: {
             ...cookieDataFromNetwork,
-            'Unknown Frame': {
+            'Unknown Frame(s)': {
               frameCookies: reshapedApplicationCookies,
               cookiesCount: Object.keys(reshapedApplicationCookies).length,
             },
