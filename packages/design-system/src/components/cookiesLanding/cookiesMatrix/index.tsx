@@ -17,22 +17,18 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
-
-/**
- * Internal dependencies.
- */
 import {
   MatrixComponentHorizontal,
   Matrix,
   type MatrixComponentProps,
   InfoIcon,
-} from '@cookie-analysis-tool/design-system';
+} from '@ps-analysis-tool/design-system';
 import {
   filterFramesWithCookies,
   type CookieStatsComponents,
   type TabCookies,
   type TabFrames,
-} from '@cookie-analysis-tool/common';
+} from '@ps-analysis-tool/common';
 
 interface CookiesMatrixProps {
   tabCookies: TabCookies | null;
@@ -143,7 +139,7 @@ const CookiesMatrix = ({
             >
               <span>{title}</span>
               {showInfoIcon && (
-                <span title="An active ad-blocker or other cookie extensions may affect the results.">
+                <span title="Cookies must be analyzed on a new, clean Chrome profile for an accurate report.">
                   <InfoIcon />
                 </span>
               )}

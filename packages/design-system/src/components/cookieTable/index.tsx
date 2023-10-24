@@ -17,17 +17,17 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
-
-/**
- * Internal dependencies.
- */
-import { Table, TableColumn, TableData, TableRow, useTable } from '../table';
 import {
   CookieTableData,
   PreferenceDataValues,
   SortingState,
   getCookieKey,
-} from '@cookie-analysis-tool/common';
+} from '@ps-analysis-tool/common';
+
+/**
+ * Internal dependencies.
+ */
+import { Table, TableColumn, TableData, TableRow, useTable } from '../table';
 import { noop } from '../../utils';
 
 interface CookieTableProps {
@@ -118,7 +118,7 @@ const CookieTable = ({
   }, []);
 
   return (
-    <div className="flex-1 w-full h-full text-outer-space-crayola border-x border-american-silver dark:border-quartz">
+    <div className="flex-1 w-full h-full overflow-x-auto text-outer-space-crayola border-x border-american-silver dark:border-quartz">
       <Table
         updatePreference={updatePreference}
         table={table}

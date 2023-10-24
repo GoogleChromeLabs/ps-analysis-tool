@@ -15,7 +15,6 @@
  */
 export { default as findSelectedFrameElements } from './findSelectedFrameElements';
 export { default as removeAllPopovers } from './removeAllPopovers';
-export { default as addPopover } from './addPopover';
 export { default as toggleFrameHighlighting } from './toggleFrameHighlighting';
 export * from './overlay';
 export * from './tooltip';

@@ -22,3 +22,4 @@ export { default as prepareCookieStatsComponents } from './utils/prepareCookieSt
 export { default as getCookieKey } from './utils/getCookieKey';
 export { default as noop } from './utils/noop';
 export * from './cookies.types';
+export const UNKNOWN_FRAME_KEY = 'Unknown frame(s)';

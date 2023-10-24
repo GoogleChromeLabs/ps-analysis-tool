@@ -17,13 +17,13 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
+import { LandingPage } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
 import InfoCard from '../../../../design-system/components/infoCard';
 import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
-import { LandingPage } from '@cookie-analysis-tool/design-system';
 
 const Fingerprinting = () => {
   const [pageTitle, setPageTitle] = useState('');
@@ -31,7 +31,7 @@ const Fingerprinting = () => {
   return (
     <LandingPage title={pageTitle} isLoading={!pageTitle}>
       <div
-        className="px-4 max-w-2xl h-full overflow-auto"
+        className="px-4 max-w-2xl h-fit overflow-auto"
         data-testid="fingerprinting-content"
       >
         <InfoCard

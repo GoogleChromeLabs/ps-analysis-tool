@@ -40,8 +40,8 @@ const TopicsList = () => {
   }, []);
 
   return (
-    <div className="max-w-2xl m-3 border-t border-american-silver">
-      <div className="p-6 pl-0 dark:bg-davys-grey ">
+    <div className="max-w-2xl m-3 border-t border-american-silver dark:border-quartz">
+      <div className="p-6 pl-0">
         <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-bright-gray">
           Topics List
         </h5>

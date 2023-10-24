@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
-import { LandingPage } from '@cookie-analysis-tool/design-system';
+import { LandingPage } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
@@ -31,7 +31,7 @@ const BounceTracking = () => {
   return (
     <LandingPage title={pageTitle} isLoading={!pageTitle}>
       <div
-        className="px-4 max-w-2xl h-full overflow-auto"
+        className="px-4 max-w-2xl h-fit overflow-auto"
         data-testid="bounce-tracking-content"
       >
         <InfoCard infoKey={PSInfoKey.BounceTracking} setTitle={setPageTitle} />

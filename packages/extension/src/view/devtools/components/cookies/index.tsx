@@ -28,7 +28,7 @@ import {
   Button,
   CookiesLanding,
   ProgressBar,
-} from '@cookie-analysis-tool/design-system';
+} from '@ps-analysis-tool/design-system';
 
 const Cookies = () => {
   const {

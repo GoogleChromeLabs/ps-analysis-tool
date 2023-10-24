@@ -21,7 +21,7 @@ import {
   CookieIconWhite,
   SiteBoundariesIcon,
   SiteBoundariesIconWhite,
-} from '@cookie-analysis-tool/design-system';
+} from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.

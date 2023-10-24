@@ -21,6 +21,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
+import { noop } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -28,9 +29,8 @@ import '@testing-library/jest-dom';
 import App from '../app';
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
-import PSInfo from 'cookie-analysis-tool/data/PSInfo.json';
+import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
 import { useCookieStore } from '../stateProviders/syncCookieStore';
-import { noop } from '@cookie-analysis-tool/common';
 import globalChrome from '../../../utils/test-data/globalChrome';
 
 jest.mock('../stateProviders/syncCookieStore', () => ({

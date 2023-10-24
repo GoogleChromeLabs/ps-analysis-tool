@@ -23,6 +23,7 @@ import { Resizable } from 're-resizable';
  * Internal dependencies.
  */
 import { useContentStore } from '../stateProviders/contentStore';
+import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
 import { TABS } from '../tabs';
 import Sidebar from './sidebar';
 
@@ -37,7 +38,7 @@ const Layout = ({ selectedSite }: LayoutProps) => {
         Object.values(state.tabCookies)
           .map((cookie) => cookie.frameUrl)
           .filter(
-            (url) => url?.includes('http') || url === 'Unknown Frame'
+            (url) => url?.includes('http') || url === UNKNOWN_FRAME_KEY
           ) as string[]
       ),
     ],

@@ -35,11 +35,6 @@ export const FILTER_MAPPING = [
     order: 4,
   },
   {
-    name: 'Same Site',
-    keys: 'parsedCookie.samesite',
-    order: 5,
-  },
-  {
     name: 'Secure',
     keys: 'parsedCookie.secure',
     type: 'boolean',
@@ -85,10 +80,30 @@ export const CUSTOM_FILTER_MAPPING = {
     ]),
     order: 8,
   },
+  samesite: {
+    name: 'SameSite',
+    keys: 'samesite',
+    filters: new Set(['Lax', 'None', 'Strict']),
+    order: 5,
+  },
   setVia: {
     name: 'Set Via',
     keys: 'headerType',
     order: 11,
     filters: new Set(['HTTP', 'JS']),
   },
+};
+
+export const MAPPING_KEYS_TO_NAME = {
+  samesite: 'SameSite',
+  'analytics.category': 'Category',
+  'parsedCookie.domain': 'Domain',
+  'parsedCookie.httponly': 'HttpOnly',
+  'parsedCookie.secure': 'Secure',
+  'parsedCookie.path': 'Path',
+  'analytics.platform': 'Platform',
+  isCookieSet: 'Cookie Accepted',
+  headerType: 'Set Via',
+  retentionPeriod: 'Retention Period',
+  isFirstParty: 'Scope',
 };

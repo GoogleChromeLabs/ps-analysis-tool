@@ -28,10 +28,11 @@ import { exec } from 'child_process';
  */
 import Utility from './utils/utility';
 import { fetchDictionary } from './utils/fetchCookieDictionary';
-import { delay } from './utils';
 import { analyzeCookiesUrls } from './procedures/analyzeCookieUrls';
 import { analyzeCookiesUrlsInBatches } from './procedures/analyzeCookieUrlsInBatches';
 import { analyzeTechnologiesUrlsInBatches } from './procedures/analyzeTechnologiesUrlsInBatches';
+import { delay } from './utils';
+import { checkPortInUse } from './utils/checkPortInUse';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
@@ -40,7 +41,7 @@ const DELAY_TIME = 20000;
 const program = new Command();
 
 program
-  .version('0.0.1')
+  .version('0.0.3')
   .description('CLI to test a URL for 3p cookies')
   .option('-u, --url <value>', 'URL of a site')
   .option('-s, --sitemap-url <value>', 'URL of a sitemap')
@@ -54,10 +55,20 @@ program.parse();
 const isHeadless = Boolean(program.opts().headless);
 
 export const initialize = async () => {
+  //check if devserver port in already in use
+
+  const portInUse = await checkPortInUse(9000);
+
+  if (portInUse) {
+    console.error(
+      'Error: Report server port (9000) already in use. You might be already running CLI'
+    );
+    process.exit(1);
+  }
+
   const url = program.opts().url;
   const sitemapURL = program.opts().sitemapUrl;
   const cookieDictionary = await fetchDictionary();
-
   if (url) {
     const prefix = Utility.generatePrefix(url ?? 'untitled');
     const directory = `./out/${prefix}`;
@@ -100,11 +111,10 @@ export const initialize = async () => {
 
     exec('npm run cli-dashboard:dev');
 
-    await delay(3000);
-
+    await delay(2000);
     console.log(
-      `Report is being served at the URL: http://localhost:9000?path=${encodeURIComponent(
-        directory + '/out.json'
+      `Report is being served at the URL: http://localhost:9000?dir=${encodeURIComponent(
+        prefix
       )}`
     );
   } else {
@@ -167,11 +177,11 @@ export const initialize = async () => {
 
     exec('npm run cli-dashboard:dev');
 
-    await delay(3000);
+    await delay(2000);
 
     console.log(
-      `Report is being served at the URL: http://localhost:9000?path=${encodeURIComponent(
-        directory + '/out.json'
+      `Report is being served at the URL: http://localhost:9000?dir=${encodeURIComponent(
+        prefix
       )}&type=sitemap`
     );
   }

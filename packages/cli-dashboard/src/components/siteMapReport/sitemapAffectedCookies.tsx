@@ -19,17 +19,13 @@
  */
 import React, { useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
-
-/**
- * Internal dependencies
- */
 import {
   CookieDetails,
   CookieTable,
   type InfoType,
   type TableColumn,
-} from '@cookie-analysis-tool/design-system';
-import type { CookieTableData } from '@cookie-analysis-tool/common';
+} from '@ps-analysis-tool/design-system';
+import type { CookieTableData } from '@ps-analysis-tool/common';
 
 interface SiteMapAffectedCookiesProps {
   cookies: CookieTableData[];

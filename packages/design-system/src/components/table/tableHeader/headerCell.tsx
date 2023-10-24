@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useRef } from 'react';
-import { PreferenceDataValues } from '@cookie-analysis-tool/common';
+import { PreferenceDataValues } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
@@ -91,6 +91,7 @@ const HeaderCell = ({
       <div
         className="w-full h-full flex items-center justify-between text-cool-grey dark:text-bright-gray"
         onClick={() => setIsRowFocused(false)}
+        title={cell.header}
       >
         <p className="px-1 py-px truncate text-xs">{cell.header}</p>
         <p className="mr-2 scale-125">

@@ -22,7 +22,7 @@ import React, { useState } from 'react';
 /**
  * Internal Dependencies
  */
-import { LandingPage } from '@cookie-analysis-tool/design-system';
+import { LandingPage } from '@ps-analysis-tool/design-system';
 
 const PrivateAdvertising = () => {
   const [loading, setLoading] = useState(true);
@@ -30,14 +30,14 @@ const PrivateAdvertising = () => {
   return (
     <>
       <LandingPage title="Private Advertising" isLoading={loading}>
-        <div className="px-4 pt-6 pb-4 h-screen w-full">
+        <div className="px-4 pt-6 pb-4 h-[78vh] w-full">
           <iframe
             src="https://privacysandbox.info/en/privacy-sandbox/measure-digital-ads"
             height="100%"
             onLoad={() => {
               setLoading(false);
             }}
-            className="w-full md:w-[70%]"
+            className="w-full md:m-auto md:w-[70%] bg-red-500"
           />
         </div>
       </LandingPage>

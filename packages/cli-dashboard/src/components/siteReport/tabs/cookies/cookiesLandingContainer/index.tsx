@@ -19,26 +19,29 @@
  */
 import React from 'react';
 import {
+  Button,
   CookiesLanding,
   CookiesMatrix,
-} from '@cookie-analysis-tool/design-system';
+} from '@ps-analysis-tool/design-system';
 import {
   prepareCookiesCount,
   prepareCookieStatsComponents,
   type TabCookies,
   type TabFrames,
-} from '@cookie-analysis-tool/common';
+} from '@ps-analysis-tool/common';
 
 interface CookiesLandingContainerProps {
   tabFrames: TabFrames;
   tabCookies: TabCookies;
   affectedCookies: TabCookies;
+  downloadReport?: () => void;
 }
 
 const CookiesLandingContainer = ({
   tabFrames,
   tabCookies,
   affectedCookies,
+  downloadReport,
 }: CookiesLandingContainerProps) => {
   return (
     <CookiesLanding
@@ -68,6 +71,15 @@ const CookiesLandingContainer = ({
             capitalizeTitle={true}
           />
         </div>
+        {downloadReport && (
+          <div className="pt-5 flex justify-center items-center">
+            <Button
+              extraClasses="w-fit text-sm flex justify-center items-center"
+              text="Download Report"
+              onClick={downloadReport}
+            />
+          </div>
+        )}
       </div>
     </CookiesLanding>
   );

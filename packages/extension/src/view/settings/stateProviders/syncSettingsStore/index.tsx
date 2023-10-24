@@ -23,7 +23,7 @@ import React, {
   useState,
   useCallback,
 } from 'react';
-import { noop } from '@cookie-analysis-tool/design-system';
+import { noop } from '@ps-analysis-tool/design-system';
 
 export interface SettingStoreContext {
   state: {

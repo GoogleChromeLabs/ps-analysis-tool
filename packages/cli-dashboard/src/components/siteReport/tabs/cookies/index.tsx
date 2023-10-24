@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 import React, { useMemo, useCallback } from 'react';
-import { Button } from '@cookie-analysis-tool/design-system';
-import { type TabFrames } from '@cookie-analysis-tool/common';
+import { UNKNOWN_FRAME_KEY, type TabFrames } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -41,7 +40,7 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
       Object.values(tabCookies).reduce((acc, cookie) => {
         if (
           cookie.frameUrl?.includes('http') ||
-          cookie.frameUrl === 'Unknown Frame'
+          cookie.frameUrl === UNKNOWN_FRAME_KEY
         ) {
           acc[cookie.frameUrl] = {} as TabFrames[string];
         }
@@ -74,15 +73,11 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
         <CookiesListing selectedFrameUrl={selectedFrameUrl} />
       ) : (
         <div className="flex flex-col h-full w-full">
-          <Button
-            extraClasses="absolute top-0 right-0 mr-2 mt-2 text-sm"
-            text="Download Report"
-            onClick={downloadReport}
-          />
           <CookiesLandingContainer
             tabFrames={tabFrames}
             tabCookies={tabCookies}
             affectedCookies={affectedCookies}
+            downloadReport={downloadReport}
           />
         </div>
       )}

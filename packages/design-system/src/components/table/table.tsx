@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { PreferenceDataValues } from '@cookie-analysis-tool/common';
+import { PreferenceDataValues } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
@@ -100,7 +100,7 @@ const Table = ({
         onClose={setShowColumnsMenu}
         position={columnPosition}
       />
-      <div className="h-full w-full overflow-auto min-w-[40rem]" ref={tableRef}>
+      <div className="h-full w-full overflow-auto min-w-[70rem]" ref={tableRef}>
         <TableHeader
           updatePreference={updatePreference}
           table={table}

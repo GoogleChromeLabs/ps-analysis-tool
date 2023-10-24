@@ -18,7 +18,7 @@
  * External dependencies
  */
 import React, { useEffect, useMemo, useState } from 'react';
-import type { TechnologyData } from '@cookie-analysis-tool/common';
+import type { TechnologyData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies
@@ -47,12 +47,13 @@ const App = () => {
 
   const [type, path] = useMemo(() => {
     const urlParams = new URLSearchParams(window.location.search);
+    const dir = urlParams.get('dir');
 
     return [
       urlParams.get('type') === 'sitemap'
         ? DisplayType.SITEMAP
         : DisplayType.SITE,
-      urlParams.get('path')?.substring(1) || '',
+      `/out/${dir}/out.json`,
     ];
   }, []);
 

@@ -1,5 +1,5 @@
 {
-  "name": "@cookie-analysis-tool/extension",
+  "name": "@ps-analysis-tool/extension",
   "version": "0.3.0",
   "description": "Chrome extension for cookie analysis",
   "repository": {
@@ -16,8 +16,8 @@
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool#readme",
   "dependencies": {
-    "@cookie-analysis-tool/common": "*",
-    "@cookie-analysis-tool/design-system": "*",
+    "@ps-analysis-tool/common": "*",
+    "@ps-analysis-tool/design-system": "*",
     "classnames": "^2.3.2",
     "fast-xml-parser": "^4.3.2",
     "p-queue": "^7.3.4",

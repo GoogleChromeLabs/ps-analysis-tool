@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import { useState, useCallback, useMemo } from 'react';
-import { PreferenceDataValues } from '@cookie-analysis-tool/common';
+import { PreferenceDataValues } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.

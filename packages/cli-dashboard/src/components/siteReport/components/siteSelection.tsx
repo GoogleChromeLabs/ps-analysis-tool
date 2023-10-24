@@ -21,7 +21,7 @@ import {
   ArrowDownWhite,
   File,
   FileWhite,
-} from '@cookie-analysis-tool/design-system';
+} from '@ps-analysis-tool/design-system';
 import React, { useState } from 'react';
 
 interface SiteSelectionProps {
@@ -48,7 +48,7 @@ const SiteSelection = ({
           setSelectedSite(null);
           selectTopLevelMenu();
         }}
-        className={`w-full flex items-center pl-6 py-0.5 outline-0 ${
+        className={`w-full flex items-center pl-[9px] py-0.5 outline-0 ${
           isSelectedTopLevelMenu
             ? isSiteSelected
               ? 'bg-gainsboro'
@@ -80,7 +80,7 @@ const SiteSelection = ({
                 setSelectedSite(site);
                 selectTopLevelMenu();
               }}
-              className={`truncate pl-[55px] cursor-pointer flex items-center ${
+              className={`truncate pl-6 cursor-pointer flex items-center ${
                 site === selectedSite ? 'bg-royal-blue text-white' : ''
               }`}
               key={id}

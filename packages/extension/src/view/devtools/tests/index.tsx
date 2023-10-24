@@ -31,7 +31,7 @@ import { Provider as FilterManagementProvider } from '../stateProviders/filterMa
 import { Provider as PreferenceStoreProvider } from '../stateProviders/preferenceStore';
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
-import PSInfo from 'cookie-analysis-tool/data/PSInfo.json';
+import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
 
 const tabCookies = {
   _cb: {

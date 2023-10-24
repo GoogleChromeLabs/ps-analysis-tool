@@ -19,11 +19,12 @@
  */
 import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
-import { type PreferenceDataValues } from '@cookie-analysis-tool/common';
+import { type PreferenceDataValues } from '@ps-analysis-tool/common';
+import { createPortal } from 'react-dom';
+
 /**
  * Internal dependencies.
  */
-import { createPortal } from 'react-dom';
 import ColumnList from './columnList';
 import type { TableOutput } from '../useTable';
 import { noop } from '../../../utils';
@@ -81,7 +82,7 @@ const ColumnMenu = ({
             data-testid="column-menu"
           >
             <div
-              className="absolute z-50 text-raisin-black dark:text-bright-gray rounded-md backdrop-blur-2xl w-screen max-w-[13rem] p-1.5 mr-2 divide-y divide-neutral-300 dark:divide-neutral-500 max-h-[80vh] overflow-auto bg-stone-200 dark:bg-neutral-700 shadow-3xl"
+              className="absolute z-50 text-raisin-black dark:text-bright-gray rounded-md backdrop-blur-2xl w-screen max-w-[13rem] p-1.5 mr-2 divide-y divide-neutral-300 dark:divide-neutral-500 max-h-[78vh] overflow-auto bg-stone-200 dark:bg-neutral-700 shadow-3xl"
               style={{
                 left: 'min( calc( 100vw - 15rem),' + position.x + 'px )',
                 top: position.y + 'px',
