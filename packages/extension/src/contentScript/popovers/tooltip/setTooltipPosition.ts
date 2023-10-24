@@ -186,8 +186,7 @@ const setTooltipPosition = (
     }
   }
 
-  tooltip.style.removeProperty('top');
-  tooltip.style.bottom = frameY + 'px';
+  tooltip.style.top = frameY + 'px';
 };
 
 export default setTooltipPosition;
