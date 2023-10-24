@@ -45,7 +45,7 @@ const SidebarChild = ({
         onClick={() => {
           updateSelectedItemKey(sidebarItem.key);
         }}
-        className={`w-full flex items-center pl-6 py-0.5 outline-0 text-sm ${
+        className={`w-full flex items-center pl-3 py-0.5 outline-0 text-sm ${
           isKeySelected(sidebarItem.key)
             ? 'bg-royal-blue text-white'
             : isKeyAncestor(sidebarItem.key)
@@ -79,7 +79,7 @@ const SidebarChild = ({
             )}
           </div>
         )}
-        <p>{sidebarItem.title}</p>
+        <p className="whitespace-nowrap">{sidebarItem.title}</p>
       </div>
       <>
         {sidebarItem.children?.length !== 0 && isOpen && (
@@ -87,7 +87,7 @@ const SidebarChild = ({
             {sidebarItem.children.map((child) => (
               <div
                 key={child.key}
-                className={`pl-6 ${
+                className={`w-full pl-4 ${
                   isKeySelected(child.key)
                     ? 'bg-royal-blue text-white'
                     : isKeyAncestor(child.key)
