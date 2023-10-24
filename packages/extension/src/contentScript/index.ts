@@ -66,11 +66,6 @@ class WebpageContentScript {
   scrollEventListeners: Array<() => void> = [];
 
   /**
-   * @property {Array<() => void>} resizeEventListeners - Array of resize event listeners.
-   */
-  resizeEventListeners: Array<() => void> = [];
-
-  /**
    * @property {HTMLElement} docElement - Document element.
    */
   docElement: HTMLElement;
@@ -169,7 +164,6 @@ class WebpageContentScript {
     };
 
     this.addEventListerOnScroll(updatePosition);
-    this.addEventListenersOnResize(() => setOverlayPosition(overlay, frame));
 
     return overlay;
   }
@@ -211,7 +205,6 @@ class WebpageContentScript {
     };
 
     this.addEventListerOnScroll(updatePosition);
-    this.addEventListenersOnResize(updatePosition);
 
     return tooltip;
   }
@@ -227,16 +220,6 @@ class WebpageContentScript {
   }
 
   /**
-   * Add event listener on scroll to update overlay and tooltip positions.
-   * @param callback Callback function to update position.
-   */
-  addEventListenersOnResize(callback: () => void) {
-    this.resizeEventListeners.push(callback);
-    callback();
-    window.addEventListener('resize', callback);
-  }
-
-  /**
    * Remove all popovers.
    */
   removeAllPopovers() {
@@ -246,14 +229,6 @@ class WebpageContentScript {
       });
 
       this.scrollEventListeners = [];
-    }
-
-    if (this.resizeEventListeners.length) {
-      this.resizeEventListeners.forEach((listener) => {
-        window.removeEventListener('resize', listener);
-      });
-
-      this.resizeEventListeners = [];
     }
 
     removeAllPopovers();
@@ -351,7 +326,7 @@ class WebpageContentScript {
     });
 
     frameElements.forEach((frame, index) => {
-      if (!isFrameHidden(frame) && !popoverElement.frameWithTooltip) {
+      if (!isFrameHidden(frame)) {
         popoverElement.frameWithTooltip = frame;
 
         const tooltip = this.insertTooltip(
@@ -418,7 +393,9 @@ class WebpageContentScript {
       !isElementVisibleInViewport(frameWithTooltip)
     ) {
       (firstToolTip as HTMLElement).scrollIntoView({
+        behavior: 'instant',
         block: 'start',
+        inline: 'nearest',
       });
     }
   }
