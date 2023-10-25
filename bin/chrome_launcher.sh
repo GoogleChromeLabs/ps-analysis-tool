@@ -2,7 +2,7 @@
 
 # Download Extension
 extension_setup() {
-  ps_analysis_tool_version=v0.3.0
+  ps_analysis_tool_version=v0.3.1
   cd /tmp/
   if [ ! -d /tmp/ps-analysis-tool-$ps_analysis_tool_version ]; then
     mkdir -p /tmp/ps-analysis-tool-$ps_analysis_tool_version
