@@ -201,7 +201,11 @@ class WebpageContentScript {
       numberOfHiddenFrames
     );
     const arrowElement = document.getElementById('ps-content-tooltip-arrow');
-    if (frame && frame.tagName === 'BODY' && arrowElement && tooltip) {
+    if (
+      (frame?.tagName === 'BODY' || isFrameHidden(frame) || !frame) &&
+      arrowElement &&
+      tooltip
+    ) {
       Object.assign(arrowElement.style, {
         left: '20px',
         top: '5px',
@@ -210,8 +214,14 @@ class WebpageContentScript {
       Object.assign(tooltip.style, {
         top: '5px',
       });
+      return tooltip;
     }
-    if (frame && frame.tagName !== 'BODY' && tooltip && arrowElement) {
+    if (
+      frame &&
+      (frame.tagName !== 'BODY' || !isFrameHidden(frame)) &&
+      tooltip &&
+      arrowElement
+    ) {
       this.cleanup = autoUpdate(frame, tooltip, () => {
         computePosition(frame, tooltip, {
           platform: platform,
@@ -255,6 +265,7 @@ class WebpageContentScript {
           }
         });
       });
+      return tooltip;
     }
 
     return tooltip;
