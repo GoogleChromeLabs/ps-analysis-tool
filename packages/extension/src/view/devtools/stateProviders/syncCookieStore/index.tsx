@@ -31,9 +31,9 @@ import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
  * Internal dependencies.
  */
 import useContextSelector from '../../../../utils/useContextSelector';
+import { CookieStore, type CookieData } from '../../../../localStore';
 import { getCurrentTabId } from '../../../../utils/getCurrentTabId';
 import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
-import { CookieStore, type CookieData } from '../../../../localStore';
 import setDocumentCookies from '../../../../utils/setDocumentCookies';
 import isOnRWS from '../../../../contentScript/utils/isOnRWS';
 
@@ -122,14 +122,14 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [tabCookies, setTabCookies] =
     useState<CookieStoreContext['state']['tabCookies']>(null);
 
-  const [selectedFrame, _setSelectedFrame] =
-    useState<CookieStoreContext['state']['selectedFrame']>(null);
-
   const [isInspecting, setIsInspecting] =
     useState<CookieStoreContext['state']['isInspecting']>(false);
 
   const [isFrameSelectedFromDevTool, setIsFrameSelectedFromDevTool] =
     useState<CookieStoreContext['state']['isFrameSelectedFromDevTool']>(false);
+
+  const [selectedFrame, _setSelectedFrame] =
+    useState<CookieStoreContext['state']['selectedFrame']>(null);
 
   const [tabUrl, setTabUrl] =
     useState<CookieStoreContext['state']['tabUrl']>(null);
@@ -148,7 +148,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
       const currentTabFrames = await chrome.webNavigation.getAllFrames({
         tabId: _tabId,
       });
-
       const modifiedTabFrames: {
         [key: string]: { frameIds: number[]; isOnRWS?: boolean };
       } = {};

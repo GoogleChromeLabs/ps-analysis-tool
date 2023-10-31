@@ -115,8 +115,10 @@ const useTable = ({
         const value = getValueByKey(column.accessorKey, _data);
         row[column.accessorKey] = {
           value:
-            column.cell?.(value, getCookieKey(row.originalData.parsedCookie)) ??
-            value,
+            column.cell?.(
+              value,
+              getCookieKey(row.originalData.parsedCookie) as string
+            ) ?? value,
         };
       });
 

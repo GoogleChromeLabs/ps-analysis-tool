@@ -50,7 +50,7 @@ interface AccordionProps {
   setIsInspecting?: React.Dispatch<React.SetStateAction<boolean>>;
   tabId: string;
   tabName: string;
-  width: number;
+  width?: number;
   keyboardNavigator: (event: React.KeyboardEvent<HTMLDivElement>) => void;
   onAccordionOpenerClick: (tabIdToBeSet: string) => void;
   onAccordionHeaderClick: (tabIdToBeSet: string, index: number) => void;

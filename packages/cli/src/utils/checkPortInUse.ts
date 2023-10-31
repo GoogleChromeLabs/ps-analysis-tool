@@ -13,20 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const getCurrentTab = () => {
-  try {
-    return chrome.tabs.query({
-      active: true,
-      currentWindow: true,
-    });
-  } catch (error) {
-    //do nothing in this error
-  }
-  return Promise.resolve(undefined);
-};
 
-export const getCurrentTabId = async (tab = null) => {
-  const _tab = tab || (await getCurrentTab());
+import http from 'http';
 
-  return _tab?.[0]?.id ? _tab[0].id.toString() : undefined;
-};
+/**
+ * @param port number Port number to test
+ * @returns Promise which will resolve in a boolean value
+ */
+export function checkPortInUse(port: number): Promise<boolean> {
+  return new Promise((resolve) => {
+    const server = http
+      .createServer()
+      .listen(port, () => {
+        server.close();
+        resolve(false);
+      })
+      .on('error', () => {
+        resolve(true);
+      });
+  });
+}

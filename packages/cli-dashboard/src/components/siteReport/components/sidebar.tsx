@@ -271,31 +271,34 @@ const Sidebar = ({
                     {id === 'cookies'
                       ? frameUrls?.map((key) => {
                           return (
-                            <AccordionChildren
-                              key={key}
-                              accordionMenuItemName={key}
-                              defaultIcon={TABS[index].icons.default}
-                              isTabFocused={isTabFocused}
-                              isAccordionChildSelected={
-                                selectedFrameUrl === key
-                              }
-                              selectedIcon={TABS[index].icons.selected}
-                              onAccordionChildClick={() => {
-                                if (selectedIndex !== index) {
-                                  setIndex(index);
+                            <div key={key} className="-ml-4">
+                              <AccordionChildren
+                                accordionMenuItemName={key}
+                                defaultIcon={TABS[index].icons.default}
+                                isTabFocused={isTabFocused}
+                                isAccordionChildSelected={
+                                  selectedFrameUrl === key
                                 }
-                                setSelectedAccordionChild('cookies');
-                                setSelectedFrameUrl(key);
-                                setIsTabFocused(true);
-                              }}
-                              titleForMenuItem={`Cookies used by frames from ${key}`}
-                            />
+                                selectedIcon={TABS[index].icons.selected}
+                                onAccordionChildClick={() => {
+                                  if (selectedIndex !== index) {
+                                    setIndex(index);
+                                  }
+                                  setSelectedAccordionChild('cookies');
+                                  setSelectedFrameUrl(key);
+                                  setIsTabFocused(true);
+                                }}
+                                titleForMenuItem={`Cookies used by frames from ${key}`}
+                              />
+                            </div>
                           );
                         })
                       : TABS.map((tab, currentIndex) => {
                           if (id === tab?.parentId && Boolean(tab?.parentId)) {
                             return (
                               <AccordionChildren
+                                currentIndex={currentIndex}
+                                tabs={TABS}
                                 key={tab.id}
                                 accordionMenuItemName={tab.display_name}
                                 defaultIcon={tab.icons.default}

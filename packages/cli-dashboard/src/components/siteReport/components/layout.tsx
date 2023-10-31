@@ -18,6 +18,7 @@
  */
 import React, { useState } from 'react';
 import { Resizable } from 're-resizable';
+import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -37,7 +38,7 @@ const Layout = ({ selectedSite }: LayoutProps) => {
         Object.values(state.tabCookies)
           .map((cookie) => cookie.frameUrl)
           .filter(
-            (url) => url?.includes('http') || url === 'Unknown Frame'
+            (url) => url?.includes('http') || url === UNKNOWN_FRAME_KEY
           ) as string[]
       ),
     ],
