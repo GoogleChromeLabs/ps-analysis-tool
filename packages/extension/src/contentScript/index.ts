@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 /**
+ * External dependencies
+ */
+import { noop } from '@ps-analysis-tool/common';
+import { autoPlacement, computePosition, shift } from '@floating-ui/core';
+import { autoUpdate, platform, arrow } from '@floating-ui/dom';
+/**
  * Internal dependencies.
  */
 import {
@@ -23,7 +29,6 @@ import {
   addOverlay,
   setOverlayPosition,
   addTooltip,
-  setTooltipPosition,
 } from './popovers';
 import type { ResponseType } from './types';
 import { CookieStore } from '../localStore';
@@ -44,6 +49,13 @@ class WebpageContentScript {
    * @property {chrome.runtime.Port | null} port - The connection port.
    */
   port: chrome.runtime.Port | null = null;
+  /**
+   * @callback cleanupFunction
+   */
+  /**
+   * @property { cleanupFunction} cleanup - Cleanup function that needs to run when tooltip is removed from the screen.
+   */
+  cleanup: () => void = noop;
 
   /**
    * @property {boolean} isInspecting - If true, the page is currently being inspected.
@@ -188,23 +200,49 @@ class WebpageContentScript {
       numberOfVisibleFrames,
       numberOfHiddenFrames
     );
+    const arrowElement = document.getElementById('ps-content-tooltip-arrow');
+    if (frame && tooltip && arrowElement) {
+      autoUpdate(frame, tooltip, () => {
+        computePosition(frame, tooltip, {
+          platform: platform,
+          placement: 'top-start',
+          middleware: [
+            shift({
+              boundary: document.querySelector('body'),
+            }),
+            autoPlacement({
+              boundary: document.querySelector('body'),
+            }),
+            arrow({
+              element: arrowElement,
+            }),
+          ],
+        }).then(({ x, y, middlewareData, placement }) => {
+          Object.assign(tooltip.style, {
+            top: `${y}px`,
+            left: `${x}px`,
+          });
+          const side = placement.split('-')[0];
 
-    const isHiddenForFirstTime = frame ? !frame.clientWidth : false;
-    setTooltipPosition(
-      tooltip,
-      frame,
-      isHiddenForFirstTime,
-      response.selectedFrame
-    );
+          const staticSide = {
+            top: 'bottom',
+            right: 'left',
+            bottom: 'top',
+            left: 'right',
+          }[side];
 
-    const updatePosition = () => {
-      if (isElementVisibleInViewport(frame, true)) {
-        const isHidden = frame ? !frame.clientWidth : false;
-        setTooltipPosition(tooltip, frame, isHidden, response.selectedFrame);
-      }
-    };
+          if (middlewareData.arrow) {
+            const { x: arrowX, y: arrowY } = middlewareData.arrow;
 
-    this.addEventListerOnScroll(updatePosition);
+            Object.assign(arrowElement.style, {
+              left: arrowX ? `${arrowX}px` : '',
+              top: arrowY ? `${arrowY}px` : '',
+              [staticSide as string]: `${10}px`,
+            });
+          }
+        });
+      });
+    }
 
     return tooltip;
   }
@@ -230,6 +268,8 @@ class WebpageContentScript {
 
       this.scrollEventListeners = [];
     }
+
+    this.cleanup();
 
     removeAllPopovers();
   }
