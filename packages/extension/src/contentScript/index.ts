@@ -17,7 +17,7 @@
  * External dependencies
  */
 import { noop } from '@ps-analysis-tool/common';
-import { autoPlacement, computePosition, shift } from '@floating-ui/core';
+import { computePosition, flip, shift } from '@floating-ui/core';
 import { autoUpdate, platform, arrow } from '@floating-ui/dom';
 /**
  * Internal dependencies.
@@ -201,16 +201,26 @@ class WebpageContentScript {
       numberOfHiddenFrames
     );
     const arrowElement = document.getElementById('ps-content-tooltip-arrow');
-    if (frame && tooltip && arrowElement) {
-      autoUpdate(frame, tooltip, () => {
+    if (frame && frame.tagName === 'BODY' && arrowElement && tooltip) {
+      Object.assign(arrowElement.style, {
+        left: '20px',
+        top: '5px',
+        transform: 'rotate(45deg)',
+      });
+      Object.assign(tooltip.style, {
+        top: '5px',
+      });
+    }
+    if (frame && frame.tagName !== 'BODY' && tooltip && arrowElement) {
+      this.cleanup = autoUpdate(frame, tooltip, () => {
         computePosition(frame, tooltip, {
           platform: platform,
-          placement: 'top-start',
+          placement: 'top',
           middleware: [
             shift({
               boundary: document.querySelector('body'),
             }),
-            autoPlacement({
+            flip({
               boundary: document.querySelector('body'),
             }),
             arrow({
@@ -237,7 +247,10 @@ class WebpageContentScript {
             Object.assign(arrowElement.style, {
               left: arrowX ? `${arrowX}px` : '',
               top: arrowY ? `${arrowY}px` : '',
-              [staticSide as string]: `${10}px`,
+              right: '',
+              bottom: '',
+              [staticSide]: `${arrowElement.offsetWidth / 2}px`,
+              transform: 'rotate(45deg)',
             });
           }
         });
@@ -425,14 +438,13 @@ class WebpageContentScript {
 
     const firstToolTip = popoverElement['firstToolTip'];
     const frameWithTooltip = popoverElement['frameWithTooltip'];
-
     if (
       firstToolTip &&
       !this.isHoveringOverPage &&
       frameToScrollTo.clientWidth &&
       !isElementVisibleInViewport(frameWithTooltip)
     ) {
-      (firstToolTip as HTMLElement).scrollIntoView({
+      (frameWithTooltip as HTMLElement).scrollIntoView({
         behavior: 'instant',
         block: 'start',
         inline: 'nearest',

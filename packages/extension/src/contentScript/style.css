@@ -39,12 +39,10 @@ html body .ps-tooltip[popover] > .ps-content {
 
 #ps-content-tooltip-arrow{
     position: absolute;
-    width: 19px;
-    height: 19px;
-    background-color: white !important;
-    position: absolute;
-    transform: rotate(45deg);
-
+    width: 20px;
+    height: 20px;
+    background: white !important;
+    pointer-events: none;
 }
 
 html body .ps-tooltip[popover] > .ps-content p {
