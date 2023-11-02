@@ -9,6 +9,7 @@ extension_setup() {
     curl -L -O -s  https://github.com/GoogleChromeLabs/ps-analysis-tool/releases/download/$ps_analysis_tool_version/extension-$ps_analysis_tool_version.zip
     unzip -qo extension-$ps_analysis_tool_version.zip -d /tmp/ps-analysis-tool-$ps_analysis_tool_version
   fi
+  cd -
 }
 
 # Detect OS
