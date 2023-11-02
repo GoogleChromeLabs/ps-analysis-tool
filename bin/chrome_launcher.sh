@@ -22,6 +22,8 @@ if [[ "$(uname)" == "Darwin" ]]; then
           --disable-sync \
           --no-default-browser-check \
           --no-first-run \
+          --start-maximized \
+          --auto-open-devtools-for-tabs \
           --user-data-dir="${DATA_DIR}" \
           "$@" https://example.com >/dev/null 2>&1 && rm -rf "${DATA_DIR}" &
   }
@@ -34,6 +36,8 @@ elif [[ "$(uname)" == "Linux" ]]; then
         --disable-sync \
         --no-default-browser-check \
         --no-first-run \
+        --start-maximized \
+        --auto-open-devtools-for-tabs \
         --user-data-dir="${DATA_DIR}" \
         "$@" https://example.com >/dev/null 2>&1 && rm -rf "${DATA_DIR}" &
     }
