@@ -125,7 +125,7 @@ const CookieTableContainer = ({
         ),
       },
       {
-        header: 'Cookie Blocked',
+        header: 'Cookie Affected',
         accessorKey: 'isCookieSet',
         cell: (info: InfoType) => (
           <p className="flex justify-center items-center">
