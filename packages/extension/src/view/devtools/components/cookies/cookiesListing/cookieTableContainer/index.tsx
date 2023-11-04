@@ -102,15 +102,8 @@ const CookieTableContainer = ({
       {
         header: 'Secure',
         accessorKey: 'parsedCookie.secure',
-        cell: (info: InfoType) => (
-          <p className="flex justify-center items-center">
-            {info ? (
-              <span className="font-serif">✓</span>
-            ) : (
-              <span className="font-serif text-black">⛌</span>
-            )}
-          </p>
-        ),
+        cell: (info: InfoType) =>
+          info ? <span className="font-serif">✓</span> : '',
       },
       {
         header: 'Category',
@@ -132,11 +125,15 @@ const CookieTableContainer = ({
         ),
       },
       {
-        header: 'Cookie Accepted',
+        header: 'Cookie Blocked',
         accessorKey: 'isCookieSet',
         cell: (info: InfoType) => (
           <p className="flex justify-center items-center">
-            {info ? <span className="font-serif">✓</span> : ''}
+            {info ? (
+              <span className="font-serif">✓</span>
+            ) : (
+              <span className="font-serif">✗</span>
+            )}
           </p>
         ),
       },
