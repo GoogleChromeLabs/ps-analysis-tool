@@ -104,7 +104,11 @@ const CookieTableContainer = ({
         accessorKey: 'parsedCookie.secure',
         cell: (info: InfoType) => (
           <p className="flex justify-center items-center">
-            {info ? <span className="font-serif">✓</span> : ''}
+            {info ? (
+              <span className="font-serif">✓</span>
+            ) : (
+              <span className="font-serif text-black">⛌</span>
+            )}
           </p>
         ),
       },
