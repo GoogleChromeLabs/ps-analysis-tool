@@ -131,18 +131,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [tabFrames, setTabFrames] =
     useState<CookieStoreContext['state']['tabFrames']>(null);
 
-  useEffect(() => {
-    if (tabId && tabCookies && Object.keys(tabCookies).length === 0) {
-      setTableLoading(() => true);
-    }
-  }, [tabCookies, tabId]);
-
   const getAllFramesForCurrentTab = useCallback(
     async (_tabId: number | null) => {
       if (!_tabId) {
         return;
       }
-
       const regexForFrameUrl =
         /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:/\n?]+)/;
 
@@ -409,6 +402,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const tabUpdateListener = useCallback(
     async (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
+      if (tabId === _tabId && changeInfo.status === 'loading') {
+        setTableLoading(false);
+      }
       if (tabId === _tabId && changeInfo.url) {
         try {
           const nextURL = new URL(changeInfo.url);
@@ -432,9 +428,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
   );
 
   const tableLoadingListener = useCallback(
-    (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
-      if (tabId === _tabId && changeInfo.status) {
-        setTableLoading(() => false);
+    (details: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
+      if (tabId === details.tabId && details.frameType === 'outermost_frame') {
+        setTableLoading(true);
       }
     },
     [tabId]
@@ -469,13 +465,15 @@ export const Provider = ({ children }: PropsWithChildren) => {
     chrome.storage.sync.onChanged.addListener(changeSyncStorageListener);
     chrome.tabs.onUpdated.addListener(tabUpdateListener);
     chrome.tabs.onRemoved.addListener(tabRemovedListener);
-    chrome.tabs.onUpdated.addListener(tableLoadingListener);
+    chrome.webNavigation.onBeforeNavigate.addListener(tableLoadingListener);
     return () => {
+      chrome.webNavigation.onBeforeNavigate.removeListener(
+        tableLoadingListener
+      );
       chrome.storage.local.onChanged.removeListener(storeChangeListener);
       chrome.tabs.onUpdated.removeListener(tabUpdateListener);
       chrome.tabs.onRemoved.removeListener(tabRemovedListener);
       chrome.storage.sync.onChanged.removeListener(changeSyncStorageListener);
-      chrome.tabs.onUpdated.removeListener(tableLoadingListener);
     };
   }, [
     intitialSync,
