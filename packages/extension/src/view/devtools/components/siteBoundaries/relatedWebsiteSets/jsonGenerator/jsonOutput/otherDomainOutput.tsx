@@ -44,8 +44,9 @@ const OtherDomainOutput = ({
           2
         </p>
         <p className="text-base">
-          Add the <code>.well-known</code> file to <b>all the other domains</b>{' '}
-          in your set with the following content:
+          Add the file <code>related-website-set.json</code> in the directory
+          <code>.well-known</code> of all the other domains in your set with the
+          following content:
         </p>
       </div>
       <div id="domainsListOutput">
@@ -56,7 +57,7 @@ const OtherDomainOutput = ({
               <div className="pl-4">
                 {primaryWellKnownOutput.associatedSites.map((url) => (
                   <li key={url} className="text-sm">
-                    {url}/.well-known/first-party-set.json
+                    {url}/.well-known/related-website-set.json
                   </li>
                 ))}
               </div>
@@ -68,7 +69,7 @@ const OtherDomainOutput = ({
               <div className="pl-4">
                 {primaryWellKnownOutput.serviceSites.map((url) => (
                   <li key={url} className="text-sm">
-                    {url}/.well-known/first-party-set.json
+                    {url}/.well-known/related-website-set.json
                   </li>
                 ))}
               </div>
@@ -81,7 +82,7 @@ const OtherDomainOutput = ({
                 {Object.values(primaryWellKnownOutput.ccTLDs).map((cctlds) =>
                   cctlds.map((cctld) => (
                     <li key={cctld} className="text-sm">
-                      {cctld}/.well-known/first-party-set.json
+                      {cctld}/.well-known/related-website-set.json
                     </li>
                   ))
                 )}
