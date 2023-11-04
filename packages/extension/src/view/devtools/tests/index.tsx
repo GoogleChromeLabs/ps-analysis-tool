@@ -146,6 +146,11 @@ describe('Index', () => {
             },
           ]);
         },
+        //@ts-ignore
+        onBeforeNavigate: {
+          addListener: () => '',
+          removeListener: () => '',
+        },
       },
       storage: {
         //@ts-ignore
