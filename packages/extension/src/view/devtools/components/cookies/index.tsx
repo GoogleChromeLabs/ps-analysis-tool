@@ -82,7 +82,7 @@ const Cookies = () => {
         {selectedFrame ? (
           isTableLoading ? (
             <div className="w-full h-full flex items-center justify-center">
-              <ProgressBar additionalStyles="w-full" />
+              <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />
             </div>
           ) : (
             <CookiesListing />
