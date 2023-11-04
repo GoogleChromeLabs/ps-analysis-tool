@@ -27,14 +27,16 @@ import Insights from './insights';
 
 const RelatedWebsiteSets = () => {
   return (
-    <LandingPage
-      title="Related Website Sets"
-      psInfoKey={PSInfoKey.RelatedWebsiteSets}
-      extraClasses="max-w-2xl h-fit"
-    >
-      <Insights />
-      <RWSJsonGenerator />
-    </LandingPage>
+    <div data-testid="related-website-sets-content" className="h-full w-full">
+      <LandingPage
+        title="Related Website Sets"
+        psInfoKey={PSInfoKey.RelatedWebsiteSets}
+        extraClasses="max-w-2xl h-fit"
+      >
+        <Insights />
+        <RWSJsonGenerator />
+      </LandingPage>
+    </div>
   );
 };
 

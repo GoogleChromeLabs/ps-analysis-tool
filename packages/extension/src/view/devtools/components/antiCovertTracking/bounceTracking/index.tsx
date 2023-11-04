@@ -21,11 +21,13 @@ import { LandingPage, PSInfoKey } from '@ps-analysis-tool/design-system';
 
 const BounceTracking = () => {
   return (
-    <LandingPage
-      title="Bounce Tracking Mitigation"
-      psInfoKey={PSInfoKey.BounceTracking}
-      extraClasses="max-w-2xl h-fit"
-    />
+    <div data-testid="bounce-tracking-content" className="h-full w-full">
+      <LandingPage
+        title="Bounce Tracking Mitigation"
+        psInfoKey={PSInfoKey.BounceTracking}
+        extraClasses="max-w-2xl h-fit"
+      />
+    </div>
   );
 };
 

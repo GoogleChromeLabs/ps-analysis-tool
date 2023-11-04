@@ -21,11 +21,13 @@ import { LandingPage, PSInfoKey } from '@ps-analysis-tool/design-system';
 
 const Fingerprinting = () => {
   return (
-    <LandingPage
-      title="User Agent Reduction"
-      psInfoKey={PSInfoKey.UserAgentReduction}
-      extraClasses="max-w-2xl h-fit"
-    />
+    <div data-testid="fingerprinting-content" className="h-full w-full">
+      <LandingPage
+        title="User Agent Reduction"
+        psInfoKey={PSInfoKey.UserAgentReduction}
+        extraClasses="max-w-2xl h-fit"
+      />
+    </div>
   );
 };
 

@@ -21,11 +21,13 @@ import { LandingPage, PSInfoKey } from '@ps-analysis-tool/design-system';
 
 const Chips = () => {
   return (
-    <LandingPage
-      title={'Cookies Having Independent Partitioned State (CHIPS)'}
-      psInfoKey={PSInfoKey.Chips}
-      extraClasses="max-w-2xl h-fit"
-    />
+    <div data-testid="chips-content" className="h-full w-full">
+      <LandingPage
+        title={'Cookies Having Independent Partitioned State (CHIPS)'}
+        psInfoKey={PSInfoKey.Chips}
+        extraClasses="max-w-2xl h-fit"
+      />
+    </div>
   );
 };
 

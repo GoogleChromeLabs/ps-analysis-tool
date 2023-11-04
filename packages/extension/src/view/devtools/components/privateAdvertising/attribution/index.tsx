@@ -21,11 +21,13 @@ import { LandingPage, PSInfoKey } from '@ps-analysis-tool/design-system';
 
 const Attribution = () => {
   return (
-    <LandingPage
-      title="Attribution Reporting"
-      psInfoKey={PSInfoKey.AttributionReporting}
-      extraClasses="max-w-2xl h-fit"
-    />
+    <div data-testid="attribution-content" className="h-full w-full">
+      <LandingPage
+        title="Attribution Reporting"
+        psInfoKey={PSInfoKey.AttributionReporting}
+        extraClasses="max-w-2xl h-fit"
+      />
+    </div>
   );
 };
 
