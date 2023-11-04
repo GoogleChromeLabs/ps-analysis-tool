@@ -37,7 +37,7 @@
     "proposal": "https://github.com/WICG/first-party-sets",
     "publicDiscussion": "https://github.com/WICG/first-party-sets/issues",
     "videoOverview": "https://www.youtube.com/watch?v=cNJ8mZ-J3F8",
-    "devDocumentation": "https://developer.chrome.com/docs/privacy-sandbox/first-party-sets/"
+    "devDocumentation": "https://developer.chrome.com/docs/privacy-sandbox/related-website-sets/"
   },
   "shared-storage": {
     "name": "Shared Storage",
