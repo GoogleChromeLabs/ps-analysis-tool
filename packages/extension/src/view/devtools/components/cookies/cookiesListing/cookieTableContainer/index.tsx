@@ -102,8 +102,11 @@ const CookieTableContainer = ({
       {
         header: 'Secure',
         accessorKey: 'parsedCookie.secure',
-        cell: (info: InfoType) =>
-          info ? <span className="font-serif">✓</span> : '',
+        cell: (info: InfoType) => (
+          <p className="flex justify-center items-center">
+            {info ? <span className="font-serif">✓</span> : ''}
+          </p>
+        ),
       },
       {
         header: 'Category',
