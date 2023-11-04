@@ -131,6 +131,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [tabFrames, setTabFrames] =
     useState<CookieStoreContext['state']['tabFrames']>(null);
 
+  useEffect(() => {
+    if (tabId && tabCookies && Object.keys(tabCookies).length === 0) {
+      setTableLoading(() => true);
+    }
+  }, [tabCookies, tabId]);
+
   const getAllFramesForCurrentTab = useCallback(
     async (_tabId: number | null) => {
       if (!_tabId) {
@@ -352,18 +358,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
     },
     [tabId, getAllFramesForCurrentTab]
   );
-  const tableLoadingStoreChangeListener = useCallback(
-    (changes: { [key: string]: chrome.storage.StorageChange }) => {
-      if (
-        tabId &&
-        Object.keys(changes).includes(tabId.toString()) &&
-        Object.keys(changes[tabId.toString()]?.newValue?.cookies).length === 0
-      ) {
-        setTableLoading(true);
-      }
-    },
-    [tabId]
-  );
 
   const getCookiesSetByJavascript = useCallback(async () => {
     if (tabId) {
@@ -447,7 +441,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const tableLoadingListener = useCallback(
     (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
       if (tabId === _tabId && changeInfo.status) {
-        setTableLoading(false);
+        setTableLoading(() => false);
       }
     },
     [tabId]
@@ -483,16 +477,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
     chrome.tabs.onUpdated.addListener(tabUpdateListener);
     chrome.tabs.onRemoved.addListener(tabRemovedListener);
     chrome.tabs.onUpdated.addListener(tableLoadingListener);
-    chrome.storage.local.onChanged.addListener(tableLoadingStoreChangeListener);
     return () => {
       chrome.storage.local.onChanged.removeListener(storeChangeListener);
       chrome.tabs.onUpdated.removeListener(tabUpdateListener);
       chrome.tabs.onRemoved.removeListener(tabRemovedListener);
       chrome.storage.sync.onChanged.removeListener(changeSyncStorageListener);
       chrome.tabs.onUpdated.removeListener(tableLoadingListener);
-      chrome.storage.local.onChanged.removeListener(
-        tableLoadingStoreChangeListener
-      );
     };
   }, [
     intitialSync,
@@ -501,7 +491,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
     tabRemovedListener,
     changeSyncStorageListener,
     tableLoadingListener,
-    tableLoadingStoreChangeListener,
   ]);
 
   useEffect(() => {
