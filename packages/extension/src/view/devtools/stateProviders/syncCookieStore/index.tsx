@@ -404,26 +404,23 @@ export const Provider = ({ children }: PropsWithChildren) => {
       if (tabId === _tabId && changeInfo.url) {
         try {
           const nextURL = new URL(changeInfo.url);
-          const nextDomain = nextURL?.hostname;
-          const currentURL = new URL(tabUrl ?? '');
-          const currentDomain = currentURL?.hostname;
 
-          setTabFrames(null);
-          await getAllFramesForCurrentTab(_tabId);
-
-          if (selectedFrame && nextDomain === currentDomain) {
+          if (selectedFrame) {
             _setSelectedFrame(nextURL.origin);
           } else {
             _setSelectedFrame(null);
           }
-
-          setTabUrl(changeInfo.url);
         } catch (error) {
           _setSelectedFrame(null);
         }
+
+        setTabUrl(changeInfo.url);
+
+        setTabFrames(null);
+        await getAllFramesForCurrentTab(_tabId);
       }
     },
-    [tabId, tabUrl, getAllFramesForCurrentTab, selectedFrame]
+    [tabId, getAllFramesForCurrentTab, selectedFrame]
   );
 
   const tabRemovedListener = useCallback(async () => {
