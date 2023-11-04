@@ -40,6 +40,7 @@ const Cookies = () => {
     selectedFrame,
     tabCookies,
     tabFrames,
+    isTableLoading,
     changeListeningToThisTab,
   } = useCookieStore(({ state, actions }) => ({
     allowedNumberOfTabs: state.allowedNumberOfTabs,
@@ -50,6 +51,7 @@ const Cookies = () => {
     selectedFrame: state.selectedFrame,
     tabCookies: state.tabCookies,
     tabFrames: state.tabFrames,
+    isTableLoading: state.isTableLoading,
     changeListeningToThisTab: actions.changeListeningToThisTab,
   }));
 
@@ -66,7 +68,6 @@ const Cookies = () => {
       </div>
     );
   }
-
   if (
     (isCurrentTabBeingListenedTo &&
       allowedNumberOfTabs &&
@@ -79,7 +80,13 @@ const Cookies = () => {
         data-testid="cookies-content"
       >
         {selectedFrame ? (
-          <CookiesListing />
+          isTableLoading ? (
+            <div className="w-full h-full flex items-center justify-center">
+              <ProgressBar additionalStyles="w-full" />
+            </div>
+          ) : (
+            <CookiesListing />
+          )
         ) : (
           <CookiesLanding tabCookies={tabCookies} tabFrames={tabFrames} />
         )}

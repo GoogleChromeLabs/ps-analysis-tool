@@ -50,6 +50,7 @@ export interface CookieStoreContext {
     contextInvalidated: boolean;
     isFrameSelectedFromDevTool: boolean;
     canStartInspecting: boolean;
+    isTableLoading: boolean;
   };
   actions: {
     setSelectedFrame: (key: string | null) => void;
@@ -78,6 +79,7 @@ const initialState: CookieStoreContext = {
     contextInvalidated: false,
     isFrameSelectedFromDevTool: false,
     canStartInspecting: false,
+    isTableLoading: false,
   },
   actions: {
     setSelectedFrame: noop,
@@ -98,6 +100,8 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const loadingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isCurrentTabBeingListenedTo, setIsCurrentTabBeingListenedTo] =
     useState<boolean>(false);
+
+  const [isTableLoading, setTableLoading] = useState<boolean>(false);
 
   const [contextInvalidated, setContextInvalidated] = useState<boolean>(false);
 
@@ -267,6 +271,14 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const storeChangeListener = useCallback(
     async (changes: { [key: string]: chrome.storage.StorageChange }) => {
+      await getAllFramesForCurrentTab(tabId);
+      if (
+        tabId &&
+        Object.keys(changes).includes(tabId.toString()) &&
+        Object.keys(changes[tabId.toString()]?.newValue?.cookies).length === 0
+      ) {
+        setTableLoading(true);
+      }
       if (
         tabId &&
         Object.keys(changes).includes(tabId.toString()) &&
@@ -274,7 +286,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
       ) {
         const _cookies: NonNullable<CookieStoreContext['state']['tabCookies']> =
           {};
-
         await Promise.all(
           Object.entries(
             changes[tabId.toString()].newValue.cookies as {
@@ -293,8 +304,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
             };
           })
         );
-
-        await getAllFramesForCurrentTab(tabId);
         setTabCookies(_cookies);
       }
 
@@ -342,6 +351,18 @@ export const Provider = ({ children }: PropsWithChildren) => {
       setLoading(false);
     },
     [tabId, getAllFramesForCurrentTab]
+  );
+  const tableLoadingStoreChangeListener = useCallback(
+    (changes: { [key: string]: chrome.storage.StorageChange }) => {
+      if (
+        tabId &&
+        Object.keys(changes).includes(tabId.toString()) &&
+        Object.keys(changes[tabId.toString()]?.newValue?.cookies).length === 0
+      ) {
+        setTableLoading(true);
+      }
+    },
+    [tabId]
   );
 
   const getCookiesSetByJavascript = useCallback(async () => {
@@ -423,6 +444,15 @@ export const Provider = ({ children }: PropsWithChildren) => {
     [tabId, getAllFramesForCurrentTab, selectedFrame]
   );
 
+  const tableLoadingListener = useCallback(
+    (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
+      if (tabId === _tabId && changeInfo.status) {
+        setTableLoading(false);
+      }
+    },
+    [tabId]
+  );
+
   const tabRemovedListener = useCallback(async () => {
     const getTabBeingListenedTo = await chrome.storage.local.get();
     const availableTabs = await chrome.tabs.query({});
@@ -452,11 +482,17 @@ export const Provider = ({ children }: PropsWithChildren) => {
     chrome.storage.sync.onChanged.addListener(changeSyncStorageListener);
     chrome.tabs.onUpdated.addListener(tabUpdateListener);
     chrome.tabs.onRemoved.addListener(tabRemovedListener);
+    chrome.tabs.onUpdated.addListener(tableLoadingListener);
+    chrome.storage.local.onChanged.addListener(tableLoadingStoreChangeListener);
     return () => {
       chrome.storage.local.onChanged.removeListener(storeChangeListener);
       chrome.tabs.onUpdated.removeListener(tabUpdateListener);
       chrome.tabs.onRemoved.removeListener(tabRemovedListener);
       chrome.storage.sync.onChanged.removeListener(changeSyncStorageListener);
+      chrome.tabs.onUpdated.removeListener(tableLoadingListener);
+      chrome.storage.local.onChanged.removeListener(
+        tableLoadingStoreChangeListener
+      );
     };
   }, [
     intitialSync,
@@ -464,6 +500,8 @@ export const Provider = ({ children }: PropsWithChildren) => {
     tabUpdateListener,
     tabRemovedListener,
     changeSyncStorageListener,
+    tableLoadingListener,
+    tableLoadingStoreChangeListener,
   ]);
 
   useEffect(() => {
@@ -494,6 +532,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           isInspecting,
           isFrameSelectedFromDevTool,
           canStartInspecting,
+          isTableLoading,
         },
         actions: {
           setSelectedFrame,
