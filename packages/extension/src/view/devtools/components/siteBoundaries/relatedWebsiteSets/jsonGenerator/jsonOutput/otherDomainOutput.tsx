@@ -45,8 +45,8 @@ const OtherDomainOutput = ({
         </p>
         <p className="text-base">
           Add the file <code>related-website-set.json</code> in the directory
-          <code>.well-known</code> of all the other domains in your set with the
-          following content:
+          <code>.well-known</code> of <b>all the other domains</b> in your set
+          with the following content:
         </p>
       </div>
       <div id="domainsListOutput">
