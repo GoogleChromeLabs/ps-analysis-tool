@@ -16,29 +16,16 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React from 'react';
 import { LandingPage } from '@ps-analysis-tool/design-system';
 
-const PrivacySandbox = () => {
-  const [loading, setLoading] = useState(true);
-
-  return (
-    <>
-      <LandingPage title="Privacy Sandbox" isLoading={loading}>
-        <div className="px-4 pt-6 pb-4 h-[78vh] w-full">
-          <iframe
-            src="https://privacysandbox.com"
-            data-testid="privacy-sandbox-content"
-            height="100%"
-            onLoad={() => {
-              setLoading(false);
-            }}
-            className="w-full md:w-[70%] md:m-auto border rounded-xl border-hex-gray dark:border-quartz"
-          />
-        </div>
-      </LandingPage>
-    </>
-  );
-};
+const PrivacySandbox = () => (
+  <LandingPage
+    title="Privacy Sandbox"
+    extraClasses="h-[78vh] w-full"
+    iframeSrc="https://privacysandbox.com"
+    iframeBorderClass="border border-hex-gray dark:border-quartz"
+  />
+);
 
 export default PrivacySandbox;

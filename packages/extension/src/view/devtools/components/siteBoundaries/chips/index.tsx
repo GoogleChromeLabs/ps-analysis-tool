@@ -16,27 +16,16 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
-
-/**
- * Internal dependencies.
- */
-import InfoCard from '../../../../design-system/components/infoCard';
-import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
-import { LandingPage } from '@ps-analysis-tool/design-system';
+import React from 'react';
+import { LandingPage, PSInfoKey } from '@ps-analysis-tool/design-system';
 
 const Chips = () => {
-  const [pageTitle, setPageTitle] = useState('');
-
   return (
-    <LandingPage title={pageTitle} isLoading={!pageTitle}>
-      <div
-        className="px-4 max-w-2xl h-fit overflow-auto"
-        data-testid="chips-content"
-      >
-        <InfoCard infoKey={PSInfoKey.Chips} setTitle={setPageTitle} />
-      </div>
-    </LandingPage>
+    <LandingPage
+      title={'Cookies Having Independent Partitioned State (CHIPS)'}
+      psInfoKey={PSInfoKey.Chips}
+      extraClasses="max-w-2xl h-fit"
+    />
   );
 };
 

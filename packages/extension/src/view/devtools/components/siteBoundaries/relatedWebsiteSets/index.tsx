@@ -16,33 +16,24 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
-import { LandingPage } from '@ps-analysis-tool/design-system';
+import React from 'react';
+import { LandingPage, PSInfoKey } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
-import InfoCard from '../../../../design-system/components/infoCard';
-import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
 import RWSJsonGenerator from './jsonGenerator';
 import Insights from './insights';
 
 const RelatedWebsiteSets = () => {
-  const [pageTitle, setPageTitle] = useState('');
-
   return (
-    <LandingPage title={pageTitle} isLoading={!pageTitle}>
-      <div
-        className="max-w-2xl h-fit px-4 overflow-auto divide-y divide-american-silver dark:divide-quartz"
-        data-testid="related-website-sets-content"
-      >
-        <InfoCard
-          infoKey={PSInfoKey.RelatedWebsiteSets}
-          setTitle={setPageTitle}
-        />
-        <Insights />
-        <RWSJsonGenerator />
-      </div>
+    <LandingPage
+      title="Related Website Sets"
+      psInfoKey={PSInfoKey.RelatedWebsiteSets}
+      extraClasses="max-w-2xl h-fit"
+    >
+      <Insights />
+      <RWSJsonGenerator />
     </LandingPage>
   );
 };
