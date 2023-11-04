@@ -281,13 +281,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
       if (
         tabId &&
         Object.keys(changes).includes(tabId.toString()) &&
-        Object.keys(changes[tabId.toString()]?.newValue?.cookies).length === 0
-      ) {
-        setTableLoading(true);
-      }
-      if (
-        tabId &&
-        Object.keys(changes).includes(tabId.toString()) &&
         changes[tabId.toString()]?.newValue?.cookies
       ) {
         const _cookies: NonNullable<CookieStoreContext['state']['tabCookies']> =
