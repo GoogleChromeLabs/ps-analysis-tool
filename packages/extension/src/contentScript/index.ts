@@ -255,11 +255,11 @@ class WebpageContentScript {
             const { x: arrowX, y: arrowY } = middlewareData.arrow;
 
             Object.assign(arrowElement.style, {
-              left: arrowX ? `${arrowX}px` : '',
+              left: arrowX ? `${arrowX - 15}px` : '',
               top: arrowY ? `${arrowY}px` : '',
               right: '',
               bottom: '',
-              [staticSide]: `${arrowElement.offsetWidth / 2}px`,
+              [staticSide as string]: `${arrowElement.offsetWidth / 2}px`,
               transform: 'rotate(45deg)',
             });
           }
