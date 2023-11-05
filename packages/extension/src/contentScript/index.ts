@@ -263,9 +263,9 @@ class WebpageContentScript {
               transform: 'rotate(45deg)',
             });
           }
+          return tooltip;
         });
       });
-      return tooltip;
     }
 
     return tooltip;
@@ -453,13 +453,9 @@ class WebpageContentScript {
       firstToolTip &&
       !this.isHoveringOverPage &&
       frameToScrollTo.clientWidth &&
-      !isElementVisibleInViewport(frameWithTooltip)
+      !isElementVisibleInViewport(firstToolTip)
     ) {
-      (frameWithTooltip as HTMLElement).scrollIntoView({
-        behavior: 'instant',
-        block: 'start',
-        inline: 'nearest',
-      });
+      (frameWithTooltip as HTMLElement).scrollIntoView();
     }
   }
 
