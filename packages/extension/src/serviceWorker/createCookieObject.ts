@@ -94,9 +94,9 @@ export async function createCookieObject(
   );
 
   return {
-    name,
+    name: (name as string)?.trim(),
     value,
-    domain,
+    domain: (domain as string)?.trim(),
     path: (path as string)?.trim(),
     secure,
     httponly,
