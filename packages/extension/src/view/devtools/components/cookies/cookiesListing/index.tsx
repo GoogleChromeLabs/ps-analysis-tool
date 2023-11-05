@@ -81,7 +81,7 @@ const CookiesListing = () => {
         >
           {cookiesAvailable && isFilterMenuOpen && (
             <Resizable
-              minWidth="10%"
+              minWidth="100px"
               maxWidth="50%"
               enable={{
                 right: true,
