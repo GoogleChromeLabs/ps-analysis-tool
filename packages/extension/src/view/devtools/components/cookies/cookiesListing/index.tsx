@@ -33,8 +33,9 @@ import { CookieDetails } from '@ps-analysis-tool/design-system';
 import CookieTableContainer from './cookieTableContainer';
 
 const CookiesListing = () => {
-  const { selectedFrame } = useCookieStore(({ state }) => ({
+  const { selectedFrame, isTableLoading } = useCookieStore(({ state }) => ({
     selectedFrame: state.selectedFrame,
+    isTableLoading: state.isTableLoading,
   }));
 
   const { filteredCookies, cookiesAvailable } = useFilterManagementStore(
@@ -95,7 +96,7 @@ const CookiesListing = () => {
             </Resizable>
           )}
           <CookieTableContainer
-            cookies={filteredCookies}
+            cookies={isTableLoading ? [] : filteredCookies}
             selectedFrame={selectedFrame}
             selectedFrameCookie={selectedFrameCookie}
             setSelectedFrameCookie={setSelectedFrameCookie}
