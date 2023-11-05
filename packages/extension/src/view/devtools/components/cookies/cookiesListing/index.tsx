@@ -77,19 +77,15 @@ const CookiesListing = () => {
             bottom: true,
             left: false,
           }}
-          className="h-full flex"
+          className="flex"
         >
           {cookiesAvailable && isFilterMenuOpen && (
             <Resizable
               minWidth="10%"
               maxWidth="50%"
               enable={{
-                top: false,
                 right: true,
-                bottom: false,
-                left: false,
               }}
-              className="overflow-y-scroll overflow-x-hidden p-3"
             >
               <FiltersList />
             </Resizable>
