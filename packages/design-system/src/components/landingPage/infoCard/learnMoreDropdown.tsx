@@ -22,7 +22,7 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import type { PSInfo as PSInfoType } from '../../../../utils/fetchPSInfo';
+import type { PSInfo as PSInfoType } from './fetchPSInfo';
 import RenderLink from './renderLink';
 
 /**

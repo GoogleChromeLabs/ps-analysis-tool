@@ -40,23 +40,21 @@ const TopicsList = () => {
   }, []);
 
   return (
-    <div className="max-w-2xl m-3 border-t border-american-silver dark:border-quartz">
-      <div className="p-6 pl-0">
-        <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-bright-gray">
-          Topics List
-        </h5>
-        {topics.length > 0 ? (
-          <ul className="ml-3 list-disc text-gray-700 dark:text-bright-gray">
-            {topics.map((topic: string) => (
-              <li key={topic}>{topic}</li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-gray-700 dark:text-bright-gray">
-            No topics found on this page.
-          </p>
-        )}
-      </div>
+    <div>
+      <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-bright-gray">
+        Topics List
+      </h5>
+      {topics.length > 0 ? (
+        <ul className="ml-3 list-disc text-gray-700 dark:text-bright-gray">
+          {topics.map((topic: string) => (
+            <li key={topic}>{topic}</li>
+          ))}
+        </ul>
+      ) : (
+        <p className="text-gray-700 dark:text-bright-gray">
+          No topics found on this page.
+        </p>
+      )}
     </div>
   );
 };

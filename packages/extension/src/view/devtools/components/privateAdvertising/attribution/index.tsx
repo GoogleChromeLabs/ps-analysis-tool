@@ -16,30 +16,18 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
-
-/**
- * Internal dependencies.
- */
-import InfoCard from '../../../../design-system/components/infoCard';
-import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
-import { LandingPage } from '@ps-analysis-tool/design-system';
+import React from 'react';
+import { LandingPage, PSInfoKey } from '@ps-analysis-tool/design-system';
 
 const Attribution = () => {
-  const [pageTitle, setPageTitle] = useState('');
-
   return (
-    <LandingPage title={pageTitle} isLoading={!pageTitle}>
-      <div
-        className="px-4 max-w-2xl h-fit overflow-auto"
-        data-testid="attribution-content"
-      >
-        <InfoCard
-          infoKey={PSInfoKey.AttributionReporting}
-          setTitle={setPageTitle}
-        />
-      </div>
-    </LandingPage>
+    <div data-testid="attribution-content" className="h-full w-full">
+      <LandingPage
+        title="Attribution Reporting"
+        psInfoKey={PSInfoKey.AttributionReporting}
+        extraClasses="max-w-2xl h-fit"
+      />
+    </div>
   );
 };
 
