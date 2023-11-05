@@ -57,7 +57,7 @@ const SubList: React.FC<SubListProps> = ({
               type="checkbox"
               name={filter.keys}
               className={classNames(
-                'accent-royal-blue dark:accent-orange-400 w-3 h-3 dark:bg-outer-space dark:min-h-0 dark:min-w-0 dark:h-[13px] dark:w-[13px]',
+                'accent-royal-blue dark:accent-orange-400 w-3 h-3 dark:bg-outer-space dark:min-h-[12px] dark:min-w-[12px]',
                 {
                   'dark:appearance-none dark:text-manatee dark:border dark:rounded-[3px]':
                     !(
