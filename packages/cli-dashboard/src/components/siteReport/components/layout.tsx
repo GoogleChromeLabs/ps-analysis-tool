@@ -18,12 +18,12 @@
  */
 import React, { useState } from 'react';
 import { Resizable } from 're-resizable';
-import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import { useContentStore } from '../stateProviders/contentStore';
+import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
 import { TABS } from '../tabs';
 import Sidebar from './sidebar';
 

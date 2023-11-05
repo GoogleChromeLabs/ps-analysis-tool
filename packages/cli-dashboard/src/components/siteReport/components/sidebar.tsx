@@ -297,8 +297,6 @@ const Sidebar = ({
                           if (id === tab?.parentId && Boolean(tab?.parentId)) {
                             return (
                               <AccordionChildren
-                                currentIndex={currentIndex}
-                                tabs={TABS}
                                 key={tab.id}
                                 accordionMenuItemName={tab.display_name}
                                 defaultIcon={tab.icons.default}

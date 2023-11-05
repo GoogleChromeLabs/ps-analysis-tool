@@ -39,15 +39,16 @@ const PrimaryDomainOutput = ({
           1
         </p>
         <p className="text-base">
-          Add the <code>.well-known</code> file to the <b>primary domain</b>{' '}
-          with the following content:
+          Add the file <code>related-website-set.json</code> in the directory
+          <code>.well-known</code> of the <b>primary domain</b> with the
+          following content:
         </p>
       </div>
       <ul className="mb-2">
         <li id="primaryOutput" className="text-sm">
           {primaryWellKnownOutput && primaryWellKnownOutput.primary
             ? primaryWellKnownOutput.primary +
-              '/.well-known/first-party-set.json'
+              '/.well-known/related-website-set.json'
             : ''}
         </li>
       </ul>

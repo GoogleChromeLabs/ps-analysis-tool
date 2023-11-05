@@ -93,6 +93,7 @@ const initialState: CookieStoreContext = {
     deleteCookie: noop,
     modifyCookie: noop,
     setIsFrameSelectedFromDevTool: noop,
+    changeListeningToThisTab: noop,
     setIsInspecting: noop,
     getCookiesSetByJavascript: noop,
     setContextInvalidated: noop,
@@ -108,7 +109,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const loadingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isCurrentTabBeingListenedTo, setIsCurrentTabBeingListenedTo] =
     useState<boolean>(false);
-  const [canStartInspecting, setCanStartInspecting] = useState<boolean>(false);
 
   const [contextInvalidated, setContextInvalidated] = useState<boolean>(false);
 
@@ -118,6 +118,8 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [allowedNumberOfTabs, setAllowedNumberOfTabs] = useState<string | null>(
     null
   );
+
+  const [canStartInspecting, setCanStartInspecting] = useState<boolean>(false);
 
   const [tabCookies, setTabCookies] =
     useState<CookieStoreContext['state']['tabCookies']>(null);

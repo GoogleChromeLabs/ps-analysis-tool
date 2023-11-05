@@ -86,6 +86,7 @@ export const analyzeCookiesUrls = async (
           frameCookies[key].platform = analytics?.platform || 'Unknown';
           frameCookies[key].category = analytics?.category || 'Uncategorized';
           frameCookies[key].GDPR = analytics?.gdprUrl || '';
+          frameCookies[key].description = analytics?.description;
 
           // some cookies may have their expires value in epoch. Convert them to string
           const expires = frameCookies[key].expires;
