@@ -65,7 +65,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   const [isTabFocused, setIsTabFocused] = useState<boolean>(true);
   const [selectedAccordionChild, setSelectedAccordionChild] = useState<
     string | null
-  >('privacySandbox');
+  >(TABS[selectedIndex].id ?? 'privacySandbox');
   const sidebarContainerRef = useRef<HTMLDivElement>(null);
 
   useFrameOverlay();
