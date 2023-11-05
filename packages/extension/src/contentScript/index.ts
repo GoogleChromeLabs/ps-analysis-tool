@@ -212,7 +212,7 @@ class WebpageContentScript {
         transform: 'rotate(45deg)',
       });
       Object.assign(tooltip.style, {
-        top: '5px',
+        top: `${5 + window.scrollY}px`,
       });
       return tooltip;
     }
