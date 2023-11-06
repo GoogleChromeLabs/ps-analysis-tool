@@ -50,7 +50,6 @@ export interface CookieStoreContext {
     contextInvalidated: boolean;
     isFrameSelectedFromDevTool: boolean;
     canStartInspecting: boolean;
-    isTableLoading: boolean;
   };
   actions: {
     setSelectedFrame: (key: string | null) => void;
@@ -79,7 +78,6 @@ const initialState: CookieStoreContext = {
     contextInvalidated: false,
     isFrameSelectedFromDevTool: false,
     canStartInspecting: false,
-    isTableLoading: false,
   },
   actions: {
     setSelectedFrame: noop,
@@ -100,8 +98,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const loadingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isCurrentTabBeingListenedTo, setIsCurrentTabBeingListenedTo] =
     useState<boolean>(false);
-
-  const [isTableLoading, setTableLoading] = useState<boolean>(false);
 
   const [contextInvalidated, setContextInvalidated] = useState<boolean>(false);
 
@@ -400,14 +396,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
     setCanStartInspecting(false);
   }, [tabId]);
 
-  const tabUpdateListener = useCallback(
-    async (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
-      if (tabId === _tabId && changeInfo.status === 'complete') {
-        setTableLoading(false);
-      }
-      if (tabId === _tabId && changeInfo.url) {
+  const tableLoadingListener = useCallback(
+    async (
+      details: chrome.webNavigation.WebNavigationFramedCallbackDetails
+    ) => {
+      if (tabId === details.tabId && details.frameType === 'outermost_frame') {
         try {
-          const nextURL = new URL(changeInfo.url);
+          const nextURL = new URL(details?.url);
 
           if (selectedFrame) {
             _setSelectedFrame(nextURL.origin);
@@ -418,22 +413,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
           _setSelectedFrame(null);
         }
 
-        setTabUrl(changeInfo.url);
+        setTabUrl(details?.url);
 
         setTabFrames(null);
-        await getAllFramesForCurrentTab(_tabId);
+        await getAllFramesForCurrentTab(details?.tabId);
       }
     },
-    [tabId, getAllFramesForCurrentTab, selectedFrame]
-  );
-
-  const tableLoadingListener = useCallback(
-    (details: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
-      if (tabId === details.tabId && details.frameType === 'outermost_frame') {
-        setTableLoading(true);
-      }
-    },
-    [tabId]
+    [getAllFramesForCurrentTab, selectedFrame, tabId]
   );
 
   const tabRemovedListener = useCallback(async () => {
@@ -463,7 +449,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
     intitialSync();
     chrome.storage.local.onChanged.addListener(storeChangeListener);
     chrome.storage.sync.onChanged.addListener(changeSyncStorageListener);
-    chrome.tabs.onUpdated.addListener(tabUpdateListener);
     chrome.tabs.onRemoved.addListener(tabRemovedListener);
     chrome.webNavigation.onBeforeNavigate.addListener(tableLoadingListener);
     return () => {
@@ -471,14 +456,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
         tableLoadingListener
       );
       chrome.storage.local.onChanged.removeListener(storeChangeListener);
-      chrome.tabs.onUpdated.removeListener(tabUpdateListener);
       chrome.tabs.onRemoved.removeListener(tabRemovedListener);
       chrome.storage.sync.onChanged.removeListener(changeSyncStorageListener);
     };
   }, [
     intitialSync,
     storeChangeListener,
-    tabUpdateListener,
     tabRemovedListener,
     changeSyncStorageListener,
     tableLoadingListener,
@@ -512,7 +495,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
           isInspecting,
           isFrameSelectedFromDevTool,
           canStartInspecting,
-          isTableLoading,
         },
         actions: {
           setSelectedFrame,

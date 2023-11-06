@@ -40,7 +40,6 @@ const Cookies = () => {
     selectedFrame,
     tabCookies,
     tabFrames,
-    isTableLoading,
     changeListeningToThisTab,
   } = useCookieStore(({ state, actions }) => ({
     allowedNumberOfTabs: state.allowedNumberOfTabs,
@@ -51,7 +50,6 @@ const Cookies = () => {
     selectedFrame: state.selectedFrame,
     tabCookies: state.tabCookies,
     tabFrames: state.tabFrames,
-    isTableLoading: state.isTableLoading,
     changeListeningToThisTab: actions.changeListeningToThisTab,
   }));
 
@@ -82,10 +80,7 @@ const Cookies = () => {
         {selectedFrame ? (
           <CookiesListing />
         ) : (
-          <CookiesLanding
-            tabCookies={isTableLoading ? {} : tabCookies}
-            tabFrames={tabFrames}
-          />
+          <CookiesLanding tabCookies={tabCookies} tabFrames={tabFrames} />
         )}
       </div>
     );
