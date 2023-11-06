@@ -297,7 +297,3 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     }
   });
 });
-
-chrome.webNavigation.onBeforeNavigate.addListener(() => {
-  PROMISE_QUEUE.clear();
-});

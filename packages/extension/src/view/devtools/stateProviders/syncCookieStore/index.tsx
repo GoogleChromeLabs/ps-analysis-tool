@@ -402,7 +402,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const tabUpdateListener = useCallback(
     async (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
-      if (tabId === _tabId && changeInfo.status === 'loading') {
+      if (tabId === _tabId && changeInfo.status === 'complete') {
         setTableLoading(false);
       }
       if (tabId === _tabId && changeInfo.url) {
