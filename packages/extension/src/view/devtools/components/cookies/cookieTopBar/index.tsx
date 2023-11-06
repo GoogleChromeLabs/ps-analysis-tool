@@ -21,7 +21,6 @@ import classNames from 'classnames';
 import {
   FilterIcon,
   Input,
-  Refresh,
   RefreshButton,
 } from '@ps-analysis-tool/design-system';
 import type { CookieTableData } from '@ps-analysis-tool/common';
