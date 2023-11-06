@@ -35,7 +35,7 @@ const Input = ({ value, onChange, clearInput }: InputProps) => {
 
   return (
     <label
-      className={`cursor-text dark:bg-charleston-green hover:bg-lotion dark:text-bright-gray border rounded flex justify-between items-center mx-[3px] my-px px-[3px] pt-0.5 pb-px box-content ${
+      className={`w-3/5 cursor-text dark:bg-charleston-green hover:bg-lotion dark:text-bright-gray border rounded flex justify-between items-center mx-[3px] my-px px-[3px] pt-0.5 pb-px box-content ${
         isFocused || value
           ? 'dark:border-baby-blue-eyes'
           : 'dark:border-davys-grey'
@@ -43,7 +43,7 @@ const Input = ({ value, onChange, clearInput }: InputProps) => {
     >
       <input
         type="text"
-        className="h-[14px] w-56 outline-none bg-inherit"
+        className="h-[14px] w-full outline-none bg-inherit"
         placeholder="Search"
         value={value}
         onChange={onChange}
