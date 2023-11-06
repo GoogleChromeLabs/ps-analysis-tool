@@ -37,18 +37,20 @@ const FiltersList = () => {
   }
 
   return (
-    <ul>
-      {filters
-        .filter((filter) => Boolean(filter.filters?.size))
-        .map((filter, index) => (
-          <ListItem
-            key={index}
-            filter={filter}
-            selectedFilters={selectedFilters}
-            setSelectedFilters={setSelectedFilters}
-          />
-        ))}
-    </ul>
+    <div className="h-full overflow-auto p-3">
+      <ul>
+        {filters
+          .filter((filter) => Boolean(filter.filters?.size))
+          .map((filter, index) => (
+            <ListItem
+              key={index}
+              filter={filter}
+              selectedFilters={selectedFilters}
+              setSelectedFilters={setSelectedFilters}
+            />
+          ))}
+      </ul>
+    </div>
   );
 };
 
