@@ -15,6 +15,7 @@
  */
 
 export { default as Button } from './button';
+export { default as RefreshButton } from './refreshButton';
 export { default as ProgressBar } from './progressBar';
 export { default as Accordion } from './accordion';
 export { default as AccordionChildren } from './accordion/accordionChildren';
