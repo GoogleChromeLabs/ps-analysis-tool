@@ -18,10 +18,7 @@
  */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Resizable } from 're-resizable';
-import {
-  ExtensionReloadNotification,
-  ProgressBar,
-} from '@ps-analysis-tool/design-system';
+import { ExtensionReloadNotification } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
@@ -37,12 +34,12 @@ const App: React.FC = () => {
   const contextInvalidatedRef = useRef(null);
   const TabContent = TABS[selectedTabIndex].component;
 
-  const { contextInvalidated, setContextInvalidated, isTableLoading } =
-    useCookieStore(({ state, actions }) => ({
+  const { contextInvalidated, setContextInvalidated } = useCookieStore(
+    ({ state, actions }) => ({
       contextInvalidated: state.contextInvalidated,
-      isTableLoading: state.isTableLoading,
       setContextInvalidated: actions.setContextInvalidated,
-    }));
+    })
+  );
 
   const listenToMouseChange = useCallback(() => {
     if (contextInvalidatedRef.current) {
@@ -70,12 +67,7 @@ const App: React.FC = () => {
           <ExtensionReloadNotification />
         </div>
       )}
-      {isTableLoading && !contextInvalidated && (
-        <div className="w-full h-full flex items-center justify-center">
-          <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />
-        </div>
-      )}
-      {!contextInvalidated && !isTableLoading && (
+      {!contextInvalidated && (
         <div className="w-full h-full flex flex-row">
           <Resizable
             size={{ width: width, height: '100%' }}
