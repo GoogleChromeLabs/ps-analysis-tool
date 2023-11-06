@@ -129,3 +129,20 @@
 * Update landing page's UI/UX https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/195
 * Fix: Frame overlay tooltip calculation issue https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/210
 * Refactor: Update package name https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/191
+
+
+# v0.3.2
+
+## Cookies
+* Enhancement: Add cross icon to cookie accepted column https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/231
+* Fix: Update checkbox dimensions and resize visibility https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/234
+* Fix: Trim out whitespace from the cookie key. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/237
+* Enhancement : Add reactive refresh button in devtools header https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/236
+
+## CLI
+* Fix : Add missing description in analytics https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/230
+
+## Privacy Sandbox API
+* Update `RWS` submission steps text https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/229
+* Fix: opaque origin error when using in https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/235
+* Refactor: Make functional components in landing page non-collapsible https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/232
