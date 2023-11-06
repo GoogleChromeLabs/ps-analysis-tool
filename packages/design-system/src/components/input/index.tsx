@@ -53,7 +53,7 @@ const Input = ({ value, onChange, clearInput }: InputProps) => {
 
       <button
         onClick={clearInput}
-        className={`w-3 h-3 flex items-center justify-center ${
+        className={`w-[10px] h-[10px] scale-150 flex items-center justify-center ${
           value ? 'visible' : 'invisible'
         }`}
         title="Clear Search"
