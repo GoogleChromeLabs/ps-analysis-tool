@@ -35,10 +35,10 @@ const Input = ({ value, onChange, clearInput }: InputProps) => {
 
   return (
     <label
-      className={`w-3/5 cursor-text dark:bg-charleston-green hover:bg-lotion dark:text-bright-gray border rounded flex justify-between items-center mx-[3px] my-px px-[3px] pt-0.5 pb-px box-content ${
+      className={`w-3/5 cursor-text bg-white dark:bg-charleston-green text-raisin-black dark:text-bright-gray border rounded flex justify-between items-center gap-1 mx-[3px] my-px px-[3px] pt-0.5 pb-px box-content ${
         isFocused || value
-          ? 'dark:border-baby-blue-eyes'
-          : 'dark:border-davys-grey'
+          ? 'border-sapphire dark:border-baby-blue-eyes'
+          : 'border-chinese-silver dark:border-davys-grey hover:bg-lotion'
       }`}
     >
       <input
@@ -53,7 +53,7 @@ const Input = ({ value, onChange, clearInput }: InputProps) => {
 
       <button
         onClick={clearInput}
-        className={`w-[10px] h-[10px] scale-150 flex items-center justify-center ${
+        className={`w-fit h-3 px-px scale-150 hover:opacity-70 active:opacity-50 flex justify-center items-center ${
           value ? 'visible' : 'invisible'
         }`}
         title="Clear Search"
