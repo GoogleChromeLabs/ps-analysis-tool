@@ -19,6 +19,7 @@
 import React, { useCallback } from 'react';
 import classNames from 'classnames';
 import { type CookieTableData, getCookieKey } from '@ps-analysis-tool/common';
+import { RefreshButton } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
@@ -30,7 +31,6 @@ import FilterIcon from '../../../../../../../../third_party/icons/filter-icon.sv
 import CrossIcon from '../../../../../../../../third_party/icons/cross-icon.svg';
 import { useFilterManagementStore } from '../../../stateProviders/filterManagementStore';
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import { Refresh } from '@ps-analysis-tool/design-system';
 
 interface CookieSearchProps {
   cookiesAvailable: boolean;
@@ -124,9 +124,7 @@ const CookieSearch = ({
           <CrossIcon className="text-mischka" />
         </button>
         <div className="h-full w-px bg-american-silver dark:bg-quartz mx-2" />
-        <button onClick={getCookiesSetByJavascript} title="Refresh">
-          <Refresh className="text-mischka" />
-        </button>
+        <RefreshButton onClick={getCookiesSetByJavascript} />
         <div className="text-right w-full text-xxxs text-secondary">
           Count: {Number(filteredCookies?.length) || 0}
         </div>

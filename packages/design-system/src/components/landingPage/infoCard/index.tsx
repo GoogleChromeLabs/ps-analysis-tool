@@ -18,7 +18,6 @@
  * External dependencies.
  */
 import React, { useEffect, useState } from 'react';
-import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -28,15 +27,14 @@ import {
   fetchPSInfo,
   type PSInfo as PSInfoType,
   type PSInfoKeyType,
-} from '../../../../utils/fetchPSInfo';
+} from './fetchPSInfo';
 
 interface InfoCardProps {
   infoKey: PSInfoKeyType;
-  setTitle?: React.Dispatch<React.SetStateAction<string>>;
   className?: string;
 }
 
-const InfoCard = ({ infoKey, setTitle, className }: InfoCardProps) => {
+const InfoCard = ({ infoKey, className }: InfoCardProps) => {
   const [PSInfo, setPSInfo] = useState({} as PSInfoType);
 
   useEffect(() => {
@@ -44,14 +42,13 @@ const InfoCard = ({ infoKey, setTitle, className }: InfoCardProps) => {
       const info = await fetchPSInfo(infoKey);
 
       setPSInfo(info);
-      setTitle?.(info.name);
     })();
-  }, [infoKey, setTitle]);
+  }, [infoKey]);
 
   return (
     <>
       {Object.keys(PSInfo).length ? (
-        <div className={classNames('py-6 ', className)}>
+        <div className={className}>
           <p
             className="mb-3 text-gray-700 dark:text-bright-gray text-sm"
             dangerouslySetInnerHTML={{ __html: PSInfo.description }}

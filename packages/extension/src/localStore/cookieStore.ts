@@ -43,10 +43,11 @@ const CookieStore = {
           continue;
         }
 
-        const cookieKey = getCookieKey(cookie.parsedCookie);
+        let cookieKey = getCookieKey(cookie.parsedCookie);
         if (!cookieKey) {
           continue;
         }
+        cookieKey = cookieKey?.trim();
 
         if (_updatedCookies?.[cookieKey]) {
           _updatedCookies[cookieKey] = {
