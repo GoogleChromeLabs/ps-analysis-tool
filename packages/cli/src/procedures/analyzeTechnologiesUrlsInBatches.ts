@@ -32,7 +32,6 @@ export const analyzeTechnologiesUrlsInBatches = async (
   batchSize = 3
 ): Promise<TechnologyDetailList[]> => {
   const spinnies = new Spinnies();
-  const wappalyzer = new Wapplalyzer();
 
   let report: TechnologyDetailList[] = [];
 
@@ -45,14 +44,18 @@ export const analyzeTechnologiesUrlsInBatches = async (
     });
 
     const urlsWindow = urls.slice(start, end + 1);
+    const wappalyzer = new Wapplalyzer();
+
+    await wappalyzer.init();
 
     const technologyAnalysis = await Promise.all(
       urlsWindow.map(async (url) => {
-        const site = await wappalyzer.open(url);
-        const results = await site.analyze();
-        return results.technologies;
+        const { technologies } = await (await wappalyzer.open(url)).analyze();
+        return technologies;
       })
     );
+
+    await wappalyzer.destroy();
 
     report = [...report, ...technologyAnalysis];
 
