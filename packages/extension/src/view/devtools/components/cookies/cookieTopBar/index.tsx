@@ -19,7 +19,7 @@
 import React, { useCallback } from 'react';
 import classNames from 'classnames';
 import { type CookieTableData, getCookieKey } from '@ps-analysis-tool/common';
-import { RefreshButton } from '@ps-analysis-tool/design-system';
+import { ClearAll, RefreshButton } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
@@ -56,8 +56,9 @@ const CookieSearch = ({
     })
   );
 
-  const { deleteCookie } = useCookieStore(({ actions }) => ({
+  const { deleteCookie, deleteAllCookies } = useCookieStore(({ actions }) => ({
     deleteCookie: actions.deleteCookie,
+    deleteAllCookies: actions.deleteAllCookies,
   }));
 
   const { getCookiesSetByJavascript } = useCookieStore(({ actions }) => ({
@@ -122,6 +123,14 @@ const CookieSearch = ({
           title="Delete cookie"
         >
           <CrossIcon className="text-mischka" />
+        </button>
+        <div className="h-full w-px bg-american-silver dark:bg-quartz mx-2" />
+        <button
+          onClick={deleteAllCookies}
+          className="w-3 h-3 flex items-center"
+          title="Delete cookie"
+        >
+          <ClearAll className="text-mischka" />
         </button>
         <div className="h-full w-px bg-american-silver dark:bg-quartz mx-2" />
         <RefreshButton onClick={getCookiesSetByJavascript} />

@@ -544,17 +544,14 @@ export const Provider = ({ children }: PropsWithChildren) => {
       const newTabData = localStorage[tabId];
       const allCookies = newTabData?.cookies;
       await Promise.all(
-        Object.keys(allCookies).map((key) => {
-          const cookieDetails = allCookies[key];
-          return chrome.cookies.remove({
-            name: cookieDetails?.parsedCookie?.name,
-            url: cookieDetails?.url,
-          });
+        Object.keys(allCookies).map(async (key) => {
+          await deleteCookie(key);
+          return key;
         })
       );
       await CookieStore.addTabData(tabId.toString());
     }
-  }, [tabId]);
+  }, [deleteCookie, tabId]);
 
   const modifierForNameUpdate = useCallback(
     async (
