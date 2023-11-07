@@ -128,7 +128,7 @@ const CookieSearch = ({
         <button
           onClick={deleteAllCookies}
           className="w-3 h-3 flex items-center"
-          title="Delete cookie"
+          title="Delete all cookies"
         >
           <ClearAll className="text-mischka" />
         </button>
