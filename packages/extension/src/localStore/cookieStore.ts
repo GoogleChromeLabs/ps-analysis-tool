@@ -44,6 +44,9 @@ const CookieStore = {
         }
 
         const cookieKey = getCookieKey(cookie.parsedCookie);
+        if (!cookieKey) {
+          continue;
+        }
 
         if (_updatedCookies?.[cookieKey]) {
           _updatedCookies[cookieKey] = {

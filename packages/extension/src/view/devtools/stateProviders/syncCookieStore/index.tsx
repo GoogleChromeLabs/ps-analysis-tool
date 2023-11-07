@@ -54,6 +54,7 @@ export interface CookieStoreContext {
   };
   actions: {
     deleteCookie: (cookieName: string) => void;
+    deleteAllCookies: () => void;
     modifyCookie: (
       cookieName: string,
       changedKey: string,
@@ -93,7 +94,7 @@ const initialState: CookieStoreContext = {
     deleteCookie: noop,
     modifyCookie: noop,
     setIsFrameSelectedFromDevTool: noop,
-    changeListeningToThisTab: noop,
+    deleteAllCookies: noop,
     setIsInspecting: noop,
     getCookiesSetByJavascript: noop,
     setContextInvalidated: noop,
@@ -537,6 +538,24 @@ export const Provider = ({ children }: PropsWithChildren) => {
     [tabId]
   );
 
+  const deleteAllCookies = useCallback(async () => {
+    const localStorage = await chrome.storage.local.get();
+    if (tabId) {
+      const newTabData = localStorage[tabId];
+      const allCookies = newTabData?.cookies;
+      await Promise.all(
+        Object.keys(allCookies).map((key) => {
+          const cookieDetails = allCookies[key];
+          return chrome.cookies.remove({
+            name: cookieDetails?.parsedCookie?.name,
+            url: cookieDetails?.url,
+          });
+        })
+      );
+      await CookieStore.addTabData(tabId.toString());
+    }
+  }, [tabId]);
+
   const modifierForNameUpdate = useCallback(
     async (
       cookieKey: string,
@@ -673,6 +692,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           changeListeningToThisTab,
           deleteCookie,
           modifyCookie,
+          deleteAllCookies,
           getCookiesSetByJavascript,
           setIsInspecting,
           setContextInvalidated,
