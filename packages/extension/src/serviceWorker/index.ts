@@ -255,6 +255,18 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     if (changeInfo.status === 'loading' && tab.url) {
       await CookieStore.removeCookieData(tabId.toString());
     }
+    const localStorage = await chrome.storage.local.get();
+    if (
+      tab.id &&
+      !localStorage[tab.id?.toString()]?.isDebuggerAttached &&
+      tab.url &&
+      changeInfo.status === 'complete' &&
+      !tab.url?.toString().startsWith('chrome://')
+    ) {
+      await chrome.debugger.attach({ tabId: tab.id }, '1.3');
+      localStorage[tab.id?.toString()].isDebuggerAttached = true;
+      await chrome.storage.local.set(localStorage);
+    }
   });
 });
 
