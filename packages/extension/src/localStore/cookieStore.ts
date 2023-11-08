@@ -45,10 +45,14 @@ const CookieStore = {
 
         let cookieKey = getCookieKey(cookie.parsedCookie);
         cookieKey = cookieKey?.trim();
-
         if (_updatedCookies?.[cookieKey]) {
           _updatedCookies[cookieKey] = {
             ...cookie,
+            parsedCookie: {
+              ...cookie.parsedCookie,
+              ..._updatedCookies[cookieKey].parsedCookie,
+            },
+            isBlocked: !cookie?.isBlocked ? _updatedCookies[cookieKey].isBlocked : cookie?.isBlocked,
             headerType:
               _updatedCookies[cookieKey].headerType === 'javascript'
                 ? _updatedCookies[cookieKey].headerType

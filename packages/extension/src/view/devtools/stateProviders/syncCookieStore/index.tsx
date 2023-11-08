@@ -231,21 +231,15 @@ export const Provider = ({ children }: PropsWithChildren) => {
       const _cookies: NonNullable<CookieStoreContext['state']['tabCookies']> =
         {};
 
-      await Promise.all(
-        Object.entries(tabData.cookies as { [key: string]: CookieData }).map(
-          async ([key, value]: [string, CookieData]) => {
-            const isCookieSet = Boolean(
-              await chrome.cookies.get({
-                name: value?.parsedCookie?.name,
-                url: value.url,
-              })
-            );
-            _cookies[key] = {
-              ...value,
-              isCookieSet,
-            };
-          }
-        )
+      Object.entries(tabData.cookies as { [key: string]: CookieData }).map(
+        ([key, value]: [string, CookieData]) => {
+          const isCookieSet = !value?.isBlocked;
+          _cookies[key] = {
+            ...value,
+            isCookieSet,
+          };
+          return [key, value];
+        }
       );
 
       setTabCookies(_cookies);
@@ -275,24 +269,18 @@ export const Provider = ({ children }: PropsWithChildren) => {
         const _cookies: NonNullable<CookieStoreContext['state']['tabCookies']> =
           {};
 
-        await Promise.all(
-          Object.entries(
-            changes[tabId.toString()].newValue.cookies as {
-              [key: string]: CookieData;
-            }
-          ).map(async ([key, value]) => {
-            const isCookieSet = Boolean(
-              await chrome.cookies.get({
-                name: value?.parsedCookie?.name,
-                url: value.url,
-              })
-            );
-            _cookies[key] = {
-              ...value,
-              isCookieSet,
-            };
-          })
-        );
+        Object.entries(
+          changes[tabId.toString()].newValue.cookies as {
+            [key: string]: CookieData;
+          }
+        ).map(([key, value]) => {
+          const isCookieSet = !value?.isBlocked;
+          _cookies[key] = {
+            ...value,
+            isCookieSet,
+          };
+          return [key, value];
+        });
 
         await getAllFramesForCurrentTab(tabId);
         setTabCookies(_cookies);

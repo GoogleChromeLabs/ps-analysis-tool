@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import PQueue from 'p-queue';
+import { parse } from 'simple-cookie';
 
 /**
  * Internal dependencies.
@@ -32,6 +33,7 @@ import {
   fetchDictionary,
 } from '../utils/fetchCookieDictionary';
 import { ALLOWED_NUMBER_OF_TABS } from '../constants';
+import findAnalyticsMatch from './findAnalyticsMatch';
 
 let cookieDB: CookieDatabase | null = null;
 
@@ -255,18 +257,6 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     if (changeInfo.status === 'loading' && tab.url) {
       await CookieStore.removeCookieData(tabId.toString());
     }
-    const localStorage = await chrome.storage.local.get();
-    if (
-      tab.id &&
-      !localStorage[tab.id?.toString()]?.isDebuggerAttached &&
-      tab.url &&
-      changeInfo.status === 'complete' &&
-      !tab.url?.toString().startsWith('chrome://')
-    ) {
-      await chrome.debugger.attach({ tabId: tab.id }, '1.3');
-      localStorage[tab.id?.toString()].isDebuggerAttached = true;
-      await chrome.storage.local.set(localStorage);
-    }
   });
 });
 
@@ -308,4 +298,148 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       });
     }
   });
+});
+
+chrome.debugger.onEvent.addListener(async (source, method, params) => {
+  await PROMISE_QUEUE.add(async () => {
+    if (!cookieDB) {
+      cookieDB = await fetchDictionary();
+    }
+    if (method === 'Network.requestWillBeSentExtraInfo' && params) {
+      const syncStorage = await chrome.storage.sync.get();
+      const localStorage = await chrome.storage.local.get();
+      if (
+        syncStorage.allowedNumberOfTabs &&
+        syncStorage.allowedNumberOfTabs === 'unlimited'
+      ) {
+        const cookies = [];
+        params.associatedCookies.forEach(({ blockedReasons, cookie }) => {
+          const singleCookie = {
+            isBlocked: !(blockedReasons.length === 0),
+            parsedCookie: {
+              ...cookie,
+              cookiePartitionKey: params?.cookiePartitionKey,
+            },
+            analytics: cookieDB
+              ? findAnalyticsMatch(cookie.name, cookieDB)
+              : {},
+            url: params.headers['url'],
+            headerType: 'request',
+            isFirstParty: cookie?.sameParty,
+            frameIdList: [],
+          };
+          cookies.push(singleCookie);
+        });
+        await CookieStore.update(source?.tabId?.toString(), cookies);
+      } else if (
+        syncStorage.allowedNumberOfTabs &&
+        syncStorage.allowedNumberOfTabs !== 'unlimited' &&
+        localStorage.tabToRead === source?.tabId?.toString()
+      ) {
+        const cookies = [];
+        params.associatedCookies.forEach(({ blockedReasons, cookie }) => {
+          const singleCookie = {
+            isBlocked: !(blockedReasons.length === 0),
+            parsedCookie: {
+              ...cookie,
+              cookiePartitionKey: params?.cookiePartitionKey,
+            },
+            analytics: findAnalyticsMatch(cookie.name, cookieDB),
+            url: params.headers['url'],
+            headerType: 'request',
+            isFirstParty: cookie?.sameParty,
+            frameIdList: [],
+          };
+          cookies.push(singleCookie);
+        });
+        await CookieStore.update(source?.tabId?.toString(), cookies);
+      }
+    }
+    if (method === 'Network.responseReceivedExtraInfo' && params) {
+      const syncStorage = await chrome.storage.sync.get();
+      const localStorage = await chrome.storage.local.get();
+      if (
+        syncStorage.allowedNumberOfTabs &&
+        syncStorage.allowedNumberOfTabs === 'unlimited'
+      ) {
+        if (params.headers['set-cookie']) {
+          const allCookies = params?.headers['set-cookie']
+            ?.split('\n')
+            .map((headerLine) => {
+              const parsedCookie = parse(headerLine);
+              const isBlocked = params.blockedCookies.find((c) => {
+                return c.cookie?.name === parsedCookie.name;
+              });
+              return {
+                parsedCookie: {
+                  ...parsedCookie,
+                  cookiePartitionKey: params?.cookiePartitionKey,
+                },
+                analytics: cookieDB
+                  ? findAnalyticsMatch(parsedCookie.name, cookieDB)
+                  : {},
+                url: params.headers['url'],
+                headerType: 'response',
+                isFirstParty: parsedCookie?.sameParty,
+                frameIdList: [],
+                isBlocked,
+              };
+            });
+          await CookieStore.update(source?.tabId?.toString(), allCookies);
+        }
+      } else if (
+        syncStorage.allowedNumberOfTabs &&
+        syncStorage.allowedNumberOfTabs !== 'unlimited' &&
+        localStorage.tabToRead === source?.tabId?.toString()
+      ) {
+        if (params.headers['set-cookie']) {
+          const allCookies = params?.headers['set-cookie']
+            ?.split('\n')
+            .map((headerLine) => {
+              const parsedCookie = parse(headerLine);
+              const isBlocked = params.blockedCookies.find((c) => {
+                console.log(parsedCookie.name,c.cookie.name)
+                return c.cookie?.name === parsedCookie.name;
+              }) ?? false;
+              return {
+                parsedCookie: {
+                  ...parsedCookie,
+                  cookiePartitionKey: params?.cookiePartitionKey,
+                },
+                analytics: cookieDB
+                  ? findAnalyticsMatch(parsedCookie.name, cookieDB)
+                  : {},
+                url: params.headers['url'],
+                headerType: 'response',
+                isFirstParty: parsedCookie?.sameParty,
+                frameIdList: [],
+                isBlocked,
+              };
+            });
+          await CookieStore.update(source?.tabId?.toString(), allCookies);
+        }
+      }
+    }
+  });
+});
+
+chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
+  const localStorage = await chrome.storage.local.get();
+  if (
+    details.tabId &&
+    localStorage[details.tabId?.toString()] &&
+    !localStorage[details.tabId?.toString()]?.isDebuggerAttached &&
+    details.url &&
+    !details.url.startsWith('chrome://') &&
+    !details.url.startsWith('about:blank')
+  ) {
+    try {
+      await chrome.debugger.attach({ tabId: details.tabId }, '1.3');
+      localStorage[details.tabId?.toString()].isDebuggerAttached = true;
+      chrome.debugger.sendCommand({ tabId: details.tabId }, 'Network.enable');
+      await chrome.storage.local.set(localStorage);
+    } catch (error) {
+      //do nothing
+    }
+  }
 });
