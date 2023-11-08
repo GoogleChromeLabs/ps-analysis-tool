@@ -98,6 +98,8 @@ const SiteMapReport = ({
     selectedItemKey,
     sidebarItems,
     updateSelectedItemKey,
+    onKeyNavigation,
+    toggleDropdown,
     isKeyAncestor,
     isKeySelected,
   } = useSidebar({ data });
@@ -194,8 +196,11 @@ const SiteMapReport = ({
         }}
       >
         <Sidebar
+          selectedItemKey={selectedItemKey}
           sidebarItems={sidebarItems}
+          onKeyNavigation={onKeyNavigation}
           updateSelectedItemKey={updateSelectedItemKey}
+          toggleDropdown={toggleDropdown}
           isKeyAncestor={isKeyAncestor}
           isKeySelected={isKeySelected}
         />

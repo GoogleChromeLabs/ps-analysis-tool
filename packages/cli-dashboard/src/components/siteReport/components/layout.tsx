@@ -59,6 +59,8 @@ const Layout = () => {
     selectedItemKey,
     sidebarItems,
     updateSelectedItemKey,
+    onKeyNavigation,
+    toggleDropdown,
     isKeyAncestor,
     isKeySelected,
   } = useSidebar({ data });
@@ -96,7 +98,7 @@ const Layout = () => {
         {}
       );
 
-      _data['technologies'].panel = (
+      _data['affected-cookies'].panel = (
         <AffectedCookies selectedFrameUrl={keys[keys.length - 1]} />
       );
 
@@ -121,8 +123,11 @@ const Layout = () => {
         }}
       >
         <Sidebar
+          selectedItemKey={selectedItemKey}
           sidebarItems={sidebarItems}
+          onKeyNavigation={onKeyNavigation}
           updateSelectedItemKey={updateSelectedItemKey}
+          toggleDropdown={toggleDropdown}
           isKeyAncestor={isKeyAncestor}
           isKeySelected={isKeySelected}
         />

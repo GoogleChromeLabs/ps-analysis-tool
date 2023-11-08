@@ -26,15 +26,24 @@ import SidebarChild from './sidebarChild';
 import type { SidebarItems } from './useSidebar';
 
 interface SidebarProps {
+  selectedItemKey: string | null;
   sidebarItems: SidebarItems;
   updateSelectedItemKey: (key: string | null) => void;
+  onKeyNavigation: (
+    event: React.KeyboardEvent<HTMLDivElement>,
+    key: string | null
+  ) => void;
+  toggleDropdown: (action: boolean, key: string) => void;
   isKeyAncestor: (key: string) => boolean;
   isKeySelected: (key: string) => boolean;
 }
 
 const Sidebar = ({
+  selectedItemKey,
   sidebarItems,
   updateSelectedItemKey,
+  onKeyNavigation,
+  toggleDropdown,
   isKeyAncestor,
   isKeySelected,
 }: SidebarProps) => {
@@ -43,9 +52,12 @@ const Sidebar = ({
       <div className="min-w-fit">
         {Object.entries(sidebarItems).map(([itemKey, sidebarItem]) => (
           <SidebarChild
+            selectedItemKey={selectedItemKey}
             itemKey={itemKey}
             sidebarItem={sidebarItem}
             updateSelectedItemKey={updateSelectedItemKey}
+            onKeyNavigation={onKeyNavigation}
+            toggleDropdown={toggleDropdown}
             isKeyAncestor={isKeyAncestor}
             isKeySelected={isKeySelected}
             key={itemKey}

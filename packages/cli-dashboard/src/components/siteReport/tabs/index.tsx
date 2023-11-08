@@ -22,7 +22,7 @@ import {
   CookieIconWhite,
   SiteBoundariesIcon,
   SiteBoundariesIconWhite,
-  type SidebarItem,
+  type SidebarItems,
 } from '@ps-analysis-tool/design-system';
 
 /**
@@ -30,7 +30,7 @@ import {
  */
 import Technologies from './technologies';
 
-const Tabs: SidebarItem = {
+const Tabs: SidebarItems = {
   cookies: {
     title: 'Cookies',
     children: {},

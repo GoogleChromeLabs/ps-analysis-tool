@@ -18,9 +18,21 @@
  */
 import React, { useCallback, useEffect, useState } from 'react';
 
+/**
+ * Internal dependencies.
+ */
+import {
+  createKeyPath,
+  findItem,
+  findNextItem,
+  findPrevItem,
+  matchKey,
+} from './utils';
+
 export type SidebarItemValue = {
   title: string;
   children: SidebarItems;
+  dropdownOpen?: boolean;
   panel?: React.ReactNode;
   icon?: React.ReactNode;
   selectedIcon?: React.ReactNode;
@@ -35,6 +47,11 @@ export interface SidebarOutput {
   selectedItemKey: string | null;
   sidebarItems: SidebarItems;
   updateSelectedItemKey: (key: string | null) => void;
+  onKeyNavigation: (
+    event: React.KeyboardEvent<HTMLDivElement>,
+    key: string | null
+  ) => void;
+  toggleDropdown: (action: boolean, key: string) => void;
   isKeyAncestor: (key: string) => boolean;
   isKeySelected: (key: string) => boolean;
 }
@@ -51,13 +68,6 @@ const useSidebar = ({ data }: useSidebarProps): SidebarOutput => {
   useEffect(() => {
     setSidebarItems(data);
   }, [data]);
-
-  const matchKey = useCallback((key: string, toMatch: string) => {
-    const keys = key.split('#');
-    const length = keys.length;
-
-    return keys[length - 1] === toMatch;
-  }, []);
 
   useEffect(() => {
     let keyFound = false;
@@ -84,48 +94,81 @@ const useSidebar = ({ data }: useSidebarProps): SidebarOutput => {
     if (selectedItemKey) {
       findActivePanel(sidebarItems);
     }
-  }, [matchKey, selectedItemKey, sidebarItems]);
+  }, [selectedItemKey, sidebarItems]);
 
   const updateSelectedItemKey = useCallback(
     (key: string | null) => {
-      let keyFound = false;
+      const keyPath = createKeyPath(sidebarItems, key || '');
 
-      const createKeyPath = (items: SidebarItems, keyPath: string[] = []) => {
-        Object.entries(items).forEach(([itemKey, item]) => {
-          if (keyFound) {
-            return;
-          }
-
-          if (matchKey(key || '', itemKey)) {
-            keyPath.push(itemKey);
-
-            keyFound = true;
-            return;
-          }
-
-          if (item.children) {
-            keyPath.push(itemKey);
-            createKeyPath(item.children, keyPath);
-
-            if (!keyFound) {
-              keyPath.pop();
-            }
-          }
-        });
-
-        return keyPath;
-      };
-
-      const keyPath = createKeyPath(sidebarItems);
-
-      if (!keyFound) {
+      if (!keyPath.length) {
         setSelectedItemKey(null);
         return;
       }
 
       setSelectedItemKey(keyPath.join('#'));
     },
-    [matchKey, sidebarItems]
+    [sidebarItems]
+  );
+
+  const toggleDropdown = useCallback(
+    (action: boolean, key: string) => {
+      const keyPath = createKeyPath(sidebarItems, key);
+
+      setSidebarItems((prev) => {
+        const items = { ...prev };
+        const item = findItem(items, keyPath);
+
+        if (item && Object.keys(item.children).length) {
+          item.dropdownOpen = action;
+        }
+
+        return items;
+      });
+    },
+    [sidebarItems]
+  );
+
+  const onKeyNavigation = useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>, key: string | null) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (!key) {
+        return;
+      }
+
+      const navigationAction = event.key;
+      const keyPath = createKeyPath(sidebarItems, key);
+
+      if (!keyPath.length) {
+        return;
+      }
+
+      if (navigationAction === 'ArrowRight') {
+        toggleDropdown(true, key);
+      } else if (navigationAction === 'ArrowLeft') {
+        toggleDropdown(false, key);
+      }
+
+      if (navigationAction === 'ArrowUp') {
+        const prevItem = findPrevItem(sidebarItems, keyPath);
+
+        if (!prevItem) {
+          return;
+        }
+
+        updateSelectedItemKey(prevItem);
+      } else if (navigationAction === 'ArrowDown') {
+        const nextItem = findNextItem(sidebarItems, keyPath);
+
+        if (!nextItem) {
+          return;
+        }
+
+        updateSelectedItemKey(nextItem);
+      }
+    },
+    [sidebarItems, toggleDropdown, updateSelectedItemKey]
   );
 
   const isKeyAncestor = useCallback(
@@ -161,6 +204,8 @@ const useSidebar = ({ data }: useSidebarProps): SidebarOutput => {
     selectedItemKey,
     sidebarItems,
     updateSelectedItemKey,
+    onKeyNavigation,
+    toggleDropdown,
     isKeyAncestor,
     isKeySelected,
   };
