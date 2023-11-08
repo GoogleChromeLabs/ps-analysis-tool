@@ -19,8 +19,12 @@
  */
 import React, { useEffect, useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
-import { type TabFrames, type TechnologyData } from '@ps-analysis-tool/common';
 import { File, FileWhite } from '@ps-analysis-tool/design-system';
+import {
+  type TabFrames,
+  type TechnologyData,
+  UNKNOWN_FRAME_KEY,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -62,7 +66,7 @@ const SiteMapReport = ({
 
   const frames = useMemo(() => {
     return Object.keys(cookies).reduce((acc, frame) => {
-      if (frame?.includes('http') || frame === 'Unknown Frame(s)') {
+      if (frame?.includes('http') || frame === UNKNOWN_FRAME_KEY) {
         acc[frame] = {} as TabFrames[string];
       }
       return acc;

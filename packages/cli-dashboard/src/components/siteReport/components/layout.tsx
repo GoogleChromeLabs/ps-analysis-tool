@@ -24,13 +24,14 @@ import { CookieIcon, CookieIconWhite } from '@ps-analysis-tool/design-system';
  * Internal dependencies.
  */
 import { useContentStore } from '../stateProviders/contentStore';
-import Tabs from '../tabs';
-import { useSidebar, type SidebarItem, Sidebar } from '../../sidebar';
-import AffectedCookies from '../tabs/affectedCookies';
+import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
+import TABS from '../tabs';
+import { Sidebar, useSidebar, type SidebarItem } from '../../sidebar';
 import CookiesTab from '../tabs/cookies';
+import AffectedCookies from '../tabs/affectedCookies';
 
 const Layout = () => {
-  const [data, setData] = useState<SidebarItem[]>(Tabs);
+  const [data, setData] = useState<SidebarItem[]>(TABS);
   const { tabCookies } = useContentStore(({ state }) => ({
     tabCookies: state.tabCookies,
   }));
@@ -41,7 +42,7 @@ const Layout = () => {
         Object.values(tabCookies)
           .map((cookie) => cookie.frameUrl)
           .filter(
-            (url) => url?.includes('http') || url === 'Unknown Frame(s)'
+            (url) => url?.includes('http') || url === UNKNOWN_FRAME_KEY
           ) as string[]
       ),
     ],

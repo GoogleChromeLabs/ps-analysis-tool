@@ -16,29 +16,25 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
-import { LandingPage } from '@ps-analysis-tool/design-system';
+import React from 'react';
+import { LandingPage, PSInfoKey } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
-import InfoCard from '../../../../design-system/components/infoCard';
-import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
 import TopicsList from './topicsList';
 
 const Topics = () => {
-  const [pageTitle, setPageTitle] = useState('');
-
   return (
-    <LandingPage title={pageTitle} isLoading={!pageTitle}>
-      <div
-        className="px-4 max-w-2xl h-fit overflow-auto"
-        data-testid="topics-content"
+    <div data-testid="topics-content" className="h-full w-full">
+      <LandingPage
+        title="Topics"
+        psInfoKey={PSInfoKey.Topics}
+        extraClasses="max-w-2xl h-fit"
       >
-        <InfoCard infoKey={PSInfoKey.Topics} setTitle={setPageTitle} />
-      </div>
-      <TopicsList />
-    </LandingPage>
+        <TopicsList />
+      </LandingPage>
+    </div>
   );
 };
 

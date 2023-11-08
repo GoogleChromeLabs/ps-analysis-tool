@@ -13,22 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import http from 'http';
+
 /**
- * External dependencies.
+ * @param port number Port number to test
+ * @returns Promise which will resolve in a boolean value
  */
-import React from 'react';
-import { LandingPage, PSInfoKey } from '@ps-analysis-tool/design-system';
-
-const Attribution = () => {
-  return (
-    <div data-testid="attribution-content" className="h-full w-full">
-      <LandingPage
-        title="Attribution Reporting"
-        psInfoKey={PSInfoKey.AttributionReporting}
-        extraClasses="max-w-2xl h-fit"
-      />
-    </div>
-  );
-};
-
-export default Attribution;
+export function checkPortInUse(port: number): Promise<boolean> {
+  return new Promise((resolve) => {
+    const server = http
+      .createServer()
+      .listen(port, () => {
+        server.close();
+        resolve(false);
+      })
+      .on('error', () => {
+        resolve(true);
+      });
+  });
+}

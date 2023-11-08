@@ -17,18 +17,24 @@
  * External dependencies.
  */
 import React from 'react';
-import { LandingPage, PSInfoKey } from '@ps-analysis-tool/design-system';
+import { Refresh as RefreshIcon } from '../../icons';
 
-const Attribution = () => {
+interface RefreshButtonProps {
+  onClick?: () => void;
+  title?: string;
+}
+const RefreshButton = ({ onClick, title = 'Refresh' }: RefreshButtonProps) => {
   return (
-    <div data-testid="attribution-content" className="h-full w-full">
-      <LandingPage
-        title="Attribution Reporting"
-        psInfoKey={PSInfoKey.AttributionReporting}
-        extraClasses="max-w-2xl h-fit"
-      />
-    </div>
+    <button
+      onClick={onClick ? onClick : undefined}
+      title={title}
+      className={
+        'flex items-center text-center text-mischka hover:text-granite-gray hover:dark:text-bright-gray active:dark:text-mischka active:text-mischka '
+      }
+    >
+      <RefreshIcon />
+    </button>
   );
 };
 
-export default Attribution;
+export default RefreshButton;

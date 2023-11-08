@@ -18,19 +18,18 @@
  */
 import React, { useCallback } from 'react';
 import classNames from 'classnames';
+import {
+  FilterIcon,
+  Input,
+  RefreshButton,
+} from '@ps-analysis-tool/design-system';
+import type { CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-
-// eslint-disable-next-line import/no-relative-packages
-import FilterIcon from '../../../../../../../../third_party/icons/filter-icon.svg';
-// eslint-disable-next-line import/no-relative-packages
-import CrossIcon from '../../../../../../../../third_party/icons/cross-icon.svg';
 import { useFilterManagementStore } from '../../../stateProviders/filterManagementStore';
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import type { CookieTableData } from '@ps-analysis-tool/common';
-import { Refresh } from '@ps-analysis-tool/design-system';
 
 interface CookieSearchProps {
   cookiesAvailable: boolean;
@@ -64,9 +63,9 @@ const CookieSearch = ({
   );
 
   return (
-    <div className="w-full h-[25px] px-2 flex items-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green">
+    <div className="w-full h-7 px-2 flex items-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green">
       <button
-        className={classNames('w-3 h-3', {
+        className={classNames('w-3 h-3 mr-2', {
           'opacity-20': !cookiesAvailable,
         })}
         onClick={toggleFilterMenu}
@@ -81,26 +80,15 @@ const CookieSearch = ({
           }
         />
       </button>
-      <input
-        type="text"
-        className="h-5 w-80 mx-2 p-2 outline-none dark:bg-charleston-green border-[1px] border-gainsboro dark:border-quartz focus:border-royal-blue focus:dark:border-medium-persian-blue dark:text-bright-gray text-outer-space-crayola"
-        placeholder="Search"
+      <Input
         value={searchTerm}
-        onInput={handleInput}
+        onChange={handleInput}
+        clearInput={() => setSearchTerm('')}
       />
-      <button
-        onClick={() => {
-          setSearchTerm('');
-        }}
-        className="w-3 h-3"
-        title="Clear Search"
-      >
-        <CrossIcon className="text-mischka" />
-      </button>
       <div className="h-full w-px bg-american-silver dark:bg-quartz mx-3" />
-      <button onClick={getCookiesSetByJavascript} title="Refresh">
-        <Refresh className="text-mischka" />
-      </button>
+
+      <RefreshButton onClick={getCookiesSetByJavascript} />
+
       <div className="text-right w-full text-xxxs text-secondary">
         Count: {Number(filteredCookies?.length) || 0}
       </div>

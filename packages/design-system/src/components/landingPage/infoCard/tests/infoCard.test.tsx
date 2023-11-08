@@ -26,7 +26,7 @@ import { render, screen } from '@testing-library/react';
  * Internal dependencies.
  */
 import InfoCard from '..';
-import { PSInfoKey } from '../../../../../utils/fetchPSInfo';
+import { PSInfoKey } from '../fetchPSInfo';
 //@ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'ps-analysis-tool/data/PSInfo.json';

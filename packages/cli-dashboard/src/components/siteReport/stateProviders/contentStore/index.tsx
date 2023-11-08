@@ -18,7 +18,10 @@
  */
 import React, { type PropsWithChildren, useMemo } from 'react';
 import { useContextSelector, createContext } from 'use-context-selector';
-import type { CookieTableData, TechnologyData } from '@ps-analysis-tool/common';
+import {
+  type CookieTableData,
+  type TechnologyData,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
