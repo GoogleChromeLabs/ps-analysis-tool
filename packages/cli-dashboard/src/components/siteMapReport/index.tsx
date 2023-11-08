@@ -19,7 +19,13 @@
  */
 import React, { useEffect, useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
-import { File, FileWhite } from '@ps-analysis-tool/design-system';
+import {
+  File,
+  FileWhite,
+  Sidebar,
+  useSidebar,
+  type SidebarItem,
+} from '@ps-analysis-tool/design-system';
 import {
   type TabFrames,
   type TechnologyData,
@@ -34,7 +40,6 @@ import SiteReport from '../siteReport';
 import SiteMapAffectedCookies from './sitemapAffectedCookies';
 import CookiesLandingContainer from '../siteReport/tabs/cookies/cookiesLandingContainer';
 import reshapeCookies from '../utils/reshapeCookies';
-import { Sidebar, useSidebar, type SidebarItem } from '../sidebar';
 import sidebarData from './sidebarData';
 
 interface SiteMapReportProps {

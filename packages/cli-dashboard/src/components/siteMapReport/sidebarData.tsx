@@ -17,12 +17,11 @@
  * External dependencies
  */
 import React from 'react';
-import { CookieIcon, CookieIconWhite } from '@ps-analysis-tool/design-system';
-
-/**
- * Internal dependencies
- */
-import type { SidebarItem } from '../sidebar';
+import {
+  CookieIcon,
+  CookieIconWhite,
+  type SidebarItem,
+} from '@ps-analysis-tool/design-system';
 
 const sidebarData: SidebarItem[] = [
   {

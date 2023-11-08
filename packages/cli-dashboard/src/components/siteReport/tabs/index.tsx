@@ -22,12 +22,12 @@ import {
   CookieIconWhite,
   SiteBoundariesIcon,
   SiteBoundariesIconWhite,
+  type SidebarItem,
 } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
-import type { SidebarItem } from '../../sidebar';
 import Technologies from './technologies';
 
 const Tabs: SidebarItem[] = [

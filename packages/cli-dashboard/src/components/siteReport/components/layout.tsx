@@ -18,7 +18,13 @@
  */
 import React, { useEffect, useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
-import { CookieIcon, CookieIconWhite } from '@ps-analysis-tool/design-system';
+import {
+  CookieIcon,
+  CookieIconWhite,
+  Sidebar,
+  useSidebar,
+  type SidebarItem,
+} from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
@@ -26,7 +32,6 @@ import { CookieIcon, CookieIconWhite } from '@ps-analysis-tool/design-system';
 import { useContentStore } from '../stateProviders/contentStore';
 import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
 import TABS from '../tabs';
-import { Sidebar, useSidebar, type SidebarItem } from '../../sidebar';
 import CookiesTab from '../tabs/cookies';
 import AffectedCookies from '../tabs/affectedCookies';
 
