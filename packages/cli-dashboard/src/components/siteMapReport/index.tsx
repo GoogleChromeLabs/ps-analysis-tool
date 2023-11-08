@@ -19,7 +19,11 @@
  */
 import React, { useEffect, useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
-import { type TabFrames, type TechnologyData } from '@ps-analysis-tool/common';
+import {
+  type TabFrames,
+  type TechnologyData,
+  UNKNOWN_FRAME_KEY,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -62,7 +66,7 @@ const SiteMapReport = ({
 
   const frames = useMemo(() => {
     return Object.keys(cookies).reduce((acc, frame) => {
-      if (frame?.includes('http') || frame === 'Unknown Frame') {
+      if (frame?.includes('http') || frame === UNKNOWN_FRAME_KEY) {
         acc[frame] = {} as TabFrames[string];
       }
       return acc;
@@ -129,7 +133,7 @@ const SiteMapReport = ({
               setSelectedTopLevelMenu('affectedCookies');
               setSelectedSite(null);
             }}
-            className={`w-full pl-6 py-0.5 outline-0 cursor-pointer text-sm 
+            className={`w-full pl-[9px] py-0.5 outline-0 cursor-pointer text-sm 
 							${
                 selectedTopLevelMenu === 'affectedCookies'
                   ? 'bg-royal-blue text-white'

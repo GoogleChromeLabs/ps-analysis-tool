@@ -17,7 +17,7 @@
 /**
  * External Dependencies
  */
-import React, { useState } from 'react';
+import React from 'react';
 
 /**
  * Internal Dependencies
@@ -25,23 +25,12 @@ import React, { useState } from 'react';
 import { LandingPage } from '@ps-analysis-tool/design-system';
 
 const AntiCovertTracking = () => {
-  const [loading, setLoading] = useState(true);
-
   return (
-    <>
-      <LandingPage title="Tracking Protection" isLoading={loading}>
-        <div className="px-4 pt-6 pb-4 h-[78vh] w-full">
-          <iframe
-            src="https://privacysandbox.info/en/privacy-sandbox/prevent-covert-tracking"
-            height="100%"
-            onLoad={() => {
-              setLoading(false);
-            }}
-            className="w-full md:m-auto md:w-[70%]"
-          />
-        </div>
-      </LandingPage>
-    </>
+    <LandingPage
+      title="Tracking Protection"
+      iframeSrc="https://privacysandbox.info/en/privacy-sandbox/prevent-covert-tracking"
+      extraClasses="h-[78vh] w-full"
+    />
   );
 };
 

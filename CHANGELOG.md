@@ -105,3 +105,44 @@
 * Add topic list https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/159
 * Landing page enhancements and fixes https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/173
 * Update RWS panel https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/174
+
+
+
+# v0.3.1
+
+## Cookies
+
+* Update styling of table and landing page UI https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/188
+* Fix: SameSite showing undefined in chips https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/198
+* Refactor: `ContentScript` directory https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/186
+
+
+## CLI
+* Cli dashboard fixes and enhancements  https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/187
+* Fix: Report downloader duplicate cookie entries in CSV https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/200
+* Fix: CLI std output changes https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/197
+* Update sidebar items padding and make Unknown Frame plural https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/213
+
+## Privacy Sandbox API
+* Fix: Update `Sidebar` navigation conditions and props https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/184
+* Fix: Frame overlay issues https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/190
+* Update landing page's UI/UX https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/195
+* Fix: Frame overlay tooltip calculation issue https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/210
+* Refactor: Update package name https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/191
+
+
+# v0.3.2
+
+## Cookies
+* Enhancement: Add cross icon to cookie accepted column https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/231
+* Fix: Update checkbox dimensions and resize visibility https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/234
+* Fix: Trim out whitespace from the cookie key. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/237
+* Enhancement : Add reactive refresh button in devtools header https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/236
+
+## CLI
+* Fix : Add missing description in analytics https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/230
+
+## Privacy Sandbox API
+* Update `RWS` submission steps text https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/229
+* Fix: opaque origin error when using in https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/235
+* Refactor: Make functional components in landing page non-collapsible https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/232

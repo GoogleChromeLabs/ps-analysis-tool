@@ -25,6 +25,7 @@ export type Cookie = {
   secure: boolean;
   isBlocked?: boolean;
   platform?: string;
+  description?: string;
   category?: string;
   GDPR?: string;
   isFirstParty?: boolean;

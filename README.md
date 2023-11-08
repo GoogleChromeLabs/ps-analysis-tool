@@ -2,102 +2,39 @@
 <a name="logo" href="https://www.privacysandbox.com"><img align="center" src="https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/62ae89de-430a-4a5b-b5bf-2a1b2f86c712" alt="Privacy Sandbox" style="width:30%;height:100%"/></a>
 </h1>
 
-# Table of contents
-
-- [Privacy Sandbox](#privacy-sandbox)
-- [Browsing Session Analysis](#browsing-session-analyses)
-- [Tool Functional Areas](#tool-functional-areas)
-- [Usage Instructions](#usage-instructions)
-- [Call to action](#call-to-action)
-- [Contributing](#contributing)
-
 # Privacy Sandbox
 
-[Privacy Sandbox](https://privacysandbox.com/) is a multi-year [initiative by Google](https://developer.chrome.com/docs/privacy-sandbox/) for building a more private web by defining a set of building blocks (i.e. proposed APIs) enabling [a new privacy model for the web](https://github.com/michaelkleber/privacy-model). This Initiative encompasses three tracks:
+[Privacy Sandbox](https://privacysandbox.com/) is a multi-year [initiative by Google](https://developer.chrome.com/docs/privacy-sandbox/) for building a more private web by defining a set of building blocks (i.e. proposed APIs) enabling [a new privacy model for the web](https://github.com/michaelkleber/privacy-model). Privacy Sandbox encompasses replacing functionality powered by third-party cookies with privacy-preserving alternatives, deprecating third-party cookies, and ensuring developers have a well-lit path to the new capabilities of the platform, and avoid pursuing tracking via other means. 
 
-1. Replacing functionality powered by third-party cookies with privacy-preserving alternatives.
+The purpose of this tool is to shed light, provide insights, and help you to learn and understand the changes that are happening in the context of Privacy Sandbox, and the potential impact on your site or web product.
 
-2. Turning down third-party cookies, while  ensuring that the ecosystem has the technical capabilities for embracing new privacy-preserving solutions (e.g. First Party Sets, Topics, etc.)
+# Installing and Running PSAT
 
-3. Mitigating workarounds, by ensuring developers have a well-lit path to the new capabilities of the platform, and avoid pursuing tracking via other means. 
-
-Tracks #2 and #3 bring significant changes to how the web operates today, and the purpose of this tool is to shed light, provide insights, and help you to learn and understand the changes that are happening regarding the deprecation of 3P cookies, and the potential impact on the aspects of your site or product built using cookies. 
-
-# Browsing Session Analyses
-
-A "browsing session" refers to the sequence of navigations a user follows over a period of time as they are actively engaging on the web, including activities like navigating through pages and sites, making transactions, submitting forms, downloading content, performing web searches, and so on. The overall goal of [Privacy Sandbox](https://privacysandbox.com/) is to protect users' privacy online, including reducing cross-site and cross-app user tracking during browsing sessions. This tool supports the analysis of **browsing sessions** by shedding light on cookie usage and insights and on the use and behavior of PS APIs. The goal is to help answer questions such as:
-
-* How can I identify cookies being used on my site? 
-* How can I tell what behaviors a third-party cookie is tracking on my website or what it's being used for?
-* How can I block third-party cookies being set on my site by other websites unrelated to mine?
-* What happens to my browsing session if 3P cookies are being blocked?
-* How can I ensure that my websites are still able to function properly after third-party cookies are deprecated?
-* How can I test my web applications to ensure that they are compatible with the cross-site boundary APIs and the upcoming changes to third-party cookies?
-* How can I play a role in shaping the future of web development and privacy standards?
-* How can I provide feedback to Google on Privacy Sandbox APIs and third-party cookie deprecation?
-
-# Tool Functional Areas
-The features and capabilities of this tool help you (developers) with the transition towards a more private web, by shedding light on data and context as you go about implementing privacy-preserving solutions to the features and capabilities of your websites and apps. The main functional areas of the tool are the following. 
-
-<img width="937" alt="Screenshot 2023-10-04 at 3 34 36 PM" src="https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/4352e62f-832b-4cce-800f-41a767e1bcc3">
-
-
-## Cookie Data Manipulation and Analysis
-
-DevTools provides access to lots of information regarding every functional aspect of the browser, including cookies. This extension expands a bit the capabilities of DevTools and provides additional ways to slice and dice cookie data, making it easier for everyone to understand the behaviors of cookies in different scenarios.
-
-<img width="937" alt="Screenshot 2023-08-21 at 1 41 13 PM" src="https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/e20cb6d0-f682-4c20-98c7-3b5e69be32df">
-
-
-## Frame Overlays
-
-Cookies are used as a state management mechanism to power varying features and capabilities of sites. For example, an embedded video component from some 3P provider could set and manipulate 3P cookies to serve authenticated videos without users having to re-authenticate repeatedly. This extension provides a frame overlay capability, making it easy to associate, when possible, components on a web page and the set of cookies that are associated with it. 
-
-<img width="937" alt="Screenshot 2023-10-04 at 3 32 03 PM" src="https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/82ab33ab-9e19-4fc3-b80f-33805b089756">
-
-## Reporting
-
-This tool provides capabilities to make it easy for users to report breakages, and connect with existing Privacy Sandbox feedback and bug reporting channels. As you leverage the capabilities of the tool to analyze and debug your critical user journeys, you can report breakages or questions about your use cases and directly send them to the proper feedback channel. This way you would get answers to your issues, and will contribute to our collective effort to ensure the ecosystem is ready for a world without 3P cookies as we know them today.
-
-<img width="937" alt="Screenshot 2023-10-10 at 4 02 12 PM" src="https://github.com/GoogleChromeLabs/ps-analysis-tool/assets/506089/67aff95d-4c9e-4eb9-b429-7a1b4c8c46d7">
-
-
-## Knowledge Access Points
-
-The final goal of this tool is to make it easy to understand the role of 3P cookies on critical user journeys all the relevant aspects of Privacy Sandbox and the phasing out of 3P cookies. As you use the tool to analyze and debug your use cases, you will encounter links to documentation and other sources of information to support your learning and understanding as you navigate the transition to a more private web. 
-
-# Usage instructions
-
-The Chrome extension provides capabilities surfaced via the extension pop-up, the Side Panel, and as Devtools panel. The CLI implementation parses a sitemap provided as input and outputs a JSON file listing all cookies set while navigating through the URLs in the sitemap. Follow the following steps to get the extension installed in your browser. 
+## Build PSAT from source
 
 - Clone this Privacy Sandbox Analysis Tool Repository
 - Run `npm install` to install all dependencies
-
-### Extension (from source)
-
 - `npm run dev` or `npm run build` to generate a build in `/dist/extension`
 - Turn on "Developer mode" in `chrome://extensions` to [load the unpacked extension](https://developer.chrome.com/docs/extensions/mv3/getstarted/development-basics/#load-unpacked)
 - Click on the "Load Unpacked" button and upload the `dist/extension` folder
 
 
-
-### Unpacked Extension (from zip file)
+## Install PSAT from zip file
 
 - Alternatively, you can download the extension zip file from the [latest release](https://github.com/GoogleChromeLabs/ps-analysis-tool/releases) and unzip it.
 - Turn on "Developer mode" in `chrome://extensions` to [load the unpacked extension](https://developer.chrome.com/docs/extensions/mv3/getstarted/development-basics/#load-unpacked)
 - Click the "Load unpacked" button and select the unzipped extension folder.
 
+## Build and Run PSAT's CLI
 
-
-### CLI
-
+- Clone this Privacy Sandbox Analysis Tool Repository
+- Run `npm install` to install all dependencies
 - `npm run cli:build` to genrate a build in `/dist/cli`.
 - Run the CLI, providing a URL or a sitemap as input.
   - E.g. `npm run cli -- -s https://example.com/sitemap_index.xml`.
   - E.g. `npm run cli -- -u https://bbc.com`.
-- Please note that the dependency (Wappalyzer), which analyzes page technologies, may require permission to use its instance of Chromium. If this happens, you have the option to skip the technology analysis by using the `nt` flag for uninterrupted analysis of cookies.
+  - Please note that the dependency (Wappalyzer), which analyzes page technologies, may require permission to use its instance of Chromium. If this happens, you have the option to skip the technology analysis by using the `nt` flag for uninterrupted analysis of cookies.
   - E.g. `npm run cli -- -u https://bbc.com -nt`. 
-
 
 
 # Call to Action
@@ -118,4 +55,3 @@ Ultimately, the web ecosystem, together, will navigate successfully this crucial
 # Contributing
 If you have requests for features you would like to see in this tool, please file a Feature Request or join as a contributor! Please refer to our contribution [guidelines](docs/CONTRIBUTING.md) and [code of conduct](docs/code-of-conduct.md).
 
-Another valuable form of contributing is by reporting breakages, proposing features, and engaging in community discussions.

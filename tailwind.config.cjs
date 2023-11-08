@@ -109,7 +109,7 @@ module.exports = {
       'american-silver': '#CBCDD1',
       'raisin-black': '#212121',
       sapphire: '#0B57D0',
-      'baby-blue-eyes': '#A8C7fA',
+      'baby-blue-eyes': '#A8C7FA',
       'tufts-blue': '#4D86E1',
       'pale-cornflower-blue': '#AECBFA',
       cultured: '#F6F6F699',
@@ -125,6 +125,7 @@ module.exports = {
       'hsl-light': 'hsla(var(--color-message-box-light) / 10%)',
       'dark-blue': '#0B57D0',
       'light-blue': '#ABC7FA',
+      lotion: '#FDFCFB1A',
     },
     borderColor: {
       ...colors,
@@ -134,8 +135,10 @@ module.exports = {
       'bright-navy-blue': '#1A73E8',
       'hex-gray': '#E0E0E0',
       'bright-gray': '#E8EAED',
+      'davys-grey': '#5D5D5D99',
       quartz: '#494C50',
       gainsboro: '#DADCE0',
+      'baby-blue-eyes': '#A8C7FA',
     },
     colors: {
       ...colors,

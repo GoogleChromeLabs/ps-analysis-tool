@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies.
+ * External dependencies.
  */
-import fetchLocalData from './fetchLocalData';
+
+import { fetchLocalData } from '@ps-analysis-tool/common';
 
 const fetchTopicsTaxonomy = async () => {
   const data = await fetchLocalData('data/topics-taxonomy-v1.json');
