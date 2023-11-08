@@ -22,16 +22,18 @@ import { ArrowDown, ArrowDownWhite } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies.
  */
-import type { SidebarItem } from './useSidebar';
+import type { SidebarItemValue } from './useSidebar';
 
 interface SidebarItemProps {
-  sidebarItem: SidebarItem;
+  itemKey: string;
+  sidebarItem: SidebarItemValue;
   updateSelectedItemKey: (key: string | null) => void;
   isKeyAncestor: (key: string) => boolean;
   isKeySelected: (key: string) => boolean;
 }
 
 const SidebarChild = ({
+  itemKey,
   sidebarItem,
   updateSelectedItemKey,
   isKeyAncestor,
@@ -43,17 +45,17 @@ const SidebarChild = ({
     <>
       <div
         onClick={() => {
-          updateSelectedItemKey(sidebarItem.key);
+          updateSelectedItemKey(itemKey);
         }}
         className={`w-full flex items-center pl-3 py-0.5 outline-0 text-sm ${
-          isKeySelected(sidebarItem.key)
+          isKeySelected(itemKey)
             ? 'bg-royal-blue text-white'
-            : isKeyAncestor(sidebarItem.key)
+            : isKeyAncestor(itemKey)
             ? 'bg-gainsboro'
             : 'bg-white'
         } cursor-pointer`}
       >
-        {sidebarItem.children?.length !== 0 && (
+        {Object.keys(sidebarItem.children)?.length !== 0 && (
           <div
             onClick={() => {
               setIsOpen(!isOpen);
@@ -62,8 +64,7 @@ const SidebarChild = ({
               !isOpen && '-rotate-90'
             }`}
           >
-            {isKeyAncestor(sidebarItem.key) ||
-            !isKeySelected(sidebarItem.key) ? (
+            {isKeyAncestor(itemKey) || !isKeySelected(itemKey) ? (
               <ArrowDown />
             ) : (
               <ArrowDownWhite />
@@ -72,7 +73,7 @@ const SidebarChild = ({
         )}
         {sidebarItem.icon && sidebarItem.selectedIcon && (
           <div className="mr-1">
-            {isKeySelected(sidebarItem.key) ? (
+            {isKeySelected(itemKey) ? (
               <>{sidebarItem.selectedIcon}</>
             ) : (
               <>{sidebarItem.icon}</>
@@ -82,20 +83,21 @@ const SidebarChild = ({
         <p className="whitespace-nowrap">{sidebarItem.title}</p>
       </div>
       <>
-        {sidebarItem.children?.length !== 0 && isOpen && (
+        {Object.keys(sidebarItem.children)?.length !== 0 && isOpen && (
           <>
-            {sidebarItem.children.map((child) => (
+            {Object.entries(sidebarItem.children).map(([childKey, child]) => (
               <div
-                key={child.key}
+                key={childKey}
                 className={`w-full pl-4 ${
-                  isKeySelected(child.key)
+                  isKeySelected(childKey)
                     ? 'bg-royal-blue text-white'
-                    : isKeyAncestor(child.key)
+                    : isKeyAncestor(childKey)
                     ? 'bg-gainsboro'
                     : 'bg-white'
                 }`}
               >
                 <SidebarChild
+                  itemKey={childKey}
                   sidebarItem={child}
                   updateSelectedItemKey={updateSelectedItemKey}
                   isKeyAncestor={isKeyAncestor}

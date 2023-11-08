@@ -23,19 +23,17 @@ import {
   type SidebarItem,
 } from '@ps-analysis-tool/design-system';
 
-const sidebarData: SidebarItem[] = [
-  {
-    key: 'sitemap-landing-page',
+const sidebarData: SidebarItem = {
+  'sitemap-landing-page': {
     title: 'Sitemap Report',
-    children: [],
+    children: {},
   },
-  {
-    key: 'sitemap-affected-cookies',
+  'sitemap-affected-cookies': {
     title: 'Affected Cookies',
-    children: [],
+    children: {},
     icon: <CookieIcon />,
     selectedIcon: <CookieIconWhite />,
   },
-];
+};
 
 export default sidebarData;

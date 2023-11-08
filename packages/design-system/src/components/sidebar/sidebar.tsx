@@ -23,10 +23,10 @@ import React from 'react';
  * Internal dependencies.
  */
 import SidebarChild from './sidebarChild';
-import type { SidebarItem } from './useSidebar';
+import type { SidebarItems } from './useSidebar';
 
 interface SidebarProps {
-  sidebarItems: SidebarItem[];
+  sidebarItems: SidebarItems;
   updateSelectedItemKey: (key: string | null) => void;
   isKeyAncestor: (key: string) => boolean;
   isKeySelected: (key: string) => boolean;
@@ -41,13 +41,14 @@ const Sidebar = ({
   return (
     <div className="w-full h-full overflow-auto border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz pt-1">
       <div className="min-w-fit">
-        {sidebarItems.map((sidebarItem) => (
+        {Object.entries(sidebarItems).map(([itemKey, sidebarItem]) => (
           <SidebarChild
+            itemKey={itemKey}
             sidebarItem={sidebarItem}
             updateSelectedItemKey={updateSelectedItemKey}
             isKeyAncestor={isKeyAncestor}
             isKeySelected={isKeySelected}
-            key={sidebarItem.key}
+            key={itemKey}
           />
         ))}
       </div>

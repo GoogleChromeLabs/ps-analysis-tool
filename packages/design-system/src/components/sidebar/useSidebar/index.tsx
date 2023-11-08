@@ -18,32 +18,35 @@
  */
 import React, { useCallback, useEffect, useState } from 'react';
 
-export type SidebarItem = {
-  key: string;
+export type SidebarItemValue = {
   title: string;
-  children: SidebarItem[];
+  children: SidebarItems;
   panel?: React.ReactNode;
   icon?: React.ReactNode;
   selectedIcon?: React.ReactNode;
 };
 
+export type SidebarItems = {
+  [key: string]: SidebarItemValue;
+};
+
 export interface SidebarOutput {
   activePanel: React.ReactNode;
   selectedItemKey: string | null;
-  sidebarItems: SidebarItem[];
+  sidebarItems: SidebarItems;
   updateSelectedItemKey: (key: string | null) => void;
   isKeyAncestor: (key: string) => boolean;
   isKeySelected: (key: string) => boolean;
 }
 
 interface useSidebarProps {
-  data: SidebarItem[];
+  data: SidebarItems;
 }
 
 const useSidebar = ({ data }: useSidebarProps): SidebarOutput => {
   const [selectedItemKey, setSelectedItemKey] = useState<string | null>(null);
   const [activePanel, setActivePanel] = useState<React.ReactNode>();
-  const [sidebarItems, setSidebarItems] = useState<SidebarItem[]>([]);
+  const [sidebarItems, setSidebarItems] = useState<SidebarItems>({});
 
   useEffect(() => {
     setSidebarItems(data);
@@ -59,13 +62,13 @@ const useSidebar = ({ data }: useSidebarProps): SidebarOutput => {
   useEffect(() => {
     let keyFound = false;
 
-    const findActivePanel = (items: SidebarItem[]) => {
-      items.forEach((item) => {
+    const findActivePanel = (items: SidebarItems) => {
+      Object.entries(items).forEach(([itemKey, item]) => {
         if (keyFound) {
           return;
         }
 
-        if (matchKey(selectedItemKey || '', item.key)) {
+        if (matchKey(selectedItemKey || '', itemKey)) {
           setActivePanel(item.panel);
 
           keyFound = true;
@@ -87,21 +90,21 @@ const useSidebar = ({ data }: useSidebarProps): SidebarOutput => {
     (key: string | null) => {
       let keyFound = false;
 
-      const createKeyPath = (items: SidebarItem[], keyPath: string[] = []) => {
-        items.forEach((item) => {
+      const createKeyPath = (items: SidebarItems, keyPath: string[] = []) => {
+        Object.entries(items).forEach(([itemKey, item]) => {
           if (keyFound) {
             return;
           }
 
-          if (matchKey(key || '', item.key)) {
-            keyPath.push(item.key);
+          if (matchKey(key || '', itemKey)) {
+            keyPath.push(itemKey);
 
             keyFound = true;
             return;
           }
 
           if (item.children) {
-            keyPath.push(item.key);
+            keyPath.push(itemKey);
             createKeyPath(item.children, keyPath);
 
             if (!keyFound) {
