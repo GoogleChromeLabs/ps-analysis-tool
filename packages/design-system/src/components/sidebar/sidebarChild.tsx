@@ -26,6 +26,8 @@ import type { SidebarItemValue } from './useSidebar';
 
 interface SidebarItemProps {
   selectedItemKey: string | null;
+  didUserInteract: boolean;
+  setDidUserInteract: (didUserInteract: boolean) => void;
   itemKey: string;
   sidebarItem: SidebarItemValue;
   updateSelectedItemKey: (key: string | null) => void;
@@ -40,6 +42,8 @@ interface SidebarItemProps {
 
 const SidebarChild = ({
   selectedItemKey,
+  didUserInteract,
+  setDidUserInteract,
   itemKey,
   sidebarItem,
   updateSelectedItemKey,
@@ -51,10 +55,10 @@ const SidebarChild = ({
   const itemRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (isKeySelected(itemKey)) {
+    if (isKeySelected(itemKey) && didUserInteract) {
       itemRef.current?.focus();
     }
-  }, [isKeySelected, itemKey, selectedItemKey]);
+  }, [didUserInteract, isKeySelected, itemKey, selectedItemKey]);
 
   return (
     <>
@@ -64,6 +68,7 @@ const SidebarChild = ({
         tabIndex={0}
         onClick={() => {
           updateSelectedItemKey(itemKey);
+          setDidUserInteract(true);
         }}
         onKeyDown={(event) => {
           onKeyNavigation(event, itemKey);
@@ -120,6 +125,8 @@ const SidebarChild = ({
                 >
                   <SidebarChild
                     selectedItemKey={selectedItemKey}
+                    didUserInteract={didUserInteract}
+                    setDidUserInteract={setDidUserInteract}
                     itemKey={childKey}
                     sidebarItem={child}
                     updateSelectedItemKey={updateSelectedItemKey}

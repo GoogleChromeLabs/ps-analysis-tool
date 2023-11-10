@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useState } from 'react';
 
 /**
  * Internal dependencies.
@@ -47,12 +47,16 @@ const Sidebar = ({
   isKeyAncestor,
   isKeySelected,
 }: SidebarProps) => {
+  const [didUserInteract, setDidUserInteract] = useState(false);
+
   return (
     <div className="w-full h-full overflow-auto border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz pt-1">
       <div className="min-w-fit">
         {Object.entries(sidebarItems).map(([itemKey, sidebarItem]) => (
           <SidebarChild
             selectedItemKey={selectedItemKey}
+            didUserInteract={didUserInteract}
+            setDidUserInteract={setDidUserInteract}
             itemKey={itemKey}
             sidebarItem={sidebarItem}
             updateSelectedItemKey={updateSelectedItemKey}
