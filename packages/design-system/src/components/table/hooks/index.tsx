@@ -85,7 +85,9 @@ export type TableOutput = {
   onMouseDown: ColumnResizingOutput['onMouseDown'];
   isResizing: ColumnResizingOutput['isResizing'];
   filters: TableFilter;
+  selectedFilters: TableFilter;
   toggleFilterSelection: TableFilteringOutput['toggleFilterSelection'];
+  resetFilters: TableFilteringOutput['resetFilters'];
   searchValue: TableSearchOutput['searchValue'];
   setSearchValue: TableSearchOutput['setSearchValue'];
 };
@@ -124,10 +126,13 @@ const useTable = ({
   const { sortedData, sortKey, sortOrder, setSortKey, setSortOrder } =
     useColumnSorting(data, options?.columnSorting);
 
-  const { filters, filteredData, toggleFilterSelection } = useFiltering(
-    sortedData,
-    tableFilterData
-  );
+  const {
+    filters,
+    selectedFilters,
+    filteredData,
+    toggleFilterSelection,
+    resetFilters,
+  } = useFiltering(sortedData, tableFilterData);
 
   const { searchValue, setSearchValue, searchFilteredData } = useSearch(
     filteredData,
@@ -173,7 +178,9 @@ const useTable = ({
     onMouseDown,
     isResizing,
     filters,
+    selectedFilters,
     toggleFilterSelection,
+    resetFilters,
     searchValue,
     setSearchValue,
   };

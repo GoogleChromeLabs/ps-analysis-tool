@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 /**
  * Internal dependencies.
@@ -27,8 +27,10 @@ import getValueByKey from '../../utils/getValueByKey';
 
 export type TableFilteringOutput = {
   filters: TableFilter;
+  selectedFilters: TableFilter;
   filteredData: TableData[];
   toggleFilterSelection: (filterKey: string, filterValue: string) => void;
+  resetFilters: () => void;
 };
 
 const useFiltering = (
@@ -61,19 +63,38 @@ const useFiltering = (
     setFilters(Object.fromEntries(newFilters));
   }, [data, tableFilterData]);
 
-  const toggleFilterSelection = (filterKey: string, filterValue: string) => {
+  const toggleFilterSelection = useCallback(
+    (filterKey: string, filterValue: string) => {
+      setFilters((prevFilters) => {
+        const newFilters = { ...prevFilters };
+        const filterValues = newFilters[filterKey].filterValues || {};
+
+        if (filterValues[filterValue]) {
+          filterValues[filterValue].selected =
+            !filterValues[filterValue].selected;
+        }
+
+        return newFilters;
+      });
+    },
+    []
+  );
+
+  const resetFilters = useCallback(() => {
     setFilters((prevFilters) => {
       const newFilters = { ...prevFilters };
-      const filterValues = newFilters[filterKey].filterValues || {};
 
-      if (filterValues[filterValue]) {
-        filterValues[filterValue].selected =
-          !filterValues[filterValue].selected;
-      }
+      Object.entries(newFilters).forEach(([, filter]) => {
+        const filterValues = filter.filterValues || {};
+
+        Object.keys(filterValues).forEach((filterValue) => {
+          filterValues[filterValue].selected = false;
+        });
+      });
 
       return newFilters;
     });
-  };
+  }, []);
 
   const filteredData = useMemo<TableData[]>(() => {
     return data.filter((row) => {
@@ -92,10 +113,28 @@ const useFiltering = (
     });
   }, [data, filters]);
 
+  const selectedFilters = useMemo(
+    () =>
+      Object.fromEntries(
+        Object.entries(filters).map(([filterKey, filter]) => {
+          filter.filterValues = Object.fromEntries(
+            Object.entries(filter.filterValues || {}).filter(
+              ([, filterValueData]) => filterValueData.selected
+            )
+          );
+
+          return [filterKey, filter];
+        })
+      ),
+    [filters]
+  );
+
   return {
     filters,
+    selectedFilters,
     filteredData,
     toggleFilterSelection,
+    resetFilters,
   };
 };
 
