@@ -33,6 +33,8 @@ import useColumnVisibility, {
 import useColumnResizing, {
   type ColumnResizingOutput,
 } from './useColumnResizing';
+import useFiltering, { TableFilteringOutput } from './useFiltering';
+import useSearch, { TableSearchOutput } from './useSearch';
 
 export type TableData = CookieTableData | TechnologyData;
 
@@ -53,6 +55,19 @@ export type TableRow = {
   originalData: TableData;
 };
 
+export type TableFilter = {
+  [accessorKey: string]: {
+    title: string;
+    description?: string;
+    filterValues?: {
+      [filterValue: string]: {
+        selected: boolean;
+        description?: string;
+      };
+    };
+  };
+};
+
 export type TableOutput = {
   columns: TableColumn[];
   hideableColumns: TableColumn[];
@@ -69,11 +84,17 @@ export type TableOutput = {
   tableContainerRef: ColumnResizingOutput['tableContainerRef'];
   onMouseDown: ColumnResizingOutput['onMouseDown'];
   isResizing: ColumnResizingOutput['isResizing'];
+  filters: TableFilter;
+  toggleFilterSelection: TableFilteringOutput['toggleFilterSelection'];
+  searchValue: TableSearchOutput['searchValue'];
+  setSearchValue: TableSearchOutput['setSearchValue'];
 };
 
 interface useTableProps {
-  tableColumns: TableColumn[];
   data: TableData[];
+  tableColumns: TableColumn[];
+  tableFilterData?: TableFilter;
+  tableSearchKeys?: string[];
   options?: {
     columnSizing?: Record<string, number>;
     columnSorting?: DefaultOptions;
@@ -82,8 +103,10 @@ interface useTableProps {
 }
 
 const useTable = ({
-  tableColumns,
   data,
+  tableColumns,
+  tableFilterData = {},
+  tableSearchKeys = [],
   options,
 }: useTableProps): TableOutput => {
   const {
@@ -101,8 +124,18 @@ const useTable = ({
   const { sortedData, sortKey, sortOrder, setSortKey, setSortOrder } =
     useColumnSorting(data, options?.columnSorting);
 
+  const { filters, filteredData, toggleFilterSelection } = useFiltering(
+    sortedData,
+    tableFilterData
+  );
+
+  const { searchValue, setSearchValue, searchFilteredData } = useSearch(
+    filteredData,
+    tableSearchKeys
+  );
+
   const rows = useMemo(() => {
-    return sortedData.map((_data) => {
+    return searchFilteredData.map((_data) => {
       const row = {
         originalData: _data,
       } as TableRow;
@@ -116,7 +149,7 @@ const useTable = ({
 
       return row;
     });
-  }, [sortedData, columns]);
+  }, [searchFilteredData, columns]);
 
   const hideableColumns = useMemo(
     () => tableColumns.filter((column) => column.enableHiding !== false),
@@ -139,6 +172,10 @@ const useTable = ({
     tableContainerRef,
     onMouseDown,
     isResizing,
+    filters,
+    toggleFilterSelection,
+    searchValue,
+    setSearchValue,
   };
 };
 
