@@ -22,7 +22,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 /**
  * Internal dependencies.
  */
-import type { TableColumn } from '../useTable';
+import type { TableColumn } from '..';
 
 export type ColumnResizingOutput = {
   columns: TableColumn[];

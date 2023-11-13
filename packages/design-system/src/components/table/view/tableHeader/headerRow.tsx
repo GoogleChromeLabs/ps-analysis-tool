@@ -18,13 +18,13 @@
  * External dependencies.
  */
 import React from 'react';
-import { PreferenceDataValues } from '@ps-analysis-tool/common';
+import { PreferenceDataValues, noop } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
 import HeaderCell from './headerCell';
-import type { TableOutput } from '../useTable';
-import { noop } from '../../../utils';
+import { TableOutput } from '../../hooks';
+
 interface HeaderRowProps {
   table: TableOutput;
   setIsRowFocused: (state: boolean) => void;

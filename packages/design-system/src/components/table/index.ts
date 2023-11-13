@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-export { default as Table } from './table';
-export { default as useTable } from './useTable';
-export * from './useTable';
+export { default as Table } from './view';
+export { default as useTable } from './hooks';
+export * from './hooks';

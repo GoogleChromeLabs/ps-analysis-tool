@@ -18,14 +18,13 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useRef } from 'react';
-import { PreferenceDataValues } from '@ps-analysis-tool/common';
+import { PreferenceDataValues, noop } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import type { TableColumn, TableOutput } from '../useTable';
 import HeaderResizer from './headerResizer';
-import { ArrowDown } from '../../../icons';
-import { noop } from '../../../utils';
+import { TableColumn, TableOutput } from '../../hooks';
+import { ArrowDown } from '../../../../icons';
 
 interface HeaderCellProps {
   table: TableOutput;

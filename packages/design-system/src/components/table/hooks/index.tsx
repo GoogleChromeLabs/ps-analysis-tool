@@ -26,13 +26,13 @@ import getValueByKey from '../utils/getValueByKey';
 import useColumnSorting, {
   DefaultOptions,
   type ColumnSortingOutput,
-} from '../useColumnSorting';
+} from './useColumnSorting';
 import useColumnVisibility, {
   type ColumnVisibilityOutput,
-} from '../useColumnVisibility';
+} from './useColumnVisibility';
 import useColumnResizing, {
   type ColumnResizingOutput,
-} from '../useColumnResizing';
+} from './useColumnResizing';
 
 export type TableData = CookieTableData | TechnologyData;
 

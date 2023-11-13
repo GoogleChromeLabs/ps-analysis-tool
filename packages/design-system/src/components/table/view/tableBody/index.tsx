@@ -24,7 +24,7 @@ import classNames from 'classnames';
  * Internal dependencies.
  */
 import BodyRow from './bodyRow';
-import type { TableData, TableOutput, TableRow } from '../useTable';
+import { TableData, TableOutput, TableRow } from '../../hooks';
 
 interface TableBodyProps {
   table: TableOutput;

@@ -23,8 +23,8 @@ import { PreferenceDataValues } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import getValueByKey from '../utils/getValueByKey';
-import type { TableData } from '../useTable';
+import type { TableData } from '..';
+import getValueByKey from '../../utils/getValueByKey';
 
 export type DefaultOptions = {
   defaultSortKey?: string;
