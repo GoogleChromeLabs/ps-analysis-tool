@@ -414,6 +414,10 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
               );
 
               return {
+                isBlocked: blockedCookie ? true : false,
+                blockedReasons: blockedCookie
+                  ? blockedCookie?.blockedReasons
+                  : [],
                 parsedCookie: {
                   ...parsedCookie,
                   expires: parsedCookie.expires
@@ -427,10 +431,6 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
                 url: responseParams.headers['url'],
                 headerType: 'response',
                 frameIdList: [0],
-                isBlocked: blockedCookie ? true : false,
-                blockedReason: blockedCookie
-                  ? blockedCookie?.blockedReasons
-                  : [],
               };
             });
 
@@ -453,6 +453,10 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
                   }
                 ) ?? false;
               return {
+                isBlocked: blockedCookie ? true : false,
+                blockedReasons: blockedCookie
+                  ? blockedCookie?.blockedReasons
+                  : [],
                 parsedCookie: {
                   ...parsedCookie,
                   expires: parsedCookie.expires
@@ -466,10 +470,6 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
                 url: responseParams.headers['url'],
                 headerType: 'response',
                 frameIdList: [0],
-                isBlocked: blockedCookie ? true : false,
-                blockedReason: blockedCookie
-                  ? blockedCookie?.blockedReasons
-                  : [],
               };
             });
 

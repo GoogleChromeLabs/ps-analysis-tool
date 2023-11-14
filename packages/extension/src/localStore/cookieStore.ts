@@ -42,7 +42,6 @@ const CookieStore = {
         if (!name || !domain || !path) {
           continue;
         }
-
         let cookieKey = getCookieKey(cookie.parsedCookie);
         cookieKey = cookieKey?.trim();
         if (_updatedCookies?.[cookieKey]) {
@@ -55,9 +54,9 @@ const CookieStore = {
             isBlocked: !cookie?.isBlocked
               ? _updatedCookies[cookieKey].isBlocked
               : cookie?.isBlocked,
-            blockedReasons: cookie?.blockedReasons
-              ? _updatedCookies[cookieKey].blockedReasons
-              : cookie?.blockedReasons,
+            blockedReasons:
+              _updatedCookies[cookieKey].blockedReasons ??
+              cookie?.blockedReasons,
             headerType:
               _updatedCookies[cookieKey].headerType === 'javascript'
                 ? _updatedCookies[cookieKey].headerType

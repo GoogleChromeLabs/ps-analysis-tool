@@ -148,7 +148,12 @@ const CookieTableContainer = ({
       {
         header: 'Blocked Reasons',
         accessorKey: 'blockedReasons',
-        cell: (info: InfoType) => info?.join(','),
+        cell: (info: InfoType) => (info as string[])?.join(','),
+      },
+      {
+        header: 'Priority',
+        accessorKey: 'parsedCookie.priority',
+        cell: (info: InfoType) => info,
       },
     ],
     []

@@ -52,12 +52,11 @@ export const FILTER_MAPPING = [
     order: 9,
   },
   {
-    name: 'Cookie Accepted',
-    keys: 'isCookieSet',
+    name: 'Cookie Blocked',
+    keys: 'isCookieBlocked',
     type: 'boolean',
     order: 10,
-    description:
-      "Whether the cookie was accepted(set) in Chrome's Cookie Store",
+    description: 'Whether the cookie was was blocked from setting on machine.',
   },
 ];
 
@@ -102,7 +101,7 @@ export const MAPPING_KEYS_TO_NAME = {
   'parsedCookie.secure': 'Secure',
   'parsedCookie.path': 'Path',
   'analytics.platform': 'Platform',
-  isCookieSet: 'Cookie Accepted',
+  isCookieBlocked: 'Cookie Accepted',
   headerType: 'Set Via',
   retentionPeriod: 'Retention Period',
   isFirstParty: 'Scope',
