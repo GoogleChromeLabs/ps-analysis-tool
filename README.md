@@ -36,6 +36,8 @@ The purpose of this tool is to shed light, provide insights, and help you to lea
   - Please note that the dependency (Wappalyzer), which analyzes page technologies, may require permission to use its instance of Chromium. If this happens, you have the option to skip the technology analysis by using the `nt` flag for uninterrupted analysis of cookies.
   - E.g. `npm run cli -- -u https://bbc.com -nt`. 
 
+## Learn more about how to use PSAT tool
+Check out this [wiki page](https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki) to get started on how to use PSAT.
 
 # Call to Action
 
