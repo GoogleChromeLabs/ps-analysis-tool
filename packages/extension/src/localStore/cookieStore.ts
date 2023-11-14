@@ -55,6 +55,9 @@ const CookieStore = {
             isBlocked: !cookie?.isBlocked
               ? _updatedCookies[cookieKey].isBlocked
               : cookie?.isBlocked,
+            blockedReasons: cookie?.blockedReasons
+              ? _updatedCookies[cookieKey].blockedReasons
+              : cookie?.blockedReasons,
             headerType:
               _updatedCookies[cookieKey].headerType === 'javascript'
                 ? _updatedCookies[cookieKey].headerType

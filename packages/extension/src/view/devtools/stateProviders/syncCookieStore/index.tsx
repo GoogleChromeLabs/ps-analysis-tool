@@ -233,10 +233,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
       Object.entries(tabData.cookies as { [key: string]: CookieData }).map(
         ([key, value]: [string, CookieData]) => {
-          const isCookieSet = !value?.isBlocked;
+          const isCookieBlocked = value?.isBlocked ?? false;
           _cookies[key] = {
             ...value,
-            isCookieSet,
+            isCookieBlocked,
           };
           return [key, value];
         }
@@ -274,10 +274,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
             [key: string]: CookieData;
           }
         ).map(([key, value]) => {
-          const isCookieSet = !value?.isBlocked;
+          const isCookieBlocked = value?.isBlocked ?? false;
           _cookies[key] = {
             ...value,
-            isCookieSet,
+            isCookieBlocked,
           };
           return [key, value];
         });

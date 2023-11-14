@@ -32,7 +32,7 @@ export type CookieData = {
   frameIdList: number[];
   isBlocked?: boolean;
   partitionKey?: string;
-  blockedReason?: BlockedReason[];
+  blockedReasons?: BlockedReason[];
 };
 
 export type PreferenceKeyValues =

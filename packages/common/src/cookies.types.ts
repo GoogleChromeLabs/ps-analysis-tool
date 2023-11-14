@@ -59,7 +59,7 @@ export type CookieData = {
 };
 
 export type CookieTableData = CookieData & {
-  isCookieSet: boolean | null;
+  isCookieBlocked: boolean | null;
   frameUrl?: string;
   highlighted?: boolean;
 };

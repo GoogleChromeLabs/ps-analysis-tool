@@ -337,6 +337,9 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
               isBlocked: !(blockedReasons.length === 0),
               parsedCookie: {
                 ...cookie,
+                expires: cookie.expires
+                  ? String(new Date(cookie.expires).toISOString())
+                  : 'Session',
               },
               partitionKey: cookie?.partitionKey,
               blockedReasons,
@@ -346,7 +349,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
               url: requestParams.headers['url'],
               headerType: 'request' as CookieData['headerType'],
               isFirstParty: cookie?.sameParty,
-              frameIdList: [],
+              frameIdList: [0],
             };
             cookies.push(singleCookie);
           }
@@ -367,6 +370,9 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
               blockedReasons,
               parsedCookie: {
                 ...cookie,
+                expires: cookie.expires
+                  ? String(new Date(cookie.expires).toISOString())
+                  : 'Session',
               },
               partitionKey: cookie?.partitionKey,
               analytics: cookieDB
@@ -375,7 +381,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
               url: requestParams.headers['url'],
               headerType: 'request' as CookieData['headerType'],
               isFirstParty: cookie?.sameParty,
-              frameIdList: [],
+              frameIdList: [0],
             };
             cookies.push(singleCookie);
           }

@@ -128,8 +128,8 @@ const CookieTableContainer = ({
         ),
       },
       {
-        header: 'Cookie Accepted',
-        accessorKey: 'isCookieSet',
+        header: 'Cookie Blocked',
+        accessorKey: 'isCookieBlocked',
         cell: (info: InfoType) => (
           <p className="flex justify-center items-center">
             {info ? (
@@ -141,18 +141,14 @@ const CookieTableContainer = ({
         ),
       },
       {
-        header: 'GDPR Portal',
-        accessorKey: 'analytics.gdprUrl',
-        cell: (info: InfoType) => (
-          <a
-            className="text-blue-500 hover:underline"
-            target="_blank"
-            href={info as string}
-            rel="noreferrer"
-          >
-            <abbr title={info as string}>{info}</abbr>
-          </a>
-        ),
+        header: 'Partition Key',
+        accessorKey: 'partitionKey',
+        cell: (info: InfoType) => info,
+      },
+      {
+        header: 'Blocked Reasons',
+        accessorKey: 'blockedReasons',
+        cell: (info: InfoType) => info?.join(','),
       },
     ],
     []
