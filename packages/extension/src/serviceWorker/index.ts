@@ -291,6 +291,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       await chrome.storage.sync.clear();
       await chrome.storage.sync.set({
         allowedNumberOfTabs: 'single',
+        isUsingCDP: false,
       });
     }
     if (details.reason === 'update') {
@@ -301,6 +302,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       await chrome.storage.sync.clear();
       await chrome.storage.sync.set({
         allowedNumberOfTabs: 'single',
+        isUsingCDP: false,
       });
     }
   });
@@ -492,7 +494,8 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
       !localStorage[details.tabId?.toString()]?.isDebuggerAttached &&
       details.url &&
       !details.url.startsWith('chrome://') &&
-      !details.url.startsWith('about:blank')
+      !details.url.startsWith('about:blank') &&
+      syncStorage?.isUsingCDP
     ) {
       try {
         await chrome.debugger.attach({ tabId: details.tabId }, '1.3');
@@ -510,7 +513,8 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
       !localStorage[details.tabId?.toString()]?.isDebuggerAttached &&
       details.url &&
       !details.url.startsWith('chrome://') &&
-      !details.url.startsWith('about:blank')
+      !details.url.startsWith('about:blank') &&
+      syncStorage?.isUsingCDP
     ) {
       try {
         await chrome.debugger.attach({ tabId: details.tabId }, '1.3');
