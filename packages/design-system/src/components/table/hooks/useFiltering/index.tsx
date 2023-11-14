@@ -35,16 +35,20 @@ export type TableFilteringOutput = {
 
 const useFiltering = (
   data: TableData[],
-  tableFilterData: TableFilter
+  tableFilterData: TableFilter | undefined
 ): TableFilteringOutput => {
   const [filters, setFilters] = useState<TableFilter>({});
 
   useEffect(() => {
+    if (!tableFilterData) {
+      return;
+    }
+
     const newFilters = Object.entries(tableFilterData).map(
       ([filterKey, filter]) => {
         const filterValues = filter.filterValues || {};
 
-        data.forEach((row) => {
+        [].forEach((row) => {
           const value = getValueByKey(filterKey, row);
 
           if (value && !filterValues[value]) {
@@ -97,6 +101,10 @@ const useFiltering = (
   }, []);
 
   const filteredData = useMemo<TableData[]>(() => {
+    if (Object.keys(filters).length === 0) {
+      return data;
+    }
+
     return data.filter((row) => {
       const filterKeys = Object.keys(filters);
 

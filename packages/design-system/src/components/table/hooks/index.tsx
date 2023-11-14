@@ -107,7 +107,7 @@ interface useTableProps {
 const useTable = ({
   data,
   tableColumns,
-  tableFilterData = {},
+  tableFilterData,
   tableSearchKeys = [],
   options,
 }: useTableProps): TableOutput => {
