@@ -21,6 +21,7 @@ export { default as prepareCookiesCount } from './utils/prepareCookiesCount';
 export { default as prepareCookieStatsComponents } from './utils/prepareCookieStatsComponents';
 export { default as getCookieKey } from './utils/getCookieKey';
 export { default as fetchLocalData } from './utils/fetchLocalData';
+export { default as cookieIssueDetails } from './utils/cookieExclusionAndWarningReasons';
 export { default as noop } from './utils/noop';
 export * from './cookies.types';
 export const UNKNOWN_FRAME_KEY = 'Unknown frame(s)';

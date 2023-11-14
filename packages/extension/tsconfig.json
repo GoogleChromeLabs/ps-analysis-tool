@@ -7,7 +7,12 @@
   "include": [
     "src",
     "../../node_modules/@types/jest/index.d.ts",
-    "src/**/*.json"
+    "src/**/*.json",
+    "../common/src/utils/cookieExclusionAndWarningReasons/cookieBlockedReason.ts",
+    "../common/src/utils/cookieExclusionAndWarningReasons/cookieExclusionReason.ts",
+    "../common/src/utils/cookieExclusionAndWarningReasons/cookieExclusionReasonHTMLContent.ts",
+    "../common/src/utils/cookieExclusionAndWarningReasons/cookieWarningReason.ts",
+    "../common/src/utils/cookieExclusionAndWarningReasons/cookieWarningReasonHTMLContent.ts"
   ],
   "references": [
     { "path": "../common" },
