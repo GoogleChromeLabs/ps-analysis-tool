@@ -22,7 +22,7 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { InfoType } from '../../hooks';
+import { InfoType } from '../../useTable';
 interface BodyCellProps {
   cell: React.JSX.Element | InfoType;
   width: number;

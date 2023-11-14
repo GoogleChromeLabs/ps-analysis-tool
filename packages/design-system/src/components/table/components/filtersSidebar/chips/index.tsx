@@ -23,7 +23,7 @@ import React from 'react';
  */
 import ChipList from './chipList';
 import { ClearIcon } from '../../../../../icons';
-import { TableFilter, TableOutput } from '../../../hooks';
+import { TableFilter, TableOutput } from '../../../useTable';
 
 interface ChipsBarProps {
   selectedFilters: TableFilter;

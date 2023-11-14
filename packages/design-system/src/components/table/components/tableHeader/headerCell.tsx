@@ -23,7 +23,7 @@ import { PreferenceDataValues, noop } from '@ps-analysis-tool/common';
  * Internal dependencies.
  */
 import HeaderResizer from './headerResizer';
-import { TableColumn, TableOutput } from '../../hooks';
+import { TableColumn, TableOutput } from '../../useTable';
 import { ArrowDown } from '../../../../icons';
 
 interface HeaderCellProps {

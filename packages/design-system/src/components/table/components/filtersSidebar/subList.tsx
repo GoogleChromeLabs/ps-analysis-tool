@@ -22,7 +22,7 @@ import classNames from 'classnames';
 /**
  * Internal dependencies.
  */
-import { TableFilter, TableOutput } from '../../hooks';
+import { TableFilter, TableOutput } from '../../useTable';
 
 interface SubListProps {
   filterValues: TableFilter[keyof TableFilter]['filterValues'];

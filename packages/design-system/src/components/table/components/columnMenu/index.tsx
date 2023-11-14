@@ -26,7 +26,7 @@ import { createPortal } from 'react-dom';
  * Internal dependencies.
  */
 import ColumnList from './columnList';
-import { TableOutput } from '../../hooks';
+import { TableOutput } from '../../useTable';
 
 interface ColumnMenuProps {
   table: TableOutput;

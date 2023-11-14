@@ -22,7 +22,7 @@ import React from 'react';
  * Internal dependencies.
  */
 import ListItem from './listItem';
-import { TableFilter, TableOutput } from '../../hooks';
+import { TableFilter, TableOutput } from '../../useTable';
 
 interface FiltersSidebarProps {
   filters: TableFilter;

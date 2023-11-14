@@ -25,7 +25,7 @@ import { PreferenceDataValues } from '@ps-analysis-tool/common';
 import TableHeader from './tableHeader';
 import TableBody from './tableBody';
 import ColumnMenu from './columnMenu';
-import { TableData, TableOutput, TableRow } from '../hooks';
+import { TableData, TableOutput, TableRow } from '../useTable';
 import { noop } from '../../../utils';
 
 interface TableProps {

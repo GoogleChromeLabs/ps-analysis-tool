@@ -19,7 +19,7 @@
  */
 import React from 'react';
 import classNames from 'classnames';
-import { TableColumn } from '../../hooks';
+import { TableColumn } from '../../useTable';
 
 /**
  * Internal dependencies.

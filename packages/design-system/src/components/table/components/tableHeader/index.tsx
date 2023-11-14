@@ -23,7 +23,7 @@ import { PreferenceDataValues, noop } from '@ps-analysis-tool/common';
  * Internal dependencies.
  */
 import HeaderRow from './headerRow';
-import { TableOutput } from '../../hooks';
+import { TableOutput } from '../../useTable';
 
 interface TableHeaderProps {
   table: TableOutput;

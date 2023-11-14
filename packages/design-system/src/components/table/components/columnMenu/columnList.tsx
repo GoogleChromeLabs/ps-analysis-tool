@@ -24,7 +24,7 @@ import { PreferenceDataValues, noop } from '@ps-analysis-tool/common';
  * Internal dependencies.
  */
 import ColumnListItem from './columnListItem';
-import { TableOutput } from '../../hooks';
+import { TableOutput } from '../../useTable';
 
 interface ColumnListProps {
   table: TableOutput;
