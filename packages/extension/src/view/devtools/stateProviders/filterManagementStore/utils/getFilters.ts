@@ -51,11 +51,18 @@ const getFilters = (cookies: CookieTableData[]): Filter[] => {
         filters[key].filters?.add(String(value));
       }
     });
+
     const collectedFilters = filters[key]?.filters;
 
     // Formatting and sorting.
     if (filterMap?.sort && collectedFilters) {
-      filters[key].filters = new Set(sortStringArray([...collectedFilters]));
+      if (filterMap?.keys === 'parsedCookie.size') {
+        filters[key].filters = new Set(
+          [...collectedFilters].sort((a, b) => Number(a) - Number(b))
+        );
+      } else {
+        filters[key].filters = new Set(sortStringArray([...collectedFilters]));
+      }
     }
 
     if ('boolean' === filterMap?.type && collectedFilters) {
