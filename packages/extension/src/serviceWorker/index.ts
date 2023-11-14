@@ -337,8 +337,9 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
               isBlocked: !(blockedReasons.length === 0),
               parsedCookie: {
                 ...cookie,
-                cookiePartitionKey: cookie?.partitionKey,
               },
+              partitionKey: cookie?.partitionKey,
+              blockedReasons,
               analytics: cookieDB
                 ? findAnalyticsMatch(cookie.name, cookieDB)
                 : null,
@@ -363,6 +364,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
           ({ blockedReasons, cookie }) => {
             const singleCookie = {
               isBlocked: !(blockedReasons.length === 0),
+              blockedReasons,
               parsedCookie: {
                 ...cookie,
               },
@@ -408,8 +410,11 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
               return {
                 parsedCookie: {
                   ...parsedCookie,
-                  cookiePartitionKey: responseParams?.cookiePartitionKey,
+                  expires: parsedCookie.expires
+                    ? String(new Date(parsedCookie.expires).toISOString())
+                    : 'Session',
                 },
+                partitionKey: responseParams?.cookiePartitionKey,
                 analytics: cookieDB
                   ? findAnalyticsMatch(parsedCookie.name, cookieDB)
                   : null,
@@ -441,12 +446,14 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
                     return c.cookie?.name === parsedCookie.name;
                   }
                 ) ?? false;
-
               return {
                 parsedCookie: {
                   ...parsedCookie,
-                  cookiePartitionKey: responseParams?.cookiePartitionKey,
+                  expires: parsedCookie.expires
+                    ? String(new Date(parsedCookie.expires).toISOString())
+                    : 'Session',
                 },
+                partitionKey: responseParams?.cookiePartitionKey,
                 analytics: cookieDB
                   ? findAnalyticsMatch(parsedCookie.name, cookieDB)
                   : null,
@@ -469,21 +476,44 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
 
 chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
   const localStorage = await chrome.storage.local.get();
+  const syncStorage = await chrome.storage.sync.get();
   if (
-    details.tabId &&
-    localStorage[details.tabId?.toString()] &&
-    !localStorage[details.tabId?.toString()]?.isDebuggerAttached &&
-    details.url &&
-    !details.url.startsWith('chrome://') &&
-    !details.url.startsWith('about:blank')
+    syncStorage.allowedNumberOfTabs &&
+    syncStorage.allowedNumberOfTabs !== 'unlimited'
   ) {
-    try {
-      await chrome.debugger.attach({ tabId: details.tabId }, '1.3');
-      localStorage[details.tabId?.toString()].isDebuggerAttached = true;
-      chrome.debugger.sendCommand({ tabId: details.tabId }, 'Network.enable');
-      await chrome.storage.local.set(localStorage);
-    } catch (error) {
-      //do nothing
+    if (
+      details.tabId.toString() === localStorage.tabToRead &&
+      !localStorage[details.tabId?.toString()]?.isDebuggerAttached &&
+      details.url &&
+      !details.url.startsWith('chrome://') &&
+      !details.url.startsWith('about:blank')
+    ) {
+      try {
+        await chrome.debugger.attach({ tabId: details.tabId }, '1.3');
+        localStorage[details.tabId?.toString()].isDebuggerAttached = true;
+        chrome.debugger.sendCommand({ tabId: details.tabId }, 'Network.enable');
+        await chrome.storage.local.set(localStorage);
+      } catch (error) {
+        //do nothing
+      }
+    }
+  } else {
+    if (
+      details.tabId &&
+      localStorage[details.tabId?.toString()] &&
+      !localStorage[details.tabId?.toString()]?.isDebuggerAttached &&
+      details.url &&
+      !details.url.startsWith('chrome://') &&
+      !details.url.startsWith('about:blank')
+    ) {
+      try {
+        await chrome.debugger.attach({ tabId: details.tabId }, '1.3');
+        localStorage[details.tabId?.toString()].isDebuggerAttached = true;
+        chrome.debugger.sendCommand({ tabId: details.tabId }, 'Network.enable');
+        await chrome.storage.local.set(localStorage);
+      } catch (error) {
+        //do nothing
+      }
     }
   }
 });
