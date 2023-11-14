@@ -22,7 +22,7 @@ import React, { useEffect, useRef, useState } from 'react';
 /**
  * Internal dependencies.
  */
-import { ClearIcon } from '../../icons';
+import { PaddedCross } from '../../icons';
 
 interface InputProps {
   value: string;
@@ -84,7 +84,7 @@ const Input = ({ value, onChange, clearInput }: InputProps) => {
         }`}
         title="Clear Search"
       >
-        <ClearIcon />
+        <PaddedCross />
       </button>
     </div>
   );
