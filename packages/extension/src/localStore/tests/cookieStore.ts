@@ -37,6 +37,8 @@ const cookieArray: CookieData[] = [
     url: 'https://example.com',
     headerType: 'response',
     isFirstParty: false,
+    blockedReasons: undefined,
+    isBlocked: undefined,
   },
   {
     parsedCookie: {
@@ -52,8 +54,10 @@ const cookieArray: CookieData[] = [
     frameIdList: [1],
     analytics: null,
     url: 'https://example.com',
+    isBlocked: undefined,
     headerType: 'response',
     isFirstParty: false,
+    blockedReasons: undefined,
   },
 ];
 
