@@ -23,7 +23,13 @@ import { parse } from 'simple-cookie';
 /**
  * Internal dependencies.
  */
-import { type CookieData, CookieStore } from '../localStore';
+import {
+  type CookieData,
+  type NetworkRequestExtraInfoParams,
+  type NetworkResponseReceivedExtraInfo,
+  CookieStore,
+  type BlockedResponseCookieWithReason,
+} from '../localStore';
 import parseResponseCookieHeader from './parseResponseCookieHeader';
 import parseRequestCookieHeader from './parseRequestCookieHeader';
 import { getTab } from '../utils/getTab';
@@ -302,121 +308,159 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 
 chrome.debugger.onEvent.addListener(async (source, method, params) => {
   await PROMISE_QUEUE.add(async () => {
+    let tabId = '';
+
+    if (!source?.tabId) {
+      return;
+    }
+
     if (!cookieDB) {
       cookieDB = await fetchDictionary();
     }
+
+    tabId = source?.tabId?.toString();
+
     if (method === 'Network.requestWillBeSentExtraInfo' && params) {
+      const requestParams = params as NetworkRequestExtraInfoParams;
       const syncStorage = await chrome.storage.sync.get();
       const localStorage = await chrome.storage.local.get();
+
       if (
         syncStorage.allowedNumberOfTabs &&
         syncStorage.allowedNumberOfTabs === 'unlimited'
       ) {
-        const cookies = [];
-        params.associatedCookies.forEach(({ blockedReasons, cookie }) => {
-          const singleCookie = {
-            isBlocked: !(blockedReasons.length === 0),
-            parsedCookie: {
-              ...cookie,
-              cookiePartitionKey: params?.cookiePartitionKey,
-            },
-            analytics: cookieDB
-              ? findAnalyticsMatch(cookie.name, cookieDB)
-              : {},
-            url: params.headers['url'],
-            headerType: 'request',
-            isFirstParty: cookie?.sameParty,
-            frameIdList: [],
-          };
-          cookies.push(singleCookie);
-        });
-        await CookieStore.update(source?.tabId?.toString(), cookies);
+        const cookies: CookieData[] = [];
+
+        requestParams.associatedCookies.forEach(
+          ({ blockedReasons, cookie }) => {
+            const singleCookie = {
+              isBlocked: !(blockedReasons.length === 0),
+              parsedCookie: {
+                ...cookie,
+                cookiePartitionKey: cookie?.partitionKey,
+              },
+              analytics: cookieDB
+                ? findAnalyticsMatch(cookie.name, cookieDB)
+                : null,
+              url: requestParams.headers['url'],
+              headerType: 'request' as CookieData['headerType'],
+              isFirstParty: cookie?.sameParty,
+              frameIdList: [],
+            };
+            cookies.push(singleCookie);
+          }
+        );
+
+        await CookieStore.update(tabId, cookies);
       } else if (
         syncStorage.allowedNumberOfTabs &&
         syncStorage.allowedNumberOfTabs !== 'unlimited' &&
-        localStorage.tabToRead === source?.tabId?.toString()
+        localStorage.tabToRead === tabId
       ) {
-        const cookies = [];
-        params.associatedCookies.forEach(({ blockedReasons, cookie }) => {
-          const singleCookie = {
-            isBlocked: !(blockedReasons.length === 0),
-            parsedCookie: {
-              ...cookie,
-              cookiePartitionKey: params?.cookiePartitionKey,
-            },
-            analytics: findAnalyticsMatch(cookie.name, cookieDB),
-            url: params.headers['url'],
-            headerType: 'request',
-            isFirstParty: cookie?.sameParty,
-            frameIdList: [],
-          };
-          cookies.push(singleCookie);
-        });
-        await CookieStore.update(source?.tabId?.toString(), cookies);
+        const cookies: CookieData[] = [];
+
+        requestParams.associatedCookies.forEach(
+          ({ blockedReasons, cookie }) => {
+            const singleCookie = {
+              isBlocked: !(blockedReasons.length === 0),
+              parsedCookie: {
+                ...cookie,
+              },
+              partitionKey: cookie?.partitionKey,
+              analytics: cookieDB
+                ? findAnalyticsMatch(cookie.name, cookieDB)
+                : null,
+              url: requestParams.headers['url'],
+              headerType: 'request' as CookieData['headerType'],
+              isFirstParty: cookie?.sameParty,
+              frameIdList: [],
+            };
+            cookies.push(singleCookie);
+          }
+        );
+
+        await CookieStore.update(tabId, cookies);
       }
     }
-    if (method === 'Network.responseReceivedExtraInfo' && params) {
+
+    if (
+      method === 'Network.responseReceivedExtraInfo' &&
+      (params as NetworkResponseReceivedExtraInfo)
+    ) {
+      const responseParams = params as NetworkResponseReceivedExtraInfo;
       const syncStorage = await chrome.storage.sync.get();
       const localStorage = await chrome.storage.local.get();
       if (
         syncStorage.allowedNumberOfTabs &&
         syncStorage.allowedNumberOfTabs === 'unlimited'
       ) {
-        if (params.headers['set-cookie']) {
-          const allCookies = params?.headers['set-cookie']
+        if (responseParams.headers['set-cookie']) {
+          const allCookies = responseParams?.headers['set-cookie']
             ?.split('\n')
-            .map((headerLine) => {
+            .map((headerLine: string) => {
               const parsedCookie = parse(headerLine);
-              const isBlocked = params.blockedCookies.find((c) => {
-                return c.cookie?.name === parsedCookie.name;
-              });
+              const blockedCookie = responseParams.blockedCookies.find(
+                (c: BlockedResponseCookieWithReason) => {
+                  return c.cookie?.name === parsedCookie.name;
+                }
+              );
+
               return {
                 parsedCookie: {
                   ...parsedCookie,
-                  cookiePartitionKey: params?.cookiePartitionKey,
+                  cookiePartitionKey: responseParams?.cookiePartitionKey,
                 },
                 analytics: cookieDB
                   ? findAnalyticsMatch(parsedCookie.name, cookieDB)
-                  : {},
-                url: params.headers['url'],
+                  : null,
+                url: responseParams.headers['url'],
                 headerType: 'response',
-                isFirstParty: parsedCookie?.sameParty,
-                frameIdList: [],
-                isBlocked,
+                frameIdList: [0],
+                isBlocked: blockedCookie ? true : false,
+                blockedReason: blockedCookie
+                  ? blockedCookie?.blockedReasons
+                  : [],
               };
             });
-          await CookieStore.update(source?.tabId?.toString(), allCookies);
+
+          await CookieStore.update(tabId, allCookies);
         }
       } else if (
         syncStorage.allowedNumberOfTabs &&
         syncStorage.allowedNumberOfTabs !== 'unlimited' &&
-        localStorage.tabToRead === source?.tabId?.toString()
+        localStorage.tabToRead === tabId
       ) {
-        if (params.headers['set-cookie']) {
-          const allCookies = params?.headers['set-cookie']
+        if (responseParams.headers['set-cookie']) {
+          const allCookies = responseParams?.headers['set-cookie']
             ?.split('\n')
-            .map((headerLine) => {
+            .map((headerLine: string) => {
               const parsedCookie = parse(headerLine);
-              const isBlocked = params.blockedCookies.find((c) => {
-                console.log(parsedCookie.name,c.cookie.name)
-                return c.cookie?.name === parsedCookie.name;
-              }) ?? false;
+              const blockedCookie =
+                responseParams.blockedCookies.find(
+                  (c: BlockedResponseCookieWithReason) => {
+                    return c.cookie?.name === parsedCookie.name;
+                  }
+                ) ?? false;
+
               return {
                 parsedCookie: {
                   ...parsedCookie,
-                  cookiePartitionKey: params?.cookiePartitionKey,
+                  cookiePartitionKey: responseParams?.cookiePartitionKey,
                 },
                 analytics: cookieDB
                   ? findAnalyticsMatch(parsedCookie.name, cookieDB)
-                  : {},
-                url: params.headers['url'],
+                  : null,
+                url: responseParams.headers['url'],
                 headerType: 'response',
-                isFirstParty: parsedCookie?.sameParty,
-                frameIdList: [],
-                isBlocked,
+                frameIdList: [0],
+                isBlocked: blockedCookie ? true : false,
+                blockedReason: blockedCookie
+                  ? blockedCookie?.blockedReasons
+                  : [],
               };
             });
-          await CookieStore.update(source?.tabId?.toString(), allCookies);
+
+          await CookieStore.update(tabId, allCookies);
         }
       }
     }

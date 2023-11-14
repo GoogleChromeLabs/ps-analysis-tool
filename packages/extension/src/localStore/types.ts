@@ -31,6 +31,8 @@ export type CookieData = {
   isFirstParty: boolean | null;
   frameIdList: number[];
   isBlocked?: boolean;
+  partitionKey?: string;
+  blockedReason?: BlockedReason[];
 };
 
 export type PreferenceKeyValues =
@@ -52,4 +54,83 @@ export type TabData = {
 
 export type Storage = {
   [tabId: string]: TabData;
+};
+
+export type NetworkCookie = {
+  name: string;
+  value: string;
+  domain: string;
+  path: string;
+  expires: number;
+  size: number;
+  httpOnly: boolean;
+  secure: boolean;
+  session: boolean;
+  sameSite?: 'Strict' | 'Lax' | 'None';
+  priority: 'Low' | 'Medium' | 'High';
+  sameParty: boolean;
+  sourceScheme: 'Unset' | 'NonSecure' | 'Secure';
+  sourcePort: number;
+  partitionKey?: string;
+  partitionKeyOpaque?: boolean;
+};
+
+export type BlockedReason =
+  | 'SecureOnly'
+  | 'NotOnPath'
+  | 'DomainMismatch'
+  | 'SameSiteStrict'
+  | 'SameSiteLax'
+  | 'SameSiteUnspecifiedTreatedAsLax'
+  | 'SameSiteNoneInsecure'
+  | 'UserPreferences'
+  | 'ThirdPartyPhaseout'
+  | 'ThirdPartyBlockedInFirstPartySet'
+  | 'UnknownError'
+  | 'SchemefulSameSiteStrict'
+  | 'SchemefulSameSiteLax'
+  | 'SchemefulSameSiteUnspecifiedTreatedAsLax'
+  | 'SamePartyFromCrossPartyContext'
+  | 'NameValuePairExceedsMaxSize';
+
+export type BlockedRequestCookieWithReason = {
+  blockedReasons: BlockedReason[];
+  cookie: NetworkCookie;
+};
+
+export type BlockedResponseCookieWithReason = {
+  blockedReasons: BlockedReason[];
+  cookieLine: string;
+  cookie?: NetworkCookie;
+};
+
+export type NetworkRequestExtraInfoParams = {
+  requestId: string;
+  associatedCookies: BlockedRequestCookieWithReason[];
+  headers: { [key: string]: any };
+  connectTiming: {
+    requestTime: number;
+  };
+  clientSecurityState?: {
+    initiatorIsSecureContext: boolean;
+    initiatorIPAddressSpace: 'Local' | 'Private' | 'Public' | 'Unknown';
+    privateNetworkRequestPolicy:
+      | 'Allow'
+      | 'BlockFromInsecureToMorePrivate'
+      | 'WarnFromInsecureToMorePrivate'
+      | 'PreflightBlock'
+      | 'PreflightWarn';
+  };
+  siteHasCookieInOtherPartition: boolean;
+};
+
+export type NetworkResponseReceivedExtraInfo = {
+  requestId: string;
+  blockedCookies: BlockedResponseCookieWithReason[];
+  headers: { [key: string]: any };
+  resourceIPAddressSpace: 'Local' | 'Private' | 'Public' | 'Unknown';
+  statusCode: number;
+  headersText?: string;
+  cookiePartitionKey?: string;
+  cookiePartitionKeyOpaque?: boolean;
 };
