@@ -18,7 +18,7 @@
  */
 import { Command } from 'commander';
 import events from 'events';
-import { ensureFile, writeFile } from 'fs-extra';
+import { ensureFile, readFile, writeFile } from 'fs-extra';
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
 import { exec } from 'child_process';
@@ -45,9 +45,10 @@ program
   .description('CLI to test a URL for 3p cookies')
   .option('-u, --url <value>', 'URL of a site')
   .option('-s, --sitemap-url <value>', 'URL of a sitemap')
+  .option('-c, --csv-path <value>', 'Path to a CSV file with a set of URLs.')
   .option(
     '-nh, --no-headless ',
-    'flag for running puppeteer in non headless mode'
+    'Flag for running puppeteer in non headless mode'
   );
 
 program.parse();
@@ -68,6 +69,7 @@ export const initialize = async () => {
 
   const url = program.opts().url;
   const sitemapURL = program.opts().sitemapUrl;
+  const csvPath = program.opts().csvPath;
   const cookieDictionary = await fetchDictionary();
   if (url) {
     const prefix = Utility.generatePrefix(url ?? 'untitled');
@@ -117,7 +119,7 @@ export const initialize = async () => {
         prefix
       )}`
     );
-  } else {
+  } else if (sitemapURL) {
     const spinnies = new Spinnies();
 
     spinnies.add('sitemap-spinner', {
@@ -126,6 +128,86 @@ export const initialize = async () => {
 
     const urls: Array<string> = await Utility.getUrlsFromSitemap(sitemapURL);
 
+    spinnies.succeed('sitemap-spinner', {
+      text: 'Done parsing Sitemap',
+    });
+
+    const prefix = Utility.generatePrefix([...urls].shift() ?? 'untitled');
+    const directory = `./out/${prefix}`;
+    const userInput: any = await Utility.askUserInput(
+      `Provided sitemap has ${urls.length} pages. Please enter the number of pages you want to analyze (Default ${urls.length}):`,
+      { default: urls.length.toString() }
+    );
+    let numberOfUrls: number = isNaN(userInput)
+      ? urls.length
+      : parseInt(userInput);
+
+    numberOfUrls = numberOfUrls < urls.length ? numberOfUrls : urls.length;
+
+    const urlsToProcess = urls.splice(0, numberOfUrls);
+
+    const cookieAnalysisData = await analyzeCookiesUrlsInBatches(
+      urlsToProcess,
+      isHeadless,
+      DELAY_TIME,
+      cookieDictionary
+    );
+
+    spinnies.add('technology-spinner', {
+      text: 'Analysing technologies',
+    });
+
+    const technologyAnalysisData = await analyzeTechnologiesUrlsInBatches(
+      urlsToProcess,
+      3
+    );
+
+    spinnies.succeed('technology-spinner', {
+      text: 'Done analysing technologies',
+    });
+
+    const result = urlsToProcess.map((_url, ind) => {
+      return {
+        pageUrl: _url,
+        technologyData: technologyAnalysisData[ind],
+        cookieData: cookieAnalysisData[ind].cookieData,
+      };
+    });
+
+    await ensureFile(directory + '/out.json');
+    await writeFile(directory + '/out.json', JSON.stringify(result, null, 4));
+
+    exec('npm run cli-dashboard:dev');
+
+    await delay(2000);
+
+    console.log(
+      `Report is being served at the URL: http://localhost:9000?dir=${encodeURIComponent(
+        prefix
+      )}&type=sitemap`
+    );
+  } else if (csvPath) {
+    const spinnies = new Spinnies();
+    spinnies.add('sitemap-spinner', {
+      text: 'Parsing Sitemap',
+    });
+
+    let urls: string[] = [];
+    try {
+      const csvString = await readFile(csvPath, 'utf-8');
+      const lines = csvString.split('\n');
+
+      urls = lines.reduce((acc, line) => {
+        if (line.length === 0) {
+          return acc;
+        } else {
+          return acc.concat(line.split(','));
+        }
+      }, [] as string[]);
+    } catch (error) {
+      console.log('Error reading the CSV file');
+      process.exit(1);
+    }
     spinnies.succeed('sitemap-spinner', {
       text: 'Done parsing Sitemap',
     });
