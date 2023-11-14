@@ -36,3 +36,5 @@ export * from './landingPage/infoCard/fetchPSInfo';
 export { default as ErrorFallback } from './errorFallback';
 export { default as ExtensionReloadNotification } from './errorFallback/extensionReloadNotification';
 export * from './table';
+export { default as Input } from './input';
+export * from './sidebar';

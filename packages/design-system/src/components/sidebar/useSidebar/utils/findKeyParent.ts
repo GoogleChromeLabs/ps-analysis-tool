@@ -13,24 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import React from 'react';
 
-interface MessageBoxProps {
-  headerText: string;
-  bodyText: string;
-}
-const MessageBox = ({ headerText, bodyText }: MessageBoxProps) => {
-  return (
-    <div className="bg-hsl-light dark:hsl-dark py-4 my-3 leading-5 max-w-2xl">
-      <p className="text-warning-red dark:text-warning-orange font-bold">
-        {headerText}
-      </p>
-      <p className="text-raisin-black dark:text-bright-gray">{bodyText}</p>
-    </div>
-  );
+const findKeyParent = (keyPath: string[]) => {
+  const length = keyPath.length;
+
+  if (length === 1) {
+    return null;
+  }
+
+  return keyPath[length - 2];
 };
 
-export default MessageBox;
+export default findKeyParent;

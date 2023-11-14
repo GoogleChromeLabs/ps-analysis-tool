@@ -13,24 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import React from 'react';
 
-interface MessageBoxProps {
-  headerText: string;
-  bodyText: string;
-}
-const MessageBox = ({ headerText, bodyText }: MessageBoxProps) => {
-  return (
-    <div className="bg-hsl-light dark:hsl-dark py-4 my-3 leading-5 max-w-2xl">
-      <p className="text-warning-red dark:text-warning-orange font-bold">
-        {headerText}
-      </p>
-      <p className="text-raisin-black dark:text-bright-gray">{bodyText}</p>
-    </div>
-  );
+/**
+ * Internal dependencies
+ */
+import { SidebarItemValue, SidebarItems } from '..';
+
+const findItem = (items: SidebarItems, keyPath: string[]) => {
+  if (keyPath.length === 0) {
+    return null;
+  }
+
+  let idx = 0,
+    item: SidebarItemValue = items[keyPath[idx]];
+
+  while (idx < keyPath.length) {
+    const itemKey = keyPath[idx];
+    item = items[itemKey];
+
+    idx++;
+  }
+
+  return item;
 };
 
-export default MessageBox;
+export default findItem;

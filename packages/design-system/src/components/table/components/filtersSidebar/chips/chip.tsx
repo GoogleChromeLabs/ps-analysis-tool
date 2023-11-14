@@ -21,7 +21,7 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { CrossBlack } from '../../../../../icons';
+import { ClearIcon } from '../../../../../icons';
 
 interface ChipProps {
   filterTitle: string;
@@ -39,7 +39,7 @@ const Chip = ({ filterTitle, value, toggleFilterSelection }: ChipProps) => {
         onClick={toggleFilterSelection}
         className="w-1.5 h-1.5 text-gray-600 hover:text-gray-800 focus:outline-none ml-1"
       >
-        <CrossBlack className="text-mischka" />
+        <ClearIcon className="text-mischka" />
       </button>
     </div>
   );

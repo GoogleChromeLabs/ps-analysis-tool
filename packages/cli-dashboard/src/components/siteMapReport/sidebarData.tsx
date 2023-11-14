@@ -14,23 +14,26 @@
  * limitations under the License.
  */
 /**
- * External dependencies.
+ * External dependencies
  */
 import React from 'react';
+import {
+  CookieIcon,
+  CookieIconWhite,
+  type SidebarItems,
+} from '@ps-analysis-tool/design-system';
 
-interface MessageBoxProps {
-  headerText: string;
-  bodyText: string;
-}
-const MessageBox = ({ headerText, bodyText }: MessageBoxProps) => {
-  return (
-    <div className="bg-hsl-light dark:hsl-dark py-4 my-3 leading-5 max-w-2xl">
-      <p className="text-warning-red dark:text-warning-orange font-bold">
-        {headerText}
-      </p>
-      <p className="text-raisin-black dark:text-bright-gray">{bodyText}</p>
-    </div>
-  );
+const sidebarData: SidebarItems = {
+  'sitemap-landing-page': {
+    title: 'Sitemap Report',
+    children: {},
+  },
+  'sitemap-affected-cookies': {
+    title: 'Affected Cookies',
+    children: {},
+    icon: <CookieIcon />,
+    selectedIcon: <CookieIconWhite />,
+  },
 };
 
-export default MessageBox;
+export default sidebarData;

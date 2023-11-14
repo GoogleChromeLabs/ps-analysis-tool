@@ -22,7 +22,7 @@ import React from 'react';
  * Internal dependencies.
  */
 import ChipList from './chipList';
-import { ClearIcon } from '../../../../../icons';
+import { StopIcon } from '../../../../../icons';
 import { TableFilter, TableOutput } from '../../../useTable';
 
 interface ChipsBarProps {
@@ -48,7 +48,7 @@ const ChipsBar = ({
           className="h-full flex items-center text-link text-xs whitespace-nowrap"
           onClick={resetFilters}
         >
-          <ClearIcon className="min-w-[14px] min-h-[14px]" />
+          <StopIcon className="min-w-[14px] min-h-[14px]" />
           <span className="ml-1 mr-1 dark:text-bright-gray bg-transparent">
             Clear all
           </span>

@@ -19,7 +19,7 @@
 import React, { useCallback } from 'react';
 import classNames from 'classnames';
 import {
-  CrossBlack,
+  ClearIcon,
   FilterIcon,
   RefreshButton,
   TableOutput,
@@ -85,7 +85,7 @@ const TableTopBar = ({
         className="w-3 h-3"
         title="Clear Search"
       >
-        <CrossBlack className="text-mischka" />
+        <ClearIcon className="text-mischka" />
       </button>
       <div className="h-full w-px bg-american-silver dark:bg-quartz mx-3" />
 

@@ -52,5 +52,5 @@ export { default as Cross } from './cross.svg';
 export { default as Refresh } from './refresh-icon.svg';
 export { default as Ellipse } from './ellipse.svg';
 export { default as ClearIcon } from './clear-icon.svg';
-export { default as CrossBlack } from './cross-black.svg';
+export { default as StopIcon } from './stop-icon.svg';
 export { default as FilterIcon } from './filter-icon.svg';
