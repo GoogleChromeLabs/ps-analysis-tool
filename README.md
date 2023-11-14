@@ -34,7 +34,9 @@ The purpose of this tool is to shed light, provide insights, and help you to lea
   - E.g. `npm run cli -- -s https://example.com/sitemap_index.xml`.
   - E.g. `npm run cli -- -u https://bbc.com`.
   - Please note that the dependency (Wappalyzer), which analyzes page technologies, may require permission to use its instance of Chromium. If this happens, you have the option to skip the technology analysis by using the `nt` flag for uninterrupted analysis of cookies.
-  - E.g. `npm run cli -- -u https://bbc.com -nt`. 
+  - E.g. `npm run cli -- -u https://bbc.com -nt`.
+ 
+*To learn more about the project, please check [PSAT's Wiki page](https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki)*
 
 
 # Call to Action
@@ -50,7 +52,6 @@ If you are a **third-party service provider transitioning away from cookies**, y
 If you are a **Website owner or technology leader**, you are responsible for technical and business decision-making, and you can leverage the guidance and tooling available to get a thorough understanding of the transformative shift that is taking place for 3P Cookies and the potential impact on user experience and privacy.
 
 Ultimately, the web ecosystem, together, will navigate successfully this crucial transition towards a more private web platform. Let's make it happen!
-
 
 # Contributing
 If you have requests for features you would like to see in this tool, please file a Feature Request or join as a contributor! Please refer to our contribution [guidelines](docs/CONTRIBUTING.md) and [code of conduct](docs/code-of-conduct.md).
