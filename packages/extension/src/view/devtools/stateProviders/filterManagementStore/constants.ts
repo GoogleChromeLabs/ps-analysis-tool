@@ -29,6 +29,12 @@ export const FILTER_MAPPING = [
     order: 3,
   },
   {
+    name: 'Size',
+    keys: 'parsedCookie.size',
+    sort: true,
+    order: 13,
+  },
+  {
     name: 'HttpOnly',
     keys: 'parsedCookie.httponly',
     type: 'boolean',
@@ -71,7 +77,7 @@ export const CUSTOM_FILTER_MAPPING = {
     name: 'Priority',
     keys: 'parsedCookie.priority',
     filters: new Set(['Low', 'Medium', 'High']),
-    order: 11,
+    order: 12,
   },
   retentionPeriod: {
     name: 'Retention Period',
@@ -112,4 +118,5 @@ export const MAPPING_KEYS_TO_NAME = {
   retentionPeriod: 'Retention Period',
   isFirstParty: 'Scope',
   'parsedCookie.priority': 'Priority',
+  'parsedCookie.size': 'Size',
 };

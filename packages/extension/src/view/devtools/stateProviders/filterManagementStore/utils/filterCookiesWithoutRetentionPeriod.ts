@@ -78,7 +78,7 @@ const filterCookiesWithoutRetentionPeriod = (
             value = filterMap.default;
           }
 
-          canShow.push(selectedFilter?.has(value));
+          canShow.push(selectedFilter?.has(String(value)));
         } else if (keys === CUSTOM_FILTER_MAPPING.scope.keys) {
           if (
             selectedFilter.has('Third Party') &&

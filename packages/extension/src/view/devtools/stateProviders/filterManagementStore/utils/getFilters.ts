@@ -48,10 +48,9 @@ const getFilters = (cookies: CookieTableData[]): Filter[] => {
       }
 
       if (value && filters[key]) {
-        filters[key].filters?.add(value);
+        filters[key].filters?.add(String(value));
       }
     });
-
     const collectedFilters = filters[key]?.filters;
 
     // Formatting and sorting.
