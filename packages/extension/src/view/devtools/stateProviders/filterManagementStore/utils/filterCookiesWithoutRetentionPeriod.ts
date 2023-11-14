@@ -62,7 +62,8 @@ const filterCookiesWithoutRetentionPeriod = (
           keys !== CUSTOM_FILTER_MAPPING.retentionPeriod.keys &&
           keys !== CUSTOM_FILTER_MAPPING.scope.keys &&
           keys !== CUSTOM_FILTER_MAPPING.setVia.keys &&
-          keys !== CUSTOM_FILTER_MAPPING.samesite.keys
+          keys !== CUSTOM_FILTER_MAPPING.samesite.keys &&
+          keys !== CUSTOM_FILTER_MAPPING.priority.keys
         ) {
           let value = getFilterValue(keys, cookieData);
           const filterMap = FILTER_MAPPING.find(
@@ -111,6 +112,18 @@ const filterCookiesWithoutRetentionPeriod = (
           }
           if (selectedFilter.has('Lax') && !canBeShown) {
             canBeShown = cookieData.parsedCookie.samesite === 'lax';
+          }
+          canShow.push(canBeShown);
+        } else if (keys === CUSTOM_FILTER_MAPPING.priority.keys) {
+          let canBeShown = false;
+          if (selectedFilter.has('Low') && !canBeShown) {
+            canBeShown = cookieData.parsedCookie?.priority === 'Low';
+          }
+          if (selectedFilter.has('Medium') && !canBeShown) {
+            canBeShown = cookieData.parsedCookie?.priority === 'Medium';
+          }
+          if (selectedFilter.has('High') && !canBeShown) {
+            canBeShown = cookieData.parsedCookie?.priority === 'High';
           }
           canShow.push(canBeShown);
         }

@@ -67,6 +67,12 @@ export const CUSTOM_FILTER_MAPPING = {
     filters: new Set(['First Party', 'Third Party']),
     order: 2,
   },
+  priority: {
+    name: 'Priority',
+    keys: 'parsedCookie.priority',
+    filters: new Set(['Low', 'Medium', 'High']),
+    order: 11,
+  },
   retentionPeriod: {
     name: 'Retention Period',
     keys: 'retentionPeriod',
@@ -105,4 +111,5 @@ export const MAPPING_KEYS_TO_NAME = {
   headerType: 'Set Via',
   retentionPeriod: 'Retention Period',
   isFirstParty: 'Scope',
+  'parsedCookie.priority': 'Priority',
 };

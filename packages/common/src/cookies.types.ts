@@ -50,7 +50,9 @@ export type CookieAnalytics = {
 };
 
 export type CookieData = {
-  parsedCookie: ParsedCookie;
+  parsedCookie: ParsedCookie & {
+    priority: 'Low' | 'Medium' | 'High';
+  };
   analytics: CookieAnalytics | null;
   url: string;
   headerType: 'response' | 'request' | 'javascript';
