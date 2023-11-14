@@ -31,11 +31,11 @@ export type TableSearchOutput = {
   searchFilteredData: TableData[];
 };
 
-const useSearch = (data: TableData[], searchKeys: string[]) => {
+const useSearch = (data: TableData[], searchKeys: string[] | undefined) => {
   const [searchValue, setSearchValue] = useState<string>('');
 
   const searchFilteredData = useMemo<TableData[]>(() => {
-    if (!searchValue) {
+    if (!searchValue || !searchKeys) {
       return data;
     }
 

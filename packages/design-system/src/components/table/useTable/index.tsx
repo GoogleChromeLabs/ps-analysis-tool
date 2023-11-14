@@ -108,7 +108,7 @@ const useTable = ({
   data,
   tableColumns,
   tableFilterData,
-  tableSearchKeys = [],
+  tableSearchKeys,
   options,
 }: useTableProps): TableOutput => {
   const {

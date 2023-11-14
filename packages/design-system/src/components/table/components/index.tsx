@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Resizable } from 're-resizable';
 import { PreferenceDataValues } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
@@ -27,6 +28,9 @@ import TableBody from './tableBody';
 import ColumnMenu from './columnMenu';
 import { TableData, TableOutput, TableRow } from '../useTable';
 import { noop } from '../../../utils';
+import TableTopBar from './tableTopBar';
+import ChipsBar from './filtersSidebar/chips';
+import FiltersSidebar from './filtersSidebar';
 
 interface TableProps {
   table: TableOutput;
@@ -39,6 +43,7 @@ interface TableProps {
       [key: string]: unknown;
     }) => PreferenceDataValues
   ) => void;
+  showTopBar?: boolean;
 }
 
 const Table = ({
@@ -47,8 +52,10 @@ const Table = ({
   getRowObjectKey,
   onRowClick,
   updatePreference = noop,
+  showTopBar = false,
 }: TableProps) => {
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
+  const [showFilterSidebar, setShowFilterSidebar] = useState(false);
   const [columnPosition, setColumnPosition] = useState({
     x: 0,
     y: 0,
@@ -89,33 +96,68 @@ const Table = ({
   );
 
   return (
-    <div
-      ref={table.tableContainerRef}
-      className="relative h-full w-full overflow-auto"
-    >
-      <ColumnMenu
-        updatePreference={updatePreference}
-        table={table}
-        open={showColumnsMenu}
-        onClose={setShowColumnsMenu}
-        position={columnPosition}
+    <div className="w-full h-full flex flex-col">
+      {showTopBar && (
+        <TableTopBar
+          searchValue={table.searchValue}
+          setSearchValue={table.setSearchValue}
+          showFilterSidebar={showFilterSidebar}
+          setShowFilterSidebar={setShowFilterSidebar}
+          cookiesCount={table.rows.length}
+        />
+      )}
+      <ChipsBar
+        selectedFilters={table.selectedFilters}
+        toggleFilterSelection={table.toggleFilterSelection}
+        resetFilters={table.resetFilters}
       />
-      <div className="h-full w-full overflow-auto min-w-[70rem]" ref={tableRef}>
-        <TableHeader
-          updatePreference={updatePreference}
-          table={table}
-          setColumnPosition={setColumnPosition}
-          onRightClick={handleRightClick}
-          setIsRowFocused={setIsRowFocused}
-        />
-        <TableBody
-          table={table}
-          getRowObjectKey={getRowObjectKey}
-          isRowFocused={isRowFocused}
-          setIsRowFocused={setIsRowFocused}
-          selectedKey={selectedKey}
-          onRowClick={onRowClick}
-        />
+      <div className="w-full flex-1 overflow-hidden h-full flex">
+        {table.rows.length > 0 && showFilterSidebar && (
+          <Resizable
+            minWidth="100px"
+            maxWidth="50%"
+            enable={{
+              right: true,
+            }}
+          >
+            <FiltersSidebar
+              filters={table.filters}
+              toggleFilterSelection={table.toggleFilterSelection}
+            />
+          </Resizable>
+        )}
+        <div
+          ref={table.tableContainerRef}
+          className="relative h-full w-full overflow-auto"
+        >
+          <ColumnMenu
+            updatePreference={updatePreference}
+            table={table}
+            open={showColumnsMenu}
+            onClose={setShowColumnsMenu}
+            position={columnPosition}
+          />
+          <div
+            className="h-full w-full overflow-auto min-w-[70rem]"
+            ref={tableRef}
+          >
+            <TableHeader
+              updatePreference={updatePreference}
+              table={table}
+              setColumnPosition={setColumnPosition}
+              onRightClick={handleRightClick}
+              setIsRowFocused={setIsRowFocused}
+            />
+            <TableBody
+              table={table}
+              getRowObjectKey={getRowObjectKey}
+              isRowFocused={isRowFocused}
+              setIsRowFocused={setIsRowFocused}
+              selectedKey={selectedKey}
+              onRowClick={onRowClick}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
