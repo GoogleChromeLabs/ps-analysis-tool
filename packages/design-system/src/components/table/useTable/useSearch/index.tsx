@@ -43,7 +43,7 @@ const useSearch = (data: TableData[], searchKeys: string[] | undefined) => {
       return searchKeys.some((key) => {
         const value = getValueByKey(key, row);
 
-        if (value.toLowerCase() === searchValue.toLowerCase()) {
+        if (value.toLowerCase().includes(searchValue.toLowerCase())) {
           return true;
         }
 

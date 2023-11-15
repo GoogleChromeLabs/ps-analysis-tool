@@ -41,6 +41,7 @@ interface CookieTableProps {
   data: TableData[];
   tableColumns: TableColumn[];
   tableFilters?: TableFilter;
+  tableSearchKeys?: string[];
   selectedFrame: string | null;
   showTopBar?: boolean;
   selectedFrameCookie: {
@@ -65,6 +66,7 @@ interface CookieTableProps {
 const CookieTable = ({
   tableColumns,
   tableFilters,
+  tableSearchKeys,
   data: cookies,
   showTopBar,
   selectedFrame,
@@ -106,6 +108,7 @@ const CookieTable = ({
     tableColumns,
     data: cookies,
     tableFilterData: tableFilters,
+    tableSearchKeys,
     options: {
       columnSizing:
         columnSizing && Object.keys(columnSizing).length > 0

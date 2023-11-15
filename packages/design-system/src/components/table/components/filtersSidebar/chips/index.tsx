@@ -51,8 +51,7 @@ const ChipsBar = ({
       } w-full h-[25px] py-1 px-2 flex items-center overflow-x-scroll no-scrollbar bg-anti-flash-white dark:bg-raisin-black border-b border-gray-300 dark:border-quartz`}
     >
       {appliedFiltersCount > 1 && (
-        <a
-          href="#"
+        <button
           className="h-full flex items-center text-link text-xs whitespace-nowrap"
           onClick={resetFilters}
         >
@@ -61,7 +60,7 @@ const ChipsBar = ({
             Clear all
           </span>
           <div className="w-[1px] bg-gainsboro dark:bg-quartz h-[20px]"></div>
-        </a>
+        </button>
       )}
       <ChipList
         selectedFilters={selectedFilters}

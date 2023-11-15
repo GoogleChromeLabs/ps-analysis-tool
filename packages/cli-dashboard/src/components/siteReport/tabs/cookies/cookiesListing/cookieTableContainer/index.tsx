@@ -283,12 +283,18 @@ const CookieTableContainer = ({
     []
   );
 
+  const searchKeys = useMemo<string[]>(
+    () => ['parsedCookie.name', 'parsedCookie.domain'],
+    []
+  );
+
   return (
     <CookieTable
       data={cookies}
       tableColumns={tableColumns}
       showTopBar={true}
       tableFilters={filters}
+      tableSearchKeys={searchKeys}
       selectedFrame={selectedFrame}
       selectedFrameCookie={selectedFrameCookie}
       setSelectedFrameCookie={setSelectedFrameCookie}
