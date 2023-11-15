@@ -81,4 +81,3 @@ chrome-chip() {
   launch_chrome \
     --partitioned-cookies=true
 }
-chrome-3pcd-ps
