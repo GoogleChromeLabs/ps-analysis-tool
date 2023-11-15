@@ -81,6 +81,15 @@ const CookieTableContainer = ({
         cell: (info: InfoType) => info,
       },
       {
+        header: 'Cookie Accepted',
+        accessorKey: 'isCookieSet',
+        cell: (info: InfoType) => (
+          <p className="flex justify-center items-center">
+            <span className="font-serif">{info ? '✓' : '✗'}</span>
+          </p>
+        ),
+      },
+      {
         header: 'Expires / Max-Age',
         accessorKey: 'parsedCookie.expires',
         cell: (info: InfoType) => (info ? info : 'Session'),
@@ -124,19 +133,6 @@ const CookieTableContainer = ({
         cell: (info: InfoType) => (
           <p className="truncate w-full">
             {!info ? 'Third Party' : 'First Party'}
-          </p>
-        ),
-      },
-      {
-        header: 'Cookie Accepted',
-        accessorKey: 'isCookieSet',
-        cell: (info: InfoType) => (
-          <p className="flex justify-center items-center">
-            {info ? (
-              <span className="font-serif">✓</span>
-            ) : (
-              <span className="font-serif">✗</span>
-            )}
           </p>
         ),
       },
