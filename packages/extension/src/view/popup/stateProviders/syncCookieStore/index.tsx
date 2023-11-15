@@ -54,7 +54,7 @@ export interface CookieStoreContext {
   };
   actions: {
     changeListeningToThisTab: () => void;
-    setUsingCDP: React.Dispatch<React.SetStateAction<boolean>>;
+    setUsingCDP: (newValue: boolean) => void;
   };
 }
 
@@ -134,15 +134,14 @@ export const Provider = ({ children }: PropsWithChildren) => {
     setLoading(false);
   }, 100);
 
-  useEffect(() => {
-    (async () => {
-      const extensionStorage = await chrome.storage.sync.get();
-      chrome.storage.sync.set({
-        ...extensionStorage,
-        isUsingCDP: isUsingCDP,
-      });
-    })();
-  }, [isUsingCDP]);
+  const _setUsingCDP = useCallback(async (newValue: boolean) => {
+    const extensionStorage = await chrome.storage.sync.get();
+    chrome.storage.sync.set({
+      ...extensionStorage,
+      isUsingCDP: newValue,
+    });
+    setUsingCDP(newValue);
+  }, []);
 
   const intitialSync = useCallback(async () => {
     const [tab] = await getCurrentTab();
@@ -197,8 +196,8 @@ export const Provider = ({ children }: PropsWithChildren) => {
       }
     }
 
-    const tabData = (await chrome.storage.local.get([_tabId.toString()]))[
-      _tabId.toString()
+    const tabData = (await chrome.storage.local.get([_tabId?.toString()]))[
+      _tabId?.toString()
     ];
 
     if (tabData && tabData.cookies) {
@@ -304,6 +303,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
     if (extensionStorage?.allowedNumberOfTabs) {
       setAllowedNumberOfTabs(extensionStorage?.allowedNumberOfTabs);
     }
+    if (extensionStorage?.isUsingCDP) {
+      setUsingCDP(extensionStorage?.isUsingCDP);
+    }
   }, []);
 
   const tabUpdateListener = useCallback(
@@ -347,7 +349,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         },
         actions: {
           changeListeningToThisTab,
-          setUsingCDP,
+          setUsingCDP: _setUsingCDP,
         },
       }}
     >

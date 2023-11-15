@@ -20,7 +20,7 @@ import React from 'react';
 
 type ToggleSwitchProps = {
   enabled: boolean;
-  setEnabled: React.Dispatch<React.SetStateAction<boolean>>;
+  setEnabled: (newValue: boolean) => void;
   onLabel: string;
   additionalStyles?: string;
 };

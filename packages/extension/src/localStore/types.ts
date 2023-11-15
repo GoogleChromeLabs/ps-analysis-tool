@@ -123,6 +123,54 @@ export type NetworkRequestExtraInfoParams = {
   };
   siteHasCookieInOtherPartition: boolean;
 };
+type CookieWarningReasons =
+  | 'WarnSameSiteUnspecifiedCrossSiteContext'
+  | 'WarnSameSiteNoneInsecure'
+  | 'WarnSameSiteUnspecifiedLaxAllowUnsafe'
+  | 'WarnSameSiteStrictLaxDowngradeStrict'
+  | 'WarnSameSiteStrictCrossDowngradeStrict'
+  | 'WarnSameSiteStrictCrossDowngradeLax'
+  | 'WarnSameSiteLaxCrossDowngradeStrict'
+  | 'WarnSameSiteLaxCrossDowngradeLax'
+  | 'WarnAttributeValueExceedsMaxSize'
+  | 'WarnDomainNonASCII'
+  | 'WarnThirdPartyPhaseout'
+  | 'WarnCrossSiteRedirectDowngradeChangesInclusion';
+
+type CookieExclusionReason =
+  | 'ExcludeSameSiteUnspecifiedTreatedAsLax'
+  | 'ExcludeSameSiteNoneInsecure'
+  | 'ExcludeSameSiteLax'
+  | 'ExcludeSameSiteStrict'
+  | 'ExcludeInvalidSameParty'
+  | 'ExcludeSamePartyCrossPartyContext'
+  | 'ExcludeDomainNonASCII'
+  | 'ExcludeThirdPartyCookieBlockedInFirstPartySet'
+  | 'ExcludeThirdPartyPhaseout';
+
+export type CookieIssueDetails = {
+  cookie?: {
+    name: string;
+    domain: string;
+    path: string;
+  };
+  rawCookieLine: string;
+  cookieWarningReasons: CookieWarningReasons[];
+  cookieExclusionReasons: CookieExclusionReason[];
+  operation: 'SetCookie' | 'ReadCookie';
+  siteForCookies?: string;
+  cookieUrl?: string;
+  request?: string;
+};
+export type AuditParamIssue = {
+  code: string;
+  details: { [key: string]: any };
+  issueId: string;
+};
+
+export type AuditParams = {
+  issue: AuditParamIssue;
+};
 
 export type NetworkResponseReceivedExtraInfo = {
   requestId: string;

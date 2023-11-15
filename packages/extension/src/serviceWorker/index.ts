@@ -29,6 +29,7 @@ import {
   type NetworkResponseReceivedExtraInfo,
   CookieStore,
   type BlockedResponseCookieWithReason,
+  type AuditParams,
 } from '../localStore';
 import parseResponseCookieHeader from './parseResponseCookieHeader';
 import parseRequestCookieHeader from './parseRequestCookieHeader';
@@ -309,6 +310,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 });
 
 chrome.debugger.onEvent.addListener(async (source, method, params) => {
+  // eslint-disable-next-line complexity
   await PROMISE_QUEUE.add(async () => {
     let tabId = '';
 
@@ -393,10 +395,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       }
     }
 
-    if (
-      method === 'Network.responseReceivedExtraInfo' &&
-      (params as NetworkResponseReceivedExtraInfo)
-    ) {
+    if (method === 'Network.responseReceivedExtraInfo' && params) {
       const responseParams = params as NetworkResponseReceivedExtraInfo;
       const syncStorage = await chrome.storage.sync.get();
       const localStorage = await chrome.storage.local.get();
@@ -479,6 +478,38 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         }
       }
     }
+
+    if (method === 'Audits.issueAdded' && params) {
+      const auditParams = params as AuditParams;
+      const syncStorage = await chrome.storage.sync.get();
+      const localStorage = await chrome.storage.local.get();
+      const { code, details } = auditParams.issue;
+      if (code !== 'CookieIssue' && !details?.CookieIssueDetails) {
+        return;
+      }
+      if (
+        syncStorage.allowedNumberOfTabs &&
+        syncStorage.allowedNumberOfTabs === 'unlimited'
+      ) {
+        const { cookie, cookieExclusionReason, cookieWarningReason } =
+          details.CookieIssueDetails;
+        await CookieStore.addCookieExclusionWarningReason(
+          cookie.name + cookie.domain + cookie.Path,
+          [...cookieExclusionReason, ...cookieWarningReason]
+        );
+      } else if (
+        syncStorage.allowedNumberOfTabs &&
+        syncStorage.allowedNumberOfTabs !== 'unlimited' &&
+        localStorage.tabToRead === tabId
+      ) {
+        const { cookie, cookieExclusionReason, cookieWarningReason } =
+          details.CookieIssueDetails;
+        await CookieStore.addCookieExclusionWarningReason(
+          cookie.name + cookie.domain + cookie.Path,
+          [...cookieExclusionReason, ...cookieWarningReason]
+        );
+      }
+    }
   });
 });
 
@@ -501,6 +532,7 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
         await chrome.debugger.attach({ tabId: details.tabId }, '1.3');
         localStorage[details.tabId?.toString()].isDebuggerAttached = true;
         chrome.debugger.sendCommand({ tabId: details.tabId }, 'Network.enable');
+        chrome.debugger.sendCommand({ tabId: details.tabId }, 'Audits.enable');
         await chrome.storage.local.set(localStorage);
       } catch (error) {
         //do nothing
@@ -520,6 +552,7 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
         await chrome.debugger.attach({ tabId: details.tabId }, '1.3');
         localStorage[details.tabId?.toString()].isDebuggerAttached = true;
         chrome.debugger.sendCommand({ tabId: details.tabId }, 'Network.enable');
+        chrome.debugger.sendCommand({ tabId: details.tabId }, 'Audits.enable');
         await chrome.storage.local.set(localStorage);
       } catch (error) {
         //do nothing

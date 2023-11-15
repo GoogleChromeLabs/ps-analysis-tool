@@ -97,6 +97,24 @@ const CookieStore = {
   },
 
   /**
+   * Deletes a cookie
+   * @param {string} cookieName Name of the cookie.
+   * @param {string[]} reasons reasons to be added to the blocked reason array.
+   */
+  async addCookieExclusionWarningReason(cookieName: string, reasons: string[]) {
+    const storage = await chrome.storage.local.get();
+
+    Object.values(storage).forEach((tabData) => {
+      tabData.cookies[cookieName].blockedReasons = [
+        ...(tabData.cookies[cookieName].blockedReasons ?? []),
+        ...reasons,
+      ];
+    });
+
+    await chrome.storage.local.set(storage);
+  },
+
+  /**
    * Update the focusedAt timestamp for the tab.
    * @param {string} tabId The active tab id.
    */
