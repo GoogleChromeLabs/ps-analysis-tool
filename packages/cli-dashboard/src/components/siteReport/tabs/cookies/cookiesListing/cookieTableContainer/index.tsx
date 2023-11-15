@@ -139,8 +139,17 @@ const CookieTableContainer = ({
       },
       isFirstParty: {
         title: 'Scope',
-        calculateFilterValues: (value: InfoType) => {
-          return value ? 'First Party' : 'Third Party';
+        filterValues: {
+          'First Party': {
+            selected: false,
+          },
+          'Third Party': {
+            selected: false,
+          },
+        },
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = value as boolean;
+          return val === (filterValue === 'First Party');
         },
       },
       'parsedCookie.domain': {
@@ -148,21 +157,50 @@ const CookieTableContainer = ({
       },
       'parsedCookie.httponly': {
         title: 'HttpOnly',
-        calculateFilterValues: (value: InfoType) => {
-          return value ? 'True' : 'False';
+        filterValues: {
+          True: {
+            selected: false,
+          },
+          False: {
+            selected: false,
+          },
+        },
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = value as boolean;
+          return val === (filterValue === 'True');
         },
       },
       'parsedCookie.samesite': {
         title: 'SameSite',
-        calculateFilterValues: (value: InfoType) => {
+        filterValues: {
+          None: {
+            selected: false,
+          },
+          Lax: {
+            selected: false,
+          },
+          Strict: {
+            selected: false,
+          },
+        },
+        comparator: (value: InfoType, filterValue: string) => {
           const val = value as string;
-          return val[0].toUpperCase() + val.slice(1);
+          return val.toLowerCase() === filterValue.toLowerCase();
         },
       },
       'parsedCookie.secure': {
         title: 'Secure',
-        calculateFilterValues: (value: InfoType) => {
-          return value ? 'True' : 'False';
+        filterValues: {
+          True: {
+            selected: false,
+          },
+          False: {
+            selected: false,
+          },
+        },
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = value as boolean;
+          return val === (filterValue === 'True');
         },
       },
       'parsedCookie.path': {
@@ -223,8 +261,17 @@ const CookieTableContainer = ({
         title: 'Cookie Accepted',
         description:
           "Whether the cookie was accepted(set) in Chrome's Cookie Store",
-        calculateFilterValues: (value: InfoType) => {
-          return value ? 'True' : 'False';
+        filterValues: {
+          True: {
+            selected: false,
+          },
+          False: {
+            selected: false,
+          },
+        },
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = value as boolean;
+          return val === (filterValue === 'True');
         },
       },
     }),
