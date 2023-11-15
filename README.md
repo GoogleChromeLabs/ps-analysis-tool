@@ -6,9 +6,13 @@
 
 [Privacy Sandbox](https://privacysandbox.com/) is a multi-year [initiative by Google](https://developer.chrome.com/docs/privacy-sandbox/) for building a more private web by defining a set of building blocks (i.e. proposed APIs) enabling [a new privacy model for the web](https://github.com/michaelkleber/privacy-model). Privacy Sandbox encompasses replacing functionality powered by third-party cookies with privacy-preserving alternatives, deprecating third-party cookies, and ensuring developers have a well-lit path to the new capabilities of the platform, and avoid pursuing tracking via other means. 
 
-The purpose of this tool is to shed light, provide insights, and help you to learn and understand the changes that are happening in the context of Privacy Sandbox, and the potential impact on your site or web product.
+This repository is home to the Privacy Sandbox Analysis DevTools extension (PSAT), which is a tool aimed at assisting developers in preparing their websites for the changes that are happening in Chrome in the context of Privacy Sandbox, and ensuring a seamless transition to a more private web.
 
-# Installing and Running PSAT
+# Learn about how to use PSAT
+
+To start leveraging the capabilities of this tool, check out the repository [wiki page](https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki), which contains detailed information about analyzing and debugging specific scenarios, and will help you map them to the specifics of your site. 
+
+# Installing and running PSAT
 
 ## Build PSAT from source
 
@@ -25,7 +29,7 @@ The purpose of this tool is to shed light, provide insights, and help you to lea
 - Turn on "Developer mode" in `chrome://extensions` to [load the unpacked extension](https://developer.chrome.com/docs/extensions/mv3/getstarted/development-basics/#load-unpacked)
 - Click the "Load unpacked" button and select the unzipped extension folder.
 
-## Build and Run PSAT's CLI
+## Build and run PSAT's CLI
 
 - Clone this Privacy Sandbox Analysis Tool Repository
 - Run `npm install` to install all dependencies
