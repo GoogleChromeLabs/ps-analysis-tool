@@ -17,7 +17,7 @@
 /**
  * Internal dependencies.
  */
-import { CookieAnalytics, CookieDatabase } from '../types';
+import { CookieAnalytics, CookieDatabase } from '../cookies.types';
 
 /**
  * Matches wildcard string to a provided string. For eg Foo_* matches Foo_123.

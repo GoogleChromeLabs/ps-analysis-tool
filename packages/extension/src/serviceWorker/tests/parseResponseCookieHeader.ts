@@ -18,12 +18,11 @@
  * External dependencies.
  */
 import SinonChrome from 'sinon-chrome';
-
+import { emptyAnalytics } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
 import parseResponseCookieHeader from '../parseResponseCookieHeader';
-import { emptyAnalytics } from '../findAnalyticsMatch';
 
 describe('parseResponseCookieHeader', () => {
   beforeAll(() => {

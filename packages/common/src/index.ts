@@ -20,8 +20,15 @@ export { default as filterCookiesByFrame } from './utils/filterCookiesByFrame';
 export { default as prepareCookiesCount } from './utils/prepareCookiesCount';
 export { default as prepareCookieStatsComponents } from './utils/prepareCookieStatsComponents';
 export { default as getCookieKey } from './utils/getCookieKey';
+export {
+  default as findAnalyticsMatch,
+  emptyAnalytics,
+} from './utils/findAnalyticsMatch';
 export { default as fetchLocalData } from './utils/fetchLocalData';
 export { default as cookieIssueDetails } from './utils/cookieExclusionAndWarningReasons';
+export { default as parseResponseReceivedExtraInfo } from './utils/parseResponseReceivedExtraInfo';
+export { default as parseRequestWillBeSentExtraInfo } from './utils/parseRequestWillBeSentExtraInfo';
 export { default as noop } from './utils/noop';
 export * from './cookies.types';
+export * from './cdp.types';
 export const UNKNOWN_FRAME_KEY = 'Unknown frame(s)';

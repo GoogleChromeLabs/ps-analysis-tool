@@ -51,7 +51,7 @@ export type CookieAnalytics = {
 
 export type CookieData = {
   parsedCookie: ParsedCookie & {
-    priority: 'Low' | 'Medium' | 'High';
+    priority?: 'Low' | 'Medium' | 'High';
   };
   analytics: CookieAnalytics | null;
   url: string;
@@ -129,3 +129,7 @@ export type PreferenceDataValues =
   | string
   | SelectedFilters
   | SortingState[];
+
+export type CookieDatabase = {
+  [name: string]: Array<CookieAnalytics>;
+};

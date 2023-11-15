@@ -18,19 +18,19 @@
  * External dependencies.
  */
 import PQueue from 'p-queue';
-import { parse } from 'simple-cookie';
-
-/**
- * Internal dependencies.
- */
 import {
   type CookieData,
   type NetworkRequestExtraInfoParams,
   type NetworkResponseReceivedExtraInfo,
-  CookieStore,
-  type BlockedResponseCookieWithReason,
   type AuditParams,
-} from '../localStore';
+  parseResponseReceivedExtraInfo,
+  parseRequestWillBeSentExtraInfo,
+} from '@ps-analysis-tool/common';
+
+/**
+ * Internal dependencies.
+ */
+import { CookieStore } from '../localStore';
 import parseResponseCookieHeader from './parseResponseCookieHeader';
 import parseRequestCookieHeader from './parseRequestCookieHeader';
 import { getTab } from '../utils/getTab';
@@ -40,7 +40,6 @@ import {
   fetchDictionary,
 } from '../utils/fetchCookieDictionary';
 import { ALLOWED_NUMBER_OF_TABS } from '../constants';
-import findAnalyticsMatch from './findAnalyticsMatch';
 
 let cookieDB: CookieDatabase | null = null;
 
@@ -333,30 +332,9 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         syncStorage.allowedNumberOfTabs &&
         syncStorage.allowedNumberOfTabs === 'unlimited'
       ) {
-        const cookies: CookieData[] = [];
-
-        requestParams.associatedCookies.forEach(
-          ({ blockedReasons, cookie }) => {
-            const singleCookie = {
-              isBlocked: !(blockedReasons.length === 0),
-              parsedCookie: {
-                ...cookie,
-                expires: cookie.expires
-                  ? String(new Date(cookie.expires).toISOString())
-                  : 'Session',
-              },
-              partitionKey: cookie?.partitionKey,
-              blockedReasons,
-              analytics: cookieDB
-                ? findAnalyticsMatch(cookie.name, cookieDB)
-                : null,
-              url: requestParams.headers['url'],
-              headerType: 'request' as CookieData['headerType'],
-              isFirstParty: cookie?.sameParty,
-              frameIdList: [0],
-            };
-            cookies.push(singleCookie);
-          }
+        const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
+          requestParams,
+          cookieDB
         );
 
         await CookieStore.update(tabId, cookies);
@@ -365,30 +343,9 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         syncStorage.allowedNumberOfTabs !== 'unlimited' &&
         localStorage.tabToRead === tabId
       ) {
-        const cookies: CookieData[] = [];
-
-        requestParams.associatedCookies.forEach(
-          ({ blockedReasons, cookie }) => {
-            const singleCookie = {
-              isBlocked: !(blockedReasons.length === 0),
-              blockedReasons,
-              parsedCookie: {
-                ...cookie,
-                expires: cookie.expires
-                  ? String(new Date(cookie.expires).toISOString())
-                  : 'Session',
-              },
-              partitionKey: cookie?.partitionKey,
-              analytics: cookieDB
-                ? findAnalyticsMatch(cookie.name, cookieDB)
-                : null,
-              url: requestParams.headers['url'],
-              headerType: 'request' as CookieData['headerType'],
-              isFirstParty: cookie?.sameParty,
-              frameIdList: [0],
-            };
-            cookies.push(singleCookie);
-          }
+        const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
+          requestParams,
+          cookieDB
         );
 
         await CookieStore.update(tabId, cookies);
@@ -404,36 +361,10 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         syncStorage.allowedNumberOfTabs === 'unlimited'
       ) {
         if (responseParams.headers['set-cookie']) {
-          const allCookies = responseParams?.headers['set-cookie']
-            ?.split('\n')
-            .map((headerLine: string) => {
-              const parsedCookie = parse(headerLine);
-              const blockedCookie = responseParams.blockedCookies.find(
-                (c: BlockedResponseCookieWithReason) => {
-                  return c.cookie?.name === parsedCookie.name;
-                }
-              );
-
-              return {
-                isBlocked: blockedCookie ? true : false,
-                blockedReasons: blockedCookie
-                  ? blockedCookie?.blockedReasons
-                  : [],
-                parsedCookie: {
-                  ...parsedCookie,
-                  expires: parsedCookie.expires
-                    ? String(new Date(parsedCookie.expires).toISOString())
-                    : 'Session',
-                },
-                partitionKey: responseParams?.cookiePartitionKey,
-                analytics: cookieDB
-                  ? findAnalyticsMatch(parsedCookie.name, cookieDB)
-                  : null,
-                url: responseParams.headers['url'],
-                headerType: 'response',
-                frameIdList: [0],
-              };
-            });
+          const allCookies = parseResponseReceivedExtraInfo(
+            responseParams,
+            cookieDB
+          );
 
           await CookieStore.update(tabId, allCookies);
         }
@@ -443,36 +374,10 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         localStorage.tabToRead === tabId
       ) {
         if (responseParams.headers['set-cookie']) {
-          const allCookies = responseParams?.headers['set-cookie']
-            ?.split('\n')
-            .map((headerLine: string) => {
-              const parsedCookie = parse(headerLine);
-              const blockedCookie =
-                responseParams.blockedCookies.find(
-                  (c: BlockedResponseCookieWithReason) => {
-                    return c.cookie?.name === parsedCookie.name;
-                  }
-                ) ?? false;
-              return {
-                isBlocked: blockedCookie ? true : false,
-                blockedReasons: blockedCookie
-                  ? blockedCookie?.blockedReasons
-                  : [],
-                parsedCookie: {
-                  ...parsedCookie,
-                  expires: parsedCookie.expires
-                    ? String(new Date(parsedCookie.expires).toISOString())
-                    : 'Session',
-                },
-                partitionKey: responseParams?.cookiePartitionKey,
-                analytics: cookieDB
-                  ? findAnalyticsMatch(parsedCookie.name, cookieDB)
-                  : null,
-                url: responseParams.headers['url'],
-                headerType: 'response',
-                frameIdList: [0],
-              };
-            });
+          const allCookies = parseResponseReceivedExtraInfo(
+            responseParams,
+            cookieDB
+          );
 
           await CookieStore.update(tabId, allCookies);
         }

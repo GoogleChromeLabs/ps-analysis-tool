@@ -16,14 +16,13 @@
 /**
  * External dependencies
  */
-import { isFirstParty } from '@ps-analysis-tool/common';
+import { isFirstParty, findAnalyticsMatch } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import { createCookieObject } from '../serviceWorker/createCookieObject';
 import { fetchDictionary, type CookieDatabase } from './fetchCookieDictionary';
-import findAnalyticsMatch from '../serviceWorker/findAnalyticsMatch';
 import { CookieStore, type CookieData } from '../localStore';
 
 interface ProcessAndStoreDucmentCookiesProps {

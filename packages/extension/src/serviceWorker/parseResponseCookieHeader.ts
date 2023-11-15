@@ -17,17 +17,19 @@
  * External dependencies.
  */
 import cookie, { type Cookie as ParsedCookie } from 'simple-cookie';
-import { isFirstParty } from '@ps-analysis-tool/common';
+import {
+  isFirstParty,
+  findAnalyticsMatch,
+  type CookieData,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import type { CookieData } from '../localStore/cookieStore';
 import type {
   CookieAnalytics,
   CookieDatabase,
 } from '../utils/fetchCookieDictionary';
-import findAnalyticsMatch from './findAnalyticsMatch';
 import { createCookieObject } from './createCookieObject';
 
 /**
