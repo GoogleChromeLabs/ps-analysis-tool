@@ -39,7 +39,6 @@ const useFiltering = (
 ): TableFilteringOutput => {
   const [filters, setFilters] = useState<TableFilter>({
     ...(tableFilterData || {}),
-    filterValues: structuredClone((tableFilterData || {})?.filterValues || {}),
   });
 
   useEffect(() => {
@@ -139,14 +138,19 @@ const useFiltering = (
     return data.filter((row) => {
       return Object.entries(selectedFilters).every(([filterKey, filter]) => {
         const filterValues = filter.filterValues || {};
+
+        if (Object.keys(filterValues).length === 0) {
+          return true;
+        }
+
         const value = getValueByKey(filterKey, row);
 
-        if (filter.comparator) {
+        if (filter.comparator !== undefined) {
           return Object.keys(filterValues).some((filterValue) =>
             filter.comparator?.(value, filterValue)
           );
-        } else if (filterValues[value] && filterValues[value].selected) {
-          return true;
+        } else if (filterValues[value]) {
+          return filterValues[value].selected;
         }
 
         return false;

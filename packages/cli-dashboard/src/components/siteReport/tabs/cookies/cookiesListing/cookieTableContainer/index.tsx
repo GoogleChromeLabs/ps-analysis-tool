@@ -139,6 +139,7 @@ const CookieTableContainer = ({
       },
       isFirstParty: {
         title: 'Scope',
+        hasStaticFilterValues: true,
         filterValues: {
           'First Party': {
             selected: false,
@@ -157,6 +158,7 @@ const CookieTableContainer = ({
       },
       'parsedCookie.httponly': {
         title: 'HttpOnly',
+        hasStaticFilterValues: true,
         filterValues: {
           True: {
             selected: false,
@@ -172,6 +174,7 @@ const CookieTableContainer = ({
       },
       'parsedCookie.samesite': {
         title: 'SameSite',
+        hasStaticFilterValues: true,
         filterValues: {
           None: {
             selected: false,
@@ -190,6 +193,7 @@ const CookieTableContainer = ({
       },
       'parsedCookie.secure': {
         title: 'Secure',
+        hasStaticFilterValues: true,
         filterValues: {
           True: {
             selected: false,
@@ -231,7 +235,7 @@ const CookieTableContainer = ({
           const val = value as string;
           switch (filterValue) {
             case 'Session':
-              return value === 0;
+              return val === 'Session';
 
             case 'Short Term (< 24h)':
               diff = Date.parse(val) - Date.now();
@@ -261,6 +265,7 @@ const CookieTableContainer = ({
         title: 'Cookie Accepted',
         description:
           "Whether the cookie was accepted(set) in Chrome's Cookie Store",
+        hasStaticFilterValues: true,
         filterValues: {
           True: {
             selected: false,
@@ -270,7 +275,7 @@ const CookieTableContainer = ({
           },
         },
         comparator: (value: InfoType, filterValue: string) => {
-          const val = value as boolean;
+          const val = !value;
           return val === (filterValue === 'True');
         },
       },
