@@ -21,6 +21,7 @@ import React, { useMemo } from 'react';
 import type { CookieTableData } from '@ps-analysis-tool/common';
 import {
   CookieTable,
+  type TableFilter,
   type InfoType,
   type TableColumn,
 } from '@ps-analysis-tool/design-system';
@@ -131,10 +132,111 @@ const CookieTableContainer = ({
     []
   );
 
+  const filters = useMemo<TableFilter>(
+    () => ({
+      'analytics.category': {
+        title: 'Category',
+      },
+      isFirstParty: {
+        title: 'Scope',
+        calculateFilterValues: (value: InfoType) => {
+          return value ? 'First Party' : 'Third Party';
+        },
+      },
+      'parsedCookie.domain': {
+        title: 'Domain',
+      },
+      'parsedCookie.httponly': {
+        title: 'HttpOnly',
+        calculateFilterValues: (value: InfoType) => {
+          return value ? 'True' : 'False';
+        },
+      },
+      'parsedCookie.samesite': {
+        title: 'SameSite',
+        calculateFilterValues: (value: InfoType) => {
+          const val = value as string;
+          return val[0].toUpperCase() + val.slice(1);
+        },
+      },
+      'parsedCookie.secure': {
+        title: 'Secure',
+        calculateFilterValues: (value: InfoType) => {
+          return value ? 'True' : 'False';
+        },
+      },
+      'parsedCookie.path': {
+        title: 'Path',
+      },
+      'parsedCookie.expires': {
+        title: 'Retention Period',
+        hasStaticFilterValues: true,
+        filterValues: {
+          Session: {
+            selected: false,
+          },
+          'Short Term (< 24h)': {
+            selected: false,
+          },
+          'Medium Term (24h - 1 week)': {
+            selected: false,
+          },
+          'Long Term (1 week - 1 month)': {
+            selected: false,
+          },
+          'Extended Term (> 1 month)': {
+            selected: false,
+          },
+        },
+        comparator: (value: InfoType, filterValue: string) => {
+          let diff = 0;
+          const val = value as string;
+          switch (filterValue) {
+            case 'Session':
+              return value === 0;
+
+            case 'Short Term (< 24h)':
+              diff = Date.parse(val) - Date.now();
+              return diff < 86400000;
+
+            case 'Medium Term (24h - 1 week)':
+              diff = Date.parse(val) - Date.now();
+              return diff >= 86400000 && diff < 604800000;
+
+            case 'Long Term (1 week - 1 month)':
+              diff = Date.parse(val) - Date.now();
+              return diff >= 604800000 && diff < 2629743833;
+
+            case 'Extended Term (> 1 month)':
+              diff = Date.parse(val) - Date.now();
+              return diff >= 2629743833;
+
+            default:
+              return false;
+          }
+        },
+      },
+      'analytics.platform': {
+        title: 'Platform',
+      },
+      isCookieSet: {
+        title: 'Cookie Accepted',
+        description:
+          "Whether the cookie was accepted(set) in Chrome's Cookie Store",
+        calculateFilterValues: (value: InfoType) => {
+          return value ? 'True' : 'False';
+        },
+      },
+    }),
+    []
+  );
+
   return (
     <CookieTable
-      tableColumns={tableColumns}
       data={cookies}
+      tableColumns={tableColumns}
+      showTopBar={true}
+      tableFilters={filters}
       selectedFrame={selectedFrame}
       selectedFrameCookie={selectedFrameCookie}
       setSelectedFrameCookie={setSelectedFrameCookie}

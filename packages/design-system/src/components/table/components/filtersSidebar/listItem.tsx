@@ -52,7 +52,7 @@ const ListItem = ({
   };
 
   return (
-    <li className="py-[3px]">
+    <li className="py-[3px] text-xs">
       <div className="flex gap-2 items-center">
         <a
           href="#"
@@ -81,7 +81,7 @@ const ListItem = ({
           {Number(Object.keys(filter.filterValues || {}).length) > 4 && (
             <a
               onClick={toggleShowMore}
-              className="text-md text-link ml-2 mt-1 block text-royal-blue dark:text-medium-persian-blue"
+              className="text-link ml-2 mt-1 block text-royal-blue dark:text-medium-persian-blue"
               href="#"
             >
               {isExpanded ? 'Show Less' : 'Show More'}

@@ -59,12 +59,15 @@ export type TableFilter = {
   [accessorKey: string]: {
     title: string;
     description?: string;
+    hasStaticFilterValues?: boolean;
     filterValues?: {
       [filterValue: string]: {
         selected: boolean;
         description?: string;
       };
     };
+    calculateFilterValues?: (value: InfoType) => string;
+    comparator?: (value: InfoType, filterValue: string) => boolean;
   };
 };
 

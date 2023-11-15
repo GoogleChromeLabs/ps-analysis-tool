@@ -56,12 +56,9 @@ const TableTopBar = ({
   return (
     <div className="w-full h-[25px] px-2 flex items-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green">
       <button
-        className={classNames('w-3 h-3', {
-          'opacity-20': !cookiesCount,
-        })}
+        className={classNames('w-3 h-3')}
         onClick={() => setShowFilterSidebar(!showFilterSidebar)}
         title="Open filter options"
-        disabled={!cookiesCount}
       >
         <FilterIcon
           className={
