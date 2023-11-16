@@ -15,22 +15,28 @@
  */
 
 /**
- * External dependencies.
+ * External dependencies
  */
 import React from 'react';
 import type { CookieTableData } from '@ps-analysis-tool/common';
 
 /**
- * Internal dependencies.
+ * Internal dependencies
  */
-import AffectedCookies from '../affectedCookies';
+import AffectedCookies from '../../../affectedCookies';
 
-interface SiteMapAffectedCookiesProps {
+interface SiteAffectedCookiesProps {
   cookies: CookieTableData[];
+  selectedFrameUrl: string | null;
 }
 
-const SiteMapAffectedCookies = ({ cookies }: SiteMapAffectedCookiesProps) => {
-  return <AffectedCookies cookies={cookies} selectedFrameUrl={'sitemap'} />;
+const SiteAffectedCookies = ({
+  cookies,
+  selectedFrameUrl,
+}: SiteAffectedCookiesProps) => {
+  return (
+    <AffectedCookies cookies={cookies} selectedFrameUrl={selectedFrameUrl} />
+  );
 };
 
-export default SiteMapAffectedCookies;
+export default SiteAffectedCookies;

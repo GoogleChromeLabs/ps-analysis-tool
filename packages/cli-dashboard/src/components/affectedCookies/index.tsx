@@ -15,7 +15,7 @@
  */
 
 /**
- * External dependencies
+ * External dependencies.
  */
 import React, { useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
@@ -27,21 +27,15 @@ import {
 } from '@ps-analysis-tool/design-system';
 import type { CookieTableData } from '@ps-analysis-tool/common';
 
-/**
- * Internal dependencies
- */
-import { useContentStore } from '../../stateProviders/contentStore';
-
 interface AffectedCookiesProps {
+  cookies: CookieTableData[];
   selectedFrameUrl: string | null;
 }
 
-const AffectedCookies = ({ selectedFrameUrl }: AffectedCookiesProps) => {
-  const { tabCookies } = useContentStore(({ state }) => ({
-    tabCookies: Object.values(state.tabCookies).filter(
-      (cookie) => !cookie.isCookieSet
-    ),
-  }));
+const AffectedCookies = ({
+  cookies,
+  selectedFrameUrl,
+}: AffectedCookiesProps) => {
   const [selectedFrameCookie, setSelectedFrameCookie] = useState<{
     [frame: string]: CookieTableData | null;
   } | null>(null);
@@ -122,37 +116,30 @@ const AffectedCookies = ({ selectedFrameUrl }: AffectedCookiesProps) => {
 
   return (
     <div className="w-full h-full flex flex-col">
-      <div className="w-full h-[25px] px-2 flex items-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green">
-        <div className="text-right w-full text-xxxs text-secondary">
-          Count: {Number(tabCookies?.length) || 0}
-        </div>
-      </div>
-      <div className="w-full flex-1 overflow-hidden h-full flex flex-col">
-        <Resizable
-          defaultSize={{
-            width: '100%',
-            height: '80%',
-          }}
-          minHeight="6%"
-          maxHeight="95%"
-          enable={{
-            top: false,
-            right: false,
-            bottom: true,
-            left: false,
-          }}
-          className="h-full flex"
-        >
-          <CookieTable
-            tableColumns={tableColumns}
-            data={tabCookies}
-            selectedFrame={selectedFrameUrl}
-            selectedFrameCookie={selectedFrameCookie}
-            setSelectedFrameCookie={setSelectedFrameCookie}
-          />
-        </Resizable>
-        <CookieDetails selectedFrameCookie={selectedFrameCookie} />
-      </div>
+      <Resizable
+        defaultSize={{
+          width: '100%',
+          height: '80%',
+        }}
+        minHeight="6%"
+        maxHeight="95%"
+        enable={{
+          top: false,
+          right: false,
+          bottom: true,
+          left: false,
+        }}
+        className="h-full flex"
+      >
+        <CookieTable
+          data={cookies}
+          tableColumns={tableColumns}
+          selectedFrame={selectedFrameUrl}
+          selectedFrameCookie={selectedFrameCookie}
+          setSelectedFrameCookie={setSelectedFrameCookie}
+        />
+      </Resizable>
+      <CookieDetails selectedFrameCookie={selectedFrameCookie} />
     </div>
   );
 };

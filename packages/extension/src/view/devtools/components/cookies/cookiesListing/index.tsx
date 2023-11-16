@@ -18,6 +18,9 @@
  */
 import React, { useState } from 'react';
 import { Resizable } from 're-resizable';
+import type { CookieTableData } from '@ps-analysis-tool/common';
+import { CookieDetails } from '@ps-analysis-tool/design-system';
+import CookieTableContainer from './cookieTableContainer';
 
 /**
  * Internal dependencies.
@@ -27,9 +30,6 @@ import { useFilterManagementStore } from '../../../stateProviders/filterManageme
 import ChipsBar from '../cookieFilter/chips';
 import CookieTopBar from '../cookieTopBar';
 import FiltersList from '../cookieFilter';
-import type { CookieTableData } from '@ps-analysis-tool/common';
-import { CookieDetails } from '@ps-analysis-tool/design-system';
-import CookieTableContainer from './cookieTableContainer';
 
 const CookiesListing = () => {
   const { selectedFrame } = useCookieStore(({ state }) => ({
