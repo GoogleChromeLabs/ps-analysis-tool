@@ -24,13 +24,13 @@ import React, { useState } from 'react';
  */
 import { ClearIcon } from '../../icons';
 
-interface TextInputProps {
+interface SearchInputProps {
   value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   clearInput: () => void;
 }
 
-const TextInput = ({ value, onChange, clearInput }: TextInputProps) => {
+const SearchInput = ({ value, onChange, clearInput }: SearchInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
 
   return (
@@ -64,4 +64,4 @@ const TextInput = ({ value, onChange, clearInput }: TextInputProps) => {
   );
 };
 
-export default TextInput;
+export default SearchInput;

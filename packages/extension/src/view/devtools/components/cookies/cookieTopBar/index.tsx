@@ -20,8 +20,8 @@ import React, { useCallback } from 'react';
 import classNames from 'classnames';
 import {
   FilterIcon,
-  TextInput,
   RefreshButton,
+  SearchInput,
 } from '@ps-analysis-tool/design-system';
 import type { CookieTableData } from '@ps-analysis-tool/common';
 
@@ -80,7 +80,7 @@ const CookieSearch = ({
           }
         />
       </button>
-      <TextInput
+      <SearchInput
         value={searchTerm}
         onChange={handleInput}
         clearInput={() => setSearchTerm('')}
