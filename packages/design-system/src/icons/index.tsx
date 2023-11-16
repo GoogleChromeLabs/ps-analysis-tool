@@ -19,6 +19,7 @@ export { default as ArrowDownWhite } from './arrow-down-white.svg';
 export { default as ArrowRight } from './arrow-right.svg';
 export { default as ChevronRight } from './chevron-right.svg';
 export { default as ClearAll } from './clear-all.svg';
+export { default as CrossIcon } from './cross-icon.svg';
 export { default as CookieIcon } from './cookie-gray.svg';
 export { default as CookieIconWhite } from './cookie-white.svg';
 export { default as File } from './file.svg';

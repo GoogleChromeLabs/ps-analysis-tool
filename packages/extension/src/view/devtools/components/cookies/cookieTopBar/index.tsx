@@ -19,7 +19,11 @@
 import React, { useCallback } from 'react';
 import classNames from 'classnames';
 import { type CookieTableData, getCookieKey } from '@ps-analysis-tool/common';
-import { ClearAll, RefreshButton } from '@ps-analysis-tool/design-system';
+import {
+  ClearAll,
+  RefreshButton,
+  CrossIcon as ClearSingle,
+} from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
@@ -73,7 +77,7 @@ const CookieSearch = ({
   );
 
   return (
-    <div className="w-full h-[25px] px-2 flex items-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green">
+    <div className="w-full h-[26px] px-2 flex items-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green">
       <div className="flex items-center bg-anti-flash-white dark:bg-charleston-green">
         <button
           className={classNames('w-3 h-3', {
@@ -108,7 +112,7 @@ const CookieSearch = ({
           <CrossIcon className="text-mischka" />
         </button>
       </div>
-      <div className="border-l border-american-silver dark:border-quartz px-2 h-full flex items-center justify-center">
+      <div className="h-full flex gap-x-3 ml-2 items-center justify-center">
         <button
           onClick={() => {
             const selectedKey = Object.values(selectedFrameCookie ?? {})[0];
@@ -119,20 +123,18 @@ const CookieSearch = ({
               }
             }
           }}
-          className="w-3 h-3 flex items-center"
-          title="Delete cookie"
+          className="w-5 h-full flex items-center"
+          title="Delete selected cookie"
         >
-          <CrossIcon className="text-mischka" />
+          <ClearSingle className="rotate-45 text-mischka" />
         </button>
-        <div className="h-full w-px bg-american-silver dark:bg-quartz mx-2" />
         <button
           onClick={deleteAllCookies}
-          className="w-3 h-3 flex items-center"
+          className="w-5 h-full flex items-end"
           title="Delete all cookies"
         >
           <ClearAll className="text-mischka" />
         </button>
-        <div className="h-full w-px bg-american-silver dark:bg-quartz mx-2" />
         <RefreshButton onClick={getCookiesSetByJavascript} />
         <div className="text-right w-full text-xxxs text-secondary">
           Count: {Number(filteredCookies?.length) || 0}
