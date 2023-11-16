@@ -24,13 +24,13 @@ const extractCookies = (
     frameCookies: CookieFrameStorageType;
   },
   pageUrl: string,
-  isLandingPage = false
+  shouldAddUrlToKey = false
 ) => {
   return Object.entries(cookieData).reduce(
     (acc: CookieFrameStorageType, [frame, _data]) => {
       acc[frame] = Object.fromEntries(
         Object.entries(_data.frameCookies).map(([key, cookie]) => [
-          key + (isLandingPage ? '' : pageUrl),
+          key + (shouldAddUrlToKey ? '' : pageUrl),
           {
             ...cookie,
             pageUrl,
