@@ -62,14 +62,20 @@ const useFiltering = (
               return value;
             })
             .reduce((acc, value) => {
-              if (value) {
-                acc[value] = {
-                  selected: false,
-                };
+              if (value && !acc[value]) {
+                if (filterValues[value]) {
+                  acc[value] = {
+                    ...filterValues[value],
+                  };
+                } else {
+                  acc[value] = {
+                    selected: false,
+                  };
+                }
               }
 
               return acc;
-            }, filterValues);
+            }, {});
 
           return [filterKey, { ...filter, filterValues }];
         })
