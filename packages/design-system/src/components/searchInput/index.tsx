@@ -24,13 +24,13 @@ import React, { useEffect, useRef, useState } from 'react';
  */
 import { PaddedCross } from '../../icons';
 
-interface InputProps {
+interface SearchInputProps {
   value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   clearInput: () => void;
 }
 
-const Input = ({ value, onChange, clearInput }: InputProps) => {
+const SearchInput = ({ value, onChange, clearInput }: SearchInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
   const inputContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -90,4 +90,4 @@ const Input = ({ value, onChange, clearInput }: InputProps) => {
   );
 };
 
-export default Input;
+export default SearchInput;
