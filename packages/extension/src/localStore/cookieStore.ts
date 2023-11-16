@@ -67,6 +67,8 @@ const CookieStore = {
                 ..._updatedCookies[cookieKey].frameIdList,
               ])
             ),
+            partitionKey:
+              _updatedCookies[cookieKey].partitionKey ?? cookie?.partitionKey,
           };
         } else {
           _updatedCookies[cookieKey] = cookie;
