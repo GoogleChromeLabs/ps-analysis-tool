@@ -18,24 +18,28 @@
  * External dependencies
  */
 import React from 'react';
-import type { CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies
  */
 import AffectedCookies from '../../../affectedCookies';
+import { useContentStore } from '../../stateProviders/contentStore';
 
 interface SiteAffectedCookiesProps {
-  cookies: CookieTableData[];
   selectedFrameUrl: string | null;
 }
 
 const SiteAffectedCookies = ({
-  cookies,
   selectedFrameUrl,
 }: SiteAffectedCookiesProps) => {
+  const { tabCookies } = useContentStore(({ state }) => ({
+    tabCookies: Object.values(state.tabCookies).filter(
+      (cookie) => !cookie.isCookieSet
+    ),
+  }));
+
   return (
-    <AffectedCookies cookies={cookies} selectedFrameUrl={selectedFrameUrl} />
+    <AffectedCookies cookies={tabCookies} selectedFrameUrl={selectedFrameUrl} />
   );
 };
 
