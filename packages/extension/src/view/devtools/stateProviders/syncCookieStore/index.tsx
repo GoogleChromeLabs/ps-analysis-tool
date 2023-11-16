@@ -467,10 +467,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
         const tabData = localStorage[tabId];
         const cookieDetails = tabData.cookies[cookieKey];
         await CookieStore.deleteCookie(cookieKey);
-        await chrome.cookies.remove({
-          name: cookieDetails?.parsedCookie?.name,
-          url: cookieDetails?.url,
-        });
+        if (cookieDetails?.parsedCookie?.name && cookieDetails?.url) {
+          await chrome.cookies.remove({
+            name: cookieDetails?.parsedCookie?.name,
+            url: cookieDetails?.url,
+          });
+        }
       }
     },
     [tabId]
