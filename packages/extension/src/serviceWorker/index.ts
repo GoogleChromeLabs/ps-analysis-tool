@@ -483,24 +483,50 @@ chrome.storage.sync.onChanged.addListener(
     ) {
       if (
         Object.keys(changes).includes('isUsingCDP') &&
-        changes['isUsingCDP']?.newValue &&
         localStorage?.tabToRead
       ) {
         if (!changes['isUsingCDP'].newValue) {
-          chrome.debugger.detach({ tabId: localStorage.tabToRead });
+          chrome.debugger.detach({ tabId: Number(localStorage.tabToRead) });
+          localStorage[localStorage.tabToRead].isDebuggerAttached = false;
+          chrome.storage.local.set(localStorage);
+        } else if (changes['isUsingCDP'].newValue) {
+          await chrome.debugger.attach(
+            { tabId: Number(localStorage.tabToRead) },
+            '1.3'
+          );
+          localStorage[localStorage.tabToRead].isDebuggerAttached = true;
+          chrome.debugger.sendCommand(
+            { tabId: Number(localStorage.tabToRead) },
+            'Network.enable'
+          );
+          chrome.debugger.sendCommand(
+            { tabId: Number(localStorage.tabToRead) },
+            'Audits.enable'
+          );
+          await chrome.storage.local.set(localStorage);
         }
       }
-    } else {
-      if (
-        Object.keys(changes).includes('isUsingCDP') &&
-        changes['isUsingCDP']?.newValue
-      ) {
+    } else if (
+      syncStorage.allowedNumberOfTabs &&
+      syncStorage.allowedNumberOfTabs !== 'single'
+    ) {
+      if (Object.keys(changes).includes('isUsingCDP')) {
         if (!changes['isUsingCDP'].newValue) {
           const tabs = await chrome.tabs.query({ active: true });
           tabs.map((tab) => {
             chrome.debugger.detach({ tabId: tab?.id });
+            localStorage[tab?.id?.toString()].isDebuggerAttached = false;
+            chrome.storage.local.set(localStorage);
             return tab;
           });
+        } else if (changes['isUsingCDP'].newValue) {
+          const tabs = await chrome.tabs.query({ active: true });
+          tabs.map((tab) => {
+            chrome.debugger.detach({ tabId: tab?.id });
+            localStorage[tab?.id?.toString()].isDebuggerAttached = true;
+            return tab;
+          });
+          await chrome.storage.local.set(localStorage);
         }
       }
     }
