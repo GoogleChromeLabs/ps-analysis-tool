@@ -50,6 +50,10 @@ const CookieStore = {
             parsedCookie: {
               ...cookie.parsedCookie,
               ..._updatedCookies[cookieKey].parsedCookie,
+              samesite:
+                cookie.parsedCookie.samesite ??
+                _updatedCookies[cookieKey].parsedCookie.samesite ??
+                'lax',
             },
             isBlocked: !cookie?.isBlocked
               ? _updatedCookies[cookieKey].isBlocked
