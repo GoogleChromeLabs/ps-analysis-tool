@@ -55,6 +55,7 @@ export default function parseResponseReceivedExtraInfo(
           expires: parsedCookie.expires
             ? String(new Date(parsedCookie.expires).toISOString())
             : 'Session',
+          samesite: parsedCookie.samesite ?? 'lax',
         },
         partitionKey: response?.cookiePartitionKey,
         analytics: cookieDB

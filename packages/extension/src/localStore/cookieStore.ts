@@ -44,16 +44,13 @@ const CookieStore = {
         }
         let cookieKey = getCookieKey(cookie.parsedCookie);
         cookieKey = cookieKey?.trim();
+
         if (_updatedCookies?.[cookieKey]) {
           _updatedCookies[cookieKey] = {
             ...cookie,
             parsedCookie: {
               ...cookie.parsedCookie,
               ..._updatedCookies[cookieKey].parsedCookie,
-              samesite:
-                cookie.parsedCookie.samesite ??
-                _updatedCookies[cookieKey].parsedCookie.samesite ??
-                'lax',
             },
             isBlocked: !cookie?.isBlocked
               ? _updatedCookies[cookieKey].isBlocked
@@ -113,8 +110,10 @@ const CookieStore = {
     Object.values(storage).forEach((tabData) => {
       if (tabData.cookies && tabData.cookies[cookieName]) {
         tabData.cookies[cookieName].blockedReasons = [
-          ...(tabData.cookies[cookieName]?.blockedReasons ?? []),
-          ...reasons,
+          ...new Set([
+            ...(tabData.cookies[cookieName]?.blockedReasons ?? []),
+            ...reasons,
+          ]),
         ];
       } else {
         tabData = {

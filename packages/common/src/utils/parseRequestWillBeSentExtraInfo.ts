@@ -38,6 +38,7 @@ export default function parseRequestWillBeSentExtraInfo(
         expires: cookie.expires
           ? String(new Date(cookie.expires).toISOString())
           : 'Session',
+        samesite: cookie.sameSite ?? 'lax',
       },
       partitionKey: cookie?.partitionKey,
       blockedReasons,
