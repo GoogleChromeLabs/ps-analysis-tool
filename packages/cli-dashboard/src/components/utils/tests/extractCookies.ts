@@ -13,15 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * External dependencies
- */
-import '@testing-library/jest-dom';
-
 /**
  * Internal dependencies
  */
+import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
 import extractCookies from '../extractCookies';
 import { tempSinglePageData } from './data.mock';
 
@@ -85,7 +80,7 @@ describe('extractCookies', () => {
           frameUrl: 'https://edition.cnn.com',
         },
       },
-      'Unknown frame(s)': {},
+      [UNKNOWN_FRAME_KEY]: {},
     });
   });
 });
