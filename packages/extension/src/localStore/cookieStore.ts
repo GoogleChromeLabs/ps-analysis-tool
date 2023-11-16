@@ -107,10 +107,19 @@ const CookieStore = {
     const storage = await chrome.storage.local.get();
 
     Object.values(storage).forEach((tabData) => {
-      tabData.cookies[cookieName].blockedReasons = [
-        ...(tabData.cookies[cookieName].blockedReasons ?? []),
-        ...reasons,
-      ];
+      if (tabData.cookies && tabData.cookies[cookieName]) {
+        tabData.cookies[cookieName].blockedReasons = [
+          ...(tabData.cookies[cookieName]?.blockedReasons ?? []),
+          ...reasons,
+        ];
+      } else {
+        tabData = {
+          ...(tabData?.cookies ?? {}),
+          cookies: {
+            blockedReasons: [...reasons],
+          },
+        };
+      }
     });
 
     await chrome.storage.local.set(storage);

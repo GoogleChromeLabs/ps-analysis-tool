@@ -389,29 +389,35 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       const syncStorage = await chrome.storage.sync.get();
       const localStorage = await chrome.storage.local.get();
       const { code, details } = auditParams.issue;
-      if (code !== 'CookieIssue' && !details?.CookieIssueDetails) {
+      if (
+        code !== 'CookieIssue' &&
+        !details?.cookieIssueDetails &&
+        !details?.cookieIssueDetails?.cookie &&
+        !details?.cookieIssueDetails?.cookieWarningReasons &&
+        !details?.cookieIssueDetails?.cookieExclusionReasons
+      ) {
         return;
       }
       if (
         syncStorage.allowedNumberOfTabs &&
         syncStorage.allowedNumberOfTabs === 'unlimited'
       ) {
-        const { cookie, cookieExclusionReason, cookieWarningReason } =
-          details.CookieIssueDetails;
+        const { cookie, cookieExclusionReasons, cookieWarningReasons } =
+          details.cookieIssueDetails;
         await CookieStore.addCookieExclusionWarningReason(
-          cookie.name + cookie.domain + cookie.Path,
-          [...cookieExclusionReason, ...cookieWarningReason]
+          cookie.name + cookie.domain + cookie.path,
+          [...cookieExclusionReasons, ...cookieWarningReasons]
         );
       } else if (
         syncStorage.allowedNumberOfTabs &&
         syncStorage.allowedNumberOfTabs !== 'unlimited' &&
         localStorage.tabToRead === tabId
       ) {
-        const { cookie, cookieExclusionReason, cookieWarningReason } =
-          details.CookieIssueDetails;
+        const { cookie, cookieExclusionReasons, cookieWarningReasons } =
+          details.cookieIssueDetails;
         await CookieStore.addCookieExclusionWarningReason(
-          cookie.name + cookie.domain + cookie.Path,
-          [...cookieExclusionReason, ...cookieWarningReason]
+          cookie.name + cookie.domain + cookie.path,
+          [...cookieExclusionReasons, ...cookieWarningReasons]
         );
       }
     }
@@ -465,3 +471,38 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
     }
   }
 });
+
+chrome.storage.sync.onChanged.addListener(
+  async (changes: { [key: string]: chrome.storage.StorageChange }) => {
+    const localStorage = await chrome.storage.local.get();
+    const syncStorage = await chrome.storage.sync.get();
+    if (
+      syncStorage.allowedNumberOfTabs &&
+      syncStorage.allowedNumberOfTabs !== 'unlimited' &&
+      localStorage?.tabToRead
+    ) {
+      if (
+        Object.keys(changes).includes('isUsingCDP') &&
+        changes['isUsingCDP']?.newValue &&
+        localStorage?.tabToRead
+      ) {
+        if (!changes['isUsingCDP'].newValue) {
+          chrome.debugger.detach({ tabId: localStorage.tabToRead });
+        }
+      }
+    } else {
+      if (
+        Object.keys(changes).includes('isUsingCDP') &&
+        changes['isUsingCDP']?.newValue
+      ) {
+        if (!changes['isUsingCDP'].newValue) {
+          const tabs = await chrome.tabs.query({ active: true });
+          tabs.map((tab) => {
+            chrome.debugger.detach({ tabId: tab?.id });
+            return tab;
+          });
+        }
+      }
+    }
+  }
+);
