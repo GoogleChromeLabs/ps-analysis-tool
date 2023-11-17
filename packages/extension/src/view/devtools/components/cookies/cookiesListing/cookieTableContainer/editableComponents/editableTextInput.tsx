@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useState, useRef, useEffect } from 'react';
+import React, { useCallback, useState, useRef, useEffect, memo } from 'react';
 
 /**
  * Internal dependencies.
@@ -52,6 +52,12 @@ const EditableTextInput = ({
     []
   );
 
+  useEffect(() => {
+    if (editing) {
+      divRef.current?.focus();
+    }
+  }, [editing]);
+
   const handleClickOutside = useCallback(
     (event: MouseEvent) => {
       if (divRef.current && !divRef.current.contains(event.target as Node)) {
@@ -71,6 +77,7 @@ const EditableTextInput = ({
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
+      event.preventDefault();
       setLocalValue(event.target.value);
     },
     []
@@ -102,4 +109,4 @@ const EditableTextInput = ({
   );
 };
 
-export default EditableTextInput;
+export default memo(EditableTextInput);

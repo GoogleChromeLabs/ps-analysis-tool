@@ -47,9 +47,15 @@ const TableBody = ({
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>, index: number) => {
+      //@ts-ignore - the `tagName` property will be available on the `target` property.
+      if (event.target.tagName === 'INPUT') {
+        //@ts-ignore - the `type` property will be available on the `target` property.
+        if (event.target.type === 'checkbox') {
+          event.preventDefault();
+        }
+        return;
+      }
       event.preventDefault();
-      event.stopPropagation();
-
       //@ts-ignore - the `children` property will be available on the `current` property.
       const currentRow = tableBodyRef.current?.children.namedItem(index);
       let newRowId: string | undefined;

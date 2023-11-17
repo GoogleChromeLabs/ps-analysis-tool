@@ -53,6 +53,12 @@ const EditableCheckBoxInput = ({
     []
   );
 
+  useEffect(() => {
+    if (editing) {
+      divRef.current?.focus();
+    }
+  }, [editing]);
+
   const handleClickOutside = useCallback(
     (event: MouseEvent) => {
       if (divRef.current && !divRef.current.contains(event.target as Node)) {
