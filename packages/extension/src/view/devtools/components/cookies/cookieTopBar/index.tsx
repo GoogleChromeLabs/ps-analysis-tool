@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef } from 'react';
 import classNames from 'classnames';
 import { type CookieTableData, getCookieKey } from '@ps-analysis-tool/common';
 import {
@@ -65,7 +65,6 @@ const CookieSearch = ({
       setSearchTerm: actions.setSearchTerm,
     })
   );
-  const [operationDone, setOperationDone] = useState(false);
   const cookieDeletedRef = useRef(false);
   const isAnyCookieSelected =
     cookieDeletedRef.current && !selectedFrameCookie
@@ -83,7 +82,6 @@ const CookieSearch = ({
   }));
 
   const handleDeleteCookie = useCallback(() => {
-    setOperationDone(false);
     const selectedKey =
       cookieDeletedRef.current && !selectedFrameCookie
         ? Object.values(filteredCookies)[0]
@@ -96,7 +94,6 @@ const CookieSearch = ({
         setSelectedFrameCookie(null);
       }
     }
-    setOperationDone(true);
   }, [
     deleteCookie,
     filteredCookies,
@@ -155,9 +152,9 @@ const CookieSearch = ({
           title="Delete selected cookie"
         >
           <ClearSingle
-            className={`rotate-45 ${
-              operationDone ? 'text-mischka' : 'text-mischka'
-            } hover:text-white`}
+            className={`rotate-45 text-mischka ${
+              isAnyCookieSelected ? 'hover:text-white' : ''
+            }`}
           />
         </button>
         <button
