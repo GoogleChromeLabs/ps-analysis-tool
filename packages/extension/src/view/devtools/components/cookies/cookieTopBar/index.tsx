@@ -147,7 +147,7 @@ const CookieSearch = ({
           <CrossIcon className="text-mischka" />
         </button>
       </div>
-      <div className="h-full flex gap-x-3 ml-2 items-center justify-center">
+      <div className="h-full w-full flex gap-x-3 ml-2 items-center justify-center">
         <button
           disabled={!isAnyCookieSelected}
           onClick={handleDeleteCookie}
