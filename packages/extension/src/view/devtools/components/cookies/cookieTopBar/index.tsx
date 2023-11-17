@@ -150,18 +150,14 @@ const CookieSearch = ({
         className="flex items-center text-center text-mischka hover:text-granite-gray hover:dark:text-bright-gray active:dark:text-mischka active:text-mischka mx-2"
         title="Delete selected cookie"
       >
-        <ClearSingle
-          className={`rotate-45 text-mischka ${
-            isAnyCookieSelected ? 'hover:text-white' : ''
-          }`}
-        />
+        <ClearSingle className="rotate-45 text-mischka" />
       </button>
       <button
         onClick={deleteAllCookies}
         className="flex h-full items-end text-mischka hover:text-granite-gray hover:dark:text-bright-gray active:dark:text-mischka active:text-mischka "
         title="Delete all cookies"
       >
-        <ClearAll className="text-mischka hover:text-white" />
+        <ClearAll className="text-mischka" />
       </button>
       <div className="text-right w-full text-xxxs text-secondary">
         Count: {Number(filteredCookies?.length) || 0}
