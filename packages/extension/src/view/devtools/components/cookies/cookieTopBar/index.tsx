@@ -44,6 +44,11 @@ interface CookieSearchProps {
   selectedFrameCookie: {
     [frame: string]: CookieTableData | null;
   } | null;
+  setSelectedFrameCookie: (
+    cookie: {
+      [frame: string]: CookieTableData | null;
+    } | null
+  ) => void;
 }
 
 const CookieSearch = ({
@@ -52,6 +57,7 @@ const CookieSearch = ({
   toggleFilterMenu,
   filteredCookies,
   selectedFrameCookie,
+  setSelectedFrameCookie,
 }: CookieSearchProps) => {
   const { searchTerm, setSearchTerm } = useFilterManagementStore(
     ({ state, actions }) => ({
@@ -68,6 +74,24 @@ const CookieSearch = ({
   const { getCookiesSetByJavascript } = useCookieStore(({ actions }) => ({
     getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
   }));
+
+  const handleDeleteCookie = useCallback(() => {
+    const selectedKey = Object.values(
+      selectedFrameCookie ?? filteredCookies
+    )[0];
+    if (selectedKey !== null && selectedKey.parsedCookie) {
+      const cookieKey = getCookieKey(selectedKey?.parsedCookie);
+      if (cookieKey) {
+        deleteCookie(cookieKey);
+        setSelectedFrameCookie(null);
+      }
+    }
+  }, [
+    deleteCookie,
+    filteredCookies,
+    selectedFrameCookie,
+    setSelectedFrameCookie,
+  ]);
 
   const handleInput = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -114,15 +138,7 @@ const CookieSearch = ({
       </div>
       <div className="h-full flex gap-x-3 ml-2 items-center justify-center">
         <button
-          onClick={() => {
-            const selectedKey = Object.values(selectedFrameCookie ?? {})[0];
-            if (selectedKey !== null && selectedKey.parsedCookie) {
-              const cookieKey = getCookieKey(selectedKey?.parsedCookie);
-              if (cookieKey) {
-                deleteCookie(cookieKey);
-              }
-            }
-          }}
+          onClick={handleDeleteCookie}
           className="w-5 h-full flex items-center"
           title="Delete selected cookie"
         >

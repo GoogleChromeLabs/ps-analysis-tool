@@ -96,7 +96,7 @@ const EditableTextInput = ({
           onChange={handleChange}
         />
       ) : (
-        <p>{localValue}</p>
+        <p>{info}</p>
       )}
     </div>
   );
