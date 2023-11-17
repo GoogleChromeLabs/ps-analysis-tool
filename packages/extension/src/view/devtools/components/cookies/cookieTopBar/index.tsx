@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import classNames from 'classnames';
 import { type CookieTableData, getCookieKey } from '@ps-analysis-tool/common';
 import {
@@ -65,7 +65,13 @@ const CookieSearch = ({
       setSearchTerm: actions.setSearchTerm,
     })
   );
-
+  const cookieDeletedRef = useRef(false);
+  const isAnyCookieSelected =
+    cookieDeletedRef.current && !selectedFrameCookie
+      ? true
+      : selectedFrameCookie
+      ? true
+      : false;
   const { deleteCookie, deleteAllCookies } = useCookieStore(({ actions }) => ({
     deleteCookie: actions.deleteCookie,
     deleteAllCookies: actions.deleteAllCookies,
@@ -76,13 +82,15 @@ const CookieSearch = ({
   }));
 
   const handleDeleteCookie = useCallback(() => {
-    const selectedKey = Object.values(
-      selectedFrameCookie ?? filteredCookies
-    )[0];
+    const selectedKey =
+      cookieDeletedRef.current && !selectedFrameCookie
+        ? Object.values(filteredCookies)[0]
+        : Object.values(selectedFrameCookie ?? {})[0];
     if (selectedKey !== null && selectedKey.parsedCookie) {
       const cookieKey = getCookieKey(selectedKey?.parsedCookie);
       if (cookieKey) {
         deleteCookie(cookieKey);
+        cookieDeletedRef.current = true;
         setSelectedFrameCookie(null);
       }
     }
@@ -138,6 +146,7 @@ const CookieSearch = ({
       </div>
       <div className="h-full flex gap-x-3 ml-2 items-center justify-center">
         <button
+          disabled={!isAnyCookieSelected}
           onClick={handleDeleteCookie}
           className="w-5 h-full flex items-center"
           title="Delete selected cookie"
