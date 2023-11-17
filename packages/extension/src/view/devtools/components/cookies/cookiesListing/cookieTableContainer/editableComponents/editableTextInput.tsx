@@ -27,7 +27,7 @@ import type { InfoType } from '@ps-analysis-tool/design-system';
 interface EditableTextInputProps {
   info: InfoType;
   changedKey: string;
-  cookieKey?: string;
+  cookieKey?: string | null;
 }
 
 const EditableTextInput = ({

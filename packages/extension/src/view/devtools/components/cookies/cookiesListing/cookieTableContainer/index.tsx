@@ -18,11 +18,16 @@
  * External dependencies.
  */
 import React, { useMemo } from 'react';
-import type { CookieTableData, SortingState } from '@ps-analysis-tool/common';
+import {
+  getCookieKey,
+  type CookieTableData,
+  type SortingState,
+} from '@ps-analysis-tool/common';
 import {
   type InfoType,
   type TableColumn,
   CookieTable,
+  type TableData,
 } from '@ps-analysis-tool/design-system';
 
 /**
@@ -64,11 +69,11 @@ const CookieTableContainer = ({
       {
         header: 'Name',
         accessorKey: 'parsedCookie.name',
-        cell: (info: InfoType, cookieKey?: string) => (
+        cell: (info: InfoType, details?: TableData) => (
           <EditableTextInput
             info={info}
             changedKey="name"
-            cookieKey={cookieKey}
+            cookieKey={getCookieKey(details?.parsedCookie)}
           />
         ),
         enableHiding: false,
@@ -76,33 +81,33 @@ const CookieTableContainer = ({
       {
         header: 'Value',
         accessorKey: 'parsedCookie.value',
-        cell: (info: InfoType, cookieKey?: string) => (
+        cell: (info: InfoType, details?: TableData) => (
           <EditableTextInput
             info={info}
             changedKey="value"
-            cookieKey={cookieKey}
+            cookieKey={getCookieKey(details?.parsedCookie)}
           />
         ),
       },
       {
         header: 'Domain',
         accessorKey: 'parsedCookie.domain',
-        cell: (info: InfoType, cookieKey?: string) => (
+        cell: (info: InfoType, details?: TableData) => (
           <EditableTextInput
             info={info}
             changedKey="domain"
-            cookieKey={cookieKey}
+            cookieKey={getCookieKey(details?.parsedCookie)}
           />
         ),
       },
       {
         header: 'Path',
         accessorKey: 'parsedCookie.path',
-        cell: (info: InfoType, cookieKey?: string) => (
+        cell: (info: InfoType, details?: TableData) => (
           <EditableTextInput
             info={info}
             changedKey="path"
-            cookieKey={cookieKey}
+            cookieKey={getCookieKey(details?.parsedCookie)}
           />
         ),
       },
@@ -114,33 +119,33 @@ const CookieTableContainer = ({
       {
         header: 'HttpOnly',
         accessorKey: 'parsedCookie.httponly',
-        cell: (info: InfoType, cookieKey?: string) => (
+        cell: (info: InfoType, details?: TableData) => (
           <EditableCheckBoxInput
             info={info}
             changedKey="httpOnly"
-            cookieKey={cookieKey}
+            cookieKey={getCookieKey(details?.parsedCookie)}
           />
         ),
       },
       {
         header: 'SameSite',
         accessorKey: 'parsedCookie.samesite',
-        cell: (info: InfoType, cookieKey?: string) => (
+        cell: (info: InfoType, details?: TableData) => (
           <EditableTextInput
             info={info}
             changedKey="sameSite"
-            cookieKey={cookieKey}
+            cookieKey={getCookieKey(details?.parsedCookie)}
           />
         ),
       },
       {
         header: 'Secure',
         accessorKey: 'parsedCookie.secure',
-        cell: (info: InfoType, cookieKey?: string) => (
+        cell: (info: InfoType, details?: TableData) => (
           <EditableCheckBoxInput
             info={info}
             changedKey="secure"
-            cookieKey={cookieKey}
+            cookieKey={getCookieKey(details?.parsedCookie)}
           />
         ),
       },

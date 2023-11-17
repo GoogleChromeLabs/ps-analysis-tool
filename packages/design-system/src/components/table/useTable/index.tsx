@@ -18,11 +18,7 @@
  * External dependencies.
  */
 import { useMemo } from 'react';
-import {
-  CookieTableData,
-  TechnologyData,
-  getCookieKey,
-} from '@ps-analysis-tool/common';
+import { CookieTableData, TechnologyData } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
@@ -45,7 +41,7 @@ export type InfoType = number | string | boolean | [];
 export type TableColumn = {
   header: string;
   accessorKey: string;
-  cell?: (info: InfoType, cookieKey?: string) => React.JSX.Element | InfoType;
+  cell?: (info: InfoType, details?: TableData) => React.JSX.Element | InfoType;
   enableHiding?: boolean;
   width?: number;
 };
@@ -114,11 +110,7 @@ const useTable = ({
       columns.forEach((column) => {
         const value = getValueByKey(column.accessorKey, _data);
         row[column.accessorKey] = {
-          value:
-            column.cell?.(
-              value,
-              getCookieKey(row.originalData.parsedCookie) as string
-            ) ?? value,
+          value: column.cell?.(value, _data) ?? value,
         };
       });
 

@@ -28,7 +28,7 @@ import type { InfoType } from '@ps-analysis-tool/design-system';
 interface EditableCheckBoxInputProps {
   info: InfoType;
   changedKey: string;
-  cookieKey?: string;
+  cookieKey?: string | null;
 }
 
 const EditableCheckBoxInput = ({
