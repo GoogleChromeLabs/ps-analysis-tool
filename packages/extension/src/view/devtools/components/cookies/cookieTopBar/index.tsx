@@ -18,12 +18,6 @@
  */
 import React, { useCallback, useRef } from 'react';
 import classNames from 'classnames';
-import { type CookieTableData, getCookieKey } from '@ps-analysis-tool/common';
-import {
-  ClearAll,
-  RefreshButton,
-  CrossIcon as ClearSingle,
-} from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
@@ -35,6 +29,12 @@ import FilterIcon from '../../../../../../../../third_party/icons/filter-icon.sv
 import CrossIcon from '../../../../../../../../third_party/icons/cross-icon.svg';
 import { useFilterManagementStore } from '../../../stateProviders/filterManagementStore';
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
+import { type CookieTableData, getCookieKey } from '@ps-analysis-tool/common';
+import {
+  ClearAll,
+  RefreshButton,
+  CrossIcon as ClearSingle,
+} from '@ps-analysis-tool/design-system';
 
 interface CookieSearchProps {
   cookiesAvailable: boolean;
@@ -65,6 +65,7 @@ const CookieSearch = ({
       setSearchTerm: actions.setSearchTerm,
     })
   );
+
   const cookieDeletedRef = useRef(false);
   const isAnyCookieSelected =
     cookieDeletedRef.current && !selectedFrameCookie
@@ -72,14 +73,12 @@ const CookieSearch = ({
       : selectedFrameCookie
       ? true
       : false;
-  const { deleteCookie, deleteAllCookies } = useCookieStore(({ actions }) => ({
-    deleteCookie: actions.deleteCookie,
-    deleteAllCookies: actions.deleteAllCookies,
-  }));
-
-  const { getCookiesSetByJavascript } = useCookieStore(({ actions }) => ({
-    getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
-  }));
+  const { deleteCookie, deleteAllCookies, getCookiesSetByJavascript } =
+    useCookieStore(({ actions }) => ({
+      deleteCookie: actions.deleteCookie,
+      deleteAllCookies: actions.deleteAllCookies,
+      getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
+    }));
 
   const handleDeleteCookie = useCallback(() => {
     const selectedKey =
@@ -109,65 +108,63 @@ const CookieSearch = ({
   );
 
   return (
-    <div className="w-full h-[26px] px-2 flex items-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green">
-      <div className="flex items-center bg-anti-flash-white dark:bg-charleston-green">
-        <button
-          className={classNames('w-3 h-3', {
-            'opacity-20': !cookiesAvailable,
-          })}
-          onClick={toggleFilterMenu}
-          title="Open filter options"
-          disabled={!cookiesAvailable}
-        >
-          <FilterIcon
-            className={
-              isFilterMenuOpen
-                ? 'text-royal-blue dark:text-medium-persian-blue'
-                : 'text-mischka'
-            }
-          />
-        </button>
-        <input
-          type="text"
-          className="h-5 w-80 mx-2 p-2 outline-none dark:bg-charleston-green border-[1px] border-gainsboro dark:border-quartz focus:border-royal-blue focus:dark:border-medium-persian-blue dark:text-bright-gray text-outer-space-crayola"
-          placeholder="Search"
-          value={searchTerm}
-          onInput={handleInput}
+    <div className="w-full h-[25px] px-2 flex items-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green">
+      <button
+        className={classNames('w-3 h-3', {
+          'opacity-20': !cookiesAvailable,
+        })}
+        onClick={toggleFilterMenu}
+        title="Open filter options"
+        disabled={!cookiesAvailable}
+      >
+        <FilterIcon
+          className={
+            isFilterMenuOpen
+              ? 'text-royal-blue dark:text-medium-persian-blue'
+              : 'text-mischka'
+          }
         />
-        <button
-          onClick={() => {
-            setSearchTerm('');
-          }}
-          className="w-3 h-3"
-          title="Clear Search"
-        >
-          <CrossIcon className="text-mischka" />
-        </button>
-      </div>
-      <div className="h-full w-full flex gap-x-3 ml-2 items-center justify-center">
-        <button
-          disabled={!isAnyCookieSelected}
-          onClick={handleDeleteCookie}
-          className="w-5 h-full flex items-center"
-          title="Delete selected cookie"
-        >
-          <ClearSingle
-            className={`rotate-45 text-mischka ${
-              isAnyCookieSelected ? 'hover:text-white' : ''
-            }`}
-          />
-        </button>
-        <button
-          onClick={deleteAllCookies}
-          className="w-5 h-full flex items-end"
-          title="Delete all cookies"
-        >
-          <ClearAll className="text-mischka hover:text-white" />
-        </button>
-        <RefreshButton onClick={getCookiesSetByJavascript} />
-        <div className="text-right w-full text-xxxs text-secondary">
-          Count: {Number(filteredCookies?.length) || 0}
-        </div>
+      </button>
+      <input
+        type="text"
+        className="h-5 w-80 mx-2 p-2 outline-none dark:bg-charleston-green border-[1px] border-gainsboro dark:border-quartz focus:border-royal-blue focus:dark:border-medium-persian-blue dark:text-bright-gray text-outer-space-crayola"
+        placeholder="Search"
+        value={searchTerm}
+        onInput={handleInput}
+      />
+      <button
+        onClick={() => {
+          setSearchTerm('');
+        }}
+        className="w-3 h-3"
+        title="Clear Search"
+      >
+        <CrossIcon className="text-mischka" />
+      </button>
+      <div className="h-full w-px bg-american-silver dark:bg-quartz mx-3" />
+
+      <RefreshButton onClick={getCookiesSetByJavascript} />
+      <button
+        disabled={!isAnyCookieSelected}
+        onClick={handleDeleteCookie}
+        className="flex items-center text-center text-mischka hover:text-granite-gray hover:dark:text-bright-gray active:dark:text-mischka active:text-mischka mx-2"
+        title="Delete selected cookie"
+      >
+        <ClearSingle
+          className={`rotate-45 text-mischka ${
+            isAnyCookieSelected ? 'hover:text-white' : ''
+          }`}
+        />
+      </button>
+      <button
+        onClick={deleteAllCookies}
+        className="flex h-full items-end text-mischka hover:text-granite-gray hover:dark:text-bright-gray active:dark:text-mischka active:text-mischka "
+        title="Delete all cookies"
+      >
+        <ClearAll className="text-mischka hover:text-white" />
+      </button>
+      <div className="text-right w-full text-xxxs text-secondary">
+        Count: {Number(filteredCookies?.length) || 0}
       </div>
     </div>
   );
