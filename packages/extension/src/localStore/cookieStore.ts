@@ -81,13 +81,27 @@ const CookieStore = {
    */
   async deleteCookie(cookieName: string) {
     const storage = await chrome.storage.local.get();
-
     Object.values(storage).forEach((tabData) => {
       if (tabData.cookies && tabData.cookies[cookieName]) {
         delete tabData.cookies[cookieName];
       }
     });
+    await chrome.storage.local.set(storage);
+  },
 
+  /**
+   * Deletes a cookie
+   * @param {string} cookieNames Name of the cookie.
+   */
+  async deleteSetOfCookie(cookieNames: string[]) {
+    const storage = await chrome.storage.local.get();
+    cookieNames.forEach((cookieName) => {
+      Object.values(storage).forEach((tabData) => {
+        if (tabData.cookies && tabData.cookies[cookieName]) {
+          delete tabData.cookies[cookieName];
+        }
+      });
+    });
     await chrome.storage.local.set(storage);
   },
 

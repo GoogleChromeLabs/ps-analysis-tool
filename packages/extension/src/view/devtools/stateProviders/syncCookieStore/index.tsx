@@ -542,18 +542,32 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const deleteAllCookies = useCallback(async () => {
     const localStorage = await chrome.storage.local.get();
-    if (tabId) {
+    if (tabId && tabFrames && selectedFrame) {
+      const currentFrame = tabFrames[selectedFrame];
       const newTabData = localStorage[tabId];
-      const allCookies = newTabData?.cookies;
-      await Promise.all(
-        Object.keys(allCookies).map(async (key) => {
-          await deleteCookie(key);
-          return key;
-        })
-      );
-      await CookieStore.addTabData(tabId.toString());
+      const allCookies: CookieStoreContext['state']['tabCookies'] =
+        newTabData.cookies ?? null;
+      if (allCookies) {
+        const cookieKeys: string[] = [];
+        await Promise.all(
+          currentFrame.frameIds.map(async (frameId) => {
+            await Promise.all(
+              Object.keys(allCookies).map(async (key) => {
+                if (allCookies[key].frameIdList.includes(frameId)) {
+                  cookieKeys.push(key);
+                  await deleteCookie(key);
+                  return key;
+                }
+                return key;
+              })
+            );
+            return frameId;
+          })
+        );
+        await CookieStore.deleteSetOfCookie(cookieKeys);
+      }
     }
-  }, [deleteCookie, tabId]);
+  }, [deleteCookie, selectedFrame, tabFrames, tabId]);
 
   const modifierForNameUpdate = useCallback(
     async (
