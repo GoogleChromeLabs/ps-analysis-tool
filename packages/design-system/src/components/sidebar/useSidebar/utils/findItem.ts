@@ -24,15 +24,8 @@ const findItem = (items: SidebarItems, keyPath: string[]) => {
     return null;
   }
 
-  let idx = 0,
+  const idx = keyPath.length - 1,
     item: SidebarItemValue = items[keyPath[idx]];
-
-  while (idx < keyPath.length) {
-    const itemKey = keyPath[idx];
-    item = items[itemKey];
-
-    idx++;
-  }
 
   return item;
 };
