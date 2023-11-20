@@ -171,7 +171,7 @@ const AffectedCookies = ({
         },
         comparator: (value: InfoType, filterValue: string) => {
           const val = value as string;
-          return val.toLowerCase() === filterValue.toLowerCase();
+          return val?.toLowerCase() === filterValue.toLowerCase();
         },
       },
       'parsedCookie.secure': {
@@ -276,6 +276,7 @@ const AffectedCookies = ({
           showTopBar={true}
           tableFilters={filters}
           tableSearchKeys={searchKeys}
+          tablePersistentSettingsKey={'affectedCookiesListing'}
           selectedFrame={selectedFrameUrl}
           selectedFrameCookie={selectedFrameCookie}
           setSelectedFrameCookie={setSelectedFrameCookie}

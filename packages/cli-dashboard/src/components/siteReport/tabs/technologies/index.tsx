@@ -83,6 +83,7 @@ const Technologies = () => {
     tableColumns,
     tableFilterData: filters,
     tableSearchKeys: searchKeys,
+    tablePersistentSettingsKey: 'technologyListing',
   });
 
   return (
@@ -104,7 +105,8 @@ const Technologies = () => {
       >
         <Table
           table={table}
-          showTopBar={false} // TODO: Add top bar
+          disableFiltering={true}
+          showTopBar={true}
           selectedKey={selectedRow?.slug}
           onRowClick={(row) => {
             setSelectedRow(row as TechnologyData);

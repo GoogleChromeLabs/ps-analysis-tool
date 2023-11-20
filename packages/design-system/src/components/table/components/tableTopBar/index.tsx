@@ -36,6 +36,7 @@ interface TableTopBarProps {
   setShowFilterSidebar: React.Dispatch<React.SetStateAction<boolean>>;
   getCookiesSetByJavascript?: () => void;
   cookiesCount: number;
+  disableFiltering?: boolean;
 }
 
 const TableTopBar = ({
@@ -45,6 +46,7 @@ const TableTopBar = ({
   setShowFilterSidebar,
   getCookiesSetByJavascript,
   cookiesCount,
+  disableFiltering = false,
 }: TableTopBarProps) => {
   const handleInput = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,19 +57,21 @@ const TableTopBar = ({
 
   return (
     <div className="w-full h-[25px] px-2 flex items-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green">
-      <button
-        className={classNames('w-3 h-3')}
-        onClick={() => setShowFilterSidebar(!showFilterSidebar)}
-        title="Open filter options"
-      >
-        <FilterIcon
-          className={
-            showFilterSidebar
-              ? 'text-royal-blue dark:text-medium-persian-blue'
-              : 'text-mischka'
-          }
-        />
-      </button>
+      {!disableFiltering && (
+        <button
+          className={classNames('w-3 h-3')}
+          onClick={() => setShowFilterSidebar(!showFilterSidebar)}
+          title="Open filter options"
+        >
+          <FilterIcon
+            className={
+              showFilterSidebar
+                ? 'text-royal-blue dark:text-medium-persian-blue'
+                : 'text-mischka'
+            }
+          />
+        </button>
+      )}
       <input
         type="text"
         className="text-xs h-5 w-80 mx-2 p-2 outline-none dark:bg-charleston-green border-[1px] border-gainsboro dark:border-quartz focus:border-royal-blue focus:dark:border-medium-persian-blue dark:text-bright-gray text-outer-space-crayola"

@@ -44,6 +44,7 @@ interface TableProps {
     }) => PreferenceDataValues
   ) => void;
   showTopBar?: boolean;
+  disableFiltering?: boolean;
 }
 
 const Table = ({
@@ -53,6 +54,7 @@ const Table = ({
   onRowClick,
   updatePreference = noop,
   showTopBar = false,
+  disableFiltering = false,
 }: TableProps) => {
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
   const [showFilterSidebar, setShowFilterSidebar] = useState(false);
@@ -102,6 +104,7 @@ const Table = ({
           searchValue={table.searchValue}
           setSearchValue={table.setSearchValue}
           showFilterSidebar={showFilterSidebar}
+          disableFiltering={disableFiltering}
           setShowFilterSidebar={setShowFilterSidebar}
           cookiesCount={table.rows.length}
         />
