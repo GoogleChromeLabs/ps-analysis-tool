@@ -60,7 +60,7 @@ export interface CookieStoreContext {
       changedKey: string,
       changedValue: string | boolean,
       previousValue: string | null
-    ) => void;
+    ) => Promise<boolean>;
     setSelectedFrame: (key: string | null) => void;
     setIsInspecting: React.Dispatch<React.SetStateAction<boolean>>;
     changeListeningToThisTab: () => void;
@@ -92,7 +92,7 @@ const initialState: CookieStoreContext = {
     setSelectedFrame: noop,
     changeListeningToThisTab: noop,
     deleteCookie: noop,
-    modifyCookie: noop,
+    modifyCookie: () => Promise.resolve(true),
     setIsFrameSelectedFromDevTool: noop,
     deleteAllCookies: noop,
     setIsInspecting: noop,
@@ -110,7 +110,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const loadingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isCurrentTabBeingListenedTo, setIsCurrentTabBeingListenedTo] =
     useState<boolean>(false);
-
   const [contextInvalidated, setContextInvalidated] = useState<boolean>(false);
 
   const [returningToSingleTab, setReturningToSingleTab] =
@@ -501,40 +500,45 @@ export const Provider = ({ children }: PropsWithChildren) => {
             cookieDetails.parsedCookie.domain +
             changedValue;
         }
-
-        await chrome.storage.local.set({
-          ...localStorage,
-          [tabId]: {
-            cookies: {
-              ...restOfCookies,
-              [newCookieKey]: {
-                ...cookieDetails,
-                parsedCookie: {
-                  ...cookieDetails.parsedCookie,
-                  [changedKey.toLowerCase()]: changedValue,
-                },
-              },
-            },
-          },
-        });
         const currentCookie = await chrome.cookies.get({
           name: cookieDetails.parsedCookie.name,
           url: cookieDetails.url,
         });
-
-        chrome.cookies.set({
-          domain: currentCookie?.domain,
-          expirationDate: currentCookie?.expirationDate,
-          httpOnly: currentCookie?.httpOnly,
-          name: currentCookie?.name,
-          path: currentCookie?.path,
-          sameSite: currentCookie?.sameSite,
-          secure: currentCookie?.secure,
-          storeId: currentCookie?.storeId,
-          value: currentCookie?.value,
-          [changedKey]: changedValue,
-          url: cookieDetails.url,
-        });
+        try {
+          await chrome.cookies.set({
+            domain: currentCookie?.domain,
+            expirationDate: currentCookie?.expirationDate,
+            httpOnly: currentCookie?.httpOnly,
+            name: currentCookie?.name,
+            path: currentCookie?.path,
+            sameSite: currentCookie?.sameSite,
+            secure: currentCookie?.secure,
+            storeId: currentCookie?.storeId,
+            value: currentCookie?.value,
+            [changedKey]: changedValue,
+            url: cookieDetails.url,
+          });
+          await chrome.storage.local.set({
+            ...localStorage,
+            [tabId]: {
+              cookies: {
+                ...restOfCookies,
+                [newCookieKey]: {
+                  ...cookieDetails,
+                  parsedCookie: {
+                    ...cookieDetails.parsedCookie,
+                    [changedKey.toLowerCase()]: changedValue,
+                  },
+                },
+              },
+            },
+          });
+          return true;
+        } catch (error) {
+          return false;
+        }
+      } else {
+        return false;
       }
     },
     [tabId]
@@ -589,27 +593,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
         const newTabData = localStorage[tabId];
         const { [cookieKey]: cookieDetails, ...restOfCookies } =
           newTabData.cookies;
-        await chrome.storage.local.set({
-          ...localStorage,
-          [tabId]: {
-            cookies: {
-              ...restOfCookies,
-              [changedValue +
-              cookieDetails.parsedCookie.domain +
-              cookieDetails.parsedCookie.path]: {
-                ...cookieDetails,
-                analytics: {
-                  ...cookieDetails?.analytics,
-                  name: changedValue,
-                },
-                parsedCookie: {
-                  ...cookieDetails.parsedCookie,
-                  [changedKey]: changedValue,
-                },
-              },
-            },
-          },
-        });
 
         const currentCookie = await chrome.cookies.get({
           name: previousValue,
@@ -619,42 +602,68 @@ export const Provider = ({ children }: PropsWithChildren) => {
           name: previousValue,
           url: cookieDetails.url,
         });
-
-        chrome.cookies.set({
-          domain: currentCookie?.domain,
-          expirationDate: currentCookie?.expirationDate,
-          httpOnly: currentCookie?.httpOnly,
-          name: currentCookie?.name,
-          path: currentCookie?.path,
-          sameSite: currentCookie?.sameSite,
-          secure: currentCookie?.secure,
-          storeId: currentCookie?.storeId,
-          value: currentCookie?.value,
-          [changedKey]: changedValue,
-          url: cookieDetails.url,
-        });
+        try {
+          await chrome.cookies.set({
+            domain: currentCookie?.domain,
+            expirationDate: currentCookie?.expirationDate,
+            httpOnly: currentCookie?.httpOnly,
+            name: currentCookie?.name,
+            path: currentCookie?.path,
+            sameSite: currentCookie?.sameSite,
+            secure: currentCookie?.secure,
+            storeId: currentCookie?.storeId,
+            value: currentCookie?.value,
+            [changedKey]: changedValue,
+            url: cookieDetails.url,
+          });
+          await chrome.storage.local.set({
+            ...localStorage,
+            [tabId]: {
+              cookies: {
+                ...restOfCookies,
+                [changedValue +
+                cookieDetails.parsedCookie.domain +
+                cookieDetails.parsedCookie.path]: {
+                  ...cookieDetails,
+                  analytics: {
+                    ...cookieDetails?.analytics,
+                    name: changedValue,
+                  },
+                  parsedCookie: {
+                    ...cookieDetails.parsedCookie,
+                    [changedKey]: changedValue,
+                  },
+                },
+              },
+            },
+          });
+          return true;
+        } catch (error) {
+          return false;
+        }
+      } else {
+        return false;
       }
     },
     [tabId]
   );
 
   const modifyCookie = useCallback(
-    async (
+    (
       cookieKey: string,
       changedKey: string,
       changedValue: string | boolean,
       previousValue: string | null
     ) => {
       if (previousValue) {
-        await modifierForNameUpdate(
+        return modifierForNameUpdate(
           cookieKey,
           changedKey,
           changedValue as string,
           previousValue
         );
-        return;
       }
-      await modifierForNonNameUpdate(cookieKey, changedKey, changedValue);
+      return modifierForNonNameUpdate(cookieKey, changedKey, changedValue);
     },
     [modifierForNameUpdate, modifierForNonNameUpdate]
   );

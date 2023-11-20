@@ -59,16 +59,19 @@ const EditableTextInput = ({
   }, [editing]);
 
   const handleClickOutside = useCallback(
-    (event: MouseEvent) => {
+    async (event: MouseEvent) => {
       if (divRef.current && !divRef.current.contains(event.target as Node)) {
         setEditing(false);
         if (localValue && localValue !== info && cookieKey) {
-          modifyCookie(
+          const result = await modifyCookie(
             cookieKey,
             changedKey,
             localValue,
             changedKey === 'name' ? (info as string) : null
           );
+          if (!result) {
+            console.log('error');
+          }
         }
       }
     },
@@ -84,16 +87,19 @@ const EditableTextInput = ({
   );
 
   const handleKeyDown = useCallback(
-    (event: React.KeyboardEventHandler<HTMLInputElement>) => {
+    async (event: React.KeyboardEventHandler<HTMLInputElement>) => {
       if (event?.key === 'Enter') {
         setEditing(false);
         if (localValue && localValue !== info && cookieKey) {
-          modifyCookie(
+          const result = await modifyCookie(
             cookieKey,
             changedKey,
             localValue,
             changedKey === 'name' ? (info as string) : null
           );
+          if (!result) {
+            console.log('error');
+          }
         }
       }
     },
