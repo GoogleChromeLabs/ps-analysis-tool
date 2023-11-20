@@ -146,6 +146,7 @@ const getUrlListFromArgs = async (
 
     try {
       const csvString = await readFile(csvPath, 'utf-8');
+
       const lines = csvString.split('\n');
 
       const _urls = lines.reduce((acc, line) => {
@@ -155,6 +156,17 @@ const getUrlListFromArgs = async (
           return acc.concat(line.split(','));
         }
       }, [] as string[]);
+
+      if (_urls.length === 0) {
+        console.log('Provided CSV files has no urls');
+        process.exit(1);
+      }
+      _urls.forEach((_url) => {
+        if (!_url.includes('http')) {
+          console.log(`${_url} is not a valid URL`);
+          process.exit(1);
+        }
+      });
 
       urls = urls.concat(_urls);
     } catch (error) {
