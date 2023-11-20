@@ -364,6 +364,6 @@ const getUrlListFromArgs = async (
   console.log(
     `Report is being served at the URL: http://localhost:9000?dir=${encodeURIComponent(
       prefix
-    )}${sitemapUrl || csvPath ? '&type=sitemap' : ''}`
+    )}${sitemapUrl || csvPath || sitemapPath ? '&type=sitemap' : ''}`
   );
 })();
