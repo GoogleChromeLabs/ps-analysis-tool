@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 /**
  * Internal dependencies.
@@ -31,8 +31,16 @@ export type TableSearchOutput = {
   searchFilteredData: TableData[];
 };
 
-const useSearch = (data: TableData[], searchKeys: string[] | undefined) => {
+const useSearch = (
+  data: TableData[],
+  searchKeys?: string[],
+  options?: string
+) => {
   const [searchValue, setSearchValue] = useState<string>('');
+
+  useEffect(() => {
+    setSearchValue(options || '');
+  }, [options]);
 
   const searchFilteredData = useMemo<TableData[]>(() => {
     if (!searchValue || !searchKeys) {

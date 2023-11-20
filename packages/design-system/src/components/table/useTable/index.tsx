@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { CookieTableData, TechnologyData } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
@@ -35,6 +35,7 @@ import useColumnResizing, {
 } from './useColumnResizing';
 import useFiltering, { TableFilteringOutput } from './useFiltering';
 import useSearch, { TableSearchOutput } from './useSearch';
+import usePersistentSettings from './usePersistentSettings';
 
 export type TableData = CookieTableData | TechnologyData;
 
@@ -100,6 +101,7 @@ interface useTableProps {
   tableColumns: TableColumn[];
   tableFilterData?: TableFilter;
   tableSearchKeys?: string[];
+  tablePersistentSettingsKey?: string;
   options?: {
     columnSizing?: Record<string, number>;
     columnSorting?: DefaultOptions;
@@ -112,8 +114,13 @@ const useTable = ({
   tableColumns,
   tableFilterData,
   tableSearchKeys,
+  tablePersistentSettingsKey,
   options,
 }: useTableProps): TableOutput => {
+  const [tableOptions, updater] = usePersistentSettings(
+    tablePersistentSettingsKey
+  );
+
   const {
     visibleColumns,
     hideColumn,
@@ -121,13 +128,27 @@ const useTable = ({
     areAllColumnsVisible,
     showColumn,
     isColumnHidden,
-  } = useColumnVisibility(tableColumns, options?.selectedColumns);
+  } = useColumnVisibility(
+    tableColumns,
+    options?.selectedColumns ?? tableOptions?.columnsVisibility
+  );
 
   const { columns, tableContainerRef, onMouseDown, isResizing } =
-    useColumnResizing(visibleColumns, options?.columnSizing);
+    useColumnResizing(
+      visibleColumns,
+      options?.columnSizing ?? tableOptions?.columnsSizing
+    );
+
+  const tabOptionsColumnSorting = useMemo<DefaultOptions>(
+    () => ({
+      defaultSortKey: tableOptions?.sortBy,
+      defaultSortOrder: tableOptions?.sortOrder,
+    }),
+    [tableOptions?.sortBy, tableOptions?.sortOrder]
+  );
 
   const { sortedData, sortKey, sortOrder, setSortKey, setSortOrder } =
-    useColumnSorting(data, options?.columnSorting);
+    useColumnSorting(data, options?.columnSorting ?? tabOptionsColumnSorting);
 
   const {
     filters,
@@ -135,11 +156,12 @@ const useTable = ({
     filteredData,
     toggleFilterSelection,
     resetFilters,
-  } = useFiltering(sortedData, tableFilterData);
+  } = useFiltering(sortedData, tableFilterData, tableOptions?.selectedFilters);
 
   const { searchValue, setSearchValue, searchFilteredData } = useSearch(
     filteredData,
-    tableSearchKeys
+    tableSearchKeys,
+    tableOptions?.searchValue
   );
 
   const rows = useMemo(() => {
@@ -163,6 +185,26 @@ const useTable = ({
     () => tableColumns.filter((column) => column.enableHiding !== false),
     [tableColumns]
   );
+
+  useEffect(() => {
+    updater({
+      columns: tableColumns,
+      visibleColumns: columns,
+      sortBy: sortKey,
+      sortOrder: sortOrder,
+      selectedFilters,
+      searchValue,
+    });
+  }, [
+    columns,
+    searchValue,
+    selectedFilters,
+    sortKey,
+    sortOrder,
+    tableColumns,
+    updater,
+    visibleColumns,
+  ]);
 
   return {
     columns,

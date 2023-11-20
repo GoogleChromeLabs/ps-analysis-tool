@@ -191,7 +191,7 @@ const CookiesListing = ({ selectedFrameUrl }: CookiesListingProps) => {
         },
         comparator: (value: InfoType, filterValue: string) => {
           const val = value as string;
-          return val.toLowerCase() === filterValue.toLowerCase();
+          return val?.toLowerCase() === filterValue.toLowerCase();
         },
       },
       'parsedCookie.secure': {
@@ -314,6 +314,7 @@ const CookiesListing = ({ selectedFrameUrl }: CookiesListingProps) => {
           showTopBar={true}
           tableFilters={filters}
           tableSearchKeys={searchKeys}
+          tablePersistentSettingsKey={'cookiesListing'}
           selectedFrame={selectedFrameUrl}
           selectedFrameCookie={selectedFrameCookie}
           setSelectedFrameCookie={setSelectedFrameCookie}

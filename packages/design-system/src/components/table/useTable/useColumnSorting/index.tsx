@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { PreferenceDataValues } from '@ps-analysis-tool/common';
 
 /**
@@ -61,6 +61,15 @@ const useColumnSorting = (
   const setSortOrder = useCallback((sortOrder: 'asc' | 'desc') => {
     setAscending(sortOrder === 'asc');
   }, []);
+
+  useEffect(() => {
+    if (options?.defaultSortKey) {
+      _setSortKey(options.defaultSortKey);
+    }
+    if (options?.defaultSortOrder) {
+      setAscending(options.defaultSortOrder === 'asc');
+    }
+  }, [options]);
 
   const setSortKey = useCallback(
     (

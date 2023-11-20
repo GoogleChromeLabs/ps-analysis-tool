@@ -35,15 +35,49 @@ export type TableFilteringOutput = {
 
 const useFiltering = (
   data: TableData[],
-  tableFilterData: TableFilter | undefined
+  tableFilterData: TableFilter | undefined,
+  options?: {
+    [filterKey: string]: TableFilter[keyof TableFilter]['filterValues'];
+  }
 ): TableFilteringOutput => {
   const [filters, setFilters] = useState<TableFilter>({
     ...(tableFilterData || {}),
   });
 
   useEffect(() => {
-    setFilters((prevFilters) => {
-      return Object.fromEntries(
+    if (!options) {
+      return;
+    }
+
+    setFilters((prevFilters) =>
+      Object.fromEntries(
+        Object.entries(prevFilters).map(([filterKey, filter]) => {
+          const savedFilterValues = options?.[filterKey];
+          const filterValues = filter.filterValues || {};
+
+          Object.entries(savedFilterValues || {}).forEach(
+            ([filterValue, filterValueData]) => {
+              if (!filterValues[filterValue]) {
+                filterValues[filterValue] = {
+                  selected: false,
+                };
+              }
+
+              filterValues[filterValue] = {
+                ...filterValueData,
+              };
+            }
+          );
+
+          return [filterKey, { ...filter, filterValues }];
+        })
+      )
+    );
+  }, [options]);
+
+  useEffect(() => {
+    setFilters((prevFilters) =>
+      Object.fromEntries(
         Object.entries(prevFilters).map(([filterKey, filter]) => {
           let filterValues = { ...(filter.filterValues || {}) };
 
@@ -79,8 +113,8 @@ const useFiltering = (
 
           return [filterKey, { ...filter, filterValues }];
         })
-      );
-    });
+      )
+    );
   }, [data]);
 
   const toggleFilterSelection = useCallback(
