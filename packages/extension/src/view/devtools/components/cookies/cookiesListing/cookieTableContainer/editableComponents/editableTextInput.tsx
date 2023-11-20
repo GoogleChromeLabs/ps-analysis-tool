@@ -83,6 +83,23 @@ const EditableTextInput = ({
     []
   );
 
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEventHandler<HTMLInputElement>) => {
+      if (event?.key === 'Enter') {
+        setEditing(false);
+        if (localValue && localValue !== info && cookieKey) {
+          modifyCookie(
+            cookieKey,
+            changedKey,
+            localValue,
+            changedKey === 'name' ? (info as string) : null
+          );
+        }
+      }
+    },
+    [changedKey, cookieKey, info, localValue, modifyCookie]
+  );
+
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
@@ -101,6 +118,7 @@ const EditableTextInput = ({
           className="mx-2 outline-none dark:bg-charleston-green border-[1px] border-gainsboro dark:border-quartz focus:border-royal-blue focus:dark:border-medium-persian-blue dark:text-bright-gray text-outer-space-crayola"
           value={localValue}
           onChange={handleChange}
+          onKeyDown={handleKeyDown}
         />
       ) : (
         <p>{info}</p>
