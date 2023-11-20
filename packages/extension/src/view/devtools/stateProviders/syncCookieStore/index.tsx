@@ -554,8 +554,16 @@ export const Provider = ({ children }: PropsWithChildren) => {
             await Promise.all(
               Object.keys(allCookies).map(async (key) => {
                 if (allCookies[key].frameIdList.includes(frameId)) {
+                  if (
+                    allCookies[key]?.parsedCookie?.name &&
+                    allCookies[key]?.url
+                  ) {
+                    await chrome.cookies.remove({
+                      name: allCookies[key]?.parsedCookie?.name,
+                      url: allCookies[key]?.url,
+                    });
+                  }
                   cookieKeys.push(key);
-                  await deleteCookie(key);
                   return key;
                 }
                 return key;
@@ -567,7 +575,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         await CookieStore.deleteSetOfCookie(cookieKeys);
       }
     }
-  }, [deleteCookie, selectedFrame, tabFrames, tabId]);
+  }, [selectedFrame, tabFrames, tabId]);
 
   const modifierForNameUpdate = useCallback(
     async (
