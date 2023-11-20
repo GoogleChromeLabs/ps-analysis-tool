@@ -17,12 +17,12 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 /**
  * Internal dependencies.
  */
-import { ClearIcon } from '../../icons';
+import { PaddedCross } from '../../icons';
 
 interface SearchInputProps {
   value: string;
@@ -32,35 +32,61 @@ interface SearchInputProps {
 
 const SearchInput = ({ value, onChange, clearInput }: SearchInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
+  const inputContainerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handleClick = (event: MouseEvent) => {
+      if (inputContainerRef.current) {
+        const isClickInside = inputContainerRef.current.contains(
+          event.target as Node
+        );
+
+        if (!isClickInside) {
+          setIsFocused(false);
+        } else {
+          setIsFocused(true);
+          inputRef.current?.focus();
+        }
+      }
+    };
+
+    document.addEventListener('click', handleClick);
+
+    return () => {
+      document.removeEventListener('click', handleClick);
+    };
+  }, []);
 
   return (
-    <label
-      className={`cursor-text dark:bg-charleston-green hover:bg-lotion dark:text-bright-gray border rounded flex justify-between items-center mx-[3px] my-px px-[3px] pt-0.5 pb-px box-content ${
-        isFocused || value
-          ? 'dark:border-baby-blue-eyes'
-          : 'dark:border-davys-grey'
+    <div
+      ref={inputContainerRef}
+      className={`w-3/5 cursor-text bg-white dark:bg-charleston-green text-raisin-black dark:text-bright-gray border rounded flex justify-between items-center gap-1 mx-[3px] my-px px-[3px] pt-0.5 pb-px box-content text-xs ${
+        isFocused
+          ? 'border-sapphire dark:border-baby-blue-eyes'
+          : 'border-chinese-silver dark:border-davys-grey hover:bg-lotion'
       }`}
     >
       <input
+        ref={inputRef}
         type="text"
-        className="h-[14px] w-56 outline-none bg-inherit"
+        className="h-[14px] w-full outline-none bg-inherit"
         placeholder="Search"
         value={value}
         onChange={onChange}
         onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
       />
 
       <button
         onClick={clearInput}
-        className={`w-3 h-3 flex items-center justify-center ${
+        className={`w-fit h-3 px-px scale-[1.6] hover:opacity-70 active:opacity-50 flex justify-center items-center ${
           value ? 'visible' : 'invisible'
         }`}
         title="Clear Search"
       >
-        <ClearIcon />
+        <PaddedCross />
       </button>
-    </label>
+    </div>
   );
 };
 
