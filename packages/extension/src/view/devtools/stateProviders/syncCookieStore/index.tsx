@@ -590,6 +590,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
     ) => {
       const localStorage = await chrome.storage.local.get();
       if (tabId) {
+        if (!changedValue) {
+          return false;
+        }
         const newTabData = localStorage[tabId];
         const { [cookieKey]: cookieDetails, ...restOfCookies } =
           newTabData.cookies;
