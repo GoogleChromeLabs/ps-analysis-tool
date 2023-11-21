@@ -18,21 +18,36 @@
  * Internal dependencies
  */
 import { SidebarItemValue, SidebarItems } from '..';
+import matchKey from './matchKey';
 
 const findItem = (items: SidebarItems, keyPath: string[]) => {
   if (keyPath.length === 0) {
     return null;
   }
 
-  let idx = 0,
-    item: SidebarItemValue = items[keyPath[idx]];
+  let keyFound = false,
+    item: SidebarItemValue | null = null;
+  const key = keyPath[keyPath.length - 1];
 
-  while (idx < keyPath.length) {
-    const itemKey = keyPath[idx];
-    item = items[itemKey];
+  const _findItem = (_items: SidebarItems) => {
+    Object.entries(_items).forEach(([itemKey, _item]) => {
+      if (keyFound) {
+        return;
+      }
 
-    idx++;
-  }
+      if (matchKey(key || '', itemKey)) {
+        keyFound = true;
+        item = _item;
+        return;
+      }
+
+      if (_item.children) {
+        _findItem(_item.children);
+      }
+    });
+  };
+
+  _findItem(items);
 
   return item;
 };
