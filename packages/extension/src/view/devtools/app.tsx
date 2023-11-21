@@ -16,23 +16,23 @@
 /**
  * External dependencies.
  */
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import { Resizable } from 're-resizable';
-import { ExtensionReloadNotification } from '@ps-analysis-tool/design-system';
+import {
+  ExtensionReloadNotification,
+  Sidebar,
+  useSidebar,
+} from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
 import TABS from './tabs';
-import { Sidebar } from './components';
 import { useCookieStore } from './stateProviders/syncCookieStore';
 import './app.css';
 
 const App: React.FC = () => {
-  const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
-  const [width, setWidth] = useState<number>(200);
   const contextInvalidatedRef = useRef(null);
-  const TabContent = TABS[selectedTabIndex].component;
 
   const { contextInvalidated, setContextInvalidated } = useCookieStore(
     ({ state, actions }) => ({
@@ -57,6 +57,25 @@ const App: React.FC = () => {
     };
   }, [listenToMouseChange]);
 
+  const {
+    activePanel,
+    selectedItemKey,
+    sidebarItems,
+    updateSelectedItemKey,
+    onKeyNavigation,
+    toggleDropdown,
+    isKeyAncestor,
+    isKeySelected,
+  } = useSidebar({
+    data: TABS,
+  });
+
+  useEffect(() => {
+    if (selectedItemKey === null) {
+      updateSelectedItemKey('privacySandbox');
+    }
+  }, [selectedItemKey, updateSelectedItemKey]);
+
   return (
     <div
       className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black"
@@ -70,13 +89,9 @@ const App: React.FC = () => {
       {!contextInvalidated && (
         <div className="w-full h-full flex flex-row">
           <Resizable
-            size={{ width: width, height: '100%' }}
-            defaultSize={{ width: '200px', height: '100%' }}
-            onResizeStop={(_, __, ___, d) => {
-              setWidth((prevState) => prevState + d.width);
-            }}
-            minWidth={'200px'}
-            maxWidth={'98%'}
+            size={{ width: 200, height: '100%' }}
+            minWidth={'150px'}
+            maxWidth={'90%'}
             enable={{
               top: false,
               right: true,
@@ -90,15 +105,17 @@ const App: React.FC = () => {
             className="h-full flex flex-col border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
           >
             <Sidebar
-              width={width}
-              selectedIndex={selectedTabIndex}
-              setIndex={setSelectedTabIndex}
+              selectedItemKey={selectedItemKey}
+              sidebarItems={sidebarItems}
+              updateSelectedItemKey={updateSelectedItemKey}
+              onKeyNavigation={onKeyNavigation}
+              toggleDropdown={toggleDropdown}
+              isKeyAncestor={isKeyAncestor}
+              isKeySelected={isKeySelected}
             />
           </Resizable>
           <main className="h-full flex-1 overflow-auto">
-            <div className="min-w-[20rem] h-full">
-              <TabContent />
-            </div>
+            <div className="min-w-[20rem] h-full">{activePanel}</div>
           </main>
         </div>
       )}

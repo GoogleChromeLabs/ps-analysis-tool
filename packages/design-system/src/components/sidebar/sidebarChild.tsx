@@ -38,6 +38,7 @@ interface SidebarItemProps {
   toggleDropdown: (action: boolean, key: string) => void;
   isKeyAncestor: (key: string) => boolean;
   isKeySelected: (key: string) => boolean;
+  recursiveStackIndex?: number;
 }
 
 const SidebarChild = ({
@@ -51,6 +52,7 @@ const SidebarChild = ({
   toggleDropdown,
   isKeyAncestor,
   isKeySelected,
+  recursiveStackIndex = 0,
 }: SidebarItemProps) => {
   const itemRef = useRef<HTMLDivElement>(null);
 
@@ -73,13 +75,10 @@ const SidebarChild = ({
         onKeyDown={(event) => {
           onKeyNavigation(event, itemKey);
         }}
-        className={`w-full flex items-center pl-3 py-0.5 outline-0 text-sm ${
-          isKeySelected(itemKey)
-            ? 'bg-royal-blue text-white'
-            : isKeyAncestor(itemKey)
-            ? 'bg-gainsboro'
-            : 'bg-white'
+        className={`w-full flex items-center py-0.5 outline-0 text-sm ${
+          isKeySelected(itemKey) ? 'bg-royal-blue text-white' : 'bg-white'
         } cursor-pointer`}
+        style={{ paddingLeft: recursiveStackIndex * 16 + 12 }}
       >
         {Object.keys(sidebarItem.children)?.length !== 0 && (
           <div
@@ -113,16 +112,7 @@ const SidebarChild = ({
           sidebarItem.dropdownOpen && (
             <>
               {Object.entries(sidebarItem.children).map(([childKey, child]) => (
-                <div
-                  key={childKey}
-                  className={`w-full pl-4 ${
-                    isKeySelected(childKey)
-                      ? 'bg-royal-blue text-white'
-                      : isKeyAncestor(childKey)
-                      ? 'bg-gainsboro'
-                      : 'bg-white'
-                  }`}
-                >
+                <React.Fragment key={childKey}>
                   <SidebarChild
                     selectedItemKey={selectedItemKey}
                     didUserInteract={didUserInteract}
@@ -134,8 +124,9 @@ const SidebarChild = ({
                     toggleDropdown={toggleDropdown}
                     isKeyAncestor={isKeyAncestor}
                     isKeySelected={isKeySelected}
+                    recursiveStackIndex={recursiveStackIndex + 1}
                   />
-                </div>
+                </React.Fragment>
               ))}
             </>
           )}
