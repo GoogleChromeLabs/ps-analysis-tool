@@ -61,10 +61,11 @@ import {
 
 const TABS: SidebarItems = {
   privacySandbox: {
-    title: 'Privacy Sanbox',
+    title: 'Privacy Sandbox',
     panel: <PrivacySandbox />,
     icon: <PrivacySandboxIcon />,
     selectedIcon: <PrivacySandboxIconWhite />,
+    dropdownOpen: true,
     children: {
       cookies: {
         title: 'Cookies',
