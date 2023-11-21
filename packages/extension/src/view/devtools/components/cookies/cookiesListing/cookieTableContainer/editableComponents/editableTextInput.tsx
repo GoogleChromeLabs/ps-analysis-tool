@@ -94,7 +94,7 @@ const EditableTextInput = ({
   );
 
   const handleKeyDown = useCallback(
-    async (event: React.KeyboardEventHandler<HTMLInputElement>) => {
+    async (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event?.key === 'Enter') {
         setEditing(false);
         if (localValue !== info && cookieKey) {
