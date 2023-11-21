@@ -69,10 +69,15 @@ const CookieTableContainer = ({
       {
         header: 'Name',
         accessorKey: 'parsedCookie.name',
-        cell: (info: InfoType, details?: TableData) => (
+        cell: (
+          info: InfoType,
+          details?: TableData,
+          rowHighlighter?: (value: boolean, cookieKey: string) => void
+        ) => (
           <EditableTextInput
             info={info}
             changedKey="name"
+            rowHighlighter={rowHighlighter}
             cookieKey={getCookieKey(details?.parsedCookie)}
           />
         ),
@@ -81,10 +86,15 @@ const CookieTableContainer = ({
       {
         header: 'Value',
         accessorKey: 'parsedCookie.value',
-        cell: (info: InfoType, details?: TableData) => (
+        cell: (
+          info: InfoType,
+          details?: TableData,
+          rowHighlighter?: (value: boolean, cookieKey: string) => void
+        ) => (
           <EditableTextInput
             info={info}
             changedKey="value"
+            rowHighlighter={rowHighlighter}
             cookieKey={getCookieKey(details?.parsedCookie)}
           />
         ),
@@ -92,10 +102,15 @@ const CookieTableContainer = ({
       {
         header: 'Domain',
         accessorKey: 'parsedCookie.domain',
-        cell: (info: InfoType, details?: TableData) => (
+        cell: (
+          info: InfoType,
+          details?: TableData,
+          rowHighlighter?: (value: boolean, cookieKey: string) => void
+        ) => (
           <EditableTextInput
             info={info}
             changedKey="domain"
+            rowHighlighter={rowHighlighter}
             cookieKey={getCookieKey(details?.parsedCookie)}
           />
         ),
@@ -103,10 +118,15 @@ const CookieTableContainer = ({
       {
         header: 'Path',
         accessorKey: 'parsedCookie.path',
-        cell: (info: InfoType, details?: TableData) => (
+        cell: (
+          info: InfoType,
+          details?: TableData,
+          rowHighlighter?: (value: boolean, cookieKey: string) => void
+        ) => (
           <EditableTextInput
             info={info}
             changedKey="path"
+            rowHighlighter={rowHighlighter}
             cookieKey={getCookieKey(details?.parsedCookie)}
           />
         ),
@@ -119,10 +139,15 @@ const CookieTableContainer = ({
       {
         header: 'HttpOnly',
         accessorKey: 'parsedCookie.httponly',
-        cell: (info: InfoType, details?: TableData) => (
+        cell: (
+          info: InfoType,
+          details?: TableData,
+          rowHighlighter?: (value: boolean, cookieKey: string) => void
+        ) => (
           <EditableCheckBoxInput
             info={info}
             changedKey="httpOnly"
+            rowHighlighter={rowHighlighter}
             cookieKey={getCookieKey(details?.parsedCookie)}
           />
         ),
@@ -130,10 +155,15 @@ const CookieTableContainer = ({
       {
         header: 'SameSite',
         accessorKey: 'parsedCookie.samesite',
-        cell: (info: InfoType, details?: TableData) => (
+        cell: (
+          info: InfoType,
+          details?: TableData,
+          rowHighlighter?: (value: boolean, cookieKey: string) => void
+        ) => (
           <EditableTextInput
             info={info}
             changedKey="sameSite"
+            rowHighlighter={rowHighlighter}
             cookieKey={getCookieKey(details?.parsedCookie)}
           />
         ),
@@ -141,10 +171,15 @@ const CookieTableContainer = ({
       {
         header: 'Secure',
         accessorKey: 'parsedCookie.secure',
-        cell: (info: InfoType, details?: TableData) => (
+        cell: (
+          info: InfoType,
+          details?: TableData,
+          rowHighlighter?: (value: boolean, cookieKey: string) => void
+        ) => (
           <EditableCheckBoxInput
             info={info}
             changedKey="secure"
+            rowHighlighter={rowHighlighter}
             cookieKey={getCookieKey(details?.parsedCookie)}
           />
         ),

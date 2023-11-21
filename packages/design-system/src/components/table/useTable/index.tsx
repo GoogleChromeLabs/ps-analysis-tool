@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect, useCallback } from 'react';
 import { CookieTableData, TechnologyData } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
@@ -41,7 +41,11 @@ export type InfoType = number | string | boolean | [];
 export type TableColumn = {
   header: string;
   accessorKey: string;
-  cell?: (info: InfoType, details?: TableData) => React.JSX.Element | InfoType;
+  cell?: (
+    info: InfoType,
+    details?: TableData,
+    rowHighlighter?: (value: boolean, cookieKey: string) => void
+  ) => React.JSX.Element | InfoType;
   enableHiding?: boolean;
   width?: number;
 };
@@ -54,6 +58,7 @@ export type TableRow = {
 };
 
 export type TableOutput = {
+  highlightRowForVisibility: (value: boolean, cookieKey: string) => void;
   columns: TableColumn[];
   hideableColumns: TableColumn[];
   rows: TableRow[];
@@ -86,6 +91,8 @@ const useTable = ({
   data,
   options,
 }: useTableProps): TableOutput => {
+  const [rows, setRows] = useState<TableRow[]>([]);
+
   const {
     visibleColumns,
     hideColumn,
@@ -101,32 +108,62 @@ const useTable = ({
   const { sortedData, sortKey, sortOrder, setSortKey, setSortOrder } =
     useColumnSorting(data, options?.columnSorting);
 
-  const rows = useMemo(() => {
+  const highlightRowForVisibility = useCallback(
+    (value: boolean, cookieKey: string) => {
+      setRows((prevState) => {
+        const tempRows = prevState;
+        const indexToBeReplaced = tempRows.findIndex(
+          (row: TableRow) =>
+            (row.originalData.parsedCookie.name as string) +
+              (row.originalData.parsedCookie.domain as string) +
+              (row.originalData.parsedCookie.path as string) ===
+            cookieKey
+        );
+        tempRows[indexToBeReplaced].originalData.highlighted = value;
+        return tempRows;
+      });
+    },
+    []
+  );
+
+  const memoisedRows = useMemo(() => {
     return sortedData.map((_data) => {
       const row = {
-        originalData: _data,
+        originalData: {
+          ..._data,
+          highlighted: false,
+        },
       } as TableRow;
 
       columns.forEach((column) => {
         const value = getValueByKey(column.accessorKey, _data);
         row[column.accessorKey] = {
-          value: column.cell?.(value, _data) ?? value,
+          value:
+            column.cell?.(value, _data, highlightRowForVisibility) ?? value,
         };
       });
 
       return row;
     });
-  }, [sortedData, columns]);
+  }, [sortedData, columns, highlightRowForVisibility]);
+
+  useEffect(() => {
+    setRows(memoisedRows);
+  }, [memoisedRows]);
 
   const hideableColumns = useMemo(
     () => tableColumns.filter((column) => column.enableHiding !== false),
     [tableColumns]
   );
 
+  const rowsToBeProcessed =
+    rows && rows[0] && rows[0]['parsedCookie.name'] ? rows : memoisedRows;
+
   return {
+    highlightRowForVisibility,
     columns,
     hideableColumns,
-    rows,
+    rows: rowsToBeProcessed,
     sortKey,
     sortOrder,
     setSortKey,

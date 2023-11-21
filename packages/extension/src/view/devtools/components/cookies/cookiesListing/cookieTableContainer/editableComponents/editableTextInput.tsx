@@ -23,17 +23,20 @@ import React, { useCallback, useState, useRef, useEffect, memo } from 'react';
  */
 import { useCookieStore } from '../../../../../stateProviders/syncCookieStore';
 import type { InfoType } from '@ps-analysis-tool/design-system';
+import { noop } from '@ps-analysis-tool/common';
 
 interface EditableTextInputProps {
   info: InfoType;
   changedKey: string;
   cookieKey?: string | null;
+  rowHighlighter?: (value: boolean, cookieKey: string) => void;
 }
 
 const EditableTextInput = ({
   info,
   changedKey,
   cookieKey,
+  rowHighlighter = noop,
 }: EditableTextInputProps) => {
   const [editing, setEditing] = useState(false);
   const divRef = useRef<HTMLInputElement>(null);
@@ -69,13 +72,17 @@ const EditableTextInput = ({
             localValue,
             changedKey === 'name' ? (info as string) : null
           );
+
           if (!result) {
-            console.log('error');
+            rowHighlighter(true, cookieKey);
+            setLocalValue(info as string);
+          } else {
+            rowHighlighter(false, cookieKey);
           }
         }
       }
     },
-    [info, changedKey, localValue, modifyCookie, cookieKey]
+    [localValue, info, cookieKey, modifyCookie, changedKey, rowHighlighter]
   );
 
   const handleChange = useCallback(
@@ -97,13 +104,20 @@ const EditableTextInput = ({
             localValue,
             changedKey === 'name' ? (info as string) : null
           );
+
           if (!result) {
-            console.log('error');
+            rowHighlighter(true, cookieKey);
+            setLocalValue(info as string);
+          } else {
+            rowHighlighter(false, cookieKey);
           }
         }
       }
+      if (event?.key === 'Escape') {
+        setEditing(false);
+      }
     },
-    [changedKey, cookieKey, info, localValue, modifyCookie]
+    [changedKey, cookieKey, info, localValue, modifyCookie, rowHighlighter]
   );
 
   useEffect(() => {
