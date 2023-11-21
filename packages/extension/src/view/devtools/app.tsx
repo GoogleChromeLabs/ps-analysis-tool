@@ -16,12 +16,15 @@
 /**
  * External dependencies.
  */
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback, useState } from 'react';
 import { Resizable } from 're-resizable';
 import {
+  CookieIcon,
+  CookieIconWhite,
   ExtensionReloadNotification,
   Sidebar,
   useSidebar,
+  type SidebarItems,
 } from '@ps-analysis-tool/design-system';
 
 /**
@@ -30,16 +33,23 @@ import {
 import TABS from './tabs';
 import { useCookieStore } from './stateProviders/syncCookieStore';
 import './app.css';
+import { Cookies } from './components';
 
 const App: React.FC = () => {
+  const [sidebarData, setSidebarData] = useState(TABS);
   const contextInvalidatedRef = useRef(null);
 
-  const { contextInvalidated, setContextInvalidated } = useCookieStore(
-    ({ state, actions }) => ({
-      contextInvalidated: state.contextInvalidated,
-      setContextInvalidated: actions.setContextInvalidated,
-    })
-  );
+  const {
+    contextInvalidated,
+    setContextInvalidated,
+    tabFrames,
+    setSelectedFrame,
+  } = useCookieStore(({ state, actions }) => ({
+    contextInvalidated: state.contextInvalidated,
+    setContextInvalidated: actions.setContextInvalidated,
+    tabFrames: state.tabFrames,
+    setSelectedFrame: actions.setSelectedFrame,
+  }));
 
   const listenToMouseChange = useCallback(() => {
     if (contextInvalidatedRef.current) {
@@ -60,6 +70,7 @@ const App: React.FC = () => {
   const {
     activePanel,
     selectedItemKey,
+    currentItemKey,
     sidebarItems,
     updateSelectedItemKey,
     onKeyNavigation,
@@ -67,8 +78,37 @@ const App: React.FC = () => {
     isKeyAncestor,
     isKeySelected,
   } = useSidebar({
-    data: TABS,
+    data: sidebarData,
   });
+
+  useEffect(() => {
+    setSidebarData((prev) => {
+      const data = { ...prev };
+
+      data['privacySandbox'].children['cookies'].panel = <Cookies />;
+      data['privacySandbox'].children['cookies'].children = Object.keys(
+        tabFrames || {}
+      ).reduce((acc, url) => {
+        acc[url] = {
+          title: url,
+          panel: <Cookies />,
+          icon: <CookieIcon />,
+          selectedIcon: <CookieIconWhite />,
+          children: {},
+        };
+
+        return acc;
+      }, {} as SidebarItems);
+
+      return data;
+    });
+  }, [tabFrames]);
+
+  useEffect(() => {
+    if (Object.keys(tabFrames || {}).includes(currentItemKey || '')) {
+      setSelectedFrame(currentItemKey);
+    }
+  }, [currentItemKey, setSelectedFrame, tabFrames]);
 
   useEffect(() => {
     if (selectedItemKey === null) {
@@ -89,7 +129,7 @@ const App: React.FC = () => {
       {!contextInvalidated && (
         <div className="w-full h-full flex flex-row">
           <Resizable
-            size={{ width: 200, height: '100%' }}
+            size={{ width: 210, height: '100%' }}
             minWidth={'150px'}
             maxWidth={'90%'}
             enable={{

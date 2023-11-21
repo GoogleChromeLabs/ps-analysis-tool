@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 /**
  * Internal dependencies.
@@ -45,6 +45,7 @@ export type SidebarItems = {
 export interface SidebarOutput {
   activePanel: React.ReactNode;
   selectedItemKey: string | null;
+  currentItemKey: string | null;
   sidebarItems: SidebarItems;
   updateSelectedItemKey: (key: string | null) => void;
   onKeyNavigation: (
@@ -64,6 +65,17 @@ const useSidebar = ({ data }: useSidebarProps): SidebarOutput => {
   const [selectedItemKey, setSelectedItemKey] = useState<string | null>(null);
   const [activePanel, setActivePanel] = useState<React.ReactNode>();
   const [sidebarItems, setSidebarItems] = useState<SidebarItems>({});
+
+  const currentItemKey = useMemo(() => {
+    if (!selectedItemKey) {
+      return null;
+    }
+
+    const keys = selectedItemKey.split('#');
+    const length = keys.length;
+
+    return keys[length - 1];
+  }, [selectedItemKey]);
 
   useEffect(() => {
     setSidebarItems(data);
@@ -197,6 +209,7 @@ const useSidebar = ({ data }: useSidebarProps): SidebarOutput => {
   return {
     activePanel,
     selectedItemKey,
+    currentItemKey,
     sidebarItems,
     updateSelectedItemKey,
     onKeyNavigation,
