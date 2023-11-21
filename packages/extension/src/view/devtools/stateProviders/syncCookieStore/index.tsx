@@ -505,7 +505,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           url: cookieDetails.url,
         });
         try {
-          await chrome.cookies.set({
+          const result = await chrome.cookies.set({
             domain: currentCookie?.domain,
             expirationDate: currentCookie?.expirationDate,
             httpOnly: currentCookie?.httpOnly,
@@ -518,23 +518,34 @@ export const Provider = ({ children }: PropsWithChildren) => {
             [changedKey]: changedValue,
             url: cookieDetails.url,
           });
-          await chrome.storage.local.set({
-            ...localStorage,
-            [tabId]: {
-              cookies: {
-                ...restOfCookies,
-                [newCookieKey]: {
-                  ...cookieDetails,
-                  parsedCookie: {
-                    ...cookieDetails.parsedCookie,
-                    [changedKey.toLowerCase()]: changedValue,
+
+          if (result[changedKey] === changedValue) {
+            await chrome.storage.local.set({
+              ...localStorage,
+              [tabId]: {
+                cookies: {
+                  ...restOfCookies,
+                  [newCookieKey]: {
+                    ...cookieDetails,
+                    parsedCookie: {
+                      ...cookieDetails.parsedCookie,
+                      [changedKey.toLowerCase()]:
+                        changedValue === 'unspecified'
+                          ? ''
+                          : changedValue === 'no_restriction'
+                          ? 'none'
+                          : changedValue,
+                    },
                   },
                 },
               },
-            },
-          });
+            });
+          } else {
+            return false;
+          }
           return true;
         } catch (error) {
+          console.log(error);
           return false;
         }
       } else {
@@ -606,7 +617,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           url: cookieDetails.url,
         });
         try {
-          await chrome.cookies.set({
+          const result = await chrome.cookies.set({
             domain: currentCookie?.domain,
             expirationDate: currentCookie?.expirationDate,
             httpOnly: currentCookie?.httpOnly,
@@ -619,29 +630,34 @@ export const Provider = ({ children }: PropsWithChildren) => {
             [changedKey]: changedValue,
             url: cookieDetails.url,
           });
-          await chrome.storage.local.set({
-            ...localStorage,
-            [tabId]: {
-              cookies: {
-                ...restOfCookies,
-                [changedValue +
-                cookieDetails.parsedCookie.domain +
-                cookieDetails.parsedCookie.path]: {
-                  ...cookieDetails,
-                  analytics: {
-                    ...cookieDetails?.analytics,
-                    name: changedValue,
-                  },
-                  parsedCookie: {
-                    ...cookieDetails.parsedCookie,
-                    [changedKey]: changedValue,
+          if (result[changedKey] === changedValue) {
+            await chrome.storage.local.set({
+              ...localStorage,
+              [tabId]: {
+                cookies: {
+                  ...restOfCookies,
+                  [changedValue +
+                  cookieDetails.parsedCookie.domain +
+                  cookieDetails.parsedCookie.path]: {
+                    ...cookieDetails,
+                    analytics: {
+                      ...cookieDetails?.analytics,
+                      name: changedValue,
+                    },
+                    parsedCookie: {
+                      ...cookieDetails.parsedCookie,
+                      [changedKey]: changedValue,
+                    },
                   },
                 },
               },
-            },
-          });
+            });
+          } else {
+            return false;
+          }
           return true;
         } catch (error) {
+          console.log(error);
           return false;
         }
       } else {

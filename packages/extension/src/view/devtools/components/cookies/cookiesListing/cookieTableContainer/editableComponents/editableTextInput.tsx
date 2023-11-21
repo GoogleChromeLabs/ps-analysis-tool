@@ -65,7 +65,7 @@ const EditableTextInput = ({
     async (event: MouseEvent) => {
       if (divRef.current && !divRef.current.contains(event.target as Node)) {
         setEditing(false);
-        if (localValue && localValue !== info && cookieKey) {
+        if (localValue !== info && cookieKey) {
           const result = await modifyCookie(
             cookieKey,
             changedKey,
@@ -97,7 +97,7 @@ const EditableTextInput = ({
     async (event: React.KeyboardEventHandler<HTMLInputElement>) => {
       if (event?.key === 'Enter') {
         setEditing(false);
-        if (localValue && localValue !== info && cookieKey) {
+        if (localValue !== info && cookieKey) {
           const result = await modifyCookie(
             cookieKey,
             changedKey,
@@ -129,7 +129,10 @@ const EditableTextInput = ({
   }, [handleClickOutside]);
 
   return (
-    <div onClick={(event) => handleDoubleClick(event)}>
+    <div
+      className={`${!info ? 'w-full h-full' : ''}`}
+      onClick={(event) => handleDoubleClick(event)}
+    >
       {editing ? (
         <input
           name={changedKey}
@@ -141,7 +144,7 @@ const EditableTextInput = ({
           onKeyDown={handleKeyDown}
         />
       ) : (
-        <p>{info}</p>
+        <p className="w-full">{info}</p>
       )}
     </div>
   );

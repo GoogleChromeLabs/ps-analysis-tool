@@ -49,19 +49,28 @@ const BodyRow = ({
   onKeyDown,
 }: BodyRowProps) => {
   const cookieKey = getRowObjectKey(row);
-
+  const isCookieHighlighted = (row.originalData as CookieTableData)
+    ?.highlighted;
   const tableRowClassName = classNames(
     'outline-0 flex divide-x divide-american-silver dark:divide-quartz',
     {
-      'bg-burnt-sienna-30': (row.originalData as CookieTableData)?.highlighted,
+      'bg-rose-900 text-white': isCookieHighlighted,
     },
     cookieKey !== selectedKey &&
       (index % 2
-        ? 'bg-anti-flash-white dark:bg-charleston-green'
+        ? isCookieHighlighted
+          ? 'bg-rose-900 text-white'
+          : 'bg-anti-flash-white dark:bg-charleston-green'
+        : isCookieHighlighted
+        ? 'bg-rose-900 text-white'
         : 'bg-white dark:bg-raisin-black'),
     cookieKey === selectedKey &&
       (isRowFocused
-        ? 'bg-gainsboro dark:bg-outer-space'
+        ? isCookieHighlighted
+          ? 'bg-rose-900 text-white'
+          : 'bg-gainsboro dark:bg-outer-space'
+        : isCookieHighlighted
+        ? 'bg-rose-900 text-white'
         : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver')
   );
 

@@ -24,17 +24,20 @@ import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { useCookieStore } from '../../../../../stateProviders/syncCookieStore';
 import classNames from 'classnames';
 import type { InfoType } from '@ps-analysis-tool/design-system';
+import { noop } from '@ps-analysis-tool/common';
 
 interface EditableCheckBoxInputProps {
   info: InfoType;
   changedKey: string;
   cookieKey?: string | null;
+  rowHighlighter?: (value: boolean, cookieKey: string) => void;
 }
 
 const EditableCheckBoxInput = ({
   info,
   changedKey,
   cookieKey,
+  rowHighlighter = noop,
 }: EditableCheckBoxInputProps) => {
   const [editing, setEditing] = useState(false);
   const divRef = useRef<HTMLInputElement>(null);
@@ -60,15 +63,24 @@ const EditableCheckBoxInput = ({
   }, [editing]);
 
   const handleClickOutside = useCallback(
-    (event: MouseEvent) => {
+    async (event: MouseEvent) => {
       if (divRef.current && !divRef.current.contains(event.target as Node)) {
         setEditing(false);
         if (localValue !== info && cookieKey) {
-          modifyCookie(cookieKey, changedKey, localValue, null);
+          const result = await modifyCookie(
+            cookieKey,
+            changedKey,
+            localValue,
+            null
+          );
+          if (!result) {
+            rowHighlighter(true, cookieKey);
+            setLocalValue(info as boolean);
+          }
         }
       }
     },
-    [info, changedKey, localValue, modifyCookie, cookieKey]
+    [info, changedKey, localValue, modifyCookie, cookieKey, rowHighlighter]
   );
 
   useEffect(() => {
