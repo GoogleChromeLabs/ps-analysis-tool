@@ -121,6 +121,10 @@ const EditableTextInput = ({
   );
 
   useEffect(() => {
+    setLocalValue(info as string);
+  }, [info]);
+
+  useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       // Unbind the event listener on clean up
@@ -138,7 +142,7 @@ const EditableTextInput = ({
           name={changedKey}
           ref={divRef}
           type="text"
-          className="mx-2 outline-none dark:bg-charleston-green border-[1px] border-gainsboro dark:border-quartz focus:border-royal-blue focus:dark:border-medium-persian-blue dark:text-bright-gray text-outer-space-crayola"
+          className="outline-none dark:bg-charleston-green border-[1px] border-gainsboro dark:border-quartz focus:border-royal-blue focus:dark:border-medium-persian-blue dark:text-bright-gray text-outer-space-crayola"
           value={localValue}
           onChange={handleChange}
           onKeyDown={handleKeyDown}

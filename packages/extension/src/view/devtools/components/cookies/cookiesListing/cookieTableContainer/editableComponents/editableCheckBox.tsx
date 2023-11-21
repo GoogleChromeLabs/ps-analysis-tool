@@ -91,6 +91,10 @@ const EditableCheckBoxInput = ({
     };
   }, [handleClickOutside]);
 
+  useEffect(() => {
+    setLocalValue(info as boolean);
+  }, [info]);
+
   return (
     <div
       className="h-full w-full flex items-center"

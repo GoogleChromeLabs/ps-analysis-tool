@@ -129,7 +129,7 @@ const TableBody = ({
         ? 'bg-anti-flash-white dark:bg-charleston-green'
         : 'bg-white dark:bg-raisin-black')
   );
-
+  console.log(table.rows);
   return (
     <div ref={tableBodyRef} className="h-full flex flex-col">
       {table.rows.map((row, index) => (
