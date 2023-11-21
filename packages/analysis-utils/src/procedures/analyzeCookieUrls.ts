@@ -23,10 +23,10 @@ import { isFirstParty } from '@ps-analysis-tool/common';
  * Internal dependencies.
  */
 import { CookieDatabase } from '../types';
-import { BrowserManagement } from '../utils/browserManagement';
-import findAnalyticsMatch from '../utils/findAnalyticsMatch';
+import { BrowserManagement } from '../browserManagement';
+import { findAnalyticsMatch } from '../utils';
 
-export const analyzeCookiesUrls = async (
+const analyzeCookiesUrls = async (
   urls: string[],
   isHeadless: boolean,
   delayTime: number,
@@ -111,3 +111,5 @@ export const analyzeCookiesUrls = async (
     return normalCookieAnaysisData[ind];
   });
 };
+
+export default analyzeCookiesUrls;

@@ -19,17 +19,13 @@
  */
 import fs from 'fs/promises';
 import path from 'path';
-
-/**
- * Internal dependencies.
- */
-import { CookieDatabase } from '../types';
+import { CookieDatabase } from '@ps-analysis-tool/analysis-utils';
 
 /**
  * Fetch dictionary from local data folder.
  * @returns {Promise<CookieDatabase>} Open Cookie Data base
  */
-export async function fetchDictionary(): Promise<CookieDatabase> {
+async function fetchDictionary(): Promise<CookieDatabase> {
   const data = JSON.parse(
     await fs.readFile(
       path.resolve('./third_party/data/open-cookie-database.json'),
@@ -39,3 +35,5 @@ export async function fetchDictionary(): Promise<CookieDatabase> {
 
   return data;
 }
+
+export default fetchDictionary;

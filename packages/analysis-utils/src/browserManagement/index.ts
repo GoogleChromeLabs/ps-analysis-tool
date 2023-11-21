@@ -26,7 +26,7 @@ import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
  */
 import { Cookie, RequestData, ResponseData, ViewportConfig } from './types';
 import { parseNetworkDataToCookieData } from './parseNetworkDataToCookieData';
-import delay from '../delay';
+import { delay } from '../utils';
 
 export class BrowserManagement {
   viewportConfig: ViewportConfig;

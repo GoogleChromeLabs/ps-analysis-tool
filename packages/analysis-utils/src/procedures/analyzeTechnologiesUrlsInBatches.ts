@@ -19,57 +19,50 @@
  */
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
+// @ts-ignore Package does not support typescript.
+import Wapplalyzer from 'wappalyzer';
 
 /**
  * Internal dependencies.
  */
-import { CookieDatabase } from '../types';
-import { Cookie } from '../utils/browserManagement/types';
-import { analyzeCookiesUrls } from './analyzeCookieUrls';
+import { TechnologyDetailList } from '../types';
 
-export const analyzeCookiesUrlsInBatches = async (
-  urls: string[],
-  isHeadless: boolean,
-  delayTime: number,
-  cookieDictionary: CookieDatabase,
+const analyzeTechnologiesUrlsInBatches = async (
+  urls: Array<string>,
   batchSize = 3
-) => {
+): Promise<TechnologyDetailList[]> => {
   const spinnies = new Spinnies();
-  let report: {
-    pageUrl: string;
-    cookieData: {
-      [frameUrl: string]: {
-        cookiesCount: number;
-        frameCookies: {
-          [key: string]: Cookie;
-        };
-      };
-    };
-  }[] = [];
+
+  let report: TechnologyDetailList[] = [];
+  const wappalyzer = new Wapplalyzer();
 
   for (let i = 0; i < urls.length; i += batchSize) {
     const start = i;
     const end = Math.min(urls.length - 1, i + batchSize - 1);
+    await wappalyzer.init();
 
-    spinnies.add(`cookies-spinner-${i}`, {
-      text: `Analysing cookies in urls ${start + 1} - ${end + 1} `,
+    spinnies.add(`spinner-${i}`, {
+      text: `Analysing technologies in urls ${start + 1} - ${end + 1} `,
     });
 
     const urlsWindow = urls.slice(start, end + 1);
 
-    const cookieAnalysis = await analyzeCookiesUrls(
-      urlsWindow,
-      isHeadless,
-      delayTime,
-      cookieDictionary
+    const technologyAnalysis = await Promise.all(
+      urlsWindow.map(async (url) => {
+        const { technologies } = await (await wappalyzer.open(url)).analyze();
+        return technologies;
+      })
     );
 
-    report = [...report, ...cookieAnalysis];
+    report = [...report, ...technologyAnalysis];
 
-    spinnies.succeed(`cookies-spinner-${i}`, {
-      text: `Done analysing cookies in urls ${start + 1} - ${end + 1} `,
+    spinnies.succeed(`spinner-${i}`, {
+      text: `Done technology in urls ${start + 1} - ${end + 1} `,
     });
+    await wappalyzer.destroy();
   }
 
   return report;
 };
+
+export default analyzeTechnologiesUrlsInBatches;

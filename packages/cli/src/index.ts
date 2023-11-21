@@ -22,17 +22,16 @@ import { ensureFile, writeFile } from 'fs-extra';
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
 import { exec } from 'child_process';
+import {
+  analyzeCookiesUrls,
+  analyzeCookiesUrlsInBatches,
+  analyzeTechnologiesUrlsInBatches,
+} from '@ps-analysis-tool/analysis-utils';
 
 /**
  * Internal dependencies.
  */
-import Utility from './utils/utility';
-import { fetchDictionary } from './utils/fetchCookieDictionary';
-import { analyzeCookiesUrls } from './procedures/analyzeCookieUrls';
-import { analyzeCookiesUrlsInBatches } from './procedures/analyzeCookieUrlsInBatches';
-import { analyzeTechnologiesUrlsInBatches } from './procedures/analyzeTechnologiesUrlsInBatches';
-import { delay } from './utils';
-import { checkPortInUse } from './utils/checkPortInUse';
+import { delay, fetchCookieDictionary, checkPortInUse, Utility } from './utils';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
@@ -68,7 +67,7 @@ export const initialize = async () => {
 
   const url = program.opts().url;
   const sitemapURL = program.opts().sitemapUrl;
-  const cookieDictionary = await fetchDictionary();
+  const cookieDictionary = await fetchCookieDictionary();
   if (url) {
     const prefix = Utility.generatePrefix(url ?? 'untitled');
     const directory = `./out/${prefix}`;

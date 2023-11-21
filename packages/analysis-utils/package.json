@@ -1,0 +1,44 @@
+{
+  "name": "@ps-analysis-tool/analysis-utils",
+  "version": "0.3.2",
+  "description": "A package for common utilities for analyzing websites",
+  "main": "./dist/index.js",
+  "types": "./dist-types/index.d.ts",
+  "source":"./src/index.ts",
+  "customExports": {
+    ".": {
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc-watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"
+  },
+  "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
+  "dependencies": {
+    "cli-color": "^2.0.3",
+    "cli-table": "^0.3.11",
+    "ora": "^7.0.1",
+    "puppeteer": "^21.0.3",
+    "simple-cookie": "^1.0.15",
+    "sitemapper": "^3.1.8",
+    "tldts": "^6.0.14",
+    "wappalyzer": "^6.10.66",
+    "spinnies": "^0.5.1"
+  },
+  "devDependencies": {
+    "@types/cli-color": "^2.0.2",
+    "@types/node": "^20.2.3",
+    "tsc-watch": "^6.0.4",
+    "typescript": "^5.0.4"
+  }
+}
