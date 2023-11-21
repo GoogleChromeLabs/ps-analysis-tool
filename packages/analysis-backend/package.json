@@ -1,0 +1,27 @@
+{
+  "name": "@ps-analysis-tool/analysis-backend",
+  "version": "0.3.2",
+  "description": "An Express based server which analyzes websites",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc-watch"
+  },
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"
+  },
+  "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
+  "dependencies": {
+   
+  },
+  "devDependencies": {
+    
+  }
+}
