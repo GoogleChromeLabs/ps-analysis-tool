@@ -20,14 +20,16 @@
 import { SidebarItemValue, SidebarItems } from '..';
 import matchKey from './matchKey';
 
-const findItem = (items: SidebarItems, keyPath: string[]) => {
-  if (keyPath.length === 0) {
+const findItem = (
+  items: SidebarItems,
+  key: string | null
+): SidebarItemValue | null => {
+  if (!key) {
     return null;
   }
 
   let keyFound = false,
     item: SidebarItemValue | null = null;
-  const key = keyPath[keyPath.length - 1];
 
   const _findItem = (_items: SidebarItems) => {
     Object.entries(_items).forEach(([itemKey, _item]) => {

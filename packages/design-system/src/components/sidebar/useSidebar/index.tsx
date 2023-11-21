@@ -110,23 +110,18 @@ const useSidebar = ({ data }: useSidebarProps): SidebarOutput => {
     [sidebarItems]
   );
 
-  const toggleDropdown = useCallback(
-    (action: boolean, key: string) => {
-      const keyPath = createKeyPath(sidebarItems, key);
+  const toggleDropdown = useCallback((action: boolean, key: string) => {
+    setSidebarItems((prev) => {
+      const items = { ...prev };
+      const item = findItem(items, key);
 
-      setSidebarItems((prev) => {
-        const items = { ...prev };
-        const item = findItem(items, keyPath);
+      if (item && Object.keys(item.children).length) {
+        item.dropdownOpen = action;
+      }
 
-        if (item && Object.keys(item.children).length) {
-          item.dropdownOpen = action;
-        }
-
-        return items;
-      });
-    },
-    [sidebarItems]
-  );
+      return items;
+    });
+  }, []);
 
   const onKeyNavigation = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>, key: string | null) => {

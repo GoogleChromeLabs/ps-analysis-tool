@@ -28,7 +28,7 @@ const findPrevItem = (items: SidebarItems, keyPath: string[]) => {
 
   const currentKey = keyPath[keyPath.length - 1];
   const parentKey = findKeyParent(keyPath);
-  const parentItem = parentKey ? findItem(items, keyPath.slice(0, -1)) : null;
+  const parentItem = parentKey ? findItem(items, parentKey) : null;
   const children = parentItem ? parentItem.children : items;
   const keys = Object.keys(children);
   const currentIndex = keys.indexOf(currentKey);

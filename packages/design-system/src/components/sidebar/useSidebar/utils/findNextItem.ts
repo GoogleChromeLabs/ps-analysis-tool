@@ -19,6 +19,7 @@
  */
 import { SidebarItemValue, SidebarItems } from '..';
 import findItem from './findItem';
+import findKeyParent from './findKeyParent';
 
 const handleNextItemOnParent = (currentItem: SidebarItemValue) => {
   const children = Object.keys(currentItem.children);
@@ -36,13 +37,14 @@ const findNextItem = (
   }
 
   const currentKey = keyPath[keyPath.length - 1];
-  const currentItem = findItem(items, keyPath) as SidebarItemValue;
+  const currentItem = findItem(items, currentKey) as SidebarItemValue;
 
   if (currentItem?.dropdownOpen && !skipDropdown) {
     return handleNextItemOnParent(currentItem);
   }
 
-  const parentItem = findItem(items, keyPath.slice(0, -1));
+  const parentKey = findKeyParent(keyPath);
+  const parentItem = findItem(items, parentKey);
   const children = parentItem ? parentItem.children : items;
   const keys = Object.keys(children);
   const currentIndex = keys.indexOf(currentKey);
