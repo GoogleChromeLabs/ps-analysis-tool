@@ -68,6 +68,7 @@ const SidebarChild = ({
       <div
         ref={itemRef}
         tabIndex={0}
+        title={sidebarItem.itemNodeTitle}
         onClick={() => {
           updateSelectedItemKey(itemKey);
           setDidUserInteract(true);

@@ -91,6 +91,7 @@ const App: React.FC = () => {
       ).reduce((acc, url) => {
         acc[url] = {
           title: url,
+          itemNodeTitle: `Cookies used by frames from ${url}`,
           panel: <Cookies />,
           icon: <CookieIcon />,
           selectedIcon: <CookieIconWhite />,

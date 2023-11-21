@@ -32,6 +32,7 @@ import {
 export type SidebarItemValue = {
   title: string;
   children: SidebarItems;
+  itemNodeTitle?: string;
   dropdownOpen?: boolean;
   panel?: React.ReactNode;
   icon?: React.ReactNode;
