@@ -35,6 +35,7 @@ import {
   RefreshButton,
   CrossIcon as ClearSingle,
 } from '@ps-analysis-tool/design-system';
+import getNextIndexToDelete from '../../../../../utils/getNextIndexToDelete';
 
 interface CookieSearchProps {
   cookiesAvailable: boolean;
@@ -67,6 +68,7 @@ const CookieSearch = ({
   );
 
   const cookieDeletedRef = useRef(false);
+  const selectedCookieIndexRef = useRef(-1);
   const isAnyCookieSelected =
     cookieDeletedRef.current && !selectedFrameCookie
       ? true
@@ -83,11 +85,23 @@ const CookieSearch = ({
   const handleDeleteCookie = useCallback(() => {
     const selectedKey =
       cookieDeletedRef.current && !selectedFrameCookie
-        ? Object.values(filteredCookies)[0]
+        ? Object.values(filteredCookies)[
+            getNextIndexToDelete(
+              selectedCookieIndexRef.current,
+              Object.keys(filteredCookies).length
+            )
+          ]
         : Object.values(selectedFrameCookie ?? {})[0];
+
     if (selectedKey !== null && selectedKey.parsedCookie) {
       const cookieKey = getCookieKey(selectedKey?.parsedCookie);
       if (cookieKey) {
+        selectedCookieIndexRef.current = Object.values(
+          filteredCookies
+        ).findIndex(
+          (cookie) => getCookieKey(cookie.parsedCookie) === cookieKey
+        );
+
         deleteCookie(cookieKey);
         cookieDeletedRef.current = true;
         setSelectedFrameCookie(null);
