@@ -144,10 +144,15 @@ const CookieSearch = ({
       <div className="h-full w-px bg-american-silver dark:bg-quartz mx-3" />
 
       <RefreshButton onClick={getCookiesSetByJavascript} />
+
       <button
         disabled={!isAnyCookieSelected}
         onClick={handleDeleteCookie}
-        className="flex items-center text-center text-mischka hover:text-granite-gray hover:dark:text-bright-gray active:dark:text-mischka active:text-mischka mx-2"
+        className={`flex items-center text-center ${
+          isAnyCookieSelected
+            ? 'text-granite-gray dark:text-bright-gray'
+            : 'text-mischka'
+        } active:dark:text-mischka active:text-mischka mx-2`}
         title="Delete selected cookie"
       >
         <ClearSingle className="rotate-45" />
