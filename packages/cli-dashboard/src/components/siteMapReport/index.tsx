@@ -97,6 +97,8 @@ const SiteMapReport = ({
     activePanel,
     selectedItemKey,
     sidebarItems,
+    isSidebarFocused,
+    setIsSidebarFocused,
     updateSelectedItemKey,
     onKeyNavigation,
     toggleDropdown,
@@ -198,6 +200,8 @@ const SiteMapReport = ({
         <Sidebar
           selectedItemKey={selectedItemKey}
           sidebarItems={sidebarItems}
+          isSidebarFocused={isSidebarFocused}
+          setIsSidebarFocused={setIsSidebarFocused}
           onKeyNavigation={onKeyNavigation}
           updateSelectedItemKey={updateSelectedItemKey}
           toggleDropdown={toggleDropdown}

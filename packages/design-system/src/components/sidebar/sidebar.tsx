@@ -28,6 +28,8 @@ import type { SidebarItems } from './useSidebar';
 interface SidebarProps {
   selectedItemKey: string | null;
   sidebarItems: SidebarItems;
+  isSidebarFocused: boolean;
+  setIsSidebarFocused: React.Dispatch<boolean>;
   updateSelectedItemKey: (key: string | null) => void;
   onKeyNavigation: (
     event: React.KeyboardEvent<HTMLDivElement>,
@@ -36,19 +38,22 @@ interface SidebarProps {
   toggleDropdown: (action: boolean, key: string) => void;
   isKeyAncestor: (key: string) => boolean;
   isKeySelected: (key: string) => boolean;
+  visibleWidth?: number;
 }
 
 const Sidebar = ({
   selectedItemKey,
   sidebarItems,
+  isSidebarFocused,
+  setIsSidebarFocused,
   updateSelectedItemKey,
   onKeyNavigation,
   toggleDropdown,
   isKeyAncestor,
   isKeySelected,
+  visibleWidth,
 }: SidebarProps) => {
   const [didUserInteract, setDidUserInteract] = useState(false);
-  const [isSidebarFocused, setIsSidebarFocused] = useState(true);
   const sidebarContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -66,7 +71,7 @@ const Sidebar = ({
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
-  }, []);
+  }, [setIsSidebarFocused]);
 
   return (
     <div className="w-full h-full overflow-auto border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz pt-1">
@@ -86,6 +91,7 @@ const Sidebar = ({
             isKeyAncestor={isKeyAncestor}
             isKeySelected={isKeySelected}
             key={itemKey}
+            visibleWidth={visibleWidth}
           />
         ))}
       </div>

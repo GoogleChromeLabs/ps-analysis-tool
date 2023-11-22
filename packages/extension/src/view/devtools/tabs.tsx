@@ -72,6 +72,7 @@ const TABS: SidebarItems = {
         icon: <CookieIcon />,
         selectedIcon: <CookieIconWhite />,
         children: {},
+        dropdownOpen: true,
       },
       siteBoundaries: {
         title: 'Site Boundaries',

@@ -58,6 +58,8 @@ const Layout = () => {
     activePanel,
     selectedItemKey,
     sidebarItems,
+    isSidebarFocused,
+    setIsSidebarFocused,
     updateSelectedItemKey,
     onKeyNavigation,
     toggleDropdown,
@@ -125,6 +127,8 @@ const Layout = () => {
         <Sidebar
           selectedItemKey={selectedItemKey}
           sidebarItems={sidebarItems}
+          isSidebarFocused={isSidebarFocused}
+          setIsSidebarFocused={setIsSidebarFocused}
           onKeyNavigation={onKeyNavigation}
           updateSelectedItemKey={updateSelectedItemKey}
           toggleDropdown={toggleDropdown}

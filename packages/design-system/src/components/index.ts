@@ -38,3 +38,4 @@ export { default as ExtensionReloadNotification } from './errorFallback/extensio
 export * from './table';
 export { default as Input } from './input';
 export * from './sidebar';
+export { default as InspectButton } from './inspectButton';

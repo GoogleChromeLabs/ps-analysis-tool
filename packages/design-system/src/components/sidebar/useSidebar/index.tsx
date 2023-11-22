@@ -33,6 +33,7 @@ export type SidebarItemValue = {
   title: string;
   children: SidebarItems;
   itemNodeTitle?: string;
+  extraInterfaceToTitle?: React.ReactNode;
   dropdownOpen?: boolean;
   panel?: React.ReactNode;
   icon?: React.ReactNode;
@@ -48,6 +49,8 @@ export interface SidebarOutput {
   selectedItemKey: string | null;
   currentItemKey: string | null;
   sidebarItems: SidebarItems;
+  isSidebarFocused: boolean;
+  setIsSidebarFocused: React.Dispatch<boolean>;
   updateSelectedItemKey: (key: string | null) => void;
   onKeyNavigation: (
     event: React.KeyboardEvent<HTMLDivElement>,
@@ -66,6 +69,7 @@ const useSidebar = ({ data }: useSidebarProps): SidebarOutput => {
   const [selectedItemKey, setSelectedItemKey] = useState<string | null>(null);
   const [activePanel, setActivePanel] = useState<React.ReactNode>();
   const [sidebarItems, setSidebarItems] = useState<SidebarItems>({});
+  const [isSidebarFocused, setIsSidebarFocused] = useState(true);
 
   const currentItemKey = useMemo(() => {
     if (!selectedItemKey) {
@@ -212,6 +216,8 @@ const useSidebar = ({ data }: useSidebarProps): SidebarOutput => {
     selectedItemKey,
     currentItemKey,
     sidebarItems,
+    isSidebarFocused,
+    setIsSidebarFocused,
     updateSelectedItemKey,
     onKeyNavigation,
     toggleDropdown,

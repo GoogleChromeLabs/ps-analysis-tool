@@ -41,6 +41,7 @@ interface SidebarItemProps {
   isKeyAncestor: (key: string) => boolean;
   isKeySelected: (key: string) => boolean;
   recursiveStackIndex?: number;
+  visibleWidth?: number;
 }
 
 const SidebarChild = ({
@@ -57,6 +58,7 @@ const SidebarChild = ({
   isKeyAncestor,
   isKeySelected,
   recursiveStackIndex = 0,
+  visibleWidth,
 }: SidebarItemProps) => {
   const itemRef = useRef<HTMLDivElement>(null);
 
@@ -88,7 +90,7 @@ const SidebarChild = ({
           onKeyNavigation(event, itemKey);
           setIsSidebarFocused(true);
         }}
-        className={`w-full flex items-center py-0.5 outline-0 text-sm ${
+        className={`relative w-full flex items-center py-0.5 outline-0 text-sm ${
           isKeySelected(itemKey)
             ? isSidebarFocused
               ? 'bg-royal-blue text-white'
@@ -129,6 +131,14 @@ const SidebarChild = ({
           </button>
         )}
         <p className="whitespace-nowrap pr-1">{sidebarItem.title}</p>
+        <div
+          className="absolute"
+          style={{
+            left: visibleWidth ? visibleWidth - 20 : 0,
+          }}
+        >
+          {sidebarItem.extraInterfaceToTitle}
+        </div>
       </div>
       <>
         {Object.keys(sidebarItem.children)?.length !== 0 &&
@@ -150,6 +160,7 @@ const SidebarChild = ({
                     isKeyAncestor={isKeyAncestor}
                     isKeySelected={isKeySelected}
                     recursiveStackIndex={recursiveStackIndex + 1}
+                    visibleWidth={visibleWidth}
                   />
                 </React.Fragment>
               ))}

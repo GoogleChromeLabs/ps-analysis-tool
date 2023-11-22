@@ -25,6 +25,7 @@ import {
   Sidebar,
   useSidebar,
   type SidebarItems,
+  InspectButton,
 } from '@ps-analysis-tool/design-system';
 
 /**
@@ -34,8 +35,10 @@ import TABS from './tabs';
 import { useCookieStore } from './stateProviders/syncCookieStore';
 import './app.css';
 import { Cookies } from './components';
+import useFrameOverlay from './hooks/useFrameOverlay';
 
 const App: React.FC = () => {
+  const [sidebarWidth, setSidebarWidth] = useState(200);
   const [sidebarData, setSidebarData] = useState(TABS);
   const contextInvalidatedRef = useRef(null);
 
@@ -44,12 +47,18 @@ const App: React.FC = () => {
     setContextInvalidated,
     tabFrames,
     setSelectedFrame,
+    isInspecting,
+    setIsInspecting,
   } = useCookieStore(({ state, actions }) => ({
     contextInvalidated: state.contextInvalidated,
     setContextInvalidated: actions.setContextInvalidated,
     tabFrames: state.tabFrames,
     setSelectedFrame: actions.setSelectedFrame,
+    isInspecting: state.isInspecting,
+    setIsInspecting: actions.setIsInspecting,
   }));
+
+  useFrameOverlay();
 
   const listenToMouseChange = useCallback(() => {
     if (contextInvalidatedRef.current) {
@@ -72,6 +81,8 @@ const App: React.FC = () => {
     selectedItemKey,
     currentItemKey,
     sidebarItems,
+    isSidebarFocused,
+    setIsSidebarFocused,
     updateSelectedItemKey,
     onKeyNavigation,
     toggleDropdown,
@@ -84,26 +95,43 @@ const App: React.FC = () => {
   useEffect(() => {
     setSidebarData((prev) => {
       const data = { ...prev };
+      const psData = data['privacySandbox'];
 
-      data['privacySandbox'].children['cookies'].panel = <Cookies />;
-      data['privacySandbox'].children['cookies'].children = Object.keys(
-        tabFrames || {}
-      ).reduce((acc, url) => {
-        acc[url] = {
-          title: url,
-          itemNodeTitle: `Cookies used by frames from ${url}`,
-          panel: <Cookies />,
-          icon: <CookieIcon />,
-          selectedIcon: <CookieIconWhite />,
-          children: {},
-        };
+      psData.children['cookies'].panel = <Cookies />;
+      psData.children['cookies'].children = Object.keys(tabFrames || {}).reduce(
+        (acc, url) => {
+          acc[url] = {
+            title: url,
+            itemNodeTitle: `Cookies used by frames from ${url}`,
+            panel: <Cookies />,
+            icon: <CookieIcon />,
+            selectedIcon: <CookieIconWhite />,
+            children: {},
+          };
 
-        return acc;
-      }, {} as SidebarItems);
+          return acc;
+        },
+        {} as SidebarItems
+      );
+      psData.children['cookies'].extraInterfaceToTitle = (
+        <InspectButton
+          isInspecting={isInspecting}
+          setIsInspecting={setIsInspecting}
+          isTabFocused={isKeySelected('cookies') && isSidebarFocused}
+        />
+      );
 
       return data;
     });
-  }, [tabFrames]);
+  }, [
+    currentItemKey,
+    isInspecting,
+    isKeySelected,
+    isSidebarFocused,
+    selectedItemKey,
+    setIsInspecting,
+    tabFrames,
+  ]);
 
   useEffect(() => {
     if (Object.keys(tabFrames || {}).includes(currentItemKey || '')) {
@@ -132,7 +160,11 @@ const App: React.FC = () => {
       {!contextInvalidated && (
         <div className="w-full h-full flex flex-row">
           <Resizable
-            size={{ width: 210, height: '100%' }}
+            size={{ width: sidebarWidth, height: '100%' }}
+            defaultSize={{ width: '200px', height: '100%' }}
+            onResizeStop={(_, __, ___, d) => {
+              setSidebarWidth((prevState) => prevState + d.width);
+            }}
             minWidth={'150px'}
             maxWidth={'90%'}
             enable={{
@@ -150,11 +182,14 @@ const App: React.FC = () => {
             <Sidebar
               selectedItemKey={selectedItemKey}
               sidebarItems={sidebarItems}
+              isSidebarFocused={isSidebarFocused}
+              setIsSidebarFocused={setIsSidebarFocused}
               updateSelectedItemKey={updateSelectedItemKey}
               onKeyNavigation={onKeyNavigation}
               toggleDropdown={toggleDropdown}
               isKeyAncestor={isKeyAncestor}
               isKeySelected={isKeySelected}
+              visibleWidth={sidebarWidth}
             />
           </Resizable>
           <main className="h-full flex-1 overflow-auto">
