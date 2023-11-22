@@ -78,7 +78,7 @@ const CookieTableContainer = ({
             info={info}
             changedKey="name"
             rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey(details?.parsedCookie)}
+            cookieKey={getCookieKey((details as CookieTableData)?.parsedCookie)}
           />
         ),
         enableHiding: false,
@@ -95,7 +95,7 @@ const CookieTableContainer = ({
             info={info}
             changedKey="value"
             rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey(details?.parsedCookie)}
+            cookieKey={getCookieKey((details as CookieTableData)?.parsedCookie)}
           />
         ),
       },
@@ -111,7 +111,7 @@ const CookieTableContainer = ({
             info={info}
             changedKey="domain"
             rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey(details?.parsedCookie)}
+            cookieKey={getCookieKey((details as CookieTableData)?.parsedCookie)}
           />
         ),
       },
@@ -127,7 +127,7 @@ const CookieTableContainer = ({
             info={info}
             changedKey="path"
             rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey(details?.parsedCookie)}
+            cookieKey={getCookieKey((details as CookieTableData)?.parsedCookie)}
           />
         ),
       },
@@ -148,7 +148,7 @@ const CookieTableContainer = ({
             info={info}
             changedKey="httpOnly"
             rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey(details?.parsedCookie)}
+            cookieKey={getCookieKey((details as CookieTableData)?.parsedCookie)}
           />
         ),
       },
@@ -164,7 +164,7 @@ const CookieTableContainer = ({
             info={info}
             changedKey="sameSite"
             rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey(details?.parsedCookie)}
+            cookieKey={getCookieKey((details as CookieTableData)?.parsedCookie)}
           />
         ),
       },
@@ -180,7 +180,7 @@ const CookieTableContainer = ({
             info={info}
             changedKey="secure"
             rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey(details?.parsedCookie)}
+            cookieKey={getCookieKey((details as CookieTableData)?.parsedCookie)}
           />
         ),
       },

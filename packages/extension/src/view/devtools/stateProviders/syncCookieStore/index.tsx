@@ -36,6 +36,8 @@ import { getCurrentTabId } from '../../../../utils/getCurrentTabId';
 import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
 import setDocumentCookies from '../../../../utils/setDocumentCookies';
 import isOnRWS from '../../../../contentScript/utils/isOnRWS';
+import getValueForSameSite from '../../../../utils/getValueForSameSite';
+import getValueToBeSetForLocalStorage from '../../../../utils/getValueToBeSetForLocalStorage';
 
 export interface CookieStoreContext {
   state: {
@@ -483,12 +485,15 @@ export const Provider = ({ children }: PropsWithChildren) => {
       changedKey: string,
       changedValue: string | boolean
     ) => {
-      const localStorage = await chrome.storage.local.get();
-      if (tabId) {
-        const newTabData = localStorage[tabId];
+      if (tabCookies && tabId) {
         let newCookieKey = cookieKey;
-        const { [cookieKey]: cookieDetails, ...restOfCookies } =
-          newTabData.cookies;
+        let valueToBeSet = changedValue;
+        const { [cookieKey]: cookieDetails, ...restOfCookies } = tabCookies;
+
+        if (!cookieDetails?.isCookieSet) {
+          return false;
+        }
+
         if (changedKey === 'domain') {
           newCookieKey =
             cookieDetails.parsedCookie.name +
@@ -500,28 +505,28 @@ export const Provider = ({ children }: PropsWithChildren) => {
             cookieDetails.parsedCookie.domain +
             changedValue;
         }
+
+        if (changedKey === 'sameSite') {
+          valueToBeSet = getValueForSameSite(changedValue as string);
+          if (!valueToBeSet) {
+            return false;
+          }
+        }
+
         const currentCookie = await chrome.cookies.get({
           name: cookieDetails.parsedCookie.name,
           url: cookieDetails.url,
         });
         try {
           const result = await chrome.cookies.set({
-            domain: currentCookie?.domain,
-            expirationDate: currentCookie?.expirationDate,
-            httpOnly: currentCookie?.httpOnly,
-            name: currentCookie?.name,
-            path: currentCookie?.path,
-            sameSite: currentCookie?.sameSite,
-            secure: currentCookie?.secure,
-            storeId: currentCookie?.storeId,
-            value: currentCookie?.value,
-            [changedKey]: changedValue,
+            ...currentCookie,
+            [changedKey]: valueToBeSet,
             url: cookieDetails.url,
           });
 
-          if (result[changedKey] === changedValue) {
+          if (result && result[changedKey] === valueToBeSet) {
             await chrome.storage.local.set({
-              ...localStorage,
+              ...(await chrome.storage.local.get()),
               [tabId]: {
                 cookies: {
                   ...restOfCookies,
@@ -530,11 +535,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
                     parsedCookie: {
                       ...cookieDetails.parsedCookie,
                       [changedKey.toLowerCase()]:
-                        changedValue === 'unspecified'
-                          ? ''
-                          : changedValue === 'no_restriction'
-                          ? 'none'
-                          : changedValue,
+                        getValueToBeSetForLocalStorage(
+                          changedKey,
+                          valueToBeSet
+                        ),
                     },
                   },
                 },
@@ -545,14 +549,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
           }
           return true;
         } catch (error) {
-          console.log(error);
           return false;
         }
       } else {
         return false;
       }
     },
-    [tabId]
+    [tabCookies, tabId]
   );
 
   const deleteAllCookies = useCallback(async () => {
@@ -599,46 +602,37 @@ export const Provider = ({ children }: PropsWithChildren) => {
       changedValue: string,
       previousValue: string
     ) => {
-      const localStorage = await chrome.storage.local.get();
-      if (tabId) {
-        if (!changedValue) {
-          return false;
-        }
-        const newTabData = localStorage[tabId];
-        const { [cookieKey]: cookieDetails, ...restOfCookies } =
-          newTabData.cookies;
+      if (tabId && tabCookies) {
+        const { [cookieKey]: cookieDetails, ...restOfCookies } = tabCookies;
+        const newCookieKey =
+          changedValue +
+          cookieDetails.parsedCookie.domain +
+          cookieDetails.parsedCookie.path;
 
         const currentCookie = await chrome.cookies.get({
           name: previousValue,
           url: cookieDetails.url,
         });
-        await chrome.cookies.remove({
-          name: previousValue,
-          url: cookieDetails.url,
-        });
+
         try {
           const result = await chrome.cookies.set({
-            domain: currentCookie?.domain,
-            expirationDate: currentCookie?.expirationDate,
-            httpOnly: currentCookie?.httpOnly,
-            name: currentCookie?.name,
-            path: currentCookie?.path,
-            sameSite: currentCookie?.sameSite,
-            secure: currentCookie?.secure,
-            storeId: currentCookie?.storeId,
-            value: currentCookie?.value,
+            ...currentCookie,
             [changedKey]: changedValue,
             url: cookieDetails.url,
           });
-          if (result[changedKey] === changedValue) {
+
+          await chrome.cookies.remove({
+            name: previousValue,
+            url: cookieDetails.url,
+          });
+
+          if (result && result[changedKey] === changedValue) {
             await chrome.storage.local.set({
-              ...localStorage,
+              ...(await chrome.storage.local.get()),
               [tabId]: {
                 cookies: {
                   ...restOfCookies,
-                  [changedValue +
-                  cookieDetails.parsedCookie.domain +
-                  cookieDetails.parsedCookie.path]: {
+                  [newCookieKey]: {
                     ...cookieDetails,
                     analytics: {
                       ...cookieDetails?.analytics,
@@ -657,14 +651,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
           }
           return true;
         } catch (error) {
-          console.log(error);
           return false;
         }
       } else {
         return false;
       }
     },
-    [tabId]
+    [tabCookies, tabId]
   );
 
   const modifyCookie = useCallback(
