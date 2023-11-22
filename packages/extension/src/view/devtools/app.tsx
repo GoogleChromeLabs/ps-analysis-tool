@@ -108,6 +108,8 @@ const App: React.FC = () => {
   useEffect(() => {
     if (Object.keys(tabFrames || {}).includes(currentItemKey || '')) {
       setSelectedFrame(currentItemKey);
+    } else {
+      setSelectedFrame(null);
     }
   }, [currentItemKey, setSelectedFrame, tabFrames]);
 
