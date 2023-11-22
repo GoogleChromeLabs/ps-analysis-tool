@@ -23,7 +23,7 @@ function getValueToBeSetForLocalStorage(
   key: string,
   value: string | boolean
 ): string | boolean {
-  if (key.toLowerCase() === 'sameSite') {
+  if (key.toLowerCase() === 'samesite') {
     switch (value as string) {
       case 'no_restriction':
       case 'none':

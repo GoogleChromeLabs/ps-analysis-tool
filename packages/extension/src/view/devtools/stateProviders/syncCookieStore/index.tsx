@@ -507,7 +507,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
 
         if (changedKey === 'sameSite') {
-          valueToBeSet = getValueForSameSite(changedValue as string);
+          valueToBeSet = getValueForSameSite(
+            changedValue.toLowerCase() as string
+          );
           if (!valueToBeSet) {
             return false;
           }
@@ -518,13 +520,25 @@ export const Provider = ({ children }: PropsWithChildren) => {
           url: cookieDetails.url,
         });
         try {
+          if (!currentCookie) {
+            return false;
+          }
+
+          const {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            hostOnly = '',
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            session = '',
+            ...otherDetails
+          } = currentCookie;
+
           const result = await chrome.cookies.set({
-            ...currentCookie,
+            ...otherDetails,
             [changedKey]: valueToBeSet,
             url: cookieDetails.url,
           });
 
-          if (result && result[changedKey] === valueToBeSet) {
+          if (result[changedKey] === valueToBeSet) {
             await chrome.storage.local.set({
               ...(await chrome.storage.local.get()),
               [tabId]: {
@@ -549,6 +563,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           }
           return true;
         } catch (error) {
+          console.log(error);
           return false;
         }
       } else {
@@ -604,6 +619,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
     ) => {
       if (tabId && tabCookies) {
         const { [cookieKey]: cookieDetails, ...restOfCookies } = tabCookies;
+        if (!cookieDetails?.isCookieSet) {
+          return false;
+        }
         const newCookieKey =
           changedValue +
           cookieDetails.parsedCookie.domain +
@@ -615,8 +633,20 @@ export const Provider = ({ children }: PropsWithChildren) => {
         });
 
         try {
+          if (!currentCookie) {
+            return false;
+          }
+
+          const {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            hostOnly = '',
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            session = '',
+            ...otherDetails
+          } = currentCookie;
+
           const result = await chrome.cookies.set({
-            ...currentCookie,
+            ...otherDetails,
             [changedKey]: changedValue,
             url: cookieDetails.url,
           });
@@ -626,7 +656,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
             url: cookieDetails.url,
           });
 
-          if (result && result[changedKey] === changedValue) {
+          if (result[changedKey] === changedValue) {
             await chrome.storage.local.set({
               ...(await chrome.storage.local.get()),
               [tabId]: {
@@ -651,6 +681,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           }
           return true;
         } catch (error) {
+          console.log(error);
           return false;
         }
       } else {
