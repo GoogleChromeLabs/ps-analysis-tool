@@ -39,7 +39,7 @@ const EditableTextInput = ({
   rowHighlighter = noop,
 }: EditableTextInputProps) => {
   const [editing, setEditing] = useState(false);
-  const divRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const [localValue, setLocalValue] = useState<string>(info as string);
   const { modifyCookie } = useCookieStore(({ actions }) => ({
@@ -57,13 +57,16 @@ const EditableTextInput = ({
 
   useEffect(() => {
     if (editing) {
-      divRef.current?.focus();
+      inputRef.current?.focus();
     }
   }, [editing]);
 
   const handleClickOutside = useCallback(
     async (event: MouseEvent) => {
-      if (divRef.current && !divRef.current.contains(event.target as Node)) {
+      if (
+        inputRef.current &&
+        !inputRef.current.contains(event.target as Node)
+      ) {
         setEditing(false);
         if (localValue !== info && cookieKey) {
           const result = await modifyCookie(
@@ -140,7 +143,7 @@ const EditableTextInput = ({
       {editing ? (
         <input
           name={changedKey}
-          ref={divRef}
+          ref={inputRef}
           type="text"
           className="outline-none dark:bg-charleston-green border-[1px] border-gainsboro dark:border-quartz focus:border-royal-blue focus:dark:border-medium-persian-blue dark:text-bright-gray text-outer-space-crayola"
           value={localValue}

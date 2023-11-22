@@ -114,9 +114,12 @@ const useTable = ({
         const tempRows = prevState;
         const indexToBeReplaced = tempRows.findIndex(
           (row: TableRow) =>
-            (row.originalData.parsedCookie.name as string) +
-              (row.originalData.parsedCookie.domain as string) +
-              (row.originalData.parsedCookie.path as string) ===
+            ((row.originalData as CookieTableData).parsedCookie
+              .name as string) +
+              ((row.originalData as CookieTableData).parsedCookie
+                .domain as string) +
+              ((row.originalData as CookieTableData).parsedCookie
+                .path as string) ===
             cookieKey
         );
         tempRows[indexToBeReplaced].originalData.highlighted = value;
@@ -157,7 +160,9 @@ const useTable = ({
   );
 
   const rowsToBeProcessed =
-    rows && rows[0] && rows[0]['parsedCookie.name'] ? rows : memoisedRows;
+    rows[0] && Object.keys(memoisedRows[0]) === Object.keys(rows[0])
+      ? rows
+      : memoisedRows;
 
   return {
     highlightRowForVisibility,
