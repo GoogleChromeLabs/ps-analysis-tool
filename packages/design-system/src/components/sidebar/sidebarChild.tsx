@@ -30,6 +30,8 @@ interface SidebarItemProps {
   setDidUserInteract: (didUserInteract: boolean) => void;
   itemKey: string;
   sidebarItem: SidebarItemValue;
+  isSidebarFocused: boolean;
+  setIsSidebarFocused: React.Dispatch<boolean>;
   updateSelectedItemKey: (key: string | null) => void;
   onKeyNavigation: (
     event: React.KeyboardEvent<HTMLDivElement>,
@@ -47,6 +49,8 @@ const SidebarChild = ({
   setDidUserInteract,
   itemKey,
   sidebarItem,
+  isSidebarFocused,
+  setIsSidebarFocused,
   updateSelectedItemKey,
   onKeyNavigation,
   toggleDropdown,
@@ -60,7 +64,13 @@ const SidebarChild = ({
     if (isKeySelected(itemKey) && didUserInteract) {
       itemRef.current?.focus();
     }
-  }, [didUserInteract, isKeySelected, itemKey, selectedItemKey]);
+  }, [
+    didUserInteract,
+    isKeySelected,
+    itemKey,
+    selectedItemKey,
+    setIsSidebarFocused,
+  ]);
 
   return (
     <>
@@ -72,17 +82,23 @@ const SidebarChild = ({
         onClick={() => {
           updateSelectedItemKey(itemKey);
           setDidUserInteract(true);
+          setIsSidebarFocused(true);
         }}
         onKeyDown={(event) => {
           onKeyNavigation(event, itemKey);
+          setIsSidebarFocused(true);
         }}
         className={`w-full flex items-center py-0.5 outline-0 text-sm ${
-          isKeySelected(itemKey) ? 'bg-royal-blue text-white' : 'bg-white'
+          isKeySelected(itemKey)
+            ? isSidebarFocused
+              ? 'bg-royal-blue text-white'
+              : 'bg-gainsboro'
+            : 'bg-white'
         } cursor-pointer`}
         style={{ paddingLeft: recursiveStackIndex * 16 + 12 }}
       >
         {Object.keys(sidebarItem.children)?.length !== 0 && (
-          <div
+          <button
             onClick={() => {
               toggleDropdown(!sidebarItem.dropdownOpen, itemKey);
             }}
@@ -90,21 +106,27 @@ const SidebarChild = ({
               !sidebarItem.dropdownOpen && '-rotate-90'
             }`}
           >
-            {isKeyAncestor(itemKey) || !isKeySelected(itemKey) ? (
-              <ArrowDown />
-            ) : (
-              <ArrowDownWhite />
-            )}
-          </div>
+            <div className="pointer-events-none">
+              {isKeyAncestor(itemKey) ||
+              !isKeySelected(itemKey) ||
+              !isSidebarFocused ? (
+                <ArrowDown />
+              ) : (
+                <ArrowDownWhite />
+              )}
+            </div>
+          </button>
         )}
         {sidebarItem.icon && sidebarItem.selectedIcon && (
-          <div className="mr-1">
-            {isKeySelected(itemKey) ? (
-              <>{sidebarItem.selectedIcon}</>
-            ) : (
-              <>{sidebarItem.icon}</>
-            )}
-          </div>
+          <button className="mr-1">
+            <div className="pointer-events-none">
+              {isKeySelected(itemKey) && isSidebarFocused ? (
+                <>{sidebarItem.selectedIcon}</>
+              ) : (
+                <>{sidebarItem.icon}</>
+              )}
+            </div>
+          </button>
         )}
         <p className="whitespace-nowrap pr-1">{sidebarItem.title}</p>
       </div>
@@ -120,6 +142,8 @@ const SidebarChild = ({
                     setDidUserInteract={setDidUserInteract}
                     itemKey={childKey}
                     sidebarItem={child}
+                    isSidebarFocused={isSidebarFocused}
+                    setIsSidebarFocused={setIsSidebarFocused}
                     updateSelectedItemKey={updateSelectedItemKey}
                     onKeyNavigation={onKeyNavigation}
                     toggleDropdown={toggleDropdown}

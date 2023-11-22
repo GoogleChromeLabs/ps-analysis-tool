@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 /**
  * Internal dependencies.
@@ -48,10 +48,29 @@ const Sidebar = ({
   isKeySelected,
 }: SidebarProps) => {
   const [didUserInteract, setDidUserInteract] = useState(false);
+  const [isSidebarFocused, setIsSidebarFocused] = useState(true);
+  const sidebarContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        sidebarContainerRef.current &&
+        !sidebarContainerRef.current?.contains(event.target as Node)
+      ) {
+        setIsSidebarFocused(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="w-full h-full overflow-auto border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz pt-1">
-      <div className="min-w-fit">
+      <div ref={sidebarContainerRef} className="min-w-fit">
         {Object.entries(sidebarItems).map(([itemKey, sidebarItem]) => (
           <SidebarChild
             selectedItemKey={selectedItemKey}
@@ -59,6 +78,8 @@ const Sidebar = ({
             setDidUserInteract={setDidUserInteract}
             itemKey={itemKey}
             sidebarItem={sidebarItem}
+            isSidebarFocused={isSidebarFocused}
+            setIsSidebarFocused={setIsSidebarFocused}
             updateSelectedItemKey={updateSelectedItemKey}
             onKeyNavigation={onKeyNavigation}
             toggleDropdown={toggleDropdown}
