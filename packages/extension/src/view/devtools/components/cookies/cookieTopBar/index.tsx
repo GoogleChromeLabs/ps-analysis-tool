@@ -69,12 +69,17 @@ const CookieSearch = ({
 
   const cookieDeletedRef = useRef(false);
   const selectedCookieIndexRef = useRef(-1);
+
   const isAnyCookieSelected =
     cookieDeletedRef.current && !selectedFrameCookie
-      ? true
-      : selectedFrameCookie
+      ? filteredCookies.length > 0
+        ? true
+        : false
+      : selectedFrameCookie &&
+        selectedFrameCookie[Object.keys(selectedFrameCookie)[0]]
       ? true
       : false;
+
   const {
     deleteCookie,
     deleteAllCookies,
