@@ -63,13 +63,21 @@ export interface SidebarOutput {
 
 interface useSidebarProps {
   data: SidebarItems;
+  defaultSelectedItemKey?: string | null;
 }
 
-const useSidebar = ({ data }: useSidebarProps): SidebarOutput => {
+const useSidebar = ({
+  data,
+  defaultSelectedItemKey = null,
+}: useSidebarProps): SidebarOutput => {
   const [selectedItemKey, setSelectedItemKey] = useState<string | null>(null);
   const [activePanel, setActivePanel] = useState<React.ReactNode>();
   const [sidebarItems, setSidebarItems] = useState<SidebarItems>({});
   const [isSidebarFocused, setIsSidebarFocused] = useState(true);
+
+  useEffect(() => {
+    setSelectedItemKey(defaultSelectedItemKey);
+  }, [defaultSelectedItemKey]);
 
   const currentItemKey = useMemo(() => {
     if (!selectedItemKey) {

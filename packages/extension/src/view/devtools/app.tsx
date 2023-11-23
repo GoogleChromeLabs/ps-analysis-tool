@@ -46,7 +46,6 @@ const App: React.FC = () => {
     contextInvalidated,
     setContextInvalidated,
     tabFrames,
-    selectedFrame,
     setSelectedFrame,
     isInspecting,
     setIsInspecting,
@@ -55,14 +54,11 @@ const App: React.FC = () => {
     contextInvalidated: state.contextInvalidated,
     setContextInvalidated: actions.setContextInvalidated,
     tabFrames: state.tabFrames,
-    selectedFrame: state.selectedFrame,
     setSelectedFrame: actions.setSelectedFrame,
     isInspecting: state.isInspecting,
     setIsInspecting: actions.setIsInspecting,
     canStartInspecting: state.canStartInspecting,
   }));
-
-  useFrameOverlay();
 
   const listenToMouseChange = useCallback(() => {
     if (contextInvalidatedRef.current) {
@@ -80,6 +76,21 @@ const App: React.FC = () => {
     };
   }, [listenToMouseChange]);
 
+  const [defaultSelectedItemKey, setDefaultSelectedItemKey] =
+    useState('privacySandbox');
+
+  useEffect(() => {
+    (async () => {
+      const tabId = chrome.devtools.inspectedWindow.tabId.toString();
+
+      const data = await chrome.storage.local.get(tabId);
+
+      if (data[tabId]?.['selectedSidebarItem']) {
+        setDefaultSelectedItemKey(data[tabId]?.['selectedSidebarItem']);
+      }
+    })();
+  }, []);
+
   const {
     activePanel,
     selectedItemKey,
@@ -94,6 +105,7 @@ const App: React.FC = () => {
     isKeySelected,
   } = useSidebar({
     data: sidebarData,
+    defaultSelectedItemKey,
   });
 
   useEffect(() => {
@@ -137,11 +149,9 @@ const App: React.FC = () => {
     });
   }, [
     canStartInspecting,
-    currentItemKey,
     isInspecting,
     isKeySelected,
     isSidebarFocused,
-    selectedItemKey,
     setIsInspecting,
     tabFrames,
   ]);
@@ -155,18 +165,23 @@ const App: React.FC = () => {
   }, [currentItemKey, setSelectedFrame, tabFrames]);
 
   useEffect(() => {
-    if (Object.keys(tabFrames || {}).includes(selectedFrame || '')) {
-      updateSelectedItemKey(selectedFrame);
-    } else if (selectedFrame === '') {
-      updateSelectedItemKey('cookies');
-    }
-  }, [selectedFrame, tabFrames, updateSelectedItemKey]);
+    (async () => {
+      const tabId = chrome.devtools.inspectedWindow.tabId.toString();
 
-  useEffect(() => {
-    if (selectedItemKey === null) {
-      updateSelectedItemKey('privacySandbox');
-    }
-  }, [selectedItemKey, updateSelectedItemKey]);
+      const data = await chrome.storage.local.get(tabId);
+      const tabData = data[tabId];
+
+      tabData['selectedSidebarItem'] = selectedItemKey;
+
+      await chrome.storage.local.set({
+        [tabId]: tabData,
+      });
+    })();
+  }, [selectedItemKey]);
+
+  useFrameOverlay((key: string | null) => {
+    updateSelectedItemKey(key || 'cookies');
+  });
 
   return (
     <div
