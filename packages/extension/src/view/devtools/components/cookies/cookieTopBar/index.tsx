@@ -162,18 +162,23 @@ const CookieSearch = ({
       <button
         disabled={!isAnyCookieSelected}
         onClick={handleDeleteCookie}
-        className={`flex items-center text-center ${
+        className={`flex items-center text-center dark:text-mischka  ${
           isAnyCookieSelected
-            ? 'text-granite-gray dark:text-bright-gray'
-            : 'text-mischka'
-        } active:dark:text-mischka active:text-mischka mx-2`}
+            ? 'text-comet-black hover:text-comet-grey hover:dark:text-bright-gray active:dark:text-mischka active:text-comet-black'
+            : 'text-mischka dark:text-dark-gray'
+        } mx-2`}
         title="Delete selected cookie"
       >
         <ClearSingle className="rotate-45" />
       </button>
       <button
+        disabled={!cookiesAvailable}
         onClick={deleteAllCookies}
-        className="flex h-full items-end text-mischka hover:text-granite-gray hover:dark:text-bright-gray active:dark:text-mischka active:text-mischka "
+        className={`flex h-full items-end dark:text-mischka ${
+          cookiesAvailable
+            ? 'text-comet-black hover:text-comet-grey hover:dark:text-bright-gray active:dark:text-mischka active:text-comet-black'
+            : 'text-mischka dark:text-dark-gray'
+        }`}
         title="Delete all cookies"
       >
         <ClearAll />

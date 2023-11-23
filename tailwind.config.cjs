@@ -91,6 +91,7 @@ module.exports = {
       'cool-grey': '#323941',
       'asteriod-black': '#2B2C2F',
       'comet-black': '#202124',
+      'comet-grey': '#474747',
       'jet-black': '#202142',
       'warning-red': '#C33300',
       'warning-orange': '#FA3',
