@@ -92,7 +92,7 @@ const CookieSearch = ({
     selectedFrame: state.selectedFrame,
   }));
 
-  const handleDeleteCookie = useCallback(async () => {
+  const handleDeleteCookie = useCallback(() => {
     const selectedKey =
       cookieDeletedRef.current && !selectedFrameCookie
         ? filteredCookies[
@@ -109,18 +109,24 @@ const CookieSearch = ({
         selectedCookieIndexRef.current = filteredCookies.findIndex(
           (cookie) => getCookieKey(cookie.parsedCookie) === cookieKey
         );
-        await deleteCookie(cookieKey);
+        deleteCookie(cookieKey);
         cookieDeletedRef.current = true;
         const index = getNextIndexToDelete(
           selectedCookieIndexRef.current,
           filteredCookies.length - 1
         );
+        const tempRows = filteredCookies.filter((cookie) => {
+          return (
+            cookie.parsedCookie.name +
+              cookie.parsedCookie.domain +
+              cookie.parsedCookie.path !==
+            cookieKey
+          );
+        });
+
         if (index !== -100 && selectedFrame) {
           setSelectedFrameCookie({
-            [selectedFrame]: [
-              ...filteredCookies.slice(0, index),
-              ...filteredCookies.slice(index + 1, filteredCookies.length),
-            ][index],
+            [selectedFrame]: tempRows[index],
           });
         }
       }
