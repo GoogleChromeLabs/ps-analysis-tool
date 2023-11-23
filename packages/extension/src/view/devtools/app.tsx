@@ -50,6 +50,7 @@ const App: React.FC = () => {
     setSelectedFrame,
     isInspecting,
     setIsInspecting,
+    canStartInspecting,
   } = useCookieStore(({ state, actions }) => ({
     contextInvalidated: state.contextInvalidated,
     setContextInvalidated: actions.setContextInvalidated,
@@ -58,6 +59,7 @@ const App: React.FC = () => {
     setSelectedFrame: actions.setSelectedFrame,
     isInspecting: state.isInspecting,
     setIsInspecting: actions.setIsInspecting,
+    canStartInspecting: state.canStartInspecting,
   }));
 
   useFrameOverlay();
@@ -115,17 +117,26 @@ const App: React.FC = () => {
         },
         {} as SidebarItems
       );
-      psData.children['cookies'].extraInterfaceToTitle = (
-        <InspectButton
-          isInspecting={isInspecting}
-          setIsInspecting={setIsInspecting}
-          isTabFocused={isKeySelected('cookies') && isSidebarFocused}
-        />
-      );
+
+      const showInspectButton =
+        canStartInspecting && Boolean(Object.keys(tabFrames || {}).length);
+
+      if (showInspectButton) {
+        psData.children['cookies'].extraInterfaceToTitle = (
+          <InspectButton
+            isInspecting={isInspecting}
+            setIsInspecting={setIsInspecting}
+            isTabFocused={isKeySelected('cookies') && isSidebarFocused}
+          />
+        );
+      } else {
+        psData.children['cookies'].extraInterfaceToTitle = null;
+      }
 
       return data;
     });
   }, [
+    canStartInspecting,
     currentItemKey,
     isInspecting,
     isKeySelected,
