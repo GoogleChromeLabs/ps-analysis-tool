@@ -118,6 +118,7 @@ const EditableTextInput = ({
         }
       }
       if (event?.key === 'Escape') {
+        event.stopPropagation();
         setEditing(false);
       }
     },
