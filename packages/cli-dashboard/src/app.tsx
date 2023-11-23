@@ -27,9 +27,8 @@ import './app.css';
 import SiteReport from './components/siteReport';
 import type { CookieFrameStorageType, CompleteJson } from './types';
 import SiteMapReport from './components/siteMapReport';
-import extractReportData, {
-  extractCookies,
-} from './components/utils/extractReportData';
+import extractReportData from './components/utils/extractReportData';
+import extractCookies from './components/utils/extractCookies';
 
 enum DisplayType {
   SITEMAP,
