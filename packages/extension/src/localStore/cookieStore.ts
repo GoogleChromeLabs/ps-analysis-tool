@@ -24,6 +24,7 @@ import { getCookieKey } from '@ps-analysis-tool/common';
 import updateStorage from './utils/updateStorage';
 import type { TabData, CookieData } from './types';
 import fetchTopicsTaxonomy from '../utils/fetchTopicsTaxonomy';
+import updateCookieBadgeText from './utils/updateCookieBadgeText';
 
 const CookieStore = {
   /**
@@ -86,6 +87,7 @@ const CookieStore = {
         delete tabData.cookies[cookieName];
       }
     });
+    await updateCookieBadgeText(storage);
     await chrome.storage.local.set(storage);
   },
 
@@ -102,6 +104,7 @@ const CookieStore = {
         }
       });
     });
+    await updateCookieBadgeText(storage);
     await chrome.storage.local.set(storage);
   },
 
