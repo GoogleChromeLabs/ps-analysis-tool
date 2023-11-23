@@ -90,7 +90,7 @@ const SidebarChild = ({
           onKeyNavigation(event, itemKey);
           setIsSidebarFocused(true);
         }}
-        className={`relative w-full flex items-center py-0.5 outline-0 text-sm ${
+        className={`relative w-full flex items-center py-0.5 outline-0 text-xs ${
           isKeySelected(itemKey)
             ? isSidebarFocused
               ? 'bg-royal-blue text-white'
