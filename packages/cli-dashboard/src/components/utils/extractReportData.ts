@@ -22,7 +22,8 @@ import type { TechnologyData } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies
  */
-import type { CookieFrameStorageType, CookieJsonDataType } from '../../types';
+import type { CookieFrameStorageType } from '../../types';
+import extractCookies from './extractCookies';
 
 const extractReportData = (
   data: {
@@ -60,32 +61,6 @@ const extractReportData = (
   };
 };
 
-const extractCookies = (
-  cookieData: {
-    frameCookies: CookieFrameStorageType;
-  },
-  pageUrl: string,
-  isLandingPage = false
-) => {
-  return Object.entries(cookieData).reduce(
-    (acc: CookieFrameStorageType, [frame, _data]) => {
-      acc[frame] = Object.fromEntries(
-        Object.entries(_data.frameCookies).map(([key, cookie]) => [
-          key + (isLandingPage ? '' : pageUrl),
-          {
-            ...cookie,
-            pageUrl,
-            frameUrl: frame,
-          } as CookieJsonDataType,
-        ])
-      );
-
-      return acc;
-    },
-    {}
-  );
-};
-
 const formatCookieData = (
   cookieData: CookieFrameStorageType,
   store: CookieFrameStorageType
@@ -102,4 +77,3 @@ const formatCookieData = (
 };
 
 export default extractReportData;
-export { extractCookies };

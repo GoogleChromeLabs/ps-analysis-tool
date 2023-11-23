@@ -138,7 +138,9 @@ module.exports = {
       'davys-grey': '#5D5D5D99',
       quartz: '#494C50',
       gainsboro: '#DADCE0',
+      'chinese-silver': '#CDCDCD',
       'baby-blue-eyes': '#A8C7FA',
+      sapphire: '#0B57D0',
     },
     colors: {
       ...colors,
@@ -148,7 +150,9 @@ module.exports = {
       quartz: '#494C50',
       manatee: '#9AA0A6',
       'medium-persian-blue': '#0E639C',
+      'chinese-silver': '#CDCDCD',
       'charleston-green': '#292A2D',
+      'outer-space': '#303942',
     },
     stroke: {
       'bright-gray': '#E8EAED',
