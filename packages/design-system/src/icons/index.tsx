@@ -54,3 +54,4 @@ export { default as Ellipse } from './ellipse.svg';
 export { default as ClearIcon } from './clear-icon.svg';
 export { default as StopIcon } from './stop-icon.svg';
 export { default as FilterIcon } from './filter-icon.svg';
+export { default as PaddedCross } from './padded-cross.svg';

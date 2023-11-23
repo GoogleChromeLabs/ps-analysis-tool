@@ -15,19 +15,36 @@
  */
 
 /**
+ * External dependencies
+ */
+import type { Meta, StoryObj } from '@storybook/react';
+import { noop } from '@ps-analysis-tool/common';
+
+/**
  * Internal dependencies
  */
-import { SidebarItemValue, SidebarItems } from '..';
+import SearchInput from '..';
 
-const findItem = (items: SidebarItems, keyPath: string[]) => {
-  if (keyPath.length === 0) {
-    return null;
-  }
-
-  const idx = keyPath.length - 1,
-    item: SidebarItemValue = items[keyPath[idx]];
-
-  return item;
+const meta: Meta<typeof SearchInput> = {
+  title: 'DesignSystem/SearchInput',
+  component: SearchInput,
+  tags: ['autodocs'],
 };
 
-export default findItem;
+export default meta;
+
+export const Primary: StoryObj<typeof SearchInput> = {
+  args: {
+    value: '',
+    onChange: noop,
+    clearInput: noop,
+  },
+};
+
+export const Secondary: StoryObj<typeof SearchInput> = {
+  args: {
+    value: 'Search Value',
+    onChange: noop,
+    clearInput: noop,
+  },
+};
