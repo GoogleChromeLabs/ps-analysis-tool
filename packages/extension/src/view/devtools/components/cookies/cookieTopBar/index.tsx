@@ -75,20 +75,25 @@ const CookieSearch = ({
       : selectedFrameCookie
       ? true
       : false;
-  const { deleteCookie, deleteAllCookies, getCookiesSetByJavascript } =
-    useCookieStore(({ actions }) => ({
-      deleteCookie: actions.deleteCookie,
-      deleteAllCookies: actions.deleteAllCookies,
-      getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
-    }));
+  const {
+    deleteCookie,
+    deleteAllCookies,
+    getCookiesSetByJavascript,
+    selectedFrame,
+  } = useCookieStore(({ state, actions }) => ({
+    deleteCookie: actions.deleteCookie,
+    deleteAllCookies: actions.deleteAllCookies,
+    getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
+    selectedFrame: state.selectedFrame,
+  }));
 
-  const handleDeleteCookie = useCallback(() => {
+  const handleDeleteCookie = useCallback(async () => {
     const selectedKey =
       cookieDeletedRef.current && !selectedFrameCookie
-        ? Object.values(filteredCookies)[
+        ? filteredCookies[
             getNextIndexToDelete(
               selectedCookieIndexRef.current,
-              Object.keys(filteredCookies).length
+              filteredCookies.length
             )
           ]
         : Object.values(selectedFrameCookie ?? {})[0];
@@ -96,15 +101,23 @@ const CookieSearch = ({
     if (selectedKey !== null && selectedKey.parsedCookie) {
       const cookieKey = getCookieKey(selectedKey?.parsedCookie);
       if (cookieKey) {
-        selectedCookieIndexRef.current = Object.values(
-          filteredCookies
-        ).findIndex(
+        selectedCookieIndexRef.current = filteredCookies.findIndex(
           (cookie) => getCookieKey(cookie.parsedCookie) === cookieKey
         );
-
-        deleteCookie(cookieKey);
+        await deleteCookie(cookieKey);
         cookieDeletedRef.current = true;
-        setSelectedFrameCookie(null);
+        const index = getNextIndexToDelete(
+          selectedCookieIndexRef.current,
+          filteredCookies.length - 1
+        );
+        if (index !== -100 && selectedFrame) {
+          setSelectedFrameCookie({
+            [selectedFrame]: [
+              ...filteredCookies.slice(0, index),
+              ...filteredCookies.slice(index + 1, filteredCookies.length),
+            ][index],
+          });
+        }
       }
     }
   }, [
@@ -112,6 +125,7 @@ const CookieSearch = ({
     filteredCookies,
     selectedFrameCookie,
     setSelectedFrameCookie,
+    selectedFrame,
   ]);
 
   const handleInput = useCallback(
