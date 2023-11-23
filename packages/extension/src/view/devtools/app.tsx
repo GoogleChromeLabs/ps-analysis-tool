@@ -46,6 +46,7 @@ const App: React.FC = () => {
     contextInvalidated,
     setContextInvalidated,
     tabFrames,
+    selectedFrame,
     setSelectedFrame,
     isInspecting,
     setIsInspecting,
@@ -53,6 +54,7 @@ const App: React.FC = () => {
     contextInvalidated: state.contextInvalidated,
     setContextInvalidated: actions.setContextInvalidated,
     tabFrames: state.tabFrames,
+    selectedFrame: state.selectedFrame,
     setSelectedFrame: actions.setSelectedFrame,
     isInspecting: state.isInspecting,
     setIsInspecting: actions.setIsInspecting,
@@ -140,6 +142,14 @@ const App: React.FC = () => {
       setSelectedFrame(null);
     }
   }, [currentItemKey, setSelectedFrame, tabFrames]);
+
+  useEffect(() => {
+    if (Object.keys(tabFrames || {}).includes(selectedFrame || '')) {
+      updateSelectedItemKey(selectedFrame);
+    } else if (selectedFrame === '') {
+      updateSelectedItemKey('cookies');
+    }
+  }, [selectedFrame, tabFrames, updateSelectedItemKey]);
 
   useEffect(() => {
     if (selectedItemKey === null) {
