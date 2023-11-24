@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import { type CookieTableData, getCookieKey } from '@ps-analysis-tool/common';
 import {
@@ -88,6 +88,10 @@ const CookieSearch = ({
     getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
     selectedFrame: state.selectedFrame,
   }));
+
+  useEffect(() => {
+    cookieDeletedRef.current = false;
+  }, [selectedFrame]);
 
   const handleDeleteCookie = useCallback(() => {
     const selectedKey =
