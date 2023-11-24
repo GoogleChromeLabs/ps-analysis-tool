@@ -21,8 +21,8 @@
  */
 function getValueToBeSetForLocalStorage(
   key: string,
-  value: string | boolean
-): string | boolean {
+  value: string | boolean | number
+): string | boolean | number {
   if (key.toLowerCase() === 'samesite') {
     switch (value as string) {
       case 'no_restriction':
@@ -41,9 +41,15 @@ function getValueToBeSetForLocalStorage(
       default:
         return '';
     }
-  } else {
-    return value;
+  } else if (key === 'expirationDate') {
+    switch (value) {
+      case 0:
+        return 'Session';
+      default:
+        return new Date(value).toJSON();
+    }
   }
+  return value;
 }
 
 export default getValueToBeSetForLocalStorage;

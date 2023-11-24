@@ -49,7 +49,6 @@ const CookieStore = {
           continue;
         }
         cookieKey = cookieKey?.trim();
-
         if (_updatedCookies?.[cookieKey]) {
           _updatedCookies[cookieKey] = {
             ...cookie,

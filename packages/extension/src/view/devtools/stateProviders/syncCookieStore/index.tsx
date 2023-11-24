@@ -487,11 +487,22 @@ export const Provider = ({ children }: PropsWithChildren) => {
     ) => {
       if (tabCookies && tabId) {
         let newCookieKey = cookieKey;
-        let valueToBeSet = changedValue;
+        let valueToBeSet: string | boolean | number = changedValue;
         const { [cookieKey]: cookieDetails, ...restOfCookies } = tabCookies;
-
         if (!cookieDetails?.isCookieSet) {
           return false;
+        }
+
+        if (changedKey === 'expirationDate') {
+          if ((valueToBeSet as string).toLowerCase() !== 'session') {
+            try {
+              valueToBeSet = new Date(valueToBeSet).getTime() / 1000;
+            } catch (error) {
+              return false;
+            }
+          } else {
+            valueToBeSet = 0;
+          }
         }
 
         if (changedKey === 'domain') {
@@ -508,7 +519,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
         if (changedKey === 'sameSite') {
           valueToBeSet = getValueForSameSite(
-            changedValue.toLowerCase() as string
+            (changedValue as string).toLowerCase()
           );
           if (!valueToBeSet) {
             return false;
@@ -529,16 +540,31 @@ export const Provider = ({ children }: PropsWithChildren) => {
             hostOnly = '',
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             session = '',
+            expirationDate = 0,
             ...otherDetails
           } = currentCookie;
 
-          const result = await chrome.cookies.set({
-            ...otherDetails,
-            [changedKey]: valueToBeSet,
-            url: cookieDetails.url,
-          });
+          let result;
 
-          if (result[changedKey] === valueToBeSet) {
+          if (changedKey === 'expirationDate' && valueToBeSet === 0) {
+            result = await chrome.cookies.set({
+              ...otherDetails,
+              url: cookieDetails.url,
+            });
+          } else {
+            result = await chrome.cookies.set({
+              ...otherDetails,
+              expirationDate,
+              [changedKey]: valueToBeSet,
+              url: cookieDetails.url,
+            });
+            valueToBeSet = Number(valueToBeSet) * 1000;
+          }
+          if (
+            result[changedKey] === valueToBeSet ||
+            (changedKey === 'expirationDate' &&
+              (result?.session || result?.expirationDate))
+          ) {
             await chrome.storage.local.set({
               ...(await chrome.storage.local.get()),
               [tabId]: {
@@ -548,7 +574,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
                     ...cookieDetails,
                     parsedCookie: {
                       ...cookieDetails.parsedCookie,
-                      [changedKey.toLowerCase()]:
+                      [changedKey === 'expirationDate'
+                        ? 'expires'
+                        : changedKey.toLowerCase()]:
                         getValueToBeSetForLocalStorage(
                           changedKey,
                           valueToBeSet
@@ -563,7 +591,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
           }
           return true;
         } catch (error) {
-          console.log(error);
           return false;
         }
       } else {
@@ -681,7 +708,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
           }
           return true;
         } catch (error) {
-          console.log(error);
           return false;
         }
       } else {
