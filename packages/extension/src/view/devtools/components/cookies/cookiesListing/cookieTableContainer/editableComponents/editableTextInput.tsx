@@ -118,7 +118,6 @@ const EditableTextInput = ({
         }
       }
       if (event?.key === 'Escape') {
-        event.stopPropagation();
         setEditing(false);
       }
     },
@@ -141,6 +140,7 @@ const EditableTextInput = ({
     <div
       className={`${!info ? 'w-full h-full' : ''}`}
       onClick={(event) => handleDoubleClick(event)}
+      onKeyDown={(e) => e.stopPropagation()}
     >
       {editing ? (
         <input
