@@ -151,6 +151,7 @@ const EditableTextInput = ({
           value={localValue}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
+          onBlur={() => setEditing(false)}
         />
       ) : (
         <p className="w-full">{info}</p>
