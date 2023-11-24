@@ -155,11 +155,7 @@ const CookieTableContainer = ({
       {
         header: 'Expires / Max-Age',
         accessorKey: 'parsedCookie.expires',
-        cell: (
-          info: InfoType,
-          details?: TableData,
-          rowHighlighter?: (value: boolean, cookieKey: string) => void
-        ) => (
+        cell: (info: InfoType, details?: TableData) => (
           <EditableTextInput
             info={info}
             changedKey="expirationDate"
