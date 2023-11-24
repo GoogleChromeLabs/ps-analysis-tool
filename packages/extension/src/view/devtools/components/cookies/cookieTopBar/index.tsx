@@ -173,9 +173,9 @@ const CookieSearch = ({
       <button
         disabled={!isAnyCookieSelected}
         onClick={handleDeleteCookie}
-        className={`flex items-center text-center dark:text-mischka  ${
+        className={`flex items-center text-center ${
           isAnyCookieSelected
-            ? 'text-comet-black hover:text-comet-grey hover:dark:text-bright-gray active:dark:text-mischka active:text-comet-black'
+            ? 'text-comet-black dark:text-mischka hover:text-comet-grey hover:dark:text-bright-gray active:dark:text-mischka active:text-comet-black'
             : 'text-mischka dark:text-dark-gray'
         } mx-2`}
         title="Delete selected cookie"
@@ -185,9 +185,9 @@ const CookieSearch = ({
       <button
         disabled={!cookiesAvailable}
         onClick={deleteAllCookies}
-        className={`flex h-full items-end dark:text-mischka ${
+        className={`flex h-full items-end ${
           cookiesAvailable
-            ? 'text-comet-black hover:text-comet-grey hover:dark:text-bright-gray active:dark:text-mischka active:text-comet-black'
+            ? 'text-comet-black dark:text-mischka hover:text-comet-grey hover:dark:text-bright-gray active:dark:text-mischka active:text-comet-black'
             : 'text-mischka dark:text-dark-gray'
         }`}
         title="Delete all cookies"
