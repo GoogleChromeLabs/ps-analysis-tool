@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   getCookieKey,
   type CookieTableData,
@@ -64,21 +64,54 @@ const CookieTableContainer = ({
       selectedColumns: state?.selectedColumns as Record<string, boolean>,
     }));
 
+  const [tableData, setTableData] = useState<Record<string, CookieTableData>>(
+    {}
+  );
+
+  useEffect(() => {
+    setTableData((prevData) =>
+      cookies.reduce((acc, cookie) => {
+        const key = getCookieKey(cookie.parsedCookie) as string;
+        acc[key] = {
+          ...cookie,
+          highlighted: prevData?.[key]?.highlighted,
+        };
+
+        return acc;
+      }, {} as Record<string, CookieTableData>)
+    );
+  }, [cookies]);
+
+  const rowHighlighter = useCallback(
+    (value: boolean, toChangeCookieKey: string) => {
+      setTableData((prevData) => {
+        const newData = { ...prevData };
+
+        Object.keys(prevData).forEach((key) => {
+          const cookieKey = getCookieKey(newData[key].parsedCookie);
+
+          if (cookieKey === toChangeCookieKey) {
+            newData[key].highlighted = value;
+          }
+        });
+
+        return newData;
+      });
+    },
+    []
+  );
+
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
         header: 'Name',
         accessorKey: 'parsedCookie.name',
-        cell: (
-          info: InfoType,
-          details?: TableData,
-          rowHighlighter?: (value: boolean, cookieKey: string) => void
-        ) => (
+        cell: (info: InfoType, rowData?: TableData) => (
           <EditableTextInput
             info={info}
             changedKey="name"
             rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey((details as CookieTableData)?.parsedCookie)}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
           />
         ),
         enableHiding: false,
@@ -86,48 +119,36 @@ const CookieTableContainer = ({
       {
         header: 'Value',
         accessorKey: 'parsedCookie.value',
-        cell: (
-          info: InfoType,
-          details?: TableData,
-          rowHighlighter?: (value: boolean, cookieKey: string) => void
-        ) => (
+        cell: (info: InfoType, rowData?: TableData) => (
           <EditableTextInput
             info={info}
             changedKey="value"
             rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey((details as CookieTableData)?.parsedCookie)}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
           />
         ),
       },
       {
         header: 'Domain',
         accessorKey: 'parsedCookie.domain',
-        cell: (
-          info: InfoType,
-          details?: TableData,
-          rowHighlighter?: (value: boolean, cookieKey: string) => void
-        ) => (
+        cell: (info: InfoType, rowData?: TableData) => (
           <EditableTextInput
             info={info}
             changedKey="domain"
             rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey((details as CookieTableData)?.parsedCookie)}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
           />
         ),
       },
       {
         header: 'Path',
         accessorKey: 'parsedCookie.path',
-        cell: (
-          info: InfoType,
-          details?: TableData,
-          rowHighlighter?: (value: boolean, cookieKey: string) => void
-        ) => (
+        cell: (info: InfoType, rowData?: TableData) => (
           <EditableTextInput
             info={info}
             changedKey="path"
             rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey((details as CookieTableData)?.parsedCookie)}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
           />
         ),
       },
@@ -150,48 +171,36 @@ const CookieTableContainer = ({
       {
         header: 'HttpOnly',
         accessorKey: 'parsedCookie.httponly',
-        cell: (
-          info: InfoType,
-          details?: TableData,
-          rowHighlighter?: (value: boolean, cookieKey: string) => void
-        ) => (
+        cell: (info: InfoType, rowData?: TableData) => (
           <EditableCheckBoxInput
             info={info}
             changedKey="httpOnly"
             rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey((details as CookieTableData)?.parsedCookie)}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
           />
         ),
       },
       {
         header: 'SameSite',
         accessorKey: 'parsedCookie.samesite',
-        cell: (
-          info: InfoType,
-          details?: TableData,
-          rowHighlighter?: (value: boolean, cookieKey: string) => void
-        ) => (
+        cell: (info: InfoType, rowData?: TableData) => (
           <EditableTextInput
             info={info}
             changedKey="sameSite"
             rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey((details as CookieTableData)?.parsedCookie)}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
           />
         ),
       },
       {
         header: 'Secure',
         accessorKey: 'parsedCookie.secure',
-        cell: (
-          info: InfoType,
-          details?: TableData,
-          rowHighlighter?: (value: boolean, cookieKey: string) => void
-        ) => (
+        cell: (info: InfoType, rowData?: TableData) => (
           <EditableCheckBoxInput
             info={info}
             changedKey="secure"
             rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey((details as CookieTableData)?.parsedCookie)}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
           />
         ),
       },
@@ -242,13 +251,13 @@ const CookieTableContainer = ({
         ),
       },
     ],
-    []
+    [rowHighlighter]
   );
 
   return (
     <CookieTable
       tableColumns={tableColumns}
-      data={cookies}
+      data={Object.values(tableData)}
       selectedFrame={selectedFrame}
       selectedFrameCookie={selectedFrameCookie}
       setSelectedFrameCookie={setSelectedFrameCookie}
