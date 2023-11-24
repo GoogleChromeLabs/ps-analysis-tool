@@ -3,11 +3,12 @@
     "rootDir": "src",
     "target": "es6",
     "module": "commonjs",
-    "outDir": "dist",
+    "outDir": "../../dist/backend",
     "strict": true,
     "sourceMap": true,
     "esModuleInterop": true,
     "moduleResolution": "node"
   },
-  "exclude": ["dist/**, dist-types/**"]
+  "exclude": ["dist/**, dist-types/**"],
+  "references": [{ "path": "../common" }, { "path": "../analysis-utils" }]
 }

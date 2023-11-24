@@ -14,20 +14,26 @@
  * limitations under the License.
  */
 
-const path = require('path');
-const rimraf = require('rimraf');
+/**
+ * External dependencies.
+ */
+import fs from 'fs/promises';
+import path from 'path';
+import { CookieDatabase } from '@ps-analysis-tool/analysis-utils';
 
-const dirs = ['analysis-utils', 'cli', 'common', 'analysis-backend'];
-
-dirs.forEach((dir) => {
-  const distDir = path.resolve(__dirname, `../packages/${dir}/dist`);
-  const distTypesDir = path.resolve(__dirname, `../packages/${dir}/dist-types`);
-  const tsconfigTsbuildinfo = path.resolve(
-    __dirname,
-    `../packages/${dir}/tsconfig.tsbuildinfo`
+/**
+ * Fetch dictionary from local data folder.
+ * @returns {Promise<CookieDatabase>} Open Cookie Data base
+ */
+async function fetchDictionary(): Promise<CookieDatabase> {
+  const data = JSON.parse(
+    await fs.readFile(
+      path.resolve('./third_party/data/open-cookie-database.json'),
+      { encoding: 'utf8' }
+    )
   );
 
-  rimraf.sync(distDir);
-  rimraf.sync(distTypesDir);
-  rimraf.sync(tsconfigTsbuildinfo);
-});
+  return data;
+}
+
+export default fetchDictionary;

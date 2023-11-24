@@ -10,6 +10,7 @@
 		"cli-dashboard:build": "npm run build --workspace=@ps-analysis-tool/cli-dashboard",
 		"analysis-backend:dev": "npm run dev --workspace=@ps-analysis-tool/analysis-backend",
 		"analysis-backend:build": "npm run build --workspace=@ps-analysis-tool/analysis-backend",
+		"analysis-backend:start": "node ./dist/backend/index.js",
 		"cli": "node dist/cli/index.js",
 		"test": "jest --config=tests/jest.config.cjs",
 		"test:coverage": "npm run test -- --collectCoverage && open coverage/lcov-report/index.html",
