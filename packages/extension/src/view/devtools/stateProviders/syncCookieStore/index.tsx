@@ -480,6 +480,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   );
 
   const modifierForNonNameUpdate = useCallback(
+    // eslint-disable-next-line complexity
     async (
       cookieKey: string,
       changedKey: string,
@@ -530,6 +531,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           name: cookieDetails.parsedCookie.name,
           url: cookieDetails.url,
         });
+
         try {
           if (!currentCookie) {
             return false;
@@ -558,8 +560,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
               [changedKey]: valueToBeSet,
               url: cookieDetails.url,
             });
-            valueToBeSet = Number(valueToBeSet) * 1000;
+            if (changedKey === 'expirationDate') {
+              valueToBeSet = Number(valueToBeSet) * 1000;
+            }
           }
+
           if (
             result[changedKey] === valueToBeSet ||
             (changedKey === 'expirationDate' &&
