@@ -83,7 +83,11 @@ const BodyRow = ({
       data-testid="body-row"
     >
       {columns.map(({ accessorKey, width }, idx) => (
-        <BodyCell key={idx} cell={row[accessorKey].value} width={width || 0} />
+        <BodyCell
+          key={idx}
+          cell={row[accessorKey]?.value || ''}
+          width={width || 0}
+        />
       ))}
     </div>
   );

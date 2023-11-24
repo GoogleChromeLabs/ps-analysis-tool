@@ -100,6 +100,7 @@ const EditableCheckBoxInput = ({
     <div
       className="h-full w-full flex items-center justify-center"
       onClick={(event) => handleDoubleClick(event)}
+      onKeyDown={(e) => e.stopPropagation()}
     >
       {editing ? (
         <input
