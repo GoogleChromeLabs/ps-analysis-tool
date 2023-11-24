@@ -53,3 +53,5 @@ export { default as Add } from './add.svg';
 export { default as Cross } from './cross.svg';
 export { default as Refresh } from './refresh-icon.svg';
 export { default as Ellipse } from './ellipse.svg';
+export { default as FilterIcon } from './filter-icon.svg';
+export { default as PaddedCross } from './padded-cross.svg';
