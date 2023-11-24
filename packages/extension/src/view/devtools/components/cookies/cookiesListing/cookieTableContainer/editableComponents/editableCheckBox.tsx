@@ -93,6 +93,7 @@ const EditableCheckBoxInput = ({
 
   useEffect(() => {
     setLocalValue(info as boolean);
+    setEditing(false);
   }, [info]);
 
   return (

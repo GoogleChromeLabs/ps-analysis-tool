@@ -127,6 +127,7 @@ const EditableTextInput = ({
 
   useEffect(() => {
     setLocalValue(info as string);
+    setEditing(false);
   }, [info]);
 
   useEffect(() => {
