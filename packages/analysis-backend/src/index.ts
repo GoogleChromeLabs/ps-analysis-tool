@@ -20,23 +20,68 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import validate from 'validate.js';
-import {
-  analyzeCookiesUrls,
-  analyzeTechnologiesUrlsInBatches,
-} from '@ps-analysis-tool/analysis-utils';
+import { MongoClient } from 'mongodb';
 import { ReportDisplayType } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
 import { fetchDictionary } from './utils';
+import analyzeSingleUrl from './procedures/analyizeSingleSite';
 
 dotenv.config({ path: `.env.backend` });
 
 const PORT: number = parseInt(process.env.PORT || '80');
 const DELAY_TIME = parseInt(process.env.DELAY_TIME || '15000');
+const CONNECTION_STRING = process.env.DB_URI;
+const DB_NAME = process.env.DB_NAME;
+const COOKIE_COLLECTION_NAME = process.env.COOKIE_COLLECTION_NAME;
+const TECHNOLOGY_COLLECTION_NAME = process.env.TECHNOLOGY_COLLECTION_NAME;
+const URL_COLLECTION_NAME = process.env.URL_COLLECTION_NAME;
+
+if (
+  !CONNECTION_STRING ||
+  !DB_NAME ||
+  !COOKIE_COLLECTION_NAME ||
+  !TECHNOLOGY_COLLECTION_NAME ||
+  !URL_COLLECTION_NAME
+) {
+  console.error('Improper DB metadata, Check .env.backend');
+  process.exit(1);
+}
+
+const connectToDb = async () => {
+  const client = new MongoClient(CONNECTION_STRING);
+
+  const conn = await client.connect();
+  const db = conn.db(DB_NAME);
+  const cookieAnalysisCollection = db.collection(COOKIE_COLLECTION_NAME);
+  const technologyAnalysisCollection = db.collection(
+    TECHNOLOGY_COLLECTION_NAME
+  );
+  const urlCollection = db.collection(URL_COLLECTION_NAME);
+
+  return {
+    cookieAnalysisCollection,
+    technologyAnalysisCollection,
+    urlCollection,
+  };
+};
 
 fetchDictionary()
-  .then((cookieDictionary) => {
+  .then(async (cookieDictionary) => {
+    const {
+      cookieAnalysisCollection,
+      technologyAnalysisCollection,
+      urlCollection,
+    } = await connectToDb();
+
+    console.log(`Connection to DB successfull
+    DB_NAME : ${DB_NAME}
+    COOKIE_COLLECTION_NAME : ${COOKIE_COLLECTION_NAME}
+    TECHNOLOGY_COLLECTION_NAME : ${TECHNOLOGY_COLLECTION_NAME}
+    URL_COLLECTION_NAME : ${URL_COLLECTION_NAME}
+    `);
+
     const app = express();
     app.use(express.json());
     app.use(cors());
@@ -73,20 +118,16 @@ fetchDictionary()
       }
 
       if (type === ReportDisplayType.SITE) {
-        const [cookieData] = await analyzeCookiesUrls(
-          [url],
-          true,
-          DELAY_TIME,
-          cookieDictionary
+        const analysis = await analyzeSingleUrl(
+          urlCollection,
+          cookieAnalysisCollection,
+          technologyAnalysisCollection,
+          url,
+          cookieDictionary,
+          DELAY_TIME
         );
 
-        const [technologyData] = await analyzeTechnologiesUrlsInBatches([url]);
-
-        return res.json({
-          pageUrl: url,
-          cookieData: cookieData.cookieData,
-          technologyData,
-        });
+        return res.json(analysis);
       } else {
         return res.sendStatus(200);
       }
