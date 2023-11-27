@@ -51,6 +51,7 @@ module.exports = {
     '<rootDir>/packages/extension/src/view/popup/index.tsx',
     '<rootDir>/packages/extension/src/view/devtools/devtools.ts',
     '<rootDir>/packages/extension/src/view/settings/index.tsx',
+    '<rootDir>/packages/extension/src/contentScript/index.ts',
   ],
   coverageReporters: ['lcov'],
   collectCoverageFrom: [
