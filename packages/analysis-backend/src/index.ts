@@ -92,6 +92,9 @@ fetchDictionary()
 
     app.get('/api', async (req, res) => {
       const url = (req.query.url as string) || '';
+      const shouldReanalyizeCookies = req.query.reanalyizeCookies === 'yes';
+      const shouldReanalyizeTechnologies =
+        req.query.reanalyizeTechnologies === 'yes';
 
       let type = ReportDisplayType.SITE;
 
@@ -124,7 +127,9 @@ fetchDictionary()
           technologyAnalysisCollection,
           url,
           cookieDictionary,
-          DELAY_TIME
+          DELAY_TIME,
+          shouldReanalyizeCookies,
+          shouldReanalyizeTechnologies
         );
 
         return res.json(analysis);

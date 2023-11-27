@@ -21,90 +21,116 @@ import {
 } from '@ps-analysis-tool/analysis-utils';
 import { Collection } from 'mongodb';
 
-class NotFoundError extends Error {
-  constructor() {
-    super('Entry not found in DB');
-    this.name = 'AuthenticationError';
-  }
-}
-
-const getAnalysisFromDatabase = async (
-  urlCollection: Collection,
-  cookieAnalysisCollection: Collection,
-  technologyAnalysisCollection: Collection,
-  url: string
-) => {
-  const pageDocument = await urlCollection?.findOne({
-    pageUrl: url,
-  });
-
-  if (!pageDocument) {
-    throw NotFoundError;
-  }
-  const cookieDataFromDB = await cookieAnalysisCollection?.findOne({
-    pageId: pageDocument._id,
-  });
-
-  const technologyDataFromDB = await technologyAnalysisCollection?.findOne({
-    pageId: pageDocument._id,
-  });
-
-  return {
-    pageUrl: url,
-    cookieData: cookieDataFromDB?.cookieData.cookieData,
-    technologyData: technologyDataFromDB?.technologyData,
-  };
-};
-
 const analyzeSingleUrl = async (
   urlCollection: Collection,
   cookieAnalysisCollection: Collection,
   technologyAnalysisCollection: Collection,
   url: string,
   cookieDictionary: CookieDatabase,
-  delayTime: number
+  delayTime: number,
+  shouldReanalyizeCookies: boolean,
+  shouldReanalyizeTechnologies: boolean
 ) => {
-  try {
-    return await getAnalysisFromDatabase(
-      urlCollection,
-      cookieAnalysisCollection,
-      technologyAnalysisCollection,
-      url
+  const pageDocument = await urlCollection?.findOne({
+    pageUrl: url,
+  });
+
+  if (!pageDocument) {
+    const [cookieData] = await analyzeCookiesUrls(
+      [url],
+      true,
+      delayTime,
+      cookieDictionary
     );
-  } catch (error) {
-    if (!(Error instanceof NotFoundError)) {
-      throw error;
-    } else {
-      const [cookieData] = await analyzeCookiesUrls(
-        [url],
-        true,
-        delayTime,
-        cookieDictionary
-      );
 
-      const [technologyData] = await analyzeTechnologiesUrlsInBatches([url]);
+    const [technologyData] = await analyzeTechnologiesUrlsInBatches([url]);
 
-      const pageObject = await urlCollection.insertOne({
-        pageUrl: url,
-      });
+    const _pageDocument = await urlCollection.insertOne({
+      pageUrl: url,
+      createdAt: new Date().toUTCString(),
+      updataedAt: new Date().toUTCString(),
+    });
 
-      await cookieAnalysisCollection.insertOne({
-        pageId: pageObject.insertedId,
-        cookieData: cookieData,
-      });
+    await cookieAnalysisCollection.insertOne({
+      pageId: _pageDocument.insertedId,
+      cookieData: cookieData,
+      createdAt: new Date().toUTCString(),
+      updataedAt: new Date().toUTCString(),
+    });
 
-      await technologyAnalysisCollection.insertOne({
-        pageId: pageObject.insertedId,
-        technologyData: technologyData,
-      });
+    await technologyAnalysisCollection.insertOne({
+      pageId: _pageDocument.insertedId,
+      technologyData: technologyData,
+      createdAt: new Date().toUTCString(),
+      updataedAt: new Date().toUTCString(),
+    });
 
-      return {
-        pageUrl: url,
-        cookieData: cookieData.cookieData,
-        technologyData,
-      };
-    }
+    return {
+      pageUrl: url,
+      cookieData: cookieData.cookieData,
+      technologyData,
+    };
   }
+
+  let cookieData;
+  let technologyData;
+
+  if (!shouldReanalyizeCookies) {
+    cookieData = (
+      await cookieAnalysisCollection?.findOne({
+        pageId: pageDocument._id,
+      })
+    )?.cookieData;
+  } else {
+    console.log('Reanalyzing Cookies');
+    [cookieData] = await analyzeCookiesUrls(
+      [url],
+      true,
+      delayTime,
+      cookieDictionary
+    );
+
+    await cookieAnalysisCollection.updateOne(
+      {
+        pageId: pageDocument._id,
+      },
+      {
+        $set: {
+          cookieData: cookieData,
+          updataedAt: new Date().toUTCString(),
+        },
+      }
+    );
+  }
+
+  if (!shouldReanalyizeTechnologies) {
+    technologyData = (
+      await technologyAnalysisCollection?.findOne({
+        pageId: pageDocument._id,
+      })
+    )?.technologyData;
+  } else {
+    console.log('Reanalyzing Technologies');
+    [technologyData] = await analyzeTechnologiesUrlsInBatches([url]);
+
+    await technologyAnalysisCollection.updateOne(
+      {
+        pageId: pageDocument._id,
+      },
+      {
+        $set: {
+          technologyData: technologyData,
+          updataedAt: new Date().toUTCString(),
+        },
+      }
+    );
+  }
+
+  return {
+    pageUrl: url,
+    cookieData: cookieData.cookieData,
+    technologyData,
+  };
 };
 
 export default analyzeSingleUrl;
