@@ -70,12 +70,12 @@ const usePersistentSettings = (persistenceKey?: string) => {
   }, [persistenceKey, isChromeExtension]);
 
   const updater = useCallback(
-    (newOptions: PersistentOptions) => {
+    async (newOptions: PersistentOptions) => {
       if (!persistenceKey) {
         return;
       }
 
-      updateStorage(persistenceKey, isChromeExtension, newOptions);
+      await updateStorage(persistenceKey, isChromeExtension, newOptions);
     },
     [isChromeExtension, persistenceKey]
   );

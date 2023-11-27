@@ -187,14 +187,16 @@ const useTable = ({
   );
 
   useEffect(() => {
-    updater({
-      columns: tableColumns,
-      visibleColumns: columns,
-      sortBy: sortKey,
-      sortOrder: sortOrder,
-      selectedFilters,
-      searchValue,
-    });
+    (async () => {
+      await updater({
+        columns: tableColumns,
+        visibleColumns: columns,
+        sortBy: sortKey,
+        sortOrder: sortOrder,
+        selectedFilters,
+        searchValue,
+      });
+    })();
   }, [
     columns,
     searchValue,

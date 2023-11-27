@@ -78,13 +78,17 @@ const Layout = () => {
         />
       );
 
+      const selectedFrameUrl = frameUrls.find(
+        (url) => url === keys[keys.length - 1]
+      );
+
       _data['cookies'].children = frameUrls.reduce(
         (acc: SidebarItems, url: string): SidebarItems => {
           acc[url] = {
             title: url,
             panel: (
               <CookiesTab
-                selectedFrameUrl={keys[keys.length - 1]}
+                selectedFrameUrl={selectedFrameUrl}
                 selectedSite={keys[keys.length - 2]}
               />
             ),
@@ -99,7 +103,7 @@ const Layout = () => {
       );
 
       _data['affected-cookies'].panel = (
-        <SiteAffectedCookies selectedFrameUrl={keys[keys.length - 1]} />
+        <SiteAffectedCookies selectedFrameUrl={null} />
       );
 
       return _data;

@@ -291,6 +291,11 @@ const CookiesListing = ({ selectedFrameUrl }: CookiesListingProps) => {
     []
   );
 
+  const tablePersistentSettingsKey = useMemo(
+    () => 'cookiesListing#' + selectedFrameUrl,
+    [selectedFrameUrl]
+  );
+
   return (
     <div className="w-full h-full flex flex-col">
       <Resizable
@@ -301,10 +306,7 @@ const CookiesListing = ({ selectedFrameUrl }: CookiesListingProps) => {
         minHeight="6%"
         maxHeight="95%"
         enable={{
-          top: false,
-          right: false,
           bottom: true,
-          left: false,
         }}
         className="h-full flex"
       >
@@ -314,7 +316,7 @@ const CookiesListing = ({ selectedFrameUrl }: CookiesListingProps) => {
           showTopBar={true}
           tableFilters={filters}
           tableSearchKeys={searchKeys}
-          tablePersistentSettingsKey={'cookiesListing'}
+          tablePersistentSettingsKey={tablePersistentSettingsKey}
           selectedFrame={selectedFrameUrl}
           selectedFrameCookie={selectedFrameCookie}
           setSelectedFrameCookie={setSelectedFrameCookie}
