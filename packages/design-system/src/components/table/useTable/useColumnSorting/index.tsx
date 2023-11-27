@@ -65,9 +65,13 @@ const useColumnSorting = (
   useEffect(() => {
     if (options?.defaultSortKey) {
       _setSortKey(options.defaultSortKey);
+    } else {
+      _setSortKey('');
     }
     if (options?.defaultSortOrder) {
       setAscending(options.defaultSortOrder === 'asc');
+    } else {
+      setAscending(true);
     }
   }, [options]);
 
