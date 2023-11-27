@@ -45,19 +45,28 @@ const useFiltering = (
   });
 
   useEffect(() => {
-    if (!options) {
-      return;
-    }
-
     setFilters((prevFilters) =>
       Object.fromEntries(
         Object.entries(prevFilters).map(([filterKey, filter]) => {
           const savedFilterValues = options?.[filterKey];
           const filterValues = filter.filterValues || {};
 
+          if (!Object.keys(savedFilterValues || {}).length) {
+            Object.entries(filterValues).forEach(
+              ([filterValue, filterValueData]) => {
+                filterValues[filterValue] = {
+                  ...filterValueData,
+                  selected: false,
+                };
+              }
+            );
+
+            return [filterKey, { ...filter, filterValues }];
+          }
+
           Object.entries(savedFilterValues || {}).forEach(
             ([filterValue, filterValueData]) => {
-              if (!filterValues[filterValue]) {
+              if (!filterValues?.[filterValue]) {
                 filterValues[filterValue] = {
                   selected: false,
                 };
