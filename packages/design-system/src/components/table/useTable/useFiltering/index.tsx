@@ -51,16 +51,16 @@ const useFiltering = (
           const savedFilterValues = options?.[filterKey];
           const filterValues = filter.filterValues || {};
 
-          if (!Object.keys(savedFilterValues || {}).length) {
-            Object.entries(filterValues).forEach(
-              ([filterValue, filterValueData]) => {
-                filterValues[filterValue] = {
-                  ...filterValueData,
-                  selected: false,
-                };
-              }
-            );
+          Object.entries(filterValues).forEach(
+            ([filterValue, filterValueData]) => {
+              filterValues[filterValue] = {
+                ...filterValueData,
+                selected: false,
+              };
+            }
+          );
 
+          if (!Object.keys(savedFilterValues || {}).length) {
             return [filterKey, { ...filter, filterValues }];
           }
 
