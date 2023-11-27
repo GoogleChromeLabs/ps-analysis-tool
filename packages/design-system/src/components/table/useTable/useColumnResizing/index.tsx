@@ -82,37 +82,41 @@ const useColumnResizing = (
       index: number
     ) => {
       const onMove = (clientXPos: number) => {
-        setIsResizing(true);
-        const startOffset =
-          selectedColumnRef.current?.getBoundingClientRect().left || 0;
-
-        const selectedColumn = index;
-
-        const column1 = columns[selectedColumn],
-          column2 = columns[selectedColumn + 1];
-
-        const column1Width = column1.width || 0,
-          column2Width = column2.width || 0;
-        const widthChange = clientXPos - (startOffset + column1Width);
-
-        let newColumn1Width = 40,
-          newColumn2Width = 40;
-
-        if (widthChange > 0) {
-          newColumn2Width = Math.max(40, column2Width - widthChange);
-          newColumn1Width =
-            newColumn2Width === 40
-              ? column1Width + column2Width - 40
-              : column1Width + widthChange;
-        } else {
-          newColumn1Width = Math.max(40, column1Width + widthChange);
-          newColumn2Width =
-            newColumn1Width === 40
-              ? column1Width + column2Width - 40
-              : column2Width - widthChange;
-        }
-
         setColumns((prev) => {
+          setIsResizing(true);
+          const startOffset =
+            selectedColumnRef.current?.getBoundingClientRect().left || 0;
+
+          const selectedColumn = index;
+
+          const column1 = prev[selectedColumn],
+            column2 = prev[selectedColumn + 1];
+
+          if (selectedColumn + 1 === prev.length) {
+            return prev;
+          }
+
+          const column1Width = column1.width || 0,
+            column2Width = column2.width || 0;
+          const widthChange = clientXPos - (startOffset + column1Width);
+
+          let newColumn1Width = 40,
+            newColumn2Width = 40;
+
+          if (widthChange > 0) {
+            newColumn2Width = Math.max(40, column2Width - widthChange);
+            newColumn1Width =
+              newColumn2Width === 40
+                ? column1Width + column2Width - 40
+                : column1Width + widthChange;
+          } else {
+            newColumn1Width = Math.max(40, column1Width + widthChange);
+            newColumn2Width =
+              newColumn1Width === 40
+                ? column1Width + column2Width - 40
+                : column2Width - widthChange;
+          }
+
           const newColumns = [...prev];
 
           newColumns[selectedColumn] = {
@@ -141,7 +145,7 @@ const useColumnResizing = (
       document.addEventListener('mousemove', mouseEvents.moveHandler);
       document.addEventListener('mouseup', mouseEvents.upHandler);
     },
-    [columns]
+    []
   );
 
   useEffect(() => {
