@@ -139,7 +139,7 @@ const EditableTextInput = ({
 
   return (
     <div
-      className={`${!info ? 'w-full h-full' : ''}`}
+      className="w-full h-full"
       onClick={(event) => handleDoubleClick(event)}
       onKeyDown={(e) => e.stopPropagation()}
     >
@@ -148,14 +148,14 @@ const EditableTextInput = ({
           name={changedKey}
           ref={inputRef}
           type="text"
-          className="w-full h-full outline-none dark:bg-charleston-green border-[1px] border-gainsboro dark:border-quartz focus:border-royal-blue focus:dark:border-medium-persian-blue dark:text-bright-gray text-outer-space-crayola"
+          className="w-full h-full outline-none dark:bg-charleston-green dark:text-bright-gray text-outer-space-crayola"
           value={localValue}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           onBlur={() => setEditing(false)}
         />
       ) : (
-        <p className="w-full">{info}</p>
+        <p className="w-full h-full">{info}</p>
       )}
     </div>
   );
