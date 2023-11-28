@@ -135,6 +135,16 @@ const useTable = ({
   tableSearchKeys,
   tablePersistentSettingsKey,
 }: useTableProps): TableOutput => {
+  const commonKey = useMemo(() => {
+    if (!tablePersistentSettingsKey) {
+      return undefined;
+    }
+
+    const keys = tablePersistentSettingsKey.split('#');
+
+    return keys[0];
+  }, [tablePersistentSettingsKey]);
+
   const {
     visibleColumns,
     hideColumn,
@@ -142,13 +152,13 @@ const useTable = ({
     areAllColumnsVisible,
     showColumn,
     isColumnHidden,
-  } = useColumnVisibility(tableColumns, tablePersistentSettingsKey);
+  } = useColumnVisibility(tableColumns, commonKey);
 
   const { columns, tableContainerRef, onMouseDown, isResizing } =
-    useColumnResizing(visibleColumns, tablePersistentSettingsKey);
+    useColumnResizing(visibleColumns, commonKey);
 
   const { sortedData, sortKey, sortOrder, setSortKey, setSortOrder } =
-    useColumnSorting(data, tablePersistentSettingsKey);
+    useColumnSorting(data, commonKey);
 
   const {
     filters,
