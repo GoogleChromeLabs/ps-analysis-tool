@@ -105,6 +105,7 @@ const App = () => {
         completeJson={completeJsonReport}
         cookies={cookies}
         technologies={technologies}
+        selectedSite={null}
       />
     </div>
   );

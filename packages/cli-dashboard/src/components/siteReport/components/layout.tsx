@@ -34,8 +34,13 @@ import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
 import TABS from '../tabs';
 import CookiesTab from '../tabs/cookies';
 import SiteAffectedCookies from '../tabs/siteAffectedCookies';
+import Technologies from '../tabs/technologies';
 
-const Layout = () => {
+interface LayoutProps {
+  selectedSite: string | null;
+}
+
+const Layout = ({ selectedSite }: LayoutProps) => {
   const [data, setData] = useState<SidebarItems>(TABS);
   const { tabCookies } = useContentStore(({ state }) => ({
     tabCookies: state.tabCookies,
@@ -72,10 +77,7 @@ const Layout = () => {
       const keys = selectedItemKey?.split('#') ?? [];
 
       _data['cookies'].panel = (
-        <CookiesTab
-          selectedFrameUrl={null}
-          selectedSite={keys[keys.length - 2]}
-        />
+        <CookiesTab selectedFrameUrl={null} selectedSite={selectedSite} />
       );
 
       const selectedFrameUrl = frameUrls.find(
@@ -89,7 +91,7 @@ const Layout = () => {
             panel: (
               <CookiesTab
                 selectedFrameUrl={selectedFrameUrl}
-                selectedSite={keys[keys.length - 2]}
+                selectedSite={selectedSite}
               />
             ),
             children: {},
@@ -103,12 +105,16 @@ const Layout = () => {
       );
 
       _data['affected-cookies'].panel = (
-        <SiteAffectedCookies selectedFrameUrl={null} />
+        <SiteAffectedCookies selectedSite={selectedSite} />
+      );
+
+      _data['technologies'].panel = (
+        <Technologies selectedSite={selectedSite} />
       );
 
       return _data;
     });
-  }, [frameUrls, selectedItemKey]);
+  }, [frameUrls, selectedItemKey, selectedSite]);
 
   useEffect(() => {
     if (selectedItemKey === null) {

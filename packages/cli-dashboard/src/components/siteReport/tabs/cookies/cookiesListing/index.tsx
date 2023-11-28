@@ -35,9 +35,13 @@ import { useContentStore } from '../../../stateProviders/contentStore';
 
 interface CookiesListingProps {
   selectedFrameUrl: string;
+  selectedSite?: string | null;
 }
 
-const CookiesListing = ({ selectedFrameUrl }: CookiesListingProps) => {
+const CookiesListing = ({
+  selectedFrameUrl,
+  selectedSite,
+}: CookiesListingProps) => {
   const { tabCookies } = useContentStore(({ state }) => ({
     tabCookies: Object.values(state.tabCookies).filter(
       (cookie) => selectedFrameUrl === cookie.frameUrl
@@ -291,10 +295,13 @@ const CookiesListing = ({ selectedFrameUrl }: CookiesListingProps) => {
     []
   );
 
-  const tablePersistentSettingsKey = useMemo(
-    () => 'cookiesListing#' + selectedFrameUrl,
-    [selectedFrameUrl]
-  );
+  const tablePersistentSettingsKey = useMemo(() => {
+    if (selectedSite) {
+      return 'cookiesListing#' + selectedSite + selectedFrameUrl;
+    }
+
+    return 'cookiesListing#' + selectedFrameUrl;
+  }, [selectedFrameUrl, selectedSite]);
 
   return (
     <div className="w-full h-full flex flex-col">

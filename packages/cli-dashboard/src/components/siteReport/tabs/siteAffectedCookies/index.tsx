@@ -26,21 +26,17 @@ import AffectedCookies from '../../../affectedCookies';
 import { useContentStore } from '../../stateProviders/contentStore';
 
 interface SiteAffectedCookiesProps {
-  selectedFrameUrl: string | null;
+  selectedSite: string | null;
 }
 
-const SiteAffectedCookies = ({
-  selectedFrameUrl,
-}: SiteAffectedCookiesProps) => {
+const SiteAffectedCookies = ({ selectedSite }: SiteAffectedCookiesProps) => {
   const { tabCookies } = useContentStore(({ state }) => ({
     tabCookies: Object.values(state.tabCookies).filter(
       (cookie) => !cookie.isCookieSet
     ),
   }));
 
-  return (
-    <AffectedCookies cookies={tabCookies} selectedFrameUrl={selectedFrameUrl} />
-  );
+  return <AffectedCookies cookies={tabCookies} selectedSite={selectedSite} />;
 };
 
 export default SiteAffectedCookies;
