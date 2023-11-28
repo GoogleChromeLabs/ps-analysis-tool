@@ -39,50 +39,46 @@ const SubList = ({
   toggleFilterSelection,
   isExpanded,
 }: SubListProps) => {
-  const sortedFilterValues = useMemo(() => {
+  const sortedFilterValueKeys = useMemo(() => {
     if (!sort) {
-      return filterValues;
+      return Object.keys(filterValues || {});
     }
 
-    return Object.fromEntries(
-      Object.entries(filterValues || {}).sort(([a], [b]) =>
-        String(a).localeCompare(String(b))
-      )
+    return Object.keys(filterValues || {}).sort(([a], [b]) =>
+      String(a).localeCompare(String(b))
     );
   }, [filterValues, sort]);
 
   return (
     <ul>
-      {Object.entries(sortedFilterValues || {}).map(
-        ([filterValue, filterValueData], index) => (
-          <li
-            key={index}
-            className={
-              index > 3 && !isExpanded ? 'ml-3 mt-1 hidden' : 'mx-3 mt-1'
-            }
-          >
-            <label className="flex gap-x-2 cursor-pointer items-center">
-              <input
-                role="checkbox"
-                type="checkbox"
-                name={filterKey}
-                className={classNames(
-                  'accent-royal-blue dark:accent-orange-400 w-3 h-3 dark:bg-outer-space dark:min-h-[12px] dark:min-w-[12px]',
-                  {
-                    'dark:appearance-none dark:text-manatee dark:border dark:rounded-[3px]':
-                      !filterValueData.selected,
-                  }
-                )}
-                checked={filterValueData.selected}
-                onChange={() => toggleFilterSelection(filterKey, filterValue)}
-              />
-              <span className="text-asteriod-black dark:text-bright-gray leading-normal font-semi-thick">
-                {String(filterValue)}
-              </span>
-            </label>
-          </li>
-        )
-      )}
+      {sortedFilterValueKeys.map((filterValue, index) => (
+        <li
+          key={index}
+          className={
+            index > 3 && !isExpanded ? 'ml-3 mt-1 hidden' : 'mx-3 mt-1'
+          }
+        >
+          <label className="flex gap-x-2 cursor-pointer items-center">
+            <input
+              role="checkbox"
+              type="checkbox"
+              name={filterKey}
+              className={classNames(
+                'accent-royal-blue dark:accent-orange-400 w-3 h-3 dark:bg-outer-space dark:min-h-[12px] dark:min-w-[12px]',
+                {
+                  'dark:appearance-none dark:text-manatee dark:border dark:rounded-[3px]':
+                    !filterValues?.[filterValue].selected,
+                }
+              )}
+              checked={filterValues?.[filterValue].selected}
+              onChange={() => toggleFilterSelection(filterKey, filterValue)}
+            />
+            <span className="text-asteriod-black dark:text-bright-gray leading-normal font-semi-thick">
+              {String(filterValue)}
+            </span>
+          </label>
+        </li>
+      ))}
     </ul>
   );
 };
