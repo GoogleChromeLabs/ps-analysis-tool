@@ -17,12 +17,13 @@
 /**
  * External dependencies.
  */
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 /**
  * Internal dependencies.
  */
 import type { TableColumn } from '..';
+import { extractStorage, updateStorage } from '../utils';
 
 export type ColumnVisibilityOutput = {
   visibleColumns: TableColumn[];
@@ -35,31 +36,13 @@ export type ColumnVisibilityOutput = {
 
 const useColumnVisibility = (
   columns: TableColumn[],
-  options?: Record<string, boolean>
+  tablePersistentSettingsKey?: string
 ): ColumnVisibilityOutput => {
   const [hiddenKeys, setHiddenKeys] = useState<Set<string>>(new Set());
 
   const hideColumn = useCallback((key: string) => {
     setHiddenKeys((prev) => new Set(prev.add(key)));
   }, []);
-
-  useEffect(() => {
-    if (options) {
-      setHiddenKeys((prev) => {
-        const next = new Set(prev);
-        columns
-          .filter(({ enableHiding }) => enableHiding !== false)
-          .forEach(({ header, accessorKey }) => {
-            if (options[header]) {
-              next.add(accessorKey);
-            }
-          });
-        return next;
-      });
-    } else {
-      setHiddenKeys(new Set());
-    }
-  }, [columns, options]);
 
   const toggleVisibility = useCallback(() => {
     setHiddenKeys((prev) => {
@@ -106,6 +89,56 @@ const useColumnVisibility = (
     () => columns.filter(({ accessorKey }) => !hiddenKeys.has(accessorKey)),
     [columns, hiddenKeys]
   );
+
+  const columnsVisibility = useRef<{ [key: string]: boolean }>({});
+
+  useEffect(() => {
+    if (tablePersistentSettingsKey) {
+      (async () => {
+        setHiddenKeys(new Set());
+
+        const data = await extractStorage(
+          tablePersistentSettingsKey,
+          window.location.protocol === 'chrome-extension:'
+        );
+
+        if (data?.columnsVisibility) {
+          const _hiddenKeys = Object.entries(data.columnsVisibility)
+            .filter(([, visible]) => visible)
+            .map(([key]) => key);
+
+          setHiddenKeys(new Set(_hiddenKeys));
+        }
+      })();
+    }
+
+    return () => {
+      if (tablePersistentSettingsKey) {
+        updateStorage(
+          tablePersistentSettingsKey,
+          window.location.protocol === 'chrome-extension:',
+          {
+            columnsVisibility: columnsVisibility.current,
+          }
+        );
+      }
+    };
+  }, [tablePersistentSettingsKey]);
+
+  useEffect(() => {
+    columnsVisibility.current = (columns || []).reduce(
+      (acc, { accessorKey }) => {
+        acc[accessorKey] = true;
+
+        return acc;
+      },
+      {} as { [key: string]: boolean }
+    );
+
+    visibleColumns?.forEach(({ accessorKey }) => {
+      columnsVisibility.current[accessorKey] = false;
+    });
+  }, [columns, visibleColumns]);
 
   return {
     visibleColumns,
