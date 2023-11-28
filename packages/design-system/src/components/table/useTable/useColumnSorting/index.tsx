@@ -18,13 +18,13 @@
  * External dependencies.
  */
 import { useState, useCallback, useMemo, useEffect } from 'react';
-import { PreferenceDataValues } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import type { TableData } from '..';
 import getValueByKey from '../../utils/getValueByKey';
+import { extractStorage, updateStorage } from '../utils';
 
 export type DefaultOptions = {
   defaultSortKey?: string;
@@ -33,15 +33,7 @@ export type DefaultOptions = {
 
 export type ColumnSortingOutput = {
   sortedData: TableData[];
-  setSortKey: (
-    key: string,
-    preferenceUpdater: (
-      key: string,
-      callback: (prevStatePreference: {
-        [key: string]: unknown;
-      }) => PreferenceDataValues
-    ) => void
-  ) => void;
+  setSortKey: (key: string) => void;
   setSortOrder: (order: 'asc' | 'desc') => void;
   sortKey: string;
   sortOrder: 'asc' | 'desc';
@@ -49,55 +41,23 @@ export type ColumnSortingOutput = {
 
 const useColumnSorting = (
   data: TableData[],
-  options?: DefaultOptions
+  tablePersistentSettingsKey?: string
 ): ColumnSortingOutput => {
-  const [sortKey, _setSortKey] = useState<string>(
-    options?.defaultSortKey ?? ''
-  );
-  const [ascending, setAscending] = useState<boolean>(
-    options?.defaultSortOrder === 'asc'
-  );
+  const [sortKey, _setSortKey] = useState<string>('');
+  const [ascending, setAscending] = useState<boolean>(true);
 
   const setSortOrder = useCallback((sortOrder: 'asc' | 'desc') => {
     setAscending(sortOrder === 'asc');
   }, []);
 
-  useEffect(() => {
-    if (options?.defaultSortKey) {
-      _setSortKey(options.defaultSortKey);
-    } else {
-      _setSortKey('');
-    }
-    if (options?.defaultSortOrder) {
-      setAscending(options.defaultSortOrder === 'asc');
-    } else {
-      setAscending(true);
-    }
-  }, [options]);
-
   const setSortKey = useCallback(
-    (
-      newSortKey: string,
-      preferenceUpdater: (
-        key: string,
-        callback: (prevStatePreference: {
-          [key: string]: unknown;
-        }) => PreferenceDataValues
-      ) => void
-    ) => {
+    (newSortKey: string) => {
       if (newSortKey === sortKey) {
         setAscending(!ascending);
       } else {
         _setSortKey(newSortKey);
         setAscending(true);
       }
-      preferenceUpdater('columnSorting', () => [
-        {
-          defaultSortKey: newSortKey,
-          defaultSortOrder:
-            newSortKey === sortKey ? (ascending ? 'desc' : 'asc') : 'asc',
-        },
-      ]);
     },
     [ascending, sortKey]
   );
@@ -120,6 +80,42 @@ const useColumnSorting = (
 
     return _sortedData;
   }, [ascending, data, sortKey]);
+
+  useEffect(() => {
+    if (tablePersistentSettingsKey) {
+      (async () => {
+        const _data = await extractStorage(
+          tablePersistentSettingsKey,
+          window.location.protocol === 'chrome-extension:'
+        );
+
+        if (_data?.sortBy) {
+          _setSortKey(_data.sortBy);
+        }
+        if (_data?.sortOrder) {
+          setAscending(_data.sortOrder === 'asc');
+        }
+      })();
+    }
+
+    return () => {
+      _setSortKey('');
+      setAscending(true);
+    };
+  }, [tablePersistentSettingsKey]);
+
+  useEffect(() => {
+    if (tablePersistentSettingsKey) {
+      updateStorage(
+        tablePersistentSettingsKey,
+        window.location.protocol === 'chrome-extension:',
+        {
+          sortBy: sortKey,
+          sortOrder: ascending ? 'asc' : 'desc',
+        }
+      );
+    }
+  }, [sortKey, ascending, tablePersistentSettingsKey]);
 
   return {
     sortedData,
