@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 /**
  * Internal dependencies.
@@ -90,8 +90,6 @@ const useColumnVisibility = (
     [columns, hiddenKeys]
   );
 
-  const columnsVisibility = useRef<{ [key: string]: boolean }>({});
-
   useEffect(() => {
     if (tablePersistentSettingsKey) {
       (async () => {
@@ -111,22 +109,10 @@ const useColumnVisibility = (
         }
       })();
     }
-
-    return () => {
-      if (tablePersistentSettingsKey) {
-        updateStorage(
-          tablePersistentSettingsKey,
-          window.location.protocol === 'chrome-extension:',
-          {
-            columnsVisibility: columnsVisibility.current,
-          }
-        );
-      }
-    };
   }, [tablePersistentSettingsKey]);
 
   useEffect(() => {
-    columnsVisibility.current = (columns || []).reduce(
+    const _columnsVisibility = (columns || []).reduce(
       (acc, { accessorKey }) => {
         acc[accessorKey] = true;
 
@@ -136,9 +122,19 @@ const useColumnVisibility = (
     );
 
     visibleColumns?.forEach(({ accessorKey }) => {
-      columnsVisibility.current[accessorKey] = false;
+      _columnsVisibility[accessorKey] = false;
     });
-  }, [columns, visibleColumns]);
+
+    if (tablePersistentSettingsKey) {
+      updateStorage(
+        tablePersistentSettingsKey,
+        window.location.protocol === 'chrome-extension:',
+        {
+          columnsVisibility: _columnsVisibility,
+        }
+      );
+    }
+  }, [columns, tablePersistentSettingsKey, visibleColumns]);
 
   return {
     visibleColumns,
