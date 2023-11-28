@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useMemo } from 'react';
 import classNames from 'classnames';
 
 /**
@@ -27,6 +27,7 @@ import { TableFilter, TableOutput } from '../../useTable';
 interface SubListProps {
   filterValues: TableFilter[keyof TableFilter]['filterValues'];
   filterKey: string;
+  sort: boolean;
   isExpanded: boolean;
   toggleFilterSelection: TableOutput['toggleFilterSelection'];
 }
@@ -34,12 +35,25 @@ interface SubListProps {
 const SubList = ({
   filterValues,
   filterKey,
+  sort,
   toggleFilterSelection,
   isExpanded,
 }: SubListProps) => {
+  const sortedFilterValues = useMemo(() => {
+    if (!sort) {
+      return filterValues;
+    }
+
+    return Object.fromEntries(
+      Object.entries(filterValues || {}).sort(([a], [b]) =>
+        String(a).localeCompare(String(b))
+      )
+    );
+  }, [filterValues, sort]);
+
   return (
     <ul>
-      {Object.entries(filterValues || {}).map(
+      {Object.entries(sortedFilterValues || {}).map(
         ([filterValue, filterValueData], index) => (
           <li
             key={index}
