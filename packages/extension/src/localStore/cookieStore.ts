@@ -38,9 +38,9 @@ const CookieStore = {
       const _updatedCookies = _prevCookies;
 
       for (const cookie of cookies) {
-        const { name, domain, path } = cookie.parsedCookie;
+        const { domain, path } = cookie.parsedCookie;
 
-        if (!name || !domain || !path) {
+        if (!domain || !path) {
           continue;
         }
 
