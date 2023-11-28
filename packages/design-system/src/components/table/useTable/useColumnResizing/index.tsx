@@ -23,6 +23,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
  * Internal dependencies.
  */
 import type { TableColumn } from '..';
+import { extractStorage, updateStorage } from '../utils';
 
 export type ColumnResizingOutput = {
   columns: TableColumn[];
@@ -36,7 +37,7 @@ export type ColumnResizingOutput = {
 
 const useColumnResizing = (
   tableColumns: TableColumn[],
-  options?: Record<string, number>
+  tablePersistentSettingsKey?: string
 ): ColumnResizingOutput => {
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const [columns, setColumns] = useState<TableColumn[]>([]);
@@ -46,9 +47,9 @@ const useColumnResizing = (
     const tableWidth = tableContainerRef.current?.scrollWidth || 0;
     const newColumns = tableColumns.map((column) => ({
       ...column,
-      width: options?.[column.accessorKey]
-        ? options[column.accessorKey]
-        : tableWidth / tableColumns.length,
+      width:
+        columnsSizing.current[column.accessorKey] ||
+        tableWidth / tableColumns.length,
     }));
 
     const totalWidth = newColumns.reduce(
@@ -66,7 +67,7 @@ const useColumnResizing = (
     }
 
     setColumns(newColumns);
-  }, [options, tableColumns]);
+  }, [tableColumns]);
 
   useEffect(() => {
     setColumnsCallback();
@@ -159,6 +160,48 @@ const useColumnResizing = (
 
     return () => resizer.disconnect();
   }, [setColumnsCallback]);
+
+  const columnsSizing = useRef<{ [key: string]: number }>({});
+
+  useEffect(() => {
+    if (tablePersistentSettingsKey) {
+      (async () => {
+        const data = await extractStorage(
+          tablePersistentSettingsKey,
+          window.location.protocol === 'chrome-extension:'
+        );
+
+        if (data?.columnsSizing) {
+          columnsSizing.current = data.columnsSizing;
+        }
+      })();
+    }
+
+    return () => {
+      if (tablePersistentSettingsKey) {
+        updateStorage(
+          tablePersistentSettingsKey,
+          window.location.protocol === 'chrome-extension:',
+          {
+            columnsSizing: columnsSizing.current,
+          }
+        );
+
+        columnsSizing.current = {};
+      }
+    };
+  }, [tablePersistentSettingsKey]);
+
+  useEffect(() => {
+    columnsSizing.current = (columns || []).reduce(
+      (acc, { accessorKey, width }) => {
+        acc[accessorKey] = width || 0;
+
+        return acc;
+      },
+      {} as { [key: string]: number }
+    );
+  }, [columns]);
 
   return {
     columns,
