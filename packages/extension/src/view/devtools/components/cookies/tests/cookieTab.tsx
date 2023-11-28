@@ -86,7 +86,20 @@ global.ResizeObserver = jest.fn().mockImplementation(() => ({
 
 describe('CookieTab', () => {
   beforeAll(() => {
-    globalThis.chrome = SinonChrome as unknown as typeof chrome;
+    globalThis.chrome = {
+      ...(SinonChrome as unknown as typeof chrome),
+      storage: {
+        // @ts-ignore
+        session: {
+          // @ts-ignore
+          onChanged: {
+            addListener: () => undefined,
+            removeListener: () => undefined,
+          },
+        },
+      },
+    };
+
     globalThis.Promise = Promise;
   });
 
