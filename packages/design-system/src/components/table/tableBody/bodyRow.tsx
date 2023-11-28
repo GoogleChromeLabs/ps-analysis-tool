@@ -58,7 +58,7 @@ const BodyRow = ({
           ? 'bg-dirty-pink'
           : 'bg-anti-flash-white dark:bg-charleston-green'
         : isHighlighted
-        ? 'bg-dirty-pink dark:text-dirty-red text-dirty-red'
+        ? 'bg-dirty-pink text-dirty-red dark:text-dirty-red text-dirty-red'
         : 'bg-white dark:bg-raisin-black'),
     cookieKey === selectedKey &&
       (isRowFocused
@@ -66,7 +66,7 @@ const BodyRow = ({
           ? 'bg-dirty-red'
           : 'bg-gainsboro dark:bg-outer-space'
         : isHighlighted
-        ? 'bg-dirty-pink'
+        ? 'bg-dirty-pink text-dirty-red'
         : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver')
   );
 
@@ -84,6 +84,7 @@ const BodyRow = ({
           cell={row[accessorKey]?.value || ''}
           width={width || 0}
           isHighlighted={isHighlighted}
+          isRowFocused={cookieKey === selectedKey}
         />
       ))}
     </div>

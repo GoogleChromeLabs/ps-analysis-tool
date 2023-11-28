@@ -68,6 +68,31 @@ const CookieTableContainer = ({
     {}
   );
 
+  const removeHighlights = useCallback(() => {
+    setTableData(() =>
+      cookies.reduce((acc, cookie) => {
+        const key = getCookieKey(cookie.parsedCookie) as string;
+        acc[key] = {
+          ...cookie,
+          highlighted: false,
+        };
+
+        return acc;
+      }, {} as Record<string, CookieTableData>)
+    );
+  }, [cookies]);
+
+  useEffect(() => {
+    chrome.storage.session.onChanged.addListener(removeHighlights);
+    return () => {
+      try {
+        chrome.storage.session.onChanged.removeListener(removeHighlights);
+      } catch (error) {
+        /* do nothing */
+      }
+    };
+  }, [removeHighlights]);
+
   useEffect(() => {
     setTableData((prevData) =>
       cookies.reduce((acc, cookie) => {

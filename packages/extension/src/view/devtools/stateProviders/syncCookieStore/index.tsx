@@ -495,7 +495,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
 
         if (changedKey === 'expirationDate') {
-          if ((valueToBeSet as string).toLowerCase() !== 'session') {
+          if (
+            (valueToBeSet as string).toLowerCase() !== 'session' &&
+            valueToBeSet
+          ) {
             try {
               valueToBeSet = new Date(valueToBeSet as string).getTime() / 1000;
             } catch (error) {
