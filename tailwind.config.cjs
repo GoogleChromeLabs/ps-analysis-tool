@@ -71,6 +71,7 @@ module.exports = {
       marketing: '#F3AE4E',
       analytics: '#4C79F4',
       uncategorized: '#EC7159',
+      'dirty-red': '#EE442F',
       'chart-label': '#111B21',
       'granite-gray': '#5F6369',
       'outer-space-crayola': '#303942',
@@ -127,6 +128,8 @@ module.exports = {
       'dark-blue': '#0B57D0',
       'light-blue': '#ABC7FA',
       lotion: '#FDFCFB1A',
+      'dirty-red': '#990000',
+      'dirty-pink': '#FFD6D6',
     },
     borderColor: {
       ...colors,

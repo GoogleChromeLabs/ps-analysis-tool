@@ -26,14 +26,19 @@ import type { InfoType } from '../useTable';
 interface BodyCellProps {
   cell: React.JSX.Element | InfoType;
   width: number;
+  isHighlighted?: boolean;
 }
 
-const BodyCell = ({ cell, width }: BodyCellProps) => {
+const BodyCell = ({ cell, width, isHighlighted = false }: BodyCellProps) => {
   return (
     <div
       tabIndex={0}
       style={{ maxWidth: width }}
-      className="box-border outline-0 px-1 py-px truncate h-5 text-xs dark:text-bright-gray cursor-default flex-1"
+      className={`box-border outline-0 px-1 py-px truncate h-5 text-xs ${
+        isHighlighted
+          ? 'text-dirty-red dark:text-white'
+          : 'dark:text-bright-gray'
+      } cursor-default flex-1`}
     >
       {cell}
     </div>
