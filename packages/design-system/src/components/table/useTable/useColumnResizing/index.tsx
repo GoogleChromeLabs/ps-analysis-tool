@@ -42,38 +42,74 @@ const useColumnResizing = (
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const [columns, setColumns] = useState<TableColumn[]>([]);
   const [isResizing, setIsResizing] = useState(false);
+  const columnsSizingRef = useRef<{ [key: string]: number }>({});
 
-  const setColumnsCallback = useCallback(() => {
-    const tableWidth = tableContainerRef.current?.scrollWidth || 0;
-    const newColumns = tableColumns.map((column) => ({
-      ...column,
-      width:
-        columnsSizing.current[column.accessorKey] ||
-        tableWidth / tableColumns.length,
-    }));
+  const resizeColumns = useCallback(
+    (columnsToResize: TableColumn[], tableWidth: number) => {
+      const totalWidth = columnsToResize.reduce(
+        (acc, column) => acc + (column.width || 0),
+        0
+      );
 
-    const totalWidth = newColumns.reduce(
-      (acc, column) => acc + column.width,
-      0
-    );
+      const diff = tableWidth - totalWidth;
 
-    const diff = tableWidth - totalWidth;
+      if (diff > 0) {
+        const perColumnDiff = diff / columnsToResize.length;
+        columnsToResize.forEach((column) => {
+          if (!column.width) {
+            column.width = 0;
+          }
 
-    if (diff > 0) {
-      const perColumnDiff = diff / newColumns.length;
-      newColumns.forEach((column) => {
-        column.width += perColumnDiff;
-      });
-    }
+          column.width += perColumnDiff;
+        });
+      }
 
-    setColumns(newColumns);
-  }, [tableColumns]);
+      return columnsToResize;
+    },
+    []
+  );
 
   useEffect(() => {
-    setColumnsCallback();
-    window.addEventListener('resize', setColumnsCallback);
+    setColumns((prev) => {
+      const newColumns = tableColumns.map((column) => ({
+        ...column,
+        width:
+          prev.find(({ accessorKey }) => accessorKey === column.accessorKey)
+            ?.width ||
+          columnsSizingRef.current?.[column.accessorKey] ||
+          0,
+      }));
+
+      return resizeColumns(
+        newColumns,
+        tableContainerRef.current?.scrollWidth || 0
+      );
+    });
+  }, [resizeColumns, tableColumns]);
+
+  const setColumnsCallback = useCallback(
+    (columnsSizing?: { [key: string]: number }) => {
+      setColumns((prevColumns) => {
+        const tableWidth = tableContainerRef.current?.scrollWidth || 0;
+        const newColumns = prevColumns.map((column) => ({
+          ...column,
+          width:
+            columnsSizing?.[column.accessorKey] ||
+            column.width ||
+            tableWidth / prevColumns.length,
+        }));
+
+        return resizeColumns(newColumns, tableWidth);
+      });
+    },
+    [resizeColumns]
+  );
+
+  useEffect(() => {
+    const _setColumnsCallback = () => setColumnsCallback();
+    window.addEventListener('resize', _setColumnsCallback);
     return () => {
-      window.removeEventListener('resize', setColumnsCallback);
+      window.removeEventListener('resize', _setColumnsCallback);
     };
   }, [setColumnsCallback]);
 
@@ -161,8 +197,6 @@ const useColumnResizing = (
     return () => resizer.disconnect();
   }, [setColumnsCallback]);
 
-  const columnsSizing = useRef<{ [key: string]: number }>({});
-
   useEffect(() => {
     if (tablePersistentSettingsKey) {
       (async () => {
@@ -172,28 +206,19 @@ const useColumnResizing = (
         );
 
         if (data?.columnsSizing) {
-          columnsSizing.current = data.columnsSizing;
+          columnsSizingRef.current = data.columnsSizing;
+          setColumnsCallback(data.columnsSizing);
         }
       })();
     }
 
     return () => {
-      if (tablePersistentSettingsKey) {
-        updateStorage(
-          tablePersistentSettingsKey,
-          window.location.protocol === 'chrome-extension:',
-          {
-            columnsSizing: columnsSizing.current,
-          }
-        );
-
-        columnsSizing.current = {};
-      }
+      setColumns([]);
     };
-  }, [tablePersistentSettingsKey]);
+  }, [setColumnsCallback, tablePersistentSettingsKey]);
 
   useEffect(() => {
-    columnsSizing.current = (columns || []).reduce(
+    const _columnsSizing = (columns || []).reduce(
       (acc, { accessorKey, width }) => {
         acc[accessorKey] = width || 0;
 
@@ -201,7 +226,17 @@ const useColumnResizing = (
       },
       {} as { [key: string]: number }
     );
-  }, [columns]);
+
+    if (tablePersistentSettingsKey) {
+      updateStorage(
+        tablePersistentSettingsKey,
+        window.location.protocol === 'chrome-extension:',
+        {
+          columnsSizing: _columnsSizing,
+        }
+      );
+    }
+  }, [columns, tablePersistentSettingsKey]);
 
   return {
     columns,
