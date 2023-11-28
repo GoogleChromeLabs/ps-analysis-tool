@@ -24,6 +24,7 @@ import { useEffect, useMemo, useState } from 'react';
  */
 import { TableData } from '..';
 import getValueByKey from '../../utils/getValueByKey';
+import { extractStorage, updateStorage } from '../utils';
 
 export type TableSearchOutput = {
   searchValue: string;
@@ -34,13 +35,9 @@ export type TableSearchOutput = {
 const useSearch = (
   data: TableData[],
   searchKeys?: string[],
-  options?: string
+  tablePersistentSettingsKey?: string
 ) => {
   const [searchValue, setSearchValue] = useState<string>('');
-
-  useEffect(() => {
-    setSearchValue(options || '');
-  }, [options]);
 
   const searchFilteredData = useMemo<TableData[]>(() => {
     if (!searchValue || !searchKeys) {
@@ -59,6 +56,36 @@ const useSearch = (
       });
     }, []);
   }, [data, searchKeys, searchValue]);
+
+  useEffect(() => {
+    if (tablePersistentSettingsKey) {
+      (async () => {
+        const _data =
+          (await extractStorage(
+            tablePersistentSettingsKey,
+            window.location.protocol === 'chrome-extension:'
+          )) || {};
+
+        setSearchValue(_data.searchValue || '');
+      })();
+    }
+
+    return () => {
+      setSearchValue('');
+    };
+  }, [tablePersistentSettingsKey]);
+
+  useEffect(() => {
+    if (tablePersistentSettingsKey) {
+      updateStorage(
+        tablePersistentSettingsKey,
+        window.location.protocol === 'chrome-extension:',
+        {
+          searchValue,
+        }
+      );
+    }
+  }, [searchValue, tablePersistentSettingsKey]);
 
   return {
     searchValue,
