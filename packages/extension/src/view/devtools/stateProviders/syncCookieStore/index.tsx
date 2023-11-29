@@ -235,11 +235,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
       }
     }
-
+    await setDocumentCookies(_tabId?.toString());
     const tabData = (await chrome.storage.local.get([_tabId.toString()]))[
       _tabId.toString()
     ];
-
     if (tabData && tabData.cookies) {
       const _cookies: NonNullable<CookieStoreContext['state']['tabCookies']> =
         {};
@@ -263,8 +262,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
       setTabCookies(_cookies);
     }
-
-    await setDocumentCookies(_tabId?.toString());
 
     chrome.devtools.inspectedWindow.eval(
       'window.location.href',
