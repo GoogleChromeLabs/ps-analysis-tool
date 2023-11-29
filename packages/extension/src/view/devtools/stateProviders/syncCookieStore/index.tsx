@@ -570,24 +570,27 @@ export const Provider = ({ children }: PropsWithChildren) => {
             (keyToChange === 'expirationDate' &&
               (result?.session || result?.expirationDate))
           ) {
+            const oldData = await chrome.storage.local.get();
+
+            const updatedCookie = {
+              [newCookieKey]: {
+                ...cookieDetails,
+                parsedCookie: {
+                  ...cookieDetails.parsedCookie,
+                  [keyToChange === 'expirationDate'
+                    ? 'expires'
+                    : keyToChange.toLowerCase()]:
+                    getValueToBeSetForLocalStorage(keyToChange, valueToBeSet),
+                },
+              },
+            };
+
             await chrome.storage.local.set({
-              ...(await chrome.storage.local.get()),
+              ...oldData,
               [tabId]: {
                 cookies: {
                   ...restOfCookies,
-                  [newCookieKey]: {
-                    ...cookieDetails,
-                    parsedCookie: {
-                      ...cookieDetails.parsedCookie,
-                      [keyToChange === 'expirationDate'
-                        ? 'expires'
-                        : keyToChange.toLowerCase()]:
-                        getValueToBeSetForLocalStorage(
-                          keyToChange,
-                          valueToBeSet
-                        ),
-                    },
-                  },
+                  ...updatedCookie,
                 },
               },
             });
@@ -689,22 +692,27 @@ export const Provider = ({ children }: PropsWithChildren) => {
           });
 
           if (result[keyToChange] === changedValue) {
+            const oldData = await chrome.storage.local.get();
+            const updatedCookie = {
+              [newCookieKey]: {
+                ...cookieDetails,
+                analytics: {
+                  ...cookieDetails?.analytics,
+                  name: changedValue,
+                },
+                parsedCookie: {
+                  ...cookieDetails.parsedCookie,
+                  [keyToChange]: changedValue,
+                },
+              },
+            };
+
             await chrome.storage.local.set({
-              ...(await chrome.storage.local.get()),
+              ...oldData,
               [tabId]: {
                 cookies: {
                   ...restOfCookies,
-                  [newCookieKey]: {
-                    ...cookieDetails,
-                    analytics: {
-                      ...cookieDetails?.analytics,
-                      name: changedValue,
-                    },
-                    parsedCookie: {
-                      ...cookieDetails.parsedCookie,
-                      [keyToChange]: changedValue,
-                    },
-                  },
+                  ...updatedCookie,
                 },
               },
             });
