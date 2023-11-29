@@ -26,11 +26,13 @@ import { LandingPage } from '@ps-analysis-tool/design-system';
 
 const PrivateAdvertising = () => {
   return (
-    <LandingPage
-      title="Private Advertising"
-      iframeSrc="https://privacysandbox.info/en/privacy-sandbox/measure-digital-ads"
-      extraClasses="h-[78vh] w-full"
-    />
+    <div data-testid="private-advertising-content" className="h-full w-full">
+      <LandingPage
+        title="Private Advertising"
+        iframeSrc="https://privacysandbox.info/en/privacy-sandbox/measure-digital-ads"
+        extraClasses="h-[78vh] w-full"
+      />
+    </div>
   );
 };
 
