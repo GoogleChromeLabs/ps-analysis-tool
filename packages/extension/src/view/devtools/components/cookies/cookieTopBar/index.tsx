@@ -64,11 +64,11 @@ const CookieSearch = ({
     })
   );
 
-  const cookieDeletedRef = useRef(false);
-  const selectedCookieIndexRef = useRef(-1);
+  const isCookieDeleted = useRef(false);
+  const selectedCookieIndex = useRef(-1);
 
   const isAnyCookieSelected =
-    cookieDeletedRef.current && !selectedFrameCookie
+    isCookieDeleted.current && !selectedFrameCookie
       ? filteredCookies.length > 0
         ? true
         : false
@@ -90,15 +90,15 @@ const CookieSearch = ({
   }));
 
   useEffect(() => {
-    cookieDeletedRef.current = false;
+    isCookieDeleted.current = false;
   }, [selectedFrame]);
 
   const handleDeleteCookie = useCallback(() => {
     const selectedKey =
-      cookieDeletedRef.current && !selectedFrameCookie
+      isCookieDeleted.current && !selectedFrameCookie
         ? filteredCookies[
             getNextIndexToDelete(
-              selectedCookieIndexRef.current,
+              selectedCookieIndex.current,
               filteredCookies.length
             )
           ]
@@ -107,16 +107,16 @@ const CookieSearch = ({
     if (selectedKey !== null && selectedKey.parsedCookie) {
       const cookieKey = getCookieKey(selectedKey?.parsedCookie);
       if (cookieKey) {
-        selectedCookieIndexRef.current = filteredCookies.findIndex(
+        selectedCookieIndex.current = filteredCookies.findIndex(
           (cookie) => getCookieKey(cookie.parsedCookie) === cookieKey
         );
         deleteCookie(cookieKey);
-        cookieDeletedRef.current = true;
+        isCookieDeleted.current = true;
         const index = getNextIndexToDelete(
-          selectedCookieIndexRef.current,
+          selectedCookieIndex.current,
           filteredCookies.length - 1
         );
-        const tempRows = filteredCookies.filter((cookie) => {
+        const filteredRows = filteredCookies.filter((cookie) => {
           return (
             cookie.parsedCookie.name +
               cookie.parsedCookie.domain +
@@ -127,7 +127,7 @@ const CookieSearch = ({
 
         if (index !== -100 && selectedFrame) {
           setSelectedFrameCookie({
-            [selectedFrame]: tempRows[index],
+            [selectedFrame]: filteredRows[index],
           });
         }
       }
