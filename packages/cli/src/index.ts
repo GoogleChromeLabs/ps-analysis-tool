@@ -24,6 +24,7 @@ import Spinnies from 'spinnies';
 import { exec } from 'child_process';
 import path from 'path';
 import { parseUrl } from '@ps-analysis-tool/common';
+import { parseStringPromise } from 'xml2js';
 
 /**
  * Internal dependencies.
@@ -48,6 +49,10 @@ program
   .option('-s, --sitemap-url <value>', 'URL of a sitemap')
   .option('-c, --csv-path <value>', 'Path to a CSV file with a set of URLs.')
   .option(
+    '-p, --sitemap-path <value>',
+    'Path to a sitmap saved in the file system'
+  )
+  .option(
     '-nh, --no-headless ',
     'Flag for running puppeteer in non headless mode'
   );
@@ -67,27 +72,36 @@ const initialize = async () => {
   }
 };
 
+// eslint-disable-next-line complexity
 const validateArgs = async (
   url: string,
   sitemapUrl: string,
-  csvPath: string
+  csvPath: string,
+  sitemapPath: string
 ) => {
-  if (!url && !sitemapUrl && !csvPath) {
+  if (!url && !sitemapUrl && !csvPath && !sitemapPath) {
     console.log(
       `Please provide one of the following 
       a) URL of a site (-u or --url) 
       b) URL of a sitemap (-s or --sitemap-url)
-      c) Path to a CSV file (-c or --csv-path)`
+      c) Path to a CSV file (-c or --csv-path)
+      d) Path to a XML file (-p or --sitemap-path)`
     );
     process.exit(1);
   }
 
-  if ((url && sitemapUrl) || (sitemapUrl && csvPath) || (csvPath && url)) {
+  if (
+    (url && sitemapUrl) ||
+    (sitemapUrl && csvPath) ||
+    (csvPath && sitemapPath) ||
+    (sitemapPath && url)
+  ) {
     console.log(
       `Please provide ONLY one of the following 
       a) URL of a site (-u or --url) 
       b) URL of a sitemap (-s or --sitemap-url)
-      c) Path to a CSV file (-c or --csv-path)`
+      c) Path to a CSV file (-c or --csv-path)
+      d) Path to a XML file (-p or --sitemap-path)`
     );
     process.exit(1);
   }
@@ -96,6 +110,14 @@ const validateArgs = async (
     const csvFileExists = await exists(csvPath);
     if (!csvFileExists) {
       console.log(`No file at ${csvPath}`);
+      process.exit(1);
+    }
+  }
+
+  if (sitemapPath) {
+    const sitemapFileExists = await exists(sitemapPath);
+    if (!sitemapFileExists) {
+      console.log(`No file at ${sitemapPath}`);
       process.exit(1);
     }
   }
@@ -116,6 +138,7 @@ const getUrlListFromArgs = async (
   url: string,
   sitemapUrl: string,
   csvPath: string,
+  sitemapPath: string,
   // @ts-ignore Package does not support typescript.
   spinnies
 ): Promise<string[]> => {
@@ -177,6 +200,63 @@ const getUrlListFromArgs = async (
     spinnies.succeed('csv-spinner', {
       text: 'Done parsing CSV file',
     });
+  } else if (sitemapPath) {
+    spinnies.add('sitemap-spinner', {
+      text: 'Parsing XML File',
+    });
+
+    try {
+      const xmlString = await readFile(sitemapPath, 'utf-8');
+      const data = await parseStringPromise(xmlString as string);
+
+      const isSiteIndex = Boolean(data['siteIndex']);
+      const isSiteMap = Boolean(data['urlset']);
+
+      if (isSiteIndex) {
+        console.log(
+          'Sorry, XML Schema for Sitemap index files is not supported by the tool'
+        );
+        process.exit(1);
+      }
+
+      if (!isSiteMap) {
+        console.log('Provided file is not a valid sitemap');
+        process.exit(1);
+      }
+
+      let _urls: string[] = [];
+
+      try {
+        _urls = data['urlset']['url'].reduce(
+          (acc: string[], { loc }: { loc: string | undefined }) =>
+            loc ? acc.concat(loc) : acc,
+          []
+        );
+      } catch (error) {
+        console.log('Provided XML files has no urls in its urlset');
+        process.exit(1);
+      }
+
+      if (_urls.length === 0) {
+        console.log('Provided XML files has no urls ');
+        process.exit(1);
+      }
+      _urls.forEach((_url) => {
+        if (!_url.includes('http')) {
+          console.log(`${_url} is not a valid URL`);
+          process.exit(1);
+        }
+      });
+
+      urls = urls.concat(_urls);
+    } catch (error) {
+      console.log('Error reading the XML file');
+      process.exit(1);
+    }
+
+    spinnies.succeed('sitemap-spinner', {
+      text: 'Done parsing XML file',
+    });
   }
 
   return urls;
@@ -188,25 +268,32 @@ const getUrlListFromArgs = async (
   const url = program.opts().url;
   const sitemapUrl = program.opts().sitemapUrl;
   const csvPath = program.opts().csvPath;
+  const sitemapPath = program.opts().sitemapPath;
   const isHeadless = Boolean(program.opts().headless);
 
-  validateArgs(url, sitemapUrl, csvPath);
+  validateArgs(url, sitemapUrl, csvPath, sitemapPath);
 
   const prefix =
     url || sitemapUrl
       ? Utility.generatePrefix(url || sitemapUrl)
-      : path.parse(csvPath).base;
+      : path.parse(csvPath || sitemapPath).base;
 
   const outputDir = `./out/${prefix}`;
   const spinnies = new Spinnies();
 
-  const urls = await getUrlListFromArgs(url, sitemapUrl, csvPath, spinnies);
+  const urls = await getUrlListFromArgs(
+    url,
+    sitemapUrl,
+    csvPath,
+    sitemapPath,
+    spinnies
+  );
 
   let urlsToProcess: string[] = [];
 
-  if (sitemapUrl || csvPath) {
+  if (sitemapUrl || csvPath || sitemapPath) {
     const userInput = await Utility.askUserInput(
-      `Provided ${sitemapUrl ? 'Sitemap' : 'CSV file'} has ${
+      `Provided ${sitemapUrl || sitemapPath ? 'Sitemap' : 'CSV file'} has ${
         urls.length
       } pages. Please enter the number of pages you want to analyze (Default ${
         urls.length
@@ -277,6 +364,6 @@ const getUrlListFromArgs = async (
   console.log(
     `Report is being served at the URL: http://localhost:9000?dir=${encodeURIComponent(
       prefix
-    )}${sitemapUrl || csvPath ? '&type=sitemap' : ''}`
+    )}${sitemapUrl || csvPath || sitemapPath ? '&type=sitemap' : ''}`
   );
 })();
