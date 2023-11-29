@@ -17,5 +17,4 @@ export * from './antiCovertTracking';
 export * from './privateAdvertising';
 export * from './siteBoundaries';
 export { default as Cookies } from './cookies';
-export { default as Sidebar } from './sidebar';
 export { default as PrivacySandbox } from './privacySandbox';
