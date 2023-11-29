@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Resizable } from 're-resizable';
 import {
   CookieIcon,
@@ -121,6 +121,15 @@ const Layout = ({ selectedSite }: LayoutProps) => {
       updateSelectedItemKey('cookies');
     }
   }, [selectedItemKey, updateSelectedItemKey]);
+
+  const lastSelectedSite = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (selectedSite !== lastSelectedSite.current) {
+      updateSelectedItemKey('cookies');
+      lastSelectedSite.current = selectedSite;
+    }
+  }, [selectedSite, updateSelectedItemKey]);
 
   return (
     <div className="w-full h-full flex">
