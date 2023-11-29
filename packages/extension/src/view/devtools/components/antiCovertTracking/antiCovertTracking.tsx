@@ -26,11 +26,13 @@ import { LandingPage } from '@ps-analysis-tool/design-system';
 
 const AntiCovertTracking = () => {
   return (
-    <LandingPage
-      title="Tracking Protection"
-      iframeSrc="https://privacysandbox.info/en/privacy-sandbox/prevent-covert-tracking"
-      extraClasses="h-[78vh] w-full"
-    />
+    <div data-testid="tracking-protection-content" className="h-full w-full">
+      <LandingPage
+        title="Tracking Protection"
+        iframeSrc="https://privacysandbox.info/en/privacy-sandbox/prevent-covert-tracking"
+        extraClasses="h-[78vh] w-full"
+      />
+    </div>
   );
 };
 
