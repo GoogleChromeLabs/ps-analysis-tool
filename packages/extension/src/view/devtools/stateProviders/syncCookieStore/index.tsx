@@ -733,6 +733,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
       previousValue: string | null
     ) => {
       if (previousValue) {
+        if (!changedValue) {
+          return false;
+        }
         return modifierForNameUpdate(
           cookieKey,
           changedKey,

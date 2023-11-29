@@ -73,7 +73,7 @@ const EditableTextInput = ({
           const result = await modifyCookie(
             cookieKey,
             changedKey,
-            localValue,
+            localValue.trim(),
             changedKey === 'name' ? (info as string) : null
           );
 
@@ -92,7 +92,7 @@ const EditableTextInput = ({
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       event.preventDefault();
-      setLocalValue(event.target.value);
+      setLocalValue(event.target.value.trim());
     },
     []
   );

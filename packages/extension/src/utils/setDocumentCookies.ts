@@ -17,7 +17,6 @@
  * External dependencies
  */
 import { isFirstParty } from '@ps-analysis-tool/common';
-import type { Cookie as ParsedCookie } from 'simple-cookie';
 
 /**
  * Internal dependencies.
@@ -55,25 +54,17 @@ const processAndStoreDocumentCookies = async ({
 
     const parsedCookieData: CookieData[] = await Promise.all(
       documentCookies.map(async (singleCookie: string) => {
-        let [name] = singleCookie.split('=');
-        const [, ...rest] = singleCookie.split('=');
-        name = name.trim();
-        let parsedCookie;
-
-        if (singleCookie.includes('=') && singleCookie.split('=').length >= 2) {
-          parsedCookie = {
-            name,
-            value: rest.join('='),
-          } as ParsedCookie;
-        } else {
-          parsedCookie = {
-            name: '',
-            value: name,
-          } as ParsedCookie;
-        }
+        const cookieValue = singleCookie.split('=')[1]?.trim();
+        const cookieName = singleCookie.split('=')[0]?.trim();
         let analytics;
 
-        parsedCookie = await createCookieObject(parsedCookie, tabUrl);
+        const parsedCookie = await createCookieObject(
+          {
+            name: cookieName,
+            value: cookieValue,
+          },
+          tabUrl
+        );
 
         if (dictionary) {
           analytics = findAnalyticsMatch(parsedCookie.name, dictionary);

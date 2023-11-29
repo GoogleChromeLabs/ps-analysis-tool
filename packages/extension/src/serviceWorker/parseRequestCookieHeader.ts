@@ -59,20 +59,11 @@ const parseRequestCookieHeader = async (
         if (dictionary) {
           analytics = findAnalyticsMatch(name, dictionary);
         }
-        let parsedCookie;
 
-        if (cookieString.includes('=') && cookieString.split('=').length >= 2) {
-          parsedCookie = {
-            name,
-            value: rest.join('='),
-          } as ParsedCookie;
-        } else {
-          parsedCookie = {
-            name: '',
-            value: name,
-          } as ParsedCookie;
-        }
-
+        let parsedCookie = {
+          name,
+          value: rest.join('='),
+        } as ParsedCookie;
         parsedCookie = await createCookieObject(parsedCookie, url);
 
         const _isFirstParty = isFirstParty(parsedCookie.domain || '', tabUrl);
