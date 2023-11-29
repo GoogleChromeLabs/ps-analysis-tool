@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 /**
+ * External dependencies
+ */
+import '@testing-library/jest-dom';
+/**
  * Internal dependencies.
  */
 import createTooltip from '../createTooltip';

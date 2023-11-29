@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 /**
+ * External dependencies
+ */
+import '@testing-library/jest-dom';
+/**
  * Internal dependencies.
  */
 import { OVERLAY_CLASS, TOOLTIP_CLASS } from '../../constants';
