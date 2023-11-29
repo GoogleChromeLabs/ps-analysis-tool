@@ -24,6 +24,7 @@ export {
   default as findAnalyticsMatch,
   emptyAnalytics,
 } from './utils/findAnalyticsMatch';
+export { parseUrl } from './utils/parseUrl';
 export { default as fetchLocalData } from './utils/fetchLocalData';
 export { default as cookieIssueDetails } from './utils/cookieExclusionAndWarningReasons';
 export { default as parseResponseReceivedExtraInfo } from './utils/parseResponseReceivedExtraInfo';

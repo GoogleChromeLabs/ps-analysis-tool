@@ -15,12 +15,6 @@
  */
 
 /**
- * External dependencies.
- */
-// @ts-ignore Package does not support typescript.
-import Spinnies from 'spinnies';
-
-/**
  * Internal dependencies.
  */
 import { CookieDatabase } from '../types';
@@ -32,9 +26,18 @@ export const analyzeCookiesUrlsInBatches = async (
   isHeadless: boolean,
   delayTime: number,
   cookieDictionary: CookieDatabase,
-  batchSize = 3
+  batchSize = 3,
+  spinnies?: {
+    add: (
+      id: string,
+      { text, indent }: { text: string; indent: number }
+    ) => void;
+    succeed: (
+      id: string,
+      { text, indent }: { text: string; indent: number }
+    ) => void;
+  }
 ) => {
-  const spinnies = new Spinnies();
   let report: {
     pageUrl: string;
     cookieData: {
@@ -51,9 +54,11 @@ export const analyzeCookiesUrlsInBatches = async (
     const start = i;
     const end = Math.min(urls.length - 1, i + batchSize - 1);
 
-    spinnies.add(`cookies-spinner-${i}`, {
-      text: `Analysing cookies in urls ${start + 1} - ${end + 1} `,
-    });
+    spinnies &&
+      spinnies.add(`cookie-batch-spinner`, {
+        text: `Analyzing cookies in urls ${start + 1} - ${end + 1} `,
+        indent: 2,
+      });
 
     const urlsWindow = urls.slice(start, end + 1);
 
@@ -66,9 +71,11 @@ export const analyzeCookiesUrlsInBatches = async (
 
     report = [...report, ...cookieAnalysis];
 
-    spinnies.succeed(`cookies-spinner-${i}`, {
-      text: `Done analysing cookies in urls ${start + 1} - ${end + 1} `,
-    });
+    spinnies &&
+      spinnies.succeed(`cookie-batch-spinner`, {
+        text: `Done analyzing cookies in urls ${start + 1} - ${end + 1} `,
+        indent: 2,
+      });
   }
 
   return report;
