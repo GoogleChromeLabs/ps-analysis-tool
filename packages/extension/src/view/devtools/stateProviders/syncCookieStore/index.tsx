@@ -59,10 +59,10 @@ export interface CookieStoreContext {
     deleteAllCookies: () => void;
     modifyCookie: (
       cookieName: string,
-      changedKey: string,
+      keyToChange: string,
       changedValue: string | boolean,
       previousValue: string | null
-    ) => Promise<boolean>;
+    ) => boolean | Promise<boolean>;
     setSelectedFrame: (key: string | null) => void;
     setIsInspecting: React.Dispatch<React.SetStateAction<boolean>>;
     changeListeningToThisTab: () => void;
@@ -480,7 +480,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     // eslint-disable-next-line complexity
     async (
       cookieKey: string,
-      changedKey: string,
+      keyToChange: string,
       changedValue: string | boolean
     ) => {
       if (tabCookies && tabId) {
@@ -491,7 +491,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           return false;
         }
 
-        if (changedKey === 'expirationDate') {
+        if (keyToChange === 'expirationDate') {
           if (
             (valueToBeSet as string).toLowerCase() !== 'session' &&
             valueToBeSet
@@ -506,19 +506,19 @@ export const Provider = ({ children }: PropsWithChildren) => {
           }
         }
 
-        if (changedKey === 'domain') {
+        if (keyToChange === 'domain') {
           newCookieKey =
             cookieDetails.parsedCookie.name +
             changedValue +
             cookieDetails.parsedCookie.path;
-        } else if (changedKey === 'path') {
+        } else if (keyToChange === 'path') {
           newCookieKey =
             cookieDetails.parsedCookie.name +
             cookieDetails.parsedCookie.domain +
             changedValue;
         }
 
-        if (changedKey === 'sameSite') {
+        if (keyToChange === 'sameSite') {
           valueToBeSet = getValueForSameSite(
             (changedValue as string).toLowerCase()
           );
@@ -548,7 +548,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
           let result;
 
-          if (changedKey === 'expirationDate' && valueToBeSet === 0) {
+          if (keyToChange === 'expirationDate' && valueToBeSet === 0) {
             result = await chrome.cookies.set({
               ...otherDetails,
               url: cookieDetails.url,
@@ -557,17 +557,17 @@ export const Provider = ({ children }: PropsWithChildren) => {
             result = await chrome.cookies.set({
               ...otherDetails,
               expirationDate,
-              [changedKey]: valueToBeSet,
+              [keyToChange]: valueToBeSet,
               url: cookieDetails.url,
             });
-            if (changedKey === 'expirationDate') {
+            if (keyToChange === 'expirationDate') {
               valueToBeSet = Number(valueToBeSet) * 1000;
             }
           }
 
           if (
-            result[changedKey] === valueToBeSet ||
-            (changedKey === 'expirationDate' &&
+            result[keyToChange] === valueToBeSet ||
+            (keyToChange === 'expirationDate' &&
               (result?.session || result?.expirationDate))
           ) {
             await chrome.storage.local.set({
@@ -579,11 +579,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
                     ...cookieDetails,
                     parsedCookie: {
                       ...cookieDetails.parsedCookie,
-                      [changedKey === 'expirationDate'
+                      [keyToChange === 'expirationDate'
                         ? 'expires'
-                        : changedKey.toLowerCase()]:
+                        : keyToChange.toLowerCase()]:
                         getValueToBeSetForLocalStorage(
-                          changedKey,
+                          keyToChange,
                           valueToBeSet
                         ),
                     },
@@ -645,7 +645,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const modifierForNameUpdate = useCallback(
     async (
       cookieKey: string,
-      changedKey: string,
+      keyToChange: string,
       changedValue: string,
       previousValue: string
     ) => {
@@ -679,7 +679,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
           const result = await chrome.cookies.set({
             ...otherDetails,
-            [changedKey]: changedValue,
+            [keyToChange]: changedValue,
             url: cookieDetails.url,
           });
 
@@ -688,7 +688,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
             url: cookieDetails.url,
           });
 
-          if (result[changedKey] === changedValue) {
+          if (result[keyToChange] === changedValue) {
             await chrome.storage.local.set({
               ...(await chrome.storage.local.get()),
               [tabId]: {
@@ -702,7 +702,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
                     },
                     parsedCookie: {
                       ...cookieDetails.parsedCookie,
-                      [changedKey]: changedValue,
+                      [keyToChange]: changedValue,
                     },
                   },
                 },
@@ -725,7 +725,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const modifyCookie = useCallback(
     (
       cookieKey: string,
-      changedKey: string,
+      keyToChange: string,
       changedValue: string | boolean,
       previousValue: string | null
     ) => {
@@ -735,12 +735,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
         return modifierForNameUpdate(
           cookieKey,
-          changedKey,
+          keyToChange,
           changedValue as string,
           previousValue
         );
       }
-      return modifierForNonNameUpdate(cookieKey, changedKey, changedValue);
+      return modifierForNonNameUpdate(cookieKey, keyToChange, changedValue);
     },
     [modifierForNameUpdate, modifierForNonNameUpdate]
   );

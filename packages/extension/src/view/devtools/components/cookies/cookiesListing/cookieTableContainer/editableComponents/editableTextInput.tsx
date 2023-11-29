@@ -27,14 +27,14 @@ import { noop } from '@ps-analysis-tool/common';
 
 interface EditableTextInputProps {
   info: InfoType;
-  changedKey: string;
+  keyToChange: string;
   cookieKey?: string | null;
   rowHighlighter?: (value: boolean, cookieKey: string) => void;
 }
 
 const EditableTextInput = ({
   info,
-  changedKey,
+  keyToChange,
   cookieKey,
   rowHighlighter = noop,
 }: EditableTextInputProps) => {
@@ -72,9 +72,9 @@ const EditableTextInput = ({
         if (localValue !== info && cookieKey) {
           const result = await modifyCookie(
             cookieKey,
-            changedKey,
+            keyToChange,
             localValue.trim(),
-            changedKey === 'name' ? (info as string) : null
+            keyToChange === 'name' ? (info as string) : null
           );
 
           if (!result) {
@@ -86,7 +86,7 @@ const EditableTextInput = ({
         }
       }
     },
-    [localValue, info, cookieKey, modifyCookie, changedKey, rowHighlighter]
+    [localValue, info, cookieKey, modifyCookie, keyToChange, rowHighlighter]
   );
 
   const handleChange = useCallback(
@@ -104,9 +104,9 @@ const EditableTextInput = ({
         if (localValue !== info && cookieKey) {
           const result = await modifyCookie(
             cookieKey,
-            changedKey,
+            keyToChange,
             localValue,
-            changedKey === 'name' ? (info as string) : null
+            keyToChange === 'name' ? (info as string) : null
           );
 
           if (!result) {
@@ -121,7 +121,7 @@ const EditableTextInput = ({
         setEditing(false);
       }
     },
-    [changedKey, cookieKey, info, localValue, modifyCookie, rowHighlighter]
+    [keyToChange, cookieKey, info, localValue, modifyCookie, rowHighlighter]
   );
 
   useEffect(() => {
@@ -145,7 +145,7 @@ const EditableTextInput = ({
     >
       {editing ? (
         <input
-          name={changedKey}
+          name={keyToChange}
           ref={inputRef}
           type="text"
           className="w-full h-full outline-none dark:bg-charleston-green dark:text-bright-gray text-outer-space-crayola"

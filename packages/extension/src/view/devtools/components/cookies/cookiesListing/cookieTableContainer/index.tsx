@@ -134,7 +134,7 @@ const CookieTableContainer = ({
         cell: (info: InfoType, rowData?: TableData) => (
           <EditableTextInput
             info={info}
-            changedKey="name"
+            keyToChange="name"
             rowHighlighter={rowHighlighter}
             cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
           />
@@ -147,7 +147,7 @@ const CookieTableContainer = ({
         cell: (info: InfoType, rowData?: TableData) => (
           <EditableTextInput
             info={info}
-            changedKey="value"
+            keyToChange="value"
             rowHighlighter={rowHighlighter}
             cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
           />
@@ -159,7 +159,7 @@ const CookieTableContainer = ({
         cell: (info: InfoType, rowData?: TableData) => (
           <EditableTextInput
             info={info}
-            changedKey="domain"
+            keyToChange="domain"
             rowHighlighter={rowHighlighter}
             cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
           />
@@ -171,7 +171,7 @@ const CookieTableContainer = ({
         cell: (info: InfoType, rowData?: TableData) => (
           <EditableTextInput
             info={info}
-            changedKey="path"
+            keyToChange="path"
             rowHighlighter={rowHighlighter}
             cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
           />
@@ -183,7 +183,7 @@ const CookieTableContainer = ({
         cell: (info: InfoType, details?: TableData) => (
           <EditableTextInput
             info={info}
-            changedKey="expirationDate"
+            keyToChange="expirationDate"
             rowHighlighter={rowHighlighter}
             cookieKey={getCookieKey((details as CookieTableData)?.parsedCookie)}
           />
@@ -195,7 +195,7 @@ const CookieTableContainer = ({
         cell: (info: InfoType, rowData?: TableData) => (
           <EditableCheckBoxInput
             info={info}
-            changedKey="httpOnly"
+            keyToChange="httpOnly"
             rowHighlighter={rowHighlighter}
             cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
           />
@@ -207,7 +207,7 @@ const CookieTableContainer = ({
         cell: (info: InfoType, rowData?: TableData) => (
           <EditableTextInput
             info={info}
-            changedKey="sameSite"
+            keyToChange="sameSite"
             rowHighlighter={rowHighlighter}
             cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
           />
@@ -219,7 +219,7 @@ const CookieTableContainer = ({
         cell: (info: InfoType, rowData?: TableData) => (
           <EditableCheckBoxInput
             info={info}
-            changedKey="secure"
+            keyToChange="secure"
             rowHighlighter={rowHighlighter}
             cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
           />

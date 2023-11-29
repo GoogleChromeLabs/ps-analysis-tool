@@ -28,14 +28,14 @@ import { noop } from '@ps-analysis-tool/common';
 
 interface EditableCheckBoxInputProps {
   info: InfoType;
-  changedKey: string;
+  keyToChange: string;
   cookieKey?: string | null;
   rowHighlighter?: (value: boolean, cookieKey: string) => void;
 }
 
 const EditableCheckBoxInput = ({
   info,
-  changedKey,
+  keyToChange,
   cookieKey,
   rowHighlighter = noop,
 }: EditableCheckBoxInputProps) => {
@@ -69,7 +69,7 @@ const EditableCheckBoxInput = ({
         if (localValue !== info && cookieKey) {
           const result = await modifyCookie(
             cookieKey,
-            changedKey,
+            keyToChange,
             localValue,
             null
           );
@@ -80,7 +80,7 @@ const EditableCheckBoxInput = ({
         }
       }
     },
-    [info, changedKey, localValue, modifyCookie, cookieKey, rowHighlighter]
+    [info, keyToChange, localValue, modifyCookie, cookieKey, rowHighlighter]
   );
 
   useEffect(() => {
