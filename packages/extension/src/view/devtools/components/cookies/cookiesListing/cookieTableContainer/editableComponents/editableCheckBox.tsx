@@ -40,7 +40,7 @@ const EditableCheckBoxInput = ({
   rowHighlighter = noop,
 }: EditableCheckBoxInputProps) => {
   const [editing, setEditing] = useState(false);
-  const divRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const [localValue, setLocalValue] = useState<boolean>(info as boolean);
   const { modifyCookie } = useCookieStore(({ actions }) => ({
@@ -58,13 +58,16 @@ const EditableCheckBoxInput = ({
 
   useEffect(() => {
     if (editing) {
-      divRef.current?.focus();
+      inputRef.current?.focus();
     }
   }, [editing]);
 
   const handleClickOutside = useCallback(
     async (event: MouseEvent) => {
-      if (divRef.current && !divRef.current.contains(event.target as Node)) {
+      if (
+        inputRef.current &&
+        !inputRef.current.contains(event.target as Node)
+      ) {
         setEditing(false);
         if (localValue !== info && cookieKey) {
           const result = await modifyCookie(
@@ -104,7 +107,7 @@ const EditableCheckBoxInput = ({
     >
       {editing ? (
         <input
-          ref={divRef}
+          ref={inputRef}
           type="checkbox"
           checked={localValue}
           className={classNames(
