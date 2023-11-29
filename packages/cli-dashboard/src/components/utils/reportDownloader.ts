@@ -32,6 +32,9 @@ interface NewReport extends CompleteJson {
 
 type SanitisedCookieType = ParsedCookie & {
   category: string;
+  platform: string;
+  gdprPortal: string;
+  sameSite: string;
   scope: string;
 };
 interface SingleTechnology {
@@ -79,6 +82,21 @@ export const reportDownloader = (
     'Platform',
     'Category',
     'Cookie Affected',
+    'GDPRPortal',
+  ];
+
+  const affectedCookieDataHeader = [
+    'Name',
+    'Value',
+    'Domain',
+    'Path',
+    'Expires',
+    'Http Only',
+    'Scope',
+    'Secure',
+    'Same Site',
+    'Platform',
+    'Category',
     'GDPRPortal',
   ];
 
@@ -215,15 +233,29 @@ export const reportDownloader = (
         break;
     }
 
-    affectedCookiesDataValues =
-      affectedCookiesDataValues + Object.values(cookie).join(',') + '\r\n';
+    const dataLine = [
+      cookie.name,
+      cookie.value,
+      cookie.domain,
+      cookie.path,
+      cookie.expires,
+      cookie.httponly,
+      cookie.scope,
+      cookie.secure,
+      cookie.sameSite,
+      cookie.platform,
+      cookie.category,
+      cookie.gdprPortal,
+    ].join(',');
+
+    affectedCookiesDataValues = affectedCookiesDataValues + dataLine + '\r\n';
     return cookieName;
   });
 
   const cookieDataCSVContent = cookieDataHeader + '\n' + cookieDataValues;
 
   const affectedCookieDataCSVContent =
-    cookieDataHeader + '\n' + affectedCookiesDataValues;
+    affectedCookieDataHeader + '\n' + affectedCookiesDataValues;
 
   technologyDataToBeProcessed.forEach((technology) => {
     const singleTechnology: SingleTechnology = {
