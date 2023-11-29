@@ -38,7 +38,7 @@ const ChipsBar = ({
 }: ChipsBarProps) => {
   const appliedFiltersCount = Object.values(selectedFilters).reduce(
     (acc, filter) => {
-      acc += Number(Boolean(Object.keys(filter.filterValues || {}).length));
+      acc += Number(Object.keys(filter.filterValues || {}).length);
       return acc;
     },
     0

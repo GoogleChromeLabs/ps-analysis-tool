@@ -30,13 +30,10 @@ import type { CookieTableData } from '@ps-analysis-tool/common';
 
 interface AffectedCookiesProps {
   cookies: CookieTableData[];
-  selectedFrameUrl: string | null;
+  selectedSite: string | null;
 }
 
-const AffectedCookies = ({
-  cookies,
-  selectedFrameUrl,
-}: AffectedCookiesProps) => {
+const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
   const [selectedFrameCookie, setSelectedFrameCookie] = useState<{
     [frame: string]: CookieTableData | null;
   } | null>(null);
@@ -253,6 +250,14 @@ const AffectedCookies = ({
     []
   );
 
+  const tablePersistentSettingsKey = useMemo<string>(() => {
+    if (selectedSite) {
+      return `affectedCookiesListing#${selectedSite}`;
+    }
+
+    return 'affectedCookiesListing';
+  }, [selectedSite]);
+
   return (
     <div className="w-full h-full flex flex-col">
       <Resizable
@@ -276,8 +281,8 @@ const AffectedCookies = ({
           showTopBar={true}
           tableFilters={filters}
           tableSearchKeys={searchKeys}
-          tablePersistentSettingsKey={'affectedCookiesListing'}
-          selectedFrame={selectedFrameUrl}
+          tablePersistentSettingsKey={tablePersistentSettingsKey}
+          selectedFrame={selectedSite}
           selectedFrameCookie={selectedFrameCookie}
           setSelectedFrameCookie={setSelectedFrameCookie}
         />

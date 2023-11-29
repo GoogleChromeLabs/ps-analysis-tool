@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { CookieTableData, TechnologyData } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
@@ -35,7 +35,6 @@ import useColumnResizing, {
 } from './useColumnResizing';
 import useFiltering, { TableFilteringOutput } from './useFiltering';
 import useSearch, { TableSearchOutput } from './useSearch';
-import usePersistentSettings from './usePersistentSettings';
 
 export type TableData = CookieTableData | TechnologyData;
 
@@ -70,6 +69,26 @@ export type TableFilter = {
     calculateFilterValues?: (value: InfoType) => string;
     comparator?: (value: InfoType, filterValue: string) => boolean;
   };
+};
+
+export type PersistentOptions = {
+  columns?: TableColumn[];
+  visibleColumns?: TableColumn[];
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+  selectedFilters?: TableFilter;
+  searchValue?: string;
+};
+
+export type PersistentStorageData = {
+  columnsVisibility?: { [key: string]: boolean };
+  columnsSizing?: { [key: string]: number };
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+  selectedFilters?: {
+    [key: string]: TableFilter[keyof TableFilter]['filterValues'];
+  };
+  searchValue?: string;
 };
 
 export type TableOutput = {
@@ -115,11 +134,16 @@ const useTable = ({
   tableFilterData,
   tableSearchKeys,
   tablePersistentSettingsKey,
-  options,
 }: useTableProps): TableOutput => {
-  const [tableOptions, updater] = usePersistentSettings(
-    tablePersistentSettingsKey
-  );
+  const commonKey = useMemo(() => {
+    if (!tablePersistentSettingsKey) {
+      return undefined;
+    }
+
+    const keys = tablePersistentSettingsKey.split('#');
+
+    return keys[0];
+  }, [tablePersistentSettingsKey]);
 
   const {
     visibleColumns,
@@ -128,27 +152,13 @@ const useTable = ({
     areAllColumnsVisible,
     showColumn,
     isColumnHidden,
-  } = useColumnVisibility(
-    tableColumns,
-    options?.selectedColumns ?? tableOptions?.columnsVisibility
-  );
+  } = useColumnVisibility(tableColumns, commonKey);
 
   const { columns, tableContainerRef, onMouseDown, isResizing } =
-    useColumnResizing(
-      visibleColumns,
-      options?.columnSizing ?? tableOptions?.columnsSizing
-    );
-
-  const tabOptionsColumnSorting = useMemo<DefaultOptions>(
-    () => ({
-      defaultSortKey: tableOptions?.sortBy,
-      defaultSortOrder: tableOptions?.sortOrder,
-    }),
-    [tableOptions?.sortBy, tableOptions?.sortOrder]
-  );
+    useColumnResizing(visibleColumns, commonKey);
 
   const { sortedData, sortKey, sortOrder, setSortKey, setSortOrder } =
-    useColumnSorting(data, options?.columnSorting ?? tabOptionsColumnSorting);
+    useColumnSorting(data, commonKey);
 
   const {
     filters,
@@ -156,12 +166,12 @@ const useTable = ({
     filteredData,
     toggleFilterSelection,
     resetFilters,
-  } = useFiltering(sortedData, tableFilterData, tableOptions?.selectedFilters);
+  } = useFiltering(sortedData, tableFilterData, tablePersistentSettingsKey);
 
   const { searchValue, setSearchValue, searchFilteredData } = useSearch(
     filteredData,
     tableSearchKeys,
-    tableOptions?.searchValue
+    tablePersistentSettingsKey
   );
 
   const rows = useMemo(() => {
@@ -185,26 +195,6 @@ const useTable = ({
     () => tableColumns.filter((column) => column.enableHiding !== false),
     [tableColumns]
   );
-
-  useEffect(() => {
-    updater({
-      columns: tableColumns,
-      visibleColumns: columns,
-      sortBy: sortKey,
-      sortOrder: sortOrder,
-      selectedFilters,
-      searchValue,
-    });
-  }, [
-    columns,
-    searchValue,
-    selectedFilters,
-    sortKey,
-    sortOrder,
-    tableColumns,
-    updater,
-    visibleColumns,
-  ]);
 
   return {
     columns,

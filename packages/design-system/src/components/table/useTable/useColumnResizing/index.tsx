@@ -23,6 +23,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
  * Internal dependencies.
  */
 import type { TableColumn } from '..';
+import { extractStorage, updateStorage } from '../utils';
 
 export type ColumnResizingOutput = {
   columns: TableColumn[];
@@ -36,43 +37,79 @@ export type ColumnResizingOutput = {
 
 const useColumnResizing = (
   tableColumns: TableColumn[],
-  options?: Record<string, number>
+  tablePersistentSettingsKey?: string
 ): ColumnResizingOutput => {
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const [columns, setColumns] = useState<TableColumn[]>([]);
   const [isResizing, setIsResizing] = useState(false);
+  const columnsSizingRef = useRef<{ [key: string]: number }>({});
 
-  const setColumnsCallback = useCallback(() => {
-    const tableWidth = tableContainerRef.current?.scrollWidth || 0;
-    const newColumns = tableColumns.map((column) => ({
-      ...column,
-      width: options?.[column.accessorKey]
-        ? options[column.accessorKey]
-        : tableWidth / tableColumns.length,
-    }));
+  const resizeColumns = useCallback(
+    (columnsToResize: TableColumn[], tableWidth: number) => {
+      const totalWidth = columnsToResize.reduce(
+        (acc, column) => acc + (column.width || 0),
+        0
+      );
 
-    const totalWidth = newColumns.reduce(
-      (acc, column) => acc + column.width,
-      0
-    );
+      const diff = tableWidth - totalWidth;
 
-    const diff = tableWidth - totalWidth;
+      if (diff > 0) {
+        const perColumnDiff = diff / columnsToResize.length;
+        columnsToResize.forEach((column) => {
+          if (!column.width) {
+            column.width = 0;
+          }
 
-    if (diff > 0) {
-      const perColumnDiff = diff / newColumns.length;
-      newColumns.forEach((column) => {
-        column.width += perColumnDiff;
-      });
-    }
+          column.width += perColumnDiff;
+        });
+      }
 
-    setColumns(newColumns);
-  }, [options, tableColumns]);
+      return columnsToResize;
+    },
+    []
+  );
 
   useEffect(() => {
-    setColumnsCallback();
-    window.addEventListener('resize', setColumnsCallback);
+    setColumns((prev) => {
+      const newColumns = tableColumns.map((column) => ({
+        ...column,
+        width:
+          prev.find(({ accessorKey }) => accessorKey === column.accessorKey)
+            ?.width ||
+          columnsSizingRef.current?.[column.accessorKey] ||
+          0,
+      }));
+
+      return resizeColumns(
+        newColumns,
+        tableContainerRef.current?.scrollWidth || 0
+      );
+    });
+  }, [resizeColumns, tableColumns]);
+
+  const setColumnsCallback = useCallback(
+    (columnsSizing?: { [key: string]: number }) => {
+      setColumns((prevColumns) => {
+        const tableWidth = tableContainerRef.current?.scrollWidth || 0;
+        const newColumns = prevColumns.map((column) => ({
+          ...column,
+          width:
+            columnsSizing?.[column.accessorKey] ||
+            column.width ||
+            tableWidth / prevColumns.length,
+        }));
+
+        return resizeColumns(newColumns, tableWidth);
+      });
+    },
+    [resizeColumns]
+  );
+
+  useEffect(() => {
+    const _setColumnsCallback = () => setColumnsCallback();
+    window.addEventListener('resize', _setColumnsCallback);
     return () => {
-      window.removeEventListener('resize', setColumnsCallback);
+      window.removeEventListener('resize', _setColumnsCallback);
     };
   }, [setColumnsCallback]);
 
@@ -82,37 +119,41 @@ const useColumnResizing = (
       index: number
     ) => {
       const onMove = (clientXPos: number) => {
-        setIsResizing(true);
-        const startOffset =
-          selectedColumnRef.current?.getBoundingClientRect().left || 0;
-
-        const selectedColumn = index;
-
-        const column1 = columns[selectedColumn],
-          column2 = columns[selectedColumn + 1];
-
-        const column1Width = column1.width || 0,
-          column2Width = column2.width || 0;
-        const widthChange = clientXPos - (startOffset + column1Width);
-
-        let newColumn1Width = 40,
-          newColumn2Width = 40;
-
-        if (widthChange > 0) {
-          newColumn2Width = Math.max(40, column2Width - widthChange);
-          newColumn1Width =
-            newColumn2Width === 40
-              ? column1Width + column2Width - 40
-              : column1Width + widthChange;
-        } else {
-          newColumn1Width = Math.max(40, column1Width + widthChange);
-          newColumn2Width =
-            newColumn1Width === 40
-              ? column1Width + column2Width - 40
-              : column2Width - widthChange;
-        }
-
         setColumns((prev) => {
+          setIsResizing(true);
+          const startOffset =
+            selectedColumnRef.current?.getBoundingClientRect().left || 0;
+
+          const selectedColumn = index;
+
+          const column1 = prev[selectedColumn],
+            column2 = prev[selectedColumn + 1];
+
+          if (selectedColumn + 1 === prev.length) {
+            return prev;
+          }
+
+          const column1Width = column1.width || 0,
+            column2Width = column2.width || 0;
+          const widthChange = clientXPos - (startOffset + column1Width);
+
+          let newColumn1Width = 40,
+            newColumn2Width = 40;
+
+          if (widthChange > 0) {
+            newColumn2Width = Math.max(40, column2Width - widthChange);
+            newColumn1Width =
+              newColumn2Width === 40
+                ? column1Width + column2Width - 40
+                : column1Width + widthChange;
+          } else {
+            newColumn1Width = Math.max(40, column1Width + widthChange);
+            newColumn2Width =
+              newColumn1Width === 40
+                ? column1Width + column2Width - 40
+                : column2Width - widthChange;
+          }
+
           const newColumns = [...prev];
 
           newColumns[selectedColumn] = {
@@ -141,7 +182,7 @@ const useColumnResizing = (
       document.addEventListener('mousemove', mouseEvents.moveHandler);
       document.addEventListener('mouseup', mouseEvents.upHandler);
     },
-    [columns]
+    []
   );
 
   useEffect(() => {
@@ -155,6 +196,47 @@ const useColumnResizing = (
 
     return () => resizer.disconnect();
   }, [setColumnsCallback]);
+
+  useEffect(() => {
+    if (tablePersistentSettingsKey) {
+      (async () => {
+        const data = await extractStorage(
+          tablePersistentSettingsKey,
+          window.location.protocol === 'chrome-extension:'
+        );
+
+        if (data?.columnsSizing) {
+          columnsSizingRef.current = data.columnsSizing;
+          setColumnsCallback(data.columnsSizing);
+        }
+      })();
+    }
+
+    return () => {
+      setColumns([]);
+    };
+  }, [setColumnsCallback, tablePersistentSettingsKey]);
+
+  useEffect(() => {
+    const _columnsSizing = (columns || []).reduce(
+      (acc, { accessorKey, width }) => {
+        acc[accessorKey] = width || 0;
+
+        return acc;
+      },
+      {} as { [key: string]: number }
+    );
+
+    if (tablePersistentSettingsKey) {
+      updateStorage(
+        tablePersistentSettingsKey,
+        window.location.protocol === 'chrome-extension:',
+        {
+          columnsSizing: _columnsSizing,
+        }
+      );
+    }
+  }, [columns, tablePersistentSettingsKey]);
 
   return {
     columns,

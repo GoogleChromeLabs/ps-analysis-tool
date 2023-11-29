@@ -35,9 +35,13 @@ import { useContentStore } from '../../../stateProviders/contentStore';
 
 interface CookiesListingProps {
   selectedFrameUrl: string;
+  selectedSite?: string | null;
 }
 
-const CookiesListing = ({ selectedFrameUrl }: CookiesListingProps) => {
+const CookiesListing = ({
+  selectedFrameUrl,
+  selectedSite,
+}: CookiesListingProps) => {
   const { tabCookies } = useContentStore(({ state }) => ({
     tabCookies: Object.values(state.tabCookies).filter(
       (cookie) => selectedFrameUrl === cookie.frameUrl
@@ -291,6 +295,14 @@ const CookiesListing = ({ selectedFrameUrl }: CookiesListingProps) => {
     []
   );
 
+  const tablePersistentSettingsKey = useMemo(() => {
+    if (selectedSite) {
+      return 'cookiesListing#' + selectedSite + selectedFrameUrl;
+    }
+
+    return 'cookiesListing#' + selectedFrameUrl;
+  }, [selectedFrameUrl, selectedSite]);
+
   return (
     <div className="w-full h-full flex flex-col">
       <Resizable
@@ -301,10 +313,7 @@ const CookiesListing = ({ selectedFrameUrl }: CookiesListingProps) => {
         minHeight="6%"
         maxHeight="95%"
         enable={{
-          top: false,
-          right: false,
           bottom: true,
-          left: false,
         }}
         className="h-full flex"
       >
@@ -314,7 +323,7 @@ const CookiesListing = ({ selectedFrameUrl }: CookiesListingProps) => {
           showTopBar={true}
           tableFilters={filters}
           tableSearchKeys={searchKeys}
-          tablePersistentSettingsKey={'cookiesListing'}
+          tablePersistentSettingsKey={tablePersistentSettingsKey}
           selectedFrame={selectedFrameUrl}
           selectedFrameCookie={selectedFrameCookie}
           setSelectedFrameCookie={setSelectedFrameCookie}

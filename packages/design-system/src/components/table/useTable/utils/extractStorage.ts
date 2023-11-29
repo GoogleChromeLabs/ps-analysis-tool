@@ -17,7 +17,7 @@
 /**
  * Internal dependencies
  */
-import { PersistentStorageData } from '.';
+import { PersistentStorageData } from '..';
 
 const extractStorage = async (
   persistenceKey: string,

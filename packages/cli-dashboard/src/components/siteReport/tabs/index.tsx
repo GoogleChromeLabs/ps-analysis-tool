@@ -25,11 +25,6 @@ import {
   type SidebarItems,
 } from '@ps-analysis-tool/design-system';
 
-/**
- * Internal dependencies.
- */
-import Technologies from './technologies';
-
 const Tabs: SidebarItems = {
   cookies: {
     title: 'Cookies',
@@ -40,7 +35,6 @@ const Tabs: SidebarItems = {
   technologies: {
     title: 'Technologies',
     children: {},
-    panel: <Technologies />,
     icon: <SiteBoundariesIcon />,
     selectedIcon: <SiteBoundariesIconWhite />,
   },

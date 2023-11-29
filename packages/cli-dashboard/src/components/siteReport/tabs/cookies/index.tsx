@@ -70,7 +70,10 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
   return (
     <div className="w-full h-full flex items-center justify-center">
       {selectedFrameUrl ? (
-        <CookiesListing selectedFrameUrl={selectedFrameUrl} />
+        <CookiesListing
+          selectedFrameUrl={selectedFrameUrl}
+          selectedSite={selectedSite}
+        />
       ) : (
         <div className="flex flex-col h-full w-full">
           <CookiesLandingContainer

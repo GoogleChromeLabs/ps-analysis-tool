@@ -24,6 +24,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
  */
 import type { TableData, TableFilter } from '..';
 import getValueByKey from '../../utils/getValueByKey';
+import { extractStorage, updateStorage } from '../utils';
 
 export type TableFilteringOutput = {
   filters: TableFilter;
@@ -36,44 +37,14 @@ export type TableFilteringOutput = {
 const useFiltering = (
   data: TableData[],
   tableFilterData: TableFilter | undefined,
-  options?: {
-    [filterKey: string]: TableFilter[keyof TableFilter]['filterValues'];
-  }
+  tablePersistentSettingsKey?: string
 ): TableFilteringOutput => {
   const [filters, setFilters] = useState<TableFilter>({
     ...(tableFilterData || {}),
   });
-
-  useEffect(() => {
-    if (!options) {
-      return;
-    }
-
-    setFilters((prevFilters) =>
-      Object.fromEntries(
-        Object.entries(prevFilters).map(([filterKey, filter]) => {
-          const savedFilterValues = options?.[filterKey];
-          const filterValues = filter.filterValues || {};
-
-          Object.entries(savedFilterValues || {}).forEach(
-            ([filterValue, filterValueData]) => {
-              if (!filterValues[filterValue]) {
-                filterValues[filterValue] = {
-                  selected: false,
-                };
-              }
-
-              filterValues[filterValue] = {
-                ...filterValueData,
-              };
-            }
-          );
-
-          return [filterKey, { ...filter, filterValues }];
-        })
-      )
-    );
-  }, [options]);
+  const [options, setOptions] = useState<{
+    [filterKey: string]: TableFilter[keyof TableFilter]['filterValues'];
+  }>({});
 
   useEffect(() => {
     setFilters((prevFilters) =>
@@ -197,6 +168,85 @@ const useFiltering = (
       });
     });
   }, [data, selectedFilters]);
+
+  useEffect(() => {
+    setFilters((prevFilters) =>
+      Object.fromEntries(
+        Object.entries(prevFilters).map(([filterKey, filter]) => {
+          const savedFilterValues = options?.[filterKey];
+          const filterValues = filter.filterValues || {};
+
+          Object.entries(filterValues).forEach(
+            ([filterValue, filterValueData]) => {
+              filterValues[filterValue] = {
+                ...filterValueData,
+                selected: false,
+              };
+            }
+          );
+
+          if (!Object.keys(savedFilterValues || {}).length) {
+            return [filterKey, { ...filter, filterValues }];
+          }
+
+          Object.entries(savedFilterValues || {}).forEach(
+            ([filterValue, filterValueData]) => {
+              if (!filterValues?.[filterValue]) {
+                filterValues[filterValue] = {
+                  selected: false,
+                };
+              }
+
+              filterValues[filterValue] = {
+                ...filterValueData,
+              };
+            }
+          );
+
+          return [filterKey, { ...filter, filterValues }];
+        })
+      )
+    );
+  }, [options]);
+
+  useEffect(() => {
+    if (tablePersistentSettingsKey) {
+      (async () => {
+        const _data = await extractStorage(
+          tablePersistentSettingsKey,
+          window.location.protocol === 'chrome-extension:'
+        );
+
+        if (_data?.selectedFilters) {
+          setOptions(_data.selectedFilters);
+        }
+      })();
+    }
+
+    return () => {
+      setOptions({});
+    };
+  }, [tablePersistentSettingsKey]);
+
+  useEffect(() => {
+    const _selectedFilters = Object.entries(filters || {}).reduce(
+      (acc, [filterKey, { filterValues }]) => {
+        acc[filterKey] = { ...filterValues };
+        return acc;
+      },
+      {} as { [key: string]: TableFilter[keyof TableFilter]['filterValues'] }
+    );
+
+    if (tablePersistentSettingsKey) {
+      updateStorage(
+        tablePersistentSettingsKey,
+        window.location.protocol === 'chrome-extension:',
+        {
+          selectedFilters: _selectedFilters,
+        }
+      );
+    }
+  }, [filters, tablePersistentSettingsKey]);
 
   return {
     filters,

@@ -34,7 +34,11 @@ import type { TechnologyData } from '@ps-analysis-tool/common';
  */
 import { useContentStore } from '../../stateProviders/contentStore';
 
-const Technologies = () => {
+interface TechnologiesProps {
+  selectedSite: string | null;
+}
+
+const Technologies = ({ selectedSite }: TechnologiesProps) => {
   const data = useContentStore(({ state }) => state.technologies || []);
 
   const [selectedRow, setSelectedRow] = useState<TechnologyData>();
@@ -78,12 +82,20 @@ const Technologies = () => {
 
   const searchKeys = useMemo<string[]>(() => ['name', 'website'], []);
 
+  const tablePersistentSettingsKey = useMemo<string>(() => {
+    if (selectedSite) {
+      return `technologyListing#${selectedSite}`;
+    }
+
+    return 'technologyListing';
+  }, [selectedSite]);
+
   const table = useTable({
     data,
     tableColumns,
     tableFilterData: filters,
     tableSearchKeys: searchKeys,
-    tablePersistentSettingsKey: 'technologyListing',
+    tablePersistentSettingsKey,
   });
 
   return (

@@ -148,6 +148,7 @@ const SiteMapReport = ({
                 cookies={siteFilteredCookies}
                 technologies={siteFilteredTechnologies}
                 completeJson={completeJson}
+                selectedSite={site}
               />
             ),
             children: {},
