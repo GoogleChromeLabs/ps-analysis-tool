@@ -21,11 +21,13 @@ import { LandingPage } from '@ps-analysis-tool/design-system';
 
 const SiteBoundaries = () => {
   return (
-    <LandingPage
-      title="Site Boundaries"
-      iframeSrc="https://privacysandbox.info/en/privacy-sandbox/strengthen-privacy-boundaries"
-      extraClasses="h-[78vh] w-full"
-    />
+    <div data-testid="site-boundaries-content" className="h-full w-full">
+      <LandingPage
+        title="Site Boundaries"
+        iframeSrc="https://privacysandbox.info/en/privacy-sandbox/strengthen-privacy-boundaries"
+        extraClasses="h-[78vh] w-full"
+      />
+    </div>
   );
 };
 
