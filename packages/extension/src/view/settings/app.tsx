@@ -32,13 +32,11 @@ const App: React.FC = () => {
 
   return (
     <div className="w-full h-full flex items-center justify-center flex-col p-3 gap-3">
-      <header className="w-full h-full flex flex-col">
-        <TabHeader
-          tabs={TABS.map((tab) => tab.display_name)}
-          setSelectedTabIndex={setSelectedTabIndex}
-          selectedTabIndex={selectedTabIndex}
-        />
-      </header>
+      <TabHeader
+        tabs={TABS.map((tab) => tab.display_name)}
+        setSelectedTabIndex={setSelectedTabIndex}
+        selectedTabIndex={selectedTabIndex}
+      />
       <main className="w-full h-full flex flex-col gap-1">
         <TabContent />
       </main>

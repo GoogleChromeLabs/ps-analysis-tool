@@ -24,7 +24,7 @@ import React from 'react';
  */
 import AllowedNumberOfTabs from './allowedNumberOfTabs';
 
-const Settings: React.FC = () => {
+const Settings = () => {
   return (
     <div className="w-full h-full flex flex-col gap-5">
       <AllowedNumberOfTabs />

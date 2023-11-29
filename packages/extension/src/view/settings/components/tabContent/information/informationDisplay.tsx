@@ -13,23 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
- * Internal dependencies.
+ * External dependencies.
  */
-import Information from './components/tabContent/information';
-import Settings from './components/tabContent/settings';
+import React from 'react';
 
-const TABS = [
-  {
-    display_name: 'Settings',
-    id: 'settings',
-    component: Settings,
-  },
-  {
-    display_name: 'Information',
-    id: 'information',
-    component: Information,
-  },
-];
+interface InformationDisplayProps {
+  information: string;
+}
 
-export default TABS;
+const InformationDisplay = ({ information }: InformationDisplayProps) => {
+  return <div className="w-full h-full flex flex-col gap-5">{information}</div>;
+};
+
+export default InformationDisplay;

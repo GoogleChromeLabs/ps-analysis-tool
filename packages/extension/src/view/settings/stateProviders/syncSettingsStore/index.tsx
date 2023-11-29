@@ -28,6 +28,19 @@ import { noop } from '@ps-analysis-tool/design-system';
 export interface SettingStoreContext {
   state: {
     allowedNumberOfTabs: string | null;
+    currentTabs:
+      | {
+          tabTitle: string;
+          tabURL: string;
+        }[]
+      | null;
+    currentExtensions:
+      | {
+          extensionName: string;
+          extensionId: string;
+        }[]
+      | null;
+    browserInformation: string | null;
   };
   actions: {
     setSettingsInStorage: (key: string, value: string) => void;
@@ -37,6 +50,9 @@ export interface SettingStoreContext {
 const initialState: SettingStoreContext = {
   state: {
     allowedNumberOfTabs: null,
+    currentTabs: null,
+    currentExtensions: null,
+    browserInformation: null,
   },
   actions: {
     setSettingsInStorage: noop,
@@ -49,11 +65,50 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [allowedNumberOfTabs, setAllowedNumberOfTabs] = useState<string | null>(
     null
   );
+  const [currentTabs, setCurrentTabs] = useState<
+    SettingStoreContext['state']['currentTabs'] | null
+  >(null);
+  const [browserInformation, setBrowserInformation] = useState<string | null>(
+    null
+  );
+  const [currentExtensions, setCurrentExtensions] = useState<
+    SettingStoreContext['state']['currentExtensions'] | null
+  >(null);
 
   const intitialSync = useCallback(async () => {
     const currentSettings = await chrome.storage.sync.get();
 
     setAllowedNumberOfTabs(currentSettings?.allowedNumberOfTabs);
+
+    chrome.tabs.query({}, (tabs) => {
+      const tabsJSON = [];
+      for (let i = 0; i < tabs.length; i++) {
+        tabsJSON.push({
+          tabTitle: tabs[i].title ?? '',
+          tabURL: tabs[i].url ?? '',
+        });
+      }
+      setCurrentTabs(tabsJSON);
+    });
+
+    chrome.management.getAll((extensions) => {
+      const extensionJSON = [];
+      // Iterate over the extensions
+      for (let i = 0; i < extensions.length; i++) {
+        extensionJSON.push({
+          extensionName: extensions[i].name,
+          extensionId: extensions[i].id,
+        });
+      }
+      setCurrentExtensions(extensionJSON);
+    });
+
+    if (navigator.userAgent) {
+      const browserInfo = /Chrome\/([0-9.]+)/.exec(navigator.userAgent);
+      if (browserInfo) {
+        setBrowserInformation(browserInfo[1]);
+      }
+    }
   }, []);
 
   const setSettingsInStorage = useCallback(
@@ -109,6 +164,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
       value={{
         state: {
           allowedNumberOfTabs,
+          currentTabs,
+          currentExtensions,
+          browserInformation,
         },
         actions: {
           setSettingsInStorage,
