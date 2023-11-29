@@ -37,7 +37,7 @@ export default function parseResponseReceivedExtraInfo(
   response: NetworkResponseReceivedExtraInfo,
   cookieDB?: CookieDatabase
 ) {
-  return response.headers['set-cookie']
+  return response.headers['Set-Cookie']
     ?.split('\n')
     .map((headerLine: string) => {
       const parsedCookie = parse(headerLine);
@@ -57,7 +57,9 @@ export default function parseResponseReceivedExtraInfo(
             : 'Session',
           samesite: parsedCookie.samesite ?? 'lax',
         },
-        partitionKey: response?.cookiePartitionKey,
+        partitionKey: headerLine.toLowerCase().includes('partitioned')
+          ? response?.cookiePartitionKey
+          : undefined,
         analytics: cookieDB
           ? findAnalyticsMatch(parsedCookie.name, cookieDB)
           : null,

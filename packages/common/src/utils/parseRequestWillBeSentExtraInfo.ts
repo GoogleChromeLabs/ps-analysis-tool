@@ -40,7 +40,6 @@ export default function parseRequestWillBeSentExtraInfo(
           : 'Session',
         samesite: cookie.sameSite ?? 'lax',
       },
-      partitionKey: cookie?.partitionKey,
       blockedReasons,
       analytics: cookieDB ? findAnalyticsMatch(cookie.name, cookieDB) : null,
       url: request.headers['url'],

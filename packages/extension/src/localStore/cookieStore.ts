@@ -44,35 +44,62 @@ const CookieStore = {
         }
         let cookieKey = getCookieKey(cookie.parsedCookie);
         cookieKey = cookieKey?.trim();
-
         if (_updatedCookies?.[cookieKey]) {
           _updatedCookies[cookieKey] = {
             ...cookie,
+            ..._updatedCookies[cookieKey],
             parsedCookie: {
               ...cookie.parsedCookie,
               ..._updatedCookies[cookieKey].parsedCookie,
             },
-            isBlocked: !cookie?.isBlocked
-              ? _updatedCookies[cookieKey].isBlocked
-              : cookie?.isBlocked,
             blockedReasons:
-              _updatedCookies[cookieKey].blockedReasons ??
-              cookie?.blockedReasons,
+              cookie.blockedReasons ??
+              _updatedCookies[cookieKey].blockedReasons,
             headerType:
               _updatedCookies[cookieKey].headerType === 'javascript'
                 ? _updatedCookies[cookieKey].headerType
                 : cookie.headerType,
             frameIdList: Array.from(
               new Set<number>([
-                ...cookie.frameIdList,
-                ..._updatedCookies[cookieKey].frameIdList,
+                ...(cookie.frameIdList ?? []),
+                ...(_updatedCookies[cookieKey].frameIdList ?? []),
               ])
             ),
-            partitionKey:
-              _updatedCookies[cookieKey].partitionKey ?? cookie?.partitionKey,
           };
         } else {
           _updatedCookies[cookieKey] = cookie;
+        }
+
+        if (domain.startsWith('.')) {
+          if (
+            !_updatedCookies[name + domain.slice(1) + path]?.parsedCookie &&
+            _updatedCookies[name + domain + path].parsedCookie
+          ) {
+            delete _updatedCookies[name + domain.slice(1) + path];
+          } else if (
+            _updatedCookies[name + domain.slice(1) + path]?.parsedCookie &&
+            !_updatedCookies[name + domain + path].parsedCookie
+          ) {
+            delete _updatedCookies[name + domain + path];
+          } else {
+            delete _updatedCookies[name + domain.slice(1) + path];
+            delete _updatedCookies[name + domain + path];
+          }
+        } else {
+          if (
+            !_updatedCookies[name + '.' + domain + path]?.parsedCookie &&
+            _updatedCookies[name + domain + path].parsedCookie
+          ) {
+            delete _updatedCookies[name + '.' + domain + path];
+          } else if (
+            _updatedCookies[name + '.' + domain + path]?.parsedCookie &&
+            !_updatedCookies[name + domain + path].parsedCookie
+          ) {
+            delete _updatedCookies[name + domain + path];
+          } else {
+            delete _updatedCookies[name + domain + path];
+            delete _updatedCookies[name + '.' + domain + path];
+          }
         }
       }
 
@@ -102,29 +129,61 @@ const CookieStore = {
   /**
    * Deletes a cookie
    * @param {string} cookieName Name of the cookie.
+   * @param {string} alternateCookieName Alternate name of the cookie.
    * @param {string[]} reasons reasons to be added to the blocked reason array.
+   * @param {string} tabId tabId where change has to be made.
    */
-  async addCookieExclusionWarningReason(cookieName: string, reasons: string[]) {
+  async addCookieExclusionWarningReason(
+    cookieName: string,
+    alternateCookieName: string,
+    reasons: string[],
+    tabId: string
+  ) {
     const storage = await chrome.storage.local.get();
+    if (!storage[tabId]) {
+      return;
+    }
 
-    Object.values(storage).forEach((tabData) => {
-      if (tabData.cookies && tabData.cookies[cookieName]) {
-        tabData.cookies[cookieName].blockedReasons = [
-          ...new Set([
-            ...(tabData.cookies[cookieName]?.blockedReasons ?? []),
-            ...reasons,
-          ]),
-        ];
-      } else {
-        tabData = {
-          ...(tabData?.cookies ?? {}),
-          cookies: {
+    if (
+      storage[tabId].cookies &&
+      storage[tabId].cookies[cookieName] &&
+      !storage[tabId].cookies[alternateCookieName]
+    ) {
+      storage[tabId].cookies[cookieName].blockedReasons = [
+        ...new Set([
+          ...(storage[tabId].cookies[cookieName].blockedReasons ?? []),
+          ...reasons,
+        ]),
+      ];
+      storage[tabId].cookies[cookieName].isBlocked = true;
+    } else if (
+      storage[tabId].cookies &&
+      !storage[tabId].cookies[cookieName] &&
+      storage[tabId].cookies[alternateCookieName]
+    ) {
+      storage[tabId].cookies[alternateCookieName].blockedReasons = [
+        ...new Set([
+          ...(storage[tabId].cookies[alternateCookieName].blockedReasons ?? []),
+          ...reasons,
+        ]),
+      ];
+      storage[tabId].cookies[alternateCookieName].isBlocked = true;
+    } else {
+      storage[tabId] = {
+        ...storage[tabId],
+        cookies: {
+          ...storage[tabId].cookies,
+          [alternateCookieName]: {
             blockedReasons: [...reasons],
+            isBlocked: true,
           },
-        };
-      }
-    });
-
+          [cookieName]: {
+            blockedReasons: [...reasons],
+            isBlocked: true,
+          },
+        },
+      };
+    }
     await chrome.storage.local.set(storage);
   },
 

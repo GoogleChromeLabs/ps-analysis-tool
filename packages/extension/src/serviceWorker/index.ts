@@ -291,7 +291,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       await chrome.storage.sync.clear();
       await chrome.storage.sync.set({
         allowedNumberOfTabs: 'single',
-        isUsingCDP: false,
+        isUsingCDP: true,
       });
     }
     if (details.reason === 'update') {
@@ -302,7 +302,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       await chrome.storage.sync.clear();
       await chrome.storage.sync.set({
         allowedNumberOfTabs: 'single',
-        isUsingCDP: false,
+        isUsingCDP: true,
       });
     }
   });
@@ -360,7 +360,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         syncStorage.allowedNumberOfTabs &&
         syncStorage.allowedNumberOfTabs === 'unlimited'
       ) {
-        if (responseParams.headers['set-cookie']) {
+        if (responseParams.headers['Set-Cookie']) {
           const allCookies = parseResponseReceivedExtraInfo(
             responseParams,
             cookieDB
@@ -373,12 +373,11 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         syncStorage.allowedNumberOfTabs !== 'unlimited' &&
         localStorage.tabToRead === tabId
       ) {
-        if (responseParams.headers['set-cookie']) {
+        if (responseParams.headers['Set-Cookie']) {
           const allCookies = parseResponseReceivedExtraInfo(
             responseParams,
             cookieDB
           );
-
           await CookieStore.update(tabId, allCookies);
         }
       }
@@ -404,9 +403,17 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       ) {
         const { cookie, cookieExclusionReasons, cookieWarningReasons } =
           details.cookieIssueDetails;
+        const primaryDomain = cookie.domain.startsWith('.')
+          ? cookie.domain
+          : '.' + cookie.domain;
+        const secondaryDomain = cookie.domain.startsWith('.')
+          ? cookie.domain.slice(1)
+          : cookie.domain;
         await CookieStore.addCookieExclusionWarningReason(
-          cookie.name + cookie.domain + cookie.path,
-          [...cookieExclusionReasons, ...cookieWarningReasons]
+          cookie.name + primaryDomain + cookie.path,
+          cookie.name + secondaryDomain + cookie.path,
+          [...cookieExclusionReasons, ...cookieWarningReasons],
+          source?.tabId.toString()
         );
       } else if (
         syncStorage.allowedNumberOfTabs &&
@@ -415,9 +422,17 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       ) {
         const { cookie, cookieExclusionReasons, cookieWarningReasons } =
           details.cookieIssueDetails;
+        const primaryDomain = cookie.domain.startsWith('.')
+          ? cookie.domain
+          : '.' + cookie.domain;
+        const secondaryDomain = cookie.domain.startsWith('.')
+          ? cookie.domain.slice(1)
+          : cookie.domain;
         await CookieStore.addCookieExclusionWarningReason(
-          cookie.name + cookie.domain + cookie.path,
-          [...cookieExclusionReasons, ...cookieWarningReasons]
+          cookie.name + primaryDomain + cookie.path,
+          cookie.name + secondaryDomain + cookie.path,
+          [...cookieExclusionReasons, ...cookieWarningReasons],
+          source?.tabId.toString()
         );
       }
     }

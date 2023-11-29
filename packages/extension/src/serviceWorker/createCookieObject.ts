@@ -126,7 +126,7 @@ function parseAttributeValues(
 
   if (type === 'domain') {
     if (url) {
-      value = value || '.' + getDomain(url);
+      value = value || getDomain(url);
     } else {
       value = value || '';
     }
