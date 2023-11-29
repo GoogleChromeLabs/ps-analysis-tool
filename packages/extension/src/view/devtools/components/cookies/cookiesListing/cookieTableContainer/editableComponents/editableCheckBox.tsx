@@ -119,7 +119,7 @@ const EditableCheckBoxInput = ({
           onChange={(e) => setLocalValue(e.target.checked)}
         />
       ) : (
-        <p>{info ? <span className="font-serif">✓</span> : ''}</p>
+        <span className="font-serif">{info ? '✓' : ''}</span>
       )}
     </div>
   );
