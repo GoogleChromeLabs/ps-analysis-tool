@@ -139,7 +139,7 @@ export const reportDownloader = (
           sameSite: unSanitisedCookie.sameSite,
           platform: unSanitisedCookie.platform,
           category: unSanitisedCookie.category,
-          isCookieSet: !unSanitisedCookie.isBlocked,
+          isBlocked: unSanitisedCookie.isBlocked,
           gdprPortal: unSanitisedCookie?.GDPR || 'NA',
         };
 
@@ -163,7 +163,7 @@ export const reportDownloader = (
       totalCookiesCount + report.cookieData[frameName].cookiesCount;
   });
 
-  Object.keys(cookiesSet).map((cookieName: string) => {
+  Object.keys(cookiesSet).forEach((cookieName: string) => {
     const cookie = cookiesSet[cookieName];
     cookieDataValues =
       cookieDataValues + Object.values(cookie).join(',') + '\r\n';
@@ -193,7 +193,7 @@ export const reportDownloader = (
     return cookieName;
   });
 
-  Object.keys(affectedCookiesSet).map((cookieName) => {
+  Object.keys(affectedCookiesSet).forEach((cookieName) => {
     const cookie = affectedCookiesSet[cookieName];
 
     affectedCookiesCount = affectedCookiesCount + 1;
@@ -214,6 +214,7 @@ export const reportDownloader = (
       default:
         break;
     }
+
     affectedCookiesDataValues =
       affectedCookiesDataValues + Object.values(cookie).join(',') + '\r\n';
     return cookieName;
