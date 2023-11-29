@@ -127,7 +127,7 @@ const EditableTextInput = ({
   useEffect(() => {
     setLocalValue(info as string);
     setEditing(false);
-  }, [info]);
+  }, [info, cookieKey]);
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
