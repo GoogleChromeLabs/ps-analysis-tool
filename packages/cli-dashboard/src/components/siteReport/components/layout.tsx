@@ -37,7 +37,7 @@ const Layout = ({ selectedSite }: LayoutProps) => {
       ...new Set(
         Object.values(state.tabCookies)
           .reduce((acc, cookie) => {
-            acc.push(...(cookie.frameUrl as string[]));
+            acc.push(...(cookie.frameUrls as string[]));
 
             return acc;
           }, [] as string[])

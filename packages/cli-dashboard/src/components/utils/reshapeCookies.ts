@@ -34,8 +34,8 @@ const reshapeCookies = (cookies: CookieFrameStorageType) =>
     .reduce((acc, cookieObj) => {
       Object.keys(cookieObj).forEach((key) => {
         if (acc[key]) {
-          (acc[key].frameUrl as string[]).push(
-            ...(cookieObj[key].frameUrl as string[])
+          (acc[key].frameUrls as string[]).push(
+            ...(cookieObj[key].frameUrls as string[])
           );
         } else {
           acc[key] = cookieObj[key];
@@ -78,7 +78,7 @@ const createCookieObj = (
         isFirstParty: cookie.isFirstParty,
         frameIdList: [],
         isCookieSet: !cookie.isBlocked,
-        frameUrl: [frame],
+        frameUrls: [frame],
       } as CookieTableData,
     ])
   );

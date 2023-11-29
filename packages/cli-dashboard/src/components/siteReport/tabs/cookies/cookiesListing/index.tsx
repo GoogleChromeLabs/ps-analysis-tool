@@ -35,7 +35,7 @@ interface CookiesListingProps {
 const CookiesListing = ({ selectedFrameUrl }: CookiesListingProps) => {
   const { tabCookies } = useContentStore(({ state }) => ({
     tabCookies: Object.values(state.tabCookies).filter((cookie) =>
-      (cookie.frameUrl as string[]).includes(selectedFrameUrl)
+      (cookie.frameUrls as string[]).includes(selectedFrameUrl)
     ),
   }));
 

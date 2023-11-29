@@ -38,7 +38,7 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
   const tabFrames = useMemo<TabFrames>(
     () =>
       Object.values(tabCookies).reduce((acc, cookie) => {
-        (cookie.frameUrl as string[]).forEach((url) => {
+        (cookie.frameUrls as string[]).forEach((url) => {
           if (url?.includes('http') || url === UNKNOWN_FRAME_KEY) {
             acc[url] = {} as TabFrames[string];
           }
