@@ -43,9 +43,7 @@ const BodyCell = ({
       className={`box-border outline-0 px-1 py-px truncate h-5 text-xs ${
         isHighlighted
           ? `${
-              isRowFocused
-                ? 'dark:text-white'
-                : 'dark:text-dirty-red text-dirty-red'
+              isRowFocused ? 'text-white' : 'dark:text-dirty-red text-dirty-red'
             }`
           : 'dark:text-bright-gray'
       } cursor-default flex-1`}
