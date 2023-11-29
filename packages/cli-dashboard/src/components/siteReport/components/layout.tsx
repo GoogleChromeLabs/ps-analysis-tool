@@ -36,7 +36,11 @@ const Layout = ({ selectedSite }: LayoutProps) => {
     frameUrls: [
       ...new Set(
         Object.values(state.tabCookies)
-          .map((cookie) => cookie.frameUrl)
+          .reduce((acc, cookie) => {
+            acc.push(...(cookie.frameUrl as string[]));
+
+            return acc;
+          }, [] as string[])
           .filter(
             (url) => url?.includes('http') || url === UNKNOWN_FRAME_KEY
           ) as string[]

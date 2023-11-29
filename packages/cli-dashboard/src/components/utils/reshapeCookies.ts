@@ -32,10 +32,17 @@ const reshapeCookies = (cookies: CookieFrameStorageType) =>
     .filter(([frame]) => frame.includes('http') || frame === UNKNOWN_FRAME_KEY)
     .map(([frame, _cookies]) => createCookieObj(frame, _cookies))
     .reduce((acc, cookieObj) => {
-      return {
-        ...acc,
-        ...cookieObj,
-      };
+      Object.keys(cookieObj).forEach((key) => {
+        if (acc[key]) {
+          (acc[key].frameUrl as string[]).push(
+            ...(cookieObj[key].frameUrl as string[])
+          );
+        } else {
+          acc[key] = cookieObj[key];
+        }
+      });
+
+      return acc;
     }, {});
 
 const createCookieObj = (
@@ -71,7 +78,7 @@ const createCookieObj = (
         isFirstParty: cookie.isFirstParty,
         frameIdList: [],
         isCookieSet: !cookie.isBlocked,
-        frameUrl: frame,
+        frameUrl: [frame],
       } as CookieTableData,
     ])
   );
