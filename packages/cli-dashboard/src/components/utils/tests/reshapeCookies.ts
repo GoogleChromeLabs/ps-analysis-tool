@@ -68,7 +68,7 @@ describe('reshapeCookies', () => {
         },
         isFirstParty: true,
         url: 'https://www.cnn.com/index.html',
-        frameUrl: 'https://edition.cnn.com',
+        frameUrl: ['https://edition.cnn.com'],
         frameIdList: [],
         isCookieSet: true,
         headerType: 'response',
