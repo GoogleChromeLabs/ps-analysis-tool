@@ -64,6 +64,7 @@ export type CookieTableData = CookieData & {
   isCookieBlocked: boolean | null;
   frameUrl?: string;
   highlighted?: boolean;
+  blockedReasons: string[];
 };
 
 export type TechnologyData = {

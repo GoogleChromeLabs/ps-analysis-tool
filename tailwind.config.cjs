@@ -98,6 +98,10 @@ module.exports = {
     backgroundColor: {
       ...colors,
       primary: '#FFF',
+      'flagged-row-odd-dark': '#5e5108',
+      'flagged-row-even-dark': '#796700',
+      'flagged-row-odd-light': '#f7eaa1',
+      'flagged-row-even-light': '#fff09b',
       secondary: '#E5E7EB',
       tertiary: '#CBD5E1',
       'royal-blue': '#3871E0',

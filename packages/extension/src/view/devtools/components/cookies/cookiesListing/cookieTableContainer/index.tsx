@@ -128,27 +128,9 @@ const CookieTableContainer = ({
         ),
       },
       {
-        header: 'Cookie Blocked',
-        accessorKey: 'isCookieBlocked',
-        cell: (info: InfoType) => (
-          <p className="flex justify-center items-center">
-            {info ? (
-              <span className="font-serif">✓</span>
-            ) : (
-              <span className="font-serif">✗</span>
-            )}
-          </p>
-        ),
-      },
-      {
         header: 'Partition Key',
         accessorKey: 'partitionKey',
         cell: (info: InfoType) => info,
-      },
-      {
-        header: 'Blocked Reasons',
-        accessorKey: 'blockedReasons',
-        cell: (info: InfoType) => (info as string[])?.join(', '),
       },
       {
         header: 'Priority',

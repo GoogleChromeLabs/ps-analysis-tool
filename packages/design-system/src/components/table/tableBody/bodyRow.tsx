@@ -49,17 +49,25 @@ const BodyRow = ({
   onKeyDown,
 }: BodyRowProps) => {
   const cookieKey = getRowObjectKey(row);
-
+  const isBlocked = row?.originalData?.isBlocked;
   const tableRowClassName = classNames(
     'outline-0 flex divide-x divide-american-silver dark:divide-quartz',
+    isBlocked
+      ? index % 2
+        ? 'dark:bg-flagged-row-even-dark bg-flagged-row-even-light'
+        : 'dark:bg-flagged-row-odd-dark bg-flagged-row-odd-light'
+      : '',
     {
-      'bg-burnt-sienna-30': (row.originalData as CookieTableData)?.highlighted,
+      'bg-burnt-sienna-30':
+        (row.originalData as CookieTableData)?.highlighted && !isBlocked,
     },
     cookieKey !== selectedKey &&
+      !isBlocked &&
       (index % 2
         ? 'bg-anti-flash-white dark:bg-charleston-green'
         : 'bg-white dark:bg-raisin-black'),
     cookieKey === selectedKey &&
+      !isBlocked &&
       (isRowFocused
         ? 'bg-gainsboro dark:bg-outer-space'
         : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver')
