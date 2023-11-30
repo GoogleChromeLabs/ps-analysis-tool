@@ -37,6 +37,7 @@ import mockResponse, {
   known1pCookie,
   known3pCookieWithValue,
 } from '../../../../../utils/test-data/cookieMockData';
+import { noop } from '@ps-analysis-tool/common';
 
 jest.mock('../../../stateProviders/syncCookieStore', () => {
   return {
@@ -49,30 +50,6 @@ jest.mock('../../../stateProviders/syncCookieStore', () => {
         allowedNumberOfTabs: 'single',
         loading: false,
         tabCookies: Object.values(mockResponse.tabCookies),
-      };
-    },
-  };
-});
-
-jest.mock('../../../stateProviders/filterManagementStore', () => {
-  return {
-    useFilterManagementStore: () => {
-      return {
-        selectedFilters: {},
-        filters: [],
-        filteredCookies: Object.values(mockResponse.tabCookies),
-      };
-    },
-  };
-});
-jest.mock('../../../stateProviders/preferenceStore', () => {
-  return {
-    usePreferenceStore: () => {
-      return {
-        columnSorting: [],
-        columnSizing: {},
-        selectedColumns: {},
-        updatePreference: () => undefined,
       };
     },
   };
@@ -91,7 +68,7 @@ describe('CookieTab', () => {
   });
 
   it('should render a list of cookies with analytics', async () => {
-    render(<CookieTab />);
+    render(<CookieTab setFilteredCookies={noop} />);
 
     expect((await screen.findAllByTestId('body-row')).length).toBe(4);
 
@@ -100,7 +77,7 @@ describe('CookieTab', () => {
   });
 
   it('should sort cookies by name', async () => {
-    render(<CookieTab />);
+    render(<CookieTab setFilteredCookies={noop} />);
 
     const headerCell = (await screen.findAllByTestId('header-cell'))[0];
     fireEvent.mouseEnter(headerCell);
@@ -156,7 +133,7 @@ describe('CookieTab', () => {
   });
 
   it('should open column menu when right click on header cell', async () => {
-    render(<CookieTab />);
+    render(<CookieTab setFilteredCookies={noop} />);
 
     const headerCell = (await screen.findAllByTestId('header-cell'))[0];
     fireEvent.contextMenu(headerCell);
@@ -173,7 +150,7 @@ describe('CookieTab', () => {
   });
 
   it('should remove one columne when click on column menu list item', async () => {
-    render(<CookieTab />);
+    render(<CookieTab setFilteredCookies={noop} />);
 
     const headerCell = (await screen.findAllByTestId('header-cell'))[0];
     fireEvent.contextMenu(headerCell);
@@ -187,7 +164,7 @@ describe('CookieTab', () => {
   });
 
   it('should columnMenu close when click on outside', async () => {
-    render(<CookieTab />);
+    render(<CookieTab setFilteredCookies={noop} />);
 
     const headerCell = (await screen.findAllByTestId('header-cell'))[0];
     fireEvent.contextMenu(headerCell);
@@ -280,7 +257,7 @@ describe('CookieTab', () => {
   });
 
   it('should get the cookie object when row is clicked or Arrow up/down pressed', async () => {
-    render(<CookieTab />);
+    render(<CookieTab setFilteredCookies={noop} />);
 
     const row = await screen.findAllByTestId('body-row');
     fireEvent.click(row[0]);
