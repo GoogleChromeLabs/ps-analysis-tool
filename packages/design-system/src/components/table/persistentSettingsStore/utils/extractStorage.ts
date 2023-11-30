@@ -17,12 +17,12 @@
 /**
  * Internal dependencies
  */
-import { PersistentStorageData } from '..';
+import { TablePersistentSettingsStoreContext } from '..';
 
 const extractStorage = async (
   persistenceKey: string,
   isChromeExtension: boolean
-): Promise<PersistentStorageData> => {
+): Promise<TablePersistentSettingsStoreContext['state']> => {
   const options = isChromeExtension
     ? extractChromeStorage(persistenceKey)
     : await extractLocalStorage(persistenceKey);
@@ -30,17 +30,19 @@ const extractStorage = async (
   return options;
 };
 
-const extractLocalStorage = (persistenceKey: string): PersistentStorageData => {
+const extractLocalStorage = (
+  persistenceKey: string
+): TablePersistentSettingsStoreContext['state'] => {
   const data = localStorage.getItem(persistenceKey);
   if (data) {
     return JSON.parse(data);
   }
-  return {} as PersistentStorageData;
+  return {} as TablePersistentSettingsStoreContext['state'];
 };
 
 const extractChromeStorage = async (
   persistenceKey: string
-): Promise<PersistentStorageData> => {
+): Promise<TablePersistentSettingsStoreContext['state']> => {
   const tabId = chrome.devtools.inspectedWindow.tabId.toString();
 
   const data = await chrome.storage.local.get(tabId);
@@ -51,7 +53,7 @@ const extractChromeStorage = async (
       return persistenceData;
     }
   }
-  return {} as PersistentStorageData;
+  return {} as TablePersistentSettingsStoreContext['state'];
 };
 
 export default extractStorage;

@@ -22,9 +22,9 @@ import { useEffect, useMemo, useState } from 'react';
 /**
  * Internal dependencies.
  */
-import { TableData } from '..';
+import { PersistentStorageData, TableData } from '..';
 import getValueByKey from '../../utils/getValueByKey';
-import { extractStorage, updateStorage } from '../utils';
+import { useTablePersistentSettingsStore } from '../../persistentSettingsStore';
 
 export type TableSearchOutput = {
   searchValue: string;
@@ -57,35 +57,35 @@ const useSearch = (
     }, []);
   }, [data, searchKeys, searchValue]);
 
+  const { getPreferences, setPreferences } = useTablePersistentSettingsStore(
+    ({ actions }) => ({
+      getPreferences: actions.getPreferences,
+      setPreferences: actions.setPreferences,
+    })
+  );
+
   useEffect(() => {
     if (tablePersistentSettingsKey) {
-      (async () => {
-        const _data =
-          (await extractStorage(
-            tablePersistentSettingsKey,
-            window.location.protocol === 'chrome-extension:'
-          )) || {};
+      const _data = getPreferences(tablePersistentSettingsKey, 'searchValue');
 
-        setSearchValue(_data.searchValue || '');
-      })();
+      setSearchValue((_data as PersistentStorageData['searchValue']) || '');
     }
 
     return () => {
       setSearchValue('');
     };
-  }, [tablePersistentSettingsKey]);
+  }, [getPreferences, tablePersistentSettingsKey]);
 
   useEffect(() => {
     if (tablePersistentSettingsKey) {
-      updateStorage(
-        tablePersistentSettingsKey,
-        window.location.protocol === 'chrome-extension:',
+      setPreferences(
         {
           searchValue,
-        }
+        },
+        tablePersistentSettingsKey
       );
     }
-  }, [searchValue, tablePersistentSettingsKey]);
+  }, [searchValue, setPreferences, tablePersistentSettingsKey]);
 
   return {
     searchValue,

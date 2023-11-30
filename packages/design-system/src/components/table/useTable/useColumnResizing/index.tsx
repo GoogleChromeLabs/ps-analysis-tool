@@ -22,8 +22,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 /**
  * Internal dependencies.
  */
-import type { TableColumn } from '..';
-import { extractStorage, updateStorage } from '../utils';
+import type { PersistentStorageData, TableColumn } from '..';
+import { useTablePersistentSettingsStore } from '../../persistentSettingsStore';
 
 export type ColumnResizingOutput = {
   columns: TableColumn[];
@@ -197,25 +197,30 @@ const useColumnResizing = (
     return () => resizer.disconnect();
   }, [setColumnsCallback]);
 
+  const { getPreferences, setPreferences } = useTablePersistentSettingsStore(
+    ({ actions }) => ({
+      getPreferences: actions.getPreferences,
+      setPreferences: actions.setPreferences,
+    })
+  );
+
   useEffect(() => {
     if (tablePersistentSettingsKey) {
-      (async () => {
-        const data = await extractStorage(
-          tablePersistentSettingsKey,
-          window.location.protocol === 'chrome-extension:'
-        );
+      const data = getPreferences(tablePersistentSettingsKey, 'columnsSizing');
 
-        if (data?.columnsSizing) {
-          columnsSizingRef.current = data.columnsSizing;
-          setColumnsCallback(data.columnsSizing);
-        }
-      })();
+      if (data) {
+        columnsSizingRef.current =
+          (data as PersistentStorageData['columnsSizing']) || {};
+        setColumnsCallback(
+          (data as PersistentStorageData['columnsSizing']) || {}
+        );
+      }
     }
 
     return () => {
       setColumns([]);
     };
-  }, [setColumnsCallback, tablePersistentSettingsKey]);
+  }, [getPreferences, setColumnsCallback, tablePersistentSettingsKey]);
 
   useEffect(() => {
     const _columnsSizing = (columns || []).reduce(
@@ -228,15 +233,14 @@ const useColumnResizing = (
     );
 
     if (tablePersistentSettingsKey) {
-      updateStorage(
-        tablePersistentSettingsKey,
-        window.location.protocol === 'chrome-extension:',
+      setPreferences(
         {
           columnsSizing: _columnsSizing,
-        }
+        },
+        tablePersistentSettingsKey
       );
     }
-  }, [columns, tablePersistentSettingsKey]);
+  }, [columns, setPreferences, tablePersistentSettingsKey]);
 
   return {
     columns,
