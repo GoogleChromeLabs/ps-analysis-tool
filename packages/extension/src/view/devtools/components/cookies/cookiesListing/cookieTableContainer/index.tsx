@@ -129,7 +129,7 @@ const CookieTableContainer = ({
       },
       {
         header: 'Partition Key',
-        accessorKey: 'partitionKey',
+        accessorKey: 'parsedCookie.partitionKey',
         cell: (info: InfoType) => info,
       },
       {

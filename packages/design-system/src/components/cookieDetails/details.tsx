@@ -32,7 +32,7 @@ const Details = ({ selectedCookie }: DetailsProps) => {
   const [showUrlDecoded, setShowUrlDecoded] = useState(false);
   let reasons = '';
   {
-    selectedCookie.blockedReasons.map((reason) => {
+    selectedCookie?.blockedReasons?.map((reason) => {
       const cookieExclusionReason =
         cookieIssueDetails.CookieExclusionReason[reason];
       const cookieWarningReason =

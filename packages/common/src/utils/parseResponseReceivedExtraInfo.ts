@@ -56,10 +56,10 @@ export default function parseResponseReceivedExtraInfo(
             ? String(new Date(parsedCookie.expires).toISOString())
             : 'Session',
           samesite: parsedCookie.samesite ?? 'lax',
+          partitionKey: headerLine.toLowerCase().includes('partitioned')
+            ? response?.cookiePartitionKey
+            : undefined,
         },
-        partitionKey: headerLine.toLowerCase().includes('partitioned')
-          ? response?.cookiePartitionKey
-          : undefined,
         analytics: cookieDB
           ? findAnalyticsMatch(parsedCookie.name, cookieDB)
           : null,
