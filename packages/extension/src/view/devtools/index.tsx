@@ -27,9 +27,6 @@ import { ErrorFallback } from '@ps-analysis-tool/design-system';
 import App from './app';
 import { Provider as ExternalStoreProvider } from './stateProviders/syncCookieStore';
 
-import { Provider as FilterManagementProvider } from './stateProviders/filterManagementStore';
-import { Provider as PreferenceStoreProvider } from './stateProviders/preferenceStore';
-
 const isDarkMode = chrome.devtools.panels.themeName === 'dark';
 document.body.classList.add(isDarkMode ? 'dark' : 'light');
 
@@ -39,11 +36,7 @@ if (root) {
   createRoot(root).render(
     <ErrorBoundary fallbackRender={ErrorFallback}>
       <ExternalStoreProvider>
-        <FilterManagementProvider>
-          <PreferenceStoreProvider>
-            <App />
-          </PreferenceStoreProvider>
-        </FilterManagementProvider>
+        <App />
       </ExternalStoreProvider>
     </ErrorBoundary>
   );

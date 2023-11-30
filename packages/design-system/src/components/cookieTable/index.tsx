@@ -17,12 +17,7 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
-import {
-  CookieTableData,
-  PreferenceDataValues,
-  SortingState,
-  getCookieKey,
-} from '@ps-analysis-tool/common';
+import { CookieTableData, getCookieKey } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -35,7 +30,6 @@ import {
   TableRow,
   useTable,
 } from '../table';
-import { noop } from '../../utils';
 
 interface CookieTableProps {
   data: TableData[];
@@ -53,15 +47,7 @@ interface CookieTableProps {
       [frame: string]: CookieTableData | null;
     } | null
   ) => void;
-  updatePreference?: (
-    key: string,
-    updater: (prevStatePreference: {
-      [key: string]: unknown;
-    }) => PreferenceDataValues
-  ) => void;
-  columnSorting?: SortingState[];
-  columnSizing?: Record<string, number>;
-  selectedColumns?: Record<string, boolean>;
+  extraInterfaceToTopBar?: React.ReactNode;
 }
 
 const CookieTable = ({
@@ -74,10 +60,7 @@ const CookieTable = ({
   selectedFrame,
   selectedFrameCookie,
   setSelectedFrameCookie,
-  updatePreference = noop,
-  columnSorting,
-  columnSizing,
-  selectedColumns,
+  extraInterfaceToTopBar,
 }: CookieTableProps) => {
   useEffect(() => {
     if (selectedFrame && selectedFrameCookie) {
@@ -112,20 +95,6 @@ const CookieTable = ({
     tableFilterData: tableFilters,
     tableSearchKeys,
     tablePersistentSettingsKey,
-    options: {
-      columnSizing:
-        columnSizing && Object.keys(columnSizing).length > 0
-          ? columnSizing
-          : undefined,
-      columnSorting:
-        columnSorting && columnSorting.length > 0
-          ? columnSorting[0]
-          : undefined,
-      selectedColumns:
-        selectedColumns && Object.keys(selectedColumns).length > 0
-          ? selectedColumns
-          : undefined,
-    },
   });
 
   useEffect(() => {
@@ -138,7 +107,6 @@ const CookieTable = ({
   return (
     <div className="flex-1 w-full h-full overflow-x-auto text-outer-space-crayola border-x border-american-silver dark:border-quartz">
       <Table
-        updatePreference={updatePreference}
         table={table}
         showTopBar={showTopBar}
         selectedKey={
@@ -148,6 +116,7 @@ const CookieTable = ({
           getCookieKey((row?.originalData as CookieTableData).parsedCookie)
         }
         onRowClick={onRowClick}
+        extraInterfaceToTopBar={extraInterfaceToTopBar}
       />
     </div>
   );

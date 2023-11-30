@@ -19,7 +19,6 @@
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Resizable } from 're-resizable';
-import { PreferenceDataValues } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
@@ -27,7 +26,6 @@ import TableHeader from './tableHeader';
 import TableBody from './tableBody';
 import ColumnMenu from './columnMenu';
 import { TableData, TableOutput, TableRow } from '../useTable';
-import { noop } from '../../../utils';
 import TableTopBar from './tableTopBar';
 import ChipsBar from './filtersSidebar/chips';
 import FiltersSidebar from './filtersSidebar';
@@ -37,14 +35,9 @@ interface TableProps {
   selectedKey: string | undefined | null;
   getRowObjectKey: (row: TableRow) => string;
   onRowClick: (row: TableData | null) => void;
-  updatePreference?: (
-    key: string,
-    updater: (prevStatePreference: {
-      [key: string]: unknown;
-    }) => PreferenceDataValues
-  ) => void;
   showTopBar?: boolean;
   disableFiltering?: boolean;
+  extraInterfaceToTopBar?: React.ReactNode;
 }
 
 const Table = ({
@@ -52,9 +45,9 @@ const Table = ({
   selectedKey,
   getRowObjectKey,
   onRowClick,
-  updatePreference = noop,
   showTopBar = false,
   disableFiltering = false,
+  extraInterfaceToTopBar,
 }: TableProps) => {
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
   const [showFilterSidebar, setShowFilterSidebar] = useState(false);
@@ -107,6 +100,7 @@ const Table = ({
           disableFiltering={disableFiltering}
           setShowFilterSidebar={setShowFilterSidebar}
           cookiesCount={table.rows.length}
+          extraInterface={extraInterfaceToTopBar}
         />
       )}
       <ChipsBar
@@ -134,7 +128,6 @@ const Table = ({
           className="relative h-full w-full overflow-auto"
         >
           <ColumnMenu
-            updatePreference={updatePreference}
             table={table}
             open={showColumnsMenu}
             onClose={setShowColumnsMenu}
@@ -145,7 +138,6 @@ const Table = ({
             ref={tableRef}
           >
             <TableHeader
-              updatePreference={updatePreference}
               table={table}
               setColumnPosition={setColumnPosition}
               onRightClick={handleRightClick}

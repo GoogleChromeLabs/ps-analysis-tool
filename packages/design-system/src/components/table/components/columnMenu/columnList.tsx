@@ -18,7 +18,6 @@
  * External dependencies.
  */
 import React, { useEffect } from 'react';
-import { PreferenceDataValues, noop } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -29,12 +28,6 @@ import { TableOutput } from '../../useTable';
 interface ColumnListProps {
   table: TableOutput;
   toggleVisibility: (key: string) => void;
-  updatePreference: (
-    key: string,
-    updater: (prevStatePreference: {
-      [key: string]: unknown;
-    }) => PreferenceDataValues
-  ) => void;
   handleClose: () => void;
 }
 
@@ -42,7 +35,6 @@ const ColumnList = ({
   table,
   toggleVisibility,
   handleClose,
-  updatePreference = noop,
 }: ColumnListProps) => {
   useEffect(() => {
     return () => {
@@ -53,10 +45,8 @@ const ColumnList = ({
           column.accessorKey
         );
       });
-
-      updatePreference('selectedColumns', () => visibleColumns);
     };
-  }, [table, table.hideableColumns, updatePreference]);
+  }, [table, table.hideableColumns]);
 
   return (
     <ul className="text-basic mt-1.5">
