@@ -64,7 +64,7 @@ const SearchInput = ({ value, onChange, clearInput }: SearchInputProps) => {
       className={`w-3/5 cursor-text bg-white dark:bg-charleston-green text-raisin-black dark:text-bright-gray border rounded flex justify-between items-center gap-1 mx-[3px] my-px px-[3px] pt-0.5 pb-px box-content text-xs ${
         isFocused
           ? 'border-sapphire dark:border-baby-blue-eyes'
-          : 'border-chinese-silver dark:border-davys-grey hover:bg-lotion'
+          : 'border-chinese-silver dark:border-davys-grey hover:bg-lotion dark:hover:bg-outer-space '
       }`}
     >
       <input
