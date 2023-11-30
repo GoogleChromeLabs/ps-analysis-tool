@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import classNames from 'classnames';
 import { type CookieTableData, getCookieKey } from '@ps-analysis-tool/common';
 import {
@@ -64,18 +64,16 @@ const CookieSearch = ({
     })
   );
 
-  const isCookieDeleted = useRef(false);
   const selectedCookieIndex = useRef(-1);
 
-  const isAnyCookieSelected =
-    isCookieDeleted.current && !selectedFrameCookie
-      ? filteredCookies.length > 0
-        ? true
-        : false
-      : selectedFrameCookie &&
-        selectedFrameCookie[Object.keys(selectedFrameCookie)[0]]
+  const isAnyCookieSelected = !selectedFrameCookie
+    ? filteredCookies.length > 0
       ? true
-      : false;
+      : false
+    : selectedFrameCookie &&
+      selectedFrameCookie[Object.keys(selectedFrameCookie)[0]]
+    ? true
+    : false;
 
   const {
     deleteCookie,
@@ -89,20 +87,16 @@ const CookieSearch = ({
     selectedFrame: state.selectedFrame,
   }));
 
-  useEffect(() => {
-    isCookieDeleted.current = false;
-  }, [selectedFrame]);
-
   const handleDeleteCookie = useCallback(() => {
-    const selectedKey =
-      isCookieDeleted.current && !selectedFrameCookie
-        ? filteredCookies[
-            getNextIndexToDelete(
-              selectedCookieIndex.current,
-              filteredCookies.length
-            )
-          ]
-        : Object.values(selectedFrameCookie ?? {})[0];
+    const selectedIndex = getNextIndexToDelete(
+      selectedCookieIndex.current,
+      filteredCookies.length
+    );
+    const selectedKey = !selectedFrameCookie
+      ? selectedIndex
+        ? filteredCookies[selectedIndex]
+        : null
+      : Object.values(selectedFrameCookie ?? {})[0];
 
     if (selectedKey !== null && selectedKey.parsedCookie) {
       const cookieKey = getCookieKey(selectedKey?.parsedCookie);
@@ -111,7 +105,6 @@ const CookieSearch = ({
           (cookie) => getCookieKey(cookie.parsedCookie) === cookieKey
         );
         deleteCookie(cookieKey);
-        isCookieDeleted.current = true;
         const index = getNextIndexToDelete(
           selectedCookieIndex.current,
           filteredCookies.length - 1
@@ -125,7 +118,7 @@ const CookieSearch = ({
           );
         });
 
-        if (index !== -100 && selectedFrame) {
+        if (index !== null && selectedFrame) {
           setSelectedFrameCookie({
             [selectedFrame]: filteredRows[index],
           });

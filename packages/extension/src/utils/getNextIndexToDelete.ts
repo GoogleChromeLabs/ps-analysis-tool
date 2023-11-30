@@ -22,11 +22,11 @@
 export default function getNextIndexToDelete(
   currentIndex: number,
   totalLength: number
-): number {
+): number | null {
   if (totalLength > 0 && currentIndex < totalLength) {
     return currentIndex;
   } else if (currentIndex + 1 > totalLength && currentIndex - 1 > -1) {
     return currentIndex - 1;
   }
-  return -100;
+  return null;
 }
