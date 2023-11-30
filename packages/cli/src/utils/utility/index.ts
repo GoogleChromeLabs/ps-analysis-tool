@@ -193,7 +193,7 @@ export default class Utility {
     const cookie: Cookie = {
       name: '',
       value: '',
-      expires: 'Session',
+      expires: 0,
       path: '',
       domain: '',
       httpOnly: false,
