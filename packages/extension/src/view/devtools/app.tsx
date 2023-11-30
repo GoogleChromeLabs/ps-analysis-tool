@@ -36,6 +36,7 @@ import { useCookieStore } from './stateProviders/syncCookieStore';
 import './app.css';
 import { Cookies } from './components';
 import useFrameOverlay from './hooks/useFrameOverlay';
+import type { CookieTableData } from '@ps-analysis-tool/common';
 
 const App: React.FC = () => {
   const [sidebarWidth, setSidebarWidth] = useState(200);
@@ -113,13 +114,15 @@ const App: React.FC = () => {
       const data = { ...prev };
       const psData = data['privacySandbox'];
 
-      psData.children['cookies'].panel = <Cookies />;
+      psData.children['cookies'].panel = (
+        <Cookies setFilteredCookies={setFilteredCookies} />
+      );
       psData.children['cookies'].children = Object.keys(tabFrames || {}).reduce(
         (acc, url) => {
           acc[url] = {
             title: url,
             itemNodeTitle: `Cookies used by frames from ${url}`,
-            panel: <Cookies />,
+            panel: <Cookies setFilteredCookies={setFilteredCookies} />,
             icon: <CookieIcon />,
             selectedIcon: <CookieIconWhite />,
             children: {},
@@ -179,7 +182,9 @@ const App: React.FC = () => {
     })();
   }, [selectedItemKey]);
 
-  useFrameOverlay((key: string | null) => {
+  const [filteredCookies, setFilteredCookies] = useState<CookieTableData[]>([]);
+
+  useFrameOverlay(filteredCookies, (key: string | null) => {
     updateSelectedItemKey(key || 'cookies');
   });
 
@@ -204,16 +209,9 @@ const App: React.FC = () => {
             minWidth={'150px'}
             maxWidth={'90%'}
             enable={{
-              top: false,
               right: true,
-              bottom: false,
-              left: false,
-              topRight: false,
-              bottomRight: false,
-              bottomLeft: false,
-              topLeft: false,
             }}
-            className="h-full flex flex-col border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
+            className="h-full"
           >
             <Sidebar
               selectedItemKey={selectedItemKey}
