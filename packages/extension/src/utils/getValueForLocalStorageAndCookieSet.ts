@@ -14,30 +14,34 @@
  * limitations under the License.
  */
 /**
- *
- * @param key {string} The key for which value is being set.
- * @param value {string | boolean} The value corresponding to the key.
- * @returns { string | boolean }.
+ * This function takes different values from user and computes which
+ * value needs to be set for samesite status.
+ * @param key {string} The value to return for same site specified by use.
+ * @param value {string | boolean | number} The value corresponding to the key.
+ * @param needValueForLocalStorage {boolean} This is a flag to reuse the function for localstorage.
+ * @returns {string | boolean | number} The value that needs to be set for sameSite in chrome.cookie.set.
  */
-function getValueToBeSetForLocalStorage(
+function getValueForLocalStorageAndCookieSet(
   key: string,
-  value: string | boolean | number
+  value: string | boolean | number,
+  needValueForLocalStorage: boolean
 ): string | boolean | number {
   if (key.toLowerCase() === 'samesite') {
-    switch (value as string) {
+    switch (value) {
       case 'no_restriction':
       case 'none':
-        return 'none';
+        return needValueForLocalStorage ? 'none' : 'no_restriction';
 
       case 'lax':
         return 'lax';
 
       case 'unspecified':
       case '':
-        return '';
+        return needValueForLocalStorage ? '' : 'unspecified';
 
       case 'strict':
         return 'strict';
+
       default:
         return '';
     }
@@ -52,4 +56,4 @@ function getValueToBeSetForLocalStorage(
   return value;
 }
 
-export default getValueToBeSetForLocalStorage;
+export default getValueForLocalStorageAndCookieSet;

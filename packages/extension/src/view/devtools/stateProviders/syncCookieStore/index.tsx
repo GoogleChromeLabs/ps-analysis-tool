@@ -36,8 +36,7 @@ import { getCurrentTabId } from '../../../../utils/getCurrentTabId';
 import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
 import setDocumentCookies from '../../../../utils/setDocumentCookies';
 import isOnRWS from '../../../../contentScript/utils/isOnRWS';
-import getValueForSameSite from '../../../../utils/getValueForSameSite';
-import getValueToBeSetForLocalStorage from '../../../../utils/getValueToBeSetForLocalStorage';
+import getValueForLocalStorageAndCookieSet from '../../../../utils/getValueForLocalStorageAndCookieSet';
 
 export interface CookieStoreContext {
   state: {
@@ -519,14 +518,15 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
 
         if (keyToChange === 'sameSite') {
-          valueToBeSet = getValueForSameSite(
-            (changedValue as string).toLowerCase()
+          valueToBeSet = getValueForLocalStorageAndCookieSet(
+            keyToChange,
+            (changedValue as string).toLowerCase(),
+            false
           );
           if (!valueToBeSet) {
             return false;
           }
         }
-
         const currentCookie = await chrome.cookies.get({
           name: cookieDetails.parsedCookie.name,
           url: cookieDetails.url,
@@ -580,7 +580,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
                   [keyToChange === 'expirationDate'
                     ? 'expires'
                     : keyToChange.toLowerCase()]:
-                    getValueToBeSetForLocalStorage(keyToChange, valueToBeSet),
+                    getValueForLocalStorageAndCookieSet(
+                      keyToChange,
+                      valueToBeSet,
+                      true
+                    ),
                 },
               },
             };
