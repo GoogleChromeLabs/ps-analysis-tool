@@ -19,9 +19,8 @@
 import React, { useCallback } from 'react';
 import classNames from 'classnames';
 import {
-  ClearIcon,
   FilterIcon,
-  RefreshButton,
+  SearchInput,
   TableOutput,
 } from '@ps-analysis-tool/design-system';
 
@@ -34,9 +33,9 @@ interface TableTopBarProps {
   setSearchValue: TableOutput['setSearchValue'];
   showFilterSidebar: boolean;
   setShowFilterSidebar: React.Dispatch<React.SetStateAction<boolean>>;
-  getCookiesSetByJavascript?: () => void;
   cookiesCount: number;
   disableFiltering?: boolean;
+  extraInterface?: React.ReactNode;
 }
 
 const TableTopBar = ({
@@ -44,9 +43,9 @@ const TableTopBar = ({
   setSearchValue,
   showFilterSidebar,
   setShowFilterSidebar,
-  getCookiesSetByJavascript,
   cookiesCount,
   disableFiltering = false,
+  extraInterface = null,
 }: TableTopBarProps) => {
   const handleInput = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,7 +58,7 @@ const TableTopBar = ({
     <div className="w-full h-[25px] px-2 flex items-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green">
       {!disableFiltering && (
         <button
-          className={classNames('w-3 h-3')}
+          className={classNames('w-3 h-3 mr-2')}
           onClick={() => setShowFilterSidebar(!showFilterSidebar)}
           title="Open filter options"
         >
@@ -72,27 +71,16 @@ const TableTopBar = ({
           />
         </button>
       )}
-      <input
-        type="text"
-        className="text-xs h-5 w-80 mx-2 p-2 outline-none dark:bg-charleston-green border-[1px] border-gainsboro dark:border-quartz focus:border-royal-blue focus:dark:border-medium-persian-blue dark:text-bright-gray text-outer-space-crayola"
-        placeholder="Search"
+      <SearchInput
         value={searchValue}
-        onInput={handleInput}
-      />
-      <button
-        onClick={() => {
+        onChange={handleInput}
+        clearInput={() => {
           setSearchValue('');
         }}
-        className="w-3 h-3"
-        title="Clear Search"
-      >
-        <ClearIcon className="text-mischka" />
-      </button>
+      />
       <div className="h-full w-px bg-american-silver dark:bg-quartz mx-3" />
 
-      {getCookiesSetByJavascript && (
-        <RefreshButton onClick={getCookiesSetByJavascript} />
-      )}
+      {extraInterface}
 
       <div className="text-right w-full text-xxxs text-secondary">
         Count: {cookiesCount ?? 0}
