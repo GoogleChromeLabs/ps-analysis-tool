@@ -23,14 +23,15 @@ import { useCallback, useEffect, useRef, useState } from 'react';
  */
 import { WEBPAGE_PORT_NAME } from '../../../constants';
 import { useCookieStore } from '../stateProviders/syncCookieStore';
-import { useFilterManagementStore } from '../stateProviders/filterManagementStore';
 import { getCurrentTabId } from '../../../utils/getCurrentTabId';
+import type { CookieTableData } from '@ps-analysis-tool/common';
 
 interface Response {
   attributes: { iframeOrigin: string | null; setInPage?: boolean };
 }
 
 const useFrameOverlay = (
+  filteredCookies: CookieTableData[],
   selectedFrameChangeHandler?: (key: string | null) => void
 ) => {
   const portRef = useRef<chrome.runtime.Port | null>(null);
@@ -73,9 +74,6 @@ const useFrameOverlay = (
     [_setSelectedFrame, selectedFrameChangeHandler]
   );
 
-  const { filteredCookies } = useFilterManagementStore(({ state }) => ({
-    filteredCookies: state.filteredCookies,
-  }));
   const [connectedToPort, setConnectedToPort] = useState(false);
 
   const connectToPort = useCallback(async () => {
