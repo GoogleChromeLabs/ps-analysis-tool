@@ -37,6 +37,7 @@ export type ColumnResizingOutput = {
 
 const useColumnResizing = (
   tableColumns: TableColumn[],
+  allTableColumnsKeys: string[],
   tablePersistentSettingsKey?: string
 ): ColumnResizingOutput => {
   const tableContainerRef = useRef<HTMLDivElement>(null);
@@ -77,7 +78,7 @@ const useColumnResizing = (
           prev.find(({ accessorKey }) => accessorKey === column.accessorKey)
             ?.width ||
           columnsSizingRef.current?.[column.accessorKey] ||
-          0,
+          40,
       }));
 
       return resizeColumns(
@@ -223,14 +224,26 @@ const useColumnResizing = (
   }, [getPreferences, setColumnsCallback, tablePersistentSettingsKey]);
 
   useEffect(() => {
-    const _columnsSizing = (columns || []).reduce(
-      (acc, { accessorKey, width }) => {
-        acc[accessorKey] = width || 0;
+    const _columns = columns.reduce((acc, { accessorKey, width }) => {
+      acc[accessorKey] = width || 0;
+
+      return acc;
+    }, {} as { [key: string]: number });
+
+    const _columnsSizing = (allTableColumnsKeys || []).reduce(
+      (acc, accessorKey) => {
+        acc[accessorKey] =
+          _columns[accessorKey] || columnsSizingRef.current[accessorKey] || 40;
 
         return acc;
       },
       {} as { [key: string]: number }
     );
+
+    columnsSizingRef.current = {
+      ...columnsSizingRef.current,
+      ..._columnsSizing,
+    };
 
     if (tablePersistentSettingsKey) {
       setPreferences(
@@ -240,7 +253,12 @@ const useColumnResizing = (
         tablePersistentSettingsKey
       );
     }
-  }, [columns, setPreferences, tablePersistentSettingsKey]);
+  }, [
+    allTableColumnsKeys,
+    columns,
+    setPreferences,
+    tablePersistentSettingsKey,
+  ]);
 
   return {
     columns,
