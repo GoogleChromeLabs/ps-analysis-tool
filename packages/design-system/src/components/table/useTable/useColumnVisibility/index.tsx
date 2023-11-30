@@ -23,7 +23,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
  * Internal dependencies.
  */
 import type { TableColumn } from '..';
-import { extractStorage, updateStorage } from '../utils';
+import { useTablePersistentSettingsStore } from '../../persistentSettingsStore';
 
 export type ColumnVisibilityOutput = {
   visibleColumns: TableColumn[];
@@ -90,26 +90,31 @@ const useColumnVisibility = (
     [columns, hiddenKeys]
   );
 
+  const { getPreferences, setPreferences } = useTablePersistentSettingsStore(
+    ({ actions }) => ({
+      getPreferences: actions.getPreferences,
+      setPreferences: actions.setPreferences,
+    })
+  );
+
   useEffect(() => {
     if (tablePersistentSettingsKey) {
-      (async () => {
-        setHiddenKeys(new Set());
+      setHiddenKeys(new Set());
 
-        const data = await extractStorage(
-          tablePersistentSettingsKey,
-          window.location.protocol === 'chrome-extension:'
-        );
+      const data = getPreferences(
+        tablePersistentSettingsKey,
+        'columnsVisibility'
+      );
 
-        if (data?.columnsVisibility) {
-          const _hiddenKeys = Object.entries(data.columnsVisibility)
-            .filter(([, visible]) => visible)
-            .map(([key]) => key);
+      if (data) {
+        const _hiddenKeys = Object.entries(data)
+          .filter(([, visible]) => visible)
+          .map(([key]) => key);
 
-          setHiddenKeys(new Set(_hiddenKeys));
-        }
-      })();
+        setHiddenKeys(new Set(_hiddenKeys));
+      }
     }
-  }, [tablePersistentSettingsKey]);
+  }, [getPreferences, tablePersistentSettingsKey]);
 
   useEffect(() => {
     const _columnsVisibility = (columns || []).reduce(
@@ -126,15 +131,14 @@ const useColumnVisibility = (
     });
 
     if (tablePersistentSettingsKey) {
-      updateStorage(
-        tablePersistentSettingsKey,
-        window.location.protocol === 'chrome-extension:',
+      setPreferences(
         {
           columnsVisibility: _columnsVisibility,
-        }
+        },
+        tablePersistentSettingsKey
       );
     }
-  }, [columns, tablePersistentSettingsKey, visibleColumns]);
+  }, [columns, setPreferences, tablePersistentSettingsKey, visibleColumns]);
 
   return {
     visibleColumns,

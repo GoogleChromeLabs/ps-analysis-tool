@@ -24,7 +24,7 @@ import { useState, useCallback, useMemo, useEffect } from 'react';
  */
 import type { TableData } from '..';
 import getValueByKey from '../../utils/getValueByKey';
-import { extractStorage, updateStorage } from '../utils';
+import { useTablePersistentSettingsStore } from '../../persistentSettingsStore';
 
 export type DefaultOptions = {
   defaultSortKey?: string;
@@ -81,41 +81,46 @@ const useColumnSorting = (
     return _sortedData;
   }, [ascending, data, sortKey]);
 
+  const { getPreferences, setPreferences } = useTablePersistentSettingsStore(
+    ({ actions }) => ({
+      getPreferences: actions.getPreferences,
+      setPreferences: actions.setPreferences,
+    })
+  );
+
   useEffect(() => {
     if (tablePersistentSettingsKey) {
-      (async () => {
-        const _data = await extractStorage(
-          tablePersistentSettingsKey,
-          window.location.protocol === 'chrome-extension:'
-        );
+      const sortByData = getPreferences(tablePersistentSettingsKey, 'sortBy');
+      const sortOrderData = getPreferences(
+        tablePersistentSettingsKey,
+        'sortOrder'
+      );
 
-        if (_data?.sortBy) {
-          _setSortKey(_data.sortBy);
-        }
-        if (_data?.sortOrder) {
-          setAscending(_data.sortOrder === 'asc');
-        }
-      })();
+      if (sortByData) {
+        _setSortKey(sortByData as string);
+      }
+      if (sortOrderData) {
+        setAscending(sortOrderData === 'asc');
+      }
     }
 
     return () => {
       _setSortKey('');
       setAscending(true);
     };
-  }, [tablePersistentSettingsKey]);
+  }, [getPreferences, tablePersistentSettingsKey]);
 
   useEffect(() => {
     if (tablePersistentSettingsKey) {
-      updateStorage(
-        tablePersistentSettingsKey,
-        window.location.protocol === 'chrome-extension:',
+      setPreferences(
         {
           sortBy: sortKey,
           sortOrder: ascending ? 'asc' : 'desc',
-        }
+        },
+        tablePersistentSettingsKey
       );
     }
-  }, [sortKey, ascending, tablePersistentSettingsKey]);
+  }, [sortKey, ascending, tablePersistentSettingsKey, setPreferences]);
 
   return {
     sortedData,

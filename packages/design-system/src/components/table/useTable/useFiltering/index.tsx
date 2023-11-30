@@ -22,9 +22,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 /**
  * Internal dependencies.
  */
-import type { TableData, TableFilter } from '..';
+import type { PersistentStorageData, TableData, TableFilter } from '..';
 import getValueByKey from '../../utils/getValueByKey';
-import { extractStorage, updateStorage } from '../utils';
+import { useTablePersistentSettingsStore } from '../../persistentSettingsStore';
 
 export type TableFilteringOutput = {
   filters: TableFilter;
@@ -209,24 +209,29 @@ const useFiltering = (
     );
   }, [options]);
 
+  const { getPreferences, setPreferences } = useTablePersistentSettingsStore(
+    ({ actions }) => ({
+      getPreferences: actions.getPreferences,
+      setPreferences: actions.setPreferences,
+    })
+  );
+
   useEffect(() => {
     if (tablePersistentSettingsKey) {
-      (async () => {
-        const _data = await extractStorage(
-          tablePersistentSettingsKey,
-          window.location.protocol === 'chrome-extension:'
-        );
+      const _data = getPreferences(
+        tablePersistentSettingsKey,
+        'selectedFilters'
+      );
 
-        if (_data?.selectedFilters) {
-          setOptions(_data.selectedFilters);
-        }
-      })();
+      if (_data) {
+        setOptions((_data as PersistentStorageData['selectedFilters']) || {});
+      }
     }
 
     return () => {
       setOptions({});
     };
-  }, [tablePersistentSettingsKey]);
+  }, [getPreferences, tablePersistentSettingsKey]);
 
   useEffect(() => {
     const _selectedFilters = Object.entries(filters || {}).reduce(
@@ -238,15 +243,14 @@ const useFiltering = (
     );
 
     if (tablePersistentSettingsKey) {
-      updateStorage(
-        tablePersistentSettingsKey,
-        window.location.protocol === 'chrome-extension:',
+      setPreferences(
         {
           selectedFilters: _selectedFilters,
-        }
+        },
+        tablePersistentSettingsKey
       );
     }
-  }, [filters, tablePersistentSettingsKey]);
+  }, [filters, setPreferences, tablePersistentSettingsKey]);
 
   return {
     filters,

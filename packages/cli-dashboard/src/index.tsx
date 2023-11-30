@@ -19,6 +19,7 @@
  */
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import { Provider as TablePersistentSettingsProvider } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies
@@ -28,5 +29,9 @@ import App from './app';
 const root = document.getElementById('root');
 
 if (root) {
-  createRoot(root).render(<App />);
+  createRoot(root).render(
+    <TablePersistentSettingsProvider>
+      <App />
+    </TablePersistentSettingsProvider>
+  );
 }

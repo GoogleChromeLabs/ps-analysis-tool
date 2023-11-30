@@ -71,15 +71,6 @@ export type TableFilter = {
   };
 };
 
-export type PersistentOptions = {
-  columns?: TableColumn[];
-  visibleColumns?: TableColumn[];
-  sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
-  selectedFilters?: TableFilter;
-  searchValue?: string;
-};
-
 export type PersistentStorageData = {
   columnsVisibility?: { [key: string]: boolean };
   columnsSizing?: { [key: string]: number };
