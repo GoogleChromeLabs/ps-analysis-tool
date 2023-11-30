@@ -137,8 +137,12 @@ const useTable = ({
     isColumnHidden,
   } = useColumnVisibility(tableColumns, commonKey);
 
+  const allTableColumnsKeys = useMemo(() => {
+    return tableColumns.map(({ accessorKey }) => accessorKey);
+  }, [tableColumns]);
+
   const { columns, tableContainerRef, onMouseDown, isResizing } =
-    useColumnResizing(visibleColumns, commonKey);
+    useColumnResizing(visibleColumns, allTableColumnsKeys, commonKey);
 
   const { sortedData, sortKey, sortOrder, setSortKey, setSortOrder } =
     useColumnSorting(data, commonKey);
