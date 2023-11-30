@@ -378,6 +378,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
             responseParams,
             cookieDB
           );
+
           await CookieStore.update(tabId, allCookies);
         }
       }

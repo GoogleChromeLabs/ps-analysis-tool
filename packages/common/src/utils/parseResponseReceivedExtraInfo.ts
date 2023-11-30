@@ -43,10 +43,14 @@ export default function parseResponseReceivedExtraInfo(
       const parsedCookie = parse(headerLine);
       const blockedCookie = response.blockedCookies.find(
         (c: BlockedResponseCookieWithReason) => {
-          return c.cookie?.name === parsedCookie.name;
+          if (c.cookie) {
+            return c.cookie?.name === parsedCookie.name;
+          } else {
+            const temporaryParsedCookie = parse(c.cookieLine);
+            return temporaryParsedCookie.name === parsedCookie.name;
+          }
         }
       );
-
       return {
         isBlocked: blockedCookie ? true : false,
         blockedReasons: blockedCookie ? blockedCookie?.blockedReasons : [],

@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import { getCookieKey } from '@ps-analysis-tool/common';
+import { getCookieKey, type BlockedReason } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -32,6 +32,7 @@ const CookieStore = {
    * @param {Array} cookies Cookies data.
    */
   async update(tabId: string, cookies: CookieData[]) {
+    // eslint-disable-next-line complexity
     await updateStorage(tabId, (prevState: TabData) => {
       const _prevCookies = prevState?.cookies || {};
       const _updatedCookies = _prevCookies;
@@ -43,6 +44,7 @@ const CookieStore = {
           continue;
         }
         let cookieKey = getCookieKey(cookie.parsedCookie);
+
         cookieKey = cookieKey?.trim();
         if (_updatedCookies?.[cookieKey]) {
           _updatedCookies[cookieKey] = {
@@ -52,9 +54,12 @@ const CookieStore = {
               ...cookie.parsedCookie,
               ..._updatedCookies[cookieKey].parsedCookie,
             },
-            blockedReasons:
-              cookie.blockedReasons ??
-              _updatedCookies[cookieKey].blockedReasons,
+            blockedReasons: Array.from(
+              new Set<BlockedReason>([
+                ...(cookie.blockedReasons ?? []),
+                ...(_updatedCookies[cookieKey].blockedReasons ?? []),
+              ])
+            ),
             headerType:
               _updatedCookies[cookieKey].headerType === 'javascript'
                 ? _updatedCookies[cookieKey].headerType
