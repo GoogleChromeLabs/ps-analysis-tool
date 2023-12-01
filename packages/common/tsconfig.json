@@ -2,6 +2,7 @@
   "compilerOptions": {
     "rootDir": "src",
     "target": "es6",
+    "lib": ["es2021"],
     "module": "commonjs",
     "outDir": "dist",
     "declarationDir": "dist-types",

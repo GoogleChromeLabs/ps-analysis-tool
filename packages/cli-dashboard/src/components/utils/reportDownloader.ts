@@ -19,6 +19,7 @@
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { type Cookie as ParsedCookie } from 'simple-cookie';
+import { sanitizeCsvRecord } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies
@@ -143,9 +144,7 @@ export const reportDownloader = (
           cookieDataToBeProcessed[frameName].frameCookies[cookie];
         const sanitizedData = {
           name: unSanitisedCookie.name,
-          value: unSanitisedCookie.value.includes(',')
-            ? `"${unSanitisedCookie.value}"`
-            : unSanitisedCookie.value,
+          value: sanitizeCsvRecord(unSanitisedCookie.value),
           domain: unSanitisedCookie.domain,
           path: unSanitisedCookie.path,
           expires: unSanitisedCookie.expires,
