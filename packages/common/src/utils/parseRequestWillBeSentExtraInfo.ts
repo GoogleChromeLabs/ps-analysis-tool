@@ -35,6 +35,7 @@ export default function parseRequestWillBeSentExtraInfo(
     const effectiveExpirationDate = calculateEffectiveExpiryDate(
       cookie.expires
     );
+
     const singleCookie = {
       isBlocked: !(blockedReasons.length === 0),
       parsedCookie: {

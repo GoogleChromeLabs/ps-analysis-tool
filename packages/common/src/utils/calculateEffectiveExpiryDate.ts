@@ -27,26 +27,10 @@ function calculateEffectiveExpiryDate(
   }
   if (typeof date === 'number') {
     const totalDecimalPlaces = date.toString().split('.')[1]?.length || 0;
-    const dateToBeConverted =
-      totalDecimalPlaces === 6 ? new Date(date * 1000) : new Date(date);
-    const isMoreThanLimit =
-      Date.now() + 34580926000 < Number(dateToBeConverted);
-    return isMoreThanLimit
-      ? new Date(Date.now() + 34580926000).toISOString().slice(0, 11) +
-          new Date(dateToBeConverted).toISOString().slice(11)
-      : new Date(dateToBeConverted).toJSON();
-  } else if (typeof date === 'string') {
-    const isMoreThanLimit = Date.now() + 34580926000 < new Date(date).getTime();
-    return isMoreThanLimit
-      ? new Date(Date.now() + 34580926000).toISOString().slice(0, 11) +
-          new Date(date).toISOString().slice(11)
-      : new Date(date).toJSON();
+    const dateToBeConverted = totalDecimalPlaces >= 6 ? date * 1000 : date;
+    return new Date(dateToBeConverted).toJSON();
   } else {
-    const isMoreThanLimit = Date.now() + 34580926000 < new Date(date).getTime();
-    return isMoreThanLimit
-      ? new Date(Date.now() + 34580926000).toISOString().slice(0, 11) +
-          new Date(date).toISOString().slice(11)
-      : new Date(date).toJSON();
+    return new Date(date).toJSON();
   }
 }
 
