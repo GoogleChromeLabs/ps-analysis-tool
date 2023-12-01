@@ -47,18 +47,22 @@ const App: React.FC = () => {
     contextInvalidated,
     setContextInvalidated,
     tabFrames,
+    selectedFrame,
     setSelectedFrame,
     isInspecting,
     setIsInspecting,
     canStartInspecting,
+    tabUrl,
   } = useCookieStore(({ state, actions }) => ({
     contextInvalidated: state.contextInvalidated,
     setContextInvalidated: actions.setContextInvalidated,
     tabFrames: state.tabFrames,
+    selectedFrame: state.selectedFrame,
     setSelectedFrame: actions.setSelectedFrame,
     isInspecting: state.isInspecting,
     setIsInspecting: actions.setIsInspecting,
     canStartInspecting: state.canStartInspecting,
+    tabUrl: state.tabUrl,
   }));
 
   const listenToMouseChange = useCallback(() => {
@@ -181,6 +185,23 @@ const App: React.FC = () => {
       });
     })();
   }, [selectedItemKey]);
+
+  const lastUrl = useRef(tabUrl);
+
+  useEffect(() => {
+    if (lastUrl.current === tabUrl || lastUrl.current === null) {
+      lastUrl.current = tabUrl;
+      return;
+    }
+
+    lastUrl.current = tabUrl;
+
+    if (!selectedFrame) {
+      updateSelectedItemKey('cookies');
+    } else {
+      updateSelectedItemKey(selectedFrame);
+    }
+  }, [selectedFrame, tabUrl, updateSelectedItemKey]);
 
   const [filteredCookies, setFilteredCookies] = useState<CookieTableData[]>([]);
 

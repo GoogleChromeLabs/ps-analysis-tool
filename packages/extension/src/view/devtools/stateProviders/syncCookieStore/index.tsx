@@ -408,9 +408,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
           const currentURL = new URL(tabUrl ?? '');
           const currentDomain = currentURL?.hostname;
 
-          setTabFrames(null);
-          await getAllFramesForCurrentTab(_tabId);
-
           if (selectedFrame && nextDomain === currentDomain) {
             _setSelectedFrame(nextURL.origin);
           } else {
@@ -420,6 +417,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
           setTabUrl(changeInfo.url);
         } catch (error) {
           _setSelectedFrame(null);
+        } finally {
+          setTabFrames(null);
+          await getAllFramesForCurrentTab(_tabId);
         }
       }
     },
