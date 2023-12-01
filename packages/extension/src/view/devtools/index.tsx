@@ -19,7 +19,10 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { ErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback } from '@ps-analysis-tool/design-system';
+import {
+  ErrorFallback,
+  Provider as TablePersistentSettingsProvider,
+} from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
@@ -36,7 +39,9 @@ if (root) {
   createRoot(root).render(
     <ErrorBoundary fallbackRender={ErrorFallback}>
       <ExternalStoreProvider>
-        <App />
+        <TablePersistentSettingsProvider>
+          <App />
+        </TablePersistentSettingsProvider>
       </ExternalStoreProvider>
     </ErrorBoundary>
   );
