@@ -90,12 +90,12 @@ const SidebarChild = ({
           onKeyNavigation(event, itemKey);
           setIsSidebarFocused(true);
         }}
-        className={`relative w-full flex items-center py-0.5 outline-0 text-xs ${
+        className={`relative w-full flex items-center py-0.5 outline-0 text-xs dark:text-bright-gray ${
           isKeySelected(itemKey)
             ? isSidebarFocused
-              ? 'bg-royal-blue text-white'
-              : 'bg-gainsboro'
-            : 'bg-white'
+              ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
+              : 'bg-gainsboro dark:bg-outer-space'
+            : 'bg-white dark:bg-raisin-black'
         } cursor-pointer`}
         style={{ paddingLeft: recursiveStackIndex * 16 + 12 }}
       >
