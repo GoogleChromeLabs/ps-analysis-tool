@@ -62,7 +62,8 @@ export type CookieData = {
 
 export type CookieTableData = CookieData & {
   isCookieBlocked: boolean | null;
-  frameUrl?: string;
+  isCookieSet: boolean | null;
+  frameUrls?: string | string[];
   highlighted?: boolean;
   blockedReasons: string[];
 };
