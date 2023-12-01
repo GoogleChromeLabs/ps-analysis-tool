@@ -137,6 +137,11 @@ const CookieTableContainer = ({
         accessorKey: 'parsedCookie.priority',
         cell: (info: InfoType) => info,
       },
+      {
+        header: 'Size',
+        accessorKey: 'parsedCookie.size',
+        cell: (info: InfoType) => info,
+      },
     ],
     []
   );
