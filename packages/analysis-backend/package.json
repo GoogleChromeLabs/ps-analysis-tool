@@ -4,7 +4,7 @@
   "description": "An Express based server which analyzes websites",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --build",
     "dev": "tsc-watch --build --watch"
   },
   "type": "module",
