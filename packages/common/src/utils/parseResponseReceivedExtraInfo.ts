@@ -26,6 +26,7 @@ import type {
 } from '../cdp.types';
 import findAnalyticsMatch from './findAnalyticsMatch';
 import { CookieDatabase } from '../cookies.types';
+import calculateEffectiveExpiryDate from './calculateEffectiveExpiryDate';
 
 /**
  *
@@ -51,14 +52,16 @@ export default function parseResponseReceivedExtraInfo(
           }
         }
       );
+      const effectiveExpirationDate = calculateEffectiveExpiryDate(
+        parsedCookie.expires
+      );
+
       return {
         isBlocked: blockedCookie ? true : false,
         blockedReasons: blockedCookie ? blockedCookie?.blockedReasons : [],
         parsedCookie: {
           ...parsedCookie,
-          expires: parsedCookie.expires
-            ? String(new Date(parsedCookie.expires).toISOString())
-            : 'Session',
+          expires: effectiveExpirationDate,
           samesite: parsedCookie.samesite ?? 'lax',
           partitionKey: headerLine.toLowerCase().includes('partitioned')
             ? response?.cookiePartitionKey

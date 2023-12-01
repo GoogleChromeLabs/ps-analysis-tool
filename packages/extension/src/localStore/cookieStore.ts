@@ -39,7 +39,6 @@ const CookieStore = {
 
       for (const cookie of cookies) {
         const { name, domain, path } = cookie.parsedCookie;
-
         if (!name || !domain || !path) {
           continue;
         }
@@ -53,6 +52,9 @@ const CookieStore = {
             parsedCookie: {
               ...cookie.parsedCookie,
               ..._updatedCookies[cookieKey].parsedCookie,
+              partitionKey:
+                _updatedCookies[cookieKey].parsedCookie?.partitionKey ??
+                cookie.parsedCookie?.partitionKey,
             },
             blockedReasons: Array.from(
               new Set<BlockedReason>([
@@ -74,39 +76,13 @@ const CookieStore = {
         } else {
           _updatedCookies[cookieKey] = cookie;
         }
-
-        if (domain.startsWith('.')) {
-          if (
-            !_updatedCookies[name + domain.slice(1) + path]?.parsedCookie &&
-            _updatedCookies[name + domain + path].parsedCookie
-          ) {
-            delete _updatedCookies[name + domain.slice(1) + path];
-          } else if (
-            _updatedCookies[name + domain.slice(1) + path]?.parsedCookie &&
-            !_updatedCookies[name + domain + path].parsedCookie
-          ) {
-            delete _updatedCookies[name + domain + path];
-          } else {
-            delete _updatedCookies[name + domain.slice(1) + path];
-            delete _updatedCookies[name + domain + path];
-          }
-        } else {
-          if (
-            !_updatedCookies[name + '.' + domain + path]?.parsedCookie &&
-            _updatedCookies[name + domain + path].parsedCookie
-          ) {
-            delete _updatedCookies[name + '.' + domain + path];
-          } else if (
-            _updatedCookies[name + '.' + domain + path]?.parsedCookie &&
-            !_updatedCookies[name + domain + path].parsedCookie
-          ) {
-            delete _updatedCookies[name + domain + path];
-          } else {
-            delete _updatedCookies[name + domain + path];
-            delete _updatedCookies[name + '.' + domain + path];
-          }
-        }
       }
+      Object.keys(_updatedCookies).map((key) => {
+        if (!_updatedCookies[key].parsedCookie) {
+          delete _updatedCookies[key];
+        }
+        return key;
+      });
 
       return {
         ...prevState,
@@ -179,10 +155,12 @@ const CookieStore = {
         cookies: {
           ...storage[tabId].cookies,
           [alternateCookieName]: {
+            ...(storage[tabId].cookies[alternateCookieName] ?? {}),
             blockedReasons: [...reasons],
             isBlocked: true,
           },
           [cookieName]: {
+            ...(storage[tabId].cookies[cookieName] ?? {}),
             blockedReasons: [...reasons],
             isBlocked: true,
           },

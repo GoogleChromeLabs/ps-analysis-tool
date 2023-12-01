@@ -25,14 +25,15 @@ import type { BlockedReason } from '@ps-analysis-tool/common';
 import type { CookieAnalytics } from '../utils/fetchCookieDictionary';
 
 export type CookieData = {
-  parsedCookie: ParsedCookie;
+  parsedCookie: ParsedCookie & {
+    partitionKey?: string;
+  };
   analytics: CookieAnalytics | null;
   url: string;
   headerType: 'response' | 'request' | 'javascript'; // @todo Change headerType key name.
   isFirstParty: boolean | null;
   frameIdList: number[];
   isBlocked?: boolean;
-  partitionKey?: string;
   blockedReasons?: BlockedReason[];
 };
 

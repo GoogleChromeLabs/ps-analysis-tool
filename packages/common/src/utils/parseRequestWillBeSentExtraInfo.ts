@@ -16,6 +16,7 @@
 
 import { NetworkRequestExtraInfoParams } from '../cdp.types';
 import { CookieData, CookieDatabase } from '../cookies.types';
+import calculateEffectiveExpiryDate from './calculateEffectiveExpiryDate';
 import findAnalyticsMatch from './findAnalyticsMatch';
 
 /**
@@ -31,13 +32,14 @@ export default function parseRequestWillBeSentExtraInfo(
   const cookies: CookieData[] = [];
 
   request.associatedCookies.forEach(({ blockedReasons, cookie }) => {
+    const effectiveExpirationDate = calculateEffectiveExpiryDate(
+      cookie.expires
+    );
     const singleCookie = {
       isBlocked: !(blockedReasons.length === 0),
       parsedCookie: {
         ...cookie,
-        expires: cookie.expires
-          ? String(new Date(cookie.expires).toISOString())
-          : 'Session',
+        expires: effectiveExpirationDate,
         samesite: cookie.sameSite ?? 'lax',
       },
       blockedReasons,

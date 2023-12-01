@@ -19,7 +19,10 @@
  */
 import { type Cookie as ParsedCookie } from 'simple-cookie';
 import { getDomain } from 'tldts';
-import { getCookieKey } from '@ps-analysis-tool/common';
+import {
+  calculateEffectiveExpiryDate,
+  getCookieKey,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -114,6 +117,7 @@ export async function createCookieObject(
  * @param url URL of the cookie from the request/response. (Only required for domain attribute)
  * @returns {string | boolean | number} Cookie attribute value.
  */
+// eslint-disable-next-line complexity
 function parseAttributeValues(
   type: string,
   parsedCookieValue: string | boolean | number | Date | undefined,
@@ -154,7 +158,10 @@ function parseAttributeValues(
   }
 
   if (type === 'expires' && value !== 0) {
-    value = new Date(value as string).toJSON() || 0;
+    const effectiveExpirationDate = calculateEffectiveExpiryDate(
+      value as string
+    );
+    value = effectiveExpirationDate || 0;
   }
 
   return value;
