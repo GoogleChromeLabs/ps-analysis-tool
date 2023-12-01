@@ -40,18 +40,14 @@ const FiltersSidebar = ({
   return (
     <div className="h-full overflow-auto p-3">
       <ul>
-        {Object.entries(filters)
-          .filter(([, filter]) =>
-            Boolean(Object.keys(filter.filterValues || {}).length)
-          )
-          .map(([filterKey, filter]) => (
-            <ListItem
-              key={filterKey}
-              filter={filter}
-              filterKey={filterKey}
-              toggleFilterSelection={toggleFilterSelection}
-            />
-          ))}
+        {Object.entries(filters).map(([filterKey, filter]) => (
+          <ListItem
+            key={filterKey}
+            filter={filter}
+            filterKey={filterKey}
+            toggleFilterSelection={toggleFilterSelection}
+          />
+        ))}
       </ul>
     </div>
   );

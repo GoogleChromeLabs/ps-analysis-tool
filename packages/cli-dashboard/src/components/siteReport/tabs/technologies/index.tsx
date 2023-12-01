@@ -99,7 +99,7 @@ const Technologies = ({ selectedSite }: TechnologiesProps) => {
   });
 
   return (
-    <div className="w-full h-full overflow-auto text-outer-space-crayola border-x border-american-silver dark:border-quartz">
+    <div className="w-full h-full text-outer-space-crayola border-x border-american-silver dark:border-quartz flex flex-col">
       <Resizable
         defaultSize={{
           width: '100%',
