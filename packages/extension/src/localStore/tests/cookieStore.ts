@@ -31,13 +31,14 @@ const cookieArray: CookieData[] = [
       samesite: 'None',
       name: 'countryCode1',
       value: 'IN',
+      partitionKey: undefined,
     },
     frameIdList: [1],
     analytics: null,
     url: 'https://example.com',
     headerType: 'response',
     isFirstParty: false,
-    blockedReasons: undefined,
+    blockedReasons: [],
     isBlocked: undefined,
   },
   {
@@ -50,6 +51,7 @@ const cookieArray: CookieData[] = [
       samesite: 'None',
       name: 'countryCode2',
       value: 'IN',
+      partitionKey: undefined,
     },
     frameIdList: [1],
     analytics: null,
@@ -57,7 +59,7 @@ const cookieArray: CookieData[] = [
     isBlocked: undefined,
     headerType: 'response',
     isFirstParty: false,
-    blockedReasons: undefined,
+    blockedReasons: [],
   },
 ];
 

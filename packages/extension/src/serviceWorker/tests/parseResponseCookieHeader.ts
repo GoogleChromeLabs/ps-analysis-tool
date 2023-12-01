@@ -40,7 +40,7 @@ describe('parseResponseCookieHeader', () => {
 
     expect(parsedCookie).toEqual({
       parsedCookie: {
-        expires: 0,
+        expires: 'Session',
         httponly: false,
         secure: true,
         path: '/',
@@ -48,6 +48,7 @@ describe('parseResponseCookieHeader', () => {
         samesite: 'none',
         name: 'countryCode',
         value: 'IN',
+        partitionKey: undefined,
       },
       analytics: { ...emptyAnalytics },
       url: 'https://example.com/public/api/alerts',
@@ -83,7 +84,7 @@ describe('parseResponseCookieHeader', () => {
 
     expect(parsedCookie).toEqual({
       parsedCookie: {
-        expires: 0,
+        expires: 'Session',
         httponly: false,
         secure: true,
         path: '/',
@@ -91,6 +92,7 @@ describe('parseResponseCookieHeader', () => {
         samesite: 'none',
         name: 'test_cookie',
         value: 'bla',
+        partitionKey: undefined,
       },
       analytics: {
         platform: 'DoubleClick/Google Marketing',
@@ -151,7 +153,7 @@ describe('parseResponseCookieHeader', () => {
 
     expect(parsedCookie).toEqual({
       parsedCookie: {
-        expires: 0,
+        expires: 'Session',
         httponly: false,
         secure: true,
         path: '/',
@@ -159,6 +161,7 @@ describe('parseResponseCookieHeader', () => {
         samesite: 'none',
         name: '_ga_123',
         value: 'bla',
+        partitionKey: undefined,
       },
       analytics: {
         platform: 'Google Analytics',

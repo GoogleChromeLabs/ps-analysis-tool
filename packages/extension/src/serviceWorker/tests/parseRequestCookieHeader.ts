@@ -29,8 +29,8 @@ const normalCookie1 = {
   parsedCookie: {
     name: 'cookieKey1',
     value: 'value1',
-    domain: 'example.com',
-    expires: 0,
+    domain: '.example.com',
+    expires: 'Session',
     path: '/',
     httponly: false,
     secure: false,
@@ -47,8 +47,8 @@ const normalCookie2 = {
   parsedCookie: {
     name: 'CookieKey2',
     value: 'value2',
-    domain: 'example.com',
-    expires: 0,
+    domain: '.example.com',
+    expires: 'Session',
     path: '/',
     httponly: false,
     secure: false,
@@ -65,8 +65,8 @@ const specialCookie = {
   parsedCookie: {
     name: 'SpecialCookie',
     value: 'Special=Value',
-    domain: 'example.com',
-    expires: 0,
+    domain: '.example.com',
+    expires: 'Session',
     path: '/',
     httponly: false,
     secure: false,
@@ -83,8 +83,8 @@ const wildcardCookie = {
   parsedCookie: {
     name: 'Wildcard_123',
     value: 'val',
-    domain: 'example.com',
-    expires: 0,
+    domain: '.example.com',
+    expires: 'Session',
     path: '/',
     httponly: false,
     secure: false,
