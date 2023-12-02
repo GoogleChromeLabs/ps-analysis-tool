@@ -17,14 +17,14 @@
  * External dependencies.
  */
 import React, { useCallback, useState, useRef, useEffect } from 'react';
+import classNames from 'classnames';
+import type { InfoType } from '@ps-analysis-tool/design-system';
+import { noop } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import { useCookieStore } from '../../../../../stateProviders/syncCookieStore';
-import classNames from 'classnames';
-import type { InfoType } from '@ps-analysis-tool/design-system';
-import { noop } from '@ps-analysis-tool/common';
 
 interface EditableCheckBoxInputProps {
   info: InfoType;
