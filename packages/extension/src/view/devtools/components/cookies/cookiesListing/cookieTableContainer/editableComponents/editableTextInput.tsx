@@ -70,14 +70,14 @@ const EditableTextInput = ({
       ) {
         setEditing(false);
         if (localValue !== info && cookieKey) {
-          const result = await modifyCookie(
+          const isUpdateDone = await modifyCookie(
             cookieKey,
             keyToChange,
             localValue.trim(),
             keyToChange === 'name' ? (info as string) : null
           );
 
-          if (!result) {
+          if (!isUpdateDone) {
             rowHighlighter(true, cookieKey);
             setLocalValue(info as string);
           } else {
@@ -102,14 +102,14 @@ const EditableTextInput = ({
       if (event?.key === 'Enter') {
         setEditing(false);
         if (localValue !== info && cookieKey) {
-          const result = await modifyCookie(
+          const isUpdateDone = await modifyCookie(
             cookieKey,
             keyToChange,
             localValue,
             keyToChange === 'name' ? (info as string) : null
           );
 
-          if (!result) {
+          if (!isUpdateDone) {
             rowHighlighter(true, cookieKey);
             setLocalValue(info as string);
           } else {

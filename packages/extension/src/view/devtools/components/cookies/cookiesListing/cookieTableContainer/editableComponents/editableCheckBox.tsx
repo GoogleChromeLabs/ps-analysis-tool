@@ -70,13 +70,13 @@ const EditableCheckBoxInput = ({
       ) {
         setEditing(false);
         if (localValue !== info && cookieKey) {
-          const result = await modifyCookie(
+          const isUpdateDone = await modifyCookie(
             cookieKey,
             keyToChange,
             localValue,
             null
           );
-          if (!result) {
+          if (!isUpdateDone) {
             rowHighlighter(true, cookieKey);
             setLocalValue(info as boolean);
           }
