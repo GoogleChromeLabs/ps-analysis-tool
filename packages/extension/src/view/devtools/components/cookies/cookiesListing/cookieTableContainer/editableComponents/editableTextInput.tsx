@@ -154,7 +154,7 @@ const EditableTextInput = ({
           onBlur={() => setEditing(false)}
         />
       ) : (
-        <p className="w-full h-full">{info}</p>
+        <p className="w-full h-full">{localValue}</p>
       )}
     </div>
   );
