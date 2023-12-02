@@ -625,19 +625,19 @@ export const Provider = ({ children }: PropsWithChildren) => {
           currentFrame.frameIds.map(async (frameId) => {
             await Promise.all(
               Object.keys(allCookies).map(async (key) => {
-                if (allCookies[key].frameIdList.includes(frameId)) {
-                  if (
-                    allCookies[key]?.parsedCookie?.name &&
-                    allCookies[key]?.url
-                  ) {
-                    await chrome.cookies.remove({
-                      name: allCookies[key]?.parsedCookie?.name,
-                      url: allCookies[key]?.url,
-                    });
-                  }
-                  cookieKeys.push(key);
+                if (!allCookies[key].frameIdList.includes(frameId)) {
                   return key;
                 }
+                if (
+                  allCookies[key]?.parsedCookie?.name &&
+                  allCookies[key]?.url
+                ) {
+                  await chrome.cookies.remove({
+                    name: allCookies[key]?.parsedCookie?.name,
+                    url: allCookies[key]?.url,
+                  });
+                }
+                cookieKeys.push(key);
                 return key;
               })
             );
