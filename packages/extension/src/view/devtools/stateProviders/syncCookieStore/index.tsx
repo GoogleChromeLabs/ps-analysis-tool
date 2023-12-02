@@ -546,15 +546,15 @@ export const Provider = ({ children }: PropsWithChildren) => {
             ...otherDetails
           } = currentCookie;
 
-          let result;
+          let isUpdateDone;
 
           if (keyToChange === 'expirationDate' && valueToBeSet === 0) {
-            result = await chrome.cookies.set({
+            isUpdateDone = await chrome.cookies.set({
               ...otherDetails,
               url: cookieDetails.url,
             });
           } else {
-            result = await chrome.cookies.set({
+            isUpdateDone = await chrome.cookies.set({
               ...otherDetails,
               expirationDate,
               [keyToChange]: valueToBeSet,
@@ -566,9 +566,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
           }
 
           if (
-            result[keyToChange] === valueToBeSet ||
+            isUpdateDone[keyToChange] === valueToBeSet ||
             (keyToChange === 'expirationDate' &&
-              (result?.session || result?.expirationDate))
+              (isUpdateDone?.session || isUpdateDone?.expirationDate))
           ) {
             const oldData = await chrome.storage.local.get();
 
@@ -684,7 +684,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
             ...otherDetails
           } = currentCookie;
 
-          const result = await chrome.cookies.set({
+          const isUpdateDone = await chrome.cookies.set({
             ...otherDetails,
             [keyToChange]: changedValue,
             url: cookieDetails.url,
@@ -695,7 +695,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
             url: cookieDetails.url,
           });
 
-          if (result[keyToChange] === changedValue) {
+          if (isUpdateDone[keyToChange] === changedValue) {
             const oldData = await chrome.storage.local.get();
             const updatedCookie = {
               [newCookieKey]: {
