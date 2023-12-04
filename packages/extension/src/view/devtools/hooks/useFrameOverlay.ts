@@ -205,26 +205,32 @@ const useFrameOverlay = () => {
 
   useEffect(() => {
     (async () => {
-      if (isInspecting) {
-        if (!connectedToPort) {
-          await connectToPort();
+      try {
+        if (isInspecting) {
+          if (!connectedToPort) {
+            await connectToPort();
+          }
+          if (chrome.runtime?.id && portRef.current && tabFrames) {
+            const thirdPartyCookies = filteredCookies
+              ? filteredCookies.filter((cookie) => !cookie.isFirstParty)
+              : [];
+            const firstPartyCookies = filteredCookies
+              ? filteredCookies.filter((cookie) => cookie.isFirstParty)
+              : [];
+            portRef.current.postMessage({
+              selectedFrame,
+              removeAllFramePopovers: isFrameSelectedFromDevTool,
+              thirdPartyCookies: thirdPartyCookies.length,
+              firstPartyCookies: firstPartyCookies.length,
+              isInspecting,
+              isOnRWS: selectedFrame
+                ? tabFrames[selectedFrame]?.isOnRWS
+                : false,
+            });
+          }
         }
-        if (chrome.runtime?.id && portRef.current && tabFrames) {
-          const thirdPartyCookies = filteredCookies
-            ? filteredCookies.filter((cookie) => !cookie.isFirstParty)
-            : [];
-          const firstPartyCookies = filteredCookies
-            ? filteredCookies.filter((cookie) => cookie.isFirstParty)
-            : [];
-          portRef.current.postMessage({
-            selectedFrame,
-            removeAllFramePopovers: isFrameSelectedFromDevTool,
-            thirdPartyCookies: thirdPartyCookies.length,
-            firstPartyCookies: firstPartyCookies.length,
-            isInspecting,
-            isOnRWS: selectedFrame ? tabFrames[selectedFrame]?.isOnRWS : false,
-          });
-        }
+      } catch (error) {
+        // Do nothing here since we just want to catch them.
       }
     })();
   }, [
