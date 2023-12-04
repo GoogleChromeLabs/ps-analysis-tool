@@ -65,7 +65,9 @@ const CookieSearch = ({
   );
 
   const selectedCookieIndex = useRef(-1);
-
+  // This check is because selectedFrameCookie gets value only once when the cookie in the frame is selected.
+  // selectedFrameCookie has the following shape.
+  // {[frameName]: cookie|null}
   const isAnyCookieSelected = !selectedFrameCookie
     ? filteredCookies.length > 0
       ? true
