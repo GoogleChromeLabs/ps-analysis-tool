@@ -48,7 +48,7 @@ export default function parseRequestWillBeSentExtraInfo(
       url: request.headers['url'],
       headerType: 'request' as CookieData['headerType'],
       isFirstParty: cookie?.sameParty,
-      frameIdList: [0],
+      frameIdList: [],
     };
     cookies.push(singleCookie);
   });

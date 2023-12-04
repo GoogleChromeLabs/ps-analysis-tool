@@ -72,7 +72,7 @@ export default function parseResponseReceivedExtraInfo(
           : null,
         url: response.headers['url'],
         headerType: 'response',
-        frameIdList: [0],
+        frameIdList: [],
       };
     });
 }

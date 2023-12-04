@@ -56,14 +56,12 @@ const CookieStore = {
                 _updatedCookies[cookieKey].parsedCookie?.partitionKey ??
                 cookie.parsedCookie?.partitionKey,
             },
-            blockedReasons: cookie.isBlocked
-              ? Array.from(
-                  new Set<BlockedReason>([
-                    ...(cookie.blockedReasons ?? []),
-                    ...(_updatedCookies[cookieKey].blockedReasons ?? []),
-                  ])
-                )
-              : [],
+            blockedReasons: Array.from(
+              new Set<BlockedReason>([
+                ...(cookie.blockedReasons ?? []),
+                ...(_updatedCookies[cookieKey].blockedReasons ?? []),
+              ])
+            ),
             headerType:
               _updatedCookies[cookieKey].headerType === 'javascript'
                 ? _updatedCookies[cookieKey].headerType
@@ -79,12 +77,6 @@ const CookieStore = {
           _updatedCookies[cookieKey] = cookie;
         }
       }
-      Object.keys(_updatedCookies).map((key) => {
-        if (!_updatedCookies[key].parsedCookie) {
-          delete _updatedCookies[key];
-        }
-        return key;
-      });
 
       return {
         ...prevState,

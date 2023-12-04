@@ -216,11 +216,31 @@ const useFrameOverlay = () => {
           const firstPartyCookies = filteredCookies
             ? filteredCookies.filter((cookie) => cookie.isFirstParty)
             : [];
+          const blockedCookies = filteredCookies
+            ? filteredCookies.filter((cookie) => cookie.isCookieBlocked)
+            : [];
+          const blockedReasons = filteredCookies
+            ? filteredCookies
+                .filter((cookie) => cookie.isCookieBlocked)
+                .reduce((previousReasons: string[], cookie) => {
+                  if (cookie.blockedReasons.length > 0) {
+                    return [
+                      ...new Set([
+                        ...previousReasons,
+                        ...cookie.blockedReasons,
+                      ]),
+                    ];
+                  }
+                  return [...new Set([...previousReasons])];
+                }, [])
+            : [];
           portRef.current.postMessage({
             selectedFrame,
             removeAllFramePopovers: isFrameSelectedFromDevTool,
             thirdPartyCookies: thirdPartyCookies.length,
             firstPartyCookies: firstPartyCookies.length,
+            blockedCookies: blockedCookies.length,
+            blockedReasons: blockedReasons.join(', '),
             isInspecting,
             isOnRWS: selectedFrame ? tabFrames[selectedFrame]?.isOnRWS : false,
           });
