@@ -89,8 +89,8 @@ const App: React.FC = () => {
 
       const data = await chrome.storage.local.get(tabId);
 
-      if (data[tabId]?.['selectedSidebarItem']) {
-        setDefaultSelectedItemKey(data[tabId]?.['selectedSidebarItem']);
+      if (data?.['selectedSidebarItem']) {
+        setDefaultSelectedItemKey(data['selectedSidebarItem']);
       }
     })();
   }, []);
@@ -172,14 +172,19 @@ const App: React.FC = () => {
     (async () => {
       const tabId = chrome.devtools.inspectedWindow.tabId.toString();
 
-      const data = await chrome.storage.local.get(tabId);
-      const tabData = data[tabId];
+      const data = await chrome.storage.local.get();
 
-      tabData['selectedSidebarItem'] = selectedItemKey;
+      if (!data?.[tabId]) {
+        data[tabId] = {};
+      }
 
-      await chrome.storage.local.set({
-        [tabId]: tabData,
-      });
+      if (!data[tabId]?.['selectedSidebarItem']) {
+        data[tabId]['selectedSidebarItem'] = 'cookies';
+      }
+
+      data[tabId]['selectedSidebarItem'] = selectedItemKey;
+
+      await chrome.storage.local.set(data);
     })();
   }, [selectedItemKey]);
 
