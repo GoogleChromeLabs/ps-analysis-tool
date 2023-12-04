@@ -19,7 +19,10 @@
  * @param {string} record - a string value that need to be converted into a CSV record.
  * @returns {URL | null} - The parsed URL object or null if the URL is invalid.
  */
-const sanitizeCsvRecord = (record: string): string => {
+const sanitizeCsvRecord = (record: string | null | undefined): string => {
+  if (!record) {
+    return '';
+  }
   let recordCopy = record;
   recordCopy = recordCopy.replaceAll('"', '""');
   return recordCopy.includes(',') ? '"' + recordCopy + '"' : recordCopy;
