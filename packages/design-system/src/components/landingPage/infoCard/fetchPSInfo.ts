@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies.
+ * External dependencies.
  */
-import fetchLocalData from './fetchLocalData';
+import { fetchLocalData } from '@ps-analysis-tool/common';
 
 export enum PSInfoKey {
   'Topics' = 'topics',

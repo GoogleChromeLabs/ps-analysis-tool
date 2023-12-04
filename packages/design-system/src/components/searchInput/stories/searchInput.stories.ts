@@ -15,23 +15,36 @@
  */
 
 /**
- * External Dependencies
+ * External dependencies
  */
-import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
+import { noop } from '@ps-analysis-tool/common';
 
 /**
- * Internal Dependencies
+ * Internal dependencies
  */
-import { LandingPage } from '@ps-analysis-tool/design-system';
+import SearchInput from '..';
 
-const PrivateAdvertising = () => {
-  return (
-    <LandingPage
-      title="Private Advertising"
-      iframeSrc="https://privacysandbox.info/en/privacy-sandbox/measure-digital-ads"
-      extraClasses="h-[78vh] w-full"
-    />
-  );
+const meta: Meta<typeof SearchInput> = {
+  title: 'DesignSystem/SearchInput',
+  component: SearchInput,
+  tags: ['autodocs'],
 };
 
-export default PrivateAdvertising;
+export default meta;
+
+export const Primary: StoryObj<typeof SearchInput> = {
+  args: {
+    value: '',
+    onChange: noop,
+    clearInput: noop,
+  },
+};
+
+export const Secondary: StoryObj<typeof SearchInput> = {
+  args: {
+    value: 'Search Value',
+    onChange: noop,
+    clearInput: noop,
+  },
+};

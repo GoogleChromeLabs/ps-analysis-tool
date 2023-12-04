@@ -17,8 +17,7 @@
 /**
  * External dependencies.
  */
-// @ts-ignore Package does not support typescript.
-import Spinnies from 'spinnies';
+
 // @ts-ignore Package does not support typescript.
 import Wapplalyzer from 'wappalyzer';
 
@@ -29,9 +28,18 @@ import { TechnologyDetailList } from '../types';
 
 export const analyzeTechnologiesUrlsInBatches = async (
   urls: Array<string>,
-  batchSize = 3
+  batchSize = 3,
+  spinnies?: {
+    add: (
+      id: string,
+      { text, indent }: { text: string; indent: number }
+    ) => void;
+    succeed: (
+      id: string,
+      { text, indent }: { text: string; indent: number }
+    ) => void;
+  }
 ): Promise<TechnologyDetailList[]> => {
-  const spinnies = new Spinnies();
   const wappalyzer = new Wapplalyzer();
 
   let report: TechnologyDetailList[] = [];
@@ -39,26 +47,31 @@ export const analyzeTechnologiesUrlsInBatches = async (
   for (let i = 0; i < urls.length; i += batchSize) {
     const start = i;
     const end = Math.min(urls.length - 1, i + batchSize - 1);
+    await wappalyzer.init();
 
-    spinnies.add(`spinner-${i}`, {
-      text: `Analysing technologies in urls ${start + 1} - ${end + 1} `,
-    });
+    spinnies &&
+      spinnies.add(`tech-batch-spinner`, {
+        text: `Analyzing technologies in urls ${start + 1} - ${end + 1} `,
+        indent: 2,
+      });
 
     const urlsWindow = urls.slice(start, end + 1);
 
     const technologyAnalysis = await Promise.all(
       urlsWindow.map(async (url) => {
-        const site = await wappalyzer.open(url);
-        const results = await site.analyze();
-        return results.technologies;
+        const { technologies } = await (await wappalyzer.open(url)).analyze();
+        return technologies;
       })
     );
 
     report = [...report, ...technologyAnalysis];
 
-    spinnies.succeed(`spinner-${i}`, {
-      text: `Done technology in urls ${start + 1} - ${end + 1} `,
-    });
+    spinnies &&
+      spinnies.succeed(`tech-batch-spinner`, {
+        text: `Done analyzing technology in urls ${start + 1} - ${end + 1} `,
+        indent: 2,
+      });
+    await wappalyzer.destroy();
   }
 
   return report;

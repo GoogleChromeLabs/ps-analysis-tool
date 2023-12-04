@@ -575,20 +575,23 @@ class WebpageContentScript {
    * Set topics to be used in the Topics landing page.
    */
   async setTopics() {
-    if (
-      !document.prerendering &&
-      'browsingTopics' in document &&
-      document.featurePolicy &&
-      document.featurePolicy.allowsFeature('browsing-topics')
-    ) {
-      const activeTabUrl = window.location.origin;
-      const topicsObjArr = await document.browsingTopics();
-      const topicsIdArr = topicsObjArr.map(
-        (topic: { [key: string]: string | number }) => topic.topic
-      );
+    try {
+      if (
+        !document.prerendering &&
+        'browsingTopics' in document &&
+        document.featurePolicy &&
+        document.featurePolicy.allowsFeature('browsing-topics')
+      ) {
+        const activeTabUrl = window.location.origin;
+        const topicsObjArr = await document.browsingTopics();
+        const topicsIdArr = topicsObjArr.map(
+          (topic: { [key: string]: string | number }) => topic.topic
+        );
 
-      CookieStore.setTopics(activeTabUrl, topicsIdArr);
-    }
+        CookieStore.setTopics(activeTabUrl, topicsIdArr);
+      }
+      // eslint-disable-next-line no-empty
+    } catch (error) {}
   }
 }
 
