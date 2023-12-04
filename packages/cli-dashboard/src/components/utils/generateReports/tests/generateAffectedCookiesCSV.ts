@@ -15,7 +15,7 @@
  */
 
 import generateAffectedCookiesCSV from '../generateAffectedCookiesCSV';
-import { mockData1 } from './consts';
+import { mockData1 } from './data.mock';
 
 describe('generateAffectedCookiesCSV', () => {
   it('should create CSV string for affected cookies', () => {

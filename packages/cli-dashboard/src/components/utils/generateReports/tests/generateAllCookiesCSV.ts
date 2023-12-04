@@ -18,13 +18,13 @@
  * Internal dependencies
  */
 import generateAllCookiesCSV from '../generateAllCookiesCSV';
-import { mockData1, mockData2 } from './consts';
+import { mockData1, mockData2 } from './data.mock';
 
 describe('generateAllCookiesCSV', () => {
-  it('should generate CSV with one more line than no on cookies', () => {
+  it('should generate CSV with one more line than no of cookies', () => {
     const CSVString = generateAllCookiesCSV(mockData1);
 
-    expect(CSVString.split('\r\n').filter((str) => str).length).toBe(5);
+    expect(CSVString.split('\r\n').filter((str) => str).length).toBe(4);
   });
 
   it('should generate cookies CSV with one entry for each cookies', () => {
