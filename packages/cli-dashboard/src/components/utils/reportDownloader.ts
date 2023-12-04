@@ -18,32 +18,21 @@
  */
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
-import { type Cookie as ParsedCookie } from 'simple-cookie';
 import { sanitizeCsvRecord } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies
  */
-import type { CompleteJson, CookieFrameStorageType } from '../../types';
+import type {
+  CompleteJson,
+  CookieFrameStorageType,
+  SanitisedCookieType,
+  SingleTechnology,
+} from '../../types';
 
 interface NewReport extends CompleteJson {
   affectedCookies: CookieFrameStorageType;
   cookieAnalysisSummary: Record<string, number>;
-}
-
-type SanitisedCookieType = ParsedCookie & {
-  category: string;
-  platform: string;
-  gdprPortal: string;
-  sameSite: string;
-  scope: string;
-};
-interface SingleTechnology {
-  name: string;
-  description: string;
-  confidence: number;
-  website: string;
-  categories: string;
 }
 
 export const reportDownloader = (
