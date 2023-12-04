@@ -52,7 +52,7 @@ const useColumnResizing = (
         0
       );
 
-      const diff = tableWidth - totalWidth;
+      let diff = tableWidth - totalWidth;
 
       if (diff > 0) {
         const perColumnDiff = diff / columnsToResize.length;
@@ -62,6 +62,31 @@ const useColumnResizing = (
           }
 
           column.width += perColumnDiff;
+        });
+      } else if (diff < 0) {
+        let perColumnDiff = -diff / columnsToResize.length;
+
+        const sortedColumns = [...columnsToResize].sort(
+          ({ width: width1 }, { width: width2 }) =>
+            (width1 || 0) - (width2 || 0)
+        );
+
+        sortedColumns.forEach((column, idx) => {
+          if (!column.width) {
+            column.width = 40;
+          }
+
+          const diffCanApply =
+            column.width - perColumnDiff < 40
+              ? column.width - 40
+              : perColumnDiff;
+
+          column.width -= diffCanApply;
+
+          diff += diffCanApply;
+
+          const newPerColumnDiff = -diff / (columnsToResize.length - idx - 1);
+          perColumnDiff = newPerColumnDiff;
         });
       }
 
