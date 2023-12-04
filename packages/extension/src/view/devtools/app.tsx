@@ -87,10 +87,10 @@ const App: React.FC = () => {
     (async () => {
       const tabId = chrome.devtools.inspectedWindow.tabId.toString();
 
-      const data = await chrome.storage.local.get(tabId);
+      const data = await chrome.storage.local.get();
 
-      if (data?.['selectedSidebarItem']) {
-        setDefaultSelectedItemKey(data['selectedSidebarItem']);
+      if (data?.[tabId]['selectedSidebarItem']) {
+        setDefaultSelectedItemKey(data[tabId]['selectedSidebarItem']);
       }
     })();
   }, []);
