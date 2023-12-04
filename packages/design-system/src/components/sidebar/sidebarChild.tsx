@@ -134,7 +134,7 @@ const SidebarChild = ({
         <div
           className="absolute"
           style={{
-            left: visibleWidth ? visibleWidth - 20 : 0,
+            left: visibleWidth ? visibleWidth - 35 : 0,
           }}
         >
           {sidebarItem.extraInterfaceToTitle}
