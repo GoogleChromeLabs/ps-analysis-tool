@@ -89,7 +89,7 @@ const App: React.FC = () => {
 
       const data = await chrome.storage.local.get();
 
-      if (data?.[tabId]['selectedSidebarItem']) {
+      if (data?.[tabId]?.['selectedSidebarItem']) {
         setDefaultSelectedItemKey(data[tabId]['selectedSidebarItem']);
       }
     })();
