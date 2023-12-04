@@ -208,7 +208,7 @@ class WebpageContentScript {
     ) {
       Object.assign(arrowElement.style, {
         left: '20px',
-        top: '5px',
+        top: '10px',
         transform: 'rotate(45deg)',
       });
       Object.assign(tooltip.style, {

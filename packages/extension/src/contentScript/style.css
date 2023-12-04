@@ -19,7 +19,7 @@ html body .ps-fixed[popover] {
 
 html body .ps-tooltip[popover] {
     background-color: transparent !important;
-    padding: 10px 10px 15px 10px !important;
+    padding: 15px 10px !important;
     max-width: 500px !important;
     min-width: 200px !important;
     width: max-content !important;
