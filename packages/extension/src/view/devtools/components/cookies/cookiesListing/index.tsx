@@ -18,7 +18,10 @@
  */
 import React, { useEffect, useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
-import type { CookieTableData } from '@ps-analysis-tool/common';
+import {
+  filterCookiesByFrame,
+  type CookieTableData,
+} from '@ps-analysis-tool/common';
 import {
   CookieDetails,
   CookieTable,
@@ -46,22 +49,13 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
       getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
     }));
 
-  const frameFilteredCookies = useMemo(() => {
-    const _frameFilteredCookies: { [key: string]: CookieTableData } = {};
-    if (cookies && selectedFrame && tabFrames && tabFrames[selectedFrame]) {
-      Object.entries(cookies).forEach(([key, cookie]) => {
-        tabFrames[selectedFrame].frameIds?.forEach((frameId) => {
-          if (cookie.frameIdList?.includes(frameId)) {
-            _frameFilteredCookies[key] = cookie;
-          }
-        });
-      });
-    }
-    return _frameFilteredCookies;
-  }, [cookies, selectedFrame, tabFrames]);
+  const frameFilteredCookies = useMemo(
+    () => filterCookiesByFrame(cookies, tabFrames, selectedFrame),
+    [cookies, selectedFrame, tabFrames]
+  );
 
   useEffect(() => {
-    setFilteredCookies(Object.values(frameFilteredCookies));
+    setFilteredCookies(frameFilteredCookies);
   }, [frameFilteredCookies, setFilteredCookies]);
 
   const [selectedFrameCookie, setSelectedFrameCookie] = useState<{
@@ -373,7 +367,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
         className="h-full flex"
       >
         <CookieTable
-          data={Object.values(frameFilteredCookies)}
+          data={frameFilteredCookies}
           tableColumns={tableColumns}
           showTopBar={true}
           tableFilters={filters}
