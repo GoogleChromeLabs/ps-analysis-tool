@@ -88,18 +88,18 @@ const generateSummaryDataCSV = (siteAnalysisData: CompleteJson): string => {
   }
 
   const summary = {
-    totalCookies,
-    totalFirstPartyCookies,
-    totalThirdPartyCookies,
-    analyticsCookies,
-    functionalCookies,
-    marketingCookies,
-    uncategorisedCookies,
-    affectedCookies,
-    affectedAnalyticsCookies,
-    affectedFunctionalCookies,
-    affectedMarketingCookies,
-    affectedUncategorisedCookies,
+    'Total Cookies': totalCookies,
+    'Total First Party Cookies': totalFirstPartyCookies,
+    'Total Third Party Cookies': totalThirdPartyCookies,
+    'Analytics Cookies': analyticsCookies,
+    'Functional Cookies': functionalCookies,
+    'Marketing Cookies': marketingCookies,
+    'Uncategorized Cookies': uncategorisedCookies,
+    'Affected Cookies': affectedCookies,
+    'Affected Analytics Cookies': affectedAnalyticsCookies,
+    'Affected Functional Cookies': affectedFunctionalCookies,
+    'Affected Marketing Cookies': affectedMarketingCookies,
+    'Affected Uncategorized Cookies': affectedUncategorisedCookies,
   };
 
   const CSVString = Object.entries(summary).reduce(
