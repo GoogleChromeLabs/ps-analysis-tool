@@ -13,6 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/**
+ * External dependencies
+ */
+import { sanitizeCsvRecord } from '@ps-analysis-tool/common';
+/**
+ * Internal dependencies
+ */
 import type { CompleteJson, CookieJsonDataType } from '../../../types';
 
 export const cookieDataHeader = [
@@ -46,7 +54,6 @@ const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
   let cookieRecords = '';
 
   for (const cookie of cookieMap.values()) {
-    //@TODO sanitize array elements
     //This should be in the same order as cookieDataHeader
     const recordsArray = [
       cookie.name,
@@ -54,15 +61,15 @@ const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
       cookie.domain,
       cookie.path,
       cookie.expires,
-      cookie.httpOnly,
+      cookie.httpOnly ? 'Yes' : 'No',
       cookie.isFirstParty ? 'First Party' : 'Third Party',
-      cookie.secure,
+      cookie.secure ? 'Yes' : 'No',
       cookie.sameSite,
       cookie.platform,
       cookie.category,
-      cookie.isBlocked,
+      cookie.isBlocked ? 'Yes' : 'No',
       cookie.GDPR || 'NA',
-    ];
+    ].map(sanitizeCsvRecord);
 
     cookieRecords += recordsArray.join(',') + '\r\n';
   }

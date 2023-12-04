@@ -13,6 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/**
+ * External dependencies
+ */
+import { sanitizeCsvRecord } from '@ps-analysis-tool/common';
+/**
+ * Internal dependencies
+ */
 import type { CompleteJson } from '../../../types';
 
 const technologyDataHeader = [
@@ -29,7 +37,6 @@ const generateTechnologyCSV = (siteAnalysisData: CompleteJson): string => {
   let technologyRecords = '';
 
   for (const technologyData of technologyDataArray) {
-    //@TODO sanitize array elements
     //This should be in the same order as technologyDataHeader
 
     const categoryRecord = technologyData.categories.reduce(
@@ -40,10 +47,10 @@ const generateTechnologyCSV = (siteAnalysisData: CompleteJson): string => {
     const recordsArray = [
       technologyData.name,
       technologyData.description,
-      technologyData.confidence,
+      technologyData.confidence + '%',
       technologyData.website,
       categoryRecord.slice(0, -1),
-    ];
+    ].map(sanitizeCsvRecord);
 
     technologyRecords += recordsArray.join(',') + '\r\n';
   }
