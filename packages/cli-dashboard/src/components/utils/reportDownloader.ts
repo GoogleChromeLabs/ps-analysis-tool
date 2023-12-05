@@ -18,28 +18,21 @@
  */
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
-import { type Cookie as ParsedCookie } from 'simple-cookie';
+import { sanitizeCsvRecord } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies
  */
-import type { CompleteJson, CookieFrameStorageType } from '../../types';
+import type {
+  CompleteJson,
+  CookieFrameStorageType,
+  SanitisedCookieType,
+  SingleTechnology,
+} from '../../types';
 
 interface NewReport extends CompleteJson {
   affectedCookies: CookieFrameStorageType;
   cookieAnalysisSummary: Record<string, number>;
-}
-
-type SanitisedCookieType = ParsedCookie & {
-  category: string;
-  scope: string;
-};
-interface SingleTechnology {
-  name: string;
-  description: string;
-  confidence: number;
-  website: string;
-  categories: string;
 }
 
 export const reportDownloader = (
@@ -79,6 +72,21 @@ export const reportDownloader = (
     'Platform',
     'Category',
     'Cookie Affected',
+    'GDPRPortal',
+  ];
+
+  const affectedCookieDataHeader = [
+    'Name',
+    'Value',
+    'Domain',
+    'Path',
+    'Expires',
+    'Http Only',
+    'Scope',
+    'Secure',
+    'Same Site',
+    'Platform',
+    'Category',
     'GDPRPortal',
   ];
 
@@ -125,9 +133,7 @@ export const reportDownloader = (
           cookieDataToBeProcessed[frameName].frameCookies[cookie];
         const sanitizedData = {
           name: unSanitisedCookie.name,
-          value: unSanitisedCookie.value.includes(',')
-            ? `"${unSanitisedCookie.value}"`
-            : unSanitisedCookie.value,
+          value: sanitizeCsvRecord(unSanitisedCookie.value),
           domain: unSanitisedCookie.domain,
           path: unSanitisedCookie.path,
           expires: unSanitisedCookie.expires,
@@ -139,7 +145,7 @@ export const reportDownloader = (
           sameSite: unSanitisedCookie.sameSite,
           platform: unSanitisedCookie.platform,
           category: unSanitisedCookie.category,
-          isCookieSet: !unSanitisedCookie.isBlocked,
+          isBlocked: unSanitisedCookie.isBlocked,
           gdprPortal: unSanitisedCookie?.GDPR || 'NA',
         };
 
@@ -163,7 +169,7 @@ export const reportDownloader = (
       totalCookiesCount + report.cookieData[frameName].cookiesCount;
   });
 
-  Object.keys(cookiesSet).map((cookieName: string) => {
+  Object.keys(cookiesSet).forEach((cookieName: string) => {
     const cookie = cookiesSet[cookieName];
     cookieDataValues =
       cookieDataValues + Object.values(cookie).join(',') + '\r\n';
@@ -193,7 +199,7 @@ export const reportDownloader = (
     return cookieName;
   });
 
-  Object.keys(affectedCookiesSet).map((cookieName) => {
+  Object.keys(affectedCookiesSet).forEach((cookieName) => {
     const cookie = affectedCookiesSet[cookieName];
 
     affectedCookiesCount = affectedCookiesCount + 1;
@@ -214,15 +220,30 @@ export const reportDownloader = (
       default:
         break;
     }
-    affectedCookiesDataValues =
-      affectedCookiesDataValues + Object.values(cookie).join(',') + '\r\n';
+
+    const dataLine = [
+      cookie.name,
+      cookie.value,
+      cookie.domain,
+      cookie.path,
+      cookie.expires,
+      cookie.httponly,
+      cookie.scope,
+      cookie.secure,
+      cookie.sameSite,
+      cookie.platform,
+      cookie.category,
+      cookie.gdprPortal,
+    ].join(',');
+
+    affectedCookiesDataValues = affectedCookiesDataValues + dataLine + '\r\n';
     return cookieName;
   });
 
   const cookieDataCSVContent = cookieDataHeader + '\n' + cookieDataValues;
 
   const affectedCookieDataCSVContent =
-    cookieDataHeader + '\n' + affectedCookiesDataValues;
+    affectedCookieDataHeader + '\n' + affectedCookiesDataValues;
 
   technologyDataToBeProcessed.forEach((technology) => {
     const singleTechnology: SingleTechnology = {

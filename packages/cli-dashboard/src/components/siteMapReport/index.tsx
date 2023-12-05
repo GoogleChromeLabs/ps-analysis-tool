@@ -20,7 +20,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
 import {
-  type CookieTableData,
   type TabFrames,
   type TechnologyData,
   UNKNOWN_FRAME_KEY,
@@ -34,6 +33,7 @@ import type { CookieFrameStorageType, CompleteJson } from '../../types';
 import SiteReport from '../siteReport';
 import SiteMapAffectedCookies from './sitemapAffectedCookies';
 import CookiesLandingContainer from '../siteReport/tabs/cookies/cookiesLandingContainer';
+import reshapeCookies from '../utils/reshapeCookies';
 
 interface SiteMapReportProps {
   landingPageCookies: CookieFrameStorageType;
@@ -74,52 +74,7 @@ const SiteMapReport = ({
   }, [cookies]);
 
   const reshapedCookies = useMemo(
-    () =>
-      Object.entries(landingPageCookies)
-        .filter(
-          ([frame]) => frame.includes('http') || frame === UNKNOWN_FRAME_KEY
-        )
-        .map(([frame, _cookies]) => {
-          const newCookies = Object.fromEntries(
-            Object.entries(_cookies).map(([key, cookie]) => [
-              key,
-              {
-                parsedCookie: {
-                  name: cookie.name,
-                  value: cookie.value,
-                  domain: cookie.domain,
-                  path: cookie.path,
-                  expires: cookie.expires,
-                  httponly: cookie.httpOnly,
-                  secure: cookie.secure,
-                  samesite: cookie.sameSite,
-                },
-                analytics: {
-                  platform: cookie.platform,
-                  category:
-                    cookie.category === 'Unknown Category'
-                      ? 'Uncategorized'
-                      : cookie.category,
-                  description: cookie.description,
-                } as CookieTableData['analytics'],
-                url: cookie.pageUrl,
-                headerType: 'response',
-                isFirstParty: cookie.isFirstParty,
-                frameIdList: [],
-                isCookieSet: !cookie.isBlocked,
-                frameUrl: frame,
-              } as CookieTableData,
-            ])
-          );
-
-          return newCookies;
-        })
-        .reduce((acc, cookieObj) => {
-          return {
-            ...acc,
-            ...cookieObj,
-          };
-        }, {}),
+    () => reshapeCookies(landingPageCookies),
     [landingPageCookies]
   );
 
