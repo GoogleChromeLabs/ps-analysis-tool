@@ -25,16 +25,17 @@ import React, {
   useRef,
 } from 'react';
 import { useContextSelector, createContext } from 'use-context-selector';
-import { noop } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies
  */
 import { PersistentStorageData } from '../useTable';
 import { extractStorage, updateStorage } from './utils';
+import PQueue from 'p-queue';
 
 export const TABLE_PERSISTENT_SETTINGS_STORE_KEY =
   'tablePersistentSettingsStore';
+const PROMISE_QUEUE = new PQueue({ concurrency: 1 });
 
 export interface TablePersistentSettingsStoreContext {
   state: {
@@ -44,7 +45,7 @@ export interface TablePersistentSettingsStoreContext {
     setPreferences: (
       options: PersistentStorageData,
       persistenceKey: string
-    ) => void;
+    ) => Promise<void>;
     getPreferences: (
       persistentkey: string,
       type: keyof PersistentStorageData
@@ -55,7 +56,7 @@ export interface TablePersistentSettingsStoreContext {
 const initialState: TablePersistentSettingsStoreContext = {
   state: {},
   actions: {
-    setPreferences: noop,
+    setPreferences: () => Promise.resolve(),
     getPreferences: () => ({}),
   },
 };
@@ -74,12 +75,14 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     (async () => {
-      const _preferences = await extractStorage(
-        TABLE_PERSISTENT_SETTINGS_STORE_KEY,
-        isChromeExtension
-      );
+      await PROMISE_QUEUE.add(async () => {
+        const _preferences = await extractStorage(
+          TABLE_PERSISTENT_SETTINGS_STORE_KEY,
+          isChromeExtension
+        );
 
-      preferences.current = _preferences;
+        preferences.current = _preferences;
+      });
     })();
   }, [isChromeExtension]);
 
@@ -92,13 +95,15 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const setPreferences = useCallback(
     async (options: PersistentStorageData, persistenceKey: string) => {
-      const updatedData = await updateStorage(
-        persistenceKey,
-        isChromeExtension,
-        options
-      );
+      await PROMISE_QUEUE.add(async () => {
+        const updatedData = await updateStorage(
+          persistenceKey,
+          isChromeExtension,
+          options
+        );
 
-      preferences.current = updatedData;
+        preferences.current = updatedData;
+      });
     },
     [isChromeExtension]
   );

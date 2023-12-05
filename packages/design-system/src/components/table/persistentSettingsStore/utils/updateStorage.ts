@@ -91,9 +91,9 @@ const updateChromeStorage = async (
   const tabId = chrome.devtools.inspectedWindow.tabId.toString();
 
   const data = await chrome.storage.local.get();
-  const tableData = data[tabId][
-    TABLE_PERSISTENT_SETTINGS_STORE_KEY
-  ] as TablePersistentSettingsStoreContext['state'];
+
+  let tableData: TablePersistentSettingsStoreContext['state'] =
+    data?.[tabId]?.[TABLE_PERSISTENT_SETTINGS_STORE_KEY];
   let requiredData = tableData?.[persistenceKey];
 
   if (requiredData) {
@@ -105,20 +105,20 @@ const updateChromeStorage = async (
     requiredData = storageData;
   }
 
-  const updatedData = {
-    ...tableData,
-    [persistenceKey]: requiredData,
-  } as TablePersistentSettingsStoreContext['state'];
+  if (!tableData) {
+    data[tabId][TABLE_PERSISTENT_SETTINGS_STORE_KEY] = {};
+    tableData = data[tabId][TABLE_PERSISTENT_SETTINGS_STORE_KEY];
+  }
 
-  await chrome.storage.local.set({
-    ...data,
-    [tabId]: {
-      ...data[tabId],
-      [TABLE_PERSISTENT_SETTINGS_STORE_KEY]: updatedData,
-    },
-  });
+  if (!tableData[persistenceKey]) {
+    tableData[persistenceKey] = {};
+  }
 
-  return updatedData;
+  tableData[persistenceKey] = requiredData;
+
+  await chrome.storage.local.set(data);
+
+  return tableData;
 };
 
 export default updateStorage;

@@ -46,9 +46,9 @@ const extractChromeStorage = async (
   const tabId = chrome.devtools.inspectedWindow.tabId.toString();
 
   const data = await chrome.storage.local.get();
-  const tableData = data[tabId];
+  const tableData = data?.[tabId];
   if (tableData) {
-    const persistenceData = tableData[persistenceKey];
+    const persistenceData = tableData?.[persistenceKey];
     if (persistenceData) {
       return persistenceData;
     }
