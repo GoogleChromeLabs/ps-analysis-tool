@@ -17,18 +17,25 @@
 /**
  * External dependencies.
  */
-import React, { useMemo } from 'react';
-import type { CookieTableData, SortingState } from '@ps-analysis-tool/common';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  getCookieKey,
+  type CookieTableData,
+  type SortingState,
+} from '@ps-analysis-tool/common';
 import {
   type InfoType,
   type TableColumn,
   CookieTable,
+  type TableData,
 } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
 import { usePreferenceStore } from '../../../../stateProviders/preferenceStore';
+import EditableCheckBoxInput from './editableComponents/editableCheckBox';
+import EditableTextInput from './editableComponents/editableTextInput';
 
 export interface CookieTableContainerProps {
   cookies: CookieTableData[];
@@ -57,55 +64,165 @@ const CookieTableContainer = ({
       selectedColumns: state?.selectedColumns as Record<string, boolean>,
     }));
 
+  const [tableData, setTableData] = useState<Record<string, CookieTableData>>(
+    {}
+  );
+
+  const removeHighlights = useCallback(() => {
+    setTableData(() =>
+      cookies.reduce((acc, cookie) => {
+        const key = getCookieKey(cookie.parsedCookie) as string;
+        acc[key] = {
+          ...cookie,
+          highlighted: false,
+        };
+
+        return acc;
+      }, {} as Record<string, CookieTableData>)
+    );
+  }, [cookies]);
+
+  useEffect(() => {
+    chrome.storage.session.onChanged.addListener(removeHighlights);
+    return () => {
+      try {
+        chrome.storage.session.onChanged.removeListener(removeHighlights);
+      } catch (error) {
+        /* do nothing */
+      }
+    };
+  }, [removeHighlights]);
+
+  useEffect(() => {
+    setTableData((prevData) =>
+      cookies.reduce((acc, cookie) => {
+        const key = getCookieKey(cookie.parsedCookie) as string;
+        acc[key] = {
+          ...cookie,
+          highlighted: prevData?.[key]?.highlighted,
+        };
+
+        return acc;
+      }, {} as Record<string, CookieTableData>)
+    );
+  }, [cookies]);
+
+  const rowHighlighter = useCallback(
+    (value: boolean, toChangeCookieKey: string) => {
+      setTableData((prevData) => {
+        const newData = { ...prevData };
+
+        Object.keys(prevData).forEach((key) => {
+          const cookieKey = getCookieKey(newData[key].parsedCookie);
+
+          if (cookieKey === toChangeCookieKey) {
+            newData[key].highlighted = value;
+          }
+        });
+
+        return newData;
+      });
+    },
+    []
+  );
+
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
         header: 'Name',
         accessorKey: 'parsedCookie.name',
-        cell: (info: InfoType) => info,
+        cell: (info: InfoType, rowData?: TableData) => (
+          <EditableTextInput
+            info={info}
+            keyToChange="name"
+            rowHighlighter={rowHighlighter}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
+          />
+        ),
         enableHiding: false,
       },
       {
         header: 'Value',
         accessorKey: 'parsedCookie.value',
-        cell: (info: InfoType) => info,
+        cell: (info: InfoType, rowData?: TableData) => (
+          <EditableTextInput
+            info={info}
+            keyToChange="value"
+            rowHighlighter={rowHighlighter}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
+          />
+        ),
       },
       {
         header: 'Domain',
         accessorKey: 'parsedCookie.domain',
-        cell: (info: InfoType) => info,
+        cell: (info: InfoType, rowData?: TableData) => (
+          <EditableTextInput
+            info={info}
+            keyToChange="domain"
+            rowHighlighter={rowHighlighter}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
+          />
+        ),
       },
       {
         header: 'Path',
         accessorKey: 'parsedCookie.path',
-        cell: (info: InfoType) => info,
+        cell: (info: InfoType, rowData?: TableData) => (
+          <EditableTextInput
+            info={info}
+            keyToChange="path"
+            rowHighlighter={rowHighlighter}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
+          />
+        ),
       },
       {
         header: 'Expires / Max-Age',
         accessorKey: 'parsedCookie.expires',
-        cell: (info: InfoType) => (info ? info : 'Session'),
+        cell: (info: InfoType, details?: TableData) => (
+          <EditableTextInput
+            info={info}
+            keyToChange="expirationDate"
+            rowHighlighter={rowHighlighter}
+            cookieKey={getCookieKey((details as CookieTableData)?.parsedCookie)}
+          />
+        ),
       },
       {
         header: 'HttpOnly',
         accessorKey: 'parsedCookie.httponly',
-        cell: (info: InfoType) => (
-          <p className="flex justify-center items-center">
-            {info ? <span className="font-serif">✓</span> : ''}
-          </p>
+        cell: (info: InfoType, rowData?: TableData) => (
+          <EditableCheckBoxInput
+            info={info}
+            keyToChange="httpOnly"
+            rowHighlighter={rowHighlighter}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
+          />
         ),
       },
       {
         header: 'SameSite',
         accessorKey: 'parsedCookie.samesite',
-        cell: (info: InfoType) => <span className="capitalize">{info}</span>,
+        cell: (info: InfoType, rowData?: TableData) => (
+          <EditableTextInput
+            info={info}
+            keyToChange="sameSite"
+            rowHighlighter={rowHighlighter}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
+          />
+        ),
       },
       {
         header: 'Secure',
         accessorKey: 'parsedCookie.secure',
-        cell: (info: InfoType) => (
-          <p className="flex justify-center items-center">
-            {info ? <span className="font-serif">✓</span> : ''}
-          </p>
+        cell: (info: InfoType, rowData?: TableData) => (
+          <EditableCheckBoxInput
+            info={info}
+            keyToChange="secure"
+            rowHighlighter={rowHighlighter}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
+          />
         ),
       },
       {
@@ -155,13 +272,13 @@ const CookieTableContainer = ({
         ),
       },
     ],
-    []
+    [rowHighlighter]
   );
 
   return (
     <CookieTable
       tableColumns={tableColumns}
-      data={cookies}
+      data={Object.values(tableData)}
       selectedFrame={selectedFrame}
       selectedFrameCookie={selectedFrameCookie}
       setSelectedFrameCookie={setSelectedFrameCookie}
