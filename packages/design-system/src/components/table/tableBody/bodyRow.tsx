@@ -49,19 +49,24 @@ const BodyRow = ({
   onKeyDown,
 }: BodyRowProps) => {
   const cookieKey = getRowObjectKey(row);
-
+  const isHighlighted = (row.originalData as CookieTableData)?.highlighted;
   const tableRowClassName = classNames(
     'outline-0 flex divide-x divide-american-silver dark:divide-quartz',
-    {
-      'bg-burnt-sienna-30': (row.originalData as CookieTableData)?.highlighted,
-    },
     cookieKey !== selectedKey &&
       (index % 2
-        ? 'bg-anti-flash-white dark:bg-charleston-green'
+        ? isHighlighted
+          ? 'bg-dirty-pink'
+          : 'bg-anti-flash-white dark:bg-charleston-green'
+        : isHighlighted
+        ? 'bg-dirty-pink text-dirty-red dark:text-dirty-red text-dirty-red'
         : 'bg-white dark:bg-raisin-black'),
     cookieKey === selectedKey &&
       (isRowFocused
-        ? 'bg-gainsboro dark:bg-outer-space'
+        ? isHighlighted
+          ? 'bg-dirty-red'
+          : 'bg-gainsboro dark:bg-outer-space'
+        : isHighlighted
+        ? 'bg-dirty-pink text-dirty-red'
         : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver')
   );
 
@@ -74,7 +79,13 @@ const BodyRow = ({
       data-testid="body-row"
     >
       {columns.map(({ accessorKey, width }, idx) => (
-        <BodyCell key={idx} cell={row[accessorKey].value} width={width || 0} />
+        <BodyCell
+          key={idx}
+          cell={row[accessorKey]?.value || ''}
+          width={width || 0}
+          isHighlighted={isHighlighted}
+          isRowFocused={cookieKey === selectedKey}
+        />
       ))}
     </div>
   );

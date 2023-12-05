@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies
+ * External dependencies
  */
 import type { CookieTableData } from '@ps-analysis-tool/common';
 
@@ -182,7 +182,7 @@ export const frameFilteredCookies: { [key: string]: CookieTableData } = {
     isFirstParty: true,
     parsedCookie: {
       domain: '.rtcamp.com',
-      expires: 0,
+      expires: 'Session',
       httponly: false,
       name: '_parsely_session_expiry',
       path: '/',
