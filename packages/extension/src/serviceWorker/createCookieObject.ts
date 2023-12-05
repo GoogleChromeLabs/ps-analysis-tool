@@ -130,7 +130,10 @@ function parseAttributeValues(
 
   if (type === 'domain') {
     if (url) {
-      value = value || '.' + getSubdomain(url) + '.' + getDomain(url);
+      const subDomain = getSubdomain(url);
+      const domain = getDomain(url);
+      value =
+        value || !subDomain ? '.' + domain : '.' + subDomain + '.' + domain;
     } else {
       value = value || '';
     }
