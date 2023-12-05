@@ -13,23 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import {
-  CookieDatabase,
-  analyzeCookiesUrls,
-  analyzeTechnologiesUrlsInBatches,
-} from '@ps-analysis-tool/analysis-utils';
-import { Collection } from 'mongodb';
+/**
+ * External dependencies.
+ */
+import { type Collection } from 'mongodb';
+import { type SiteAnalysisJobQueue } from '../utils';
 
 const analyzeSingleUrl = async (
   urlCollection: Collection,
   cookieAnalysisCollection: Collection,
   technologyAnalysisCollection: Collection,
   url: string,
-  cookieDictionary: CookieDatabase,
-  delayTime: number,
   shouldReanalyizeCookies: boolean,
-  shouldReanalyizeTechnologies: boolean
+  shouldReanalyizeTechnologies: boolean,
+  queueHandle: SiteAnalysisJobQueue
 ) => {
   const pageDocument = await urlCollection?.findOne({
     pageUrl: url,
@@ -59,110 +56,17 @@ const analyzeSingleUrl = async (
       cookieData: cookieData.cookieData,
       technologyData,
     };
-  } else if (
-    pageDocument &&
-    (shouldReanalyizeCookies || shouldReanalyizeTechnologies)
-  ) {
-    //Data is in DB but it reanalysis is requested.
-    //@Todo Make this a job and reply with queue no
-
-    let cookieData;
-    let technologyData;
-
-    if (!shouldReanalyizeCookies) {
-      cookieData = (
-        await cookieAnalysisCollection?.findOne({
-          pageId: pageDocument._id,
-        })
-      )?.cookieData;
-    } else {
-      const [cookieAnalysis] = await analyzeCookiesUrls(
-        [url],
-        true,
-        delayTime,
-        cookieDictionary
-      );
-
-      cookieData = cookieAnalysis.cookieData;
-
-      await cookieAnalysisCollection.updateOne(
-        {
-          pageId: pageDocument._id,
-        },
-        {
-          $set: {
-            cookieData: cookieData,
-            updataedAt: new Date().toUTCString(),
-          },
-        }
-      );
-    }
-
-    if (!shouldReanalyizeTechnologies) {
-      technologyData = (
-        await technologyAnalysisCollection?.findOne({
-          pageId: pageDocument._id,
-        })
-      )?.technologyData;
-    } else {
-      [technologyData] = await analyzeTechnologiesUrlsInBatches([url]);
-
-      await technologyAnalysisCollection.updateOne(
-        {
-          pageId: pageDocument._id,
-        },
-        {
-          $set: {
-            technologyData: technologyData,
-            updataedAt: new Date().toUTCString(),
-          },
-        }
-      );
-    }
-
-    return {
-      pageUrl: url,
-      cookieData: cookieData.cookieData,
-      technologyData,
-    };
   } else {
-    // No previous analysis in DB.
-    //@Todo Make this a job and reply with queue no
-
-    const [cookieAnalysis] = await analyzeCookiesUrls(
-      [url],
-      true,
-      delayTime,
-      cookieDictionary
-    );
-
-    const [technologyData] = await analyzeTechnologiesUrlsInBatches([url]);
-
-    const _pageDocument = await urlCollection.insertOne({
-      pageUrl: url,
-      createdAt: new Date().toUTCString(),
-      updataedAt: new Date().toUTCString(),
+    // Add to Job queue
+    const queueInd = await queueHandle.createJob({
+      url,
+      shouldReanalyizeCookies,
+      shouldReanalyizeTechnologies,
     });
 
-    await cookieAnalysisCollection.insertOne({
-      pageId: _pageDocument.insertedId,
-      cookieData: cookieAnalysis.cookieData,
-      createdAt: new Date().toUTCString(),
-      updataedAt: new Date().toUTCString(),
-    });
+    console.log('Added to queue:', queueInd);
 
-    await technologyAnalysisCollection.insertOne({
-      pageId: _pageDocument.insertedId,
-      technologyData: technologyData,
-      createdAt: new Date().toUTCString(),
-      updataedAt: new Date().toUTCString(),
-    });
-
-    return {
-      pageUrl: url,
-      cookieData: cookieAnalysis.cookieData,
-      technologyData,
-    };
+    return queueInd;
   }
 };
 
