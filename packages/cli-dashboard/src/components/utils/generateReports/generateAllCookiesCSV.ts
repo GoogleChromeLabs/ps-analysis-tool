@@ -23,7 +23,7 @@ import { sanitizeCsvRecord } from '@ps-analysis-tool/common';
  */
 import type { CompleteJson, CookieJsonDataType } from '../../../types';
 
-export const cookieDataHeader = [
+export const COOKIES_DATA_HEADER = [
   'Name',
   'Value',
   'Domain',
@@ -74,7 +74,7 @@ const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
     cookieRecords += recordsArray.join(',') + '\r\n';
   }
 
-  return cookieDataHeader.join(',') + '\r\n' + cookieRecords;
+  return COOKIES_DATA_HEADER.join(',') + '\r\n' + cookieRecords;
 };
 
 export default generateAllCookiesCSV;

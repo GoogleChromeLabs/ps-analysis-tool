@@ -23,7 +23,7 @@ import { sanitizeCsvRecord } from '@ps-analysis-tool/common';
  */
 import type { CompleteJson, CookieJsonDataType } from '../../../types';
 
-export const affectedCookieDataHeader = [
+export const AFFECTED_COOKIES_DATA_HEADERS = [
   'Name',
   'Value',
   'Domain',
@@ -43,7 +43,7 @@ const generateAffectedCookiesCSV = (siteAnalysisData: CompleteJson): string => {
 
   const affectedCookieMap: Map<string, CookieJsonDataType> = new Map();
 
-  // More than one frame can use one cookie, need to make a map for gettig unique entries.
+  // More than one frame can use one cookie, need to make a map for getting unique entries.
   Object.entries(frameCookieDataMap).forEach(([, { frameCookies }]) => {
     Object.entries(frameCookies).forEach(([cookieKey, cookieData]) => {
       if (cookieData.isBlocked) {
@@ -74,7 +74,7 @@ const generateAffectedCookiesCSV = (siteAnalysisData: CompleteJson): string => {
     cookieRecords += recordsArray.join(',') + '\r\n';
   }
 
-  return affectedCookieDataHeader.join(',') + '\r\n' + cookieRecords;
+  return AFFECTED_COOKIES_DATA_HEADERS.join(',') + '\r\n' + cookieRecords;
 };
 
 export default generateAffectedCookiesCSV;

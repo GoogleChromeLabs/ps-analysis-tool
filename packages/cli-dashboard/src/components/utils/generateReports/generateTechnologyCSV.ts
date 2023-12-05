@@ -23,7 +23,7 @@ import { sanitizeCsvRecord } from '@ps-analysis-tool/common';
  */
 import type { CompleteJson } from '../../../types';
 
-const technologyDataHeader = [
+const TECHNOLOGIES_DATA_HEADER = [
   'Name',
   'Description',
   'Confidence',
@@ -55,7 +55,7 @@ const generateTechnologyCSV = (siteAnalysisData: CompleteJson): string => {
     technologyRecords += recordsArray.join(',') + '\r\n';
   }
 
-  return technologyDataHeader.join(',') + '\r\n' + technologyRecords;
+  return TECHNOLOGIES_DATA_HEADER.join(',') + '\r\n' + technologyRecords;
 };
 
 export default generateTechnologyCSV;

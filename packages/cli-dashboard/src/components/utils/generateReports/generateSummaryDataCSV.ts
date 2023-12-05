@@ -31,7 +31,6 @@ const generateSummaryDataCSV = (siteAnalysisData: CompleteJson): string => {
     });
   });
 
-  let totalCookies = 0;
   let totalFirstPartyCookies = 0;
   let totalThirdPartyCookies = 0;
   let analyticsCookies = 0;
@@ -45,8 +44,6 @@ const generateSummaryDataCSV = (siteAnalysisData: CompleteJson): string => {
   let affectedUncategorisedCookies = 0;
 
   for (const cookie of cookieMap.values()) {
-    totalCookies += 1;
-
     if (cookie.isFirstParty) {
       totalFirstPartyCookies += 1;
     } else {
@@ -88,7 +85,7 @@ const generateSummaryDataCSV = (siteAnalysisData: CompleteJson): string => {
   }
 
   const summary = {
-    'Total Cookies': totalCookies,
+    'Total Cookies': cookieMap.size,
     'Total First Party Cookies': totalFirstPartyCookies,
     'Total Third Party Cookies': totalThirdPartyCookies,
     'Analytics Cookies': analyticsCookies,
