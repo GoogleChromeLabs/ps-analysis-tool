@@ -35,8 +35,101 @@ const analyzeSingleUrl = async (
     pageUrl: url,
   });
 
-  if (!pageDocument) {
-    const [cookieData] = await analyzeCookiesUrls(
+  if (
+    pageDocument &&
+    !shouldReanalyizeCookies &&
+    !shouldReanalyizeTechnologies
+  ) {
+    //Simple lookup
+
+    const cookieData = (
+      await cookieAnalysisCollection?.findOne({
+        pageId: pageDocument._id,
+      })
+    )?.cookieData;
+
+    const technologyData = (
+      await technologyAnalysisCollection?.findOne({
+        pageId: pageDocument._id,
+      })
+    )?.technologyData;
+
+    return {
+      pageUrl: url,
+      cookieData: cookieData.cookieData,
+      technologyData,
+    };
+  } else if (
+    pageDocument &&
+    (shouldReanalyizeCookies || shouldReanalyizeTechnologies)
+  ) {
+    //Data is in DB but it reanalysis is requested.
+    //@Todo Make this a job and reply with queue no
+
+    let cookieData;
+    let technologyData;
+
+    if (!shouldReanalyizeCookies) {
+      cookieData = (
+        await cookieAnalysisCollection?.findOne({
+          pageId: pageDocument._id,
+        })
+      )?.cookieData;
+    } else {
+      const [cookieAnalysis] = await analyzeCookiesUrls(
+        [url],
+        true,
+        delayTime,
+        cookieDictionary
+      );
+
+      cookieData = cookieAnalysis.cookieData;
+
+      await cookieAnalysisCollection.updateOne(
+        {
+          pageId: pageDocument._id,
+        },
+        {
+          $set: {
+            cookieData: cookieData,
+            updataedAt: new Date().toUTCString(),
+          },
+        }
+      );
+    }
+
+    if (!shouldReanalyizeTechnologies) {
+      technologyData = (
+        await technologyAnalysisCollection?.findOne({
+          pageId: pageDocument._id,
+        })
+      )?.technologyData;
+    } else {
+      [technologyData] = await analyzeTechnologiesUrlsInBatches([url]);
+
+      await technologyAnalysisCollection.updateOne(
+        {
+          pageId: pageDocument._id,
+        },
+        {
+          $set: {
+            technologyData: technologyData,
+            updataedAt: new Date().toUTCString(),
+          },
+        }
+      );
+    }
+
+    return {
+      pageUrl: url,
+      cookieData: cookieData.cookieData,
+      technologyData,
+    };
+  } else {
+    // No previous analysis in DB.
+    //@Todo Make this a job and reply with queue no
+
+    const [cookieAnalysis] = await analyzeCookiesUrls(
       [url],
       true,
       delayTime,
@@ -53,7 +146,7 @@ const analyzeSingleUrl = async (
 
     await cookieAnalysisCollection.insertOne({
       pageId: _pageDocument.insertedId,
-      cookieData: cookieData,
+      cookieData: cookieAnalysis.cookieData,
       createdAt: new Date().toUTCString(),
       updataedAt: new Date().toUTCString(),
     });
@@ -67,70 +160,10 @@ const analyzeSingleUrl = async (
 
     return {
       pageUrl: url,
-      cookieData: cookieData.cookieData,
+      cookieData: cookieAnalysis.cookieData,
       technologyData,
     };
   }
-
-  let cookieData;
-  let technologyData;
-
-  if (!shouldReanalyizeCookies) {
-    cookieData = (
-      await cookieAnalysisCollection?.findOne({
-        pageId: pageDocument._id,
-      })
-    )?.cookieData;
-  } else {
-    console.log('Reanalyzing Cookies');
-    [cookieData] = await analyzeCookiesUrls(
-      [url],
-      true,
-      delayTime,
-      cookieDictionary
-    );
-
-    await cookieAnalysisCollection.updateOne(
-      {
-        pageId: pageDocument._id,
-      },
-      {
-        $set: {
-          cookieData: cookieData,
-          updataedAt: new Date().toUTCString(),
-        },
-      }
-    );
-  }
-
-  if (!shouldReanalyizeTechnologies) {
-    technologyData = (
-      await technologyAnalysisCollection?.findOne({
-        pageId: pageDocument._id,
-      })
-    )?.technologyData;
-  } else {
-    console.log('Reanalyzing Technologies');
-    [technologyData] = await analyzeTechnologiesUrlsInBatches([url]);
-
-    await technologyAnalysisCollection.updateOne(
-      {
-        pageId: pageDocument._id,
-      },
-      {
-        $set: {
-          technologyData: technologyData,
-          updataedAt: new Date().toUTCString(),
-        },
-      }
-    );
-  }
-
-  return {
-    pageUrl: url,
-    cookieData: cookieData.cookieData,
-    technologyData,
-  };
 };
 
 export default analyzeSingleUrl;

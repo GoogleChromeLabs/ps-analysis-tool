@@ -121,7 +121,7 @@ fetchDictionary()
       }
 
       if (type === ReportDisplayType.SITE) {
-        const analysis = await analyzeSingleUrl(
+        const response = await analyzeSingleUrl(
           urlCollection,
           cookieAnalysisCollection,
           technologyAnalysisCollection,
@@ -132,7 +132,7 @@ fetchDictionary()
           shouldReanalyizeTechnologies
         );
 
-        return res.json(analysis);
+        return res.json(response);
       } else {
         return res.send({
           message: "Sorry, we don't have support to analyze xml file yet.",
