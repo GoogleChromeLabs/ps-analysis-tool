@@ -134,7 +134,9 @@ fetchDictionary()
 
         return res.json(analysis);
       } else {
-        return res.sendStatus(200);
+        return res.send({
+          message: "Sorry, we don't have support to analyze xml file yet.",
+        });
       }
     });
 
