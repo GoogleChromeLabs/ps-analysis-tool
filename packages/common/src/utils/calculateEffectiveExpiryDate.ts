@@ -22,13 +22,18 @@
 function calculateEffectiveExpiryDate(
   date: Date | number | string | undefined
 ): string {
-  if (!date) {
+  if (!date || date === -1) {
     return 'Session';
   }
   if (typeof date === 'number') {
-    const totalDecimalPlaces = date.toString().split('.')[1]?.length || 0;
-    const dateToBeConverted = totalDecimalPlaces >= 6 ? date * 1000 : date;
+    const stringSplitNumber = date.toString().split('.');
+    const totalDecimalPlaces = stringSplitNumber[1]?.length || 0;
+    const digitsBeforeDecimal = stringSplitNumber[0]?.length || 0;
+    const dateToBeConverted =
+      digitsBeforeDecimal <= 10 || totalDecimalPlaces >= 6 ? date * 1000 : date;
     return new Date(dateToBeConverted).toJSON();
+  } else if (typeof date === 'object') {
+    return date.toJSON();
   } else {
     return new Date(date).toJSON();
   }

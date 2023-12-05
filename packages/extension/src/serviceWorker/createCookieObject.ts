@@ -158,10 +158,7 @@ function parseAttributeValues(
   }
 
   if (type === 'expires' && value !== 0) {
-    const effectiveExpirationDate = calculateEffectiveExpiryDate(
-      value as string
-    );
-    value = effectiveExpirationDate || 0;
+    value = calculateEffectiveExpiryDate(value as string) || 0;
   }
 
   return value;

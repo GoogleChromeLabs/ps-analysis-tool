@@ -51,7 +51,6 @@ const parseResponseCookieHeader = async (
 ): Promise<CookieData> => {
   let parsedCookie: ParsedCookie = cookie.parse(value);
   parsedCookie = await createCookieObject(parsedCookie, url);
-
   let analytics: CookieAnalytics | null = null;
   if (dictionary) {
     analytics = findAnalyticsMatch(parsedCookie.name, dictionary);
