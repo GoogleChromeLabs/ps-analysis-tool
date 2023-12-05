@@ -35,7 +35,6 @@ import PQueue from 'p-queue';
 
 export const TABLE_PERSISTENT_SETTINGS_STORE_KEY =
   'tablePersistentSettingsStore';
-const PROMISE_QUEUE = new PQueue({ concurrency: 1 });
 
 export interface TablePersistentSettingsStoreContext {
   state: {
@@ -65,6 +64,8 @@ export const Context =
   createContext<TablePersistentSettingsStoreContext>(initialState);
 
 export const Provider = ({ children }: PropsWithChildren) => {
+  const PROMISE_QUEUE = useMemo(() => new PQueue({ concurrency: 1 }), []);
+
   const isChromeExtension = useMemo(() => {
     return window.location.protocol === 'chrome-extension:';
   }, []);
@@ -84,7 +85,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         preferences.current = _preferences;
       });
     })();
-  }, [isChromeExtension]);
+  }, [PROMISE_QUEUE, isChromeExtension]);
 
   const getPreferences = useCallback(
     (persistentkey: string, type: keyof PersistentStorageData) => {
@@ -105,7 +106,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         preferences.current = updatedData;
       });
     },
-    [isChromeExtension]
+    [PROMISE_QUEUE, isChromeExtension]
   );
 
   return (
