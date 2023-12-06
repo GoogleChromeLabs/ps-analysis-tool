@@ -13,124 +13,59 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import {
-  CookieDatabase,
-  analyzeCookiesUrls,
-  analyzeTechnologiesUrlsInBatches,
-} from '@ps-analysis-tool/analysis-utils';
-import { Collection } from 'mongodb';
+/**
+ * External dependencies.
+ */
+import { type Collection } from 'mongodb';
+import { type SiteAnalysisJobQueue } from '../utils';
 
 const analyzeSingleUrl = async (
-  urlCollection: Collection,
   cookieAnalysisCollection: Collection,
   technologyAnalysisCollection: Collection,
+  urlCollection: Collection,
   url: string,
-  cookieDictionary: CookieDatabase,
-  delayTime: number,
   shouldReanalyizeCookies: boolean,
-  shouldReanalyizeTechnologies: boolean
+  shouldReanalyizeTechnologies: boolean,
+  queueHandle: SiteAnalysisJobQueue
 ) => {
   const pageDocument = await urlCollection?.findOne({
     pageUrl: url,
   });
 
-  if (!pageDocument) {
-    const [cookieData] = await analyzeCookiesUrls(
-      [url],
-      true,
-      delayTime,
-      cookieDictionary
-    );
+  if (
+    pageDocument &&
+    !shouldReanalyizeCookies &&
+    !shouldReanalyizeTechnologies
+  ) {
+    //Simple lookup, if Page document exists it can be assumed that analysis data related to it also exists.
 
-    const [technologyData] = await analyzeTechnologiesUrlsInBatches([url]);
-
-    const _pageDocument = await urlCollection.insertOne({
-      pageUrl: url,
-      createdAt: new Date().toUTCString(),
-      updataedAt: new Date().toUTCString(),
-    });
-
-    await cookieAnalysisCollection.insertOne({
-      pageId: _pageDocument.insertedId,
-      cookieData: cookieData,
-      createdAt: new Date().toUTCString(),
-      updataedAt: new Date().toUTCString(),
-    });
-
-    await technologyAnalysisCollection.insertOne({
-      pageId: _pageDocument.insertedId,
-      technologyData: technologyData,
-      createdAt: new Date().toUTCString(),
-      updataedAt: new Date().toUTCString(),
-    });
-
-    return {
-      pageUrl: url,
-      cookieData: cookieData.cookieData,
-      technologyData,
-    };
-  }
-
-  let cookieData;
-  let technologyData;
-
-  if (!shouldReanalyizeCookies) {
-    cookieData = (
+    const cookieData = (
       await cookieAnalysisCollection?.findOne({
         pageId: pageDocument._id,
       })
     )?.cookieData;
-  } else {
-    console.log('Reanalyzing Cookies');
-    [cookieData] = await analyzeCookiesUrls(
-      [url],
-      true,
-      delayTime,
-      cookieDictionary
-    );
 
-    await cookieAnalysisCollection.updateOne(
-      {
-        pageId: pageDocument._id,
-      },
-      {
-        $set: {
-          cookieData: cookieData,
-          updataedAt: new Date().toUTCString(),
-        },
-      }
-    );
-  }
-
-  if (!shouldReanalyizeTechnologies) {
-    technologyData = (
+    const technologyData = (
       await technologyAnalysisCollection?.findOne({
         pageId: pageDocument._id,
       })
     )?.technologyData;
+
+    return {
+      pageUrl: url,
+      cookieData,
+      technologyData,
+    };
   } else {
-    console.log('Reanalyzing Technologies');
-    [technologyData] = await analyzeTechnologiesUrlsInBatches([url]);
+    // If page document does not exist or reanalysis is requested add to Job queue.
+    const queueInd = await queueHandle.createJob({
+      url,
+      shouldReanalyizeCookies,
+      shouldReanalyizeTechnologies,
+    });
 
-    await technologyAnalysisCollection.updateOne(
-      {
-        pageId: pageDocument._id,
-      },
-      {
-        $set: {
-          technologyData: technologyData,
-          updataedAt: new Date().toUTCString(),
-        },
-      }
-    );
+    return queueInd;
   }
-
-  return {
-    pageUrl: url,
-    cookieData: cookieData.cookieData,
-    technologyData,
-  };
 };
 
 export default analyzeSingleUrl;

@@ -25,7 +25,7 @@ import { ReportDisplayType } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import { fetchDictionary } from './utils';
+import { SiteAnalysisJobQueue, fetchDictionary } from './utils';
 import analyzeSingleUrl from './procedures/analyizeSingleSite';
 
 dotenv.config({ path: `.env.backend` });
@@ -37,6 +37,12 @@ const DB_NAME = process.env.DB_NAME;
 const COOKIE_COLLECTION_NAME = process.env.COOKIE_COLLECTION_NAME;
 const TECHNOLOGY_COLLECTION_NAME = process.env.TECHNOLOGY_COLLECTION_NAME;
 const URL_COLLECTION_NAME = process.env.URL_COLLECTION_NAME;
+const ANALYSIS_QUEUE_NAME = process.env.ANALYSIS_QUEUE_NAME;
+const REDIS_HOST = process.env.REDIS_HOST;
+const REDIS_PORT = process.env.REDIS_PORT;
+const QUEUE_MAX_CONCURRENCY = parseInt(
+  process.env.QUEUE_MAX_CONCURRENCY || '3'
+);
 
 if (
   !CONNECTION_STRING ||
@@ -49,22 +55,31 @@ if (
   process.exit(1);
 }
 
+if (!ANALYSIS_QUEUE_NAME || !REDIS_HOST || !REDIS_PORT) {
+  console.error('Improper  metadata, Check .env.backend');
+  process.exit(1);
+}
+
 const connectToDb = async () => {
-  const client = new MongoClient(CONNECTION_STRING);
+  try {
+    const client = new MongoClient(CONNECTION_STRING);
 
-  const conn = await client.connect();
-  const db = conn.db(DB_NAME);
-  const cookieAnalysisCollection = db.collection(COOKIE_COLLECTION_NAME);
-  const technologyAnalysisCollection = db.collection(
-    TECHNOLOGY_COLLECTION_NAME
-  );
-  const urlCollection = db.collection(URL_COLLECTION_NAME);
+    const conn = await client.connect();
+    const db = conn.db(DB_NAME);
+    const cookieAnalysisCollection = db.collection(COOKIE_COLLECTION_NAME);
+    const technologyAnalysisCollection = db.collection(
+      TECHNOLOGY_COLLECTION_NAME
+    );
+    const urlCollection = db.collection(URL_COLLECTION_NAME);
 
-  return {
-    cookieAnalysisCollection,
-    technologyAnalysisCollection,
-    urlCollection,
-  };
+    return {
+      cookieAnalysisCollection,
+      technologyAnalysisCollection,
+      urlCollection,
+    };
+  } catch (error) {
+    throw new Error("Couldn't connect to DB");
+  }
 };
 
 fetchDictionary()
@@ -80,6 +95,24 @@ fetchDictionary()
     COOKIE_COLLECTION_NAME : ${COOKIE_COLLECTION_NAME}
     TECHNOLOGY_COLLECTION_NAME : ${TECHNOLOGY_COLLECTION_NAME}
     URL_COLLECTION_NAME : ${URL_COLLECTION_NAME}
+    `);
+
+    const analysisQueueHandle = new SiteAnalysisJobQueue(
+      ANALYSIS_QUEUE_NAME,
+      REDIS_HOST,
+      parseInt(REDIS_PORT),
+      cookieAnalysisCollection,
+      technologyAnalysisCollection,
+      urlCollection,
+      cookieDictionary,
+      DELAY_TIME,
+      QUEUE_MAX_CONCURRENCY,
+      true
+    );
+    console.log(`Connection to redis successfull
+    ANALYSIS_QUEUE_NAME : ${ANALYSIS_QUEUE_NAME}
+    REDIS_HOST : ${REDIS_HOST}
+    REDIS_PORT : ${REDIS_PORT}
     `);
 
     const app = express();
@@ -121,21 +154,20 @@ fetchDictionary()
       }
 
       if (type === ReportDisplayType.SITE) {
-        const analysis = await analyzeSingleUrl(
-          urlCollection,
+        const response = await analyzeSingleUrl(
           cookieAnalysisCollection,
           technologyAnalysisCollection,
+          urlCollection,
           url,
-          cookieDictionary,
-          DELAY_TIME,
           shouldReanalyizeCookies,
-          shouldReanalyizeTechnologies
+          shouldReanalyizeTechnologies,
+          analysisQueueHandle
         );
 
-        return res.json(analysis);
+        return res.json(response);
       } else {
         return res.send({
-          message: "Sorry, we don't have support to analyze xml file yet.",
+          message: "Sorry, we don't have support analyzing sitemap files yet.",
         });
       }
     });
