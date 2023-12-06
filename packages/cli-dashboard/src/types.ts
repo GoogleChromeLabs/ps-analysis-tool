@@ -38,7 +38,7 @@ export type CookieJsonDataType = {
   name: string;
   value: string;
   domain: string;
-  partitionKey: string;
+  partitionKey?: string;
   path: string;
   expires: string;
   httpOnly: boolean;
@@ -48,11 +48,11 @@ export type CookieJsonDataType = {
   category: string;
   description: string;
   isFirstParty: boolean;
-  pageUrl: string;
-  requestUrls: { [id: string]: string };
-  frameUrls: { [id: string]: string };
+  pageUrl?: string;
+  requestUrls?: { [id: string]: string };
+  frameUrls?: { [id: string]: string };
   isBlocked: boolean;
-  blockedReasons: string[];
+  blockedReasons?: string[];
   GDPR?: string;
 };
 

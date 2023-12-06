@@ -13,19 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Converts a string value to a valid CSV record.
- * @see https://datatracker.ietf.org/doc/html/rfc4180
- * @param {string} record - a string value that need to be converted into a CSV record.
- * @returns {URL | null} - The parsed URL object or null if the URL is invalid.
- */
-const sanitizeCsvRecord = (record: string | null | undefined): string => {
-  if (!record) {
-    return '';
-  }
-  let recordCopy = record;
-  recordCopy = recordCopy.replaceAll('"', '""');
-  return recordCopy.includes(',') ? '"' + recordCopy + '"' : recordCopy;
-};
 
-export default sanitizeCsvRecord;
+import generateAffectedCookiesCSV from '../generateAffectedCookiesCSV';
+import { mockData1 } from './data.mock';
+
+describe('generateAffectedCookiesCSV', () => {
+  it('should create CSV string for affected cookies', () => {
+    const CSVString = generateAffectedCookiesCSV(mockData1);
+
+    expect(CSVString.split('\r\n').filter((str) => str).length).toBe(4);
+  });
+});
