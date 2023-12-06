@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 /**
- * Converts a string value to a valid CSV record.
- * @see https://datatracker.ietf.org/doc/html/rfc4180
- * @param {string} record - a string value that need to be converted into a CSV record.
- * @returns {URL | null} - The parsed URL object or null if the URL is invalid.
+ * Get the element that has to be deleted
+ * @param currentIndex The index of the current deleted element.
+ * @param totalLength The length of the array of elements.
+ * @returns number.
  */
-const sanitizeCsvRecord = (record: string | null | undefined): string => {
-  if (!record) {
-    return '';
+export default function getNextIndexToDelete(
+  currentIndex: number,
+  totalLength: number
+): number | null {
+  if (totalLength > 0 && currentIndex < totalLength) {
+    return currentIndex;
+  } else if (currentIndex + 1 > totalLength && currentIndex - 1 > -1) {
+    return currentIndex - 1;
   }
-  let recordCopy = record;
-  recordCopy = recordCopy.replaceAll('"', '""');
-  return recordCopy.includes(',') ? '"' + recordCopy + '"' : recordCopy;
-};
-
-export default sanitizeCsvRecord;
+  return null;
+}

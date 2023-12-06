@@ -41,7 +41,7 @@ export type InfoType = number | string | boolean | [];
 export type TableColumn = {
   header: string;
   accessorKey: string;
-  cell?: (info: InfoType) => React.JSX.Element | InfoType;
+  cell?: (info: InfoType, details?: TableData) => React.JSX.Element | InfoType;
   enableHiding?: boolean;
   width?: number;
 };
@@ -101,22 +101,26 @@ const useTable = ({
   const { sortedData, sortKey, sortOrder, setSortKey, setSortOrder } =
     useColumnSorting(data, options?.columnSorting);
 
-  const rows = useMemo(() => {
-    return sortedData.map((_data) => {
-      const row = {
-        originalData: _data,
-      } as TableRow;
+  const rows = useMemo(
+    () =>
+      sortedData.map((_data) => {
+        const row = {
+          originalData: {
+            ..._data,
+          },
+        } as TableRow;
 
-      columns.forEach((column) => {
-        const value = getValueByKey(column.accessorKey, _data);
-        row[column.accessorKey] = {
-          value: column.cell?.(value) ?? value,
-        };
-      });
+        columns.forEach((column) => {
+          const value = getValueByKey(column.accessorKey, _data);
+          row[column.accessorKey] = {
+            value: column.cell?.(value, _data) ?? value,
+          };
+        });
 
-      return row;
-    });
-  }, [sortedData, columns]);
+        return row;
+      }),
+    [columns, sortedData]
+  );
 
   const hideableColumns = useMemo(
     () => tableColumns.filter((column) => column.enableHiding !== false),
