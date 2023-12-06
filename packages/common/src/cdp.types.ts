@@ -80,7 +80,7 @@ export type NetworkRequestExtraInfoParams = {
   };
   siteHasCookieInOtherPartition: boolean;
 };
-type CookieWarningReasons =
+export type CookieWarningReasons =
   | 'WarnSameSiteUnspecifiedCrossSiteContext'
   | 'WarnSameSiteNoneInsecure'
   | 'WarnSameSiteUnspecifiedLaxAllowUnsafe'
@@ -94,7 +94,7 @@ type CookieWarningReasons =
   | 'WarnThirdPartyPhaseout'
   | 'WarnCrossSiteRedirectDowngradeChangesInclusion';
 
-type CookieExclusionReason =
+export type CookieExclusionReason =
   | 'ExcludeSameSiteUnspecifiedTreatedAsLax'
   | 'ExcludeSameSiteNoneInsecure'
   | 'ExcludeSameSiteLax'

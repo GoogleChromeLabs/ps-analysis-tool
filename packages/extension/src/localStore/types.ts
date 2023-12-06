@@ -17,7 +17,10 @@
  * External dependencies.
  */
 import { type Cookie as ParsedCookie } from 'simple-cookie';
-import type { BlockedReason } from '@ps-analysis-tool/common';
+import type {
+  BlockedReason,
+  CookieWarningReasons,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -35,6 +38,7 @@ export type CookieData = {
   frameIdList: number[];
   isBlocked?: boolean;
   blockedReasons?: BlockedReason[];
+  warningReasons?: CookieWarningReasons[];
 };
 
 export type PreferenceKeyValues =

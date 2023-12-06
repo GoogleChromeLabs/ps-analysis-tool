@@ -16,7 +16,11 @@
 /**
  * External dependencies.
  */
-import { getCookieKey, type BlockedReason } from '@ps-analysis-tool/common';
+import {
+  getCookieKey,
+  type BlockedReason,
+  type CookieWarningReasons,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -53,13 +57,19 @@ const CookieStore = {
               ...cookie.parsedCookie,
               ..._updatedCookies[cookieKey].parsedCookie,
               partitionKey:
-                _updatedCookies[cookieKey].parsedCookie?.partitionKey ??
-                cookie.parsedCookie?.partitionKey,
+                cookie.parsedCookie?.partitionKey ||
+                _updatedCookies[cookieKey].parsedCookie?.partitionKey,
             },
             blockedReasons: Array.from(
               new Set<BlockedReason>([
                 ...(cookie.blockedReasons ?? []),
                 ...(_updatedCookies[cookieKey].blockedReasons ?? []),
+              ])
+            ),
+            warningReasons: Array.from(
+              new Set<CookieWarningReasons>([
+                ...(cookie.warningReasons ?? []),
+                ...(_updatedCookies[cookieKey].warningReasons ?? []),
               ])
             ),
             headerType:
