@@ -48,6 +48,9 @@ export type CookieJsonDataType = {
   category: string;
   description: string;
   isFirstParty: boolean;
+  pageUrl: string;
+  requestUrls?: { [id: string]: string };
+  frameUrls: { [id: string]: string };
   pageUrl?: string;
   requestUrls?: { [id: string]: string };
   frameUrls?: { [id: string]: string };

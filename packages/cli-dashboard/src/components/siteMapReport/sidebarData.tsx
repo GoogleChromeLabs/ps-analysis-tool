@@ -14,40 +14,23 @@
  * limitations under the License.
  */
 /**
- * External dependencies.
+ * External dependencies
  */
 import React from 'react';
 import {
   CookieIcon,
   CookieIconWhite,
-  SiteBoundariesIcon,
-  SiteBoundariesIconWhite,
   type SidebarItem,
 } from '@ps-analysis-tool/design-system';
 
-/**
- * Internal dependencies.
- */
-import Technologies from './technologies';
-
-const Tabs: SidebarItem[] = [
+const sidebarData: SidebarItem[] = [
   {
-    key: 'cookies',
-    title: 'Cookies',
+    key: 'sitemap-landing-page',
+    title: 'Sitemap Report',
     children: [],
-    icon: <CookieIcon />,
-    selectedIcon: <CookieIconWhite />,
   },
   {
-    key: 'technologies',
-    title: 'Technologies',
-    children: [],
-    panel: <Technologies />,
-    icon: <SiteBoundariesIcon />,
-    selectedIcon: <SiteBoundariesIconWhite />,
-  },
-  {
-    key: 'affected_cookies',
+    key: 'sitemap-affected-cookies',
     title: 'Affected Cookies',
     children: [],
     icon: <CookieIcon />,
@@ -55,4 +38,4 @@ const Tabs: SidebarItem[] = [
   },
 ];
 
-export default Tabs;
+export default sidebarData;
