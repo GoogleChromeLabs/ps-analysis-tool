@@ -104,6 +104,9 @@ export class BrowserManagement {
       height: 790,
       deviceScaleFactor: 1,
     });
+    sitePage.setUserAgent(
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko)'
+    );
     this.debugLog('Page opened');
     return sitePage;
   }
