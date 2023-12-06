@@ -66,6 +66,7 @@ export type CookieTableData = CookieData & {
   frameUrls?: string | string[];
   highlighted?: boolean;
   blockedReasons: string[];
+  warningReasons: string[];
 };
 
 export type TechnologyData = {

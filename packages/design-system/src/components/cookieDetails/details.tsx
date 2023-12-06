@@ -30,36 +30,40 @@ export interface DetailsProps {
 
 const Details = ({ selectedCookie }: DetailsProps) => {
   const [showUrlDecoded, setShowUrlDecoded] = useState(false);
-  let reasons = '';
-  {
-    selectedCookie?.blockedReasons?.map((reason) => {
-      const cookieExclusionReason =
-        cookieIssueDetails.CookieExclusionReason[reason];
-      const cookieWarningReason =
-        cookieIssueDetails.CookieWarningReason[reason];
-      const cookieBlockedReason =
-        cookieIssueDetails.CookieBlockedReason[reason];
+  let blockedReasons = '';
+  let warningReasons = '';
 
-      if (cookieBlockedReason) {
-        reasons = reasons + cookieBlockedReason;
-      }
-      if (cookieWarningReason) {
-        reasons =
-          reasons +
-          cookieWarningReason(
-            selectedCookie?.headerType === 'response' ? 'SetCookie' : 'Cookie'
-          );
-      }
-      if (cookieExclusionReason) {
-        reasons =
-          reasons +
-          cookieExclusionReason(
-            selectedCookie?.headerType === 'response' ? 'SetCookie' : 'Cookie'
-          );
-      }
-      return reason;
-    });
-  }
+  selectedCookie?.blockedReasons?.forEach((reason) => {
+    const cookieExclusionReason =
+      cookieIssueDetails.CookieExclusionReason[reason];
+    const cookieBlockedReason = cookieIssueDetails.CookieBlockedReason[reason];
+
+    if (cookieBlockedReason) {
+      blockedReasons = blockedReasons + cookieBlockedReason;
+    }
+    if (cookieExclusionReason) {
+      blockedReasons =
+        blockedReasons +
+        cookieExclusionReason(
+          selectedCookie?.headerType === 'response' ? 'SetCookie' : 'Cookie'
+        );
+    }
+    return reason;
+  });
+
+  selectedCookie?.warningReasons?.forEach((reason) => {
+    const cookieWarningReason = cookieIssueDetails.CookieWarningReason[reason];
+
+    if (cookieWarningReason) {
+      warningReasons =
+        warningReasons +
+        cookieWarningReason(
+          selectedCookie?.headerType === 'response' ? 'SetCookie' : 'Cookie'
+        );
+    }
+    return reason;
+  });
+
   return (
     <div className="text-xs py-1 px-1.5">
       <p className="font-bold text-granite-gray dark:text-manatee mb-1 text-semibold flex items-center">
@@ -100,7 +104,18 @@ const Details = ({ selectedCookie }: DetailsProps) => {
           </p>
           <p
             className="text-outer-space-crayola dark:text-bright-gray"
-            dangerouslySetInnerHTML={{ __html: reasons ?? '' }}
+            dangerouslySetInnerHTML={{ __html: blockedReasons ?? '' }}
+          />
+        </>
+      )}
+      {selectedCookie?.warningReasons?.length > 0 && (
+        <>
+          <p className="font-bold text-granite-gray dark:text-manatee mb-1">
+            Warnings
+          </p>
+          <p
+            className="text-outer-space-crayola dark:text-bright-gray"
+            dangerouslySetInnerHTML={{ __html: warningReasons ?? '' }}
           />
         </>
       )}

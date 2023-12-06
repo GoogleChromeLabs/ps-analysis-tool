@@ -412,7 +412,8 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         await CookieStore.addCookieExclusionWarningReason(
           cookie.name + primaryDomain + cookie.path,
           cookie.name + secondaryDomain + cookie.path,
-          [...cookieExclusionReasons, ...cookieWarningReasons],
+          cookieExclusionReasons,
+          cookieWarningReasons,
           source?.tabId.toString()
         );
       } else if (
@@ -431,7 +432,8 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         await CookieStore.addCookieExclusionWarningReason(
           cookie.name + primaryDomain + cookie.path,
           cookie.name + secondaryDomain + cookie.path,
-          [...cookieExclusionReasons, ...cookieWarningReasons],
+          cookieExclusionReasons,
+          cookieWarningReasons,
           source?.tabId.toString()
         );
       }

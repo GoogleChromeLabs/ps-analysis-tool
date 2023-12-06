@@ -105,13 +105,15 @@ const CookieStore = {
    * Deletes a cookie
    * @param {string} cookieName Name of the cookie.
    * @param {string} alternateCookieName Alternate name of the cookie.
-   * @param {string[]} reasons reasons to be added to the blocked reason array.
+   * @param {string[]} exclusionReasons reasons to be added to the blocked reason array.
+   * @param {string[]} warningReasons warning reasons to be added to the warning reason array.
    * @param {string} tabId tabId where change has to be made.
    */
   async addCookieExclusionWarningReason(
     cookieName: string,
     alternateCookieName: string,
-    reasons: string[],
+    exclusionReasons: string[],
+    warningReasons: string[],
     tabId: string
   ) {
     const storage = await chrome.storage.local.get();
@@ -127,10 +129,17 @@ const CookieStore = {
       storage[tabId].cookies[cookieName].blockedReasons = [
         ...new Set([
           ...(storage[tabId].cookies[cookieName].blockedReasons ?? []),
-          ...reasons,
+          ...exclusionReasons,
         ]),
       ];
-      storage[tabId].cookies[cookieName].isBlocked = true;
+      storage[tabId].cookies[cookieName].warningReasons = [
+        ...new Set([
+          ...(storage[tabId].cookies[cookieName].warningReasons ?? []),
+          ...warningReasons,
+        ]),
+      ];
+      storage[tabId].cookies[cookieName].isBlocked =
+        exclusionReasons.length > 0 ? true : false;
     } else if (
       storage[tabId].cookies &&
       !storage[tabId].cookies[cookieName] &&
@@ -139,10 +148,17 @@ const CookieStore = {
       storage[tabId].cookies[alternateCookieName].blockedReasons = [
         ...new Set([
           ...(storage[tabId].cookies[alternateCookieName].blockedReasons ?? []),
-          ...reasons,
+          ...exclusionReasons,
         ]),
       ];
-      storage[tabId].cookies[alternateCookieName].isBlocked = true;
+      storage[tabId].cookies[alternateCookieName].warningReasons = [
+        ...new Set([
+          ...(storage[tabId].cookies[alternateCookieName].warningReasons ?? []),
+          ...warningReasons,
+        ]),
+      ];
+      storage[tabId].cookies[alternateCookieName].isBlocked =
+        exclusionReasons.length > 0 ? true : false;
     } else {
       storage[tabId] = {
         ...storage[tabId],
@@ -150,13 +166,15 @@ const CookieStore = {
           ...storage[tabId].cookies,
           [alternateCookieName]: {
             ...(storage[tabId].cookies[alternateCookieName] ?? {}),
-            blockedReasons: [...reasons],
-            isBlocked: true,
+            blockedReasons: [...exclusionReasons],
+            warningReasons: [...warningReasons],
+            isBlocked: exclusionReasons.length > 0 ? true : false,
           },
           [cookieName]: {
             ...(storage[tabId].cookies[cookieName] ?? {}),
-            blockedReasons: [...reasons],
-            isBlocked: true,
+            blockedReasons: [...exclusionReasons],
+            warningReasons: [...warningReasons],
+            isBlocked: exclusionReasons.length > 0 ? true : false,
           },
         },
       };
