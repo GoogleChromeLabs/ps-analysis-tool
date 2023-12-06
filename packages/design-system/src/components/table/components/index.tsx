@@ -36,7 +36,7 @@ interface TableProps {
   getRowObjectKey: (row: TableRow) => string;
   onRowClick: (row: TableData | null) => void;
   showTopBar?: boolean;
-  disableFiltering?: boolean;
+  hideFiltering?: boolean;
   extraInterfaceToTopBar?: React.ReactNode;
 }
 
@@ -46,7 +46,7 @@ const Table = ({
   getRowObjectKey,
   onRowClick,
   showTopBar = false,
-  disableFiltering = false,
+  hideFiltering = false,
   extraInterfaceToTopBar,
 }: TableProps) => {
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
@@ -97,7 +97,8 @@ const Table = ({
           searchValue={table.searchValue}
           setSearchValue={table.setSearchValue}
           showFilterSidebar={showFilterSidebar}
-          disableFiltering={disableFiltering}
+          hideFiltering={hideFiltering}
+          disableFiltering={table.rows.length === 0}
           setShowFilterSidebar={setShowFilterSidebar}
           cookiesCount={table.rows.length}
           extraInterface={extraInterfaceToTopBar}
@@ -116,6 +117,7 @@ const Table = ({
             enable={{
               right: true,
             }}
+            className={`${table.rows.length === 0 ? 'hidden' : 'block'}`}
           >
             <FiltersSidebar
               filters={table.filters}

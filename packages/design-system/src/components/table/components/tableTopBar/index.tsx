@@ -34,6 +34,7 @@ interface TableTopBarProps {
   showFilterSidebar: boolean;
   setShowFilterSidebar: React.Dispatch<React.SetStateAction<boolean>>;
   cookiesCount: number;
+  hideFiltering?: boolean;
   disableFiltering?: boolean;
   extraInterface?: React.ReactNode;
 }
@@ -44,6 +45,7 @@ const TableTopBar = ({
   showFilterSidebar,
   setShowFilterSidebar,
   cookiesCount,
+  hideFiltering = false,
   disableFiltering = false,
   extraInterface = null,
 }: TableTopBarProps) => {
@@ -56,15 +58,16 @@ const TableTopBar = ({
 
   return (
     <div className="w-full h-[25px] px-2 flex items-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green">
-      {!disableFiltering && (
+      {!hideFiltering && (
         <button
           className={classNames('w-3 h-3 mr-2')}
           onClick={() => setShowFilterSidebar(!showFilterSidebar)}
+          disabled={disableFiltering}
           title="Open filter options"
         >
           <FilterIcon
             className={
-              showFilterSidebar
+              showFilterSidebar && !disableFiltering
                 ? 'text-royal-blue dark:text-medium-persian-blue'
                 : 'text-mischka'
             }
