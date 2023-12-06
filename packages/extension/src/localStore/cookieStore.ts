@@ -57,7 +57,7 @@ const CookieStore = {
               ...cookie.parsedCookie,
               ..._updatedCookies[cookieKey].parsedCookie,
               partitionKey:
-                cookie.parsedCookie?.partitionKey ||
+                cookie.parsedCookie?.partitionKey ??
                 _updatedCookies[cookieKey].parsedCookie?.partitionKey,
             },
             blockedReasons: Array.from(

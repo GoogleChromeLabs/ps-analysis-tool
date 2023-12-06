@@ -49,7 +49,11 @@ const prepareCookiesCount = (cookies: { [key: string]: CookieData } | null) => {
 
   const cookieList = Object.values(cookies);
 
-  cookiesCount.total = cookieList.length;
+  cookiesCount.total = Object.keys(cookies).filter(
+    (cookieKey) =>
+      cookies[cookieKey].parsedCookie &&
+      cookies[cookieKey].frameIdList.length >= 1
+  ).length;
 
   for (const cookie of cookieList) {
     const { analytics, isFirstParty } = cookie;
