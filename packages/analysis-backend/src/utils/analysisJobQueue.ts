@@ -33,19 +33,20 @@ export type AnalysisJobData = {
 export class SiteAnalysisJobQueue {
   queueHandle;
   cookieDictionary;
-  urlCollection;
   cookieAnalysisCollection;
   technologyAnalysisCollection;
+  urlCollection;
   delayTime;
   concurrencyCount;
   debug;
 
   constructor(
     queueName: string,
-    redisUrl: string,
-    urlCollection: Collection,
+    redisHost: string,
+    redisPort: number,
     cookieAnalysisCollection: Collection,
     technologyAnalysisCollection: Collection,
+    urlCollection: Collection,
     cookieDictionary: CookieDatabase,
     delayTime: number,
     concurrencyCount: number,
@@ -53,14 +54,14 @@ export class SiteAnalysisJobQueue {
   ) {
     this.queueHandle = new Bull(queueName, {
       redis: {
-        host: '127.0.0.1',
-        port: 6379,
+        host: redisHost,
+        port: redisPort,
       },
     });
     this.cookieDictionary = cookieDictionary;
-    this.urlCollection = urlCollection;
     this.cookieAnalysisCollection = cookieAnalysisCollection;
     this.technologyAnalysisCollection = technologyAnalysisCollection;
+    this.urlCollection = urlCollection;
     this.delayTime = delayTime;
     this.concurrencyCount = concurrencyCount;
     this.debug = debug;
@@ -113,17 +114,14 @@ export class SiteAnalysisJobQueue {
     const { url, shouldReanalyizeCookies, shouldReanalyizeTechnologies } =
       job.data;
 
+    this.log(`Now processig analysis request for url ${url}`);
+
     const pageDocument = await this.urlCollection?.findOne({
       pageUrl: url,
     });
 
-    if (!pageDocument) {
-      console.error('Page document is not available');
-      return;
-    }
-
-    if (shouldReanalyizeCookies || shouldReanalyizeTechnologies) {
-      //Data is in DB but its reanalysis is requested.
+    if (pageDocument) {
+      // if page document exists the job needs to reanalyze cookie or technology of a site
 
       let cookieData;
       let technologyData;
@@ -179,8 +177,10 @@ export class SiteAnalysisJobQueue {
         );
       }
     } else {
-      // No previous analysis in DB.
+      // No previous analysis in DB. Cookie and technology analysis should be done.
+      this.log(`No previous analysis found. Analyzing ${url}`);
 
+      this.log(`Analyzing Cookies for ${url}`);
       const [cookieAnalysis] = await analyzeCookiesUrls(
         [url],
         true,
@@ -188,6 +188,7 @@ export class SiteAnalysisJobQueue {
         this.cookieDictionary
       );
 
+      this.log(`Analyzing Technologies for ${url}`);
       const [technologyData] = await analyzeTechnologiesUrlsInBatches([url]);
 
       const _pageDocument = await this.urlCollection.insertOne({
@@ -196,6 +197,7 @@ export class SiteAnalysisJobQueue {
         updataedAt: new Date().toUTCString(),
       });
 
+      this.log(`Adding analysis data to db ${url}`);
       await this.cookieAnalysisCollection.insertOne({
         pageId: _pageDocument.insertedId,
         cookieData: cookieAnalysis.cookieData,
@@ -210,5 +212,6 @@ export class SiteAnalysisJobQueue {
         updataedAt: new Date().toUTCString(),
       });
     }
+    this.log(`Done processig analysis request for url ${url}`);
   };
 }

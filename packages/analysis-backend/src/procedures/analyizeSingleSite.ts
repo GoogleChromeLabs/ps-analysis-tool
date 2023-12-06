@@ -20,9 +20,9 @@ import { type Collection } from 'mongodb';
 import { type SiteAnalysisJobQueue } from '../utils';
 
 const analyzeSingleUrl = async (
-  urlCollection: Collection,
   cookieAnalysisCollection: Collection,
   technologyAnalysisCollection: Collection,
+  urlCollection: Collection,
   url: string,
   shouldReanalyizeCookies: boolean,
   shouldReanalyizeTechnologies: boolean,
@@ -37,7 +37,7 @@ const analyzeSingleUrl = async (
     !shouldReanalyizeCookies &&
     !shouldReanalyizeTechnologies
   ) {
-    //Simple lookup
+    //Simple lookup, if Page document exists it can be assumed that analysis data related to it also exists.
 
     const cookieData = (
       await cookieAnalysisCollection?.findOne({
@@ -53,18 +53,16 @@ const analyzeSingleUrl = async (
 
     return {
       pageUrl: url,
-      cookieData: cookieData.cookieData,
+      cookieData,
       technologyData,
     };
   } else {
-    // Add to Job queue
+    // If page document does not exist or reanalysis is requested add to Job queue.
     const queueInd = await queueHandle.createJob({
       url,
       shouldReanalyizeCookies,
       shouldReanalyizeTechnologies,
     });
-
-    console.log('Added to queue:', queueInd);
 
     return queueInd;
   }

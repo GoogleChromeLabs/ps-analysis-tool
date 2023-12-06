@@ -38,7 +38,8 @@ const COOKIE_COLLECTION_NAME = process.env.COOKIE_COLLECTION_NAME;
 const TECHNOLOGY_COLLECTION_NAME = process.env.TECHNOLOGY_COLLECTION_NAME;
 const URL_COLLECTION_NAME = process.env.URL_COLLECTION_NAME;
 const ANALYSIS_QUEUE_NAME = process.env.ANALYSIS_QUEUE_NAME;
-const REDIS_URL = process.env.REDIS_URL;
+const REDIS_HOST = process.env.REDIS_HOST;
+const REDIS_PORT = process.env.REDIS_PORT;
 const QUEUE_MAX_CONCURRENCY = parseInt(
   process.env.QUEUE_MAX_CONCURRENCY || '3'
 );
@@ -54,7 +55,7 @@ if (
   process.exit(1);
 }
 
-if (!ANALYSIS_QUEUE_NAME || !REDIS_URL) {
+if (!ANALYSIS_QUEUE_NAME || !REDIS_HOST || !REDIS_PORT) {
   console.error('Improper  metadata, Check .env.backend');
   process.exit(1);
 }
@@ -98,10 +99,11 @@ fetchDictionary()
 
     const analysisQueueHandle = new SiteAnalysisJobQueue(
       ANALYSIS_QUEUE_NAME,
-      REDIS_URL,
-      urlCollection,
-      technologyAnalysisCollection,
+      REDIS_HOST,
+      parseInt(REDIS_PORT),
       cookieAnalysisCollection,
+      technologyAnalysisCollection,
+      urlCollection,
       cookieDictionary,
       DELAY_TIME,
       QUEUE_MAX_CONCURRENCY,
@@ -109,7 +111,8 @@ fetchDictionary()
     );
     console.log(`Connection to redis successfull
     ANALYSIS_QUEUE_NAME : ${ANALYSIS_QUEUE_NAME}
-    REDIS_URL : ${REDIS_URL}
+    REDIS_HOST : ${REDIS_HOST}
+    REDIS_PORT : ${REDIS_PORT}
     `);
 
     const app = express();
@@ -152,9 +155,9 @@ fetchDictionary()
 
       if (type === ReportDisplayType.SITE) {
         const response = await analyzeSingleUrl(
-          urlCollection,
           cookieAnalysisCollection,
           technologyAnalysisCollection,
+          urlCollection,
           url,
           shouldReanalyizeCookies,
           shouldReanalyizeTechnologies,
