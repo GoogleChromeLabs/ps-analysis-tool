@@ -18,10 +18,10 @@
  * Internal dependencies.
  */
 import { CookieDatabase } from '../types';
-import { Cookie } from '../utils/browserManagement/types';
-import { analyzeCookiesUrls } from './analyzeCookieUrls';
+import { Cookie } from '../browserManagement/types';
+import analyzeCookiesUrls from './analyzeCookieUrls';
 
-export const analyzeCookiesUrlsInBatches = async (
+const analyzeCookiesUrlsInBatches = async (
   urls: string[],
   isHeadless: boolean,
   delayTime: number,
@@ -80,3 +80,5 @@ export const analyzeCookiesUrlsInBatches = async (
 
   return report;
 };
+
+export default analyzeCookiesUrlsInBatches;

@@ -34,3 +34,5 @@ packages/*/dist-types
 #puppeteer artifact
 tmp
 
+#Env files
+.env.backend

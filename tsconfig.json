@@ -1,4 +1,8 @@
 {
-  "references": [{ "path": "packages/common" }, { "path": "packages/cli" }],
+  "references": [
+    { "path": "packages/common" },
+    { "path": "packages/cli" },
+    { "path": "packages/analysis-utils" }
+  ],
   "files": []
 }

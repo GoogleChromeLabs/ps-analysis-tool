@@ -127,3 +127,8 @@ export type PreferenceDataValues =
   | string
   | SelectedFilters
   | SortingState[];
+
+export enum ReportDisplayType {
+  SITE,
+  SITEMAP,
+}

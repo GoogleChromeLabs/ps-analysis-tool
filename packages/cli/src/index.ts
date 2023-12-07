@@ -22,6 +22,10 @@ import { ensureFile, exists, readFile, writeFile } from 'fs-extra';
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
 import { exec } from 'child_process';
+import {
+  analyzeCookiesUrlsInBatches,
+  analyzeTechnologiesUrlsInBatches,
+} from '@ps-analysis-tool/analysis-utils';
 import path from 'path';
 import { parseUrl } from '@ps-analysis-tool/common';
 import { parseStringPromise } from 'xml2js';
@@ -29,12 +33,7 @@ import { parseStringPromise } from 'xml2js';
 /**
  * Internal dependencies.
  */
-import Utility from './utils/utility';
-import { fetchDictionary } from './utils/fetchCookieDictionary';
-import { analyzeCookiesUrlsInBatches } from './procedures/analyzeCookieUrlsInBatches';
-import { analyzeTechnologiesUrlsInBatches } from './procedures/analyzeTechnologiesUrlsInBatches';
-import { delay } from './utils';
-import { checkPortInUse } from './utils/checkPortInUse';
+import { delay, fetchCookieDictionary, checkPortInUse, Utility } from './utils';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
@@ -311,7 +310,7 @@ const getUrlListFromArgs = async (
     urlsToProcess.push(url);
   }
 
-  const cookieDictionary = await fetchDictionary();
+  const cookieDictionary = await fetchCookieDictionary();
 
   spinnies.add('cookie-spinner', {
     text: 'Analysing cookies on first page visit',

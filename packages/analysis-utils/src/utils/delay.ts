@@ -14,24 +14,13 @@
  * limitations under the License.
  */
 
-import http from 'http';
-
 /**
- * @param port number Port number to test
- * @returns Promise which will resolve in a boolean value
+ * Delay by using setTimeout.
+ * @param ms delay in miliseconds
+ * @returns a promise that will resolve in given amount of miliseconds
  */
-function checkPortInUse(port: number): Promise<boolean> {
-  return new Promise((resolve) => {
-    const server = http
-      .createServer()
-      .listen(port, () => {
-        server.close();
-        resolve(false);
-      })
-      .on('error', () => {
-        resolve(true);
-      });
-  });
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export default checkPortInUse;
+export default delay;

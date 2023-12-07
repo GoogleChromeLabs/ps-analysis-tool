@@ -13,25 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import http from 'http';
-
-/**
- * @param port number Port number to test
- * @returns Promise which will resolve in a boolean value
- */
-function checkPortInUse(port: number): Promise<boolean> {
-  return new Promise((resolve) => {
-    const server = http
-      .createServer()
-      .listen(port, () => {
-        server.close();
-        resolve(false);
-      })
-      .on('error', () => {
-        resolve(true);
-      });
-  });
-}
-
-export default checkPortInUse;
+export { default as fetchDictionary } from './fetchCookieDictionary';

@@ -26,7 +26,7 @@ import Wapplalyzer from 'wappalyzer';
  */
 import { TechnologyDetailList } from '../types';
 
-export const analyzeTechnologiesUrlsInBatches = async (
+const analyzeTechnologiesUrlsInBatches = async (
   urls: Array<string>,
   batchSize = 3,
   spinnies?: {
@@ -76,3 +76,5 @@ export const analyzeTechnologiesUrlsInBatches = async (
 
   return report;
 };
+
+export default analyzeTechnologiesUrlsInBatches;
