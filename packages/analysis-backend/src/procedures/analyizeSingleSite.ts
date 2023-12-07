@@ -29,13 +29,19 @@ const analyzeSingleUrl = async (
   cookieDictionary: CookieDatabase,
   delayTime: number,
   shouldReanalyizeCookies: boolean,
-  shouldReanalyizeTechnologies: boolean
+  shouldReanalyizeTechnologies: boolean,
+  allowDebugLogs = false
 ) => {
+  allowDebugLogs &&
+    console.log(`Request received for analysis for url: ${url}`);
   const pageDocument = await urlCollection?.findOne({
     pageUrl: url,
   });
 
   if (!pageDocument) {
+    allowDebugLogs && console.log(`No previous analysis found for url: ${url}`);
+
+    allowDebugLogs && console.log(`Analyzing cookies for url: ${url}`);
     const [cookieData] = await analyzeCookiesUrls(
       [url],
       true,
@@ -43,6 +49,7 @@ const analyzeSingleUrl = async (
       cookieDictionary
     );
 
+    allowDebugLogs && console.log(`Analyzing technologies url: ${url}`);
     const [technologyData] = await analyzeTechnologiesUrlsInBatches([url]);
 
     const _pageDocument = await urlCollection.insertOne({
@@ -51,6 +58,7 @@ const analyzeSingleUrl = async (
       updataedAt: new Date().toUTCString(),
     });
 
+    allowDebugLogs && console.log(`Adding analysis date to DB for url: ${url}`);
     await cookieAnalysisCollection.insertOne({
       pageId: _pageDocument.insertedId,
       cookieData: cookieData,
@@ -76,13 +84,16 @@ const analyzeSingleUrl = async (
   let technologyData;
 
   if (!shouldReanalyizeCookies) {
+    allowDebugLogs &&
+      console.log(`Fetching cookie analysis data for url: ${url}`);
     cookieData = (
       await cookieAnalysisCollection?.findOne({
         pageId: pageDocument._id,
       })
     )?.cookieData;
   } else {
-    console.log('Reanalyzing Cookies');
+    allowDebugLogs &&
+      console.log(`Reanalyzing cookie analysis data for url: ${url}`);
     [cookieData] = await analyzeCookiesUrls(
       [url],
       true,
@@ -104,13 +115,16 @@ const analyzeSingleUrl = async (
   }
 
   if (!shouldReanalyizeTechnologies) {
+    allowDebugLogs &&
+      console.log(`Fetching technology analysis data for url: ${url}`);
     technologyData = (
       await technologyAnalysisCollection?.findOne({
         pageId: pageDocument._id,
       })
     )?.technologyData;
   } else {
-    console.log('Reanalyzing Technologies');
+    allowDebugLogs &&
+      console.log(`Reanalyzing technology data for url: ${url}`);
     [technologyData] = await analyzeTechnologiesUrlsInBatches([url]);
 
     await technologyAnalysisCollection.updateOne(

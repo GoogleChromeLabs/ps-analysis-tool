@@ -37,7 +37,8 @@ const DB_NAME = process.env.DB_NAME;
 const COOKIE_COLLECTION_NAME = process.env.COOKIE_COLLECTION_NAME;
 const TECHNOLOGY_COLLECTION_NAME = process.env.TECHNOLOGY_COLLECTION_NAME;
 const URL_COLLECTION_NAME = process.env.URL_COLLECTION_NAME;
-
+const ALLOW_ANALYAIS_PROCESS_LOGGING =
+  process.env.ALLOW_ANALYAIS_PROCESS_LOGGING === 'true';
 if (
   !CONNECTION_STRING ||
   !DB_NAME ||
@@ -129,7 +130,8 @@ fetchDictionary()
           cookieDictionary,
           DELAY_TIME,
           shouldReanalyizeCookies,
-          shouldReanalyizeTechnologies
+          shouldReanalyizeTechnologies,
+          ALLOW_ANALYAIS_PROCESS_LOGGING
         );
 
         return res.json(analysis);
