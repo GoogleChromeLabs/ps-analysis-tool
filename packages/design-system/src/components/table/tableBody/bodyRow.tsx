@@ -54,13 +54,13 @@ const BodyRow = ({
   const isHighlighted = (row.originalData as CookieTableData)?.highlighted;
   const tableRowClassName = classNames(
     'outline-0 flex divide-x divide-american-silver dark:divide-quartz',
-    getClassNamesForBodyRow(
+    `${getClassNamesForBodyRow(
       isBlocked,
       isHighlighted,
       isRowFocused,
       cookieKey === selectedKey,
       index
-    )
+    )}`
   );
 
   return (
