@@ -25,6 +25,7 @@ export {
   emptyAnalytics,
 } from './utils/findAnalyticsMatch';
 export { default as calculateEffectiveExpiryDate } from './utils/calculateEffectiveExpiryDate';
+export { default as sanitizeCsvRecord } from './utils/sanitizeCsvRecord';
 export { parseUrl } from './utils/parseUrl';
 export { default as fetchLocalData } from './utils/fetchLocalData';
 export { default as cookieIssueDetails } from './utils/cookieExclusionAndWarningReasons';

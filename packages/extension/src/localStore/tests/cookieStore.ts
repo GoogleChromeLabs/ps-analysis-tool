@@ -23,7 +23,7 @@ import type { CookieData, Storage } from '../types';
 const cookieArray: CookieData[] = [
   {
     parsedCookie: {
-      expires: 0,
+      expires: 'Session',
       httponly: false,
       secure: true,
       path: '/',
@@ -43,7 +43,7 @@ const cookieArray: CookieData[] = [
   },
   {
     parsedCookie: {
-      expires: 0,
+      expires: 'Session',
       httponly: false,
       secure: true,
       path: '/',

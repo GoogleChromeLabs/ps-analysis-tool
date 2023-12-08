@@ -28,6 +28,7 @@ import {
 import updateStorage from './utils/updateStorage';
 import type { TabData, CookieData } from './types';
 import fetchTopicsTaxonomy from '../utils/fetchTopicsTaxonomy';
+import updateCookieBadgeText from './utils/updateCookieBadgeText';
 
 const CookieStore = {
   /**
@@ -47,7 +48,9 @@ const CookieStore = {
           continue;
         }
         let cookieKey = getCookieKey(cookie.parsedCookie);
-
+        if (!cookieKey) {
+          continue;
+        }
         cookieKey = cookieKey?.trim();
         if (_updatedCookies?.[cookieKey]) {
           _updatedCookies[cookieKey] = {
@@ -101,13 +104,29 @@ const CookieStore = {
    */
   async deleteCookie(cookieName: string) {
     const storage = await chrome.storage.local.get();
-
     Object.values(storage).forEach((tabData) => {
       if (tabData.cookies && tabData.cookies[cookieName]) {
         delete tabData.cookies[cookieName];
       }
     });
+    await updateCookieBadgeText(storage);
+    await chrome.storage.local.set(storage);
+  },
 
+  /**
+   * Deletes a cookie
+   * @param {string} cookieNames Name of the cookie.
+   */
+  async deleteSetOfCookie(cookieNames: string[]) {
+    const storage = await chrome.storage.local.get();
+    cookieNames.forEach((cookieName) => {
+      Object.values(storage).forEach((tabData) => {
+        if (tabData.cookies && tabData.cookies[cookieName]) {
+          delete tabData.cookies[cookieName];
+        }
+      });
+    });
+    await updateCookieBadgeText(storage);
     await chrome.storage.local.set(storage);
   },
 
