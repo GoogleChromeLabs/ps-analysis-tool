@@ -26,6 +26,7 @@ import { CookieTableData } from '@ps-analysis-tool/common';
  */
 import BodyCell from './bodyCell';
 import type { TableColumn, TableRow } from '../useTable';
+import getClassNamesForBodyRow from '../utils/getClassNamesForBodyRow';
 
 interface BodyRowProps {
   row: TableRow;
@@ -53,29 +54,13 @@ const BodyRow = ({
   const isHighlighted = (row.originalData as CookieTableData)?.highlighted;
   const tableRowClassName = classNames(
     'outline-0 flex divide-x divide-american-silver dark:divide-quartz',
-    isBlocked
-      ? index % 2
-        ? 'dark:bg-flagged-row-even-dark bg-flagged-row-even-light'
-        : 'dark:bg-flagged-row-odd-dark bg-flagged-row-odd-light'
-      : '',
-    cookieKey !== selectedKey &&
-      !isBlocked &&
-      (index % 2
-        ? isHighlighted
-          ? 'bg-dirty-pink'
-          : 'bg-anti-flash-white dark:bg-charleston-green'
-        : isHighlighted
-        ? 'bg-dirty-pink text-dirty-red dark:text-dirty-red text-dirty-red'
-        : 'bg-white dark:bg-raisin-black'),
-    cookieKey === selectedKey &&
-      !isBlocked &&
-      (isRowFocused
-        ? isHighlighted
-          ? 'bg-dirty-red'
-          : 'bg-gainsboro dark:bg-outer-space'
-        : isHighlighted
-        ? 'bg-dirty-pink text-dirty-red'
-        : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver')
+    getClassNamesForBodyRow(
+      isBlocked,
+      isHighlighted,
+      isRowFocused,
+      cookieKey === selectedKey,
+      index
+    )
   );
 
   return (
