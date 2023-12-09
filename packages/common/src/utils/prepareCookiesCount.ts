@@ -52,7 +52,7 @@ const prepareCookiesCount = (cookies: { [key: string]: CookieData } | null) => {
   cookiesCount.total = Object.keys(cookies).filter(
     (cookieKey) =>
       cookies[cookieKey].parsedCookie &&
-      cookies[cookieKey].frameIdList.length >= 1
+      cookies[cookieKey].frameIdList?.length >= 1
   ).length;
 
   for (const cookie of cookieList) {

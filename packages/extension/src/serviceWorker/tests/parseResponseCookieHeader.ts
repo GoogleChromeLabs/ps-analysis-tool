@@ -50,6 +50,7 @@ describe('parseResponseCookieHeader', () => {
         value: 'IN',
         partitionKey: undefined,
       },
+      isBlocked: false,
       analytics: { ...emptyAnalytics },
       url: 'https://example.com/public/api/alerts',
       headerType: 'response',
@@ -94,6 +95,7 @@ describe('parseResponseCookieHeader', () => {
         value: 'bla',
         partitionKey: undefined,
       },
+      isBlocked: false,
       analytics: {
         platform: 'DoubleClick/Google Marketing',
         category: 'Functional',
@@ -163,6 +165,7 @@ describe('parseResponseCookieHeader', () => {
         value: 'bla',
         partitionKey: undefined,
       },
+      isBlocked: false,
       analytics: {
         platform: 'Google Analytics',
         category: 'Analytics',
