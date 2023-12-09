@@ -139,3 +139,14 @@ export type NetworkResponseReceivedExtraInfo = {
   cookiePartitionKey?: string;
   cookiePartitionKeyOpaque?: boolean;
 };
+
+export type NetworkRequestWillBeSentParams = {
+  requestId: string;
+  documentURL: string;
+  wallTime: number;
+  timestamp: number;
+  frameId: string;
+  loaderID: string;
+  redirectHasExtraInfo: boolean;
+  hasUserGesture: boolean;
+};

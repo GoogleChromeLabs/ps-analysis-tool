@@ -23,11 +23,13 @@ import findAnalyticsMatch from './findAnalyticsMatch';
  *
  * @param {object} request Request to be parsed to get extra information about a cookie.
  * @param {object} cookieDB Cookie database to find analytics from.
+ * @param {object} requestMap An object for requestId to url.
  * @returns {object} parsed cookies.
  */
 export default function parseRequestWillBeSentExtraInfo(
   request: NetworkRequestExtraInfoParams,
-  cookieDB: CookieDatabase
+  cookieDB: CookieDatabase,
+  requestMap: { [requestId: string]: string }
 ) {
   const cookies: CookieData[] = [];
 
@@ -35,6 +37,14 @@ export default function parseRequestWillBeSentExtraInfo(
     const effectiveExpirationDate = calculateEffectiveExpiryDate(
       cookie.expires
     );
+    let domain;
+    if (cookie?.domain) {
+      domain = cookie?.domain.startsWith('.')
+        ? cookie.domain.slice(1)
+        : cookie?.domain;
+    } else {
+      domain = new URL(requestMap[request?.requestId]).hostname;
+    }
 
     const singleCookie = {
       isBlocked: !(blockedReasons.length === 0),
@@ -42,35 +52,16 @@ export default function parseRequestWillBeSentExtraInfo(
         ...cookie,
         expires: effectiveExpirationDate,
         samesite: cookie.sameSite ?? 'lax',
+        domain,
       },
       blockedReasons,
       analytics: cookieDB ? findAnalyticsMatch(cookie.name, cookieDB) : null,
-      url: request.headers['url'],
+      url: requestMap[request?.requestId],
       headerType: 'request' as CookieData['headerType'],
       isFirstParty: cookie?.sameParty,
       frameIdList: [],
     };
-
-    const singleAlternateCookie = {
-      isBlocked: !(blockedReasons.length === 0),
-      parsedCookie: {
-        ...cookie,
-        expires: effectiveExpirationDate,
-        samesite: cookie.sameSite ?? 'lax',
-        domain: cookie.domain.startsWith('.')
-          ? cookie.domain?.slice(1)
-          : '.' + cookie.domain,
-      },
-      blockedReasons,
-      analytics: cookieDB ? findAnalyticsMatch(cookie.name, cookieDB) : null,
-      url: request.headers['url'],
-      headerType: 'request' as CookieData['headerType'],
-      isFirstParty: cookie?.sameParty,
-      frameIdList: [],
-    };
-
     cookies.push(singleCookie);
-    cookies.push(singleAlternateCookie);
   });
   return cookies;
 }

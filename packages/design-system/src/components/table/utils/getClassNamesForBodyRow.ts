@@ -46,6 +46,7 @@ export default function getClassNamesForBodyRow(
       }
     } else {
       if (index % 2) {
+        console.log(isBlocked, isHighlighted);
         if (isHighlighted) {
           return 'bg-dirty-pink';
         } else {

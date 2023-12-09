@@ -22,6 +22,7 @@ import {
   type CookieData,
   type NetworkRequestExtraInfoParams,
   type NetworkResponseReceivedExtraInfo,
+  type NetworkRequestWillBeSentParams,
   type AuditParams,
   parseResponseReceivedExtraInfo,
   parseRequestWillBeSentExtraInfo,
@@ -45,6 +46,11 @@ let cookieDB: CookieDatabase | null = null;
 
 // Global promise queue.
 const PROMISE_QUEUE = new PQueue({ concurrency: 1 });
+const cdpURLToRequestMap: {
+  [tabId: string]: {
+    [requestId: string]: string;
+  };
+} = {};
 /**
  * Fires when the browser receives a response from a web server.
  * @see https://developer.chrome.com/docs/extensions/reference/webRequest/
@@ -322,6 +328,19 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
     }
 
     tabId = source?.tabId?.toString();
+    if (method === 'Network.requestWillBeSent' && params) {
+      const request = params as NetworkRequestWillBeSentParams;
+      if (!cdpURLToRequestMap[tabId]) {
+        cdpURLToRequestMap[tabId] = {
+          [request.requestId]: request?.documentURL,
+        };
+      } else {
+        cdpURLToRequestMap[tabId] = {
+          ...cdpURLToRequestMap[tabId],
+          [request.requestId]: request?.documentURL,
+        };
+      }
+    }
 
     if (method === 'Network.requestWillBeSentExtraInfo' && params) {
       const requestParams = params as NetworkRequestExtraInfoParams;
@@ -334,7 +353,8 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       ) {
         const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
           requestParams,
-          cookieDB
+          cookieDB,
+          cdpURLToRequestMap[tabId]
         );
 
         await CookieStore.update(tabId, cookies);
@@ -345,7 +365,8 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       ) {
         const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
           requestParams,
-          cookieDB
+          cookieDB,
+          cdpURLToRequestMap[tabId]
         );
 
         await CookieStore.update(tabId, cookies);
@@ -363,6 +384,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         if (responseParams.headers['Set-Cookie']) {
           const allCookies = parseResponseReceivedExtraInfo(
             responseParams,
+            cdpURLToRequestMap[tabId],
             cookieDB
           );
           await CookieStore.update(tabId, allCookies);
@@ -375,6 +397,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         if (responseParams.headers['Set-Cookie']) {
           const allCookies = parseResponseReceivedExtraInfo(
             responseParams,
+            cdpURLToRequestMap[tabId],
             cookieDB
           );
 

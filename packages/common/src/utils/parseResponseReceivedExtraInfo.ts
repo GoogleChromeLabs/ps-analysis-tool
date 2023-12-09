@@ -31,11 +31,13 @@ import calculateEffectiveExpiryDate from './calculateEffectiveExpiryDate';
 /**
  *
  * @param {object} response Response to be parsed to get extra information about a cookie.
+ * @param {object} requestMap An object for requestId to url.
  * @param {object} cookieDB Cookie database to find analytics from.
  * @returns {object} parsed cookies.
  */
 export default function parseResponseReceivedExtraInfo(
   response: NetworkResponseReceivedExtraInfo,
+  requestMap: { [requestId: string]: string },
   cookieDB?: CookieDatabase
 ) {
   const cookies: CookieData[] = [];
@@ -69,38 +71,19 @@ export default function parseResponseReceivedExtraInfo(
         ...parsedCookie,
         expires: effectiveExpirationDate,
         samesite: parsedCookie.samesite ?? 'lax',
+        domain:
+          parsedCookie?.domain ??
+          new URL(requestMap[response?.requestId]).hostname,
       },
       analytics: cookieDB
         ? findAnalyticsMatch(parsedCookie.name, cookieDB)
         : null,
-      url: response.headers['url'],
+      url: requestMap[response?.requestId],
       isFirstParty: null,
       headerType: 'response' as CookieData['headerType'],
       frameIdList: [],
     };
-
-    const singleAlternateCookie = {
-      isBlocked: blockedCookie ? true : false,
-      blockedReasons: blockedCookie ? blockedCookie?.blockedReasons : [],
-      parsedCookie: {
-        ...parsedCookie,
-        expires: effectiveExpirationDate,
-        samesite: parsedCookie.samesite ?? 'lax',
-        domain: parsedCookie.domain?.startsWith('.')
-          ? parsedCookie.domain?.slice(1)
-          : '.' + parsedCookie.domain,
-      },
-      analytics: cookieDB
-        ? findAnalyticsMatch(parsedCookie.name, cookieDB)
-        : null,
-      url: response.headers['url'],
-      isFirstParty: null,
-      headerType: 'response' as CookieData['headerType'],
-      frameIdList: [],
-    };
-
     cookies.push(singleCookie);
-    cookies.push(singleAlternateCookie);
   });
   return cookies;
 }

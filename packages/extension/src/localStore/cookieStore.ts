@@ -20,13 +20,14 @@ import {
   getCookieKey,
   type BlockedReason,
   type CookieWarningReasons,
+  type CookieData,
 } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import updateStorage from './utils/updateStorage';
-import type { TabData, CookieData } from './types';
+import type { TabData } from './types';
 import fetchTopicsTaxonomy from '../utils/fetchTopicsTaxonomy';
 import updateCookieBadgeText from './utils/updateCookieBadgeText';
 
@@ -153,7 +154,6 @@ const CookieStore = {
     if (!storage[tabId]) {
       return;
     }
-
     if (
       storage[tabId].cookies &&
       storage[tabId].cookies[cookieName] &&
