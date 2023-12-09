@@ -25,7 +25,7 @@ import type {
   BlockedResponseCookieWithReason,
 } from '../cdp.types';
 import findAnalyticsMatch from './findAnalyticsMatch';
-import { CookieDatabase } from '../cookies.types';
+import { CookieData, CookieDatabase } from '../cookies.types';
 import calculateEffectiveExpiryDate from './calculateEffectiveExpiryDate';
 
 /**
@@ -38,41 +38,69 @@ export default function parseResponseReceivedExtraInfo(
   response: NetworkResponseReceivedExtraInfo,
   cookieDB?: CookieDatabase
 ) {
-  return response.headers['Set-Cookie']
-    ?.split('\n')
-    .map((headerLine: string) => {
-      const parsedCookie = parse(headerLine);
-      const blockedCookie = response.blockedCookies.find(
-        (c: BlockedResponseCookieWithReason) => {
-          if (c.cookie) {
-            return c.cookie?.name === parsedCookie.name;
-          } else {
-            const temporaryParsedCookie = parse(c.cookieLine);
-            return temporaryParsedCookie.name === parsedCookie.name;
-          }
-        }
-      );
-      const effectiveExpirationDate = calculateEffectiveExpiryDate(
-        parsedCookie.expires
-      );
+  const cookies: CookieData[] = [];
 
-      return {
-        isBlocked: blockedCookie ? true : false,
-        blockedReasons: blockedCookie ? blockedCookie?.blockedReasons : [],
-        parsedCookie: {
-          ...parsedCookie,
-          expires: effectiveExpirationDate,
-          samesite: parsedCookie.samesite ?? 'lax',
-          partitionKey: headerLine.toLowerCase().includes('partitioned')
-            ? response?.cookiePartitionKey
-            : undefined,
-        },
-        analytics: cookieDB
-          ? findAnalyticsMatch(parsedCookie.name, cookieDB)
-          : null,
-        url: response.headers['url'],
-        headerType: 'response',
-        frameIdList: [],
+  response.headers['Set-Cookie']?.split('\n').forEach((headerLine: string) => {
+    let parsedCookie: CookieData['parsedCookie'] = parse(headerLine);
+    const blockedCookie = response.blockedCookies.find(
+      (c: BlockedResponseCookieWithReason) => {
+        if (c.cookie) {
+          return c.cookie?.name === parsedCookie.name;
+        } else {
+          const temporaryParsedCookie = parse(c.cookieLine);
+          return temporaryParsedCookie.name === parsedCookie.name;
+        }
+      }
+    );
+    const effectiveExpirationDate = calculateEffectiveExpiryDate(
+      parsedCookie.expires
+    );
+    if (headerLine.toLowerCase().includes('partitioned')) {
+      parsedCookie = {
+        ...parsedCookie,
+        partitionKey: response?.cookiePartitionKey,
       };
-    });
+    }
+
+    const singleCookie = {
+      isBlocked: blockedCookie ? true : false,
+      blockedReasons: blockedCookie ? blockedCookie?.blockedReasons : [],
+      parsedCookie: {
+        ...parsedCookie,
+        expires: effectiveExpirationDate,
+        samesite: parsedCookie.samesite ?? 'lax',
+      },
+      analytics: cookieDB
+        ? findAnalyticsMatch(parsedCookie.name, cookieDB)
+        : null,
+      url: response.headers['url'],
+      isFirstParty: null,
+      headerType: 'response' as CookieData['headerType'],
+      frameIdList: [],
+    };
+
+    const singleAlternateCookie = {
+      isBlocked: blockedCookie ? true : false,
+      blockedReasons: blockedCookie ? blockedCookie?.blockedReasons : [],
+      parsedCookie: {
+        ...parsedCookie,
+        expires: effectiveExpirationDate,
+        samesite: parsedCookie.samesite ?? 'lax',
+        domain: parsedCookie.domain?.startsWith('.')
+          ? parsedCookie.domain?.slice(1)
+          : '.' + parsedCookie.domain,
+      },
+      analytics: cookieDB
+        ? findAnalyticsMatch(parsedCookie.name, cookieDB)
+        : null,
+      url: response.headers['url'],
+      isFirstParty: null,
+      headerType: 'response' as CookieData['headerType'],
+      frameIdList: [],
+    };
+
+    cookies.push(singleCookie);
+    cookies.push(singleAlternateCookie);
+  });
+  return cookies;
 }

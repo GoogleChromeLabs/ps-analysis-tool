@@ -30,6 +30,7 @@ import type { CookieAnalytics } from '../utils/fetchCookieDictionary';
 export type CookieData = {
   parsedCookie: ParsedCookie & {
     partitionKey?: string;
+    priority?: 'Low' | 'Medium' | 'High';
   };
   analytics: CookieAnalytics | null;
   url: string;

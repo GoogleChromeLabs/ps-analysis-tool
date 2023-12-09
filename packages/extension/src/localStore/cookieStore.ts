@@ -59,6 +59,10 @@ const CookieStore = {
             parsedCookie: {
               ...cookie.parsedCookie,
               ..._updatedCookies[cookieKey].parsedCookie,
+              priority:
+                cookie.parsedCookie?.priority ??
+                _updatedCookies[cookieKey].parsedCookie?.priority ??
+                'Medium',
               partitionKey:
                 cookie.parsedCookie?.partitionKey ??
                 _updatedCookies[cookieKey].parsedCookie?.partitionKey,

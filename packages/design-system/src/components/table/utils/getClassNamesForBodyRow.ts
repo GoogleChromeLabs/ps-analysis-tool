@@ -29,7 +29,6 @@ export default function getClassNamesForBodyRow(
   isCookieSelected: boolean,
   index: number
 ): string {
-  console.log(isBlocked, isHighlighted, isRowFocused, isCookieSelected, index);
   if (isBlocked) {
     if (isCookieSelected) {
       if (isRowFocused) {

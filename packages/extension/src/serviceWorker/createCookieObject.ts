@@ -96,6 +96,13 @@ export async function createCookieObject(
     prevParsedCookie?.expires
   );
 
+  const partitionKey = parseAttributeValues(
+    'partitionKey',
+    parsedCookie.partitionKey,
+    chromeStoreCookie?.partitionKey,
+    prevParsedCookie?.partitionKey
+  );
+
   return {
     name: (name as string)?.trim(),
     value,
@@ -105,6 +112,7 @@ export async function createCookieObject(
     httponly,
     samesite,
     expires,
+    partitionKey,
   } as ParsedCookie;
 }
 
@@ -162,6 +170,10 @@ function parseAttributeValues(
 
   if (type === 'expires' && value !== 0) {
     value = calculateEffectiveExpiryDate(value as string) || 0;
+  }
+
+  if (type === 'partitionKey') {
+    return value;
   }
 
   return value;

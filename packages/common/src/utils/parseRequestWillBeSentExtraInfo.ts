@@ -50,7 +50,27 @@ export default function parseRequestWillBeSentExtraInfo(
       isFirstParty: cookie?.sameParty,
       frameIdList: [],
     };
+
+    const singleAlternateCookie = {
+      isBlocked: !(blockedReasons.length === 0),
+      parsedCookie: {
+        ...cookie,
+        expires: effectiveExpirationDate,
+        samesite: cookie.sameSite ?? 'lax',
+        domain: cookie.domain.startsWith('.')
+          ? cookie.domain?.slice(1)
+          : '.' + cookie.domain,
+      },
+      blockedReasons,
+      analytics: cookieDB ? findAnalyticsMatch(cookie.name, cookieDB) : null,
+      url: request.headers['url'],
+      headerType: 'request' as CookieData['headerType'],
+      isFirstParty: cookie?.sameParty,
+      frameIdList: [],
+    };
+
     cookies.push(singleCookie);
+    cookies.push(singleAlternateCookie);
   });
   return cookies;
 }

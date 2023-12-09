@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import cookie, { type Cookie as ParsedCookie } from 'simple-cookie';
+import cookie from 'simple-cookie';
 import {
   isFirstParty,
   findAnalyticsMatch,
@@ -49,7 +49,7 @@ const parseResponseCookieHeader = async (
   tabUrl: string,
   frameId: number
 ): Promise<CookieData> => {
-  let parsedCookie: ParsedCookie = cookie.parse(value);
+  let parsedCookie: CookieData['parsedCookie'] = cookie.parse(value);
   parsedCookie = await createCookieObject(parsedCookie, url);
   let analytics: CookieAnalytics | null = null;
   if (dictionary) {
@@ -57,7 +57,16 @@ const parseResponseCookieHeader = async (
   }
 
   const _isFirstParty = isFirstParty(parsedCookie.domain || '', tabUrl);
-
+  const partitionKey =
+    new URL(tabUrl).protocol +
+    '//' +
+    new URL(tabUrl).hostname.replace('www.', '');
+  if (value.toLowerCase().includes('partitioned')) {
+    parsedCookie = {
+      ...parsedCookie,
+      partitionKey,
+    };
+  }
   return {
     parsedCookie,
     analytics,

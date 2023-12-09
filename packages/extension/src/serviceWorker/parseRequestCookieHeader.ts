@@ -17,7 +17,6 @@
 /**
  * External dependencies.
  */
-import type { Cookie as ParsedCookie } from 'simple-cookie';
 import {
   isFirstParty,
   findAnalyticsMatch,
@@ -65,9 +64,11 @@ const parseRequestCookieHeader = async (
         let parsedCookie = {
           name,
           value: rest.join('='),
-        } as ParsedCookie;
+        } as CookieData['parsedCookie'];
         parsedCookie = await createCookieObject(parsedCookie, url);
-
+        if (!parsedCookie?.partitionKey) {
+          delete parsedCookie.partitionKey;
+        }
         const _isFirstParty = isFirstParty(parsedCookie.domain || '', tabUrl);
 
         return {
@@ -77,6 +78,7 @@ const parseRequestCookieHeader = async (
           url,
           isFirstParty: _isFirstParty,
           frameIdList: [frameId],
+          isBlocked: false,
         };
       })
     );
