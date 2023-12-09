@@ -66,9 +66,11 @@ const parseRequestCookieHeader = async (
           value: rest.join('='),
         } as CookieData['parsedCookie'];
         parsedCookie = await createCookieObject(parsedCookie, url);
+
         if (!parsedCookie?.partitionKey) {
           delete parsedCookie.partitionKey;
         }
+
         const _isFirstParty = isFirstParty(parsedCookie.domain || '', tabUrl);
 
         return {

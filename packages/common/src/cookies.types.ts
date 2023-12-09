@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import { type Cookie as ParsedCookie } from 'simple-cookie';
+import { BlockedReason, CookieWarningReasons } from './cdp.types';
 
 export type CookiesCount = {
   total: number;
@@ -59,8 +60,8 @@ export type CookieData = {
   headerType: 'response' | 'request' | 'javascript';
   isFirstParty: boolean | null;
   frameIdList: number[];
-  blockedReasons?: string[];
-  warningReasons?: string[];
+  blockedReasons?: BlockedReason[];
+  warningReasons?: CookieWarningReasons[];
   isBlocked: boolean | null;
 };
 

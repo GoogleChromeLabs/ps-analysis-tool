@@ -37,7 +37,7 @@ export type CookieData = {
   headerType: 'response' | 'request' | 'javascript'; // @todo Change headerType key name.
   isFirstParty: boolean | null;
   frameIdList: number[];
-  isBlocked?: boolean;
+  isBlocked: boolean | null;
   blockedReasons?: BlockedReason[];
   warningReasons?: CookieWarningReasons[];
 };

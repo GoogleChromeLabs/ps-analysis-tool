@@ -39,9 +39,7 @@ export default function parseRequestWillBeSentExtraInfo(
     );
     let domain;
     if (cookie?.domain) {
-      domain = cookie?.domain.startsWith('.')
-        ? cookie.domain.slice(1)
-        : cookie?.domain;
+      domain = cookie?.domain;
     } else {
       domain = new URL(requestMap[request?.requestId]).hostname;
     }

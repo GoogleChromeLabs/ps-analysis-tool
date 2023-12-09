@@ -52,6 +52,12 @@ const CookieStore = {
         if (!cookieKey) {
           continue;
         }
+        const blockedReasons: BlockedReason[] = [
+          ...new Set<BlockedReason>([
+            ...(cookie?.blockedReasons ?? []),
+            ...(_updatedCookies[cookieKey]?.blockedReasons ?? []),
+          ]),
+        ];
         cookieKey = cookieKey?.trim();
         if (_updatedCookies?.[cookieKey]) {
           _updatedCookies[cookieKey] = {
@@ -68,12 +74,8 @@ const CookieStore = {
                 cookie.parsedCookie?.partitionKey ??
                 _updatedCookies[cookieKey].parsedCookie?.partitionKey,
             },
-            blockedReasons: Array.from(
-              new Set<BlockedReason>([
-                ...(cookie.blockedReasons ?? []),
-                ...(_updatedCookies[cookieKey].blockedReasons ?? []),
-              ])
-            ),
+            isBlocked: blockedReasons.length > 0,
+            blockedReasons,
             warningReasons: Array.from(
               new Set<CookieWarningReasons>([
                 ...(cookie.warningReasons ?? []),

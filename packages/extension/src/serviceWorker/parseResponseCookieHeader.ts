@@ -74,6 +74,7 @@ const parseResponseCookieHeader = async (
     headerType: 'response',
     isFirstParty: _isFirstParty,
     frameIdList: [frameId],
+    isBlocked: false,
   };
 };
 
