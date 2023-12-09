@@ -18,7 +18,6 @@
  * External dependencies.
  */
 import { type Cookie as ParsedCookie } from 'simple-cookie';
-import { getSubdomain, getDomain } from 'tldts';
 import {
   calculateEffectiveExpiryDate,
   getCookieKey,
@@ -138,10 +137,7 @@ function parseAttributeValues(
 
   if (type === 'domain') {
     if (url) {
-      const subDomain = getSubdomain(url);
-      const domain = getDomain(url);
-      value =
-        value || !subDomain ? '.' + domain : '.' + subDomain + '.' + domain;
+      value = value || new URL(url).hostname;
     } else {
       value = value || '';
     }
