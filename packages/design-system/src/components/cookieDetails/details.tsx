@@ -97,7 +97,7 @@ const Details = ({ selectedCookie }: DetailsProps) => {
       <p className="mb-4 text-outer-space-crayola dark:text-bright-gray">
         {selectedCookie.analytics?.description || 'No description available.'}
       </p>
-      {selectedCookie.isCookieBlocked && (
+      {selectedCookie.isBlocked && (
         <>
           <p className="font-bold text-granite-gray dark:text-manatee mb-1">
             Blocked reason

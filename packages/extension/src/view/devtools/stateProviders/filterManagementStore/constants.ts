@@ -59,7 +59,7 @@ export const FILTER_MAPPING = [
   },
   {
     name: 'Cookie Blocked',
-    keys: 'isCookieBlocked',
+    keys: 'isBlocked',
     type: 'boolean',
     order: 10,
     description: 'Whether the cookie was was blocked from setting on machine.',
@@ -113,7 +113,7 @@ export const MAPPING_KEYS_TO_NAME = {
   'parsedCookie.secure': 'Secure',
   'parsedCookie.path': 'Path',
   'analytics.platform': 'Platform',
-  isCookieBlocked: 'Cookie Accepted',
+  isBlocked: 'Cookie Blocked',
   headerType: 'Set Via',
   retentionPeriod: 'Retention Period',
   isFirstParty: 'Scope',

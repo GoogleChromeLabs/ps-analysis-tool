@@ -247,7 +247,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           const isCookieBlocked = value?.isBlocked ?? false;
           _cookies[key] = {
             ...value,
-            isCookieBlocked,
+            isBlocked: isCookieBlocked,
           };
           return [key, value];
         }
@@ -286,7 +286,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           const isCookieBlocked = value?.isBlocked ?? false;
           _cookies[key] = {
             ...value,
-            isCookieBlocked,
+            isBlocked: isCookieBlocked,
           };
           return [key, value];
         });
@@ -475,8 +475,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
         let newCookieKey = cookieKey;
         let valueToBeSet: string | boolean | number = changedValue;
         const { [cookieKey]: cookieDetails, ...restOfCookies } = tabCookies;
-        if (!cookieDetails?.isCookieBlocked) {
-          return false;
+
+        if (cookieDetails?.isBlocked) {
+          return null;
         }
 
         if (keyToChange === 'expirationDate') {
@@ -647,8 +648,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
     ) => {
       if (tabId && tabCookies) {
         const { [cookieKey]: cookieDetails, ...restOfCookies } = tabCookies;
-        if (!cookieDetails?.isCookieBlocked) {
-          return false;
+
+        if (cookieDetails?.isBlocked) {
+          return null;
         }
         const newCookieKey =
           changedValue +

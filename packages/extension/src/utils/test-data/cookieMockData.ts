@@ -82,7 +82,7 @@ const data: {
       url: 'https://edition.cnn.com/whatever/api',
       headerType: 'response',
       isFirstParty: true,
-      isCookieBlocked: false,
+      isBlocked: false,
       frameIdList: [1],
     },
     [uncategorized3pCookie.name]: {
@@ -91,7 +91,7 @@ const data: {
       url: 'https://api.pubmatic.com/whatever/api',
       headerType: 'response',
       isFirstParty: false,
-      isCookieBlocked: false,
+      isBlocked: false,
       frameIdList: [1],
     },
     [known1pCookie.name]: {
@@ -111,7 +111,7 @@ const data: {
       url: 'https://edition.cnn.com/whatever/api',
       headerType: 'response',
       isFirstParty: true,
-      isCookieBlocked: false,
+      isBlocked: false,
       frameIdList: [1],
     },
     [known3pCookie.name]: {
@@ -131,7 +131,7 @@ const data: {
       url: 'https://api.pubmatic.com/whatever/api',
       headerType: 'response',
       isFirstParty: false,
-      isCookieBlocked: false,
+      isBlocked: false,
       frameIdList: [1],
     },
     [known3pCookieWithValue.name]: {
@@ -151,7 +151,7 @@ const data: {
       url: 'https://api.pubmatic.com/whatever/api',
       headerType: 'response',
       isFirstParty: false,
-      isCookieBlocked: false,
+      isBlocked: false,
       frameIdList: [1],
     },
   },

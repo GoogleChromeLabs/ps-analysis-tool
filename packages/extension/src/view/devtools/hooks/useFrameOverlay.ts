@@ -217,11 +217,11 @@ const useFrameOverlay = () => {
             ? filteredCookies.filter((cookie) => cookie.isFirstParty)
             : [];
           const blockedCookies = filteredCookies
-            ? filteredCookies.filter((cookie) => cookie.isCookieBlocked)
+            ? filteredCookies.filter((cookie) => cookie.isBlocked)
             : [];
           const blockedReasons = filteredCookies
             ? filteredCookies
-                .filter((cookie) => cookie.isCookieBlocked)
+                .filter((cookie) => cookie.isBlocked)
                 .reduce((previousReasons: string[], cookie) => {
                   if (cookie.blockedReasons.length > 0) {
                     return [
