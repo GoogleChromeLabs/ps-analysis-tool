@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.shared.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "types": ["node"]
+  },
+  "include": [
+    "src",
+    "../../node_modules/@types/jest/index.d.ts",
+    "src/**/*.json"
+  ],
+  "references": [
+    { "path": "../common" },
+    {
+      "path": "../design-system"
+    }
+  ]
+}

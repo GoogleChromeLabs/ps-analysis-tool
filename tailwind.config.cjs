@@ -31,6 +31,7 @@ module.exports = {
     path.resolve(__dirname, './packages/extension/src/**/*.{tsx,js}'),
     path.resolve(__dirname, './packages/design-system/src/**/*.{tsx,js}'),
     path.resolve(__dirname, './packages/cli-dashboard/src/**/*.{tsx,js}'),
+    path.resolve(__dirname, './packages/analysis-frontend/src/**/*.{tsx,js}'),
   ],
   theme: {
     extend: {

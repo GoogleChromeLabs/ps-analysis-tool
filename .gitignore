@@ -36,3 +36,4 @@ tmp
 
 #Env files
 .env.backend
+.env.frontend
