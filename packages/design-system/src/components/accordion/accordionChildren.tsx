@@ -29,7 +29,7 @@ import { noop } from '../../utils';
 interface AccordionChildrenProps {
   accordionMenuItemName: string;
   accordionState?: Record<string, boolean> | undefined;
-  currentIndex: number;
+  currentIndex?: number;
   defaultIcon: React.FC<React.SVGProps<SVGSVGElement>>;
   hasChildren?: boolean;
   index?: number;
@@ -46,7 +46,7 @@ interface AccordionChildrenProps {
   tabFrames?: TabFrames | null;
   titleForMenuItem: string;
   tabId?: string;
-  tabs: tabSidebar[];
+  tabs?: tabSidebar[];
   width?: number;
   keyboardNavigator?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
   onAccordionChildClick?: (
@@ -78,7 +78,7 @@ const AccordionChildren: React.FC<AccordionChildrenProps> = ({
   tabFrames = null,
   titleForMenuItem,
   tabId = '',
-  tabs,
+  tabs = [],
   width = 0,
   onAccordionChildClick = noop,
   keyboardNavigator = noop,

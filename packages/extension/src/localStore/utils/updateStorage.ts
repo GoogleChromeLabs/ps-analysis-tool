@@ -17,6 +17,7 @@
  * Internal dependencies.
  */
 import { type Storage, type TabData } from '../types';
+import updateCookieBadgeText from './updateCookieBadgeText';
 
 const updateStorage = async (
   tabId: string,
@@ -68,18 +69,7 @@ const updateStorage = async (
       }
     }
   }
-  try {
-    const tabCookies = newStorageValue[tabId].cookies || {};
-    const numCookies = Object.keys(tabCookies).length;
-    if (numCookies > 0) {
-      await chrome.action.setBadgeText({
-        tabId: parseInt(tabId),
-        text: numCookies.toString(),
-      });
-    }
-  } catch (error) {
-    // do nothing
-  }
+  await updateCookieBadgeText(newStorageValue, tabId);
   //Apply update to the chrome local store
   await chrome.storage.local.set(newStorageValue);
 };

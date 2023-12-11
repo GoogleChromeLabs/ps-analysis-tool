@@ -63,11 +63,7 @@ interface useSidebarProps {
 const useSidebar = ({ data }: useSidebarProps): SidebarOutput => {
   const [selectedItemKey, setSelectedItemKey] = useState<string | null>(null);
   const [activePanel, setActivePanel] = useState<React.ReactNode>();
-  const [sidebarItems, setSidebarItems] = useState<SidebarItems>({});
-
-  useEffect(() => {
-    setSidebarItems(data);
-  }, [data]);
+  const [sidebarItems, setSidebarItems] = useState<SidebarItems>(data);
 
   useEffect(() => {
     let keyFound = false;
