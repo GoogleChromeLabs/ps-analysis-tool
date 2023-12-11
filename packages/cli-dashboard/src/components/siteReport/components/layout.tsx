@@ -47,7 +47,6 @@ const Layout = () => {
         Object.values(tabCookies)
           .reduce((acc, cookie) => {
             acc.push(...(cookie.frameUrls as string[]));
-
             return acc;
           }, [] as string[])
           .filter(
