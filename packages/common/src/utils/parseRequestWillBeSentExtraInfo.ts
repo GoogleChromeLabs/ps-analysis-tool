@@ -37,10 +37,11 @@ export default function parseRequestWillBeSentExtraInfo(
     const effectiveExpirationDate = calculateEffectiveExpiryDate(
       cookie.expires
     );
+
     let domain;
     if (cookie?.domain) {
       domain = cookie?.domain;
-    } else {
+    } else if (!cookie?.domain && [request?.requestId]) {
       domain = new URL(requestMap[request?.requestId]).hostname;
     }
 

@@ -64,6 +64,13 @@ export default function parseResponseReceivedExtraInfo(
       };
     }
 
+    let domain;
+    if (parsedCookie?.domain) {
+      domain = parsedCookie?.domain;
+    } else if (!parsedCookie?.domain && [response?.requestId]) {
+      domain = new URL(requestMap[response?.requestId]).hostname;
+    }
+
     const singleCookie = {
       isBlocked: blockedCookie ? true : false,
       blockedReasons: blockedCookie ? blockedCookie?.blockedReasons : [],
@@ -71,9 +78,7 @@ export default function parseResponseReceivedExtraInfo(
         ...parsedCookie,
         expires: effectiveExpirationDate,
         samesite: parsedCookie.samesite ?? 'lax',
-        domain:
-          parsedCookie?.domain ??
-          new URL(requestMap[response?.requestId]).hostname,
+        domain,
       },
       analytics: cookieDB
         ? findAnalyticsMatch(parsedCookie.name, cookieDB)
