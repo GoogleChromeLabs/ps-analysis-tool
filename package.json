@@ -8,6 +8,8 @@
 		"cli:build": "npm run cli:prebuild && tsc --build",
 		"cli-dashboard:dev": "npm run dev --workspace=@ps-analysis-tool/cli-dashboard",
 		"cli-dashboard:build": "npm run build --workspace=@ps-analysis-tool/cli-dashboard",
+		"analysis-frontend:dev": "npm run dev --workspace=@ps-analysis-tool/analysis-frontend",
+		"analysis-frontend:build": "npm run build --workspace=@ps-analysis-tool/analysis-frontend",
 		"analysis-backend:dev": "npm run dev --workspace=@ps-analysis-tool/analysis-backend",
 		"analysis-backend:build": "npm run build --workspace=@ps-analysis-tool/analysis-backend",
 		"analysis-backend:start": "node ./dist/backend/index.js",
