@@ -68,7 +68,7 @@ export default function parseResponseReceivedExtraInfo(
     let domain,
       url = '';
 
-    if (requestMap[response?.requestId]) {
+    if (requestMap && requestMap[response?.requestId]) {
       url = requestMap[response?.requestId] ?? '';
     }
 

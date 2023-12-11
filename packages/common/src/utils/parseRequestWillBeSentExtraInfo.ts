@@ -41,7 +41,7 @@ export default function parseRequestWillBeSentExtraInfo(
     let domain,
       url = '';
 
-    if (requestMap[request?.requestId]) {
+    if (requestMap && requestMap[request?.requestId]) {
       url = requestMap[request?.requestId] ?? '';
     }
 

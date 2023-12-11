@@ -114,12 +114,18 @@ chrome.webRequest.onResponseStarted.addListener(
             tab.url &&
             cookieDB
           ) {
+            const cdpRequestCookies = await chrome.debugger.sendCommand(
+              { tabId: tabId },
+              'Network.getCookies',
+              { urls: [url] }
+            );
             const cookie = await parseResponseCookieHeader(
               url,
               header.value,
               cookieDB,
               tab.url,
-              frameId
+              frameId,
+              cdpRequestCookies.cookies ?? []
             );
             return [...(await accumulator), cookie];
           }
@@ -192,12 +198,19 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
               tab.url &&
               cookieDB
             ) {
+              const cdpRequestCookies = await chrome.debugger.sendCommand(
+                { tabId: tabId },
+                'Network.getCookies',
+                { urls: [url] }
+              );
+
               const cookieList = await parseRequestCookieHeader(
                 url,
                 header.value,
                 cookieDB,
                 tab.url,
-                frameId
+                frameId,
+                cdpRequestCookies?.cookies ?? []
               );
               return [...(await accumulator), ...cookieList];
             }

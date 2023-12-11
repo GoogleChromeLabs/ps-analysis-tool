@@ -83,7 +83,7 @@ const prepareCookiesCount = (cookies: { [key: string]: CookieData } | null) => {
 
   for (const cookie of cookieList) {
     const { analytics, isFirstParty } = cookie;
-    if (cookie?.frameIdList?.length === 0) {
+    if (!cookie.parsedCookie && cookie?.frameIdList?.length === 0) {
       continue;
     }
 

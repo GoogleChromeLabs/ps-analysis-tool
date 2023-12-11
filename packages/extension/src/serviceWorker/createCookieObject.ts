@@ -21,6 +21,7 @@ import { type Cookie as ParsedCookie } from 'simple-cookie';
 import {
   calculateEffectiveExpiryDate,
   getCookieKey,
+  type NetworkCookie,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -33,15 +34,19 @@ import { findPreviousCookieDataObject } from './findPreviousCookieDataObject';
  * Create cookie object from cookieStore API cookie object, previously saved parsed cookie object if any, and recently captured request/response cookie header.
  * @param parsedCookie Parsed cookie object from request/response.
  * @param url URL of the cookie from the request/response.
+ * @param {NetworkCookie[]} cookiesList List cookies from the request.
  * @returns {Promise<{ParsedCookie}>} Cookie object.
  */
 export async function createCookieObject(
   parsedCookie: ParsedCookie,
-  url: string
+  url: string,
+  cookiesList: NetworkCookie[]
 ) {
-  const chromeStoreCookie = await chrome.cookies.get({
-    name: parsedCookie.name,
-    url,
+  const name = parsedCookie.name;
+  const value = parsedCookie.value;
+
+  const cdpCookie = cookiesList?.filter((cookie: NetworkCookie) => {
+    return cookie.name === name && cookie.value === value;
   });
 
   const prevParsedCookie = (
@@ -51,54 +56,53 @@ export async function createCookieObject(
     )
   )?.parsedCookie;
 
-  const name = parsedCookie.name;
-  const value = parsedCookie.value;
   const domain = parseAttributeValues(
     'domain',
     parsedCookie.domain,
-    chromeStoreCookie?.domain,
+    cdpCookie[0]?.domain,
     prevParsedCookie?.domain,
     url
   );
+
   const path = parseAttributeValues(
     'path',
     parsedCookie.path,
-    chromeStoreCookie?.path,
+    cdpCookie[0]?.path,
     prevParsedCookie?.path
   );
 
   const secure = parseAttributeValues(
     'secure',
     parsedCookie.secure,
-    chromeStoreCookie?.secure,
+    cdpCookie[0]?.secure,
     prevParsedCookie?.secure
   );
 
   const httponly = parseAttributeValues(
     'httponly',
     parsedCookie.httponly,
-    chromeStoreCookie?.httpOnly,
+    cdpCookie[0]?.httpOnly,
     prevParsedCookie?.httponly
   );
 
   const samesite = parseAttributeValues(
     'samesite',
     parsedCookie.samesite,
-    chromeStoreCookie?.sameSite,
+    cdpCookie[0]?.sameSite,
     prevParsedCookie?.samesite
   );
 
   const expires = parseAttributeValues(
     'expires',
     parsedCookie.expires,
-    (chromeStoreCookie?.expirationDate || 0) * 1000,
+    (cdpCookie[0]?.expires || 0) * 1000,
     prevParsedCookie?.expires
   );
 
   const partitionKey = parseAttributeValues(
     'partitionKey',
-    parsedCookie.partitionKey,
-    chromeStoreCookie?.partitionKey,
+    parsedCookie?.partitionKey,
+    cdpCookie[0]?.partitionKey,
     prevParsedCookie?.partitionKey
   );
 
@@ -134,7 +138,6 @@ function parseAttributeValues(
 ) {
   let value =
     parsedCookieValue || chromeStoreCookieValue || prevParsedCookieValue;
-
   if (type === 'domain') {
     if (url) {
       value = value || new URL(url).hostname;

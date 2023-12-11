@@ -21,6 +21,7 @@ import {
   isFirstParty,
   findAnalyticsMatch,
   type CookieData,
+  type NetworkCookie,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -40,6 +41,7 @@ import { createCookieObject } from './createCookieObject';
  * @param {CookieDatabase} dictionary Dictionary from open cookie database
  * @param {string} tabUrl top url of the tab from which the request originated.
  * @param {number} frameId Id of a frame in which this cookie is used.
+ * @param {NetworkCookie[]} cookiesList List cookies from the request.
  * @returns {Promise<CookieData>} Parsed cookie object.
  */
 const parseResponseCookieHeader = async (
@@ -47,10 +49,13 @@ const parseResponseCookieHeader = async (
   value: string,
   dictionary: CookieDatabase,
   tabUrl: string,
-  frameId: number
+  frameId: number,
+  cookiesList: NetworkCookie[]
 ): Promise<CookieData> => {
   let parsedCookie: CookieData['parsedCookie'] = cookie.parse(value);
-  parsedCookie = await createCookieObject(parsedCookie, url);
+
+  parsedCookie = await createCookieObject(parsedCookie, url, cookiesList);
+
   let analytics: CookieAnalytics | null = null;
   if (dictionary) {
     analytics = findAnalyticsMatch(parsedCookie.name, dictionary);
