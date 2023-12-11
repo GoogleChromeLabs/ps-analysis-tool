@@ -615,7 +615,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
           currentFrame.frameIds.map(async (frameId) => {
             await Promise.all(
               Object.keys(allCookies).map(async (key) => {
-                if (!allCookies[key].frameIdList.includes(frameId)) {
+                if (
+                  allCookies[key].frameIdList &&
+                  !allCookies[key].frameIdList.includes(frameId)
+                ) {
                   return key;
                 }
                 if (
