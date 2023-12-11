@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 const path = require('path');
+const Dotenv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const WebpackBar = require('webpackbar');
@@ -35,8 +36,14 @@ const analysisFrontend = {
     port: 9000,
   },
   plugins: [
+    new Dotenv({
+      path: '../../.env.frontend',
+    }),
+    new CopyPlugin({
+      patterns: [{ from: './assets', to: 'assets' }],
+    }),
     new WebpackBar({
-      name: 'Dashboard',
+      name: 'Analysis frontend',
       color: '#357BB5',
     }),
     new HtmlWebpackPlugin({
@@ -44,9 +51,6 @@ const analysisFrontend = {
       template: './public/index.html',
       filename: 'index.html',
       inject: false,
-    }),
-    new CopyPlugin({
-      patterns: [{ from: '../../out', to: 'out' }],
     }),
   ],
   ...commonConfig,

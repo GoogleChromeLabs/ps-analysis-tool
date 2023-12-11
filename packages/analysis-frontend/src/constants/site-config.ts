@@ -14,25 +14,4 @@
  * limitations under the License.
  */
 
-/**
- * External dependencies
- */
-import React from 'react';
-
-/**
- * Internal dependencies
- */
-import './app.css';
-import { Footer, Header } from './components';
-
-const App = () => {
-  return (
-    <div className="h-screen flex flex-col">
-      <Header />
-      <div className="flex-1"></div>
-      <Footer />
-    </div>
-  );
-};
-
-export default App;
+export const HEADER_TITLE = 'Privacy Sandbox Report';
