@@ -44,7 +44,7 @@ const prepareCookieStatsComponents = (
       count: cookieStats.blockedCookies[reason] ?? 0,
       //@ts-ignore
       color: BLOCKED_COLOR_MAP[reason],
-      countClassName: `text-${reason}`,
+      countClassName: `text-${reason.toLowerCase()}`,
     });
   });
 

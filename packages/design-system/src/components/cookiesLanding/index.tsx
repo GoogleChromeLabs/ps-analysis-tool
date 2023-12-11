@@ -52,6 +52,10 @@ const CookiesLanding = ({
 }: CookiesLandingProps) => {
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
+  cookiesStatsComponents?.blockedCookiesLegend.map((singleLegend) => {
+    singleLegend.count = cookieStats.blockedCookies[singleLegend.label];
+    return singleLegend;
+  });
 
   return (
     <div className="h-full w-full min-w-[20rem]" data-testid="cookies-landing">
