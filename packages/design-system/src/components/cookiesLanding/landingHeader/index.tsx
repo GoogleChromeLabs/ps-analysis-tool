@@ -57,6 +57,11 @@ const LandingHeader = ({
       count: cookieStats.thirdParty.total,
       data: cookiesStatsComponents.thirdParty,
     },
+    {
+      title: 'Blocked cookies',
+      count: cookieStats.blockedCookies.total,
+      data: cookiesStatsComponents.blocked,
+    },
   ];
 
   return (

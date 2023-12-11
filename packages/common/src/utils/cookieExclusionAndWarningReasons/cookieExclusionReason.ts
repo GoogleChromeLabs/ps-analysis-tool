@@ -17,8 +17,8 @@ import * as CookieExclusionReasonHTMLContent from './cookieExclusionReasonHTMLCo
 
 const codeForCookieIssueDetails = (
   reason: string,
-  warningReasons: string[],
-  operation: string,
+  warningReasons?: string[],
+  operation?: string,
   cookieUrl?: string
 ): string => {
   const isURLSecure =
@@ -61,7 +61,7 @@ const codeForCookieIssueDetails = (
   }
 
   if (
-    warningReasons.includes('WarnCrossSiteRedirectDowngradeChangesInclusion')
+    warningReasons?.includes('WarnCrossSiteRedirectDowngradeChangesInclusion')
   ) {
     return CookieExclusionReasonHTMLContent.cookieCrossSiteRedirectDowngrade;
   }
@@ -79,9 +79,9 @@ const codeForCookieIssueDetails = (
 
 const CookieExclusionReason = {
   ExcludeSameSiteUnspecifiedTreatedAsLax: (
-    warningReasons: string[],
-    operation: string,
-    cookieUrl: string
+    warningReasons?: string[],
+    operation?: string,
+    cookieUrl?: string
   ): string => {
     const reason = 'ExcludeSameSiteUnspecifiedTreatedAsLax';
     return codeForCookieIssueDetails(
@@ -91,7 +91,7 @@ const CookieExclusionReason = {
       cookieUrl
     );
   },
-  ExcludeSameSiteNoneInsecure: (operation: string): string => {
+  ExcludeSameSiteNoneInsecure: (operation?: string): string => {
     // For SetCookie operation.
     if (operation === 'SetCookie') {
       return CookieExclusionReasonHTMLContent.ExcludeSameSiteNoneInsecureSetCookie;
@@ -100,9 +100,9 @@ const CookieExclusionReason = {
     return CookieExclusionReasonHTMLContent.ExcludeSameSiteNoneInsecureReadCookie;
   },
   ExcludeSameSiteLax: (
-    warningReasons: string[],
-    operation: string,
-    cookieUrl: string
+    warningReasons?: string[],
+    operation?: string,
+    cookieUrl?: string
   ): string => {
     const reason = 'ExcludeSameSiteLax';
     return codeForCookieIssueDetails(
@@ -113,9 +113,9 @@ const CookieExclusionReason = {
     );
   },
   ExcludeSameSiteStrict: (
-    warningReasons: string[],
-    operation: string,
-    cookieUrl: string
+    warningReasons?: string[],
+    operation?: string,
+    cookieUrl?: string
   ): string => {
     const reason = 'ExcludeSameSiteStrict';
     return codeForCookieIssueDetails(
@@ -137,7 +137,7 @@ const CookieExclusionReason = {
   ExcludeThirdPartyCookieBlockedInFirstPartySet: (): string => {
     return CookieExclusionReasonHTMLContent.ExcludeThirdPartyCookieBlockedInFirstPartySet;
   },
-  ExcludeThirdPartyPhaseout: (operation: string): string => {
+  ExcludeThirdPartyPhaseout: (operation?: string): string => {
     // For SetCookie operation.
     if (operation === 'SetCookie') {
       return CookieExclusionReasonHTMLContent.ExcludeThirdPartyPhaseoutSetCookie;

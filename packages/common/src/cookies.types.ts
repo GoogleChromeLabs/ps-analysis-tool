@@ -36,6 +36,10 @@ export type CookiesCount = {
     analytics: number;
     uncategorized: number;
   };
+  blockedCookies: {
+    total: number;
+    [key: string]: number;
+  };
 };
 
 export type CookieAnalytics = {
@@ -105,11 +109,16 @@ export interface Legend {
 
 export interface CookieStatsComponents {
   legend: Legend[];
+  blockedCookiesLegend: Legend[];
   firstParty: {
     count: number;
     color: string;
   }[];
   thirdParty: {
+    count: number;
+    color: string;
+  }[];
+  blocked: {
     count: number;
     color: string;
   }[];

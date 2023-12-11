@@ -18,19 +18,36 @@
  */
 
 import { CookieStatsComponents, CookiesCount } from '../cookies.types';
-
-const COLOR_MAP = {
-  functional: '#5CC971',
-  marketing: '#F3AE4E',
-  analytics: '#4C79F4',
-  uncategorized: '#EC7159',
-  brightGray: '#E8EAED',
-  mediumGray: '#BDBDBD',
-};
+import { COLOR_MAP, BLOCKED_COLOR_MAP, BLOCKED_REASON_LIST } from '../const';
 
 const prepareCookieStatsComponents = (
   cookieStats: CookiesCount
 ): CookieStatsComponents => {
+  const blockedCookiesStats: CookieStatsComponents['blocked'] = [];
+  Object.keys(cookieStats.blockedCookies).forEach((key) => {
+    if (key === 'total') {
+      return;
+    }
+    blockedCookiesStats.push({
+      count: cookieStats.blockedCookies[key],
+      //@ts-ignore
+      color: BLOCKED_COLOR_MAP[key],
+    });
+  });
+
+  const blockedCookiesLegend: CookieStatsComponents['blockedCookiesLegend'] =
+    [];
+
+  BLOCKED_REASON_LIST.forEach((reason) => {
+    blockedCookiesLegend.push({
+      label: reason,
+      count: cookieStats.blockedCookies[reason] ?? 0,
+      //@ts-ignore
+      color: BLOCKED_COLOR_MAP[reason],
+      countClassName: `text-${reason}`,
+    });
+  });
+
   return {
     legend: [
       {
@@ -99,6 +116,8 @@ const prepareCookieStatsComponents = (
         color: COLOR_MAP.uncategorized,
       },
     ],
+    blocked: blockedCookiesStats,
+    blockedCookiesLegend,
   };
 };
 

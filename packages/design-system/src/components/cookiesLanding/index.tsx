@@ -72,11 +72,20 @@ const CookiesLanding = ({
             ))}
         <CookiesMatrix
           tabCookies={tabCookies}
-          cookiesStatsComponents={cookiesStatsComponents}
+          componentData={cookiesStatsComponents.legend}
           tabFrames={tabFrames}
           showInfoIcon={showInfoIcon}
           showHorizontalMatrix={showHorizontalMatrix}
           associatedCookiesCount={associatedCookiesCount}
+        />
+        <div className="w-full my-3" />
+        <CookiesMatrix
+          title="Blocked cookie insights"
+          tabCookies={tabCookies}
+          componentData={cookiesStatsComponents.blockedCookiesLegend}
+          tabFrames={tabFrames}
+          showInfoIcon={showInfoIcon}
+          showHorizontalMatrix={false}
         />
         {children && <div className="mt-8">{children}</div>}
       </div>

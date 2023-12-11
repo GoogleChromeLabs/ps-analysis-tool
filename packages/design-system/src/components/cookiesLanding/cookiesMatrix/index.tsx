@@ -25,14 +25,14 @@ import {
 } from '@ps-analysis-tool/design-system';
 import {
   filterFramesWithCookies,
-  type CookieStatsComponents,
   type TabCookies,
   type TabFrames,
+  Legend,
 } from '@ps-analysis-tool/common';
 
 interface CookiesMatrixProps {
   tabCookies: TabCookies | null;
-  cookiesStatsComponents: CookieStatsComponents;
+  componentData: Legend[];
   tabFrames: TabFrames | null;
   title?: string;
   description?: string;
@@ -77,7 +77,7 @@ const LEGEND_DATA: LegendData = {
 
 const CookiesMatrix = ({
   tabCookies,
-  cookiesStatsComponents,
+  componentData,
   tabFrames,
   title = 'Cookies Insights',
   description = '',
@@ -91,8 +91,8 @@ const CookiesMatrix = ({
 }: CookiesMatrixProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const dataComponents: MatrixComponentProps[] =
-    cookiesStatsComponents.legend.map((component) => {
+  const dataComponents: MatrixComponentProps[] = componentData.map(
+    (component) => {
       const additionalDataComponent = LEGEND_DATA[component.label] || {};
       const comp = {
         ...component,
@@ -103,7 +103,8 @@ const CookiesMatrix = ({
       };
 
       return comp;
-    });
+    }
+  );
 
   const totalFrames = tabFrames ? Object.keys(tabFrames).length : 0;
   const framesWithCookies = filterFramesWithCookies(tabCookies, tabFrames);

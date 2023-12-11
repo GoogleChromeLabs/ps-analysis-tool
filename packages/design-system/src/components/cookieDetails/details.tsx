@@ -58,7 +58,8 @@ const Details = ({ selectedCookie }: DetailsProps) => {
       warningReasons =
         warningReasons +
         cookieWarningReason(
-          selectedCookie?.headerType === 'response' ? 'SetCookie' : 'Cookie'
+          selectedCookie?.headerType === 'response' ? 'SetCookie' : 'Cookie',
+          ''
         );
     }
     return reason;

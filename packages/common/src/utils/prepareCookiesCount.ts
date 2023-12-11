@@ -27,6 +27,9 @@ import { CookieData, CookiesCount } from '../cookies.types';
 const prepareCookiesCount = (cookies: { [key: string]: CookieData } | null) => {
   const cookiesCount: CookiesCount = {
     total: 0,
+    blockedCookies: {
+      total: 0,
+    },
     firstParty: {
       total: 0,
       functional: 0,
@@ -54,6 +57,29 @@ const prepareCookiesCount = (cookies: { [key: string]: CookieData } | null) => {
       cookies[cookieKey].parsedCookie &&
       cookies[cookieKey].frameIdList?.length >= 1
   ).length;
+
+  cookiesCount.blockedCookies.total = Object.keys(cookies).filter(
+    (cookieKey) =>
+      cookies[cookieKey].parsedCookie &&
+      cookies[cookieKey].frameIdList?.length >= 1 &&
+      cookies[cookieKey].isBlocked
+  ).length;
+
+  Object.keys(cookies).forEach((cookieKey) => {
+    if (
+      cookies[cookieKey].parsedCookie &&
+      cookies[cookieKey].frameIdList?.length >= 1 &&
+      cookies[cookieKey].isBlocked
+    ) {
+      cookies[cookieKey].blockedReasons?.forEach((reason) => {
+        if (!cookiesCount.blockedCookies[reason]) {
+          cookiesCount.blockedCookies[reason] = 1;
+        } else {
+          cookiesCount.blockedCookies[reason]++;
+        }
+      });
+    }
+  });
 
   for (const cookie of cookieList) {
     const { analytics, isFirstParty } = cookie;

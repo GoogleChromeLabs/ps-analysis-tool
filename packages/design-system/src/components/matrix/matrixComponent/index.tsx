@@ -17,6 +17,11 @@
  * External dependencies.
  */
 import React from 'react';
+import {
+  type BlockedReason,
+  type CookieExclusionReason,
+  cookieIssueDetails,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -51,11 +56,26 @@ const MatrixComponent = ({
             {title}
           </h4>
           <div className={countClassName}>{count}</div>
-          {description && isExpanded && (
-            <p className="text-xs mt-1.5 text-darkest-gray dark:text-manatee">
-              {description}
-            </p>
-          )}
+          {description
+            ? isExpanded && (
+                <p className="text-xs text-darkest-gray dark:text-bright-gray">
+                  {description}
+                </p>
+              )
+            : isExpanded && (
+                <p
+                  className="text-xs text-darkest-gray dark:text-bright-gray"
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      cookieIssueDetails.CookieExclusionReason[
+                        title as CookieExclusionReason
+                      ]?.() ??
+                      cookieIssueDetails.CookieBlockedReason[
+                        title as BlockedReason
+                      ],
+                  }}
+                ></p>
+              )}
         </div>
       </div>
     </div>
