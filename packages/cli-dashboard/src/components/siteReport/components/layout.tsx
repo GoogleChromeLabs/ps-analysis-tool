@@ -45,7 +45,11 @@ const Layout = () => {
     () => [
       ...new Set(
         Object.values(tabCookies)
-          .map((cookie) => cookie.frameUrl)
+          .reduce((acc, cookie) => {
+            acc.push(...(cookie.frameUrls as string[]));
+
+            return acc;
+          }, [] as string[])
           .filter(
             (url) => url?.includes('http') || url === UNKNOWN_FRAME_KEY
           ) as string[]
