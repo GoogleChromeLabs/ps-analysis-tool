@@ -67,8 +67,10 @@ const parseResponseCookieHeader = async (
       partitionKey,
     };
   }
+
   return {
     parsedCookie,
+    blockedReasons: [],
     analytics,
     url,
     headerType: 'response',

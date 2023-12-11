@@ -57,6 +57,7 @@ export default function parseResponseReceivedExtraInfo(
     const effectiveExpirationDate = calculateEffectiveExpiryDate(
       parsedCookie.expires
     );
+
     if (headerLine.toLowerCase().includes('partitioned')) {
       parsedCookie = {
         ...parsedCookie,
@@ -64,7 +65,13 @@ export default function parseResponseReceivedExtraInfo(
       };
     }
 
-    let domain;
+    let domain,
+      url = '';
+
+    if (requestMap[response?.requestId]) {
+      url = requestMap[response?.requestId] ?? '';
+    }
+
     if (parsedCookie?.domain) {
       domain = parsedCookie?.domain;
     } else if (!parsedCookie?.domain && requestMap[response?.requestId]) {
@@ -77,13 +84,13 @@ export default function parseResponseReceivedExtraInfo(
       parsedCookie: {
         ...parsedCookie,
         expires: effectiveExpirationDate,
-        samesite: parsedCookie.samesite ?? 'lax',
+        samesite: parsedCookie.samesite ?? '',
         domain,
       },
       analytics: cookieDB
         ? findAnalyticsMatch(parsedCookie.name, cookieDB)
         : null,
-      url: requestMap[response?.requestId],
+      url,
       isFirstParty: null,
       headerType: 'response' as CookieData['headerType'],
       frameIdList: [],

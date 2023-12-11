@@ -75,6 +75,7 @@ const parseRequestCookieHeader = async (
 
         return {
           parsedCookie,
+          blockedReasons: [],
           analytics,
           headerType: 'request',
           url,

@@ -38,11 +38,18 @@ export default function parseRequestWillBeSentExtraInfo(
       cookie.expires
     );
 
-    let domain;
+    let domain,
+      url = '';
+
+    if (requestMap[request?.requestId]) {
+      url = requestMap[request?.requestId] ?? '';
+    }
+
     if (cookie?.domain) {
       domain = cookie?.domain;
     } else if (!cookie?.domain && requestMap[request?.requestId]) {
       domain = new URL(requestMap[request?.requestId]).hostname;
+      url = requestMap[request?.requestId] ?? '';
     }
 
     const singleCookie = {
@@ -50,12 +57,12 @@ export default function parseRequestWillBeSentExtraInfo(
       parsedCookie: {
         ...cookie,
         expires: effectiveExpirationDate,
-        samesite: cookie.sameSite ?? 'lax',
+        samesite: cookie.sameSite ?? '',
         domain,
       },
       blockedReasons,
       analytics: cookieDB ? findAnalyticsMatch(cookie.name, cookieDB) : null,
-      url: requestMap[request?.requestId],
+      url,
       headerType: 'request' as CookieData['headerType'],
       isFirstParty: cookie?.sameParty,
       frameIdList: [],

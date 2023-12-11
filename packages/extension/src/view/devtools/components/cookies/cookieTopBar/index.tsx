@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import { type CookieTableData, getCookieKey } from '@ps-analysis-tool/common';
 import {
@@ -65,18 +65,23 @@ const CookieSearch = ({
   );
 
   const selectedCookieIndex = useRef(-1);
+  const isDeleteOperationPerformed = useRef(false);
+
   // This check is because selectedFrameCookie gets value only once when the cookie in the frame is selected.
   // selectedFrameCookie has the following shape.
   // {[frameName]: cookie|null}
-  const isAnyCookieSelected = !selectedFrameCookie
-    ? filteredCookies.length > 0
+  const isAnyCookieSelected =
+    !selectedFrameCookie && isDeleteOperationPerformed.current
+      ? filteredCookies.length > 0
+        ? true
+        : false
+      : selectedFrameCookie &&
+        selectedFrameCookie[Object.keys(selectedFrameCookie)[0]]
       ? true
-      : false
-    : selectedFrameCookie &&
-      selectedFrameCookie[Object.keys(selectedFrameCookie)[0]]
-    ? true
-    : false;
-
+      : false;
+  useEffect(() => {
+    isDeleteOperationPerformed.current = false;
+  }, []);
   const {
     deleteCookie,
     deleteAllCookies,
@@ -100,12 +105,13 @@ const CookieSearch = ({
         : null
       : Object.values(selectedFrameCookie ?? {})[0];
 
-    if (selectedKey !== null && selectedKey.parsedCookie) {
+    if (selectedKey && selectedKey !== null && selectedKey.parsedCookie) {
       const cookieKey = getCookieKey(selectedKey?.parsedCookie);
       if (cookieKey) {
         selectedCookieIndex.current = filteredCookies.findIndex(
           (cookie) => getCookieKey(cookie.parsedCookie) === cookieKey
         );
+        isDeleteOperationPerformed.current = true;
         deleteCookie(cookieKey);
         const index = getNextIndexToDelete(
           selectedCookieIndex.current,

@@ -64,8 +64,8 @@ const CookieStore = {
             ..._updatedCookies[cookieKey],
             ...cookie,
             parsedCookie: {
-              ...cookie.parsedCookie,
               ..._updatedCookies[cookieKey].parsedCookie,
+              ...cookie.parsedCookie,
               priority:
                 cookie.parsedCookie?.priority ??
                 _updatedCookies[cookieKey].parsedCookie?.priority ??
