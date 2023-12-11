@@ -13,27 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies
- */
-import React from 'react';
-import {
-  CookieIcon,
-  CookieIconWhite,
-  type SidebarItems,
-} from '@ps-analysis-tool/design-system';
 
-const sidebarData: SidebarItems = {
-  'sitemap-landing-page': {
-    title: 'Sitemap Report',
-    children: {},
-  },
-  'sitemap-affected-cookies': {
-    title: 'Affected Cookies',
-    children: {},
-    icon: <CookieIcon />,
-    selectedIcon: <CookieIconWhite />,
-  },
-};
-
-export default sidebarData;
+export { default as createKeyPath } from './createKeyPath';
+export { default as findItem } from './findItem';
+export { default as findKeyParent } from './findKeyParent';
+export { default as matchKey } from './matchKey';
+export { default as findNextItem } from './findNextItem';
+export { default as findPrevItem } from './findPrevItem';

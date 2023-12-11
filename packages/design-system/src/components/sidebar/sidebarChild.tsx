@@ -16,54 +16,81 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ArrowDown, ArrowDownWhite } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
-import type { SidebarItem } from './useSidebar';
+import type { SidebarItemValue } from './useSidebar';
 
 interface SidebarItemProps {
-  sidebarItem: SidebarItem;
+  selectedItemKey: string | null;
+  didUserInteract: boolean;
+  setDidUserInteract: (didUserInteract: boolean) => void;
+  itemKey: string;
+  sidebarItem: SidebarItemValue;
   updateSelectedItemKey: (key: string | null) => void;
+  onKeyNavigation: (
+    event: React.KeyboardEvent<HTMLDivElement>,
+    key: string | null
+  ) => void;
+  toggleDropdown: (action: boolean, key: string) => void;
   isKeyAncestor: (key: string) => boolean;
   isKeySelected: (key: string) => boolean;
 }
 
 const SidebarChild = ({
+  selectedItemKey,
+  didUserInteract,
+  setDidUserInteract,
+  itemKey,
   sidebarItem,
   updateSelectedItemKey,
+  onKeyNavigation,
+  toggleDropdown,
   isKeyAncestor,
   isKeySelected,
 }: SidebarItemProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const itemRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isKeySelected(itemKey) && didUserInteract) {
+      itemRef.current?.focus();
+    }
+  }, [didUserInteract, isKeySelected, itemKey, selectedItemKey]);
 
   return (
     <>
+      {/* SidebarItem */}
       <div
+        ref={itemRef}
+        tabIndex={0}
         onClick={() => {
-          updateSelectedItemKey(sidebarItem.key);
+          updateSelectedItemKey(itemKey);
+          setDidUserInteract(true);
+        }}
+        onKeyDown={(event) => {
+          onKeyNavigation(event, itemKey);
         }}
         className={`w-full flex items-center pl-3 py-0.5 outline-0 text-sm ${
-          isKeySelected(sidebarItem.key)
+          isKeySelected(itemKey)
             ? 'bg-royal-blue text-white'
-            : isKeyAncestor(sidebarItem.key)
+            : isKeyAncestor(itemKey)
             ? 'bg-gainsboro'
             : 'bg-white'
         } cursor-pointer`}
       >
-        {sidebarItem.children?.length !== 0 && (
+        {Object.keys(sidebarItem.children)?.length !== 0 && (
           <div
             onClick={() => {
-              setIsOpen(!isOpen);
+              toggleDropdown(!sidebarItem.dropdownOpen, itemKey);
             }}
             className={`origin-center transition-transform scale-125 p-0.5 mr-1 ${
-              !isOpen && '-rotate-90'
+              !sidebarItem.dropdownOpen && '-rotate-90'
             }`}
           >
-            {isKeyAncestor(sidebarItem.key) ||
-            !isKeySelected(sidebarItem.key) ? (
+            {isKeyAncestor(itemKey) || !isKeySelected(itemKey) ? (
               <ArrowDown />
             ) : (
               <ArrowDownWhite />
@@ -72,39 +99,46 @@ const SidebarChild = ({
         )}
         {sidebarItem.icon && sidebarItem.selectedIcon && (
           <div className="mr-1">
-            {isKeySelected(sidebarItem.key) ? (
+            {isKeySelected(itemKey) ? (
               <>{sidebarItem.selectedIcon}</>
             ) : (
               <>{sidebarItem.icon}</>
             )}
           </div>
         )}
-        <p className="whitespace-nowrap">{sidebarItem.title}</p>
+        <p className="whitespace-nowrap pr-1">{sidebarItem.title}</p>
       </div>
       <>
-        {sidebarItem.children?.length !== 0 && isOpen && (
-          <>
-            {sidebarItem.children.map((child) => (
-              <div
-                key={child.key}
-                className={`w-full pl-4 ${
-                  isKeySelected(child.key)
-                    ? 'bg-royal-blue text-white'
-                    : isKeyAncestor(child.key)
-                    ? 'bg-gainsboro'
-                    : 'bg-white'
-                }`}
-              >
-                <SidebarChild
-                  sidebarItem={child}
-                  updateSelectedItemKey={updateSelectedItemKey}
-                  isKeyAncestor={isKeyAncestor}
-                  isKeySelected={isKeySelected}
-                />
-              </div>
-            ))}
-          </>
-        )}
+        {Object.keys(sidebarItem.children)?.length !== 0 &&
+          sidebarItem.dropdownOpen && (
+            <>
+              {Object.entries(sidebarItem.children).map(([childKey, child]) => (
+                <div
+                  key={childKey}
+                  className={`w-full pl-4 ${
+                    isKeySelected(childKey)
+                      ? 'bg-royal-blue text-white'
+                      : isKeyAncestor(childKey)
+                      ? 'bg-gainsboro'
+                      : 'bg-white'
+                  }`}
+                >
+                  <SidebarChild
+                    selectedItemKey={selectedItemKey}
+                    didUserInteract={didUserInteract}
+                    setDidUserInteract={setDidUserInteract}
+                    itemKey={childKey}
+                    sidebarItem={child}
+                    updateSelectedItemKey={updateSelectedItemKey}
+                    onKeyNavigation={onKeyNavigation}
+                    toggleDropdown={toggleDropdown}
+                    isKeyAncestor={isKeyAncestor}
+                    isKeySelected={isKeySelected}
+                  />
+                </div>
+              ))}
+            </>
+          )}
       </>
     </>
   );

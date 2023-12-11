@@ -22,7 +22,7 @@ import {
   CookieIconWhite,
   SiteBoundariesIcon,
   SiteBoundariesIconWhite,
-  type SidebarItem,
+  type SidebarItems,
 } from '@ps-analysis-tool/design-system';
 
 /**
@@ -30,29 +30,26 @@ import {
  */
 import Technologies from './technologies';
 
-const Tabs: SidebarItem[] = [
-  {
-    key: 'cookies',
+const Tabs: SidebarItems = {
+  cookies: {
     title: 'Cookies',
-    children: [],
+    children: {},
     icon: <CookieIcon />,
     selectedIcon: <CookieIconWhite />,
   },
-  {
-    key: 'technologies',
+  technologies: {
     title: 'Technologies',
-    children: [],
+    children: {},
     panel: <Technologies />,
     icon: <SiteBoundariesIcon />,
     selectedIcon: <SiteBoundariesIconWhite />,
   },
-  {
-    key: 'affected_cookies',
+  'affected-cookies': {
     title: 'Affected Cookies',
-    children: [],
+    children: {},
     icon: <CookieIcon />,
     selectedIcon: <CookieIconWhite />,
   },
-];
+};
 
 export default Tabs;

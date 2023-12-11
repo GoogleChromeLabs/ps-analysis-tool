@@ -23,7 +23,7 @@ import {
   CookieIconWhite,
   Sidebar,
   useSidebar,
-  type SidebarItem,
+  type SidebarItems,
 } from '@ps-analysis-tool/design-system';
 
 /**
@@ -36,7 +36,7 @@ import CookiesTab from '../tabs/cookies';
 import AffectedCookies from '../tabs/affectedCookies';
 
 const Layout = () => {
-  const [data, setData] = useState<SidebarItem[]>(TABS);
+  const [data, setData] = useState<SidebarItems>(TABS);
   const { tabCookies } = useContentStore(({ state }) => ({
     tabCookies: state.tabCookies,
   }));
@@ -62,40 +62,46 @@ const Layout = () => {
     selectedItemKey,
     sidebarItems,
     updateSelectedItemKey,
+    onKeyNavigation,
+    toggleDropdown,
     isKeyAncestor,
     isKeySelected,
   } = useSidebar({ data });
 
   useEffect(() => {
     setData((prev) => {
-      const _data = [...prev];
+      const _data = { ...prev };
 
       const keys = selectedItemKey?.split('#') ?? [];
 
-      _data[0].panel = (
+      _data['cookies'].panel = (
         <CookiesTab
           selectedFrameUrl={null}
           selectedSite={keys[keys.length - 2]}
         />
       );
 
-      _data[0].children = frameUrls.map(
-        (url): SidebarItem => ({
-          key: url,
-          title: url,
-          panel: (
-            <CookiesTab
-              selectedFrameUrl={keys[keys.length - 1]}
-              selectedSite={keys[keys.length - 2]}
-            />
-          ),
-          children: [],
-          icon: <CookieIcon />,
-          selectedIcon: <CookieIconWhite />,
-        })
+      _data['cookies'].children = frameUrls.reduce(
+        (acc: SidebarItems, url: string): SidebarItems => {
+          acc[url] = {
+            title: url,
+            panel: (
+              <CookiesTab
+                selectedFrameUrl={keys[keys.length - 1]}
+                selectedSite={keys[keys.length - 2]}
+              />
+            ),
+            children: {},
+            icon: <CookieIcon />,
+            selectedIcon: <CookieIconWhite />,
+          };
+
+          return acc;
+        },
+        {}
       );
 
-      _data[2].panel = (
+      _data['affected-cookies'].panel = (
         <AffectedCookies selectedFrameUrl={keys[keys.length - 1]} />
       );
 
@@ -120,8 +126,11 @@ const Layout = () => {
         }}
       >
         <Sidebar
+          selectedItemKey={selectedItemKey}
           sidebarItems={sidebarItems}
+          onKeyNavigation={onKeyNavigation}
           updateSelectedItemKey={updateSelectedItemKey}
+          toggleDropdown={toggleDropdown}
           isKeyAncestor={isKeyAncestor}
           isKeySelected={isKeySelected}
         />
