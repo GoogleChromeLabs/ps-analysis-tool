@@ -35,7 +35,8 @@ describe('parseResponseCookieHeader', () => {
       'countryCode=IN; Domain=.example.com; Path=/; SameSite=None; Secure',
       {},
       'https://docs.google.com/',
-      1
+      1,
+      []
     );
 
     expect(parsedCookie).toEqual({
@@ -56,6 +57,7 @@ describe('parseResponseCookieHeader', () => {
       headerType: 'response',
       isFirstParty: false,
       frameIdList: [1],
+      blockedReasons: [],
     });
   });
 
@@ -80,7 +82,8 @@ describe('parseResponseCookieHeader', () => {
         ],
       },
       'https://docs.google.com/',
-      1
+      1,
+      []
     );
 
     expect(parsedCookie).toEqual({
@@ -112,6 +115,7 @@ describe('parseResponseCookieHeader', () => {
       headerType: 'response',
       isFirstParty: false,
       frameIdList: [1],
+      blockedReasons: [],
     });
   });
 
@@ -150,7 +154,8 @@ describe('parseResponseCookieHeader', () => {
         ],
       },
       'https://docs.google.com/',
-      1
+      1,
+      []
     );
 
     expect(parsedCookie).toEqual({
@@ -182,6 +187,7 @@ describe('parseResponseCookieHeader', () => {
       headerType: 'response',
       isFirstParty: true,
       frameIdList: [1],
+      blockedReasons: [],
     });
   });
 });

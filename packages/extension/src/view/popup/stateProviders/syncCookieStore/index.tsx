@@ -62,6 +62,9 @@ const initialState: CookieStoreContext = {
   state: {
     tabCookieStats: {
       total: 0,
+      blockedCookies: {
+        total: 0,
+      },
       firstParty: {
         total: 0,
         functional: 0,
@@ -166,7 +169,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
     }
 
     const _tabId = tab.id;
-    const _tabUrl = tab.url;
 
     setTabId(tab.id);
     setTabUrl(tab.url);
@@ -201,7 +203,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     ];
 
     if (tabData && tabData.cookies) {
-      setDebouncedStats(prepareCookiesCount(tabData.cookies, _tabUrl));
+      setDebouncedStats(prepareCookiesCount(tabData.cookies));
     }
     setLoading(false);
   }, [setDebouncedStats]);
@@ -215,10 +217,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         changes[tabId.toString()]?.newValue?.cookies
       ) {
         setDebouncedStats(
-          prepareCookiesCount(
-            changes[tabId.toString()].newValue.cookies,
-            tabUrl
-          )
+          prepareCookiesCount(changes[tabId.toString()].newValue.cookies)
         );
       }
       if (tabUrl) {

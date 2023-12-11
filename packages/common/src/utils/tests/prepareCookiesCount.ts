@@ -137,6 +137,9 @@ const uncategorized3pCookie = {
 
 const EMPTY_STATS = {
   total: 0,
+  blockedCookies: {
+    total: 0,
+  },
   firstParty: {
     total: 0,
     functional: 0,
@@ -176,6 +179,9 @@ describe('prepareCookiesCount : ', () => {
 
     const expectedStats = {
       total: 8,
+      blockedCookies: {
+        total: 0,
+      },
       firstParty: {
         total: 4,
         functional: 1,

@@ -42,6 +42,7 @@ const normalCookie1 = {
   headerType: 'request',
   isFirstParty: false,
   frameIdList: [1],
+  blockedReasons: [],
 };
 
 const normalCookie2 = {
@@ -61,6 +62,7 @@ const normalCookie2 = {
   headerType: 'request',
   isFirstParty: false,
   frameIdList: [1],
+  blockedReasons: [],
 };
 
 const specialCookie = {
@@ -80,6 +82,7 @@ const specialCookie = {
   headerType: 'request',
   isFirstParty: false,
   frameIdList: [1],
+  blockedReasons: [],
 };
 
 const wildcardCookie = {
@@ -110,6 +113,7 @@ const wildcardCookie = {
   headerType: 'request',
   isFirstParty: false,
   frameIdList: [1],
+  blockedReasons: [],
 };
 
 const normalCookie1Header = `${normalCookie1.parsedCookie.name}=${normalCookie1.parsedCookie.value}`;
@@ -129,7 +133,8 @@ describe('parseRequestCookieHeader', () => {
       header,
       {},
       'https://docs.google.com/',
-      1
+      1,
+      []
     );
 
     expect(parsedCookie).toEqual([normalCookie1, normalCookie2, specialCookie]);
@@ -171,7 +176,8 @@ describe('parseRequestCookieHeader', () => {
         ],
       },
       'https://docs.google.com/',
-      1
+      1,
+      []
     );
 
     expect(parsedCookie).toEqual([

@@ -76,4 +76,6 @@ export default {
       color: '#EC7159',
     },
   ],
+  blocked: [{}],
+  blockedCookiesLegend: [],
 };

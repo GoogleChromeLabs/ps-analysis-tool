@@ -32,12 +32,14 @@ describe('CookiesLanding', () => {
       <CookiesLanding
         tabCookies={mockResponse.tabCookies}
         tabFrames={mockResponse.tabFrames}
-        tabUrl={mockResponse.tabUrl}
       />
     );
 
     expect(getByTestId('cookies-landing')).toBeInTheDocument();
     expect(getByTestId('cookies-landing-header')).toBeInTheDocument();
-    expect(getByTestId('cookies-matrix')).toBeInTheDocument();
+    expect(getByTestId('cookies-matrix-Cookies Insights')).toBeInTheDocument();
+    expect(
+      getByTestId('cookies-matrix-Blocked cookie insights')
+    ).toBeInTheDocument();
   });
 });
