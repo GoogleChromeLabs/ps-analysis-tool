@@ -96,7 +96,7 @@ module.exports = {
       'jet-black': '#202142',
       'warning-red': '#C33300',
       'warning-orange': '#FA3',
-      SecureOnly: '#A98307',
+      'text-SecureOnly': '#A98307',
       'text-DomainMismatch': '#7D8471',
       'text-NotOnPath': '#79553D',
       'text-SameSiteStrict': '#AF2B1E',
