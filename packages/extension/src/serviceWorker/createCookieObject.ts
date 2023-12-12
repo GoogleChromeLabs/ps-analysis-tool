@@ -110,7 +110,9 @@ export async function createCookieObject(
     'size',
     parsedCookie?.size,
     cdpCookie?.size,
-    prevParsedCookie?.size
+    prevParsedCookie?.size,
+    '',
+    name + value
   );
 
   const priority = parseAttributeValues(
@@ -142,6 +144,7 @@ export async function createCookieObject(
  * @param chromeStoreCookieValue Cookie attribute value from the cookieStore API cookie object.
  * @param prevParsedCookieValue Cookie attribute value from the previously saved parsed cookie object.
  * @param url URL of the cookie from the request/response. (Only required for domain attribute)
+ * @param cookieValue cookie value to calculate the size of cookie.
  * @returns {string | boolean | number} Cookie attribute value.
  */
 // eslint-disable-next-line complexity
@@ -150,7 +153,8 @@ function parseAttributeValues(
   parsedCookieValue: string | boolean | number | Date | undefined,
   chromeStoreCookieValue: string | boolean | number | Date | undefined,
   prevParsedCookieValue: string | boolean | number | Date | undefined,
-  url?: string | undefined
+  url?: string | undefined,
+  cookieValue?: string | undefined
 ) {
   let value =
     parsedCookieValue || chromeStoreCookieValue || prevParsedCookieValue;
@@ -182,13 +186,13 @@ function parseAttributeValues(
     }
     value = ((value || '') as string).toLowerCase();
   }
+  if (type === 'size' && !value) {
+    const encoder = new TextEncoder();
+    value = encoder.encode(cookieValue).length;
+  }
 
   if (type === 'expires' && value !== 0) {
     value = calculateEffectiveExpiryDate(value as string) || 0;
-  }
-
-  if (type === 'partitionKey') {
-    return value;
   }
 
   return value;
