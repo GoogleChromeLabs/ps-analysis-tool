@@ -71,7 +71,6 @@ const parseRequestCookieHeader = async (
         parsedCookie = await createCookieObject(parsedCookie, url, cookiesList);
 
         const _isFirstParty = isFirstParty(parsedCookie.domain || '', tabUrl);
-
         return {
           parsedCookie,
           analytics,

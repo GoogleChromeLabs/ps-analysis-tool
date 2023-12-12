@@ -18,18 +18,21 @@ import { NetworkRequestExtraInfoParams } from '../cdp.types';
 import { CookieData, CookieDatabase } from '../cookies.types';
 import calculateEffectiveExpiryDate from './calculateEffectiveExpiryDate';
 import findAnalyticsMatch from './findAnalyticsMatch';
+import isFirstParty from './isFirstParty';
 
 /**
  *
  * @param {object} request Request to be parsed to get extra information about a cookie.
  * @param {object} cookieDB Cookie database to find analytics from.
  * @param {object} requestMap An object for requestId to url.
+ * @param {string} tabUrl - The top-level URL (URL in the tab's address bar).
  * @returns {object} parsed cookies.
  */
 export default function parseRequestWillBeSentExtraInfo(
   request: NetworkRequestExtraInfoParams,
   cookieDB: CookieDatabase,
-  requestMap: { [requestId: string]: string }
+  requestMap: { [requestId: string]: string },
+  tabUrl: string
 ) {
   const cookies: CookieData[] = [];
 
@@ -64,7 +67,7 @@ export default function parseRequestWillBeSentExtraInfo(
       analytics: cookieDB ? findAnalyticsMatch(cookie.name, cookieDB) : null,
       url,
       headerType: 'request' as CookieData['headerType'],
-      isFirstParty: cookie?.sameParty,
+      isFirstParty: isFirstParty(domain, tabUrl),
       frameIdList: [],
     };
     cookies.push(singleCookie);

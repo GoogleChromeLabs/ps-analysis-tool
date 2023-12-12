@@ -35,7 +35,7 @@ import { CookieStore } from '../localStore';
 import parseResponseCookieHeader from './parseResponseCookieHeader';
 import parseRequestCookieHeader from './parseRequestCookieHeader';
 import { getTab } from '../utils/getTab';
-import { getCurrentTabId } from '../utils/getCurrentTabId';
+import { getCurrentTab, getCurrentTabId } from '../utils/getCurrentTabId';
 import {
   type CookieDatabase,
   fetchDictionary,
@@ -348,6 +348,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
     }
 
     tabId = source?.tabId?.toString();
+    const tab = await getCurrentTab();
     if (method === 'Network.requestWillBeSent' && params) {
       const request = params as NetworkRequestWillBeSentParams;
       if (!cdpURLToRequestMap[tabId]) {
@@ -374,7 +375,8 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
           requestParams,
           cookieDB,
-          cdpURLToRequestMap[tabId]
+          cdpURLToRequestMap[tabId],
+          tab ? tab[0]?.url : ''
         );
 
         await CookieStore.update(tabId, cookies);
@@ -386,7 +388,8 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
           requestParams,
           cookieDB,
-          cdpURLToRequestMap[tabId]
+          cdpURLToRequestMap[tabId],
+          tab ? tab[0]?.url : ''
         );
 
         await CookieStore.update(tabId, cookies);
@@ -405,6 +408,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
           const allCookies = parseResponseReceivedExtraInfo(
             responseParams,
             cdpURLToRequestMap[tabId],
+            tab ? tab[0]?.url : '',
             cookieDB
           );
           await CookieStore.update(tabId, allCookies);
@@ -418,6 +422,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
           const allCookies = parseResponseReceivedExtraInfo(
             responseParams,
             cdpURLToRequestMap[tabId],
+            tab ? tab[0]?.url : '',
             cookieDB
           );
 

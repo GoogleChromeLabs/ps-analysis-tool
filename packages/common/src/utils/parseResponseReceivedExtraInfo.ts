@@ -27,18 +27,21 @@ import type {
 import findAnalyticsMatch from './findAnalyticsMatch';
 import { CookieData, CookieDatabase } from '../cookies.types';
 import calculateEffectiveExpiryDate from './calculateEffectiveExpiryDate';
+import isFirstParty from './isFirstParty';
 
 /**
  *
  * @param {object} response Response to be parsed to get extra information about a cookie.
  * @param {object} requestMap An object for requestId to url.
+ * @param {string} tabUrl - The top-level URL (URL in the tab's address bar).
  * @param {object} cookieDB Cookie database to find analytics from.
  * @returns {object} parsed cookies.
  */
 export default function parseResponseReceivedExtraInfo(
   response: NetworkResponseReceivedExtraInfo,
   requestMap: { [requestId: string]: string },
-  cookieDB?: CookieDatabase
+  tabUrl: string,
+  cookieDB: CookieDatabase
 ) {
   const cookies: CookieData[] = [];
 
@@ -91,7 +94,7 @@ export default function parseResponseReceivedExtraInfo(
         ? findAnalyticsMatch(parsedCookie.name, cookieDB)
         : null,
       url,
-      isFirstParty: null,
+      isFirstParty: isFirstParty(domain, tabUrl),
       headerType: 'response' as CookieData['headerType'],
       frameIdList: [],
     };
