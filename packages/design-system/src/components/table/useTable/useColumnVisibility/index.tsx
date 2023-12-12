@@ -38,7 +38,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 /**
  * Internal dependencies.
  */
-import type { TableColumn } from '../useTable';
+import type { TableColumn } from '..';
 
 export type ColumnVisibilityOutput = {
   visibleColumns: TableColumn[];

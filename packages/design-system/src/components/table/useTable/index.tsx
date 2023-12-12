@@ -26,13 +26,15 @@ import getValueByKey from '../utils/getValueByKey';
 import useColumnSorting, {
   DefaultOptions,
   type ColumnSortingOutput,
-} from '../useColumnSorting';
+} from './useColumnSorting';
 import useColumnVisibility, {
   type ColumnVisibilityOutput,
-} from '../useColumnVisibility';
+} from './useColumnVisibility';
 import useColumnResizing, {
   type ColumnResizingOutput,
-} from '../useColumnResizing';
+} from './useColumnResizing';
+import useFiltering, { TableFilteringOutput } from './useFiltering';
+import useSearch, { TableSearchOutput } from './useSearch';
 
 export type TableData = CookieTableData | TechnologyData;
 
@@ -53,6 +55,19 @@ export type TableRow = {
   originalData: TableData;
 };
 
+export type TableFilter = {
+  [accessorKey: string]: {
+    title: string;
+    description?: string;
+    filterValues?: {
+      [filterValue: string]: {
+        selected: boolean;
+        description?: string;
+      };
+    };
+  };
+};
+
 export type TableOutput = {
   columns: TableColumn[];
   hideableColumns: TableColumn[];
@@ -69,11 +84,19 @@ export type TableOutput = {
   tableContainerRef: ColumnResizingOutput['tableContainerRef'];
   onMouseDown: ColumnResizingOutput['onMouseDown'];
   isResizing: ColumnResizingOutput['isResizing'];
+  filters: TableFilter;
+  selectedFilters: TableFilter;
+  toggleFilterSelection: TableFilteringOutput['toggleFilterSelection'];
+  resetFilters: TableFilteringOutput['resetFilters'];
+  searchValue: TableSearchOutput['searchValue'];
+  setSearchValue: TableSearchOutput['setSearchValue'];
 };
 
 interface useTableProps {
-  tableColumns: TableColumn[];
   data: TableData[];
+  tableColumns: TableColumn[];
+  tableFilterData?: TableFilter;
+  tableSearchKeys?: string[];
   options?: {
     columnSizing?: Record<string, number>;
     columnSorting?: DefaultOptions;
@@ -82,8 +105,10 @@ interface useTableProps {
 }
 
 const useTable = ({
-  tableColumns,
   data,
+  tableColumns,
+  tableFilterData,
+  tableSearchKeys,
   options,
 }: useTableProps): TableOutput => {
   const {
@@ -101,26 +126,35 @@ const useTable = ({
   const { sortedData, sortKey, sortOrder, setSortKey, setSortOrder } =
     useColumnSorting(data, options?.columnSorting);
 
-  const rows = useMemo(
-    () =>
-      sortedData.map((_data) => {
-        const row = {
-          originalData: {
-            ..._data,
-          },
-        } as TableRow;
+  const {
+    filters,
+    selectedFilters,
+    filteredData,
+    toggleFilterSelection,
+    resetFilters,
+  } = useFiltering(sortedData, tableFilterData);
 
-        columns.forEach((column) => {
-          const value = getValueByKey(column.accessorKey, _data);
-          row[column.accessorKey] = {
-            value: column.cell?.(value, _data) ?? value,
-          };
-        });
-
-        return row;
-      }),
-    [columns, sortedData]
+  const { searchValue, setSearchValue, searchFilteredData } = useSearch(
+    filteredData,
+    tableSearchKeys
   );
+
+  const rows = useMemo(() => {
+    return searchFilteredData.map((_data) => {
+      const row = {
+        originalData: _data,
+      } as TableRow;
+
+      columns.forEach((column) => {
+        const value = getValueByKey(column.accessorKey, _data);
+        row[column.accessorKey] = {
+          value: column.cell?.(value, _data) ?? value,
+        };
+      });
+
+      return row;
+    });
+  }, [searchFilteredData, columns]);
 
   const hideableColumns = useMemo(
     () => tableColumns.filter((column) => column.enableHiding !== false),
@@ -143,6 +177,12 @@ const useTable = ({
     tableContainerRef,
     onMouseDown,
     isResizing,
+    filters,
+    selectedFilters,
+    toggleFilterSelection,
+    resetFilters,
+    searchValue,
+    setSearchValue,
   };
 };
 

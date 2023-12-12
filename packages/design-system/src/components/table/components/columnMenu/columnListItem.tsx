@@ -23,7 +23,7 @@ import classNames from 'classnames';
 /**
  * Internal dependencies.
  */
-import type { TableColumn } from '../useTable';
+import { TableColumn } from '../../useTable';
 
 interface ColumnListItemProps {
   column: TableColumn;
