@@ -30,13 +30,15 @@ interface Response {
   attributes: { iframeOrigin: string | null; setInPage?: boolean };
 }
 
-const useFrameOverlay = () => {
+const useFrameOverlay = (
+  selectedFrameChangeHandler?: (key: string | null) => void
+) => {
   const portRef = useRef<chrome.runtime.Port | null>(null);
 
   const {
     isInspecting,
     setIsInspecting,
-    setSelectedFrame,
+    _setSelectedFrame,
     setContextInvalidated,
     selectedFrame,
     isCurrentTabBeingListenedTo,
@@ -49,7 +51,7 @@ const useFrameOverlay = () => {
   } = useCookieStore(({ state, actions }) => ({
     setContextInvalidated: actions.setContextInvalidated,
     isInspecting: state.isInspecting,
-    setSelectedFrame: actions.setSelectedFrame,
+    _setSelectedFrame: actions.setSelectedFrame,
     setIsInspecting: actions.setIsInspecting,
     selectedFrame: state.selectedFrame,
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
@@ -60,6 +62,16 @@ const useFrameOverlay = () => {
     setCanStartInspecting: actions.setCanStartInspecting,
     canStartInspecting: state.canStartInspecting,
   }));
+
+  const setSelectedFrame = useCallback(
+    (key: string | null) => {
+      _setSelectedFrame(key);
+      if (selectedFrameChangeHandler) {
+        selectedFrameChangeHandler(key);
+      }
+    },
+    [_setSelectedFrame, selectedFrameChangeHandler]
+  );
 
   const { filteredCookies } = useFilterManagementStore(({ state }) => ({
     filteredCookies: state.filteredCookies,

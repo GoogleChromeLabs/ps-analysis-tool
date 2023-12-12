@@ -63,7 +63,7 @@ const filterCookiesWithRetentionPeriod = (
             }
             switch (retentionFilter) {
               case 'Session':
-                canShow = cookieData.parsedCookie.expires === 0;
+                canShow = cookieData.parsedCookie.expires === 'Session';
                 break;
               case 'Short Term (< 24h)':
                 if (typeof cookieData.parsedCookie.expires === 'string') {
