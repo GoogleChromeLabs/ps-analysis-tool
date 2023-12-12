@@ -18,19 +18,18 @@
  */
 import React, { useState } from 'react';
 import { Resizable } from 're-resizable';
+import type { CookieTableData } from '@ps-analysis-tool/common';
+import { CookieDetails } from '@ps-analysis-tool/design-system';
+import CookieTableContainer from './cookieTableContainer';
 
 /**
  * Internal dependencies.
  */
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-
 import { useFilterManagementStore } from '../../../stateProviders/filterManagementStore';
 import ChipsBar from '../cookieFilter/chips';
 import CookieTopBar from '../cookieTopBar';
 import FiltersList from '../cookieFilter';
-import type { CookieTableData } from '@ps-analysis-tool/common';
-import { CookieDetails } from '@ps-analysis-tool/design-system';
-import CookieTableContainer from './cookieTableContainer';
 
 const CookiesListing = () => {
   const { selectedFrame } = useCookieStore(({ state }) => ({
@@ -57,10 +56,12 @@ const CookiesListing = () => {
   return (
     <div className="w-full h-full flex flex-col">
       <CookieTopBar
+        selectedFrameCookie={selectedFrameCookie}
         cookiesAvailable={cookiesAvailable}
         isFilterMenuOpen={isFilterMenuOpen}
         toggleFilterMenu={toggleFilterMenu}
         filteredCookies={filteredCookies}
+        setSelectedFrameCookie={setSelectedFrameCookie}
       />
       {cookiesAvailable && <ChipsBar />}
       <div className="w-full flex-1 overflow-hidden h-full flex flex-col">

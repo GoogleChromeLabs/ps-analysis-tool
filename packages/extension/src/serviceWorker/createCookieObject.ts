@@ -154,7 +154,7 @@ function parseAttributeValues(
   }
 
   if (type === 'expires' && value !== 0) {
-    value = new Date(value as string).toJSON() || 0;
+    value = new Date(value as string).toJSON() || 'Session';
   }
 
   return value;
