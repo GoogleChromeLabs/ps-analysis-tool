@@ -205,9 +205,14 @@ const App: React.FC = () => {
     }
   }, [selectedFrame, tabUrl, updateSelectedItemKey]);
 
-  useFrameOverlay((key: string | null) => {
-    updateSelectedItemKey(key || 'cookies');
-  });
+  const handleUpdate = useCallback(
+    (key: string | null) => {
+      updateSelectedItemKey(key || 'cookies');
+    },
+    [updateSelectedItemKey]
+  );
+
+  useFrameOverlay(handleUpdate);
 
   return (
     <div
