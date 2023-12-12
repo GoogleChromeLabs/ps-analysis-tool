@@ -541,7 +541,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
             isAnyCookieSelected
               ? 'text-comet-black dark:text-mischka hover:text-comet-grey hover:dark:text-bright-gray active:dark:text-mischka active:text-comet-black'
               : 'text-mischka dark:text-dark-gray'
-          } mx-2`}
+          } mx-4`}
           title="Delete selected cookie"
         >
           <ClearSingle className="rotate-45" />
