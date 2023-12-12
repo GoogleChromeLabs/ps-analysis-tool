@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { BLOCKED_REASON_LIST } from '@ps-analysis-tool/common';
+
 export const FILTER_MAPPING = [
   {
     name: 'Category',
@@ -57,13 +59,6 @@ export const FILTER_MAPPING = [
     sort: true,
     order: 9,
   },
-  {
-    name: 'Cookie Blocked',
-    keys: 'isBlocked',
-    type: 'boolean',
-    order: 10,
-    description: 'Whether the cookie was was blocked from setting on machine.',
-  },
 ];
 
 export const CUSTOM_FILTER_MAPPING = {
@@ -91,6 +86,13 @@ export const CUSTOM_FILTER_MAPPING = {
     ]),
     order: 8,
   },
+  cookieBlockedReasons: {
+    name: 'Cookie Blocked Reasons',
+    keys: 'blockedReasons',
+    filters: new Set(BLOCKED_REASON_LIST),
+    order: 10,
+    description: 'Reason why the cookies were blocked.',
+  },
   samesite: {
     name: 'SameSite',
     keys: 'samesite',
@@ -113,7 +115,7 @@ export const MAPPING_KEYS_TO_NAME = {
   'parsedCookie.secure': 'Secure',
   'parsedCookie.path': 'Path',
   'analytics.platform': 'Platform',
-  isBlocked: 'Cookie Blocked',
+  blockedReasons: 'Cookie Blocked Reason',
   headerType: 'Set Via',
   retentionPeriod: 'Retention Period',
   isFirstParty: 'Scope',

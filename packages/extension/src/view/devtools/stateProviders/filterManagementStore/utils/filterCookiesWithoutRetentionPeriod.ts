@@ -16,9 +16,11 @@
 /**
  * External dependencies.
  */
-import type {
-  CookieTableData,
-  SelectedFilters,
+import {
+  BLOCKED_REASON_LIST,
+  type BlockedReason,
+  type CookieTableData,
+  type SelectedFilters,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -63,7 +65,8 @@ const filterCookiesWithoutRetentionPeriod = (
           keys !== CUSTOM_FILTER_MAPPING.scope.keys &&
           keys !== CUSTOM_FILTER_MAPPING.setVia.keys &&
           keys !== CUSTOM_FILTER_MAPPING.samesite.keys &&
-          keys !== CUSTOM_FILTER_MAPPING.priority.keys
+          keys !== CUSTOM_FILTER_MAPPING.priority.keys &&
+          keys !== CUSTOM_FILTER_MAPPING.cookieBlockedReasons.keys
         ) {
           let value = getFilterValue(keys, cookieData);
           const filterMap = FILTER_MAPPING.find(
@@ -128,6 +131,16 @@ const filterCookiesWithoutRetentionPeriod = (
           if (selectedFilter.has('High') && !canBeShown) {
             canBeShown = cookieData.parsedCookie?.priority === 'High';
           }
+          canShow.push(canBeShown);
+        } else if (keys === CUSTOM_FILTER_MAPPING.cookieBlockedReasons.keys) {
+          let canBeShown = false;
+          BLOCKED_REASON_LIST.forEach((reason) => {
+            if (selectedFilter.has(reason) && !canBeShown) {
+              canBeShown = Boolean(
+                cookieData.blockedReasons?.includes(reason as BlockedReason)
+              );
+            }
+          });
           canShow.push(canBeShown);
         }
       });

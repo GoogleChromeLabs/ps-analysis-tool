@@ -34,4 +34,5 @@ export { default as parseRequestWillBeSentExtraInfo } from './utils/parseRequest
 export { default as noop } from './utils/noop';
 export * from './cookies.types';
 export * from './cdp.types';
+export * from './constants';
 export const UNKNOWN_FRAME_KEY = 'Unknown frame(s)';

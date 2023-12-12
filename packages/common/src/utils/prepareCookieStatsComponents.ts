@@ -18,7 +18,11 @@
  */
 
 import { CookieStatsComponents, CookiesCount } from '../cookies.types';
-import { COLOR_MAP, BLOCKED_COLOR_MAP, BLOCKED_REASON_LIST } from '../const';
+import {
+  COLOR_MAP,
+  BLOCKED_COLOR_MAP,
+  BLOCKED_REASON_LIST,
+} from '../constants';
 
 const prepareCookieStatsComponents = (
   cookieStats: CookiesCount
