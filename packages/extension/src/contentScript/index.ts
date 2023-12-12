@@ -89,11 +89,6 @@ class WebpageContentScript {
    * Initialize.
    */
   constructor() {
-    this.handleHoverEvent = this.handleHoverEvent.bind(this);
-    this.abortInspection = this.abortInspection.bind(this);
-    this.onMessage = this.onMessage.bind(this);
-    this.onDisconnect = this.onDisconnect.bind(this);
-    this.handleMouseMove = this.handleMouseMove.bind(this);
     this.docElement = document.documentElement;
 
     this.listenToConnection();
@@ -146,7 +141,7 @@ class WebpageContentScript {
    * Handles incoming messages from the connected port.
    * @param {ResponseType} response - The incoming message/response.
    */
-  onMessage(response: ResponseType) {
+  onMessage = (response: ResponseType) => {
     this.isInspecting = response.isInspecting;
 
     if (response.isInspecting) {
@@ -157,7 +152,7 @@ class WebpageContentScript {
     } else {
       this.abortInspection();
     }
-  }
+  };
 
   /**
    * Inserts overlay
@@ -299,21 +294,21 @@ class WebpageContentScript {
   /**
    * Handles the port disconnection event.
    */
-  onDisconnect() {
+  onDisconnect = () => {
     this.port?.onMessage.removeListener(this.onMessage);
     this.port = null;
     this.abortInspection();
-  }
+  };
 
   /**
    * Abort inspection and removes all frame popovers and hover event listeners.
    */
-  abortInspection(): void {
+  abortInspection = (): void => {
     this.removeEventListeners();
     removeAllPopovers();
     toggleFrameHighlighting(false);
     this.isInspecting = false;
-  }
+  };
 
   /**
    * Insert popovers for all visible frames.
@@ -462,7 +457,7 @@ class WebpageContentScript {
    * @param {MouseEvent} event - The mouse event triggered by user action.
    */
   // eslint-disable-next-line complexity
-  handleHoverEvent(event: MouseEvent): void {
+  handleHoverEvent = (event: MouseEvent) => {
     const target = event.target as HTMLElement;
     const isNonIframeElement = target.tagName !== 'IFRAME';
     const isTooltipElement =
@@ -551,13 +546,13 @@ class WebpageContentScript {
     } catch (error) {
       this.abortInspection();
     }
-  }
+  };
 
   /**
    * Toggle this.isHoveringOverPage state when mouse or visibility is changed.
    * @param {MouseEvent} event Mouse event.
    */
-  handleMouseMove(event: Event) {
+  handleMouseMove = (event: Event) => {
     if (event?.type === 'mouseenter') {
       this.isHoveringOverPage = true;
     } else if (event?.type === 'mouseleave') {
@@ -567,7 +562,7 @@ class WebpageContentScript {
     if (document.hidden) {
       this.isHoveringOverPage = false;
     }
-  }
+  };
 
   /**
    * Set topics to be used in the Topics landing page.
