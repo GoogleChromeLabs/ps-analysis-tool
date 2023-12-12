@@ -47,7 +47,7 @@ const Matrix = ({ dataComponents }: MatrixProps) => {
             />
           );
         }
-        return <div key={index} />;
+        return null;
       })}
     </div>
   );
