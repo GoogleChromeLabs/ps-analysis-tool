@@ -19,11 +19,11 @@
  */
 import React from 'react';
 import classNames from 'classnames';
-import { TableColumn } from '../../useTable';
 
 /**
  * Internal dependencies.
  */
+import type { TableColumn } from '../../useTable';
 
 interface ColumnListItemProps {
   column: TableColumn;

@@ -118,7 +118,7 @@ export const parseNetworkDataToCookieData = (
 
   for (const [, data] of frameIdCookiesMap) {
     if (!data.frameUrl.includes('http')) {
-      break;
+      continue;
     }
     const _url = new URL(data.frameUrl);
 

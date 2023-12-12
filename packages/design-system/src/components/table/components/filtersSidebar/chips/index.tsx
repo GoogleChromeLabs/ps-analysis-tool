@@ -23,7 +23,7 @@ import React from 'react';
  */
 import ChipList from './chipList';
 import { StopIcon } from '../../../../../icons';
-import { TableFilter, TableOutput } from '../../../useTable';
+import type { TableFilter, TableOutput } from '../../../useTable';
 
 interface ChipsBarProps {
   selectedFilters: TableFilter;
@@ -55,7 +55,7 @@ const ChipsBar = ({
           className="h-full flex items-center text-link text-xs whitespace-nowrap"
           onClick={resetFilters}
         >
-          <StopIcon className="min-w-[14px] min-h-[14px]" />
+          <StopIcon className="text-gray min-w-[14px] min-h-[14px]" />
           <span className="ml-1 mr-1 dark:text-bright-gray bg-transparent">
             Clear all
           </span>

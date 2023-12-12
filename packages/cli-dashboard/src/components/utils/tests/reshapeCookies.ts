@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import reshapeCookies from '../reshapeCookies';
 
 /**
  * Internal dependencies
  */
+import type { CookieFrameStorageType } from '../../../types';
+import reshapeCookies from '../reshapeCookies';
 
 describe('reshapeCookies', () => {
   it('should return an empty object if no cookies are present', () => {
@@ -25,7 +26,7 @@ describe('reshapeCookies', () => {
   });
 
   it('should return an object with the cookies', () => {
-    const cookies = {
+    const cookies: CookieFrameStorageType = {
       'https://edition.cnn.com': {
         'countryCode:.cnn.com:/': {
           name: 'countryCode',
@@ -43,7 +44,7 @@ describe('reshapeCookies', () => {
           description: '',
           isFirstParty: true,
           pageUrl: 'https://www.cnn.com/index.html',
-          frameUrl: 'https://edition.cnn.com',
+          frameUrls: { sadf: 'https://edition.cnn.com' },
         },
       },
       'Unknown frame(s)': {},
@@ -68,7 +69,7 @@ describe('reshapeCookies', () => {
         },
         isFirstParty: true,
         url: 'https://www.cnn.com/index.html',
-        frameUrl: 'https://edition.cnn.com',
+        frameUrls: ['https://edition.cnn.com'],
         frameIdList: [],
         isCookieSet: true,
         headerType: 'response',

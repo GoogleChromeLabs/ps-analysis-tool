@@ -104,13 +104,16 @@ const filterCookiesWithoutRetentionPeriod = (
         } else if (keys === CUSTOM_FILTER_MAPPING.samesite.keys) {
           let canBeShown = false;
           if (selectedFilter.has('None') && !canBeShown) {
-            canBeShown = cookieData.parsedCookie.samesite === 'none';
+            canBeShown =
+              cookieData.parsedCookie.samesite?.toLowerCase() === 'none';
           }
           if (selectedFilter.has('Strict') && !canBeShown) {
-            canBeShown = cookieData.parsedCookie.samesite === 'strict';
+            canBeShown =
+              cookieData.parsedCookie.samesite?.toLowerCase() === 'strict';
           }
           if (selectedFilter.has('Lax') && !canBeShown) {
-            canBeShown = cookieData.parsedCookie.samesite === 'lax';
+            canBeShown =
+              cookieData.parsedCookie.samesite?.toLowerCase() === 'lax';
           }
           canShow.push(canBeShown);
         }

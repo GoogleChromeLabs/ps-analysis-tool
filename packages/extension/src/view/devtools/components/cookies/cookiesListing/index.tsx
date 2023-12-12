@@ -56,10 +56,12 @@ const CookiesListing = () => {
   return (
     <div className="w-full h-full flex flex-col">
       <CookieTopBar
+        selectedFrameCookie={selectedFrameCookie}
         cookiesAvailable={cookiesAvailable}
         isFilterMenuOpen={isFilterMenuOpen}
         toggleFilterMenu={toggleFilterMenu}
         filteredCookies={filteredCookies}
+        setSelectedFrameCookie={setSelectedFrameCookie}
       />
       {cookiesAvailable && <ChipsBar />}
       <div className="w-full flex-1 overflow-hidden h-full flex flex-col">

@@ -43,7 +43,7 @@ export type InfoType = number | string | boolean | [];
 export type TableColumn = {
   header: string;
   accessorKey: string;
-  cell?: (info: InfoType) => React.JSX.Element | InfoType;
+  cell?: (info: InfoType, details?: TableData) => React.JSX.Element | InfoType;
   enableHiding?: boolean;
   width?: number;
 };
@@ -52,6 +52,7 @@ export type TableRow = {
   [accessorKey: string]: {
     value: React.JSX.Element | InfoType;
   };
+  //@ts-ignore
   originalData: TableData;
 };
 
@@ -178,7 +179,7 @@ const useTable = ({
       columns.forEach((column) => {
         const value = getValueByKey(column.accessorKey, _data);
         row[column.accessorKey] = {
-          value: column.cell?.(value) ?? value,
+          value: column.cell?.(value, _data) ?? value,
         };
       });
 
