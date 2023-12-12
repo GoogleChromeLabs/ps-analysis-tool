@@ -27,13 +27,24 @@ import {
 /**
  * Internal dependencies.
  */
-import { Table, TableColumn, TableData, TableRow, useTable } from '../table';
+import {
+  Table,
+  TableColumn,
+  TableData,
+  TableFilter,
+  TableRow,
+  useTable,
+} from '../table';
 import { noop } from '../../utils';
 
 interface CookieTableProps {
-  tableColumns: TableColumn[];
   data: TableData[];
+  tableColumns: TableColumn[];
+  tableFilters?: TableFilter;
+  tableSearchKeys?: string[];
+  tablePersistentSettingsKey?: string;
   selectedFrame: string | null;
+  showTopBar?: boolean;
   selectedFrameCookie: {
     [frame: string]: CookieTableData | null;
   } | null;
@@ -55,7 +66,11 @@ interface CookieTableProps {
 
 const CookieTable = ({
   tableColumns,
+  tableFilters,
+  tableSearchKeys,
+  tablePersistentSettingsKey,
   data: cookies,
+  showTopBar,
   selectedFrame,
   selectedFrameCookie,
   setSelectedFrameCookie,
@@ -94,6 +109,9 @@ const CookieTable = ({
   const table = useTable({
     tableColumns,
     data: cookies,
+    tableFilterData: tableFilters,
+    tableSearchKeys,
+    tablePersistentSettingsKey,
     options: {
       columnSizing:
         columnSizing && Object.keys(columnSizing).length > 0
@@ -122,11 +140,14 @@ const CookieTable = ({
       <Table
         updatePreference={updatePreference}
         table={table}
+        showTopBar={showTopBar}
         selectedKey={
           selectedKey === null ? null : getCookieKey(selectedKey?.parsedCookie)
         }
         getRowObjectKey={(row: TableRow) =>
-          getCookieKey((row?.originalData as CookieTableData).parsedCookie)
+          getCookieKey(
+            (row?.originalData as CookieTableData).parsedCookie
+          ) as string
         }
         onRowClick={onRowClick}
       />

@@ -16,49 +16,34 @@
 /**
  * External dependencies.
  */
+import React from 'react';
 import {
   CookieIcon,
   CookieIconWhite,
   SiteBoundariesIcon,
   SiteBoundariesIconWhite,
+  type SidebarItems,
 } from '@ps-analysis-tool/design-system';
 
-/**
- * Internal dependencies.
- */
-import CookiesTab from './cookies';
-import TechnologiesTab from './technologies';
-import AffectedCookiesTab from './affectedCookies';
+const Tabs: SidebarItems = {
+  cookies: {
+    title: 'Cookies',
+    children: {},
+    icon: <CookieIcon />,
+    selectedIcon: <CookieIconWhite />,
+  },
+  technologies: {
+    title: 'Technologies',
+    children: {},
+    icon: <SiteBoundariesIcon />,
+    selectedIcon: <SiteBoundariesIconWhite />,
+  },
+  'affected-cookies': {
+    title: 'Affected Cookies',
+    children: {},
+    icon: <CookieIcon />,
+    selectedIcon: <CookieIconWhite />,
+  },
+};
 
-export const TABS = [
-  {
-    display_name: 'Cookies',
-    component: CookiesTab,
-    id: 'cookies',
-    icons: {
-      default: CookieIcon,
-      selected: CookieIconWhite,
-    },
-    parentId: undefined,
-  },
-  {
-    display_name: 'Technologies',
-    component: TechnologiesTab,
-    id: 'technologies',
-    icons: {
-      default: SiteBoundariesIcon,
-      selected: SiteBoundariesIconWhite,
-    },
-    parentId: undefined,
-  },
-  {
-    display_name: 'Affected Cookies',
-    component: AffectedCookiesTab,
-    id: 'affected_cookies',
-    icons: {
-      default: SiteBoundariesIcon,
-      selected: SiteBoundariesIconWhite,
-    },
-    parentId: undefined,
-  },
-];
+export default Tabs;
