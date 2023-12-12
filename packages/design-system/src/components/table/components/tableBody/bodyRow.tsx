@@ -25,7 +25,7 @@ import { CookieTableData } from '@ps-analysis-tool/common';
  * Internal dependencies.
  */
 import BodyCell from './bodyCell';
-import { TableColumn, TableRow } from '../../useTable';
+import type { TableColumn, TableRow } from '../../useTable';
 
 interface BodyRowProps {
   row: TableRow;
