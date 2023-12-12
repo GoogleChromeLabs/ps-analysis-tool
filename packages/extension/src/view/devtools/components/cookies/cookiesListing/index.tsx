@@ -46,8 +46,8 @@ import {
  */
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
 import getNextIndexToDelete from '../../../../../utils/getNextIndexToDelete';
-import EditableTextInput from './cookieTableContainer/editableComponents/editableTextInput';
-import EditableCheckBoxInput from './cookieTableContainer/editableComponents/editableCheckBox';
+import EditableTextInput from './editableComponents/editableTextInput';
+import EditableCheckBoxInput from './editableComponents/editableCheckBox';
 
 interface CookiesListingProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;

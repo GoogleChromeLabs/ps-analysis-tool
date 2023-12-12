@@ -21,7 +21,7 @@ import React, { useCallback, useState, useRef, useEffect, memo } from 'react';
 /**
  * Internal dependencies.
  */
-import { useCookieStore } from '../../../../../stateProviders/syncCookieStore';
+import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import type { InfoType } from '@ps-analysis-tool/design-system';
 import { noop } from '@ps-analysis-tool/common';
 

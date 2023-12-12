@@ -24,7 +24,7 @@ import { noop } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import { useCookieStore } from '../../../../../stateProviders/syncCookieStore';
+import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 
 interface EditableCheckBoxInputProps {
   info: InfoType;
