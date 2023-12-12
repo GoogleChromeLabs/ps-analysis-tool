@@ -18,17 +18,16 @@
  */
 import React, { useState } from 'react';
 import {
-  MatrixComponentHorizontal,
-  Matrix,
-  type MatrixComponentProps,
-  InfoIcon,
-} from '@ps-analysis-tool/design-system';
-import {
-  filterFramesWithCookies,
   type TabCookies,
   type TabFrames,
   Legend,
 } from '@ps-analysis-tool/common';
+/**
+ * Internal dependencies
+ */
+import Matrix from '../../matrix';
+import type { MatrixComponentProps } from '../../matrix/matrixComponent';
+import { InfoIcon } from '../../../icons';
 
 interface CookiesMatrixProps {
   tabCookies: TabCookies | null;
@@ -197,15 +196,11 @@ const BLOCKED_COOKIE_LEGEND_DATA: LegendData = {
 };
 
 const CookiesMatrix = ({
-  tabCookies,
   componentData,
-  tabFrames,
   title = 'Cookies Insights',
   description = '',
-  showHorizontalMatrix = true,
   showInfoIcon = true,
   count = null,
-  associatedCookiesCount = null,
   allowExpand = true,
   highlightTitle = false,
   capitalizeTitle = false,
@@ -241,28 +236,6 @@ const CookiesMatrix = ({
     }
   );
 
-  const totalFrames = tabFrames ? Object.keys(tabFrames).length : 0;
-  const framesWithCookies = filterFramesWithCookies(tabCookies, tabFrames);
-
-  const matrixHorizontalComponents = [
-    {
-      title: 'Number of Frames',
-      description: 'Number of frames found on the page.',
-      count: totalFrames,
-      expand: isExpanded,
-    },
-    {
-      title: 'Number of Frames with Associated Cookies',
-      description: 'Frames that have cookies associated with them.',
-      count: associatedCookiesCount
-        ? associatedCookiesCount
-        : framesWithCookies
-        ? Object.keys(framesWithCookies).length
-        : 0,
-      expand: isExpanded,
-    },
-  ];
-
   return (
     <div className="w-full" data-testid={`cookies-matrix-${title}`}>
       <div>
@@ -295,19 +268,6 @@ const CookiesMatrix = ({
         </div>
         <Matrix dataComponents={dataComponents} />
       </div>
-      {showHorizontalMatrix && (
-        <div>
-          {matrixHorizontalComponents.map(
-            (matrixHorizontalComponent, index) => (
-              <MatrixComponentHorizontal
-                key={index}
-                {...matrixHorizontalComponent}
-                containerClasses="px-3.5 py-4"
-              />
-            )
-          )}
-        </div>
-      )}
     </div>
   );
 };

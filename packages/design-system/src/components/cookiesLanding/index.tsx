@@ -22,15 +22,17 @@ import {
   TabFrames,
   prepareCookieStatsComponents,
   prepareCookiesCount,
+  filterFramesWithCookies,
 } from '@ps-analysis-tool/common';
-import { MessageBox } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
+import MessageBox from '../messageBox';
 import { type DataMapping } from './landingHeader';
 import CookiesMatrix from './cookiesMatrix';
 import CookiesLandingContainer from './cookieLandingHeaderContainer';
+import MatrixComponentHorizontal from '../matrix/matrixComponent/matrixComponentHorizontal';
 
 interface CookiesLandingProps {
   tabFrames: TabFrames | null;
@@ -40,6 +42,7 @@ interface CookiesLandingProps {
   showHorizontalMatrix?: boolean;
   associatedCookiesCount?: number | null;
   showMessageBoxBody?: boolean;
+  showBlockedCookiesSection?: boolean;
 }
 
 const CookiesLanding = ({
@@ -50,6 +53,7 @@ const CookiesLanding = ({
   showHorizontalMatrix = true,
   associatedCookiesCount = null,
   showMessageBoxBody = true,
+  showBlockedCookiesSection = false,
 }: CookiesLandingProps) => {
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
@@ -85,6 +89,25 @@ const CookiesLanding = ({
     },
   ];
 
+  const totalFrames = tabFrames ? Object.keys(tabFrames).length : 0;
+  const framesWithCookies = filterFramesWithCookies(tabCookies, tabFrames);
+
+  const matrixHorizontalComponents = [
+    {
+      title: 'Number of Frames',
+      description: 'Number of frames found on the page.',
+      count: totalFrames,
+    },
+    {
+      title: 'Number of Frames with Associated Cookies',
+      description: 'Frames that have cookies associated with them.',
+      count: associatedCookiesCount
+        ? associatedCookiesCount
+        : framesWithCookies
+        ? Object.keys(framesWithCookies).length
+        : 0,
+    },
+  ];
   return (
     <div
       className="h-full w-full flex flex-col min-w-[20rem]"
@@ -92,7 +115,7 @@ const CookiesLanding = ({
     >
       <CookiesLandingContainer
         dataMapping={cookieClassificationDataMapping}
-        testId="cookies-landing-insights"
+        testId="cookies-insights"
       >
         {!cookieStats ||
           (cookieStats?.firstParty.total === 0 &&
@@ -112,21 +135,49 @@ const CookiesLanding = ({
           showHorizontalMatrix={showHorizontalMatrix}
           associatedCookiesCount={associatedCookiesCount}
         />
+        {!showBlockedCookiesSection && showHorizontalMatrix && (
+          <div>
+            {matrixHorizontalComponents.map(
+              (matrixHorizontalComponent, index) => (
+                <MatrixComponentHorizontal
+                  key={index}
+                  {...matrixHorizontalComponent}
+                  containerClasses="px-3.5 py-4"
+                />
+              )
+            )}
+          </div>
+        )}
         {children && <div className="mt-8">{children}</div>}
       </CookiesLandingContainer>
-      <CookiesLandingContainer
-        dataMapping={blockedCookieDataMapping}
-        testId="cookies-landing-insights"
-      >
-        <CookiesMatrix
-          title="Blocked cookie insights"
-          tabCookies={tabCookies}
-          componentData={cookiesStatsComponents.blockedCookiesLegend}
-          tabFrames={tabFrames}
-          showInfoIcon={showInfoIcon}
-          showHorizontalMatrix={false}
-        />
-      </CookiesLandingContainer>
+      {showBlockedCookiesSection && (
+        <CookiesLandingContainer
+          dataMapping={blockedCookieDataMapping}
+          testId="blocked-cookies-insights"
+        >
+          <CookiesMatrix
+            title="Blocked cookie insights"
+            tabCookies={tabCookies}
+            componentData={cookiesStatsComponents.blockedCookiesLegend}
+            tabFrames={tabFrames}
+            showInfoIcon={showInfoIcon}
+            showHorizontalMatrix={false}
+          />
+          {showHorizontalMatrix && (
+            <div>
+              {matrixHorizontalComponents.map(
+                (matrixHorizontalComponent, index) => (
+                  <MatrixComponentHorizontal
+                    key={index}
+                    {...matrixHorizontalComponent}
+                    containerClasses="px-3.5 py-4"
+                  />
+                )
+              )}
+            </div>
+          )}
+        </CookiesLandingContainer>
+      )}
     </div>
   );
 };

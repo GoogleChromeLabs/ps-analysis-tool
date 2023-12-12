@@ -81,7 +81,11 @@ const Cookies = () => {
         {selectedFrame ? (
           <CookiesListing />
         ) : (
-          <CookiesLanding tabCookies={tabCookies} tabFrames={tabFrames} />
+          <CookiesLanding
+            tabCookies={tabCookies}
+            tabFrames={tabFrames}
+            showBlockedCookiesSection
+          />
         )}
       </div>
     );
