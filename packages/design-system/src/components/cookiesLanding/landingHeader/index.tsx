@@ -29,10 +29,10 @@ export interface DataMapping {
 }
 
 interface LandingHeaderProps {
-  dataMapping: DataMapping[];
+  dataMapping?: DataMapping[];
 }
 
-const LandingHeader = ({ dataMapping }: LandingHeaderProps) => {
+const LandingHeader = ({ dataMapping = [] }: LandingHeaderProps) => {
   return (
     <div
       className="flex justify-center border-b border-hex-gray pt-5 pb-5 dark:border-quartz"

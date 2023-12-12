@@ -34,11 +34,12 @@ import MatrixComponentHorizontal from '../../matrix/matrixComponent/matrixCompon
 
 interface CookiesMatrixProps {
   tabCookies: TabCookies | null;
-  componentData: Legend[];
+  componentData?: Legend[];
   tabFrames: TabFrames | null;
   title?: string;
   description?: string;
   showHorizontalMatrix?: boolean;
+  showMatrix?: boolean;
   showInfoIcon?: boolean;
   count?: number | null;
   associatedCookiesCount?: number | null;
@@ -49,11 +50,12 @@ interface CookiesMatrixProps {
 
 const CookiesMatrix = ({
   tabCookies,
-  componentData,
   tabFrames,
+  componentData = [],
   title = 'Cookie Classification',
   description = '',
   showHorizontalMatrix = true,
+  showMatrix = true,
   showInfoIcon = true,
   count = null,
   associatedCookiesCount = null,
@@ -142,7 +144,7 @@ const CookiesMatrix = ({
             </h4>
           )}
         </div>
-        <Matrix dataComponents={dataComponents} />
+        {showMatrix && <Matrix dataComponents={dataComponents} />}
       </div>
       {showHorizontalMatrix && (
         <div>

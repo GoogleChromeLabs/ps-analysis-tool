@@ -20,14 +20,14 @@ import React from 'react';
 import LandingHeader, { type DataMapping } from './landingHeader';
 
 interface CookiesLandingContainerProps {
-  dataMapping: DataMapping[];
+  dataMapping?: DataMapping[];
   showLandingHeader?: boolean;
   testId?: string | null;
   children?: React.ReactNode;
 }
 
 const CookiesLandingContainer = ({
-  dataMapping,
+  dataMapping = [],
   showLandingHeader = true,
   testId = 'cookie-landing-insights',
   children,
@@ -36,7 +36,7 @@ const CookiesLandingContainer = ({
     <div className="w-full flex flex-col min-w-[20rem]">
       <div className="w-full min-w-[20rem]" data-testid={testId}>
         {showLandingHeader && <LandingHeader dataMapping={dataMapping} />}
-        <div className="lg:max-w-[729px] mx-auto flex justify-center flex-col mt-2 pb-20 px-4">
+        <div className="lg:max-w-[729px] mx-auto flex justify-center flex-col mt-10 pb-10 px-4">
           {children}
         </div>
       </div>

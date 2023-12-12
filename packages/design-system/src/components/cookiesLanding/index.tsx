@@ -127,6 +127,21 @@ const CookiesLanding = ({
             componentData={cookiesStatsComponents.blockedCookiesLegend}
             tabFrames={tabFrames}
             showInfoIcon={showInfoIcon}
+            showHorizontalMatrix={false}
+          />
+        </CookiesLandingContainer>
+      )}
+      {showBlockedCookiesSection && (
+        <CookiesLandingContainer
+          showLandingHeader={false}
+          testId="frames-insights"
+        >
+          <CookiesMatrix
+            title="Frames"
+            showMatrix={true}
+            tabCookies={tabCookies}
+            tabFrames={tabFrames}
+            showInfoIcon={showInfoIcon}
             showHorizontalMatrix={showHorizontalMatrix}
           />
         </CookiesLandingContainer>
