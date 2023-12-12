@@ -46,44 +46,42 @@ import './style.css';
  */
 class WebpageContentScript {
   /**
-   * @property {chrome.runtime.Port | null} port - The connection port.
+   * Connection port
    */
   port: chrome.runtime.Port | null = null;
+
   /**
-   * @callback cleanupFunction
-   */
-  /**
-   * @property { cleanupFunction} cleanup - Cleanup function that needs to run when tooltip is removed from the screen.
+   * Cleanup function that needs to run when tooltip is removed from the screen.
    */
   cleanup: () => void = noop;
 
   /**
-   * @property {boolean} isInspecting - If true, the page is currently being inspected.
+   * If true, the page is currently being inspected.
    */
   isInspecting = false;
 
   /**
-   * @property {boolean} isHoveringOverPage - If true, the mouse is currently hovering over the page.
+   * If true, the mouse is currently hovering over the page.
    */
   isHoveringOverPage = false;
 
   /**
-   * @property {boolean} bodyHoverStateSent - Keeps track if the hover state message has been sent.
+   * Keeps track if the hover state message has been sent.
    */
   bodyHoverStateSent = false;
 
   /**
-   * @property {Array<() => void>} scrollEventListeners - Array of scroll event listeners.
+   * Array of scroll event listeners.
    */
   scrollEventListeners: Array<() => void> = [];
 
   /**
-   * @property {HTMLElement} docElement - Document element.
+   * Document element.
    */
   docElement: HTMLElement;
 
   /**
-   * @property {HTMLElement} hoveredFrame - Frame that is currently being hovered over.
+   * Frame that is currently being hovered over.
    */
   hoveredFrame: HTMLElement | null = null;
 
