@@ -28,8 +28,9 @@ import { MessageBox } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies.
  */
-import LandingHeader from './landingHeader';
+import { type DataMapping } from './landingHeader';
 import CookiesMatrix from './cookiesMatrix';
+import CookiesLandingContainer from './cookieLandingHeaderContainer';
 
 interface CookiesLandingProps {
   tabFrames: TabFrames | null;
@@ -52,18 +53,47 @@ const CookiesLanding = ({
 }: CookiesLandingProps) => {
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
+
   cookiesStatsComponents?.blockedCookiesLegend.map((singleLegend) => {
     singleLegend.count = cookieStats.blockedCookies[singleLegend.label];
     return singleLegend;
   });
 
+  const cookieClassificationDataMapping: DataMapping[] = [
+    {
+      title: 'Total cookies',
+      count: cookieStats.total,
+      data: cookiesStatsComponents.legend,
+    },
+    {
+      title: '1st party cookies',
+      count: cookieStats.firstParty.total,
+      data: cookiesStatsComponents.firstParty,
+    },
+    {
+      title: '3rd party cookies',
+      count: cookieStats.thirdParty.total,
+      data: cookiesStatsComponents.thirdParty,
+    },
+  ];
+
+  const blockedCookieDataMapping: DataMapping[] = [
+    {
+      title: 'Blocked cookies',
+      count: cookieStats.blockedCookies.total,
+      data: cookiesStatsComponents.blocked,
+    },
+  ];
+
   return (
-    <div className="h-full w-full min-w-[20rem]" data-testid="cookies-landing">
-      <LandingHeader
-        cookieStats={cookieStats}
-        cookiesStatsComponents={cookiesStatsComponents}
-      />
-      <div className="lg:max-w-[729px] mx-auto flex justify-center flex-col mt-10 pb-28 px-4">
+    <div
+      className="h-full w-full flex flex-col min-w-[20rem]"
+      data-testid="cookies-landing"
+    >
+      <CookiesLandingContainer
+        dataMapping={cookieClassificationDataMapping}
+        testId="cookies-landing-insights"
+      >
         {!cookieStats ||
           (cookieStats?.firstParty.total === 0 &&
             cookieStats?.thirdParty.total === 0 && (
@@ -82,7 +112,12 @@ const CookiesLanding = ({
           showHorizontalMatrix={showHorizontalMatrix}
           associatedCookiesCount={associatedCookiesCount}
         />
-        <div className="w-full my-3" />
+        {children && <div className="mt-8">{children}</div>}
+      </CookiesLandingContainer>
+      <CookiesLandingContainer
+        dataMapping={blockedCookieDataMapping}
+        testId="cookies-landing-insights"
+      >
         <CookiesMatrix
           title="Blocked cookie insights"
           tabCookies={tabCookies}
@@ -91,8 +126,7 @@ const CookiesLanding = ({
           showInfoIcon={showInfoIcon}
           showHorizontalMatrix={false}
         />
-        {children && <div className="mt-8">{children}</div>}
-      </div>
+      </CookiesLandingContainer>
     </div>
   );
 };

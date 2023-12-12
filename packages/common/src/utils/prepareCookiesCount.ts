@@ -50,7 +50,9 @@ const prepareCookiesCount = (cookies: { [key: string]: CookieData } | null) => {
     return cookiesCount;
   }
 
-  const cookieList = Object.values(cookies);
+  const cookieList = Object.values(cookies).filter(
+    (cookie) => cookie.parsedCookie && cookie.frameIdList?.length >= 1
+  );
 
   cookiesCount.total = Object.keys(cookies).filter(
     (cookieKey) =>
@@ -58,20 +60,13 @@ const prepareCookiesCount = (cookies: { [key: string]: CookieData } | null) => {
       cookies[cookieKey].frameIdList?.length >= 1
   ).length;
 
-  cookiesCount.blockedCookies.total = Object.keys(cookies).filter(
-    (cookieKey) =>
-      cookies[cookieKey].parsedCookie &&
-      cookies[cookieKey].frameIdList?.length >= 1 &&
-      cookies[cookieKey].isBlocked
+  cookiesCount.blockedCookies.total = cookieList.filter(
+    (cookie) => cookie.isBlocked
   ).length;
 
-  Object.keys(cookies).forEach((cookieKey) => {
-    if (
-      cookies[cookieKey].parsedCookie &&
-      cookies[cookieKey].frameIdList?.length >= 1 &&
-      cookies[cookieKey].isBlocked
-    ) {
-      cookies[cookieKey].blockedReasons?.forEach((reason) => {
+  cookieList.forEach((cookie) => {
+    if (cookie.isBlocked) {
+      cookie.blockedReasons?.forEach((reason) => {
         if (!cookiesCount.blockedCookies[reason]) {
           cookiesCount.blockedCookies[reason] = 1;
         } else {
@@ -83,10 +78,6 @@ const prepareCookiesCount = (cookies: { [key: string]: CookieData } | null) => {
 
   for (const cookie of cookieList) {
     const { analytics, isFirstParty } = cookie;
-    if (!cookie.parsedCookie && cookie?.frameIdList?.length === 0) {
-      continue;
-    }
-
     const category = analytics?.category?.toLowerCase() as
       | keyof CookiesCount['firstParty']
       | keyof CookiesCount['thirdParty']
