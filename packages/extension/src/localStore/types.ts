@@ -31,13 +31,14 @@ export type CookieData = {
   parsedCookie: ParsedCookie & {
     partitionKey?: string;
     priority?: 'Low' | 'Medium' | 'High';
+    size?: number;
   };
   analytics: CookieAnalytics | null;
   url: string;
   headerType: 'response' | 'request' | 'javascript'; // @todo Change headerType key name.
   isFirstParty: boolean | null;
   frameIdList: number[];
-  isBlocked: boolean | null;
+  isBlocked?: boolean | null;
   blockedReasons?: BlockedReason[];
   warningReasons?: CookieWarningReasons[];
 };

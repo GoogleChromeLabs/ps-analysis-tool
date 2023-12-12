@@ -58,6 +58,7 @@ export type CookieData = {
   parsedCookie: ParsedCookie & {
     partitionKey?: string;
     priority?: 'Low' | 'Medium' | 'High';
+    size?: number;
   };
   analytics: CookieAnalytics | null;
   url: string;
@@ -66,7 +67,7 @@ export type CookieData = {
   frameIdList: number[];
   blockedReasons?: BlockedReason[];
   warningReasons?: CookieWarningReasons[];
-  isBlocked: boolean | null;
+  isBlocked?: boolean | null;
 };
 
 export type CookieTableData = CookieData & {

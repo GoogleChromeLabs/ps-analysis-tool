@@ -74,13 +74,11 @@ const parseRequestCookieHeader = async (
 
         return {
           parsedCookie,
-          blockedReasons: [],
           analytics,
           headerType: 'request',
           url,
           isFirstParty: _isFirstParty,
           frameIdList: [frameId],
-          isBlocked: false,
         };
       })
     );

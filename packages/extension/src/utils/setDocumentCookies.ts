@@ -40,57 +40,67 @@ const processAndStoreDocumentCookies = async ({
   dictionary,
   isException,
 }: ProcessAndStoreDucmentCookiesProps) => {
-  if (!isException && typeof tabUrlResult === 'string') {
-    const tabUrl = tabUrlResult;
+  try {
+    if (!isException && typeof tabUrlResult === 'string') {
+      const tabUrl = tabUrlResult;
 
-    const frames = await chrome.webNavigation.getAllFrames({
-      tabId: Number(tabId),
-    });
+      const frames = await chrome.webNavigation.getAllFrames({
+        tabId: Number(tabId),
+      });
 
-    const outerMostFrame = frames?.filter(
-      (frame) => frame.frameType === 'outermost_frame'
-    );
+      const outerMostFrame = frames?.filter(
+        (frame) => frame.frameType === 'outermost_frame'
+      );
 
-    const parsedCookieData: CookieData[] = await Promise.all(
-      documentCookies.map(async (singleCookie: string) => {
-        const cookieValue = singleCookie.split('=')[1]?.trim();
-        const cookieName = singleCookie.split('=')[0]?.trim();
-        let analytics;
+      const cdpCookies = await chrome.debugger.sendCommand(
+        { tabId: parseInt(tabId) },
+        'Network.getCookies',
+        { urls: [tabUrl] }
+      );
 
-        const parsedCookie = await createCookieObject(
-          {
-            name: cookieName,
-            value: cookieValue,
-          },
-          tabUrl
-        );
+      const parsedCookieData: CookieData[] = await Promise.all(
+        documentCookies.map(async (singleCookie: string) => {
+          const cookieValue = singleCookie.split('=')[1]?.trim();
+          const cookieName = singleCookie.split('=')[0]?.trim();
+          let analytics;
 
-        if (dictionary) {
-          analytics = findAnalyticsMatch(parsedCookie.name, dictionary);
-        }
+          const parsedCookie = await createCookieObject(
+            {
+              name: cookieName,
+              value: cookieValue,
+            },
+            tabUrl,
+            cdpCookies?.cookies ?? []
+          );
 
-        const isFirstPartyCookie = isFirstParty(
-          parsedCookie.domain || '',
-          tabUrl
-        );
+          if (dictionary) {
+            analytics = findAnalyticsMatch(parsedCookie.name, dictionary);
+          }
 
-        return Promise.resolve({
-          parsedCookie,
-          analytics:
-            analytics && Object.keys(analytics).length > 0 ? analytics : null,
-          url: tabUrl,
-          headerType: 'javascript', // @todo Update headerType name.
-          isFirstParty: isFirstPartyCookie || null,
-          frameIdList: [
-            outerMostFrame && outerMostFrame[0]
-              ? outerMostFrame[0]?.frameId
-              : 0,
-          ],
-        });
-      })
-    );
+          const isFirstPartyCookie = isFirstParty(
+            parsedCookie.domain || '',
+            tabUrl
+          );
 
-    await CookieStore.update(tabId, parsedCookieData);
+          return Promise.resolve({
+            parsedCookie,
+            analytics:
+              analytics && Object.keys(analytics).length > 0 ? analytics : null,
+            url: tabUrl,
+            headerType: 'javascript', // @todo Update headerType name.
+            isFirstParty: isFirstPartyCookie || null,
+            frameIdList: [
+              outerMostFrame && outerMostFrame[0]
+                ? outerMostFrame[0]?.frameId
+                : 0,
+            ],
+          });
+        })
+      );
+      await CookieStore.update(tabId, parsedCookieData);
+    }
+  } catch (error) {
+    //Just handle this error
   }
 };
 

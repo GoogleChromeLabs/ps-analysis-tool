@@ -17,10 +17,10 @@
 /**
  * External dependencies.
  */
-import { type Cookie as ParsedCookie } from 'simple-cookie';
 import {
   calculateEffectiveExpiryDate,
   getCookieKey,
+  type CookieData,
   type NetworkCookie,
 } from '@ps-analysis-tool/common';
 
@@ -35,17 +35,17 @@ import { findPreviousCookieDataObject } from './findPreviousCookieDataObject';
  * @param parsedCookie Parsed cookie object from request/response.
  * @param url URL of the cookie from the request/response.
  * @param {NetworkCookie[]} cookiesList List cookies from the request.
- * @returns {Promise<{ParsedCookie}>} Cookie object.
+ * @returns {Promise<CookieData.parsedCookie>} Cookie object.
  */
 export async function createCookieObject(
-  parsedCookie: ParsedCookie,
+  parsedCookie: CookieData['parsedCookie'],
   url: string,
   cookiesList: NetworkCookie[]
 ) {
   const name = parsedCookie.name;
   const value = parsedCookie.value;
 
-  const cdpCookie = cookiesList?.filter((cookie: NetworkCookie) => {
+  const cdpCookie = cookiesList?.find((cookie: NetworkCookie) => {
     return cookie.name === name && cookie.value === value;
   });
 
@@ -59,7 +59,7 @@ export async function createCookieObject(
   const domain = parseAttributeValues(
     'domain',
     parsedCookie.domain,
-    cdpCookie[0]?.domain,
+    cdpCookie?.domain,
     prevParsedCookie?.domain,
     url
   );
@@ -67,43 +67,57 @@ export async function createCookieObject(
   const path = parseAttributeValues(
     'path',
     parsedCookie.path,
-    cdpCookie[0]?.path,
+    cdpCookie?.path,
     prevParsedCookie?.path
   );
 
   const secure = parseAttributeValues(
     'secure',
     parsedCookie.secure,
-    cdpCookie[0]?.secure,
+    cdpCookie?.secure,
     prevParsedCookie?.secure
   );
 
   const httponly = parseAttributeValues(
     'httponly',
     parsedCookie.httponly,
-    cdpCookie[0]?.httpOnly,
+    cdpCookie?.httpOnly,
     prevParsedCookie?.httponly
   );
 
   const samesite = parseAttributeValues(
     'samesite',
     parsedCookie.samesite,
-    cdpCookie[0]?.sameSite,
+    cdpCookie?.sameSite,
     prevParsedCookie?.samesite
   );
 
   const expires = parseAttributeValues(
     'expires',
     parsedCookie.expires,
-    (cdpCookie[0]?.expires || 0) * 1000,
+    (cdpCookie?.expires || 0) * 1000,
     prevParsedCookie?.expires
   );
 
   const partitionKey = parseAttributeValues(
     'partitionKey',
     parsedCookie?.partitionKey,
-    cdpCookie[0]?.partitionKey,
+    cdpCookie?.partitionKey,
     prevParsedCookie?.partitionKey
+  );
+
+  const size = parseAttributeValues(
+    'size',
+    parsedCookie?.size,
+    cdpCookie?.size,
+    prevParsedCookie?.size
+  );
+
+  const priority = parseAttributeValues(
+    'priority',
+    parsedCookie?.priority,
+    cdpCookie?.priority,
+    prevParsedCookie?.priority
   );
 
   return {
@@ -116,7 +130,9 @@ export async function createCookieObject(
     samesite,
     expires,
     partitionKey,
-  } as ParsedCookie;
+    size,
+    priority,
+  } as CookieData['parsedCookie'];
 }
 
 /**
