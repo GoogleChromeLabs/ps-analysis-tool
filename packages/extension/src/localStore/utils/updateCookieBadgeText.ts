@@ -36,7 +36,11 @@ export default async function updateCookieBadgeText(
       return;
     }
     const tabCookies = storage[currentTabId].cookies || {};
-    const numCookies = Object.keys(tabCookies).length;
+    const numCookies = Object.keys(tabCookies).filter(
+      (cookieKey) =>
+        tabCookies[cookieKey]?.parsedCookie &&
+        tabCookies[cookieKey].frameIdList?.length >= 1
+    ).length;
     if (numCookies >= 0) {
       await chrome.action.setBadgeText({
         tabId: parseInt(currentTabId),
