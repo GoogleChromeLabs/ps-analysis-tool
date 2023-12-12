@@ -152,7 +152,8 @@ const BLOCKED_COOKIE_LEGEND_DATA: LegendData = {
     countClassName: 'text-namevaluepairexceedsmaxsize',
   },
   ExcludeSameSiteUnspecifiedTreatedAsLax: {
-    description: '',
+    description:
+      'This `Set-Cookie` header didn\'t specify a "`SameSite`" attribute and was defaulted to "`SameSite=Lax,`" and was blocked because it came from a cross-site response which was not the response to a top-level navigation. The `Set-Cookie` had to have been set with "`SameSite=None`" to enable cross-site usage.',
     countClassName: 'text-excludesamesiteunspecifiedtreatedaslax',
   },
   ExcludeSameSiteNoneInsecure: {
