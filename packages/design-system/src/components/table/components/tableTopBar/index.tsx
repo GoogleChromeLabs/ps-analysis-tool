@@ -60,7 +60,9 @@ const TableTopBar = ({
     <div className="w-full h-[25px] px-2 flex items-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green">
       {!hideFiltering && (
         <button
-          className={classNames('w-3 h-3 mr-2')}
+          className={classNames('w-3 h-3 mr-2', {
+            'opacity-20': disableFiltering,
+          })}
           onClick={() => setShowFilterSidebar(!showFilterSidebar)}
           disabled={disableFiltering}
           title="Open filter options"
