@@ -22,7 +22,7 @@ import React from 'react';
  * Internal dependencies.
  */
 import Chip from './chip';
-import { TableFilter, TableOutput } from '../../../useTable';
+import type { TableFilter, TableOutput } from '../../../useTable';
 
 interface ChipListProps {
   selectedFilters: TableFilter;

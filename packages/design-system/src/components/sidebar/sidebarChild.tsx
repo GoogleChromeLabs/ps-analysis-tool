@@ -80,7 +80,7 @@ const SidebarChild = ({
       <div
         ref={itemRef}
         tabIndex={0}
-        title={sidebarItem.itemNodeTitle}
+        title={sidebarItem.popupTitle}
         onClick={() => {
           updateSelectedItemKey(itemKey);
           setDidUserInteract(true);
@@ -120,15 +120,13 @@ const SidebarChild = ({
           </button>
         )}
         {sidebarItem.icon && sidebarItem.selectedIcon && (
-          <button className="mr-1">
-            <div className="pointer-events-none">
-              {isKeySelected(itemKey) && isSidebarFocused ? (
-                <>{sidebarItem.selectedIcon}</>
-              ) : (
-                <>{sidebarItem.icon}</>
-              )}
-            </div>
-          </button>
+          <div className="mr-1 pointer-events-none">
+            {isKeySelected(itemKey) ? (
+              <>{sidebarItem.selectedIcon}</>
+            ) : (
+              <>{sidebarItem.icon}</>
+            )}
+          </div>
         )}
         <p className="whitespace-nowrap pr-1">{sidebarItem.title}</p>
         <div

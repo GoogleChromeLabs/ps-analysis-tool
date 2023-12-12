@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
+import type { CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -24,7 +25,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { WEBPAGE_PORT_NAME } from '../../../constants';
 import { useCookieStore } from '../stateProviders/syncCookieStore';
 import { getCurrentTabId } from '../../../utils/getCurrentTabId';
-import type { CookieTableData } from '@ps-analysis-tool/common';
 
 interface Response {
   attributes: { iframeOrigin: string | null; setInPage?: boolean };

@@ -22,7 +22,7 @@ import React, { useCallback, useRef } from 'react';
  * Internal dependencies.
  */
 import HeaderResizer from './headerResizer';
-import { TableColumn, TableOutput } from '../../useTable';
+import type { TableColumn, TableOutput } from '../../useTable';
 import { ArrowDown } from '../../../../icons';
 
 interface HeaderCellProps {

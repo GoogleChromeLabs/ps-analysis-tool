@@ -22,7 +22,7 @@ import React, { useCallback } from 'react';
  * Internal dependencies.
  */
 import HeaderRow from './headerRow';
-import { TableOutput } from '../../useTable';
+import type { TableOutput } from '../../useTable';
 
 interface TableHeaderProps {
   table: TableOutput;

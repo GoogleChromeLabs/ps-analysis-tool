@@ -27,6 +27,7 @@ import {
   type SidebarItems,
   InspectButton,
 } from '@ps-analysis-tool/design-system';
+import type { CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -36,7 +37,6 @@ import { useCookieStore } from './stateProviders/syncCookieStore';
 import './app.css';
 import { Cookies } from './components';
 import useFrameOverlay from './hooks/useFrameOverlay';
-import type { CookieTableData } from '@ps-analysis-tool/common';
 
 const App: React.FC = () => {
   const [sidebarWidth, setSidebarWidth] = useState(200);
@@ -125,7 +125,7 @@ const App: React.FC = () => {
         (acc, url) => {
           acc[url] = {
             title: url,
-            itemNodeTitle: `Cookies used by frames from ${url}`,
+            popupTitle: `Cookies used by frames from ${url}`,
             panel: <Cookies setFilteredCookies={setFilteredCookies} />,
             icon: <CookieIcon />,
             selectedIcon: <CookieIconWhite />,
@@ -210,9 +210,14 @@ const App: React.FC = () => {
 
   const [filteredCookies, setFilteredCookies] = useState<CookieTableData[]>([]);
 
-  useFrameOverlay(filteredCookies, (key: string | null) => {
-    updateSelectedItemKey(key || 'cookies');
-  });
+  const handleUpdate = useCallback(
+    (key: string | null) => {
+      updateSelectedItemKey(key || 'cookies');
+    },
+    [updateSelectedItemKey]
+  );
+
+  useFrameOverlay(filteredCookies, handleUpdate);
 
   return (
     <div

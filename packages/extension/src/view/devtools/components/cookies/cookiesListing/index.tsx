@@ -16,11 +16,18 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Resizable } from 're-resizable';
 import {
   filterCookiesByFrame,
   type CookieTableData,
+  getCookieKey,
 } from '@ps-analysis-tool/common';
 import {
   CookieDetails,
@@ -29,29 +36,105 @@ import {
   type InfoType,
   type TableColumn,
   type TableFilter,
+  ClearAll,
+  CrossIcon as ClearSingle,
+  type TableData,
 } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
+import getNextIndexToDelete from '../../../../../utils/getNextIndexToDelete';
+import EditableTextInput from './cookieTableContainer/editableComponents/editableTextInput';
+import EditableCheckBoxInput from './cookieTableContainer/editableComponents/editableCheckBox';
 
 interface CookiesListingProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;
 }
 
 const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
-  const { selectedFrame, cookies, tabFrames, getCookiesSetByJavascript } =
-    useCookieStore(({ state, actions }) => ({
-      selectedFrame: state.selectedFrame,
-      cookies: state.tabCookies || {},
-      tabFrames: state.tabFrames,
-      getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
-    }));
+  const {
+    selectedFrame,
+    cookies,
+    tabFrames,
+    getCookiesSetByJavascript,
+    deleteCookie,
+    deleteAllCookies,
+  } = useCookieStore(({ state, actions }) => ({
+    selectedFrame: state.selectedFrame,
+    cookies: state.tabCookies || {},
+    tabFrames: state.tabFrames,
+    getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
+    deleteCookie: actions.deleteCookie,
+    deleteAllCookies: actions.deleteAllCookies,
+  }));
+
+  const [tableData, setTableData] = useState<Record<string, CookieTableData>>(
+    {}
+  );
+
+  useEffect(() => {
+    setTableData((prevData) =>
+      Object.values(cookies).reduce((acc, cookie) => {
+        const key = getCookieKey(cookie.parsedCookie) as string;
+        acc[key] = {
+          ...cookie,
+          highlighted: prevData?.[key]?.highlighted,
+        };
+
+        return acc;
+      }, {} as Record<string, CookieTableData>)
+    );
+  }, [cookies]);
+
+  const removeHighlights = useCallback(() => {
+    setTableData((prev) =>
+      Object.values(prev).reduce((acc, cookie) => {
+        const key = getCookieKey(cookie.parsedCookie) as string;
+        acc[key] = {
+          ...cookie,
+          highlighted: false,
+        };
+
+        return acc;
+      }, {} as Record<string, CookieTableData>)
+    );
+  }, []);
+
+  useEffect(() => {
+    chrome.storage.session.onChanged.addListener(removeHighlights);
+    return () => {
+      try {
+        chrome.storage.session.onChanged.removeListener(removeHighlights);
+      } catch (error) {
+        /* do nothing */
+      }
+    };
+  }, [removeHighlights]);
+
+  const rowHighlighter = useCallback(
+    (value: boolean, toChangeCookieKey: string) => {
+      setTableData((prevData) => {
+        const newData = { ...prevData };
+
+        Object.keys(prevData).forEach((key) => {
+          const cookieKey = getCookieKey(newData[key].parsedCookie);
+
+          if (cookieKey === toChangeCookieKey) {
+            newData[key].highlighted = value;
+          }
+        });
+
+        return newData;
+      });
+    },
+    []
+  );
 
   const frameFilteredCookies = useMemo(
-    () => filterCookiesByFrame(cookies, tabFrames, selectedFrame),
-    [cookies, selectedFrame, tabFrames]
+    () => filterCookiesByFrame(tableData, tabFrames, selectedFrame),
+    [tableData, selectedFrame, tabFrames]
   );
 
   useEffect(() => {
@@ -67,50 +150,98 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
       {
         header: 'Name',
         accessorKey: 'parsedCookie.name',
-        cell: (info: InfoType) => info,
+        cell: (info: InfoType, rowData?: TableData) => (
+          <EditableTextInput
+            info={info}
+            keyToChange="name"
+            rowHighlighter={rowHighlighter}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
+          />
+        ),
         enableHiding: false,
       },
       {
         header: 'Value',
         accessorKey: 'parsedCookie.value',
-        cell: (info: InfoType) => info,
+        cell: (info: InfoType, rowData?: TableData) => (
+          <EditableTextInput
+            info={info}
+            keyToChange="value"
+            rowHighlighter={rowHighlighter}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
+          />
+        ),
       },
       {
         header: 'Domain',
         accessorKey: 'parsedCookie.domain',
-        cell: (info: InfoType) => info,
+        cell: (info: InfoType, rowData?: TableData) => (
+          <EditableTextInput
+            info={info}
+            keyToChange="domain"
+            rowHighlighter={rowHighlighter}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
+          />
+        ),
       },
       {
         header: 'Path',
         accessorKey: 'parsedCookie.path',
-        cell: (info: InfoType) => info,
+        cell: (info: InfoType, rowData?: TableData) => (
+          <EditableTextInput
+            info={info}
+            keyToChange="path"
+            rowHighlighter={rowHighlighter}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
+          />
+        ),
       },
       {
         header: 'Expires / Max-Age',
         accessorKey: 'parsedCookie.expires',
-        cell: (info: InfoType) => (info ? info : 'Session'),
+        cell: (info: InfoType, details?: TableData) => (
+          <EditableTextInput
+            info={info}
+            keyToChange="expirationDate"
+            rowHighlighter={rowHighlighter}
+            cookieKey={getCookieKey((details as CookieTableData)?.parsedCookie)}
+          />
+        ),
       },
       {
         header: 'HttpOnly',
         accessorKey: 'parsedCookie.httponly',
-        cell: (info: InfoType) => (
-          <p className="flex justify-center items-center">
-            {info ? <span className="font-serif">✓</span> : ''}
-          </p>
+        cell: (info: InfoType, rowData?: TableData) => (
+          <EditableCheckBoxInput
+            info={info}
+            keyToChange="httpOnly"
+            rowHighlighter={rowHighlighter}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
+          />
         ),
       },
       {
         header: 'SameSite',
         accessorKey: 'parsedCookie.samesite',
-        cell: (info: InfoType) => <span className="capitalize">{info}</span>,
+        cell: (info: InfoType, rowData?: TableData) => (
+          <EditableTextInput
+            info={info}
+            keyToChange="sameSite"
+            rowHighlighter={rowHighlighter}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
+          />
+        ),
       },
       {
         header: 'Secure',
         accessorKey: 'parsedCookie.secure',
-        cell: (info: InfoType) => (
-          <p className="flex justify-center items-center">
-            {info ? <span className="font-serif">✓</span> : ''}
-          </p>
+        cell: (info: InfoType, rowData?: TableData) => (
+          <EditableCheckBoxInput
+            info={info}
+            keyToChange="secure"
+            rowHighlighter={rowHighlighter}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
+          />
         ),
       },
       {
@@ -160,7 +291,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
         ),
       },
     ],
-    []
+    [rowHighlighter]
   );
 
   const filters = useMemo<TableFilter>(
@@ -345,9 +476,98 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
     return `cookieListing#${selectedFrame}`;
   }, [selectedFrame]);
 
-  const extraInterfaceToTopBar = useMemo(() => {
-    return <RefreshButton onClick={getCookiesSetByJavascript} />;
-  }, [getCookiesSetByJavascript]);
+  const selectedCookieIndex = useRef(-1);
+
+  // This check is because selectedFrameCookie gets value only once when the cookie in the frame is selected.
+  // selectedFrameCookie has the following shape.
+  // {[frameName]: cookie|null}
+  const isAnyCookieSelected = !selectedFrameCookie
+    ? frameFilteredCookies.length > 0
+      ? true
+      : false
+    : selectedFrameCookie &&
+      selectedFrameCookie[Object.keys(selectedFrameCookie)[0]]
+    ? true
+    : false;
+
+  const handleDeleteCookie = useCallback(() => {
+    const selectedIndex = getNextIndexToDelete(
+      selectedCookieIndex.current,
+      frameFilteredCookies.length
+    );
+    const selectedKey = !selectedFrameCookie
+      ? selectedIndex
+        ? frameFilteredCookies[selectedIndex]
+        : null
+      : Object.values(selectedFrameCookie ?? {})[0];
+
+    if (selectedKey !== null && selectedKey.parsedCookie) {
+      const cookieKey = getCookieKey(selectedKey?.parsedCookie);
+      if (cookieKey) {
+        selectedCookieIndex.current = frameFilteredCookies.findIndex(
+          (cookie) => getCookieKey(cookie.parsedCookie) === cookieKey
+        );
+        deleteCookie(cookieKey);
+        const index = getNextIndexToDelete(
+          selectedCookieIndex.current,
+          frameFilteredCookies.length - 1
+        );
+        const filteredRows = frameFilteredCookies.filter((cookie) => {
+          return (
+            cookie.parsedCookie.name +
+              cookie.parsedCookie.domain +
+              cookie.parsedCookie.path !==
+            cookieKey
+          );
+        });
+
+        if (index !== null && selectedFrame) {
+          setSelectedFrameCookie({
+            [selectedFrame]: filteredRows[index],
+          });
+        }
+      }
+    }
+  }, [frameFilteredCookies, selectedFrameCookie, deleteCookie, selectedFrame]);
+
+  const extraInterfaceToTopBar = useMemo(
+    () => (
+      <>
+        <RefreshButton onClick={getCookiesSetByJavascript} />
+        <button
+          disabled={!isAnyCookieSelected}
+          onClick={handleDeleteCookie}
+          className={`flex items-center text-center ${
+            isAnyCookieSelected
+              ? 'text-comet-black dark:text-mischka hover:text-comet-grey hover:dark:text-bright-gray active:dark:text-mischka active:text-comet-black'
+              : 'text-mischka dark:text-dark-gray'
+          } mx-2`}
+          title="Delete selected cookie"
+        >
+          <ClearSingle className="rotate-45" />
+        </button>
+        <button
+          disabled={!Object.keys(frameFilteredCookies)}
+          onClick={deleteAllCookies}
+          className={`flex h-full items-end ${
+            Object.keys(frameFilteredCookies)
+              ? 'text-comet-black dark:text-mischka hover:text-comet-grey hover:dark:text-bright-gray active:dark:text-mischka active:text-comet-black'
+              : 'text-mischka dark:text-dark-gray'
+          }`}
+          title="Delete all cookies"
+        >
+          <ClearAll />
+        </button>
+      </>
+    ),
+    [
+      deleteAllCookies,
+      frameFilteredCookies,
+      getCookiesSetByJavascript,
+      handleDeleteCookie,
+      isAnyCookieSelected,
+    ]
+  );
 
   return (
     <div className="w-full h-full flex flex-col">

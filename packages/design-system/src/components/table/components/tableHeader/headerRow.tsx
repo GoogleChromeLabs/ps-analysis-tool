@@ -22,7 +22,7 @@ import React from 'react';
  * Internal dependencies.
  */
 import HeaderCell from './headerCell';
-import { TableOutput } from '../../useTable';
+import type { TableOutput } from '../../useTable';
 
 interface HeaderRowProps {
   table: TableOutput;

@@ -23,7 +23,7 @@ import React, { useEffect } from 'react';
  * Internal dependencies.
  */
 import ColumnListItem from './columnListItem';
-import { TableOutput } from '../../useTable';
+import type { TableOutput } from '../../useTable';
 
 interface ColumnListProps {
   table: TableOutput;
