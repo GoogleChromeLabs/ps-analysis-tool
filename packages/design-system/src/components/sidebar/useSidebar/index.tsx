@@ -32,7 +32,7 @@ import {
 export type SidebarItemValue = {
   title: string;
   children: SidebarItems;
-  itemNodeTitle?: string;
+  popupTitle?: string;
   extraInterfaceToTitle?: React.ReactNode;
   dropdownOpen?: boolean;
   panel?: React.ReactNode;
@@ -46,8 +46,8 @@ export type SidebarItems = {
 
 export interface SidebarOutput {
   activePanel: React.ReactNode;
-  selectedItemKey: string | null;
-  currentItemKey: string | null;
+  selectedItemKey: string | null; //Entire chained item key eg Privacy-Sandbox#cookies#frameUrl
+  currentItemKey: string | null; //Last sidebar item key in selectedItemKey eg frameUrl
   sidebarItems: SidebarItems;
   isSidebarFocused: boolean;
   setIsSidebarFocused: React.Dispatch<boolean>;
