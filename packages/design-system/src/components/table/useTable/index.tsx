@@ -52,6 +52,7 @@ export type TableRow = {
   [accessorKey: string]: {
     value: React.JSX.Element | InfoType;
   };
+  //@ts-ignore
   originalData: TableData;
 };
 
