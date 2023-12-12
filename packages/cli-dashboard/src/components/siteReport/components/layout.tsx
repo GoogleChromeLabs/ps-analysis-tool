@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Resizable } from 're-resizable';
 import {
   CookieIcon,
@@ -34,8 +34,13 @@ import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
 import TABS from '../tabs';
 import CookiesTab from '../tabs/cookies';
 import SiteAffectedCookies from '../tabs/siteAffectedCookies';
+import Technologies from '../tabs/technologies';
 
-const Layout = () => {
+interface LayoutProps {
+  selectedSite: string | null;
+}
+
+const Layout = ({ selectedSite }: LayoutProps) => {
   const [data, setData] = useState<SidebarItems>(TABS);
   const { tabCookies } = useContentStore(({ state }) => ({
     tabCookies: state.tabCookies,
@@ -75,10 +80,11 @@ const Layout = () => {
       const keys = selectedItemKey?.split('#') ?? [];
 
       _data['cookies'].panel = (
-        <CookiesTab
-          selectedFrameUrl={null}
-          selectedSite={keys[keys.length - 2]}
-        />
+        <CookiesTab selectedFrameUrl={null} selectedSite={selectedSite} />
+      );
+
+      const selectedFrameUrl = frameUrls.find(
+        (url) => url === keys[keys.length - 1]
       );
 
       _data['cookies'].children = frameUrls.reduce(
@@ -87,8 +93,8 @@ const Layout = () => {
             title: url,
             panel: (
               <CookiesTab
-                selectedFrameUrl={keys[keys.length - 1]}
-                selectedSite={keys[keys.length - 2]}
+                selectedFrameUrl={selectedFrameUrl}
+                selectedSite={selectedSite}
               />
             ),
             children: {},
@@ -102,18 +108,31 @@ const Layout = () => {
       );
 
       _data['affected-cookies'].panel = (
-        <SiteAffectedCookies selectedFrameUrl={keys[keys.length - 1]} />
+        <SiteAffectedCookies selectedSite={selectedSite} />
+      );
+
+      _data['technologies'].panel = (
+        <Technologies selectedSite={selectedSite} />
       );
 
       return _data;
     });
-  }, [frameUrls, selectedItemKey]);
+  }, [frameUrls, selectedItemKey, selectedSite]);
 
   useEffect(() => {
     if (selectedItemKey === null) {
       updateSelectedItemKey('cookies');
     }
   }, [selectedItemKey, updateSelectedItemKey]);
+
+  const lastSelectedSite = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (selectedSite !== lastSelectedSite.current) {
+      updateSelectedItemKey('cookies');
+      lastSelectedSite.current = selectedSite;
+    }
+  }, [selectedSite, updateSelectedItemKey]);
 
   return (
     <div className="w-full h-full flex">

@@ -105,6 +105,7 @@ const App = () => {
         completeJson={completeJsonReport}
         cookies={cookies}
         technologies={technologies}
+        selectedSite={path.slice(5, -9)}
       />
     </div>
   );

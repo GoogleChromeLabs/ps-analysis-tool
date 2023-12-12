@@ -22,8 +22,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 /**
  * Internal dependencies.
  */
-import type { TableData, TableFilter } from '..';
+import type { PersistentStorageData, TableData, TableFilter } from '..';
 import getValueByKey from '../../utils/getValueByKey';
+import { useTablePersistentSettingsStore } from '../../persistentSettingsStore';
 
 export type TableFilteringOutput = {
   filters: TableFilter;
@@ -35,15 +36,19 @@ export type TableFilteringOutput = {
 
 const useFiltering = (
   data: TableData[],
-  tableFilterData: TableFilter | undefined
+  tableFilterData: TableFilter | undefined,
+  tablePersistentSettingsKey?: string
 ): TableFilteringOutput => {
   const [filters, setFilters] = useState<TableFilter>({
     ...(tableFilterData || {}),
   });
+  const [options, setOptions] = useState<{
+    [filterKey: string]: TableFilter[keyof TableFilter]['filterValues'];
+  }>({});
 
   useEffect(() => {
-    setFilters((prevFilters) => {
-      return Object.fromEntries(
+    setFilters((prevFilters) =>
+      Object.fromEntries(
         Object.entries(prevFilters).map(([filterKey, filter]) => {
           let filterValues = { ...(filter.filterValues || {}) };
 
@@ -79,8 +84,8 @@ const useFiltering = (
 
           return [filterKey, { ...filter, filterValues }];
         })
-      );
-    });
+      )
+    );
   }, [data]);
 
   const toggleFilterSelection = useCallback(
@@ -163,6 +168,89 @@ const useFiltering = (
       });
     });
   }, [data, selectedFilters]);
+
+  useEffect(() => {
+    setFilters((prevFilters) =>
+      Object.fromEntries(
+        Object.entries(prevFilters).map(([filterKey, filter]) => {
+          const savedFilterValues = options?.[filterKey];
+          const filterValues = filter.filterValues || {};
+
+          Object.entries(filterValues).forEach(
+            ([filterValue, filterValueData]) => {
+              filterValues[filterValue] = {
+                ...filterValueData,
+                selected: false,
+              };
+            }
+          );
+
+          if (!Object.keys(savedFilterValues || {}).length) {
+            return [filterKey, { ...filter, filterValues }];
+          }
+
+          Object.entries(savedFilterValues || {}).forEach(
+            ([filterValue, filterValueData]) => {
+              if (!filterValues?.[filterValue]) {
+                filterValues[filterValue] = {
+                  selected: false,
+                };
+              }
+
+              filterValues[filterValue] = {
+                ...filterValueData,
+              };
+            }
+          );
+
+          return [filterKey, { ...filter, filterValues }];
+        })
+      )
+    );
+  }, [options]);
+
+  const { getPreferences, setPreferences } = useTablePersistentSettingsStore(
+    ({ actions }) => ({
+      getPreferences: actions.getPreferences,
+      setPreferences: actions.setPreferences,
+    })
+  );
+
+  useEffect(() => {
+    if (tablePersistentSettingsKey) {
+      const _data = getPreferences(
+        tablePersistentSettingsKey,
+        'selectedFilters'
+      );
+
+      if (_data) {
+        setOptions((_data as PersistentStorageData['selectedFilters']) || {});
+      }
+    }
+
+    return () => {
+      setOptions({});
+    };
+  }, [getPreferences, tablePersistentSettingsKey]);
+
+  useEffect(() => {
+    const _selectedFilters = Object.entries(filters || {}).reduce(
+      (acc, [filterKey, { filterValues }]) => {
+        acc[filterKey] = { ...filterValues };
+        return acc;
+      },
+      {} as { [key: string]: TableFilter[keyof TableFilter]['filterValues'] }
+    );
+
+    if (tablePersistentSettingsKey) {
+      setPreferences(
+        {
+          selectedFilters: _selectedFilters,
+        },
+        tablePersistentSettingsKey
+      );
+    }
+  }, [filters, setPreferences, tablePersistentSettingsKey]);
 
   return {
     filters,

@@ -14,31 +14,16 @@
  * limitations under the License.
  */
 
-/*
- * Copyright 2023 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 /**
  * External dependencies.
  */
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 /**
  * Internal dependencies.
  */
 import type { TableColumn } from '..';
+import { useTablePersistentSettingsStore } from '../../persistentSettingsStore';
 
 export type ColumnVisibilityOutput = {
   visibleColumns: TableColumn[];
@@ -51,31 +36,13 @@ export type ColumnVisibilityOutput = {
 
 const useColumnVisibility = (
   columns: TableColumn[],
-  options?: Record<string, boolean>
+  tablePersistentSettingsKey?: string
 ): ColumnVisibilityOutput => {
   const [hiddenKeys, setHiddenKeys] = useState<Set<string>>(new Set());
-  const isDefaultRendered = useRef(false);
 
   const hideColumn = useCallback((key: string) => {
     setHiddenKeys((prev) => new Set(prev.add(key)));
   }, []);
-
-  useEffect(() => {
-    if (options && !isDefaultRendered.current) {
-      setHiddenKeys((prev) => {
-        const next = new Set(prev);
-        columns
-          .filter(({ enableHiding }) => enableHiding !== false)
-          .forEach(({ header, accessorKey }) => {
-            if (options[header]) {
-              next.add(accessorKey);
-            }
-          });
-        return next;
-      });
-      isDefaultRendered.current = true;
-    }
-  }, [columns, options]);
 
   const toggleVisibility = useCallback(() => {
     setHiddenKeys((prev) => {
@@ -122,6 +89,56 @@ const useColumnVisibility = (
     () => columns.filter(({ accessorKey }) => !hiddenKeys.has(accessorKey)),
     [columns, hiddenKeys]
   );
+
+  const { getPreferences, setPreferences } = useTablePersistentSettingsStore(
+    ({ actions }) => ({
+      getPreferences: actions.getPreferences,
+      setPreferences: actions.setPreferences,
+    })
+  );
+
+  useEffect(() => {
+    if (tablePersistentSettingsKey) {
+      setHiddenKeys(new Set());
+
+      const data = getPreferences(
+        tablePersistentSettingsKey,
+        'columnsVisibility'
+      );
+
+      if (data) {
+        const _hiddenKeys = Object.entries(data)
+          .filter(([, visible]) => visible)
+          .map(([key]) => key);
+
+        setHiddenKeys(new Set(_hiddenKeys));
+      }
+    }
+  }, [getPreferences, tablePersistentSettingsKey]);
+
+  useEffect(() => {
+    const _columnsVisibility = (columns || []).reduce(
+      (acc, { accessorKey }) => {
+        acc[accessorKey] = true;
+
+        return acc;
+      },
+      {} as { [key: string]: boolean }
+    );
+
+    visibleColumns?.forEach(({ accessorKey }) => {
+      _columnsVisibility[accessorKey] = false;
+    });
+
+    if (tablePersistentSettingsKey) {
+      setPreferences(
+        {
+          columnsVisibility: _columnsVisibility,
+        },
+        tablePersistentSettingsKey
+      );
+    }
+  }, [columns, setPreferences, tablePersistentSettingsKey, visibleColumns]);
 
   return {
     visibleColumns,

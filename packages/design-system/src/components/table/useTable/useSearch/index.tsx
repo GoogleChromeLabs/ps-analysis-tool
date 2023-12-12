@@ -17,13 +17,14 @@
 /**
  * External dependencies.
  */
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 /**
  * Internal dependencies.
  */
-import { TableData } from '..';
+import { PersistentStorageData, TableData } from '..';
 import getValueByKey from '../../utils/getValueByKey';
+import { useTablePersistentSettingsStore } from '../../persistentSettingsStore';
 
 export type TableSearchOutput = {
   searchValue: string;
@@ -31,7 +32,11 @@ export type TableSearchOutput = {
   searchFilteredData: TableData[];
 };
 
-const useSearch = (data: TableData[], searchKeys: string[] | undefined) => {
+const useSearch = (
+  data: TableData[],
+  searchKeys?: string[],
+  tablePersistentSettingsKey?: string
+) => {
   const [searchValue, setSearchValue] = useState<string>('');
 
   const searchFilteredData = useMemo<TableData[]>(() => {
@@ -51,6 +56,36 @@ const useSearch = (data: TableData[], searchKeys: string[] | undefined) => {
       });
     }, []);
   }, [data, searchKeys, searchValue]);
+
+  const { getPreferences, setPreferences } = useTablePersistentSettingsStore(
+    ({ actions }) => ({
+      getPreferences: actions.getPreferences,
+      setPreferences: actions.setPreferences,
+    })
+  );
+
+  useEffect(() => {
+    if (tablePersistentSettingsKey) {
+      const _data = getPreferences(tablePersistentSettingsKey, 'searchValue');
+
+      setSearchValue((_data as PersistentStorageData['searchValue']) || '');
+    }
+
+    return () => {
+      setSearchValue('');
+    };
+  }, [getPreferences, tablePersistentSettingsKey]);
+
+  useEffect(() => {
+    if (tablePersistentSettingsKey) {
+      setPreferences(
+        {
+          searchValue,
+        },
+        tablePersistentSettingsKey
+      );
+    }
+  }, [searchValue, setPreferences, tablePersistentSettingsKey]);
 
   return {
     searchValue,

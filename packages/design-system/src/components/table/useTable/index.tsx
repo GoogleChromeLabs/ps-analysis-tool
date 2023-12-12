@@ -72,6 +72,17 @@ export type TableFilter = {
   };
 };
 
+export type PersistentStorageData = {
+  columnsVisibility?: { [key: string]: boolean };
+  columnsSizing?: { [key: string]: number };
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+  selectedFilters?: {
+    [key: string]: TableFilter[keyof TableFilter]['filterValues'];
+  };
+  searchValue?: string;
+};
+
 export type TableOutput = {
   columns: TableColumn[];
   hideableColumns: TableColumn[];
@@ -101,6 +112,7 @@ interface useTableProps {
   tableColumns: TableColumn[];
   tableFilterData?: TableFilter;
   tableSearchKeys?: string[];
+  tablePersistentSettingsKey?: string;
   options?: {
     columnSizing?: Record<string, number>;
     columnSorting?: DefaultOptions;
@@ -113,8 +125,18 @@ const useTable = ({
   tableColumns,
   tableFilterData,
   tableSearchKeys,
-  options,
+  tablePersistentSettingsKey,
 }: useTableProps): TableOutput => {
+  const commonKey = useMemo(() => {
+    if (!tablePersistentSettingsKey) {
+      return undefined;
+    }
+
+    const keys = tablePersistentSettingsKey.split('#');
+
+    return keys[0];
+  }, [tablePersistentSettingsKey]);
+
   const {
     visibleColumns,
     hideColumn,
@@ -122,13 +144,17 @@ const useTable = ({
     areAllColumnsVisible,
     showColumn,
     isColumnHidden,
-  } = useColumnVisibility(tableColumns, options?.selectedColumns);
+  } = useColumnVisibility(tableColumns, commonKey);
+
+  const allTableColumnsKeys = useMemo(() => {
+    return tableColumns.map(({ accessorKey }) => accessorKey);
+  }, [tableColumns]);
 
   const { columns, tableContainerRef, onMouseDown, isResizing } =
-    useColumnResizing(visibleColumns, options?.columnSizing);
+    useColumnResizing(visibleColumns, allTableColumnsKeys, commonKey);
 
   const { sortedData, sortKey, sortOrder, setSortKey, setSortOrder } =
-    useColumnSorting(data, options?.columnSorting);
+    useColumnSorting(data, commonKey);
 
   const {
     filters,
@@ -136,11 +162,12 @@ const useTable = ({
     filteredData,
     toggleFilterSelection,
     resetFilters,
-  } = useFiltering(sortedData, tableFilterData);
+  } = useFiltering(sortedData, tableFilterData, tablePersistentSettingsKey);
 
   const { searchValue, setSearchValue, searchFilteredData } = useSearch(
     filteredData,
-    tableSearchKeys
+    tableSearchKeys,
+    tablePersistentSettingsKey
   );
 
   const rows = useMemo(() => {

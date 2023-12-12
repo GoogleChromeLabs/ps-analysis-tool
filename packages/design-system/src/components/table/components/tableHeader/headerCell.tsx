@@ -74,8 +74,8 @@ const HeaderCell = ({
   }, [resizeHandler]);
 
   const handleOnClick = useCallback(() => {
-    table.setSortKey(cell.accessorKey, updatePreference);
-  }, [cell.accessorKey, table, updatePreference]);
+    table.setSortKey(cell.accessorKey);
+  }, [cell.accessorKey, table]);
 
   const columnRef = useRef<HTMLTableHeaderCellElement>(null);
 

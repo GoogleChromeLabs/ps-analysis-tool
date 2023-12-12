@@ -30,7 +30,7 @@ interface SiteMapAffectedCookiesProps {
 }
 
 const SiteMapAffectedCookies = ({ cookies }: SiteMapAffectedCookiesProps) => {
-  return <AffectedCookies cookies={cookies} selectedFrameUrl={'sitemap'} />;
+  return <AffectedCookies cookies={cookies} selectedSite={null} />;
 };
 
 export default SiteMapAffectedCookies;
