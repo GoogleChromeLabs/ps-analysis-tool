@@ -23,7 +23,7 @@ import { PreferenceDataValues, noop } from '@ps-analysis-tool/common';
  * Internal dependencies.
  */
 import HeaderResizer from './headerResizer';
-import { TableColumn, TableOutput } from '../../useTable';
+import type { TableColumn, TableOutput } from '../../useTable';
 import { ArrowDown } from '../../../../icons';
 
 interface HeaderCellProps {
@@ -74,8 +74,8 @@ const HeaderCell = ({
   }, [resizeHandler]);
 
   const handleOnClick = useCallback(() => {
-    table.setSortKey(cell.accessorKey, updatePreference);
-  }, [cell.accessorKey, table, updatePreference]);
+    table.setSortKey(cell.accessorKey);
+  }, [cell.accessorKey, table]);
 
   const columnRef = useRef<HTMLTableHeaderCellElement>(null);
 

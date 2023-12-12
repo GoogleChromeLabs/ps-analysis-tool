@@ -18,12 +18,12 @@
  * External dependencies.
  */
 import React from 'react';
-import { PreferenceDataValues, noop } from '@ps-analysis-tool/common';
+import { type PreferenceDataValues, noop } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
 import HeaderCell from './headerCell';
-import { TableOutput } from '../../useTable';
+import type { TableOutput } from '../../useTable';
 
 interface HeaderRowProps {
   table: TableOutput;

@@ -145,7 +145,9 @@ const CookieTable = ({
           selectedKey === null ? null : getCookieKey(selectedKey?.parsedCookie)
         }
         getRowObjectKey={(row: TableRow) =>
-          getCookieKey((row?.originalData as CookieTableData).parsedCookie)
+          getCookieKey(
+            (row?.originalData as CookieTableData).parsedCookie
+          ) as string
         }
         onRowClick={onRowClick}
       />

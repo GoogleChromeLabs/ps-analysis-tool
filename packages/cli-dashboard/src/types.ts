@@ -17,12 +17,28 @@
  * External dependencies
  */
 import type { TechnologyData } from '@ps-analysis-tool/common';
+import { type Cookie as ParsedCookie } from 'simple-cookie';
+
+export type SanitisedCookieType = ParsedCookie & {
+  category: string;
+  platform: string;
+  gdprPortal: string;
+  sameSite: string;
+  scope: string;
+};
+export interface SingleTechnology {
+  name: string;
+  description: string;
+  confidence: number;
+  website: string;
+  categories: string;
+}
 
 export type CookieJsonDataType = {
   name: string;
   value: string;
   domain: string;
-  partitionKey: string;
+  partitionKey?: string;
   path: string;
   expires: string;
   httpOnly: boolean;
@@ -33,10 +49,10 @@ export type CookieJsonDataType = {
   description: string;
   isFirstParty: boolean;
   pageUrl: string;
-  requestUrls: { [id: string]: string };
-  frameUrls: { [id: string]: string };
+  requestUrls?: { [id: string]: string };
+  frameUrls?: { [id: string]: string };
   isBlocked: boolean;
-  blockedReasons: string[];
+  blockedReasons?: string[];
   GDPR?: string;
 };
 
