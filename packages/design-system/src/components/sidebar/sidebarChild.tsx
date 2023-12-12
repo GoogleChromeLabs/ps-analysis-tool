@@ -30,6 +30,8 @@ interface SidebarItemProps {
   setDidUserInteract: (didUserInteract: boolean) => void;
   itemKey: string;
   sidebarItem: SidebarItemValue;
+  isSidebarFocused: boolean;
+  setIsSidebarFocused: React.Dispatch<boolean>;
   updateSelectedItemKey: (key: string | null) => void;
   onKeyNavigation: (
     event: React.KeyboardEvent<HTMLDivElement>,
@@ -38,6 +40,8 @@ interface SidebarItemProps {
   toggleDropdown: (action: boolean, key: string) => void;
   isKeyAncestor: (key: string) => boolean;
   isKeySelected: (key: string) => boolean;
+  recursiveStackIndex?: number;
+  visibleWidth?: number;
 }
 
 const SidebarChild = ({
@@ -46,11 +50,15 @@ const SidebarChild = ({
   setDidUserInteract,
   itemKey,
   sidebarItem,
+  isSidebarFocused,
+  setIsSidebarFocused,
   updateSelectedItemKey,
   onKeyNavigation,
   toggleDropdown,
   isKeyAncestor,
   isKeySelected,
+  recursiveStackIndex = 0,
+  visibleWidth,
 }: SidebarItemProps) => {
   const itemRef = useRef<HTMLDivElement>(null);
 
@@ -58,7 +66,13 @@ const SidebarChild = ({
     if (isKeySelected(itemKey) && didUserInteract) {
       itemRef.current?.focus();
     }
-  }, [didUserInteract, isKeySelected, itemKey, selectedItemKey]);
+  }, [
+    didUserInteract,
+    isKeySelected,
+    itemKey,
+    selectedItemKey,
+    setIsSidebarFocused,
+  ]);
 
   return (
     <>
@@ -66,23 +80,27 @@ const SidebarChild = ({
       <div
         ref={itemRef}
         tabIndex={0}
+        title={sidebarItem.popupTitle}
         onClick={() => {
           updateSelectedItemKey(itemKey);
           setDidUserInteract(true);
+          setIsSidebarFocused(true);
         }}
         onKeyDown={(event) => {
           onKeyNavigation(event, itemKey);
+          setIsSidebarFocused(true);
         }}
-        className={`w-full flex items-center pl-3 py-0.5 outline-0 text-sm ${
+        className={`relative w-full flex items-center py-0.5 outline-0 text-xs dark:text-bright-gray ${
           isKeySelected(itemKey)
-            ? 'bg-royal-blue text-white'
-            : isKeyAncestor(itemKey)
-            ? 'bg-gainsboro'
-            : 'bg-white'
+            ? isSidebarFocused
+              ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
+              : 'bg-gainsboro dark:bg-outer-space'
+            : 'bg-white dark:bg-raisin-black'
         } cursor-pointer`}
+        style={{ paddingLeft: recursiveStackIndex * 16 + 12 }}
       >
         {Object.keys(sidebarItem.children)?.length !== 0 && (
-          <div
+          <button
             onClick={() => {
               toggleDropdown(!sidebarItem.dropdownOpen, itemKey);
             }}
@@ -90,15 +108,19 @@ const SidebarChild = ({
               !sidebarItem.dropdownOpen && '-rotate-90'
             }`}
           >
-            {isKeyAncestor(itemKey) || !isKeySelected(itemKey) ? (
-              <ArrowDown />
-            ) : (
-              <ArrowDownWhite />
-            )}
-          </div>
+            <div className="pointer-events-none">
+              {isKeyAncestor(itemKey) ||
+              !isKeySelected(itemKey) ||
+              !isSidebarFocused ? (
+                <ArrowDown />
+              ) : (
+                <ArrowDownWhite />
+              )}
+            </div>
+          </button>
         )}
         {sidebarItem.icon && sidebarItem.selectedIcon && (
-          <div className="mr-1">
+          <div className="mr-1 pointer-events-none">
             {isKeySelected(itemKey) ? (
               <>{sidebarItem.selectedIcon}</>
             ) : (
@@ -107,35 +129,38 @@ const SidebarChild = ({
           </div>
         )}
         <p className="whitespace-nowrap pr-1">{sidebarItem.title}</p>
+        <div
+          className="absolute"
+          style={{
+            left: visibleWidth ? visibleWidth - 35 : 0,
+          }}
+        >
+          {sidebarItem.extraInterfaceToTitle}
+        </div>
       </div>
       <>
         {Object.keys(sidebarItem.children)?.length !== 0 &&
           sidebarItem.dropdownOpen && (
             <>
               {Object.entries(sidebarItem.children).map(([childKey, child]) => (
-                <div
-                  key={childKey}
-                  className={`w-full pl-4 ${
-                    isKeySelected(childKey)
-                      ? 'bg-royal-blue text-white'
-                      : isKeyAncestor(childKey)
-                      ? 'bg-gainsboro'
-                      : 'bg-white'
-                  }`}
-                >
+                <React.Fragment key={childKey}>
                   <SidebarChild
                     selectedItemKey={selectedItemKey}
                     didUserInteract={didUserInteract}
                     setDidUserInteract={setDidUserInteract}
                     itemKey={childKey}
                     sidebarItem={child}
+                    isSidebarFocused={isSidebarFocused}
+                    setIsSidebarFocused={setIsSidebarFocused}
                     updateSelectedItemKey={updateSelectedItemKey}
                     onKeyNavigation={onKeyNavigation}
                     toggleDropdown={toggleDropdown}
                     isKeyAncestor={isKeyAncestor}
                     isKeySelected={isKeySelected}
+                    recursiveStackIndex={recursiveStackIndex + 1}
+                    visibleWidth={visibleWidth}
                   />
-                </div>
+                </React.Fragment>
               ))}
             </>
           )}

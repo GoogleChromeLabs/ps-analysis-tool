@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 /**
  * Internal dependencies.
@@ -32,6 +32,8 @@ import {
 export type SidebarItemValue = {
   title: string;
   children: SidebarItems;
+  popupTitle?: string;
+  extraInterfaceToTitle?: React.ReactNode;
   dropdownOpen?: boolean;
   panel?: React.ReactNode;
   icon?: React.ReactNode;
@@ -44,8 +46,11 @@ export type SidebarItems = {
 
 export interface SidebarOutput {
   activePanel: React.ReactNode;
-  selectedItemKey: string | null;
+  selectedItemKey: string | null; //Entire chained item key eg Privacy-Sandbox#cookies#frameUrl
+  currentItemKey: string | null; //Last sidebar item key in selectedItemKey eg frameUrl
   sidebarItems: SidebarItems;
+  isSidebarFocused: boolean;
+  setIsSidebarFocused: React.Dispatch<boolean>;
   updateSelectedItemKey: (key: string | null) => void;
   onKeyNavigation: (
     event: React.KeyboardEvent<HTMLDivElement>,
@@ -58,12 +63,32 @@ export interface SidebarOutput {
 
 interface useSidebarProps {
   data: SidebarItems;
+  defaultSelectedItemKey?: string | null;
 }
 
-const useSidebar = ({ data }: useSidebarProps): SidebarOutput => {
+const useSidebar = ({
+  data,
+  defaultSelectedItemKey = null,
+}: useSidebarProps): SidebarOutput => {
   const [selectedItemKey, setSelectedItemKey] = useState<string | null>(null);
   const [activePanel, setActivePanel] = useState<React.ReactNode>();
   const [sidebarItems, setSidebarItems] = useState<SidebarItems>({});
+  const [isSidebarFocused, setIsSidebarFocused] = useState(true);
+
+  useEffect(() => {
+    setSelectedItemKey(defaultSelectedItemKey);
+  }, [defaultSelectedItemKey]);
+
+  const currentItemKey = useMemo(() => {
+    if (!selectedItemKey) {
+      return null;
+    }
+
+    const keys = selectedItemKey.split('#');
+    const length = keys.length;
+
+    return keys[length - 1];
+  }, [selectedItemKey]);
 
   useEffect(() => {
     setSidebarItems(data);
@@ -112,9 +137,8 @@ const useSidebar = ({ data }: useSidebarProps): SidebarOutput => {
 
   const toggleDropdown = useCallback((action: boolean, key: string) => {
     setSidebarItems((prev) => {
-      const keyPath = createKeyPath(prev, key);
       const items = { ...prev };
-      const item = findItem(items, keyPath);
+      const item = findItem(items, key);
 
       if (item && Object.keys(item.children).length) {
         item.dropdownOpen = action;
@@ -198,7 +222,10 @@ const useSidebar = ({ data }: useSidebarProps): SidebarOutput => {
   return {
     activePanel,
     selectedItemKey,
+    currentItemKey,
     sidebarItems,
+    isSidebarFocused,
+    setIsSidebarFocused,
     updateSelectedItemKey,
     onKeyNavigation,
     toggleDropdown,
