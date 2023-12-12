@@ -22,30 +22,41 @@ import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
 import InformationDisplay from './informationDisplay';
 
 const Information = () => {
-  const { currentTabs, currentExtensions, browserInformation } =
+  const { currentTabs, currentExtensions, browserInformation, OSInformation } =
     useSettingsStore(({ state }) => ({
       currentTabs: state.currentTabs,
       currentExtensions: state.currentExtensions,
       browserInformation: state.browserInformation,
+      OSInformation: state.OSInformation,
     }));
+
+  const clipboardText = `
+  Number of open tabs: ${currentTabs}
+  Active extensions:
+  ${currentExtensions?.map((extension) => {
+    return `${extension.extensionName}: ${extension.extensionId}\n`;
+  })}
+  Browser Version: ${browserInformation}
+  OS information: ${OSInformation}
+  `;
+
   return (
-    <div className="w-full h-full flex flex-col gap-5">
+    <div className="relative w-full h-full flex flex-col gap-5 p-3 bg-dynamic-grey">
+      <button
+        className="absolute right-0 top-0"
+        onClick={() => navigator.clipboard.writeText(clipboardText)}
+      >
+        copy
+      </button>
       <div>
         <p className="font-semibold text-lg">Current Tabs:</p>
-        <div className="bg-dynamic-grey">
-          {currentTabs?.map((tab, index) => {
-            return (
-              <InformationDisplay
-                key={index}
-                information={`${tab.tabTitle}: ${tab.tabURL}`}
-              />
-            );
-          })}
+        <div>
+          <InformationDisplay information={`${currentTabs}`} />
         </div>
       </div>
       <div>
         <p className="font-semibold text-lg">Current installed extensions:</p>
-        <div className="bg-dynamic-grey">
+        <div>
           {currentExtensions?.map((extension, index) => {
             return (
               <InformationDisplay
@@ -58,8 +69,14 @@ const Information = () => {
       </div>
       <div>
         <p className="font-semibold text-lg">Browser version:</p>
-        <div className="bg-dynamic-grey">
-          <InformationDisplay information={`${browserInformation}`} />
+        <div>
+          <InformationDisplay information={browserInformation ?? ''} />
+        </div>
+      </div>
+      <div>
+        <p className="font-semibold text-lg">OS</p>
+        <div>
+          <InformationDisplay information={OSInformation ?? ''} />
         </div>
       </div>
     </div>
