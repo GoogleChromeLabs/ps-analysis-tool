@@ -32,7 +32,7 @@ const CookiesLandingContainer = ({
 }: CookiesLandingContainerProps) => {
   return (
     <div
-      className="h-full w-full flex flex-col min-w-[20rem]"
+      className="w-full flex flex-col min-w-[20rem]"
       data-testid="cookies-landing"
     >
       <div className="w-full min-w-[20rem]" data-testid={testId}>
