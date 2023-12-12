@@ -111,8 +111,8 @@ const Table = ({
         toggleFilterSelection={table.toggleFilterSelection}
         resetFilters={table.resetFilters}
       />
-      <div className="w-full flex-1 overflow-hidden h-full flex">
-        {table.rows.length > 0 && showFilterSidebar && (
+      <div className="w-full flex-1 overflow-hidden h-full flex divide-x divide-american-silver dark:divide-quartz">
+        {showFilterSidebar && (
           <Resizable
             minWidth="100px"
             maxWidth="50%"

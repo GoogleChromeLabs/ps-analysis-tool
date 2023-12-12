@@ -32,7 +32,7 @@ interface ChipProps {
 const Chip = ({ filterTitle, value, toggleFilterSelection }: ChipProps) => {
   return (
     <div className="flex items-center px-2 rounded-sm bg-gainsboro dark:bg-charleston-green mx-1 h-4">
-      <span className="block whitespace-nowrap text-onyx dark:text-manatee">
+      <span className="block whitespace-nowrap text-onyx dark:text-manatee text-xs">
         {filterTitle + ': ' + value}
       </span>
       <button

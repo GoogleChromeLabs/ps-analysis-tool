@@ -33,7 +33,7 @@ import { useContentStore } from '../stateProviders/contentStore';
 import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
 import TABS from '../tabs';
 import CookiesTab from '../tabs/cookies';
-import AffectedCookies from '../tabs/affectedCookies';
+import SiteAffectedCookies from '../tabs/siteAffectedCookies';
 
 const Layout = () => {
   const [data, setData] = useState<SidebarItems>(TABS);
@@ -102,7 +102,7 @@ const Layout = () => {
       );
 
       _data['affected-cookies'].panel = (
-        <AffectedCookies selectedFrameUrl={keys[keys.length - 1]} />
+        <SiteAffectedCookies selectedFrameUrl={keys[keys.length - 1]} />
       );
 
       return _data;

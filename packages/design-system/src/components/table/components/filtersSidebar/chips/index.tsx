@@ -36,15 +36,22 @@ const ChipsBar = ({
   toggleFilterSelection,
   resetFilters,
 }: ChipsBarProps) => {
+  const appliedFiltersCount = Object.values(selectedFilters).reduce(
+    (acc, filter) => {
+      acc += Number(Boolean(Object.keys(filter.filterValues || {}).length));
+      return acc;
+    },
+    0
+  );
+
   return (
     <div
       className={`${
-        Object.keys(selectedFilters).length === 0 && 'hidden'
+        appliedFiltersCount === 0 && 'hidden'
       } w-full h-[25px] py-1 px-2 flex items-center overflow-x-scroll no-scrollbar bg-anti-flash-white dark:bg-raisin-black border-b border-gray-300 dark:border-quartz`}
     >
-      {Object.keys(selectedFilters).length > 1 && (
-        <a
-          href="#"
+      {appliedFiltersCount > 1 && (
+        <button
           className="h-full flex items-center text-link text-xs whitespace-nowrap"
           onClick={resetFilters}
         >
@@ -53,7 +60,7 @@ const ChipsBar = ({
             Clear all
           </span>
           <div className="w-[1px] bg-gainsboro dark:bg-quartz h-[20px]"></div>
-        </a>
+        </button>
       )}
       <ChipList
         selectedFilters={selectedFilters}

@@ -37,35 +37,51 @@ const useFiltering = (
   data: TableData[],
   tableFilterData: TableFilter | undefined
 ): TableFilteringOutput => {
-  const [filters, setFilters] = useState<TableFilter>({});
+  const [filters, setFilters] = useState<TableFilter>({
+    ...(tableFilterData || {}),
+  });
 
   useEffect(() => {
-    if (!tableFilterData) {
-      return;
-    }
+    setFilters((prevFilters) => {
+      return Object.fromEntries(
+        Object.entries(prevFilters).map(([filterKey, filter]) => {
+          let filterValues = { ...(filter.filterValues || {}) };
 
-    const newFilters = Object.entries(tableFilterData).map(
-      ([filterKey, filter]) => {
-        const filterValues = filter.filterValues || {};
-
-        [].forEach((row) => {
-          const value = getValueByKey(filterKey, row);
-
-          if (value && !filterValues[value]) {
-            filterValues[value] = {
-              selected: false,
-            };
+          if (filter.hasStaticFilterValues) {
+            return [filterKey, { ...filter, filterValues }];
           }
-        });
 
-        filter.filterValues = filterValues;
+          filterValues = data
+            .map((row) => {
+              let value = getValueByKey(filterKey, row);
 
-        return [filterKey, filter];
-      }
-    );
+              if (filter.calculateFilterValues) {
+                value = filter.calculateFilterValues(value);
+              }
 
-    setFilters(Object.fromEntries(newFilters));
-  }, [data, tableFilterData]);
+              return value;
+            })
+            .reduce((acc, value) => {
+              if (value && !acc[value]) {
+                if (filterValues[value]) {
+                  acc[value] = {
+                    ...filterValues[value],
+                  };
+                } else {
+                  acc[value] = {
+                    selected: false,
+                  };
+                }
+              }
+
+              return acc;
+            }, {});
+
+          return [filterKey, { ...filter, filterValues }];
+        })
+      );
+    });
+  }, [data]);
 
   const toggleFilterSelection = useCallback(
     (filterKey: string, filterValue: string) => {
@@ -100,42 +116,53 @@ const useFiltering = (
     });
   }, []);
 
-  const filteredData = useMemo<TableData[]>(() => {
-    if (Object.keys(filters).length === 0) {
-      return data;
-    }
-
-    return data.filter((row) => {
-      const filterKeys = Object.keys(filters);
-
-      return filterKeys.some((filterKey) => {
-        const filterValues = filters[filterKey].filterValues || {};
-        const value = getValueByKey(filterKey, row);
-
-        if (filterValues[value] && filterValues[value].selected) {
-          return true;
-        }
-
-        return false;
-      });
-    });
-  }, [data, filters]);
-
   const selectedFilters = useMemo(
     () =>
       Object.fromEntries(
         Object.entries(filters).map(([filterKey, filter]) => {
-          filter.filterValues = Object.fromEntries(
+          const filterValues = Object.fromEntries(
             Object.entries(filter.filterValues || {}).filter(
               ([, filterValueData]) => filterValueData.selected
             )
           );
 
-          return [filterKey, filter];
+          return [filterKey, { ...filter, filterValues }];
         })
       ),
     [filters]
   );
+
+  const filteredData = useMemo<TableData[]>(() => {
+    if (
+      Object.values(selectedFilters).every(
+        (filter) => Object.keys(filter.filterValues || {}).length === 0
+      )
+    ) {
+      return data;
+    }
+
+    return data.filter((row) => {
+      return Object.entries(selectedFilters).every(([filterKey, filter]) => {
+        const filterValues = filter.filterValues || {};
+
+        if (Object.keys(filterValues).length === 0) {
+          return true;
+        }
+
+        const value = getValueByKey(filterKey, row);
+
+        if (filter.comparator !== undefined) {
+          return Object.keys(filterValues).some((filterValue) =>
+            filter.comparator?.(value, filterValue)
+          );
+        } else if (filterValues[value]) {
+          return filterValues[value].selected;
+        }
+
+        return false;
+      });
+    });
+  }, [data, selectedFilters]);
 
   return {
     filters,

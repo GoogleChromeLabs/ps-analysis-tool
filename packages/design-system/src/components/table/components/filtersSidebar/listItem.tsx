@@ -52,10 +52,9 @@ const ListItem = ({
   };
 
   return (
-    <li className="py-[3px]">
+    <li className="py-[3px] text-xs">
       <div className="flex gap-2 items-center">
-        <a
-          href="#"
+        <button
           className="flex items-center text-asteriod-black dark:text-bright-gray"
           onClick={toggleSubList}
         >
@@ -63,7 +62,7 @@ const ListItem = ({
             <ArrowDown />
           </span>
           <p className="ml-1 leading-normal font-semi-thick">{filter.title}</p>
-        </a>
+        </button>
         {filter.description && (
           <p title={filter.description}>
             <InfoIcon />
@@ -81,7 +80,7 @@ const ListItem = ({
           {Number(Object.keys(filter.filterValues || {}).length) > 4 && (
             <a
               onClick={toggleShowMore}
-              className="text-md text-link ml-2 mt-1 block text-royal-blue dark:text-medium-persian-blue"
+              className="text-link ml-2 mt-1 block text-royal-blue dark:text-medium-persian-blue"
               href="#"
             >
               {isExpanded ? 'Show Less' : 'Show More'}

@@ -15,7 +15,7 @@
  */
 
 /**
- * External dependencies
+ * External dependencies.
  */
 import React, { useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
@@ -28,22 +28,15 @@ import {
 } from '@ps-analysis-tool/design-system';
 import type { CookieTableData } from '@ps-analysis-tool/common';
 
-/**
- * Internal dependencies
- */
-import { useContentStore } from '../../../stateProviders/contentStore';
-
-interface CookiesListingProps {
-  selectedFrameUrl: string;
+interface AffectedCookiesProps {
+  cookies: CookieTableData[];
+  selectedFrameUrl: string | null;
 }
 
-const CookiesListing = ({ selectedFrameUrl }: CookiesListingProps) => {
-  const { tabCookies } = useContentStore(({ state }) => ({
-    tabCookies: Object.values(state.tabCookies).filter((cookie) =>
-      (cookie.frameUrls as string[]).includes(selectedFrameUrl)
-    ),
-  }));
-
+const AffectedCookies = ({
+  cookies,
+  selectedFrameUrl,
+}: AffectedCookiesProps) => {
   const [selectedFrameCookie, setSelectedFrameCookie] = useState<{
     [frame: string]: CookieTableData | null;
   } | null>(null);
@@ -115,19 +108,6 @@ const CookiesListing = ({ selectedFrameUrl }: CookiesListingProps) => {
         cell: (info: InfoType) => (
           <p className="truncate w-full">
             {!info ? 'Third Party' : 'First Party'}
-          </p>
-        ),
-      },
-      {
-        header: 'Cookie Affected',
-        accessorKey: 'isCookieSet',
-        cell: (info: InfoType) => (
-          <p className="flex justify-center items-center">
-            {!info ? (
-              <span className="font-serif">✓</span>
-            ) : (
-              <span className="font-serif">✗</span>
-            )}
           </p>
         ),
       },
@@ -264,24 +244,6 @@ const CookiesListing = ({ selectedFrameUrl }: CookiesListingProps) => {
       'analytics.platform': {
         title: 'Platform',
       },
-      isCookieSet: {
-        title: 'Cookie Accepted',
-        description:
-          "Whether the cookie was accepted(set) in Chrome's Cookie Store",
-        hasStaticFilterValues: true,
-        filterValues: {
-          True: {
-            selected: false,
-          },
-          False: {
-            selected: false,
-          },
-        },
-        comparator: (value: InfoType, filterValue: string) => {
-          const val = !value;
-          return val === (filterValue === 'True');
-        },
-      },
     }),
     []
   );
@@ -309,7 +271,7 @@ const CookiesListing = ({ selectedFrameUrl }: CookiesListingProps) => {
         className="h-full flex"
       >
         <CookieTable
-          data={tabCookies}
+          data={cookies}
           tableColumns={tableColumns}
           showTopBar={true}
           tableFilters={filters}
@@ -324,4 +286,4 @@ const CookiesListing = ({ selectedFrameUrl }: CookiesListingProps) => {
   );
 };
 
-export default CookiesListing;
+export default AffectedCookies;
