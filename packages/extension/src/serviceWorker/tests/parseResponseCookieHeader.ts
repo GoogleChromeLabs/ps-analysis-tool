@@ -50,14 +50,14 @@ describe('parseResponseCookieHeader', () => {
         name: 'countryCode',
         value: 'IN',
         partitionKey: undefined,
+        priority: undefined,
+        size: 13,
       },
-      isBlocked: false,
       analytics: { ...emptyAnalytics },
       url: 'https://example.com/public/api/alerts',
       headerType: 'response',
       isFirstParty: false,
       frameIdList: [1],
-      blockedReasons: [],
     });
   });
 
@@ -97,8 +97,9 @@ describe('parseResponseCookieHeader', () => {
         name: 'test_cookie',
         value: 'bla',
         partitionKey: undefined,
+        priority: undefined,
+        size: 14,
       },
-      isBlocked: false,
       analytics: {
         platform: 'DoubleClick/Google Marketing',
         category: 'Functional',
@@ -115,7 +116,6 @@ describe('parseResponseCookieHeader', () => {
       headerType: 'response',
       isFirstParty: false,
       frameIdList: [1],
-      blockedReasons: [],
     });
   });
 
@@ -169,8 +169,9 @@ describe('parseResponseCookieHeader', () => {
         name: '_ga_123',
         value: 'bla',
         partitionKey: undefined,
+        priority: undefined,
+        size: 10,
       },
-      isBlocked: false,
       analytics: {
         platform: 'Google Analytics',
         category: 'Analytics',
@@ -187,7 +188,6 @@ describe('parseResponseCookieHeader', () => {
       headerType: 'response',
       isFirstParty: true,
       frameIdList: [1],
-      blockedReasons: [],
     });
   });
 });

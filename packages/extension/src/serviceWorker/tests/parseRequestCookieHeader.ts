@@ -35,14 +35,15 @@ const normalCookie1 = {
     httponly: false,
     secure: false,
     samesite: '',
+    partitionKey: undefined,
+    priority: undefined,
+    size: 16,
   },
-  isBlocked: false,
   analytics: { ...emptyAnalytics },
   url: 'https://example.com/public/api/alerts',
   headerType: 'request',
   isFirstParty: false,
   frameIdList: [1],
-  blockedReasons: [],
 };
 
 const normalCookie2 = {
@@ -55,14 +56,15 @@ const normalCookie2 = {
     httponly: false,
     secure: false,
     samesite: '',
+    partitionKey: undefined,
+    priority: undefined,
+    size: 16,
   },
-  isBlocked: false,
   analytics: { ...emptyAnalytics },
   url: 'https://example.com/public/api/alerts',
   headerType: 'request',
   isFirstParty: false,
   frameIdList: [1],
-  blockedReasons: [],
 };
 
 const specialCookie = {
@@ -75,14 +77,15 @@ const specialCookie = {
     httponly: false,
     secure: false,
     samesite: '',
+    partitionKey: undefined,
+    priority: undefined,
+    size: 26,
   },
-  isBlocked: false,
   analytics: { ...emptyAnalytics },
   url: 'https://example.com/public/api/alerts',
   headerType: 'request',
   isFirstParty: false,
   frameIdList: [1],
-  blockedReasons: [],
 };
 
 const wildcardCookie = {
@@ -95,8 +98,10 @@ const wildcardCookie = {
     httponly: false,
     secure: false,
     samesite: '',
+    partitionKey: undefined,
+    priority: undefined,
+    size: 15,
   },
-  isBlocked: false,
   analytics: {
     platform: 'Google Analytics',
     category: 'Analytics',
@@ -113,7 +118,6 @@ const wildcardCookie = {
   headerType: 'request',
   isFirstParty: false,
   frameIdList: [1],
-  blockedReasons: [],
 };
 
 const normalCookie1Header = `${normalCookie1.parsedCookie.name}=${normalCookie1.parsedCookie.value}`;

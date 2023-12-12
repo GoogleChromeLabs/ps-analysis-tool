@@ -28,15 +28,17 @@ import CookiesLanding from '..';
 
 describe('CookiesLanding', () => {
   it('renders CookiesLanding with data', () => {
-    const { getByTestId } = render(
+    const { getByTestId, getAllByTestId } = render(
       <CookiesLanding
         tabCookies={mockResponse.tabCookies}
         tabFrames={mockResponse.tabFrames}
+        showBlockedCookiesSection
+        showHorizontalMatrix
       />
     );
 
     expect(getByTestId('cookies-landing')).toBeInTheDocument();
-    expect(getByTestId('cookies-landing-header')).toBeInTheDocument();
+    expect(getAllByTestId('cookies-landing-header')[0]).toBeInTheDocument();
     expect(getByTestId('cookies-matrix-Cookies Insights')).toBeInTheDocument();
     expect(
       getByTestId('cookies-matrix-Blocked cookie insights')

@@ -115,7 +115,7 @@ chrome.webRequest.onResponseStarted.addListener(
               tab.url &&
               cookieDB
             ) {
-              const cdpRequestCookies = await chrome.debugger.sendCommand(
+              const cdpCookies = await chrome.debugger.sendCommand(
                 { tabId: tabId },
                 'Network.getCookies',
                 { urls: [url] }
@@ -126,7 +126,7 @@ chrome.webRequest.onResponseStarted.addListener(
                 cookieDB,
                 tab.url,
                 frameId,
-                cdpRequestCookies.cookies ?? []
+                cdpCookies.cookies ?? []
               );
               return [...(await accumulator), cookie];
             }
@@ -202,7 +202,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
                 tab.url &&
                 cookieDB
               ) {
-                const cdpRequestCookies = await chrome.debugger.sendCommand(
+                const cdpCookies = await chrome.debugger.sendCommand(
                   { tabId: tabId },
                   'Network.getCookies',
                   { urls: [url] }
@@ -214,7 +214,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
                   cookieDB,
                   tab.url,
                   frameId,
-                  cdpRequestCookies?.cookies ?? []
+                  cdpCookies?.cookies ?? []
                 );
                 return [...(await accumulator), ...cookieList];
               }
@@ -555,20 +555,24 @@ chrome.storage.sync.onChanged.addListener(
           localStorage[localStorage.tabToRead].isDebuggerAttached = false;
           chrome.storage.local.set(localStorage);
         } else if (changes['isUsingCDP'].newValue) {
-          await chrome.debugger.attach(
-            { tabId: Number(localStorage.tabToRead) },
-            '1.3'
-          );
-          localStorage[localStorage.tabToRead].isDebuggerAttached = true;
-          chrome.debugger.sendCommand(
-            { tabId: Number(localStorage.tabToRead) },
-            'Network.enable'
-          );
-          chrome.debugger.sendCommand(
-            { tabId: Number(localStorage.tabToRead) },
-            'Audits.enable'
-          );
-          await chrome.storage.local.set(localStorage);
+          try {
+            await chrome.debugger.attach(
+              { tabId: Number(localStorage.tabToRead) },
+              '1.3'
+            );
+            localStorage[localStorage.tabToRead].isDebuggerAttached = true;
+            chrome.debugger.sendCommand(
+              { tabId: Number(localStorage.tabToRead) },
+              'Network.enable'
+            );
+            chrome.debugger.sendCommand(
+              { tabId: Number(localStorage.tabToRead) },
+              'Audits.enable'
+            );
+            await chrome.storage.local.set(localStorage);
+          } catch (error) {
+            //just catch the error.
+          }
         }
       }
     } else if (
