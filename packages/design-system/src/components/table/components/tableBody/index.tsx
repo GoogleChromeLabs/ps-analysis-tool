@@ -24,7 +24,7 @@ import classNames from 'classnames';
  * Internal dependencies.
  */
 import BodyRow from './bodyRow';
-import { TableData, TableOutput, TableRow } from '../../useTable';
+import type { TableData, TableOutput, TableRow } from '../../useTable';
 
 interface TableBodyProps {
   table: TableOutput;
@@ -48,8 +48,6 @@ const TableBody = ({
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>, index: number) => {
       event.preventDefault();
-      event.stopPropagation();
-
       //@ts-ignore - the `children` property will be available on the `current` property.
       const currentRow = tableBodyRef.current?.children.namedItem(index);
       let newRowId: string | undefined;

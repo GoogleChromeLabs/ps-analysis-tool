@@ -52,7 +52,7 @@ const callback = (panel: {
 
     const sessionData = await chrome.storage.session.get();
     sessionData[currentTabId] = false;
-    await chrome.storage.session.set(sessionData);
+    chrome.storage.session.set(sessionData);
   });
 };
 chrome.devtools.panels.create(

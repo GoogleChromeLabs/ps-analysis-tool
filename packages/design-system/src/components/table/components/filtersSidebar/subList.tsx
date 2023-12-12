@@ -63,7 +63,7 @@ const SubList = ({
                 onChange={() => toggleFilterSelection(filterKey, filterValue)}
               />
               <span className="text-asteriod-black dark:text-bright-gray leading-normal font-semi-thick">
-                {String(filterValue)}
+                {filterValue}
               </span>
             </label>
           </li>
