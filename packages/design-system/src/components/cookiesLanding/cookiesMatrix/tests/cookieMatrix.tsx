@@ -40,6 +40,8 @@ describe('CookiesMatrix', () => {
       />
     );
 
-    expect(getByTestId('cookies-matrix-Cookies Insights')).toBeInTheDocument();
+    expect(
+      getByTestId('cookies-matrix-Cookie Classification')
+    ).toBeInTheDocument();
   });
 });

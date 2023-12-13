@@ -39,9 +39,9 @@ describe('CookiesLanding', () => {
 
     expect(getByTestId('cookies-landing')).toBeInTheDocument();
     expect(getAllByTestId('cookies-landing-header')[0]).toBeInTheDocument();
-    expect(getByTestId('cookies-matrix-Cookies Insights')).toBeInTheDocument();
     expect(
-      getByTestId('cookies-matrix-Blocked cookie insights')
+      getByTestId('cookies-matrix-Cookie Classification')
     ).toBeInTheDocument();
+    expect(getByTestId('cookies-matrix-Cookie Blockages')).toBeInTheDocument();
   });
 });
