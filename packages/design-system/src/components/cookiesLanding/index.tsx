@@ -89,7 +89,7 @@ const CookiesLanding = ({
 
   return (
     <div
-      className="h-full w-full flex flex-col min-w-[20rem]"
+      className="h-full w-full flex flex-col min-w-[40rem]"
       data-testid="cookies-landing"
     >
       <CookiesLandingContainer

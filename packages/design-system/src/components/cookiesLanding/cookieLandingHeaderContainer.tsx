@@ -33,8 +33,8 @@ const CookiesLandingContainer = ({
   children,
 }: CookiesLandingContainerProps) => {
   return (
-    <div className="w-full flex flex-col min-w-[20rem]">
-      <div className="w-full min-w-[20rem]" data-testid={testId}>
+    <div className="w-full flex flex-col min-w-[40rem]">
+      <div className="w-full min-w-[40rem]" data-testid={testId}>
         {showLandingHeader && <LandingHeader dataMapping={dataMapping} />}
         <div className="lg:max-w-[729px] mx-auto flex justify-center flex-col mt-10 pb-10 px-4">
           {children}
