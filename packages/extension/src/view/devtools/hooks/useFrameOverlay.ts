@@ -196,7 +196,7 @@ const useFrameOverlay = (
           sessionStoreChangedListener
         );
       } catch (error) {
-        /* do nothing */
+        //Silently fail
       }
     };
   }, [sessionStoreChangedListener]);
@@ -217,7 +217,10 @@ const useFrameOverlay = (
 
   useEffect(() => {
     (async () => {
-      if (isInspecting) {
+      try {
+        if (!isInspecting) {
+          return;
+        }
         if (!connectedToPort) {
           await connectToPort();
         }
@@ -237,6 +240,8 @@ const useFrameOverlay = (
             isOnRWS: selectedFrame ? tabFrames[selectedFrame]?.isOnRWS : false,
           });
         }
+      } catch (error) {
+        // Silently fail.
       }
     })();
   }, [
