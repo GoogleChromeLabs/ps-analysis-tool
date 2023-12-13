@@ -60,7 +60,7 @@ export default function parseRequestWillBeSentExtraInfo(
       parsedCookie: {
         ...cookie,
         expires: effectiveExpirationDate,
-        samesite: cookie.sameSite ?? '',
+        samesite: cookie.sameSite?.toLowerCase() ?? '',
         domain,
       },
       blockedReasons,
