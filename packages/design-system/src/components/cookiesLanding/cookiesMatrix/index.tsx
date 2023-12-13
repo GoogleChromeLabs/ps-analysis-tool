@@ -22,6 +22,7 @@ import {
   type TabFrames,
   Legend,
   filterFramesWithCookies,
+  LEGEND_DATA,
 } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies
@@ -29,7 +30,6 @@ import {
 import Matrix from '../../matrix';
 import type { MatrixComponentProps } from '../../matrix/matrixComponent';
 import { InfoIcon } from '../../../icons';
-import { LEGEND_DATA, BLOCKED_COOKIE_LEGEND_DATA } from './constants';
 import MatrixComponentHorizontal from '../../matrix/matrixComponent/matrixComponentHorizontal';
 
 interface CookiesMatrixProps {
@@ -67,31 +67,18 @@ const CookiesMatrix = ({
 }: CookiesMatrixProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const dataComponents: MatrixComponentProps[] = [];
+
   componentData.forEach((component) => {
-    const additionalDataComponent =
-      LEGEND_DATA[component.label] ||
-      BLOCKED_COOKIE_LEGEND_DATA[component.label] ||
-      {};
-    if (title === 'Cookie Classification') {
-      dataComponents.push({
-        ...additionalDataComponent,
-        ...component,
-        title: component.label,
-        isExpanded,
-        containerClasses: '',
-      });
-    } else if (title === 'Cookie Blockages') {
-      if (component.count && component.count > 0) {
-        dataComponents.push({
-          ...additionalDataComponent,
-          ...component,
-          title: component.label,
-          isExpanded,
-          containerClasses: '',
-        });
-      }
-    }
+    const additionalDataComponent = LEGEND_DATA[component.label] || {};
+    dataComponents.push({
+      ...additionalDataComponent,
+      ...component,
+      title: component.label,
+      isExpanded,
+      containerClasses: '',
+    });
   });
+
   const totalFrames = tabFrames ? Object.keys(tabFrames).length : 0;
   const framesWithCookies = filterFramesWithCookies(tabCookies, tabFrames);
 

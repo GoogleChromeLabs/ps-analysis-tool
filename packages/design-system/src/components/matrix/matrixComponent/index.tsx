@@ -50,7 +50,9 @@ const MatrixComponent = ({
           <h4 className="-mt-[3px] mb-1.5 text-xs font-medium dark:text-bright-gray">
             {title}
           </h4>
-          <div className={countClassName}>{count}</div>
+          <p style={{ color }} className={countClassName}>
+            {count}
+          </p>
           {description && isExpanded && (
             <p
               className="text-xs text-darkest-gray dark:text-bright-gray"

@@ -56,11 +56,6 @@ const CookiesLanding = ({
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
 
-  cookiesStatsComponents?.blockedCookiesLegend.map((singleLegend) => {
-    singleLegend.count = cookieStats.blockedCookies[singleLegend.label];
-    return singleLegend;
-  });
-
   const cookieClassificationDataMapping: DataMapping[] = [
     {
       title: 'Total cookies',
