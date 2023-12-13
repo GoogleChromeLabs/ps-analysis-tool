@@ -58,9 +58,10 @@ const CookiesLandingContainer = ({
         <div className="pt-4">
           <CookiesMatrix
             tabCookies={affectedCookies}
-            cookiesStatsComponents={prepareCookieStatsComponents(
-              prepareCookiesCount(affectedCookies)
-            )}
+            componentData={
+              prepareCookieStatsComponents(prepareCookiesCount(affectedCookies))
+                .legend
+            }
             tabFrames={tabFrames}
             title="Affected Cookies"
             description=""
