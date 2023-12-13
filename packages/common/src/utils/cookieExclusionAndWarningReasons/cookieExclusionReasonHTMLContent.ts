@@ -14,56 +14,44 @@
  * limitations under the License.
  */
 export const sameSiteExcludeNavigationContextDowngradeSecure = `
-    <h1>Migrate entirely to HTTPS to have cookies sent on same-site requests</h1>
-    <br />
-    <p>A cookie was not sent to a secure origin from an insecure context on a navigation. Because this cookie would have been sent across schemes on the same site, it was not sent. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
-    <br />
-    <p>Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
+    <p class="font-medium">Migrate entirely to HTTPS to have cookies sent on same-site requests</p>
+    <p class="text-xxxs">A cookie was not sent to a secure origin from an insecure context on a navigation. Because this cookie would have been sent across schemes on the same site, it was not sent. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
+    <p class="text-xxxs">Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
 `;
 
 // Filename: SameSiteExcludeNavigationContextDowngrade.md
 export const sameSiteExcludeNavigationContextDowngradeInsecure = `
-    <h1>Migrate entirely to HTTPS to have cookies sent on same-site requests</h1>
-    <br />
-    <p>A cookie was not sent to an insecure origin from a secure context on a navigation. Because this cookie would have been sent across schemes on the same site, it was not sent. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
-    <br />
-    <p>Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
+    <p class="font-medium">Migrate entirely to HTTPS to have cookies sent on same-site requests</p>
+    <p class="text-xxxs">A cookie was not sent to an insecure origin from a secure context on a navigation. Because this cookie would have been sent across schemes on the same site, it was not sent. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
+    <p class="text-xxxs">Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
 `;
 
 // Filename: SameSiteExcludeContextDowngradeSet.md
 export const sameSiteExcludeContextDowngradeSetCookieSecure = `
-    <h1>Migrate entirely to HTTPS to allow cookies to be set by same-site subresources</h1>
-    <br />
-    <p>A cookie was not set by an insecure origin in a secure context. Because this cookie would have been set across schemes on the same site, it was blocked. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
-    <br />
-    <p>Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
+    <p class="font-medium">Migrate entirely to HTTPS to allow cookies to be set by same-site subresources</p>
+    <p class="text-xxxs">A cookie was not set by an insecure origin in a secure context. Because this cookie would have been set across schemes on the same site, it was blocked. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
+    <p class="text-xxxs">Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
 `;
 
 // Filename: SameSiteExcludeContextDowngradeSet.md
 export const sameSiteExcludeContextDowngradeSetCookieInsecure = `
-    <h1>Migrate entirely to HTTPS to allow cookies to be set by same-site subresources</h1>
-    <br />
-    <p>A cookie was not set by a secure origin in an insecure context. Because this cookie would have been set across schemes on the same site, it was blocked. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
-    <br />
-    <p>Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
+    <p class="font-medium">Migrate entirely to HTTPS to allow cookies to be set by same-site subresources</p>
+    <p class="text-xxxs">A cookie was not set by a secure origin in an insecure context. Because this cookie would have been set across schemes on the same site, it was blocked. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
+    <p class="text-xxxs">Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
 `;
 
 // Filename: SameSiteExcludeContextDowngradeRead.md
 export const sameSiteExcludeContextDowngradeReadCookieSecure = `
-    <h1>Migrate entirely to HTTPS to have cookies sent to same-site subresources</h1>
-    <br />
-    <p>A cookie was not sent to a secure origin from an insecure context. Because this cookie would have been sent across schemes on the same site, it was not sent. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
-    <br />
-    <p>Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
+    <p class="font-medium">Migrate entirely to HTTPS to have cookies sent to same-site subresources</p>
+    <p class="text-xxxs">A cookie was not sent to a secure origin from an insecure context. Because this cookie would have been sent across schemes on the same site, it was not sent. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
+    <p class="text-xxxs">Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
 `;
 
 // Filename: SameSiteExcludeContextDowngradeRead.md
 export const sameSiteExcludeContextDowngradeReadCookieInsecure = `
-    <h1>Migrate entirely to HTTPS to have cookies sent to same-site subresources</h1>
-    <br />
-    <p>A cookie was not sent to an insecure origin from a secure context. Because this cookie would have been sent across schemes on the same site, it was not sent. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
-    <br />
-    <p>Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
+    <p class="font-medium">Migrate entirely to HTTPS to have cookies sent to same-site subresources</p>
+    <p class="text-xxxs">A cookie was not sent to an insecure origin from a secure context. Because this cookie would have been sent across schemes on the same site, it was not sent. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.</p>
+    <p class="text-xxxs">Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.</p>
 `;
 
 // Filename: NetworkRequest.ts
@@ -72,20 +60,16 @@ export const ExcludeSameSiteUnspecifiedTreatedAsLax =
 
 // Filename: cookieCrossSiteRedirectDowngrade.md
 export const cookieCrossSiteRedirectDowngrade = `
-    <h1>Cookie is blocked due to a cross-site redirect chain</h1>
-    <br />
-    <p>The cookie was blocked because the URL redirect chain was not fully same-site, meaning the final request was treated as a cross-site request. Like other cross-site requests, this blocks cookies with <code>SameSite=Lax</code> or <code>SameSite=Strict</code>.</p>
-    <br />
-    <p>For example: If site A redirects to site B which then redirects back to site A, the final request to site A will be a cross-site request.</p>
+    <p class="font-medium">Cookie is blocked due to a cross-site redirect chain</p>
+    <p class="text-xxxs">The cookie was blocked because the URL redirect chain was not fully same-site, meaning the final request was treated as a cross-site request. Like other cross-site requests, this blocks cookies with <code>SameSite=Lax</code> or <code>SameSite=Strict</code>.</p>
+    <p class="text-xxxs">For example: If site A redirects to site B which then redirects back to site A, the final request to site A will be a cross-site request.</p>
 `;
 
 // Filename: SameSiteNoneInsecureErrorSet.md
 export const ExcludeSameSiteNoneInsecureSetCookie = `
-    <h1>Mark cross-site cookies as Secure to allow setting them in cross-site contexts</h1>
-    <br />
-    <p>Cookies marked with <code>SameSite=None</code> must also be marked with <code>Secure</code> to allow setting them in a cross-site context. This behavior protects user data from being sent over an insecure connection.</p>
-    <br />
-    <p>Resolve this issue by updating the attributes of the cookie:</p>
+    <p class="font-medium">Mark cross-site cookies as Secure to allow setting them in cross-site contexts</p>
+    <p class="text-xxxs">Cookies marked with <code>SameSite=None</code> must also be marked with <code>Secure</code> to allow setting them in a cross-site context. This behavior protects user data from being sent over an insecure connection.</p>
+    <p class="text-xxxs">Resolve this issue by updating the attributes of the cookie:</p>
     <ul>
         <li>Specify <code>SameSite=None</code> and <code>Secure</code> if the cookie is intended to be set in cross-site contexts. Note that only cookies sent over HTTPS may use the <code>Secure</code> attribute.</li>
         <li>Specify <code>SameSite=Strict</code> or <code>SameSite=Lax</code> if the cookie should not be set by cross-site requests.</li>
@@ -94,12 +78,10 @@ export const ExcludeSameSiteNoneInsecureSetCookie = `
 
 // Filename: SameSiteNoneInsecureErrorRead.md
 export const ExcludeSameSiteNoneInsecureReadCookie = `
-    <h1>Mark cross-site cookies as Secure to allow them to be sent in cross-site requests</h1>
-    <br />
-    <p>Cookies marked with <code>SameSite=None</code> must also be marked with <code>Secure</code> to get sent in cross-site requests. 
+    <p class="font-medium">Mark cross-site cookies as Secure to allow them to be sent in cross-site requests</p>
+    <p class="text-xxxs">Cookies marked with <code>SameSite=None</code> must also be marked with <code>Secure</code> to get sent in cross-site requests. 
     This behavior protects user data from being sent over an insecure connection.</p>
-    <br />
-    <p>Resolve this issue by updating the attributes of the cookie:</p>
+    <p class="text-xxxs">Resolve this issue by updating the attributes of the cookie:</p>
     <ul>
         <li>Specify <code>SameSite=None</code> and <code>Secure</code> if the cookie should be sent in cross-site requests. This enables third-party use.</li>
         <li>Specify <code>SameSite=Strict</code> or <code>SameSite=Lax</code> if the cookie should not be sent in cross-site requests.</li>
@@ -108,11 +90,9 @@ export const ExcludeSameSiteNoneInsecureReadCookie = `
 
 // Filename: SameSiteInvalidSameParty.md
 export const ExcludeInvalidSameParty = `
-    <h1>Mark SameParty cookies as Secure and do not use SameSite=Strict for SameParty cookies</h1>
-    <br />
-    <p>Cookies marked with <code>SameParty</code> must also be marked with <code>Secure</code>. In addition, cookies marked with <code>SameParty</code> cannot use <code>SameSite=Strict</code>.</p>
-    <br />
-    <p>Resolve this issue by updating the attributes of the cookie:</p>
+    <p class="font-medium">Mark SameParty cookies as Secure and do not use SameSite=Strict for SameParty cookies</p>
+    <p class="text-xxxs">Cookies marked with <code>SameParty</code> must also be marked with <code>Secure</code>. In addition, cookies marked with <code>SameParty</code> cannot use <code>SameSite=Strict</code>.</p>
+    <p class="text-xxxs">Resolve this issue by updating the attributes of the cookie:</p>
     <ul>
         <li>Remove <code>SameParty</code> if the cookie should only be used by the same site but not the same first-party set</li>
         <li>Remove <code>SameSite=Strict</code> and specify <code>Secure</code> if the cookie should be available to all sites of the same first-party set</li>
@@ -121,53 +101,44 @@ export const ExcludeInvalidSameParty = `
 
 // Filename: SameSiteSamePartyCrossPartyContextSet.md
 export const ExcludeSamePartyCrossPartyContext = `
-    <h1>Make sure a cookie is using the SameParty attribute correctly</h1>
-    <br />
-    <p>Setting cross-site cookies with the <code>SameParty</code> attribute is only possible if both domains are a part of the same First-Party Set.</p>
-    <br />
-    <p>To allow setting cross-site cookies, try one of the following:</p>
+    <p class="font-medium">Make sure a cookie is using the SameParty attribute correctly</p>
+    <p class="text-xxxs">Setting cross-site cookies with the <code>SameParty</code> attribute is only possible if both domains are a part of the same First-Party Set.</p>
+    <p class="text-xxxs">To allow setting cross-site cookies, try one of the following:</p>
     <ul>
         <li>If the domains satisfy the First-Party Set criteria, add them to the same First-Party Set.</li>
         <li>If the domains don't satisfy the First-Party Set criteria, remove the <code>SameParty</code> attribute and specify <code>SameSite=None</code>.</li>
     </ul>
-    <br />
-    <p>If you don't have the option to do any of the above, cookies are not intended to be set in cross-site contexts.</p>
+    <p class="text-xxxs">If you don't have the option to do any of the above, cookies are not intended to be set in cross-site contexts.</p>
 `;
 
 // Filename: cookieExcludeDomainNonAscii.md
 export const ExcludeDomainNonASCII = `
-    <h1>Ensure cookie <code>Domain</code> attribute values only contain ASCII characters</h1>
-    <br />
-    <p><code>Domain</code> attributes in cookies are restricted to the ASCII character set. Any cookies that contain characters outside of the ASCII range in their <code>Domain</code> attribute will be ignored.</p>
-    <br />
-    <p>To resolve this issue, you need to remove all non-ASCII characters from the <code>Domain</code> attribute of the affected cookies.</p>
-    <br />
-    <p>If your site has an internationalized domain name (IDN), you should use <a href="punycodeReference">punycode</a> representation for the <code>Domain</code> attribute instead.</p>
+    <p class="font-medium">Ensure cookie <code>Domain</code> attribute values only contain ASCII characters</p>
+    <p class="text-xxxs"><code>Domain</code> attributes in cookies are restricted to the ASCII character set. Any cookies that contain characters outside of the ASCII range in their <code>Domain</code> attribute will be ignored.</p>
+    <p class="text-xxxs">To resolve this issue, you need to remove all non-ASCII characters from the <code>Domain</code> attribute of the affected cookies.</p>
+    <p class="text-xxxs">If your site has an internationalized domain name (IDN), you should use <a href="punycodeReference">punycode</a> representation for the <code>Domain</code> attribute instead.</p>
 `;
 
 // Filename: cookieExcludeBlockedWithinFirstPartySet.md
 export const ExcludeThirdPartyCookieBlockedInFirstPartySet = `
-    <h1>Third-party cookie blocked within the same First-Party Set</h1>
-    <br />
-    <p>
+    <p class="font-medium">Third-party cookie blocked within the same First-Party Set</p>
+    <p class="text-xxxs">
         A cookie embedded by a site in the top-level page's First-Party Set was blocked by third-party cookie blocking.
     </p>
 `;
 
 // Filename: cookieExcludeThirdPartyPhaseoutRead.md
 export const ExcludeThirdPartyPhaseoutReadCookie = `
-    <h1>Cookie is blocked when sent in cross-site context</h1>
-    <br />
-    <p>
+    <p class="font-medium">Cookie is blocked when sent in cross-site context</p>
+    <p class="text-xxxs">
         Cookies marked with <code>SameSite=None; Secure;</code> and not <code>Partitioned</code> are blocked in cross-site requests. This behavior protects user data from cross-site tracking.
     </p>
 `;
 
 // Filename: cookieExcludeThirdPartyPhaseoutSet.md
 export const ExcludeThirdPartyPhaseoutSetCookie = `
-    <h1>Cookie is blocked when set in cross-site context</h1>
-    <br />
-    <p>
+    <p class="font-medium">Cookie is blocked when set in cross-site context</p>
+    <p class="text-xxxs">
         Cookies marked with <code>SameSite=None; Secure</code> and not <code>Partitioned</code> are blocked in cross-site contexts. This behavior protects user data from cross-site tracking.
     </p>
 `;
