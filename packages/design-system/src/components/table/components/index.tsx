@@ -45,6 +45,7 @@ interface TableProps {
   ) => void;
   showTopBar?: boolean;
   disableFiltering?: boolean;
+  isExtension?: boolean;
 }
 
 const Table = ({
@@ -55,6 +56,7 @@ const Table = ({
   updatePreference = noop,
   showTopBar = false,
   disableFiltering = false,
+  isExtension = false,
 }: TableProps) => {
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
   const [showFilterSidebar, setShowFilterSidebar] = useState(false);
@@ -152,6 +154,7 @@ const Table = ({
               setIsRowFocused={setIsRowFocused}
             />
             <TableBody
+              isExtension={isExtension}
               table={table}
               getRowObjectKey={getRowObjectKey}
               isRowFocused={isRowFocused}

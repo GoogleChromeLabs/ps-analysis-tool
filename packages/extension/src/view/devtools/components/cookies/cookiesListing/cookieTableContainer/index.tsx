@@ -277,6 +277,7 @@ const CookieTableContainer = ({
 
   return (
     <CookieTable
+      isExtension
       tableColumns={tableColumns}
       data={Object.values(tableData)}
       selectedFrame={selectedFrame}

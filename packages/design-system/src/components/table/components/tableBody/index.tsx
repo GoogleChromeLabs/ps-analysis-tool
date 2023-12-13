@@ -33,6 +33,7 @@ interface TableBodyProps {
   setIsRowFocused: (state: boolean) => void;
   selectedKey: string | undefined | null;
   onRowClick: (key: TableData | null) => void;
+  isExtension?: boolean;
 }
 
 const TableBody = ({
@@ -42,6 +43,7 @@ const TableBody = ({
   setIsRowFocused,
   selectedKey,
   onRowClick,
+  isExtension = false,
 }: TableBodyProps) => {
   const tableBodyRef = useRef(null);
 
@@ -126,6 +128,7 @@ const TableBody = ({
     <div ref={tableBodyRef} className="h-full flex flex-col">
       {table.rows.map((row, index) => (
         <BodyRow
+          isExtension={isExtension}
           key={index}
           index={index}
           row={row}

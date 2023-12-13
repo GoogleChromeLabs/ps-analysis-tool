@@ -36,6 +36,7 @@ interface BodyRowProps {
   getRowObjectKey: (row: TableRow) => string;
   onRowClick: () => void;
   onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>, index: number) => void;
+  isExtension?: boolean;
 }
 
 const BodyRow = ({
@@ -47,6 +48,7 @@ const BodyRow = ({
   isRowFocused,
   onRowClick,
   onKeyDown,
+  isExtension = false,
 }: BodyRowProps) => {
   const cookieKey = getRowObjectKey(row);
   const isHighlighted = (row.originalData as CookieTableData)?.highlighted;
@@ -80,6 +82,7 @@ const BodyRow = ({
     >
       {columns.map(({ accessorKey, width }, idx) => (
         <BodyCell
+          isExtension={isExtension}
           key={idx}
           onRowClick={onRowClick}
           cell={row[accessorKey]?.value || ''}

@@ -30,6 +30,7 @@ interface BodyCellProps {
   width: number;
   isHighlighted?: boolean;
   isRowFocused: boolean;
+  isExtension?: boolean;
   row: TableRow;
   onRowClick: () => void;
 }
@@ -41,6 +42,7 @@ const BodyCell = ({
   width,
   isRowFocused,
   isHighlighted = false,
+  isExtension = false,
 }: BodyCellProps) => {
   const [contextMenuOpen, setContextMenuOpen] = useState(false);
   const [columnPosition, setColumnPosition] = useState({
@@ -50,15 +52,17 @@ const BodyCell = ({
 
   const handleRightClick = useCallback(
     (e: React.MouseEvent<HTMLElement>) => {
-      e.preventDefault();
-      const x = e.clientX,
-        y = e.clientY;
-      onRowClick();
-      setColumnPosition({ x, y });
-      document.body.style.overflow = contextMenuOpen ? 'auto' : 'hidden';
-      setContextMenuOpen(!contextMenuOpen);
+      if (isExtension) {
+        e.preventDefault();
+        const x = e.clientX,
+          y = e.clientY;
+        onRowClick();
+        setColumnPosition({ x, y });
+        document.body.style.overflow = contextMenuOpen ? 'auto' : 'hidden';
+        setContextMenuOpen(!contextMenuOpen);
+      }
     },
-    [contextMenuOpen, onRowClick]
+    [contextMenuOpen, isExtension, onRowClick]
   );
 
   const handleCopy = useCallback(() => {
@@ -96,7 +100,8 @@ const BodyCell = ({
     >
       {cell}
       <>
-        {contextMenuOpen &&
+        {isExtension &&
+          contextMenuOpen &&
           createPortal(
             <div className="transition duration-100" data-testid="column-menu">
               <div
