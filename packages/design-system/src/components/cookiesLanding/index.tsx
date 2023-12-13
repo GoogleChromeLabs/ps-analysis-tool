@@ -116,7 +116,7 @@ const CookiesLanding = ({
           testId="blocked-cookies-insights"
         >
           <CookiesMatrix
-            title="Cookie Blockages"
+            title="Blocked Reasons"
             tabCookies={tabCookies}
             componentData={cookiesStatsComponents.blockedCookiesLegend}
             tabFrames={tabFrames}
