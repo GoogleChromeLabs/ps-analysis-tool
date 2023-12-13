@@ -35,7 +35,7 @@ import { CookieStore } from '../localStore';
 import parseResponseCookieHeader from './parseResponseCookieHeader';
 import parseRequestCookieHeader from './parseRequestCookieHeader';
 import { getTab } from '../utils/getTab';
-import { getCurrentTab, getCurrentTabId } from '../utils/getCurrentTabId';
+import { getCurrentTab } from '../utils/getCurrentTabId';
 import {
   type CookieDatabase,
   fetchDictionary,
@@ -58,48 +58,28 @@ const cdpURLToRequestMap: {
 chrome.webRequest.onResponseStarted.addListener(
   (details: chrome.webRequest.WebResponseCacheDetails) => {
     (async () => {
-      const extensionSettings = await chrome.storage.sync.get();
-
-      if (
-        extensionSettings &&
-        extensionSettings?.allowedNumberOfTabs !== 'unlimited'
-      ) {
-        const currentTabId = await getCurrentTabId();
-
-        if (!currentTabId) {
-          return;
-        }
-
-        const tabsBeingListenedTo = await chrome.storage.local.get();
-
-        if (
-          tabsBeingListenedTo &&
-          currentTabId !== tabsBeingListenedTo?.tabToRead
-        ) {
-          return;
-        }
-      }
       await PROMISE_QUEUE.add(async () => {
         const { tabId, url, responseHeaders, frameId } = details;
         const tab = await getTab(tabId);
+
+        if (!tab || !responseHeaders || tab.url === 'chrome://newtab/') {
+          return;
+        }
+
+        const extensionSettings = await chrome.storage.sync.get();
+
         if (
           extensionSettings &&
           extensionSettings?.allowedNumberOfTabs !== 'unlimited'
         ) {
           const tabsBeingListenedTo = await chrome.storage.local.get();
 
-          if (ALLOWED_NUMBER_OF_TABS > 0) {
-            if (
-              tabsBeingListenedTo &&
-              tabId.toString() !== tabsBeingListenedTo?.tabToRead
-            ) {
-              return;
-            }
+          if (
+            tabsBeingListenedTo &&
+            tabId.toString() !== tabsBeingListenedTo?.tabToRead
+          ) {
+            return;
           }
-        }
-
-        if (!tab || !responseHeaders || tab.url === 'chrome://newtab/') {
-          return;
         }
 
         if (!cookieDB) {
@@ -115,6 +95,7 @@ chrome.webRequest.onResponseStarted.addListener(
               cookieDB
             ) {
               let cdpCookies;
+              //Since we are using CDP we might as well use it to get the proper cookies in the request this will further reduce the load of domain calculation
               try {
                 cdpCookies = await chrome.debugger.sendCommand(
                   { tabId: tabId },
@@ -150,38 +131,21 @@ chrome.webRequest.onResponseStarted.addListener(
 chrome.webRequest.onBeforeSendHeaders.addListener(
   ({ url, requestHeaders, tabId, frameId }) => {
     (async () => {
-      const extensionSettings = await chrome.storage.sync.get();
-
-      if (
-        extensionSettings &&
-        extensionSettings?.allowedNumberOfTabs !== 'unlimited'
-      ) {
-        const currentTabId = await getCurrentTabId();
-
-        if (!currentTabId) {
-          return;
-        }
-
-        const tabsBeingListenedTo = await chrome.storage.local.get();
-
-        if (
-          tabsBeingListenedTo &&
-          currentTabId !== tabsBeingListenedTo?.tabToRead
-        ) {
-          return;
-        }
-      }
       await PROMISE_QUEUE.add(async () => {
         const tab = await getTab(tabId);
 
         if (!tab || !requestHeaders || tab.url === 'chrome://newtab/') {
           return;
         }
+
+        const extensionSettings = await chrome.storage.sync.get();
+
         if (
           extensionSettings &&
           extensionSettings?.allowedNumberOfTabs !== 'unlimited'
         ) {
           const tabsBeingListenedTo = await chrome.storage.local.get();
+
           if (
             tabsBeingListenedTo &&
             tabId.toString() !== tabsBeingListenedTo?.tabToRead
@@ -189,6 +153,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
             return;
           }
         }
+
         if (!cookieDB) {
           cookieDB = await fetchDictionary();
         }
@@ -237,24 +202,27 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 
 chrome.tabs.onCreated.addListener(async (tab) => {
   await PROMISE_QUEUE.add(async () => {
-    if (tab.id) {
-      const extensionSettings = await chrome.storage.sync.get();
+    if (!tab.id) {
+      return;
+    }
+
+    const extensionSettings = await chrome.storage.sync.get();
+
+    if (
+      extensionSettings?.allowedNumberOfTabs &&
+      extensionSettings?.allowedNumberOfTabs !== 'unlimited'
+    ) {
+      const previousTabData = await chrome.storage.local.get();
+      const doesTabExist = await getTab(previousTabData?.tabToRead);
       if (
-        extensionSettings?.allowedNumberOfTabs &&
-        extensionSettings?.allowedNumberOfTabs !== 'unlimited'
+        Object.keys(previousTabData).length - 1 >= ALLOWED_NUMBER_OF_TABS &&
+        doesTabExist
       ) {
-        const previousTabData = await chrome.storage.local.get();
-        const doesTabExist = await getTab(previousTabData?.tabToRead);
-        if (
-          Object.keys(previousTabData).length - 1 >= ALLOWED_NUMBER_OF_TABS &&
-          doesTabExist
-        ) {
-          return;
-        }
-        await CookieStore.addTabData(tab.id.toString());
-      } else {
-        await CookieStore.addTabData(tab.id.toString());
+        return;
       }
+      await CookieStore.addTabData(tab.id.toString());
+    } else {
+      await CookieStore.addTabData(tab.id.toString());
     }
   });
 });
@@ -452,6 +420,9 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       ) {
         const { cookie, cookieExclusionReasons, cookieWarningReasons } =
           details.cookieIssueDetails;
+
+        // Adding alternate domains here because our extension calculates domain differently that the application tab.
+        // This is done to capture both NID.google.com/ and NIDgoogle.com/ so that if we find either of the cookie we add issues to the cookie object
         const primaryDomain = cookie.domain.startsWith('.')
           ? cookie.domain
           : '.' + cookie.domain;
@@ -516,6 +487,7 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
       }
     }
   } else {
+    // Have to check multiple condition since debugger cannot be attached on empty url tab and on chrome:// urls
     if (
       details.tabId &&
       localStorage[details.tabId?.toString()] &&
@@ -548,56 +520,64 @@ chrome.storage.sync.onChanged.addListener(
       localStorage?.tabToRead
     ) {
       if (
-        Object.keys(changes).includes('isUsingCDP') &&
-        localStorage?.tabToRead
+        !Object.keys(changes).includes('isUsingCDP') &&
+        !localStorage?.tabToRead
       ) {
-        if (!changes['isUsingCDP'].newValue) {
-          chrome.debugger.detach({ tabId: Number(localStorage.tabToRead) });
-          localStorage[localStorage.tabToRead].isDebuggerAttached = false;
-          chrome.storage.local.set(localStorage);
-        } else if (changes['isUsingCDP'].newValue) {
-          try {
-            await chrome.debugger.attach(
-              { tabId: Number(localStorage.tabToRead) },
-              '1.3'
-            );
-            localStorage[localStorage.tabToRead].isDebuggerAttached = true;
-            chrome.debugger.sendCommand(
-              { tabId: Number(localStorage.tabToRead) },
-              'Network.enable'
-            );
-            chrome.debugger.sendCommand(
-              { tabId: Number(localStorage.tabToRead) },
-              'Audits.enable'
-            );
-            await chrome.storage.local.set(localStorage);
-          } catch (error) {
-            //just catch the error.
-          }
+        return;
+      }
+      if (!changes['isUsingCDP'].newValue) {
+        chrome.debugger.detach({ tabId: Number(localStorage.tabToRead) });
+        localStorage[localStorage.tabToRead].isDebuggerAttached = false;
+        chrome.storage.local.set(localStorage);
+      } else if (changes['isUsingCDP'].newValue) {
+        try {
+          await chrome.debugger.attach(
+            { tabId: Number(localStorage.tabToRead) },
+            '1.3'
+          );
+          localStorage[localStorage.tabToRead].isDebuggerAttached = true;
+          chrome.debugger.sendCommand(
+            { tabId: Number(localStorage.tabToRead) },
+            'Network.enable'
+          );
+          chrome.debugger.sendCommand(
+            { tabId: Number(localStorage.tabToRead) },
+            'Audits.enable'
+          );
+          await chrome.storage.local.set(localStorage);
+        } catch (error) {
+          //just catch the error.
         }
       }
     } else if (
       syncStorage.allowedNumberOfTabs &&
       syncStorage.allowedNumberOfTabs !== 'single'
     ) {
-      if (Object.keys(changes).includes('isUsingCDP')) {
-        if (!changes['isUsingCDP'].newValue) {
-          const tabs = await chrome.tabs.query({ active: true });
-          tabs.map((tab) => {
-            chrome.debugger.detach({ tabId: tab?.id });
-            localStorage[tab?.id?.toString()].isDebuggerAttached = false;
-            chrome.storage.local.set(localStorage);
+      if (!Object.keys(changes).includes('isUsingCDP')) {
+        return;
+      }
+      if (!changes['isUsingCDP'].newValue) {
+        const tabs = await chrome.tabs.query({ active: true });
+        tabs.map((tab) => {
+          if (!tab.id) {
             return tab;
-          });
-        } else if (changes['isUsingCDP'].newValue) {
-          const tabs = await chrome.tabs.query({ active: true });
-          tabs.map((tab) => {
-            chrome.debugger.detach({ tabId: tab?.id });
-            localStorage[tab?.id?.toString()].isDebuggerAttached = true;
+          }
+          chrome.debugger.detach({ tabId: tab?.id });
+          localStorage[tab?.id?.toString()].isDebuggerAttached = false;
+          chrome.storage.local.set(localStorage);
+          return tab;
+        });
+      } else if (changes['isUsingCDP'].newValue) {
+        const tabs = await chrome.tabs.query({ active: true });
+        tabs.map((tab) => {
+          if (!tab.id) {
             return tab;
-          });
-          await chrome.storage.local.set(localStorage);
-        }
+          }
+          chrome.debugger.detach({ tabId: tab?.id });
+          localStorage[tab?.id?.toString()].isDebuggerAttached = true;
+          return tab;
+        });
+        await chrome.storage.local.set(localStorage);
       }
     }
   }

@@ -156,6 +156,7 @@ const CookieStore = {
     if (!storage[tabId]) {
       return;
     }
+    // Check if primaryDomain cookie exists
     if (
       storage[tabId].cookies &&
       storage[tabId].cookies[cookieName] &&
@@ -175,6 +176,7 @@ const CookieStore = {
       ];
       storage[tabId].cookies[cookieName].isBlocked =
         exclusionReasons.length > 0 ? true : false;
+      // Check if secondaryDomain cookie exists
     } else if (
       storage[tabId].cookies &&
       !storage[tabId].cookies[cookieName] &&
@@ -195,6 +197,7 @@ const CookieStore = {
       storage[tabId].cookies[alternateCookieName].isBlocked =
         exclusionReasons.length > 0 ? true : false;
     } else {
+      // If none of them exists. This case is possible when the PROMISE_QUEUE hasnt processed our current promise, and we already have an issue.
       storage[tabId] = {
         ...storage[tabId],
         cookies: {
