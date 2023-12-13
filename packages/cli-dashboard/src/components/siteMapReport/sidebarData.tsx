@@ -20,22 +20,20 @@ import React from 'react';
 import {
   CookieIcon,
   CookieIconWhite,
-  type SidebarItem,
+  type SidebarItems,
 } from '@ps-analysis-tool/design-system';
 
-const sidebarData: SidebarItem[] = [
-  {
-    key: 'sitemap-landing-page',
+const sidebarData: SidebarItems = {
+  'sitemap-landing-page': {
     title: 'Sitemap Report',
-    children: [],
+    children: {},
   },
-  {
-    key: 'sitemap-affected-cookies',
+  'sitemap-affected-cookies': {
     title: 'Affected Cookies',
-    children: [],
+    children: {},
     icon: <CookieIcon />,
     selectedIcon: <CookieIconWhite />,
   },
-];
+};
 
 export default sidebarData;

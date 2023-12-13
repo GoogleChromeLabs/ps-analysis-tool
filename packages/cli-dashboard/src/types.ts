@@ -50,9 +50,6 @@ export type CookieJsonDataType = {
   isFirstParty: boolean;
   pageUrl: string;
   requestUrls?: { [id: string]: string };
-  frameUrls: { [id: string]: string };
-  pageUrl?: string;
-  requestUrls?: { [id: string]: string };
   frameUrls?: { [id: string]: string };
   isBlocked: boolean;
   blockedReasons?: string[];

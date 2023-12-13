@@ -24,7 +24,7 @@ import {
   FileWhite,
   Sidebar,
   useSidebar,
-  type SidebarItem,
+  type SidebarItems,
 } from '@ps-analysis-tool/design-system';
 import {
   type TabFrames,
@@ -56,7 +56,7 @@ const SiteMapReport = ({
   completeJson,
 }: SiteMapReportProps) => {
   const [sites, setSites] = useState<string[]>([]);
-  const [data, setData] = useState<SidebarItem[]>(sidebarData);
+  const [data, setData] = useState<SidebarItems>(sidebarData);
 
   useEffect(() => {
     const _sites = new Set<string>();
@@ -97,7 +97,11 @@ const SiteMapReport = ({
     activePanel,
     selectedItemKey,
     sidebarItems,
+    isSidebarFocused,
+    setIsSidebarFocused,
     updateSelectedItemKey,
+    onKeyNavigation,
+    toggleDropdown,
     isKeyAncestor,
     isKeySelected,
   } = useSidebar({ data });
@@ -125,9 +129,9 @@ const SiteMapReport = ({
 
   useEffect(() => {
     setData((prev) => {
-      const _data = [...prev];
+      const _data = { ...prev };
 
-      _data[0].panel = (
+      _data['sitemap-landing-page'].panel = (
         <CookiesLandingContainer
           tabCookies={reshapedCookies}
           tabFrames={frames}
@@ -135,24 +139,29 @@ const SiteMapReport = ({
         />
       );
 
-      _data[0].children = sites.map(
-        (site): SidebarItem => ({
-          key: site,
-          title: site,
-          panel: (
-            <SiteReport
-              cookies={siteFilteredCookies}
-              technologies={siteFilteredTechnologies}
-              completeJson={completeJson}
-            />
-          ),
-          children: [],
-          icon: <File />,
-          selectedIcon: <FileWhite />,
-        })
+      _data['sitemap-landing-page'].children = sites.reduce(
+        (acc: SidebarItems, site: string) => {
+          acc[site] = {
+            title: site,
+            panel: (
+              <SiteReport
+                cookies={siteFilteredCookies}
+                technologies={siteFilteredTechnologies}
+                completeJson={completeJson}
+                selectedSite={site}
+              />
+            ),
+            children: {},
+            icon: <File />,
+            selectedIcon: <FileWhite />,
+          };
+
+          return acc;
+        },
+        {}
       );
 
-      _data[1].panel = (
+      _data['sitemap-affected-cookies'].panel = (
         <SiteMapAffectedCookies
           cookies={Object.values(reshapedCookies).filter(
             (cookie) => !cookie.isCookieSet
@@ -174,8 +183,8 @@ const SiteMapReport = ({
   ]);
 
   useEffect(() => {
-    if (selectedItemKey === null && data.length > 0) {
-      updateSelectedItemKey(data[0].key);
+    if (selectedItemKey === null && Object.keys(data).length > 0) {
+      updateSelectedItemKey('sitemap-landing-page');
     }
   }, [data, isKeySelected, selectedItemKey, updateSelectedItemKey]);
 
@@ -190,8 +199,13 @@ const SiteMapReport = ({
         }}
       >
         <Sidebar
+          selectedItemKey={selectedItemKey}
           sidebarItems={sidebarItems}
+          isSidebarFocused={isSidebarFocused}
+          setIsSidebarFocused={setIsSidebarFocused}
+          onKeyNavigation={onKeyNavigation}
           updateSelectedItemKey={updateSelectedItemKey}
+          toggleDropdown={toggleDropdown}
           isKeyAncestor={isKeyAncestor}
           isKeySelected={isKeySelected}
         />

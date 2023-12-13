@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { CookieFrameStorageType } from '../../../types';
-import reshapeCookies from '../reshapeCookies';
 
 /**
  * Internal dependencies
  */
+import type { CookieFrameStorageType } from '../../../types';
+import reshapeCookies from '../reshapeCookies';
 
 describe('reshapeCookies', () => {
   it('should return an empty object if no cookies are present', () => {

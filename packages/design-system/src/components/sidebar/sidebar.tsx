@@ -17,37 +17,81 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 /**
  * Internal dependencies.
  */
 import SidebarChild from './sidebarChild';
-import type { SidebarItem } from './useSidebar';
+import type { SidebarItems } from './useSidebar';
 
 interface SidebarProps {
-  sidebarItems: SidebarItem[];
+  selectedItemKey: string | null;
+  sidebarItems: SidebarItems;
+  isSidebarFocused: boolean;
+  setIsSidebarFocused: React.Dispatch<boolean>;
   updateSelectedItemKey: (key: string | null) => void;
+  onKeyNavigation: (
+    event: React.KeyboardEvent<HTMLDivElement>,
+    key: string | null
+  ) => void;
+  toggleDropdown: (action: boolean, key: string) => void;
   isKeyAncestor: (key: string) => boolean;
   isKeySelected: (key: string) => boolean;
+  visibleWidth?: number;
 }
 
 const Sidebar = ({
+  selectedItemKey,
   sidebarItems,
+  isSidebarFocused,
+  setIsSidebarFocused,
   updateSelectedItemKey,
+  onKeyNavigation,
+  toggleDropdown,
   isKeyAncestor,
   isKeySelected,
+  visibleWidth,
 }: SidebarProps) => {
+  const [didUserInteract, setDidUserInteract] = useState(false);
+  const sidebarContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        sidebarContainerRef.current &&
+        !sidebarContainerRef.current?.contains(event.target as Node)
+      ) {
+        setIsSidebarFocused(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [setIsSidebarFocused]);
+
   return (
-    <div className="w-full h-full overflow-auto border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz pt-1">
-      <div className="min-w-fit">
-        {sidebarItems.map((sidebarItem) => (
+    <div className="w-full h-full overflow-auto border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz dark:bg-raisin-black">
+      <div ref={sidebarContainerRef} className="min-w-fit">
+        {Object.entries(sidebarItems).map(([itemKey, sidebarItem]) => (
           <SidebarChild
+            selectedItemKey={selectedItemKey}
+            didUserInteract={didUserInteract}
+            setDidUserInteract={setDidUserInteract}
+            itemKey={itemKey}
             sidebarItem={sidebarItem}
+            isSidebarFocused={isSidebarFocused}
+            setIsSidebarFocused={setIsSidebarFocused}
             updateSelectedItemKey={updateSelectedItemKey}
+            onKeyNavigation={onKeyNavigation}
+            toggleDropdown={toggleDropdown}
             isKeyAncestor={isKeyAncestor}
             isKeySelected={isKeySelected}
-            key={sidebarItem.key}
+            key={itemKey}
+            visibleWidth={visibleWidth}
           />
         ))}
       </div>

@@ -16,14 +16,14 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Resizable } from 're-resizable';
 import {
   CookieIcon,
   CookieIconWhite,
   Sidebar,
   useSidebar,
-  type SidebarItem,
+  type SidebarItems,
 } from '@ps-analysis-tool/design-system';
 
 /**
@@ -33,10 +33,15 @@ import { useContentStore } from '../stateProviders/contentStore';
 import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
 import TABS from '../tabs';
 import CookiesTab from '../tabs/cookies';
-import AffectedCookies from '../tabs/affectedCookies';
+import SiteAffectedCookies from '../tabs/siteAffectedCookies';
+import Technologies from '../tabs/technologies';
 
-const Layout = () => {
-  const [data, setData] = useState<SidebarItem[]>(TABS);
+interface LayoutProps {
+  selectedSite: string | null;
+}
+
+const Layout = ({ selectedSite }: LayoutProps) => {
+  const [data, setData] = useState<SidebarItems>(TABS);
   const { tabCookies } = useContentStore(({ state }) => ({
     tabCookies: state.tabCookies,
   }));
@@ -61,53 +66,75 @@ const Layout = () => {
     activePanel,
     selectedItemKey,
     sidebarItems,
+    isSidebarFocused,
+    setIsSidebarFocused,
     updateSelectedItemKey,
+    onKeyNavigation,
+    toggleDropdown,
     isKeyAncestor,
     isKeySelected,
   } = useSidebar({ data });
 
   useEffect(() => {
     setData((prev) => {
-      const _data = [...prev];
+      const _data = { ...prev };
 
       const keys = selectedItemKey?.split('#') ?? [];
 
-      _data[0].panel = (
-        <CookiesTab
-          selectedFrameUrl={null}
-          selectedSite={keys[keys.length - 2]}
-        />
+      _data['cookies'].panel = (
+        <CookiesTab selectedFrameUrl={null} selectedSite={selectedSite} />
       );
 
-      _data[0].children = frameUrls.map(
-        (url): SidebarItem => ({
-          key: url,
-          title: url,
-          panel: (
-            <CookiesTab
-              selectedFrameUrl={keys[keys.length - 1]}
-              selectedSite={keys[keys.length - 2]}
-            />
-          ),
-          children: [],
-          icon: <CookieIcon />,
-          selectedIcon: <CookieIconWhite />,
-        })
+      const selectedFrameUrl = frameUrls.find(
+        (url) => url === keys[keys.length - 1]
       );
 
-      _data[2].panel = (
-        <AffectedCookies selectedFrameUrl={keys[keys.length - 1]} />
+      _data['cookies'].children = frameUrls.reduce(
+        (acc: SidebarItems, url: string): SidebarItems => {
+          acc[url] = {
+            title: url,
+            panel: (
+              <CookiesTab
+                selectedFrameUrl={selectedFrameUrl}
+                selectedSite={selectedSite}
+              />
+            ),
+            children: {},
+            icon: <CookieIcon />,
+            selectedIcon: <CookieIconWhite />,
+          };
+
+          return acc;
+        },
+        {}
+      );
+
+      _data['affected-cookies'].panel = (
+        <SiteAffectedCookies selectedSite={selectedSite} />
+      );
+
+      _data['technologies'].panel = (
+        <Technologies selectedSite={selectedSite} />
       );
 
       return _data;
     });
-  }, [frameUrls, selectedItemKey]);
+  }, [frameUrls, selectedItemKey, selectedSite]);
 
   useEffect(() => {
     if (selectedItemKey === null) {
       updateSelectedItemKey('cookies');
     }
   }, [selectedItemKey, updateSelectedItemKey]);
+
+  const lastSelectedSite = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (selectedSite !== lastSelectedSite.current) {
+      updateSelectedItemKey('cookies');
+      lastSelectedSite.current = selectedSite;
+    }
+  }, [selectedSite, updateSelectedItemKey]);
 
   return (
     <div className="w-full h-full flex">
@@ -120,8 +147,13 @@ const Layout = () => {
         }}
       >
         <Sidebar
+          selectedItemKey={selectedItemKey}
           sidebarItems={sidebarItems}
+          isSidebarFocused={isSidebarFocused}
+          setIsSidebarFocused={setIsSidebarFocused}
+          onKeyNavigation={onKeyNavigation}
           updateSelectedItemKey={updateSelectedItemKey}
+          toggleDropdown={toggleDropdown}
           isKeyAncestor={isKeyAncestor}
           isKeySelected={isKeySelected}
         />
