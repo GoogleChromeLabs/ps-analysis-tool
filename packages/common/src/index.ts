@@ -30,7 +30,7 @@ export { parseUrl } from './utils/parseUrl';
 export { default as fetchLocalData } from './utils/fetchLocalData';
 export { default as cookieIssueDetails } from './utils/cookieExclusionAndWarningReasons';
 export { default as parseResponseReceivedExtraInfo } from './utils/parseResponseReceivedExtraInfo';
-export { default as prepareFrameStateComponent } from './utils/prepareFrameStateComponent';
+export { default as prepareFrameStatsComponent } from './utils/prepareFrameStatsComponent';
 export { default as parseRequestWillBeSentExtraInfo } from './utils/parseRequestWillBeSentExtraInfo';
 export { default as noop } from './utils/noop';
 export * from './cookies.types';

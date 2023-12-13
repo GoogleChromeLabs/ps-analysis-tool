@@ -22,7 +22,7 @@ import {
   TabFrames,
   prepareCookieStatsComponents,
   prepareCookiesCount,
-  prepareFrameStateComponent,
+  prepareFrameStatsComponent,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -55,7 +55,7 @@ const CookiesLanding = ({
 }: CookiesLandingProps) => {
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
-  const frameStateCreator = prepareFrameStateComponent(tabFrames, tabCookies);
+  const frameStateCreator = prepareFrameStatsComponent(tabFrames, tabCookies);
   const cookieClassificationDataMapping: DataMapping[] = [
     {
       title: 'Total cookies',

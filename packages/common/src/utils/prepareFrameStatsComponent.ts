@@ -22,7 +22,7 @@ import { TabCookies, TabFrames } from '../cookies.types';
  * @param tabCookies cookies of curent tab.
  * @returns object
  */
-export default function prepareFrameStateComponent(
+export default function prepareFrameStatsComponent(
   tabFrames: TabFrames | null,
   tabCookies: TabCookies | null
 ) {
