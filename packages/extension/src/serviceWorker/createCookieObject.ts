@@ -195,5 +195,13 @@ function parseAttributeValues(
     value = calculateEffectiveExpiryDate(value as string) || 0;
   }
 
+  if (type === 'priority' && !value) {
+    value = 'Medium';
+  }
+
+  if (type === 'partitionKey' && !value) {
+    value = '';
+  }
+
   return value;
 }
