@@ -18,7 +18,7 @@
  */
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { COLOR_MAP } from '@ps-analysis-tool/design-system';
+import { COLOR_MAP } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.

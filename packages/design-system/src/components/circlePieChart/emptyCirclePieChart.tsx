@@ -18,7 +18,7 @@
  */
 import React from 'react';
 import { VictoryPie } from 'victory';
-import { COLOR_MAP } from '@ps-analysis-tool/design-system';
+import { COLOR_MAP } from '@ps-analysis-tool/common';
 
 const EmptyCirclePieChart = () => {
   return (
