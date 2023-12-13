@@ -128,6 +128,7 @@ const CookiesLanding = ({
             tabFrames={tabFrames}
             showInfoIcon={showInfoIcon}
             showHorizontalMatrix={false}
+            infoIconTitle="Cookies that have been blocked by the browser.(The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
           />
         </CookiesLandingContainer>
       )}
@@ -143,6 +144,7 @@ const CookiesLanding = ({
             tabFrames={tabFrames}
             showInfoIcon={showInfoIcon}
             showHorizontalMatrix={showHorizontalMatrix}
+            infoIconTitle="The details regarding frames and associated cookies in this page."
           />
         </CookiesLandingContainer>
       )}

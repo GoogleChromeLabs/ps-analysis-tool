@@ -56,90 +56,91 @@ const cdpURLToRequestMap: {
  * @see https://developer.chrome.com/docs/extensions/reference/webRequest/
  */
 chrome.webRequest.onResponseStarted.addListener(
-  async (details: chrome.webRequest.WebResponseCacheDetails) => {
-    const extensionSettings = await chrome.storage.sync.get();
-
-    if (
-      extensionSettings &&
-      extensionSettings?.allowedNumberOfTabs !== 'unlimited'
-    ) {
-      const currentTabId = await getCurrentTabId();
-
-      if (!currentTabId) {
-        return;
-      }
-
-      const tabsBeingListenedTo = await chrome.storage.local.get();
+  (details: chrome.webRequest.WebResponseCacheDetails) => {
+    (async () => {
+      const extensionSettings = await chrome.storage.sync.get();
 
       if (
-        tabsBeingListenedTo &&
-        currentTabId !== tabsBeingListenedTo?.tabToRead
+        extensionSettings &&
+        extensionSettings?.allowedNumberOfTabs !== 'unlimited'
       ) {
-        return;
-      }
-    }
+        const currentTabId = await getCurrentTabId();
 
-    await PROMISE_QUEUE.add(async () => {
-      try {
-        const { tabId, url, responseHeaders, frameId } = details;
-        const tab = await getTab(tabId);
-        if (
-          extensionSettings &&
-          extensionSettings?.allowedNumberOfTabs !== 'unlimited'
-        ) {
-          const tabsBeingListenedTo = await chrome.storage.local.get();
-
-          if (ALLOWED_NUMBER_OF_TABS > 0) {
-            if (
-              tabsBeingListenedTo &&
-              tabId.toString() !== tabsBeingListenedTo?.tabToRead
-            ) {
-              return;
-            }
-          }
-        }
-
-        if (!tab || !responseHeaders || tab.url === 'chrome://newtab/') {
+        if (!currentTabId) {
           return;
         }
 
-        if (!cookieDB) {
-          cookieDB = await fetchDictionary();
-        }
+        const tabsBeingListenedTo = await chrome.storage.local.get();
 
-        const cookies = await responseHeaders.reduce<Promise<CookieData[]>>(
-          async (accumulator, header) => {
-            if (
-              header.name.toLowerCase() === 'set-cookie' &&
-              header.value &&
-              tab.url &&
-              cookieDB
-            ) {
-              const cdpCookies = await chrome.debugger.sendCommand(
-                { tabId: tabId },
-                'Network.getCookies',
-                { urls: [url] }
-              );
-              const cookie = await parseResponseCookieHeader(
-                url,
-                header.value,
-                cookieDB,
-                tab.url,
-                frameId,
-                cdpCookies.cookies ?? []
-              );
-              return [...(await accumulator), cookie];
-            }
-            return accumulator;
-          },
-          Promise.resolve([])
-        );
-        // Adds the cookies from the request headers to the cookies object.
-        await CookieStore.update(tabId.toString(), cookies);
-      } catch (error) {
-        //Just handle this error
+        if (
+          tabsBeingListenedTo &&
+          currentTabId !== tabsBeingListenedTo?.tabToRead
+        ) {
+          return;
+        }
       }
-    });
+      try {
+        await PROMISE_QUEUE.add(async () => {
+          const { tabId, url, responseHeaders, frameId } = details;
+          const tab = await getTab(tabId);
+          if (
+            extensionSettings &&
+            extensionSettings?.allowedNumberOfTabs !== 'unlimited'
+          ) {
+            const tabsBeingListenedTo = await chrome.storage.local.get();
+
+            if (ALLOWED_NUMBER_OF_TABS > 0) {
+              if (
+                tabsBeingListenedTo &&
+                tabId.toString() !== tabsBeingListenedTo?.tabToRead
+              ) {
+                return;
+              }
+            }
+          }
+
+          if (!tab || !responseHeaders || tab.url === 'chrome://newtab/') {
+            return;
+          }
+
+          if (!cookieDB) {
+            cookieDB = await fetchDictionary();
+          }
+
+          const cookies = await responseHeaders.reduce<Promise<CookieData[]>>(
+            async (accumulator, header) => {
+              if (
+                header.name.toLowerCase() === 'set-cookie' &&
+                header.value &&
+                tab.url &&
+                cookieDB
+              ) {
+                const cdpCookies = await chrome.debugger.sendCommand(
+                  { tabId: tabId },
+                  'Network.getCookies',
+                  { urls: [url] }
+                );
+                const cookie = await parseResponseCookieHeader(
+                  url,
+                  header.value,
+                  cookieDB,
+                  tab.url,
+                  frameId,
+                  cdpCookies.cookies ?? []
+                );
+                return [...(await accumulator), cookie];
+              }
+              return accumulator;
+            },
+            Promise.resolve([])
+          );
+          // Adds the cookies from the request headers to the cookies object.
+          await CookieStore.update(tabId.toString(), cookies);
+        });
+      } catch (error) {
+        //Silently fail
+      }
+    })();
   },
   { urls: ['*://*/*'] },
   ['extraHeaders', 'responseHeaders']
@@ -169,9 +170,8 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
           return;
         }
       }
-
-      await PROMISE_QUEUE.add(async () => {
-        try {
+      try {
+        await PROMISE_QUEUE.add(async () => {
           const tab = await getTab(tabId);
 
           if (!tab || !requestHeaders || tab.url === 'chrome://newtab/') {
@@ -224,10 +224,10 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
           );
 
           await CookieStore.update(tabId.toString(), cookies);
-        } catch (error) {
-          //Just handle this error
-        }
-      });
+        });
+      } catch (error) {
+        //Silently fail
+      }
     })();
   },
   { urls: ['*://*/*'] },
@@ -511,7 +511,7 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
         chrome.debugger.sendCommand({ tabId: details.tabId }, 'Audits.enable');
         await chrome.storage.local.set(localStorage);
       } catch (error) {
-        //do nothing
+        //Silently fail
       }
     }
   } else {
@@ -531,7 +531,7 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
         chrome.debugger.sendCommand({ tabId: details.tabId }, 'Audits.enable');
         await chrome.storage.local.set(localStorage);
       } catch (error) {
-        //do nothing
+        //Silently fail
       }
     }
   }
