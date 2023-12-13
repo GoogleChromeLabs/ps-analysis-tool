@@ -22,6 +22,7 @@ import {
   TabFrames,
   prepareCookieStatsComponents,
   prepareCookiesCount,
+  prepareFrameStateComponent,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -48,14 +49,13 @@ const CookiesLanding = ({
   tabFrames,
   children,
   showInfoIcon = true,
-  showHorizontalMatrix = true,
   associatedCookiesCount = null,
   showMessageBoxBody = true,
   showBlockedCookiesSection = false,
 }: CookiesLandingProps) => {
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
-
+  const frameStateCreator = prepareFrameStateComponent(tabFrames, tabCookies);
   const cookieClassificationDataMapping: DataMapping[] = [
     {
       title: 'Total cookies',
@@ -81,7 +81,6 @@ const CookiesLanding = ({
       data: cookiesStatsComponents.blocked,
     },
   ];
-
   return (
     <div
       className="h-full w-full flex flex-col min-w-[40rem]"
@@ -129,16 +128,17 @@ const CookiesLanding = ({
       )}
       {showBlockedCookiesSection && (
         <CookiesLandingContainer
-          showLandingHeader={false}
+          dataMapping={frameStateCreator.dataMapping}
           testId="frames-insights"
         >
           <CookiesMatrix
             title="Frames"
+            componentData={frameStateCreator.legend}
             showMatrix={true}
             tabCookies={tabCookies}
             tabFrames={tabFrames}
             showInfoIcon={showInfoIcon}
-            showHorizontalMatrix={showHorizontalMatrix}
+            showHorizontalMatrix={false}
             infoIconTitle="The details regarding frames and associated cookies in this page."
           />
         </CookiesLandingContainer>

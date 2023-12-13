@@ -228,4 +228,20 @@ export const LEGEND_DATA: LegendData = {
       '\n    <p class="font-semibold">Cookie is blocked when sent in cross-site context</p>\n    <br />\n    <p>\n        Cookies marked with <code>SameSite=None; Secure;</code> and not <code>Partitioned</code> are blocked in cross-site requests. This behavior protects user data from cross-site tracking.\n    </p>\n',
     countClassName: 'text-excludethirdpartyphaseout',
   },
+  'Total frames': {
+    description: 'The total frames present inside the current page.',
+    countClassName: 'text-total-frames',
+  },
+  'Frames with cookies': {
+    description: 'The count of frames which have cookies in them',
+    countClassName: 'text-cookie-frames',
+  },
+  'Frames with blocked cookies': {
+    description: 'The count of frames which have blocked cookies.',
+    countClassName: 'text-blocked-frames',
+  },
+  'Frames with unblocked cookies': {
+    description: 'The count of frames which have unblocked cookies.',
+    countClassName: 'text-unblocked-frames',
+  },
 };
