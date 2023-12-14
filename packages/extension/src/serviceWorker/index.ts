@@ -342,7 +342,11 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
     if (method === 'Network.responseReceivedExtraInfo' && params) {
       const responseParams =
         params as Protocol.Network.ResponseReceivedExtraInfoEvent;
-      if (!responseParams.headers['Set-Cookie']) {
+      // Added this because sometimes CDP gives set-cookie and sometimes it gives Set-Cookie.
+      if (
+        !responseParams.headers['set-cookie'] &&
+        !responseParams.headers['Set-Cookie']
+      ) {
         return;
       }
       const allCookies = parseResponseReceivedExtraInfo(

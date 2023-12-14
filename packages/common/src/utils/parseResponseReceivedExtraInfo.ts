@@ -41,8 +41,10 @@ export default function parseResponseReceivedExtraInfo(
   cookieDB: CookieDatabase
 ) {
   const cookies: CookieData[] = [];
+  const responseToParse =
+    response.headers['set-cookie'] ?? response.headers['Set-Cookie'];
 
-  response.headers['Set-Cookie']?.split('\n').forEach((headerLine: string) => {
+  responseToParse?.split('\n').forEach((headerLine: string) => {
     let parsedCookie: CookieData['parsedCookie'] = parse(headerLine);
     const blockedCookie = response.blockedCookies.find((c) => {
       if (c.cookie) {
