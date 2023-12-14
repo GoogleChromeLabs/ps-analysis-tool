@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Internal dependencies.
+ */
 import * as CookieWarningReasonHTMLContent from './cookieWarningReasonHTMLContent';
 
 const isURLSecure = (cookieUrl: string): boolean => {

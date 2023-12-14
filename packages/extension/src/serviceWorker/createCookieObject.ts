@@ -158,50 +158,51 @@ function parseAttributeValues(
 ) {
   let value =
     parsedCookieValue || chromeStoreCookieValue || prevParsedCookieValue;
-  if (type === 'domain') {
-    if (url) {
-      value = value || new URL(url).hostname;
-    } else {
+
+  switch (type) {
+    case 'domain':
+      if (url) {
+        value = value || new URL(url).hostname;
+      } else {
+        value = value || '';
+      }
+      break;
+    case 'path':
+      value = value || '/';
+      break;
+    case 'secure':
+      value = value || false;
+      break;
+    case 'httponly':
+      value = value || false;
+      break;
+    case 'samesite':
+      if (value === 'no_restriction') {
+        value = 'none';
+      } else if (value === 'unspecified') {
+        value = '';
+      }
+      value = ((value || '') as string).toLowerCase();
+      break;
+    case 'size':
+      if (!value) {
+        const encoder = new TextEncoder();
+        value = encoder.encode(cookieValue).length;
+      }
+      break;
+    case 'expires':
+      if (value !== 0) {
+        value = calculateEffectiveExpiryDate(value as string) || 0;
+      }
+      break;
+    case 'priority':
+      value = value || 'Medium';
+      break;
+    case 'partitionKey':
       value = value || '';
-    }
+      break;
+    default:
+      return value;
   }
-
-  if (type === 'path') {
-    value = value || '/';
-  }
-
-  if (type === 'secure') {
-    value = value || false;
-  }
-
-  if (type === 'httponly') {
-    value = value || false;
-  }
-
-  if (type === 'samesite') {
-    if (value === 'no_restriction') {
-      value = 'none';
-    } else if (value === 'unspecified') {
-      value = '';
-    }
-    value = ((value || '') as string).toLowerCase();
-  }
-  if (type === 'size' && !value) {
-    const encoder = new TextEncoder();
-    value = encoder.encode(cookieValue).length;
-  }
-
-  if (type === 'expires' && value !== 0) {
-    value = calculateEffectiveExpiryDate(value as string) || 0;
-  }
-
-  if (type === 'priority' && !value) {
-    value = 'Medium';
-  }
-
-  if (type === 'partitionKey' && !value) {
-    value = '';
-  }
-
   return value;
 }

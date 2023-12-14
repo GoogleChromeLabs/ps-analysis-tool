@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/**
+ * Internal dependencies.
+ */
 import { NetworkRequestExtraInfoParams } from '../cdp.types';
 import { CookieData, CookieDatabase } from '../cookies.types';
 import calculateEffectiveExpiryDate from './calculateEffectiveExpiryDate';
