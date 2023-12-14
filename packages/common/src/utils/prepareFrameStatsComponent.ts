@@ -118,6 +118,10 @@ export default function prepareFrameStatsComponent(
         count: Object.keys(tabFrames || {}).length,
         data: [
           {
+            count: Object.keys(tabFrames || {}).length,
+            color: '#25ACAD',
+          },
+          {
             count: unBlockedCookieFrame.size,
             color: '#F54021',
           },
