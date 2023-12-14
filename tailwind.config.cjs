@@ -129,6 +129,7 @@ module.exports = {
     backgroundColor: {
       ...colors,
       primary: '#FFF',
+      'toggle-on': '#5CC971',
       'flagged-row-odd-dark': '#5e5108',
       'flagged-row-even-dark': '#796700',
       'flagged-row-odd-light': '#f7eaa1',
