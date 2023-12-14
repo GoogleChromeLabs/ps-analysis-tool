@@ -22,7 +22,7 @@ import '@testing-library/jest-dom/extend-expect';
 /**
  * Internal dependencies
  */
-import { COLOR_MAP } from '../../../constants';
+import { COLOR_MAP } from '../../../theme/colors';
 
 /**
  * Internal dependencies.

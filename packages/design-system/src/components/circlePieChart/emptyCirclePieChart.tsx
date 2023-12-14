@@ -21,7 +21,7 @@ import { VictoryPie } from 'victory';
 /**
  * Internal dependencies
  */
-import { COLOR_MAP } from '../../constants';
+import { COLOR_MAP } from '../../theme/colors';
 
 const EmptyCirclePieChart = () => {
   return (

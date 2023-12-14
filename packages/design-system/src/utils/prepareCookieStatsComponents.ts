@@ -23,7 +23,7 @@ import type {
 /**
  * Internal dependencies.
  */
-import { COLOR_MAP } from '../constants';
+import { COLOR_MAP } from '../theme/colors';
 
 // eslint-disable-next-line complexity
 const prepareCookieStatsComponents = (

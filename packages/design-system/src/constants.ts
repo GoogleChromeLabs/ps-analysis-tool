@@ -17,40 +17,6 @@ interface LegendData {
   [key: string]: string;
 }
 
-export const COLOR_MAP: { [key: string]: string } = {
-  functional: '#5CC971',
-  marketing: '#F3AE4E',
-  analytics: '#4C79F4',
-  uncategorized: '#EC7159',
-  brightGray: '#E8EAED',
-  mediumGray: '#BDBDBD',
-  SecureOnly: '#A98307',
-  DomainMismatch: '#7D8471',
-  NotOnPath: '#79553D',
-  SameSiteStrict: '#AF2B1E',
-  SameSiteLax: '#FFA420',
-  SameSiteUnspecifiedTreatedAsLax: '#FF7514',
-  SameSiteNoneInsecure: '#924E7D',
-  UserPreferences: '#E63244',
-  ThirdPartyPhaseout: '#999950',
-  ThirdPartyBlockedInFirstPartySet: '#DE4C8A',
-  UnknownError: '#DE4C8A',
-  SchemefulSameSiteStrict: '#763C28',
-  SchemefulSameSiteLax: '#C6A664',
-  SchemefulSameSiteUnspecifiedTreatedAsLax: '#E7EBDA',
-  SamePartyFromCrossPartyContext: '#008F39',
-  NameValuePairExceedsMaxSize: '#1C542D',
-  ExcludeSameSiteUnspecifiedTreatedAsLax: '#1C542D',
-  ExcludeSameSiteNoneInsecure: '#EDFF21',
-  ExcludeSameSiteLax: '#A5A5A5',
-  ExcludeSameSiteStrict: '#256D7B',
-  ExcludeInvalidSameParty: '#898176',
-  ExcludeSamePartyCrossPartyContext: '#497E76',
-  ExcludeDomainNonASCII: '#7FB5B5',
-  ExcludeThirdPartyCookieBlockedInFirstPartySet: '#EFA94A',
-  ExcludeThirdPartyPhaseout: '#CF3476',
-};
-
 export const LEGEND_DESCRIPTION: LegendData = {
   Functional:
     'Cookies necessary for a website to function properly. They enable basic functionalities such as page navigation, access to secure areas, and remembering user preferences (e.g., language, font size, etc.)',

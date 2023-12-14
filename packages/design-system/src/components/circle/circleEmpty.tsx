@@ -20,7 +20,7 @@ import React from 'react';
 /**
  * Internal dependencies
  */
-import { COLOR_MAP } from '../../constants';
+import { COLOR_MAP } from '../../theme/colors';
 
 interface CircleEmptyProps {
   color?: string;

@@ -23,7 +23,7 @@ import type { Meta, StoryObj } from '@storybook/react';
  * Internal dependencies.
  */
 import CirclePieChart from '..';
-import { COLOR_MAP } from '../../../constants';
+import { COLOR_MAP } from '../../../theme/colors';
 
 const meta: Meta<typeof CirclePieChart> = {
   title: 'DesignSystem/CirclePieChart',
