@@ -53,43 +53,45 @@ const Information = () => {
   }, [OSInformation, browserInformation, currentExtensions, currentTabs]);
 
   return (
-    <div className="relative w-full h-full flex flex-col gap-5 p-3 bg-dynamic-grey">
-      <button
-        disabled={copying}
-        className="absolute right-0 top-0"
-        onClick={handleCopy}
-      >
-        <Copy className={copying ? 'text-mischka' : ''} />
-      </button>
-      <div>
-        <p className="font-semibold text-lg">Current Tabs:</p>
+    <div className="w-full h-full bg-dynamic-grey">
+      <div className="relative w-fit h-fit flex flex-col gap-5 px-5 py-2 border rounded">
+        <button
+          disabled={copying}
+          className="absolute right-1 top-1"
+          onClick={handleCopy}
+        >
+          <Copy className={copying ? 'text-mischka' : ''} />
+        </button>
         <div>
-          <InformationDisplay information={`${currentTabs}`} />
+          <p className="font-semibold text-lg">Current Tabs:</p>
+          <div>
+            <InformationDisplay information={`${currentTabs}`} />
+          </div>
         </div>
-      </div>
-      <div>
-        <p className="font-semibold text-lg">Current installed extensions:</p>
         <div>
-          {currentExtensions?.map((extension, index) => {
-            return (
-              <InformationDisplay
-                key={index}
-                information={`${extension.extensionName}: ${extension.extensionId}`}
-              />
-            );
-          })}
+          <p className="font-semibold text-lg">Current installed extensions:</p>
+          <div>
+            {currentExtensions?.map((extension, index) => {
+              return (
+                <InformationDisplay
+                  key={index}
+                  information={`${extension.extensionName}: ${extension.extensionId}`}
+                />
+              );
+            })}
+          </div>
         </div>
-      </div>
-      <div>
-        <p className="font-semibold text-lg">Browser version:</p>
         <div>
-          <InformationDisplay information={browserInformation ?? ''} />
+          <p className="font-semibold text-lg">Chrome version:</p>
+          <div>
+            <InformationDisplay information={browserInformation ?? ''} />
+          </div>
         </div>
-      </div>
-      <div>
-        <p className="font-semibold text-lg">OS</p>
         <div>
-          <InformationDisplay information={OSInformation ?? ''} />
+          <p className="font-semibold text-lg">OS - System architecture</p>
+          <div>
+            <InformationDisplay information={OSInformation ?? ''} />
+          </div>
         </div>
       </div>
     </div>
