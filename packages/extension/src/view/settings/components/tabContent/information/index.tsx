@@ -53,7 +53,7 @@ const Information = () => {
   }, [OSInformation, browserInformation, currentExtensions, currentTabs]);
 
   return (
-    <div className="w-full h-full bg-dynamic-grey">
+    <div className="w-full h-ful">
       <div className="relative w-fit h-fit flex flex-col gap-5 px-5 py-2 border rounded">
         <button
           disabled={copying}

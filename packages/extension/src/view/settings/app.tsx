@@ -31,7 +31,7 @@ const App: React.FC = () => {
   const TabContent = TABS[selectedTabIndex].component;
 
   return (
-    <div className="w-full h-full flex items-center justify-center flex-col p-3 gap-3">
+    <div className="w-full h-full flex items-center justify-center flex-col p-3">
       <TabHeader
         tabs={TABS.map((tab) => tab.display_name)}
         setSelectedTabIndex={setSelectedTabIndex}
