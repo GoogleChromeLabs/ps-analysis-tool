@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import { type Cookie as ParsedCookie } from 'simple-cookie';
-import { BlockedReason, CookieWarningReasons } from './cdp.types';
+import type { Protocol } from 'devtools-protocol';
 
 export type CookiesCount = {
   total: number;
@@ -54,6 +54,11 @@ export type CookieAnalytics = {
   wildcard: string;
 };
 
+export type BlockedReason =
+  | Protocol.Network.SetCookieBlockedReason
+  | Protocol.Network.CookieBlockedReason
+  | Protocol.Audits.CookieExclusionReason;
+
 export type CookieData = {
   parsedCookie: ParsedCookie & {
     partitionKey?: string;
@@ -66,7 +71,7 @@ export type CookieData = {
   isFirstParty: boolean | null;
   frameIdList: number[];
   blockedReasons?: BlockedReason[];
-  warningReasons?: CookieWarningReasons[];
+  warningReasons?: Protocol.Audits.CookieWarningReason[];
   isBlocked?: boolean | null;
 };
 

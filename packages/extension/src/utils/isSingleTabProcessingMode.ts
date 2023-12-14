@@ -14,27 +14,13 @@
  * limitations under the License.
  */
 /**
- * External dependencies.
+ * This determines the processing mode of the extension True if singleTabProcessingMode false if multiple tab being processed.
+ * @returns boolean.
  */
-import type { CookieData } from '@ps-analysis-tool/common';
-
-export type PreferenceKeyValues =
-  | 'columnSorting'
-  | 'selectedFrame'
-  | 'columnSizing'
-  | 'selectedColumns'
-  | 'selectedFilter';
-
-export type TabData = {
-  cookies: {
-    [key: string]: CookieData;
-  } | null;
-  focusedAt: number | null;
-  preferences: {
-    [key: string]: unknown;
-  };
-};
-
-export type Storage = {
-  [tabId: string]: TabData;
-};
+export default async function isSingleTabProcessingMode() {
+  const syncStorage = await chrome.storage.sync.get();
+  return (
+    syncStorage.allowedNumberOfTabs &&
+    syncStorage.allowedNumberOfTabs !== 'unlimited'
+  );
+}

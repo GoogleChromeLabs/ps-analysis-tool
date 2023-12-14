@@ -17,13 +17,10 @@
  * External dependencies.
  */
 import { parse } from 'simple-cookie';
+import type { Protocol } from 'devtools-protocol';
 /**
  * Internal dependencies
  */
-import type {
-  NetworkResponseReceivedExtraInfo,
-  BlockedResponseCookieWithReason,
-} from '../cdp.types';
 import findAnalyticsMatch from './findAnalyticsMatch';
 import { CookieData, CookieDatabase } from '../cookies.types';
 import calculateEffectiveExpiryDate from './calculateEffectiveExpiryDate';
@@ -38,7 +35,7 @@ import isFirstParty from './isFirstParty';
  * @returns {object} parsed cookies.
  */
 export default function parseResponseReceivedExtraInfo(
-  response: NetworkResponseReceivedExtraInfo,
+  response: Protocol.Network.ResponseReceivedExtraInfoEvent,
   requestMap: { [requestId: string]: string },
   tabUrl: string,
   cookieDB: CookieDatabase
@@ -47,16 +44,14 @@ export default function parseResponseReceivedExtraInfo(
 
   response.headers['Set-Cookie']?.split('\n').forEach((headerLine: string) => {
     let parsedCookie: CookieData['parsedCookie'] = parse(headerLine);
-    const blockedCookie = response.blockedCookies.find(
-      (c: BlockedResponseCookieWithReason) => {
-        if (c.cookie) {
-          return c.cookie?.name === parsedCookie.name;
-        } else {
-          const temporaryParsedCookie = parse(c.cookieLine);
-          return temporaryParsedCookie.name === parsedCookie.name;
-        }
+    const blockedCookie = response.blockedCookies.find((c) => {
+      if (c.cookie) {
+        return c.cookie?.name === parsedCookie.name;
+      } else {
+        const temporaryParsedCookie = parse(c.cookieLine);
+        return temporaryParsedCookie.name === parsedCookie.name;
       }
-    );
+    });
     const effectiveExpirationDate = calculateEffectiveExpiryDate(
       parsedCookie.expires
     );

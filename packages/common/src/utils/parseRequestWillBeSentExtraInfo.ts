@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 /**
+ * External dependencies
+ */
+import type { Protocol } from 'devtools-protocol';
+/**
  * Internal dependencies.
  */
-import { NetworkRequestExtraInfoParams } from '../cdp.types';
 import { CookieData, CookieDatabase } from '../cookies.types';
 import calculateEffectiveExpiryDate from './calculateEffectiveExpiryDate';
 import findAnalyticsMatch from './findAnalyticsMatch';
@@ -31,7 +34,7 @@ import isFirstParty from './isFirstParty';
  * @returns {object} parsed cookies.
  */
 export default function parseRequestWillBeSentExtraInfo(
-  request: NetworkRequestExtraInfoParams,
+  request: Protocol.Network.RequestWillBeSentExtraInfoEvent,
   cookieDB: CookieDatabase,
   requestMap: { [requestId: string]: string },
   tabUrl: string

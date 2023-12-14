@@ -13,7 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Internal dependencies
+ */
 import { getCurrentTabId } from '../../utils/getCurrentTabId';
+import type { TabData } from '../types';
 /**
  *
  * @param storage {object} The storage object from local store.
@@ -21,7 +25,7 @@ import { getCurrentTabId } from '../../utils/getCurrentTabId';
  */
 export default async function updateCookieBadgeText(
   storage: {
-    [key: string]: any;
+    [key: string]: TabData;
   },
   tabId?: string
 ) {

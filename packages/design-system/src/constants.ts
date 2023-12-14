@@ -51,34 +51,6 @@ export const COLOR_MAP: { [key: string]: string } = {
   ExcludeThirdPartyPhaseout: '#CF3476',
 };
 
-export const BLOCKED_REASON_LIST = [
-  'SecureOnly',
-  'DomainMismatch',
-  'NotOnPath',
-  'SameSiteStrict',
-  'SameSiteLax',
-  'SameSiteUnspecifiedTreatedAsLax',
-  'SameSiteNoneInsecure',
-  'UserPreferences',
-  'ThirdPartyPhaseout',
-  'ThirdPartyBlockedInFirstPartySet',
-  'UnknownError',
-  'SchemefulSameSiteStrict',
-  'SchemefulSameSiteLax',
-  'SchemefulSameSiteUnspecifiedTreatedAsLax',
-  'SamePartyFromCrossPartyContext',
-  'NameValuePairExceedsMaxSize',
-  'ExcludeSameSiteUnspecifiedTreatedAsLax',
-  'ExcludeSameSiteNoneInsecure',
-  'ExcludeSameSiteLax',
-  'ExcludeSameSiteStrict',
-  'ExcludeInvalidSameParty',
-  'ExcludeSamePartyCrossPartyContext',
-  'ExcludeDomainNonASCII',
-  'ExcludeThirdPartyCookieBlockedInFirstPartySet',
-  'ExcludeThirdPartyPhaseout',
-];
-
 export const LEGEND_DESCRIPTION: LegendData = {
   Functional:
     'Cookies necessary for a website to function properly. They enable basic functionalities such as page navigation, access to secure areas, and remembering user preferences (e.g., language, font size, etc.)',

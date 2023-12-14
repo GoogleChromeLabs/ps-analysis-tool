@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { BLOCKED_REASON_LIST } from '@ps-analysis-tool/common';
+/**
+ * Internal dependencies
+ */
+import { BLOCKED_REASON_LIST } from '../../../../constants';
 
 export const FILTER_MAPPING = [
   {

@@ -17,11 +17,11 @@
 /**
  * External dependencies.
  */
+import type { Protocol } from 'devtools-protocol';
 import {
   isFirstParty,
   findAnalyticsMatch,
   type CookieData,
-  type NetworkCookie,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -41,7 +41,7 @@ import { createCookieObject } from './createCookieObject';
  * @param {CookieDatabase} dictionary Dictionary from open cookie database
  * @param {string} tabUrl top url of the tab from which the request originated.
  * @param {number} frameId Id of the frame the cookie is used in.
- * @param {NetworkCookie[]} cookiesList List cookies from the request.
+ * @param {Protocol.Network.Cookie[]} cookiesList List cookies from the request.
  * @returns {Promise<CookieData[]>} Parsed cookie object array.
  */
 const parseRequestCookieHeader = async (
@@ -50,7 +50,7 @@ const parseRequestCookieHeader = async (
   dictionary: CookieDatabase,
   tabUrl: string,
   frameId: number,
-  cookiesList: NetworkCookie[]
+  cookiesList: Protocol.Network.Cookie[]
 ): Promise<CookieData[]> => {
   try {
     return await Promise.all(

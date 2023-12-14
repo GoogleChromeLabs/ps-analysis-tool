@@ -18,10 +18,10 @@
  */
 import {
   getCookieKey,
-  type BlockedReason,
-  type CookieWarningReasons,
   type CookieData,
+  type BlockedReason,
 } from '@ps-analysis-tool/common';
+import type { Protocol } from 'devtools-protocol';
 
 /**
  * Internal dependencies.
@@ -77,7 +77,7 @@ const CookieStore = {
             isBlocked: blockedReasons.length > 0,
             blockedReasons,
             warningReasons: Array.from(
-              new Set<CookieWarningReasons>([
+              new Set<Protocol.Audits.CookieWarningReason>([
                 ...(cookie.warningReasons ?? []),
                 ...(_updatedCookies[cookieKey].warningReasons ?? []),
               ])

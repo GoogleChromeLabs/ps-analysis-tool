@@ -32,5 +32,4 @@ export { default as parseResponseReceivedExtraInfo } from './utils/parseResponse
 export { default as parseRequestWillBeSentExtraInfo } from './utils/parseRequestWillBeSentExtraInfo';
 export { default as noop } from './utils/noop';
 export * from './cookies.types';
-export * from './cdp.types';
 export const UNKNOWN_FRAME_KEY = 'Unknown frame(s)';

@@ -17,7 +17,6 @@
  * External dependencies.
  */
 import {
-  BLOCKED_REASON_LIST,
   type BlockedReason,
   type CookieTableData,
   type SelectedFilters,
@@ -28,6 +27,7 @@ import {
  */
 import { FILTER_MAPPING, CUSTOM_FILTER_MAPPING } from '../constants';
 import getFilterValue from './getFilterValue';
+import { BLOCKED_REASON_LIST } from '../../../../../constants';
 
 const filterCookiesWithoutRetentionPeriod = (
   cookies: {
@@ -134,10 +134,15 @@ const filterCookiesWithoutRetentionPeriod = (
           canShow.push(canBeShown);
         } else if (keys === CUSTOM_FILTER_MAPPING.cookieBlockedReasons.keys) {
           let canBeShown = false;
+
           BLOCKED_REASON_LIST.forEach((reason) => {
             if (selectedFilter.has(reason) && !canBeShown) {
-              canBeShown = Boolean(
-                cookieData.blockedReasons?.includes(reason as BlockedReason)
+              if (!cookieData.blockedReasons) {
+                return;
+              }
+
+              canBeShown = cookieData.blockedReasons.includes(
+                reason as BlockedReason
               );
             }
           });

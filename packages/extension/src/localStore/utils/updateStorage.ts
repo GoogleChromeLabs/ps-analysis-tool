@@ -26,6 +26,9 @@ const updateStorage = async (
   //Find out storage quota used currently
   const currentBytesInUse = await chrome.storage.local.getBytesInUse();
   const currentStorageSnapshot: Storage = await chrome.storage.local.get();
+  if (!currentStorageSnapshot[tabId]) {
+    return;
+  }
   const encodedData = new TextEncoder().encode(
     JSON.stringify(currentStorageSnapshot[tabId])
   );
