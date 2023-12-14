@@ -160,23 +160,27 @@ const useFrameOverlay = (
   // When inspect button is clicked.
   useEffect(() => {
     (async () => {
-      // Indicates that the context was invalidated.
-      if (!chrome.runtime?.id && setContextInvalidated) {
-        setContextInvalidated(true);
-        return;
-      }
-
-      if (!isInspecting) {
-        if (portRef.current) {
-          portRef.current.disconnect();
-          portRef.current = null;
-          setConnectedToPort(false);
+      try {
+        // Indicates that the context was invalidated.
+        if (!chrome.runtime?.id && setContextInvalidated) {
+          setContextInvalidated(true);
+          return;
         }
 
-        return;
-      }
+        if (!isInspecting) {
+          if (portRef.current) {
+            portRef.current.disconnect();
+            portRef.current = null;
+            setConnectedToPort(false);
+          }
 
-      await connectToPort();
+          return;
+        }
+
+        await connectToPort();
+      } catch (error) {
+        // fail silently
+      }
     })();
   }, [
     isInspecting,
