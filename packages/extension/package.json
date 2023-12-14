@@ -8,14 +8,16 @@
   },
   "license": "Apache-2.0",
   "scripts": {
-		"dev": "webpack --config webpack.config.cjs --watch",
-		"build": "cross-env NODE_ENV=production webpack --config webpack.config.cjs"
-  },  
+    "dev": "webpack --config webpack.config.cjs --watch",
+    "build": "cross-env NODE_ENV=production webpack --config webpack.config.cjs"
+  },
   "bugs": {
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool#readme",
   "dependencies": {
+    "@floating-ui/core": "^1.5.0",
+    "@floating-ui/dom": "^1.5.3",
     "@ps-analysis-tool/common": "*",
     "@ps-analysis-tool/design-system": "*",
     "classnames": "^2.3.2",
@@ -33,7 +35,7 @@
     "validate.js": "^0.13.1",
     "victory": "^36.6.11"
   },
-	"devDependencies": {
-		"@types/react-copy-to-clipboard": "^5.0.4"
-	}
+  "devDependencies": {
+    "@types/react-copy-to-clipboard": "^5.0.4"
+  }
 }

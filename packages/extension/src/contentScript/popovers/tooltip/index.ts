@@ -14,4 +14,3 @@
  * limitations under the License.
  */
 export { default as addTooltip } from './addTooltip';
-export { default as setTooltipPosition } from './setTooltipPosition';

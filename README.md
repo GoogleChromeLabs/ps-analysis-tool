@@ -6,36 +6,11 @@
 
 [Privacy Sandbox](https://privacysandbox.com/) is a multi-year [initiative by Google](https://developer.chrome.com/docs/privacy-sandbox/) for building a more private web by defining a set of building blocks (i.e. proposed APIs) enabling [a new privacy model for the web](https://github.com/michaelkleber/privacy-model). Privacy Sandbox encompasses replacing functionality powered by third-party cookies with privacy-preserving alternatives, deprecating third-party cookies, and ensuring developers have a well-lit path to the new capabilities of the platform, and avoid pursuing tracking via other means. 
 
-The purpose of this tool is to shed light, provide insights, and help you to learn and understand the changes that are happening in the context of Privacy Sandbox, and the potential impact on your site or web product.
+This repository is home to the Privacy Sandbox Analysis DevTools extension (PSAT), which is a tool aimed at assisting developers in preparing their websites for the changes that are happening in Chrome in the context of Privacy Sandbox, and ensuring a seamless transition to a more private web.
 
-# Installing and Running PSAT
+# Learn about how to use PSAT
 
-## Build PSAT from source
-
-- Clone this Privacy Sandbox Analysis Tool Repository
-- Run `npm install` to install all dependencies
-- `npm run dev` or `npm run build` to generate a build in `/dist/extension`
-- Turn on "Developer mode" in `chrome://extensions` to [load the unpacked extension](https://developer.chrome.com/docs/extensions/mv3/getstarted/development-basics/#load-unpacked)
-- Click on the "Load Unpacked" button and upload the `dist/extension` folder
-
-
-## Install PSAT from zip file
-
-- Alternatively, you can download the extension zip file from the [latest release](https://github.com/GoogleChromeLabs/ps-analysis-tool/releases) and unzip it.
-- Turn on "Developer mode" in `chrome://extensions` to [load the unpacked extension](https://developer.chrome.com/docs/extensions/mv3/getstarted/development-basics/#load-unpacked)
-- Click the "Load unpacked" button and select the unzipped extension folder.
-
-## Build and Run PSAT's CLI
-
-- Clone this Privacy Sandbox Analysis Tool Repository
-- Run `npm install` to install all dependencies
-- `npm run cli:build` to genrate a build in `/dist/cli`.
-- Run the CLI, providing a URL or a sitemap as input.
-  - E.g. `npm run cli -- -s https://example.com/sitemap_index.xml`.
-  - E.g. `npm run cli -- -u https://bbc.com`.
-  - Please note that the dependency (Wappalyzer), which analyzes page technologies, may require permission to use its instance of Chromium. If this happens, you have the option to skip the technology analysis by using the `nt` flag for uninterrupted analysis of cookies.
-  - E.g. `npm run cli -- -u https://bbc.com -nt`. 
-
+To start leveraging the capabilities of this tool, check out the repository [wiki page](https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki), which contains detailed information about analyzing and debugging specific scenarios, and will help you map them to the specifics of your site. 
 
 # Call to Action
 
@@ -50,8 +25,3 @@ If you are a **third-party service provider transitioning away from cookies**, y
 If you are a **Website owner or technology leader**, you are responsible for technical and business decision-making, and you can leverage the guidance and tooling available to get a thorough understanding of the transformative shift that is taking place for 3P Cookies and the potential impact on user experience and privacy.
 
 Ultimately, the web ecosystem, together, will navigate successfully this crucial transition towards a more private web platform. Let's make it happen!
-
-
-# Contributing
-If you have requests for features you would like to see in this tool, please file a Feature Request or join as a contributor! Please refer to our contribution [guidelines](docs/CONTRIBUTING.md) and [code of conduct](docs/code-of-conduct.md).
-
