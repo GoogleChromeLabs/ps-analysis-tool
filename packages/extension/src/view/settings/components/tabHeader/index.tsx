@@ -36,8 +36,10 @@ const TabHeader = ({
         <div
           onClick={() => setSelectedTabIndex(index)}
           key={tab}
-          className={`text-xl cursor-pointer px-2 border border-white ${
-            index === selectedTabIndex ? 'border-black border-b-white' : ''
+          className={`text-xl cursor-pointer px-2 border ${
+            index === selectedTabIndex
+              ? 'border-black border-b-white'
+              : 'border-white'
           }`}
         >
           {tab}
