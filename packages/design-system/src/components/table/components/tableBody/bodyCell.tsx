@@ -116,11 +116,10 @@ const BodyCell = ({
               >
                 <button
                   onClick={handleCopy}
-                  className="w-full text-xs rounded px-1 py-[3px] mb-1.5 flex items-center hover:bg-royal-blue hover:text-white cursor-default"
+                  className="w-full text-xs rounded px-1 py-[3px] flex items-center hover:bg-royal-blue hover:text-white cursor-default"
                 >
                   <span>Copy network filter string.</span>
                 </button>
-                <div></div>
               </div>
 
               <div
