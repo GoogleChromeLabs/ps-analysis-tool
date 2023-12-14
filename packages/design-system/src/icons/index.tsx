@@ -22,6 +22,7 @@ export { default as ClearAll } from './clear-all.svg';
 export { default as CrossIcon } from './cross-icon.svg';
 export { default as CookieIcon } from './cookie-gray.svg';
 export { default as CookieIconWhite } from './cookie-white.svg';
+export { default as Copy } from './copy.svg';
 export { default as File } from './file.svg';
 export { default as FileWhite } from './file-white.svg';
 export { default as Check } from './check.svg';

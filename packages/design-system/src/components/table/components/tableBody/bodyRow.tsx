@@ -92,10 +92,12 @@ const BodyRow = ({
       {columns.map(({ accessorKey, width }, idx) => (
         <BodyCell
           key={idx}
+          onRowClick={onRowClick}
           cell={row[accessorKey]?.value || ''}
           width={width || 0}
           isHighlighted={isHighlighted}
           isRowFocused={cookieKey === selectedKey}
+          row={row}
         />
       ))}
     </div>

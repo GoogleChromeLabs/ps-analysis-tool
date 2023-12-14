@@ -162,6 +162,7 @@ module.exports = {
       'dark-blue': '#0B57D0',
       'light-blue': '#ABC7FA',
       lotion: '#FDFCFB1A',
+      'dynamic-grey': '#fbfbfb',
       'dirty-red': '#990000',
       'dirty-pink': '#FFD6D6',
     },
