@@ -62,7 +62,6 @@ interface CookieTableProps {
   columnSorting?: SortingState[];
   columnSizing?: Record<string, number>;
   selectedColumns?: Record<string, boolean>;
-  isExtension?: boolean;
 }
 
 const CookieTable = ({
@@ -79,7 +78,6 @@ const CookieTable = ({
   columnSorting,
   columnSizing,
   selectedColumns,
-  isExtension = false,
 }: CookieTableProps) => {
   useEffect(() => {
     if (selectedFrame && selectedFrameCookie) {
@@ -151,7 +149,6 @@ const CookieTable = ({
             (row?.originalData as CookieTableData).parsedCookie
           ) as string
         }
-        isExtension={isExtension}
         onRowClick={onRowClick}
       />
     </div>

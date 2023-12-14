@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 
 /**
@@ -30,7 +30,6 @@ interface BodyCellProps {
   width: number;
   isHighlighted?: boolean;
   isRowFocused: boolean;
-  isExtension?: boolean;
   row: TableRow;
   onRowClick: () => void;
 }
@@ -42,7 +41,6 @@ const BodyCell = ({
   width,
   isRowFocused,
   isHighlighted = false,
-  isExtension = false,
 }: BodyCellProps) => {
   const [contextMenuOpen, setContextMenuOpen] = useState(false);
   const [columnPosition, setColumnPosition] = useState({
@@ -52,25 +50,27 @@ const BodyCell = ({
 
   const handleRightClick = useCallback(
     (e: React.MouseEvent<HTMLElement>) => {
-      if (isExtension) {
-        e.preventDefault();
-        const x = e.clientX,
-          y = e.clientY;
-        onRowClick();
-        setColumnPosition({ x, y });
-        document.body.style.overflow = contextMenuOpen ? 'auto' : 'hidden';
-        setContextMenuOpen(!contextMenuOpen);
-      }
+      e.preventDefault();
+      const x = e.clientX,
+        y = e.clientY;
+      onRowClick();
+      setColumnPosition({ x, y });
+      document.body.style.overflow = contextMenuOpen ? 'auto' : 'hidden';
+      setContextMenuOpen(!contextMenuOpen);
     },
-    [contextMenuOpen, isExtension, onRowClick]
+    [contextMenuOpen, onRowClick]
+  );
+
+  const [domain, name] = useMemo(
+    () => [
+      (row?.originalData as CookieTableData)?.parsedCookie?.domain,
+      (row?.originalData as CookieTableData)?.parsedCookie?.name,
+    ],
+    [row?.originalData]
   );
 
   const handleCopy = useCallback(() => {
     try {
-      const domain = (row?.originalData as CookieTableData)?.parsedCookie
-        ?.domain;
-      const name = (row?.originalData as CookieTableData)?.parsedCookie?.name;
-
       // Need to do this since chrome doesnt allow the clipboard access in extension.
       const copyFrom = document.createElement('textarea');
       copyFrom.textContent = `cookie-domain:${domain} cookie-name:${name}`;
@@ -83,7 +83,7 @@ const BodyCell = ({
     } catch (error) {
       //Fail silently
     }
-  }, [row?.originalData]);
+  }, [domain, name]);
 
   return (
     <div
@@ -100,7 +100,8 @@ const BodyCell = ({
     >
       {cell}
       <>
-        {isExtension &&
+        {!domain &&
+          !name &&
           contextMenuOpen &&
           createPortal(
             <div className="transition duration-100" data-testid="column-menu">
