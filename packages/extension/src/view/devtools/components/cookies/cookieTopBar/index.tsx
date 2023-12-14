@@ -79,9 +79,11 @@ const CookieSearch = ({
         selectedFrameCookie[Object.keys(selectedFrameCookie)[0]]
       ? true
       : false;
+
   useEffect(() => {
     isDeleteOperationPerformed.current = false;
   }, []);
+
   const {
     deleteCookie,
     deleteAllCookies,
@@ -107,30 +109,33 @@ const CookieSearch = ({
 
     if (selectedKey && selectedKey !== null && selectedKey.parsedCookie) {
       const cookieKey = getCookieKey(selectedKey?.parsedCookie);
-      if (cookieKey) {
-        selectedCookieIndex.current = filteredCookies.findIndex(
-          (cookie) => getCookieKey(cookie.parsedCookie) === cookieKey
-        );
-        isDeleteOperationPerformed.current = true;
-        deleteCookie(cookieKey);
-        const index = getNextIndexToDelete(
-          selectedCookieIndex.current,
-          filteredCookies.length - 1
-        );
-        const filteredRows = filteredCookies.filter((cookie) => {
-          return (
-            cookie.parsedCookie.name +
-              cookie.parsedCookie.domain +
-              cookie.parsedCookie.path !==
-            cookieKey
-          );
-        });
+      if (!cookieKey) {
+        return;
+      }
 
-        if (index !== null && selectedFrame) {
-          setSelectedFrameCookie({
-            [selectedFrame]: filteredRows[index],
-          });
-        }
+      selectedCookieIndex.current = filteredCookies.findIndex(
+        (cookie) => getCookieKey(cookie.parsedCookie) === cookieKey
+      );
+      isDeleteOperationPerformed.current = true;
+      deleteCookie(cookieKey);
+      const index = getNextIndexToDelete(
+        selectedCookieIndex.current,
+        filteredCookies.length - 1
+      );
+
+      const filteredRows = filteredCookies.filter((cookie) => {
+        return (
+          cookie.parsedCookie.name +
+            cookie.parsedCookie.domain +
+            cookie.parsedCookie.path !==
+          cookieKey
+        );
+      });
+
+      if (index !== null && selectedFrame) {
+        setSelectedFrameCookie({
+          [selectedFrame]: filteredRows[index],
+        });
       }
     }
   }, [
