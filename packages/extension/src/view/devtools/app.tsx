@@ -201,11 +201,7 @@ const App: React.FC = () => {
 
     lastUrl.current = tabUrl;
 
-    if (!selectedFrame) {
-      updateSelectedItemKey('cookies');
-    } else {
-      updateSelectedItemKey(selectedFrame);
-    }
+    updateSelectedItemKey(selectedFrame || 'cookies');
   }, [selectedFrame, tabUrl, updateSelectedItemKey]);
 
   const [filteredCookies, setFilteredCookies] = useState<CookieTableData[]>([]);

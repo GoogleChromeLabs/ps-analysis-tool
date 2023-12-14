@@ -44,8 +44,6 @@ const useFrameOverlay = (
     isCurrentTabBeingListenedTo,
     allowedNumberOfTabs,
     tabFrames,
-    isFrameSelectedFromDevTool,
-    setIsFrameSelectedFromDevTool,
     setCanStartInspecting,
     canStartInspecting,
   } = useCookieStore(({ state, actions }) => ({
@@ -56,17 +54,17 @@ const useFrameOverlay = (
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
     allowedNumberOfTabs: state.allowedNumberOfTabs,
     tabFrames: state.tabFrames,
-    isFrameSelectedFromDevTool: state.isFrameSelectedFromDevTool,
-    setIsFrameSelectedFromDevTool: actions.setIsFrameSelectedFromDevTool,
     setCanStartInspecting: actions.setCanStartInspecting,
     canStartInspecting: state.canStartInspecting,
   }));
 
+  const [isFrameSelectedFromDevTool, setIsFrameSelectedFromDevTool] =
+    useState(false);
+
   const setSelectedFrame = useCallback(
-    (key: string | null) => {
-      if (selectedFrameChangeHandler) {
-        selectedFrameChangeHandler(key);
-      }
+    (key: string | null, isHover?: boolean) => {
+      selectedFrameChangeHandler?.(key);
+      setIsFrameSelectedFromDevTool(!isHover);
     },
     [selectedFrameChangeHandler]
   );
@@ -86,8 +84,7 @@ const useFrameOverlay = (
       name: portName,
     });
     portRef.current.onMessage.addListener((response: Response) => {
-      setSelectedFrame(response.attributes.iframeOrigin);
-      setIsFrameSelectedFromDevTool(false);
+      setSelectedFrame(response.attributes.iframeOrigin, true);
     });
 
     portRef.current.onDisconnect.addListener(() => {
@@ -99,7 +96,7 @@ const useFrameOverlay = (
       isInspecting: true,
     });
     setConnectedToPort(true);
-  }, [setIsFrameSelectedFromDevTool, setIsInspecting, setSelectedFrame]);
+  }, [setIsInspecting, setSelectedFrame]);
 
   const listenIfContentScriptSet = useCallback(
     async (
@@ -179,13 +176,7 @@ const useFrameOverlay = (
         // fail silently
       }
     })();
-  }, [
-    isInspecting,
-    setSelectedFrame,
-    setIsInspecting,
-    setContextInvalidated,
-    connectToPort,
-  ]);
+  }, [connectToPort, isInspecting, setContextInvalidated]);
 
   useEffect(() => {
     chrome.storage.session.onChanged.addListener(sessionStoreChangedListener);
@@ -244,14 +235,13 @@ const useFrameOverlay = (
       }
     })();
   }, [
-    setCanStartInspecting,
-    selectedFrame,
-    filteredCookies,
-    isInspecting,
     connectToPort,
     connectedToPort,
-    tabFrames,
+    filteredCookies,
     isFrameSelectedFromDevTool,
+    isInspecting,
+    selectedFrame,
+    tabFrames,
   ]);
 };
 
