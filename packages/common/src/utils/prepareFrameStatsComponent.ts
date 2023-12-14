@@ -35,7 +35,7 @@ export default function prepareFrameStatsComponent(
           data: [
             {
               count: 0,
-              color: '#D9F1BE',
+              color: '#F54021',
             },
             {
               count: 0,
@@ -70,7 +70,7 @@ export default function prepareFrameStatsComponent(
         {
           label: 'Frames with unblocked cookies',
           count: 0,
-          color: '#D9F1BE',
+          color: '#F54021',
           countClassName: 'text-unblocked-frames',
         },
       ],
@@ -119,7 +119,7 @@ export default function prepareFrameStatsComponent(
         data: [
           {
             count: unBlockedCookieFrame.size,
-            color: '#D9F1BE',
+            color: '#F54021',
           },
           {
             count: blockedCookieFrame.size,
@@ -154,7 +154,7 @@ export default function prepareFrameStatsComponent(
       {
         label: 'Frames with unblocked cookies',
         count: unBlockedCookieFrame.size,
-        color: '#D9F1BE',
+        color: '#F54021',
         countClassName: 'text-total-frames',
       },
     ],

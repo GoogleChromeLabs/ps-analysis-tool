@@ -90,7 +90,7 @@ module.exports = {
       'blocked-frames': '#AF7AA3',
       'cookie-frames': '#C5A06A',
       'total-frames': '#25ACAD',
-      'unblocked-frames': '#D9F1BE',
+      'unblocked-frames': '#F54021',
       primary: '#000',
       secondary: '#5F5F5F',
       tertiary: '#808080',
