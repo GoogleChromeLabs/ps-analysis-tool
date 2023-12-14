@@ -71,7 +71,7 @@ const useFrameOverlay = (
 
   useEffect(() => {
     if (!isInspecting) {
-      setSelectedFrame(null);
+      setIsFrameSelectedFromDevTool(true);
     }
   }, [isInspecting, setSelectedFrame]);
 
@@ -214,11 +214,16 @@ const useFrameOverlay = (
   useEffect(() => {
     (async () => {
       try {
-        if (!isInspecting) {
-          return;
-        }
         if (!connectedToPort) {
           await connectToPort();
+        }
+
+        if (!isInspecting && portRef.current) {
+          portRef.current.postMessage({
+            isInspecting: false,
+          });
+
+          return;
         }
         if (chrome.runtime?.id && portRef.current && tabFrames) {
           const thirdPartyCookies = filteredCookies
@@ -227,6 +232,7 @@ const useFrameOverlay = (
           const firstPartyCookies = filteredCookies
             ? filteredCookies.filter((cookie) => cookie.isFirstParty)
             : [];
+
           portRef.current.postMessage({
             selectedFrame,
             removeAllFramePopovers: isFrameSelectedFromDevTool,
