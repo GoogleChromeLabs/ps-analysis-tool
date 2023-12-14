@@ -100,8 +100,8 @@ const BodyCell = ({
     >
       {cell}
       <>
-        {!domain &&
-          !name &&
+        {domain &&
+          name &&
           contextMenuOpen &&
           createPortal(
             <div className="transition duration-100" data-testid="column-menu">
