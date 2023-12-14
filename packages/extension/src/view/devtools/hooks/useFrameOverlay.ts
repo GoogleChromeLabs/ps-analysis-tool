@@ -39,7 +39,6 @@ const useFrameOverlay = (
   const {
     isInspecting,
     setIsInspecting,
-    _setSelectedFrame,
     setContextInvalidated,
     selectedFrame,
     isCurrentTabBeingListenedTo,
@@ -52,7 +51,6 @@ const useFrameOverlay = (
   } = useCookieStore(({ state, actions }) => ({
     setContextInvalidated: actions.setContextInvalidated,
     isInspecting: state.isInspecting,
-    _setSelectedFrame: actions.setSelectedFrame,
     setIsInspecting: actions.setIsInspecting,
     selectedFrame: state.selectedFrame,
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
@@ -66,12 +64,11 @@ const useFrameOverlay = (
 
   const setSelectedFrame = useCallback(
     (key: string | null) => {
-      _setSelectedFrame(key);
       if (selectedFrameChangeHandler) {
         selectedFrameChangeHandler(key);
       }
     },
-    [_setSelectedFrame, selectedFrameChangeHandler]
+    [selectedFrameChangeHandler]
   );
 
   const [connectedToPort, setConnectedToPort] = useState(false);
