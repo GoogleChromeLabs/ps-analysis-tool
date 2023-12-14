@@ -18,12 +18,12 @@
  * External dependencies.
  */
 import React from 'react';
-import { prepareCookieStatsComponents } from '@ps-analysis-tool/common';
 import {
   Button,
   CirclePieChart,
   ProgressBar,
   ToggleSwitch,
+  prepareCookieStatsComponents,
 } from '@ps-analysis-tool/design-system';
 
 /**
