@@ -30,7 +30,9 @@ import {
 import Matrix from '../../matrix';
 import type { MatrixComponentProps } from '../../matrix/matrixComponent';
 import { InfoIcon } from '../../../icons';
-import MatrixComponentHorizontal from '../../matrix/matrixComponent/matrixComponentHorizontal';
+import MatrixComponentHorizontal, {
+  type MatrixComponentHorizontalProps,
+} from '../../matrix/matrixComponent/matrixComponentHorizontal';
 
 interface CookiesMatrixProps {
   tabCookies: TabCookies | null;
@@ -47,6 +49,7 @@ interface CookiesMatrixProps {
   highlightTitle?: boolean;
   capitalizeTitle?: boolean;
   infoIconTitle?: string;
+  matrixHorizontalData?: MatrixComponentHorizontalProps[] | null;
 }
 
 const CookiesMatrix = ({
@@ -63,6 +66,7 @@ const CookiesMatrix = ({
   allowExpand = true,
   highlightTitle = false,
   capitalizeTitle = false,
+  matrixHorizontalData = null,
   infoIconTitle = 'Cookies must be analyzed on a new, clean Chrome profile for an accurate report.',
 }: CookiesMatrixProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -82,24 +86,26 @@ const CookiesMatrix = ({
   const totalFrames = tabFrames ? Object.keys(tabFrames).length : 0;
   const framesWithCookies = filterFramesWithCookies(tabCookies, tabFrames);
 
-  const matrixHorizontalComponents = [
-    {
-      title: 'Number of Frames',
-      description: 'Number of frames found on the page.',
-      count: totalFrames,
-      expand: isExpanded,
-    },
-    {
-      title: 'Number of Frames with Associated Cookies',
-      description: 'Frames that have cookies associated with them.',
-      count: associatedCookiesCount
-        ? associatedCookiesCount
-        : framesWithCookies
-        ? Object.keys(framesWithCookies).length
-        : 0,
-      expand: isExpanded,
-    },
-  ];
+  const matrixHorizontalComponents = matrixHorizontalData
+    ? matrixHorizontalData.map((data) => ({ ...data, expand: isExpanded }))
+    : [
+        {
+          title: 'Number of Frames',
+          description: 'Number of frames found on the page.',
+          count: totalFrames,
+          expand: isExpanded,
+        },
+        {
+          title: 'Number of Frames with Associated Cookies',
+          description: 'Frames that have cookies associated with them.',
+          count: associatedCookiesCount
+            ? associatedCookiesCount
+            : framesWithCookies
+            ? Object.keys(framesWithCookies).length
+            : 0,
+          expand: isExpanded,
+        },
+      ];
   return (
     <div className="w-full" data-testid={`cookies-matrix-${title}`}>
       <div>

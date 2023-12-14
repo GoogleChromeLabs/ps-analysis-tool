@@ -98,7 +98,11 @@ export interface TabCookies {
 }
 
 export interface TabFrames {
-  [key: string]: { frameIds: number[]; isOnRWS?: boolean };
+  [key: string]: {
+    frameIds: number[];
+    isOnRWS?: boolean;
+    frameType?: 'outermost_frame' | 'fenced_frame' | 'sub_frame';
+  };
 }
 
 export interface Legend {

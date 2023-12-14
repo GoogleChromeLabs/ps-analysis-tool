@@ -151,11 +151,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
       const currentTabFrames = await chrome.webNavigation.getAllFrames({
         tabId: _tabId,
       });
-      const modifiedTabFrames: {
-        [key: string]: { frameIds: number[]; isOnRWS?: boolean };
-      } = {};
+      const modifiedTabFrames: TabFrames = {};
 
-      currentTabFrames?.forEach(({ url, frameId }) => {
+      currentTabFrames?.forEach(({ url, frameId, frameType }) => {
         if (url && url.includes('http')) {
           const parsedUrl = regexForFrameUrl.exec(url);
           if (parsedUrl && parsedUrl[0]) {
@@ -164,6 +162,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
             } else {
               modifiedTabFrames[parsedUrl[0]] = {
                 frameIds: [frameId],
+                frameType,
               };
             }
           }
