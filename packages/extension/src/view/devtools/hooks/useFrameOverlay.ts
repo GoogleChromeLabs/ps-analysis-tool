@@ -69,6 +69,12 @@ const useFrameOverlay = (
     [selectedFrameChangeHandler]
   );
 
+  useEffect(() => {
+    if (!isInspecting) {
+      setSelectedFrame(null);
+    }
+  }, [isInspecting, setSelectedFrame]);
+
   const [connectedToPort, setConnectedToPort] = useState(false);
 
   const connectToPort = useCallback(async () => {
