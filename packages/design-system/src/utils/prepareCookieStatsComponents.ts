@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 /**
+ * External dependencies.
+ */
+import type {
+  CookieStatsComponents,
+  CookiesCount,
+} from '@ps-analysis-tool/common';
+/**
  * Internal dependencies.
  */
-
-import { CookieStatsComponents, CookiesCount } from '../cookies.types';
-import { COLOR_MAP, BLOCKED_COLOR_MAP, LEGEND_DATA } from '../constants';
+import { COLOR_MAP } from '../constants';
 
 // eslint-disable-next-line complexity
 const prepareCookieStatsComponents = (
@@ -35,17 +40,16 @@ const prepareCookieStatsComponents = (
 
     blockedCookiesStats.push({
       count: cookieStats.blockedCookies[key],
-      color: BLOCKED_COLOR_MAP[key],
+      color: COLOR_MAP[key],
     });
 
     blockedCookiesLegend.push({
       label: key,
       count: cookieStats.blockedCookies[key],
-      color: BLOCKED_COLOR_MAP[key],
-      countClassName: LEGEND_DATA[key].countClassName,
+      color: COLOR_MAP[key],
+      countClassName: 'text-' + key.toLowerCase(),
     });
   });
-
   return {
     legend: [
       {

@@ -19,7 +19,10 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import { COLOR_MAP } from '@ps-analysis-tool/common';
+/**
+ * Internal dependencies
+ */
+import { COLOR_MAP } from '../../../constants';
 
 /**
  * Internal dependencies.

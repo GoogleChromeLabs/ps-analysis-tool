@@ -15,9 +15,9 @@
  */
 
 /**
- * Internal dependencies.
+ * External dependencies.
  */
-import { CookieData, CookiesCount } from '../cookies.types';
+import type { CookieData, CookiesCount } from '@ps-analysis-tool/common';
 
 /**
  * Categorize cookies count into 1st party and 3rd party cookies and then into functional, marketing, analytics and uncategorized.

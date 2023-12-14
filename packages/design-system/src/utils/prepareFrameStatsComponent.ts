@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { TabCookies, TabFrames } from '../cookies.types';
+/**
+ * External dependencies
+ */
+import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
 
 /**
  *

@@ -17,8 +17,7 @@
 export { default as isFirstParty } from './utils/isFirstParty';
 export { default as filterFramesWithCookies } from './utils/filterFramesWithCookies';
 export { default as filterCookiesByFrame } from './utils/filterCookiesByFrame';
-export { default as prepareCookiesCount } from './utils/prepareCookiesCount';
-export { default as prepareCookieStatsComponents } from './utils/prepareCookieStatsComponents';
+
 export { default as getCookieKey } from './utils/getCookieKey';
 export {
   default as findAnalyticsMatch,
@@ -28,12 +27,10 @@ export { default as calculateEffectiveExpiryDate } from './utils/calculateEffect
 export { default as sanitizeCsvRecord } from './utils/sanitizeCsvRecord';
 export { parseUrl } from './utils/parseUrl';
 export { default as fetchLocalData } from './utils/fetchLocalData';
-export { default as cookieIssueDetails } from './utils/cookieExclusionAndWarningReasons';
+export { default as cookieIssueDetails } from './data/cookieExclusionAndWarningReasons';
 export { default as parseResponseReceivedExtraInfo } from './utils/parseResponseReceivedExtraInfo';
-export { default as prepareFrameStatsComponent } from './utils/prepareFrameStatsComponent';
 export { default as parseRequestWillBeSentExtraInfo } from './utils/parseRequestWillBeSentExtraInfo';
 export { default as noop } from './utils/noop';
 export * from './cookies.types';
 export * from './cdp.types';
-export * from './constants';
 export const UNKNOWN_FRAME_KEY = 'Unknown frame(s)';

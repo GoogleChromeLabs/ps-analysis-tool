@@ -17,13 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
-import {
-  TabCookies,
-  TabFrames,
-  prepareCookieStatsComponents,
-  prepareCookiesCount,
-  prepareFrameStatsComponent,
-} from '@ps-analysis-tool/common';
+import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -32,7 +26,11 @@ import MessageBox from '../messageBox';
 import { type DataMapping } from './landingHeader';
 import CookiesMatrix from './cookiesMatrix';
 import CookiesLandingContainer from './cookieLandingHeaderContainer';
-
+import {
+  prepareCookieStatsComponents,
+  prepareCookiesCount,
+  prepareFrameStatsComponent,
+} from '../../utils';
 interface CookiesLandingProps {
   tabFrames: TabFrames | null;
   tabCookies: TabCookies | null;

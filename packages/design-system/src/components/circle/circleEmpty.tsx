@@ -17,7 +17,10 @@
  * External dependencies.
  */
 import React from 'react';
-import { COLOR_MAP } from '@ps-analysis-tool/common';
+/**
+ * Internal dependencies
+ */
+import { COLOR_MAP } from '../../constants';
 
 interface CircleEmptyProps {
   color?: string;

@@ -22,7 +22,6 @@ import {
   type TabFrames,
   Legend,
   filterFramesWithCookies,
-  LEGEND_DATA,
 } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies
@@ -33,6 +32,7 @@ import { InfoIcon } from '../../../icons';
 import MatrixComponentHorizontal, {
   type MatrixComponentHorizontalProps,
 } from '../../matrix/matrixComponent/matrixComponentHorizontal';
+import { LEGEND_DESCRIPTION } from '../../../constants';
 
 interface CookiesMatrixProps {
   tabCookies: TabCookies | null;
@@ -73,10 +73,10 @@ const CookiesMatrix = ({
   const dataComponents: MatrixComponentProps[] = [];
 
   componentData.forEach((component) => {
-    const additionalDataComponent = LEGEND_DATA[component.label] || {};
+    const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
     dataComponents.push({
-      ...additionalDataComponent,
       ...component,
+      description: legendDescription,
       title: component.label,
       isExpanded,
       containerClasses: '',

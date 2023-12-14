@@ -18,12 +18,12 @@
  */
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { COLOR_MAP } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import CirclePieChart from '..';
+import { COLOR_MAP } from '../../../constants';
 
 const meta: Meta<typeof CirclePieChart> = {
   title: 'DesignSystem/CirclePieChart',
