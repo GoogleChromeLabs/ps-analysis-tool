@@ -16,6 +16,7 @@
 /**
  * Internal dependencies.
  */
+import Information from './components/tabContent/information';
 import Settings from './components/tabContent/settings';
 
 const TABS = [
@@ -23,6 +24,11 @@ const TABS = [
     display_name: 'Settings',
     id: 'settings',
     component: Settings,
+  },
+  {
+    display_name: 'Information',
+    id: 'information',
+    component: Information,
   },
 ];
 

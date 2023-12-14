@@ -19,17 +19,12 @@
  */
 import React from 'react';
 
-/**
- * Internal dependencies.
- */
-import AllowedNumberOfTabs from './allowedNumberOfTabs';
+interface InformationDisplayProps {
+  information: string;
+}
 
-const Settings = () => {
-  return (
-    <div className="w-fit h-full flex flex-col gap-5 px-5 py-2 border rounded">
-      <AllowedNumberOfTabs />
-    </div>
-  );
+const InformationDisplay = ({ information }: InformationDisplayProps) => {
+  return <div className="w-full h-full flex flex-col gap-5">{information}</div>;
 };
 
-export default Settings;
+export default InformationDisplay;
