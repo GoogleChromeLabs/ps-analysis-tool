@@ -80,3 +80,51 @@ export const LEGEND_DESCRIPTION: LegendData = {
   'Frames with unblocked cookies':
     'The count of frames which have unblocked cookies.',
 };
+
+export const EMPTY_FRAME_COUNT = [
+  {
+    title: 'Frame details',
+    count: 0,
+    data: [
+      {
+        count: 0,
+        color: '#F54021',
+      },
+      {
+        count: 0,
+        color: '#AF7AA3',
+      },
+      {
+        count: 0,
+        color: '#C5A06A',
+      },
+    ],
+  },
+];
+
+export const EMPTY_FRAME_LEGEND = [
+  {
+    label: 'Total frames',
+    count: 0,
+    color: '#25ACAD',
+    countClassName: 'text-total-frames',
+  },
+  {
+    label: 'Frames with cookies',
+    count: 0,
+    color: '#C5A06A',
+    countClassName: 'text-cookie-frames',
+  },
+  {
+    label: 'Frames with blocked cookies',
+    count: 0,
+    color: '#AF7AA3',
+    countClassName: 'text-blocked-frames',
+  },
+  {
+    label: 'Frames with unblocked cookies',
+    count: 0,
+    color: '#F54021',
+    countClassName: 'text-unblocked-frames',
+  },
+];

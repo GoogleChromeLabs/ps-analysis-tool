@@ -17,6 +17,10 @@
  * External dependencies
  */
 import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
+/**
+ * Internal dependencies
+ */
+import { EMPTY_FRAME_COUNT, EMPTY_FRAME_LEGEND } from '../constants';
 
 /**
  *
@@ -30,57 +34,14 @@ export default function prepareFrameStatsComponent(
 ) {
   if (!tabFrames || !tabCookies) {
     return {
-      dataMapping: [
-        {
-          title: 'Frame details',
-          count: Object.keys(tabFrames || {}).length,
-          data: [
-            {
-              count: 0,
-              color: '#F54021',
-            },
-            {
-              count: 0,
-              color: '#AF7AA3',
-            },
-            {
-              count: 0,
-              color: '#C5A06A',
-            },
-          ],
-        },
-      ],
-      legend: [
-        {
-          label: 'Total frames',
-          count: 0,
-          color: '#25ACAD',
-          countClassName: 'text-total-frames',
-        },
-        {
-          label: 'Frames with cookies',
-          count: 0,
-          color: '#C5A06A',
-          countClassName: 'text-cookie-frames',
-        },
-        {
-          label: 'Frames with blocked cookies',
-          count: 0,
-          color: '#AF7AA3',
-          countClassName: 'text-blocked-frames',
-        },
-        {
-          label: 'Frames with unblocked cookies',
-          count: 0,
-          color: '#F54021',
-          countClassName: 'text-unblocked-frames',
-        },
-      ],
+      dataMapping: EMPTY_FRAME_COUNT,
+      legend: EMPTY_FRAME_LEGEND,
     };
   }
   const blockedCookieFrame = new Set();
   const unBlockedCookieFrame = new Set();
   const cookieFrame = new Set();
+
   Object.keys(tabFrames || {}).forEach((frame) => {
     let hasBlockedCookie = false;
     let hasUnblockedCookie = false;
