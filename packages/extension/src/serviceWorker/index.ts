@@ -20,7 +20,6 @@
 import PQueue from 'p-queue';
 import {
   type CookieData,
-  type AuditParams,
   parseResponseReceivedExtraInfo,
   parseRequestWillBeSentExtraInfo,
 } from '@ps-analysis-tool/common';
@@ -360,17 +359,20 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
     }
 
     if (method === 'Audits.issueAdded' && params) {
-      const auditParams = params as AuditParams;
+      const auditParams = params as Protocol.Audits.IssueAddedEvent;
       const { code, details } = auditParams.issue;
+      if (code !== 'CookieIssue' && !details.cookieIssueDetails) {
+        return;
+      }
+
       if (
-        code !== 'CookieIssue' &&
-        !details?.cookieIssueDetails &&
-        !details?.cookieIssueDetails?.cookie &&
-        !details?.cookieIssueDetails?.cookieWarningReasons &&
-        !details?.cookieIssueDetails?.cookieExclusionReasons
+        !details.cookieIssueDetails?.cookie &&
+        !details.cookieIssueDetails?.cookieWarningReasons &&
+        !details.cookieIssueDetails?.cookieExclusionReasons
       ) {
         return;
       }
+
       await addAuditsIssues(
         details.cookieIssueDetails,
         source.tabId.toString()
