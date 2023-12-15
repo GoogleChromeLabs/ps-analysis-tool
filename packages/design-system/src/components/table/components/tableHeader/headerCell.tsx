@@ -17,8 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useRef } from 'react';
-import { PreferenceDataValues, noop } from '@ps-analysis-tool/common';
+import React, { useCallback, useRef } from 'react';
 /**
  * Internal dependencies.
  */
@@ -31,12 +30,6 @@ interface HeaderCellProps {
   index: number;
   cell: TableColumn;
   setIsRowFocused: (state: boolean) => void;
-  updatePreference: (
-    key: string,
-    callback: (prevStatePreference: {
-      [key: string]: unknown;
-    }) => PreferenceDataValues
-  ) => void;
 }
 
 const HeaderCell = ({
@@ -44,35 +37,7 @@ const HeaderCell = ({
   index,
   cell,
   setIsRowFocused,
-  updatePreference = noop,
 }: HeaderCellProps) => {
-  // Table data is updated on mouseup.
-  const resizeHandler = useCallback(() => {
-    updatePreference('columnSizing', () => {
-      const currentSizes: { [key: string]: number } = {};
-
-      table.columns.map((column) => {
-        currentSizes[column.accessorKey] = column.width as number;
-        return column;
-      });
-      return currentSizes;
-    });
-  }, [table, updatePreference]);
-
-  useEffect(() => {
-    if (columnRef.current) {
-      columnRef.current.addEventListener('mouseup', resizeHandler);
-    }
-
-    const tempRef = columnRef.current;
-
-    return () => {
-      if (tempRef) {
-        tempRef.removeEventListener('mouseup', resizeHandler);
-      }
-    };
-  }, [resizeHandler]);
-
   const handleOnClick = useCallback(() => {
     table.setSortKey(cell.accessorKey);
   }, [cell.accessorKey, table]);

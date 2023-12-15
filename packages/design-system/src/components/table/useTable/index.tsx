@@ -23,10 +23,7 @@ import { CookieTableData, TechnologyData } from '@ps-analysis-tool/common';
  * Internal dependencies.
  */
 import getValueByKey from '../utils/getValueByKey';
-import useColumnSorting, {
-  DefaultOptions,
-  type ColumnSortingOutput,
-} from './useColumnSorting';
+import useColumnSorting, { type ColumnSortingOutput } from './useColumnSorting';
 import useColumnVisibility, {
   type ColumnVisibilityOutput,
 } from './useColumnVisibility';
@@ -113,11 +110,6 @@ interface useTableProps {
   tableFilterData?: TableFilter;
   tableSearchKeys?: string[];
   tablePersistentSettingsKey?: string;
-  options?: {
-    columnSizing?: Record<string, number>;
-    columnSorting?: DefaultOptions;
-    selectedColumns?: Record<string, boolean>;
-  };
 }
 
 const useTable = ({

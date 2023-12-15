@@ -117,7 +117,7 @@ const Technologies = ({ selectedSite }: TechnologiesProps) => {
       >
         <Table
           table={table}
-          disableFiltering={true}
+          hideFiltering={true}
           showTopBar={true}
           selectedKey={selectedRow?.slug}
           onRowClick={(row) => {

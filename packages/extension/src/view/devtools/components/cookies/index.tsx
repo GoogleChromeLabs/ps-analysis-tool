@@ -29,8 +29,13 @@ import {
   CookiesLanding,
   ProgressBar,
 } from '@ps-analysis-tool/design-system';
+import type { CookieTableData } from '@ps-analysis-tool/common';
 
-const Cookies = () => {
+interface CookiesProps {
+  setFilteredCookies: React.Dispatch<CookieTableData[]>;
+}
+
+const Cookies = ({ setFilteredCookies }: CookiesProps) => {
   const {
     allowedNumberOfTabs,
     contextInvalidated,
@@ -79,7 +84,7 @@ const Cookies = () => {
         data-testid="cookies-content"
       >
         {selectedFrame ? (
-          <CookiesListing />
+          <CookiesListing setFilteredCookies={setFilteredCookies} />
         ) : (
           <CookiesLanding
             tabCookies={tabCookies}
