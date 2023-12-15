@@ -48,6 +48,7 @@ import { useCookieStore } from '../../../stateProviders/syncCookieStore';
 import getNextIndexToDelete from '../../../../../utils/getNextIndexToDelete';
 import EditableTextInput from './editableComponents/editableTextInput';
 import EditableCheckBoxInput from './editableComponents/editableCheckBox';
+import { BLOCKED_REASON_LIST } from '../../../../../constants';
 
 interface CookiesListingProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;
@@ -264,35 +265,33 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
         ),
       },
       {
-        header: 'Cookie Accepted',
-        accessorKey: 'isCookieSet',
-        cell: (info: InfoType) => (
-          <p className="flex justify-center items-center">
-            {info ? (
-              <span className="font-serif">✓</span>
-            ) : (
-              <span className="font-serif">✗</span>
-            )}
-          </p>
-        ),
+        header: 'Partition Key',
+        accessorKey: 'parsedCookie.partitionKey',
+        cell: (info: InfoType) => info,
       },
       {
-        header: 'GDPR Portal',
-        accessorKey: 'analytics.gdprUrl',
-        cell: (info: InfoType) => (
-          <a
-            className="text-blue-500 hover:underline"
-            target="_blank"
-            href={info as string}
-            rel="noreferrer"
-          >
-            <abbr title={info as string}>{info}</abbr>
-          </a>
-        ),
+        header: 'Priority',
+        accessorKey: 'parsedCookie.priority',
+        cell: (info: InfoType) => info,
+      },
+      {
+        header: 'Size',
+        accessorKey: 'parsedCookie.size',
+        cell: (info: InfoType) => info,
       },
     ],
     [rowHighlighter]
   );
+
+  const blockedReasonFilterValues = useMemo<{
+    [key: string]: { selected: boolean };
+  }>(() => {
+    const filterValues: { [key: string]: { selected: boolean } } = {};
+    BLOCKED_REASON_LIST.forEach((reason) => {
+      filterValues[reason] = { selected: false };
+    });
+    return filterValues;
+  }, []);
 
   const filters = useMemo<TableFilter>(
     () => ({
@@ -423,22 +422,13 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
       'analytics.platform': {
         title: 'Platform',
       },
-      isCookieSet: {
-        title: 'Cookie Accepted',
-        description:
-          "Whether the cookie was accepted(set) in Chrome's Cookie Store",
+      blockedReasons: {
+        title: 'Cookie Blocked Reasons',
+        description: 'Reason why the cookies were blocked.',
         hasStaticFilterValues: true,
-        filterValues: {
-          True: {
-            selected: false,
-          },
-          False: {
-            selected: false,
-          },
-        },
+        filterValues: blockedReasonFilterValues,
         comparator: (value: InfoType, filterValue: string) => {
-          const val = !value;
-          return val === (filterValue === 'True');
+          return value?.includes(filterValue);
         },
       },
       headerType: {
@@ -460,7 +450,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
         },
       },
     }),
-    []
+    [blockedReasonFilterValues]
   );
 
   const searchKeys = useMemo<string[]>(
