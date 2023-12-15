@@ -22,7 +22,6 @@ const setOverlayPosition = (
   }
 
   const { x: frameX, y: frameY } = frame.getBoundingClientRect();
-
   if (frame.tagName !== 'BODY') {
     overlay.style.top = frameY + Number(window.scrollY) + 'px';
     overlay.style.left = frameX + Number(window.scrollX) + 'px';

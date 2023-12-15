@@ -27,7 +27,9 @@ const getTooltipInfoData = (
   numberOfThirdPartyCookies: number,
   belongsToRWS: string,
   allowedFeatures: string[] | string,
-  displayShowMoreButton: boolean
+  displayShowMoreButton: boolean,
+  blockedCookies: number,
+  blockedReasons: string
 ): { [key: string]: Record<string, string> } => {
   let allowedFeatureInExpandedView;
   let allowedFeaturesInCompactView;
@@ -53,6 +55,8 @@ const getTooltipInfoData = (
   info['Hidden iframes'] = String(numberOfHiddenFrames);
   info['First-party cookies'] = String(numberOfFirstPartyCookies);
   info['Third-party cookies'] = String(numberOfThirdPartyCookies);
+  info['Blocked cookies'] = String(blockedCookies);
+  info['Blocked reasons'] = String(blockedReasons);
 
   if (Array.isArray(allowedFeatures)) {
     allowedFeatureInExpandedView = allowedFeatures.join(', ');

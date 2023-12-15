@@ -37,7 +37,7 @@ const CookieDetails = ({ selectedFrameCookie }: CookieDetailsProps) => {
   return (
     <div
       data-testid="cookie-card"
-      className="flex-1 border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem]"
+      className="flex-1 border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] overflow-y-auto"
     >
       {selectedCookie ? (
         <Details selectedCookie={selectedCookie} />

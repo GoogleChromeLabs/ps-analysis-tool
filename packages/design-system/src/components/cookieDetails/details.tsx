@@ -19,7 +19,10 @@
  */
 import React, { useState } from 'react';
 import classNames from 'classnames';
-import type { CookieTableData } from '@ps-analysis-tool/common';
+import {
+  cookieIssueDetails,
+  type CookieTableData,
+} from '@ps-analysis-tool/common';
 
 export interface DetailsProps {
   selectedCookie: CookieTableData;
@@ -27,6 +30,40 @@ export interface DetailsProps {
 
 const Details = ({ selectedCookie }: DetailsProps) => {
   const [showUrlDecoded, setShowUrlDecoded] = useState(false);
+  let blockedReasons = '';
+  let warningReasons = '';
+
+  selectedCookie?.blockedReasons?.forEach((reason) => {
+    const cookieExclusionReason =
+      cookieIssueDetails.CookieExclusionReason[reason];
+    const cookieBlockedReason = cookieIssueDetails.CookieBlockedReason[reason];
+
+    if (cookieBlockedReason) {
+      blockedReasons = blockedReasons + cookieBlockedReason;
+    }
+    if (cookieExclusionReason) {
+      blockedReasons =
+        blockedReasons +
+        cookieExclusionReason(
+          selectedCookie?.headerType === 'response' ? 'SetCookie' : 'Cookie'
+        );
+    }
+    return reason;
+  });
+
+  selectedCookie?.warningReasons?.forEach((reason) => {
+    const cookieWarningReason = cookieIssueDetails.CookieWarningReason[reason];
+
+    if (cookieWarningReason) {
+      warningReasons =
+        warningReasons +
+        cookieWarningReason(
+          selectedCookie?.headerType === 'response' ? 'SetCookie' : 'Cookie',
+          ''
+        );
+    }
+    return reason;
+  });
 
   return (
     <div className="text-xs py-1 px-1.5">
@@ -58,9 +95,32 @@ const Details = ({ selectedCookie }: DetailsProps) => {
       <p className="font-bold text-granite-gray dark:text-manatee mb-1">
         Description
       </p>
-      <p className="text-outer-space-crayola dark:text-bright-gray">
+      <p className="mb-4 text-outer-space-crayola dark:text-bright-gray">
         {selectedCookie.analytics?.description || 'No description available.'}
       </p>
+      {selectedCookie.isBlocked && (
+        <>
+          <p className="font-bold text-granite-gray dark:text-manatee mb-1">
+            Blocked reason
+          </p>
+          <p
+            className="text-outer-space-crayola dark:text-bright-gray mb-3"
+            dangerouslySetInnerHTML={{ __html: blockedReasons ?? '' }}
+          />
+        </>
+      )}
+      {selectedCookie?.warningReasons &&
+        selectedCookie?.warningReasons?.length > 0 && (
+          <>
+            <p className="font-bold text-granite-gray dark:text-manatee mb-1">
+              Warnings
+            </p>
+            <p
+              className="text-outer-space-crayola dark:text-bright-gray"
+              dangerouslySetInnerHTML={{ __html: warningReasons ?? '' }}
+            />
+          </>
+        )}
     </div>
   );
 };

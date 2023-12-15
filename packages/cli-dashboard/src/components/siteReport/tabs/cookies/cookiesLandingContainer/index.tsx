@@ -22,13 +22,10 @@ import {
   Button,
   CookiesLanding,
   CookiesMatrix,
-} from '@ps-analysis-tool/design-system';
-import {
   prepareCookiesCount,
   prepareCookieStatsComponents,
-  type TabCookies,
-  type TabFrames,
-} from '@ps-analysis-tool/common';
+} from '@ps-analysis-tool/design-system';
+import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
 
 interface CookiesLandingContainerProps {
   tabFrames: TabFrames;
@@ -58,9 +55,10 @@ const CookiesLandingContainer = ({
         <div className="pt-4">
           <CookiesMatrix
             tabCookies={affectedCookies}
-            cookiesStatsComponents={prepareCookieStatsComponents(
-              prepareCookiesCount(affectedCookies)
-            )}
+            componentData={
+              prepareCookieStatsComponents(prepareCookiesCount(affectedCookies))
+                .legend
+            }
             tabFrames={tabFrames}
             title="Affected Cookies"
             description=""

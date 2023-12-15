@@ -93,19 +93,18 @@ class WebpageContentScript {
 
     this.listenToConnection();
     this.setTopics();
-
-    // Message once on initialize, to let the devtool know that content script has loaded.
-    if (chrome.runtime?.id) {
-      chrome.runtime.sendMessage({
-        setInPage: true,
-      });
-    }
   }
 
   /**
    * Listens for connection requests from devtool.
    */
   listenToConnection() {
+    // Message once on initialize, to let the devtool know that content script has loaded.
+    if (chrome.runtime?.id) {
+      chrome.runtime.sendMessage({
+        setInPage: true,
+      });
+    }
     chrome.runtime.onConnect.addListener((port) => {
       if (port.name.startsWith(WEBPAGE_PORT_NAME)) {
         this.port = port;
@@ -161,6 +160,8 @@ class WebpageContentScript {
    */
   insertOverlay(frame: HTMLElement): HTMLElement | null {
     const overlay = addOverlay(frame);
+
+    setOverlayPosition(overlay, frame);
 
     const updatePosition = () => {
       if (isElementVisibleInViewport(frame, true)) {

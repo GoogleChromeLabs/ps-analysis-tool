@@ -17,6 +17,7 @@
 export { default as Button } from './button';
 export { default as RefreshButton } from './refreshButton';
 export { default as ProgressBar } from './progressBar';
+export { default as ToggleSwitch } from './toggleSwitch';
 export { default as MessageBox } from './messageBox';
 export { default as Circle } from './circle';
 export { default as CirclePieChart } from './circlePieChart';

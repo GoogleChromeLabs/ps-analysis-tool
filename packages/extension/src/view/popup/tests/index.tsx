@@ -123,6 +123,7 @@ describe('App', () => {
                   allowedNumberOfTabs: 'single',
                 });
               }),
+            set: () => Promise.resolve(),
             //@ts-ignore
             onChanged: {
               addListener: () => undefined,
@@ -220,6 +221,7 @@ describe('App', () => {
                   allowedNumberOfTabs: 'single',
                 });
               }),
+            set: () => Promise.resolve(),
             //@ts-ignore
             onChanged: {
               addListener: () => undefined,
@@ -304,6 +306,7 @@ describe('App', () => {
                   allowedNumberOfTabs: 'single',
                 });
               }),
+            set: () => Promise.resolve(),
             //@ts-ignore
             onChanged: {
               addListener: () => undefined,

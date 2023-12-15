@@ -25,11 +25,8 @@ import React, {
   useRef,
 } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
-import { noop } from '@ps-analysis-tool/design-system';
-import {
-  prepareCookiesCount,
-  type CookiesCount,
-} from '@ps-analysis-tool/common';
+import { noop, prepareCookiesCount } from '@ps-analysis-tool/design-system';
+import { type CookiesCount } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -50,9 +47,11 @@ export interface CookieStoreContext {
     tabId: number | null;
     onChromeUrl: boolean;
     allowedNumberOfTabs: string | null;
+    isUsingCDP: boolean;
   };
   actions: {
     changeListeningToThisTab: () => void;
+    setUsingCDP: (newValue: boolean) => void;
   };
 }
 
@@ -60,6 +59,9 @@ const initialState: CookieStoreContext = {
   state: {
     tabCookieStats: {
       total: 0,
+      blockedCookies: {
+        total: 0,
+      },
       firstParty: {
         total: 0,
         functional: 0,
@@ -81,9 +83,11 @@ const initialState: CookieStoreContext = {
     onChromeUrl: false,
     tabId: null,
     allowedNumberOfTabs: null,
+    isUsingCDP: false,
   },
   actions: {
     changeListeningToThisTab: noop,
+    setUsingCDP: noop,
   },
 };
 
@@ -110,6 +114,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     useState<boolean>(false);
 
   const [onChromeUrl, setOnChromeUrl] = useState<boolean>(false);
+  const [isUsingCDP, setUsingCDP] = useState<boolean>(false);
   const loadingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -129,6 +134,15 @@ export const Provider = ({ children }: PropsWithChildren) => {
     setLoading(false);
   }, 100);
 
+  const _setUsingCDP = useCallback(async (newValue: boolean) => {
+    const extensionStorage = await chrome.storage.sync.get();
+    chrome.storage.sync.set({
+      ...extensionStorage,
+      isUsingCDP: newValue,
+    });
+    setUsingCDP(newValue);
+  }, []);
+
   const intitialSync = useCallback(async () => {
     const [tab] = await getCurrentTab();
 
@@ -136,6 +150,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
     if (extensionStorage?.allowedNumberOfTabs) {
       setAllowedNumberOfTabs(extensionStorage?.allowedNumberOfTabs);
+    }
+    if (extensionStorage?.isUsingCDP) {
+      setUsingCDP(extensionStorage?.isUsingCDP);
     }
 
     if (!tab.id || !tab.url) {
@@ -149,7 +166,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
     }
 
     const _tabId = tab.id;
-    const _tabUrl = tab.url;
 
     setTabId(tab.id);
     setTabUrl(tab.url);
@@ -179,12 +195,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
       }
     }
 
-    const tabData = (await chrome.storage.local.get([_tabId.toString()]))[
-      _tabId.toString()
+    const tabData = (await chrome.storage.local.get([_tabId?.toString()]))[
+      _tabId?.toString()
     ];
 
     if (tabData && tabData.cookies) {
-      setDebouncedStats(prepareCookiesCount(tabData.cookies, _tabUrl));
+      setDebouncedStats(prepareCookiesCount(tabData.cookies));
     }
     setLoading(false);
   }, [setDebouncedStats]);
@@ -198,10 +214,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         changes[tabId.toString()]?.newValue?.cookies
       ) {
         setDebouncedStats(
-          prepareCookiesCount(
-            changes[tabId.toString()].newValue.cookies,
-            tabUrl
-          )
+          prepareCookiesCount(changes[tabId.toString()].newValue.cookies)
         );
       }
       if (tabUrl) {
@@ -286,6 +299,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
     if (extensionStorage?.allowedNumberOfTabs) {
       setAllowedNumberOfTabs(extensionStorage?.allowedNumberOfTabs);
     }
+    if (extensionStorage?.isUsingCDP) {
+      setUsingCDP(extensionStorage?.isUsingCDP);
+    }
   }, []);
 
   const tabUpdateListener = useCallback(
@@ -325,9 +341,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
           returningToSingleTab,
           onChromeUrl,
           allowedNumberOfTabs,
+          isUsingCDP,
         },
         actions: {
           changeListeningToThisTab,
+          setUsingCDP: _setUsingCDP,
         },
       }}
     >

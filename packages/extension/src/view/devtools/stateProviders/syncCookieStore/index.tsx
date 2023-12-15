@@ -50,7 +50,6 @@ export interface CookieStoreContext {
     allowedNumberOfTabs: string | null;
     isInspecting: boolean;
     contextInvalidated: boolean;
-    isFrameSelectedFromDevTool: boolean;
     canStartInspecting: boolean;
   };
   actions: {
@@ -67,9 +66,6 @@ export interface CookieStoreContext {
     changeListeningToThisTab: () => void;
     getCookiesSetByJavascript: () => void;
     setContextInvalidated: React.Dispatch<React.SetStateAction<boolean>>;
-    setIsFrameSelectedFromDevTool: React.Dispatch<
-      React.SetStateAction<boolean>
-    >;
     setCanStartInspecting: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
@@ -86,7 +82,6 @@ const initialState: CookieStoreContext = {
     allowedNumberOfTabs: null,
     isInspecting: false,
     contextInvalidated: false,
-    isFrameSelectedFromDevTool: false,
     canStartInspecting: false,
   },
   actions: {
@@ -94,7 +89,6 @@ const initialState: CookieStoreContext = {
     changeListeningToThisTab: noop,
     deleteCookie: noop,
     modifyCookie: () => Promise.resolve(true),
-    setIsFrameSelectedFromDevTool: noop,
     deleteAllCookies: noop,
     setIsInspecting: noop,
     getCookiesSetByJavascript: noop,
@@ -128,10 +122,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [isInspecting, setIsInspecting] =
     useState<CookieStoreContext['state']['isInspecting']>(false);
 
-  const [isFrameSelectedFromDevTool, setIsFrameSelectedFromDevTool] =
-    useState<CookieStoreContext['state']['isFrameSelectedFromDevTool']>(false);
-
-  const [selectedFrame, _setSelectedFrame] =
+  const [selectedFrame, setSelectedFrame] =
     useState<CookieStoreContext['state']['selectedFrame']>(null);
 
   const [tabUrl, setTabUrl] =
@@ -151,11 +142,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
       const currentTabFrames = await chrome.webNavigation.getAllFrames({
         tabId: _tabId,
       });
-      const modifiedTabFrames: {
-        [key: string]: { frameIds: number[]; isOnRWS?: boolean };
-      } = {};
+      const modifiedTabFrames: TabFrames = {};
 
-      currentTabFrames?.forEach(({ url, frameId }) => {
+      currentTabFrames?.forEach(({ url, frameId, frameType }) => {
         if (url && url.includes('http')) {
           const parsedUrl = regexForFrameUrl.exec(url);
           if (parsedUrl && parsedUrl[0]) {
@@ -164,6 +153,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
             } else {
               modifiedTabFrames[parsedUrl[0]] = {
                 frameIds: [frameId],
+                frameType,
               };
             }
           }
@@ -179,11 +169,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
     },
     []
   );
-
-  const setSelectedFrame = useCallback((key: string | null) => {
-    _setSelectedFrame(key);
-    setIsFrameSelectedFromDevTool(true);
-  }, []);
 
   const intitialSync = useCallback(async () => {
     const _tabId = chrome.devtools.inspectedWindow.tabId;
@@ -225,7 +210,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         ) {
           setIsCurrentTabBeingListenedTo(false);
           setLoading(false);
-          _setSelectedFrame(null);
+          setSelectedFrame(null);
           setTabFrames(null);
           setCanStartInspecting(false);
           return;
@@ -242,21 +227,15 @@ export const Provider = ({ children }: PropsWithChildren) => {
       const _cookies: NonNullable<CookieStoreContext['state']['tabCookies']> =
         {};
 
-      await Promise.all(
-        Object.entries(tabData.cookies as { [key: string]: CookieData }).map(
-          async ([key, value]: [string, CookieData]) => {
-            const isCookieSet = Boolean(
-              await chrome.cookies.get({
-                name: value?.parsedCookie?.name,
-                url: value.url,
-              })
-            );
-            _cookies[key] = {
-              ...value,
-              isCookieSet,
-            };
-          }
-        )
+      Object.entries(tabData.cookies as { [key: string]: CookieData }).map(
+        ([key, value]: [string, CookieData]) => {
+          const isCookieBlocked = value?.isBlocked ?? false;
+          _cookies[key] = {
+            ...value,
+            isBlocked: isCookieBlocked,
+          };
+          return [key, value];
+        }
       );
 
       setTabCookies(_cookies);
@@ -284,24 +263,19 @@ export const Provider = ({ children }: PropsWithChildren) => {
         const _cookies: NonNullable<CookieStoreContext['state']['tabCookies']> =
           {};
 
-        await Promise.all(
-          Object.entries(
-            changes[tabId.toString()].newValue.cookies as {
-              [key: string]: CookieData;
-            }
-          ).map(async ([key, value]) => {
-            const isCookieSet = Boolean(
-              await chrome.cookies.get({
-                name: value?.parsedCookie?.name,
-                url: value.url,
-              })
-            );
-            _cookies[key] = {
-              ...value,
-              isCookieSet,
-            };
-          })
-        );
+        Object.entries(
+          changes[tabId.toString()].newValue.cookies as {
+            [key: string]: CookieData;
+          }
+        ).map(([key, value]) => {
+          const isCookieBlocked = value?.isBlocked ?? false;
+          _cookies[key] = {
+            ...value,
+            isBlocked: isCookieBlocked,
+          };
+          return [key, value];
+        });
+
         await getAllFramesForCurrentTab(tabId);
         setTabCookies(_cookies);
       }
@@ -330,7 +304,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           ) {
             setIsCurrentTabBeingListenedTo(false);
             setTabFrames(null);
-            _setSelectedFrame(null);
+            setSelectedFrame(null);
             setLoading(false);
             setCanStartInspecting(false);
             return;
@@ -417,14 +391,14 @@ export const Provider = ({ children }: PropsWithChildren) => {
           const currentDomain = currentURL?.hostname;
 
           if (selectedFrame && nextDomain === currentDomain) {
-            _setSelectedFrame(nextURL.origin);
+            setSelectedFrame(nextURL.origin);
           } else {
-            _setSelectedFrame(null);
+            setSelectedFrame(null);
           }
 
           setTabUrl(changeInfo.url);
         } catch (error) {
-          _setSelectedFrame(null);
+          setSelectedFrame(null);
         } finally {
           setTabFrames(null);
           await getAllFramesForCurrentTab(_tabId);
@@ -486,8 +460,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
         let newCookieKey = cookieKey;
         let valueToBeSet: string | boolean | number = changedValue;
         const { [cookieKey]: cookieDetails, ...restOfCookies } = tabCookies;
-        if (!cookieDetails?.isCookieSet) {
-          return false;
+
+        if (cookieDetails?.isBlocked) {
+          return null;
         }
 
         if (keyToChange === 'expirationDate') {
@@ -592,6 +567,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
             await chrome.storage.local.set({
               ...oldData,
               [tabId]: {
+                ...oldData[tabId],
                 cookies: {
                   ...restOfCookies,
                   ...updatedCookie,
@@ -625,7 +601,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
           currentFrame.frameIds.map(async (frameId) => {
             await Promise.all(
               Object.keys(allCookies).map(async (key) => {
-                if (!allCookies[key].frameIdList.includes(frameId)) {
+                if (
+                  allCookies[key].frameIdList &&
+                  !allCookies[key].frameIdList.includes(frameId)
+                ) {
                   return key;
                 }
                 if (
@@ -658,8 +637,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
     ) => {
       if (tabId && tabCookies) {
         const { [cookieKey]: cookieDetails, ...restOfCookies } = tabCookies;
-        if (!cookieDetails?.isCookieSet) {
-          return false;
+
+        if (cookieDetails?.isBlocked) {
+          return null;
         }
         const newCookieKey =
           changedValue +
@@ -714,6 +694,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
             await chrome.storage.local.set({
               ...oldData,
               [tabId]: {
+                ...oldData[tabId],
                 cookies: {
                   ...restOfCookies,
                   ...updatedCookie,
@@ -803,7 +784,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
           allowedNumberOfTabs,
           contextInvalidated,
           isInspecting,
-          isFrameSelectedFromDevTool,
           canStartInspecting,
         },
         actions: {
@@ -815,7 +795,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
           getCookiesSetByJavascript,
           setIsInspecting,
           setContextInvalidated,
-          setIsFrameSelectedFromDevTool,
           setCanStartInspecting,
         },
       }}

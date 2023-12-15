@@ -64,13 +64,8 @@ const useColumnSorting = (
 
   const sortedData = useMemo(() => {
     const _sortedData = [...data].sort((a, b) => {
-      let candidateA = getValueByKey(sortKey, a);
-      let candidateB = getValueByKey(sortKey, b);
-
-      candidateA =
-        typeof candidateA === 'number' ? candidateA.toString() : candidateA;
-      candidateB =
-        typeof candidateB === 'number' ? candidateB.toString() : candidateB;
+      const candidateA = getValueByKey(sortKey, a);
+      const candidateB = getValueByKey(sortKey, b);
 
       return (
         (candidateA === candidateB ? 0 : candidateA > candidateB ? 1 : -1) *
@@ -111,7 +106,7 @@ const useColumnSorting = (
   }, [getPreferences, tablePersistentSettingsKey]);
 
   useEffect(() => {
-    if (tablePersistentSettingsKey) {
+    if (tablePersistentSettingsKey && sortKey) {
       setPreferences(
         {
           sortBy: sortKey,

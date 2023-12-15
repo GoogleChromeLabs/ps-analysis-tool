@@ -49,10 +49,20 @@ const BodyRow = ({
   onKeyDown,
 }: BodyRowProps) => {
   const cookieKey = getRowObjectKey(row);
+  const isBlocked = (row.originalData as CookieTableData)?.isBlocked;
   const isHighlighted = (row.originalData as CookieTableData)?.highlighted;
   const tableRowClassName = classNames(
     'outline-0 flex divide-x divide-american-silver dark:divide-quartz',
+    isBlocked &&
+      (cookieKey !== selectedKey
+        ? index % 2
+          ? 'dark:bg-flagged-row-even-dark bg-flagged-row-even-light'
+          : 'dark:bg-flagged-row-odd-dark bg-flagged-row-odd-light'
+        : isRowFocused
+        ? 'bg-gainsboro dark:bg-outer-space'
+        : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
     cookieKey !== selectedKey &&
+      !isBlocked &&
       (index % 2
         ? isHighlighted
           ? 'bg-dirty-pink'
@@ -61,6 +71,7 @@ const BodyRow = ({
         ? 'bg-dirty-pink text-dirty-red dark:text-dirty-red text-dirty-red'
         : 'bg-white dark:bg-raisin-black'),
     cookieKey === selectedKey &&
+      !isBlocked &&
       (isRowFocused
         ? isHighlighted
           ? 'bg-dirty-red'

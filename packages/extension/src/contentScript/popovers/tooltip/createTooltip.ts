@@ -89,7 +89,9 @@ const createTooltip = (
     data?.thirdPartyCookies || 0,
     origin ? (data?.isOnRWS ? 'Yes' : 'No') : 'N/A',
     allowedFeatured,
-    DISPLAY_SHOW_MORE_BUTTON
+    DISPLAY_SHOW_MORE_BUTTON,
+    data?.blockedCookies || 0,
+    data?.blockedReasons || ''
   );
 
   const info = infoData['info'];

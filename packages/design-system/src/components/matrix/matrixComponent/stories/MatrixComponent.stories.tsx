@@ -17,12 +17,12 @@
  * External dependencies.
  */
 import type { Meta, StoryObj } from '@storybook/react';
-import { COLOR_MAP } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
 import MatrixComponent from '..';
+import { COLOR_MAP } from '../../../../theme/colors';
 
 const meta: Meta<typeof MatrixComponent> = {
   title: 'DesignSystem/Matrix/Component',
@@ -37,8 +37,8 @@ export const Primary: StoryObj<typeof meta> = {
     title: 'Functional Cookies',
     description:
       'These are essential cookies that are necessary for a website to function properly. They enable basic functionalities such as page navigation, access to secure areas, and remembering user preferences (e.g., language, font size).',
-    color: COLOR_MAP.functional,
+    color: COLOR_MAP.functional.color,
     isExpanded: true,
-    countClassName: 'text-functional',
+    countClassName: COLOR_MAP.functional.className,
   },
 };

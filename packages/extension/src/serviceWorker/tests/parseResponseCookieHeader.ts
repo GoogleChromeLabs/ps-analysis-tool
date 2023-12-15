@@ -18,12 +18,11 @@
  * External dependencies.
  */
 import SinonChrome from 'sinon-chrome';
-
+import { emptyAnalytics } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
 import parseResponseCookieHeader from '../parseResponseCookieHeader';
-import { emptyAnalytics } from '../findAnalyticsMatch';
 
 describe('parseResponseCookieHeader', () => {
   beforeAll(() => {
@@ -36,7 +35,8 @@ describe('parseResponseCookieHeader', () => {
       'countryCode=IN; Domain=.example.com; Path=/; SameSite=None; Secure',
       {},
       'https://docs.google.com/',
-      1
+      1,
+      []
     );
 
     expect(parsedCookie).toEqual({
@@ -49,6 +49,9 @@ describe('parseResponseCookieHeader', () => {
         samesite: 'none',
         name: 'countryCode',
         value: 'IN',
+        partitionKey: '',
+        priority: 'Medium',
+        size: 13,
       },
       analytics: { ...emptyAnalytics },
       url: 'https://example.com/public/api/alerts',
@@ -79,7 +82,8 @@ describe('parseResponseCookieHeader', () => {
         ],
       },
       'https://docs.google.com/',
-      1
+      1,
+      []
     );
 
     expect(parsedCookie).toEqual({
@@ -92,6 +96,9 @@ describe('parseResponseCookieHeader', () => {
         samesite: 'none',
         name: 'test_cookie',
         value: 'bla',
+        partitionKey: '',
+        priority: 'Medium',
+        size: 14,
       },
       analytics: {
         platform: 'DoubleClick/Google Marketing',
@@ -147,7 +154,8 @@ describe('parseResponseCookieHeader', () => {
         ],
       },
       'https://docs.google.com/',
-      1
+      1,
+      []
     );
 
     expect(parsedCookie).toEqual({
@@ -160,6 +168,9 @@ describe('parseResponseCookieHeader', () => {
         samesite: 'none',
         name: '_ga_123',
         value: 'bla',
+        partitionKey: '',
+        priority: 'Medium',
+        size: 10,
       },
       analytics: {
         platform: 'Google Analytics',

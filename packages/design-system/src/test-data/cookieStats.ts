@@ -15,6 +15,9 @@
  */
 export default {
   total: 7,
+  blockedCookies: {
+    total: 0,
+  },
   firstParty: {
     total: 6,
     functional: 0,

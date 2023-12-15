@@ -16,18 +16,21 @@
 /**
  * External dependencies.
  */
-import cookie, { type Cookie as ParsedCookie } from 'simple-cookie';
-import { isFirstParty } from '@ps-analysis-tool/common';
+import cookie from 'simple-cookie';
+import {
+  isFirstParty,
+  findAnalyticsMatch,
+  type CookieData,
+  type NetworkCookie,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import type { CookieData } from '../localStore/cookieStore';
 import type {
   CookieAnalytics,
   CookieDatabase,
 } from '../utils/fetchCookieDictionary';
-import findAnalyticsMatch from './findAnalyticsMatch';
 import { createCookieObject } from './createCookieObject';
 
 /**
@@ -38,6 +41,7 @@ import { createCookieObject } from './createCookieObject';
  * @param {CookieDatabase} dictionary Dictionary from open cookie database
  * @param {string} tabUrl top url of the tab from which the request originated.
  * @param {number} frameId Id of a frame in which this cookie is used.
+ * @param {NetworkCookie[]} cookiesList List cookies from the request.
  * @returns {Promise<CookieData>} Parsed cookie object.
  */
 const parseResponseCookieHeader = async (
@@ -45,10 +49,12 @@ const parseResponseCookieHeader = async (
   value: string,
   dictionary: CookieDatabase,
   tabUrl: string,
-  frameId: number
+  frameId: number,
+  cookiesList: NetworkCookie[]
 ): Promise<CookieData> => {
-  let parsedCookie: ParsedCookie = cookie.parse(value);
-  parsedCookie = await createCookieObject(parsedCookie, url);
+  let parsedCookie: CookieData['parsedCookie'] = cookie.parse(value);
+
+  parsedCookie = await createCookieObject(parsedCookie, url, cookiesList);
 
   let analytics: CookieAnalytics | null = null;
   if (dictionary) {
@@ -56,6 +62,16 @@ const parseResponseCookieHeader = async (
   }
 
   const _isFirstParty = isFirstParty(parsedCookie.domain || '', tabUrl);
+  const partitionKey =
+    new URL(tabUrl).protocol +
+    '//' +
+    new URL(tabUrl).hostname.replace('www.', '');
+  if (value.toLowerCase().includes('partitioned')) {
+    parsedCookie = {
+      ...parsedCookie,
+      partitionKey,
+    };
+  }
 
   return {
     parsedCookie,
