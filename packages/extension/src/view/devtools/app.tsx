@@ -27,6 +27,7 @@ import {
   type SidebarItems,
   InspectButton,
 } from '@ps-analysis-tool/design-system';
+import type { CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -117,13 +118,15 @@ const App: React.FC = () => {
       const data = { ...prev };
       const psData = data['privacySandbox'];
 
-      psData.children['cookies'].panel = <Cookies />;
+      psData.children['cookies'].panel = (
+        <Cookies setFilteredCookies={setFilteredCookies} />
+      );
       psData.children['cookies'].children = Object.keys(tabFrames || {}).reduce(
         (acc, url) => {
           acc[url] = {
             title: url,
             popupTitle: `Cookies used by frames from ${url}`,
-            panel: <Cookies />,
+            panel: <Cookies setFilteredCookies={setFilteredCookies} />,
             icon: <CookieIcon />,
             selectedIcon: <CookieIconWhite />,
             children: {},
@@ -142,7 +145,7 @@ const App: React.FC = () => {
           <InspectButton
             isInspecting={isInspecting}
             setIsInspecting={setIsInspecting}
-            isTabFocused={isKeySelected('cookies') && isSidebarFocused}
+            isTabFocused={isSidebarFocused}
           />
         );
       } else {
@@ -198,12 +201,10 @@ const App: React.FC = () => {
 
     lastUrl.current = tabUrl;
 
-    if (!selectedFrame) {
-      updateSelectedItemKey('cookies');
-    } else {
-      updateSelectedItemKey(selectedFrame);
-    }
+    updateSelectedItemKey(selectedFrame || 'cookies');
   }, [selectedFrame, tabUrl, updateSelectedItemKey]);
+
+  const [filteredCookies, setFilteredCookies] = useState<CookieTableData[]>([]);
 
   const handleUpdate = useCallback(
     (key: string | null) => {
@@ -212,7 +213,7 @@ const App: React.FC = () => {
     [updateSelectedItemKey]
   );
 
-  useFrameOverlay(handleUpdate);
+  useFrameOverlay(filteredCookies, handleUpdate);
 
   return (
     <div
@@ -235,16 +236,9 @@ const App: React.FC = () => {
             minWidth={'150px'}
             maxWidth={'90%'}
             enable={{
-              top: false,
               right: true,
-              bottom: false,
-              left: false,
-              topRight: false,
-              bottomRight: false,
-              bottomLeft: false,
-              topLeft: false,
             }}
-            className="h-full flex flex-col border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
+            className="h-full"
           >
             <Sidebar
               selectedItemKey={selectedItemKey}

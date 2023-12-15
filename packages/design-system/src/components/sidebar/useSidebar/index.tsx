@@ -177,7 +177,8 @@ const useSidebar = ({
           return;
         }
 
-        updateSelectedItemKey(prevItem);
+        // delay navigation as user can hold up arrow key which make useEffect to run multiple times unnecessarily.
+        setTimeout(() => updateSelectedItemKey(prevItem));
       } else if (navigationAction === 'ArrowDown') {
         const nextItem = findNextItem(sidebarItems, keyPath);
 
@@ -185,7 +186,8 @@ const useSidebar = ({
           return;
         }
 
-        updateSelectedItemKey(nextItem);
+        // delay navigation as user can hold down arrow key which make useEffect to run multiple times unnecessarily.
+        setTimeout(() => updateSelectedItemKey(nextItem));
       }
     },
     [sidebarItems, toggleDropdown, updateSelectedItemKey]

@@ -19,7 +19,6 @@
  */
 import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
-import { noop, type PreferenceDataValues } from '@ps-analysis-tool/common';
 import { createPortal } from 'react-dom';
 
 /**
@@ -33,21 +32,9 @@ interface ColumnMenuProps {
   position: { x: number; y: number };
   open: boolean;
   onClose: (value: boolean) => void;
-  updatePreference: (
-    key: string,
-    updater: (prevStatePreference: {
-      [key: string]: unknown;
-    }) => PreferenceDataValues
-  ) => void;
 }
 
-const ColumnMenu = ({
-  table,
-  position,
-  open,
-  onClose,
-  updatePreference = noop,
-}: ColumnMenuProps) => {
+const ColumnMenu = ({ table, position, open, onClose }: ColumnMenuProps) => {
   const [startAnimation, setStartAnimation] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -108,7 +95,6 @@ const ColumnMenu = ({
               <div>
                 <ColumnList
                   table={table}
-                  updatePreference={updatePreference}
                   toggleVisibility={(key: string) => {
                     table.isColumnHidden(key)
                       ? table.showColumn(key)

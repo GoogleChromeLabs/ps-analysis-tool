@@ -17,13 +17,13 @@
  * External dependencies.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
+import type { CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import { WEBPAGE_PORT_NAME } from '../../../constants';
 import { useCookieStore } from '../stateProviders/syncCookieStore';
-import { useFilterManagementStore } from '../stateProviders/filterManagementStore';
 import { getCurrentTabId } from '../../../utils/getCurrentTabId';
 
 interface Response {
@@ -31,6 +31,7 @@ interface Response {
 }
 
 const useFrameOverlay = (
+  filteredCookies: CookieTableData[],
   selectedFrameChangeHandler?: (key: string | null) => void
 ) => {
   const portRef = useRef<chrome.runtime.Port | null>(null);
@@ -38,44 +39,42 @@ const useFrameOverlay = (
   const {
     isInspecting,
     setIsInspecting,
-    _setSelectedFrame,
     setContextInvalidated,
     selectedFrame,
     isCurrentTabBeingListenedTo,
     allowedNumberOfTabs,
     tabFrames,
-    isFrameSelectedFromDevTool,
-    setIsFrameSelectedFromDevTool,
     setCanStartInspecting,
     canStartInspecting,
   } = useCookieStore(({ state, actions }) => ({
     setContextInvalidated: actions.setContextInvalidated,
     isInspecting: state.isInspecting,
-    _setSelectedFrame: actions.setSelectedFrame,
     setIsInspecting: actions.setIsInspecting,
     selectedFrame: state.selectedFrame,
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
     allowedNumberOfTabs: state.allowedNumberOfTabs,
     tabFrames: state.tabFrames,
-    isFrameSelectedFromDevTool: state.isFrameSelectedFromDevTool,
-    setIsFrameSelectedFromDevTool: actions.setIsFrameSelectedFromDevTool,
     setCanStartInspecting: actions.setCanStartInspecting,
     canStartInspecting: state.canStartInspecting,
   }));
 
+  const [isFrameSelectedFromDevTool, setIsFrameSelectedFromDevTool] =
+    useState(false);
+
   const setSelectedFrame = useCallback(
-    (key: string | null) => {
-      _setSelectedFrame(key);
-      if (selectedFrameChangeHandler) {
-        selectedFrameChangeHandler(key);
-      }
+    (key: string | null, isHover?: boolean) => {
+      selectedFrameChangeHandler?.(key);
+      setIsFrameSelectedFromDevTool(!isHover);
     },
-    [_setSelectedFrame, selectedFrameChangeHandler]
+    [selectedFrameChangeHandler]
   );
 
-  const { filteredCookies } = useFilterManagementStore(({ state }) => ({
-    filteredCookies: state.filteredCookies,
-  }));
+  useEffect(() => {
+    if (!isInspecting) {
+      setIsFrameSelectedFromDevTool(true);
+    }
+  }, [isInspecting, setSelectedFrame]);
+
   const [connectedToPort, setConnectedToPort] = useState(false);
 
   const connectToPort = useCallback(async () => {
@@ -91,8 +90,7 @@ const useFrameOverlay = (
       name: portName,
     });
     portRef.current.onMessage.addListener((response: Response) => {
-      setSelectedFrame(response.attributes.iframeOrigin);
-      setIsFrameSelectedFromDevTool(false);
+      setSelectedFrame(response.attributes.iframeOrigin, true);
     });
 
     portRef.current.onDisconnect.addListener(() => {
@@ -104,7 +102,7 @@ const useFrameOverlay = (
       isInspecting: true,
     });
     setConnectedToPort(true);
-  }, [setIsFrameSelectedFromDevTool, setIsInspecting, setSelectedFrame]);
+  }, [setIsInspecting, setSelectedFrame]);
 
   const listenIfContentScriptSet = useCallback(
     async (
@@ -162,31 +160,29 @@ const useFrameOverlay = (
   // When inspect button is clicked.
   useEffect(() => {
     (async () => {
-      // Indicates that the context was invalidated.
-      if (!chrome.runtime?.id && setContextInvalidated) {
-        setContextInvalidated(true);
-        return;
-      }
-
-      if (!isInspecting) {
-        if (portRef.current) {
-          portRef.current.disconnect();
-          portRef.current = null;
-          setConnectedToPort(false);
+      try {
+        // Indicates that the context was invalidated.
+        if (!chrome.runtime?.id && setContextInvalidated) {
+          setContextInvalidated(true);
+          return;
         }
 
-        return;
-      }
+        if (!isInspecting) {
+          if (portRef.current) {
+            portRef.current.disconnect();
+            portRef.current = null;
+            setConnectedToPort(false);
+          }
 
-      await connectToPort();
+          return;
+        }
+
+        await connectToPort();
+      } catch (error) {
+        // fail silently
+      }
     })();
-  }, [
-    isInspecting,
-    setSelectedFrame,
-    setIsInspecting,
-    setContextInvalidated,
-    connectToPort,
-  ]);
+  }, [connectToPort, isInspecting, setContextInvalidated]);
 
   useEffect(() => {
     chrome.storage.session.onChanged.addListener(sessionStoreChangedListener);
@@ -218,11 +214,16 @@ const useFrameOverlay = (
   useEffect(() => {
     (async () => {
       try {
-        if (!isInspecting) {
-          return;
-        }
         if (!connectedToPort) {
           await connectToPort();
+        }
+
+        if (!isInspecting && portRef.current) {
+          portRef.current.postMessage({
+            isInspecting: false,
+          });
+
+          return;
         }
         if (chrome.runtime?.id && portRef.current && tabFrames) {
           const thirdPartyCookies = filteredCookies
@@ -231,6 +232,7 @@ const useFrameOverlay = (
           const firstPartyCookies = filteredCookies
             ? filteredCookies.filter((cookie) => cookie.isFirstParty)
             : [];
+
           portRef.current.postMessage({
             selectedFrame,
             removeAllFramePopovers: isFrameSelectedFromDevTool,
@@ -245,14 +247,13 @@ const useFrameOverlay = (
       }
     })();
   }, [
-    setCanStartInspecting,
-    selectedFrame,
-    filteredCookies,
-    isInspecting,
     connectToPort,
     connectedToPort,
-    tabFrames,
+    filteredCookies,
     isFrameSelectedFromDevTool,
+    isInspecting,
+    selectedFrame,
+    tabFrames,
   ]);
 };
 

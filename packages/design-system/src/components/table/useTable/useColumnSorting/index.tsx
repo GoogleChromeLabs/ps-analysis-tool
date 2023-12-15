@@ -111,7 +111,7 @@ const useColumnSorting = (
   }, [getPreferences, tablePersistentSettingsKey]);
 
   useEffect(() => {
-    if (tablePersistentSettingsKey) {
+    if (tablePersistentSettingsKey && sortKey) {
       setPreferences(
         {
           sortBy: sortKey,
