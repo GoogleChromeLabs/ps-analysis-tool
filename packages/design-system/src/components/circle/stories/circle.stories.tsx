@@ -37,6 +37,6 @@ export default meta;
 
 export const Primary: StoryObj<typeof meta> = {
   args: {
-    color: COLOR_MAP.functional,
+    color: COLOR_MAP.functional.color,
   },
 };

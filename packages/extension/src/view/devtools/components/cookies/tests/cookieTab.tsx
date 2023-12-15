@@ -332,9 +332,7 @@ describe('CookieTab', () => {
     const card = await screen.findByTestId('cookie-card');
 
     expect(card).toBeInTheDocument();
-    expect(
-      await within(card).findByText(lastCookie.parsedCookie.value)
-    ).toBeInTheDocument();
+    expect(screen.getByText(lastCookie.parsedCookie.value)).toBeInTheDocument();
 
     fireEvent.click(screen.getByTestId('show-url-decoded-checkbox'));
 

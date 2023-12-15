@@ -40,19 +40,19 @@ export const Primary: StoryObj<typeof meta> = {
     data: [
       {
         count: 5,
-        color: COLOR_MAP.functional,
+        color: COLOR_MAP.functional.color,
       },
       {
         count: 4,
-        color: COLOR_MAP.marketing,
+        color: COLOR_MAP.marketing.color,
       },
       {
         count: 0,
-        color: COLOR_MAP.analytics,
+        color: COLOR_MAP.analytics.color,
       },
       {
         count: 9,
-        color: COLOR_MAP.uncategorized,
+        color: COLOR_MAP.uncategorized.color,
       },
     ],
   },
@@ -70,19 +70,19 @@ export const Wide: StoryObj<typeof meta> = {
     data: [
       {
         count: 5,
-        color: COLOR_MAP.functional,
+        color: COLOR_MAP.functional.color,
       },
       {
         count: 4,
-        color: COLOR_MAP.marketing,
+        color: COLOR_MAP.marketing.color,
       },
       {
         count: 0,
-        color: COLOR_MAP.analytics,
+        color: COLOR_MAP.analytics.color,
       },
       {
         count: 9,
-        color: COLOR_MAP.uncategorized,
+        color: COLOR_MAP.uncategorized.color,
       },
     ],
   },

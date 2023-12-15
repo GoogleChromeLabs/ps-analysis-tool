@@ -107,24 +107,24 @@ export const EMPTY_FRAME_LEGEND = [
     label: 'Total frames',
     count: 0,
     color: '#25ACAD',
-    countClassName: 'text-total-frames',
+    countClassName: 'text-greenland-green',
   },
   {
     label: 'Frames with cookies',
     count: 0,
     color: '#C5A06A',
-    countClassName: 'text-cookie-frames',
+    countClassName: 'text-good-life',
   },
   {
     label: 'Frames with blocked cookies',
     count: 0,
     color: '#AF7AA3',
-    countClassName: 'text-blocked-frames',
+    countClassName: 'text-victorian-violet',
   },
   {
     label: 'Frames with unblocked cookies',
     count: 0,
     color: '#F54021',
-    countClassName: 'text-unblocked-frames',
+    countClassName: 'text-strawberry-spinach-red',
   },
 ];

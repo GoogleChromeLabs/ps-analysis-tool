@@ -40,14 +40,14 @@ const prepareCookieStatsComponents = (
 
     blockedCookiesStats.push({
       count: cookieStats.blockedCookies[key],
-      color: COLOR_MAP[key],
+      color: COLOR_MAP[key].color,
     });
 
     blockedCookiesLegend.push({
       label: key,
       count: cookieStats.blockedCookies[key],
-      color: COLOR_MAP[key],
-      countClassName: 'text-' + key.toLowerCase(),
+      color: COLOR_MAP[key].color,
+      countClassName: COLOR_MAP[key].className,
     });
   });
   return {
@@ -56,66 +56,66 @@ const prepareCookieStatsComponents = (
         label: 'Functional',
         count:
           cookieStats.firstParty.functional + cookieStats.thirdParty.functional,
-        color: COLOR_MAP.functional,
-        countClassName: 'text-functional',
+        color: COLOR_MAP.functional.color,
+        countClassName: COLOR_MAP.functional.className,
       },
       {
         label: 'Marketing',
         count:
           cookieStats.firstParty.marketing + cookieStats.thirdParty.marketing,
-        color: COLOR_MAP.marketing,
-        countClassName: 'text-marketing',
+        color: COLOR_MAP.marketing.color,
+        countClassName: COLOR_MAP.uncategorized.className,
       },
       {
         label: 'Analytics',
         count:
           cookieStats.firstParty.analytics + cookieStats.thirdParty.analytics,
-        color: COLOR_MAP.analytics,
-        countClassName: 'text-analytics',
+        color: COLOR_MAP.analytics.color,
+        countClassName: COLOR_MAP.uncategorized.className,
       },
       {
         label: 'Uncategorized',
         count:
           cookieStats.firstParty.uncategorized +
           cookieStats.thirdParty.uncategorized,
-        color: COLOR_MAP.uncategorized,
-        countClassName: 'text-uncategorized',
+        color: COLOR_MAP.uncategorized.color,
+        countClassName: COLOR_MAP.uncategorized.className,
       },
     ],
     firstParty: [
       {
         count: cookieStats.firstParty.functional,
-        color: COLOR_MAP.functional,
+        color: COLOR_MAP.functional.color,
       },
       {
         count: cookieStats.firstParty.marketing,
-        color: COLOR_MAP.marketing,
+        color: COLOR_MAP.marketing.color,
       },
       {
         count: cookieStats.firstParty.analytics,
-        color: COLOR_MAP.analytics,
+        color: COLOR_MAP.analytics.color,
       },
       {
         count: cookieStats.firstParty.uncategorized,
-        color: COLOR_MAP.uncategorized,
+        color: COLOR_MAP.uncategorized.color,
       },
     ],
     thirdParty: [
       {
         count: cookieStats.thirdParty.functional,
-        color: COLOR_MAP.functional,
+        color: COLOR_MAP.functional.color,
       },
       {
         count: cookieStats.thirdParty.marketing,
-        color: COLOR_MAP.marketing,
+        color: COLOR_MAP.marketing.color,
       },
       {
         count: cookieStats.thirdParty.analytics,
-        color: COLOR_MAP.analytics,
+        color: COLOR_MAP.analytics.color,
       },
       {
         count: cookieStats.thirdParty.uncategorized,
-        color: COLOR_MAP.uncategorized,
+        color: COLOR_MAP.uncategorized.color,
       },
     ],
     blocked: blockedCookiesStats,
