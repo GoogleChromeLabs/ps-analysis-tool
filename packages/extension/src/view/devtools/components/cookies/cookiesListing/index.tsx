@@ -428,7 +428,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
         hasStaticFilterValues: true,
         filterValues: blockedReasonFilterValues,
         comparator: (value: InfoType, filterValue: string) => {
-          return value?.includes(filterValue);
+          return (value as string[])?.includes(filterValue);
         },
       },
       headerType: {
