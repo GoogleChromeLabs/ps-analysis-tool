@@ -162,15 +162,12 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
         enableHiding: false,
       },
       {
-        header: 'Value',
-        accessorKey: 'parsedCookie.value',
-        cell: (info: InfoType, rowData?: TableData) => (
-          <EditableTextInput
-            info={info}
-            keyToChange="value"
-            rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
-          />
+        header: 'Scope',
+        accessorKey: 'isFirstParty',
+        cell: (info: InfoType) => (
+          <p className="truncate w-full">
+            {!info ? 'Third Party' : 'First Party'}
+          </p>
         ),
       },
       {
@@ -180,6 +177,69 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
           <EditableTextInput
             info={info}
             keyToChange="domain"
+            rowHighlighter={rowHighlighter}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
+          />
+        ),
+      },
+      {
+        header: 'Partition Key',
+        accessorKey: 'parsedCookie.partitionKey',
+        cell: (info: InfoType) => info,
+      },
+      {
+        header: 'SameSite',
+        accessorKey: 'parsedCookie.samesite',
+        cell: (info: InfoType, rowData?: TableData) => (
+          <EditableTextInput
+            info={info}
+            keyToChange="sameSite"
+            rowHighlighter={rowHighlighter}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
+          />
+        ),
+      },
+      {
+        header: 'Category',
+        accessorKey: 'analytics.category',
+        cell: (info: InfoType) => info,
+      },
+      {
+        header: 'Platform',
+        accessorKey: 'analytics.platform',
+        cell: (info: InfoType) => info,
+      },
+      {
+        header: 'HttpOnly',
+        accessorKey: 'parsedCookie.httponly',
+        cell: (info: InfoType, rowData?: TableData) => (
+          <EditableCheckBoxInput
+            info={info}
+            keyToChange="httpOnly"
+            rowHighlighter={rowHighlighter}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
+          />
+        ),
+      },
+      {
+        header: 'Secure',
+        accessorKey: 'parsedCookie.secure',
+        cell: (info: InfoType, rowData?: TableData) => (
+          <EditableCheckBoxInput
+            info={info}
+            keyToChange="secure"
+            rowHighlighter={rowHighlighter}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
+          />
+        ),
+      },
+      {
+        header: 'Value',
+        accessorKey: 'parsedCookie.value',
+        cell: (info: InfoType, rowData?: TableData) => (
+          <EditableTextInput
+            info={info}
+            keyToChange="value"
             rowHighlighter={rowHighlighter}
             cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
           />
@@ -208,66 +268,6 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
             cookieKey={getCookieKey((details as CookieTableData)?.parsedCookie)}
           />
         ),
-      },
-      {
-        header: 'HttpOnly',
-        accessorKey: 'parsedCookie.httponly',
-        cell: (info: InfoType, rowData?: TableData) => (
-          <EditableCheckBoxInput
-            info={info}
-            keyToChange="httpOnly"
-            rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
-          />
-        ),
-      },
-      {
-        header: 'SameSite',
-        accessorKey: 'parsedCookie.samesite',
-        cell: (info: InfoType, rowData?: TableData) => (
-          <EditableTextInput
-            info={info}
-            keyToChange="sameSite"
-            rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
-          />
-        ),
-      },
-      {
-        header: 'Secure',
-        accessorKey: 'parsedCookie.secure',
-        cell: (info: InfoType, rowData?: TableData) => (
-          <EditableCheckBoxInput
-            info={info}
-            keyToChange="secure"
-            rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
-          />
-        ),
-      },
-      {
-        header: 'Category',
-        accessorKey: 'analytics.category',
-        cell: (info: InfoType) => info,
-      },
-      {
-        header: 'Platform',
-        accessorKey: 'analytics.platform',
-        cell: (info: InfoType) => info,
-      },
-      {
-        header: 'Scope',
-        accessorKey: 'isFirstParty',
-        cell: (info: InfoType) => (
-          <p className="truncate w-full">
-            {!info ? 'Third Party' : 'First Party'}
-          </p>
-        ),
-      },
-      {
-        header: 'Partition Key',
-        accessorKey: 'parsedCookie.partitionKey',
-        cell: (info: InfoType) => info,
       },
       {
         header: 'Priority',
