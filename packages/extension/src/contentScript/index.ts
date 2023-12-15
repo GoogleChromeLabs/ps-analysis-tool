@@ -162,6 +162,8 @@ class WebpageContentScript {
   insertOverlay(frame: HTMLElement): HTMLElement | null {
     const overlay = addOverlay(frame);
 
+    setOverlayPosition(overlay, frame);
+
     const updatePosition = () => {
       if (isElementVisibleInViewport(frame, true)) {
         setOverlayPosition(overlay, frame);
