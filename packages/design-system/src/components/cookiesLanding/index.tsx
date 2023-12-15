@@ -89,7 +89,7 @@ const CookiesLanding = ({
       count: totalFrames,
     },
     {
-      title: 'Top Frame',
+      title: 'Topmost Frame',
       description:
         'Typically referred to as the topmost frame. Note that there are multiples of these. For example, if you have a prerendered and cached pages, each has an outermost frame that could be called its topmost frame',
       count: Object.values(tabFrames || {}).filter(
