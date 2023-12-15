@@ -88,6 +88,9 @@ const updateChromeStorage = async (
   persistenceKey: string,
   storageData: PersistentStorageData
 ) => {
+  if (!chrome?.runtime) {
+    return {};
+  }
   const tabId = chrome.devtools.inspectedWindow.tabId.toString();
 
   const data = await chrome.storage.local.get();

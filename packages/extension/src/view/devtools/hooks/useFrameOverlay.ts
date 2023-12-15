@@ -84,17 +84,23 @@ const useFrameOverlay = (
       return;
     }
 
+    if (!canStartInspecting) {
+      return;
+    }
+
     const portName = `${WEBPAGE_PORT_NAME}-${tabId}`;
 
     portRef.current = chrome.tabs.connect(Number(tabId), {
       name: portName,
     });
+
     portRef.current.onMessage.addListener((response: Response) => {
       setSelectedFrame(response.attributes.iframeOrigin, true);
     });
 
     portRef.current.onDisconnect.addListener(() => {
       setIsInspecting(false);
+      setCanStartInspecting(false);
     });
 
     // For the first time.
@@ -102,7 +108,12 @@ const useFrameOverlay = (
       isInspecting: true,
     });
     setConnectedToPort(true);
-  }, [setIsInspecting, setSelectedFrame]);
+  }, [
+    canStartInspecting,
+    setSelectedFrame,
+    setIsInspecting,
+    setCanStartInspecting,
+  ]);
 
   const listenIfContentScriptSet = useCallback(
     async (
@@ -110,18 +121,13 @@ const useFrameOverlay = (
       sender: chrome.runtime.MessageSender
     ) => {
       const tabId = await getCurrentTabId();
+
       if (request.setInPage && tabId === sender?.tab?.id?.toString()) {
         setCanStartInspecting(true);
       }
     },
     [setCanStartInspecting]
   );
-
-  useEffect(() => {
-    if (!canStartInspecting && isCurrentTabBeingListenedTo) {
-      setCanStartInspecting(true);
-    }
-  }, [canStartInspecting, setCanStartInspecting, isCurrentTabBeingListenedTo]);
 
   useEffect(() => {
     chrome.runtime.onMessage.addListener(listenIfContentScriptSet);
@@ -214,18 +220,23 @@ const useFrameOverlay = (
   useEffect(() => {
     (async () => {
       try {
-        if (!connectedToPort) {
+        if (!connectedToPort && !canStartInspecting) {
           await connectToPort();
         }
 
-        if (!isInspecting && portRef.current) {
+        if (!isInspecting && portRef.current && canStartInspecting) {
           portRef.current.postMessage({
             isInspecting: false,
           });
 
           return;
         }
-        if (chrome.runtime?.id && portRef.current && tabFrames) {
+        if (
+          chrome.runtime?.id &&
+          portRef.current &&
+          tabFrames &&
+          canStartInspecting
+        ) {
           const thirdPartyCookies = filteredCookies
             ? filteredCookies.filter((cookie) => !cookie.isFirstParty)
             : [];
@@ -269,6 +280,7 @@ const useFrameOverlay = (
       }
     })();
   }, [
+    canStartInspecting,
     connectToPort,
     connectedToPort,
     filteredCookies,
