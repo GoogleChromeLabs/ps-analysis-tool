@@ -30,6 +30,7 @@ const CookieBlockedReason = {
   SchemefulSameSiteUnspecifiedTreatedAsLax: `<p>This cookie didn't specify a 'SameSite' attribute when it was stored, was defaulted to <code>SameSite=Lax</code>, and was blocked because the request was cross-site and was not initiated by a top-level navigation. This request is considered cross-site because the URL has a different scheme than the current site.</p><br />`,
   SamePartyFromCrossPartyContext: `<p>This cookie was blocked because it had the 'SameParty' attribute but the request was cross-party. The request was considered cross-party because the domain of the resource's URL and the domains of the resource's enclosing frames/documents are neither owners nor members in the same first-party set.</p><br />`,
   NameValuePairExceedsMaxSize: `<p>This cookie was blocked because it was too large. The combined size of the name and value must be less than or equal to 4,096 characters.</p><br />`,
+  InvalidDomain: `<p>This attempt to set a cookie via 'Set-Cookie' header was blocked because its Domain value was invalid with regards to the current host url.</p>`,
 };
 
 export default CookieBlockedReason;

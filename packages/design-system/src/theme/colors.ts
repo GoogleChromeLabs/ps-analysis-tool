@@ -140,4 +140,8 @@ export const COLOR_MAP: {
     color: '#CF3476',
     className: 'text-magentarama',
   },
+  InvalidDomain: {
+    color: '#D5CABD',
+    className: 'text-hotrod-brown',
+  },
 };

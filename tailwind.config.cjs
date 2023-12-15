@@ -92,6 +92,7 @@ module.exports = {
       'good-life': '#C5A06A',
       'greenland-green': '#25ACAD',
       'strawberry-spinach-red': '#F54021',
+      'hotrod-brown': '#D5CABD',
       primary: '#000',
       secondary: '#5F5F5F',
       tertiary: '#808080',

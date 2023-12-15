@@ -50,6 +50,7 @@ const prepareCookieStatsComponents = (
       countClassName: COLOR_MAP[key].className,
     });
   });
+
   return {
     legend: [
       {
