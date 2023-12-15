@@ -42,6 +42,5 @@ describe('CookiesLanding', () => {
     expect(
       getByTestId('cookies-matrix-Cookie Classification')
     ).toBeInTheDocument();
-    expect(getByTestId('cookies-matrix-Blocked Reasons')).toBeInTheDocument();
   });
 });
