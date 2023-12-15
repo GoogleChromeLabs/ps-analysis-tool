@@ -142,6 +142,49 @@ const CookieTableContainer = ({
         enableHiding: false,
       },
       {
+        header: 'Scope',
+        accessorKey: 'isFirstParty',
+        cell: (info: InfoType) => (
+          <p className="truncate w-full">
+            {!info ? 'Third Party' : 'First Party'}
+          </p>
+        ),
+      },
+      {
+        header: 'Domain',
+        accessorKey: 'parsedCookie.domain',
+        cell: (info: InfoType, rowData?: TableData) => (
+          <EditableTextInput
+            info={info}
+            keyToChange="domain"
+            rowHighlighter={rowHighlighter}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
+          />
+        ),
+      },
+      {
+        header: 'SameSite',
+        accessorKey: 'parsedCookie.samesite',
+        cell: (info: InfoType, rowData?: TableData) => (
+          <EditableTextInput
+            info={info}
+            keyToChange="sameSite"
+            rowHighlighter={rowHighlighter}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
+          />
+        ),
+      },
+      {
+        header: 'Category',
+        accessorKey: 'analytics.category',
+        cell: (info: InfoType) => info,
+      },
+      {
+        header: 'Platform',
+        accessorKey: 'analytics.platform',
+        cell: (info: InfoType) => info,
+      },
+      {
         header: 'Value',
         accessorKey: 'parsedCookie.value',
         cell: (info: InfoType, rowData?: TableData) => (
@@ -154,12 +197,24 @@ const CookieTableContainer = ({
         ),
       },
       {
-        header: 'Domain',
-        accessorKey: 'parsedCookie.domain',
+        header: 'HttpOnly',
+        accessorKey: 'parsedCookie.httponly',
         cell: (info: InfoType, rowData?: TableData) => (
-          <EditableTextInput
+          <EditableCheckBoxInput
             info={info}
-            keyToChange="domain"
+            keyToChange="httpOnly"
+            rowHighlighter={rowHighlighter}
+            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
+          />
+        ),
+      },
+      {
+        header: 'Secure',
+        accessorKey: 'parsedCookie.secure',
+        cell: (info: InfoType, rowData?: TableData) => (
+          <EditableCheckBoxInput
+            info={info}
+            keyToChange="secure"
             rowHighlighter={rowHighlighter}
             cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
           />
@@ -187,61 +242,6 @@ const CookieTableContainer = ({
             rowHighlighter={rowHighlighter}
             cookieKey={getCookieKey((details as CookieTableData)?.parsedCookie)}
           />
-        ),
-      },
-      {
-        header: 'HttpOnly',
-        accessorKey: 'parsedCookie.httponly',
-        cell: (info: InfoType, rowData?: TableData) => (
-          <EditableCheckBoxInput
-            info={info}
-            keyToChange="httpOnly"
-            rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
-          />
-        ),
-      },
-      {
-        header: 'SameSite',
-        accessorKey: 'parsedCookie.samesite',
-        cell: (info: InfoType, rowData?: TableData) => (
-          <EditableTextInput
-            info={info}
-            keyToChange="sameSite"
-            rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
-          />
-        ),
-      },
-      {
-        header: 'Secure',
-        accessorKey: 'parsedCookie.secure',
-        cell: (info: InfoType, rowData?: TableData) => (
-          <EditableCheckBoxInput
-            info={info}
-            keyToChange="secure"
-            rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
-          />
-        ),
-      },
-      {
-        header: 'Category',
-        accessorKey: 'analytics.category',
-        cell: (info: InfoType) => info,
-      },
-      {
-        header: 'Platform',
-        accessorKey: 'analytics.platform',
-        cell: (info: InfoType) => info,
-      },
-      {
-        header: 'Scope',
-        accessorKey: 'isFirstParty',
-        cell: (info: InfoType) => (
-          <p className="truncate w-full">
-            {!info ? 'Third Party' : 'First Party'}
-          </p>
         ),
       },
       {
