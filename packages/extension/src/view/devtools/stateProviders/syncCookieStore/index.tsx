@@ -142,11 +142,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
       const currentTabFrames = await chrome.webNavigation.getAllFrames({
         tabId: _tabId,
       });
-      const modifiedTabFrames: {
-        [key: string]: { frameIds: number[]; isOnRWS?: boolean };
-      } = {};
+      const modifiedTabFrames: TabFrames = {};
 
-      currentTabFrames?.forEach(({ url, frameId }) => {
+      currentTabFrames?.forEach(({ url, frameId, frameType }) => {
         if (url && url.includes('http')) {
           const parsedUrl = regexForFrameUrl.exec(url);
           if (parsedUrl && parsedUrl[0]) {
@@ -155,6 +153,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
             } else {
               modifiedTabFrames[parsedUrl[0]] = {
                 frameIds: [frameId],
+                frameType,
               };
             }
           }
@@ -228,21 +227,15 @@ export const Provider = ({ children }: PropsWithChildren) => {
       const _cookies: NonNullable<CookieStoreContext['state']['tabCookies']> =
         {};
 
-      await Promise.all(
-        Object.entries(tabData.cookies as { [key: string]: CookieData }).map(
-          async ([key, value]: [string, CookieData]) => {
-            const isCookieSet = Boolean(
-              await chrome.cookies.get({
-                name: value?.parsedCookie?.name,
-                url: value.url,
-              })
-            );
-            _cookies[key] = {
-              ...value,
-              isCookieSet,
-            };
-          }
-        )
+      Object.entries(tabData.cookies as { [key: string]: CookieData }).map(
+        ([key, value]: [string, CookieData]) => {
+          const isCookieBlocked = value?.isBlocked ?? false;
+          _cookies[key] = {
+            ...value,
+            isBlocked: isCookieBlocked,
+          };
+          return [key, value];
+        }
       );
 
       setTabCookies(_cookies);
@@ -270,24 +263,19 @@ export const Provider = ({ children }: PropsWithChildren) => {
         const _cookies: NonNullable<CookieStoreContext['state']['tabCookies']> =
           {};
 
-        await Promise.all(
-          Object.entries(
-            changes[tabId.toString()].newValue.cookies as {
-              [key: string]: CookieData;
-            }
-          ).map(async ([key, value]) => {
-            const isCookieSet = Boolean(
-              await chrome.cookies.get({
-                name: value?.parsedCookie?.name,
-                url: value.url,
-              })
-            );
-            _cookies[key] = {
-              ...value,
-              isCookieSet,
-            };
-          })
-        );
+        Object.entries(
+          changes[tabId.toString()].newValue.cookies as {
+            [key: string]: CookieData;
+          }
+        ).map(([key, value]) => {
+          const isCookieBlocked = value?.isBlocked ?? false;
+          _cookies[key] = {
+            ...value,
+            isBlocked: isCookieBlocked,
+          };
+          return [key, value];
+        });
+
         await getAllFramesForCurrentTab(tabId);
         setTabCookies(_cookies);
       }
@@ -472,8 +460,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
         let newCookieKey = cookieKey;
         let valueToBeSet: string | boolean | number = changedValue;
         const { [cookieKey]: cookieDetails, ...restOfCookies } = tabCookies;
-        if (!cookieDetails?.isCookieSet) {
-          return false;
+
+        if (cookieDetails?.isBlocked) {
+          return null;
         }
 
         if (keyToChange === 'expirationDate') {
@@ -612,7 +601,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
           currentFrame.frameIds.map(async (frameId) => {
             await Promise.all(
               Object.keys(allCookies).map(async (key) => {
-                if (!allCookies[key].frameIdList.includes(frameId)) {
+                if (
+                  allCookies[key].frameIdList &&
+                  !allCookies[key].frameIdList.includes(frameId)
+                ) {
                   return key;
                 }
                 if (
@@ -645,8 +637,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
     ) => {
       if (tabId && tabCookies) {
         const { [cookieKey]: cookieDetails, ...restOfCookies } = tabCookies;
-        if (!cookieDetails?.isCookieSet) {
-          return false;
+
+        if (cookieDetails?.isBlocked) {
+          return null;
         }
         const newCookieKey =
           changedValue +

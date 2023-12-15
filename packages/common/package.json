@@ -4,7 +4,7 @@
   "description": "A package for common utilities that are being used in multiple packages",
   "main": "./dist/index.js",
   "types": "./dist-types/index.d.ts",
-  "source":"./src/index.ts",
+  "source": "./src/index.ts",
   "customExports": {
     ".": {
       "default": "./src/index.ts"
@@ -28,5 +28,6 @@
     "tldts": "^6.0.8"
   },
   "devDependencies": {
+    "devtools-protocol": "^0.0.1236148"
   }
 }

@@ -35,7 +35,7 @@ import useSearch, { TableSearchOutput } from './useSearch';
 
 export type TableData = CookieTableData | TechnologyData;
 
-export type InfoType = number | string | boolean | [];
+export type InfoType = number | string | boolean | string[] | [];
 
 export type TableColumn = {
   header: string;

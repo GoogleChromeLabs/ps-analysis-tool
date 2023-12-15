@@ -18,117 +18,96 @@
  */
 import React, { useState } from 'react';
 import {
-  MatrixComponentHorizontal,
-  Matrix,
-  type MatrixComponentProps,
-  InfoIcon,
-} from '@ps-analysis-tool/design-system';
-import {
-  filterFramesWithCookies,
-  type CookieStatsComponents,
   type TabCookies,
   type TabFrames,
+  Legend,
+  filterFramesWithCookies,
 } from '@ps-analysis-tool/common';
+/**
+ * Internal dependencies
+ */
+import Matrix from '../../matrix';
+import type { MatrixComponentProps } from '../../matrix/matrixComponent';
+import { InfoIcon } from '../../../icons';
+import MatrixComponentHorizontal, {
+  type MatrixComponentHorizontalProps,
+} from '../../matrix/matrixComponent/matrixComponentHorizontal';
+import { LEGEND_DESCRIPTION } from '../../../constants';
 
 interface CookiesMatrixProps {
   tabCookies: TabCookies | null;
-  cookiesStatsComponents: CookieStatsComponents;
+  componentData?: Legend[];
   tabFrames: TabFrames | null;
   title?: string;
   description?: string;
   showHorizontalMatrix?: boolean;
+  showMatrix?: boolean;
   showInfoIcon?: boolean;
   count?: number | null;
   associatedCookiesCount?: number | null;
   allowExpand?: boolean;
   highlightTitle?: boolean;
   capitalizeTitle?: boolean;
+  infoIconTitle?: string;
+  matrixHorizontalData?: MatrixComponentHorizontalProps[] | null;
 }
-
-interface LegendData {
-  [key: string]: {
-    description: string;
-    countClassName: string;
-  };
-}
-
-const LEGEND_DATA: LegendData = {
-  Functional: {
-    description:
-      'Cookies necessary for a website to function properly. They enable basic functionalities such as page navigation, access to secure areas, and remembering user preferences (e.g., language, font size, etc.)',
-    countClassName: 'text-functional',
-  },
-  Marketing: {
-    description:
-      "Cookies used to track visitors across websites, gathering information about their browsing habits. The data collected is often used by advertisers to deliver targeted advertisements that are relevant to the user's interests.",
-    countClassName: 'text-marketing',
-  },
-  Analytics: {
-    description:
-      'Cookies used to gather information about how users interact with a website. They provide website owners with insights into user behavior, such as the number of visitors, the most popular pages, and the average time spent on the site.',
-    countClassName: 'text-analytics',
-  },
-  Uncategorized: {
-    description:
-      'Cookies that could not be categorized. You may check sites like cookiedatabase.org and cookiesearch.org to acquire additional details about these cookies.',
-    countClassName: 'text-uncategorized',
-  },
-};
 
 const CookiesMatrix = ({
   tabCookies,
-  cookiesStatsComponents,
   tabFrames,
-  title = 'Cookies Insights',
+  componentData = [],
+  title = 'Cookie Classification',
   description = '',
   showHorizontalMatrix = true,
+  showMatrix = true,
   showInfoIcon = true,
   count = null,
   associatedCookiesCount = null,
   allowExpand = true,
   highlightTitle = false,
   capitalizeTitle = false,
+  matrixHorizontalData = null,
+  infoIconTitle = 'Cookies must be analyzed on a new, clean Chrome profile for an accurate report.',
 }: CookiesMatrixProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const dataComponents: MatrixComponentProps[] = [];
 
-  const dataComponents: MatrixComponentProps[] =
-    cookiesStatsComponents.legend.map((component) => {
-      const additionalDataComponent = LEGEND_DATA[component.label] || {};
-      const comp = {
-        ...component,
-        ...additionalDataComponent,
-        title: component.label,
-        isExpanded,
-        containerClasses: '',
-      };
-
-      return comp;
+  componentData.forEach((component) => {
+    const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
+    dataComponents.push({
+      ...component,
+      description: legendDescription,
+      title: component.label,
+      isExpanded,
+      containerClasses: '',
     });
+  });
 
   const totalFrames = tabFrames ? Object.keys(tabFrames).length : 0;
   const framesWithCookies = filterFramesWithCookies(tabCookies, tabFrames);
 
-  const matrixHorizontalComponents = [
-    {
-      title: 'Number of Frames',
-      description: 'Number of frames found on the page.',
-      count: totalFrames,
-      expand: isExpanded,
-    },
-    {
-      title: 'Number of Frames with Associated Cookies',
-      description: 'Frames that have cookies associated with them.',
-      count: associatedCookiesCount
-        ? associatedCookiesCount
-        : framesWithCookies
-        ? Object.keys(framesWithCookies).length
-        : 0,
-      expand: isExpanded,
-    },
-  ];
-
+  const matrixHorizontalComponents = matrixHorizontalData
+    ? matrixHorizontalData.map((data) => ({ ...data, expand: isExpanded }))
+    : [
+        {
+          title: 'Number of Frames',
+          description: 'Number of frames found on the page.',
+          count: totalFrames,
+          expand: isExpanded,
+        },
+        {
+          title: 'Number of Frames with Associated Cookies',
+          description: 'Frames that have cookies associated with them.',
+          count: associatedCookiesCount
+            ? associatedCookiesCount
+            : framesWithCookies
+            ? Object.keys(framesWithCookies).length
+            : 0,
+          expand: isExpanded,
+        },
+      ];
   return (
-    <div className="w-full" data-testid="cookies-matrix">
+    <div className="w-full" data-testid={`cookies-matrix-${title}`}>
       <div>
         <div className="flex gap-x-5 justify-between border-b border-bright-gray dark:border-quartz">
           <div className="pb-3 flex flex-col gap-1.5">
@@ -139,7 +118,7 @@ const CookiesMatrix = ({
             >
               <span>{title}</span>
               {showInfoIcon && (
-                <span title="Cookies must be analyzed on a new, clean Chrome profile for an accurate report.">
+                <span title={infoIconTitle}>
                   <InfoIcon />
                 </span>
               )}
@@ -157,7 +136,7 @@ const CookiesMatrix = ({
             </h4>
           )}
         </div>
-        <Matrix dataComponents={dataComponents} />
+        {showMatrix && <Matrix dataComponents={dataComponents} />}
       </div>
       {showHorizontalMatrix && (
         <div>

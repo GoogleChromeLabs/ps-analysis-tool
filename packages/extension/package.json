@@ -36,6 +36,7 @@
     "victory": "^36.6.11"
   },
   "devDependencies": {
-    "@types/react-copy-to-clipboard": "^5.0.4"
+    "@types/react-copy-to-clipboard": "^5.0.4",
+    "devtools-protocol": "^0.0.1236148"
   }
 }

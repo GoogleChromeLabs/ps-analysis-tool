@@ -19,6 +19,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { act } from 'react-dom/test-utils';
 import SinonChrome from 'sinon-chrome';
 
 /**
@@ -55,7 +56,9 @@ describe('App', () => {
       tabCookieStats: {},
       isCurrentTabBeingListenedTo: true,
     });
-    render(<App />);
+    act(() => {
+      render(<App />);
+    });
 
     expect(
       screen.getByText('Please try reloading the page')
@@ -77,7 +80,9 @@ describe('App', () => {
       initialProcessed: true,
       totalProcessed: 100,
     });
-    render(<App />);
+    act(() => {
+      render(<App />);
+    });
 
     expect(
       screen.getByText('No cookies found on this page')
@@ -89,6 +94,9 @@ describe('App', () => {
       isCurrentTabBeingListenedTo: true,
       cookieStats: {
         total: 6,
+        blockedCookies: {
+          total: 0,
+        },
         firstParty: {
           total: 3,
           analytics: 1,
@@ -105,7 +113,9 @@ describe('App', () => {
         },
       },
     });
-    render(<App />);
+    act(() => {
+      render(<App />);
+    });
 
     expect(screen.getAllByText('3').length).toBe(2);
     expect(screen.getByText('1st Party Cookies')).toBeInTheDocument();

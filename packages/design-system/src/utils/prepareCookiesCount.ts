@@ -15,9 +15,9 @@
  */
 
 /**
- * Internal dependencies.
+ * External dependencies.
  */
-import { CookieData, CookiesCount } from '../cookies.types';
+import type { CookieData, CookiesCount } from '@ps-analysis-tool/common';
 
 /**
  * Categorize cookies count into 1st party and 3rd party cookies and then into functional, marketing, analytics and uncategorized.
@@ -27,6 +27,9 @@ import { CookieData, CookiesCount } from '../cookies.types';
 const prepareCookiesCount = (cookies: { [key: string]: CookieData } | null) => {
   const cookiesCount: CookiesCount = {
     total: 0,
+    blockedCookies: {
+      total: 0,
+    },
     firstParty: {
       total: 0,
       functional: 0,
@@ -47,13 +50,34 @@ const prepareCookiesCount = (cookies: { [key: string]: CookieData } | null) => {
     return cookiesCount;
   }
 
-  const cookieList = Object.values(cookies);
+  const cookieList = Object.values(cookies).filter(
+    (cookie) => cookie.parsedCookie && cookie.frameIdList?.length >= 1
+  );
 
-  cookiesCount.total = cookieList.length;
+  cookiesCount.total = Object.keys(cookies).filter(
+    (cookieKey) =>
+      cookies[cookieKey].parsedCookie &&
+      cookies[cookieKey].frameIdList?.length >= 1
+  ).length;
+
+  cookiesCount.blockedCookies.total = cookieList.filter(
+    (cookie) => cookie.isBlocked
+  ).length;
+
+  cookieList.forEach((cookie) => {
+    if (cookie.isBlocked) {
+      cookie.blockedReasons?.forEach((reason) => {
+        if (!cookiesCount.blockedCookies[reason]) {
+          cookiesCount.blockedCookies[reason] = 1;
+        } else {
+          cookiesCount.blockedCookies[reason]++;
+        }
+      });
+    }
+  });
 
   for (const cookie of cookieList) {
     const { analytics, isFirstParty } = cookie;
-
     const category = analytics?.category?.toLowerCase() as
       | keyof CookiesCount['firstParty']
       | keyof CookiesCount['thirdParty']

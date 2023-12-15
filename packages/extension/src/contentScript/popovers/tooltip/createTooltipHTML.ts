@@ -19,7 +19,6 @@ const createTooltipHTML = (
   infoAttribtues: { [key: string]: string }
 ): HTMLElement => {
   const tooltipHTML = document.createElement('div');
-
   // eslint-disable-next-line guard-for-in
   for (const label in info) {
     const value = info[label];

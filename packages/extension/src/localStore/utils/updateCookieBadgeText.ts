@@ -13,7 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Internal dependencies
+ */
 import { getCurrentTabId } from '../../utils/getCurrentTabId';
+import type { TabData } from '../types';
 /**
  *
  * @param storage {object} The storage object from local store.
@@ -21,7 +25,7 @@ import { getCurrentTabId } from '../../utils/getCurrentTabId';
  */
 export default async function updateCookieBadgeText(
   storage: {
-    [key: string]: any;
+    [key: string]: TabData;
   },
   tabId?: string
 ) {
@@ -36,7 +40,11 @@ export default async function updateCookieBadgeText(
       return;
     }
     const tabCookies = storage[currentTabId].cookies || {};
-    const numCookies = Object.keys(tabCookies).length;
+    const numCookies = Object.keys(tabCookies).filter(
+      (cookieKey) =>
+        tabCookies[cookieKey]?.parsedCookie &&
+        tabCookies[cookieKey].frameIdList?.length >= 1
+    ).length;
     if (numCookies >= 0) {
       await chrome.action.setBadgeText({
         tabId: parseInt(currentTabId),

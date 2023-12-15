@@ -18,23 +18,26 @@
  * External dependencies.
  */
 import SinonChrome from 'sinon-chrome';
+import { emptyAnalytics } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import parseRequestCookieHeader from '../parseRequestCookieHeader';
-import { emptyAnalytics } from '../findAnalyticsMatch';
 
 const normalCookie1 = {
   parsedCookie: {
     name: 'cookieKey1',
     value: 'value1',
-    domain: '.example.com',
+    domain: 'example.com',
     expires: 'Session',
     path: '/',
     httponly: false,
     secure: false,
     samesite: '',
+    partitionKey: '',
+    priority: 'Medium',
+    size: 16,
   },
   analytics: { ...emptyAnalytics },
   url: 'https://example.com/public/api/alerts',
@@ -47,12 +50,15 @@ const normalCookie2 = {
   parsedCookie: {
     name: 'CookieKey2',
     value: 'value2',
-    domain: '.example.com',
+    domain: 'example.com',
     expires: 'Session',
     path: '/',
     httponly: false,
     secure: false,
     samesite: '',
+    partitionKey: '',
+    priority: 'Medium',
+    size: 16,
   },
   analytics: { ...emptyAnalytics },
   url: 'https://example.com/public/api/alerts',
@@ -65,12 +71,15 @@ const specialCookie = {
   parsedCookie: {
     name: 'SpecialCookie',
     value: 'Special=Value',
-    domain: '.example.com',
+    domain: 'example.com',
     expires: 'Session',
     path: '/',
     httponly: false,
     secure: false,
     samesite: '',
+    partitionKey: '',
+    priority: 'Medium',
+    size: 26,
   },
   analytics: { ...emptyAnalytics },
   url: 'https://example.com/public/api/alerts',
@@ -83,12 +92,15 @@ const wildcardCookie = {
   parsedCookie: {
     name: 'Wildcard_123',
     value: 'val',
-    domain: '.example.com',
+    domain: 'example.com',
     expires: 'Session',
     path: '/',
     httponly: false,
     secure: false,
     samesite: '',
+    partitionKey: '',
+    priority: 'Medium',
+    size: 15,
   },
   analytics: {
     platform: 'Google Analytics',
@@ -125,7 +137,8 @@ describe('parseRequestCookieHeader', () => {
       header,
       {},
       'https://docs.google.com/',
-      1
+      1,
+      []
     );
 
     expect(parsedCookie).toEqual([normalCookie1, normalCookie2, specialCookie]);
@@ -167,7 +180,8 @@ describe('parseRequestCookieHeader', () => {
         ],
       },
       'https://docs.google.com/',
-      1
+      1,
+      []
     );
 
     expect(parsedCookie).toEqual([

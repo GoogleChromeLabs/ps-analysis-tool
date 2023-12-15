@@ -23,7 +23,7 @@ import React from 'react';
  */
 import CircleEmpty from '../../circle/circleEmpty';
 
-interface MatrixComponentHorizontalProps {
+export interface MatrixComponentHorizontalProps {
   title: string;
   description: string;
   count: number;

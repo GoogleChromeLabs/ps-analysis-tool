@@ -35,11 +35,13 @@ describe('CookiesMatrix', () => {
     const { getByTestId } = render(
       <CookiesMatrix
         tabCookies={tabCookies}
-        cookiesStatsComponents={cookiesStatsComponents}
+        componentData={cookiesStatsComponents.legend}
         tabFrames={tabFrames}
       />
     );
 
-    expect(getByTestId('cookies-matrix')).toBeInTheDocument();
+    expect(
+      getByTestId('cookies-matrix-Cookie Classification')
+    ).toBeInTheDocument();
   });
 });

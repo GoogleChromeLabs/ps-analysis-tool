@@ -76,7 +76,11 @@ const EditableTextInput = ({
             localValue.trim(),
             keyToChange === 'name' ? (info as string) : null
           );
-
+          if (isUpdateDone === null) {
+            setLocalValue(info as string);
+            setEditing(false);
+            return;
+          }
           if (!isUpdateDone) {
             rowHighlighter(true, cookieKey);
             setLocalValue(info as string);
@@ -108,7 +112,11 @@ const EditableTextInput = ({
             localValue,
             keyToChange === 'name' ? (info as string) : null
           );
-
+          if (isUpdateDone === null) {
+            setLocalValue(info as string);
+            setEditing(false);
+            return;
+          }
           if (!isUpdateDone) {
             rowHighlighter(true, cookieKey);
             setLocalValue(info as string);

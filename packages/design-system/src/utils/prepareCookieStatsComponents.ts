@@ -14,91 +14,113 @@
  * limitations under the License.
  */
 /**
+ * External dependencies.
+ */
+import type {
+  CookieStatsComponents,
+  CookiesCount,
+} from '@ps-analysis-tool/common';
+/**
  * Internal dependencies.
  */
+import { COLOR_MAP } from '../theme/colors';
 
-import { CookieStatsComponents, CookiesCount } from '../cookies.types';
-
-const COLOR_MAP = {
-  functional: '#5CC971',
-  marketing: '#F3AE4E',
-  analytics: '#4C79F4',
-  uncategorized: '#EC7159',
-  brightGray: '#E8EAED',
-  mediumGray: '#BDBDBD',
-};
-
+// eslint-disable-next-line complexity
 const prepareCookieStatsComponents = (
   cookieStats: CookiesCount
 ): CookieStatsComponents => {
+  const blockedCookiesStats: CookieStatsComponents['blocked'] = [];
+  const blockedCookiesLegend: CookieStatsComponents['blockedCookiesLegend'] =
+    [];
+
+  Object.keys(cookieStats.blockedCookies).forEach((key: string) => {
+    if (key === 'total') {
+      return;
+    }
+
+    blockedCookiesStats.push({
+      count: cookieStats.blockedCookies[key],
+      color: COLOR_MAP[key].color,
+    });
+
+    blockedCookiesLegend.push({
+      label: key,
+      count: cookieStats.blockedCookies[key],
+      color: COLOR_MAP[key].color,
+      countClassName: COLOR_MAP[key].className,
+    });
+  });
+
   return {
     legend: [
       {
         label: 'Functional',
         count:
           cookieStats.firstParty.functional + cookieStats.thirdParty.functional,
-        color: COLOR_MAP.functional,
-        countClassName: 'text-functional',
+        color: COLOR_MAP.functional.color,
+        countClassName: COLOR_MAP.functional.className,
       },
       {
         label: 'Marketing',
         count:
           cookieStats.firstParty.marketing + cookieStats.thirdParty.marketing,
-        color: COLOR_MAP.marketing,
-        countClassName: 'text-marketing',
+        color: COLOR_MAP.marketing.color,
+        countClassName: COLOR_MAP.uncategorized.className,
       },
       {
         label: 'Analytics',
         count:
           cookieStats.firstParty.analytics + cookieStats.thirdParty.analytics,
-        color: COLOR_MAP.analytics,
-        countClassName: 'text-analytics',
+        color: COLOR_MAP.analytics.color,
+        countClassName: COLOR_MAP.uncategorized.className,
       },
       {
         label: 'Uncategorized',
         count:
           cookieStats.firstParty.uncategorized +
           cookieStats.thirdParty.uncategorized,
-        color: COLOR_MAP.uncategorized,
-        countClassName: 'text-uncategorized',
+        color: COLOR_MAP.uncategorized.color,
+        countClassName: COLOR_MAP.uncategorized.className,
       },
     ],
     firstParty: [
       {
         count: cookieStats.firstParty.functional,
-        color: COLOR_MAP.functional,
+        color: COLOR_MAP.functional.color,
       },
       {
         count: cookieStats.firstParty.marketing,
-        color: COLOR_MAP.marketing,
+        color: COLOR_MAP.marketing.color,
       },
       {
         count: cookieStats.firstParty.analytics,
-        color: COLOR_MAP.analytics,
+        color: COLOR_MAP.analytics.color,
       },
       {
         count: cookieStats.firstParty.uncategorized,
-        color: COLOR_MAP.uncategorized,
+        color: COLOR_MAP.uncategorized.color,
       },
     ],
     thirdParty: [
       {
         count: cookieStats.thirdParty.functional,
-        color: COLOR_MAP.functional,
+        color: COLOR_MAP.functional.color,
       },
       {
         count: cookieStats.thirdParty.marketing,
-        color: COLOR_MAP.marketing,
+        color: COLOR_MAP.marketing.color,
       },
       {
         count: cookieStats.thirdParty.analytics,
-        color: COLOR_MAP.analytics,
+        color: COLOR_MAP.analytics.color,
       },
       {
         count: cookieStats.thirdParty.uncategorized,
-        color: COLOR_MAP.uncategorized,
+        color: COLOR_MAP.uncategorized.color,
       },
     ],
+    blocked: blockedCookiesStats,
+    blockedCookiesLegend,
   };
 };
 

@@ -19,7 +19,10 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import { COLOR_MAP } from '@ps-analysis-tool/design-system';
+/**
+ * Internal dependencies
+ */
+import { COLOR_MAP } from '../../../theme/colors';
 
 /**
  * Internal dependencies.
@@ -28,10 +31,12 @@ import Circle from '..';
 
 describe('Circle', () => {
   it('renders the Circle with the correct background color', () => {
-    const { container } = render(<Circle color={COLOR_MAP.functional} />);
+    const { container } = render(<Circle color={COLOR_MAP.functional.color} />);
 
     // Check if the Circle div has the correct background color style
     const circleDiv = container.querySelector('div');
-    expect(circleDiv).toHaveStyle(`background-color: ${COLOR_MAP.functional}`);
+    expect(circleDiv).toHaveStyle(
+      `background-color: ${COLOR_MAP.functional.color}`
+    );
   });
 });

@@ -28,16 +28,19 @@ import CookiesLanding from '..';
 
 describe('CookiesLanding', () => {
   it('renders CookiesLanding with data', () => {
-    const { getByTestId } = render(
+    const { getByTestId, getAllByTestId } = render(
       <CookiesLanding
         tabCookies={mockResponse.tabCookies}
         tabFrames={mockResponse.tabFrames}
-        tabUrl={mockResponse.tabUrl}
+        showBlockedCookiesSection
+        showHorizontalMatrix
       />
     );
 
     expect(getByTestId('cookies-landing')).toBeInTheDocument();
-    expect(getByTestId('cookies-landing-header')).toBeInTheDocument();
-    expect(getByTestId('cookies-matrix')).toBeInTheDocument();
+    expect(getAllByTestId('cookies-landing-header')[0]).toBeInTheDocument();
+    expect(
+      getByTestId('cookies-matrix-Cookie Classification')
+    ).toBeInTheDocument();
   });
 });

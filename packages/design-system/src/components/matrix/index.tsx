@@ -34,16 +34,26 @@ const Matrix = ({ dataComponents }: MatrixProps) => {
 
   return (
     <div className="grid grid-cols-2 gap-x-5" data-testid="matrix">
-      {dataComponents.map((dataComponent, index) => (
-        <MatrixComponent
-          key={index}
-          {...dataComponent}
-          containerClasses="p-3.5 border-b border-bright-gray dark:border-quartz"
-          countClassName={
-            dataComponent.countClassName + ' text-xxl leading-none'
-          }
-        />
-      ))}
+      {dataComponents.map((dataComponent, index) => {
+        if (dataComponent && dataComponent.countClassName) {
+          const isLastTwoItems =
+            index === dataComponents.length - 1 ||
+            index === dataComponents.length - 2;
+          return (
+            <MatrixComponent
+              key={index}
+              {...dataComponent}
+              containerClasses={`p-3.5 ${
+                !isLastTwoItems ? 'border-b' : ''
+              } border-bright-gray dark:border-quartz`}
+              countClassName={
+                dataComponent.countClassName + ' text-xxl leading-none'
+              }
+            />
+          );
+        }
+        return null;
+      })}
     </div>
   );
 };

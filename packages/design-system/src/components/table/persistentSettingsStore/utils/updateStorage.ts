@@ -88,6 +88,9 @@ const updateChromeStorage = async (
   persistenceKey: string,
   storageData: PersistentStorageData
 ) => {
+  if (!chrome?.runtime) {
+    return {};
+  }
   const tabId = chrome.devtools.inspectedWindow.tabId.toString();
 
   const data = await chrome.storage.local.get();
@@ -105,16 +108,17 @@ const updateChromeStorage = async (
     requiredData = storageData;
   }
 
-  if (!tableData) {
+  if (!tableData && data[tabId]) {
     data[tabId][TABLE_PERSISTENT_SETTINGS_STORE_KEY] = {};
     tableData = data[tabId][TABLE_PERSISTENT_SETTINGS_STORE_KEY];
   }
 
-  if (!tableData[persistenceKey]) {
+  if (tableData && !tableData[persistenceKey]) {
     tableData[persistenceKey] = {};
   }
-
-  tableData[persistenceKey] = requiredData;
+  if (tableData && tableData[persistenceKey]) {
+    tableData[persistenceKey] = requiredData;
+  }
 
   await chrome.storage.local.set(data);
 

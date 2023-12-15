@@ -17,12 +17,12 @@
  * External dependencies.
  */
 import type { Meta, StoryObj } from '@storybook/react';
+import { COLOR_MAP } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
 import Legend from '..';
-import { COLOR_MAP } from '@ps-analysis-tool/design-system';
 
 const meta: Meta<typeof Legend> = {
   title: 'Extension/Popup/Legend',
@@ -38,26 +38,26 @@ export const Primary: StoryObj<typeof meta> = {
       {
         label: 'Functional',
         count: 10,
-        color: COLOR_MAP.functional,
-        countClassName: 'text-fuctional',
+        color: COLOR_MAP.functional.color,
+        countClassName: COLOR_MAP.functional.className,
       },
       {
         label: 'Marketing',
         count: 20,
-        color: COLOR_MAP.marketing,
-        countClassName: 'text-marketing',
+        color: COLOR_MAP.marketing.color,
+        countClassName: COLOR_MAP.marketing.className,
       },
       {
         label: 'Analytics',
         count: 22,
-        color: COLOR_MAP.analytics,
-        countClassName: 'text-analytics',
+        color: COLOR_MAP.analytics.color,
+        countClassName: COLOR_MAP.analytics.className,
       },
       {
         label: 'Uncategorized',
         count: 11,
-        color: COLOR_MAP.uncategorized,
-        countClassName: 'text-uncategorized',
+        color: COLOR_MAP.uncategorized.color,
+        countClassName: COLOR_MAP.uncategorized.className,
       },
     ],
   },

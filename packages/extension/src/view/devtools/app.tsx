@@ -254,7 +254,7 @@ const App: React.FC = () => {
             />
           </Resizable>
           <main className="h-full flex-1 overflow-auto">
-            <div className="min-w-[20rem] h-full">{activePanel}</div>
+            <div className="min-w-[40rem] h-full">{activePanel}</div>
           </main>
         </div>
       )}

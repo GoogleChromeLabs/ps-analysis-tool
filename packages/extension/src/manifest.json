@@ -16,6 +16,7 @@
     "webRequest",
     "cookies",
     "unlimitedStorage",
+    "debugger",
     "management"
   ],
   "host_permissions": ["*://*/*"],

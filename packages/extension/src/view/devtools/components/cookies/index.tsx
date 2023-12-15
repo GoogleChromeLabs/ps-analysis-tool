@@ -86,7 +86,11 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
         {selectedFrame ? (
           <CookiesListing setFilteredCookies={setFilteredCookies} />
         ) : (
-          <CookiesLanding tabCookies={tabCookies} tabFrames={tabFrames} />
+          <CookiesLanding
+            tabCookies={tabCookies}
+            tabFrames={tabFrames}
+            showBlockedCookiesSection
+          />
         )}
       </div>
     );

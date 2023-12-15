@@ -28,6 +28,7 @@ const functional1pCookie = {
   analytics: {
     category: 'functional',
   },
+  frameIdList: [0],
   url: 'https://example.com/public/api/alerts',
   headerType: 'request',
   isFirstParty: true,
@@ -42,6 +43,7 @@ const marketing1pCookie = {
   analytics: {
     category: 'marketing',
   },
+  frameIdList: [0],
   url: 'https://example.com/public/api/alerts',
   headerType: 'request',
   isFirstParty: true,
@@ -56,6 +58,7 @@ const analytics1pCookie = {
   analytics: {
     category: 'analytics',
   },
+  frameIdList: [0],
   url: 'https://example.com/public/api/alerts',
   headerType: 'request',
   isFirstParty: true,
@@ -67,6 +70,7 @@ const uncategorized1pCookie = {
     value: 'val',
     domain: 'example.com',
   },
+  frameIdList: [0],
   analytics: null,
   url: 'https://example.com/public/api/alerts',
   headerType: 'request',
@@ -82,6 +86,7 @@ const functional3pCookie = {
   analytics: {
     category: 'functional',
   },
+  frameIdList: [0],
   url: 'https://other.server.com/public/api/alerts',
   headerType: 'request',
   isFirstParty: false,
@@ -96,6 +101,7 @@ const marketing3pCookie = {
   analytics: {
     category: 'marketing',
   },
+  frameIdList: [0],
   url: 'https://other.server.com/public/api/alerts',
   headerType: 'request',
   isFirstParty: false,
@@ -110,6 +116,7 @@ const analytics3pCookie = {
   analytics: {
     category: 'analytics',
   },
+  frameIdList: [0],
   url: 'https://other.server.com/public/api/alerts',
   headerType: 'request',
   isFirstParty: false,
@@ -121,6 +128,7 @@ const uncategorized3pCookie = {
     value: 'val',
     domain: 'other.server.com',
   },
+  frameIdList: [0],
   analytics: null,
   url: 'https://other.server.com/public/api/alerts',
   headerType: 'request',
@@ -129,6 +137,9 @@ const uncategorized3pCookie = {
 
 const EMPTY_STATS = {
   total: 0,
+  blockedCookies: {
+    total: 0,
+  },
   firstParty: {
     total: 0,
     functional: 0,
@@ -168,6 +179,9 @@ describe('prepareCookiesCount : ', () => {
 
     const expectedStats = {
       total: 8,
+      blockedCookies: {
+        total: 0,
+      },
       firstParty: {
         total: 4,
         functional: 1,
