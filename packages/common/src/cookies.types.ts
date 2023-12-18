@@ -54,6 +54,10 @@ export type CookieAnalytics = {
   wildcard: string;
 };
 
+export type CookieDatabase = {
+  [name: string]: Array<CookieAnalytics>;
+};
+
 export type BlockedReason =
   | Protocol.Network.SetCookieBlockedReason
   | Protocol.Network.CookieBlockedReason
