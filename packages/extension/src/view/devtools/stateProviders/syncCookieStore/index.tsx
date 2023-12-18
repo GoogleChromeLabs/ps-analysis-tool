@@ -23,7 +23,6 @@ import React, {
   useState,
   useCallback,
   useRef,
-  type MutableRefObject,
 } from 'react';
 import { noop } from '@ps-analysis-tool/design-system';
 import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
@@ -51,7 +50,7 @@ export interface CookieStoreContext {
     allowedNumberOfTabs: string | null;
     isInspecting: boolean;
     contextInvalidated: boolean;
-    canStartInspecting: MutableRefObject<boolean>;
+    canStartInspecting: boolean;
   };
   actions: {
     deleteCookie: (cookieName: string) => void;
@@ -67,6 +66,7 @@ export interface CookieStoreContext {
     changeListeningToThisTab: () => void;
     getCookiesSetByJavascript: () => void;
     setContextInvalidated: React.Dispatch<React.SetStateAction<boolean>>;
+    setCanStartInspecting: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
@@ -82,7 +82,7 @@ const initialState: CookieStoreContext = {
     allowedNumberOfTabs: null,
     isInspecting: false,
     contextInvalidated: false,
-    canStartInspecting: { current: false },
+    canStartInspecting: false,
   },
   actions: {
     setSelectedFrame: noop,
@@ -93,6 +93,7 @@ const initialState: CookieStoreContext = {
     setIsInspecting: noop,
     getCookiesSetByJavascript: noop,
     setContextInvalidated: noop,
+    setCanStartInspecting: noop,
   },
 };
 
@@ -112,7 +113,8 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [allowedNumberOfTabs, setAllowedNumberOfTabs] = useState<string | null>(
     null
   );
-  const canStartInspecting = useRef<boolean>(false);
+
+  const [canStartInspecting, setCanStartInspecting] = useState<boolean>(false);
 
   const [tabCookies, setTabCookies] =
     useState<CookieStoreContext['state']['tabCookies']>(null);
@@ -210,7 +212,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           setLoading(false);
           setSelectedFrame(null);
           setTabFrames(null);
-          canStartInspecting.current = false;
+          setCanStartInspecting(false);
           return;
         } else {
           setIsCurrentTabBeingListenedTo(true);
@@ -304,7 +306,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
             setTabFrames(null);
             setSelectedFrame(null);
             setLoading(false);
-            canStartInspecting.current = false;
+            setCanStartInspecting(false);
             return;
           } else {
             setIsCurrentTabBeingListenedTo(true);
@@ -376,7 +378,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
     setIsCurrentTabBeingListenedTo(true);
     setLoading(false);
-    canStartInspecting.current = false;
+    setCanStartInspecting(false);
   }, [tabId]);
 
   const tabUpdateListener = useCallback(
@@ -793,6 +795,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           getCookiesSetByJavascript,
           setIsInspecting,
           setContextInvalidated,
+          setCanStartInspecting,
         },
       }}
     >

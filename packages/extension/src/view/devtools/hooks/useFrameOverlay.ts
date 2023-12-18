@@ -220,7 +220,7 @@ const useFrameOverlay = (
   useEffect(() => {
     (async () => {
       try {
-        if (!connectedToPort) {
+        if (!connectedToPort && !canStartInspecting) {
           await connectToPort();
         }
 
