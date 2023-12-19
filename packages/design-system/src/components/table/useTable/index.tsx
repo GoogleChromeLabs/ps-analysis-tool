@@ -98,6 +98,7 @@ export type TableOutput = {
   isResizing: ColumnResizingOutput['isResizing'];
   filters: TableFilter;
   selectedFilters: TableFilter;
+  isFiltering: TableFilteringOutput['isFiltering'];
   toggleFilterSelection: TableFilteringOutput['toggleFilterSelection'];
   resetFilters: TableFilteringOutput['resetFilters'];
   searchValue: TableSearchOutput['searchValue'];
@@ -152,6 +153,7 @@ const useTable = ({
     filters,
     selectedFilters,
     filteredData,
+    isFiltering,
     toggleFilterSelection,
     resetFilters,
   } = useFiltering(sortedData, tableFilterData, tablePersistentSettingsKey);
@@ -202,6 +204,7 @@ const useTable = ({
     isResizing,
     filters,
     selectedFilters,
+    isFiltering,
     toggleFilterSelection,
     resetFilters,
     searchValue,
