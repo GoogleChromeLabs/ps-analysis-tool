@@ -256,7 +256,7 @@ const CookiesListing = ({
         title: 'Platform',
       },
       isBlocked: {
-        title: 'Cookie Accepted',
+        title: 'Cookie Affected',
         description:
           "Whether the cookie was accepted(set) in Chrome's Cookie Store",
         hasStaticFilterValues: true,
@@ -270,7 +270,7 @@ const CookiesListing = ({
         },
         comparator: (value: InfoType, filterValue: string) => {
           const val = !value;
-          return val === (filterValue === 'True');
+          return val === (filterValue === 'False');
         },
       },
     }),
