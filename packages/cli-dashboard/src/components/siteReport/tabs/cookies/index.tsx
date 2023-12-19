@@ -51,7 +51,7 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
   const affectedCookies = useMemo(
     () =>
       Object.fromEntries(
-        Object.entries(tabCookies).filter(([, cookie]) => !cookie.isCookieSet)
+        Object.entries(tabCookies).filter(([, cookie]) => cookie.isBlocked)
       ),
     [tabCookies]
   );

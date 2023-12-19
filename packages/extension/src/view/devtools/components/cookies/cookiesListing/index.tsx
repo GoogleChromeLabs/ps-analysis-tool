@@ -443,11 +443,33 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
           },
         },
         comparator: (value: InfoType, filterValue: string) => {
-          const val = value as string;
-          const isJS = val === 'JS';
-
-          return isJS === (filterValue === 'JS');
+          switch (filterValue) {
+            case 'JS':
+              return value === 'javascript';
+            case 'HTTP':
+              return value === 'request' || value === 'response';
+            default:
+              return true;
+          }
         },
+      },
+      'parsedCookie.priority': {
+        title: 'Priority',
+        hasStaticFilterValues: true,
+        filterValues: {
+          Low: {
+            selected: false,
+          },
+          Medium: {
+            selected: false,
+          },
+          High: {
+            selected: false,
+          },
+        },
+      },
+      'parsedCookie.size': {
+        title: 'Size',
       },
     }),
     [blockedReasonFilterValues]

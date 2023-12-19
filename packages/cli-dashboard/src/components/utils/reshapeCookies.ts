@@ -76,8 +76,8 @@ const createCookieObj = (
         url: cookie.pageUrl,
         headerType: 'response',
         isFirstParty: cookie.isFirstParty,
-        frameIdList: [],
-        isCookieSet: !cookie.isBlocked,
+        frameIdList: [frame], // Hot fix: For Displaying cookies in CLI Dashboard.
+        isBlocked: cookie.isBlocked,
         frameUrls: [frame],
       } as CookieTableData,
     ])

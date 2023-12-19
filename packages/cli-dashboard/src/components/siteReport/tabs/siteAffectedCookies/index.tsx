@@ -32,7 +32,7 @@ interface SiteAffectedCookiesProps {
 const SiteAffectedCookies = ({ selectedSite }: SiteAffectedCookiesProps) => {
   const { tabCookies } = useContentStore(({ state }) => ({
     tabCookies: Object.values(state.tabCookies).filter(
-      (cookie) => !cookie.isCookieSet
+      (cookie) => cookie.isBlocked
     ),
   }));
 

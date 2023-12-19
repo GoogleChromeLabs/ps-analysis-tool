@@ -58,6 +58,10 @@ export type CookieAnalytics = {
   wildcard: string;
 };
 
+export type CookieDatabase = {
+  [name: string]: Array<CookieAnalytics>;
+};
+
 export type BlockedReason =
   | Protocol.Network.SetCookieBlockedReason
   | Protocol.Network.CookieBlockedReason
@@ -73,7 +77,7 @@ export type CookieData = {
   url: string;
   headerType: 'response' | 'request' | 'javascript';
   isFirstParty: boolean | null;
-  frameIdList: number[];
+  frameIdList: Array<number | string>;
   blockedReasons?: BlockedReason[];
   warningReasons?: Protocol.Audits.CookieWarningReason[];
   isBlocked?: boolean | null;

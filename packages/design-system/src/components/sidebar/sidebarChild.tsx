@@ -121,7 +121,7 @@ const SidebarChild = ({
         )}
         {sidebarItem.icon && sidebarItem.selectedIcon && (
           <div className="mr-1 pointer-events-none">
-            {isKeySelected(itemKey) ? (
+            {isKeySelected(itemKey) && isSidebarFocused ? (
               <>{sidebarItem.selectedIcon}</>
             ) : (
               <>{sidebarItem.icon}</>
