@@ -76,8 +76,8 @@ const createCookieObj = (
         url: cookie.pageUrl,
         headerType: 'response',
         isFirstParty: cookie.isFirstParty,
-        frameIdList: [],
-        isCookieSet: !cookie.isBlocked,
+        frameIdList: [frame],
+        isBlocked: cookie.isBlocked,
         frameUrls: [frame],
       } as CookieTableData,
     ])

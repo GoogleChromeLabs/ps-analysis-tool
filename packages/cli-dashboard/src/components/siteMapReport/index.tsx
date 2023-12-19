@@ -86,9 +86,7 @@ const SiteMapReport = ({
   const affectedCookies = useMemo(
     () =>
       Object.fromEntries(
-        Object.entries(reshapedCookies).filter(
-          ([, cookie]) => !cookie.isCookieSet
-        )
+        Object.entries(reshapedCookies).filter(([, cookie]) => cookie.isBlocked)
       ),
     [reshapedCookies]
   );
@@ -164,7 +162,7 @@ const SiteMapReport = ({
       _data['sitemap-affected-cookies'].panel = (
         <SiteMapAffectedCookies
           cookies={Object.values(reshapedCookies).filter(
-            (cookie) => !cookie.isCookieSet
+            (cookie) => cookie.isBlocked
           )}
         />
       );

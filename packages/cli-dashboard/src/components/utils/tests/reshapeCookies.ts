@@ -71,7 +71,7 @@ describe('reshapeCookies', () => {
         url: 'https://www.cnn.com/index.html',
         frameUrls: ['https://edition.cnn.com'],
         frameIdList: [],
-        isCookieSet: true,
+        isBlocked: true,
         headerType: 'response',
       },
     });

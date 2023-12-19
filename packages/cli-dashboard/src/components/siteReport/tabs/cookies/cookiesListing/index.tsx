@@ -124,7 +124,7 @@ const CookiesListing = ({
       },
       {
         header: 'Cookie Affected',
-        accessorKey: 'isCookieSet',
+        accessorKey: 'isBlocked',
         cell: (info: InfoType) => (
           <p className="flex justify-center items-center">
             {!info ? (
@@ -268,7 +268,7 @@ const CookiesListing = ({
       'analytics.platform': {
         title: 'Platform',
       },
-      isCookieSet: {
+      isBlocked: {
         title: 'Cookie Accepted',
         description:
           "Whether the cookie was accepted(set) in Chrome's Cookie Store",

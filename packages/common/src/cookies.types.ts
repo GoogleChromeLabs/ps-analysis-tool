@@ -73,7 +73,7 @@ export type CookieData = {
   url: string;
   headerType: 'response' | 'request' | 'javascript';
   isFirstParty: boolean | null;
-  frameIdList: number[];
+  frameIdList: number[] | string[];
   blockedReasons?: BlockedReason[];
   warningReasons?: Protocol.Audits.CookieWarningReason[];
   isBlocked?: boolean | null;
