@@ -48,7 +48,7 @@ const ChipsBar = ({
     <div
       className={`${
         appliedFiltersCount === 0 ? 'hidden' : ''
-      } w-full h-fit px-2 py-0 flex items-center overflow-x-scroll no-scrollbar bg-anti-flash-white dark:bg-raisin-black border-b border-gray-300 dark:border-quartz p-0`}
+      } w-full h-fit px-2 py-1 flex items-center overflow-x-scroll no-scrollbar bg-anti-flash-white dark:bg-raisin-black border-b border-gray-300 dark:border-quartz`}
     >
       {appliedFiltersCount > 1 && (
         <button

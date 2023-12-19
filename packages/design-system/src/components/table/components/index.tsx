@@ -117,7 +117,9 @@ const Table = ({
             enable={{
               right: true,
             }}
-            className={`${table.rows.length === 0 ? 'hidden' : 'block'}`}
+            className={`${
+              table.rows.length === 0 && !table.isFiltering ? 'hidden' : 'block'
+            }`}
           >
             <FiltersSidebar
               filters={table.filters}

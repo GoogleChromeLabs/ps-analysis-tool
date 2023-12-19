@@ -30,6 +30,7 @@ export type TableFilteringOutput = {
   filters: TableFilter;
   selectedFilters: TableFilter;
   filteredData: TableData[];
+  isFiltering: boolean;
   toggleFilterSelection: (filterKey: string, filterValue: string) => void;
   resetFilters: () => void;
 };
@@ -252,10 +253,21 @@ const useFiltering = (
     }
   }, [filters, setPreferences, tablePersistentSettingsKey]);
 
+  const isFiltering = useMemo(
+    () =>
+      Object.values(selectedFilters).some((filter) =>
+        Object.values(filter.filterValues).some(
+          (filterValue) => filterValue.selected
+        )
+      ),
+    [selectedFilters]
+  );
+
   return {
     filters,
     selectedFilters,
     filteredData,
+    isFiltering,
     toggleFilterSelection,
     resetFilters,
   };
