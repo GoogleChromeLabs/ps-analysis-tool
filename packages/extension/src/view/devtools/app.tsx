@@ -145,7 +145,7 @@ const App: React.FC = () => {
           <InspectButton
             isInspecting={isInspecting}
             setIsInspecting={setIsInspecting}
-            isTabFocused={isSidebarFocused}
+            isTabFocused={isSidebarFocused && isKeySelected('cookies')}
           />
         );
       } else {
