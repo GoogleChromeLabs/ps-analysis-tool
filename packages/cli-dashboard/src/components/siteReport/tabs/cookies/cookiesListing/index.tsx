@@ -127,7 +127,7 @@ const CookiesListing = ({
         accessorKey: 'isBlocked',
         cell: (info: InfoType) => (
           <p className="flex justify-center items-center">
-            {!info ? (
+            {info ? (
               <span className="font-serif">✓</span>
             ) : (
               <span className="font-serif">✗</span>
