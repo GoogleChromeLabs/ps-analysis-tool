@@ -276,7 +276,7 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
         className="h-full flex"
       >
         <CookieTable
-          data={cookies}
+          data={cookies.map((cookie) => ({ ...cookie, isBlocked: undefined }))}
           tableColumns={tableColumns}
           showTopBar={true}
           tableFilters={filters}

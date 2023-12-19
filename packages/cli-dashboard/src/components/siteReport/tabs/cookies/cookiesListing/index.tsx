@@ -122,19 +122,6 @@ const CookiesListing = ({
           </p>
         ),
       },
-      {
-        header: 'Cookie Affected',
-        accessorKey: 'isBlocked',
-        cell: (info: InfoType) => (
-          <p className="flex justify-center items-center">
-            {info ? (
-              <span className="font-serif">✓</span>
-            ) : (
-              <span className="font-serif">✗</span>
-            )}
-          </p>
-        ),
-      },
     ],
     []
   );
