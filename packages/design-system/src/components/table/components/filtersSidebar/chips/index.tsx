@@ -49,9 +49,6 @@ const ChipsBar = ({
       className={
         'w-full h-6 px-2 py-1 flex items-center overflow-x-scroll no-scrollbar bg-anti-flash-white dark:bg-raisin-black border-b border-gray-300 dark:border-quartz'
       }
-      style={{
-        scrollbarWidth: 'none',
-      }}
     >
       {appliedFiltersCount > 1 && (
         <button
