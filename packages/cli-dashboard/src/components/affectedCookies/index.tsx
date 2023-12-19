@@ -276,7 +276,7 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
         className="h-full flex"
       >
         <CookieTable
-          data={cookies}
+          data={cookies.map((cookie) => ({ ...cookie, isBlocked: undefined }))} // Hot Fix: To unhighlight cookies in the Affected Cookie table.
           tableColumns={tableColumns}
           showTopBar={true}
           tableFilters={filters}

@@ -449,6 +449,24 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
           return isJS === (filterValue === 'JS');
         },
       },
+      'parsedCookie.priority': {
+        title: 'Priority',
+        hasStaticFilterValues: true,
+        filterValues: {
+          Low: {
+            selected: false,
+          },
+          Medium: {
+            selected: false,
+          },
+          High: {
+            selected: false,
+          },
+        },
+      },
+      'parsedCookie.size': {
+        title: 'Size',
+      },
     }),
     [blockedReasonFilterValues]
   );
