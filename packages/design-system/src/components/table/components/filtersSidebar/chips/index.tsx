@@ -46,9 +46,9 @@ const ChipsBar = ({
 
   return (
     <div
-      className={`${
-        appliedFiltersCount === 0 ? 'hidden' : ''
-      } w-full h-fit px-2 py-1 flex items-center overflow-x-scroll no-scrollbar bg-anti-flash-white dark:bg-raisin-black border-b border-gray-300 dark:border-quartz`}
+      className={
+        'w-full h-6 px-2 py-1 flex items-center overflow-x-scroll no-scrollbar bg-anti-flash-white dark:bg-raisin-black border-b border-gray-300 dark:border-quartz'
+      }
     >
       {appliedFiltersCount > 1 && (
         <button
@@ -56,7 +56,7 @@ const ChipsBar = ({
           onClick={resetFilters}
         >
           <StopIcon className="text-gray min-w-[14px] min-h-[14px]" />
-          <span className="ml-1 mr-1 dark:text-bright-gray bg-transparent">
+          <span className="ml-1 mr-2 dark:text-bright-gray bg-transparent">
             Clear all
           </span>
           <div className="w-[1px] bg-gainsboro dark:bg-quartz h-[20px]"></div>
