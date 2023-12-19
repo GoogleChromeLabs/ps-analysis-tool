@@ -105,6 +105,12 @@ class WebpageContentScript {
         setInPage: true,
       });
     }
+    chrome.runtime.onMessage.addListener((message, sender, response) => {
+      if (message.status === 'set?') {
+        response({ setInPage: true });
+      }
+    });
+
     chrome.runtime.onConnect.addListener((port) => {
       if (port.name.startsWith(WEBPAGE_PORT_NAME)) {
         this.port = port;
@@ -118,6 +124,7 @@ class WebpageContentScript {
    * Adds event listeners to the document.
    */
   addEventListeners(): void {
+    window.addEventListener('unload', this.handleUnloadEvent);
     document.addEventListener('mouseover', this.handleHoverEvent);
     document.addEventListener('mouseout', this.handleHoverEvent);
     document.addEventListener('visibilitychange', this.handleMouseMove);
@@ -129,11 +136,23 @@ class WebpageContentScript {
    * Removes event listeners from the document.
    */
   removeEventListeners(): void {
+    window.removeEventListener('unload', this.handleUnloadEvent);
     document.removeEventListener('mouseover', this.handleHoverEvent);
     document.removeEventListener('mouseout', this.handleHoverEvent);
     document.removeEventListener('visibilitychange', this.handleMouseMove);
     this.docElement.removeEventListener('mouseleave', this.handleMouseMove);
     this.docElement.removeEventListener('mouseenter', this.handleMouseMove);
+  }
+
+  /**
+   * Handle unload event
+   */
+  handleUnloadEvent(): void {
+    if (chrome.runtime?.id) {
+      chrome.runtime.sendMessage({
+        setInPage: false,
+      });
+    }
   }
 
   /**

@@ -489,37 +489,45 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
   }, [selectedFrame]);
 
   const selectedCookieIndex = useRef(-1);
+  const isDeleteOperationPerformed = useRef(false);
 
   // This check is because selectedFrameCookie gets value only once when the cookie in the frame is selected.
   // selectedFrameCookie has the following shape.
   // {[frameName]: cookie|null}
-  const isAnyCookieSelected = !selectedFrameCookie
-    ? frameFilteredCookies.length > 0
+  const isAnyCookieSelected =
+    isDeleteOperationPerformed.current && !selectedFrameCookie
+      ? frameFilteredCookies.length > 0
+        ? true
+        : false
+      : selectedFrameCookie &&
+        selectedFrameCookie[Object.keys(selectedFrameCookie)[0]]
       ? true
-      : false
-    : selectedFrameCookie &&
-      selectedFrameCookie[Object.keys(selectedFrameCookie)[0]]
-    ? true
-    : false;
+      : false;
+
+  useEffect(() => {
+    isDeleteOperationPerformed.current = false;
+  }, [selectedFrame]);
 
   const handleDeleteCookie = useCallback(() => {
     const selectedIndex = getNextIndexToDelete(
       selectedCookieIndex.current,
       frameFilteredCookies.length
     );
-    const selectedKey = !selectedFrameCookie
-      ? selectedIndex
-        ? frameFilteredCookies[selectedIndex]
-        : null
-      : Object.values(selectedFrameCookie ?? {})[0];
+    const selectedKey =
+      isDeleteOperationPerformed.current && !selectedFrameCookie
+        ? selectedIndex
+          ? frameFilteredCookies[selectedIndex]
+          : null
+        : Object.values(selectedFrameCookie ?? {})[0];
 
-    if (selectedKey !== null && selectedKey.parsedCookie) {
+    if (selectedKey !== null && selectedKey && selectedKey.parsedCookie) {
       const cookieKey = getCookieKey(selectedKey?.parsedCookie);
       if (cookieKey) {
         selectedCookieIndex.current = frameFilteredCookies.findIndex(
           (cookie) => getCookieKey(cookie.parsedCookie) === cookieKey
         );
         deleteCookie(cookieKey);
+        isDeleteOperationPerformed.current = true;
         const index = getNextIndexToDelete(
           selectedCookieIndex.current,
           frameFilteredCookies.length - 1

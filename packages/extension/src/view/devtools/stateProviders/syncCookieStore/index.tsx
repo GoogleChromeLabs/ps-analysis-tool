@@ -60,7 +60,7 @@ export interface CookieStoreContext {
       keyToChange: string,
       changedValue: string | boolean,
       previousValue: string | null
-    ) => boolean | Promise<boolean>;
+    ) => boolean | Promise<boolean | null>;
     setSelectedFrame: (key: string | null) => void;
     setIsInspecting: React.Dispatch<React.SetStateAction<boolean>>;
     changeListeningToThisTab: () => void;
