@@ -25,18 +25,21 @@ import React, {
   useRef,
 } from 'react';
 import { noop } from '@ps-analysis-tool/design-system';
-import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
+import type {
+  TabCookies,
+  TabFrames,
+  CookieData,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import useContextSelector from '../../../../utils/useContextSelector';
-import { CookieStore, type CookieData } from '../../../../localStore';
+import { CookieStore } from '../../../../localStore';
 import { getCurrentTabId } from '../../../../utils/getCurrentTabId';
 import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
 import setDocumentCookies from '../../../../utils/setDocumentCookies';
 import isOnRWS from '../../../../contentScript/utils/isOnRWS';
-import getValueForLocalStorageAndCookieSet from '../../../../utils/getValueForLocalStorageAndCookieSet';
 
 export interface CookieStoreContext {
   state: {
@@ -53,14 +56,6 @@ export interface CookieStoreContext {
     canStartInspecting: boolean;
   };
   actions: {
-    deleteCookie: (cookieName: string) => void;
-    deleteAllCookies: () => void;
-    modifyCookie: (
-      cookieName: string,
-      keyToChange: string,
-      changedValue: string | boolean,
-      previousValue: string | null
-    ) => boolean | Promise<boolean>;
     setSelectedFrame: (key: string | null) => void;
     setIsInspecting: React.Dispatch<React.SetStateAction<boolean>>;
     changeListeningToThisTab: () => void;
@@ -87,9 +82,6 @@ const initialState: CookieStoreContext = {
   actions: {
     setSelectedFrame: noop,
     changeListeningToThisTab: noop,
-    deleteCookie: noop,
-    modifyCookie: () => Promise.resolve(true),
-    deleteAllCookies: noop,
     setIsInspecting: noop,
     getCookiesSetByJavascript: noop,
     setContextInvalidated: noop,
@@ -431,313 +423,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
     }
   }, []);
 
-  const deleteCookie = useCallback(
-    async (cookieKey: string) => {
-      const localStorage = await chrome.storage.local.get();
-      if (tabId) {
-        const tabData = localStorage[tabId];
-        const cookieDetails = tabData.cookies[cookieKey];
-        await CookieStore.deleteCookie(cookieKey);
-        if (cookieDetails?.parsedCookie?.name && cookieDetails?.url) {
-          await chrome.cookies.remove({
-            name: cookieDetails?.parsedCookie?.name,
-            url: cookieDetails?.url,
-          });
-        }
-      }
-    },
-    [tabId]
-  );
-
-  const modifierForNonNameUpdate = useCallback(
-    // eslint-disable-next-line complexity
-    async (
-      cookieKey: string,
-      keyToChange: string,
-      changedValue: string | boolean
-    ) => {
-      if (tabCookies && tabId) {
-        let newCookieKey = cookieKey;
-        let valueToBeSet: string | boolean | number = changedValue;
-        const { [cookieKey]: cookieDetails, ...restOfCookies } = tabCookies;
-
-        if (cookieDetails?.isBlocked) {
-          return null;
-        }
-
-        if (keyToChange === 'expirationDate') {
-          if (
-            (valueToBeSet as string).toLowerCase() !== 'session' &&
-            valueToBeSet
-          ) {
-            try {
-              valueToBeSet = new Date(valueToBeSet as string).getTime() / 1000;
-            } catch (error) {
-              return false;
-            }
-          } else {
-            valueToBeSet = 0;
-          }
-        }
-
-        if (keyToChange === 'domain') {
-          newCookieKey =
-            cookieDetails.parsedCookie.name +
-            changedValue +
-            cookieDetails.parsedCookie.path;
-        } else if (keyToChange === 'path') {
-          newCookieKey =
-            cookieDetails.parsedCookie.name +
-            cookieDetails.parsedCookie.domain +
-            changedValue;
-        }
-
-        if (keyToChange === 'sameSite') {
-          valueToBeSet = getValueForLocalStorageAndCookieSet(
-            keyToChange,
-            (changedValue as string).toLowerCase(),
-            false
-          );
-          if (!valueToBeSet) {
-            return false;
-          }
-        }
-        const currentCookie = await chrome.cookies.get({
-          name: cookieDetails.parsedCookie.name,
-          url: cookieDetails.url,
-        });
-
-        try {
-          if (!currentCookie) {
-            return false;
-          }
-
-          const {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            hostOnly = '',
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            session = '',
-            expirationDate = 0,
-            ...otherDetails
-          } = currentCookie;
-
-          let isUpdateDone;
-
-          if (keyToChange === 'expirationDate' && valueToBeSet === 0) {
-            isUpdateDone = await chrome.cookies.set({
-              ...otherDetails,
-              url: cookieDetails.url,
-            });
-          } else {
-            isUpdateDone = await chrome.cookies.set({
-              ...otherDetails,
-              expirationDate,
-              [keyToChange]: valueToBeSet,
-              url: cookieDetails.url,
-            });
-            if (keyToChange === 'expirationDate') {
-              valueToBeSet = Number(valueToBeSet) * 1000;
-            }
-          }
-
-          if (
-            isUpdateDone[keyToChange] === valueToBeSet ||
-            (keyToChange === 'expirationDate' &&
-              (isUpdateDone?.session || isUpdateDone?.expirationDate))
-          ) {
-            const oldData = await chrome.storage.local.get();
-
-            const updatedCookie = {
-              [newCookieKey]: {
-                ...cookieDetails,
-                parsedCookie: {
-                  ...cookieDetails.parsedCookie,
-                  [keyToChange === 'expirationDate'
-                    ? 'expires'
-                    : keyToChange.toLowerCase()]:
-                    getValueForLocalStorageAndCookieSet(
-                      keyToChange,
-                      valueToBeSet,
-                      true
-                    ),
-                },
-              },
-            };
-
-            await chrome.storage.local.set({
-              ...oldData,
-              [tabId]: {
-                ...oldData[tabId],
-                cookies: {
-                  ...restOfCookies,
-                  ...updatedCookie,
-                },
-              },
-            });
-          } else {
-            return false;
-          }
-          return true;
-        } catch (error) {
-          return false;
-        }
-      } else {
-        return false;
-      }
-    },
-    [tabCookies, tabId]
-  );
-
-  const deleteAllCookies = useCallback(async () => {
-    const localStorage = await chrome.storage.local.get();
-    if (tabId && tabFrames && selectedFrame) {
-      const currentFrame = tabFrames[selectedFrame];
-      const newTabData = localStorage[tabId];
-      const allCookies: CookieStoreContext['state']['tabCookies'] =
-        newTabData.cookies ?? null;
-      if (allCookies) {
-        const cookieKeys: string[] = [];
-        await Promise.all(
-          currentFrame.frameIds.map(async (frameId) => {
-            await Promise.all(
-              Object.keys(allCookies).map(async (key) => {
-                if (
-                  allCookies[key].frameIdList &&
-                  !allCookies[key].frameIdList.includes(frameId)
-                ) {
-                  return key;
-                }
-                if (
-                  allCookies[key]?.parsedCookie?.name &&
-                  allCookies[key]?.url
-                ) {
-                  await chrome.cookies.remove({
-                    name: allCookies[key]?.parsedCookie?.name,
-                    url: allCookies[key]?.url,
-                  });
-                }
-                cookieKeys.push(key);
-                return key;
-              })
-            );
-            return frameId;
-          })
-        );
-        await CookieStore.deleteSetOfCookie(cookieKeys);
-      }
-    }
-  }, [selectedFrame, tabFrames, tabId]);
-
-  const modifierForNameUpdate = useCallback(
-    async (
-      cookieKey: string,
-      keyToChange: string,
-      changedValue: string,
-      previousValue: string
-    ) => {
-      if (tabId && tabCookies) {
-        const { [cookieKey]: cookieDetails, ...restOfCookies } = tabCookies;
-
-        if (cookieDetails?.isBlocked) {
-          return null;
-        }
-        const newCookieKey =
-          changedValue +
-          cookieDetails.parsedCookie.domain +
-          cookieDetails.parsedCookie.path;
-
-        const currentCookie = await chrome.cookies.get({
-          name: previousValue,
-          url: cookieDetails.url,
-        });
-
-        try {
-          if (!currentCookie) {
-            return false;
-          }
-
-          const {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            hostOnly = '',
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            session = '',
-            ...otherDetails
-          } = currentCookie;
-
-          const isUpdateDone = await chrome.cookies.set({
-            ...otherDetails,
-            [keyToChange]: changedValue,
-            url: cookieDetails.url,
-          });
-
-          await chrome.cookies.remove({
-            name: previousValue,
-            url: cookieDetails.url,
-          });
-
-          if (isUpdateDone[keyToChange] === changedValue) {
-            const oldData = await chrome.storage.local.get();
-            const updatedCookie = {
-              [newCookieKey]: {
-                ...cookieDetails,
-                analytics: {
-                  ...cookieDetails?.analytics,
-                  name: changedValue,
-                },
-                parsedCookie: {
-                  ...cookieDetails.parsedCookie,
-                  [keyToChange]: changedValue,
-                },
-              },
-            };
-
-            await chrome.storage.local.set({
-              ...oldData,
-              [tabId]: {
-                ...oldData[tabId],
-                cookies: {
-                  ...restOfCookies,
-                  ...updatedCookie,
-                },
-              },
-            });
-          } else {
-            return false;
-          }
-          return true;
-        } catch (error) {
-          return false;
-        }
-      } else {
-        return false;
-      }
-    },
-    [tabCookies, tabId]
-  );
-
-  const modifyCookie = useCallback(
-    (
-      cookieKey: string,
-      keyToChange: string,
-      changedValue: string | boolean,
-      previousValue: string | null
-    ) => {
-      if (previousValue) {
-        if (!changedValue) {
-          return false;
-        }
-        return modifierForNameUpdate(
-          cookieKey,
-          keyToChange,
-          changedValue as string,
-          previousValue
-        );
-      }
-      return modifierForNonNameUpdate(cookieKey, keyToChange, changedValue);
-    },
-    [modifierForNameUpdate, modifierForNonNameUpdate]
-  );
-
   useEffect(() => {
     intitialSync();
     chrome.storage.local.onChanged.addListener(storeChangeListener);
@@ -789,9 +474,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
         actions: {
           setSelectedFrame,
           changeListeningToThisTab,
-          deleteCookie,
-          modifyCookie,
-          deleteAllCookies,
           getCookiesSetByJavascript,
           setIsInspecting,
           setContextInvalidated,
