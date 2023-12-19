@@ -105,6 +105,12 @@ class WebpageContentScript {
         setInPage: true,
       });
     }
+    chrome.runtime.onMessage.addListener((message, sender, response) => {
+      if (message.status === 'set?') {
+        response({ setInPage: true });
+      }
+    });
+
     chrome.runtime.onConnect.addListener((port) => {
       if (port.name.startsWith(WEBPAGE_PORT_NAME)) {
         this.port = port;
