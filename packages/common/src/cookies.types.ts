@@ -20,6 +20,10 @@
 import { type Cookie as ParsedCookie } from 'simple-cookie';
 import type { Protocol } from 'devtools-protocol';
 
+export type CookieDatabase = {
+  [name: string]: Array<CookieAnalytics>;
+};
+
 export type CookiesCount = {
   total: number;
   firstParty: {
