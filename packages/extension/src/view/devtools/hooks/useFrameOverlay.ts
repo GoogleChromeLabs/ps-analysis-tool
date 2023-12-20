@@ -162,7 +162,28 @@ const useFrameOverlay = (
     },
     [setIsInspecting]
   );
+  useEffect(() => {
+    (async () => {
+      try {
+        const currentTabId = await getCurrentTabId();
+        if (!currentTabId) {
+          return;
+        }
 
+        chrome.tabs.sendMessage(
+          Number(currentTabId),
+          { status: 'set?' },
+          (res) => {
+            if (res) {
+              setCanStartInspecting(res.setInPage);
+            }
+          }
+        );
+      } catch (error) {
+        // Fail silently.
+      }
+    })();
+  }, [setCanStartInspecting]);
   // When inspect button is clicked.
   useEffect(() => {
     (async () => {
