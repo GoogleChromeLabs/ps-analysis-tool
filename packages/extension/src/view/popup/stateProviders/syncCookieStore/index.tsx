@@ -31,11 +31,7 @@ import { type CookiesCount } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import {
-  getCurrentTab,
-  getCurrentTabId,
-} from '../../../../utils/getCurrentTabId';
-import { CookieStore } from '../../../../localStore';
+import { getCurrentTab } from '../../../../utils/getCurrentTabId';
 import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
 
 export interface CookieStoreContext {
@@ -258,40 +254,39 @@ export const Provider = ({ children }: PropsWithChildren) => {
     [setDebouncedStats, tabId, tabUrl]
   );
 
-  const changeListeningToThisTab = useCallback(async () => {
-    const changedTabId = await getCurrentTabId();
-    if (!changedTabId) {
-      return;
-    }
-    await CookieStore.addTabData(changedTabId?.toString());
-    const storedTabData = Object.keys(await chrome.storage.local.get());
-    // eslint-disable-next-line guard-for-in
-    storedTabData.map(async (tabIdToBeDeleted) => {
-      if (
-        tabIdToBeDeleted !== changedTabId &&
-        tabIdToBeDeleted !== 'tabToRead'
-      ) {
-        await CookieStore.removeTabData(tabIdToBeDeleted);
+  const changeListeningToThisTab = useCallback(() => {
+    chrome.runtime.sendMessage({
+      type: 'SET_TAB_TO_READ',
+      payload: {
+        tabId,
+      },
+    });
+  }, [tabId]);
 
-        if (!Number.isNaN(parseInt(tabIdToBeDeleted))) {
-          await chrome.action.setBadgeText({
-            tabId: parseInt(tabIdToBeDeleted),
-            text: '',
-          });
+  useEffect(() => {
+    const listener = async (message: {
+      type: string;
+      payload: { tabId: string };
+    }) => {
+      if (message.type === 'syncCookieStore:SET_TAB_TO_READ') {
+        const tab = await getCurrentTab();
+
+        if (tab?.[0]?.url) {
+          setTabUrl(tab[0]?.url);
         }
-      }
-      return Promise.resolve();
-    });
 
-    chrome.tabs.query({ active: true }, (tab) => {
-      if (tab[0]?.url) {
-        setTabUrl(tab[0]?.url);
-      }
-    });
+        await chrome.tabs.reload(Number(message.payload.tabId));
 
-    await chrome.tabs.reload(Number(changedTabId));
-    setIsCurrentTabBeingListenedTo(true);
-    setLoading(true);
+        setIsCurrentTabBeingListenedTo(true);
+        setLoading(false);
+      }
+    };
+
+    chrome.runtime.onMessage.addListener(listener);
+
+    return () => {
+      chrome.runtime.onMessage.removeListener(listener);
+    };
   }, []);
 
   const changeSyncStorageListener = useCallback(async () => {
