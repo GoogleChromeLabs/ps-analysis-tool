@@ -32,7 +32,7 @@ import { CookieStore } from '../localStore';
 import parseResponseCookieHeader from './parseResponseCookieHeader';
 import parseRequestCookieHeader from './parseRequestCookieHeader';
 import { getTab } from '../utils/getTab';
-import { getCurrentTab } from '../utils/getCurrentTabId';
+import { getCurrentTab, getCurrentTabId } from '../utils/getCurrentTabId';
 import {
   type CookieDatabase,
   fetchDictionary,
@@ -529,3 +529,47 @@ chrome.storage.sync.onChanged.addListener(
     }
   }
 );
+
+const listenToNewTab = async (tabId?: number) => {
+  const newTabId = tabId?.toString() || (await getCurrentTabId());
+
+  if (!newTabId) {
+    return '';
+  }
+
+  await CookieStore.addTabData(newTabId);
+
+  const storedTabData = Object.keys(await chrome.storage.local.get());
+
+  storedTabData.some(async (tabIdToDelete) => {
+    if (tabIdToDelete !== newTabId) {
+      await CookieStore.removeTabData(tabIdToDelete);
+
+      if (!Number.isNaN(parseInt(tabIdToDelete))) {
+        await chrome.action.setBadgeText({
+          tabId: parseInt(tabIdToDelete),
+          text: '',
+        });
+      }
+    }
+  });
+
+  return newTabId;
+};
+
+chrome.runtime.onMessage.addListener((request) => {
+  if (request?.type === 'SET_TAB_TO_READ') {
+    PROMISE_QUEUE.clear();
+    PROMISE_QUEUE.add(async () => {
+      const newTab = await listenToNewTab(request?.payload?.tabId);
+
+      // Can't use sendResponse as delay is too long. So using sendMessage instead.
+      chrome.runtime.sendMessage({
+        type: 'syncCookieStore:SET_TAB_TO_READ',
+        payload: {
+          tabId: newTab,
+        },
+      });
+    });
+  }
+});

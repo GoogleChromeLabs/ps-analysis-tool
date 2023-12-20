@@ -37,6 +37,7 @@ import { useCookieStore } from './stateProviders/syncCookieStore';
 import './app.css';
 import { Cookies } from './components';
 import useFrameOverlay from './hooks/useFrameOverlay';
+import { CookieStore } from '../../localStore';
 
 const App: React.FC = () => {
   const [sidebarWidth, setSidebarWidth] = useState(200);
@@ -210,11 +211,8 @@ const App: React.FC = () => {
 
       const getTabBeingListenedTo = await chrome.storage.local.get();
 
-      if (
-        getTabBeingListenedTo &&
-        tabId.toString() !== getTabBeingListenedTo?.tabToRead
-      ) {
-        updateSelectedItemKey('cookies');
+      if (getTabBeingListenedTo && tabId !== getTabBeingListenedTo?.tabToRead) {
+        await CookieStore.removeTabData(tabId); // Hot Fix: Remove tab data if tab is not being listened to
       }
     };
 

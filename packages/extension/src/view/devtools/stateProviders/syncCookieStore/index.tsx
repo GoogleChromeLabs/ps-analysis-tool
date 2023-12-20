@@ -35,8 +35,6 @@ import type {
  * Internal dependencies.
  */
 import useContextSelector from '../../../../utils/useContextSelector';
-import { CookieStore } from '../../../../localStore';
-import { getCurrentTabId } from '../../../../utils/getCurrentTabId';
 import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
 import setDocumentCookies from '../../../../utils/setDocumentCookies';
 import isOnRWS from '../../../../contentScript/utils/isOnRWS';
@@ -324,54 +322,44 @@ export const Provider = ({ children }: PropsWithChildren) => {
     }
   }, [tabId]);
 
-  const changeListeningToThisTab = useCallback(async () => {
-    let changedTabId = tabId?.toString();
-
-    if (!tabId) {
-      changedTabId = await getCurrentTabId();
-    }
-
-    if (!changedTabId) {
-      return;
-    }
-
-    await CookieStore.addTabData(changedTabId);
-
-    const storedTabData = Object.keys(await chrome.storage.local.get());
-
-    // eslint-disable-next-line guard-for-in
-    storedTabData.map(async (tabIdToBeDeleted) => {
-      if (
-        tabIdToBeDeleted !== changedTabId &&
-        tabIdToBeDeleted !== 'tabToRead'
-      ) {
-        await CookieStore.removeTabData(tabIdToBeDeleted);
-
-        if (!Number.isNaN(parseInt(tabIdToBeDeleted))) {
-          await chrome.action.setBadgeText({
-            tabId: parseInt(tabIdToBeDeleted),
-            text: '',
-          });
-        }
-      }
-      return Promise.resolve();
+  const changeListeningToThisTab = useCallback(() => {
+    chrome.runtime.sendMessage({
+      type: 'SET_TAB_TO_READ',
+      payload: {
+        tabId,
+      },
     });
-
-    chrome.devtools.inspectedWindow.eval(
-      'window.location.href',
-      (result, isException) => {
-        if (!isException && typeof result === 'string') {
-          setTabUrl(result);
-        }
-      }
-    );
-
-    await chrome.tabs.reload(Number(changedTabId));
-
-    setIsCurrentTabBeingListenedTo(true);
-    setLoading(false);
-    setCanStartInspecting(false);
   }, [tabId]);
+
+  useEffect(() => {
+    const listener = async (message: {
+      type: string;
+      payload: { tabId: number };
+    }) => {
+      if (message.type === 'syncCookieStore:SET_TAB_TO_READ') {
+        chrome.devtools.inspectedWindow.eval(
+          'window.location.href',
+          (result, isException) => {
+            if (!isException && typeof result === 'string') {
+              setTabUrl(result);
+            }
+          }
+        );
+
+        await chrome.tabs.reload(Number(message.payload.tabId));
+
+        setIsCurrentTabBeingListenedTo(true);
+        setLoading(false);
+        setCanStartInspecting(false);
+      }
+    };
+
+    chrome.runtime.onMessage.addListener(listener);
+
+    return () => {
+      chrome.runtime.onMessage.removeListener(listener);
+    };
+  }, []);
 
   const tabUpdateListener = useCallback(
     async (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
@@ -425,6 +413,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     intitialSync();
+  }, [intitialSync]);
+
+  useEffect(() => {
     chrome.storage.local.onChanged.addListener(storeChangeListener);
     chrome.storage.sync.onChanged.addListener(changeSyncStorageListener);
     chrome.tabs.onUpdated.addListener(tabUpdateListener);
@@ -436,7 +427,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
       chrome.storage.sync.onChanged.removeListener(changeSyncStorageListener);
     };
   }, [
-    intitialSync,
     storeChangeListener,
     tabUpdateListener,
     tabRemovedListener,

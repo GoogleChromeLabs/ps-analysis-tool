@@ -381,9 +381,6 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
           },
         },
       },
-      'parsedCookie.size': {
-        title: 'Size',
-      },
     }),
     [blockedReasonFilterValues]
   );

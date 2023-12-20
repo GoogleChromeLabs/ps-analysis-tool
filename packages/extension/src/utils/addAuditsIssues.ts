@@ -41,12 +41,16 @@ export default async function addAuditsIssues(
     : cookie?.domain;
   // Adding alternate domains here because our extension calculates domain differently that the application tab.
   // This is done to capture both NID.google.com/ and NIDgoogle.com/ so that if we find either of the cookie we add issues to the cookie object
-  await CookieStore.addCookieExclusionWarningReason(
-    cookie?.name + primaryDomain + cookie?.path,
-    //@ts-ignore since The details has been checked before sending them as parameter.
-    cookie?.name + secondaryDomain + cookie?.path,
-    cookieExclusionReasons,
-    cookieWarningReasons,
-    tabId
-  );
+  try {
+    await CookieStore.addCookieExclusionWarningReason(
+      cookie?.name + primaryDomain + cookie?.path,
+      //@ts-ignore since The details has been checked before sending them as parameter.
+      cookie?.name + secondaryDomain + cookie?.path,
+      cookieExclusionReasons,
+      cookieWarningReasons,
+      tabId
+    );
+  } catch (error) {
+    // fail silently
+  }
 }
