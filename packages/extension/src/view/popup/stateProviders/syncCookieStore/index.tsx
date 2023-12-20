@@ -275,8 +275,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
           setTabUrl(tab[0]?.url);
         }
 
-        await chrome.tabs.reload(Number(message.payload.tabId));
-
         setIsCurrentTabBeingListenedTo(true);
         setLoading(false);
       }
