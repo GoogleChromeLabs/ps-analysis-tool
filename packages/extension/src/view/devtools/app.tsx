@@ -145,7 +145,7 @@ const App: React.FC = () => {
           <InspectButton
             isInspecting={isInspecting}
             setIsInspecting={setIsInspecting}
-            isTabFocused={isSidebarFocused}
+            isTabFocused={isSidebarFocused && isKeySelected('cookies')}
           />
         );
       } else {
@@ -203,6 +203,27 @@ const App: React.FC = () => {
 
     updateSelectedItemKey(selectedFrame || 'cookies');
   }, [selectedFrame, tabUrl, updateSelectedItemKey]);
+
+  useEffect(() => {
+    const storeChangeListener = async () => {
+      const tabId = chrome.devtools.inspectedWindow.tabId.toString();
+
+      const getTabBeingListenedTo = await chrome.storage.local.get();
+
+      if (
+        getTabBeingListenedTo &&
+        tabId.toString() !== getTabBeingListenedTo?.tabToRead
+      ) {
+        updateSelectedItemKey('cookies');
+      }
+    };
+
+    chrome.storage.onChanged.addListener(storeChangeListener);
+
+    return () => {
+      chrome.storage.onChanged.removeListener(storeChangeListener);
+    };
+  }, [updateSelectedItemKey]);
 
   const [filteredCookies, setFilteredCookies] = useState<CookieTableData[]>([]);
 

@@ -22,7 +22,7 @@ import type { Protocol } from 'devtools-protocol';
  * Internal dependencies
  */
 import findAnalyticsMatch from './findAnalyticsMatch';
-import { CookieData, CookieDatabase } from '../cookies.types';
+import type { CookieData, CookieDatabase } from '../cookies.types';
 import calculateEffectiveExpiryDate from './calculateEffectiveExpiryDate';
 import isFirstParty from './isFirstParty';
 

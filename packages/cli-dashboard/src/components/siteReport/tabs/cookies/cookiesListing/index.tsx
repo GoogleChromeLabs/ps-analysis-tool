@@ -122,19 +122,6 @@ const CookiesListing = ({
           </p>
         ),
       },
-      {
-        header: 'Cookie Affected',
-        accessorKey: 'isCookieSet',
-        cell: (info: InfoType) => (
-          <p className="flex justify-center items-center">
-            {!info ? (
-              <span className="font-serif">✓</span>
-            ) : (
-              <span className="font-serif">✗</span>
-            )}
-          </p>
-        ),
-      },
     ],
     []
   );
@@ -268,8 +255,8 @@ const CookiesListing = ({
       'analytics.platform': {
         title: 'Platform',
       },
-      isCookieSet: {
-        title: 'Cookie Accepted',
+      isBlocked: {
+        title: 'Cookie Affected',
         description:
           "Whether the cookie was accepted(set) in Chrome's Cookie Store",
         hasStaticFilterValues: true,
@@ -283,7 +270,7 @@ const CookiesListing = ({
         },
         comparator: (value: InfoType, filterValue: string) => {
           const val = !value;
-          return val === (filterValue === 'True');
+          return val === (filterValue === 'False');
         },
       },
     }),
