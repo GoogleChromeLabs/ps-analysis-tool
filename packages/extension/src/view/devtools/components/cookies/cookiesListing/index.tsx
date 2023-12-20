@@ -16,13 +16,7 @@
 /**
  * External dependencies.
  */
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
 import {
   filterCookiesByFrame,
@@ -36,18 +30,12 @@ import {
   type InfoType,
   type TableColumn,
   type TableFilter,
-  ClearAll,
-  CrossIcon as ClearSingle,
-  type TableData,
 } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import getNextIndexToDelete from '../../../../../utils/getNextIndexToDelete';
-import EditableTextInput from './editableComponents/editableTextInput';
-import EditableCheckBoxInput from './editableComponents/editableCheckBox';
 import { BLOCKED_REASON_LIST } from '../../../../../constants';
 
 interface CookiesListingProps {
@@ -55,21 +43,13 @@ interface CookiesListingProps {
 }
 
 const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
-  const {
-    selectedFrame,
-    cookies,
-    tabFrames,
-    getCookiesSetByJavascript,
-    deleteCookie,
-    deleteAllCookies,
-  } = useCookieStore(({ state, actions }) => ({
-    selectedFrame: state.selectedFrame,
-    cookies: state.tabCookies || {},
-    tabFrames: state.tabFrames,
-    getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
-    deleteCookie: actions.deleteCookie,
-    deleteAllCookies: actions.deleteAllCookies,
-  }));
+  const { selectedFrame, cookies, tabFrames, getCookiesSetByJavascript } =
+    useCookieStore(({ state, actions }) => ({
+      selectedFrame: state.selectedFrame,
+      cookies: state.tabCookies || {},
+      tabFrames: state.tabFrames,
+      getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
+    }));
 
   const [tableData, setTableData] = useState<Record<string, CookieTableData>>(
     {}
@@ -114,25 +94,6 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
     };
   }, [removeHighlights]);
 
-  const rowHighlighter = useCallback(
-    (value: boolean, toChangeCookieKey: string) => {
-      setTableData((prevData) => {
-        const newData = { ...prevData };
-
-        Object.keys(prevData).forEach((key) => {
-          const cookieKey = getCookieKey(newData[key].parsedCookie);
-
-          if (cookieKey === toChangeCookieKey) {
-            newData[key].highlighted = value;
-          }
-        });
-
-        return newData;
-      });
-    },
-    []
-  );
-
   const frameFilteredCookies = useMemo(
     () => filterCookiesByFrame(tableData, tabFrames, selectedFrame),
     [tableData, selectedFrame, tabFrames]
@@ -151,14 +112,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
       {
         header: 'Name',
         accessorKey: 'parsedCookie.name',
-        cell: (info: InfoType, rowData?: TableData) => (
-          <EditableTextInput
-            info={info}
-            keyToChange="name"
-            rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
-          />
-        ),
+        cell: (info: InfoType) => info,
         enableHiding: false,
       },
       {
@@ -173,14 +127,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
       {
         header: 'Domain',
         accessorKey: 'parsedCookie.domain',
-        cell: (info: InfoType, rowData?: TableData) => (
-          <EditableTextInput
-            info={info}
-            keyToChange="domain"
-            rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
-          />
-        ),
+        cell: (info: InfoType) => info,
       },
       {
         header: 'Partition Key',
@@ -190,14 +137,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
       {
         header: 'SameSite',
         accessorKey: 'parsedCookie.samesite',
-        cell: (info: InfoType, rowData?: TableData) => (
-          <EditableTextInput
-            info={info}
-            keyToChange="sameSite"
-            rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
-          />
-        ),
+        cell: (info: InfoType) => <span className="capitalize">{info}</span>,
       },
       {
         header: 'Category',
@@ -212,62 +152,35 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
       {
         header: 'HttpOnly',
         accessorKey: 'parsedCookie.httponly',
-        cell: (info: InfoType, rowData?: TableData) => (
-          <EditableCheckBoxInput
-            info={info}
-            keyToChange="httpOnly"
-            rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
-          />
+        cell: (info: InfoType) => (
+          <p className="flex justify-center items-center">
+            {info ? <span className="font-serif">✓</span> : ''}
+          </p>
         ),
       },
       {
         header: 'Secure',
         accessorKey: 'parsedCookie.secure',
-        cell: (info: InfoType, rowData?: TableData) => (
-          <EditableCheckBoxInput
-            info={info}
-            keyToChange="secure"
-            rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
-          />
+        cell: (info: InfoType) => (
+          <p className="flex justify-center items-center">
+            {info ? <span className="font-serif">✓</span> : ''}
+          </p>
         ),
       },
       {
         header: 'Value',
         accessorKey: 'parsedCookie.value',
-        cell: (info: InfoType, rowData?: TableData) => (
-          <EditableTextInput
-            info={info}
-            keyToChange="value"
-            rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
-          />
-        ),
+        cell: (info: InfoType) => info,
       },
       {
         header: 'Path',
         accessorKey: 'parsedCookie.path',
-        cell: (info: InfoType, rowData?: TableData) => (
-          <EditableTextInput
-            info={info}
-            keyToChange="path"
-            rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey((rowData as CookieTableData)?.parsedCookie)}
-          />
-        ),
+        cell: (info: InfoType) => info,
       },
       {
         header: 'Expires / Max-Age',
         accessorKey: 'parsedCookie.expires',
-        cell: (info: InfoType, details?: TableData) => (
-          <EditableTextInput
-            info={info}
-            keyToChange="expirationDate"
-            rowHighlighter={rowHighlighter}
-            cookieKey={getCookieKey((details as CookieTableData)?.parsedCookie)}
-          />
-        ),
+        cell: (info: InfoType) => (info ? info : 'Session'),
       },
       {
         header: 'Priority',
@@ -280,7 +193,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
         cell: (info: InfoType) => info,
       },
     ],
-    [rowHighlighter]
+    []
   );
 
   const blockedReasonFilterValues = useMemo<{
@@ -488,105 +401,9 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
     return `cookieListing#${selectedFrame}`;
   }, [selectedFrame]);
 
-  const selectedCookieIndex = useRef(-1);
-  const isDeleteOperationPerformed = useRef(false);
-
-  // This check is because selectedFrameCookie gets value only once when the cookie in the frame is selected.
-  // selectedFrameCookie has the following shape.
-  // {[frameName]: cookie|null}
-  const isAnyCookieSelected =
-    isDeleteOperationPerformed.current && !selectedFrameCookie
-      ? frameFilteredCookies.length > 0
-        ? true
-        : false
-      : selectedFrameCookie &&
-        selectedFrameCookie[Object.keys(selectedFrameCookie)[0]]
-      ? true
-      : false;
-
-  useEffect(() => {
-    isDeleteOperationPerformed.current = false;
-  }, [selectedFrame]);
-
-  const handleDeleteCookie = useCallback(() => {
-    const selectedIndex = getNextIndexToDelete(
-      selectedCookieIndex.current,
-      frameFilteredCookies.length
-    );
-    const selectedKey =
-      isDeleteOperationPerformed.current && !selectedFrameCookie
-        ? selectedIndex
-          ? frameFilteredCookies[selectedIndex]
-          : null
-        : Object.values(selectedFrameCookie ?? {})[0];
-
-    if (selectedKey !== null && selectedKey && selectedKey.parsedCookie) {
-      const cookieKey = getCookieKey(selectedKey?.parsedCookie);
-      if (cookieKey) {
-        selectedCookieIndex.current = frameFilteredCookies.findIndex(
-          (cookie) => getCookieKey(cookie.parsedCookie) === cookieKey
-        );
-        deleteCookie(cookieKey);
-        isDeleteOperationPerformed.current = true;
-        const index = getNextIndexToDelete(
-          selectedCookieIndex.current,
-          frameFilteredCookies.length - 1
-        );
-        const filteredRows = frameFilteredCookies.filter((cookie) => {
-          return (
-            cookie.parsedCookie.name +
-              cookie.parsedCookie.domain +
-              cookie.parsedCookie.path !==
-            cookieKey
-          );
-        });
-
-        if (index !== null && selectedFrame) {
-          setSelectedFrameCookie({
-            [selectedFrame]: filteredRows[index],
-          });
-        }
-      }
-    }
-  }, [frameFilteredCookies, selectedFrameCookie, deleteCookie, selectedFrame]);
-
   const extraInterfaceToTopBar = useMemo(
-    () => (
-      <>
-        <RefreshButton onClick={getCookiesSetByJavascript} />
-        <button
-          disabled={!isAnyCookieSelected}
-          onClick={handleDeleteCookie}
-          className={`flex items-center text-center ${
-            isAnyCookieSelected
-              ? 'text-comet-black dark:text-mischka hover:text-comet-grey hover:dark:text-bright-gray active:dark:text-mischka active:text-comet-black'
-              : 'text-mischka dark:text-dark-gray'
-          } mx-4`}
-          title="Delete selected cookie"
-        >
-          <ClearSingle className="rotate-45" />
-        </button>
-        <button
-          disabled={!Object.keys(frameFilteredCookies)}
-          onClick={deleteAllCookies}
-          className={`flex h-full items-end ${
-            Object.keys(frameFilteredCookies)
-              ? 'text-comet-black dark:text-mischka hover:text-comet-grey hover:dark:text-bright-gray active:dark:text-mischka active:text-comet-black'
-              : 'text-mischka dark:text-dark-gray'
-          }`}
-          title="Delete all cookies"
-        >
-          <ClearAll />
-        </button>
-      </>
-    ),
-    [
-      deleteAllCookies,
-      frameFilteredCookies,
-      getCookiesSetByJavascript,
-      handleDeleteCookie,
-      isAnyCookieSelected,
-    ]
+    () => <RefreshButton onClick={getCookiesSetByJavascript} />,
+    [getCookiesSetByJavascript]
   );
 
   return (
