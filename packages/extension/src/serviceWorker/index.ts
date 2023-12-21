@@ -386,78 +386,70 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
   })();
 });
 
-// chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
-//   PROMISE_QUEUE.clear();
-//   await PROMISE_QUEUE.add(async () => {
-//     if (!details.tabId || !details.url) {
-//       return;
-//     }
+chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
+  PROMISE_QUEUE.clear();
+  await PROMISE_QUEUE.add(async () => {
+    if (!details.tabId || !details.url) {
+      return;
+    }
 
-//     const syncStorage = await chrome.storage.sync.get();
+    const syncStorage = await chrome.storage.sync.get();
 
-//     if (
-//       !syncStorage?.isUsingCDP ||
-//       details.url.startsWith('chrome://') ||
-//       details.url.startsWith('about:blank')
-//     ) {
-//       return;
-//     }
+    if (
+      !syncStorage?.isUsingCDP ||
+      details.url.startsWith('chrome://') ||
+      details.url.startsWith('about:blank')
+    ) {
+      return;
+    }
 
-//     let localStorage = await chrome.storage.local.get();
+    const _isSingleTabProcessingMode = await isSingleTabProcessingMode();
 
-//     if (localStorage && Object.keys(localStorage).length === 0) {
-//       await CookieStore.addTabData(details.tabId.toString());
-//       localStorage = await chrome.storage.local.get();
-//     }
+    let localStorage = await chrome.storage.local.get();
 
-//     try {
-//       await chrome.debugger.attach({ tabId: details.tabId }, '1.3');
-//       localStorage[details.tabId?.toString()].isDebuggerAttached = true;
-//       chrome.debugger.sendCommand({ tabId: details.tabId }, 'Network.enable');
-//       chrome.debugger.sendCommand({ tabId: details.tabId }, 'Audits.enable');
-//       await chrome.storage.local.set(localStorage);
-//     } catch (error) {
-//       //Fail silently
-//     }
+    if (localStorage && Object.keys(localStorage).length === 0) {
+      await CookieStore.addTabData(details.tabId.toString());
+      localStorage = await chrome.storage.local.get();
+    }
 
-//     // if (_isSingleTabProcessingMode) {
-//     //   if (
-//     //     details.tabId.toString() !== localStorage.tabToRead &&
-//     //     localStorage[details.tabId.toString()]?.isDebuggerAttached
-//     //   ) {
-//     //     return;
-//     //   }
+    if (_isSingleTabProcessingMode) {
+      if (
+        details.tabId.toString() !== localStorage.tabToRead &&
+        localStorage[details.tabId.toString()]?.isDebuggerAttached
+      ) {
+        return;
+      }
 
-//     //   try {
-//     //     await chrome.debugger.attach({ tabId: details.tabId }, '1.3');
-//     //     localStorage[details.tabId?.toString()].isDebuggerAttached = true;
-//     //     chrome.debugger.sendCommand({ tabId: details.tabId }, 'Network.enable');
-//     //     chrome.debugger.sendCommand({ tabId: details.tabId }, 'Audits.enable');
-//     //     await chrome.storage.local.set(localStorage);
-//     //   } catch (error) {
-//     //     //Fail silently
-//     //   }
-//     // } else {
-//     //   Have to check multiple condition since debugger cannot be attached on empty url tab and on chrome:// urls
-//     //   if (
-//     //     !localStorage[details.tabId.toString()] &&
-//     //     localStorage[details.tabId.toString()]?.isDebuggerAttached
-//     //   ) {
-//     //     return;
-//     //   }
+      try {
+        await chrome.debugger.attach({ tabId: details.tabId }, '1.3');
+        localStorage[details.tabId?.toString()].isDebuggerAttached = true;
+        chrome.debugger.sendCommand({ tabId: details.tabId }, 'Network.enable');
+        chrome.debugger.sendCommand({ tabId: details.tabId }, 'Audits.enable');
+        await chrome.storage.local.set(localStorage);
+      } catch (error) {
+        //Fail silently
+      }
+    } else {
+      // Have to check multiple condition since debugger cannot be attached on empty url tab and on chrome:// urls
+      if (
+        !localStorage[details.tabId.toString()] &&
+        localStorage[details.tabId.toString()]?.isDebuggerAttached
+      ) {
+        return;
+      }
 
-//     //   try {
-//     //     await chrome.debugger.attach({ tabId: details.tabId }, '1.3');
-//     //     localStorage[details.tabId?.toString()].isDebuggerAttached = true;
-//     //     chrome.debugger.sendCommand({ tabId: details.tabId }, 'Network.enable');
-//     //     chrome.debugger.sendCommand({ tabId: details.tabId }, 'Audits.enable');
-//     //     await chrome.storage.local.set(localStorage);
-//     //   } catch (error) {
-//     //     //Silently fail
-//     //   }
-//     // }
-//   });
-// });
+      try {
+        await chrome.debugger.attach({ tabId: details.tabId }, '1.3');
+        localStorage[details.tabId?.toString()].isDebuggerAttached = true;
+        chrome.debugger.sendCommand({ tabId: details.tabId }, 'Network.enable');
+        chrome.debugger.sendCommand({ tabId: details.tabId }, 'Audits.enable');
+        await chrome.storage.local.set(localStorage);
+      } catch (error) {
+        //Silently fail
+      }
+    }
+  });
+});
 
 chrome.storage.sync.onChanged.addListener(
   async (changes: { [key: string]: chrome.storage.StorageChange }) => {

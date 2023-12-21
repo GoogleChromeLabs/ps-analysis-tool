@@ -525,7 +525,10 @@ class WebpageContentScript {
     const frame = target as HTMLIFrameElement;
     let srcAttribute = frame.getAttribute('src');
 
-    srcAttribute = srcAttribute === 'about:blank' ? '' : srcAttribute;
+    srcAttribute =
+      srcAttribute === 'about:blank' || srcAttribute?.startsWith('chrome://')
+        ? ''
+        : srcAttribute;
 
     if (!srcAttribute) {
       // User is able to hover over it so it is visible,
