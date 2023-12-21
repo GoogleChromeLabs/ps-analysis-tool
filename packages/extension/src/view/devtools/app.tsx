@@ -37,7 +37,6 @@ import { useCookieStore } from './stateProviders/syncCookieStore';
 import './app.css';
 import { Cookies } from './components';
 import useFrameOverlay from './hooks/useFrameOverlay';
-import { CookieStore } from '../../localStore';
 
 const App: React.FC = () => {
   const [sidebarWidth, setSidebarWidth] = useState(200);
@@ -54,6 +53,7 @@ const App: React.FC = () => {
     setIsInspecting,
     canStartInspecting,
     tabUrl,
+    isCurrentTabBeingListenedTo,
   } = useCookieStore(({ state, actions }) => ({
     contextInvalidated: state.contextInvalidated,
     setContextInvalidated: actions.setContextInvalidated,
@@ -64,6 +64,7 @@ const App: React.FC = () => {
     setIsInspecting: actions.setIsInspecting,
     canStartInspecting: state.canStartInspecting,
     tabUrl: state.tabUrl,
+    isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
   }));
 
   const listenToMouseChange = useCallback(() => {
@@ -118,10 +119,14 @@ const App: React.FC = () => {
     setSidebarData((prev) => {
       const data = { ...prev };
       const psData = data['privacySandbox'];
-
       psData.children['cookies'].panel = (
         <Cookies setFilteredCookies={setFilteredCookies} />
       );
+      if (!isCurrentTabBeingListenedTo) {
+        psData.children['cookies'].children = {};
+        psData.children['cookies'].extraInterfaceToTitle = null;
+        return data;
+      }
       psData.children['cookies'].children = Object.keys(tabFrames || {}).reduce(
         (acc, url) => {
           acc[url] = {
@@ -157,6 +162,7 @@ const App: React.FC = () => {
     });
   }, [
     canStartInspecting,
+    isCurrentTabBeingListenedTo,
     isInspecting,
     isKeySelected,
     isSidebarFocused,
@@ -204,24 +210,6 @@ const App: React.FC = () => {
 
     updateSelectedItemKey(selectedFrame || 'cookies');
   }, [selectedFrame, tabUrl, updateSelectedItemKey]);
-
-  useEffect(() => {
-    const storeChangeListener = async () => {
-      const tabId = chrome.devtools.inspectedWindow.tabId.toString();
-
-      const getTabBeingListenedTo = await chrome.storage.local.get();
-
-      if (getTabBeingListenedTo && tabId !== getTabBeingListenedTo?.tabToRead) {
-        await CookieStore.removeTabData(tabId); // Hot Fix: Remove tab data if tab is not being listened to
-      }
-    };
-
-    chrome.storage.onChanged.addListener(storeChangeListener);
-
-    return () => {
-      chrome.storage.onChanged.removeListener(storeChangeListener);
-    };
-  }, [updateSelectedItemKey]);
 
   const [filteredCookies, setFilteredCookies] = useState<CookieTableData[]>([]);
 

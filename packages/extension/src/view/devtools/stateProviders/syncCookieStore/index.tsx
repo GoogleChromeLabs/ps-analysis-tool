@@ -38,6 +38,8 @@ import useContextSelector from '../../../../utils/useContextSelector';
 import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
 import setDocumentCookies from '../../../../utils/setDocumentCookies';
 import isOnRWS from '../../../../contentScript/utils/isOnRWS';
+import { getCurrentTabId } from '../../../../utils/getCurrentTabId';
+import { CookieStore } from '../../../../localStore';
 
 export interface CookieStoreContext {
   state: {
@@ -322,44 +324,44 @@ export const Provider = ({ children }: PropsWithChildren) => {
     }
   }, [tabId]);
 
-  const changeListeningToThisTab = useCallback(() => {
-    chrome.runtime.sendMessage({
-      type: 'SET_TAB_TO_READ',
-      payload: {
-        tabId,
-      },
-    });
-  }, [tabId]);
+  const changeListeningToThisTab = useCallback(async () => {
+    let changedTabId = tabId?.toString();
 
-  useEffect(() => {
-    const listener = async (message: {
-      type: string;
-      payload: { tabId: number };
-    }) => {
-      if (message.type === 'syncCookieStore:SET_TAB_TO_READ') {
-        chrome.devtools.inspectedWindow.eval(
-          'window.location.href',
-          (result, isException) => {
-            if (!isException && typeof result === 'string') {
-              setTabUrl(result);
-            }
+    if (!tabId) {
+      changedTabId = await getCurrentTabId();
+    }
+
+    if (!changedTabId) {
+      return;
+    }
+
+    await CookieStore.addTabData(changedTabId);
+
+    const storedTabData = Object.keys(await chrome.storage.local.get());
+
+    // eslint-disable-next-line guard-for-in
+    storedTabData.forEach(async (tabIdToBeDeleted) => {
+      if (
+        tabIdToBeDeleted !== changedTabId &&
+        tabIdToBeDeleted !== 'tabToRead'
+      ) {
+        try {
+          await chrome.debugger.detach({ tabId: Number(tabIdToBeDeleted) });
+          await CookieStore.removeTabData(tabIdToBeDeleted);
+
+          if (!Number.isNaN(parseInt(tabIdToBeDeleted))) {
+            await chrome.action.setBadgeText({
+              tabId: parseInt(tabIdToBeDeleted),
+              text: '',
+            });
           }
-        );
-
-        await chrome.tabs.reload(Number(message.payload.tabId));
-
-        setIsCurrentTabBeingListenedTo(true);
-        setLoading(false);
-        setCanStartInspecting(false);
+        } catch (error) {
+          // Fail silently.
+        }
       }
-    };
-
-    chrome.runtime.onMessage.addListener(listener);
-
-    return () => {
-      chrome.runtime.onMessage.removeListener(listener);
-    };
-  }, []);
+    });
+    await chrome.tabs.reload(Number(changedTabId));
+  }, [tabId]);
 
   const tabUpdateListener = useCallback(
     async (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
