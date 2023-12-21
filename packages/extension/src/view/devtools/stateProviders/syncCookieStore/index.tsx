@@ -174,6 +174,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     if (!extensionStorage?.allowedNumberOfTabs) {
       await chrome.storage.sync.clear();
       await chrome.storage.sync.set({
+        ...extensionStorage,
         allowedNumberOfTabs: 'single',
       });
     }
