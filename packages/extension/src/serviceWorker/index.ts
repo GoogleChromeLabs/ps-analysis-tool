@@ -545,6 +545,14 @@ const listenToNewTab = async (tabId?: number) => {
     return '';
   }
 
+  try {
+    await chrome.debugger.attach({ tabId }, '1.3');
+    chrome.debugger.sendCommand({ tabId }, 'Network.enable');
+    chrome.debugger.sendCommand({ tabId }, 'Audits.enable');
+  } catch (error) {
+    //Fail silently
+  }
+
   await CookieStore.addTabData(newTabId);
 
   const storedTabData = Object.keys(await chrome.storage.local.get());
@@ -562,14 +570,6 @@ const listenToNewTab = async (tabId?: number) => {
     }
   });
 
-  try {
-    await chrome.debugger.attach({ tabId }, '1.3');
-    chrome.debugger.sendCommand({ tabId }, 'Network.enable');
-    chrome.debugger.sendCommand({ tabId }, 'Audits.enable');
-  } catch (error) {
-    //Fail silently
-  }
-
   return newTabId;
 };
 
@@ -586,6 +586,8 @@ chrome.runtime.onMessage.addListener((request) => {
           tabId: newTab,
         },
       });
+
+      await chrome.tabs.reload(Number(newTab));
     });
   }
 });

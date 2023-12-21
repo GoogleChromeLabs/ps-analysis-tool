@@ -333,7 +333,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   }, [tabId]);
 
   useEffect(() => {
-    const listener = async (message: {
+    const listener = (message: {
       type: string;
       payload: { tabId: number };
     }) => {
@@ -346,8 +346,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
             }
           }
         );
-
-        await chrome.tabs.reload(Number(message.payload.tabId));
 
         setIsCurrentTabBeingListenedTo(true);
         setLoading(false);
