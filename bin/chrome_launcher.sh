@@ -26,6 +26,7 @@ if [[ "$(uname)" == "Darwin" ]]; then
           --start-maximized \
           --auto-open-devtools-for-tabs \
           --user-data-dir="${DATA_DIR}" \
+          --silent-debugger-extension-api \
           "$@" https://example.com >/dev/null 2>&1 && rm -rf "${DATA_DIR}" &
   }
 elif [[ "$(uname)" == "Linux" ]]; then
@@ -40,6 +41,7 @@ elif [[ "$(uname)" == "Linux" ]]; then
         --start-maximized \
         --auto-open-devtools-for-tabs \
         --user-data-dir="${DATA_DIR}" \
+        --silent-debugger-extension-api \
         "$@" https://example.com >/dev/null 2>&1 && rm -rf "${DATA_DIR}" &
     }
 fi
