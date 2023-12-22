@@ -121,8 +121,5 @@
 	],
 	"overrides": {
 		"xml2js": "^0.5.0"
-	},
-	"dependencies": {
-		"tlds": "^1.248.0"
 	}
 }

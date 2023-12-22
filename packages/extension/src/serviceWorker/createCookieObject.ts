@@ -23,6 +23,7 @@ import {
   type CookieData,
   type NetworkCookie,
 } from '@ps-analysis-tool/common';
+import { getDomain } from 'tldts';
 
 /**
  * Internal dependencies.
@@ -162,7 +163,12 @@ function parseAttributeValues(
   switch (type) {
     case 'domain':
       if (url) {
-        value = value || new URL(url).hostname;
+        let domain = getDomain(url);
+        if (domain) {
+          domain = domain.startsWith('.') ? domain : '.' + domain;
+        }
+
+        value = value || domain || '';
       } else {
         value = value || '';
       }
