@@ -363,97 +363,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
   })();
 });
 
-chrome.storage.sync.onChanged.addListener(
-  async (changes: { [key: string]: chrome.storage.StorageChange }) => {
-    await PROMISE_QUEUE.add(async () => {
-      const _isSingleTabProcessingMode = await isSingleTabProcessingMode();
-      if (_isSingleTabProcessingMode) {
-        const localStorage = await chrome.storage.local.get();
-        if (
-          !Object.keys(changes).includes('isUsingCDP') &&
-          !localStorage?.tabToRead
-        ) {
-          return;
-        }
-
-        if (!changes['isUsingCDP'].newValue) {
-          await chrome.debugger.detach({
-            tabId: Number(localStorage.tabToRead),
-          });
-          localStorage[localStorage.tabToRead].isDebuggerAttached = false;
-          await chrome.storage.local.set(localStorage);
-        } else if (changes['isUsingCDP'].newValue) {
-          try {
-            await chrome.debugger.attach(
-              { tabId: Number(localStorage.tabToRead) },
-              '1.3'
-            );
-            localStorage[localStorage.tabToRead].isDebuggerAttached = true;
-            chrome.debugger.sendCommand(
-              { tabId: Number(localStorage.tabToRead) },
-              'Network.enable'
-            );
-            chrome.debugger.sendCommand(
-              { tabId: Number(localStorage.tabToRead) },
-              'Audits.enable'
-            );
-            await chrome.storage.local.set(localStorage);
-          } catch (error) {
-            //just catch the error.
-          }
-        }
-      } else {
-        if (!Object.keys(changes).includes('isUsingCDP')) {
-          return;
-        }
-
-        if (!changes['isUsingCDP'].newValue) {
-          const tabs = await chrome.tabs.query({ active: true });
-          await Promise.all(
-            tabs.map(async (tab) => {
-              if (!tab.id) {
-                return tab;
-              }
-              await chrome.debugger.detach({ tabId: tab?.id });
-              localStorage[tab?.id?.toString()].isDebuggerAttached = false;
-              await chrome.storage.local.set(localStorage);
-              return tab;
-            })
-          );
-        } else if (changes['isUsingCDP'].newValue) {
-          const tabs = await chrome.tabs.query({ active: true });
-          await Promise.all(
-            tabs.map(async (tab) => {
-              if (!tab.id) {
-                return tab;
-              }
-              try {
-                await chrome.debugger.attach(
-                  { tabId: Number(localStorage.tabToRead) },
-                  '1.3'
-                );
-                localStorage[localStorage.tabToRead].isDebuggerAttached = true;
-                chrome.debugger.sendCommand(
-                  { tabId: Number(localStorage.tabToRead) },
-                  'Network.enable'
-                );
-                chrome.debugger.sendCommand(
-                  { tabId: Number(localStorage.tabToRead) },
-                  'Audits.enable'
-                );
-              } catch (error) {
-                //just catch the error.
-              }
-              return tab;
-            })
-          );
-          await chrome.storage.local.set(localStorage);
-        }
-      }
-    });
-  }
-);
-
 const listenToNewTab = async (tabId?: number) => {
   const newTabId = tabId?.toString() || (await getCurrentTabId());
 
@@ -461,12 +370,10 @@ const listenToNewTab = async (tabId?: number) => {
     return '';
   }
 
-  await CookieStore.addTabData(newTabId);
-
   if (await isSingleTabProcessingMode()) {
     const storedTabData = Object.keys(await chrome.storage.local.get());
     storedTabData.some(async (tabIdToDelete) => {
-      if (tabIdToDelete !== newTabId && tabIdToDelete !== 'tabToRead') {
+      if (tabIdToDelete !== 'tabToRead') {
         await CookieStore.removeTabData(tabIdToDelete);
         await chrome.debugger.detach({ tabId: Number(tabIdToDelete) });
         await chrome.action.setBadgeText({
@@ -476,6 +383,8 @@ const listenToNewTab = async (tabId?: number) => {
       }
     });
   }
+
+  await CookieStore.addTabData(newTabId);
 
   const syncStorage = await chrome.storage.sync.get();
   if (syncStorage.isUsingCDP) {

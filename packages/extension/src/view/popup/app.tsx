@@ -64,7 +64,10 @@ const App: React.FC = () => {
           additionalStyles="absolute top-2 left-2"
           onLabel="CDP"
           enabled={isUsingCDP}
-          setEnabled={setUsingCDP}
+          setEnabled={(value: boolean) => {
+            setUsingCDP(value);
+            changeListeningToThisTab();
+          }}
         />
         <p className="font-bold text-lg mb-2">Not much to analyze here</p>
         <p className="text-chart-label text-xs">
@@ -96,7 +99,10 @@ const App: React.FC = () => {
           additionalStyles="absolute top-2 left-2"
           onLabel="CDP"
           enabled={isUsingCDP}
-          setEnabled={setUsingCDP}
+          setEnabled={(value: boolean) => {
+            setUsingCDP(value);
+            changeListeningToThisTab();
+          }}
         />
         {!returningToSingleTab && (
           <p className="dark:text-bright-gray text-chart-label text-base mb-5 text-center">
@@ -118,7 +124,10 @@ const App: React.FC = () => {
           additionalStyles="absolute top-2 left-2"
           onLabel="CDP"
           enabled={isUsingCDP}
-          setEnabled={setUsingCDP}
+          setEnabled={(value: boolean) => {
+            setUsingCDP(value);
+            changeListeningToThisTab();
+          }}
         />
         <p className="font-bold text-lg">No cookies found on this page</p>
         <p className="text-chart-label text-xs">
@@ -135,7 +144,10 @@ const App: React.FC = () => {
         additionalStyles="absolute top-2 left-2"
         onLabel="CDP"
         enabled={isUsingCDP}
-        setEnabled={setUsingCDP}
+        setEnabled={(value: boolean) => {
+          setUsingCDP(value);
+          changeListeningToThisTab();
+        }}
       />
       <div className="w-full flex gap-x-6 justify-center border-b border-hex-gray pb-3.5">
         <div className="w-32 text-center">
