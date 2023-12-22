@@ -418,3 +418,24 @@ chrome.runtime.onMessage.addListener((request) => {
     });
   }
 });
+
+chrome.storage.local.onChanged.addListener(
+  async (changes: { [key: string]: chrome.storage.StorageChange }) => {
+    if (!changes?.tabToRead || !changes?.tabToRead?.oldValue) {
+      return;
+    }
+
+    const tabId = changes.tabToRead.oldValue;
+
+    if (!tabId || !(await isSingleTabProcessingMode())) {
+      return;
+    }
+
+    PROMISE_QUEUE.clear();
+    await CookieStore.removeTabData(tabId);
+    await chrome.action.setBadgeText({
+      tabId: parseInt(tabId),
+      text: '',
+    });
+  }
+);
