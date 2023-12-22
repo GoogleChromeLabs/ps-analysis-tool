@@ -146,3 +146,32 @@
 * Update `RWS` submission steps text https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/229
 * Fix: opaque origin error when using in https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/235
 * Refactor: Make functional components in landing page non-collapsible https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/232
+
+
+# v0.4.0
+
+## CLI
+* Fix: MaxListenerExceedWarning when analyzing sitemap https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/260
+* Fix: Affected cookies csv output https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/308
+* Fix: Report generation in cli-dashboard https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/318
+* Enhancement: add interface use CSV file in CLI. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/274
+* Enhancement: CLI analyze sites with local sitemap https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/271
+* Feature: Add custom sidebar hook and component https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/193
+* Feature: Implement keyboard navigation inside sidebar https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/266
+* Feature: Implement generic filtering and search capabilities https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/289
+* Feature: Integrate filtering and searching capability to cli dashboard https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/290
+* Feature: Implement persistent settings for table  https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/291
+* Feature: Implement generic sidebar for extension https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/306
+* Feature: Implements generic filtering and searching capabilities inside the extension https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/323
+* Refactor: Move dashboard's data processing to utils https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/192
+
+## PSAT Extension
+* Fixing hover input state in dark mode https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/295
+* Feature: Use Floating UI for tooltip positioning https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/276
+* Update tools input field inline to devtools's UI https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/243
+* Feature: Use Chrome DevTools Protocol to extract extra information https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/270
+* Feature: Extract information and show it on settings page for reporting bugs in the extension. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/307
+* Feature: Add context menu to copy network filter string to filter network requests https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/333
+* Enhancement: Reorder column to get important data at https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/337
+* Update quick links on landing pages https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/329
+
