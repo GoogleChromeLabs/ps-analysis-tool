@@ -531,6 +531,10 @@ chrome.runtime.onMessage.addListener((request) => {
     PROMISE_QUEUE.clear();
     PROMISE_QUEUE.add(async () => {
       const newTab = await listenToNewTab(request?.payload?.tabId);
+      await chrome.action.setBadgeText({
+        tabId: Number(newTab),
+        text: '',
+      });
 
       // Can't use sendResponse as delay is too long. So using sendMessage instead.
       chrome.runtime.sendMessage({
