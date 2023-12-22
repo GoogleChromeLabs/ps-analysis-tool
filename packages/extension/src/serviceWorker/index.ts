@@ -39,7 +39,6 @@ import {
 } from '../utils/fetchCookieDictionary';
 import isSingleTabProcessingMode from '../utils/isSingleTabProcessingMode';
 import addAuditsIssues from '../utils/addAuditsIssues';
-import { ALLOWED_NUMBER_OF_TABS } from '../constants';
 
 let cookieDB: CookieDatabase | null = null;
 
@@ -194,28 +193,6 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
   { urls: ['*://*/*'] },
   ['extraHeaders', 'requestHeaders']
 );
-
-chrome.tabs.onCreated.addListener(async (tab) => {
-  await PROMISE_QUEUE.add(async () => {
-    if (!tab.id) {
-      return;
-    }
-    const _isSingleTabProcessingMode = await isSingleTabProcessingMode();
-    if (_isSingleTabProcessingMode) {
-      const previousTabData = await chrome.storage.local.get();
-      const doesTabExist = await getTab(previousTabData?.tabToRead);
-      if (
-        Object.keys(previousTabData).length - 1 >= ALLOWED_NUMBER_OF_TABS &&
-        doesTabExist
-      ) {
-        return;
-      }
-      await CookieStore.addTabData(tab.id.toString());
-    } else {
-      await CookieStore.addTabData(tab.id.toString());
-    }
-  });
-});
 
 /**
  * Fires when the tab is focused,
