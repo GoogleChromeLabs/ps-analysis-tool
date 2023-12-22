@@ -476,12 +476,15 @@ const listenToNewTab = async (tabId?: number) => {
     });
   }
 
-  try {
-    await chrome.debugger.attach({ tabId }, '1.3');
-    chrome.debugger.sendCommand({ tabId }, 'Network.enable');
-    chrome.debugger.sendCommand({ tabId }, 'Audits.enable');
-  } catch (error) {
-    //Fail silently
+  const syncStorage = await chrome.storage.sync.get();
+  if (syncStorage.isUsingCDP) {
+    try {
+      await chrome.debugger.attach({ tabId }, '1.3');
+      chrome.debugger.sendCommand({ tabId }, 'Network.enable');
+      chrome.debugger.sendCommand({ tabId }, 'Audits.enable');
+    } catch (error) {
+      //Fail silently
+    }
   }
 
   return newTabId;
