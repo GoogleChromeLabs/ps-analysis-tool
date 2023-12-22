@@ -38,6 +38,10 @@ const CookieStore = {
    * @param {Array} cookies Cookies data.
    */
   async update(tabId: string, cookies: CookieData[]) {
+    const currentStorageSnapshot = await chrome.storage.local.get();
+    if (!currentStorageSnapshot[tabId]) {
+      return;
+    }
     // eslint-disable-next-line complexity
     await updateStorage(tabId, (prevState: TabData) => {
       const _prevCookies = prevState?.cookies || {};
@@ -86,12 +90,12 @@ const CookieStore = {
               _updatedCookies[cookieKey].headerType === 'javascript'
                 ? _updatedCookies[cookieKey].headerType
                 : cookie.headerType,
-            frameIdList: [
-              ...new Set<string | number>([
+            frameIdList: Array.from(
+              new Set<number>([
                 ...(cookie.frameIdList ?? []),
                 ...(_updatedCookies[cookieKey].frameIdList ?? []),
-              ]),
-            ],
+              ])
+            ),
           };
         } else {
           _updatedCookies[cookieKey] = cookie;
@@ -260,7 +264,7 @@ const CookieStore = {
         [tabId]: {
           cookies: {},
           focusedAt: Date.now(),
-          isDebuggerAttached: false,
+          isDebuggerAttached: extensionStorage?.isUsingCDP,
         },
         tabToRead: tabId,
       });
@@ -269,7 +273,7 @@ const CookieStore = {
         [tabId]: {
           cookies: {},
           focusedAt: Date.now(),
-          isDebuggerAttached: false,
+          isDebuggerAttached: extensionStorage?.isUsingCDP,
         },
       });
     }

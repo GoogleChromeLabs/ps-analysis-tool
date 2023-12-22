@@ -245,20 +245,6 @@ chrome.tabs.onRemoved.addListener(async (tabId) => {
  * @see https://developer.chrome.com/docs/extensions/reference/tabs/#event-onUpdated
  */
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-  try {
-    const localStorage = await chrome.storage.local.get();
-    if (!localStorage[tabId] && localStorage[tabId].isDebuggerAttached) {
-      return;
-    }
-    await chrome.debugger.attach({ tabId: Number(tabId) }, '1.3');
-    localStorage[tabId].isDebuggerAttached = true;
-    chrome.debugger.sendCommand({ tabId: Number(tabId) }, 'Network.enable');
-    chrome.debugger.sendCommand({ tabId: Number(tabId) }, 'Audits.enable');
-    await chrome.storage.local.set(localStorage);
-  } catch (error) {
-    //Fail silently
-  }
-
   if (changeInfo.status === 'loading' && tab.url) {
     PROMISE_QUEUE.clear();
     await PROMISE_QUEUE.add(async () => {
@@ -328,16 +314,16 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       const tab = await getCurrentTab();
       const url = tab && tab[0] ? tab[0].url : '';
 
-      if (method === 'Network.responseReceived' && params) {
-        const request = params as Protocol.Network.ResponseReceivedEvent;
+      if (method === 'Network.requestWillBeSent' && params) {
+        const request = params as Protocol.Network.RequestWillBeSentEvent;
         if (!cdpURLToRequestMap[tabId]) {
           cdpURLToRequestMap[tabId] = {
-            [request.requestId]: request?.response.url,
+            [request.requestId]: request?.documentURL,
           };
         } else {
           cdpURLToRequestMap[tabId] = {
             ...cdpURLToRequestMap[tabId],
-            [request.requestId]: request?.response.url,
+            [request.requestId]: request?.documentURL,
           };
         }
       }
@@ -372,6 +358,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           url,
           cookieDB
         );
+
         await CookieStore.update(tabId, allCookies);
       }
 
@@ -397,6 +384,70 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       }
     });
   })();
+});
+
+chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
+  PROMISE_QUEUE.clear();
+  await PROMISE_QUEUE.add(async () => {
+    const syncStorage = await chrome.storage.sync.get();
+    const _isSingleTabProcessingMode = await isSingleTabProcessingMode();
+
+    if (!details.tabId || !details.url) {
+      return;
+    }
+
+    if (
+      !syncStorage?.isUsingCDP ||
+      details.url.startsWith('chrome://') ||
+      details.url.startsWith('about:blank')
+    ) {
+      return;
+    }
+
+    let localStorage = await chrome.storage.local.get();
+
+    if (localStorage && Object.keys(localStorage).length === 0) {
+      await CookieStore.addTabData(details.tabId.toString());
+      localStorage = await chrome.storage.local.get();
+    }
+
+    if (_isSingleTabProcessingMode) {
+      if (
+        details.tabId.toString() !== localStorage.tabToRead &&
+        localStorage[details.tabId.toString()]?.isDebuggerAttached
+      ) {
+        return;
+      }
+
+      try {
+        await chrome.debugger.attach({ tabId: details.tabId }, '1.3');
+        localStorage[details.tabId?.toString()].isDebuggerAttached = true;
+        chrome.debugger.sendCommand({ tabId: details.tabId }, 'Network.enable');
+        chrome.debugger.sendCommand({ tabId: details.tabId }, 'Audits.enable');
+        await chrome.storage.local.set(localStorage);
+      } catch (error) {
+        //Fail silently
+      }
+    } else {
+      // Have to check multiple condition since debugger cannot be attached on empty url tab and on chrome:// urls
+      if (
+        !localStorage[details.tabId.toString()] &&
+        localStorage[details.tabId.toString()]?.isDebuggerAttached
+      ) {
+        return;
+      }
+
+      try {
+        await chrome.debugger.attach({ tabId: details.tabId }, '1.3');
+        localStorage[details.tabId?.toString()].isDebuggerAttached = true;
+        chrome.debugger.sendCommand({ tabId: details.tabId }, 'Network.enable');
+        chrome.debugger.sendCommand({ tabId: details.tabId }, 'Audits.enable');
+        await chrome.storage.local.set(localStorage);
+      } catch (error) {
+        //Silently fail
+      }
+    }
+  });
 });
 
 chrome.storage.sync.onChanged.addListener(
@@ -504,13 +555,10 @@ const listenToNewTab = async (tabId?: number) => {
     storedTabData.some(async (tabIdToDelete) => {
       if (tabIdToDelete !== newTabId && tabIdToDelete !== 'tabToRead') {
         await CookieStore.removeTabData(tabIdToDelete);
-
-        if (!Number.isNaN(parseInt(tabIdToDelete))) {
-          await chrome.action.setBadgeText({
-            tabId: parseInt(tabIdToDelete),
-            text: '',
-          });
-        }
+        await chrome.action.setBadgeText({
+          tabId: Number(newTabId),
+          text: '',
+        });
       }
     });
   }
@@ -531,10 +579,6 @@ chrome.runtime.onMessage.addListener((request) => {
     PROMISE_QUEUE.clear();
     PROMISE_QUEUE.add(async () => {
       const newTab = await listenToNewTab(request?.payload?.tabId);
-      await chrome.action.setBadgeText({
-        tabId: Number(newTab),
-        text: '',
-      });
 
       // Can't use sendResponse as delay is too long. So using sendMessage instead.
       chrome.runtime.sendMessage({
