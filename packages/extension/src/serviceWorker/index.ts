@@ -291,16 +291,16 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       const tab = await getCurrentTab();
       const url = tab && tab[0] ? tab[0].url : '';
 
-      if (method === 'Network.requestWillBeSent' && params) {
-        const request = params as Protocol.Network.RequestWillBeSentEvent;
+      if (method === 'Network.responseReceived' && params) {
+        const request = params as Protocol.Network.ResponseReceivedEvent;
         if (!cdpURLToRequestMap[tabId]) {
           cdpURLToRequestMap[tabId] = {
-            [request.requestId]: request?.documentURL,
+            [request.requestId]: request?.response.url,
           };
         } else {
           cdpURLToRequestMap[tabId] = {
             ...cdpURLToRequestMap[tabId],
-            [request.requestId]: request?.documentURL,
+            [request.requestId]: request?.response.url,
           };
         }
       }
