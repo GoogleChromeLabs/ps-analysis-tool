@@ -47,7 +47,8 @@ const Matrix = ({ dataComponents }: MatrixProps) => {
                 !isLastTwoItems ? 'border-b' : ''
               } border-bright-gray dark:border-quartz`}
               countClassName={
-                dataComponent.countClassName + ' text-xxl leading-none'
+                dataComponent.countClassName +
+                ' text-xxl leading-none text-center'
               }
             />
           );

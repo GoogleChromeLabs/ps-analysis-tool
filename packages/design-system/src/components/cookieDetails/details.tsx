@@ -70,6 +70,29 @@ const Details = ({ selectedCookie }: DetailsProps) => {
 
   return (
     <div className="text-xs py-1 px-1.5">
+      {isCookieBlocked && blockedReasons && blockedReasons && (
+        <>
+          <p className="font-bold text-granite-gray dark:text-manatee mb-1">
+            Blocked reason
+          </p>
+          <p
+            className="text-outer-space-crayola dark:text-bright-gray mb-3"
+            dangerouslySetInnerHTML={{ __html: blockedReasons ?? '' }}
+          />
+        </>
+      )}
+      {selectedCookie?.warningReasons &&
+        selectedCookie?.warningReasons?.length > 0 && (
+          <>
+            <p className="font-bold text-granite-gray dark:text-manatee mb-1">
+              Warnings
+            </p>
+            <p
+              className="text-outer-space-crayola dark:text-bright-gray"
+              dangerouslySetInnerHTML={{ __html: warningReasons ?? '' }}
+            />
+          </>
+        )}
       <p className="font-bold text-granite-gray dark:text-manatee mb-1 text-semibold flex items-center">
         <span>Cookie Value</span>
         <label className="text-granite-gray dark:text-manatee text-xs font-normal flex items-center">
@@ -101,29 +124,6 @@ const Details = ({ selectedCookie }: DetailsProps) => {
       <p className="mb-4 text-outer-space-crayola dark:text-bright-gray">
         {selectedCookie.analytics?.description || 'No description available.'}
       </p>
-      {isCookieBlocked && blockedReasons && (
-        <>
-          <p className="font-bold text-granite-gray dark:text-manatee mb-1">
-            Blocked reason
-          </p>
-          <p
-            className="text-outer-space-crayola dark:text-bright-gray mb-3"
-            dangerouslySetInnerHTML={{ __html: blockedReasons ?? '' }}
-          />
-        </>
-      )}
-      {selectedCookie?.warningReasons &&
-        selectedCookie?.warningReasons?.length > 0 && (
-          <>
-            <p className="font-bold text-granite-gray dark:text-manatee mb-1">
-              Warnings
-            </p>
-            <p
-              className="text-outer-space-crayola dark:text-bright-gray"
-              dangerouslySetInnerHTML={{ __html: warningReasons ?? '' }}
-            />
-          </>
-        )}
     </div>
   );
 };

@@ -55,7 +55,7 @@ const MatrixComponent = ({
           </p>
           {description && isExpanded && (
             <p
-              className="text-xs text-darkest-gray dark:text-bright-gray"
+              className="mt-2 text-xs text-darkest-gray dark:text-bright-gray"
               dangerouslySetInnerHTML={{ __html: description }}
             />
           )}

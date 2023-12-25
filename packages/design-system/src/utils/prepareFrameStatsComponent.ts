@@ -96,6 +96,12 @@ export default function prepareFrameStatsComponent(
             count: cookieFrame.size,
             color: '#C5A06A',
           },
+          {
+            count: Object.values(tabFrames || {}).filter(
+              (frame) => frame?.frameType === 'fenced_frame'
+            ).length,
+            color: '#A98307',
+          },
         ],
       },
     ],
@@ -123,6 +129,14 @@ export default function prepareFrameStatsComponent(
         count: unBlockedCookieFrame.size,
         color: '#F54021',
         countClassName: 'text-strawberry-spinach-red',
+      },
+      {
+        label: 'Fenced frames',
+        count: Object.values(tabFrames || {}).filter(
+          (frame) => frame?.frameType === 'fenced_frame'
+        ).length,
+        color: '#A98307',
+        countClassName: 'text-chestnut-gold',
       },
     ],
   };
