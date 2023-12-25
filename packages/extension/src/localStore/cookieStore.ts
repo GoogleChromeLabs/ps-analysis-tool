@@ -264,7 +264,6 @@ const CookieStore = {
         [tabId]: {
           cookies: {},
           focusedAt: Date.now(),
-          isDebuggerAttached: extensionStorage?.isUsingCDP,
         },
         tabToRead: tabId,
       });
@@ -273,7 +272,6 @@ const CookieStore = {
         [tabId]: {
           cookies: {},
           focusedAt: Date.now(),
-          isDebuggerAttached: extensionStorage?.isUsingCDP,
         },
       });
     }

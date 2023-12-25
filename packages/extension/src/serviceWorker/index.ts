@@ -39,6 +39,7 @@ import {
 } from '../utils/fetchCookieDictionary';
 import isSingleTabProcessingMode from '../utils/isSingleTabProcessingMode';
 import addAuditsIssues from '../utils/addAuditsIssues';
+import { ALLOWED_NUMBER_OF_TABS } from '../constants';
 
 let cookieDB: CookieDatabase | null = null;
 
@@ -194,6 +195,28 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
   ['extraHeaders', 'requestHeaders']
 );
 
+chrome.tabs.onCreated.addListener(async (tab) => {
+  await PROMISE_QUEUE.add(async () => {
+    if (!tab.id) {
+      return;
+    }
+    const _isSingleTabProcessingMode = await isSingleTabProcessingMode();
+    if (_isSingleTabProcessingMode) {
+      const previousTabData = await chrome.storage.local.get();
+      const doesTabExist = await getTab(previousTabData?.tabToRead);
+      if (
+        Object.keys(previousTabData).length - 1 >= ALLOWED_NUMBER_OF_TABS &&
+        doesTabExist
+      ) {
+        return;
+      }
+      await CookieStore.addTabData(tab.id.toString());
+    } else {
+      await CookieStore.addTabData(tab.id.toString());
+    }
+  });
+});
+
 /**
  * Fires when the tab is focused,
  * When a new window is opened,
@@ -222,6 +245,13 @@ chrome.tabs.onRemoved.addListener(async (tabId) => {
  * @see https://developer.chrome.com/docs/extensions/reference/tabs/#event-onUpdated
  */
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+  try {
+    await chrome.debugger.attach({ tabId }, '1.3');
+    chrome.debugger.sendCommand({ tabId }, 'Network.enable');
+    chrome.debugger.sendCommand({ tabId }, 'Audits.enable');
+  } catch (error) {
+    //Fail silently
+  }
   if (changeInfo.status === 'loading' && tab.url) {
     PROMISE_QUEUE.clear();
     await PROMISE_QUEUE.add(async () => {
@@ -256,7 +286,6 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       await chrome.storage.sync.clear();
       await chrome.storage.sync.set({
         allowedNumberOfTabs: 'single',
-        isUsingCDP: true,
       });
     }
     if (details.reason === 'update') {
@@ -267,7 +296,6 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       await chrome.storage.sync.clear();
       await chrome.storage.sync.set({
         allowedNumberOfTabs: 'single',
-        isUsingCDP: true,
       });
     }
   });
@@ -290,6 +318,13 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
       const tab = await getCurrentTab();
       const url = tab && tab[0] ? tab[0].url : '';
+      const localStorage = await chrome.storage.local.get();
+      if (
+        (await isSingleTabProcessingMode()) &&
+        localStorage?.tabToRead !== tabId
+      ) {
+        return;
+      }
 
       if (method === 'Network.responseReceived' && params) {
         const request = params as Protocol.Network.ResponseReceivedEvent;
@@ -375,7 +410,11 @@ const listenToNewTab = async (tabId?: number) => {
     storedTabData.some(async (tabIdToDelete) => {
       if (tabIdToDelete !== 'tabToRead') {
         await CookieStore.removeTabData(tabIdToDelete);
-        await chrome.debugger.detach({ tabId: Number(tabIdToDelete) });
+        try {
+          await chrome.debugger.detach({ tabId: Number(tabIdToDelete) });
+        } catch (error) {
+          // Fail silently
+        }
         await chrome.action.setBadgeText({
           tabId: Number(newTabId),
           text: '',
@@ -385,17 +424,6 @@ const listenToNewTab = async (tabId?: number) => {
   }
 
   await CookieStore.addTabData(newTabId);
-
-  const syncStorage = await chrome.storage.sync.get();
-  if (syncStorage.isUsingCDP) {
-    try {
-      await chrome.debugger.attach({ tabId }, '1.3');
-      chrome.debugger.sendCommand({ tabId }, 'Network.enable');
-      chrome.debugger.sendCommand({ tabId }, 'Audits.enable');
-    } catch (error) {
-      //Fail silently
-    }
-  }
 
   return newTabId;
 };

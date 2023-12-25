@@ -63,7 +63,7 @@ const prepareCookiesCount = (cookies: { [key: string]: CookieData } | null) => {
   cookiesCount.blockedCookies.total = cookieList.filter(
     (cookie) => cookie.blockedReasons && cookie.blockedReasons?.length > 0
   ).length;
-  console.log(cookieList);
+
   cookieList.forEach((cookie) => {
     if (cookie.blockedReasons && cookie.blockedReasons?.length > 0) {
       cookie.blockedReasons?.forEach((reason) => {

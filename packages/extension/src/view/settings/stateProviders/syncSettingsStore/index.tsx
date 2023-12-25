@@ -24,6 +24,7 @@ import React, {
   useCallback,
 } from 'react';
 import { noop } from '@ps-analysis-tool/design-system';
+import { CookieStore } from '../../../../localStore';
 
 export interface SettingStoreContext {
   state: {
@@ -127,17 +128,25 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
         if (changes['allowedNumberOfTabs']?.newValue === 'single') {
           chrome.tabs.query({}, (tabs) => {
-            tabs.map((tab) => {
+            tabs.forEach((tab) => {
               chrome.action.setBadgeText({
                 tabId: tab?.id,
                 text: '',
               });
-
-              return tab;
             });
           });
 
           await chrome.storage.local.clear();
+        } else {
+          chrome.tabs.query({}, (tabs) => {
+            tabs.forEach(async (tab) => {
+              if (!tab.id) {
+                return;
+              }
+              await CookieStore.addTabData(tab.id?.toString());
+              await chrome.tabs.reload(tab?.id);
+            });
+          });
         }
       }
     },

@@ -407,8 +407,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
     if (extensionStorage?.allowedNumberOfTabs) {
       setAllowedNumberOfTabs(extensionStorage?.allowedNumberOfTabs);
+      await getAllFramesForCurrentTab(tabId);
     }
-  }, []);
+  }, [getAllFramesForCurrentTab, tabId]);
 
   useEffect(() => {
     intitialSync();
