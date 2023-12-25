@@ -32,7 +32,10 @@ const Details = ({ selectedCookie }: DetailsProps) => {
   const [showUrlDecoded, setShowUrlDecoded] = useState(false);
   let blockedReasons = '';
   let warningReasons = '';
-
+  const isCookieBlocked =
+    selectedCookie?.isBlocked ||
+    (selectedCookie?.blockedReasons &&
+      selectedCookie?.blockedReasons?.length > 0);
   selectedCookie?.blockedReasons?.forEach((reason) => {
     const cookieExclusionReason =
       cookieIssueDetails.CookieExclusionReason[reason];
@@ -98,7 +101,7 @@ const Details = ({ selectedCookie }: DetailsProps) => {
       <p className="mb-4 text-outer-space-crayola dark:text-bright-gray">
         {selectedCookie.analytics?.description || 'No description available.'}
       </p>
-      {selectedCookie.isBlocked && blockedReasons && (
+      {isCookieBlocked && blockedReasons && (
         <>
           <p className="font-bold text-granite-gray dark:text-manatee mb-1">
             Blocked reason
