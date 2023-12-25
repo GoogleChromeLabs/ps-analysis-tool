@@ -80,38 +80,6 @@ const CookiesLanding = ({
     },
   ];
 
-  const totalFrames = tabFrames ? Object.keys(tabFrames).length : 0;
-
-  const matrixHorizontalComponents = [
-    {
-      title: 'Total Frames',
-      description: 'Total number of frames in the page.',
-      count: totalFrames,
-    },
-    {
-      title: 'Topmost Frame',
-      description:
-        'Typically referred to as the topmost frame. Note that there are multiples of these. For example, if you have a prerendered and cached pages, each has an outermost frame that could be called its topmost frame',
-      count: Object.values(tabFrames || {}).filter(
-        (frame) => frame?.frameType === 'outermost_frame'
-      ).length,
-    },
-    {
-      title: 'Inner Frames',
-      description: 'Typically an iframe',
-      count: Object.values(tabFrames || {}).filter(
-        (frame) => frame?.frameType === 'sub_frame'
-      ).length,
-    },
-    {
-      title: 'Fenced frame',
-      description: 'Reserved for future use.',
-      count: Object.values(tabFrames || {}).filter(
-        (frame) => frame?.frameType === 'fenced_frame'
-      ).length,
-    },
-  ];
-
   return (
     <div
       className="h-full w-full flex flex-col min-w-[40rem]"
@@ -171,8 +139,7 @@ const CookiesLanding = ({
             tabCookies={tabCookies}
             tabFrames={tabFrames}
             showInfoIcon={showInfoIcon}
-            showHorizontalMatrix={true}
-            matrixHorizontalData={matrixHorizontalComponents}
+            showHorizontalMatrix={false}
             infoIconTitle="The details regarding frames and associated cookies in this page."
           />
         </CookiesLandingContainer>
