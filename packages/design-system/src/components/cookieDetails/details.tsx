@@ -72,7 +72,7 @@ const Details = ({ selectedCookie }: DetailsProps) => {
     <div className="text-xs py-1 px-1.5">
       {isCookieBlocked && blockedReasons && blockedReasons && (
         <>
-          <p className="font-bold text-granite-gray dark:text-manatee mb-1">
+          <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
             Blocked reason
           </p>
           <p
@@ -84,7 +84,7 @@ const Details = ({ selectedCookie }: DetailsProps) => {
       {selectedCookie?.warningReasons &&
         selectedCookie?.warningReasons?.length > 0 && (
           <>
-            <p className="font-bold text-granite-gray dark:text-manatee mb-1">
+            <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
               Warnings
             </p>
             <p
@@ -93,9 +93,9 @@ const Details = ({ selectedCookie }: DetailsProps) => {
             />
           </>
         )}
-      <p className="font-bold text-granite-gray dark:text-manatee mb-1 text-semibold flex items-center">
+      <p className="font-bold text-raising-black dark:text-bright-gray mb-1 text-semibold flex items-center">
         <span>Cookie Value</span>
-        <label className="text-granite-gray dark:text-manatee text-xs font-normal flex items-center">
+        <label className="text-raising-black dark:text-bright-gray text-xs font-normal flex items-center">
           <input
             data-testid="show-url-decoded-checkbox"
             role="checkbox"
@@ -118,7 +118,7 @@ const Details = ({ selectedCookie }: DetailsProps) => {
           ? decodeURIComponent(selectedCookie.parsedCookie.value)
           : selectedCookie.parsedCookie.value}
       </p>
-      <p className="font-bold text-granite-gray dark:text-manatee mb-1">
+      <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
         Description
       </p>
       <p className="mb-4 text-outer-space-crayola dark:text-bright-gray">
