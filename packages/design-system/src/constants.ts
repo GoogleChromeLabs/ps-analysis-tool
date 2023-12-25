@@ -79,6 +79,8 @@ export const LEGEND_DESCRIPTION: LegendData = {
     'The count of frames which have blocked cookies.',
   'Frames with unblocked cookies':
     'The count of frames which have unblocked cookies.',
+  'Fenced frames':
+    'A fenced frames is a proposed HTML element for embedded content, similar to an iframe. Unlike iframes, a fenced frame restricts communication with its embedding context to allow the frame access to cross-site data without sharing it with the embedding context.',
 };
 
 export const EMPTY_FRAME_COUNT = [
