@@ -39,7 +39,10 @@ const CookieStore = {
    */
   async update(tabId: string, cookies: CookieData[]) {
     const currentStorageSnapshot = await chrome.storage.local.get();
-    if (!currentStorageSnapshot[tabId]) {
+    if (
+      currentStorageSnapshot[tabId] &&
+      Object.keys(currentStorageSnapshot[tabId]).length === 0
+    ) {
       return;
     }
     // eslint-disable-next-line complexity
