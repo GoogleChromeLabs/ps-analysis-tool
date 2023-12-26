@@ -108,7 +108,8 @@ export default function prepareFrameStatsComponent(
     legend: [
       {
         label: 'Total frames',
-        count: Object.keys(tabFrames || {}).length,
+        // Reducing count by one for "Unknown Frames(s) key."
+        count: Object.keys(tabFrames || {}).length - 1,
         color: '#25ACAD',
         countClassName: 'text-greenland-green',
       },
