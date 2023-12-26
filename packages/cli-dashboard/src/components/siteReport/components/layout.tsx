@@ -42,9 +42,8 @@ interface LayoutProps {
 
 const Layout = ({ selectedSite }: LayoutProps) => {
   const [data, setData] = useState<SidebarItems>(TABS);
-  const { tabCookies, technologyData } = useContentStore(({ state }) => ({
+  const { tabCookies } = useContentStore(({ state }) => ({
     tabCookies: state.tabCookies,
-    technologyData: state.technologies,
   }));
 
   const frameUrls = useMemo(
@@ -114,17 +113,13 @@ const Layout = ({ selectedSite }: LayoutProps) => {
         <SiteAffectedCookies selectedSite={selectedSite} />
       );
 
-      if (technologyData && technologyData.length > 0) {
-        _data['technologies'].panel = (
-          <Technologies selectedSite={selectedSite} />
-        );
-      } else {
-        delete _data['technologies'];
-      }
+      _data['technologies'].panel = (
+        <Technologies selectedSite={selectedSite} />
+      );
 
       return _data;
     });
-  }, [frameUrls, selectedItemKey, selectedSite, technologyData]);
+  }, [frameUrls, selectedItemKey, selectedSite]);
 
   useEffect(() => {
     if (selectedItemKey === null) {
