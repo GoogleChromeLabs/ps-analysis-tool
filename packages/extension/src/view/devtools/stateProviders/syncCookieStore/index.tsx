@@ -155,6 +155,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           return tabFrame;
         })
       );
+      modifiedTabFrames['Unknown Frame(s)'] = { frameIds: [] };
       setTabFrames(modifiedTabFrames);
     },
     []
