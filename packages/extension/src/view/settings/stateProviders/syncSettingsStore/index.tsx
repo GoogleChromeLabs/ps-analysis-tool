@@ -26,7 +26,7 @@ import React, {
 import { noop } from '@ps-analysis-tool/design-system';
 import { CookieStore } from '../../../../localStore';
 
-enum PLATFORM_OS {
+enum PLATFORM_OS_MAP {
   mac = 'MacOS',
   win = 'Windows',
   android = 'Android',
@@ -107,7 +107,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     });
 
     chrome.runtime.getPlatformInfo((platfrom) => {
-      setOSInformation(`${PLATFORM_OS[platfrom.os]} (${platfrom.arch})`);
+      setOSInformation(`${PLATFORM_OS_MAP[platfrom.os]} (${platfrom.arch})`);
     });
   }, []);
 
