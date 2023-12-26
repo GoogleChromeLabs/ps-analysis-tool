@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
   "dependencies": {
-    "tldts": "^6.0.8"
+    "tldts": "^6.0.14"
   },
   "devDependencies": {
     "devtools-protocol": "^0.0.1236148"

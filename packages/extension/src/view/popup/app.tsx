@@ -22,7 +22,6 @@ import {
   Button,
   CirclePieChart,
   ProgressBar,
-  ToggleSwitch,
   prepareCookieStatsComponents,
 } from '@ps-analysis-tool/design-system';
 
@@ -43,8 +42,6 @@ const App: React.FC = () => {
     changeListeningToThisTab,
     onChromeUrl,
     allowedNumberOfTabs,
-    isUsingCDP,
-    setUsingCDP,
   } = useCookieStore(({ state, actions }) => ({
     cookieStats: state.tabCookieStats,
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
@@ -52,20 +49,12 @@ const App: React.FC = () => {
     returningToSingleTab: state.returningToSingleTab,
     allowedNumberOfTabs: state.allowedNumberOfTabs,
     onChromeUrl: state.onChromeUrl,
-    isUsingCDP: state.isUsingCDP,
     changeListeningToThisTab: actions.changeListeningToThisTab,
-    setUsingCDP: actions.setUsingCDP,
   }));
 
   if (onChromeUrl) {
     return (
       <>
-        <ToggleSwitch
-          additionalStyles="absolute top-2 left-2"
-          onLabel="CDP"
-          enabled={isUsingCDP}
-          setEnabled={setUsingCDP}
-        />
         <p className="font-bold text-lg mb-2">Not much to analyze here</p>
         <p className="text-chart-label text-xs">
           Its emptier than a cookie jar after a midnight snack! 🌌
@@ -92,12 +81,6 @@ const App: React.FC = () => {
   ) {
     return (
       <>
-        <ToggleSwitch
-          additionalStyles="absolute top-2 left-2"
-          onLabel="CDP"
-          enabled={isUsingCDP}
-          setEnabled={setUsingCDP}
-        />
         {!returningToSingleTab && (
           <p className="dark:text-bright-gray text-chart-label text-base mb-5 text-center">
             This tool works best with a single tab for cookie analysis.
@@ -114,12 +97,6 @@ const App: React.FC = () => {
   ) {
     return (
       <>
-        <ToggleSwitch
-          additionalStyles="absolute top-2 left-2"
-          onLabel="CDP"
-          enabled={isUsingCDP}
-          setEnabled={setUsingCDP}
-        />
         <p className="font-bold text-lg">No cookies found on this page</p>
         <p className="text-chart-label text-xs">
           Please try reloading the page
@@ -131,12 +108,6 @@ const App: React.FC = () => {
 
   return (
     <>
-      <ToggleSwitch
-        additionalStyles="absolute top-2 left-2"
-        onLabel="CDP"
-        enabled={isUsingCDP}
-        setEnabled={setUsingCDP}
-      />
       <div className="w-full flex gap-x-6 justify-center border-b border-hex-gray pb-3.5">
         <div className="w-32 text-center">
           <CirclePieChart

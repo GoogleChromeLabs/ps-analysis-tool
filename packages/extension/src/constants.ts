@@ -27,6 +27,7 @@ export const BLOCKED_REASON_LIST = [
   'UserPreferences',
   'ThirdPartyPhaseout',
   'ThirdPartyBlockedInFirstPartySet',
+  'InvalidDomain',
   'UnknownError',
   'SchemefulSameSiteStrict',
   'SchemefulSameSiteLax',

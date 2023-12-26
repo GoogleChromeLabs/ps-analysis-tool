@@ -43,11 +43,9 @@ export interface CookieStoreContext {
     tabId: number | null;
     onChromeUrl: boolean;
     allowedNumberOfTabs: string | null;
-    isUsingCDP: boolean;
   };
   actions: {
     changeListeningToThisTab: () => void;
-    setUsingCDP: (newValue: boolean) => void;
   };
 }
 
@@ -79,11 +77,9 @@ const initialState: CookieStoreContext = {
     onChromeUrl: false,
     tabId: null,
     allowedNumberOfTabs: null,
-    isUsingCDP: false,
   },
   actions: {
     changeListeningToThisTab: noop,
-    setUsingCDP: noop,
   },
 };
 
@@ -110,7 +106,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
     useState<boolean>(false);
 
   const [onChromeUrl, setOnChromeUrl] = useState<boolean>(false);
-  const [isUsingCDP, setUsingCDP] = useState<boolean>(false);
   const loadingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -130,15 +125,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
     setLoading(false);
   }, 100);
 
-  const _setUsingCDP = useCallback(async (newValue: boolean) => {
-    const extensionStorage = await chrome.storage.sync.get();
-    chrome.storage.sync.set({
-      ...extensionStorage,
-      isUsingCDP: newValue,
-    });
-    setUsingCDP(newValue);
-  }, []);
-
   const intitialSync = useCallback(async () => {
     const [tab] = await getCurrentTab();
 
@@ -146,9 +132,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
     if (extensionStorage?.allowedNumberOfTabs) {
       setAllowedNumberOfTabs(extensionStorage?.allowedNumberOfTabs);
-    }
-    if (extensionStorage?.isUsingCDP) {
-      setUsingCDP(extensionStorage?.isUsingCDP);
     }
 
     if (!tab.id || !tab.url) {
@@ -292,9 +275,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
     if (extensionStorage?.allowedNumberOfTabs) {
       setAllowedNumberOfTabs(extensionStorage?.allowedNumberOfTabs);
     }
-    if (extensionStorage?.isUsingCDP) {
-      setUsingCDP(extensionStorage?.isUsingCDP);
-    }
   }, []);
 
   const tabUpdateListener = useCallback(
@@ -334,11 +314,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
           returningToSingleTab,
           onChromeUrl,
           allowedNumberOfTabs,
-          isUsingCDP,
         },
         actions: {
           changeListeningToThisTab,
-          setUsingCDP: _setUsingCDP,
         },
       }}
     >

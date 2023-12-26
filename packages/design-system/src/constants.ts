@@ -73,12 +73,15 @@ export const LEGEND_DESCRIPTION: LegendData = {
     "\n    <p class='font-semibold'>Third-party cookie blocked within the same First-Party Set</p>\n    <br />\n    <p>\n        A cookie embedded by a site in the top-level page's First-Party Set was blocked by third-party cookie blocking.\n    </p>\n",
   ExcludeThirdPartyPhaseout:
     '\n    <p class="font-semibold">Cookie is blocked when sent in cross-site context</p>\n    <br />\n    <p>\n        Cookies marked with <code>SameSite=None; Secure;</code> and not <code>Partitioned</code> are blocked in cross-site requests. This behavior protects user data from cross-site tracking.\n    </p>\n',
+  InvalidDomain: `<p class="font-semibold">This attempt to set a cookie via 'Set-Cookie' header was blocked because its Domain value was invalid with regards to the current host url.</p>`,
   'Total frames': 'The total frames present inside the current page.',
   'Frames with cookies': 'The count of frames which have cookies in them',
   'Frames with blocked cookies':
     'The count of frames which have blocked cookies.',
   'Frames with unblocked cookies':
     'The count of frames which have unblocked cookies.',
+  'Fenced frames':
+    'A fenced frames is a proposed HTML element for embedded content, similar to an iframe. Unlike iframes, a fenced frame restricts communication with its embedding context to allow the frame access to cross-site data without sharing it with the embedding context.',
 };
 
 export const EMPTY_FRAME_COUNT = [

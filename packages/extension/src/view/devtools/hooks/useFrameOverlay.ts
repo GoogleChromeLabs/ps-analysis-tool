@@ -265,7 +265,12 @@ const useFrameOverlay = (
             ? filteredCookies.filter((cookie) => cookie.isFirstParty)
             : [];
           const blockedCookies = filteredCookies
-            ? filteredCookies.filter((cookie) => cookie.isBlocked)
+            ? filteredCookies.filter(
+                (cookie) =>
+                  cookie.isBlocked ||
+                  (cookie.blockedReasons?.length !== undefined &&
+                    cookie.blockedReasons?.length > 0)
+              )
             : [];
           const blockedReasons = filteredCookies
             ? filteredCookies

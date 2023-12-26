@@ -39,7 +39,10 @@ const CookieStore = {
    */
   async update(tabId: string, cookies: CookieData[]) {
     const currentStorageSnapshot = await chrome.storage.local.get();
-    if (!currentStorageSnapshot[tabId]) {
+    if (
+      currentStorageSnapshot[tabId] &&
+      Object.keys(currentStorageSnapshot[tabId]).length === 0
+    ) {
       return;
     }
     // eslint-disable-next-line complexity
@@ -264,7 +267,6 @@ const CookieStore = {
         [tabId]: {
           cookies: {},
           focusedAt: Date.now(),
-          isDebuggerAttached: extensionStorage?.isUsingCDP,
         },
         tabToRead: tabId,
       });
@@ -273,7 +275,6 @@ const CookieStore = {
         [tabId]: {
           cookies: {},
           focusedAt: Date.now(),
-          isDebuggerAttached: extensionStorage?.isUsingCDP,
         },
       });
     }

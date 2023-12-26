@@ -24,11 +24,17 @@ import React, {
   useCallback,
 } from 'react';
 import { noop } from '@ps-analysis-tool/design-system';
+import { CookieStore } from '../../../../localStore';
 
-/**
- * Internal dependencies.
- */
-import { PLATFORM_OS } from './constants';
+enum PLATFORM_OS_MAP {
+  mac = 'MacOS',
+  win = 'Windows',
+  android = 'Android',
+  cros = 'Chrome OS',
+  linux = 'Linux',
+  openbsd = 'OpenBSD',
+  fuchsia = 'Fuchsia',
+}
 
 export interface SettingStoreContext {
   state: {
@@ -101,7 +107,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     });
 
     chrome.runtime.getPlatformInfo((platfrom) => {
-      setOSInformation(`${PLATFORM_OS[platfrom.os]} (${platfrom.arch})`);
+      setOSInformation(`${PLATFORM_OS_MAP[platfrom.os]} (${platfrom.arch})`);
     });
   }, []);
 
@@ -138,17 +144,25 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
         if (changes['allowedNumberOfTabs']?.newValue === 'single') {
           chrome.tabs.query({}, (tabs) => {
-            tabs.map((tab) => {
+            tabs.forEach((tab) => {
               chrome.action.setBadgeText({
                 tabId: tab?.id,
                 text: '',
               });
-
-              return tab;
             });
           });
 
           await chrome.storage.local.clear();
+        } else {
+          chrome.tabs.query({}, (tabs) => {
+            tabs.forEach(async (tab) => {
+              if (!tab.id) {
+                return;
+              }
+              await CookieStore.addTabData(tab.id?.toString());
+              await chrome.tabs.reload(tab?.id);
+            });
+          });
         }
       }
     },

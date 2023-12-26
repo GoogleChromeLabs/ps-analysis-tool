@@ -13,13 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
+import { getDomain } from 'tldts';
 
-export enum PLATFORM_OS {
-  mac = 'MacOS',
-  win = 'Windows',
-  android = 'Android',
-  cros = 'Chrome OS',
-  linux = 'Linux',
-  openbsd = 'OpenBSD',
-  fuchsia = 'Fuchsia',
+/**
+ * Returns the domain of a cookie from the url.
+ * @param url {string} the url the cookies is associated with.
+ * @returns {string} domain of the cookie.
+ */
+export default function getDomainFromUrl(url: string) {
+  let domain = getDomain(url);
+  if (domain) {
+    domain = domain.startsWith('.') ? domain : '.' + domain;
+  }
+  return domain || '';
 }

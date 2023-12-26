@@ -37,7 +37,6 @@ import { useCookieStore } from './stateProviders/syncCookieStore';
 import './app.css';
 import { Cookies } from './components';
 import useFrameOverlay from './hooks/useFrameOverlay';
-import { CookieStore } from '../../localStore';
 
 const App: React.FC = () => {
   const [sidebarWidth, setSidebarWidth] = useState(200);
@@ -204,24 +203,6 @@ const App: React.FC = () => {
 
     updateSelectedItemKey(selectedFrame || 'cookies');
   }, [selectedFrame, tabUrl, updateSelectedItemKey]);
-
-  useEffect(() => {
-    const storeChangeListener = async () => {
-      const tabId = chrome.devtools.inspectedWindow.tabId.toString();
-
-      const getTabBeingListenedTo = await chrome.storage.local.get();
-
-      if (getTabBeingListenedTo && tabId !== getTabBeingListenedTo?.tabToRead) {
-        await CookieStore.removeTabData(tabId); // Hot Fix: Remove tab data if tab is not being listened to
-      }
-    };
-
-    chrome.storage.onChanged.addListener(storeChangeListener);
-
-    return () => {
-      chrome.storage.onChanged.removeListener(storeChangeListener);
-    };
-  }, [updateSelectedItemKey]);
 
   const [filteredCookies, setFilteredCookies] = useState<CookieTableData[]>([]);
 

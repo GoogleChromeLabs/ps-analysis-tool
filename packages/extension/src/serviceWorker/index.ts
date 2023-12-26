@@ -37,9 +37,9 @@ import {
   type CookieDatabase,
   fetchDictionary,
 } from '../utils/fetchCookieDictionary';
-import { ALLOWED_NUMBER_OF_TABS } from '../constants';
 import isSingleTabProcessingMode from '../utils/isSingleTabProcessingMode';
 import addAuditsIssues from '../utils/addAuditsIssues';
+import { ALLOWED_NUMBER_OF_TABS } from '../constants';
 
 let cookieDB: CookieDatabase | null = null;
 
@@ -101,6 +101,7 @@ chrome.webRequest.onResponseStarted.addListener(
               } catch (error) {
                 // Fail silently
               }
+
               const cookie = await parseResponseCookieHeader(
                 url,
                 header.value,
@@ -109,6 +110,7 @@ chrome.webRequest.onResponseStarted.addListener(
                 frameId,
                 cdpCookies?.cookies ?? []
               );
+
               return [...(await accumulator), cookie];
             }
             return accumulator;
@@ -198,9 +200,7 @@ chrome.tabs.onCreated.addListener(async (tab) => {
     if (!tab.id) {
       return;
     }
-
     const _isSingleTabProcessingMode = await isSingleTabProcessingMode();
-
     if (_isSingleTabProcessingMode) {
       const previousTabData = await chrome.storage.local.get();
       const doesTabExist = await getTab(previousTabData?.tabToRead);
@@ -245,6 +245,13 @@ chrome.tabs.onRemoved.addListener(async (tabId) => {
  * @see https://developer.chrome.com/docs/extensions/reference/tabs/#event-onUpdated
  */
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+  try {
+    await chrome.debugger.attach({ tabId }, '1.3');
+    chrome.debugger.sendCommand({ tabId }, 'Network.enable');
+    chrome.debugger.sendCommand({ tabId }, 'Audits.enable');
+  } catch (error) {
+    //Fail silently
+  }
   if (changeInfo.status === 'loading' && tab.url) {
     PROMISE_QUEUE.clear();
     await PROMISE_QUEUE.add(async () => {
@@ -272,13 +279,13 @@ chrome.windows.onRemoved.addListener(async (windowId) => {
  * @todo Shouldn't have to reinstall the extension.
  */
 chrome.runtime.onInstalled.addListener(async (details) => {
+  PROMISE_QUEUE.clear();
   await PROMISE_QUEUE.add(async () => {
     await chrome.storage.local.clear();
     if (details.reason === 'install') {
       await chrome.storage.sync.clear();
       await chrome.storage.sync.set({
         allowedNumberOfTabs: 'single',
-        isUsingCDP: true,
       });
     }
     if (details.reason === 'update') {
@@ -289,7 +296,6 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       await chrome.storage.sync.clear();
       await chrome.storage.sync.set({
         allowedNumberOfTabs: 'single',
-        isUsingCDP: true,
       });
     }
   });
@@ -309,19 +315,27 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       }
 
       tabId = source?.tabId?.toString();
+
       const tab = await getCurrentTab();
       const url = tab && tab[0] ? tab[0].url : '';
+      const localStorage = await chrome.storage.local.get();
+      if (
+        (await isSingleTabProcessingMode()) &&
+        localStorage?.tabToRead !== tabId
+      ) {
+        return;
+      }
 
-      if (method === 'Network.requestWillBeSent' && params) {
-        const request = params as Protocol.Network.RequestWillBeSentEvent;
+      if (method === 'Network.responseReceived' && params) {
+        const request = params as Protocol.Network.ResponseReceivedEvent;
         if (!cdpURLToRequestMap[tabId]) {
           cdpURLToRequestMap[tabId] = {
-            [request.requestId]: request?.documentURL,
+            [request.requestId]: request?.response.url,
           };
         } else {
           cdpURLToRequestMap[tabId] = {
             ...cdpURLToRequestMap[tabId],
-            [request.requestId]: request?.documentURL,
+            [request.requestId]: request?.response.url,
           };
         }
       }
@@ -384,161 +398,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
   })();
 });
 
-chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
-  PROMISE_QUEUE.clear();
-  await PROMISE_QUEUE.add(async () => {
-    const syncStorage = await chrome.storage.sync.get();
-    const _isSingleTabProcessingMode = await isSingleTabProcessingMode();
-
-    if (!details.tabId || !details.url) {
-      return;
-    }
-
-    if (
-      !syncStorage?.isUsingCDP ||
-      details.url.startsWith('chrome://') ||
-      details.url.startsWith('about:blank')
-    ) {
-      return;
-    }
-
-    let localStorage = await chrome.storage.local.get();
-
-    if (localStorage && Object.keys(localStorage).length === 0) {
-      await CookieStore.addTabData(details.tabId.toString());
-      localStorage = await chrome.storage.local.get();
-    }
-
-    if (_isSingleTabProcessingMode) {
-      if (
-        details.tabId.toString() !== localStorage.tabToRead &&
-        localStorage[details.tabId.toString()]?.isDebuggerAttached
-      ) {
-        return;
-      }
-
-      try {
-        await chrome.debugger.attach({ tabId: details.tabId }, '1.3');
-        localStorage[details.tabId?.toString()].isDebuggerAttached = true;
-        chrome.debugger.sendCommand({ tabId: details.tabId }, 'Network.enable');
-        chrome.debugger.sendCommand({ tabId: details.tabId }, 'Audits.enable');
-        await chrome.storage.local.set(localStorage);
-      } catch (error) {
-        //Fail silently
-      }
-    } else {
-      // Have to check multiple condition since debugger cannot be attached on empty url tab and on chrome:// urls
-      if (
-        !localStorage[details.tabId.toString()] &&
-        localStorage[details.tabId.toString()]?.isDebuggerAttached
-      ) {
-        return;
-      }
-
-      try {
-        await chrome.debugger.attach({ tabId: details.tabId }, '1.3');
-        localStorage[details.tabId?.toString()].isDebuggerAttached = true;
-        chrome.debugger.sendCommand({ tabId: details.tabId }, 'Network.enable');
-        chrome.debugger.sendCommand({ tabId: details.tabId }, 'Audits.enable');
-        await chrome.storage.local.set(localStorage);
-      } catch (error) {
-        //Silently fail
-      }
-    }
-  });
-});
-
-chrome.storage.sync.onChanged.addListener(
-  async (changes: { [key: string]: chrome.storage.StorageChange }) => {
-    await PROMISE_QUEUE.add(async () => {
-      const _isSingleTabProcessingMode = await isSingleTabProcessingMode();
-      if (_isSingleTabProcessingMode) {
-        const localStorage = await chrome.storage.local.get();
-        if (
-          !Object.keys(changes).includes('isUsingCDP') &&
-          !localStorage?.tabToRead
-        ) {
-          return;
-        }
-
-        if (!changes['isUsingCDP'].newValue) {
-          await chrome.debugger.detach({
-            tabId: Number(localStorage.tabToRead),
-          });
-          localStorage[localStorage.tabToRead].isDebuggerAttached = false;
-          await chrome.storage.local.set(localStorage);
-        } else if (changes['isUsingCDP'].newValue) {
-          try {
-            await chrome.debugger.attach(
-              { tabId: Number(localStorage.tabToRead) },
-              '1.3'
-            );
-            localStorage[localStorage.tabToRead].isDebuggerAttached = true;
-            chrome.debugger.sendCommand(
-              { tabId: Number(localStorage.tabToRead) },
-              'Network.enable'
-            );
-            chrome.debugger.sendCommand(
-              { tabId: Number(localStorage.tabToRead) },
-              'Audits.enable'
-            );
-            await chrome.storage.local.set(localStorage);
-          } catch (error) {
-            //just catch the error.
-          }
-        }
-      } else {
-        if (!Object.keys(changes).includes('isUsingCDP')) {
-          return;
-        }
-
-        if (!changes['isUsingCDP'].newValue) {
-          const tabs = await chrome.tabs.query({ active: true });
-          await Promise.all(
-            tabs.map(async (tab) => {
-              if (!tab.id) {
-                return tab;
-              }
-              await chrome.debugger.detach({ tabId: tab?.id });
-              localStorage[tab?.id?.toString()].isDebuggerAttached = false;
-              await chrome.storage.local.set(localStorage);
-              return tab;
-            })
-          );
-        } else if (changes['isUsingCDP'].newValue) {
-          const tabs = await chrome.tabs.query({ active: true });
-          await Promise.all(
-            tabs.map(async (tab) => {
-              if (!tab.id) {
-                return tab;
-              }
-              try {
-                await chrome.debugger.attach(
-                  { tabId: Number(localStorage.tabToRead) },
-                  '1.3'
-                );
-                localStorage[localStorage.tabToRead].isDebuggerAttached = true;
-                chrome.debugger.sendCommand(
-                  { tabId: Number(localStorage.tabToRead) },
-                  'Network.enable'
-                );
-                chrome.debugger.sendCommand(
-                  { tabId: Number(localStorage.tabToRead) },
-                  'Audits.enable'
-                );
-              } catch (error) {
-                //just catch the error.
-              }
-              return tab;
-            })
-          );
-          await chrome.storage.local.set(localStorage);
-        }
-      }
-    });
-  }
-);
-
 const listenToNewTab = async (tabId?: number) => {
   const newTabId = tabId?.toString() || (await getCurrentTabId());
 
@@ -546,22 +405,25 @@ const listenToNewTab = async (tabId?: number) => {
     return '';
   }
 
-  await CookieStore.addTabData(newTabId);
-
-  const storedTabData = Object.keys(await chrome.storage.local.get());
-
-  storedTabData.some(async (tabIdToDelete) => {
-    if (tabIdToDelete !== newTabId) {
-      await CookieStore.removeTabData(tabIdToDelete);
-
-      if (!Number.isNaN(parseInt(tabIdToDelete))) {
+  if (await isSingleTabProcessingMode()) {
+    const storedTabData = Object.keys(await chrome.storage.local.get());
+    storedTabData.some(async (tabIdToDelete) => {
+      if (tabIdToDelete !== 'tabToRead') {
+        await CookieStore.removeTabData(tabIdToDelete);
+        try {
+          await chrome.debugger.detach({ tabId: Number(tabIdToDelete) });
+        } catch (error) {
+          // Fail silently
+        }
         await chrome.action.setBadgeText({
-          tabId: parseInt(tabIdToDelete),
+          tabId: Number(newTabId),
           text: '',
         });
       }
-    }
-  });
+    });
+  }
+
+  await CookieStore.addTabData(newTabId);
 
   return newTabId;
 };
@@ -579,6 +441,29 @@ chrome.runtime.onMessage.addListener((request) => {
           tabId: newTab,
         },
       });
+
+      await chrome.tabs.reload(Number(newTab));
     });
   }
 });
+
+chrome.storage.local.onChanged.addListener(
+  async (changes: { [key: string]: chrome.storage.StorageChange }) => {
+    if (!changes?.tabToRead || !changes?.tabToRead?.oldValue) {
+      return;
+    }
+
+    const tabId = changes.tabToRead.oldValue;
+
+    if (!tabId || !(await isSingleTabProcessingMode())) {
+      return;
+    }
+
+    PROMISE_QUEUE.clear();
+    await CookieStore.removeTabData(tabId);
+    await chrome.action.setBadgeText({
+      tabId: parseInt(tabId),
+      text: '',
+    });
+  }
+);

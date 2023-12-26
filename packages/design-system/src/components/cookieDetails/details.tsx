@@ -32,7 +32,12 @@ const Details = ({ selectedCookie }: DetailsProps) => {
   const [showUrlDecoded, setShowUrlDecoded] = useState(false);
   let blockedReasons = '';
   let warningReasons = '';
-
+  //Adding a comment here for future reference, this was done because we are using 2 different APIs to gather cookie data and often the isBlocked gets toggled between true and false.
+  //Adding this as a fallback prevents from showing wrong information regarding blocked cookies.
+  const isCookieBlocked =
+    selectedCookie?.isBlocked ||
+    (selectedCookie?.blockedReasons &&
+      selectedCookie?.blockedReasons?.length > 0);
   selectedCookie?.blockedReasons?.forEach((reason) => {
     const cookieExclusionReason =
       cookieIssueDetails.CookieExclusionReason[reason];
@@ -67,9 +72,32 @@ const Details = ({ selectedCookie }: DetailsProps) => {
 
   return (
     <div className="text-xs py-1 px-1.5">
-      <p className="font-bold text-granite-gray dark:text-manatee mb-1 text-semibold flex items-center">
+      {isCookieBlocked && blockedReasons && blockedReasons && (
+        <>
+          <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
+            Blocked reason
+          </p>
+          <p
+            className="text-outer-space-crayola dark:text-bright-gray mb-3"
+            dangerouslySetInnerHTML={{ __html: blockedReasons ?? '' }}
+          />
+        </>
+      )}
+      {selectedCookie?.warningReasons &&
+        selectedCookie?.warningReasons?.length > 0 && (
+          <>
+            <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
+              Warnings
+            </p>
+            <p
+              className="text-outer-space-crayola dark:text-bright-gray"
+              dangerouslySetInnerHTML={{ __html: warningReasons ?? '' }}
+            />
+          </>
+        )}
+      <p className="font-bold text-raising-black dark:text-bright-gray mb-1 text-semibold flex items-center">
         <span>Cookie Value</span>
-        <label className="text-granite-gray dark:text-manatee text-xs font-normal flex items-center">
+        <label className="text-raising-black dark:text-bright-gray text-xs font-normal flex items-center">
           <input
             data-testid="show-url-decoded-checkbox"
             role="checkbox"
@@ -92,35 +120,12 @@ const Details = ({ selectedCookie }: DetailsProps) => {
           ? decodeURIComponent(selectedCookie.parsedCookie.value)
           : selectedCookie.parsedCookie.value}
       </p>
-      <p className="font-bold text-granite-gray dark:text-manatee mb-1">
+      <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
         Description
       </p>
       <p className="mb-4 text-outer-space-crayola dark:text-bright-gray">
         {selectedCookie.analytics?.description || 'No description available.'}
       </p>
-      {selectedCookie.isBlocked && blockedReasons && (
-        <>
-          <p className="font-bold text-granite-gray dark:text-manatee mb-1">
-            Blocked reason
-          </p>
-          <p
-            className="text-outer-space-crayola dark:text-bright-gray mb-3"
-            dangerouslySetInnerHTML={{ __html: blockedReasons ?? '' }}
-          />
-        </>
-      )}
-      {selectedCookie?.warningReasons &&
-        selectedCookie?.warningReasons?.length > 0 && (
-          <>
-            <p className="font-bold text-granite-gray dark:text-manatee mb-1">
-              Warnings
-            </p>
-            <p
-              className="text-outer-space-crayola dark:text-bright-gray"
-              dangerouslySetInnerHTML={{ __html: warningReasons ?? '' }}
-            />
-          </>
-        )}
     </div>
   );
 };

@@ -30,6 +30,7 @@ export { default as fetchLocalData } from './utils/fetchLocalData';
 export { default as cookieIssueDetails } from './data/cookieExclusionAndWarningReasons';
 export { default as parseResponseReceivedExtraInfo } from './utils/parseResponseReceivedExtraInfo';
 export { default as parseRequestWillBeSentExtraInfo } from './utils/parseRequestWillBeSentExtraInfo';
+export { default as getDomainFromUrl } from './utils/getDomainFromUrl';
 export { default as noop } from './utils/noop';
 export * from './cookies.types';
 export const UNKNOWN_FRAME_KEY = 'Unknown frame(s)';

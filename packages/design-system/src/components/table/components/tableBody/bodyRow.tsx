@@ -49,7 +49,10 @@ const BodyRow = ({
   onKeyDown,
 }: BodyRowProps) => {
   const cookieKey = getRowObjectKey(row);
-  const isBlocked = (row.originalData as CookieTableData)?.isBlocked;
+  const isBlocked =
+    (row.originalData as CookieTableData)?.isBlocked ||
+    ((row.originalData as CookieTableData)?.blockedReasons &&
+      (row.originalData as CookieTableData)?.blockedReasons?.length > 0);
   const isHighlighted = (row.originalData as CookieTableData)?.highlighted;
   const tableRowClassName = classNames(
     'outline-0 flex divide-x divide-american-silver dark:divide-quartz',
