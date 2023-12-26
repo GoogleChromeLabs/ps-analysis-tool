@@ -82,7 +82,7 @@ const QuickLinksList = () => {
               rel="noreferrer"
               className="leading-6 text-sm text-bright-navy-blue dark:text-jordy-blue font-semibold px-3 border border-american-silver dark:border-quartz rounded inline-flex gap-2 items-center"
             >
-              View More{' '}
+              View More
               <ChevronRight className="text-bright-navy-blue dark:text-jordy-blue" />
             </a>
           </div>
