@@ -37,10 +37,12 @@ const filterCookiesByFrame = (
   }
   let tabFramesIDMap: number[] = [];
 
-  Object.keys(tabFrames).forEach((url) => {
-    tabFramesIDMap = [
-      ...new Set<number>([...tabFrames[url].frameIds, ...tabFramesIDMap]),
-    ];
+  Object.keys(tabFrames)?.forEach((url) => {
+    const frameIds = tabFrames[url].frameIds;
+
+    if (frameIds) {
+      tabFramesIDMap = [...new Set<number>([...frameIds, ...tabFramesIDMap])];
+    }
   });
 
   if (tabFrames[frameUrl].frameIds?.length === 0) {
