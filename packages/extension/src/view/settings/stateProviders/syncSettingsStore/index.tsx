@@ -26,10 +26,15 @@ import React, {
 import { noop } from '@ps-analysis-tool/design-system';
 import { CookieStore } from '../../../../localStore';
 
-/**
- * Internal dependencies.
- */
-import { PLATFORM_OS } from './constants';
+enum PLATFORM_OS {
+  mac = 'MacOS',
+  win = 'Windows',
+  android = 'Android',
+  cros = 'Chrome OS',
+  linux = 'Linux',
+  openbsd = 'OpenBSD',
+  fuchsia = 'Fuchsia',
+}
 
 export interface SettingStoreContext {
   state: {
