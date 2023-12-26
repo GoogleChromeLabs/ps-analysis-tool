@@ -35,7 +35,7 @@ interface SiteReportProps {
   };
   technologies: TechnologyData[];
   completeJson: CompleteJson | null;
-  selectedSite?: string;
+  selectedSite: string | null;
 }
 
 const SiteReport = ({

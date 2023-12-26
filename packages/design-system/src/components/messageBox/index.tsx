@@ -24,7 +24,7 @@ interface MessageBoxProps {
 }
 const MessageBox = ({ headerText, bodyText }: MessageBoxProps) => {
   return (
-    <div className="bg-hsl-light dark:hsl-dark p-4 m-3 leading-5 max-w-2xl">
+    <div className="bg-hsl-light dark:hsl-dark py-4 my-3 px-3 leading-5 max-w-2xl">
       <p className="text-warning-red dark:text-warning-orange font-bold">
         {headerText}
       </p>

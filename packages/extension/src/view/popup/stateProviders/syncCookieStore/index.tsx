@@ -25,20 +25,13 @@ import React, {
   useRef,
 } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
-import { noop } from '@ps-analysis-tool/design-system';
-import {
-  prepareCookiesCount,
-  type CookiesCount,
-} from '@ps-analysis-tool/common';
+import { noop, prepareCookiesCount } from '@ps-analysis-tool/design-system';
+import { type CookiesCount } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import {
-  getCurrentTab,
-  getCurrentTabId,
-} from '../../../../utils/getCurrentTabId';
-import { CookieStore } from '../../../../localStore';
+import { getCurrentTab } from '../../../../utils/getCurrentTabId';
 import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
 
 export interface CookieStoreContext {
@@ -60,6 +53,9 @@ const initialState: CookieStoreContext = {
   state: {
     tabCookieStats: {
       total: 0,
+      blockedCookies: {
+        total: 0,
+      },
       firstParty: {
         total: 0,
         functional: 0,
@@ -149,7 +145,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
     }
 
     const _tabId = tab.id;
-    const _tabUrl = tab.url;
 
     setTabId(tab.id);
     setTabUrl(tab.url);
@@ -179,12 +174,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
       }
     }
 
-    const tabData = (await chrome.storage.local.get([_tabId.toString()]))[
-      _tabId.toString()
+    const tabData = (await chrome.storage.local.get([_tabId?.toString()]))[
+      _tabId?.toString()
     ];
 
     if (tabData && tabData.cookies) {
-      setDebouncedStats(prepareCookiesCount(tabData.cookies, _tabUrl));
+      setDebouncedStats(prepareCookiesCount(tabData.cookies));
     }
     setLoading(false);
   }, [setDebouncedStats]);
@@ -198,10 +193,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         changes[tabId.toString()]?.newValue?.cookies
       ) {
         setDebouncedStats(
-          prepareCookiesCount(
-            changes[tabId.toString()].newValue.cookies,
-            tabUrl
-          )
+          prepareCookiesCount(changes[tabId.toString()].newValue.cookies)
         );
       }
       if (tabUrl) {
@@ -245,40 +237,37 @@ export const Provider = ({ children }: PropsWithChildren) => {
     [setDebouncedStats, tabId, tabUrl]
   );
 
-  const changeListeningToThisTab = useCallback(async () => {
-    const changedTabId = await getCurrentTabId();
-    if (!changedTabId) {
-      return;
-    }
-    await CookieStore.addTabData(changedTabId?.toString());
-    const storedTabData = Object.keys(await chrome.storage.local.get());
-    // eslint-disable-next-line guard-for-in
-    storedTabData.map(async (tabIdToBeDeleted) => {
-      if (
-        tabIdToBeDeleted !== changedTabId &&
-        tabIdToBeDeleted !== 'tabToRead'
-      ) {
-        await CookieStore.removeTabData(tabIdToBeDeleted);
+  const changeListeningToThisTab = useCallback(() => {
+    chrome.runtime.sendMessage({
+      type: 'SET_TAB_TO_READ',
+      payload: {
+        tabId,
+      },
+    });
+  }, [tabId]);
 
-        if (!Number.isNaN(parseInt(tabIdToBeDeleted))) {
-          await chrome.action.setBadgeText({
-            tabId: parseInt(tabIdToBeDeleted),
-            text: '',
-          });
+  useEffect(() => {
+    const listener = async (message: {
+      type: string;
+      payload: { tabId: string };
+    }) => {
+      if (message.type === 'syncCookieStore:SET_TAB_TO_READ') {
+        const tab = await getCurrentTab();
+
+        if (tab?.[0]?.url) {
+          setTabUrl(tab[0]?.url);
         }
-      }
-      return Promise.resolve();
-    });
 
-    chrome.tabs.query({ active: true }, (tab) => {
-      if (tab[0]?.url) {
-        setTabUrl(tab[0]?.url);
+        setIsCurrentTabBeingListenedTo(true);
+        setLoading(false);
       }
-    });
+    };
 
-    await chrome.tabs.reload(Number(changedTabId));
-    setIsCurrentTabBeingListenedTo(true);
-    setLoading(true);
+    chrome.runtime.onMessage.addListener(listener);
+
+    return () => {
+      chrome.runtime.onMessage.removeListener(listener);
+    };
   }, []);
 
   const changeSyncStorageListener = useCallback(async () => {

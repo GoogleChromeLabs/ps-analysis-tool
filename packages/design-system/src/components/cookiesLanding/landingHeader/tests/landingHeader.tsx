@@ -29,12 +29,24 @@ import cookiesStatsComponents from '../../../../test-data/cookiesStatsComponents
 
 describe('LandingHeader', () => {
   it('should render the landing header', () => {
-    const { getByTestId } = render(
-      <LandingHeader
-        cookieStats={cookieStats}
-        cookiesStatsComponents={cookiesStatsComponents}
-      />
-    );
+    const dataMapping = [
+      {
+        title: 'Total Cookies',
+        count: cookieStats.total,
+        data: [...cookiesStatsComponents.legend],
+      },
+      {
+        title: 'First Party Cookies',
+        count: cookieStats.firstParty.total,
+        data: [...cookiesStatsComponents.firstParty],
+      },
+      {
+        title: 'Third Party Cookies',
+        count: cookieStats.thirdParty.total,
+        data: [...cookiesStatsComponents.thirdParty],
+      },
+    ];
+    const { getByTestId } = render(<LandingHeader dataMapping={dataMapping} />);
 
     expect(getByTestId('cookies-landing-header')).toBeInTheDocument();
   });

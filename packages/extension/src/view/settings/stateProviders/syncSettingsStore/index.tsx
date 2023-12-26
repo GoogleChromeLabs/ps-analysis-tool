@@ -24,10 +24,30 @@ import React, {
   useCallback,
 } from 'react';
 import { noop } from '@ps-analysis-tool/design-system';
+import { CookieStore } from '../../../../localStore';
+
+enum PLATFORM_OS_MAP {
+  mac = 'MacOS',
+  win = 'Windows',
+  android = 'Android',
+  cros = 'Chrome OS',
+  linux = 'Linux',
+  openbsd = 'OpenBSD',
+  fuchsia = 'Fuchsia',
+}
 
 export interface SettingStoreContext {
   state: {
     allowedNumberOfTabs: string | null;
+    currentTabs: number;
+    currentExtensions:
+      | {
+          extensionName: string;
+          extensionId: string;
+        }[]
+      | null;
+    browserInformation: string | null;
+    OSInformation: string | null;
   };
   actions: {
     setSettingsInStorage: (key: string, value: string) => void;
@@ -37,6 +57,10 @@ export interface SettingStoreContext {
 const initialState: SettingStoreContext = {
   state: {
     allowedNumberOfTabs: null,
+    currentTabs: 0,
+    currentExtensions: null,
+    browserInformation: null,
+    OSInformation: null,
   },
   actions: {
     setSettingsInStorage: noop,
@@ -49,12 +73,54 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [allowedNumberOfTabs, setAllowedNumberOfTabs] = useState<string | null>(
     null
   );
+  const [currentTabs, setCurrentTabs] =
+    useState<SettingStoreContext['state']['currentTabs']>(0);
+  const [browserInformation, setBrowserInformation] = useState<string | null>(
+    null
+  );
+  const [currentExtensions, setCurrentExtensions] =
+    useState<SettingStoreContext['state']['currentExtensions']>(null);
+  const [OSInformation, setOSInformation] =
+    useState<SettingStoreContext['state']['OSInformation']>(null);
 
   const intitialSync = useCallback(async () => {
     const currentSettings = await chrome.storage.sync.get();
 
     setAllowedNumberOfTabs(currentSettings?.allowedNumberOfTabs);
+
+    chrome.tabs.query({}, (tabs) => {
+      setCurrentTabs(tabs.length);
+    });
+
+    chrome.management.getAll((extensions) => {
+      const extensionJSON = [];
+      // Iterate over the extensions
+      for (let i = 0; i < extensions.length; i++) {
+        if (extensions[i].enabled) {
+          extensionJSON.push({
+            extensionName: extensions[i].name,
+            extensionId: extensions[i].id,
+          });
+        }
+      }
+      setCurrentExtensions(extensionJSON);
+    });
+
+    chrome.runtime.getPlatformInfo((platfrom) => {
+      setOSInformation(`${PLATFORM_OS_MAP[platfrom.os]} (${platfrom.arch})`);
+    });
   }, []);
+
+  useEffect(() => {
+    if (navigator.userAgent) {
+      const browserInfo = /Chrome\/([0-9.]+)/.exec(navigator.userAgent);
+      if (browserInfo) {
+        setBrowserInformation(
+          'Version ' + browserInfo[1] + ' ' + OSInformation?.split(' ')[1]
+        );
+      }
+    }
+  }, [OSInformation]);
 
   const setSettingsInStorage = useCallback(
     async (key: string, value: string) => {
@@ -78,17 +144,25 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
         if (changes['allowedNumberOfTabs']?.newValue === 'single') {
           chrome.tabs.query({}, (tabs) => {
-            tabs.map((tab) => {
+            tabs.forEach((tab) => {
               chrome.action.setBadgeText({
                 tabId: tab?.id,
                 text: '',
               });
-
-              return tab;
             });
           });
 
           await chrome.storage.local.clear();
+        } else {
+          chrome.tabs.query({}, (tabs) => {
+            tabs.forEach(async (tab) => {
+              if (!tab.id) {
+                return;
+              }
+              await CookieStore.addTabData(tab.id?.toString());
+              await chrome.tabs.reload(tab?.id);
+            });
+          });
         }
       }
     },
@@ -109,6 +183,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
       value={{
         state: {
           allowedNumberOfTabs,
+          currentTabs,
+          currentExtensions,
+          browserInformation,
+          OSInformation,
         },
         actions: {
           setSettingsInStorage,

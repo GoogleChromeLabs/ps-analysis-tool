@@ -16,30 +16,54 @@
 /**
  * External dependencies.
  */
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback, useState } from 'react';
 import { Resizable } from 're-resizable';
-import { ExtensionReloadNotification } from '@ps-analysis-tool/design-system';
+import {
+  CookieIcon,
+  CookieIconWhite,
+  ExtensionReloadNotification,
+  Sidebar,
+  useSidebar,
+  type SidebarItems,
+  InspectButton,
+} from '@ps-analysis-tool/design-system';
+import type { CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import TABS from './tabs';
-import { Sidebar } from './components';
 import { useCookieStore } from './stateProviders/syncCookieStore';
 import './app.css';
+import { Cookies } from './components';
+import useFrameOverlay from './hooks/useFrameOverlay';
 
 const App: React.FC = () => {
-  const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
-  const [width, setWidth] = useState<number>(200);
+  const [sidebarWidth, setSidebarWidth] = useState(200);
+  const [sidebarData, setSidebarData] = useState(TABS);
   const contextInvalidatedRef = useRef(null);
-  const TabContent = TABS[selectedTabIndex].component;
 
-  const { contextInvalidated, setContextInvalidated } = useCookieStore(
-    ({ state, actions }) => ({
-      contextInvalidated: state.contextInvalidated,
-      setContextInvalidated: actions.setContextInvalidated,
-    })
-  );
+  const {
+    contextInvalidated,
+    setContextInvalidated,
+    tabFrames,
+    selectedFrame,
+    setSelectedFrame,
+    isInspecting,
+    setIsInspecting,
+    canStartInspecting,
+    tabUrl,
+  } = useCookieStore(({ state, actions }) => ({
+    contextInvalidated: state.contextInvalidated,
+    setContextInvalidated: actions.setContextInvalidated,
+    tabFrames: state.tabFrames,
+    selectedFrame: state.selectedFrame,
+    setSelectedFrame: actions.setSelectedFrame,
+    isInspecting: state.isInspecting,
+    setIsInspecting: actions.setIsInspecting,
+    canStartInspecting: state.canStartInspecting,
+    tabUrl: state.tabUrl,
+  }));
 
   const listenToMouseChange = useCallback(() => {
     if (contextInvalidatedRef.current) {
@@ -57,6 +81,140 @@ const App: React.FC = () => {
     };
   }, [listenToMouseChange]);
 
+  const [defaultSelectedItemKey, setDefaultSelectedItemKey] =
+    useState('privacySandbox');
+
+  useEffect(() => {
+    (async () => {
+      const tabId = chrome.devtools.inspectedWindow.tabId.toString();
+
+      const data = await chrome.storage.local.get();
+
+      if (data?.[tabId]?.['selectedSidebarItem']) {
+        setDefaultSelectedItemKey(data[tabId]['selectedSidebarItem']);
+      }
+    })();
+  }, []);
+
+  const {
+    activePanel,
+    selectedItemKey,
+    currentItemKey,
+    sidebarItems,
+    isSidebarFocused,
+    setIsSidebarFocused,
+    updateSelectedItemKey,
+    onKeyNavigation,
+    toggleDropdown,
+    isKeyAncestor,
+    isKeySelected,
+  } = useSidebar({
+    data: sidebarData,
+    defaultSelectedItemKey,
+  });
+
+  useEffect(() => {
+    setSidebarData((prev) => {
+      const data = { ...prev };
+      const psData = data['privacySandbox'];
+
+      psData.children['cookies'].panel = (
+        <Cookies setFilteredCookies={setFilteredCookies} />
+      );
+      psData.children['cookies'].children = Object.keys(tabFrames || {}).reduce(
+        (acc, url) => {
+          acc[url] = {
+            title: url,
+            popupTitle: `Cookies used by frames from ${url}`,
+            panel: <Cookies setFilteredCookies={setFilteredCookies} />,
+            icon: <CookieIcon />,
+            selectedIcon: <CookieIconWhite />,
+            children: {},
+          };
+
+          return acc;
+        },
+        {} as SidebarItems
+      );
+
+      const showInspectButton =
+        canStartInspecting && Boolean(Object.keys(tabFrames || {}).length);
+
+      if (showInspectButton) {
+        psData.children['cookies'].extraInterfaceToTitle = (
+          <InspectButton
+            isInspecting={isInspecting}
+            setIsInspecting={setIsInspecting}
+            isTabFocused={isSidebarFocused && isKeySelected('cookies')}
+          />
+        );
+      } else {
+        psData.children['cookies'].extraInterfaceToTitle = null;
+      }
+
+      return data;
+    });
+  }, [
+    canStartInspecting,
+    isInspecting,
+    isKeySelected,
+    isSidebarFocused,
+    setIsInspecting,
+    tabFrames,
+  ]);
+
+  useEffect(() => {
+    if (Object.keys(tabFrames || {}).includes(currentItemKey || '')) {
+      setSelectedFrame(currentItemKey);
+    } else {
+      setSelectedFrame(null);
+    }
+  }, [currentItemKey, setSelectedFrame, tabFrames]);
+
+  useEffect(() => {
+    (async () => {
+      const tabId = chrome.devtools.inspectedWindow.tabId.toString();
+
+      const data = await chrome.storage.local.get();
+
+      if (!data?.[tabId]) {
+        data[tabId] = {};
+      }
+
+      if (!data[tabId]?.['selectedSidebarItem']) {
+        data[tabId]['selectedSidebarItem'] = 'cookies';
+      }
+
+      data[tabId]['selectedSidebarItem'] = selectedItemKey;
+
+      await chrome.storage.local.set(data);
+    })();
+  }, [selectedItemKey]);
+
+  const lastUrl = useRef(tabUrl);
+
+  useEffect(() => {
+    if (lastUrl.current === tabUrl || lastUrl.current === null) {
+      lastUrl.current = tabUrl;
+      return;
+    }
+
+    lastUrl.current = tabUrl;
+
+    updateSelectedItemKey(selectedFrame || 'cookies');
+  }, [selectedFrame, tabUrl, updateSelectedItemKey]);
+
+  const [filteredCookies, setFilteredCookies] = useState<CookieTableData[]>([]);
+
+  const handleUpdate = useCallback(
+    (key: string | null) => {
+      updateSelectedItemKey(key || 'cookies');
+    },
+    [updateSelectedItemKey]
+  );
+
+  useFrameOverlay(filteredCookies, handleUpdate);
+
   return (
     <div
       className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black"
@@ -70,35 +228,33 @@ const App: React.FC = () => {
       {!contextInvalidated && (
         <div className="w-full h-full flex flex-row">
           <Resizable
-            size={{ width: width, height: '100%' }}
+            size={{ width: sidebarWidth, height: '100%' }}
             defaultSize={{ width: '200px', height: '100%' }}
             onResizeStop={(_, __, ___, d) => {
-              setWidth((prevState) => prevState + d.width);
+              setSidebarWidth((prevState) => prevState + d.width);
             }}
-            minWidth={'200px'}
-            maxWidth={'98%'}
+            minWidth={'150px'}
+            maxWidth={'90%'}
             enable={{
-              top: false,
               right: true,
-              bottom: false,
-              left: false,
-              topRight: false,
-              bottomRight: false,
-              bottomLeft: false,
-              topLeft: false,
             }}
-            className="h-full flex flex-col border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz"
+            className="h-full"
           >
             <Sidebar
-              width={width}
-              selectedIndex={selectedTabIndex}
-              setIndex={setSelectedTabIndex}
+              selectedItemKey={selectedItemKey}
+              sidebarItems={sidebarItems}
+              isSidebarFocused={isSidebarFocused}
+              setIsSidebarFocused={setIsSidebarFocused}
+              updateSelectedItemKey={updateSelectedItemKey}
+              onKeyNavigation={onKeyNavigation}
+              toggleDropdown={toggleDropdown}
+              isKeyAncestor={isKeyAncestor}
+              isKeySelected={isKeySelected}
+              visibleWidth={sidebarWidth}
             />
           </Resizable>
           <main className="h-full flex-1 overflow-auto">
-            <div className="min-w-[20rem] h-full">
-              <TabContent />
-            </div>
+            <div className="min-w-[40rem] h-full">{activePanel}</div>
           </main>
         </div>
       )}

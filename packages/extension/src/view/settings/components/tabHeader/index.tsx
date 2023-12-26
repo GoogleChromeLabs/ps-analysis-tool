@@ -32,19 +32,19 @@ const TabHeader = ({
 }: TabHeaderProps) => {
   return (
     <div className="w-full h-full flex flex-row gap-1">
-      <ul>
-        {tabs.map((tab, index) => (
-          <li
-            onClick={() => setSelectedTabIndex(index)}
-            key={tab}
-            className={`text-xl ${
-              index === selectedTabIndex ? 'border-b border-color-black' : ''
-            }`}
-          >
-            {tab}
-          </li>
-        ))}
-      </ul>
+      {tabs.map((tab, index) => (
+        <div
+          onClick={() => setSelectedTabIndex(index)}
+          key={tab}
+          className={`text-xl cursor-pointer px-2 border ${
+            index === selectedTabIndex
+              ? 'border-black border-b-white'
+              : 'border-white'
+          }`}
+        >
+          {tab}
+        </div>
+      ))}
     </div>
   );
 };

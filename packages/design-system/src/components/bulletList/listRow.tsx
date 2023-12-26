@@ -40,7 +40,7 @@ const ListRow = ({ row }: Props) => {
           href={row.link}
           target="_blank"
           rel="noreferrer"
-          className="text-sm text-analytics font-medium leading-6 dark:text-medium-persian-blue"
+          className="text-sm text-bright-navy-blue dark:text-jordy-blue font-medium leading-6"
         >
           {row.title}
         </a>

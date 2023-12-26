@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies
+ * External dependencies
  */
 import type { CookieTableData } from '@ps-analysis-tool/common';
 
@@ -46,7 +46,7 @@ export const frameFilteredCookies: { [key: string]: CookieTableData } = {
         '|_SVI_EMmpku6Lz4ADGBAiP01BRURIZl9xZWR4OHp5aUhCQ1h5RnVzcXFlb1NPUUVQeXVPZGlSTjBLeXdLMnRMOGpfd3JQZDk0STh3ZWJVNA_:|28192806:3705',
     },
     url: 'https://accounts.google.com/gsi/status?client_id=549796576131-8aoqmiheqf84a8bh3dl10ec2kp2v6e7p.apps.googleusercontent.com&as=ujHsjnl%2BJlozSZHE2Z6o2A',
-    isCookieSet: true,
+    isBlocked: true,
   },
   NID: {
     analytics: {
@@ -76,7 +76,7 @@ export const frameFilteredCookies: { [key: string]: CookieTableData } = {
         '511=Wrres5z7l_wUKKUzHhf2KIqAnj6papQrcGn1F12gPxd2SdxEGS-567t-hT7Yuzb8tJsENk8pT_9xCJ1UMPLbXKQk4mPUCtMp7VeFXp0yi8t0xPMvqgfUKKBpQwV8XmrveNPPwLmwxriIpyicaBYoJ-ZzfHvqnCZDya9rU_s_JwGk5JvIDTqIEYVQKzKJDyFQjiAINLhRFCmWOTWF7X3C3mYKVaUQrT4JLhZRAGEoj4Qz_ig5MbxpLB372-PjFrNofa5FvfmYWn3uBEFYm0UvAqhhyOcsND5eAf_iYYWufJAVGReSyfWZ0spF25g4TS-pUdU8l3zDJC-7',
     },
     url: 'https://www.google.com/recaptcha/api2/anchor?ar=1&k=6Le6JpwaAAAAAFkASVap1OUThl-lQSJC0r9kLl2I&co=aHR0cHM6Ly9ydGNhbXAuY29tOjQ0Mw..&hl=en&v=QybaJej5brGL8d7EvWmfKMZU&theme=light&size=invisible&badge=bottomright&cb=hztbhk44za6a',
-    isCookieSet: true,
+    isBlocked: true,
   },
   _ga: {
     analytics: {
@@ -105,7 +105,7 @@ export const frameFilteredCookies: { [key: string]: CookieTableData } = {
       value: 'GA1.1.2118227284.1688917659',
     },
     url: 'https://rtcamp.com/wp-content/mu-plugins/jetpack-12.4/css/jetpack.css?ver=12.4',
-    isCookieSet: true,
+    isBlocked: true,
   },
   _ga_7HKDVLRRV4: {
     analytics: {
@@ -134,7 +134,7 @@ export const frameFilteredCookies: { [key: string]: CookieTableData } = {
       value: 'GS1.1.1692264828.19.1.1692264924.55.0.0',
     },
     url: 'https://rtcamp.com/wp-content/mu-plugins/jetpack-12.4/css/jetpack.css?ver=12.4',
-    isCookieSet: true,
+    isBlocked: true,
   },
   _parsely_session: {
     analytics: {
@@ -163,7 +163,7 @@ export const frameFilteredCookies: { [key: string]: CookieTableData } = {
         '{%22sid%22:8%2C%22surl%22:%22https://rtcamp.com/%22%2C%22sref%22:%22%22%2C%22sts%22:1692264828254%2C%22slts%22:1692261902478}',
     },
     url: 'https://rtcamp.com/wp-content/mu-plugins/jetpack-12.4/css/jetpack.css?ver=12.4',
-    isCookieSet: false,
+    isBlocked: false,
   },
   _parsely_session_expiry: {
     analytics: {
@@ -182,7 +182,7 @@ export const frameFilteredCookies: { [key: string]: CookieTableData } = {
     isFirstParty: true,
     parsedCookie: {
       domain: '.rtcamp.com',
-      expires: 0,
+      expires: 'Session',
       httponly: false,
       name: '_parsely_session_expiry',
       path: '/',
@@ -192,6 +192,6 @@ export const frameFilteredCookies: { [key: string]: CookieTableData } = {
         '{%22sid%22:8%2C%22surl%22:%22https://rtcamp.com/%22%2C%22sref%22:%22%22%2C%22sts%22:1692264828254%2C%22slts%22:1692261902478}',
     },
     url: 'https://rtcamp.com/wp-content/mu-plugins/jetpack-12.4/css/jetpack.css?ver=12.4',
-    isCookieSet: false,
+    isBlocked: false,
   },
 };

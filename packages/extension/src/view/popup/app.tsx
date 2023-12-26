@@ -18,11 +18,11 @@
  * External dependencies.
  */
 import React from 'react';
-import { prepareCookieStatsComponents } from '@ps-analysis-tool/common';
 import {
   Button,
   CirclePieChart,
   ProgressBar,
+  prepareCookieStatsComponents,
 } from '@ps-analysis-tool/design-system';
 
 /**
@@ -54,12 +54,12 @@ const App: React.FC = () => {
 
   if (onChromeUrl) {
     return (
-      <div className="w-96 min-h-[318px] h-fit p-5 flex justify-center items-center flex-col">
+      <>
         <p className="font-bold text-lg mb-2">Not much to analyze here</p>
         <p className="text-chart-label text-xs">
           Its emptier than a cookie jar after a midnight snack! 🌌
         </p>
-      </div>
+      </>
     );
   }
 
@@ -80,14 +80,14 @@ const App: React.FC = () => {
     allowedNumberOfTabs !== 'unlimited'
   ) {
     return (
-      <div className="w-96 min-h-[20rem] flex flex-col items-center justify-center">
+      <>
         {!returningToSingleTab && (
           <p className="dark:text-bright-gray text-chart-label text-base mb-5 text-center">
             This tool works best with a single tab for cookie analysis.
           </p>
         )}
         <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
-      </div>
+      </>
     );
   }
 
@@ -96,18 +96,18 @@ const App: React.FC = () => {
     (cookieStats?.firstParty.total === 0 && cookieStats?.thirdParty.total === 0)
   ) {
     return (
-      <div className="w-96 min-h-[318px] h-fit p-5 flex justify-center items-center flex-col">
+      <>
         <p className="font-bold text-lg">No cookies found on this page</p>
         <p className="text-chart-label text-xs">
           Please try reloading the page
         </p>
-      </div>
+      </>
     );
   }
   const statsComponents = prepareCookieStatsComponents(cookieStats);
 
   return (
-    <div className="w-96 min-h-[318px] h-fit p-5 flex justify-center items-center flex-col">
+    <>
       <div className="w-full flex gap-x-6 justify-center border-b border-hex-gray pb-3.5">
         <div className="w-32 text-center">
           <CirclePieChart
@@ -132,7 +132,7 @@ const App: React.FC = () => {
           {'Inspect cookies in the "Privacy Sandbox" panel of DevTools'}
         </p>
       </div>
-    </div>
+    </>
   );
 };
 

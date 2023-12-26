@@ -32,16 +32,40 @@ const filterCookiesByFrame = (
   frameUrl: string | null
 ) => {
   const frameFilteredCookies: { [key: string]: CookieTableData } = {};
+  if (!cookies || !frameUrl || !tabFrames || !tabFrames[frameUrl]) {
+    return Object.values(frameFilteredCookies);
+  }
+  let tabFramesIDMap: number[] = [];
 
-  if (cookies && frameUrl && tabFrames && tabFrames[frameUrl]) {
+  Object.keys(tabFrames)?.forEach((url) => {
+    const frameIds = tabFrames[url].frameIds;
+
+    if (frameIds) {
+      tabFramesIDMap = [...new Set<number>([...frameIds, ...tabFramesIDMap])];
+    }
+  });
+
+  if (tabFrames[frameUrl].frameIds?.length === 0) {
     Object.entries(cookies).forEach(([key, cookie]) => {
-      tabFrames[frameUrl].frameIds?.forEach((frameId) => {
-        if (cookie.frameIdList?.includes(frameId)) {
-          frameFilteredCookies[key] = cookie;
+      let hasFrame = false;
+      cookie.frameIdList?.forEach((frameId) => {
+        if (tabFramesIDMap.includes(frameId as number)) {
+          hasFrame = true;
         }
       });
+      if (!hasFrame && cookie.frameIdList?.length > 0) {
+        frameFilteredCookies[key] = cookie;
+      }
     });
   }
+
+  Object.entries(cookies).forEach(([key, cookie]) => {
+    tabFrames[frameUrl].frameIds?.forEach((frameId) => {
+      if (cookie.frameIdList?.includes(frameId)) {
+        frameFilteredCookies[key] = cookie;
+      }
+    });
+  });
 
   return Object.values(frameFilteredCookies);
 };

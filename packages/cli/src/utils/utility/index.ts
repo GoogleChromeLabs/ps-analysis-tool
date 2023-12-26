@@ -156,8 +156,8 @@ export default class Utility {
   public static async askUserInput(
     message: string,
     options: object = {}
-  ): Promise<any> {
-    const userInput: any = await promptly.prompt(message, options);
+  ): Promise<string> {
+    const userInput: string = await promptly.prompt(message, options);
     return userInput;
   }
 

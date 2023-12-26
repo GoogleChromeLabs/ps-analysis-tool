@@ -15,15 +15,19 @@
  */
 export const QUICK_LINKS = [
   {
+    title: 'Learn more about PSAT',
+    link: 'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki',
+  },
+  {
+    title: 'Join the discussions',
+    link: 'https://github.com/GoogleChromeLabs/ps-analysis-tool/discussions',
+  },
+  {
     title: 'Report a bug',
     link: 'https://github.com/GoogleChromeLabs/ps-analysis-tool/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=',
   },
   {
     title: 'Report a breakage',
     link: 'https://github.com/GoogleChromeLabs/ps-analysis-tool/issues/new?assignees=&labels=&projects=&template=third-party-cookie-breakage-report.md&title=',
-  },
-  {
-    title: 'Join the discussions',
-    link: 'https://github.com/GoogleChromeLabs/ps-analysis-tool/discussions',
   },
 ];

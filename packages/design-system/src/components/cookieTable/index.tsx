@@ -17,23 +17,28 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
-import {
-  CookieTableData,
-  PreferenceDataValues,
-  SortingState,
-  getCookieKey,
-} from '@ps-analysis-tool/common';
+import { CookieTableData, getCookieKey } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import { Table, TableColumn, TableData, TableRow, useTable } from '../table';
-import { noop } from '../../utils';
+import {
+  Table,
+  TableColumn,
+  TableData,
+  TableFilter,
+  TableRow,
+  useTable,
+} from '../table';
 
 interface CookieTableProps {
-  tableColumns: TableColumn[];
   data: TableData[];
+  tableColumns: TableColumn[];
+  tableFilters?: TableFilter;
+  tableSearchKeys?: string[];
+  tablePersistentSettingsKey?: string;
   selectedFrame: string | null;
+  showTopBar?: boolean;
   selectedFrameCookie: {
     [frame: string]: CookieTableData | null;
   } | null;
@@ -42,27 +47,20 @@ interface CookieTableProps {
       [frame: string]: CookieTableData | null;
     } | null
   ) => void;
-  updatePreference?: (
-    key: string,
-    updater: (prevStatePreference: {
-      [key: string]: unknown;
-    }) => PreferenceDataValues
-  ) => void;
-  columnSorting?: SortingState[];
-  columnSizing?: Record<string, number>;
-  selectedColumns?: Record<string, boolean>;
+  extraInterfaceToTopBar?: React.ReactNode;
 }
 
 const CookieTable = ({
   tableColumns,
+  tableFilters,
+  tableSearchKeys,
+  tablePersistentSettingsKey,
   data: cookies,
+  showTopBar,
   selectedFrame,
   selectedFrameCookie,
   setSelectedFrameCookie,
-  updatePreference = noop,
-  columnSorting,
-  columnSizing,
-  selectedColumns,
+  extraInterfaceToTopBar,
 }: CookieTableProps) => {
   useEffect(() => {
     if (selectedFrame && selectedFrameCookie) {
@@ -94,20 +92,9 @@ const CookieTable = ({
   const table = useTable({
     tableColumns,
     data: cookies,
-    options: {
-      columnSizing:
-        columnSizing && Object.keys(columnSizing).length > 0
-          ? columnSizing
-          : undefined,
-      columnSorting:
-        columnSorting && columnSorting.length > 0
-          ? columnSorting[0]
-          : undefined,
-      selectedColumns:
-        selectedColumns && Object.keys(selectedColumns).length > 0
-          ? selectedColumns
-          : undefined,
-    },
+    tableFilterData: tableFilters,
+    tableSearchKeys,
+    tablePersistentSettingsKey,
   });
 
   useEffect(() => {
@@ -120,15 +107,18 @@ const CookieTable = ({
   return (
     <div className="flex-1 w-full h-full overflow-x-auto text-outer-space-crayola border-x border-american-silver dark:border-quartz">
       <Table
-        updatePreference={updatePreference}
         table={table}
+        showTopBar={showTopBar}
         selectedKey={
           selectedKey === null ? null : getCookieKey(selectedKey?.parsedCookie)
         }
         getRowObjectKey={(row: TableRow) =>
-          getCookieKey((row?.originalData as CookieTableData).parsedCookie)
+          getCookieKey(
+            (row?.originalData as CookieTableData).parsedCookie
+          ) as string
         }
         onRowClick={onRowClick}
+        extraInterfaceToTopBar={extraInterfaceToTopBar}
       />
     </div>
   );

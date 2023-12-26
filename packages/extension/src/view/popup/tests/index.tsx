@@ -35,7 +35,7 @@ const tabCookies = {
     headerType: 'response',
     frameIdList: [1],
     isFirstParty: true,
-    isCookieSet: true,
+    isBlocked: true,
   },
   pubsyncexp: {
     parsedCookie: 'pubsyncexp',
@@ -44,7 +44,7 @@ const tabCookies = {
     headerType: 'response',
     frameIdList: [1],
     isFirstParty: false,
-    isCookieSet: true,
+    isBlocked: true,
   },
   __qca: {
     parsedCookie: '__qca',
@@ -64,7 +64,7 @@ const tabCookies = {
     headerType: 'response',
     frameIdList: [1],
     isFirstParty: true,
-    isCookieSet: true,
+    isBlocked: true,
   },
   KRTBCOOKIE_290: {
     parsedCookie: 'KRTBCOOKIE_290',
@@ -84,7 +84,7 @@ const tabCookies = {
     headerType: 'response',
     frameIdList: [1],
     isFirstParty: false,
-    isCookieSet: true,
+    isBlocked: true,
   },
 };
 
@@ -123,6 +123,7 @@ describe('App', () => {
                   allowedNumberOfTabs: 'single',
                 });
               }),
+            set: () => Promise.resolve(),
             //@ts-ignore
             onChanged: {
               addListener: () => undefined,
@@ -220,6 +221,7 @@ describe('App', () => {
                   allowedNumberOfTabs: 'single',
                 });
               }),
+            set: () => Promise.resolve(),
             //@ts-ignore
             onChanged: {
               addListener: () => undefined,
@@ -304,6 +306,7 @@ describe('App', () => {
                   allowedNumberOfTabs: 'single',
                 });
               }),
+            set: () => Promise.resolve(),
             //@ts-ignore
             onChanged: {
               addListener: () => undefined,

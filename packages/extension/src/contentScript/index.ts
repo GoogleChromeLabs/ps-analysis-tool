@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 /**
+ * External dependencies
+ */
+import { noop } from '@ps-analysis-tool/common';
+import { computePosition, flip, shift } from '@floating-ui/core';
+import { autoUpdate, platform, arrow } from '@floating-ui/dom';
+/**
  * Internal dependencies.
  */
 import {
@@ -23,7 +29,6 @@ import {
   addOverlay,
   setOverlayPosition,
   addTooltip,
-  setTooltipPosition,
 } from './popovers';
 import type { ResponseType } from './types';
 import { CookieStore } from '../localStore';
@@ -41,37 +46,42 @@ import './style.css';
  */
 class WebpageContentScript {
   /**
-   * @property {chrome.runtime.Port | null} port - The connection port.
+   * Connection port
    */
   port: chrome.runtime.Port | null = null;
 
   /**
-   * @property {boolean} isInspecting - If true, the page is currently being inspected.
+   * Cleanup function that needs to run when tooltip is removed from the screen.
+   */
+  cleanup: () => void = noop;
+
+  /**
+   * If true, the page is currently being inspected.
    */
   isInspecting = false;
 
   /**
-   * @property {boolean} isHoveringOverPage - If true, the mouse is currently hovering over the page.
+   * If true, the mouse is currently hovering over the page.
    */
   isHoveringOverPage = false;
 
   /**
-   * @property {boolean} bodyHoverStateSent - Keeps track if the hover state message has been sent.
+   * Keeps track if the hover state message has been sent.
    */
   bodyHoverStateSent = false;
 
   /**
-   * @property {Array<() => void>} scrollEventListeners - Array of scroll event listeners.
+   * Array of scroll event listeners.
    */
   scrollEventListeners: Array<() => void> = [];
 
   /**
-   * @property {HTMLElement} docElement - Document element.
+   * Document element.
    */
   docElement: HTMLElement;
 
   /**
-   * @property {HTMLElement} hoveredFrame - Frame that is currently being hovered over.
+   * Frame that is currently being hovered over.
    */
   hoveredFrame: HTMLElement | null = null;
 
@@ -79,28 +89,28 @@ class WebpageContentScript {
    * Initialize.
    */
   constructor() {
-    this.handleHoverEvent = this.handleHoverEvent.bind(this);
-    this.abortInspection = this.abortInspection.bind(this);
-    this.onMessage = this.onMessage.bind(this);
-    this.onDisconnect = this.onDisconnect.bind(this);
-    this.handleMouseMove = this.handleMouseMove.bind(this);
     this.docElement = document.documentElement;
 
     this.listenToConnection();
     this.setTopics();
-
-    // Message once on initialize, to let the devtool know that content script has loaded.
-    if (chrome.runtime?.id) {
-      chrome.runtime.sendMessage({
-        setInPage: true,
-      });
-    }
   }
 
   /**
    * Listens for connection requests from devtool.
    */
   listenToConnection() {
+    // Message once on initialize, to let the devtool know that content script has loaded.
+    if (chrome.runtime?.id) {
+      chrome.runtime.sendMessage({
+        setInPage: true,
+      });
+    }
+    chrome.runtime.onMessage.addListener((message, sender, response) => {
+      if (message.status === 'set?') {
+        response({ setInPage: true });
+      }
+    });
+
     chrome.runtime.onConnect.addListener((port) => {
       if (port.name.startsWith(WEBPAGE_PORT_NAME)) {
         this.port = port;
@@ -114,6 +124,7 @@ class WebpageContentScript {
    * Adds event listeners to the document.
    */
   addEventListeners(): void {
+    window.addEventListener('unload', this.handleUnloadEvent);
     document.addEventListener('mouseover', this.handleHoverEvent);
     document.addEventListener('mouseout', this.handleHoverEvent);
     document.addEventListener('visibilitychange', this.handleMouseMove);
@@ -125,6 +136,7 @@ class WebpageContentScript {
    * Removes event listeners from the document.
    */
   removeEventListeners(): void {
+    window.removeEventListener('unload', this.handleUnloadEvent);
     document.removeEventListener('mouseover', this.handleHoverEvent);
     document.removeEventListener('mouseout', this.handleHoverEvent);
     document.removeEventListener('visibilitychange', this.handleMouseMove);
@@ -133,10 +145,21 @@ class WebpageContentScript {
   }
 
   /**
+   * Handle unload event
+   */
+  handleUnloadEvent(): void {
+    if (chrome.runtime?.id) {
+      chrome.runtime.sendMessage({
+        setInPage: false,
+      });
+    }
+  }
+
+  /**
    * Handles incoming messages from the connected port.
    * @param {ResponseType} response - The incoming message/response.
    */
-  onMessage(response: ResponseType) {
+  onMessage = (response: ResponseType) => {
     this.isInspecting = response.isInspecting;
 
     if (response.isInspecting) {
@@ -147,7 +170,7 @@ class WebpageContentScript {
     } else {
       this.abortInspection();
     }
-  }
+  };
 
   /**
    * Inserts overlay
@@ -156,6 +179,8 @@ class WebpageContentScript {
    */
   insertOverlay(frame: HTMLElement): HTMLElement | null {
     const overlay = addOverlay(frame);
+
+    setOverlayPosition(overlay, frame);
 
     const updatePosition = () => {
       if (isElementVisibleInViewport(frame, true)) {
@@ -188,23 +213,73 @@ class WebpageContentScript {
       numberOfVisibleFrames,
       numberOfHiddenFrames
     );
+    const arrowElement = document.getElementById('ps-content-tooltip-arrow');
+    if (
+      (frame?.tagName === 'BODY' || isFrameHidden(frame) || !frame) &&
+      arrowElement &&
+      tooltip
+    ) {
+      Object.assign(arrowElement.style, {
+        left: '20px',
+        top: '10px',
+        transform: 'rotate(45deg)',
+      });
+      Object.assign(tooltip.style, {
+        top: `${5 + window.scrollY}px`,
+      });
+      return tooltip;
+    }
+    if (
+      frame &&
+      (frame.tagName !== 'BODY' || !isFrameHidden(frame)) &&
+      tooltip &&
+      arrowElement
+    ) {
+      this.cleanup = autoUpdate(frame, tooltip, () => {
+        computePosition(frame, tooltip, {
+          platform: platform,
+          placement: 'top',
+          middleware: [
+            shift({
+              boundary: document.querySelector('body'),
+            }),
+            flip({
+              boundary: document.querySelector('body'),
+            }),
+            arrow({
+              element: arrowElement,
+            }),
+          ],
+        }).then(({ x, y, middlewareData, placement }) => {
+          Object.assign(tooltip.style, {
+            top: `${y}px`,
+            left: `${x}px`,
+          });
+          const side = placement.split('-')[0];
 
-    const isHiddenForFirstTime = frame ? !frame.clientWidth : false;
-    setTooltipPosition(
-      tooltip,
-      frame,
-      isHiddenForFirstTime,
-      response.selectedFrame
-    );
+          const staticSide = {
+            top: 'bottom',
+            right: 'left',
+            bottom: 'top',
+            left: 'right',
+          }[side];
 
-    const updatePosition = () => {
-      if (isElementVisibleInViewport(frame, true)) {
-        const isHidden = frame ? !frame.clientWidth : false;
-        setTooltipPosition(tooltip, frame, isHidden, response.selectedFrame);
-      }
-    };
+          if (middlewareData.arrow) {
+            const { x: arrowX, y: arrowY } = middlewareData.arrow;
 
-    this.addEventListerOnScroll(updatePosition);
+            Object.assign(arrowElement.style, {
+              left: arrowX ? `${arrowX - 15}px` : '',
+              top: arrowY ? `${arrowY}px` : '',
+              right: '',
+              bottom: '',
+              [staticSide as string]: `${arrowElement.offsetWidth / 2}px`,
+              transform: 'rotate(45deg)',
+            });
+          }
+          return tooltip;
+        });
+      });
+    }
 
     return tooltip;
   }
@@ -231,27 +306,29 @@ class WebpageContentScript {
       this.scrollEventListeners = [];
     }
 
+    this.cleanup();
+
     removeAllPopovers();
   }
 
   /**
    * Handles the port disconnection event.
    */
-  onDisconnect() {
+  onDisconnect = () => {
     this.port?.onMessage.removeListener(this.onMessage);
     this.port = null;
     this.abortInspection();
-  }
+  };
 
   /**
    * Abort inspection and removes all frame popovers and hover event listeners.
    */
-  abortInspection(): void {
+  abortInspection = (): void => {
     this.removeEventListeners();
     removeAllPopovers();
     toggleFrameHighlighting(false);
     this.isInspecting = false;
-  }
+  };
 
   /**
    * Insert popovers for all visible frames.
@@ -385,18 +462,13 @@ class WebpageContentScript {
 
     const firstToolTip = popoverElement['firstToolTip'];
     const frameWithTooltip = popoverElement['frameWithTooltip'];
-
     if (
       firstToolTip &&
       !this.isHoveringOverPage &&
       frameToScrollTo.clientWidth &&
-      !isElementVisibleInViewport(frameWithTooltip)
+      !isElementVisibleInViewport(firstToolTip)
     ) {
-      (firstToolTip as HTMLElement).scrollIntoView({
-        behavior: 'instant',
-        block: 'start',
-        inline: 'nearest',
-      });
+      (frameWithTooltip as HTMLElement).scrollIntoView();
     }
   }
 
@@ -405,7 +477,7 @@ class WebpageContentScript {
    * @param {MouseEvent} event - The mouse event triggered by user action.
    */
   // eslint-disable-next-line complexity
-  handleHoverEvent(event: MouseEvent): void {
+  handleHoverEvent = (event: MouseEvent) => {
     const target = event.target as HTMLElement;
     const isNonIframeElement = target.tagName !== 'IFRAME';
     const isTooltipElement =
@@ -494,13 +566,13 @@ class WebpageContentScript {
     } catch (error) {
       this.abortInspection();
     }
-  }
+  };
 
   /**
    * Toggle this.isHoveringOverPage state when mouse or visibility is changed.
    * @param {MouseEvent} event Mouse event.
    */
-  handleMouseMove(event: Event) {
+  handleMouseMove = (event: Event) => {
     if (event?.type === 'mouseenter') {
       this.isHoveringOverPage = true;
     } else if (event?.type === 'mouseleave') {
@@ -510,7 +582,7 @@ class WebpageContentScript {
     if (document.hidden) {
       this.isHoveringOverPage = false;
     }
-  }
+  };
 
   /**
    * Set topics to be used in the Topics landing page.

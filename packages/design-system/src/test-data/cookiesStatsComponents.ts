@@ -76,4 +76,18 @@ export default {
       color: '#EC7159',
     },
   ],
+  blocked: [
+    {
+      count: 4,
+      color: '#7D8471',
+    },
+  ],
+  blockedCookiesLegend: [
+    {
+      label: 'DomainMismatch',
+      count: 4,
+      color: '#7D8471',
+      countClassName: 'text-secureonly',
+    },
+  ],
 };

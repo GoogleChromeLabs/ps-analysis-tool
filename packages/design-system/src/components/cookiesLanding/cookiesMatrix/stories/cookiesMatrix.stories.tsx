@@ -46,7 +46,7 @@ export const Primary: StoryObj<typeof meta> = {
           domain: '.google.com',
         },
         url: 'https://www.google.com/recaptcha/api2/reload?k=6Le6JpwaAAAAAFkASVap1OUThl-lQSJC0r9kLl2I',
-        isCookieSet: false,
+        isBlocked: false,
       },
       _ga: {
         // @ts-ignore
@@ -59,7 +59,7 @@ export const Primary: StoryObj<typeof meta> = {
           domain: '.rtcamp.com',
         },
         url: 'https://rtcamp.com/',
-        isCookieSet: true,
+        isBlocked: true,
       },
     },
     cookiesStatsComponents: cookiesStatsComponents,

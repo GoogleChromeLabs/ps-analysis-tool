@@ -21,7 +21,7 @@ import { UNKNOWN_FRAME_KEY, type TabFrames } from '@ps-analysis-tool/common';
  */
 import CookiesListing from './cookiesListing';
 import { useContentStore } from '../../stateProviders/contentStore';
-import { reportDownloader } from '../../../utils/reportDownloader';
+import { genereateAndDownloadCSVReports } from '../../../utils/reportDownloader';
 import CookiesLandingContainer from './cookiesLandingContainer';
 
 interface CookiesTabProps {
@@ -38,12 +38,11 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
   const tabFrames = useMemo<TabFrames>(
     () =>
       Object.values(tabCookies).reduce((acc, cookie) => {
-        if (
-          cookie.frameUrl?.includes('http') ||
-          cookie.frameUrl === UNKNOWN_FRAME_KEY
-        ) {
-          acc[cookie.frameUrl] = {} as TabFrames[string];
-        }
+        (cookie.frameUrls as string[]).forEach((url) => {
+          if (url?.includes('http') || url === UNKNOWN_FRAME_KEY) {
+            acc[url] = {} as TabFrames[string];
+          }
+        });
         return acc;
       }, {} as TabFrames),
     [tabCookies]
@@ -52,7 +51,7 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
   const affectedCookies = useMemo(
     () =>
       Object.fromEntries(
-        Object.entries(tabCookies).filter(([, cookie]) => !cookie.isCookieSet)
+        Object.entries(tabCookies).filter(([, cookie]) => cookie.isBlocked)
       ),
     [tabCookies]
   );
@@ -61,16 +60,19 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
       return;
     }
     if (Array.isArray(completeJson)) {
-      reportDownloader(completeJson, selectedSite);
+      genereateAndDownloadCSVReports(completeJson, selectedSite);
     } else if (!Array.isArray(completeJson)) {
-      reportDownloader([completeJson]);
+      genereateAndDownloadCSVReports([completeJson]);
     }
   }, [completeJson, selectedSite]);
 
   return (
     <div className="w-full h-full flex items-center justify-center">
       {selectedFrameUrl ? (
-        <CookiesListing selectedFrameUrl={selectedFrameUrl} />
+        <CookiesListing
+          selectedFrameUrl={selectedFrameUrl}
+          selectedSite={selectedSite}
+        />
       ) : (
         <div className="flex flex-col h-full w-full">
           <CookiesLandingContainer

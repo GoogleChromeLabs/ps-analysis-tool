@@ -20,4 +20,6 @@ export interface ResponseType {
   isInspecting: boolean;
   isOnRWS?: boolean;
   removeAllFramePopovers?: boolean;
+  blockedCookies?: number;
+  blockedReasons?: string;
 }
