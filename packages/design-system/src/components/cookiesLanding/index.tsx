@@ -50,6 +50,7 @@ const CookiesLanding = ({
   associatedCookiesCount = null,
   showMessageBoxBody = true,
   showBlockedCookiesSection = false,
+  showHorizontalMatrix = false,
 }: CookiesLandingProps) => {
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
@@ -104,7 +105,7 @@ const CookiesLanding = ({
           componentData={cookiesStatsComponents.legend}
           tabFrames={tabFrames}
           showInfoIcon={showInfoIcon}
-          showHorizontalMatrix={false}
+          showHorizontalMatrix={showHorizontalMatrix}
           associatedCookiesCount={associatedCookiesCount}
         />
         {children && <div className="mt-8">{children}</div>}

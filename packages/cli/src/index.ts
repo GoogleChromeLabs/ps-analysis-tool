@@ -39,7 +39,6 @@ import { checkPortInUse } from './utils/checkPortInUse';
 events.EventEmitter.defaultMaxListeners = 15;
 
 const DELAY_TIME = 20000;
-
 const program = new Command();
 
 program
@@ -52,10 +51,16 @@ program
     '-p, --sitemap-path <value>',
     'Path to a sitmap saved in the file system'
   )
+  .option('-ul, --url-limit <value>', 'No of Urls to analyze')
   .option(
     '-nh, --no-headless ',
     'Flag for running puppeteer in non headless mode'
-  );
+  )
+  .option(
+    '-np, --no-prompts',
+    'Flags for skipping all prompts. Default options will be used'
+  )
+  .option('-nt, --no-technology', 'Flags for skipping technology analysis.');
 
 program.parse();
 
@@ -77,7 +82,8 @@ const validateArgs = async (
   url: string,
   sitemapUrl: string,
   csvPath: string,
-  sitemapPath: string
+  sitemapPath: string,
+  numberOfUrls: string
 ) => {
   if (!url && !sitemapUrl && !csvPath && !sitemapPath) {
     console.log(
@@ -129,6 +135,13 @@ const validateArgs = async (
 
     if (parsedUrl === null) {
       console.log(`Provided Url ${parsedUrl} is not valid`);
+      process.exit(1);
+    }
+  }
+
+  if (numberOfUrls) {
+    if (isNaN(parseInt(numberOfUrls))) {
+      console.log(`${numberOfUrls} is not valid numeric value`);
       process.exit(1);
     }
   }
@@ -262,6 +275,7 @@ const getUrlListFromArgs = async (
   return urls;
 };
 
+// eslint-disable-next-line complexity
 (async () => {
   await initialize();
 
@@ -269,9 +283,12 @@ const getUrlListFromArgs = async (
   const sitemapUrl = program.opts().sitemapUrl;
   const csvPath = program.opts().csvPath;
   const sitemapPath = program.opts().sitemapPath;
+  const numberOfUrlsInput = program.opts().urlLimit;
   const isHeadless = Boolean(program.opts().headless);
+  const shouldSkipPrompts = !program.opts().prompts;
+  const shouldSkipTechnologyAnalysis = !program.opts().technology;
 
-  validateArgs(url, sitemapUrl, csvPath, sitemapPath);
+  validateArgs(url, sitemapUrl, csvPath, sitemapPath, numberOfUrlsInput);
 
   const prefix =
     url || sitemapUrl
@@ -292,19 +309,29 @@ const getUrlListFromArgs = async (
   let urlsToProcess: string[] = [];
 
   if (sitemapUrl || csvPath || sitemapPath) {
-    const userInput = await Utility.askUserInput(
-      `Provided ${sitemapUrl || sitemapPath ? 'Sitemap' : 'CSV file'} has ${
-        urls.length
-      } pages. Please enter the number of pages you want to analyze (Default ${
-        urls.length
-      }):`,
-      { default: urls.length.toString() }
-    );
-    let numberOfUrls: number = isNaN(userInput)
-      ? urls.length
-      : parseInt(userInput);
+    let numberOfUrls: number | null = null;
+    let userInput: string | null = null;
 
-    numberOfUrls = numberOfUrls < urls.length ? numberOfUrls : urls.length;
+    if (!shouldSkipPrompts && !numberOfUrlsInput) {
+      userInput = await Utility.askUserInput(
+        `Provided ${sitemapUrl || sitemapPath ? 'Sitemap' : 'CSV file'} has ${
+          urls.length
+        } pages. Please enter the number of pages you want to analyze (Default ${
+          urls.length
+        }):`,
+        { default: urls.length.toString() }
+      );
+      numberOfUrls =
+        userInput && isNaN(parseInt(userInput))
+          ? urls.length
+          : parseInt(userInput);
+    } else if (numberOfUrlsInput) {
+      console.log(`Analysing ${numberOfUrlsInput} urls.`);
+      numberOfUrls = parseInt(numberOfUrlsInput);
+    } else {
+      console.log(`Analysing all ${urls.length} urls.`);
+      numberOfUrls = urls.length;
+    }
 
     urlsToProcess = urlsToProcess.concat(urls.splice(0, numberOfUrls));
   } else if (url) {
@@ -329,24 +356,29 @@ const getUrlListFromArgs = async (
   spinnies.succeed('cookie-spinner', {
     text: 'Done analyzing cookies.',
   });
-  spinnies.add('technology-spinner', {
-    text: 'Analysing technologies',
-  });
 
-  const technologyAnalysisData = await analyzeTechnologiesUrlsInBatches(
-    urlsToProcess,
-    3,
-    urlsToProcess.length !== 1 ? spinnies : undefined
-  );
+  let technologyAnalysisData: any = null;
 
-  spinnies.succeed('technology-spinner', {
-    text: 'Done analyzing technologies.',
-  });
+  if (!shouldSkipTechnologyAnalysis) {
+    spinnies.add('technology-spinner', {
+      text: 'Analysing technologies',
+    });
+
+    technologyAnalysisData = await analyzeTechnologiesUrlsInBatches(
+      urlsToProcess,
+      3,
+      urlsToProcess.length !== 1 ? spinnies : undefined
+    );
+
+    spinnies.succeed('technology-spinner', {
+      text: 'Done analyzing technologies.',
+    });
+  }
 
   const result = urlsToProcess.map((_url, ind) => {
     return {
       pageUrl: _url,
-      technologyData: technologyAnalysisData[ind],
+      technologyData: technologyAnalysisData ? technologyAnalysisData[ind] : [],
       cookieData: cookieAnalysisData[ind].cookieData,
     };
   });
