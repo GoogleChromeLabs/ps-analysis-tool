@@ -47,9 +47,13 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
         enableHiding: false,
       },
       {
-        header: 'Value',
-        accessorKey: 'parsedCookie.value',
-        cell: (info: InfoType) => info,
+        header: 'Scope',
+        accessorKey: 'isFirstParty',
+        cell: (info: InfoType) => (
+          <p className="truncate w-full">
+            {!info ? 'Third Party' : 'First Party'}
+          </p>
+        ),
       },
       {
         header: 'Domain',
@@ -57,37 +61,9 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
         cell: (info: InfoType) => info,
       },
       {
-        header: 'Path',
-        accessorKey: 'parsedCookie.path',
-        cell: (info: InfoType) => info,
-      },
-      {
-        header: 'Expires / Max-Age',
-        accessorKey: 'parsedCookie.expires',
-        cell: (info: InfoType) => (info ? info : 'Session'),
-      },
-      {
-        header: 'HttpOnly',
-        accessorKey: 'parsedCookie.httponly',
-        cell: (info: InfoType) => (
-          <p className="flex justify-center items-center">
-            {info ? <span className="font-serif">✓</span> : ''}
-          </p>
-        ),
-      },
-      {
         header: 'SameSite',
         accessorKey: 'parsedCookie.samesite',
         cell: (info: InfoType) => <span className="capitalize">{info}</span>,
-      },
-      {
-        header: 'Secure',
-        accessorKey: 'parsedCookie.secure',
-        cell: (info: InfoType) => (
-          <p className="flex justify-center items-center">
-            {info ? <span className="font-serif">✓</span> : ''}
-          </p>
-        ),
       },
       {
         header: 'Category',
@@ -100,13 +76,37 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
         cell: (info: InfoType) => info,
       },
       {
-        header: 'Scope',
-        accessorKey: 'isFirstParty',
+        header: 'HttpOnly',
+        accessorKey: 'parsedCookie.httponly',
         cell: (info: InfoType) => (
-          <p className="truncate w-full">
-            {!info ? 'Third Party' : 'First Party'}
+          <p className="flex justify-center items-center">
+            {info ? <span className="font-serif">✓</span> : ''}
           </p>
         ),
+      },
+      {
+        header: 'Secure',
+        accessorKey: 'parsedCookie.secure',
+        cell: (info: InfoType) => (
+          <p className="flex justify-center items-center">
+            {info ? <span className="font-serif">✓</span> : ''}
+          </p>
+        ),
+      },
+      {
+        header: 'Value',
+        accessorKey: 'parsedCookie.value',
+        cell: (info: InfoType) => info,
+      },
+      {
+        header: 'Path',
+        accessorKey: 'parsedCookie.path',
+        cell: (info: InfoType) => info,
+      },
+      {
+        header: 'Expires / Max-Age',
+        accessorKey: 'parsedCookie.expires',
+        cell: (info: InfoType) => (info ? info : 'Session'),
       },
     ],
     []
