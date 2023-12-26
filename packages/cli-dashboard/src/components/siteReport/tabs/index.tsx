@@ -20,8 +20,6 @@ import React from 'react';
 import {
   CookieIcon,
   CookieIconWhite,
-  SiteBoundariesIcon,
-  SiteBoundariesIconWhite,
   type SidebarItems,
 } from '@ps-analysis-tool/design-system';
 
@@ -31,12 +29,6 @@ const Tabs: SidebarItems = {
     children: {},
     icon: <CookieIcon />,
     selectedIcon: <CookieIconWhite />,
-  },
-  technologies: {
-    title: 'Technologies',
-    children: {},
-    icon: <SiteBoundariesIcon />,
-    selectedIcon: <SiteBoundariesIconWhite />,
   },
   'affected-cookies': {
     title: 'Affected Cookies',

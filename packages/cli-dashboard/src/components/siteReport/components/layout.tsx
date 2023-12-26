@@ -24,6 +24,8 @@ import {
   Sidebar,
   useSidebar,
   type SidebarItems,
+  SiteBoundariesIcon,
+  SiteBoundariesIconWhite,
 } from '@ps-analysis-tool/design-system';
 
 /**
@@ -42,9 +44,9 @@ interface LayoutProps {
 
 const Layout = ({ selectedSite }: LayoutProps) => {
   const [data, setData] = useState<SidebarItems>(TABS);
-  const { tabCookies, technologyData } = useContentStore(({ state }) => ({
+  const { tabCookies, technologies } = useContentStore(({ state }) => ({
     tabCookies: state.tabCookies,
-    technologyData: state.technologies,
+    technologies: state.technologies,
   }));
 
   const frameUrls = useMemo(
@@ -114,17 +116,21 @@ const Layout = ({ selectedSite }: LayoutProps) => {
         <SiteAffectedCookies selectedSite={selectedSite} />
       );
 
-      if (technologyData && technologyData.length > 0) {
-        _data['technologies'].panel = (
-          <Technologies selectedSite={selectedSite} />
-        );
+      if (technologies && technologies.length > 0) {
+        _data['technologies'] = {
+          title: 'Technologies',
+          children: {},
+          icon: <SiteBoundariesIcon />,
+          selectedIcon: <SiteBoundariesIconWhite />,
+          panel: <Technologies selectedSite={selectedSite} />,
+        };
       } else {
         delete _data['technologies'];
       }
 
       return _data;
     });
-  }, [frameUrls, selectedItemKey, selectedSite, technologyData]);
+  }, [frameUrls, selectedItemKey, selectedSite, technologies]);
 
   useEffect(() => {
     if (selectedItemKey === null) {
