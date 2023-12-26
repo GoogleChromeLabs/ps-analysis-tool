@@ -49,13 +49,18 @@ export const genereateAndDownloadCSVReports = (
   }
 
   const allCookiesCSV = generateAllCookiesCSV(siteAnalysisData);
-  const technologyDataCSV = generateTechnologyCSV(siteAnalysisData);
+  let technologyDataCSV = null;
+  if (siteAnalysisData.technologyData.length > 0) {
+    technologyDataCSV = generateTechnologyCSV(siteAnalysisData);
+  }
   const affectedCookiesDataCSV = generateAffectedCookiesCSV(siteAnalysisData);
   const summaryDataCSV = generateSummaryDataCSV(siteAnalysisData);
 
   const zip = new JSZip();
   zip.file('cookies.csv', allCookiesCSV);
-  zip.file('technologies.csv', technologyDataCSV);
+  if (technologyDataCSV) {
+    zip.file('technologies.csv', technologyDataCSV);
+  }
   zip.file('affected-cookies.csv', affectedCookiesDataCSV);
   zip.file('report.csv', summaryDataCSV);
   zip.file('report.json', JSON.stringify(JSONReport, null, 4));
