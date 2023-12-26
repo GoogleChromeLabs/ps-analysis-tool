@@ -25,16 +25,16 @@ import type { CompleteJson, CookieJsonDataType } from '../../../types';
 
 export const AFFECTED_COOKIES_DATA_HEADERS = [
   'Name',
-  'Value',
+  'Scope',
   'Domain',
+  'Same Site',
+  'Category',
+  'Platform',
+  'Http Only',
+  'Secure',
+  'Value',
   'Path',
   'Expires',
-  'Http Only',
-  'Scope',
-  'Secure',
-  'Same Site',
-  'Platform',
-  'Category',
   'GDPRPortal',
 ];
 
@@ -58,16 +58,16 @@ const generateAffectedCookiesCSV = (siteAnalysisData: CompleteJson): string => {
     //This should be in the same order as cookieDataHeader
     const recordsArray = [
       cookie.name,
-      cookie.value,
+      cookie.isFirstParty ? 'First Party' : 'Third Party',
       cookie.domain,
+      cookie.value,
+      cookie.sameSite,
+      cookie.category,
+      cookie.platform,
+      cookie.httpOnly ? 'Yes' : 'No',
+      cookie.secure ? 'Yes' : 'No',
       cookie.path,
       cookie.expires,
-      cookie.httpOnly ? 'Yes' : 'No',
-      cookie.isFirstParty ? 'First Party' : 'Third Party',
-      cookie.secure ? 'Yes' : 'No',
-      cookie.sameSite,
-      cookie.platform,
-      cookie.category,
       cookie.GDPR || 'NA',
     ].map(sanitizeCsvRecord);
 
