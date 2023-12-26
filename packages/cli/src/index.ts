@@ -51,6 +51,7 @@ program
     '-p, --sitemap-path <value>',
     'Path to a sitmap saved in the file system'
   )
+  .option('-ul, --url-limit <value>', 'No of Urls to analyze')
   .option(
     '-nh, --no-headless ',
     'Flag for running puppeteer in non headless mode'
@@ -81,7 +82,8 @@ const validateArgs = async (
   url: string,
   sitemapUrl: string,
   csvPath: string,
-  sitemapPath: string
+  sitemapPath: string,
+  numberOfUrls: string
 ) => {
   if (!url && !sitemapUrl && !csvPath && !sitemapPath) {
     console.log(
@@ -133,6 +135,13 @@ const validateArgs = async (
 
     if (parsedUrl === null) {
       console.log(`Provided Url ${parsedUrl} is not valid`);
+      process.exit(1);
+    }
+  }
+
+  if (numberOfUrls) {
+    if (isNaN(parseInt(numberOfUrls))) {
+      console.log(`${numberOfUrls} is not valid numeric value`);
       process.exit(1);
     }
   }
@@ -274,11 +283,12 @@ const getUrlListFromArgs = async (
   const sitemapUrl = program.opts().sitemapUrl;
   const csvPath = program.opts().csvPath;
   const sitemapPath = program.opts().sitemapPath;
+  const numberOfUrlsInput = program.opts().countUrls;
   const isHeadless = Boolean(program.opts().headless);
   const shouldSkipPrompts = !program.opts().prompts;
   const shouldSkipTechnologyAnalysis = !program.opts().technology;
 
-  validateArgs(url, sitemapUrl, csvPath, sitemapPath);
+  validateArgs(url, sitemapUrl, csvPath, sitemapPath, numberOfUrlsInput);
 
   const prefix =
     url || sitemapUrl
@@ -302,7 +312,7 @@ const getUrlListFromArgs = async (
     let numberOfUrls: number | null = null;
     let userInput: string | null = null;
 
-    if (!shouldSkipPrompts) {
+    if (!shouldSkipPrompts && !numberOfUrlsInput) {
       userInput = await Utility.askUserInput(
         `Provided ${sitemapUrl || sitemapPath ? 'Sitemap' : 'CSV file'} has ${
           urls.length
@@ -315,6 +325,9 @@ const getUrlListFromArgs = async (
         userInput && isNaN(parseInt(userInput))
           ? urls.length
           : parseInt(userInput);
+    } else if (numberOfUrlsInput) {
+      console.log(`Analysing ${numberOfUrlsInput} urls.`);
+      numberOfUrls = parseInt(numberOfUrlsInput);
     } else {
       console.log(`Analysing all ${urls.length} urls.`);
       numberOfUrls = urls.length;
