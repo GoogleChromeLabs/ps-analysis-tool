@@ -58,7 +58,8 @@ program
   .option(
     '-np, --no-prompts',
     'Flags for skipping all prompts. Default options will be used'
-  );
+  )
+  .option('-nt, --no-technology', 'Flags for skipping technology analysis.');
 
 program.parse();
 
@@ -275,6 +276,7 @@ const getUrlListFromArgs = async (
   const sitemapPath = program.opts().sitemapPath;
   const isHeadless = Boolean(program.opts().headless);
   const shouldSkipPrompts = !program.opts().prompts;
+  const shouldSkipTechnologyAnalysis = !program.opts().technology;
 
   validateArgs(url, sitemapUrl, csvPath, sitemapPath);
 
@@ -341,24 +343,29 @@ const getUrlListFromArgs = async (
   spinnies.succeed('cookie-spinner', {
     text: 'Done analyzing cookies.',
   });
-  spinnies.add('technology-spinner', {
-    text: 'Analysing technologies',
-  });
 
-  const technologyAnalysisData = await analyzeTechnologiesUrlsInBatches(
-    urlsToProcess,
-    3,
-    urlsToProcess.length !== 1 ? spinnies : undefined
-  );
+  let technologyAnalysisData: any = null;
 
-  spinnies.succeed('technology-spinner', {
-    text: 'Done analyzing technologies.',
-  });
+  if (!shouldSkipTechnologyAnalysis) {
+    spinnies.add('technology-spinner', {
+      text: 'Analysing technologies',
+    });
+
+    technologyAnalysisData = await analyzeTechnologiesUrlsInBatches(
+      urlsToProcess,
+      3,
+      urlsToProcess.length !== 1 ? spinnies : undefined
+    );
+
+    spinnies.succeed('technology-spinner', {
+      text: 'Done analyzing technologies.',
+    });
+  }
 
   const result = urlsToProcess.map((_url, ind) => {
     return {
       pageUrl: _url,
-      technologyData: technologyAnalysisData[ind],
+      technologyData: technologyAnalysisData ? technologyAnalysisData[ind] : [],
       cookieData: cookieAnalysisData[ind].cookieData,
     };
   });
