@@ -32,6 +32,8 @@ const Details = ({ selectedCookie }: DetailsProps) => {
   const [showUrlDecoded, setShowUrlDecoded] = useState(false);
   let blockedReasons = '';
   let warningReasons = '';
+  //Adding a comment here for future reference, this was done because we are using 2 different APIs to gather cookie data and often the isBlocked gets toggled between true and false.
+  //Adding this as a fallback prevents from showing wrong information regarding blocked cookies.
   const isCookieBlocked =
     selectedCookie?.isBlocked ||
     (selectedCookie?.blockedReasons &&
