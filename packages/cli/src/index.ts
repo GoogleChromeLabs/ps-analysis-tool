@@ -39,7 +39,6 @@ import { checkPortInUse } from './utils/checkPortInUse';
 events.EventEmitter.defaultMaxListeners = 15;
 
 const DELAY_TIME = 20000;
-
 const program = new Command();
 
 program
@@ -55,6 +54,10 @@ program
   .option(
     '-nh, --no-headless ',
     'Flag for running puppeteer in non headless mode'
+  )
+  .option(
+    '-np, --no-prompts',
+    'Flags for skipping all prompts. Default options will be used'
   );
 
 program.parse();
@@ -262,6 +265,7 @@ const getUrlListFromArgs = async (
   return urls;
 };
 
+// eslint-disable-next-line complexity
 (async () => {
   await initialize();
 
@@ -270,6 +274,7 @@ const getUrlListFromArgs = async (
   const csvPath = program.opts().csvPath;
   const sitemapPath = program.opts().sitemapPath;
   const isHeadless = Boolean(program.opts().headless);
+  const shouldSkipPrompts = !program.opts().prompts;
 
   validateArgs(url, sitemapUrl, csvPath, sitemapPath);
 
@@ -292,19 +297,26 @@ const getUrlListFromArgs = async (
   let urlsToProcess: string[] = [];
 
   if (sitemapUrl || csvPath || sitemapPath) {
-    const userInput = await Utility.askUserInput(
-      `Provided ${sitemapUrl || sitemapPath ? 'Sitemap' : 'CSV file'} has ${
-        urls.length
-      } pages. Please enter the number of pages you want to analyze (Default ${
-        urls.length
-      }):`,
-      { default: urls.length.toString() }
-    );
-    let numberOfUrls: number = isNaN(userInput)
-      ? urls.length
-      : parseInt(userInput);
+    let numberOfUrls: number | null = null;
+    let userInput: string | null = null;
 
-    numberOfUrls = numberOfUrls < urls.length ? numberOfUrls : urls.length;
+    if (!shouldSkipPrompts) {
+      userInput = await Utility.askUserInput(
+        `Provided ${sitemapUrl || sitemapPath ? 'Sitemap' : 'CSV file'} has ${
+          urls.length
+        } pages. Please enter the number of pages you want to analyze (Default ${
+          urls.length
+        }):`,
+        { default: urls.length.toString() }
+      );
+      numberOfUrls =
+        userInput && isNaN(parseInt(userInput))
+          ? urls.length
+          : parseInt(userInput);
+    } else {
+      console.log(`Analysing all ${urls.length} urls.`);
+      numberOfUrls = urls.length;
+    }
 
     urlsToProcess = urlsToProcess.concat(urls.splice(0, numberOfUrls));
   } else if (url) {
