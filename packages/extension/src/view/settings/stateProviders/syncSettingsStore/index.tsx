@@ -26,6 +26,11 @@ import React, {
 import { noop } from '@ps-analysis-tool/design-system';
 import { CookieStore } from '../../../../localStore';
 
+/**
+ * Internal dependencies.
+ */
+import { PLATFORM_OS } from './constants';
+
 export interface SettingStoreContext {
   state: {
     allowedNumberOfTabs: string | null;
@@ -95,16 +100,22 @@ export const Provider = ({ children }: PropsWithChildren) => {
       }
       setCurrentExtensions(extensionJSON);
     });
+
     chrome.runtime.getPlatformInfo((platfrom) => {
-      setOSInformation(`${platfrom.os} ${platfrom.arch}`);
+      setOSInformation(`${PLATFORM_OS[platfrom.os]} (${platfrom.arch})`);
     });
+  }, []);
+
+  useEffect(() => {
     if (navigator.userAgent) {
       const browserInfo = /Chrome\/([0-9.]+)/.exec(navigator.userAgent);
       if (browserInfo) {
-        setBrowserInformation(browserInfo[1]);
+        setBrowserInformation(
+          'Version ' + browserInfo[1] + ' ' + OSInformation?.split(' ')[1]
+        );
       }
     }
-  }, []);
+  }, [OSInformation]);
 
   const setSettingsInStorage = useCallback(
     async (key: string, value: string) => {

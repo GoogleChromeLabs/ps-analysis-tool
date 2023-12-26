@@ -54,7 +54,7 @@ const Information = () => {
 
   return (
     <div className="w-full h-ful">
-      <div className="relative w-fit h-fit flex flex-col gap-5 px-5 py-2 border rounded">
+      <div className="relative w-fit h-fit flex flex-col gap-5 px-5 py-2 border rounded text-raisin-black">
         <button
           disabled={copying}
           className="absolute right-1 top-1"
