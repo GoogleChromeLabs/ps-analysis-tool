@@ -21,9 +21,9 @@ import {
   calculateEffectiveExpiryDate,
   getCookieKey,
   type CookieData,
-  type NetworkCookie,
+  getDomainFromUrl,
 } from '@ps-analysis-tool/common';
-import { getDomain } from 'tldts';
+import type { Protocol } from 'devtools-protocol';
 
 /**
  * Internal dependencies.
@@ -35,18 +35,18 @@ import { findPreviousCookieDataObject } from './findPreviousCookieDataObject';
  * Create cookie object from cookieStore API cookie object, previously saved parsed cookie object if any, and recently captured request/response cookie header.
  * @param parsedCookie Parsed cookie object from request/response.
  * @param url URL of the cookie from the request/response.
- * @param {NetworkCookie[]} cookiesList List cookies from the request.
- * @returns {Promise<CookieData.parsedCookie>} Cookie object.
+ * @param {Protocol.Network.Cookie[]} cookiesList List cookies from the request.
+ * @returns {Promise<Protocol.Network.Cookie[]>} Cookie object.
  */
 export async function createCookieObject(
   parsedCookie: CookieData['parsedCookie'],
   url: string,
-  cookiesList: NetworkCookie[]
+  cookiesList: Protocol.Network.Cookie[]
 ) {
   const name = parsedCookie.name;
   const value = parsedCookie.value;
 
-  const cdpCookie = cookiesList?.find((cookie: NetworkCookie) => {
+  const cdpCookie = cookiesList?.find((cookie: Protocol.Network.Cookie) => {
     return cookie.name === name && cookie.value === value;
   });
 
@@ -163,12 +163,7 @@ function parseAttributeValues(
   switch (type) {
     case 'domain':
       if (url) {
-        let domain = getDomain(url);
-        if (domain) {
-          domain = domain.startsWith('.') ? domain : '.' + domain;
-        }
-
-        value = value || domain || '';
+        value = value || getDomainFromUrl(url);
       } else {
         value = value || '';
       }
