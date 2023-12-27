@@ -47,9 +47,9 @@ const TableBody = ({
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>, index: number) => {
-if (!['Meta', 'Control', 'c'].includes(event.key)) {
-  event.preventDefault();
-}
+      if (!['Meta', 'Control', 'c'].includes(event.key)) {
+        event.preventDefault();
+      }
       //@ts-ignore - the `children` property will be available on the `current` property.
       const currentRow = tableBodyRef.current?.children.namedItem(index);
       let newRowId: string | undefined;
