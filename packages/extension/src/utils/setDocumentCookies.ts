@@ -60,14 +60,12 @@ const processAndStoreDocumentCookies = async ({
 
       const parsedCookieData: CookieData[] = await Promise.all(
         documentCookies.map(async (singleCookie: string) => {
-          let [name] = singleCookie.split('=');
-          const [, ...rest] = singleCookie.split('=');
-          name = name.trim();
+          const [name, ...rest] = singleCookie.split('=');
           let analytics;
 
           const parsedCookie = await createCookieObject(
             {
-              name: name,
+              name: name.trim(),
               value: rest.join('='),
             },
             tabUrl,
