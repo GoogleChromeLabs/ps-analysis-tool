@@ -30,42 +30,53 @@ import {
   generateTechnologyCSV,
 } from './generateReports';
 
-export const genereateAndDownloadCSVReports = (
+export const genereateAndDownloadCSVReports = async (
   JSONReport: CompleteJson[],
-  selectedPageUrl?: string | null
+  selectedPageUrl?: string | null,
+  processAllPages?: boolean
 ) => {
-  if (!JSONReport) {
+  if (!JSONReport.length) {
     return;
   }
 
-  let siteAnalysisData: CompleteJson = JSONReport[0];
+  let siteAnalysisData: CompleteJson[];
 
   if (selectedPageUrl) {
-    siteAnalysisData = JSONReport.find(
-      ({ pageUrl }) => pageUrl === selectedPageUrl
-    ) as CompleteJson;
+    siteAnalysisData = [
+      JSONReport.find(({ pageUrl }) => pageUrl === selectedPageUrl),
+    ] as CompleteJson[];
+  } else if (processAllPages) {
+    siteAnalysisData = JSONReport;
   } else {
-    siteAnalysisData = JSONReport[0];
+    siteAnalysisData = [JSONReport[0]];
   }
-
-  const allCookiesCSV = generateAllCookiesCSV(siteAnalysisData);
-  let technologyDataCSV = null;
-  if (siteAnalysisData.technologyData.length > 0) {
-    technologyDataCSV = generateTechnologyCSV(siteAnalysisData);
-  }
-  const affectedCookiesDataCSV = generateAffectedCookiesCSV(siteAnalysisData);
-  const summaryDataCSV = generateSummaryDataCSV(siteAnalysisData);
 
   const zip = new JSZip();
-  zip.file('cookies.csv', allCookiesCSV);
-  if (technologyDataCSV) {
-    zip.file('technologies.csv', technologyDataCSV);
-  }
-  zip.file('affected-cookies.csv', affectedCookiesDataCSV);
-  zip.file('report.csv', summaryDataCSV);
-  zip.file('report.json', JSON.stringify(JSONReport, null, 4));
-  zip.generateAsync({ type: 'blob' }).then((content) => {
-    // see FileSaver.js
-    saveAs(content, 'report.zip');
+
+  siteAnalysisData.forEach((data) => {
+    const allCookiesCSV = generateAllCookiesCSV(data);
+    let technologyDataCSV = null;
+    if (data.technologyData.length > 0) {
+      technologyDataCSV = generateTechnologyCSV(data);
+    }
+    const affectedCookiesDataCSV = generateAffectedCookiesCSV(data);
+    const summaryDataCSV = generateSummaryDataCSV(data);
+
+    let folderName = data.pageUrl
+      .replace(/^https?:\/\//, '')
+      .replace(/\/+/g, '-');
+    zip.folder(folderName);
+    folderName = folderName + '/';
+
+    zip.file(folderName + 'cookies.csv', allCookiesCSV);
+    if (technologyDataCSV) {
+      zip.file(folderName + 'technologies.csv', technologyDataCSV);
+    }
+    zip.file(folderName + 'affected-cookies.csv', affectedCookiesDataCSV);
+    zip.file(folderName + 'report.csv', summaryDataCSV);
+    zip.file(folderName + 'report.json', JSON.stringify(JSONReport, null, 4));
   });
+
+  const content = await zip.generateAsync({ type: 'blob' });
+  saveAs(content, 'report.zip');
 };
