@@ -97,7 +97,8 @@ const CookiesMatrix = ({
         },
         {
           title: 'Number of Frames with Associated Cookies',
-          description: 'Unique frames that have cookies associated with them.',
+          description:
+            'Unique frames across the page(s) that have cookies associated with them.',
           count: associatedCookiesCount
             ? associatedCookiesCount
             : framesWithCookies
