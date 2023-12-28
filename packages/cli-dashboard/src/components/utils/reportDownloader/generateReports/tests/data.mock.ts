@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import type { CompleteJson } from '../../../../types';
+import type { CompleteJson } from '../../../../../types';
 
 export const mockData1: CompleteJson = {
   pageUrl: 'https://edition.cnn.com/',
