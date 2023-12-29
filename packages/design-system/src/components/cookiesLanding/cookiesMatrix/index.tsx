@@ -91,13 +91,14 @@ const CookiesMatrix = ({
     : [
         {
           title: 'Number of Frames',
-          description: 'Number of frames found on the page.',
+          description: 'Number of unique frames found across the page(s).',
           count: totalFrames,
           expand: isExpanded,
         },
         {
           title: 'Number of Frames with Associated Cookies',
-          description: 'Frames that have cookies associated with them.',
+          description:
+            'Unique frames across the page(s) that have cookies associated with them.',
           count: associatedCookiesCount
             ? associatedCookiesCount
             : framesWithCookies
