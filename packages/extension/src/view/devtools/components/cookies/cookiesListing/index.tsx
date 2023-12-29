@@ -147,7 +147,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
       {
         header: 'Platform',
         accessorKey: 'analytics.platform',
-        cell: (info: InfoType) => info,
+        cell: (info: InfoType) => <span>{info ? info : 'Unknown'}</span>,
       },
       {
         header: 'HttpOnly',
