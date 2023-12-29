@@ -75,6 +75,21 @@ export class BrowserManagement {
     this.debugLog('browser intialized');
   }
 
+  async clickOnAcceptBanner(sitePage: Page) {
+    const acceptAllCookiesBanner = await sitePage.$(
+      'button[id="onetrust-accept-btn-handler"]'
+    );
+
+    if (acceptAllCookiesBanner) {
+      await acceptAllCookiesBanner.evaluate((button) => {
+        button.click();
+      });
+      this.debugLog('Found and accepted all cookies in GDPR banner');
+    } else {
+      this.debugLog('Couldnt find accept GDPR banner');
+    }
+  }
+
   async openPage(): Promise<Page> {
     if (!this.browser) {
       throw new Error('Browser not intialized');
@@ -91,6 +106,7 @@ export class BrowserManagement {
       deviceScaleFactor: 1,
     });
     this.debugLog('Page opened');
+
     return sitePage;
   }
 
@@ -108,7 +124,7 @@ export class BrowserManagement {
       );
       //ignore
     }
-
+    await this.clickOnAcceptBanner(page);
     await delay(this.pageWaitTime / 2);
 
     await page.evaluate(() => {
