@@ -77,7 +77,7 @@ export class BrowserManagement {
 
   async clickOnAcceptBanner(sitePage: Page) {
     const acceptAllCookiesBanner = await sitePage.$(
-      'button[id="onetrust-accept-btn-handler"]'
+      'button[id="onetrust-accept-btn-handler"], button[id="truste-consent-button"]'
     );
 
     if (acceptAllCookiesBanner) {
