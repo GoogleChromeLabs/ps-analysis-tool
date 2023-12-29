@@ -17,13 +17,18 @@
  * External dependencies.
  */
 import React from 'react';
-import { COLOR_MAP } from '@ps-analysis-tool/design-system';
+/**
+ * Internal dependencies
+ */
+import { COLOR_MAP } from '../../theme/colors';
 
 interface CircleEmptyProps {
   color?: string;
 }
 
-const CircleEmpty = ({ color = COLOR_MAP.mediumGray }: CircleEmptyProps) => (
+const CircleEmpty = ({
+  color = COLOR_MAP.mediumGray.color,
+}: CircleEmptyProps) => (
   <div
     className="w-2.5 h-2.5 flex-shrink-0 rounded-full border-2 border-solid"
     style={{ borderColor: color }}

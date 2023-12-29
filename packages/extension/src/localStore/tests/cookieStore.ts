@@ -23,7 +23,7 @@ import type { CookieData, Storage } from '../types';
 const cookieArray: CookieData[] = [
   {
     parsedCookie: {
-      expires: 0,
+      expires: 'Session',
       httponly: false,
       secure: true,
       path: '/',
@@ -31,16 +31,21 @@ const cookieArray: CookieData[] = [
       samesite: 'None',
       name: 'countryCode1',
       value: 'IN',
+      partitionKey: '',
+      priority: 'Medium',
     },
     frameIdList: [1],
     analytics: null,
     url: 'https://example.com',
     headerType: 'response',
     isFirstParty: false,
+    blockedReasons: [],
+    warningReasons: [],
+    isBlocked: false,
   },
   {
     parsedCookie: {
-      expires: 0,
+      expires: 'Session',
       httponly: false,
       secure: true,
       path: '/',
@@ -48,12 +53,17 @@ const cookieArray: CookieData[] = [
       samesite: 'None',
       name: 'countryCode2',
       value: 'IN',
+      partitionKey: '',
+      priority: 'Medium',
     },
     frameIdList: [1],
     analytics: null,
     url: 'https://example.com',
+    isBlocked: false,
     headerType: 'response',
     isFirstParty: false,
+    warningReasons: [],
+    blockedReasons: [],
   },
 ];
 

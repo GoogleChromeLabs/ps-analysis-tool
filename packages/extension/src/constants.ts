@@ -16,3 +16,31 @@
 export const ALLOWED_NUMBER_OF_TABS = 1;
 export const WEBPAGE_PORT_NAME = 'psat-webpage';
 export const DEVTOOL_PORT_NAME = 'psat-devtool';
+export const BLOCKED_REASON_LIST = [
+  'SecureOnly',
+  'DomainMismatch',
+  'NotOnPath',
+  'SameSiteStrict',
+  'SameSiteLax',
+  'SameSiteUnspecifiedTreatedAsLax',
+  'SameSiteNoneInsecure',
+  'UserPreferences',
+  'ThirdPartyPhaseout',
+  'ThirdPartyBlockedInFirstPartySet',
+  'InvalidDomain',
+  'UnknownError',
+  'SchemefulSameSiteStrict',
+  'SchemefulSameSiteLax',
+  'SchemefulSameSiteUnspecifiedTreatedAsLax',
+  'SamePartyFromCrossPartyContext',
+  'NameValuePairExceedsMaxSize',
+  'ExcludeSameSiteUnspecifiedTreatedAsLax',
+  'ExcludeSameSiteNoneInsecure',
+  'ExcludeSameSiteLax',
+  'ExcludeSameSiteStrict',
+  'ExcludeInvalidSameParty',
+  'ExcludeSamePartyCrossPartyContext',
+  'ExcludeDomainNonASCII',
+  'ExcludeThirdPartyCookieBlockedInFirstPartySet',
+  'ExcludeThirdPartyPhaseout',
+];

@@ -1,6 +1,6 @@
 {
   "name": "@ps-analysis-tool/design-system",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "A package for presentational components that are being used in multiple packages",
   "main": "./src/index.ts",
   "source":"./src/index.ts",
@@ -24,7 +24,9 @@
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
   "dependencies": {
-		"@ps-analysis-tool/common": "*"
+		"@ps-analysis-tool/common": "*",
+    "p-queue": "^7.3.4",
+		"use-context-selector": "^1.4.1"
   },
   "devDependencies": {
   }

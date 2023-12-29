@@ -17,7 +17,10 @@
  * External dependencies.
  */
 import type { Meta, StoryObj } from '@storybook/react';
-import { COLOR_MAP } from '@ps-analysis-tool/design-system';
+/**
+ * Internal dependencies
+ */
+import { COLOR_MAP } from '../../../theme/colors';
 
 /**
  * Internal dependencies.
@@ -34,6 +37,6 @@ export default meta;
 
 export const Primary: StoryObj<typeof meta> = {
   args: {
-    color: COLOR_MAP.functional,
+    color: COLOR_MAP.functional.color,
   },
 };

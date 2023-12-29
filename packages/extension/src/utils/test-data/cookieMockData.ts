@@ -17,12 +17,11 @@
  * External dependencies.
  */
 import { type Cookie as ParsedCookie } from 'simple-cookie';
-
+import { emptyAnalytics } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
 import type { CookieStoreContext } from '../../view/devtools/stateProviders/syncCookieStore';
-import { emptyAnalytics } from '../../serviceWorker/findAnalyticsMatch';
 
 const emptyCookie = {
   name: '',
@@ -83,7 +82,7 @@ const data: {
       url: 'https://edition.cnn.com/whatever/api',
       headerType: 'response',
       isFirstParty: true,
-      isCookieSet: true,
+      isBlocked: false,
       frameIdList: [1],
     },
     [uncategorized3pCookie.name]: {
@@ -92,7 +91,7 @@ const data: {
       url: 'https://api.pubmatic.com/whatever/api',
       headerType: 'response',
       isFirstParty: false,
-      isCookieSet: true,
+      isBlocked: false,
       frameIdList: [1],
     },
     [known1pCookie.name]: {
@@ -112,7 +111,7 @@ const data: {
       url: 'https://edition.cnn.com/whatever/api',
       headerType: 'response',
       isFirstParty: true,
-      isCookieSet: true,
+      isBlocked: false,
       frameIdList: [1],
     },
     [known3pCookie.name]: {
@@ -132,7 +131,7 @@ const data: {
       url: 'https://api.pubmatic.com/whatever/api',
       headerType: 'response',
       isFirstParty: false,
-      isCookieSet: true,
+      isBlocked: false,
       frameIdList: [1],
     },
     [known3pCookieWithValue.name]: {
@@ -152,7 +151,7 @@ const data: {
       url: 'https://api.pubmatic.com/whatever/api',
       headerType: 'response',
       isFirstParty: false,
-      isCookieSet: true,
+      isBlocked: false,
       frameIdList: [1],
     },
   },

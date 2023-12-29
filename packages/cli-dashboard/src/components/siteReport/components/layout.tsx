@@ -16,73 +16,160 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Resizable } from 're-resizable';
+import {
+  CookieIcon,
+  CookieIconWhite,
+  Sidebar,
+  useSidebar,
+  type SidebarItems,
+  SiteBoundariesIcon,
+  SiteBoundariesIconWhite,
+} from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
 import { useContentStore } from '../stateProviders/contentStore';
 import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
-import { TABS } from '../tabs';
-import Sidebar from './sidebar';
+import TABS from '../tabs';
+import CookiesTab from '../tabs/cookies';
+import SiteAffectedCookies from '../tabs/siteAffectedCookies';
+import Technologies from '../tabs/technologies';
 
 interface LayoutProps {
-  selectedSite?: string;
+  selectedSite: string | null;
 }
 
 const Layout = ({ selectedSite }: LayoutProps) => {
-  const { frameUrls } = useContentStore(({ state }) => ({
-    frameUrls: [
+  const [data, setData] = useState<SidebarItems>(TABS);
+  const { tabCookies, technologies } = useContentStore(({ state }) => ({
+    tabCookies: state.tabCookies,
+    technologies: state.technologies,
+  }));
+
+  const frameUrls = useMemo(
+    () => [
       ...new Set(
-        Object.values(state.tabCookies)
-          .map((cookie) => cookie.frameUrl)
+        Object.values(tabCookies)
+          .reduce((acc, cookie) => {
+            acc.push(...(cookie.frameUrls as string[]));
+            return acc;
+          }, [] as string[])
           .filter(
             (url) => url?.includes('http') || url === UNKNOWN_FRAME_KEY
           ) as string[]
       ),
     ],
-  }));
+    [tabCookies]
+  );
 
-  const [selectedSidebarOptionInd, setSelectedSidebarOptionInd] =
-    useState<number>(0);
+  const {
+    activePanel,
+    selectedItemKey,
+    sidebarItems,
+    isSidebarFocused,
+    setIsSidebarFocused,
+    updateSelectedItemKey,
+    onKeyNavigation,
+    toggleDropdown,
+    isKeyAncestor,
+    isKeySelected,
+  } = useSidebar({ data });
 
-  const [selectedFrameUrl, setSelectedFrameUrl] = useState<string | null>(null);
+  useEffect(() => {
+    setData((prev) => {
+      const _data = { ...prev };
 
-  const TabComponent = TABS[selectedSidebarOptionInd].component;
+      const keys = selectedItemKey?.split('#') ?? [];
+
+      _data['cookies'].panel = (
+        <CookiesTab selectedFrameUrl={null} selectedSite={selectedSite} />
+      );
+
+      const selectedFrameUrl = frameUrls.find(
+        (url) => url === keys[keys.length - 1]
+      );
+
+      _data['cookies'].children = frameUrls.reduce(
+        (acc: SidebarItems, url: string): SidebarItems => {
+          acc[url] = {
+            title: url,
+            panel: (
+              <CookiesTab
+                selectedFrameUrl={selectedFrameUrl}
+                selectedSite={selectedSite}
+              />
+            ),
+            children: {},
+            icon: <CookieIcon />,
+            selectedIcon: <CookieIconWhite />,
+          };
+
+          return acc;
+        },
+        {}
+      );
+
+      _data['affected-cookies'].panel = (
+        <SiteAffectedCookies selectedSite={selectedSite} />
+      );
+
+      if (technologies && technologies.length > 0) {
+        _data['technologies'] = {
+          title: 'Technologies',
+          children: {},
+          icon: <SiteBoundariesIcon />,
+          selectedIcon: <SiteBoundariesIconWhite />,
+          panel: <Technologies selectedSite={selectedSite} />,
+        };
+      } else {
+        delete _data['technologies'];
+      }
+
+      return _data;
+    });
+  }, [frameUrls, selectedItemKey, selectedSite, technologies]);
+
+  useEffect(() => {
+    if (selectedItemKey === null) {
+      updateSelectedItemKey('cookies');
+    }
+  }, [selectedItemKey, updateSelectedItemKey]);
+
+  const lastSelectedSite = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (selectedSite !== lastSelectedSite.current) {
+      updateSelectedItemKey('cookies');
+      lastSelectedSite.current = selectedSite;
+    }
+  }, [selectedSite, updateSelectedItemKey]);
 
   return (
     <div className="w-full h-full flex">
       <Resizable
         defaultSize={{ width: '200px', height: '100%' }}
         minWidth={'150px'}
-        maxWidth={'98%'}
+        maxWidth={'60%'}
         enable={{
-          top: false,
           right: true,
-          bottom: false,
-          left: false,
-          topRight: false,
-          bottomRight: false,
-          bottomLeft: false,
-          topLeft: false,
         }}
-        className="h-full flex flex-col border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz pt-1"
       >
         <Sidebar
-          selectedFrameUrl={selectedFrameUrl}
-          setSelectedFrameUrl={setSelectedFrameUrl}
-          frameUrls={frameUrls}
-          selectedIndex={selectedSidebarOptionInd}
-          setIndex={setSelectedSidebarOptionInd}
+          selectedItemKey={selectedItemKey}
+          sidebarItems={sidebarItems}
+          isSidebarFocused={isSidebarFocused}
+          setIsSidebarFocused={setIsSidebarFocused}
+          onKeyNavigation={onKeyNavigation}
+          updateSelectedItemKey={updateSelectedItemKey}
+          toggleDropdown={toggleDropdown}
+          isKeyAncestor={isKeyAncestor}
+          isKeySelected={isKeySelected}
         />
       </Resizable>
-      <div className="flex-1 max-h-screen overflow-auto">
-        <TabComponent
-          selectedFrameUrl={selectedFrameUrl}
-          selectedSite={selectedSite}
-        />
-      </div>
+      <div className="flex-1 max-h-screen overflow-auto">{activePanel}</div>
     </div>
   );
 };

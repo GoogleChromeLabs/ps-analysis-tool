@@ -21,9 +21,7 @@ const { join } = require('path');
 /** @type {import('jest').Config} */
 module.exports = {
   rootDir: '../',
-  transform: {
-    '^.+\\.[jt]sx?$': 'babel-jest',
-  },
+  transformIgnorePatterns: ['node_modules/(?!(p-queue|p-timeout))'],
   moduleNameMapper: {
     '^@ps-analysis-tool\\/(.*)': '<rootDir>/packages/$1/src/',
     '\\.svg': join(__dirname, '/svgMock.cjs'),
@@ -40,6 +38,7 @@ module.exports = {
     '<rootDir>/out',
     '<rootDir>/node_modules',
     '<rootDir>/tests',
+    '.mock.ts',
   ],
   coveragePathIgnorePatterns: [
     '<rootDir>/node_modules',

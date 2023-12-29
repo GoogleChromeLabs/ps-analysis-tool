@@ -17,13 +17,9 @@
  * External dependencies.
  */
 import React from 'react';
-import type {
-  CookieStatsComponents,
-  CookiesCount,
-} from '@ps-analysis-tool/common';
 import { CirclePieChart } from '@ps-analysis-tool/design-system';
 
-interface DataMapping {
+export interface DataMapping {
   title: string;
   count: number;
   data: {
@@ -33,35 +29,13 @@ interface DataMapping {
 }
 
 interface LandingHeaderProps {
-  cookieStats: CookiesCount;
-  cookiesStatsComponents: CookieStatsComponents;
+  dataMapping?: DataMapping[];
 }
 
-const LandingHeader = ({
-  cookieStats,
-  cookiesStatsComponents,
-}: LandingHeaderProps) => {
-  const dataMapping: DataMapping[] = [
-    {
-      title: 'Total cookies',
-      count: cookieStats.total,
-      data: cookiesStatsComponents.legend,
-    },
-    {
-      title: '1st party cookies',
-      count: cookieStats.firstParty.total,
-      data: cookiesStatsComponents.firstParty,
-    },
-    {
-      title: '3rd party cookies',
-      count: cookieStats.thirdParty.total,
-      data: cookiesStatsComponents.thirdParty,
-    },
-  ];
-
+const LandingHeader = ({ dataMapping = [] }: LandingHeaderProps) => {
   return (
     <div
-      className="flex justify-center border-b border-hex-gray pt-5 pb-5 dark:border-quartz"
+      className="flex justify-center border-t border-hex-gray pt-5 pb-5 dark:border-quartz"
       data-testid="cookies-landing-header"
     >
       <div className="lg:max-w-[729px] flex gap-9 px-4">

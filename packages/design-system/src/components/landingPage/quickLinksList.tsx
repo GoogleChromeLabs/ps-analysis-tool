@@ -80,9 +80,10 @@ const QuickLinksList = () => {
               href="https://privacysandbox.com/news/"
               target="_blank"
               rel="noreferrer"
-              className="leading-6 text-sm text-analytics dark:text-medium-persian-blue font-semibold px-3 border border-american-silver dark:border-quartz rounded inline-flex gap-2 items-center"
+              className="leading-6 text-sm text-bright-navy-blue dark:text-jordy-blue font-semibold px-3 border border-american-silver dark:border-quartz rounded inline-flex gap-2 items-center"
             >
-              View More <ChevronRight />
+              View More
+              <ChevronRight className="text-bright-navy-blue dark:text-jordy-blue" />
             </a>
           </div>
         </div>

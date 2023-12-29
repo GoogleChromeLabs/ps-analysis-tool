@@ -31,7 +31,9 @@ const root = document.getElementById('root');
 if (root) {
   createRoot(root).render(
     <ExternalStoreProvider>
-      <App />
+      <div className="w-96 min-h-[318px] h-full p-5 mt-4 flex justify-center items-center flex-col">
+        <App />
+      </div>
     </ExternalStoreProvider>
   );
 }

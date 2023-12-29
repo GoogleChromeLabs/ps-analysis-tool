@@ -17,9 +17,13 @@
 /**
  * External dependencies.
  */
-import { type Cookie as ParsedCookie } from 'simple-cookie';
-import { getDomain } from 'tldts';
-import { getCookieKey } from '@ps-analysis-tool/common';
+import {
+  calculateEffectiveExpiryDate,
+  getCookieKey,
+  type CookieData,
+  getDomainFromUrl,
+} from '@ps-analysis-tool/common';
+import type { Protocol } from 'devtools-protocol';
 
 /**
  * Internal dependencies.
@@ -31,15 +35,19 @@ import { findPreviousCookieDataObject } from './findPreviousCookieDataObject';
  * Create cookie object from cookieStore API cookie object, previously saved parsed cookie object if any, and recently captured request/response cookie header.
  * @param parsedCookie Parsed cookie object from request/response.
  * @param url URL of the cookie from the request/response.
- * @returns {Promise<{ParsedCookie}>} Cookie object.
+ * @param {Protocol.Network.Cookie[]} cookiesList List cookies from the request.
+ * @returns {Promise<Protocol.Network.Cookie[]>} Cookie object.
  */
 export async function createCookieObject(
-  parsedCookie: ParsedCookie,
-  url: string
+  parsedCookie: CookieData['parsedCookie'],
+  url: string,
+  cookiesList: Protocol.Network.Cookie[]
 ) {
-  const chromeStoreCookie = await chrome.cookies.get({
-    name: parsedCookie.name,
-    url,
+  const name = parsedCookie.name;
+  const value = parsedCookie.value;
+
+  const cdpCookie = cookiesList?.find((cookie: Protocol.Network.Cookie) => {
+    return cookie.name === name && cookie.value === value;
   });
 
   const prevParsedCookie = (
@@ -49,48 +57,70 @@ export async function createCookieObject(
     )
   )?.parsedCookie;
 
-  const name = parsedCookie.name;
-  const value = parsedCookie.value;
   const domain = parseAttributeValues(
     'domain',
     parsedCookie.domain,
-    chromeStoreCookie?.domain,
+    cdpCookie?.domain,
     prevParsedCookie?.domain,
     url
   );
+
   const path = parseAttributeValues(
     'path',
     parsedCookie.path,
-    chromeStoreCookie?.path,
+    cdpCookie?.path,
     prevParsedCookie?.path
   );
 
   const secure = parseAttributeValues(
     'secure',
     parsedCookie.secure,
-    chromeStoreCookie?.secure,
+    cdpCookie?.secure,
     prevParsedCookie?.secure
   );
 
   const httponly = parseAttributeValues(
     'httponly',
     parsedCookie.httponly,
-    chromeStoreCookie?.httpOnly,
+    cdpCookie?.httpOnly,
     prevParsedCookie?.httponly
   );
 
   const samesite = parseAttributeValues(
     'samesite',
     parsedCookie.samesite,
-    chromeStoreCookie?.sameSite,
+    cdpCookie?.sameSite,
     prevParsedCookie?.samesite
   );
 
   const expires = parseAttributeValues(
     'expires',
     parsedCookie.expires,
-    (chromeStoreCookie?.expirationDate || 0) * 1000,
+    (cdpCookie?.expires || 0) * 1000,
     prevParsedCookie?.expires
+  );
+
+  const partitionKey = parseAttributeValues(
+    'partitionKey',
+    parsedCookie?.partitionKey,
+    cdpCookie?.partitionKey,
+    prevParsedCookie?.partitionKey
+  );
+
+  const size = parseAttributeValues(
+    'size',
+    parsedCookie?.size,
+    cdpCookie?.size,
+    prevParsedCookie?.size,
+    '',
+    name + value
+  );
+
+  const priority = parseAttributeValues(
+    'priority',
+    parsedCookie?.priority,
+    cdpCookie?.priority,
+    prevParsedCookie?.priority
   );
 
   return {
@@ -102,7 +132,10 @@ export async function createCookieObject(
     httponly,
     samesite,
     expires,
-  } as ParsedCookie;
+    partitionKey,
+    size,
+    priority,
+  } as CookieData['parsedCookie'];
 }
 
 /**
@@ -112,50 +145,65 @@ export async function createCookieObject(
  * @param chromeStoreCookieValue Cookie attribute value from the cookieStore API cookie object.
  * @param prevParsedCookieValue Cookie attribute value from the previously saved parsed cookie object.
  * @param url URL of the cookie from the request/response. (Only required for domain attribute)
+ * @param cookieValue cookie value to calculate the size of cookie.
  * @returns {string | boolean | number} Cookie attribute value.
  */
+// eslint-disable-next-line complexity
 function parseAttributeValues(
   type: string,
   parsedCookieValue: string | boolean | number | Date | undefined,
   chromeStoreCookieValue: string | boolean | number | Date | undefined,
   prevParsedCookieValue: string | boolean | number | Date | undefined,
-  url?: string | undefined
+  url?: string | undefined,
+  cookieValue?: string | undefined
 ) {
   let value =
     parsedCookieValue || chromeStoreCookieValue || prevParsedCookieValue;
 
-  if (type === 'domain') {
-    if (url) {
-      value = value || '.' + getDomain(url);
-    } else {
+  switch (type) {
+    case 'domain':
+      if (url) {
+        value = value || getDomainFromUrl(url);
+      } else {
+        value = value || '';
+      }
+      break;
+    case 'path':
+      value = value || '/';
+      break;
+    case 'secure':
+      value = value || false;
+      break;
+    case 'httponly':
+      value = value || false;
+      break;
+    case 'samesite':
+      if (value === 'no_restriction') {
+        value = 'none';
+      } else if (value === 'unspecified') {
+        value = '';
+      }
+      value = ((value || '') as string).toLowerCase();
+      break;
+    case 'size':
+      if (!value) {
+        const encoder = new TextEncoder();
+        value = encoder.encode(cookieValue).length;
+      }
+      break;
+    case 'expires':
+      if (value !== 0) {
+        value = calculateEffectiveExpiryDate(value as string) || 0;
+      }
+      break;
+    case 'priority':
+      value = value || 'Medium';
+      break;
+    case 'partitionKey':
       value = value || '';
-    }
+      break;
+    default:
+      return value;
   }
-
-  if (type === 'path') {
-    value = value || '/';
-  }
-
-  if (type === 'secure') {
-    value = value || false;
-  }
-
-  if (type === 'httponly') {
-    value = value || false;
-  }
-
-  if (type === 'samesite') {
-    if (value === 'no_restriction') {
-      value = 'none';
-    } else if (value === 'unspecified') {
-      value = '';
-    }
-    value = ((value || '') as string).toLowerCase();
-  }
-
-  if (type === 'expires' && value !== 0) {
-    value = new Date(value as string).toJSON() || 0;
-  }
-
   return value;
 }

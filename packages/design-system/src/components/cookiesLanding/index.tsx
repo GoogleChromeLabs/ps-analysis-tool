@@ -17,20 +17,20 @@
  * External dependencies.
  */
 import React from 'react';
-import {
-  TabCookies,
-  TabFrames,
-  prepareCookieStatsComponents,
-  prepareCookiesCount,
-} from '@ps-analysis-tool/common';
-import { MessageBox } from '@ps-analysis-tool/design-system';
+import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import LandingHeader from './landingHeader';
+import MessageBox from '../messageBox';
+import { type DataMapping } from './landingHeader';
 import CookiesMatrix from './cookiesMatrix';
-
+import CookiesLandingContainer from './cookieLandingHeaderContainer';
+import {
+  prepareCookieStatsComponents,
+  prepareCookiesCount,
+  prepareFrameStatsComponent,
+} from '../../utils';
 interface CookiesLandingProps {
   tabFrames: TabFrames | null;
   tabCookies: TabCookies | null;
@@ -38,6 +38,8 @@ interface CookiesLandingProps {
   showInfoIcon?: boolean;
   showHorizontalMatrix?: boolean;
   associatedCookiesCount?: number | null;
+  showMessageBoxBody?: boolean;
+  showBlockedCookiesSection?: boolean;
 }
 
 const CookiesLanding = ({
@@ -45,37 +47,104 @@ const CookiesLanding = ({
   tabFrames,
   children,
   showInfoIcon = true,
-  showHorizontalMatrix = true,
   associatedCookiesCount = null,
+  showMessageBoxBody = true,
+  showBlockedCookiesSection = false,
+  showHorizontalMatrix = false,
 }: CookiesLandingProps) => {
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
+  const frameStateCreator = prepareFrameStatsComponent(tabFrames, tabCookies);
+  const cookieClassificationDataMapping: DataMapping[] = [
+    {
+      title: 'Total cookies',
+      count: cookieStats.total,
+      data: cookiesStatsComponents.legend,
+    },
+    {
+      title: '1st party cookies',
+      count: cookieStats.firstParty.total,
+      data: cookiesStatsComponents.firstParty,
+    },
+    {
+      title: '3rd party cookies',
+      count: cookieStats.thirdParty.total,
+      data: cookiesStatsComponents.thirdParty,
+    },
+  ];
+
+  const blockedCookieDataMapping: DataMapping[] = [
+    {
+      title: 'Blocked cookies',
+      count: cookieStats.blockedCookies.total,
+      data: cookiesStatsComponents.blocked,
+    },
+  ];
 
   return (
-    <div className="h-full w-full min-w-[20rem]" data-testid="cookies-landing">
-      <LandingHeader
-        cookieStats={cookieStats}
-        cookiesStatsComponents={cookiesStatsComponents}
-      />
-      <div className="lg:max-w-[729px] mx-auto flex justify-center flex-col mt-10 pb-28 px-4">
+    <div
+      className="h-full w-full flex flex-col min-w-[40rem]"
+      data-testid="cookies-landing"
+    >
+      <CookiesLandingContainer
+        dataMapping={cookieClassificationDataMapping}
+        testId="cookies-insights"
+      >
         {!cookieStats ||
           (cookieStats?.firstParty.total === 0 &&
             cookieStats?.thirdParty.total === 0 && (
               <MessageBox
                 headerText="No cookies found on this page"
-                bodyText="Please try reloading the page"
+                bodyText={
+                  showMessageBoxBody ? 'Please try reloading the page' : ''
+                }
               />
             ))}
         <CookiesMatrix
           tabCookies={tabCookies}
-          cookiesStatsComponents={cookiesStatsComponents}
+          componentData={cookiesStatsComponents.legend}
           tabFrames={tabFrames}
           showInfoIcon={showInfoIcon}
           showHorizontalMatrix={showHorizontalMatrix}
           associatedCookiesCount={associatedCookiesCount}
         />
         {children && <div className="mt-8">{children}</div>}
-      </div>
+      </CookiesLandingContainer>
+      {showBlockedCookiesSection && (
+        <CookiesLandingContainer
+          dataMapping={blockedCookieDataMapping}
+          testId="blocked-cookies-insights"
+        >
+          {cookiesStatsComponents.blockedCookiesLegend.length > 0 && (
+            <CookiesMatrix
+              title="Blocked Reasons"
+              tabCookies={tabCookies}
+              componentData={cookiesStatsComponents.blockedCookiesLegend}
+              tabFrames={tabFrames}
+              showInfoIcon={showInfoIcon}
+              showHorizontalMatrix={false}
+              infoIconTitle="Cookies that have been blocked by the browser.(The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
+            />
+          )}
+        </CookiesLandingContainer>
+      )}
+      {showBlockedCookiesSection && (
+        <CookiesLandingContainer
+          dataMapping={frameStateCreator.dataMapping}
+          testId="frames-insights"
+        >
+          <CookiesMatrix
+            title="Frames"
+            componentData={frameStateCreator.legend}
+            showMatrix={true}
+            tabCookies={tabCookies}
+            tabFrames={tabFrames}
+            showInfoIcon={showInfoIcon}
+            showHorizontalMatrix={false}
+            infoIconTitle="The details regarding frames and associated cookies in this page."
+          />
+        </CookiesLandingContainer>
+      )}
     </div>
   );
 };

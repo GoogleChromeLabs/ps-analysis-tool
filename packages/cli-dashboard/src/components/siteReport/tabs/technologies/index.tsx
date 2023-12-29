@@ -25,6 +25,7 @@ import {
   type TableColumn,
   type InfoType,
   type TableRow,
+  type TableFilter,
 } from '@ps-analysis-tool/design-system';
 import type { TechnologyData } from '@ps-analysis-tool/common';
 
@@ -33,7 +34,11 @@ import type { TechnologyData } from '@ps-analysis-tool/common';
  */
 import { useContentStore } from '../../stateProviders/contentStore';
 
-const Technologies = () => {
+interface TechnologiesProps {
+  selectedSite: string | null;
+}
+
+const Technologies = ({ selectedSite }: TechnologiesProps) => {
   const data = useContentStore(({ state }) => state.technologies || []);
 
   const [selectedRow, setSelectedRow] = useState<TechnologyData>();
@@ -73,69 +78,79 @@ const Technologies = () => {
     []
   );
 
+  const filters = useMemo<TableFilter>(() => ({}), []);
+
+  const searchKeys = useMemo<string[]>(() => ['name', 'website'], []);
+
+  const tablePersistentSettingsKey = useMemo<string>(() => {
+    if (selectedSite) {
+      return `technologyListing#${selectedSite}`;
+    }
+
+    return 'technologyListing';
+  }, [selectedSite]);
+
   const table = useTable({
-    tableColumns,
     data,
+    tableColumns,
+    tableFilterData: filters,
+    tableSearchKeys: searchKeys,
+    tablePersistentSettingsKey,
   });
 
   return (
-    <div className="w-full h-full overflow-auto text-outer-space-crayola border-x border-american-silver dark:border-quartz">
-      <div className="w-full h-[25px] px-2 flex items-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green">
-        <div className="text-right w-full text-xxxs text-secondary">
-          Count: {Number(data?.length) || 0}
-        </div>
-      </div>
-      <div className="w-full flex-1 overflow-hidden h-full flex flex-col">
-        <Resizable
-          defaultSize={{
-            width: '100%',
-            height: '80%',
+    <div className="w-full h-full text-outer-space-crayola border-x border-american-silver dark:border-quartz flex flex-col">
+      <Resizable
+        defaultSize={{
+          width: '100%',
+          height: '80%',
+        }}
+        minHeight="6%"
+        maxHeight="95%"
+        enable={{
+          top: false,
+          right: false,
+          bottom: true,
+          left: false,
+        }}
+        className="h-full flex"
+      >
+        <Table
+          table={table}
+          hideFiltering={true}
+          showTopBar={true}
+          selectedKey={selectedRow?.slug}
+          onRowClick={(row) => {
+            setSelectedRow(row as TechnologyData);
           }}
-          minHeight="6%"
-          maxHeight="95%"
-          enable={{
-            top: false,
-            right: false,
-            bottom: true,
-            left: false,
+          getRowObjectKey={(row: TableRow) => {
+            return (row.originalData as TechnologyData).slug;
           }}
-          className="h-full flex"
-        >
-          <Table
-            table={table}
-            selectedKey={selectedRow?.slug}
-            onRowClick={(row) => {
-              setSelectedRow(row as TechnologyData);
-            }}
-            getRowObjectKey={(row: TableRow) => {
-              return (row.originalData as TechnologyData).slug;
-            }}
-          />
-        </Resizable>
-        <div className="flex-1 border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem]">
-          {selectedRow ? (
-            <div className="text-xs py-1 px-1.5">
-              <p className="font-bold text-granite-gray dark:text-manatee mb-1 text-semibold flex items-center">
-                <span>Technology Details</span>
-              </p>
-              <p className="mb-4 break-words text-outer-space-crayola dark:text-bright-gray">
-                {selectedRow.name}
-              </p>
-              <p className="font-bold text-granite-gray dark:text-manatee mb-1">
-                Description
-              </p>
-              <p className="text-outer-space-crayola dark:text-bright-gray">
-                {selectedRow.description}
-              </p>
-            </div>
-          ) : (
-            <div className="h-full p-8 flex items-center">
-              <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">
-                Select row to preview its value
-              </p>
-            </div>
-          )}
-        </div>
+        />
+      </Resizable>
+      <div className="flex-1 border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem]">
+        {selectedRow ? (
+          <div className="text-xs py-1 px-1.5">
+            <p className="font-bold text-granite-gray dark:text-manatee mb-1 text-semibold flex items-center">
+              <span>Technology Details</span>
+            </p>
+            <p className="mb-4 break-words text-outer-space-crayola dark:text-bright-gray">
+              {selectedRow.name}
+            </p>
+            <p className="font-bold text-granite-gray dark:text-manatee mb-1">
+              Description
+            </p>
+            <p className="text-outer-space-crayola dark:text-bright-gray">
+              {selectedRow.description}
+            </p>
+          </div>
+        ) : (
+          <div className="h-full p-8 flex items-center">
+            <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">
+              Select row to preview its value
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

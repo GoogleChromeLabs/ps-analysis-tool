@@ -18,7 +18,10 @@
  */
 import React from 'react';
 import { VictoryPie } from 'victory';
-import { COLOR_MAP } from '@ps-analysis-tool/design-system';
+/**
+ * Internal dependencies
+ */
+import { COLOR_MAP } from '../../theme/colors';
 
 const EmptyCirclePieChart = () => {
   return (
@@ -26,7 +29,7 @@ const EmptyCirclePieChart = () => {
       <VictoryPie
         padding={0}
         innerRadius={0}
-        colorScale={[COLOR_MAP.brightGray]}
+        colorScale={[COLOR_MAP.brightGray.color]}
         data={[{ x: '', y: 100 }]}
       />
       <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center opacity-40 text-2xl leading-4'">

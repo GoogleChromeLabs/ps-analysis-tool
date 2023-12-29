@@ -89,7 +89,9 @@ const createTooltip = (
     data?.thirdPartyCookies || 0,
     origin ? (data?.isOnRWS ? 'Yes' : 'No') : 'N/A',
     allowedFeatured,
-    DISPLAY_SHOW_MORE_BUTTON
+    DISPLAY_SHOW_MORE_BUTTON,
+    data?.blockedCookies || 0,
+    data?.blockedReasons || ''
   );
 
   const info = infoData['info'];
@@ -102,7 +104,10 @@ const createTooltip = (
     const tooltipShowButtonContainer = createShowMoreButton();
     content.appendChild(tooltipShowButtonContainer);
   }
-
+  const toolTipArrow = document.createElement('div');
+  toolTipArrow.classList.add('ps-content-arrow');
+  toolTipArrow.id = 'ps-content-tooltip-arrow';
+  tooltip.appendChild(toolTipArrow);
   tooltip.appendChild(content);
 
   tooltip.popover = 'manual';

@@ -25,12 +25,10 @@ import type { TechnologyData } from '@ps-analysis-tool/common';
  */
 import './app.css';
 import SiteReport from './components/siteReport';
-import type {
-  CookieFrameStorageType,
-  CookieJsonDataType,
-  CompleteJson,
-} from './types';
+import type { CookieFrameStorageType, CompleteJson } from './types';
 import SiteMapReport from './components/siteMapReport';
+import extractReportData from './components/utils/extractReportData';
+import extractCookies from './components/utils/extractCookies';
 
 enum DisplayType {
   SITEMAP,
@@ -62,114 +60,23 @@ const App = () => {
       const response = await fetch(path);
       const data = await response.json();
       setCompleteJsonReport(data);
-      const _landingPageCookies: CookieFrameStorageType = {};
-      let _cookies: CookieFrameStorageType = {};
-      let _technologies: TechnologyData[] = [];
+
+      let _cookies: CookieFrameStorageType = {},
+        _technologies: TechnologyData[] = [];
 
       if (type === DisplayType.SITEMAP) {
-        data.forEach(
-          ({
-            cookieData,
-            technologyData,
-            pageUrl,
-          }: {
-            cookieData: {
-              frameCookies: CookieFrameStorageType;
-            };
-            technologyData: TechnologyData[];
-            pageUrl: string;
-          }) => {
-            const _cookieData = Object.entries(cookieData).reduce(
-              (acc: CookieFrameStorageType, [frame, _data]) => {
-                acc[frame] = Object.fromEntries(
-                  Object.entries(_data.frameCookies).map(([key, cookie]) => [
-                    key + pageUrl,
-                    {
-                      ...cookie,
-                      pageUrl,
-                      frameUrl: frame,
-                    } as CookieJsonDataType,
-                  ])
-                );
+        const extractedData = extractReportData(data);
 
-                return acc;
-              },
-              {}
-            );
-
-            Object.entries(_cookieData).forEach(([frame, _cData]) => {
-              if (!_cookies[frame]) {
-                _cookies[frame] = {};
-              }
-
-              Object.entries(_cData).forEach(([key, cookie]) => {
-                _cookies[frame][key] = cookie;
-              });
-            });
-
-            const _landingCData = Object.entries(cookieData).reduce(
-              (acc: CookieFrameStorageType, [frame, _data]) => {
-                acc[frame] = Object.fromEntries(
-                  Object.entries(_data.frameCookies).map(([key, cookie]) => [
-                    key,
-                    {
-                      ...cookie,
-                      pageUrl,
-                      frameUrl: frame,
-                    } as CookieJsonDataType,
-                  ])
-                );
-
-                return acc;
-              },
-              {}
-            );
-
-            Object.entries(_landingCData).forEach(([frame, _cData]) => {
-              if (!_landingPageCookies[frame]) {
-                _landingPageCookies[frame] = {};
-              }
-
-              Object.entries(_cData).forEach(([key, cookie]) => {
-                _landingPageCookies[frame][key] = cookie;
-              });
-            });
-
-            setLandingPageCookies(_landingPageCookies);
-
-            _technologies.push(
-              ...technologyData.map((technology) => ({
-                ...technology,
-                pageUrl,
-              }))
-            );
-          }
-        );
+        _cookies = extractedData.cookies;
+        _technologies = extractedData.technologies;
+        setLandingPageCookies(extractedData.landingPageCookies);
       } else {
+        _cookies = extractCookies(data.cookieData, data.pageUrl, true);
         _technologies = data.technologyData;
-
-        _cookies = Object.entries(
-          data.cookieData as {
-            frameCookies: CookieFrameStorageType;
-          }
-        ).reduce((acc: CookieFrameStorageType, [frame, _data]) => {
-          acc[frame] = Object.fromEntries(
-            Object.entries(_data.frameCookies).map(([key, cookie]) => [
-              key,
-              {
-                ...cookie,
-                pageUrl: data.pageUrl,
-                frameUrl: frame,
-              },
-            ])
-          );
-
-          return acc;
-        }, {});
       }
 
       setCookies(_cookies);
-      setTechnologies(_technologies as TechnologyData[]);
+      setTechnologies(_technologies);
     })();
   }, [path, type]);
 
@@ -198,6 +105,7 @@ const App = () => {
         completeJson={completeJsonReport}
         cookies={cookies}
         technologies={technologies}
+        selectedSite={path.slice(5, -9)}
       />
     </div>
   );

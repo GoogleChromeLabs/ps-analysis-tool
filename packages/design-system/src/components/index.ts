@@ -17,8 +17,7 @@
 export { default as Button } from './button';
 export { default as RefreshButton } from './refreshButton';
 export { default as ProgressBar } from './progressBar';
-export { default as Accordion } from './accordion';
-export { default as AccordionChildren } from './accordion/accordionChildren';
+export { default as ToggleSwitch } from './toggleSwitch';
 export { default as MessageBox } from './messageBox';
 export { default as Circle } from './circle';
 export { default as CirclePieChart } from './circlePieChart';
@@ -36,3 +35,6 @@ export * from './landingPage/infoCard/fetchPSInfo';
 export { default as ErrorFallback } from './errorFallback';
 export { default as ExtensionReloadNotification } from './errorFallback/extensionReloadNotification';
 export * from './table';
+export { default as SearchInput } from './searchInput';
+export * from './sidebar';
+export { default as InspectButton } from './inspectButton';

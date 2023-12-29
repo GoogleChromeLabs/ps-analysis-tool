@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
-export { default as Table } from './table';
+export { default as Table } from './components';
 export { default as useTable } from './useTable';
+export * from './persistentSettingsStore';
 export * from './useTable';

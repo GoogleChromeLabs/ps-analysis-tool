@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import { type Cookie as ParsedCookie } from 'simple-cookie';
+import type { Protocol } from 'devtools-protocol';
 
 export type CookiesCount = {
   total: number;
@@ -35,6 +36,10 @@ export type CookiesCount = {
     analytics: number;
     uncategorized: number;
   };
+  blockedCookies: {
+    total: number;
+    [key: string]: number;
+  };
 };
 
 export type CookieAnalytics = {
@@ -49,18 +54,33 @@ export type CookieAnalytics = {
   wildcard: string;
 };
 
+export type CookieDatabase = {
+  [name: string]: Array<CookieAnalytics>;
+};
+
+export type BlockedReason =
+  | Protocol.Network.SetCookieBlockedReason
+  | Protocol.Network.CookieBlockedReason
+  | Protocol.Audits.CookieExclusionReason;
+
 export type CookieData = {
-  parsedCookie: ParsedCookie;
+  parsedCookie: ParsedCookie & {
+    partitionKey?: string;
+    priority?: 'Low' | 'Medium' | 'High';
+    size?: number;
+  };
   analytics: CookieAnalytics | null;
   url: string;
   headerType: 'response' | 'request' | 'javascript';
   isFirstParty: boolean | null;
-  frameIdList: number[];
+  frameIdList: Array<number | string>;
+  blockedReasons?: BlockedReason[];
+  warningReasons?: Protocol.Audits.CookieWarningReason[];
+  isBlocked?: boolean | null;
 };
 
 export type CookieTableData = CookieData & {
-  isCookieSet: boolean | null;
-  frameUrl?: string;
+  frameUrls?: string | string[];
   highlighted?: boolean;
 };
 
@@ -87,7 +107,11 @@ export interface TabCookies {
 }
 
 export interface TabFrames {
-  [key: string]: { frameIds: number[]; isOnRWS?: boolean };
+  [key: string]: {
+    frameIds: number[];
+    isOnRWS?: boolean;
+    frameType?: 'outermost_frame' | 'fenced_frame' | 'sub_frame';
+  };
 }
 
 export interface Legend {
@@ -99,6 +123,7 @@ export interface Legend {
 
 export interface CookieStatsComponents {
   legend: Legend[];
+  blockedCookiesLegend: Legend[];
   firstParty: {
     count: number;
     color: string;
@@ -107,23 +132,12 @@ export interface CookieStatsComponents {
     count: number;
     color: string;
   }[];
+  blocked: {
+    count: number;
+    color: string;
+  }[];
 }
 
 export interface FramesWithCookies {
   [key: string]: { frameIds: number[] };
 }
-
-export type SortingState = {
-  defaultSortKey?: string;
-  defaultSortOrder?: 'asc' | 'desc';
-};
-
-export type SelectedFilters = {
-  [key: string]: Set<string>;
-};
-
-export type PreferenceDataValues =
-  | Record<string, number | boolean>
-  | string
-  | SelectedFilters
-  | SortingState[];
