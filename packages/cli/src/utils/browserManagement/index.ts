@@ -76,14 +76,31 @@ export class BrowserManagement {
   }
 
   async clickOnAcceptBanner(sitePage: Page) {
-    const acceptAllCookiesBanner = await sitePage.$(
-      'button[id="onetrust-accept-btn-handler"], button[id="truste-consent-button"]'
+    const buttonHandlersName = [
+      'onetrust-accept-btn-handler',
+      'truste-consent-button',
+    ];
+
+    let bannerAccepted = false;
+
+    await Promise.all(
+      buttonHandlersName.map(async (handler) => {
+        const acceptAllCookiesBanner = await sitePage.$(
+          `button[id="${handler}"]`
+        );
+
+        if (acceptAllCookiesBanner && !bannerAccepted) {
+          await acceptAllCookiesBanner.evaluate((button) => {
+            button?.click();
+          });
+          bannerAccepted = true;
+        }
+
+        return handler;
+      })
     );
 
-    if (acceptAllCookiesBanner) {
-      await acceptAllCookiesBanner.evaluate((button) => {
-        button.click();
-      });
+    if (bannerAccepted) {
       this.debugLog('Found and accepted all cookies in GDPR banner');
     } else {
       this.debugLog('Couldnt find accept GDPR banner');
