@@ -1,5 +1,5 @@
 {
-	"name": "ps-analysis-tool",
+	"name": "ts-analysis-tool",
 	"version": "0.3.2",
 	"description": "Cookie Analysis Tool and CLI for analysis and understanding of cookie usage on web pages.",
 	"scripts": {
