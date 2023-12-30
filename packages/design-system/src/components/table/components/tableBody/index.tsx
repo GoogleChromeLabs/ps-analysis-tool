@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import classNames from 'classnames';
 
 /**
@@ -43,6 +43,9 @@ const TableBody = ({
   selectedKey,
   onRowClick,
 }: TableBodyProps) => {
+  const [domainsInAllowList, setDomainsInAllowList] = useState<Set<string>>(
+    new Set()
+  );
   const tableBodyRef = useRef(null);
 
   const handleKeyDown = useCallback(
@@ -138,6 +141,8 @@ const TableBody = ({
             setIsRowFocused(true);
           }}
           onKeyDown={handleKeyDown}
+          domainsInAllowList={domainsInAllowList}
+          setDomainsInAllowList={setDomainsInAllowList}
         />
       ))}
       <div

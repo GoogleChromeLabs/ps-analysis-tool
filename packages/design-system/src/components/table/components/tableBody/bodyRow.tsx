@@ -26,6 +26,7 @@ import { CookieTableData } from '@ps-analysis-tool/common';
  */
 import BodyCell from './bodyCell';
 import type { TableColumn, TableRow } from '../../useTable';
+import useAllowedList from '../../useTable/useAllowedList';
 
 interface BodyRowProps {
   row: TableRow;
@@ -36,8 +37,11 @@ interface BodyRowProps {
   getRowObjectKey: (row: TableRow) => string;
   onRowClick: () => void;
   onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>, index: number) => void;
+  domainsInAllowList: Set<string>;
+  setDomainsInAllowList: (domainList: Set<string>) => void;
 }
 
+// eslint-disable-next-line complexity
 const BodyRow = ({
   row,
   columns,
@@ -47,12 +51,20 @@ const BodyRow = ({
   isRowFocused,
   onRowClick,
   onKeyDown,
+  domainsInAllowList,
+  setDomainsInAllowList,
 }: BodyRowProps) => {
+  const { handleAllowListClick, isDomainInAllowList } = useAllowedList(
+    domainsInAllowList,
+    row,
+    setDomainsInAllowList
+  );
+
   const cookieKey = getRowObjectKey(row);
   const isBlocked =
     (row.originalData as CookieTableData)?.isBlocked ||
     ((row.originalData as CookieTableData)?.blockedReasons &&
-      (row.originalData as CookieTableData)?.blockedReasons?.length > 0);
+      (row.originalData as CookieTableData)?.blockedReasons?.length);
   const isHighlighted = (row.originalData as CookieTableData)?.highlighted;
   const tableRowClassName = classNames(
     'outline-0 flex divide-x divide-american-silver dark:divide-quartz',
@@ -64,8 +76,17 @@ const BodyRow = ({
         : isRowFocused
         ? 'bg-gainsboro dark:bg-outer-space'
         : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
+    isDomainInAllowList &&
+      (cookieKey !== selectedKey
+        ? index % 2
+          ? 'dark:bg-green-900 bg-green-400'
+          : 'dark:bg-green-800 bg-green-300'
+        : isRowFocused
+        ? 'bg-gainsboro dark:bg-outer-space'
+        : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
     cookieKey !== selectedKey &&
       !isBlocked &&
+      !isDomainInAllowList &&
       (index % 2
         ? isHighlighted
           ? 'bg-dirty-pink'
@@ -101,6 +122,8 @@ const BodyRow = ({
           isHighlighted={isHighlighted}
           isRowFocused={cookieKey === selectedKey}
           row={row}
+          isDomainInAllowList={isDomainInAllowList}
+          handleAllowListClick={handleAllowListClick}
         />
       ))}
     </div>
