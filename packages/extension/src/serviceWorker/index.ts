@@ -467,3 +467,11 @@ chrome.storage.local.onChanged.addListener(
     });
   }
 );
+
+/**
+ * Fires when the browser window is opened.
+ * @see https://developer.chrome.com/docs/extensions/reference/api/windows#event-onCreated
+ */
+chrome.windows.onCreated.addListener(() => {
+  chrome.contentSettings.cookies.clear({});
+});
