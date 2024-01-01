@@ -110,10 +110,7 @@ export class BrowserManagement {
 
       const buttonToClick: HTMLButtonElement[] = bannerNodes.map(
         (node: Element) => {
-          const buttonNodes = Array.from(
-            node.getElementsByTagName('button') ||
-              node.getElementsByTagName('a')
-          );
+          const buttonNodes = Array.from(node.getElementsByTagName('button'));
           const isButtonForAccept = buttonNodes.filter(
             (cnode) =>
               cnode.textContent &&
