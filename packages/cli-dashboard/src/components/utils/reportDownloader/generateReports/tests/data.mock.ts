@@ -18,7 +18,66 @@ import type { CompleteJson } from '../../../../../types';
 
 export const mockData1: CompleteJson = {
   pageUrl: 'https://edition.cnn.com/',
-  technologyData: [],
+  technologyData: [
+    {
+      slug: 'bootstrap',
+      name: 'Bootstrap',
+      description:
+        'Bootstrap is a free and open-source CSS framework directed at responsive, mobile-first front-end web development. It contains CSS and JavaScript-based design templates for typography, forms, buttons, navigation, and other interface components.',
+      confidence: 100,
+      version: null,
+      icon: 'Bootstrap.svg',
+      website: 'https://getbootstrap.com',
+      cpe: 'cpe:2.3:a:getbootstrap:bootstrap:*:*:*:*:*:*:*:*',
+      categories: [
+        {
+          id: 66,
+          slug: 'ui-frameworks',
+          name: 'UI frameworks',
+        },
+      ],
+    },
+    {
+      slug: 'varnish',
+      name: 'Varnish',
+      description: 'Varnish is a reverse caching proxy.',
+      confidence: 100,
+      version: null,
+      icon: 'Varnish.svg',
+      website: 'https://www.varnish-cache.org',
+      cpe: 'cpe:2.3:a:varnish-software:varnish_cache:*:*:*:*:*:*:*:*',
+      categories: [
+        {
+          id: 23,
+          slug: 'caching',
+          name: 'Caching',
+        },
+      ],
+    },
+    {
+      slug: 'styled-components',
+      name: 'styled-components',
+      description:
+        'Styled components is a CSS-in-JS styling framework that uses tagged template literals in JavaScript.',
+      confidence: 100,
+      version: '4.3.2',
+      icon: 'styled-components.svg',
+      website: 'https://styled-components.com',
+      cpe: null,
+      categories: [
+        {
+          id: 12,
+          slug: 'javascript-frameworks',
+          name: 'JavaScript frameworks',
+        },
+        {
+          id: 47,
+          slug: 'development',
+          name: 'Development',
+        },
+      ],
+    },
+  ],
   cookieData: {
     'https://edition.cnn.com': {
       cookiesCount: 2,
