@@ -104,12 +104,13 @@ export class BrowserManagement {
           if (!node || !node?.textContent) {
             return false;
           }
-          const regex = /\b(consent|policy|cookie policy|privacy policy)\b/;
+          const regex =
+            /\b(consent|policy|cookie policy|privacy policy|personalize|preferences)\b/;
           return regex.test(node?.textContent.toLowerCase());
         });
 
-      const buttonToClick: HTMLButtonElement[] = bannerNodes.map(
-        (node: Element) => {
+      const buttonToClick: HTMLButtonElement[] = bannerNodes
+        .map((node: Element) => {
           const buttonNodes = Array.from(node.getElementsByTagName('button'));
           const isButtonForAccept = buttonNodes.filter(
             (cnode) =>
@@ -119,8 +120,8 @@ export class BrowserManagement {
           );
 
           return isButtonForAccept[0];
-        }
-      );
+        })
+        .filter((button) => button);
       buttonToClick[0]?.click();
     });
   }
