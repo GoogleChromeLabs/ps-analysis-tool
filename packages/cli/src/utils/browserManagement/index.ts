@@ -95,35 +95,37 @@ export class BrowserManagement {
   }
 
   async clickOnAcceptBanner(sitePage: Page) {
-    const buttonHandlersName = [
-      'onetrust-accept-btn-handler',
-      'truste-consent-button',
-    ];
+    await sitePage.evaluate(() => {
+      const bannerNodes: Element[] = Array.from(
+        (document.querySelector('body')?.childNodes || []) as Element[]
+      )
+        .filter((node: Element) => node && node?.tagName === 'DIV')
+        .filter((node) => {
+          if (!node || !node?.textContent) {
+            return false;
+          }
+          const regex = /\b(consent|policy|cookie policy|privacy policy)\b/;
+          return regex.test(node?.textContent.toLowerCase());
+        });
 
-    let bannerAccepted = false;
+      const buttonToClick: HTMLButtonElement[] = bannerNodes.map(
+        (node: Element) => {
+          const buttonNodes = Array.from(
+            node.getElementsByTagName('button') ||
+              node.getElementsByTagName('a')
+          );
+          const isButtonForAccept = buttonNodes.filter(
+            (cnode) =>
+              cnode.textContent &&
+              (cnode.textContent.toLowerCase().includes('accept') ||
+                cnode.textContent.toLowerCase().includes('allow'))
+          );
 
-    await Promise.all(
-      buttonHandlersName.map(async (handler) => {
-        const acceptAllCookiesBanner = await sitePage.$(
-          `button[id="${handler}"]`
-        );
-
-        if (acceptAllCookiesBanner && !bannerAccepted) {
-          await acceptAllCookiesBanner.evaluate((button) => {
-            button?.click();
-          });
-          bannerAccepted = true;
+          return isButtonForAccept[0];
         }
-
-        return handler;
-      })
-    );
-
-    if (bannerAccepted) {
-      this.debugLog('Found and accepted all cookies in GDPR banner');
-    } else {
-      this.debugLog('Couldnt find accept GDPR banner');
-    }
+      );
+      buttonToClick[0]?.click();
+    });
   }
 
   async openPage(): Promise<Page> {
