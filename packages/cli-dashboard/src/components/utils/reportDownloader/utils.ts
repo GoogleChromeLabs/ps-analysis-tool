@@ -63,3 +63,14 @@ export const createZip = (analysisData: CompleteJson, zipObject: JSZip) => {
   zipObject.file('report.csv', summaryDataCSV);
   zipObject.file('report.json', JSON.stringify(analysisData, null, 4));
 };
+
+export const getFolderName = (pageUrl: string) => {
+  let folderName = pageUrl.replace(/^https?:\/\//, '').replace(/\/+/g, '-');
+
+  const lastDashIndex = folderName.lastIndexOf('-');
+  if (lastDashIndex !== -1) {
+    folderName = folderName.substring(0, lastDashIndex);
+  }
+
+  return folderName;
+};

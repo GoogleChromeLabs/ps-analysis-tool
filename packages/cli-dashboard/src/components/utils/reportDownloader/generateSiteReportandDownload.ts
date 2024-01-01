@@ -23,7 +23,7 @@ import { saveAs } from 'file-saver';
  * Internal dependencies
  */
 import type { CompleteJson } from '../../../types';
-import { createZip } from './utils';
+import { createZip, getFolderName } from './utils';
 
 const generateSiteReportandDownload = async (
   JSONReport: CompleteJson[],
@@ -45,11 +45,13 @@ const generateSiteReportandDownload = async (
     siteAnalysisData = JSONReport[0];
   }
 
-  const folderName = siteAnalysisData.pageUrl
-    .replace(/^https?:\/\//, '')
-    .replace(/\/+/g, '-');
+  const zipFolder: JSZip | null = zip.folder(
+    getFolderName(siteAnalysisData.pageUrl)
+  );
 
-  const zipFolder = zip.folder(folderName) as JSZip;
+  if (!zipFolder) {
+    return;
+  }
 
   createZip(siteAnalysisData, zipFolder);
 

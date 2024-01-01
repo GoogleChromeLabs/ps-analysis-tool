@@ -24,7 +24,7 @@ import { saveAs } from 'file-saver';
  * Internal dependencies
  */
 import type { CompleteJson } from '../../../types';
-import { createZip } from './utils';
+import { createZip, getFolderName } from './utils';
 
 const generateSiteMapReportandDownload = async (JSONReport: CompleteJson[]) => {
   if (!JSONReport.length) {
@@ -34,11 +34,7 @@ const generateSiteMapReportandDownload = async (JSONReport: CompleteJson[]) => {
   const zip = new JSZip();
 
   JSONReport.forEach((data) => {
-    const folderName = data.pageUrl
-      .replace(/^https?:\/\//, '')
-      .replace(/\/+/g, '-');
-
-    const zipFolder = zip.folder(folderName);
+    const zipFolder: JSZip | null = zip.folder(getFolderName(data.pageUrl));
 
     if (!zipFolder) {
       return;
