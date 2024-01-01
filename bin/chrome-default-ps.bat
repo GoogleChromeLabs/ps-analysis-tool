@@ -1,7 +1,7 @@
 :: Default Chrome with PS Extension
 
 :: Download PS Extension
-set "ps_analysis_tool_version=v0.3.2"
+set "ps_analysis_tool_version=v0.4.0"
 cd /d %TEMP%
 if not exist %TEMP%\ps-analysis-tool-%ps_analysis_tool_version% (
     mkdir %TEMP%\ps-analysis-tool-%ps_analysis_tool_version%
