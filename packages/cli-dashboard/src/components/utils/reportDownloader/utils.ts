@@ -65,10 +65,13 @@ export const createZip = (analysisData: CompleteJson, zipObject: JSZip) => {
 };
 
 export const getFolderName = (pageUrl: string) => {
-  let folderName = pageUrl.replace(/^https?:\/\//, '').replace(/\/+/g, '-');
+  let folderName = pageUrl
+    .trim()
+    .replace(/^https?:\/\//, '')
+    .replace(/\/+/g, '-');
 
-  const lastDashIndex = folderName.lastIndexOf('-');
-  if (lastDashIndex !== -1) {
+  if (folderName.endsWith('-')) {
+    const lastDashIndex = folderName.lastIndexOf('-');
     folderName = folderName.substring(0, lastDashIndex);
   }
 
