@@ -36,7 +36,6 @@ import {
  * Internal dependencies.
  */
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import { BLOCKED_REASON_LIST } from '../../../../../constants';
 
 interface CookiesListingProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;
@@ -195,16 +194,6 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
     ],
     []
   );
-
-  const blockedReasonFilterValues = useMemo<{
-    [key: string]: { selected: boolean };
-  }>(() => {
-    const filterValues: { [key: string]: { selected: boolean } } = {};
-    BLOCKED_REASON_LIST.forEach((reason) => {
-      filterValues[reason] = { selected: false };
-    });
-    return filterValues;
-  }, []);
 
   const filters = useMemo<TableFilter>(
     () => ({
@@ -393,7 +382,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
         },
       },
     }),
-    [blockedReasonFilterValues]
+    []
   );
 
   const searchKeys = useMemo<string[]>(
