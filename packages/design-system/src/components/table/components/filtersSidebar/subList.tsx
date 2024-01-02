@@ -44,7 +44,7 @@ const SubList = ({
       return Object.keys(filterValues || {});
     }
 
-    return Object.keys(filterValues || {}).sort(([a], [b]) =>
+    return Object.keys(filterValues || {}).sort((a, b) =>
       String(a).localeCompare(String(b))
     );
   }, [filterValues, sort]);
