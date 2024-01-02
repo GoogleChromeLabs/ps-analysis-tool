@@ -344,6 +344,22 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
           return (value as string[])?.includes(filterValue);
         },
       },
+      isBlocked: {
+        title: 'Blocked',
+        hasStaticFilterValues: true,
+        filterValues: {
+          True: {
+            selected: false,
+          },
+          False: {
+            selected: false,
+          },
+        },
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = value as boolean;
+          return val === (filterValue === 'True');
+        },
+      },
       headerType: {
         title: 'Set Via',
         hasStaticFilterValues: true,
