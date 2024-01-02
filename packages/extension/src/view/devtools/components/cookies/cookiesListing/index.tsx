@@ -338,11 +338,6 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
       blockedReasons: {
         title: 'Cookie Blocked Reasons',
         description: 'Reason why the cookies were blocked.',
-        hasStaticFilterValues: true,
-        filterValues: blockedReasonFilterValues,
-        comparator: (value: InfoType, filterValue: string) => {
-          return (value as string[])?.includes(filterValue);
-        },
       },
       isBlocked: {
         title: 'Blocked',
