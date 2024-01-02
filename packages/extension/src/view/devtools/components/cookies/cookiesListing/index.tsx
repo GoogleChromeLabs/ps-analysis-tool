@@ -325,8 +325,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
         title: 'Platform',
       },
       blockedReasons: {
-        title: 'Cookie Blocked Reasons',
-        description: 'Reason why the cookies were blocked.',
+        title: 'Blocked Reasons',
       },
       isBlocked: {
         title: 'Blocked',
