@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * External dependencies
+ */
+import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
+
 export const tempSinglePageData = {
   pageUrl: 'https://edition.cnn.com/sitemaps/sitemap-section.xml',
   cookieData: {
@@ -38,7 +43,7 @@ export const tempSinglePageData = {
         },
       },
     },
-    'Unknown frame(s)': {
+    [UNKNOWN_FRAME_KEY]: {
       frameCookies: {},
       cookiesCount: 0,
     },
@@ -108,7 +113,7 @@ export const tempMultiPageData = [
           },
         },
       },
-      'Unknown frame(s)': {
+      [UNKNOWN_FRAME_KEY]: {
         frameCookies: {},
         cookiesCount: 1,
       },
@@ -157,7 +162,7 @@ export const tempMultiPageData = [
           },
         },
       },
-      'Unknown frame(s)': {
+      [UNKNOWN_FRAME_KEY]: {
         frameCookies: {},
         cookiesCount: 1,
       },

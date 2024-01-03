@@ -52,7 +52,7 @@ describe('extractCookies', () => {
           frameUrl: 'https://edition.cnn.com',
         },
       },
-      'Unknown frame(s)': {},
+      [UNKNOWN_FRAME_KEY]: {},
     });
 
     isLandingPage = false;
