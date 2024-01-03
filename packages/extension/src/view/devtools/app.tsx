@@ -16,7 +16,13 @@
 /**
  * External dependencies.
  */
-import React, { useRef, useEffect, useCallback, useState } from 'react';
+import React, {
+  useRef,
+  useEffect,
+  useCallback,
+  useState,
+  useMemo,
+} from 'react';
 import { Resizable } from 're-resizable';
 import {
   CookieIcon,
@@ -27,7 +33,10 @@ import {
   type SidebarItems,
   InspectButton,
 } from '@ps-analysis-tool/design-system';
-import type { CookieTableData } from '@ps-analysis-tool/common';
+import {
+  UNKNOWN_FRAME_KEY,
+  type CookieTableData,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -46,6 +55,7 @@ const App: React.FC = () => {
   const {
     contextInvalidated,
     setContextInvalidated,
+    tabCookies,
     tabFrames,
     selectedFrame,
     setSelectedFrame,
@@ -56,6 +66,7 @@ const App: React.FC = () => {
   } = useCookieStore(({ state, actions }) => ({
     contextInvalidated: state.contextInvalidated,
     setContextInvalidated: actions.setContextInvalidated,
+    tabCookies: state.tabCookies,
     tabFrames: state.tabFrames,
     selectedFrame: state.selectedFrame,
     setSelectedFrame: actions.setSelectedFrame,
@@ -96,6 +107,42 @@ const App: React.FC = () => {
     })();
   }, []);
 
+  const cookiesByFrameURL = useMemo(() => {
+    if (!tabCookies) {
+      return {};
+    }
+
+    const tabFramesIdsWithURL = Object.entries(tabFrames || {}).reduce(
+      (acc, [url, frame]) => {
+        frame.frameIds?.forEach((id) => {
+          acc[id] = url;
+        });
+
+        return acc;
+      },
+      {} as Record<string, string>
+    );
+
+    const _cookiesByFrameURL = Object.values(tabCookies).reduce(
+      (acc, cookie) => {
+        cookie.frameIdList?.forEach((frameId) => {
+          const url = tabFramesIdsWithURL[frameId];
+
+          if (url) {
+            acc[url] = true;
+          } else {
+            acc[UNKNOWN_FRAME_KEY] = true;
+          }
+        });
+
+        return acc;
+      },
+      {} as Record<string, boolean>
+    );
+
+    return _cookiesByFrameURL;
+  }, [tabCookies, tabFrames]);
+
   const {
     activePanel,
     selectedItemKey,
@@ -130,6 +177,7 @@ const App: React.FC = () => {
             icon: <CookieIcon />,
             selectedIcon: <CookieIconWhite />,
             children: {},
+            isBlurred: !cookiesByFrameURL[url],
           };
 
           return acc;
@@ -156,6 +204,7 @@ const App: React.FC = () => {
     });
   }, [
     canStartInspecting,
+    cookiesByFrameURL,
     isInspecting,
     isKeySelected,
     isSidebarFocused,
