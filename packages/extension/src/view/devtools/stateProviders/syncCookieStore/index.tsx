@@ -25,10 +25,11 @@ import React, {
   useRef,
 } from 'react';
 import { noop } from '@ps-analysis-tool/design-system';
-import type {
-  TabCookies,
-  TabFrames,
-  CookieData,
+import {
+  type TabCookies,
+  type TabFrames,
+  type CookieData,
+  UNKNOWN_FRAME_KEY,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -155,7 +156,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           return tabFrame;
         })
       );
-      modifiedTabFrames['Unknown Frame(s)'] = { frameIds: [] };
+      modifiedTabFrames[UNKNOWN_FRAME_KEY] = { frameIds: [] };
       setTabFrames(modifiedTabFrames);
     },
     []

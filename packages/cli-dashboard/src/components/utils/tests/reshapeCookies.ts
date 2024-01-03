@@ -15,6 +15,10 @@
  */
 
 /**
+ * External dependencies
+ */
+import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
+/**
  * Internal dependencies
  */
 import type { CookieFrameStorageType } from '../../../types';
@@ -47,7 +51,7 @@ describe('reshapeCookies', () => {
           frameUrls: { sadf: 'https://edition.cnn.com' },
         },
       },
-      'Unknown frame(s)': {},
+      [UNKNOWN_FRAME_KEY]: {},
     };
 
     expect(reshapeCookies(cookies)).toEqual({
