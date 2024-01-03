@@ -77,7 +77,7 @@ export default function prepareFrameStatsComponent(
   return {
     dataMapping: [
       {
-        title: Object.keys(tabFrames || {}).length > 1 ? 'Frames' : 'Frame',
+        title: 'Frame details',
         count: Object.keys(tabFrames || {}).length,
         data: [
           {
