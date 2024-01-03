@@ -125,15 +125,20 @@ const App: React.FC = () => {
 
     const _cookiesByFrameURL = Object.values(tabCookies).reduce(
       (acc, cookie) => {
+        let hasFrame = false;
+
         cookie.frameIdList?.forEach((frameId) => {
           const url = tabFramesIdsWithURL[frameId];
 
           if (url) {
             acc[url] = true;
-          } else {
-            acc[UNKNOWN_FRAME_KEY] = true;
+            hasFrame = true;
           }
         });
+
+        if (!hasFrame && cookie.frameIdList?.length > 0) {
+          acc[UNKNOWN_FRAME_KEY] = true;
+        }
 
         return acc;
       },
