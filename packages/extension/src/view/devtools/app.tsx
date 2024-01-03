@@ -107,7 +107,7 @@ const App: React.FC = () => {
     })();
   }, []);
 
-  const cookiesByFrameURL = useMemo(() => {
+  const doesFrameContainsCookies = useMemo(() => {
     if (!tabCookies) {
       return {};
     }
@@ -123,7 +123,7 @@ const App: React.FC = () => {
       {} as Record<string, string>
     );
 
-    const _cookiesByFrameURL = Object.values(tabCookies).reduce(
+    const _doesFrameContainsCookies = Object.values(tabCookies).reduce(
       (acc, cookie) => {
         let hasFrame = false;
 
@@ -145,7 +145,7 @@ const App: React.FC = () => {
       {} as Record<string, boolean>
     );
 
-    return _cookiesByFrameURL;
+    return _doesFrameContainsCookies;
   }, [tabCookies, tabFrames]);
 
   const {
@@ -182,7 +182,7 @@ const App: React.FC = () => {
             icon: <CookieIcon />,
             selectedIcon: <CookieIconWhite />,
             children: {},
-            isBlurred: !cookiesByFrameURL[url],
+            isBlurred: !doesFrameContainsCookies[url],
           };
 
           return acc;
@@ -209,7 +209,7 @@ const App: React.FC = () => {
     });
   }, [
     canStartInspecting,
-    cookiesByFrameURL,
+    doesFrameContainsCookies,
     isInspecting,
     isKeySelected,
     isSidebarFocused,
