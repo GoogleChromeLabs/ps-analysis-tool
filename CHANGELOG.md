@@ -175,3 +175,8 @@
 * Enhancement: Reorder column to get important data at https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/337
 * Update quick links on landing pages https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/329
 
+
+# v0.4.1
+### Extension
+
+- Enhancement: Allow blurring the sidebar items https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/384
