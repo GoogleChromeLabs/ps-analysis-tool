@@ -36,3 +36,4 @@ export { default as getValueByKey } from './utils/getValueByKey';
 export * from './utils/generateReports';
 export * from './cookies.types';
 export * from './constants';
+export const UNKNOWN_FRAME_KEY = 'Unknown Frame(s)';

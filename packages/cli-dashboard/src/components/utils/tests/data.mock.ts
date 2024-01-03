@@ -19,7 +19,7 @@
  */
 import { UNKNOWN_FRAME_KEY, type CompleteJson } from '@ps-analysis-tool/common';
 
-export const tempSinglePageData: CompleteJson = {
+export const tempSinglePageData = {
   pageUrl: 'https://edition.cnn.com/sitemaps/sitemap-section.xml',
   cookieData: {
     'https://edition.cnn.com': {
