@@ -15,6 +15,10 @@
  */
 
 /**
+ * External dependencies
+ */
+import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
+/**
  * Internal dependencies
  */
 import extractReportData from '../extractReportData';
@@ -70,7 +74,7 @@ describe('extractReportData', () => {
             frameUrl: 'https://edition.cnn.com',
           },
         },
-        'Unknown frame(s)': {},
+        [UNKNOWN_FRAME_KEY]: {},
       },
       technologies: [
         {
@@ -131,7 +135,7 @@ describe('extractReportData', () => {
             frameUrl: 'https://edition.cnn.com',
           },
         },
-        'Unknown frame(s)': {},
+        [UNKNOWN_FRAME_KEY]: {},
       },
     });
   });

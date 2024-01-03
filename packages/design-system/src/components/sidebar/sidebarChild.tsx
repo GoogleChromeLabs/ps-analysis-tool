@@ -96,7 +96,7 @@ const SidebarChild = ({
               ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
               : 'bg-gainsboro dark:bg-outer-space'
             : 'bg-white dark:bg-raisin-black'
-        } cursor-pointer`}
+        } cursor-pointer ${sidebarItem.isBlurred ? 'opacity-50' : ''}`}
         style={{ paddingLeft: recursiveStackIndex * 16 + 12 }}
       >
         {Object.keys(sidebarItem.children)?.length !== 0 && (
