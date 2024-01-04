@@ -26,6 +26,7 @@ export const handleResizeOnColumnsVisibilityChange = (
   columnsSizing: { [key: string]: number },
   tableWidth: number
 ) => {
+  // new columns are added and it's not the first render
   if (
     prevColumnsState.length < newTableColumnsToRender.length &&
     prevColumnsState.length
@@ -63,6 +64,7 @@ export const handleResizeOnColumnsVisibilityChange = (
     width: columnsSizing?.[column.accessorKey] || 40,
   }));
 
+  // columns are removed or it's the first render
   if (
     prevColumnsState.length > newTableColumnsToRender.length ||
     !prevColumnsState.length
