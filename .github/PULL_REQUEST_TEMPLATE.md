@@ -23,6 +23,15 @@ Please provide step-by-step instructions to test the changes.
 
 ---
 
+## Checklist
+
+<!-- Check these after PR creation -->
+
+- [ ] I have thoroughly tested this code to the best of my abilities.
+- [ ] I have reviewed the code myself before requesting a review.
+- [ ] This code is covered by unit tests to verify that it works as intended.
+- [ ] The QA of this PR is done by a member of the QA team (to be checked by QA).
+
 <!--
 Example:
 
