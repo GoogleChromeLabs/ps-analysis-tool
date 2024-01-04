@@ -21,7 +21,7 @@ import { sanitizeCsvRecord } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies
  */
-import type { CompleteJson, CookieJsonDataType } from '../../../types';
+import type { CompleteJson, CookieJsonDataType } from '../../../../types';
 
 export const AFFECTED_COOKIES_DATA_HEADERS = [
   'Name',
