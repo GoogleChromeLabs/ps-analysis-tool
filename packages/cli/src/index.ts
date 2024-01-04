@@ -60,7 +60,11 @@ program
     '-np, --no-prompts',
     'Flags for skipping all prompts. Default options will be used'
   )
-  .option('-nt, --no-technology', 'Flags for skipping technology analysis.');
+  .option('-nt, --no-technology', 'Flags for skipping technology analysis.')
+  .option(
+    '-d, --out-dir <value>',
+    'Directory path where the analysis data will be stored'
+  );
 
 program.parse();
 
@@ -83,7 +87,8 @@ const validateArgs = async (
   sitemapUrl: string,
   csvPath: string,
   sitemapPath: string,
-  numberOfUrls: string
+  numberOfUrls: string,
+  outDir: string
 ) => {
   if (!url && !sitemapUrl && !csvPath && !sitemapPath) {
     console.log(
@@ -142,6 +147,14 @@ const validateArgs = async (
   if (numberOfUrls) {
     if (isNaN(parseInt(numberOfUrls))) {
       console.log(`${numberOfUrls} is not valid numeric value`);
+      process.exit(1);
+    }
+  }
+
+  if (outDir) {
+    const outDirExists = await exists(path.resolve(outDir));
+    if (!outDirExists) {
+      console.log(`Provided dir "${path.resolve(outDir)}" does not exist`);
       process.exit(1);
     }
   }
@@ -275,6 +288,24 @@ const getUrlListFromArgs = async (
   return urls;
 };
 
+const saveResults = async (outDir: string, result: any, url: string) => {
+  await ensureFile(outDir + '/out.json');
+  await writeFile(
+    outDir + '/out.json',
+    JSON.stringify(url ? result[0] : result, null, 4)
+  );
+};
+
+const startDashboardServer = async (dir: string) => {
+  exec('npm run cli-dashboard:dev');
+
+  await delay(2000);
+
+  console.log(
+    `Report is being served at the URL: http://localhost:9000?dir=${dir}`
+  );
+};
+
 // eslint-disable-next-line complexity
 (async () => {
   await initialize();
@@ -287,15 +318,24 @@ const getUrlListFromArgs = async (
   const isHeadless = Boolean(program.opts().headless);
   const shouldSkipPrompts = !program.opts().prompts;
   const shouldSkipTechnologyAnalysis = !program.opts().technology;
+  const outDir = program.opts().outDir;
 
-  validateArgs(url, sitemapUrl, csvPath, sitemapPath, numberOfUrlsInput);
+  validateArgs(
+    url,
+    sitemapUrl,
+    csvPath,
+    sitemapPath,
+    numberOfUrlsInput,
+    outDir
+  );
 
   const prefix =
     url || sitemapUrl
       ? Utility.generatePrefix(url || sitemapUrl)
       : path.parse(csvPath || sitemapPath).base;
 
-  const outputDir = `./out/${prefix}`;
+  const outputDir = outDir ? outDir : `./out/${prefix}`;
+
   const spinnies = new Spinnies();
 
   const urls = await getUrlListFromArgs(
@@ -383,19 +423,13 @@ const getUrlListFromArgs = async (
     };
   });
 
-  await ensureFile(outputDir + '/out.json');
-  await writeFile(
-    outputDir + '/out.json',
-    JSON.stringify(url ? result[0] : result, null, 4)
-  );
+  await saveResults(outputDir, result, url);
 
-  exec('npm run cli-dashboard:dev');
-
-  await delay(2000);
-
-  console.log(
-    `Report is being served at the URL: http://localhost:9000?dir=${encodeURIComponent(
-      prefix
-    )}${sitemapUrl || csvPath || sitemapPath ? '&type=sitemap' : ''}`
-  );
+  if (!outDir) {
+    startDashboardServer(
+      encodeURIComponent(prefix) + sitemapUrl || csvPath || sitemapPath
+        ? '&type=sitemap'
+        : ''
+    );
+  }
 })();
