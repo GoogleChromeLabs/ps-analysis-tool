@@ -59,7 +59,6 @@ const CookiesListing = ({
         accessorKey: 'parsedCookie.name',
         cell: (info: InfoType) => info,
         enableHiding: false,
-        width: 150,
       },
       {
         header: 'Scope',
@@ -69,7 +68,6 @@ const CookiesListing = ({
             {!info ? 'Third Party' : 'First Party'}
           </p>
         ),
-        width: 200,
       },
       {
         header: 'Domain',

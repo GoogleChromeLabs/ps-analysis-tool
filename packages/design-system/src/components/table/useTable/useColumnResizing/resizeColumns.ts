@@ -30,6 +30,7 @@ export const resizeColumns = (
 
   const diff = tableWidth - totalWidth;
 
+  // If the table is wider than the columns, we need to add the difference to the columns
   if (diff > 0) {
     const perColumnDiff = diff / columnsToResize.length;
     columnsToResize.forEach((column) => {
@@ -39,7 +40,9 @@ export const resizeColumns = (
 
       column.width += perColumnDiff;
     });
-  } else if (diff < 0) {
+  }
+  // If the table is narrower than the columns, we need to remove the difference from the columns
+  else if (diff < 0) {
     const sortedColumns = [...columnsToResize].sort(
       ({ width: width1 }, { width: width2 }) => (width2 || 0) - (width1 || 0)
     );
