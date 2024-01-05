@@ -486,11 +486,10 @@ chrome.storage.local.onChanged.addListener(
 );
 
 chrome.storage.sync.onChanged.addListener(
-  async (changes: { [key: string]: chrome.storage.StorageChange }) => {
-    await PROMISE_QUEUE.add(() => {
-      if (changes && Object.keys(changes).includes('allowedNumberOfTabs')) {
-        tabMode = changes.allowedNumberOfTabs.newValue;
-      }
-    });
+  (changes: { [key: string]: chrome.storage.StorageChange }) => {
+    if (changes && Object.keys(changes).includes('allowedNumberOfTabs')) {
+      PROMISE_QUEUE.clear();
+      tabMode = changes.allowedNumberOfTabs.newValue;
+    }
   }
 );
