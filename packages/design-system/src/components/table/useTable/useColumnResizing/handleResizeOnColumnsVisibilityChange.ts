@@ -40,8 +40,13 @@ export const handleResizeOnColumnsVisibilityChange = (
       )
       .reduce((acc, column) => {
         if (!columnsSizing[column.accessorKey]) {
-          columnsSizing[column.accessorKey] =
-            tableWidth / newTableColumnsToRender.length;
+          if (column.widthWeightagePercentage) {
+            columnsSizing[column.accessorKey] =
+              (column.widthWeightagePercentage / 100) * tableWidth;
+          } else {
+            columnsSizing[column.accessorKey] =
+              tableWidth / newTableColumnsToRender.length;
+          }
         }
 
         acc += columnsSizing[column.accessorKey] || 40;
