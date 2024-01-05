@@ -114,6 +114,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
         accessorKey: 'parsedCookie.name',
         cell: (info: InfoType) => info,
         enableHiding: false,
+        widthWeightagePercentage: 13,
       },
       {
         header: 'Scope',
@@ -123,31 +124,37 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
             {!info ? 'Third Party' : 'First Party'}
           </p>
         ),
+        widthWeightagePercentage: 7.9,
       },
       {
         header: 'Domain',
         accessorKey: 'parsedCookie.domain',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 10.5,
       },
       {
         header: 'Partition Key',
         accessorKey: 'parsedCookie.partitionKey',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 9,
       },
       {
         header: 'SameSite',
         accessorKey: 'parsedCookie.samesite',
         cell: (info: InfoType) => <span className="capitalize">{info}</span>,
+        widthWeightagePercentage: 6.5,
       },
       {
         header: 'Category',
         accessorKey: 'analytics.category',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 8,
       },
       {
         header: 'Platform',
         accessorKey: 'analytics.platform',
         cell: (info: InfoType) => <span>{info ? info : 'Unknown'}</span>,
+        widthWeightagePercentage: 11.5,
       },
       {
         header: 'HttpOnly',
@@ -157,6 +164,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
             {info ? <span className="font-serif">✓</span> : ''}
           </p>
         ),
+        widthWeightagePercentage: 5,
       },
       {
         header: 'Secure',
@@ -166,31 +174,37 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
             {info ? <span className="font-serif">✓</span> : ''}
           </p>
         ),
+        widthWeightagePercentage: 5,
       },
       {
         header: 'Value',
         accessorKey: 'parsedCookie.value',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 5.6,
       },
       {
         header: 'Path',
         accessorKey: 'parsedCookie.path',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 3.5,
       },
       {
         header: 'Expires / Max-Age',
         accessorKey: 'parsedCookie.expires',
         cell: (info: InfoType) => (info ? info : 'Session'),
+        widthWeightagePercentage: 5.4,
       },
       {
         header: 'Priority',
         accessorKey: 'parsedCookie.priority',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 5.4,
       },
       {
         header: 'Size',
         accessorKey: 'parsedCookie.size',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 3.4,
       },
     ],
     []
