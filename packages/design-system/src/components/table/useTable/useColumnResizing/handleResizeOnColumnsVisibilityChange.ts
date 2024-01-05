@@ -20,6 +20,18 @@
 import { TableColumn } from '..';
 import { resizeColumns } from './resizeColumns';
 
+const getInitialColumnSize = (
+  widthWeightagePercentage: number,
+  tableWidth: number,
+  columnsCount: number
+) => {
+  if (widthWeightagePercentage) {
+    return (widthWeightagePercentage / 100) * tableWidth;
+  }
+
+  return tableWidth / columnsCount;
+};
+
 export const handleResizeOnColumnsVisibilityChange = (
   prevColumnsState: TableColumn[],
   newTableColumnsToRender: TableColumn[],
@@ -40,16 +52,14 @@ export const handleResizeOnColumnsVisibilityChange = (
       )
       .reduce((acc, column) => {
         if (!columnsSizing[column.accessorKey]) {
-          if (column.widthWeightagePercentage) {
-            columnsSizing[column.accessorKey] =
-              (column.widthWeightagePercentage / 100) * tableWidth;
-          } else {
-            columnsSizing[column.accessorKey] =
-              tableWidth / newTableColumnsToRender.length;
-          }
+          columnsSizing[column.accessorKey] = getInitialColumnSize(
+            column.widthWeightagePercentage || 0,
+            tableWidth,
+            newTableColumnsToRender.length
+          );
         }
 
-        acc += columnsSizing[column.accessorKey] || 40;
+        acc += columnsSizing[column.accessorKey];
 
         return acc;
       }, 0);
@@ -64,10 +74,20 @@ export const handleResizeOnColumnsVisibilityChange = (
     });
   }
 
-  const newColumns = newTableColumnsToRender.map((column) => ({
-    ...column,
-    width: columnsSizing?.[column.accessorKey] || 40,
-  }));
+  const newColumns = newTableColumnsToRender.map((column) => {
+    if (!columnsSizing[column.accessorKey]) {
+      columnsSizing[column.accessorKey] = getInitialColumnSize(
+        column.widthWeightagePercentage || 0,
+        tableWidth,
+        newTableColumnsToRender.length
+      );
+    }
+
+    return {
+      ...column,
+      width: columnsSizing?.[column.accessorKey],
+    };
+  });
 
   // columns are removed or it's the first render
   if (
