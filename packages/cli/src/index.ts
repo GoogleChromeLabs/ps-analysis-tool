@@ -427,9 +427,8 @@ const startDashboardServer = async (dir: string) => {
 
   if (!outDir) {
     startDashboardServer(
-      encodeURIComponent(prefix) + sitemapUrl || csvPath || sitemapPath
-        ? '&type=sitemap'
-        : ''
+      encodeURIComponent(prefix) +
+        (sitemapUrl || csvPath || sitemapPath ? '&type=sitemap' : '')
     );
   }
 })();
