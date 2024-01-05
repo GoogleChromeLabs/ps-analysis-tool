@@ -18,17 +18,13 @@
  * External dependencies
  */
 import type JSZip from 'jszip';
-
-/**
- * Internal dependencies
- */
-import type { CompleteJson } from '../../../types';
 import {
   generateAffectedCookiesCSV,
   generateAllCookiesCSV,
   generateSummaryDataCSV,
   generateTechnologyCSV,
-} from './generateReports';
+  type CompleteJson,
+} from '@ps-analysis-tool/common';
 
 const generateCSVFiles = (data: CompleteJson) => {
   const allCookiesCSV = generateAllCookiesCSV(data);
