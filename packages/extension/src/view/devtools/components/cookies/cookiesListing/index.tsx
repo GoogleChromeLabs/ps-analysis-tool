@@ -124,13 +124,13 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
             {!info ? 'Third Party' : 'First Party'}
           </p>
         ),
-        widthWeightagePercentage: 7.9,
+        widthWeightagePercentage: 6.6,
       },
       {
         header: 'Domain',
         accessorKey: 'parsedCookie.domain',
         cell: (info: InfoType) => info,
-        widthWeightagePercentage: 10.5,
+        widthWeightagePercentage: 9,
       },
       {
         header: 'Partition Key',
@@ -154,7 +154,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
         header: 'Platform',
         accessorKey: 'analytics.platform',
         cell: (info: InfoType) => <span>{info ? info : 'Unknown'}</span>,
-        widthWeightagePercentage: 11.5,
+        widthWeightagePercentage: 10,
       },
       {
         header: 'HttpOnly',
@@ -180,7 +180,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
         header: 'Value',
         accessorKey: 'parsedCookie.value',
         cell: (info: InfoType) => info,
-        widthWeightagePercentage: 5.6,
+        widthWeightagePercentage: 7.8,
       },
       {
         header: 'Path',
@@ -192,7 +192,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
         header: 'Expires / Max-Age',
         accessorKey: 'parsedCookie.expires',
         cell: (info: InfoType) => (info ? info : 'Session'),
-        widthWeightagePercentage: 5.4,
+        widthWeightagePercentage: 7.8,
       },
       {
         header: 'Priority',
