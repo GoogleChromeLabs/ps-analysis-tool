@@ -18,12 +18,12 @@
  * External dependencies.
  */
 import { useEffect, useMemo, useState } from 'react';
+import { getValueByKey } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import { PersistentStorageData, TableData } from '..';
-import getValueByKey from '../../utils/getValueByKey';
 import { useTablePersistentSettingsStore } from '../../persistentSettingsStore';
 
 export type TableSearchOutput = {
