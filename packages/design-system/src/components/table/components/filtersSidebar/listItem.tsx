@@ -59,13 +59,7 @@ const ListItem = ({
           disabled={Object.keys(filter.filterValues || {}).length === 0}
           onClick={toggleSubList}
         >
-          <span
-            className={`${showSubList ? '' : '-rotate-90'} ${
-              Object.keys(filter.filterValues || {}).length === 0
-                ? 'invisible'
-                : 'visible'
-            }`}
-          >
+          <span className={showSubList ? '' : '-rotate-90'}>
             <ArrowDown />
           </span>
           <p className="ml-1 leading-normal font-semi-thick">{filter.title}</p>
