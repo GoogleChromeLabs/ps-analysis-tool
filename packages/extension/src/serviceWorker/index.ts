@@ -22,6 +22,8 @@ import {
   type CookieData,
   parseResponseReceivedExtraInfo,
   parseRequestWillBeSentExtraInfo,
+  getCookieKey,
+  type BlockedReason,
 } from '@ps-analysis-tool/common';
 import { Protocol } from 'devtools-protocol';
 
@@ -42,20 +44,98 @@ let cookieDB: CookieDatabase | null = null;
 
 // Global promise queue.
 const PROMISE_QUEUE = new PQueue({ concurrency: 1 });
+
 const cdpURLToRequestMap: {
   [tabId: string]: {
     [requestId: string]: string;
   };
 } = {};
+
 let tabMode = '';
 let tabToRead = '';
-const tabs: { [key: number]: string } = {};
+
+const cachedTabsData: { [key: number]: any } = {};
+
+const tabs: { [key: number]: { url: string; devToolsOpenState: boolean } } = {};
+
 const ALLOWED_EVENTS = [
   'Network.responseReceived',
   'Network.requestWillBeSentExtraInfo',
   'Network.responseReceivedExtraInfor',
   'Audits.issueAdded',
 ];
+
+const updateData = (tabId: number, data: any) => {
+  //await CookieStore.update(tabId, data);
+  if (!cachedTabsData[tabId]) {
+    return;
+  }
+
+  for (const cookie of data) {
+    const { name, domain, path } = cookie.parsedCookie;
+    if (!name || !domain || !path) {
+      continue;
+    }
+    let cookieKey = getCookieKey(cookie.parsedCookie);
+    if (!cookieKey) {
+      continue;
+    }
+    const blockedReasons: BlockedReason[] = [
+      ...new Set<BlockedReason>([
+        ...(cookie?.blockedReasons ?? []),
+        ...(cachedTabsData[tabId][cookieKey]?.blockedReasons ?? []),
+      ]),
+    ];
+    cookieKey = cookieKey?.trim();
+    if (cachedTabsData[tabId]?.[cookieKey]) {
+      cachedTabsData[tabId][cookieKey] = {
+        ...cachedTabsData[tabId][cookieKey],
+        ...cookie,
+        parsedCookie: {
+          ...cachedTabsData[tabId][cookieKey].parsedCookie,
+          ...cookie.parsedCookie,
+          priority:
+            cookie.parsedCookie?.priority ??
+            cachedTabsData[tabId][cookieKey].parsedCookie?.priority ??
+            'Medium',
+          partitionKey:
+            cookie.parsedCookie?.partitionKey ??
+            cachedTabsData[tabId][cookieKey].parsedCookie?.partitionKey,
+        },
+        isBlocked: blockedReasons.length > 0,
+        blockedReasons,
+        warningReasons: Array.from(
+          new Set<Protocol.Audits.CookieWarningReason>([
+            ...(cookie.warningReasons ?? []),
+            ...(cachedTabsData[tabId][cookieKey].warningReasons ?? []),
+          ])
+        ),
+        headerType:
+          cachedTabsData[tabId][cookieKey].headerType === 'javascript'
+            ? cachedTabsData[tabId][cookieKey].headerType
+            : cookie.headerType,
+        frameIdList: Array.from(
+          new Set<number>([
+            ...(cookie.frameIdList ?? []),
+            ...(cachedTabsData[tabId][cookieKey].frameIdList ?? []),
+          ])
+        ),
+      };
+    } else {
+      cachedTabsData[tabId][cookieKey] = cookie;
+    }
+  }
+
+  if (tabs[Number(tabId)].devToolsOpenState) {
+    chrome.runtime.sendMessage({
+      type: 'NEW_COOKIE_DATA',
+      payload: {
+        cookieData: JSON.stringify(cachedTabsData[tabId]),
+      },
+    });
+  }
+};
+
 /**
  * Fires when the browser receives a response from a web server.
  * @see https://developer.chrome.com/docs/extensions/reference/webRequest/
@@ -69,7 +149,7 @@ chrome.webRequest.onResponseStarted.addListener(
         if (
           !tabs[tabId] ||
           !responseHeaders ||
-          tabs[tabId] === 'chrome://newtab/'
+          tabs[tabId].url === 'chrome://newtab/'
         ) {
           return;
         }
@@ -98,14 +178,14 @@ chrome.webRequest.onResponseStarted.addListener(
             if (
               header.name.toLowerCase() === 'set-cookie' &&
               header.value &&
-              tabs[tabId] &&
+              tabs[tabId].url &&
               cookieDB
             ) {
               const cookie = parseResponseCookieHeader(
                 url,
                 header.value,
                 cookieDB,
-                tabs[tabId],
+                tabs[tabId].url,
                 frameId,
                 cdpCookies?.cookies ?? []
               );
@@ -121,7 +201,7 @@ chrome.webRequest.onResponseStarted.addListener(
           return;
         }
         // Adds the cookies from the request headers to the cookies object.
-        await CookieStore.update(tabId.toString(), cookies);
+        updateData(tabId, cookies);
       });
     })();
   },
@@ -136,7 +216,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
         if (
           !tabs[tabId] ||
           !requestHeaders ||
-          tabs[tabId] === 'chrome://newtab/'
+          tabs[tabId].url === 'chrome://newtab/'
         ) {
           return;
         }
@@ -168,14 +248,14 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
               header.name.toLowerCase() === 'cookie' &&
               header.value &&
               url &&
-              tabs[tabId] &&
+              tabs[tabId].url &&
               cookieDB
             ) {
               const cookieList = parseRequestCookieHeader(
                 url,
                 header.value,
                 cookieDB,
-                tabs[tabId],
+                tabs[tabId].url,
                 frameId,
                 cdpCookies?.cookies ?? []
               );
@@ -190,7 +270,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
           return;
         }
 
-        await CookieStore.update(tabId.toString(), cookies);
+        updateData(tabId, cookies);
       });
     })();
   },
@@ -203,8 +283,12 @@ chrome.tabs.onCreated.addListener(async (tab) => {
     if (!tab.id) {
       return;
     }
-
-    tabs[tab.id] = tab.url;
+    cachedTabsData[tab.id] = {};
+    if (!tabs[tab.id]) {
+      tabs[tab.id] = { url: tab.url ?? '', devToolsOpenState: false };
+    } else {
+      tabs[tab.id].url = tab.url ?? '';
+    }
 
     if (tabMode && tabMode !== 'unlimited') {
       const previousTabData = await chrome.storage.local.get();
@@ -258,7 +342,14 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   } catch (error) {
     //Fail silently
   }
-  tabs[tabId] = tab.url;
+  if (!tab.url) {
+    return;
+  }
+  if (!tabs[tabId]) {
+    tabs[tabId] = { url: tab.url, devToolsOpenState: false };
+  } else {
+    tabs[tabId].url = tab.url;
+  }
   if (changeInfo.status === 'loading' && tab.url) {
     PROMISE_QUEUE.clear();
     await PROMISE_QUEUE.add(async () => {
@@ -324,7 +415,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
     tabId = source?.tabId?.toString();
 
-    const url = tabs[Number(tabId)] ? tabs[Number(tabId)] : '';
+    const url = tabs[Number(tabId)]?.url ? tabs[Number(tabId)].url : '';
 
     if (tabMode && tabMode !== 'unlimited' && tabToRead !== tabId) {
       return;
@@ -362,9 +453,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       if (cookies.length === 0) {
         return;
       }
-      await PROMISE_QUEUE.add(async () => {
-        await CookieStore.update(tabId, cookies);
-      });
+      updateData(Number(tabId), cookies);
     }
 
     if (method === 'Network.responseReceivedExtraInfo' && params) {
@@ -384,9 +473,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         cookieDB ?? {}
       );
 
-      await PROMISE_QUEUE.add(async () => {
-        await CookieStore.update(tabId, allCookies);
-      });
+      updateData(Number(tabId), allCookies);
     }
 
     if (method === 'Audits.issueAdded' && params) {
@@ -460,6 +547,20 @@ chrome.runtime.onMessage.addListener((request) => {
 
       await chrome.tabs.reload(Number(newTab));
     });
+  }
+
+  if (request?.type === 'DEVTOOLS_STATE_OPEN') {
+    if (!request?.payload?.tabId) {
+      return;
+    }
+    tabs[request?.payload?.tabId].devToolsOpenState = true;
+  }
+
+  if (request?.type === 'DEVTOOLS_STATE_CLOSE') {
+    if (!request?.payload?.tabId) {
+      return;
+    }
+    tabs[request?.payload?.tabId].devToolsOpenState = false;
   }
 });
 

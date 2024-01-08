@@ -337,7 +337,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     const listener = (message: {
       type: string;
-      payload: { tabId: number };
+      payload: { tabId?: number; cookieData?: any };
     }) => {
       if (message.type === 'syncCookieStore:SET_TAB_TO_READ') {
         chrome.devtools.inspectedWindow.eval(
@@ -348,6 +348,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
             }
           }
         );
+
+        setIsCurrentTabBeingListenedTo(true);
+        setLoading(false);
+        setCanStartInspecting(false);
+      }
+      if (message.type === 'NEW_COOKIE_DATA') {
+        setTabCookies(JSON.parse(message?.payload?.cookieData || '{}'));
 
         setIsCurrentTabBeingListenedTo(true);
         setLoading(false);
@@ -443,6 +450,24 @@ export const Provider = ({ children }: PropsWithChildren) => {
       if (loadingTimeout.current) {
         clearTimeout(loadingTimeout.current);
       }
+    };
+  }, []);
+
+  useEffect(() => {
+    chrome.runtime.sendMessage({
+      type: 'DEVTOOLS_STATE_OPEN',
+      payload: {
+        tabId: chrome.devtools.inspectedWindow.tabId,
+      },
+    });
+
+    return () => {
+      chrome.runtime.sendMessage({
+        type: 'DEVTOOLS_STATE_CLOSE',
+        payload: {
+          tabId: chrome.devtools.inspectedWindow.tabId,
+        },
+      });
     };
   }, []);
 
