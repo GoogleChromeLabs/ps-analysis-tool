@@ -18,11 +18,14 @@
  * External dependencies.
  */
 import { useMemo } from 'react';
-import { CookieTableData, TechnologyData } from '@ps-analysis-tool/common';
+import {
+  getValueByKey,
+  CookieTableData,
+  TechnologyData,
+} from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import getValueByKey from '../utils/getValueByKey';
 import useColumnSorting, { type ColumnSortingOutput } from './useColumnSorting';
 import useColumnVisibility, {
   type ColumnVisibilityOutput,
@@ -58,12 +61,15 @@ export type TableFilter = {
     title: string;
     description?: string;
     hasStaticFilterValues?: boolean;
+    hasPrecalculatedFilterValues?: boolean;
     filterValues?: {
       [filterValue: string]: {
         selected: boolean;
         description?: string;
       };
     };
+    sortValues?: boolean; // for dynamic filters, values are sorted by default even if not specified.
+    useGenericPersistenceKey?: boolean;
     calculateFilterValues?: (value: InfoType) => string;
     comparator?: (value: InfoType, filterValue: string) => boolean;
   };
@@ -156,7 +162,12 @@ const useTable = ({
     isFiltering,
     toggleFilterSelection,
     resetFilters,
-  } = useFiltering(sortedData, tableFilterData, tablePersistentSettingsKey);
+  } = useFiltering(
+    sortedData,
+    tableFilterData,
+    tablePersistentSettingsKey,
+    commonKey
+  );
 
   const { searchValue, setSearchValue, searchFilteredData } = useSearch(
     filteredData,
