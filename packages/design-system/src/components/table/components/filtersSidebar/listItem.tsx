@@ -55,10 +55,17 @@ const ListItem = ({
     <li className="py-[3px] text-xs">
       <div className="flex gap-2 items-center">
         <button
-          className="flex items-center text-asteriod-black dark:text-bright-gray"
+          className="flex items-center text-asteriod-black dark:text-bright-gray disabled:opacity-50"
+          disabled={Object.keys(filter.filterValues || {}).length === 0}
           onClick={toggleSubList}
         >
-          <span className={showSubList ? '' : '-rotate-90'}>
+          <span
+            className={`${showSubList ? '' : '-rotate-90'} ${
+              Object.keys(filter.filterValues || {}).length === 0
+                ? 'invisible'
+                : 'visible'
+            }`}
+          >
             <ArrowDown />
           </span>
           <p className="ml-1 leading-normal font-semi-thick">{filter.title}</p>
