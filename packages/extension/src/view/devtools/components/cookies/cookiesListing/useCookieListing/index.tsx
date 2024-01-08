@@ -18,7 +18,7 @@
  * External dependencies
  */
 import React, { useMemo, useState } from 'react';
-import { type TabCookies } from '@ps-analysis-tool/common';
+import { getValueByKey, type TabCookies } from '@ps-analysis-tool/common';
 import {
   RefreshButton,
   type InfoType,
@@ -134,10 +134,65 @@ const useCookieListing = () => {
     []
   );
 
+  const preCalculatedFilters = useMemo<{
+    category: TableFilter[keyof TableFilter]['filterValues'];
+    platform: TableFilter[keyof TableFilter]['filterValues'];
+    blockedReason: TableFilter[keyof TableFilter]['filterValues'];
+  }>(() => {
+    const calculate = (
+      key: string
+    ): TableFilter[keyof TableFilter]['filterValues'] =>
+      Object.values(cookies).reduce((acc, cookie) => {
+        const value = getValueByKey(key, cookie);
+
+        if (!acc) {
+          acc = {};
+        }
+
+        if (value) {
+          acc[value] = {
+            selected: false,
+          };
+        }
+
+        return acc;
+      }, {} as TableFilter[keyof TableFilter]['filterValues']);
+
+    const blockedReasonFilterValues = Object.values(cookies).reduce(
+      (acc, cookie) => {
+        const blockedReason = getValueByKey('blockedReasons', cookie);
+
+        blockedReason?.forEach((reason: string) => {
+          if (!acc) {
+            acc = {};
+          }
+
+          acc[reason] = {
+            selected: false,
+          };
+        });
+
+        return acc;
+      },
+      {} as TableFilter[keyof TableFilter]['filterValues']
+    );
+
+    return {
+      category: calculate('analytics.category'),
+      platform: calculate('analytics.platform'),
+      blockedReason: blockedReasonFilterValues,
+    };
+  }, [cookies]);
+
   const filters = useMemo<TableFilter>(
     () => ({
       'analytics.category': {
         title: 'Category',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: preCalculatedFilters.category,
+        sortValues: true,
+        useGenericPersistenceKey: true,
       },
       isFirstParty: {
         title: 'Scope',
@@ -150,6 +205,7 @@ const useCookieListing = () => {
             selected: false,
           },
         },
+        useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           const val = value as boolean;
           return val === (filterValue === 'First Party');
@@ -169,6 +225,7 @@ const useCookieListing = () => {
             selected: false,
           },
         },
+        useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           const val = value as boolean;
           return val === (filterValue === 'True');
@@ -188,6 +245,7 @@ const useCookieListing = () => {
             selected: false,
           },
         },
+        useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           const val = value as string;
           return val?.toLowerCase() === filterValue.toLowerCase();
@@ -204,6 +262,7 @@ const useCookieListing = () => {
             selected: false,
           },
         },
+        useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           const val = value as boolean;
           return val === (filterValue === 'True');
@@ -232,6 +291,7 @@ const useCookieListing = () => {
             selected: false,
           },
         },
+        useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           let diff = 0;
           const val = value as string;
@@ -262,9 +322,19 @@ const useCookieListing = () => {
       },
       'analytics.platform': {
         title: 'Platform',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: preCalculatedFilters.platform,
+        sortValues: true,
+        useGenericPersistenceKey: true,
       },
       blockedReasons: {
         title: 'Blocked Reasons',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: preCalculatedFilters.blockedReason,
+        sortValues: true,
+        useGenericPersistenceKey: true,
       },
       isBlocked: {
         title: 'Blocked',
@@ -277,6 +347,7 @@ const useCookieListing = () => {
             selected: false,
           },
         },
+        useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           const val = value as boolean;
           return val === (filterValue === 'True');
@@ -293,6 +364,7 @@ const useCookieListing = () => {
             selected: false,
           },
         },
+        useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           switch (filterValue) {
             case 'JS':
@@ -318,9 +390,14 @@ const useCookieListing = () => {
             selected: false,
           },
         },
+        useGenericPersistenceKey: true,
       },
     }),
-    []
+    [
+      preCalculatedFilters.blockedReason,
+      preCalculatedFilters.category,
+      preCalculatedFilters.platform,
+    ]
   );
 
   const searchKeys = useMemo<string[]>(
