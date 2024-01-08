@@ -38,6 +38,7 @@ export type SidebarItemValue = {
   panel?: React.ReactNode;
   icon?: React.ReactNode;
   selectedIcon?: React.ReactNode;
+  isBlurred?: boolean;
 };
 
 export type SidebarItems = {

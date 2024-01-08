@@ -21,7 +21,7 @@ import { sanitizeCsvRecord } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies
  */
-import type { CompleteJson } from '../../../types';
+import type { CompleteJson } from '../../../../types';
 
 const TECHNOLOGIES_DATA_HEADER = [
   'Name',

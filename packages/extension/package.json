@@ -1,6 +1,6 @@
 {
   "name": "@ps-analysis-tool/extension",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Chrome extension for cookie analysis",
   "repository": {
     "type": "git",
