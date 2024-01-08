@@ -13,20 +13,28 @@ case $SHELL in
 */zsh)
   grep "chrome_launcher.sh" ~/.zshrc > /dev/null
   if [ $? -ne 0 ]; then
-    echo "if [ -f ~/bin/chrome_launcher.sh ]; then" >> ~/.zshrc
-      echo -e "\tsource ~/bin/chrome_launcher.sh" >> ~/.zshrc
-    echo "fi" >> ~/.zshrc
+    {
+      echo "if [ -f ~/bin/chrome_launcher.sh ]; then"
+        echo -e "\tsource ~/bin/chrome_launcher.sh"
+      echo "fi"
+    } >> ~/.zshrc
   fi
+  echo -e "Script added to ~/.zshrc, please restart your terminal session or run: \n\tsource ~/.zshrc"
    ;;
 */bash)
   grep "chrome_launcher.sh" ~/.bashrc > /dev/null
   if [ $? -ne 0 ]; then
-    echo "if [ -f ~/bin/chrome_launcher.sh ]; then" >> ~/.bashrc
-      echo -e "\tsource ~/bin/chrome_launcher.sh" >> ~/.bashrc
-    echo "fi" >> ~/.bashrc
+    {
+      echo "if [ -f ~/bin/chrome_launcher.sh ]; then"
+        echo -e "\tsource ~/bin/chrome_launcher.sh"
+      echo "fi"
+    } >> ~/.bashrc
   fi
-;;
+  echo -e "Script added to ~/.bashrc, please restart your terminal session or run: \n\tsource ~/.bashrc"
+   ;;
 esac
+
+echo -e "New commands that will be available in new terminal session: \n\tchrome-default \n\tchrome-3pcd \n\tchrome-default-ps \n\tchrome-3pcd-ps"
 
 # Source into current terminal session as well
 source ~/bin/chrome_launcher.sh
