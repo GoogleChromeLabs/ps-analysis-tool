@@ -61,10 +61,11 @@ const useColumnResizing = (
         prev,
         tableColumns,
         columnsSizingRef.current,
-        tableContainerRef.current?.scrollWidth || 0
+        tableContainerRef.current?.scrollWidth || 0,
+        allTableColumnsKeys.length === tableColumns.length
       )
     );
-  }, [tableColumns]);
+  }, [allTableColumnsKeys.length, tableColumns]);
 
   const setColumnsCallback = useCallback(
     (columnsSizing?: { [key: string]: number }) => {

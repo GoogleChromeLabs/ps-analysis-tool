@@ -36,7 +36,8 @@ export const handleResizeOnColumnsVisibilityChange = (
   prevColumnsState: TableColumn[],
   newTableColumnsToRender: TableColumn[],
   columnsSizing: { [key: string]: number },
-  tableWidth: number
+  tableWidth: number,
+  isToggleAll: boolean
 ) => {
   // new columns are added and it's not the first render
   if (
@@ -52,8 +53,11 @@ export const handleResizeOnColumnsVisibilityChange = (
       )
       .reduce((acc, column) => {
         if (!columnsSizing[column.accessorKey]) {
+          const percentage = isToggleAll
+            ? column.widthWeightagePercentage || 0
+            : 0;
           columnsSizing[column.accessorKey] = getInitialColumnSize(
-            column.widthWeightagePercentage || 0,
+            percentage,
             tableWidth,
             newTableColumnsToRender.length
           );
