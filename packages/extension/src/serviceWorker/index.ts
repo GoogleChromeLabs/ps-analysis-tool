@@ -98,14 +98,14 @@ chrome.webRequest.onResponseStarted.addListener(
             if (
               header.name.toLowerCase() === 'set-cookie' &&
               header.value &&
-              tab.url &&
+              tabs[tabId] &&
               cookieDB
             ) {
               const cookie = parseResponseCookieHeader(
                 url,
                 header.value,
                 cookieDB,
-                tab.url,
+                tabs[tabId],
                 frameId,
                 cdpCookies?.cookies ?? []
               );
