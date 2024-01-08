@@ -11,7 +11,7 @@ chmod 755 ~/bin/chrome_launcher.sh
 # Check Shell and auto source chrome_launcher.sh
 case $SHELL in
 */zsh)
-  grep "chrome_launcher.sh" ~/.zshrc
+  grep "chrome_launcher.sh" ~/.zshrc > /dev/null
   if [ $? -ne 0 ]; then
     echo "if [ -f ~/bin/chrome_launcher.sh ]; then" >> ~/.zshrc
       echo -e "\tsource ~/bin/chrome_launcher.sh" >> ~/.zshrc
@@ -19,7 +19,7 @@ case $SHELL in
   fi
    ;;
 */bash)
-  grep "chrome_launcher.sh" ~/.bashrc
+  grep "chrome_launcher.sh" ~/.bashrc > /dev/null
   if [ $? -ne 0 ]; then
     echo "if [ -f ~/bin/chrome_launcher.sh ]; then" >> ~/.bashrc
       echo -e "\tsource ~/bin/chrome_launcher.sh" >> ~/.bashrc
