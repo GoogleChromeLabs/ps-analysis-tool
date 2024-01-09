@@ -17,7 +17,7 @@
 /**
  * Internal dependencies
  */
-import type { CompleteJson, CookieJsonDataType } from '../../../types';
+import type { CompleteJson, CookieJsonDataType } from '../../../../types';
 
 const generateSummaryDataCSV = (siteAnalysisData: CompleteJson): string => {
   const frameCookieDataMap = siteAnalysisData.cookieData;
