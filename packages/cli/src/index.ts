@@ -18,7 +18,7 @@
  */
 import { Command } from 'commander';
 import events from 'events';
-import { ensureFile, exists, readFile, writeFile } from 'fs-extra';
+import { ensureFile, readFile, writeFile } from 'fs-extra';
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
 import { exec } from 'child_process';
@@ -29,7 +29,6 @@ import {
   generateAllCookiesCSV,
   generateSummaryDataCSV,
   generateTechnologyCSV,
-  parseUrl,
 } from '@ps-analysis-tool/common';
 import { parseStringPromise } from 'xml2js';
 
@@ -40,7 +39,7 @@ import Utility from './utils/utility';
 import { fetchDictionary } from './utils/fetchCookieDictionary';
 import { analyzeCookiesUrlsInBatches } from './procedures/analyzeCookieUrlsInBatches';
 import { analyzeTechnologiesUrlsInBatches } from './procedures/analyzeTechnologiesUrlsInBatches';
-import { delay } from './utils';
+import { delay, validateArgs } from './utils';
 import { checkPortInUse } from './utils/checkPortInUse';
 
 events.EventEmitter.defaultMaxListeners = 15;
@@ -85,85 +84,6 @@ const initialize = async () => {
       'Error: Report server port (9000) already in use. You might be already running CLI'
     );
     process.exit(1);
-  }
-};
-
-// eslint-disable-next-line complexity
-const validateArgs = async (
-  url: string,
-  sitemapUrl: string,
-  csvPath: string,
-  sitemapPath: string,
-  numberOfUrls: string,
-  outDir: string
-) => {
-  if (!url && !sitemapUrl && !csvPath && !sitemapPath) {
-    console.log(
-      `Please provide one of the following 
-      a) URL of a site (-u or --url) 
-      b) URL of a sitemap (-s or --sitemap-url)
-      c) Path to a CSV file (-c or --csv-path)
-      d) Path to a XML file (-p or --sitemap-path)`
-    );
-    process.exit(1);
-  }
-
-  if (
-    (url && sitemapUrl) ||
-    (sitemapUrl && csvPath) ||
-    (csvPath && sitemapPath) ||
-    (sitemapPath && url)
-  ) {
-    console.log(
-      `Please provide ONLY one of the following 
-      a) URL of a site (-u or --url) 
-      b) URL of a sitemap (-s or --sitemap-url)
-      c) Path to a CSV file (-c or --csv-path)
-      d) Path to a XML file (-p or --sitemap-path)`
-    );
-    process.exit(1);
-  }
-
-  if (csvPath) {
-    const csvFileExists = await exists(csvPath);
-    if (!csvFileExists) {
-      console.log(`No file at ${csvPath}`);
-      process.exit(1);
-    }
-  }
-
-  if (sitemapPath) {
-    const sitemapFileExists = await exists(sitemapPath);
-    if (!sitemapFileExists) {
-      console.log(`No file at ${sitemapPath}`);
-      process.exit(1);
-    }
-  }
-
-  if (url || sitemapUrl) {
-    const _url = url || sitemapUrl;
-
-    const parsedUrl = parseUrl(_url);
-
-    if (parsedUrl === null) {
-      console.log(`Provided Url ${parsedUrl} is not valid`);
-      process.exit(1);
-    }
-  }
-
-  if (numberOfUrls) {
-    if (isNaN(parseInt(numberOfUrls))) {
-      console.log(`${numberOfUrls} is not valid numeric value`);
-      process.exit(1);
-    }
-  }
-
-  if (outDir) {
-    const outDirExists = await exists(path.resolve(outDir));
-    if (!outDirExists) {
-      console.log(`Provided dir "${path.resolve(outDir)}" does not exist`);
-      process.exit(1);
-    }
   }
 };
 

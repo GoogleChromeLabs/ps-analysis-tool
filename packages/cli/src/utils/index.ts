@@ -14,3 +14,4 @@
  * limitations under the License.
  */
 export { default as delay } from './delay';
+export { default as validateArgs } from './validateArgs';
