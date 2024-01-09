@@ -307,7 +307,7 @@ const CookieStore = {
   },
 
   /**
-   * Handle topics.
+   * Set topics list.
    * @param {string} activeTabUrl The active tab origin location.
    * @param {number[]} topics The topics for active tab.
    */
@@ -340,6 +340,77 @@ const CookieStore = {
     }
 
     return [];
+  },
+
+  /**
+   * Add domain to allow-list.
+   * @param {Record<string, string>} domainObject
+   * The domain to be added to allow-list.
+   */
+  async addDomainToAllowList(domainObject: Record<string, string>) {
+    const storage = await chrome.storage.session.get();
+
+    if (!storage.allowList) {
+      storage.allowList = [] as Record<string, string>[];
+    }
+
+    let isElementPresent = false;
+    for (let i = 0; i < storage.allowList.length; i++) {
+      if (
+        storage.allowList[i].scope === domainObject.scope &&
+        storage.allowList[i].primaryDomain === domainObject.primaryDomain &&
+        storage.allowList[i].primaryPattern === domainObject.primaryPattern &&
+        storage.allowList[i].secondaryPattern === domainObject.secondaryPattern
+      ) {
+        isElementPresent = true;
+        break;
+      }
+    }
+
+    if (!isElementPresent) {
+      storage.allowList = [...storage.allowList, domainObject];
+    }
+
+    await chrome.storage.session.set(storage);
+  },
+
+  /**
+   * Remove domain from allow-list.
+   * @param {Record<string, string>} domainObject
+   * The domain to be removed from allow-list.
+   */
+  async removeDomainFromAllowList(domainObject: Record<string, string>) {
+    const storage = await chrome.storage.session.get();
+
+    let indexToRemove = -1;
+    for (let i = 0; i < storage.allowList.length; i++) {
+      if (
+        storage.allowList[i].scope === domainObject.scope &&
+        storage.allowList[i].primaryDomain === domainObject.primaryDomain &&
+        storage.allowList[i].primaryPattern === domainObject.primaryPattern &&
+        storage.allowList[i].secondaryPattern === domainObject.secondaryPattern
+      ) {
+        indexToRemove = i;
+        break;
+      }
+    }
+
+    if (indexToRemove !== -1) {
+      storage.allowList.splice(indexToRemove, 1);
+    }
+
+    await chrome.storage.session.set(storage);
+  },
+
+  /**
+   * Get domains in allow-list.
+   * @returns {Promise<Record<string, string>>}
+   * Set of domains in allow-list.
+   */
+  async getDomainsInAllowList(): Promise<Record<string, string>[]> {
+    const storage = await chrome.storage.session.get();
+
+    return storage.allowList ?? [];
   },
 };
 
