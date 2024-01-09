@@ -14,4 +14,6 @@
  * limitations under the License.
  */
 export { default as delay } from './delay';
+export { fetchDictionary } from './fetchCookieDictionary';
 export { default as validateArgs } from './validateArgs';
+export { default as getUrlListFromArgs } from './getUrlListFromArgs';
