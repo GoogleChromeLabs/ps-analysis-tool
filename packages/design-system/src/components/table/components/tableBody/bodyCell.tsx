@@ -25,6 +25,7 @@ import { createPortal } from 'react-dom';
  */
 import type { InfoType, TableRow } from '../../useTable';
 import { CookieTableData } from '@ps-analysis-tool/common';
+
 interface BodyCellProps {
   cell: React.JSX.Element | InfoType;
   width: number;
@@ -33,7 +34,9 @@ interface BodyCellProps {
   row: TableRow;
   onRowClick: () => void;
   isDomainInAllowList: boolean;
-  handleAllowListClick: () => void;
+  parentDomain: { value: string; exist: boolean };
+  onAllowListClick: (domain: string) => void;
+  removeSelectedRow: () => void;
 }
 
 const BodyCell = ({
@@ -43,7 +46,9 @@ const BodyCell = ({
   width,
   isRowFocused,
   isDomainInAllowList,
-  handleAllowListClick,
+  parentDomain,
+  onAllowListClick,
+  removeSelectedRow,
   isHighlighted = false,
 }: BodyCellProps) => {
   const [contextMenuOpen, setContextMenuOpen] = useState(false);
@@ -89,10 +94,17 @@ const BodyCell = ({
     }
   }, [domain, name]);
 
-  const handleAllowedList = useCallback(() => {
-    handleAllowListClick();
+  const handleAllowListClick = useCallback(() => {
+    removeSelectedRow();
+    onAllowListClick(domain ?? '');
     setContextMenuOpen(false);
-  }, [handleAllowListClick]);
+  }, [domain, onAllowListClick, removeSelectedRow]);
+
+  const handleAllowListWithParentDomainClick = useCallback(() => {
+    removeSelectedRow();
+    onAllowListClick(parentDomain.value);
+    setContextMenuOpen(false);
+  }, [onAllowListClick, parentDomain, removeSelectedRow]);
 
   return (
     <div
@@ -115,7 +127,7 @@ const BodyCell = ({
           createPortal(
             <div className="transition duration-100" data-testid="column-menu">
               <div
-                className="absolute z-50 text-raisin-black dark:text-bright-gray rounded-md backdrop-blur-2xl max-w-[13rem] p-1.5 mr-2 divide-neutral-300 dark:divide-neutral-500 max-h-[78vh] bg-stone-200 dark:bg-neutral-700 shadow-3xl"
+                className="absolute z-50 text-raisin-black dark:text-bright-gray rounded-md backdrop-blur-2xl p-1.5 mr-2 divide-neutral-300 dark:divide-neutral-500 max-h-[78vh] bg-stone-200 dark:bg-neutral-700 shadow-3xl"
                 style={{
                   left:
                     'min( calc( 100vw - 15rem),' + columnPosition.x + 'px )',
@@ -130,16 +142,25 @@ const BodyCell = ({
                   <span>Copy network filter string</span>
                 </button>
 
-                <button
-                  onClick={handleAllowedList}
-                  className="w-full text-xs rounded px-1 py-[3px] flex items-center hover:bg-royal-blue hover:text-white cursor-default"
-                >
-                  <span>
-                    {isDomainInAllowList
-                      ? 'Remove domain from allowed list'
-                      : 'Add domain to allowed list'}
-                  </span>
-                </button>
+                {isDomainInAllowList && parentDomain.exist ? (
+                  <button
+                    onClick={handleAllowListWithParentDomainClick}
+                    className="w-full text-xs rounded px-1 py-[3px] flex items-center hover:bg-royal-blue hover:text-white cursor-default"
+                  >
+                    <span>Remove `{parentDomain.value}` from allow list</span>
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleAllowListClick}
+                    className="w-full text-xs rounded px-1 py-[3px] flex items-center hover:bg-royal-blue hover:text-white cursor-default"
+                  >
+                    <span id="allow-list-option">
+                      {isDomainInAllowList
+                        ? 'Remove domain from allow list'
+                        : 'Add domain to allow list'}
+                    </span>
+                  </button>
+                )}
               </div>
               <div
                 data-testid="column-menu-overlay"

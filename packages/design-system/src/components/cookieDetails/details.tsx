@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import {
   cookieIssueDetails,
@@ -30,6 +30,14 @@ export interface DetailsProps {
 
 const Details = ({ selectedCookie }: DetailsProps) => {
   const [showUrlDecoded, setShowUrlDecoded] = useState(false);
+  const [isDomainInAllowList, setIsDomainInAllowList] =
+    useState<boolean>(false);
+
+  const pageUrl = useRef<string>('');
+  const isIncognito = useRef<boolean>(false);
+
+  const domain = selectedCookie.parsedCookie.domain;
+
   let blockedReasons = '';
   let warningReasons = '';
   //Adding a comment here for future reference, this was done because we are using 2 different APIs to gather cookie data and often the isBlocked gets toggled between true and false.
@@ -70,9 +78,53 @@ const Details = ({ selectedCookie }: DetailsProps) => {
     return reason;
   });
 
+  useEffect(() => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const currentTab = tabs[0];
+
+      if (currentTab?.url) {
+        try {
+          const origin = new URL(currentTab.url).origin;
+          if (pageUrl.current !== origin) {
+            pageUrl.current = origin;
+          }
+        } catch (e) {
+          // Ignore.
+        }
+      }
+
+      if (currentTab?.incognito) {
+        isIncognito.current = currentTab.incognito;
+      }
+
+      if (pageUrl.current && domain) {
+        let primaryUrl = domain;
+
+        primaryUrl = primaryUrl.startsWith('.')
+          ? `https://${primaryUrl.substring(1)}/`
+          : `https://${primaryUrl}/`;
+
+        chrome.contentSettings.cookies.get(
+          {
+            primaryUrl: primaryUrl,
+            secondaryUrl: pageUrl.current,
+            incognito: isIncognito.current,
+          },
+          (details) => {
+            if (details?.setting === 'session_only') {
+              setIsDomainInAllowList(true);
+            } else {
+              setIsDomainInAllowList(false);
+            }
+          }
+        );
+      }
+    });
+  }, [domain, isDomainInAllowList, selectedCookie]);
+
   return (
     <div className="text-xs py-1 px-1.5">
-      {isCookieBlocked && blockedReasons && blockedReasons && (
+      {!isDomainInAllowList && isCookieBlocked && blockedReasons && (
         <>
           <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
             Blocked reason
@@ -83,7 +135,8 @@ const Details = ({ selectedCookie }: DetailsProps) => {
           />
         </>
       )}
-      {selectedCookie?.warningReasons &&
+      {!isDomainInAllowList &&
+        selectedCookie?.warningReasons &&
         selectedCookie?.warningReasons?.length > 0 && (
           <>
             <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
@@ -95,6 +148,18 @@ const Details = ({ selectedCookie }: DetailsProps) => {
             />
           </>
         )}
+      {isDomainInAllowList && (
+        <div className="mb-4">
+          <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
+            Allow Listed
+          </p>
+          <p className="text-outer-space-crayola dark:text-bright-gray">
+            The cookie domain was added to “allow list” for this session of the
+            browser. You can view all allowed items under
+            chrome://settings/content/siteData.
+          </p>
+        </div>
+      )}
       <p className="font-bold text-raising-black dark:text-bright-gray mb-1 text-semibold flex items-center">
         <span>Cookie Value</span>
         <label className="text-raising-black dark:text-bright-gray text-xs font-normal flex items-center">

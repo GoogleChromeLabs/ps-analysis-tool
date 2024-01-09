@@ -33,6 +33,7 @@ import FiltersSidebar from './filtersSidebar';
 interface TableProps {
   table: TableOutput;
   selectedKey: string | undefined | null;
+  removeSelectedFrame: () => void;
   getRowObjectKey: (row: TableRow) => string;
   onRowClick: (row: TableData | null) => void;
   showTopBar?: boolean;
