@@ -17,7 +17,7 @@
 /**
  * Internal dependencies.
  */
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useTablePersistentSettingsStore } from '../../persistentSettingsStore';
 import { PersistentStorageData, TableFilter } from '..';
 
@@ -48,6 +48,10 @@ const useFiltersPersistence = (
     [setOptions]
   );
 
+  const genericFilterOptionsRef = useRef<
+    PersistentStorageData['selectedFilters']
+  >({});
+
   useEffect(() => {
     if (specificTablePersistentSettingsKey) {
       const data = getPreferences(
@@ -62,6 +66,19 @@ const useFiltersPersistence = (
       }
     }
 
+    return () => {
+      setOptions(() => ({
+        ...genericFilterOptionsRef.current,
+      }));
+    };
+  }, [
+    computeAndUpdateOptions,
+    getPreferences,
+    setOptions,
+    specificTablePersistentSettingsKey,
+  ]);
+
+  useEffect(() => {
     if (genericTablePersistentSettingsKey) {
       const data = getPreferences(
         genericTablePersistentSettingsKey,
@@ -69,21 +86,20 @@ const useFiltersPersistence = (
       );
 
       if (data) {
-        computeAndUpdateOptions(
-          data as PersistentStorageData['selectedFilters']
-        );
+        genericFilterOptionsRef.current =
+          data as PersistentStorageData['selectedFilters'];
+        computeAndUpdateOptions(genericFilterOptionsRef.current);
       }
     }
 
     return () => {
-      setOptions({});
+      setOptions(() => ({}));
     };
   }, [
     computeAndUpdateOptions,
     genericTablePersistentSettingsKey,
     getPreferences,
     setOptions,
-    specificTablePersistentSettingsKey,
   ]);
 
   const saveFilters = useCallback(
