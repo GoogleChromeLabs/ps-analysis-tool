@@ -13,10 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/**
+ * External dependencies.
+ */
 import { readFile } from 'fs-extra';
-import Utility from './utility';
 import { parseStringPromise } from 'xml2js';
+/**
+ * Internal dependencies.
+ */
+import Utility from './utility';
 
 /**
  * Validate arguments passed to the CLI. Process for the CLI is exited with appropriate message.

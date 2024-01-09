@@ -23,13 +23,7 @@ import { ensureFile, writeFile } from 'fs-extra';
 import Spinnies from 'spinnies';
 import { exec } from 'child_process';
 import path from 'path';
-import {
-  CompleteJson,
-  generateAffectedCookiesCSV,
-  generateAllCookiesCSV,
-  generateSummaryDataCSV,
-  generateTechnologyCSV,
-} from '@ps-analysis-tool/common';
+import { CompleteJson } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -96,99 +90,6 @@ const saveResults = async (outDir: string, result: CompleteJson[]) => {
     outDir + '/out.json',
     JSON.stringify(Array.isArray(result) ? result[0] : result, null, 4)
   );
-};
-
-const generateCSVFiles = (data: CompleteJson) => {
-  const allCookiesCSV = generateAllCookiesCSV(data);
-  let technologyDataCSV = null;
-  if (data.technologyData.length > 0) {
-    technologyDataCSV = generateTechnologyCSV(data);
-  }
-  const affectedCookiesDataCSV = generateAffectedCookiesCSV(data);
-  const summaryDataCSV = generateSummaryDataCSV(data);
-
-  return {
-    allCookiesCSV,
-    technologyDataCSV,
-    affectedCookiesDataCSV,
-    summaryDataCSV,
-  };
-};
-
-export const getFolderName = (pageUrl: string) => {
-  let folderName = pageUrl
-    .trim()
-    .replace(/^https?:\/\//, '')
-    .replace(/\/+/g, '-');
-
-  if (folderName.endsWith('-')) {
-    const lastDashIndex = folderName.lastIndexOf('-');
-    folderName = folderName.substring(0, lastDashIndex);
-  }
-
-  return folderName;
-};
-
-const saveCSVReports = async (outDir: string, result: CompleteJson[]) => {
-  if (result.length > 1) {
-    // Sitemap report
-    await Promise.all(
-      result.map(async (siteReport) => {
-        const {
-          allCookiesCSV,
-          technologyDataCSV,
-          affectedCookiesDataCSV,
-          summaryDataCSV,
-        } = generateCSVFiles(siteReport);
-
-        const fileDir = path.join(outDir, getFolderName(siteReport.pageUrl));
-
-        await ensureFile(path.join(fileDir, 'cookies.csv'));
-        await writeFile(path.join(fileDir, 'cookies.csv'), allCookiesCSV);
-
-        if (technologyDataCSV) {
-          await ensureFile(path.join(fileDir, 'technologies.csv'));
-          await writeFile(
-            path.join(fileDir, 'technologies.csv'),
-            technologyDataCSV
-          );
-        }
-
-        await ensureFile(path.join(fileDir, 'affected-cookies.csv'));
-        await writeFile(
-          path.join(fileDir, 'affected-cookies.csv'),
-          affectedCookiesDataCSV
-        );
-
-        await ensureFile(path.join(fileDir, 'report.csv'));
-        await writeFile(path.join(fileDir, 'report.csv'), summaryDataCSV);
-      })
-    );
-  } else {
-    //site report
-    const {
-      allCookiesCSV,
-      technologyDataCSV,
-      affectedCookiesDataCSV,
-      summaryDataCSV,
-    } = generateCSVFiles(result[0]);
-    await ensureFile(path.join(outDir, 'cookies.csv'));
-    await writeFile(path.join(outDir, 'cookies.csv'), allCookiesCSV);
-
-    if (technologyDataCSV) {
-      await ensureFile(path.join(outDir, 'technologies.csv'));
-      await writeFile(path.join(outDir, 'technologies.csv'), technologyDataCSV);
-    }
-
-    await ensureFile(path.join(outDir, 'affected-cookies.csv'));
-    await writeFile(
-      path.join(outDir, 'affected-cookies.csv'),
-      affectedCookiesDataCSV
-    );
-
-    await ensureFile(path.join(outDir, 'report.csv'));
-    await writeFile(path.join(outDir, 'report.csv'), summaryDataCSV);
-  }
 };
 
 const startDashboardServer = async (dir: string) => {
@@ -321,7 +222,7 @@ const startDashboardServer = async (dir: string) => {
   await saveResults(path.join(outputDir, prefix), result);
 
   if (outDir) {
-    await saveCSVReports(path.join(outputDir, prefix), result);
+    await (path.join(outputDir, prefix), result);
   }
 
   if (!outDir) {
