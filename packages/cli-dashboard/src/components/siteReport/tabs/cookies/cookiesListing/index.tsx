@@ -59,6 +59,7 @@ const CookiesListing = ({
         accessorKey: 'parsedCookie.name',
         cell: (info: InfoType) => info,
         enableHiding: false,
+        widthWeightagePercentage: 15,
       },
       {
         header: 'Scope',
@@ -68,26 +69,31 @@ const CookiesListing = ({
             {!info ? 'Third Party' : 'First Party'}
           </p>
         ),
+        widthWeightagePercentage: 9,
       },
       {
         header: 'Domain',
         accessorKey: 'parsedCookie.domain',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 10,
       },
       {
         header: 'SameSite',
         accessorKey: 'parsedCookie.samesite',
         cell: (info: InfoType) => <span className="capitalize">{info}</span>,
+        widthWeightagePercentage: 8,
       },
       {
         header: 'Category',
         accessorKey: 'analytics.category',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 10,
       },
       {
         header: 'Platform',
         accessorKey: 'analytics.platform',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 11,
       },
       {
         header: 'HttpOnly',
@@ -97,6 +103,7 @@ const CookiesListing = ({
             {info ? <span className="font-serif">✓</span> : ''}
           </p>
         ),
+        widthWeightagePercentage: 5,
       },
       {
         header: 'Secure',
@@ -106,21 +113,25 @@ const CookiesListing = ({
             {info ? <span className="font-serif">✓</span> : ''}
           </p>
         ),
+        widthWeightagePercentage: 5,
       },
       {
         header: 'Value',
         accessorKey: 'parsedCookie.value',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 12,
       },
       {
         header: 'Path',
         accessorKey: 'parsedCookie.path',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 4,
       },
       {
         header: 'Expires / Max-Age',
         accessorKey: 'parsedCookie.expires',
         cell: (info: InfoType) => (info ? info : 'Session'),
+        widthWeightagePercentage: 11,
       },
     ],
     []
