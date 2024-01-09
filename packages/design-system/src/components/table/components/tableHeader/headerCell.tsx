@@ -47,7 +47,7 @@ const HeaderCell = ({
   return (
     <div
       ref={columnRef}
-      style={{ maxWidth: cell.width }}
+      style={{ minWidth: cell.width }}
       onClick={table.isResizing ? undefined : handleOnClick}
       className="relative hover:bg-gainsboro dark:hover:bg-outer-space select-none touch-none font-normal truncate flex-1"
       data-testid="header-cell"

@@ -155,7 +155,7 @@ const TableBody = ({
             key={index}
             className="px-1 py-px outline-0 flex-1"
             style={{
-              maxWidth: width,
+              minWidth: width,
             }}
           />
         ))}
@@ -171,7 +171,7 @@ const TableBody = ({
             key={index}
             className="px-1 py-px outline-0 h-full flex-1"
             style={{
-              maxWidth: width,
+              minWidth: width,
             }}
           />
         ))}
