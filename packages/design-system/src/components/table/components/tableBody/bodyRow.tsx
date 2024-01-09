@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useCallback } from 'react';
 import classNames from 'classnames';
 import { CookieTableData } from '@ps-analysis-tool/common';
 
@@ -34,6 +34,7 @@ interface BodyRowProps {
   index: number;
   isRowFocused: boolean;
   selectedKey: string | undefined | null;
+  removeSelectedRow: () => void;
   getRowObjectKey: (row: TableRow) => string;
   onRowClick: () => void;
   onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>, index: number) => void;
@@ -47,6 +48,7 @@ const BodyRow = ({
   columns,
   index,
   selectedKey,
+  removeSelectedRow,
   getRowObjectKey,
   isRowFocused,
   onRowClick,
@@ -54,11 +56,8 @@ const BodyRow = ({
   domainsInAllowList,
   setDomainsInAllowList,
 }: BodyRowProps) => {
-  const { handleAllowListClick, isDomainInAllowList } = useAllowedList(
-    domainsInAllowList,
-    row,
-    setDomainsInAllowList
-  );
+  const { onAllowListClick, isDomainInAllowList, parentDomain } =
+    useAllowedList(row, domainsInAllowList, setDomainsInAllowList);
 
   const cookieKey = getRowObjectKey(row);
   const isBlocked =
@@ -66,6 +65,7 @@ const BodyRow = ({
     ((row.originalData as CookieTableData)?.blockedReasons &&
       (row.originalData as CookieTableData)?.blockedReasons?.length);
   const isHighlighted = (row.originalData as CookieTableData)?.highlighted;
+
   const tableRowClassName = classNames(
     'outline-0 flex divide-x divide-american-silver dark:divide-quartz',
     isBlocked &&
@@ -79,8 +79,8 @@ const BodyRow = ({
     isDomainInAllowList &&
       (cookieKey !== selectedKey
         ? index % 2
-          ? 'dark:bg-green-900 bg-green-400'
-          : 'dark:bg-green-800 bg-green-300'
+          ? 'dark:bg-jungle-green-dark bg-leaf-green-dark'
+          : 'dark:bg-jungle-green-light bg-leaf-green-light'
         : isRowFocused
         ? 'bg-gainsboro dark:bg-outer-space'
         : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
@@ -105,11 +105,20 @@ const BodyRow = ({
         : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver')
   );
 
+  const handleRowClick = useCallback(
+    (e: React.MouseEvent<HTMLElement>) => {
+      if ((e.target as HTMLElement).id !== 'allow-list-option') {
+        onRowClick();
+      }
+    },
+    [onRowClick]
+  );
+
   return (
     <div
       id={index.toString()}
       className={tableRowClassName}
-      onClick={onRowClick}
+      onClick={handleRowClick}
       onKeyDown={(e) => onKeyDown(e, index)}
       data-testid="body-row"
     >
@@ -122,8 +131,10 @@ const BodyRow = ({
           isHighlighted={isHighlighted}
           isRowFocused={cookieKey === selectedKey}
           row={row}
+          removeSelectedRow={removeSelectedRow}
           isDomainInAllowList={isDomainInAllowList}
-          handleAllowListClick={handleAllowListClick}
+          parentDomain={parentDomain}
+          onAllowListClick={onAllowListClick}
         />
       ))}
     </div>
