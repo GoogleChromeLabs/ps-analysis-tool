@@ -16,71 +16,173 @@
 /**
  * External dependencies.
  */
-import { useRef, useEffect, useCallback } from 'react';
+import { useRef, useEffect, useCallback, useState } from 'react';
 import { CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import type { TableRow } from '..';
+import { CookieStore } from '@ps-analysis-tool/extension/src/localStore';
 
 const useAllowedList = (
-  domainsInAllowList: Set<string>,
   row: TableRow,
+  domainsInAllowList: Set<string>,
   setDomainsInAllowList: (domainList: Set<string>) => void
 ) => {
   const pageUrl = useRef<string>('');
   const isIncognito = useRef<boolean>(false);
 
+  const [parentDomain, setParentDomain] = useState<{
+    value: string;
+    exist: boolean;
+  }>({
+    exist: false,
+    value: '',
+  });
+
   const domain =
     (row?.originalData as CookieTableData)?.parsedCookie?.domain ?? '';
+
   const isDomainInAllowList = domainsInAllowList.has(domain);
+  const allowListSessionStorage = CookieStore.getDomainsInAllowList();
 
-  const handleAllowListClick = useCallback(() => {
-    if (pageUrl.current === '' || domain === '') {
-      return;
-    }
+  const onAllowListClick = useCallback(
+    (domainForAllowList: string) => {
+      if (pageUrl.current === '' || domainForAllowList === '') {
+        return;
+      }
 
-    const secondaryPattern = pageUrl.current.endsWith('/')
-      ? pageUrl.current + '*'
-      : pageUrl.current + '/*';
+      const secondaryPattern = pageUrl.current.endsWith('/')
+        ? pageUrl.current + '*'
+        : pageUrl.current + '/*';
 
-    let primaryPattern = domain;
-    primaryPattern =
-      '*://' +
-      (primaryPattern.startsWith('.') ? '*' : '') +
-      primaryPattern +
-      '/*';
+      let primaryPattern = domainForAllowList;
 
-    const scope = isIncognito.current ? 'incognito_session_only' : 'regular';
-    if (isDomainInAllowList) {
-      chrome.contentSettings.cookies.clear({});
-    } else {
-      chrome.contentSettings.cookies
-        .set({
-          primaryPattern: primaryPattern,
-          secondaryPattern: secondaryPattern,
-          setting: 'session_only',
-          scope: scope,
-        })
-        // @ts-ignore - The chrome-type definition is outdated,
-        // this returns a promise instead of a void.
-        .catch((error: Error) => {
-          console.log(
-            error.message,
-            `Primary pattern: ${primaryPattern}  |  Secondary pattern: ${secondaryPattern}`
-          );
+      primaryPattern =
+        'https://' +
+        (primaryPattern.startsWith('.') ? '*' : '') +
+        primaryPattern +
+        '/*';
+
+      const scope = isIncognito.current ? 'incognito_session_only' : 'regular';
+      const domainObject = {
+        primaryDomain: domainForAllowList,
+        primaryPattern,
+        secondaryPattern,
+        scope,
+      };
+
+      if (isDomainInAllowList) {
+        domainsInAllowList.delete(domainForAllowList);
+        chrome.contentSettings.cookies.clear({});
+
+        CookieStore.removeDomainFromAllowList(domainObject).then(() => {
+          // Set remaining settings after removing one setting.
+          CookieStore.getDomainsInAllowList().then((listOfDomainObject) => {
+            listOfDomainObject.forEach((domainObjectItem) => {
+              chrome.contentSettings.cookies
+                .set({
+                  primaryPattern: domainObjectItem.primaryPattern,
+                  secondaryPattern: domainObjectItem.secondaryPattern,
+                  setting: 'session_only',
+                  scope: domainObjectItem.scope as
+                    | 'incognito_session_only'
+                    | 'regular',
+                })
+                // @ts-ignore - The chrome-type definition is outdated,
+                // this returns a promise instead of a void.
+                .catch((error: Error) => {
+                  console.log(
+                    error.message,
+                    `Primary pattern: ${domainObjectItem.primaryPattern}`,
+                    `Secondary pattern: ${domainObjectItem.secondaryPattern}`
+                  );
+                });
+            });
+          });
         });
-    }
+      } else {
+        CookieStore.getDomainsInAllowList()
+          .then((listOfDomainObject) => {
+            console.log(listOfDomainObject, domainForAllowList);
+            listOfDomainObject.forEach((domainObjectItem) => {
+              // Check if more specific patterns was added to allow-list,
+              // and remove it as the general pattern will be applied.
+              if (
+                domainObjectItem.primaryDomain.endsWith(domainForAllowList) ||
+                `.${domainObjectItem.primaryDomain}` === domainForAllowList
+              ) {
+                domainsInAllowList.delete(domainObjectItem.primaryDomain);
+                chrome.contentSettings.cookies.clear({});
 
-    if (isDomainInAllowList) {
-      domainsInAllowList.clear();
-    } else {
-      domainsInAllowList.add(domain);
-    }
-
-    setDomainsInAllowList(domainsInAllowList);
-  }, [domain, domainsInAllowList, isDomainInAllowList, setDomainsInAllowList]);
+                CookieStore.removeDomainFromAllowList(domainObjectItem).then(
+                  () => {
+                    // Set remaining settings after removing one setting.
+                    CookieStore.getDomainsInAllowList().then(
+                      (newListOfDomainObject) => {
+                        newListOfDomainObject.forEach((newDomainObjectItem) => {
+                          chrome.contentSettings.cookies
+                            .set({
+                              primaryPattern:
+                                newDomainObjectItem.primaryPattern,
+                              secondaryPattern:
+                                newDomainObjectItem.secondaryPattern,
+                              setting: 'session_only',
+                              scope: newDomainObjectItem.scope as
+                                | 'incognito_session_only'
+                                | 'regular',
+                            })
+                            // @ts-ignore - The chrome-type definition is outdated,
+                            // this returns a promise instead of a void.
+                            .catch((error: Error) => {
+                              console.log(
+                                error.message,
+                                `Primary pattern: ${newDomainObjectItem.primaryPattern}`,
+                                `Secondary pattern: ${newDomainObjectItem.secondaryPattern}`
+                              );
+                            });
+                        });
+                      }
+                    );
+                  }
+                );
+              }
+            });
+          })
+          .then(() => {
+            chrome.contentSettings.cookies
+              .set({
+                primaryPattern,
+                secondaryPattern,
+                setting: 'session_only',
+                scope,
+              })
+              // @ts-ignore - The chrome-type definition is outdated,
+              // this returns a promise instead of a void.
+              .then(() => {
+                domainsInAllowList.add(domainForAllowList);
+                CookieStore.addDomainToAllowList(domainObject);
+              })
+              .catch((error: Error) => {
+                console.log(
+                  error.message,
+                  `Primary pattern: ${primaryPattern}`,
+                  `Secondary pattern: ${secondaryPattern}`
+                );
+              });
+          });
+      }
+      setDomainsInAllowList(domainsInAllowList);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      isDomainInAllowList,
+      // allowListSessionStorage,
+      domainsInAllowList,
+      setDomainsInAllowList,
+    ]
+  );
 
   useEffect(() => {
     // @todo Is there an alternative way to do it?
@@ -102,7 +204,7 @@ const useAllowedList = (
         isIncognito.current = currentTab.incognito;
       }
 
-      if (pageUrl.current !== '' && domain !== '') {
+      if (pageUrl.current && domain) {
         let primaryUrl = domain;
 
         primaryUrl = primaryUrl.startsWith('.')
@@ -135,10 +237,47 @@ const useAllowedList = (
         );
       }
     });
-  }, [domain, domainsInAllowList, isIncognito, row, setDomainsInAllowList]);
+
+    // Set whether the domain is a subdomain match or the exact match.
+    allowListSessionStorage.then((listOfDomainObject) => {
+      let parentDomainExist = false;
+      let parentDomainValue = '';
+      const numberOfDomainsInAllowList = listOfDomainObject
+        ? listOfDomainObject.length
+        : 0;
+
+      for (let i = 0; i < numberOfDomainsInAllowList; i++) {
+        if (
+          domain.endsWith(listOfDomainObject[i].primaryDomain) &&
+          domain !== listOfDomainObject[i].primaryDomain
+        ) {
+          parentDomainExist = true;
+          parentDomainValue = listOfDomainObject[i].primaryDomain;
+          // console.log(listOfDomainObject[i].primaryDomain, domain);
+          break;
+        }
+      }
+
+      if (
+        parentDomain.value !== parentDomainValue ||
+        parentDomain.exist !== parentDomainExist
+      ) {
+        setParentDomain({ exist: parentDomainExist, value: parentDomainValue });
+      }
+    });
+  }, [
+    row,
+    domain,
+    isIncognito,
+    domainsInAllowList,
+    setDomainsInAllowList,
+    allowListSessionStorage,
+    parentDomain,
+  ]);
 
   return {
-    handleAllowListClick,
+    parentDomain,
+    onAllowListClick,
     isDomainInAllowList,
   };
 };
