@@ -14,40 +14,32 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies
+ * External dependencies
  */
-import { getCurrentTabId } from '../../utils/getCurrentTabId';
-import type { TabData } from '../types';
+import type { CookieData } from '@ps-analysis-tool/common';
 /**
  *
  * @param storage {object} The storage object from local store.
  * @param tabId {string} The tabId of the the tab where badge text need to be updated.
  */
-export default async function updateCookieBadgeText(
+export default function updateCookieBadgeText(
   storage: {
-    [key: string]: TabData;
+    [key: string]: CookieData;
   },
-  tabId?: string
+  tabId: number
 ) {
   try {
-    let currentTabId = '';
-    if (tabId) {
-      currentTabId = tabId;
-    } else {
-      currentTabId = (await getCurrentTabId()) as string;
-    }
-    if (!currentTabId) {
+    if (!tabId) {
       return;
     }
-    const tabCookies = storage[currentTabId].cookies || {};
-    const numCookies = Object.keys(tabCookies).filter(
+    const numCookies = Object.keys(storage).filter(
       (cookieKey) =>
-        tabCookies[cookieKey]?.parsedCookie &&
-        tabCookies[cookieKey].frameIdList?.length >= 1
+        storage[cookieKey]?.parsedCookie &&
+        storage[cookieKey].frameIdList?.length >= 1
     ).length;
     if (numCookies >= 0) {
-      await chrome.action.setBadgeText({
-        tabId: parseInt(currentTabId),
+      chrome.action.setBadgeText({
+        tabId: tabId,
         text: numCookies.toString(),
       });
     }

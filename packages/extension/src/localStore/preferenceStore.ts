@@ -48,7 +48,6 @@ const PreferenceStore = {
     await chrome.storage.local.set({
       [tabId]: {
         cookies: {},
-        focusedAt: Date.now(),
         preferences: {},
       },
     });

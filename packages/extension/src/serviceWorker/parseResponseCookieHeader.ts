@@ -32,6 +32,7 @@ import type {
   CookieDatabase,
 } from '../utils/fetchCookieDictionary';
 import { createCookieObject } from './createCookieObject';
+import { getDomain } from 'tldts';
 
 /**
  * Parse response cookies header.
@@ -62,10 +63,7 @@ const parseResponseCookieHeader = (
   }
 
   const _isFirstParty = isFirstParty(parsedCookie.domain || '', tabUrl);
-  const partitionKey =
-    new URL(tabUrl).protocol +
-    '//' +
-    new URL(tabUrl).hostname.replace('www.', '');
+  const partitionKey = new URL(tabUrl).protocol + '//' + getDomain(tabUrl);
   if (value.toLowerCase().includes('partitioned')) {
     parsedCookie = {
       ...parsedCookie,

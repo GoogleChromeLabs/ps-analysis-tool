@@ -228,19 +228,6 @@ const CookieStore = {
   },
 
   /**
-   * Update the focusedAt timestamp for the tab.
-   * @param {string} tabId The active tab id.
-   */
-  async updateTabFocus(tabId: string) {
-    const storage = await chrome.storage.local.get();
-    if (storage[tabId]) {
-      storage[tabId].focusedAt = Date.now();
-    }
-
-    await chrome.storage.local.set(storage);
-  },
-
-  /**
    * Clear cookie data
    * @param {string} tabId The active tab id.
    */
@@ -266,7 +253,6 @@ const CookieStore = {
       await chrome.storage.local.set({
         [tabId]: {
           cookies: {},
-          focusedAt: Date.now(),
         },
         tabToRead: tabId,
       });
@@ -274,7 +260,6 @@ const CookieStore = {
       await chrome.storage.local.set({
         [tabId]: {
           cookies: {},
-          focusedAt: Date.now(),
         },
       });
     }

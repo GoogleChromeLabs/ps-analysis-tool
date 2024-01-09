@@ -94,9 +94,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [tabId, setTabId] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const loadingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const framesGetterTimeOut = useRef<ReturnType<typeof setTimeout> | null>(
-    null
-  );
+  const [tabToRead, setTabToRead] = useState<string | null>(null);
   const [isCurrentTabBeingListenedTo, setIsCurrentTabBeingListenedTo] =
     useState<boolean>(false);
   const [contextInvalidated, setContextInvalidated] = useState<boolean>(false);
@@ -199,11 +197,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         ) {
           setReturningToSingleTab(true);
         }
-
-        if (
-          getTabBeingListenedTo &&
-          _tabId.toString() !== getTabBeingListenedTo?.tabToRead
-        ) {
+        if (tabToRead && _tabId.toString() !== tabToRead) {
           setIsCurrentTabBeingListenedTo(false);
           setLoading(false);
           setSelectedFrame(null);
@@ -247,7 +241,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     );
 
     setLoading(false);
-  }, [getAllFramesForCurrentTab]);
+  }, [getAllFramesForCurrentTab, tabToRead]);
 
   const getCookiesSetByJavascript = useCallback(async () => {
     if (tabId) {
@@ -265,11 +259,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
   }, [tabId]);
 
   useEffect(() => {
-    const listener = (message: {
+    const listener = async (message: {
       type: string;
       payload: {
         tabId?: number;
         cookieData?: string;
+        tabToRead?: string;
       };
     }) => {
       if (message.type === 'syncCookieStore:SET_TAB_TO_READ') {
@@ -287,7 +282,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
         setCanStartInspecting(false);
       }
       if (message.type === 'NEW_COOKIE_DATA') {
+        await getAllFramesForCurrentTab(chrome.devtools.inspectedWindow.tabId);
         setTabCookies(JSON.parse(message?.payload?.cookieData ?? '{}'));
+      }
+
+      if (message.type === 'TAB_TO_READ_DATA') {
+        setTabToRead(message?.payload?.tabToRead || '');
       }
     };
 
@@ -296,7 +296,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     return () => {
       chrome.runtime.onMessage.removeListener(listener);
     };
-  }, []);
+  }, [getAllFramesForCurrentTab]);
 
   const tabUpdateListener = useCallback(
     async (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
@@ -374,18 +374,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
       }
     };
   }, []);
-
-  useEffect(() => {
-    framesGetterTimeOut.current = setTimeout(async () => {
-      await getAllFramesForCurrentTab(chrome.devtools.inspectedWindow.tabId);
-    }, 2500);
-
-    return () => {
-      if (framesGetterTimeOut.current) {
-        clearTimeout(framesGetterTimeOut.current);
-      }
-    };
-  }, [getAllFramesForCurrentTab]);
 
   useEffect(() => {
     chrome.runtime.sendMessage({

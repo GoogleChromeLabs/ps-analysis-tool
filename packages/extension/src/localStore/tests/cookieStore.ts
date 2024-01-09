@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/**
+ * External dependencies.
+ */
+import type { CookieData } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
 import CookieStore from '../cookieStore';
-import type { CookieData, Storage } from '../types';
+import type { Storage } from '../types';
 
 const cookieArray: CookieData[] = [
   {
@@ -184,16 +187,6 @@ describe('local store: CookieStore', () => {
     expect(storage['123'].cookies).toStrictEqual({
       'countryCode1.example1.com/': { ...cookieArray[0], frameIdList: [2, 1] },
     });
-  });
-
-  it('should update tab foucusedAt value', async () => {
-    await CookieStore.update('123', cookieArray);
-    const prevFocusedAt = storage['123'].focusedAt;
-
-    await new Promise((r) => setTimeout(r, 100));
-    await CookieStore.updateTabFocus('123');
-
-    expect(storage['123'].focusedAt).not.toBe(prevFocusedAt);
   });
 
   it('should remove tab data', async () => {
