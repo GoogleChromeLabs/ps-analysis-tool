@@ -383,15 +383,19 @@ const CookieStore = {
     const storage = await chrome.storage.session.get();
 
     let indexToRemove = -1;
-    for (let i = 0; i < storage.allowList.length; i++) {
-      if (
-        storage.allowList[i].scope === domainObject.scope &&
-        storage.allowList[i].primaryDomain === domainObject.primaryDomain &&
-        storage.allowList[i].primaryPattern === domainObject.primaryPattern &&
-        storage.allowList[i].secondaryPattern === domainObject.secondaryPattern
-      ) {
-        indexToRemove = i;
-        break;
+
+    if (storage.allowList) {
+      for (let i = 0; i < storage.allowList.length; i++) {
+        if (
+          storage.allowList[i].scope === domainObject.scope &&
+          storage.allowList[i].primaryDomain === domainObject.primaryDomain &&
+          storage.allowList[i].primaryPattern === domainObject.primaryPattern &&
+          storage.allowList[i].secondaryPattern ===
+            domainObject.secondaryPattern
+        ) {
+          indexToRemove = i;
+          break;
+        }
       }
     }
 
