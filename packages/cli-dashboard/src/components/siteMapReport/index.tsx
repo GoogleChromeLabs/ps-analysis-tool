@@ -41,6 +41,7 @@ import SiteMapAffectedCookies from './sitemapAffectedCookies';
 import CookiesLandingContainer from '../siteReport/tabs/cookies/cookiesLandingContainer';
 import reshapeCookies from '../utils/reshapeCookies';
 import sidebarData from './sidebarData';
+import { generateSiteMapReportandDownload } from '../utils/reportDownloader';
 
 interface SiteMapReportProps {
   landingPageCookies: CookieFrameStorageType;
@@ -134,6 +135,13 @@ const SiteMapReport = ({
           tabCookies={reshapedCookies}
           tabFrames={frames}
           affectedCookies={affectedCookies}
+          downloadReport={() => {
+            if (!Array.isArray(completeJson)) {
+              return;
+            }
+
+            generateSiteMapReportandDownload(completeJson);
+          }}
         />
       );
 
