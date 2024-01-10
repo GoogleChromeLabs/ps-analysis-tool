@@ -73,10 +73,7 @@ const useColumnResizing = (
         const tableWidth = tableContainerRef.current?.scrollWidth || 0;
         const newColumns = prevColumns.map((column) => ({
           ...column,
-          width:
-            columnsSizing?.[column.accessorKey] ||
-            column.width ||
-            tableWidth / prevColumns.length,
+          width: columnsSizing?.[column.accessorKey] || column.width || 0,
         }));
 
         return resizeColumns(newColumns, tableWidth);

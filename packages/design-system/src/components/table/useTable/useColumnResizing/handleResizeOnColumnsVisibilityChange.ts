@@ -79,7 +79,7 @@ export const handleResizeOnColumnsVisibilityChange = (
   }
 
   const newColumns = newTableColumnsToRender.map((column) => {
-    if (!columnsSizing[column.accessorKey]) {
+    if (!columnsSizing[column.accessorKey] && prevColumnsState.length) {
       columnsSizing[column.accessorKey] = getInitialColumnSize(
         column.widthWeightagePercentage || 0,
         tableWidth,
