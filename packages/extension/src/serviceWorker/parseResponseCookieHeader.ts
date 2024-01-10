@@ -21,8 +21,9 @@ import {
   isFirstParty,
   findAnalyticsMatch,
   type CookieData,
-  type NetworkCookie,
 } from '@ps-analysis-tool/common';
+import { getDomain } from 'tldts';
+import type { Protocol } from 'devtools-protocol';
 
 /**
  * Internal dependencies.
@@ -41,7 +42,7 @@ import { createCookieObject } from './createCookieObject';
  * @param {CookieDatabase} dictionary Dictionary from open cookie database
  * @param {string} tabUrl top url of the tab from which the request originated.
  * @param {number} frameId Id of a frame in which this cookie is used.
- * @param {NetworkCookie[]} cookiesList List cookies from the request.
+ * @param {Protocol.Network.Cookie[]} cookiesList List cookies from the request.
  * @returns {Promise<CookieData>} Parsed cookie object.
  */
 const parseResponseCookieHeader = async (
@@ -50,7 +51,7 @@ const parseResponseCookieHeader = async (
   dictionary: CookieDatabase,
   tabUrl: string,
   frameId: number,
-  cookiesList: NetworkCookie[]
+  cookiesList: Protocol.Network.Cookie[]
 ): Promise<CookieData> => {
   let parsedCookie: CookieData['parsedCookie'] = cookie.parse(value);
 
@@ -62,10 +63,7 @@ const parseResponseCookieHeader = async (
   }
 
   const _isFirstParty = isFirstParty(parsedCookie.domain || '', tabUrl);
-  const partitionKey =
-    new URL(tabUrl).protocol +
-    '//' +
-    new URL(tabUrl).hostname.replace('www.', '');
+  const partitionKey = new URL(tabUrl).protocol + '//' + getDomain(tabUrl);
   if (value.toLowerCase().includes('partitioned')) {
     parsedCookie = {
       ...parsedCookie,

@@ -45,11 +45,22 @@ let cookieDB: CookieDatabase | null = null;
 
 // Global promise queue.
 const PROMISE_QUEUE = new PQueue({ concurrency: 1 });
+
+let globalIsUsingCDP = false;
+
 const cdpURLToRequestMap: {
   [tabId: string]: {
     [requestId: string]: string;
   };
 } = {};
+
+const ALLOWED_EVENTS = [
+  'Network.responseReceived',
+  'Network.requestWillBeSentExtraInfo',
+  'Network.responseReceivedExtraInfo',
+  'Audits.issueAdded',
+];
+
 /**
  * Fires when the browser receives a response from a web server.
  * @see https://developer.chrome.com/docs/extensions/reference/webRequest/
@@ -246,9 +257,11 @@ chrome.tabs.onRemoved.addListener(async (tabId) => {
  */
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   try {
-    await chrome.debugger.attach({ tabId }, '1.3');
-    chrome.debugger.sendCommand({ tabId }, 'Network.enable');
-    chrome.debugger.sendCommand({ tabId }, 'Audits.enable');
+    if (globalIsUsingCDP) {
+      await chrome.debugger.attach({ tabId }, '1.3');
+      await chrome.debugger.sendCommand({ tabId }, 'Network.enable');
+      await chrome.debugger.sendCommand({ tabId }, 'Audits.enable');
+    }
   } catch (error) {
     //Fail silently
   }
@@ -286,22 +299,35 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       await chrome.storage.sync.clear();
       await chrome.storage.sync.set({
         allowedNumberOfTabs: 'single',
+        isUsingCDP: false,
       });
     }
     if (details.reason === 'update') {
       const preSetSettings = await chrome.storage.sync.get();
+      if (preSetSettings?.isUsingCDP) {
+        globalIsUsingCDP = preSetSettings?.isUsingCDP;
+      }
       if (preSetSettings?.allowedNumberOfTabs) {
         return;
       }
+
+      if (preSetSettings?.isUsingCDP) {
+        globalIsUsingCDP = preSetSettings?.isUsingCDP;
+      }
+
       await chrome.storage.sync.clear();
       await chrome.storage.sync.set({
         allowedNumberOfTabs: 'single',
+        isUsingCDP: globalIsUsingCDP,
       });
     }
   });
 });
 
 chrome.debugger.onEvent.addListener((source, method, params) => {
+  if (!ALLOWED_EVENTS.includes(method)) {
+    return;
+  }
   (async () => {
     // eslint-disable-next-line complexity
     await PROMISE_QUEUE.add(async () => {
@@ -445,6 +471,18 @@ chrome.runtime.onMessage.addListener((request) => {
       await chrome.tabs.reload(Number(newTab));
     });
   }
+  if (request.type === 'CHANGE_CDP_SETTING') {
+    if (typeof request.payload?.isUsingCDP !== 'undefined') {
+      globalIsUsingCDP = request.payload?.isUsingCDP;
+      (async () => {
+        const storage = await chrome.storage.sync.get();
+        await chrome.storage.sync.set({
+          ...storage,
+          isUsingCDP: globalIsUsingCDP,
+        });
+      })();
+    }
+  }
 });
 
 chrome.storage.local.onChanged.addListener(
@@ -465,5 +503,57 @@ chrome.storage.local.onChanged.addListener(
       tabId: parseInt(tabId),
       text: '',
     });
+  }
+);
+
+chrome.storage.sync.onChanged.addListener(
+  async (changes: { [key: string]: chrome.storage.StorageChange }) => {
+    if (
+      !changes?.isUsingCDP ||
+      typeof changes?.isUsingCDP?.newValue === 'undefined'
+    ) {
+      return;
+    }
+
+    globalIsUsingCDP = changes?.isUsingCDP?.newValue;
+
+    chrome.runtime.sendMessage({
+      type: 'CHANGE_CDP_SETTING',
+      payload: {
+        isUsingCDP: changes?.isUsingCDP?.newValue,
+      },
+    });
+    if (!globalIsUsingCDP) {
+      try {
+        const storedTabData = Object.keys(await chrome.storage.local.get());
+        const cdpPromises = storedTabData.map(async (key) => {
+          if (key === 'tabToRead') {
+            return;
+          }
+          await chrome.debugger.sendCommand(
+            { tabId: Number(key) },
+            'Network.disable'
+          );
+          await chrome.debugger.sendCommand(
+            { tabId: Number(key) },
+            'Audits.disable'
+          );
+          await chrome.debugger.detach({ tabId: Number(key) });
+          await chrome.tabs.reload(Number(key));
+        });
+        await Promise.all(cdpPromises);
+      } catch (error) {
+        // Fail silently
+      }
+    } else {
+      const storedTabData = Object.keys(await chrome.storage.local.get());
+      const cdpPromises = storedTabData.map(async (key) => {
+        if (key === 'tabToRead') {
+          return;
+        }
+        await chrome.tabs.reload(Number(key));
+      });
+      await Promise.all(cdpPromises);
+    }
   }
 );
