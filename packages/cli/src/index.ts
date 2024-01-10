@@ -36,6 +36,7 @@ import {
   delay,
   getUrlListFromArgs,
   validateArgs,
+  saveCSVReports,
 } from './utils';
 import { checkPortInUse } from './utils/checkPortInUse';
 
@@ -222,7 +223,7 @@ const startDashboardServer = async (dir: string) => {
   await saveResults(path.join(outputDir, prefix), result);
 
   if (outDir) {
-    await (path.join(outputDir, prefix), result);
+    await saveCSVReports(path.join(outputDir, prefix), result);
   }
 
   if (!outDir) {
