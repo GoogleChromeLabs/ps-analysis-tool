@@ -138,7 +138,7 @@ const Table = ({
             position={columnPosition}
           />
           <div
-            className="h-full w-full overflow-auto min-w-[70rem]"
+            className="h-full w-full overflow-hidden min-w-[70rem]"
             ref={tableRef}
           >
             <TableHeader
