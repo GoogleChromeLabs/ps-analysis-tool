@@ -41,7 +41,7 @@ const CookiesListing = ({
   } | null>(null);
 
   const {
-    tabCookies,
+    cookies,
     tableColumns,
     filters,
     searchKeys,
@@ -63,7 +63,7 @@ const CookiesListing = ({
         className="h-full flex"
       >
         <CookieTable
-          data={tabCookies}
+          data={cookies}
           tableColumns={tableColumns}
           showTopBar={true}
           tableFilters={filters}

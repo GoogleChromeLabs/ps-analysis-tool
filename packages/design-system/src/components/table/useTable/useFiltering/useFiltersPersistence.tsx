@@ -145,6 +145,10 @@ const useFiltersPersistence = (
       }
     });
 
+    genericFilterOptionsRef.current = {
+      ...accumulator.genericSelectedFilters,
+    };
+
     return [
       accumulator.specificSelectedFilters,
       accumulator.genericSelectedFilters,

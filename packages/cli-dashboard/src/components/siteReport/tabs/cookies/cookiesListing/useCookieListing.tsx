@@ -17,12 +17,17 @@
 /**
  * External dependencies
  */
+import React, { useCallback, useMemo } from 'react';
 import type {
   InfoType,
   TableColumn,
   TableFilter,
 } from '@ps-analysis-tool/design-system';
-import React, { useMemo } from 'react';
+import { getValueByKey } from '@ps-analysis-tool/common';
+
+/**
+ * Internal dependencies
+ */
 import { useContentStore } from '../../../stateProviders/contentStore';
 
 const useCookieListing = (
@@ -30,10 +35,16 @@ const useCookieListing = (
   selectedSite?: string | null
 ) => {
   const { tabCookies } = useContentStore(({ state }) => ({
-    tabCookies: Object.values(state.tabCookies).filter((cookie) =>
-      (cookie.frameUrls as string[]).includes(selectedFrameUrl)
-    ),
+    tabCookies: state.tabCookies,
   }));
+
+  const cookies = useMemo(
+    () =>
+      Object.values(tabCookies).filter((cookie) =>
+        (cookie.frameUrls as string[]).includes(selectedFrameUrl)
+      ),
+    [tabCookies, selectedFrameUrl]
+  );
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -109,10 +120,37 @@ const useCookieListing = (
     []
   );
 
+  const calculate = useCallback(
+    (key: string): TableFilter[keyof TableFilter]['filterValues'] =>
+      Object.values(tabCookies).reduce<
+        TableFilter[keyof TableFilter]['filterValues']
+      >((acc, cookie) => {
+        const value = getValueByKey(key, cookie);
+
+        if (!acc) {
+          acc = {};
+        }
+
+        if (value) {
+          acc[value] = {
+            selected: false,
+          };
+        }
+
+        return acc;
+      }, {}),
+    [tabCookies]
+  );
+
   const filters = useMemo<TableFilter>(
     () => ({
       'analytics.category': {
         title: 'Category',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculate('analytics.category'),
+        sortValues: true,
+        useGenericPersistenceKey: true,
       },
       isFirstParty: {
         title: 'Scope',
@@ -242,6 +280,11 @@ const useCookieListing = (
       },
       'analytics.platform': {
         title: 'Platform',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculate('analytics.platform'),
+        sortValues: true,
+        useGenericPersistenceKey: true,
       },
       isBlocked: {
         title: 'Blocked',
@@ -260,7 +303,7 @@ const useCookieListing = (
         },
       },
     }),
-    []
+    [calculate]
   );
 
   const searchKeys = useMemo<string[]>(
@@ -270,14 +313,14 @@ const useCookieListing = (
 
   const tablePersistentSettingsKey = useMemo(() => {
     if (selectedSite) {
-      return 'cookiesListing#' + selectedSite + selectedFrameUrl;
+      return `cookiesListing#${selectedSite}${selectedFrameUrl}`;
     }
 
     return 'cookiesListing#' + selectedFrameUrl;
   }, [selectedFrameUrl, selectedSite]);
 
   return {
-    tabCookies,
+    cookies,
     tableColumns,
     filters,
     searchKeys,
