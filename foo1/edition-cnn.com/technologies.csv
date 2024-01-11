@@ -1,0 +1,38 @@
+Name,Description,Confidence,Website,Categories
+Aniview Video Ad Player,"Aniview Video Ad Player is a video player technology developed by Aniview, a company that specialises in providing video advertising solutions.",100%,https://aniview.com/video-ad-player/,Video players
+Varnish,Varnish is a reverse caching proxy.,100%,https://www.varnish-cache.org,Caching
+Aniview Ad Server,"Aniview Ad Server is a technology developed by Aniview, a company that specialises in providing video advertising solutions. The Aniview Ad Server is a platform designed to manage and serve video ads to publishers, advertisers, and agencies.",100%,https://aniview.com/video-ad-servers/,Advertising
+Vidazoo,Vidazoo is a video content and yield management platform.,100%,https://www.vidazoo.com,Advertising
+Snowplow Analytics,Snowplow is an open-source behavioral data management platform for businesses.,50%,https://snowplowanalytics.com,Analytics|IaaS
+OneTrust,OneTrust is a cloud-based data privacy management compliance platform.,100%,https://www.onetrust.com,Cookie compliance
+Google Publisher Tag,Google Publisher Tag (GPT) is an ad tagging library for Google Ad Manager which is used to dynamically build ad requests.,100%,https://developers.google.com/publisher-tag/guides/get-started,Advertising
+Wunderkind,"Wunderkind (Formerly BounceX) is a software for behavioural marketing technologies, created to de-anonymise site visitors, analyse their digital behaviour and create relevant digital experiences regardless of channel or device.",100%,https://www.wunderkind.co,Marketing automation
+Quantcast Measure,Quantcast Measure is an audience insights and analytics tool.,100%,https://www.quantcast.com/products/measure-audience-insights,Analytics
+PubSubJS,PubSubJS is a topic-based publish/subscribe library written in JavaScript.,100%,https://github.com/mroderick/PubSubJS,JavaScript libraries
+Prebid,"Prebid is an open-source header bidding wrapper. It forms the core of our Nucleus ad platform, helping maximize revenue and performance for publishers.",100%,https://prebid.org,Advertising
+Outbrain,"Outbrain is a web advertising platform that displays boxes of links, known as chumboxes, to pages within websites.",100%,https://www.outbrain.com,Widgets|Advertising
+Optimizely,Optimizely is an experimentation platform that helps developers build and run A/B tests on websites.,100%,https://www.optimizely.com,A/B Testing|Personalisation
+Nativo,Nativo is an advertising technology provider.,100%,https://www.nativo.com,Advertising
+jQuery,"jQuery is a JavaScript library which is a free, open-source software designed to simplify HTML DOM tree traversal and manipulation, as well as event handling, CSS animation, and Ajax.",100%,https://jquery.com,JavaScript libraries
+Google Tag Manager,Google Tag Manager is a tag management system (TMS) that allows you to quickly and easily update measurement codes and related code fragments collectively known as tags on your website or mobile app.,100%,https://www.google.com/tagmanager,Tag managers
+Google Analytics,Google Analytics is a free web analytics service that tracks and reports website traffic.,100%,https://google.com/analytics,Analytics
+Datadog,Datadog is a SaaS-based monitoring and analytics platform for large-scale applications and infrastructure.,1%,https://www.datadoghq.com,RUM|Analytics
+core-js,"core-js is a modular standard library for JavaScript, with polyfills for cutting-edge ECMAScript features.",100%,https://github.com/zloirock/core-js,JavaScript libraries
+comScore,comScore is an American media measurement and analytics company providing marketing data and analytics to enterprises; media and advertising agencies; and publishers.,100%,https://comscore.com,Analytics
+Criteo,Criteo provides personalised retargeting that works with Internet retailers to serve personalised online display advertisements to consumers who have previously visited the advertiser's website.,100%,https://criteo.com,Advertising|Retargeting
+Chartbeat,,100%,https://chartbeat.com,Analytics
+Adobe Experience Platform Launch,"Adobe Experience Cloud Launch is an extendable tag management solution for Adobe Experience Cloud, Adobe Experience Platform, and other applications.",100%,https://docs.adobelaunch.com/getting-started,Tag managers
+Adobe Experience Platform Identity Service,Adobe Experience Platform Identity Service creates identity graphs that hold customer profiles and the known identifiers that belong to individual consumers.,100%,https://docs.adobe.com/content/help/en/id-service/using/home.html,Customer data platform
+Adobe Analytics,"Adobe Analytics is a web analytics, marketing and cross-channel analytics application.",100%,https://www.adobe.com/analytics/adobe-analytics.html,Analytics
+Rubicon Project,Rubicon Project is an advertising automation platform enabling publishers to transact advertising brands.,100%,https://rubiconproject.com/,Advertising
+PubMatic,PubMatic is a company that develops and implements online advertising software and strategies for the digital publishing and advertising industry.,100%,https://www.pubmatic.com/,Advertising
+Integral Ad Science,Integral Ad Science is an American publicly owned technology company that analyses the value of digital advertising placements.,100%,https://integralads.com,Advertising
+AppNexus,AppNexus is a cloud-based software platform that enables and optimizes programmatic online advertising.,100%,https://appnexus.com,Advertising
+ID5,"ID5 is a company that offers an identity solution for digital advertising, providing a Universal ID that enables privacy-compliant user recognition and tracking across websites without relying on personal information or third-party cookies.",100%,https://id5.io/,Advertising
+Amazon Advertising,Amazon Advertising (formerly AMS or Amazon Marketing Services) is a service that works in a similar way to pay-per-click ads on Google.,100%,https://advertising.amazon.com,Advertising
+Kaltura,"Kaltura is a video content management platform that allows users to upload, manage, share, publish, and stream videos.",100%,https://corp.kaltura.com,Video players|Livestreaming
+web-vitals,"The web-vitals JavaScript is a tiny, modular library for measuring all the web vitals metrics on real users.",100%,https://github.com/GoogleChrome/web-vitals,JavaScript libraries|RUM
+Webpack,Webpack is an open-source JavaScript module bundler.,100%,https://webpack.js.org/,Miscellaneous
+Open Graph,Open Graph is a protocol that is used to integrate any web page into the social graph.,100%,https://ogp.me,Miscellaneous
+Module Federation,Module Federation is a webpack technology for dynamically loading parts of other independently deployed builds.,50%,https://webpack.js.org/concepts/module-federation/,Miscellaneous
+HTTP/3,HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.,100%,https://httpwg.org/,Miscellaneous

@@ -1,0 +1,106 @@
+Name,Scope,Domain,Same Site,Category,Platform,Http Only,Secure,Value,Path,Expires,Cookie Affected,GDPRPortal
+obuid,Third Party,.outbrain.com,c4ff9885-6ed7-4b93-a137-4a6531b9fc36,None,Marketing,Outbrain,No,Yes,/,2024-01-31T05:13:40.835Z,Yes,https://www.outbrain.com/legal/privacy#privacy-policy
+obsessionid-p235,Third Party,.outbrain.com,1e0cf074-2e94-aac3-0000-018cf7d920a7|0|1,None,Marketing,Outbrain,No,Yes,/,2024-01-31T03:04:06.635Z,Yes,https://www.outbrain.com/legal/privacy#privacy-policy
+countryCode,First Party,.cnn.com,IN,None,Uncategorized,Unknown,No,Yes,/,Session,No,NA
+stateCode,First Party,.cnn.com,RJ,None,Uncategorized,Unknown,No,Yes,/,Session,No,NA
+geoData,First Party,.cnn.com,udaipur|RJ|313002|IN|AS|530|broadband|24.560|73.700,None,Uncategorized,Unknown,No,Yes,/,Session,No,NA
+FastAB,First Party,.cnn.com,"0=5358,1=0526,2=7845,3=8666,4=1715,5=1538,6=1019,7=9842,8=8211,9=4311,10=8932,11=4832,12=0560,13=6306,14=6439,15=6827,16=2117,17=9035,18=5188,19=4612",Lax,Uncategorized,Unknown,No,No,/,2025-01-10T09:27:29.000Z,No,NA
+usprivacy,First Party,.cnn.com,1---,None,Functional,ShareThis,No,Yes,/,2024-01-11T09:27:59.576Z,No,https://sharethis.com/privacy/
+sato,First Party,.cnn.com,1,,Uncategorized,Unknown,No,No,/,2024-01-31T03:05:38.426Z,No,NA
+optimizelyEndUserId,First Party,.cnn.com,oeu1704965249641r0.9014332779917718,,Marketing,Optimizely,No,No,/,2024-01-31T07:23:16.826Z,No,https://www.optimizely.com/privacy/
+IMRID,Third Party,.imrworldwide.com,a47efa60-b063-11ee-826d-370ea577f41f,None,Marketing,Nielsen,No,Yes,/,2024-01-31T12:25:40.827Z,Yes,https://www.nielsen.com/legal/privacy-principles/
+FastAB_Zion,First Party,.cnn.com,5.1,Lax,Uncategorized,Unknown,No,No,/,Session,No,NA
+_dd_s,First Party,edition.cnn.com,logs=1&id=7d6eb929-3c9a-4178-a3b3-976c43624d28&created=1704965249920&expire=1704966149921,Strict,Uncategorized,Unknown,No,No,/,2024-01-31T03:04:05.727Z,No,NA
+AMCV_7FF852E2556756057F000101%40AdobeOrg,First Party,.cnn.com,-1124106680%7CMCIDTS%7C19734%7CMCMID%7C14690251824500151141358777135909273394%7CMCAAMLH-1705570050%7C3%7CMCAAMB-1705570050%7C6G1ynYcLPuiQxYZrsz_pkqfLG9yMXBpb2zX5dvJdYQJzPXImdj0y%7CMCOPTOUT-1704972451s%7CNONE%7CMCAID%7CNONE%7CvVersion%7C5.2.0,,Marketing,Adobe Audience Manager,No,No,/,2024-01-31T12:40:04.829Z,No,https://www.adobe.com/nl/privacy.html
+UID,Third Party,.scorecardresearch.com,1B0518b80212cf14d0c272b1704965250,None,Uncategorized,Unknown,No,Yes,/,2025-12-31T09:27:49.420Z,Yes,NA
+_cb,First Party,.cnn.com,DXViNuDohNUKC_fH6M,,Uncategorized,Unknown,No,Yes,/,2024-01-31T12:32:52.828Z,No,NA
+_chartbeat2,First Party,.cnn.com,.1704965250284.1704965250284.1.BI1D9tBAueT-BMVOWaCP3Z45DHtve.1,,Analytics,Chartbeat,No,Yes,/,2024-01-31T12:32:52.828Z,No,https://chartbeat.com/privacy/
+_cb_svref,First Party,.cnn.com,external,,Uncategorized,Unknown,No,Yes,/,2024-01-31T03:04:06.629Z,No,NA
+_sp_ses.f5fb,First Party,.cnn.com,*,None,Analytics,Snowplow,No,Yes,/,2024-01-31T03:04:06.648Z,No,https://snowplowanalytics.com/privacy-policy/
+_sp_id.f5fb,First Party,.cnn.com,6cad2d4f-3105-46d7-92a6-b3e0a83d14ef.1704965250.1.1704965269.1704965250.7be43cb8-bd74-4a06-a633-6eae249f20bd,None,Analytics,Snowplow,No,Yes,/,2024-01-31T11:49:40.848Z,No,https://snowplowanalytics.com/privacy-policy/
+cnprevpage_pn,First Party,.cnn.com,%2Fhomepage,,Uncategorized,Unknown,No,No,/,2024-01-31T03:04:06.629Z,No,NA
+_t_tests,First Party,.cnn.com,eyI3aEhmU2VWVkNTTFh4Ijp7ImNob3NlblZhcmlhbnQiOiJFIiwic3BlY2lmaWNMb2NhdGlvbiI6WyJDSnlrWTciXX0sInpJSmdlamJNaWtFNUsiOnsiY2hvc2VuVmFyaWFudCI6IkEiLCJzcGVjaWZpY0xvY2F0aW9uIjpbIjBLVUhGIl19LCJ0ZWtCSFlDbVJEOXg5Ijp7ImNob3NlblZhcmlhbnQiOiJBIiwic3BlY2lmaWNMb2NhdGlvbiI6WyJCRGlKS08iXX0sIm0xRERxbEhOTHBIa0wiOnsiY2hvc2VuVmFyaWFudCI6IkIiLCJzcGVjaWZpY0xvY2F0aW9uIjpbIkJ6bkM2OSJdfSwibGlmdF9leHAiOiJtIn0=,,Uncategorized,Unknown,No,Yes,/,2024-01-31T03:04:08.429Z,No,NA
+AMCVS_7FF852E2556756057F000101%40AdobeOrg,First Party,.cnn.com,1,,Marketing,Adobe Audience Manager,No,No,/,2024-01-11T09:27:59.578Z,No,https://www.adobe.com/nl/privacy.html
+__qca,First Party,.cnn.com,P0-172168698-1704965250356,,Marketing,Quantcast,No,No,/,2024-01-31T12:28:33.630Z,No,https://www.quantcast.com/privacy/
+s_ecid,First Party,.cnn.com,MCMID%7C14690251824500151141358777135909273394,None,Marketing,Adobe Analytics,No,Yes,/,2024-01-31T12:40:04.840Z,No,https://www.adobe.com/nl/privacy.html
+ljt_reader,Third Party,.lijit.com,H-QXsSZHYb3bGsniRHaNCBSS,None,Marketing,Federated Media Publishing,No,Yes,/,2024-01-31T11:49:40.830Z,Yes,NA
+mc,Third Party,.quantserve.com,659fb482-82b9d-221d6-342f2,None,Marketing,Quantcast,No,Yes,/,2025-02-10T09:27:30.000Z,Yes,https://www.quantcast.com/privacy/
+s_cc,First Party,.cnn.com,true,,Analytics,Adobe Analytics,No,No,/,2024-01-11T09:27:59.578Z,No,https://www.adobe.com/nl/privacy.html
+OptanonConsent,First Party,.cnn.com,isGpcEnabled=0&datestamp=Thu+Jan+11+2024+14%3A57%3A31+GMT%2B0530+(India+Standard+Time)&version=202310.2.0&browserGpcFlag=0&isIABGlobal=false&hosts=&landingPath=https%3A%2F%2Fedition.cnn.com%2F&groups=BG2362%3A1%2Creq%3A1%2Ctdc%3A1%2Cven%3A1%2Cdid%3A1%2Cpcp%3A1%2Cpcd%3A1%2Cmcp%3A1%2Cdsa%3A1%2Cdlk%3A1%2Cmap%3A1%2Ccad%3A1%2Cpdd%3A1%2Cmra%3A1%2Cpad%3A1%2Cpap%3A1%2Ccos%3A1%2Csec%3A1%2Cdsh%3A1%2Cdsl%3A1%2Ctc%3A1%2Cfc%3A1%2Cpzv%3A1%2Cpf%3A1%2Cbb%3A1%2Cadv%3A1%2Cai%3A1,None,Functional,OneTrust,No,Yes,/,2024-01-31T11:49:40.830Z,No,https://www.onetrust.com/privacy-notice/
+btIdentify,First Party,.cnn.com,2858066b-b21a-480d-91bb-067a64ce5962,,Uncategorized,Unknown,No,No,/,2024-01-31T11:49:40.831Z,No,NA
+_bti,First Party,.cnn.com,%7B%22app_id%22%3A%22cnn%22%2C%22bsin%22%3A%22DraYM%2F%2FkOh2u%2BJy5v4f6jSjOL%2FHMrjgnCK9ju8be%2FIkK%2FlBzJHCd%2BeH2BfHjJ42ASDaSeUoXXrgIXdJYiuFuZQ%3D%3D%22%2C%22is_identified%22%3Afalse%7D,,Uncategorized,Unknown,No,No,/,2024-01-31T11:49:40.832Z,No,NA
+_bts,First Party,.cnn.com,61fef3c3-0f0a-4c86-a138-0c8577fe978b,,Uncategorized,Unknown,No,No,/,2024-01-31T03:04:08.431Z,No,NA
+_v__chartbeat3,First Party,.cnn.com,Ce1rlAB-XwKwDfxbfT,,Uncategorized,Unknown,No,Yes,/,2024-01-31T12:32:52.831Z,No,NA
+sp,First Party,collector.cdp.cnn.com,cb1d312a-424e-4563-bb9b-b3d90e678d9a,Strict,Analytics,Snowplow,No,No,/,2024-01-31T11:49:40.841Z,No,https://snowplowanalytics.com/privacy-policy/
+ad-id,Third Party,.amazon-adsystem.com,AxaNVsXOi0JWiWk-GmXQGQY|t,None,Marketing,Amazon,Yes,Yes,/,2024-01-31T09:24:14.435Z,Yes,https://amazon.com/privacy/
+ad-privacy,Third Party,.amazon-adsystem.com,0,None,Marketing,Amazon,Yes,Yes,/,2024-01-31T12:40:04.832Z,Yes,https://amazon.com/privacy/
+receive-cookie-deprecation,Third Party,.casalemedia.com,1,None,Uncategorized,Unknown,Yes,Yes,/,2024-01-31T11:49:40.832Z,No,NA
+IDE,Third Party,.doubleclick.net,AHWqTUkVtMLTBwHfLRfCtP-21GY8YOPkfFlZS5XMln6m0pjtz8U-KUO4KOrQtphJKDk,None,Marketing,DoubleClick/Google Marketing,Yes,Yes,/,2024-01-31T12:40:04.831Z,Yes,https://privacy.google.com/take-control.html
+CMID,Third Party,.casalemedia.com,ZZ.0hAeMg0qq4MlMF4m3qgAA,None,Marketing,Casale Media,No,Yes,/,2024-01-31T11:49:40.833Z,Yes,https://casalemedia.com
+CMPS,Third Party,.casalemedia.com,5484,None,Marketing,Casale Media,No,Yes,/,2024-01-31T05:13:40.832Z,Yes,https://casalemedia.com
+CMPRO,Third Party,.casalemedia.com,5484,None,Marketing,Casale Media,No,Yes,/,2024-01-31T05:13:40.833Z,Yes,https://casalemedia.com
+khaos,Third Party,.rubiconproject.com,LR90AH45-1W-K6J1,None,Marketing,Magnite,No,Yes,/,2024-01-31T11:49:40.839Z,Yes,https://www.magnite.com/legal/platform-cookie-statement/
+audit,Third Party,.rubiconproject.com,1|9sbkmz1j/90agGBZjQe5Rvl45C2B+cs0Z0nCI9E4r7+TSP4V9XYDVAoWeOoPs5tJQzF4NXG3He7qFTrNE4+z9rxKcI79UbrhPi38Q7tiQHa+ylV6cuCuehSlhZWsoOn4Tc5gaaihuXs=,None,Marketing,Magnite,No,Yes,/,2024-01-31T11:49:40.839Z,Yes,https://www.magnite.com/legal/platform-cookie-statement/
+__gads,First Party,.cnn.com,ID=2ca591c82cbd4104:T=1704965251:RT=1704965251:S=ALNI_MbEkvcmrUmaHYwLQPINNrr1sb3-wA,,Marketing,DoubleClick/Google Marketing,No,No,/,2024-01-31T12:25:40.832Z,No,https://privacy.google.com/take-control.html
+__gpi,First Party,.cnn.com,UID=00000cd59fcabe8c:T=1704965251:RT=1704965251:S=ALNI_MaCLEzhDt7miz5CbXiVzjIw7tndPQ,,Marketing,Google Adsense,No,No,/,2024-01-31T12:25:40.832Z,No,https://privacy.google.com/take-control.html
+pid,Third Party,.smartadserver.com,6887898035923490597,None,Marketing,Smartadserver,No,Yes,/,2024-01-31T12:34:19.175Z,Yes,https://equativ.com/end-users-privacy-policy/
+stx_user_id,Third Party,.sharethrough.com,d88c9ca7-94f1-4e6f-8dcb-70afc711fdbe,None,Marketing,Sharethrough,No,Yes,/,2024-02-10T09:27:34.000Z,Yes,https://platform-cdn.sharethrough.com/privacy-policy
+tuuid,Third Party,.360yield.com,7311f98c-7f49-4678-92dc-28b89756b957,None,Marketing,Platform161,No,Yes,/,2024-01-31T05:13:40.834Z,Yes,https://platform161.com/cookie-and-privacy-policy/
+tuuid_lu,Third Party,.360yield.com,1704965253,None,Marketing,bidswitch.net,No,Yes,/,2024-01-31T05:13:40.834Z,Yes,NA
+umto,First Party,.cnn.com,1,None,Uncategorized,Unknown,No,Yes,/,2024-01-31T03:05:38.438Z,No,NA
+IMRID,Third Party,imrworldwide.com,a47efa60-b063-11ee-826d-370ea577f41f,None,Marketing,Nielsen,No,Yes,/,2025-02-04T09:27:30.000Z,Yes,https://www.nielsen.com/legal/privacy-principles/
+ug1,Third Party,.www.ugdturner.com,659fb48205c6560a3f9c440015e1f818,None,Uncategorized,Unknown,No,Yes,/,2029-01-09T09:27:30.000Z,Yes,NA
+u,Third Party,ml314.com,aHR0cHM6Ly9lZGl0aW9uLmNubi5jb20v,None,Uncategorized,Unknown,No,Yes,/,2024-01-11T09:27:45.000Z,Yes,NA
+pi,Third Party,ml314.com,3641272964908318756,none,Marketing,PubMatic,Yes,Yes,/,2025-01-11T09:27:30.000Z,Yes,https://pubmatic.com/legal/privacy/
+tp,Third Party,ml314.com,9%253b01%252f11%252f2024%2B09%253a27%253a30%253b0,None,Uncategorized,Unknown,No,Yes,/,2024-01-25T09:27:30.000Z,Yes,NA
+zync-uuid,Third Party,rezync.com,73e379d7-27e8-4fb5-bcc3-34ef9898ec9a:1704965250.5017762,None,Uncategorized,Unknown,No,Yes,/,2025-02-04T09:27:30.000Z,Yes,NA
+sd-session-id,Third Party,rezync.com,eyJfcGVybWFuZW50Ijp0cnVlLCJzZXNzaW9uX2lkIjoiNzNlMzc5ZDctMjdlOC00ZmI1LWJjYzMtMzRlZjk4OThlYzlhOjE3MDQ5NjUyNTAuNTAxNzc2MiJ9.ZZ-0gg.x8rE2QAvHUtaNMMIAnJxo8VL0ZY,None,Uncategorized,Unknown,Yes,Yes,/,2025-02-04T09:27:30.000Z,Yes,NA
+demdex,Third Party,.demdex.net,14718754644726435301357123809697817458,None,Marketing,Adobe Audience Manager,No,Yes,/,2024-07-09T09:27:30.000Z,Yes,https://www.adobe.com/nl/privacy.html
+s_ecid,First Party,cnn.com,MCMID%7C14690251824500151141358777135909273394,None,Marketing,Adobe Analytics,No,Yes,/,2026-01-10T09:27:27.000Z,No,https://www.adobe.com/nl/privacy.html
+receive-cookie-deprecation,Third Party,casalemedia.com,1,None,Uncategorized,Unknown,Yes,Yes,/,2025-01-10T09:27:33.000Z,No,NA
+akacd_cvp_prod_ion,Third Party,turner.com,1704965371~rv=13~id=0a5bfdfa9ab1826fbb013633182c4123,None,Uncategorized,Unknown,No,Yes,/,2024-01-11T09:29:31.000Z,Yes,NA
+obuid,Third Party,outbrain.com,c4ff9885-6ed7-4b93-a137-4a6531b9fc36,None,Marketing,Outbrain,No,Yes,/,2024-04-10T09:27:31.000Z,Yes,https://www.outbrain.com/legal/privacy#privacy-policy
+obsessionid-p235,Third Party,outbrain.com,1e0cf074-2e94-aac3-0000-018cf7d920a7|438|1,None,Marketing,Outbrain,No,Yes,/,2024-01-11T09:57:31.000Z,Yes,https://www.outbrain.com/legal/privacy#privacy-policy
+sp,First Party,cnn.com,cb1d312a-424e-4563-bb9b-b3d90e678d9a,Strict,Analytics,Snowplow,No,No,/,2025-01-10T09:27:49.000Z,No,https://snowplowanalytics.com/privacy-policy/
+test_cookie,Third Party,.doubleclick.net,CheckForPermission,none,Functional,DoubleClick/Google Marketing,Yes,Yes,/,2024-01-11T09:42:31.000Z,Yes,https://privacy.google.com/take-control.html
+akaalb_me-prod-03102020,Third Party,ngtv.io,1704965314~op=lln_prod:lln-east-prod|~rv=85~m=lln-east-prod:0|~os=77af6be3f5f8005d531cfcb6a9745dc4~id=33cc4acb37278c5e8b80768c503bbd52,None,Uncategorized,Unknown,No,Yes,/,2024-01-11T09:28:34.000Z,No,NA
+TDID,Third Party,.adsrvr.org,6907d193-0338-4fef-99c7-bc2964d5401f,none,Marketing,The Tradedesk,No,Yes,/,2025-01-11T09:27:34.000Z,Yes,https://adsrvr.org/
+TDCPM,Third Party,.adsrvr.org,CAESGwoMc2hhcmV0aHJvdWdoEgsIjLz0t7KkyTwQBRIXCghwdWJtYXRpYxILCIzSmKmypMk8EAUSFAoFdGFwYWQSCwj4xMatsqTJPBAFEhYKB3J1Ymljb24SCwjmubKvsqTJPBAFGAEgASgCMgsItLL35MikyTwQBTgBWgxzaGFyZXRocm91Z2hgAg..,none,Marketing,The Tradedesk,No,Yes,/,2025-01-11T09:27:34.000Z,Yes,https://adsrvr.org/
+receive-cookie-deprecation,Third Party,sharethrough.com,1,None,Uncategorized,Unknown,Yes,Yes,/,2024-04-10T09:27:34.000Z,Yes,NA
+u,Third Party,.creativecdn.com,8dEgjCDH5GFYSPzgmRZk,None,Uncategorized,Unknown,No,Yes,/,2025-01-10T09:27:34.000Z,Yes,NA
+g,Third Party,.creativecdn.com,8dEgjCDH5GFYSPzgmRZk_1704965252834,None,Uncategorized,Unknown,No,Yes,/,2025-01-10T09:27:34.000Z,Yes,NA
+ts,Third Party,.creativecdn.com,1704965254,None,Functional,PayPal,No,Yes,/,2025-01-10T09:27:34.000Z,Yes,https://www.paypal.com/privacy-center
+uid,Third Party,.criteo.com,84c97c0b-ef83-4aa2-bc6a-af6038708d55,none,Marketing,Adform,No,Yes,/,2025-02-04T09:27:37.000Z,Yes,https://site.adform.com/privacy-center/overview
+KCCH,Third Party,.ads.pubmatic.com,YES,None,Marketing,PubMatic,No,Yes,/,2024-01-31T03:05:31.236Z,Yes,https://pubmatic.com/legal/privacy/
+KADUSERCOOKIE,Third Party,.pubmatic.com,E34220E7-7753-478B-9FAA-4EDAFC53620F,None,Marketing,PubMatic,No,Yes,/,2024-01-31T11:49:40.837Z,Yes,https://pubmatic.com/legal/privacy/
+DPSync3,Third Party,.pubmatic.com,1705017600%3A248%7C1706140800%3A245_226_201,None,Marketing,PubMatic,No,Yes,/,2024-01-31T05:13:40.836Z,Yes,https://pubmatic.com/legal/privacy/
+KRTBCOOKIE_80,Third Party,.pubmatic.com,22987-CAESENjOfmAuuNlYbW7KS8ehZIE&KRTB&23025-CAESENjOfmAuuNlYbW7KS8ehZIE&KRTB&23386-CAESENjOfmAuuNlYbW7KS8ehZIE,None,Marketing,PubMatic,No,Yes,/,2024-01-31T05:13:40.837Z,Yes,https://pubmatic.com/legal/privacy/
+pi,Third Party,.pubmatic.com,160065:3,None,Marketing,PubMatic,No,Yes,/,2024-01-31T03:05:31.237Z,Yes,https://pubmatic.com/legal/privacy/
+KRTBCOOKIE_377,Third Party,.pubmatic.com,6810-6907d193-0338-4fef-99c7-bc2964d5401f&KRTB&22918-6907d193-0338-4fef-99c7-bc2964d5401f&KRTB&22926-6907d193-0338-4fef-99c7-bc2964d5401f&KRTB&23031-6907d193-0338-4fef-99c7-bc2964d5401f,None,Marketing,PubMatic,No,Yes,/,2024-01-31T05:13:40.837Z,Yes,https://pubmatic.com/legal/privacy/
+PugT,Third Party,.pubmatic.com,1704965253,None,Marketing,PubMatic,No,Yes,/,2024-01-31T03:47:16.837Z,Yes,https://pubmatic.com/legal/privacy/
+KRTBCOOKIE_27,Third Party,.pubmatic.com,16735-uid:f94e659f-b485-4300-ad87-6cf117d7b34b,None,Marketing,PubMatic,No,Yes,/,2024-01-31T05:13:40.837Z,Yes,https://pubmatic.com/legal/privacy/
+SPugT,Third Party,.pubmatic.com,1704965253,None,Marketing,PubMatic,No,Yes,/,2024-01-31T03:47:16.837Z,Yes,https://pubmatic.com/legal/privacy/
+SyncRTB3,Third Party,.pubmatic.com,1706140800%3A7_71_54_220_21_13%7C1705536000%3A223_2,None,Marketing,PubMatic,No,Yes,/,2024-01-31T05:13:40.837Z,Yes,https://pubmatic.com/legal/privacy/
+ipc,Third Party,.pubmatic.com,160065^https%3A%2F%2Fimage4.pubmatic.com%2FAdServer%2FSPug%3Fp%3D160065%26pmc%3DPM_PMC%26pr%3Dhttps%253A%252F%252Fsync.outbrain.com%252Fcookie-sync%253Fp%253Dpubmatic%2526obUid%253DrYb6c71TA6h4y0-z79OyVxidspyB_GxzsbzoTcYJ-3Rshcvv7pRpIEYIoNwbxV4F%2526gdpr%253D0%2526initiator%253Dob%2526gdpr_consent%253D%2526us_privacy%253D1---%2526uid%253D%2523PMUID^1^0,None,Functional,PubMatic,No,Yes,/,2024-01-31T03:04:04.840Z,Yes,https://pubmatic.com/legal/privacy/
+chkChromeAb67Sec,Third Party,.pubmatic.com,3,None,Functional,PubMatic,No,Yes,/,2024-01-31T05:13:40.837Z,Yes,https://pubmatic.com/legal/privacy/
+uid,Third Party,.adform.net,4794335062431758195,None,Marketing,Adform,No,Yes,/,2024-01-31T04:30:28.842Z,Yes,https://site.adform.com/privacy-center/overview
+C,Third Party,.adform.net,1,None,Marketing,Adform,No,Yes,/,2024-01-31T03:48:43.241Z,Yes,https://site.adform.com/privacy-center/overview
+KRTBCOOKIE_107,Third Party,.pubmatic.com,1471-uid:Tfa1yGl91RnRlG5&KRTB&23421-uid:Tfa1yGl91RnRlG5,None,Marketing,PubMatic,No,Yes,/,2024-01-31T05:13:40.846Z,Yes,https://pubmatic.com/legal/privacy/
+KRTBCOOKIE_32,Third Party,.pubmatic.com,11175-AAAK_Fq6l96oEwNkeNdUAAAAAAA&KRTB&22713-AAAK_Fq6l96oEwNkeNdUAAAAAAA&KRTB&22715-AAAK_Fq6l96oEwNkeNdUAAAAAAA&KRTB&23519-AAAK_Fq6l96oEwNkeNdUAAAAAAA,None,Marketing,PubMatic,No,Yes,/,2024-01-31T05:13:40.843Z,Yes,https://pubmatic.com/legal/privacy/
+KRTBCOOKIE_860,Third Party,.pubmatic.com,16335-Zpj1_OGUWSdHoZAW7wwWbWeHJ5c&KRTB&23334-Zpj1_OGUWSdHoZAW7wwWbWeHJ5c&KRTB&23417-Zpj1_OGUWSdHoZAW7wwWbWeHJ5c&KRTB&23426-Zpj1_OGUWSdHoZAW7wwWbWeHJ5c,None,Marketing,PubMatic,No,Yes,/,2024-01-31T05:13:40.843Z,Yes,https://pubmatic.com/legal/privacy/
+KRTBCOOKIE_391,Third Party,.pubmatic.com,22924-4794335062431758195&KRTB&23263-4794335062431758195&KRTB&23481-4794335062431758195,None,Marketing,PubMatic,No,Yes,/,2024-01-31T03:47:16.842Z,Yes,https://pubmatic.com/legal/privacy/
+KRTBCOOKIE_594,Third Party,.pubmatic.com,17105-OPTOUT&KRTB&17107-OPTOUT,None,Marketing,PubMatic,No,Yes,/,2024-01-31T05:13:40.846Z,Yes,https://pubmatic.com/legal/privacy/
+KRTBCOOKIE_466,Third Party,.pubmatic.com,16530-3cdbef49-c601-43b2-9dc2-6dada13297bd,None,Marketing,PubMatic,No,Yes,/,2024-01-31T05:13:40.841Z,Yes,https://pubmatic.com/legal/privacy/
+KRTBCOOKIE_1290,Third Party,.pubmatic.com,23368-131vakaqeqbl,None,Marketing,PubMatic,No,Yes,/,2024-01-31T03:47:16.841Z,Yes,https://pubmatic.com/legal/privacy/
+KRTBCOOKIE_1159,Third Party,.pubmatic.com,23138-9fd3b324a3d9446da28590d39ef72f17&KRTB&23328-9fd3b324a3d9446da28590d39ef72f17&KRTB&23427-9fd3b324a3d9446da28590d39ef72f17&KRTB&23445-9fd3b324a3d9446da28590d39ef72f17,None,Marketing,PubMatic,No,Yes,/,2024-01-31T03:24:14.441Z,Yes,https://pubmatic.com/legal/privacy/
+KRTBCOOKIE_22,Third Party,.pubmatic.com,14911-3993768175359057840&KRTB&23150-3993768175359057840&KRTB&23527-3993768175359057840,None,Marketing,PubMatic,No,Yes,/,2024-01-31T03:47:16.839Z,Yes,https://pubmatic.com/legal/privacy/
+bea4r,First Party,edition.cnn.com,659fb48ad9372e0a3f9c440015e1f818,,Uncategorized,Unknown,No,Yes,/,2024-01-31T11:49:40.842Z,No,NA
+ug,First Party,edition.cnn.com,659fb48205c6560a3f9c440015e1f818,,Uncategorized,Unknown,No,No,/,2024-01-31T11:49:40.836Z,No,NA
+ANON_ID,Third Party,.tribalfusion.com,aPnt6ZawZcF1foXarpebwFVaItZauZbEJYtYZaELjfrmteZaXWB45dij2FqinG5DNdheZaXE46t2uOZdPUr6F9UGJSqqt1WaL28e,None,Uncategorized,Unknown,No,Yes,/,2024-01-31T05:13:40.847Z,Yes,NA
+nexus-web-application-identifier,First Party,edition.cnn.com,a8b552ba-7639-40e3-939c-07c2a1f2d14c|1704965250905,,Uncategorized,Unknown,No,No,/,2024-01-31T12:40:04.836Z,No,NA
+KRTBCOOKIE_18,Third Party,.pubmatic.com,22947-3132203008052819937,None,Marketing,PubMatic,No,Yes,/,2024-01-31T05:13:40.847Z,Yes,https://pubmatic.com/legal/privacy/
+KRTBCOOKIE_904,Third Party,.pubmatic.com,23554-v18AFiWnAmWCTKQoibSfZQ&KRTB&23557-v18AFiWnAmWCTKQoibSfZQ,None,Marketing,PubMatic,No,Yes,/,2024-01-31T03:47:16.843Z,Yes,https://pubmatic.com/legal/privacy/
+KRTBCOOKIE_153,Third Party,.pubmatic.com,1923-WGZzzwxncptDa3jLVzdnm1xiLp9DYH6bCGFPi_Nm&KRTB&19420-WGZzzwxncptDa3jLVzdnm1xiLp9DYH6bCGFPi_Nm&KRTB&22979-WGZzzwxncptDa3jLVzdnm1xiLp9DYH6bCGFPi_Nm&KRTB&23462-WGZzzwxncptDa3jLVzdnm1xiLp9DYH6bCGFPi_Nm,None,Marketing,PubMatic,No,Yes,/,2024-01-31T05:13:40.841Z,Yes,https://pubmatic.com/legal/privacy/
+cid,Third Party,.ctnsnet.com,9fd3b324a3d9446da28590d39ef72f17,None,Marketing,Adform,No,Yes,/,2024-01-31T11:49:40.844Z,Yes,https://site.adform.com/privacy-center/overview
+ugs,First Party,edition.cnn.com,1,,Uncategorized,Unknown,No,No,/,2024-01-31T03:05:38.436Z,No,NA
+KRTBCOOKIE_1323,Third Party,.pubmatic.com,23480-OPU073884c3f9864e10ba005bd02eb73f37&KRTB&23485-OPU073884c3f9864e10ba005bd02eb73f37&KRTB&23524-OPU073884c3f9864e10ba005bd02eb73f37,None,Marketing,PubMatic,No,Yes,/,2024-01-31T03:24:14.443Z,Yes,https://pubmatic.com/legal/privacy/

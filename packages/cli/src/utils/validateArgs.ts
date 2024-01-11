@@ -15,7 +15,7 @@
  */
 
 import { parseUrl } from '@ps-analysis-tool/common';
-import { exists } from 'fs-extra';
+import { exists, mkdir } from 'fs-extra';
 import path from 'path';
 
 /**
@@ -100,8 +100,10 @@ const validateArgs = async (
   if (outDir) {
     const outDirExists = await exists(path.resolve(outDir));
     if (!outDirExists) {
-      console.log(`Provided dir "${path.resolve(outDir)}" does not exist`);
-      process.exit(1);
+      console.log(
+        `Provided dir "${path.resolve(outDir)}" does not exist. Creating now!!`
+      );
+      await mkdir(path.resolve(outDir));
     }
   }
 };
