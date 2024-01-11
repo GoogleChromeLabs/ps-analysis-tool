@@ -18,7 +18,6 @@
  */
 import React from 'react';
 import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
-import { LibraryDetection } from '@ps-analysis-tool/library-detection';
 
 /**
  * Internal dependencies.
@@ -32,6 +31,7 @@ import {
   prepareCookiesCount,
   prepareFrameStatsComponent,
 } from '../../utils';
+
 interface CookiesLandingProps {
   tabFrames: TabFrames | null;
   tabCookies: TabCookies | null;
@@ -41,6 +41,9 @@ interface CookiesLandingProps {
   associatedCookiesCount?: number | null;
   showMessageBoxBody?: boolean;
   showBlockedCookiesSection?: boolean;
+  additionalComponents?: {
+    [key: string]: React.ReactNode;
+  };
 }
 
 const CookiesLanding = ({
@@ -52,6 +55,7 @@ const CookiesLanding = ({
   showMessageBoxBody = true,
   showBlockedCookiesSection = false,
   showHorizontalMatrix = false,
+  additionalComponents = {},
 }: CookiesLandingProps) => {
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
@@ -147,9 +151,12 @@ const CookiesLanding = ({
         </CookiesLandingContainer>
       )}
 
-      <CookiesLandingContainer>
-        <LibraryDetection />
-      </CookiesLandingContainer>
+      {Object.keys(additionalComponents).length && // TODO: Refactor code use children instead of passing components as props.
+        Object.keys(additionalComponents).map((key: string) => (
+          <CookiesLandingContainer key={key}>
+            {additionalComponents[key] as React.ReactNode}
+          </CookiesLandingContainer>
+        ))}
     </div>
   );
 };
