@@ -524,9 +524,9 @@ chrome.storage.sync.onChanged.addListener(
       },
     });
     if (!globalIsUsingCDP) {
-      try {
-        const storedTabData = Object.keys(await chrome.storage.local.get());
-        const cdpPromises = storedTabData.map(async (key) => {
+      const storedTabData = Object.keys(await chrome.storage.local.get());
+      const cdpPromises = storedTabData.map(async (key) => {
+        try {
           if (key === 'tabToRead') {
             return;
           }
@@ -539,19 +539,25 @@ chrome.storage.sync.onChanged.addListener(
             'Audits.disable'
           );
           await chrome.debugger.detach({ tabId: Number(key) });
+        } catch (error) {
+          // Fail silently
+        } finally {
           await chrome.tabs.reload(Number(key));
-        });
-        await Promise.all(cdpPromises);
-      } catch (error) {
-        // Fail silently
-      }
+        }
+      });
+      await Promise.all(cdpPromises);
     } else {
       const storedTabData = Object.keys(await chrome.storage.local.get());
       const cdpPromises = storedTabData.map(async (key) => {
-        if (key === 'tabToRead') {
-          return;
+        try {
+          if (key === 'tabToRead') {
+            return;
+          }
+        } catch (error) {
+          // Fail silently
+        } finally {
+          await chrome.tabs.reload(Number(key));
         }
-        await chrome.tabs.reload(Number(key));
       });
       await Promise.all(cdpPromises);
     }
