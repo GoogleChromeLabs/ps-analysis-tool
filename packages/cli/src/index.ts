@@ -87,10 +87,7 @@ const initialize = async () => {
 
 const saveResults = async (outDir: string, result: CompleteJson[]) => {
   await ensureFile(outDir + '/out.json');
-  await writeFile(
-    outDir + '/out.json',
-    JSON.stringify(Array.isArray(result) ? result[0] : result, null, 4)
-  );
+  await writeFile(outDir + '/out.json', JSON.stringify(result, null, 4));
 };
 
 const startDashboardServer = async (dir: string) => {
@@ -129,7 +126,7 @@ const startDashboardServer = async (dir: string) => {
   const prefix =
     url || sitemapUrl
       ? Utility.generatePrefix(url || sitemapUrl)
-      : path.parse(csvPath || sitemapPath).base;
+      : path.parse(csvPath || sitemapPath).name;
 
   const outputDir = outDir ? outDir : `./out/${prefix}`;
 
