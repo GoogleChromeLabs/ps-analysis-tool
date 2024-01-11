@@ -172,7 +172,7 @@ const useTable = ({
   const { searchValue, setSearchValue, searchFilteredData } = useSearch(
     filteredData,
     tableSearchKeys,
-    tablePersistentSettingsKey
+    commonKey
   );
 
   const rows = useMemo(() => {
