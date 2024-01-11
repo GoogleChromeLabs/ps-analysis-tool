@@ -524,42 +524,45 @@ chrome.storage.sync.onChanged.addListener(
       },
     });
     if (!globalIsUsingCDP) {
-      const storedTabData = Object.keys(await chrome.storage.local.get());
-      const cdpPromises = storedTabData.map(async (key) => {
-        try {
+      PROMISE_QUEUE.clear();
+      await PROMISE_QUEUE.add(async () => {
+        const storedTabData = Object.keys(await chrome.storage.local.get());
+        const cdpPromises = storedTabData.map(async (key) => {
           if (key === 'tabToRead') {
             return;
           }
-          await chrome.debugger.sendCommand(
-            { tabId: Number(key) },
-            'Network.disable'
-          );
-          await chrome.debugger.sendCommand(
-            { tabId: Number(key) },
-            'Audits.disable'
-          );
-          await chrome.debugger.detach({ tabId: Number(key) });
-        } catch (error) {
-          // Fail silently
-        } finally {
-          await chrome.tabs.reload(Number(key));
-        }
+          try {
+            await chrome.debugger.sendCommand(
+              { tabId: Number(key) },
+              'Network.disable'
+            );
+            await chrome.debugger.sendCommand(
+              { tabId: Number(key) },
+              'Audits.disable'
+            );
+            await chrome.debugger.detach({ tabId: Number(key) });
+          } catch (error) {
+            // Fail silently
+          } finally {
+            await CookieStore.removeCookieData(key);
+            await chrome.tabs.reload(Number(key), { bypassCache: true });
+          }
+        });
+        await Promise.all(cdpPromises);
       });
-      await Promise.all(cdpPromises);
     } else {
-      const storedTabData = Object.keys(await chrome.storage.local.get());
-      const cdpPromises = storedTabData.map(async (key) => {
-        try {
+      PROMISE_QUEUE.clear();
+      await PROMISE_QUEUE.add(async () => {
+        const storedTabData = Object.keys(await chrome.storage.local.get());
+        const cdpPromises = storedTabData.map(async (key) => {
           if (key === 'tabToRead') {
             return;
           }
-        } catch (error) {
-          // Fail silently
-        } finally {
-          await chrome.tabs.reload(Number(key));
-        }
+          await CookieStore.removeCookieData(key);
+          await chrome.tabs.reload(Number(key), { bypassCache: true });
+        });
+        await Promise.all(cdpPromises);
       });
-      await Promise.all(cdpPromises);
     }
   }
 );
