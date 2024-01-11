@@ -525,12 +525,14 @@ chrome.storage.sync.onChanged.addListener(
     });
     if (!globalIsUsingCDP) {
       PROMISE_QUEUE.clear();
+
       await PROMISE_QUEUE.add(async () => {
         const storedTabData = Object.keys(await chrome.storage.local.get());
-        const cdpPromises = storedTabData.map(async (key) => {
+        storedTabData.forEach(async (key) => {
           if (key === 'tabToRead') {
             return;
           }
+
           try {
             await chrome.debugger.sendCommand(
               { tabId: Number(key) },
@@ -544,24 +546,20 @@ chrome.storage.sync.onChanged.addListener(
           } catch (error) {
             // Fail silently
           } finally {
-            await CookieStore.removeCookieData(key);
             await chrome.tabs.reload(Number(key), { bypassCache: true });
           }
         });
-        await Promise.all(cdpPromises);
       });
     } else {
       PROMISE_QUEUE.clear();
       await PROMISE_QUEUE.add(async () => {
         const storedTabData = Object.keys(await chrome.storage.local.get());
-        const cdpPromises = storedTabData.map(async (key) => {
+        storedTabData.forEach(async (key) => {
           if (key === 'tabToRead') {
             return;
           }
-          await CookieStore.removeCookieData(key);
           await chrome.tabs.reload(Number(key), { bypassCache: true });
         });
-        await Promise.all(cdpPromises);
       });
     }
   }
