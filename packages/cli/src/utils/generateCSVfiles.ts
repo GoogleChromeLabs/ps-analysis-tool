@@ -18,6 +18,7 @@
  */
 import {
   CompleteJson,
+  generateAffectedCookiesCSV,
   generateAllCookiesCSV,
   generateSummaryDataCSV,
   generateTechnologyCSV,
@@ -29,7 +30,7 @@ const generateCSVFiles = (data: CompleteJson) => {
   if (data.technologyData.length > 0) {
     technologyDataCSV = generateTechnologyCSV(data);
   }
-  const affectedCookiesDataCSV = generateTechnologyCSV(data);
+  const affectedCookiesDataCSV = generateAffectedCookiesCSV(data);
   const summaryDataCSV = generateSummaryDataCSV(data);
 
   return {
