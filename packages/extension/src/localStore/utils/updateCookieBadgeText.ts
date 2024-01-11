@@ -18,7 +18,7 @@
  */
 import type { CookieData } from '@ps-analysis-tool/common';
 /**
- *
+ * Update cookie badge text.
  * @param storage {object} The storage object from local store.
  * @param tabId {string} The tabId of the the tab where badge text need to be updated.
  */
