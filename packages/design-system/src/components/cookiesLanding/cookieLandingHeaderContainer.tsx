@@ -17,9 +17,13 @@
  * External dependencies.
  */
 import React from 'react';
+
+/**
+ * Internal dependencies.
+ */
 import LandingHeader, { type DataMapping } from './landingHeader';
 
-interface CookiesLandingContainerProps {
+export interface CookiesLandingContainerProps {
   dataMapping?: DataMapping[];
   showLandingHeader?: boolean;
   testId?: string | null;

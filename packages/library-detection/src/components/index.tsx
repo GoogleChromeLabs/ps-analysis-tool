@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
+import { COLOR_MAP } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
@@ -24,6 +25,15 @@ import React from 'react';
 import LibraryDetection from './libraryDetection';
 
 const libraryDetection = {
+  containerProps: {
+    dataMapping: [
+      {
+        title: 'Known Breakages',
+        count: 2,
+        data: [{ count: 1, color: COLOR_MAP.uncategorized.color }],
+      },
+    ],
+  },
   component: <LibraryDetection />,
 };
 
