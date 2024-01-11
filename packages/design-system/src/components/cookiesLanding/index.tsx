@@ -42,7 +42,9 @@ interface CookiesLandingProps {
   showMessageBoxBody?: boolean;
   showBlockedCookiesSection?: boolean;
   additionalComponents?: {
-    [key: string]: React.ReactNode;
+    [key: string]: {
+      component: React.ReactNode;
+    };
   };
 }
 
@@ -154,7 +156,7 @@ const CookiesLanding = ({
       {Object.keys(additionalComponents).length && // TODO: Refactor code use children instead of passing components as props.
         Object.keys(additionalComponents).map((key: string) => (
           <CookiesLandingContainer key={key}>
-            {additionalComponents[key] as React.ReactNode}
+            {additionalComponents[key].component}
           </CookiesLandingContainer>
         ))}
     </div>
