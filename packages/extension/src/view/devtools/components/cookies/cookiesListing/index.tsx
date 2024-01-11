@@ -85,6 +85,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
 
   useEffect(() => {
     chrome.storage.session.onChanged.addListener(removeHighlights);
+
     return () => {
       try {
         chrome.storage.session.onChanged.removeListener(removeHighlights);
@@ -200,6 +201,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
     [key: string]: { selected: boolean };
   }>(() => {
     const filterValues: { [key: string]: { selected: boolean } } = {};
+
     BLOCKED_REASON_LIST.forEach((reason) => {
       filterValues[reason] = { selected: false };
     });

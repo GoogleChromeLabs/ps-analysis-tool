@@ -72,7 +72,7 @@ const useSidebar = ({
   defaultSelectedItemKey = null,
 }: useSidebarProps): SidebarOutput => {
   const [selectedItemKey, setSelectedItemKey] = useState<string | null>(null);
-  const [activePanel, setActivePanel] = useState<React.ReactNode>();
+  const [activePanel, setActivePanel] = useState<React.ReactNode>(); // TODO: Should we use React.ReactNode in state?
   const [sidebarItems, setSidebarItems] = useState<SidebarItems>({});
   const [isSidebarFocused, setIsSidebarFocused] = useState(true);
 
