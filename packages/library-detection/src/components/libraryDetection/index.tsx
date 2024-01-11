@@ -13,4 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './components';
+/**
+ * External dependencies.
+ */
+import React from 'react';
+
+const LibraryDetection = () => {
+  return (
+    <div>
+      <h1>Library Detection</h1>
+      <p>This is a placeholder for the Library Detection page.</p>
+    </div>
+  );
+};
+
+export default LibraryDetection;

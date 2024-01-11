@@ -18,6 +18,7 @@
  */
 import React from 'react';
 import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
+import { LibraryDetection } from '@ps-analysis-tool/library-detection';
 
 /**
  * Internal dependencies.
@@ -145,6 +146,10 @@ const CookiesLanding = ({
           />
         </CookiesLandingContainer>
       )}
+
+      <CookiesLandingContainer>
+        <LibraryDetection />
+      </CookiesLandingContainer>
     </div>
   );
 };
