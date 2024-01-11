@@ -16,17 +16,24 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useState } from 'react';
 import {
   CookiesLandingContainer,
   COLOR_MAP,
 } from '@ps-analysis-tool/design-system';
 
+/**
+ * Internal dependencies.
+ */
+import LibraryAccordion from '../libraryAccordion';
+
 const LibraryDetection = () => {
+  const [libraryCount] = useState(1);
+
   const dataMapping = [
     {
       title: 'Known Breakages',
-      count: 2,
+      count: libraryCount,
       data: [{ count: 1, color: COLOR_MAP.uncategorized.color }],
     },
   ];
@@ -35,11 +42,10 @@ const LibraryDetection = () => {
     <CookiesLandingContainer
       dataMapping={dataMapping}
       testId="library-detection"
+      description="Please review the recommendations for the following libraries or library features, as they may not work after third-party cookie deprecation."
     >
-      <div>
-        <h1>Library Detection</h1>
-        <p>This is a placeholder for the Library Detection page.</p>
-      </div>
+      <LibraryAccordion></LibraryAccordion>
+      <LibraryAccordion></LibraryAccordion>
     </CookiesLandingContainer>
   );
 };
