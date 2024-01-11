@@ -25,9 +25,7 @@ import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
 import MessageBox from '../messageBox';
 import { type DataMapping } from './landingHeader';
 import CookiesMatrix from './cookiesMatrix';
-import CookiesLandingContainer, {
-  type CookiesLandingContainerProps,
-} from './cookieLandingHeaderContainer';
+import CookiesLandingContainer from './cookieLandingHeaderContainer';
 import {
   prepareCookieStatsComponents,
   prepareCookiesCount,
@@ -44,10 +42,7 @@ interface CookiesLandingProps {
   showMessageBoxBody?: boolean;
   showBlockedCookiesSection?: boolean;
   additionalComponents?: {
-    [key: string]: {
-      component: React.ReactNode;
-      containerProps: CookiesLandingContainerProps;
-    };
+    [key: string]: React.ReactNode;
   };
 }
 
@@ -155,16 +150,10 @@ const CookiesLanding = ({
           />
         </CookiesLandingContainer>
       )}
-
-      {Object.keys(additionalComponents).length && // TODO: Refactor code use children instead of passing components as props.
-        Object.keys(additionalComponents).map((key: string) => (
-          <CookiesLandingContainer
-            key={key}
-            {...additionalComponents[key].containerProps}
-          >
-            {additionalComponents[key].component}
-          </CookiesLandingContainer>
-        ))}
+      {Object.keys(additionalComponents).length &&
+        Object.keys(additionalComponents).map(
+          (key: string) => additionalComponents[key]
+        )}
     </div>
   );
 };

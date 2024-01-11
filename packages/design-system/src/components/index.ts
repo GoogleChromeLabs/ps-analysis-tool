@@ -38,3 +38,7 @@ export * from './table';
 export { default as SearchInput } from './searchInput';
 export * from './sidebar';
 export { default as InspectButton } from './inspectButton';
+export {
+  default as CookiesLandingContainer,
+  CookiesLandingContainerProps,
+} from './cookiesLanding/cookieLandingHeaderContainer';

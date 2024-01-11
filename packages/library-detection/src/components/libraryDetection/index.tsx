@@ -17,13 +17,30 @@
  * External dependencies.
  */
 import React from 'react';
+import {
+  CookiesLandingContainer,
+  COLOR_MAP,
+} from '@ps-analysis-tool/design-system';
 
 const LibraryDetection = () => {
+  const dataMapping = [
+    {
+      title: 'Known Breakages',
+      count: 2,
+      data: [{ count: 1, color: COLOR_MAP.uncategorized.color }],
+    },
+  ];
+
   return (
-    <div>
-      <h1>Library Detection</h1>
-      <p>This is a placeholder for the Library Detection page.</p>
-    </div>
+    <CookiesLandingContainer
+      dataMapping={dataMapping}
+      testId="library-detection"
+    >
+      <div>
+        <h1>Library Detection</h1>
+        <p>This is a placeholder for the Library Detection page.</p>
+      </div>
+    </CookiesLandingContainer>
   );
 };
 

@@ -24,7 +24,7 @@ import {
   ProgressBar,
 } from '@ps-analysis-tool/design-system';
 import type { CookieTableData } from '@ps-analysis-tool/common';
-import { libraryDetection } from '@ps-analysis-tool/library-detection';
+import { LibraryDetection } from '@ps-analysis-tool/library-detection';
 
 /**
  * Internal dependencies.
@@ -91,7 +91,7 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
             tabCookies={tabCookies}
             tabFrames={tabFrames}
             showBlockedCookiesSection
-            additionalComponents={{ libraryDetection }}
+            additionalComponents={{ libraryDetection: <LibraryDetection /> }}
           />
         )}
       </div>
