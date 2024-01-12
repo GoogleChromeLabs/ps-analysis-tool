@@ -69,6 +69,7 @@ const useAllowedList = (
 
       if (isDomainInAllowList) {
         domainsInAllowList.delete(domainForAllowList);
+        setDomainsInAllowList(domainsInAllowList);
         chrome.contentSettings.cookies.clear({});
 
         CookieStore.removeDomainFromAllowList(domainObject).then(() => {
@@ -96,90 +97,84 @@ const useAllowedList = (
             });
           });
         });
-      } else {
-        CookieStore.getDomainsInAllowList()
-          .then((listOfDomainObject) => {
-            console.log(listOfDomainObject, domainForAllowList);
-            listOfDomainObject.forEach((domainObjectItem) => {
-              // Check if more specific patterns was added to allow-list,
-              // and remove it as the general pattern will be applied.
-              if (
-                domainObjectItem.primaryDomain.endsWith(domainForAllowList) ||
-                `.${domainObjectItem.primaryDomain}` === domainForAllowList
-              ) {
-                domainsInAllowList.delete(domainObjectItem.primaryDomain);
-                chrome.contentSettings.cookies.clear({});
 
-                CookieStore.removeDomainFromAllowList(domainObjectItem).then(
-                  () => {
-                    // Set remaining settings after removing one setting.
-                    CookieStore.getDomainsInAllowList().then(
-                      (newListOfDomainObject) => {
-                        newListOfDomainObject.forEach((newDomainObjectItem) => {
-                          chrome.contentSettings.cookies
-                            .set({
-                              primaryPattern:
-                                newDomainObjectItem.primaryPattern,
-                              secondaryPattern:
-                                newDomainObjectItem.secondaryPattern,
-                              setting: 'session_only',
-                              scope: newDomainObjectItem.scope as
-                                | 'incognito_session_only'
-                                | 'regular',
-                            })
-                            // @ts-ignore - The chrome-type definition is outdated,
-                            // this returns a promise instead of a void.
-                            .catch((error: Error) => {
-                              console.log(
-                                error.message,
-                                `Primary pattern: ${newDomainObjectItem.primaryPattern}`,
-                                `Secondary pattern: ${newDomainObjectItem.secondaryPattern}`
-                              );
-                            });
-                        });
-                      }
-                    );
-                  }
-                );
-              }
-            });
-          })
-          .then(() => {
-            chrome.contentSettings.cookies
-              .set({
-                primaryPattern,
-                secondaryPattern,
-                setting: 'session_only',
-                scope,
-              })
-              // @ts-ignore - The chrome-type definition is outdated,
-              // this returns a promise instead of a void.
-              .then(() => {
-                domainsInAllowList.add(domainForAllowList);
-                CookieStore.addDomainToAllowList(domainObject);
-              })
-              .catch((error: Error) => {
-                console.log(
-                  error.message,
-                  `Primary pattern: ${primaryPattern}`,
-                  `Secondary pattern: ${secondaryPattern}`
-                );
-              });
-          });
+        return;
       }
-      setDomainsInAllowList(domainsInAllowList);
+
+      CookieStore.getDomainsInAllowList()
+        .then((listOfDomainObject) => {
+          console.log(listOfDomainObject, domainForAllowList);
+          listOfDomainObject.forEach((domainObjectItem) => {
+            // Check if more specific patterns was added to allow-list,
+            // and remove it as the general pattern will be applied.
+            if (
+              domainObjectItem.primaryDomain.endsWith(domainForAllowList) ||
+              `.${domainObjectItem.primaryDomain}` === domainForAllowList
+            ) {
+              domainsInAllowList.delete(domainObjectItem.primaryDomain);
+              chrome.contentSettings.cookies.clear({});
+
+              CookieStore.removeDomainFromAllowList(domainObjectItem).then(
+                () => {
+                  // Set remaining settings after removing one setting.
+                  CookieStore.getDomainsInAllowList().then(
+                    (newListOfDomainObject) => {
+                      newListOfDomainObject.forEach((newDomainObjectItem) => {
+                        chrome.contentSettings.cookies
+                          .set({
+                            primaryPattern: newDomainObjectItem.primaryPattern,
+                            secondaryPattern:
+                              newDomainObjectItem.secondaryPattern,
+                            setting: 'session_only',
+                            scope: newDomainObjectItem.scope as
+                              | 'incognito_session_only'
+                              | 'regular',
+                          })
+                          // @ts-ignore - The chrome-type definition is outdated,
+                          // this returns a promise instead of a void.
+                          .catch((error: Error) => {
+                            console.log(
+                              error.message,
+                              `Primary pattern: ${newDomainObjectItem.primaryPattern}`,
+                              `Secondary pattern: ${newDomainObjectItem.secondaryPattern}`
+                            );
+                          });
+                      });
+                    }
+                  );
+                }
+              );
+            }
+          });
+        })
+        .then(() => {
+          chrome.contentSettings.cookies
+            .set({
+              primaryPattern,
+              secondaryPattern,
+              setting: 'session_only',
+              scope,
+            })
+            // @ts-ignore - The chrome-type definition is outdated,
+            // this returns a promise instead of a void.
+            .then(() => {
+              domainsInAllowList.add(domainForAllowList);
+              setDomainsInAllowList(domainsInAllowList);
+              CookieStore.addDomainToAllowList(domainObject);
+            })
+            .catch((error: Error) => {
+              console.log(
+                error.message,
+                `Primary pattern: ${primaryPattern}`,
+                `Secondary pattern: ${secondaryPattern}`
+              );
+            });
+        });
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      isDomainInAllowList,
-      // allowListSessionStorage,
-      domainsInAllowList,
-      setDomainsInAllowList,
-    ]
+    [isDomainInAllowList, domainsInAllowList, setDomainsInAllowList]
   );
 
   useEffect(() => {
-    // @todo Is there an alternative way to do it?
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const currentTab = tabs[0];
 
@@ -197,40 +192,44 @@ const useAllowedList = (
       if (currentTab?.incognito) {
         isIncognito.current = currentTab.incognito;
       }
-
-      if (pageUrl.current && domain) {
-        let primaryUrl = domain;
-
-        primaryUrl = primaryUrl.startsWith('.')
-          ? `https://${primaryUrl.substring(1)}/`
-          : `https://${primaryUrl}/`;
-
-        chrome.contentSettings.cookies.get(
-          {
-            primaryUrl: primaryUrl,
-            secondaryUrl: pageUrl.current,
-            incognito: isIncognito.current,
-          },
-          (details) => {
-            if (details?.setting) {
-              if (
-                details.setting === 'session_only' &&
-                !domainsInAllowList.has(domain)
-              ) {
-                domainsInAllowList.add(domain);
-                setDomainsInAllowList(domainsInAllowList);
-              } else if (
-                details.setting !== 'session_only' &&
-                domainsInAllowList.has(domain)
-              ) {
-                domainsInAllowList.delete(domain);
-                setDomainsInAllowList(domainsInAllowList);
-              }
-            }
-          }
-        );
-      }
     });
+  }, []);
+
+  useEffect(() => {
+    if (!pageUrl.current && domain) {
+      return;
+    }
+
+    let primaryUrl = domain;
+
+    primaryUrl = primaryUrl.startsWith('.')
+      ? `https://${primaryUrl.substring(1)}/`
+      : `https://${primaryUrl}/`;
+
+    chrome.contentSettings.cookies.get(
+      {
+        primaryUrl: primaryUrl,
+        secondaryUrl: pageUrl.current,
+        incognito: isIncognito.current,
+      },
+      (details) => {
+        if (details?.setting) {
+          if (
+            details.setting === 'session_only' &&
+            !domainsInAllowList.has(domain)
+          ) {
+            domainsInAllowList.add(domain);
+            setDomainsInAllowList(domainsInAllowList);
+          } else if (
+            details.setting !== 'session_only' &&
+            domainsInAllowList.has(domain)
+          ) {
+            domainsInAllowList.delete(domain);
+            setDomainsInAllowList(domainsInAllowList);
+          }
+        }
+      }
+    );
 
     // Set whether the domain is a subdomain match or the exact match.
     allowListSessionStorage.then((listOfDomainObject) => {
