@@ -24,7 +24,7 @@ const process = require('process');
 const fetch = require('node-fetch');
 const targetDIR = path.resolve(__dirname, '..', 'third_party/data');
 const requestURL =
-  'https://raw.githubusercontent.com/jkwakman/Open-Cookie-Database/master/open-cookie-database.csv';
+  'https://raw.githubusercontent.com/rtCamp/Open-Cookie-Database/master/open-cookie-database.csv';
 
 /**
  * Format the raw csv data to a JSON object and return it.
