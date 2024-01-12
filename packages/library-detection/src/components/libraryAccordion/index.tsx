@@ -16,15 +16,27 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useState } from 'react';
+import { ArrowDown, ArrowUp, Ellipse } from '@ps-analysis-tool/design-system';
 
 const LibraryAccordion = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <div>
-      <div className="border-t border-b border-hex-gray">
-        <p>Google Sign-In: detecting...</p>
+    <div className="mb-1">
+      <div
+        onClick={() => setIsOpen(!isOpen)}
+        className="border-t border-b border-hex-gray flex py-2 cursor-pointer hover:bg-slate-100 transition-all"
+      >
+        <span className="flex items-center px-2">
+          <Ellipse />
+        </span>
+        <p className="flex-1">Google Sign-In: detecting...</p>
+        <span className="flex items-center px-2">
+          {isOpen ? <ArrowUp /> : <ArrowDown />}
+        </span>
       </div>
-      <div></div>
+      {isOpen && <div className="p-5">Content</div>}
     </div>
   );
 };
