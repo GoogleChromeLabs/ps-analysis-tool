@@ -38,10 +38,10 @@ const useAllowedList = (
 
   const [parentDomain, setParentDomain] = useState<string>('');
 
-  const domain =
+  const rowDomain =
     (row?.originalData as CookieTableData)?.parsedCookie?.domain ?? '';
 
-  const isDomainInAllowList = domainsInAllowList.has(domain);
+  const isDomainInAllowList = domainsInAllowList.has(rowDomain);
   const allowListSessionStorage = CookieStore.getDomainsInAllowList();
 
   const onAllowListClick = useCallback(
@@ -199,11 +199,11 @@ const useAllowedList = (
   }, []);
 
   useEffect(() => {
-    if (!pageUrl.current && domain) {
+    if (!pageUrl.current && rowDomain) {
       return;
     }
 
-    let primaryUrl = domain;
+    let primaryUrl = rowDomain;
 
     primaryUrl = primaryUrl.startsWith('.')
       ? `https://${primaryUrl.substring(1)}/`
@@ -219,21 +219,23 @@ const useAllowedList = (
         if (details?.setting) {
           if (
             details.setting === 'session_only' &&
-            !domainsInAllowList.has(domain)
+            !domainsInAllowList.has(rowDomain)
           ) {
-            domainsInAllowList.add(domain);
+            domainsInAllowList.add(rowDomain);
             setDomainsInAllowList(domainsInAllowList);
           } else if (
             details.setting !== 'session_only' &&
-            domainsInAllowList.has(domain)
+            domainsInAllowList.has(rowDomain)
           ) {
-            domainsInAllowList.delete(domain);
+            domainsInAllowList.delete(rowDomain);
             setDomainsInAllowList(domainsInAllowList);
           }
         }
       }
     );
+  }, [rowDomain, isIncognito, domainsInAllowList, setDomainsInAllowList]);
 
+  useEffect(() => {
     // Set whether the domain is a subdomain match or the exact match.
     allowListSessionStorage.then(
       (allowedDomainObjects: AllowedDomainObject[]) => {
@@ -244,29 +246,24 @@ const useAllowedList = (
         }
 
         for (let i = 0; i < allowedDomainObjects.length; i++) {
+          const storedAllowedDomain = allowedDomainObjects[i].primaryDomain;
+          // For example xyz.bbc.com and .bbc.com
           if (
-            domain.endsWith(allowedDomainObjects[i].primaryDomain) &&
-            domain !== allowedDomainObjects[i].primaryDomain
+            rowDomain.endsWith(storedAllowedDomain) &&
+            rowDomain !== storedAllowedDomain
           ) {
-            parentDomainValue = allowedDomainObjects[i].primaryDomain;
+            parentDomainValue = storedAllowedDomain;
             break;
           }
         }
 
+        // For example .bbc.com will be parent domain of xyz.bbc.com
         if (parentDomain !== parentDomainValue) {
           setParentDomain(parentDomainValue);
         }
       }
     );
-  }, [
-    row,
-    domain,
-    isIncognito,
-    domainsInAllowList,
-    setDomainsInAllowList,
-    allowListSessionStorage,
-    parentDomain,
-  ]);
+  }, [allowListSessionStorage, rowDomain, parentDomain]);
 
   return {
     parentDomain,
