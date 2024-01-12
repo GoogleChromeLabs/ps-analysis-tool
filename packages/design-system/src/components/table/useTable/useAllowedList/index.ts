@@ -27,6 +27,7 @@ import {
  * Internal dependencies.
  */
 import type { TableRow } from '..';
+import removeFromAllowList from './removeFromAllowList';
 
 const useAllowedList = (
   row: TableRow,
@@ -73,84 +74,31 @@ const useAllowedList = (
 
       // Remove from allowed list.
       if (isDomainInAllowList) {
-        domainsInAllowList.delete(domainOrParentDomain);
-        setDomainsInAllowList(domainsInAllowList);
-        chrome.contentSettings.cookies.clear({});
-
-        CookieStore.removeDomainFromAllowList(domainObject).then(
-          (remainingAllowedDomainObjects) => {
-            // Set remaining settings after removing one setting becuase chrome.contentSettings.cookies.clear({}); clears everything.
-            remainingAllowedDomainObjects.forEach((domainObjectItem) => {
-              chrome.contentSettings.cookies
-                .set({
-                  primaryPattern: domainObjectItem.primaryPattern,
-                  secondaryPattern: domainObjectItem.secondaryPattern,
-                  setting: 'session_only',
-                  scope: domainObjectItem.scope as
-                    | 'incognito_session_only'
-                    | 'regular',
-                })
-                // @ts-ignore - The chrome-type definition is outdated,
-                // this returns a promise instead of a void.
-                .catch((error: Error) => {
-                  console.log(
-                    error.message,
-                    `Primary pattern: ${domainObjectItem.primaryPattern}`,
-                    `Secondary pattern: ${domainObjectItem.secondaryPattern}`
-                  );
-                });
-            });
-          }
-        );
+        removeFromAllowList(domainObject).then(() => {
+          domainsInAllowList.delete(domainOrParentDomain);
+          setDomainsInAllowList(domainsInAllowList);
+        });
 
         return;
       }
 
       // Add to allow list.
       CookieStore.getDomainsInAllowList()
-        .then((allowedDomainObjects) => {
-          allowedDomainObjects.forEach((domainObjectItem) => {
-            // Check if more specific patterns was added to allow-list,
-            // and remove it as the general pattern will be applied. (look for child domain)
-            if (
-              domainObjectItem.primaryDomain.endsWith(domainOrParentDomain) ||
-              `.${domainObjectItem.primaryDomain}` === domainOrParentDomain
-            ) {
-              domainsInAllowList.delete(domainObjectItem.primaryDomain);
-              chrome.contentSettings.cookies.clear({});
+        .then(async (allowedDomainObjects) => {
+          await Promise.all(
+            allowedDomainObjects.map(async (domainObjectItem) => {
+              // Check if more specific patterns was added to allow-list,
+              // and remove it as the general pattern will be applied. (look for child domain)
+              if (
+                domainObjectItem.primaryDomain.endsWith(domainOrParentDomain) ||
+                `.${domainObjectItem.primaryDomain}` === domainOrParentDomain
+              ) {
+                domainsInAllowList.delete(domainObjectItem.primaryDomain);
 
-              CookieStore.removeDomainFromAllowList(domainObjectItem).then(
-                () => {
-                  // Set remaining settings after removing one setting.
-                  CookieStore.getDomainsInAllowList().then(
-                    (newAllowedDomainObjects) => {
-                      newAllowedDomainObjects.forEach((newDomainObjectItem) => {
-                        chrome.contentSettings.cookies
-                          .set({
-                            primaryPattern: newDomainObjectItem.primaryPattern,
-                            secondaryPattern:
-                              newDomainObjectItem.secondaryPattern,
-                            setting: 'session_only',
-                            scope: newDomainObjectItem.scope as
-                              | 'incognito_session_only'
-                              | 'regular',
-                          })
-                          // @ts-ignore - The chrome-type definition is outdated,
-                          // this returns a promise instead of a void.
-                          .catch((error: Error) => {
-                            console.log(
-                              error.message,
-                              `Primary pattern: ${newDomainObjectItem.primaryPattern}`,
-                              `Secondary pattern: ${newDomainObjectItem.secondaryPattern}`
-                            );
-                          });
-                      });
-                    }
-                  );
-                }
-              );
-            }
-          });
+                await removeFromAllowList(domainObjectItem);
+              }
+            })
+          );
         })
         .then(() => {
           chrome.contentSettings.cookies
