@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import { CookieTableData } from '@ps-analysis-tool/common';
 
@@ -26,7 +26,6 @@ import { CookieTableData } from '@ps-analysis-tool/common';
  */
 import BodyCell from './bodyCell';
 import type { TableColumn, TableRow } from '../../useTable';
-import useAllowedList from '../../useTable/useAllowedList';
 
 interface BodyRowProps {
   row: TableRow;
@@ -34,12 +33,13 @@ interface BodyRowProps {
   index: number;
   isRowFocused: boolean;
   selectedKey: string | undefined | null;
-  removeSelectedRow: () => void;
   getRowObjectKey: (row: TableRow) => string;
-  onRowClick: () => void;
+  onRowClick: (e: React.MouseEvent<HTMLDivElement>) => void;
   onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>, index: number) => void;
-  domainsInAllowList: Set<string>;
-  setDomainsInAllowList: (domainList: Set<string>) => void;
+  onRowContextMenu?: (
+    e: React.MouseEvent<HTMLDivElement>,
+    row: TableRow
+  ) => void;
 }
 
 // eslint-disable-next-line complexity
@@ -48,23 +48,20 @@ const BodyRow = ({
   columns,
   index,
   selectedKey,
-  removeSelectedRow,
   getRowObjectKey,
   isRowFocused,
   onRowClick,
   onKeyDown,
-  domainsInAllowList,
-  setDomainsInAllowList,
+  onRowContextMenu = () => undefined,
 }: BodyRowProps) => {
-  const { onAllowListClick, isDomainInAllowList, parentDomain } =
-    useAllowedList(row, domainsInAllowList, setDomainsInAllowList);
-
   const cookieKey = getRowObjectKey(row);
   const isBlocked =
     (row.originalData as CookieTableData)?.isBlocked ||
     ((row.originalData as CookieTableData)?.blockedReasons &&
       (row.originalData as CookieTableData)?.blockedReasons?.length);
   const isHighlighted = (row.originalData as CookieTableData)?.highlighted;
+  const isDomainInAllowList = (row.originalData as CookieTableData)
+    ?.isDomainInAllowList;
 
   const tableRowClassName = classNames(
     'outline-0 flex divide-x divide-american-silver dark:divide-quartz',
@@ -105,21 +102,13 @@ const BodyRow = ({
         : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver')
   );
 
-  const handleRowClick = useCallback(
-    (e: React.MouseEvent<HTMLElement>) => {
-      if ((e.target as HTMLElement).id !== 'allow-list-option') {
-        onRowClick();
-      }
-    },
-    [onRowClick]
-  );
-
   return (
     <div
       id={index.toString()}
       className={tableRowClassName}
-      onClick={handleRowClick}
+      onClick={onRowClick}
       onKeyDown={(e) => onKeyDown(e, index)}
+      onContextMenu={(e) => onRowContextMenu(e, row)}
       data-testid="body-row"
     >
       {columns.map(({ accessorKey, width }, idx) => (
@@ -131,10 +120,6 @@ const BodyRow = ({
           isHighlighted={isHighlighted}
           isRowFocused={cookieKey === selectedKey}
           row={row}
-          removeSelectedRow={removeSelectedRow}
-          isDomainInAllowList={isDomainInAllowList}
-          parentDomain={parentDomain}
-          onAllowListClick={onAllowListClick}
         />
       ))}
     </div>

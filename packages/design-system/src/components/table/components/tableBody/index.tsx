@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef } from 'react';
 import classNames from 'classnames';
 
 /**
@@ -32,7 +32,14 @@ interface TableBodyProps {
   isRowFocused: boolean;
   setIsRowFocused: (state: boolean) => void;
   selectedKey: string | undefined | null;
-  onRowClick: (key: TableData | null) => void;
+  onRowClick: (
+    key: TableData | null,
+    e?: React.MouseEvent<HTMLDivElement>
+  ) => void;
+  onRowContextMenu?: (
+    e: React.MouseEvent<HTMLDivElement>,
+    row: TableRow
+  ) => void;
 }
 
 const TableBody = ({
@@ -42,10 +49,8 @@ const TableBody = ({
   setIsRowFocused,
   selectedKey,
   onRowClick,
+  onRowContextMenu = () => undefined,
 }: TableBodyProps) => {
-  const [domainsInAllowList, setDomainsInAllowList] = useState<Set<string>>(
-    new Set()
-  );
   const tableBodyRef = useRef(null);
 
   const handleKeyDown = useCallback(
@@ -125,10 +130,10 @@ const TableBody = ({
         : 'bg-white dark:bg-raisin-black')
   );
 
-  const removeSelectedRow = useCallback(() => {
-    onRowClick(null);
-    setIsRowFocused(false);
-  }, [onRowClick, setIsRowFocused]);
+  // const removeSelectedRow = useCallback(() => {
+  //   onRowClick(null);
+  //   setIsRowFocused(false);
+  // }, [onRowClick, setIsRowFocused]);
 
   return (
     <div ref={tableBodyRef} className="h-full flex flex-col">
@@ -139,16 +144,14 @@ const TableBody = ({
           row={row}
           columns={table.columns}
           selectedKey={selectedKey}
-          removeSelectedRow={removeSelectedRow}
           getRowObjectKey={getRowObjectKey}
           isRowFocused={isRowFocused}
-          onRowClick={() => {
-            onRowClick(row?.originalData);
+          onRowClick={(e: React.MouseEvent<HTMLDivElement>) => {
+            onRowClick(row?.originalData, e);
             setIsRowFocused(true);
           }}
           onKeyDown={handleKeyDown}
-          domainsInAllowList={domainsInAllowList}
-          setDomainsInAllowList={setDomainsInAllowList}
+          onRowContextMenu={onRowContextMenu}
         />
       ))}
       <div

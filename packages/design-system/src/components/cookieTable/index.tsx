@@ -48,6 +48,10 @@ interface CookieTableProps {
     } | null
   ) => void;
   extraInterfaceToTopBar?: React.ReactNode;
+  onRowContextMenu?: (
+    e: React.MouseEvent<HTMLDivElement>,
+    row: TableRow
+  ) => void;
 }
 
 const CookieTable = ({
@@ -61,6 +65,7 @@ const CookieTable = ({
   selectedFrameCookie,
   setSelectedFrameCookie,
   extraInterfaceToTopBar,
+  onRowContextMenu,
 }: CookieTableProps) => {
   useEffect(() => {
     if (selectedFrame && selectedFrameCookie) {
@@ -76,10 +81,12 @@ const CookieTable = ({
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
 
   const onRowClick = useCallback(
-    (cookieData: TableData | null) => {
-      setSelectedFrameCookie({
-        [selectedFrame as string]: cookieData as CookieTableData | null,
-      });
+    (cookieData: TableData | null, e?: React.MouseEvent<HTMLDivElement>) => {
+      if ((e?.target as HTMLElement)?.id !== 'allow-list-option') {
+        setSelectedFrameCookie({
+          [selectedFrame as string]: cookieData as CookieTableData | null,
+        });
+      }
     },
     [selectedFrame, setSelectedFrameCookie]
   );
@@ -119,6 +126,13 @@ const CookieTable = ({
         }
         onRowClick={onRowClick}
         extraInterfaceToTopBar={extraInterfaceToTopBar}
+        onRowContextMenu={(
+          e: React.MouseEvent<HTMLDivElement>,
+          row: TableRow
+        ) => {
+          onRowContextMenu?.(e, row);
+          onRowClick(row?.originalData, e);
+        }}
       />
     </div>
   );
