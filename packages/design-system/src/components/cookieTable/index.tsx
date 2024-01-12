@@ -96,12 +96,10 @@ const CookieTable = forwardRef<
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
 
   const onRowClick = useCallback(
-    (cookieData: TableData | null, e?: React.MouseEvent<HTMLDivElement>) => {
-      if ((e?.target as HTMLElement)?.id !== 'allow-list-option') {
-        setSelectedFrameCookie({
-          [selectedFrame as string]: cookieData as CookieTableData | null,
-        });
-      }
+    (cookieData: TableData | null) => {
+      setSelectedFrameCookie({
+        [selectedFrame as string]: cookieData as CookieTableData | null,
+      });
     },
     [selectedFrame, setSelectedFrameCookie]
   );
@@ -158,7 +156,7 @@ const CookieTable = forwardRef<
           row: TableRow
         ) => {
           onRowContextMenu?.(e, row);
-          onRowClick(row?.originalData, e);
+          onRowClick(row?.originalData);
         }}
       />
     </div>

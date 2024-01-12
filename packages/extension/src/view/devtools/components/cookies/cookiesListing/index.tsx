@@ -184,31 +184,41 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
     null
   );
 
-  const handleAllowListClick = useCallback(() => {
-    cookieTableRef.current?.removeSelectedRow();
-    onAllowListClick(
-      domain,
-      tabUrl || '',
-      isIncognito.current,
-      domainsInAllowList.has(domain),
-      domainsInAllowList,
-      setDomainsInAllowListCallback
-    );
-    setContextMenuOpen(false);
-  }, [domain, domainsInAllowList, tabUrl]);
+  const handleAllowListClick = useCallback(
+    (e: React.MouseEvent<HTMLElement>) => {
+      e.stopPropagation();
 
-  const handleAllowListWithParentDomainClick = useCallback(() => {
-    cookieTableRef.current?.removeSelectedRow();
-    onAllowListClick(
-      parentDomain.value,
-      tabUrl || '',
-      isIncognito.current,
-      domainsInAllowList.has(parentDomain.value),
-      domainsInAllowList,
-      setDomainsInAllowListCallback
-    );
-    setContextMenuOpen(false);
-  }, [domainsInAllowList, parentDomain.value, tabUrl]);
+      cookieTableRef.current?.removeSelectedRow();
+      onAllowListClick(
+        domain,
+        tabUrl || '',
+        isIncognito.current,
+        domainsInAllowList.has(domain),
+        domainsInAllowList,
+        setDomainsInAllowListCallback
+      );
+      setContextMenuOpen(false);
+    },
+    [domain, domainsInAllowList, tabUrl]
+  );
+
+  const handleAllowListWithParentDomainClick = useCallback(
+    (e: React.MouseEvent<HTMLElement>) => {
+      e.stopPropagation();
+
+      cookieTableRef.current?.removeSelectedRow();
+      onAllowListClick(
+        parentDomain.value,
+        tabUrl || '',
+        isIncognito.current,
+        domainsInAllowList.has(parentDomain.value),
+        domainsInAllowList,
+        setDomainsInAllowListCallback
+      );
+      setContextMenuOpen(false);
+    },
+    [domainsInAllowList, parentDomain.value, tabUrl]
+  );
 
   const removeHighlights = useCallback(() => {
     setTableData((prev) =>

@@ -130,11 +130,6 @@ const TableBody = ({
         : 'bg-white dark:bg-raisin-black')
   );
 
-  // const removeSelectedRow = useCallback(() => {
-  //   onRowClick(null);
-  //   setIsRowFocused(false);
-  // }, [onRowClick, setIsRowFocused]);
-
   return (
     <div ref={tableBodyRef} className="h-full flex flex-col">
       {table.rows.map((row, index) => (
