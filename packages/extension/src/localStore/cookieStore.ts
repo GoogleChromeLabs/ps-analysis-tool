@@ -373,12 +373,15 @@ const CookieStore = {
   /**
    * Remove domain from allow-list.
    * @param {AllowedDomainObject} domainObject The domain to be removed from allow-list.
+   * @returns AllowedDomainObject[] Remaning objects.
    */
-  async removeDomainFromAllowList(domainObject: AllowedDomainObject) {
+  async removeDomainFromAllowList(
+    domainObject: AllowedDomainObject
+  ): Promise<AllowedDomainObject[] | []> {
     const storage = await chrome.storage.session.get();
 
     if (!storage?.allowList || storage?.allowList?.length === 0) {
-      return;
+      return [];
     }
 
     const indexToRemove = getIndexForAllowListedItem(
@@ -391,6 +394,8 @@ const CookieStore = {
     }
 
     await chrome.storage.session.set(storage);
+
+    return (storage.allowList as AllowedDomainObject[]) || [];
   },
 
   /**

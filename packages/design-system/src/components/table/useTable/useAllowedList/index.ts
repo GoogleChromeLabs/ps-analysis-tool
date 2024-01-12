@@ -45,16 +45,17 @@ const useAllowedList = (
   const allowListSessionStorage = CookieStore.getDomainsInAllowList();
 
   const onAllowListClick = useCallback(
-    (domainForAllowList: string) => {
-      if (pageUrl.current === '' || domainForAllowList === '') {
+    (domainOrParentDomain: string) => {
+      if (pageUrl.current === '' || domainOrParentDomain === '') {
         return;
       }
 
+      // Because we need to provide a pattern.
       const secondaryPattern = pageUrl.current.endsWith('/')
         ? pageUrl.current + '*'
         : pageUrl.current + '/*';
 
-      let primaryPattern = domainForAllowList;
+      let primaryPattern = domainOrParentDomain;
 
       primaryPattern =
         'https://' +
@@ -64,21 +65,22 @@ const useAllowedList = (
 
       const scope = isIncognito.current ? 'incognito_session_only' : 'regular';
       const domainObject: AllowedDomainObject = {
-        primaryDomain: domainForAllowList,
+        primaryDomain: domainOrParentDomain, // For finding parent domain.
         primaryPattern,
         secondaryPattern,
         scope,
       };
 
+      // Remove from allowed list.
       if (isDomainInAllowList) {
-        domainsInAllowList.delete(domainForAllowList);
+        domainsInAllowList.delete(domainOrParentDomain);
         setDomainsInAllowList(domainsInAllowList);
         chrome.contentSettings.cookies.clear({});
 
-        CookieStore.removeDomainFromAllowList(domainObject).then(() => {
-          // Set remaining settings after removing one setting.
-          CookieStore.getDomainsInAllowList().then((allowedDomainObjects) => {
-            allowedDomainObjects.forEach((domainObjectItem) => {
+        CookieStore.removeDomainFromAllowList(domainObject).then(
+          (remainingAllowedDomainObjects) => {
+            // Set remaining settings after removing one setting becuase chrome.contentSettings.cookies.clear({}); clears everything.
+            remainingAllowedDomainObjects.forEach((domainObjectItem) => {
               chrome.contentSettings.cookies
                 .set({
                   primaryPattern: domainObjectItem.primaryPattern,
@@ -98,21 +100,21 @@ const useAllowedList = (
                   );
                 });
             });
-          });
-        });
+          }
+        );
 
         return;
       }
 
+      // Add to allow list.
       CookieStore.getDomainsInAllowList()
         .then((allowedDomainObjects) => {
-          console.log(allowedDomainObjects, domainForAllowList);
           allowedDomainObjects.forEach((domainObjectItem) => {
             // Check if more specific patterns was added to allow-list,
-            // and remove it as the general pattern will be applied.
+            // and remove it as the general pattern will be applied. (look for child domain)
             if (
-              domainObjectItem.primaryDomain.endsWith(domainForAllowList) ||
-              `.${domainObjectItem.primaryDomain}` === domainForAllowList
+              domainObjectItem.primaryDomain.endsWith(domainOrParentDomain) ||
+              `.${domainObjectItem.primaryDomain}` === domainOrParentDomain
             ) {
               domainsInAllowList.delete(domainObjectItem.primaryDomain);
               chrome.contentSettings.cookies.clear({});
@@ -121,8 +123,8 @@ const useAllowedList = (
                 () => {
                   // Set remaining settings after removing one setting.
                   CookieStore.getDomainsInAllowList().then(
-                    (newallowedDomainObjects) => {
-                      newallowedDomainObjects.forEach((newDomainObjectItem) => {
+                    (newAllowedDomainObjects) => {
+                      newAllowedDomainObjects.forEach((newDomainObjectItem) => {
                         chrome.contentSettings.cookies
                           .set({
                             primaryPattern: newDomainObjectItem.primaryPattern,
@@ -161,7 +163,7 @@ const useAllowedList = (
             // @ts-ignore - The chrome-type definition is outdated,
             // this returns a promise instead of a void.
             .then(() => {
-              domainsInAllowList.add(domainForAllowList);
+              domainsInAllowList.add(domainOrParentDomain);
               setDomainsInAllowList(domainsInAllowList);
               CookieStore.addDomainToAllowList(domainObject);
             })
