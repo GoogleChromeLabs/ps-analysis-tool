@@ -221,12 +221,11 @@ const startDashboardServer = async (dir: string) => {
 
   if (outDir) {
     await saveCSVReports(path.join(outputDir, prefix), result);
+    return;
   }
 
-  if (!outDir) {
-    startDashboardServer(
-      encodeURIComponent(prefix) +
-        (sitemapUrl || csvPath || sitemapPath ? '&type=sitemap' : '')
-    );
-  }
+  startDashboardServer(
+    encodeURIComponent(prefix) +
+      (sitemapUrl || csvPath || sitemapPath ? '&type=sitemap' : '')
+  );
 })();
