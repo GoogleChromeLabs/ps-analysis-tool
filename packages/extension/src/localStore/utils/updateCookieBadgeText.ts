@@ -18,8 +18,9 @@
  */
 import { getCurrentTabId } from '../../utils/getCurrentTabId';
 import type { TabData } from '../types';
+
 /**
- *
+ * Update cookie badge text.
  * @param storage {object} The storage object from local store.
  * @param tabId {string} The tabId of the the tab where badge text need to be updated.
  */
