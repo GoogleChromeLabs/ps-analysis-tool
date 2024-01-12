@@ -180,8 +180,12 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
     }
   }, [domain, name]);
 
+  const cookieTableRef = useRef<React.ElementRef<typeof CookieTable> | null>(
+    null
+  );
+
   const handleAllowListClick = useCallback(() => {
-    // removeSelectedRow();
+    cookieTableRef.current?.removeSelectedRow();
     onAllowListClick(
       domain,
       tabUrl || '',
@@ -194,7 +198,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
   }, [domain, domainsInAllowList, tabUrl]);
 
   const handleAllowListWithParentDomainClick = useCallback(() => {
-    // removeSelectedRow();
+    cookieTableRef.current?.removeSelectedRow();
     onAllowListClick(
       parentDomain.value,
       tabUrl || '',
@@ -569,6 +573,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
           setSelectedFrameCookie={setSelectedFrameCookie}
           extraInterfaceToTopBar={extraInterfaceToTopBar}
           onRowContextMenu={handleRightClick}
+          ref={cookieTableRef}
         />
       </Resizable>
       <CookieDetails selectedFrameCookie={selectedFrameCookie} />

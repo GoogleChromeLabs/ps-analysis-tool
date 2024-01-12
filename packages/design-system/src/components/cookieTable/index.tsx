@@ -16,7 +16,14 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
+import React, {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useReducer,
+} from 'react';
 import { CookieTableData, getCookieKey } from '@ps-analysis-tool/common';
 
 /**
@@ -54,19 +61,27 @@ interface CookieTableProps {
   ) => void;
 }
 
-const CookieTable = ({
-  tableColumns,
-  tableFilters,
-  tableSearchKeys,
-  tablePersistentSettingsKey,
-  data: cookies,
-  showTopBar,
-  selectedFrame,
-  selectedFrameCookie,
-  setSelectedFrameCookie,
-  extraInterfaceToTopBar,
-  onRowContextMenu,
-}: CookieTableProps) => {
+const CookieTable = forwardRef<
+  {
+    removeSelectedRow: () => void;
+  },
+  CookieTableProps
+>(function CookieTable(
+  {
+    tableColumns,
+    tableFilters,
+    tableSearchKeys,
+    tablePersistentSettingsKey,
+    data: cookies,
+    showTopBar,
+    selectedFrame,
+    selectedFrameCookie,
+    setSelectedFrameCookie,
+    extraInterfaceToTopBar,
+    onRowContextMenu,
+  }: CookieTableProps,
+  ref
+) {
   useEffect(() => {
     if (selectedFrame && selectedFrameCookie) {
       if (
@@ -89,6 +104,18 @@ const CookieTable = ({
       }
     },
     [selectedFrame, setSelectedFrameCookie]
+  );
+
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        removeSelectedRow: () => {
+          onRowClick(null);
+        },
+      };
+    },
+    [onRowClick]
   );
 
   const selectedKey = useMemo(
@@ -136,6 +163,6 @@ const CookieTable = ({
       />
     </div>
   );
-};
+});
 
 export default CookieTable;
