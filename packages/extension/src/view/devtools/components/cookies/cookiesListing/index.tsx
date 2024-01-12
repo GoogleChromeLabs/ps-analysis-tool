@@ -16,7 +16,13 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Resizable } from 're-resizable';
 import {
   filterCookiesByFrame,
@@ -30,6 +36,7 @@ import {
   type InfoType,
   type TableColumn,
   type TableFilter,
+  type TableRow,
 } from '@ps-analysis-tool/design-system';
 
 /**
@@ -37,37 +44,167 @@ import {
  */
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
 import { BLOCKED_REASON_LIST } from '../../../../../constants';
+import { getCurrentTab } from '../../../../../utils/getCurrentTabId';
+import setDomainsInAllowList from './handleAllowList/setDomainsInAllowList';
+import { createPortal } from 'react-dom';
+import onAllowListClick from './handleAllowList/onAllowListClick';
+import setParentDomain from './handleAllowList/setParentDomain';
 
 interface CookiesListingProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;
 }
 
 const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
-  const { selectedFrame, cookies, tabFrames, getCookiesSetByJavascript } =
-    useCookieStore(({ state, actions }) => ({
-      selectedFrame: state.selectedFrame,
-      cookies: state.tabCookies || {},
-      tabFrames: state.tabFrames,
-      getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
-    }));
+  const {
+    selectedFrame,
+    cookies,
+    tabFrames,
+    tabUrl,
+    getCookiesSetByJavascript,
+  } = useCookieStore(({ state, actions }) => ({
+    selectedFrame: state.selectedFrame,
+    cookies: state.tabCookies || {},
+    tabFrames: state.tabFrames,
+    tabUrl: state.tabUrl,
+    getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
+  }));
+
+  const isIncognito = useRef<boolean>(false);
+
+  useEffect(() => {
+    (async () => {
+      const tabs = await getCurrentTab();
+
+      if (tabs?.length) {
+        isIncognito.current = tabs[0].incognito;
+      }
+    })();
+  }, [tabUrl]);
 
   const [tableData, setTableData] = useState<Record<string, CookieTableData>>(
     {}
   );
 
+  const [domainsInAllowList, setDomainsInAllowListCallback] = useState<
+    Set<string>
+  >(new Set());
+
   useEffect(() => {
     setTableData((prevData) =>
       Object.values(cookies).reduce((acc, cookie) => {
         const key = getCookieKey(cookie.parsedCookie) as string;
+
+        if (cookie.parsedCookie?.domain) {
+          setDomainsInAllowList(
+            tabUrl || '',
+            isIncognito.current,
+            cookie.parsedCookie.domain,
+            domainsInAllowList,
+            setDomainsInAllowListCallback
+          );
+        }
+
         acc[key] = {
           ...cookie,
           highlighted: prevData?.[key]?.highlighted,
+          isDomainInAllowList: domainsInAllowList.has(
+            cookie.parsedCookie?.domain || ''
+          ),
         };
 
         return acc;
       }, {} as Record<string, CookieTableData>)
     );
-  }, [cookies]);
+  }, [cookies, domainsInAllowList, tabUrl]);
+
+  const [parentDomain, setParentDomainCallback] = useState<{
+    value: string;
+    exist: boolean;
+  }>({
+    exist: false,
+    value: '',
+  });
+
+  const [contextMenuOpen, setContextMenuOpen] = useState(false);
+  const [columnPosition, setColumnPosition] = useState({
+    x: 0,
+    y: 0,
+  });
+  const [selectedCookie, setSelectedCookie] = useState<CookieTableData | null>(
+    null
+  );
+
+  const handleRightClick = useCallback(
+    (e: React.MouseEvent<HTMLElement>, { originalData }: TableRow) => {
+      e.preventDefault();
+      const x = e.clientX,
+        y = e.clientY;
+      setColumnPosition({ x, y });
+      document.body.style.overflow = contextMenuOpen ? 'auto' : 'hidden';
+      setContextMenuOpen(!contextMenuOpen);
+      setSelectedCookie(originalData as CookieTableData);
+      setParentDomain(
+        (originalData as CookieTableData).parsedCookie.domain || '',
+        setParentDomainCallback
+      );
+    },
+    [contextMenuOpen]
+  );
+
+  const [domain, name] = useMemo(
+    () => [
+      selectedCookie?.parsedCookie?.domain || '',
+      selectedCookie?.parsedCookie?.name,
+    ],
+    [selectedCookie]
+  );
+
+  const isDomainInAllowList = useMemo(
+    () => domainsInAllowList.has(domain || ''),
+    [domain, domainsInAllowList]
+  );
+
+  const handleCopy = useCallback(() => {
+    try {
+      // Need to do this since chrome doesnt allow the clipboard access in extension.
+      const copyFrom = document.createElement('textarea');
+      copyFrom.textContent = `cookie-domain:${domain} cookie-name:${name}`;
+      document.body.appendChild(copyFrom);
+      copyFrom.select();
+      document.execCommand('copy');
+      copyFrom.blur();
+      document.body.removeChild(copyFrom);
+      setContextMenuOpen(false);
+    } catch (error) {
+      //Fail silently
+    }
+  }, [domain, name]);
+
+  const handleAllowListClick = useCallback(() => {
+    // removeSelectedRow();
+    onAllowListClick(
+      domain,
+      tabUrl || '',
+      isIncognito.current,
+      domainsInAllowList.has(domain),
+      domainsInAllowList,
+      setDomainsInAllowListCallback
+    );
+    setContextMenuOpen(false);
+  }, [domain, domainsInAllowList, tabUrl]);
+
+  const handleAllowListWithParentDomainClick = useCallback(() => {
+    // removeSelectedRow();
+    onAllowListClick(
+      parentDomain.value,
+      tabUrl || '',
+      isIncognito.current,
+      domainsInAllowList.has(parentDomain.value),
+      domainsInAllowList,
+      setDomainsInAllowListCallback
+    );
+    setContextMenuOpen(false);
+  }, [domainsInAllowList, parentDomain.value, tabUrl]);
 
   const removeHighlights = useCallback(() => {
     setTableData((prev) =>
@@ -431,9 +568,61 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
           selectedFrameCookie={selectedFrameCookie}
           setSelectedFrameCookie={setSelectedFrameCookie}
           extraInterfaceToTopBar={extraInterfaceToTopBar}
+          onRowContextMenu={handleRightClick}
         />
       </Resizable>
       <CookieDetails selectedFrameCookie={selectedFrameCookie} />
+      <>
+        {domain &&
+          name &&
+          contextMenuOpen &&
+          createPortal(
+            <div className="transition duration-100" data-testid="column-menu">
+              <div
+                className="absolute z-50 text-raisin-black dark:text-bright-gray rounded-md backdrop-blur-2xl p-1.5 mr-2 divide-neutral-300 dark:divide-neutral-500 max-h-[78vh] bg-stone-200 dark:bg-neutral-700 shadow-3xl"
+                style={{
+                  left:
+                    'min( calc( 100vw - 15rem),' + columnPosition.x + 'px )',
+                  top: columnPosition.y + 'px',
+                  border: '0.5px solid rgba(0, 0, 0, 0.20)',
+                }}
+              >
+                <button
+                  onClick={handleCopy}
+                  className="w-full text-xs rounded px-1 py-[3px] flex items-center hover:bg-royal-blue hover:text-white cursor-default"
+                >
+                  <span>Copy network filter string</span>
+                </button>
+
+                {isDomainInAllowList && parentDomain.exist ? (
+                  <button
+                    onClick={handleAllowListWithParentDomainClick}
+                    className="w-full text-xs rounded px-1 py-[3px] flex items-center hover:bg-royal-blue hover:text-white cursor-default"
+                  >
+                    <span>Remove `{parentDomain.value}` from allow list</span>
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleAllowListClick}
+                    className="w-full text-xs rounded px-1 py-[3px] flex items-center hover:bg-royal-blue hover:text-white cursor-default"
+                  >
+                    <span id="allow-list-option">
+                      {isDomainInAllowList
+                        ? 'Remove domain from allow list'
+                        : 'Add domain to allow list'}
+                    </span>
+                  </button>
+                )}
+              </div>
+              <div
+                data-testid="column-menu-overlay"
+                onClick={() => setContextMenuOpen(false)}
+                className="absolute w-screen h-screen z-10 top-0 left-0"
+              />
+            </div>,
+            document.body
+          )}
+      </>
     </div>
   );
 };
