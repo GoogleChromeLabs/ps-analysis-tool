@@ -18,7 +18,10 @@
  */
 import { useRef, useEffect, useCallback, useState } from 'react';
 import { CookieTableData } from '@ps-analysis-tool/common';
-import { CookieStore } from '@ps-analysis-tool/extension/src/localStore';
+import {
+  CookieStore,
+  type AllowedDomainObject,
+} from '@ps-analysis-tool/extension/src/localStore';
 
 /**
  * Internal dependencies.
@@ -60,7 +63,7 @@ const useAllowedList = (
         '/*';
 
       const scope = isIncognito.current ? 'incognito_session_only' : 'regular';
-      const domainObject = {
+      const domainObject: AllowedDomainObject = {
         primaryDomain: domainForAllowList,
         primaryPattern,
         secondaryPattern,
@@ -74,8 +77,8 @@ const useAllowedList = (
 
         CookieStore.removeDomainFromAllowList(domainObject).then(() => {
           // Set remaining settings after removing one setting.
-          CookieStore.getDomainsInAllowList().then((listOfDomainObject) => {
-            listOfDomainObject.forEach((domainObjectItem) => {
+          CookieStore.getDomainsInAllowList().then((allowedDomainObjects) => {
+            allowedDomainObjects.forEach((domainObjectItem) => {
               chrome.contentSettings.cookies
                 .set({
                   primaryPattern: domainObjectItem.primaryPattern,
@@ -102,9 +105,9 @@ const useAllowedList = (
       }
 
       CookieStore.getDomainsInAllowList()
-        .then((listOfDomainObject) => {
-          console.log(listOfDomainObject, domainForAllowList);
-          listOfDomainObject.forEach((domainObjectItem) => {
+        .then((allowedDomainObjects) => {
+          console.log(allowedDomainObjects, domainForAllowList);
+          allowedDomainObjects.forEach((domainObjectItem) => {
             // Check if more specific patterns was added to allow-list,
             // and remove it as the general pattern will be applied.
             if (
@@ -118,8 +121,8 @@ const useAllowedList = (
                 () => {
                   // Set remaining settings after removing one setting.
                   CookieStore.getDomainsInAllowList().then(
-                    (newListOfDomainObject) => {
-                      newListOfDomainObject.forEach((newDomainObjectItem) => {
+                    (newallowedDomainObjects) => {
+                      newallowedDomainObjects.forEach((newDomainObjectItem) => {
                         chrome.contentSettings.cookies
                           .set({
                             primaryPattern: newDomainObjectItem.primaryPattern,
@@ -232,26 +235,29 @@ const useAllowedList = (
     );
 
     // Set whether the domain is a subdomain match or the exact match.
-    allowListSessionStorage.then((listOfDomainObject) => {
-      let parentDomainValue = '';
-      const numberOfDomainsInAllowList = listOfDomainObject
-        ? listOfDomainObject.length
-        : 0;
+    allowListSessionStorage.then(
+      (allowedDomainObjects: AllowedDomainObject[]) => {
+        let parentDomainValue = '';
 
-      for (let i = 0; i < numberOfDomainsInAllowList; i++) {
-        if (
-          domain.endsWith(listOfDomainObject[i].primaryDomain) &&
-          domain !== listOfDomainObject[i].primaryDomain
-        ) {
-          parentDomainValue = listOfDomainObject[i].primaryDomain;
-          break;
+        if (!allowedDomainObjects || allowedDomainObjects?.length === 0) {
+          return;
+        }
+
+        for (let i = 0; i < allowedDomainObjects.length; i++) {
+          if (
+            domain.endsWith(allowedDomainObjects[i].primaryDomain) &&
+            domain !== allowedDomainObjects[i].primaryDomain
+          ) {
+            parentDomainValue = allowedDomainObjects[i].primaryDomain;
+            break;
+          }
+        }
+
+        if (parentDomain !== parentDomainValue) {
+          setParentDomain(parentDomainValue);
         }
       }
-
-      if (parentDomain !== parentDomainValue) {
-        setParentDomain(parentDomainValue);
-      }
-    });
+    );
   }, [
     row,
     domain,

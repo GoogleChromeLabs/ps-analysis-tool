@@ -27,12 +27,14 @@ import type { Protocol } from 'devtools-protocol';
  * Internal dependencies.
  */
 import updateStorage from './utils/updateStorage';
-import type { TabData } from './types';
+import type {
+  TabData,
+  AllowedDomainObject,
+  AllowedDomainStorage,
+} from './types';
 import fetchTopicsTaxonomy from '../utils/fetchTopicsTaxonomy';
 import updateCookieBadgeText from './utils/updateCookieBadgeText';
-import getIndexForAllowListedItem, {
-  type AllowListedStorage,
-} from './utils/getIndexForAllowListedItem';
+import getIndexForAllowListedItem from './utils/getIndexForAllowListedItem';
 
 const CookieStore = {
   /**
@@ -347,9 +349,9 @@ const CookieStore = {
 
   /**
    * Add domain to allow-list.
-   * @param {Record<string, string>} domainObject The domain to be added to allow-list.
+   * @param {AllowedDomainObject} domainObject The domain to be added to allow-list.
    */
-  async addDomainToAllowList(domainObject: Record<string, string>) {
+  async addDomainToAllowList(domainObject: AllowedDomainObject) {
     const storage = await chrome.storage.session.get();
 
     if (!storage.allowList) {
@@ -357,7 +359,7 @@ const CookieStore = {
     }
 
     const index = getIndexForAllowListedItem(
-      storage as AllowListedStorage,
+      storage as AllowedDomainStorage,
       domainObject
     );
 
@@ -370,9 +372,9 @@ const CookieStore = {
 
   /**
    * Remove domain from allow-list.
-   * @param {Record<string, string>} domainObject The domain to be removed from allow-list.
+   * @param {AllowedDomainObject} domainObject The domain to be removed from allow-list.
    */
-  async removeDomainFromAllowList(domainObject: Record<string, string>) {
+  async removeDomainFromAllowList(domainObject: AllowedDomainObject) {
     const storage = await chrome.storage.session.get();
 
     if (!storage?.allowList || storage?.allowList?.length === 0) {
@@ -380,7 +382,7 @@ const CookieStore = {
     }
 
     const indexToRemove = getIndexForAllowListedItem(
-      storage as AllowListedStorage,
+      storage as AllowedDomainStorage,
       domainObject
     );
 
@@ -395,7 +397,7 @@ const CookieStore = {
    * Get domains in allow-list.
    * @returns {Promise<Record<string, string>>} Set of domains in allow-list.
    */
-  async getDomainsInAllowList(): Promise<Record<string, string>[]> {
+  async getDomainsInAllowList(): Promise<AllowedDomainObject[] | []> {
     const storage = await chrome.storage.session.get();
 
     return storage.allowList ?? [];

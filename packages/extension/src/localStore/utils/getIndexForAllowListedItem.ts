@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-export interface AllowListedStorage {
-  allowList: Record<string, string>[];
-}
+/**
+ * Internal dependencies.
+ */
+import type { AllowedDomainObject, AllowedDomainStorage } from '../types';
 
 const getIndexForAllowListedItem = (
-  storage: AllowListedStorage,
-  domainObject: Record<string, string>
+  storage: AllowedDomainStorage,
+  domainObject: AllowedDomainObject
 ): number => {
   let index = -1;
 
