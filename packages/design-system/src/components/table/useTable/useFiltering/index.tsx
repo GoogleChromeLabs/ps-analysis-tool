@@ -47,6 +47,11 @@ const useFiltering = (
   const [options, setOptions] = useState<{
     [filterKey: string]: TableFilter[keyof TableFilter]['filterValues'];
   }>({});
+  const [isDataLoading, setIsDataLoading] = useState(true);
+
+  useEffect(() => {
+    setIsDataLoading(true);
+  }, [specificTablePersistentSettingsKey]);
 
   useEffect(() => {
     setFilters((prevFilters) =>
@@ -175,6 +180,10 @@ const useFiltering = (
   );
 
   const filteredData = useMemo<TableData[]>(() => {
+    if (isDataLoading) {
+      return [];
+    }
+
     if (
       Object.values(selectedFilters).every(
         (filter) => Object.keys(filter.filterValues || {}).length === 0
@@ -204,7 +213,7 @@ const useFiltering = (
         return false;
       });
     });
-  }, [data, selectedFilters]);
+  }, [data, isDataLoading, selectedFilters]);
 
   useEffect(() => {
     setFilters((prevFilters) =>
@@ -259,6 +268,7 @@ const useFiltering = (
   useFiltersPersistence(
     filters,
     setOptions,
+    setIsDataLoading,
     specificTablePersistentSettingsKey,
     genericTablePersistentSettingsKey
   );

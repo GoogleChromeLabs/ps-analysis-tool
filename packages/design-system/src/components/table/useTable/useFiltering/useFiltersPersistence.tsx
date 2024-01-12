@@ -28,6 +28,7 @@ const useFiltersPersistence = (
       [filterKey: string]: TableFilter[keyof TableFilter]['filterValues'];
     }>
   >,
+  setIsDataLoading: React.Dispatch<React.SetStateAction<boolean>>,
   specificTablePersistentSettingsKey?: string,
   genericTablePersistentSettingsKey?: string
 ) => {
@@ -66,6 +67,8 @@ const useFiltersPersistence = (
       }
     }
 
+    setIsDataLoading(false);
+
     return () => {
       setOptions(() => ({
         ...genericFilterOptionsRef.current,
@@ -74,11 +77,13 @@ const useFiltersPersistence = (
   }, [
     computeAndUpdateOptions,
     getPreferences,
+    setIsDataLoading,
     setOptions,
     specificTablePersistentSettingsKey,
   ]);
 
   useEffect(() => {
+    setIsDataLoading(true);
     if (genericTablePersistentSettingsKey) {
       const data = getPreferences(
         genericTablePersistentSettingsKey,
@@ -92,6 +97,8 @@ const useFiltersPersistence = (
       }
     }
 
+    setIsDataLoading(false);
+
     return () => {
       setOptions(() => ({}));
     };
@@ -99,6 +106,7 @@ const useFiltersPersistence = (
     computeAndUpdateOptions,
     genericTablePersistentSettingsKey,
     getPreferences,
+    setIsDataLoading,
     setOptions,
   ]);
 
