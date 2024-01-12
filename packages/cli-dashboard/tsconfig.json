@@ -6,8 +6,7 @@
   "include": [
     "src",
     "../../node_modules/@types/jest/index.d.ts",
-    "src/**/*.json",
-    "../common/src/utils/generateReports"
+    "src/**/*.json"
   ],
   "references": [
     { "path": "../common" },
