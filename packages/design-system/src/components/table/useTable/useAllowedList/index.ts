@@ -18,12 +18,12 @@
  */
 import { useRef, useEffect, useCallback, useState } from 'react';
 import { CookieTableData } from '@ps-analysis-tool/common';
+import { CookieStore } from '@ps-analysis-tool/extension/src/localStore';
 
 /**
  * Internal dependencies.
  */
 import type { TableRow } from '..';
-import { CookieStore } from '@ps-analysis-tool/extension/src/localStore';
 
 const useAllowedList = (
   row: TableRow,
@@ -33,13 +33,7 @@ const useAllowedList = (
   const pageUrl = useRef<string>('');
   const isIncognito = useRef<boolean>(false);
 
-  const [parentDomain, setParentDomain] = useState<{
-    value: string;
-    exist: boolean;
-  }>({
-    exist: false,
-    value: '',
-  });
+  const [parentDomain, setParentDomain] = useState<string>('');
 
   const domain =
     (row?.originalData as CookieTableData)?.parsedCookie?.domain ?? '';
@@ -240,7 +234,6 @@ const useAllowedList = (
 
     // Set whether the domain is a subdomain match or the exact match.
     allowListSessionStorage.then((listOfDomainObject) => {
-      let parentDomainExist = false;
       let parentDomainValue = '';
       const numberOfDomainsInAllowList = listOfDomainObject
         ? listOfDomainObject.length
@@ -251,18 +244,13 @@ const useAllowedList = (
           domain.endsWith(listOfDomainObject[i].primaryDomain) &&
           domain !== listOfDomainObject[i].primaryDomain
         ) {
-          parentDomainExist = true;
           parentDomainValue = listOfDomainObject[i].primaryDomain;
-          // console.log(listOfDomainObject[i].primaryDomain, domain);
           break;
         }
       }
 
-      if (
-        parentDomain.value !== parentDomainValue ||
-        parentDomain.exist !== parentDomainExist
-      ) {
-        setParentDomain({ exist: parentDomainExist, value: parentDomainValue });
+      if (parentDomain !== parentDomainValue) {
+        setParentDomain(parentDomainValue);
       }
     });
   }, [

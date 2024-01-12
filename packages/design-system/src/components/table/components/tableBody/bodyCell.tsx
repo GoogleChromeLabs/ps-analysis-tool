@@ -34,7 +34,7 @@ interface BodyCellProps {
   row: TableRow;
   onRowClick: () => void;
   isDomainInAllowList: boolean;
-  parentDomain: { value: string; exist: boolean };
+  parentDomain: string;
   onAllowListClick: (domain: string) => void;
   removeSelectedRow: () => void;
 }
@@ -102,7 +102,7 @@ const BodyCell = ({
 
   const handleAllowListWithParentDomainClick = useCallback(() => {
     removeSelectedRow();
-    onAllowListClick(parentDomain.value);
+    onAllowListClick(parentDomain);
     setContextMenuOpen(false);
   }, [onAllowListClick, parentDomain, removeSelectedRow]);
 
@@ -142,12 +142,12 @@ const BodyCell = ({
                   <span>Copy network filter string</span>
                 </button>
 
-                {isDomainInAllowList && parentDomain.exist ? (
+                {isDomainInAllowList && parentDomain ? (
                   <button
                     onClick={handleAllowListWithParentDomainClick}
                     className="w-full text-xs rounded px-1 py-[3px] flex items-center hover:bg-royal-blue hover:text-white cursor-default"
                   >
-                    <span>Remove `{parentDomain.value}` from allow list</span>
+                    <span>Remove `{parentDomain}` from allow list</span>
                   </button>
                 ) : (
                   <button
