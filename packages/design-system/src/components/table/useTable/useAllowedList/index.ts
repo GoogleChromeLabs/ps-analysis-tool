@@ -46,7 +46,7 @@ const useAllowedList = (
   const allowListSessionStorage = CookieStore.getDomainsInAllowList();
 
   const onAllowListClick = useCallback(
-    (domainOrParentDomain: string) => {
+    async (domainOrParentDomain: string) => {
       if (pageUrl.current === '' || domainOrParentDomain === '') {
         return;
       }
@@ -74,54 +74,51 @@ const useAllowedList = (
 
       // Remove from allowed list.
       if (isDomainInAllowList) {
-        removeFromAllowList(domainObject).then(() => {
-          domainsInAllowList.delete(domainOrParentDomain);
-          setDomainsInAllowList(domainsInAllowList);
-        });
+        await removeFromAllowList(domainObject);
+        domainsInAllowList.delete(domainOrParentDomain);
+        setDomainsInAllowList(domainsInAllowList);
 
         return;
       }
 
       // Add to allow list.
-      CookieStore.getDomainsInAllowList()
-        .then(async (allowedDomainObjects) => {
-          await Promise.all(
-            allowedDomainObjects.map(async (domainObjectItem) => {
-              // Check if more specific patterns was added to allow-list,
-              // and remove it as the general pattern will be applied. (look for child domain)
-              if (
-                domainObjectItem.primaryDomain.endsWith(domainOrParentDomain) ||
-                `.${domainObjectItem.primaryDomain}` === domainOrParentDomain
-              ) {
-                domainsInAllowList.delete(domainObjectItem.primaryDomain);
+      const allowedDomainObjects = await CookieStore.getDomainsInAllowList();
 
-                await removeFromAllowList(domainObjectItem);
-              }
-            })
-          );
+      await Promise.all(
+        allowedDomainObjects.map(async (domainObjectItem) => {
+          // Check if more specific patterns was added to allow-list,
+          // and remove it as the general pattern will be applied. (look for child domain)
+          if (
+            domainObjectItem.primaryDomain.endsWith(domainOrParentDomain) ||
+            `.${domainObjectItem.primaryDomain}` === domainOrParentDomain
+          ) {
+            domainsInAllowList.delete(domainObjectItem.primaryDomain);
+
+            await removeFromAllowList(domainObjectItem);
+          }
         })
+      );
+
+      chrome.contentSettings.cookies
+        .set({
+          primaryPattern,
+          secondaryPattern,
+          setting: 'session_only',
+          scope,
+        })
+        // @ts-ignore - The chrome-type definition is outdated,
+        // this returns a promise instead of a void.
         .then(() => {
-          chrome.contentSettings.cookies
-            .set({
-              primaryPattern,
-              secondaryPattern,
-              setting: 'session_only',
-              scope,
-            })
-            // @ts-ignore - The chrome-type definition is outdated,
-            // this returns a promise instead of a void.
-            .then(() => {
-              domainsInAllowList.add(domainOrParentDomain);
-              setDomainsInAllowList(domainsInAllowList);
-              CookieStore.addDomainToAllowList(domainObject);
-            })
-            .catch((error: Error) => {
-              console.log(
-                error.message,
-                `Primary pattern: ${primaryPattern}`,
-                `Secondary pattern: ${secondaryPattern}`
-              );
-            });
+          domainsInAllowList.add(domainOrParentDomain);
+          setDomainsInAllowList(domainsInAllowList);
+          CookieStore.addDomainToAllowList(domainObject);
+        })
+        .catch((error: Error) => {
+          console.log(
+            error.message,
+            `Primary pattern: ${primaryPattern}`,
+            `Secondary pattern: ${secondaryPattern}`
+          );
         });
     },
     [isDomainInAllowList, domainsInAllowList, setDomainsInAllowList]
