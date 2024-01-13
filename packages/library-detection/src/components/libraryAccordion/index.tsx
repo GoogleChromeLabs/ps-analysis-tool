@@ -17,13 +17,18 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
-import { ArrowDown, ArrowUp, Ellipse } from '@ps-analysis-tool/design-system';
+import {
+  ArrowDown,
+  ArrowUp,
+  Ellipse,
+  BorderProgressBar,
+} from '@ps-analysis-tool/design-system';
 import classNames from 'classnames';
 
 const LibraryAccordion = () => {
   const [isOpen, setIsOpen] = useState(false);
   const parentClass = classNames({
-    'border-t border-hex-gray last:border-b': true,
+    'border-t border-hex-gray last:border-b relative': true,
     'border border-slate-400': isOpen,
   });
 
@@ -40,6 +45,9 @@ const LibraryAccordion = () => {
         <span className="flex items-center px-2">
           {isOpen ? <ArrowUp /> : <ArrowDown />}
         </span>
+        <div className="absolute top-0 left-0 w-full">
+          <BorderProgressBar />
+        </div>
       </div>
       {isOpen && <div className="p-5 border-t border-hex-gray">Content</div>}
     </div>
