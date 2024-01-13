@@ -55,7 +55,7 @@ const LibraryDetection = () => {
       {libraryCount > 0 ? (
         <>
           {LIBRARIES.map((config: Config) => {
-            const Component = config.component;
+            const Component = config.component as React.FunctionComponent;
             const { name, signatures, domainsToSkip, helpUrl } = config;
 
             return (

@@ -24,7 +24,7 @@ export interface SignaturesConfig {
 }
 
 export interface Config {
-  component?: React.Component;
+  component?: React.FunctionComponent;
   name?: string;
   signatures: SignaturesConfig[];
   domainsToSkip: string[];

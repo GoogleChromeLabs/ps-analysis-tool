@@ -42,7 +42,7 @@ interface CookiesLandingProps {
   showMessageBoxBody?: boolean;
   showBlockedCookiesSection?: boolean;
   additionalComponents?: {
-    [key: string]: React.ReactNode;
+    [key: string]: React.FunctionComponent;
   };
 }
 
@@ -151,9 +151,10 @@ const CookiesLanding = ({
         </CookiesLandingContainer>
       )}
       {Object.keys(additionalComponents).length &&
-        Object.keys(additionalComponents).map(
-          (key: string) => additionalComponents[key]
-        )}
+        Object.keys(additionalComponents).map((key: string) => {
+          const Component = additionalComponents[key];
+          return <Component key={key} />;
+        })}
     </div>
   );
 };
