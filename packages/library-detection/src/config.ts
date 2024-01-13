@@ -16,16 +16,38 @@
 /**
  * Internal dependencies.
  */
-import { GSIAccordion, GISAccordion } from './libraries';
+import {
+  GSIAccordion,
+  GISAccordion,
+  GSI_V2_SIGNATURE_STRONG_MATCHES,
+  GSI_V2_SIGNATURE_WEAK_MATCHES,
+  GIS_SIGNATURE_WEAK_MATCHES,
+  GIS_HELP_URL,
+  GSI_HELP_URL,
+  GIS_DOMAINS_TO_SKIP,
+  GSI_DOMAINS_TO_SKIP,
+} from './libraries';
 
 const LIBRARIES = [
   {
     name: 'gsi',
     component: GISAccordion,
+    signatures: {
+      strongMatches: GSI_V2_SIGNATURE_STRONG_MATCHES,
+      weakMatches: GSI_V2_SIGNATURE_WEAK_MATCHES,
+    },
+    domainsToSkip: GSI_DOMAINS_TO_SKIP,
+    helpUrl: GSI_HELP_URL,
   },
   {
     name: 'gis',
     component: GSIAccordion,
+    signatures: {
+      strongMatches: [],
+      weakMatches: GIS_SIGNATURE_WEAK_MATCHES,
+    },
+    domainsToSkip: GIS_DOMAINS_TO_SKIP,
+    helpUrl: GIS_HELP_URL,
   },
 ];
 

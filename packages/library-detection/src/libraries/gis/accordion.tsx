@@ -24,7 +24,7 @@ import React, { useState } from 'react';
 import { Accordion } from '../../components';
 
 const GSIAccordion = () => {
-  const [isLoading] = useState(true);
+  const [isLoading] = useState(false);
 
   return (
     <Accordion

@@ -15,3 +15,5 @@
  */
 export { default as GSIAccordion } from './gsi/accordion';
 export { default as GISAccordion } from './gis/accordion';
+export * from './gis/constants';
+export * from './gsi/constants';
