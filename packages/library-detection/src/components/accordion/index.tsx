@@ -28,11 +28,11 @@ import AccordionContent from './accordionContent';
 interface AccordionProps {
   children: React.ReactNode;
   title: string;
+  isLoading: boolean;
 }
 
-const Accordion = ({ children, title }: AccordionProps) => {
+const Accordion = ({ children, title, isLoading = false }: AccordionProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [loading] = useState(true);
 
   const parentClass = classNames({
     'border-t border-hex-gray last:border-b relative': true,
@@ -44,7 +44,7 @@ const Accordion = ({ children, title }: AccordionProps) => {
       <AccordionHeading
         setIsOpen={setIsOpen}
         isOpen={isOpen}
-        loading={loading}
+        loading={isLoading}
         title={title}
       />
       <AccordionContent isOpen={isOpen}>{children}</AccordionContent>

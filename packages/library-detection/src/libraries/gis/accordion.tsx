@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useState } from 'react';
 
 /**
  * Internal dependencies.
@@ -24,8 +24,13 @@ import React from 'react';
 import { Accordion } from '../../components';
 
 const GSIAccordion = () => {
+  const [isLoading] = useState(true);
+
   return (
-    <Accordion title={'Avoid use of deprecated Google Sign-In functionality.'}>
+    <Accordion
+      title={'Avoid use of deprecated Google Sign-In functionality.'}
+      isLoading={isLoading}
+    >
       New GSI Content
     </Accordion>
   );
