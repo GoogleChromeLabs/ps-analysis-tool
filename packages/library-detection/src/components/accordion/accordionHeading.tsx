@@ -29,6 +29,7 @@ interface AccodionHeadingProps {
   title: string;
   loading: boolean;
   isOpen: boolean;
+  featuresText: string;
 }
 
 const AccordionHeading = ({
@@ -36,6 +37,7 @@ const AccordionHeading = ({
   title,
   loading,
   isOpen,
+  featuresText,
 }: AccodionHeadingProps) => {
   return (
     <div
@@ -45,7 +47,12 @@ const AccordionHeading = ({
       <span className="flex items-center px-2">
         <Ellipse />
       </span>
-      <p className="flex-1">{title}</p>
+      <p className="flex-1">
+        {title}
+        {featuresText && (
+          <span className="text-gray ml-2">— {featuresText}</span>
+        )}
+      </p>
       <span className="flex items-center px-2">
         {isOpen ? <ArrowUp /> : <ArrowDown />}
       </span>

@@ -30,6 +30,7 @@ const GSIAccordion = () => {
     <Accordion
       title={'Avoid use of deprecated Google Sign-In functionality.'}
       isLoading={isLoading}
+      featuresText="6 features"
     >
       New GSI Content
     </Accordion>
