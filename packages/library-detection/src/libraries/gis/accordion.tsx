@@ -13,5 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as LibraryDetection } from './libraryDetection';
-export { default as Accordion } from './accordion';
+/**
+ * External dependencies.
+ */
+import React from 'react';
+
+/**
+ * Internal dependencies.
+ */
+import { Accordion } from '../../components';
+
+const GSIAccordion = () => {
+  return (
+    <Accordion title={'Avoid use of deprecated Google Sign-In functionality.'}>
+      New GSI Content
+    </Accordion>
+  );
+};
+
+export default GSIAccordion;

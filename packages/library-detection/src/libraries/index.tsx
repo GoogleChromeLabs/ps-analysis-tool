@@ -13,5 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as LibraryDetection } from './libraryDetection';
-export { default as Accordion } from './accordion';
+export { default as GSIAccordion } from './gsi/accordion';
+export { default as GISAccordion } from './gis/accordion';

@@ -13,5 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as LibraryDetection } from './libraryDetection';
-export { default as Accordion } from './accordion';
+/**
+ * Internal dependencies.
+ */
+import { GSIAccordion, GISAccordion } from './libraries';
+
+const LIBRARIES = [
+  {
+    name: 'gsi',
+    component: GISAccordion,
+  },
+  {
+    name: 'gis',
+    component: GSIAccordion,
+  },
+];
+
+export default LIBRARIES;

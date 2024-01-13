@@ -25,11 +25,11 @@ import {
 /**
  * Internal dependencies.
  */
-import LibraryAccordion from '../libraryAccordion';
-import AlternateDetectionComponent from './alternateDetectionComponent';
+import DynamicPlaceholder from './dynamicPlaceholder';
+import LIBRARIES from '../../config';
 
 const LibraryDetection = () => {
-  const [libraryCount] = useState(0);
+  const [libraryCount] = useState(2);
 
   const dataMapping = [
     {
@@ -52,11 +52,13 @@ const LibraryDetection = () => {
     >
       {libraryCount > 0 ? (
         <>
-          <LibraryAccordion></LibraryAccordion>
-          <LibraryAccordion></LibraryAccordion>
+          {LIBRARIES.map((config) => {
+            const Component = config.component;
+            return <Component key={config.name} />;
+          })}
         </>
       ) : (
-        <AlternateDetectionComponent />
+        <DynamicPlaceholder />
       )}
     </CookiesLandingContainer>
   );

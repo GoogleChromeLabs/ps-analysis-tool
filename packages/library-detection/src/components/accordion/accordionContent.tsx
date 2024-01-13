@@ -13,5 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as LibraryDetection } from './libraryDetection';
-export { default as Accordion } from './accordion';
+/**
+ * External dependencies.
+ */
+import React from 'react';
+
+interface AccordionContentProps {
+  children: React.ReactNode;
+  isOpen: boolean;
+}
+
+const AccordionContent = ({ children, isOpen }: AccordionContentProps) => {
+  if (!isOpen) {
+    return null;
+  }
+
+  return <div className="p-5 border-t border-hex-gray">{children}</div>;
+};
+
+export default AccordionContent;

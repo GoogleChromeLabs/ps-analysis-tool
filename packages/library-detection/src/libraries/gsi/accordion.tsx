@@ -13,5 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as LibraryDetection } from './libraryDetection';
-export { default as Accordion } from './accordion';
+/**
+ * External dependencies.
+ */
+import React from 'react';
+
+/**
+ * Internal dependencies.
+ */
+import { Accordion } from '../../components';
+
+const GISAccordion = () => {
+  return (
+    <Accordion
+      title={'Avoid use of unsupported Google Identity Services features.'}
+    >
+      New GIS Content
+    </Accordion>
+  );
+};
+
+export default GISAccordion;

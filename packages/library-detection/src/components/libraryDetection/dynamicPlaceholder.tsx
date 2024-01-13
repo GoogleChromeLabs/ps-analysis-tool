@@ -19,7 +19,7 @@
 import React, { useState, useEffect } from 'react';
 import { ProgressBar } from '@ps-analysis-tool/design-system';
 
-const AlternateDetectionComponent = () => {
+const DynamicPlaceholder = () => {
   const [pageLoaded, setPageLoaded] = useState(false);
 
   useEffect(() => {
@@ -46,4 +46,4 @@ const AlternateDetectionComponent = () => {
   );
 };
 
-export default AlternateDetectionComponent;
+export default DynamicPlaceholder;

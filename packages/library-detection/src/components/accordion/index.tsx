@@ -17,16 +17,23 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
-import {
-  ArrowDown,
-  ArrowUp,
-  Ellipse,
-  BorderProgressBar,
-} from '@ps-analysis-tool/design-system';
 import classNames from 'classnames';
 
-const LibraryAccordion = () => {
+/**
+ * Internal dependencies.
+ */
+import AccordionHeading from './accordionHeading';
+import AccordionContent from './accordionContent';
+
+interface AccordionProps {
+  children: React.ReactNode;
+  title: string;
+}
+
+const Accordion = ({ children, title }: AccordionProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [loading] = useState(true);
+
   const parentClass = classNames({
     'border-t border-hex-gray last:border-b relative': true,
     'border border-slate-400': isOpen,
@@ -34,24 +41,15 @@ const LibraryAccordion = () => {
 
   return (
     <div className={parentClass}>
-      <div
-        onClick={() => setIsOpen(!isOpen)}
-        className=" hover:bg-gray-100 transition-colors flex py-3 cursor-pointer"
-      >
-        <span className="flex items-center px-2">
-          <Ellipse />
-        </span>
-        <p className="flex-1">Google Sign-In: detecting...</p>
-        <span className="flex items-center px-2">
-          {isOpen ? <ArrowUp /> : <ArrowDown />}
-        </span>
-        <div className="absolute top-0 left-0 w-full">
-          <BorderProgressBar />
-        </div>
-      </div>
-      {isOpen && <div className="p-5 border-t border-hex-gray">Content</div>}
+      <AccordionHeading
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}
+        loading={loading}
+        title={title}
+      />
+      <AccordionContent isOpen={isOpen}>{children}</AccordionContent>
     </div>
   );
 };
 
-export default LibraryAccordion;
+export default Accordion;
