@@ -26,9 +26,10 @@ import {
  * Internal dependencies.
  */
 import LibraryAccordion from '../libraryAccordion';
+import AlternateDetectionComponent from './alternateDetectionComponent';
 
 const LibraryDetection = () => {
-  const [libraryCount] = useState(1);
+  const [libraryCount] = useState(0);
 
   const dataMapping = [
     {
@@ -38,14 +39,25 @@ const LibraryDetection = () => {
     },
   ];
 
+  const description =
+    libraryCount > 0
+      ? 'Please review the following libraries or library features for known breakages.'
+      : '';
+
   return (
     <CookiesLandingContainer
       dataMapping={dataMapping}
       testId="library-detection"
-      description="Please review the following libraries or library features for known breakages."
+      description={description}
     >
-      <LibraryAccordion></LibraryAccordion>
-      <LibraryAccordion></LibraryAccordion>
+      {libraryCount > 0 ? (
+        <>
+          <LibraryAccordion></LibraryAccordion>
+          <LibraryAccordion></LibraryAccordion>
+        </>
+      ) : (
+        <AlternateDetectionComponent />
+      )}
     </CookiesLandingContainer>
   );
 };
