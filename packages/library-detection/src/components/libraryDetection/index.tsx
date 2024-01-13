@@ -42,7 +42,7 @@ const LibraryDetection = () => {
     <CookiesLandingContainer
       dataMapping={dataMapping}
       testId="library-detection"
-      description="Please review the recommendations for the following libraries or library features, as they may not work after third-party cookie deprecation."
+      description="Please review the following libraries or library features for known breakages."
     >
       <LibraryAccordion></LibraryAccordion>
       <LibraryAccordion></LibraryAccordion>

@@ -18,15 +18,20 @@
  */
 import React, { useState } from 'react';
 import { ArrowDown, ArrowUp, Ellipse } from '@ps-analysis-tool/design-system';
+import classNames from 'classnames';
 
 const LibraryAccordion = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const parentClass = classNames({
+    'border-t border-hex-gray last:border-b': true,
+    'border border-slate-400': isOpen,
+  });
 
   return (
-    <div className="mb-1">
+    <div className={parentClass}>
       <div
         onClick={() => setIsOpen(!isOpen)}
-        className="border-t border-b border-hex-gray flex py-2 cursor-pointer hover:bg-slate-100 transition-all"
+        className=" hover:bg-gray-100 transition-colors flex py-3 cursor-pointer"
       >
         <span className="flex items-center px-2">
           <Ellipse />
@@ -36,7 +41,7 @@ const LibraryAccordion = () => {
           {isOpen ? <ArrowUp /> : <ArrowDown />}
         </span>
       </div>
-      {isOpen && <div className="p-5">Content</div>}
+      {isOpen && <div className="p-5 border-t border-hex-gray">Content</div>}
     </div>
   );
 };

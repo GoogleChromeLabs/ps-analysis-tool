@@ -3,7 +3,7 @@
   "version": "0.4.0",
   "description": "A package for detecting libraries for potential breakage",
   "main": "./src/index.ts",
-  "source":"./src/index.ts",
+  "source": "./src/index.ts",
   "customExports": {
     ".": {
       "default": "./src/index.ts"
@@ -24,8 +24,8 @@
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
   "dependencies": {
-		"@ps-analysis-tool/design-system": "*",
+    "@ps-analysis-tool/design-system": "*",
+    "classnames": "^2.5.1",
     "escape-string-regexp": "^4.0.0"
-  },
-  "devDependencies": {}
+  }
 }

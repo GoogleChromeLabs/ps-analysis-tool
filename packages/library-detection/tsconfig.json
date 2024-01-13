@@ -11,10 +11,5 @@
     "esModuleInterop": true,
     "moduleResolution": "node",
     "jsx": "preserve"
-  },
-  "references": [
-    {
-      "path": "../common"
-    }
-  ]
+  }
 }
