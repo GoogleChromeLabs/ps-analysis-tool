@@ -22,9 +22,14 @@ import React, { useState } from 'react';
  * Internal dependencies.
  */
 import { Accordion } from '../../components';
+import { useLibraryDetection } from '../../stateProviders';
 
 const GSIAccordion = () => {
   const [isLoading] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { config } = useLibraryDetection(({ state }) => ({
+    config: state.config,
+  }));
 
   return (
     <Accordion

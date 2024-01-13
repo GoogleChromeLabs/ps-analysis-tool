@@ -27,6 +27,8 @@ import {
  */
 import DynamicPlaceholder from './dynamicPlaceholder';
 import LIBRARIES from '../../config';
+import { Provider as LibraryDetectionProvider } from '../../stateProviders/librayDetectionContext';
+import type { Config } from '../../types';
 
 const LibraryDetection = () => {
   const [libraryCount] = useState(2);
@@ -52,9 +54,18 @@ const LibraryDetection = () => {
     >
       {libraryCount > 0 ? (
         <>
-          {LIBRARIES.map((config) => {
+          {LIBRARIES.map((config: Config) => {
             const Component = config.component;
-            return <Component key={config.name} />;
+            const { name, signatures, domainsToSkip, helpUrl } = config;
+
+            return (
+              <LibraryDetectionProvider
+                key={name}
+                config={{ signatures, domainsToSkip, helpUrl }}
+              >
+                <Component />
+              </LibraryDetectionProvider>
+            );
           })}
         </>
       ) : (
