@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import {
   CookiesLandingContainer,
   COLOR_MAP,
@@ -30,7 +30,8 @@ import LIBRARIES from '../../config';
 import { Provider as LibraryDetectionProvider } from '../../stateProviders/librayDetectionContext';
 import type { Config } from '../../types';
 
-const LibraryDetection = () => {
+// eslint-disable-next-line react/display-name
+const LibraryDetection = memo(function LibraryDetection() {
   const [libraryCount] = useState(2);
 
   const dataMapping = [
@@ -46,6 +47,12 @@ const LibraryDetection = () => {
       ? 'Please review the following libraries or library features for known breakages.'
       : '';
 
+  const configs: Config[] = LIBRARIES.map((config) => {
+    const _config = { ...config, component: '' };
+
+    return _config;
+  });
+
   return (
     <CookiesLandingContainer
       dataMapping={dataMapping}
@@ -53,26 +60,18 @@ const LibraryDetection = () => {
       description={description}
     >
       {libraryCount > 0 ? (
-        <>
+        <LibraryDetectionProvider config={configs}>
           {LIBRARIES.map((config: Config) => {
-            const Component = config.component as React.FunctionComponent;
-            const { name, signatures, domainsToSkip, helpUrl } = config;
+            const Component = config.component as React.FC;
 
-            return (
-              <LibraryDetectionProvider
-                key={name}
-                config={{ signatures, domainsToSkip, helpUrl }}
-              >
-                <Component />
-              </LibraryDetectionProvider>
-            );
+            return <Component key={config.name} />;
           })}
-        </>
+        </LibraryDetectionProvider>
       ) : (
         <DynamicPlaceholder />
       )}
     </CookiesLandingContainer>
   );
-};
+});
 
 export default LibraryDetection;

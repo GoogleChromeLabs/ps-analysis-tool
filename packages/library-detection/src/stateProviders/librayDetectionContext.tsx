@@ -35,7 +35,7 @@ export interface LibraryDetectionStoreContext {
 
 interface ProviderProps {
   children: React.ReactNode | undefined;
-  config: Config;
+  config: Config[];
 }
 
 const initialState = {
