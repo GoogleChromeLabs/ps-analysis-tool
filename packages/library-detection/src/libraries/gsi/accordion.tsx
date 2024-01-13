@@ -28,7 +28,21 @@ const GISAccordion = () => {
     <Accordion
       title={'Avoid use of unsupported Google Identity Services features.'}
     >
-      New GIS Content
+      <p>
+        Due to Privacy Sandbox enforcements some features are backward
+        incompatible or deprecated. This report performs a page scan for script
+        src elements and affected JavaScript objects and methods. Review the
+        following features in and{' '}
+        <a
+          className="text-medium-persian-blue"
+          target="_blank"
+          href="https://developers.google.com/identity/gsi/web/guides/fedcm-migration?utm_source=lighthouse&utm_medium=cli"
+          rel="noreferrer"
+        >
+          migrate
+        </a>{' '}
+        if necessary.
+      </p>
     </Accordion>
   );
 };
