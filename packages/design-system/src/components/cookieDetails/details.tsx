@@ -127,7 +127,7 @@ const Details = ({ selectedCookie }: DetailsProps) => {
       {isCookieBlocked && blockedReasons ? (
         <>
           <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
-            Blocked reason {isDomainInAllowList ? '(allow listed)' : ''}
+            Blocked Reason {isDomainInAllowList ? '(allow listed)' : ''}
           </p>
           <p
             className="text-outer-space-crayola dark:text-bright-gray mb-3"
