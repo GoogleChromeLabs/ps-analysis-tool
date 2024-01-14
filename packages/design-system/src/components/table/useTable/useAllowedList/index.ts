@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import { useRef, useEffect, useCallback, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { CookieTableData } from '@ps-analysis-tool/common';
 import {
   CookieStore,
@@ -27,7 +27,7 @@ import {
  * Internal dependencies.
  */
 import type { TableRow } from '..';
-import removeFromAllowList from './removeFromAllowList';
+import handleAllowListClick from './handlAllowListClick';
 
 const useAllowedList = (
   row: TableRow,
@@ -44,85 +44,6 @@ const useAllowedList = (
 
   const isDomainInAllowList = domainsInAllowList.has(rowDomain);
   const allowListSessionStorage = CookieStore.getDomainsInAllowList();
-
-  const onAllowListClick = useCallback(
-    async (domainOrParentDomain: string) => {
-      if (pageUrl.current === '' || domainOrParentDomain === '') {
-        return;
-      }
-
-      // Because we need to provide a pattern.
-      const secondaryPattern = pageUrl.current.endsWith('/')
-        ? pageUrl.current + '*'
-        : pageUrl.current + '/*';
-
-      let primaryPattern = domainOrParentDomain;
-
-      primaryPattern =
-        'https://' +
-        (primaryPattern.startsWith('.') ? '*' : '') +
-        primaryPattern +
-        '/*';
-
-      const scope = isIncognito.current ? 'incognito_session_only' : 'regular';
-      const domainObject: AllowedDomainObject = {
-        primaryDomain: domainOrParentDomain, // For finding parent domain.
-        primaryPattern,
-        secondaryPattern,
-        scope,
-      };
-
-      // Remove from allowed list.
-      if (isDomainInAllowList) {
-        await removeFromAllowList(domainObject);
-        domainsInAllowList.delete(domainOrParentDomain);
-        setDomainsInAllowList(domainsInAllowList);
-
-        return;
-      }
-
-      // Add to allow list.
-      const allowedDomainObjects = await CookieStore.getDomainsInAllowList();
-
-      await Promise.all(
-        allowedDomainObjects.map(async (domainObjectItem) => {
-          // Check if more specific patterns was added to allow-list,
-          // and remove it as the general pattern will be applied. (look for child domain)
-          if (
-            domainObjectItem.primaryDomain.endsWith(domainOrParentDomain) ||
-            `.${domainObjectItem.primaryDomain}` === domainOrParentDomain
-          ) {
-            domainsInAllowList.delete(domainObjectItem.primaryDomain);
-
-            await removeFromAllowList(domainObjectItem);
-          }
-        })
-      );
-
-      chrome.contentSettings.cookies
-        .set({
-          primaryPattern,
-          secondaryPattern,
-          setting: 'session_only',
-          scope,
-        })
-        // @ts-ignore - The chrome-type definition is outdated,
-        // this returns a promise instead of a void.
-        .then(() => {
-          domainsInAllowList.add(domainOrParentDomain);
-          setDomainsInAllowList(domainsInAllowList);
-          CookieStore.addDomainToAllowList(domainObject);
-        })
-        .catch((error: Error) => {
-          console.log(
-            error.message,
-            `Primary pattern: ${primaryPattern}`,
-            `Secondary pattern: ${secondaryPattern}`
-          );
-        });
-    },
-    [isDomainInAllowList, domainsInAllowList, setDomainsInAllowList]
-  );
 
   useEffect(() => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -211,6 +132,16 @@ const useAllowedList = (
       }
     );
   }, [allowListSessionStorage, rowDomain, parentDomain]);
+
+  const onAllowListClick = (domainOrParentDomain: string) =>
+    handleAllowListClick(
+      domainOrParentDomain,
+      pageUrl.current,
+      isIncognito.current,
+      isDomainInAllowList,
+      domainsInAllowList,
+      setDomainsInAllowList
+    );
 
   return {
     parentDomain,

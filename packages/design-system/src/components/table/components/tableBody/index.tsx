@@ -125,6 +125,9 @@ const TableBody = ({
         : 'bg-white dark:bg-raisin-black')
   );
 
+  /**
+   * Unselects the row on context menu option click.
+   */
   const removeSelectedRow = useCallback(() => {
     onRowClick(null);
     setIsRowFocused(false);
@@ -139,7 +142,6 @@ const TableBody = ({
           row={row}
           columns={table.columns}
           selectedKey={selectedKey}
-          removeSelectedRow={removeSelectedRow}
           getRowObjectKey={getRowObjectKey}
           isRowFocused={isRowFocused}
           onRowClick={() => {
@@ -149,6 +151,7 @@ const TableBody = ({
           onKeyDown={handleKeyDown}
           domainsInAllowList={domainsInAllowList}
           setDomainsInAllowList={setDomainsInAllowList}
+          removeSelectedRow={removeSelectedRow}
         />
       ))}
       <div
