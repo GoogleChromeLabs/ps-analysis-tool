@@ -87,6 +87,7 @@ const BodyRow = ({
         : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
     cookieKey !== selectedKey &&
       !isBlocked &&
+      !isDomainInAllowList &&
       (index % 2
         ? isHighlighted
           ? 'bg-dirty-pink'
@@ -96,13 +97,15 @@ const BodyRow = ({
         : 'bg-white dark:bg-raisin-black'),
     cookieKey === selectedKey &&
       !isBlocked &&
+      !isDomainInAllowList &&
       (isRowFocused
         ? isHighlighted
           ? 'bg-dirty-red'
           : 'bg-gainsboro dark:bg-outer-space'
         : isHighlighted
         ? 'bg-dirty-pink text-dirty-red'
-        : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver')
+        : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
+    isDomainInAllowList && 'border-l-2 border-leaf-green-dark'
   );
 
   const handleRowClick = useCallback(

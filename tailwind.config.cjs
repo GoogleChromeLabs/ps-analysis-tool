@@ -185,6 +185,7 @@ module.exports = {
       gainsboro: '#DADCE0',
       'chinese-silver': '#CDCDCD',
       'baby-blue-eyes': '#A8C7FA',
+      'leaf-green-dark': '#87DFB2',
       sapphire: '#0B57D0',
     },
     colors: {
