@@ -77,6 +77,7 @@ const BodyRow = ({
         ? 'bg-gainsboro dark:bg-outer-space'
         : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
     isDomainInAllowList &&
+      !isBlocked &&
       (cookieKey !== selectedKey
         ? index % 2
           ? 'dark:bg-jungle-green-dark bg-leaf-green-dark'
@@ -86,7 +87,6 @@ const BodyRow = ({
         : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
     cookieKey !== selectedKey &&
       !isBlocked &&
-      !isDomainInAllowList &&
       (index % 2
         ? isHighlighted
           ? 'bg-dirty-pink'
