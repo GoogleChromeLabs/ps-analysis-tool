@@ -90,13 +90,13 @@ const useAllowedList = (
             !domainsInAllowList.has(rowDomain)
           ) {
             domainsInAllowList.add(rowDomain);
-            setDomainsInAllowList(domainsInAllowList);
+            setDomainsInAllowList(new Set([...domainsInAllowList]));
           } else if (
             details.setting !== 'session_only' &&
             domainsInAllowList.has(rowDomain)
           ) {
             domainsInAllowList.delete(rowDomain);
-            setDomainsInAllowList(domainsInAllowList);
+            setDomainsInAllowList(new Set([...domainsInAllowList]));
           }
         }
       }

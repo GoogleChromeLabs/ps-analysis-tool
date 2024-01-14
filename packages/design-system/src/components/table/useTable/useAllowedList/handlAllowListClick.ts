@@ -63,7 +63,7 @@ const handleAllowListClick = async (
   if (isDomainInAllowList) {
     await removeFromAllowList(domainObject);
     domainsInAllowList.delete(domainOrParentDomain);
-    setDomainsInAllowList(domainsInAllowList);
+    setDomainsInAllowList(new Set([...domainsInAllowList]));
 
     return;
   }
@@ -97,7 +97,7 @@ const handleAllowListClick = async (
     // this returns a promise instead of a void.
     .then(() => {
       domainsInAllowList.add(domainOrParentDomain);
-      setDomainsInAllowList(domainsInAllowList);
+      setDomainsInAllowList(new Set([...domainsInAllowList]));
       CookieStore.addDomainToAllowList(domainObject);
     })
     .catch((error: Error) => {

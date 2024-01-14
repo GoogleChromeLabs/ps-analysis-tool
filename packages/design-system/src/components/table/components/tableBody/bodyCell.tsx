@@ -147,7 +147,7 @@ const BodyCell = ({
                     onClick={handleAllowListWithParentDomainClick}
                     className="w-full text-xs rounded px-1 py-[3px] flex items-center hover:bg-royal-blue hover:text-white cursor-default"
                   >
-                    <span>Remove `{parentDomain}` from allow list</span>
+                    <span>Remove {parentDomain} from allow list</span>
                   </button>
                 ) : (
                   <button
