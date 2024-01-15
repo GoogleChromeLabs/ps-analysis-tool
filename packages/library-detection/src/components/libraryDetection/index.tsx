@@ -34,9 +34,9 @@ import useLibraryDetection from './useLibraryDetection';
 // eslint-disable-next-line react/display-name
 const LibraryDetection = memo(function LibraryDetection() {
   const [libraryCount] = useState(2);
-  const { generateDisplayData } = useLibraryDetection();
+  const { libraryMatches } = useLibraryDetection();
 
-  console.log(generateDisplayData(), 'generateDisplayData');
+  console.log(libraryMatches, 'libraryMatches');
 
   const dataMapping = [
     {

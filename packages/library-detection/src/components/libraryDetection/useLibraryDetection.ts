@@ -21,12 +21,7 @@ import { useState, useCallback, useEffect } from 'react';
 /**
  * Internal dependencies.
  */
-import {
-  generateGSIV2Matches,
-  generateGsiReportingData,
-  getAllLoadedScripts,
-  populateContentFromResource,
-} from '../../utils';
+import { getAllLoadedScripts, populateContentFromResource } from '../../utils';
 import { detectMatchingSignatures, sumUpDetectionResults } from '../../core';
 import type { LibraryData } from '../../types';
 
@@ -45,53 +40,53 @@ const useLibraryDetection = () => {
 
   const [libraryMatches, setLibraryMatches] = useState(initialState);
 
-  const generateDisplayData = useCallback(() => {
-    const gisMatches =
-      libraryMatches.gis.signatureMatches === 0
-        ? []
-        : libraryMatches.gis.matches;
+  const listenerCallback = useCallback(
+    async (resource) => {
+      const realtimeComputationResult = detectMatchingSignatures(
+        await populateContentFromResource([resource])
+      );
 
-    const gsiMatches = generateGSIV2Matches(
-      libraryMatches.gsiV2.signatureMatches,
-      libraryMatches.gsiV2.matches,
-      libraryMatches.gsiV2.moduleMatch
+      if (
+        realtimeComputationResult.gis.matches.length !== 0 ||
+        realtimeComputationResult.gsiV2.matches.length !== 0
+      ) {
+        const newResult = sumUpDetectionResults(
+          libraryMatches,
+          realtimeComputationResult
+        );
+
+        setLibraryMatches(newResult);
+      }
+    },
+    [libraryMatches]
+  );
+
+  useEffect(() => {
+    (async () => {
+      const scripts = await getAllLoadedScripts();
+      const detectMatchingSignaturesv1Results =
+        detectMatchingSignatures(scripts);
+
+      setLibraryMatches(detectMatchingSignaturesv1Results);
+    })();
+  }, []);
+
+  const invokeGSIdetection = useCallback(() => {
+    chrome.devtools.inspectedWindow.onResourceAdded.removeListener(
+      listenerCallback
     );
-
-    return generateGsiReportingData(gisMatches, gsiMatches);
-  }, [libraryMatches]);
-
-  const invokeGSIdetection = useCallback(async () => {
-    const detectMatchingSignaturesv1Results = detectMatchingSignatures(
-      await getAllLoadedScripts()
-    );
-
-    setLibraryMatches(detectMatchingSignaturesv1Results);
 
     chrome.devtools.inspectedWindow.onResourceAdded.addListener(
-      async (resource) => {
-        const realtimeComputationResult = detectMatchingSignatures(
-          await populateContentFromResource([resource])
-        );
-        if (
-          realtimeComputationResult.gis.matches.length !== 0 ||
-          realtimeComputationResult.gsiV2.matches.length !== 0
-        ) {
-          const newResult = sumUpDetectionResults(
-            libraryMatches,
-            realtimeComputationResult
-          );
-          setLibraryMatches(newResult);
-        }
-      }
+      listenerCallback
     );
-  }, [libraryMatches]);
+  }, [listenerCallback]);
 
   useEffect(() => {
     invokeGSIdetection();
   }, [invokeGSIdetection]);
 
   return {
-    generateDisplayData,
+    libraryMatches,
   };
 };
 
