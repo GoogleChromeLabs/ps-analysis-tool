@@ -23,6 +23,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { createPortal } from 'react-dom';
 import { Resizable } from 're-resizable';
 import {
   filterCookiesByFrame,
@@ -46,7 +47,6 @@ import { useCookieStore } from '../../../stateProviders/syncCookieStore';
 import { BLOCKED_REASON_LIST } from '../../../../../constants';
 import { getCurrentTab } from '../../../../../utils/getCurrentTabId';
 import setDomainsInAllowList from './handleAllowList/setDomainsInAllowList';
-import { createPortal } from 'react-dom';
 import onAllowListClick from './handleAllowList/onAllowListClick';
 import setParentDomain from './handleAllowList/setParentDomain';
 
@@ -89,28 +89,57 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
     Set<string>
   >(new Set());
 
+  const domainsInAllowListRef = useRef<Set<string>>(new Set());
+
+  useEffect(() => {
+    domainsInAllowListRef.current = domainsInAllowList;
+  }, [domainsInAllowList]);
+
   useEffect(() => {
     (async () => {
-      let _domainsInAllowList = new Set<string>();
       const setter = (list: Set<string>) => {
-        _domainsInAllowList = list;
+        domainsInAllowListRef.current = list;
       };
 
       await Promise.all(
         Object.values(cookies).map(async (cookie) => {
           if (cookie.parsedCookie?.domain) {
+            const domain = cookie.parsedCookie.domain || '';
+            let isDomainInAllowList = domainsInAllowListRef.current.has(domain);
+
+            if (!isDomainInAllowList) {
+              isDomainInAllowList = [...domainsInAllowListRef.current].some(
+                (storedDomain) => {
+                  // For example xyz.bbc.com and .bbc.com
+                  if (
+                    (domain.endsWith(storedDomain) &&
+                      domain !== storedDomain) ||
+                    `.${domain}` === storedDomain
+                  ) {
+                    return true;
+                  }
+
+                  return false;
+                }
+              );
+            }
+
+            if (isDomainInAllowList) {
+              return;
+            }
+
             await setDomainsInAllowList(
               tabUrl || '',
               isIncognito.current,
               cookie.parsedCookie.domain,
-              _domainsInAllowList,
+              domainsInAllowListRef.current,
               setter
             );
           }
         })
       );
 
-      setDomainsInAllowListCallback(_domainsInAllowList);
+      setDomainsInAllowListCallback(domainsInAllowListRef.current);
     })();
   }, [cookies, tabUrl]);
 
@@ -118,15 +147,29 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
     setTableData((prevData) =>
       Object.fromEntries(
         Object.entries(cookies).map(([key, cookie]) => {
-          const updatedCookie = {
-            ...cookie,
-            highlighted: prevData?.[key]?.highlighted,
-            isDomainInAllowList: domainsInAllowList.has(
-              cookie.parsedCookie?.domain || ''
-            ),
-          };
+          const domain = cookie.parsedCookie?.domain || '';
+          let isDomainInAllowList = domainsInAllowList.has(domain);
 
-          return [key, updatedCookie];
+          if (!isDomainInAllowList) {
+            isDomainInAllowList = [...domainsInAllowList].some(
+              (storedDomain) => {
+                // For example xyz.bbc.com and .bbc.com
+                if (
+                  (domain.endsWith(storedDomain) && domain !== storedDomain) ||
+                  `.${domain}` === storedDomain
+                ) {
+                  return true;
+                }
+
+                return false;
+              }
+            );
+          }
+
+          cookie.highlighted = prevData?.[key]?.highlighted;
+          cookie.isDomainInAllowList = isDomainInAllowList;
+
+          return [key, cookie];
         })
       )
     );
@@ -168,10 +211,25 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
     [selectedCookie]
   );
 
-  const isDomainInAllowList = useMemo(
-    () => domainsInAllowList.has(domain || ''),
-    [domain, domainsInAllowList]
-  );
+  const isDomainInAllowList = useMemo(() => {
+    let _isDomainInAllowList = domainsInAllowList.has(domain);
+
+    if (!_isDomainInAllowList) {
+      _isDomainInAllowList = [...domainsInAllowList].some((storedDomain) => {
+        // For example xyz.bbc.com and .bbc.com
+        if (
+          (domain.endsWith(storedDomain) && domain !== storedDomain) ||
+          `.${domain}` === storedDomain
+        ) {
+          return true;
+        }
+
+        return false;
+      });
+    }
+
+    return _isDomainInAllowList;
+  }, [domain, domainsInAllowList]);
 
   const handleCopy = useCallback(() => {
     try {
