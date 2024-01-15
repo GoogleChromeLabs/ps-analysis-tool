@@ -247,7 +247,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
           }
         );
         setTabToRead(message?.payload?.tabId?.toString() || '');
-        setIsCurrentTabBeingListenedTo(true);
+        setTabFrames(null);
+        setIsCurrentTabBeingListenedTo(
+          message?.payload?.tabId?.toString() === tabId?.toString()
+        );
         setLoading(false);
         setCanStartInspecting(false);
       }
