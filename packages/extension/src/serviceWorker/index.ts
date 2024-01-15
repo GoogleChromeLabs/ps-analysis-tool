@@ -107,7 +107,7 @@ chrome.webRequest.onResponseStarted.addListener(
         []
       );
 
-      if (!cookies && cookies?.length === 0) {
+      if (!cookies || (cookies && cookies?.length === 0)) {
         return;
       }
       // Adds the cookies from the request headers to the cookies object.
@@ -167,7 +167,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
         []
       );
 
-      if (!cookies && cookies?.length === 0) {
+      if (!cookies || (cookies && cookies?.length === 0)) {
         return;
       }
 
