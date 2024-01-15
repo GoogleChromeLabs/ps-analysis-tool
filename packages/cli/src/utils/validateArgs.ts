@@ -36,25 +36,19 @@ const validateArgs = async (
   numberOfUrls: string,
   outDir: string
 ) => {
-  if (!url && !sitemapUrl && !csvPath && !sitemapPath) {
-    console.log(
-      `Please provide one of the following 
-        a) URL of a site (-u or --url) 
-        b) URL of a sitemap (-s or --sitemap-url)
-        c) Path to a CSV file (-c or --csv-path)
-        d) Path to a XML file (-p or --sitemap-path)`
-    );
-    process.exit(1);
-  }
+  const numArgs: number = [
+    Boolean(url),
+    Boolean(sitemapUrl),
+    Boolean(csvPath),
+    Boolean(sitemapPath),
+  ].reduce((acc, arg) => {
+    acc += arg ? 1 : 0;
+    return acc;
+  }, 0);
 
-  if (
-    (url && sitemapUrl) ||
-    (sitemapUrl && csvPath) ||
-    (csvPath && sitemapPath) ||
-    (sitemapPath && url)
-  ) {
+  if (numArgs !== 1) {
     console.log(
-      `Please provide ONLY one of the following 
+      `Please provide one and only one of the following 
         a) URL of a site (-u or --url) 
         b) URL of a sitemap (-s or --sitemap-url)
         c) Path to a CSV file (-c or --csv-path)
