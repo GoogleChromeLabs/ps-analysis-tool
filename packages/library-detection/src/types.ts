@@ -30,3 +30,83 @@ export interface Config {
   domainsToSkip: string[];
   helpUrl: string;
 }
+
+export type NetworkCallData = {
+  documentId?: string;
+  documentLifeCycle?: string;
+  frameId: number;
+  frameType?: string;
+  fromCache?: boolean;
+  initiator?: string | undefined;
+  ip?: string | undefined;
+  method: string;
+  parentFrameId: number;
+  requestId: string;
+  responseHeaders?: chrome.webRequest.HttpHeader[] | undefined;
+  statusCode?: number;
+  statusLine?: string;
+  tabId: number;
+  timeStamp: number;
+  type: string;
+  url: string;
+};
+
+export type ScriptTagUnderCheck = {
+  origin: string | null;
+  content: string;
+};
+
+export type DetectedSignature = {
+  feature: {
+    type: 'link';
+    text: string;
+    /* Link to the migration guide for all features instead of linking to individual
+     * pages as the instructions to update the codebase are short and simple.
+     */
+    url: string;
+  };
+  subItems: {
+    type: 'subitems';
+    items: {
+      sourceLocation: string;
+      snippet: string;
+    }[];
+  };
+};
+
+export type DeprecatedSignatureDetectedReportItem = {
+  title: string;
+  accordion: AccordionItem[];
+};
+
+export type AccordionItem = {
+  count: number;
+  isAffected: boolean;
+  title: string;
+  superTitle: string;
+  superTitleDescription: string;
+  helpUrl?: string;
+  description: string; // Description for Google service
+  table: {
+    headers: string[];
+    rows: unknown[];
+  };
+};
+
+export type LibraryData = {
+  gis: {
+    signatureMatches: number;
+    matches: DetectedSignature[];
+  };
+  gsiV2: {
+    signatureMatches: number;
+    moduleMatch: number;
+    matches: DetectedSignature[];
+  };
+};
+
+export type ResourceTreeItem = {
+  url: string;
+  getContent: (callback: (content: string) => void) => void;
+  type?: string;
+};

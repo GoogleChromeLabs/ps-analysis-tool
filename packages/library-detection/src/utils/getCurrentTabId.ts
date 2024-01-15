@@ -13,15 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// GSI
-export { default as GSIAccordion } from './gsi/accordion';
-export { default as checkForGSIv2 } from './gsi/checkForGSIv2';
-export { default as generateGSIV2Matches } from './gsi/generateGSIV2Matches';
-export { default as sumUpGSIv2Matches } from './gsi/sumUpGSIv2Matches';
-export * from './gis/constants';
+// @todo To be moved to common package.
+export const getCurrentTab = () => {
+  try {
+    return chrome.tabs.query({
+      active: true,
+      currentWindow: true,
+    });
+  } catch (error) {
+    //do nothing in this error
+  }
+  return Promise.resolve(undefined);
+};
 
-// GIS
-export { default as GISAccordion } from './gis/accordion';
-export { default as checkForGIS } from './gis/checkForGIS';
-export { default as sumUpGISMatches } from './gis/sumUpGISMatches';
-export * from './gsi/constants';
+export const getCurrentTabId = async (tab = null) => {
+  const _tab = tab || (await getCurrentTab());
+
+  return _tab?.[0]?.id ? _tab[0].id.toString() : undefined;
+};

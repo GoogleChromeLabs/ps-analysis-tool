@@ -13,15 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// GSI
-export { default as GSIAccordion } from './gsi/accordion';
-export { default as checkForGSIv2 } from './gsi/checkForGSIv2';
-export { default as generateGSIV2Matches } from './gsi/generateGSIV2Matches';
-export { default as sumUpGSIv2Matches } from './gsi/sumUpGSIv2Matches';
-export * from './gis/constants';
+/**
+ * Internal dependencies.
+ */
+import { LibraryData } from '../types';
+import sumUpGISMatches from '../libraries/gis/sumUpGISMatches';
+import sumUpGSIv2Matches from '../libraries/gsi/sumUpGSIv2Matches';
 
-// GIS
-export { default as GISAccordion } from './gis/accordion';
-export { default as checkForGIS } from './gis/checkForGIS';
-export { default as sumUpGISMatches } from './gis/sumUpGISMatches';
-export * from './gsi/constants';
+const sumUpDetectionResults = (obj1: LibraryData, obj2: LibraryData) => {
+  const resultObj: LibraryData = { ...obj1 };
+
+  resultObj.gis = sumUpGISMatches(resultObj, obj2);
+  //GSI 2 matches
+
+  resultObj.gsiV2 = sumUpGSIv2Matches(resultObj, obj2);
+
+  return resultObj;
+};
+
+export default sumUpDetectionResults;

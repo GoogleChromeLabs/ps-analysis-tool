@@ -13,157 +13,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const GSI_V2_SIGNATURE_WEAK_MATCHES = [
-  /* These signatures indicate use of OpenID Connect ID token for user sign-in,
-   * link to the user authentication migration guide for user sign-in. */
+export const GIS_SIGNATURE_WEAK_MATCHES = [
   {
-    signature: 'gapi.load(',
-    helpUrl: 'https://developers.google.com/identity/gsi/web/guides/migration',
+    signature: 'google.accounts.id.prompt(', // XXX add check for optional callback parameter
+    helpUrl: '',
   },
   {
-    signature: 'SignInOptions',
-    helpUrl:
-      'https://developers.google.com/identity/gsi/web/guides/migration#object_migration_reference_for_user_sign-in',
+    signature: 'isDisplayMomment(',
+    helpUrl: '',
   },
   {
-    signature: '.ClientConfig(',
-    helpUrl:
-      'https://developers.google.com/identity/gsi/web/guides/migration#object_migration_reference_for_user_sign-in',
+    signature: 'isDisplayed(',
+    helpUrl: '',
   },
   {
-    signature: '.SigninOptionsBuilder(',
-    helpUrl:
-      'https://developers.google.com/identity/gsi/web/guides/migration#object_migration_reference_for_user_sign-in',
+    signature: 'isNotDisplayed(',
+    helpUrl: '',
   },
   {
-    signature: '.getAuthInstance(',
-    helpUrl:
-      'https://developers.google.com/identity/gsi/web/guides/migration#object_migration_reference_for_user_sign-in',
+    signature: 'getNotDisplayedReason(',
+    helpUrl: '',
   },
   {
-    signature: 'GoogleAuth',
-    helpUrl:
-      'https://developers.google.com/identity/gsi/web/guides/migration#object_migration_reference_for_user_sign-in',
+    signature: 'PromptMomentNotification',
   },
   {
-    signature: '.attachClickHandler(',
-    helpUrl:
-      'https://developers.google.com/identity/gsi/web/guides/migration#session_state_and_listeners',
-  },
-  {
-    signature: '.currentUser.get(',
-    helpUrl:
-      'https://developers.google.com/identity/gsi/web/guides/migration#token_response',
-  },
-  {
-    signature: '.currentUser.listen(',
-    helpUrl:
-      'https://developers.google.com/identity/gsi/web/guides/migration#session_state_and_listeners',
-  },
-  {
-    signature: '.isSignedIn.get(',
-    helpUrl:
-      'https://developers.google.com/identity/gsi/web/guides/migration#session_state_and_listeners',
-  },
-  {
-    signature: '.isSignedIn.listen(',
-    helpUrl:
-      'https://developers.google.com/identity/gsi/web/guides/migration#session_state_and_listeners',
-  },
-  {
-    signature: '.isSignedIn(',
-    helpUrl: 'https://developers.google.com/identity/gsi/web/guides/migration',
-  },
-  {
-    signature: '.signIn(',
-    helpUrl:
-      'https://developers.google.com/identity/gsi/web/guides/migration#object_migration_reference_for_user_sign-in',
-  },
-  {
-    signature: '.signOut(',
-    helpUrl:
-      'https://developers.google.com/identity/gsi/web/guides/migration#user_consent_and_revoking_permission',
-  },
-  {
-    signature: 'GoogleUser',
-    helpUrl:
-      'https://developers.google.com/identity/gsi/web/guides/migration#token_response',
-  },
-  {
-    signature: '.getBasicProfile(',
-    helpUrl:
-      'https://developers.google.com/identity/gsi/web/guides/migration#token_response',
-  },
-  {
-    signature: '.getHostedDomain(',
-    helpUrl:
-      'https://developers.google.com/identity/gsi/web/guides/migration#object_migration_reference_for_user_sign-in',
-  },
-  {
-    signature: '.grant(',
-    helpUrl:
-      'https://developers.google.com/identity/gsi/web/guides/migration#object_migration_reference_for_user_sign-in',
-  },
-  {
-    signature: '.reloadAuthResponse(',
-    helpUrl:
-      'https://developers.google.com/identity/gsi/web/guides/migration#object_migration_reference_for_user_sign-in',
-  },
-  {
-    signature: 'gapi.signin2',
-    helpUrl:
-      'https://developers.google.com/identity/gsi/web/guides/migration#object_migration_reference_for_user_sign-in',
-  },
-  /* These signatures indicate the use of OAuth 2.0 access token or authorization code flows,
-   * link to the user authorization migration guide for data sharing. */
-  {
-    signature: 'AuthorizeConfig',
-    helpUrl:
-      'https://developers.google.com/identity/oauth2/web/guides/migration-to-gis#client_configuration',
-  },
-  {
-    signature: 'AuthorizeResponse',
-    helpUrl:
-      'https://developers.google.com/identity/oauth2/web/guides/migration-to-gis#token_and_consent_response',
-  },
-  {
-    signature: 'OfflineAccessOptions',
-    helpUrl:
-      'https://developers.google.com/identity/oauth2/web/guides/migration-to-gis#authorization_code_flow_examples',
-  },
-  {
-    signature: '.authorize(',
-    helpUrl:
-      'https://developers.google.com/identity/oauth2/web/guides/migration-to-gis#implicit-flow_3',
-  },
-  {
-    signature: '.getGrantedScopes(',
-    helpUrl:
-      'https://developers.google.com/identity/oauth2/web/guides/migration-to-gis#implicit-flow_4',
-  },
-  {
-    signature: '.grantOfflineAccess(',
-    helpUrl:
-      'https://developers.google.com/identity/oauth2/web/guides/migration-to-gis#library_quick_reference',
-  },
-  {
-    signature: '.hasGrantedScopes(',
-    helpUrl:
-      'https://developers.google.com/identity/oauth2/web/guides/migration-to-gis#implicit-flow_4',
+    signature: 'opt_out_or_no_session',
+    helpUrl: '',
   },
 ];
 
-export const GSI_V2_SIGNATURE_STRONG_MATCHES = [
-  {
-    signature: 'gapi.auth2',
-    helpUrl: 'https://developers.google.com/identity/gsi/web/guides/migration',
-  },
-];
+export const GIS_SIGNATURE_STRONG_MATCHES = [];
 
-export const GSI_HELP_URL =
+export const GIS_HELP_URL =
   'https://developers.google.com/identity/gsi/web/guides/migration';
 
-export const GSI_DOMAINS_TO_SKIP = [
+export const GIS_DOMAINS_TO_SKIP = [
   'accounts.google.com',
   'apis.google.com',
   'gstatic.com',

@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// GSI
-export { default as GSIAccordion } from './gsi/accordion';
-export { default as checkForGSIv2 } from './gsi/checkForGSIv2';
-export { default as generateGSIV2Matches } from './gsi/generateGSIV2Matches';
-export { default as sumUpGSIv2Matches } from './gsi/sumUpGSIv2Matches';
-export * from './gis/constants';
 
-// GIS
-export { default as GISAccordion } from './gis/accordion';
-export { default as checkForGIS } from './gis/checkForGIS';
-export { default as sumUpGISMatches } from './gis/sumUpGISMatches';
-export * from './gsi/constants';
+import { ResourceTreeItem } from '../types';
+
+export const filterRemoteAndInlineScript = (
+  inputResources: ResourceTreeItem[]
+) => {
+  return inputResources
+    .filter((i) => i.type === 'script' || i.type === 'document')
+    .filter(
+      (i) =>
+        !i.url.includes('chrome-extension://') && !i.url.includes('debugger://')
+    );
+};

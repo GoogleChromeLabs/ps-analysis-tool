@@ -29,10 +29,14 @@ import DynamicPlaceholder from './dynamicPlaceholder';
 import LIBRARIES from '../../config';
 import { Provider as LibraryDetectionProvider } from '../../stateProviders/librayDetectionContext';
 import type { Config } from '../../types';
+import useLibraryDetection from './useLibraryDetection';
 
 // eslint-disable-next-line react/display-name
 const LibraryDetection = memo(function LibraryDetection() {
   const [libraryCount] = useState(2);
+  const { generateDisplayData } = useLibraryDetection();
+
+  console.log(generateDisplayData(), 'generateDisplayData');
 
   const dataMapping = [
     {
