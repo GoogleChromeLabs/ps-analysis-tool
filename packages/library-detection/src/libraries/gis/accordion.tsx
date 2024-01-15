@@ -21,21 +21,23 @@ import React, { useState } from 'react';
 /**
  * Internal dependencies.
  */
-import { Accordion } from '../../components';
+import { Accordion, FeatureList } from '../../components';
 import { useLibraryDetection } from '../../stateProviders';
+import type { AccordionProps } from '../../types';
 
-const GSIAccordion = () => {
+const GSIAccordion = ({ matches }: AccordionProps) => {
   const [isLoading] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { config } = useLibraryDetection(({ state }) => ({
     config: state.config,
   }));
+  const featuresCount = matches && matches.length ? matches.length : 0;
 
   return (
     <Accordion
       title={'Avoid use of deprecated Google Sign-In functionality.'}
       isLoading={isLoading}
-      featuresText="6 features"
+      featuresText={`${featuresCount} features`}
     >
       The Google Sign-In JavaScript library is deprecated and is no longer
       supported. Review the following features and consider{' '}
@@ -48,6 +50,7 @@ const GSIAccordion = () => {
         migrating
       </a>{' '}
       to a newer library if necessary.
+      <FeatureList matches={matches} />
     </Accordion>
   );
 };

@@ -31,26 +31,6 @@ export interface Config {
   helpUrl: string;
 }
 
-export type NetworkCallData = {
-  documentId?: string;
-  documentLifeCycle?: string;
-  frameId: number;
-  frameType?: string;
-  fromCache?: boolean;
-  initiator?: string | undefined;
-  ip?: string | undefined;
-  method: string;
-  parentFrameId: number;
-  requestId: string;
-  responseHeaders?: chrome.webRequest.HttpHeader[] | undefined;
-  statusCode?: number;
-  statusLine?: string;
-  tabId: number;
-  timeStamp: number;
-  type: string;
-  url: string;
-};
-
 export type ScriptTagUnderCheck = {
   origin: string | null;
   content: string;
@@ -72,11 +52,6 @@ export type DetectedSignature = {
       snippet: string;
     }[];
   };
-};
-
-export type DeprecatedSignatureDetectedReportItem = {
-  title: string;
-  accordion: AccordionItem[];
 };
 
 export type AccordionItem = {
@@ -109,4 +84,8 @@ export type ResourceTreeItem = {
   url: string;
   getContent: (callback: (content: string) => void) => void;
   type?: string;
+};
+
+export type AccordionProps = {
+  matches: DetectedSignature[];
 };

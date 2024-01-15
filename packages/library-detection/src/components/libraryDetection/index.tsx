@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useState, memo } from 'react';
+import React, { useState, memo, useEffect } from 'react';
 import {
   CookiesLandingContainer,
   COLOR_MAP,
@@ -33,15 +33,29 @@ import useLibraryDetection from './useLibraryDetection';
 
 // eslint-disable-next-line react/display-name
 const LibraryDetection = memo(function LibraryDetection() {
-  const [libraryCount] = useState(2);
+  const [libraryCount, setLibraryCount] = useState(0);
   const { libraryMatches } = useLibraryDetection();
 
   console.log(libraryMatches, 'libraryMatches');
 
+  useEffect(() => {
+    const names = Object.keys(libraryMatches);
+
+    if (!names.length) {
+      return;
+    }
+
+    const detectedLibraryNames = names.filter((name) => {
+      return libraryMatches[name]?.matches?.length;
+    });
+
+    setLibraryCount(detectedLibraryNames.length);
+  }, [libraryMatches]);
+
   const dataMapping = [
     {
       title: 'Known Breakages',
-      count: libraryCount,
+      count: Number(libraryCount),
       data: [{ count: 1, color: COLOR_MAP.uncategorized.color }],
     },
   ];
@@ -67,8 +81,12 @@ const LibraryDetection = memo(function LibraryDetection() {
         <LibraryDetectionProvider config={configs}>
           {LIBRARIES.map((config: Config) => {
             const Component = config.component as React.FC;
+            const matches =
+              libraryMatches && libraryMatches[config.name]
+                ? libraryMatches[config.name]?.matches
+                : [];
 
-            return <Component key={config.name} />;
+            return <Component key={config.name} matches={matches} />;
           })}
         </LibraryDetectionProvider>
       ) : (

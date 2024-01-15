@@ -30,7 +30,7 @@ import {
 
 const LIBRARIES = [
   {
-    name: 'gsi',
+    name: 'gsiV2',
     component: GISAccordion,
     signatures: {
       strongMatches: GSI_V2_SIGNATURE_STRONG_MATCHES,

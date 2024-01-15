@@ -21,12 +21,16 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { Accordion } from '../../components';
+import { Accordion, FeatureList } from '../../components';
+import type { AccordionProps } from '../../types';
 
-const GISAccordion = () => {
+const GISAccordion = ({ matches }: AccordionProps) => {
+  const featuresCount = matches && matches.length ? matches.length : 0;
+
   return (
     <Accordion
       title={'Avoid use of unsupported Google Identity Services features.'}
+      featuresText={`${featuresCount} features`}
     >
       <p>
         Due to Privacy Sandbox enforcements some features are backward
@@ -42,6 +46,7 @@ const GISAccordion = () => {
           migrate
         </a>{' '}
         if necessary.
+        <FeatureList matches={matches} />
       </p>
     </Accordion>
   );
