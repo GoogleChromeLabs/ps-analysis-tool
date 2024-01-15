@@ -41,5 +41,5 @@ export * from './sidebar';
 export { default as InspectButton } from './inspectButton';
 export {
   default as CookiesLandingContainer,
-  CookiesLandingContainerProps,
+  type CookiesLandingContainerProps,
 } from './cookiesLanding/cookieLandingHeaderContainer';
