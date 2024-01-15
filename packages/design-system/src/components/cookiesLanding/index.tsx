@@ -31,6 +31,7 @@ import {
   prepareCookiesCount,
   prepareFrameStatsComponent,
 } from '../../utils';
+
 interface CookiesLandingProps {
   tabFrames: TabFrames | null;
   tabCookies: TabCookies | null;
@@ -40,6 +41,9 @@ interface CookiesLandingProps {
   associatedCookiesCount?: number | null;
   showMessageBoxBody?: boolean;
   showBlockedCookiesSection?: boolean;
+  additionalComponents?: {
+    [key: string]: React.FunctionComponent;
+  };
 }
 
 const CookiesLanding = ({
@@ -51,6 +55,7 @@ const CookiesLanding = ({
   showMessageBoxBody = true,
   showBlockedCookiesSection = false,
   showHorizontalMatrix = false,
+  additionalComponents = {},
 }: CookiesLandingProps) => {
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
@@ -145,6 +150,11 @@ const CookiesLanding = ({
           />
         </CookiesLandingContainer>
       )}
+      {Object.keys(additionalComponents).length &&
+        Object.keys(additionalComponents).map((key: string) => {
+          const Component = additionalComponents[key];
+          return <Component key={key} />;
+        })}
     </div>
   );
 };
