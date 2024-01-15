@@ -31,7 +31,12 @@ const GSIAccordion = ({ matches }: AccordionProps) => {
   const { config } = useLibraryDetection(({ state }) => ({
     config: state.config,
   }));
+
   const featuresCount = matches && matches.length ? matches.length : 0;
+
+  if (!featuresCount) {
+    return null;
+  }
 
   return (
     <Accordion

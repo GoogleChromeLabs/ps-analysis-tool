@@ -27,6 +27,10 @@ import type { AccordionProps } from '../../types';
 const GISAccordion = ({ matches }: AccordionProps) => {
   const featuresCount = matches && matches.length ? matches.length : 0;
 
+  if (!featuresCount) {
+    return null;
+  }
+
   return (
     <Accordion
       title={'Avoid use of unsupported Google Identity Services features.'}
