@@ -162,6 +162,10 @@ const useCookieListing = () => {
       (acc, cookie) => {
         const blockedReason = getValueByKey('blockedReasons', cookie);
 
+        if (!cookie.frameIdList || cookie?.frameIdList?.length === 0) {
+          return acc;
+        }
+
         blockedReason?.forEach((reason: string) => {
           if (!acc) {
             acc = {};
