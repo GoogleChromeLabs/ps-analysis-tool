@@ -34,7 +34,11 @@ case $SHELL in
    ;;
 esac
 
-echo -e "New commands that will be available in new terminal session: \n\tchrome-default \n\tchrome-3pcd \n\tchrome-default-ps \n\tchrome-3pcd-ps"
+echo -e "\nNew commands that will be available in new terminal session:"
+echo -e "\tchrome-default     : Opens a Chrome instance with default settings."
+echo -e "\tchrome-3pcd        : Opens a Chrome instance with Third-Party Cookie Deprecation (3PCD) enabled."
+echo -e "\tchrome-default-ps  : Opens a Chrome instance with default settings and the Privacy Sandbox extension installed."
+echo -e "\tchrome-3pcd-ps     : Opens a Chrome instance with 3PCD enabled and the Privacy Sandbox extension installed."
 
 # Source into current terminal session as well
 source ~/bin/chrome_launcher.sh
