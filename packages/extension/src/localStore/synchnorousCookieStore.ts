@@ -118,6 +118,7 @@ class SynchnorousCookieStore {
       chrome.runtime.sendMessage({
         type: 'NEW_COOKIE_DATA',
         payload: {
+          tabId: tabId,
           cookieData: JSON.stringify(this.cachedTabsData[tabId]),
         },
       });

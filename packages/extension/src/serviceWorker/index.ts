@@ -418,7 +418,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
   }
 });
 
-const listenToNewTab = async (tabId?: number) => {
+const listenToNewTab = (tabId?: number) => {
   const newTabId =
     tabId?.toString() || chrome.devtools.inspectedWindow.tabId.toString();
 
@@ -427,24 +427,24 @@ const listenToNewTab = async (tabId?: number) => {
   }
 
   if (tabMode && tabMode !== 'unlimited') {
-    const storedTabData = Object.keys(await chrome.storage.local.get());
-    storedTabData.some(async (tabIdToDelete) => {
-      if (tabIdToDelete !== 'tabToRead') {
-        syncCookieStore.removeTabData(Number(tabIdToDelete));
-        try {
-          await chrome.debugger.detach({ tabId: Number(tabIdToDelete) });
-        } catch (error) {
-          // Fail silently
-        }
-        await chrome.action.setBadgeText({
-          tabId: Number(newTabId),
-          text: '',
-        });
+    const storedTabData = Object.keys(syncCookieStore.cachedTabsData);
+    storedTabData.some((tabIdToDelete) => {
+      syncCookieStore.removeTabData(Number(tabIdToDelete));
+      try {
+        chrome.debugger.detach({ tabId: Number(tabIdToDelete) });
+      } catch (error) {
+        // Fail silently
       }
+      chrome.action.setBadgeText({
+        tabId: Number(newTabId),
+        text: '',
+      });
+      return tabIdToDelete;
     });
   }
 
   syncCookieStore.addTabData(Number(newTabId), tabMode);
+  syncCookieStore.updateDevToolsState(Number(newTabId), true);
 
   return newTabId;
 };
@@ -457,8 +457,14 @@ chrome.runtime.onMessage.addListener((request) => {
   if (request?.type === 'SET_TAB_TO_READ') {
     PROMISE_QUEUE.clear();
     PROMISE_QUEUE.add(async () => {
-      const newTab = await listenToNewTab(request?.payload?.tabId);
-
+      const newTab = listenToNewTab(request?.payload?.tabId);
+      tabToRead = newTab;
+      chrome.runtime.sendMessage({
+        type: 'TAB_TO_READ_DATA',
+        payload: {
+          tabToRead: tabToRead,
+        },
+      });
       // Can't use sendResponse as delay is too long. So using sendMessage instead.
       chrome.runtime.sendMessage({
         type: 'syncCookieStore:SET_TAB_TO_READ',
@@ -482,6 +488,19 @@ chrome.runtime.onMessage.addListener((request) => {
         tabToRead: tabToRead,
       },
     });
+
+    if (syncCookieStore.cachedTabsData[Number(tabToRead)]) {
+      chrome.runtime.sendMessage({
+        type: 'NEW_COOKIE_DATA',
+        payload: {
+          tabId: Number(tabToRead),
+          cookieData: JSON.stringify(
+            syncCookieStore.cachedTabsData[Number(tabToRead)]
+          ),
+        },
+      });
+    }
+
     syncCookieStore.updateDevToolsState(request?.payload?.tabId, true);
   }
 
