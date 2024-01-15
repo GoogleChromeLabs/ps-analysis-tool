@@ -24,13 +24,13 @@ import { parseStringPromise } from 'xml2js';
 import Utility from './utility';
 
 const parseUrlsFromSitemap = async (sitemapUrl: string, spinnies: any) => {
-  spinnies.add('sitemap-spinner', {
+  spinnies?.add('sitemap-spinner', {
     text: 'Parsing Sitemap',
   });
 
   try {
     const _urls = await Utility.getUrlsFromSitemap(sitemapUrl);
-    spinnies.succeed('sitemap-spinner', {
+    spinnies?.succeed('sitemap-spinner', {
       text: 'Done parsing Sitemap',
     });
     return _urls;
@@ -40,7 +40,7 @@ const parseUrlsFromSitemap = async (sitemapUrl: string, spinnies: any) => {
 };
 
 const parseUrlsFromCSV = async (csvPath: string, spinnies: any) => {
-  spinnies.add('csv-spinner', {
+  spinnies?.add('csv-spinner', {
     text: 'Parsing CSV File',
   });
 
@@ -67,7 +67,7 @@ const parseUrlsFromCSV = async (csvPath: string, spinnies: any) => {
         process.exit(1);
       }
     });
-    spinnies.succeed('csv-spinner', {
+    spinnies?.succeed('csv-spinner', {
       text: 'Done parsing CSV file',
     });
     return _urls;
@@ -80,7 +80,7 @@ const parseUrlsFromLocalSitemap = async (
   sitemapPath: string,
   spinnies: any
 ) => {
-  spinnies.add('sitemap-spinner', {
+  spinnies?.add('sitemap-spinner', {
     text: 'Parsing XML File',
   });
 
@@ -122,7 +122,7 @@ const parseUrlsFromLocalSitemap = async (
       throw new Error(`${_url} is not a valid URL`);
     }
   });
-  spinnies.succeed('sitemap-spinner', {
+  spinnies?.succeed('sitemap-spinner', {
     text: 'Done parsing XML file',
   });
 
@@ -140,9 +140,9 @@ const parseUrlsFromLocalSitemap = async (
  */
 const getUrlListFromArgs = async (
   url: string,
-  sitemapUrl: string,
-  csvPath: string,
-  sitemapPath: string,
+  sitemapUrl?: string,
+  csvPath?: string,
+  sitemapPath?: string,
   // @ts-ignore Package does not support typescript.
   spinnies
 ): Promise<string[]> => {
