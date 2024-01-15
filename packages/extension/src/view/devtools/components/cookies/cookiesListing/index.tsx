@@ -90,40 +90,49 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
   >(new Set());
 
   useEffect(() => {
+    (async () => {
+      let _domainsInAllowList = new Set<string>();
+      const setter = (list: Set<string>) => {
+        _domainsInAllowList = list;
+      };
+
+      await Promise.all(
+        Object.values(cookies).map(async (cookie) => {
+          if (cookie.parsedCookie?.domain) {
+            await setDomainsInAllowList(
+              tabUrl || '',
+              isIncognito.current,
+              cookie.parsedCookie.domain,
+              _domainsInAllowList,
+              setter
+            );
+          }
+        })
+      );
+
+      setDomainsInAllowListCallback(_domainsInAllowList);
+    })();
+  }, [cookies, tabUrl]);
+
+  useEffect(() => {
     setTableData((prevData) =>
-      Object.values(cookies).reduce((acc, cookie) => {
-        const key = getCookieKey(cookie.parsedCookie) as string;
+      Object.fromEntries(
+        Object.entries(cookies).map(([key, cookie]) => {
+          const updatedCookie = {
+            ...cookie,
+            highlighted: prevData?.[key]?.highlighted,
+            isDomainInAllowList: domainsInAllowList.has(
+              cookie.parsedCookie?.domain || ''
+            ),
+          };
 
-        if (cookie.parsedCookie?.domain) {
-          setDomainsInAllowList(
-            tabUrl || '',
-            isIncognito.current,
-            cookie.parsedCookie.domain,
-            domainsInAllowList,
-            setDomainsInAllowListCallback
-          );
-        }
-
-        acc[key] = {
-          ...cookie,
-          highlighted: prevData?.[key]?.highlighted,
-          isDomainInAllowList: domainsInAllowList.has(
-            cookie.parsedCookie?.domain || ''
-          ),
-        };
-
-        return acc;
-      }, {} as Record<string, CookieTableData>)
+          return [key, updatedCookie];
+        })
+      )
     );
-  }, [cookies, domainsInAllowList, tabUrl]);
+  }, [cookies, domainsInAllowList]);
 
-  const [parentDomain, setParentDomainCallback] = useState<{
-    value: string;
-    exist: boolean;
-  }>({
-    exist: false,
-    value: '',
-  });
+  const [parentDomain, setParentDomainCallback] = useState<string>('');
 
   const [contextMenuOpen, setContextMenuOpen] = useState(false);
   const [columnPosition, setColumnPosition] = useState({
@@ -135,7 +144,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
   );
 
   const handleRightClick = useCallback(
-    (e: React.MouseEvent<HTMLElement>, { originalData }: TableRow) => {
+    async (e: React.MouseEvent<HTMLElement>, { originalData }: TableRow) => {
       e.preventDefault();
       const x = e.clientX,
         y = e.clientY;
@@ -143,7 +152,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
       document.body.style.overflow = contextMenuOpen ? 'auto' : 'hidden';
       setContextMenuOpen(!contextMenuOpen);
       setSelectedCookie(originalData as CookieTableData);
-      setParentDomain(
+      await setParentDomain(
         (originalData as CookieTableData).parsedCookie.domain || '',
         setParentDomainCallback
       );
@@ -185,11 +194,11 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
   );
 
   const handleAllowListClick = useCallback(
-    (e: React.MouseEvent<HTMLElement>) => {
+    async (e: React.MouseEvent<HTMLElement>) => {
       e.stopPropagation();
 
       cookieTableRef.current?.removeSelectedRow();
-      onAllowListClick(
+      await onAllowListClick(
         domain,
         tabUrl || '',
         isIncognito.current,
@@ -203,21 +212,21 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
   );
 
   const handleAllowListWithParentDomainClick = useCallback(
-    (e: React.MouseEvent<HTMLElement>) => {
+    async (e: React.MouseEvent<HTMLElement>) => {
       e.stopPropagation();
 
       cookieTableRef.current?.removeSelectedRow();
-      onAllowListClick(
-        parentDomain.value,
+      await onAllowListClick(
+        parentDomain,
         tabUrl || '',
         isIncognito.current,
-        domainsInAllowList.has(parentDomain.value),
+        domainsInAllowList.has(parentDomain),
         domainsInAllowList,
         setDomainsInAllowListCallback
       );
       setContextMenuOpen(false);
     },
-    [domainsInAllowList, parentDomain.value, tabUrl]
+    [domainsInAllowList, parentDomain, tabUrl]
   );
 
   const removeHighlights = useCallback(() => {
@@ -609,12 +618,12 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
                   <span>Copy network filter string</span>
                 </button>
 
-                {isDomainInAllowList && parentDomain.exist ? (
+                {isDomainInAllowList && parentDomain ? (
                   <button
                     onClick={handleAllowListWithParentDomainClick}
                     className="w-full text-xs rounded px-1 py-[3px] flex items-center hover:bg-royal-blue hover:text-white cursor-default"
                   >
-                    <span>Remove `{parentDomain.value}` from allow list</span>
+                    <span>Remove `{parentDomain}` from allow list</span>
                   </button>
                 ) : (
                   <button
