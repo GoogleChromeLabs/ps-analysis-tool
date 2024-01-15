@@ -13,22 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies
- */
-import { type Cookie as ParsedCookie } from 'simple-cookie';
 
-export type SanitisedCookieType = ParsedCookie & {
-  category: string;
-  platform: string;
-  gdprPortal: string;
-  sameSite: string;
-  scope: string;
-};
-export interface SingleTechnology {
-  name: string;
-  description: string;
-  confidence: number;
-  website: string;
-  categories: string;
-}
+/**
+ * Internal dependencies
+ */
+import generateTechnologyCSV from '../generateTechnologyCSV';
+import { mockData1 } from './data.mock';
+
+describe('generateTechnologyCSV', () => {
+  it('should create CSV string for technology data', () => {
+    const CSVString = generateTechnologyCSV(mockData1);
+
+    expect(CSVString.split('\r\n').filter((str) => str).length).toBe(4);
+  });
+});

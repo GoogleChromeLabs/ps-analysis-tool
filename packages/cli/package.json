@@ -4,8 +4,8 @@
   "description": "CLI tool for analysis",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc-watch"
+    "build": "tsc --build",
+    "dev": "tsc-watch --build"
   },
   "type": "module",
   "repository": {

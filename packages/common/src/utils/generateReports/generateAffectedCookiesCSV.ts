@@ -15,13 +15,10 @@
  */
 
 /**
- * External dependencies
- */
-import { sanitizeCsvRecord } from '@ps-analysis-tool/common';
-/**
  * Internal dependencies
  */
-import type { CompleteJson, CookieJsonDataType } from '../../../types';
+import { CompleteJson, CookieJsonDataType } from '../../cookies.types';
+import sanitizeCsvRecord from '../sanitizeCsvRecord';
 
 export const AFFECTED_COOKIES_DATA_HEADERS = [
   'Name',

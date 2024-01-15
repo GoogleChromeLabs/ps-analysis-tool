@@ -152,7 +152,7 @@ module.exports = {
       cultured: '#F6F6F699',
       'burnt-sienna-30': '#EC71594D',
       'light-gray': '#F1F1F1',
-      'charleston-green': '#292A2D',
+      'charleston-green': '#282828',
       quartz: '#494C50',
       'davys-grey': '#5D5D5D99',
       'outer-space-crayola': '#303942',
@@ -166,6 +166,7 @@ module.exports = {
       'dynamic-grey': '#fbfbfb',
       'dirty-red': '#990000',
       'dirty-pink': '#FFD6D6',
+      'eerie-black': '#1F1F1F0F',
     },
     borderColor: {
       ...colors,

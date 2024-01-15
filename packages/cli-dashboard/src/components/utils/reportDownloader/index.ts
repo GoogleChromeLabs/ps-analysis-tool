@@ -13,22 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies
- */
-import { type Cookie as ParsedCookie } from 'simple-cookie';
 
-export type SanitisedCookieType = ParsedCookie & {
-  category: string;
-  platform: string;
-  gdprPortal: string;
-  sameSite: string;
-  scope: string;
-};
-export interface SingleTechnology {
-  name: string;
-  description: string;
-  confidence: number;
-  website: string;
-  categories: string;
-}
+export { default as generateSiteMapReportandDownload } from './generateSiteMapReportandDownload';
+export { default as generateSiteReportandDownload } from './generateSiteReportandDownload';

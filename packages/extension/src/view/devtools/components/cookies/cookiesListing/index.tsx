@@ -85,6 +85,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
 
   useEffect(() => {
     chrome.storage.session.onChanged.addListener(removeHighlights);
+
     return () => {
       try {
         chrome.storage.session.onChanged.removeListener(removeHighlights);
@@ -147,7 +148,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
       {
         header: 'Platform',
         accessorKey: 'analytics.platform',
-        cell: (info: InfoType) => info,
+        cell: (info: InfoType) => <span>{info ? info : 'Unknown'}</span>,
       },
       {
         header: 'HttpOnly',
@@ -200,6 +201,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
     [key: string]: { selected: boolean };
   }>(() => {
     const filterValues: { [key: string]: { selected: boolean } } = {};
+
     BLOCKED_REASON_LIST.forEach((reason) => {
       filterValues[reason] = { selected: false };
     });

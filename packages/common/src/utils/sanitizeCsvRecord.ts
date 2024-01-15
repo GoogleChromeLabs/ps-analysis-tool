@@ -19,12 +19,18 @@
  * @param {string} record - a string value that need to be converted into a CSV record.
  * @returns {URL | null} - The parsed URL object or null if the URL is invalid.
  */
-const sanitizeCsvRecord = (record: string | null | undefined): string => {
-  if (!record) {
+const sanitizeCsvRecord = (record: unknown): string => {
+  let recordCopy: string | null;
+
+  if (record instanceof Date) {
+    recordCopy = record.toISOString();
+  } else if (typeof record === 'string') {
+    recordCopy = record;
+  } else {
     return '';
   }
-  let recordCopy = record;
-  recordCopy = recordCopy.replaceAll('"', '""');
+
+  recordCopy = recordCopy.replace(/"/g, '""');
   return recordCopy.includes(',') ? '"' + recordCopy + '"' : recordCopy;
 };
 
