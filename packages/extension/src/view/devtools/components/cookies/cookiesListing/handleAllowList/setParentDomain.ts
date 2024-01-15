@@ -18,35 +18,33 @@ import { CookieStore } from '../../../../../../localStore';
 
 const setParentDomain = async (
   domain: string,
-  setter: (
-    prev: (prevState: { exist: boolean; value: string }) => {
-      exist: boolean;
-      value: string;
-    }
-  ) => void
+  setter: (prev: (prevState: string) => string) => void
 ) => {
   const allowListSessionStorage = await CookieStore.getDomainsInAllowList();
 
-  let parentDomainExist = false;
   let parentDomainValue = '';
-  const numberOfDomainsInAllowList = allowListSessionStorage
-    ? allowListSessionStorage.length
-    : 0;
 
-  for (let i = 0; i < numberOfDomainsInAllowList; i++) {
-    if (
-      domain.endsWith(allowListSessionStorage[i].primaryDomain) &&
-      domain !== allowListSessionStorage[i].primaryDomain
-    ) {
-      parentDomainExist = true;
-      parentDomainValue = allowListSessionStorage[i].primaryDomain;
-      break;
-    }
+  if (!allowListSessionStorage || allowListSessionStorage?.length === 0) {
+    return;
   }
 
-  setter((prev: { exist: boolean; value: string }) => {
-    if (prev.value !== parentDomainValue || prev.exist !== parentDomainExist) {
-      return { exist: parentDomainExist, value: parentDomainValue };
+  allowListSessionStorage.some((storedAllowedDomain) => {
+    const storedDomain = storedAllowedDomain.primaryDomain;
+
+    // For example xyz.bbc.com and .bbc.com
+    if (domain.endsWith(storedDomain) && domain !== storedDomain) {
+      parentDomainValue = storedDomain;
+
+      return true;
+    }
+
+    return false;
+  });
+
+  // For example .bbc.com will be parent domain of xyz.bbc.com
+  setter((prev) => {
+    if (prev !== parentDomainValue) {
+      return parentDomainValue;
     }
 
     return prev;

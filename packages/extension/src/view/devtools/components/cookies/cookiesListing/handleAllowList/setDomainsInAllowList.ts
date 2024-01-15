@@ -14,44 +14,41 @@
  * limitations under the License.
  */
 
-const setDomainsInAllowList = (
+const setDomainsInAllowList = async (
   pageUrl: string,
   isIncognito: boolean,
   domain: string,
   domainsInAllowList: Set<string>,
   setter: (list: Set<string>) => void
 ) => {
-  if (pageUrl && domain) {
-    let primaryUrl = domain;
+  if (!pageUrl && !domain) {
+    return;
+  }
 
-    primaryUrl = primaryUrl.startsWith('.')
-      ? `https://${primaryUrl.substring(1)}/`
-      : `https://${primaryUrl}/`;
+  let primaryUrl = domain;
 
-    chrome.contentSettings.cookies.get(
-      {
-        primaryUrl: primaryUrl,
-        secondaryUrl: pageUrl,
-        incognito: isIncognito,
-      },
-      (details) => {
-        if (details?.setting) {
-          if (
-            details.setting === 'session_only' &&
-            !domainsInAllowList.has(domain)
-          ) {
-            domainsInAllowList.add(domain);
-            setter(domainsInAllowList);
-          } else if (
-            details.setting !== 'session_only' &&
-            domainsInAllowList.has(domain)
-          ) {
-            domainsInAllowList.delete(domain);
-            setter(domainsInAllowList);
-          }
-        }
-      }
-    );
+  primaryUrl = primaryUrl.startsWith('.')
+    ? `https://${primaryUrl.substring(1)}/`
+    : `https://${primaryUrl}/`;
+
+  // @ts-ignore - The chrome-type definition is outdated, and the return type is a promise.
+  const details = (await chrome.contentSettings.cookies.get({
+    primaryUrl: primaryUrl,
+    secondaryUrl: pageUrl,
+    incognito: isIncognito,
+  })) as chrome.contentSettings.CookieSetDetails;
+
+  if (details?.setting) {
+    if (details.setting === 'session_only' && !domainsInAllowList.has(domain)) {
+      domainsInAllowList.add(domain);
+      setter(domainsInAllowList);
+    } else if (
+      details.setting !== 'session_only' &&
+      domainsInAllowList.has(domain)
+    ) {
+      domainsInAllowList.delete(domain);
+      setter(domainsInAllowList);
+    }
   }
 };
 
