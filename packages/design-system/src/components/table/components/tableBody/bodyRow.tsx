@@ -74,6 +74,7 @@ const BodyRow = ({
         ? 'bg-gainsboro dark:bg-outer-space'
         : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
     isDomainInAllowList &&
+      !isBlocked &&
       (cookieKey !== selectedKey
         ? index % 2
           ? 'dark:bg-jungle-green-dark bg-leaf-green-dark'
@@ -93,13 +94,15 @@ const BodyRow = ({
         : 'bg-white dark:bg-raisin-black'),
     cookieKey === selectedKey &&
       !isBlocked &&
+      !isDomainInAllowList &&
       (isRowFocused
         ? isHighlighted
           ? 'bg-dirty-red'
           : 'bg-gainsboro dark:bg-outer-space'
         : isHighlighted
         ? 'bg-dirty-pink text-dirty-red'
-        : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver')
+        : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
+    isDomainInAllowList && 'border-l-2 border-leaf-green-dark'
   );
 
   return (

@@ -38,3 +38,14 @@ export type TabData = {
 export type Storage = {
   [tabId: string]: TabData;
 };
+
+export type AllowedDomainObject = {
+  primaryDomain: string;
+  primaryPattern: string;
+  secondaryPattern: string;
+  scope: string;
+};
+
+export type AllowedDomainStorage = {
+  allowList: AllowedDomainObject[];
+};

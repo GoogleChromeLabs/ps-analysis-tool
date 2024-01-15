@@ -27,9 +27,14 @@ import type { Protocol } from 'devtools-protocol';
  * Internal dependencies.
  */
 import updateStorage from './utils/updateStorage';
-import type { TabData } from './types';
+import type {
+  TabData,
+  AllowedDomainObject,
+  AllowedDomainStorage,
+} from './types';
 import fetchTopicsTaxonomy from '../utils/fetchTopicsTaxonomy';
 import updateCookieBadgeText from './utils/updateCookieBadgeText';
+import getIndexForAllowListedItem from './utils/getIndexForAllowListedItem';
 
 const CookieStore = {
   /**
@@ -344,30 +349,21 @@ const CookieStore = {
 
   /**
    * Add domain to allow-list.
-   * @param {Record<string, string>} domainObject
-   * The domain to be added to allow-list.
+   * @param {AllowedDomainObject} domainObject The domain to be added to allow-list.
    */
-  async addDomainToAllowList(domainObject: Record<string, string>) {
+  async addDomainToAllowList(domainObject: AllowedDomainObject) {
     const storage = await chrome.storage.session.get();
 
     if (!storage.allowList) {
-      storage.allowList = [] as Record<string, string>[];
+      storage.allowList = [];
     }
 
-    let isElementPresent = false;
-    for (let i = 0; i < storage.allowList.length; i++) {
-      if (
-        storage.allowList[i].scope === domainObject.scope &&
-        storage.allowList[i].primaryDomain === domainObject.primaryDomain &&
-        storage.allowList[i].primaryPattern === domainObject.primaryPattern &&
-        storage.allowList[i].secondaryPattern === domainObject.secondaryPattern
-      ) {
-        isElementPresent = true;
-        break;
-      }
-    }
+    const index = getIndexForAllowListedItem(
+      storage as AllowedDomainStorage,
+      domainObject
+    );
 
-    if (!isElementPresent) {
+    if (index === -1) {
       storage.allowList = [...storage.allowList, domainObject];
     }
 
@@ -376,42 +372,37 @@ const CookieStore = {
 
   /**
    * Remove domain from allow-list.
-   * @param {Record<string, string>} domainObject
-   * The domain to be removed from allow-list.
+   * @param {AllowedDomainObject} domainObject The domain to be removed from allow-list.
+   * @returns AllowedDomainObject[] Remaning objects.
    */
-  async removeDomainFromAllowList(domainObject: Record<string, string>) {
+  async removeDomainFromAllowList(
+    domainObject: AllowedDomainObject
+  ): Promise<AllowedDomainObject[] | []> {
     const storage = await chrome.storage.session.get();
 
-    let indexToRemove = -1;
-
-    if (storage.allowList) {
-      for (let i = 0; i < storage.allowList.length; i++) {
-        if (
-          storage.allowList[i].scope === domainObject.scope &&
-          storage.allowList[i].primaryDomain === domainObject.primaryDomain &&
-          storage.allowList[i].primaryPattern === domainObject.primaryPattern &&
-          storage.allowList[i].secondaryPattern ===
-            domainObject.secondaryPattern
-        ) {
-          indexToRemove = i;
-          break;
-        }
-      }
+    if (!storage?.allowList || storage?.allowList?.length === 0) {
+      return [];
     }
+
+    const indexToRemove = getIndexForAllowListedItem(
+      storage as AllowedDomainStorage,
+      domainObject
+    );
 
     if (indexToRemove !== -1) {
       storage.allowList.splice(indexToRemove, 1);
     }
 
     await chrome.storage.session.set(storage);
+
+    return (storage.allowList as AllowedDomainObject[]) || [];
   },
 
   /**
    * Get domains in allow-list.
-   * @returns {Promise<Record<string, string>>}
-   * Set of domains in allow-list.
+   * @returns {Promise<Record<string, string>>} Set of domains in allow-list.
    */
-  async getDomainsInAllowList(): Promise<Record<string, string>[]> {
+  async getDomainsInAllowList(): Promise<AllowedDomainObject[] | []> {
     const storage = await chrome.storage.session.get();
 
     return storage.allowList ?? [];

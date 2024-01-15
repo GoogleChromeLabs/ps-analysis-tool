@@ -124,23 +124,36 @@ const Details = ({ selectedCookie }: DetailsProps) => {
 
   return (
     <div className="text-xs py-1 px-1.5">
-      {!isDomainInAllowList && isCookieBlocked && blockedReasons && (
+      {isCookieBlocked && blockedReasons ? (
         <>
           <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
-            Blocked reason
+            Blocked Reason {isDomainInAllowList ? '(allow listed)' : ''}
           </p>
           <p
             className="text-outer-space-crayola dark:text-bright-gray mb-3"
             dangerouslySetInnerHTML={{ __html: blockedReasons ?? '' }}
           />
         </>
+      ) : (
+        isDomainInAllowList && (
+          <div className="mb-4">
+            <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
+              Allow Listed
+            </p>
+            <p className="text-outer-space-crayola dark:text-bright-gray">
+              The cookie domain was added to “allow list” for this session of
+              the browser. You can view all allowed items under
+              chrome://settings/content/siteData.
+            </p>
+          </div>
+        )
       )}
-      {!isDomainInAllowList &&
-        selectedCookie?.warningReasons &&
+      {selectedCookie?.warningReasons &&
         selectedCookie?.warningReasons?.length > 0 && (
           <>
             <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
-              Warnings
+              Warnings{' '}
+              {isDomainInAllowList && !blockedReasons ? '(allow listed)' : ''}
             </p>
             <p
               className="text-outer-space-crayola dark:text-bright-gray"
@@ -148,18 +161,6 @@ const Details = ({ selectedCookie }: DetailsProps) => {
             />
           </>
         )}
-      {isDomainInAllowList && (
-        <div className="mb-4">
-          <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
-            Allow Listed
-          </p>
-          <p className="text-outer-space-crayola dark:text-bright-gray">
-            The cookie domain was added to “allow list” for this session of the
-            browser. You can view all allowed items under
-            chrome://settings/content/siteData.
-          </p>
-        </div>
-      )}
       <p className="font-bold text-raising-black dark:text-bright-gray mb-1 text-semibold flex items-center">
         <span>Cookie Value</span>
         <label className="text-raising-black dark:text-bright-gray text-xs font-normal flex items-center">
