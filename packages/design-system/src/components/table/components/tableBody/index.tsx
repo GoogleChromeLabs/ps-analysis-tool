@@ -124,7 +124,7 @@ const TableBody = ({
   );
 
   return (
-    <div ref={tableBodyRef} className="h-full flex flex-col">
+    <div ref={tableBodyRef} className="h-full flex flex-col overflow-auto">
       {table.rows.map((row, index) => (
         <BodyRow
           key={index}
