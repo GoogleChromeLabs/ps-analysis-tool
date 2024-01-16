@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 /**
@@ -33,10 +33,6 @@ describe('BodyCell', () => {
     isRowFocused: false,
     row: table.rows[0],
     onRowClick: jest.fn(),
-    isDomainInAllowList: false,
-    isDomainSetToAllowListManually: true,
-    onAllowListClick: jest.fn(),
-    removeSelectedRow: jest.fn(),
   };
 
   it('should render Body Cell component', () => {
@@ -48,52 +44,11 @@ describe('BodyCell', () => {
         // @ts-ignore
         row={bodyCellProp.row}
         onRowClick={bodyCellProp.onRowClick}
-        isDomainInAllowList={bodyCellProp.isDomainInAllowList}
-        isDomainSetToAllowListManually={
-          bodyCellProp.isDomainSetToAllowListManually
-        }
-        onAllowListClick={bodyCellProp.onAllowListClick}
-        removeSelectedRow={bodyCellProp.removeSelectedRow}
       />
     );
 
     const bodyCell = screen.getByText('.example.com');
 
     expect(bodyCell).toBeInTheDocument();
-  });
-
-  it('should display setting to update allow list setting', () => {
-    const onRowClick = jest.fn();
-    const onAllowListClick = jest.fn();
-    const removeSelectedRow = jest.fn();
-
-    render(
-      <BodyCell
-        cell={'.example.com'}
-        width={50}
-        isRowFocused={bodyCellProp.isRowFocused}
-        // @ts-ignore
-        row={bodyCellProp.row}
-        onRowClick={onRowClick}
-        isDomainInAllowList={bodyCellProp.isDomainInAllowList}
-        isDomainSetToAllowListManually={
-          bodyCellProp.isDomainSetToAllowListManually
-        }
-        onAllowListClick={onAllowListClick}
-        removeSelectedRow={removeSelectedRow}
-      />
-    );
-
-    const bodyCell = screen.getByText('.example.com');
-
-    fireEvent.contextMenu(bodyCell);
-
-    const addDomainSetting = screen.queryByText('Add domain to allow list');
-    const removeDomainSetting = screen.queryByText(
-      'Remove domain from allow list'
-    );
-
-    expect(addDomainSetting).toBeInTheDocument();
-    expect(removeDomainSetting).not.toBeInTheDocument();
   });
 });

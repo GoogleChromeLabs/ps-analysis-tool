@@ -69,8 +69,6 @@ describe('BodyRow', () => {
         isRowFocused={BodyRowProp.isRowFocused}
         onRowClick={BodyRowProp.onRowClick}
         onKeyDown={BodyRowProp.onKeyDown}
-        domainsInAllowList={BodyRowProp.domainsInAllowList}
-        setDomainsInAllowList={BodyRowProp.setDomainsInAllowList}
       />
     );
 
@@ -105,8 +103,6 @@ describe('BodyRow', () => {
         isRowFocused={BodyRowProp.isRowFocused}
         onRowClick={BodyRowProp.onRowClick}
         onKeyDown={BodyRowProp.onKeyDown}
-        domainsInAllowList={BodyRowProp.domainsInAllowList}
-        setDomainsInAllowList={BodyRowProp.setDomainsInAllowList}
       />
     );
 
@@ -117,35 +113,5 @@ describe('BodyRow', () => {
 
     expect(BodyRowProp.onRowClick).toHaveBeenCalled();
     expect(BodyRowProp.isRowFocused).toBe(true);
-  });
-
-  it('should display setting to update allow list setting', () => {
-    render(
-      <BodyRow
-        index={0}
-        // @ts-ignore
-        row={BodyRowProp.row}
-        columns={BodyRowProp.columns}
-        selectedKey={BodyRowProp.selectedKey}
-        getRowObjectKey={BodyRowProp.getRowObjectKey}
-        isRowFocused={BodyRowProp.isRowFocused}
-        onRowClick={BodyRowProp.onRowClick}
-        onKeyDown={BodyRowProp.onKeyDown}
-        domainsInAllowList={BodyRowProp.domainsInAllowList}
-        setDomainsInAllowList={BodyRowProp.setDomainsInAllowList}
-      />
-    );
-
-    // Open context menu.
-    const selectedItem = screen.getByText('.twitter.com');
-    fireEvent.contextMenu(selectedItem);
-
-    const addDomainSetting = screen.queryByText('Add domain to allow list');
-    const removeDomainSetting = screen.queryByText(
-      'Remove domain from allow list'
-    );
-
-    expect(addDomainSetting).toBeInTheDocument();
-    expect(removeDomainSetting).not.toBeInTheDocument();
   });
 });
