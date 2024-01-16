@@ -203,7 +203,7 @@ const RowContextMenu = forwardRef<
                 onClick={handleCopy}
                 className="w-full text-xs rounded px-1 py-[3px] flex items-center hover:bg-royal-blue hover:text-white cursor-default"
               >
-                <span>Copy network filter string</span>
+                <span>Copy Network Filter String</span>
               </button>
 
               {isDomainInAllowList && parentDomain ? (
@@ -211,7 +211,7 @@ const RowContextMenu = forwardRef<
                   onClick={handleAllowListWithParentDomainClick}
                   className="w-full text-xs rounded px-1 py-[3px] flex items-center hover:bg-royal-blue hover:text-white cursor-default"
                 >
-                  <span>Remove `{parentDomain}` from allow list</span>
+                  <span>Remove `{parentDomain}` From Allow List</span>
                 </button>
               ) : (
                 <button
@@ -220,8 +220,8 @@ const RowContextMenu = forwardRef<
                 >
                   <span id="allow-list-option">
                     {isDomainInAllowList
-                      ? 'Remove domain from allow list'
-                      : 'Add domain to allow list'}
+                      ? 'Remove Domain From Allow List'
+                      : 'Add Domain To Allow List'}
                   </span>
                 </button>
               )}
