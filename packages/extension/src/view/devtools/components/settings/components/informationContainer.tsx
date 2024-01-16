@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 
 /**
  * Internal dependencies
@@ -38,11 +38,11 @@ const InformationContainer = () => {
       OSInformation: state.OSInformation,
     }));
 
-  const [copying, setCopying] = useState(false);
+  const copying = useRef(false);
   const [open, setOpen] = useState(true);
 
   const handleCopy = useCallback(() => {
-    setCopying(true);
+    copying.current = true;
     let clipboardText = `Number of open tabs: ${currentTabs}\n`;
     clipboardText += `Active extensions:\n`;
     currentExtensions?.forEach((extension) => {
@@ -61,7 +61,7 @@ const InformationContainer = () => {
       document.execCommand('copy');
       copyFrom.blur();
       document.body.removeChild(copyFrom);
-      setCopying(false);
+      copying.current = false;
     } catch (error) {
       //Fail silently
     }
@@ -93,13 +93,11 @@ const InformationContainer = () => {
           )}
         >
           <button
-            disabled={copying}
+            disabled={copying.current}
             className="absolute right-1 top-1"
             onClick={handleCopy}
           >
-            <Copy
-              className={`dark:text-white  ${copying ? 'text-mischka' : ''}`}
-            />
+            <Copy className="dark:text-white active:text-mishka active:dark:text-mischka" />
           </button>
           <div className="flex flex-row gap-x-2 justify-between mt-4">
             <div className="flex flex-col">
