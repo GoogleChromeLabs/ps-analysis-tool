@@ -13,17 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
- * External dependencies
+ * External dependencies.
  */
-import type JSZip from 'jszip';
 import {
+  CompleteJson,
   generateAffectedCookiesCSV,
   generateAllCookiesCSV,
   generateSummaryDataCSV,
   generateTechnologyCSV,
-  type CompleteJson,
 } from '@ps-analysis-tool/common';
 
 const generateCSVFiles = (data: CompleteJson) => {
@@ -43,23 +41,6 @@ const generateCSVFiles = (data: CompleteJson) => {
   };
 };
 
-export const createZip = (analysisData: CompleteJson, zipObject: JSZip) => {
-  const {
-    allCookiesCSV,
-    technologyDataCSV,
-    affectedCookiesDataCSV,
-    summaryDataCSV,
-  } = generateCSVFiles(analysisData);
-
-  zipObject.file('cookies.csv', allCookiesCSV);
-  if (technologyDataCSV) {
-    zipObject.file('technologies.csv', technologyDataCSV);
-  }
-  zipObject.file('affected-cookies.csv', affectedCookiesDataCSV);
-  zipObject.file('report.csv', summaryDataCSV);
-  zipObject.file('report.json', JSON.stringify(analysisData, null, 4));
-};
-
 export const getFolderName = (pageUrl: string) => {
   let folderName = pageUrl
     .trim()
@@ -73,3 +54,5 @@ export const getFolderName = (pageUrl: string) => {
 
   return folderName;
 };
+
+export default generateCSVFiles;

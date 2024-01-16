@@ -142,3 +142,44 @@ export interface CookieStatsComponents {
 export interface FramesWithCookies {
   [key: string]: { frameIds: number[] };
 }
+
+export type CookieJsonDataType = {
+  name: string;
+  value: string;
+  domain: string;
+  partitionKey?: string;
+  path: string;
+  expires: string;
+  httpOnly: boolean;
+  secure: boolean;
+  sameSite: string;
+  platform: string;
+  category: string;
+  description: string;
+  isFirstParty: boolean;
+  pageUrl: string;
+  requestUrls?: { [id: string]: string };
+  frameUrls?: { [id: string]: string };
+  isBlocked: boolean;
+  blockedReasons?: string[];
+  GDPR?: string;
+};
+
+export type CookieFrameStorageType = {
+  [frame: string]: {
+    [cookieKey: string]: CookieJsonDataType;
+  };
+};
+
+export type CompleteJson = {
+  pageUrl: string;
+  cookieData: {
+    [frame: string]: {
+      cookiesCount: number;
+      frameCookies: {
+        [cookieKey: string]: CookieJsonDataType;
+      };
+    };
+  };
+  technologyData: TechnologyData[];
+};

@@ -18,6 +18,7 @@
  */
 import { parse } from 'simple-cookie';
 import type { Protocol } from 'devtools-protocol';
+
 /**
  * Internal dependencies
  */
@@ -27,7 +28,7 @@ import calculateEffectiveExpiryDate from './calculateEffectiveExpiryDate';
 import isFirstParty from './isFirstParty';
 
 /**
- *
+ * Parse Network.responseReceivedExtraInfo for extra information about a cookie.
  * @param {object} response Response to be parsed to get extra information about a cookie.
  * @param {object} requestMap An object for requestId to url.
  * @param {string} tabUrl - The top-level URL (URL in the tab's address bar).
@@ -46,6 +47,7 @@ export default function parseResponseReceivedExtraInfo(
 
   responseToParse?.split('\n').forEach((headerLine: string) => {
     let parsedCookie: CookieData['parsedCookie'] = parse(headerLine);
+
     const blockedCookie = response.blockedCookies.find((c) => {
       if (c.cookie) {
         return c.cookie?.name === parsedCookie.name;
@@ -54,6 +56,7 @@ export default function parseResponseReceivedExtraInfo(
         return temporaryParsedCookie.name === parsedCookie.name;
       }
     });
+
     const effectiveExpirationDate = calculateEffectiveExpiryDate(
       parsedCookie.expires
     );
@@ -97,5 +100,6 @@ export default function parseResponseReceivedExtraInfo(
     };
     cookies.push(singleCookie);
   });
+
   return cookies;
 }

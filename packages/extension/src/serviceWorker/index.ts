@@ -50,6 +50,7 @@ const cdpURLToRequestMap: {
     [requestId: string]: string;
   };
 } = {};
+
 /**
  * Fires when the browser receives a response from a web server.
  * @see https://developer.chrome.com/docs/extensions/reference/webRequest/
@@ -126,6 +127,10 @@ chrome.webRequest.onResponseStarted.addListener(
   ['extraHeaders', 'responseHeaders']
 );
 
+/**
+ * Fires before sending an HTTP request, once the request headers are available.
+ * @see https://developer.chrome.com/docs/extensions/reference/api/webRequest#event-onBeforeSendHeaders
+ */
 chrome.webRequest.onBeforeSendHeaders.addListener(
   ({ url, requestHeaders, tabId, frameId }) => {
     (async () => {
@@ -195,12 +200,18 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
   ['extraHeaders', 'requestHeaders']
 );
 
+/**
+ * Fires when a tab is created.
+ * @see https://developer.chrome.com/docs/extensions/reference/api/tabs#event-onCreated
+ */
 chrome.tabs.onCreated.addListener(async (tab) => {
   await PROMISE_QUEUE.add(async () => {
     if (!tab.id) {
       return;
     }
+
     const _isSingleTabProcessingMode = await isSingleTabProcessingMode();
+
     if (_isSingleTabProcessingMode) {
       const previousTabData = await chrome.storage.local.get();
       const doesTabExist = await getTab(previousTabData?.tabToRead);
@@ -303,6 +314,10 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   });
 });
 
+/**
+ * Fires whenever debugging target issues instrumentation event.
+ * @see https://developer.chrome.com/docs/extensions/reference/api/debugger
+ */
 chrome.debugger.onEvent.addListener((source, method, params) => {
   (async () => {
     // eslint-disable-next-line complexity
@@ -430,6 +445,10 @@ const listenToNewTab = async (tabId?: number) => {
   return newTabId;
 };
 
+/**
+ * Fires when a message is sent from either an extension process (by runtime.sendMessage) or a content script (by tabs.sendMessage).
+ * @see https://developer.chrome.com/docs/extensions/reference/api/runtime#event-onMessage
+ */
 chrome.runtime.onMessage.addListener((request) => {
   if (request?.type === 'SET_TAB_TO_READ') {
     PROMISE_QUEUE.clear();
@@ -449,6 +468,10 @@ chrome.runtime.onMessage.addListener((request) => {
   }
 });
 
+/**
+ * Listen to local storage changes.
+ * @see https://developer.chrome.com/docs/extensions/reference/api/storage#event-onChanged
+ */
 chrome.storage.local.onChanged.addListener(
   async (changes: { [key: string]: chrome.storage.StorageChange }) => {
     if (!changes?.tabToRead || !changes?.tabToRead?.oldValue) {
