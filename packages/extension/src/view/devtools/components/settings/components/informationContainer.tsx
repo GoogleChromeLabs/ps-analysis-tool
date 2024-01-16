@@ -43,19 +43,18 @@ const InformationContainer = () => {
 
   const handleCopy = useCallback(() => {
     setCopying(true);
+    let clipboardText = `Number of open tabs: ${currentTabs}\n`;
+    clipboardText += `Active extensions:\n`;
+    currentExtensions?.forEach((extension) => {
+      clipboardText += `${extension.extensionName}: ${extension.extensionId}\n`;
+    });
+    clipboardText += `Chrome Version: ${browserInformation}\n`;
+    clipboardText += `OS information: ${OSInformation}`;
 
-    const clipboardText = `
-      Number of open tabs: ${currentTabs}
-      Active extensions:
-      ${currentExtensions?.map((extension) => {
-        return `${extension.extensionName}: ${extension.extensionId}\n`;
-      })}
-      Chrome Version: ${browserInformation}
-      OS information: ${OSInformation}
-      `;
     try {
       // Need to do this since chrome doesnt allow the clipboard access in extension.
       const copyFrom = document.createElement('textarea');
+      copyFrom.style.textAlign = 'left';
       copyFrom.textContent = clipboardText;
       document.body.appendChild(copyFrom);
       copyFrom.select();
