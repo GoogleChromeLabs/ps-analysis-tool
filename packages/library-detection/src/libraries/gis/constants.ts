@@ -48,8 +48,4 @@ export const GIS_SIGNATURE_STRONG_MATCHES = [];
 export const GIS_HELP_URL =
   'https://developers.google.com/identity/gsi/web/guides/migration';
 
-export const GIS_DOMAINS_TO_SKIP = [
-  'accounts.google.com',
-  'apis.google.com',
-  'gstatic.com',
-];
+export const GIS_DOMAINS_TO_SKIP = ['accounts.google.com', 'gstatic.com'];
