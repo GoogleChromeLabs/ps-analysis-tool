@@ -21,7 +21,10 @@ import { useState, useCallback, useEffect } from 'react';
 /**
  * Internal dependencies.
  */
-import { getAllLoadedScripts, populateContentFromResource } from '../../utils';
+import {
+  getNetworkScriptsFromResourceTree,
+  getResourcesWithContent,
+} from '../../utils';
 import { detectMatchingSignatures, sumUpDetectionResults } from '../../core';
 import type { LibraryData } from '../../types';
 
@@ -43,7 +46,7 @@ const useLibraryDetection = () => {
   const listenerCallback = useCallback(
     async (resource) => {
       const realtimeComputationResult = detectMatchingSignatures(
-        await populateContentFromResource([resource])
+        await getResourcesWithContent([resource])
       );
 
       if (
@@ -63,7 +66,7 @@ const useLibraryDetection = () => {
 
   useEffect(() => {
     (async () => {
-      const scripts = await getAllLoadedScripts();
+      const scripts = await getNetworkScriptsFromResourceTree();
       const detectMatchingSignaturesv1Results =
         detectMatchingSignatures(scripts);
 

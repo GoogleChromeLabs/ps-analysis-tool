@@ -13,24 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * Internal dependencies.
  */
-import { ResourceTreeItem } from '../libraries';
-import { populateContentFromResource } from './populateContentFromResource';
+import { type ResourceTreeItem } from '../types';
+import { getResourcesWithContent } from './getResourcesWithContent';
 
 export const getNetworkScriptsFromResourceTree = async () => {
-  const resourceFromResourceTree: ResourceTreeItem[] = await new Promise(
-    (resolve) => {
-      chrome.devtools.inspectedWindow.getResources((resources) =>
-        resolve(resources)
-      );
-    }
-  );
+  const resources: ResourceTreeItem[] = await new Promise((resolve) => {
+    chrome.devtools.inspectedWindow.getResources((_resources) =>
+      resolve(_resources)
+    );
+  });
 
-  const resourceFromResourceTreeWithContentPopulated =
-    await populateContentFromResource(resourceFromResourceTree);
+  const resourcesWithContent = await getResourcesWithContent(resources);
 
-  return resourceFromResourceTreeWithContentPopulated;
+  return resourcesWithContent;
 };

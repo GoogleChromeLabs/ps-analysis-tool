@@ -13,16 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/**
+ * Internal dependencies.
+ */
 import { ResourceTreeItem } from '../types';
 
-export const filterRemoteAndInlineScript = (
-  inputResources: ResourceTreeItem[]
-) => {
+const filterResources = (inputResources: ResourceTreeItem[]) => {
   return inputResources
-    .filter((i) => i.type === 'script' || i.type === 'document')
+    .filter((i) => ['script', 'document'].includes(i.type))
     .filter(
       (i) =>
         !i.url.includes('chrome-extension://') && !i.url.includes('debugger://')
     );
 };
+
+export default filterResources;

@@ -17,3 +17,4 @@ export { default as isRequestURLMatchingDomainPaths } from './isRequestURLMatchi
 export { default as detectMatchingSignatures } from './detectMatchingSignatures';
 export { default as getHelpUrl } from './getHelpUrl';
 export { default as sumUpDetectionResults } from './sumUpDetectionResults';
+export { default as filterResources } from './filterResources';
