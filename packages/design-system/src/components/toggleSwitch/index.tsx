@@ -21,14 +21,14 @@ import React from 'react';
 type ToggleSwitchProps = {
   enabled: boolean;
   setEnabled: (newValue: boolean) => void;
-  onLabel: string;
+  onLabel?: string;
   additionalStyles?: string;
 };
 
 const ToggleSwitch = ({
   enabled,
   setEnabled,
-  onLabel,
+  onLabel = '',
   additionalStyles = 'relative',
 }: ToggleSwitchProps) => {
   return (
@@ -55,9 +55,11 @@ const ToggleSwitch = ({
               }`}
             ></span>
           </span>
-          <span className="label flex items-center text-sm font-medium text-black">
-            {onLabel} <span className="pl-1"> {enabled ? 'On' : 'Off'} </span>
-          </span>
+          {onLabel && (
+            <span className="label flex items-center text-sm font-medium text-black">
+              {onLabel} <span className="pl-1"> {enabled ? 'On' : 'Off'} </span>
+            </span>
+          )}
         </label>
       </>
     </div>

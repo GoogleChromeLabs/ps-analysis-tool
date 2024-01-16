@@ -57,6 +57,7 @@ import {
   BounceTracking,
   Fingerprinting,
   PrivacySandbox,
+  Settings,
 } from './components';
 
 const TABS: SidebarItems = {
@@ -141,6 +142,14 @@ const TABS: SidebarItems = {
         },
       },
     },
+  },
+  settings: {
+    title: 'PSAT Settings',
+    panel: <Settings />,
+    icon: <PrivacySandboxIcon />,
+    selectedIcon: <PrivacySandboxIconWhite />,
+    dropdownOpen: false,
+    children: {},
   },
 };
 

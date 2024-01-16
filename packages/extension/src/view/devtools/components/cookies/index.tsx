@@ -30,6 +30,7 @@ import {
   ProgressBar,
 } from '@ps-analysis-tool/design-system';
 import type { CookieTableData } from '@ps-analysis-tool/common';
+import { useSettingsStore } from '../../stateProviders/syncSettingsStore';
 
 interface CookiesProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;
@@ -37,7 +38,6 @@ interface CookiesProps {
 
 const Cookies = ({ setFilteredCookies }: CookiesProps) => {
   const {
-    allowedNumberOfTabs,
     contextInvalidated,
     isCurrentTabBeingListenedTo,
     loading,
@@ -47,7 +47,6 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
     tabFrames,
     changeListeningToThisTab,
   } = useCookieStore(({ state, actions }) => ({
-    allowedNumberOfTabs: state.allowedNumberOfTabs,
     contextInvalidated: state.contextInvalidated,
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
     loading: state.loading,
@@ -56,6 +55,10 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
     tabCookies: state.tabCookies,
     tabFrames: state.tabFrames,
     changeListeningToThisTab: actions.changeListeningToThisTab,
+  }));
+
+  const { allowedNumberOfTabs } = useSettingsStore(({ state }) => ({
+    allowedNumberOfTabs: state.allowedNumberOfTabs,
   }));
 
   if (
