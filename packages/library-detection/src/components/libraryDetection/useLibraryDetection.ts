@@ -45,9 +45,9 @@ const useLibraryDetection = () => {
 
   const listenerCallback = useCallback(
     async (resource) => {
-      const realtimeComputationResult = detectMatchingSignatures(
-        await getResourcesWithContent([resource])
-      );
+      const resourcesWithContent = await getResourcesWithContent([resource]);
+      const realtimeComputationResult =
+        detectMatchingSignatures(resourcesWithContent);
 
       if (
         realtimeComputationResult.gis.matches.length !== 0 ||
