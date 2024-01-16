@@ -16,12 +16,13 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 
 /**
  * Internal dependencies
  */
 import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
+import { Copy } from '@ps-analysis-tool/design-system';
 
 const InformationContainer = () => {
   const { currentTabs, currentExtensions, browserInformation, OSInformation } =
@@ -32,6 +33,35 @@ const InformationContainer = () => {
       OSInformation: state.OSInformation,
     }));
 
+  const [copying, setCopying] = useState(false);
+
+  const handleCopy = useCallback(() => {
+    setCopying(true);
+
+    const clipboardText = `
+      Number of open tabs: ${currentTabs}
+      Active extensions:
+      ${currentExtensions?.map((extension) => {
+        return `${extension.extensionName}: ${extension.extensionId}\n`;
+      })}
+      Chrome Version: ${browserInformation}
+      OS information: ${OSInformation}
+      `;
+    try {
+      // Need to do this since chrome doesnt allow the clipboard access in extension.
+      const copyFrom = document.createElement('textarea');
+      copyFrom.textContent = clipboardText;
+      document.body.appendChild(copyFrom);
+      copyFrom.select();
+      document.execCommand('copy');
+      copyFrom.blur();
+      document.body.removeChild(copyFrom);
+      setCopying(false);
+    } catch (error) {
+      //Fail silently
+    }
+  }, [OSInformation, browserInformation, currentExtensions, currentTabs]);
+
   return (
     <div data-testid="Debugging information">
       <div>
@@ -40,8 +70,17 @@ const InformationContainer = () => {
             System Information
           </span>
         </div>
-        <div className="rounded flex flex-col w-full px-4 py-2 border border-american-silver dark:border-quartz gap-y-3">
-          <div className="flex flex-row gap-x-2 justify-between">
+        <div className="relative rounded flex flex-col w-full px-4 pr-8 py-2 border border-american-silver dark:border-quartz gap-y-3">
+          <button
+            disabled={copying}
+            className="absolute right-1 top-1"
+            onClick={handleCopy}
+          >
+            <Copy
+              className={`dark:text-white  ${copying ? 'text-mischka' : ''}`}
+            />
+          </button>
+          <div className="flex flex-row gap-x-2 justify-between mt-4">
             <div className="flex flex-col">
               <span className="text-sm font-bold dark:text-white">
                 Current Open Tabs
