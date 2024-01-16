@@ -16,7 +16,13 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Resizable } from 're-resizable';
 import {
   filterCookiesByFrame,
@@ -37,37 +43,66 @@ import {
  */
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
 import { BLOCKED_REASON_LIST } from '../../../../../constants';
+import RowContextMenu from './rowContextMenu';
+import useAllowedList from './useAllowedList';
 
 interface CookiesListingProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;
 }
 
 const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
-  const { selectedFrame, cookies, tabFrames, getCookiesSetByJavascript } =
-    useCookieStore(({ state, actions }) => ({
-      selectedFrame: state.selectedFrame,
-      cookies: state.tabCookies || {},
-      tabFrames: state.tabFrames,
-      getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
-    }));
+  const {
+    selectedFrame,
+    cookies,
+    tabFrames,
+    tabUrl,
+    getCookiesSetByJavascript,
+  } = useCookieStore(({ state, actions }) => ({
+    selectedFrame: state.selectedFrame,
+    cookies: state.tabCookies,
+    tabFrames: state.tabFrames,
+    tabUrl: state.tabUrl,
+    getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
+  }));
 
   const [tableData, setTableData] = useState<Record<string, CookieTableData>>(
     {}
   );
 
+  const { domainsInAllowList, setDomainsInAllowListCallback, isIncognito } =
+    useAllowedList();
+
   useEffect(() => {
     setTableData((prevData) =>
-      Object.values(cookies).reduce((acc, cookie) => {
-        const key = getCookieKey(cookie.parsedCookie) as string;
-        acc[key] = {
-          ...cookie,
-          highlighted: prevData?.[key]?.highlighted,
-        };
+      Object.fromEntries(
+        Object.entries(cookies || {}).map(([key, cookie]) => {
+          const domain = cookie.parsedCookie?.domain || '';
+          let isDomainInAllowList = domainsInAllowList.has(domain);
 
-        return acc;
-      }, {} as Record<string, CookieTableData>)
+          if (!isDomainInAllowList) {
+            isDomainInAllowList = [...domainsInAllowList].some(
+              (storedDomain) => {
+                // For example xyz.bbc.com and .bbc.com
+                if (
+                  (domain.endsWith(storedDomain) && domain !== storedDomain) ||
+                  `.${domain}` === storedDomain
+                ) {
+                  return true;
+                }
+
+                return false;
+              }
+            );
+          }
+
+          cookie.highlighted = prevData?.[key]?.highlighted;
+          cookie.isDomainInAllowList = isDomainInAllowList;
+
+          return [key, cookie];
+        })
+      )
     );
-  }, [cookies]);
+  }, [cookies, domainsInAllowList]);
 
   const removeHighlights = useCallback(() => {
     setTableData((prev) =>
@@ -403,6 +438,14 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
     [getCookiesSetByJavascript]
   );
 
+  const cookieTableRef = useRef<React.ElementRef<typeof CookieTable> | null>(
+    null
+  );
+
+  const rowContextMenuRef = useRef<React.ElementRef<
+    typeof RowContextMenu
+  > | null>(null);
+
   return (
     <div className="w-full h-full flex flex-col">
       <Resizable
@@ -431,9 +474,19 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
           selectedFrameCookie={selectedFrameCookie}
           setSelectedFrameCookie={setSelectedFrameCookie}
           extraInterfaceToTopBar={extraInterfaceToTopBar}
+          onRowContextMenu={rowContextMenuRef.current?.onRowContextMenu}
+          ref={cookieTableRef}
         />
       </Resizable>
       <CookieDetails selectedFrameCookie={selectedFrameCookie} />
+      <RowContextMenu
+        domainsInAllowList={domainsInAllowList}
+        isIncognito={isIncognito}
+        tabUrl={tabUrl || ''}
+        setDomainsInAllowListCallback={setDomainsInAllowListCallback}
+        removeSelectedRow={cookieTableRef.current?.removeSelectedRow}
+        ref={rowContextMenuRef}
+      />
     </div>
   );
 };

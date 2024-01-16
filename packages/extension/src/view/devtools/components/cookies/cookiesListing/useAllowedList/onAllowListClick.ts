@@ -13,28 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import {
-  CookieStore,
-  type AllowedDomainObject,
-} from '@ps-analysis-tool/extension/src/localStore';
 
 /**
  * Internal dependencies.
  */
+import { CookieStore } from '../../../../../../localStore';
 import removeFromAllowList from './removeFromAllowList';
 
-const handleAllowListClick = async (
+const onAllowListClick = async (
   domainOrParentDomain: string,
   pageUrl: string,
   isIncognito: boolean,
   isDomainInAllowList: boolean,
   domainsInAllowList: Set<string>,
-  setDomainsInAllowList: (domainList: Set<string>) => void
+  setDomainsInAllowList: (list: Set<string>) => void
 ) => {
-  if (pageUrl === '' || domainOrParentDomain === '') {
+  if (!pageUrl || !domainOrParentDomain) {
     return;
   }
 
@@ -52,8 +46,8 @@ const handleAllowListClick = async (
     '/*';
 
   const scope = isIncognito ? 'incognito_session_only' : 'regular';
-  const domainObject: AllowedDomainObject = {
-    primaryDomain: domainOrParentDomain, // For finding parent domain.
+  const domainObject = {
+    primaryDomain: domainOrParentDomain,
     primaryPattern,
     secondaryPattern,
     scope,
@@ -86,27 +80,27 @@ const handleAllowListClick = async (
     })
   );
 
-  chrome.contentSettings.cookies
-    .set({
+  // The chrome-type definition is outdated,
+  // this returns a promise instead of a void.
+  try {
+    await chrome.contentSettings.cookies.set({
       primaryPattern,
       secondaryPattern,
       setting: 'session_only',
       scope,
-    })
-    // @ts-ignore - The chrome-type definition is outdated,
-    // this returns a promise instead of a void.
-    .then(() => {
-      domainsInAllowList.add(domainOrParentDomain);
-      setDomainsInAllowList(new Set([...domainsInAllowList]));
-      CookieStore.addDomainToAllowList(domainObject);
-    })
-    .catch((error: Error) => {
-      console.log(
-        error.message,
-        `Primary pattern: ${primaryPattern}`,
-        `Secondary pattern: ${secondaryPattern}`
-      );
     });
+
+    domainsInAllowList.add(domainOrParentDomain);
+    setDomainsInAllowList(new Set([...domainsInAllowList]));
+    CookieStore.addDomainToAllowList(domainObject);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log(
+      error,
+      `Primary pattern: ${primaryPattern}`,
+      `Secondary pattern: ${secondaryPattern}`
+    );
+  }
 };
 
-export default handleAllowListClick;
+export default onAllowListClick;
