@@ -22,7 +22,12 @@ import React, { useCallback, useState } from 'react';
  * Internal dependencies
  */
 import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
-import { Copy, InformationIcon } from '@ps-analysis-tool/design-system';
+import {
+  ArrowUp,
+  Copy,
+  InformationIcon,
+} from '@ps-analysis-tool/design-system';
+import classNames from 'classnames';
 
 const InformationContainer = () => {
   const { currentTabs, currentExtensions, browserInformation, OSInformation } =
@@ -34,6 +39,7 @@ const InformationContainer = () => {
     }));
 
   const [copying, setCopying] = useState(false);
+  const [open, setOpen] = useState(true);
 
   const handleCopy = useCallback(() => {
     setCopying(true);
@@ -65,13 +71,28 @@ const InformationContainer = () => {
   return (
     <div data-testid="Debugging information">
       <div>
-        <div className="flex items-center flex-row pl-3 mb-2 gap-x-1">
-          <InformationIcon className="text-white dark:text-mischka" />
-          <span className="text-base font-bold dark:text-white">
-            System Information
-          </span>
+        <div className="flex flex-row justify-between items-baseline">
+          <div className="flex items-center flex-row pl-3 mb-2 gap-x-1">
+            <InformationIcon className="text-white dark:text-mischka" />
+            <span className="text-base font-bold dark:text-white">
+              System Information
+            </span>
+          </div>
+          <button
+            className="flex gap-2 text-2xl font-bold items-baseline dark:text-bright-gray cursor-pointer"
+            onClick={() => setOpen((prevOpen) => !prevOpen)}
+          >
+            <ArrowUp
+              className={classNames(open && 'rotate-180 -translate-y-1')}
+            />
+          </button>
         </div>
-        <div className="relative rounded flex flex-col w-full px-4 pr-8 py-2 border border-american-silver dark:border-quartz gap-y-3">
+        <div
+          className={classNames(
+            { hidden: !open },
+            'relative rounded flex flex-col w-full px-4 pr-8 py-2 border border-american-silver dark:border-quartz gap-y-3'
+          )}
+        >
           <button
             disabled={copying}
             className="absolute right-1 top-1"

@@ -33,8 +33,14 @@ const Settings = () => {
       data-testid="extension-settings-content"
       className="h-full w-full flex flex-col min-w-[40rem]"
     >
-      <div className="border-b border-hex-gray dark:border-quartz">
-        <div className="p-4">
+      <div
+        className={`${!open && 'border-b border-hex-gray dark:border-quartz'}`}
+      >
+        <div
+          className={`p-4 ${
+            open && 'border-b border-hex-gray dark:border-quartz'
+          }`}
+        >
           <button
             className="flex gap-2 text-2xl font-bold items-baseline dark:text-bright-gray cursor-pointer"
             onClick={() => setOpen((prevOpen) => !prevOpen)}
