@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * Internal dependencies.
  */
 import {
   CookieStore,
   type AllowedDomainObject,
-} from '@ps-analysis-tool/extension/src/localStore';
+} from '../../../../../../localStore';
 
 /**
  * Remove object from allow list.

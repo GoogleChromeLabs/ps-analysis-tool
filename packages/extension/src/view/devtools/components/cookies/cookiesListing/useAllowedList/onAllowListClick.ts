@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/**
+ * Internal dependencies.
+ */
 import { CookieStore } from '../../../../../../localStore';
 import removeFromAllowList from './removeFromAllowList';
 
