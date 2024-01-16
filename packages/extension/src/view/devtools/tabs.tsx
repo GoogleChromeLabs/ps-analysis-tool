@@ -40,6 +40,8 @@ import {
   TopicsIconWhite,
   PrivacySandboxIcon,
   PrivacySandboxIconWhite,
+  SettingsTab,
+  SettingsTabWhite,
   type SidebarItems,
 } from '@ps-analysis-tool/design-system';
 
@@ -146,8 +148,8 @@ const TABS: SidebarItems = {
   settings: {
     title: 'PSAT Settings',
     panel: <Settings />,
-    icon: <PrivacySandboxIcon />,
-    selectedIcon: <PrivacySandboxIconWhite />,
+    icon: <SettingsTab />,
+    selectedIcon: <SettingsTabWhite />,
     dropdownOpen: false,
     children: {},
   },

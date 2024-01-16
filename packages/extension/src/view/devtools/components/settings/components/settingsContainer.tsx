@@ -23,6 +23,7 @@ import React from 'react';
  */
 import SettingOption from './settingOption';
 import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
+import { Gear } from '@ps-analysis-tool/design-system';
 
 const SettingsContainer = () => {
   const { allowedNumberOfTabs, isUsingCDP, setIsUsingCDP, setProcessingMode } =
@@ -35,7 +36,8 @@ const SettingsContainer = () => {
 
   return (
     <div data-testid="Settings">
-      <div className="flex flex-row pl-3 mb-2">
+      <div className="flex items-center flex-row pl-3 mb-2 gap-x-1">
+        <Gear className="text-white dark:text-mischka" />
         <span className="text-base font-bold dark:text-white">
           PSAT Extension Settings
         </span>

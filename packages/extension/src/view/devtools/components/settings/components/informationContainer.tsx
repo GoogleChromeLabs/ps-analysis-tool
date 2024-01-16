@@ -22,7 +22,7 @@ import React, { useCallback, useState } from 'react';
  * Internal dependencies
  */
 import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
-import { Copy } from '@ps-analysis-tool/design-system';
+import { Copy, InformationIcon } from '@ps-analysis-tool/design-system';
 
 const InformationContainer = () => {
   const { currentTabs, currentExtensions, browserInformation, OSInformation } =
@@ -65,7 +65,8 @@ const InformationContainer = () => {
   return (
     <div data-testid="Debugging information">
       <div>
-        <div className="flex flex-row pl-3 mb-2">
+        <div className="flex items-center flex-row pl-3 mb-2 gap-x-1">
+          <InformationIcon className="text-white dark:text-mischka" />
           <span className="text-base font-bold dark:text-white">
             System Information
           </span>
