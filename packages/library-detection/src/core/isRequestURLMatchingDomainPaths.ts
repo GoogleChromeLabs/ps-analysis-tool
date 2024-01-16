@@ -27,7 +27,7 @@ const isRequestURLMatchingDomainPaths = (
   requestUrl: string,
   domainPaths: DomainPaths
 ) => {
-  let url;
+  let url: URL;
 
   try {
     url = new URL(requestUrl);

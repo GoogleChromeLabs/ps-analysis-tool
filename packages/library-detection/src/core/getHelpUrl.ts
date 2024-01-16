@@ -13,10 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const getHelpUrl = (signature: string, helpUrls) => {
-  const helpUrl = helpUrls.find((item) => item.signature === signature);
+/**
+ * Internal dependencies.
+ */
+import { SignaturesConfigItem } from '../types';
 
-  return helpUrl ? helpUrl.url : '';
+const getHelpUrl = (signature: string, helpUrls: SignaturesConfigItem[]) => {
+  const matchingSignatureItem = helpUrls.find(
+    (item) => item.signature === signature
+  );
+
+  return matchingSignatureItem ? matchingSignatureItem.helpUrl : '';
 };
 
 export default getHelpUrl;

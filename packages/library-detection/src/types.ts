@@ -34,7 +34,7 @@ export interface Config {
 export type ScriptTagUnderCheck = {
   origin: string | null;
   content: string;
-  type: string | undefined;
+  type: string;
 };
 
 export type DetectedSignature = {
@@ -84,7 +84,7 @@ export type LibraryData = {
 export type ResourceTreeItem = {
   url: string;
   getContent: (callback: (content: string) => void) => void;
-  type?: string;
+  type: string;
 };
 
 export type AccordionProps = {
