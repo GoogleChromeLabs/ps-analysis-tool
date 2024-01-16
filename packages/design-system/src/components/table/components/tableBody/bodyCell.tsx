@@ -89,6 +89,19 @@ const BodyCell = ({
     <div
       tabIndex={0}
       onContextMenu={handleRightClick}
+      onDoubleClick={(e) => {
+        const target = e.target as HTMLElement;
+        const range = new Range();
+        range.selectNodeContents(target);
+
+        document.getSelection()?.removeAllRanges();
+        document.getSelection()?.addRange(range);
+      }}
+      onKeyDown={(e) => {
+        if (['Meta', 'Control', 'c'].includes(e.key)) {
+          e.stopPropagation();
+        }
+      }}
       style={{ maxWidth: width }}
       className={`box-border outline-0 px-1 py-px truncate h-5 text-xs ${
         isHighlighted
