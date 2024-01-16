@@ -22,7 +22,7 @@ import { useState, useCallback, useEffect } from 'react';
  * Internal dependencies.
  */
 import {
-  getNetworkScriptsFromResourceTree,
+  getNetworkResourcesWithContent,
   getResourcesWithContent,
 } from '../../utils';
 import { detectMatchingSignatures, sumUpDetectionResults } from '..';
@@ -66,7 +66,7 @@ const useLibraryDetection = () => {
 
   useEffect(() => {
     (async () => {
-      const scripts = await getNetworkScriptsFromResourceTree();
+      const scripts = await getNetworkResourcesWithContent();
       const detectMatchingSignaturesv1Results =
         detectMatchingSignatures(scripts);
 

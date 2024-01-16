@@ -19,7 +19,7 @@
 import { type ResourceTreeItem } from '../types';
 import { getResourcesWithContent } from './getResourcesWithContent';
 
-export const getNetworkScriptsFromResourceTree = async () => {
+export const getNetworkResourcesWithContent = async () => {
   const resources: ResourceTreeItem[] = await new Promise((resolve) => {
     chrome.devtools.inspectedWindow.getResources((_resources) =>
       resolve(_resources)
