@@ -8,9 +8,11 @@
 
 This repository is home to the Privacy Sandbox Analysis DevTools extension (PSAT), which is a tool aimed at assisting developers in preparing their websites for the changes that are happening in Chrome in the context of Privacy Sandbox, and ensuring a seamless transition to a more private web.
 
-# Learn about how to use PSAT
+# Learn how to use PSAT
 
-To start leveraging the capabilities of this tool, check out the repository [wiki page](https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki), which contains detailed information about analyzing and debugging specific scenarios, and will help you map them to the specifics of your site. 
+PSAT brings new and experimental capabilities to complement and expand Chrome DevTools and facilitate the analysis and debugging of sites in the context of PS. You can start by [installing and running PSAT](https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/Evaluation-Environment#installing-psat-from-chrome-web-store) right away! 
+
+And to learn everything about using PSAT, check out the repository's [wiki page](https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki), which contains detailed information about analyzing and debugging specific scenarios, and will help you map them to the specifics of your site. 
 
 # Call to Action
 

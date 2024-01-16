@@ -1,11 +1,12 @@
 {
 	"name": "ps-analysis-tool",
-	"version": "0.4.0",
+	"version": "0.4.1",
 	"description": "Cookie Analysis Tool and CLI for analysis and understanding of cookie usage on web pages.",
 	"scripts": {
 		"cli:prebuild": "node ./scripts/delete-build-artifacts.cjs",
 		"cli:dev": "tsc-watch --build",
 		"cli:build": "npm run cli:prebuild && tsc --build",
+		"cli-dashboard:start": "npm run dev --workspace=@ps-analysis-tool/cli-dashboard",
 		"cli-dashboard:dev": "npm run dev --workspace=@ps-analysis-tool/cli-dashboard",
 		"cli-dashboard:build": "npm run build --workspace=@ps-analysis-tool/cli-dashboard",
 		"cli": "node dist/cli/index.js",

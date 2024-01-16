@@ -25,10 +25,11 @@ import React, {
   useRef,
 } from 'react';
 import { noop } from '@ps-analysis-tool/design-system';
-import type {
-  TabCookies,
-  TabFrames,
-  CookieData,
+import {
+  type TabCookies,
+  type TabFrames,
+  type CookieData,
+  UNKNOWN_FRAME_KEY,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -90,6 +91,7 @@ const initialState: CookieStoreContext = {
 export const Context = createContext<CookieStoreContext>(initialState);
 
 export const Provider = ({ children }: PropsWithChildren) => {
+  // TODO: Refactor: create smaller providers and reduce state from here.
   const [tabId, setTabId] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const loadingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -120,6 +122,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [tabFrames, setTabFrames] =
     useState<CookieStoreContext['state']['tabFrames']>(null);
 
+  /**
+   * Set tab frames state for frame ids and frame URLs from using chrome.webNavigation.getAllFrames
+   *
+   * TODO: Refactor: move it to a utility function.
+   */
   const getAllFramesForCurrentTab = useCallback(
     async (_tabId: number | null) => {
       if (!_tabId) {
@@ -155,12 +162,18 @@ export const Provider = ({ children }: PropsWithChildren) => {
           return tabFrame;
         })
       );
-      modifiedTabFrames['Unknown Frame(s)'] = { frameIds: [] };
+      modifiedTabFrames[UNKNOWN_FRAME_KEY] = { frameIds: [] };
       setTabFrames(modifiedTabFrames);
     },
     []
   );
 
+  /**
+   * Sets current frames for sidebar, detected if the current tab is to be analysed,
+   * parses data currently in store, set current tab URL.
+   *
+   * TODO: Refactor: Break in smaller parts.
+   */
   const intitialSync = useCallback(async () => {
     const _tabId = chrome.devtools.inspectedWindow.tabId;
 
