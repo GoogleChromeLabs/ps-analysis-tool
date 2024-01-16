@@ -34,6 +34,7 @@ export interface Config {
 export type ScriptTagUnderCheck = {
   origin: string | null;
   content: string;
+  type: string | undefined;
 };
 
 export type DetectedSignature = {

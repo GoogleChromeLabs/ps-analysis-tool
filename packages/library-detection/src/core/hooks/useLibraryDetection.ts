@@ -25,7 +25,7 @@ import {
   getNetworkScriptsFromResourceTree,
   getResourcesWithContent,
 } from '../../utils';
-import { detectMatchingSignatures, sumUpDetectionResults } from '../../core';
+import { detectMatchingSignatures, sumUpDetectionResults } from '..';
 import type { LibraryData } from '../../types';
 
 const useLibraryDetection = () => {

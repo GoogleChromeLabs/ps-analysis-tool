@@ -16,16 +16,16 @@
 /**
  * Internal dependencies.
  */
-import { type ResourceTreeItem } from '../types';
-import { filterResources } from '../core';
+import { ScriptTagUnderCheck, type ResourceTreeItem } from '../types';
+import { getInlineScriptContent, filterResources } from '../core';
 
 export const getResourcesWithContent = async (
   resources: ResourceTreeItem[]
 ) => {
   const filteredResources = filterResources(resources);
 
-  const contentPromises = [];
-  const networkScripts = [];
+  const contentPromises: Promise<unknown>[] = [];
+  const resourcesWithOutContent: ScriptTagUnderCheck[] = [];
 
   filteredResources.forEach((resource) => {
     contentPromises.push(
@@ -33,18 +33,29 @@ export const getResourcesWithContent = async (
         resource.getContent((content: string) => resolve(content))
       )
     );
-    networkScripts.push({ origin: resource.url, content: '' });
+    resourcesWithOutContent.push({
+      origin: resource.url,
+      content: '',
+      type: resource.type,
+    });
   });
 
   const contents = await Promise.allSettled(contentPromises);
 
-  const resourcesWithContent = [];
+  const resourcesWithContent: ScriptTagUnderCheck[] = [];
 
-  networkScripts.forEach((networkScriptItem, index) => {
+  resourcesWithOutContent.forEach((networkScriptItem, index) => {
+    let content = contents[index]?.value; //TODO: get help to fix this type issue. In the run time this .value exists but type fails
+
+    if (networkScriptItem.type === 'document') {
+      content = getInlineScriptContent(contents[index]?.value).toString();
+    }
+
     if (contents[index].status === 'fulfilled') {
       resourcesWithContent.push({
         origin: networkScriptItem.origin,
-        content: contents[index].value, //TODO: get help to fix this type issue. In the run time this .value exists but type fails
+        content,
+        type: networkScriptItem.type,
       });
     }
   });

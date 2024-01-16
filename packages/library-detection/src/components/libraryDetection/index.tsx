@@ -29,14 +29,12 @@ import DynamicPlaceholder from './dynamicPlaceholder';
 import LIBRARIES from '../../config';
 import { Provider as LibraryDetectionProvider } from '../../stateProviders/librayDetectionContext';
 import type { Config } from '../../types';
-import useLibraryDetection from './useLibraryDetection';
+import { useLibraryDetection } from '../../core';
 
 // eslint-disable-next-line react/display-name
 const LibraryDetection = memo(function LibraryDetection() {
   const [libraryCount, setLibraryCount] = useState(0);
   const { libraryMatches } = useLibraryDetection();
-
-  console.log(libraryMatches, 'libraryMatches');
 
   useEffect(() => {
     const names = Object.keys(libraryMatches);

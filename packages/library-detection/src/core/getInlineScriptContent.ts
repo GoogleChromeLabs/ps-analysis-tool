@@ -13,10 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as isRequestURLMatchingDomainPaths } from './isRequestURLMatchingDomainPaths';
-export { default as detectMatchingSignatures } from './detectMatchingSignatures';
-export { default as getHelpUrl } from './getHelpUrl';
-export { default as sumUpDetectionResults } from './sumUpDetectionResults';
-export { default as filterResources } from './filterResources';
-export { default as getInlineScriptContent } from './getInlineScriptContent';
-export { default as useLibraryDetection } from './hooks/useLibraryDetection';
+
+const getInlineScriptContent = (content: string) => {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(content, 'text/html');
+
+  const inlineScripts = doc.querySelectorAll('script:not([src])');
+  const scriptContents = Array.from(inlineScripts).map(
+    (_script) => _script.textContent
+  );
+
+  return scriptContents;
+};
+
+export default getInlineScriptContent;
