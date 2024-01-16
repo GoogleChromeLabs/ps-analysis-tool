@@ -50,8 +50,8 @@ const GISAccordion = ({ matches }: AccordionProps) => {
           migrate
         </a>{' '}
         if necessary.
-        <FeatureList matches={matches} />
       </p>
+      <FeatureList matches={matches} />
     </Accordion>
   );
 };

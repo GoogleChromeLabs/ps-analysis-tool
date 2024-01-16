@@ -44,17 +44,19 @@ const GSIAccordion = ({ matches }: AccordionProps) => {
       isLoading={isLoading}
       featuresText={`${featuresCount} features`}
     >
-      The Google Sign-In JavaScript library is deprecated and is no longer
-      supported. Review the following features and consider{' '}
-      <a
-        className="text-medium-persian-blue"
-        href="https://developers.google.com/privacy-sandbox/3pcd/guides/identity#federated_identity"
-        target="_blank"
-        rel="noreferrer"
-      >
-        migrating
-      </a>{' '}
-      to a newer library if necessary.
+      <p>
+        The Google Sign-In JavaScript library is deprecated and is no longer
+        supported. Review the following features and consider{' '}
+        <a
+          className="text-medium-persian-blue"
+          href="https://developers.google.com/privacy-sandbox/3pcd/guides/identity#federated_identity"
+          target="_blank"
+          rel="noreferrer"
+        >
+          migrating
+        </a>{' '}
+        to a newer library if necessary.
+      </p>
       <FeatureList matches={matches} />
     </Accordion>
   );
