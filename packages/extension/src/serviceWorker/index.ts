@@ -261,6 +261,8 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
       await chrome.debugger.attach({ tabId }, '1.3');
       await chrome.debugger.sendCommand({ tabId }, 'Network.enable');
       await chrome.debugger.sendCommand({ tabId }, 'Audits.enable');
+    } else {
+      await chrome.debugger.detach({ tabId });
     }
   } catch (error) {
     //Fail silently
@@ -534,14 +536,6 @@ chrome.storage.sync.onChanged.addListener(
           }
 
           try {
-            await chrome.debugger.sendCommand(
-              { tabId: Number(key) },
-              'Network.disable'
-            );
-            await chrome.debugger.sendCommand(
-              { tabId: Number(key) },
-              'Audits.disable'
-            );
             await chrome.debugger.detach({ tabId: Number(key) });
           } catch (error) {
             // Fail silently
