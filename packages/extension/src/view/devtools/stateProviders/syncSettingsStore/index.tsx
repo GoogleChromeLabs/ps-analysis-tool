@@ -24,7 +24,6 @@ import React, {
   useCallback,
 } from 'react';
 import { noop } from '@ps-analysis-tool/design-system';
-import { CookieStore } from '../../../../localStore';
 
 enum PLATFORM_OS_MAP {
   mac = 'MacOS',
@@ -151,37 +150,15 @@ export const Provider = ({ children }: PropsWithChildren) => {
   }, []);
 
   const storeChangeListener = useCallback(
-    async (changes: { [key: string]: chrome.storage.StorageChange }) => {
+    (changes: { [key: string]: chrome.storage.StorageChange }) => {
       if (
         changes?.allowedNumberOfTabs &&
         changes?.allowedNumberOfTabs?.newValue
       ) {
         setAllowedNumberOfTabs(changes?.allowedNumberOfTabs?.newValue);
-        if (changes['allowedNumberOfTabs']?.newValue === 'single') {
-          chrome.tabs.query({}, (tabs) => {
-            tabs.forEach((tab) => {
-              chrome.action.setBadgeText({
-                tabId: tab?.id,
-                text: '',
-              });
-            });
-          });
-
-          await chrome.storage.local.clear();
-        } else {
-          chrome.tabs.query({}, (tabs) => {
-            tabs.forEach(async (tab) => {
-              if (!tab.id) {
-                return;
-              }
-              await CookieStore.addTabData(tab.id?.toString());
-              await chrome.tabs.reload(tab?.id);
-            });
-          });
-        }
       }
 
-      if (changes?.isUsingCDP) {
+      if (changes?.isUsingCDP && changes?.isUsingCDP?.newValue) {
         setIsUsingCDP(changes?.isUsingCDP?.newValue);
       }
     },

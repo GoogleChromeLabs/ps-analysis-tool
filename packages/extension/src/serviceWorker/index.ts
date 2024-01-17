@@ -511,6 +511,55 @@ chrome.storage.local.onChanged.addListener(
 chrome.storage.sync.onChanged.addListener(
   async (changes: { [key: string]: chrome.storage.StorageChange }) => {
     if (
+      !changes?.allowedNumberOfTabs ||
+      typeof changes?.allowedNumberOfTabs?.newValue === 'undefined'
+    ) {
+      return;
+    }
+
+    if (changes?.allowedNumberOfTabs?.newValue === 'single') {
+      PROMISE_QUEUE.clear();
+
+      await PROMISE_QUEUE.add(async () => {
+        const tabs = await chrome.tabs.query({});
+
+        await Promise.all(
+          tabs.map(async (tab) => {
+            if (!tab?.id) {
+              return;
+            }
+            await chrome.action.setBadgeText({
+              tabId: tab?.id,
+              text: '',
+            });
+          })
+        );
+
+        await chrome.storage.local.clear();
+      });
+    } else {
+      PROMISE_QUEUE.clear();
+
+      await PROMISE_QUEUE.add(async () => {
+        const tabs = await chrome.tabs.query({});
+
+        await Promise.all(
+          tabs.map(async (tab) => {
+            if (!tab?.id) {
+              return;
+            }
+            await CookieStore.addTabData(tab.id?.toString());
+            await chrome.tabs.reload(tab?.id);
+          })
+        );
+      });
+    }
+  }
+);
+
+chrome.storage.sync.onChanged.addListener(
+  async (changes: { [key: string]: chrome.storage.StorageChange }) => {
+    if (
       !changes?.isUsingCDP ||
       typeof changes?.isUsingCDP?.newValue === 'undefined'
     ) {
@@ -525,7 +574,8 @@ chrome.storage.sync.onChanged.addListener(
         isUsingCDP: changes?.isUsingCDP?.newValue,
       },
     });
-    if (!globalIsUsingCDP) {
+
+    if (!changes?.isUsingCDP?.newValue) {
       PROMISE_QUEUE.clear();
 
       await PROMISE_QUEUE.add(async () => {
