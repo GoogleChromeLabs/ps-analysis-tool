@@ -420,6 +420,7 @@ const listenToNewTab = (tabId?: number) => {
 
   syncCookieStore.addTabData(Number(newTabId), tabMode);
   syncCookieStore.updateDevToolsState(Number(newTabId), true);
+  syncCookieStore.updatePopUpState(Number(newTabId), true);
 
   return newTabId;
 };
@@ -465,7 +466,8 @@ chrome.runtime.onMessage.addListener(async (request) => {
       chrome.runtime.sendMessage({
         type: 'NEW_COOKIE_DATA',
         payload: {
-          tabId: Number(tabToRead),
+          tabId:
+            tabMode === 'single' ? Number(tabToRead) : request?.payload?.tabId,
           cookieData: JSON.stringify(
             syncCookieStore.cachedTabsData[Number(tabToRead)]
           ),
@@ -477,10 +479,12 @@ chrome.runtime.onMessage.addListener(async (request) => {
   }
 
   if (request?.type === 'POPUP_STATE_OPEN') {
+    const tabId = tabMode === 'single' ? tabToRead : request?.payload?.tabId;
     chrome.runtime.sendMessage({
       type: 'popup:TAB_TO_READ_DATA',
       payload: {
-        tabToRead: tabToRead,
+        tabId,
+        cookieData: JSON.stringify(syncCookieStore.cachedTabsData[tabId]),
       },
     });
     syncCookieStore.updatePopUpState(request?.payload?.tabId, true);

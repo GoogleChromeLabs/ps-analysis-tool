@@ -121,6 +121,7 @@ class SynchnorousCookieStore {
         this.cachedTabsData[tabId][cookieKey] = cookie;
       }
     }
+    globalThis.CDPData = this.cachedTabsData;
     updateCookieBadgeText(this.cachedTabsData[tabId], tabId);
     if (this.tabs[tabId].devToolsOpenState) {
       chrome.runtime.sendMessage({
@@ -131,7 +132,15 @@ class SynchnorousCookieStore {
         },
       });
     }
-    globalThis.CDPData = this.cachedTabsData;
+    if (this.tabs[tabId].popupOpenState) {
+      chrome.runtime.sendMessage({
+        type: 'popup:NEW_COOKIE_DATA',
+        payload: {
+          tabId: tabId,
+          cookieData: JSON.stringify(this.cachedTabsData[tabId]),
+        },
+      });
+    }
   }
 
   /**

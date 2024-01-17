@@ -237,6 +237,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         tabId?: number;
         cookieData?: string;
         tabToRead?: string;
+        tabProcessingMode: string;
       };
     }) => {
       if (message.type === 'syncCookieStore:SET_TAB_TO_READ') {
@@ -250,7 +251,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         setLoading(false);
       }
 
-      if (message.type === 'NEW_COOKIE_DATA') {
+      if (message.type === 'popup:NEW_COOKIE_DATA') {
         if (
           message?.payload?.tabId &&
           tabId?.toString() === message?.payload?.tabId.toString()
@@ -264,8 +265,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
       }
 
       if (message.type === 'popup:TAB_TO_READ_DATA') {
-        setIsCurrentTabBeingListenedTo(
-          tabId?.toString() === message?.payload?.tabToRead
+        if (allowedNumberOfTabs === 'single') {
+          setIsCurrentTabBeingListenedTo(
+            tabId?.toString() === message?.payload?.tabId
+          );
+        }
+        setTabCookieStats(
+          prepareCookiesCount(JSON.parse(message?.payload?.cookieData ?? '{}'))
         );
         setLoading(false);
       }
@@ -276,7 +282,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     return () => {
       chrome.runtime.onMessage.removeListener(listener);
     };
-  }, [setDebouncedStats, tabId]);
+  }, [setDebouncedStats, tabId, allowedNumberOfTabs]);
 
   const changeSyncStorageListener = useCallback(async () => {
     const extensionStorage = await chrome.storage.sync.get();
