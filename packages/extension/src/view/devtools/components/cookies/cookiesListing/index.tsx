@@ -84,6 +84,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
 
   useEffect(() => {
     chrome.storage.session.onChanged.addListener(removeHighlights);
+
     return () => {
       try {
         chrome.storage.session.onChanged.removeListener(removeHighlights);

@@ -18,18 +18,18 @@
  * External dependencies.
  */
 import React from 'react';
-
-/**
- * Internal dependencies.
- */
-import { useCookieStore } from '../../stateProviders/syncCookieStore';
-import CookiesListing from './cookiesListing';
 import {
   Button,
   CookiesLanding,
   ProgressBar,
 } from '@ps-analysis-tool/design-system';
 import type { CookieTableData } from '@ps-analysis-tool/common';
+
+/**
+ * Internal dependencies.
+ */
+import { useCookieStore } from '../../stateProviders/syncCookieStore';
+import CookiesListing from './cookiesListing';
 
 interface CookiesProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;

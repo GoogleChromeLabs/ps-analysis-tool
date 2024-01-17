@@ -18,11 +18,11 @@
  */
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
+import type { CompleteJson } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies
  */
-import type { CompleteJson } from '../../../types';
 import { createZip, getFolderName } from './utils';
 
 const generateSiteReportandDownload = async (
