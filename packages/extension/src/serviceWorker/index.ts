@@ -476,6 +476,20 @@ chrome.runtime.onMessage.addListener(async (request) => {
     syncCookieStore.updateDevToolsState(request?.payload?.tabId, true);
   }
 
+  if (request?.type === 'POPUP_STATE_OPEN') {
+    chrome.runtime.sendMessage({
+      type: 'popup:TAB_TO_READ_DATA',
+      payload: {
+        tabToRead: tabToRead,
+      },
+    });
+    syncCookieStore.updatePopUpState(request?.payload?.tabId, true);
+  }
+
+  if (request?.type === 'POPUP_STATE_CLOSE') {
+    syncCookieStore.updatePopUpState(request?.payload?.tabId, false);
+  }
+
   if (request?.type === 'DEVTOOLS_STATE_CLOSE') {
     if (!request?.payload?.tabId) {
       return;

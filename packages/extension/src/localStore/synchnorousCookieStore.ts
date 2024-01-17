@@ -41,7 +41,13 @@ class SynchnorousCookieStore {
   /**
    * Required data of the tabs.
    */
-  tabs: { [key: number]: { url: string; devToolsOpenState: boolean } } = {};
+  tabs: {
+    [key: number]: {
+      url: string;
+      devToolsOpenState: boolean;
+      popupOpenState: boolean;
+    };
+  } = {};
 
   /**
    * Update cookie store.
@@ -147,10 +153,25 @@ class SynchnorousCookieStore {
    */
   updateUrl(tabId: number, url: string) {
     if (!this.tabs[tabId]) {
-      this.tabs[tabId] = { url, devToolsOpenState: false };
+      this.tabs[tabId] = {
+        url,
+        devToolsOpenState: false,
+        popupOpenState: false,
+      };
     } else {
       this.tabs[tabId].url = url;
     }
+  }
+  /**
+   * Update Popup State for given tab
+   * @param {number} tabId The url whose tabId needs to be update.
+   * @param {boolean} state The updated devtools state.
+   */
+  updatePopUpState(tabId: number, state: boolean) {
+    if (!this.tabs[tabId]) {
+      return;
+    }
+    this.tabs[tabId].popupOpenState = state;
   }
 
   /**
@@ -260,10 +281,18 @@ class SynchnorousCookieStore {
   addTabData(tabId: number, tabProessingMode: string) {
     if (tabProessingMode && tabProessingMode !== 'unlimited') {
       this.cachedTabsData[tabId] = {};
-      this.tabs[tabId] = { url: '', devToolsOpenState: false };
+      this.tabs[tabId] = {
+        url: '',
+        devToolsOpenState: false,
+        popupOpenState: false,
+      };
     } else {
       this.cachedTabsData[tabId] = {};
-      this.tabs[tabId] = { url: '', devToolsOpenState: false };
+      this.tabs[tabId] = {
+        url: '',
+        devToolsOpenState: false,
+        popupOpenState: false,
+      };
     }
   }
 
@@ -273,6 +302,7 @@ class SynchnorousCookieStore {
    */
   removeTabData(tabId: number) {
     delete this.cachedTabsData[tabId];
+    delete this.tabs[tabId];
   }
 
   /**
