@@ -24,18 +24,22 @@ interface CookiesLandingContainerProps {
   showLandingHeader?: boolean;
   testId?: string | null;
   children?: React.ReactNode;
+  isUsingCDP?: boolean;
 }
 
 const CookiesLandingContainer = ({
   dataMapping = [],
   showLandingHeader = true,
   testId = 'cookie-landing-insights',
+  isUsingCDP = true,
   children,
 }: CookiesLandingContainerProps) => {
   return (
     <div className="w-full flex flex-col min-w-[40rem]">
       <div className="w-full min-w-[40rem]" data-testid={testId}>
-        {showLandingHeader && <LandingHeader dataMapping={dataMapping} />}
+        {showLandingHeader && (
+          <LandingHeader dataMapping={dataMapping} isUsingCDP={isUsingCDP} />
+        )}
         <div className="lg:max-w-[729px] mx-auto flex justify-center flex-col mt-2 pb-10 px-4">
           {children}
         </div>

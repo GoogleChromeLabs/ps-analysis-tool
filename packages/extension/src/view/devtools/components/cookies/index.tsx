@@ -57,8 +57,9 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
     changeListeningToThisTab: actions.changeListeningToThisTab,
   }));
 
-  const { allowedNumberOfTabs } = useSettingsStore(({ state }) => ({
+  const { allowedNumberOfTabs, isUsingCDP } = useSettingsStore(({ state }) => ({
     allowedNumberOfTabs: state.allowedNumberOfTabs,
+    isUsingCDP: state.isUsingCDP,
   }));
 
   if (
@@ -93,6 +94,7 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
             tabCookies={tabCookies}
             tabFrames={tabFrames}
             showBlockedCookiesSection
+            isUsingCDP={isUsingCDP}
           />
         )}
       </div>

@@ -30,9 +30,13 @@ export interface DataMapping {
 
 interface LandingHeaderProps {
   dataMapping?: DataMapping[];
+  isUsingCDP?: boolean;
 }
 
-const LandingHeader = ({ dataMapping = [] }: LandingHeaderProps) => {
+const LandingHeader = ({
+  dataMapping = [],
+  isUsingCDP = true,
+}: LandingHeaderProps) => {
   return (
     <div
       className="flex justify-center border-t border-hex-gray pt-5 pb-5 dark:border-quartz"
@@ -43,6 +47,7 @@ const LandingHeader = ({ dataMapping = [] }: LandingHeaderProps) => {
           return (
             <div key={index} className="text-center w-16">
               <CirclePieChart
+                isUsingCDP={isUsingCDP}
                 title={circleData.title}
                 centerCount={circleData.count}
                 data={circleData.data}
