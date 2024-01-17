@@ -43,8 +43,8 @@ const InformationContainer = () => {
 
   const handleCopy = useCallback(() => {
     copying.current = true;
-    let clipboardText = `<strong>Current Open Tabs:</strong> ${currentTabs}<br/>`;
-    clipboardText += `<strong>Current Installed and Active Extensions:</strong><br/>`;
+    let clipboardText = `<strong>Open Tabs:</strong> ${currentTabs}<br/>`;
+    clipboardText += `<strong>Active Extensions:</strong><br/>`;
     currentExtensions?.forEach((extension) => {
       clipboardText += `${extension.extensionName}: ${extension.extensionId}<br/>`;
     });
@@ -119,7 +119,7 @@ const InformationContainer = () => {
           <div className="flex flex-row gap-x-2 justify-between mt-4">
             <div className="flex flex-col">
               <span className="text-sm font-bold dark:text-bright-gray">
-                Current Open Tabs
+                Open Tabs
               </span>
               <span className="text-xs dark:text-bright-gray">
                 {currentTabs}
@@ -145,7 +145,7 @@ const InformationContainer = () => {
           <div className="flex flex-row">
             <div className="mt-1">
               <span className="text-sm font-bold dark:text-bright-gray">
-                Current Installed and Active Extensions
+                Active Extensions
               </span>
               <ul className="list-disc ml-4 mt-1">
                 {currentExtensions?.map((extension, index) => {
