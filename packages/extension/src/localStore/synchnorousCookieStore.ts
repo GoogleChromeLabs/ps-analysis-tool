@@ -49,6 +49,7 @@ class SynchnorousCookieStore {
    * @param {Array} cookies Cookies data.
    * @param {string }operation Only passed if cookie data needs to be cleared.
    */
+  // eslint-disable-next-line complexity
   update(tabId: number, cookies: CookieData[], operation?: string) {
     if (!this.cachedTabsData[tabId]) {
       return;
@@ -97,6 +98,7 @@ class SynchnorousCookieStore {
               ...(this.cachedTabsData[tabId][cookieKey].warningReasons ?? []),
             ])
           ),
+          url: this.cachedTabsData[tabId][cookieKey].url ?? cookie.url,
           headerType:
             this.cachedTabsData[tabId][cookieKey].headerType === 'javascript'
               ? this.cachedTabsData[tabId][cookieKey].headerType
@@ -123,6 +125,7 @@ class SynchnorousCookieStore {
         },
       });
     }
+    globalThis.CDPData = this.cachedTabsData;
   }
 
   /**
@@ -156,6 +159,9 @@ class SynchnorousCookieStore {
    * @param {boolean} state The updated devtools state.
    */
   updateDevToolsState(tabId: number, state: boolean) {
+    if (!this.tabs[tabId]) {
+      return;
+    }
     this.tabs[tabId].devToolsOpenState = state;
   }
   /**

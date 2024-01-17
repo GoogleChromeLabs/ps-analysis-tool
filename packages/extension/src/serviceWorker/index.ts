@@ -279,7 +279,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
  */
 // eslint-disable-next-line complexity
 chrome.debugger.onEvent.addListener((source, method, params) => {
-  if (ALLOWED_EVENTS.includes(method)) {
+  if (!ALLOWED_EVENTS.includes(method)) {
     return;
   }
 
@@ -374,6 +374,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
     const secondaryDomain = cookie?.domain.startsWith('.')
       ? cookie.domain.slice(1)
       : cookie?.domain;
+
     // Adding alternate domains here because our extension calculates domain differently that the application tab.
     // This is done to capture both NID.google.com/ and NIDgoogle.com/ so that if we find either of the cookie we add issues to the cookie object
     try {
