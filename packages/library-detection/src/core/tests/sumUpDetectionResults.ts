@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Internal dependencies.
+ */
 import { LibraryData } from '../../types';
 import sumUpDetectionResults from '../sumUpDetectionResults';
 

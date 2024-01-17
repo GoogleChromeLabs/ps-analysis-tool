@@ -22,13 +22,13 @@ import escapeStringRegexp from 'escape-string-regexp';
  * Internal dependencies.
  */
 import { getSourceLocation } from '../../utils';
+import { getHelpUrl } from '../../core';
+import type { DetectedSignature, ScriptTagUnderCheck } from '../../types';
 import {
   GIS_SIGNATURE_WEAK_MATCHES,
   GIS_SIGNATURE_STRONG_MATCHES,
   GIS_HELP_URL,
 } from './constants';
-import getHelpUrl from '../../core/getHelpUrl';
-import type { DetectedSignature, ScriptTagUnderCheck } from '../../types';
 
 const checkForGIS = (
   script: ScriptTagUnderCheck,

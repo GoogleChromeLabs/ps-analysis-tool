@@ -17,8 +17,7 @@
  * Internal dependencies.
  */
 import { LibraryData } from '../types';
-import sumUpGISMatches from '../libraries/gis/sumUpGISMatches';
-import sumUpGSIv2Matches from '../libraries/gsi/sumUpGSIv2Matches';
+import { sumUpGISMatches, sumUpGSIv2Matches } from '../libraries';
 
 const sumUpDetectionResults = (obj1: LibraryData, obj2: LibraryData) => {
   const resultObj: LibraryData = { ...obj1 };

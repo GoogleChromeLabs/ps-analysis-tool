@@ -17,19 +17,18 @@
  * External dependencies.
  */
 import escapeStringRegexp from 'escape-string-regexp';
-import type { DetectedSignature, ScriptTagUnderCheck } from '../../types';
 
 /**
  * Internal dependencies.
  */
 import { getSourceLocation } from '../../utils';
+import type { DetectedSignature, ScriptTagUnderCheck } from '../../types';
+import { getHelpUrl, isRequestURLMatchingDomainPaths } from '../../core';
 import {
   GSI_V2_SIGNATURE_WEAK_MATCHES,
   GSI_V2_SIGNATURE_STRONG_MATCHES,
   GSI_HELP_URL,
 } from './constants';
-import isRequestURLMatchingDomainPaths from '../../core/isRequestURLMatchingDomainPaths';
-import getHelpUrl from '../../core/getHelpUrl';
 
 const checkForGSIv2 = (
   script: ScriptTagUnderCheck,

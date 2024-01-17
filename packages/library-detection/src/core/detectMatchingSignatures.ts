@@ -16,8 +16,7 @@
 /**
  * Internal dependencies.
  */
-import { generateGSIV2Matches } from '../utils';
-import { checkForGIS, checkForGSIv2 } from '../libraries';
+import { checkForGIS, checkForGSIv2, generateGSIV2Matches } from '../libraries';
 import type { ScriptTagUnderCheck, LibraryData } from '../types';
 
 const originIsGoogle = (script: ScriptTagUnderCheck) => {
