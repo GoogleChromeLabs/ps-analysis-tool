@@ -43,22 +43,39 @@ const InformationContainer = () => {
 
   const handleCopy = useCallback(() => {
     copying.current = true;
-    let clipboardText = `Number of open tabs: ${currentTabs}\n`;
-    clipboardText += `Active extensions:\n`;
+    let clipboardText = `<strong>Current Open Tabs:</strong> ${currentTabs}<br/>`;
+    clipboardText += `<strong>Current Installed and Active Extensions:</strong><br/>`;
     currentExtensions?.forEach((extension) => {
-      clipboardText += `${extension.extensionName}: ${extension.extensionId}\n`;
+      clipboardText += `${extension.extensionName}: ${extension.extensionId}<br/>`;
     });
-    clipboardText += `Chrome Version: ${browserInformation}\n`;
-    clipboardText += `OS information: ${OSInformation}`;
+    clipboardText += `<strong>Chrome Version:</strong> ${browserInformation}<br/>`;
+    clipboardText += `<strong>OS - System Architecture:</strong> ${OSInformation}`;
 
     try {
       // Need to do this since chrome doesnt allow the clipboard access in extension.
-      const copyFrom = document.createElement('textarea');
+      const copyFrom = document.createElement('div');
       copyFrom.style.textAlign = 'left';
-      copyFrom.textContent = clipboardText;
+      copyFrom.contentEditable = 'true';
+
+      copyFrom.innerHTML = clipboardText;
+
       document.body.appendChild(copyFrom);
-      copyFrom.select();
+
+      const range = new Range();
+      range.selectNodeContents(copyFrom);
+      document.getSelection()?.removeAllRanges();
+      document.getSelection()?.addRange(range);
+
+      document.addEventListener('copy', (e) => {
+        e.clipboardData?.setData('text/html', clipboardText);
+        e.preventDefault();
+      });
       document.execCommand('copy');
+      document.removeEventListener('copy', (e) => {
+        e.clipboardData?.setData('text/html', clipboardText);
+        e.preventDefault();
+      });
+
       copyFrom.blur();
       document.body.removeChild(copyFrom);
       copying.current = false;
@@ -97,7 +114,7 @@ const InformationContainer = () => {
             className="absolute right-1 top-1"
             onClick={handleCopy}
           >
-            <Copy className="dark:text-white active:text-mishka active:dark:text-mischka" />
+            <Copy className="active:text-mischka dark:text-white active:dark:text-mischka" />
           </button>
           <div className="flex flex-row gap-x-2 justify-between mt-4">
             <div className="flex flex-col">
@@ -122,7 +139,7 @@ const InformationContainer = () => {
           <div className="flex flex-row">
             <div className="mt-1">
               <span className="text-sm font-bold dark:text-white">
-                Current Installed Extensions
+                Current Installed and Active Extensions
               </span>
               <ul className="list-disc ml-4 mt-1">
                 {currentExtensions?.map((extension, index) => {
