@@ -26,7 +26,7 @@ import findAnalyticsMatch from './findAnalyticsMatch';
 import isFirstParty from './isFirstParty';
 
 /**
- *
+ * Parses Network.requestWillBeSentExtraInfo to get extra information about a cookie.
  * @param {object} request Request to be parsed to get extra information about a cookie.
  * @param {object} cookieDB Cookie database to find analytics from.
  * @param {object} requestMap An object for requestId to url.

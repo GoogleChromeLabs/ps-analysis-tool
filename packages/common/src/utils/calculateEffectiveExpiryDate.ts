@@ -15,7 +15,8 @@
  */
 
 /**
- *
+ * Calculate effective expiry date for a cookie.
+ * For example we get expiration date as 1733319706, 1704961011.109784, -1 or empty etc.
  * @param date {Date | number | string | undefined} The date that needs to be converted for expiration.
  * @returns {string} The date of expiry for cookie.
  */
@@ -25,6 +26,7 @@ function calculateEffectiveExpiryDate(
   if (!date || date === -1) {
     return 'Session';
   }
+
   if (typeof date === 'number') {
     const stringSplitNumber = date.toString().split('.');
     const totalDecimalPlaces = stringSplitNumber[1]?.length || 0;
