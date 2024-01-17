@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useMemo } from 'react';
 
 /**
  * Internal dependencies
@@ -24,7 +24,14 @@ import React from 'react';
 import SettingOption from './settingOption';
 import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
 import { Gear } from '@ps-analysis-tool/design-system';
-
+import { HEADING_DESCRIPTION } from '../../../../../constants';
+interface settingsToReturnObject {
+  id: string;
+  heading: string;
+  switchState: boolean;
+  description: string;
+  changeSwitchState: (newState: boolean) => void;
+}
 const SettingsContainer = () => {
   const { allowedNumberOfTabs, isUsingCDP, setIsUsingCDP, setProcessingMode } =
     useSettingsStore(({ state, actions }) => ({
@@ -34,28 +41,54 @@ const SettingsContainer = () => {
       setIsUsingCDP: actions.setIsUsingCDP,
     }));
 
+  const memoisedSettings = useMemo(() => {
+    const settingsToReturn: settingsToReturnObject[] = [];
+
+    HEADING_DESCRIPTION.map((setting) => {
+      switch (setting.id) {
+        case 'enableCDP':
+          settingsToReturn.push({
+            ...setting,
+            changeSwitchState: setIsUsingCDP,
+            switchState: isUsingCDP,
+          });
+          break;
+        case 'multitabDebugging':
+          settingsToReturn.push({
+            ...setting,
+            changeSwitchState: setProcessingMode,
+            switchState: allowedNumberOfTabs === 'unlimited',
+          });
+          break;
+        default:
+          break;
+      }
+      return setting;
+    });
+
+    return settingsToReturn;
+  }, [allowedNumberOfTabs, isUsingCDP, setIsUsingCDP, setProcessingMode]);
+
   return (
     <div data-testid="Settings">
-      <div className="flex items-center flex-row pl-3 mb-2 gap-x-1">
-        <Gear className="text-white dark:text-mischka" />
-        <span className="text-base font-bold dark:text-white">
+      <div className="flex items-center flex-row pl-3 mb-2 gap-x-4">
+        <Gear className="dark:text-bright-gray" />
+        <span className="text-base font-bold dark:text-bright-gray">
           PSAT Extension Settings
         </span>
       </div>
       <div className="rounded w-full divide-y divide-hex-gray dark:divide-quartz px-2 border border-american-silver dark:border-quartz">
-        <SettingOption
-          title="Enable CDP"
-          switchState={isUsingCDP}
-          changeSwitchState={setIsUsingCDP}
-          description="The Chrome DevTools Protocol allows for tools to instrument, inspect, debug and profile Chromium,
-Chrome and other Blink-based browsers."
-        />
-        <SettingOption
-          title="Multitab Debugging"
-          switchState={allowedNumberOfTabs === 'unlimited'}
-          changeSwitchState={setProcessingMode}
-          description="By default, the PSAT tool analyzes one tab at a time. You can enable multi-tab debugging by toggling the appropriate option. However, be aware that this may slow down the extension's performance"
-        />
+        {memoisedSettings?.map((setting) => {
+          return (
+            <SettingOption
+              key={setting.id}
+              title={setting.heading}
+              switchState={setting.switchState}
+              changeSwitchState={setting.changeSwitchState}
+              description={setting.description}
+            />
+          );
+        })}
       </div>
     </div>
   );

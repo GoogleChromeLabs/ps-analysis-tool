@@ -88,9 +88,9 @@ const InformationContainer = () => {
     <div data-testid="Debugging information">
       <div>
         <div className="flex flex-row justify-between items-baseline">
-          <div className="flex items-center flex-row pl-3 mb-2 gap-x-1">
-            <InformationIcon className="text-white dark:text-mischka" />
-            <span className="text-base font-bold dark:text-white">
+          <div className="flex items-center flex-row pl-3 mb-2 gap-x-4">
+            <InformationIcon className="dark:text-bright-gray" />
+            <span className="text-base font-bold dark:text-bright-gray">
               System Information
             </span>
           </div>
@@ -114,37 +114,46 @@ const InformationContainer = () => {
             className="absolute right-1 top-1"
             onClick={handleCopy}
           >
-            <Copy className="active:text-mischka dark:text-white active:dark:text-mischka" />
+            <Copy className="active:text-mischka dark:text-bright-gray active:dark:text-mischka" />
           </button>
           <div className="flex flex-row gap-x-2 justify-between mt-4">
             <div className="flex flex-col">
-              <span className="text-sm font-bold dark:text-white">
+              <span className="text-sm font-bold dark:text-bright-gray">
                 Current Open Tabs
               </span>
-              <span className="text-xs text-mischka">{currentTabs}</span>
+              <span className="text-xs dark:text-bright-gray">
+                {currentTabs}
+              </span>
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-bold dark:text-white">
+              <span className="text-sm font-bold dark:text-bright-gray">
                 Chrome version
               </span>
-              <span className="text-xs text-mischka">{browserInformation}</span>
+              <span className="text-xs dark:text-bright-gray">
+                {browserInformation}
+              </span>
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-bold dark:text-white">
+              <span className="text-sm font-bold dark:text-bright-gray">
                 OS - System Architecture
               </span>
-              <span className="text-xs text-mischka">{OSInformation}</span>
+              <span className="text-xs dark:text-bright-gray">
+                {OSInformation}
+              </span>
             </div>
           </div>
           <div className="flex flex-row">
             <div className="mt-1">
-              <span className="text-sm font-bold dark:text-white">
+              <span className="text-sm font-bold dark:text-bright-gray">
                 Current Installed and Active Extensions
               </span>
               <ul className="list-disc ml-4 mt-1">
                 {currentExtensions?.map((extension, index) => {
                   return (
-                    <li className="text-xs text-mischka mt-1" key={index}>
+                    <li
+                      className="text-xs dark:text-bright-gray mt-1"
+                      key={index}
+                    >
                       {extension.extensionName}: {extension.extensionId}
                     </li>
                   );

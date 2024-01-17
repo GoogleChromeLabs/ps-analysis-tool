@@ -44,3 +44,17 @@ export const BLOCKED_REASON_LIST = [
   'ExcludeThirdPartyCookieBlockedInFirstPartySet',
   'ExcludeThirdPartyPhaseout',
 ];
+export const HEADING_DESCRIPTION = [
+  {
+    id: 'enableCDP',
+    heading: 'Enable CDP',
+    description:
+      'The Chrome DevTools Protocol allows for tools to instrument, inspect, debug and profile Chromium, Chrome and other Blink-based browsers.',
+  },
+  {
+    id: 'multitabDebugging',
+    heading: 'Multitab Debugging',
+    description:
+      "By default, the PSAT tool analyzes one tab at a time. You can enable multi-tab debugging by toggling the appropriate option. However, be aware that this may slow down the extension's performance",
+  },
+];

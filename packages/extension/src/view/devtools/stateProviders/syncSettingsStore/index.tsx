@@ -93,6 +93,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     const currentSettings = await chrome.storage.sync.get();
 
     setAllowedNumberOfTabs(currentSettings?.allowedNumberOfTabs);
+    setIsUsingCDP(currentSettings?.isUsingCDP);
 
     chrome.tabs.query({}, (tabs) => {
       setCurrentTabs(tabs.length);
@@ -158,7 +159,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         setAllowedNumberOfTabs(changes?.allowedNumberOfTabs?.newValue);
       }
 
-      if (changes?.isUsingCDP && changes?.isUsingCDP?.newValue) {
+      if (changes?.isUsingCDP) {
         setIsUsingCDP(changes?.isUsingCDP?.newValue);
       }
     },
