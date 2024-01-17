@@ -52,7 +52,7 @@ let tabToRead = '';
 const ALLOWED_EVENTS = [
   'Network.responseReceived',
   'Network.requestWillBeSentExtraInfo',
-  'Network.responseReceivedExtraInfor',
+  'Network.responseReceivedExtraInfo',
   'Audits.issueAdded',
 ];
 
@@ -263,6 +263,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   }
   if (details.reason === 'update') {
     const preSetSettings = await chrome.storage.sync.get();
+    tabMode = preSetSettings?.allowedNumberOfTabs ?? 'single';
     if (preSetSettings?.allowedNumberOfTabs) {
       return;
     }
