@@ -19,7 +19,7 @@
 import { GSI_V2_SIGNATURE_STRONG_MATCHES } from './constants';
 import type { DetectedSignature } from '../../types';
 
-export const generateGSIV2Matches = (
+const generateGSIV2Matches = (
   signatureMatches: number,
   matches: DetectedSignature[],
   gsiV2ModuleMatch: number

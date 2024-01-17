@@ -31,7 +31,7 @@ import {
 import isRequestURLMatchingDomainPaths from '../../core/isRequestURLMatchingDomainPaths';
 import getHelpUrl from '../../core/getHelpUrl';
 
-export const checkForGSIv2 = (
+const checkForGSIv2 = (
   script: ScriptTagUnderCheck,
   existingItems: DetectedSignature[],
   signatureMatches: number,
