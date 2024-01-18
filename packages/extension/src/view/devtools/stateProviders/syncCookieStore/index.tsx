@@ -39,6 +39,7 @@ import useContextSelector from '../../../../utils/useContextSelector';
 import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
 import setDocumentCookies from '../../../../utils/setDocumentCookies';
 import isOnRWS from '../../../../contentScript/utils/isOnRWS';
+import { useSettingsStore } from '../syncSettingsStore';
 
 export interface CookieStoreContext {
   state: {
@@ -49,7 +50,6 @@ export interface CookieStoreContext {
     selectedFrame: string | null;
     returningToSingleTab: boolean;
     isCurrentTabBeingListenedTo: boolean;
-    allowedNumberOfTabs: string | null;
     isInspecting: boolean;
     contextInvalidated: boolean;
     canStartInspecting: boolean;
@@ -73,7 +73,6 @@ const initialState: CookieStoreContext = {
     loading: true,
     isCurrentTabBeingListenedTo: false,
     returningToSingleTab: false,
-    allowedNumberOfTabs: null,
     isInspecting: false,
     contextInvalidated: false,
     canStartInspecting: false,
@@ -91,6 +90,7 @@ const initialState: CookieStoreContext = {
 export const Context = createContext<CookieStoreContext>(initialState);
 
 export const Provider = ({ children }: PropsWithChildren) => {
+  // TODO: Refactor: create smaller providers and reduce state from here.
   const [tabId, setTabId] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const loadingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -101,9 +101,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [returningToSingleTab, setReturningToSingleTab] =
     useState<CookieStoreContext['state']['returningToSingleTab']>(false);
 
-  const [allowedNumberOfTabs, setAllowedNumberOfTabs] = useState<string | null>(
-    null
-  );
+  const { allowedNumberOfTabs } = useSettingsStore(({ state }) => ({
+    allowedNumberOfTabs: state.allowedNumberOfTabs,
+  }));
 
   const [canStartInspecting, setCanStartInspecting] = useState<boolean>(false);
 
@@ -121,6 +121,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [tabFrames, setTabFrames] =
     useState<CookieStoreContext['state']['tabFrames']>(null);
 
+  /**
+   * Set tab frames state for frame ids and frame URLs from using chrome.webNavigation.getAllFrames
+   *
+   * TODO: Refactor: move it to a utility function.
+   */
   const getAllFramesForCurrentTab = useCallback(
     async (_tabId: number | null) => {
       if (!_tabId) {
@@ -162,6 +167,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
     []
   );
 
+  /**
+   * Sets current frames for sidebar, detected if the current tab is to be analysed,
+   * parses data currently in store, set current tab URL.
+   *
+   * TODO: Refactor: Break in smaller parts.
+   */
   const intitialSync = useCallback(async () => {
     const _tabId = chrome.devtools.inspectedWindow.tabId;
 
@@ -169,22 +180,8 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
     setTabId(_tabId);
 
-    const extensionStorage = await chrome.storage.sync.get();
-    const _allowedNumberOfTabs =
-      extensionStorage?.allowedNumberOfTabs || 'single';
-
-    if (!extensionStorage?.allowedNumberOfTabs) {
-      await chrome.storage.sync.clear();
-      await chrome.storage.sync.set({
-        ...extensionStorage,
-        allowedNumberOfTabs: 'single',
-      });
-    }
-
-    setAllowedNumberOfTabs(_allowedNumberOfTabs);
-
     if (_tabId) {
-      if (extensionStorage?.allowedNumberOfTabs === 'single') {
+      if (allowedNumberOfTabs === 'single') {
         const getTabBeingListenedTo = await chrome.storage.local.get();
         const availableTabs = await chrome.tabs.query({});
         if (
@@ -244,7 +241,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     );
 
     setLoading(false);
-  }, [getAllFramesForCurrentTab]);
+  }, [allowedNumberOfTabs, getAllFramesForCurrentTab]);
 
   const storeChangeListener = useCallback(
     async (changes: { [key: string]: chrome.storage.StorageChange }) => {
@@ -404,35 +401,20 @@ export const Provider = ({ children }: PropsWithChildren) => {
     }
   }, []);
 
-  const changeSyncStorageListener = useCallback(async () => {
-    const extensionStorage = await chrome.storage.sync.get();
-
-    if (extensionStorage?.allowedNumberOfTabs) {
-      setAllowedNumberOfTabs(extensionStorage?.allowedNumberOfTabs);
-    }
-  }, []);
-
   useEffect(() => {
     intitialSync();
   }, [intitialSync]);
 
   useEffect(() => {
     chrome.storage.local.onChanged.addListener(storeChangeListener);
-    chrome.storage.sync.onChanged.addListener(changeSyncStorageListener);
     chrome.tabs.onUpdated.addListener(tabUpdateListener);
     chrome.tabs.onRemoved.addListener(tabRemovedListener);
     return () => {
       chrome.storage.local.onChanged.removeListener(storeChangeListener);
       chrome.tabs.onUpdated.removeListener(tabUpdateListener);
       chrome.tabs.onRemoved.removeListener(tabRemovedListener);
-      chrome.storage.sync.onChanged.removeListener(changeSyncStorageListener);
     };
-  }, [
-    storeChangeListener,
-    tabUpdateListener,
-    tabRemovedListener,
-    changeSyncStorageListener,
-  ]);
+  }, [storeChangeListener, tabUpdateListener, tabRemovedListener]);
 
   useEffect(() => {
     loadingTimeout.current = setTimeout(() => {
@@ -457,7 +439,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
           selectedFrame,
           isCurrentTabBeingListenedTo,
           returningToSingleTab,
-          allowedNumberOfTabs,
           contextInvalidated,
           isInspecting,
           canStartInspecting,

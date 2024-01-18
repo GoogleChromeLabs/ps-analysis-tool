@@ -13,23 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * External dependencies.
- */
-import React from 'react';
-
-/**
- * Internal dependencies.
- */
-import AllowedNumberOfTabs from './allowedNumberOfTabs';
-
-const Settings = () => {
-  return (
-    <div className="w-fit h-full flex flex-col gap-5 px-5 py-2 border rounded">
-      <AllowedNumberOfTabs />
-    </div>
-  );
-};
-
-export default Settings;
+export { default as InformationContainer } from './informationContainer';
+export { default as SettingsContainer } from './settingsContainer';
