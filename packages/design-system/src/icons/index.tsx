@@ -62,3 +62,4 @@ export { default as InformationIcon } from './information-icon.svg';
 export { default as Gear } from './settings-gear.svg';
 export { default as SettingsTab } from './settings-tab.svg';
 export { default as SettingsTabWhite } from './settings-tab-white.svg';
+export { default as Done } from './done.svg';

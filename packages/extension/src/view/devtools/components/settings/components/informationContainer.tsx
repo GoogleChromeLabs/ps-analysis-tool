@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 /**
  * Internal dependencies
@@ -25,6 +25,7 @@ import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
 import {
   ArrowUp,
   Copy,
+  Done,
   InformationIcon,
 } from '@ps-analysis-tool/design-system';
 import classNames from 'classnames';
@@ -38,11 +39,24 @@ const InformationContainer = () => {
       OSInformation: state.OSInformation,
     }));
 
-  const copying = useRef(false);
+  const [copying, setCopying] = useState(false);
+  const timeOutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [open, setOpen] = useState(true);
 
+  useEffect(() => {
+    if (copying) {
+      timeOutRef.current = setTimeout(() => {
+        setCopying(false);
+      }, 200);
+    } else {
+      if (timeOutRef.current) {
+        clearTimeout(timeOutRef.current);
+      }
+    }
+  }, [copying]);
+
   const handleCopy = useCallback(() => {
-    copying.current = true;
+    setCopying(true);
     let clipboardText = `<strong>Open Tabs:</strong> ${currentTabs}<br/>`;
     clipboardText += `<strong>Active Extensions:</strong><br/>`;
     currentExtensions?.forEach((extension) => {
@@ -78,7 +92,6 @@ const InformationContainer = () => {
 
       copyFrom.blur();
       document.body.removeChild(copyFrom);
-      copying.current = false;
     } catch (error) {
       //Fail silently
     }
@@ -108,11 +121,15 @@ const InformationContainer = () => {
           )}
         >
           <button
-            disabled={copying.current}
+            disabled={copying}
             className="absolute right-1 top-1"
             onClick={handleCopy}
           >
-            <Copy className="active:text-mischka dark:text-bright-gray active:dark:text-mischka" />
+            {copying ? (
+              <Done className="active:text-mischka dark:text-bright-gray active:dark:text-mischka" />
+            ) : (
+              <Copy className="active:text-mischka dark:text-bright-gray active:dark:text-mischka" />
+            )}
           </button>
           <div className="flex flex-row gap-x-2 justify-between mt-4">
             <div className="flex flex-col">
