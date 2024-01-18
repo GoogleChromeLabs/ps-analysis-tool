@@ -22,7 +22,7 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { useSettingsStore } from '../../../../stateProviders/syncSettingsStore';
+import { useSettingsStore } from '../../../../../devtools/stateProviders/syncSettingsStore';
 
 const AllowedNumberOfTabs: React.FC = () => {
   const { allowedNumberOfTabs, setSettingsInStorage } = useSettingsStore(
