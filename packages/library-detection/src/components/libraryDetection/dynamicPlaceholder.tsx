@@ -33,12 +33,12 @@ const DynamicPlaceholder = () => {
       {!pageLoaded ? (
         <>
           <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />
-          <p className="text-center">
+          <p className="text-center dark:text-bright-gray">
             Checking libraries for any known breakages on the page....
           </p>
         </>
       ) : (
-        <p className="text-center">
+        <p className="text-center dark:text-bright-gray">
           No libraries with known breakages found yet!
         </p>
       )}

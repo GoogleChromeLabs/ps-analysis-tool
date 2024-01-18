@@ -33,7 +33,7 @@ const FeatureList = ({ matches }: FeatureListProps) => {
   }
 
   return (
-    <ul className="mt-2 list-disc pl-3">
+    <ul className="mt-2 list-disc pl-3 dark:text-bright-gray">
       {matches.map(({ feature }) => {
         if (feature.type !== 'link') {
           return null;
@@ -42,7 +42,7 @@ const FeatureList = ({ matches }: FeatureListProps) => {
         return (
           <li key={feature.text}>
             <a
-              className="text-medium-persian-blue"
+              className="text-bright-navy-blue dark:text-jordy-blue"
               target="_blank"
               href={feature.url}
               rel="noreferrer"

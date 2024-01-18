@@ -42,18 +42,20 @@ const AccordionHeading = ({
   return (
     <div
       onClick={() => setIsOpen(!isOpen)}
-      className=" hover:bg-gray-100 transition-colors flex py-3 cursor-pointer"
+      className="transition-colors flex py-3 cursor-pointer"
     >
       <span className="flex items-center px-2">
         <Ellipse />
       </span>
-      <p className="flex-1">
+      <p className="flex-1 dark:text-bright-gray">
         {title}
         {featuresText && (
-          <span className="text-gray ml-2">— {featuresText}</span>
+          <span className="text-gray ml-2 dark:text-bright-gray">
+            — {featuresText}
+          </span>
         )}
       </p>
-      <span className="flex items-center px-2">
+      <span className="flex items-center px-2 dark:text-bright-gray">
         {isOpen ? <ArrowUp /> : <ArrowDown />}
       </span>
       {loading && (

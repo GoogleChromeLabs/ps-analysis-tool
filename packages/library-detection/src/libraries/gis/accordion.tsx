@@ -39,11 +39,11 @@ const GSIAccordion = ({ matches }: AccordionProps) => {
       isLoading={isLoading}
       featuresText={`${featuresCount} features`}
     >
-      <p>
+      <p className="dark:text-bright-gray">
         The Google Sign-In JavaScript library is deprecated and is no longer
         supported. Review the following features and consider{' '}
         <a
-          className="text-medium-persian-blue"
+          className="text-bright-navy-blue dark:text-jordy-blue"
           href="https://developers.google.com/privacy-sandbox/3pcd/guides/identity#federated_identity"
           target="_blank"
           rel="noreferrer"
