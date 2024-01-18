@@ -87,22 +87,20 @@ const InformationContainer = () => {
   return (
     <div data-testid="Debugging information">
       <div>
-        <div className="flex flex-row justify-between items-baseline">
+        <button
+          className="w-full flex gap-2 justify-between text-2xl font-bold items-baseline dark:text-bright-gray cursor-pointer"
+          onClick={() => setOpen((prevOpen) => !prevOpen)}
+        >
           <div className="flex items-center flex-row pl-3 mb-2 gap-x-4">
             <InformationIcon className="dark:text-bright-gray" />
             <span className="text-base font-bold dark:text-bright-gray">
               System Information
             </span>
           </div>
-          <button
-            className="flex gap-2 text-2xl font-bold items-baseline dark:text-bright-gray cursor-pointer"
-            onClick={() => setOpen((prevOpen) => !prevOpen)}
-          >
-            <ArrowUp
-              className={classNames(open && 'rotate-180 -translate-y-1')}
-            />
-          </button>
-        </div>
+          <ArrowUp
+            className={classNames('mr-4', open && 'rotate-180 -translate-y-1')}
+          />
+        </button>
         <div
           className={classNames(
             { hidden: !open },
