@@ -14,16 +14,22 @@
  * limitations under the License.
  */
 
+import { Protocol } from 'puppeteer';
+
 export type Cookie = {
-  name: string;
-  domain: string;
-  path: string;
-  value: string;
-  sameSite: string;
-  expires: string | Date | number;
-  httpOnly: boolean;
-  secure: boolean;
+  parsedCookie: {
+    name: string;
+    domain: string;
+    path: string;
+    value: string;
+    sameSite: string;
+    expires: string | Date | number;
+    httpOnly: boolean;
+    secure: boolean;
+    partionKey: string | undefined;
+  };
   isBlocked?: boolean;
+  blockedReasons?: Protocol.Network.SetCookieBlockedReason[];
   platform?: string;
   description?: string;
   category?: string;
@@ -38,12 +44,6 @@ export type ViewportConfig = {
 };
 
 export type ResponseData = {
-  frameId: string;
-  serverUrl: string;
-  cookies: Cookie[];
-};
-
-export type RequestData = {
   frameId: string;
   serverUrl: string;
   cookies: Cookie[];

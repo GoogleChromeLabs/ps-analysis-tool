@@ -54,7 +54,7 @@ const generateSummaryDataCSV = (siteAnalysisData: CompleteJson): string => {
       affectedCookies += 1;
     }
 
-    switch (cookie.category) {
+    switch (cookie.analytics.category) {
       case 'Analytics':
         analyticsCookies += 1;
         if (cookie.isBlocked) {

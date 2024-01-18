@@ -86,6 +86,8 @@ const initialize = async () => {
 };
 
 const saveResults = async (outDir: string, result: CompleteJson[]) => {
+  console.log(outDir);
+
   await ensureFile(outDir + '/out.json');
   await writeFile(outDir + '/out.json', JSON.stringify(result, null, 4));
 };
@@ -217,7 +219,7 @@ const startDashboardServer = async (dir: string) => {
     } as CompleteJson;
   });
 
-  await saveResults(path.join(outputDir, prefix), result);
+  await saveResults(outputDir, result);
 
   if (outDir) {
     await saveCSVReports(path.join(outputDir, prefix), result);

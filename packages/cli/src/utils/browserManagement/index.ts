@@ -19,12 +19,11 @@
  */
 import puppeteer, { Browser, Page, Protocol } from 'puppeteer';
 import { parse } from 'simple-cookie';
-import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import { Cookie, RequestData, ResponseData, ViewportConfig } from './types';
+import { ResponseData, ViewportConfig } from './types';
 import { parseNetworkDataToCookieData } from './parseNetworkDataToCookieData';
 import delay from '../delay';
 
@@ -35,7 +34,6 @@ export class BrowserManagement {
   pageWaitTime: number;
   pageMap: Map<string, Page>;
   pageResponseMaps: Map<string, Map<string, ResponseData>>;
-  pageRequestMaps: Map<string, Map<string, RequestData>>;
   shouldLogDebug: boolean;
 
   constructor(
@@ -50,7 +48,6 @@ export class BrowserManagement {
     this.pageWaitTime = pageWaitTime;
     this.pageMap = new Map();
     this.pageResponseMaps = new Map();
-    this.pageRequestMaps = new Map();
     this.shouldLogDebug = shouldLogDebug;
   }
 
@@ -60,38 +57,19 @@ export class BrowserManagement {
     }
   }
 
-  async initializeBrowser(shouldBlock3pCookies: boolean) {
+  async initializeBrowser(enable3pCookiePhaseout: boolean) {
+    const args = [];
+
+    if (enable3pCookiePhaseout) {
+      args.push('--test-third-party-cookie-phaseout');
+    }
+
     this.browser = await puppeteer.launch({
       devtools: true,
       headless: this.isHeadless ? 'new' : false,
+      args,
     });
     this.debugLog('browser intialized');
-    if (shouldBlock3pCookies) {
-      await this.blockCookies();
-    }
-  }
-
-  async blockCookies() {
-    if (!this.browser) {
-      throw new Error('Browser not intialized');
-    }
-
-    const cookiesPage = await this.browser.newPage();
-    await cookiesPage.goto('chrome://settings/cookies');
-
-    const radioButton = await cookiesPage.$(
-      'settings-ui >>> settings-main >>> settings-basic-page >>> settings-section settings-privacy-page >>> settings-cookies-page >>> #blockThirdParty >>> #label'
-    );
-
-    if (radioButton) {
-      // @ts-ignore
-      await radioButton.evaluate((b) => b.click());
-    } else {
-      console.log('radio button not found');
-    }
-
-    await cookiesPage.close();
-    this.debugLog('3p cookies blocked');
   }
 
   async openPage(): Promise<Page> {
@@ -159,79 +137,51 @@ export class BrowserManagement {
 
     cdpSession.on(
       'Network.responseReceivedExtraInfo',
-      (response: Protocol.Network.ResponseReceivedExtraInfoEvent) => {
-        const allowedCookies: any[] = [];
-        const allCookies = response.headers['set-cookie']
-          ?.split('\n')
+      (event: Protocol.Network.ResponseReceivedExtraInfoEvent) => {
+        if (!event.headers['set-cookie']) {
+          return;
+        }
+        const cookies = event.headers['set-cookie']
+          .split('\n')
           .map((headerLine) => {
             const parsedCookie = parse(headerLine);
+            const partionKey = headerLine.includes('Partitioned')
+              ? event.cookiePartitionKey
+              : undefined;
+
+            const blockedEntry = event.blockedCookies.find((c) => {
+              return c.cookie?.name === parsedCookie.name;
+            });
+
             return {
-              name: parsedCookie.name,
-              domain: parsedCookie.domain,
-              path: parsedCookie.path || '/',
-              value: parsedCookie.value,
-              sameSite: parsedCookie.samesite || 'Lax',
-              expires: parsedCookie.expires || 'Session',
-              httpOnly: parsedCookie.httponly || false,
-              secure: parsedCookie.secure || false,
+              parsedCookie: {
+                name: parsedCookie.name,
+                domain: parsedCookie.domain,
+                path: parsedCookie.path || '/',
+                value: parsedCookie.value,
+                sameSite: parsedCookie.samesite || 'Lax',
+                expires: parsedCookie.expires || 'Session',
+                httpOnly: parsedCookie.httponly || false,
+                secure: parsedCookie.secure || false,
+                partionKey,
+              },
+              isBlocked: Boolean(blockedEntry),
+              blockedReasons: blockedEntry?.blockedReasons,
             };
           });
 
-        if (allCookies) {
-          allCookies.forEach((allCookie) => {
-            const foundInBlocked = response.blockedCookies.find((c) => {
-              return c.cookie?.name === allCookie.name;
-            });
+        const prevCookies = responseMap.get(event.requestId)?.cookies || [];
+        const mergedCookies = [...prevCookies, ...(cookies || [])];
 
-            if (!foundInBlocked) {
-              allowedCookies.push(allCookie);
-            }
-          });
-        }
-
-        const prevCookies = responseMap.get(response.requestId)?.cookies || [];
-        const mergedCookies = [...prevCookies, ...(allowedCookies || [])];
-
-        responseMap.set(response.requestId, {
-          frameId: responseMap.get(response.requestId)?.frameId || '',
-          serverUrl: responseMap.get(response.requestId)?.serverUrl || '',
+        responseMap.set(event.requestId, {
+          frameId: responseMap.get(event.requestId)?.frameId || '',
+          serverUrl: responseMap.get(event.requestId)?.serverUrl || '',
           // @ts-ignore TODO: fix expires type mismatch
           cookies: mergedCookies,
         });
       }
     );
 
-    const requestMap = new Map();
-    this.pageRequestMaps.set(pageId, requestMap);
-
-    cdpSession.on('Network.requestWillBeSent', (request) => {
-      requestMap.set(request.requestId, {
-        ...(requestMap.get(request.requestId) || {}),
-        frameId: request.frameId,
-        serverUrl: request.request.url,
-      });
-    });
-
-    cdpSession.on(
-      'Network.requestWillBeSentExtraInfo',
-      (request: Protocol.Network.RequestWillBeSentExtraInfoEvent) => {
-        if (
-          request.associatedCookies &&
-          request.associatedCookies.length !== 0
-        ) {
-          const cookies: Protocol.Network.Cookie[] = [];
-          request.associatedCookies.forEach(({ blockedReasons, cookie }) => {
-            if (blockedReasons.length === 0) {
-              cookies.push(cookie);
-            }
-          });
-          requestMap.set(request.requestId, {
-            ...(requestMap.get(request.requestId) || {}),
-            cookies,
-          });
-        }
-      }
-    );
     this.debugLog('done attaching network event listeners');
   }
 
@@ -263,7 +213,7 @@ export class BrowserManagement {
       await this.attachNetworkListenersToPage(url);
     }
 
-    //start navigation in parallel
+    // start navigation in parallel
     await Promise.all(
       urls.map(async (url) => {
         await this.navigateAndScroll(url);
@@ -271,81 +221,71 @@ export class BrowserManagement {
     );
 
     //parse cookie data in parallel
-    const result = await Promise.all(
-      urls.map(async (url) => {
-        const responseMap = this.pageResponseMaps.get(url);
-        const requestMap = this.pageRequestMaps.get(url);
-        const page = this.pageMap.get(url);
+    const result = urls.map((url) => {
+      const responseMap = this.pageResponseMaps.get(url);
+      const page = this.pageMap.get(url);
 
-        const frameIdUrlMap = this.getPageFrameIdToUrlMap(url);
-        // @ts-ignore
-        const mainFrameId = this.pageMap.get(url)?.mainFrame()._id;
+      const frameIdUrlMap = this.getPageFrameIdToUrlMap(url);
+      // @ts-ignore
+      const mainFrameId = this.pageMap.get(url)?.mainFrame()._id;
 
-        if (
-          !requestMap ||
-          !responseMap ||
-          !frameIdUrlMap ||
-          !mainFrameId ||
-          !page
-        ) {
-          return {
-            pageUrl: url,
-            cookieData: {},
-          };
-        }
-
-        const cookieDataFromNetwork = parseNetworkDataToCookieData(
-          responseMap,
-          requestMap,
-          frameIdUrlMap,
-          mainFrameId,
-          url
-        );
-
-        const networkCookieKeySet = new Set();
-
-        Object.values(cookieDataFromNetwork).forEach(({ frameCookies }) => {
-          Object.keys(frameCookies).forEach((key) => {
-            networkCookieKeySet.add(key);
-          });
-        });
-
-        //Get cookies from another API
-        const session = await page.createCDPSession();
-
-        const applicationCookies = (await session.send('Page.getCookies'))
-          .cookies;
-
-        const filteredApplicationCookies = applicationCookies.filter(
-          (cookie) =>
-            !networkCookieKeySet.has(
-              `${cookie.name}:${cookie.domain}:${cookie.path}`
-            )
-        );
-
-        const reshapedApplicationCookies = filteredApplicationCookies.reduce<{
-          [key: string]: Cookie;
-        }>((acc, cookie) => {
-          const key = `${cookie.name}:${cookie.domain}:${cookie.path}`;
-          acc[key] = cookie as Cookie;
-          return acc;
-        }, {});
-
-        // handles redirection
-        const pageUrl = page.url();
-
+      if (!responseMap || !frameIdUrlMap || !mainFrameId || !page) {
         return {
-          pageUrl,
-          cookieData: {
-            ...cookieDataFromNetwork,
-            [UNKNOWN_FRAME_KEY]: {
-              frameCookies: reshapedApplicationCookies,
-              cookiesCount: Object.keys(reshapedApplicationCookies).length,
-            },
-          },
+          pageUrl: url,
+          cookieData: {},
         };
-      })
-    );
+      }
+
+      const cookieDataFromNetwork = parseNetworkDataToCookieData(
+        responseMap,
+        frameIdUrlMap,
+        mainFrameId,
+        url
+      );
+
+      const networkCookieKeySet = new Set();
+
+      Object.values(cookieDataFromNetwork).forEach(({ frameCookies }) => {
+        Object.keys(frameCookies).forEach((key) => {
+          networkCookieKeySet.add(key);
+        });
+      });
+
+      //Get cookies from another API
+      // const session = await page.createCDPSession();
+
+      // const applicationCookies = (await session.send('Page.getCookies'))
+      //   .cookies;
+
+      // const filteredApplicationCookies = applicationCookies.filter(
+      //   (cookie) =>
+      //     !networkCookieKeySet.has(
+      //       `${cookie.name}:${cookie.domain}:${cookie.path}`
+      //     )
+      // );
+
+      // const reshapedApplicationCookies = filteredApplicationCookies.reduce<{
+      //   [key: string]: Cookie;
+      // }>((acc, cookie) => {
+      //   const key = `${cookie.name}:${cookie.domain}:${cookie.path}`;
+      //   acc[key] = cookie as Cookie;
+      //   return acc;
+      // }, {});
+
+      // handles redirection
+      const pageUrl = page.url();
+
+      return {
+        pageUrl,
+        cookieData: {
+          ...cookieDataFromNetwork,
+          // [UNKNOWN_FRAME_KEY]: {
+          //   frameCookies: reshapedApplicationCookies,
+          //   cookiesCount: Object.keys(reshapedApplicationCookies).length,
+          // },
+        },
+      };
+    });
 
     return result;
   }

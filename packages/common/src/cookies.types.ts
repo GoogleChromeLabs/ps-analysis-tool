@@ -43,15 +43,15 @@ export type CookiesCount = {
 };
 
 export type CookieAnalytics = {
-  platform: string;
-  category: string;
-  name: string;
-  domain: string;
-  description: string;
-  retention: string;
-  dataController: string;
-  gdprUrl: string;
-  wildcard: string;
+  platform?: string;
+  category?: string;
+  name?: string;
+  domain?: string;
+  description?: string;
+  retention?: string;
+  dataController?: string;
+  gdprUrl?: string;
+  wildcard?: string;
 };
 
 export type CookieDatabase = {
@@ -69,11 +69,11 @@ export type CookieData = {
     priority?: 'Low' | 'Medium' | 'High';
     size?: number;
   };
-  analytics: CookieAnalytics | null;
+  analytics?: CookieAnalytics | null;
   url: string;
-  headerType: 'response' | 'request' | 'javascript';
-  isFirstParty: boolean | null;
-  frameIdList: Array<number | string>;
+  headerType?: 'response' | 'request' | 'javascript';
+  isFirstParty?: boolean | null;
+  frameIdList?: Array<number | string>;
   blockedReasons?: BlockedReason[];
   warningReasons?: Protocol.Audits.CookieWarningReason[];
   isBlocked?: boolean | null;
@@ -143,20 +143,24 @@ export interface FramesWithCookies {
 }
 
 export type CookieJsonDataType = {
-  name: string;
-  value: string;
-  domain: string;
-  partitionKey?: string;
-  path: string;
-  expires: string;
-  httpOnly: boolean;
-  secure: boolean;
-  sameSite: string;
-  platform: string;
-  category: string;
-  description: string;
+  parsedCookie: {
+    name: string;
+    value: string;
+    domain: string;
+    partitionKey?: string;
+    path: string;
+    expires: string;
+    httpOnly: boolean;
+    secure: boolean;
+    sameSite: string;
+  };
+  analytics: {
+    platform: string;
+    category: string;
+    description: string;
+  };
   isFirstParty: boolean;
-  pageUrl: string;
+  url: string;
   requestUrls?: { [id: string]: string };
   frameUrls?: { [id: string]: string };
   isBlocked: boolean;
