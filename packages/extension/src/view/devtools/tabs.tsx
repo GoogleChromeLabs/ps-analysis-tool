@@ -146,7 +146,7 @@ const TABS: SidebarItems = {
     },
   },
   settings: {
-    title: 'PSAT Settings',
+    title: 'Settings',
     panel: <Settings />,
     icon: <SettingsTab />,
     selectedIcon: <SettingsTabWhite />,

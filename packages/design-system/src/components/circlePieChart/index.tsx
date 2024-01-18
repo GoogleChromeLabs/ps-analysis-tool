@@ -31,7 +31,6 @@ interface CirclePieChartProps {
   data: { count: number; color: string }[];
   title?: string;
   fallbackText?: string;
-  isUsingCDP?: boolean;
   infoIconClassName?: string;
 }
 
@@ -41,7 +40,6 @@ const CirclePieChart = ({
   centerCount,
   data,
   title,
-  isUsingCDP = true,
   infoIconClassName = '',
 }: CirclePieChartProps) => {
   const centerTitleClasses = centerCount <= MAX_COUNT ? 'text-2xl' : 'text-l';
@@ -77,11 +75,6 @@ const CirclePieChart = ({
           <p className="text-xs text-center font-semibold leading-relaxed dark:text-bright-gray">
             {title}
           </p>
-          {title === 'Blocked cookies' && !isUsingCDP && (
-            <span title="To gather data and insights regarding blocked cookies, please enable PSAT to use the Chrome DevTools protocol. You can do this in the Settings page or in the extension popup. For more information check the PSAT Wiki.">
-              <InfoIcon />
-            </span>
-          )}
           {title === '3rd Party Cookies' && (
             <p
               className={infoIconClassName}
