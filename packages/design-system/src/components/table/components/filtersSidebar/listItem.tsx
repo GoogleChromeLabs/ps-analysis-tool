@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ArrowDown,
   InfoIcon,
@@ -33,35 +33,50 @@ interface ListItemProps {
   filter: TableFilter[keyof TableFilter];
   filterKey: string;
   toggleFilterSelection: TableOutput['toggleFilterSelection'];
+  expandAll: boolean;
+  toggleFilterExpansion: (filterKey: string) => void;
 }
 
 const ListItem = ({
   filter,
   filterKey,
   toggleFilterSelection,
+  expandAll,
+  toggleFilterExpansion,
 }: ListItemProps) => {
   const [isExpanded, setExpanded] = useState<boolean>(false);
   const [showSubList, setShowSubList] = useState<boolean>(false);
 
-  const toggleShowMore = () => {
+  const toggleShowMore = useCallback(() => {
     setExpanded(!isExpanded);
-  };
+  }, [isExpanded]);
 
-  const toggleSubList = () => {
+  const toggleSubList = useCallback(() => {
     setShowSubList(!showSubList);
-  };
+    toggleFilterExpansion(filterKey);
+  }, [filterKey, showSubList, toggleFilterExpansion]);
 
-  const isDisabled = Object.keys(filter.filterValues || {}).length === 0;
+  useEffect(() => {
+    setShowSubList(expandAll);
+  }, [expandAll]);
+
+  const isDisabled = useMemo(
+    () => Object.keys(filter.filterValues || {}).length === 0,
+    [filter.filterValues]
+  );
 
   return (
     <li className="py-[3px] text-xs">
       <div className="flex gap-2 items-center">
         <button
-          className="flex items-center text-asteriod-black dark:text-bright-gray disabled:opacity-50"
+          className="flex items-center text-asteriod-black dark:text-bright-gray disabled:opacity-50 active:opacity-70"
           disabled={isDisabled}
           onClick={toggleSubList}
         >
-          <span className={`${showSubList && !isDisabled ? '' : '-rotate-90'}`}>
+          <span
+            className={`${showSubList && !isDisabled ? '' : '-rotate-90'}`}
+            data-testid="list-item-arrow"
+          >
             <ArrowDown />
           </span>
           <p className="ml-1 leading-normal font-semi-thick">{filter.title}</p>
