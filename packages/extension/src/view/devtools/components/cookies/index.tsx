@@ -23,7 +23,7 @@ import {
   CookiesLanding,
   ProgressBar,
 } from '@ps-analysis-tool/design-system';
-import { noop, type CookieTableData } from '@ps-analysis-tool/common';
+import { type CookieTableData } from '@ps-analysis-tool/common';
 import { useSettingsStore } from '../../stateProviders/syncSettingsStore';
 
 /**
@@ -34,13 +34,9 @@ import CookiesListing from './cookiesListing';
 
 interface CookiesProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;
-  updateSelectedItemKey?: (key: string | null) => void;
 }
 
-const Cookies = ({
-  setFilteredCookies,
-  updateSelectedItemKey = noop,
-}: CookiesProps) => {
+const Cookies = ({ setFilteredCookies }: CookiesProps) => {
   const {
     contextInvalidated,
     isCurrentTabBeingListenedTo,
@@ -89,14 +85,8 @@ const Cookies = ({
     const description = !isUsingCDP ? (
       <>
         To gather data and insights regarding blocked cookies, please enable
-        PSAT to use the Chrome DevTools protocol. You can do this in the&nbsp;
-        <button
-          className="text-bright-navy-blue dark:text-jordy-blue"
-          onClick={() => updateSelectedItemKey('settings')}
-        >
-          Settings page
-        </button>
-        &nbsp;or in the extension popup. For more information check the
+        PSAT to use the Chrome DevTools protocol. You can do this in the
+        Settings page or in the extension popup. For more information check the
         PSAT&nbsp;
         <a
           target="_blank"

@@ -171,10 +171,7 @@ const App: React.FC = () => {
       const psData = data['privacySandbox'];
 
       psData.children['cookies'].panel = (
-        <Cookies
-          updateSelectedItemKey={updateSelectedItemKey}
-          setFilteredCookies={setFilteredCookies}
-        />
+        <Cookies setFilteredCookies={setFilteredCookies} />
       );
       psData.children['cookies'].children = Object.keys(tabFrames || {}).reduce(
         (acc, url) => {
