@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useState, memo, useEffect } from 'react';
+import React, { useState, memo, useEffect, useCallback } from 'react';
 import {
   CookiesLandingContainer,
   COLOR_MAP,
@@ -61,6 +61,18 @@ const LibraryDetection = memo(function LibraryDetection() {
     libraryCount > 0
       ? 'Please review the following libraries or library features for known breakages.'
       : '';
+
+  const onTabUpdate = useCallback(() => {
+    setLibraryCount(0);
+  }, []);
+
+  useEffect(() => {
+    chrome.tabs.onUpdated.addListener(onTabUpdate);
+
+    return () => {
+      chrome.tabs.onUpdated.removeListener(onTabUpdate);
+    };
+  }, [onTabUpdate]);
 
   return (
     <CookiesLandingContainer
