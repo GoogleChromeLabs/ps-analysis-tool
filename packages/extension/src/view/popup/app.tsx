@@ -57,11 +57,13 @@ const App: React.FC = () => {
     changeListeningToThisTab: actions.changeListeningToThisTab,
   }));
 
+  const cdpLabel = isUsingCDP ? 'Disable CDP' : 'Enable CDP';
+
   if (onChromeUrl) {
     return (
       <>
         <ToggleSwitch
-          onLabel="Enable CDP"
+          onLabel={cdpLabel}
           additionalStyles="top-2 left-2 absolute"
           setEnabled={setIsUsingCDP}
           enabled={isUsingCDP}
@@ -93,7 +95,7 @@ const App: React.FC = () => {
     return (
       <>
         <ToggleSwitch
-          onLabel="Enable CDP"
+          onLabel={cdpLabel}
           additionalStyles="top-2 left-2 absolute"
           setEnabled={setIsUsingCDP}
           enabled={isUsingCDP}
@@ -115,7 +117,7 @@ const App: React.FC = () => {
     return (
       <>
         <ToggleSwitch
-          onLabel="Enable CDP"
+          onLabel={cdpLabel}
           additionalStyles="top-2 left-2 absolute"
           setEnabled={setIsUsingCDP}
           enabled={isUsingCDP}
@@ -132,7 +134,7 @@ const App: React.FC = () => {
   return (
     <>
       <ToggleSwitch
-        onLabel="Enable CDP"
+        onLabel={cdpLabel}
         additionalStyles="top-2 left-2 absolute"
         setEnabled={setIsUsingCDP}
         enabled={isUsingCDP}
