@@ -23,10 +23,11 @@ import React, { useMemo } from 'react';
  */
 import SettingOption from './settingOption';
 import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
-import { HEADING_DESCRIPTION } from '../../../../../constants';
 // @ts-ignore
 // eslint-disable-next-line import/no-relative-packages
 import Gear from '../../../../../../../../third_party/icons/gear.svg';
+import { SETTING_PAGE_CONTROLS } from '../../../../../constants';
+
 interface settingsToReturnObject {
   id: string;
   heading: string;
@@ -46,7 +47,7 @@ const SettingsContainer = () => {
   const memoisedSettings = useMemo(() => {
     const settingsToReturn: settingsToReturnObject[] = [];
 
-    HEADING_DESCRIPTION.map((setting) => {
+    SETTING_PAGE_CONTROLS.map((setting) => {
       switch (setting.id) {
         case 'enableCDP':
           settingsToReturn.push({

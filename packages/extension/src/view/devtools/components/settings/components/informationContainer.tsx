@@ -57,7 +57,9 @@ const InformationContainer = () => {
 
   const handleCopy = useCallback(() => {
     setCopying(true);
+
     let clipboardText = `<strong>Open Tabs:</strong> ${currentTabs}<br/>`;
+
     clipboardText += `<strong>Active Extensions:</strong><br/>`;
     currentExtensions?.forEach((extension) => {
       clipboardText += `${extension.extensionName}: ${extension.extensionId}<br/>`;
@@ -98,7 +100,7 @@ const InformationContainer = () => {
   }, [OSInformation, browserInformation, currentExtensions, currentTabs]);
 
   return (
-    <div data-testid="Debugging information">
+    <div data-testid="debugging-information">
       <div>
         <button
           className="w-full flex gap-2 justify-between text-2xl font-bold items-baseline dark:text-bright-gray cursor-pointer"

@@ -572,7 +572,7 @@ chrome.storage.sync.onChanged.addListener(
               return;
             }
             await CookieStore.addTabData(tab.id?.toString());
-            await chrome.tabs.reload(tab?.id);
+            await chrome.tabs.reload(Number(tab?.id));
           })
         );
       });
@@ -606,7 +606,7 @@ chrome.storage.sync.onChanged.addListener(
 
         await Promise.all(
           storedTabData.map(async (key) => {
-            if (key === 'tabToRead') {
+            if (!Number(key)) {
               return;
             }
 
@@ -629,9 +629,10 @@ chrome.storage.sync.onChanged.addListener(
 
         await Promise.all(
           storedTabData.map(async (key) => {
-            if (key === 'tabToRead') {
+            if (!Number(key)) {
               return;
             }
+
             await chrome.tabs.reload(Number(key), { bypassCache: true });
           })
         );

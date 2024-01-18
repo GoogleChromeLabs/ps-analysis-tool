@@ -44,7 +44,8 @@ export const BLOCKED_REASON_LIST = [
   'ExcludeThirdPartyCookieBlockedInFirstPartySet',
   'ExcludeThirdPartyPhaseout',
 ];
-export const HEADING_DESCRIPTION = [
+
+export const SETTING_PAGE_CONTROLS = [
   {
     id: 'enableCDP',
     heading: 'Enable CDP',
