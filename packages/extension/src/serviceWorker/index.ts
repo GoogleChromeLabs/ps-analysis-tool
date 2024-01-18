@@ -63,7 +63,7 @@ const ALLOWED_EVENTS = [
 
 /**
  * Fires when the browser receives a response from a web server.
- * @see https://developer.chrome.com/docs/extensions/reference/api/webRequest
+ * @see https://developer.chrome.com/docs/extensions/reference/webRequest/
  */
 chrome.webRequest.onResponseStarted.addListener(
   (details: chrome.webRequest.WebResponseCacheDetails) => {
@@ -242,7 +242,7 @@ chrome.tabs.onCreated.addListener(async (tab) => {
  * Fires when the tab is focused,
  * When a new window is opened,
  * Not when the tab is refreshed or a new website is opened.
- * @see https://developer.chrome.com/docs/extensions/reference/api/tabs#event-onActivated
+ * @see https://developer.chrome.com/docs/extensions/reference/tabs/#event-onActivated
  */
 chrome.tabs.onActivated.addListener(async (activeInfo) => {
   await PROMISE_QUEUE.add(async () => {
@@ -252,7 +252,7 @@ chrome.tabs.onActivated.addListener(async (activeInfo) => {
 
 /**
  * Fires when a tab is closed.
- * @see https://developer.chrome.com/docs/extensions/reference/api/tabs#event-onRemoved
+ * @see https://developer.chrome.com/docs/extensions/reference/tabs/#event-onRemoved
  */
 chrome.tabs.onRemoved.addListener(async (tabId) => {
   PROMISE_QUEUE.clear();
@@ -263,7 +263,7 @@ chrome.tabs.onRemoved.addListener(async (tabId) => {
 
 /**
  * Fires when a tab is updated.
- * @see https://developer.chrome.com/docs/extensions/reference/api/tabs#event-onUpdated
+ * @see https://developer.chrome.com/docs/extensions/reference/tabs/#event-onUpdated
  */
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   try {
@@ -287,7 +287,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 
 /**
  * Fires when a window is removed (closed).
- * @see https://developer.chrome.com/docs/extensions/reference/api/windows#event-onRemoved
+ * @see https://developer.chrome.com/docs/extensions/reference/windows/#event-onRemoved
  */
 chrome.windows.onRemoved.addListener(async (windowId) => {
   await PROMISE_QUEUE.add(async () => {
@@ -300,7 +300,7 @@ chrome.windows.onRemoved.addListener(async (windowId) => {
  * when clicked on the extension refresh button from chrome://extensions/
  * when the extension is updated to a new version,
  * when Chrome is updated to a new version.
- * @see https://developer.chrome.com/docs/extensions/reference/api/runtime#event-onInstalled
+ * @see https://developer.chrome.com/docs/extensions/reference/runtime/#event-onInstalled
  * @todo Shouldn't have to reinstall the extension.
  */
 chrome.runtime.onInstalled.addListener(async (details) => {
