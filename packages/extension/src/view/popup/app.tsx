@@ -62,7 +62,7 @@ const App: React.FC = () => {
       <>
         <ToggleSwitch
           onLabel="Enable CDP"
-          additionalStyles="top-1 left-1 absolute"
+          additionalStyles="top-2 left-2 absolute"
           setEnabled={setIsUsingCDP}
           enabled={isUsingCDP}
         />
@@ -94,7 +94,7 @@ const App: React.FC = () => {
       <>
         <ToggleSwitch
           onLabel="Enable CDP"
-          additionalStyles="top-1 left-1 absolute"
+          additionalStyles="top-2 left-2 absolute"
           setEnabled={setIsUsingCDP}
           enabled={isUsingCDP}
         />
@@ -116,7 +116,7 @@ const App: React.FC = () => {
       <>
         <ToggleSwitch
           onLabel="Enable CDP"
-          additionalStyles="top-1 left-1 absolute"
+          additionalStyles="top-2 left-2 absolute"
           setEnabled={setIsUsingCDP}
           enabled={isUsingCDP}
         />
@@ -133,7 +133,7 @@ const App: React.FC = () => {
     <>
       <ToggleSwitch
         onLabel="Enable CDP"
-        additionalStyles="top-1 left-1 absolute"
+        additionalStyles="top-2 left-2 absolute"
         setEnabled={setIsUsingCDP}
         enabled={isUsingCDP}
       />

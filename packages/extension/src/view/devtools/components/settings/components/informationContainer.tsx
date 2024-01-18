@@ -133,15 +133,13 @@ const InformationContainer = () => {
           </button>
           <div className="flex flex-row gap-x-2 justify-between mt-4">
             <div className="flex flex-col">
-              <span className="text-sm font-bold dark:text-bright-gray">
-                Open Tabs
-              </span>
+              <span className="text-sm dark:text-bright-gray">Open Tabs</span>
               <span className="text-xs text-darkest-gray dark:text-bright-gray">
                 {currentTabs}
               </span>
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-bold dark:text-bright-gray">
+              <span className="text-sm dark:text-bright-gray">
                 Chrome version
               </span>
               <span className="text-xs text-darkest-gray dark:text-bright-gray">
@@ -149,7 +147,7 @@ const InformationContainer = () => {
               </span>
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-bold dark:text-bright-gray">
+              <span className="text-sm dark:text-bright-gray">
                 OS - System Architecture
               </span>
               <span className="text-xs text-darkest-gray dark:text-bright-gray">
@@ -159,7 +157,7 @@ const InformationContainer = () => {
           </div>
           <div className="flex flex-row">
             <div className="mt-1">
-              <span className="text-sm font-bold dark:text-bright-gray">
+              <span className="text-sm dark:text-bright-gray">
                 Active Extensions
               </span>
               <ul className="list-disc ml-4 mt-1">

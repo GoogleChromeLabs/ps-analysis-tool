@@ -57,7 +57,7 @@ const ToggleSwitch = ({
           </span>
           {onLabel && (
             <span className="label flex items-center text-sm font-medium text-black">
-              {onLabel} <span className="pl-1"> {enabled ? 'On' : 'Off'} </span>
+              {onLabel}
             </span>
           )}
         </label>
