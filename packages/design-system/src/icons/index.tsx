@@ -58,3 +58,8 @@ export { default as StopIcon } from './stop-icon.svg';
 export { default as FilterIcon } from './filter-icon.svg';
 export { default as ClearIcon } from './clear-icon.svg';
 export { default as PaddedCross } from './padded-cross.svg';
+export { default as InformationIcon } from './information-icon.svg';
+export { default as Gear } from './gear.svg';
+export { default as SettingsTab } from './settings-tab.svg';
+export { default as SettingsTabWhite } from './settings-tab-white.svg';
+export { default as Done } from './done.svg';
