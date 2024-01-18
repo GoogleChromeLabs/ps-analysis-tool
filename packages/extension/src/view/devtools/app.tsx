@@ -218,7 +218,6 @@ const App: React.FC = () => {
     isSidebarFocused,
     setIsInspecting,
     tabFrames,
-    updateSelectedItemKey,
   ]);
 
   useEffect(() => {

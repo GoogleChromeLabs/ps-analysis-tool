@@ -199,6 +199,36 @@ describe('App', () => {
     expect((await screen.findAllByTestId('body-row')).length).toBe(4);
   });
 
+  it('Should show refresh banner if context invalidated.', async () => {
+    mockUseCookieStore.mockReturnValue({
+      contextInvalidated: true,
+      setContextInvalidated: noop,
+      tabCookies: {},
+      tabFrames: null,
+      selectedFrame: null,
+      cookies: {},
+      setSelectedFrame: noop,
+      isInspecting: false,
+      setIsInspecting: noop,
+      canStartInspecting: true,
+      tabUrl: data.tabUrl,
+      isCurrentTabBeingListenedTo: true,
+    });
+    mockUseTablePersistentSettingStore.mockReturnValue({
+      getPreferences: () => '',
+      setPreferences: noop,
+    });
+    mockUseSettingsStore.mockReturnValue({
+      allowedNumberOfTabs: 'single',
+    });
+
+    act(() => {
+      render(<App />);
+    });
+
+    expect(await screen.findByText('Refresh panel')).toBeInTheDocument();
+  });
+
   afterAll(() => {
     globalThis.chrome = undefined as unknown as typeof chrome;
     globalThis.fetch = undefined as unknown as typeof fetch;
