@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import { ScriptTagUnderCheck, type ResourceTreeItem } from '../types';
+import { ScriptTagUnderCheck, ResourceTreeItem } from '../types';
 import { getInlineScriptContent, filterResources } from '../core';
 
 export const getResourcesWithContent = async (
@@ -36,7 +36,7 @@ export const getResourcesWithContent = async (
     resourcesWithOutContent.push({
       origin: resource.url,
       content: '',
-      type: resource.type,
+      type: resource?.type,
     });
   });
 
@@ -45,10 +45,12 @@ export const getResourcesWithContent = async (
   const resourcesWithContent: ScriptTagUnderCheck[] = [];
 
   resourcesWithOutContent.forEach((networkScriptItem, index) => {
-    let content = contents[index]?.value; //TODO: get help to fix this type issue. In the run time this .value exists but type fails
+    let content = (contents[index] as PromiseFulfilledResult<string>)?.value;
 
     if (networkScriptItem.type === 'document') {
-      content = getInlineScriptContent(contents[index]?.value).toString();
+      content = getInlineScriptContent(
+        (contents[index] as PromiseFulfilledResult<string>)?.value
+      ).toString();
     }
 
     if (contents[index].status === 'fulfilled') {

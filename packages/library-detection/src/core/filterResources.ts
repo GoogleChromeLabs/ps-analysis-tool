@@ -20,7 +20,7 @@ import { ResourceTreeItem } from '../types';
 
 const filterResources = (inputResources: ResourceTreeItem[]) => {
   return inputResources
-    .filter((i) => ['script', 'document'].includes(i.type))
+    .filter((i: ResourceTreeItem) => ['script', 'document'].includes(i.type))
     .filter(
       (i) =>
         !i.url.includes('chrome-extension://') && !i.url.includes('debugger://')

@@ -36,6 +36,7 @@ export const GIS_SIGNATURE_WEAK_MATCHES = [
   },
   {
     signature: 'PromptMomentNotification',
+    helpUrl: '',
   },
   {
     signature: 'opt_out_or_no_session',

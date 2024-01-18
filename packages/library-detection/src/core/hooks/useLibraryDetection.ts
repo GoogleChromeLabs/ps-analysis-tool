@@ -26,7 +26,7 @@ import {
   getResourcesWithContent,
 } from '../../utils';
 import { detectMatchingSignatures, sumUpDetectionResults } from '..';
-import type { LibraryData } from '../../types';
+import type { LibraryData, ResourceTreeItem } from '../../types';
 
 const useLibraryDetection = () => {
   const initialState: LibraryData = {
@@ -44,7 +44,7 @@ const useLibraryDetection = () => {
   const [libraryMatches, setLibraryMatches] = useState(initialState);
 
   const listenerCallback = useCallback(
-    async (resource) => {
+    async (resource: ResourceTreeItem) => {
       const realtimeComputationResult = detectMatchingSignatures(
         await getResourcesWithContent([resource])
       );
