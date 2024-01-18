@@ -16,13 +16,14 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 
 /**
  * Internal dependencies.
  */
 import ListItem from './listItem';
 import type { TableFilter, TableOutput } from '../../useTable';
+import { ArrowDown } from '../../../../icons';
 
 interface FiltersSidebarProps {
   filters: TableFilter;
@@ -33,12 +34,70 @@ const FiltersSidebar = ({
   filters,
   toggleFilterSelection,
 }: FiltersSidebarProps) => {
+  const [expandAll, setExpandAll] = useState(false);
+  const expandedFilters = useRef(new Set<string>());
+
+  const toggleFilterExpansion = useCallback(
+    (filterKey: string) => {
+      const newSet = new Set(expandedFilters.current);
+
+      if (newSet.has(filterKey)) {
+        newSet.delete(filterKey);
+      } else {
+        newSet.add(filterKey);
+      }
+
+      if (newSet.size === 0) {
+        setExpandAll(false);
+      }
+
+      if (newSet.size === Object.keys(filters).length) {
+        setExpandAll(true);
+      }
+
+      expandedFilters.current = newSet;
+    },
+    [filters]
+  );
+
   if (!Object.keys(filters).length) {
     return null;
   }
 
   return (
-    <div className="h-full overflow-auto p-3" data-testid="filters-sidebar">
+    <div
+      className="h-full overflow-auto p-3 flex flex-col gap-1"
+      data-testid="filters-sidebar"
+    >
+      <div className="flex gap-2 items-center mb-[3px]">
+        <button
+          className="flex items-center text-asteriod-black dark:text-bright-gray active:opacity-70"
+          onClick={() => {
+            setExpandAll((prev) => {
+              const newExpandAll = !prev;
+
+              if (newExpandAll) {
+                expandedFilters.current = new Set(Object.keys(filters));
+              } else {
+                expandedFilters.current = new Set();
+              }
+
+              return newExpandAll;
+            });
+          }}
+        >
+          <span
+            className={`${expandAll ? '' : '-rotate-90'}`}
+            data-testid="expand-arrow"
+          >
+            <ArrowDown />
+          </span>
+          <p className="ml-1 leading-normal font-semi-thick">
+            Expand/Collapse All
+          </p>
+        </button>
+      </div>
+      <hr />
       <ul>
         {Object.entries(filters).map(([filterKey, filter]) => (
           <ListItem
@@ -46,6 +105,8 @@ const FiltersSidebar = ({
             filter={filter}
             filterKey={filterKey}
             toggleFilterSelection={toggleFilterSelection}
+            expandAll={expandAll}
+            toggleFilterExpansion={toggleFilterExpansion}
           />
         ))}
       </ul>
