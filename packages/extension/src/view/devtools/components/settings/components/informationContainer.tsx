@@ -121,7 +121,7 @@ const InformationContainer = () => {
               <span className="text-sm font-bold dark:text-bright-gray">
                 Open Tabs
               </span>
-              <span className="text-xs dark:text-bright-gray">
+              <span className="text-xs text-darkest-gray dark:text-bright-gray">
                 {currentTabs}
               </span>
             </div>
@@ -129,7 +129,7 @@ const InformationContainer = () => {
               <span className="text-sm font-bold dark:text-bright-gray">
                 Chrome version
               </span>
-              <span className="text-xs dark:text-bright-gray">
+              <span className="text-xs text-darkest-gray dark:text-bright-gray">
                 {browserInformation}
               </span>
             </div>
@@ -137,7 +137,7 @@ const InformationContainer = () => {
               <span className="text-sm font-bold dark:text-bright-gray">
                 OS - System Architecture
               </span>
-              <span className="text-xs dark:text-bright-gray">
+              <span className="text-xs text-darkest-gray dark:text-bright-gray">
                 {OSInformation}
               </span>
             </div>
@@ -151,7 +151,7 @@ const InformationContainer = () => {
                 {currentExtensions?.map((extension, index) => {
                   return (
                     <li
-                      className="text-xs dark:text-bright-gray mt-1"
+                      className="text-xs text-darkest-gray dark:text-bright-gray mt-1"
                       key={index}
                     >
                       {extension.extensionName}: {extension.extensionId}
