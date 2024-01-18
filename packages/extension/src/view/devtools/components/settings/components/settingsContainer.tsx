@@ -23,8 +23,10 @@ import React, { useMemo } from 'react';
  */
 import SettingOption from './settingOption';
 import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
-import { Gear } from '@ps-analysis-tool/design-system';
 import { HEADING_DESCRIPTION } from '../../../../../constants';
+// @ts-ignore
+// eslint-disable-next-line import/no-relative-packages
+import Gear from '../../../../../../../../third_party/icons/gear.svg';
 interface settingsToReturnObject {
   id: string;
   heading: string;

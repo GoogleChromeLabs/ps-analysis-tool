@@ -41,13 +41,17 @@ import {
   PrivacySandboxIcon,
   PrivacySandboxIconWhite,
   type SidebarItems,
-  SettingsTab,
-  SettingsTabWhite,
 } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
+// @ts-ignore
+// eslint-disable-next-line import/no-relative-packages
+import SettingsTab from '../../../../../third_party/icons/settings-tab.svg';
+// @ts-ignore
+// eslint-disable-next-line import/no-relative-packages
+import SettingsTabWhite from '../../../../../third_party/icons/settings-tab-white.svg';
 import {
   SiteBoundaries,
   Chips,

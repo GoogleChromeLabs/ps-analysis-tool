@@ -17,18 +17,18 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-
+import { ArrowUp, Copy } from '@ps-analysis-tool/design-system';
+import classNames from 'classnames';
 /**
  * Internal dependencies
  */
 import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
-import {
-  ArrowUp,
-  Copy,
-  Done,
-  InformationIcon,
-} from '@ps-analysis-tool/design-system';
-import classNames from 'classnames';
+// @ts-ignore
+// eslint-disable-next-line import/no-relative-packages
+import InformationIcon from '../../../../../../../../third_party/icons/information-icon.svg';
+// @ts-ignore
+// eslint-disable-next-line import/no-relative-packages
+import Done from '../../../../../../../../third_party/icons/done.svg';
 
 const InformationContainer = () => {
   const { currentTabs, currentExtensions, browserInformation, OSInformation } =
