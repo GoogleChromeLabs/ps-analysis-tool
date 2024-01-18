@@ -41,6 +41,8 @@ import {
   PrivacySandboxIcon,
   PrivacySandboxIconWhite,
   type SidebarItems,
+  SettingsTab,
+  SettingsTabWhite,
 } from '@ps-analysis-tool/design-system';
 
 /**
@@ -57,6 +59,7 @@ import {
   BounceTracking,
   Fingerprinting,
   PrivacySandbox,
+  Settings,
 } from './components';
 
 const TABS: SidebarItems = {
@@ -141,6 +144,14 @@ const TABS: SidebarItems = {
         },
       },
     },
+  },
+  settings: {
+    title: 'Settings',
+    panel: <Settings />,
+    icon: <SettingsTab />,
+    selectedIcon: <SettingsTabWhite />,
+    dropdownOpen: false,
+    children: {},
   },
 };
 
