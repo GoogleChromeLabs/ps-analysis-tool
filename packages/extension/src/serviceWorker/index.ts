@@ -602,30 +602,35 @@ chrome.storage.sync.onChanged.addListener(
 
       await PROMISE_QUEUE.add(async () => {
         const storedTabData = Object.keys(await chrome.storage.local.get());
-        storedTabData.forEach(async (key) => {
-          if (key === 'tabToRead') {
-            return;
-          }
+        await Promise.all(
+          storedTabData.map(async (key) => {
+            if (key === 'tabToRead') {
+              return;
+            }
 
-          try {
-            await chrome.debugger.detach({ tabId: Number(key) });
-          } catch (error) {
-            // Fail silently
-          } finally {
-            await chrome.tabs.reload(Number(key), { bypassCache: true });
-          }
-        });
+            try {
+              await chrome.debugger.detach({ tabId: Number(key) });
+              await CookieStore.removeTabData(key);
+            } catch (error) {
+              // Fail silently
+            } finally {
+              await chrome.tabs.reload(Number(key), { bypassCache: true });
+            }
+          })
+        );
       });
     } else {
       PROMISE_QUEUE.clear();
       await PROMISE_QUEUE.add(async () => {
         const storedTabData = Object.keys(await chrome.storage.local.get());
-        storedTabData.forEach(async (key) => {
-          if (key === 'tabToRead') {
-            return;
-          }
-          await chrome.tabs.reload(Number(key), { bypassCache: true });
-        });
+        await Promise.all(
+          storedTabData.map(async (key) => {
+            if (key === 'tabToRead') {
+              return;
+            }
+            await chrome.tabs.reload(Number(key), { bypassCache: true });
+          })
+        );
       });
     }
   }
