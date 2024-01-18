@@ -24,7 +24,6 @@ import React, {
   useCallback,
 } from 'react';
 import { noop } from '@ps-analysis-tool/design-system';
-import { CookieStore } from '../../../../localStore';
 
 enum PLATFORM_OS_MAP {
   mac = 'MacOS',
@@ -48,9 +47,11 @@ export interface SettingStoreContext {
       | null;
     browserInformation: string | null;
     OSInformation: string | null;
+    isUsingCDP: boolean;
   };
   actions: {
-    setSettingsInStorage: (key: string, value: string) => void;
+    setProcessingMode: (newState: boolean) => void;
+    setIsUsingCDP: (newValue: boolean) => void;
   };
 }
 
@@ -61,9 +62,11 @@ const initialState: SettingStoreContext = {
     currentExtensions: null,
     browserInformation: null,
     OSInformation: null,
+    isUsingCDP: false,
   },
   actions: {
-    setSettingsInStorage: noop,
+    setIsUsingCDP: noop,
+    setProcessingMode: noop,
   },
 };
 
@@ -73,6 +76,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [allowedNumberOfTabs, setAllowedNumberOfTabs] = useState<string | null>(
     null
   );
+
+  const [isUsingCDP, setIsUsingCDP] = useState(false);
+
   const [currentTabs, setCurrentTabs] =
     useState<SettingStoreContext['state']['currentTabs']>(0);
   const [browserInformation, setBrowserInformation] = useState<string | null>(
@@ -87,6 +93,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     const currentSettings = await chrome.storage.sync.get();
 
     setAllowedNumberOfTabs(currentSettings?.allowedNumberOfTabs);
+    setIsUsingCDP(currentSettings?.isUsingCDP);
 
     chrome.tabs.query({}, (tabs) => {
       setCurrentTabs(tabs.length);
@@ -122,48 +129,38 @@ export const Provider = ({ children }: PropsWithChildren) => {
     }
   }, [OSInformation]);
 
-  const setSettingsInStorage = useCallback(
-    async (key: string, value: string) => {
-      const currentSettings = await chrome.storage.sync.get();
+  const setProcessingMode = useCallback(async (newState: boolean) => {
+    const valueToBeSet: boolean | string = newState ? 'unlimited' : 'single';
 
-      chrome.storage.sync.set({
-        ...currentSettings,
-        [key]: value,
-      });
-    },
-    []
-  );
+    const currentSettings = await chrome.storage.sync.get();
+
+    chrome.storage.sync.set({
+      ...currentSettings,
+      allowedNumberOfTabs: valueToBeSet,
+    });
+  }, []);
+
+  const _setUsingCDP = useCallback((newValue: boolean) => {
+    chrome.runtime.sendMessage({
+      type: 'CHANGE_CDP_SETTING',
+      payload: {
+        isUsingCDP: newValue,
+      },
+    });
+    setIsUsingCDP(newValue);
+  }, []);
 
   const storeChangeListener = useCallback(
-    async (changes: { [key: string]: chrome.storage.StorageChange }) => {
+    (changes: { [key: string]: chrome.storage.StorageChange }) => {
       if (
-        Object.keys(changes).includes('allowedNumberOfTabs') &&
-        changes['allowedNumberOfTabs']?.newValue
+        changes?.allowedNumberOfTabs &&
+        changes?.allowedNumberOfTabs?.newValue
       ) {
-        setAllowedNumberOfTabs(changes['allowedNumberOfTabs']?.newValue);
+        setAllowedNumberOfTabs(changes?.allowedNumberOfTabs?.newValue);
+      }
 
-        if (changes['allowedNumberOfTabs']?.newValue === 'single') {
-          chrome.tabs.query({}, (tabs) => {
-            tabs.forEach((tab) => {
-              chrome.action.setBadgeText({
-                tabId: tab?.id,
-                text: '',
-              });
-            });
-          });
-
-          await chrome.storage.local.clear();
-        } else {
-          chrome.tabs.query({}, (tabs) => {
-            tabs.forEach(async (tab) => {
-              if (!tab.id) {
-                return;
-              }
-              await CookieStore.addTabData(tab.id?.toString());
-              await chrome.tabs.reload(tab?.id);
-            });
-          });
-        }
+      if (changes?.isUsingCDP) {
+        setIsUsingCDP(changes?.isUsingCDP?.newValue);
       }
     },
     []
@@ -187,9 +184,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
           currentExtensions,
           browserInformation,
           OSInformation,
+          isUsingCDP,
         },
         actions: {
-          setSettingsInStorage,
+          setProcessingMode,
+          setIsUsingCDP: _setUsingCDP,
         },
       }}
     >
