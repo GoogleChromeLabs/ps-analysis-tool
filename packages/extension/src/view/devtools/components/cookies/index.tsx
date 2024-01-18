@@ -89,14 +89,15 @@ const Cookies = ({
     const description = !isUsingCDP ? (
       <>
         To gather data and insights regarding blocked cookies, please enable
-        PSAT to use the Chrome DevTools protocol. You can do this in the &nbsp;
+        PSAT to use the Chrome DevTools protocol. You can do this in the&nbsp;
         <button
           className="text-bright-navy-blue dark:text-jordy-blue"
           onClick={() => updateSelectedItemKey('settings')}
         >
           Settings page
         </button>
-        &nbsp;or in the extension popup. For more information check the PSAT
+        &nbsp;or in the extension popup. For more information check the
+        PSAT&nbsp;
         <a
           target="_blank"
           rel="noreferrer"
