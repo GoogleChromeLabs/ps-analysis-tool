@@ -15,7 +15,7 @@
  */
 
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import FiltersSidebar from '..';
 import '@testing-library/jest-dom';
 import { act } from 'react-dom/test-utils';
@@ -124,5 +124,97 @@ describe('FiltersSidebar', () => {
     const list = await screen.findAllByTestId('sub-list-item');
 
     expect(list[0]).toHaveTextContent('aValue');
+  });
+
+  it('should expand all filters', async () => {
+    const { rerender } = render(<FiltersSidebar {...props} />);
+
+    const expandAll = await screen.findByText('Expand/Collapse All');
+    act(() => {
+      expandAll.click();
+    });
+
+    const expandArrow = await screen.findByTestId('expand-arrow');
+    const listExpandArrows = await screen.findAllByTestId('list-item-arrow');
+
+    expect(expandArrow).not.toHaveClass('-rotate-90');
+    expect(listExpandArrows[0]).not.toHaveClass('-rotate-90');
+
+    act(() => {
+      expandAll.click();
+    });
+
+    expect(expandArrow).toHaveClass('-rotate-90');
+    expect(listExpandArrows[0]).toHaveClass('-rotate-90');
+
+    act(() => {
+      listExpandArrows[0].click();
+    });
+
+    expect(expandArrow).toHaveClass('-rotate-90');
+    expect(listExpandArrows[0]).not.toHaveClass('-rotate-90');
+
+    act(() => {
+      listExpandArrows[1].click();
+    });
+
+    await waitFor(() => {
+      expect(expandArrow).not.toHaveClass('-rotate-90');
+      expect(listExpandArrows[0]).not.toHaveClass('-rotate-90');
+      expect(listExpandArrows[1]).not.toHaveClass('-rotate-90');
+    });
+
+    rerender(
+      <FiltersSidebar
+        {...props}
+        filters={{
+          ...props.filters,
+          filters3: {
+            filterValues: {
+              value5: {
+                selected: true,
+              },
+              value6: {
+                selected: false,
+              },
+            },
+            title: 'Filter 3',
+          },
+        }}
+      />
+    );
+
+    await waitFor(() => {
+      expect(expandArrow).not.toHaveClass('-rotate-90');
+      expect(listExpandArrows[0]).not.toHaveClass('-rotate-90');
+      expect(listExpandArrows[1]).not.toHaveClass('-rotate-90');
+      expect(listExpandArrows[2]).not.toHaveClass('-rotate-90');
+    });
+
+    rerender(<FiltersSidebar {...props} />);
+
+    await waitFor(() => {
+      expect(expandArrow).not.toHaveClass('-rotate-90');
+      expect(listExpandArrows[0]).not.toHaveClass('-rotate-90');
+      expect(listExpandArrows[1]).not.toHaveClass('-rotate-90');
+      expect(listExpandArrows[2]).toHaveClass('-rotate-90');
+    });
+
+    act(() => {
+      listExpandArrows[2].click();
+    });
+
+    await waitFor(() => {
+      expect(listExpandArrows[2]).toHaveClass('-rotate-90');
+    });
+
+    act(() => {
+      listExpandArrows[0].click();
+      listExpandArrows[1].click();
+    });
+
+    await waitFor(() => {
+      expect(expandArrow).toHaveClass('-rotate-90');
+    });
   });
 });
