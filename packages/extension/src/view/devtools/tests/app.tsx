@@ -145,7 +145,7 @@ describe('App', () => {
           //@ts-ignore
           onMessage: {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            addListener: (_: any) => undefined,
+            addListener: () => undefined,
           },
           //@ts-ignore
           onDisconnect: {
