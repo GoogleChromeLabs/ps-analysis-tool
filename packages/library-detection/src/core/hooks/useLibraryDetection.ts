@@ -57,21 +57,44 @@ const useLibraryDetection = () => {
           libraryMatches,
           realtimeComputationResult
         );
-
         setLibraryMatches(newResult);
       }
     },
     [libraryMatches]
   );
 
-  useEffect(() => {
-    (async () => {
-      const scripts = await getNetworkResourcesWithContent();
-      const detectMatchingSignaturesv1Results =
-        detectMatchingSignatures(scripts);
+  const oneTimeComputation = useCallback(async () => {
+    const scripts = await getNetworkResourcesWithContent();
+    setLibraryMatches(detectMatchingSignatures(scripts));
+  }, [libraryMatches]);
 
-      setLibraryMatches(detectMatchingSignaturesv1Results);
-    })();
+  const tabOnUpdatedHandler = useCallback(
+    (
+      _tabId: number,
+      changeInfo: chrome.tabs.TabChangeInfo,
+      tab: chrome.tabs.Tab
+    ) => {
+      chrome.devtools.inspectedWindow.onResourceAdded.removeListener(
+        listenerCallback
+      );
+      if (changeInfo.status === 'complete' && tab.active) {
+        // Check for fully loaded and active tab
+        oneTimeComputation();
+        chrome.devtools.inspectedWindow.onResourceAdded.addListener(
+          listenerCallback
+        );
+      }
+    },
+    [listenerCallback]
+  );
+
+  useEffect(() => {
+    oneTimeComputation();
+    chrome.tabs.onUpdated.addListener(tabOnUpdatedHandler);
+
+    return () => {
+      chrome.tabs.onUpdated.removeListener(tabOnUpdatedHandler);
+    };
   }, []);
 
   const invokeGSIdetection = useCallback(() => {
