@@ -23,7 +23,14 @@
  */
 import { type DomainPaths } from '../types';
 
-// isRequestURLMatchingDomainPaths
+/**
+ * Checks if the given requestUrl matches the host and the path
+ * @param {any} requestUrl:string
+ * @param {any} domainPaths:DomainPaths
+ * @param requestUrl
+ * @param domainPaths
+ * @returns {any}
+ */
 const isRequestURLMatchingDomainPaths = (
   requestUrl: string,
   domainPaths: DomainPaths

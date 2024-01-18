@@ -30,6 +30,16 @@ import {
   GIS_HELP_URL,
 } from './constants';
 
+/**
+ * Business logic to check for signature matches for GoogleIdentityServices library
+ * @param {any} script:ScriptTagUnderCheck
+ * @param {any} existingItems:DetectedSignature[]
+ * @param {any} signatureMatches:number
+ * @param script
+ * @param existingItems
+ * @param signatureMatches
+ * @returns {any}
+ */
 const checkForGIS = (
   script: ScriptTagUnderCheck,
   existingItems: DetectedSignature[],

@@ -18,6 +18,12 @@
  */
 import { ResourceTreeItem } from '../types';
 
+/**
+ * Filters the document and scripts of interest from all the Resources given as input
+ * @param {any} inputResources:ResourceTreeItem[]
+ * @param inputResources
+ * @returns {any}
+ */
 const filterResources = (inputResources: ResourceTreeItem[]) => {
   return inputResources
     .filter((i: ResourceTreeItem) => ['script', 'document'].includes(i.type))

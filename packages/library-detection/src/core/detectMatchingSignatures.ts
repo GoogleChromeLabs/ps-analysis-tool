@@ -19,6 +19,12 @@
 import { checkForGIS, checkForGSIv2, generateGSIV2Matches } from '../libraries';
 import type { ScriptTagUnderCheck, LibraryData } from '../types';
 
+/**
+ * Checks if given ScriptTag's url and return false if it is google origin
+ * @param {any} script:ScriptTagUnderCheck
+ * @param script
+ * @returns {any}
+ */
 const originIsGoogle = (script: ScriptTagUnderCheck) => {
   return !(
     (
@@ -28,6 +34,12 @@ const originIsGoogle = (script: ScriptTagUnderCheck) => {
   );
 };
 
+/**
+ * Primary function which gets the stringTag url and content and looks for varirous library sigantures
+ * @param {any} loadedScripts:ScriptTagUnderCheck[]
+ * @param loadedScripts
+ * @returns {any}
+ */
 const detectMatchingSignatures = (loadedScripts: ScriptTagUnderCheck[]) => {
   const libraryMatches: LibraryData = {
     gis: {

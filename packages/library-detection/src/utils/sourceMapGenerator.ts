@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
+/**
+ * This function returns the source location i.e. The line number and the column number of the given match and the sourceURL
+ * @param {any} match:RegExpMatchArray
+ * @param {any} sourceUrl:string|null
+ * @returns {any}
+ */
+
 export const getSourceLocation = (
   match: RegExpMatchArray,
   sourceUrl: string | null
@@ -28,6 +35,12 @@ export const getSourceLocation = (
   return `${sourceUrl}`;
 };
 
+/**
+ * This util methods finds the lineNumber required for sourceLocation
+ * @param {any} match:RegExpMatchArray
+ * @param match
+ * @returns {any}
+ */
 const findLineNumber = (match: RegExpMatchArray): number | null => {
   if (!match.input || !match.index) {
     return null;
@@ -52,6 +65,13 @@ const findLineNumber = (match: RegExpMatchArray): number | null => {
   return lineNumber;
 };
 
+/**
+ * This util methods finds the columnNumber required for sourceLocation
+ * @param {any} match:RegExpMatchArray
+ * @param match
+ * @param lineNumber
+ * @returns {any}
+ */
 const findColumnNumber = (
   match: RegExpMatchArray,
   lineNumber: number

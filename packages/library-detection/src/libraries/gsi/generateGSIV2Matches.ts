@@ -19,6 +19,16 @@
 import { GSI_V2_SIGNATURE_STRONG_MATCHES } from './constants';
 import type { DetectedSignature } from '../../types';
 
+/**
+ * Business logic where signature detection is checked for false positive and confidence of the detection
+ * @param {any} signatureMatches:number
+ * @param {any} matches:DetectedSignature[]
+ * @param {any} gsiV2ModuleMatch:number
+ * @param signatureMatches
+ * @param matches
+ * @param gsiV2ModuleMatch
+ * @returns {any}
+ */
 const generateGSIV2Matches = (
   signatureMatches: number,
   matches: DetectedSignature[],

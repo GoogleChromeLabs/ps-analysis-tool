@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
+/**
+ * From the content string given parse only the innerHtml from script tag
+ * @param {any} content:string
+ * @param content
+ * @returns {any}
+ */
 const getInlineScriptContent = (content: string) => {
   const parser = new DOMParser();
   const doc = parser.parseFromString(content, 'text/html');

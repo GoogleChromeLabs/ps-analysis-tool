@@ -18,6 +18,14 @@
  */
 import { LibraryData } from '../../types';
 
+/**
+ * Util function which sums up detection results GIS
+ * @param {any} obj1:LibraryData
+ * @param {any} obj2:LibraryData
+ * @param obj1
+ * @param obj2
+ * @returns {any}
+ */
 const sumUpGISMatches = (obj1: LibraryData, obj2: LibraryData) => {
   const resultObj: LibraryData = { ...obj1 };
 

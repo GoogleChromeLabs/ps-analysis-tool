@@ -19,6 +19,12 @@
 import { ScriptTagUnderCheck, ResourceTreeItem } from '../types';
 import { getInlineScriptContent, filterResources } from '../core';
 
+/**
+ * This function populates the content from the resource using the getContent function async
+ * @param {any} resources:ResourceTreeItem[]
+ * @param resources
+ * @returns {any}
+ */
 export const getResourcesWithContent = async (
   resources: ResourceTreeItem[]
 ) => {

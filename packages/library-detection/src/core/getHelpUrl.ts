@@ -18,6 +18,14 @@
  */
 import { SignaturesConfigItem } from '../types';
 
+/**
+ * Returns the Help url the helpUrls param for the given signature string
+ * @param {any} signature:string
+ * @param {any} helpUrls:SignaturesConfigItem[]
+ * @param signature
+ * @param helpUrls
+ * @returns {any}
+ */
 const getHelpUrl = (signature: string, helpUrls: SignaturesConfigItem[]) => {
   const matchingSignatureItem = helpUrls.find(
     (item) => item.signature === signature

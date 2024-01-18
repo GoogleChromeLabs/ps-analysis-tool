@@ -30,6 +30,18 @@ import {
   GSI_HELP_URL,
 } from './constants';
 
+/**
+ * Business logic to identify signature present in the given script content
+ * @param {any} script:ScriptTagUnderCheck
+ * @param {any} existingItems:DetectedSignature[]
+ * @param {any} signatureMatches:number
+ * @param {any} gsi2ModuleMatch:number
+ * @param script
+ * @param existingItems
+ * @param signatureMatches
+ * @param gsi2ModuleMatch
+ * @returns {any}
+ */
 const checkForGSIv2 = (
   script: ScriptTagUnderCheck,
   existingItems: DetectedSignature[],

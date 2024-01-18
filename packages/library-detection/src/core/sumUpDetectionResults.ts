@@ -19,11 +19,18 @@
 import { LibraryData } from '../types';
 import { sumUpGISMatches, sumUpGSIv2Matches } from '../libraries';
 
+/**
+ * Util function for adding up LibraryData Objects
+ * @param {any} obj1:LibraryData
+ * @param {any} obj2:LibraryData
+ * @param obj1
+ * @param obj2
+ * @returns {any}
+ */
 const sumUpDetectionResults = (obj1: LibraryData, obj2: LibraryData) => {
   const resultObj: LibraryData = { ...obj1 };
 
   resultObj.gis = sumUpGISMatches(resultObj, obj2);
-  //GSI 2 matches
 
   resultObj.gsiV2 = sumUpGSIv2Matches(resultObj, obj2);
 

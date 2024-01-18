@@ -18,6 +18,14 @@
  */
 import { LibraryData } from '../../types';
 
+/**
+ * Util function that sums up two GSIv2 detection representational objects, LibraryData
+ * @param {any} obj1:LibraryData
+ * @param {any} obj2:LibraryData
+ * @param obj1
+ * @param obj2
+ * @returns {any}
+ */
 const sumUpGSIv2Matches = (obj1: LibraryData, obj2: LibraryData) => {
   const resultObj: LibraryData = { ...obj1 };
 

@@ -28,6 +28,10 @@ import {
 import { detectMatchingSignatures, sumUpDetectionResults } from '..';
 import type { LibraryData, ResourceTreeItem } from '../../types';
 
+/**
+ * The primary custom hook used for Library signature detection purpose
+ *
+ */
 const useLibraryDetection = () => {
   const initialState: LibraryData = {
     gis: {
@@ -43,6 +47,11 @@ const useLibraryDetection = () => {
 
   const [libraryMatches, setLibraryMatches] = useState(initialState);
 
+  /**
+   * This function is called whenever a new resource is added.
+   * @param {any} async(resource:chrome.devtools.inspectedWindow.Resource
+   * @returns {any}
+   */
   const listenerCallback = useCallback(
     async (resource: ResourceTreeItem) => {
       const realtimeComputationResult = detectMatchingSignatures(
@@ -63,6 +72,11 @@ const useLibraryDetection = () => {
     [libraryMatches]
   );
 
+  /**
+   * This function invokes the getResource method internal and invokes the processing on the data return from getResource
+   * @param {any}
+   * @returns {any}
+   */
   const oneTimeComputation = useCallback(async () => {
     const scripts = await getNetworkResourcesWithContent();
     setLibraryMatches(detectMatchingSignatures(scripts));
