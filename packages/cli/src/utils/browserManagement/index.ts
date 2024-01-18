@@ -26,6 +26,7 @@ import { parse } from 'simple-cookie';
 import { ResponseData, ViewportConfig } from './types';
 import { parseNetworkDataToCookieData } from './parseNetworkDataToCookieData';
 import delay from '../delay';
+import { CookieData, UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
 
 export class BrowserManagement {
   viewportConfig: ViewportConfig;
@@ -221,71 +222,76 @@ export class BrowserManagement {
     );
 
     //parse cookie data in parallel
-    const result = urls.map((url) => {
-      const responseMap = this.pageResponseMaps.get(url);
-      const page = this.pageMap.get(url);
+    const result = await Promise.all(
+      urls.map(async (url) => {
+        const responseMap = this.pageResponseMaps.get(url);
+        const page = this.pageMap.get(url);
 
-      const frameIdUrlMap = this.getPageFrameIdToUrlMap(url);
-      // @ts-ignore
-      const mainFrameId = this.pageMap.get(url)?.mainFrame()._id;
+        const frameIdUrlMap = this.getPageFrameIdToUrlMap(url);
+        // @ts-ignore
+        const mainFrameId = this.pageMap.get(url)?.mainFrame()._id;
 
-      if (!responseMap || !frameIdUrlMap || !mainFrameId || !page) {
-        return {
-          pageUrl: url,
-          cookieData: {},
-        };
-      }
+        if (!responseMap || !frameIdUrlMap || !mainFrameId || !page) {
+          return {
+            pageUrl: url,
+            cookieData: {},
+          };
+        }
 
-      const cookieDataFromNetwork = parseNetworkDataToCookieData(
-        responseMap,
-        frameIdUrlMap,
-        mainFrameId,
-        url
-      );
+        const cookieDataFromNetwork = parseNetworkDataToCookieData(
+          responseMap,
+          frameIdUrlMap,
+          mainFrameId,
+          url
+        );
 
-      const networkCookieKeySet = new Set();
+        const networkCookieKeySet = new Set();
 
-      Object.values(cookieDataFromNetwork).forEach(({ frameCookies }) => {
-        Object.keys(frameCookies).forEach((key) => {
-          networkCookieKeySet.add(key);
+        Object.values(cookieDataFromNetwork).forEach(({ frameCookies }) => {
+          Object.keys(frameCookies).forEach((key) => {
+            networkCookieKeySet.add(key);
+          });
         });
-      });
 
-      //Get cookies from another API
-      // const session = await page.createCDPSession();
+        //Get cookies from another API
+        const session = await page.createCDPSession();
 
-      // const applicationCookies = (await session.send('Page.getCookies'))
-      //   .cookies;
+        const applicationCookies = (await session.send('Page.getCookies'))
+          .cookies;
 
-      // const filteredApplicationCookies = applicationCookies.filter(
-      //   (cookie) =>
-      //     !networkCookieKeySet.has(
-      //       `${cookie.name}:${cookie.domain}:${cookie.path}`
-      //     )
-      // );
+        const filteredApplicationCookies = applicationCookies.filter(
+          (cookie) =>
+            !networkCookieKeySet.has(
+              `${cookie.name}:${cookie.domain}:${cookie.path}`
+            )
+        );
 
-      // const reshapedApplicationCookies = filteredApplicationCookies.reduce<{
-      //   [key: string]: Cookie;
-      // }>((acc, cookie) => {
-      //   const key = `${cookie.name}:${cookie.domain}:${cookie.path}`;
-      //   acc[key] = cookie as Cookie;
-      //   return acc;
-      // }, {});
+        const reshapedApplicationCookies = filteredApplicationCookies.reduce<{
+          [key: string]: CookieData;
+        }>((acc, cookie) => {
+          const key = `${cookie.name}:${cookie.domain}:${cookie.path}`;
+          acc[key] = {
+            parsedCookie: cookie,
+            url: '',
+          };
+          return acc;
+        }, {});
 
-      // handles redirection
-      const pageUrl = page.url();
+        // handles redirection
+        const pageUrl = page.url();
 
-      return {
-        pageUrl,
-        cookieData: {
-          ...cookieDataFromNetwork,
-          // [UNKNOWN_FRAME_KEY]: {
-          //   frameCookies: reshapedApplicationCookies,
-          //   cookiesCount: Object.keys(reshapedApplicationCookies).length,
-          // },
-        },
-      };
-    });
+        return {
+          pageUrl,
+          cookieData: {
+            ...cookieDataFromNetwork,
+            [UNKNOWN_FRAME_KEY]: {
+              frameCookies: reshapedApplicationCookies,
+              cookiesCount: Object.keys(reshapedApplicationCookies).length,
+            },
+          },
+        };
+      })
+    );
 
     return result;
   }
