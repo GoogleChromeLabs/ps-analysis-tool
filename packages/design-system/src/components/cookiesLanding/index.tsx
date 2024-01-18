@@ -41,6 +41,7 @@ interface CookiesLandingProps {
   showMessageBoxBody?: boolean;
   showBlockedCookiesSection?: boolean;
   isUsingCDP?: boolean;
+  description?: React.ReactNode;
 }
 
 const CookiesLanding = ({
@@ -52,7 +53,7 @@ const CookiesLanding = ({
   showMessageBoxBody = true,
   showBlockedCookiesSection = false,
   showHorizontalMatrix = false,
-  isUsingCDP = true,
+  description = '',
 }: CookiesLandingProps) => {
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
@@ -114,7 +115,7 @@ const CookiesLanding = ({
       </CookiesLandingContainer>
       {showBlockedCookiesSection && (
         <CookiesLandingContainer
-          isUsingCDP={isUsingCDP}
+          description={description}
           dataMapping={blockedCookieDataMapping}
           testId="blocked-cookies-insights"
         >

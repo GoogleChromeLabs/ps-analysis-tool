@@ -24,8 +24,7 @@ interface CookiesLandingContainerProps {
   showLandingHeader?: boolean;
   testId?: string | null;
   children?: React.ReactNode;
-  isUsingCDP?: boolean;
-  description?: string;
+  description?: React.ReactNode;
 }
 
 const CookiesLandingContainer = ({

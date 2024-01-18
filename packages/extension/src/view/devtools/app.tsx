@@ -171,7 +171,10 @@ const App: React.FC = () => {
       const psData = data['privacySandbox'];
 
       psData.children['cookies'].panel = (
-        <Cookies setFilteredCookies={setFilteredCookies} />
+        <Cookies
+          updateSelectedItemKey={updateSelectedItemKey}
+          setFilteredCookies={setFilteredCookies}
+        />
       );
       psData.children['cookies'].children = Object.keys(tabFrames || {}).reduce(
         (acc, url) => {
@@ -215,6 +218,7 @@ const App: React.FC = () => {
     isSidebarFocused,
     setIsInspecting,
     tabFrames,
+    updateSelectedItemKey,
   ]);
 
   useEffect(() => {

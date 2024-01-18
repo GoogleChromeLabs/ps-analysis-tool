@@ -23,7 +23,7 @@ import {
   CookiesLanding,
   ProgressBar,
 } from '@ps-analysis-tool/design-system';
-import type { CookieTableData } from '@ps-analysis-tool/common';
+import { noop, type CookieTableData } from '@ps-analysis-tool/common';
 import { useSettingsStore } from '../../stateProviders/syncSettingsStore';
 
 /**
@@ -34,9 +34,13 @@ import CookiesListing from './cookiesListing';
 
 interface CookiesProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;
+  updateSelectedItemKey?: (key: string | null) => void;
 }
 
-const Cookies = ({ setFilteredCookies }: CookiesProps) => {
+const Cookies = ({
+  setFilteredCookies,
+  updateSelectedItemKey = noop,
+}: CookiesProps) => {
   const {
     contextInvalidated,
     isCurrentTabBeingListenedTo,
@@ -82,6 +86,29 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
       allowedNumberOfTabs === 'single') ||
     (allowedNumberOfTabs && allowedNumberOfTabs === 'unlimited')
   ) {
+    const description = !isUsingCDP ? (
+      <>
+        To gather data and insights regarding blocked cookies, please enable
+        PSAT to use the Chrome DevTools protocol. You can do this in the &nbsp;
+        <button
+          className="text-bright-navy-blue dark:text-jordy-blue"
+          onClick={() => updateSelectedItemKey('settings')}
+        >
+          Settings page
+        </button>
+        &nbsp;or in the extension popup. For more information check the PSAT
+        <a
+          target="_blank"
+          rel="noreferrer"
+          className="text-bright-navy-blue dark:text-jordy-blue"
+          href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/PSAT-Debugging"
+        >
+          Wiki
+        </a>
+      </>
+    ) : (
+      ''
+    );
     return (
       <div
         className={`h-full ${selectedFrame ? '' : 'flex items-center'}`}
@@ -94,7 +121,7 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
             tabCookies={tabCookies}
             tabFrames={tabFrames}
             showBlockedCookiesSection
-            isUsingCDP={isUsingCDP}
+            description={description}
           />
         )}
       </div>
