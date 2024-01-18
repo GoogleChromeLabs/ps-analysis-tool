@@ -18,9 +18,10 @@
  * Only those filenames directly mentioned in the developer documentation
  * are considered to be positive matches.
  */
-interface DomainPaths {
-  [domain: string]: string[];
-}
+/**
+ * External dependencies.
+ */
+import { type DomainPaths } from '../types';
 
 // isRequestURLMatchingDomainPaths
 const isRequestURLMatchingDomainPaths = (

@@ -90,3 +90,7 @@ export type ResourceTreeItem = {
 export type AccordionProps = {
   matches: DetectedSignature[];
 };
+
+export type DomainPaths = {
+  [domain: string]: string[];
+};
