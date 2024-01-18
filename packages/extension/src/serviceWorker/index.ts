@@ -550,6 +550,7 @@ chrome.storage.sync.onChanged.addListener(
             if (!tab?.id) {
               return;
             }
+
             await chrome.action.setBadgeText({
               tabId: tab?.id,
               text: '',
@@ -602,6 +603,7 @@ chrome.storage.sync.onChanged.addListener(
 
       await PROMISE_QUEUE.add(async () => {
         const storedTabData = Object.keys(await chrome.storage.local.get());
+
         await Promise.all(
           storedTabData.map(async (key) => {
             if (key === 'tabToRead') {
@@ -621,8 +623,10 @@ chrome.storage.sync.onChanged.addListener(
       });
     } else {
       PROMISE_QUEUE.clear();
+
       await PROMISE_QUEUE.add(async () => {
         const storedTabData = Object.keys(await chrome.storage.local.get());
+
         await Promise.all(
           storedTabData.map(async (key) => {
             if (key === 'tabToRead') {
