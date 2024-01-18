@@ -62,7 +62,7 @@ export const analyzeCookiesUrls = async (
         };
         frameCookies[key].isFirstParty = isFirstParty(
           cookie.parsedCookie.domain,
-          cookie.url
+          pageUrl
         );
       });
     });
