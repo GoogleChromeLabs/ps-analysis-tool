@@ -164,7 +164,7 @@ export type CookieJsonDataType = {
   requestUrls?: { [id: string]: string };
   frameUrls?: { [id: string]: string };
   isBlocked: boolean;
-  blockedReasons?: string[];
+  blockedReasons?: BlockedReason[];
   GDPR?: string;
 };
 

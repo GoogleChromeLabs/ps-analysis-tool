@@ -18,14 +18,17 @@
  * External dependencies
  */
 import React from 'react';
-import type { TechnologyData } from '@ps-analysis-tool/common';
+import type {
+  CompleteJson,
+  CookieJsonDataType,
+  TechnologyData,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import { Provider as ContentStoreProvider } from './stateProviders/contentStore';
 import Layout from './components/layout';
-import type { CompleteJson, CookieJsonDataType } from '../../types';
 
 interface SiteReportProps {
   cookies: {

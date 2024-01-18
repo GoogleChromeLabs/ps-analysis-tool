@@ -14,35 +14,31 @@
  * limitations under the License.
  */
 
+import type { CookieFrameStorageType } from '@ps-analysis-tool/common';
+
 /**
  * Internal dependencies
  */
-import type { CookieFrameStorageType, CookieJsonDataType } from '../../types';
 
 const extractCookies = (
-  cookieData: {
-    frameCookies: CookieFrameStorageType;
-  },
+  cookieData: CookieFrameStorageType,
   pageUrl: string,
   shouldAddUrlToKey = false
 ) => {
-  return Object.entries(cookieData).reduce(
-    (acc: CookieFrameStorageType, [frame, _data]) => {
-      acc[frame] = Object.fromEntries(
-        Object.entries(_data.frameCookies).map(([key, cookie]) => [
-          key + (shouldAddUrlToKey ? '' : pageUrl),
-          {
-            ...cookie,
-            pageUrl,
-            frameUrl: frame,
-          } as CookieJsonDataType,
-        ])
-      );
+  return Object.entries(cookieData).reduce((acc, [frame, _data]) => {
+    acc[frame] = Object.fromEntries(
+      Object.entries(_data.frameCookies).map(([key, cookie]) => [
+        key + (shouldAddUrlToKey ? '' : pageUrl),
+        {
+          ...cookie,
+          pageUrl,
+          frameUrl: frame,
+        },
+      ])
+    );
 
-      return acc;
-    },
-    {}
-  );
+    return acc;
+  }, {});
 };
 
 export default extractCookies;

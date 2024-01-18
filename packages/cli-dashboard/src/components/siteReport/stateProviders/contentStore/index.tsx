@@ -19,6 +19,8 @@
 import React, { type PropsWithChildren, useMemo } from 'react';
 import { useContextSelector, createContext } from 'use-context-selector';
 import {
+  type CompleteJson,
+  type CookieJsonDataType,
   type CookieTableData,
   type TechnologyData,
 } from '@ps-analysis-tool/common';
@@ -26,7 +28,6 @@ import {
 /**
  * Internal dependencies.
  */
-import type { CompleteJson, CookieJsonDataType } from '../../../../types';
 import reshapeCookies from '../../../utils/reshapeCookies';
 
 export interface ContentStore {
