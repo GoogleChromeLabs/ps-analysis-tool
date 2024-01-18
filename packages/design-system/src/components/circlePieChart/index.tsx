@@ -78,7 +78,7 @@ const CirclePieChart = ({
             {title}
           </p>
           {title === 'Blocked cookies' && !isUsingCDP && (
-            <span title="Enable Chrome DevTools Protocol to get Cookie Blocked Reasons.">
+            <span title="To gather data and insights regarding blocked cookies, please enable PSAT to use the Chrome DevTools protocol. You can do this in the Settings page or in the extension popup. For more information check the PSAT Wiki.">
               <InfoIcon />
             </span>
           )}
