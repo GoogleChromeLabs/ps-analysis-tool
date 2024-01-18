@@ -12,7 +12,7 @@
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool#readme",
   "scripts": {
-    "serve": "node ./server/index.cjs",
+    "start": "webpack-dev-server --config webpack.config.cjs",
     "build": "webpack --config webpack.config.cjs",
     "dev": "webpack-dev-server --config webpack.config.cjs"
   },

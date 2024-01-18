@@ -50,9 +50,10 @@ const cdpURLToRequestMap: {
     [requestId: string]: string;
   };
 } = {};
+
 /**
  * Fires when the browser receives a response from a web server.
- * @see https://developer.chrome.com/docs/extensions/reference/webRequest/
+ * @see https://developer.chrome.com/docs/extensions/reference/api/webRequest
  */
 chrome.webRequest.onResponseStarted.addListener(
   (details: chrome.webRequest.WebResponseCacheDetails) => {
@@ -126,6 +127,10 @@ chrome.webRequest.onResponseStarted.addListener(
   ['extraHeaders', 'responseHeaders']
 );
 
+/**
+ * Fires before sending an HTTP request, once the request headers are available.
+ * @see https://developer.chrome.com/docs/extensions/reference/api/webRequest#event-onBeforeSendHeaders
+ */
 chrome.webRequest.onBeforeSendHeaders.addListener(
   ({ url, requestHeaders, tabId, frameId }) => {
     (async () => {
@@ -195,12 +200,18 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
   ['extraHeaders', 'requestHeaders']
 );
 
+/**
+ * Fires when a tab is created.
+ * @see https://developer.chrome.com/docs/extensions/reference/api/tabs#event-onCreated
+ */
 chrome.tabs.onCreated.addListener(async (tab) => {
   await PROMISE_QUEUE.add(async () => {
     if (!tab.id) {
       return;
     }
+
     const _isSingleTabProcessingMode = await isSingleTabProcessingMode();
+
     if (_isSingleTabProcessingMode) {
       const previousTabData = await chrome.storage.local.get();
       const doesTabExist = await getTab(previousTabData?.tabToRead);
@@ -221,7 +232,7 @@ chrome.tabs.onCreated.addListener(async (tab) => {
  * Fires when the tab is focused,
  * When a new window is opened,
  * Not when the tab is refreshed or a new website is opened.
- * @see https://developer.chrome.com/docs/extensions/reference/tabs/#event-onActivated
+ * @see https://developer.chrome.com/docs/extensions/reference/api/tabs#event-onActivated
  */
 chrome.tabs.onActivated.addListener(async (activeInfo) => {
   await PROMISE_QUEUE.add(async () => {
@@ -231,7 +242,7 @@ chrome.tabs.onActivated.addListener(async (activeInfo) => {
 
 /**
  * Fires when a tab is closed.
- * @see https://developer.chrome.com/docs/extensions/reference/tabs/#event-onRemoved
+ * @see https://developer.chrome.com/docs/extensions/reference/api/tabs#event-onRemoved
  */
 chrome.tabs.onRemoved.addListener(async (tabId) => {
   PROMISE_QUEUE.clear();
@@ -242,7 +253,7 @@ chrome.tabs.onRemoved.addListener(async (tabId) => {
 
 /**
  * Fires when a tab is updated.
- * @see https://developer.chrome.com/docs/extensions/reference/tabs/#event-onUpdated
+ * @see https://developer.chrome.com/docs/extensions/reference/api/tabs#event-onUpdated
  */
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   try {
@@ -262,7 +273,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 
 /**
  * Fires when a window is removed (closed).
- * @see https://developer.chrome.com/docs/extensions/reference/windows/#event-onRemoved
+ * @see https://developer.chrome.com/docs/extensions/reference/api/windows#event-onRemoved
  */
 chrome.windows.onRemoved.addListener(async (windowId) => {
   await PROMISE_QUEUE.add(async () => {
@@ -275,7 +286,7 @@ chrome.windows.onRemoved.addListener(async (windowId) => {
  * when clicked on the extension refresh button from chrome://extensions/
  * when the extension is updated to a new version,
  * when Chrome is updated to a new version.
- * @see https://developer.chrome.com/docs/extensions/reference/runtime/#event-onInstalled
+ * @see https://developer.chrome.com/docs/extensions/reference/api/runtime#event-onInstalled
  * @todo Shouldn't have to reinstall the extension.
  */
 chrome.runtime.onInstalled.addListener(async (details) => {
@@ -301,6 +312,10 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   });
 });
 
+/**
+ * Fires whenever debugging target issues instrumentation event.
+ * @see https://developer.chrome.com/docs/extensions/reference/api/debugger
+ */
 chrome.debugger.onEvent.addListener((source, method, params) => {
   (async () => {
     // eslint-disable-next-line complexity
@@ -428,6 +443,10 @@ const listenToNewTab = async (tabId?: number) => {
   return newTabId;
 };
 
+/**
+ * Fires when a message is sent from either an extension process (by runtime.sendMessage) or a content script (by tabs.sendMessage).
+ * @see https://developer.chrome.com/docs/extensions/reference/api/runtime#event-onMessage
+ */
 chrome.runtime.onMessage.addListener((request) => {
   if (request?.type === 'SET_TAB_TO_READ') {
     PROMISE_QUEUE.clear();
@@ -447,6 +466,10 @@ chrome.runtime.onMessage.addListener((request) => {
   }
 });
 
+/**
+ * Listen to local storage changes.
+ * @see https://developer.chrome.com/docs/extensions/reference/api/storage#event-onChanged
+ */
 chrome.storage.local.onChanged.addListener(
   async (changes: { [key: string]: chrome.storage.StorageChange }) => {
     if (!changes?.tabToRead || !changes?.tabToRead?.oldValue) {
