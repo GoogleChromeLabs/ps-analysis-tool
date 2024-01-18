@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
@@ -24,11 +23,11 @@ import {
   ProgressBar,
 } from '@ps-analysis-tool/design-system';
 import { type CookieTableData } from '@ps-analysis-tool/common';
-import { useSettingsStore } from '../../stateProviders/syncSettingsStore';
 
 /**
  * Internal dependencies.
  */
+import { useSettingsStore } from '../../stateProviders/syncSettingsStore';
 import { useCookieStore } from '../../stateProviders/syncCookieStore';
 import CookiesListing from './cookiesListing';
 
