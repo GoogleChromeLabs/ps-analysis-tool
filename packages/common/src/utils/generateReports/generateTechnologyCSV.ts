@@ -15,13 +15,10 @@
  */
 
 /**
- * External dependencies
- */
-import { sanitizeCsvRecord } from '@ps-analysis-tool/common';
-/**
  * Internal dependencies
  */
-import type { CompleteJson } from '../../../../types';
+import sanitizeCsvRecord from '../sanitizeCsvRecord';
+import { CompleteJson } from '../../cookies.types';
 
 const TECHNOLOGIES_DATA_HEADER = [
   'Name',
