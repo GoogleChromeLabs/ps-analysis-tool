@@ -146,7 +146,7 @@ export class BrowserManagement {
           .split('\n')
           .map((headerLine) => {
             const parsedCookie = parse(headerLine);
-            const partionKey = headerLine.includes('Partitioned')
+            const partitionKey = headerLine.includes('Partitioned')
               ? event.cookiePartitionKey
               : undefined;
 
@@ -164,7 +164,7 @@ export class BrowserManagement {
                 expires: parsedCookie.expires || 'Session',
                 httpOnly: parsedCookie.httponly || false,
                 secure: parsedCookie.secure || false,
-                partionKey,
+                partitionKey,
               },
               isBlocked: Boolean(blockedEntry),
               blockedReasons: blockedEntry?.blockedReasons,

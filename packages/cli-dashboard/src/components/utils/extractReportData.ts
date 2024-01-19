@@ -17,22 +17,18 @@
 /**
  * External dependencies
  */
-import type { CookieData, TechnologyData } from '@ps-analysis-tool/common';
+import type {
+  CompleteJson,
+  CookieFrameStorageType,
+  TechnologyData,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies
  */
 import extractCookies from './extractCookies';
 
-const extractReportData = (
-  data: {
-    cookieData: {
-      frameCookies: CookieData;
-    };
-    technologyData: TechnologyData[];
-    pageUrl: string;
-  }[]
-) => {
+const extractReportData = (data: CompleteJson[]) => {
   const cookies = {};
   const technologies: TechnologyData[] = [];
   const landingPageCookies = {};
@@ -61,7 +57,7 @@ const extractReportData = (
 };
 
 const formatCookieData = (
-  cookieData: CookieData,
+  cookieData: CookieFrameStorageType,
   store: Record<string, any>
 ) => {
   Object.entries(cookieData).forEach(([frame, _cData]) => {

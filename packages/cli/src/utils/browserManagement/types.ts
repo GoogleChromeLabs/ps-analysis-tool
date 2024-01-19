@@ -14,28 +14,7 @@
  * limitations under the License.
  */
 
-import { Protocol } from 'puppeteer';
-
-export type Cookie = {
-  parsedCookie: {
-    name: string;
-    domain: string;
-    path: string;
-    value: string;
-    sameSite: string;
-    expires: string | Date | number;
-    httpOnly: boolean;
-    secure: boolean;
-    partionKey: string | undefined;
-  };
-  isBlocked?: boolean;
-  blockedReasons?: Protocol.Network.SetCookieBlockedReason[];
-  platform?: string;
-  description?: string;
-  category?: string;
-  GDPR?: string;
-  isFirstParty?: boolean;
-};
+import { CookieData } from '@ps-analysis-tool/common';
 
 export type ViewportConfig = {
   width: number;
@@ -46,5 +25,5 @@ export type ViewportConfig = {
 export type ResponseData = {
   frameId: string;
   serverUrl: string;
-  cookies: Cookie[];
+  cookies: CookieData[];
 };

@@ -43,8 +43,9 @@ const App = () => {
   const [landingPageCookies, setLandingPageCookies] =
     useState<CookieFrameStorageType>({});
   const [technologies, setTechnologies] = useState<TechnologyData[]>([]);
-  const [completeJsonReport, setCompleteJsonReport] =
-    useState<CompleteJson | null>(null);
+  const [completeJsonReport, setCompleteJsonReport] = useState<
+    CompleteJson[] | null
+  >(null);
 
   const [type, path] = useMemo(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -61,7 +62,7 @@ const App = () => {
   useEffect(() => {
     (async () => {
       const response = await fetch(path);
-      const data = await response.json();
+      const data: CompleteJson[] = await response.json();
       setCompleteJsonReport(data);
 
       let _cookies: CookieFrameStorageType = {},
@@ -75,7 +76,7 @@ const App = () => {
         setLandingPageCookies(extractedData.landingPageCookies);
       } else {
         _cookies = extractCookies(data[0].cookieData, data[0].pageUrl, true);
-        _technologies = data.technologyData;
+        _technologies = data[0].technologyData;
       }
 
       setCookies(_cookies);

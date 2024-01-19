@@ -158,6 +158,7 @@ export type CookieJsonDataType = {
     platform: string;
     category: string;
     description: string;
+    GDPR?: string;
   };
   isFirstParty: boolean;
   url: string;
@@ -165,7 +166,6 @@ export type CookieJsonDataType = {
   frameUrls?: { [id: string]: string };
   isBlocked: boolean;
   blockedReasons?: BlockedReason[];
-  GDPR?: string;
 };
 
 export type CookieFrameStorageType = {

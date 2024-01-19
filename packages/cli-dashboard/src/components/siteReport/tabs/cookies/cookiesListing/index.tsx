@@ -75,6 +75,11 @@ const CookiesListing = ({
         cell: (info: InfoType) => info,
       },
       {
+        header: 'Partition Key',
+        accessorKey: 'parsedCookie.partitionKey',
+        cell: (info: InfoType) => info,
+      },
+      {
         header: 'SameSite',
         accessorKey: 'parsedCookie.samesite',
         cell: (info: InfoType) => <span className="capitalize">{info}</span>,

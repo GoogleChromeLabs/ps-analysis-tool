@@ -37,7 +37,7 @@ interface SiteReportProps {
     };
   };
   technologies: TechnologyData[];
-  completeJson: CompleteJson | null;
+  completeJson: CompleteJson[] | null;
   selectedSite: string | null;
 }
 

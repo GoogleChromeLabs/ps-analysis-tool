@@ -34,7 +34,7 @@ export interface ContentStore {
   state: {
     tabCookies: { [key: string]: CookieTableData };
     technologies: TechnologyData[] | undefined;
-    completeJson: CompleteJson | null;
+    completeJson: CompleteJson[] | null;
   };
 }
 
@@ -55,7 +55,7 @@ interface ContentStoreProviderProps {
     };
   };
   technologies?: TechnologyData[];
-  completeJson: CompleteJson | null;
+  completeJson: CompleteJson[] | null;
 }
 
 export const Provider = ({

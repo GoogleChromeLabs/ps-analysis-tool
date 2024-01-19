@@ -68,7 +68,7 @@ const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
       cookie.parsedCookie.path,
       cookie.parsedCookie.expires,
       cookie.isBlocked ? 'Yes' : 'No',
-      cookie.GDPR || 'NA',
+      cookie.analytics.GDPR || 'NA',
     ].map(sanitizeCsvRecord);
 
     cookieRecords += recordsArray.join(',') + '\r\n';
