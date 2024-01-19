@@ -131,7 +131,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const _setUsingCDP = useCallback((newValue: boolean) => {
     chrome.runtime.sendMessage({
-      type: 'CHANGE_CDP_SETTING',
+      type: 'Popup::ServiceWorker::CHANGE_CDP_SETTING',
       payload: {
         isUsingCDP: newValue,
       },
@@ -168,7 +168,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     if (tabId) {
       chrome.runtime.sendMessage({
-        type: 'POPUP_STATE_OPEN',
+        type: 'Popup::ServiceWorker::POPUP_STATE_OPEN',
         payload: {
           tabId: tabId,
         },
@@ -177,7 +177,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
     return () => {
       chrome.runtime.sendMessage({
-        type: 'POPUP_STATE_CLOSE',
+        type: 'Popup::ServiceWorker::POPUP_STATE_CLOSE',
         payload: {
           tabId: tabId,
         },
@@ -187,7 +187,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const changeListeningToThisTab = useCallback(() => {
     chrome.runtime.sendMessage({
-      type: 'Popup::SET_TAB_TO_READ',
+      type: 'Popup::ServiceWorker::SET_TAB_TO_READ',
       payload: {
         tabId,
       },
@@ -242,10 +242,14 @@ export const Provider = ({ children }: PropsWithChildren) => {
             tabId?.toString() === message?.payload?.tabId
           );
         }
-        setTabCookieStats(
-          prepareCookiesCount(JSON.parse(message?.payload?.cookieData ?? '{}'))
-        );
-        setLoading(false);
+        if (tabId?.toString() === message?.payload?.tabId.toString()) {
+          setTabCookieStats(
+            prepareCookiesCount(
+              JSON.parse(message?.payload?.cookieData ?? '{}')
+            )
+          );
+          setLoading(false);
+        }
       }
     };
 

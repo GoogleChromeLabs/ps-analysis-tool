@@ -211,7 +211,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const changeListeningToThisTab = useCallback(() => {
     chrome.runtime.sendMessage({
-      type: 'DevTools::SET_TAB_TO_READ',
+      type: 'DevTools::ServiceWorker::SET_TAB_TO_READ',
       payload: {
         tabId,
       },
@@ -246,6 +246,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       }
 
       if (message.type === 'ServiceWorker::DevTools::NEW_COOKIE_DATA') {
+        console.log(message);
         if (
           message?.payload?.tabId &&
           tabId?.toString() === message?.payload?.tabId.toString()
@@ -339,7 +340,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     chrome.runtime.sendMessage({
       type: 'DevTools::ServiceWorker::DEVTOOLS_STATE_OPEN',
       payload: {
-        tabId: chrome.devtools.inspectedWindow.tabId,
+        tabId: tabId,
       },
     });
 
@@ -347,11 +348,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
       chrome.runtime.sendMessage({
         type: 'DevTools::ServiceWorker::DEVTOOLS_STATE_CLOSE',
         payload: {
-          tabId: chrome.devtools.inspectedWindow.tabId,
+          tabId: tabId,
         },
       });
     };
-  }, []);
+  }, [tabId]);
 
   return (
     <Context.Provider

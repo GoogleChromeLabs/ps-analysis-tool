@@ -436,8 +436,8 @@ const listenToNewTab = (tabId?: number) => {
  */
 chrome.runtime.onMessage.addListener(async (request) => {
   if (
-    request?.type === 'DevTools::SET_TAB_TO_READ' ||
-    request?.type === 'Popup::SET_TAB_TO_READ'
+    request?.type === 'DevTools::ServiceWorker::SET_TAB_TO_READ' ||
+    request?.type === 'Popup::ServiceWorker::SET_TAB_TO_READ'
   ) {
     const newTab = listenToNewTab(request?.payload?.tabId);
     tabToRead = newTab;
@@ -466,6 +466,22 @@ chrome.runtime.onMessage.addListener(async (request) => {
     await chrome.tabs.reload(Number(newTab));
   }
 
+  if (
+    request.type === 'DevTools::ServiceWorker::CHANGE_CDP_SETTING' ||
+    request.type === 'Popup::ServiceWorker::CHANGE_CDP_SETTING'
+  ) {
+    if (typeof request.payload?.isUsingCDP !== 'undefined') {
+      globalIsUsingCDP = request.payload?.isUsingCDP;
+      (async () => {
+        const storage = await chrome.storage.sync.get();
+        await chrome.storage.sync.set({
+          ...storage,
+          isUsingCDP: globalIsUsingCDP,
+        });
+      })();
+    }
+  }
+
   if (request?.type === 'DevTools::ServiceWorker::DEVTOOLS_STATE_OPEN') {
     if (!request?.payload?.tabId) {
       return;
@@ -478,14 +494,14 @@ chrome.runtime.onMessage.addListener(async (request) => {
       },
     });
 
-    if (syncCookieStore.cachedTabsData[Number(tabToRead)]) {
+    if (syncCookieStore.cachedTabsData[Number(request?.payload?.tabId)]) {
       chrome.runtime.sendMessage({
         type: 'ServiceWorker::DevTools::NEW_COOKIE_DATA',
         payload: {
           tabId:
             tabMode === 'single' ? Number(tabToRead) : request?.payload?.tabId,
           cookieData: JSON.stringify(
-            syncCookieStore.cachedTabsData[Number(tabToRead)]
+            syncCookieStore.cachedTabsData[Number(request?.payload?.tabId)]
           ),
         },
       });
@@ -503,6 +519,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
 
   if (request?.type === 'Popup::ServiceWorker::POPUP_STATE_OPEN') {
     const tabId = tabMode === 'single' ? tabToRead : request?.payload?.tabId;
+
     chrome.runtime.sendMessage({
       type: 'ServiceWorker::Popup::TAB_TO_READ_DATA',
       payload: {
@@ -510,14 +527,15 @@ chrome.runtime.onMessage.addListener(async (request) => {
         cookieData: JSON.stringify(syncCookieStore.cachedTabsData[tabId]),
       },
     });
-    if (syncCookieStore.cachedTabsData[Number(tabToRead)]) {
+
+    if (syncCookieStore.cachedTabsData[Number(request?.payload?.tabId)]) {
       chrome.runtime.sendMessage({
         type: 'ServiceWorker::Popup::NEW_COOKIE_DATA',
         payload: {
           tabId:
             tabMode === 'single' ? Number(tabToRead) : request?.payload?.tabId,
           cookieData: JSON.stringify(
-            syncCookieStore.cachedTabsData[Number(tabToRead)]
+            syncCookieStore.cachedTabsData[Number(request?.payload?.tabId)]
           ),
         },
       });
@@ -552,14 +570,6 @@ chrome.storage.local.onChanged.addListener(
 );
 
 chrome.storage.sync.onChanged.addListener(
-  (changes: { [key: string]: chrome.storage.StorageChange }) => {
-    if (changes && Object.keys(changes).includes('allowedNumberOfTabs')) {
-      tabMode = changes.allowedNumberOfTabs.newValue;
-    }
-  }
-);
-
-chrome.storage.sync.onChanged.addListener(
   async (changes: { [key: string]: chrome.storage.StorageChange }) => {
     if (
       !changes?.allowedNumberOfTabs ||
@@ -567,6 +577,8 @@ chrome.storage.sync.onChanged.addListener(
     ) {
       return;
     }
+
+    tabMode = changes.allowedNumberOfTabs.newValue;
 
     if (changes?.allowedNumberOfTabs?.newValue === 'single') {
       const tabs = await chrome.tabs.query({});
@@ -615,7 +627,14 @@ chrome.storage.sync.onChanged.addListener(
     globalIsUsingCDP = changes?.isUsingCDP?.newValue;
 
     chrome.runtime.sendMessage({
-      type: 'CHANGE_CDP_SETTING',
+      type: 'ServiceWorker::Popup::CHANGE_CDP_SETTING',
+      payload: {
+        isUsingCDP: changes?.isUsingCDP?.newValue,
+      },
+    });
+
+    chrome.runtime.sendMessage({
+      type: 'ServiceWorker::DevTools::CHANGE_CDP_SETTING',
       payload: {
         isUsingCDP: changes?.isUsingCDP?.newValue,
       },

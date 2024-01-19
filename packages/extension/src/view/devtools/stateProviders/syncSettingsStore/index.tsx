@@ -142,7 +142,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const _setUsingCDP = useCallback((newValue: boolean) => {
     chrome.runtime.sendMessage({
-      type: 'CHANGE_CDP_SETTING',
+      type: 'DevTools::ServiceWorker::CHANGE_CDP_SETTING',
       payload: {
         isUsingCDP: newValue,
       },
