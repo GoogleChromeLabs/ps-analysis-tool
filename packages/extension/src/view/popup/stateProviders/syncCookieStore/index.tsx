@@ -223,7 +223,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const changeListeningToThisTab = useCallback(() => {
     chrome.runtime.sendMessage({
-      type: 'SET_TAB_TO_READ',
+      type: 'Popup::SET_TAB_TO_READ',
       payload: {
         tabId,
       },
@@ -240,7 +240,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         tabProcessingMode: string;
       };
     }) => {
-      if (message.type === 'syncCookieStore:SET_TAB_TO_READ') {
+      if (message.type === 'ServiceWorker::Popup::SET_TAB_TO_READ') {
         const tab = await getCurrentTab();
 
         if (tab?.[0]?.url) {
@@ -251,7 +251,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         setLoading(false);
       }
 
-      if (message.type === 'popup:NEW_COOKIE_DATA') {
+      if (message.type === 'ServiceWorker::Popup::NEW_COOKIE_DATA') {
         if (
           message?.payload?.tabId &&
           tabId?.toString() === message?.payload?.tabId.toString()
@@ -264,7 +264,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
       }
 
-      if (message.type === 'popup:TAB_TO_READ_DATA') {
+      if (message.type === 'ServiceWorker::Popup::TAB_TO_READ_DATA') {
         if (allowedNumberOfTabs === 'single') {
           setIsCurrentTabBeingListenedTo(
             tabId?.toString() === message?.payload?.tabId

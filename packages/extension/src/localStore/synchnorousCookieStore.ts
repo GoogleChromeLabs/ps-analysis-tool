@@ -67,20 +67,26 @@ class SynchnorousCookieStore {
 
     for (const cookie of cookies) {
       const { name, domain, path } = cookie.parsedCookie;
+
       if (!name || !domain || !path) {
         continue;
       }
+
       let cookieKey = getCookieKey(cookie.parsedCookie);
+
       if (!cookieKey) {
         continue;
       }
+
       const blockedReasons: BlockedReason[] = [
         ...new Set<BlockedReason>([
           ...(cookie?.blockedReasons ?? []),
           ...(this.cachedTabsData[tabId][cookieKey]?.blockedReasons ?? []),
         ]),
       ];
+
       cookieKey = cookieKey?.trim();
+
       if (this.cachedTabsData[tabId]?.[cookieKey]) {
         this.cachedTabsData[tabId][cookieKey] = {
           ...this.cachedTabsData[tabId][cookieKey],
@@ -121,20 +127,24 @@ class SynchnorousCookieStore {
         this.cachedTabsData[tabId][cookieKey] = cookie;
       }
     }
+
     globalThis.CDPData = this.cachedTabsData;
+
     updateCookieBadgeText(this.cachedTabsData[tabId], tabId);
+
     if (this.tabs[tabId].devToolsOpenState) {
       chrome.runtime.sendMessage({
-        type: 'NEW_COOKIE_DATA',
+        type: 'ServiceWorker::DevTools::NEW_COOKIE_DATA',
         payload: {
           tabId: tabId,
           cookieData: JSON.stringify(this.cachedTabsData[tabId]),
         },
       });
     }
+
     if (this.tabs[tabId].popupOpenState) {
       chrome.runtime.sendMessage({
-        type: 'popup:NEW_COOKIE_DATA',
+        type: 'ServiceWorker::Popup::NEW_COOKIE_DATA',
         payload: {
           tabId: tabId,
           cookieData: JSON.stringify(this.cachedTabsData[tabId]),

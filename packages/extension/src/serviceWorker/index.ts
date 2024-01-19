@@ -430,18 +430,29 @@ const listenToNewTab = (tabId?: number) => {
  * @see https://developer.chrome.com/docs/extensions/reference/api/runtime#event-onMessage
  */
 chrome.runtime.onMessage.addListener(async (request) => {
-  if (request?.type === 'SET_TAB_TO_READ') {
+  if (
+    request?.type === 'DevTools::SET_TAB_TO_READ' ||
+    request?.type === 'Popup::SET_TAB_TO_READ'
+  ) {
     const newTab = listenToNewTab(request?.payload?.tabId);
     tabToRead = newTab;
+
     chrome.runtime.sendMessage({
-      type: 'TAB_TO_READ_DATA',
+      type: 'ServiceWorker::DevTools::TAB_TO_READ_DATA',
       payload: {
         tabToRead: tabToRead,
       },
     });
     // Can't use sendResponse as delay is too long. So using sendMessage instead.
     chrome.runtime.sendMessage({
-      type: 'syncCookieStore:SET_TAB_TO_READ',
+      type: 'ServiceWorker::DevTools::SET_TAB_TO_READ',
+      payload: {
+        tabId: newTab,
+      },
+    });
+
+    chrome.runtime.sendMessage({
+      type: 'ServiceWorker::Popup::SET_TAB_TO_READ',
       payload: {
         tabId: newTab,
       },
@@ -450,13 +461,13 @@ chrome.runtime.onMessage.addListener(async (request) => {
     await chrome.tabs.reload(Number(newTab));
   }
 
-  if (request?.type === 'DEVTOOLS_STATE_OPEN') {
+  if (request?.type === 'DevTools::ServiceWorker::DEVTOOLS_STATE_OPEN') {
     if (!request?.payload?.tabId) {
       return;
     }
 
     chrome.runtime.sendMessage({
-      type: 'TAB_TO_READ_DATA',
+      type: 'ServiceWorker::DevTools::TAB_TO_READ_DATA',
       payload: {
         tabToRead: tabToRead,
       },
@@ -464,7 +475,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
 
     if (syncCookieStore.cachedTabsData[Number(tabToRead)]) {
       chrome.runtime.sendMessage({
-        type: 'NEW_COOKIE_DATA',
+        type: 'ServiceWorker::DevTools::NEW_COOKIE_DATA',
         payload: {
           tabId:
             tabMode === 'single' ? Number(tabToRead) : request?.payload?.tabId,
@@ -478,27 +489,39 @@ chrome.runtime.onMessage.addListener(async (request) => {
     syncCookieStore.updateDevToolsState(request?.payload?.tabId, true);
   }
 
-  if (request?.type === 'POPUP_STATE_OPEN') {
+  if (request?.type === 'DevTools::ServiceWorker::DEVTOOLS_STATE_CLOSE') {
+    if (!request?.payload?.tabId) {
+      return;
+    }
+    syncCookieStore.updateDevToolsState(request?.payload?.tabId, false);
+  }
+
+  if (request?.type === 'Popup::ServiceWorker::POPUP_STATE_OPEN') {
     const tabId = tabMode === 'single' ? tabToRead : request?.payload?.tabId;
     chrome.runtime.sendMessage({
-      type: 'popup:TAB_TO_READ_DATA',
+      type: 'ServiceWorker::Popup::TAB_TO_READ_DATA',
       payload: {
         tabId,
         cookieData: JSON.stringify(syncCookieStore.cachedTabsData[tabId]),
       },
     });
+    if (syncCookieStore.cachedTabsData[Number(tabToRead)]) {
+      chrome.runtime.sendMessage({
+        type: 'ServiceWorker::Popup::NEW_COOKIE_DATA',
+        payload: {
+          tabId:
+            tabMode === 'single' ? Number(tabToRead) : request?.payload?.tabId,
+          cookieData: JSON.stringify(
+            syncCookieStore.cachedTabsData[Number(tabToRead)]
+          ),
+        },
+      });
+    }
     syncCookieStore.updatePopUpState(request?.payload?.tabId, true);
   }
 
-  if (request?.type === 'POPUP_STATE_CLOSE') {
+  if (request?.type === 'Popup::ServiceWorker::POPUP_STATE_CLOSE') {
     syncCookieStore.updatePopUpState(request?.payload?.tabId, false);
-  }
-
-  if (request?.type === 'DEVTOOLS_STATE_CLOSE') {
-    if (!request?.payload?.tabId) {
-      return;
-    }
-    syncCookieStore.updateDevToolsState(request?.payload?.tabId, false);
   }
 });
 

@@ -221,7 +221,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const changeListeningToThisTab = useCallback(() => {
     chrome.runtime.sendMessage({
-      type: 'SET_TAB_TO_READ',
+      type: 'DevTools::SET_TAB_TO_READ',
       payload: {
         tabId,
       },
@@ -237,7 +237,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         tabToRead?: string;
       };
     }) => {
-      if (message.type === 'syncCookieStore:SET_TAB_TO_READ') {
+      if (message.type === 'ServiceWorker::DevTools::SET_TAB_TO_READ') {
         chrome.devtools.inspectedWindow.eval(
           'window.location.href',
           (result, isException) => {
@@ -255,7 +255,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         setCanStartInspecting(false);
       }
 
-      if (message.type === 'NEW_COOKIE_DATA') {
+      if (message.type === 'ServiceWorker::DevTools::NEW_COOKIE_DATA') {
         if (
           message?.payload?.tabId &&
           tabId?.toString() === message?.payload?.tabId.toString()
@@ -265,7 +265,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
       }
 
-      if (message.type === 'TAB_TO_READ_DATA') {
+      if (message.type === 'ServiceWorker::DevTools::TAB_TO_READ_DATA') {
         setIsCurrentTabBeingListenedTo(
           tabId?.toString() === message?.payload?.tabToRead
         );
@@ -359,7 +359,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     chrome.runtime.sendMessage({
-      type: 'DEVTOOLS_STATE_OPEN',
+      type: 'DevTools::ServiceWorker::DEVTOOLS_STATE_OPEN',
       payload: {
         tabId: chrome.devtools.inspectedWindow.tabId,
       },
@@ -367,7 +367,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
     return () => {
       chrome.runtime.sendMessage({
-        type: 'DEVTOOLS_STATE_CLOSE',
+        type: 'DevTools::ServiceWorker::DEVTOOLS_STATE_CLOSE',
         payload: {
           tabId: chrome.devtools.inspectedWindow.tabId,
         },
