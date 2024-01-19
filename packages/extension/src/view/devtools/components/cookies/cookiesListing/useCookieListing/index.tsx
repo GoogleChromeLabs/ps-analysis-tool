@@ -41,7 +41,7 @@ const useCookieListing = () => {
     })
   );
 
-  const [tableData, setTableData] = useState<TabCookies>({});
+  const [tableData, setTableData] = useState<TabCookies>(cookies);
 
   useHighlighting(cookies, setTableData);
 
