@@ -17,12 +17,12 @@
  * External dependencies.
  */
 import React, { useMemo } from 'react';
-import classNames from 'classnames';
 
 /**
  * Internal dependencies.
  */
 import { TableFilter, TableOutput } from '../../useTable';
+import Option from './option';
 
 interface SubListProps {
   filterValues: TableFilter[keyof TableFilter]['filterValues'];
@@ -52,36 +52,15 @@ const SubList = ({
   return (
     <ul>
       {sortedFilterValueKeys.map((filterValue, index) => (
-        <li
-          key={index}
-          className={
-            index > 3 && !isExpanded ? 'ml-3 mt-1 hidden' : 'mx-3 mt-1'
-          }
-          data-testid="sub-list-item"
-        >
-          <label className="flex gap-x-2 cursor-pointer items-center">
-            <input
-              role="checkbox"
-              type="checkbox"
-              name={filterKey}
-              className={classNames(
-                'accent-royal-blue dark:accent-orange-400 w-3 h-3 dark:bg-outer-space dark:min-h-[12px] dark:min-w-[12px]',
-                {
-                  'dark:appearance-none dark:text-manatee dark:border dark:rounded-[3px]':
-                    !filterValues?.[filterValue].selected,
-                }
-              )}
-              checked={filterValues?.[filterValue].selected}
-              onChange={() => {
-                // Use Event Loop to delay the toggleFilterSelection call as too many clicks in a short time provide wrong results
-                setTimeout(() => toggleFilterSelection(filterKey, filterValue));
-              }}
-            />
-            <span className="text-asteriod-black dark:text-bright-gray leading-normal font-semi-thick">
-              {String(filterValue)}
-            </span>
-          </label>
-        </li>
+        <React.Fragment key={index}>
+          <Option
+            filterKey={filterKey}
+            filterValue={filterValue}
+            selected={Boolean(filterValues?.[filterValue].selected)}
+            toggleFilterSelection={toggleFilterSelection}
+            isExpanded={index > 3 && !isExpanded}
+          />
+        </React.Fragment>
       ))}
     </ul>
   );
