@@ -29,6 +29,7 @@ import {
  */
 import App from './app';
 import { Provider as ExternalStoreProvider } from './stateProviders/syncCookieStore';
+import { Provider as SettingsStoreProvider } from './stateProviders/syncSettingsStore';
 
 const isDarkMode = chrome.devtools.panels.themeName === 'dark';
 document.body.classList.add(isDarkMode ? 'dark' : 'light');
@@ -38,11 +39,13 @@ const root = document.getElementById('root');
 if (root) {
   createRoot(root).render(
     <ErrorBoundary fallbackRender={ErrorFallback}>
-      <ExternalStoreProvider>
-        <TablePersistentSettingsProvider>
-          <App />
-        </TablePersistentSettingsProvider>
-      </ExternalStoreProvider>
+      <SettingsStoreProvider>
+        <ExternalStoreProvider>
+          <TablePersistentSettingsProvider>
+            <App />
+          </TablePersistentSettingsProvider>
+        </ExternalStoreProvider>
+      </SettingsStoreProvider>
     </ErrorBoundary>
   );
 }

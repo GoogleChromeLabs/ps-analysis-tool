@@ -43,9 +43,11 @@ export interface CookieStoreContext {
     tabId: number | null;
     onChromeUrl: boolean;
     allowedNumberOfTabs: string | null;
+    isUsingCDP: boolean;
   };
   actions: {
     changeListeningToThisTab: () => void;
+    setIsUsingCDP: (newValue: boolean) => void;
   };
 }
 
@@ -77,9 +79,11 @@ const initialState: CookieStoreContext = {
     onChromeUrl: false,
     tabId: null,
     allowedNumberOfTabs: null,
+    isUsingCDP: false,
   },
   actions: {
     changeListeningToThisTab: noop,
+    setIsUsingCDP: noop,
   },
 };
 
@@ -93,6 +97,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [allowedNumberOfTabs, setAllowedNumberOfTabs] = useState<string | null>(
     null
   );
+  const [isUsingCDP, setIsUsingCDP] = useState(false);
 
   const [tabCookieStats, setTabCookieStats] =
     useState<CookieStoreContext['state']['tabCookieStats']>(null);
@@ -125,6 +130,16 @@ export const Provider = ({ children }: PropsWithChildren) => {
     setLoading(false);
   }, 100);
 
+  const _setUsingCDP = useCallback((newValue: boolean) => {
+    chrome.runtime.sendMessage({
+      type: 'CHANGE_CDP_SETTING',
+      payload: {
+        isUsingCDP: newValue,
+      },
+    });
+    setIsUsingCDP(newValue);
+  }, []);
+
   const intitialSync = useCallback(async () => {
     const [tab] = await getCurrentTab();
 
@@ -132,6 +147,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
     if (extensionStorage?.allowedNumberOfTabs) {
       setAllowedNumberOfTabs(extensionStorage?.allowedNumberOfTabs);
+    }
+    if (Object.keys(extensionStorage).includes('isUsingCDP')) {
+      setIsUsingCDP(extensionStorage.isUsingCDP);
     }
 
     if (!tab.id || !tab.url) {
@@ -249,8 +267,15 @@ export const Provider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     const listener = async (message: {
       type: string;
-      payload: { tabId: string };
+      payload: { tabId?: string; isUsingCDPNewValue?: boolean };
     }) => {
+      if (
+        message.type === 'CHANGE_CDP_SETTING' &&
+        typeof message?.payload?.isUsingCDPNewValue !== 'undefined'
+      ) {
+        setIsUsingCDP(message?.payload?.isUsingCDPNewValue);
+      }
+
       if (message.type === 'syncCookieStore:SET_TAB_TO_READ') {
         const tab = await getCurrentTab();
 
@@ -314,9 +339,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
           returningToSingleTab,
           onChromeUrl,
           allowedNumberOfTabs,
+          isUsingCDP,
         },
         actions: {
           changeListeningToThisTab,
+          setIsUsingCDP: _setUsingCDP,
         },
       }}
     >
