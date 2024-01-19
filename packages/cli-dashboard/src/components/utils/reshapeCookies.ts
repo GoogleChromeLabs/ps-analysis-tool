@@ -69,6 +69,7 @@ const createCookieObj = (
         } as CookieTableData['analytics'],
         url: cookie.url,
         headerType: 'response',
+        blockedReasons: cookie.blockedReasons,
         isFirstParty: cookie.isFirstParty,
         frameIdList: [frame], // Hot fix: For Displaying cookies in CLI Dashboard.
         isBlocked: cookie.isBlocked,
