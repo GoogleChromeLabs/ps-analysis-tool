@@ -48,6 +48,7 @@ const cdpURLToRequestMap: {
 
 let tabMode = 'single';
 let tabToRead = '';
+let globalIsUsingCDP = false;
 
 const ALLOWED_EVENTS = [
   'Network.responseReceived',
@@ -217,9 +218,13 @@ chrome.tabs.onRemoved.addListener((tabId) => {
  */
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   try {
-    await chrome.debugger.attach({ tabId }, '1.3');
-    chrome.debugger.sendCommand({ tabId }, 'Network.enable');
-    chrome.debugger.sendCommand({ tabId }, 'Audits.enable');
+    if (globalIsUsingCDP) {
+      await chrome.debugger.attach({ tabId }, '1.3');
+      await chrome.debugger.sendCommand({ tabId }, 'Network.enable');
+      await chrome.debugger.sendCommand({ tabId }, 'Audits.enable');
+    } else {
+      await chrome.debugger.detach({ tabId });
+    }
   } catch (error) {
     //Fail silently
   }
@@ -550,6 +555,99 @@ chrome.storage.sync.onChanged.addListener(
   (changes: { [key: string]: chrome.storage.StorageChange }) => {
     if (changes && Object.keys(changes).includes('allowedNumberOfTabs')) {
       tabMode = changes.allowedNumberOfTabs.newValue;
+    }
+  }
+);
+
+chrome.storage.sync.onChanged.addListener(
+  async (changes: { [key: string]: chrome.storage.StorageChange }) => {
+    if (
+      !changes?.allowedNumberOfTabs ||
+      typeof changes?.allowedNumberOfTabs?.newValue === 'undefined'
+    ) {
+      return;
+    }
+
+    if (changes?.allowedNumberOfTabs?.newValue === 'single') {
+      const tabs = await chrome.tabs.query({});
+
+      tabs.map((tab) => {
+        if (!tab?.id) {
+          return tab;
+        }
+
+        chrome.action.setBadgeText({
+          tabId: tab?.id,
+          text: '',
+        });
+        return tab;
+      });
+
+      syncCookieStore.clear();
+    } else {
+      const tabs = await chrome.tabs.query({});
+
+      await Promise.all(
+        tabs.map(async (tab) => {
+          if (!tab?.id) {
+            return;
+          }
+          syncCookieStore.addTabData(
+            tab.id,
+            changes?.allowedNumberOfTabs?.newValue
+          );
+          await chrome.tabs.reload(Number(tab?.id));
+        })
+      );
+    }
+  }
+);
+
+chrome.storage.sync.onChanged.addListener(
+  async (changes: { [key: string]: chrome.storage.StorageChange }) => {
+    if (
+      !changes?.isUsingCDP ||
+      typeof changes?.isUsingCDP?.newValue === 'undefined'
+    ) {
+      return;
+    }
+
+    globalIsUsingCDP = changes?.isUsingCDP?.newValue;
+
+    chrome.runtime.sendMessage({
+      type: 'CHANGE_CDP_SETTING',
+      payload: {
+        isUsingCDP: changes?.isUsingCDP?.newValue,
+      },
+    });
+
+    if (!changes?.isUsingCDP?.newValue) {
+      await Promise.all(
+        Object.keys(syncCookieStore.cachedTabsData).map(async (key) => {
+          if (!Number(key)) {
+            return;
+          }
+
+          try {
+            await chrome.debugger.detach({ tabId: Number(key) });
+            syncCookieStore.removeTabData(Number(key));
+          } catch (error) {
+            // Fail silently
+          } finally {
+            await chrome.tabs.reload(Number(key), { bypassCache: true });
+          }
+        })
+      );
+    } else {
+      await Promise.all(
+        Object.keys(syncCookieStore.cachedTabsData).map(async (key) => {
+          if (!Number(key)) {
+            return;
+          }
+
+          await chrome.tabs.reload(Number(key), { bypassCache: true });
+        })
+      );
     }
   }
 );

@@ -154,6 +154,13 @@ class SynchnorousCookieStore {
   }
 
   /**
+   * Clears the whole storage.
+   */
+  clear() {
+    this.cachedTabsData = {};
+  }
+
+  /**
    * Gets the tabUrl for the given tab id.
    * @param {number} tabId Tab id.
    * @returns the url of the tab

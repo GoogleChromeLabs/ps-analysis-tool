@@ -22,6 +22,7 @@ import {
   findAnalyticsMatch,
   type CookieData,
 } from '@ps-analysis-tool/common';
+import { getDomain } from 'tldts';
 import type { Protocol } from 'devtools-protocol';
 
 /**
@@ -32,7 +33,6 @@ import type {
   CookieDatabase,
 } from '../utils/fetchCookieDictionary';
 import { createCookieObject } from './createCookieObject';
-import { getDomain } from 'tldts';
 
 /**
  * Parse response cookies header.
