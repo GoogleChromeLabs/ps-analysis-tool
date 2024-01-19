@@ -23,6 +23,7 @@ const root = {
   entry: {
     'service-worker': './src/serviceWorker/index.ts',
     'content-script': './src/contentScript/index.ts',
+    worker: './src/worker/index.ts',
   },
   output: {
     path: path.resolve(__dirname, '../../dist/extension'),
