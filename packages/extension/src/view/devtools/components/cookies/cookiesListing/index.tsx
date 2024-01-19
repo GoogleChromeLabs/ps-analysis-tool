@@ -22,6 +22,7 @@ import {
   filterCookiesByFrame,
   type CookieTableData,
   getCookieKey,
+  BLOCKED_REASON_LIST,
 } from '@ps-analysis-tool/common';
 import {
   CookieDetails,
@@ -36,7 +37,6 @@ import {
  * Internal dependencies.
  */
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import { BLOCKED_REASON_LIST } from '../../../../../constants';
 
 interface CookiesListingProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;

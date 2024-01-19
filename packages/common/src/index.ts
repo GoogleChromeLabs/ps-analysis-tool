@@ -34,4 +34,4 @@ export { default as getDomainFromUrl } from './utils/getDomainFromUrl';
 export { default as noop } from './utils/noop';
 export * from './utils/generateReports';
 export * from './cookies.types';
-export const UNKNOWN_FRAME_KEY = 'Unknown Frame(s)';
+export * from './constants';

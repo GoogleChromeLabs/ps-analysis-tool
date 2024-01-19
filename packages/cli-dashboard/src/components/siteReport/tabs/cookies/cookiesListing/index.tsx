@@ -26,7 +26,10 @@ import {
   type TableColumn,
   type TableFilter,
 } from '@ps-analysis-tool/design-system';
-import type { CookieTableData } from '@ps-analysis-tool/common';
+import {
+  BLOCKED_REASON_LIST,
+  type CookieTableData,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies
@@ -130,6 +133,17 @@ const CookiesListing = ({
     ],
     []
   );
+
+  const blockedReasonFilterValues = useMemo<{
+    [key: string]: { selected: boolean };
+  }>(() => {
+    const filterValues: { [key: string]: { selected: boolean } } = {};
+
+    BLOCKED_REASON_LIST.forEach((reason) => {
+      filterValues[reason] = { selected: false };
+    });
+    return filterValues;
+  }, []);
 
   const filters = useMemo<TableFilter>(
     () => ({
@@ -260,6 +274,15 @@ const CookiesListing = ({
       'analytics.platform': {
         title: 'Platform',
       },
+      blockedReasons: {
+        title: 'Cookie Blocked Reasons',
+        description: 'Reason why the cookies were blocked.',
+        hasStaticFilterValues: true,
+        filterValues: blockedReasonFilterValues,
+        comparator: (value: InfoType, filterValue: string) => {
+          return (value as string[])?.includes(filterValue);
+        },
+      },
       isBlocked: {
         title: 'Cookie Affected',
         description:
@@ -279,7 +302,7 @@ const CookiesListing = ({
         },
       },
     }),
-    []
+    [blockedReasonFilterValues]
   );
 
   const searchKeys = useMemo<string[]>(
