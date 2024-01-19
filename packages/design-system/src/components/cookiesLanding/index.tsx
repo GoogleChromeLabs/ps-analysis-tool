@@ -40,6 +40,7 @@ interface CookiesLandingProps {
   associatedCookiesCount?: number | null;
   showMessageBoxBody?: boolean;
   showBlockedCookiesSection?: boolean;
+  showFramesSection?: boolean;
   description?: React.ReactNode;
 }
 
@@ -51,6 +52,7 @@ const CookiesLanding = ({
   associatedCookiesCount = null,
   showMessageBoxBody = true,
   showBlockedCookiesSection = false,
+  showFramesSection = false,
   showHorizontalMatrix = false,
   description = '',
 }: CookiesLandingProps) => {
@@ -133,7 +135,7 @@ const CookiesLanding = ({
           )}
         </CookiesLandingContainer>
       )}
-      {showBlockedCookiesSection && (
+      {showFramesSection && (
         <CookiesLandingContainer
           dataMapping={frameStateCreator.dataMapping}
           testId="frames-insights"
