@@ -33,7 +33,7 @@ const extractCookies = (
       acc[frame] = Object.fromEntries(
         Object.entries(_data.frameCookies).map(([key, cookie]) => [
           key + (shouldAddUrlToKey ? '' : pageUrl),
-          cookie,
+          { ...cookie, pageUrl },
         ])
       );
 
