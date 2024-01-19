@@ -98,7 +98,7 @@ export type TechnologyData = {
     name: string;
     slug: string;
   }[];
-  rootPath: boolean;
+  rootPath?: boolean;
   pageUrl?: string;
 };
 
