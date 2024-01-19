@@ -21,10 +21,11 @@ import { CookieData } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import { ResponseData } from './types';
+import { RequestData, ResponseData } from './types';
 
 export const parseNetworkDataToCookieData = (
   responseMap: Map<string, ResponseData>,
+  requestMap: Map<string, RequestData>,
   frameIdUrlMap: Map<string, string>,
   mainFrameId: string,
   pageUrl: string
@@ -38,7 +39,7 @@ export const parseNetworkDataToCookieData = (
 } => {
   const frameIdNetworkDataMap = new Map<
     string,
-    { responses: ResponseData[] }
+    { responses: ResponseData[]; requests: RequestData[] }
   >();
 
   for (const [, response] of responseMap) {
@@ -46,10 +47,25 @@ export const parseNetworkDataToCookieData = (
       continue;
     }
     const frameId = response.frameId || mainFrameId;
-    const prevResposes = frameIdNetworkDataMap.get(frameId)?.responses || [];
+    const prevResponses = frameIdNetworkDataMap.get(frameId)?.responses || [];
+    const prevRequests = frameIdNetworkDataMap.get(frameId)?.responses || [];
 
     frameIdNetworkDataMap.set(frameId, {
-      responses: [...prevResposes, response],
+      responses: [...prevResponses, response],
+      requests: prevRequests,
+    });
+  }
+  for (const [, request] of requestMap) {
+    if (!request.cookies || request.cookies.length === 0) {
+      continue;
+    }
+    const frameId = request.frameId || mainFrameId;
+    const prevResponses = frameIdNetworkDataMap.get(frameId)?.responses || [];
+    const prevRequests = frameIdNetworkDataMap.get(frameId)?.responses || [];
+
+    frameIdNetworkDataMap.set(frameId, {
+      responses: prevResponses,
+      requests: [...prevRequests, request],
     });
   }
 
@@ -83,6 +99,28 @@ export const parseNetworkDataToCookieData = (
         _frameCookies.set(key, {
           ...cookie,
           url: response.serverUrl,
+          parsedCookie: { ...cookie.parsedCookie, domain: parsedDomain || '' },
+        });
+      });
+    });
+
+    data.requests?.forEach((request: RequestData) => {
+      request.cookies.forEach((cookie) => {
+        // domain update required. Domain based on the server url
+        const parsedDomain =
+          cookie.parsedCookie.domain === ''
+            ? getDomain(request.serverUrl)
+            : cookie.parsedCookie.domain;
+
+        const key =
+          cookie.parsedCookie.name +
+          ':' +
+          parsedDomain +
+          ':' +
+          cookie.parsedCookie.path;
+        _frameCookies.set(key, {
+          ...cookie,
+          url: request.serverUrl,
           parsedCookie: { ...cookie.parsedCookie, domain: parsedDomain || '' },
         });
       });

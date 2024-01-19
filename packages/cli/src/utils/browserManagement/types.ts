@@ -27,3 +27,9 @@ export type ResponseData = {
   serverUrl: string;
   cookies: CookieData[];
 };
+
+export type RequestData = {
+  frameId: string;
+  serverUrl: string;
+  cookies: CookieData[];
+};

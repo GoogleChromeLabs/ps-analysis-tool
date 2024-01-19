@@ -23,7 +23,7 @@ import { parse } from 'simple-cookie';
 /**
  * Internal dependencies.
  */
-import { ResponseData, ViewportConfig } from './types';
+import { ResponseData, RequestData, ViewportConfig } from './types';
 import { parseNetworkDataToCookieData } from './parseNetworkDataToCookieData';
 import delay from '../delay';
 import { CookieData, UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
@@ -35,6 +35,7 @@ export class BrowserManagement {
   pageWaitTime: number;
   pageMap: Map<string, Page>;
   pageResponseMaps: Map<string, Map<string, ResponseData>>;
+  pageRequestMaps: Map<string, Map<string, RequestData>>;
   shouldLogDebug: boolean;
 
   constructor(
@@ -49,6 +50,7 @@ export class BrowserManagement {
     this.pageWaitTime = pageWaitTime;
     this.pageMap = new Map();
     this.pageResponseMaps = new Map();
+    this.pageRequestMaps = new Map();
     this.shouldLogDebug = shouldLogDebug;
   }
 
@@ -183,6 +185,47 @@ export class BrowserManagement {
       }
     );
 
+    const requestMap = new Map();
+    this.pageRequestMaps.set(pageId, requestMap);
+
+    cdpSession.on('Network.requestWillBeSent', (request) => {
+      requestMap.set(request.requestId, {
+        ...(requestMap.get(request.requestId) || {}),
+        frameId: request.frameId,
+        serverUrl: request.request.url,
+      });
+    });
+
+    cdpSession.on(
+      'Network.requestWillBeSentExtraInfo',
+      (event: Protocol.Network.RequestWillBeSentExtraInfoEvent) => {
+        if (event.associatedCookies && event.associatedCookies.length !== 0) {
+          const cookies: Protocol.Network.Cookie[] = [];
+          event.associatedCookies.forEach((associatedCookie) => {
+            return {
+              parsedCookie: {
+                name: associatedCookie.cookie.name,
+                domain: associatedCookie.cookie.domain,
+                path: associatedCookie.cookie.path || '/',
+                value: associatedCookie.cookie.value,
+                sameSite: associatedCookie.cookie.sameSite || 'Lax',
+                expires: associatedCookie.cookie.expires || 'Session',
+                httpOnly: associatedCookie.cookie.httpOnly || false,
+                secure: associatedCookie.cookie.secure || false,
+                partitionKey: associatedCookie.cookie.partitionKey,
+              },
+              isBlocked: associatedCookie.blockedReasons.length > 0,
+              blockedReasons: associatedCookie.blockedReasons,
+            };
+          });
+          requestMap.set(event.requestId, {
+            ...(requestMap.get(event.requestId) || {}),
+            cookies,
+          });
+        }
+      }
+    );
+
     this.debugLog('done attaching network event listeners');
   }
 
@@ -225,13 +268,20 @@ export class BrowserManagement {
     const result = await Promise.all(
       urls.map(async (url) => {
         const responseMap = this.pageResponseMaps.get(url);
+        const requestMap = this.pageRequestMaps.get(url);
         const page = this.pageMap.get(url);
 
         const frameIdUrlMap = this.getPageFrameIdToUrlMap(url);
         // @ts-ignore
         const mainFrameId = this.pageMap.get(url)?.mainFrame()._id;
 
-        if (!responseMap || !frameIdUrlMap || !mainFrameId || !page) {
+        if (
+          !responseMap ||
+          !requestMap ||
+          !frameIdUrlMap ||
+          !mainFrameId ||
+          !page
+        ) {
           return {
             pageUrl: url,
             cookieData: {},
@@ -240,6 +290,7 @@ export class BrowserManagement {
 
         const cookieDataFromNetwork = parseNetworkDataToCookieData(
           responseMap,
+          requestMap,
           frameIdUrlMap,
           mainFrameId,
           url
