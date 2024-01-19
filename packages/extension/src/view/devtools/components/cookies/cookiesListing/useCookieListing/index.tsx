@@ -41,7 +41,7 @@ const useCookieListing = () => {
     })
   );
 
-  const [tableData, setTableData] = useState<TabCookies>({});
+  const [tableData, setTableData] = useState<TabCookies>(cookies);
 
   useHighlighting(cookies, setTableData);
 
@@ -161,6 +161,10 @@ const useCookieListing = () => {
     const blockedReasonFilterValues = Object.values(cookies).reduce(
       (acc, cookie) => {
         const blockedReason = getValueByKey('blockedReasons', cookie);
+
+        if (!cookie.frameIdList || cookie?.frameIdList?.length === 0) {
+          return acc;
+        }
 
         blockedReason?.forEach((reason: string) => {
           if (!acc) {
