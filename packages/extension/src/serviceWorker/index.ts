@@ -491,6 +491,19 @@ chrome.runtime.onMessage.addListener((request) => {
       await chrome.tabs.reload(Number(newTab));
     });
   }
+
+  if (request.type === 'CHANGE_CDP_SETTING') {
+    if (typeof request.payload?.isUsingCDP !== 'undefined') {
+      globalIsUsingCDP = request.payload?.isUsingCDP;
+      (async () => {
+        const storage = await chrome.storage.sync.get();
+        await chrome.storage.sync.set({
+          ...storage,
+          isUsingCDP: globalIsUsingCDP,
+        });
+      })();
+    }
+  }
 });
 
 /**
