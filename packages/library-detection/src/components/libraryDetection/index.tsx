@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useState, memo, useEffect } from 'react';
+import React, { useState, memo, useEffect, useCallback } from 'react';
 import {
   CookiesLandingContainer,
   COLOR_MAP,
@@ -27,16 +27,13 @@ import {
  */
 import DynamicPlaceholder from './dynamicPlaceholder';
 import LIBRARIES from '../../config';
-import { Provider as LibraryDetectionProvider } from '../../stateProviders/librayDetectionContext';
 import type { Config } from '../../types';
-import useLibraryDetection from './useLibraryDetection';
+import { useLibraryDetection } from '../../core';
 
 // eslint-disable-next-line react/display-name
 const LibraryDetection = memo(function LibraryDetection() {
   const [libraryCount, setLibraryCount] = useState(0);
   const { libraryMatches } = useLibraryDetection();
-
-  console.log(libraryMatches, 'libraryMatches');
 
   useEffect(() => {
     const names = Object.keys(libraryMatches);
@@ -45,9 +42,9 @@ const LibraryDetection = memo(function LibraryDetection() {
       return;
     }
 
-    const detectedLibraryNames = names.filter((name) => {
-      return libraryMatches[name]?.matches?.length;
-    });
+    const detectedLibraryNames = names.filter(
+      (name) => libraryMatches[name]?.matches?.length
+    );
 
     setLibraryCount(detectedLibraryNames.length);
   }, [libraryMatches]);
@@ -65,11 +62,17 @@ const LibraryDetection = memo(function LibraryDetection() {
       ? 'Please review the following libraries or library features for known breakages.'
       : '';
 
-  const configs: Config[] = LIBRARIES.map((config) => {
-    const _config = { ...config, component: '' };
+  const onTabUpdate = useCallback(() => {
+    setLibraryCount(0);
+  }, []);
 
-    return _config;
-  });
+  useEffect(() => {
+    chrome.tabs.onUpdated.addListener(onTabUpdate);
+
+    return () => {
+      chrome.tabs.onUpdated.removeListener(onTabUpdate);
+    };
+  }, [onTabUpdate]);
 
   return (
     <CookiesLandingContainer
@@ -78,7 +81,7 @@ const LibraryDetection = memo(function LibraryDetection() {
       description={description}
     >
       {libraryCount > 0 ? (
-        <LibraryDetectionProvider config={configs}>
+        <>
           {LIBRARIES.map((config: Config) => {
             const Component = config.component as React.FC;
             const matches =
@@ -88,7 +91,7 @@ const LibraryDetection = memo(function LibraryDetection() {
 
             return <Component key={config.name} matches={matches} />;
           })}
-        </LibraryDetectionProvider>
+        </>
       ) : (
         <DynamicPlaceholder />
       )}

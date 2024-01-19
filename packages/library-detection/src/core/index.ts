@@ -18,3 +18,5 @@ export { default as detectMatchingSignatures } from './detectMatchingSignatures'
 export { default as getHelpUrl } from './getHelpUrl';
 export { default as sumUpDetectionResults } from './sumUpDetectionResults';
 export { default as filterResources } from './filterResources';
+export { default as getInlineScriptContent } from './getInlineScriptContent';
+export { default as useLibraryDetection } from './hooks/useLibraryDetection';

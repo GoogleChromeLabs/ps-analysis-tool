@@ -13,27 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export interface SignaturesConfigItem {
+export type SignaturesConfigItem = {
   signature: string;
   helpUrl: string;
-}
+};
 
-export interface SignaturesConfig {
+export type SignaturesConfig = {
   strongMatches: SignaturesConfigItem[];
   weakMatches: SignaturesConfigItem[];
-}
+};
 
-export interface Config {
+export type Config = {
   component?: React.FC;
   name?: string;
   signatures: SignaturesConfig[];
   domainsToSkip: string[];
   helpUrl: string;
-}
+};
 
 export type ScriptTagUnderCheck = {
   origin: string | null;
   content: string;
+  type?: string;
 };
 
 export type DetectedSignature = {
@@ -88,4 +89,8 @@ export type ResourceTreeItem = {
 
 export type AccordionProps = {
   matches: DetectedSignature[];
+};
+
+export type DomainPaths = {
+  [domain: string]: string[];
 };

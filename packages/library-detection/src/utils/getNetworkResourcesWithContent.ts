@@ -13,21 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// @todo To be moved to common package.
-export const getCurrentTab = () => {
-  try {
-    return chrome.tabs.query({
-      active: true,
-      currentWindow: true,
-    });
-  } catch (error) {
-    //do nothing in this error
-  }
-  return Promise.resolve(undefined);
-};
+/**
+ * Internal dependencies.
+ */
+import { type ResourceTreeItem } from '../types';
+import { getResourcesWithContent } from './getResourcesWithContent';
 
-export const getCurrentTabId = async (tab = null) => {
-  const _tab = tab || (await getCurrentTab());
+export const getNetworkResourcesWithContent = async () => {
+  const resources: ResourceTreeItem[] = await new Promise((resolve) => {
+    chrome.devtools.inspectedWindow.getResources((_resources) =>
+      resolve(_resources)
+    );
+  });
 
-  return _tab?.[0]?.id ? _tab[0].id.toString() : undefined;
+  const resourcesWithContent = await getResourcesWithContent(resources);
+
+  return resourcesWithContent;
 };

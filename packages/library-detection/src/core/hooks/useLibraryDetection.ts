@@ -22,11 +22,11 @@ import { useState, useCallback, useEffect } from 'react';
  * Internal dependencies.
  */
 import {
-  getNetworkScriptsFromResourceTree,
+  getNetworkResourcesWithContent,
   getResourcesWithContent,
 } from '../../utils';
-import { detectMatchingSignatures, sumUpDetectionResults } from '../../core';
-import type { LibraryData } from '../../types';
+import { detectMatchingSignatures, sumUpDetectionResults } from '..';
+import type { LibraryData, ResourceTreeItem } from '../../types';
 
 const useLibraryDetection = () => {
   const initialState: LibraryData = {
@@ -44,10 +44,10 @@ const useLibraryDetection = () => {
   const [libraryMatches, setLibraryMatches] = useState(initialState);
 
   const listenerCallback = useCallback(
-    async (resource) => {
-      const resourcesWithContent = await getResourcesWithContent([resource]);
-      const realtimeComputationResult =
-        detectMatchingSignatures(resourcesWithContent);
+    async (resource: ResourceTreeItem) => {
+      const realtimeComputationResult = detectMatchingSignatures(
+        await getResourcesWithContent([resource])
+      );
 
       if (
         realtimeComputationResult.gis.matches.length !== 0 ||
@@ -66,7 +66,7 @@ const useLibraryDetection = () => {
 
   useEffect(() => {
     (async () => {
-      const scripts = await getNetworkScriptsFromResourceTree();
+      const scripts = await getNetworkResourcesWithContent();
       const detectMatchingSignaturesv1Results =
         detectMatchingSignatures(scripts);
 

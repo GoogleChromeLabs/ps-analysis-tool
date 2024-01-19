@@ -22,15 +22,10 @@ import React, { useState } from 'react';
  * Internal dependencies.
  */
 import { Accordion, FeatureList } from '../../components';
-import { useLibraryDetection } from '../../stateProviders';
 import type { AccordionProps } from '../../types';
 
 const GSIAccordion = ({ matches }: AccordionProps) => {
   const [isLoading] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { config } = useLibraryDetection(({ state }) => ({
-    config: state.config,
-  }));
 
   const featuresCount = matches && matches.length ? matches.length : 0;
 
