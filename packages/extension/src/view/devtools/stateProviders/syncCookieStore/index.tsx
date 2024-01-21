@@ -246,7 +246,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
       }
 
       if (message.type === 'ServiceWorker::DevTools::NEW_COOKIE_DATA') {
-        console.log(message);
         if (
           message?.payload?.tabId &&
           tabId?.toString() === message?.payload?.tabId.toString()
