@@ -15,6 +15,11 @@
  */
 let devToolWorker: Worker | null = null;
 
+/**
+ * Get the DevTool worker instance. If it doesn't exist, it creates a new one.
+ * @returns {Worker} The DevTool worker instance.
+ */
+
 const getDevToolWorker = () => {
   devToolWorker = devToolWorker || new Worker('worker.js');
 

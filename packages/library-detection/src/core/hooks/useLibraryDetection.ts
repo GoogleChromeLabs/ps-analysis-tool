@@ -27,7 +27,8 @@ import {
 } from '../../utils';
 import { detectMatchingSignatures, sumUpDetectionResults } from '..';
 import type { LibraryData, ResourceTreeItem } from '../../types';
-import { getDevToolWorker } from '@ps-analysis-tool/common';
+import { executeTaskInWorker } from '@ps-analysis-tool/common';
+import { LIBRARY_DETECTION_WORKER_TASK } from '../../worker/constants';
 
 const useLibraryDetection = () => {
   const initialState: LibraryData = {
@@ -40,23 +41,6 @@ const useLibraryDetection = () => {
       moduleMatch: 0,
       matches: [],
     },
-  };
-
-  const newWorker = async () => {
-    const workerThread = getDevToolWorker();
-    const scripts = await getNetworkResourcesWithContent();
-
-    const result = await new Promise((resolve, reject) => {
-      workerThread.postMessage({
-        task: 'detectMatchingSignatures',
-        payload: scripts,
-      });
-      // Send data to worker
-      workerThread.onerror = reject; // Handle errors
-      workerThread.onmessage = resolve; // Get result from worker
-    });
-
-    console.log('result from worker thread =>', result);
   };
 
   const [libraryMatches, setLibraryMatches] = useState(initialState);
@@ -85,13 +69,12 @@ const useLibraryDetection = () => {
   useEffect(() => {
     (async () => {
       const scripts = await getNetworkResourcesWithContent();
-      const detectMatchingSignaturesv1Results =
-        detectMatchingSignatures(scripts);
-
-      setLibraryMatches(detectMatchingSignaturesv1Results);
+      const detectedSignatureMatches = await executeTaskInWorker(
+        LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING,
+        scripts
+      );
+      setLibraryMatches(detectedSignatureMatches);
     })();
-    newWorker();
-    // libraryDetectionWorker.postMessage('test post message from hook')
   }, []);
 
   const invokeGSIdetection = useCallback(() => {

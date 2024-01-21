@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * Internal dependencies.
  */
-import { libraryDetectionWorker } from '@ps-analysis-tool/library-detection';
 
-/**
- * Main onmessage handler of the worker thread. Inside this other modules onMessageHandlers are registered.
- * @param {any} event
- * @returns {any}
- */
-self.onmessage = function (event) {
-  libraryDetectionWorker(event);
-};
+import {
+  LIBRARY_DETECTION_WORKER_TASK,
+  PreDefinedLibraryWorkerTaskPayload,
+} from '@ps-analysis-tool/library-detection';
+
+export type PredefinedTasks = LIBRARY_DETECTION_WORKER_TASK; // in the future add other module tasks using union to this PredefinedTasks
+
+export type PreDefinedWorkerTaskPayload = PreDefinedLibraryWorkerTaskPayload; // in the future add other module predefinedPayloads using union to this

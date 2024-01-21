@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * Internal dependencies.
  */
-import { libraryDetectionWorker } from '@ps-analysis-tool/library-detection';
+import { ScriptTagUnderCheck } from '../types';
 
-/**
- * Main onmessage handler of the worker thread. Inside this other modules onMessageHandlers are registered.
- * @param {any} event
- * @returns {any}
- */
-self.onmessage = function (event) {
-  libraryDetectionWorker(event);
+export enum LIBRARY_DETECTION_WORKER_TASK {
+  DETECT_SIGNATURE_MATCHING,
+}
+
+export type PreDefinedLibraryWorkerTaskPayload = {
+  [LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING]: ScriptTagUnderCheck[];
 };

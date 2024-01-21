@@ -14,14 +14,28 @@
  * limitations under the License.
  */
 
+/**
+ * Internal dependencies.
+ */
 import detectMatchingSignatures from '../core/detectMatchingSignatures';
+import {
+  LIBRARY_DETECTION_WORKER_TASK,
+  PreDefinedLibraryWorkerTaskPayload,
+} from './constants';
+
+/**
+ * Library Detection Worker function that handles tasks related to library detection.
+ * @param {MessageEvent<any>} event - The MessageEvent containing task and payload data.
+ * @returns {void} This function does not return a value directly but uses postMessage for communication.
+ */
 
 export const libraryDetectionWorker = (event: MessageEvent<any>) => {
-  const task = event.data.task;
-  const payload = event.data.payload;
+  const task: LIBRARY_DETECTION_WORKER_TASK = event.data.task;
+  const payload: PreDefinedLibraryWorkerTaskPayload[LIBRARY_DETECTION_WORKER_TASK] =
+    event.data.payload;
 
   switch (task) {
-    case 'detectMatchingSignatures': {
+    case LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING: {
       const detectedMatchingSignatures = detectMatchingSignatures(payload);
       postMessage(detectedMatchingSignatures);
       break;

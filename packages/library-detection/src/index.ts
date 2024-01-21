@@ -30,3 +30,4 @@
  */
 export * from './components';
 export * from './worker';
+export * from './worker/constants';
