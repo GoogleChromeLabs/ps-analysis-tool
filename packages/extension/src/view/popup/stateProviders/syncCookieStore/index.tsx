@@ -32,6 +32,7 @@ import { type CookiesCount } from '@ps-analysis-tool/common';
  * Internal dependencies.
  */
 import { getCurrentTab } from '../../../../utils/getCurrentTabId';
+import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
 
 export interface CookieStoreContext {
   state: {
@@ -91,11 +92,11 @@ export const Context = createContext<CookieStoreContext>(initialState);
 export const Provider = ({ children }: PropsWithChildren) => {
   const [tabId, setTabId] = useState<number | null>(null);
 
-  const [tabUrl, setTabUrl] = useState<string | null>(null);
-
   const [allowedNumberOfTabs, setAllowedNumberOfTabs] = useState<string | null>(
     null
   );
+
+  const [tabToRead, setTabToRead] = useState<string>('');
   const [isUsingCDP, setIsUsingCDP] = useState(false);
 
   const [tabCookieStats, setTabCookieStats] =
@@ -151,6 +152,17 @@ export const Provider = ({ children }: PropsWithChildren) => {
       setIsUsingCDP(extensionStorage.isUsingCDP);
     }
 
+    const availableTabs = await chrome.tabs.query({});
+
+    if (
+      availableTabs.length === ALLOWED_NUMBER_OF_TABS &&
+      availableTabs.filter(
+        (processingTab) => processingTab.id?.toString() === tabToRead
+      )
+    ) {
+      setReturningToSingleTab(true);
+    }
+
     if (!tab || !tab[0].id || !tab[0].url) {
       return;
     }
@@ -162,8 +174,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     }
 
     setTabId(tab[0].id);
-    setTabUrl(tab[0].url);
-  }, []);
+  }, [tabToRead]);
 
   useEffect(() => {
     if (tabId) {
@@ -195,10 +206,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
   }, [tabId]);
 
   useEffect(() => {
-    const listener = async (message: {
+    const listener = (message: {
       type: string;
       payload: {
-        tabId?: number;
+        tabId?: string;
         cookieData?: string;
         tabToRead?: string;
         tabProcessingMode?: string;
@@ -206,12 +217,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       };
     }) => {
       if (message.type === 'ServiceWorker::Popup::SET_TAB_TO_READ') {
-        const tab = await getCurrentTab();
-
-        if (tab?.[0]?.url) {
-          setTabUrl(tab[0]?.url);
-        }
-
+        setTabToRead(message?.payload?.tabId || '');
         setIsCurrentTabBeingListenedTo(true);
         setLoading(false);
       }
@@ -239,17 +245,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
       if (message.type === 'ServiceWorker::Popup::TAB_TO_READ_DATA') {
         if (allowedNumberOfTabs === 'single') {
           setIsCurrentTabBeingListenedTo(
-            tabId?.toString() === message?.payload?.tabId
-          );
-        }
-        if (tabId?.toString() === message?.payload?.tabId.toString()) {
-          setTabCookieStats(
-            prepareCookiesCount(
-              JSON.parse(message?.payload?.cookieData ?? '{}')
-            )
+            tabId?.toString() === message?.payload?.tabToRead
           );
           setLoading(false);
         }
+
+        setTabToRead(message?.payload?.tabToRead || '');
       }
     };
 
@@ -267,27 +268,16 @@ export const Provider = ({ children }: PropsWithChildren) => {
     }
   }, []);
 
-  const tabUpdateListener = useCallback(
-    (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
-      if (tabId === _tabId && changeInfo.url) {
-        setTabUrl(changeInfo.url);
-      }
-    },
-    [tabId]
-  );
-
   useEffect(() => {
     intitialSync();
   }, [intitialSync]);
 
   useEffect(() => {
     chrome.storage.sync.onChanged.addListener(changeSyncStorageListener);
-    chrome.tabs.onUpdated.addListener(tabUpdateListener);
     return () => {
-      chrome.tabs.onUpdated.removeListener(tabUpdateListener);
       chrome.storage.sync.onChanged.removeListener(changeSyncStorageListener);
     };
-  }, [tabUpdateListener, changeSyncStorageListener]);
+  }, [changeSyncStorageListener]);
 
   return (
     <Context.Provider

@@ -459,7 +459,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
     chrome.runtime.sendMessage({
       type: 'ServiceWorker::Popup::SET_TAB_TO_READ',
       payload: {
-        tabId: newTab,
+        tabId: Number(newTab),
       },
     });
 
@@ -516,6 +516,15 @@ chrome.runtime.onMessage.addListener(async (request) => {
 
     syncCookieStore.updatePopUpState(request?.payload?.tabId, true);
 
+    if (tabMode === 'single') {
+      chrome.runtime.sendMessage({
+        type: 'ServiceWorker::Popup::TAB_TO_READ_DATA',
+        payload: {
+          tabToRead: tabToRead,
+        },
+      });
+    }
+
     if (syncCookieStore.cachedTabsData[tabId]) {
       syncCookieStore.sendUpdatedDataToPopupAndDevTools(tabId);
     }
@@ -570,6 +579,7 @@ chrome.storage.sync.onChanged.addListener(
           tabId: tab?.id,
           text: '',
         });
+        chrome.tabs.reload(Number(tab?.id));
         return tab;
       });
 
