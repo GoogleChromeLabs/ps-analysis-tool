@@ -18,4 +18,6 @@
  */
 import { libraryDetectionWorker } from '@ps-analysis-tool/library-detection';
 
-libraryDetectionWorker();
+self.onmessage = function (event) {
+  libraryDetectionWorker(event);
+};

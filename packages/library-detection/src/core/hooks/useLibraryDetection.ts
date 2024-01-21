@@ -27,6 +27,7 @@ import {
 } from '../../utils';
 import { detectMatchingSignatures, sumUpDetectionResults } from '..';
 import type { LibraryData, ResourceTreeItem } from '../../types';
+import { getDevToolWorker } from '@ps-analysis-tool/common';
 
 const useLibraryDetection = () => {
   const initialState: LibraryData = {
@@ -39,6 +40,23 @@ const useLibraryDetection = () => {
       moduleMatch: 0,
       matches: [],
     },
+  };
+
+  const newWorker = async () => {
+    const workerThread = getDevToolWorker();
+    const scripts = await getNetworkResourcesWithContent();
+
+    const result = await new Promise((resolve, reject) => {
+      workerThread.postMessage({
+        task: 'detectMatchingSignatures',
+        payload: scripts,
+      });
+      // Send data to worker
+      workerThread.onerror = reject; // Handle errors
+      workerThread.onmessage = resolve; // Get result from worker
+    });
+
+    console.log('result from worker thread =>', result);
   };
 
   const [libraryMatches, setLibraryMatches] = useState(initialState);
@@ -72,6 +90,8 @@ const useLibraryDetection = () => {
 
       setLibraryMatches(detectMatchingSignaturesv1Results);
     })();
+    newWorker();
+    // libraryDetectionWorker.postMessage('test post message from hook')
   }, []);
 
   const invokeGSIdetection = useCallback(() => {

@@ -32,6 +32,7 @@ export { default as parseResponseReceivedExtraInfo } from './utils/parseResponse
 export { default as parseRequestWillBeSentExtraInfo } from './utils/parseRequestWillBeSentExtraInfo';
 export { default as getDomainFromUrl } from './utils/getDomainFromUrl';
 export { default as noop } from './utils/noop';
+export { default as getDevToolWorker } from './worker/devToolWorker';
 export * from './utils/generateReports';
 export * from './cookies.types';
 export const UNKNOWN_FRAME_KEY = 'Unknown Frame(s)';

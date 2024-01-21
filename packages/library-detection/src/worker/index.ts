@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-const libraryDetectionWorker = () => {
-  onmessage = function (event) {
-    console.log('Message received from main script');
+import detectMatchingSignatures from '../core/detectMatchingSignatures';
 
-    console.log(event.data, 'event.data');
+export const libraryDetectionWorker = (event: MessageEvent<any>) => {
+  const task = event.data.task;
+  const payload = event.data.payload;
 
-    postMessage('Message from worker');
-  };
+  switch (task) {
+    case 'detectMatchingSignatures': {
+      const detectedMatchingSignatures = detectMatchingSignatures(payload);
+      postMessage(detectedMatchingSignatures);
+      break;
+    }
+    default:
+      postMessage('Task not defined');
+  }
 };
-
-export default libraryDetectionWorker;
