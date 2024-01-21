@@ -57,16 +57,11 @@ const LibraryDetection = memo(function LibraryDetection() {
     },
   ];
 
-  const description =
-    libraryCount > 0
-      ? 'Please review the following libraries or library features for known breakages.'
-      : '';
-
   return (
     <CookiesLandingContainer
       dataMapping={dataMapping}
       testId="library-detection"
-      description={description}
+      description=""
     >
       {libraryCount > 0 ? (
         <>

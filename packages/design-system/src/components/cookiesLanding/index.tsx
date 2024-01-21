@@ -133,6 +133,11 @@ const CookiesLanding = ({
           )}
         </CookiesLandingContainer>
       )}
+      {Object.keys(additionalComponents).length &&
+        Object.keys(additionalComponents).map((key: string) => {
+          const Component = additionalComponents[key];
+          return <Component key={key} />;
+        })}
       {showBlockedCookiesSection && (
         <CookiesLandingContainer
           dataMapping={frameStateCreator.dataMapping}
@@ -150,11 +155,6 @@ const CookiesLanding = ({
           />
         </CookiesLandingContainer>
       )}
-      {Object.keys(additionalComponents).length &&
-        Object.keys(additionalComponents).map((key: string) => {
-          const Component = additionalComponents[key];
-          return <Component key={key} />;
-        })}
     </div>
   );
 };
