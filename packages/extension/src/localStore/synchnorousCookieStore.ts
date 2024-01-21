@@ -53,16 +53,11 @@ class SynchnorousCookieStore {
    * Update cookie store.
    * @param {number} tabId Tab id.
    * @param {Array} cookies Cookies data.
-   * @param {string }operation Only passed if cookie data needs to be cleared.
    */
   // eslint-disable-next-line complexity
-  update(tabId: number, cookies: CookieData[], operation?: string) {
+  update(tabId: number, cookies: CookieData[]) {
     if (!this.cachedTabsData[tabId]) {
       return;
-    }
-
-    if (operation === 'clear') {
-      this.cachedTabsData[tabId] = {};
     }
 
     for (const cookie of cookies) {
@@ -131,26 +126,7 @@ class SynchnorousCookieStore {
     globalThis.CDPData = this.cachedTabsData;
 
     updateCookieBadgeText(this.cachedTabsData[tabId], tabId);
-
-    if (this.tabs[tabId].devToolsOpenState) {
-      chrome.runtime.sendMessage({
-        type: 'ServiceWorker::DevTools::NEW_COOKIE_DATA',
-        payload: {
-          tabId: tabId,
-          cookieData: JSON.stringify(this.cachedTabsData[tabId]),
-        },
-      });
-    }
-
-    if (this.tabs[tabId].popupOpenState) {
-      chrome.runtime.sendMessage({
-        type: 'ServiceWorker::Popup::NEW_COOKIE_DATA',
-        payload: {
-          tabId: tabId,
-          cookieData: JSON.stringify(this.cachedTabsData[tabId]),
-        },
-      });
-    }
+    this.sendUpdatedDataToPopupAndDevTools(tabId);
   }
 
   /**
@@ -344,6 +320,32 @@ class SynchnorousCookieStore {
         return tab;
       });
     });
+  }
+
+  /**
+   * Sends updated data to the popup and devtools
+   * @param {number} tabId The window id.
+   */
+  sendUpdatedDataToPopupAndDevTools(tabId: number) {
+    if (this.tabs[tabId].devToolsOpenState) {
+      chrome.runtime.sendMessage({
+        type: 'ServiceWorker::DevTools::NEW_COOKIE_DATA',
+        payload: {
+          tabId: tabId,
+          cookieData: JSON.stringify(this.cachedTabsData[tabId]),
+        },
+      });
+    }
+
+    if (this.tabs[tabId].popupOpenState) {
+      chrome.runtime.sendMessage({
+        type: 'ServiceWorker::Popup::NEW_COOKIE_DATA',
+        payload: {
+          tabId: tabId,
+          cookieData: JSON.stringify(this.cachedTabsData[tabId]),
+        },
+      });
+    }
   }
 }
 

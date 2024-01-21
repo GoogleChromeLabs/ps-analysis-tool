@@ -494,20 +494,13 @@ chrome.runtime.onMessage.addListener(async (request) => {
       },
     });
 
-    if (syncCookieStore.cachedTabsData[Number(request?.payload?.tabId)]) {
-      chrome.runtime.sendMessage({
-        type: 'ServiceWorker::DevTools::NEW_COOKIE_DATA',
-        payload: {
-          tabId:
-            tabMode === 'single' ? Number(tabToRead) : request?.payload?.tabId,
-          cookieData: JSON.stringify(
-            syncCookieStore.cachedTabsData[Number(request?.payload?.tabId)]
-          ),
-        },
-      });
-    }
-
     syncCookieStore.updateDevToolsState(request?.payload?.tabId, true);
+
+    if (syncCookieStore.cachedTabsData[Number(request?.payload?.tabId)]) {
+      const tabIdToSendMessage =
+        tabMode === 'single' ? Number(tabToRead) : request?.payload?.tabId;
+      syncCookieStore.sendUpdatedDataToPopupAndDevTools(tabIdToSendMessage);
+    }
   }
 
   if (request?.type === 'DevTools::ServiceWorker::DEVTOOLS_STATE_CLOSE') {
@@ -518,29 +511,14 @@ chrome.runtime.onMessage.addListener(async (request) => {
   }
 
   if (request?.type === 'Popup::ServiceWorker::POPUP_STATE_OPEN') {
-    const tabId = tabMode === 'single' ? tabToRead : request?.payload?.tabId;
+    const tabId =
+      tabMode === 'single' ? Number(tabToRead) : request?.payload?.tabId;
 
-    chrome.runtime.sendMessage({
-      type: 'ServiceWorker::Popup::TAB_TO_READ_DATA',
-      payload: {
-        tabId,
-        cookieData: JSON.stringify(syncCookieStore.cachedTabsData[tabId]),
-      },
-    });
-
-    if (syncCookieStore.cachedTabsData[Number(request?.payload?.tabId)]) {
-      chrome.runtime.sendMessage({
-        type: 'ServiceWorker::Popup::NEW_COOKIE_DATA',
-        payload: {
-          tabId:
-            tabMode === 'single' ? Number(tabToRead) : request?.payload?.tabId,
-          cookieData: JSON.stringify(
-            syncCookieStore.cachedTabsData[Number(request?.payload?.tabId)]
-          ),
-        },
-      });
-    }
     syncCookieStore.updatePopUpState(request?.payload?.tabId, true);
+
+    if (syncCookieStore.cachedTabsData[tabId]) {
+      syncCookieStore.sendUpdatedDataToPopupAndDevTools(tabId);
+    }
   }
 
   if (request?.type === 'Popup::ServiceWorker::POPUP_STATE_CLOSE') {
