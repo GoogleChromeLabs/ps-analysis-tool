@@ -122,7 +122,7 @@ class SynchnorousCookieStore {
         this.cachedTabsData[tabId][cookieKey] = cookie;
       }
     }
-
+    //@ts-ignore Since this is for debugging the data to check the data being collected by the storage.
     globalThis.CDPData = this.cachedTabsData;
 
     updateCookieBadgeText(this.cachedTabsData[tabId], tabId);
