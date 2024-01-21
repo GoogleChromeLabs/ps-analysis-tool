@@ -25,7 +25,7 @@ import {
   getNetworkResourcesWithContent,
   getResourcesWithContent,
 } from '../../utils';
-import { detectMatchingSignatures, sumUpDetectionResults } from '..';
+import { sumUpDetectionResults } from '..';
 import type { LibraryData, ResourceTreeItem } from '../../types';
 import { executeTaskInWorker } from '@ps-analysis-tool/common';
 import { LIBRARY_DETECTION_WORKER_TASK } from '../../worker/constants';
@@ -47,8 +47,11 @@ const useLibraryDetection = () => {
 
   const listenerCallback = useCallback(
     async (resource: ResourceTreeItem) => {
-      const realtimeComputationResult = detectMatchingSignatures(
-        await getResourcesWithContent([resource])
+      const resourcesWithContent = await getResourcesWithContent([resource]);
+
+      const realtimeComputationResult = await executeTaskInWorker(
+        LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING,
+        resourcesWithContent
       );
 
       if (

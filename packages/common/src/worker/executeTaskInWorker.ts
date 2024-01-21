@@ -45,7 +45,6 @@ const executeTaskInWorker = (
     workerThread.onerror = reject; // Handle errors
     workerThread.onmessage = (resultEvent) => {
       resolve(resultEvent.data);
-      workerThread.terminate();
     }; // Get result from worker
   });
 };
