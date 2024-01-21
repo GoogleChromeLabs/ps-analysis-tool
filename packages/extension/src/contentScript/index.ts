@@ -105,6 +105,7 @@ class WebpageContentScript {
         setInPage: true,
       });
     }
+
     chrome.runtime.onMessage.addListener((message, sender, response) => {
       if (message.status === 'set?') {
         response({ setInPage: true });
