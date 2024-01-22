@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies
  */
@@ -33,6 +32,7 @@ import type { TableRow } from '@ps-analysis-tool/design-system';
  */
 import setParentDomain from './useAllowedList/setParentDomain';
 import onAllowListClick from './useAllowedList/onAllowListClick';
+import reloadCurrentTab from '../../../../../utils/reloadCurrentTab';
 
 interface RowContextMenuProps {
   domainsInAllowList: Set<string>;
@@ -148,6 +148,7 @@ const RowContextMenu = forwardRef<
         setDomainsInAllowListCallback
       );
       setContextMenuOpen(false);
+      await reloadCurrentTab();
     },
     [
       domain,
@@ -173,6 +174,7 @@ const RowContextMenu = forwardRef<
         setDomainsInAllowListCallback
       );
       setContextMenuOpen(false);
+      await reloadCurrentTab();
     },
     [
       domainsInAllowList,

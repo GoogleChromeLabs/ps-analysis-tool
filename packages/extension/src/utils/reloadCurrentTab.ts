@@ -18,7 +18,7 @@
  */
 import { getCurrentTabId } from './getCurrentTabId';
 
-const reloadCurrentTab = async (tabId: number) => {
+const reloadCurrentTab = async (tabId: number | undefined = undefined) => {
   const currentTabId: number | string | undefined =
     tabId || (await getCurrentTabId());
 
