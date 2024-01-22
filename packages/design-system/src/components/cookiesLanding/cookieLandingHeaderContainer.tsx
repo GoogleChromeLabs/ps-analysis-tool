@@ -27,15 +27,15 @@ export interface CookiesLandingContainerProps {
   dataMapping?: DataMapping[];
   showLandingHeader?: boolean;
   testId?: string | null;
-  description?: string;
   children?: React.ReactNode;
+  description?: React.ReactNode;
 }
 
 const CookiesLandingContainer = ({
   dataMapping = [],
   showLandingHeader = true,
   testId = 'cookie-landing-insights',
-  description,
+  description = '',
   children,
 }: CookiesLandingContainerProps) => {
   return (

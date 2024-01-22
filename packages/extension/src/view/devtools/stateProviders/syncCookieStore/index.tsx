@@ -39,6 +39,7 @@ import useContextSelector from '../../../../utils/useContextSelector';
 import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
 import setDocumentCookies from '../../../../utils/setDocumentCookies';
 import isOnRWS from '../../../../contentScript/utils/isOnRWS';
+import { useSettingsStore } from '../syncSettingsStore';
 
 export interface CookieStoreContext {
   state: {
@@ -49,7 +50,6 @@ export interface CookieStoreContext {
     selectedFrame: string | null;
     returningToSingleTab: boolean;
     isCurrentTabBeingListenedTo: boolean;
-    allowedNumberOfTabs: string | null;
     isInspecting: boolean;
     contextInvalidated: boolean;
     canStartInspecting: boolean;
@@ -74,7 +74,6 @@ const initialState: CookieStoreContext = {
     loading: true,
     isCurrentTabBeingListenedTo: false,
     returningToSingleTab: false,
-    allowedNumberOfTabs: null,
     isInspecting: false,
     contextInvalidated: false,
     canStartInspecting: false,
@@ -104,9 +103,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [returningToSingleTab, setReturningToSingleTab] =
     useState<CookieStoreContext['state']['returningToSingleTab']>(false);
 
-  const [allowedNumberOfTabs, setAllowedNumberOfTabs] = useState<string | null>(
-    null
-  );
+  const { allowedNumberOfTabs } = useSettingsStore(({ state }) => ({
+    allowedNumberOfTabs: state.allowedNumberOfTabs,
+  }));
 
   const [canStartInspecting, setCanStartInspecting] = useState<boolean>(false);
 
@@ -183,22 +182,8 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
     setTabId(_tabId);
 
-    const extensionStorage = await chrome.storage.sync.get();
-    const _allowedNumberOfTabs =
-      extensionStorage?.allowedNumberOfTabs || 'single';
-
-    if (!extensionStorage?.allowedNumberOfTabs) {
-      await chrome.storage.sync.clear();
-      await chrome.storage.sync.set({
-        ...extensionStorage,
-        allowedNumberOfTabs: 'single',
-      });
-    }
-
-    setAllowedNumberOfTabs(_allowedNumberOfTabs);
-
     if (_tabId) {
-      if (extensionStorage?.allowedNumberOfTabs === 'single') {
+      if (allowedNumberOfTabs === 'single') {
         const getTabBeingListenedTo = await chrome.storage.local.get();
         const availableTabs = await chrome.tabs.query({});
         if (
@@ -258,7 +243,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     );
 
     setLoading(false);
-  }, [getAllFramesForCurrentTab]);
+  }, [allowedNumberOfTabs, getAllFramesForCurrentTab]);
 
   const storeChangeListener = useCallback(
     async (changes: { [key: string]: chrome.storage.StorageChange }) => {
@@ -418,35 +403,20 @@ export const Provider = ({ children }: PropsWithChildren) => {
     }
   }, []);
 
-  const changeSyncStorageListener = useCallback(async () => {
-    const extensionStorage = await chrome.storage.sync.get();
-
-    if (extensionStorage?.allowedNumberOfTabs) {
-      setAllowedNumberOfTabs(extensionStorage?.allowedNumberOfTabs);
-    }
-  }, []);
-
   useEffect(() => {
     intitialSync();
   }, [intitialSync]);
 
   useEffect(() => {
     chrome.storage.local.onChanged.addListener(storeChangeListener);
-    chrome.storage.sync.onChanged.addListener(changeSyncStorageListener);
     chrome.tabs.onUpdated.addListener(tabUpdateListener);
     chrome.tabs.onRemoved.addListener(tabRemovedListener);
     return () => {
       chrome.storage.local.onChanged.removeListener(storeChangeListener);
       chrome.tabs.onUpdated.removeListener(tabUpdateListener);
       chrome.tabs.onRemoved.removeListener(tabRemovedListener);
-      chrome.storage.sync.onChanged.removeListener(changeSyncStorageListener);
     };
-  }, [
-    storeChangeListener,
-    tabUpdateListener,
-    tabRemovedListener,
-    changeSyncStorageListener,
-  ]);
+  }, [storeChangeListener, tabUpdateListener, tabRemovedListener]);
 
   useEffect(() => {
     loadingTimeout.current = setTimeout(() => {
@@ -471,7 +441,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
           selectedFrame,
           isCurrentTabBeingListenedTo,
           returningToSingleTab,
-          allowedNumberOfTabs,
           contextInvalidated,
           isInspecting,
           canStartInspecting,
