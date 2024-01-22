@@ -71,54 +71,22 @@ const useLibraryDetection = () => {
           libraryMatches,
           realtimeComputationResult
         );
+
         setLibraryMatches(newResult);
       }
     },
     [libraryMatches]
   );
 
-  /**
-   * This function invokes the getResource method internal and invokes the processing on the data return from getResource
-   * @param {any}
-   * @returns {any}
-   */
-  const oneTimeComputation = useCallback(async () => {
-    const scripts = await getNetworkResourcesWithContent();
-    setLibraryMatches(
-      await executeTaskInWorker(
+  useEffect(() => {
+    (async () => {
+      const scripts = await getNetworkResourcesWithContent();
+      const detectedMatchingSignatures = await executeTaskInWorker(
         LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING,
         scripts
-      )
-    );
-  }, [libraryMatches]);
-
-  const tabOnUpdatedHandler = useCallback(
-    (
-      _tabId: number,
-      changeInfo: chrome.tabs.TabChangeInfo,
-      tab: chrome.tabs.Tab
-    ) => {
-      chrome.devtools.inspectedWindow.onResourceAdded.removeListener(
-        listenerCallback
       );
-      if (changeInfo.status === 'complete' && tab.active) {
-        // Check for fully loaded and active tab
-        oneTimeComputation();
-        chrome.devtools.inspectedWindow.onResourceAdded.addListener(
-          listenerCallback
-        );
-      }
-    },
-    [listenerCallback]
-  );
-
-  useEffect(() => {
-    oneTimeComputation();
-    chrome.tabs.onUpdated.addListener(tabOnUpdatedHandler);
-
-    return () => {
-      chrome.tabs.onUpdated.removeListener(tabOnUpdatedHandler);
-    };
+      setLibraryMatches(detectedMatchingSignatures);
+    })();
   }, []);
 
   const invokeGSIdetection = useCallback(() => {
