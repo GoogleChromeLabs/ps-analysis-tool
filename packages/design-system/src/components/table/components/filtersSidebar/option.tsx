@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useRef } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 
 /**
@@ -39,52 +39,34 @@ const Option = ({
   selected,
   toggleFilterSelection,
   isExpanded,
-}: OptionProps) => {
-  const setTimeOutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const handleChange = useCallback(() => {
-    () => {
-      // Use Event Loop to delay the toggleFilterSelection call as too many clicks in a short time provide wrong results
-      setTimeOutRef.current = setTimeout(() =>
-        toggleFilterSelection(filterKey, filterValue)
-      );
-    };
-  }, [filterKey, filterValue, toggleFilterSelection]);
-
-  useEffect(() => {
-    return () => {
-      if (setTimeOutRef.current) {
-        clearTimeout(setTimeOutRef.current);
-      }
-    };
-  }, [filterKey, filterValue, toggleFilterSelection]);
-
-  return (
-    <li
-      className={!isExpanded ? 'ml-3 mt-1 hidden' : 'mx-3 mt-1'}
-      data-testid="sub-list-item"
-    >
-      <label className="flex gap-x-2 cursor-pointer items-center">
-        <input
-          role="checkbox"
-          type="checkbox"
-          name={filterKey}
-          className={classNames(
-            'accent-royal-blue dark:accent-orange-400 w-3 h-3 dark:bg-outer-space dark:min-h-[12px] dark:min-w-[12px]',
-            {
-              'dark:appearance-none dark:text-manatee dark:border dark:rounded-[3px]':
-                !selected,
-            }
-          )}
-          checked={selected}
-          onChange={handleChange}
-        />
-        <span className="text-asteriod-black dark:text-bright-gray leading-normal font-semi-thick">
-          {String(filterValue)}
-        </span>
-      </label>
-    </li>
-  );
-};
+}: OptionProps) => (
+  <li
+    className={isExpanded ? 'mx-3 mt-1' : 'ml-3 mt-1 hidden'}
+    data-testid="sub-list-item"
+  >
+    <label className="flex gap-x-2 cursor-pointer items-center">
+      <input
+        role="checkbox"
+        type="checkbox"
+        name={filterKey}
+        className={classNames(
+          'accent-royal-blue dark:accent-orange-400 w-3 h-3 dark:bg-outer-space dark:min-h-[12px] dark:min-w-[12px]',
+          {
+            'dark:appearance-none dark:text-manatee dark:border dark:rounded-[3px]':
+              !selected,
+          }
+        )}
+        checked={selected}
+        onChange={() => {
+          // Use Event Loop to delay the toggleFilterSelection call as too many clicks in a short time provide wrong results
+          setTimeout(() => toggleFilterSelection(filterKey, filterValue));
+        }}
+      />
+      <span className="text-asteriod-black dark:text-bright-gray leading-normal font-semi-thick">
+        {String(filterValue)}
+      </span>
+    </label>
+  </li>
+);
 
 export default Option;
