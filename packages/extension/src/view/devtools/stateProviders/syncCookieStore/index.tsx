@@ -273,6 +273,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const tabUpdateListener = useCallback(
     async (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
       if (tabId === _tabId && changeInfo.url) {
+        setIsInspecting(false);
         try {
           const nextURL = new URL(changeInfo.url);
           const nextDomain = nextURL?.hostname;

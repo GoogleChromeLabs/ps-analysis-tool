@@ -235,7 +235,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   syncCookieStore.updateUrl(tabId, tab.url);
 
   if (changeInfo.status === 'loading' && tab.url) {
-    syncCookieStore.update(tabId, [], 'clear');
+    syncCookieStore.removeCookieData(tabId);
   }
 });
 

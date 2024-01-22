@@ -103,20 +103,15 @@ const useFrameOverlay = (
 
     portRef.current.onDisconnect.addListener(() => {
       setIsInspecting(false);
-      setCanStartInspecting(false);
     });
 
     // For the first time.
     portRef.current.postMessage({
       isInspecting: true,
     });
+
     setConnectedToPort(true);
-  }, [
-    canStartInspecting,
-    setSelectedFrame,
-    setIsInspecting,
-    setCanStartInspecting,
-  ]);
+  }, [canStartInspecting, setSelectedFrame, setIsInspecting]);
 
   const listenIfContentScriptSet = useCallback(
     async (
