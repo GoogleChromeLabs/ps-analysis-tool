@@ -5,7 +5,7 @@
     "proposal": "https://github.com/WICG/trust-token-api",
     "publicDiscussion": "https://github.com/WICG/trust-token-api/issues",
     "videoOverview": "https://www.youtube.com/watch?v=bXB1Iwq6Eq4",
-    "devDocumentation": "https://developer.chrome.com/docs/privacy-sandbox/trust-tokens/"
+    "devDocumentation": "https://developers.google.com/privacy-sandbox/protections/private-state-tokens"
   },
   "topics": {
     "name": "Topics",
@@ -13,7 +13,7 @@
     "proposal": "https://github.com/patcg-individual-drafts/topics",
     "publicDiscussion": "https://github.com/patcg-individual-drafts/topics/issues",
     "videoOverview": "https://youtu.be/hEBzWuXjeTQ",
-    "devDocumentation": "https://developer.chrome.com/docs/privacy-sandbox/topics/"
+    "devDocumentation": "https://developers.google.com/privacy-sandbox/relevance/topics"
   },
   "protected-audience": {
     "name": "Protected Audience (FLEDGE)",
@@ -21,7 +21,7 @@
     "proposal": "https://github.com/WICG/turtledove",
     "publicDiscussion": "https://github.com/WICG/turtledove/issues",
     "videoOverview": "https://www.youtube.com/watch?v=HkvmYKqnytw",
-    "devDocumentation": "https://developer.chrome.com/docs/privacy-sandbox/fledge-api/"
+    "devDocumentation": "https://developers.google.com/privacy-sandbox/relevance/protected-audience"
   },
   "attribution-reporting": {
     "name": "Attribution Reporting",
@@ -29,7 +29,7 @@
     "proposal": "https://github.com/WICG/attribution-reporting-api",
     "publicDiscussion": "https://github.com/WICG/attribution-reporting-api/issues",
     "videoOverview": "https://www.youtube.com/watch?v=UGA74CIcom8",
-    "devDocumentation": "https://developer.chrome.com/docs/privacy-sandbox/attribution-reporting/"
+    "devDocumentation": "https://developers.google.com/privacy-sandbox/relevance/attribution-reporting"
   },
   "related-website-sets": {
     "name": "Related Website Sets",
@@ -37,7 +37,7 @@
     "proposal": "https://github.com/WICG/first-party-sets",
     "publicDiscussion": "https://github.com/WICG/first-party-sets/issues",
     "videoOverview": "https://www.youtube.com/watch?v=cNJ8mZ-J3F8",
-    "devDocumentation": "https://developer.chrome.com/docs/privacy-sandbox/related-website-sets/"
+    "devDocumentation": "https://developers.google.com/privacy-sandbox/3pcd/related-website-sets"
   },
   "shared-storage": {
     "name": "Shared Storage",
@@ -45,7 +45,7 @@
     "proposal": "https://github.com/WICG/shared-storage",
     "publicDiscussion": "https://github.com/WICG/shared-storage/issues",
     "videoOverview": "",
-    "devDocumentation": "https://developer.chrome.com/docs/privacy-sandbox/shared-storage/"
+    "devDocumentation": "https://developers.google.com/privacy-sandbox/relevance/shared-storage"
   },
   "chips": {
     "name": "Cookies Having Independent Partitioned State (CHIPS)",
@@ -53,7 +53,7 @@
     "proposal": "https://github.com/privacycg/CHIPS",
     "publicDiscussion": "https://github.com/privacycg/CHIPS/issues",
     "videoOverview": "",
-    "devDocumentation": "https://developer.chrome.com/docs/privacy-sandbox/chips/"
+    "devDocumentation": "https://developers.google.com/privacy-sandbox/3pcd/chips"
   },
   "fenced-frames": {
     "name": "Fenced Frames",
@@ -61,7 +61,7 @@
     "proposal": "https://github.com/WICG/fenced-frame",
     "publicDiscussion": "https://github.com/WICG/fenced-frame/issues",
     "videoOverview": "https://www.youtube.com/watch?v=CqbluZHZofI",
-    "devDocumentation": "https://developer.chrome.com/docs/privacy-sandbox/fenced-frame/"
+    "devDocumentation": "https://developers.google.com/privacy-sandbox/relevance/fenced-frame"
   },
   "fedcm": {
     "name": "Federated Credential Management(FedCM)",
@@ -69,7 +69,7 @@
     "proposal": "https://github.com/fedidcg/FedCM",
     "publicDiscussion": "https://github.com/fedidcg/FedCM/issues",
     "videoOverview": "https://www.youtube.com/watch?v=rSOqIR3lzBk",
-    "devDocumentation": "https://developer.chrome.com/docs/privacy-sandbox/fedcm/"
+    "devDocumentation": "https://developers.google.com/privacy-sandbox/3pcd/fedcm"
   },
   "bounce-tracking": {
     "name": "Bounce Tracking Mitigation",
@@ -77,7 +77,7 @@
     "proposal": "https://github.com/privacycg/nav-tracking-mitigations",
     "publicDiscussion": "https://github.com/privacycg/nav-tracking-mitigations/issues",
     "videoOverview": "",
-    "devDocumentation": "https://developer.chrome.com/en/docs/privacy-sandbox/bounce-tracking-mitigations"
+    "devDocumentation": "https://developers.google.com/privacy-sandbox/protections/bounce-tracking-mitigations"
   },
   "user-agent-reduction": {
     "name": "User Agent Reduction",
@@ -85,6 +85,6 @@
     "proposal": "https://github.com/miketaylr/user-agent-reduction/",
     "publicDiscussion": "https://github.com/miketaylr/user-agent-reduction/issues",
     "videoOverview": "",
-    "devDocumentation": "https://developer.chrome.com/en/docs/privacy-sandbox/user-agent/"
+    "devDocumentation": "https://developers.google.com/privacy-sandbox/protections/user-agent"
   }
 }

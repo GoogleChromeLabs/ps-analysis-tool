@@ -46,6 +46,12 @@ import {
 /**
  * Internal dependencies.
  */
+// @ts-ignore
+// eslint-disable-next-line import/no-relative-packages
+import SettingsTab from '../../../../../third_party/icons/settings-tab.svg';
+// @ts-ignore
+// eslint-disable-next-line import/no-relative-packages
+import SettingsTabWhite from '../../../../../third_party/icons/settings-tab-white.svg';
 import {
   SiteBoundaries,
   Chips,
@@ -57,6 +63,7 @@ import {
   BounceTracking,
   Fingerprinting,
   PrivacySandbox,
+  Settings,
 } from './components';
 
 const TABS: SidebarItems = {
@@ -141,6 +148,14 @@ const TABS: SidebarItems = {
         },
       },
     },
+  },
+  settings: {
+    title: 'Settings',
+    panel: <Settings />,
+    icon: <SettingsTab />,
+    selectedIcon: <SettingsTabWhite />,
+    dropdownOpen: false,
+    children: {},
   },
 };
 

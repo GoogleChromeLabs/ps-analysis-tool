@@ -88,6 +88,7 @@ const CookieStore = {
             },
             isBlocked: blockedReasons.length > 0,
             blockedReasons,
+            url: _updatedCookies[cookieKey].url ?? cookie.url,
             warningReasons: Array.from(
               new Set<Protocol.Audits.CookieWarningReason>([
                 ...(cookie.warningReasons ?? []),
