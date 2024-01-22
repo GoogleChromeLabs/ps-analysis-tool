@@ -346,7 +346,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
         },
       },
       'parsedCookie.partitionKey': {
-        title: 'Partitioned',
+        title: 'Partition Key',
         hasStaticFilterValues: true,
         filterValues: {
           Set: {
