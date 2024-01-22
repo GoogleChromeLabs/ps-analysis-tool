@@ -67,14 +67,17 @@ const useFiltering = (
 
               return value;
             })
+            .filter((value) => value && value.toString().trim())
             .reduce((acc, value) => {
-              if (value && !acc[value]) {
-                if (filterValues[value]) {
-                  acc[value] = {
-                    ...filterValues[value],
+              const val = value.toString().trim();
+
+              if (val && !acc[val]) {
+                if (filterValues[val]) {
+                  acc[val] = {
+                    ...filterValues[val],
                   };
                 } else {
-                  acc[value] = {
+                  acc[val] = {
                     selected: false,
                   };
                 }
