@@ -77,8 +77,8 @@ export default function parseResponseReceivedExtraInfo(
 
     if (parsedCookie?.domain) {
       domain = parsedCookie?.domain;
-    } else if (!parsedCookie?.domain && requestMap[response?.requestId]) {
-      domain = new URL(requestMap[response?.requestId]).hostname;
+    } else if (!parsedCookie?.domain && url) {
+      domain = new URL(url).hostname;
     }
 
     const singleCookie = {
