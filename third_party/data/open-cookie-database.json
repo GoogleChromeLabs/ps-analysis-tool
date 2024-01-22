@@ -1544,6 +1544,17 @@
       "dataController": "Adform",
       "gdprUrl": "https://site.adform.com/privacy-center/overview",
       "wildcard": "0"
+    },
+    {
+      "platform": "Xandr",
+      "category": "Functional",
+      "name": "token",
+      "domain": ".adnxs.com",
+      "description": "Cookies that start with token are helper cookies used as a security measure with industry opt-out pages. They contain a unique value only to verify the origin of opt-out requests.",
+      "retention": "1440 Minutes",
+      "dataController": "Xandr",
+      "gdprUrl": "https://about.ads.microsoft.com/en-us/solutions/xandr/platform-privacy-policy",
+      "wildcard": "0"
     }
   ],
   "otsid": [
@@ -3611,6 +3622,17 @@
       "dataController": "Admatic",
       "gdprUrl": "http://www.admatic.com.tr/en/privacy-policy.html",
       "wildcard": "0"
+    },
+    {
+      "platform": "Xandr",
+      "category": "Marketing",
+      "name": "uids",
+      "domain": ".adnxs.com",
+      "description": "This cookie contains a base 64 encoded JSON object which contains external unique randomly-generated values that enable other Prebid Server demand partners to distinguish browsers and mobile devices.",
+      "retention": "120 days",
+      "dataController": "Xandr",
+      "gdprUrl": "https://about.ads.microsoft.com/en-us/solutions/xandr/platform-privacy-policy",
+      "wildcard": "0"
     }
   ],
   "__cfduid": [
@@ -4120,6 +4142,32 @@
       "wildcard": "1"
     }
   ],
+  "ELOQUA": [
+    {
+      "platform": "Oracle",
+      "category": "Analytics",
+      "name": "ELOQUA",
+      "domain": ".eloqua.com",
+      "description": "This cookies allow better understand how visitors use the website. This cookie data may be used to personalise the content or design of the website",
+      "retention": "13 months",
+      "dataController": "Oracle",
+      "gdprUrl": "https://www.oracle.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "ELQSTATUS": [
+    {
+      "platform": "Oracle",
+      "category": "Analytics",
+      "name": "ELQSTATUS",
+      "domain": ".eloqua.com",
+      "description": "This cookie is used to track individual visitors and their use of the site. It is set when you first visit the site and updated on subsequent visits.",
+      "retention": "13 months",
+      "dataController": "Oracle",
+      "gdprUrl": "https://www.oracle.com/privacy",
+      "wildcard": "0"
+    }
+  ],
   "laravel_session": [
     {
       "platform": "Laravel",
@@ -4364,6 +4412,149 @@
       "retention": "90 days",
       "dataController": "LinkedIn",
       "gdprUrl": "https://www.linkedin.com/legal/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "sdsc": [
+    {
+      "platform": "LinkedIn",
+      "category": "Functional",
+      "name": "sdsc",
+      "domain": ".linkedin.com",
+      "description": "This cookie is used for signed data service context cookie used for database routing to ensure consistency across all databases when a change is made. Used to ensure that user-inputted content is immediately available to the submitting user upon submission",
+      "retention": "Session",
+      "dataController": "LinkedIn",
+      "gdprUrl": "https://www.linkedin.com/legal/cookie-policy",
+      "wildcard": "0"
+    }
+  ],
+  "li_mc": [
+    {
+      "platform": "LinkedIn",
+      "category": "Functional",
+      "name": "li_mc",
+      "domain": ".linkedin.com",
+      "description": "This cookie is used as a temporary cache to avoid database lookups for a member's consent for use of non-essential cookies and used for having consent information on the client side to enforce consent on the client side",
+      "retention": "6 months",
+      "dataController": "LinkedIn",
+      "gdprUrl": "https://www.linkedin.com/legal/cookie-policy",
+      "wildcard": "0"
+    }
+  ],
+  "lms_ads": [
+    {
+      "platform": "LinkedIn",
+      "category": "Marketing",
+      "name": "lms_ads",
+      "domain": ".linkedin.com",
+      "description": "This cookie is used to identify LinkedIn Members off LinkedIn for advertising",
+      "retention": "30 days",
+      "dataController": "LinkedIn",
+      "gdprUrl": "https://www.linkedin.com/legal/cookie-policy",
+      "wildcard": "0"
+    }
+  ],
+  "_guid": [
+    {
+      "platform": "LinkedIn",
+      "category": "Marketing",
+      "name": "_guid",
+      "domain": "linkedin.com",
+      "description": "This cookie is used to identify a LinkedIn Member for advertising through Google Ads",
+      "retention": "90 days",
+      "dataController": "LinkedIn",
+      "gdprUrl": "https://www.linkedin.com/legal/cookie-policy",
+      "wildcard": "0"
+    }
+  ],
+  "BizographicsOptOut": [
+    {
+      "platform": "LinkedIn",
+      "category": "Marketing",
+      "name": "BizographicsOptOut",
+      "domain": ".linkedin.com",
+      "description": "This cookie is used to determine opt-out status for non-members",
+      "retention": "10 years",
+      "dataController": "LinkedIn",
+      "gdprUrl": "https://www.linkedin.com/legal/cookie-policy",
+      "wildcard": "0"
+    }
+  ],
+  "IRLD": [
+    {
+      "platform": "LinkedIn",
+      "category": "Marketing",
+      "name": "IRLD",
+      "domain": ".linkedin.com",
+      "description": "This cookie is used for Affiliate Marketing Cookie for LinkedIn",
+      "retention": "2 years",
+      "dataController": "LinkedIn",
+      "gdprUrl": "https://www.linkedin.com/legal/cookie-policy",
+      "wildcard": "0"
+    }
+  ],
+  "l_page": [
+    {
+      "platform": "LinkedIn",
+      "category": "Analytics",
+      "name": "l_page",
+      "domain": ".linkedin.com",
+      "description": "This cookie is used for measuring conversion metrics on LinkedIn",
+      "retention": "6 months",
+      "dataController": "LinkedIn",
+      "gdprUrl": "https://www.linkedin.com/legal/cookie-policy",
+      "wildcard": "0"
+    }
+  ],
+  "ABSELB": [
+    {
+      "platform": "LinkedIn",
+      "category": "Marketing",
+      "name": "ABSELB",
+      "domain": ".linkedin.com",
+      "description": "This is Load Balancer Cookie for affiliate marketing",
+      "retention": "2 years",
+      "dataController": "LinkedIn",
+      "gdprUrl": "https://www.linkedin.com/legal/cookie-policy",
+      "wildcard": "0"
+    }
+  ],
+  "brwsr": [
+    {
+      "platform": "LinkedIn",
+      "category": "Marketing",
+      "name": "brwsr",
+      "domain": ".linkedin.com",
+      "description": "This cookie is used to Affiliate Marketing Cookie for LinkedIn",
+      "retention": "2 years",
+      "dataController": "LinkedIn",
+      "gdprUrl": "https://www.linkedin.com/legal/cookie-policy",
+      "wildcard": "0"
+    }
+  ],
+  "oribi_user_guid": [
+    {
+      "platform": "Oribi",
+      "category": "Analytics",
+      "name": "oribi_user_guid",
+      "domain": ".oribi.io",
+      "description": "This cookie is used to identify a unique visitor",
+      "retention": "1 year",
+      "dataController": "Oribi",
+      "gdprUrl": "https://www.linkedin.com/legal/cookie-policy",
+      "wildcard": "0"
+    }
+  ],
+  "oribi_cookie_test": [
+    {
+      "platform": "Oribi",
+      "category": "Analytics",
+      "name": "oribi_cookie_test",
+      "domain": "linkedin.com",
+      "description": "This cookie is used To determine if tracking can be enabled on a current domain",
+      "retention": "Session",
+      "dataController": "Oribi",
+      "gdprUrl": "https://www.linkedin.com/legal/cookie-policy",
       "wildcard": "0"
     }
   ],
@@ -5303,6 +5494,19 @@
       "wildcard": "0"
     }
   ],
+  "UID": [
+    {
+      "platform": "ComScore",
+      "category": "Marketing",
+      "name": "UID",
+      "domain": ".scorecardresearch.com",
+      "description": "Collects information of the user and his/her movement, such as timestamp for visits, most recently loaded pages and IP address. The data is used by the marketing research network, Scorecard Research, to analyse traffic patterns and carry out surveys to help their clients better understand the customer's preferences.",
+      "retention": "2 years",
+      "dataController": "ComScore",
+      "gdprUrl": "https://www.comscore.com/About/Privacy-Policy",
+      "wildcard": "0"
+    }
+  ],
   "SEUNCY": [
     {
       "platform": "semasio.net",
@@ -5433,6 +5637,71 @@
       "wildcard": "0"
     }
   ],
+  "tt_bluekai": [
+    {
+      "platform": "Teads",
+      "category": "Marketing",
+      "name": "tt_bluekai",
+      "domain": ".teads.tv",
+      "description": "Avoid calling to bluekai. This avoids unnecessary calls to bluekai.",
+      "retention": "1 day",
+      "dataController": "Teads.com",
+      "gdprUrl": "https://www.teads.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "tt_exelate": [
+    {
+      "platform": "Teads",
+      "category": "Marketing",
+      "name": "tt_exelate",
+      "domain": ".teads.tv",
+      "description": "Avoid calling to Exelate. This avoids unnecessary calls to Eleate.",
+      "retention": "1 day",
+      "dataController": "Teads.com",
+      "gdprUrl": "https://www.teads.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "tt_liveramp": [
+    {
+      "platform": "Teads",
+      "category": "Marketing",
+      "name": "tt_liveramp",
+      "domain": ".teads.tv",
+      "description": "Avoid calling to Liveramp. This avoids unnecessary calls to Liveramp.",
+      "retention": "1 day",
+      "dataController": "Teads.com",
+      "gdprUrl": "https://www.teads.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "tt_neustar": [
+    {
+      "platform": "Teads",
+      "category": "Marketing",
+      "name": "tt_neustar",
+      "domain": ".teads.tv",
+      "description": "Avoid calling to Nuestar. This avoids unnecessary calls to Neustar.",
+      "retention": "1 day",
+      "dataController": "Teads.com",
+      "gdprUrl": "https://www.teads.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "tt_salesforce": [
+    {
+      "platform": "Teads",
+      "category": "Marketing",
+      "name": "tt_salesforce",
+      "domain": ".teads.tv",
+      "description": "Avoid calling to Salesforce. This avoids unnecessary calls to Salesforce.",
+      "retention": "1 day",
+      "dataController": "Teads.com",
+      "gdprUrl": "https://www.teads.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
   "cfid": [
     {
       "platform": "Adobe ColdFusion",
@@ -5469,6 +5738,17 @@
       "retention": "1 year",
       "dataController": "CXense",
       "gdprUrl": "https://www.cxense.com/about-us/platform-privacy-policy",
+      "wildcard": "0"
+    },
+    {
+      "platform": "Piano",
+      "category": "Marketing",
+      "name": "gckp",
+      "domain": "",
+      "description": "This cookie is used for building user profile information across sites of a single customer where cx.js is implemented",
+      "retention": "12 months",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
       "wildcard": "0"
     }
   ],
@@ -5766,8 +6046,8 @@
       "domain": "smartadserver.com",
       "description": "Optimises ad display based on the user's movement combined and various advertiser bids for displaying user ads.",
       "retention": "1 day",
-      "dataController": "Smartadserver",
-      "gdprUrl": "http://smartadserver.fr/privacy-policy",
+      "dataController": "Equativ.com",
+      "gdprUrl": "https://equativ.com/privacy-policy/",
       "wildcard": "0"
     }
   ],
@@ -5789,8 +6069,34 @@
       "platform": "Smartadserver",
       "category": "Marketing",
       "name": "pid",
-      "domain": "",
+      "domain": ".smartadserver.com",
       "description": "Unique ID associated with an end-user (according to a domain and browser)",
+      "retention": "13 months",
+      "dataController": "Equativ.com",
+      "gdprUrl": "https://equativ.com/end-users-privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "pbw": [
+    {
+      "platform": "Smartadserver",
+      "category": "Analytics",
+      "name": "pbw",
+      "domain": ".smartadserver.com",
+      "description": "This cookie collects cached data by browser ID, operating system ID and screen size",
+      "retention": "13 months",
+      "dataController": "Equativ.com",
+      "gdprUrl": "https://equativ.com/end-users-privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "lcsrd": [
+    {
+      "platform": "Smartadserver",
+      "category": "Marketing",
+      "name": "lcsrd",
+      "domain": ".smartadserver.com",
+      "description": "This cookie is used to present the visitor with relevant content and advertisements",
       "retention": "13 months",
       "dataController": "Equativ.com",
       "gdprUrl": "https://equativ.com/end-users-privacy-policy/",
@@ -5885,6 +6191,32 @@
       "retention": "13 months",
       "dataController": "taboola.com",
       "gdprUrl": "",
+      "wildcard": "0"
+    }
+  ],
+  "t_pt_gid": [
+    {
+      "platform": "Taboola",
+      "category": "Functional",
+      "name": "t_pt_gid",
+      "domain": ".taboola.com",
+      "description": "Assigns a unique User ID that Taboola uses for attribution and reporting purposes, and to tailor recommendations to this specific user.",
+      "retention": "1 Year",
+      "dataController": "taboola.com",
+      "gdprUrl": "https://www.taboola.com/policies/cookie-policy",
+      "wildcard": "0"
+    }
+  ],
+  "taboola_session_id": [
+    {
+      "platform": "Taboola",
+      "category": "Marketing",
+      "name": "taboola_session_id",
+      "domain": ".taboola.com",
+      "description": "Creates a temporary session ID to avoid the display of duplicate recommendations on the page.",
+      "retention": "Session",
+      "dataController": "taboola.com",
+      "gdprUrl": "https://www.taboola.com/policies/cookie-policy",
       "wildcard": "0"
     }
   ],
@@ -6510,19 +6842,6 @@
       "dataController": "Microsoft",
       "gdprUrl": "",
       "wildcard": "1"
-    }
-  ],
-  "__stid": [
-    {
-      "platform": "ShareThis",
-      "category": "Analytics",
-      "name": "__stid",
-      "domain": "sharethis.com",
-      "description": "The __stid cookie is set as part of the ShareThis service and monitors user-activity, e.g. Web pages viewed, navigation from page to page, time spent on each page etc.",
-      "retention": "1 year",
-      "dataController": "ShareThis",
-      "gdprUrl": "https://sharethis.com/privacy/",
-      "wildcard": "0"
     }
   ],
   "__uin_mm": [
@@ -8434,6 +8753,17 @@
       "dataController": "Shopify.com",
       "gdprUrl": "https://www.shopify.com/legal/cookies",
       "wildcard": "0"
+    },
+    {
+      "platform": "Qualaroo",
+      "category": "Marketing",
+      "name": "ki_r",
+      "domain": "qualaroo.com",
+      "description": "This cookie is used to store the initial document.referrer when available for targeting purposes.",
+      "retention": "5 years",
+      "dataController": "Qualaroo",
+      "gdprUrl": "https://www.proprofs.com/policies/privacy/",
+      "wildcard": "0"
     }
   ],
   "ki_t": [
@@ -8446,6 +8776,17 @@
       "retention": "2 years",
       "dataController": "Shopify.com",
       "gdprUrl": "https://www.shopify.com/legal/cookies",
+      "wildcard": "0"
+    },
+    {
+      "platform": "Qualaroo",
+      "category": "Marketing",
+      "name": "ki_t",
+      "domain": "qualaroo.com",
+      "description": "This cookie is used to store Timestamps and view counts.",
+      "retention": "5 years",
+      "dataController": "Qualaroo",
+      "gdprUrl": "https://www.proprofs.com/policies/privacy/",
       "wildcard": "0"
     }
   ],
@@ -8813,6 +9154,32 @@
       "wildcard": "0"
     }
   ],
+  "sd_identity": [
+    {
+      "platform": "Vimeo",
+      "category": "Analytics",
+      "name": "sd_identity",
+      "domain": "vimeo.com",
+      "description": "Collects analytical tracking information about videos and enables the player to function properly.",
+      "retention": "2 years",
+      "dataController": "Vimeo",
+      "gdprUrl": "https://vimeo.com/cookie_policy",
+      "wildcard": "0"
+    }
+  ],
+  "sd_client_id": [
+    {
+      "platform": "Vimeo",
+      "category": "Analytics",
+      "name": "sd_client_id",
+      "domain": "vimeo.com",
+      "description": "Collects analytical tracking information about videos and enables the player to function properly.",
+      "retention": "2 years",
+      "dataController": "Vimeo",
+      "gdprUrl": "https://vimeo.com/cookie_policy",
+      "wildcard": "0"
+    }
+  ],
   "__stripe_mid": [
     {
       "platform": "Stripe",
@@ -9069,7 +9436,7 @@
       "description": "The anj cookie contains data denoting whether a cookie ID is synced with our partners. ID syncing enables our partners to use their data from outside the Platform on the Platform. ",
       "retention": "90 days",
       "dataController": "Xandr",
-      "gdprUrl": "https://www.xandr.com/privacy/platform-privacy-policy/",
+      "gdprUrl": "https://about.ads.microsoft.com/en-us/solutions/xandr/platform-privacy-policy",
       "wildcard": "0"
     }
   ],
@@ -9082,7 +9449,59 @@
       "description": "This cookie contains a unique randomly-generated value that enables the Platform to distinguish browsers and devices.",
       "retention": "90 days",
       "dataController": "Xandr",
-      "gdprUrl": "https://www.xandr.com/privacy/platform-privacy-policy/",
+      "gdprUrl": "https://about.ads.microsoft.com/en-us/solutions/xandr/platform-privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "usersync": [
+    {
+      "platform": "Xandr",
+      "category": "Analytics",
+      "name": "usersync",
+      "domain": ".adnxs.com",
+      "description": "This cookie contains data denoting whether a cookie ID is synced with our partners. ID syncing enables our partners to use their data from outside the Platform on the Platform.",
+      "retention": "90 days",
+      "dataController": "Xandr",
+      "gdprUrl": "https://about.ads.microsoft.com/en-us/solutions/xandr/platform-privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "icu": [
+    {
+      "platform": "Xandr",
+      "category": "Marketing",
+      "name": "icu",
+      "domain": ".adnxs.com",
+      "description": "This cookie is used to select ads and limit the number of times a user sees a particular ad. It contains information such as the number of times an ad has been shown, how recently an ad has been shown, or how many total ads have been shown.",
+      "retention": "90 days",
+      "dataController": "Xandr",
+      "gdprUrl": "https://about.ads.microsoft.com/en-us/solutions/xandr/platform-privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "pses": [
+    {
+      "platform": "Xandr",
+      "category": "Analytics",
+      "name": "pses",
+      "domain": "",
+      "description": "This cookie is used to measure the time a user spends on a site.",
+      "retention": "Session",
+      "dataController": "Xandr",
+      "gdprUrl": "https://about.ads.microsoft.com/en-us/solutions/xandr/platform-privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "sess": [
+    {
+      "platform": "Xandr",
+      "category": "Functional",
+      "name": "sess",
+      "domain": ".adnxs.com",
+      "description": "The sess cookie contains a single non-unique value: “1”.It is used by the Platform to test whether a browser is configured to accept cookies from Xandr.",
+      "retention": "Session",
+      "dataController": "Xandr",
+      "gdprUrl": "https://about.ads.microsoft.com/en-us/solutions/xandr/platform-privacy-policy",
       "wildcard": "0"
     }
   ],
@@ -13584,24 +14003,24 @@
       "wildcard": "0"
     }
   ],
-  "_stid": [
+  "__stid": [
     {
       "platform": "ShareThis",
-      "category": "Marketing",
-      "name": "_stid",
+      "category": "Analytics",
+      "name": "__stid",
       "domain": "sharethis.com",
-      "description": "ShareThis cookie ID.",
+      "description": "The __stid cookie is set as part of the ShareThis service and monitors user-activity, e.g. Web pages viewed, navigation from page to page, time spent on each page etc.",
       "retention": "1 year",
       "dataController": "ShareThis",
       "gdprUrl": "https://sharethis.com/privacy/",
       "wildcard": "0"
     }
   ],
-  "_stidv": [
+  "__stidv": [
     {
       "platform": "ShareThis",
       "category": "Marketing",
-      "name": "_stidv",
+      "name": "__stidv",
       "domain": "sharethis.com",
       "description": "ShareThis cookie ID version.",
       "retention": "10 years",
@@ -17000,6 +17419,552 @@
       "retention": "session",
       "dataController": "Rack",
       "gdprUrl": "",
+      "wildcard": "0"
+    }
+  ],
+  "pa_user": [
+    {
+      "platform": "Piano",
+      "category": "Analytics",
+      "name": "pa_user",
+      "domain": "",
+      "description": "The pa_user cookie tracks an authenticated visitor (user) over time, even if the user does not log in again during subsequent visits. This cookie is managed by the customer who chooses its value and decides if the cookie should be set or not",
+      "retention": "13 months",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "xbc": [
+    {
+      "platform": "Piano",
+      "category": "Functional",
+      "name": "xbc",
+      "domain": "",
+      "description": "This cookie is used by Multiple Composer features, used for, metering, A/B testing, adblocker conversion tracking, credits, affiliates, first-visit segmentation, and AMP reader ID linking.",
+      "retention": "2 years",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "__tbc": [
+    {
+      "platform": "Piano",
+      "category": "Functional",
+      "name": "__tbc",
+      "domain": "",
+      "description": "This cookie is used for tracking conversion and external segmentation",
+      "retention": "2 years",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "__pls": [
+    {
+      "platform": "Piano",
+      "category": "Functional",
+      "name": "__pls",
+      "domain": "",
+      "description": "This cookie is used to differentiate users has been subscribed to an ESP push list",
+      "retention": "2 years",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "__tac": [
+    {
+      "platform": "Piano",
+      "category": "Functional",
+      "name": "__tac",
+      "domain": "",
+      "description": "This cookie is used to check access via JWT won't work and the Composer Cookies stop working",
+      "retention": "90 days",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "_pcus": [
+    {
+      "platform": "Piano",
+      "category": "Marketing",
+      "name": "_pcus",
+      "domain": "",
+      "description": "This cookie is used to User segmentation",
+      "retention": "2 years",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "cX_P": [
+    {
+      "platform": "Piano",
+      "category": "Analytics",
+      "name": "cX_P",
+      "domain": "",
+      "description": "This cookie contains the browserId that is used in Piano products for reporting and tracking purposes",
+      "retention": "13 months",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "cX_G": [
+    {
+      "platform": "Piano",
+      "category": "Marketing",
+      "name": "cX_G",
+      "domain": "",
+      "description": "This cookie is a Global ID mapping different IDs together into one ID. Used for building user profile information across all sites of a single customer where cx.js is implemented",
+      "retention": "13 months",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "pnespsdk_visitor": [
+    {
+      "platform": "Piano",
+      "category": "Analytics",
+      "name": "pnespsdk_visitor",
+      "domain": "",
+      "description": "This cookie is used for tracking user visits",
+      "retention": "12 months",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "pnespsdk_push_subscription_added": [
+    {
+      "platform": "Piano",
+      "category": "Analytics",
+      "name": "pnespsdk_push_subscription_added",
+      "domain": "",
+      "description": "This cookie is used only in case the Push notifications feature in ESP is activated and allows correct tracking of Push notification subscription events",
+      "retention": "12 months",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "pnespsdk_pnespid": [
+    {
+      "platform": "Piano",
+      "category": "Marketing",
+      "name": "pnespsdk_pnespid",
+      "domain": "",
+      "description": "This cookie is used to connect a user visit coming from an email campaign click with a visitor on the website",
+      "retention": "12 months",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "pnespsdk_ssn": [
+    {
+      "platform": "Piano",
+      "category": "Functional",
+      "name": "pnespsdk_ssn",
+      "domain": "",
+      "description": "This session cookie is mandatory for the ESP service to be correctly running",
+      "retention": "session",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "__utp": [
+    {
+      "platform": "Piano",
+      "category": "Functional",
+      "name": "__utp",
+      "domain": "",
+      "description": "This cookie is used for logged-in user's session, and contains details of a logged-in user. By default, this cookie is set on the top-level domain",
+      "retention": "2 years",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "__pil": [
+    {
+      "platform": "Piano",
+      "category": "Functional",
+      "name": "__pil",
+      "domain": "",
+      "description": "This cookie is used to set the preferred language for the Piano templates. Value for example: de_DE. If not available, VX's LANG cookie is used.",
+      "retention": "30 days",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "__pid": [
+    {
+      "platform": "Piano",
+      "category": "Functional",
+      "name": "__pid",
+      "domain": "",
+      "description": "This cookie store the domain received on the frontend is used as a domain for other cookies (incl. __utp, __idr, __tae) Example value: .piano.io",
+      "retention": "30 days",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "__idr": [
+    {
+      "platform": "Piano",
+      "category": "Functional",
+      "name": "__idr",
+      "domain": "",
+      "description": "The User Session Cookie is set when a user selects the option 'Stay logged in' when signing in. The expiration depends on the value configured in the Piano ID settings. Various browser restrictions and cookie rules affect the expiration as well.",
+      "retention": "30 days",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "__eea": [
+    {
+      "platform": "Piano",
+      "category": "Functional",
+      "name": "__eea",
+      "domain": "",
+      "description": "This cookie is used to determine if the user token (stored in __utp) needs to be refreshed with the new expiration automatically every 24 hours.",
+      "retention": "30 days",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "__code": [
+    {
+      "platform": "Piano",
+      "category": "Functional",
+      "name": "__code",
+      "domain": "",
+      "description": "This cookie is used for ID OAuth authorization.",
+      "retention": "session",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "__bid": [
+    {
+      "platform": "Piano",
+      "category": "Functional",
+      "name": "__bid",
+      "domain": "tinypass.com",
+      "description": "this cookie is used to Identifies the browser of the end user",
+      "retention": "1 year",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "__ut": [
+    {
+      "platform": "Piano",
+      "category": "Functional",
+      "name": "__ut",
+      "domain": "",
+      "description": "This cookie is used to Store on your website, the User Token Cookie stores encrypted data used by all Piano User Accounts",
+      "retention": "2 years",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "__pvi": [
+    {
+      "platform": "Piano",
+      "category": "Analytics",
+      "name": "__pvi",
+      "domain": "",
+      "description": "This cookie store data about the last visit to the site including the AID, lastTrackedVisitId, domain and time of the visit. Used for reporting only.",
+      "retention": "1 day",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "__pat": [
+    {
+      "platform": "Piano",
+      "category": "Analytics",
+      "name": "__pat",
+      "domain": "",
+      "description": "This cookie store difference between the client’s application time zone and UTC. At midnight, (application's local time), the previous visit is expired and a new one is created. The cookie is used for calculation.",
+      "retention": "30 days",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "__pnahc": [
+    {
+      "platform": "Piano",
+      "category": "Functional",
+      "name": "__pnahc",
+      "domain": "",
+      "description": "This cookie store the result of previous Adblock detection, removes false-positive AdBlock detection clauses.",
+      "retention": "90 days",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "LANG": [
+    {
+      "platform": "Piano",
+      "category": "Functional",
+      "name": "LANG",
+      "domain": "tinypass.com",
+      "description": "This cookie store the selected locale",
+      "retention": "1500 days",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "LANG_CHANGED": [
+    {
+      "platform": "Piano",
+      "category": "Functional",
+      "name": "LANG_CHANGED",
+      "domain": "tinypass.com",
+      "description": "This cookie store the temporarily selected locale (e.g. impersonation in Admin dashboard).",
+      "retention": "1 day",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "_pctx": [
+    {
+      "platform": "Piano",
+      "category": "Functional",
+      "name": "_pctx",
+      "domain": "",
+      "description": "This cookie is required to sync different Piano product scripts containing common data points. It contains data from different products,  for example for Composer Insights or Ad Revenue Insights, but only IF you have implemented any of these products.",
+      "retention": "13 months",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "_pprv": [
+    {
+      "platform": "Piano",
+      "category": "Functional",
+      "name": "_pprv",
+      "domain": "",
+      "description": "This cookie contains the property consent (linked to a product) the end-user has consented to. More information about Consent management can be found here.",
+      "retention": "13 months",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "_pcid": [
+    {
+      "platform": "Piano",
+      "category": "Functional",
+      "name": "_pcid",
+      "domain": "",
+      "description": "This cookie contains the browserId (BID) that is used in Piano products for reporting and tracking purposes.",
+      "retention": "13 months",
+      "dataController": "Piano",
+      "gdprUrl": "https://piano.io/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "DotMetrics.SessionCookieTemp": [
+    {
+      "platform": "Dotmetrics",
+      "category": "Analytics",
+      "name": "DotMetrics.SessionCookieTemp",
+      "domain": ".dotmetrics.net",
+      "description": "This cookie DotMetrics obtain information about a general site visit collect in the DotMetrics Research Network.",
+      "retention": "Session",
+      "dataController": "Dot Metrics",
+      "gdprUrl": "https://dotmetrics.net/privacy-center.html",
+      "wildcard": "0"
+    }
+  ],
+  "DotMetrics.UniqueUserIdentityCookie": [
+    {
+      "platform": "Dotmetrics",
+      "category": "Analytics",
+      "name": "DotMetrics.UniqueUserIdentityCookie",
+      "domain": ".dotmetrics.net",
+      "description": "This cookie contains information about the current user (unique ID, creation time, current tracking mode and version)",
+      "retention": "Session",
+      "dataController": "Dot Metrics",
+      "gdprUrl": "https://dotmetrics.net/privacy-center.html",
+      "wildcard": "0"
+    }
+  ],
+  "DotMetrics.DeviceKey": [
+    {
+      "platform": "Dotmetrics",
+      "category": "Analytics",
+      "name": "DotMetrics.DeviceKey",
+      "domain": ".dotmetrics.net",
+      "description": "This cookie collects information about your device. The purpose for which we use it is to provide a high quality view of the survey or some content on your device.",
+      "retention": "Session",
+      "dataController": "Dot Metrics",
+      "gdprUrl": "https://dotmetrics.net/privacy-center.html",
+      "wildcard": "0"
+    }
+  ],
+  "DotMetrics.SessionCookieTempTimed": [
+    {
+      "platform": "Dotmetrics",
+      "category": "Analytics",
+      "name": "DotMetrics.SessionCookieTempTimed",
+      "domain": ".dotmetrics.net",
+      "description": "This cookie contains information about the current site from which you access the DotMetrics research network.",
+      "retention": "Session",
+      "dataController": "Dot Metrics",
+      "gdprUrl": "https://dotmetrics.net/privacy-center.html",
+      "wildcard": "0"
+    }
+  ],
+  "ki_s": [
+    {
+      "platform": "Qualaroo",
+      "category": "Marketing",
+      "name": "ki_s",
+      "domain": "qualaroo.com",
+      "description": "This cookie is used to store the current state of any survey the user has viewed or interacted with.",
+      "retention": "5 years",
+      "dataController": "Qualaroo",
+      "gdprUrl": "https://www.proprofs.com/policies/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "ki_u": [
+    {
+      "platform": "Qualaroo",
+      "category": "Marketing",
+      "name": "ki_u",
+      "domain": "qualaroo.com",
+      "description": "This cookie is used to store a unique user identifier.",
+      "retention": "5 years",
+      "dataController": "Qualaroo",
+      "gdprUrl": "https://www.proprofs.com/policies/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "barometric[cuid]": [
+    {
+      "platform": "Claritas",
+      "category": "Marketing",
+      "name": "barometric[cuid]",
+      "domain": "trkn.us",
+      "description": "This cookie is used to identify users for Veritone/Barometric Podcast Conversion.",
+      "retention": "1 year",
+      "dataController": "Claritas",
+      "gdprUrl": "https://claritas.com/privacy-legal/",
+      "wildcard": "0"
+    }
+  ],
+  "barometric[idfa]": [
+    {
+      "platform": "Claritas",
+      "category": "Marketing",
+      "name": "barometric[idfa]",
+      "domain": "trkn.us",
+      "description": "This cookie is used to to collect visitor statistics. This data is used to categorize users and improve the effectiveness of website advertising.",
+      "retention": "10 seconds",
+      "dataController": "Claritas",
+      "gdprUrl": "https://claritas.com/privacy-legal/",
+      "wildcard": "0"
+    }
+  ],
+  "__gfp_64b": [
+    {
+      "platform": "Gemius",
+      "category": "Analytics",
+      "name": "__gfp_64b",
+      "domain": ".gemius.pl",
+      "description": "Stores data on the time spent on the website and its sub-pages, during the current session.",
+      "retention": "13 months",
+      "dataController": "Gemius",
+      "gdprUrl": "https://www.gemius.pl/privacy-notice-for-panelists.html",
+      "wildcard": "0"
+    }
+  ],
+  "__gfp_s_64b": [
+    {
+      "platform": "Gemius",
+      "category": "Analytics",
+      "name": "__gfp_s_64b",
+      "domain": ".gemius.pl",
+      "description": "Registers data on the performance of the website’s embedded video-content.",
+      "retention": "13 months",
+      "dataController": "Gemius",
+      "gdprUrl": "https://www.gemius.pl/privacy-notice-for-panelists.html",
+      "wildcard": "0"
+    }
+  ],
+  "Gdyn": [
+    {
+      "platform": "Gemius",
+      "category": "Analytics",
+      "name": "Gdyn",
+      "domain": ".gemius.pl",
+      "description": "\tCollects statistics on the visitor's visits to the website, such as the number of visits, average time spent on the website and what pages have been read.",
+      "retention": "13 months",
+      "dataController": "Gemius",
+      "gdprUrl": "https://www.gemius.pl/privacy-notice-for-panelists.html",
+      "wildcard": "0"
+    }
+  ],
+  "opt_out": [
+    {
+      "platform": "Nativo",
+      "category": "Marketing",
+      "name": "opt_out",
+      "domain": "postrelease.com",
+      "description": "This cookie is used to remember not to serve that user targeted Ads if they opt out.",
+      "retention": "1 year",
+      "dataController": "Nativo",
+      "gdprUrl": "https://www.nativo.com/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "visitor": [
+    {
+      "platform": "Nativo",
+      "category": "Marketing",
+      "name": "visitor",
+      "domain": "postrelease.com",
+      "description": "This cookie is used to identify a unique visitor to the site.",
+      "retention": "1 year",
+      "dataController": "Nativo",
+      "gdprUrl": "https://www.nativo.com/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "tp": [
+    {
+      "platform": "Bombora",
+      "category": "Marketing",
+      "name": "tp",
+      "domain": ".ml314.com",
+      "description": "This cookie is used to target the audience",
+      "retention": "14 days",
+      "dataController": "Bombora",
+      "gdprUrl": "https://bombora.com/privacy-philosophy/",
       "wildcard": "0"
     }
   ]
