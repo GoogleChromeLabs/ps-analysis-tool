@@ -338,12 +338,27 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
         title: 'Platform',
       },
       blockedReasons: {
-        title: 'Cookie Blocked Reasons',
-        description: 'Reason why the cookies were blocked.',
+        title: 'Blocked Reasons',
         hasStaticFilterValues: true,
         filterValues: blockedReasonFilterValues,
         comparator: (value: InfoType, filterValue: string) => {
           return (value as string[])?.includes(filterValue);
+        },
+      },
+      'parsedCookie.partitionKey': {
+        title: 'Partition Key',
+        hasStaticFilterValues: true,
+        filterValues: {
+          Set: {
+            selected: false,
+          },
+          'Not Set': {
+            selected: false,
+          },
+        },
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = value as string;
+          return val ? filterValue === 'Set' : filterValue === 'Not Set';
         },
       },
       headerType: {
