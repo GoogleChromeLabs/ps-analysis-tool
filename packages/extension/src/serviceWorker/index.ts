@@ -268,6 +268,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   if (details.reason === 'update') {
     const preSetSettings = await chrome.storage.sync.get();
     tabMode = preSetSettings?.allowedNumberOfTabs ?? 'single';
+    globalIsUsingCDP = preSetSettings?.isUsingCDP ?? false;
     if (preSetSettings?.allowedNumberOfTabs) {
       return;
     }
@@ -601,6 +602,7 @@ chrome.storage.sync.onChanged.addListener(
             tab.id,
             changes?.allowedNumberOfTabs?.newValue
           );
+          syncCookieStore.sendUpdatedDataToPopupAndDevTools(tab.id);
           syncCookieStore.updateDevToolsState(tab.id, true);
           await chrome.tabs.reload(Number(tab?.id), { bypassCache: true });
         })
@@ -643,7 +645,8 @@ chrome.storage.sync.onChanged.addListener(
 
           try {
             await chrome.debugger.detach({ tabId: Number(key) });
-            syncCookieStore.removeTabData(Number(key));
+            syncCookieStore.removeCookieData(Number(key));
+            syncCookieStore.sendUpdatedDataToPopupAndDevTools(Number(key));
           } catch (error) {
             // Fail silently
           } finally {
@@ -657,7 +660,8 @@ chrome.storage.sync.onChanged.addListener(
           if (!Number(key)) {
             return;
           }
-
+          syncCookieStore.removeCookieData(Number(key));
+          syncCookieStore.sendUpdatedDataToPopupAndDevTools(Number(key));
           await chrome.tabs.reload(Number(key), { bypassCache: true });
         })
       );
