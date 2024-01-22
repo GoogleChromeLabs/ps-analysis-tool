@@ -345,6 +345,22 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
           return (value as string[])?.includes(filterValue);
         },
       },
+      'parsedCookie.partitionKey': {
+        title: 'Partition',
+        hasStaticFilterValues: true,
+        filterValues: {
+          Set: {
+            selected: false,
+          },
+          'Not Set': {
+            selected: false,
+          },
+        },
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = value as string;
+          return val ? filterValue === 'Set' : filterValue === 'Not Set';
+        },
+      },
       headerType: {
         title: 'Set Via',
         hasStaticFilterValues: true,
