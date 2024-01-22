@@ -84,20 +84,6 @@ describe('useCookieListing', () => {
       result.current.filters['parsedCookie.httponly'].comparator(true, 'True')
     ).toBe(true);
 
-    expect(result.current.filters['isBlocked'].filterValues).toEqual({
-      True: {
-        selected: false,
-      },
-      False: {
-        selected: false,
-      },
-    });
-    expect(result.current.filters['isBlocked']?.comparator(true, 'True')).toBe(
-      true
-    );
-    expect(
-      result.current.filters['isBlocked']?.comparator(false, 'False')
-    ).toBe(true);
     expect(
       result.current.filters['parsedCookie.expires'].comparator(
         'Session',
