@@ -36,7 +36,6 @@ import {
  * Internal dependencies.
  */
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import { BLOCKED_REASON_LIST } from '../../../../../constants';
 
 interface CookiesListingProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;
@@ -197,17 +196,6 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
     []
   );
 
-  const blockedReasonFilterValues = useMemo<{
-    [key: string]: { selected: boolean };
-  }>(() => {
-    const filterValues: { [key: string]: { selected: boolean } } = {};
-
-    BLOCKED_REASON_LIST.forEach((reason) => {
-      filterValues[reason] = { selected: false };
-    });
-    return filterValues;
-  }, []);
-
   const filters = useMemo<TableFilter>(
     () => ({
       'analytics.category': {
@@ -338,12 +326,22 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
         title: 'Platform',
       },
       blockedReasons: {
-        title: 'Cookie Blocked Reasons',
-        description: 'Reason why the cookies were blocked.',
+        title: 'Blocked Reasons',
+      },
+      'parsedCookie.partitionKey': {
+        title: 'Partition Key',
         hasStaticFilterValues: true,
-        filterValues: blockedReasonFilterValues,
+        filterValues: {
+          Set: {
+            selected: false,
+          },
+          'Not Set': {
+            selected: false,
+          },
+        },
         comparator: (value: InfoType, filterValue: string) => {
-          return (value as string[])?.includes(filterValue);
+          const val = value as string;
+          return val ? filterValue === 'Set' : filterValue === 'Not Set';
         },
       },
       headerType: {
@@ -384,7 +382,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
         },
       },
     }),
-    [blockedReasonFilterValues]
+    []
   );
 
   const searchKeys = useMemo<string[]>(
