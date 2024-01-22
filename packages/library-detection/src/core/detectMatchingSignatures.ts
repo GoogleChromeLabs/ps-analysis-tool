@@ -96,4 +96,5 @@ const detectMatchingSignatures = (loadedScripts: ScriptTagUnderCheck[]) => {
     gsiV2: libraryMatches.gsiV2,
   };
 };
+
 export default detectMatchingSignatures;

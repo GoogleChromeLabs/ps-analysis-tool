@@ -25,8 +25,10 @@ import {
   getNetworkResourcesWithContent,
   getResourcesWithContent,
 } from '../../utils';
-import { detectMatchingSignatures, sumUpDetectionResults } from '..';
+import { sumUpDetectionResults } from '..';
 import type { LibraryData, ResourceTreeItem } from '../../types';
+import { executeTaskInWorker } from '@ps-analysis-tool/common';
+import { LIBRARY_DETECTION_WORKER_TASK } from '../../worker/constants';
 
 /**
  * The primary custom hook used for Library signature detection purpose
@@ -54,8 +56,11 @@ const useLibraryDetection = () => {
    */
   const listenerCallback = useCallback(
     async (resource: ResourceTreeItem) => {
-      const realtimeComputationResult = detectMatchingSignatures(
-        await getResourcesWithContent([resource])
+      const resourcesWithContent = await getResourcesWithContent([resource]);
+
+      const realtimeComputationResult = await executeTaskInWorker(
+        LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING,
+        resourcesWithContent
       );
 
       if (
@@ -79,7 +84,12 @@ const useLibraryDetection = () => {
    */
   const oneTimeComputation = useCallback(async () => {
     const scripts = await getNetworkResourcesWithContent();
-    setLibraryMatches(detectMatchingSignatures(scripts));
+    setLibraryMatches(
+      await executeTaskInWorker(
+        LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING,
+        scripts
+      )
+    );
   }, [libraryMatches]);
 
   const tabOnUpdatedHandler = useCallback(
