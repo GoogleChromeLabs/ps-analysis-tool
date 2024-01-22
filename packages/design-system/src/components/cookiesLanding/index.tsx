@@ -44,6 +44,7 @@ interface CookiesLandingProps {
   additionalComponents?: {
     [key: string]: React.FunctionComponent;
   };
+  description?: React.ReactNode;
 }
 
 const CookiesLanding = ({
@@ -55,6 +56,7 @@ const CookiesLanding = ({
   showMessageBoxBody = true,
   showBlockedCookiesSection = false,
   showHorizontalMatrix = false,
+  description = '',
   additionalComponents = {},
 }: CookiesLandingProps) => {
   const cookieStats = prepareCookiesCount(tabCookies);
@@ -117,19 +119,22 @@ const CookiesLanding = ({
       </CookiesLandingContainer>
       {showBlockedCookiesSection && (
         <CookiesLandingContainer
+          description={description}
           dataMapping={blockedCookieDataMapping}
           testId="blocked-cookies-insights"
         >
           {cookiesStatsComponents.blockedCookiesLegend.length > 0 && (
-            <CookiesMatrix
-              title="Blocked Reasons"
-              tabCookies={tabCookies}
-              componentData={cookiesStatsComponents.blockedCookiesLegend}
-              tabFrames={tabFrames}
-              showInfoIcon={showInfoIcon}
-              showHorizontalMatrix={false}
-              infoIconTitle="Cookies that have been blocked by the browser.(The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
-            />
+            <>
+              <CookiesMatrix
+                title="Blocked Reasons"
+                tabCookies={tabCookies}
+                componentData={cookiesStatsComponents.blockedCookiesLegend}
+                tabFrames={tabFrames}
+                showInfoIcon={showInfoIcon}
+                showHorizontalMatrix={false}
+                infoIconTitle="Cookies that have been blocked by the browser.(The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
+              />
+            </>
           )}
         </CookiesLandingContainer>
       )}
