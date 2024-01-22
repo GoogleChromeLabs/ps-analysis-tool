@@ -177,8 +177,6 @@ const useFrameOverlay = (
               if (res) {
                 setCanStartInspecting(res.setInPage);
               }
-            } else {
-              // Fail silently.
             }
           }
         );

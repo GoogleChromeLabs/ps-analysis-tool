@@ -533,6 +533,19 @@ chrome.runtime.onMessage.addListener(async (request) => {
   if (request?.type === 'Popup::ServiceWorker::POPUP_STATE_CLOSE') {
     syncCookieStore.updatePopUpState(request?.payload?.tabId, false);
   }
+
+  if (request.type === 'CHANGE_CDP_SETTING') {
+    if (typeof request.payload?.isUsingCDP !== 'undefined') {
+      globalIsUsingCDP = request.payload?.isUsingCDP;
+      (async () => {
+        const storage = await chrome.storage.sync.get();
+        await chrome.storage.sync.set({
+          ...storage,
+          isUsingCDP: globalIsUsingCDP,
+        });
+      })();
+    }
+  }
 });
 
 /**
