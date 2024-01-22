@@ -284,9 +284,7 @@ const CookiesListing = ({
         },
       },
       isBlocked: {
-        title: 'Cookie Affected',
-        description:
-          "Whether the cookie was accepted(set) in Chrome's Cookie Store",
+        title: 'Blocked',
         hasStaticFilterValues: true,
         filterValues: {
           True: {
