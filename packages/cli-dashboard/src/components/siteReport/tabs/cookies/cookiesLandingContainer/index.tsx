@@ -54,7 +54,7 @@ const CookiesLandingContainer = ({
       <CookiesLanding
         tabFrames={tabFrames}
         tabCookies={tabCookies}
-        showInfoIcon={false}
+        showInfoIcon={true}
         associatedCookiesCount={Object.values(tabFrames).length}
         showMessageBoxBody={false}
         showBlockedCookiesSection
