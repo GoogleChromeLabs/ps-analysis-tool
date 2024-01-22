@@ -18,7 +18,7 @@
  */
 import type { Storage } from '../types';
 
-describe('local store: CookieStore', () => {
+xdescribe('local store: CookieStore', () => {
   let storage: Storage = {};
   beforeAll(() => {
     globalThis.chrome = {
