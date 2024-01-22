@@ -31,7 +31,11 @@ import type { Config } from '../../types';
 import { useLibraryDetection } from '../../core';
 
 // eslint-disable-next-line react/display-name
-const LibraryDetection = memo(function LibraryDetection() {
+const LibraryDetection = memo(function LibraryDetection({
+  tabId,
+}: {
+  tabId: number;
+}) {
   const [libraryCount, setLibraryCount] = useState(0);
   const { libraryMatches } = useLibraryDetection();
 
@@ -62,9 +66,24 @@ const LibraryDetection = memo(function LibraryDetection() {
       ? 'Please review the following libraries or library features for known breakages.'
       : '';
 
-  const onTabUpdate = useCallback(() => {
-    setLibraryCount(0);
-  }, []);
+  const onTabUpdate = useCallback(
+    (
+      changingTabId: number,
+      changeInfo: chrome.tabs.TabChangeInfo,
+      tab: chrome.tabs.Tab
+    ) => {
+      const currentTabId = tabId;
+
+      if (
+        changeInfo.status === 'complete' &&
+        tab.active &&
+        changingTabId === currentTabId
+      ) {
+        setLibraryCount(0);
+      }
+    },
+    [tabId]
+  );
 
   useEffect(() => {
     chrome.tabs.onUpdated.addListener(onTabUpdate);
