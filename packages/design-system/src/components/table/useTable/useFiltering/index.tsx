@@ -31,7 +31,16 @@ export type TableFilteringOutput = {
   selectedFilters: TableFilter;
   filteredData: TableData[];
   isFiltering: boolean;
-  toggleFilterSelection: (filterKey: string, filterValue: string) => void;
+  toggleFilterSelection: (
+    filterKey: string,
+    filterValue: string,
+    isRemovalAction?: boolean
+  ) => void;
+  toggleSelectAllFilter: (
+    filterKey: string,
+    isSingleFilterRemovalAction?: boolean
+  ) => void;
+  isSelectAllFilterSelected: (filterKey: string) => boolean;
   resetFilters: () => void;
 };
 
@@ -44,6 +53,9 @@ const useFiltering = (
   const [filters, setFilters] = useState<TableFilter>({
     ...(tableFilterData || {}),
   });
+  const [selectAllFilterSelection, setSelectAllFilterSelection] = useState<{
+    [accessorKey: string]: { selected: boolean };
+  }>({});
   const [options, setOptions] = useState<{
     [filterKey: string]: TableFilter[keyof TableFilter]['filterValues'];
   }>({});
@@ -130,16 +142,67 @@ const useFiltering = (
     });
   }, [tableFilterData]);
 
-  const toggleFilterSelection = useCallback(
-    (filterKey: string, filterValue: string) => {
+  useEffect(() => {
+    const filtersWithSelectAllFilterEnabled = Object.entries(
+      tableFilterData || {}
+    )
+      .filter(([, filter]) => filter.enableSelectAllOption)
+      .reduce<Record<string, { selected: boolean }>>((acc, [filterKey]) => {
+        acc[filterKey] = {
+          selected: false,
+        };
+
+        return acc;
+      }, {});
+
+    setSelectAllFilterSelection((prev) => {
+      const newSelectAllFilterSelection = { ...prev };
+
+      Object.entries(filtersWithSelectAllFilterEnabled).forEach(
+        ([filterKey, filterValueData]) => {
+          if (!newSelectAllFilterSelection[filterKey]) {
+            newSelectAllFilterSelection[filterKey] = filterValueData;
+          }
+        }
+      );
+
+      return newSelectAllFilterSelection;
+    });
+  }, [tableFilterData]);
+
+  const isSelectAllFilterSelected = useCallback(
+    (filterKey: string) => {
+      return selectAllFilterSelection?.[filterKey]?.selected;
+    },
+    [selectAllFilterSelection]
+  );
+
+  const toggleSelectAllFilter = useCallback(
+    (filterKey: string, isSingleFilterRemovalAction?: boolean) => {
+      let valueToSet = false;
+      setSelectAllFilterSelection((prev) => {
+        const newSelectAllFilterSelection = { ...prev };
+
+        newSelectAllFilterSelection[filterKey] = {
+          selected: !newSelectAllFilterSelection[filterKey].selected,
+        };
+
+        valueToSet = newSelectAllFilterSelection[filterKey].selected;
+
+        return newSelectAllFilterSelection;
+      });
+
+      if (isSingleFilterRemovalAction) {
+        return;
+      }
+
       setFilters((prevFilters) => {
         const newFilters = { ...prevFilters };
         const filterValues = newFilters[filterKey].filterValues || {};
 
-        if (filterValues[filterValue]) {
-          filterValues[filterValue].selected =
-            !filterValues[filterValue].selected;
-        }
+        Object.entries(filterValues).forEach(([filterValue]) => {
+          filterValues[filterValue].selected = valueToSet;
+        });
 
         return newFilters;
       });
@@ -147,7 +210,44 @@ const useFiltering = (
     []
   );
 
+  const toggleFilterSelection = useCallback(
+    (filterKey: string, filterValue: string, isRemovalAction?: boolean) => {
+      if (selectAllFilterSelection?.[filterKey]?.selected) {
+        toggleSelectAllFilter(filterKey, isRemovalAction);
+      }
+
+      setFilters((prevFilters) => {
+        const newFilters = { ...prevFilters };
+        const filterValues = newFilters[filterKey].filterValues || {};
+
+        if (filterValues[filterValue]) {
+          filterValues[filterValue].selected = isRemovalAction
+            ? false
+            : !filterValues[filterValue].selected;
+        }
+
+        return newFilters;
+      });
+    },
+    [selectAllFilterSelection, toggleSelectAllFilter]
+  );
+
   const resetFilters = useCallback(() => {
+    setSelectAllFilterSelection((prev) => {
+      const newSelectAllFilterSelection = { ...prev };
+
+      Object.entries(newSelectAllFilterSelection).forEach(
+        ([filterKey, filterValueData]) => {
+          newSelectAllFilterSelection[filterKey] = {
+            ...filterValueData,
+            selected: false,
+          };
+        }
+      );
+
+      return newSelectAllFilterSelection;
+    });
+
     setFilters((prevFilters) => {
       const newFilters = { ...prevFilters };
 
@@ -279,6 +379,8 @@ const useFiltering = (
     filteredData,
     isFiltering,
     toggleFilterSelection,
+    toggleSelectAllFilter,
+    isSelectAllFilterSelected,
     resetFilters,
   };
 };
