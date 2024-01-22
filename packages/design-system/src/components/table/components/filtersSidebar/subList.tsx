@@ -30,6 +30,9 @@ interface SubListProps {
   sort: boolean;
   isExpanded: boolean;
   toggleFilterSelection: TableOutput['toggleFilterSelection'];
+  isSelectAllFilterEnabled: boolean;
+  toggleSelectAllFilter: TableOutput['toggleSelectAllFilter'];
+  isSelectAllFilterSelected: boolean;
 }
 
 const SubList = ({
@@ -38,6 +41,9 @@ const SubList = ({
   sort,
   toggleFilterSelection,
   isExpanded,
+  isSelectAllFilterEnabled,
+  isSelectAllFilterSelected,
+  toggleSelectAllFilter,
 }: SubListProps) => {
   const sortedFilterValueKeys = useMemo(() => {
     if (!sort) {
@@ -51,14 +57,26 @@ const SubList = ({
 
   return (
     <ul>
+      {isSelectAllFilterEnabled && (
+        <Option
+          filterKey={filterKey}
+          filterValue="All"
+          selected={isSelectAllFilterSelected}
+          toggleFilterSelection={() => toggleSelectAllFilter(filterKey)}
+          isExpanded={true}
+        />
+      )}
       {sortedFilterValueKeys.map((filterValue, index) => (
         <React.Fragment key={index}>
           <Option
             filterKey={filterKey}
             filterValue={filterValue}
-            selected={Boolean(filterValues?.[filterValue].selected)}
+            selected={
+              Boolean(filterValues?.[filterValue].selected) &&
+              (isSelectAllFilterEnabled ? !isSelectAllFilterSelected : true)
+            }
             toggleFilterSelection={toggleFilterSelection}
-            isExpanded={index > 3 && !isExpanded}
+            isExpanded={index < 3 || isExpanded}
           />
         </React.Fragment>
       ))}

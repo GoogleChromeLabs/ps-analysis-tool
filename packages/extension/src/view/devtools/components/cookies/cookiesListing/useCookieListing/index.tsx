@@ -336,6 +336,7 @@ const useCookieListing = () => {
         title: 'Blocked Reasons',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
+        enableSelectAllOption: true,
         filterValues: preCalculatedFilters.blockedReason,
         sortValues: true,
         useGenericPersistenceKey: true,
