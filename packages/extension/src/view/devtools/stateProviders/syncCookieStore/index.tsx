@@ -38,6 +38,7 @@ import useContextSelector from '../../../../utils/useContextSelector';
 import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
 import setDocumentCookies from '../../../../utils/setDocumentCookies';
 import isOnRWS from '../../../../contentScript/utils/isOnRWS';
+import { useSettingsStore } from '../syncSettingsStore';
 
 export interface CookieStoreContext {
   state: {
@@ -118,6 +119,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [tabFrames, setTabFrames] =
     useState<CookieStoreContext['state']['tabFrames']>(null);
 
+  const { allowedNumberOfTabs } = useSettingsStore(({ state }) => ({
+    allowedNumberOfTabs: state.allowedNumberOfTabs,
+  }));
+
   /**
    * Set tab frames state for frame ids and frame URLs from using chrome.webNavigation.getAllFrames
    *
@@ -163,6 +168,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
     },
     []
   );
+
+  useEffect(() => {
+    if (allowedNumberOfTabs === 'single' && !isCurrentTabBeingListenedTo) {
+      setTabFrames(null);
+    }
+  }, [isCurrentTabBeingListenedTo, allowedNumberOfTabs]);
 
   /**
    * Sets current frames for sidebar, detected if the current tab is to be analysed,
@@ -236,13 +247,16 @@ export const Provider = ({ children }: PropsWithChildren) => {
             }
           }
         );
-        setTabToRead(message?.payload?.tabId?.toString() || '');
         setTabFrames(null);
-        setIsCurrentTabBeingListenedTo(
-          message?.payload?.tabId?.toString() === tabId?.toString()
-        );
         setLoading(false);
         setCanStartInspecting(false);
+      }
+
+      if (message.type === 'ServiceWorker::DevTools::TAB_TO_READ_DATA') {
+        setIsCurrentTabBeingListenedTo(
+          tabId?.toString() === message?.payload?.tabToRead
+        );
+        setTabToRead(message?.payload?.tabToRead || '');
       }
 
       if (message.type === 'ServiceWorker::DevTools::NEW_COOKIE_DATA') {
@@ -253,13 +267,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
           await getAllFramesForCurrentTab(tabId);
           setTabCookies(JSON.parse(message?.payload?.cookieData ?? '{}'));
         }
-      }
-
-      if (message.type === 'ServiceWorker::DevTools::TAB_TO_READ_DATA') {
-        setIsCurrentTabBeingListenedTo(
-          tabId?.toString() === message?.payload?.tabToRead
-        );
-        setTabToRead(message?.payload?.tabToRead || '');
       }
     };
 

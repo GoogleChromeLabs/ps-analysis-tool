@@ -66,7 +66,6 @@ chrome.webRequest.onResponseStarted.addListener(
     (async () => {
       const { tabId, url, responseHeaders, frameId } = details;
       const tabUrl = syncCookieStore.getTabUrl(tabId);
-
       if (
         !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, responseHeaders)
       ) {
@@ -256,7 +255,7 @@ chrome.windows.onRemoved.addListener((windowId) => {
  * @todo Shouldn't have to reinstall the extension.
  */
 chrome.runtime.onInstalled.addListener(async (details) => {
-  await chrome.storage.local.clear();
+  syncCookieStore.clear();
   if (!cookieDB) {
     cookieDB = await fetchDictionary();
   }
@@ -439,8 +438,8 @@ chrome.runtime.onMessage.addListener(async (request) => {
     request?.type === 'DevTools::ServiceWorker::SET_TAB_TO_READ' ||
     request?.type === 'Popup::ServiceWorker::SET_TAB_TO_READ'
   ) {
+    tabToRead = request?.payload?.tabId?.toString();
     const newTab = listenToNewTab(request?.payload?.tabId);
-    tabToRead = newTab;
 
     chrome.runtime.sendMessage({
       type: 'ServiceWorker::DevTools::TAB_TO_READ_DATA',
@@ -496,10 +495,9 @@ chrome.runtime.onMessage.addListener(async (request) => {
     });
 
     syncCookieStore.updateDevToolsState(request?.payload?.tabId, true);
-
-    if (syncCookieStore.cachedTabsData[Number(request?.payload?.tabId)]) {
-      const tabIdToSendMessage =
-        tabMode === 'single' ? Number(tabToRead) : request?.payload?.tabId;
+    const tabIdToSendMessage =
+      tabMode === 'single' ? Number(tabToRead) : request?.payload?.tabId;
+    if (syncCookieStore.cachedTabsData[tabIdToSendMessage]) {
       syncCookieStore.sendUpdatedDataToPopupAndDevTools(tabIdToSendMessage);
     }
   }
@@ -549,27 +547,6 @@ chrome.runtime.onMessage.addListener(async (request) => {
   }
 });
 
-/**
- * Listen to local storage changes.
- * @see https://developer.chrome.com/docs/extensions/reference/api/storage#event-onChanged
- */
-chrome.storage.local.onChanged.addListener(
-  (changes: { [key: string]: chrome.storage.StorageChange }) => {
-    if (!changes?.tabToRead || !changes?.tabToRead?.oldValue) {
-      return;
-    }
-
-    const tabId = changes.tabToRead.oldValue;
-    tabToRead = changes.tabToRead.newValue;
-
-    if (!tabId || (tabMode && tabMode !== 'unlimited')) {
-      return;
-    }
-
-    syncCookieStore.removeTabData(tabId);
-  }
-);
-
 chrome.storage.sync.onChanged.addListener(
   async (changes: { [key: string]: chrome.storage.StorageChange }) => {
     if (
@@ -583,6 +560,21 @@ chrome.storage.sync.onChanged.addListener(
 
     if (changes?.allowedNumberOfTabs?.newValue === 'single') {
       const tabs = await chrome.tabs.query({});
+      tabToRead = '';
+
+      chrome.runtime.sendMessage({
+        type: 'ServiceWorker::DevTools::TAB_TO_READ_DATA',
+        payload: {
+          tabToRead: tabToRead,
+        },
+      });
+
+      chrome.runtime.sendMessage({
+        type: 'ServiceWorker::Popup::TAB_TO_READ_DATA',
+        payload: {
+          tabToRead: tabToRead,
+        },
+      });
 
       tabs.map((tab) => {
         if (!tab?.id) {
@@ -593,11 +585,10 @@ chrome.storage.sync.onChanged.addListener(
           tabId: tab?.id,
           text: '',
         });
+        syncCookieStore.removeTabData(tab.id);
         chrome.tabs.reload(Number(tab?.id), { bypassCache: true });
         return tab;
       });
-
-      syncCookieStore.clear();
     } else {
       const tabs = await chrome.tabs.query({});
 
@@ -610,6 +601,7 @@ chrome.storage.sync.onChanged.addListener(
             tab.id,
             changes?.allowedNumberOfTabs?.newValue
           );
+          syncCookieStore.updateDevToolsState(tab.id, true);
           await chrome.tabs.reload(Number(tab?.id), { bypassCache: true });
         })
       );

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 /**
- * This function will return true/false if the current request can be processed or not for cookies.
+ * This function will return true if the current request can be processed or and false if it cannot be processed.
  * @param {string} tabMode The mode of processing of the extension.
  * @param {string} tabUrl Current tab url.
  * @param {string} tabToRead The current tab being read y extension in case of single processing mode.
@@ -36,7 +36,7 @@ export default function canProcessCookies(
   const _isSingleTabProcessingMode = tabMode && tabMode !== 'unlimited';
 
   if (_isSingleTabProcessingMode) {
-    if (tabToRead && currentTabId?.toString() !== tabToRead) {
+    if (currentTabId?.toString() !== tabToRead) {
       return false;
     }
   }

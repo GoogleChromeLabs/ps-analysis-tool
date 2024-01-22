@@ -56,7 +56,7 @@ class SynchnorousCookieStore {
    */
   // eslint-disable-next-line complexity
   update(tabId: number, cookies: CookieData[]) {
-    if (!this.cachedTabsData[tabId]) {
+    if (!this.cachedTabsData[tabId] && !this.tabs[tabId]) {
       return;
     }
 
