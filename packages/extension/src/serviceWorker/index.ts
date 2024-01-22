@@ -448,6 +448,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
         tabToRead: tabToRead,
       },
     });
+
     // Can't use sendResponse as delay is too long. So using sendMessage instead.
     chrome.runtime.sendMessage({
       type: 'ServiceWorker::DevTools::SET_TAB_TO_READ',
@@ -463,7 +464,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
       },
     });
 
-    await chrome.tabs.reload(Number(newTab));
+    await chrome.tabs.reload(Number(newTab), { bypassCache: true });
   }
 
   if (
@@ -592,7 +593,7 @@ chrome.storage.sync.onChanged.addListener(
           tabId: tab?.id,
           text: '',
         });
-        chrome.tabs.reload(Number(tab?.id));
+        chrome.tabs.reload(Number(tab?.id), { bypassCache: true });
         return tab;
       });
 
@@ -609,7 +610,7 @@ chrome.storage.sync.onChanged.addListener(
             tab.id,
             changes?.allowedNumberOfTabs?.newValue
           );
-          await chrome.tabs.reload(Number(tab?.id));
+          await chrome.tabs.reload(Number(tab?.id), { bypassCache: true });
         })
       );
     }

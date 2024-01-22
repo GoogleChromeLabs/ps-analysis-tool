@@ -184,7 +184,7 @@ class WebpageContentScript {
     setOverlayPosition(overlay, frame);
 
     const updatePosition = () => {
-      if (isElementVisibleInViewport(frame, true)) {
+      if (isElementVisibleInViewport(frame)) {
         setOverlayPosition(overlay, frame);
       }
     };
@@ -363,7 +363,7 @@ class WebpageContentScript {
 
       if (!this.hoveredFrame) {
         frameElements.forEach((frame) => {
-          if (isElementVisibleInViewport(frame, true)) {
+          if (isElementVisibleInViewport(frame)) {
             iframeForTooltip = frame;
             return;
           }
@@ -463,6 +463,7 @@ class WebpageContentScript {
 
     const firstToolTip = popoverElement['firstToolTip'];
     const frameWithTooltip = popoverElement['frameWithTooltip'];
+
     if (
       firstToolTip &&
       !this.isHoveringOverPage &&
