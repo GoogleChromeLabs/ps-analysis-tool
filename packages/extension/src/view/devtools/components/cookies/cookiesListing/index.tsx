@@ -22,7 +22,6 @@ import {
   filterCookiesByFrame,
   type CookieTableData,
   getCookieKey,
-  BLOCKED_REASON_LIST,
 } from '@ps-analysis-tool/common';
 import {
   CookieDetails,
