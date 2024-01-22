@@ -33,9 +33,8 @@ const onAllowListClick = async (
   }
 
   // Because we need to provide a pattern.
-  const secondaryPattern = pageUrl.endsWith('/')
-    ? pageUrl + '*'
-    : pageUrl + '/*';
+  const secondaryUrlObject = new URL(pageUrl);
+  const secondaryPattern = `${secondaryUrlObject.protocol}//${secondaryUrlObject.hostname}/*`;
 
   let primaryPattern = domainOrParentDomain;
 

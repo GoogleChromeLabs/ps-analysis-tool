@@ -25,33 +25,39 @@ import SinonChrome from 'sinon-chrome';
 import onAllowListClick from '../onAllowListClick';
 import * as removeFromAllowList from '../removeFromAllowList';
 
-globalThis.chrome = {
-  ...(SinonChrome as unknown as typeof chrome),
-  storage: {
-    // @ts-ignore
-    session: {
-      // @ts-ignore
-      get: () => ({
-        allowList: [
-          {
-            primaryDomain: 'xyz.domain',
-          },
-        ],
-      }),
-      set: () => Promise.resolve(),
-    },
-  },
-};
-
 describe('onAllowListClick', () => {
+  beforeAll(() => {
+    globalThis.chrome = {
+      ...(SinonChrome as unknown as typeof chrome),
+      storage: {
+        // @ts-ignore
+        session: {
+          // @ts-ignore
+          get: () => ({
+            allowList: [
+              {
+                primaryDomain: 'xyz.domain',
+              },
+            ],
+          }),
+          set: () => Promise.resolve(),
+        },
+      },
+    };
+  });
+
+  afterAll(() => {
+    globalThis.chrome = chrome as unknown as typeof chrome;
+  });
+
   it('should return undefined if pageUrl or domainOrParentDomain is not defined', async () => {
     const result = await onAllowListClick(
       '',
-      '',
+      'https://www.example.com/home',
       false,
       false,
-      new Set(),
-      () => undefined
+      new Set<string>(),
+      jest.fn()
     );
     expect(result).toBe(undefined);
   });
@@ -60,7 +66,7 @@ describe('onAllowListClick', () => {
     const removeFromAllowListSpy = jest.spyOn(removeFromAllowList, 'default');
     await onAllowListClick(
       'domain',
-      'pageUrl',
+      'https://www.example.com/home',
       false,
       true,
       new Set(),
@@ -76,7 +82,7 @@ describe('onAllowListClick', () => {
 
     await onAllowListClick(
       'domain',
-      'pageUrl',
+      'https://www.example.com/home',
       false,
       false,
       new Set('domain'),
@@ -93,7 +99,7 @@ describe('onAllowListClick', () => {
 
     await onAllowListClick(
       'zzz.domain',
-      'pageUrl',
+      'https://www.example.com/home',
       false,
       false,
       new Set(),
