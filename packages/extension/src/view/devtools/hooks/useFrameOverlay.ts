@@ -177,8 +177,10 @@ const useFrameOverlay = (
           Number(currentTabId),
           { status: 'set?' },
           (res) => {
-            if (res) {
-              setCanStartInspecting(res.setInPage);
+            if (!chrome.runtime.lastError) {
+              if (res) {
+                setCanStartInspecting(res.setInPage);
+              }
             }
           }
         );
