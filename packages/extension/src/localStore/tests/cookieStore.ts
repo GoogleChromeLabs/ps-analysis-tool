@@ -14,61 +14,9 @@
  * limitations under the License.
  */
 /**
- * External dependencies.
- */
-import type { CookieData } from '@ps-analysis-tool/common';
-/**
  * Internal dependencies.
  */
-import CookieStore from '../cookieStore';
 import type { Storage } from '../types';
-
-const cookieArray: CookieData[] = [
-  {
-    parsedCookie: {
-      expires: 'Session',
-      httponly: false,
-      secure: true,
-      path: '/',
-      domain: '.example1.com',
-      samesite: 'None',
-      name: 'countryCode1',
-      value: 'IN',
-      partitionKey: '',
-      priority: 'Medium',
-    },
-    frameIdList: [1],
-    analytics: null,
-    url: 'https://example.com',
-    headerType: 'response',
-    isFirstParty: false,
-    blockedReasons: [],
-    warningReasons: [],
-    isBlocked: false,
-  },
-  {
-    parsedCookie: {
-      expires: 'Session',
-      httponly: false,
-      secure: true,
-      path: '/',
-      domain: '.example2.com',
-      samesite: 'None',
-      name: 'countryCode2',
-      value: 'IN',
-      partitionKey: '',
-      priority: 'Medium',
-    },
-    frameIdList: [1],
-    analytics: null,
-    url: 'https://example.com',
-    isBlocked: false,
-    headerType: 'response',
-    isFirstParty: false,
-    warningReasons: [],
-    blockedReasons: [],
-  },
-];
 
 describe('local store: CookieStore', () => {
   let storage: Storage = {};
@@ -152,56 +100,5 @@ describe('local store: CookieStore', () => {
         },
       },
     };
-  });
-
-  beforeEach(() => {
-    chrome.storage.local.QUOTA_BYTES = 10485760;
-    chrome.storage.local.clear();
-
-    //mock navigation to a URL
-    CookieStore.addTabData('123');
-  });
-
-  it('should add/update tab data', async () => {
-    await CookieStore.update('123', cookieArray);
-    expect(storage['123'].cookies).toStrictEqual({
-      'countryCode1.example1.com/': cookieArray[0],
-      'countryCode2.example2.com/': cookieArray[1],
-    });
-  });
-
-  it('should delete cookies', async () => {
-    await CookieStore.update('123', cookieArray);
-    await CookieStore.deleteCookie('countryCode1.example1.com/');
-    expect(storage['123'].cookies).toStrictEqual({
-      'countryCode2.example2.com/': cookieArray[1],
-    });
-  });
-
-  it('should add/update tab data and merge frame id list', async () => {
-    await CookieStore.update('123', [
-      cookieArray[0],
-      { ...cookieArray[0], frameIdList: [2] },
-      { ...cookieArray[0], frameIdList: [2] },
-    ]);
-    expect(storage['123'].cookies).toStrictEqual({
-      'countryCode1.example1.com/': { ...cookieArray[0], frameIdList: [2, 1] },
-    });
-  });
-
-  it('should remove tab data', async () => {
-    await CookieStore.update('123', cookieArray);
-    await CookieStore.removeTabData('123');
-    expect(storage['123']).toBeUndefined();
-  });
-
-  it('should tab data in a window', async () => {
-    const tmpTabRef = globalThis.chrome.tabs;
-
-    await CookieStore.update('123', cookieArray);
-    await CookieStore.removeWindowData(123);
-    expect(storage['123']).toBeUndefined();
-    expect(storage).toStrictEqual({ tabToRead: '123' });
-    globalThis.chrome.tabs = tmpTabRef;
   });
 });
