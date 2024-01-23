@@ -180,3 +180,12 @@
 ### Extension
 
 - Enhancement: Allow blurring the sidebar items https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/384
+
+
+# v0.4.2
+
+### Extension
+
+- Feature: Provide switch to turn PSAT's debugging capabilities on and off https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/429
+- Chore: Update cookie database https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/430
+- Chore: Update related website sets data  https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/431

@@ -33,7 +33,7 @@ const root = {
       patterns: [
         { from: 'src/manifest.json', to: '' },
         { from: 'icons', to: 'icons' },
-        { from: '../../third_party', to: 'third_party' },
+        { from: '../../assets', to: 'assets' },
         { from: '../../data', to: 'data' },
       ],
     }),
