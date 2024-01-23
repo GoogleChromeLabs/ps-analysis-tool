@@ -26,7 +26,10 @@ import {
   type TableColumn,
   type TableFilter,
 } from '@ps-analysis-tool/design-system';
-import type { CookieTableData } from '@ps-analysis-tool/common';
+import {
+  BLOCKED_REASON_LIST,
+  type CookieTableData,
+} from '@ps-analysis-tool/common';
 
 interface AffectedCookiesProps {
   cookies: CookieTableData[];
@@ -58,6 +61,11 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
       {
         header: 'Domain',
         accessorKey: 'parsedCookie.domain',
+        cell: (info: InfoType) => info,
+      },
+      {
+        header: 'Partition Key',
+        accessorKey: 'parsedCookie.partitionKey',
         cell: (info: InfoType) => info,
       },
       {
@@ -111,6 +119,17 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
     ],
     []
   );
+
+  const blockedReasonFilterValues = useMemo<{
+    [key: string]: { selected: boolean };
+  }>(() => {
+    const filterValues: { [key: string]: { selected: boolean } } = {};
+
+    BLOCKED_REASON_LIST.forEach((reason) => {
+      filterValues[reason] = { selected: false };
+    });
+    return filterValues;
+  }, []);
 
   const filters = useMemo<TableFilter>(
     () => ({
@@ -241,8 +260,18 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
       'analytics.platform': {
         title: 'Platform',
       },
+
+      blockedReasons: {
+        title: 'Cookie Blocked Reasons',
+        description: 'Reason why the cookies were blocked.',
+        hasStaticFilterValues: true,
+        filterValues: blockedReasonFilterValues,
+        comparator: (value: InfoType, filterValue: string) => {
+          return (value as string[])?.includes(filterValue);
+        },
+      },
     }),
-    []
+    [blockedReasonFilterValues]
   );
 
   const searchKeys = useMemo<string[]>(

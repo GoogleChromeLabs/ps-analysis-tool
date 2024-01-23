@@ -27,6 +27,7 @@ export const COOKIES_DATA_HEADER = [
   'Name',
   'Scope',
   'Domain',
+  'Partition Key',
   'Same Site',
   'Category',
   'Platform',
@@ -58,7 +59,8 @@ const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
     const recordsArray = [
       cookie.parsedCookie.name,
       cookie.isFirstParty ? 'First Party' : 'Third Party',
-      cookie.parsedCookie.domain,
+      cookie.parsedCookie.domain || ' ',
+      cookie.parsedCookie.partitionKey || ' ',
       cookie.parsedCookie.value,
       cookie.parsedCookie.sameSite,
       cookie.analytics.category,
