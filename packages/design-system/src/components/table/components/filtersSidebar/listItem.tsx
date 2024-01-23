@@ -34,7 +34,7 @@ interface ListItemProps {
   filterKey: string;
   toggleFilterSelection: TableOutput['toggleFilterSelection'];
   expandAll: boolean;
-  toggleFilterExpansion: (filterKey: string) => void;
+  toggleFilterExpansion: (filterKey: string, expand?: boolean) => void;
 }
 
 const ListItem = ({
@@ -52,9 +52,9 @@ const ListItem = ({
   }, [isExpanded]);
 
   const toggleSubList = useCallback(() => {
-    setShowSubList(!showSubList);
+    setShowSubList((prev) => !prev);
     toggleFilterExpansion(filterKey);
-  }, [filterKey, showSubList, toggleFilterExpansion]);
+  }, [filterKey, toggleFilterExpansion]);
 
   useEffect(() => {
     setShowSubList(expandAll);
@@ -64,6 +64,18 @@ const ListItem = ({
     () => Object.keys(filter.filterValues || {}).length === 0,
     [filter.filterValues]
   );
+
+  useEffect(() => {
+    if (isDisabled && showSubList) {
+      setShowSubList((prev) => {
+        if (prev) {
+          toggleFilterExpansion(filterKey);
+        }
+
+        return false;
+      });
+    }
+  }, [expandAll, filterKey, isDisabled, showSubList, toggleFilterExpansion]);
 
   return (
     <li className="py-[3px] text-xs">

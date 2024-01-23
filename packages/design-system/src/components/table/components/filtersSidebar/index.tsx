@@ -16,13 +16,7 @@
 /**
  * External dependencies.
  */
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 /**
  * Internal dependencies.
@@ -42,17 +36,9 @@ const FiltersSidebar = ({
 }: FiltersSidebarProps) => {
   const [expandAll, setExpandAll] = useState(false);
   const expandedFilters = useRef(new Set<string>());
-  const filterKeysWithValues = useMemo(() => {
-    return Object.keys(filters).filter(
-      (key) => Object.keys(filters[key].filterValues || {}).length
-    );
+  const filterKeys = useMemo(() => {
+    return Object.keys(filters);
   }, [filters]);
-
-  useEffect(() => {
-    if (expandAll) {
-      expandedFilters.current = new Set(filterKeysWithValues);
-    }
-  }, [expandAll, filterKeysWithValues]);
 
   const toggleFilterExpansion = useCallback(
     (filterKey: string) => {
@@ -67,17 +53,16 @@ const FiltersSidebar = ({
       if (newSet.size === 0) {
         setExpandAll(false);
       }
-
-      if (newSet.size === filterKeysWithValues.length) {
+      if (newSet.size === filterKeys.length) {
         setExpandAll(true);
       }
 
       expandedFilters.current = newSet;
     },
-    [filterKeysWithValues]
+    [filterKeys]
   );
 
-  if (!Object.keys(filters).length) {
+  if (!filterKeys.length) {
     return null;
   }
 
@@ -94,7 +79,7 @@ const FiltersSidebar = ({
               const newExpandAll = !prev;
 
               if (newExpandAll) {
-                expandedFilters.current = new Set(filterKeysWithValues);
+                expandedFilters.current = new Set(filterKeys);
               } else {
                 expandedFilters.current = new Set();
               }
