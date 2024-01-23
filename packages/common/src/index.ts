@@ -34,6 +34,7 @@ export { default as getDomainFromUrl } from './utils/getDomainFromUrl';
 export { default as noop } from './utils/noop';
 export { default as getDevToolWorker } from './worker/devToolWorker';
 export { default as executeTaskInWorker } from './worker/executeTaskInWorker';
+export { default as getValueByKey } from './utils/getValueByKey';
 export * from './utils/generateReports';
 export * from './cookies.types';
 export const UNKNOWN_FRAME_KEY = 'Unknown Frame(s)';

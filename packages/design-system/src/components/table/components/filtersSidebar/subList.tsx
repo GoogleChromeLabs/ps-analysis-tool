@@ -72,7 +72,10 @@ const SubList = ({
                 }
               )}
               checked={filterValues?.[filterValue].selected}
-              onChange={() => toggleFilterSelection(filterKey, filterValue)}
+              onChange={() => {
+                // Use Event Loop to delay the toggleFilterSelection call as too many clicks in a short time provide wrong results
+                setTimeout(() => toggleFilterSelection(filterKey, filterValue));
+              }}
             />
             <span className="text-asteriod-black dark:text-bright-gray leading-normal font-semi-thick">
               {String(filterValue)}
