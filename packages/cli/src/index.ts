@@ -46,7 +46,7 @@ const DELAY_TIME = 20000;
 const program = new Command();
 
 program
-  .version('0.4.1')
+  .version('0.4.2')
   .description('CLI to test a URL for 3p cookies')
   .option('-u, --url <value>', 'URL of a site')
   .option('-s, --sitemap-url <value>', 'URL of a sitemap')
@@ -85,7 +85,10 @@ const initialize = async () => {
   }
 };
 
-const saveResults = async (outDir: string, result: CompleteJson[]) => {
+const saveResults = async (
+  outDir: string,
+  result: CompleteJson | CompleteJson[]
+) => {
   await ensureFile(outDir + '/out.json');
   await writeFile(outDir + '/out.json', JSON.stringify(result, null, 4));
 };
@@ -217,10 +220,13 @@ const startDashboardServer = async (dir: string) => {
     } as CompleteJson;
   });
 
-  await saveResults(path.join(outputDir, prefix), result);
+  await saveResults(
+    path.resolve(outputDir),
+    result.length === 1 ? result[0] : result
+  );
 
   if (outDir) {
-    await saveCSVReports(path.join(outputDir, prefix), result);
+    await saveCSVReports(path.resolve(outputDir), result);
     return;
   }
 

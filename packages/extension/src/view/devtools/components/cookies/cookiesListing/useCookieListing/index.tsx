@@ -341,21 +341,21 @@ const useCookieListing = () => {
         sortValues: true,
         useGenericPersistenceKey: true,
       },
-      isBlocked: {
-        title: 'Blocked',
+      'parsedCookie.partitionKey': {
+        title: 'Partition Key',
         hasStaticFilterValues: true,
         filterValues: {
-          True: {
+          Set: {
             selected: false,
           },
-          False: {
+          'Not Set': {
             selected: false,
           },
         },
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
-          const val = value as boolean;
-          return val === (filterValue === 'True');
+          const val = value as string;
+          return val ? filterValue === 'Set' : filterValue === 'Not Set';
         },
       },
       headerType: {
