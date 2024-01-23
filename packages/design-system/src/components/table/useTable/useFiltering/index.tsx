@@ -89,14 +89,20 @@ const useFiltering = (
             .reduce((acc, value) => {
               const val = value.toString().trim();
 
+              // if selectAll is selected, then select all filter values
               if (val && !acc[val]) {
+                const isSelectAllFilterSelected =
+                  selectAllFilterSelection?.[filterKey]?.selected;
+
                 if (filterValues[val]) {
                   acc[val] = {
                     ...filterValues[val],
+                    selected:
+                      isSelectAllFilterSelected || filterValues[val].selected,
                   };
                 } else {
                   acc[val] = {
-                    selected: false,
+                    selected: isSelectAllFilterSelected || false,
                   };
                 }
               }
@@ -108,7 +114,7 @@ const useFiltering = (
         })
       )
     );
-  }, [data]);
+  }, [data, selectAllFilterSelection]);
 
   useEffect(() => {
     const filtersByKey = Object.fromEntries(
@@ -123,24 +129,44 @@ const useFiltering = (
       const newFilters = { ...prevFilters };
 
       Object.entries(newFilters).forEach(([key, filter]) => {
+        if (!filtersByKey[key]) {
+          return;
+        }
+
+        const filterValues: TableFilter[keyof TableFilter]['filterValues'] = {};
+
         Object.entries(filtersByKey[key] || {}).forEach(
           ([filterValue, filterValueData]) => {
             const _filterValue = filterValue.trim();
+            const isSelectAllFilterSelected =
+              selectAllFilterSelection?.[key]?.selected;
 
             if (!filter.filterValues) {
               filter.filterValues = {};
             }
 
             if (!filter.filterValues?.[_filterValue]) {
-              filter.filterValues[_filterValue] = filterValueData;
+              filterValues[_filterValue] = {
+                ...filterValueData,
+                selected: isSelectAllFilterSelected || false,
+              };
+            } else {
+              filterValues[_filterValue] = {
+                ...filterValueData,
+                selected:
+                  isSelectAllFilterSelected ||
+                  filter.filterValues[_filterValue].selected,
+              };
             }
           }
         );
+
+        filter.filterValues = filterValues;
       });
 
       return newFilters;
     });
-  }, [tableFilterData]);
+  }, [selectAllFilterSelection, tableFilterData]);
 
   useEffect(() => {
     const filtersWithSelectAllFilterEnabled = Object.entries(
