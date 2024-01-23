@@ -281,6 +281,10 @@ class SynchnorousCookieStore {
    * @param {string} tabProessingMode Passed to determine the tab processing mode.
    */
   addTabData(tabId: number, tabProessingMode: string) {
+    if (this.cachedTabsData[tabId] && this.tabs[tabId]) {
+      return;
+    }
+
     if (tabProessingMode && tabProessingMode !== 'unlimited') {
       this.cachedTabsData[tabId] = {};
       this.tabs[tabId] = {

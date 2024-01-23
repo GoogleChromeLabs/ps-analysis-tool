@@ -495,6 +495,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
       },
     });
 
+    syncCookieStore.addTabData(request?.payload?.tabId, tabMode);
     syncCookieStore.updateDevToolsState(request?.payload?.tabId, true);
     const tabIdToSendMessage =
       tabMode === 'single' ? Number(tabToRead) : request?.payload?.tabId;
@@ -514,6 +515,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
     const tabId =
       tabMode === 'single' ? Number(tabToRead) : request?.payload?.tabId;
 
+    syncCookieStore.addTabData(request?.payload?.tabId, tabMode);
     syncCookieStore.updatePopUpState(request?.payload?.tabId, true);
 
     if (tabMode === 'single') {
