@@ -66,6 +66,7 @@ chrome.webRequest.onResponseStarted.addListener(
     (async () => {
       const { tabId, url, responseHeaders, frameId } = details;
       const tabUrl = syncCookieStore.getTabUrl(tabId);
+
       if (
         !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, responseHeaders)
       ) {
@@ -434,6 +435,7 @@ const listenToNewTab = (tabId?: number) => {
  * Fires when a message is sent from either an extension process (by runtime.sendMessage) or a content script (by tabs.sendMessage).
  * @see https://developer.chrome.com/docs/extensions/reference/api/runtime#event-onMessage
  */
+// eslint-disable-next-line complexity
 chrome.runtime.onMessage.addListener(async (request) => {
   if (
     request?.type === 'DevTools::ServiceWorker::SET_TAB_TO_READ' ||
@@ -495,10 +497,18 @@ chrome.runtime.onMessage.addListener(async (request) => {
       },
     });
 
-    syncCookieStore.addTabData(request?.payload?.tabId, tabMode);
+    if (!syncCookieStore.tabs[request.payload.tabId]) {
+      const tabs = await chrome.tabs.query({});
+      const currentTab = tabs.find((tab) => tab.id === request.payload.tabId);
+
+      syncCookieStore.addTabData(request?.payload?.tabId, tabMode);
+      syncCookieStore.updateUrl(request?.payload?.tabId, currentTab?.url || '');
+    }
+
     syncCookieStore.updateDevToolsState(request?.payload?.tabId, true);
     const tabIdToSendMessage =
       tabMode === 'single' ? Number(tabToRead) : request?.payload?.tabId;
+
     if (syncCookieStore.cachedTabsData[tabIdToSendMessage]) {
       syncCookieStore.sendUpdatedDataToPopupAndDevTools(tabIdToSendMessage);
     }
@@ -512,10 +522,21 @@ chrome.runtime.onMessage.addListener(async (request) => {
   }
 
   if (request?.type === 'Popup::ServiceWorker::POPUP_STATE_OPEN') {
+    if (!request?.payload?.tabId) {
+      return;
+    }
+
     const tabId =
       tabMode === 'single' ? Number(tabToRead) : request?.payload?.tabId;
 
-    syncCookieStore.addTabData(request?.payload?.tabId, tabMode);
+    if (!syncCookieStore.tabs[request.payload.tabId]) {
+      const tabs = await chrome.tabs.query({});
+      const currentTab = tabs.find((tab) => tab.id === request.payload.tabId);
+
+      syncCookieStore.addTabData(request?.payload?.tabId, tabMode);
+      syncCookieStore.updateUrl(request?.payload?.tabId, currentTab?.url || '');
+    }
+
     syncCookieStore.updatePopUpState(request?.payload?.tabId, true);
 
     if (tabMode === 'single') {
