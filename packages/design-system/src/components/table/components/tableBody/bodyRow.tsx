@@ -64,7 +64,7 @@ const BodyRow = ({
     ?.isDomainInAllowList;
 
   const tableRowClassName = classNames(
-    'outline-0 flex divide-x divide-american-silver dark:divide-quartz',
+    'outline-0 flex divide-x divide-american-silver dark:divide-quartz relative',
     isBlocked &&
       (cookieKey !== selectedKey
         ? index % 2
@@ -101,8 +101,7 @@ const BodyRow = ({
           : 'bg-gainsboro dark:bg-outer-space'
         : isHighlighted
         ? 'bg-dirty-pink text-dirty-red'
-        : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
-    isDomainInAllowList && 'border-l-2 border-leaf-green-dark'
+        : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver')
   );
 
   return (
@@ -114,6 +113,10 @@ const BodyRow = ({
       onContextMenu={(e) => onRowContextMenu(e, row)}
       data-testid="body-row"
     >
+      {/* Vertical bar for allow-listed domain row at the left side */}
+      {isDomainInAllowList && (
+        <span className="absolute block top-0 bottom-0 left-0 border-l-2 border-emerald-600 dark:border-leaf-green-dark" />
+      )}
       {columns.map(({ accessorKey, width }, idx) => (
         <BodyCell
           key={idx}
