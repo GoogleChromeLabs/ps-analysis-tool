@@ -35,9 +35,7 @@ export type CookieDatabase = {
  * @returns {Promise<CookieDatabase>} Open Cookie Data base
  */
 export async function fetchDictionary(): Promise<CookieDatabase> {
-  const url = chrome.runtime.getURL(
-    'third_party/data/open-cookie-database.json'
-  );
+  const url = chrome.runtime.getURL('assets/data/open-cookie-database.json');
 
   const data = await (await fetch(url)).json();
 
