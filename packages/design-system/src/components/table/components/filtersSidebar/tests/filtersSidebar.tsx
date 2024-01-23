@@ -159,7 +159,7 @@ describe('FiltersSidebar', () => {
     });
 
     await waitFor(() => {
-      expect(expandArrow).not.toHaveClass('-rotate-90');
+      expect(expandArrow).toHaveClass('-rotate-90');
       expect(listExpandArrows[0]).not.toHaveClass('-rotate-90');
       expect(listExpandArrows[1]).not.toHaveClass('-rotate-90');
     });
@@ -183,6 +183,10 @@ describe('FiltersSidebar', () => {
         }}
       />
     );
+
+    act(() => {
+      listExpandArrows[2].click();
+    });
 
     await waitFor(() => {
       expect(expandArrow).not.toHaveClass('-rotate-90');
