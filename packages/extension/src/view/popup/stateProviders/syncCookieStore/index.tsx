@@ -239,6 +239,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
               JSON.parse(message?.payload?.cookieData ?? '{}')
             )
           );
+          setLoading(false);
         }
       }
 

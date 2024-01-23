@@ -506,11 +506,9 @@ chrome.runtime.onMessage.addListener(async (request) => {
     }
 
     syncCookieStore.updateDevToolsState(request?.payload?.tabId, true);
-    const tabIdToSendMessage =
-      tabMode === 'single' ? Number(tabToRead) : request?.payload?.tabId;
 
-    if (syncCookieStore.cachedTabsData[tabIdToSendMessage]) {
-      syncCookieStore.sendUpdatedDataToPopupAndDevTools(tabIdToSendMessage);
+    if (syncCookieStore.cachedTabsData[request.payload.tabId]) {
+      syncCookieStore.sendUpdatedDataToPopupAndDevTools(request.payload.tabId);
     }
   }
 
@@ -525,9 +523,6 @@ chrome.runtime.onMessage.addListener(async (request) => {
     if (!request?.payload?.tabId) {
       return;
     }
-
-    const tabId =
-      tabMode === 'single' ? Number(tabToRead) : request?.payload?.tabId;
 
     if (!syncCookieStore.tabs[request.payload.tabId]) {
       const tabs = await chrome.tabs.query({});
@@ -548,8 +543,10 @@ chrome.runtime.onMessage.addListener(async (request) => {
       });
     }
 
-    if (syncCookieStore.cachedTabsData[tabId]) {
-      syncCookieStore.sendUpdatedDataToPopupAndDevTools(tabId);
+    if (syncCookieStore.cachedTabsData[request?.payload?.tabId]) {
+      syncCookieStore.sendUpdatedDataToPopupAndDevTools(
+        request?.payload?.tabId
+      );
     }
   }
 
