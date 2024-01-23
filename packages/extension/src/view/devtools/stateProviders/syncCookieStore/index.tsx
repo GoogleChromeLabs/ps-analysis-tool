@@ -190,16 +190,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
       await getAllFramesForCurrentTab(_tabId);
     }
 
-    const extensionStorage = await chrome.storage.sync.get();
-
-    if (!extensionStorage?.allowedNumberOfTabs) {
-      await chrome.storage.sync.clear();
-      await chrome.storage.sync.set({
-        ...extensionStorage,
-        allowedNumberOfTabs: 'single',
-      });
-    }
-
     await setDocumentCookies(_tabId?.toString());
 
     chrome.devtools.inspectedWindow.eval(

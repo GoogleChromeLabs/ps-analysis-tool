@@ -497,7 +497,10 @@ chrome.runtime.onMessage.addListener(async (request) => {
       },
     });
 
-    if (!syncCookieStore.tabs[request.payload.tabId]) {
+    if (
+      !syncCookieStore.tabs[request.payload.tabId] &&
+      tabMode === 'unlimited'
+    ) {
       const tabs = await chrome.tabs.query({});
       const currentTab = tabs.find((tab) => tab.id === request.payload.tabId);
 
@@ -524,7 +527,10 @@ chrome.runtime.onMessage.addListener(async (request) => {
       return;
     }
 
-    if (!syncCookieStore.tabs[request.payload.tabId]) {
+    if (
+      !syncCookieStore.tabs[request.payload.tabId] &&
+      tabMode === 'unlimited'
+    ) {
       const tabs = await chrome.tabs.query({});
       const currentTab = tabs.find((tab) => tab.id === request.payload.tabId);
 
