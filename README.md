@@ -4,7 +4,7 @@
 
 # Privacy Sandbox
 
-[Privacy Sandbox](https://privacysandbox.com/) is a multi-year [initiative by Google](https://developer.chrome.com/docs/privacy-sandbox/) for building a more private web by defining a set of building blocks (i.e. proposed APIs) enabling [a new privacy model for the web](https://github.com/michaelkleber/privacy-model). Privacy Sandbox encompasses replacing functionality powered by third-party cookies with privacy-preserving alternatives, deprecating third-party cookies, and ensuring developers have a well-lit path to the new capabilities of the platform, and avoid pursuing tracking via other means. 
+[Privacy Sandbox](https://privacysandbox.com/) is a multi-year [initiative by Google](https://developers.google.com/privacy-sandbox) for building a more private web by defining a set of building blocks (i.e. proposed APIs) enabling [a new privacy model for the web](https://github.com/michaelkleber/privacy-model). Privacy Sandbox encompasses replacing functionality powered by third-party cookies with privacy-preserving alternatives, deprecating third-party cookies, and ensuring developers have a well-lit path to the new capabilities of the platform, and avoid pursuing tracking via other means. 
 
 This repository is home to the Privacy Sandbox Analysis DevTools extension (PSAT), which is a tool aimed at assisting developers in preparing their websites for the changes that are happening in Chrome in the context of Privacy Sandbox, and ensuring a seamless transition to a more private web.
 

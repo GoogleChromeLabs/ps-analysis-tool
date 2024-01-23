@@ -44,7 +44,7 @@ const SubList = ({
       return Object.keys(filterValues || {});
     }
 
-    return Object.keys(filterValues || {}).sort(([a], [b]) =>
+    return Object.keys(filterValues || {}).sort((a, b) =>
       String(a).localeCompare(String(b))
     );
   }, [filterValues, sort]);
@@ -57,6 +57,7 @@ const SubList = ({
           className={
             index > 3 && !isExpanded ? 'ml-3 mt-1 hidden' : 'mx-3 mt-1'
           }
+          data-testid="sub-list-item"
         >
           <label className="flex gap-x-2 cursor-pointer items-center">
             <input
@@ -71,7 +72,10 @@ const SubList = ({
                 }
               )}
               checked={filterValues?.[filterValue].selected}
-              onChange={() => toggleFilterSelection(filterKey, filterValue)}
+              onChange={() => {
+                // Use Event Loop to delay the toggleFilterSelection call as too many clicks in a short time provide wrong results
+                setTimeout(() => toggleFilterSelection(filterKey, filterValue));
+              }}
             />
             <span className="text-asteriod-black dark:text-bright-gray leading-normal font-semi-thick">
               {String(filterValue)}

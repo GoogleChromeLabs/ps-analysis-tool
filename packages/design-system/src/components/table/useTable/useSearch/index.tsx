@@ -18,12 +18,12 @@
  * External dependencies.
  */
 import { useEffect, useMemo, useState } from 'react';
+import { getValueByKey } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import { PersistentStorageData, TableData } from '..';
-import getValueByKey from '../../utils/getValueByKey';
 import { useTablePersistentSettingsStore } from '../../persistentSettingsStore';
 
 export type TableSearchOutput = {
@@ -38,8 +38,13 @@ const useSearch = (
   tablePersistentSettingsKey?: string
 ) => {
   const [searchValue, setSearchValue] = useState<string>('');
+  const [isDataLoading, setIsDataLoading] = useState<boolean>(true);
 
   const searchFilteredData = useMemo<TableData[]>(() => {
+    if (isDataLoading) {
+      return [];
+    }
+
     if (!searchValue || !searchKeys) {
       return data;
     }
@@ -55,7 +60,7 @@ const useSearch = (
         return false;
       });
     }, []);
-  }, [data, searchKeys, searchValue]);
+  }, [data, isDataLoading, searchKeys, searchValue]);
 
   const { getPreferences, setPreferences } = useTablePersistentSettingsStore(
     ({ actions }) => ({
@@ -65,11 +70,15 @@ const useSearch = (
   );
 
   useEffect(() => {
+    setIsDataLoading(true);
+
     if (tablePersistentSettingsKey) {
       const _data = getPreferences(tablePersistentSettingsKey, 'searchValue');
 
       setSearchValue((_data as PersistentStorageData['searchValue']) || '');
     }
+
+    setIsDataLoading(false);
 
     return () => {
       setSearchValue('');

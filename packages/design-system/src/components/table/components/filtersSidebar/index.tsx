@@ -38,7 +38,7 @@ const FiltersSidebar = ({
   }
 
   return (
-    <div className="h-full overflow-auto p-3" data-testid="filter-sidebar">
+    <div className="h-full overflow-auto p-3" data-testid="filters-sidebar">
       <ul>
         {Object.entries(filters).map(([filterKey, filter]) => (
           <ListItem
