@@ -446,25 +446,11 @@ chrome.runtime.onMessage.addListener(async (request) => {
     tabToRead = request?.payload?.tabId?.toString();
     const newTab = await listenToNewTab(request?.payload?.tabId);
 
-    chrome.runtime.sendMessage({
-      type: 'ServiceWorker::DevTools::TAB_TO_READ_DATA',
-      payload: {
-        tabToRead: tabToRead,
-      },
-    });
-
     // Can't use sendResponse as delay is too long. So using sendMessage instead.
     chrome.runtime.sendMessage({
-      type: 'ServiceWorker::DevTools::SET_TAB_TO_READ',
+      type: 'ServiceWorker::SET_TAB_TO_READ',
       payload: {
         tabId: newTab,
-      },
-    });
-
-    chrome.runtime.sendMessage({
-      type: 'ServiceWorker::Popup::SET_TAB_TO_READ',
-      payload: {
-        tabId: Number(newTab),
       },
     });
 
@@ -477,26 +463,27 @@ chrome.runtime.onMessage.addListener(async (request) => {
   ) {
     if (typeof request.payload?.isUsingCDP !== 'undefined') {
       globalIsUsingCDP = request.payload?.isUsingCDP;
-      (async () => {
-        const storage = await chrome.storage.sync.get();
-        await chrome.storage.sync.set({
-          ...storage,
-          isUsingCDP: globalIsUsingCDP,
-        });
-      })();
+      const storage = await chrome.storage.sync.get();
+      await chrome.storage.sync.set({
+        ...storage,
+        isUsingCDP: globalIsUsingCDP,
+      });
     }
   }
 
-  if (request?.type === 'DevTools::ServiceWorker::DEVTOOLS_STATE_OPEN') {
-    if (!request?.payload?.tabId) {
-      return;
-    }
+  if (
+    request?.type === 'DevTools::ServiceWorker::DEVTOOLS_STATE_OPEN' &&
+    request?.payload?.tabId
+  ) {
+    const dataToSend: { [key: string]: string } = {};
+    dataToSend['tabMode'] = tabMode;
 
+    if (tabMode === 'single') {
+      dataToSend['tabToRead'] = tabToRead;
+    }
     chrome.runtime.sendMessage({
-      type: 'ServiceWorker::DevTools::TAB_TO_READ_DATA',
-      payload: {
-        tabToRead: tabToRead,
-      },
+      type: 'ServiceWorker::DevTools::INITIAL_SYNC',
+      payload: dataToSend,
     });
 
     if (
@@ -517,39 +504,23 @@ chrome.runtime.onMessage.addListener(async (request) => {
     }
   }
 
-  if (request?.type === 'DevTools::ServiceWorker::DEVTOOLS_STATE_CLOSE') {
-    if (!request?.payload?.tabId) {
-      return;
-    }
-    syncCookieStore.updateDevToolsState(request?.payload?.tabId, false);
-  }
-
-  if (request?.type === 'Popup::ServiceWorker::POPUP_STATE_OPEN') {
-    if (!request?.payload?.tabId) {
-      return;
-    }
-
-    if (
-      !syncCookieStore.tabs[request.payload.tabId] &&
-      tabMode === 'unlimited'
-    ) {
-      const tabs = await chrome.tabs.query({});
-      const currentTab = tabs.find((tab) => tab.id === request.payload.tabId);
-
-      syncCookieStore.addTabData(request?.payload?.tabId, tabMode);
-      syncCookieStore.updateUrl(request?.payload?.tabId, currentTab?.url || '');
-    }
-
-    syncCookieStore.updatePopUpState(request?.payload?.tabId, true);
+  if (
+    request?.type === 'Popup::ServiceWorker::POPUP_STATE_OPEN' &&
+    request?.payload?.tabId
+  ) {
+    const dataToSend: { [key: string]: string } = {};
+    dataToSend['tabMode'] = tabMode;
 
     if (tabMode === 'single') {
-      chrome.runtime.sendMessage({
-        type: 'ServiceWorker::Popup::TAB_TO_READ_DATA',
-        payload: {
-          tabToRead: tabToRead,
-        },
-      });
+      dataToSend['tabToRead'] = tabToRead;
     }
+
+    chrome.runtime.sendMessage({
+      type: 'ServiceWorker::Popup::INITIAL_SYNC',
+      payload: dataToSend,
+    });
+
+    syncCookieStore.updatePopUpState(request?.payload?.tabId, true);
 
     if (syncCookieStore.cachedTabsData[request?.payload?.tabId]) {
       syncCookieStore.sendUpdatedDataToPopupAndDevTools(
@@ -558,21 +529,18 @@ chrome.runtime.onMessage.addListener(async (request) => {
     }
   }
 
-  if (request?.type === 'Popup::ServiceWorker::POPUP_STATE_CLOSE') {
-    syncCookieStore.updatePopUpState(request?.payload?.tabId, false);
+  if (
+    request?.type === 'DevTools::ServiceWorker::DEVTOOLS_STATE_CLOSE' &&
+    request?.payload?.tabId
+  ) {
+    syncCookieStore.updateDevToolsState(request?.payload?.tabId, false);
   }
 
-  if (request.type === 'CHANGE_CDP_SETTING') {
-    if (typeof request.payload?.isUsingCDP !== 'undefined') {
-      globalIsUsingCDP = request.payload?.isUsingCDP;
-      (async () => {
-        const storage = await chrome.storage.sync.get();
-        await chrome.storage.sync.set({
-          ...storage,
-          isUsingCDP: globalIsUsingCDP,
-        });
-      })();
-    }
+  if (
+    request?.type === 'Popup::ServiceWorker::POPUP_STATE_CLOSE' &&
+    request?.payload?.tabId
+  ) {
+    syncCookieStore.updatePopUpState(request?.payload?.tabId, false);
   }
 });
 
@@ -592,15 +560,17 @@ chrome.storage.sync.onChanged.addListener(
       tabToRead = '';
 
       chrome.runtime.sendMessage({
-        type: 'ServiceWorker::DevTools::TAB_TO_READ_DATA',
+        type: 'ServiceWorker::DevTools::INITIAL_SYNC',
         payload: {
+          tabMode,
           tabToRead: tabToRead,
         },
       });
 
       chrome.runtime.sendMessage({
-        type: 'ServiceWorker::Popup::TAB_TO_READ_DATA',
+        type: 'ServiceWorker::Popup::INITIAL_SYNC',
         payload: {
+          tabMode,
           tabToRead: tabToRead,
         },
       });
@@ -620,7 +590,20 @@ chrome.storage.sync.onChanged.addListener(
       });
     } else {
       const tabs = await chrome.tabs.query({});
-
+      chrome.runtime.sendMessage({
+        type: 'ServiceWorker::Popup::INITIAL_SYNC',
+        payload: {
+          tabMode,
+          tabToRead: tabToRead,
+        },
+      });
+      chrome.runtime.sendMessage({
+        type: 'ServiceWorker::DevTools::INITIAL_SYNC',
+        payload: {
+          tabMode,
+          tabToRead: tabToRead,
+        },
+      });
       await Promise.all(
         tabs.map(async (tab) => {
           if (!tab?.id) {

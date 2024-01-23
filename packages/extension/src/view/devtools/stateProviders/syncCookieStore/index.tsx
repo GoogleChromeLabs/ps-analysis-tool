@@ -169,12 +169,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
     []
   );
 
-  useEffect(() => {
-    if (allowedNumberOfTabs === 'single' && !isCurrentTabBeingListenedTo) {
-      setTabFrames(null);
-    }
-  }, [isCurrentTabBeingListenedTo, allowedNumberOfTabs]);
-
   /**
    * Sets current frames for sidebar, detected if the current tab is to be analysed,
    * parses data currently in store, set current tab URL.
@@ -220,15 +214,27 @@ export const Provider = ({ children }: PropsWithChildren) => {
   }, [tabId]);
 
   useEffect(() => {
+    if (
+      !isCurrentTabBeingListenedTo &&
+      allowedNumberOfTabs === 'single' &&
+      tabFrames &&
+      Object.keys(tabFrames).length > 0
+    ) {
+      setTabFrames(null);
+    }
+  }, [isCurrentTabBeingListenedTo, allowedNumberOfTabs, tabFrames]);
+
+  useEffect(() => {
     const listener = async (message: {
       type: string;
       payload: {
         tabId?: number;
         cookieData?: string;
         tabToRead?: string;
+        tabMode?: string;
       };
     }) => {
-      if (message.type === 'ServiceWorker::DevTools::SET_TAB_TO_READ') {
+      if (message.type === 'ServiceWorker::SET_TAB_TO_READ') {
         chrome.devtools.inspectedWindow.eval(
           'window.location.href',
           (result, isException) => {
@@ -242,11 +248,19 @@ export const Provider = ({ children }: PropsWithChildren) => {
         setCanStartInspecting(false);
       }
 
-      if (message.type === 'ServiceWorker::DevTools::TAB_TO_READ_DATA') {
-        setIsCurrentTabBeingListenedTo(
-          tabId?.toString() === message?.payload?.tabToRead
-        );
-        setTabToRead(message?.payload?.tabToRead || '');
+      if (message.type === 'ServiceWorker::DevTools::INITIAL_SYNC') {
+        if (message?.payload?.tabMode === 'unlimited') {
+          setIsCurrentTabBeingListenedTo(true);
+          setTabToRead(null);
+        } else {
+          if (tabId?.toString() !== message?.payload?.tabToRead) {
+            setTabFrames(null);
+          }
+          setIsCurrentTabBeingListenedTo(
+            tabId?.toString() === message?.payload?.tabToRead
+          );
+          setTabToRead(message?.payload?.tabToRead || null);
+        }
       }
 
       if (message.type === 'ServiceWorker::DevTools::NEW_COOKIE_DATA') {
@@ -254,7 +268,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
           message?.payload?.tabId &&
           tabId?.toString() === message?.payload?.tabId.toString()
         ) {
-          await getAllFramesForCurrentTab(tabId);
+          if (isCurrentTabBeingListenedTo) {
+            await getAllFramesForCurrentTab(tabId);
+          } else {
+            setTabFrames(null);
+          }
           setTabCookies(JSON.parse(message?.payload?.cookieData ?? '{}'));
         }
       }
@@ -265,7 +283,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     return () => {
       chrome.runtime.onMessage.removeListener(listener);
     };
-  }, [getAllFramesForCurrentTab, tabId]);
+  }, [getAllFramesForCurrentTab, tabId, isCurrentTabBeingListenedTo]);
 
   const tabUpdateListener = useCallback(
     async (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {

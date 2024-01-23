@@ -214,9 +214,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
         tabToRead?: string;
         tabProcessingMode?: string;
         isUsingCDPNewValue?: boolean;
+        tabMode?: string;
       };
     }) => {
-      if (message.type === 'ServiceWorker::Popup::SET_TAB_TO_READ') {
+      if (message.type === 'ServiceWorker::SET_TAB_TO_READ') {
         setTabToRead(message?.payload?.tabId || '');
         setIsCurrentTabBeingListenedTo(true);
         setLoading(false);
@@ -243,15 +244,17 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
       }
 
-      if (message.type === 'ServiceWorker::Popup::TAB_TO_READ_DATA') {
-        if (allowedNumberOfTabs === 'single') {
+      if (message.type === 'ServiceWorker::Popup::INITIAL_SYNC') {
+        if (message?.payload?.tabMode === 'unlimited') {
+          setIsCurrentTabBeingListenedTo(true);
+          setTabToRead('');
+        } else {
           setIsCurrentTabBeingListenedTo(
             tabId?.toString() === message?.payload?.tabToRead
           );
-          setLoading(false);
+          setTabToRead(message?.payload?.tabToRead || '');
         }
-
-        setTabToRead(message?.payload?.tabToRead || '');
+        setLoading(false);
       }
     };
 
