@@ -124,3 +124,5 @@ export type DetectionAuditFunctions = {
     arg3: number
   ) => DetectedSignature[];
 };
+
+export type TabLoadingStatus = 'loading' | 'complete';

@@ -17,7 +17,6 @@
  * Internal dependencies.
  */
 import { LibraryData } from '../types';
-import { sumUpGISMatches, sumUpGSIv2Matches } from '../libraries';
 
 /**
  * Util function for adding up LibraryData Objects
@@ -30,9 +29,44 @@ import { sumUpGISMatches, sumUpGSIv2Matches } from '../libraries';
 const sumUpDetectionResults = (obj1: LibraryData, obj2: LibraryData) => {
   const resultObj: LibraryData = { ...obj1 };
 
-  resultObj.gis = sumUpGISMatches(resultObj, obj2);
+  const libraryKeys = Object.keys(obj1);
 
-  resultObj.gsiV2 = sumUpGSIv2Matches(resultObj, obj2);
+  for (let i = 0; i < libraryKeys.length; i++) {
+    const key = libraryKeys[i] as keyof LibraryData;
+    for (let j = 0; j < resultObj[key].matches.length; j++) {
+      // Add Matches array
+      const featureText = resultObj[key].matches[j].feature.text;
+      const sameFeatureInOtherObject = obj2[key].matches.find(
+        (match) => match.feature.text === featureText
+      );
+
+      if (!sameFeatureInOtherObject) {
+        continue;
+      }
+
+      const sameFeatureInOtherObjectIndex = obj2[key].matches.findIndex(
+        (match) => match.feature.text === featureText
+      );
+
+      obj2[key].matches.splice(sameFeatureInOtherObjectIndex, 1);
+
+      resultObj[key].matches[j].subItems.items = [
+        ...resultObj[key].matches[j].subItems.items,
+        ...sameFeatureInOtherObject.subItems.items,
+      ];
+    }
+
+    resultObj[key].matches = [...resultObj[key].matches, ...obj2[key].matches];
+
+    resultObj[key].signatureMatches =
+      resultObj[key].signatureMatches + obj2[key].signatureMatches;
+
+    if (resultObj[key].moduleMatch && obj2[key].moduleMatch) {
+      resultObj[key].moduleMatch =
+        (resultObj[key].moduleMatch as number) +
+        (obj2[key].moduleMatch as number);
+    }
+  }
 
   return resultObj;
 };

@@ -16,19 +16,10 @@
 /**
  * External dependencies.
  */
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { ProgressBar } from '@ps-analysis-tool/design-system';
 
-const DynamicPlaceholder = () => {
-  const [pageLoaded, setPageLoaded] = useState(false);
-
-  // TODO: Use page load time.
-  useEffect(() => {
-    setTimeout(() => {
-      setPageLoaded(true);
-    }, 2000);
-  }, []);
-
+const DynamicPlaceholder = ({ pageLoaded }: { pageLoaded: boolean }) => {
   return (
     <div>
       {!pageLoaded ? (

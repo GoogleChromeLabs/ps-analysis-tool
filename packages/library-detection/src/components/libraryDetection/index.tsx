@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useState, memo, useEffect, useCallback } from 'react';
+import React, { memo, useEffect } from 'react';
 import {
   CookiesLandingContainer,
   COLOR_MAP,
@@ -36,8 +36,12 @@ const LibraryDetection = memo(function LibraryDetection({
 }: {
   tabId: number;
 }) {
-  const [libraryCount, setLibraryCount] = useState(0);
-  const { libraryMatches } = useLibraryDetection();
+  const {
+    libraryMatches,
+    libraryCount,
+    setLibraryCount,
+    currentTabLoadingStatus,
+  } = useLibraryDetection(tabId);
 
   useEffect(() => {
     const names = Object.keys(libraryMatches);
@@ -51,7 +55,7 @@ const LibraryDetection = memo(function LibraryDetection({
     );
 
     setLibraryCount(detectedLibraryNames.length);
-  }, [libraryMatches]);
+  }, [libraryMatches, setLibraryCount]);
 
   const dataMapping = [
     {
@@ -61,40 +65,13 @@ const LibraryDetection = memo(function LibraryDetection({
     },
   ];
 
-  const onTabUpdate = useCallback(
-    (
-      changingTabId: number,
-      changeInfo: chrome.tabs.TabChangeInfo,
-      tab: chrome.tabs.Tab
-    ) => {
-      const currentTabId = tabId;
-
-      if (
-        changeInfo.status === 'complete' &&
-        tab.active &&
-        changingTabId === currentTabId
-      ) {
-        setLibraryCount(0);
-      }
-    },
-    [tabId]
-  );
-
-  useEffect(() => {
-    chrome.tabs.onUpdated.addListener(onTabUpdate);
-
-    return () => {
-      chrome.tabs.onUpdated.removeListener(onTabUpdate);
-    };
-  }, [onTabUpdate]);
-
   return (
     <CookiesLandingContainer
       dataMapping={dataMapping}
       testId="library-detection"
       description=""
     >
-      {libraryCount > 0 ? (
+      {currentTabLoadingStatus === 'complete' && libraryCount > 0 ? (
         <>
           {LIBRARIES.map((config: Config) => {
             const Component = config.component as React.FC;
@@ -107,7 +84,9 @@ const LibraryDetection = memo(function LibraryDetection({
           })}
         </>
       ) : (
-        <DynamicPlaceholder />
+        <DynamicPlaceholder
+          pageLoaded={currentTabLoadingStatus === 'complete'}
+        />
       )}
     </CookiesLandingContainer>
   );

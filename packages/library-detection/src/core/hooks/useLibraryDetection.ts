@@ -27,13 +27,18 @@ import {
   getResourcesWithContent,
 } from '../../utils';
 import { sumUpDetectionResults } from '..';
-import type { LibraryData, ResourceTreeItem } from '../../types';
+import type {
+  LibraryData,
+  ResourceTreeItem,
+  TabLoadingStatus,
+} from '../../types';
 import { LIBRARY_DETECTION_WORKER_TASK } from '../../worker/constants';
 
 /**
  * The primary custom hook used for Library signature detection purpose
+ * @param tabId
  */
-const useLibraryDetection = () => {
+const useLibraryDetection = (tabId: number) => {
   const initialState: LibraryData = {
     gis: {
       signatureMatches: 0,
@@ -47,6 +52,38 @@ const useLibraryDetection = () => {
   };
 
   const [libraryMatches, setLibraryMatches] = useState(initialState);
+  const [currentTabLoadingStatus, setCurrentTabLoadingStatus] =
+    useState<TabLoadingStatus>('complete');
+
+  const [libraryCount, setLibraryCount] = useState(0);
+
+  const onTabUpdate = useCallback(
+    (
+      changingTabId: number,
+      changeInfo: chrome.tabs.TabChangeInfo,
+      tab: chrome.tabs.Tab
+    ) => {
+      const currentTabId = tabId;
+
+      if (tab.active && changingTabId === currentTabId) {
+        if (changeInfo.status === 'complete') {
+          setLibraryCount(0);
+          setCurrentTabLoadingStatus('complete');
+        } else if (changeInfo.status === 'loading') {
+          setCurrentTabLoadingStatus('loading');
+        }
+      }
+    },
+    [tabId]
+  );
+
+  useEffect(() => {
+    chrome.tabs.onUpdated.addListener(onTabUpdate);
+
+    return () => {
+      chrome.tabs.onUpdated.removeListener(onTabUpdate);
+    };
+  }, [onTabUpdate]);
 
   /**
    * This function is called whenever a new resource is added.
@@ -56,6 +93,9 @@ const useLibraryDetection = () => {
   const listenerCallback = useCallback(
     async (resource: ResourceTreeItem) => {
       const resourcesWithContent = await getResourcesWithContent([resource]);
+      if (resourcesWithContent.length === 0) {
+        return;
+      }
 
       executeTaskInWorker(
         LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING,
@@ -79,34 +119,34 @@ const useLibraryDetection = () => {
   );
 
   useEffect(() => {
-    (async () => {
-      const scripts = await getNetworkResourcesWithContent();
-      executeTaskInWorker(
-        LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING,
-        scripts,
-        (detectedMatchingSignatures: LibraryData) => {
-          setLibraryMatches(detectedMatchingSignatures);
-        }
+    if (currentTabLoadingStatus === 'complete') {
+      (async () => {
+        const scripts = await getNetworkResourcesWithContent();
+
+        executeTaskInWorker(
+          LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING,
+          scripts,
+          (detectedMatchingSignatures: LibraryData) => {
+            setLibraryMatches(detectedMatchingSignatures);
+            chrome.devtools.inspectedWindow.onResourceAdded.addListener(
+              listenerCallback
+            );
+          }
+        );
+      })();
+    } else {
+      chrome.devtools.inspectedWindow.onResourceAdded.removeListener(
+        listenerCallback
       );
-    })();
-  }, []);
-
-  const invokeGSIdetection = useCallback(() => {
-    chrome.devtools.inspectedWindow.onResourceAdded.removeListener(
-      listenerCallback
-    );
-
-    chrome.devtools.inspectedWindow.onResourceAdded.addListener(
-      listenerCallback
-    );
-  }, [listenerCallback]);
-
-  useEffect(() => {
-    invokeGSIdetection();
-  }, [invokeGSIdetection]);
+      setLibraryMatches(initialState);
+    }
+  }, [currentTabLoadingStatus]);
 
   return {
     libraryMatches,
+    libraryCount,
+    setLibraryCount,
+    currentTabLoadingStatus,
   };
 };
 
