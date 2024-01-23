@@ -399,7 +399,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
   }
 });
 
-const listenToNewTab = (tabId?: number) => {
+const listenToNewTab = async (tabId?: number) => {
   const newTabId =
     tabId?.toString() || chrome.devtools.inspectedWindow.tabId.toString();
 
@@ -409,19 +409,21 @@ const listenToNewTab = (tabId?: number) => {
 
   if (tabMode && tabMode !== 'unlimited') {
     const storedTabData = Object.keys(syncCookieStore.cachedTabsData);
-    storedTabData.some((tabIdToDelete) => {
-      syncCookieStore.removeTabData(Number(tabIdToDelete));
-      try {
-        chrome.debugger.detach({ tabId: Number(tabIdToDelete) });
-      } catch (error) {
-        // Fail silently
-      }
-      chrome.action.setBadgeText({
-        tabId: Number(newTabId),
-        text: '',
-      });
-      return tabIdToDelete;
-    });
+    await Promise.all(
+      storedTabData.map(async (tabIdToDelete) => {
+        syncCookieStore.removeTabData(Number(tabIdToDelete));
+        try {
+          chrome.action.setBadgeText({
+            tabId: Number(newTabId),
+            text: '',
+          });
+          await chrome.debugger.detach({ tabId: Number(tabIdToDelete) });
+        } catch (error) {
+          // Fail silently
+        }
+        return tabIdToDelete;
+      })
+    );
   }
 
   syncCookieStore.addTabData(Number(newTabId), tabMode);
@@ -442,7 +444,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
     request?.type === 'Popup::ServiceWorker::SET_TAB_TO_READ'
   ) {
     tabToRead = request?.payload?.tabId?.toString();
-    const newTab = listenToNewTab(request?.payload?.tabId);
+    const newTab = await listenToNewTab(request?.payload?.tabId);
 
     chrome.runtime.sendMessage({
       type: 'ServiceWorker::DevTools::TAB_TO_READ_DATA',
