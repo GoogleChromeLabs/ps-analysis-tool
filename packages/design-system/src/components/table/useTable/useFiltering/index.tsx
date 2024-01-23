@@ -342,6 +342,23 @@ const useFiltering = (
   }, [data, isDataLoading, selectedFilters]);
 
   useEffect(() => {
+    setSelectAllFilterSelection((prev) => {
+      const newSelectAllFilterSelection = { ...prev };
+
+      Object.keys(newSelectAllFilterSelection).forEach((filterKey) => {
+        const savedFilters = options?.[filterKey];
+        const isSelectAllSelected = savedFilters?.All?.selected;
+
+        if (!isSelectAllSelected) {
+          return;
+        }
+
+        newSelectAllFilterSelection[filterKey].selected = true;
+      });
+
+      return newSelectAllFilterSelection;
+    });
+
     setFilters((prevFilters) =>
       Object.fromEntries(
         Object.entries(prevFilters).map(([filterKey, filter]) => {
@@ -363,6 +380,10 @@ const useFiltering = (
 
           Object.entries(savedFilterValues || {}).forEach(
             ([filterValue, filterValueData]) => {
+              if (filterValue === 'All') {
+                return;
+              }
+
               if (!filterValues?.[filterValue]) {
                 filterValues[filterValue] = {
                   selected: false,
@@ -393,6 +414,7 @@ const useFiltering = (
 
   useFiltersPersistence(
     filters,
+    selectAllFilterSelection,
     setOptions,
     setIsDataLoading,
     specificTablePersistentSettingsKey,
