@@ -16,11 +16,11 @@
 /**
  * Internal dependencies.
  */
-import { generateGSIV2Matches } from '../libraries';
 import type {
   ScriptTagUnderCheck,
   LibraryData,
   DetectionSubFunctions,
+  DetectionAuditFunctions,
 } from '../types';
 
 /**
@@ -43,11 +43,13 @@ const originIsGoogle = (script: ScriptTagUnderCheck) => {
  * @param {any} loadedScripts:ScriptTagUnderCheck[]
  * @param loadedScripts
  * @param detectionSubFunctions
+ * @param detectionAuditFunctions
  * @returns {any}
  */
 const detectMatchingSignatures = (
   loadedScripts: ScriptTagUnderCheck[],
-  detectionSubFunctions: DetectionSubFunctions
+  detectionSubFunctions: DetectionSubFunctions,
+  detectionAuditFunctions: DetectionAuditFunctions
 ) => {
   const libraryMatches: LibraryData = {
     gis: {
@@ -79,13 +81,17 @@ const detectMatchingSignatures = (
     }
   }
 
-  const gsi2AuditData = generateGSIV2Matches(
-    libraryMatches.gsiV2.signatureMatches,
-    libraryMatches.gsiV2.matches,
-    libraryMatches.gsiV2.moduleMatch as number
-  );
+  const detectionAuditFunctionsKeys = Object.keys(detectionAuditFunctions);
 
-  libraryMatches.gsiV2.matches = gsi2AuditData;
+  for (let i = 0; i < detectionAuditFunctionsKeys.length; i++) {
+    const key = detectionAuditFunctionsKeys[i] as keyof DetectionAuditFunctions;
+
+    libraryMatches[key].matches = detectionAuditFunctions[key](
+      libraryMatches[key].signatureMatches,
+      libraryMatches[key].matches,
+      libraryMatches[key].moduleMatch as number
+    );
+  }
 
   return {
     gis: libraryMatches.gis,

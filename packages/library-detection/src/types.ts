@@ -116,3 +116,11 @@ export type DetectionSubFunctions = {
     moduleMatch: number;
   };
 };
+
+export type DetectionAuditFunctions = {
+  gsiV2: (
+    arg1: number,
+    arg2: DetectedSignature[],
+    arg3: number
+  ) => DetectedSignature[];
+};
