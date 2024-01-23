@@ -604,6 +604,7 @@ chrome.storage.sync.onChanged.addListener(
           tabToRead: tabToRead,
         },
       });
+
       await Promise.all(
         tabs.map(async (tab) => {
           if (!tab?.id) {
