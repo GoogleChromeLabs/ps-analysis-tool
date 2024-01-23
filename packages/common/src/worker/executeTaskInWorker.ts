@@ -29,20 +29,22 @@ import getDevToolWorker from './devToolWorker';
  * or rejects with an error if the task encounters an error.
  */
 
-const executeTaskInWorker = (task: string, payload: unknown) => {
+const executeTaskInWorker = (
+  task: string,
+  payload: unknown,
+  successCallback: (dataFromThread: unknown) => void
+) => {
   const workerThread = getDevToolWorker();
 
-  return new Promise((resolve, reject) => {
-    workerThread.postMessage({
-      task,
-      payload,
-    });
-    // Send data to worker
-    workerThread.onerror = reject; // Handle errors
-    workerThread.onmessage = (resultEvent) => {
-      resolve(resultEvent.data);
-    }; // Get result from worker
+  workerThread.postMessage({
+    task,
+    payload,
   });
+  // Send data to worker
+  // workerThread.onerror = reject; // Handle errors
+  workerThread.onmessage = (resultEvent) => {
+    successCallback(resultEvent.data);
+  }; // Get result from worker
 };
 
 export default executeTaskInWorker;

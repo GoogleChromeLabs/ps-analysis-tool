@@ -58,22 +58,23 @@ const useLibraryDetection = () => {
     async (resource: ResourceTreeItem) => {
       const resourcesWithContent = await getResourcesWithContent([resource]);
 
-      const realtimeComputationResult = await executeTaskInWorker(
+      executeTaskInWorker(
         LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING,
-        resourcesWithContent
+        resourcesWithContent,
+        (realtimeComputationResult: LibraryData) => {
+          if (
+            realtimeComputationResult.gis.matches.length !== 0 ||
+            realtimeComputationResult.gsiV2.matches.length !== 0
+          ) {
+            const newResult = sumUpDetectionResults(
+              libraryMatches,
+              realtimeComputationResult
+            );
+
+            setLibraryMatches(newResult);
+          }
+        }
       );
-
-      if (
-        realtimeComputationResult.gis.matches.length !== 0 ||
-        realtimeComputationResult.gsiV2.matches.length !== 0
-      ) {
-        const newResult = sumUpDetectionResults(
-          libraryMatches,
-          realtimeComputationResult
-        );
-
-        setLibraryMatches(newResult);
-      }
     },
     [libraryMatches]
   );
@@ -81,11 +82,13 @@ const useLibraryDetection = () => {
   useEffect(() => {
     (async () => {
       const scripts = await getNetworkResourcesWithContent();
-      const detectedMatchingSignatures = await executeTaskInWorker(
+      executeTaskInWorker(
         LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING,
-        scripts
+        scripts,
+        (detectedMatchingSignatures: LibraryData) => {
+          setLibraryMatches(detectedMatchingSignatures);
+        }
       );
-      setLibraryMatches(detectedMatchingSignatures);
     })();
   }, []);
 
