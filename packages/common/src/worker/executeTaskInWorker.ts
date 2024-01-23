@@ -17,7 +17,6 @@
 /**
  * Internal dependencies.
  */
-import { PreDefinedWorkerTaskPayload, PredefinedTasks } from './constants';
 import getDevToolWorker from './devToolWorker';
 
 /**
@@ -30,10 +29,7 @@ import getDevToolWorker from './devToolWorker';
  * or rejects with an error if the task encounters an error.
  */
 
-const executeTaskInWorker = (
-  task: PredefinedTasks,
-  payload: PreDefinedWorkerTaskPayload
-) => {
+const executeTaskInWorker = (task: string, payload: unknown) => {
   const workerThread = getDevToolWorker();
 
   return new Promise((resolve, reject) => {
