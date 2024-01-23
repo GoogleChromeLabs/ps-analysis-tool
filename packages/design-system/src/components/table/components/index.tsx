@@ -98,7 +98,6 @@ const Table = ({
           setSearchValue={table.setSearchValue}
           showFilterSidebar={showFilterSidebar}
           hideFiltering={hideFiltering}
-          disableFiltering={table.rows.length === 0 && !table.isFiltering}
           setShowFilterSidebar={setShowFilterSidebar}
           cookiesCount={table.rows.length}
           extraInterface={extraInterfaceToTopBar}
@@ -117,9 +116,6 @@ const Table = ({
             enable={{
               right: true,
             }}
-            className={`${
-              table.rows.length === 0 && !table.isFiltering ? 'hidden' : 'block'
-            }`}
           >
             <FiltersSidebar
               filters={table.filters}
