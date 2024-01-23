@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useState, memo, useEffect } from 'react';
+import React, { useState, memo, useEffect, useCallback } from 'react';
 import {
   CookiesLandingContainer,
   COLOR_MAP,
@@ -31,7 +31,11 @@ import type { Config } from '../../types';
 import { useLibraryDetection } from '../../core';
 
 // eslint-disable-next-line react/display-name
-const LibraryDetection = memo(function LibraryDetection() {
+const LibraryDetection = memo(function LibraryDetection({
+  tabId,
+}: {
+  tabId: number;
+}) {
   const [libraryCount, setLibraryCount] = useState(0);
   const { libraryMatches } = useLibraryDetection();
 
@@ -56,6 +60,33 @@ const LibraryDetection = memo(function LibraryDetection() {
       data: [{ count: 1, color: COLOR_MAP.uncategorized.color }],
     },
   ];
+
+  const onTabUpdate = useCallback(
+    (
+      changingTabId: number,
+      changeInfo: chrome.tabs.TabChangeInfo,
+      tab: chrome.tabs.Tab
+    ) => {
+      const currentTabId = tabId;
+
+      if (
+        changeInfo.status === 'complete' &&
+        tab.active &&
+        changingTabId === currentTabId
+      ) {
+        setLibraryCount(0);
+      }
+    },
+    [tabId]
+  );
+
+  useEffect(() => {
+    chrome.tabs.onUpdated.addListener(onTabUpdate);
+
+    return () => {
+      chrome.tabs.onUpdated.removeListener(onTabUpdate);
+    };
+  }, [onTabUpdate]);
 
   return (
     <CookiesLandingContainer

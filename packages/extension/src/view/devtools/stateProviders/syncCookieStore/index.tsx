@@ -53,6 +53,7 @@ export interface CookieStoreContext {
     isInspecting: boolean;
     contextInvalidated: boolean;
     canStartInspecting: boolean;
+    tabId: number | null;
   };
   actions: {
     setSelectedFrame: (key: string | null) => void;
@@ -76,6 +77,7 @@ const initialState: CookieStoreContext = {
     isInspecting: false,
     contextInvalidated: false,
     canStartInspecting: false,
+    tabId: -1,
   },
   actions: {
     setSelectedFrame: noop,
@@ -450,6 +452,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           contextInvalidated,
           isInspecting,
           canStartInspecting,
+          tabId,
         },
         actions: {
           setSelectedFrame,
