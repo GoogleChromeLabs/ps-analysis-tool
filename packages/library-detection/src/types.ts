@@ -72,11 +72,12 @@ export type AccordionItem = {
 export type LibraryData = {
   gis: {
     signatureMatches: number;
+    moduleMatch?: number;
     matches: DetectedSignature[];
   };
   gsiV2: {
     signatureMatches: number;
-    moduleMatch: number;
+    moduleMatch?: number;
     matches: DetectedSignature[];
   };
 };
@@ -93,4 +94,25 @@ export type AccordionProps = {
 
 export type DomainPaths = {
   [domain: string]: string[];
+};
+
+export type DetectionSubFunctions = {
+  gis: (
+    arg0: ScriptTagUnderCheck,
+    arg1: DetectedSignature[],
+    arg2: number
+  ) => {
+    signatureMatches: number;
+    matches: DetectedSignature[];
+  };
+  gsiV2: (
+    arg0: ScriptTagUnderCheck,
+    arg1: DetectedSignature[],
+    arg2: number,
+    arg3: number
+  ) => {
+    signatureMatches: number;
+    matches: DetectedSignature[];
+    moduleMatch: number;
+  };
 };

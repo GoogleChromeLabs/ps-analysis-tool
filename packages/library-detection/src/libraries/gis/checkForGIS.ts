@@ -46,7 +46,7 @@ const checkForGIS = (
   signatureMatches: number
 ) => {
   const content = script.content;
-  const items = existingItems;
+  let items = existingItems;
 
   if (!content) {
     // this case if no network request is present
@@ -113,6 +113,11 @@ const checkForGIS = (
         },
       });
     }
+  }
+
+  // Audit step
+  if (signatureMatches === 0) {
+    items = [];
   }
 
   return {

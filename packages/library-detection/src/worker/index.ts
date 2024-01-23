@@ -17,6 +17,8 @@
  * Internal dependencies.
  */
 import detectMatchingSignatures from '../core/detectMatchingSignatures';
+import { checkForGIS, checkForGSIv2 } from '../libraries';
+
 import {
   LIBRARY_DETECTION_WORKER_TASK,
   PreDefinedLibraryWorkerTaskPayload,
@@ -34,7 +36,10 @@ export const ldWorkerOnMessageCallback = (event: MessageEvent<any>) => {
 
   switch (task) {
     case LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING: {
-      const detectedMatchingSignatures = detectMatchingSignatures(payload);
+      const detectedMatchingSignatures = detectMatchingSignatures(payload, {
+        gis: checkForGIS,
+        gsiV2: checkForGSIv2,
+      });
       postMessage(detectedMatchingSignatures);
       break;
     }
