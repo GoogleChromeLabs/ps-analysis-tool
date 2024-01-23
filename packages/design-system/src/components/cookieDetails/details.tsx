@@ -71,32 +71,34 @@ const Details = ({ selectedCookie }: DetailsProps) => {
     return reason;
   });
 
+  // {selectedCookie.isDomainInAllowList ? '(allow listed)' : ''}
+
   return (
     <div className="text-xs py-1 px-1.5">
-      {isCookieBlocked && blockedReasons ? (
+      {selectedCookie.isDomainInAllowList && (
+        <div className="mb-4">
+          <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
+            Allow Listed
+          </p>
+          <p className="text-outer-space-crayola dark:text-bright-gray">
+            The cookie domain was added to the allow-list for this session of
+            the browser. However, adding a cookie to the allow-list does not
+            guarantee that the browser will allow it. You can view all allowed
+            domains under chrome://settings/content/siteData.
+          </p>
+        </div>
+      )}
+
+      {isCookieBlocked && blockedReasons && (
         <>
           <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
-            Blocked Reason{' '}
-            {selectedCookie.isDomainInAllowList ? '(allow listed)' : ''}
+            Blocked Reason
           </p>
           <p
             className="text-outer-space-crayola dark:text-bright-gray mb-3"
             dangerouslySetInnerHTML={{ __html: blockedReasons ?? '' }}
           />
         </>
-      ) : (
-        selectedCookie.isDomainInAllowList && (
-          <div className="mb-4">
-            <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
-              Allow Listed
-            </p>
-            <p className="text-outer-space-crayola dark:text-bright-gray">
-              The cookie domain was added to “allow list” for this session of
-              the browser. You can view all allowed items under
-              chrome://settings/content/siteData.
-            </p>
-          </div>
-        )
       )}
       {selectedCookie?.warningReasons &&
         selectedCookie?.warningReasons?.length > 0 && (
