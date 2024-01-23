@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * Internal dependencies.
  */
@@ -28,8 +27,7 @@ import {
  * @param {MessageEvent<any>} event - The MessageEvent containing task and payload data.
  * @returns {void} This function does not return a value directly but uses postMessage for communication.
  */
-
-export const libraryDetectionWorker = (event: MessageEvent<any>) => {
+export const ldWorkerOnMessageCallback = (event: MessageEvent<any>) => {
   const task: LIBRARY_DETECTION_WORKER_TASK = event.data.task;
   const payload: PreDefinedLibraryWorkerTaskPayload[LIBRARY_DETECTION_WORKER_TASK] =
     event.data.payload;

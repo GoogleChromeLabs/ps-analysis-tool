@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies.
+ * External dependencies.
  */
-import { libraryDetectionWorker } from '@ps-analysis-tool/library-detection';
+import { ldWorkerOnMessageCallback } from '@ps-analysis-tool/library-detection';
 
 /**
- * Main onmessage handler of the worker thread. Inside this other modules onMessageHandlers are registered.
- * @param {any} event
- * @returns {any}
+ * Main onmessage handler of the worker thread.
+ * Inside this other modules onMessageHandlers can be added.
+ * @param {Event} event Event object.
  */
 self.onmessage = function (event) {
-  libraryDetectionWorker(event);
+  ldWorkerOnMessageCallback(event);
 };
