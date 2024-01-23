@@ -27,7 +27,7 @@ import {
  */
 import DynamicPlaceholder from './dynamicPlaceholder';
 import LIBRARIES from '../../config';
-import type { Config } from '../../types';
+import type { Config, TabLoadingStatus } from '../../types';
 import { useLibraryDetection } from '../../core';
 
 // eslint-disable-next-line react/display-name
@@ -38,6 +38,8 @@ const LibraryDetection = memo(function LibraryDetection({
 }) {
   const [libraryCount, setLibraryCount] = useState(0);
   const { libraryMatches } = useLibraryDetection();
+  const [currentTabLoadingStatus, setCurrentTabLoadingStatus] =
+    useState<TabLoadingStatus>('complete');
 
   useEffect(() => {
     const names = Object.keys(libraryMatches);
@@ -69,12 +71,13 @@ const LibraryDetection = memo(function LibraryDetection({
     ) => {
       const currentTabId = tabId;
 
-      if (
-        changeInfo.status === 'complete' &&
-        tab.active &&
-        changingTabId === currentTabId
-      ) {
-        setLibraryCount(0);
+      if (tab.active && changingTabId === currentTabId) {
+        if (changeInfo.status === 'complete') {
+          setLibraryCount(0);
+          setCurrentTabLoadingStatus('complete');
+        } else if (changeInfo.status === 'loading') {
+          setCurrentTabLoadingStatus('loading');
+        }
       }
     },
     [tabId]
@@ -94,7 +97,7 @@ const LibraryDetection = memo(function LibraryDetection({
       testId="library-detection"
       description=""
     >
-      {libraryCount > 0 ? (
+      {libraryCount > 0 && currentTabLoadingStatus === 'complete' ? (
         <>
           {LIBRARIES.map((config: Config) => {
             const Component = config.component as React.FC;
@@ -107,7 +110,9 @@ const LibraryDetection = memo(function LibraryDetection({
           })}
         </>
       ) : (
-        <DynamicPlaceholder />
+        <DynamicPlaceholder
+          pageLoaded={currentTabLoadingStatus === 'complete'}
+        />
       )}
     </CookiesLandingContainer>
   );
