@@ -22,6 +22,7 @@ import { ProgressBar } from '@ps-analysis-tool/design-system';
 const DynamicPlaceholder = () => {
   const [pageLoaded, setPageLoaded] = useState(false);
 
+  // TODO: Use page load time.
   useEffect(() => {
     setTimeout(() => {
       setPageLoaded(true);

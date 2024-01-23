@@ -1,6 +1,3 @@
 {
-  "rules": {
-    "no-console": "off"
-  },
   "ignorePatterns": ["dist/**", "dist-types/**"]
 }

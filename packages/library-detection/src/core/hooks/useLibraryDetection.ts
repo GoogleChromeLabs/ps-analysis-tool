@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import { useState, useCallback, useEffect } from 'react';
+import { executeTaskInWorker } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -27,12 +28,10 @@ import {
 } from '../../utils';
 import { sumUpDetectionResults } from '..';
 import type { LibraryData, ResourceTreeItem } from '../../types';
-import { executeTaskInWorker } from '@ps-analysis-tool/common';
 import { LIBRARY_DETECTION_WORKER_TASK } from '../../worker/constants';
 
 /**
  * The primary custom hook used for Library signature detection purpose
- *
  */
 const useLibraryDetection = () => {
   const initialState: LibraryData = {
