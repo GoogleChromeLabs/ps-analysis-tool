@@ -223,7 +223,7 @@ const RowContextMenu = forwardRef<
                   <span id="allow-list-option">
                     {isDomainInAllowList
                       ? 'Remove Domain From Allow List'
-                      : 'Add Domain To Allow List'}
+                      : 'Add Domain to Allow List'}
                   </span>
                 </button>
               )}
