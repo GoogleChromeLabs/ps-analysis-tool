@@ -205,12 +205,16 @@ export const Provider = ({ children }: PropsWithChildren) => {
   }, [tabId]);
 
   const changeListeningToThisTab = useCallback(() => {
+    if (!tabId) {
+      return;
+    }
     chrome.runtime.sendMessage({
       type: 'DevTools::ServiceWorker::SET_TAB_TO_READ',
       payload: {
         tabId,
       },
     });
+    setTabToRead(tabId.toString());
   }, [tabId]);
 
   useEffect(() => {
@@ -242,6 +246,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
               setTabUrl(result);
             }
           }
+        );
+        setIsCurrentTabBeingListenedTo(
+          tabId?.toString() === message?.payload?.tabId
         );
         setTabFrames(null);
         setLoading(false);
