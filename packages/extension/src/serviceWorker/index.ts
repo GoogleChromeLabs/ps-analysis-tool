@@ -66,6 +66,7 @@ chrome.webRequest.onResponseStarted.addListener(
     (async () => {
       const { tabId, url, responseHeaders, frameId } = details;
       const tabUrl = syncCookieStore.getTabUrl(tabId);
+
       if (
         !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, responseHeaders)
       ) {
@@ -547,11 +548,11 @@ chrome.storage.sync.onChanged.addListener(
   async (changes: { [key: string]: chrome.storage.StorageChange }) => {
     if (
       !changes?.allowedNumberOfTabs ||
-      typeof changes?.allowedNumberOfTabs?.newValue === 'undefined'
+      !changes?.allowedNumberOfTabs?.newValue ||
+      !changes?.allowedNumberOfTabs?.oldValue
     ) {
       return;
     }
-
     tabMode = changes.allowedNumberOfTabs.newValue;
 
     if (changes?.allowedNumberOfTabs?.newValue === 'single') {
@@ -626,7 +627,8 @@ chrome.storage.sync.onChanged.addListener(
   async (changes: { [key: string]: chrome.storage.StorageChange }) => {
     if (
       !changes?.isUsingCDP ||
-      typeof changes?.isUsingCDP?.newValue === 'undefined'
+      typeof changes?.isUsingCDP?.newValue === 'undefined' ||
+      typeof changes?.isUsingCDP?.oldValue === 'undefined'
     ) {
       return;
     }
