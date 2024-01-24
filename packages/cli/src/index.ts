@@ -85,7 +85,10 @@ const initialize = async () => {
   }
 };
 
-const saveResults = async (outDir: string, result: CompleteJson[]) => {
+const saveResults = async (
+  outDir: string,
+  result: CompleteJson | CompleteJson[]
+) => {
   await ensureFile(outDir + '/out.json');
   await writeFile(outDir + '/out.json', JSON.stringify(result, null, 4));
 };
@@ -220,7 +223,7 @@ const startDashboardServer = async (dir: string) => {
   await saveResults(outputDir, result);
 
   if (outDir) {
-    await saveCSVReports(path.join(outputDir, prefix), result);
+    await saveCSVReports(path.resolve(outputDir), result);
     return;
   }
 
