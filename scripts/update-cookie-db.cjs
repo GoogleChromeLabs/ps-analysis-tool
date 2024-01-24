@@ -22,7 +22,7 @@ const path = require('path');
 const csvtojson = require('csvtojson');
 const process = require('process');
 const fetch = require('node-fetch');
-const targetDIR = path.resolve(__dirname, '..', 'assets/data');
+const targetDIR = path.resolve(__dirname, '..', 'third_party/data');
 const requestURL =
   'https://raw.githubusercontent.com/jkwakman/Open-Cookie-Database/master/open-cookie-database.csv';
 

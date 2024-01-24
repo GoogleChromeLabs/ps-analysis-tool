@@ -43,7 +43,7 @@ module.exports = {
   coveragePathIgnorePatterns: [
     '<rootDir>/node_modules',
     '<rootDir>/dist',
-    '<rootDir>/assets',
+    '<rootDir>/third_party',
     '<rootDir>/data',
     '/stories/',
     '<rootDir>/packages/extension/src/view/devtools/index.tsx',
