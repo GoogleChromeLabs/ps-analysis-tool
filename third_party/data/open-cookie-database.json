@@ -4379,7 +4379,7 @@
   "AnalyticsSyncHistory": [
     {
       "platform": "LinkedIn",
-      "category": "Analytics",
+      "category": "Functional",
       "name": "AnalyticsSyncHistory",
       "domain": "linkedin.com (3rd party)",
       "description": "Used to store information about the time a sync with the lms_analytics cookie took place for users in the Designated Countries",
@@ -17965,45 +17965,6 @@
       "retention": "14 days",
       "dataController": "Bombora",
       "gdprUrl": "https://bombora.com/privacy-philosophy/",
-      "wildcard": "0"
-    }
-  ],
-  "lkqdid": [
-    {
-      "platform": "Verve",
-      "category": "Marketing",
-      "name": "lkqdid",
-      "domain": "lkqd.net",
-      "description": "This cookie is used to identify the physical location of mobile devices and operating system device identifiers.",
-      "retention": "1 year",
-      "dataController": "Verve",
-      "gdprUrl": "https://verve.com/website-privacy-policy/",
-      "wildcard": "0"
-    }
-  ],
-  "lkqdidts": [
-    {
-      "platform": "Verve",
-      "category": "Marketing",
-      "name": "lkqdidts",
-      "domain": "lkqd.net",
-      "description": "This cookie is used to identify the physical location of mobile devices and operating system device.",
-      "retention": "1 year",
-      "dataController": "Verve",
-      "gdprUrl": "https://verve.com/website-privacy-policy/",
-      "wildcard": "0"
-    }
-  ],
-  "33x_ps": [
-    {
-      "platform": "33Across",
-      "category": "Marketing",
-      "name": "33x_ps",
-      "domain": ".33across.com",
-      "description": "This cookie is used targeted and behavioural advertising services.",
-      "retention": "1 year",
-      "dataController": "33Across",
-      "gdprUrl": "https://33across.com/privacy-policy/",
       "wildcard": "0"
     }
   ]
