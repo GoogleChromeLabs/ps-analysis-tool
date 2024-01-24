@@ -66,7 +66,6 @@ chrome.webRequest.onResponseStarted.addListener(
     (async () => {
       const { tabId, url, responseHeaders, frameId } = details;
       const tabUrl = syncCookieStore.getTabUrl(tabId);
-
       if (
         !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, responseHeaders)
       ) {
@@ -257,25 +256,34 @@ chrome.windows.onRemoved.addListener((windowId) => {
  */
 chrome.runtime.onInstalled.addListener(async (details) => {
   syncCookieStore.clear();
+
   if (!cookieDB) {
     cookieDB = await fetchDictionary();
   }
+
   if (details.reason === 'install') {
     await chrome.storage.sync.clear();
     await chrome.storage.sync.set({
       allowedNumberOfTabs: 'single',
+      isUsingCDP: false,
     });
   }
+
   if (details.reason === 'update') {
     const preSetSettings = await chrome.storage.sync.get();
     tabMode = preSetSettings?.allowedNumberOfTabs ?? 'single';
     globalIsUsingCDP = preSetSettings?.isUsingCDP ?? false;
-    if (preSetSettings?.allowedNumberOfTabs) {
+    if (
+      preSetSettings?.allowedNumberOfTabs &&
+      Object.keys(preSetSettings).includes('isUsingCDP')
+    ) {
       return;
     }
+
     await chrome.storage.sync.clear();
     await chrome.storage.sync.set({
       allowedNumberOfTabs: 'single',
+      isUsingCDP: false,
     });
   }
 });
@@ -652,10 +660,6 @@ chrome.storage.sync.onChanged.addListener(
     if (!changes?.isUsingCDP?.newValue) {
       await Promise.all(
         Object.keys(syncCookieStore.cachedTabsData).map(async (key) => {
-          if (!Number(key)) {
-            return;
-          }
-
           try {
             await chrome.debugger.detach({ tabId: Number(key) });
             syncCookieStore.removeCookieData(Number(key));
@@ -670,9 +674,6 @@ chrome.storage.sync.onChanged.addListener(
     } else {
       await Promise.all(
         Object.keys(syncCookieStore.cachedTabsData).map(async (key) => {
-          if (!Number(key)) {
-            return;
-          }
           syncCookieStore.removeCookieData(Number(key));
           syncCookieStore.sendUpdatedDataToPopupAndDevTools(Number(key));
           await chrome.tabs.reload(Number(key), { bypassCache: true });
