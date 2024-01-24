@@ -27,11 +27,7 @@ import {
   getResourcesWithContent,
 } from '../../utils';
 import { sumUpDetectionResults } from '..';
-import type {
-  LibraryData,
-  ResourceTreeItem,
-  TabLoadingStatus,
-} from '../../types';
+import type { LibraryData, ResourceTreeItem } from '../../types';
 import { LIBRARY_DETECTION_WORKER_TASK } from '../../worker/constants';
 
 /**
@@ -52,8 +48,8 @@ const useLibraryDetection = (tabId: number) => {
   };
 
   const [libraryMatches, setLibraryMatches] = useState(initialState);
-  const [currentTabLoadingStatus, setCurrentTabLoadingStatus] =
-    useState<TabLoadingStatus>('complete');
+  const [isCurrentTabLoading, setIsCurrentTabLoading] =
+    useState<boolean>(false);
 
   const [libraryCount, setLibraryCount] = useState(0);
 
@@ -68,9 +64,9 @@ const useLibraryDetection = (tabId: number) => {
       if (tab.active && changingTabId === currentTabId) {
         if (changeInfo.status === 'complete') {
           setLibraryCount(0);
-          setCurrentTabLoadingStatus('complete');
+          setIsCurrentTabLoading(false);
         } else if (changeInfo.status === 'loading') {
-          setCurrentTabLoadingStatus('loading');
+          setIsCurrentTabLoading(true);
         }
       }
     },
@@ -119,7 +115,7 @@ const useLibraryDetection = (tabId: number) => {
   );
 
   useEffect(() => {
-    if (currentTabLoadingStatus === 'complete') {
+    if (!isCurrentTabLoading) {
       (async () => {
         const scripts = await getNetworkResourcesWithContent();
 
@@ -140,13 +136,13 @@ const useLibraryDetection = (tabId: number) => {
       );
       setLibraryMatches(initialState);
     }
-  }, [currentTabLoadingStatus]);
+  }, [isCurrentTabLoading]);
 
   return {
     libraryMatches,
     libraryCount,
     setLibraryCount,
-    currentTabLoadingStatus,
+    isCurrentTabLoading,
   };
 };
 

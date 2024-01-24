@@ -36,12 +36,8 @@ const LibraryDetection = memo(function LibraryDetection({
 }: {
   tabId: number;
 }) {
-  const {
-    libraryMatches,
-    libraryCount,
-    setLibraryCount,
-    currentTabLoadingStatus,
-  } = useLibraryDetection(tabId);
+  const { libraryMatches, libraryCount, setLibraryCount, isCurrentTabLoading } =
+    useLibraryDetection(tabId);
 
   useEffect(() => {
     const names = Object.keys(libraryMatches);
@@ -71,7 +67,7 @@ const LibraryDetection = memo(function LibraryDetection({
       testId="library-detection"
       description=""
     >
-      {currentTabLoadingStatus === 'complete' && libraryCount > 0 ? (
+      {!isCurrentTabLoading && libraryCount > 0 ? (
         <>
           {LIBRARIES.map((config: Config) => {
             const Component = config.component as React.FC;
@@ -84,9 +80,7 @@ const LibraryDetection = memo(function LibraryDetection({
           })}
         </>
       ) : (
-        <DynamicPlaceholder
-          pageLoaded={currentTabLoadingStatus === 'complete'}
-        />
+        <DynamicPlaceholder pageLoaded={!isCurrentTabLoading} />
       )}
     </CookiesLandingContainer>
   );
