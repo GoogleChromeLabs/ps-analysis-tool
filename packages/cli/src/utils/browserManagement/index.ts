@@ -200,8 +200,7 @@ export class BrowserManagement {
       'Network.requestWillBeSentExtraInfo',
       (event: Protocol.Network.RequestWillBeSentExtraInfoEvent) => {
         if (event.associatedCookies && event.associatedCookies.length !== 0) {
-          const cookies: Protocol.Network.Cookie[] = [];
-          event.associatedCookies.forEach((associatedCookie) => {
+          const cookies = event.associatedCookies.map((associatedCookie) => {
             return {
               parsedCookie: {
                 name: associatedCookie.cookie.name,

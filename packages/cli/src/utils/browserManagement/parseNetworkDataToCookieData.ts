@@ -96,10 +96,22 @@ export const parseNetworkDataToCookieData = (
           parsedDomain +
           ':' +
           cookie.parsedCookie.path;
+
+        const prevEntry = _frameCookies.get(key);
+
+        const blockedReasonsSet = new Set([
+          ...(cookie?.blockedReasons || []),
+          ...(prevEntry?.blockedReasons || []),
+        ]);
+
         _frameCookies.set(key, {
           ...cookie,
           url: response.serverUrl,
-          parsedCookie: { ...cookie.parsedCookie, domain: parsedDomain || '' },
+          blockedReasons: Array.from(blockedReasonsSet),
+          parsedCookie: {
+            ...cookie.parsedCookie,
+            domain: parsedDomain || '',
+          },
         });
       });
     });
@@ -118,9 +130,18 @@ export const parseNetworkDataToCookieData = (
           parsedDomain +
           ':' +
           cookie.parsedCookie.path;
+
+        const prevEntry = _frameCookies.get(key);
+
+        const blockedReasonsSet = new Set([
+          ...(cookie?.blockedReasons || []),
+          ...(prevEntry?.blockedReasons || []),
+        ]);
+
         _frameCookies.set(key, {
           ...cookie,
           url: request.serverUrl,
+          blockedReasons: Array.from(blockedReasonsSet),
           parsedCookie: { ...cookie.parsedCookie, domain: parsedDomain || '' },
         });
       });
