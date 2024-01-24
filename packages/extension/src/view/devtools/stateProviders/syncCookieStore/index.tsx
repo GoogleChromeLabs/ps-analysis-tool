@@ -271,6 +271,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       }
 
       if (message.type === 'ServiceWorker::DevTools::NEW_COOKIE_DATA') {
+        console.log('DevTools SyncCookieStore:',tabId, message?.payload?.tabId, isCurrentTabBeingListenedTo)
         if (
           message?.payload?.tabId &&
           tabId?.toString() === message?.payload?.tabId.toString()
@@ -278,10 +279,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
           if (isCurrentTabBeingListenedTo) {
             await getAllFramesForCurrentTab(tabId);
             setTabToRead(tabId.toString());
+            setTabCookies(JSON.parse(message?.payload?.cookieData ?? '{}'));
           } else {
             setTabFrames(null);
           }
-          setTabCookies(JSON.parse(message?.payload?.cookieData ?? '{}'));
         }
       }
     };

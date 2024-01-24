@@ -337,7 +337,7 @@ class SynchnorousCookieStore {
       chrome.runtime.sendMessage({
         type: 'ServiceWorker::DevTools::NEW_COOKIE_DATA',
         payload: {
-          tabId: tabId,
+          tabId,
           cookieData: JSON.stringify(this.cachedTabsData[tabId]),
         },
       });
@@ -347,7 +347,7 @@ class SynchnorousCookieStore {
       chrome.runtime.sendMessage({
         type: 'ServiceWorker::Popup::NEW_COOKIE_DATA',
         payload: {
-          tabId: tabId,
+          tabId,
           cookieData: JSON.stringify(this.cachedTabsData[tabId]),
         },
       });
