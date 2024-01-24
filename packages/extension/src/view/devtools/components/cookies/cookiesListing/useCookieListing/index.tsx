@@ -340,6 +340,10 @@ const useCookieListing = () => {
         filterValues: preCalculatedFilters.blockedReason,
         sortValues: true,
         useGenericPersistenceKey: true,
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = value as string[];
+          return val?.includes(filterValue);
+        },
       },
       'parsedCookie.partitionKey': {
         title: 'Partition Key',
