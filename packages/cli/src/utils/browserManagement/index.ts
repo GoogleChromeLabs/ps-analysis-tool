@@ -19,14 +19,14 @@
  */
 import puppeteer, { Browser, Page, Protocol } from 'puppeteer';
 import { parse } from 'simple-cookie';
-import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import { Cookie, RequestData, ResponseData, ViewportConfig } from './types';
+import { ResponseData, RequestData, ViewportConfig } from './types';
 import { parseNetworkDataToCookieData } from './parseNetworkDataToCookieData';
 import delay from '../delay';
+import { CookieData, UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
 
 export class BrowserManagement {
   viewportConfig: ViewportConfig;
@@ -60,38 +60,19 @@ export class BrowserManagement {
     }
   }
 
-  async initializeBrowser(shouldBlock3pCookies: boolean) {
+  async initializeBrowser(enable3pCookiePhaseout: boolean) {
+    const args = [];
+
+    if (enable3pCookiePhaseout) {
+      args.push('--test-third-party-cookie-phaseout');
+    }
+
     this.browser = await puppeteer.launch({
       devtools: true,
       headless: this.isHeadless ? 'new' : false,
+      args,
     });
     this.debugLog('browser intialized');
-    if (shouldBlock3pCookies) {
-      await this.blockCookies();
-    }
-  }
-
-  async blockCookies() {
-    if (!this.browser) {
-      throw new Error('Browser not intialized');
-    }
-
-    const cookiesPage = await this.browser.newPage();
-    await cookiesPage.goto('chrome://settings/cookies');
-
-    const radioButton = await cookiesPage.$(
-      'settings-ui >>> settings-main >>> settings-basic-page >>> settings-section settings-privacy-page >>> settings-cookies-page >>> #blockThirdParty >>> #label'
-    );
-
-    if (radioButton) {
-      // @ts-ignore
-      await radioButton.evaluate((b) => b.click());
-    } else {
-      console.log('radio button not found');
-    }
-
-    await cookiesPage.close();
-    this.debugLog('3p cookies blocked');
   }
 
   async openPage(): Promise<Page> {
@@ -159,42 +140,45 @@ export class BrowserManagement {
 
     cdpSession.on(
       'Network.responseReceivedExtraInfo',
-      (response: Protocol.Network.ResponseReceivedExtraInfoEvent) => {
-        const allowedCookies: any[] = [];
-        const allCookies = response.headers['set-cookie']
-          ?.split('\n')
+      (event: Protocol.Network.ResponseReceivedExtraInfoEvent) => {
+        if (!event.headers['set-cookie']) {
+          return;
+        }
+        const cookies = event.headers['set-cookie']
+          .split('\n')
           .map((headerLine) => {
             const parsedCookie = parse(headerLine);
+            const partitionKey = headerLine.includes('Partitioned')
+              ? event.cookiePartitionKey
+              : undefined;
+
+            const blockedEntry = event.blockedCookies.find((c) => {
+              return c.cookie?.name === parsedCookie.name;
+            });
+
             return {
-              name: parsedCookie.name,
-              domain: parsedCookie.domain,
-              path: parsedCookie.path || '/',
-              value: parsedCookie.value,
-              sameSite: parsedCookie.samesite || 'Lax',
-              expires: parsedCookie.expires || 'Session',
-              httpOnly: parsedCookie.httponly || false,
-              secure: parsedCookie.secure || false,
+              parsedCookie: {
+                name: parsedCookie.name,
+                domain: parsedCookie.domain,
+                path: parsedCookie.path || '/',
+                value: parsedCookie.value,
+                sameSite: parsedCookie.samesite || 'Lax',
+                expires: parsedCookie.expires || 'Session',
+                httpOnly: parsedCookie.httponly || false,
+                secure: parsedCookie.secure || false,
+                partitionKey,
+              },
+              isBlocked: Boolean(blockedEntry),
+              blockedReasons: blockedEntry?.blockedReasons,
             };
           });
 
-        if (allCookies) {
-          allCookies.forEach((allCookie) => {
-            const foundInBlocked = response.blockedCookies.find((c) => {
-              return c.cookie?.name === allCookie.name;
-            });
+        const prevCookies = responseMap.get(event.requestId)?.cookies || [];
+        const mergedCookies = [...prevCookies, ...(cookies || [])];
 
-            if (!foundInBlocked) {
-              allowedCookies.push(allCookie);
-            }
-          });
-        }
-
-        const prevCookies = responseMap.get(response.requestId)?.cookies || [];
-        const mergedCookies = [...prevCookies, ...(allowedCookies || [])];
-
-        responseMap.set(response.requestId, {
-          frameId: responseMap.get(response.requestId)?.frameId || '',
-          serverUrl: responseMap.get(response.requestId)?.serverUrl || '',
+        responseMap.set(event.requestId, {
+          frameId: responseMap.get(event.requestId)?.frameId || '',
+          serverUrl: responseMap.get(event.requestId)?.serverUrl || '',
           // @ts-ignore TODO: fix expires type mismatch
           cookies: mergedCookies,
         });
@@ -214,24 +198,33 @@ export class BrowserManagement {
 
     cdpSession.on(
       'Network.requestWillBeSentExtraInfo',
-      (request: Protocol.Network.RequestWillBeSentExtraInfoEvent) => {
-        if (
-          request.associatedCookies &&
-          request.associatedCookies.length !== 0
-        ) {
-          const cookies: Protocol.Network.Cookie[] = [];
-          request.associatedCookies.forEach(({ blockedReasons, cookie }) => {
-            if (blockedReasons.length === 0) {
-              cookies.push(cookie);
-            }
+      (event: Protocol.Network.RequestWillBeSentExtraInfoEvent) => {
+        if (event.associatedCookies && event.associatedCookies.length !== 0) {
+          const cookies = event.associatedCookies.map((associatedCookie) => {
+            return {
+              parsedCookie: {
+                name: associatedCookie.cookie.name,
+                domain: associatedCookie.cookie.domain,
+                path: associatedCookie.cookie.path || '/',
+                value: associatedCookie.cookie.value,
+                sameSite: associatedCookie.cookie.sameSite || 'Lax',
+                expires: associatedCookie.cookie.expires || 'Session',
+                httpOnly: associatedCookie.cookie.httpOnly || false,
+                secure: associatedCookie.cookie.secure || false,
+                partitionKey: associatedCookie.cookie.partitionKey,
+              },
+              isBlocked: associatedCookie.blockedReasons.length > 0,
+              blockedReasons: associatedCookie.blockedReasons,
+            };
           });
-          requestMap.set(request.requestId, {
-            ...(requestMap.get(request.requestId) || {}),
+          requestMap.set(event.requestId, {
+            ...(requestMap.get(event.requestId) || {}),
             cookies,
           });
         }
       }
     );
+
     this.debugLog('done attaching network event listeners');
   }
 
@@ -263,7 +256,7 @@ export class BrowserManagement {
       await this.attachNetworkListenersToPage(url);
     }
 
-    //start navigation in parallel
+    // start navigation in parallel
     await Promise.all(
       urls.map(async (url) => {
         await this.navigateAndScroll(url);
@@ -282,8 +275,8 @@ export class BrowserManagement {
         const mainFrameId = this.pageMap.get(url)?.mainFrame()._id;
 
         if (
-          !requestMap ||
           !responseMap ||
+          !requestMap ||
           !frameIdUrlMap ||
           !mainFrameId ||
           !page
@@ -324,10 +317,13 @@ export class BrowserManagement {
         );
 
         const reshapedApplicationCookies = filteredApplicationCookies.reduce<{
-          [key: string]: Cookie;
+          [key: string]: CookieData;
         }>((acc, cookie) => {
           const key = `${cookie.name}:${cookie.domain}:${cookie.path}`;
-          acc[key] = cookie as Cookie;
+          acc[key] = {
+            parsedCookie: cookie,
+            url: '',
+          };
           return acc;
         }, {});
 

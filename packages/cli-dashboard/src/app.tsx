@@ -18,14 +18,17 @@
  * External dependencies
  */
 import React, { useEffect, useMemo, useState } from 'react';
-import type { TechnologyData } from '@ps-analysis-tool/common';
+import type {
+  CompleteJson,
+  CookieFrameStorageType,
+  TechnologyData,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies
  */
 import './app.css';
 import SiteReport from './components/siteReport';
-import type { CookieFrameStorageType, CompleteJson } from './types';
 import SiteMapReport from './components/siteMapReport';
 import extractReportData from './components/utils/extractReportData';
 import extractCookies from './components/utils/extractCookies';
@@ -40,8 +43,9 @@ const App = () => {
   const [landingPageCookies, setLandingPageCookies] =
     useState<CookieFrameStorageType>({});
   const [technologies, setTechnologies] = useState<TechnologyData[]>([]);
-  const [completeJsonReport, setCompleteJsonReport] =
-    useState<CompleteJson | null>(null);
+  const [completeJsonReport, setCompleteJsonReport] = useState<
+    CompleteJson[] | null
+  >(null);
 
   const [type, path] = useMemo(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -58,7 +62,7 @@ const App = () => {
   useEffect(() => {
     (async () => {
       const response = await fetch(path);
-      const data = await response.json();
+      const data: CompleteJson[] = await response.json();
       setCompleteJsonReport(data);
 
       let _cookies: CookieFrameStorageType = {},
@@ -71,8 +75,8 @@ const App = () => {
         _technologies = extractedData.technologies;
         setLandingPageCookies(extractedData.landingPageCookies);
       } else {
-        _cookies = extractCookies(data.cookieData, data.pageUrl, true);
-        _technologies = data.technologyData;
+        _cookies = extractCookies(data[0].cookieData, data[0].pageUrl, true);
+        _technologies = data[0].technologyData;
       }
 
       setCookies(_cookies);
