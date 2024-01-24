@@ -263,7 +263,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
             setTabFrames(null);
           }
           isCurrentTabBeingListenedToRef.current =
-            tabId?.toString() === message?.payload?.tabId;
+            tabId?.toString() === message?.payload?.tabToRead;
           setTabToRead(message?.payload?.tabToRead || null);
         }
       }
