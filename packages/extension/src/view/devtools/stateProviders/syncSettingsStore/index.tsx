@@ -92,8 +92,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const intitialSync = useCallback(async () => {
     const currentSettings = await chrome.storage.sync.get();
 
-    setAllowedNumberOfTabs(currentSettings?.allowedNumberOfTabs);
-    setIsUsingCDP(currentSettings?.isUsingCDP);
+    if (Object.keys(currentSettings).includes('allowedNumberOfTabs')) {
+      setAllowedNumberOfTabs(currentSettings?.allowedNumberOfTabs);
+    }
+    if (Object.keys(currentSettings).includes('isUsingCDP')) {
+      setIsUsingCDP(currentSettings?.isUsingCDP);
+    }
 
     chrome.tabs.query({}, (tabs) => {
       setCurrentTabs(tabs.length);

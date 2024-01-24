@@ -145,11 +145,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
     const extensionStorage = await chrome.storage.sync.get();
 
-    if (extensionStorage?.allowedNumberOfTabs) {
+    if (Object.keys(extensionStorage).includes('allowedNumberOfTabs')) {
       setAllowedNumberOfTabs(extensionStorage?.allowedNumberOfTabs);
     }
     if (Object.keys(extensionStorage).includes('isUsingCDP')) {
-      setIsUsingCDP(extensionStorage.isUsingCDP);
+      setIsUsingCDP(extensionStorage?.isUsingCDP);
     }
 
     const availableTabs = await chrome.tabs.query({});
