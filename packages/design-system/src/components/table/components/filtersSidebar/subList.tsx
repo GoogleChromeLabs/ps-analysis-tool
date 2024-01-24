@@ -76,7 +76,7 @@ const SubList = ({
               (isSelectAllFilterEnabled ? !isSelectAllFilterSelected : true)
             }
             toggleFilterSelection={toggleFilterSelection}
-            isExpanded={index < 5 || isExpanded}
+            isExpanded={index < 4 || isExpanded}
           />
         </React.Fragment>
       ))}
