@@ -18,9 +18,10 @@
  * This function returns the source location i.e. The line number and the column number of the given match and the sourceURL
  * @param {any} match:RegExpMatchArray
  * @param {any} sourceUrl:string|null
+ * @param match
+ * @param sourceUrl
  * @returns {any}
  */
-
 export const getSourceLocation = (
   match: RegExpMatchArray,
   sourceUrl: string | null

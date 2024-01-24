@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import { SignaturesConfigItem } from '../types';
+import type { SignaturesConfigItem } from '../types';
 
 /**
  * Returns the Help url the helpUrls param for the given signature string

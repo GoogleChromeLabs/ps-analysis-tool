@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import { ScriptTagUnderCheck, ResourceTreeItem } from '../types';
+import type { ScriptTagUnderCheck, ResourceTreeItem } from '../types';
 import { getInlineScriptContent, filterResources } from '../core';
 
 /**

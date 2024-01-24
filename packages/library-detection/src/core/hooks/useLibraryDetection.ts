@@ -30,24 +30,25 @@ import { sumUpDetectionResults } from '..';
 import type { LibraryData, ResourceTreeItem } from '../../types';
 import { LIBRARY_DETECTION_WORKER_TASK } from '../../worker/constants';
 
+const INITIAL_STATE: LibraryData = {
+  gis: {
+    signatureMatches: 0,
+    matches: [],
+  },
+  gsiV2: {
+    signatureMatches: 0,
+    moduleMatch: 0,
+    matches: [],
+  },
+};
+
 /**
  * The primary custom hook used for Library signature detection purpose
- * @param tabId
+ * @param {number} tabId Tab id.
+ * @returns {object} libraryMatches and isCurrentTabLoading
  */
 const useLibraryDetection = (tabId: number) => {
-  const initialState: LibraryData = {
-    gis: {
-      signatureMatches: 0,
-      matches: [],
-    },
-    gsiV2: {
-      signatureMatches: 0,
-      moduleMatch: 0,
-      matches: [],
-    },
-  };
-
-  const [libraryMatches, setLibraryMatches] = useState(initialState);
+  const [libraryMatches, setLibraryMatches] = useState(INITIAL_STATE);
   const [isCurrentTabLoading, setIsCurrentTabLoading] =
     useState<boolean>(false);
 
@@ -99,7 +100,7 @@ const useLibraryDetection = (tabId: number) => {
             listenerCallback
           );
         } else if (changeInfo.status === 'loading') {
-          setLibraryMatches(initialState);
+          setLibraryMatches(INITIAL_STATE);
           chrome.devtools.inspectedWindow.onResourceAdded.removeListener(
             listenerCallback
           );
@@ -107,13 +108,7 @@ const useLibraryDetection = (tabId: number) => {
         }
       }
     },
-    [
-      tabId,
-      listenerCallback,
-      setIsCurrentTabLoading,
-      setLibraryMatches,
-      initialState,
-    ]
+    [tabId, listenerCallback, setIsCurrentTabLoading, setLibraryMatches]
   );
 
   useEffect(() => {

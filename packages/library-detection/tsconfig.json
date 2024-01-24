@@ -1,15 +1,18 @@
 {
+  "extends": "../../tsconfig.shared.json",
   "compilerOptions": {
     "rootDir": "src",
-    "target": "es6",
-    "module": "commonjs",
-    "outDir": "dist",
-    "declarationDir": "dist-types",
-    "composite": true,
-    "strict": true,
-    "sourceMap": true,
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "jsx": "preserve"
-  }
+    "types": ["chrome"]
+  },
+  "include": [
+    "src",
+    "../../node_modules/@types/jest/index.d.ts",
+    "src/**/*.json"
+  ],
+  "references": [
+    { "path": "../common" },
+    {
+      "path": "../design-system"
+    }
+  ]
 }

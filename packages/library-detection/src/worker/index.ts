@@ -18,18 +18,16 @@
  */
 import detectMatchingSignatures from '../core/detectMatchingSignatures';
 import { checkForGIS, checkForGSIv2, generateGSIV2Matches } from '../libraries';
-
 import {
   LIBRARY_DETECTION_WORKER_TASK,
-  PreDefinedLibraryWorkerTaskPayload,
+  type PreDefinedLibraryWorkerTaskPayload,
 } from './constants';
 
 /**
- * Library Detection Worker function that handles tasks related to library detection.
- * @param {MessageEvent<any>} event - The MessageEvent containing task and payload data.
- * @returns {void} This function does not return a value directly but uses postMessage for communication.
+ * Library Detection worker function that handles tasks related to library detection.
+ * @param {MessageEvent} event - The MessageEvent containing task and payload data.
  */
-export const ldWorkerOnMessageCallback = (event: MessageEvent<any>) => {
+export const ldWorkerOnMessageCallback = (event: MessageEvent): void => {
   const task: LIBRARY_DETECTION_WORKER_TASK = event.data.task;
   const payload: PreDefinedLibraryWorkerTaskPayload[LIBRARY_DETECTION_WORKER_TASK] =
     event.data.payload;

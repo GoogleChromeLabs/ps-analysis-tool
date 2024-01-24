@@ -21,7 +21,7 @@ import { getResourcesWithContent } from './getResourcesWithContent';
 
 /**
  * This function returns the Resources of the of the given website in the inspectedWindow
- * @returns {any}
+ * @returns {string} Resources with content.
  */
 export const getNetworkResourcesWithContent = async () => {
   const resources: ResourceTreeItem[] = await new Promise((resolve) => {

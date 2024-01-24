@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * Internal dependencies.
  */
-import { ScriptTagUnderCheck } from '../types';
+import type { ScriptTagUnderCheck } from '../types';
 
 export enum LIBRARY_DETECTION_WORKER_TASK {
   DETECT_SIGNATURE_MATCHING,

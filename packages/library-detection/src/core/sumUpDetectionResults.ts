@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import { LibraryData } from '../types';
+import type { LibraryData } from '../types';
 
 /**
  * Util function for adding up LibraryData Objects

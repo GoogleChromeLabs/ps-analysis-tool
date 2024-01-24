@@ -17,7 +17,7 @@
  * Internal dependencies.
  */
 import isRequestURLMatchingDomainPaths from '../isRequestURLMatchingDomainPaths';
-import { DomainPaths } from '../../types';
+import type { DomainPaths } from '../../types';
 
 describe('Test for isRequestURLMatchingDomainPaths', () => {
   it('Should return true since the domain and path matches', () => {

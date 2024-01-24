@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import { ResourceTreeItem } from '../types';
+import type { ResourceTreeItem } from '../types';
 
 /**
  * Filters the document and scripts of interest from all the Resources given as input
