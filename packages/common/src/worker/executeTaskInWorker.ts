@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * Internal dependencies.
  */
@@ -22,29 +21,25 @@ import getDevToolWorker from './devToolWorker';
 /**
  * Execute a task using a web worker.
  * This is a highlevel abstraction over webworker.
- * This kills the web worker instance after execution completes.
- * @param {PredefinedTasks} task - The predefined task to be executed by the worker.
- * @param {PreDefinedWorkerTaskPayload} payload - The payload or data required for the task.
- * @returns {Promise<MessageEvent>} A promise that resolves with the result of the task
- * or rejects with an error if the task encounters an error.
+ * @param {string} task - The predefined task to be executed by the worker.
+ * @param {unknown} payload - The payload or data required for the task.
+ * @param {Function} onMessage callback.
  */
-
 const executeTaskInWorker = (
   task: string,
   payload: unknown,
-  successCallback: (dataFromThread: unknown) => void
+  onMessage: (dataFromThread: unknown) => void
 ) => {
-  const workerThread = getDevToolWorker();
+  const worker = getDevToolWorker();
 
-  workerThread.postMessage({
+  worker.postMessage({
     task,
     payload,
   });
-  // Send data to worker
-  // workerThread.onerror = reject; // Handle errors
-  workerThread.onmessage = (resultEvent) => {
-    successCallback(resultEvent.data);
-  }; // Get result from worker
+
+  worker.onmessage = (resultEvent) => {
+    onMessage(resultEvent.data);
+  };
 };
 
 export default executeTaskInWorker;

@@ -144,6 +144,7 @@ const CookiesLanding = ({
           )}
         </CookiesLandingContainer>
       )}
+      {/* TODO: This is not scalable. Refactor code so that components can be added from the the extension or dashboard package. */}
       {Object.keys(additionalComponents).length &&
         Object.keys(additionalComponents).map((key: string) => {
           const Component = additionalComponents[key];
