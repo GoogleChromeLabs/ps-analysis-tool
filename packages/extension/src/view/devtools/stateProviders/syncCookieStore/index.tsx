@@ -277,6 +277,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         ) {
           if (isCurrentTabBeingListenedTo) {
             await getAllFramesForCurrentTab(tabId);
+            setTabToRead(tabId.toString());
           } else {
             setTabFrames(null);
           }

@@ -66,7 +66,6 @@ chrome.webRequest.onResponseStarted.addListener(
     (async () => {
       const { tabId, url, responseHeaders, frameId } = details;
       const tabUrl = syncCookieStore.getTabUrl(tabId);
-
       if (
         !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, responseHeaders)
       ) {
