@@ -262,7 +262,7 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
       },
 
       blockedReasons: {
-        title: 'Cookie Blocked Reasons',
+        title: 'Blocked Reasons',
         description: 'Reason why the cookies were blocked.',
         hasStaticFilterValues: true,
         filterValues: blockedReasonFilterValues,
