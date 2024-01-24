@@ -256,6 +256,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       }
 
       if (message.type === 'ServiceWorker::DevTools::INITIAL_SYNC') {
+        console.log('ServiceWorker::DevTools::INITIAL_SYNC', message, tabId, isCurrentTabBeingListenedTo)
         if (message?.payload?.tabMode === 'unlimited') {
           setIsCurrentTabBeingListenedTo(true);
           setTabToRead(null);
@@ -271,7 +272,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       }
 
       if (message.type === 'ServiceWorker::DevTools::NEW_COOKIE_DATA') {
-        console.log('DevTools SyncCookieStore:',tabId, message?.payload?.tabId, isCurrentTabBeingListenedTo)
+        console.log('DevTools SyncCookieStore NEW_COOKIE_DATA',tabId, message, isCurrentTabBeingListenedTo)
         if (
           message?.payload?.tabId &&
           tabId?.toString() === message?.payload?.tabId.toString()

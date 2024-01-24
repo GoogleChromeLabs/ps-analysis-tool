@@ -66,7 +66,6 @@ chrome.webRequest.onResponseStarted.addListener(
     (async () => {
       const { tabId, url, responseHeaders, frameId } = details;
       const tabUrl = syncCookieStore.getTabUrl(tabId);
-      console.log('chrome.webRequest.onResponseStarted',!canProcessCookies(tabMode, tabUrl, tabToRead, tabId, responseHeaders), syncCookieStore.cachedTabsData, syncCookieStore.tabs)
       if (
         !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, responseHeaders)
       ) {
@@ -127,7 +126,6 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
   ({ url, requestHeaders, tabId, frameId }) => {
     (async () => {
       const tabUrl = syncCookieStore.getTabUrl(tabId);
-      console.log('chrome.webRequest.onBeforeSendHeaders',!canProcessCookies(tabMode, tabUrl, tabToRead, tabId, requestHeaders), syncCookieStore.cachedTabsData, syncCookieStore.tabs)
       if (
         !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, requestHeaders)
       ) {
