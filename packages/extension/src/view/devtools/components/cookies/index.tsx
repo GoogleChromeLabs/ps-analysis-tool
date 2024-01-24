@@ -117,6 +117,7 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
             tabCookies={tabCookies}
             tabFrames={tabFrames}
             showBlockedCookiesSection
+            showFramesSection
             description={description}
           />
         )}
