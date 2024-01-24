@@ -27,6 +27,7 @@ import { CookieTableData } from '@ps-analysis-tool/common';
  */
 import CookieTable from '..';
 import { InfoType } from '../../table';
+import { act } from 'react-dom/test-utils';
 
 describe('CookieTable', () => {
   global.ResizeObserver = jest.fn().mockImplementation(() => ({
@@ -160,23 +161,26 @@ describe('CookieTable', () => {
     const name = await screen.findByText('Name');
 
     expect(name).toBeInTheDocument();
-    fireEvent.click(name);
+    act(() => fireEvent.click(name));
 
-    const firstRow = await screen.findByText('test');
-    expect(firstRow.innerHTML).toMatch('test');
+    await waitFor(() => {
+      const firstRow = screen.getByText('test');
+      expect(firstRow.innerHTML).toMatch('test');
+    });
 
     const filterButton = await screen.findByTitle('Open filter options');
-    fireEvent.click(filterButton);
+    act(() => fireEvent.click(filterButton));
 
     const filter = await screen.findByText('NameFilter');
-    fireEvent.click(filter);
+    act(() => fireEvent.click(filter));
 
     const testFilter = await screen.findByText('testFilter');
-    fireEvent.click(testFilter);
+    act(() => fireEvent.click(testFilter));
 
-    const rows = await screen.findAllByTestId('body-row');
-
-    expect(rows.length).toBe(1);
+    await waitFor(() => {
+      const rows = screen.getAllByTestId('body-row');
+      expect(rows.length).toBe(1);
+    });
   });
 
   it('should search cookies by name', async () => {
@@ -294,33 +298,35 @@ describe('CookieTable', () => {
     const name = await screen.findByText('Name');
 
     expect(name).toBeInTheDocument();
-    fireEvent.click(name);
+    act(() => fireEvent.click(name));
 
     const firstRow = await screen.findByText('test');
     expect(firstRow.innerHTML).toMatch('test');
 
     const filterButton = await screen.findByTitle('Open filter options');
-    fireEvent.click(filterButton);
+    act(() => fireEvent.click(filterButton));
 
     const filter = await screen.findByText('NameFilter');
-    fireEvent.click(filter);
+    act(() => fireEvent.click(filter));
 
     const testFilter = await screen.findByText('testFilter');
-    fireEvent.click(testFilter);
+    act(() => fireEvent.click(testFilter));
 
     const test2Filter = await screen.findByText('test2Filter');
-    fireEvent.click(test2Filter);
+    act(() => fireEvent.click(test2Filter));
 
-    const rows = await screen.findAllByTestId('body-row');
-
-    expect(rows.length).toBe(2);
+    await waitFor(() => {
+      const rows = screen.getAllByTestId('body-row');
+      expect(rows.length).toBe(2);
+    });
 
     const clearFiltersButton = await screen.findByText('Clear all');
-    fireEvent.click(clearFiltersButton);
+    act(() => fireEvent.click(clearFiltersButton));
 
-    const rowsAfterClear = await screen.findAllByTestId('body-row');
-
-    expect(rowsAfterClear.length).toBe(4);
+    await waitFor(() => {
+      const rowsAfterClear = screen.getAllByTestId('body-row');
+      expect(rowsAfterClear.length).toBe(4);
+    });
   });
 
   it('should get the cookie object when row is clicked or Arrow up/down pressed', async () => {
