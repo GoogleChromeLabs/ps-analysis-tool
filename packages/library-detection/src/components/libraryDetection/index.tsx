@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { memo, useEffect } from 'react';
+import React, { memo } from 'react';
 import {
   CookiesLandingContainer,
   COLOR_MAP,
@@ -36,31 +36,18 @@ const LibraryDetection = memo(function LibraryDetection({
 }: {
   tabId: number;
 }) {
-  const {
-    libraryMatches,
-    libraryCount,
-    setLibraryCount,
-    currentTabLoadingStatus,
-  } = useLibraryDetection(tabId);
+  const { libraryMatches, isCurrentTabLoading } = useLibraryDetection(tabId);
 
-  useEffect(() => {
-    const names = Object.keys(libraryMatches);
+  const names = Object.keys(libraryMatches);
 
-    if (!names.length) {
-      return;
-    }
-
-    const detectedLibraryNames = names.filter(
-      (name) => libraryMatches[name]?.matches?.length
-    );
-
-    setLibraryCount(detectedLibraryNames.length);
-  }, [libraryMatches, setLibraryCount]);
+  const detectedLibraryNames = names.filter(
+    (name) => libraryMatches[name]?.matches?.length
+  );
 
   const dataMapping = [
     {
       title: 'Known Breakages',
-      count: Number(libraryCount),
+      count: Number(detectedLibraryNames.length),
       data: [{ count: 1, color: COLOR_MAP.uncategorized.color }],
     },
   ];
@@ -71,7 +58,7 @@ const LibraryDetection = memo(function LibraryDetection({
       testId="library-detection"
       description=""
     >
-      {currentTabLoadingStatus === 'complete' && libraryCount > 0 ? (
+      {!isCurrentTabLoading && detectedLibraryNames.length > 0 ? (
         <>
           {LIBRARIES.map((config: Config) => {
             const Component = config.component as React.FC;
@@ -84,9 +71,7 @@ const LibraryDetection = memo(function LibraryDetection({
           })}
         </>
       ) : (
-        <DynamicPlaceholder
-          pageLoaded={currentTabLoadingStatus === 'complete'}
-        />
+        <DynamicPlaceholder pageLoaded={!isCurrentTabLoading} />
       )}
     </CookiesLandingContainer>
   );
