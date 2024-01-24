@@ -18,12 +18,12 @@
  * External dependencies.
  */
 import { useState, useCallback, useMemo, useEffect } from 'react';
+import { getValueByKey } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import type { TableData } from '..';
-import getValueByKey from '../../utils/getValueByKey';
 import { useTablePersistentSettingsStore } from '../../persistentSettingsStore';
 
 export type DefaultOptions = {
@@ -45,6 +45,7 @@ const useColumnSorting = (
 ): ColumnSortingOutput => {
   const [sortKey, _setSortKey] = useState<string>('');
   const [ascending, setAscending] = useState<boolean>(true);
+  const [isDataLoading, setIsDataLoading] = useState<boolean>(true);
 
   const setSortOrder = useCallback((sortOrder: 'asc' | 'desc') => {
     setAscending(sortOrder === 'asc');
@@ -63,6 +64,10 @@ const useColumnSorting = (
   );
 
   const sortedData = useMemo(() => {
+    if (isDataLoading) {
+      return [];
+    }
+
     const _sortedData = [...data].sort((a, b) => {
       const candidateA = getValueByKey(sortKey, a);
       const candidateB = getValueByKey(sortKey, b);
@@ -74,7 +79,7 @@ const useColumnSorting = (
     });
 
     return _sortedData;
-  }, [ascending, data, sortKey]);
+  }, [ascending, data, isDataLoading, sortKey]);
 
   const { getPreferences, setPreferences } = useTablePersistentSettingsStore(
     ({ actions }) => ({
@@ -98,6 +103,8 @@ const useColumnSorting = (
         setAscending(sortOrderData === 'asc');
       }
     }
+
+    setIsDataLoading(false);
 
     return () => {
       _setSortKey('');
