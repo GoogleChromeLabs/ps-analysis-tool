@@ -25,6 +25,8 @@ describe('FiltersSidebar', () => {
   const initialProps = {
     filters: {},
     toggleFilterSelection: () => undefined,
+    toggleSelectAllFilter: () => undefined,
+    isSelectAllFilterSelected: () => false,
   };
 
   const props = {
@@ -43,6 +45,7 @@ describe('FiltersSidebar', () => {
           },
         },
         title: 'Filter 1',
+        enableSelectAllOption: true,
       },
       filter2: {
         filterValues: {
@@ -121,9 +124,11 @@ describe('FiltersSidebar', () => {
       filter1.click();
     });
 
-    const list = await screen.findAllByTestId('sub-list-item');
+    await waitFor(() => {
+      const list = screen.getAllByTestId('sub-list-item');
 
-    expect(list[0]).toHaveTextContent('aValue');
+      expect(list[1]).toHaveTextContent('aValue');
+    });
   });
 
   it('should expand all filters', async () => {
@@ -219,6 +224,59 @@ describe('FiltersSidebar', () => {
 
     await waitFor(() => {
       expect(expandArrow).toHaveClass('-rotate-90');
+    });
+  });
+
+  it('should handle select All filter option', async () => {
+    const toggleSelectAllFilter = jest.fn();
+    const toggleFilterSelection = jest.fn();
+    const { rerender } = render(
+      <FiltersSidebar
+        {...props}
+        toggleSelectAllFilter={toggleSelectAllFilter}
+        toggleFilterSelection={toggleFilterSelection}
+        isSelectAllFilterSelected={() => true}
+      />
+    );
+
+    const filter1 = screen.getByText('Filter 1');
+    act(() => {
+      filter1.click();
+    });
+
+    const selectAll = await screen.findByText('All');
+    act(() => {
+      selectAll.click();
+    });
+
+    await waitFor(() => {
+      expect(toggleSelectAllFilter).toHaveBeenCalledWith('filter1');
+    });
+
+    rerender(
+      <FiltersSidebar
+        {...props}
+        toggleSelectAllFilter={toggleSelectAllFilter}
+        toggleFilterSelection={toggleFilterSelection}
+        isSelectAllFilterSelected={() => false}
+      />
+    );
+
+    await waitFor(() => {
+      const filterCheckBoxes = screen.getAllByRole('checkbox');
+
+      expect(filterCheckBoxes[0]).not.toBeChecked();
+      expect(filterCheckBoxes[1]).not.toBeChecked();
+      expect(filterCheckBoxes[2]).toBeChecked();
+    });
+
+    const value1Option = await screen.findByText('value1');
+    act(() => {
+      value1Option.click();
+    });
+
+    await waitFor(() => {
+      expect(toggleFilterSelection).toHaveBeenCalledWith('filter1', 'value1');
     });
   });
 });
