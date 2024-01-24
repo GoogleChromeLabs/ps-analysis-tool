@@ -115,6 +115,7 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
             tabId={tabId}
             tabFrames={tabFrames}
             showBlockedCookiesSection
+            showFramesSection
             description={description}
             additionalComponents={{ libraryDetection: LibraryDetection }}
           />

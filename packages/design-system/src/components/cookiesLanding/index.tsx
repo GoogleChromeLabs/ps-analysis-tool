@@ -37,6 +37,7 @@ interface CookiesLandingProps {
   tabCookies: TabCookies | null;
   children?: React.ReactNode;
   showInfoIcon?: boolean;
+  showBlockedInfoIcon?: boolean;
   showHorizontalMatrix?: boolean;
   associatedCookiesCount?: number | null;
   showMessageBoxBody?: boolean;
@@ -45,6 +46,7 @@ interface CookiesLandingProps {
     [key: string]: React.FunctionComponent<{ tabId: number | null }>;
   };
   tabId: number | null;
+  showFramesSection?: boolean;
   description?: React.ReactNode;
 }
 
@@ -53,9 +55,11 @@ const CookiesLanding = ({
   tabFrames,
   children,
   showInfoIcon = true,
+  showBlockedInfoIcon = true,
   associatedCookiesCount = null,
   showMessageBoxBody = true,
   showBlockedCookiesSection = false,
+  showFramesSection = false,
   showHorizontalMatrix = false,
   description = '',
   additionalComponents = {},
@@ -132,7 +136,7 @@ const CookiesLanding = ({
                 tabCookies={tabCookies}
                 componentData={cookiesStatsComponents.blockedCookiesLegend}
                 tabFrames={tabFrames}
-                showInfoIcon={showInfoIcon}
+                showInfoIcon={showBlockedInfoIcon}
                 showHorizontalMatrix={false}
                 infoIconTitle="Cookies that have been blocked by the browser.(The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
               />
@@ -145,7 +149,7 @@ const CookiesLanding = ({
           const Component = additionalComponents[key];
           return <Component key={key} tabId={tabId} />;
         })}
-      {showBlockedCookiesSection && (
+      {showFramesSection && (
         <CookiesLandingContainer
           dataMapping={frameStateCreator.dataMapping}
           testId="frames-insights"

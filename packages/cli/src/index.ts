@@ -220,10 +220,7 @@ const startDashboardServer = async (dir: string) => {
     } as CompleteJson;
   });
 
-  await saveResults(
-    path.resolve(outputDir),
-    result.length === 1 ? result[0] : result
-  );
+  await saveResults(outputDir, result);
 
   if (outDir) {
     await saveCSVReports(path.resolve(outputDir), result);

@@ -37,4 +37,4 @@ export { default as executeTaskInWorker } from './worker/executeTaskInWorker';
 export { default as getValueByKey } from './utils/getValueByKey';
 export * from './utils/generateReports';
 export * from './cookies.types';
-export const UNKNOWN_FRAME_KEY = 'Unknown Frame(s)';
+export * from './constants';

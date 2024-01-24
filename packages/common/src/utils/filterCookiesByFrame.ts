@@ -53,7 +53,11 @@ const filterCookiesByFrame = (
           hasFrame = true;
         }
       });
-      if (!hasFrame && cookie.frameIdList?.length > 0) {
+      if (
+        !hasFrame &&
+        cookie.frameIdList !== undefined &&
+        cookie.frameIdList?.length > 0
+      ) {
         frameFilteredCookies[key] = cookie;
       }
     });

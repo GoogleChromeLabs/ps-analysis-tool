@@ -24,6 +24,7 @@ export const AFFECTED_COOKIES_DATA_HEADERS = [
   'Name',
   'Scope',
   'Domain',
+  'Partition Key',
   'Same Site',
   'Category',
   'Platform',
@@ -54,18 +55,19 @@ const generateAffectedCookiesCSV = (siteAnalysisData: CompleteJson): string => {
   for (const cookie of affectedCookieMap.values()) {
     //This should be in the same order as cookieDataHeader
     const recordsArray = [
-      cookie.name,
+      cookie.parsedCookie.name,
       cookie.isFirstParty ? 'First Party' : 'Third Party',
-      cookie.domain,
-      cookie.value,
-      cookie.sameSite,
-      cookie.category,
-      cookie.platform,
-      cookie.httpOnly ? 'Yes' : 'No',
-      cookie.secure ? 'Yes' : 'No',
-      cookie.path,
-      cookie.expires,
-      cookie.GDPR || 'NA',
+      cookie.parsedCookie.domain || ' ',
+      cookie.parsedCookie.partitionKey || ' ',
+      cookie.parsedCookie.value,
+      cookie.parsedCookie.sameSite,
+      cookie.analytics.category,
+      cookie.analytics.platform,
+      cookie.parsedCookie.httpOnly ? 'Yes' : 'No',
+      cookie.parsedCookie.secure ? 'Yes' : 'No',
+      cookie.parsedCookie.path,
+      cookie.parsedCookie.expires,
+      cookie.analytics.GDPR || 'NA',
     ].map(sanitizeCsvRecord);
 
     cookieRecords += recordsArray.join(',') + '\r\n';
