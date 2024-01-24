@@ -413,8 +413,8 @@ const listenToNewTab = async (tabId?: number) => {
       storedTabData.map(async (tabIdToDelete) => {
         syncCookieStore.removeTabData(Number(tabIdToDelete));
         try {
-          chrome.action.setBadgeText({
-            tabId: Number(newTabId),
+          await chrome.action.setBadgeText({
+            tabId: Number(tabIdToDelete),
             text: '',
           });
           await chrome.debugger.detach({ tabId: Number(tabIdToDelete) });
