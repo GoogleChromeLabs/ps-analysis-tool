@@ -51,36 +51,6 @@ const useLibraryDetection = (tabId: number) => {
   const [isCurrentTabLoading, setIsCurrentTabLoading] =
     useState<boolean>(false);
 
-  const [libraryCount, setLibraryCount] = useState(0);
-
-  const onTabUpdate = useCallback(
-    (
-      changingTabId: number,
-      changeInfo: chrome.tabs.TabChangeInfo,
-      tab: chrome.tabs.Tab
-    ) => {
-      const currentTabId = tabId;
-
-      if (tab.active && changingTabId === currentTabId) {
-        if (changeInfo.status === 'complete') {
-          setLibraryCount(0);
-          setIsCurrentTabLoading(false);
-        } else if (changeInfo.status === 'loading') {
-          setIsCurrentTabLoading(true);
-        }
-      }
-    },
-    [tabId]
-  );
-
-  useEffect(() => {
-    chrome.tabs.onUpdated.addListener(onTabUpdate);
-
-    return () => {
-      chrome.tabs.onUpdated.removeListener(onTabUpdate);
-    };
-  }, [onTabUpdate]);
-
   /**
    * This function is called whenever a new resource is added.
    * @param {any} async(resource:chrome.devtools.inspectedWindow.Resource
@@ -114,6 +84,47 @@ const useLibraryDetection = (tabId: number) => {
     [libraryMatches]
   );
 
+  const onTabUpdate = useCallback(
+    (
+      changingTabId: number,
+      changeInfo: chrome.tabs.TabChangeInfo,
+      tab: chrome.tabs.Tab
+    ) => {
+      const currentTabId = tabId;
+
+      if (tab.active && changingTabId === currentTabId) {
+        if (changeInfo.status === 'complete') {
+          setIsCurrentTabLoading(false);
+          chrome.devtools.inspectedWindow.onResourceAdded.addListener(
+            listenerCallback
+          );
+        } else if (changeInfo.status === 'loading') {
+          setLibraryMatches(initialState);
+          chrome.devtools.inspectedWindow.onResourceAdded.removeListener(
+            listenerCallback
+          );
+          setIsCurrentTabLoading(true);
+        }
+      }
+    },
+    [
+      tabId,
+      listenerCallback,
+      setIsCurrentTabLoading,
+      setLibraryMatches,
+      initialState,
+    ]
+  );
+
+  useEffect(() => {
+    chrome.tabs.onUpdated.removeListener(onTabUpdate);
+    chrome.tabs.onUpdated.addListener(onTabUpdate);
+
+    return () => {
+      chrome.tabs.onUpdated.removeListener(onTabUpdate);
+    };
+  }, [onTabUpdate]);
+
   useEffect(() => {
     if (!isCurrentTabLoading) {
       (async () => {
@@ -124,24 +135,14 @@ const useLibraryDetection = (tabId: number) => {
           scripts,
           (detectedMatchingSignatures: LibraryData) => {
             setLibraryMatches(detectedMatchingSignatures);
-            chrome.devtools.inspectedWindow.onResourceAdded.addListener(
-              listenerCallback
-            );
           }
         );
       })();
-    } else {
-      chrome.devtools.inspectedWindow.onResourceAdded.removeListener(
-        listenerCallback
-      );
-      setLibraryMatches(initialState);
     }
   }, [isCurrentTabLoading]);
 
   return {
     libraryMatches,
-    libraryCount,
-    setLibraryCount,
     isCurrentTabLoading,
   };
 };
