@@ -26,10 +26,7 @@ import {
   type TableColumn,
   type TableFilter,
 } from '@ps-analysis-tool/design-system';
-import {
-  BLOCKED_REASON_LIST,
-  type CookieTableData,
-} from '@ps-analysis-tool/common';
+import { getValueByKey, type CookieTableData } from '@ps-analysis-tool/common';
 
 interface AffectedCookiesProps {
   cookies: CookieTableData[];
@@ -120,16 +117,29 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
     []
   );
 
-  const blockedReasonFilterValues = useMemo<{
-    [key: string]: { selected: boolean };
-  }>(() => {
-    const filterValues: { [key: string]: { selected: boolean } } = {};
+  const blockedReasonFilterValues = useMemo(
+    () =>
+      Object.values(cookies).reduce((acc, cookie) => {
+        const blockedReason = getValueByKey('blockedReasons', cookie);
 
-    BLOCKED_REASON_LIST.forEach((reason) => {
-      filterValues[reason] = { selected: false };
-    });
-    return filterValues;
-  }, []);
+        if (!cookie.frameIdList || cookie?.frameIdList?.length === 0) {
+          return acc;
+        }
+
+        blockedReason?.forEach((reason: string) => {
+          if (!acc) {
+            acc = {};
+          }
+
+          acc[reason] = {
+            selected: false,
+          };
+        });
+
+        return acc;
+      }, {} as TableFilter[keyof TableFilter]['filterValues']),
+    [cookies]
+  );
 
   const filters = useMemo<TableFilter>(
     () => ({
@@ -260,12 +270,14 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
       'analytics.platform': {
         title: 'Platform',
       },
-
       blockedReasons: {
         title: 'Blocked Reasons',
-        description: 'Reason why the cookies were blocked.',
         hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        enableSelectAllOption: true,
         filterValues: blockedReasonFilterValues,
+        sortValues: true,
+        useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           return (value as string[])?.includes(filterValue);
         },
