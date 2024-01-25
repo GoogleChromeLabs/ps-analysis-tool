@@ -71,7 +71,7 @@ chrome.webRequest.onResponseStarted.addListener(
       ) {
         return;
       }
-
+      console.log('chrome.webRequest.onResponseStarted', !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, responseHeaders),tabMode, tabUrl, tabToRead, tabId, responseHeaders)
       let cdpCookies: { [key: string]: Protocol.Network.Cookie[] };
       //Since we are using CDP we might as well use it to get the proper cookies in the request this will further reduce the load of domain calculation
       try {
@@ -131,7 +131,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
       ) {
         return;
       }
-
+      console.log('chrome.webRequest.onBeforeSendHeaders', !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, requestHeaders),tabMode, tabUrl, tabToRead, tabId, requestHeaders)
       let cdpCookies: { [key: string]: Protocol.Network.Cookie[] };
       try {
         cdpCookies = await chrome.debugger.sendCommand(
