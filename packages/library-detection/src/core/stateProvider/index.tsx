@@ -17,7 +17,13 @@
  * External dependencies.
  */
 import { createContext, useContextSelector } from 'use-context-selector';
-import React, { type PropsWithChildren, useState } from 'react';
+import React, {
+  type PropsWithChildren,
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+} from 'react';
 import { noop } from '@ps-analysis-tool/common';
 
 /**
@@ -76,6 +82,39 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
     useState<boolean>(false);
   const [loadedBefore, setLoadedBeforeState] = useState<boolean>(false);
   const [showLoader, setShowLoader] = useState<boolean>(true);
+  const tabId = useRef(-1);
+
+  useEffect(() => {
+    tabId.current = chrome.devtools.inspectedWindow.tabId;
+  }, []);
+
+  const onTabUpdate = useCallback(
+    (
+      changingTabId: number,
+      changeInfo: chrome.tabs.TabChangeInfo,
+      tab: chrome.tabs.Tab
+    ) => {
+      if (tab.active && Number(changingTabId) === Number(tabId.current)) {
+        if (changeInfo.status === 'complete') {
+          setIsCurrentTabLoading(false);
+        } else if (changeInfo.status === 'loading') {
+          setLibraryMatches(INITIAL_STATE);
+          setIsCurrentTabLoading(true);
+          setShowLoader(true);
+        }
+      }
+    },
+    [setIsCurrentTabLoading]
+  );
+
+  useEffect(() => {
+    chrome.tabs.onUpdated.removeListener(onTabUpdate);
+    chrome.tabs.onUpdated.addListener(onTabUpdate);
+
+    return () => {
+      chrome.tabs.onUpdated.removeListener(onTabUpdate);
+    };
+  }, [onTabUpdate]);
 
   return (
     <Context.Provider

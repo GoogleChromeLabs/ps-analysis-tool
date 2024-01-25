@@ -31,12 +31,8 @@ import type { Config } from '../../types';
 import { useLibraryDetection, useLibraryDetectionContext } from '../../core';
 
 // eslint-disable-next-line react/display-name
-const LibraryDetection = memo(function LibraryDetection({
-  tabId,
-}: {
-  tabId: number;
-}) {
-  const { libraryMatches } = useLibraryDetection(tabId);
+const LibraryDetection = memo(function LibraryDetection() {
+  const { libraryMatches } = useLibraryDetection();
   const { showLoader } = useLibraryDetectionContext(({ state }) => ({
     showLoader: state.showLoader,
   }));

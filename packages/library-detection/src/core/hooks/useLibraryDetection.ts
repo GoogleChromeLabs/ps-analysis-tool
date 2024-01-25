@@ -30,32 +30,19 @@ import { sumUpDetectionResults, useLibraryDetectionContext } from '..';
 import type { LibraryData, ResourceTreeItem } from '../../types';
 import { LIBRARY_DETECTION_WORKER_TASK } from '../../worker/constants';
 
-const INITIAL_STATE: LibraryData = {
-  gis: {
-    signatureMatches: 0,
-    matches: [],
-  },
-  gsiV2: {
-    signatureMatches: 0,
-    moduleMatch: 0,
-    matches: [],
-  },
-};
-
-const LOADING_DELAY = 3000;
+const LOADING_DELAY = 4000;
 
 /**
  * The primary custom hook used for Library signature detection purpose
  * @param {number} tabId Tab id.
  * @returns {object} libraryMatches and isCurrentTabLoading
  */
-const useLibraryDetection = (tabId: number) => {
+const useLibraryDetection = () => {
   const {
     libraryMatches,
     isCurrentTabLoading,
     loadedBefore,
     setLibraryMatches,
-    setIsCurrentTabLoading,
     setLoadedBeforeState,
     setShowLoader,
   } = useLibraryDetectionContext(({ state, actions }) => ({
@@ -64,7 +51,6 @@ const useLibraryDetection = (tabId: number) => {
     loadedBefore: state.loadedBefore,
     setLoadedBeforeState: actions.setLoadedBeforeState,
     setLibraryMatches: actions.setLibraryMatches,
-    setIsCurrentTabLoading: actions.setIsCurrentTabLoading,
     setShowLoader: actions.setShowLoader,
   }));
   const timeout = useRef(0);
@@ -112,36 +98,6 @@ const useLibraryDetection = (tabId: number) => {
     );
   }, [listenerCallback, removeListener]);
 
-  const onTabUpdate = useCallback(
-    (
-      changingTabId: number,
-      changeInfo: chrome.tabs.TabChangeInfo,
-      tab: chrome.tabs.Tab
-    ) => {
-      const currentTabId = tabId;
-
-      if (tab.active && changingTabId === currentTabId) {
-        if (changeInfo.status === 'complete') {
-          setIsCurrentTabLoading(false);
-        } else if (changeInfo.status === 'loading') {
-          setLibraryMatches(INITIAL_STATE);
-          removeListener();
-          setIsCurrentTabLoading(true);
-        }
-      }
-    },
-    [tabId, setIsCurrentTabLoading, setLibraryMatches, removeListener]
-  );
-
-  useEffect(() => {
-    chrome.tabs.onUpdated.removeListener(onTabUpdate);
-    chrome.tabs.onUpdated.addListener(onTabUpdate);
-
-    return () => {
-      chrome.tabs.onUpdated.removeListener(onTabUpdate);
-    };
-  }, [onTabUpdate]);
-
   const updateInitialData = useCallback(async () => {
     const scripts = await getNetworkResourcesWithContent();
 
@@ -163,6 +119,7 @@ const useLibraryDetection = (tabId: number) => {
           timeout.current = setTimeout(() => {
             updateInitialData();
             setLoadedBeforeState(true);
+            timeout.current = 0;
           }, LOADING_DELAY);
         }
       } else {
