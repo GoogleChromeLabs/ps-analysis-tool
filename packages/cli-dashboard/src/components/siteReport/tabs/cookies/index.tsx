@@ -59,10 +59,10 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
     if (!completeJson) {
       return;
     }
-    if (Array.isArray(completeJson)) {
+    if (completeJson.length > 1) {
       generateSiteReportandDownload(completeJson, selectedSite);
-    } else if (!Array.isArray(completeJson)) {
-      generateSiteReportandDownload([completeJson]);
+    } else {
+      generateSiteReportandDownload(completeJson);
     }
   }, [completeJson, selectedSite]);
 

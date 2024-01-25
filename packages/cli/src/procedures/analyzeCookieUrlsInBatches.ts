@@ -17,8 +17,8 @@
 /**
  * Internal dependencies.
  */
+import { CookieData } from '@ps-analysis-tool/common';
 import { CookieDatabase } from '../types';
-import { Cookie } from '../utils/browserManagement/types';
 import { analyzeCookiesUrls } from './analyzeCookieUrls';
 
 export const analyzeCookiesUrlsInBatches = async (
@@ -44,7 +44,7 @@ export const analyzeCookiesUrlsInBatches = async (
       [frameUrl: string]: {
         cookiesCount: number;
         frameCookies: {
-          [key: string]: Cookie;
+          [key: string]: CookieData;
         };
       };
     };

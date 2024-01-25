@@ -17,11 +17,11 @@
  * External dependencies.
  */
 import { getDomain } from 'tldts';
-
+import { CookieData } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import { Cookie, RequestData, ResponseData } from './types';
+import { RequestData, ResponseData } from './types';
 
 export const parseNetworkDataToCookieData = (
   responseMap: Map<string, ResponseData>,
@@ -33,7 +33,7 @@ export const parseNetworkDataToCookieData = (
   [frameUrl: string]: {
     cookiesCount: number;
     frameCookies: {
-      [key: string]: Cookie;
+      [key: string]: CookieData;
     };
   };
 } => {
@@ -47,25 +47,24 @@ export const parseNetworkDataToCookieData = (
       continue;
     }
     const frameId = response.frameId || mainFrameId;
-    const prevResposes = frameIdNetworkDataMap.get(frameId)?.responses || [];
-    const prevRequests = frameIdNetworkDataMap.get(frameId)?.requests || [];
+    const prevResponses = frameIdNetworkDataMap.get(frameId)?.responses || [];
+    const prevRequests = frameIdNetworkDataMap.get(frameId)?.responses || [];
 
     frameIdNetworkDataMap.set(frameId, {
-      responses: [...prevResposes, response],
+      responses: [...prevResponses, response],
       requests: prevRequests,
     });
   }
-
   for (const [, request] of requestMap) {
     if (!request.cookies || request.cookies.length === 0) {
       continue;
     }
     const frameId = request.frameId || mainFrameId;
-    const prevResposes = frameIdNetworkDataMap.get(frameId)?.responses || [];
-    const prevRequests = frameIdNetworkDataMap.get(frameId)?.requests || [];
+    const prevResponses = frameIdNetworkDataMap.get(frameId)?.responses || [];
+    const prevRequests = frameIdNetworkDataMap.get(frameId)?.responses || [];
 
     frameIdNetworkDataMap.set(frameId, {
-      responses: prevResposes,
+      responses: prevResponses,
       requests: [...prevRequests, request],
     });
   }
@@ -75,29 +74,76 @@ export const parseNetworkDataToCookieData = (
     {
       frameUrl: string;
       frameCookies: {
-        [key: string]: Cookie;
+        [key: string]: CookieData;
       };
     }
   >();
 
   for (const [frameId, data] of frameIdNetworkDataMap) {
-    const _frameCookies = new Map<string, Cookie>();
-
-    data.requests?.forEach((request: RequestData) => {
-      request.cookies.forEach((cookie) => {
-        const key = cookie.name + ':' + cookie.domain + ':' + cookie.path;
-        _frameCookies.set(key, cookie);
-      });
-    });
+    const _frameCookies = new Map<string, CookieData>();
 
     data.responses?.forEach((response: ResponseData) => {
       response.cookies.forEach((cookie) => {
         // domain update required. Domain based on the server url
         const parsedDomain =
-          cookie.domain === '' ? getDomain(response.serverUrl) : cookie.domain;
+          cookie.parsedCookie.domain === ''
+            ? getDomain(response.serverUrl)
+            : cookie.parsedCookie.domain;
 
-        const key = cookie.name + ':' + parsedDomain + ':' + cookie.path;
-        _frameCookies.set(key, { ...cookie, domain: parsedDomain || '' });
+        const key =
+          cookie.parsedCookie.name +
+          ':' +
+          parsedDomain +
+          ':' +
+          cookie.parsedCookie.path;
+
+        const prevEntry = _frameCookies.get(key);
+
+        const blockedReasonsSet = new Set([
+          ...(cookie?.blockedReasons || []),
+          ...(prevEntry?.blockedReasons || []),
+        ]);
+
+        _frameCookies.set(key, {
+          ...cookie,
+          url: response.serverUrl,
+          blockedReasons: Array.from(blockedReasonsSet),
+          parsedCookie: {
+            ...cookie.parsedCookie,
+            domain: parsedDomain || '',
+          },
+        });
+      });
+    });
+
+    data.requests?.forEach((request: RequestData) => {
+      request.cookies.forEach((cookie) => {
+        // domain update required. Domain based on the server url
+        const parsedDomain =
+          cookie.parsedCookie.domain === ''
+            ? getDomain(request.serverUrl)
+            : cookie.parsedCookie.domain;
+
+        const key =
+          cookie.parsedCookie.name +
+          ':' +
+          parsedDomain +
+          ':' +
+          cookie.parsedCookie.path;
+
+        const prevEntry = _frameCookies.get(key);
+
+        const blockedReasonsSet = new Set([
+          ...(cookie?.blockedReasons || []),
+          ...(prevEntry?.blockedReasons || []),
+        ]);
+
+        _frameCookies.set(key, {
+          ...cookie,
+          url: request.serverUrl,
+          blockedReasons: Array.from(blockedReasonsSet),
+          parsedCookie: { ...cookie.parsedCookie, domain: parsedDomain || '' },
+        });
       });
     });
 
@@ -111,7 +157,7 @@ export const parseNetworkDataToCookieData = (
     {
       cookiesCount: number;
       frameCookies: {
-        [key: string]: Cookie;
+        [key: string]: CookieData;
       };
     }
   >();

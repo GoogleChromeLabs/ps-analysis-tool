@@ -18,13 +18,13 @@
  * External dependencies.
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { getValueByKey } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import type { PersistentStorageData, TableData, TableFilter } from '..';
-import getValueByKey from '../../utils/getValueByKey';
-import { useTablePersistentSettingsStore } from '../../persistentSettingsStore';
+import type { TableData, TableFilter } from '..';
+import useFiltersPersistence from './useFiltersPersistence';
 
 export type TableFilteringOutput = {
   filters: TableFilter;
@@ -38,7 +38,8 @@ export type TableFilteringOutput = {
 const useFiltering = (
   data: TableData[],
   tableFilterData: TableFilter | undefined,
-  tablePersistentSettingsKey?: string
+  specificTablePersistentSettingsKey?: string,
+  genericTablePersistentSettingsKey?: string
 ): TableFilteringOutput => {
   const [filters, setFilters] = useState<TableFilter>({
     ...(tableFilterData || {}),
@@ -46,6 +47,11 @@ const useFiltering = (
   const [options, setOptions] = useState<{
     [filterKey: string]: TableFilter[keyof TableFilter]['filterValues'];
   }>({});
+  const [isDataLoading, setIsDataLoading] = useState(true);
+
+  useEffect(() => {
+    setIsDataLoading(true);
+  }, [specificTablePersistentSettingsKey]);
 
   useEffect(() => {
     setFilters((prevFilters) =>
@@ -91,6 +97,38 @@ const useFiltering = (
       )
     );
   }, [data]);
+
+  useEffect(() => {
+    const filtersByKey = Object.fromEntries(
+      Object.entries(tableFilterData || {})
+        .filter(([, filter]) => filter.hasPrecalculatedFilterValues)
+        .map(([key, filter]) => {
+          return [key, filter.filterValues];
+        })
+    );
+
+    setFilters((prevFilters) => {
+      const newFilters = { ...prevFilters };
+
+      Object.entries(newFilters).forEach(([key, filter]) => {
+        Object.entries(filtersByKey[key] || {}).forEach(
+          ([filterValue, filterValueData]) => {
+            const _filterValue = filterValue.trim();
+
+            if (!filter.filterValues) {
+              filter.filterValues = {};
+            }
+
+            if (!filter.filterValues?.[_filterValue]) {
+              filter.filterValues[_filterValue] = filterValueData;
+            }
+          }
+        );
+      });
+
+      return newFilters;
+    });
+  }, [tableFilterData]);
 
   const toggleFilterSelection = useCallback(
     (filterKey: string, filterValue: string) => {
@@ -142,6 +180,10 @@ const useFiltering = (
   );
 
   const filteredData = useMemo<TableData[]>(() => {
+    if (isDataLoading) {
+      return [];
+    }
+
     if (
       Object.values(selectedFilters).every(
         (filter) => Object.keys(filter.filterValues || {}).length === 0
@@ -171,7 +213,7 @@ const useFiltering = (
         return false;
       });
     });
-  }, [data, selectedFilters]);
+  }, [data, isDataLoading, selectedFilters]);
 
   useEffect(() => {
     setFilters((prevFilters) =>
@@ -213,49 +255,6 @@ const useFiltering = (
     );
   }, [options]);
 
-  const { getPreferences, setPreferences } = useTablePersistentSettingsStore(
-    ({ actions }) => ({
-      getPreferences: actions.getPreferences,
-      setPreferences: actions.setPreferences,
-    })
-  );
-
-  useEffect(() => {
-    if (tablePersistentSettingsKey) {
-      const _data = getPreferences(
-        tablePersistentSettingsKey,
-        'selectedFilters'
-      );
-
-      if (_data) {
-        setOptions((_data as PersistentStorageData['selectedFilters']) || {});
-      }
-    }
-
-    return () => {
-      setOptions({});
-    };
-  }, [getPreferences, tablePersistentSettingsKey]);
-
-  useEffect(() => {
-    const _selectedFilters = Object.entries(filters || {}).reduce(
-      (acc, [filterKey, { filterValues }]) => {
-        acc[filterKey] = { ...filterValues };
-        return acc;
-      },
-      {} as { [key: string]: TableFilter[keyof TableFilter]['filterValues'] }
-    );
-
-    if (tablePersistentSettingsKey) {
-      setPreferences(
-        {
-          selectedFilters: _selectedFilters,
-        },
-        tablePersistentSettingsKey
-      );
-    }
-  }, [filters, setPreferences, tablePersistentSettingsKey]);
-
   const isFiltering = useMemo(
     () =>
       Object.values(selectedFilters).some((filter) =>
@@ -264,6 +263,14 @@ const useFiltering = (
         )
       ),
     [selectedFilters]
+  );
+
+  useFiltersPersistence(
+    filters,
+    setOptions,
+    setIsDataLoading,
+    specificTablePersistentSettingsKey,
+    genericTablePersistentSettingsKey
   );
 
   return {

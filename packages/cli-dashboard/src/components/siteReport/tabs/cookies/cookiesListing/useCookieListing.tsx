@@ -15,31 +15,36 @@
  */
 
 /**
- * External dependencies.
+ * External dependencies
  */
-import React, { useMemo, useState } from 'react';
-import { Resizable } from 're-resizable';
-import {
-  CookieDetails,
-  CookieTable,
-  type InfoType,
-  type TableColumn,
-  type TableFilter,
+import React, { useCallback, useMemo } from 'react';
+import type {
+  InfoType,
+  TableColumn,
+  TableFilter,
 } from '@ps-analysis-tool/design-system';
-import {
-  BLOCKED_REASON_LIST,
-  type CookieTableData,
-} from '@ps-analysis-tool/common';
+import { BLOCKED_REASON_LIST, getValueByKey } from '@ps-analysis-tool/common';
 
-interface AffectedCookiesProps {
-  cookies: CookieTableData[];
-  selectedSite: string | null;
-}
+/**
+ * Internal dependencies
+ */
+import { useContentStore } from '../../../stateProviders/contentStore';
 
-const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
-  const [selectedFrameCookie, setSelectedFrameCookie] = useState<{
-    [frame: string]: CookieTableData | null;
-  } | null>(null);
+const useCookieListing = (
+  selectedFrameUrl: string,
+  selectedSite?: string | null
+) => {
+  const { tabCookies } = useContentStore(({ state }) => ({
+    tabCookies: state.tabCookies,
+  }));
+
+  const cookies = useMemo(
+    () =>
+      Object.values(tabCookies).filter((cookie) =>
+        (cookie.frameUrls as string[]).includes(selectedFrameUrl)
+      ),
+    [tabCookies, selectedFrameUrl]
+  );
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -120,6 +125,28 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
     []
   );
 
+  const calculate = useCallback(
+    (key: string): TableFilter[keyof TableFilter]['filterValues'] =>
+      Object.values(tabCookies).reduce<
+        TableFilter[keyof TableFilter]['filterValues']
+      >((acc, cookie) => {
+        const value = getValueByKey(key, cookie);
+
+        if (!acc) {
+          acc = {};
+        }
+
+        if (value) {
+          acc[value] = {
+            selected: false,
+          };
+        }
+
+        return acc;
+      }, {}),
+    [tabCookies]
+  );
+
   const blockedReasonFilterValues = useMemo<{
     [key: string]: { selected: boolean };
   }>(() => {
@@ -135,6 +162,11 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
     () => ({
       'analytics.category': {
         title: 'Category',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculate('analytics.category'),
+        sortValues: true,
+        useGenericPersistenceKey: true,
       },
       isFirstParty: {
         title: 'Scope',
@@ -147,6 +179,7 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
             selected: false,
           },
         },
+        useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           const val = value as boolean;
           return val === (filterValue === 'First Party');
@@ -166,6 +199,7 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
             selected: false,
           },
         },
+        useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           const val = value as boolean;
           return val === (filterValue === 'True');
@@ -185,6 +219,7 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
             selected: false,
           },
         },
+        useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           const val = value as string;
           return val?.toLowerCase() === filterValue.toLowerCase();
@@ -201,6 +236,7 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
             selected: false,
           },
         },
+        useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           const val = value as boolean;
           return val === (filterValue === 'True');
@@ -229,6 +265,7 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
             selected: false,
           },
         },
+        useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           let diff = 0;
           const val = value as string;
@@ -259,8 +296,12 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
       },
       'analytics.platform': {
         title: 'Platform',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculate('analytics.platform'),
+        sortValues: true,
+        useGenericPersistenceKey: true,
       },
-
       blockedReasons: {
         title: 'Blocked Reasons',
         description: 'Reason why the cookies were blocked.',
@@ -270,8 +311,24 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
           return (value as string[])?.includes(filterValue);
         },
       },
+      isBlocked: {
+        title: 'Blocked',
+        hasStaticFilterValues: true,
+        filterValues: {
+          True: {
+            selected: false,
+          },
+          False: {
+            selected: false,
+          },
+        },
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = !value;
+          return val === (filterValue === 'False');
+        },
+      },
     }),
-    [blockedReasonFilterValues]
+    [calculate, blockedReasonFilterValues]
   );
 
   const searchKeys = useMemo<string[]>(
@@ -279,46 +336,21 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
     []
   );
 
-  const tablePersistentSettingsKey = useMemo<string>(() => {
+  const tablePersistentSettingsKey = useMemo(() => {
     if (selectedSite) {
-      return `affectedCookiesListing#${selectedSite}`;
+      return `cookiesListing#${selectedSite}${selectedFrameUrl}`;
     }
 
-    return 'affectedCookiesListing';
-  }, [selectedSite]);
+    return 'cookiesListing#' + selectedFrameUrl;
+  }, [selectedFrameUrl, selectedSite]);
 
-  return (
-    <div className="w-full h-full flex flex-col">
-      <Resizable
-        defaultSize={{
-          width: '100%',
-          height: '80%',
-        }}
-        minHeight="6%"
-        maxHeight="95%"
-        enable={{
-          top: false,
-          right: false,
-          bottom: true,
-          left: false,
-        }}
-        className="h-full flex"
-      >
-        <CookieTable
-          data={cookies.map((cookie) => ({ ...cookie, isBlocked: undefined }))} // Hot Fix: To unhighlight cookies in the Affected Cookie table.
-          tableColumns={tableColumns}
-          showTopBar={true}
-          tableFilters={filters}
-          tableSearchKeys={searchKeys}
-          tablePersistentSettingsKey={tablePersistentSettingsKey}
-          selectedFrame={selectedSite}
-          selectedFrameCookie={selectedFrameCookie}
-          setSelectedFrameCookie={setSelectedFrameCookie}
-        />
-      </Resizable>
-      <CookieDetails selectedFrameCookie={selectedFrameCookie} />
-    </div>
-  );
+  return {
+    cookies,
+    tableColumns,
+    filters,
+    searchKeys,
+    tablePersistentSettingsKey,
+  };
 };
 
-export default AffectedCookies;
+export default useCookieListing;
