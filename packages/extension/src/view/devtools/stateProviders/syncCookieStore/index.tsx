@@ -255,7 +255,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
       }
 
       if (message.type === 'ServiceWorker::DevTools::INITIAL_SYNC') {
-        console.log('Debug log INITIAL_SYNC:',message, tabId, isCurrentTabBeingListenedToRef.current, tabId?.toString() !== message?.payload?.tabToRead)
         if (message?.payload?.tabMode === 'unlimited') {
           isCurrentTabBeingListenedToRef.current = true;
           setTabToRead(null);
@@ -270,7 +269,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
       }
 
       if (message.type === 'ServiceWorker::DevTools::NEW_COOKIE_DATA') {
-        console.log('Debug log NEWCOOKIE_DATA:',message, tabId, isCurrentTabBeingListenedToRef.current, tabId?.toString() === message?.payload?.tabId.toString())
         const data = JSON.parse(message?.payload?.cookieData ?? '{}');
         if (
           message?.payload?.tabId &&
