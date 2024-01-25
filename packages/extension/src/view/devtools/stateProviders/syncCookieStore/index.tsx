@@ -30,7 +30,10 @@ import {
   type TabFrames,
   type CookieData,
   UNKNOWN_FRAME_KEY,
+  filterCookiesByFrame,
+  generateCookieTableCSV,
 } from '@ps-analysis-tool/common';
+import { saveAs } from 'file-saver';
 
 /**
  * Internal dependencies.
@@ -59,6 +62,7 @@ export interface CookieStoreContext {
     setIsInspecting: React.Dispatch<React.SetStateAction<boolean>>;
     changeListeningToThisTab: () => void;
     getCookiesSetByJavascript: () => void;
+    exportFrameCookies: () => void;
     setContextInvalidated: React.Dispatch<React.SetStateAction<boolean>>;
     setCanStartInspecting: React.Dispatch<React.SetStateAction<boolean>>;
   };
@@ -82,6 +86,7 @@ const initialState: CookieStoreContext = {
     changeListeningToThisTab: noop,
     setIsInspecting: noop,
     getCookiesSetByJavascript: noop,
+    exportFrameCookies: noop,
     setContextInvalidated: noop,
     setCanStartInspecting: noop,
   },
@@ -330,6 +335,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
     }
   }, [tabId]);
 
+  const exportFrameCookies = useCallback(() => {
+    const cookies = filterCookiesByFrame(tabCookies, tabFrames, selectedFrame);
+    const csvTextBlob = generateCookieTableCSV(cookies);
+
+    saveAs(csvTextBlob, 'out.csv');
+  }, [selectedFrame, tabCookies, tabFrames]);
+
   const changeListeningToThisTab = useCallback(() => {
     chrome.runtime.sendMessage({
       type: 'SET_TAB_TO_READ',
@@ -455,6 +467,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           setSelectedFrame,
           changeListeningToThisTab,
           getCookiesSetByJavascript,
+          exportFrameCookies,
           setIsInspecting,
           setContextInvalidated,
           setCanStartInspecting,

@@ -24,6 +24,7 @@ import {
   type InfoType,
   type TableColumn,
   type TableFilter,
+  ExportButton,
 } from '@ps-analysis-tool/design-system';
 
 /**
@@ -33,13 +34,17 @@ import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import useHighlighting from './useHighlighting';
 
 const useCookieListing = () => {
-  const { selectedFrame, cookies, getCookiesSetByJavascript } = useCookieStore(
-    ({ state, actions }) => ({
-      selectedFrame: state.selectedFrame,
-      cookies: state.tabCookies || {},
-      getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
-    })
-  );
+  const {
+    selectedFrame,
+    cookies,
+    getCookiesSetByJavascript,
+    exportFrameCookies,
+  } = useCookieStore(({ state, actions }) => ({
+    selectedFrame: state.selectedFrame,
+    cookies: state.tabCookies || {},
+    getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
+    exportFrameCookies: actions.exportFrameCookies,
+  }));
 
   const [tableData, setTableData] = useState<TabCookies>(cookies);
 
@@ -417,10 +422,14 @@ const useCookieListing = () => {
     return `cookieListing#${selectedFrame}`;
   }, [selectedFrame]);
 
-  const extraInterfaceToTopBar = useMemo(
-    () => <RefreshButton onClick={getCookiesSetByJavascript} />,
-    [getCookiesSetByJavascript]
-  );
+  const extraInterfaceToTopBar = useMemo(() => {
+    return (
+      <div className="flex gap-2">
+        <RefreshButton onClick={getCookiesSetByJavascript} />
+        <ExportButton onClick={exportFrameCookies} />
+      </div>
+    );
+  }, [getCookiesSetByJavascript, exportFrameCookies]);
 
   return {
     tableData,
