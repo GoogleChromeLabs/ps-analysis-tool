@@ -20,15 +20,15 @@ import React, { memo } from 'react';
 import {
   CookiesLandingContainer,
   COLOR_MAP,
+  ProgressBar,
 } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
-import DynamicPlaceholder from './dynamicPlaceholder';
 import LIBRARIES from '../../config';
 import type { Config } from '../../types';
-import { useLibraryDetection } from '../../core';
+import { useLibraryDetection, useLibraryDetectionContext } from '../../core';
 
 // eslint-disable-next-line react/display-name
 const LibraryDetection = memo(function LibraryDetection({
@@ -36,7 +36,10 @@ const LibraryDetection = memo(function LibraryDetection({
 }: {
   tabId: number;
 }) {
-  const { libraryMatches, isCurrentTabLoading } = useLibraryDetection(tabId);
+  const { libraryMatches } = useLibraryDetection(tabId);
+  const { showLoader } = useLibraryDetectionContext(({ state }) => ({
+    showLoader: state.showLoader,
+  }));
 
   const names = Object.keys(libraryMatches);
 
@@ -52,26 +55,40 @@ const LibraryDetection = memo(function LibraryDetection({
     },
   ];
 
+  const result =
+    detectedLibraryNames.length > 0 ? (
+      <>
+        {LIBRARIES.map((config: Config) => {
+          const Component = config.component as React.FC;
+          const matches =
+            libraryMatches && libraryMatches[config.name]
+              ? libraryMatches[config.name]?.matches
+              : [];
+
+          return <Component key={config.name} matches={matches} />;
+        })}
+      </>
+    ) : (
+      <p className="text-center dark:text-bright-gray">
+        No libraries with known breakages found yet!
+      </p>
+    );
+
   return (
     <CookiesLandingContainer
       dataMapping={dataMapping}
       testId="library-detection"
       description=""
     >
-      {!isCurrentTabLoading && detectedLibraryNames.length > 0 ? (
+      {showLoader ? (
         <>
-          {LIBRARIES.map((config: Config) => {
-            const Component = config.component as React.FC;
-            const matches =
-              libraryMatches && libraryMatches[config.name]
-                ? libraryMatches[config.name]?.matches
-                : [];
-
-            return <Component key={config.name} matches={matches} />;
-          })}
+          <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />
+          <p className="text-center dark:text-bright-gray">
+            Checking libraries for any known breakages on the page....
+          </p>
         </>
       ) : (
-        <DynamicPlaceholder pageLoaded={!isCurrentTabLoading} />
+        result
       )}
     </CookiesLandingContainer>
   );

@@ -42,7 +42,7 @@ const INITIAL_STATE: LibraryData = {
   },
 };
 
-const LOADING_DELAY = 15000;
+const LOADING_DELAY = 3000;
 
 /**
  * The primary custom hook used for Library signature detection purpose
@@ -57,6 +57,7 @@ const useLibraryDetection = (tabId: number) => {
     setLibraryMatches,
     setIsCurrentTabLoading,
     setLoadedBeforeState,
+    setShowLoader,
   } = useLibraryDetectionContext(({ state, actions }) => ({
     libraryMatches: state.libraryMatches,
     isCurrentTabLoading: state.isCurrentTabLoading,
@@ -64,6 +65,7 @@ const useLibraryDetection = (tabId: number) => {
     setLoadedBeforeState: actions.setLoadedBeforeState,
     setLibraryMatches: actions.setLibraryMatches,
     setIsCurrentTabLoading: actions.setIsCurrentTabLoading,
+    setShowLoader: actions.setShowLoader,
   }));
   const timeout = useRef(0);
 
@@ -97,6 +99,19 @@ const useLibraryDetection = (tabId: number) => {
     [setLibraryMatches]
   );
 
+  const removeListener = useCallback(() => {
+    chrome.devtools.inspectedWindow.onResourceAdded.removeListener(
+      listenerCallback
+    );
+  }, [listenerCallback]);
+
+  const attachListener = useCallback(() => {
+    removeListener();
+    chrome.devtools.inspectedWindow.onResourceAdded.addListener(
+      listenerCallback
+    );
+  }, [listenerCallback, removeListener]);
+
   const onTabUpdate = useCallback(
     (
       changingTabId: number,
@@ -108,19 +123,14 @@ const useLibraryDetection = (tabId: number) => {
       if (tab.active && changingTabId === currentTabId) {
         if (changeInfo.status === 'complete') {
           setIsCurrentTabLoading(false);
-          chrome.devtools.inspectedWindow.onResourceAdded.addListener(
-            listenerCallback
-          );
         } else if (changeInfo.status === 'loading') {
           setLibraryMatches(INITIAL_STATE);
-          chrome.devtools.inspectedWindow.onResourceAdded.removeListener(
-            listenerCallback
-          );
+          removeListener();
           setIsCurrentTabLoading(true);
         }
       }
     },
-    [tabId, listenerCallback, setIsCurrentTabLoading, setLibraryMatches]
+    [tabId, setIsCurrentTabLoading, setLibraryMatches, removeListener]
   );
 
   useEffect(() => {
@@ -140,31 +150,42 @@ const useLibraryDetection = (tabId: number) => {
       scripts,
       (detectedMatchingSignatures: LibraryData) => {
         setLibraryMatches(detectedMatchingSignatures);
+        attachListener();
+        setShowLoader(false);
       }
     );
-  }, [setLibraryMatches]);
+  }, [setLibraryMatches, attachListener, setShowLoader]);
 
   useEffect(() => {
     if (!isCurrentTabLoading) {
       if (!loadedBefore) {
-        timeout.current = setTimeout(updateInitialData, LOADING_DELAY);
-        setLoadedBeforeState(true);
+        if (!timeout.current) {
+          timeout.current = setTimeout(() => {
+            updateInitialData();
+            setLoadedBeforeState(true);
+          }, LOADING_DELAY);
+        }
       } else {
         updateInitialData();
       }
     }
-
-    return () => {
-      if (timeout.current) {
-        clearTimeout(timeout.current);
-      }
-    };
   }, [
     isCurrentTabLoading,
     loadedBefore,
     setLoadedBeforeState,
     updateInitialData,
   ]);
+
+  useEffect(() => {
+    return () => {
+      removeListener();
+
+      if (timeout.current) {
+        clearTimeout(timeout.current);
+        timeout.current = 0;
+      }
+    };
+  }, [removeListener]);
 
   return {
     libraryMatches,
