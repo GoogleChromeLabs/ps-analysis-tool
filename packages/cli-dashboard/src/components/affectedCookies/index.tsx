@@ -58,18 +58,19 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
             {!info ? 'Third Party' : 'First Party'}
           </p>
         ),
-        widthWeightagePercentage: 9,
+        widthWeightagePercentage: 8,
       },
       {
         header: 'Domain',
         accessorKey: 'parsedCookie.domain',
         cell: (info: InfoType) => info,
-        widthWeightagePercentage: 10,
+        widthWeightagePercentage: 9,
       },
       {
         header: 'Partition Key',
         accessorKey: 'parsedCookie.partitionKey',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 9,
       },
       {
         header: 'SameSite',
@@ -87,7 +88,7 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
         header: 'Platform',
         accessorKey: 'analytics.platform',
         cell: (info: InfoType) => info,
-        widthWeightagePercentage: 11,
+        widthWeightagePercentage: 10,
       },
       {
         header: 'HttpOnly',
@@ -113,7 +114,7 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
         header: 'Value',
         accessorKey: 'parsedCookie.value',
         cell: (info: InfoType) => info,
-        widthWeightagePercentage: 12,
+        widthWeightagePercentage: 10,
       },
       {
         header: 'Path',
@@ -125,7 +126,7 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
         header: 'Expires / Max-Age',
         accessorKey: 'parsedCookie.expires',
         cell: (info: InfoType) => (info ? info : 'Session'),
-        widthWeightagePercentage: 11,
+        widthWeightagePercentage: 7,
       },
     ],
     []
