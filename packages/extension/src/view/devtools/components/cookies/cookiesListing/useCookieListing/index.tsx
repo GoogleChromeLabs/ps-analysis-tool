@@ -15,31 +15,35 @@
  */
 
 /**
- * External dependencies.
+ * External dependencies
  */
 import React, { useMemo, useState } from 'react';
-import { Resizable } from 're-resizable';
+import { getValueByKey, type TabCookies } from '@ps-analysis-tool/common';
 import {
-  CookieDetails,
-  CookieTable,
+  RefreshButton,
   type InfoType,
   type TableColumn,
   type TableFilter,
 } from '@ps-analysis-tool/design-system';
-import {
-  BLOCKED_REASON_LIST,
-  type CookieTableData,
-} from '@ps-analysis-tool/common';
 
-interface AffectedCookiesProps {
-  cookies: CookieTableData[];
-  selectedSite: string | null;
-}
+/**
+ * Internal dependencies
+ */
+import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
+import useHighlighting from './useHighlighting';
 
-const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
-  const [selectedFrameCookie, setSelectedFrameCookie] = useState<{
-    [frame: string]: CookieTableData | null;
-  } | null>(null);
+const useCookieListing = () => {
+  const { selectedFrame, cookies, getCookiesSetByJavascript } = useCookieStore(
+    ({ state, actions }) => ({
+      selectedFrame: state.selectedFrame,
+      cookies: state.tabCookies || {},
+      getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
+    })
+  );
+
+  const [tableData, setTableData] = useState<TabCookies>(cookies);
+
+  useHighlighting(cookies, setTableData);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -81,7 +85,7 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
       {
         header: 'Platform',
         accessorKey: 'analytics.platform',
-        cell: (info: InfoType) => info,
+        cell: (info: InfoType) => <span>{info ? info : 'Unknown'}</span>,
       },
       {
         header: 'HttpOnly',
@@ -116,25 +120,83 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
         accessorKey: 'parsedCookie.expires',
         cell: (info: InfoType) => (info ? info : 'Session'),
       },
+      {
+        header: 'Priority',
+        accessorKey: 'parsedCookie.priority',
+        cell: (info: InfoType) => info,
+      },
+      {
+        header: 'Size',
+        accessorKey: 'parsedCookie.size',
+        cell: (info: InfoType) => info,
+      },
     ],
     []
   );
 
-  const blockedReasonFilterValues = useMemo<{
-    [key: string]: { selected: boolean };
+  const preCalculatedFilters = useMemo<{
+    category: TableFilter[keyof TableFilter]['filterValues'];
+    platform: TableFilter[keyof TableFilter]['filterValues'];
+    blockedReason: TableFilter[keyof TableFilter]['filterValues'];
   }>(() => {
-    const filterValues: { [key: string]: { selected: boolean } } = {};
+    const calculate = (
+      key: string
+    ): TableFilter[keyof TableFilter]['filterValues'] =>
+      Object.values(cookies).reduce((acc, cookie) => {
+        const value = getValueByKey(key, cookie);
 
-    BLOCKED_REASON_LIST.forEach((reason) => {
-      filterValues[reason] = { selected: false };
-    });
-    return filterValues;
-  }, []);
+        if (!acc) {
+          acc = {};
+        }
+
+        if (value) {
+          acc[value] = {
+            selected: false,
+          };
+        }
+
+        return acc;
+      }, {} as TableFilter[keyof TableFilter]['filterValues']);
+
+    const blockedReasonFilterValues = Object.values(cookies).reduce(
+      (acc, cookie) => {
+        const blockedReason = getValueByKey('blockedReasons', cookie);
+
+        if (!cookie.frameIdList || cookie?.frameIdList?.length === 0) {
+          return acc;
+        }
+
+        blockedReason?.forEach((reason: string) => {
+          if (!acc) {
+            acc = {};
+          }
+
+          acc[reason] = {
+            selected: false,
+          };
+        });
+
+        return acc;
+      },
+      {} as TableFilter[keyof TableFilter]['filterValues']
+    );
+
+    return {
+      category: calculate('analytics.category'),
+      platform: calculate('analytics.platform'),
+      blockedReason: blockedReasonFilterValues,
+    };
+  }, [cookies]);
 
   const filters = useMemo<TableFilter>(
     () => ({
       'analytics.category': {
         title: 'Category',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: preCalculatedFilters.category,
+        sortValues: true,
+        useGenericPersistenceKey: true,
       },
       isFirstParty: {
         title: 'Scope',
@@ -147,6 +209,7 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
             selected: false,
           },
         },
+        useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           const val = value as boolean;
           return val === (filterValue === 'First Party');
@@ -166,6 +229,7 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
             selected: false,
           },
         },
+        useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           const val = value as boolean;
           return val === (filterValue === 'True');
@@ -185,6 +249,7 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
             selected: false,
           },
         },
+        useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           const val = value as string;
           return val?.toLowerCase() === filterValue.toLowerCase();
@@ -201,6 +266,7 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
             selected: false,
           },
         },
+        useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           const val = value as boolean;
           return val === (filterValue === 'True');
@@ -229,6 +295,7 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
             selected: false,
           },
         },
+        useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           let diff = 0;
           const val = value as string;
@@ -259,19 +326,82 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
       },
       'analytics.platform': {
         title: 'Platform',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: preCalculatedFilters.platform,
+        sortValues: true,
+        useGenericPersistenceKey: true,
       },
-
       blockedReasons: {
         title: 'Blocked Reasons',
-        description: 'Reason why the cookies were blocked.',
         hasStaticFilterValues: true,
-        filterValues: blockedReasonFilterValues,
+        hasPrecalculatedFilterValues: true,
+        filterValues: preCalculatedFilters.blockedReason,
+        sortValues: true,
+        useGenericPersistenceKey: true,
+      },
+      'parsedCookie.partitionKey': {
+        title: 'Partition Key',
+        hasStaticFilterValues: true,
+        filterValues: {
+          Set: {
+            selected: false,
+          },
+          'Not Set': {
+            selected: false,
+          },
+        },
+        useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
-          return (value as string[])?.includes(filterValue);
+          const val = value as string;
+          return val ? filterValue === 'Set' : filterValue === 'Not Set';
         },
       },
+      headerType: {
+        title: 'Set Via',
+        hasStaticFilterValues: true,
+        filterValues: {
+          HTTP: {
+            selected: false,
+          },
+          JS: {
+            selected: false,
+          },
+        },
+        useGenericPersistenceKey: true,
+        comparator: (value: InfoType, filterValue: string) => {
+          switch (filterValue) {
+            case 'JS':
+              return value === 'javascript';
+            case 'HTTP':
+              return value === 'request' || value === 'response';
+            default:
+              return true;
+          }
+        },
+      },
+      'parsedCookie.priority': {
+        title: 'Priority',
+        hasStaticFilterValues: true,
+        filterValues: {
+          Low: {
+            selected: false,
+          },
+          Medium: {
+            selected: false,
+          },
+          High: {
+            selected: false,
+          },
+        },
+        useGenericPersistenceKey: true,
+      },
     }),
-    [blockedReasonFilterValues]
+    [
+      preCalculatedFilters.blockedReason,
+      preCalculatedFilters.category,
+      preCalculatedFilters.platform,
+    ]
   );
 
   const searchKeys = useMemo<string[]>(
@@ -279,46 +409,27 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
     []
   );
 
-  const tablePersistentSettingsKey = useMemo<string>(() => {
-    if (selectedSite) {
-      return `affectedCookiesListing#${selectedSite}`;
+  const tablePersistentSettingsKey = useMemo(() => {
+    if (!selectedFrame) {
+      return 'cookieListing';
     }
 
-    return 'affectedCookiesListing';
-  }, [selectedSite]);
+    return `cookieListing#${selectedFrame}`;
+  }, [selectedFrame]);
 
-  return (
-    <div className="w-full h-full flex flex-col">
-      <Resizable
-        defaultSize={{
-          width: '100%',
-          height: '80%',
-        }}
-        minHeight="6%"
-        maxHeight="95%"
-        enable={{
-          top: false,
-          right: false,
-          bottom: true,
-          left: false,
-        }}
-        className="h-full flex"
-      >
-        <CookieTable
-          data={cookies.map((cookie) => ({ ...cookie, isBlocked: undefined }))} // Hot Fix: To unhighlight cookies in the Affected Cookie table.
-          tableColumns={tableColumns}
-          showTopBar={true}
-          tableFilters={filters}
-          tableSearchKeys={searchKeys}
-          tablePersistentSettingsKey={tablePersistentSettingsKey}
-          selectedFrame={selectedSite}
-          selectedFrameCookie={selectedFrameCookie}
-          setSelectedFrameCookie={setSelectedFrameCookie}
-        />
-      </Resizable>
-      <CookieDetails selectedFrameCookie={selectedFrameCookie} />
-    </div>
+  const extraInterfaceToTopBar = useMemo(
+    () => <RefreshButton onClick={getCookiesSetByJavascript} />,
+    [getCookiesSetByJavascript]
   );
+
+  return {
+    tableData,
+    tableColumns,
+    filters,
+    searchKeys,
+    tablePersistentSettingsKey,
+    extraInterfaceToTopBar,
+  };
 };
 
-export default AffectedCookies;
+export default useCookieListing;

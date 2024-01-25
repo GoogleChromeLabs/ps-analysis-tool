@@ -77,7 +77,7 @@ const ListItem = ({
           <SubList
             filterValues={filter.filterValues}
             filterKey={filterKey}
-            sort={!filter.hasStaticFilterValues}
+            sort={!filter.hasStaticFilterValues || Boolean(filter.sortValues)}
             toggleFilterSelection={toggleFilterSelection}
             isExpanded={isExpanded}
           />

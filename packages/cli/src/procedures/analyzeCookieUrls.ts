@@ -31,17 +31,7 @@ export const analyzeCookiesUrls = async (
   delayTime: number,
   cookieDictionary: CookieDatabase
 ) => {
-  const normalBrowser = new BrowserManagement(
-    {
-      width: 1440,
-      height: 790,
-      deviceScaleFactor: 1,
-    },
-    isHeadless,
-    delayTime,
-    false
-  );
-  const browserWith3pCookiesBlocked = new BrowserManagement(
+  const browser = new BrowserManagement(
     {
       width: 1440,
       height: 790,
@@ -52,61 +42,34 @@ export const analyzeCookiesUrls = async (
     false
   );
 
-  await normalBrowser.initializeBrowser(false);
-  await browserWith3pCookiesBlocked.initializeBrowser(true);
+  await browser.initializeBrowser(true);
+  const analysisCookieData = await browser.analyzeCookieUrls(urls);
 
-  const [normalCookieAnaysisData, blockedAnalysisData] = await Promise.all([
-    normalBrowser.analyzeCookieUrls(urls),
-    browserWith3pCookiesBlocked.analyzeCookieUrls(urls),
-  ]);
+  return analysisCookieData.map(({ pageUrl, cookieData }) => {
+    Object.entries(cookieData).forEach(([, frameData]) => {
+      const frameCookies = frameData.frameCookies;
+      Object.entries(frameCookies).forEach(([key, cookie]) => {
+        const analytics = findAnalyticsMatch(
+          cookie.parsedCookie.name,
+          cookieDictionary
+        );
 
-  await normalBrowser.deinitialize();
-  await browserWith3pCookiesBlocked.deinitialize();
+        frameCookies[key].analytics = {
+          platform: analytics?.platform || 'Unknown',
+          category: analytics?.category || 'Uncategorized',
+          gdprUrl: analytics?.gdprUrl || '',
+          description: analytics?.description,
+        };
+        frameCookies[key].isFirstParty = isFirstParty(
+          cookie.parsedCookie.domain,
+          pageUrl
+        );
+      });
+    });
 
-  return urls.map((url, ind) => {
-    const cookieKeysInBlockedEnv = new Set();
-    Object.values(blockedAnalysisData[ind].cookieData).forEach(
-      ({ frameCookies }) => {
-        Object.keys(frameCookies).forEach((key) => {
-          cookieKeysInBlockedEnv.add(key);
-        });
-      }
-    );
-
-    Object.values(normalCookieAnaysisData[ind].cookieData).forEach(
-      ({ frameCookies }) => {
-        Object.keys(frameCookies).forEach((key) => {
-          frameCookies[key].isBlocked = !cookieKeysInBlockedEnv.has(key);
-
-          //also add analytics form dictionary
-          const name = frameCookies[key].name;
-          const analytics = findAnalyticsMatch(name, cookieDictionary);
-
-          frameCookies[key].platform = analytics?.platform || 'Unknown';
-          frameCookies[key].category = analytics?.category || 'Uncategorized';
-          frameCookies[key].GDPR = analytics?.gdprUrl || '';
-          frameCookies[key].description = analytics?.description;
-
-          // some cookies may have their expires value in epoch. Convert them to string
-          const expires = frameCookies[key].expires;
-
-          if (expires === '') {
-            frameCookies[key].expires = 'Session';
-          } else if (typeof expires === 'number') {
-            frameCookies[key].expires = new Date(
-              expires + Date.now()
-            ).toISOString();
-          }
-
-          frameCookies[key].isFirstParty =
-            isFirstParty(
-              frameCookies[key].domain,
-              normalCookieAnaysisData[ind].pageUrl
-            ) || false;
-        });
-      }
-    );
-
-    return normalCookieAnaysisData[ind];
+    return {
+      pageUrl,
+      cookieData,
+    };
   });
 };

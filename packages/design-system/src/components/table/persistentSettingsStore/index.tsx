@@ -25,13 +25,13 @@ import React, {
   useRef,
 } from 'react';
 import { useContextSelector, createContext } from 'use-context-selector';
+import PQueue from 'p-queue';
 
 /**
  * Internal dependencies
  */
 import { PersistentStorageData } from '../useTable';
 import { extractStorage, updateStorage } from './utils';
-import PQueue from 'p-queue';
 
 export const TABLE_PERSISTENT_SETTINGS_STORE_KEY =
   'tablePersistentSettingsStore';
