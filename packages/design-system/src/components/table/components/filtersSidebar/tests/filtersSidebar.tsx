@@ -134,29 +134,27 @@ describe('FiltersSidebar', () => {
   it('should expand all filters', async () => {
     const { rerender } = render(<FiltersSidebar {...props} />);
 
-    const expandAll = await screen.findByText('Expand/Collapse All');
+    const expandAll = await screen.findByText('Expand All');
     act(() => {
       expandAll.click();
     });
 
-    const expandArrow = await screen.findByTestId('expand-arrow');
     const listExpandArrows = await screen.findAllByTestId('list-item-arrow');
 
-    expect(expandArrow).not.toHaveClass('-rotate-90');
     expect(listExpandArrows[0]).not.toHaveClass('-rotate-90');
 
     act(() => {
       expandAll.click();
     });
 
-    expect(expandArrow).toHaveClass('-rotate-90');
+    expect(expandAll.innerHTML).not.toEqual('Collapse All');
     expect(listExpandArrows[0]).toHaveClass('-rotate-90');
 
     act(() => {
       listExpandArrows[0].click();
     });
 
-    expect(expandArrow).toHaveClass('-rotate-90');
+    expect(expandAll.innerHTML).not.toEqual('Collapse All');
     expect(listExpandArrows[0]).not.toHaveClass('-rotate-90');
 
     act(() => {
@@ -164,7 +162,7 @@ describe('FiltersSidebar', () => {
     });
 
     await waitFor(() => {
-      expect(expandArrow).toHaveClass('-rotate-90');
+      expect(expandAll.innerHTML).toEqual('Expand All');
       expect(listExpandArrows[0]).not.toHaveClass('-rotate-90');
       expect(listExpandArrows[1]).not.toHaveClass('-rotate-90');
     });
@@ -194,7 +192,7 @@ describe('FiltersSidebar', () => {
     });
 
     await waitFor(() => {
-      expect(expandArrow).not.toHaveClass('-rotate-90');
+      expect(expandAll.innerHTML).not.toEqual('Expand All');
       expect(listExpandArrows[0]).not.toHaveClass('-rotate-90');
       expect(listExpandArrows[1]).not.toHaveClass('-rotate-90');
       expect(listExpandArrows[2]).not.toHaveClass('-rotate-90');
@@ -203,7 +201,7 @@ describe('FiltersSidebar', () => {
     rerender(<FiltersSidebar {...props} />);
 
     await waitFor(() => {
-      expect(expandArrow).not.toHaveClass('-rotate-90');
+      expect(expandAll.innerHTML).not.toEqual('Expand All');
       expect(listExpandArrows[0]).not.toHaveClass('-rotate-90');
       expect(listExpandArrows[1]).not.toHaveClass('-rotate-90');
       expect(listExpandArrows[2]).toHaveClass('-rotate-90');
@@ -223,7 +221,7 @@ describe('FiltersSidebar', () => {
     });
 
     await waitFor(() => {
-      expect(expandArrow).toHaveClass('-rotate-90');
+      expect(expandAll.innerHTML).toEqual('Expand All');
     });
   });
 
