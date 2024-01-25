@@ -114,6 +114,8 @@ chrome.webRequest.onResponseStarted.addListener(
         tabId,
         responseHeaders,
         cookies,
+        tabUrl,
+        cookieDB,
         syncCookieStore.cachedTabsData
       );
       if (!cookies || (cookies && cookies?.length === 0)) {
@@ -184,6 +186,8 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
         tabId,
         requestHeaders,
         cookies,
+        tabUrl,
+        cookieDB,
         syncCookieStore.cachedTabsData
       );
       if (!cookies || (cookies && cookies?.length === 0)) {
