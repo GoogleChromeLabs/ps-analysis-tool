@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import { useState, useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { executeTaskInWorker } from '@ps-analysis-tool/common';
 
 /**
@@ -26,7 +26,7 @@ import {
   getNetworkResourcesWithContent,
   getResourcesWithContent,
 } from '../../utils';
-import { sumUpDetectionResults } from '..';
+import { sumUpDetectionResults, useLibraryDetectionContext } from '..';
 import type { LibraryData, ResourceTreeItem } from '../../types';
 import { LIBRARY_DETECTION_WORKER_TASK } from '../../worker/constants';
 
@@ -48,9 +48,17 @@ const INITIAL_STATE: LibraryData = {
  * @returns {object} libraryMatches and isCurrentTabLoading
  */
 const useLibraryDetection = (tabId: number) => {
-  const [libraryMatches, setLibraryMatches] = useState(INITIAL_STATE);
-  const [isCurrentTabLoading, setIsCurrentTabLoading] =
-    useState<boolean>(false);
+  const {
+    libraryMatches,
+    isCurrentTabLoading,
+    setLibraryMatches,
+    setIsCurrentTabLoading,
+  } = useLibraryDetectionContext(({ state, actions }) => ({
+    libraryMatches: state.libraryMatches,
+    isCurrentTabLoading: state.isCurrentTabLoading,
+    setLibraryMatches: actions.setLibraryMatches,
+    setIsCurrentTabLoading: actions.setIsCurrentTabLoading,
+  }));
 
   /**
    * This function is called whenever a new resource is added.
@@ -82,7 +90,7 @@ const useLibraryDetection = (tabId: number) => {
         }
       );
     },
-    [libraryMatches]
+    [libraryMatches, setLibraryMatches]
   );
 
   const onTabUpdate = useCallback(
@@ -134,7 +142,7 @@ const useLibraryDetection = (tabId: number) => {
         );
       })();
     }
-  }, [isCurrentTabLoading]);
+  }, [isCurrentTabLoading, setLibraryMatches]);
 
   return {
     libraryMatches,

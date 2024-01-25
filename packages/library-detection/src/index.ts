@@ -31,3 +31,4 @@
 export * from './components';
 export * from './worker';
 export * from './worker/constants';
+export * from './core/stateProvider';
