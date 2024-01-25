@@ -19,7 +19,7 @@
 import type { ScriptTagUnderCheck } from '../types';
 
 export enum LIBRARY_DETECTION_WORKER_TASK {
-  DETECT_SIGNATURE_MATCHING,
+  DETECT_SIGNATURE_MATCHING = 'DetectSignatureMatching',
 }
 
 export type PreDefinedLibraryWorkerTaskPayload = {

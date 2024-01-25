@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { executeTaskInWorker } from '@ps-analysis-tool/common';
 
 /**
@@ -42,6 +42,8 @@ const INITIAL_STATE: LibraryData = {
   },
 };
 
+const LOADING_DELAY = 15000;
+
 /**
  * The primary custom hook used for Library signature detection purpose
  * @param {number} tabId Tab id.
@@ -51,14 +53,19 @@ const useLibraryDetection = (tabId: number) => {
   const {
     libraryMatches,
     isCurrentTabLoading,
+    loadedBefore,
     setLibraryMatches,
     setIsCurrentTabLoading,
+    setLoadedBeforeState,
   } = useLibraryDetectionContext(({ state, actions }) => ({
     libraryMatches: state.libraryMatches,
     isCurrentTabLoading: state.isCurrentTabLoading,
+    loadedBefore: state.loadedBefore,
+    setLoadedBeforeState: actions.setLoadedBeforeState,
     setLibraryMatches: actions.setLibraryMatches,
     setIsCurrentTabLoading: actions.setIsCurrentTabLoading,
   }));
+  const timeout = useRef(0);
 
   /**
    * This function is called whenever a new resource is added.
@@ -125,21 +132,39 @@ const useLibraryDetection = (tabId: number) => {
     };
   }, [onTabUpdate]);
 
+  const updateInitialData = useCallback(async () => {
+    const scripts = await getNetworkResourcesWithContent();
+
+    executeTaskInWorker(
+      LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING,
+      scripts,
+      (detectedMatchingSignatures: LibraryData) => {
+        setLibraryMatches(detectedMatchingSignatures);
+      }
+    );
+  }, [setLibraryMatches]);
+
   useEffect(() => {
     if (!isCurrentTabLoading) {
-      (async () => {
-        const scripts = await getNetworkResourcesWithContent();
-
-        executeTaskInWorker(
-          LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING,
-          scripts,
-          (detectedMatchingSignatures: LibraryData) => {
-            setLibraryMatches(detectedMatchingSignatures);
-          }
-        );
-      })();
+      if (!loadedBefore) {
+        timeout.current = setTimeout(updateInitialData, LOADING_DELAY);
+        setLoadedBeforeState(true);
+      } else {
+        updateInitialData();
+      }
     }
-  }, [isCurrentTabLoading, setLibraryMatches]);
+
+    return () => {
+      if (timeout.current) {
+        clearTimeout(timeout.current);
+      }
+    };
+  }, [
+    isCurrentTabLoading,
+    loadedBefore,
+    setLoadedBeforeState,
+    updateInitialData,
+  ]);
 
   return {
     libraryMatches,

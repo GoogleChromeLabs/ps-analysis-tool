@@ -29,10 +29,12 @@ export interface LibraryDetectionContext {
   state: {
     libraryMatches: LibraryData;
     isCurrentTabLoading: boolean;
+    loadedBefore: boolean;
   };
   actions: {
     setLibraryMatches: React.Dispatch<React.SetStateAction<LibraryData>>;
     setIsCurrentTabLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    setLoadedBeforeState: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
@@ -52,10 +54,12 @@ const initialState: LibraryDetectionContext = {
   state: {
     libraryMatches: INITIAL_STATE,
     isCurrentTabLoading: false,
+    loadedBefore: false,
   },
   actions: {
     setLibraryMatches: noop,
     setIsCurrentTabLoading: noop,
+    setLoadedBeforeState: noop,
   },
 };
 
@@ -66,6 +70,7 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
     useState<LibraryData>(INITIAL_STATE);
   const [isCurrentTabLoading, setIsCurrentTabLoading] =
     useState<boolean>(false);
+  const [loadedBefore, setLoadedBeforeState] = useState<boolean>(false);
 
   return (
     <Context.Provider
@@ -73,10 +78,12 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
         state: {
           libraryMatches,
           isCurrentTabLoading,
+          loadedBefore,
         },
         actions: {
           setLibraryMatches,
           setIsCurrentTabLoading,
+          setLoadedBeforeState,
         },
       }}
     >
