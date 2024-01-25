@@ -84,6 +84,14 @@ chrome.webRequest.onResponseStarted.addListener(
       }
       const cookies = responseHeaders?.reduce<CookieData[]>(
         (accumulator, header) => {
+          console.log(
+            'chrome.webRequest.onResponseStarted reduce',
+            header.name.toLowerCase() === 'set-cookie',
+            header.value,
+            url,
+            tabUrl,
+            cookieDB
+          );
           if (
             header.name.toLowerCase() === 'set-cookie' &&
             header.value &&
@@ -156,6 +164,14 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 
       const cookies = requestHeaders?.reduce<CookieData[]>(
         (accumulator, header) => {
+          console.log(
+            'chrome.webRequest.onBeforeSendHeaders reduce',
+            header.name.toLowerCase() === 'cookie',
+            header.value,
+            url,
+            tabUrl,
+            cookieDB
+          );
           if (
             header.name.toLowerCase() === 'cookie' &&
             header.value &&
