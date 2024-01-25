@@ -20,15 +20,16 @@
 import {
   UNKNOWN_FRAME_KEY,
   type CookieTableData,
+  type CookieData,
+  type CookieFrameStorageType,
 } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies
  */
-import type { CookieFrameStorageType, CookieJsonDataType } from '../../types';
 
-const reshapeCookies = (cookies: CookieFrameStorageType) =>
-  Object.entries(cookies)
+const reshapeCookies = (cookies: CookieFrameStorageType) => {
+  return Object.entries(cookies)
     .filter(([frame]) => frame.includes('http') || frame === UNKNOWN_FRAME_KEY)
     .map(([frame, _cookies]) => createCookieObj(frame, _cookies))
     .reduce((acc, cookieObj) => {
@@ -44,37 +45,31 @@ const reshapeCookies = (cookies: CookieFrameStorageType) =>
 
       return acc;
     }, {});
+};
 
 const createCookieObj = (
   frame: string,
   cookies: {
-    [cookieKey: string]: CookieJsonDataType;
+    [cookieKey: string]: CookieData;
   }
 ) =>
   Object.fromEntries(
     Object.values(cookies).map((cookie) => [
-      cookie.name + cookie.domain + cookie.path,
+      cookie.parsedCookie.name +
+        cookie.parsedCookie.domain +
+        cookie.parsedCookie.path,
       {
-        parsedCookie: {
-          name: cookie.name,
-          value: cookie.value,
-          domain: cookie.domain,
-          path: cookie.path,
-          expires: cookie.expires,
-          httponly: cookie.httpOnly,
-          secure: cookie.secure,
-          samesite: cookie.sameSite,
-        },
+        parsedCookie: cookie.parsedCookie,
         analytics: {
-          platform: cookie.platform,
+          ...cookie.analytics,
           category:
-            cookie.category === 'Unknown Category'
+            cookie.analytics?.category === 'Unknown Category'
               ? 'Uncategorized'
-              : cookie.category,
-          description: cookie.description,
+              : cookie.analytics?.category,
         } as CookieTableData['analytics'],
-        url: cookie.pageUrl,
+        url: cookie.url,
         headerType: 'response',
+        blockedReasons: cookie.blockedReasons,
         isFirstParty: cookie.isFirstParty,
         frameIdList: [frame], // Hot fix: For Displaying cookies in CLI Dashboard.
         isBlocked: cookie.isBlocked,
