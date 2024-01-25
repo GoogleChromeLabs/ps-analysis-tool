@@ -71,7 +71,7 @@ const FiltersSidebar = ({
       data-testid="filters-sidebar"
     >
       <a
-        className="w-full block text-link text-royal-blue dark:text-medium-persian-blue text-xs mt-1.5 mb-0.5"
+        className="w-full block text-link text-royal-blue dark:text-medium-persian-blue text-xs mt-1.5 mb-3"
         href="#"
         onClick={() => {
           setExpandAll((prev) => {
@@ -89,7 +89,6 @@ const FiltersSidebar = ({
       >
         {expandAll ? 'Collapse All' : 'Expand All'}
       </a>
-      <hr className="mb-2" />
       <ul>
         {Object.entries(filters).map(([filterKey, filter]) => (
           <ListItem
