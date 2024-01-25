@@ -77,15 +77,21 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
       Object.fromEntries(
         Object.entries(cookies || {}).map(([key, cookie]) => {
           const domain = cookie.parsedCookie?.domain || '';
-          let isDomainInAllowList = domainsInAllowList.has(domain);
+          let _domain = '';
+
+          if (domain) {
+            _domain = domain.startsWith('.') ? domain : `.${domain}`;
+          }
+
+          let isDomainInAllowList = domainsInAllowList.has(_domain);
 
           if (!isDomainInAllowList) {
             isDomainInAllowList = [...domainsInAllowList].some(
               (storedDomain) => {
                 // For example xyz.bbc.com and .bbc.com
                 if (
-                  (domain.endsWith(storedDomain) && domain !== storedDomain) ||
-                  `.${domain}` === storedDomain
+                  _domain.endsWith(storedDomain) &&
+                  _domain !== storedDomain
                 ) {
                   return true;
                 }

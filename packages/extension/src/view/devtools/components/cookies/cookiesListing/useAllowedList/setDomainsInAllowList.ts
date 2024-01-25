@@ -25,16 +25,16 @@ const setDomainsInAllowList = async (
     return;
   }
 
-  let primaryUrl = domain;
+  const primaryUrl = `https://${domain}/`;
 
-  primaryUrl = primaryUrl.startsWith('.')
-    ? `https://${primaryUrl.substring(1)}/`
-    : `https://${primaryUrl}/`;
+  // Because we need to provide a pattern.
+  const secondaryUrlObject = new URL(pageUrl);
+  const secondaryUrl = `${secondaryUrlObject.protocol}//${secondaryUrlObject.hostname}/`;
 
   // @ts-ignore - The chrome-type definition is outdated, and the return type is a promise.
   const details = (await chrome.contentSettings.cookies.get({
     primaryUrl: primaryUrl,
-    secondaryUrl: pageUrl,
+    secondaryUrl: secondaryUrl,
     incognito: isIncognito,
   })) as chrome.contentSettings.CookieSetDetails;
 

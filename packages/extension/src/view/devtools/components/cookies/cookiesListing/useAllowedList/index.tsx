@@ -64,16 +64,23 @@ const useAllowedList = () => {
         Object.values(cookies || {}).map(async (cookie) => {
           if (cookie.parsedCookie?.domain) {
             const domain = cookie.parsedCookie.domain || '';
-            let isDomainInAllowList = domainsInAllowListRef.current.has(domain);
+            const _domain =
+              domain === ''
+                ? ''
+                : domain.startsWith('.')
+                ? domain
+                : `.${domain}`;
+
+            let isDomainInAllowList =
+              domainsInAllowListRef.current.has(_domain);
 
             if (!isDomainInAllowList) {
               isDomainInAllowList = [...domainsInAllowListRef.current].some(
                 (storedDomain) => {
                   // For example xyz.bbc.com and .bbc.com
                   if (
-                    (domain.endsWith(storedDomain) &&
-                      domain !== storedDomain) ||
-                    `.${domain}` === storedDomain
+                    _domain.endsWith(storedDomain) &&
+                    _domain !== storedDomain
                   ) {
                     return true;
                   }
@@ -90,7 +97,7 @@ const useAllowedList = () => {
             await setDomainsInAllowList(
               tabUrl || '',
               isIncognito.current,
-              cookie.parsedCookie.domain,
+              _domain,
               domainsInAllowListRef.current,
               setter
             );

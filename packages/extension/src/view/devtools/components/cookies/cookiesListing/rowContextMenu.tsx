@@ -67,6 +67,18 @@ const RowContextMenu = forwardRef<
   const [parentDomain, setParentDomainCallback] = useState<string>('');
   const [selectedCookie, setSelectedCookie] = useState<CookieTableData>();
 
+  const [domain, name] = useMemo(
+    () => [
+      selectedCookie?.parsedCookie?.domain || '',
+      selectedCookie?.parsedCookie?.name,
+    ],
+    [selectedCookie]
+  );
+
+  const _domain = useMemo(() => {
+    return domain === '' ? '' : domain.startsWith('.') ? domain : `.${domain}`;
+  }, [domain]);
+
   const handleRightClick = useCallback(
     async (e: React.MouseEvent<HTMLElement>, { originalData }: TableRow) => {
       e.preventDefault();
@@ -76,12 +88,9 @@ const RowContextMenu = forwardRef<
       document.body.style.overflow = contextMenuOpen ? 'auto' : 'hidden';
       setContextMenuOpen(!contextMenuOpen);
       setSelectedCookie(originalData as CookieTableData);
-      await setParentDomain(
-        (originalData as CookieTableData).parsedCookie.domain || '',
-        setParentDomainCallback
-      );
+      await setParentDomain(_domain || '', setParentDomainCallback);
     },
-    [contextMenuOpen]
+    [contextMenuOpen, _domain]
   );
 
   useImperativeHandle(ref, () => ({
@@ -90,23 +99,15 @@ const RowContextMenu = forwardRef<
     },
   }));
 
-  const [domain, name] = useMemo(
-    () => [
-      selectedCookie?.parsedCookie?.domain || '',
-      selectedCookie?.parsedCookie?.name,
-    ],
-    [selectedCookie]
-  );
-
   const isDomainInAllowList = useMemo(() => {
-    let _isDomainInAllowList = domainsInAllowList.has(domain);
+    let _isDomainInAllowList = domainsInAllowList.has(_domain);
 
     if (!_isDomainInAllowList) {
       _isDomainInAllowList = [...domainsInAllowList].some((storedDomain) => {
         // For example xyz.bbc.com and .bbc.com
         if (
-          (domain.endsWith(storedDomain) && domain !== storedDomain) ||
-          `.${domain}` === storedDomain
+          (_domain.endsWith(storedDomain) && _domain !== storedDomain) ||
+          `.${_domain}` === storedDomain
         ) {
           return true;
         }
@@ -116,7 +117,7 @@ const RowContextMenu = forwardRef<
     }
 
     return _isDomainInAllowList;
-  }, [domain, domainsInAllowList]);
+  }, [_domain, domainsInAllowList]);
 
   const handleCopy = useCallback(() => {
     try {
@@ -140,10 +141,10 @@ const RowContextMenu = forwardRef<
 
       removeSelectedRow();
       await onAllowListClick(
-        domain,
+        _domain,
         tabUrl || '',
         isIncognito,
-        domainsInAllowList.has(domain),
+        domainsInAllowList.has(_domain),
         domainsInAllowList,
         setDomainsInAllowListCallback
       );
@@ -151,7 +152,7 @@ const RowContextMenu = forwardRef<
       await reloadCurrentTab();
     },
     [
-      domain,
+      _domain,
       domainsInAllowList,
       isIncognito,
       removeSelectedRow,

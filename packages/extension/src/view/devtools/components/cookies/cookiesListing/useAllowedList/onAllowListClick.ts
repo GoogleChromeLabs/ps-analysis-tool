@@ -36,13 +36,7 @@ const onAllowListClick = async (
   const secondaryUrlObject = new URL(pageUrl);
   const secondaryPattern = `${secondaryUrlObject.protocol}//${secondaryUrlObject.hostname}/*`;
 
-  let primaryPattern = domainOrParentDomain;
-
-  primaryPattern =
-    'https://' +
-    (primaryPattern.startsWith('.') ? '*' : '') +
-    primaryPattern +
-    '/*';
+  const primaryPattern = `https://*${domainOrParentDomain}/*`;
 
   const scope = isIncognito ? 'incognito_session_only' : 'regular';
   const domainObject = {
@@ -60,24 +54,6 @@ const onAllowListClick = async (
 
     return;
   }
-
-  // Add to allow list.
-  const allowedDomainObjects = await CookieStore.getDomainsInAllowList();
-
-  await Promise.all(
-    allowedDomainObjects.map(async (domainObjectItem) => {
-      // Check if more specific patterns was added to allow-list,
-      // and remove it as the general pattern will be applied. (look for child domain)
-      if (
-        domainObjectItem.primaryDomain.endsWith(domainOrParentDomain) ||
-        `.${domainObjectItem.primaryDomain}` === domainOrParentDomain
-      ) {
-        domainsInAllowList.delete(domainObjectItem.primaryDomain);
-
-        await removeFromAllowList(domainObjectItem);
-      }
-    })
-  );
 
   // The chrome-type definition is outdated,
   // this returns a promise instead of a void.

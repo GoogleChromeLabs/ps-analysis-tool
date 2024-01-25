@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * Internal dependencies.
  */
@@ -35,10 +34,7 @@ const setParentDomain = async (
     const storedDomain = storedAllowedDomain.primaryDomain;
 
     // For example xyz.bbc.com and .bbc.com
-    if (
-      (domain.endsWith(storedDomain) && domain !== storedDomain) ||
-      `.${domain}` === storedDomain
-    ) {
+    if (domain.endsWith(storedDomain) && domain !== storedDomain) {
       parentDomainValue = storedDomain;
 
       return true;
