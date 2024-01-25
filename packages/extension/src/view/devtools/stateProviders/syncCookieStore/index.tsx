@@ -271,14 +271,16 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
       if (message.type === 'ServiceWorker::DevTools::NEW_COOKIE_DATA') {
         console.log('Debug log NEWCOOKIE_DATA:',message, tabId, isCurrentTabBeingListenedToRef.current, tabId?.toString() === message?.payload?.tabId.toString())
+        const data = JSON.parse(message?.payload?.cookieData ?? '{}');
         if (
           message?.payload?.tabId &&
-          tabId?.toString() === message?.payload?.tabId.toString()
+          tabId?.toString() === message?.payload?.tabId.toString() &&
+          Object.keys(data).length > 0
         ) {
           if (isCurrentTabBeingListenedToRef.current) {
             await getAllFramesForCurrentTab(tabId);
             setTabToRead(tabId.toString());
-            setTabCookies(JSON.parse(message?.payload?.cookieData ?? '{}'));
+            setTabCookies(data);
           } else {
             setTabFrames(null);
           }
