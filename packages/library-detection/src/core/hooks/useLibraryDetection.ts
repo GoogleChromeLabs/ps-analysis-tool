@@ -80,17 +80,14 @@ const useLibraryDetection = (tabId: number) => {
             realtimeComputationResult.gis.matches.length !== 0 ||
             realtimeComputationResult.gsiV2.matches.length !== 0
           ) {
-            const newResult = sumUpDetectionResults(
-              libraryMatches,
-              realtimeComputationResult
-            );
-
-            setLibraryMatches(newResult);
+            setLibraryMatches((matches) => {
+              return sumUpDetectionResults(matches, realtimeComputationResult);
+            });
           }
         }
       );
     },
-    [libraryMatches, setLibraryMatches]
+    [setLibraryMatches]
   );
 
   const onTabUpdate = useCallback(
