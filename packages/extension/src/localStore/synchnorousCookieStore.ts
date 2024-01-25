@@ -56,79 +56,84 @@ class SynchnorousCookieStore {
    */
   // eslint-disable-next-line complexity
   update(tabId: number, cookies: CookieData[]) {
-    if (!this.cachedTabsData[tabId] && !this.tabs[tabId]) {
-      return;
+    try {
+      if (!this.cachedTabsData[tabId] && !this.tabs[tabId]) {
+        return;
+      }
+
+      for (const cookie of cookies) {
+        const { name, domain, path } = cookie.parsedCookie;
+
+        if (!name || !domain || !path) {
+          continue;
+        }
+
+        let cookieKey = getCookieKey(cookie.parsedCookie);
+
+        if (!cookieKey) {
+          continue;
+        }
+
+        const blockedReasons: BlockedReason[] = [
+          ...new Set<BlockedReason>([
+            ...(cookie?.blockedReasons ?? []),
+            ...(this.cachedTabsData[tabId]?.[cookieKey]?.blockedReasons ?? []),
+          ]),
+        ];
+
+        cookieKey = cookieKey?.trim();
+
+        if (this.cachedTabsData[tabId]?.[cookieKey]) {
+          this.cachedTabsData[tabId][cookieKey] = {
+            ...this.cachedTabsData[tabId][cookieKey],
+            ...cookie,
+            parsedCookie: {
+              ...this.cachedTabsData[tabId][cookieKey].parsedCookie,
+              ...cookie.parsedCookie,
+              priority:
+                cookie.parsedCookie?.priority ??
+                this.cachedTabsData[tabId][cookieKey].parsedCookie?.priority ??
+                'Medium',
+              partitionKey:
+                cookie.parsedCookie?.partitionKey ??
+                this.cachedTabsData[tabId][cookieKey].parsedCookie
+                  ?.partitionKey,
+            },
+            isBlocked: blockedReasons.length > 0,
+            blockedReasons,
+            warningReasons: Array.from(
+              new Set<Protocol.Audits.CookieWarningReason>([
+                ...(cookie.warningReasons ?? []),
+                ...(this.cachedTabsData[tabId][cookieKey].warningReasons ?? []),
+              ])
+            ),
+            url: this.cachedTabsData[tabId][cookieKey].url ?? cookie.url,
+            headerType:
+              this.cachedTabsData[tabId][cookieKey].headerType === 'javascript'
+                ? this.cachedTabsData[tabId][cookieKey].headerType
+                : cookie.headerType,
+            frameIdList: Array.from(
+              new Set<number>([
+                ...((cookie.frameIdList ?? []) as number[]),
+                ...((this.cachedTabsData[tabId][cookieKey].frameIdList ??
+                  []) as number[]),
+              ])
+            ),
+          };
+        } else {
+          this.cachedTabsData[tabId][cookieKey] = cookie;
+        }
+      }
+      //@ts-ignore Since this is for debugging the data to check the data being collected by the storage.
+      globalThis.CDPData = this.cachedTabsData;
+      //@ts-ignore Since this is for debugging the data to check the data being collected by the storage.
+      globalThis.TabsData = this.tabs;
+
+      updateCookieBadgeText(this.cachedTabsData[tabId], tabId);
+      this.sendUpdatedDataToPopupAndDevTools(tabId);
+    } catch (error) {
+      //Fail silently
     }
-
-    for (const cookie of cookies) {
-      const { name, domain, path } = cookie.parsedCookie;
-
-      if (!name || !domain || !path) {
-        continue;
-      }
-
-      let cookieKey = getCookieKey(cookie.parsedCookie);
-
-      if (!cookieKey) {
-        continue;
-      }
-
-      const blockedReasons: BlockedReason[] = [
-        ...new Set<BlockedReason>([
-          ...(cookie?.blockedReasons ?? []),
-          ...(this.cachedTabsData[tabId]?.[cookieKey]?.blockedReasons ?? []),
-        ]),
-      ];
-
-      cookieKey = cookieKey?.trim();
-
-      if (this.cachedTabsData[tabId]?.[cookieKey]) {
-        this.cachedTabsData[tabId][cookieKey] = {
-          ...this.cachedTabsData[tabId][cookieKey],
-          ...cookie,
-          parsedCookie: {
-            ...this.cachedTabsData[tabId][cookieKey].parsedCookie,
-            ...cookie.parsedCookie,
-            priority:
-              cookie.parsedCookie?.priority ??
-              this.cachedTabsData[tabId][cookieKey].parsedCookie?.priority ??
-              'Medium',
-            partitionKey:
-              cookie.parsedCookie?.partitionKey ??
-              this.cachedTabsData[tabId][cookieKey].parsedCookie?.partitionKey,
-          },
-          isBlocked: blockedReasons.length > 0,
-          blockedReasons,
-          warningReasons: Array.from(
-            new Set<Protocol.Audits.CookieWarningReason>([
-              ...(cookie.warningReasons ?? []),
-              ...(this.cachedTabsData[tabId][cookieKey].warningReasons ?? []),
-            ])
-          ),
-          url: this.cachedTabsData[tabId][cookieKey].url ?? cookie.url,
-          headerType:
-            this.cachedTabsData[tabId][cookieKey].headerType === 'javascript'
-              ? this.cachedTabsData[tabId][cookieKey].headerType
-              : cookie.headerType,
-          frameIdList: Array.from(
-            new Set<number>([
-              ...((cookie.frameIdList ?? []) as number[]),
-              ...((this.cachedTabsData[tabId][cookieKey].frameIdList ??
-                []) as number[]),
-            ])
-          ),
-        };
-      } else {
-        this.cachedTabsData[tabId][cookieKey] = cookie;
-      }
-    }
-    //@ts-ignore Since this is for debugging the data to check the data being collected by the storage.
-    globalThis.CDPData = this.cachedTabsData;
-    //@ts-ignore Since this is for debugging the data to check the data being collected by the storage.
-    globalThis.TabsData = this.tabs;
-
-    updateCookieBadgeText(this.cachedTabsData[tabId], tabId);
-    this.sendUpdatedDataToPopupAndDevTools(tabId);
   }
 
   /**
