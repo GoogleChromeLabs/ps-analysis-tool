@@ -56,15 +56,3 @@ const findLineNumber = (match: RegExpMatchArray): number | null => {
 
   return lineNumber;
 };
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const findColumnNumber = (
-  match: RegExpMatchArray,
-  lineNumber: number
-): number | null => {
-  if (!match.input || !match.index) {
-    return null;
-  }
-  const line = match.input.split('\n')[lineNumber - 1];
-  return match.index - line.lastIndexOf('\n') - 1; // Adjust for newline
-};

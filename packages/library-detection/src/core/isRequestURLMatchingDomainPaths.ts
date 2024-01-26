@@ -19,7 +19,7 @@
  * are considered to be positive matches.
  */
 /**
- * External dependencies.
+ * Internal dependencies.
  */
 import { type DomainPaths } from '../types';
 

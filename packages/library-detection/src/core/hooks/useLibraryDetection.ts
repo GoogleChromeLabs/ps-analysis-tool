@@ -30,6 +30,7 @@ import { sumUpDetectionResults, useLibraryDetectionContext } from '..';
 import type { LibraryData, ResourceTreeItem } from '../../types';
 import { LIBRARY_DETECTION_WORKER_TASK } from '../../worker/constants';
 
+// The delay after the page load, because some scripts arrive right after the page load.
 const LOADING_DELAY = 4000;
 
 /**

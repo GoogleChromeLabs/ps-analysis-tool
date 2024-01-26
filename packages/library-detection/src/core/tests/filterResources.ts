@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies.
- */
-import filterResources from '../filterResources';
-
-/**
  * External dependencies.
  */
 import { noop } from '@ps-analysis-tool/common';
+
+/**
+ * Internal dependencies.
+ */
+import filterResources from '../filterResources';
 
 describe('should return only the inline script content', () => {
   it('Should filter the specified items', () => {

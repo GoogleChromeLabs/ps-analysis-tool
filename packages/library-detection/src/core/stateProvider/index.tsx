@@ -154,7 +154,7 @@ export function useLibraryDetectionContext<T>(
 ): T;
 
 /**
- * Cookie store hook.
+ * Library detection hook.
  * @param selector Selector function to partially select state.
  * @returns selected part of the state
  */

@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React from 'react';
 
 /**
  * Internal dependencies.
@@ -25,8 +25,6 @@ import { Accordion, FeatureList } from '../../components';
 import type { AccordionProps } from '../../types';
 
 const GSIAccordion = ({ matches }: AccordionProps) => {
-  const [isLoading] = useState(false);
-
   const featuresCount = matches && matches.length ? matches.length : 0;
 
   if (!featuresCount) {
@@ -36,7 +34,7 @@ const GSIAccordion = ({ matches }: AccordionProps) => {
   return (
     <Accordion
       title={'Avoid use of deprecated Google Sign-In functionality.'}
-      isLoading={isLoading}
+      isLoading={false}
       featuresText={`${featuresCount} features`}
     >
       <p className="dark:text-bright-gray">

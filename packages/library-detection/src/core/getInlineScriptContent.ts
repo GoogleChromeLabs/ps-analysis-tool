@@ -19,7 +19,6 @@
  * @param content The HTML content to parse.
  * @returns An array of strings representing the contents of inline script tags.
  */
-
 const getInlineScriptContent = (content: string) => {
   const parser = new DOMParser();
   const doc = parser.parseFromString(content, 'text/html');

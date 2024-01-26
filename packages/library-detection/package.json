@@ -15,9 +15,11 @@
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
   "dependencies": {
-    "@ps-analysis-tool/design-system": "*",
     "@ps-analysis-tool/common": "*",
+    "@ps-analysis-tool/design-system": "*",
     "classnames": "^2.5.1",
-    "escape-string-regexp": "^4.0.0"
+    "escape-string-regexp": "^4.0.0",
+    "react": "^18.2.0",
+    "use-context-selector": "^1.4.1"
   }
 }

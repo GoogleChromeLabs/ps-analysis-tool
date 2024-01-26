@@ -24,7 +24,6 @@ import { getInlineScriptContent, filterResources } from '../core';
  * @param resources
  * @returns {string} Resources with content.
  */
-
 export const getResourcesWithContent = async (
   resources: ResourceTreeItem[]
 ) => {
