@@ -17,6 +17,7 @@
  * Internal dependencies.
  */
 import getDevToolWorker from './devToolWorker';
+import type { LibraryData } from '../libraryDetection.types';
 
 /**
  * Execute a task using a web worker.
@@ -28,7 +29,7 @@ import getDevToolWorker from './devToolWorker';
 const executeTaskInWorker = (
   task: string,
   payload: unknown,
-  onMessage: (dataFromThread: unknown) => void
+  onMessage: (dataFromThread: LibraryData) => void
 ) => {
   const worker = getDevToolWorker();
 
@@ -37,7 +38,7 @@ const executeTaskInWorker = (
     payload,
   });
 
-  worker.onmessage = (resultEvent) => {
+  worker.onmessage = (resultEvent: MessageEvent) => {
     onMessage(resultEvent.data);
   };
 };

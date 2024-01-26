@@ -34,7 +34,6 @@ const LOADING_DELAY = 4000;
 
 /**
  * The primary custom hook used for Library signature detection purpose
- * @param {number} tabId Tab id.
  */
 const useLibraryDetection = () => {
   const {
@@ -100,6 +99,7 @@ const useLibraryDetection = () => {
   }, [listenerCallback, removeListener]);
 
   const updateInitialData = useCallback(async () => {
+    //  chrome.devtools.inspectedWindow.getResources updates whenever new items are added.
     const scripts = await getNetworkResourcesWithContent();
 
     executeTaskInWorker(

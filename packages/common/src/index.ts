@@ -37,4 +37,5 @@ export { default as executeTaskInWorker } from './worker/executeTaskInWorker';
 export { default as getValueByKey } from './utils/getValueByKey';
 export * from './utils/generateReports';
 export * from './cookies.types';
+export * from './libraryDetection.types';
 export * from './constants';

@@ -27,10 +27,9 @@ import {
  * Internal dependencies.
  */
 import LIBRARIES from '../../config';
-import type { Config } from '../../types';
+import type { LibraryData, DetectedSignature } from '../../types';
 import { useLibraryDetection, useLibraryDetectionContext } from '../../core';
 
-// eslint-disable-next-line react/display-name
 const LibraryDetection = memo(function LibraryDetection() {
   useLibraryDetection();
 
@@ -44,7 +43,7 @@ const LibraryDetection = memo(function LibraryDetection() {
   const names = Object.keys(libraryMatches);
 
   const detectedLibraryNames = names.filter(
-    (name) => libraryMatches[name]?.matches?.length
+    (name) => libraryMatches[name as keyof LibraryData]?.matches?.length
   );
 
   const dataMapping = [
@@ -58,11 +57,13 @@ const LibraryDetection = memo(function LibraryDetection() {
   const result =
     detectedLibraryNames.length > 0 ? (
       <>
-        {LIBRARIES.map((config: Config) => {
-          const Component = config.component as React.FC;
+        {LIBRARIES.map((config) => {
+          const Component = config.component as React.FC<{
+            matches: DetectedSignature[];
+          }>;
           const matches =
-            libraryMatches && libraryMatches[config.name]
-              ? libraryMatches[config.name]?.matches
+            libraryMatches && libraryMatches[config.name as keyof LibraryData]
+              ? libraryMatches[config.name as keyof LibraryData]?.matches
               : [];
 
           return <Component key={config.name} matches={matches} />;

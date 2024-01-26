@@ -13,6 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
+import type { DetectedSignature } from '@ps-analysis-tool/common';
+
+export type { LibraryData, DetectedSignature } from '@ps-analysis-tool/common';
+
 export type SignaturesConfigItem = {
   signature: string;
   helpUrl: string;
@@ -37,24 +44,6 @@ export type ScriptTagUnderCheck = {
   type?: string;
 };
 
-export type DetectedSignature = {
-  feature: {
-    type: 'link';
-    text: string;
-    /* Link to the migration guide for all features instead of linking to individual
-     * pages as the instructions to update the codebase are short and simple.
-     */
-    url: string;
-  };
-  subItems: {
-    type: 'subitems';
-    items: {
-      sourceLocation: string;
-      snippet: string;
-    }[];
-  };
-};
-
 export type AccordionItem = {
   count: number;
   isAffected: boolean;
@@ -66,19 +55,6 @@ export type AccordionItem = {
   table: {
     headers: string[];
     rows: unknown[];
-  };
-};
-
-export type LibraryData = {
-  gis: {
-    signatureMatches: number;
-    moduleMatch?: number;
-    matches: DetectedSignature[];
-  };
-  gsiV2: {
-    signatureMatches: number;
-    moduleMatch?: number;
-    matches: DetectedSignature[];
   };
 };
 
