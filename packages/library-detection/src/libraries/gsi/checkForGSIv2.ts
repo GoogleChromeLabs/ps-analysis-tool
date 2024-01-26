@@ -31,16 +31,12 @@ import {
 } from './constants';
 
 /**
- * Business logic to identify signature present in the given script content
- * @param {any} script:ScriptTagUnderCheck
- * @param {any} existingItems:DetectedSignature[]
- * @param {any} signatureMatches:number
- * @param {any} gsi2ModuleMatch:number
- * @param script
- * @param existingItems
- * @param signatureMatches
- * @param gsi2ModuleMatch
- * @returns {any}
+ * Checks for Google Sign-In v2 api signatures.
+ * @param script - The script tag to check.
+ * @param existingItems - The existing items to check against.
+ * @param signatureMatches - The number of signature matches.
+ * @param gsi2ModuleMatch - The number of module matches.
+ * @returns The number of signature matches and the items.
  */
 const checkForGSIv2 = (
   script: ScriptTagUnderCheck,

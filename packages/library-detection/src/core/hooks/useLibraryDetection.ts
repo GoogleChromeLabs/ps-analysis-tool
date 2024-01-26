@@ -33,7 +33,7 @@ import { LIBRARY_DETECTION_WORKER_TASK } from '../../worker/constants';
 const LOADING_DELAY = 4000;
 
 /**
- * The primary custom hook used for Library signature detection purpose
+ * Custom hook that handles the library detection logic.
  */
 const useLibraryDetection = () => {
   const {
@@ -55,9 +55,9 @@ const useLibraryDetection = () => {
   const timeout = useRef(0);
 
   /**
-   * This function is called whenever a new resource is added.
-   * @param {any} async(resource:chrome.devtools.inspectedWindow.Resource
-   * @returns {any}
+   * Callback function used as a listener for resource changes.
+   * It detects library matches in the updated resources and updates the library matches state accordingly.
+   * @param resource - The updated resource for which library detection needs to be performed.
    */
   const listenerCallback = useCallback(
     async (resource: ResourceTreeItem) => {

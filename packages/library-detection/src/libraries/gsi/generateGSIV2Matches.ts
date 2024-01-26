@@ -20,14 +20,11 @@ import { GSI_V2_SIGNATURE_STRONG_MATCHES } from './constants';
 import type { DetectedSignature } from '../../types';
 
 /**
- * Business logic where signature detection is checked for false positive and confidence of the detection
- * @param {any} signatureMatches:number
- * @param {any} matches:DetectedSignature[]
- * @param {any} gsiV2ModuleMatch:number
- * @param signatureMatches
- * @param matches
- * @param gsiV2ModuleMatch
- * @returns {any}
+ * Generates the Google Sign-In v2 api matches.
+ * @param signatureMatches - The number of signature matches.
+ * @param matches - The existing matches.
+ * @param gsiV2ModuleMatch - The number of module matches.
+ * @returns The matches.
  */
 const generateGSIV2Matches = (
   signatureMatches: number,

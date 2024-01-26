@@ -20,7 +20,7 @@ import { type ResourceTreeItem } from '../types';
 import { getResourcesWithContent } from './getResourcesWithContent';
 
 /**
- * This function returns the Resources of the of the given website in the inspectedWindow
+ * This function returns the Resources of the website in the inspectedWindow
  * @returns {string} Resources with content.
  */
 export const getNetworkResourcesWithContent = async () => {

@@ -31,6 +31,9 @@ import { noop } from '@ps-analysis-tool/common';
  */
 import type { LibraryData } from '../../types';
 
+/**
+ * Represents the context for library detection state.
+ */
 export interface LibraryDetectionContext {
   state: {
     libraryMatches: LibraryData;

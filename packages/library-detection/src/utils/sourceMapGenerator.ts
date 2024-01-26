@@ -15,12 +15,11 @@
  */
 
 /**
- * This function returns the source location i.e. The line number and the column number of the given match and the sourceURL
- * @param {any} match:RegExpMatchArray
- * @param {any} sourceUrl:string|null
- * @param match
- * @param sourceUrl
- * @returns {any}
+ * Retrieves the source location based on the provided match and source URL.
+ * If the line number is not found, it returns 'inline source'.
+ * @param match - The regular expression match array.
+ * @param sourceUrl - The URL of the source.
+ * @returns The source location.
  */
 export const getSourceLocation = (
   match: RegExpMatchArray,
@@ -30,18 +29,10 @@ export const getSourceLocation = (
   if (!lineNumber) {
     return 'inline source';
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const columnNumber = findColumnNumber(match, lineNumber);
 
   return `${sourceUrl}`;
 };
 
-/**
- * This util methods finds the lineNumber required for sourceLocation
- * @param {any} match:RegExpMatchArray
- * @param match
- * @returns {any}
- */
 const findLineNumber = (match: RegExpMatchArray): number | null => {
   if (!match.input || !match.index) {
     return null;
@@ -66,13 +57,7 @@ const findLineNumber = (match: RegExpMatchArray): number | null => {
   return lineNumber;
 };
 
-/**
- * This util methods finds the columnNumber required for sourceLocation
- * @param {any} match:RegExpMatchArray
- * @param match
- * @param lineNumber
- * @returns {any}
- */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const findColumnNumber = (
   match: RegExpMatchArray,
   lineNumber: number

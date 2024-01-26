@@ -19,14 +19,17 @@
 import type { ResourceTreeItem } from '../types';
 
 /**
- * Filters the document and scripts of interest from all the Resources given as input
- * @param {any} inputResources:ResourceTreeItem[]
- * @param inputResources
- * @returns {any}
+ * Filters the input resources based on their type and URL.
+ * @param inputResources - The array of input resources to filter.
+ * @returns The filtered array of resources.
  */
 const filterResources = (inputResources: ResourceTreeItem[]) => {
   return inputResources
-    .filter((i: ResourceTreeItem) => ['script', 'document'].includes(i.type))
+    .filter(
+      (resource: ResourceTreeItem) =>
+        resource.type !== undefined &&
+        ['script', 'document'].includes(resource.type)
+    )
     .filter(
       (i) =>
         !i.url.includes('chrome-extension://') && !i.url.includes('debugger://')

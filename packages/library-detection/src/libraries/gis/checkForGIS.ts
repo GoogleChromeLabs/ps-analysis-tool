@@ -31,14 +31,11 @@ import {
 } from './constants';
 
 /**
- * Business logic to check for signature matches for GoogleIdentityServices library
- * @param {any} script:ScriptTagUnderCheck
- * @param {any} existingItems:DetectedSignature[]
- * @param {any} signatureMatches:number
- * @param script
- * @param existingItems
- * @param signatureMatches
- * @returns {any}
+ * Checks for Google Identity Services api signatures.
+ * @param script - The script tag to check.
+ * @param existingItems - The existing items to check against.
+ * @param signatureMatches - The number of signature matches.
+ * @returns The number of signature matches and the items.
  */
 const checkForGIS = (
   script: ScriptTagUnderCheck,
@@ -56,7 +53,6 @@ const checkForGIS = (
     };
   }
 
-  // TODO: Make use of help URLs.
   const gisSignatures = [
     ...GIS_SIGNATURE_WEAK_MATCHES,
     ...GIS_SIGNATURE_STRONG_MATCHES,

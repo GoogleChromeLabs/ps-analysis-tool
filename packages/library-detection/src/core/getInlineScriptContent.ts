@@ -15,11 +15,11 @@
  */
 
 /**
- * From the content string given parse only the innerHtml from script tag
- * @param {any} content:string
- * @param content
- * @returns {any}
+ * Parses the provided HTML content and extracts the contents of inline script tags.
+ * @param content The HTML content to parse.
+ * @returns An array of strings representing the contents of inline script tags.
  */
+
 const getInlineScriptContent = (content: string) => {
   const parser = new DOMParser();
   const doc = parser.parseFromString(content, 'text/html');

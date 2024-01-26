@@ -19,12 +19,10 @@
 import type { LibraryData } from '../types';
 
 /**
- * Util function for adding up LibraryData Objects
- * @param {any} obj1:LibraryData
- * @param {any} obj2:LibraryData
- * @param obj1
- * @param obj2
- * @returns {any}
+ * Sums up two library detection objects.
+ * @param obj1 - The first library detection object.
+ * @param obj2 - The second library detection object.
+ * @returns The sum of the two library detection object.
  */
 const sumUpDetectionResults = (obj1: LibraryData, obj2: LibraryData) => {
   const resultObj: LibraryData = { ...obj1 };
@@ -34,7 +32,6 @@ const sumUpDetectionResults = (obj1: LibraryData, obj2: LibraryData) => {
   for (let i = 0; i < libraryKeys.length; i++) {
     const key = libraryKeys[i] as keyof LibraryData;
     for (let j = 0; j < resultObj[key].matches.length; j++) {
-      // Add Matches array
       const featureText = resultObj[key].matches[j].feature.text;
       const sameFeatureInOtherObject = obj2[key].matches.find(
         (match) => match.feature.text === featureText
