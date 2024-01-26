@@ -32,10 +32,14 @@ import { useLibraryDetection, useLibraryDetectionContext } from '../../core';
 
 // eslint-disable-next-line react/display-name
 const LibraryDetection = memo(function LibraryDetection() {
-  const { libraryMatches } = useLibraryDetection();
-  const { showLoader } = useLibraryDetectionContext(({ state }) => ({
-    showLoader: state.showLoader,
-  }));
+  useLibraryDetection();
+
+  const { libraryMatches, showLoader } = useLibraryDetectionContext(
+    ({ state }) => ({
+      libraryMatches: state.libraryMatches,
+      showLoader: state.showLoader,
+    })
+  );
 
   const names = Object.keys(libraryMatches);
 

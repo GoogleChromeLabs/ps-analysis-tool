@@ -35,24 +35,24 @@ const LOADING_DELAY = 4000;
 /**
  * The primary custom hook used for Library signature detection purpose
  * @param {number} tabId Tab id.
- * @returns {object} libraryMatches and isCurrentTabLoading
  */
 const useLibraryDetection = () => {
   const {
-    libraryMatches,
     isCurrentTabLoading,
     loadedBefore,
+    showLoader,
     setLibraryMatches,
     setLoadedBeforeState,
     setShowLoader,
   } = useLibraryDetectionContext(({ state, actions }) => ({
-    libraryMatches: state.libraryMatches,
     isCurrentTabLoading: state.isCurrentTabLoading,
     loadedBefore: state.loadedBefore,
+    showLoader: state.showLoader,
     setLoadedBeforeState: actions.setLoadedBeforeState,
     setLibraryMatches: actions.setLibraryMatches,
     setShowLoader: actions.setShowLoader,
   }));
+
   const timeout = useRef(0);
 
   /**
@@ -63,6 +63,7 @@ const useLibraryDetection = () => {
   const listenerCallback = useCallback(
     async (resource: ResourceTreeItem) => {
       const resourcesWithContent = await getResourcesWithContent([resource]);
+
       if (resourcesWithContent.length === 0) {
         return;
       }
@@ -113,19 +114,36 @@ const useLibraryDetection = () => {
   }, [setLibraryMatches, attachListener, setShowLoader]);
 
   useEffect(() => {
-    if (!isCurrentTabLoading) {
-      if (!loadedBefore) {
-        if (!timeout.current) {
-          timeout.current = setTimeout(() => {
-            updateInitialData();
-            setLoadedBeforeState(true);
-            timeout.current = 0;
-          }, LOADING_DELAY);
-        }
-      } else {
-        updateInitialData();
-      }
+    if (showLoader) {
+      removeListener();
     }
+  }, [showLoader, removeListener]);
+
+  // Get the initial data and listen to new resources.
+  useEffect(() => {
+    // Only show loader if the page has not loaded yet.
+    if (isCurrentTabLoading) {
+      return;
+    }
+
+    // If the user visits the landing page for the first time,
+    // Or after the tab has updated (reloaded or changed) show loader for few seconds.
+    if (!loadedBefore) {
+      // Since this useEffect has multiple depedency, it may be called multiple times.
+      // We want to ensure that we show the loader only once.
+      if (!timeout.current) {
+        timeout.current = setTimeout(() => {
+          updateInitialData();
+          setLoadedBeforeState(true);
+          timeout.current = 0;
+        }, LOADING_DELAY);
+      }
+
+      return;
+    }
+
+    // When the user revisits the landing page we do not need to show loader.
+    updateInitialData();
   }, [
     isCurrentTabLoading,
     loadedBefore,
@@ -143,11 +161,6 @@ const useLibraryDetection = () => {
       }
     };
   }, [removeListener]);
-
-  return {
-    libraryMatches,
-    isCurrentTabLoading,
-  };
 };
 
 export default useLibraryDetection;
