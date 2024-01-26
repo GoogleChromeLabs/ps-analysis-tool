@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import { useCallback, useEffect, useRef } from 'react';
-import { executeTaskInWorker } from '@ps-analysis-tool/common';
+import { executeTaskInDevToolWorker } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -68,7 +68,7 @@ const useLibraryDetection = () => {
         return;
       }
 
-      executeTaskInWorker(
+      executeTaskInDevToolWorker(
         LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING,
         resourcesWithContent,
         (realtimeComputationResult: LibraryData) => {
@@ -103,7 +103,7 @@ const useLibraryDetection = () => {
     //  chrome.devtools.inspectedWindow.getResources updates whenever new items are added.
     const scripts = await getNetworkResourcesWithContent();
 
-    executeTaskInWorker(
+    executeTaskInDevToolWorker(
       LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING,
       scripts,
       (detectedMatchingSignatures: LibraryData) => {

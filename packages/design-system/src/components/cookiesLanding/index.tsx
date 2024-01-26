@@ -43,9 +43,8 @@ interface CookiesLandingProps {
   showMessageBoxBody?: boolean;
   showBlockedCookiesSection?: boolean;
   additionalComponents?: {
-    [key: string]: React.FunctionComponent<{ tabId: number | null }>;
+    [key: string]: React.FunctionComponent;
   };
-  tabId: number | null;
   showFramesSection?: boolean;
   description?: React.ReactNode;
 }
@@ -63,7 +62,6 @@ const CookiesLanding = ({
   showHorizontalMatrix = false,
   description = '',
   additionalComponents = {},
-  tabId,
 }: CookiesLandingProps) => {
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
@@ -148,7 +146,7 @@ const CookiesLanding = ({
       {Object.keys(additionalComponents).length &&
         Object.keys(additionalComponents).map((key: string) => {
           const Component = additionalComponents[key];
-          return <Component key={key} tabId={tabId} />;
+          return <Component key={key} />;
         })}
       {showFramesSection && (
         <CookiesLandingContainer

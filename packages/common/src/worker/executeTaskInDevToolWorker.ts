@@ -26,7 +26,7 @@ import type { LibraryData } from '../libraryDetection.types';
  * @param {unknown} payload - The payload or data required for the task.
  * @param {Function} onMessage callback.
  */
-const executeTaskInWorker = (
+const executeTaskInDevToolWorker = (
   task: string,
   payload: unknown,
   onMessage: (dataFromThread: LibraryData) => void
@@ -43,4 +43,4 @@ const executeTaskInWorker = (
   };
 };
 
-export default executeTaskInWorker;
+export default executeTaskInDevToolWorker;

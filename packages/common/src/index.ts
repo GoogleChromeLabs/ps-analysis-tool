@@ -33,7 +33,7 @@ export { default as parseRequestWillBeSentExtraInfo } from './utils/parseRequest
 export { default as getDomainFromUrl } from './utils/getDomainFromUrl';
 export { default as noop } from './utils/noop';
 export { default as getDevToolWorker } from './worker/devToolWorker';
-export { default as executeTaskInWorker } from './worker/executeTaskInWorker';
+export { default as executeTaskInDevToolWorker } from './worker/executeTaskInDevToolWorker';
 export { default as getValueByKey } from './utils/getValueByKey';
 export * from './utils/generateReports';
 export * from './cookies.types';

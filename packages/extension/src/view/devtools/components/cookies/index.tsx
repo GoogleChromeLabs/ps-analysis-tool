@@ -45,7 +45,6 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
     selectedFrame,
     tabCookies,
     tabFrames,
-    tabId,
     changeListeningToThisTab,
   } = useCookieStore(({ state, actions }) => ({
     contextInvalidated: state.contextInvalidated,
@@ -55,7 +54,6 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
     selectedFrame: state.selectedFrame,
     tabCookies: state.tabCookies,
     tabFrames: state.tabFrames,
-    tabId: state.tabId,
     changeListeningToThisTab: actions.changeListeningToThisTab,
   }));
 
@@ -112,7 +110,6 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
         ) : (
           <CookiesLanding
             tabCookies={tabCookies}
-            tabId={tabId}
             tabFrames={tabFrames}
             showBlockedCookiesSection
             showFramesSection

@@ -20,7 +20,7 @@ import { ldWorkerOnMessageCallback } from '@ps-analysis-tool/library-detection';
 
 /**
  * Main onmessage handler of the worker thread.
- * Inside this other modules onMessageHandlers can be added.
+ * Other modules onMessageHandlers can be added here.
  * @param {Event} event Event object.
  */
 self.onmessage = function (event) {
