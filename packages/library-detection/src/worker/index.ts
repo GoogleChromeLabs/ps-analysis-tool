@@ -41,7 +41,9 @@ export const ldWorkerOnMessageCallback = (event: MessageEvent): void => {
       const detectionAuditFunctions = {
         gsiV2: generateGSIV2Matches,
       };
+      const librariesToDetect = ['gis', 'gsiV2'];
       const detectedMatchingSignatures = detectMatchingSignatures(
+        librariesToDetect,
         payload,
         detectionSubFunctions,
         detectionAuditFunctions

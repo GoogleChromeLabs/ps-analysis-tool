@@ -24,10 +24,9 @@ import type {
 } from '../types';
 
 /**
- * Checks if given ScriptTag's url and return false if it is google origin
- * @param {any} script:ScriptTagUnderCheck
- * @param script
- * @returns {any}
+ * Checks if the origin of a script tag is Google-related.
+ * @param script - The script tag to check.
+ * @returns A boolean value indicating whether the origin is Google-related.
  */
 const originIsGoogle = (script: ScriptTagUnderCheck) => {
   return !(
@@ -39,29 +38,31 @@ const originIsGoogle = (script: ScriptTagUnderCheck) => {
 };
 
 /**
- * Primary function which gets the stringTag url and content and looks for varirous library sigantures
- * @param {any} loadedScripts:ScriptTagUnderCheck[]
- * @param loadedScripts
- * @param detectionSubFunctions
- * @param detectionAuditFunctions
- * @returns {any}
+ * Detects matching signatures of libraries in loaded scripts.
+ * @param librariesToDetect - An array of libraries to detect.
+ * @param loadedScripts - An array of loaded scripts to check.
+ * @param detectionSubFunctions - An object containing detection sub-functions for each library.
+ * @param detectionAuditFunctions - An object containing detection audit functions for each library.
+ * @returns An object containing the matching signatures and matches for each library.
  */
+
 const detectMatchingSignatures = (
+  librariesToDetect: string[],
   loadedScripts: ScriptTagUnderCheck[],
   detectionSubFunctions: DetectionSubFunctions,
   detectionAuditFunctions: DetectionAuditFunctions
 ) => {
-  const libraryMatches: LibraryData = {
-    gis: {
-      signatureMatches: 0,
-      matches: [],
+  const libraryMatches: LibraryData = librariesToDetect.reduce(
+    (acc, library) => {
+      acc[library as keyof LibraryData] = {
+        signatureMatches: 0,
+        matches: [],
+        moduleMatch: 0,
+      };
+      return acc;
     },
-    gsiV2: {
-      signatureMatches: 0,
-      moduleMatch: 0,
-      matches: [],
-    },
-  };
+    {} as LibraryData
+  );
 
   for (const script of loadedScripts.filter(originIsGoogle)) {
     if (script.content === undefined) {
@@ -93,10 +94,7 @@ const detectMatchingSignatures = (
     );
   }
 
-  return {
-    gis: libraryMatches.gis,
-    gsiV2: libraryMatches.gsiV2,
-  };
+  return libraryMatches;
 };
 
 export default detectMatchingSignatures;
