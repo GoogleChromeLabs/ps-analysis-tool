@@ -86,7 +86,7 @@ export const LEGEND_DESCRIPTION: LegendData = {
 
 export const EMPTY_FRAME_COUNT = [
   {
-    title: 'Frame(s)',
+    title: 'Frames',
     count: 0,
     data: [
       {
