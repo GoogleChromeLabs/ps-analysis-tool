@@ -53,12 +53,12 @@ program
   .option('-c, --csv-path <value>', 'Path to a CSV file with a set of URLs.')
   .option(
     '-p, --sitemap-path <value>',
-    'Path to a sitmap saved in the file system'
+    'Path to a sitemap saved in the file system'
   )
-  .option('-ul, --url-limit <value>', 'No of Urls to analyze')
+  .option('-ul, --url-limit <value>', 'No of URLs to analyze')
   .option(
     '-nh, --no-headless ',
-    'Flag for running puppeteer in non headless mode'
+    'Flag for running puppeteer in non-headless mode'
   )
   .option(
     '-np, --no-prompts',
