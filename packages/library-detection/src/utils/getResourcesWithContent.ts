@@ -21,12 +21,12 @@ import { getInlineScriptContent, filterResources } from '../core';
 
 /**
  * This function returns the Resources of the website in the inspectedWindow
- * @param resources
- * @returns {string} Resources with content.
+ * @param resources Resources
+ * @returns Resources with content.
  */
 export const getResourcesWithContent = async (
   resources: ResourceTreeItem[]
-) => {
+): Promise<ScriptTagUnderCheck[]> => {
   const filteredResources = filterResources(resources);
 
   const contentPromises: Promise<unknown>[] = [];

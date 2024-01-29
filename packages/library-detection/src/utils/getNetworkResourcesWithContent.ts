@@ -16,14 +16,16 @@
 /**
  * Internal dependencies.
  */
-import { type ResourceTreeItem } from '../types';
+import { type ResourceTreeItem, type ScriptTagUnderCheck } from '../types';
 import { getResourcesWithContent } from './getResourcesWithContent';
 
 /**
  * This function returns the Resources of the website in the inspectedWindow
- * @returns {string} Resources with content.
+ * @returns Resources with content.
  */
-export const getNetworkResourcesWithContent = async () => {
+export const getNetworkResourcesWithContent = async (): Promise<
+  ScriptTagUnderCheck[]
+> => {
   const resources: ResourceTreeItem[] = await new Promise((resolve) => {
     chrome.devtools.inspectedWindow.getResources((_resources) =>
       resolve(_resources)

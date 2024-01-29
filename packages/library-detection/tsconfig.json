@@ -9,6 +9,7 @@
     "../../node_modules/@types/jest/index.d.ts",
     "src/**/*.json"
   ],
+  "exclude": ["dist/**", "dist-types/**"],
   "references": [
     { "path": "../common" },
     {
