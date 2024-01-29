@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
@@ -33,12 +32,12 @@ const useHighlighting = (
   const { domainsInAllowList } = useAllowedList();
 
   const handleHighlighting = useCallback(
-    (cookiesToProcess: TabCookies, cookiesToReference?: TabCookies) =>
+    (cookiesToProcess: TabCookies) =>
       Object.values(cookiesToProcess).reduce((acc, cookie) => {
         const key = getCookieKey(cookie.parsedCookie) as string;
+
         acc[key] = {
           ...cookie,
-          highlighted: cookiesToReference?.[key]?.highlighted || false,
           isDomainInAllowList: isCookieDomainInAllowList(
             cookie,
             domainsInAllowList
@@ -51,23 +50,8 @@ const useHighlighting = (
   );
 
   useEffect(() => {
-    setTableData((prevData) => handleHighlighting(cookies, prevData));
+    setTableData(() => handleHighlighting(cookies));
   }, [cookies, handleHighlighting, setTableData]);
-
-  const removeHighlights = useCallback(() => {
-    setTableData((prev) => handleHighlighting(prev));
-  }, [handleHighlighting, setTableData]);
-
-  useEffect(() => {
-    chrome.storage.session.onChanged.addListener(removeHighlights);
-    return () => {
-      try {
-        chrome.storage.session.onChanged.removeListener(removeHighlights);
-      } catch (error) {
-        /* do nothing */
-      }
-    };
-  }, [removeHighlights]);
 };
 
 export default useHighlighting;
