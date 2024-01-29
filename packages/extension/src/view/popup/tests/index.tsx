@@ -351,12 +351,6 @@ xdescribe('App', () => {
           </ExternalStoreProvider>
         )
       );
-      chrome.runtime.sendMessage({
-        type: 'ServiceWorker::Popup::TAB_TO_READ_DATA',
-        payload: {
-          tabToRead: '402463',
-        },
-      });
       expect(await screen.findByText('Analyze this tab')).toBeInTheDocument();
       expect(
         await screen.findByText(
