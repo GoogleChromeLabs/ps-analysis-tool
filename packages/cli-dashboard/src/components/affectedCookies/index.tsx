@@ -313,6 +313,7 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
           tablePersistentSettingsKey={tablePersistentSettingsKey}
           selectedFrame={selectedSite}
           selectedFrameCookie={selectedFrameCookie}
+          hideExport={true}
           setSelectedFrameCookie={setSelectedFrameCookie}
         />
       </Resizable>

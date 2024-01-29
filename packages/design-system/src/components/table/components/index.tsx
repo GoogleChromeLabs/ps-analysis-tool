@@ -40,6 +40,7 @@ interface TableProps {
   onRowClick: (row: TableData | null) => void;
   showTopBar?: boolean;
   hideFiltering?: boolean;
+  hideExport?: boolean;
   extraInterfaceToTopBar?: React.ReactNode;
 }
 
@@ -50,6 +51,7 @@ const Table = ({
   onRowClick,
   showTopBar = false,
   hideFiltering = false,
+  hideExport = false,
   extraInterfaceToTopBar,
 }: TableProps) => {
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
@@ -112,7 +114,7 @@ const Table = ({
           setShowFilterSidebar={setShowFilterSidebar}
           cookiesCount={table.rows.length}
           extraInterface={extraInterfaceToTopBar}
-          exportCookies={exportCookies}
+          exportCookies={hideExport ? undefined : exportCookies}
         />
       )}
       <ChipsBar

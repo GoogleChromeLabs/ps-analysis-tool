@@ -119,6 +119,7 @@ const Technologies = ({ selectedSite }: TechnologiesProps) => {
           table={table}
           hideFiltering={true}
           showTopBar={true}
+          hideExport={true}
           selectedKey={selectedRow?.slug}
           onRowClick={(row) => {
             setSelectedRow(row as TechnologyData);
