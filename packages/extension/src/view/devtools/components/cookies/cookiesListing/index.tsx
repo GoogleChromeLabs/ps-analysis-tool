@@ -45,6 +45,7 @@ import { useCookieStore } from '../../../stateProviders/syncCookieStore';
 import { BLOCKED_REASON_LIST } from '../../../../../constants';
 import RowContextMenu from './rowContextMenu';
 import useAllowedList from './useAllowedList';
+import isCookieDomainInAllowList from './useAllowedList/isCookieDomainInAllowList';
 
 interface CookiesListingProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;
@@ -74,39 +75,20 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
 
   useEffect(() => {
     setTableData((prevData) =>
-      Object.fromEntries(
-        Object.entries(cookies || {}).map(([key, cookie]) => {
-          const domain = cookie.parsedCookie?.domain || '';
-          let _domain = '';
+      Object.values(cookies).reduce((acc, cookie) => {
+        const key = getCookieKey(cookie.parsedCookie) as string;
 
-          if (domain) {
-            _domain = domain.startsWith('.') ? domain : `.${domain}`;
-          }
+        acc[key] = {
+          ...cookie,
+          highlighted: prevData?.[key]?.highlighted,
+          isDomainInAllowList: isCookieDomainInAllowList(
+            cookie,
+            domainsInAllowList
+          ),
+        };
 
-          let isDomainInAllowList = domainsInAllowList.has(_domain);
-
-          if (!isDomainInAllowList) {
-            isDomainInAllowList = [...domainsInAllowList].some(
-              (storedDomain) => {
-                // For example xyz.bbc.com and .bbc.com
-                if (
-                  _domain.endsWith(storedDomain) &&
-                  _domain !== storedDomain
-                ) {
-                  return true;
-                }
-
-                return false;
-              }
-            );
-          }
-
-          cookie.highlighted = prevData?.[key]?.highlighted;
-          cookie.isDomainInAllowList = isDomainInAllowList;
-
-          return [key, cookie];
-        })
-      )
+        return acc;
+      }, {} as Record<string, CookieTableData>)
     );
   }, [cookies, domainsInAllowList]);
 
