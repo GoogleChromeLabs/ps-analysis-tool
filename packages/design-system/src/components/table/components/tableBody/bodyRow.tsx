@@ -34,10 +34,15 @@ interface BodyRowProps {
   isRowFocused: boolean;
   selectedKey: string | undefined | null;
   getRowObjectKey: (row: TableRow) => string;
-  onRowClick: () => void;
+  onRowClick: (e: React.MouseEvent<HTMLDivElement>) => void;
   onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>, index: number) => void;
+  onRowContextMenu?: (
+    e: React.MouseEvent<HTMLDivElement>,
+    row: TableRow
+  ) => void;
 }
 
+// eslint-disable-next-line complexity
 const BodyRow = ({
   row,
   columns,
@@ -47,15 +52,19 @@ const BodyRow = ({
   isRowFocused,
   onRowClick,
   onKeyDown,
+  onRowContextMenu = () => undefined,
 }: BodyRowProps) => {
   const cookieKey = getRowObjectKey(row);
   const isBlocked =
     (row.originalData as CookieTableData)?.isBlocked ||
     ((row.originalData as CookieTableData)?.blockedReasons &&
-      (row.originalData as CookieTableData)?.blockedReasons?.length > 0);
+      (row.originalData as CookieTableData)?.blockedReasons?.length);
   const isHighlighted = (row.originalData as CookieTableData)?.highlighted;
+  const isDomainInAllowList = (row.originalData as CookieTableData)
+    ?.isDomainInAllowList;
+
   const tableRowClassName = classNames(
-    'outline-0 flex divide-x divide-american-silver dark:divide-quartz',
+    'outline-0 flex divide-x divide-american-silver dark:divide-quartz relative',
     isBlocked &&
       (cookieKey !== selectedKey
         ? index % 2
@@ -64,8 +73,18 @@ const BodyRow = ({
         : isRowFocused
         ? 'bg-gainsboro dark:bg-outer-space'
         : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
+    isDomainInAllowList &&
+      !isBlocked &&
+      (cookieKey !== selectedKey
+        ? index % 2
+          ? 'dark:bg-jungle-green-dark bg-leaf-green-dark'
+          : 'dark:bg-jungle-green-light bg-leaf-green-light'
+        : isRowFocused
+        ? 'bg-gainsboro dark:bg-outer-space'
+        : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
     cookieKey !== selectedKey &&
       !isBlocked &&
+      !isDomainInAllowList &&
       (index % 2
         ? isHighlighted
           ? 'bg-dirty-pink'
@@ -75,6 +94,7 @@ const BodyRow = ({
         : 'bg-white dark:bg-raisin-black'),
     cookieKey === selectedKey &&
       !isBlocked &&
+      !isDomainInAllowList &&
       (isRowFocused
         ? isHighlighted
           ? 'bg-dirty-red'
@@ -90,8 +110,13 @@ const BodyRow = ({
       className={tableRowClassName}
       onClick={onRowClick}
       onKeyDown={(e) => onKeyDown(e, index)}
+      onContextMenu={(e) => onRowContextMenu(e, row)}
       data-testid="body-row"
     >
+      {/* Vertical bar for allow-listed domain row at the left side */}
+      {isDomainInAllowList && (
+        <span className="absolute block top-0 bottom-0 left-0 border-l-2 border-emerald-600 dark:border-leaf-green-dark" />
+      )}
       {columns.map(({ accessorKey, width }, idx) => (
         <BodyCell
           key={idx}

@@ -31,6 +31,7 @@ import {
   prepareCookiesCount,
   prepareFrameStatsComponent,
 } from '../../utils';
+
 interface CookiesLandingProps {
   tabFrames: TabFrames | null;
   tabCookies: TabCookies | null;
@@ -41,6 +42,9 @@ interface CookiesLandingProps {
   associatedCookiesCount?: number | null;
   showMessageBoxBody?: boolean;
   showBlockedCookiesSection?: boolean;
+  additionalComponents?: {
+    [key: string]: React.FunctionComponent;
+  };
   showFramesSection?: boolean;
   description?: React.ReactNode;
 }
@@ -57,6 +61,7 @@ const CookiesLanding = ({
   showFramesSection = false,
   showHorizontalMatrix = false,
   description = '',
+  additionalComponents = {},
 }: CookiesLandingProps) => {
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
@@ -137,6 +142,12 @@ const CookiesLanding = ({
           )}
         </CookiesLandingContainer>
       )}
+      {/* TODO: This is not scalable. Refactor code so that components can be added from the the extension or dashboard package. */}
+      {Object.keys(additionalComponents).length &&
+        Object.keys(additionalComponents).map((key: string) => {
+          const Component = additionalComponents[key];
+          return <Component key={key} />;
+        })}
       {showFramesSection && (
         <CookiesLandingContainer
           dataMapping={frameStateCreator.dataMapping}

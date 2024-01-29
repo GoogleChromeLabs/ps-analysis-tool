@@ -17,6 +17,7 @@
 export { default as Button } from './button';
 export { default as RefreshButton } from './refreshButton';
 export { default as ProgressBar } from './progressBar';
+export { default as BorderProgressBar } from './progressBar/borderProgressbar';
 export { default as ToggleSwitch } from './toggleSwitch';
 export { default as MessageBox } from './messageBox';
 export { default as Circle } from './circle';
@@ -38,3 +39,7 @@ export * from './table';
 export { default as SearchInput } from './searchInput';
 export * from './sidebar';
 export { default as InspectButton } from './inspectButton';
+export {
+  default as CookiesLandingContainer,
+  type CookiesLandingContainerProps,
+} from './cookiesLanding/cookieLandingHeaderContainer';

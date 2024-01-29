@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import {
+  type CookieDatabase,
   type CookieData,
   parseResponseReceivedExtraInfo,
   parseRequestWillBeSentExtraInfo,
@@ -29,10 +30,7 @@ import { Protocol } from 'devtools-protocol';
  */
 import parseResponseCookieHeader from './parseResponseCookieHeader';
 import parseRequestCookieHeader from './parseRequestCookieHeader';
-import {
-  type CookieDatabase,
-  fetchDictionary,
-} from '../utils/fetchCookieDictionary';
+import { fetchDictionary } from '../utils/fetchCookieDictionary';
 import { ALLOWED_NUMBER_OF_TABS } from '../constants';
 import SynchnorousCookieStore from '../localStore/synchnorousCookieStore';
 import canProcessCookies from '../utils/canProcessCookies';
@@ -553,6 +551,14 @@ chrome.runtime.onMessage.addListener(async (request) => {
   ) {
     syncCookieStore.updatePopUpState(request?.payload?.tabId, false);
   }
+});
+
+/**
+ * Fires when the browser window is opened.
+ * @see https://developer.chrome.com/docs/extensions/reference/api/windows#event-onCreated
+ */
+chrome.windows.onCreated.addListener(() => {
+  chrome.contentSettings.cookies.clear({});
 });
 
 chrome.storage.sync.onChanged.addListener(

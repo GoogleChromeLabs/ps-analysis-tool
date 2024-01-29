@@ -49,6 +49,7 @@ const devTools = {
   entry: {
     index: './src/view/devtools/index.tsx',
     devtools: './src/view/devtools/devtools.ts',
+    worker: './src/worker/index.ts',
   },
   output: {
     path: path.resolve(__dirname, '../../dist/extension/devtools'),

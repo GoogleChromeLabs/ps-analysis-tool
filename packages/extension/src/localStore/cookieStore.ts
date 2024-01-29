@@ -17,7 +17,9 @@
 /**
  * Internal dependencies.
  */
+import type { AllowedDomainObject, AllowedDomainStorage } from './types';
 import fetchTopicsTaxonomy from '../utils/fetchTopicsTaxonomy';
+import getIndexForAllowListedItem from './utils/getIndexForAllowListedItem';
 
 const CookieStore = {
   /**
@@ -54,6 +56,67 @@ const CookieStore = {
     }
 
     return [];
+  },
+
+  /**
+   * Add domain to allow-list.
+   * @param {AllowedDomainObject} domainObject The domain to be added to allow-list.
+   */
+  async addDomainToAllowList(domainObject: AllowedDomainObject) {
+    const storage = await chrome.storage.session.get();
+
+    if (!storage.allowList) {
+      storage.allowList = [];
+    }
+
+    const index = getIndexForAllowListedItem(
+      storage as AllowedDomainStorage,
+      domainObject
+    );
+
+    if (index === -1) {
+      storage.allowList = [...storage.allowList, domainObject];
+    }
+
+    await chrome.storage.session.set(storage);
+  },
+
+  /**
+   * Remove domain from allow-list.
+   * @param {AllowedDomainObject} domainObject The domain to be removed from allow-list.
+   * @returns AllowedDomainObject[] Remaning objects.
+   */
+  async removeDomainFromAllowList(
+    domainObject: AllowedDomainObject
+  ): Promise<AllowedDomainObject[] | []> {
+    const storage = await chrome.storage.session.get();
+
+    if (!storage?.allowList || storage?.allowList?.length === 0) {
+      return [];
+    }
+
+    const indexToRemove = getIndexForAllowListedItem(
+      storage as AllowedDomainStorage,
+      domainObject
+    );
+
+    if (indexToRemove !== -1) {
+      storage.allowList.splice(indexToRemove, 1);
+    }
+
+    await chrome.storage.session.set(storage);
+
+    return (storage.allowList as AllowedDomainObject[]) || [];
+  },
+
+  /**
+   * Get domains in allow-list.
+   * @returns {Promise<Record<string, string>>} Set of domains in allow-list.
+   */
+  async getDomainsInAllowList(): Promise<AllowedDomainObject[] | []> {
+    const storage = await chrome.storage.session.get();
+
+    return storage?.allowList ?? [];
   },
 };
 
