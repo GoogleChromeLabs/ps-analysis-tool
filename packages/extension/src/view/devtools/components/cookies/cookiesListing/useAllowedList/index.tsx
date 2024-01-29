@@ -90,10 +90,6 @@ const useAllowedList = () => {
               );
             }
 
-            if (isDomainInAllowList) {
-              return;
-            }
-
             await setDomainsInAllowList(
               tabUrl || '',
               isIncognito.current,
