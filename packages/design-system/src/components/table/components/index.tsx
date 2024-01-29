@@ -38,6 +38,10 @@ interface TableProps {
   selectedKey: string | undefined | null;
   getRowObjectKey: (row: TableRow) => string;
   onRowClick: (row: TableData | null) => void;
+  onRowContextMenu?: (
+    e: React.MouseEvent<HTMLDivElement>,
+    row: TableRow
+  ) => void;
   showTopBar?: boolean;
   hideFiltering?: boolean;
   hideExport?: boolean;
@@ -49,6 +53,7 @@ const Table = ({
   selectedKey,
   getRowObjectKey,
   onRowClick,
+  onRowContextMenu = () => undefined,
   showTopBar = false,
   hideFiltering = false,
   hideExport = false,
@@ -165,6 +170,7 @@ const Table = ({
               setIsRowFocused={setIsRowFocused}
               selectedKey={selectedKey}
               onRowClick={onRowClick}
+              onRowContextMenu={onRowContextMenu}
             />
           </div>
         </div>

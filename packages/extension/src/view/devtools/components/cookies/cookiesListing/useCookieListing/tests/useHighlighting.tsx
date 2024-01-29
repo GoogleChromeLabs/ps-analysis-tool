@@ -48,7 +48,11 @@ describe('useHighlighting', () => {
     });
 
     renderHook(() =>
-      useHighlighting(mock.default.tabCookies, mockSetTableData)
+      useHighlighting(
+        mock.default.tabCookies,
+        new Set<string>(),
+        mockSetTableData
+      )
     );
 
     expect(nextState['KRTBCOOKIE_290.pubmatic.com']).toEqual(

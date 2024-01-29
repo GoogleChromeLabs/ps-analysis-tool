@@ -32,7 +32,7 @@ import {
 import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import useHighlighting from './useHighlighting';
 
-const useCookieListing = () => {
+const useCookieListing = (domainsInAllowList: Set<string>) => {
   const { selectedFrame, cookies, getCookiesSetByJavascript } = useCookieStore(
     ({ state, actions }) => ({
       selectedFrame: state.selectedFrame,
@@ -43,7 +43,7 @@ const useCookieListing = () => {
 
   const [tableData, setTableData] = useState<TabCookies>(cookies);
 
-  useHighlighting(cookies, setTableData);
+  useHighlighting(cookies, domainsInAllowList, setTableData);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [

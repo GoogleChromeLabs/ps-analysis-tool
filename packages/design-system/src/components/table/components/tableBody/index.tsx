@@ -32,7 +32,14 @@ interface TableBodyProps {
   isRowFocused: boolean;
   setIsRowFocused: (state: boolean) => void;
   selectedKey: string | undefined | null;
-  onRowClick: (key: TableData | null) => void;
+  onRowClick: (
+    key: TableData | null,
+    e?: React.MouseEvent<HTMLDivElement>
+  ) => void;
+  onRowContextMenu?: (
+    e: React.MouseEvent<HTMLDivElement>,
+    row: TableRow
+  ) => void;
 }
 
 const TableBody = ({
@@ -42,6 +49,7 @@ const TableBody = ({
   setIsRowFocused,
   selectedKey,
   onRowClick,
+  onRowContextMenu = () => undefined,
 }: TableBodyProps) => {
   const tableBodyRef = useRef(null);
 
@@ -134,11 +142,12 @@ const TableBody = ({
           selectedKey={selectedKey}
           getRowObjectKey={getRowObjectKey}
           isRowFocused={isRowFocused}
-          onRowClick={() => {
-            onRowClick(row?.originalData);
+          onRowClick={(e: React.MouseEvent<HTMLDivElement>) => {
+            onRowClick(row?.originalData, e);
             setIsRowFocused(true);
           }}
           onKeyDown={handleKeyDown}
+          onRowContextMenu={onRowContextMenu}
         />
       ))}
       <div
