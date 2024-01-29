@@ -23,6 +23,7 @@ import {
   ErrorFallback,
   Provider as TablePersistentSettingsProvider,
 } from '@ps-analysis-tool/design-system';
+import { LibraryDetectionProvider } from '@ps-analysis-tool/library-detection';
 
 /**
  * Internal dependencies.
@@ -42,7 +43,9 @@ if (root) {
       <SettingsStoreProvider>
         <ExternalStoreProvider>
           <TablePersistentSettingsProvider>
-            <App />
+            <LibraryDetectionProvider>
+              <App />
+            </LibraryDetectionProvider>
           </TablePersistentSettingsProvider>
         </ExternalStoreProvider>
       </SettingsStoreProvider>
