@@ -23,14 +23,12 @@ import { getCookieKey, type TabCookies } from '@ps-analysis-tool/common';
  * Internal dependencies.
  */
 import isCookieDomainInAllowList from '../useAllowedList/isCookieDomainInAllowList';
-import useAllowedList from '../useAllowedList';
 
 const useHighlighting = (
   cookies: TabCookies,
+  domainsInAllowList: Set<string>,
   setTableData: React.Dispatch<React.SetStateAction<TabCookies>>
 ) => {
-  const { domainsInAllowList } = useAllowedList();
-
   const handleHighlighting = useCallback(
     (cookiesToProcess: TabCookies) =>
       Object.values(cookiesToProcess).reduce((acc, cookie) => {

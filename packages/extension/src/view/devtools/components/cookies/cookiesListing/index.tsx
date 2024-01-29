@@ -53,7 +53,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
     searchKeys,
     tablePersistentSettingsKey,
     extraInterfaceToTopBar,
-  } = useCookieListing();
+  } = useCookieListing(domainsInAllowList);
 
   const frameFilteredCookies = useMemo(
     () => filterCookiesByFrame(tableData, tabFrames, selectedFrame),
