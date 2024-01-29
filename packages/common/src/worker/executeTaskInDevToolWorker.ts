@@ -18,6 +18,7 @@
  */
 import getDevToolWorker from './devToolWorker';
 import type { LibraryData } from '../libraryDetection.types';
+import { LIBRARY_DETECTION_WORKER_TASK } from './enums';
 
 /**
  * Execute a task using a web worker.
@@ -27,7 +28,7 @@ import type { LibraryData } from '../libraryDetection.types';
  * @param {Function} onMessage callback.
  */
 const executeTaskInDevToolWorker = (
-  task: string,
+  task: LIBRARY_DETECTION_WORKER_TASK,
   payload: unknown,
   onMessage: (dataFromThread: LibraryData) => void
 ) => {

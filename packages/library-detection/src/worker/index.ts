@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 /**
+ * External dependencies.
+ */
+import { LIBRARY_DETECTION_WORKER_TASK } from '@ps-analysis-tool/common';
+
+/**
  * Internal dependencies.
  */
 import detectMatchingSignatures from '../core/detectMatchingSignatures';
 import { checkForGIS, checkForGSIv2, generateGSIV2Matches } from '../libraries';
-import {
-  LIBRARY_DETECTION_WORKER_TASK,
-  type PreDefinedLibraryWorkerTaskPayload,
-} from './constants';
+import { type PreDefinedLibraryWorkerTaskPayload } from './constants';
 
 /**
  * Library Detection worker function that handles tasks related to library detection.

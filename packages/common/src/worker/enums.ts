@@ -13,16 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import { LIBRARY_DETECTION_WORKER_TASK } from '@ps-analysis-tool/common';
-
-/**
- * Internal dependencies.
- */
-import type { ScriptTagUnderCheck } from '../types';
-
-export type PreDefinedLibraryWorkerTaskPayload = {
-  [LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING]: ScriptTagUnderCheck[];
-};
+export enum LIBRARY_DETECTION_WORKER_TASK {
+  DETECT_SIGNATURE_MATCHING = 'DetectSignatureMatching',
+}
