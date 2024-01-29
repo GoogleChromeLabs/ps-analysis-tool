@@ -117,6 +117,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [tabFrames, setTabFrames] =
     useState<CookieStoreContext['state']['tabFrames']>(null);
 
+  // This was converted to useRef because setting state was creating a race condition in rerendering the provider.
   const isCurrentTabBeingListenedToRef = useRef(false);
 
   const { allowedNumberOfTabs } = useSettingsStore(({ state }) => ({
