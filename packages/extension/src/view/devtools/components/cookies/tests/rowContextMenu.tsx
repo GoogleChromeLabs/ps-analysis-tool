@@ -77,7 +77,7 @@ describe('RowContextMenu', () => {
       );
     });
 
-    const rowContextMenu = await screen.findByText('Add Domain To Allow List');
+    const rowContextMenu = await screen.findByText('Add Domain to Allow List');
 
     expect(rowContextMenu).toBeVisible();
   });

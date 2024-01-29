@@ -81,13 +81,14 @@ describe('onAllowListClick', () => {
     const removeFromAllowListSpy = jest.spyOn(removeFromAllowList, 'default');
 
     await onAllowListClick(
-      'domain',
+      'xyz.domain.com',
       'https://www.example.com/home',
       false,
-      false,
-      new Set('domain'),
+      true,
+      new Set('domain.com'),
       () => undefined
     );
+
     expect(removeFromAllowListSpy).toHaveBeenCalled();
 
     removeFromAllowListSpy.mockRestore();

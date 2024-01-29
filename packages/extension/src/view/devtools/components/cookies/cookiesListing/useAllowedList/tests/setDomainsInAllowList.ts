@@ -48,6 +48,15 @@ describe('setDomainsInAllowList', () => {
       Promise.resolve()
     );
     expect(result).toBe(undefined);
+
+    const result2 = await setDomainsInAllowList(
+      'pageUrl',
+      false,
+      '',
+      new Set(),
+      () => Promise.resolve()
+    );
+    expect(result2).toBe(undefined);
   });
 
   it('should add domain to domainsInAllowList if setting is session_only', async () => {
@@ -67,7 +76,7 @@ describe('setDomainsInAllowList', () => {
     const domainsInAllowList = new Set<string>();
     const setDomainsInAllowListSpy = jest.fn();
     await setDomainsInAllowList(
-      'pageUrl',
+      'https://bbc.com',
       false,
       'domain',
       domainsInAllowList,
@@ -94,7 +103,7 @@ describe('setDomainsInAllowList', () => {
     const domainsInAllowList = new Set(['domain']);
     const setDomainsInAllowListSpy = jest.fn();
     await setDomainsInAllowList(
-      'pageUrl',
+      'https://bbc.com',
       false,
       'domain',
       domainsInAllowList,
