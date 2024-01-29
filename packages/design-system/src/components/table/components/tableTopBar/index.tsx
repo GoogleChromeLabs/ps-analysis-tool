@@ -37,6 +37,7 @@ interface TableTopBarProps {
   cookiesCount: number;
   hideFiltering?: boolean;
   disableFiltering?: boolean;
+  disableExport?: boolean;
   extraInterface?: React.ReactNode;
   exportCookies?: () => void;
 }
@@ -49,6 +50,7 @@ const TableTopBar = ({
   cookiesCount,
   hideFiltering = false,
   disableFiltering = false,
+  disableExport = false,
   extraInterface = null,
   exportCookies,
 }: TableTopBarProps) => {
@@ -90,7 +92,9 @@ const TableTopBar = ({
 
       <div className="flex gap-2">
         {extraInterface}
-        {exportCookies && <ExportButton onClick={exportCookies} />}
+        {exportCookies && (
+          <ExportButton disable={disableExport} onClick={exportCookies} />
+        )}
       </div>
 
       <div className="text-right w-full text-xxxs text-secondary">

@@ -97,7 +97,7 @@ const Table = ({
 
   const exportCookies = useCallback(() => {
     const cookies = table.rows.map(({ originalData }) => originalData);
-    if ('parsedCookie' in cookies[0]) {
+    if (cookies.length > 0 && 'parsedCookie' in cookies[0]) {
       const csvTextBlob = generateCookieTableCSV(cookies as CookieTableData[]);
       saveAs(csvTextBlob, 'out.csv');
     }
@@ -113,6 +113,7 @@ const Table = ({
           hideFiltering={hideFiltering}
           setShowFilterSidebar={setShowFilterSidebar}
           cookiesCount={table.rows.length}
+          disableExport={table.rows.length === 0}
           extraInterface={extraInterfaceToTopBar}
           exportCookies={hideExport ? undefined : exportCookies}
         />

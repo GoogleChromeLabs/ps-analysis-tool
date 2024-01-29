@@ -17,20 +17,33 @@
  * External dependencies.
  */
 import React from 'react';
+import classNames from 'classnames';
+import { noop } from '@ps-analysis-tool/common';
+/**
+ * Internal dependencies.
+ */
 import { Export } from '../../icons';
 
 interface ExportButtonProps {
   onClick?: () => void;
   title?: string;
+  disable?: boolean;
 }
-const ExportButton = ({ onClick, title = 'Export' }: ExportButtonProps) => {
+const ExportButton = ({
+  onClick,
+  title = 'Export',
+  disable = false,
+}: ExportButtonProps) => {
   return (
     <button
-      onClick={onClick ? onClick : undefined}
+      onClick={disable ? noop : onClick}
       title={title}
-      className={
-        'flex items-center text-center dark:text-mischka text-comet-black hover:text-comet-grey hover:dark:text-bright-gray active:dark:text-mischka active:text-comet-black'
-      }
+      className={classNames({
+        'flex items-center text-center dark:text-mischka text-comet-black ':
+          true,
+        'hover:text-comet-grey hover:dark:text-bright-gray active:dark:text-mischka active:text-comet-black':
+          !disable,
+      })}
     >
       <Export />
     </button>
