@@ -23,7 +23,6 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
  */
 import ListItem from './listItem';
 import type { TableFilter, TableOutput } from '../../useTable';
-import { ArrowDown } from '../../../../icons';
 
 interface FiltersSidebarProps {
   filters: TableFilter;
@@ -72,38 +71,28 @@ const FiltersSidebar = ({
 
   return (
     <div
-      className="h-full overflow-auto p-3 flex flex-col gap-1"
+      className="h-full overflow-auto p-3 pt-0"
       data-testid="filters-sidebar"
     >
-      <div className="flex gap-2 items-center mb-[3px]">
-        <button
-          className="flex items-center text-asteriod-black dark:text-bright-gray active:opacity-70"
-          onClick={() => {
-            setExpandAll((prev) => {
-              const newExpandAll = !prev;
+      <a
+        className="w-full block text-link text-royal-blue dark:text-medium-persian-blue text-[11px] mt-1.5 mb-2"
+        href="#"
+        onClick={() => {
+          setExpandAll((prev) => {
+            const newExpandAll = !prev;
 
-              if (newExpandAll) {
-                expandedFilters.current = new Set(filterKeys);
-              } else {
-                expandedFilters.current = new Set();
-              }
+            if (newExpandAll) {
+              expandedFilters.current = new Set(filterKeys);
+            } else {
+              expandedFilters.current = new Set();
+            }
 
-              return newExpandAll;
-            });
-          }}
-        >
-          <span
-            className={`${expandAll ? '' : '-rotate-90'}`}
-            data-testid="expand-arrow"
-          >
-            <ArrowDown />
-          </span>
-          <p className="ml-1 leading-normal font-semi-thick">
-            Expand/Collapse All
-          </p>
-        </button>
-      </div>
-      <hr />
+            return newExpandAll;
+          });
+        }}
+      >
+        {expandAll ? 'Collapse All' : 'Expand All'}
+      </a>
       <ul>
         {Object.entries(filters).map(([filterKey, filter]) => (
           <ListItem
