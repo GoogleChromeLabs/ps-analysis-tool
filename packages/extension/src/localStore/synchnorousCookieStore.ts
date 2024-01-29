@@ -39,7 +39,7 @@ class SynchnorousCookieStore {
   } = {};
 
   /**
-   * Required data of the tabs.
+   * Required data of the tabs and PSAT panel of the tab.
    */
   tabs: {
     [key: number]: {
@@ -141,12 +141,13 @@ class SynchnorousCookieStore {
    */
   clear() {
     this.cachedTabsData = {};
+    this.tabs = {};
   }
 
   /**
-   * Gets the tabUrl for the given tab id.
+   * Gets the tabUrl for the given tab id if tab exists.
    * @param {number} tabId Tab id.
-   * @returns the url of the tab
+   * @returns {string | null} The url of the tab if exists else null.
    */
   getTabUrl(tabId: number): string | null {
     if (!this.tabs[tabId]) {
@@ -155,9 +156,10 @@ class SynchnorousCookieStore {
 
     return this.tabs[tabId].url;
   }
+
   /**
    * Update tab url for given tab
-   * @param {number} tabId The url whose tabId needs to be update.
+   * @param {number} tabId The url whose url needs to be update.
    * @param {string} url The updated URL.
    */
   updateUrl(tabId: number, url: string) {
@@ -171,10 +173,11 @@ class SynchnorousCookieStore {
       this.tabs[tabId].url = url;
     }
   }
+
   /**
    * Update Popup State for given tab
-   * @param {number} tabId The url whose tabId needs to be update.
-   * @param {boolean} state The updated devtools state.
+   * @param {number} tabId The tabId whose popup state needs to be update.
+   * @param {boolean} state The updated popup state.
    */
   updatePopUpState(tabId: number, state: boolean) {
     if (!this.tabs[tabId]) {
@@ -185,7 +188,7 @@ class SynchnorousCookieStore {
 
   /**
    * Update Devtools State for given tab
-   * @param {number} tabId The url whose tabId needs to be update.
+   * @param {number} tabId The tabId whose devtools state needs to be update.
    * @param {boolean} state The updated devtools state.
    */
   updateDevToolsState(tabId: number, state: boolean) {
@@ -194,8 +197,9 @@ class SynchnorousCookieStore {
     }
     this.tabs[tabId].devToolsOpenState = state;
   }
+
   /**
-   * Deletes a cookie
+   * Adds exclusion and warning reasons for a given cookie.
    * @param {string} cookieName Name of the cookie.
    * @param {string} alternateCookieName Alternate name of the cookie.
    * @param {string[]} exclusionReasons reasons to be added to the blocked reason array.
@@ -275,7 +279,7 @@ class SynchnorousCookieStore {
   }
 
   /**
-   * Clear cookie data
+   * Clear cookie data from cached cookie data for the given tabId
    * @param {number} tabId The active tab id.
    */
   removeCookieData(tabId: number) {
@@ -285,28 +289,18 @@ class SynchnorousCookieStore {
   /**
    * Creates an entry for a tab
    * @param {number} tabId The tab id.
-   * @param {string} tabProessingMode Passed to determine the tab processing mode.
    */
-  addTabData(tabId: number, tabProessingMode: string) {
+  addTabData(tabId: number) {
     if (this.cachedTabsData[tabId] && this.tabs[tabId]) {
       return;
     }
 
-    if (tabProessingMode && tabProessingMode !== 'unlimited') {
-      this.cachedTabsData[tabId] = {};
-      this.tabs[tabId] = {
-        url: '',
-        devToolsOpenState: false,
-        popupOpenState: false,
-      };
-    } else {
-      this.cachedTabsData[tabId] = {};
-      this.tabs[tabId] = {
-        url: '',
-        devToolsOpenState: false,
-        popupOpenState: false,
-      };
-    }
+    this.cachedTabsData[tabId] = {};
+    this.tabs[tabId] = {
+      url: '',
+      devToolsOpenState: false,
+      popupOpenState: false,
+    };
   }
 
   /**
