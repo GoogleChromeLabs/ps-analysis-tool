@@ -40,7 +40,7 @@ export function createCookieObject(
   const value = parsedCookie.value;
 
   const cdpCookie = cookiesList?.find((cookie: Protocol.Network.Cookie) => {
-    return cookie.name === name && cookie.value === value;
+    return cookie.name === name;
   });
 
   const domain = parseAttributeValues(

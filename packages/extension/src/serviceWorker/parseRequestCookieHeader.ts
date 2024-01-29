@@ -22,15 +22,13 @@ import {
   isFirstParty,
   findAnalyticsMatch,
   type CookieData,
+  type CookieAnalytics,
+  type CookieDatabase,
 } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import type {
-  CookieAnalytics,
-  CookieDatabase,
-} from '../utils/fetchCookieDictionary';
 import { createCookieObject } from './createCookieObject';
 
 /**
