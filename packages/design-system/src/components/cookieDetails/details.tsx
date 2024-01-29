@@ -30,6 +30,7 @@ export interface DetailsProps {
 
 const Details = ({ selectedCookie }: DetailsProps) => {
   const [showUrlDecoded, setShowUrlDecoded] = useState(false);
+
   let blockedReasons = '';
   let warningReasons = '';
   //Adding a comment here for future reference, this was done because we are using 2 different APIs to gather cookie data and often the isBlocked gets toggled between true and false.
@@ -72,10 +73,24 @@ const Details = ({ selectedCookie }: DetailsProps) => {
 
   return (
     <div className="text-xs py-1 px-1.5">
-      {isCookieBlocked && blockedReasons && blockedReasons && (
+      {selectedCookie.isDomainInAllowList && (
+        <div className="mb-4">
+          <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
+            Allow Listed
+          </p>
+          <p className="text-outer-space-crayola dark:text-bright-gray">
+            The cookie domain was added to the allow-list for this session,
+            however the browser may still block these cookies for various
+            reasons, such as invalid attributes. You can check the allowed
+            domains under chrome://settings/content/siteData.
+          </p>
+        </div>
+      )}
+
+      {isCookieBlocked && blockedReasons && (
         <>
           <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
-            Blocked reason
+            Blocked Reason
           </p>
           <p
             className="text-outer-space-crayola dark:text-bright-gray mb-3"

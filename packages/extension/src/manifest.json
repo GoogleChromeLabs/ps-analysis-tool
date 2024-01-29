@@ -17,7 +17,8 @@
     "cookies",
     "unlimitedStorage",
     "debugger",
-    "management"
+    "management",
+    "contentSettings"
   ],
   "host_permissions": ["*://*/*"],
   "devtools_page": "devtools/devtools.html",

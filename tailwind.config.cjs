@@ -167,6 +167,10 @@ module.exports = {
       'dynamic-grey': '#fbfbfb',
       'dirty-red': '#990000',
       'dirty-pink': '#FFD6D6',
+      'jungle-green-light': '#234F1E',
+      'jungle-green-dark': '#1C4218',
+      'leaf-green-light': '#99EDC3',
+      'leaf-green-dark': '#87DFB2',
       'eerie-black': '#1F1F1F0F',
     },
     borderColor: {
@@ -182,6 +186,7 @@ module.exports = {
       gainsboro: '#DADCE0',
       'chinese-silver': '#CDCDCD',
       'baby-blue-eyes': '#A8C7FA',
+      'leaf-green-dark': '#87DFB2',
       sapphire: '#0B57D0',
     },
     colors: {
