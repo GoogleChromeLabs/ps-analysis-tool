@@ -51,14 +51,17 @@ const ListItem = ({
     setShowSubList(!showSubList);
   };
 
+  const isDisabled = Object.keys(filter.filterValues || {}).length === 0;
+
   return (
     <li className="py-[3px] text-xs">
       <div className="flex gap-2 items-center">
         <button
-          className="flex items-center text-asteriod-black dark:text-bright-gray"
+          className="flex items-center text-asteriod-black dark:text-bright-gray disabled:opacity-50"
+          disabled={isDisabled}
           onClick={toggleSubList}
         >
-          <span className={showSubList ? '' : '-rotate-90'}>
+          <span className={`${showSubList && !isDisabled ? '' : '-rotate-90'}`}>
             <ArrowDown />
           </span>
           <p className="ml-1 leading-normal font-semi-thick">{filter.title}</p>
@@ -74,7 +77,7 @@ const ListItem = ({
           <SubList
             filterValues={filter.filterValues}
             filterKey={filterKey}
-            sort={!filter.hasStaticFilterValues}
+            sort={!filter.hasStaticFilterValues || Boolean(filter.sortValues)}
             toggleFilterSelection={toggleFilterSelection}
             isExpanded={isExpanded}
           />

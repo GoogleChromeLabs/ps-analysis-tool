@@ -53,12 +53,12 @@ program
   .option('-c, --csv-path <value>', 'Path to a CSV file with a set of URLs.')
   .option(
     '-p, --sitemap-path <value>',
-    'Path to a sitmap saved in the file system'
+    'Path to a sitemap saved in the file system'
   )
-  .option('-ul, --url-limit <value>', 'No of Urls to analyze')
+  .option('-ul, --url-limit <value>', 'No of URLs to analyze')
   .option(
     '-nh, --no-headless ',
-    'Flag for running puppeteer in non headless mode'
+    'Flag for running puppeteer in non-headless mode'
   )
   .option(
     '-np, --no-prompts',
@@ -85,7 +85,10 @@ const initialize = async () => {
   }
 };
 
-const saveResults = async (outDir: string, result: CompleteJson[]) => {
+const saveResults = async (
+  outDir: string,
+  result: CompleteJson | CompleteJson[]
+) => {
   await ensureFile(outDir + '/out.json');
   await writeFile(outDir + '/out.json', JSON.stringify(result, null, 4));
 };
@@ -217,10 +220,10 @@ const startDashboardServer = async (dir: string) => {
     } as CompleteJson;
   });
 
-  await saveResults(path.join(outputDir, prefix), result);
+  await saveResults(outputDir, result);
 
   if (outDir) {
-    await saveCSVReports(path.join(outputDir, prefix), result);
+    await saveCSVReports(path.resolve(outputDir), result);
     return;
   }
 

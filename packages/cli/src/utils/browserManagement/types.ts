@@ -14,22 +14,7 @@
  * limitations under the License.
  */
 
-export type Cookie = {
-  name: string;
-  domain: string;
-  path: string;
-  value: string;
-  sameSite: string;
-  expires: string | Date | number;
-  httpOnly: boolean;
-  secure: boolean;
-  isBlocked?: boolean;
-  platform?: string;
-  description?: string;
-  category?: string;
-  GDPR?: string;
-  isFirstParty?: boolean;
-};
+import { CookieData } from '@ps-analysis-tool/common';
 
 export type ViewportConfig = {
   width: number;
@@ -40,11 +25,11 @@ export type ViewportConfig = {
 export type ResponseData = {
   frameId: string;
   serverUrl: string;
-  cookies: Cookie[];
+  cookies: CookieData[];
 };
 
 export type RequestData = {
   frameId: string;
   serverUrl: string;
-  cookies: Cookie[];
+  cookies: CookieData[];
 };
