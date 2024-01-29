@@ -34,6 +34,7 @@ import type { TableRow } from '@ps-analysis-tool/design-system';
 import setParentDomain from './useAllowedList/setParentDomain';
 import onAllowListClick from './useAllowedList/onAllowListClick';
 import reloadCurrentTab from '../../../../../utils/reloadCurrentTab';
+import getDotPrefixedDomain from './useAllowedList/getDotPrefixedDomain';
 
 interface RowContextMenuProps {
   domainsInAllowList: Set<string>;
@@ -76,9 +77,7 @@ const RowContextMenu = forwardRef<
     [selectedCookie]
   );
 
-  const _domain = useMemo(() => {
-    return domain === '' ? '' : domain.startsWith('.') ? domain : `.${domain}`;
-  }, [domain]);
+  const _domain = useMemo(() => getDotPrefixedDomain(domain), [domain]);
 
   const handleRightClick = useCallback(
     (e: React.MouseEvent<HTMLElement>, { originalData }: TableRow) => {
@@ -111,14 +110,7 @@ const RowContextMenu = forwardRef<
     if (!_isDomainInAllowList) {
       _isDomainInAllowList = [...domainsInAllowList].some((storedDomain) => {
         // For example xyz.bbc.com and .bbc.com
-        if (
-          (_domain.endsWith(storedDomain) && _domain !== storedDomain) ||
-          `.${_domain}` === storedDomain
-        ) {
-          return true;
-        }
-
-        return false;
+        return _domain.endsWith(storedDomain) && _domain !== storedDomain;
       });
     }
 

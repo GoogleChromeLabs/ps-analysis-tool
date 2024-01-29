@@ -18,23 +18,23 @@
  */
 import type { CookieTableData } from '@ps-analysis-tool/common';
 
+/**
+ * Internal dependencies.
+ */
+import getDotPrefixedDomain from './getDotPrefixedDomain';
+
 const isCookieDomainInAllowList = (
   cookie: CookieTableData,
   domainsInAllowList: Set<string>
 ) => {
-  const domain = cookie.parsedCookie?.domain || '';
-  let _domain = '';
+  const domain = getDotPrefixedDomain(cookie.parsedCookie?.domain || '');
 
-  if (domain) {
-    _domain = domain.startsWith('.') ? domain : `.${domain}`;
-  }
-
-  let isDomainInAllowList = domainsInAllowList.has(_domain);
+  let isDomainInAllowList = domainsInAllowList.has(domain);
 
   if (!isDomainInAllowList) {
     isDomainInAllowList = [...domainsInAllowList].some((storedDomain) => {
       // For example xyz.bbc.com and .bbc.com
-      return _domain.endsWith(storedDomain) && _domain !== storedDomain;
+      return domain.endsWith(storedDomain) && domain !== storedDomain;
     });
   }
 

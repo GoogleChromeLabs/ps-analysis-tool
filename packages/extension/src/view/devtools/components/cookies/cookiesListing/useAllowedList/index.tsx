@@ -25,6 +25,7 @@ import { useEffect, useRef, useState } from 'react';
 import { getCurrentTab } from '../../../../../../utils/getCurrentTabId';
 import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import setDomainsInAllowList from './setDomainsInAllowList';
+import getDotPrefixedDomain from './getDotPrefixedDomain';
 
 const useAllowedList = () => {
   const { tabUrl, cookies } = useCookieStore(({ state }) => ({
@@ -63,29 +64,19 @@ const useAllowedList = () => {
       await Promise.all(
         Object.values(cookies || {}).map(async (cookie) => {
           if (cookie.parsedCookie?.domain) {
-            const domain = cookie.parsedCookie.domain || '';
-            const _domain =
-              domain === ''
-                ? ''
-                : domain.startsWith('.')
-                ? domain
-                : `.${domain}`;
+            const domain = getDotPrefixedDomain(
+              cookie.parsedCookie.domain || ''
+            );
 
-            let isDomainInAllowList =
-              domainsInAllowListRef.current.has(_domain);
+            let isDomainInAllowList = domainsInAllowListRef.current.has(domain);
 
             if (!isDomainInAllowList) {
               isDomainInAllowList = [...domainsInAllowListRef.current].some(
                 (storedDomain) => {
                   // For example xyz.bbc.com and .bbc.com
-                  if (
-                    _domain.endsWith(storedDomain) &&
-                    _domain !== storedDomain
-                  ) {
-                    return true;
-                  }
-
-                  return false;
+                  return (
+                    domain.endsWith(storedDomain) && domain !== storedDomain
+                  );
                 }
               );
             }
@@ -93,7 +84,7 @@ const useAllowedList = () => {
             await setDomainsInAllowList(
               tabUrl || '',
               isIncognito.current,
-              _domain,
+              domain,
               domainsInAllowListRef.current,
               setter
             );
