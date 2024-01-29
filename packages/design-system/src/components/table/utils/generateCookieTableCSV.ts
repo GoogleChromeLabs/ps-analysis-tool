@@ -17,8 +17,7 @@
 /**
  * Internal dependencies.
  */
-import { CookieTableData } from '../cookies.types';
-import sanitizeCsvRecord from './sanitizeCsvRecord';
+import { CookieTableData, sanitizeCsvRecord } from '@ps-analysis-tool/common';
 
 const COOKIES_TABLE_DATA_HEADER = [
   'Name',

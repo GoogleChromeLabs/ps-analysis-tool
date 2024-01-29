@@ -27,6 +27,7 @@ import {
 /**
  * Internal dependencies.
  */
+import ExportButton from '../../../exportButton';
 
 interface TableTopBarProps {
   searchValue: TableOutput['searchValue'];
@@ -37,6 +38,7 @@ interface TableTopBarProps {
   hideFiltering?: boolean;
   disableFiltering?: boolean;
   extraInterface?: React.ReactNode;
+  exportCookies?: () => void;
 }
 
 const TableTopBar = ({
@@ -48,6 +50,7 @@ const TableTopBar = ({
   hideFiltering = false,
   disableFiltering = false,
   extraInterface = null,
+  exportCookies,
 }: TableTopBarProps) => {
   const handleInput = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,7 +88,10 @@ const TableTopBar = ({
       />
       <div className="h-full w-px bg-american-silver dark:bg-quartz mx-3" />
 
-      {extraInterface}
+      <div className="flex gap-2">
+        {extraInterface}
+        {exportCookies && <ExportButton onClick={exportCookies} />}
+      </div>
 
       <div className="text-right w-full text-xxxs text-secondary">
         Count: {cookiesCount ?? 0}

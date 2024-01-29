@@ -19,6 +19,7 @@
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Resizable } from 're-resizable';
+import { saveAs } from 'file-saver';
 /**
  * Internal dependencies.
  */
@@ -29,6 +30,8 @@ import { TableData, TableOutput, TableRow } from '../useTable';
 import TableTopBar from './tableTopBar';
 import ChipsBar from './filtersSidebar/chips';
 import FiltersSidebar from './filtersSidebar';
+import { generateCookieTableCSV } from '../utils';
+import { CookieTableData } from '@ps-analysis-tool/common';
 
 interface TableProps {
   table: TableOutput;
@@ -90,6 +93,14 @@ const Table = ({
     [showColumnsMenu]
   );
 
+  const exportCookies = useCallback(() => {
+    const cookies = table.rows.map(({ originalData }) => originalData);
+    if ('parsedCookie' in cookies[0]) {
+      const csvTextBlob = generateCookieTableCSV(cookies as CookieTableData[]);
+      saveAs(csvTextBlob, 'out.csv');
+    }
+  }, [table.rows]);
+
   return (
     <div className="w-full h-full flex flex-col">
       {showTopBar && (
@@ -101,6 +112,7 @@ const Table = ({
           setShowFilterSidebar={setShowFilterSidebar}
           cookiesCount={table.rows.length}
           extraInterface={extraInterfaceToTopBar}
+          exportCookies={exportCookies}
         />
       )}
       <ChipsBar

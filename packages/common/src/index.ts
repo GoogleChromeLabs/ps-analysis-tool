@@ -17,8 +17,6 @@
 export { default as isFirstParty } from './utils/isFirstParty';
 export { default as filterFramesWithCookies } from './utils/filterFramesWithCookies';
 export { default as filterCookiesByFrame } from './utils/filterCookiesByFrame';
-export { default as generateCookieTableCSV } from './utils/generateCookieTableCSV';
-
 export { default as getCookieKey } from './utils/getCookieKey';
 export {
   default as findAnalyticsMatch,
