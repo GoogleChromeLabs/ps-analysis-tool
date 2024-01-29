@@ -19,6 +19,7 @@
 import React, {
   forwardRef,
   useCallback,
+  useEffect,
   useImperativeHandle,
   useMemo,
   useState,
@@ -80,7 +81,7 @@ const RowContextMenu = forwardRef<
   }, [domain]);
 
   const handleRightClick = useCallback(
-    async (e: React.MouseEvent<HTMLElement>, { originalData }: TableRow) => {
+    (e: React.MouseEvent<HTMLElement>, { originalData }: TableRow) => {
       e.preventDefault();
       const x = e.clientX,
         y = e.clientY;
@@ -88,10 +89,15 @@ const RowContextMenu = forwardRef<
       document.body.style.overflow = contextMenuOpen ? 'auto' : 'hidden';
       setContextMenuOpen(!contextMenuOpen);
       setSelectedCookie(originalData as CookieTableData);
-      await setParentDomain(_domain || '', setParentDomainCallback);
     },
-    [contextMenuOpen, _domain]
+    [contextMenuOpen]
   );
+
+  useEffect(() => {
+    (async () => {
+      await setParentDomain(_domain || '', setParentDomainCallback);
+    })();
+  }, [_domain, setParentDomainCallback]);
 
   useImperativeHandle(ref, () => ({
     onRowContextMenu(e, row) {
