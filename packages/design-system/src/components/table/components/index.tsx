@@ -20,6 +20,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Resizable } from 're-resizable';
 import { saveAs } from 'file-saver';
+import { CookieTableData } from '@ps-analysis-tool/common';
+
 /**
  * Internal dependencies.
  */
@@ -31,7 +33,6 @@ import TableTopBar from './tableTopBar';
 import ChipsBar from './filtersSidebar/chips';
 import FiltersSidebar from './filtersSidebar';
 import { generateCookieTableCSV } from '../utils';
-import { CookieTableData } from '@ps-analysis-tool/common';
 
 interface TableProps {
   table: TableOutput;

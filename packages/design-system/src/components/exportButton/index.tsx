@@ -19,6 +19,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { noop } from '@ps-analysis-tool/common';
+
 /**
  * Internal dependencies.
  */
@@ -29,6 +30,7 @@ interface ExportButtonProps {
   title?: string;
   disable?: boolean;
 }
+
 const ExportButton = ({
   onClick,
   title = 'Export',
