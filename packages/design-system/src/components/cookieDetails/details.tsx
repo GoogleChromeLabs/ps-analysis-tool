@@ -71,8 +71,6 @@ const Details = ({ selectedCookie }: DetailsProps) => {
     return reason;
   });
 
-  // {selectedCookie.isDomainInAllowList ? '(allow listed)' : ''}
-
   return (
     <div className="text-xs py-1 px-1.5">
       {selectedCookie.isDomainInAllowList && (
@@ -81,9 +79,9 @@ const Details = ({ selectedCookie }: DetailsProps) => {
             Allow Listed
           </p>
           <p className="text-outer-space-crayola dark:text-bright-gray">
-            The cookie domain was added to the allow-list for this session of
-            the browser. However, adding a cookie to the allow-list does not
-            guarantee that the browser will allow it. You can view all allowed
+            The cookie domain was added to the allow-list for this session,
+            however the browser may still block these cookies for various
+            reasons, such as invalid attributes. You can check the allowed
             domains under chrome://settings/content/siteData.
           </p>
         </div>
@@ -104,10 +102,7 @@ const Details = ({ selectedCookie }: DetailsProps) => {
         selectedCookie?.warningReasons?.length > 0 && (
           <>
             <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
-              Warnings{' '}
-              {selectedCookie.isDomainInAllowList && !blockedReasons
-                ? '(allow listed)'
-                : ''}
+              Warnings
             </p>
             <p
               className="text-outer-space-crayola dark:text-bright-gray"
