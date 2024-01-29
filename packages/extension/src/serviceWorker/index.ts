@@ -71,6 +71,11 @@ chrome.webRequest.onResponseStarted.addListener(
       ) {
         return;
       }
+
+      if (!cookieDB) {
+        cookieDB = await fetchDictionary();
+      }
+
       let cdpCookies: { [key: string]: Protocol.Network.Cookie[] };
       //Since we are using CDP we might as well use it to get the proper cookies in the request this will further reduce the load of domain calculation
       try {
@@ -84,14 +89,6 @@ chrome.webRequest.onResponseStarted.addListener(
       }
       const cookies = responseHeaders?.reduce<CookieData[]>(
         (accumulator, header) => {
-          console.log(
-            'chrome.webRequest.onResponseStarted reduce',
-            header.name.toLowerCase() === 'set-cookie',
-            header.value,
-            url,
-            tabUrl,
-            cookieDB
-          );
           if (
             header.name.toLowerCase() === 'set-cookie' &&
             header.value &&
@@ -113,19 +110,7 @@ chrome.webRequest.onResponseStarted.addListener(
         },
         []
       );
-      console.log(
-        'chrome.webRequest.onResponseStarted',
-        !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, responseHeaders),
-        tabMode,
-        tabUrl,
-        tabToRead,
-        tabId,
-        responseHeaders,
-        cookies,
-        tabUrl,
-        cookieDB,
-        syncCookieStore.cachedTabsData
-      );
+
       if (!cookies || (cookies && cookies?.length === 0)) {
         return;
       }
@@ -151,6 +136,10 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
         return;
       }
 
+      if (!cookieDB) {
+        cookieDB = await fetchDictionary();
+      }
+
       let cdpCookies: { [key: string]: Protocol.Network.Cookie[] };
       try {
         cdpCookies = await chrome.debugger.sendCommand(
@@ -164,14 +153,6 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 
       const cookies = requestHeaders?.reduce<CookieData[]>(
         (accumulator, header) => {
-          console.log(
-            'chrome.webRequest.onBeforeSendHeaders reduce',
-            header.name.toLowerCase() === 'cookie',
-            header.value,
-            url,
-            tabUrl,
-            cookieDB
-          );
           if (
             header.name.toLowerCase() === 'cookie' &&
             header.value &&
@@ -192,19 +173,6 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
           return accumulator;
         },
         []
-      );
-      console.log(
-        'chrome.webRequest.onBeforeSendHeaders',
-        !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, requestHeaders),
-        tabMode,
-        tabUrl,
-        tabToRead,
-        tabId,
-        requestHeaders,
-        cookies,
-        tabUrl,
-        cookieDB,
-        syncCookieStore.cachedTabsData
       );
       if (!cookies || (cookies && cookies?.length === 0)) {
         return;
@@ -295,10 +263,6 @@ chrome.windows.onRemoved.addListener((windowId) => {
  */
 chrome.runtime.onInstalled.addListener(async (details) => {
   syncCookieStore.clear();
-
-  if (!cookieDB) {
-    cookieDB = await fetchDictionary();
-  }
 
   if (details.reason === 'install') {
     await chrome.storage.sync.clear();
