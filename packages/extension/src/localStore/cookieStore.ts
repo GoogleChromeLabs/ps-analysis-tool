@@ -406,7 +406,7 @@ const CookieStore = {
   async getDomainsInAllowList(): Promise<AllowedDomainObject[] | []> {
     const storage = await chrome.storage.session.get();
 
-    return storage.allowList ?? [];
+    return storage?.allowList ?? [];
   },
 };
 
