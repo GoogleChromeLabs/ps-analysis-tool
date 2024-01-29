@@ -116,7 +116,7 @@ describe('RowContextMenu', () => {
     });
 
     const rowContextMenu = await screen.findByText(
-      'Remove Domain From Allow List'
+      'Remove Domain from Allow List'
     );
 
     expect(rowContextMenu).toBeVisible();
