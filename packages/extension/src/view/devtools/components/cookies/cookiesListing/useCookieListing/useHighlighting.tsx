@@ -23,6 +23,7 @@ import { getCookieKey, type TabCookies } from '@ps-analysis-tool/common';
  * Internal dependencies.
  */
 import isCookieDomainInAllowList from '../useAllowedList/isCookieDomainInAllowList';
+import getDotPrefixedDomain from '../useAllowedList/getDotPrefixedDomain';
 
 const useHighlighting = (
   cookies: TabCookies,
@@ -34,10 +35,12 @@ const useHighlighting = (
       Object.values(cookiesToProcess).reduce((acc, cookie) => {
         const key = getCookieKey(cookie.parsedCookie) as string;
 
+        const domain = getDotPrefixedDomain(cookie.parsedCookie?.domain || '');
+
         acc[key] = {
           ...cookie,
           isDomainInAllowList: isCookieDomainInAllowList(
-            cookie,
+            domain,
             domainsInAllowList
           ),
         };

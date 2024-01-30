@@ -13,10 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import type { CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -24,10 +20,10 @@ import type { CookieTableData } from '@ps-analysis-tool/common';
 import getDotPrefixedDomain from './getDotPrefixedDomain';
 
 const isCookieDomainInAllowList = (
-  cookie: CookieTableData,
+  _domain: string,
   domainsInAllowList: Set<string>
 ) => {
-  const domain = getDotPrefixedDomain(cookie.parsedCookie?.domain || '');
+  const domain = getDotPrefixedDomain(_domain);
 
   let isDomainInAllowList = domainsInAllowList.has(domain);
 

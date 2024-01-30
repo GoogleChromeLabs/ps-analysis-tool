@@ -35,6 +35,7 @@ import setParentDomain from './useAllowedList/setParentDomain';
 import onAllowListClick from './useAllowedList/onAllowListClick';
 import reloadCurrentTab from '../../../../../utils/reloadCurrentTab';
 import getDotPrefixedDomain from './useAllowedList/getDotPrefixedDomain';
+import isCookieDomainInAllowList from './useAllowedList/isCookieDomainInAllowList';
 
 interface RowContextMenuProps {
   domainsInAllowList: Set<string>;
@@ -104,18 +105,10 @@ const RowContextMenu = forwardRef<
     },
   }));
 
-  const isDomainInAllowList = useMemo(() => {
-    let _isDomainInAllowList = domainsInAllowList.has(_domain);
-
-    if (!_isDomainInAllowList) {
-      _isDomainInAllowList = [...domainsInAllowList].some((storedDomain) => {
-        // For example xyz.bbc.com and .bbc.com
-        return _domain.endsWith(storedDomain) && _domain !== storedDomain;
-      });
-    }
-
-    return _isDomainInAllowList;
-  }, [_domain, domainsInAllowList]);
+  const isDomainInAllowList = isCookieDomainInAllowList(
+    _domain,
+    domainsInAllowList
+  );
 
   const handleCopy = useCallback(() => {
     try {
