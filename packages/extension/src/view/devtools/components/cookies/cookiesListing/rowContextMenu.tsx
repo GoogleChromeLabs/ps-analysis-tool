@@ -96,7 +96,7 @@ const RowContextMenu = forwardRef<
     (async () => {
       await setParentDomain(_domain || '', setParentDomainCallback);
     })();
-  }, [_domain, setParentDomainCallback]);
+  }, [_domain, setParentDomainCallback, contextMenuOpen]);
 
   useImperativeHandle(ref, () => ({
     onRowContextMenu(e, row) {
