@@ -38,10 +38,8 @@ interface CookiesProps {
 
 const Cookies = ({ setFilteredCookies }: CookiesProps) => {
   const {
-    contextInvalidated,
     isCurrentTabBeingListenedTo,
     loading,
-    returningToSingleTab,
     selectedFrame,
     tabCookies,
     tabFrames,
@@ -124,11 +122,6 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
   return (
     <div className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black">
       <div className="w-full h-full flex flex-col items-center justify-center">
-        {!returningToSingleTab && !contextInvalidated && (
-          <p className="dark:text-bright-gray text-chart-label text-base mb-5 text-center">
-            This tool works best with a single tab for cookie analysis.
-          </p>
-        )}
         <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
       </div>
     </div>

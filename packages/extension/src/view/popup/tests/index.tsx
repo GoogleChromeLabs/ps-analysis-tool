@@ -264,11 +264,6 @@ describe('App', () => {
         )
       );
       expect(await screen.findByText('Analyze this tab')).toBeInTheDocument();
-      expect(
-        screen.queryByText(
-          'This tool works best with a single tab for cookie analysis.'
-        )
-      ).not.toBeInTheDocument();
     });
   });
 
@@ -352,11 +347,6 @@ describe('App', () => {
         )
       );
       expect(await screen.findByText('Analyze this tab')).toBeInTheDocument();
-      expect(
-        await screen.findByText(
-          'This tool works best with a single tab for cookie analysis.'
-        )
-      ).toBeInTheDocument();
     });
   });
 
