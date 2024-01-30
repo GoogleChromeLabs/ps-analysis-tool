@@ -42,6 +42,7 @@ const BodyCell = ({
   return (
     <div
       tabIndex={0}
+      style={{ minWidth: width }}
       onDoubleClick={(e) => {
         const target = e.target as HTMLElement;
         const range = new Range();
@@ -55,7 +56,6 @@ const BodyCell = ({
           e.stopPropagation();
         }
       }}
-      style={{ maxWidth: width }}
       className={`box-border outline-0 px-1 py-px truncate h-5 text-xs ${
         isHighlighted
           ? `${

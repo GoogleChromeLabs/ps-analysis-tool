@@ -27,6 +27,7 @@ const setParentDomain = async (
   let parentDomainValue = '';
 
   if (!allowListSessionStorage || allowListSessionStorage?.length === 0) {
+    setter(() => '');
     return;
   }
 
