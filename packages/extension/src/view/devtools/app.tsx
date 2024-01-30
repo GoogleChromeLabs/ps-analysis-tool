@@ -136,7 +136,7 @@ const App: React.FC = () => {
           }
         });
 
-        if (!hasFrame && cookie.frameIdList?.length > 0) {
+        if (!hasFrame && cookie.frameIdList?.length) {
           acc[UNKNOWN_FRAME_KEY] = true;
         }
 
@@ -173,8 +173,13 @@ const App: React.FC = () => {
       psData.children['cookies'].panel = (
         <Cookies setFilteredCookies={setFilteredCookies} />
       );
-      psData.children['cookies'].children = Object.keys(tabFrames || {}).reduce(
-        (acc, url) => {
+      psData.children['cookies'].children = Object.keys(tabFrames || {})
+        .filter((url) => {
+          return url === UNKNOWN_FRAME_KEY
+            ? doesFrameContainCookies[url]
+            : true;
+        })
+        .reduce<SidebarItems>((acc, url) => {
           acc[url] = {
             title: url,
             popupTitle: `Cookies used by frames from ${url}`,
@@ -186,9 +191,7 @@ const App: React.FC = () => {
           };
 
           return acc;
-        },
-        {} as SidebarItems
-      );
+        }, {});
 
       const showInspectButton =
         canStartInspecting && Boolean(Object.keys(tabFrames || {}).length);
