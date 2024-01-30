@@ -93,7 +93,11 @@ const TableTopBar = ({
       <div className="flex gap-2">
         {extraInterface}
         {exportCookies && (
-          <ExportButton disable={disableExport} onClick={exportCookies} />
+          <ExportButton
+            title={'Exprt Cookies Table'}
+            disabled={disableExport}
+            onClick={exportCookies}
+          />
         )}
       </div>
 
