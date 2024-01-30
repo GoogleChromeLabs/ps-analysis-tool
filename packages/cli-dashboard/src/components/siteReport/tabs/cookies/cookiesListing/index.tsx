@@ -71,7 +71,7 @@ const CookiesListing = ({
           tablePersistentSettingsKey={tablePersistentSettingsKey}
           selectedFrame={selectedFrameUrl}
           selectedFrameCookie={selectedFrameCookie}
-          hideExport={true}
+          hideExport
           setSelectedFrameCookie={setSelectedFrameCookie}
         />
       </Resizable>
