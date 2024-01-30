@@ -34,6 +34,8 @@ const COOKIES_TABLE_DATA_HEADER = [
   'Expires',
   'Cookie Affected',
   'GDPRPortal',
+  'Priority',
+  'Size',
 ];
 
 const generateCookieTableCSV = (cookies: CookieTableData[]): Blob => {
@@ -56,6 +58,8 @@ const generateCookieTableCSV = (cookies: CookieTableData[]): Blob => {
       cookie.parsedCookie.expires,
       cookie.isBlocked ? 'Yes' : 'No',
       cookie.analytics?.gdprUrl || 'NA',
+      cookie.parsedCookie.priority || ' ',
+      cookie.parsedCookie.size || ' ',
     ].map(sanitizeCsvRecord);
 
     cookieRecords += recordsArray.join(',') + '\r\n';
