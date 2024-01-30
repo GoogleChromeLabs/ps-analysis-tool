@@ -130,7 +130,7 @@ const Table = ({
         )}
         <div
           ref={table.tableContainerRef}
-          className="relative h-full w-full overflow-auto"
+          className="relative h-full w-full overflow-x-hidden overflow-y-auto"
         >
           <ColumnMenu
             table={table}
