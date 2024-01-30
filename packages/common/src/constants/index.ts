@@ -43,4 +43,4 @@ export const BLOCKED_REASON_LIST = [
   'ExcludeThirdPartyPhaseout',
 ];
 
-export const UNKNOWN_FRAME_KEY = 'Unknown Frame(s)';
+export const UNKNOWN_FRAME_KEY = 'Unknown Frames';
