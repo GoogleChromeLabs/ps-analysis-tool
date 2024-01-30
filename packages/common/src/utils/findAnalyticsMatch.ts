@@ -15,7 +15,7 @@
  */
 
 /**
- * External dependencies.
+ * Internal dependencies.
  */
 import { CookieAnalytics, CookieDatabase } from '../cookies.types';
 
