@@ -39,10 +39,11 @@ const ExportButton = ({
       onClick={disable ? noop : onClick}
       title={title}
       className={classNames({
-        'flex items-center text-center dark:text-mischka text-comet-black ':
+        'flex items-center text-center dark:text-mischka text-comet-black':
           true,
         'hover:text-comet-grey hover:dark:text-bright-gray active:dark:text-mischka active:text-comet-black':
           !disable,
+        'opacity-50': disable,
       })}
     >
       <Export />
