@@ -177,14 +177,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
   }, [tabToRead]);
 
   useEffect(() => {
-    if (tabId) {
-      chrome.runtime.sendMessage({
-        type: 'Popup::ServiceWorker::POPUP_STATE_OPEN',
-        payload: {
-          tabId: tabId,
-        },
-      });
-    }
+    chrome.runtime.sendMessage({
+      type: 'Popup::ServiceWorker::POPUP_STATE_OPEN',
+      payload: {
+        tabId: tabId,
+      },
+    });
 
     return () => {
       chrome.runtime.sendMessage({

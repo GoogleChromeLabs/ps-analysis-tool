@@ -523,7 +523,6 @@ chrome.runtime.onMessage.addListener(async (request) => {
     if (tabMode === 'single') {
       dataToSend['tabToRead'] = tabToRead;
     }
-
     chrome.runtime.sendMessage({
       type: 'ServiceWorker::Popup::INITIAL_SYNC',
       payload: dataToSend,

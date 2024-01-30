@@ -331,25 +331,29 @@ class SynchnorousCookieStore {
    * Sends updated data to the popup and devtools
    * @param {number} tabId The window id.
    */
-  sendUpdatedDataToPopupAndDevTools(tabId: number) {
-    if (this.tabs[tabId].devToolsOpenState) {
-      chrome.runtime.sendMessage({
-        type: 'ServiceWorker::DevTools::NEW_COOKIE_DATA',
-        payload: {
-          tabId,
-          cookieData: JSON.stringify(this.cachedTabsData[tabId]),
-        },
-      });
-    }
+  async sendUpdatedDataToPopupAndDevTools(tabId: number) {
+    try {
+      if (this.tabs[tabId].devToolsOpenState) {
+        await chrome.runtime.sendMessage({
+          type: 'ServiceWorker::DevTools::NEW_COOKIE_DATA',
+          payload: {
+            tabId,
+            cookieData: JSON.stringify(this.cachedTabsData[tabId]),
+          },
+        });
+      }
 
-    if (this.tabs[tabId].popupOpenState) {
-      chrome.runtime.sendMessage({
-        type: 'ServiceWorker::Popup::NEW_COOKIE_DATA',
-        payload: {
-          tabId,
-          cookieData: JSON.stringify(this.cachedTabsData[tabId]),
-        },
-      });
+      if (this.tabs[tabId].popupOpenState) {
+        await chrome.runtime.sendMessage({
+          type: 'ServiceWorker::Popup::NEW_COOKIE_DATA',
+          payload: {
+            tabId,
+            cookieData: JSON.stringify(this.cachedTabsData[tabId]),
+          },
+        });
+      }
+    } catch (error) {
+      //Fail silently
     }
   }
 }
