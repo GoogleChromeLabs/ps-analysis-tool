@@ -70,15 +70,14 @@ const RowContextMenu = forwardRef<
   const [parentDomain, setParentDomainCallback] = useState<string>('');
   const [selectedCookie, setSelectedCookie] = useState<CookieTableData>();
 
-  const [domain, name] = useMemo(
+  const [domain, dotPrefixedDomain, name] = useMemo(
     () => [
       selectedCookie?.parsedCookie?.domain || '',
+      getDotPrefixedDomain(selectedCookie?.parsedCookie?.domain || ''),
       selectedCookie?.parsedCookie?.name,
     ],
     [selectedCookie]
   );
-
-  const _domain = useMemo(() => getDotPrefixedDomain(domain), [domain]);
 
   const handleRightClick = useCallback(
     (e: React.MouseEvent<HTMLElement>, { originalData }: TableRow) => {
@@ -95,9 +94,9 @@ const RowContextMenu = forwardRef<
 
   useEffect(() => {
     (async () => {
-      await setParentDomain(_domain || '', setParentDomainCallback);
+      await setParentDomain(dotPrefixedDomain || '', setParentDomainCallback);
     })();
-  }, [_domain, setParentDomainCallback, contextMenuOpen]);
+  }, [dotPrefixedDomain, setParentDomainCallback, contextMenuOpen]);
 
   useImperativeHandle(ref, () => ({
     onRowContextMenu(e, row) {
@@ -106,7 +105,7 @@ const RowContextMenu = forwardRef<
   }));
 
   const isDomainInAllowList = isCookieDomainInAllowList(
-    _domain,
+    dotPrefixedDomain,
     domainsInAllowList
   );
 
@@ -132,10 +131,10 @@ const RowContextMenu = forwardRef<
 
       removeSelectedRow();
       await onAllowListClick(
-        _domain,
+        dotPrefixedDomain,
         tabUrl || '',
         isIncognito,
-        domainsInAllowList.has(_domain),
+        domainsInAllowList.has(dotPrefixedDomain),
         domainsInAllowList,
         setDomainsInAllowListCallback
       );
@@ -143,7 +142,7 @@ const RowContextMenu = forwardRef<
       await reloadCurrentTab();
     },
     [
-      _domain,
+      dotPrefixedDomain,
       domainsInAllowList,
       isIncognito,
       removeSelectedRow,
