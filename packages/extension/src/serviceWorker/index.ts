@@ -307,7 +307,6 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   PROMISE_QUEUE.clear();
   await PROMISE_QUEUE.add(async () => {
     await chrome.storage.local.clear();
-    chrome.contentSettings.cookies.clear({});
 
     if (details.reason === 'install') {
       await chrome.storage.sync.clear();
