@@ -105,7 +105,7 @@ const Table = ({
     const cookies = table.rows.map(({ originalData }) => originalData);
     if (cookies.length > 0 && 'parsedCookie' in cookies[0]) {
       const csvTextBlob = generateCookieTableCSV(cookies as CookieTableData[]);
-      saveAs(csvTextBlob, 'out.csv');
+      saveAs(csvTextBlob, 'Cookies Report.csv');
     }
   }, [table.rows]);
 
