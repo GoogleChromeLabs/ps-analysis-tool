@@ -91,7 +91,6 @@ class WebpageContentScript {
     this.docElement = document.documentElement;
 
     this.listenToConnection();
-    this.setTopics();
   }
 
   /**
