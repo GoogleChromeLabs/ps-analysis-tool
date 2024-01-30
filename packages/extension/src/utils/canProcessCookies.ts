@@ -23,7 +23,7 @@
  * @returns {boolean}.
  */
 export default function canProcessCookies(
-  tabMode: string,
+  tabMode: 'unlimited' | 'single',
   tabUrl: string | null,
   tabToRead: string,
   currentTabId: number,

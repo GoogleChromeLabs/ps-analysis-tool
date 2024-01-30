@@ -44,7 +44,7 @@ const cdpURLToRequestMap: {
   };
 } = {};
 
-let tabMode = 'single';
+let tabMode: 'single' | 'unlimited' = 'single';
 let tabToRead = '';
 let globalIsUsingCDP = false;
 
