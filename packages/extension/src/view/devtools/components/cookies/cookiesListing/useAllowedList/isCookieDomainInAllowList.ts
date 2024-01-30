@@ -20,17 +20,20 @@
 import getDotPrefixedDomain from './getDotPrefixedDomain';
 
 const isCookieDomainInAllowList = (
-  _domain: string,
+  domain: string,
   domainsInAllowList: Set<string>
 ) => {
-  const domain = getDotPrefixedDomain(_domain);
+  const dotPrefixedDomain = getDotPrefixedDomain(domain);
 
-  let isDomainInAllowList = domainsInAllowList.has(domain);
+  let isDomainInAllowList = domainsInAllowList.has(dotPrefixedDomain);
 
   if (!isDomainInAllowList) {
     isDomainInAllowList = [...domainsInAllowList].some((storedDomain) => {
       // For example xyz.bbc.com and .bbc.com
-      return domain.endsWith(storedDomain) && domain !== storedDomain;
+      return (
+        dotPrefixedDomain.endsWith(storedDomain) &&
+        dotPrefixedDomain !== storedDomain
+      );
     });
   }
 
