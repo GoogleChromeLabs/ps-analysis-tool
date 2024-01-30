@@ -276,6 +276,7 @@ class SynchnorousCookieStore {
         },
       };
     }
+    this.sendUpdatedDataToPopupAndDevTools(tabId);
   }
 
   /**
@@ -284,6 +285,7 @@ class SynchnorousCookieStore {
    */
   removeCookieData(tabId: number) {
     this.cachedTabsData[tabId] = {};
+    this.sendUpdatedDataToPopupAndDevTools(tabId);
   }
 
   /**

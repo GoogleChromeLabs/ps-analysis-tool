@@ -273,13 +273,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
         const data = JSON.parse(message?.payload?.cookieData ?? '{}');
         if (
           message?.payload?.tabId &&
-          tabId?.toString() === message?.payload?.tabId.toString() &&
-          Object.keys(data).length > 0
+          tabId?.toString() === message?.payload?.tabId.toString()
         ) {
           if (isCurrentTabBeingListenedToRef.current) {
             await getAllFramesForCurrentTab(tabId);
             setTabToRead(tabId.toString());
-            setTabCookies(data);
+            setTabCookies(Object.keys(data).length > 0 ? data : null);
           } else {
             setTabFrames(null);
           }
