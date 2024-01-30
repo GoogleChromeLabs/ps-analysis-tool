@@ -37,7 +37,7 @@ const useHighlighting = (
         acc[key] = {
           ...cookie,
           isDomainInAllowList: isCookieDomainInAllowList(
-            cookie.parsedCookie.domain || '',
+            cookie.parsedCookie?.domain || '',
             domainsInAllowList
           ),
         };
