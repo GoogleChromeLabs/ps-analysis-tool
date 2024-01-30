@@ -36,7 +36,7 @@ import SynchnorousCookieStore from '../localStore/synchnorousCookieStore';
 import canProcessCookies from '../utils/canProcessCookies';
 
 let cookieDB: CookieDatabase | null = null;
-const syncCookieStore = new SynchnorousCookieStore();
+let syncCookieStore: SynchnorousCookieStore | undefined;
 
 const cdpURLToRequestMap: {
   [tabId: string]: {
@@ -63,7 +63,7 @@ chrome.webRequest.onResponseStarted.addListener(
   (details: chrome.webRequest.WebResponseCacheDetails) => {
     (async () => {
       const { tabId, url, responseHeaders, frameId } = details;
-      const tabUrl = syncCookieStore.getTabUrl(tabId);
+      const tabUrl = syncCookieStore?.getTabUrl(tabId);
       if (
         !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, responseHeaders)
       ) {
@@ -113,7 +113,7 @@ chrome.webRequest.onResponseStarted.addListener(
         return;
       }
       // Adds the cookies from the request headers to the cookies object.
-      syncCookieStore.update(tabId, cookies);
+      syncCookieStore?.update(tabId, cookies);
     })();
   },
   { urls: ['*://*/*'] },
@@ -127,7 +127,7 @@ chrome.webRequest.onResponseStarted.addListener(
 chrome.webRequest.onBeforeSendHeaders.addListener(
   ({ url, requestHeaders, tabId, frameId }) => {
     (async () => {
-      const tabUrl = syncCookieStore.getTabUrl(tabId);
+      const tabUrl = syncCookieStore?.getTabUrl(tabId) ?? '';
       if (
         !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, requestHeaders)
       ) {
@@ -176,7 +176,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
         return;
       }
 
-      syncCookieStore.update(tabId, cookies);
+      syncCookieStore?.update(tabId, cookies);
     })();
   },
   { urls: ['*://*/*'] },
@@ -195,16 +195,16 @@ chrome.tabs.onCreated.addListener((tab) => {
   if (tabMode && tabMode !== 'unlimited') {
     const doesTabExist = tabToRead;
     if (
-      Object.keys(syncCookieStore.cachedTabsData).length >=
+      Object.keys(syncCookieStore?.cachedTabsData ?? {}).length >=
         ALLOWED_NUMBER_OF_TABS &&
       doesTabExist
     ) {
       return;
     }
     tabToRead = tab.id.toString();
-    syncCookieStore.addTabData(tab.id);
+    syncCookieStore?.addTabData(tab.id);
   } else {
-    syncCookieStore.addTabData(tab.id);
+    syncCookieStore?.addTabData(tab.id);
   }
 });
 
@@ -213,7 +213,7 @@ chrome.tabs.onCreated.addListener((tab) => {
  * @see https://developer.chrome.com/docs/extensions/reference/api/tabs#event-onRemoved
  */
 chrome.tabs.onRemoved.addListener((tabId) => {
-  syncCookieStore.removeTabData(tabId);
+  syncCookieStore?.removeTabData(tabId);
 });
 
 /**
@@ -236,10 +236,10 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     return;
   }
 
-  syncCookieStore.updateUrl(tabId, tab.url);
+  syncCookieStore?.updateUrl(tabId, tab.url);
 
   if (changeInfo.status === 'loading' && tab.url) {
-    syncCookieStore.removeCookieData(tabId);
+    syncCookieStore?.removeCookieData(tabId);
   }
 });
 
@@ -248,7 +248,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
  * @see https://developer.chrome.com/docs/extensions/reference/api/windows#event-onRemoved
  */
 chrome.windows.onRemoved.addListener((windowId) => {
-  syncCookieStore.removeWindowData(windowId);
+  syncCookieStore?.removeWindowData(windowId);
 });
 
 /**
@@ -260,7 +260,8 @@ chrome.windows.onRemoved.addListener((windowId) => {
  * @todo Shouldn't have to reinstall the extension.
  */
 chrome.runtime.onInstalled.addListener(async (details) => {
-  syncCookieStore.clear();
+  syncCookieStore = new SynchnorousCookieStore();
+  syncCookieStore?.clear();
 
   if (details.reason === 'install') {
     await chrome.storage.sync.clear();
@@ -306,7 +307,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
   tabId = source?.tabId?.toString();
 
-  const url = syncCookieStore.getTabUrl(source?.tabId);
+  const url = syncCookieStore?.getTabUrl(source?.tabId);
 
   if (tabMode && tabMode !== 'unlimited' && tabToRead !== tabId) {
     return;
@@ -345,7 +346,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       return;
     }
 
-    syncCookieStore.update(Number(tabId), cookies);
+    syncCookieStore?.update(Number(tabId), cookies);
   }
 
   if (method === 'Network.responseReceivedExtraInfo' && params) {
@@ -365,7 +366,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       cookieDB ?? {}
     );
 
-    syncCookieStore.update(Number(tabId), allCookies);
+    syncCookieStore?.update(Number(tabId), allCookies);
   }
 
   if (method === 'Audits.issueAdded' && params) {
@@ -394,7 +395,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
     // Adding alternate domains here because our extension calculates domain differently that the application tab.
     // This is done to capture both NID.google.com/ and NIDgoogle.com/ so that if we find either of the cookie we add issues to the cookie object
     try {
-      syncCookieStore.addCookieExclusionWarningReason(
+      syncCookieStore?.addCookieExclusionWarningReason(
         cookie?.name + primaryDomain + cookie?.path,
         //@ts-ignore since The details has been checked before sending them as parameter.
         cookie?.name + secondaryDomain + cookie?.path,
@@ -417,10 +418,10 @@ const listenToNewTab = async (tabId?: number) => {
   }
 
   if (tabMode && tabMode !== 'unlimited') {
-    const storedTabData = Object.keys(syncCookieStore.cachedTabsData);
+    const storedTabData = Object.keys(syncCookieStore?.cachedTabsData ?? {});
     await Promise.all(
       storedTabData.map(async (tabIdToDelete) => {
-        syncCookieStore.removeTabData(Number(tabIdToDelete));
+        syncCookieStore?.removeTabData(Number(tabIdToDelete));
         try {
           await chrome.action.setBadgeText({
             tabId: Number(tabIdToDelete),
@@ -435,9 +436,9 @@ const listenToNewTab = async (tabId?: number) => {
     );
   }
 
-  syncCookieStore.addTabData(Number(newTabId));
-  syncCookieStore.updateDevToolsState(Number(newTabId), true);
-  syncCookieStore.updatePopUpState(Number(newTabId), true);
+  syncCookieStore?.addTabData(Number(newTabId));
+  syncCookieStore?.updateDevToolsState(Number(newTabId), true);
+  syncCookieStore?.updatePopUpState(Number(newTabId), true);
 
   return newTabId;
 };
@@ -496,20 +497,23 @@ chrome.runtime.onMessage.addListener(async (request) => {
     });
 
     if (
-      !syncCookieStore.tabs[request.payload.tabId] &&
+      !syncCookieStore?.tabs[request.payload.tabId] &&
       tabMode === 'unlimited'
     ) {
       const tabs = await chrome.tabs.query({});
       const currentTab = tabs.find((tab) => tab.id === request.payload.tabId);
 
-      syncCookieStore.addTabData(request?.payload?.tabId);
-      syncCookieStore.updateUrl(request?.payload?.tabId, currentTab?.url || '');
+      syncCookieStore?.addTabData(request?.payload?.tabId);
+      syncCookieStore?.updateUrl(
+        request?.payload?.tabId,
+        currentTab?.url || ''
+      );
     }
 
-    syncCookieStore.updateDevToolsState(request?.payload?.tabId, true);
+    syncCookieStore?.updateDevToolsState(request?.payload?.tabId, true);
 
-    if (syncCookieStore.cachedTabsData[request.payload.tabId]) {
-      syncCookieStore.sendUpdatedDataToPopupAndDevTools(request.payload.tabId);
+    if (syncCookieStore?.cachedTabsData[request.payload.tabId]) {
+      syncCookieStore?.sendUpdatedDataToPopupAndDevTools(request.payload.tabId);
     }
   }
 
@@ -528,10 +532,10 @@ chrome.runtime.onMessage.addListener(async (request) => {
       payload: dataToSend,
     });
 
-    syncCookieStore.updatePopUpState(request?.payload?.tabId, true);
+    syncCookieStore?.updatePopUpState(request?.payload?.tabId, true);
 
-    if (syncCookieStore.cachedTabsData[request?.payload?.tabId]) {
-      syncCookieStore.sendUpdatedDataToPopupAndDevTools(
+    if (syncCookieStore?.cachedTabsData[request?.payload?.tabId]) {
+      syncCookieStore?.sendUpdatedDataToPopupAndDevTools(
         request?.payload?.tabId
       );
     }
@@ -541,14 +545,14 @@ chrome.runtime.onMessage.addListener(async (request) => {
     request?.type === 'DevTools::ServiceWorker::DEVTOOLS_STATE_CLOSE' &&
     request?.payload?.tabId
   ) {
-    syncCookieStore.updateDevToolsState(request?.payload?.tabId, false);
+    syncCookieStore?.updateDevToolsState(request?.payload?.tabId, false);
   }
 
   if (
     request?.type === 'Popup::ServiceWorker::POPUP_STATE_CLOSE' &&
     request?.payload?.tabId
   ) {
-    syncCookieStore.updatePopUpState(request?.payload?.tabId, false);
+    syncCookieStore?.updatePopUpState(request?.payload?.tabId, false);
   }
 });
 
@@ -600,7 +604,7 @@ chrome.storage.sync.onChanged.addListener(
           tabId: tab?.id,
           text: '',
         });
-        syncCookieStore.removeTabData(tab.id);
+        syncCookieStore?.removeTabData(tab.id);
         chrome.tabs.reload(Number(tab?.id), { bypassCache: true });
         return tab;
       });
@@ -626,9 +630,9 @@ chrome.storage.sync.onChanged.addListener(
           if (!tab?.id) {
             return;
           }
-          syncCookieStore.addTabData(tab.id);
-          syncCookieStore.sendUpdatedDataToPopupAndDevTools(tab.id);
-          syncCookieStore.updateDevToolsState(tab.id, true);
+          syncCookieStore?.addTabData(tab.id);
+          syncCookieStore?.sendUpdatedDataToPopupAndDevTools(tab.id);
+          syncCookieStore?.updateDevToolsState(tab.id, true);
           await chrome.tabs.reload(Number(tab?.id), { bypassCache: true });
         })
       );
@@ -664,11 +668,11 @@ chrome.storage.sync.onChanged.addListener(
 
     if (!changes?.isUsingCDP?.newValue) {
       await Promise.all(
-        Object.keys(syncCookieStore.cachedTabsData).map(async (key) => {
+        Object.keys(syncCookieStore?.cachedTabsData ?? {}).map(async (key) => {
           try {
             await chrome.debugger.detach({ tabId: Number(key) });
-            syncCookieStore.removeCookieData(Number(key));
-            syncCookieStore.sendUpdatedDataToPopupAndDevTools(Number(key));
+            syncCookieStore?.removeCookieData(Number(key));
+            syncCookieStore?.sendUpdatedDataToPopupAndDevTools(Number(key));
           } catch (error) {
             // Fail silently
           } finally {
@@ -678,9 +682,9 @@ chrome.storage.sync.onChanged.addListener(
       );
     } else {
       await Promise.all(
-        Object.keys(syncCookieStore.cachedTabsData).map(async (key) => {
-          syncCookieStore.removeCookieData(Number(key));
-          syncCookieStore.sendUpdatedDataToPopupAndDevTools(Number(key));
+        Object.keys(syncCookieStore?.cachedTabsData ?? {}).map(async (key) => {
+          syncCookieStore?.removeCookieData(Number(key));
+          syncCookieStore?.sendUpdatedDataToPopupAndDevTools(Number(key));
           await chrome.tabs.reload(Number(key), { bypassCache: true });
         })
       );
