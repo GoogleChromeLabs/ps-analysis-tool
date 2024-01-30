@@ -94,7 +94,7 @@ const TableTopBar = ({
         {extraInterface}
         {exportCookies && (
           <ExportButton
-            title={'Exprt Cookies Table'}
+            title={'Export Cookies Table'}
             disabled={disableExport}
             onClick={exportCookies}
           />
