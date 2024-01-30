@@ -184,7 +184,7 @@ class WebpageContentScript {
     setOverlayPosition(overlay, frame);
 
     const updatePosition = () => {
-      if (isElementVisibleInViewport(frame)) {
+      if (isElementVisibleInViewport(frame, true)) {
         setOverlayPosition(overlay, frame);
       }
     };
