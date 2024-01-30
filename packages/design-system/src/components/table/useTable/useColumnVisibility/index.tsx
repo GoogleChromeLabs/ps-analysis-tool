@@ -90,6 +90,7 @@ const useColumnVisibility = (
     if (isDataLoading) {
       return [];
     }
+
     return columns.filter(({ accessorKey }) => !hiddenKeys.has(accessorKey));
   }, [columns, hiddenKeys, isDataLoading]);
 
@@ -111,7 +112,7 @@ const useColumnVisibility = (
 
       if (data) {
         const _hiddenKeys = Object.entries(data)
-          .filter(([, visible]) => visible)
+          .filter(([, hidden]) => hidden)
           .map(([key]) => key);
 
         setHiddenKeys(new Set(_hiddenKeys));
@@ -122,6 +123,10 @@ const useColumnVisibility = (
   }, [getPreferences, tablePersistentSettingsKey]);
 
   useEffect(() => {
+    if (isDataLoading || visibleColumns.length === 0 || columns.length === 0) {
+      return;
+    }
+
     const _columnsVisibility = (columns || []).reduce(
       (acc, { accessorKey }) => {
         acc[accessorKey] = true;
@@ -143,7 +148,13 @@ const useColumnVisibility = (
         tablePersistentSettingsKey
       );
     }
-  }, [columns, setPreferences, tablePersistentSettingsKey, visibleColumns]);
+  }, [
+    columns,
+    isDataLoading,
+    setPreferences,
+    tablePersistentSettingsKey,
+    visibleColumns,
+  ]);
 
   return {
     visibleColumns,
