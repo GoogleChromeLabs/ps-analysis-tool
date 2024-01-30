@@ -90,7 +90,7 @@ const TableTopBar = ({
       />
       <div className="h-full w-px bg-american-silver dark:bg-quartz mx-3" />
 
-      <div className="flex gap-2">
+      <div className="flex gap-3">
         {extraInterface}
         {exportCookies && (
           <ExportButton

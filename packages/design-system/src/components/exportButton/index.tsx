@@ -48,7 +48,7 @@ const ExportButton = ({
         'opacity-50': disabled,
       })}
     >
-      <Export />
+      <Export className="h-[13px] w-[13px]" />
     </button>
   );
 };
