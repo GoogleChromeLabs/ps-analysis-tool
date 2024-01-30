@@ -16,14 +16,17 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   Button,
   CookiesLanding,
   ProgressBar,
 } from '@ps-analysis-tool/design-system';
 import { LibraryDetection } from '@ps-analysis-tool/library-detection';
-import { type CookieTableData } from '@ps-analysis-tool/common';
+import {
+  UNKNOWN_FRAME_KEY,
+  type CookieTableData,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -43,6 +46,7 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
     selectedFrame,
     tabCookies,
     tabFrames,
+    doesFrameContainCookies,
     changeListeningToThisTab,
   } = useCookieStore(({ state, actions }) => ({
     contextInvalidated: state.contextInvalidated,
@@ -52,6 +56,7 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
     selectedFrame: state.selectedFrame,
     tabCookies: state.tabCookies,
     tabFrames: state.tabFrames,
+    doesFrameContainCookies: state.doesFrameContainCookies,
     changeListeningToThisTab: actions.changeListeningToThisTab,
   }));
 
@@ -59,6 +64,16 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
     allowedNumberOfTabs: state.allowedNumberOfTabs,
     isUsingCDP: state.isUsingCDP,
   }));
+
+  const processedTabFrames = useMemo(
+    () =>
+      Object.fromEntries(
+        Object.entries(tabFrames || {}).filter(([url]) =>
+          url === UNKNOWN_FRAME_KEY ? doesFrameContainCookies[url] : true
+        )
+      ),
+    [tabFrames, doesFrameContainCookies]
+  );
 
   if (
     loading ||
@@ -98,6 +113,7 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
     ) : (
       ''
     );
+
     return (
       <div
         className={`h-full ${selectedFrame ? '' : 'flex items-center'}`}
@@ -108,7 +124,7 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
         ) : (
           <CookiesLanding
             tabCookies={tabCookies}
-            tabFrames={tabFrames}
+            tabFrames={processedTabFrames}
             showBlockedCookiesSection
             showFramesSection
             description={description}

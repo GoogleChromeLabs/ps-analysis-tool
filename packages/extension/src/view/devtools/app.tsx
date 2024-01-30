@@ -16,13 +16,7 @@
 /**
  * External dependencies.
  */
-import React, {
-  useRef,
-  useEffect,
-  useCallback,
-  useState,
-  useMemo,
-} from 'react';
+import React, { useRef, useEffect, useCallback, useState } from 'react';
 import { Resizable } from 're-resizable';
 import {
   CookieIcon,
@@ -55,7 +49,6 @@ const App: React.FC = () => {
   const {
     contextInvalidated,
     setContextInvalidated,
-    tabCookies,
     tabFrames,
     selectedFrame,
     setSelectedFrame,
@@ -63,6 +56,7 @@ const App: React.FC = () => {
     setIsInspecting,
     canStartInspecting,
     tabUrl,
+    doesFrameContainCookies,
   } = useCookieStore(({ state, actions }) => ({
     contextInvalidated: state.contextInvalidated,
     setContextInvalidated: actions.setContextInvalidated,
@@ -74,6 +68,7 @@ const App: React.FC = () => {
     setIsInspecting: actions.setIsInspecting,
     canStartInspecting: state.canStartInspecting,
     tabUrl: state.tabUrl,
+    doesFrameContainCookies: state.doesFrameContainCookies,
   }));
 
   const listenToMouseChange = useCallback(() => {
@@ -106,47 +101,6 @@ const App: React.FC = () => {
       }
     })();
   }, []);
-
-  const doesFrameContainCookies = useMemo(() => {
-    if (!tabCookies) {
-      return {};
-    }
-
-    const tabFramesIdsWithURL = Object.entries(tabFrames || {}).reduce(
-      (acc, [url, frame]) => {
-        frame.frameIds?.forEach((id) => {
-          acc[id] = url;
-        });
-
-        return acc;
-      },
-      {} as Record<string, string>
-    );
-
-    const _doesFrameContainCookies = Object.values(tabCookies).reduce(
-      (acc, cookie) => {
-        let hasFrame = false;
-
-        cookie.frameIdList?.forEach((frameId) => {
-          const url = tabFramesIdsWithURL[frameId];
-
-          if (url) {
-            acc[url] = true;
-            hasFrame = true;
-          }
-        });
-
-        if (!hasFrame && cookie.frameIdList?.length) {
-          acc[UNKNOWN_FRAME_KEY] = true;
-        }
-
-        return acc;
-      },
-      {} as Record<string, boolean>
-    );
-
-    return _doesFrameContainCookies;
-  }, [tabCookies, tabFrames]);
 
   const {
     activePanel,
