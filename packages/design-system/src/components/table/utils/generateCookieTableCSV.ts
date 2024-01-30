@@ -59,7 +59,7 @@ const generateCookieTableCSV = (cookies: CookieTableData[]): Blob => {
       cookie.isBlocked ? 'Yes' : 'No',
       cookie.analytics?.gdprUrl || 'NA',
       cookie.parsedCookie.priority || ' ',
-      cookie.parsedCookie.size || ' ',
+      cookie.parsedCookie.size?.toString(),
     ].map(sanitizeCsvRecord);
 
     cookieRecords += recordsArray.join(',') + '\r\n';
