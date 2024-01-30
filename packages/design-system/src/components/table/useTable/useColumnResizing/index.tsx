@@ -24,6 +24,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
  */
 import type { PersistentStorageData, TableColumn } from '..';
 import { useTablePersistentSettingsStore } from '../../persistentSettingsStore';
+import { resizeColumns } from './resizeColumns';
+import { handleResizeOnColumnsVisibilityChange } from './handleResizeOnColumnsVisibilityChange';
 
 export type ColumnResizingOutput = {
   columns: TableColumn[];
@@ -45,73 +47,25 @@ const useColumnResizing = (
   const [isResizing, setIsResizing] = useState(false);
   const columnsSizingRef = useRef<{ [key: string]: number }>({});
 
-  const resizeColumns = useCallback(
-    (columnsToResize: TableColumn[], tableWidth: number) => {
-      const totalWidth = columnsToResize.reduce(
-        (acc, column) => acc + (column.width || 0),
-        0
-      );
-
-      let diff = tableWidth - totalWidth;
-
-      if (diff > 0) {
-        const perColumnDiff = diff / columnsToResize.length;
-        columnsToResize.forEach((column) => {
-          if (!column.width) {
-            column.width = 0;
-          }
-
-          column.width += perColumnDiff;
-        });
-      } else if (diff < 0) {
-        let perColumnDiff = -diff / columnsToResize.length;
-
-        const sortedColumns = [...columnsToResize].sort(
-          ({ width: width1 }, { width: width2 }) =>
-            (width1 || 0) - (width2 || 0)
-        );
-
-        sortedColumns.forEach((column, idx) => {
-          if (!column.width) {
-            column.width = 40;
-          }
-
-          const diffCanApply =
-            column.width - perColumnDiff < 40
-              ? column.width - 40
-              : perColumnDiff;
-
-          column.width -= diffCanApply;
-
-          diff += diffCanApply;
-
-          const newPerColumnDiff = -diff / (columnsToResize.length - idx - 1);
-          perColumnDiff = newPerColumnDiff;
-        });
-      }
-
-      return columnsToResize;
-    },
-    []
-  );
+  useEffect(() => {
+    if (tableColumns.length === 1) {
+      columnsSizingRef.current = {};
+      columnsSizingRef.current[tableColumns[0].accessorKey] =
+        tableColumns[0].width || 0;
+    }
+  }, [tableColumns]);
 
   useEffect(() => {
-    setColumns((prev) => {
-      const newColumns = tableColumns.map((column) => ({
-        ...column,
-        width:
-          prev.find(({ accessorKey }) => accessorKey === column.accessorKey)
-            ?.width ||
-          columnsSizingRef.current?.[column.accessorKey] ||
-          40,
-      }));
-
-      return resizeColumns(
-        newColumns,
-        tableContainerRef.current?.scrollWidth || 0
-      );
-    });
-  }, [resizeColumns, tableColumns]);
+    setColumns((prev) =>
+      handleResizeOnColumnsVisibilityChange(
+        prev,
+        tableColumns,
+        columnsSizingRef.current,
+        tableContainerRef.current?.scrollWidth || 0,
+        allTableColumnsKeys.length === tableColumns.length
+      )
+    );
+  }, [allTableColumnsKeys.length, tableColumns]);
 
   const setColumnsCallback = useCallback(
     (columnsSizing?: { [key: string]: number }) => {
@@ -119,16 +73,13 @@ const useColumnResizing = (
         const tableWidth = tableContainerRef.current?.scrollWidth || 0;
         const newColumns = prevColumns.map((column) => ({
           ...column,
-          width:
-            columnsSizing?.[column.accessorKey] ||
-            column.width ||
-            tableWidth / prevColumns.length,
+          width: columnsSizing?.[column.accessorKey] || column.width || 0,
         }));
 
         return resizeColumns(newColumns, tableWidth);
       });
     },
-    [resizeColumns]
+    []
   );
 
   useEffect(() => {
@@ -258,7 +209,7 @@ const useColumnResizing = (
     const _columnsSizing = (allTableColumnsKeys || []).reduce(
       (acc, accessorKey) => {
         acc[accessorKey] =
-          _columns[accessorKey] || columnsSizingRef.current[accessorKey] || 40;
+          _columns[accessorKey] || columnsSizingRef.current[accessorKey] || 0;
 
         return acc;
       },
