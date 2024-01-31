@@ -272,8 +272,10 @@ const App: React.FC = () => {
   useEffect(() => {
     (async () => {
       const localStorageFlag = localStorage.getItem('contextInvalidated');
+
       if (localStorageFlag && localStorageFlag === 'true') {
         const tabId = await getCurrentTabId();
+
         if (tabId) {
           chrome.tabs.reload(Number(tabId));
           localStorage.removeItem('contextInvalidated');
