@@ -76,23 +76,23 @@ class SynchnorousCookieStore {
           ]),
         ];
 
+        const warningReasons = Array.from(
+          new Set<Protocol.Audits.CookieWarningReason>([
+            ...(cookie?.warningReasons ?? []),
+            ...(this.tabsData[tabId]?.[cookieKey]?.warningReasons ?? []),
+          ])
+        );
+
+        const frameIdList = Array.from(
+          new Set<number>([
+            ...((cookie?.frameIdList ?? []) as number[]),
+            ...((this.tabsData[tabId]?.[cookieKey]?.frameIdList ??
+              []) as number[]),
+          ])
+        );
+
         if (this.tabsData[tabId]?.[cookieKey]) {
           // Merge in previous warning reasons.
-          const warningReasons = Array.from(
-            new Set<Protocol.Audits.CookieWarningReason>([
-              ...(cookie.warningReasons ?? []),
-              ...(this.tabsData[tabId][cookieKey].warningReasons ?? []),
-            ])
-          );
-
-          const frameIdList = Array.from(
-            new Set<number>([
-              ...((cookie.frameIdList ?? []) as number[]),
-              ...((this.tabsData[tabId][cookieKey].frameIdList ??
-                []) as number[]),
-            ])
-          );
-
           const parsedCookie = {
             ...this.tabsData[tabId][cookieKey].parsedCookie,
             ...cookie.parsedCookie,
