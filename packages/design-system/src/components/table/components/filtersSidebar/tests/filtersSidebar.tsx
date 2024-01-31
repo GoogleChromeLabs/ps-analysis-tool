@@ -15,7 +15,7 @@
  */
 
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import FiltersSidebar from '..';
 import '@testing-library/jest-dom';
 import { act } from 'react-dom/test-utils';
@@ -25,6 +25,8 @@ describe('FiltersSidebar', () => {
   const initialProps = {
     filters: {},
     toggleFilterSelection: () => undefined,
+    toggleSelectAllFilter: () => undefined,
+    isSelectAllFilterSelected: () => false,
   };
 
   const props = {
@@ -43,6 +45,7 @@ describe('FiltersSidebar', () => {
           },
         },
         title: 'Filter 1',
+        enableSelectAllOption: true,
       },
       filter2: {
         filterValues: {
@@ -121,8 +124,157 @@ describe('FiltersSidebar', () => {
       filter1.click();
     });
 
-    const list = await screen.findAllByTestId('sub-list-item');
+    await waitFor(() => {
+      const list = screen.getAllByTestId('sub-list-item');
 
-    expect(list[0]).toHaveTextContent('aValue');
+      expect(list[1]).toHaveTextContent('aValue');
+    });
+  });
+
+  it('should expand all filters', async () => {
+    const { rerender } = render(<FiltersSidebar {...props} />);
+
+    const expandAll = await screen.findByText('Expand All');
+    act(() => {
+      expandAll.click();
+    });
+
+    const listExpandArrows = await screen.findAllByTestId('list-item-arrow');
+
+    expect(listExpandArrows[0]).not.toHaveClass('-rotate-90');
+
+    act(() => {
+      expandAll.click();
+    });
+
+    expect(expandAll.innerHTML).not.toEqual('Collapse All');
+    expect(listExpandArrows[0]).toHaveClass('-rotate-90');
+
+    act(() => {
+      listExpandArrows[0].click();
+    });
+
+    expect(expandAll.innerHTML).not.toEqual('Collapse All');
+    expect(listExpandArrows[0]).not.toHaveClass('-rotate-90');
+
+    act(() => {
+      listExpandArrows[1].click();
+    });
+
+    await waitFor(() => {
+      expect(expandAll.innerHTML).toEqual('Expand All');
+      expect(listExpandArrows[0]).not.toHaveClass('-rotate-90');
+      expect(listExpandArrows[1]).not.toHaveClass('-rotate-90');
+    });
+
+    rerender(
+      <FiltersSidebar
+        {...props}
+        filters={{
+          ...props.filters,
+          filters3: {
+            filterValues: {
+              value5: {
+                selected: true,
+              },
+              value6: {
+                selected: false,
+              },
+            },
+            title: 'Filter 3',
+          },
+        }}
+      />
+    );
+
+    act(() => {
+      listExpandArrows[2].click();
+    });
+
+    await waitFor(() => {
+      expect(expandAll.innerHTML).not.toEqual('Expand All');
+      expect(listExpandArrows[0]).not.toHaveClass('-rotate-90');
+      expect(listExpandArrows[1]).not.toHaveClass('-rotate-90');
+      expect(listExpandArrows[2]).not.toHaveClass('-rotate-90');
+    });
+
+    rerender(<FiltersSidebar {...props} />);
+
+    await waitFor(() => {
+      expect(expandAll.innerHTML).not.toEqual('Expand All');
+      expect(listExpandArrows[0]).not.toHaveClass('-rotate-90');
+      expect(listExpandArrows[1]).not.toHaveClass('-rotate-90');
+      expect(listExpandArrows[2]).toHaveClass('-rotate-90');
+    });
+
+    act(() => {
+      listExpandArrows[2].click();
+    });
+
+    await waitFor(() => {
+      expect(listExpandArrows[2]).toHaveClass('-rotate-90');
+    });
+
+    act(() => {
+      listExpandArrows[0].click();
+      listExpandArrows[1].click();
+    });
+
+    await waitFor(() => {
+      expect(expandAll.innerHTML).toEqual('Expand All');
+    });
+  });
+
+  it('should handle select All filter option', async () => {
+    const toggleSelectAllFilter = jest.fn();
+    const toggleFilterSelection = jest.fn();
+    const { rerender } = render(
+      <FiltersSidebar
+        {...props}
+        toggleSelectAllFilter={toggleSelectAllFilter}
+        toggleFilterSelection={toggleFilterSelection}
+        isSelectAllFilterSelected={() => true}
+      />
+    );
+
+    const filter1 = screen.getByText('Filter 1');
+    act(() => {
+      filter1.click();
+    });
+
+    const selectAll = await screen.findByText('All');
+    act(() => {
+      selectAll.click();
+    });
+
+    await waitFor(() => {
+      expect(toggleSelectAllFilter).toHaveBeenCalledWith('filter1');
+    });
+
+    rerender(
+      <FiltersSidebar
+        {...props}
+        toggleSelectAllFilter={toggleSelectAllFilter}
+        toggleFilterSelection={toggleFilterSelection}
+        isSelectAllFilterSelected={() => false}
+      />
+    );
+
+    await waitFor(() => {
+      const filterCheckBoxes = screen.getAllByRole('checkbox');
+
+      expect(filterCheckBoxes[0]).not.toBeChecked();
+      expect(filterCheckBoxes[1]).not.toBeChecked();
+      expect(filterCheckBoxes[2]).toBeChecked();
+    });
+
+    const value1Option = await screen.findByText('value1');
+    act(() => {
+      value1Option.click();
+    });
+
+    await waitFor(() => {
+      expect(toggleFilterSelection).toHaveBeenCalledWith('filter1', 'value1');
+    });
   });
 });

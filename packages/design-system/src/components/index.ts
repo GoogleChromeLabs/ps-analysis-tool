@@ -16,6 +16,7 @@
 
 export { default as Button } from './button';
 export { default as RefreshButton } from './refreshButton';
+export { default as ExportButton } from './exportButton';
 export { default as ProgressBar } from './progressBar';
 export { default as BorderProgressBar } from './progressBar/borderProgressbar';
 export { default as ToggleSwitch } from './toggleSwitch';

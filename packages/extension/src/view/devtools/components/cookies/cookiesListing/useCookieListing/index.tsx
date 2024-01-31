@@ -350,9 +350,14 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         title: 'Blocked Reasons',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
+        enableSelectAllOption: true,
         filterValues: preCalculatedFilters.blockedReason,
         sortValues: true,
         useGenericPersistenceKey: true,
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = value as string[];
+          return val?.includes(filterValue);
+        },
       },
       'parsedCookie.partitionKey': {
         title: 'Partition Key',
@@ -431,10 +436,9 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
     return `cookieListing#${selectedFrame}`;
   }, [selectedFrame]);
 
-  const extraInterfaceToTopBar = useMemo(
-    () => <RefreshButton onClick={getCookiesSetByJavascript} />,
-    [getCookiesSetByJavascript]
-  );
+  const extraInterfaceToTopBar = useMemo(() => {
+    return <RefreshButton onClick={getCookiesSetByJavascript} />;
+  }, [getCookiesSetByJavascript]);
 
   return {
     tableData,
