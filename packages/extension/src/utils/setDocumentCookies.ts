@@ -23,7 +23,7 @@ import { isFirstParty, findAnalyticsMatch } from '@ps-analysis-tool/common';
  */
 import { createCookieObject } from '../serviceWorker/createCookieObject';
 import { fetchDictionary, type CookieDatabase } from './fetchCookieDictionary';
-import { CookieStore, type CookieData } from '../localStore';
+import { ChromeStorage, type CookieData } from '../store';
 
 interface ProcessAndStoreDucmentCookiesProps {
   tabUrlResult: string;
@@ -96,7 +96,7 @@ const processAndStoreDocumentCookies = async ({
           });
         })
       );
-      await CookieStore.update(tabId, parsedCookieData);
+      await ChromeStorage.update(tabId, parsedCookieData);
     }
   } catch (error) {
     //Just handle this error

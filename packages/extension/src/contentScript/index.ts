@@ -31,7 +31,7 @@ import {
   addTooltip,
 } from './popovers';
 import type { ResponseType } from './types';
-import { CookieStore } from '../localStore';
+import { ChromeStorage } from '../store';
 import { TOOLTIP_CLASS } from './constants';
 import { WEBPAGE_PORT_NAME } from '../constants';
 import {
@@ -603,7 +603,7 @@ class WebpageContentScript {
           (topic: { [key: string]: string | number }) => topic.topic
         );
 
-        CookieStore.setTopics(activeTabUrl, topicsIdArr);
+        ChromeStorage.setTopics(activeTabUrl, topicsIdArr);
       }
       // eslint-disable-next-line no-empty
     } catch (error) {}

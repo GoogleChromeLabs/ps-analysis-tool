@@ -18,9 +18,9 @@
  * Internal dependencies.
  */
 import {
-  CookieStore,
+  ChromeStorage,
   type AllowedDomainObject,
-} from '../../../../../../localStore';
+} from '../../../../../../store';
 
 /**
  * Remove object from allow list.
@@ -31,7 +31,7 @@ const removeFromAllowList = async (domainObject: AllowedDomainObject) => {
   chrome.contentSettings.cookies.clear({});
 
   const remainingAllowedDomainObjects =
-    await CookieStore.removeDomainFromAllowList(domainObject);
+    await ChromeStorage.removeDomainFromAllowList(domainObject);
 
   // Set remaining settings after removing one setting becuase chrome.contentSettings.cookies.clear({}); clears everything.
   await Promise.all(
