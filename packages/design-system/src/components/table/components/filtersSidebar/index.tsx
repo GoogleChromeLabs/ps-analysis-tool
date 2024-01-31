@@ -65,6 +65,20 @@ const FiltersSidebar = ({
     [filterKeys]
   );
 
+  const handleExpandAllClick = useCallback(() => {
+    setExpandAll((prev) => {
+      const newExpandAll = !prev;
+
+      if (newExpandAll) {
+        expandedFilters.current = new Set(filterKeys);
+      } else {
+        expandedFilters.current = new Set();
+      }
+
+      return newExpandAll;
+    });
+  }, [filterKeys]);
+
   if (!filterKeys.length) {
     return null;
   }
@@ -75,21 +89,9 @@ const FiltersSidebar = ({
       data-testid="filters-sidebar"
     >
       <a
-        className="w-full block text-link text-royal-blue dark:text-medium-persian-blue text-[11px] mt-1.5 mb-2"
+        className="w-full block text-link text-royal-blue dark:text-medium-persian-blue text-[11px] mt-1.5 mb-[5px]"
         href="#"
-        onClick={() => {
-          setExpandAll((prev) => {
-            const newExpandAll = !prev;
-
-            if (newExpandAll) {
-              expandedFilters.current = new Set(filterKeys);
-            } else {
-              expandedFilters.current = new Set();
-            }
-
-            return newExpandAll;
-          });
-        }}
+        onClick={handleExpandAllClick}
       >
         {expandAll ? 'Collapse All' : 'Expand All'}
       </a>

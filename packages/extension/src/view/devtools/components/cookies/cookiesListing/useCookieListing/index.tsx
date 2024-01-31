@@ -32,7 +32,7 @@ import {
 import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import useHighlighting from './useHighlighting';
 
-const useCookieListing = () => {
+const useCookieListing = (domainsInAllowList: Set<string>) => {
   const { selectedFrame, cookies, getCookiesSetByJavascript } = useCookieStore(
     ({ state, actions }) => ({
       selectedFrame: state.selectedFrame,
@@ -43,7 +43,7 @@ const useCookieListing = () => {
 
   const [tableData, setTableData] = useState<TabCookies>(cookies);
 
-  useHighlighting(cookies, setTableData);
+  useHighlighting(cookies, domainsInAllowList, setTableData);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -52,6 +52,7 @@ const useCookieListing = () => {
         accessorKey: 'parsedCookie.name',
         cell: (info: InfoType) => info,
         enableHiding: false,
+        widthWeightagePercentage: 13,
       },
       {
         header: 'Scope',
@@ -61,31 +62,37 @@ const useCookieListing = () => {
             {!info ? 'Third Party' : 'First Party'}
           </p>
         ),
+        widthWeightagePercentage: 6.6,
       },
       {
         header: 'Domain',
         accessorKey: 'parsedCookie.domain',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 9,
       },
       {
         header: 'Partition Key',
         accessorKey: 'parsedCookie.partitionKey',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 9,
       },
       {
         header: 'SameSite',
         accessorKey: 'parsedCookie.samesite',
         cell: (info: InfoType) => <span className="capitalize">{info}</span>,
+        widthWeightagePercentage: 6.5,
       },
       {
         header: 'Category',
         accessorKey: 'analytics.category',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 8,
       },
       {
         header: 'Platform',
         accessorKey: 'analytics.platform',
         cell: (info: InfoType) => <span>{info ? info : 'Unknown'}</span>,
+        widthWeightagePercentage: 10,
       },
       {
         header: 'HttpOnly',
@@ -95,6 +102,7 @@ const useCookieListing = () => {
             {info ? <span className="font-serif">✓</span> : ''}
           </p>
         ),
+        widthWeightagePercentage: 5,
       },
       {
         header: 'Secure',
@@ -104,31 +112,37 @@ const useCookieListing = () => {
             {info ? <span className="font-serif">✓</span> : ''}
           </p>
         ),
+        widthWeightagePercentage: 5,
       },
       {
         header: 'Value',
         accessorKey: 'parsedCookie.value',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 7.8,
       },
       {
         header: 'Path',
         accessorKey: 'parsedCookie.path',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 3.5,
       },
       {
         header: 'Expires / Max-Age',
         accessorKey: 'parsedCookie.expires',
         cell: (info: InfoType) => (info ? info : 'Session'),
+        widthWeightagePercentage: 7.8,
       },
       {
         header: 'Priority',
         accessorKey: 'parsedCookie.priority',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 5.4,
       },
       {
         header: 'Size',
         accessorKey: 'parsedCookie.size',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 3.4,
       },
     ],
     []
@@ -422,10 +436,9 @@ const useCookieListing = () => {
     return `cookieListing#${selectedFrame}`;
   }, [selectedFrame]);
 
-  const extraInterfaceToTopBar = useMemo(
-    () => <RefreshButton onClick={getCookiesSetByJavascript} />,
-    [getCookiesSetByJavascript]
-  );
+  const extraInterfaceToTopBar = useMemo(() => {
+    return <RefreshButton onClick={getCookiesSetByJavascript} />;
+  }, [getCookiesSetByJavascript]);
 
   return {
     tableData,

@@ -16,7 +16,14 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
+import React, {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useReducer,
+} from 'react';
 import { CookieTableData, getCookieKey } from '@ps-analysis-tool/common';
 
 /**
@@ -39,6 +46,7 @@ interface CookieTableProps {
   tablePersistentSettingsKey?: string;
   selectedFrame: string | null;
   showTopBar?: boolean;
+  hideExport?: boolean;
   selectedFrameCookie: {
     [frame: string]: CookieTableData | null;
   } | null;
@@ -48,20 +56,34 @@ interface CookieTableProps {
     } | null
   ) => void;
   extraInterfaceToTopBar?: React.ReactNode;
+  onRowContextMenu?: (
+    e: React.MouseEvent<HTMLDivElement>,
+    row: TableRow
+  ) => void;
 }
 
-const CookieTable = ({
-  tableColumns,
-  tableFilters,
-  tableSearchKeys,
-  tablePersistentSettingsKey,
-  data: cookies,
-  showTopBar,
-  selectedFrame,
-  selectedFrameCookie,
-  setSelectedFrameCookie,
-  extraInterfaceToTopBar,
-}: CookieTableProps) => {
+const CookieTable = forwardRef<
+  {
+    removeSelectedRow: () => void;
+  },
+  CookieTableProps
+>(function CookieTable(
+  {
+    tableColumns,
+    tableFilters,
+    tableSearchKeys,
+    tablePersistentSettingsKey,
+    data: cookies,
+    showTopBar,
+    hideExport = false,
+    selectedFrame,
+    selectedFrameCookie,
+    setSelectedFrameCookie,
+    extraInterfaceToTopBar,
+    onRowContextMenu,
+  }: CookieTableProps,
+  ref
+) {
   useEffect(() => {
     if (selectedFrame && selectedFrameCookie) {
       if (
@@ -82,6 +104,18 @@ const CookieTable = ({
       });
     },
     [selectedFrame, setSelectedFrameCookie]
+  );
+
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        removeSelectedRow: () => {
+          onRowClick(null);
+        },
+      };
+    },
+    [onRowClick]
   );
 
   const selectedKey = useMemo(
@@ -112,6 +146,7 @@ const CookieTable = ({
         selectedKey={
           selectedKey === null ? null : getCookieKey(selectedKey?.parsedCookie)
         }
+        hideExport={hideExport}
         getRowObjectKey={(row: TableRow) =>
           getCookieKey(
             (row?.originalData as CookieTableData).parsedCookie
@@ -119,9 +154,16 @@ const CookieTable = ({
         }
         onRowClick={onRowClick}
         extraInterfaceToTopBar={extraInterfaceToTopBar}
+        onRowContextMenu={(
+          e: React.MouseEvent<HTMLDivElement>,
+          row: TableRow
+        ) => {
+          onRowContextMenu?.(e, row);
+          onRowClick(row?.originalData);
+        }}
       />
     </div>
   );
-};
+});
 
 export default CookieTable;

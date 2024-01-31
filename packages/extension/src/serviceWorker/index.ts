@@ -307,6 +307,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   PROMISE_QUEUE.clear();
   await PROMISE_QUEUE.add(async () => {
     await chrome.storage.local.clear();
+
     if (details.reason === 'install') {
       await chrome.storage.sync.clear();
       await chrome.storage.sync.set({
@@ -530,6 +531,19 @@ chrome.storage.local.onChanged.addListener(
     });
   }
 );
+
+/**
+ * Fires when the browser window is opened.
+ * @see https://developer.chrome.com/docs/extensions/reference/api/windows#event-onCreated
+ */
+chrome.windows.onCreated.addListener(async () => {
+  const totalWindows = await chrome.windows.getAll();
+
+  // We do not want to clear content settings if a user has create one more window.
+  if (totalWindows.length < 2) {
+    chrome.contentSettings.cookies.clear({});
+  }
+});
 
 chrome.storage.sync.onChanged.addListener(
   async (changes: { [key: string]: chrome.storage.StorageChange }) => {

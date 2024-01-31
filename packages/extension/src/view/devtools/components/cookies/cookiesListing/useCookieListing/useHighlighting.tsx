@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
@@ -23,43 +22,34 @@ import { getCookieKey, type TabCookies } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
+import isCookieDomainInAllowList from '../useAllowedList/isCookieDomainInAllowList';
 
 const useHighlighting = (
   cookies: TabCookies,
+  domainsInAllowList: Set<string>,
   setTableData: React.Dispatch<React.SetStateAction<TabCookies>>
 ) => {
   const handleHighlighting = useCallback(
-    (cookiesToProcess: TabCookies, cookiesToReference?: TabCookies) =>
+    (cookiesToProcess: TabCookies) =>
       Object.values(cookiesToProcess).reduce((acc, cookie) => {
         const key = getCookieKey(cookie.parsedCookie) as string;
+
         acc[key] = {
           ...cookie,
-          highlighted: cookiesToReference?.[key]?.highlighted || false,
+          isDomainInAllowList: isCookieDomainInAllowList(
+            cookie.parsedCookie?.domain || '',
+            domainsInAllowList
+          ),
         };
 
         return acc;
       }, {} as TabCookies),
-    []
+    [domainsInAllowList]
   );
 
   useEffect(() => {
-    setTableData((prevData) => handleHighlighting(cookies, prevData));
+    setTableData(() => handleHighlighting(cookies));
   }, [cookies, handleHighlighting, setTableData]);
-
-  const removeHighlights = useCallback(() => {
-    setTableData((prev) => handleHighlighting(prev));
-  }, [handleHighlighting, setTableData]);
-
-  useEffect(() => {
-    chrome.storage.session.onChanged.addListener(removeHighlights);
-    return () => {
-      try {
-        chrome.storage.session.onChanged.removeListener(removeHighlights);
-      } catch (error) {
-        /* do nothing */
-      }
-    };
-  }, [removeHighlights]);
 };
 
 export default useHighlighting;

@@ -32,7 +32,14 @@ interface TableBodyProps {
   isRowFocused: boolean;
   setIsRowFocused: (state: boolean) => void;
   selectedKey: string | undefined | null;
-  onRowClick: (key: TableData | null) => void;
+  onRowClick: (
+    key: TableData | null,
+    e?: React.MouseEvent<HTMLDivElement>
+  ) => void;
+  onRowContextMenu?: (
+    e: React.MouseEvent<HTMLDivElement>,
+    row: TableRow
+  ) => void;
 }
 
 const TableBody = ({
@@ -42,6 +49,7 @@ const TableBody = ({
   setIsRowFocused,
   selectedKey,
   onRowClick,
+  onRowContextMenu = () => undefined,
 }: TableBodyProps) => {
   const tableBodyRef = useRef(null);
 
@@ -124,7 +132,10 @@ const TableBody = ({
   );
 
   return (
-    <div ref={tableBodyRef} className="h-full flex flex-col">
+    <div
+      ref={tableBodyRef}
+      className="h-full flex flex-col overflow-x-hidden overflow-y-auto"
+    >
       {table.rows.map((row, index) => (
         <BodyRow
           key={index}
@@ -134,11 +145,12 @@ const TableBody = ({
           selectedKey={selectedKey}
           getRowObjectKey={getRowObjectKey}
           isRowFocused={isRowFocused}
-          onRowClick={() => {
-            onRowClick(row?.originalData);
+          onRowClick={(e: React.MouseEvent<HTMLDivElement>) => {
+            onRowClick(row?.originalData, e);
             setIsRowFocused(true);
           }}
           onKeyDown={handleKeyDown}
+          onRowContextMenu={onRowContextMenu}
         />
       ))}
       <div
@@ -156,7 +168,7 @@ const TableBody = ({
             key={index}
             className="px-1 py-px outline-0 flex-1"
             style={{
-              maxWidth: width,
+              minWidth: width,
             }}
           />
         ))}
@@ -172,7 +184,7 @@ const TableBody = ({
             key={index}
             className="px-1 py-px outline-0 h-full flex-1"
             style={{
-              maxWidth: width,
+              minWidth: width,
             }}
           />
         ))}

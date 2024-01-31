@@ -17,7 +17,6 @@
 export { default as isFirstParty } from './utils/isFirstParty';
 export { default as filterFramesWithCookies } from './utils/filterFramesWithCookies';
 export { default as filterCookiesByFrame } from './utils/filterCookiesByFrame';
-
 export { default as getCookieKey } from './utils/getCookieKey';
 export {
   default as findAnalyticsMatch,
@@ -32,7 +31,11 @@ export { default as parseResponseReceivedExtraInfo } from './utils/parseResponse
 export { default as parseRequestWillBeSentExtraInfo } from './utils/parseRequestWillBeSentExtraInfo';
 export { default as getDomainFromUrl } from './utils/getDomainFromUrl';
 export { default as noop } from './utils/noop';
+export { default as getDevToolWorker } from './worker/devToolWorker';
+export { default as executeTaskInDevToolWorker } from './worker/executeTaskInDevToolWorker';
 export { default as getValueByKey } from './utils/getValueByKey';
+export * from './worker/enums';
 export * from './utils/generateReports';
 export * from './cookies.types';
+export * from './libraryDetection.types';
 export * from './constants';

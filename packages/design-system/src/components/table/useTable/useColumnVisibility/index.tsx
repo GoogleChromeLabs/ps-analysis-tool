@@ -39,6 +39,7 @@ const useColumnVisibility = (
   tablePersistentSettingsKey?: string
 ): ColumnVisibilityOutput => {
   const [hiddenKeys, setHiddenKeys] = useState<Set<string>>(new Set());
+  const [isDataLoading, setIsDataLoading] = useState(true);
 
   const hideColumn = useCallback((key: string) => {
     setHiddenKeys((prev) => new Set(prev.add(key)));
@@ -85,10 +86,13 @@ const useColumnVisibility = (
     [hiddenKeys]
   );
 
-  const visibleColumns = useMemo(
-    () => columns.filter(({ accessorKey }) => !hiddenKeys.has(accessorKey)),
-    [columns, hiddenKeys]
-  );
+  const visibleColumns = useMemo(() => {
+    if (isDataLoading) {
+      return [];
+    }
+
+    return columns.filter(({ accessorKey }) => !hiddenKeys.has(accessorKey));
+  }, [columns, hiddenKeys, isDataLoading]);
 
   const { getPreferences, setPreferences } = useTablePersistentSettingsStore(
     ({ actions }) => ({
@@ -108,15 +112,21 @@ const useColumnVisibility = (
 
       if (data) {
         const _hiddenKeys = Object.entries(data)
-          .filter(([, visible]) => visible)
+          .filter(([, hidden]) => hidden)
           .map(([key]) => key);
 
         setHiddenKeys(new Set(_hiddenKeys));
       }
     }
+
+    setIsDataLoading(false);
   }, [getPreferences, tablePersistentSettingsKey]);
 
   useEffect(() => {
+    if (isDataLoading || visibleColumns.length === 0 || columns.length === 0) {
+      return;
+    }
+
     const _columnsVisibility = (columns || []).reduce(
       (acc, { accessorKey }) => {
         acc[accessorKey] = true;
@@ -138,7 +148,13 @@ const useColumnVisibility = (
         tablePersistentSettingsKey
       );
     }
-  }, [columns, setPreferences, tablePersistentSettingsKey, visibleColumns]);
+  }, [
+    columns,
+    isDataLoading,
+    setPreferences,
+    tablePersistentSettingsKey,
+    visibleColumns,
+  ]);
 
   return {
     visibleColumns,

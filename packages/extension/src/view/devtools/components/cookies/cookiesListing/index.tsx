@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { Resizable } from 're-resizable';
 import {
   filterCookiesByFrame,
@@ -29,16 +29,22 @@ import { CookieDetails, CookieTable } from '@ps-analysis-tool/design-system';
  */
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
 import useCookieListing from './useCookieListing';
+import RowContextMenu from './rowContextMenu';
+import useAllowedList from './useAllowedList';
 
 interface CookiesListingProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;
 }
 
 const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
-  const { selectedFrame, tabFrames } = useCookieStore(({ state }) => ({
+  const { selectedFrame, tabFrames, tabUrl } = useCookieStore(({ state }) => ({
     selectedFrame: state.selectedFrame,
     tabFrames: state.tabFrames,
+    tabUrl: state.tabUrl,
   }));
+
+  const { domainsInAllowList, setDomainsInAllowListCallback, isIncognito } =
+    useAllowedList();
 
   const {
     tableData,
@@ -47,12 +53,19 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
     searchKeys,
     tablePersistentSettingsKey,
     extraInterfaceToTopBar,
-  } = useCookieListing();
+  } = useCookieListing(domainsInAllowList);
 
   const frameFilteredCookies = useMemo(
     () => filterCookiesByFrame(tableData, tabFrames, selectedFrame),
     [tableData, selectedFrame, tabFrames]
   );
+
+  const cookieTableRef = useRef<React.ElementRef<typeof CookieTable> | null>(
+    null
+  );
+  const rowContextMenuRef = useRef<React.ElementRef<
+    typeof RowContextMenu
+  > | null>(null);
 
   useEffect(() => {
     setFilteredCookies(frameFilteredCookies);
@@ -69,7 +82,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
           width: '100%',
           height: '80%',
         }}
-        minHeight="6%"
+        minHeight="15%"
         maxHeight="95%"
         enable={{
           top: false,
@@ -90,9 +103,19 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
           selectedFrameCookie={selectedFrameCookie}
           setSelectedFrameCookie={setSelectedFrameCookie}
           extraInterfaceToTopBar={extraInterfaceToTopBar}
+          onRowContextMenu={rowContextMenuRef.current?.onRowContextMenu}
+          ref={cookieTableRef}
         />
       </Resizable>
       <CookieDetails selectedFrameCookie={selectedFrameCookie} />
+      <RowContextMenu
+        domainsInAllowList={domainsInAllowList}
+        isIncognito={isIncognito}
+        tabUrl={tabUrl || ''}
+        setDomainsInAllowListCallback={setDomainsInAllowListCallback}
+        removeSelectedRow={cookieTableRef.current?.removeSelectedRow}
+        ref={rowContextMenuRef}
+      />
     </div>
   );
 };
