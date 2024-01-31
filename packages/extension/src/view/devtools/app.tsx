@@ -148,7 +148,7 @@ const App: React.FC = () => {
             icon: <CookieIcon />,
             selectedIcon: <CookieIconWhite />,
             children: {},
-            isBlurred: !doesFrameContainCookies[url],
+            isBlurred: !doesFrameContainCookies?.[url],
           };
 
           return acc;
