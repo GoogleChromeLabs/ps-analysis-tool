@@ -33,7 +33,9 @@ interface ListItemProps {
   filter: TableFilter[keyof TableFilter];
   filterKey: string;
   toggleFilterSelection: TableOutput['toggleFilterSelection'];
+  toggleSelectAllFilter: TableOutput['toggleSelectAllFilter'];
   expandAll: boolean;
+  isSelectAllFilterSelected: boolean;
   toggleFilterExpansion: (filterKey: string, expand?: boolean) => void;
 }
 
@@ -41,8 +43,10 @@ const ListItem = ({
   filter,
   filterKey,
   toggleFilterSelection,
+  toggleSelectAllFilter,
   expandAll,
   toggleFilterExpansion,
+  isSelectAllFilterSelected,
 }: ListItemProps) => {
   const [isExpanded, setExpanded] = useState<boolean>(false);
   const [showSubList, setShowSubList] = useState<boolean>(false);
@@ -107,6 +111,9 @@ const ListItem = ({
             sort={!filter.hasStaticFilterValues || Boolean(filter.sortValues)}
             toggleFilterSelection={toggleFilterSelection}
             isExpanded={isExpanded}
+            isSelectAllFilterEnabled={Boolean(filter.enableSelectAllOption)}
+            toggleSelectAllFilter={toggleSelectAllFilter}
+            isSelectAllFilterSelected={isSelectAllFilterSelected}
           />
           {Number(Object.keys(filter.filterValues || {}).length) > 4 && (
             <a

@@ -62,6 +62,7 @@ export type TableFilter = {
     description?: string;
     hasStaticFilterValues?: boolean;
     hasPrecalculatedFilterValues?: boolean;
+    enableSelectAllOption?: boolean;
     filterValues?: {
       [filterValue: string]: {
         selected: boolean;
@@ -106,7 +107,9 @@ export type TableOutput = {
   selectedFilters: TableFilter;
   isFiltering: TableFilteringOutput['isFiltering'];
   toggleFilterSelection: TableFilteringOutput['toggleFilterSelection'];
+  toggleSelectAllFilter: TableFilteringOutput['toggleSelectAllFilter'];
   resetFilters: TableFilteringOutput['resetFilters'];
+  isSelectAllFilterSelected: TableFilteringOutput['isSelectAllFilterSelected'];
   searchValue: TableSearchOutput['searchValue'];
   setSearchValue: TableSearchOutput['setSearchValue'];
 };
@@ -161,7 +164,9 @@ const useTable = ({
     filteredData,
     isFiltering,
     toggleFilterSelection,
+    toggleSelectAllFilter,
     resetFilters,
+    isSelectAllFilterSelected,
   } = useFiltering(
     sortedData,
     tableFilterData,
@@ -217,7 +222,9 @@ const useTable = ({
     selectedFilters,
     isFiltering,
     toggleFilterSelection,
+    toggleSelectAllFilter,
     resetFilters,
+    isSelectAllFilterSelected,
     searchValue,
     setSearchValue,
   };

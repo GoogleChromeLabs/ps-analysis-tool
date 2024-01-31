@@ -27,11 +27,15 @@ import type { TableFilter, TableOutput } from '../../useTable';
 interface FiltersSidebarProps {
   filters: TableFilter;
   toggleFilterSelection: TableOutput['toggleFilterSelection'];
+  toggleSelectAllFilter: TableOutput['toggleSelectAllFilter'];
+  isSelectAllFilterSelected: (filterKey: string) => boolean;
 }
 
 const FiltersSidebar = ({
   filters,
   toggleFilterSelection,
+  toggleSelectAllFilter,
+  isSelectAllFilterSelected,
 }: FiltersSidebarProps) => {
   const [expandAll, setExpandAll] = useState(false);
   const expandedFilters = useRef(new Set<string>());
@@ -96,8 +100,10 @@ const FiltersSidebar = ({
             filter={filter}
             filterKey={filterKey}
             toggleFilterSelection={toggleFilterSelection}
+            toggleSelectAllFilter={toggleSelectAllFilter}
             expandAll={expandAll}
             toggleFilterExpansion={toggleFilterExpansion}
+            isSelectAllFilterSelected={isSelectAllFilterSelected(filterKey)}
           />
         ))}
       </ul>
