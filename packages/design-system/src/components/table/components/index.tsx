@@ -141,6 +141,8 @@ const Table = ({
             <FiltersSidebar
               filters={table.filters}
               toggleFilterSelection={table.toggleFilterSelection}
+              toggleSelectAllFilter={table.toggleSelectAllFilter}
+              isSelectAllFilterSelected={table.isSelectAllFilterSelected}
             />
           </Resizable>
         )}
