@@ -84,6 +84,14 @@ class SynchnorousCookieStore {
           ])
         );
 
+        const frameIdList = Array.from(
+          new Set<number>([
+            ...((cookie.frameIdList ?? []) as number[]),
+            ...((this.tabsData[tabId][cookieKey].frameIdList ??
+              []) as number[]),
+          ])
+        );
+
         const parsedCookie = {
           ...this.tabsData[tabId][cookieKey].parsedCookie,
           ...cookie.parsedCookie,
@@ -110,13 +118,7 @@ class SynchnorousCookieStore {
               this.tabsData[tabId][cookieKey].headerType === 'javascript'
                 ? this.tabsData[tabId][cookieKey].headerType
                 : cookie.headerType,
-            frameIdList: Array.from(
-              new Set<number>([
-                ...((cookie.frameIdList ?? []) as number[]),
-                ...((this.tabsData[tabId][cookieKey].frameIdList ??
-                  []) as number[]),
-              ])
-            ),
+            frameIdList,
           };
         } else {
           this.tabsData[tabId][cookieKey] = cookie;
@@ -124,12 +126,12 @@ class SynchnorousCookieStore {
       }
 
       //@ts-ignore Since this is for debugging the data to check the data being collected by the storage.
-      globalThis.CDPData = this.tabsData;
-      //@ts-ignore Since this is for debugging the data to check the data being collected by the storage.
-      globalThis.TabsData = this.tabs;
+      globalThis.PSAT = {
+        tabsData: this.tabsData,
+        tabs: this.tabs,
+      };
 
       updateCookieBadgeText(this.tabsData[tabId], tabId);
-      //this.sendUpdatedDataToPopupAndDevTools(tabId);
     } catch (error) {
       //Fail silently
       // eslint-disable-next-line no-console
