@@ -132,7 +132,10 @@ const TableBody = ({
   );
 
   return (
-    <div ref={tableBodyRef} className="h-full flex flex-col">
+    <div
+      ref={tableBodyRef}
+      className="h-full flex flex-col overflow-x-hidden overflow-y-auto"
+    >
       {table.rows.map((row, index) => (
         <BodyRow
           key={index}
@@ -165,7 +168,7 @@ const TableBody = ({
             key={index}
             className="px-1 py-px outline-0 flex-1"
             style={{
-              maxWidth: width,
+              minWidth: width,
             }}
           />
         ))}
@@ -181,7 +184,7 @@ const TableBody = ({
             key={index}
             className="px-1 py-px outline-0 h-full flex-1"
             style={{
-              maxWidth: width,
+              minWidth: width,
             }}
           />
         ))}

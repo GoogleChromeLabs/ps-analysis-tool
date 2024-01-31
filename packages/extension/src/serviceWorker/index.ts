@@ -63,7 +63,7 @@ chrome.webRequest.onResponseStarted.addListener(
   (details: chrome.webRequest.WebResponseCacheDetails) => {
     (async () => {
       const { tabId, url, responseHeaders, frameId } = details;
-      const tabUrl = syncCookieStore?.getTabUrl(tabId);
+      const tabUrl = syncCookieStore?.getTabUrl(tabId) ?? '';
       if (
         !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, responseHeaders)
       ) {
@@ -560,8 +560,13 @@ chrome.runtime.onMessage.addListener(async (request) => {
  * Fires when the browser window is opened.
  * @see https://developer.chrome.com/docs/extensions/reference/api/windows#event-onCreated
  */
-chrome.windows.onCreated.addListener(() => {
-  chrome.contentSettings.cookies.clear({});
+chrome.windows.onCreated.addListener(async () => {
+  const totalWindows = await chrome.windows.getAll();
+
+  // We do not want to clear content settings if a user has create one more window.
+  if (totalWindows.length < 2) {
+    chrome.contentSettings.cookies.clear({});
+  }
 });
 
 chrome.storage.sync.onChanged.addListener(

@@ -48,6 +48,7 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
         accessorKey: 'parsedCookie.name',
         cell: (info: InfoType) => info,
         enableHiding: false,
+        widthWeightagePercentage: 15,
       },
       {
         header: 'Scope',
@@ -57,31 +58,37 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
             {!info ? 'Third Party' : 'First Party'}
           </p>
         ),
+        widthWeightagePercentage: 8,
       },
       {
         header: 'Domain',
         accessorKey: 'parsedCookie.domain',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 9,
       },
       {
         header: 'Partition Key',
         accessorKey: 'parsedCookie.partitionKey',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 9,
       },
       {
         header: 'SameSite',
         accessorKey: 'parsedCookie.samesite',
         cell: (info: InfoType) => <span className="capitalize">{info}</span>,
+        widthWeightagePercentage: 8,
       },
       {
         header: 'Category',
         accessorKey: 'analytics.category',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 10,
       },
       {
         header: 'Platform',
         accessorKey: 'analytics.platform',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 10,
       },
       {
         header: 'HttpOnly',
@@ -91,6 +98,7 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
             {info ? <span className="font-serif">✓</span> : ''}
           </p>
         ),
+        widthWeightagePercentage: 5,
       },
       {
         header: 'Secure',
@@ -100,21 +108,25 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
             {info ? <span className="font-serif">✓</span> : ''}
           </p>
         ),
+        widthWeightagePercentage: 5,
       },
       {
         header: 'Value',
         accessorKey: 'parsedCookie.value',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 10,
       },
       {
         header: 'Path',
         accessorKey: 'parsedCookie.path',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 4,
       },
       {
         header: 'Expires / Max-Age',
         accessorKey: 'parsedCookie.expires',
         cell: (info: InfoType) => (info ? info : 'Session'),
+        widthWeightagePercentage: 7,
       },
     ],
     []
@@ -313,6 +325,7 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
           tablePersistentSettingsKey={tablePersistentSettingsKey}
           selectedFrame={selectedSite}
           selectedFrameCookie={selectedFrameCookie}
+          hideExport={true}
           setSelectedFrameCookie={setSelectedFrameCookie}
         />
       </Resizable>

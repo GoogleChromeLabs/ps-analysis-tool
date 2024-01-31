@@ -82,7 +82,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
           width: '100%',
           height: '80%',
         }}
-        minHeight="6%"
+        minHeight="15%"
         maxHeight="95%"
         enable={{
           top: false,

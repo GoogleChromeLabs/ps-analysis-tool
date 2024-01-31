@@ -77,7 +77,9 @@ describe('RowContextMenu', () => {
       );
     });
 
-    const rowContextMenu = await screen.findByText('Add Domain to Allow List');
+    const rowContextMenu = await screen.findByText(
+      'Allow Domain During Session'
+    );
 
     expect(rowContextMenu).toBeVisible();
   });
