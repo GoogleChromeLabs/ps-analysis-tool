@@ -48,7 +48,12 @@ const useHighlighting = (
   );
 
   useEffect(() => {
-    setTableData(() => handleHighlighting(cookies));
+    setTableData((prevState) => {
+      if (Object.values(cookies).length > 0) {
+        return handleHighlighting(cookies);
+      }
+      return prevState;
+    });
   }, [cookies, handleHighlighting, setTableData]);
 };
 
