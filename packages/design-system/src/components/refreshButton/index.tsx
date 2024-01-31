@@ -29,7 +29,7 @@ const RefreshButton = ({ onClick, title = 'Refresh' }: RefreshButtonProps) => {
       onClick={onClick ? onClick : undefined}
       title={title}
       className={
-        'flex items-center text-center dark:text-mischka text-comet-black hover:text-comet-grey hover:dark:text-bright-gray active:dark:text-mischka active:text-comet-black'
+        'flex items-center text-center dark:text-mischka text-comet-black hover:text-comet-grey hover:dark:text-bright-gray active:dark:text-mischka active:text-comet-black pt-[1px]'
       }
     >
       <RefreshIcon className="h-[13px] w-[13px]" />
