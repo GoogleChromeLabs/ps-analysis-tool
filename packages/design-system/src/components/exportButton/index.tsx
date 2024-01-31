@@ -17,24 +17,40 @@
  * External dependencies.
  */
 import React from 'react';
-import { Refresh as RefreshIcon } from '../../icons';
+import classNames from 'classnames';
 
-interface RefreshButtonProps {
+/**
+ * Internal dependencies.
+ */
+import { Export } from '../../icons';
+
+interface ExportButtonProps {
   onClick?: () => void;
   title?: string;
+  disabled?: boolean;
 }
-const RefreshButton = ({ onClick, title = 'Refresh' }: RefreshButtonProps) => {
+
+const ExportButton = ({
+  onClick,
+  title = 'Export',
+  disabled = false,
+}: ExportButtonProps) => {
   return (
     <button
-      onClick={onClick ? onClick : undefined}
+      disabled={disabled}
+      onClick={onClick}
       title={title}
-      className={
-        'flex items-center text-center dark:text-mischka text-comet-black hover:text-comet-grey hover:dark:text-bright-gray active:dark:text-mischka active:text-comet-black pt-[1px]'
-      }
+      className={classNames({
+        'flex items-center text-center dark:text-mischka text-comet-black':
+          true,
+        'hover:text-comet-grey hover:dark:text-bright-gray active:dark:text-mischka active:text-comet-black':
+          !disabled,
+        'opacity-50': disabled,
+      })}
     >
-      <RefreshIcon className="h-[13px] w-[13px]" />
+      <Export className="h-[13px] w-[13px]" />
     </button>
   );
 };
 
-export default RefreshButton;
+export default ExportButton;

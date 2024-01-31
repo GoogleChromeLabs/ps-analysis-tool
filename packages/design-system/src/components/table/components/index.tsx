@@ -19,6 +19,9 @@
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Resizable } from 're-resizable';
+import { saveAs } from 'file-saver';
+import { CookieTableData } from '@ps-analysis-tool/common';
+
 /**
  * Internal dependencies.
  */
@@ -29,6 +32,7 @@ import { TableData, TableOutput, TableRow } from '../useTable';
 import TableTopBar from './tableTopBar';
 import ChipsBar from './filtersSidebar/chips';
 import FiltersSidebar from './filtersSidebar';
+import { generateCookieTableCSV } from '../utils';
 
 interface TableProps {
   table: TableOutput;
@@ -41,6 +45,7 @@ interface TableProps {
   ) => void;
   showTopBar?: boolean;
   hideFiltering?: boolean;
+  hideExport?: boolean;
   extraInterfaceToTopBar?: React.ReactNode;
 }
 
@@ -52,6 +57,7 @@ const Table = ({
   onRowContextMenu = () => undefined,
   showTopBar = false,
   hideFiltering = false,
+  hideExport = false,
   extraInterfaceToTopBar,
 }: TableProps) => {
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
@@ -95,6 +101,14 @@ const Table = ({
     [showColumnsMenu]
   );
 
+  const exportCookies = useCallback(() => {
+    const cookies = table.rows.map(({ originalData }) => originalData);
+    if (cookies.length > 0 && 'parsedCookie' in cookies[0]) {
+      const csvTextBlob = generateCookieTableCSV(cookies as CookieTableData[]);
+      saveAs(csvTextBlob, 'Cookies Report.csv');
+    }
+  }, [table.rows]);
+
   return (
     <div className="w-full h-full flex flex-col">
       {showTopBar && (
@@ -105,7 +119,9 @@ const Table = ({
           hideFiltering={hideFiltering}
           setShowFilterSidebar={setShowFilterSidebar}
           cookiesCount={table.rows.length}
+          disableExport={table.rows.length === 0}
           extraInterface={extraInterfaceToTopBar}
+          exportCookies={hideExport ? undefined : exportCookies}
         />
       )}
       <ChipsBar
@@ -125,6 +141,8 @@ const Table = ({
             <FiltersSidebar
               filters={table.filters}
               toggleFilterSelection={table.toggleFilterSelection}
+              toggleSelectAllFilter={table.toggleSelectAllFilter}
+              isSelectAllFilterSelected={table.isSelectAllFilterSelected}
             />
           </Resizable>
         )}
@@ -139,7 +157,7 @@ const Table = ({
             position={columnPosition}
           />
           <div
-            className="h-full w-full overflow-auto min-w-[70rem]"
+            className="h-full w-full overflow-hidden min-w-[70rem]"
             ref={tableRef}
           >
             <TableHeader

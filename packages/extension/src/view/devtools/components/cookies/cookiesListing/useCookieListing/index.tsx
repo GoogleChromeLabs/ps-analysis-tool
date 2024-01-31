@@ -52,6 +52,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         accessorKey: 'parsedCookie.name',
         cell: (info: InfoType) => info,
         enableHiding: false,
+        widthWeightagePercentage: 13,
       },
       {
         header: 'Scope',
@@ -61,31 +62,37 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
             {!info ? 'Third Party' : 'First Party'}
           </p>
         ),
+        widthWeightagePercentage: 6.6,
       },
       {
         header: 'Domain',
         accessorKey: 'parsedCookie.domain',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 9,
       },
       {
         header: 'Partition Key',
         accessorKey: 'parsedCookie.partitionKey',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 9,
       },
       {
         header: 'SameSite',
         accessorKey: 'parsedCookie.samesite',
         cell: (info: InfoType) => <span className="capitalize">{info}</span>,
+        widthWeightagePercentage: 6.5,
       },
       {
         header: 'Category',
         accessorKey: 'analytics.category',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 8,
       },
       {
         header: 'Platform',
         accessorKey: 'analytics.platform',
         cell: (info: InfoType) => <span>{info ? info : 'Unknown'}</span>,
+        widthWeightagePercentage: 10,
       },
       {
         header: 'HttpOnly',
@@ -95,6 +102,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
             {info ? <span className="font-serif">✓</span> : ''}
           </p>
         ),
+        widthWeightagePercentage: 5,
       },
       {
         header: 'Secure',
@@ -104,31 +112,37 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
             {info ? <span className="font-serif">✓</span> : ''}
           </p>
         ),
+        widthWeightagePercentage: 5,
       },
       {
         header: 'Value',
         accessorKey: 'parsedCookie.value',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 7.8,
       },
       {
         header: 'Path',
         accessorKey: 'parsedCookie.path',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 3.5,
       },
       {
         header: 'Expires / Max-Age',
         accessorKey: 'parsedCookie.expires',
         cell: (info: InfoType) => (info ? info : 'Session'),
+        widthWeightagePercentage: 7.8,
       },
       {
         header: 'Priority',
         accessorKey: 'parsedCookie.priority',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 5.4,
       },
       {
         header: 'Size',
         accessorKey: 'parsedCookie.size',
         cell: (info: InfoType) => info,
+        widthWeightagePercentage: 3.4,
       },
     ],
     []
@@ -336,9 +350,14 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         title: 'Blocked Reasons',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
+        enableSelectAllOption: true,
         filterValues: preCalculatedFilters.blockedReason,
         sortValues: true,
         useGenericPersistenceKey: true,
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = value as string[];
+          return val?.includes(filterValue);
+        },
       },
       'parsedCookie.partitionKey': {
         title: 'Partition Key',
@@ -417,10 +436,9 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
     return `cookieListing#${selectedFrame}`;
   }, [selectedFrame]);
 
-  const extraInterfaceToTopBar = useMemo(
-    () => <RefreshButton onClick={getCookiesSetByJavascript} />,
-    [getCookiesSetByJavascript]
-  );
+  const extraInterfaceToTopBar = useMemo(() => {
+    return <RefreshButton onClick={getCookiesSetByJavascript} />;
+  }, [getCookiesSetByJavascript]);
 
   return {
     tableData,

@@ -46,6 +46,7 @@ interface CookieTableProps {
   tablePersistentSettingsKey?: string;
   selectedFrame: string | null;
   showTopBar?: boolean;
+  hideExport?: boolean;
   selectedFrameCookie: {
     [frame: string]: CookieTableData | null;
   } | null;
@@ -74,6 +75,7 @@ const CookieTable = forwardRef<
     tablePersistentSettingsKey,
     data: cookies,
     showTopBar,
+    hideExport = false,
     selectedFrame,
     selectedFrameCookie,
     setSelectedFrameCookie,
@@ -144,6 +146,7 @@ const CookieTable = forwardRef<
         selectedKey={
           selectedKey === null ? null : getCookieKey(selectedKey?.parsedCookie)
         }
+        hideExport={hideExport}
         getRowObjectKey={(row: TableRow) =>
           getCookieKey(
             (row?.originalData as CookieTableData).parsedCookie

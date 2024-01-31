@@ -35,6 +35,7 @@ import setParentDomain from './useAllowedList/setParentDomain';
 import onAllowListClick from './useAllowedList/onAllowListClick';
 import reloadCurrentTab from '../../../../../utils/reloadCurrentTab';
 import getDotPrefixedDomain from './useAllowedList/getDotPrefixedDomain';
+import isCookieDomainInAllowList from './useAllowedList/isCookieDomainInAllowList';
 
 interface RowContextMenuProps {
   domainsInAllowList: Set<string>;
@@ -69,15 +70,14 @@ const RowContextMenu = forwardRef<
   const [parentDomain, setParentDomainCallback] = useState<string>('');
   const [selectedCookie, setSelectedCookie] = useState<CookieTableData>();
 
-  const [domain, name] = useMemo(
+  const [domain, dotPrefixedDomain, name] = useMemo(
     () => [
       selectedCookie?.parsedCookie?.domain || '',
+      getDotPrefixedDomain(selectedCookie?.parsedCookie?.domain || ''),
       selectedCookie?.parsedCookie?.name,
     ],
     [selectedCookie]
   );
-
-  const _domain = useMemo(() => getDotPrefixedDomain(domain), [domain]);
 
   const handleRightClick = useCallback(
     (e: React.MouseEvent<HTMLElement>, { originalData }: TableRow) => {
@@ -94,9 +94,9 @@ const RowContextMenu = forwardRef<
 
   useEffect(() => {
     (async () => {
-      await setParentDomain(_domain || '', setParentDomainCallback);
+      await setParentDomain(dotPrefixedDomain || '', setParentDomainCallback);
     })();
-  }, [_domain, setParentDomainCallback]);
+  }, [dotPrefixedDomain, setParentDomainCallback, contextMenuOpen]);
 
   useImperativeHandle(ref, () => ({
     onRowContextMenu(e, row) {
@@ -104,18 +104,10 @@ const RowContextMenu = forwardRef<
     },
   }));
 
-  const isDomainInAllowList = useMemo(() => {
-    let _isDomainInAllowList = domainsInAllowList.has(_domain);
-
-    if (!_isDomainInAllowList) {
-      _isDomainInAllowList = [...domainsInAllowList].some((storedDomain) => {
-        // For example xyz.bbc.com and .bbc.com
-        return _domain.endsWith(storedDomain) && _domain !== storedDomain;
-      });
-    }
-
-    return _isDomainInAllowList;
-  }, [_domain, domainsInAllowList]);
+  const isDomainInAllowList = isCookieDomainInAllowList(
+    dotPrefixedDomain,
+    domainsInAllowList
+  );
 
   const handleCopy = useCallback(() => {
     try {
@@ -139,10 +131,10 @@ const RowContextMenu = forwardRef<
 
       removeSelectedRow();
       await onAllowListClick(
-        _domain,
+        dotPrefixedDomain,
         tabUrl || '',
         isIncognito,
-        domainsInAllowList.has(_domain),
+        domainsInAllowList.has(dotPrefixedDomain),
         domainsInAllowList,
         setDomainsInAllowListCallback
       );
@@ -150,7 +142,7 @@ const RowContextMenu = forwardRef<
       await reloadCurrentTab();
     },
     [
-      _domain,
+      dotPrefixedDomain,
       domainsInAllowList,
       isIncognito,
       removeSelectedRow,
@@ -222,7 +214,7 @@ const RowContextMenu = forwardRef<
                   <span id="allow-list-option">
                     {isDomainInAllowList
                       ? 'Remove Domain from Allow List'
-                      : 'Add Domain to Allow List'}
+                      : 'Allow Domain During Session'}
                   </span>
                 </button>
               )}

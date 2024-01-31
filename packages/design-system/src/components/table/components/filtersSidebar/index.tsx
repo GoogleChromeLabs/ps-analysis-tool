@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 /**
  * Internal dependencies.
@@ -27,18 +27,74 @@ import type { TableFilter, TableOutput } from '../../useTable';
 interface FiltersSidebarProps {
   filters: TableFilter;
   toggleFilterSelection: TableOutput['toggleFilterSelection'];
+  toggleSelectAllFilter: TableOutput['toggleSelectAllFilter'];
+  isSelectAllFilterSelected: (filterKey: string) => boolean;
 }
 
 const FiltersSidebar = ({
   filters,
   toggleFilterSelection,
+  toggleSelectAllFilter,
+  isSelectAllFilterSelected,
 }: FiltersSidebarProps) => {
-  if (!Object.keys(filters).length) {
+  const [expandAll, setExpandAll] = useState(false);
+  const expandedFilters = useRef(new Set<string>());
+  const filterKeys = useMemo(() => {
+    return Object.keys(filters);
+  }, [filters]);
+
+  const toggleFilterExpansion = useCallback(
+    (filterKey: string) => {
+      const newSet = new Set(expandedFilters.current);
+
+      if (newSet.has(filterKey)) {
+        newSet.delete(filterKey);
+      } else {
+        newSet.add(filterKey);
+      }
+
+      if (newSet.size === 0) {
+        setExpandAll(false);
+      }
+      if (newSet.size === filterKeys.length) {
+        setExpandAll(true);
+      }
+
+      expandedFilters.current = newSet;
+    },
+    [filterKeys]
+  );
+
+  const handleExpandAllClick = useCallback(() => {
+    setExpandAll((prev) => {
+      const newExpandAll = !prev;
+
+      if (newExpandAll) {
+        expandedFilters.current = new Set(filterKeys);
+      } else {
+        expandedFilters.current = new Set();
+      }
+
+      return newExpandAll;
+    });
+  }, [filterKeys]);
+
+  if (!filterKeys.length) {
     return null;
   }
 
   return (
-    <div className="h-full overflow-auto p-3" data-testid="filters-sidebar">
+    <div
+      className="h-full overflow-auto p-3 pt-0"
+      data-testid="filters-sidebar"
+    >
+      <a
+        className="w-full block text-link text-royal-blue dark:text-medium-persian-blue text-[11px] mt-1.5 mb-[5px]"
+        href="#"
+        onClick={handleExpandAllClick}
+      >
+        {expandAll ? 'Collapse All' : 'Expand All'}
+      </a>
       <ul>
         {Object.entries(filters).map(([filterKey, filter]) => (
           <ListItem
@@ -46,6 +102,10 @@ const FiltersSidebar = ({
             filter={filter}
             filterKey={filterKey}
             toggleFilterSelection={toggleFilterSelection}
+            toggleSelectAllFilter={toggleSelectAllFilter}
+            expandAll={expandAll}
+            toggleFilterExpansion={toggleFilterExpansion}
+            isSelectAllFilterSelected={isSelectAllFilterSelected(filterKey)}
           />
         ))}
       </ul>
