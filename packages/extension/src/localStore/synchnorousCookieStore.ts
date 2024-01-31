@@ -133,6 +133,8 @@ class SynchnorousCookieStore {
       this.sendUpdatedDataToPopupAndDevTools(tabId);
     } catch (error) {
       //Fail silently
+      // eslint-disable-next-line no-console
+      console.warn(error);
     }
   }
 
