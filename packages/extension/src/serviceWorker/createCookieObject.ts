@@ -28,18 +28,17 @@ import type { Protocol } from 'devtools-protocol';
  * Create cookie object from ChromeStorage API cookie object, previously saved parsed cookie object if any, and recently captured request/response cookie header.
  * @param parsedCookie Parsed cookie object from request/response.
  * @param url URL of the cookie from the request/response.
- * @param {Protocol.Network.Cookie[]} cookiesList List cookies from the request.
+ * @param {Protocol.Network.Cookie[]} cdpCookiesList List cookies from the request.
  * @returns {Promise<Protocol.Network.Cookie[]>} Cookie object.
  */
 export function createCookieObject(
   parsedCookie: CookieData['parsedCookie'],
   url: string,
-  cookiesList: Protocol.Network.Cookie[]
+  cdpCookiesList: Protocol.Network.Cookie[]
 ) {
-  const name = parsedCookie.name;
-  const value = parsedCookie.value;
+  const { name, value } = parsedCookie;
 
-  const cdpCookie = cookiesList?.find((cookie: Protocol.Network.Cookie) => {
+  const cdpCookie = cdpCookiesList?.find((cookie: Protocol.Network.Cookie) => {
     return cookie.name === name;
   });
 

@@ -64,6 +64,7 @@ chrome.webRequest.onResponseStarted.addListener(
     (async () => {
       const { tabId, url, responseHeaders, frameId } = details;
       const tabUrl = syncCookieStore?.getTabUrl(tabId) ?? '';
+
       if (
         !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, responseHeaders)
       ) {
@@ -75,7 +76,8 @@ chrome.webRequest.onResponseStarted.addListener(
       }
 
       let cdpCookies: { [key: string]: Protocol.Network.Cookie[] };
-      //Since we are using CDP we might as well use it to get the proper cookies in the request this will further reduce the load of domain calculation
+
+      // Since we are using CDP we might as well use it to get the proper cookies in the request this will further reduce the load of domain calculation
       try {
         cdpCookies = await chrome.debugger.sendCommand(
           { tabId: tabId },
@@ -85,6 +87,7 @@ chrome.webRequest.onResponseStarted.addListener(
       } catch (error) {
         // Fail silently
       }
+
       const cookies = responseHeaders?.reduce<CookieData[]>(
         (accumulator, header) => {
           if (
@@ -104,6 +107,7 @@ chrome.webRequest.onResponseStarted.addListener(
 
             return [...accumulator, cookie];
           }
+
           return accumulator;
         },
         []
@@ -112,6 +116,7 @@ chrome.webRequest.onResponseStarted.addListener(
       if (!cookies || (cookies && cookies?.length === 0)) {
         return;
       }
+
       // Adds the cookies from the request headers to the cookies object.
       syncCookieStore?.update(tabId, cookies);
     })();
@@ -128,6 +133,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
   ({ url, requestHeaders, tabId, frameId }) => {
     (async () => {
       const tabUrl = syncCookieStore?.getTabUrl(tabId) ?? '';
+
       if (
         !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, requestHeaders)
       ) {
@@ -139,6 +145,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
       }
 
       let cdpCookies: { [key: string]: Protocol.Network.Cookie[] };
+
       try {
         cdpCookies = await chrome.debugger.sendCommand(
           { tabId: tabId },
@@ -166,12 +173,15 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
               frameId,
               cdpCookies?.cookies ?? []
             );
+
             return [...accumulator, ...cookieList];
           }
+
           return accumulator;
         },
         []
       );
+
       if (!cookies || (cookies && cookies?.length === 0)) {
         return;
       }
@@ -195,7 +205,7 @@ chrome.tabs.onCreated.addListener((tab) => {
   if (tabMode && tabMode !== 'unlimited') {
     const doesTabExist = tabToRead;
     if (
-      Object.keys(syncCookieStore?.cachedTabsData ?? {}).length >=
+      Object.keys(syncCookieStore?.tabsData ?? {}).length >=
         ALLOWED_NUMBER_OF_TABS &&
       doesTabExist
     ) {
@@ -263,11 +273,11 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   syncCookieStore = new SynchnorousCookieStore();
   syncCookieStore?.clear();
   setInterval(() => {
-    if (Object.keys(syncCookieStore?.cachedTabsData ?? {}).length === 0) {
+    if (Object.keys(syncCookieStore?.tabsData ?? {}).length === 0) {
       return;
     }
 
-    Object.keys(syncCookieStore?.cachedTabsData ?? {}).forEach((key) => {
+    Object.keys(syncCookieStore?.tabsData ?? {}).forEach((key) => {
       syncCookieStore?.sendUpdatedDataToPopupAndDevTools(Number(key));
     });
   }, 1000);
@@ -427,7 +437,7 @@ const listenToNewTab = async (tabId?: number) => {
   }
 
   if (tabMode && tabMode !== 'unlimited') {
-    const storedTabData = Object.keys(syncCookieStore?.cachedTabsData ?? {});
+    const storedTabData = Object.keys(syncCookieStore?.tabsData ?? {});
     await Promise.all(
       storedTabData.map(async (tabIdToDelete) => {
         syncCookieStore?.removeTabData(Number(tabIdToDelete));
@@ -521,7 +531,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
 
     syncCookieStore?.updateDevToolsState(request?.payload?.tabId, true);
 
-    if (syncCookieStore?.cachedTabsData[request.payload.tabId]) {
+    if (syncCookieStore?.tabsData[request.payload.tabId]) {
       syncCookieStore?.sendUpdatedDataToPopupAndDevTools(request.payload.tabId);
     }
   }
@@ -543,7 +553,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
 
     syncCookieStore?.updatePopUpState(request?.payload?.tabId, true);
 
-    if (syncCookieStore?.cachedTabsData[request?.payload?.tabId]) {
+    if (syncCookieStore?.tabsData[request?.payload?.tabId]) {
       syncCookieStore?.sendUpdatedDataToPopupAndDevTools(
         request?.payload?.tabId
       );
@@ -682,7 +692,7 @@ chrome.storage.sync.onChanged.addListener(
 
     if (!changes?.isUsingCDP?.newValue) {
       await Promise.all(
-        Object.keys(syncCookieStore?.cachedTabsData ?? {}).map(async (key) => {
+        Object.keys(syncCookieStore?.tabsData ?? {}).map(async (key) => {
           try {
             await chrome.debugger.detach({ tabId: Number(key) });
             syncCookieStore?.removeCookieData(Number(key));
@@ -696,7 +706,7 @@ chrome.storage.sync.onChanged.addListener(
       );
     } else {
       await Promise.all(
-        Object.keys(syncCookieStore?.cachedTabsData ?? {}).map(async (key) => {
+        Object.keys(syncCookieStore?.tabsData ?? {}).map(async (key) => {
           syncCookieStore?.removeCookieData(Number(key));
           syncCookieStore?.sendUpdatedDataToPopupAndDevTools(Number(key));
           await chrome.tabs.reload(Number(key), { bypassCache: true });

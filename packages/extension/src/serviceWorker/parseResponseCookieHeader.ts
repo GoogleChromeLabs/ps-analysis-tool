@@ -21,6 +21,8 @@ import {
   isFirstParty,
   findAnalyticsMatch,
   type CookieData,
+  type CookieAnalytics,
+  type CookieDatabase,
 } from '@ps-analysis-tool/common';
 import { getDomain } from 'tldts';
 import type { Protocol } from 'devtools-protocol';
@@ -28,10 +30,6 @@ import type { Protocol } from 'devtools-protocol';
 /**
  * Internal dependencies.
  */
-import type {
-  CookieAnalytics,
-  CookieDatabase,
-} from '../utils/fetchCookieDictionary';
 import { createCookieObject } from './createCookieObject';
 
 /**
@@ -42,7 +40,7 @@ import { createCookieObject } from './createCookieObject';
  * @param {CookieDatabase} dictionary Dictionary from open cookie database
  * @param {string} tabUrl top url of the tab from which the request originated.
  * @param {number} frameId Id of a frame in which this cookie is used.
- * @param {Protocol.Network.Cookie[]} cookiesList List cookies from the request.
+ * @param {Protocol.Network.Cookie[]} cdpCookiesList List cookies from the request.
  * @returns {CookieData} Parsed cookie object.
  */
 const parseResponseCookieHeader = (
@@ -51,24 +49,23 @@ const parseResponseCookieHeader = (
   dictionary: CookieDatabase,
   tabUrl: string,
   frameId: number,
-  cookiesList: Protocol.Network.Cookie[]
+  cdpCookiesList: Protocol.Network.Cookie[]
 ): CookieData => {
   let parsedCookie: CookieData['parsedCookie'] = cookie.parse(value);
 
-  parsedCookie = createCookieObject(parsedCookie, url, cookiesList);
+  parsedCookie = createCookieObject(parsedCookie, url, cdpCookiesList);
 
   let analytics: CookieAnalytics | null = null;
+
   if (dictionary) {
     analytics = findAnalyticsMatch(parsedCookie.name, dictionary);
   }
 
   const _isFirstParty = isFirstParty(parsedCookie.domain || '', tabUrl);
   const partitionKey = new URL(tabUrl).protocol + '//' + getDomain(tabUrl);
+
   if (value.toLowerCase().includes('partitioned')) {
-    parsedCookie = {
-      ...parsedCookie,
-      partitionKey,
-    };
+    parsedCookie.partitionKey = partitionKey;
   }
 
   return {

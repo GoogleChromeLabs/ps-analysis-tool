@@ -32,9 +32,9 @@ class SynchnorousCookieStore {
   /**
    * The cookie data of the tabs.
    */
-  cachedTabsData: {
-    [key: number]: {
-      [Key: string]: CookieData;
+  tabsData: {
+    [tabId: number]: {
+      [cookieKey: string]: CookieData;
     };
   } = {};
 
@@ -42,7 +42,7 @@ class SynchnorousCookieStore {
    * Required data of the tabs and PSAT panel of the tab.
    */
   tabs: {
-    [key: number]: {
+    [tabId: number]: {
       url: string;
       devToolsOpenState: boolean;
       popupOpenState: boolean;
@@ -57,79 +57,78 @@ class SynchnorousCookieStore {
   // eslint-disable-next-line complexity
   update(tabId: number, cookies: CookieData[]) {
     try {
-      if (!this.cachedTabsData[tabId] && !this.tabs[tabId]) {
+      if (!this.tabsData[tabId] && !this.tabs[tabId]) {
         return;
       }
 
       for (const cookie of cookies) {
-        const { name, domain, path } = cookie.parsedCookie;
-
-        if (!name || !domain || !path) {
-          continue;
-        }
-
-        let cookieKey = getCookieKey(cookie.parsedCookie);
+        const cookieKey = getCookieKey(cookie.parsedCookie);
 
         if (!cookieKey) {
           continue;
         }
 
+        // Merge in previous blocked reasons.
         const blockedReasons: BlockedReason[] = [
           ...new Set<BlockedReason>([
             ...(cookie?.blockedReasons ?? []),
-            ...(this.cachedTabsData[tabId]?.[cookieKey]?.blockedReasons ?? []),
+            ...(this.tabsData[tabId]?.[cookieKey]?.blockedReasons ?? []),
           ]),
         ];
 
-        cookieKey = cookieKey?.trim();
+        // Merge in previous warning reasons.
+        const warningReasons = Array.from(
+          new Set<Protocol.Audits.CookieWarningReason>([
+            ...(cookie.warningReasons ?? []),
+            ...(this.tabsData[tabId][cookieKey].warningReasons ?? []),
+          ])
+        );
 
-        if (this.cachedTabsData[tabId]?.[cookieKey]) {
-          this.cachedTabsData[tabId][cookieKey] = {
-            ...this.cachedTabsData[tabId][cookieKey],
+        const parsedCookie = {
+          ...this.tabsData[tabId][cookieKey].parsedCookie,
+          ...cookie.parsedCookie,
+          priority:
+            cookie.parsedCookie?.priority ??
+            this.tabsData[tabId][cookieKey].parsedCookie?.priority ??
+            'Medium',
+          partitionKey:
+            cookie.parsedCookie?.partitionKey ??
+            this.tabsData[tabId][cookieKey].parsedCookie?.partitionKey,
+        };
+
+        if (this.tabsData[tabId]?.[cookieKey]) {
+          this.tabsData[tabId][cookieKey] = {
+            ...this.tabsData[tabId][cookieKey],
             ...cookie,
-            parsedCookie: {
-              ...this.cachedTabsData[tabId][cookieKey].parsedCookie,
-              ...cookie.parsedCookie,
-              priority:
-                cookie.parsedCookie?.priority ??
-                this.cachedTabsData[tabId][cookieKey].parsedCookie?.priority ??
-                'Medium',
-              partitionKey:
-                cookie.parsedCookie?.partitionKey ??
-                this.cachedTabsData[tabId][cookieKey].parsedCookie
-                  ?.partitionKey,
-            },
+            // Insert data receieved from CDP or new data recieved through webRequest API.
+            parsedCookie,
             isBlocked: blockedReasons.length > 0,
             blockedReasons,
-            warningReasons: Array.from(
-              new Set<Protocol.Audits.CookieWarningReason>([
-                ...(cookie.warningReasons ?? []),
-                ...(this.cachedTabsData[tabId][cookieKey].warningReasons ?? []),
-              ])
-            ),
-            url: this.cachedTabsData[tabId][cookieKey].url ?? cookie.url,
+            warningReasons,
+            url: this.tabsData[tabId][cookieKey].url ?? cookie.url,
             headerType:
-              this.cachedTabsData[tabId][cookieKey].headerType === 'javascript'
-                ? this.cachedTabsData[tabId][cookieKey].headerType
+              this.tabsData[tabId][cookieKey].headerType === 'javascript'
+                ? this.tabsData[tabId][cookieKey].headerType
                 : cookie.headerType,
             frameIdList: Array.from(
               new Set<number>([
                 ...((cookie.frameIdList ?? []) as number[]),
-                ...((this.cachedTabsData[tabId][cookieKey].frameIdList ??
+                ...((this.tabsData[tabId][cookieKey].frameIdList ??
                   []) as number[]),
               ])
             ),
           };
         } else {
-          this.cachedTabsData[tabId][cookieKey] = cookie;
+          this.tabsData[tabId][cookieKey] = cookie;
         }
       }
+
       //@ts-ignore Since this is for debugging the data to check the data being collected by the storage.
-      globalThis.CDPData = this.cachedTabsData;
+      globalThis.CDPData = this.tabsData;
       //@ts-ignore Since this is for debugging the data to check the data being collected by the storage.
       globalThis.TabsData = this.tabs;
 
-      updateCookieBadgeText(this.cachedTabsData[tabId], tabId);
+      updateCookieBadgeText(this.tabsData[tabId], tabId);
       //this.sendUpdatedDataToPopupAndDevTools(tabId);
     } catch (error) {
       //Fail silently
@@ -142,7 +141,7 @@ class SynchnorousCookieStore {
    * Clears the whole storage.
    */
   clear() {
-    this.cachedTabsData = {};
+    this.tabsData = {};
     this.tabs = {};
   }
 
@@ -215,63 +214,61 @@ class SynchnorousCookieStore {
     warningReasons: Protocol.Audits.CookieWarningReason[],
     tabId: number
   ) {
-    if (!this.cachedTabsData[tabId]) {
+    if (!this.tabsData[tabId]) {
       return;
     }
     // Check if primaryDomain cookie exists
     if (
-      this.cachedTabsData[tabId] &&
-      this.cachedTabsData[tabId][cookieName] &&
-      !this.cachedTabsData[tabId][alternateCookieName]
+      this.tabsData[tabId] &&
+      this.tabsData[tabId][cookieName] &&
+      !this.tabsData[tabId][alternateCookieName]
     ) {
-      this.cachedTabsData[tabId][cookieName].blockedReasons = [
+      this.tabsData[tabId][cookieName].blockedReasons = [
         ...new Set([
-          ...(this.cachedTabsData[tabId][cookieName].blockedReasons ?? []),
+          ...(this.tabsData[tabId][cookieName].blockedReasons ?? []),
           ...exclusionReasons,
         ]),
       ];
-      this.cachedTabsData[tabId][cookieName].warningReasons = [
+      this.tabsData[tabId][cookieName].warningReasons = [
         ...new Set([
-          ...(this.cachedTabsData[tabId][cookieName].warningReasons ?? []),
+          ...(this.tabsData[tabId][cookieName].warningReasons ?? []),
           ...warningReasons,
         ]),
       ];
-      this.cachedTabsData[tabId][cookieName].isBlocked =
+      this.tabsData[tabId][cookieName].isBlocked =
         exclusionReasons.length > 0 ? true : false;
       // Check if secondaryDomain cookie exists
     } else if (
-      this.cachedTabsData[tabId] &&
-      !this.cachedTabsData[tabId][cookieName] &&
-      this.cachedTabsData[tabId][alternateCookieName]
+      this.tabsData[tabId] &&
+      !this.tabsData[tabId][cookieName] &&
+      this.tabsData[tabId][alternateCookieName]
     ) {
-      this.cachedTabsData[tabId][alternateCookieName].blockedReasons = [
+      this.tabsData[tabId][alternateCookieName].blockedReasons = [
         ...new Set([
-          ...(this.cachedTabsData[tabId][alternateCookieName].blockedReasons ??
-            []),
+          ...(this.tabsData[tabId][alternateCookieName].blockedReasons ?? []),
           ...exclusionReasons,
         ]),
       ];
-      this.cachedTabsData[tabId][alternateCookieName].warningReasons = [
+      this.tabsData[tabId][alternateCookieName].warningReasons = [
         ...new Set([
-          ...(this.cachedTabsData[tabId][alternateCookieName].warningReasons ??
-            []),
+          ...(this.tabsData[tabId][alternateCookieName].warningReasons ?? []),
           ...warningReasons,
         ]),
       ];
-      this.cachedTabsData[tabId][alternateCookieName].isBlocked =
+      this.tabsData[tabId][alternateCookieName].isBlocked =
         exclusionReasons.length > 0 ? true : false;
     } else {
       // If none of them exists. This case is possible when the PROMISE_QUEUE hasnt processed our current promise, and we already have an issue.
-      this.cachedTabsData[tabId] = {
-        ...this.cachedTabsData[tabId],
+      this.tabsData[tabId] = {
+        ...this.tabsData[tabId],
         [alternateCookieName]: {
-          ...(this.cachedTabsData[tabId][alternateCookieName] ?? {}),
+          ...(this.tabsData[tabId][alternateCookieName] ?? {}),
           blockedReasons: [...exclusionReasons],
           warningReasons: [...warningReasons],
           isBlocked: exclusionReasons.length > 0 ? true : false,
         },
         [cookieName]: {
-          ...(this.cachedTabsData[tabId][cookieName] ?? {}),
+          ...(this.tabsData[tabId][cookieName] ?? {}),
           blockedReasons: [...exclusionReasons],
           warningReasons: [...warningReasons],
           isBlocked: exclusionReasons.length > 0 ? true : false,
@@ -286,7 +283,7 @@ class SynchnorousCookieStore {
    * @param {number} tabId The active tab id.
    */
   removeCookieData(tabId: number) {
-    this.cachedTabsData[tabId] = {};
+    this.tabsData[tabId] = {};
     this.sendUpdatedDataToPopupAndDevTools(tabId);
   }
 
@@ -295,11 +292,11 @@ class SynchnorousCookieStore {
    * @param {number} tabId The tab id.
    */
   addTabData(tabId: number) {
-    if (this.cachedTabsData[tabId] && this.tabs[tabId]) {
+    if (this.tabsData[tabId] && this.tabs[tabId]) {
       return;
     }
 
-    this.cachedTabsData[tabId] = {};
+    this.tabsData[tabId] = {};
     this.tabs[tabId] = {
       url: '',
       devToolsOpenState: false,
@@ -312,7 +309,7 @@ class SynchnorousCookieStore {
    * @param {number} tabId The tab id.
    */
   removeTabData(tabId: number) {
-    delete this.cachedTabsData[tabId];
+    delete this.tabsData[tabId];
     delete this.tabs[tabId];
   }
 
@@ -342,7 +339,7 @@ class SynchnorousCookieStore {
           type: 'ServiceWorker::DevTools::NEW_COOKIE_DATA',
           payload: {
             tabId,
-            cookieData: JSON.stringify(this.cachedTabsData[tabId]),
+            cookieData: JSON.stringify(this.tabsData[tabId]),
           },
         });
       }
@@ -352,7 +349,7 @@ class SynchnorousCookieStore {
           type: 'ServiceWorker::Popup::NEW_COOKIE_DATA',
           payload: {
             tabId,
-            cookieData: JSON.stringify(this.cachedTabsData[tabId]),
+            cookieData: JSON.stringify(this.tabsData[tabId]),
           },
         });
       }

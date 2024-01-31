@@ -39,7 +39,7 @@ import { createCookieObject } from './createCookieObject';
  * @param {CookieDatabase} dictionary Dictionary from open cookie database
  * @param {string} tabUrl top url of the tab from which the request originated.
  * @param {number} frameId Id of the frame the cookie is used in.
- * @param {Protocol.Network.Cookie[]} cookiesList List cookies from the request.
+ * @param {Protocol.Network.Cookie[]} cdpCookiesList List cookies from the request.
  * @returns {CookieData[]} Parsed cookie object array.
  */
 const parseRequestCookieHeader = (
@@ -48,15 +48,17 @@ const parseRequestCookieHeader = (
   dictionary: CookieDatabase,
   tabUrl: string,
   frameId: number,
-  cookiesList: Protocol.Network.Cookie[]
+  cdpCookiesList: Protocol.Network.Cookie[]
 ): CookieData[] => {
   try {
     return value?.split(';').map((cookieString) => {
       let [name] = cookieString.split('=');
       const [, ...rest] = cookieString.split('=');
+
       name = name.trim();
 
       let analytics: CookieAnalytics | null = null;
+
       if (dictionary) {
         analytics = findAnalyticsMatch(name, dictionary);
       }
@@ -65,9 +67,11 @@ const parseRequestCookieHeader = (
         name,
         value: rest.join('='),
       } as CookieData['parsedCookie'];
-      parsedCookie = createCookieObject(parsedCookie, url, cookiesList);
+
+      parsedCookie = createCookieObject(parsedCookie, url, cdpCookiesList);
 
       const _isFirstParty = isFirstParty(parsedCookie.domain || '', tabUrl);
+
       return {
         parsedCookie,
         analytics,

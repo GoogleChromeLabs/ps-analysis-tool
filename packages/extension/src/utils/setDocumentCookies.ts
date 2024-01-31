@@ -16,14 +16,19 @@
 /**
  * External dependencies
  */
-import { isFirstParty, findAnalyticsMatch } from '@ps-analysis-tool/common';
+import {
+  isFirstParty,
+  findAnalyticsMatch,
+  type CookieDatabase,
+  type CookieData,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import { createCookieObject } from '../serviceWorker/createCookieObject';
-import { fetchDictionary, type CookieDatabase } from './fetchCookieDictionary';
-import { ChromeStorage, type CookieData } from '../store';
+import { fetchDictionary } from './fetchCookieDictionary';
+import { ChromeStorage } from '../store';
 
 interface ProcessAndStoreDucmentCookiesProps {
   tabUrlResult: string;
@@ -96,6 +101,8 @@ const processAndStoreDocumentCookies = async ({
           });
         })
       );
+
+      // TODO: Use syncCookieStore.
       await ChromeStorage.update(tabId, parsedCookieData);
     }
   } catch (error) {
