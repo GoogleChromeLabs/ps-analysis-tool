@@ -17,35 +17,22 @@
 /**
  * External dependencies
  */
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import type {
   InfoType,
   TableColumn,
   TableFilter,
 } from '@ps-analysis-tool/design-system';
-import { getValueByKey } from '@ps-analysis-tool/common';
-
-/**
- * Internal dependencies
- */
-import { useContentStore } from '../../../stateProviders/contentStore';
+import { type CookieTableData } from '@ps-analysis-tool/common';
+import calculateDynamicFilterValues from './utils/calculateDynamicFilterValues';
+import calculateBlockedReasonsFilterValues from './utils/calculateBlockedReasonsFilterValues';
 
 const useCookieListing = (
+  tabCookies: CookieTableData[],
   selectedFrameUrl: string,
+  persistenceKey = 'cookiesListing',
   selectedSite?: string | null
 ) => {
-  const { tabCookies } = useContentStore(({ state }) => ({
-    tabCookies: state.tabCookies,
-  }));
-
-  const cookies = useMemo(
-    () =>
-      Object.values(tabCookies).filter((cookie) =>
-        (cookie.frameUrls as string[]).includes(selectedFrameUrl)
-      ),
-    [tabCookies, selectedFrameUrl]
-  );
-
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
@@ -137,61 +124,16 @@ const useCookieListing = (
     []
   );
 
-  const calculate = useCallback(
-    (key: string): TableFilter[keyof TableFilter]['filterValues'] =>
-      Object.values(tabCookies).reduce<
-        TableFilter[keyof TableFilter]['filterValues']
-      >((acc, cookie) => {
-        const value = getValueByKey(key, cookie);
-
-        if (!acc) {
-          acc = {};
-        }
-
-        if (value) {
-          acc[value] = {
-            selected: false,
-          };
-        }
-
-        return acc;
-      }, {}),
-    [tabCookies]
-  );
-
-  const blockedReasonFilterValues = useMemo(
-    () =>
-      Object.values(tabCookies).reduce<
-        TableFilter[keyof TableFilter]['filterValues']
-      >((acc, cookie) => {
-        const blockedReason = getValueByKey('blockedReasons', cookie);
-
-        if (!cookie.frameIdList || cookie?.frameIdList?.length === 0) {
-          return acc;
-        }
-
-        blockedReason?.forEach((reason: string) => {
-          if (!acc) {
-            acc = {};
-          }
-
-          acc[reason] = {
-            selected: false,
-          };
-        });
-
-        return acc;
-      }, {}),
-    [tabCookies]
-  );
-
   const filters = useMemo<TableFilter>(
     () => ({
       'analytics.category': {
         title: 'Category',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: calculate('analytics.category'),
+        filterValues: calculateDynamicFilterValues(
+          'analytics.category',
+          tabCookies
+        ),
         sortValues: true,
         useGenericPersistenceKey: true,
       },
@@ -325,7 +267,10 @@ const useCookieListing = (
         title: 'Platform',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: calculate('analytics.platform'),
+        filterValues: calculateDynamicFilterValues(
+          'analytics.platform',
+          tabCookies
+        ),
         sortValues: true,
         useGenericPersistenceKey: true,
       },
@@ -334,7 +279,7 @@ const useCookieListing = (
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
         enableSelectAllOption: true,
-        filterValues: blockedReasonFilterValues,
+        filterValues: calculateBlockedReasonsFilterValues(tabCookies),
         sortValues: true,
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
@@ -342,7 +287,7 @@ const useCookieListing = (
         },
       },
     }),
-    [blockedReasonFilterValues, calculate]
+    [tabCookies]
   );
 
   const searchKeys = useMemo<string[]>(
@@ -352,14 +297,13 @@ const useCookieListing = (
 
   const tablePersistentSettingsKey = useMemo(() => {
     if (selectedSite) {
-      return `cookiesListing#${selectedSite}${selectedFrameUrl}`;
+      return persistenceKey + '#' + selectedSite + selectedFrameUrl;
     }
 
-    return 'cookiesListing#' + selectedFrameUrl;
-  }, [selectedFrameUrl, selectedSite]);
+    return persistenceKey + '#' + selectedFrameUrl;
+  }, [persistenceKey, selectedFrameUrl, selectedSite]);
 
   return {
-    cookies,
     tableColumns,
     filters,
     searchKeys,
