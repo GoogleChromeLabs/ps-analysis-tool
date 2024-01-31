@@ -40,6 +40,8 @@ import { useCookieStore } from './stateProviders/syncCookieStore';
 import './app.css';
 import { Cookies } from './components';
 import useFrameOverlay from './hooks/useFrameOverlay';
+import { getCurrentTabId } from '../../utils/getCurrentTabId';
+import { useSettingsStore } from './stateProviders/syncSettingsStore';
 
 const App: React.FC = () => {
   const [sidebarWidth, setSidebarWidth] = useState(200);
@@ -71,10 +73,15 @@ const App: React.FC = () => {
     doesFrameContainCookies: state.doesFrameContainCookies,
   }));
 
+  const { allowedNumberOfTabs } = useSettingsStore(({ state }) => ({
+    allowedNumberOfTabs: state.allowedNumberOfTabs,
+  }));
+
   const listenToMouseChange = useCallback(() => {
     if (contextInvalidatedRef.current) {
       if (!chrome.runtime?.id) {
         setContextInvalidated(true);
+        localStorage.setItem('contextInvalidated', 'true');
       }
     }
   }, [setContextInvalidated]);
@@ -223,6 +230,25 @@ const App: React.FC = () => {
     },
     [updateSelectedItemKey]
   );
+
+  useEffect(() => {
+    (async () => {
+      const localStorageFlag = localStorage.getItem('contextInvalidated');
+
+      if (
+        localStorageFlag &&
+        localStorageFlag === 'true' &&
+        allowedNumberOfTabs === 'unlimited'
+      ) {
+        const tabId = await getCurrentTabId();
+
+        if (tabId) {
+          chrome.tabs.reload(Number(tabId));
+          localStorage.removeItem('contextInvalidated');
+        }
+      }
+    })();
+  }, [allowedNumberOfTabs]);
 
   useFrameOverlay(filteredCookies, handleUpdate);
 
