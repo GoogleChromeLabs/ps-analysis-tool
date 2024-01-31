@@ -14,5 +14,4 @@
  * limitations under the License.
  */
 export { default as ChromeStorage } from './chromeStorage';
-export { default as PreferenceStore } from './preferenceStore';
 export * from './types';
