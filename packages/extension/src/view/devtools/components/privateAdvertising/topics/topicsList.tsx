@@ -21,7 +21,7 @@ import React, { useEffect, useState } from 'react';
 /**
  * Internal dependencies.
  */
-import { CookieStore } from '../../../../../localStore';
+import { ChromeStorage } from '../../../../../store';
 
 const TopicsList = () => {
   const [topics, setTopics] = useState<string[]>([]);
@@ -31,7 +31,7 @@ const TopicsList = () => {
       'window.location.origin',
       (activeTabUrl: string, isException) => {
         if (!isException) {
-          CookieStore.getTopics(activeTabUrl).then((resolvedTopics) => {
+          ChromeStorage.getTopics(activeTabUrl).then((resolvedTopics) => {
             setTopics(resolvedTopics);
           });
         }

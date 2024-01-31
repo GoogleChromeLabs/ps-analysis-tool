@@ -20,7 +20,7 @@ import { Protocol } from 'devtools-protocol';
 /**
  * Internal dependencies
  */
-import { CookieStore } from '../localStore';
+import { ChromeStorage } from '../store';
 
 /**
  * This will add audits issue to the function
@@ -42,7 +42,7 @@ export default async function addAuditsIssues(
   // Adding alternate domains here because our extension calculates domain differently that the application tab.
   // This is done to capture both NID.google.com/ and NIDgoogle.com/ so that if we find either of the cookie we add issues to the cookie object
   try {
-    await CookieStore.addCookieExclusionWarningReason(
+    await ChromeStorage.addCookieExclusionWarningReason(
       cookie?.name + primaryDomain + cookie?.path,
       //@ts-ignore since The details has been checked before sending them as parameter.
       cookie?.name + secondaryDomain + cookie?.path,

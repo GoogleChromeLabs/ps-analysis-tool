@@ -32,7 +32,7 @@ import parseResponseCookieHeader from './parseResponseCookieHeader';
 import parseRequestCookieHeader from './parseRequestCookieHeader';
 import { fetchDictionary } from '../utils/fetchCookieDictionary';
 import { ALLOWED_NUMBER_OF_TABS } from '../constants';
-import SynchnorousCookieStore from '../localStore/synchnorousCookieStore';
+import SynchnorousCookieStore from '../store/synchnorousCookieStore';
 import canProcessCookies from '../utils/canProcessCookies';
 
 let cookieDB: CookieDatabase | null = null;

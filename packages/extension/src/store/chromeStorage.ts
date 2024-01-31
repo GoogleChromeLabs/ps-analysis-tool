@@ -21,7 +21,7 @@ import type { AllowedDomainObject, AllowedDomainStorage } from './types';
 import fetchTopicsTaxonomy from '../utils/fetchTopicsTaxonomy';
 import getIndexForAllowListedItem from './utils/getIndexForAllowListedItem';
 
-const CookieStore = {
+const ChromeStorage = {
   /**
    * Handle topics.
    * @param {string} activeTabUrl The active tab origin location.
@@ -120,4 +120,4 @@ const CookieStore = {
   },
 };
 
-export default CookieStore;
+export default ChromeStorage;
