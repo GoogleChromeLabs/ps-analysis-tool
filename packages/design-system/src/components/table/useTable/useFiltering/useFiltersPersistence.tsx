@@ -23,6 +23,7 @@ import { PersistentStorageData, TableFilter } from '..';
 
 const useFiltersPersistence = (
   filters: TableFilter | undefined,
+  selectAllFilters: { [filterKey: string]: { selected: boolean } },
   setOptions: React.Dispatch<
     React.SetStateAction<{
       [filterKey: string]: TableFilter[keyof TableFilter]['filterValues'];
@@ -142,14 +143,34 @@ const useFiltersPersistence = (
     };
 
     Object.entries(filters || {}).forEach(([filterKey, filter]) => {
+      const selected = Boolean(selectAllFilters[filterKey]?.selected);
+
       if (filter.useGenericPersistenceKey) {
         accumulator.genericSelectedFilters[filterKey] = {
           ...filter.filterValues,
         };
+
+        if (selected) {
+          accumulator.genericSelectedFilters[filterKey] = {
+            ...accumulator.genericSelectedFilters[filterKey],
+            All: {
+              selected: true,
+            },
+          };
+        }
       } else {
         accumulator.specificSelectedFilters[filterKey] = {
           ...filter.filterValues,
         };
+
+        if (selected) {
+          accumulator.specificSelectedFilters[filterKey] = {
+            ...accumulator.specificSelectedFilters[filterKey],
+            All: {
+              selected: true,
+            },
+          };
+        }
       }
     });
 
@@ -161,7 +182,7 @@ const useFiltersPersistence = (
       accumulator.specificSelectedFilters,
       accumulator.genericSelectedFilters,
     ];
-  }, [filters]);
+  }, [filters, selectAllFilters]);
 
   useEffect(() => {
     saveFilters(specificSelectedFilters, specificTablePersistentSettingsKey);

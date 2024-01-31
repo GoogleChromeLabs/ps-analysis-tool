@@ -141,6 +141,8 @@ const Table = ({
             <FiltersSidebar
               filters={table.filters}
               toggleFilterSelection={table.toggleFilterSelection}
+              toggleSelectAllFilter={table.toggleSelectAllFilter}
+              isSelectAllFilterSelected={table.isSelectAllFilterSelected}
             />
           </Resizable>
         )}
@@ -155,7 +157,7 @@ const Table = ({
             position={columnPosition}
           />
           <div
-            className="h-full w-full overflow-hidden min-w-[70rem]"
+            className="h-full w-full overflow-hidden min-w-[70rem] flex flex-col"
             ref={tableRef}
           >
             <TableHeader
