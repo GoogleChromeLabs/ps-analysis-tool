@@ -573,6 +573,16 @@ chrome.runtime.onMessage.addListener(async (request) => {
   ) {
     syncCookieStore?.updatePopUpState(request?.payload?.tabId, false);
   }
+
+  if (
+    request?.type === 'DevTools::ServiceWorker::SET_JAVASCRIPT_COOKIE' &&
+    request?.payload?.tabId
+  ) {
+    syncCookieStore?.update(
+      request?.payload?.tabId,
+      JSON.parse(request?.payload?.cookieData)
+    );
+  }
 });
 
 /**
