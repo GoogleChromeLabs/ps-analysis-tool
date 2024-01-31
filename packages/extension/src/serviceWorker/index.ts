@@ -262,6 +262,15 @@ chrome.windows.onRemoved.addListener((windowId) => {
 chrome.runtime.onInstalled.addListener(async (details) => {
   syncCookieStore = new SynchnorousCookieStore();
   syncCookieStore?.clear();
+  setInterval(() => {
+    if (Object.keys(syncCookieStore?.cachedTabsData ?? {}).length === 0) {
+      return;
+    }
+
+    Object.keys(syncCookieStore?.cachedTabsData ?? {}).forEach((key) => {
+      syncCookieStore?.sendUpdatedDataToPopupAndDevTools(Number(key));
+    });
+  }, 1000);
 
   if (details.reason === 'install') {
     await chrome.storage.sync.clear();

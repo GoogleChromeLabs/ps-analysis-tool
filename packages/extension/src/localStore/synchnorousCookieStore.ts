@@ -130,7 +130,7 @@ class SynchnorousCookieStore {
       globalThis.TabsData = this.tabs;
 
       updateCookieBadgeText(this.cachedTabsData[tabId], tabId);
-      this.sendUpdatedDataToPopupAndDevTools(tabId);
+      //this.sendUpdatedDataToPopupAndDevTools(tabId);
     } catch (error) {
       //Fail silently
       // eslint-disable-next-line no-console
