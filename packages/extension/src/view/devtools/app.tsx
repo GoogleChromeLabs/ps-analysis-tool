@@ -47,6 +47,7 @@ import './app.css';
 import { Cookies } from './components';
 import useFrameOverlay from './hooks/useFrameOverlay';
 import { getCurrentTabId } from '../../utils/getCurrentTabId';
+import { useSettingsStore } from './stateProviders/syncSettingsStore';
 
 const App: React.FC = () => {
   const [sidebarWidth, setSidebarWidth] = useState(200);
@@ -75,6 +76,10 @@ const App: React.FC = () => {
     setIsInspecting: actions.setIsInspecting,
     canStartInspecting: state.canStartInspecting,
     tabUrl: state.tabUrl,
+  }));
+
+  const { allowedNumberOfTabs } = useSettingsStore(({ state }) => ({
+    allowedNumberOfTabs: state.allowedNumberOfTabs,
   }));
 
   const listenToMouseChange = useCallback(() => {
@@ -273,7 +278,11 @@ const App: React.FC = () => {
     (async () => {
       const localStorageFlag = localStorage.getItem('contextInvalidated');
 
-      if (localStorageFlag && localStorageFlag === 'true') {
+      if (
+        localStorageFlag &&
+        localStorageFlag === 'true' &&
+        allowedNumberOfTabs === 'unlimited'
+      ) {
         const tabId = await getCurrentTabId();
 
         if (tabId) {
@@ -282,7 +291,7 @@ const App: React.FC = () => {
         }
       }
     })();
-  }, []);
+  }, [allowedNumberOfTabs]);
 
   useFrameOverlay(filteredCookies, handleUpdate);
 
