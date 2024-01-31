@@ -431,10 +431,9 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
     return `cookieListing#${selectedFrame}`;
   }, [selectedFrame]);
 
-  const extraInterfaceToTopBar = useMemo(
-    () => <RefreshButton onClick={getCookiesSetByJavascript} />,
-    [getCookiesSetByJavascript]
-  );
+  const extraInterfaceToTopBar = useMemo(() => {
+    return <RefreshButton onClick={getCookiesSetByJavascript} />;
+  }, [getCookiesSetByJavascript]);
 
   return {
     tableData,
