@@ -89,7 +89,7 @@ const FiltersSidebar = ({
       data-testid="filters-sidebar"
     >
       <a
-        className="w-full block text-link text-royal-blue dark:text-medium-persian-blue text-[11px] mt-1.5 mb-2"
+        className="w-full block text-link text-royal-blue dark:text-medium-persian-blue text-[11px] mt-1.5 mb-[5px]"
         href="#"
         onClick={handleExpandAllClick}
       >
