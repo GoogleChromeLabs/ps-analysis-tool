@@ -105,7 +105,7 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
           target="_blank"
           rel="noreferrer"
           className="text-bright-navy-blue dark:text-jordy-blue"
-          href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/PSAT-Debugging"
+          href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki"
         >
           Wiki
         </a>
