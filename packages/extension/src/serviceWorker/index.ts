@@ -38,7 +38,7 @@ import canProcessCookies from '../utils/canProcessCookies';
 let cookieDB: CookieDatabase | null = null;
 let syncCookieStore: SynchnorousCookieStore | undefined;
 
-const cdpURLToRequestMap: {
+const requestIdToCDPURLMapping: {
   [tabId: string]: {
     [requestId: string]: string;
   };
@@ -322,13 +322,14 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
   }
 
   let tabId = '';
+
   if (!source?.tabId) {
     return;
   }
 
-  tabId = source?.tabId?.toString();
-
   const url = syncCookieStore?.getTabUrl(source?.tabId);
+
+  tabId = source?.tabId?.toString();
 
   if (tabMode && tabMode !== 'unlimited' && tabToRead !== tabId) {
     return;
@@ -336,13 +337,15 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
   if (method === 'Network.responseReceived' && params) {
     const request = params as Protocol.Network.ResponseReceivedEvent;
-    if (!cdpURLToRequestMap[tabId]) {
-      cdpURLToRequestMap[tabId] = {
+
+    // To get domain from the request URL if not given in the cookie line.
+    if (!requestIdToCDPURLMapping[tabId]) {
+      requestIdToCDPURLMapping[tabId] = {
         [request.requestId]: request?.response.url,
       };
     } else {
-      cdpURLToRequestMap[tabId] = {
-        ...cdpURLToRequestMap[tabId],
+      requestIdToCDPURLMapping[tabId] = {
+        ...requestIdToCDPURLMapping[tabId],
         [request.requestId]: request?.response.url,
       };
     }
@@ -359,7 +362,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
     const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
       requestParams,
       cookieDB ?? {},
-      cdpURLToRequestMap[tabId],
+      requestIdToCDPURLMapping[tabId],
       url ?? ''
     );
 
@@ -382,7 +385,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
     }
     const allCookies = parseResponseReceivedExtraInfo(
       responseParams,
-      cdpURLToRequestMap[tabId],
+      requestIdToCDPURLMapping[tabId],
       url ?? '',
       cookieDB ?? {}
     );
