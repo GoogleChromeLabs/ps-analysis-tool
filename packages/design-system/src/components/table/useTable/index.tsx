@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   getValueByKey,
   CookieTableData,
@@ -181,8 +181,10 @@ const useTable = ({
     commonKey
   );
 
-  const rows = useMemo(() => {
-    return searchFilteredData.map((_data) => {
+  const [rows, setRows] = useState<TableRow[]>([]);
+
+  useEffect(() => {
+    const newRows = searchFilteredData.map((_data) => {
       const row = {
         originalData: _data,
       } as TableRow;
@@ -196,6 +198,8 @@ const useTable = ({
 
       return row;
     });
+
+    setRows(newRows);
   }, [searchFilteredData, columns]);
 
   const hideableColumns = useMemo(
