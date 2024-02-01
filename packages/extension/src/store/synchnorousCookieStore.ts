@@ -54,7 +54,6 @@ class SynchnorousCookieStore {
    * @param {number} tabId Tab id.
    * @param {Array} cookies Cookies data.
    */
-  // eslint-disable-next-line complexity
   update(tabId: number, cookies: CookieData[]) {
     try {
       if (!this.tabsData[tabId] || !this.tabs[tabId]) {
@@ -223,6 +222,7 @@ class SynchnorousCookieStore {
     if (!this.tabsData[tabId]) {
       return;
     }
+
     // Check if primaryDomain cookie exists
     if (
       this.tabsData[tabId] &&
@@ -235,12 +235,14 @@ class SynchnorousCookieStore {
           ...exclusionReasons,
         ]),
       ];
+
       this.tabsData[tabId][cookieName].warningReasons = [
         ...new Set([
           ...(this.tabsData[tabId][cookieName].warningReasons ?? []),
           ...warningReasons,
         ]),
       ];
+
       this.tabsData[tabId][cookieName].isBlocked =
         exclusionReasons.length > 0 ? true : false;
       // Check if secondaryDomain cookie exists
@@ -255,12 +257,14 @@ class SynchnorousCookieStore {
           ...exclusionReasons,
         ]),
       ];
+
       this.tabsData[tabId][alternateCookieName].warningReasons = [
         ...new Set([
           ...(this.tabsData[tabId][alternateCookieName].warningReasons ?? []),
           ...warningReasons,
         ]),
       ];
+
       this.tabsData[tabId][alternateCookieName].isBlocked =
         exclusionReasons.length > 0 ? true : false;
     } else {
@@ -281,7 +285,6 @@ class SynchnorousCookieStore {
         },
       };
     }
-    //this.sendUpdatedDataToPopupAndDevTools(tabId);
   }
 
   /**
@@ -361,7 +364,8 @@ class SynchnorousCookieStore {
         });
       }
     } catch (error) {
-      //Fail silently
+      // eslint-disable-next-line no-console
+      console.warn(error);
     }
   }
 }

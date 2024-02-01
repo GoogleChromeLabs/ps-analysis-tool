@@ -376,26 +376,29 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
   if (method === 'Network.responseReceivedExtraInfo' && params) {
     const responseParams =
       params as Protocol.Network.ResponseReceivedExtraInfoEvent;
-    // Added this because sometimes CDP gives set-cookie and sometimes it gives Set-Cookie.
+
+    // Sometimes CDP gives "set-cookie" and sometimes it gives "Set-Cookie".
     if (
       !responseParams.headers['set-cookie'] &&
       !responseParams.headers['Set-Cookie']
     ) {
       return;
     }
-    const allCookies = parseResponseReceivedExtraInfo(
+
+    const cookies: CookieData[] = parseResponseReceivedExtraInfo(
       responseParams,
       requestIdToCDPURLMapping[tabId],
       url ?? '',
       cookieDB ?? {}
     );
 
-    syncCookieStore?.update(Number(tabId), allCookies);
+    syncCookieStore?.update(Number(tabId), cookies);
   }
 
   if (method === 'Audits.issueAdded' && params) {
     const auditParams = params as Protocol.Audits.IssueAddedEvent;
     const { code, details } = auditParams.issue;
+
     if (code !== 'CookieIssue' && !details.cookieIssueDetails) {
       return;
     }
@@ -407,11 +410,14 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
     ) {
       return;
     }
+
     const { cookie, cookieExclusionReasons, cookieWarningReasons } =
       details.cookieIssueDetails;
+
     const primaryDomain = cookie?.domain.startsWith('.')
       ? cookie.domain
       : '.' + cookie?.domain;
+
     const secondaryDomain = cookie?.domain.startsWith('.')
       ? cookie.domain.slice(1)
       : cookie?.domain;
@@ -421,7 +427,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
     try {
       syncCookieStore?.addCookieExclusionWarningReason(
         cookie?.name + primaryDomain + cookie?.path,
-        //@ts-ignore since The details has been checked before sending them as parameter.
+        //@ts-ignore since the details has been checked before sending them as parameter.
         cookie?.name + secondaryDomain + cookie?.path,
         cookieExclusionReasons,
         cookieWarningReasons,
