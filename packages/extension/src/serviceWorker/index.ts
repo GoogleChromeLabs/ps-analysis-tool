@@ -272,6 +272,8 @@ chrome.windows.onRemoved.addListener((windowId) => {
 chrome.runtime.onInstalled.addListener(async (details) => {
   syncCookieStore = new SynchnorousCookieStore();
   syncCookieStore?.clear();
+
+  // @todo Send tab data of the active tab only, also if sending only the difference would make it any faster.
   setInterval(() => {
     if (Object.keys(syncCookieStore?.tabsData ?? {}).length === 0) {
       return;
@@ -281,6 +283,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       syncCookieStore?.sendUpdatedDataToPopupAndDevTools(Number(key));
     });
   }, 1200);
+
   if (details.reason === 'install') {
     await chrome.storage.sync.clear();
     await chrome.storage.sync.set({
