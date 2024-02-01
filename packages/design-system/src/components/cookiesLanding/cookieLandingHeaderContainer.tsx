@@ -24,6 +24,7 @@ import React from 'react';
 import LandingHeader, { type DataMapping } from './landingHeader';
 
 export interface CookiesLandingContainerProps {
+  showDivider: boolean;
   dataMapping?: DataMapping[];
   showLandingHeader?: boolean;
   testId?: string | null;
@@ -32,6 +33,7 @@ export interface CookiesLandingContainerProps {
 }
 
 const CookiesLandingContainer = ({
+  showDivider,
   dataMapping = [],
   showLandingHeader = true,
   testId = 'cookie-landing-insights',
@@ -41,7 +43,9 @@ const CookiesLandingContainer = ({
   return (
     <div className="w-full flex flex-col min-w-[40rem]">
       <div className="w-full min-w-[40rem]" data-testid={testId}>
-        {showLandingHeader && <LandingHeader dataMapping={dataMapping} />}
+        {showLandingHeader && (
+          <LandingHeader showDivider={showDivider} dataMapping={dataMapping} />
+        )}
         {description && (
           <div className="text-center px-4 flex items-center justify-center -mt-2 mb-10">
             <p className="lg:max-w-[450px] text-gray dark:text-bright-gray">

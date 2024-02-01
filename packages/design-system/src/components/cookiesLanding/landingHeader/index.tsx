@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
+import classnames from 'classnames';
 import { CirclePieChart } from '@ps-analysis-tool/design-system';
 
 export interface DataMapping {
@@ -29,13 +30,21 @@ export interface DataMapping {
 }
 
 interface LandingHeaderProps {
+  showDivider: boolean;
   dataMapping?: DataMapping[];
 }
 
-const LandingHeader = ({ dataMapping = [] }: LandingHeaderProps) => {
+const LandingHeader = ({
+  dataMapping = [],
+  showDivider,
+}: LandingHeaderProps) => {
   return (
     <div
-      className="flex justify-center border-t border-hex-gray pt-5 pb-5 dark:border-quartz"
+      className={classnames({
+        'flex justify-center border-hex-gray pt-5 pb-5 dark:border-quartz':
+          true,
+        'border-t': showDivider,
+      })}
       data-testid="cookies-landing-header"
     >
       <div className="lg:max-w-[729px] flex gap-9 px-4">
