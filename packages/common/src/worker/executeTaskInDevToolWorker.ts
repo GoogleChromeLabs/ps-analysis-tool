@@ -41,7 +41,6 @@ const executeTaskInDevToolWorker = (
 
   worker.onmessage = (resultEvent: MessageEvent) => {
     onMessage(resultEvent.data);
-    worker.terminate();
   };
 };
 

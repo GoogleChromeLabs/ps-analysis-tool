@@ -57,7 +57,7 @@ class SynchnorousCookieStore {
   // eslint-disable-next-line complexity
   update(tabId: number, cookies: CookieData[]) {
     try {
-      if (!this.tabsData[tabId] && !this.tabs[tabId]) {
+      if (!this.tabsData[tabId] || !this.tabs[tabId]) {
         return;
       }
 
@@ -124,13 +124,11 @@ class SynchnorousCookieStore {
           this.tabsData[tabId][cookieKey] = cookie;
         }
       }
-
       //@ts-ignore Since this is for debugging the data to check the data being collected by the storage.
       globalThis.PSAT = {
         tabsData: this.tabsData,
         tabs: this.tabs,
       };
-
       updateCookieBadgeText(this.tabsData[tabId], tabId);
     } catch (error) {
       //Fail silently
@@ -143,6 +141,12 @@ class SynchnorousCookieStore {
    * Clears the whole storage.
    */
   clear() {
+    Object.keys(this.tabsData).forEach((key) => {
+      delete this.tabsData[Number(key)];
+    });
+    Object.keys(this.tabs).forEach((key) => {
+      delete this.tabs[Number(key)];
+    });
     this.tabsData = {};
     this.tabs = {};
   }
@@ -277,7 +281,7 @@ class SynchnorousCookieStore {
         },
       };
     }
-    this.sendUpdatedDataToPopupAndDevTools(tabId);
+    //this.sendUpdatedDataToPopupAndDevTools(tabId);
   }
 
   /**
@@ -285,6 +289,7 @@ class SynchnorousCookieStore {
    * @param {number} tabId The active tab id.
    */
   removeCookieData(tabId: number) {
+    delete this.tabsData[tabId];
     this.tabsData[tabId] = {};
     this.sendUpdatedDataToPopupAndDevTools(tabId);
   }
@@ -341,7 +346,7 @@ class SynchnorousCookieStore {
           type: 'ServiceWorker::DevTools::NEW_COOKIE_DATA',
           payload: {
             tabId,
-            cookieData: JSON.stringify(this.tabsData[tabId]),
+            cookieData: this.tabsData[tabId],
           },
         });
       }
@@ -351,7 +356,7 @@ class SynchnorousCookieStore {
           type: 'ServiceWorker::Popup::NEW_COOKIE_DATA',
           payload: {
             tabId,
-            cookieData: JSON.stringify(this.tabsData[tabId]),
+            cookieData: this.tabsData[tabId],
           },
         });
       }

@@ -26,7 +26,7 @@ import React, {
 } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import { noop, prepareCookiesCount } from '@ps-analysis-tool/design-system';
-import { type CookiesCount } from '@ps-analysis-tool/common';
+import { type CookieData, type CookiesCount } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -208,7 +208,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       type: string;
       payload: {
         tabId?: string;
-        cookieData?: string;
+        cookieData?: { [key: string]: CookieData };
         tabToRead?: string;
         tabProcessingMode?: string;
         isUsingCDPNewValue?: boolean;
@@ -234,9 +234,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           tabId?.toString() === message?.payload?.tabId.toString()
         ) {
           setTabCookieStats(
-            prepareCookiesCount(
-              JSON.parse(message?.payload?.cookieData ?? '{}')
-            )
+            prepareCookiesCount(message?.payload?.cookieData ?? null)
           );
           setLoading(false);
         }

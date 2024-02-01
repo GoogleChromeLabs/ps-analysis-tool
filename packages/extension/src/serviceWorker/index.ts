@@ -280,8 +280,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     Object.keys(syncCookieStore?.tabsData ?? {}).forEach((key) => {
       syncCookieStore?.sendUpdatedDataToPopupAndDevTools(Number(key));
     });
-  }, 1000);
-
+  }, 1200);
   if (details.reason === 'install') {
     await chrome.storage.sync.clear();
     await chrome.storage.sync.set({

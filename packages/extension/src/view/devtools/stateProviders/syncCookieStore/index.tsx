@@ -234,7 +234,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       type: string;
       payload: {
         tabId?: number;
-        cookieData?: string;
+        cookieData?: TabCookies;
         tabToRead?: string;
         tabMode?: string;
       };
@@ -270,7 +270,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       }
 
       if (message.type === 'ServiceWorker::DevTools::NEW_COOKIE_DATA') {
-        const data = JSON.parse(message?.payload?.cookieData ?? '{}');
+        const data = message?.payload?.cookieData ?? {};
         if (
           message?.payload?.tabId &&
           tabId?.toString() === message?.payload?.tabId.toString()
