@@ -13,4 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const UNKNOWN_FRAME_KEY = 'Unknown Frame(s)';
+export const UNKNOWN_FRAME_KEY = 'Unknown Frames';
