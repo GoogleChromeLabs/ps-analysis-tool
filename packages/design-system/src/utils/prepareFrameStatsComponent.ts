@@ -84,7 +84,7 @@ export default function prepareFrameStatsComponent(
   return {
     dataMapping: [
       {
-        title: 'Frame(s)',
+        title: 'Frames',
         count: Object.keys(tabFrames || {}).length,
         data: [
           {
