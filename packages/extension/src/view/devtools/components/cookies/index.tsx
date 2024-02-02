@@ -46,7 +46,7 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
     selectedFrame,
     tabCookies,
     tabFrames,
-    doesFrameContainCookies,
+    frameHasCookies,
     changeListeningToThisTab,
   } = useCookieStore(({ state, actions }) => ({
     contextInvalidated: state.contextInvalidated,
@@ -56,7 +56,7 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
     selectedFrame: state.selectedFrame,
     tabCookies: state.tabCookies,
     tabFrames: state.tabFrames,
-    doesFrameContainCookies: state.doesFrameContainCookies,
+    frameHasCookies: state.frameHasCookies,
     changeListeningToThisTab: actions.changeListeningToThisTab,
   }));
 
@@ -69,10 +69,10 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
     () =>
       Object.fromEntries(
         Object.entries(tabFrames || {}).filter(([url]) =>
-          url === UNKNOWN_FRAME_KEY ? doesFrameContainCookies[url] : true
+          url === UNKNOWN_FRAME_KEY ? frameHasCookies[url] : true
         )
       ),
-    [tabFrames, doesFrameContainCookies]
+    [tabFrames, frameHasCookies]
   );
 
   if (

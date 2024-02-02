@@ -54,7 +54,7 @@ export interface CookieStoreContext {
     isInspecting: boolean;
     contextInvalidated: boolean;
     canStartInspecting: boolean;
-    doesFrameContainCookies: Record<string, boolean>;
+    frameHasCookies: Record<string, boolean>;
   };
   actions: {
     setSelectedFrame: (key: string | null) => void;
@@ -78,7 +78,7 @@ const initialState: CookieStoreContext = {
     isInspecting: false,
     contextInvalidated: false,
     canStartInspecting: false,
-    doesFrameContainCookies: {},
+    frameHasCookies: {},
   },
   actions: {
     setSelectedFrame: noop,
@@ -175,7 +175,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
    *
    * TODO: Can be moved to a utility function.
    */
-  const doesFrameContainCookies = useMemo(() => {
+  const frameHasCookies = useMemo(() => {
     if (!tabCookies) {
       return {};
     }
@@ -190,7 +190,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       return acc;
     }, {});
 
-    const _doesFrameContainCookies = Object.values(tabCookies).reduce<
+    const _frameHasCookies = Object.values(tabCookies).reduce<
       Record<string, boolean>
     >((acc, cookie) => {
       let hasFrame = false;
@@ -211,7 +211,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       return acc;
     }, {});
 
-    return _doesFrameContainCookies;
+    return _frameHasCookies;
   }, [tabCookies, tabFrames]);
 
   /**
@@ -497,7 +497,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           contextInvalidated,
           isInspecting,
           canStartInspecting,
-          doesFrameContainCookies,
+          frameHasCookies,
         },
         actions: {
           setSelectedFrame,

@@ -58,7 +58,7 @@ const App: React.FC = () => {
     setIsInspecting,
     canStartInspecting,
     tabUrl,
-    doesFrameContainCookies,
+    frameHasCookies,
   } = useCookieStore(({ state, actions }) => ({
     contextInvalidated: state.contextInvalidated,
     setContextInvalidated: actions.setContextInvalidated,
@@ -70,7 +70,7 @@ const App: React.FC = () => {
     setIsInspecting: actions.setIsInspecting,
     canStartInspecting: state.canStartInspecting,
     tabUrl: state.tabUrl,
-    doesFrameContainCookies: state.doesFrameContainCookies,
+    frameHasCookies: state.frameHasCookies,
   }));
 
   const { allowedNumberOfTabs } = useSettingsStore(({ state }) => ({
@@ -136,9 +136,7 @@ const App: React.FC = () => {
       );
       psData.children['cookies'].children = Object.keys(tabFrames || {})
         .filter((url) => {
-          return url === UNKNOWN_FRAME_KEY
-            ? doesFrameContainCookies[url]
-            : true;
+          return url === UNKNOWN_FRAME_KEY ? frameHasCookies[url] : true;
         })
         .reduce<SidebarItems>((acc, url) => {
           acc[url] = {
@@ -148,7 +146,7 @@ const App: React.FC = () => {
             icon: <CookieIcon />,
             selectedIcon: <CookieIconWhite />,
             children: {},
-            isBlurred: !doesFrameContainCookies?.[url],
+            isBlurred: !frameHasCookies?.[url],
           };
 
           return acc;
@@ -173,7 +171,7 @@ const App: React.FC = () => {
     });
   }, [
     canStartInspecting,
-    doesFrameContainCookies,
+    frameHasCookies,
     isInspecting,
     isKeySelected,
     isSidebarFocused,
