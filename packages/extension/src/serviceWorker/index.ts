@@ -38,7 +38,7 @@ import canProcessCookies from '../utils/canProcessCookies';
 let cookieDB: CookieDatabase | null = null;
 let syncCookieStore: SynchnorousCookieStore | undefined;
 
-const cdpURLToRequestMap: {
+const requestIdToCDPURLMapping: {
   [tabId: string]: {
     [requestId: string]: string;
   };
@@ -272,6 +272,8 @@ chrome.windows.onRemoved.addListener((windowId) => {
 chrome.runtime.onInstalled.addListener(async (details) => {
   syncCookieStore = new SynchnorousCookieStore();
   syncCookieStore?.clear();
+
+  // @todo Send tab data of the active tab only, also if sending only the difference would make it any faster.
   setInterval(() => {
     if (Object.keys(syncCookieStore?.tabsData ?? {}).length === 0) {
       return;
@@ -281,6 +283,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       syncCookieStore?.sendUpdatedDataToPopupAndDevTools(Number(key));
     });
   }, 1200);
+
   if (details.reason === 'install') {
     await chrome.storage.sync.clear();
     await chrome.storage.sync.set({
@@ -319,13 +322,14 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
   }
 
   let tabId = '';
+
   if (!source?.tabId) {
     return;
   }
 
-  tabId = source?.tabId?.toString();
-
   const url = syncCookieStore?.getTabUrl(source?.tabId);
+
+  tabId = source?.tabId?.toString();
 
   if (tabMode && tabMode !== 'unlimited' && tabToRead !== tabId) {
     return;
@@ -333,13 +337,15 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
   if (method === 'Network.responseReceived' && params) {
     const request = params as Protocol.Network.ResponseReceivedEvent;
-    if (!cdpURLToRequestMap[tabId]) {
-      cdpURLToRequestMap[tabId] = {
+
+    // To get domain from the request URL if not given in the cookie line.
+    if (!requestIdToCDPURLMapping[tabId]) {
+      requestIdToCDPURLMapping[tabId] = {
         [request.requestId]: request?.response.url,
       };
     } else {
-      cdpURLToRequestMap[tabId] = {
-        ...cdpURLToRequestMap[tabId],
+      requestIdToCDPURLMapping[tabId] = {
+        ...requestIdToCDPURLMapping[tabId],
         [request.requestId]: request?.response.url,
       };
     }
@@ -356,7 +362,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
     const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
       requestParams,
       cookieDB ?? {},
-      cdpURLToRequestMap[tabId],
+      requestIdToCDPURLMapping[tabId],
       url ?? ''
     );
 
@@ -370,26 +376,29 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
   if (method === 'Network.responseReceivedExtraInfo' && params) {
     const responseParams =
       params as Protocol.Network.ResponseReceivedExtraInfoEvent;
-    // Added this because sometimes CDP gives set-cookie and sometimes it gives Set-Cookie.
+
+    // Sometimes CDP gives "set-cookie" and sometimes it gives "Set-Cookie".
     if (
       !responseParams.headers['set-cookie'] &&
       !responseParams.headers['Set-Cookie']
     ) {
       return;
     }
-    const allCookies = parseResponseReceivedExtraInfo(
+
+    const cookies: CookieData[] = parseResponseReceivedExtraInfo(
       responseParams,
-      cdpURLToRequestMap[tabId],
+      requestIdToCDPURLMapping[tabId],
       url ?? '',
       cookieDB ?? {}
     );
 
-    syncCookieStore?.update(Number(tabId), allCookies);
+    syncCookieStore?.update(Number(tabId), cookies);
   }
 
   if (method === 'Audits.issueAdded' && params) {
     const auditParams = params as Protocol.Audits.IssueAddedEvent;
     const { code, details } = auditParams.issue;
+
     if (code !== 'CookieIssue' && !details.cookieIssueDetails) {
       return;
     }
@@ -401,11 +410,14 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
     ) {
       return;
     }
+
     const { cookie, cookieExclusionReasons, cookieWarningReasons } =
       details.cookieIssueDetails;
+
     const primaryDomain = cookie?.domain.startsWith('.')
       ? cookie.domain
       : '.' + cookie?.domain;
+
     const secondaryDomain = cookie?.domain.startsWith('.')
       ? cookie.domain.slice(1)
       : cookie?.domain;
@@ -415,7 +427,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
     try {
       syncCookieStore?.addCookieExclusionWarningReason(
         cookie?.name + primaryDomain + cookie?.path,
-        //@ts-ignore since The details has been checked before sending them as parameter.
+        //@ts-ignore since the details has been checked before sending them as parameter.
         cookie?.name + secondaryDomain + cookie?.path,
         cookieExclusionReasons,
         cookieWarningReasons,
