@@ -36,9 +36,10 @@ const SettingOption = ({
     <div className="flex flex-row items-center justify-between">
       <div className="flex flex-col w-11/12 mx-2 gap-y-1 py-4">
         <div className="text-sm dark:text-bright-gray">{title}</div>
-        <div className="text-xs text-darkest-gray dark:text-bright-gray">
-          {description}
-        </div>
+        <div
+          className="text-xs text-darkest-gray dark:text-bright-gray"
+          dangerouslySetInnerHTML={{ __html: description }}
+        />
       </div>
       <div className="flex w-1/12">
         <ToggleSwitch enabled={switchState} setEnabled={changeSwitchState} />

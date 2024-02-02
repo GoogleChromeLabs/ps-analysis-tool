@@ -16,14 +16,17 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   Button,
   CookiesLanding,
   ProgressBar,
 } from '@ps-analysis-tool/design-system';
 import { LibraryDetection } from '@ps-analysis-tool/library-detection';
-import { type CookieTableData } from '@ps-analysis-tool/common';
+import {
+  UNKNOWN_FRAME_KEY,
+  type CookieTableData,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -38,13 +41,12 @@ interface CookiesProps {
 
 const Cookies = ({ setFilteredCookies }: CookiesProps) => {
   const {
-    contextInvalidated,
     isCurrentTabBeingListenedTo,
     loading,
-    returningToSingleTab,
     selectedFrame,
     tabCookies,
     tabFrames,
+    frameHasCookies,
     changeListeningToThisTab,
   } = useCookieStore(({ state, actions }) => ({
     contextInvalidated: state.contextInvalidated,
@@ -54,6 +56,7 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
     selectedFrame: state.selectedFrame,
     tabCookies: state.tabCookies,
     tabFrames: state.tabFrames,
+    frameHasCookies: state.frameHasCookies,
     changeListeningToThisTab: actions.changeListeningToThisTab,
   }));
 
@@ -61,6 +64,16 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
     allowedNumberOfTabs: state.allowedNumberOfTabs,
     isUsingCDP: state.isUsingCDP,
   }));
+
+  const processedTabFrames = useMemo(
+    () =>
+      Object.fromEntries(
+        Object.entries(tabFrames || {}).filter(([url]) =>
+          url === UNKNOWN_FRAME_KEY ? frameHasCookies[url] : true
+        )
+      ),
+    [tabFrames, frameHasCookies]
+  );
 
   if (
     loading ||
@@ -92,7 +105,7 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
           target="_blank"
           rel="noreferrer"
           className="text-bright-navy-blue dark:text-jordy-blue"
-          href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/PSAT-Debugging"
+          href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki"
         >
           Wiki
         </a>
@@ -100,6 +113,7 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
     ) : (
       ''
     );
+
     return (
       <div
         className={`h-full ${selectedFrame ? '' : 'flex items-center'}`}
@@ -110,7 +124,7 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
         ) : (
           <CookiesLanding
             tabCookies={tabCookies}
-            tabFrames={tabFrames}
+            tabFrames={processedTabFrames}
             showBlockedCookiesSection
             showFramesSection
             description={description}
@@ -124,11 +138,6 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
   return (
     <div className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black">
       <div className="w-full h-full flex flex-col items-center justify-center">
-        {!returningToSingleTab && !contextInvalidated && (
-          <p className="dark:text-bright-gray text-chart-label text-base mb-5 text-center">
-            This tool works best with a single tab for cookie analysis.
-          </p>
-        )}
         <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
       </div>
     </div>

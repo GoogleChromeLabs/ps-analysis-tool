@@ -22,12 +22,12 @@ export const SETTING_PAGE_CONTROLS = [
     id: 'enableCDP',
     heading: 'Enable CDP',
     description:
-      'The Chrome DevTools Protocol allows for tools to instrument, inspect, debug and profile Chromium, Chrome and other Blink-based browsers.',
+      'The Chrome DevTools Protocol allows for tools to instrument, inspect, debug and profile Chromium, Chrome and other Blink-based browsers. <a class="text-bright-navy-blue dark:text-jordy-blue" href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/PSAT-Settings-and-Permissions#enabling-chrome-devtools-protocol-in-psat" target="_blank">Learn More.</a>',
   },
   {
     id: 'multitabDebugging',
     heading: 'Multitab Debugging',
     description:
-      "By default, the PSAT tool analyzes one tab at a time. You can enable multi-tab debugging by toggling the appropriate option. However, be aware that this may slow down the extension's performance",
+      "The PSAT tool is designed for efficient single-tab analysis. While <a class='text-bright-navy-blue dark:text-jordy-blue' href='https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/PSAT-Settings-and-Permissions#multi-tab-debugging' target='_blank'>multi-tab debugging</a> is available for more comprehensive analysis, it is intended for examining 2-3 tabs simultaneously. Using more tabs may impact the tool's responsiveness.",
   },
 ];
