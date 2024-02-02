@@ -46,6 +46,7 @@ class SynchnorousCookieStore {
       url: string;
       devToolsOpenState: boolean;
       popupOpenState: boolean;
+      newUpdates: number;
     };
   } = {};
 
@@ -91,6 +92,7 @@ class SynchnorousCookieStore {
         );
 
         if (this.tabsData[tabId]?.[cookieKey]) {
+          this.tabs[tabId].newUpdates = this.tabs[tabId].newUpdates + 1;
           // Merge in previous warning reasons.
           const parsedCookie = {
             ...this.tabsData[tabId][cookieKey].parsedCookie,
@@ -120,6 +122,7 @@ class SynchnorousCookieStore {
             frameIdList,
           };
         } else {
+          this.tabs[tabId].newUpdates = this.tabs[tabId].newUpdates + 1;
           this.tabsData[tabId][cookieKey] = cookie;
         }
       }
@@ -174,6 +177,7 @@ class SynchnorousCookieStore {
         url,
         devToolsOpenState: false,
         popupOpenState: false,
+        newUpdates: 0,
       };
     } else {
       this.tabs[tabId].url = url;
@@ -311,6 +315,7 @@ class SynchnorousCookieStore {
       url: '',
       devToolsOpenState: false,
       popupOpenState: false,
+      newUpdates: 0,
     };
   }
 
@@ -344,7 +349,10 @@ class SynchnorousCookieStore {
    */
   async sendUpdatedDataToPopupAndDevTools(tabId: number) {
     try {
-      if (this.tabs[tabId].devToolsOpenState) {
+      if (
+        this.tabs[tabId].devToolsOpenState &&
+        this.tabs[tabId].newUpdates > 0
+      ) {
         await chrome.runtime.sendMessage({
           type: 'ServiceWorker::DevTools::NEW_COOKIE_DATA',
           payload: {
@@ -354,7 +362,7 @@ class SynchnorousCookieStore {
         });
       }
 
-      if (this.tabs[tabId].popupOpenState) {
+      if (this.tabs[tabId].popupOpenState && this.tabs[tabId].newUpdates > 0) {
         await chrome.runtime.sendMessage({
           type: 'ServiceWorker::Popup::NEW_COOKIE_DATA',
           payload: {
@@ -367,6 +375,7 @@ class SynchnorousCookieStore {
       // eslint-disable-next-line no-console
       console.warn(error);
     }
+    this.tabs[tabId].newUpdates = 0;
   }
 }
 
