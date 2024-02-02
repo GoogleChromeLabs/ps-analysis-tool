@@ -13,34 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-export const BLOCKED_REASON_LIST = [
-  'SecureOnly',
-  'DomainMismatch',
-  'NotOnPath',
-  'SameSiteStrict',
-  'SameSiteLax',
-  'SameSiteUnspecifiedTreatedAsLax',
-  'SameSiteNoneInsecure',
-  'UserPreferences',
-  'ThirdPartyPhaseout',
-  'ThirdPartyBlockedInFirstPartySet',
-  'InvalidDomain',
-  'UnknownError',
-  'SchemefulSameSiteStrict',
-  'SchemefulSameSiteLax',
-  'SchemefulSameSiteUnspecifiedTreatedAsLax',
-  'SamePartyFromCrossPartyContext',
-  'NameValuePairExceedsMaxSize',
-  'ExcludeSameSiteUnspecifiedTreatedAsLax',
-  'ExcludeSameSiteNoneInsecure',
-  'ExcludeSameSiteLax',
-  'ExcludeSameSiteStrict',
-  'ExcludeInvalidSameParty',
-  'ExcludeSamePartyCrossPartyContext',
-  'ExcludeDomainNonASCII',
-  'ExcludeThirdPartyCookieBlockedInFirstPartySet',
-  'ExcludeThirdPartyPhaseout',
-];
-
 export const UNKNOWN_FRAME_KEY = 'Unknown Frames';
