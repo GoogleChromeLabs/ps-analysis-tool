@@ -92,7 +92,7 @@ class SynchnorousCookieStore {
         );
 
         if (this.tabsData[tabId]?.[cookieKey]) {
-          this.tabs[tabId].newUpdates = this.tabs[tabId].newUpdates + 1;
+          this.tabs[tabId].newUpdates++;
           // Merge in previous warning reasons.
           const parsedCookie = {
             ...this.tabsData[tabId][cookieKey].parsedCookie,
@@ -122,7 +122,7 @@ class SynchnorousCookieStore {
             frameIdList,
           };
         } else {
-          this.tabs[tabId].newUpdates = this.tabs[tabId].newUpdates + 1;
+          this.tabs[tabId].newUpdates++;
           this.tabsData[tabId][cookieKey] = cookie;
         }
       }
@@ -249,12 +249,14 @@ class SynchnorousCookieStore {
 
       this.tabsData[tabId][cookieName].isBlocked =
         exclusionReasons.length > 0 ? true : false;
+      this.tabs[tabId].newUpdates++;
       // Check if secondaryDomain cookie exists
     } else if (
       this.tabsData[tabId] &&
       !this.tabsData[tabId][cookieName] &&
       this.tabsData[tabId][alternateCookieName]
     ) {
+      this.tabs[tabId].newUpdates++;
       this.tabsData[tabId][alternateCookieName].blockedReasons = [
         ...new Set([
           ...(this.tabsData[tabId][alternateCookieName].blockedReasons ?? []),
@@ -272,7 +274,8 @@ class SynchnorousCookieStore {
       this.tabsData[tabId][alternateCookieName].isBlocked =
         exclusionReasons.length > 0 ? true : false;
     } else {
-      // If none of them exists. This case is possible when the PROMISE_QUEUE hasnt processed our current promise, and we already have an issue.
+      this.tabs[tabId].newUpdates++;
+      // If none of them exists. This case is possible when the cookies hasnt processed and we already have an issue.
       this.tabsData[tabId] = {
         ...this.tabsData[tabId],
         [alternateCookieName]: {
@@ -346,12 +349,16 @@ class SynchnorousCookieStore {
   /**
    * Sends updated data to the popup and devtools
    * @param {number} tabId The window id.
+   * @param {boolean} overrideForInitialSync Optional is only passed when we want to override the newUpdate condition for initial sync.
    */
-  async sendUpdatedDataToPopupAndDevTools(tabId: number) {
+  async sendUpdatedDataToPopupAndDevTools(
+    tabId: number,
+    overrideForInitialSync = false
+  ) {
     try {
       if (
         this.tabs[tabId].devToolsOpenState &&
-        this.tabs[tabId].newUpdates > 0
+        (overrideForInitialSync || this.tabs[tabId].newUpdates > 0)
       ) {
         await chrome.runtime.sendMessage({
           type: 'ServiceWorker::DevTools::NEW_COOKIE_DATA',
@@ -362,7 +369,10 @@ class SynchnorousCookieStore {
         });
       }
 
-      if (this.tabs[tabId].popupOpenState && this.tabs[tabId].newUpdates > 0) {
+      if (
+        this.tabs[tabId].popupOpenState &&
+        (overrideForInitialSync || this.tabs[tabId].newUpdates > 0)
+      ) {
         await chrome.runtime.sendMessage({
           type: 'ServiceWorker::Popup::NEW_COOKIE_DATA',
           payload: {

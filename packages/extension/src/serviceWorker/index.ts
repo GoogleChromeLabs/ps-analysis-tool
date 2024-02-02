@@ -543,7 +543,10 @@ chrome.runtime.onMessage.addListener(async (request) => {
     syncCookieStore?.updateDevToolsState(request?.payload?.tabId, true);
 
     if (syncCookieStore?.tabsData[request.payload.tabId]) {
-      syncCookieStore?.sendUpdatedDataToPopupAndDevTools(request.payload.tabId);
+      syncCookieStore?.sendUpdatedDataToPopupAndDevTools(
+        request.payload.tabId,
+        true
+      );
     }
   }
 
@@ -566,7 +569,8 @@ chrome.runtime.onMessage.addListener(async (request) => {
 
     if (syncCookieStore?.tabsData[request?.payload?.tabId]) {
       syncCookieStore?.sendUpdatedDataToPopupAndDevTools(
-        request?.payload?.tabId
+        request?.payload?.tabId,
+        true
       );
     }
   }
