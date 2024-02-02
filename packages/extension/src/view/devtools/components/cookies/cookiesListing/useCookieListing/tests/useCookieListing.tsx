@@ -25,12 +25,12 @@ import { renderHook } from '@testing-library/react';
  */
 import useCookieListing from '..';
 import * as mock from '../../../../../../../utils/test-data/cookieMockData';
-import * as CookieStore from '../../../../../stateProviders/syncCookieStore';
+import * as ChromeStorage from '../../../../../stateProviders/syncCookieStore';
 
 describe('useCookieListing', () => {
   const mockUseCookieStore = jest.fn();
   jest
-    .spyOn(CookieStore, 'useCookieStore')
+    .spyOn(ChromeStorage, 'useCookieStore')
     .mockImplementation(mockUseCookieStore);
 
   const mockUseEffect = jest.fn();

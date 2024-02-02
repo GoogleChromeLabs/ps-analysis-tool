@@ -39,7 +39,6 @@ const App: React.FC = () => {
     cookieStats,
     loading,
     isCurrentTabBeingListenedTo,
-    returningToSingleTab,
     changeListeningToThisTab,
     onChromeUrl,
     allowedNumberOfTabs,
@@ -100,11 +99,6 @@ const App: React.FC = () => {
           setEnabled={setIsUsingCDP}
           enabled={isUsingCDP}
         />
-        {!returningToSingleTab && (
-          <p className="dark:text-bright-gray text-chart-label text-base mb-5 text-center">
-            This tool works best with a single tab for cookie analysis.
-          </p>
-        )}
         <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
       </>
     );

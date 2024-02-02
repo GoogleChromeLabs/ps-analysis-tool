@@ -98,6 +98,7 @@ export default function parseResponseReceivedExtraInfo(
       headerType: 'response' as CookieData['headerType'],
       frameIdList: [],
     };
+
     cookies.push(singleCookie);
   });
 

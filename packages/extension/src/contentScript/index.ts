@@ -31,7 +31,6 @@ import {
   addTooltip,
 } from './popovers';
 import type { ResponseType } from './types';
-import { CookieStore } from '../localStore';
 import { TOOLTIP_CLASS } from './constants';
 import { WEBPAGE_PORT_NAME } from '../constants';
 import {
@@ -92,7 +91,6 @@ class WebpageContentScript {
     this.docElement = document.documentElement;
 
     this.listenToConnection();
-    this.setTopics();
   }
 
   /**
@@ -105,6 +103,7 @@ class WebpageContentScript {
         setInPage: true,
       });
     }
+
     chrome.runtime.onMessage.addListener((message, sender, response) => {
       if (message.status === 'set?') {
         response({ setInPage: true });
@@ -362,7 +361,7 @@ class WebpageContentScript {
 
       if (!this.hoveredFrame) {
         frameElements.forEach((frame) => {
-          if (isElementVisibleInViewport(frame, true)) {
+          if (isElementVisibleInViewport(frame)) {
             iframeForTooltip = frame;
             return;
           }
@@ -462,6 +461,7 @@ class WebpageContentScript {
 
     const firstToolTip = popoverElement['firstToolTip'];
     const frameWithTooltip = popoverElement['frameWithTooltip'];
+
     if (
       firstToolTip &&
       !this.isHoveringOverPage &&
@@ -583,29 +583,6 @@ class WebpageContentScript {
       this.isHoveringOverPage = false;
     }
   };
-
-  /**
-   * Set topics to be used in the Topics landing page.
-   */
-  async setTopics() {
-    try {
-      if (
-        !document.prerendering &&
-        'browsingTopics' in document &&
-        document.featurePolicy &&
-        document.featurePolicy.allowsFeature('browsing-topics')
-      ) {
-        const activeTabUrl = window.location.origin;
-        const topicsObjArr = await document.browsingTopics();
-        const topicsIdArr = topicsObjArr.map(
-          (topic: { [key: string]: string | number }) => topic.topic
-        );
-
-        CookieStore.setTopics(activeTabUrl, topicsIdArr);
-      }
-      // eslint-disable-next-line no-empty
-    } catch (error) {}
-  }
 }
 
 // eslint-disable-next-line no-new

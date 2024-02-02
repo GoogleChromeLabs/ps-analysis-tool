@@ -16,13 +16,13 @@
 /**
  * Internal dependencies.
  */
-import { CookieStore } from '../../../../../../localStore';
+import { ChromeStorage } from '../../../../../../store';
 
 const setParentDomain = async (
   domain: string,
   setter: (prev: (prevState: string) => string) => void
 ) => {
-  const allowListSessionStorage = await CookieStore.getDomainsInAllowList();
+  const allowListSessionStorage = await ChromeStorage.getDomainsInAllowList();
 
   let parentDomainValue = '';
 

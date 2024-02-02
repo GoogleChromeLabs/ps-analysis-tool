@@ -16,13 +16,7 @@
 /**
  * External dependencies.
  */
-import React, {
-  useRef,
-  useEffect,
-  useCallback,
-  useState,
-  useMemo,
-} from 'react';
+import React, { useRef, useEffect, useCallback, useState } from 'react';
 import { Resizable } from 're-resizable';
 import {
   CookieIcon,
@@ -46,6 +40,8 @@ import { useCookieStore } from './stateProviders/syncCookieStore';
 import './app.css';
 import { Cookies } from './components';
 import useFrameOverlay from './hooks/useFrameOverlay';
+import { getCurrentTabId } from '../../utils/getCurrentTabId';
+import { useSettingsStore } from './stateProviders/syncSettingsStore';
 
 const App: React.FC = () => {
   const [sidebarWidth, setSidebarWidth] = useState(200);
@@ -55,7 +51,6 @@ const App: React.FC = () => {
   const {
     contextInvalidated,
     setContextInvalidated,
-    tabCookies,
     tabFrames,
     selectedFrame,
     setSelectedFrame,
@@ -63,6 +58,7 @@ const App: React.FC = () => {
     setIsInspecting,
     canStartInspecting,
     tabUrl,
+    frameHasCookies,
   } = useCookieStore(({ state, actions }) => ({
     contextInvalidated: state.contextInvalidated,
     setContextInvalidated: actions.setContextInvalidated,
@@ -74,12 +70,18 @@ const App: React.FC = () => {
     setIsInspecting: actions.setIsInspecting,
     canStartInspecting: state.canStartInspecting,
     tabUrl: state.tabUrl,
+    frameHasCookies: state.frameHasCookies,
+  }));
+
+  const { allowedNumberOfTabs } = useSettingsStore(({ state }) => ({
+    allowedNumberOfTabs: state.allowedNumberOfTabs,
   }));
 
   const listenToMouseChange = useCallback(() => {
     if (contextInvalidatedRef.current) {
       if (!chrome.runtime?.id) {
         setContextInvalidated(true);
+        localStorage.setItem('contextInvalidated', 'true');
       }
     }
   }, [setContextInvalidated]);
@@ -107,47 +109,6 @@ const App: React.FC = () => {
     })();
   }, []);
 
-  const doesFrameContainCookies = useMemo(() => {
-    if (!tabCookies) {
-      return {};
-    }
-
-    const tabFramesIdsWithURL = Object.entries(tabFrames || {}).reduce(
-      (acc, [url, frame]) => {
-        frame.frameIds?.forEach((id) => {
-          acc[id] = url;
-        });
-
-        return acc;
-      },
-      {} as Record<string, string>
-    );
-
-    const _doesFrameContainCookies = Object.values(tabCookies).reduce(
-      (acc, cookie) => {
-        let hasFrame = false;
-
-        cookie.frameIdList?.forEach((frameId) => {
-          const url = tabFramesIdsWithURL[frameId];
-
-          if (url) {
-            acc[url] = true;
-            hasFrame = true;
-          }
-        });
-
-        if (!hasFrame && cookie.frameIdList?.length > 0) {
-          acc[UNKNOWN_FRAME_KEY] = true;
-        }
-
-        return acc;
-      },
-      {} as Record<string, boolean>
-    );
-
-    return _doesFrameContainCookies;
-  }, [tabCookies, tabFrames]);
-
   const {
     activePanel,
     selectedItemKey,
@@ -173,8 +134,11 @@ const App: React.FC = () => {
       psData.children['cookies'].panel = (
         <Cookies setFilteredCookies={setFilteredCookies} />
       );
-      psData.children['cookies'].children = Object.keys(tabFrames || {}).reduce(
-        (acc, url) => {
+      psData.children['cookies'].children = Object.keys(tabFrames || {})
+        .filter((url) => {
+          return url === UNKNOWN_FRAME_KEY ? frameHasCookies[url] : true;
+        })
+        .reduce<SidebarItems>((acc, url) => {
           acc[url] = {
             title: url,
             popupTitle: `Cookies used by frames from ${url}`,
@@ -182,13 +146,11 @@ const App: React.FC = () => {
             icon: <CookieIcon />,
             selectedIcon: <CookieIconWhite />,
             children: {},
-            isBlurred: !doesFrameContainCookies[url],
+            isBlurred: !frameHasCookies?.[url],
           };
 
           return acc;
-        },
-        {} as SidebarItems
-      );
+        }, {});
 
       const showInspectButton =
         canStartInspecting && Boolean(Object.keys(tabFrames || {}).length);
@@ -209,7 +171,7 @@ const App: React.FC = () => {
     });
   }, [
     canStartInspecting,
-    doesFrameContainCookies,
+    frameHasCookies,
     isInspecting,
     isKeySelected,
     isSidebarFocused,
@@ -266,6 +228,25 @@ const App: React.FC = () => {
     },
     [updateSelectedItemKey]
   );
+
+  useEffect(() => {
+    (async () => {
+      const localStorageFlag = localStorage.getItem('contextInvalidated');
+
+      if (
+        localStorageFlag &&
+        localStorageFlag === 'true' &&
+        allowedNumberOfTabs === 'unlimited'
+      ) {
+        const tabId = await getCurrentTabId();
+
+        if (tabId) {
+          chrome.tabs.reload(Number(tabId));
+          localStorage.removeItem('contextInvalidated');
+        }
+      }
+    })();
+  }, [allowedNumberOfTabs]);
 
   useFrameOverlay(filteredCookies, handleUpdate);
 
