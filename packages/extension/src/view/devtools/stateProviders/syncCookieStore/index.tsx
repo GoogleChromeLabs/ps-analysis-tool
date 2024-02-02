@@ -193,15 +193,15 @@ export const Provider = ({ children }: PropsWithChildren) => {
     const _doesFrameContainCookies = Object.values(tabCookies).reduce<
       Record<string, boolean>
     >((acc, cookie) => {
-      const hasFrame = cookie.frameIdList?.some((frameId) => {
+      let hasFrame = false;
+
+      cookie.frameIdList?.forEach((frameId) => {
         const url = tabFramesIdsWithURL[frameId];
 
         if (url) {
           acc[url] = true;
-          return true;
+          hasFrame = true;
         }
-
-        return false;
       });
 
       if (!hasFrame && cookie.frameIdList?.length) {
