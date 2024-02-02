@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const getCurrentTab = () => {
+export const getCurrentTab = async () => {
   try {
-    return chrome.tabs.query({
+    const tab = await chrome.tabs.query({
       active: true,
       currentWindow: true,
     });
+    return tab;
   } catch (error) {
     //do nothing in this error
   }

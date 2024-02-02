@@ -183,6 +183,7 @@ describe('App', () => {
       canStartInspecting: true,
       tabUrl: data.tabUrl,
       isCurrentTabBeingListenedTo: true,
+      tabToRead: '40245632',
     });
     mockUseTablePersistentSettingStore.mockReturnValue({
       getPreferences: () => '',

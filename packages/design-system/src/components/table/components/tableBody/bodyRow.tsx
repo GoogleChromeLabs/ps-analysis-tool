@@ -57,7 +57,8 @@ const BodyRow = ({
   const cookieKey = getRowObjectKey(row);
   const isBlocked =
     (row.originalData as CookieTableData)?.isBlocked ||
-    ((row.originalData as CookieTableData)?.blockedReasons &&
+    (((row.originalData as CookieTableData)?.isBlocked ?? false) &&
+      (row.originalData as CookieTableData)?.blockedReasons &&
       (row.originalData as CookieTableData)?.blockedReasons?.length);
   const isHighlighted = (row.originalData as CookieTableData)?.highlighted;
   const isDomainInAllowList = (row.originalData as CookieTableData)

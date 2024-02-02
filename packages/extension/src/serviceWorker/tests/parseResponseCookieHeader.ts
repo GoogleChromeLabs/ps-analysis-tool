@@ -41,7 +41,7 @@ describe('parseResponseCookieHeader', () => {
 
     expect(parsedCookie).toEqual({
       parsedCookie: {
-        expires: 'Session',
+        expires: 0,
         httponly: false,
         secure: true,
         path: '/',
@@ -88,7 +88,7 @@ describe('parseResponseCookieHeader', () => {
 
     expect(parsedCookie).toEqual({
       parsedCookie: {
-        expires: 'Session',
+        expires: 0,
         httponly: false,
         secure: true,
         path: '/',
@@ -160,7 +160,7 @@ describe('parseResponseCookieHeader', () => {
 
     expect(parsedCookie).toEqual({
       parsedCookie: {
-        expires: 'Session',
+        expires: 0,
         httponly: false,
         secure: true,
         path: '/',

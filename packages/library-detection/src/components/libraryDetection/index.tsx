@@ -85,7 +85,7 @@ const LibraryDetection = memo(function LibraryDetection() {
         <>
           <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />
           <p className="text-center dark:text-bright-gray">
-            Checking libraries for any known breakages on the page....
+            Checking libraries for any known breakages on the page..
           </p>
         </>
       ) : (

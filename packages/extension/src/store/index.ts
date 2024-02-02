@@ -13,16 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-
-import { fetchLocalData } from '@ps-analysis-tool/common';
-
-const fetchTopicsTaxonomy = async () => {
-  const data = await fetchLocalData('data/topics-taxonomy-v1.json');
-
-  return data;
-};
-
-export default fetchTopicsTaxonomy;
+export { default as ChromeStorage } from './chromeStorage';
+export * from './types';
