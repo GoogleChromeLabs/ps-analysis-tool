@@ -48,7 +48,9 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
     tabFrames,
     frameHasCookies,
     changeListeningToThisTab,
+    tabToRead,
   } = useCookieStore(({ state, actions }) => ({
+    tabToRead: state.tabToRead,
     contextInvalidated: state.contextInvalidated,
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
     loading: state.loading,
@@ -78,6 +80,7 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
   if (
     loading ||
     (loading &&
+      tabToRead &&
       isCurrentTabBeingListenedTo &&
       allowedNumberOfTabs &&
       allowedNumberOfTabs === 'single')
@@ -90,7 +93,8 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
   }
 
   if (
-    (isCurrentTabBeingListenedTo &&
+    (tabToRead &&
+      isCurrentTabBeingListenedTo &&
       allowedNumberOfTabs &&
       allowedNumberOfTabs === 'single') ||
     (allowedNumberOfTabs && allowedNumberOfTabs === 'unlimited')

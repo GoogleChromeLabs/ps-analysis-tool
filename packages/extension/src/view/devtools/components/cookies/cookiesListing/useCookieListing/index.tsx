@@ -437,7 +437,12 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
   }, [selectedFrame]);
 
   const extraInterfaceToTopBar = useMemo(() => {
-    return <RefreshButton onClick={getCookiesSetByJavascript} />;
+    return (
+      <RefreshButton
+        onClick={getCookiesSetByJavascript}
+        title="Refresh Cookies Set via Javascript"
+      />
+    );
   }, [getCookiesSetByJavascript]);
 
   return {

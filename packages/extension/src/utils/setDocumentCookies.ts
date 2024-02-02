@@ -16,14 +16,18 @@
 /**
  * External dependencies
  */
-import { isFirstParty, findAnalyticsMatch } from '@ps-analysis-tool/common';
+import {
+  isFirstParty,
+  findAnalyticsMatch,
+  type CookieDatabase,
+  type CookieData,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import { createCookieObject } from '../serviceWorker/createCookieObject';
-import { fetchDictionary, type CookieDatabase } from './fetchCookieDictionary';
-import { CookieStore, type CookieData } from '../localStore';
+import { fetchDictionary } from './fetchCookieDictionary';
 
 interface ProcessAndStoreDucmentCookiesProps {
   tabUrlResult: string;
@@ -52,24 +56,18 @@ const processAndStoreDocumentCookies = async ({
         (frame) => frame.frameType === 'outermost_frame'
       );
 
-      const cdpCookies = await chrome.debugger.sendCommand(
-        { tabId: parseInt(tabId) },
-        'Network.getCookies',
-        { urls: [tabUrl] }
-      );
-
-      const parsedCookieData: CookieData[] = await Promise.all(
-        documentCookies.map(async (singleCookie: string) => {
+      const parsedCookieData: CookieData[] = documentCookies.map(
+        (singleCookie: string) => {
           const [name, ...rest] = singleCookie.split('=');
           let analytics;
 
-          const parsedCookie = await createCookieObject(
+          const parsedCookie = createCookieObject(
             {
               name: name.trim(),
               value: rest.join('='),
             },
             tabUrl,
-            cdpCookies?.cookies ?? []
+            []
           );
 
           if (dictionary) {
@@ -81,7 +79,7 @@ const processAndStoreDocumentCookies = async ({
             tabUrl
           );
 
-          return Promise.resolve({
+          return {
             parsedCookie,
             analytics:
               analytics && Object.keys(analytics).length > 0 ? analytics : null,
@@ -93,13 +91,22 @@ const processAndStoreDocumentCookies = async ({
                 ? outerMostFrame[0]?.frameId
                 : 0,
             ],
-          });
-        })
+          };
+        }
       );
-      await CookieStore.update(tabId, parsedCookieData);
+
+      await chrome.runtime.sendMessage({
+        type: 'DevTools::ServiceWorker::SET_JAVASCRIPT_COOKIE',
+        payload: {
+          tabId,
+          cookieData: JSON.stringify(parsedCookieData),
+        },
+      });
     }
   } catch (error) {
     //Just handle this error
+    // eslint-disable-next-line no-console
+    console.warn(error);
   }
 };
 

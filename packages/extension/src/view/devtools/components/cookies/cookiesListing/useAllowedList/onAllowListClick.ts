@@ -17,7 +17,7 @@
 /**
  * Internal dependencies.
  */
-import { CookieStore } from '../../../../../../localStore';
+import { ChromeStorage } from '../../../../../../store';
 import removeFromAllowList from './removeFromAllowList';
 
 const onAllowListClick = async (
@@ -67,7 +67,7 @@ const onAllowListClick = async (
 
     domainsInAllowList.add(domainOrParentDomain);
     setDomainsInAllowList(new Set([...domainsInAllowList]));
-    CookieStore.addDomainToAllowList(domainObject);
+    ChromeStorage.addDomainToAllowList(domainObject);
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log(
