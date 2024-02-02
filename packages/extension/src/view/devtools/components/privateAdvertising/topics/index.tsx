@@ -19,11 +19,6 @@
 import React from 'react';
 import { LandingPage, PSInfoKey } from '@ps-analysis-tool/design-system';
 
-/**
- * Internal dependencies.
- */
-import TopicsList from './topicsList';
-
 const Topics = () => {
   return (
     <div data-testid="topics-content" className="h-full w-full">
@@ -31,9 +26,7 @@ const Topics = () => {
         title="Topics"
         psInfoKey={PSInfoKey.Topics}
         extraClasses="max-w-2xl h-fit"
-      >
-        <TopicsList />
-      </LandingPage>
+      />
     </div>
   );
 };
