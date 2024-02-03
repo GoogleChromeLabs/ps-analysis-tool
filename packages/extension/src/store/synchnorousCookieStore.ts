@@ -301,6 +301,7 @@ class SynchnorousCookieStore {
   removeCookieData(tabId: number) {
     delete this.tabsData[tabId];
     this.tabsData[tabId] = {};
+    this.tabs[tabId].newUpdates = 0;
     this.sendUpdatedDataToPopupAndDevTools(tabId);
   }
 
@@ -355,11 +356,15 @@ class SynchnorousCookieStore {
     tabId: number,
     overrideForInitialSync = false
   ) {
+    let sentMessageAnyWhere = false;
+
     try {
       if (
         this.tabs[tabId].devToolsOpenState &&
         (overrideForInitialSync || this.tabs[tabId].newUpdates > 0)
       ) {
+        sentMessageAnyWhere = true;
+
         await chrome.runtime.sendMessage({
           type: 'ServiceWorker::DevTools::NEW_COOKIE_DATA',
           payload: {
@@ -373,6 +378,7 @@ class SynchnorousCookieStore {
         this.tabs[tabId].popupOpenState &&
         (overrideForInitialSync || this.tabs[tabId].newUpdates > 0)
       ) {
+        sentMessageAnyWhere = true;
         await chrome.runtime.sendMessage({
           type: 'ServiceWorker::Popup::NEW_COOKIE_DATA',
           payload: {
@@ -385,7 +391,10 @@ class SynchnorousCookieStore {
       // eslint-disable-next-line no-console
       console.warn(error);
     }
-    this.tabs[tabId].newUpdates = 0;
+
+    if (sentMessageAnyWhere) {
+      this.tabs[tabId].newUpdates = 0;
+    }
   }
 }
 
