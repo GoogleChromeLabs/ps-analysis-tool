@@ -226,6 +226,22 @@ chrome.tabs.onRemoved.addListener((tabId) => {
   syncCookieStore?.removeTabData(tabId);
 });
 
+chrome.runtime.onStartup.addListener(async () => {
+  const storage = await chrome.storage.sync.get();
+
+  if (!syncCookieStore) {
+    syncCookieStore = new SynchnorousCookieStore();
+  }
+
+  if (Object.keys(storage).includes('allowedNumberOfTabs')) {
+    tabMode = storage.allowedNumberOfTabs;
+  }
+
+  if (Object.keys(storage).includes('isUsingCDP')) {
+    globalIsUsingCDP = storage.isUsingCDP;
+  }
+});
+
 /**
  * Fires when a tab is updated.
  * @see https://developer.chrome.com/docs/extensions/reference/api/tabs#event-onUpdated
@@ -242,6 +258,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   } catch (error) {
     //Fail silently
   }
+
   if (!tab.url) {
     return;
   }
