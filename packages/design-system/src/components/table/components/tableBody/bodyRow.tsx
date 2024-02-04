@@ -55,10 +55,8 @@ const BodyRow = ({
   onRowContextMenu = () => undefined,
 }: BodyRowProps) => {
   const cookieKey = getRowObjectKey(row);
-  const isBlocked =
-    (row.originalData as CookieTableData)?.isBlocked ||
-    ((row.originalData as CookieTableData)?.blockedReasons &&
-      (row.originalData as CookieTableData)?.blockedReasons?.length);
+  const isBlocked = (row.originalData as CookieTableData)?.blockingStatus
+    ?.inboundBlock;
   const isHighlighted = (row.originalData as CookieTableData)?.highlighted;
   const isDomainInAllowList = (row.originalData as CookieTableData)
     ?.isDomainInAllowList;
