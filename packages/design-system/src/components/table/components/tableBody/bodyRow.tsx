@@ -115,7 +115,7 @@ const BodyRow = ({
       {isDomainInAllowList && (
         <span className="absolute block top-0 bottom-0 left-0 border-l-2 border-emerald-600 dark:border-leaf-green-dark" />
       )}
-      {columns.map(({ accessorKey, width }, idx) => (
+      {columns.map(({ accessorKey, width, enablePrefixIcon }, idx) => (
         <BodyCell
           key={idx}
           onRowClick={onRowClick}
@@ -124,6 +124,10 @@ const BodyRow = ({
           isHighlighted={isHighlighted}
           isRowFocused={cookieKey === selectedKey}
           row={row}
+          hasIcon={enablePrefixIcon}
+          showWarningIcon={
+            (row.originalData as CookieTableData)?.blockingStatus?.outboundBlock
+          }
         />
       ))}
     </div>

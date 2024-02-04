@@ -23,6 +23,7 @@ import React from 'react';
  * Internal dependencies.
  */
 import type { InfoType, TableRow } from '../../useTable';
+import { Warning } from '../../../../icons';
 
 interface BodyCellProps {
   cell: React.JSX.Element | InfoType;
@@ -30,6 +31,8 @@ interface BodyCellProps {
   isHighlighted?: boolean;
   isRowFocused: boolean;
   row: TableRow;
+  hasIcon?: boolean;
+  showWarningIcon?: boolean | null;
   onRowClick: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
@@ -37,6 +40,8 @@ const BodyCell = ({
   cell,
   width,
   isRowFocused,
+  hasIcon = false,
+  showWarningIcon = false,
   isHighlighted = false,
 }: BodyCellProps) => {
   return (
@@ -56,7 +61,7 @@ const BodyCell = ({
           e.stopPropagation();
         }
       }}
-      className={`box-border outline-0 px-1 py-px truncate h-5 text-xs ${
+      className={`flex box-border outline-0 px-1 py-px truncate h-5 text-xs ${
         isHighlighted
           ? `${
               isRowFocused ? 'text-white' : 'dark:text-dirty-red text-dirty-red'
@@ -64,6 +69,13 @@ const BodyCell = ({
           : 'dark:text-bright-gray'
       } cursor-default flex-1`}
     >
+      {hasIcon && (
+        <div className="w-3 min-w-[12px] h-3 mr-3 mt-[-2px]">
+          {Boolean(showWarningIcon) && (
+            <Warning className="text-warning-orange w-4" />
+          )}
+        </div>
+      )}
       {cell}
     </div>
   );
