@@ -106,17 +106,18 @@ class SynchnorousCookieStore {
               this.tabsData[tabId][cookieKey].parsedCookie?.partitionKey,
           };
 
-          cookie.networkEvents.requestEvents = [
-            ...(this.tabsData[tabId][cookieKey]?.networkEvents?.requestEvents ||
-              []),
-            ...cookie.networkEvents.requestEvents,
-          ];
-
-          cookie.networkEvents.responseEvents = [
-            ...(this.tabsData[tabId][cookieKey]?.networkEvents
-              ?.responseEvents || []),
-            ...cookie.networkEvents.responseEvents,
-          ];
+          const networkEvents: CookieData['networkEvents'] = {
+            requestEvents: [
+              ...(this.tabsData[tabId][cookieKey]?.networkEvents
+                ?.requestEvents || []),
+              ...(cookie.networkEvents?.requestEvents || []),
+            ],
+            responseEvents: [
+              ...(this.tabsData[tabId][cookieKey]?.networkEvents
+                ?.responseEvents || []),
+              ...(cookie.networkEvents?.responseEvents || []),
+            ],
+          };
 
           this.tabsData[tabId][cookieKey] = {
             ...this.tabsData[tabId][cookieKey],
@@ -124,7 +125,8 @@ class SynchnorousCookieStore {
             // Insert data receieved from CDP or new data recieved through webRequest API.
             parsedCookie,
             isBlocked: blockedReasons.length > 0,
-            blockingStatus: deriveBlockingStatus(cookie.networkEvents),
+            networkEvents,
+            blockingStatus: deriveBlockingStatus(networkEvents),
             blockedReasons,
             warningReasons,
             url: this.tabsData[tabId][cookieKey].url ?? cookie.url,
