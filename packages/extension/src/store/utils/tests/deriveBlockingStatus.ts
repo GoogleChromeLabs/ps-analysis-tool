@@ -19,8 +19,9 @@
  */
 import {
   RESPONSE_EVENT,
-  type CookieData,
   REQUEST_EVENT,
+  type responsEvent,
+  type requestEvent,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -28,7 +29,7 @@ import {
  */
 import { deriveBlockingStatus } from '../deriveBlockingStatus';
 
-const mockRespArray: CookieData['networkEvents']['responseEvents'] = [
+const mockRespArray: responsEvent[] = [
   {
     type: RESPONSE_EVENT.CDP_RESPONSE_RECEIVED_EXTRA_INFO,
     blocked: false,
@@ -52,7 +53,7 @@ const mockRespArray: CookieData['networkEvents']['responseEvents'] = [
   },
 ];
 
-const mockReqArray: CookieData['networkEvents']['requestEvents'] = [
+const mockReqArray: requestEvent[] = [
   {
     type: REQUEST_EVENT.CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO,
     blocked: false,
@@ -150,5 +151,81 @@ describe('deriveBlockingStatus', () => {
     mockReqArray.forEach((ev) => {
       ev.blocked = false;
     });
+  });
+
+  it('should ignore non CDP events in request', () => {
+    mockReqArray[1].type =
+      REQUEST_EVENT.CHROME_WEBREQUEST_ON_BEFORE_SEND_HEADERS;
+    mockReqArray[1].blocked = null;
+    expect(
+      deriveBlockingStatus({
+        requestEvents: mockReqArray,
+        responseEvents: mockRespArray,
+      })
+    ).toStrictEqual({
+      inboundBlock: false,
+      outboundBlock: false,
+    });
+    mockReqArray[1].type = REQUEST_EVENT.CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO;
+    mockReqArray[1].blocked = false;
+  });
+
+  it('should ignore non CDP events in response', () => {
+    mockRespArray[1].type =
+      RESPONSE_EVENT.CHROME_WEBREQUEST_ON_RESPONSE_STARTED;
+    mockRespArray[1].blocked = null;
+    expect(
+      deriveBlockingStatus({
+        requestEvents: mockReqArray,
+        responseEvents: mockRespArray,
+      })
+    ).toStrictEqual({
+      inboundBlock: false,
+      outboundBlock: false,
+    });
+    mockRespArray[1].type = RESPONSE_EVENT.CDP_RESPONSE_RECEIVED_EXTRA_INFO;
+    mockRespArray[1].blocked = false;
+  });
+
+  it('should ignore non CDP events in request 2', () => {
+    mockReqArray[0].blocked = true;
+    mockReqArray[1].type =
+      REQUEST_EVENT.CHROME_WEBREQUEST_ON_BEFORE_SEND_HEADERS;
+    mockReqArray[1].blocked = null;
+    mockReqArray[2].blocked = true;
+    expect(
+      deriveBlockingStatus({
+        requestEvents: mockReqArray,
+        responseEvents: mockRespArray,
+      })
+    ).toStrictEqual({
+      inboundBlock: false,
+      outboundBlock: true,
+    });
+    mockReqArray[0].blocked = false;
+    mockReqArray[1].type = REQUEST_EVENT.CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO;
+    mockReqArray[1].blocked = false;
+    mockReqArray[2].blocked = false;
+  });
+
+  it('should ignore non CDP events in response 2', () => {
+    mockRespArray[0].blocked = true;
+    mockRespArray[1].type =
+      RESPONSE_EVENT.CHROME_WEBREQUEST_ON_RESPONSE_STARTED;
+    mockRespArray[1].blocked = null;
+    mockRespArray[2].blocked = true;
+    expect(
+      deriveBlockingStatus({
+        requestEvents: mockReqArray,
+        responseEvents: mockRespArray,
+      })
+    ).toStrictEqual({
+      inboundBlock: true,
+      outboundBlock: false,
+    });
+    mockRespArray[0].blocked = true;
+    mockRespArray[1].type = RESPONSE_EVENT.CDP_RESPONSE_RECEIVED_EXTRA_INFO;
+    mockRespArray[1].blocked = false;
+    mockRespArray[2].blocked = true;
   });
 });

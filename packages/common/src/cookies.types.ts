@@ -74,6 +74,22 @@ export enum REQUEST_EVENT {
   CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO = 'CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO',
 }
 
+export type requestEvent = {
+  type: REQUEST_EVENT;
+  requestId: string;
+  url: string;
+  blocked: boolean | null;
+  timeStamp: number;
+};
+
+export type responsEvent = {
+  type: RESPONSE_EVENT;
+  requestId: string;
+  url: string;
+  blocked: boolean | null;
+  timeStamp: number;
+};
+
 export type CookieData = {
   parsedCookie: ParsedCookie & {
     partitionKey?: string;
@@ -81,20 +97,8 @@ export type CookieData = {
     size?: number;
   };
   networkEvents?: {
-    requestEvents: {
-      type: REQUEST_EVENT;
-      requestId: string;
-      url: string;
-      blocked: boolean | null;
-      timeStamp: number;
-    }[];
-    responseEvents: {
-      type: RESPONSE_EVENT;
-      requestId: string;
-      url: string;
-      blocked: boolean | null;
-      timeStamp: number;
-    }[];
+    requestEvents: requestEvent[];
+    responseEvents: responsEvent[];
   };
   analytics?: CookieAnalytics | null;
   url: string;

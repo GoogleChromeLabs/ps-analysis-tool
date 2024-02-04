@@ -17,17 +17,25 @@
 /**
  * External dependencies.
  */
-import type { CookieData } from '@ps-analysis-tool/common';
+import {
+  RESPONSE_EVENT,
+  type CookieData,
+  type requestEvent,
+  type responsEvent,
+  REQUEST_EVENT,
+} from '@ps-analysis-tool/common';
 
 /**
  *
  * @param respEvents Response event array
  * @returns outbound blocking status
  */
-function deriveInboundBlocking(
-  respEvents: CookieData['networkEvents']['responseEvents']
-): CookieData['blockingStatus']['inboundBlock'] {
-  const numBlocked: number = respEvents.reduce((acc, event) => {
+function deriveInboundBlocking(respEvents: responsEvent[]): boolean | null {
+  // Only the event RESPONSE_EVENT.CDP_RESPONSE_RECEIVED_EXTRA_INFO has info about blocking.
+  const CDPEvents = respEvents.filter(
+    ({ type }) => type === RESPONSE_EVENT.CDP_RESPONSE_RECEIVED_EXTRA_INFO
+  );
+  const numBlocked: number = CDPEvents.reduce((acc, event) => {
     if (event.blocked === null) {
       return acc;
     } else if (event.blocked) {
@@ -39,7 +47,7 @@ function deriveInboundBlocking(
 
   if (numBlocked === 0) {
     return false; // cookie is not blocked.
-  } else if (0 < numBlocked && numBlocked < respEvents.length) {
+  } else if (0 < numBlocked && numBlocked < CDPEvents.length) {
     return null; // cookie may be blocked.
   } else {
     return true; // cookie is not be blocked.
@@ -51,10 +59,13 @@ function deriveInboundBlocking(
  * @param reqEvents Request event array
  * @returns outbound blocking status
  */
-function deriveOutboundBlocking(
-  reqEvents: CookieData['networkEvents']['requestEvents']
-): CookieData['blockingStatus']['outboundBlock'] {
-  const numBlocked: number = reqEvents.reduce((acc, event) => {
+function deriveOutboundBlocking(reqEvents: requestEvent[]): boolean | null {
+  // Only the event REQUEST_EVENT.CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO has info about blocking.
+
+  const CDPEvents = reqEvents.filter(
+    ({ type }) => type === REQUEST_EVENT.CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO
+  );
+  const numBlocked: number = CDPEvents.reduce((acc, event) => {
     if (event.blocked === null) {
       return acc;
     } else if (event.blocked) {
@@ -63,6 +74,7 @@ function deriveOutboundBlocking(
       return acc;
     }
   }, 0);
+
   if (numBlocked === 0) {
     return false; // cookie is not blocked.
   } else {
@@ -78,6 +90,12 @@ function deriveOutboundBlocking(
 export function deriveBlockingStatus(
   networkEvents: CookieData['networkEvents']
 ): CookieData['blockingStatus'] {
+  if (!networkEvents) {
+    return {
+      inboundBlock: null,
+      outboundBlock: null,
+    };
+  }
   return {
     inboundBlock: deriveInboundBlocking(networkEvents.responseEvents),
     outboundBlock: deriveOutboundBlocking(networkEvents.requestEvents),
