@@ -17,35 +17,22 @@
 /**
  * External dependencies
  */
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import type {
   InfoType,
   TableColumn,
   TableFilter,
 } from '@ps-analysis-tool/design-system';
-import { BLOCKED_REASON_LIST, getValueByKey } from '@ps-analysis-tool/common';
-
-/**
- * Internal dependencies
- */
-import { useContentStore } from '../../../stateProviders/contentStore';
+import { type CookieTableData } from '@ps-analysis-tool/common';
+import calculateDynamicFilterValues from './utils/calculateDynamicFilterValues';
+import calculateBlockedReasonsFilterValues from './utils/calculateBlockedReasonsFilterValues';
 
 const useCookieListing = (
+  tabCookies: CookieTableData[],
   selectedFrameUrl: string,
+  persistenceKey = 'cookiesListing',
   selectedSite?: string | null
 ) => {
-  const { tabCookies } = useContentStore(({ state }) => ({
-    tabCookies: state.tabCookies,
-  }));
-
-  const cookies = useMemo(
-    () =>
-      Object.values(tabCookies).filter((cookie) =>
-        (cookie.frameUrls as string[]).includes(selectedFrameUrl)
-      ),
-    [tabCookies, selectedFrameUrl]
-  );
-
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
@@ -137,46 +124,16 @@ const useCookieListing = (
     []
   );
 
-  const calculate = useCallback(
-    (key: string): TableFilter[keyof TableFilter]['filterValues'] =>
-      Object.values(tabCookies).reduce<
-        TableFilter[keyof TableFilter]['filterValues']
-      >((acc, cookie) => {
-        const value = getValueByKey(key, cookie);
-
-        if (!acc) {
-          acc = {};
-        }
-
-        if (value) {
-          acc[value] = {
-            selected: false,
-          };
-        }
-
-        return acc;
-      }, {}),
-    [tabCookies]
-  );
-
-  const blockedReasonFilterValues = useMemo<{
-    [key: string]: { selected: boolean };
-  }>(() => {
-    const filterValues: { [key: string]: { selected: boolean } } = {};
-
-    BLOCKED_REASON_LIST.forEach((reason) => {
-      filterValues[reason] = { selected: false };
-    });
-    return filterValues;
-  }, []);
-
   const filters = useMemo<TableFilter>(
     () => ({
       'analytics.category': {
         title: 'Category',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: calculate('analytics.category'),
+        filterValues: calculateDynamicFilterValues(
+          'analytics.category',
+          tabCookies
+        ),
         sortValues: true,
         useGenericPersistenceKey: true,
       },
@@ -310,37 +267,27 @@ const useCookieListing = (
         title: 'Platform',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: calculate('analytics.platform'),
+        filterValues: calculateDynamicFilterValues(
+          'analytics.platform',
+          tabCookies
+        ),
         sortValues: true,
         useGenericPersistenceKey: true,
       },
       blockedReasons: {
         title: 'Blocked Reasons',
-        description: 'Reason why the cookies were blocked.',
         hasStaticFilterValues: true,
-        filterValues: blockedReasonFilterValues,
+        hasPrecalculatedFilterValues: true,
+        enableSelectAllOption: true,
+        filterValues: calculateBlockedReasonsFilterValues(tabCookies),
+        sortValues: true,
+        useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           return (value as string[])?.includes(filterValue);
         },
       },
-      isBlocked: {
-        title: 'Blocked',
-        hasStaticFilterValues: true,
-        filterValues: {
-          True: {
-            selected: false,
-          },
-          False: {
-            selected: false,
-          },
-        },
-        comparator: (value: InfoType, filterValue: string) => {
-          const val = !value;
-          return val === (filterValue === 'False');
-        },
-      },
     }),
-    [calculate, blockedReasonFilterValues]
+    [tabCookies]
   );
 
   const searchKeys = useMemo<string[]>(
@@ -350,14 +297,13 @@ const useCookieListing = (
 
   const tablePersistentSettingsKey = useMemo(() => {
     if (selectedSite) {
-      return `cookiesListing#${selectedSite}${selectedFrameUrl}`;
+      return persistenceKey + '#' + selectedSite + selectedFrameUrl;
     }
 
-    return 'cookiesListing#' + selectedFrameUrl;
-  }, [selectedFrameUrl, selectedSite]);
+    return persistenceKey + '#' + selectedFrameUrl;
+  }, [persistenceKey, selectedFrameUrl, selectedSite]);
 
   return {
-    cookies,
     tableColumns,
     filters,
     searchKeys,

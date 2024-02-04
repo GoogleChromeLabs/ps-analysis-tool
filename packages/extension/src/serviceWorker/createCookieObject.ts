@@ -111,10 +111,10 @@ export function createCookieObject(
 }
 
 /**
- * Parse cookie attribute values from ChromeStorage API cookie object, previously saved parsed cookie object if any, and recently captured request/response cookie header.
+ * Parse cookie attribute values from Chrome debugger API cookie object, previously saved parsed cookie object if any, and recently captured request/response cookie header.
  * @param type Cookie attribute type.
  * @param parsedCookieValue Cookie attribute value from the parsed cookie object.
- * @param chromeStoreCookieValue Cookie attribute value from the ChromeStorage API cookie object.
+ * @param cdpCookieValue Cookie attribute value from the ChromeStorage API cookie object.
  * @param url URL of the cookie from the request/response. (Only required for domain attribute)
  * @param cookieValue cookie value to calculate the size of cookie.
  * @returns {string | boolean | number} Cookie attribute value.
@@ -123,11 +123,11 @@ export function createCookieObject(
 function parseAttributeValues(
   type: string,
   parsedCookieValue: string | boolean | number | Date | undefined,
-  chromeStoreCookieValue: string | boolean | number | Date | undefined,
+  cdpCookieValue: string | boolean | number | Date | undefined,
   url?: string | undefined,
   cookieValue?: string | undefined
 ) {
-  let value = parsedCookieValue || chromeStoreCookieValue;
+  let value = parsedCookieValue || cdpCookieValue;
 
   switch (type) {
     case 'domain':

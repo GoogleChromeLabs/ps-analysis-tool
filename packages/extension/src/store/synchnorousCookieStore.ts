@@ -47,6 +47,7 @@ class SynchnorousCookieStore {
       url: string;
       devToolsOpenState: boolean;
       popupOpenState: boolean;
+      newUpdates: number;
     };
   } = {};
 
@@ -93,6 +94,7 @@ class SynchnorousCookieStore {
         );
 
         if (this.tabsData[tabId]?.[cookieKey]) {
+          this.tabs[tabId].newUpdates++;
           // Merge in previous warning reasons.
           const parsedCookie = {
             ...this.tabsData[tabId][cookieKey].parsedCookie,
@@ -137,16 +139,15 @@ class SynchnorousCookieStore {
             frameIdList,
           };
         } else {
+          this.tabs[tabId].newUpdates++;
           this.tabsData[tabId][cookieKey] = cookie;
         }
       }
-
       //@ts-ignore Since this is for debugging the data to check the data being collected by the storage.
       globalThis.PSAT = {
         tabsData: this.tabsData,
         tabs: this.tabs,
       };
-
       updateCookieBadgeText(this.tabsData[tabId], tabId);
     } catch (error) {
       //Fail silently
@@ -159,6 +160,12 @@ class SynchnorousCookieStore {
    * Clears the whole storage.
    */
   clear() {
+    Object.keys(this.tabsData).forEach((key) => {
+      delete this.tabsData[Number(key)];
+    });
+    Object.keys(this.tabs).forEach((key) => {
+      delete this.tabs[Number(key)];
+    });
     this.tabsData = {};
     this.tabs = {};
   }
@@ -187,6 +194,7 @@ class SynchnorousCookieStore {
         url,
         devToolsOpenState: false,
         popupOpenState: false,
+        newUpdates: 0,
       };
     } else {
       this.tabs[tabId].url = url;
@@ -253,14 +261,17 @@ class SynchnorousCookieStore {
           ...warningReasons,
         ]),
       ];
+
       this.tabsData[tabId][cookieName].isBlocked =
         exclusionReasons.length > 0 ? true : false;
+      this.tabs[tabId].newUpdates++;
       // Check if secondaryDomain cookie exists
     } else if (
       this.tabsData[tabId] &&
       !this.tabsData[tabId][cookieName] &&
       this.tabsData[tabId][alternateCookieName]
     ) {
+      this.tabs[tabId].newUpdates++;
       this.tabsData[tabId][alternateCookieName].blockedReasons = [
         ...new Set([
           ...(this.tabsData[tabId][alternateCookieName].blockedReasons ?? []),
@@ -273,10 +284,12 @@ class SynchnorousCookieStore {
           ...warningReasons,
         ]),
       ];
+
       this.tabsData[tabId][alternateCookieName].isBlocked =
         exclusionReasons.length > 0 ? true : false;
     } else {
-      // If none of them exists. This case is possible when the PROMISE_QUEUE hasnt processed our current promise, and we already have an issue.
+      this.tabs[tabId].newUpdates++;
+      // If none of them exists. This case is possible when the cookies hasnt processed and we already have an issue.
       this.tabsData[tabId] = {
         ...this.tabsData[tabId],
         [alternateCookieName]: {
@@ -293,7 +306,6 @@ class SynchnorousCookieStore {
         },
       };
     }
-    this.sendUpdatedDataToPopupAndDevTools(tabId);
   }
 
   /**
@@ -301,7 +313,9 @@ class SynchnorousCookieStore {
    * @param {number} tabId The active tab id.
    */
   removeCookieData(tabId: number) {
+    delete this.tabsData[tabId];
     this.tabsData[tabId] = {};
+    this.tabs[tabId].newUpdates = 0;
     this.sendUpdatedDataToPopupAndDevTools(tabId);
   }
 
@@ -319,6 +333,7 @@ class SynchnorousCookieStore {
       url: '',
       devToolsOpenState: false,
       popupOpenState: false,
+      newUpdates: 0,
     };
   }
 
@@ -349,30 +364,50 @@ class SynchnorousCookieStore {
   /**
    * Sends updated data to the popup and devtools
    * @param {number} tabId The window id.
+   * @param {boolean} overrideForInitialSync Optional is only passed when we want to override the newUpdate condition for initial sync.
    */
-  async sendUpdatedDataToPopupAndDevTools(tabId: number) {
+  async sendUpdatedDataToPopupAndDevTools(
+    tabId: number,
+    overrideForInitialSync = false
+  ) {
+    let sentMessageAnyWhere = false;
+
     try {
-      if (this.tabs[tabId].devToolsOpenState) {
+      if (
+        this.tabs[tabId].devToolsOpenState &&
+        (overrideForInitialSync || this.tabs[tabId].newUpdates > 0)
+      ) {
+        sentMessageAnyWhere = true;
+
         await chrome.runtime.sendMessage({
           type: 'ServiceWorker::DevTools::NEW_COOKIE_DATA',
           payload: {
             tabId,
-            cookieData: JSON.stringify(this.tabsData[tabId]),
+            cookieData: this.tabsData[tabId],
           },
         });
       }
 
-      if (this.tabs[tabId].popupOpenState) {
+      if (
+        this.tabs[tabId].popupOpenState &&
+        (overrideForInitialSync || this.tabs[tabId].newUpdates > 0)
+      ) {
+        sentMessageAnyWhere = true;
         await chrome.runtime.sendMessage({
           type: 'ServiceWorker::Popup::NEW_COOKIE_DATA',
           payload: {
             tabId,
-            cookieData: JSON.stringify(this.tabsData[tabId]),
+            cookieData: this.tabsData[tabId],
           },
         });
       }
     } catch (error) {
-      //Fail silently
+      // eslint-disable-next-line no-console
+      console.warn(error);
+    }
+
+    if (sentMessageAnyWhere) {
+      this.tabs[tabId].newUpdates = 0;
     }
   }
 }

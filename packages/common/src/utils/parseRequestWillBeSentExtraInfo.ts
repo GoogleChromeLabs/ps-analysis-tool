@@ -88,13 +88,15 @@ export default function parseRequestWillBeSentExtraInfo(
         outboundBlock: blockedReasons.length !== 0,
       },
       blockedReasons,
-      analytics: cookieDB ? findAnalyticsMatch(cookie.name, cookieDB) : null,
+      analytics: cookieDB ? findAnalyticsMatch(cookie.name, cookieDB) : null, // In case CDP gets cookie first.
       url,
       headerType: 'request',
       isFirstParty: isFirstParty(domain, tabUrl),
       frameIdList: [],
     };
+
     cookies.push(singleCookie);
   });
+
   return cookies;
 }
