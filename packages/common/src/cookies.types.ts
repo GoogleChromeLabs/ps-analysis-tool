@@ -80,7 +80,7 @@ export type CookieData = {
     priority?: 'Low' | 'Medium' | 'High';
     size?: number;
   };
-  networkEvents: {
+  networkEvents?: {
     requestEvents: {
       type: REQUEST_EVENT;
       requestId: string;
@@ -104,7 +104,7 @@ export type CookieData = {
   blockedReasons?: BlockedReason[];
   warningReasons?: Protocol.Audits.CookieWarningReason[];
   isBlocked?: boolean | null;
-  blockingStatus: {
+  blockingStatus?: {
     inboundBlock: boolean | null;
     outboundBlock: boolean | null;
   };
