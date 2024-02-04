@@ -27,6 +27,7 @@ import type { Protocol } from 'devtools-protocol';
  * Internal dependencies.
  */
 import updateCookieBadgeText from './utils/updateCookieBadgeText';
+import { deriveBlockingStatus } from './utils/deriveBlockingStatus';
 
 class SynchnorousCookieStore {
   /**
@@ -105,12 +106,25 @@ class SynchnorousCookieStore {
               this.tabsData[tabId][cookieKey].parsedCookie?.partitionKey,
           };
 
+          cookie.networkEvents.requestEvents = [
+            ...(this.tabsData[tabId][cookieKey]?.networkEvents?.requestEvents ||
+              []),
+            ...cookie.networkEvents.requestEvents,
+          ];
+
+          cookie.networkEvents.responseEvents = [
+            ...(this.tabsData[tabId][cookieKey]?.networkEvents
+              ?.responseEvents || []),
+            ...cookie.networkEvents.responseEvents,
+          ];
+
           this.tabsData[tabId][cookieKey] = {
             ...this.tabsData[tabId][cookieKey],
             ...cookie,
             // Insert data receieved from CDP or new data recieved through webRequest API.
             parsedCookie,
             isBlocked: blockedReasons.length > 0,
+            blockingStatus: deriveBlockingStatus(cookie.networkEvents),
             blockedReasons,
             warningReasons,
             url: this.tabsData[tabId][cookieKey].url ?? cookie.url,

@@ -63,11 +63,38 @@ export type BlockedReason =
   | Protocol.Network.CookieBlockedReason
   | Protocol.Audits.CookieExclusionReason;
 
+export enum RESPONSE_EVENT {
+  CHROME_WEBREQUEST_ON_RESPONSE_STARTED = 'CHROME_WEBREQUEST_ON_RESPONSE_STARTED',
+  CDP_RESPONSE_RECEIVED = 'CDP_RESPONSE_RECEIVED',
+  CDP_RESPONSE_RECEIVED_EXTRA_INFO = 'CDP_RESPONSE_RECEIVED_EXTRA_INFO',
+}
+
+export enum REQUEST_EVENT {
+  CHROME_WEBREQUEST_ON_BEFORE_SEND_HEADERS = 'CHROME_WEBREQUEST_ON_BEFORE_SEND_HEADERS',
+  CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO = 'CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO',
+}
+
 export type CookieData = {
   parsedCookie: ParsedCookie & {
     partitionKey?: string;
     priority?: 'Low' | 'Medium' | 'High';
     size?: number;
+  };
+  networkEvents: {
+    requestEvents: {
+      type: REQUEST_EVENT;
+      requestId: string;
+      url: string;
+      blocked: boolean | null;
+      timeStamp: number;
+    }[];
+    responseEvents: {
+      type: RESPONSE_EVENT;
+      requestId: string;
+      url: string;
+      blocked: boolean | null;
+      timeStamp: number;
+    }[];
   };
   analytics?: CookieAnalytics | null;
   url: string;
@@ -77,6 +104,10 @@ export type CookieData = {
   blockedReasons?: BlockedReason[];
   warningReasons?: Protocol.Audits.CookieWarningReason[];
   isBlocked?: boolean | null;
+  blockingStatus: {
+    inboundBlock: boolean | null;
+    outboundBlock: boolean | null;
+  };
 };
 
 export type CookieTableData = CookieData & {
