@@ -106,6 +106,7 @@ const BodyRow = ({
     (row.originalData as CookieTableData)?.blockingStatus?.outboundBlock ||
     (row.originalData as CookieTableData)?.blockingStatus?.inboundBlock ===
       null;
+
   return (
     <div
       id={index.toString()}
