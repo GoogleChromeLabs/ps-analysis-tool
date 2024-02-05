@@ -138,8 +138,8 @@ const Details = ({ selectedCookie }: DetailsProps) => {
           <div className="flex gap-1">
             <Warning className="h-4 text-warning-orange" />
             <p className="text-outer-space-crayola dark:text-bright-gray mb-3">
-              This cookie has failed to be associated in atleast one of the
-              requests it was supposed to.
+              This cookie failed to be associated with at least one of the
+              intended requests.
             </p>
           </div>
         )}
