@@ -295,7 +295,7 @@ class SynchnorousCookieStore {
    * @param {number} tabId The active tab id.
    */
   removeCookieData(tabId: number) {
-    if (!this.tabs[tabId] || this.tabsData[tabId]) {
+    if (!this.tabs[tabId] || !this.tabsData[tabId]) {
       return;
     }
 
