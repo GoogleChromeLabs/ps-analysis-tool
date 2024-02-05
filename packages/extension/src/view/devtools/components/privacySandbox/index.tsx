@@ -18,14 +18,13 @@
  */
 import React from 'react';
 import { LandingPage } from '@ps-analysis-tool/design-system';
+import PrivacySandboxContent from './privacySandboxContent';
 
 const PrivacySandbox = () => (
   <div data-testid="privacy-sandbox-content" className="h-full w-full">
     <LandingPage
       title="Privacy Sandbox"
-      extraClasses="h-[78vh] w-full"
-      iframeSrc="https://privacysandbox.com"
-      iframeBorderClass="border border-hex-gray dark:border-quartz"
+      contentPanel={<PrivacySandboxContent />}
     />
   </div>
 );
