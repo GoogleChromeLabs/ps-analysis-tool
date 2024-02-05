@@ -90,19 +90,50 @@ const Details = ({ selectedCookie }: DetailsProps) => {
 
       {isCookieBlocked && blockedReasons && (
         <>
-          <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
+          <p className="font-bold text-raising-black dark:text-bright-gray">
             Blocked Reason
           </p>
           <p
-            className="text-outer-space-crayola dark:text-bright-gray mb-3"
+            className="text-outer-space-crayola dark:text-bright-gray"
             dangerouslySetInnerHTML={{ __html: blockedReasons ?? '' }}
           />
+          {selectedCookie?.blockingStatus?.inboundBlock === null && (
+            <div className="flex gap-1">
+              <Warning className="h-4 text-warning-orange" />
+              <p className="text-outer-space-crayola dark:text-bright-gray">
+                This cookie was rejected by the browser in atleast one of the
+                response headers.
+              </p>
+            </div>
+          )}
+
+          {selectedCookie?.blockingStatus?.inboundBlock !== null &&
+            selectedCookie?.blockingStatus?.inboundBlock && (
+              <div className="flex gap-1">
+                <Warning className="h-4 text-warning-orange" />
+                <p className="text-outer-space-crayola dark:text-bright-gray mb-3">
+                  This cookie was rejected by the browser in all of the response
+                  headers.
+                </p>
+              </div>
+            )}
+
+          {selectedCookie?.blockingStatus?.outboundBlock !== null &&
+            selectedCookie?.blockingStatus?.outboundBlock && (
+              <div className="flex gap-1">
+                <Warning className="h-4 text-warning-orange" />
+                <p className="text-outer-space-crayola dark:text-bright-gray mb-3">
+                  This cookie was rejected by the browser in one of the request
+                  headers.
+                </p>
+              </div>
+            )}
         </>
       )}
       {selectedCookie?.warningReasons &&
         selectedCookie?.warningReasons?.length > 0 && (
           <>
-            <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
+            <p className="font-bold text-raising-black dark:text-bright-gray">
               Warnings
             </p>
             <p
@@ -112,37 +143,6 @@ const Details = ({ selectedCookie }: DetailsProps) => {
           </>
         )}
 
-      {selectedCookie?.blockingStatus?.inboundBlock === null && (
-        <div className="flex gap-1">
-          <Warning className="h-4 text-warning-orange" />
-          <p className="text-outer-space-crayola dark:text-bright-gray mb-3">
-            This cookie was rejected by the browser in atleast one of the
-            response headers which tried to save it.
-          </p>
-        </div>
-      )}
-
-      {selectedCookie?.blockingStatus?.inboundBlock !== null &&
-        selectedCookie?.blockingStatus?.inboundBlock && (
-          <div className="flex gap-1">
-            <Warning className="h-4 text-warning-orange" />
-            <p className="text-outer-space-crayola dark:text-bright-gray mb-3">
-              This cookie was rejected by the browser in all of the response
-              headers which tried to save it.
-            </p>
-          </div>
-        )}
-
-      {selectedCookie?.blockingStatus?.outboundBlock !== null &&
-        selectedCookie?.blockingStatus?.outboundBlock && (
-          <div className="flex gap-1">
-            <Warning className="h-4 text-warning-orange" />
-            <p className="text-outer-space-crayola dark:text-bright-gray mb-3">
-              This cookie failed to be associated with at least one of the
-              intended requests.
-            </p>
-          </div>
-        )}
       <p className="font-bold text-raising-black dark:text-bright-gray mb-1 text-semibold flex items-center">
         <span>Cookie Value</span>
         <label className="text-raising-black dark:text-bright-gray text-xs font-normal flex items-center">
