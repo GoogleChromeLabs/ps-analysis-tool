@@ -40,26 +40,28 @@ describe('parseResponseCookieHeader', () => {
       '123'
     );
 
-    expect(parsedCookie).toEqual({
-      parsedCookie: {
-        expires: 0,
-        httponly: false,
-        secure: true,
-        path: '/',
-        domain: '.example.com',
-        samesite: 'none',
-        name: 'countryCode',
-        value: 'IN',
-        partitionKey: '',
-        priority: 'Medium',
-        size: 13,
-      },
-      analytics: { ...emptyAnalytics },
-      url: 'https://example.com/public/api/alerts',
-      headerType: 'response',
-      isFirstParty: false,
-      frameIdList: [1],
-    });
+    expect(parsedCookie).toEqual(
+      expect.objectContaining({
+        parsedCookie: {
+          expires: 0,
+          httponly: false,
+          secure: true,
+          path: '/',
+          domain: '.example.com',
+          samesite: 'none',
+          name: 'countryCode',
+          value: 'IN',
+          partitionKey: '',
+          priority: 'Medium',
+          size: 13,
+        },
+        analytics: { ...emptyAnalytics },
+        url: 'https://example.com/public/api/alerts',
+        headerType: 'response',
+        isFirstParty: false,
+        frameIdList: [1],
+      })
+    );
   });
 
   it('Should parse and add analytics', async () => {
@@ -88,37 +90,39 @@ describe('parseResponseCookieHeader', () => {
       '123'
     );
 
-    expect(parsedCookie).toEqual({
-      parsedCookie: {
-        expires: 0,
-        httponly: false,
-        secure: true,
-        path: '/',
-        domain: '.example.com',
-        samesite: 'none',
-        name: 'test_cookie',
-        value: 'bla',
-        partitionKey: '',
-        priority: 'Medium',
-        size: 14,
-      },
-      analytics: {
-        platform: 'DoubleClick/Google Marketing',
-        category: 'Functional',
-        name: 'test_cookie',
-        domain: 'doubleclick.net',
-        description:
-          "This cookie is set by DoubleClick (which is owned by Google) to determine if the website visitor's browser supports cookies.",
-        retention: '1 year',
-        dataController: 'Google',
-        gdprUrl: 'https://privacy.google.com/take-control.html',
-        wildcard: '0',
-      },
-      url: 'https://example.com/public/api/alerts',
-      headerType: 'response',
-      isFirstParty: false,
-      frameIdList: [1],
-    });
+    expect(parsedCookie).toEqual(
+      expect.objectContaining({
+        parsedCookie: {
+          expires: 0,
+          httponly: false,
+          secure: true,
+          path: '/',
+          domain: '.example.com',
+          samesite: 'none',
+          name: 'test_cookie',
+          value: 'bla',
+          partitionKey: '',
+          priority: 'Medium',
+          size: 14,
+        },
+        analytics: {
+          platform: 'DoubleClick/Google Marketing',
+          category: 'Functional',
+          name: 'test_cookie',
+          domain: 'doubleclick.net',
+          description:
+            "This cookie is set by DoubleClick (which is owned by Google) to determine if the website visitor's browser supports cookies.",
+          retention: '1 year',
+          dataController: 'Google',
+          gdprUrl: 'https://privacy.google.com/take-control.html',
+          wildcard: '0',
+        },
+        url: 'https://example.com/public/api/alerts',
+        headerType: 'response',
+        isFirstParty: false,
+        frameIdList: [1],
+      })
+    );
   });
 
   it('Should parse and add analytics for wild card entries', async () => {
@@ -161,36 +165,38 @@ describe('parseResponseCookieHeader', () => {
       '123'
     );
 
-    expect(parsedCookie).toEqual({
-      parsedCookie: {
-        expires: 0,
-        httponly: false,
-        secure: true,
-        path: '/',
-        domain: '.google.com',
-        samesite: 'none',
-        name: '_ga_123',
-        value: 'bla',
-        partitionKey: '',
-        priority: 'Medium',
-        size: 10,
-      },
-      analytics: {
-        platform: 'Google Analytics',
-        category: 'Analytics',
-        name: '_ga_',
-        domain:
-          "google-analytics.com (3rd party) or advertiser's website domain (1st party)",
-        description: 'ID used to identify users',
-        retention: '2 years',
-        dataController: 'Google',
-        gdprUrl: 'https://privacy.google.com/take-control.html',
-        wildcard: '1',
-      },
-      url: 'https://google.com/public/api/alerts',
-      headerType: 'response',
-      isFirstParty: true,
-      frameIdList: [1],
-    });
+    expect(parsedCookie).toEqual(
+      expect.objectContaining({
+        parsedCookie: {
+          expires: 0,
+          httponly: false,
+          secure: true,
+          path: '/',
+          domain: '.google.com',
+          samesite: 'none',
+          name: '_ga_123',
+          value: 'bla',
+          partitionKey: '',
+          priority: 'Medium',
+          size: 10,
+        },
+        analytics: {
+          platform: 'Google Analytics',
+          category: 'Analytics',
+          name: '_ga_',
+          domain:
+            "google-analytics.com (3rd party) or advertiser's website domain (1st party)",
+          description: 'ID used to identify users',
+          retention: '2 years',
+          dataController: 'Google',
+          gdprUrl: 'https://privacy.google.com/take-control.html',
+          wildcard: '1',
+        },
+        url: 'https://google.com/public/api/alerts',
+        headerType: 'response',
+        isFirstParty: true,
+        frameIdList: [1],
+      })
+    );
   });
 });

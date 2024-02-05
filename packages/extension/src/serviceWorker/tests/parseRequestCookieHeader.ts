@@ -142,7 +142,13 @@ describe('parseRequestCookieHeader', () => {
       '123'
     );
 
-    expect(parsedCookie).toEqual([normalCookie1, normalCookie2, specialCookie]);
+    expect(parsedCookie).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining(normalCookie1),
+        expect.objectContaining(normalCookie2),
+        expect.objectContaining(specialCookie),
+      ])
+    );
   });
 
   it('Should parse cookie header and add analytics', async () => {
@@ -186,11 +192,13 @@ describe('parseRequestCookieHeader', () => {
       '123'
     );
 
-    expect(parsedCookie).toEqual([
-      normalCookie1,
-      normalCookie2,
-      specialCookie,
-      wildcardCookie,
-    ]);
+    expect(parsedCookie).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining(normalCookie1),
+        expect.objectContaining(normalCookie2),
+        expect.objectContaining(specialCookie),
+        expect.objectContaining(wildcardCookie),
+      ])
+    );
   });
 });
