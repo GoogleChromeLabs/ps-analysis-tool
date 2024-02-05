@@ -1,0 +1,69 @@
+/*
+ * Copyright 2023 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * External dependencies.
+ */
+import React from 'react';
+import RestrictionInfoContainer from './restrictionInfoContainer';
+import InfoCards from './infoCards';
+
+/**
+ * Internal dependencies.
+ */
+
+const PrivacySandboxContent = () => {
+  return (
+    <div className="px-44 min-w-[60rem]">
+      <div className="w-full h-full border border-hex-gray dark:border-quartz text-raisin-black dark:text-bright-gray rounded-lg px-8 py-10 flex flex-col gap-8">
+        <h3 className="px-2 text-sm break-words">
+          <a
+            href="https://privacysandbox.com/"
+            className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline"
+          >
+            Privacy Sandbox
+          </a>{' '}
+          is a multi-year{' '}
+          <a
+            href="https://developer.chrome.com/docs/privacy-sandbox/"
+            className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline"
+          >
+            initiative
+          </a>{' '}
+          for building a more private web by defining a set of building blocks
+          (i.e. proposed APIs) enabling{' '}
+          <a
+            href="https://github.com/michaelkleber/privacy-model"
+            className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline"
+          >
+            a new privacy model for the web
+          </a>
+          . Privacy Sandbox encompasses replacing functionality powered by
+          third-party cookies with privacy-preserving alternatives, deprecating
+          third-party cookies, and ensuring developers have a well-lit path to
+          the new capabilities of the platform, and avoid pursuing tracking via
+          other means.
+        </h3>
+        <RestrictionInfoContainer />
+        <div className="px-2">
+          <InfoCards />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default PrivacySandboxContent;
