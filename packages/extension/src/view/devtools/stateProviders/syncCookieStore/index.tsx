@@ -23,6 +23,7 @@ import React, {
   useState,
   useCallback,
   useRef,
+  useMemo,
 } from 'react';
 import { noop } from '@ps-analysis-tool/design-system';
 import {
@@ -53,6 +54,7 @@ export interface CookieStoreContext {
     contextInvalidated: boolean;
     canStartInspecting: boolean;
     tabToRead: string | null;
+    frameHasCookies: Record<string, boolean>;
   };
   actions: {
     setSelectedFrame: (key: string | null) => void;
@@ -77,6 +79,7 @@ const initialState: CookieStoreContext = {
     contextInvalidated: false,
     canStartInspecting: false,
     tabToRead: null,
+    frameHasCookies: {},
   },
   actions: {
     setSelectedFrame: noop,
@@ -169,6 +172,50 @@ export const Provider = ({ children }: PropsWithChildren) => {
     },
     []
   );
+
+  /**
+   * Stores object with frame URLs as keys and boolean values indicating if the frame contains cookies.
+   *
+   * TODO: Can be moved to a utility function.
+   */
+  const frameHasCookies = useMemo(() => {
+    if (!tabCookies) {
+      return {};
+    }
+
+    const tabFramesIdsWithURL = Object.entries(tabFrames || {}).reduce<
+      Record<string, string>
+    >((acc, [url, frame]) => {
+      frame.frameIds?.forEach((id) => {
+        acc[id] = url;
+      });
+
+      return acc;
+    }, {});
+
+    const _frameHasCookies = Object.values(tabCookies).reduce<
+      Record<string, boolean>
+    >((acc, cookie) => {
+      let hasFrame = false;
+
+      cookie.frameIdList?.forEach((frameId) => {
+        const url = tabFramesIdsWithURL[frameId];
+
+        if (url) {
+          acc[url] = true;
+          hasFrame = true;
+        }
+      });
+
+      if (!hasFrame && cookie.frameIdList?.length) {
+        acc[UNKNOWN_FRAME_KEY] = true;
+      }
+
+      return acc;
+    }, {});
+
+    return _frameHasCookies;
+  }, [tabCookies, tabFrames]);
 
   /**
    * Sets current frames for sidebar, detected if the current tab is to be analysed,
@@ -392,6 +439,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           isInspecting,
           canStartInspecting,
           tabToRead,
+          frameHasCookies,
         },
         actions: {
           setSelectedFrame,

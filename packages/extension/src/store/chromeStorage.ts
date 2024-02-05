@@ -18,46 +18,9 @@
  * Internal dependencies.
  */
 import type { AllowedDomainObject, AllowedDomainStorage } from './types';
-import fetchTopicsTaxonomy from '../utils/fetchTopicsTaxonomy';
 import getIndexForAllowListedItem from './utils/getIndexForAllowListedItem';
 
 const ChromeStorage = {
-  /**
-   * Handle topics.
-   * @param {string} activeTabUrl The active tab origin location.
-   * @param {number[]} topics The topics for active tab.
-   */
-  async setTopics(activeTabUrl: string, topics: (string | number)[] = []) {
-    const storage = await chrome.storage.local.get();
-
-    if (!storage[activeTabUrl]) {
-      storage[activeTabUrl] = {};
-    }
-
-    const topicsTaxonomy = await fetchTopicsTaxonomy();
-
-    storage[activeTabUrl].topics = topics.map(
-      (topicsId) => topicsTaxonomy[topicsId]
-    );
-
-    await chrome.storage.local.set(storage);
-  },
-
-  /**
-   * Get topics list.
-   * @param {string} activeTabUrl The host name for which topics is to be fetched.
-   * @returns {Promise<string[]>} The list of topics.
-   */
-  async getTopics(activeTabUrl: string): Promise<string[]> {
-    const storage = await chrome.storage.local.get();
-
-    if (storage && storage[activeTabUrl] && storage[activeTabUrl].topics) {
-      return storage[activeTabUrl].topics;
-    }
-
-    return [];
-  },
-
   /**
    * Add domain to allow-list.
    * @param {AllowedDomainObject} domainObject The domain to be added to allow-list.

@@ -95,7 +95,6 @@ const processAndStoreDocumentCookies = async ({
         }
       );
 
-      // TODO: Use syncCookieStore.
       await chrome.runtime.sendMessage({
         type: 'DevTools::ServiceWorker::SET_JAVASCRIPT_COOKIE',
         payload: {

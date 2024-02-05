@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
 import { CookieDetails, CookieTable } from '@ps-analysis-tool/design-system';
 import type { CookieTableData } from '@ps-analysis-tool/common';
@@ -25,7 +25,12 @@ import type { CookieTableData } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies
  */
-import useCookieListing from './useCookieListing';
+import useCookieListing from '../../../../../hooks/useCookieListing.tsx';
+import { useContentStore } from '../../../stateProviders/contentStore';
+
+/**
+ * Internal dependencies
+ */
 
 interface CookiesListingProps {
   selectedFrameUrl: string;
@@ -40,13 +45,25 @@ const CookiesListing = ({
     [frame: string]: CookieTableData | null;
   } | null>(null);
 
-  const {
-    cookies,
-    tableColumns,
-    filters,
-    searchKeys,
-    tablePersistentSettingsKey,
-  } = useCookieListing(selectedFrameUrl, selectedSite);
+  const { tabCookies } = useContentStore(({ state }) => ({
+    tabCookies: state.tabCookies,
+  }));
+
+  const cookies = useMemo(
+    () =>
+      Object.values(tabCookies).filter((cookie) =>
+        (cookie.frameUrls as string[]).includes(selectedFrameUrl)
+      ),
+    [tabCookies, selectedFrameUrl]
+  );
+
+  const { tableColumns, filters, searchKeys, tablePersistentSettingsKey } =
+    useCookieListing(
+      Object.values(tabCookies),
+      selectedFrameUrl,
+      'cookiesListing',
+      selectedSite
+    );
 
   return (
     <div className="w-full h-full flex flex-col">
