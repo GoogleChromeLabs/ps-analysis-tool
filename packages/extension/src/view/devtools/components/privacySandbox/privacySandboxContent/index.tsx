@@ -27,36 +27,8 @@ import InfoCards from './infoCards';
 
 const PrivacySandboxContent = () => {
   return (
-    <div className="px-44 min-w-[60rem]">
+    <div className="px-48 min-w-[60rem]">
       <div className="w-full h-full border border-hex-gray dark:border-quartz text-raisin-black dark:text-bright-gray rounded-lg px-8 py-10 flex flex-col gap-8">
-        <h3 className="px-2 text-sm break-words">
-          <a
-            href="https://privacysandbox.com/"
-            className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline"
-          >
-            Privacy Sandbox
-          </a>{' '}
-          is a multi-year{' '}
-          <a
-            href="https://developer.chrome.com/docs/privacy-sandbox/"
-            className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline"
-          >
-            initiative
-          </a>{' '}
-          for building a more private web by defining a set of building blocks
-          (i.e. proposed APIs) enabling{' '}
-          <a
-            href="https://github.com/michaelkleber/privacy-model"
-            className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline"
-          >
-            a new privacy model for the web
-          </a>
-          . Privacy Sandbox encompasses replacing functionality powered by
-          third-party cookies with privacy-preserving alternatives, deprecating
-          third-party cookies, and ensuring developers have a well-lit path to
-          the new capabilities of the platform, and avoid pursuing tracking via
-          other means.
-        </h3>
         <RestrictionInfoContainer />
         <div className="px-2">
           <InfoCards />

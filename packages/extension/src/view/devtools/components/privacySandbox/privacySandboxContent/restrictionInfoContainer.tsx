@@ -21,34 +21,58 @@ import { Cookie, VisibilityOff } from '@ps-analysis-tool/design-system';
 import React from 'react';
 
 const RestrictionInfoContainer = () => (
-  <div className="bg-light-yellow rounded-lg p-6 flex w-full text-raisin-black">
+  <div className="bg-[#D4E3FC] rounded-lg p-6 flex w-full text-raisin-black">
     <div className="flex-1">
       <h2 className="text-2xl mb-3">
         Prepare for third-party cookie restrictions
       </h2>
+      <p className="text-base break-words mb-6">
+        <a
+          href="https://privacysandbox.com/"
+          className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Privacy Sandbox
+        </a>{' '}
+        is a multi-year{' '}
+        <a
+          href="https://developer.chrome.com/docs/privacy-sandbox/"
+          className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline"
+          target="_blank"
+          rel="noreferrer"
+        >
+          initiative
+        </a>{' '}
+        for building a more private web by defining a set of building blocks
+        (i.e. proposed APIs) enabling{' '}
+        <a
+          href="https://github.com/michaelkleber/privacy-model"
+          className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline"
+          target="_blank"
+          rel="noreferrer"
+        >
+          a new privacy model for the web
+        </a>
+        .
+      </p>
       <p className="text-sm mb-7">
         To facilitate testing,{' '}
         <a
           href="https://developers.google.com/privacy-sandbox/blog/cookie-countdown-2024jan"
           className="text-bright-navy-blue hover:opacity-80 underline"
+          target="_blank"
+          rel="noreferrer"
         >
           Chrome has restricted third-party cookies by default for 1% of users.
         </a>
       </p>
-      <p className="text-sm">
-        During this testing period, it is important for sites and services to
-        start preparing for third-party cookie restrictions, including moving to
-        more private alternatives. Subject to addressing any remaining
-        competition concerns of the UK&apos;s Competition and Markets Authority,
-        Chrome will ramp up third-party cookie restrictions to 100% of users
-        from Q3 2024.
-      </p>
     </div>
     <div className="w-[10rem] h-full relative">
-      <div className="absolute fill-[#D4E3FC]">
+      <div className="absolute fill-[#A1A6B4] top-2">
         <Cookie />
       </div>
-      <div className="absolute top-[70px] left-[70px] fill-[#006E8C]">
+      <div className="absolute top-16 left-8 fill-[#006E8C]">
         <VisibilityOff />
       </div>
     </div>

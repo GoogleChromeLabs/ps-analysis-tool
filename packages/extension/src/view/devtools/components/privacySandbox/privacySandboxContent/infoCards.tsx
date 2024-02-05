@@ -27,12 +27,12 @@ const INFO_CARDS_DATA = [
   {
     heading: 'Membership in Experiment Group',
     content:
-      'To prepare for third-party cookie deprecation, we will be providing Chrome-facilitated testing modes that allow sites to preview how site behavior and functionality work without third-party cookies. <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="https://developers.google.com/privacy-sandbox/setup/web/chrome-facilitated-testing">This guide</a> provides an overview of the testing modes.',
+      'To prepare for third-party cookie deprecation, we will be providing Chrome-facilitated testing modes that allow sites to preview how site behavior and functionality work without third-party cookies. <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" target="_blank" href="https://developers.google.com/privacy-sandbox/setup/web/chrome-facilitated-testing">This guide</a> provides an overview of the testing modes.',
   },
   {
     heading: 'Request Additional Migration Time',
     content:
-      'Deprecation trials are a standard option that Chrome provides to allow sites to <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline"  href="https://developer.chrome.com/origintrials/#/view_trial/3315212275698106369">register for additional time to migrate away</a> from the legacy functionality being removed. A deprecation trial is a type of origin trial that allows a feature to be temporarily re-enabled.',
+      'Deprecation trials are a standard option that Chrome provides to allow sites to <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" target="_blank"  href="https://developer.chrome.com/origintrials/#/view_trial/3315212275698106369">register for additional time to migrate away</a> from the legacy functionality being removed. A deprecation trial is a type of origin trial that allows a feature to be temporarily re-enabled.',
   },
   {
     heading: 'Attestation Enrollment',
@@ -41,8 +41,8 @@ const INFO_CARDS_DATA = [
   },
   {
     heading: 'Reporting Breakages',
-    content: `<p>If your site or a service you depend on is breaking with third-party cookies disabled, you should file an issue here - <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="http://goo.gle/report-3pc-broken" >goo.gle/report-3pc-broken</a></p>
-		<p>If you have questions around the deprecation process, you can <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="https://github.com/GoogleChromeLabs/privacy-sandbox-dev-support/issues/new/choose">raise a new issue using the "third-party cookie deprecation"</a> tag.</p>`,
+    content: `<p>If your site or a service you depend on is breaking with third-party cookies disabled, you should file an issue here - <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" target="_blank" href="http://goo.gle/report-3pc-broken" >goo.gle/report-3pc-broken</a></p>
+		<p>If you have questions around the deprecation process, you can <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" target="_blank" href="https://github.com/GoogleChromeLabs/privacy-sandbox-dev-support/issues/new/choose">raise a new issue using the "third-party cookie deprecation"</a> tag.</p>`,
   },
 ];
 
