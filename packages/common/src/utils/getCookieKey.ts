@@ -23,7 +23,11 @@ const getCookieKey = (parsedCookie: ParsedCookie) => {
   const cookieDomain = parsedCookie?.domain;
   const cookiePath = parsedCookie?.path;
 
-  return cookieName + cookieDomain + cookiePath;
+  if (!cookieName || !cookieDomain || !cookiePath) {
+    return '';
+  }
+
+  return (cookieName + cookieDomain + cookiePath).trim();
 };
 
 export default getCookieKey;

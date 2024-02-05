@@ -84,7 +84,7 @@ export default function prepareFrameStatsComponent(
   return {
     dataMapping: [
       {
-        title: 'Frame details',
+        title: 'Frames',
         count: Object.keys(tabFrames || {}).length,
         data: [
           {
@@ -115,8 +115,7 @@ export default function prepareFrameStatsComponent(
     legend: [
       {
         label: 'Total frames',
-        // Reducing count by one for "Unknown Frames(s) key."
-        count: Object.keys(tabFrames || {}).length - 1,
+        count: Object.keys(tabFrames || {}).length,
         color: '#25ACAD',
         countClassName: 'text-greenland-green',
       },

@@ -26,7 +26,7 @@ import React, {
 } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import { noop, prepareCookiesCount } from '@ps-analysis-tool/design-system';
-import { type CookiesCount } from '@ps-analysis-tool/common';
+import { type CookieData, type CookiesCount } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -92,11 +92,11 @@ export const Context = createContext<CookieStoreContext>(initialState);
 export const Provider = ({ children }: PropsWithChildren) => {
   const [tabId, setTabId] = useState<number | null>(null);
 
-  const [tabUrl, setTabUrl] = useState<string | null>(null);
-
   const [allowedNumberOfTabs, setAllowedNumberOfTabs] = useState<string | null>(
     null
   );
+
+  const [tabToRead, setTabToRead] = useState<string>('');
   const [isUsingCDP, setIsUsingCDP] = useState(false);
 
   const [tabCookieStats, setTabCookieStats] =
@@ -132,7 +132,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const _setUsingCDP = useCallback((newValue: boolean) => {
     chrome.runtime.sendMessage({
-      type: 'CHANGE_CDP_SETTING',
+      type: 'Popup::ServiceWorker::CHANGE_CDP_SETTING',
       payload: {
         isUsingCDP: newValue,
       },
@@ -141,123 +141,62 @@ export const Provider = ({ children }: PropsWithChildren) => {
   }, []);
 
   const intitialSync = useCallback(async () => {
-    const [tab] = await getCurrentTab();
+    const tab = await getCurrentTab();
 
     const extensionStorage = await chrome.storage.sync.get();
 
-    if (extensionStorage?.allowedNumberOfTabs) {
+    if (Object.keys(extensionStorage).includes('allowedNumberOfTabs')) {
       setAllowedNumberOfTabs(extensionStorage?.allowedNumberOfTabs);
     }
     if (Object.keys(extensionStorage).includes('isUsingCDP')) {
-      setIsUsingCDP(extensionStorage.isUsingCDP);
+      setIsUsingCDP(extensionStorage?.isUsingCDP);
     }
 
-    if (!tab.id || !tab.url) {
+    const availableTabs = await chrome.tabs.query({});
+
+    if (
+      availableTabs.length === ALLOWED_NUMBER_OF_TABS &&
+      availableTabs.filter(
+        (processingTab) => processingTab.id?.toString() === tabToRead
+      )
+    ) {
+      setReturningToSingleTab(true);
+    }
+
+    if (!tab || !tab[0].id || !tab[0].url) {
       return;
     }
 
-    if (tab.url.startsWith('chrome:')) {
+    if (tab[0].url.startsWith('chrome:')) {
       setOnChromeUrl(true);
     } else {
       setOnChromeUrl(false);
     }
 
-    const _tabId = tab.id;
+    setTabId(tab[0].id);
+  }, [tabToRead]);
 
-    setTabId(tab.id);
-    setTabUrl(tab.url);
+  useEffect(() => {
+    chrome.runtime.sendMessage({
+      type: 'Popup::ServiceWorker::POPUP_STATE_OPEN',
+      payload: {
+        tabId: tabId,
+      },
+    });
 
-    if (extensionStorage?.allowedNumberOfTabs === 'single') {
-      const getTabBeingListenedTo = await chrome.storage.local.get();
-      const availableTabs = await chrome.tabs.query({});
-      if (
-        availableTabs.length === ALLOWED_NUMBER_OF_TABS &&
-        availableTabs.filter(
-          (processingTab) =>
-            processingTab.id?.toString() === getTabBeingListenedTo?.tabToRead
-        )
-      ) {
-        setReturningToSingleTab(true);
-      }
-
-      if (
-        getTabBeingListenedTo &&
-        tab?.id.toString() !== getTabBeingListenedTo?.tabToRead
-      ) {
-        setIsCurrentTabBeingListenedTo(false);
-        setLoading(false);
-        return;
-      } else {
-        setIsCurrentTabBeingListenedTo(true);
-      }
-    }
-
-    const tabData = (await chrome.storage.local.get([_tabId?.toString()]))[
-      _tabId?.toString()
-    ];
-
-    if (tabData && tabData.cookies) {
-      setDebouncedStats(prepareCookiesCount(tabData.cookies));
-    }
-    setLoading(false);
-  }, [setDebouncedStats]);
-
-  const storeChangeListener = useCallback(
-    async (changes: { [key: string]: chrome.storage.StorageChange }) => {
-      if (
-        tabId &&
-        tabUrl &&
-        Object.keys(changes).includes(tabId.toString()) &&
-        changes[tabId.toString()]?.newValue?.cookies
-      ) {
-        setDebouncedStats(
-          prepareCookiesCount(changes[tabId.toString()].newValue.cookies)
-        );
-      }
-      if (tabUrl) {
-        if (tabUrl.startsWith('chrome:')) {
-          setOnChromeUrl(true);
-        } else {
-          setOnChromeUrl(false);
-        }
-      }
-      if (tabId) {
-        const extensionStorage = await chrome.storage.sync.get();
-
-        if (extensionStorage?.allowedNumberOfTabs === 'single') {
-          const getTabBeingListenedTo = await chrome.storage.local.get();
-          const availableTabs = await chrome.tabs.query({});
-
-          if (
-            availableTabs.length === ALLOWED_NUMBER_OF_TABS &&
-            availableTabs.filter(
-              (processingTab) =>
-                processingTab.id?.toString() ===
-                getTabBeingListenedTo?.tabToRead
-            )
-          ) {
-            setReturningToSingleTab(true);
-          }
-
-          if (
-            getTabBeingListenedTo &&
-            tabId.toString() !== getTabBeingListenedTo?.tabToRead
-          ) {
-            setIsCurrentTabBeingListenedTo(false);
-            setLoading(false);
-            return;
-          } else {
-            setIsCurrentTabBeingListenedTo(true);
-          }
-        }
-      }
-    },
-    [setDebouncedStats, tabId, tabUrl]
-  );
+    return () => {
+      chrome.runtime.sendMessage({
+        type: 'Popup::ServiceWorker::POPUP_STATE_CLOSE',
+        payload: {
+          tabId: tabId,
+        },
+      });
+    };
+  }, [tabId]);
 
   const changeListeningToThisTab = useCallback(() => {
     chrome.runtime.sendMessage({
-      type: 'SET_TAB_TO_READ',
+      type: 'Popup::ServiceWorker::SET_TAB_TO_READ',
       payload: {
         tabId,
       },
@@ -265,25 +204,52 @@ export const Provider = ({ children }: PropsWithChildren) => {
   }, [tabId]);
 
   useEffect(() => {
-    const listener = async (message: {
+    const listener = (message: {
       type: string;
-      payload: { tabId?: string; isUsingCDPNewValue?: boolean };
+      payload: {
+        tabId?: string;
+        cookieData?: { [key: string]: CookieData };
+        tabToRead?: string;
+        tabProcessingMode?: string;
+        isUsingCDPNewValue?: boolean;
+        tabMode?: string;
+      };
     }) => {
+      if (message.type === 'ServiceWorker::SET_TAB_TO_READ') {
+        setTabToRead(message?.payload?.tabId || '');
+        setIsCurrentTabBeingListenedTo(true);
+        setLoading(false);
+      }
+
       if (
-        message.type === 'CHANGE_CDP_SETTING' &&
+        message.type === 'ServiceWorker::Popup::CHANGE_CDP_SETTING' &&
         typeof message?.payload?.isUsingCDPNewValue !== 'undefined'
       ) {
         setIsUsingCDP(message?.payload?.isUsingCDPNewValue);
       }
 
-      if (message.type === 'syncCookieStore:SET_TAB_TO_READ') {
-        const tab = await getCurrentTab();
-
-        if (tab?.[0]?.url) {
-          setTabUrl(tab[0]?.url);
+      if (message.type === 'ServiceWorker::Popup::NEW_COOKIE_DATA') {
+        if (
+          message?.payload?.tabId &&
+          tabId?.toString() === message?.payload?.tabId.toString()
+        ) {
+          setTabCookieStats(
+            prepareCookiesCount(message?.payload?.cookieData ?? null)
+          );
+          setLoading(false);
         }
+      }
 
-        setIsCurrentTabBeingListenedTo(true);
+      if (message.type === 'ServiceWorker::Popup::INITIAL_SYNC') {
+        if (message?.payload?.tabMode === 'unlimited') {
+          setIsCurrentTabBeingListenedTo(true);
+          setTabToRead('');
+        } else {
+          setIsCurrentTabBeingListenedTo(
+            tabId?.toString() === message?.payload?.tabToRead
+          );
+          setTabToRead(message?.payload?.tabToRead || '');
+        }
         setLoading(false);
       }
     };
@@ -293,7 +259,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     return () => {
       chrome.runtime.onMessage.removeListener(listener);
     };
-  }, []);
+  }, [setDebouncedStats, tabId, allowedNumberOfTabs]);
 
   const changeSyncStorageListener = useCallback(async () => {
     const extensionStorage = await chrome.storage.sync.get();
@@ -302,31 +268,16 @@ export const Provider = ({ children }: PropsWithChildren) => {
     }
   }, []);
 
-  const tabUpdateListener = useCallback(
-    (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
-      if (tabId === _tabId && changeInfo.url) {
-        setTabUrl(changeInfo.url);
-      }
-    },
-    [tabId]
-  );
-
   useEffect(() => {
     intitialSync();
-    chrome.storage.local.onChanged.addListener(storeChangeListener);
+  }, [intitialSync]);
+
+  useEffect(() => {
     chrome.storage.sync.onChanged.addListener(changeSyncStorageListener);
-    chrome.tabs.onUpdated.addListener(tabUpdateListener);
     return () => {
-      chrome.storage.local.onChanged.removeListener(storeChangeListener);
-      chrome.tabs.onUpdated.removeListener(tabUpdateListener);
       chrome.storage.sync.onChanged.removeListener(changeSyncStorageListener);
     };
-  }, [
-    intitialSync,
-    storeChangeListener,
-    tabUpdateListener,
-    changeSyncStorageListener,
-  ]);
+  }, [changeSyncStorageListener]);
 
   return (
     <Context.Provider

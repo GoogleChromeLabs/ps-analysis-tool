@@ -97,7 +97,6 @@ const dummyData = {
         url: 'https://elb.the-ozone-project.com/cookie_sync',
       },
     },
-    focusedAt: 1691983869724,
   },
 };
 

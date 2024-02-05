@@ -19,99 +19,72 @@
  */
 import {
   calculateEffectiveExpiryDate,
-  getCookieKey,
   type CookieData,
   getDomainFromUrl,
 } from '@ps-analysis-tool/common';
 import type { Protocol } from 'devtools-protocol';
 
 /**
- * Internal dependencies.
- */
-import { getCurrentTabId } from '../utils/getCurrentTabId';
-import { findPreviousCookieDataObject } from './findPreviousCookieDataObject';
-
-/**
- * Create cookie object from cookieStore API cookie object, previously saved parsed cookie object if any, and recently captured request/response cookie header.
+ * Create cookie object from ChromeStorage API cookie object, previously saved parsed cookie object if any, and recently captured request/response cookie header.
  * @param parsedCookie Parsed cookie object from request/response.
  * @param url URL of the cookie from the request/response.
- * @param {Protocol.Network.Cookie[]} cookiesList List cookies from the request.
+ * @param {Protocol.Network.Cookie[]} cdpCookiesList List cookies from the request.
  * @returns {Promise<Protocol.Network.Cookie[]>} Cookie object.
  */
-export async function createCookieObject(
+export function createCookieObject(
   parsedCookie: CookieData['parsedCookie'],
   url: string,
-  cookiesList: Protocol.Network.Cookie[]
+  cdpCookiesList: Protocol.Network.Cookie[]
 ) {
-  const name = parsedCookie.name;
-  const value = parsedCookie.value;
+  const { name, value } = parsedCookie;
 
-  const cdpCookie = cookiesList?.find((cookie: Protocol.Network.Cookie) => {
-    return cookie.name === name && cookie.value === value;
+  const cdpCookie = cdpCookiesList?.find((cookie: Protocol.Network.Cookie) => {
+    return cookie.name === name;
   });
-
-  const prevParsedCookie = (
-    await findPreviousCookieDataObject(
-      (await getCurrentTabId()) || '0',
-      getCookieKey(parsedCookie)
-    )
-  )?.parsedCookie;
 
   const domain = parseAttributeValues(
     'domain',
     parsedCookie.domain,
     cdpCookie?.domain,
-    prevParsedCookie?.domain,
     url
   );
 
-  const path = parseAttributeValues(
-    'path',
-    parsedCookie.path,
-    cdpCookie?.path,
-    prevParsedCookie?.path
-  );
+  const path = parseAttributeValues('path', parsedCookie.path, cdpCookie?.path);
 
   const secure = parseAttributeValues(
     'secure',
     parsedCookie.secure,
-    cdpCookie?.secure,
-    prevParsedCookie?.secure
+    cdpCookie?.secure
   );
 
   const httponly = parseAttributeValues(
     'httponly',
     parsedCookie.httponly,
-    cdpCookie?.httpOnly,
-    prevParsedCookie?.httponly
+    cdpCookie?.httpOnly
   );
 
   const samesite = parseAttributeValues(
     'samesite',
     parsedCookie.samesite,
-    cdpCookie?.sameSite,
-    prevParsedCookie?.samesite
+    cdpCookie?.sameSite
   );
 
   const expires = parseAttributeValues(
     'expires',
     parsedCookie.expires,
-    (cdpCookie?.expires || 0) * 1000,
-    prevParsedCookie?.expires
+    (cdpCookie?.expires || 0) * 1000
   );
 
   const partitionKey = parseAttributeValues(
     'partitionKey',
     parsedCookie?.partitionKey,
-    cdpCookie?.partitionKey,
-    prevParsedCookie?.partitionKey
+    cdpCookie?.partitionKey
   );
 
   const size = parseAttributeValues(
     'size',
     parsedCookie?.size,
     cdpCookie?.size,
-    prevParsedCookie?.size,
     '',
     name + value
   );
@@ -119,8 +92,7 @@ export async function createCookieObject(
   const priority = parseAttributeValues(
     'priority',
     parsedCookie?.priority,
-    cdpCookie?.priority,
-    prevParsedCookie?.priority
+    cdpCookie?.priority
   );
 
   return {
@@ -139,11 +111,10 @@ export async function createCookieObject(
 }
 
 /**
- * Parse cookie attribute values from cookieStore API cookie object, previously saved parsed cookie object if any, and recently captured request/response cookie header.
+ * Parse cookie attribute values from Chrome debugger API cookie object, previously saved parsed cookie object if any, and recently captured request/response cookie header.
  * @param type Cookie attribute type.
  * @param parsedCookieValue Cookie attribute value from the parsed cookie object.
- * @param chromeStoreCookieValue Cookie attribute value from the cookieStore API cookie object.
- * @param prevParsedCookieValue Cookie attribute value from the previously saved parsed cookie object.
+ * @param cdpCookieValue Cookie attribute value from the ChromeStorage API cookie object.
  * @param url URL of the cookie from the request/response. (Only required for domain attribute)
  * @param cookieValue cookie value to calculate the size of cookie.
  * @returns {string | boolean | number} Cookie attribute value.
@@ -152,13 +123,11 @@ export async function createCookieObject(
 function parseAttributeValues(
   type: string,
   parsedCookieValue: string | boolean | number | Date | undefined,
-  chromeStoreCookieValue: string | boolean | number | Date | undefined,
-  prevParsedCookieValue: string | boolean | number | Date | undefined,
+  cdpCookieValue: string | boolean | number | Date | undefined,
   url?: string | undefined,
   cookieValue?: string | undefined
 ) {
-  let value =
-    parsedCookieValue || chromeStoreCookieValue || prevParsedCookieValue;
+  let value = parsedCookieValue || cdpCookieValue;
 
   switch (type) {
     case 'domain':

@@ -13,22 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-export type CookieAnalytics = {
-  platform: string;
-  category: string;
-  name: string;
-  domain: string;
-  description: string;
-  retention: string;
-  dataController: string;
-  gdprUrl: string;
-  wildcard: string;
-};
-
-export type CookieDatabase = {
-  [category: string]: Array<CookieAnalytics>;
-};
+/**
+ * External dependencies
+ */
+import { type CookieDatabase } from '@ps-analysis-tool/common';
 
 /**
  * Fetch dictionary from local data folder.

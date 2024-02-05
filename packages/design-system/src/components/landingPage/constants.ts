@@ -28,6 +28,10 @@ export const QUICK_LINKS = [
   },
   {
     title: 'Report a breakage',
-    link: 'https://github.com/GoogleChromeLabs/ps-analysis-tool/issues/new?assignees=&labels=&projects=&template=third-party-cookie-breakage-report.md&title=',
+    link: 'https://goo.gle/report-3pc-broken',
+  },
+  {
+    title: 'Request Additional Migration Time',
+    link: 'https://developer.chrome.com/origintrials/#/view_trial/3315212275698106369',
   },
 ];

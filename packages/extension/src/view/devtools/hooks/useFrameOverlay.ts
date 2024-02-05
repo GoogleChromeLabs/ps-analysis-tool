@@ -103,20 +103,15 @@ const useFrameOverlay = (
 
     portRef.current.onDisconnect.addListener(() => {
       setIsInspecting(false);
-      setCanStartInspecting(false);
     });
 
     // For the first time.
     portRef.current.postMessage({
       isInspecting: true,
     });
+
     setConnectedToPort(true);
-  }, [
-    canStartInspecting,
-    setSelectedFrame,
-    setIsInspecting,
-    setCanStartInspecting,
-  ]);
+  }, [canStartInspecting, setSelectedFrame, setIsInspecting]);
 
   const listenIfContentScriptSet = useCallback(
     async (
@@ -165,6 +160,7 @@ const useFrameOverlay = (
     },
     [setIsInspecting]
   );
+
   useEffect(() => {
     (async () => {
       try {
@@ -189,6 +185,7 @@ const useFrameOverlay = (
       }
     })();
   }, [setCanStartInspecting]);
+
   // When inspect button is clicked.
   useEffect(() => {
     (async () => {
@@ -257,6 +254,7 @@ const useFrameOverlay = (
 
           return;
         }
+
         if (
           chrome.runtime?.id &&
           portRef.current &&
@@ -295,7 +293,7 @@ const useFrameOverlay = (
                   return [...new Set([...previousReasons])];
                 }, [])
             : [];
-          portRef.current.postMessage({
+          portRef.current?.postMessage({
             selectedFrame,
             removeAllFramePopovers: isFrameSelectedFromDevTool,
             thirdPartyCookies: thirdPartyCookies.length,

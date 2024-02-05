@@ -21,6 +21,10 @@ const setDomainsInAllowList = async (
   domainsInAllowList: Set<string>,
   setter: (list: Set<string>) => void
 ) => {
+  if (!chrome.runtime) {
+    return;
+  }
+
   if (!pageUrl && !domain) {
     return;
   }
