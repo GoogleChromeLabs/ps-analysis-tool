@@ -34,6 +34,7 @@ interface LandingPageProps {
   children?: ReactNode;
   psInfoKey?: PSInfoKeyType;
   iframeSrc?: string;
+  contentPanel?: ReactNode;
   iframeBorderClass?: string;
   extraClasses?: string;
 }
@@ -45,6 +46,7 @@ const LandingPage = ({
   iframeBorderClass,
   children,
   extraClasses,
+  contentPanel,
 }: LandingPageProps) => {
   const [loading, setLoading] = useState(iframeSrc ? true : false);
   const [open, setOpen] = useState(true);
@@ -76,9 +78,11 @@ const LandingPage = ({
             id="#__psat-collapsible-content"
             className={classNames(
               { hidden: !open },
-              extraClasses,
               'flex flex-col gap-6 divide-y divide-american-silver dark:divide-quartz px-4 py-6',
-              { 'border-b border-american-silver dark:border-quartz': children }
+              {
+                'border-b border-american-silver dark:border-quartz': children,
+              },
+              extraClasses
             )}
           >
             {iframeSrc && (
@@ -95,6 +99,7 @@ const LandingPage = ({
               />
             )}
             {psInfoKey && <InfoCard infoKey={psInfoKey} />}
+            <div>{contentPanel}</div>
           </div>
 
           {children && (
