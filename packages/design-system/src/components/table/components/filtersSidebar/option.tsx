@@ -20,16 +20,11 @@
 import React from 'react';
 import classNames from 'classnames';
 
-/**
- * Internal dependencies.
- */
-import { TableOutput } from '../../useTable';
-
 interface OptionProps {
   filterKey: string;
   filterValue: string;
   selected: boolean;
-  toggleFilterSelection: TableOutput['toggleFilterSelection'];
+  toggleFilterSelection: (filterKey: string, filterValue: string) => void;
   isExpanded: boolean;
 }
 

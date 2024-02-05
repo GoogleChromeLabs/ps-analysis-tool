@@ -18,20 +18,15 @@
  */
 import React, { useCallback } from 'react';
 import classNames from 'classnames';
-import {
-  FilterIcon,
-  SearchInput,
-  TableOutput,
-} from '@ps-analysis-tool/design-system';
+import { FilterIcon, SearchInput } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
 import ExportButton from '../../../exportButton';
+import { useTable } from '../../useTable';
 
 interface TableTopBarProps {
-  searchValue: TableOutput['searchValue'];
-  setSearchValue: TableOutput['setSearchValue'];
   showFilterSidebar: boolean;
   setShowFilterSidebar: React.Dispatch<React.SetStateAction<boolean>>;
   cookiesCount: number;
@@ -43,8 +38,6 @@ interface TableTopBarProps {
 }
 
 const TableTopBar = ({
-  searchValue,
-  setSearchValue,
   showFilterSidebar,
   setShowFilterSidebar,
   cookiesCount,
@@ -54,6 +47,11 @@ const TableTopBar = ({
   extraInterface = null,
   exportCookies,
 }: TableTopBarProps) => {
+  const { searchValue, setSearchValue } = useTable(({ state, actions }) => ({
+    searchValue: state.searchValue,
+    setSearchValue: actions.setSearchValue,
+  }));
+
   const handleInput = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearchValue(event.target.value);

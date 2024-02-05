@@ -29,7 +29,7 @@ import { handleResizeOnColumnsVisibilityChange } from './handleResizeOnColumnsVi
 
 export type ColumnResizingOutput = {
   columns: TableColumn[];
-  tableContainerRef: React.RefObject<HTMLDivElement>;
+  tableContainerRef: React.RefObject<HTMLDivElement> | null;
   onMouseDown: (
     selectedColumnRef: React.RefObject<HTMLTableHeaderCellElement>,
     index: number

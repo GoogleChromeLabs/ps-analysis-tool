@@ -21,7 +21,6 @@ import {
   ArrowDown,
   InfoIcon,
   TableFilter,
-  TableOutput,
 } from '@ps-analysis-tool/design-system';
 
 /**
@@ -32,8 +31,6 @@ import SubList from './subList';
 interface ListItemProps {
   filter: TableFilter[keyof TableFilter];
   filterKey: string;
-  toggleFilterSelection: TableOutput['toggleFilterSelection'];
-  toggleSelectAllFilter: TableOutput['toggleSelectAllFilter'];
   expandAll: boolean;
   isSelectAllFilterSelected: boolean;
   toggleFilterExpansion: (filterKey: string, expand?: boolean) => void;
@@ -42,8 +39,6 @@ interface ListItemProps {
 const ListItem = ({
   filter,
   filterKey,
-  toggleFilterSelection,
-  toggleSelectAllFilter,
   expandAll,
   toggleFilterExpansion,
   isSelectAllFilterSelected,
@@ -109,10 +104,8 @@ const ListItem = ({
             filterValues={filter.filterValues}
             filterKey={filterKey}
             sort={!filter.hasStaticFilterValues || Boolean(filter.sortValues)}
-            toggleFilterSelection={toggleFilterSelection}
             isExpanded={isExpanded}
             isSelectAllFilterEnabled={Boolean(filter.enableSelectAllOption)}
-            toggleSelectAllFilter={toggleSelectAllFilter}
             isSelectAllFilterSelected={isSelectAllFilterSelected}
           />
           {Number(Object.keys(filter.filterValues || {}).length) > 4 && (
