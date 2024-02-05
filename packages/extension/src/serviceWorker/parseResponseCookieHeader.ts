@@ -23,6 +23,7 @@ import {
   type CookieData,
   type CookieAnalytics,
   type CookieDatabase,
+  RESPONSE_EVENT,
 } from '@ps-analysis-tool/common';
 import { getDomain } from 'tldts';
 import type { Protocol } from 'devtools-protocol';
@@ -41,6 +42,7 @@ import { createCookieObject } from './createCookieObject';
  * @param {string} tabUrl top url of the tab from which the request originated.
  * @param {number} frameId Id of a frame in which this cookie is used.
  * @param {Protocol.Network.Cookie[]} cdpCookiesList List cookies from the request.
+ * @param {string} requestId Request id.
  * @returns {CookieData} Parsed cookie object.
  */
 const parseResponseCookieHeader = (
@@ -49,7 +51,8 @@ const parseResponseCookieHeader = (
   dictionary: CookieDatabase,
   tabUrl: string,
   frameId: number,
-  cdpCookiesList: Protocol.Network.Cookie[]
+  cdpCookiesList: Protocol.Network.Cookie[],
+  requestId: string
 ): CookieData => {
   let parsedCookie: CookieData['parsedCookie'] = cookie.parse(value);
 
@@ -72,6 +75,22 @@ const parseResponseCookieHeader = (
     parsedCookie,
     analytics,
     url,
+    networkEvents: {
+      requestEvents: [],
+      responseEvents: [
+        {
+          type: RESPONSE_EVENT.CHROME_WEBREQUEST_ON_RESPONSE_STARTED,
+          requestId,
+          url: url,
+          blocked: null,
+          timeStamp: Date.now(),
+        },
+      ],
+    },
+    blockingStatus: {
+      inboundBlock: null,
+      outboundBlock: null,
+    },
     headerType: 'response',
     isFirstParty: _isFirstParty,
     frameIdList: [frameId],

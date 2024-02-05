@@ -53,6 +53,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         cell: (info: InfoType) => info,
         enableHiding: false,
         widthWeightagePercentage: 13,
+        enablePrefixIcon: true,
       },
       {
         header: 'Scope',

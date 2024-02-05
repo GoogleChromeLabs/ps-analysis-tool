@@ -127,6 +127,7 @@ module.exports = {
       'comet-grey': '#474747',
       'jet-black': '#202142',
       'warning-red': '#C33300',
+      'warning-orange': '#FE8d59',
     },
     backgroundColor: {
       ...colors,

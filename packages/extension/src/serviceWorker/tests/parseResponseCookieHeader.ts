@@ -36,7 +36,8 @@ describe('parseResponseCookieHeader', () => {
       {},
       'https://docs.google.com/',
       1,
-      []
+      [],
+      '123'
     );
 
     expect(parsedCookie).toEqual({
@@ -83,7 +84,8 @@ describe('parseResponseCookieHeader', () => {
       },
       'https://docs.google.com/',
       1,
-      []
+      [],
+      '123'
     );
 
     expect(parsedCookie).toEqual({
@@ -155,7 +157,8 @@ describe('parseResponseCookieHeader', () => {
       },
       'https://docs.google.com/',
       1,
-      []
+      [],
+      '123'
     );
 
     expect(parsedCookie).toEqual({
