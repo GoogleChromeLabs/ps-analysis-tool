@@ -38,10 +38,18 @@ export default function updateCookieBadgeText(
         storage[cookieKey].frameIdList?.length >= 1
     ).length;
     if (numCookies >= 0) {
-      chrome.action.setBadgeText({
-        tabId: tabId,
-        text: numCookies.toString(),
-      });
+      chrome.action.setBadgeText(
+        {
+          tabId: tabId,
+          text: numCookies.toString(),
+        },
+        () => {
+          if (chrome.runtime.lastError) {
+            // eslint-disable-next-line no-console
+            console.warn(chrome.runtime.lastError);
+          }
+        }
+      );
     }
   } catch (error) {
     // do nothing

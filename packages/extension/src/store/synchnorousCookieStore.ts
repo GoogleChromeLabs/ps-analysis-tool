@@ -395,13 +395,13 @@ class SynchnorousCookieStore {
           },
         });
       }
+
+      if (sentMessageAnyWhere) {
+        this.tabs[tabId].newUpdates = 0;
+      }
     } catch (error) {
       // eslint-disable-next-line no-console
       console.warn(error);
-    }
-
-    if (sentMessageAnyWhere) {
-      this.tabs[tabId].newUpdates = 0;
     }
   }
 }

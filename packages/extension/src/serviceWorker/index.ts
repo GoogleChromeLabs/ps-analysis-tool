@@ -641,81 +641,70 @@ chrome.storage.sync.onChanged.addListener(
     }
     tabMode = changes.allowedNumberOfTabs.newValue;
 
+    const tabs = await chrome.tabs.query({});
+
     if (changes?.allowedNumberOfTabs?.newValue === 'single') {
-      try {
-        const tabs = await chrome.tabs.query({});
-        tabToRead = '';
+      tabToRead = '';
 
-        chrome.runtime.sendMessage({
-          type: 'ServiceWorker::DevTools::INITIAL_SYNC',
-          payload: {
-            tabMode,
-            tabToRead: tabToRead,
-          },
-        });
+      chrome.runtime.sendMessage({
+        type: 'ServiceWorker::DevTools::INITIAL_SYNC',
+        payload: {
+          tabMode,
+          tabToRead: tabToRead,
+        },
+      });
 
-        chrome.runtime.sendMessage({
-          type: 'ServiceWorker::Popup::INITIAL_SYNC',
-          payload: {
-            tabMode,
-            tabToRead: tabToRead,
-          },
-        });
+      chrome.runtime.sendMessage({
+        type: 'ServiceWorker::Popup::INITIAL_SYNC',
+        payload: {
+          tabMode,
+          tabToRead: tabToRead,
+        },
+      });
 
-        tabs.map((tab) => {
-          if (!tab?.id) {
-            return tab;
-          }
-
-          chrome.action.setBadgeText({
-            tabId: tab?.id,
-            text: '',
-          });
-
-          syncCookieStore?.removeTabData(tab.id);
-
-          chrome.tabs.reload(Number(tab?.id), { bypassCache: true });
+      tabs.map((tab) => {
+        if (!tab?.id) {
           return tab;
+        }
+
+        chrome.action.setBadgeText({
+          tabId: tab?.id,
+          text: '',
         });
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.warn(error);
-      }
+
+        syncCookieStore?.removeTabData(tab.id);
+
+        chrome.tabs.reload(Number(tab?.id), { bypassCache: true });
+        return tab;
+      });
     } else {
-      try {
-        const tabs = await chrome.tabs.query({});
+      chrome.runtime.sendMessage({
+        type: 'ServiceWorker::Popup::INITIAL_SYNC',
+        payload: {
+          tabMode,
+          tabToRead: tabToRead,
+        },
+      });
 
-        chrome.runtime.sendMessage({
-          type: 'ServiceWorker::Popup::INITIAL_SYNC',
-          payload: {
-            tabMode,
-            tabToRead: tabToRead,
-          },
-        });
+      chrome.runtime.sendMessage({
+        type: 'ServiceWorker::DevTools::INITIAL_SYNC',
+        payload: {
+          tabMode,
+          tabToRead: tabToRead,
+        },
+      });
 
-        chrome.runtime.sendMessage({
-          type: 'ServiceWorker::DevTools::INITIAL_SYNC',
-          payload: {
-            tabMode,
-            tabToRead: tabToRead,
-          },
-        });
-
-        await Promise.all(
-          tabs.map(async (tab) => {
-            if (!tab?.id) {
-              return;
-            }
-            syncCookieStore?.addTabData(tab.id);
-            syncCookieStore?.sendUpdatedDataToPopupAndDevTools(tab.id);
-            syncCookieStore?.updateDevToolsState(tab.id, true);
-            await chrome.tabs.reload(Number(tab?.id), { bypassCache: true });
-          })
-        );
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.warn(error);
-      }
+      await Promise.all(
+        tabs.map(async (tab) => {
+          if (!tab?.id) {
+            return;
+          }
+          syncCookieStore?.addTabData(tab.id);
+          syncCookieStore?.sendUpdatedDataToPopupAndDevTools(tab.id);
+          syncCookieStore?.updateDevToolsState(tab.id, true);
+          await chrome.tabs.reload(Number(tab?.id), { bypassCache: true });
+        })
+      );
     }
   }
 );
@@ -746,51 +735,39 @@ chrome.storage.sync.onChanged.addListener(
       },
     });
 
+    const tabs = await chrome.tabs.query({});
+
     if (!changes?.isUsingCDP?.newValue) {
-      try {
-        const tabs = await chrome.tabs.query({});
+      await Promise.all(
+        tabs.map(async (tab) => {
+          if (!tab.id) {
+            return;
+          }
 
-        await Promise.all(
-          tabs.map(async (tab) => {
-            if (!tab.id) {
-              return;
-            }
-
-            try {
-              await chrome.debugger.detach({ tabId: tab.id });
-              syncCookieStore?.removeCookieData(tab.id);
-              syncCookieStore?.sendUpdatedDataToPopupAndDevTools(tab.id);
-            } catch (error) {
-              // eslint-disable-next-line no-console
-              console.warn(error);
-            } finally {
-              await chrome.tabs.reload(tab.id, { bypassCache: true });
-            }
-          })
-        );
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.warn(error);
-      }
-    } else {
-      try {
-        const tabs = await chrome.tabs.query({});
-
-        await Promise.all(
-          tabs.map(async (tab) => {
-            if (!tab.id) {
-              return;
-            }
-
+          try {
+            await chrome.debugger.detach({ tabId: tab.id });
             syncCookieStore?.removeCookieData(tab.id);
             syncCookieStore?.sendUpdatedDataToPopupAndDevTools(tab.id);
+          } catch (error) {
+            // eslint-disable-next-line no-console
+            console.warn(error);
+          } finally {
             await chrome.tabs.reload(tab.id, { bypassCache: true });
-          })
-        );
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.warn(error);
-      }
+          }
+        })
+      );
+    } else {
+      await Promise.all(
+        tabs.map(async (tab) => {
+          if (!tab.id) {
+            return;
+          }
+
+          syncCookieStore?.removeCookieData(tab.id);
+          syncCookieStore?.sendUpdatedDataToPopupAndDevTools(tab.id);
+          await chrome.tabs.reload(tab.id, { bypassCache: true });
+        })
+      );
     }
   }
 );
