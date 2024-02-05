@@ -48,7 +48,6 @@ interface CookiesLandingProps {
   showFramesSection?: boolean;
   description?: React.ReactNode;
   cookieClassificationTitle?: string;
-  showDivider?: boolean;
 }
 
 const CookiesLanding = ({
@@ -65,7 +64,6 @@ const CookiesLanding = ({
   description = '',
   additionalComponents = {},
   cookieClassificationTitle,
-  showDivider = true,
 }: CookiesLandingProps) => {
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
@@ -102,7 +100,6 @@ const CookiesLanding = ({
       data-testid="cookies-landing"
     >
       <CookiesLandingContainer
-        showDivider={showDivider}
         dataMapping={cookieClassificationDataMapping}
         testId="cookies-insights"
       >
@@ -128,7 +125,6 @@ const CookiesLanding = ({
       </CookiesLandingContainer>
       {showBlockedCookiesSection && (
         <CookiesLandingContainer
-          showDivider={showDivider}
           description={description}
           dataMapping={blockedCookieDataMapping}
           testId="blocked-cookies-insights"
@@ -157,7 +153,6 @@ const CookiesLanding = ({
         })}
       {showFramesSection && (
         <CookiesLandingContainer
-          showDivider={showDivider}
           dataMapping={frameStateCreator.dataMapping}
           testId="frames-insights"
         >
