@@ -27,22 +27,22 @@ const INFO_CARDS_DATA = [
   {
     heading: 'Membership in Experiment Group',
     content:
-      'To prepare for third-party cookie deprecation, we will be providing Chrome-facilitated testing modes that allow sites to preview how site behavior and functionality work without third-party cookies. <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" target="_blank" href="https://developers.google.com/privacy-sandbox/setup/web/chrome-facilitated-testing">This guide</a> provides an overview of the testing modes.',
+      '<p>To prepare for third-party cookie deprecation, we will be providing Chrome-facilitated testing modes that allow sites to preview how site behavior and functionality work without third-party cookies.</p> <p>Check <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="https://developers.google.com/privacy-sandbox/setup/web/chrome-facilitated-testing" target="_blank">this guide</a> to learn more.</p>',
   },
   {
     heading: 'Request Additional Migration Time',
     content:
-      'Deprecation trials are a standard option that Chrome provides to allow sites to <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" target="_blank"  href="https://developer.chrome.com/origintrials/#/view_trial/3315212275698106369">register for additional time to migrate away</a> from the legacy functionality being removed. A deprecation trial is a type of origin trial that allows a feature to be temporarily re-enabled.',
+      'For an easier transition through the deprecation process, Chrome is providing a third-party <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="https://developer.chrome.com/docs/web-platform/origin-trials/" target="_blank">deprecation trial</a> which allows embedded sites and services to request additional time to migrate away from third-party cookie dependencies for non-advertising use cases. To learn more please check <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="https://developers.google.com/privacy-sandbox/3pcd/temporary-exceptions/first-party-deprecation-trial?hl=en" target="_blank">this documentation.</a>',
   },
   {
     heading: 'Attestation Enrollment',
     content:
-      'As we make plans for general availability of the Privacy Sandbox relevance and measurement APIs, including Attribution Reporting, FLEDGE, Topics, Private Aggregation and Shared Storage, we want to make sure these technologies are used as intended and with transparency.',
+      'To access the Privacy Sandbox relevance and measurement APIs on <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="https://developer.chrome.com/docs/privacy-sandbox/" target="_blank">Chrome</a> and <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="https://developer.android.com/design-for-safety/privacy-sandbox" target="_blank">Android</a>, <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="https://developer.chrome.com/blog/announce-enrollment-privacy-sandbox/" target="_blank">developers need to enroll</a> with the privacy sandbox as a mechanism to verify the entities that call these APIs, and to gather the developer-specific data needed for the proper configuration and use of the APIs. To learn more about this process and how to enroll please check <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="https://github.com/privacysandbox/attestation/blob/main/how-to-enroll.md" target="_blank">this documentation.</a>',
   },
   {
     heading: 'Reporting Breakages',
-    content: `<p>If your site or a service you depend on is breaking with third-party cookies disabled, you should file an issue here - <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" target="_blank" href="http://goo.gle/report-3pc-broken" >goo.gle/report-3pc-broken</a></p>
-		<p>If you have questions around the deprecation process, you can <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" target="_blank" href="https://github.com/GoogleChromeLabs/privacy-sandbox-dev-support/issues/new/choose">raise a new issue using the "third-party cookie deprecation"</a> tag.</p>`,
+    content:
+      'If your site or a service you depend on is breaking with third-party cookies disabled, you should file an issue <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="https://b.corp.google.com/issues/new?component=1306484&template=1777152" target="_blank">here</a>. And if you have questions or feedback about Privacy Sandbox, you can raise a new issue <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="https://github.com/GoogleChromeLabs/privacy-sandbox-dev-support/issues/new/choose" target="_blank">here</a>  using the "third-party cookie deprecation.',
   },
 ];
 
