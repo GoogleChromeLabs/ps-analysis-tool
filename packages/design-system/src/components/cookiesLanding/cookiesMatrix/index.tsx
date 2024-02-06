@@ -56,7 +56,7 @@ const CookiesMatrix = ({
   tabCookies,
   tabFrames,
   componentData = [],
-  title = 'Cookie Classification',
+  title = 'Categories',
   description = '',
   showHorizontalMatrix = true,
   showMatrix = true,
