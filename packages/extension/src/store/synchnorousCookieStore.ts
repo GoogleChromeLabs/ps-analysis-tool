@@ -143,11 +143,7 @@ class SynchnorousCookieStore {
           this.tabsData[tabId][cookieKey] = cookie;
         }
       }
-      //@ts-ignore Since this is for debugging the data to check the data being collected by the storage.
-      globalThis.PSAT = {
-        tabsData: this.tabsData,
-        tabs: this.tabs,
-      };
+
       updateCookieBadgeText(this.tabsData[tabId], tabId);
     } catch (error) {
       //Fail silently
@@ -316,6 +312,10 @@ class SynchnorousCookieStore {
    * @param {number} tabId The active tab id.
    */
   removeCookieData(tabId: number) {
+    if (!this.tabs[tabId] || !this.tabsData[tabId]) {
+      return;
+    }
+
     delete this.tabsData[tabId];
     this.tabsData[tabId] = {};
     this.tabs[tabId].newUpdates = 0;
@@ -330,6 +330,11 @@ class SynchnorousCookieStore {
     if (this.tabsData[tabId] && this.tabs[tabId]) {
       return;
     }
+    //@ts-ignore Since this is for debugging the data to check the data being collected by the storage.
+    globalThis.PSAT = {
+      tabsData: this.tabsData,
+      tabs: this.tabs,
+    };
 
     this.tabsData[tabId] = {};
     this.tabs[tabId] = {
@@ -373,6 +378,9 @@ class SynchnorousCookieStore {
     tabId: number,
     overrideForInitialSync = false
   ) {
+    if (!this.tabs[tabId] || !this.tabsData[tabId]) {
+      return;
+    }
     let sentMessageAnyWhere = false;
 
     try {
@@ -404,13 +412,12 @@ class SynchnorousCookieStore {
           },
         });
       }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.warn(error);
-    }
 
-    if (sentMessageAnyWhere) {
-      this.tabs[tabId].newUpdates = 0;
+      if (sentMessageAnyWhere) {
+        this.tabs[tabId].newUpdates = 0;
+      }
+    } catch (error) {
+      //Fail silently. Ignoring the console.warn here because the only error this will throw is of "Error: Could not establish connection".
     }
   }
 }

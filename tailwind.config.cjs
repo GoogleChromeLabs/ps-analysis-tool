@@ -173,6 +173,7 @@ module.exports = {
       'leaf-green-light': '#99EDC3',
       'leaf-green-dark': '#87DFB2',
       'eerie-black': '#1F1F1F0F',
+      'light-yellow': '#FEFCE0',
     },
     borderColor: {
       ...colors,
