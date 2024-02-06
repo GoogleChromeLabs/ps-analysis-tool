@@ -36,6 +36,10 @@ function deriveInboundBlocking(respEvents: responsEvent[]): boolean | null {
     ({ type }) => type === RESPONSE_EVENT.CDP_RESPONSE_RECEIVED_EXTRA_INFO
   );
 
+  if (CDPEvents.length === 0) {
+    return null;
+  }
+
   const numBlocked: number = CDPEvents.reduce((acc, event) => {
     if (event.blocked === null) {
       return acc;
@@ -68,7 +72,7 @@ function deriveOutboundBlocking(reqEvents: requestEvent[]): boolean | null {
   );
 
   if (CDPEvents.length === 0) {
-    return false;
+    return null;
   }
 
   const numBlocked: number = CDPEvents.reduce((acc, event) => {
