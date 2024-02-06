@@ -104,7 +104,7 @@ interface useTableProps {
     row: TableRow
   ) => void;
   getRowObjectKey: (row: TableRow) => string;
-  conditionalTableRowClasses?: (
+  conditionalTableRowClassesHandler?: (
     row: TableRow,
     isRowFocused: boolean,
     rowIndex: number
@@ -144,7 +144,7 @@ export interface TableStoreContext {
     onRowClick: useTableProps['onRowClick'];
     onRowContextMenu: useTableProps['onRowContextMenu'];
     getRowObjectKey: useTableProps['getRowObjectKey'];
-    conditionalTableRowClasses?: useTableProps['conditionalTableRowClasses'];
+    conditionalTableRowClassesHandler?: useTableProps['conditionalTableRowClassesHandler'];
     exportTableData?: useTableProps['exportTableData'];
     hasVerticalBar?: useTableProps['hasVerticalBar'];
   };
@@ -195,7 +195,7 @@ export const TableProvider = ({
   onRowClick,
   onRowContextMenu,
   getRowObjectKey,
-  conditionalTableRowClasses,
+  conditionalTableRowClassesHandler,
   exportTableData,
   hasVerticalBar,
   children,
@@ -311,7 +311,7 @@ export const TableProvider = ({
           onRowClick,
           onRowContextMenu,
           getRowObjectKey,
-          conditionalTableRowClasses,
+          conditionalTableRowClassesHandler,
           exportTableData,
           hasVerticalBar,
         },
