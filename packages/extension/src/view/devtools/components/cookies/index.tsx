@@ -51,7 +51,6 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
     tabToRead,
   } = useCookieStore(({ state, actions }) => ({
     tabToRead: state.tabToRead,
-    contextInvalidated: state.contextInvalidated,
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
     loading: state.loading,
     returningToSingleTab: state.returningToSingleTab,

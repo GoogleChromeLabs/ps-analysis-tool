@@ -364,7 +364,6 @@ class SynchnorousCookieStore {
         (overrideForInitialSync || this.tabs[tabId].newUpdates > 0)
       ) {
         sentMessageAnyWhere = true;
-
         await chrome.runtime.sendMessage({
           type: 'ServiceWorker::DevTools::NEW_COOKIE_DATA',
           payload: {
@@ -387,13 +386,13 @@ class SynchnorousCookieStore {
           },
         });
       }
+
+      if (sentMessageAnyWhere) {
+        this.tabs[tabId].newUpdates = 0;
+      }
     } catch (error) {
       // eslint-disable-next-line no-console
       console.warn(error);
-    }
-
-    if (sentMessageAnyWhere) {
-      this.tabs[tabId].newUpdates = 0;
     }
   }
 }

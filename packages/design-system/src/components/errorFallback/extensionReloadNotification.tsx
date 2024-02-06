@@ -22,15 +22,21 @@ import React from 'react';
  * Internal dependencies.
  */
 import Button from '../button';
+import { noop } from '@ps-analysis-tool/common';
+interface ExtensionReloadNotificationProps {
+  text?: string;
+  onClick?: () => void;
+}
 
-const ExtensionReloadNotification = () => {
+const ExtensionReloadNotification = ({
+  text = 'Looks like extension has been updated since devtool was open.',
+  onClick = noop,
+}: ExtensionReloadNotificationProps) => {
   return (
     <div className="w-full h-full px-2 flex flex-col items-center justify-center border-b border-american-silver dark:border-quartz bg-white dark:bg-charleston-green dark:text-white">
-      <p className="text-xl text-center px-4">
-        Looks like extension has been updated since devtool was open.
-      </p>
+      <p className="text-xl text-center px-4">{text}</p>
       <div className="ml-2 mt-4">
-        <Button onClick={() => window.location.reload()} text="Refresh panel" />
+        <Button onClick={onClick} text="Refresh panel" />
       </div>
     </div>
   );

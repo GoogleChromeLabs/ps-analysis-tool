@@ -34,6 +34,7 @@ import { fetchDictionary } from '../utils/fetchCookieDictionary';
 import { ALLOWED_NUMBER_OF_TABS } from '../constants';
 import SynchnorousCookieStore from '../store/synchnorousCookieStore';
 import canProcessCookies from '../utils/canProcessCookies';
+import reloadCurrentTab from '../utils/reloadCurrentTab';
 
 let cookieDB: CookieDatabase | null = null;
 let syncCookieStore: SynchnorousCookieStore | undefined;
@@ -60,10 +61,13 @@ const ALLOWED_EVENTS = [
  * @see https://developer.chrome.com/docs/extensions/reference/api/webRequest
  */
 chrome.webRequest.onResponseStarted.addListener(
-  (details: chrome.webRequest.WebResponseCacheDetails) => {
+  ({ tabId, url, responseHeaders, frameId }) => {
     (async () => {
-      const { tabId, url, responseHeaders, frameId } = details;
-      const tabUrl = syncCookieStore?.getTabUrl(tabId) ?? '';
+      if (!syncCookieStore) {
+        return;
+      }
+
+      const tabUrl = syncCookieStore.getTabUrl(tabId) ?? '';
 
       if (
         !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, responseHeaders)
@@ -132,6 +136,10 @@ chrome.webRequest.onResponseStarted.addListener(
 chrome.webRequest.onBeforeSendHeaders.addListener(
   ({ url, requestHeaders, tabId, frameId }) => {
     (async () => {
+      if (!syncCookieStore) {
+        return;
+      }
+
       const tabUrl = syncCookieStore?.getTabUrl(tabId) ?? '';
 
       if (
@@ -532,8 +540,10 @@ chrome.runtime.onMessage.addListener(async (request) => {
     request?.type === 'DevTools::ServiceWorker::DEVTOOLS_STATE_OPEN' &&
     request?.payload?.tabId
   ) {
-    const dataToSend: { [key: string]: string } = {};
+    const dataToSend: { [key: string]: string | boolean } = {};
+
     dataToSend['tabMode'] = tabMode;
+    dataToSend['didServiceWorkerSleep'] = syncCookieStore ? false : true;
 
     if (tabMode === 'single') {
       dataToSend['tabToRead'] = tabToRead;
@@ -577,6 +587,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
     if (tabMode === 'single') {
       dataToSend['tabToRead'] = tabToRead;
     }
+
     chrome.runtime.sendMessage({
       type: 'ServiceWorker::Popup::INITIAL_SYNC',
       payload: dataToSend,
@@ -615,6 +626,39 @@ chrome.runtime.onMessage.addListener(async (request) => {
       JSON.parse(request?.payload?.cookieData)
     );
   }
+
+  if (
+    request?.type === 'DevTools::ServiceWorker::ACTIVATE_SERVICE_WORKER' &&
+    request?.payload?.tabId
+  ) {
+    if (!syncCookieStore) {
+      syncCookieStore = new SynchnorousCookieStore();
+    }
+    const extensionStorage = await chrome.storage.sync.get();
+
+    if (Object.keys(extensionStorage).includes('allowedNumberOfTabs')) {
+      tabMode = extensionStorage?.allowedNumberOfTabs;
+    }
+
+    if (Object.keys(extensionStorage).includes('isUsingCDP')) {
+      globalIsUsingCDP = extensionStorage?.isUsingCDP;
+    }
+
+    syncCookieStore.addTabData(request?.payload?.tabId);
+    syncCookieStore.updateDevToolsState(request?.payload?.tabId, true);
+
+    setInterval(() => {
+      if (Object.keys(syncCookieStore?.tabsData ?? {}).length === 0) {
+        return;
+      }
+
+      Object.keys(syncCookieStore?.tabsData ?? {}).forEach((key) => {
+        syncCookieStore?.sendUpdatedDataToPopupAndDevTools(Number(key));
+      });
+    }, 1200);
+
+    await reloadCurrentTab(request?.payload?.tabId);
+  }
 });
 
 /**
@@ -649,7 +693,8 @@ chrome.storage.sync.onChanged.addListener(
         type: 'ServiceWorker::DevTools::INITIAL_SYNC',
         payload: {
           tabMode,
-          tabToRead: tabToRead,
+          tabToRead,
+          didServiceWorkerSleep: syncCookieStore ? false : true,
         },
       });
 
@@ -657,7 +702,7 @@ chrome.storage.sync.onChanged.addListener(
         type: 'ServiceWorker::Popup::INITIAL_SYNC',
         payload: {
           tabMode,
-          tabToRead: tabToRead,
+          tabToRead,
         },
       });
 
@@ -680,14 +725,13 @@ chrome.storage.sync.onChanged.addListener(
         type: 'ServiceWorker::Popup::INITIAL_SYNC',
         payload: {
           tabMode,
-          tabToRead: tabToRead,
         },
       });
+
       chrome.runtime.sendMessage({
         type: 'ServiceWorker::DevTools::INITIAL_SYNC',
         payload: {
           tabMode,
-          tabToRead: tabToRead,
         },
       });
 
