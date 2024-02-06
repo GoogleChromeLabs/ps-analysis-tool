@@ -291,6 +291,8 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   syncCookieStore = new SynchnorousCookieStore();
   syncCookieStore?.clear();
 
+  // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
+  // Doing this to keep the service worker alive so that we dont loose unnecessary data and introduce any unnecessary bug.
   setInterval(() => {
     chrome.storage.local.get();
   }, 28000);
