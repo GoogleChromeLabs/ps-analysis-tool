@@ -37,14 +37,21 @@ const TableBody = ({
   setIsRowFocused,
   selectedKey,
 }: TableBodyProps) => {
-  const { rows, columns, onRowClick, onRowContextMenu, getRowObjectKey } =
-    useTable(({ state, actions }) => ({
-      rows: state.rows,
-      columns: state.columns,
-      onRowClick: actions.onRowClick,
-      onRowContextMenu: actions.onRowContextMenu,
-      getRowObjectKey: actions.getRowObjectKey,
-    }));
+  const {
+    rows,
+    columns,
+    onRowClick,
+    onRowContextMenu,
+    getRowObjectKey,
+    conditionalTableRowClasses,
+  } = useTable(({ state, actions }) => ({
+    rows: state.rows,
+    columns: state.columns,
+    onRowClick: actions.onRowClick,
+    onRowContextMenu: actions.onRowContextMenu,
+    getRowObjectKey: actions.getRowObjectKey,
+    conditionalTableRowClasses: actions.conditionalTableRowClasses,
+  }));
 
   const tableBodyRef = useRef(null);
 
@@ -138,8 +145,10 @@ const TableBody = ({
           row={row}
           columns={columns}
           selectedKey={selectedKey}
+          extraClasses={
+            conditionalTableRowClasses?.(row, isRowFocused, index) ?? ''
+          }
           getRowObjectKey={getRowObjectKey}
-          isRowFocused={isRowFocused}
           onRowClick={() => {
             onRowClick(row?.originalData);
             setIsRowFocused(true);

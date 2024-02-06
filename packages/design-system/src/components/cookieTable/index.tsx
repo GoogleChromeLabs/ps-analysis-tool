@@ -26,6 +26,7 @@ import React, {
 } from 'react';
 import { CookieTableData, getCookieKey } from '@ps-analysis-tool/common';
 import { saveAs } from 'file-saver';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -134,9 +135,68 @@ const CookieTable = forwardRef<
     [onRowClick]
   );
 
-  const selectedKey = useMemo(
-    () => Object.values(selectedFrameCookie ?? {})[0],
-    [selectedFrameCookie]
+  const selectedKey = useMemo(() => {
+    const key = Object.values(selectedFrameCookie ?? {})[0];
+
+    return key === null ? null : getCookieKey(key?.parsedCookie);
+  }, [selectedFrameCookie]);
+
+  const conditionalTableRowClasses = useCallback(
+    // eslint-disable-next-line complexity
+    (row: TableRow, isRowFocused: boolean, rowIndex: number) => {
+      const rowKey = getRowObjectKey(row);
+      const isBlocked =
+        (row.originalData as CookieTableData)?.isBlocked ||
+        (((row.originalData as CookieTableData)?.isBlocked ?? false) &&
+          (row.originalData as CookieTableData)?.blockedReasons &&
+          (row.originalData as CookieTableData)?.blockedReasons?.length);
+      const isHighlighted = row.originalData?.highlighted;
+      const isDomainInAllowList = (row.originalData as CookieTableData)
+        ?.isDomainInAllowList;
+
+      const tableRowClassName = classNames(
+        isBlocked &&
+          (rowKey !== selectedKey
+            ? rowIndex % 2
+              ? 'dark:bg-flagged-row-even-dark bg-flagged-row-even-light'
+              : 'dark:bg-flagged-row-odd-dark bg-flagged-row-odd-light'
+            : isRowFocused
+            ? 'bg-gainsboro dark:bg-outer-space'
+            : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
+        isDomainInAllowList &&
+          !isBlocked &&
+          (rowKey !== selectedKey
+            ? rowIndex % 2
+              ? 'dark:bg-jungle-green-dark bg-leaf-green-dark'
+              : 'dark:bg-jungle-green-light bg-leaf-green-light'
+            : isRowFocused
+            ? 'bg-gainsboro dark:bg-outer-space'
+            : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
+        rowKey !== selectedKey &&
+          !isBlocked &&
+          !isDomainInAllowList &&
+          (rowIndex % 2
+            ? isHighlighted
+              ? 'bg-dirty-pink'
+              : 'bg-anti-flash-white dark:bg-charleston-green'
+            : isHighlighted
+            ? 'bg-dirty-pink text-dirty-red dark:text-dirty-red text-dirty-red'
+            : 'bg-white dark:bg-raisin-black'),
+        rowKey === selectedKey &&
+          !isBlocked &&
+          !isDomainInAllowList &&
+          (isRowFocused
+            ? isHighlighted
+              ? 'bg-dirty-red'
+              : 'bg-gainsboro dark:bg-outer-space'
+            : isHighlighted
+            ? 'bg-dirty-pink text-dirty-red'
+            : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver')
+      );
+
+      return tableRowClassName;
+    },
+    [getRowObjectKey, selectedKey]
   );
 
   useEffect(() => {
@@ -157,14 +217,11 @@ const CookieTable = forwardRef<
         onRowClick={onRowClick}
         onRowContextMenu={onRowContextMenuHandler}
         getRowObjectKey={getRowObjectKey}
+        conditionalTableRowClasses={conditionalTableRowClasses}
         exportTableData={exportCookies}
       >
         <Table
-          selectedKey={
-            selectedKey === null
-              ? null
-              : getCookieKey(selectedKey?.parsedCookie)
-          }
+          selectedKey={selectedKey}
           extraInterfaceToTopBar={extraInterfaceToTopBar}
         />
       </TableProvider>

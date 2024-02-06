@@ -18,7 +18,6 @@
  * External dependencies.
  */
 import React from 'react';
-import classNames from 'classnames';
 import { CookieTableData } from '@ps-analysis-tool/common';
 
 /**
@@ -31,8 +30,8 @@ interface BodyRowProps {
   row: TableRow;
   columns: TableColumn[];
   index: number;
-  isRowFocused: boolean;
   selectedKey: string | undefined | null;
+  extraClasses: string;
   getRowObjectKey: (row: TableRow) => string;
   onRowClick: (e: React.MouseEvent<HTMLDivElement>) => void;
   onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>, index: number) => void;
@@ -42,73 +41,26 @@ interface BodyRowProps {
   ) => void;
 }
 
-// eslint-disable-next-line complexity
 const BodyRow = ({
   row,
   columns,
   index,
   selectedKey,
+  extraClasses,
   getRowObjectKey,
-  isRowFocused,
   onRowClick,
   onKeyDown,
   onRowContextMenu,
 }: BodyRowProps) => {
-  const cookieKey = getRowObjectKey(row);
-  const isBlocked =
-    (row.originalData as CookieTableData)?.isBlocked ||
-    (((row.originalData as CookieTableData)?.isBlocked ?? false) &&
-      (row.originalData as CookieTableData)?.blockedReasons &&
-      (row.originalData as CookieTableData)?.blockedReasons?.length);
-  const isHighlighted = (row.originalData as CookieTableData)?.highlighted;
+  const rowKey = getRowObjectKey(row);
+  const isHighlighted = row.originalData?.highlighted;
   const isDomainInAllowList = (row.originalData as CookieTableData)
     ?.isDomainInAllowList;
-
-  const tableRowClassName = classNames(
-    'outline-0 flex divide-x divide-american-silver dark:divide-quartz relative',
-    isBlocked &&
-      (cookieKey !== selectedKey
-        ? index % 2
-          ? 'dark:bg-flagged-row-even-dark bg-flagged-row-even-light'
-          : 'dark:bg-flagged-row-odd-dark bg-flagged-row-odd-light'
-        : isRowFocused
-        ? 'bg-gainsboro dark:bg-outer-space'
-        : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
-    isDomainInAllowList &&
-      !isBlocked &&
-      (cookieKey !== selectedKey
-        ? index % 2
-          ? 'dark:bg-jungle-green-dark bg-leaf-green-dark'
-          : 'dark:bg-jungle-green-light bg-leaf-green-light'
-        : isRowFocused
-        ? 'bg-gainsboro dark:bg-outer-space'
-        : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
-    cookieKey !== selectedKey &&
-      !isBlocked &&
-      !isDomainInAllowList &&
-      (index % 2
-        ? isHighlighted
-          ? 'bg-dirty-pink'
-          : 'bg-anti-flash-white dark:bg-charleston-green'
-        : isHighlighted
-        ? 'bg-dirty-pink text-dirty-red dark:text-dirty-red text-dirty-red'
-        : 'bg-white dark:bg-raisin-black'),
-    cookieKey === selectedKey &&
-      !isBlocked &&
-      !isDomainInAllowList &&
-      (isRowFocused
-        ? isHighlighted
-          ? 'bg-dirty-red'
-          : 'bg-gainsboro dark:bg-outer-space'
-        : isHighlighted
-        ? 'bg-dirty-pink text-dirty-red'
-        : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver')
-  );
 
   return (
     <div
       id={index.toString()}
-      className={tableRowClassName}
+      className={`outline-0 flex divide-x divide-american-silver dark:divide-quartz relative ${extraClasses}`}
       onClick={onRowClick}
       onKeyDown={(e) => onKeyDown(e, index)}
       onContextMenu={(e) => onRowContextMenu(e, row)}
@@ -125,7 +77,7 @@ const BodyRow = ({
           cell={row[accessorKey]?.value || ''}
           width={width || 0}
           isHighlighted={isHighlighted}
-          isRowFocused={cookieKey === selectedKey}
+          isRowFocused={rowKey === selectedKey}
           row={row}
         />
       ))}

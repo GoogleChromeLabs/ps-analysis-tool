@@ -38,7 +38,9 @@ import useFiltering, { TableFilteringOutput } from './useFiltering';
 import useSearch, { TableSearchOutput } from './useSearch';
 import { createContext, useContextSelector } from 'use-context-selector';
 
-export type TableData = CookieTableData | TechnologyData;
+export type TableData = (CookieTableData | TechnologyData) & {
+  highlighted?: boolean;
+};
 
 export type InfoType = number | string | boolean | string[] | [];
 
@@ -102,6 +104,11 @@ interface useTableProps {
     row: TableRow
   ) => void;
   getRowObjectKey: (row: TableRow) => string;
+  conditionalTableRowClasses?: (
+    row: TableRow,
+    isRowFocused: boolean,
+    rowIndex: number
+  ) => string;
   exportTableData?: (rows: TableRow[]) => void;
 }
 
@@ -136,6 +143,7 @@ export interface TableStoreContext {
     onRowClick: useTableProps['onRowClick'];
     onRowContextMenu: useTableProps['onRowContextMenu'];
     getRowObjectKey: useTableProps['getRowObjectKey'];
+    conditionalTableRowClasses?: useTableProps['conditionalTableRowClasses'];
     exportTableData?: useTableProps['exportTableData'];
   };
 }
@@ -185,6 +193,7 @@ export const TableProvider = ({
   onRowClick,
   onRowContextMenu,
   getRowObjectKey,
+  conditionalTableRowClasses,
   exportTableData,
   children,
 }: PropsWithChildren<useTableProps>) => {
@@ -299,6 +308,7 @@ export const TableProvider = ({
           onRowClick,
           onRowContextMenu,
           getRowObjectKey,
+          conditionalTableRowClasses,
           exportTableData,
         },
       }}
