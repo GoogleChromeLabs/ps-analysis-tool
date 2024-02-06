@@ -62,7 +62,7 @@ const LandingPage = ({
       >
         <div className="p-4">
           <button
-            className="flex gap-2 text-2xl font-bold items-baseline dark:text-bright-gray cursor-pointer"
+            className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray cursor-pointer"
             onClick={() => setOpen((prevOpen) => !prevOpen)}
           >
             {title && <h1 className="text-left">{title}</h1>}

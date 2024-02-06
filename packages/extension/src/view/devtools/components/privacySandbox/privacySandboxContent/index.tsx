@@ -27,7 +27,7 @@ import InfoCards from './infoCards';
 
 const PrivacySandboxContent = () => {
   return (
-    <div className="m-auto w-[60rem] md:w-[70%] md:min-w-[40rem]">
+    <div className="m-auto md:w-[70%] min-w-[30rem]">
       <div className="w-full h-full border border-hex-gray dark:border-quartz text-raisin-black dark:text-bright-gray rounded-lg px-8 py-10 flex flex-col gap-8">
         <RestrictionInfoContainer />
         <div className="px-2">
