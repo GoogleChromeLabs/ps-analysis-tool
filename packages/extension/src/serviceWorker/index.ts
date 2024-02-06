@@ -291,6 +291,10 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   syncCookieStore = new SynchnorousCookieStore();
   syncCookieStore?.clear();
 
+  setInterval(() => {
+    chrome.storage.local.get();
+  }, 28000);
+
   // @todo Send tab data of the active tab only, also if sending only the difference would make it any faster.
   setInterval(() => {
     if (Object.keys(syncCookieStore?.tabsData ?? {}).length === 0) {
