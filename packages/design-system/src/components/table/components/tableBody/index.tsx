@@ -24,35 +24,27 @@ import classNames from 'classnames';
  * Internal dependencies.
  */
 import BodyRow from './bodyRow';
-import { useTable, type TableData, type TableRow } from '../../useTable';
+import { useTable } from '../../useTable';
 
 interface TableBodyProps {
-  getRowObjectKey: (row: TableRow) => string;
   isRowFocused: boolean;
   setIsRowFocused: (state: boolean) => void;
   selectedKey: string | undefined | null;
-  onRowClick: (
-    key: TableData | null,
-    e?: React.MouseEvent<HTMLDivElement>
-  ) => void;
-  onRowContextMenu?: (
-    e: React.MouseEvent<HTMLDivElement>,
-    row: TableRow
-  ) => void;
 }
 
 const TableBody = ({
-  getRowObjectKey,
   isRowFocused,
   setIsRowFocused,
   selectedKey,
-  onRowClick,
-  onRowContextMenu = () => undefined,
 }: TableBodyProps) => {
-  const { rows, columns } = useTable(({ state }) => ({
-    rows: state.rows,
-    columns: state.columns,
-  }));
+  const { rows, columns, onRowClick, onRowContextMenu, getRowObjectKey } =
+    useTable(({ state, actions }) => ({
+      rows: state.rows,
+      columns: state.columns,
+      onRowClick: actions.onRowClick,
+      onRowContextMenu: actions.onRowContextMenu,
+      getRowObjectKey: actions.getRowObjectKey,
+    }));
 
   const tableBodyRef = useRef(null);
 
@@ -148,8 +140,8 @@ const TableBody = ({
           selectedKey={selectedKey}
           getRowObjectKey={getRowObjectKey}
           isRowFocused={isRowFocused}
-          onRowClick={(e: React.MouseEvent<HTMLDivElement>) => {
-            onRowClick(row?.originalData, e);
+          onRowClick={() => {
+            onRowClick(row?.originalData);
             setIsRowFocused(true);
           }}
           onKeyDown={handleKeyDown}

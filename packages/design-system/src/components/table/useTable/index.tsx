@@ -96,6 +96,13 @@ interface useTableProps {
   tableFilterData?: TableFilter;
   tableSearchKeys?: string[];
   tablePersistentSettingsKey?: string;
+  onRowClick: (row: TableData | null) => void;
+  onRowContextMenu: (
+    e: React.MouseEvent<HTMLDivElement>,
+    row: TableRow
+  ) => void;
+  getRowObjectKey: (row: TableRow) => string;
+  exportTableData?: (rows: TableRow[]) => void;
 }
 
 export interface TableStoreContext {
@@ -126,6 +133,10 @@ export interface TableStoreContext {
     resetFilters: TableFilteringOutput['resetFilters'];
     isSelectAllFilterSelected: TableFilteringOutput['isSelectAllFilterSelected'];
     setSearchValue: TableSearchOutput['setSearchValue'];
+    onRowClick: useTableProps['onRowClick'];
+    onRowContextMenu: useTableProps['onRowContextMenu'];
+    getRowObjectKey: useTableProps['getRowObjectKey'];
+    exportTableData?: useTableProps['exportTableData'];
   };
 }
 
@@ -157,6 +168,9 @@ const initialState: TableStoreContext = {
     resetFilters: noop,
     isSelectAllFilterSelected: () => false,
     setSearchValue: noop,
+    onRowClick: noop,
+    onRowContextMenu: noop,
+    getRowObjectKey: () => '',
   },
 };
 
@@ -168,6 +182,10 @@ export const TableProvider = ({
   tableFilterData,
   tableSearchKeys,
   tablePersistentSettingsKey,
+  onRowClick,
+  onRowContextMenu,
+  getRowObjectKey,
+  exportTableData,
   children,
 }: PropsWithChildren<useTableProps>) => {
   const commonKey = useMemo(() => {
@@ -278,6 +296,10 @@ export const TableProvider = ({
           resetFilters,
           isSelectAllFilterSelected,
           setSearchValue,
+          onRowClick,
+          onRowContextMenu,
+          getRowObjectKey,
+          exportTableData,
         },
       }}
     >

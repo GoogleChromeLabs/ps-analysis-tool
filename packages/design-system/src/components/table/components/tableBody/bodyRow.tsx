@@ -36,7 +36,7 @@ interface BodyRowProps {
   getRowObjectKey: (row: TableRow) => string;
   onRowClick: (e: React.MouseEvent<HTMLDivElement>) => void;
   onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>, index: number) => void;
-  onRowContextMenu?: (
+  onRowContextMenu: (
     e: React.MouseEvent<HTMLDivElement>,
     row: TableRow
   ) => void;
@@ -52,7 +52,7 @@ const BodyRow = ({
   isRowFocused,
   onRowClick,
   onKeyDown,
-  onRowContextMenu = () => undefined,
+  onRowContextMenu,
 }: BodyRowProps) => {
   const cookieKey = getRowObjectKey(row);
   const isBlocked =

@@ -25,12 +25,14 @@ import React, {
   useReducer,
 } from 'react';
 import { CookieTableData, getCookieKey } from '@ps-analysis-tool/common';
+import { saveAs } from 'file-saver';
 
 /**
  * Internal dependencies.
  */
 import { Table, TableColumn, TableData, TableFilter, TableRow } from '../table';
 import { TableProvider } from '../table/useTable';
+import { generateCookieTableCSV } from '../table/utils';
 
 interface CookieTableProps {
   data: TableData[];
@@ -39,8 +41,6 @@ interface CookieTableProps {
   tableSearchKeys?: string[];
   tablePersistentSettingsKey?: string;
   selectedFrame: string | null;
-  showTopBar?: boolean;
-  hideExport?: boolean;
   selectedFrameCookie: {
     [frame: string]: CookieTableData | null;
   } | null;
@@ -68,8 +68,6 @@ const CookieTable = forwardRef<
     tableSearchKeys,
     tablePersistentSettingsKey,
     data: cookies,
-    showTopBar,
-    hideExport = false,
     selectedFrame,
     selectedFrameCookie,
     setSelectedFrameCookie,
@@ -98,6 +96,30 @@ const CookieTable = forwardRef<
       });
     },
     [selectedFrame, setSelectedFrameCookie]
+  );
+
+  const onRowContextMenuHandler = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>, row: TableRow) => {
+      onRowContextMenu?.(e, row);
+      onRowClick(row?.originalData);
+    },
+    [onRowClick, onRowContextMenu]
+  );
+
+  const exportCookies = useCallback((rows: TableRow[]) => {
+    const _cookies = rows.map(({ originalData }) => originalData);
+    if (_cookies.length > 0 && 'parsedCookie' in _cookies[0]) {
+      const csvTextBlob = generateCookieTableCSV(_cookies as CookieTableData[]);
+      saveAs(csvTextBlob, 'Cookies Report.csv');
+    }
+  }, []);
+
+  const getRowObjectKey = useCallback(
+    (row: TableRow) =>
+      getCookieKey(
+        (row?.originalData as CookieTableData).parsedCookie
+      ) as string,
+    []
   );
 
   useImperativeHandle(
@@ -132,29 +154,18 @@ const CookieTable = forwardRef<
         tableFilterData={tableFilters}
         tableSearchKeys={tableSearchKeys}
         tablePersistentSettingsKey={tablePersistentSettingsKey}
+        onRowClick={onRowClick}
+        onRowContextMenu={onRowContextMenuHandler}
+        getRowObjectKey={getRowObjectKey}
+        exportTableData={exportCookies}
       >
         <Table
-          showTopBar={showTopBar}
           selectedKey={
             selectedKey === null
               ? null
               : getCookieKey(selectedKey?.parsedCookie)
           }
-          hideExport={hideExport}
-          getRowObjectKey={(row: TableRow) =>
-            getCookieKey(
-              (row?.originalData as CookieTableData).parsedCookie
-            ) as string
-          }
-          onRowClick={onRowClick}
           extraInterfaceToTopBar={extraInterfaceToTopBar}
-          onRowContextMenu={(
-            e: React.MouseEvent<HTMLDivElement>,
-            row: TableRow
-          ) => {
-            onRowContextMenu?.(e, row);
-            onRowClick(row?.originalData);
-          }}
         />
       </TableProvider>
     </div>

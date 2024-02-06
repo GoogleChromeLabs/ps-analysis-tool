@@ -19,8 +19,6 @@
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Resizable } from 're-resizable';
-import { saveAs } from 'file-saver';
-import { CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -28,40 +26,29 @@ import { CookieTableData } from '@ps-analysis-tool/common';
 import TableHeader from './tableHeader';
 import TableBody from './tableBody';
 import ColumnMenu from './columnMenu';
-import { TableData, TableRow, useTable } from '../useTable';
+import { useTable } from '../useTable';
 import TableTopBar from './tableTopBar';
 import ChipsBar from './filtersSidebar/chips';
 import FiltersSidebar from './filtersSidebar';
-import { generateCookieTableCSV } from '../utils';
 
 interface TableProps {
   selectedKey: string | undefined | null;
-  getRowObjectKey: (row: TableRow) => string;
-  onRowClick: (row: TableData | null) => void;
-  onRowContextMenu?: (
-    e: React.MouseEvent<HTMLDivElement>,
-    row: TableRow
-  ) => void;
-  showTopBar?: boolean;
   hideFiltering?: boolean;
-  hideExport?: boolean;
   extraInterfaceToTopBar?: React.ReactNode;
 }
 
 const Table = ({
   selectedKey,
-  getRowObjectKey,
-  onRowClick,
-  onRowContextMenu = () => undefined,
-  showTopBar = false,
   hideFiltering = false,
-  hideExport = false,
   extraInterfaceToTopBar,
 }: TableProps) => {
-  const { rows, tableContainerRef } = useTable(({ state }) => ({
-    rows: state.rows,
-    tableContainerRef: state.tableContainerRef,
-  }));
+  const { rows, tableContainerRef, exportTableData } = useTable(
+    ({ state, actions }) => ({
+      rows: state.rows,
+      tableContainerRef: state.tableContainerRef,
+      exportTableData: actions.exportTableData,
+    })
+  );
 
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
   const [showFilterSidebar, setShowFilterSidebar] = useState(false);
@@ -104,27 +91,19 @@ const Table = ({
     [showColumnsMenu]
   );
 
-  const exportCookies = useCallback(() => {
-    const cookies = rows.map(({ originalData }) => originalData);
-    if (cookies.length > 0 && 'parsedCookie' in cookies[0]) {
-      const csvTextBlob = generateCookieTableCSV(cookies as CookieTableData[]);
-      saveAs(csvTextBlob, 'Cookies Report.csv');
-    }
-  }, [rows]);
-
   return (
     <div className="w-full h-full flex flex-col">
-      {showTopBar && (
-        <TableTopBar
-          showFilterSidebar={showFilterSidebar}
-          hideFiltering={hideFiltering}
-          setShowFilterSidebar={setShowFilterSidebar}
-          cookiesCount={rows.length}
-          disableExport={rows.length === 0}
-          extraInterface={extraInterfaceToTopBar}
-          exportCookies={hideExport ? undefined : exportCookies}
-        />
-      )}
+      <TableTopBar
+        showFilterSidebar={showFilterSidebar}
+        hideFiltering={hideFiltering}
+        setShowFilterSidebar={setShowFilterSidebar}
+        cookiesCount={rows.length}
+        disableExport={rows.length === 0}
+        extraInterface={extraInterfaceToTopBar}
+        exportTableData={
+          exportTableData ? () => exportTableData(rows) : undefined
+        }
+      />
       <ChipsBar />
       <div className="w-full flex-1 overflow-hidden h-full flex divide-x divide-american-silver dark:divide-quartz">
         {showFilterSidebar && (
@@ -157,12 +136,9 @@ const Table = ({
               setIsRowFocused={setIsRowFocused}
             />
             <TableBody
-              getRowObjectKey={getRowObjectKey}
               isRowFocused={isRowFocused}
               setIsRowFocused={setIsRowFocused}
               selectedKey={selectedKey}
-              onRowClick={onRowClick}
-              onRowContextMenu={onRowContextMenu}
             />
           </div>
         </div>

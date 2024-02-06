@@ -34,7 +34,7 @@ interface TableTopBarProps {
   disableFiltering?: boolean;
   disableExport?: boolean;
   extraInterface?: React.ReactNode;
-  exportCookies?: () => void;
+  exportTableData?: () => void;
 }
 
 const TableTopBar = ({
@@ -45,7 +45,7 @@ const TableTopBar = ({
   disableFiltering = false,
   disableExport = false,
   extraInterface = null,
-  exportCookies,
+  exportTableData,
 }: TableTopBarProps) => {
   const { searchValue, setSearchValue } = useTable(({ state, actions }) => ({
     searchValue: state.searchValue,
@@ -90,11 +90,11 @@ const TableTopBar = ({
 
       <div className="flex gap-3">
         {extraInterface}
-        {exportCookies && (
+        {exportTableData && (
           <ExportButton
-            title={'Export Cookies Table'}
+            title="Export Table Data"
             disabled={disableExport}
-            onClick={exportCookies}
+            onClick={exportTableData}
           />
         )}
       </div>
