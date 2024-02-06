@@ -110,6 +110,7 @@ interface useTableProps {
     rowIndex: number
   ) => string;
   exportTableData?: (rows: TableRow[]) => void;
+  hasVerticalBar?: (row: TableRow) => boolean;
 }
 
 export interface TableStoreContext {
@@ -145,6 +146,7 @@ export interface TableStoreContext {
     getRowObjectKey: useTableProps['getRowObjectKey'];
     conditionalTableRowClasses?: useTableProps['conditionalTableRowClasses'];
     exportTableData?: useTableProps['exportTableData'];
+    hasVerticalBar?: useTableProps['hasVerticalBar'];
   };
 }
 
@@ -195,6 +197,7 @@ export const TableProvider = ({
   getRowObjectKey,
   conditionalTableRowClasses,
   exportTableData,
+  hasVerticalBar,
   children,
 }: PropsWithChildren<useTableProps>) => {
   const commonKey = useMemo(() => {
@@ -310,6 +313,7 @@ export const TableProvider = ({
           getRowObjectKey,
           conditionalTableRowClasses,
           exportTableData,
+          hasVerticalBar,
         },
       }}
     >

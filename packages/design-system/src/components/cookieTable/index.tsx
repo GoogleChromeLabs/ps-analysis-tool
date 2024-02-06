@@ -199,6 +199,12 @@ const CookieTable = forwardRef<
     [getRowObjectKey, selectedKey]
   );
 
+  const hasVerticalBar = useCallback((row: TableRow) => {
+    const isDomainInAllowList = (row.originalData as CookieTableData)
+      ?.isDomainInAllowList;
+    return Boolean(isDomainInAllowList);
+  }, []);
+
   useEffect(() => {
     window.addEventListener('resize', () => forceUpdate());
     return () => {
@@ -219,6 +225,7 @@ const CookieTable = forwardRef<
         getRowObjectKey={getRowObjectKey}
         conditionalTableRowClasses={conditionalTableRowClasses}
         exportTableData={exportCookies}
+        hasVerticalBar={hasVerticalBar}
       >
         <Table
           selectedKey={selectedKey}

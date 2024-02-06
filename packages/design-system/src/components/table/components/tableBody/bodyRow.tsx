@@ -18,7 +18,6 @@
  * External dependencies.
  */
 import React from 'react';
-import { CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -32,6 +31,7 @@ interface BodyRowProps {
   index: number;
   selectedKey: string | undefined | null;
   extraClasses: string;
+  hasVerticalBar: boolean;
   getRowObjectKey: (row: TableRow) => string;
   onRowClick: (e: React.MouseEvent<HTMLDivElement>) => void;
   onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>, index: number) => void;
@@ -47,6 +47,7 @@ const BodyRow = ({
   index,
   selectedKey,
   extraClasses,
+  hasVerticalBar,
   getRowObjectKey,
   onRowClick,
   onKeyDown,
@@ -54,8 +55,6 @@ const BodyRow = ({
 }: BodyRowProps) => {
   const rowKey = getRowObjectKey(row);
   const isHighlighted = row.originalData?.highlighted;
-  const isDomainInAllowList = (row.originalData as CookieTableData)
-    ?.isDomainInAllowList;
 
   return (
     <div
@@ -66,8 +65,8 @@ const BodyRow = ({
       onContextMenu={(e) => onRowContextMenu(e, row)}
       data-testid="body-row"
     >
-      {/* Vertical bar for allow-listed domain row at the left side */}
-      {isDomainInAllowList && (
+      {/* Vertical bar for for some indication, styles can also be made dynamic.*/}
+      {hasVerticalBar && (
         <span className="absolute block top-0 bottom-0 left-0 border-l-2 border-emerald-600 dark:border-leaf-green-dark" />
       )}
       {columns.map(({ accessorKey, width }, idx) => (

@@ -44,6 +44,7 @@ const TableBody = ({
     onRowContextMenu,
     getRowObjectKey,
     conditionalTableRowClasses,
+    hasVerticalBar,
   } = useTable(({ state, actions }) => ({
     rows: state.rows,
     columns: state.columns,
@@ -51,6 +52,7 @@ const TableBody = ({
     onRowContextMenu: actions.onRowContextMenu,
     getRowObjectKey: actions.getRowObjectKey,
     conditionalTableRowClasses: actions.conditionalTableRowClasses,
+    hasVerticalBar: actions.hasVerticalBar,
   }));
 
   const tableBodyRef = useRef(null);
@@ -148,6 +150,7 @@ const TableBody = ({
           extraClasses={
             conditionalTableRowClasses?.(row, isRowFocused, index) ?? ''
           }
+          hasVerticalBar={hasVerticalBar?.(row) ?? false}
           getRowObjectKey={getRowObjectKey}
           onRowClick={() => {
             onRowClick(row?.originalData);
