@@ -42,7 +42,7 @@ const INFO_CARDS_DATA = [
   {
     heading: 'Reporting Breakages',
     content:
-      'If your site or a service you depend on is breaking with third-party cookies disabled, you should file an issue <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="https://b.corp.google.com/issues/new?component=1306484&template=1777152" target="_blank">here</a>. And if you have questions or feedback about Privacy Sandbox, you can raise a new issue <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="https://github.com/GoogleChromeLabs/privacy-sandbox-dev-support/issues/new/choose" target="_blank">here</a>  using the "third-party cookie deprecation.',
+      'If your site or a service you depend on is breaking with third-party cookies disabled, you should file an issue <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="https://b.corp.google.com/issues/new?component=1306484&template=1777152" target="_blank">here</a>. And if you have questions or feedback about Privacy Sandbox, you can raise a new issue <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="https://github.com/GoogleChromeLabs/privacy-sandbox-dev-support/issues/new/choose" target="_blank">here</a> using the third-party cookie deprecation.',
   },
 ];
 
