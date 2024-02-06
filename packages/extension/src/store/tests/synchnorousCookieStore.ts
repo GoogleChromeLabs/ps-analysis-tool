@@ -24,16 +24,15 @@ let synchnorousCookieStore: SynchnorousCookieStore;
 describe('SynchnorousCookieStore:', () => {
   beforeAll(() => {
     globalThis.chrome = SinonChrome as unknown as typeof chrome;
+    synchnorousCookieStore = new SynchnorousCookieStore();
   });
 
   beforeEach(() => {
-    synchnorousCookieStore = new SynchnorousCookieStore();
     synchnorousCookieStore.addTabData(123456);
     synchnorousCookieStore.updateUrl(123456, 'https://bbc.com');
   });
 
   afterEach(() => {
-    synchnorousCookieStore = new SynchnorousCookieStore();
     synchnorousCookieStore.clear();
   });
 
