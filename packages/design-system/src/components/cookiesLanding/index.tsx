@@ -47,6 +47,7 @@ interface CookiesLandingProps {
   };
   showFramesSection?: boolean;
   description?: React.ReactNode;
+  cookieClassificationTitle?: string;
 }
 
 const CookiesLanding = ({
@@ -62,6 +63,7 @@ const CookiesLanding = ({
   showHorizontalMatrix = false,
   description = '',
   additionalComponents = {},
+  cookieClassificationTitle,
 }: CookiesLandingProps) => {
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
@@ -112,6 +114,7 @@ const CookiesLanding = ({
               />
             ))}
         <CookiesMatrix
+          title={cookieClassificationTitle}
           tabCookies={tabCookies}
           componentData={cookiesStatsComponents.legend}
           tabFrames={tabFrames}
@@ -119,7 +122,6 @@ const CookiesLanding = ({
           showHorizontalMatrix={showHorizontalMatrix}
           associatedCookiesCount={associatedCookiesCount}
         />
-        {children && <div className="mt-8">{children}</div>}
       </CookiesLandingContainer>
       {showBlockedCookiesSection && (
         <CookiesLandingContainer
@@ -140,10 +142,11 @@ const CookiesLanding = ({
               />
             </>
           )}
+          {children && <div className="mt-8">{children}</div>}
         </CookiesLandingContainer>
       )}
       {/* TODO: This is not scalable. Refactor code so that components can be added from the the extension or dashboard package. */}
-      {Object.keys(additionalComponents).length &&
+      {Boolean(Object.keys(additionalComponents).length) &&
         Object.keys(additionalComponents).map((key: string) => {
           const Component = additionalComponents[key];
           return <Component key={key} />;
