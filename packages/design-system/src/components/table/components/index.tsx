@@ -100,9 +100,7 @@ const Table = ({
         cookiesCount={rows.length}
         disableExport={rows.length === 0}
         extraInterface={extraInterfaceToTopBar}
-        exportTableData={
-          exportTableData ? () => exportTableData(rows) : undefined
-        }
+        exportTableData={exportTableData?.(rows) ?? undefined}
       />
       <ChipsBar />
       <div className="w-full flex-1 overflow-hidden h-full flex divide-x divide-american-silver dark:divide-quartz">
