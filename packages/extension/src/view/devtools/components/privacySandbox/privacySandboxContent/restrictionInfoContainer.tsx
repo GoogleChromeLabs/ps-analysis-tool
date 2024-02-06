@@ -19,6 +19,7 @@
  */
 import { Cookie, VisibilityOff } from '@ps-analysis-tool/design-system';
 import React from 'react';
+import Link from './link';
 
 const RestrictionInfoContainer = () => (
   <div className="bg-[#D4E3FC] rounded-lg p-6 flex w-full text-raisin-black">
@@ -27,45 +28,26 @@ const RestrictionInfoContainer = () => (
         Prepare for third-party cookie restrictions
       </h2>
       <p className="text-base break-words mb-6">
-        <a
-          href="https://privacysandbox.com/"
-          className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Privacy Sandbox
-        </a>{' '}
-        is a multi-year{' '}
-        <a
+        <Link href="https://privacysandbox.com/" title="Privacy Sandbox" /> is a
+        multi-year{' '}
+        <Link
           href="https://developer.chrome.com/docs/privacy-sandbox/"
-          className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline"
-          target="_blank"
-          rel="noreferrer"
-        >
-          initiative
-        </a>{' '}
+          title="initiative"
+        />{' '}
         for building a more private web by defining a set of building blocks
         (i.e. proposed APIs) enabling{' '}
-        <a
+        <Link
           href="https://github.com/michaelkleber/privacy-model"
-          className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline"
-          target="_blank"
-          rel="noreferrer"
-        >
-          a new privacy model for the web
-        </a>
+          title="a new privacy model for the web"
+        />
         .
       </p>
       <p className="text-sm mb-7">
         To facilitate testing,{' '}
-        <a
+        <Link
           href="https://developers.google.com/privacy-sandbox/blog/cookie-countdown-2024jan"
-          className="text-bright-navy-blue hover:opacity-80 underline"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Chrome has restricted third-party cookies by default for 1% of users.
-        </a>
+          title="Chrome has restricted third-party cookies by default for 1% of users."
+        />
       </p>
     </div>
     <div className="w-[10rem] h-full relative">
