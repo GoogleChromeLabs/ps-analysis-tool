@@ -31,6 +31,11 @@ import {
  * @returns outbound blocking status
  */
 function deriveInboundBlocking(respEvents: responsEvent[]): boolean | null {
+  // if there are not response events the cookie must be stored in a previous visit
+  if (respEvents.length === 0) {
+    return false;
+  }
+
   // Only the event RESPONSE_EVENT.CDP_RESPONSE_RECEIVED_EXTRA_INFO has info about blocking.
   const CDPEvents = respEvents.filter(
     ({ type }) => type === RESPONSE_EVENT.CDP_RESPONSE_RECEIVED_EXTRA_INFO

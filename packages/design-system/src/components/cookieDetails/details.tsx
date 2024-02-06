@@ -112,7 +112,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         </>
       )}
 
-      {inboundBlock === null && isUsingCDP && (
+      {inboundBlock === null && hasValidBlockedReason && (
         <div className="flex gap-1 mb-3">
           <Warning className="h-4 text-warning-orange" />
           <p className="text-outer-space-crayola dark:text-bright-gray">

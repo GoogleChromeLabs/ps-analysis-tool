@@ -31,6 +31,7 @@ import {
  */
 import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import useHighlighting from './useHighlighting';
+import { useSettingsStore } from '../../../../stateProviders/syncSettingsStore';
 
 const useCookieListing = (domainsInAllowList: Set<string>) => {
   const { selectedFrame, cookies, getCookiesSetByJavascript } = useCookieStore(
@@ -40,6 +41,8 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
       getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
     })
   );
+
+  const isUsingCDP = useSettingsStore(({ state }) => state.isUsingCDP);
 
   const [tableData, setTableData] = useState<TabCookies>(cookies);
 
@@ -53,7 +56,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         cell: (info: InfoType) => info,
         enableHiding: false,
         widthWeightagePercentage: 13,
-        enablePrefixIcon: true,
+        enablePrefixIcon: isUsingCDP,
       },
       {
         header: 'Scope',
@@ -146,7 +149,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         widthWeightagePercentage: 3.4,
       },
     ],
-    []
+    [isUsingCDP]
   );
 
   const preCalculatedFilters = useMemo<{
