@@ -70,7 +70,7 @@ const BodyCell = ({
       } cursor-default flex-1`}
     >
       {hasIcon && (
-        <div className="w-3 min-w-[12px] h-3 mr-3 mt-[-2px]">
+        <div className="w-4 min-w-[1rem] h-3 mr-1 mt-[-2px]">
           {Boolean(showWarningIcon) && (
             <Warning className="text-warning-orange w-4" />
           )}
