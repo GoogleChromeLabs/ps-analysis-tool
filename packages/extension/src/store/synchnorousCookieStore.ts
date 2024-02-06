@@ -400,8 +400,7 @@ class SynchnorousCookieStore {
         this.tabs[tabId].newUpdates = 0;
       }
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.warn(error);
+      //Fail silently. Ignoring the catch here because the only error this will throw is of "Error: Could not establish connection".
     }
   }
 }
