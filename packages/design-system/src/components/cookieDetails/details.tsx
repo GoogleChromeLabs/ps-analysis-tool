@@ -26,10 +26,12 @@ import {
 import { Warning } from '../../icons';
 
 export interface DetailsProps {
+  isUsingCDP: boolean;
   selectedCookie: CookieTableData;
 }
 
-const Details = ({ selectedCookie }: DetailsProps) => {
+// eslint-disable-next-line complexity
+const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
   const [showUrlDecoded, setShowUrlDecoded] = useState(false);
 
   let blockedReasons = '';
@@ -99,7 +101,7 @@ const Details = ({ selectedCookie }: DetailsProps) => {
         </>
       )}
 
-      {inboundBlock === null && !hasValidBlockedReason && (
+      {inboundBlock === null && !hasValidBlockedReason && isUsingCDP && (
         <>
           <p className="font-bold text-raising-black dark:text-bright-gray">
             Blocked Reason
@@ -110,7 +112,7 @@ const Details = ({ selectedCookie }: DetailsProps) => {
         </>
       )}
 
-      {inboundBlock === null && (
+      {inboundBlock === null && isUsingCDP && (
         <div className="flex gap-1 mb-3">
           <Warning className="h-4 text-warning-orange" />
           <p className="text-outer-space-crayola dark:text-bright-gray">
