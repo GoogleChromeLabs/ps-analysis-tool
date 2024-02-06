@@ -13,20 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * External dependencies.
  */
 import React from 'react';
-import { LandingPage } from '@ps-analysis-tool/design-system';
-import PrivacySandboxContent from './privacySandboxContent';
 
-const PrivacySandbox = () => (
-  <div data-testid="privacy-sandbox-content" className="h-full w-full">
-    <LandingPage
-      title="Privacy Sandbox"
-      contentPanel={<PrivacySandboxContent />}
-    />
-  </div>
+interface LinkProps {
+  href: string;
+  title: string;
+}
+
+const Link = ({ href, title }: LinkProps) => (
+  <a
+    href={href}
+    className="text-bright-navy-blue hover:opacity-80 underline"
+    target="_blank"
+    rel="noreferrer"
+  >
+    {title}
+  </a>
 );
 
-export default PrivacySandbox;
+export default Link;
