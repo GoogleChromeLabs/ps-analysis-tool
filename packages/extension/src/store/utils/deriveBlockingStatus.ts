@@ -35,6 +35,7 @@ function deriveInboundBlocking(respEvents: responsEvent[]): boolean | null {
   const CDPEvents = respEvents.filter(
     ({ type }) => type === RESPONSE_EVENT.CDP_RESPONSE_RECEIVED_EXTRA_INFO
   );
+
   const numBlocked: number = CDPEvents.reduce((acc, event) => {
     if (event.blocked === null) {
       return acc;
@@ -50,7 +51,7 @@ function deriveInboundBlocking(respEvents: responsEvent[]): boolean | null {
   } else if (0 < numBlocked && numBlocked < CDPEvents.length) {
     return null; // cookie may be blocked.
   } else {
-    return true; // cookie is not be blocked.
+    return true; // cookie is blocked.
   }
 }
 
@@ -65,6 +66,11 @@ function deriveOutboundBlocking(reqEvents: requestEvent[]): boolean | null {
   const CDPEvents = reqEvents.filter(
     ({ type }) => type === REQUEST_EVENT.CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO
   );
+
+  if (CDPEvents.length === 0) {
+    return false;
+  }
+
   const numBlocked: number = CDPEvents.reduce((acc, event) => {
     if (event.blocked === null) {
       return acc;
@@ -78,7 +84,7 @@ function deriveOutboundBlocking(reqEvents: requestEvent[]): boolean | null {
   if (numBlocked === 0) {
     return false; // cookie is not blocked.
   } else {
-    return true; // cookie is not be blocked.
+    return true; // cookie is blocked.
   }
 }
 

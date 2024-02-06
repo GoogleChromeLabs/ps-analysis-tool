@@ -93,7 +93,7 @@ const Details = ({ selectedCookie }: DetailsProps) => {
             Blocked Reason
           </p>
           <p
-            className="text-outer-space-crayola dark:text-bright-gray"
+            className="text-outer-space-crayola dark:text-bright-gray mb-3"
             dangerouslySetInnerHTML={{ __html: blockedReasons ?? '' }}
           />
         </>
@@ -104,7 +104,7 @@ const Details = ({ selectedCookie }: DetailsProps) => {
           <p className="font-bold text-raising-black dark:text-bright-gray">
             Blocked Reason
           </p>
-          <p className="text-outer-space-crayola dark:text-bright-gray">
+          <p className="text-outer-space-crayola dark:text-bright-gray mb-3">
             This cookie was blocked due to unknown reasons
           </p>
         </>
