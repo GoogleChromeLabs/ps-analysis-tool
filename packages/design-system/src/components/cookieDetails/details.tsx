@@ -110,7 +110,7 @@ const Details = ({ selectedCookie }: DetailsProps) => {
         </>
       )}
 
-      {selectedCookie?.blockingStatus?.inboundBlock === null && (
+      {inboundBlock === null && (
         <div className="flex gap-1 mb-3">
           <Warning className="h-4 text-warning-orange" />
           <p className="text-outer-space-crayola dark:text-bright-gray">
@@ -120,27 +120,25 @@ const Details = ({ selectedCookie }: DetailsProps) => {
         </div>
       )}
 
-      {selectedCookie?.blockingStatus?.inboundBlock !== null &&
-        selectedCookie?.blockingStatus?.inboundBlock && (
-          <div className="flex gap-1 mb-3">
-            <Warning className="h-4 text-warning-orange" />
-            <p className="text-outer-space-crayola dark:text-bright-gray">
-              This cookie was rejected by the browser in all of the response
-              headers.
-            </p>
-          </div>
-        )}
+      {inboundBlock !== null && inboundBlock && (
+        <div className="flex gap-1 mb-3">
+          <Warning className="h-4 text-warning-orange" />
+          <p className="text-outer-space-crayola dark:text-bright-gray">
+            This cookie was rejected by the browser in all of the response
+            headers.
+          </p>
+        </div>
+      )}
 
-      {selectedCookie?.blockingStatus?.outboundBlock !== null &&
-        selectedCookie?.blockingStatus?.outboundBlock && (
-          <div className="flex gap-1 mb-3">
-            <Warning className="h-4 text-warning-orange" />
-            <p className="text-outer-space-crayola dark:text-bright-gray">
-              This cookie was rejected by the browser in one of the request
-              headers.
-            </p>
-          </div>
-        )}
+      {outboundBlock !== null && outboundBlock && (
+        <div className="flex gap-1 mb-3">
+          <Warning className="h-4 text-warning-orange" />
+          <p className="text-outer-space-crayola dark:text-bright-gray">
+            This cookie was rejected by the browser in one of the request
+            headers.
+          </p>
+        </div>
+      )}
 
       {selectedCookie?.warningReasons &&
         selectedCookie?.warningReasons?.length > 0 && (
