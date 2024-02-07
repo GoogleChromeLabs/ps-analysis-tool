@@ -202,6 +202,7 @@ module.exports = {
       'charleston-green': '#292A2D',
       'outer-space': '#303942',
       'granite-gray': '#5F6369',
+      gray: '#6E6E6E',
     },
     stroke: {
       'bright-gray': '#E8EAED',

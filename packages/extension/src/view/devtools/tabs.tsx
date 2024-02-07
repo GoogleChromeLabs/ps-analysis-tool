@@ -41,6 +41,7 @@ import {
   PrivacySandboxIcon,
   PrivacySandboxIconWhite,
   type SidebarItems,
+  InfoIcon,
 } from '@ps-analysis-tool/design-system';
 
 /**
@@ -65,6 +66,7 @@ import {
   PrivacySandbox,
   Settings,
 } from './components';
+import FacilitatedTesting from './components/facilitatedTesting';
 
 const TABS: SidebarItems = {
   privacySandbox: {
@@ -148,6 +150,14 @@ const TABS: SidebarItems = {
         },
       },
     },
+  },
+  facilitatedTesting: {
+    title: 'Facilitated Testing',
+    panel: <FacilitatedTesting />,
+    icon: <InfoIcon className="fill-gray" />,
+    selectedIcon: <InfoIcon className="fill-white" />,
+    dropdownOpen: false,
+    children: {},
   },
   settings: {
     title: 'Settings',
