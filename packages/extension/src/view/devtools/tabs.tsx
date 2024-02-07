@@ -65,8 +65,8 @@ import {
   Fingerprinting,
   PrivacySandbox,
   Settings,
+  FacilitatedTesting,
 } from './components';
-import FacilitatedTesting from './components/facilitatedTesting';
 
 const TABS: SidebarItems = {
   privacySandbox: {
