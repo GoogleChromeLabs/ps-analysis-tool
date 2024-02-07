@@ -27,6 +27,7 @@ import type { Protocol } from 'devtools-protocol';
  * Internal dependencies.
  */
 import updateCookieBadgeText from './utils/updateCookieBadgeText';
+import { deriveBlockingStatus } from './utils/deriveBlockingStatus';
 
 class SynchnorousCookieStore {
   /**
@@ -107,6 +108,19 @@ class SynchnorousCookieStore {
               this.tabsData[tabId][cookieKey].parsedCookie?.partitionKey,
           };
 
+          const networkEvents: CookieData['networkEvents'] = {
+            requestEvents: [
+              ...(this.tabsData[tabId][cookieKey]?.networkEvents
+                ?.requestEvents || []),
+              ...(cookie.networkEvents?.requestEvents || []),
+            ],
+            responseEvents: [
+              ...(this.tabsData[tabId][cookieKey]?.networkEvents
+                ?.responseEvents || []),
+              ...(cookie.networkEvents?.responseEvents || []),
+            ],
+          };
+
           this.tabsData[tabId][cookieKey] = {
             ...this.tabsData[tabId][cookieKey],
             ...cookie,
@@ -114,6 +128,8 @@ class SynchnorousCookieStore {
             parsedCookie,
             isBlocked: blockedReasons.length > 0,
             blockedReasons,
+            networkEvents,
+            blockingStatus: deriveBlockingStatus(networkEvents),
             warningReasons,
             url: this.tabsData[tabId][cookieKey].url ?? cookie.url,
             headerType:
@@ -170,12 +186,7 @@ class SynchnorousCookieStore {
    */
   updateUrl(tabId: number, url: string) {
     if (!this.tabs[tabId]) {
-      this.tabs[tabId] = {
-        url,
-        devToolsOpenState: false,
-        popupOpenState: false,
-        newUpdates: 0,
-      };
+      return;
     } else {
       this.tabs[tabId].url = url;
     }

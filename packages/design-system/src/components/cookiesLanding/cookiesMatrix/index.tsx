@@ -120,7 +120,7 @@ const CookiesMatrix = ({
               <span>{title}</span>
               {showInfoIcon && (
                 <span title={infoIconTitle}>
-                  <InfoIcon />
+                  <InfoIcon className="fill-granite-gray" />
                 </span>
               )}
               {count !== null && <span>: {Number(count) || 0}</span>}

@@ -13,10 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './antiCovertTracking';
-export * from './privateAdvertising';
-export * from './siteBoundaries';
-export { default as Cookies } from './cookies';
-export { default as PrivacySandbox } from './privacySandbox';
-export { default as Settings } from './settings';
-export { default as FacilitatedTesting } from './facilitatedTesting';
+
+/**
+ * External dependencies.
+ */
+import React from 'react';
+
+interface LinkProps {
+  href: string;
+  title: string;
+}
+
+const Link = ({ href, title }: LinkProps) => (
+  <a
+    href={href}
+    className="text-bright-navy-blue hover:opacity-80 underline"
+    target="_blank"
+    rel="noreferrer"
+  >
+    {title}
+  </a>
+);
+
+export default Link;

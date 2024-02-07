@@ -29,11 +29,8 @@ const conditionalTableRowClassesHandler = (
   const rowKey = getCookieKey(
     (row?.originalData as CookieTableData).parsedCookie
   ) as string;
-  const isBlocked =
-    (row.originalData as CookieTableData)?.isBlocked ||
-    (((row.originalData as CookieTableData)?.isBlocked ?? false) &&
-      (row.originalData as CookieTableData)?.blockedReasons &&
-      (row.originalData as CookieTableData)?.blockedReasons?.length);
+  const isBlocked = (row.originalData as CookieTableData)?.blockingStatus
+    ?.inboundBlock;
   const isHighlighted = row.originalData?.highlighted;
   const isDomainInAllowList = (row.originalData as CookieTableData)
     ?.isDomainInAllowList;

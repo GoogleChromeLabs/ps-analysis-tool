@@ -127,6 +127,7 @@ module.exports = {
       'comet-grey': '#474747',
       'jet-black': '#202142',
       'warning-red': '#C33300',
+      'warning-orange': '#FE8d59',
     },
     backgroundColor: {
       ...colors,
@@ -172,6 +173,7 @@ module.exports = {
       'leaf-green-light': '#99EDC3',
       'leaf-green-dark': '#87DFB2',
       'eerie-black': '#1F1F1F0F',
+      'light-yellow': '#FEFCE0',
     },
     borderColor: {
       ...colors,
@@ -200,6 +202,8 @@ module.exports = {
       'chinese-silver': '#CDCDCD',
       'charleston-green': '#292A2D',
       'outer-space': '#303942',
+      'granite-gray': '#5F6369',
+      gray: '#6E6E6E',
     },
     stroke: {
       'bright-gray': '#E8EAED',

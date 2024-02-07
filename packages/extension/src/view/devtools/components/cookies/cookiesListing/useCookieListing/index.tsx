@@ -18,12 +18,18 @@
  * External dependencies
  */
 import React, { useMemo, useState } from 'react';
-import { getValueByKey, type TabCookies } from '@ps-analysis-tool/common';
+import {
+  getValueByKey,
+  type CookieTableData,
+  type TabCookies,
+} from '@ps-analysis-tool/common';
 import {
   RefreshButton,
   type InfoType,
   type TableColumn,
   type TableFilter,
+  Warning,
+  type TableRow,
 } from '@ps-analysis-tool/design-system';
 
 /**
@@ -31,6 +37,7 @@ import {
  */
 import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import useHighlighting from './useHighlighting';
+import { useSettingsStore } from '../../../../stateProviders/syncSettingsStore';
 
 const useCookieListing = (domainsInAllowList: Set<string>) => {
   const { selectedFrame, cookies, getCookiesSetByJavascript } = useCookieStore(
@@ -40,6 +47,8 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
       getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
     })
   );
+
+  const isUsingCDP = useSettingsStore(({ state }) => state.isUsingCDP);
 
   const [tableData, setTableData] = useState<TabCookies>(cookies);
 
@@ -53,6 +62,17 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         cell: (info: InfoType) => info,
         enableHiding: false,
         widthWeightagePercentage: 13,
+        enableBodyCellPrefixIcon: isUsingCDP,
+        bodyCellPrefixIcon: <Warning className="text-warning-orange w-4" />,
+        showBodyCellPrefixIcon: (row: TableRow) => {
+          const shouldShowWarningIcon =
+            (row.originalData as CookieTableData)?.blockingStatus
+              ?.outboundBlock ||
+            (row.originalData as CookieTableData)?.blockingStatus
+              ?.inboundBlock === null;
+
+          return shouldShowWarningIcon;
+        },
       },
       {
         header: 'Scope',
@@ -145,7 +165,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         widthWeightagePercentage: 3.4,
       },
     ],
-    []
+    [isUsingCDP]
   );
 
   const preCalculatedFilters = useMemo<{

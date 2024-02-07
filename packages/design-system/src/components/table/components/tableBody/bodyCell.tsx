@@ -30,6 +30,9 @@ interface BodyCellProps {
   isHighlighted?: boolean;
   isRowFocused: boolean;
   row: TableRow;
+  hasIcon?: boolean;
+  showIcon?: boolean | null;
+  icon?: React.ReactNode;
   onRowClick: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
@@ -37,6 +40,9 @@ const BodyCell = ({
   cell,
   width,
   isRowFocused,
+  hasIcon = false,
+  showIcon = false,
+  icon,
   isHighlighted = false,
 }: BodyCellProps) => {
   return (
@@ -56,7 +62,7 @@ const BodyCell = ({
           e.stopPropagation();
         }
       }}
-      className={`box-border outline-0 px-1 py-px truncate h-5 text-xs ${
+      className={`flex box-border outline-0 px-1 py-px truncate h-5 text-xs ${
         isHighlighted
           ? `${
               isRowFocused ? 'text-white' : 'dark:text-dirty-red text-dirty-red'
@@ -64,6 +70,11 @@ const BodyCell = ({
           : 'dark:text-bright-gray'
       } cursor-default flex-1`}
     >
+      {hasIcon && (
+        <div className="w-4 min-w-[1rem] h-3 mr-1 mt-[-2px]">
+          {Boolean(showIcon) && <div>{icon}</div>}
+        </div>
+      )}
       {cell}
     </div>
   );

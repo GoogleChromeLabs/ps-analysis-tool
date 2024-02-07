@@ -69,17 +69,31 @@ const BodyRow = ({
       {hasVerticalBar && (
         <span className="absolute block top-0 bottom-0 left-0 border-l-2 border-emerald-600 dark:border-leaf-green-dark" />
       )}
-      {columns.map(({ accessorKey, width }, idx) => (
-        <BodyCell
-          key={idx}
-          onRowClick={onRowClick}
-          cell={row[accessorKey]?.value || ''}
-          width={width || 0}
-          isHighlighted={isHighlighted}
-          isRowFocused={rowKey === selectedKey}
-          row={row}
-        />
-      ))}
+      {columns.map(
+        (
+          {
+            accessorKey,
+            width,
+            enableBodyCellPrefixIcon,
+            bodyCellPrefixIcon,
+            showBodyCellPrefixIcon,
+          },
+          idx
+        ) => (
+          <BodyCell
+            key={idx}
+            onRowClick={onRowClick}
+            cell={row[accessorKey]?.value || ''}
+            width={width || 0}
+            isHighlighted={isHighlighted}
+            isRowFocused={rowKey === selectedKey}
+            row={row}
+            hasIcon={enableBodyCellPrefixIcon}
+            showIcon={showBodyCellPrefixIcon?.(row)}
+            icon={bodyCellPrefixIcon}
+          />
+        )
+      )}
     </div>
   );
 };

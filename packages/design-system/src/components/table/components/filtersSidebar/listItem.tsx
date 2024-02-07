@@ -94,7 +94,7 @@ const ListItem = ({
         </button>
         {filter.description && (
           <p title={filter.description}>
-            <InfoIcon />
+            <InfoIcon className="fill-granite-gray" />
           </p>
         )}
       </div>
