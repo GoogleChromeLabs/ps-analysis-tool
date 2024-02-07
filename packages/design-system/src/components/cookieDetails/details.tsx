@@ -103,18 +103,21 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           </>
         )}
 
-      {inboundBlock === null && hasValidBlockedReason && (
-        <div className="flex gap-1 my-4">
-          <Warning className="h-4 text-warning-orange" />
-          <p className="text-outer-space-crayola dark:text-bright-gray">
-            This cookie was rejected by the browser in atleast one of the
-            response headers.
-          </p>
-          <br />
-        </div>
-      )}
+      {inboundBlock === null &&
+        !outboundBlock &&
+        hasValidBlockedReason &&
+        isUsingCDP && (
+          <div className="flex gap-1 my-4">
+            <Warning className="h-4 text-warning-orange" />
+            <p className="text-outer-space-crayola dark:text-bright-gray">
+              This cookie was rejected by the browser in atleast one of the
+              response headers.
+            </p>
+            <br />
+          </div>
+        )}
 
-      {inboundBlock === null && !hasValidBlockedReason && (
+      {inboundBlock === null && !hasValidBlockedReason && isUsingCDP && (
         <div className="flex gap-1 my-4">
           <Warning className="h-4 text-warning-orange" />
           <p className="text-outer-space-crayola dark:text-bright-gray">
@@ -126,7 +129,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         </div>
       )}
 
-      {inboundBlock !== null && inboundBlock && (
+      {inboundBlock !== null && inboundBlock && isUsingCDP && (
         <div className="flex gap-1 my-4">
           <Warning className="h-4 text-warning-orange" />
           <p className="text-outer-space-crayola dark:text-bright-gray">
@@ -137,7 +140,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         </div>
       )}
 
-      {outboundBlock !== null && outboundBlock && (
+      {outboundBlock !== null && outboundBlock && isUsingCDP && (
         <div className="flex gap-1 my-4">
           <Warning className="h-4 text-warning-orange" />
           <p className="text-outer-space-crayola dark:text-bright-gray">
