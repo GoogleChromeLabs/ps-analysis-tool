@@ -23,7 +23,10 @@ import type {
   TableColumn,
   TableFilter,
 } from '@ps-analysis-tool/design-system';
-import { type CookieTableData } from '@ps-analysis-tool/common';
+import {
+  calculateEffectiveExpiryDate,
+  type CookieTableData,
+} from '@ps-analysis-tool/common';
 import calculateDynamicFilterValues from './utils/calculateDynamicFilterValues';
 import calculateBlockedReasonsFilterValues from './utils/calculateBlockedReasonsFilterValues';
 
@@ -117,7 +120,8 @@ const useCookieListing = (
       {
         header: 'Expires / Max-Age',
         accessorKey: 'parsedCookie.expires',
-        cell: (info: InfoType) => (info ? info : 'Session'),
+        cell: (info: InfoType) =>
+          info ? calculateEffectiveExpiryDate(info as string) : 'Session',
         widthWeightagePercentage: 7,
       },
     ],

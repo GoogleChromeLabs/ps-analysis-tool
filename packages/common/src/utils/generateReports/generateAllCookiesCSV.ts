@@ -22,6 +22,7 @@ import sanitizeCsvRecord from '../sanitizeCsvRecord';
  * Internal dependencies
  */
 import type { CompleteJson, CookieJsonDataType } from '../../cookies.types';
+import calculateEffectiveExpiryDate from '../calculateEffectiveExpiryDate';
 
 export const COOKIES_DATA_HEADER = [
   'Name',
@@ -68,7 +69,7 @@ const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
       cookie.parsedCookie.secure ? 'Yes' : 'No',
       cookie.parsedCookie.value,
       cookie.parsedCookie.path,
-      cookie.parsedCookie.expires,
+      calculateEffectiveExpiryDate(cookie.parsedCookie.expires),
       cookie.isBlocked ? 'Yes' : 'No',
       cookie.analytics.GDPR || 'NA',
     ].map(sanitizeCsvRecord);
