@@ -296,7 +296,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   syncCookieStore?.clear();
 
   // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
-  // Doing this to keep the service worker alive so that we dont loose unnecessary data and introduce any unnecessary bug.
+  // Doing this to keep the service worker alive so that we dont loose any data and introduce any bug.
   setInterval(() => {
     chrome.storage.local.get();
   }, 28000);
@@ -635,7 +635,7 @@ chrome.windows.onCreated.addListener(async () => {
   const totalWindows = await chrome.windows.getAll();
 
   // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
-  // Doing this to keep the service worker alive so that we dont loose unnecessary data and introduce any unnecessary bug.
+  // Doing this to keep the service worker alive so that we dont loose any data and introduce any bug.
   setInterval(() => {
     chrome.storage.local.get();
   }, 28000);
