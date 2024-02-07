@@ -31,6 +31,7 @@ import { useCookieStore } from '../../../stateProviders/syncCookieStore';
 import useCookieListing from './useCookieListing';
 import RowContextMenu from './rowContextMenu';
 import useAllowedList from './useAllowedList';
+import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
 
 interface CookiesListingProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;
@@ -42,6 +43,8 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
     tabFrames: state.tabFrames,
     tabUrl: state.tabUrl,
   }));
+
+  const isUsingCDP = useSettingsStore(({ state }) => state.isUsingCDP);
 
   const { domainsInAllowList, setDomainsInAllowListCallback, isIncognito } =
     useAllowedList();
@@ -107,7 +110,10 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
           ref={cookieTableRef}
         />
       </Resizable>
-      <CookieDetails selectedFrameCookie={selectedFrameCookie} />
+      <CookieDetails
+        isUsingCDP={isUsingCDP}
+        selectedFrameCookie={selectedFrameCookie}
+      />
       <RowContextMenu
         domainsInAllowList={domainsInAllowList}
         isIncognito={isIncognito}

@@ -103,7 +103,8 @@ chrome.webRequest.onResponseStarted.addListener(
               cookieDB,
               tabUrl,
               frameId,
-              cdpCookies?.cookies ?? []
+              cdpCookies?.cookies ?? [],
+              details.requestId
             );
 
             return [...accumulator, cookie];
@@ -131,7 +132,7 @@ chrome.webRequest.onResponseStarted.addListener(
  * @see https://developer.chrome.com/docs/extensions/reference/api/webRequest#event-onBeforeSendHeaders
  */
 chrome.webRequest.onBeforeSendHeaders.addListener(
-  ({ url, requestHeaders, tabId, frameId }) => {
+  ({ url, requestHeaders, tabId, frameId, requestId }) => {
     (async () => {
       const tabUrl = syncCookieStore?.getTabUrl(tabId) ?? '';
 
@@ -172,7 +173,8 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
               cookieDB,
               tabUrl,
               frameId,
-              cdpCookies?.cookies ?? []
+              cdpCookies?.cookies ?? [],
+              requestId
             );
 
             return [...accumulator, ...cookieList];
