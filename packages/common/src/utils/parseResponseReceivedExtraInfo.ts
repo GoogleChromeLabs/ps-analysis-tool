@@ -23,7 +23,11 @@ import type { Protocol } from 'devtools-protocol';
  * Internal dependencies
  */
 import findAnalyticsMatch from './findAnalyticsMatch';
-import type { CookieData, CookieDatabase } from '../cookies.types';
+import {
+  RESPONSE_EVENT,
+  type CookieData,
+  type CookieDatabase,
+} from '../cookies.types';
 import calculateEffectiveExpiryDate from './calculateEffectiveExpiryDate';
 import isFirstParty from './isFirstParty';
 
@@ -81,7 +85,7 @@ export default function parseResponseReceivedExtraInfo(
       domain = new URL(url).hostname;
     }
 
-    const singleCookie = {
+    const singleCookie: CookieData = {
       isBlocked: blockedCookie ? true : false,
       blockedReasons: blockedCookie ? blockedCookie?.blockedReasons : [],
       parsedCookie: {
@@ -89,6 +93,22 @@ export default function parseResponseReceivedExtraInfo(
         expires: effectiveExpirationDate,
         samesite: parsedCookie.samesite ?? '',
         domain,
+      },
+      networkEvents: {
+        requestEvents: [],
+        responseEvents: [
+          {
+            type: RESPONSE_EVENT.CDP_RESPONSE_RECEIVED_EXTRA_INFO,
+            requestId: response.requestId,
+            url: url,
+            blocked: blockedCookie ? true : false,
+            timeStamp: Date.now(),
+          },
+        ],
+      },
+      blockingStatus: {
+        inboundBlock: blockedCookie ? true : false,
+        outboundBlock: null,
       },
       analytics: cookieDB
         ? findAnalyticsMatch(parsedCookie.name, cookieDB)

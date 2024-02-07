@@ -103,7 +103,8 @@ chrome.webRequest.onResponseStarted.addListener(
               cookieDB,
               tabUrl,
               frameId,
-              cdpCookies?.cookies ?? []
+              cdpCookies?.cookies ?? [],
+              details.requestId
             );
 
             return [...accumulator, cookie];
@@ -131,7 +132,7 @@ chrome.webRequest.onResponseStarted.addListener(
  * @see https://developer.chrome.com/docs/extensions/reference/api/webRequest#event-onBeforeSendHeaders
  */
 chrome.webRequest.onBeforeSendHeaders.addListener(
-  ({ url, requestHeaders, tabId, frameId }) => {
+  ({ url, requestHeaders, tabId, frameId, requestId }) => {
     (async () => {
       const tabUrl = syncCookieStore?.getTabUrl(tabId) ?? '';
 
@@ -172,7 +173,8 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
               cookieDB,
               tabUrl,
               frameId,
-              cdpCookies?.cookies ?? []
+              cdpCookies?.cookies ?? [],
+              requestId
             );
 
             return [...accumulator, ...cookieList];
@@ -201,6 +203,10 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 chrome.tabs.onCreated.addListener((tab) => {
   if (!tab.id) {
     return;
+  }
+
+  if (!syncCookieStore) {
+    syncCookieStore = new SynchnorousCookieStore();
   }
 
   if (tabMode && tabMode !== 'unlimited') {
@@ -292,7 +298,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   syncCookieStore?.clear();
 
   // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
-  // Doing this to keep the service worker alive so that we dont loose unnecessary data and introduce any unnecessary bug.
+  // Doing this to keep the service worker alive so that we dont loose any data and introduce any bug.
   setInterval(() => {
     chrome.storage.local.get();
   }, 28000);
@@ -629,6 +635,12 @@ chrome.runtime.onMessage.addListener(async (request) => {
  */
 chrome.windows.onCreated.addListener(async () => {
   const totalWindows = await chrome.windows.getAll();
+
+  // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
+  // Doing this to keep the service worker alive so that we dont loose any data and introduce any bug.
+  setInterval(() => {
+    chrome.storage.local.get();
+  }, 28000);
 
   // We do not want to clear content settings if a user has create one more window.
   if (totalWindows.length < 2) {

@@ -93,12 +93,8 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
 
   // It is attached, next time the tab is updated or reloaded.
   const onTabUpdate = useCallback(
-    (
-      changingTabId: number,
-      changeInfo: chrome.tabs.TabChangeInfo,
-      tab: chrome.tabs.Tab
-    ) => {
-      if (tab.active && Number(changingTabId) === Number(tabId.current)) {
+    (changingTabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
+      if (Number(changingTabId) === Number(tabId.current)) {
         if (changeInfo.status === 'complete') {
           setIsCurrentTabLoading(false);
         } else if (changeInfo.status === 'loading') {

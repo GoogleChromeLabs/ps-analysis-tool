@@ -80,7 +80,7 @@ const CirclePieChart = ({
               className={infoIconClassName}
               title="Cookies must be analyzed on a new, clean Chrome profile for an accurate report"
             >
-              <InfoIcon />
+              <InfoIcon className="fill-granite-gray" />
             </p>
           )}
         </div>
