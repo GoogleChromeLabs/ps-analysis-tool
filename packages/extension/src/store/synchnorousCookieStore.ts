@@ -169,12 +169,7 @@ class SynchnorousCookieStore {
    */
   updateUrl(tabId: number, url: string) {
     if (!this.tabs[tabId]) {
-      this.tabs[tabId] = {
-        url,
-        devToolsOpenState: false,
-        popupOpenState: false,
-        newUpdates: 0,
-      };
+      return;
     } else {
       this.tabs[tabId].url = url;
     }
