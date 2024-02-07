@@ -27,7 +27,7 @@ const INFO_CARDS_DATA = [
   {
     heading: 'Membership in Experiment Group',
     content:
-      '<p>To prepare for third-party cookie deprecation, we will be providing Chrome-facilitated testing modes that allow sites to preview how site behavior and functionality work without third-party cookies.</p> <p>Check <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="https://developers.google.com/privacy-sandbox/setup/web/chrome-facilitated-testing" target="_blank">this guide</a> to learn more.</p>',
+      'To prepare for third-party cookie deprecation, we will be providing Chrome-facilitated testing modes that allow sites to preview how site behavior and functionality work without third-party cookies. Check <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="https://developers.google.com/privacy-sandbox/setup/web/chrome-facilitated-testing" target="_blank">this guide</a> to learn more.',
   },
   {
     heading: 'Reporting Breakages',
