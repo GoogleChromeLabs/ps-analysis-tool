@@ -17,13 +17,14 @@
  * External dependencies
  */
 import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
+
 /**
  * Internal dependencies
  */
 import { EMPTY_FRAME_COUNT, EMPTY_FRAME_LEGEND } from '../constants';
 
 /**
- *
+ * Calcualte insights about frames to be shown on cookies landing page.
  * @param tabFrames frames in current tab.
  * @param tabCookies cookies of curent tab.
  * @returns object
@@ -38,6 +39,7 @@ export default function prepareFrameStatsComponent(
       legend: EMPTY_FRAME_LEGEND,
     };
   }
+
   const blockedCookieFrame = new Set();
   const unBlockedCookieFrame = new Set();
   const cookieFrame = new Set();
@@ -46,6 +48,7 @@ export default function prepareFrameStatsComponent(
     let hasBlockedCookie = false;
     let hasUnblockedCookie = false;
     let hasCookie = false;
+
     tabFrames[frame]?.frameIds?.forEach((frameId: number) => {
       Object.values(tabCookies || {}).forEach((cookie) => {
         if (
@@ -63,21 +66,25 @@ export default function prepareFrameStatsComponent(
           hasCookie = true;
         }
       });
+
       if (hasBlockedCookie) {
         blockedCookieFrame.add(frame);
       }
+
       if (hasUnblockedCookie) {
         unBlockedCookieFrame.add(frame);
       }
+
       if (hasCookie) {
         cookieFrame.add(frame);
       }
     });
   });
+
   return {
     dataMapping: [
       {
-        title: 'Frame details',
+        title: 'Frames',
         count: Object.keys(tabFrames || {}).length,
         data: [
           {
@@ -108,8 +115,7 @@ export default function prepareFrameStatsComponent(
     legend: [
       {
         label: 'Total frames',
-        // Reducing count by one for "Unknown Frames(s) key."
-        count: Object.keys(tabFrames || {}).length - 1,
+        count: Object.keys(tabFrames || {}).length,
         color: '#25ACAD',
         countClassName: 'text-greenland-green',
       },

@@ -41,7 +41,7 @@ const ChipList = ({
           filterTitle={filter.title}
           value={filterValue}
           toggleFilterSelection={() => {
-            toggleFilterSelection(filterKey, filterValue);
+            toggleFilterSelection(filterKey, filterValue, true);
           }}
         />
       ));

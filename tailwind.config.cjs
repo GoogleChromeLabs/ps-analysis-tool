@@ -31,6 +31,7 @@ module.exports = {
     path.resolve(__dirname, './packages/extension/src/**/*.{tsx,js}'),
     path.resolve(__dirname, './packages/design-system/src/**/*.{tsx,js}'),
     path.resolve(__dirname, './packages/cli-dashboard/src/**/*.{tsx,js}'),
+    path.resolve(__dirname, './packages/library-detection/src/**/*.{tsx,js}'),
   ],
   theme: {
     extend: {
@@ -126,6 +127,7 @@ module.exports = {
       'comet-grey': '#474747',
       'jet-black': '#202142',
       'warning-red': '#C33300',
+      'warning-orange': '#FE8d59',
     },
     backgroundColor: {
       ...colors,
@@ -152,7 +154,7 @@ module.exports = {
       cultured: '#F6F6F699',
       'burnt-sienna-30': '#EC71594D',
       'light-gray': '#F1F1F1',
-      'charleston-green': '#292A2D',
+      'charleston-green': '#282828',
       quartz: '#494C50',
       'davys-grey': '#5D5D5D99',
       'outer-space-crayola': '#303942',
@@ -166,6 +168,12 @@ module.exports = {
       'dynamic-grey': '#fbfbfb',
       'dirty-red': '#990000',
       'dirty-pink': '#FFD6D6',
+      'jungle-green-light': '#234F1E',
+      'jungle-green-dark': '#1C4218',
+      'leaf-green-light': '#99EDC3',
+      'leaf-green-dark': '#87DFB2',
+      'eerie-black': '#1F1F1F0F',
+      'light-yellow': '#FEFCE0',
     },
     borderColor: {
       ...colors,
@@ -180,6 +188,7 @@ module.exports = {
       gainsboro: '#DADCE0',
       'chinese-silver': '#CDCDCD',
       'baby-blue-eyes': '#A8C7FA',
+      'leaf-green-dark': '#87DFB2',
       sapphire: '#0B57D0',
     },
     colors: {
@@ -193,6 +202,8 @@ module.exports = {
       'chinese-silver': '#CDCDCD',
       'charleston-green': '#292A2D',
       'outer-space': '#303942',
+      'granite-gray': '#5F6369',
+      gray: '#6E6E6E',
     },
     stroke: {
       'bright-gray': '#E8EAED',

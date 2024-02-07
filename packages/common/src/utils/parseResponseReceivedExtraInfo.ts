@@ -18,16 +18,21 @@
  */
 import { parse } from 'simple-cookie';
 import type { Protocol } from 'devtools-protocol';
+
 /**
  * Internal dependencies
  */
 import findAnalyticsMatch from './findAnalyticsMatch';
-import type { CookieData, CookieDatabase } from '../cookies.types';
+import {
+  RESPONSE_EVENT,
+  type CookieData,
+  type CookieDatabase,
+} from '../cookies.types';
 import calculateEffectiveExpiryDate from './calculateEffectiveExpiryDate';
 import isFirstParty from './isFirstParty';
 
 /**
- *
+ * Parse Network.responseReceivedExtraInfo for extra information about a cookie.
  * @param {object} response Response to be parsed to get extra information about a cookie.
  * @param {object} requestMap An object for requestId to url.
  * @param {string} tabUrl - The top-level URL (URL in the tab's address bar).
@@ -46,6 +51,7 @@ export default function parseResponseReceivedExtraInfo(
 
   responseToParse?.split('\n').forEach((headerLine: string) => {
     let parsedCookie: CookieData['parsedCookie'] = parse(headerLine);
+
     const blockedCookie = response.blockedCookies.find((c) => {
       if (c.cookie) {
         return c.cookie?.name === parsedCookie.name;
@@ -54,6 +60,7 @@ export default function parseResponseReceivedExtraInfo(
         return temporaryParsedCookie.name === parsedCookie.name;
       }
     });
+
     const effectiveExpirationDate = calculateEffectiveExpiryDate(
       parsedCookie.expires
     );
@@ -78,7 +85,7 @@ export default function parseResponseReceivedExtraInfo(
       domain = new URL(url).hostname;
     }
 
-    const singleCookie = {
+    const singleCookie: CookieData = {
       isBlocked: blockedCookie ? true : false,
       blockedReasons: blockedCookie ? blockedCookie?.blockedReasons : [],
       parsedCookie: {
@@ -86,6 +93,22 @@ export default function parseResponseReceivedExtraInfo(
         expires: effectiveExpirationDate,
         samesite: parsedCookie.samesite ?? '',
         domain,
+      },
+      networkEvents: {
+        requestEvents: [],
+        responseEvents: [
+          {
+            type: RESPONSE_EVENT.CDP_RESPONSE_RECEIVED_EXTRA_INFO,
+            requestId: response.requestId,
+            url: url,
+            blocked: blockedCookie ? true : false,
+            timeStamp: Date.now(),
+          },
+        ],
+      },
+      blockingStatus: {
+        inboundBlock: blockedCookie ? true : false,
+        outboundBlock: null,
       },
       analytics: cookieDB
         ? findAnalyticsMatch(parsedCookie.name, cookieDB)
@@ -95,7 +118,9 @@ export default function parseResponseReceivedExtraInfo(
       headerType: 'response' as CookieData['headerType'],
       frameIdList: [],
     };
+
     cookies.push(singleCookie);
   });
+
   return cookies;
 }

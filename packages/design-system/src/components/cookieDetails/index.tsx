@@ -26,12 +26,16 @@ import type { CookieTableData } from '@ps-analysis-tool/common';
 import Details from './details';
 
 interface CookieDetailsProps {
+  isUsingCDP: boolean;
   selectedFrameCookie: {
     [frame: string]: CookieTableData | null;
   } | null;
 }
 
-const CookieDetails = ({ selectedFrameCookie }: CookieDetailsProps) => {
+const CookieDetails = ({
+  selectedFrameCookie,
+  isUsingCDP,
+}: CookieDetailsProps) => {
   const selectedCookie = Object.values(selectedFrameCookie ?? {})[0];
 
   return (
@@ -40,7 +44,7 @@ const CookieDetails = ({ selectedFrameCookie }: CookieDetailsProps) => {
       className="flex-1 border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] overflow-y-auto"
     >
       {selectedCookie ? (
-        <Details selectedCookie={selectedCookie} />
+        <Details isUsingCDP={isUsingCDP} selectedCookie={selectedCookie} />
       ) : (
         <div className="h-full p-8 flex items-center">
           <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">

@@ -27,6 +27,7 @@ import {
 /**
  * Internal dependencies.
  */
+import ExportButton from '../../../exportButton';
 
 interface TableTopBarProps {
   searchValue: TableOutput['searchValue'];
@@ -36,7 +37,9 @@ interface TableTopBarProps {
   cookiesCount: number;
   hideFiltering?: boolean;
   disableFiltering?: boolean;
+  disableExport?: boolean;
   extraInterface?: React.ReactNode;
+  exportCookies?: () => void;
 }
 
 const TableTopBar = ({
@@ -47,7 +50,9 @@ const TableTopBar = ({
   cookiesCount,
   hideFiltering = false,
   disableFiltering = false,
+  disableExport = false,
   extraInterface = null,
+  exportCookies,
 }: TableTopBarProps) => {
   const handleInput = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +62,7 @@ const TableTopBar = ({
   );
 
   return (
-    <div className="w-full h-[25px] px-2 flex items-center border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green">
+    <div className="w-full h-[25px] px-2 flex items-center border-b border-american-silver dark:border-quartz bg-white dark:bg-charleston-green">
       {!hideFiltering && (
         <button
           className={classNames('w-3 h-3 mr-2', {
@@ -85,7 +90,16 @@ const TableTopBar = ({
       />
       <div className="h-full w-px bg-american-silver dark:bg-quartz mx-3" />
 
-      {extraInterface}
+      <div className="flex gap-3">
+        {extraInterface}
+        {exportCookies && (
+          <ExportButton
+            title={'Export Cookies Table'}
+            disabled={disableExport}
+            onClick={exportCookies}
+          />
+        )}
+      </div>
 
       <div className="text-right w-full text-xxxs text-secondary">
         Count: {cookiesCount ?? 0}

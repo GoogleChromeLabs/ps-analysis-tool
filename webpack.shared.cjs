@@ -51,7 +51,25 @@ module.exports = {
       {
         // svg
         test: /\.svg$/,
-        use: ['@svgr/webpack'],
+        use: [
+          {
+            loader: '@svgr/webpack',
+            options: {
+              svgoConfig: {
+                plugins: [
+                  {
+                    name: 'preset-default',
+                    params: {
+                      overrides: {
+                        removeViewBox: false,
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
       },
     ],
   },
@@ -63,7 +81,7 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js'],
   },
   performance: {
-    maxEntrypointSize: 1024000,
-    maxAssetSize: 1024000,
+    maxEntrypointSize: 2048000,
+    maxAssetSize: 2048000,
   },
 };

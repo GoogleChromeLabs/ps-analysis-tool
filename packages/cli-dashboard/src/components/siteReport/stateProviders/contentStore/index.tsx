@@ -19,6 +19,8 @@
 import React, { type PropsWithChildren, useMemo } from 'react';
 import { useContextSelector, createContext } from 'use-context-selector';
 import {
+  type CompleteJson,
+  type CookieJsonDataType,
   type CookieTableData,
   type TechnologyData,
 } from '@ps-analysis-tool/common';
@@ -26,14 +28,13 @@ import {
 /**
  * Internal dependencies.
  */
-import type { CompleteJson, CookieJsonDataType } from '../../../../types';
 import reshapeCookies from '../../../utils/reshapeCookies';
 
 export interface ContentStore {
   state: {
     tabCookies: { [key: string]: CookieTableData };
     technologies: TechnologyData[] | undefined;
-    completeJson: CompleteJson | null;
+    completeJson: CompleteJson[] | null;
   };
 }
 
@@ -54,7 +55,7 @@ interface ContentStoreProviderProps {
     };
   };
   technologies?: TechnologyData[];
-  completeJson: CompleteJson | null;
+  completeJson: CompleteJson[] | null;
 }
 
 export const Provider = ({

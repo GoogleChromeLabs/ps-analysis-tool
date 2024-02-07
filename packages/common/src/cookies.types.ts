@@ -43,15 +43,15 @@ export type CookiesCount = {
 };
 
 export type CookieAnalytics = {
-  platform: string;
-  category: string;
-  name: string;
-  domain: string;
-  description: string;
-  retention: string;
-  dataController: string;
-  gdprUrl: string;
-  wildcard: string;
+  platform?: string;
+  category?: string;
+  name?: string;
+  domain?: string;
+  description?: string;
+  retention?: string;
+  dataController?: string;
+  gdprUrl?: string;
+  wildcard?: string;
 };
 
 export type CookieDatabase = {
@@ -63,25 +63,61 @@ export type BlockedReason =
   | Protocol.Network.CookieBlockedReason
   | Protocol.Audits.CookieExclusionReason;
 
+export enum RESPONSE_EVENT {
+  CHROME_WEBREQUEST_ON_RESPONSE_STARTED = 'CHROME_WEBREQUEST_ON_RESPONSE_STARTED',
+  CDP_RESPONSE_RECEIVED = 'CDP_RESPONSE_RECEIVED',
+  CDP_RESPONSE_RECEIVED_EXTRA_INFO = 'CDP_RESPONSE_RECEIVED_EXTRA_INFO',
+}
+
+export enum REQUEST_EVENT {
+  CHROME_WEBREQUEST_ON_BEFORE_SEND_HEADERS = 'CHROME_WEBREQUEST_ON_BEFORE_SEND_HEADERS',
+  CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO = 'CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO',
+}
+
+export type requestEvent = {
+  type: REQUEST_EVENT;
+  requestId: string;
+  url: string;
+  blocked: boolean | null;
+  timeStamp: number;
+};
+
+export type responsEvent = {
+  type: RESPONSE_EVENT;
+  requestId: string;
+  url: string;
+  blocked: boolean | null;
+  timeStamp: number;
+};
+
 export type CookieData = {
   parsedCookie: ParsedCookie & {
     partitionKey?: string;
     priority?: 'Low' | 'Medium' | 'High';
     size?: number;
   };
-  analytics: CookieAnalytics | null;
+  networkEvents?: {
+    requestEvents: requestEvent[];
+    responseEvents: responsEvent[];
+  };
+  analytics?: CookieAnalytics | null;
   url: string;
-  headerType: 'response' | 'request' | 'javascript';
-  isFirstParty: boolean | null;
-  frameIdList: Array<number | string>;
+  headerType?: 'response' | 'request' | 'javascript';
+  isFirstParty?: boolean | null;
+  frameIdList?: Array<number | string>;
   blockedReasons?: BlockedReason[];
   warningReasons?: Protocol.Audits.CookieWarningReason[];
   isBlocked?: boolean | null;
+  blockingStatus?: {
+    inboundBlock: boolean | null;
+    outboundBlock: boolean | null;
+  };
 };
 
 export type CookieTableData = CookieData & {
   frameUrls?: string | string[];
   highlighted?: boolean;
+  isDomainInAllowList?: boolean;
 };
 
 export type TechnologyData = {
@@ -98,7 +134,7 @@ export type TechnologyData = {
     name: string;
     slug: string;
   }[];
-  rootPath: boolean;
+  rootPath?: boolean;
   pageUrl?: string;
 };
 
@@ -141,3 +177,49 @@ export interface CookieStatsComponents {
 export interface FramesWithCookies {
   [key: string]: { frameIds: number[] };
 }
+
+export type CookieJsonDataType = {
+  parsedCookie: {
+    name: string;
+    value: string;
+    domain: string;
+    partitionKey?: string;
+    path: string;
+    expires: string;
+    httpOnly: boolean;
+    secure: boolean;
+    sameSite: string;
+  };
+  analytics: {
+    platform: string;
+    category: string;
+    description: string;
+    GDPR?: string;
+  };
+  isFirstParty: boolean;
+  url: string;
+  pageUrl?: string;
+  requestUrls?: { [id: string]: string };
+  frameUrls?: { [id: string]: string };
+  isBlocked: boolean;
+  blockedReasons?: BlockedReason[];
+};
+
+export type CookieFrameStorageType = {
+  [frame: string]: {
+    [cookieKey: string]: CookieJsonDataType;
+  };
+};
+
+export type CompleteJson = {
+  pageUrl: string;
+  cookieData: {
+    [frame: string]: {
+      cookiesCount: number;
+      frameCookies: {
+        [cookieKey: string]: CookieJsonDataType;
+      };
+    };
+  };
+  technologyData: TechnologyData[];
+};

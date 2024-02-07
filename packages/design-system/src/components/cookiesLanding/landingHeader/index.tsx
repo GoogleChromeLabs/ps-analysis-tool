@@ -35,7 +35,9 @@ interface LandingHeaderProps {
 const LandingHeader = ({ dataMapping = [] }: LandingHeaderProps) => {
   return (
     <div
-      className="flex justify-center border-t border-hex-gray pt-5 pb-5 dark:border-quartz"
+      className={
+        'flex justify-center border-hex-gray pt-5 pb-5 dark:border-quartz border-t'
+      }
       data-testid="cookies-landing-header"
     >
       <div className="lg:max-w-[729px] flex gap-9 px-4">

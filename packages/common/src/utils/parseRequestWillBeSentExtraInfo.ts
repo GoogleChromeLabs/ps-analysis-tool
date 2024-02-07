@@ -20,13 +20,17 @@ import type { Protocol } from 'devtools-protocol';
 /**
  * Internal dependencies.
  */
-import type { CookieData, CookieDatabase } from '../cookies.types';
+import {
+  REQUEST_EVENT,
+  type CookieData,
+  type CookieDatabase,
+} from '../cookies.types';
 import calculateEffectiveExpiryDate from './calculateEffectiveExpiryDate';
 import findAnalyticsMatch from './findAnalyticsMatch';
 import isFirstParty from './isFirstParty';
 
 /**
- *
+ * Parses Network.requestWillBeSentExtraInfo to get extra information about a cookie.
  * @param {object} request Request to be parsed to get extra information about a cookie.
  * @param {object} cookieDB Cookie database to find analytics from.
  * @param {object} requestMap An object for requestId to url.
@@ -59,7 +63,7 @@ export default function parseRequestWillBeSentExtraInfo(
       domain = new URL(url).hostname;
     }
 
-    const singleCookie = {
+    const singleCookie: CookieData = {
       isBlocked: !(blockedReasons.length === 0),
       parsedCookie: {
         ...cookie,
@@ -67,14 +71,32 @@ export default function parseRequestWillBeSentExtraInfo(
         samesite: cookie.sameSite?.toLowerCase() ?? '',
         domain,
       },
+      networkEvents: {
+        requestEvents: [
+          {
+            type: REQUEST_EVENT.CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO,
+            requestId: request.requestId,
+            url: url,
+            blocked: blockedReasons.length !== 0,
+            timeStamp: Date.now(),
+          },
+        ],
+        responseEvents: [],
+      },
+      blockingStatus: {
+        inboundBlock: null,
+        outboundBlock: blockedReasons.length !== 0,
+      },
       blockedReasons,
-      analytics: cookieDB ? findAnalyticsMatch(cookie.name, cookieDB) : null,
+      analytics: cookieDB ? findAnalyticsMatch(cookie.name, cookieDB) : null, // In case CDP gets cookie first.
       url,
       headerType: 'request' as CookieData['headerType'],
       isFirstParty: isFirstParty(domain, tabUrl),
       frameIdList: [],
     };
+
     cookies.push(singleCookie);
   });
+
   return cookies;
 }

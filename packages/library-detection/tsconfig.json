@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.shared.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "types": ["chrome"]
+  },
+  "include": [
+    "src",
+    "../../node_modules/@types/jest/index.d.ts",
+    "src/**/*.json"
+  ],
+  "exclude": ["**/tests/**/*.ts", "dist/**", "dist-types/**"],
+  "references": [
+    { "path": "../common" },
+    {
+      "path": "../design-system"
+    }
+  ]
+}

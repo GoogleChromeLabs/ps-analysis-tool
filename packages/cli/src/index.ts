@@ -18,22 +18,26 @@
  */
 import { Command } from 'commander';
 import events from 'events';
-import { ensureFile, exists, readFile, writeFile } from 'fs-extra';
+import { ensureFile, writeFile } from 'fs-extra';
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
 import { exec } from 'child_process';
 import path from 'path';
-import { parseUrl } from '@ps-analysis-tool/common';
-import { parseStringPromise } from 'xml2js';
+import { CompleteJson } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import Utility from './utils/utility';
-import { fetchDictionary } from './utils/fetchCookieDictionary';
 import { analyzeCookiesUrlsInBatches } from './procedures/analyzeCookieUrlsInBatches';
 import { analyzeTechnologiesUrlsInBatches } from './procedures/analyzeTechnologiesUrlsInBatches';
-import { delay } from './utils';
+import {
+  fetchDictionary,
+  delay,
+  getUrlListFromArgs,
+  validateArgs,
+  saveCSVReports,
+} from './utils';
 import { checkPortInUse } from './utils/checkPortInUse';
 
 events.EventEmitter.defaultMaxListeners = 15;
@@ -42,25 +46,29 @@ const DELAY_TIME = 20000;
 const program = new Command();
 
 program
-  .version('0.4.2')
+  .version('0.5.0')
   .description('CLI to test a URL for 3p cookies')
   .option('-u, --url <value>', 'URL of a site')
   .option('-s, --sitemap-url <value>', 'URL of a sitemap')
   .option('-c, --csv-path <value>', 'Path to a CSV file with a set of URLs.')
   .option(
     '-p, --sitemap-path <value>',
-    'Path to a sitmap saved in the file system'
+    'Path to a sitemap saved in the file system'
   )
-  .option('-ul, --url-limit <value>', 'No of Urls to analyze')
+  .option('-ul, --url-limit <value>', 'No of URLs to analyze')
   .option(
     '-nh, --no-headless ',
-    'Flag for running puppeteer in non headless mode'
+    'Flag for running puppeteer in non-headless mode'
   )
   .option(
     '-np, --no-prompts',
     'Flags for skipping all prompts. Default options will be used'
   )
-  .option('-nt, --no-technology', 'Flags for skipping technology analysis.');
+  .option('-nt, --no-technology', 'Flags for skipping technology analysis.')
+  .option(
+    '-d, --out-dir <value>',
+    'Directory path where the analysis data will be stored'
+  );
 
 program.parse();
 
@@ -77,202 +85,22 @@ const initialize = async () => {
   }
 };
 
-// eslint-disable-next-line complexity
-const validateArgs = async (
-  url: string,
-  sitemapUrl: string,
-  csvPath: string,
-  sitemapPath: string,
-  numberOfUrls: string
+const saveResults = async (
+  outDir: string,
+  result: CompleteJson | CompleteJson[]
 ) => {
-  if (!url && !sitemapUrl && !csvPath && !sitemapPath) {
-    console.log(
-      `Please provide one of the following 
-      a) URL of a site (-u or --url) 
-      b) URL of a sitemap (-s or --sitemap-url)
-      c) Path to a CSV file (-c or --csv-path)
-      d) Path to a XML file (-p or --sitemap-path)`
-    );
-    process.exit(1);
-  }
-
-  if (
-    (url && sitemapUrl) ||
-    (sitemapUrl && csvPath) ||
-    (csvPath && sitemapPath) ||
-    (sitemapPath && url)
-  ) {
-    console.log(
-      `Please provide ONLY one of the following 
-      a) URL of a site (-u or --url) 
-      b) URL of a sitemap (-s or --sitemap-url)
-      c) Path to a CSV file (-c or --csv-path)
-      d) Path to a XML file (-p or --sitemap-path)`
-    );
-    process.exit(1);
-  }
-
-  if (csvPath) {
-    const csvFileExists = await exists(csvPath);
-    if (!csvFileExists) {
-      console.log(`No file at ${csvPath}`);
-      process.exit(1);
-    }
-  }
-
-  if (sitemapPath) {
-    const sitemapFileExists = await exists(sitemapPath);
-    if (!sitemapFileExists) {
-      console.log(`No file at ${sitemapPath}`);
-      process.exit(1);
-    }
-  }
-
-  if (url || sitemapUrl) {
-    const _url = url || sitemapUrl;
-
-    const parsedUrl = parseUrl(_url);
-
-    if (parsedUrl === null) {
-      console.log(`Provided Url ${parsedUrl} is not valid`);
-      process.exit(1);
-    }
-  }
-
-  if (numberOfUrls) {
-    if (isNaN(parseInt(numberOfUrls))) {
-      console.log(`${numberOfUrls} is not valid numeric value`);
-      process.exit(1);
-    }
-  }
+  await ensureFile(outDir + '/out.json');
+  await writeFile(outDir + '/out.json', JSON.stringify(result, null, 4));
 };
 
-const getUrlListFromArgs = async (
-  url: string,
-  sitemapUrl: string,
-  csvPath: string,
-  sitemapPath: string,
-  // @ts-ignore Package does not support typescript.
-  spinnies
-): Promise<string[]> => {
-  let urls: string[] = [];
+const startDashboardServer = async (dir: string) => {
+  exec('npm run cli-dashboard:dev');
 
-  if (url) {
-    urls.push(url);
-  } else if (sitemapUrl) {
-    spinnies.add('sitemap-spinner', {
-      text: 'Parsing Sitemap',
-    });
+  await delay(2000);
 
-    try {
-      const _urls = await Utility.getUrlsFromSitemap(sitemapUrl);
-      urls = urls.concat(_urls);
-    } catch (error) {
-      console.log('Error parsing the sitemap file');
-      process.exit(1);
-    }
-
-    spinnies.succeed('sitemap-spinner', {
-      text: 'Done parsing Sitemap',
-    });
-  } else if (csvPath) {
-    spinnies.add('csv-spinner', {
-      text: 'Parsing CSV File',
-    });
-
-    try {
-      const csvString = await readFile(csvPath, 'utf-8');
-
-      const lines = csvString.split('\n');
-
-      const _urls = lines.reduce((acc, line) => {
-        if (line.length === 0) {
-          return acc;
-        } else {
-          return acc.concat(line.split(','));
-        }
-      }, [] as string[]);
-
-      if (_urls.length === 0) {
-        console.log('Provided CSV files has no urls');
-        process.exit(1);
-      }
-      _urls.forEach((_url) => {
-        if (!_url.includes('http')) {
-          console.log(`${_url} is not a valid URL`);
-          process.exit(1);
-        }
-      });
-
-      urls = urls.concat(_urls);
-    } catch (error) {
-      console.log('Error reading the CSV file');
-      process.exit(1);
-    }
-
-    spinnies.succeed('csv-spinner', {
-      text: 'Done parsing CSV file',
-    });
-  } else if (sitemapPath) {
-    spinnies.add('sitemap-spinner', {
-      text: 'Parsing XML File',
-    });
-
-    try {
-      const xmlString = await readFile(sitemapPath, 'utf-8');
-      const data = await parseStringPromise(xmlString as string);
-
-      const isSiteIndex = Boolean(data['siteIndex']);
-      const isSiteMap = Boolean(data['urlset']);
-
-      if (isSiteIndex) {
-        console.log(
-          'Sorry, XML Schema for Sitemap index files is not supported by the tool'
-        );
-        process.exit(1);
-      }
-
-      if (!isSiteMap) {
-        console.log('Provided file is not a valid sitemap');
-        process.exit(1);
-      }
-
-      let _urls: string[] = [];
-
-      try {
-        _urls = data['urlset']['url'].reduce(
-          (acc: string[], { loc }: { loc: string | undefined }) =>
-            loc ? acc.concat(loc) : acc,
-          []
-        );
-      } catch (error) {
-        console.log('Provided XML files has no urls in its urlset');
-        process.exit(1);
-      }
-
-      if (_urls.length === 0) {
-        console.log('Provided XML files has no urls ');
-        process.exit(1);
-      }
-      _urls.forEach((_url) => {
-        if (!_url.includes('http')) {
-          console.log(`${_url} is not a valid URL`);
-          process.exit(1);
-        }
-      });
-
-      urls = urls.concat(_urls);
-    } catch (error) {
-      console.log('Error reading the XML file');
-      process.exit(1);
-    }
-
-    spinnies.succeed('sitemap-spinner', {
-      text: 'Done parsing XML file',
-    });
-  }
-
-  return urls;
+  console.log(
+    `Report is being served at the URL: http://localhost:9000?dir=${dir}`
+  );
 };
 
 // eslint-disable-next-line complexity
@@ -287,15 +115,24 @@ const getUrlListFromArgs = async (
   const isHeadless = Boolean(program.opts().headless);
   const shouldSkipPrompts = !program.opts().prompts;
   const shouldSkipTechnologyAnalysis = !program.opts().technology;
+  const outDir = program.opts().outDir;
 
-  validateArgs(url, sitemapUrl, csvPath, sitemapPath, numberOfUrlsInput);
+  validateArgs(
+    url,
+    sitemapUrl,
+    csvPath,
+    sitemapPath,
+    numberOfUrlsInput,
+    outDir
+  );
 
   const prefix =
     url || sitemapUrl
       ? Utility.generatePrefix(url || sitemapUrl)
-      : path.parse(csvPath || sitemapPath).base;
+      : path.parse(csvPath || sitemapPath).name;
 
-  const outputDir = `./out/${prefix}`;
+  const outputDir = outDir ? outDir : `./out/${prefix}`;
+
   const spinnies = new Spinnies();
 
   const urls = await getUrlListFromArgs(
@@ -380,22 +217,18 @@ const getUrlListFromArgs = async (
       pageUrl: _url,
       technologyData: technologyAnalysisData ? technologyAnalysisData[ind] : [],
       cookieData: cookieAnalysisData[ind].cookieData,
-    };
+    } as CompleteJson;
   });
 
-  await ensureFile(outputDir + '/out.json');
-  await writeFile(
-    outputDir + '/out.json',
-    JSON.stringify(url ? result[0] : result, null, 4)
-  );
+  await saveResults(outputDir, result);
 
-  exec('npm run cli-dashboard:dev');
+  if (outDir) {
+    await saveCSVReports(path.resolve(outputDir), result);
+    return;
+  }
 
-  await delay(2000);
-
-  console.log(
-    `Report is being served at the URL: http://localhost:9000?dir=${encodeURIComponent(
-      prefix
-    )}${sitemapUrl || csvPath || sitemapPath ? '&type=sitemap' : ''}`
+  startDashboardServer(
+    encodeURIComponent(prefix) +
+      (sitemapUrl || csvPath || sitemapPath ? '&type=sitemap' : '')
   );
 })();

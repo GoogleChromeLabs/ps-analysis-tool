@@ -30,7 +30,7 @@ const emptyCookie = {
   samesite: '',
   secure: false,
   httponly: false,
-  path: '',
+  path: '/',
   expires: '',
 };
 

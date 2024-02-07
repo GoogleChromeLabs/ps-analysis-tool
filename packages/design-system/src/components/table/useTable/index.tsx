@@ -18,11 +18,14 @@
  * External dependencies.
  */
 import { useMemo } from 'react';
-import { CookieTableData, TechnologyData } from '@ps-analysis-tool/common';
+import {
+  getValueByKey,
+  CookieTableData,
+  TechnologyData,
+} from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import getValueByKey from '../utils/getValueByKey';
 import useColumnSorting, { type ColumnSortingOutput } from './useColumnSorting';
 import useColumnVisibility, {
   type ColumnVisibilityOutput,
@@ -42,7 +45,9 @@ export type TableColumn = {
   accessorKey: string;
   cell?: (info: InfoType, details?: TableData) => React.JSX.Element | InfoType;
   enableHiding?: boolean;
-  width?: number;
+  enablePrefixIcon?: boolean;
+  widthWeightagePercentage?: number;
+  width?: number; // For internal use only
 };
 
 export type TableRow = {
@@ -58,12 +63,16 @@ export type TableFilter = {
     title: string;
     description?: string;
     hasStaticFilterValues?: boolean;
+    hasPrecalculatedFilterValues?: boolean;
+    enableSelectAllOption?: boolean;
     filterValues?: {
       [filterValue: string]: {
         selected: boolean;
         description?: string;
       };
     };
+    sortValues?: boolean; // for dynamic filters, values are sorted by default even if not specified.
+    useGenericPersistenceKey?: boolean;
     calculateFilterValues?: (value: InfoType) => string;
     comparator?: (value: InfoType, filterValue: string) => boolean;
   };
@@ -100,7 +109,9 @@ export type TableOutput = {
   selectedFilters: TableFilter;
   isFiltering: TableFilteringOutput['isFiltering'];
   toggleFilterSelection: TableFilteringOutput['toggleFilterSelection'];
+  toggleSelectAllFilter: TableFilteringOutput['toggleSelectAllFilter'];
   resetFilters: TableFilteringOutput['resetFilters'];
+  isSelectAllFilterSelected: TableFilteringOutput['isSelectAllFilterSelected'];
   searchValue: TableSearchOutput['searchValue'];
   setSearchValue: TableSearchOutput['setSearchValue'];
 };
@@ -155,13 +166,20 @@ const useTable = ({
     filteredData,
     isFiltering,
     toggleFilterSelection,
+    toggleSelectAllFilter,
     resetFilters,
-  } = useFiltering(sortedData, tableFilterData, tablePersistentSettingsKey);
+    isSelectAllFilterSelected,
+  } = useFiltering(
+    sortedData,
+    tableFilterData,
+    tablePersistentSettingsKey,
+    commonKey
+  );
 
   const { searchValue, setSearchValue, searchFilteredData } = useSearch(
     filteredData,
     tableSearchKeys,
-    tablePersistentSettingsKey
+    commonKey
   );
 
   const rows = useMemo(() => {
@@ -206,7 +224,9 @@ const useTable = ({
     selectedFilters,
     isFiltering,
     toggleFilterSelection,
+    toggleSelectAllFilter,
     resetFilters,
+    isSelectAllFilterSelected,
     searchValue,
     setSearchValue,
   };

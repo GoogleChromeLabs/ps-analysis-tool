@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ArrowDown,
   InfoIcon,
@@ -33,39 +33,73 @@ interface ListItemProps {
   filter: TableFilter[keyof TableFilter];
   filterKey: string;
   toggleFilterSelection: TableOutput['toggleFilterSelection'];
+  toggleSelectAllFilter: TableOutput['toggleSelectAllFilter'];
+  expandAll: boolean;
+  isSelectAllFilterSelected: boolean;
+  toggleFilterExpansion: (filterKey: string, expand?: boolean) => void;
 }
 
 const ListItem = ({
   filter,
   filterKey,
   toggleFilterSelection,
+  toggleSelectAllFilter,
+  expandAll,
+  toggleFilterExpansion,
+  isSelectAllFilterSelected,
 }: ListItemProps) => {
   const [isExpanded, setExpanded] = useState<boolean>(false);
   const [showSubList, setShowSubList] = useState<boolean>(false);
 
-  const toggleShowMore = () => {
+  const toggleShowMore = useCallback(() => {
     setExpanded(!isExpanded);
-  };
+  }, [isExpanded]);
 
-  const toggleSubList = () => {
-    setShowSubList(!showSubList);
-  };
+  const toggleSubList = useCallback(() => {
+    setShowSubList((prev) => !prev);
+    toggleFilterExpansion(filterKey);
+  }, [filterKey, toggleFilterExpansion]);
+
+  useEffect(() => {
+    setShowSubList(expandAll);
+  }, [expandAll]);
+
+  const isDisabled = useMemo(
+    () => Object.keys(filter.filterValues || {}).length === 0,
+    [filter.filterValues]
+  );
+
+  useEffect(() => {
+    if (isDisabled && showSubList) {
+      setShowSubList((prev) => {
+        if (prev) {
+          toggleFilterExpansion(filterKey);
+        }
+
+        return false;
+      });
+    }
+  }, [expandAll, filterKey, isDisabled, showSubList, toggleFilterExpansion]);
 
   return (
     <li className="py-[3px] text-xs">
       <div className="flex gap-2 items-center">
         <button
-          className="flex items-center text-asteriod-black dark:text-bright-gray"
+          className="flex items-center text-asteriod-black dark:text-bright-gray disabled:opacity-50 active:opacity-70"
+          disabled={isDisabled}
           onClick={toggleSubList}
         >
-          <span className={showSubList ? '' : '-rotate-90'}>
+          <span
+            className={`${showSubList && !isDisabled ? '' : '-rotate-90'}`}
+            data-testid="list-item-arrow"
+          >
             <ArrowDown />
           </span>
           <p className="ml-1 leading-normal font-semi-thick">{filter.title}</p>
         </button>
         {filter.description && (
           <p title={filter.description}>
-            <InfoIcon />
+            <InfoIcon className="fill-granite-gray" />
           </p>
         )}
       </div>
@@ -74,9 +108,12 @@ const ListItem = ({
           <SubList
             filterValues={filter.filterValues}
             filterKey={filterKey}
-            sort={!filter.hasStaticFilterValues}
+            sort={!filter.hasStaticFilterValues || Boolean(filter.sortValues)}
             toggleFilterSelection={toggleFilterSelection}
             isExpanded={isExpanded}
+            isSelectAllFilterEnabled={Boolean(filter.enableSelectAllOption)}
+            toggleSelectAllFilter={toggleSelectAllFilter}
+            isSelectAllFilterSelected={isSelectAllFilterSelected}
           />
           {Number(Object.keys(filter.filterValues || {}).length) > 4 && (
             <a

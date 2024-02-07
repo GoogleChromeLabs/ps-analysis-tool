@@ -16,88 +16,59 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { Resizable } from 're-resizable';
 import {
   filterCookiesByFrame,
   type CookieTableData,
-  getCookieKey,
 } from '@ps-analysis-tool/common';
-import {
-  CookieDetails,
-  CookieTable,
-  RefreshButton,
-  type InfoType,
-  type TableColumn,
-  type TableFilter,
-} from '@ps-analysis-tool/design-system';
+import { CookieDetails, CookieTable } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import { BLOCKED_REASON_LIST } from '../../../../../constants';
+import useCookieListing from './useCookieListing';
+import RowContextMenu from './rowContextMenu';
+import useAllowedList from './useAllowedList';
+import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
 
 interface CookiesListingProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;
 }
 
 const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
-  const { selectedFrame, cookies, tabFrames, getCookiesSetByJavascript } =
-    useCookieStore(({ state, actions }) => ({
-      selectedFrame: state.selectedFrame,
-      cookies: state.tabCookies || {},
-      tabFrames: state.tabFrames,
-      getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
-    }));
+  const { selectedFrame, tabFrames, tabUrl } = useCookieStore(({ state }) => ({
+    selectedFrame: state.selectedFrame,
+    tabFrames: state.tabFrames,
+    tabUrl: state.tabUrl,
+  }));
 
-  const [tableData, setTableData] = useState<Record<string, CookieTableData>>(
-    {}
-  );
+  const isUsingCDP = useSettingsStore(({ state }) => state.isUsingCDP);
 
-  useEffect(() => {
-    setTableData((prevData) =>
-      Object.values(cookies).reduce((acc, cookie) => {
-        const key = getCookieKey(cookie.parsedCookie) as string;
-        acc[key] = {
-          ...cookie,
-          highlighted: prevData?.[key]?.highlighted,
-        };
+  const { domainsInAllowList, setDomainsInAllowListCallback, isIncognito } =
+    useAllowedList();
 
-        return acc;
-      }, {} as Record<string, CookieTableData>)
-    );
-  }, [cookies]);
-
-  const removeHighlights = useCallback(() => {
-    setTableData((prev) =>
-      Object.values(prev).reduce((acc, cookie) => {
-        const key = getCookieKey(cookie.parsedCookie) as string;
-        acc[key] = {
-          ...cookie,
-          highlighted: false,
-        };
-
-        return acc;
-      }, {} as Record<string, CookieTableData>)
-    );
-  }, []);
-
-  useEffect(() => {
-    chrome.storage.session.onChanged.addListener(removeHighlights);
-    return () => {
-      try {
-        chrome.storage.session.onChanged.removeListener(removeHighlights);
-      } catch (error) {
-        /* do nothing */
-      }
-    };
-  }, [removeHighlights]);
+  const {
+    tableData,
+    tableColumns,
+    filters,
+    searchKeys,
+    tablePersistentSettingsKey,
+    extraInterfaceToTopBar,
+  } = useCookieListing(domainsInAllowList);
 
   const frameFilteredCookies = useMemo(
     () => filterCookiesByFrame(tableData, tabFrames, selectedFrame),
     [tableData, selectedFrame, tabFrames]
   );
+
+  const cookieTableRef = useRef<React.ElementRef<typeof CookieTable> | null>(
+    null
+  );
+  const rowContextMenuRef = useRef<React.ElementRef<
+    typeof RowContextMenu
+  > | null>(null);
 
   useEffect(() => {
     setFilteredCookies(frameFilteredCookies);
@@ -107,302 +78,6 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
     [frame: string]: CookieTableData | null;
   } | null>(null);
 
-  const tableColumns = useMemo<TableColumn[]>(
-    () => [
-      {
-        header: 'Name',
-        accessorKey: 'parsedCookie.name',
-        cell: (info: InfoType) => info,
-        enableHiding: false,
-      },
-      {
-        header: 'Scope',
-        accessorKey: 'isFirstParty',
-        cell: (info: InfoType) => (
-          <p className="truncate w-full">
-            {!info ? 'Third Party' : 'First Party'}
-          </p>
-        ),
-      },
-      {
-        header: 'Domain',
-        accessorKey: 'parsedCookie.domain',
-        cell: (info: InfoType) => info,
-      },
-      {
-        header: 'Partition Key',
-        accessorKey: 'parsedCookie.partitionKey',
-        cell: (info: InfoType) => info,
-      },
-      {
-        header: 'SameSite',
-        accessorKey: 'parsedCookie.samesite',
-        cell: (info: InfoType) => <span className="capitalize">{info}</span>,
-      },
-      {
-        header: 'Category',
-        accessorKey: 'analytics.category',
-        cell: (info: InfoType) => info,
-      },
-      {
-        header: 'Platform',
-        accessorKey: 'analytics.platform',
-        cell: (info: InfoType) => info,
-      },
-      {
-        header: 'HttpOnly',
-        accessorKey: 'parsedCookie.httponly',
-        cell: (info: InfoType) => (
-          <p className="flex justify-center items-center">
-            {info ? <span className="font-serif">✓</span> : ''}
-          </p>
-        ),
-      },
-      {
-        header: 'Secure',
-        accessorKey: 'parsedCookie.secure',
-        cell: (info: InfoType) => (
-          <p className="flex justify-center items-center">
-            {info ? <span className="font-serif">✓</span> : ''}
-          </p>
-        ),
-      },
-      {
-        header: 'Value',
-        accessorKey: 'parsedCookie.value',
-        cell: (info: InfoType) => info,
-      },
-      {
-        header: 'Path',
-        accessorKey: 'parsedCookie.path',
-        cell: (info: InfoType) => info,
-      },
-      {
-        header: 'Expires / Max-Age',
-        accessorKey: 'parsedCookie.expires',
-        cell: (info: InfoType) => (info ? info : 'Session'),
-      },
-      {
-        header: 'Priority',
-        accessorKey: 'parsedCookie.priority',
-        cell: (info: InfoType) => info,
-      },
-      {
-        header: 'Size',
-        accessorKey: 'parsedCookie.size',
-        cell: (info: InfoType) => info,
-      },
-    ],
-    []
-  );
-
-  const blockedReasonFilterValues = useMemo<{
-    [key: string]: { selected: boolean };
-  }>(() => {
-    const filterValues: { [key: string]: { selected: boolean } } = {};
-    BLOCKED_REASON_LIST.forEach((reason) => {
-      filterValues[reason] = { selected: false };
-    });
-    return filterValues;
-  }, []);
-
-  const filters = useMemo<TableFilter>(
-    () => ({
-      'analytics.category': {
-        title: 'Category',
-      },
-      isFirstParty: {
-        title: 'Scope',
-        hasStaticFilterValues: true,
-        filterValues: {
-          'First Party': {
-            selected: false,
-          },
-          'Third Party': {
-            selected: false,
-          },
-        },
-        comparator: (value: InfoType, filterValue: string) => {
-          const val = value as boolean;
-          return val === (filterValue === 'First Party');
-        },
-      },
-      'parsedCookie.domain': {
-        title: 'Domain',
-      },
-      'parsedCookie.httponly': {
-        title: 'HttpOnly',
-        hasStaticFilterValues: true,
-        filterValues: {
-          True: {
-            selected: false,
-          },
-          False: {
-            selected: false,
-          },
-        },
-        comparator: (value: InfoType, filterValue: string) => {
-          const val = value as boolean;
-          return val === (filterValue === 'True');
-        },
-      },
-      'parsedCookie.samesite': {
-        title: 'SameSite',
-        hasStaticFilterValues: true,
-        filterValues: {
-          None: {
-            selected: false,
-          },
-          Lax: {
-            selected: false,
-          },
-          Strict: {
-            selected: false,
-          },
-        },
-        comparator: (value: InfoType, filterValue: string) => {
-          const val = value as string;
-          return val?.toLowerCase() === filterValue.toLowerCase();
-        },
-      },
-      'parsedCookie.secure': {
-        title: 'Secure',
-        hasStaticFilterValues: true,
-        filterValues: {
-          True: {
-            selected: false,
-          },
-          False: {
-            selected: false,
-          },
-        },
-        comparator: (value: InfoType, filterValue: string) => {
-          const val = value as boolean;
-          return val === (filterValue === 'True');
-        },
-      },
-      'parsedCookie.path': {
-        title: 'Path',
-      },
-      'parsedCookie.expires': {
-        title: 'Retention Period',
-        hasStaticFilterValues: true,
-        filterValues: {
-          Session: {
-            selected: false,
-          },
-          'Short Term (< 24h)': {
-            selected: false,
-          },
-          'Medium Term (24h - 1 week)': {
-            selected: false,
-          },
-          'Long Term (1 week - 1 month)': {
-            selected: false,
-          },
-          'Extended Term (> 1 month)': {
-            selected: false,
-          },
-        },
-        comparator: (value: InfoType, filterValue: string) => {
-          let diff = 0;
-          const val = value as string;
-          switch (filterValue) {
-            case 'Session':
-              return val === 'Session';
-
-            case 'Short Term (< 24h)':
-              diff = Date.parse(val) - Date.now();
-              return diff < 86400000;
-
-            case 'Medium Term (24h - 1 week)':
-              diff = Date.parse(val) - Date.now();
-              return diff >= 86400000 && diff < 604800000;
-
-            case 'Long Term (1 week - 1 month)':
-              diff = Date.parse(val) - Date.now();
-              return diff >= 604800000 && diff < 2629743833;
-
-            case 'Extended Term (> 1 month)':
-              diff = Date.parse(val) - Date.now();
-              return diff >= 2629743833;
-
-            default:
-              return false;
-          }
-        },
-      },
-      'analytics.platform': {
-        title: 'Platform',
-      },
-      blockedReasons: {
-        title: 'Cookie Blocked Reasons',
-        description: 'Reason why the cookies were blocked.',
-        hasStaticFilterValues: true,
-        filterValues: blockedReasonFilterValues,
-        comparator: (value: InfoType, filterValue: string) => {
-          return (value as string[])?.includes(filterValue);
-        },
-      },
-      headerType: {
-        title: 'Set Via',
-        hasStaticFilterValues: true,
-        filterValues: {
-          HTTP: {
-            selected: false,
-          },
-          JS: {
-            selected: false,
-          },
-        },
-        comparator: (value: InfoType, filterValue: string) => {
-          switch (filterValue) {
-            case 'JS':
-              return value === 'javascript';
-            case 'HTTP':
-              return value === 'request' || value === 'response';
-            default:
-              return true;
-          }
-        },
-      },
-      'parsedCookie.priority': {
-        title: 'Priority',
-        hasStaticFilterValues: true,
-        filterValues: {
-          Low: {
-            selected: false,
-          },
-          Medium: {
-            selected: false,
-          },
-          High: {
-            selected: false,
-          },
-        },
-      },
-    }),
-    [blockedReasonFilterValues]
-  );
-
-  const searchKeys = useMemo<string[]>(
-    () => ['parsedCookie.name', 'parsedCookie.domain'],
-    []
-  );
-
-  const tablePersistentSettingsKey = useMemo(() => {
-    if (!selectedFrame) {
-      return 'cookieListing';
-    }
-
-    return `cookieListing#${selectedFrame}`;
-  }, [selectedFrame]);
-
-  const extraInterfaceToTopBar = useMemo(
-    () => <RefreshButton onClick={getCookiesSetByJavascript} />,
-    [getCookiesSetByJavascript]
-  );
-
   return (
     <div className="w-full h-full flex flex-col">
       <Resizable
@@ -410,7 +85,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
           width: '100%',
           height: '80%',
         }}
-        minHeight="6%"
+        minHeight="15%"
         maxHeight="95%"
         enable={{
           top: false,
@@ -431,9 +106,22 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
           selectedFrameCookie={selectedFrameCookie}
           setSelectedFrameCookie={setSelectedFrameCookie}
           extraInterfaceToTopBar={extraInterfaceToTopBar}
+          onRowContextMenu={rowContextMenuRef.current?.onRowContextMenu}
+          ref={cookieTableRef}
         />
       </Resizable>
-      <CookieDetails selectedFrameCookie={selectedFrameCookie} />
+      <CookieDetails
+        isUsingCDP={isUsingCDP}
+        selectedFrameCookie={selectedFrameCookie}
+      />
+      <RowContextMenu
+        domainsInAllowList={domainsInAllowList}
+        isIncognito={isIncognito}
+        tabUrl={tabUrl || ''}
+        setDomainsInAllowListCallback={setDomainsInAllowListCallback}
+        removeSelectedRow={cookieTableRef.current?.removeSelectedRow}
+        ref={rowContextMenuRef}
+      />
     </div>
   );
 };

@@ -27,27 +27,38 @@ import BodyRow from './bodyRow';
 import type { TableData, TableOutput, TableRow } from '../../useTable';
 
 interface TableBodyProps {
+  useIsBlockedToHighlight: boolean;
   table: TableOutput;
   getRowObjectKey: (row: TableRow) => string;
   isRowFocused: boolean;
   setIsRowFocused: (state: boolean) => void;
   selectedKey: string | undefined | null;
-  onRowClick: (key: TableData | null) => void;
+  onRowClick: (
+    key: TableData | null,
+    e?: React.MouseEvent<HTMLDivElement>
+  ) => void;
+  onRowContextMenu?: (
+    e: React.MouseEvent<HTMLDivElement>,
+    row: TableRow
+  ) => void;
 }
 
 const TableBody = ({
+  useIsBlockedToHighlight,
   table,
   getRowObjectKey,
   isRowFocused,
   setIsRowFocused,
   selectedKey,
   onRowClick,
+  onRowContextMenu = () => undefined,
 }: TableBodyProps) => {
   const tableBodyRef = useRef(null);
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>, index: number) => {
       event.preventDefault();
+
       //@ts-ignore - the `children` property will be available on the `current` property.
       const currentRow = tableBodyRef.current?.children.namedItem(index);
       let newRowId: string | undefined;
@@ -123,9 +134,13 @@ const TableBody = ({
   );
 
   return (
-    <div ref={tableBodyRef} className="h-full flex flex-col">
+    <div
+      ref={tableBodyRef}
+      className="h-full flex flex-col overflow-x-hidden overflow-y-auto"
+    >
       {table.rows.map((row, index) => (
         <BodyRow
+          useIsBlockedToHighlight={useIsBlockedToHighlight}
           key={index}
           index={index}
           row={row}
@@ -133,11 +148,12 @@ const TableBody = ({
           selectedKey={selectedKey}
           getRowObjectKey={getRowObjectKey}
           isRowFocused={isRowFocused}
-          onRowClick={() => {
-            onRowClick(row?.originalData);
+          onRowClick={(e: React.MouseEvent<HTMLDivElement>) => {
+            onRowClick(row?.originalData, e);
             setIsRowFocused(true);
           }}
           onKeyDown={handleKeyDown}
+          onRowContextMenu={onRowContextMenu}
         />
       ))}
       <div
@@ -155,7 +171,7 @@ const TableBody = ({
             key={index}
             className="px-1 py-px outline-0 flex-1"
             style={{
-              maxWidth: width,
+              minWidth: width,
             }}
           />
         ))}
@@ -171,7 +187,7 @@ const TableBody = ({
             key={index}
             className="px-1 py-px outline-0 h-full flex-1"
             style={{
-              maxWidth: width,
+              minWidth: width,
             }}
           />
         ))}

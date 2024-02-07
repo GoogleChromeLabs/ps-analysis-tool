@@ -1,6 +1,6 @@
 {
   "name": "@ps-analysis-tool/extension",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "description": "Chrome extension for cookie analysis",
   "repository": {
     "type": "git",
@@ -20,8 +20,10 @@
     "@floating-ui/dom": "^1.5.3",
     "@ps-analysis-tool/common": "*",
     "@ps-analysis-tool/design-system": "*",
+    "@ps-analysis-tool/library-detection": "*",
     "classnames": "^2.3.2",
     "fast-xml-parser": "^4.3.2",
+    "file-saver": "^2.0.5",
     "p-queue": "^7.3.4",
     "re-resizable": "^6.9.9",
     "react": "^18.2.0",

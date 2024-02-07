@@ -31,16 +31,23 @@ import {
   prepareCookiesCount,
   prepareFrameStatsComponent,
 } from '../../utils';
+
 interface CookiesLandingProps {
   tabFrames: TabFrames | null;
   tabCookies: TabCookies | null;
   children?: React.ReactNode;
   showInfoIcon?: boolean;
+  showBlockedInfoIcon?: boolean;
   showHorizontalMatrix?: boolean;
   associatedCookiesCount?: number | null;
   showMessageBoxBody?: boolean;
   showBlockedCookiesSection?: boolean;
+  additionalComponents?: {
+    [key: string]: React.FunctionComponent;
+  };
+  showFramesSection?: boolean;
   description?: React.ReactNode;
+  cookieClassificationTitle?: string;
 }
 
 const CookiesLanding = ({
@@ -48,11 +55,15 @@ const CookiesLanding = ({
   tabFrames,
   children,
   showInfoIcon = true,
+  showBlockedInfoIcon = true,
   associatedCookiesCount = null,
   showMessageBoxBody = true,
   showBlockedCookiesSection = false,
+  showFramesSection = false,
   showHorizontalMatrix = false,
   description = '',
+  additionalComponents = {},
+  cookieClassificationTitle,
 }: CookiesLandingProps) => {
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
@@ -103,6 +114,7 @@ const CookiesLanding = ({
               />
             ))}
         <CookiesMatrix
+          title={cookieClassificationTitle}
           tabCookies={tabCookies}
           componentData={cookiesStatsComponents.legend}
           tabFrames={tabFrames}
@@ -110,7 +122,6 @@ const CookiesLanding = ({
           showHorizontalMatrix={showHorizontalMatrix}
           associatedCookiesCount={associatedCookiesCount}
         />
-        {children && <div className="mt-8">{children}</div>}
       </CookiesLandingContainer>
       {showBlockedCookiesSection && (
         <CookiesLandingContainer
@@ -125,15 +136,22 @@ const CookiesLanding = ({
                 tabCookies={tabCookies}
                 componentData={cookiesStatsComponents.blockedCookiesLegend}
                 tabFrames={tabFrames}
-                showInfoIcon={showInfoIcon}
+                showInfoIcon={showBlockedInfoIcon}
                 showHorizontalMatrix={false}
                 infoIconTitle="Cookies that have been blocked by the browser.(The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
               />
             </>
           )}
+          {children && <div className="mt-8">{children}</div>}
         </CookiesLandingContainer>
       )}
-      {showBlockedCookiesSection && (
+      {/* TODO: This is not scalable. Refactor code so that components can be added from the the extension or dashboard package. */}
+      {Boolean(Object.keys(additionalComponents).length) &&
+        Object.keys(additionalComponents).map((key: string) => {
+          const Component = additionalComponents[key];
+          return <Component key={key} />;
+        })}
+      {showFramesSection && (
         <CookiesLandingContainer
           dataMapping={frameStateCreator.dataMapping}
           testId="frames-insights"

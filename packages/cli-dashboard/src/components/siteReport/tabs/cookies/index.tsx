@@ -21,7 +21,7 @@ import { UNKNOWN_FRAME_KEY, type TabFrames } from '@ps-analysis-tool/common';
  */
 import CookiesListing from './cookiesListing';
 import { useContentStore } from '../../stateProviders/contentStore';
-import { genereateAndDownloadCSVReports } from '../../../utils/reportDownloader';
+import { generateSiteReportandDownload } from '../../../utils/reportDownloader';
 import CookiesLandingContainer from './cookiesLandingContainer';
 
 interface CookiesTabProps {
@@ -59,10 +59,10 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
     if (!completeJson) {
       return;
     }
-    if (Array.isArray(completeJson)) {
-      genereateAndDownloadCSVReports(completeJson, selectedSite);
-    } else if (!Array.isArray(completeJson)) {
-      genereateAndDownloadCSVReports([completeJson]);
+    if (completeJson.length > 1) {
+      generateSiteReportandDownload(completeJson, selectedSite);
+    } else {
+      generateSiteReportandDownload(completeJson);
     }
   }, [completeJson, selectedSite]);
 
