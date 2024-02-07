@@ -66,7 +66,7 @@ const useCookieListing = (
       },
       {
         header: 'SameSite',
-        accessorKey: 'parsedCookie.samesite',
+        accessorKey: 'parsedCookie.sameSite',
         cell: (info: InfoType) => <span className="capitalize">{info}</span>,
         widthWeightagePercentage: 8,
       },
