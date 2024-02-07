@@ -45,8 +45,7 @@ export default function updateCookieBadgeText(
         },
         () => {
           if (chrome.runtime.lastError) {
-            // eslint-disable-next-line no-console
-            console.warn(chrome.runtime.lastError);
+            //Fail silently since we know that it will throw the error of tab Id not being available.
           }
         }
       );
