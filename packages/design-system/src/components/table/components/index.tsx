@@ -42,13 +42,9 @@ const Table = ({
   hideFiltering = false,
   extraInterfaceToTopBar,
 }: TableProps) => {
-  const { rows, tableContainerRef, exportTableData } = useTable(
-    ({ state, actions }) => ({
-      rows: state.rows,
-      tableContainerRef: state.tableContainerRef,
-      exportTableData: actions.exportTableData,
-    })
-  );
+  const { tableContainerRef } = useTable(({ state }) => ({
+    tableContainerRef: state.tableContainerRef,
+  }));
 
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
   const [showFilterSidebar, setShowFilterSidebar] = useState(false);
@@ -97,10 +93,7 @@ const Table = ({
         showFilterSidebar={showFilterSidebar}
         hideFiltering={hideFiltering}
         setShowFilterSidebar={setShowFilterSidebar}
-        cookiesCount={rows.length}
-        disableExport={rows.length === 0}
         extraInterface={extraInterfaceToTopBar}
-        exportTableData={exportTableData?.(rows) ?? undefined}
       />
       <ChipsBar />
       <div className="w-full flex-1 overflow-hidden h-full flex divide-x divide-american-silver dark:divide-quartz">

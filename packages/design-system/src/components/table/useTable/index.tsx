@@ -270,7 +270,6 @@ export const TableProvider = ({
     });
 
     setRows(newRows);
-    console.log(Date.now());
   }, [searchFilteredData, columns]);
 
   const hideableColumns = useMemo(

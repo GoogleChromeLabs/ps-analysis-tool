@@ -29,28 +29,26 @@ import { useTable } from '../../useTable';
 interface TableTopBarProps {
   showFilterSidebar: boolean;
   setShowFilterSidebar: React.Dispatch<React.SetStateAction<boolean>>;
-  cookiesCount: number;
   hideFiltering?: boolean;
   disableFiltering?: boolean;
-  disableExport?: boolean;
   extraInterface?: React.ReactNode;
-  exportTableData?: () => void;
 }
 
 const TableTopBar = ({
   showFilterSidebar,
   setShowFilterSidebar,
-  cookiesCount,
   hideFiltering = false,
   disableFiltering = false,
-  disableExport = false,
   extraInterface = null,
-  exportTableData,
 }: TableTopBarProps) => {
-  const { searchValue, setSearchValue } = useTable(({ state, actions }) => ({
-    searchValue: state.searchValue,
-    setSearchValue: actions.setSearchValue,
-  }));
+  const { rows, searchValue, setSearchValue, exportTableData } = useTable(
+    ({ state, actions }) => ({
+      rows: state.rows,
+      searchValue: state.searchValue,
+      setSearchValue: actions.setSearchValue,
+      exportTableData: actions.exportTableData,
+    })
+  );
 
   const handleInput = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,14 +91,14 @@ const TableTopBar = ({
         {exportTableData && (
           <ExportButton
             title="Export Table Data"
-            disabled={disableExport}
-            onClick={exportTableData}
+            disabled={rows.length === 0}
+            onClick={() => exportTableData(rows)}
           />
         )}
       </div>
 
       <div className="text-right w-full text-xxxs text-secondary">
-        Count: {cookiesCount ?? 0}
+        Count: {rows.length ?? 0}
       </div>
     </div>
   );
