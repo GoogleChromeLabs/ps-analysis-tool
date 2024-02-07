@@ -203,6 +203,10 @@ chrome.tabs.onCreated.addListener((tab) => {
     return;
   }
 
+  if (!syncCookieStore) {
+    syncCookieStore = new SynchnorousCookieStore();
+  }
+
   if (tabMode && tabMode !== 'unlimited') {
     const doesTabExist = tabToRead;
     if (
@@ -629,6 +633,12 @@ chrome.runtime.onMessage.addListener(async (request) => {
  */
 chrome.windows.onCreated.addListener(async () => {
   const totalWindows = await chrome.windows.getAll();
+
+  // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
+  // Doing this to keep the service worker alive so that we dont loose unnecessary data and introduce any unnecessary bug.
+  setInterval(() => {
+    chrome.storage.local.get();
+  }, 28000);
 
   // We do not want to clear content settings if a user has create one more window.
   if (totalWindows.length < 2) {
