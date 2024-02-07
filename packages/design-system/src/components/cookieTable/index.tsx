@@ -39,6 +39,7 @@ import {
 } from '../table';
 
 interface CookieTableProps {
+  useIsBlockedToHighlight?: boolean;
   data: TableData[];
   tableColumns: TableColumn[];
   tableFilters?: TableFilter;
@@ -69,6 +70,7 @@ const CookieTable = forwardRef<
   CookieTableProps
 >(function CookieTable(
   {
+    useIsBlockedToHighlight = false,
     tableColumns,
     tableFilters,
     tableSearchKeys,
@@ -141,6 +143,7 @@ const CookieTable = forwardRef<
   return (
     <div className="flex-1 w-full h-full overflow-x-auto text-outer-space-crayola border-x border-american-silver dark:border-quartz">
       <Table
+        useIsBlockedToHighlight={useIsBlockedToHighlight}
         table={table}
         showTopBar={showTopBar}
         selectedKey={

@@ -28,6 +28,7 @@ import BodyCell from './bodyCell';
 import type { TableColumn, TableRow } from '../../useTable';
 
 interface BodyRowProps {
+  useIsBlockedToHighlight: boolean;
   row: TableRow;
   columns: TableColumn[];
   index: number;
@@ -44,6 +45,7 @@ interface BodyRowProps {
 
 // eslint-disable-next-line complexity
 const BodyRow = ({
+  useIsBlockedToHighlight,
   row,
   columns,
   index,
@@ -55,8 +57,9 @@ const BodyRow = ({
   onRowContextMenu = () => undefined,
 }: BodyRowProps) => {
   const cookieKey = getRowObjectKey(row);
-  const isBlocked = (row.originalData as CookieTableData)?.blockingStatus
-    ?.inboundBlock;
+  const isBlocked = useIsBlockedToHighlight
+    ? (row.originalData as CookieTableData)?.isBlocked
+    : (row.originalData as CookieTableData)?.blockingStatus?.inboundBlock;
   const isHighlighted = (row.originalData as CookieTableData)?.highlighted;
   const isDomainInAllowList = (row.originalData as CookieTableData)
     ?.isDomainInAllowList;

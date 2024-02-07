@@ -27,6 +27,7 @@ import BodyRow from './bodyRow';
 import type { TableData, TableOutput, TableRow } from '../../useTable';
 
 interface TableBodyProps {
+  useIsBlockedToHighlight: boolean;
   table: TableOutput;
   getRowObjectKey: (row: TableRow) => string;
   isRowFocused: boolean;
@@ -43,6 +44,7 @@ interface TableBodyProps {
 }
 
 const TableBody = ({
+  useIsBlockedToHighlight,
   table,
   getRowObjectKey,
   isRowFocused,
@@ -138,6 +140,7 @@ const TableBody = ({
     >
       {table.rows.map((row, index) => (
         <BodyRow
+          useIsBlockedToHighlight={useIsBlockedToHighlight}
           key={index}
           index={index}
           row={row}
