@@ -89,26 +89,28 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         </div>
       )}
 
-      {(outboundBlock || inboundBlock) && hasValidBlockedReason && (
-        <>
-          <p className="font-bold text-raising-black dark:text-bright-gray">
-            Blocked Reason
-          </p>
-          <p
-            className="text-outer-space-crayola dark:text-bright-gray mb-3"
-            dangerouslySetInnerHTML={{ __html: blockedReasons ?? '' }}
-          />
-        </>
-      )}
+      {(outboundBlock || inboundBlock || inboundBlock === null) &&
+        hasValidBlockedReason && (
+          <>
+            <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
+              Blocked Reason
+            </p>
+            <p
+              className="text-outer-space-crayola dark:text-bright-gray"
+              dangerouslySetInnerHTML={{ __html: blockedReasons ?? '' }}
+            />
+          </>
+        )}
 
       {inboundBlock === null && !hasValidBlockedReason && isUsingCDP && (
         <>
           <p className="font-bold text-raising-black dark:text-bright-gray">
             Blocked Reason
           </p>
-          <p className="text-outer-space-crayola dark:text-bright-gray mb-3">
+          <p className="text-outer-space-crayola dark:text-bright-gray">
             This cookie was blocked due to unknown reasons
           </p>
+          <br />
         </>
       )}
 
@@ -119,6 +121,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
             This cookie was rejected by the browser in atleast one of the
             response headers.
           </p>
+          <br />
         </div>
       )}
 
@@ -129,6 +132,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
             This cookie was rejected by the browser in all of the response
             headers.
           </p>
+          <br />
         </div>
       )}
 
@@ -139,6 +143,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
             This cookie was rejected by the browser in one of the request
             headers.
           </p>
+          <br />
         </div>
       )}
 
