@@ -13,21 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * External dependencies.
  */
 import React from 'react';
-import { LandingPage } from '@ps-analysis-tool/design-system';
+import RestrictionInfoContainer from './restrictionInfoContainer';
+import InfoCards from './infoCards';
 
-const PrivacySandbox = () => (
-  <div data-testid="privacy-sandbox-content" className="h-full w-full">
-    <LandingPage
-      title="Privacy Sandbox"
-      extraClasses="h-[78vh] w-full"
-      iframeSrc="https://privacysandbox.com"
-      iframeBorderClass="border border-hex-gray dark:border-quartz"
-    />
-  </div>
-);
+/**
+ * Internal dependencies.
+ */
 
-export default PrivacySandbox;
+const FacilitatedTestingContent = () => {
+  return (
+    <div className="m-auto md:w-[70%] min-w-[30rem]">
+      <div className="w-full h-full border border-hex-gray dark:border-quartz text-raisin-black dark:text-bright-gray rounded-lg px-8 py-10 flex flex-col gap-8">
+        <RestrictionInfoContainer />
+        <div className="px-2">
+          <InfoCards />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default FacilitatedTestingContent;
