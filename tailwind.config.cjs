@@ -201,6 +201,7 @@ module.exports = {
       'chinese-silver': '#CDCDCD',
       'charleston-green': '#292A2D',
       'outer-space': '#303942',
+      'granite-gray': '#5F6369',
     },
     stroke: {
       'bright-gray': '#E8EAED',

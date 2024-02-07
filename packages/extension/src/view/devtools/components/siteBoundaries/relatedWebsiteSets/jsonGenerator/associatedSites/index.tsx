@@ -48,7 +48,7 @@ const AssociatedSites = ({
         <p className="text-base flex items-center gap-2 ">
           Associated Subset
           <span title="Browsers may enforce a limit on Associated Domains (e.g. Chrome's limit is 5)">
-            <InfoIcon />
+            <InfoIcon className="fill-granite-gray" />
           </span>
         </p>
         <AddButton onClick={addAssociatedSite} />
