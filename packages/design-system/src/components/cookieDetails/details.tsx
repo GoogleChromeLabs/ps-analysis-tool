@@ -90,7 +90,8 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
       )}
 
       {(outboundBlock || inboundBlock || inboundBlock === null) &&
-        hasValidBlockedReason && (
+        hasValidBlockedReason &&
+        isUsingCDP && (
           <>
             <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
               Blocked Reason
@@ -102,20 +103,8 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           </>
         )}
 
-      {inboundBlock === null && !hasValidBlockedReason && isUsingCDP && (
-        <>
-          <p className="font-bold text-raising-black dark:text-bright-gray">
-            Blocked Reason
-          </p>
-          <p className="text-outer-space-crayola dark:text-bright-gray">
-            This cookie was blocked due to unknown reasons
-          </p>
-          <br />
-        </>
-      )}
-
       {inboundBlock === null && hasValidBlockedReason && (
-        <div className="flex gap-1 mb-3">
+        <div className="flex gap-1 my-4">
           <Warning className="h-4 text-warning-orange" />
           <p className="text-outer-space-crayola dark:text-bright-gray">
             This cookie was rejected by the browser in atleast one of the
@@ -125,8 +114,20 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         </div>
       )}
 
+      {inboundBlock === null && !hasValidBlockedReason && (
+        <div className="flex gap-1 my-4">
+          <Warning className="h-4 text-warning-orange" />
+          <p className="text-outer-space-crayola dark:text-bright-gray">
+            We could not identify whether this cookie was blocked or not. Please
+            take a look at the network panel by copying the filter string from
+            the cookie&apos;s right-click context menu.
+          </p>
+          <br />
+        </div>
+      )}
+
       {inboundBlock !== null && inboundBlock && (
-        <div className="flex gap-1 mb-3">
+        <div className="flex gap-1 my-4">
           <Warning className="h-4 text-warning-orange" />
           <p className="text-outer-space-crayola dark:text-bright-gray">
             This cookie was rejected by the browser in all of the response
@@ -137,7 +138,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
       )}
 
       {outboundBlock !== null && outboundBlock && (
-        <div className="flex gap-1 mb-3">
+        <div className="flex gap-1 my-4">
           <Warning className="h-4 text-warning-orange" />
           <p className="text-outer-space-crayola dark:text-bright-gray">
             This cookie was rejected by the browser in one of the request
