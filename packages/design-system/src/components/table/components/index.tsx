@@ -35,6 +35,7 @@ import FiltersSidebar from './filtersSidebar';
 import { generateCookieTableCSV } from '../utils';
 
 interface TableProps {
+  useIsBlockedToHighlight: boolean;
   table: TableOutput;
   selectedKey: string | undefined | null;
   getRowObjectKey: (row: TableRow) => string;
@@ -50,6 +51,7 @@ interface TableProps {
 }
 
 const Table = ({
+  useIsBlockedToHighlight,
   table,
   selectedKey,
   getRowObjectKey,
@@ -167,6 +169,7 @@ const Table = ({
               setIsRowFocused={setIsRowFocused}
             />
             <TableBody
+              useIsBlockedToHighlight={useIsBlockedToHighlight}
               table={table}
               getRowObjectKey={getRowObjectKey}
               isRowFocused={isRowFocused}
