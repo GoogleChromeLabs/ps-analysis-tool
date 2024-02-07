@@ -26,9 +26,12 @@ import {
 } from '@ps-analysis-tool/common';
 
 /**
- *
+ * Derives if a cookie was blocked in response header.
  * @param respEvents Response event array
- * @returns outbound blocking status
+ * @returns Outbound Blocking status.
+ * 'false' - The cookie was never blocked.
+ * 'null' - The cookie wa blocked in atleast one or all of the response headers
+ * 'true' - The cookie was blocked in all of the response headers.
  */
 function deriveInboundBlocking(respEvents: responsEvent[]): boolean | null {
   // if there are not response events the cookie must be stored in a previous visit
@@ -65,9 +68,11 @@ function deriveInboundBlocking(respEvents: responsEvent[]): boolean | null {
 }
 
 /**
- *
+ * Derives if a cookie was blocked in request header.
  * @param reqEvents Request event array
- * @returns outbound blocking status
+ * @returns Outbound Blocking status.
+ * 'false' implies that the cookie was never blocked.
+ * 'true' means that is was blocked in atleast one of the requests.
  */
 function deriveOutboundBlocking(reqEvents: requestEvent[]): boolean | null {
   // Only the event REQUEST_EVENT.CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO has info about blocking.
