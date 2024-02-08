@@ -379,15 +379,20 @@ export const Provider = ({ children }: PropsWithChildren) => {
   );
 
   const tabRemovedListener = useCallback(async () => {
-    const availableTabs = await chrome.tabs.query({});
+    try {
+      const availableTabs = await chrome.tabs.query({});
 
-    if (
-      availableTabs.length === ALLOWED_NUMBER_OF_TABS &&
-      availableTabs.filter(
-        (processingTab) => processingTab.id?.toString() === tabToRead
-      )
-    ) {
-      setReturningToSingleTab(true);
+      if (
+        availableTabs.length === ALLOWED_NUMBER_OF_TABS &&
+        availableTabs.filter(
+          (processingTab) => processingTab.id?.toString() === tabToRead
+        )
+      ) {
+        setReturningToSingleTab(true);
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.warn(error);
     }
   }, [tabToRead]);
 

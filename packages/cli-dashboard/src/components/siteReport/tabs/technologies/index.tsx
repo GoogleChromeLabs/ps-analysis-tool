@@ -54,7 +54,11 @@ const Technologies = ({ selectedSite }: TechnologiesProps) => {
       {
         header: 'Description',
         accessorKey: 'description',
-        cell: (info: InfoType) => <p title={info as string}>{info}</p>,
+        cell: (info: InfoType) => (
+          <p title={info as string} className="truncate">
+            {info}
+          </p>
+        ),
       },
       {
         header: 'Confidence',
@@ -132,18 +136,26 @@ const Technologies = ({ selectedSite }: TechnologiesProps) => {
       <div className="flex-1 border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem]">
         {selectedRow ? (
           <div className="text-xs py-1 px-1.5">
-            <p className="font-bold text-granite-gray dark:text-manatee mb-1 text-semibold flex items-center">
-              <span>Technology Details</span>
-            </p>
-            <p className="mb-4 break-words text-outer-space-crayola dark:text-bright-gray">
-              {selectedRow.name}
-            </p>
-            <p className="font-bold text-granite-gray dark:text-manatee mb-1">
-              Description
-            </p>
-            <p className="text-outer-space-crayola dark:text-bright-gray">
-              {selectedRow.description}
-            </p>
+            {selectedRow.name && (
+              <>
+                <p className="font-bold text-granite-gray dark:text-manatee mb-1 text-semibold flex items-center">
+                  <span>Technology Details</span>
+                </p>
+                <p className="mb-4 break-words text-outer-space-crayola dark:text-bright-gray">
+                  {selectedRow.name}
+                </p>
+              </>
+            )}
+            {selectedRow.name && (
+              <>
+                <p className="font-bold text-granite-gray dark:text-manatee mb-1">
+                  Description
+                </p>
+                <p className="text-outer-space-crayola dark:text-bright-gray">
+                  {selectedRow.description}
+                </p>
+              </>
+            )}
           </div>
         ) : (
           <div className="h-full p-8 flex items-center">

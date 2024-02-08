@@ -13,10 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './antiCovertTracking';
-export * from './privateAdvertising';
-export * from './siteBoundaries';
-export { default as Cookies } from './cookies';
-export { default as PrivacySandbox } from './privacySandbox';
-export { default as Settings } from './settings';
-export { default as FacilitatedTesting } from './facilitatedTesting';
+
+/**
+ * External dependencies.
+ */
+import React from 'react';
+import { LandingPage } from '@ps-analysis-tool/design-system';
+import FacilitatedTestingContent from './faciliatedTestingContent';
+
+const FacilitatedTesting = () => (
+  <div data-testid="facilitated-testing-content" className="h-full w-full">
+    <LandingPage
+      title="Facilitated Testing"
+      contentPanel={<FacilitatedTestingContent />}
+    />
+  </div>
+);
+
+export default FacilitatedTesting;

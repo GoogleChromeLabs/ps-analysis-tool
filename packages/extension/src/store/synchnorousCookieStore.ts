@@ -27,6 +27,7 @@ import type { Protocol } from 'devtools-protocol';
  * Internal dependencies.
  */
 import updateCookieBadgeText from './utils/updateCookieBadgeText';
+import { deriveBlockingStatus } from './utils/deriveBlockingStatus';
 
 class SynchnorousCookieStore {
   /**
@@ -55,6 +56,7 @@ class SynchnorousCookieStore {
    * @param {number} tabId Tab id.
    * @param {Array} cookies Cookies data.
    */
+  // eslint-disable-next-line complexity
   update(tabId: number, cookies: CookieData[]) {
     try {
       if (!this.tabsData[tabId] || !this.tabs[tabId]) {
@@ -106,6 +108,19 @@ class SynchnorousCookieStore {
               this.tabsData[tabId][cookieKey].parsedCookie?.partitionKey,
           };
 
+          const networkEvents: CookieData['networkEvents'] = {
+            requestEvents: [
+              ...(this.tabsData[tabId][cookieKey]?.networkEvents
+                ?.requestEvents || []),
+              ...(cookie.networkEvents?.requestEvents || []),
+            ],
+            responseEvents: [
+              ...(this.tabsData[tabId][cookieKey]?.networkEvents
+                ?.responseEvents || []),
+              ...(cookie.networkEvents?.responseEvents || []),
+            ],
+          };
+
           this.tabsData[tabId][cookieKey] = {
             ...this.tabsData[tabId][cookieKey],
             ...cookie,
@@ -113,6 +128,8 @@ class SynchnorousCookieStore {
             parsedCookie,
             isBlocked: blockedReasons.length > 0,
             blockedReasons,
+            networkEvents,
+            blockingStatus: deriveBlockingStatus(networkEvents),
             warningReasons,
             url: this.tabsData[tabId][cookieKey].url ?? cookie.url,
             headerType:
@@ -126,11 +143,7 @@ class SynchnorousCookieStore {
           this.tabsData[tabId][cookieKey] = cookie;
         }
       }
-      //@ts-ignore Since this is for debugging the data to check the data being collected by the storage.
-      globalThis.PSAT = {
-        tabsData: this.tabsData,
-        tabs: this.tabs,
-      };
+
       updateCookieBadgeText(this.tabsData[tabId], tabId);
     } catch (error) {
       //Fail silently
@@ -173,12 +186,7 @@ class SynchnorousCookieStore {
    */
   updateUrl(tabId: number, url: string) {
     if (!this.tabs[tabId]) {
-      this.tabs[tabId] = {
-        url,
-        devToolsOpenState: false,
-        popupOpenState: false,
-        newUpdates: 0,
-      };
+      return;
     } else {
       this.tabs[tabId].url = url;
     }
@@ -299,6 +307,10 @@ class SynchnorousCookieStore {
    * @param {number} tabId The active tab id.
    */
   removeCookieData(tabId: number) {
+    if (!this.tabs[tabId] || !this.tabsData[tabId]) {
+      return;
+    }
+
     delete this.tabsData[tabId];
     this.tabsData[tabId] = {};
     this.tabs[tabId].newUpdates = 0;
@@ -313,6 +325,11 @@ class SynchnorousCookieStore {
     if (this.tabsData[tabId] && this.tabs[tabId]) {
       return;
     }
+    //@ts-ignore Since this is for debugging the data to check the data being collected by the storage.
+    globalThis.PSAT = {
+      tabsData: this.tabsData,
+      tabs: this.tabs,
+    };
 
     this.tabsData[tabId] = {};
     this.tabs[tabId] = {
@@ -356,6 +373,9 @@ class SynchnorousCookieStore {
     tabId: number,
     overrideForInitialSync = false
   ) {
+    if (!this.tabs[tabId] || !this.tabsData[tabId]) {
+      return;
+    }
     let sentMessageAnyWhere = false;
 
     try {
@@ -391,8 +411,7 @@ class SynchnorousCookieStore {
         this.tabs[tabId].newUpdates = 0;
       }
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.warn(error);
+      //Fail silently. Ignoring the console.warn here because the only error this will throw is of "Error: Could not establish connection".
     }
   }
 }

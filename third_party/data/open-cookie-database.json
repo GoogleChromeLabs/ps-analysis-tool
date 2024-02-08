@@ -1026,6 +1026,19 @@
       "wildcard": "0"
     }
   ],
+  "receive-cookie-deprecation": [
+    {
+      "platform": "Google",
+      "category": "Functional",
+      "name": "receive-cookie-deprecation",
+      "domain": "",
+      "description": "This cookie ensures browers in an experiment group of the Chrome-facilitated testing period include the Sec-Cookie-Deprecation request header as soon as it becomes available.",
+      "retention": "180 days",
+      "dataController": "Google",
+      "gdprUrl": "https://privacy.google.com/take-control.html",
+      "wildcard": "0"
+    }
+  ],
   "IDE": [
     {
       "platform": "DoubleClick/Google Marketing",
@@ -2617,6 +2630,19 @@
       "name": "ACLUSR",
       "domain": "bing.com",
       "description": "This cookie is used for advertisement tracking purposes.",
+      "retention": "1 year",
+      "dataController": "Microsoft",
+      "gdprUrl": "https://account.microsoft.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "MSPTC": [
+    {
+      "platform": "Bing / Microsoft",
+      "category": "Marketing",
+      "name": "MSPTC",
+      "domain": "bing.com",
+      "description": "This cookie registers data on the visitor. The information is used to optimize advertisement relevance.",
       "retention": "1 year",
       "dataController": "Microsoft",
       "gdprUrl": "https://account.microsoft.com/privacy",
@@ -4379,7 +4405,7 @@
   "AnalyticsSyncHistory": [
     {
       "platform": "LinkedIn",
-      "category": "Functional",
+      "category": "Analytics",
       "name": "AnalyticsSyncHistory",
       "domain": "linkedin.com (3rd party)",
       "description": "Used to store information about the time a sync with the lms_analytics cookie took place for users in the Designated Countries",
@@ -9505,6 +9531,19 @@
       "wildcard": "0"
     }
   ],
+  "XANDR_PANID": [
+    {
+      "platform": "Xandr",
+      "category": "Marketing",
+      "name": "XANDR_PANID",
+      "domain": ".adnxs.com",
+      "description": "This cookie registers data on the visitor. The information is used to optimize advertisement relevance.",
+      "retention": "400 days",
+      "dataController": "Xandr",
+      "gdprUrl": "https://about.ads.microsoft.com/en-us/solutions/xandr/platform-privacy-policy",
+      "wildcard": "0"
+    }
+  ],
   "cc-*": [
     {
       "platform": "Intershop",
@@ -9697,6 +9736,19 @@
       "retention": "1 day",
       "dataController": "Snapchat",
       "gdprUrl": "",
+      "wildcard": "0"
+    }
+  ],
+  "_scid_r": [
+    {
+      "platform": "Snapchat",
+      "category": "Marketing",
+      "name": "_scid_r",
+      "domain": "",
+      "description": "Sets a unique ID for the visitor, that allows third party advertisers to target the visitor with relevant advertisement. This pairing service is provided by third party advertisement hubs, which facilitates real-time bidding for advertisers.",
+      "retention": "13 months",
+      "dataController": "Snapchat",
+      "gdprUrl": "https://www.snap.com/en-US/privacy/privacy-policy/",
       "wildcard": "0"
     }
   ],
@@ -17965,6 +18017,97 @@
       "retention": "14 days",
       "dataController": "Bombora",
       "gdprUrl": "https://bombora.com/privacy-philosophy/",
+      "wildcard": "0"
+    }
+  ],
+  "lkqdid": [
+    {
+      "platform": "Verve",
+      "category": "Marketing",
+      "name": "lkqdid",
+      "domain": "lkqd.net",
+      "description": "This cookie is used to identify the physical location of mobile devices and operating system device identifiers.",
+      "retention": "1 year",
+      "dataController": "Verve",
+      "gdprUrl": "https://verve.com/website-privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "lkqdidts": [
+    {
+      "platform": "Verve",
+      "category": "Marketing",
+      "name": "lkqdidts",
+      "domain": "lkqd.net",
+      "description": "This cookie is used to identify the physical location of mobile devices and operating system device.",
+      "retention": "1 year",
+      "dataController": "Verve",
+      "gdprUrl": "https://verve.com/website-privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "33x_ps": [
+    {
+      "platform": "33Across",
+      "category": "Marketing",
+      "name": "33x_ps",
+      "domain": ".33across.com",
+      "description": "This cookie is used targeted and behavioural advertising services.",
+      "retention": "1 year",
+      "dataController": "33Across",
+      "gdprUrl": "https://33across.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "COOKIELAW_ADS": [
+    {
+      "platform": "Lightspeed",
+      "category": "Functional",
+      "name": "COOKIELAW_ADS",
+      "domain": "",
+      "description": "Keeps track of whether marketing cookies are allowed",
+      "retention": "1 year",
+      "dataController": "Lightspeed",
+      "gdprUrl": "https://www.lightspeedhq.com/legal/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "COOKIELAW_SOCIAL": [
+    {
+      "platform": "Lightspeed",
+      "category": "Functional",
+      "name": "COOKIELAW_SOCIAL",
+      "domain": "",
+      "description": "Keeps track of whether social cookies are allowed",
+      "retention": "1 year",
+      "dataController": "Lightspeed",
+      "gdprUrl": "https://www.lightspeedhq.com/legal/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "COOKIELAW_STATS": [
+    {
+      "platform": "Lightspeed",
+      "category": "Functional",
+      "name": "COOKIELAW_STATS",
+      "domain": "",
+      "description": "Keeps track of whether analytics cookies are allowed",
+      "retention": "1 year",
+      "dataController": "Lightspeed",
+      "gdprUrl": "https://www.lightspeedhq.com/legal/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "COOKIELAW": [
+    {
+      "platform": "Lightspeed",
+      "category": "Functional",
+      "name": "COOKIELAW",
+      "domain": "",
+      "description": "These cookies are used for platform stability and to store cookie preferences. They do not collect personally identifiable information and cannot be disabled.",
+      "retention": "1 year",
+      "dataController": "Lightspeed",
+      "gdprUrl": "https://www.lightspeedhq.com/legal/privacy-policy/",
       "wildcard": "0"
     }
   ]

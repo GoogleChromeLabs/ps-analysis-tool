@@ -59,11 +59,9 @@ const CookiesLandingContainer = ({
         associatedCookiesCount={Object.values(tabFrames).length}
         showMessageBoxBody={false}
         showBlockedCookiesSection
+        cookieClassificationTitle="Categories"
       >
         <div className="flex flex-col">
-          <h3 className="text-xs font-bold text-darkest-gray dark:text-bright-gray uppercase">
-            Comparative Insights
-          </h3>
           <div className="pt-4">
             <CookiesMatrix
               tabCookies={affectedCookies}
@@ -73,14 +71,10 @@ const CookiesLandingContainer = ({
                 ).legend
               }
               tabFrames={tabFrames}
-              title="Affected Cookies"
               description=""
               showInfoIcon={false}
               showHorizontalMatrix={false}
-              count={Number(Object.values(affectedCookies).length)}
               allowExpand={false}
-              highlightTitle={true}
-              capitalizeTitle={true}
             />
           </div>
         </div>

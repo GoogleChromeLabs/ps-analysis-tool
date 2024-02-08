@@ -38,10 +38,17 @@ export default function updateCookieBadgeText(
         storage[cookieKey].frameIdList?.length >= 1
     ).length;
     if (numCookies >= 0) {
-      chrome.action.setBadgeText({
-        tabId: tabId,
-        text: numCookies.toString(),
-      });
+      chrome.action.setBadgeText(
+        {
+          tabId: tabId,
+          text: numCookies.toString(),
+        },
+        () => {
+          if (chrome.runtime.lastError) {
+            //Fail silently since we know that it will throw the error of tab Id not being available.
+          }
+        }
+      );
     }
   } catch (error) {
     // do nothing
