@@ -65,6 +65,14 @@ chrome.webRequest.onResponseStarted.addListener(
   ({ tabId, url, responseHeaders, frameId }) => {
     (async () => {
       if (!syncCookieStore) {
+        try {
+          chrome.runtime.sendMessage({
+            type: 'ServiceWorker::DevTools::SERVICE_WORKER_STATE_UPDATE',
+            payload: { didServiceWorkerSleep: true },
+          });
+        } catch (error) {
+          //Fail silently. Ignoring the console.warn here because the only error this will throw is of "Error: Could not establish connection".
+        }
         return;
       }
 
@@ -139,10 +147,18 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
   ({ url, requestHeaders, tabId, frameId, requestId }) => {
     (async () => {
       if (!syncCookieStore) {
+        try {
+          chrome.runtime.sendMessage({
+            type: 'ServiceWorker::DevTools::SERVICE_WORKER_STATE_UPDATE',
+            payload: { didServiceWorkerSleep: true },
+          });
+        } catch (error) {
+          //Fail silently. Ignoring the console.warn here because the only error this will throw is of "Error: Could not establish connection".
+        }
         return;
       }
 
-      const tabUrl = syncCookieStore?.getTabUrl(tabId) ?? '';
+      const tabUrl = syncCookieStore.getTabUrl(tabId) ?? '';
 
       if (
         !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, requestHeaders)
@@ -197,7 +213,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
         return;
       }
 
-      syncCookieStore?.update(tabId, cookies);
+      syncCookieStore.update(tabId, cookies);
     })();
   },
   { urls: ['*://*/*'] },
@@ -211,10 +227,6 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 chrome.tabs.onCreated.addListener((tab) => {
   if (!tab.id) {
     return;
-  }
-
-  if (!syncCookieStore) {
-    syncCookieStore = new SynchnorousCookieStore();
   }
 
   if (tabMode && tabMode !== 'unlimited') {
@@ -515,6 +527,18 @@ chrome.runtime.onMessage.addListener(async (request) => {
     request?.type === 'DevTools::ServiceWorker::SET_TAB_TO_READ' ||
     request?.type === 'Popup::ServiceWorker::SET_TAB_TO_READ'
   ) {
+    if (!syncCookieStore) {
+      try {
+        chrome.runtime.sendMessage({
+          type: 'ServiceWorker::DevTools::SERVICE_WORKER_STATE_UPDATE',
+          payload: { didServiceWorkerSleep: true },
+        });
+      } catch (error) {
+        //Fail silently. Ignoring the console.warn here because the only error this will throw is of "Error: Could not establish connection".
+      }
+      return;
+    }
+
     tabToRead = request?.payload?.tabId?.toString();
     const newTab = await listenToNewTab(request?.payload?.tabId);
 

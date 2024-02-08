@@ -341,6 +341,14 @@ export const Provider = ({ children }: PropsWithChildren) => {
           }
         }
       }
+
+      if (
+        message.type === 'ServiceWorker::DevTools::SERVICE_WORKER_STATE_UPDATE'
+      ) {
+        if (typeof message?.payload?.didServiceWorkerSleep !== 'undefined') {
+          setServiceWorkerInactive(message?.payload?.didServiceWorkerSleep);
+        }
+      }
     };
 
     chrome.runtime.onMessage.addListener(listener);
