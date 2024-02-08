@@ -66,7 +66,7 @@ chrome.webRequest.onResponseStarted.addListener(
     (async () => {
       if (!syncCookieStore) {
         try {
-          chrome.runtime.sendMessage({
+          await chrome.runtime.sendMessage({
             type: 'ServiceWorker::DevTools::SERVICE_WORKER_STATE_UPDATE',
             payload: { didServiceWorkerSleep: true },
           });
@@ -148,7 +148,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
     (async () => {
       if (!syncCookieStore) {
         try {
-          chrome.runtime.sendMessage({
+          await chrome.runtime.sendMessage({
             type: 'ServiceWorker::DevTools::SERVICE_WORKER_STATE_UPDATE',
             payload: { didServiceWorkerSleep: true },
           });
@@ -676,6 +676,12 @@ chrome.runtime.onMessage.addListener(async (request) => {
 
     syncCookieStore.addTabData(request?.payload?.tabId);
     syncCookieStore.updateDevToolsState(request?.payload?.tabId, true);
+
+    //Send message to other devtools in multitab environement when service worker has been
+    //revived and syncCookieStore object has been recreated.
+    await chrome.runtime.sendMessage({
+      type: 'ServiceWorker::DevTools::SERVICE_WORKER_RELOADED',
+    });
 
     setInterval(() => {
       if (Object.keys(syncCookieStore?.tabsData ?? {}).length === 0) {

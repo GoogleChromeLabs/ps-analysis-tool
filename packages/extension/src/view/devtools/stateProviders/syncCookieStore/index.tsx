@@ -349,6 +349,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
           setServiceWorkerInactive(message?.payload?.didServiceWorkerSleep);
         }
       }
+
+      if (message.type === 'ServiceWorker::DevTools::SERVICE_WORKER_RELOADED') {
+        setServiceWorkerInactive(false);
+        window.location.reload();
+      }
     };
 
     chrome.runtime.onMessage.addListener(listener);
