@@ -35,6 +35,7 @@ import { ALLOWED_NUMBER_OF_TABS } from '../constants';
 import SynchnorousCookieStore from '../store/synchnorousCookieStore';
 import canProcessCookies from '../utils/canProcessCookies';
 import { getTab } from '../utils/getTab';
+import reloadCurrentTab from '../utils/reloadCurrentTab';
 
 let cookieDB: CookieDatabase | null = null;
 let syncCookieStore: SynchnorousCookieStore | undefined;
@@ -627,6 +628,21 @@ chrome.runtime.onMessage.addListener(async (request) => {
       JSON.parse(request?.payload?.cookieData)
     );
   }
+
+  if (request?.type === 'DevTools::ServiceWorker::RELOAD_ALL_TABS') {
+    await chrome.runtime.sendMessage({
+      type: 'ServiceWorker::DevTools::TABS_RELOADED',
+    });
+    const tabs = await chrome.tabs.query({});
+    await Promise.all(
+      tabs.map(async (tab) => {
+        if (!tab.id) {
+          return;
+        }
+        await reloadCurrentTab(tab.id);
+      })
+    );
+  }
 });
 
 /**
@@ -692,7 +708,6 @@ chrome.storage.sync.onChanged.addListener(
 
         syncCookieStore?.removeTabData(tab.id);
 
-        chrome.tabs.reload(Number(tab?.id), { bypassCache: true });
         return tab;
       });
     } else {
@@ -712,17 +727,14 @@ chrome.storage.sync.onChanged.addListener(
         },
       });
 
-      await Promise.all(
-        tabs.map(async (tab) => {
-          if (!tab?.id) {
-            return;
-          }
-          syncCookieStore?.addTabData(tab.id);
-          syncCookieStore?.sendUpdatedDataToPopupAndDevTools(tab.id);
-          syncCookieStore?.updateDevToolsState(tab.id, true);
-          await chrome.tabs.reload(Number(tab?.id), { bypassCache: true });
-        })
-      );
+      tabs.forEach((tab) => {
+        if (!tab?.id) {
+          return;
+        }
+        syncCookieStore?.addTabData(tab.id);
+        syncCookieStore?.sendUpdatedDataToPopupAndDevTools(tab.id);
+        syncCookieStore?.updateDevToolsState(tab.id, true);
+      });
     }
   }
 );
@@ -769,23 +781,18 @@ chrome.storage.sync.onChanged.addListener(
           } catch (error) {
             // eslint-disable-next-line no-console
             console.warn(error);
-          } finally {
-            await chrome.tabs.reload(tab.id, { bypassCache: true });
           }
         })
       );
     } else {
-      await Promise.all(
-        tabs.map(async (tab) => {
-          if (!tab.id) {
-            return;
-          }
+      tabs.forEach((tab) => {
+        if (!tab.id) {
+          return;
+        }
 
-          syncCookieStore?.removeCookieData(tab.id);
-          syncCookieStore?.sendUpdatedDataToPopupAndDevTools(tab.id);
-          await chrome.tabs.reload(tab.id, { bypassCache: true });
-        })
-      );
+        syncCookieStore?.removeCookieData(tab.id);
+        syncCookieStore?.sendUpdatedDataToPopupAndDevTools(tab.id);
+      });
     }
   }
 );

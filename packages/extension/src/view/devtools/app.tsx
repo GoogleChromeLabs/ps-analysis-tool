@@ -26,6 +26,7 @@ import {
   useSidebar,
   type SidebarItems,
   InspectButton,
+  ToastMessage,
 } from '@ps-analysis-tool/design-system';
 import {
   UNKNOWN_FRAME_KEY,
@@ -73,9 +74,12 @@ const App: React.FC = () => {
     frameHasCookies: state.frameHasCookies,
   }));
 
-  const { allowedNumberOfTabs } = useSettingsStore(({ state }) => ({
-    allowedNumberOfTabs: state.allowedNumberOfTabs,
-  }));
+  const { allowedNumberOfTabs, settingsChanged, handleSettingsChange } =
+    useSettingsStore(({ state, actions }) => ({
+      allowedNumberOfTabs: state.allowedNumberOfTabs,
+      settingsChanged: state.settingsChanged,
+      handleSettingsChange: actions.handleSettingsChange,
+    }));
 
   const listenToMouseChange = useCallback(() => {
     if (contextInvalidatedRef.current) {
@@ -252,16 +256,16 @@ const App: React.FC = () => {
 
   return (
     <div
-      className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black"
+      className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black relative"
       ref={contextInvalidatedRef}
     >
       {contextInvalidated && (
-        <div className="flex flex-col items-center justify-center w-full h-full">
+        <div className="flex flex-col items-center justify-center w-full h-full z-1">
           <ExtensionReloadNotification />
         </div>
       )}
       {!contextInvalidated && (
-        <div className="w-full h-full flex flex-row">
+        <div className="w-full h-full flex flex-row z-1">
           <Resizable
             size={{ width: sidebarWidth, height: '100%' }}
             defaultSize={{ width: '200px', height: '100%' }}
@@ -292,6 +296,13 @@ const App: React.FC = () => {
             <div className="min-w-[40rem] h-full">{activePanel}</div>
           </main>
         </div>
+      )}
+      {settingsChanged && (
+        <ToastMessage
+          text="To get accurate data we need to reload all open tabs. Please click
+        on Reload to reload all open tabs."
+          onClick={handleSettingsChange}
+        />
       )}
     </div>
   );

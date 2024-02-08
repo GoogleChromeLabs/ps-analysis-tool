@@ -48,10 +48,13 @@ export interface SettingStoreContext {
     browserInformation: string | null;
     OSInformation: string | null;
     isUsingCDP: boolean;
+    settingsChanged: boolean;
   };
   actions: {
     setProcessingMode: (newState: boolean) => void;
     setIsUsingCDP: (newValue: boolean) => void;
+    handleSettingsChange: () => void;
+    setSettingsChanged: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
@@ -63,10 +66,13 @@ const initialState: SettingStoreContext = {
     browserInformation: null,
     OSInformation: null,
     isUsingCDP: false,
+    settingsChanged: false,
   },
   actions: {
     setIsUsingCDP: noop,
     setProcessingMode: noop,
+    handleSettingsChange: noop,
+    setSettingsChanged: noop,
   },
 };
 
@@ -76,6 +82,8 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [allowedNumberOfTabs, setAllowedNumberOfTabs] = useState<string | null>(
     null
   );
+
+  const [settingsChanged, setSettingsChanged] = useState<boolean>(false);
 
   const [isUsingCDP, setIsUsingCDP] = useState(false);
 
@@ -137,7 +145,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
     const valueToBeSet: boolean | string = newState ? 'unlimited' : 'single';
 
     const currentSettings = await chrome.storage.sync.get();
-
     chrome.storage.sync.set({
       ...currentSettings,
       allowedNumberOfTabs: valueToBeSet,
@@ -161,14 +168,25 @@ export const Provider = ({ children }: PropsWithChildren) => {
         changes?.allowedNumberOfTabs?.newValue
       ) {
         setAllowedNumberOfTabs(changes?.allowedNumberOfTabs?.newValue);
+        setSettingsChanged(true);
       }
 
       if (changes?.isUsingCDP) {
         setIsUsingCDP(changes?.isUsingCDP?.newValue);
+        setSettingsChanged(true);
       }
     },
     []
   );
+
+  const handleSettingsChange = useCallback(async () => {
+    if (settingsChanged) {
+      await chrome.runtime.sendMessage({
+        type: 'DevTools::ServiceWorker::RELOAD_ALL_TABS',
+      });
+      setSettingsChanged(false);
+    }
+  }, [settingsChanged]);
 
   useEffect(() => {
     intitialSync();
@@ -189,10 +207,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
           browserInformation,
           OSInformation,
           isUsingCDP,
+          settingsChanged,
         },
         actions: {
           setProcessingMode,
           setIsUsingCDP: _setUsingCDP,
+          handleSettingsChange,
+          setSettingsChanged,
         },
       }}
     >
