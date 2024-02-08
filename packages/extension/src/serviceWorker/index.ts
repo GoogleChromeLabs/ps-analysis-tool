@@ -62,7 +62,7 @@ const ALLOWED_EVENTS = [
  * @see https://developer.chrome.com/docs/extensions/reference/api/webRequest
  */
 chrome.webRequest.onResponseStarted.addListener(
-  ({ tabId, url, responseHeaders, frameId }) => {
+  ({ tabId, url, responseHeaders, frameId, requestId }) => {
     (async () => {
       if (!syncCookieStore) {
         try {
@@ -116,7 +116,7 @@ chrome.webRequest.onResponseStarted.addListener(
               tabUrl,
               frameId,
               cdpCookies?.cookies ?? [],
-              details.requestId
+              requestId
             );
 
             return [...accumulator, cookie];
