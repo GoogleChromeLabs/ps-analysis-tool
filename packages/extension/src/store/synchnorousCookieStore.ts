@@ -234,7 +234,6 @@ class SynchnorousCookieStore {
     if (!this.tabsData[tabId]) {
       return;
     }
-
     // Check if primaryDomain cookie exists
     if (
       this.tabsData[tabId] &&
@@ -247,7 +246,6 @@ class SynchnorousCookieStore {
           ...exclusionReasons,
         ]),
       ];
-
       this.tabsData[tabId][cookieName].warningReasons = [
         ...new Set([
           ...(this.tabsData[tabId][cookieName].warningReasons ?? []),
@@ -271,7 +269,6 @@ class SynchnorousCookieStore {
           ...exclusionReasons,
         ]),
       ];
-
       this.tabsData[tabId][alternateCookieName].warningReasons = [
         ...new Set([
           ...(this.tabsData[tabId][alternateCookieName].warningReasons ?? []),

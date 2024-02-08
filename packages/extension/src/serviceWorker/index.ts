@@ -265,7 +265,6 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   } catch (error) {
     //Fail silently
   }
-
   if (!tab.url) {
     return;
   }
@@ -428,7 +427,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
   if (method === 'Audits.issueAdded' && params) {
     const auditParams = params as Protocol.Audits.IssueAddedEvent;
     const { code, details } = auditParams.issue;
-
     if (code !== 'CookieIssue' && !details.cookieIssueDetails) {
       return;
     }

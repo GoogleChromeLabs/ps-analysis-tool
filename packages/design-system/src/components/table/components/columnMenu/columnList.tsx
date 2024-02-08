@@ -23,38 +23,38 @@ import React, { useEffect } from 'react';
  * Internal dependencies.
  */
 import ColumnListItem from './columnListItem';
-import type { TableOutput } from '../../useTable';
+import { useTable } from '../../useTable';
 
 interface ColumnListProps {
-  table: TableOutput;
   toggleVisibility: (key: string) => void;
   handleClose: () => void;
 }
 
-const ColumnList = ({
-  table,
-  toggleVisibility,
-  handleClose,
-}: ColumnListProps) => {
+const ColumnList = ({ toggleVisibility, handleClose }: ColumnListProps) => {
+  const { hideableColumns, isColumnHidden } = useTable(
+    ({ state, actions }) => ({
+      hideableColumns: state.hideableColumns,
+      isColumnHidden: actions.isColumnHidden,
+    })
+  );
+
   useEffect(() => {
     return () => {
       const visibleColumns: Record<string, boolean> = {};
 
-      table.hideableColumns.forEach((column) => {
-        visibleColumns[column.header] = table.isColumnHidden(
-          column.accessorKey
-        );
+      hideableColumns.forEach((column) => {
+        visibleColumns[column.header] = isColumnHidden(column.accessorKey);
       });
     };
-  }, [table, table.hideableColumns]);
+  }, [hideableColumns, isColumnHidden]);
 
   return (
     <ul className="text-basic mt-1.5">
-      {table.hideableColumns.map((column, key) => (
+      {hideableColumns.map((column, key) => (
         <ColumnListItem
           key={key}
           column={column}
-          isColumnHidden={table.isColumnHidden(column.accessorKey)}
+          isColumnHidden={isColumnHidden(column.accessorKey)}
           toggleVisibility={toggleVisibility}
           handleClose={handleClose}
         />

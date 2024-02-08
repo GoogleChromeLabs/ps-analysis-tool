@@ -29,14 +29,9 @@ import { CookieTableData, getCookieKey } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import {
-  Table,
-  TableColumn,
-  TableData,
-  TableFilter,
-  TableRow,
-  useTable,
-} from '../table';
+import { Table, TableColumn, TableData, TableFilter, TableRow } from '../table';
+import { TableProvider } from '../table/useTable';
+import { conditionalTableRowClassesHandler, exportCookies } from './utils';
 
 interface CookieTableProps {
   useIsBlockedToHighlight?: boolean;
@@ -46,8 +41,6 @@ interface CookieTableProps {
   tableSearchKeys?: string[];
   tablePersistentSettingsKey?: string;
   selectedFrame: string | null;
-  showTopBar?: boolean;
-  hideExport?: boolean;
   selectedFrameCookie: {
     [frame: string]: CookieTableData | null;
   } | null;
@@ -76,8 +69,6 @@ const CookieTable = forwardRef<
     tableSearchKeys,
     tablePersistentSettingsKey,
     data: cookies,
-    showTopBar,
-    hideExport = false,
     selectedFrame,
     selectedFrameCookie,
     setSelectedFrameCookie,
@@ -108,6 +99,22 @@ const CookieTable = forwardRef<
     [selectedFrame, setSelectedFrameCookie]
   );
 
+  const onRowContextMenuHandler = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>, row: TableRow) => {
+      onRowContextMenu?.(e, row);
+      onRowClick(row?.originalData);
+    },
+    [onRowClick, onRowContextMenu]
+  );
+
+  const getRowObjectKey = useCallback(
+    (row: TableRow) =>
+      getCookieKey(
+        (row?.originalData as CookieTableData).parsedCookie
+      ) as string,
+    []
+  );
+
   useImperativeHandle(
     ref,
     () => {
@@ -120,18 +127,30 @@ const CookieTable = forwardRef<
     [onRowClick]
   );
 
-  const selectedKey = useMemo(
-    () => Object.values(selectedFrameCookie ?? {})[0],
-    [selectedFrameCookie]
+  const selectedKey = useMemo(() => {
+    const key = Object.values(selectedFrameCookie ?? {})[0];
+
+    return key === null ? null : getCookieKey(key?.parsedCookie);
+  }, [selectedFrameCookie]);
+
+  const _conditionalTableRowClassesHandler = useCallback(
+    (row: TableRow, isRowFocused: boolean, rowIndex: number) => {
+      return conditionalTableRowClassesHandler(
+        row,
+        isRowFocused,
+        rowIndex,
+        selectedKey,
+        useIsBlockedToHighlight
+      );
+    },
+    [selectedKey, useIsBlockedToHighlight]
   );
 
-  const table = useTable({
-    tableColumns,
-    data: cookies,
-    tableFilterData: tableFilters,
-    tableSearchKeys,
-    tablePersistentSettingsKey,
-  });
+  const hasVerticalBar = useCallback((row: TableRow) => {
+    const isDomainInAllowList = (row.originalData as CookieTableData)
+      ?.isDomainInAllowList;
+    return Boolean(isDomainInAllowList);
+  }, []);
 
   useEffect(() => {
     window.addEventListener('resize', () => forceUpdate());
@@ -142,29 +161,24 @@ const CookieTable = forwardRef<
 
   return (
     <div className="flex-1 w-full h-full overflow-x-auto text-outer-space-crayola border-x border-american-silver dark:border-quartz">
-      <Table
-        useIsBlockedToHighlight={useIsBlockedToHighlight}
-        table={table}
-        showTopBar={showTopBar}
-        selectedKey={
-          selectedKey === null ? null : getCookieKey(selectedKey?.parsedCookie)
-        }
-        hideExport={hideExport}
-        getRowObjectKey={(row: TableRow) =>
-          getCookieKey(
-            (row?.originalData as CookieTableData).parsedCookie
-          ) as string
-        }
+      <TableProvider
+        data={cookies}
+        tableColumns={tableColumns}
+        tableFilterData={tableFilters}
+        tableSearchKeys={tableSearchKeys}
+        tablePersistentSettingsKey={tablePersistentSettingsKey}
         onRowClick={onRowClick}
-        extraInterfaceToTopBar={extraInterfaceToTopBar}
-        onRowContextMenu={(
-          e: React.MouseEvent<HTMLDivElement>,
-          row: TableRow
-        ) => {
-          onRowContextMenu?.(e, row);
-          onRowClick(row?.originalData);
-        }}
-      />
+        onRowContextMenu={onRowContextMenuHandler}
+        getRowObjectKey={getRowObjectKey}
+        conditionalTableRowClassesHandler={_conditionalTableRowClassesHandler}
+        exportTableData={exportCookies}
+        hasVerticalBar={hasVerticalBar}
+      >
+        <Table
+          selectedKey={selectedKey}
+          extraInterfaceToTopBar={extraInterfaceToTopBar}
+        />
+      </TableProvider>
     </div>
   );
 });

@@ -21,11 +21,11 @@ import React, { useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
 import {
   Table,
-  useTable,
   type TableColumn,
   type InfoType,
   type TableRow,
   type TableFilter,
+  TableProvider,
 } from '@ps-analysis-tool/design-system';
 import type { TechnologyData } from '@ps-analysis-tool/common';
 
@@ -94,14 +94,6 @@ const Technologies = ({ selectedSite }: TechnologiesProps) => {
     return 'technologyListing';
   }, [selectedSite]);
 
-  const table = useTable({
-    data,
-    tableColumns,
-    tableFilterData: filters,
-    tableSearchKeys: searchKeys,
-    tablePersistentSettingsKey,
-  });
-
   return (
     <div className="w-full h-full text-outer-space-crayola border-x border-american-silver dark:border-quartz flex flex-col">
       <Resizable
@@ -119,19 +111,26 @@ const Technologies = ({ selectedSite }: TechnologiesProps) => {
         }}
         className="h-full flex"
       >
-        <Table
-          table={table}
-          hideFiltering={true}
-          showTopBar={true}
-          hideExport={true}
-          selectedKey={selectedRow?.slug}
-          onRowClick={(row) => {
-            setSelectedRow(row as TechnologyData);
-          }}
-          getRowObjectKey={(row: TableRow) => {
-            return (row.originalData as TechnologyData).slug;
-          }}
-        />
+        <TableProvider
+          data={data}
+          tableColumns={tableColumns}
+          tableFilterData={filters}
+          tableSearchKeys={searchKeys}
+          tablePersistentSettingsKey={tablePersistentSettingsKey}
+        >
+          <Table
+            hideFiltering={true}
+            showTopBar={true}
+            hideExport={true}
+            selectedKey={selectedRow?.slug}
+            onRowClick={(row) => {
+              setSelectedRow(row as TechnologyData);
+            }}
+            getRowObjectKey={(row: TableRow) => {
+              return (row.originalData as TechnologyData).slug;
+            }}
+          />
+        </TableProvider>
       </Resizable>
       <div className="flex-1 border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem]">
         {selectedRow ? (

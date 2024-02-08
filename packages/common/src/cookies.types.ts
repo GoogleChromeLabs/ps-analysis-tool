@@ -116,7 +116,6 @@ export type CookieData = {
 
 export type CookieTableData = CookieData & {
   frameUrls?: string | string[];
-  highlighted?: boolean;
   isDomainInAllowList?: boolean;
 };
 

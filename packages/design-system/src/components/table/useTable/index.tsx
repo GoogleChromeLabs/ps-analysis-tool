@@ -17,11 +17,12 @@
 /**
  * External dependencies.
  */
-import { useEffect, useMemo, useState } from 'react';
+import React, { PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import {
   getValueByKey,
   CookieTableData,
   TechnologyData,
+  noop,
 } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
@@ -35,8 +36,11 @@ import useColumnResizing, {
 } from './useColumnResizing';
 import useFiltering, { TableFilteringOutput } from './useFiltering';
 import useSearch, { TableSearchOutput } from './useSearch';
+import { createContext, useContextSelector } from 'use-context-selector';
 
-export type TableData = CookieTableData | TechnologyData;
+export type TableData = (CookieTableData | TechnologyData) & {
+  highlighted?: boolean;
+};
 
 export type InfoType = number | string | boolean | string[] | [];
 
@@ -45,7 +49,9 @@ export type TableColumn = {
   accessorKey: string;
   cell?: (info: InfoType, details?: TableData) => React.JSX.Element | InfoType;
   enableHiding?: boolean;
-  enablePrefixIcon?: boolean;
+  enableBodyCellPrefixIcon?: boolean;
+  bodyCellPrefixIcon?: React.ReactNode;
+  showBodyCellPrefixIcon?: (row: TableRow) => boolean;
   widthWeightagePercentage?: number;
   width?: number; // For internal use only
 };
@@ -89,48 +95,114 @@ export type PersistentStorageData = {
   searchValue?: string;
 };
 
-export type TableOutput = {
-  columns: TableColumn[];
-  hideableColumns: TableColumn[];
-  rows: TableRow[];
-  sortKey: ColumnSortingOutput['sortKey'];
-  sortOrder: ColumnSortingOutput['sortOrder'];
-  setSortKey: ColumnSortingOutput['setSortKey'];
-  setSortOrder: ColumnSortingOutput['setSortOrder'];
-  hideColumn: ColumnVisibilityOutput['hideColumn'];
-  toggleVisibility: ColumnVisibilityOutput['toggleVisibility'];
-  areAllColumnsVisible: ColumnVisibilityOutput['areAllColumnsVisible'];
-  showColumn: ColumnVisibilityOutput['showColumn'];
-  isColumnHidden: ColumnVisibilityOutput['isColumnHidden'];
-  tableContainerRef: ColumnResizingOutput['tableContainerRef'];
-  onMouseDown: ColumnResizingOutput['onMouseDown'];
-  isResizing: ColumnResizingOutput['isResizing'];
-  filters: TableFilter;
-  selectedFilters: TableFilter;
-  isFiltering: TableFilteringOutput['isFiltering'];
-  toggleFilterSelection: TableFilteringOutput['toggleFilterSelection'];
-  toggleSelectAllFilter: TableFilteringOutput['toggleSelectAllFilter'];
-  resetFilters: TableFilteringOutput['resetFilters'];
-  isSelectAllFilterSelected: TableFilteringOutput['isSelectAllFilterSelected'];
-  searchValue: TableSearchOutput['searchValue'];
-  setSearchValue: TableSearchOutput['setSearchValue'];
-};
-
 interface useTableProps {
   data: TableData[];
   tableColumns: TableColumn[];
   tableFilterData?: TableFilter;
   tableSearchKeys?: string[];
   tablePersistentSettingsKey?: string;
+  onRowClick: (row: TableData | null) => void;
+  onRowContextMenu: (
+    e: React.MouseEvent<HTMLDivElement>,
+    row: TableRow
+  ) => void;
+  getRowObjectKey: (row: TableRow) => string;
+  conditionalTableRowClassesHandler?: (
+    row: TableRow,
+    isRowFocused: boolean,
+    rowIndex: number
+  ) => string;
+  exportTableData?: (rows: TableRow[]) => void;
+  hasVerticalBar?: (row: TableRow) => boolean;
 }
 
-const useTable = ({
+export interface TableStoreContext {
+  state: {
+    columns: TableColumn[];
+    hideableColumns: TableColumn[];
+    rows: TableRow[];
+    sortKey: ColumnSortingOutput['sortKey'];
+    sortOrder: ColumnSortingOutput['sortOrder'];
+    areAllColumnsVisible: ColumnVisibilityOutput['areAllColumnsVisible'];
+    tableContainerRef: ColumnResizingOutput['tableContainerRef'];
+    isResizing: ColumnResizingOutput['isResizing'];
+    filters: TableFilter;
+    selectedFilters: TableFilter;
+    isFiltering: TableFilteringOutput['isFiltering'];
+    searchValue: TableSearchOutput['searchValue'];
+  };
+  actions: {
+    setSortKey: ColumnSortingOutput['setSortKey'];
+    setSortOrder: ColumnSortingOutput['setSortOrder'];
+    hideColumn: ColumnVisibilityOutput['hideColumn'];
+    toggleVisibility: ColumnVisibilityOutput['toggleVisibility'];
+    showColumn: ColumnVisibilityOutput['showColumn'];
+    isColumnHidden: ColumnVisibilityOutput['isColumnHidden'];
+    onMouseDown: ColumnResizingOutput['onMouseDown'];
+    toggleFilterSelection: TableFilteringOutput['toggleFilterSelection'];
+    toggleSelectAllFilter: TableFilteringOutput['toggleSelectAllFilter'];
+    resetFilters: TableFilteringOutput['resetFilters'];
+    isSelectAllFilterSelected: TableFilteringOutput['isSelectAllFilterSelected'];
+    setSearchValue: TableSearchOutput['setSearchValue'];
+    onRowClick: useTableProps['onRowClick'];
+    onRowContextMenu: useTableProps['onRowContextMenu'];
+    getRowObjectKey: useTableProps['getRowObjectKey'];
+    conditionalTableRowClassesHandler?: useTableProps['conditionalTableRowClassesHandler'];
+    exportTableData?: useTableProps['exportTableData'];
+    hasVerticalBar?: useTableProps['hasVerticalBar'];
+  };
+}
+
+const initialState: TableStoreContext = {
+  state: {
+    columns: [],
+    hideableColumns: [],
+    rows: [],
+    sortKey: '',
+    sortOrder: 'asc',
+    areAllColumnsVisible: true,
+    tableContainerRef: null,
+    isResizing: false,
+    filters: {},
+    selectedFilters: {},
+    isFiltering: false,
+    searchValue: '',
+  },
+  actions: {
+    setSortKey: noop,
+    setSortOrder: noop,
+    hideColumn: noop,
+    toggleVisibility: noop,
+    showColumn: noop,
+    isColumnHidden: () => false,
+    onMouseDown: noop,
+    toggleFilterSelection: noop,
+    toggleSelectAllFilter: noop,
+    resetFilters: noop,
+    isSelectAllFilterSelected: () => false,
+    setSearchValue: noop,
+    onRowClick: noop,
+    onRowContextMenu: noop,
+    getRowObjectKey: () => '',
+  },
+};
+
+export const TableContext = createContext<TableStoreContext>(initialState);
+
+export const TableProvider = ({
   data,
   tableColumns,
   tableFilterData,
   tableSearchKeys,
   tablePersistentSettingsKey,
-}: useTableProps): TableOutput => {
+  onRowClick,
+  onRowContextMenu,
+  getRowObjectKey,
+  conditionalTableRowClassesHandler,
+  exportTableData,
+  hasVerticalBar,
+  children,
+}: PropsWithChildren<useTableProps>) => {
   const commonKey = useMemo(() => {
     if (!tablePersistentSettingsKey) {
       return undefined;
@@ -208,32 +280,61 @@ const useTable = ({
     [tableColumns]
   );
 
-  return {
-    columns,
-    hideableColumns,
-    rows,
-    sortKey,
-    sortOrder,
-    setSortKey,
-    setSortOrder,
-    hideColumn,
-    toggleVisibility,
-    areAllColumnsVisible,
-    showColumn,
-    isColumnHidden,
-    tableContainerRef,
-    onMouseDown,
-    isResizing,
-    filters,
-    selectedFilters,
-    isFiltering,
-    toggleFilterSelection,
-    toggleSelectAllFilter,
-    resetFilters,
-    isSelectAllFilterSelected,
-    searchValue,
-    setSearchValue,
-  };
+  return (
+    <TableContext.Provider
+      value={{
+        state: {
+          columns,
+          hideableColumns,
+          rows,
+          sortKey,
+          sortOrder,
+          areAllColumnsVisible,
+          tableContainerRef,
+          isResizing,
+          filters,
+          selectedFilters,
+          isFiltering,
+          searchValue,
+        },
+        actions: {
+          setSortKey,
+          setSortOrder,
+          hideColumn,
+          toggleVisibility,
+          showColumn,
+          isColumnHidden,
+          onMouseDown,
+          toggleFilterSelection,
+          toggleSelectAllFilter,
+          resetFilters,
+          isSelectAllFilterSelected,
+          setSearchValue,
+          onRowClick,
+          onRowContextMenu,
+          getRowObjectKey,
+          conditionalTableRowClassesHandler,
+          exportTableData,
+          hasVerticalBar,
+        },
+      }}
+    >
+      {children}
+    </TableContext.Provider>
+  );
 };
 
-export default useTable;
+export function useTable(): TableStoreContext;
+export function useTable<T>(selector: (state: TableStoreContext) => T): T;
+
+/**
+ * Table store hook.
+ * @param selector Selector function to partially select state.
+ * @returns selected part of the state
+ */
+export function useTable<T>(
+  selector: (state: TableStoreContext) => T | TableStoreContext = (state) =>
+    state
+) {
+  return useContextSelector(TableContext, selector);
+}

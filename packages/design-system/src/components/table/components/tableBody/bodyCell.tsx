@@ -23,7 +23,6 @@ import React from 'react';
  * Internal dependencies.
  */
 import type { InfoType, TableRow } from '../../useTable';
-import { Warning } from '../../../../icons';
 
 interface BodyCellProps {
   cell: React.JSX.Element | InfoType;
@@ -32,7 +31,8 @@ interface BodyCellProps {
   isRowFocused: boolean;
   row: TableRow;
   hasIcon?: boolean;
-  showWarningIcon?: boolean | null;
+  showIcon?: boolean | null;
+  icon?: React.ReactNode;
   onRowClick: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
@@ -41,7 +41,8 @@ const BodyCell = ({
   width,
   isRowFocused,
   hasIcon = false,
-  showWarningIcon = false,
+  showIcon = false,
+  icon,
   isHighlighted = false,
 }: BodyCellProps) => {
   return (
@@ -71,9 +72,7 @@ const BodyCell = ({
     >
       {hasIcon && (
         <div className="w-4 min-w-[1rem] h-3 mr-1 mt-[-2px]">
-          {Boolean(showWarningIcon) && (
-            <Warning className="text-warning-orange w-4" />
-          )}
+          {Boolean(showIcon) && <div>{icon}</div>}
         </div>
       )}
       {cell}
