@@ -43,7 +43,7 @@ const useColumnResizing = (
   tablePersistentSettingsKey?: string
 ): ColumnResizingOutput => {
   const tableContainerRef = useRef<HTMLDivElement>(null);
-  const [columns, setColumns] = useState<TableColumn[]>([]);
+  const [columns, setColumns] = useState<TableColumn[]>(tableColumns);
   const [isResizing, setIsResizing] = useState(false);
   const columnsSizingRef = useRef<{ [key: string]: number }>({});
 

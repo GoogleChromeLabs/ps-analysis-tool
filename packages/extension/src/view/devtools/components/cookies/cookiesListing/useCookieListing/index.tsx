@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   getValueByKey,
   type CookieTableData,
@@ -168,15 +168,23 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
     [isUsingCDP]
   );
 
-  const preCalculatedFilters = useMemo<{
-    category: TableFilter[keyof TableFilter]['filterValues'];
-    platform: TableFilter[keyof TableFilter]['filterValues'];
-    blockedReason: TableFilter[keyof TableFilter]['filterValues'];
-  }>(() => {
+  const [preCalculatedFilters, setPreCalculatedFilters] = useState<{
+    categories: TableFilter[keyof TableFilter]['filterValues'];
+    platforms: TableFilter[keyof TableFilter]['filterValues'];
+    blockedReasons: TableFilter[keyof TableFilter]['filterValues'];
+  }>({
+    categories: {},
+    platforms: {},
+    blockedReasons: {},
+  });
+
+  useEffect(() => {
     const calculate = (
       key: string
     ): TableFilter[keyof TableFilter]['filterValues'] =>
-      Object.values(cookies).reduce((acc, cookie) => {
+      Object.values(cookies).reduce<
+        TableFilter[keyof TableFilter]['filterValues']
+      >((acc, cookie) => {
         const value = getValueByKey(key, cookie);
 
         if (!acc) {
@@ -190,36 +198,35 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         }
 
         return acc;
-      }, {} as TableFilter[keyof TableFilter]['filterValues']);
+      }, {});
 
-    const blockedReasonFilterValues = Object.values(cookies).reduce(
-      (acc, cookie) => {
-        const blockedReason = getValueByKey('blockedReasons', cookie);
+    const blockedReasonFilterValues = Object.values(cookies).reduce<
+      TableFilter[keyof TableFilter]['filterValues']
+    >((acc, cookie) => {
+      const blockedReason = getValueByKey('blockedReasons', cookie);
 
-        if (!cookie.frameIdList || cookie?.frameIdList?.length === 0) {
-          return acc;
+      if (!cookie.frameIdList || cookie?.frameIdList?.length === 0) {
+        return acc;
+      }
+
+      blockedReason?.forEach((reason: string) => {
+        if (!acc) {
+          acc = {};
         }
 
-        blockedReason?.forEach((reason: string) => {
-          if (!acc) {
-            acc = {};
-          }
+        acc[reason] = {
+          selected: false,
+        };
+      });
 
-          acc[reason] = {
-            selected: false,
-          };
-        });
+      return acc;
+    }, {});
 
-        return acc;
-      },
-      {} as TableFilter[keyof TableFilter]['filterValues']
-    );
-
-    return {
-      category: calculate('analytics.category'),
-      platform: calculate('analytics.platform'),
-      blockedReason: blockedReasonFilterValues,
-    };
+    setPreCalculatedFilters({
+      categories: calculate('analytics.category'),
+      platforms: calculate('analytics.platform'),
+      blockedReasons: blockedReasonFilterValues,
+    });
   }, [cookies]);
 
   const filters = useMemo<TableFilter>(
@@ -228,7 +235,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         title: 'Category',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: preCalculatedFilters.category,
+        filterValues: preCalculatedFilters.categories,
         sortValues: true,
         useGenericPersistenceKey: true,
       },
@@ -362,7 +369,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         title: 'Platform',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: preCalculatedFilters.platform,
+        filterValues: preCalculatedFilters.platforms,
         sortValues: true,
         useGenericPersistenceKey: true,
       },
@@ -371,7 +378,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
         enableSelectAllOption: true,
-        filterValues: preCalculatedFilters.blockedReason,
+        filterValues: preCalculatedFilters.blockedReasons,
         sortValues: true,
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
@@ -437,9 +444,9 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
       },
     }),
     [
-      preCalculatedFilters.blockedReason,
-      preCalculatedFilters.category,
-      preCalculatedFilters.platform,
+      preCalculatedFilters.blockedReasons,
+      preCalculatedFilters.categories,
+      preCalculatedFilters.platforms,
     ]
   );
 

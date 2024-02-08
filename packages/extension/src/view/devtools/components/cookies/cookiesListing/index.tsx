@@ -98,7 +98,6 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
         <CookieTable
           data={frameFilteredCookies}
           tableColumns={tableColumns}
-          showTopBar={true}
           tableFilters={filters}
           tableSearchKeys={searchKeys}
           tablePersistentSettingsKey={tablePersistentSettingsKey}
