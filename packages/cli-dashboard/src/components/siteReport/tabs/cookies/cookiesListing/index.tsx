@@ -80,6 +80,7 @@ const CookiesListing = ({
         className="h-full flex"
       >
         <CookieTable
+          useIsBlockedToHighlight={true}
           data={cookies}
           tableColumns={tableColumns}
           showTopBar={true}
@@ -92,7 +93,10 @@ const CookiesListing = ({
           setSelectedFrameCookie={setSelectedFrameCookie}
         />
       </Resizable>
-      <CookieDetails selectedFrameCookie={selectedFrameCookie} />
+      <CookieDetails
+        isUsingCDP={true}
+        selectedFrameCookie={selectedFrameCookie}
+      />
     </div>
   );
 };

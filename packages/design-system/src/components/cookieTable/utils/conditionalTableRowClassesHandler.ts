@@ -24,13 +24,15 @@ const conditionalTableRowClassesHandler = (
   row: TableRow,
   isRowFocused: boolean,
   rowIndex: number,
-  selectedKey: string | null
+  selectedKey: string | null,
+  useIsBlockedToHighlight: boolean
 ) => {
   const rowKey = getCookieKey(
     (row?.originalData as CookieTableData).parsedCookie
   ) as string;
-  const isBlocked = (row.originalData as CookieTableData)?.blockingStatus
-    ?.inboundBlock;
+  const isBlocked = useIsBlockedToHighlight
+    ? (row.originalData as CookieTableData)?.isBlocked
+    : (row.originalData as CookieTableData)?.blockingStatus?.inboundBlock;
   const isHighlighted = row.originalData?.highlighted;
   const isDomainInAllowList = (row.originalData as CookieTableData)
     ?.isDomainInAllowList;

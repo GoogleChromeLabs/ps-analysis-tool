@@ -26,6 +26,7 @@ import BodyCell from './bodyCell';
 import type { TableColumn, TableRow } from '../../useTable';
 
 interface BodyRowProps {
+  useIsBlockedToHighlight: boolean;
   row: TableRow;
   columns: TableColumn[];
   index: number;
