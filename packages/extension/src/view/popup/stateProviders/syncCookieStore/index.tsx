@@ -44,8 +44,10 @@ export interface CookieStoreContext {
     onChromeUrl: boolean;
     allowedNumberOfTabs: string | null;
     isUsingCDP: boolean;
+    settingsChanged: boolean;
   };
   actions: {
+    handleSettingsChange: () => void;
     changeListeningToThisTab: () => void;
     setIsUsingCDP: (newValue: boolean) => void;
   };
@@ -80,8 +82,10 @@ const initialState: CookieStoreContext = {
     tabId: null,
     allowedNumberOfTabs: null,
     isUsingCDP: false,
+    settingsChanged: false,
   },
   actions: {
+    handleSettingsChange: noop,
     changeListeningToThisTab: noop,
     setIsUsingCDP: noop,
   },
@@ -95,6 +99,8 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [allowedNumberOfTabs, setAllowedNumberOfTabs] = useState<string | null>(
     null
   );
+
+  const [settingsChanged, setSettingsChanged] = useState<boolean>(false);
 
   const [tabToRead, setTabToRead] = useState<string>('');
   const [isUsingCDP, setIsUsingCDP] = useState(false);
@@ -141,6 +147,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
   }, []);
 
   const intitialSync = useCallback(async () => {
+    const localStoragePersistance = localStorage.getItem('settingsChanged');
+
+    setSettingsChanged(localStoragePersistance === 'true');
+
     const tab = await getCurrentTab();
 
     const extensionStorage = await chrome.storage.sync.get();
@@ -203,6 +213,16 @@ export const Provider = ({ children }: PropsWithChildren) => {
     });
   }, [tabId]);
 
+  const handleSettingsChange = useCallback(async () => {
+    if (settingsChanged) {
+      await chrome.runtime.sendMessage({
+        type: 'DevTools::ServiceWorker::RELOAD_ALL_TABS',
+      });
+      localStorage.setItem('settingsChanged', 'false');
+      setSettingsChanged(false);
+    }
+  }, [settingsChanged]);
+
   useEffect(() => {
     const listener = (message: {
       type: string;
@@ -252,6 +272,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
         setLoading(false);
       }
+
+      if (message.type === 'ServiceWorker::TABS_RELOADED') {
+        localStorage.setItem('settingsChanged', 'false');
+        setSettingsChanged(false);
+      }
     };
 
     chrome.runtime.onMessage.addListener(listener);
@@ -263,8 +288,16 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const changeSyncStorageListener = useCallback(async () => {
     const extensionStorage = await chrome.storage.sync.get();
-    if (extensionStorage?.allowedNumberOfTabs) {
+
+    if (Object.keys(extensionStorage).includes('allowedNumberOfTabs')) {
       setAllowedNumberOfTabs(extensionStorage?.allowedNumberOfTabs);
+      localStorage.setItem('settingsChanged', 'true');
+      setSettingsChanged(true);
+    }
+    if (Object.keys(extensionStorage).includes('isUsingCDP')) {
+      setIsUsingCDP(extensionStorage?.isUsingCDP);
+      localStorage.setItem('settingsChanged', 'true');
+      setSettingsChanged(true);
     }
   }, []);
 
@@ -291,10 +324,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
           onChromeUrl,
           allowedNumberOfTabs,
           isUsingCDP,
+          settingsChanged,
         },
         actions: {
           changeListeningToThisTab,
           setIsUsingCDP: _setUsingCDP,
+          handleSettingsChange,
         },
       }}
     >

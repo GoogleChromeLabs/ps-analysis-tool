@@ -26,14 +26,27 @@ import Button from '../button';
 interface ToastMessageProps {
   text: string;
   onClick: () => void;
+  additionalStyles?: string;
+  textAdditionalStyles?: string;
+  variant?: 'primary' | 'secondary' | 'danger' | 'small';
 }
 
-const ToastMessage = ({ text, onClick }: ToastMessageProps) => {
+const ToastMessage = ({
+  text,
+  onClick,
+  additionalStyles = '',
+  textAdditionalStyles = '',
+  variant = 'primary',
+}: ToastMessageProps) => {
   return (
-    <div className="flex flex-row w-full absolute z-2 left-0 bottom-0 items-center justify-between bg-white dark:bg-raisin-black pb-2">
-      <div className="w-5/6 dark:text-white pl-4">{text}</div>
+    <div
+      className={`${additionalStyles} flex flex-row w-full absolute z-2 left-0 bottom-0 items-center justify-between bg-white dark:bg-raisin-black`}
+    >
+      <div className={`w-5/6 dark:text-white ${textAdditionalStyles}`}>
+        {text}
+      </div>
       <div className="w-1/6">
-        <Button text="Reload All Tabs" onClick={onClick} />
+        <Button text="Reload All Tabs" onClick={onClick} variant={variant} />
       </div>
     </div>
   );

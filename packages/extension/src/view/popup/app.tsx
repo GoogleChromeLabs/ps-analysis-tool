@@ -22,6 +22,7 @@ import {
   Button,
   CirclePieChart,
   ProgressBar,
+  ToastMessage,
   ToggleSwitch,
   prepareCookieStatsComponents,
 } from '@ps-analysis-tool/design-system';
@@ -44,6 +45,8 @@ const App: React.FC = () => {
     allowedNumberOfTabs,
     isUsingCDP,
     setIsUsingCDP,
+    settingsChanged,
+    handleSettingsChange,
   } = useCookieStore(({ state, actions }) => ({
     cookieStats: state.tabCookieStats,
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
@@ -53,6 +56,8 @@ const App: React.FC = () => {
     onChromeUrl: state.onChromeUrl,
     isUsingCDP: state.isUsingCDP,
     setIsUsingCDP: actions.setIsUsingCDP,
+    handleSettingsChange: actions.handleSettingsChange,
+    settingsChanged: state.settingsChanged,
     changeListeningToThisTab: actions.changeListeningToThisTab,
   }));
 
@@ -60,7 +65,7 @@ const App: React.FC = () => {
 
   if (onChromeUrl) {
     return (
-      <>
+      <div className="w-full h-full flex justify-center items-center flex-col z-1 relative">
         <ToggleSwitch
           onLabel={cdpLabel}
           additionalStyles="top-2 left-2 absolute"
@@ -71,7 +76,15 @@ const App: React.FC = () => {
         <p className="text-chart-label text-xs">
           Its emptier than a cookie jar after a midnight snack! 🌌
         </p>
-      </>
+        {settingsChanged && (
+          <ToastMessage
+            variant="small"
+            text="To get accurate data we need to reload all open tabs. Please click
+        on Reload to reload all open tabs."
+            onClick={handleSettingsChange}
+          />
+        )}
+      </div>
     );
   }
 
@@ -92,7 +105,7 @@ const App: React.FC = () => {
     allowedNumberOfTabs !== 'unlimited'
   ) {
     return (
-      <>
+      <div className="w-full h-full flex justify-center items-center flex-col z-1">
         <ToggleSwitch
           onLabel={cdpLabel}
           additionalStyles="top-2 left-2 absolute"
@@ -100,7 +113,15 @@ const App: React.FC = () => {
           enabled={isUsingCDP}
         />
         <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
-      </>
+        {settingsChanged && (
+          <ToastMessage
+            variant="small"
+            text="To get accurate data we need to reload all open tabs. Please click
+        on Reload to reload all open tabs."
+            onClick={handleSettingsChange}
+          />
+        )}
+      </div>
     );
   }
 
@@ -109,7 +130,7 @@ const App: React.FC = () => {
     (cookieStats?.firstParty.total === 0 && cookieStats?.thirdParty.total === 0)
   ) {
     return (
-      <>
+      <div className="w-full h-full flex justify-center items-center flex-col z-1">
         <ToggleSwitch
           onLabel={cdpLabel}
           additionalStyles="top-2 left-2 absolute"
@@ -120,13 +141,21 @@ const App: React.FC = () => {
         <p className="text-chart-label text-xs">
           Please try reloading the page
         </p>
-      </>
+        {settingsChanged && (
+          <ToastMessage
+            variant="small"
+            text="To get accurate data we need to reload all open tabs. Please click
+        on Reload to reload all open tabs."
+            onClick={handleSettingsChange}
+          />
+        )}
+      </div>
     );
   }
   const statsComponents = prepareCookieStatsComponents(cookieStats);
 
   return (
-    <>
+    <div className="w-full h-full flex justify-center items-center flex-col z-1">
       <ToggleSwitch
         onLabel={cdpLabel}
         additionalStyles="top-2 left-2 absolute"
@@ -157,7 +186,15 @@ const App: React.FC = () => {
           {'Inspect cookies in the "Privacy Sandbox" panel of DevTools'}
         </p>
       </div>
-    </>
+      {settingsChanged && (
+        <ToastMessage
+          variant="small"
+          text="To get accurate data we need to reload all open tabs. Please click
+        on Reload to reload all open tabs."
+          onClick={handleSettingsChange}
+        />
+      )}
+    </div>
   );
 };
 
