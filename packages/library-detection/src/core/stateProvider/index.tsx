@@ -40,12 +40,14 @@ export interface LibraryDetectionContext {
     isCurrentTabLoading: boolean;
     loadedBefore: boolean;
     showLoader: boolean;
+    tabDomain: string;
   };
   actions: {
     setLibraryMatches: React.Dispatch<React.SetStateAction<LibraryData>>;
     setIsCurrentTabLoading: React.Dispatch<React.SetStateAction<boolean>>;
     setLoadedBeforeState: React.Dispatch<React.SetStateAction<boolean>>;
     setShowLoader: React.Dispatch<React.SetStateAction<boolean>>;
+    setTabDomain: React.Dispatch<React.SetStateAction<string>>;
   };
 }
 
@@ -67,12 +69,14 @@ const initialState: LibraryDetectionContext = {
     isCurrentTabLoading: false,
     loadedBefore: false,
     showLoader: true,
+    tabDomain: '',
   },
   actions: {
     setLibraryMatches: noop,
     setIsCurrentTabLoading: noop,
     setLoadedBeforeState: noop,
     setShowLoader: noop,
+    setTabDomain: noop,
   },
 };
 
@@ -85,10 +89,34 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
     useState<boolean>(false); // TODO: Use first/current tab loaded state instead.
   const [loadedBefore, setLoadedBeforeState] = useState<boolean>(false);
   const [showLoader, setShowLoader] = useState<boolean>(true);
+  const [tabDomain, setTabDomain] = useState<string>('');
   const tabId = useRef(-1);
+
+  /**
+   * Extracts the domain from a given URL.
+   * @param url - The URL from which to extract the domain.
+   * @returns string - The domain extracted from the URL, or an empty string if the URL is invalid.
+   */
+  const extractDomainFromUrl = (url: string) => {
+    try {
+      const currentURL = new URL(url ?? '');
+      return currentURL?.hostname;
+    } catch (error) {
+      return '';
+    }
+  };
 
   useEffect(() => {
     tabId.current = chrome.devtools.inspectedWindow.tabId;
+    chrome.devtools.inspectedWindow.eval(
+      'window.location.href',
+      (result, isException) => {
+        if (!isException && typeof result === 'string') {
+          const currentURL = new URL(result ?? '');
+          setTabDomain(extractDomainFromUrl(currentURL?.hostname));
+        }
+      }
+    );
   }, []);
 
   // It is attached, next time the tab is updated or reloaded.
@@ -130,12 +158,14 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
           isCurrentTabLoading,
           loadedBefore,
           showLoader,
+          tabDomain,
         },
         actions: {
           setLibraryMatches,
           setIsCurrentTabLoading,
           setLoadedBeforeState,
           setShowLoader,
+          setTabDomain,
         },
       }}
     >

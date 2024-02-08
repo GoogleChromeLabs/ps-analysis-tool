@@ -33,10 +33,11 @@ import { useLibraryDetection, useLibraryDetectionContext } from '../../core';
 const LibraryDetection = memo(function LibraryDetection() {
   useLibraryDetection();
 
-  const { libraryMatches, showLoader } = useLibraryDetectionContext(
+  const { libraryMatches, showLoader, tabDomain } = useLibraryDetectionContext(
     ({ state }) => ({
       libraryMatches: state.libraryMatches,
       showLoader: state.showLoader,
+      tabDomain: state.tabDomain,
     })
   );
 
@@ -61,10 +62,20 @@ const LibraryDetection = memo(function LibraryDetection() {
           const Component = config.component as React.FC<{
             matches: DetectedSignature[];
           }>;
-          const matches =
+          let matches =
             libraryMatches && libraryMatches[config.name as keyof LibraryData]
               ? libraryMatches[config.name as keyof LibraryData]?.matches
               : [];
+          const isCurrentDomainExceptionDomain =
+            config?.exceptions?.[tabDomain] &&
+            config?.exceptions?.[tabDomain]?.length > 0;
+
+          if (isCurrentDomainExceptionDomain) {
+            matches = matches.filter(
+              (match) =>
+                !config.exceptions?.[tabDomain].includes(match.feature.text)
+            );
+          }
 
           return <Component key={config.name} matches={matches} />;
         })}
