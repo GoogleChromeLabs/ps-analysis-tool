@@ -47,10 +47,10 @@ export type InfoType = number | string | boolean | string[] | [];
 export type TableColumn = {
   header: string;
   accessorKey: string;
-  cell?: (info: InfoType, details?: TableData) => React.JSX.Element | InfoType;
+  cell: (info: InfoType, details?: TableData) => React.JSX.Element | InfoType;
   enableHiding?: boolean;
   enableBodyCellPrefixIcon?: boolean;
-  bodyCellPrefixIcon?: React.ReactNode;
+  bodyCellPrefixIcon?: () => React.JSX.Element;
   showBodyCellPrefixIcon?: (row: TableRow) => boolean;
   widthWeightagePercentage?: number;
   width?: number; // For internal use only
@@ -58,7 +58,7 @@ export type TableColumn = {
 
 export type TableRow = {
   [accessorKey: string]: {
-    value: React.JSX.Element | InfoType;
+    value: () => React.JSX.Element;
   };
   //@ts-ignore
   originalData: TableData;
@@ -265,7 +265,7 @@ export const TableProvider = ({
       columns.forEach((column) => {
         const value = getValueByKey(column.accessorKey, _data);
         row[column.accessorKey] = {
-          value: column.cell?.(value, _data) ?? value,
+          value: () => column.cell(value, _data) as React.JSX.Element,
         };
       });
 

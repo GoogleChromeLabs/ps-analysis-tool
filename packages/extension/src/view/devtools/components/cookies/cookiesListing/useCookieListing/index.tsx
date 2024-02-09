@@ -63,7 +63,9 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         enableHiding: false,
         widthWeightagePercentage: 13,
         enableBodyCellPrefixIcon: isUsingCDP,
-        bodyCellPrefixIcon: <Warning className="text-warning-orange w-4" />,
+        bodyCellPrefixIcon: () => (
+          <Warning className="text-warning-orange w-4" />
+        ),
         showBodyCellPrefixIcon: (row: TableRow) => {
           const shouldShowWarningIcon =
             (row.originalData as CookieTableData)?.blockingStatus
