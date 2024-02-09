@@ -38,6 +38,7 @@ module.exports = {
       boxShadow: {
         '3xl':
           '0px 38px 90px 0px rgba(0, 0, 0, 0.25), 0px 0px 2px 0px rgba(0, 0, 0, 0.05), 0px 0px 1px 0px rgba(0, 0, 0, 0.60)',
+        xxs: '0 -2px 2px 0 rgba(0, 0, 0, 0.1)',
       },
       keyframes: {
         'horizontal-spinner-keyframes': {

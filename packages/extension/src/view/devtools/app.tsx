@@ -256,11 +256,11 @@ const App: React.FC = () => {
 
   return (
     <div
-      className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black relative"
+      className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black"
       ref={contextInvalidatedRef}
     >
       {contextInvalidated && (
-        <div className="flex flex-col items-center justify-center w-full h-full z-1">
+        <div className="flex flex-col items-center justify-center w-full h-full">
           <ExtensionReloadNotification />
         </div>
       )}
@@ -292,19 +292,19 @@ const App: React.FC = () => {
               visibleWidth={sidebarWidth}
             />
           </Resizable>
-          <main className="h-full flex-1 overflow-auto">
-            <div className="min-w-[40rem] h-full">{activePanel}</div>
+          <main className="h-full flex-1 overflow-auto relative">
+            <div className="min-w-[40rem] h-full z-1">{activePanel}</div>
+            {settingsChanged && (
+              <ToastMessage
+                additionalStyles="pb-2"
+                text="To get accurate data we need to reload all open tabs. Please click
+        on Reload to reload all open tabs."
+                onClick={handleSettingsChange}
+                textAdditionalStyles="pl-4"
+              />
+            )}
           </main>
         </div>
-      )}
-      {settingsChanged && (
-        <ToastMessage
-          additionalStyles="pb-2"
-          text="To get accurate data we need to reload all open tabs. Please click
-        on Reload to reload all open tabs."
-          onClick={handleSettingsChange}
-          textAdditionalStyles="pl-4"
-        />
       )}
     </div>
   );

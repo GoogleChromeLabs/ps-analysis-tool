@@ -98,6 +98,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
     useState<SettingStoreContext['state']['OSInformation']>(null);
 
   const intitialSync = useCallback(async () => {
+    const localStoragePersistance = localStorage.getItem('settingsChanged');
+
+    setSettingsChanged(localStoragePersistance === 'true');
+
     const currentSettings = await chrome.storage.sync.get();
 
     if (Object.keys(currentSettings).includes('allowedNumberOfTabs')) {
@@ -168,11 +172,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
         changes?.allowedNumberOfTabs?.newValue
       ) {
         setAllowedNumberOfTabs(changes?.allowedNumberOfTabs?.newValue);
+        localStorage.setItem('settingsChanged', 'true');
         setSettingsChanged(true);
       }
 
       if (changes?.isUsingCDP) {
         setIsUsingCDP(changes?.isUsingCDP?.newValue);
+        localStorage.setItem('settingsChanged', 'true');
         setSettingsChanged(true);
       }
     },
@@ -184,6 +190,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       await chrome.runtime.sendMessage({
         type: 'DevTools::ServiceWorker::RELOAD_ALL_TABS',
       });
+      localStorage.setItem('settingsChanged', 'false');
       setSettingsChanged(false);
     }
   }, [settingsChanged]);
