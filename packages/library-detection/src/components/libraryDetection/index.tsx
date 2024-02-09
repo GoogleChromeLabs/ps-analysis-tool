@@ -38,13 +38,13 @@ import { extractUrl } from '@ps-analysis-tool/common';
 const LibraryDetection = memo(function LibraryDetection() {
   useLibraryDetection();
 
-  const { libraryMatches, showLoader, tabDomain } = useLibraryDetectionContext(
-    ({ state }) => ({
+  const { libraryMatches, showLoader, tabDomain, isCurrentTabLoading } =
+    useLibraryDetectionContext(({ state }) => ({
       libraryMatches: state.libraryMatches,
       showLoader: state.showLoader,
       tabDomain: state.tabDomain,
-    })
-  );
+      isCurrentTabLoading: state.isCurrentTabLoading,
+    }));
 
   const names = Object.keys(libraryMatches);
 
@@ -108,7 +108,9 @@ const LibraryDetection = memo(function LibraryDetection() {
         <>
           <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />
           <p className="text-center dark:text-bright-gray">
-            Checking libraries for any known breakages on the page..
+            {isCurrentTabLoading
+              ? 'Waiting for the page to load..'
+              : 'Checking libraries for any known breakages on the page..'}
           </p>
         </>
       ) : (
