@@ -17,12 +17,11 @@
  * External dependencies.
  */
 import React from 'react';
-
+import { noop } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
 import Button from '../button';
-import { noop } from '@ps-analysis-tool/common';
 interface ExtensionReloadNotificationProps {
   text?: string;
   onClick?: () => void;

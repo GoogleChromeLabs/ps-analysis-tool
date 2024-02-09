@@ -58,7 +58,7 @@ export interface CookieStoreContext {
     frameHasCookies: Record<string, boolean>;
   };
   actions: {
-    sendRefreshExtensionAndPage: () => void;
+    sendMessageToRefreshExtensionAndPage: () => void;
     setSelectedFrame: (key: string | null) => void;
     setIsInspecting: React.Dispatch<React.SetStateAction<boolean>>;
     changeListeningToThisTab: () => void;
@@ -85,7 +85,7 @@ const initialState: CookieStoreContext = {
     frameHasCookies: {},
   },
   actions: {
-    sendRefreshExtensionAndPage: noop,
+    sendMessageToRefreshExtensionAndPage: noop,
     setSelectedFrame: noop,
     changeListeningToThisTab: noop,
     setIsInspecting: noop,
@@ -313,6 +313,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         if (typeof message?.payload?.didServiceWorkerSleep !== 'undefined') {
           setServiceWorkerInactive(message?.payload?.didServiceWorkerSleep);
         }
+
         if (message?.payload?.tabMode === 'unlimited') {
           isCurrentTabBeingListenedToRef.current = true;
           setTabToRead(null);
@@ -452,7 +453,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     };
   }, [tabId]);
 
-  const sendRefreshExtensionAndPage = useCallback(() => {
+  const sendMessageToRefreshExtensionAndPage = useCallback(() => {
     if (serviceWorkerInactive && tabId) {
       chrome.runtime.sendMessage({
         type: 'DevTools::ServiceWorker::ACTIVATE_SERVICE_WORKER',
@@ -483,7 +484,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           frameHasCookies,
         },
         actions: {
-          sendRefreshExtensionAndPage,
+          sendMessageToRefreshExtensionAndPage,
           setSelectedFrame,
           changeListeningToThisTab,
           getCookiesSetByJavascript,

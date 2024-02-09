@@ -60,7 +60,7 @@ const App: React.FC = () => {
     tabUrl,
     frameHasCookies,
     serviceWorkerInactive,
-    sendRefreshExtensionAndPage,
+    sendMessageToRefreshExtensionAndPage,
   } = useCookieStore(({ state, actions }) => ({
     contextInvalidated: state.contextInvalidated,
     serviceWorkerInactive: state.serviceWorkerInactive,
@@ -74,7 +74,8 @@ const App: React.FC = () => {
     canStartInspecting: state.canStartInspecting,
     tabUrl: state.tabUrl,
     frameHasCookies: state.frameHasCookies,
-    sendRefreshExtensionAndPage: actions.sendRefreshExtensionAndPage,
+    sendMessageToRefreshExtensionAndPage:
+      actions.sendMessageToRefreshExtensionAndPage,
   }));
 
   const { allowedNumberOfTabs } = useSettingsStore(({ state }) => ({
@@ -267,14 +268,16 @@ const App: React.FC = () => {
           />
         </div>
       )}
+
       {serviceWorkerInactive && (
         <div className="flex flex-col items-center justify-center w-full h-full">
           <ExtensionReloadNotification
             text="Looks like the service worker was put to sleep. Please click on refresh to activate the service worker."
-            onClick={sendRefreshExtensionAndPage}
+            onClick={sendMessageToRefreshExtensionAndPage}
           />
         </div>
       )}
+
       {!contextInvalidated && (
         <div className="w-full h-full flex flex-row">
           <Resizable
