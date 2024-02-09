@@ -27,7 +27,7 @@ import {
   type TableFilter,
   TableProvider,
 } from '@ps-analysis-tool/design-system';
-import type { TechnologyData } from '@ps-analysis-tool/common';
+import { noop, type TechnologyData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies
@@ -117,19 +117,15 @@ const Technologies = ({ selectedSite }: TechnologiesProps) => {
           tableFilterData={filters}
           tableSearchKeys={searchKeys}
           tablePersistentSettingsKey={tablePersistentSettingsKey}
+          onRowClick={(row) => {
+            setSelectedRow(row as TechnologyData);
+          }}
+          onRowContextMenu={noop}
+          getRowObjectKey={(row: TableRow) => {
+            return (row.originalData as TechnologyData).slug;
+          }}
         >
-          <Table
-            hideFiltering={true}
-            showTopBar={true}
-            hideExport={true}
-            selectedKey={selectedRow?.slug}
-            onRowClick={(row) => {
-              setSelectedRow(row as TechnologyData);
-            }}
-            getRowObjectKey={(row: TableRow) => {
-              return (row.originalData as TechnologyData).slug;
-            }}
-          />
+          <Table hideFiltering={true} selectedKey={selectedRow?.slug} />
         </TableProvider>
       </Resizable>
       <div className="flex-1 border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem]">
