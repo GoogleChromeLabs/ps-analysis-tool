@@ -28,7 +28,12 @@ import {
  */
 import LIBRARIES from '../../config';
 import type { LibraryData, DetectedSignature } from '../../types';
-import { useLibraryDetection, useLibraryDetectionContext } from '../../core';
+import {
+  filterMatchesBasedOnExceptions,
+  useLibraryDetection,
+  useLibraryDetectionContext,
+} from '../../core';
+import { extractUrl } from '@ps-analysis-tool/common';
 
 const LibraryDetection = memo(function LibraryDetection() {
   useLibraryDetection();
@@ -66,14 +71,21 @@ const LibraryDetection = memo(function LibraryDetection() {
             libraryMatches && libraryMatches[config.name as keyof LibraryData]
               ? libraryMatches[config.name as keyof LibraryData]?.matches
               : [];
+
+          const parsedUrl = extractUrl(tabDomain);
+
+          const parsedTabDomain = parsedUrl?.hostname;
+
           const isCurrentDomainExceptionDomain =
-            config?.exceptions?.[tabDomain] &&
-            config?.exceptions?.[tabDomain]?.length > 0;
+            config?.exceptions?.[parsedTabDomain as string] &&
+            config?.exceptions?.[parsedTabDomain as string]?.signatures
+              ?.length > 0;
 
           if (isCurrentDomainExceptionDomain) {
-            matches = matches.filter(
-              (match) =>
-                !config.exceptions?.[tabDomain].includes(match.feature.text)
+            matches = filterMatchesBasedOnExceptions(
+              tabDomain,
+              config, //TODO: revist this after testing
+              matches
             );
           }
 

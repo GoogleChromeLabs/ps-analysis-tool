@@ -24,7 +24,7 @@ import React, {
   useEffect,
   useRef,
 } from 'react';
-import { noop } from '@ps-analysis-tool/common';
+import { getDomainFromUrl, noop } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -92,28 +92,13 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
   const [tabDomain, setTabDomain] = useState<string>('');
   const tabId = useRef(-1);
 
-  /**
-   * Extracts the domain from a given URL.
-   * @param url - The URL from which to extract the domain.
-   * @returns string - The domain extracted from the URL, or an empty string if the URL is invalid.
-   */
-  const extractDomainFromUrl = (url: string) => {
-    try {
-      const currentURL = new URL(url ?? '');
-      return currentURL?.hostname;
-    } catch (error) {
-      return '';
-    }
-  };
-
   useEffect(() => {
     tabId.current = chrome.devtools.inspectedWindow.tabId;
     chrome.devtools.inspectedWindow.eval(
       'window.location.href',
       (result, isException) => {
         if (!isException && typeof result === 'string') {
-          const currentURL = new URL(result ?? '');
-          setTabDomain(extractDomainFromUrl(currentURL?.hostname));
+          setTabDomain(getDomainFromUrl(result));
         }
       }
     );
@@ -121,8 +106,15 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
 
   // It is attached, next time the tab is updated or reloaded.
   const onTabUpdate = useCallback(
-    (changingTabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
+    (
+      changingTabId: number,
+      changeInfo: chrome.tabs.TabChangeInfo,
+      tab: chrome.tabs.Tab
+    ) => {
       if (Number(changingTabId) === Number(tabId.current)) {
+        if (tab.url) {
+          setTabDomain(getDomainFromUrl(tab.url));
+        }
         if (changeInfo.status === 'complete') {
           setIsCurrentTabLoading(false);
         } else if (changeInfo.status === 'loading') {

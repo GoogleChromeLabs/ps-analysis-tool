@@ -51,12 +51,11 @@ export const GIS_HELP_URL =
 
 export const GIS_DOMAINS_TO_SKIP = ['accounts.google.com', 'gstatic.com'];
 
-// For EXCEPTIONS www is considered as a subdomain. For example, www.cnn.com is considered as a subdomain of cnn.com, if its required please add it to the exceptions list.
-export const GIS_EXCEPTIONS: { [key: string]: string[] } = {
-  'cnn.com': ['isDisplayed('],
-  'www.cnn.com': ['isDisplayed('],
-  'edition.cnn.com': ['isDisplayed('],
-  'www.edition.cnn.com': ['isDisplayed('],
+export const GIS_EXCEPTIONS: {
+  [key: string]: { signatures: string[]; subDomains: string[] };
+} = {
+  'cnn.com': {
+    signatures: ['isDisplayed('],
+    subDomains: ['edition.cnn.com', 'www.cnn.com', 'cnn.com'],
+  },
 };
-
-export const GSIv2_EXCEPTIONS: { [key: string]: string[] } = {};
