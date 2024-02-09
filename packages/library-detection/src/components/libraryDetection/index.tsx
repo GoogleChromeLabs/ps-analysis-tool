@@ -74,7 +74,7 @@ const LibraryDetection = memo(function LibraryDetection() {
 
           const parsedUrl = extractUrl(tabDomain);
 
-          const parsedTabDomain = parsedUrl?.hostname;
+          const parsedTabDomain = parsedUrl?.domain;
 
           const isCurrentDomainExceptionDomain =
             config?.exceptions?.[parsedTabDomain as string] &&
@@ -84,7 +84,7 @@ const LibraryDetection = memo(function LibraryDetection() {
           if (isCurrentDomainExceptionDomain) {
             matches = filterMatchesBasedOnExceptions(
               tabDomain,
-              config, //TODO: revist this after testing
+              config?.exceptions, //TODO: revist this after testing
               matches
             );
           }

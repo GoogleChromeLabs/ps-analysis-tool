@@ -22,40 +22,40 @@ import { extractUrl } from '@ps-analysis-tool/common';
  * Internal dependencies.
  */
 
-import type { Config, DetectedSignature } from '../types';
+import type { DetectedSignature, ExceptionUrls } from '../types';
 
 /**
  * Filters the given matches based on the exceptions defined in the configuration.
  * @param domain - The domain for which the matches are filtered.
- * @param config - The configuration object containing the exceptions.
+ * @param exceptions - The configuration object containing the exceptions.
  * @param matches - The array of detected signatures to be filtered.
  * @returns The filtered array of matches.
  */
 const filterMatchesBasedOnExceptions = (
   domain: string,
-  config: Config,
+  exceptions: ExceptionUrls,
   matches: DetectedSignature[]
 ) => {
   const parsedUrl = extractUrl(domain);
-  const parsedTabDomain = parsedUrl?.hostname;
+  const parsedTabDomain = parsedUrl?.domain;
   const parsedSubDomain = parsedUrl?.subdomain;
-  let filteredMatches = { ...matches };
+  let filteredMatches: DetectedSignature[] = [...matches];
 
   const isCurrentDomainExceptionDomain =
-    config?.exceptions?.[parsedTabDomain as string] &&
-    config?.exceptions?.[parsedTabDomain as string]?.signatures?.length > 0;
+    exceptions?.[parsedTabDomain as string] &&
+    exceptions?.[parsedTabDomain as string]?.signatures?.length > 0;
 
   if (
     (isCurrentDomainExceptionDomain && !parsedSubDomain) ||
     (isCurrentDomainExceptionDomain &&
       parsedSubDomain &&
-      config.exceptions?.[parsedTabDomain as string]?.subDomains.includes(
+      exceptions?.[parsedTabDomain as string]?.subDomains.includes(
         parsedSubDomain
       ))
   ) {
     filteredMatches = matches.filter(
       (match: DetectedSignature) =>
-        !config.exceptions?.[parsedTabDomain as string]?.signatures?.includes(
+        !exceptions?.[parsedTabDomain as string]?.signatures?.includes(
           match.feature.text
         )
     );
