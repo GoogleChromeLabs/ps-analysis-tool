@@ -80,6 +80,11 @@ export class BrowserManagement {
       throw new Error('Browser not intialized');
     }
     const sitePage = await this.browser.newPage();
+
+    await sitePage.setUserAgent(
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36'
+    );
+
     sitePage.setViewport({
       width: 1440,
       height: 790,
