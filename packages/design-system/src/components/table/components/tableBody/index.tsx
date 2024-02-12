@@ -148,9 +148,12 @@ const TableBody = ({
           row={row}
           columns={columns}
           selectedKey={selectedKey}
-          extraClasses={
-            conditionalTableRowClassesHandler?.(row, isRowFocused, index) ?? ''
-          }
+          getExtraClasses={() => {
+            return (
+              conditionalTableRowClassesHandler?.(row, isRowFocused, index) ??
+              ''
+            );
+          }}
           hasVerticalBar={hasVerticalBar?.(row) ?? false}
           getRowObjectKey={getRowObjectKey}
           onRowClick={() => {

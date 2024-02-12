@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import React from 'react';
+import classnames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -30,7 +31,7 @@ interface BodyRowProps {
   columns: TableColumn[];
   index: number;
   selectedKey: string | undefined | null;
-  extraClasses: string;
+  getExtraClasses: () => string;
   hasVerticalBar: boolean;
   getRowObjectKey: (row: TableRow) => string;
   onRowClick: (e: React.MouseEvent<HTMLDivElement>) => void;
@@ -46,7 +47,7 @@ const BodyRow = ({
   columns,
   index,
   selectedKey,
-  extraClasses,
+  getExtraClasses,
   hasVerticalBar,
   getRowObjectKey,
   onRowClick,
@@ -55,11 +56,17 @@ const BodyRow = ({
 }: BodyRowProps) => {
   const rowKey = getRowObjectKey(row);
   const isHighlighted = row.originalData?.highlighted;
+  const extraClasses = getExtraClasses();
 
   return (
     <div
       id={index.toString()}
-      className={`outline-0 flex divide-x divide-american-silver dark:divide-quartz relative ${extraClasses}`}
+      className={classnames(
+        'outline-0 flex divide-x divide-american-silver dark:divide-quartz relative',
+        {
+          [extraClasses]: extraClasses.length > 0,
+        }
+      )}
       onClick={onRowClick}
       onKeyDown={(e) => onKeyDown(e, index)}
       onContextMenu={(e) => onRowContextMenu(e, row)}
