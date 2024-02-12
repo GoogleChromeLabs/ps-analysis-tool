@@ -314,7 +314,7 @@ class SynchnorousCookieStore {
     delete this.tabsData[tabId];
     this.tabsData[tabId] = {};
     this.tabs[tabId].newUpdates = 0;
-    this.sendUpdatedDataToPopupAndDevTools(tabId);
+    this.sendUpdatedDataToPopupAndDevTools(tabId, true);
   }
 
   /**
