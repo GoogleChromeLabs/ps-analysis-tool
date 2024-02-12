@@ -255,6 +255,16 @@ chrome.runtime.onStartup.addListener(async () => {
  * @see https://developer.chrome.com/docs/extensions/reference/api/tabs#event-onUpdated
  */
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+  if (!tab.url) {
+    return;
+  }
+
+  syncCookieStore?.updateUrl(tabId, tab.url);
+
+  if (changeInfo.status === 'loading' && tab.url) {
+    syncCookieStore?.removeCookieData(tabId);
+  }
+
   try {
     if (globalIsUsingCDP) {
       await chrome.debugger.attach({ tabId }, '1.3');
@@ -265,16 +275,6 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     }
   } catch (error) {
     //Fail silently
-  }
-
-  if (!tab.url) {
-    return;
-  }
-
-  syncCookieStore?.updateUrl(tabId, tab.url);
-
-  if (changeInfo.status === 'loading' && tab.url) {
-    syncCookieStore?.removeCookieData(tabId);
   }
 });
 
@@ -497,9 +497,15 @@ const listenToNewTab = async (tabId?: number) => {
     );
   }
 
+  tabToRead = newTabId;
+
   syncCookieStore?.addTabData(Number(newTabId));
   syncCookieStore?.updateDevToolsState(Number(newTabId), true);
   syncCookieStore?.updatePopUpState(Number(newTabId), true);
+
+  const currentTab = await getTab(Number(newTabId));
+
+  syncCookieStore?.updateUrl(Number(newTabId), currentTab?.url ?? '');
 
   return newTabId;
 };
@@ -514,7 +520,6 @@ chrome.runtime.onMessage.addListener(async (request) => {
     request?.type === 'DevTools::ServiceWorker::SET_TAB_TO_READ' ||
     request?.type === 'Popup::ServiceWorker::SET_TAB_TO_READ'
   ) {
-    tabToRead = request?.payload?.tabId?.toString();
     const newTab = await listenToNewTab(request?.payload?.tabId);
 
     // Can't use sendResponse as delay is too long. So using sendMessage instead.
