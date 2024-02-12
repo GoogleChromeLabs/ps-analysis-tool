@@ -89,6 +89,7 @@ const CookiesListing = ({
           selectedFrame={selectedFrameUrl}
           selectedFrameCookie={selectedFrameCookie}
           setSelectedFrameCookie={setSelectedFrameCookie}
+          hideExport
         />
       </Resizable>
       <CookieDetails

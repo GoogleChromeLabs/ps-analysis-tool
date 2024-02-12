@@ -54,6 +54,7 @@ interface CookieTableProps {
     e: React.MouseEvent<HTMLDivElement>,
     row: TableRow
   ) => void;
+  hideExport?: boolean;
 }
 
 const CookieTable = forwardRef<
@@ -74,6 +75,7 @@ const CookieTable = forwardRef<
     setSelectedFrameCookie,
     extraInterfaceToTopBar,
     onRowContextMenu,
+    hideExport,
   }: CookieTableProps,
   ref
 ) {
@@ -171,7 +173,7 @@ const CookieTable = forwardRef<
         onRowContextMenu={onRowContextMenuHandler}
         getRowObjectKey={getRowObjectKey}
         conditionalTableRowClassesHandler={_conditionalTableRowClassesHandler}
-        exportTableData={exportCookies}
+        exportTableData={!hideExport ? exportCookies : undefined}
         hasVerticalBar={hasVerticalBar}
       >
         <Table
