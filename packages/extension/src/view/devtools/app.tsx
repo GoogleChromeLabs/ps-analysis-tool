@@ -296,7 +296,7 @@ const App: React.FC = () => {
             <div className="min-w-[40rem] h-full z-1">{activePanel}</div>
             {settingsChanged && (
               <ToastMessage
-                additionalStyles="pb-2"
+                additionalStyles="pb-2 text-sm"
                 text="To get accurate data we need to reload all open tabs. Please click
         on Reload to reload all open tabs."
                 onClick={handleSettingsChange}
