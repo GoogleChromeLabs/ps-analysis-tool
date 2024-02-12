@@ -133,6 +133,9 @@ module.exports = {
     backgroundColor: {
       ...colors,
       primary: '#FFF',
+      'google-blue': '#8AB4F8',
+      'smurf-blue': '#1967D2',
+      beteleguese: '#4285F4',
       'toggle-on': '#5CC971',
       'flagged-row-odd-dark': '#5e5108',
       'flagged-row-even-dark': '#796700',

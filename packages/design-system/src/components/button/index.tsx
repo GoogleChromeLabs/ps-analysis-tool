@@ -25,7 +25,7 @@ interface ButtonProps {
   onClick?: () => void;
   loading?: boolean;
   type?: 'button' | 'submit' | 'reset';
-  variant?: 'primary' | 'secondary' | 'danger' | 'small';
+  variant?: 'primary' | 'secondary' | 'danger' | 'small' | 'large';
   extraClasses?: string;
 }
 const Button = ({
@@ -36,30 +36,86 @@ const Button = ({
   variant = 'primary',
   extraClasses = '',
 }: ButtonProps) => {
-  return (
-    <button
-      data-test-id="button"
-      type={type}
-      name={name}
-      onClick={onClick ? onClick : undefined}
-      className={classNames(
-        'rounded flex items-center text-center',
-        extraClasses,
-        {
-          'py-1 px-2 font-medium': variant !== 'small',
-          'py-0.5 px-1.5 text-xs': variant === 'small',
-          'text-white dark:bg-baby-blue-eyes bg-sapphire hover:bg-tufts-blue dark:hover:bg-pale-cornflower-blue dark:text-raisin-black':
-            ['primary', 'small'].includes(variant),
-          'bg-transparent dark:bg-transparent dark:text-bright-gray text-raisin-black active:opacity-60 hover:opacity-80':
-            variant === 'secondary',
-          'text-white dark:text-white dark:bg-red-500 bg-red-500 hover:bg-red-600':
-            variant === 'danger',
-        }
-      )}
-    >
-      {text}
-    </button>
-  );
+  switch (variant) {
+    case 'small':
+      return (
+        <button
+          data-test-id="button"
+          type={type}
+          name={name}
+          onClick={onClick ? onClick : undefined}
+          className={classNames(
+            'rounded flex items-center text-center py-0.5 px-1.5 text-xs text-white dark:bg-baby-blue-eyes bg-sapphire hover:bg-tufts-blue dark:hover:bg-pale-cornflower-blue dark:text-raisin-black',
+            extraClasses
+          )}
+        >
+          {text}
+        </button>
+      );
+    case 'large':
+      return (
+        <button
+          data-test-id="button"
+          type={type}
+          name={name}
+          onClick={onClick ? onClick : undefined}
+          className={classNames(
+            'rounded flex items-center text-center py-3.5 px-9 text-white dark:bg-google-blue bg-smurf-blue hover:bg-beteleguese dark:hover:bg-bright-navy-blue dark:text-raisin-black',
+            extraClasses
+          )}
+        >
+          {text}
+        </button>
+      );
+    case 'primary':
+      return (
+        <button
+          data-test-id="button"
+          type={type}
+          name={name}
+          onClick={onClick ? onClick : undefined}
+          className={classNames(
+            'rounded flex items-center text-center py-1 px-2 font-medium text-white dark:bg-baby-blue-eyes bg-sapphire hover:bg-tufts-blue dark:hover:bg-pale-cornflower-blue dark:text-raisin-black',
+            extraClasses
+          )}
+        >
+          {text}
+        </button>
+      );
+    case 'secondary':
+      return (
+        <button
+          data-test-id="button"
+          type={type}
+          name={name}
+          onClick={onClick ? onClick : undefined}
+          className={classNames(
+            'rounded flex items-center text-center py-1 px-2 font-medium bg-transparent dark:bg-transparent dark:text-bright-gray text-raisin-black active:opacity-60 hover:opacity-80',
+            extraClasses
+          )}
+        >
+          {text}
+        </button>
+      );
+    case 'danger':
+      return (
+        <button
+          data-test-id="button"
+          type={type}
+          name={name}
+          onClick={onClick ? onClick : undefined}
+          className={classNames(
+            'rounded flex items-center text-center py-1 px-2 font-medium text-white dark:text-white dark:bg-red-500 bg-red-500 hover:bg-red-600',
+            extraClasses
+          )}
+        >
+          {text}
+        </button>
+      );
+    default:
+  }
+
+  return <></>;
 };
 
 export default Button;

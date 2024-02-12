@@ -28,7 +28,7 @@ interface ToastMessageProps {
   onClick: () => void;
   additionalStyles?: string;
   textAdditionalStyles?: string;
-  variant?: 'primary' | 'secondary' | 'danger' | 'small';
+  variant?: 'primary' | 'secondary' | 'danger' | 'small' | 'large';
 }
 
 const ToastMessage = ({
@@ -36,7 +36,7 @@ const ToastMessage = ({
   onClick,
   additionalStyles = '',
   textAdditionalStyles = '',
-  variant = 'primary',
+  variant = 'large',
 }: ToastMessageProps) => {
   return (
     <div
