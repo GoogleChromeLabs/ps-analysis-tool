@@ -31,6 +31,7 @@ interface BodyRowProps {
   columns: TableColumn[];
   index: number;
   selectedKey: string | undefined | null;
+  isRowFocused: boolean;
   getExtraClasses: () => string;
   hasVerticalBar: boolean;
   getRowObjectKey: (row: TableRow) => string;
@@ -47,6 +48,7 @@ const BodyRow = ({
   columns,
   index,
   selectedKey,
+  isRowFocused,
   getExtraClasses,
   hasVerticalBar,
   getRowObjectKey,
@@ -56,6 +58,24 @@ const BodyRow = ({
 }: BodyRowProps) => {
   const rowKey = getRowObjectKey(row);
   const isHighlighted = row.originalData?.highlighted;
+  const classes = classnames(
+    rowKey !== selectedKey &&
+      (index % 2
+        ? isHighlighted
+          ? 'bg-dirty-pink'
+          : 'bg-anti-flash-white dark:bg-charleston-green'
+        : isHighlighted
+        ? 'bg-dirty-pink text-dirty-red dark:text-dirty-red text-dirty-red'
+        : 'bg-white dark:bg-raisin-black'),
+    rowKey === selectedKey &&
+      (isRowFocused
+        ? isHighlighted
+          ? 'bg-dirty-red'
+          : 'bg-gainsboro dark:bg-outer-space'
+        : isHighlighted
+        ? 'bg-dirty-pink text-dirty-red'
+        : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver')
+  );
   const extraClasses = getExtraClasses();
 
   return (
@@ -63,6 +83,9 @@ const BodyRow = ({
       id={index.toString()}
       className={classnames(
         'outline-0 flex divide-x divide-american-silver dark:divide-quartz relative',
+        {
+          [classes]: extraClasses.length === 0,
+        },
         {
           [extraClasses]: extraClasses.length > 0,
         }

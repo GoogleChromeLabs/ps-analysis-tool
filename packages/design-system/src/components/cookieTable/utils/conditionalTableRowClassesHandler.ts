@@ -33,7 +33,6 @@ const conditionalTableRowClassesHandler = (
   const isBlocked = useIsBlockedToHighlight
     ? (row.originalData as CookieTableData)?.isBlocked
     : (row.originalData as CookieTableData)?.blockingStatus?.inboundBlock;
-  const isHighlighted = row.originalData?.highlighted;
   const isDomainInAllowList = (row.originalData as CookieTableData)
     ?.isDomainInAllowList;
 
@@ -54,26 +53,6 @@ const conditionalTableRowClassesHandler = (
           : 'dark:bg-jungle-green-light bg-leaf-green-light'
         : isRowFocused
         ? 'bg-gainsboro dark:bg-outer-space'
-        : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
-    rowKey !== selectedKey &&
-      !isBlocked &&
-      !isDomainInAllowList &&
-      (rowIndex % 2
-        ? isHighlighted
-          ? 'bg-dirty-pink'
-          : 'bg-anti-flash-white dark:bg-charleston-green'
-        : isHighlighted
-        ? 'bg-dirty-pink text-dirty-red dark:text-dirty-red text-dirty-red'
-        : 'bg-white dark:bg-raisin-black'),
-    rowKey === selectedKey &&
-      !isBlocked &&
-      !isDomainInAllowList &&
-      (isRowFocused
-        ? isHighlighted
-          ? 'bg-dirty-red'
-          : 'bg-gainsboro dark:bg-outer-space'
-        : isHighlighted
-        ? 'bg-dirty-pink text-dirty-red'
         : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver')
   );
 

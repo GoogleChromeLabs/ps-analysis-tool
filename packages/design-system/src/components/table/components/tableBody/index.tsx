@@ -148,6 +148,7 @@ const TableBody = ({
           row={row}
           columns={columns}
           selectedKey={selectedKey}
+          isRowFocused={isRowFocused}
           getExtraClasses={() => {
             return (
               conditionalTableRowClassesHandler?.(row, isRowFocused, index) ??
