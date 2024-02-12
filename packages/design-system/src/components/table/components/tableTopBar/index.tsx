@@ -31,7 +31,7 @@ interface TableTopBarProps {
   setShowFilterSidebar: React.Dispatch<React.SetStateAction<boolean>>;
   hideFiltering?: boolean;
   disableFiltering?: boolean;
-  extraInterface?: React.ReactNode;
+  extraInterface?: () => React.JSX.Element;
 }
 
 const TableTopBar = ({
@@ -39,7 +39,7 @@ const TableTopBar = ({
   setShowFilterSidebar,
   hideFiltering = false,
   disableFiltering = false,
-  extraInterface = null,
+  extraInterface,
 }: TableTopBarProps) => {
   const { rows, searchValue, setSearchValue, exportTableData } = useTable(
     ({ state, actions }) => ({
@@ -87,7 +87,7 @@ const TableTopBar = ({
       <div className="h-full w-px bg-american-silver dark:bg-quartz mx-3" />
 
       <div className="flex gap-3">
-        {extraInterface}
+        {extraInterface?.()}
         {exportTableData && (
           <ExportButton
             title="Export Table Data"

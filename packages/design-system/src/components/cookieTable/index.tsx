@@ -49,7 +49,7 @@ interface CookieTableProps {
       [frame: string]: CookieTableData | null;
     } | null
   ) => void;
-  extraInterfaceToTopBar?: React.ReactNode;
+  extraInterfaceToTopBar?: () => React.JSX.Element;
   onRowContextMenu?: (
     e: React.MouseEvent<HTMLDivElement>,
     row: TableRow

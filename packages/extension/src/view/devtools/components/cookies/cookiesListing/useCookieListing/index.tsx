@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   getValueByKey,
   type CookieTableData,
@@ -465,7 +465,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
     return `cookieListing#${selectedFrame}`;
   }, [selectedFrame]);
 
-  const extraInterfaceToTopBar = useMemo(() => {
+  const extraInterfaceToTopBar = useCallback(() => {
     return (
       <RefreshButton
         onClick={getCookiesSetByJavascript}

@@ -34,7 +34,7 @@ import FiltersSidebar from './filtersSidebar';
 interface TableProps {
   selectedKey: string | undefined | null;
   hideFiltering?: boolean;
-  extraInterfaceToTopBar?: React.ReactNode;
+  extraInterfaceToTopBar?: () => React.JSX.Element;
 }
 
 const Table = ({

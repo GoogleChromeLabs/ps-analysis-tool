@@ -83,13 +83,11 @@ const CookiesListing = ({
           useIsBlockedToHighlight={true}
           data={cookies}
           tableColumns={tableColumns}
-          showTopBar={true}
           tableFilters={filters}
           tableSearchKeys={searchKeys}
           tablePersistentSettingsKey={tablePersistentSettingsKey}
           selectedFrame={selectedFrameUrl}
           selectedFrameCookie={selectedFrameCookie}
-          hideExport
           setSelectedFrameCookie={setSelectedFrameCookie}
         />
       </Resizable>
