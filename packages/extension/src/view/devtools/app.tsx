@@ -297,8 +297,7 @@ const App: React.FC = () => {
             {settingsChanged && (
               <ToastMessage
                 additionalStyles="pb-2 text-sm"
-                text="To get accurate data we need to reload all open tabs. Please click
-        on Reload to reload all open tabs."
+                text="To get accurate data we need to reload all open tabs."
                 onClick={handleSettingsChange}
                 textAdditionalStyles="pl-4"
               />
