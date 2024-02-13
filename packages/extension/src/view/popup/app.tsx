@@ -79,7 +79,7 @@ const App: React.FC = () => {
         {settingsChanged && (
           <ToastMessage
             additionalStyles="pb-2 text-xs"
-            text="To get accurate data we need to reload all open tabs."
+            text="To get accurate data and allow settings to take effect we need to reload all tab(s).."
             variant="small"
             buttonText="Reload"
             onClick={handleSettingsChange}
@@ -118,7 +118,7 @@ const App: React.FC = () => {
         {settingsChanged && (
           <ToastMessage
             additionalStyles="pb-2 text-xs"
-            text="To get accurate data we need to reload all open tabs."
+            text="To get accurate data and allow settings to take effect we need to reload all tab(s).."
             onClick={handleSettingsChange}
             variant="small"
             buttonText="Reload"
@@ -148,7 +148,7 @@ const App: React.FC = () => {
         {settingsChanged && (
           <ToastMessage
             additionalStyles="pb-2 text-xs"
-            text="To get accurate data we need to reload all open tabs."
+            text="To get accurate data and allow settings to take effect we need to reload all tab(s).."
             variant="small"
             buttonText="Reload"
             onClick={handleSettingsChange}
@@ -195,7 +195,7 @@ const App: React.FC = () => {
       {settingsChanged && (
         <ToastMessage
           additionalStyles="pb-2 text-xs"
-          text="To get accurate data we need to reload all open tabs."
+          text="To get accurate data and allow settings to take effect we need to reload all tab(s).."
           variant="small"
           buttonText="Reload"
           onClick={handleSettingsChange}

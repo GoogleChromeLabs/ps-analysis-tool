@@ -42,7 +42,7 @@ const ToastMessage = ({
 }: ToastMessageProps) => {
   return (
     <div
-      className={`${additionalStyles} flex flex-row w-full absolute z-2 left-0 bottom-0 items-center justify-between bg-white dark:bg-charleston-green shadow-xxs py-4`}
+      className={`${additionalStyles} sticky flex flex-row w-full z-2 left-0 bottom-0 items-center justify-between bg-white dark:bg-charleston-green shadow-xxs py-4`}
     >
       <div className={`w-5/6 dark:text-white ${textAdditionalStyles}`}>
         {text}

@@ -292,16 +292,18 @@ const App: React.FC = () => {
               visibleWidth={sidebarWidth}
             />
           </Resizable>
-          <main className="h-full flex-1 overflow-auto relative">
-            <div className="min-w-[40rem] h-full z-1">{activePanel}</div>
-            {settingsChanged && (
-              <ToastMessage
-                additionalStyles="pb-2 text-sm"
-                text="To get accurate data we need to reload all open tabs."
-                onClick={handleSettingsChange}
-                textAdditionalStyles="pl-4"
-              />
-            )}
+          <main className="h-full flex-1 overflow-auto">
+            <div className="min-w-[40rem] h-full relative z-1">
+              {activePanel}
+              {settingsChanged && (
+                <ToastMessage
+                  additionalStyles="pb-2 text-sm"
+                  text="To get accurate data and allow settings to take effect we need to reload all tab(s)."
+                  onClick={handleSettingsChange}
+                  textAdditionalStyles="pl-4"
+                />
+              )}
+            </div>
           </main>
         </div>
       )}

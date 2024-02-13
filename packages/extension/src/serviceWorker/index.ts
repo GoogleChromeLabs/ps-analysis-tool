@@ -534,20 +534,6 @@ chrome.runtime.onMessage.addListener(async (request) => {
   }
 
   if (
-    request.type === 'DevTools::ServiceWorker::CHANGE_CDP_SETTING' ||
-    request.type === 'Popup::ServiceWorker::CHANGE_CDP_SETTING'
-  ) {
-    if (typeof request.payload?.isUsingCDP !== 'undefined') {
-      globalIsUsingCDP = request.payload?.isUsingCDP;
-      const storage = await chrome.storage.sync.get();
-      await chrome.storage.sync.set({
-        ...storage,
-        isUsingCDP: globalIsUsingCDP,
-      });
-    }
-  }
-
-  if (
     request?.type === 'DevTools::ServiceWorker::DEVTOOLS_STATE_OPEN' &&
     request?.payload?.tabId
   ) {
@@ -635,9 +621,21 @@ chrome.runtime.onMessage.addListener(async (request) => {
   }
 
   if (request?.type === 'DevTools::ServiceWorker::RELOAD_ALL_TABS') {
+    globalIsUsingCDP = request.payload.isUsingCDP;
+    tabMode = request.payload.allowedNumberOfTabs;
+
+    const storage = await chrome.storage.sync.get();
+
+    await chrome.storage.sync.set({
+      ...storage,
+      allowedNumberOfTabs: tabMode,
+      isUsingCDP: globalIsUsingCDP,
+    });
+
     await chrome.runtime.sendMessage({
       type: 'ServiceWorker::DevTools::TABS_RELOADED',
     });
+
     const tabs = await chrome.tabs.query({});
     await Promise.all(
       tabs.map(async (tab) => {
@@ -781,7 +779,6 @@ chrome.storage.sync.onChanged.addListener(
 
           try {
             await chrome.debugger.detach({ tabId: tab.id });
-            syncCookieStore?.removeCookieData(tab.id);
             syncCookieStore?.sendUpdatedDataToPopupAndDevTools(tab.id);
           } catch (error) {
             // eslint-disable-next-line no-console
@@ -795,7 +792,6 @@ chrome.storage.sync.onChanged.addListener(
           return;
         }
 
-        syncCookieStore?.removeCookieData(tab.id);
         syncCookieStore?.sendUpdatedDataToPopupAndDevTools(tab.id);
       });
     }
