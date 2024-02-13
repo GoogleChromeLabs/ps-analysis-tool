@@ -621,13 +621,22 @@ chrome.runtime.onMessage.addListener(async (request) => {
   }
 
   if (request?.type === 'DevTools::ServiceWorker::RELOAD_ALL_TABS') {
-    globalIsUsingCDP = request.payload.isUsingCDP;
-    tabMode = request.payload.allowedNumberOfTabs;
+    const sessionStorage = await chrome.storage.session.get();
+    if (Object.keys(sessionStorage).includes('allowedNumberOfTabs')) {
+      tabMode = sessionStorage.allowedNumberOfTabs;
+    }
 
-    const storage = await chrome.storage.sync.get();
+    if (Object.keys(sessionStorage).includes('isUsingCDP')) {
+      globalIsUsingCDP = sessionStorage.isUsingCDP;
+    }
+
+    await chrome.storage.session.set({
+      allowedNumberOfTabs: tabMode,
+      isUsingCDP: globalIsUsingCDP,
+      pendingReload: false,
+    });
 
     await chrome.storage.sync.set({
-      ...storage,
       allowedNumberOfTabs: tabMode,
       isUsingCDP: globalIsUsingCDP,
     });

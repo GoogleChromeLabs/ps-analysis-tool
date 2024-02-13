@@ -138,23 +138,38 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const _setUsingCDP = useCallback((newValue: boolean) => {
     setIsUsingCDP(newValue);
+    chrome.storage.session.set({
+      isUsingCDP: newValue,
+      pendingReload: true,
+    });
   }, []);
 
   const intitialSync = useCallback(async () => {
-    const localStoragePersistance = localStorage.getItem('settingsChanged');
+    const sessionStorage = await chrome.storage.session.get();
 
-    setSettingsChanged(localStoragePersistance === 'true');
+    if (Object.keys(sessionStorage).includes('pendingReload')) {
+      setSettingsChanged(sessionStorage?.pendingReload);
+
+      if (Object.keys(sessionStorage).includes('allowedNumberOfTabs')) {
+        setAllowedNumberOfTabs(sessionStorage?.allowedNumberOfTabs);
+      }
+
+      if (Object.keys(sessionStorage).includes('isUsingCDP')) {
+        setIsUsingCDP(sessionStorage?.isUsingCDP);
+      }
+    } else {
+      const currentSettings = await chrome.storage.sync.get();
+
+      if (Object.keys(currentSettings).includes('allowedNumberOfTabs')) {
+        setAllowedNumberOfTabs(currentSettings?.allowedNumberOfTabs);
+      }
+
+      if (Object.keys(currentSettings).includes('isUsingCDP')) {
+        setIsUsingCDP(currentSettings?.isUsingCDP);
+      }
+    }
 
     const tab = await getCurrentTab();
-
-    const extensionStorage = await chrome.storage.sync.get();
-
-    if (Object.keys(extensionStorage).includes('allowedNumberOfTabs')) {
-      setAllowedNumberOfTabs(extensionStorage?.allowedNumberOfTabs);
-    }
-    if (Object.keys(extensionStorage).includes('isUsingCDP')) {
-      setIsUsingCDP(extensionStorage?.isUsingCDP);
-    }
 
     const availableTabs = await chrome.tabs.query({});
 
@@ -207,20 +222,30 @@ export const Provider = ({ children }: PropsWithChildren) => {
     });
   }, [tabId]);
 
+  const sessionStoreChangeListener = useCallback(
+    (changes: { [key: string]: chrome.storage.StorageChange }) => {
+      if (
+        Object.keys(changes).includes('allowedNumberOfTabs') &&
+        Object.keys(changes.allowedNumberOfTabs).includes('newValue')
+      ) {
+        setAllowedNumberOfTabs(changes?.allowedNumberOfTabs?.newValue);
+      }
+
+      if (
+        Object.keys(changes).includes('isUsingCDP') &&
+        Object.keys(changes.isUsingCDP).includes('newValue')
+      ) {
+        setIsUsingCDP(changes?.isUsingCDP?.newValue);
+      }
+    },
+    []
+  );
+
   const handleSettingsChange = useCallback(async () => {
     if (settingsChanged) {
-      const newProcessingMode = localStorage.getItem('allowedNumberOfTabs');
-      const newCDPMode = localStorage.getItem('isUsingCDP');
       await chrome.runtime.sendMessage({
         type: 'Popup::ServiceWorker::RELOAD_ALL_TABS',
-        payload: {
-          allowedNumberOfTabs: newProcessingMode,
-          isUsingCDP: newCDPMode,
-        },
       });
-      localStorage.removeItem('settingsChanged');
-      localStorage.removeItem('isUsingCDP');
-      localStorage.removeItem('allowedNumberOfTabs');
       setSettingsChanged(false);
     }
   }, [settingsChanged]);
@@ -287,18 +312,24 @@ export const Provider = ({ children }: PropsWithChildren) => {
     };
   }, [setDebouncedStats, tabId, allowedNumberOfTabs]);
 
-  const changeSyncStorageListener = useCallback(async () => {
-    const extensionStorage = await chrome.storage.sync.get();
+  const changeSyncStorageListener = useCallback(
+    (changes: { [key: string]: chrome.storage.StorageChange }) => {
+      if (
+        Object.keys(changes).includes('allowedNumberOfTabs') &&
+        Object.keys(changes.allowedNumberOfTabs).includes('newValue')
+      ) {
+        setAllowedNumberOfTabs(changes?.allowedNumberOfTabs?.newValue);
+      }
 
-    if (Object.keys(extensionStorage).includes('allowedNumberOfTabs')) {
-      setAllowedNumberOfTabs(extensionStorage?.allowedNumberOfTabs);
-      setSettingsChanged(true);
-    }
-    if (Object.keys(extensionStorage).includes('isUsingCDP')) {
-      setIsUsingCDP(extensionStorage?.isUsingCDP);
-      setSettingsChanged(true);
-    }
-  }, []);
+      if (
+        Object.keys(changes).includes('isUsingCDP') &&
+        Object.keys(changes.isUsingCDP).includes('newValue')
+      ) {
+        setIsUsingCDP(changes?.isUsingCDP?.newValue);
+      }
+    },
+    []
+  );
 
   useEffect(() => {
     intitialSync();
@@ -306,10 +337,15 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     chrome.storage.sync.onChanged.addListener(changeSyncStorageListener);
+    chrome.storage.session.onChanged.addListener(sessionStoreChangeListener);
+
     return () => {
       chrome.storage.sync.onChanged.removeListener(changeSyncStorageListener);
+      chrome.storage.session.onChanged.removeListener(
+        sessionStoreChangeListener
+      );
     };
-  }, [changeSyncStorageListener]);
+  }, [changeSyncStorageListener, sessionStoreChangeListener]);
 
   return (
     <Context.Provider
