@@ -29,6 +29,7 @@ interface ToastMessageProps {
   additionalStyles?: string;
   textAdditionalStyles?: string;
   variant?: 'primary' | 'secondary' | 'danger' | 'small' | 'large';
+  buttonText?: string;
 }
 
 const ToastMessage = ({
@@ -37,6 +38,7 @@ const ToastMessage = ({
   additionalStyles = '',
   textAdditionalStyles = '',
   variant = 'large',
+  buttonText = 'Reload All Tabs',
 }: ToastMessageProps) => {
   return (
     <div
@@ -46,7 +48,7 @@ const ToastMessage = ({
         {text}
       </div>
       <div className="w-1/6">
-        <Button text="Reload All Tabs" onClick={onClick} variant={variant} />
+        <Button text={buttonText} onClick={onClick} variant={variant} />
       </div>
     </div>
   );

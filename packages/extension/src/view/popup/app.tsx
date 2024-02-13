@@ -21,8 +21,8 @@ import React from 'react';
 import {
   Button,
   CirclePieChart,
-  InfoIcon,
   ProgressBar,
+  ToastMessage,
   ToggleSwitch,
   prepareCookieStatsComponents,
 } from '@ps-analysis-tool/design-system';
@@ -77,19 +77,14 @@ const App: React.FC = () => {
           Its emptier than a cookie jar after a midnight snack! 🌌
         </p>
         {settingsChanged && (
-          <div className="flex flex-row gap-x-1.5 top-2 right-2 absolute items-center">
-            <Button
-              variant="small"
-              text="Reload Tabs"
-              onClick={handleSettingsChange}
-            />
-            <span
-              title="To get accurate data we need to reload all open tabs. Please click
-        on Reload to reload all open tabs."
-            >
-              <InfoIcon />
-            </span>
-          </div>
+          <ToastMessage
+            additionalStyles="pb-2 text-xs"
+            text="To get accurate data we need to reload all open tabs"
+            variant="small"
+            buttonText="Reload"
+            onClick={handleSettingsChange}
+            textAdditionalStyles="pl-4"
+          />
         )}
       </div>
     );
@@ -121,19 +116,14 @@ const App: React.FC = () => {
         />
         <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
         {settingsChanged && (
-          <div className="flex flex-row gap-x-1.5 top-2 right-2 absolute items-center">
-            <Button
-              variant="small"
-              text="Reload Tabs"
-              onClick={handleSettingsChange}
-            />
-            <span
-              title="To get accurate data we need to reload all open tabs. Please click
-        on Reload to reload all open tabs."
-            >
-              <InfoIcon />
-            </span>
-          </div>
+          <ToastMessage
+            additionalStyles="pb-2 text-xs"
+            text="To get accurate data we need to reload all open tabs"
+            onClick={handleSettingsChange}
+            variant="small"
+            buttonText="Reload"
+            textAdditionalStyles="pl-4"
+          />
         )}
       </div>
     );
@@ -156,19 +146,14 @@ const App: React.FC = () => {
           Please try reloading the page
         </p>
         {settingsChanged && (
-          <div className="flex flex-row gap-x-1.5 top-2 right-2 absolute items-center">
-            <Button
-              variant="small"
-              text="Reload Tabs"
-              onClick={handleSettingsChange}
-            />
-            <span
-              title="To get accurate data we need to reload all open tabs. Please click
-        on Reload to reload all open tabs."
-            >
-              <InfoIcon />
-            </span>
-          </div>
+          <ToastMessage
+            additionalStyles="pb-2 text-xs"
+            text="To get accurate data we need to reload all open tabs"
+            variant="small"
+            buttonText="Reload"
+            onClick={handleSettingsChange}
+            textAdditionalStyles="pl-4"
+          />
         )}
       </div>
     );
@@ -208,19 +193,14 @@ const App: React.FC = () => {
         </p>
       </div>
       {settingsChanged && (
-        <div className="flex flex-row gap-x-1.5 top-2 right-2 absolute items-center">
-          <Button
-            variant="small"
-            text="Reload Tabs"
-            onClick={handleSettingsChange}
-          />
-          <span
-            title="To get accurate data we need to reload all open tabs. Please click
-        on Reload to reload all open tabs."
-          >
-            <InfoIcon />
-          </span>
-        </div>
+        <ToastMessage
+          additionalStyles="pb-2 text-xs"
+          text="To get accurate data we need to reload all open tabs"
+          variant="small"
+          buttonText="Reload"
+          onClick={handleSettingsChange}
+          textAdditionalStyles="pl-4"
+        />
       )}
     </div>
   );
