@@ -283,25 +283,15 @@ chrome.runtime.onInstalled.addListener(async (details) => {
  */
 // eslint-disable-next-line complexity
 chrome.debugger.onEvent.addListener((source, method, params) => {
-  if (!ALLOWED_EVENTS.includes(method)) {
-    return;
-  }
-
-  let tabId = '';
-
-  if (!source?.tabId) {
-    return;
-  }
-
-  if (!params) {
+  if (!ALLOWED_EVENTS.includes(method) || !source?.tabId || !params) {
     return;
   }
 
   const url = syncCookieStore?.getTabUrl(source?.tabId);
 
-  tabId = source?.tabId?.toString();
+  const tabId = source.tabId.toString();
 
-  if (tabMode && tabMode !== 'unlimited' && tabToRead !== tabId) {
+  if (tabMode !== 'unlimited' && tabToRead !== tabId) {
     return;
   }
 
