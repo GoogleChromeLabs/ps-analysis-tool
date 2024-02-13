@@ -40,7 +40,7 @@ const GISAccordion = ({ matches }: AccordionProps) => {
         Due to Privacy Sandbox enforcements some features are backward
         incompatible or deprecated. This report performs a page scan for script
         src elements and affected JavaScript objects and methods. Review the
-        following features in and{' '}
+        following features and{' '}
         <a
           className="text-bright-navy-blue dark:text-jordy-blue"
           target="_blank"
