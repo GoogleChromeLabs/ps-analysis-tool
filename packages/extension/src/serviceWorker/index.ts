@@ -394,15 +394,18 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
     const requestParams =
       params as Protocol.Network.RequestWillBeSentExtraInfoEvent;
 
-    if (requestParams.associatedCookies.length === 0) {
+    const { associatedCookies, requestId } = requestParams;
+
+    if (associatedCookies.length === 0) {
       return;
     }
 
     const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
-      requestParams,
+      associatedCookies,
       cookieDB ?? {},
       requestIdToCDPURLMapping[tabId],
-      url ?? ''
+      url ?? '',
+      requestId
     );
 
     if (cookies.length === 0) {
@@ -416,20 +419,31 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
     const responseParams =
       params as Protocol.Network.ResponseReceivedExtraInfoEvent;
 
+    const {
+      headers,
+      blockedCookies,
+      requestId,
+      cookiePartitionKey = '',
+    } = responseParams;
+
     // Sometimes CDP gives "set-cookie" and sometimes it gives "Set-Cookie".
-    if (
-      !responseParams.headers['set-cookie'] &&
-      !responseParams.headers['Set-Cookie']
-    ) {
+    if (!headers['set-cookie'] && !headers['Set-Cookie']) {
       return;
     }
 
     const cookies: CookieData[] = parseResponseReceivedExtraInfo(
-      responseParams,
+      headers,
+      blockedCookies,
+      cookiePartitionKey,
       requestIdToCDPURLMapping[tabId],
       url ?? '',
-      cookieDB ?? {}
+      cookieDB ?? {},
+      requestId
     );
+
+    if (cookies.length === 0) {
+      return;
+    }
 
     syncCookieStore?.update(Number(tabId), cookies);
   }
