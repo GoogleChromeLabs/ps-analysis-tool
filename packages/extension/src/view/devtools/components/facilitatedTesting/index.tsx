@@ -26,6 +26,7 @@ const FacilitatedTesting = () => (
     <LandingPage
       title="Facilitated Testing"
       contentPanel={<FacilitatedTestingContent />}
+      extraClasses="max-w-2xl h-fit"
     />
   </div>
 );

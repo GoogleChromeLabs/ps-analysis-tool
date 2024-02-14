@@ -48,20 +48,23 @@ const INFO_CARDS_DATA = [
 
 const InfoCards = () => {
   return (
-    <div className="grid grid-cols-2 gap-9">
+    <ul className="divide-y divide-gray-200 dark:divide-gray-500">
       {INFO_CARDS_DATA.map((card, index) => (
-        <div
-          key={index}
-          className="w-full h-full text-raisin-black dark:text-bright-gray"
-        >
-          <h3 className="text-xl font-bold break-words mb-3">{card.heading}</h3>
-          <p
-            className="text-sm break-words"
-            dangerouslySetInnerHTML={{ __html: card.content }}
-          ></p>
-        </div>
+        <li className="py-4" key={index}>
+          <div className="flex items-center">
+            <div className="flex-1 min-w-0 flex flex-col gap-2">
+              <p className="text-xl font-bold text-raisin-black dark:text-bright-gray truncate capitalize">
+                {card.heading}
+              </p>
+              <p
+                className="text-sm break-words"
+                dangerouslySetInnerHTML={{ __html: card.content }}
+              />
+            </div>
+          </div>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 };
 
