@@ -115,8 +115,14 @@ chrome.webRequest.onResponseStarted.addListener(
         },
         []
       );
+      const currentTab = await getTab(tabId);
 
-      if (!cookies || (cookies && cookies?.length === 0)) {
+      if (
+        !cookies ||
+        (cookies && cookies?.length === 0) ||
+        currentTab?.pendingUrl ||
+        currentTab?.url !== tabUrl
+      ) {
         return;
       }
 
@@ -185,8 +191,14 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
         },
         []
       );
+      const currentTab = await getTab(tabId);
 
-      if (!cookies || (cookies && cookies?.length === 0)) {
+      if (
+        !cookies ||
+        (cookies && cookies?.length === 0) ||
+        currentTab?.pendingUrl ||
+        currentTab?.url !== tabUrl
+      ) {
         return;
       }
 
@@ -259,9 +271,8 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     return;
   }
 
-  syncCookieStore?.updateUrl(tabId, tab.url);
-
-  if (changeInfo.status === 'loading' && tab.url) {
+  if (['loading', 'complete'].includes(changeInfo.status ?? '') && tab.url) {
+    syncCookieStore?.updateUrl(tabId, tab.url);
     syncCookieStore?.removeCookieData(tabId);
   }
 
