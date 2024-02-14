@@ -627,7 +627,10 @@ chrome.runtime.onMessage.addListener(async (request) => {
     );
   }
 
-  if (request?.type === 'DevTools::ServiceWorker::RELOAD_ALL_TABS') {
+  if (
+    request?.type === 'DevTools::ServiceWorker::RELOAD_ALL_TABS' ||
+    request?.type === 'Popup::ServiceWorker::RELOAD_ALL_TABS'
+  ) {
     const sessionStorage = await chrome.storage.session.get();
     if (Object.keys(sessionStorage).includes('allowedNumberOfTabs')) {
       tabMode = sessionStorage.allowedNumberOfTabs;

@@ -76,16 +76,18 @@ const App: React.FC = () => {
         <p className="text-chart-label text-xs">
           Its emptier than a cookie jar after a midnight snack! 🌌
         </p>
-        {settingsChanged && (
-          <ToastMessage
-            additionalStyles="pb-2 text-xs"
-            text="To get accurate data and allow settings to take effect we need to reload all tab(s).."
-            variant="small"
-            buttonText="Reload"
-            onClick={handleSettingsChange}
-            textAdditionalStyles="pl-4"
-          />
-        )}
+        <div className="absolute right-0 bottom-0 w-full">
+          {settingsChanged && (
+            <ToastMessage
+              additionalStyles="text-sm"
+              text="To get accurate data and allow settings to take effect we need to reload all tab(s)."
+              variant="primary"
+              buttonText="Reload"
+              onClick={handleSettingsChange}
+              textAdditionalStyles="text-xs"
+            />
+          )}
+        </div>
       </div>
     );
   }
@@ -115,16 +117,18 @@ const App: React.FC = () => {
           enabled={isUsingCDP}
         />
         <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
-        {settingsChanged && (
-          <ToastMessage
-            additionalStyles="pb-2 text-xs"
-            text="To get accurate data and allow settings to take effect we need to reload all tab(s).."
-            onClick={handleSettingsChange}
-            variant="small"
-            buttonText="Reload"
-            textAdditionalStyles="pl-4"
-          />
-        )}
+        <div className="absolute right-0 bottom-0 w-full">
+          {settingsChanged && (
+            <ToastMessage
+              additionalStyles="text-sm"
+              text="To get accurate data and allow settings to take effect we need to reload all tab(s)."
+              variant="primary"
+              buttonText="Reload"
+              onClick={handleSettingsChange}
+              textAdditionalStyles="text-xs"
+            />
+          )}
+        </div>
       </div>
     );
   }
@@ -145,16 +149,18 @@ const App: React.FC = () => {
         <p className="text-chart-label text-xs">
           Please try reloading the page
         </p>
-        {settingsChanged && (
-          <ToastMessage
-            additionalStyles="pb-2 text-xs"
-            text="To get accurate data and allow settings to take effect we need to reload all tab(s).."
-            variant="small"
-            buttonText="Reload"
-            onClick={handleSettingsChange}
-            textAdditionalStyles="pl-4"
-          />
-        )}
+        <div className="absolute right-0 bottom-0 w-full">
+          {settingsChanged && (
+            <ToastMessage
+              additionalStyles="text-sm"
+              text="To get accurate data and allow settings to take effect we need to reload all tab(s)."
+              variant="primary"
+              buttonText="Reload"
+              onClick={handleSettingsChange}
+              textAdditionalStyles="text-xs"
+            />
+          )}
+        </div>
       </div>
     );
   }
@@ -192,16 +198,18 @@ const App: React.FC = () => {
           {'Inspect cookies in the "Privacy Sandbox" panel of DevTools'}
         </p>
       </div>
-      {settingsChanged && (
-        <ToastMessage
-          additionalStyles="pb-2 text-xs"
-          text="To get accurate data and allow settings to take effect we need to reload all tab(s).."
-          variant="small"
-          buttonText="Reload"
-          onClick={handleSettingsChange}
-          textAdditionalStyles="pl-4"
-        />
-      )}
+      <div className="absolute right-0 bottom-0 w-full">
+        {settingsChanged && (
+          <ToastMessage
+            additionalStyles="text-sm"
+            text="To get accurate data and allow settings to take effect we need to reload all tab(s)."
+            variant="primary"
+            buttonText="Reload"
+            onClick={handleSettingsChange}
+            textAdditionalStyles="text-xs"
+          />
+        )}
+      </div>
     </div>
   );
 };
