@@ -326,7 +326,7 @@ const App: React.FC = () => {
                 {settingsChanged && (
                   <ToastMessage
                     additionalStyles={`text-sm`}
-                    text="To get accurate data and allow settings to take effect we need to reload all tab(s)."
+                    text="For settings to take effect please reload all tab(s)."
                     onClick={handleSettingsChange}
                     textAdditionalStyles="text-sm"
                   />
