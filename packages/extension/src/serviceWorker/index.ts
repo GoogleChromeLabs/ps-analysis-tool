@@ -267,11 +267,7 @@ chrome.runtime.onStartup.addListener(async () => {
  * @see https://developer.chrome.com/docs/extensions/reference/api/tabs#event-onUpdated
  */
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-  if (!tab.url) {
-    return;
-  }
-
-  if (['loading', 'complete'].includes(changeInfo.status ?? '') && tab.url) {
+  if (changeInfo.status === 'loading' && tab.url) {
     syncCookieStore?.updateUrl(tabId, tab.url);
     syncCookieStore?.removeCookieData(tabId);
   }
