@@ -34,6 +34,7 @@ import { fetchDictionary } from '../utils/fetchCookieDictionary';
 import { ALLOWED_NUMBER_OF_TABS } from '../constants';
 import SynchnorousCookieStore from '../store/synchnorousCookieStore';
 import canProcessCookies from '../utils/canProcessCookies';
+import reloadCurrentTab from '../utils/reloadCurrentTab';
 import { getTab } from '../utils/getTab';
 
 let cookieDB: CookieDatabase | null = null;
@@ -61,10 +62,21 @@ const ALLOWED_EVENTS = [
  * @see https://developer.chrome.com/docs/extensions/reference/api/webRequest
  */
 chrome.webRequest.onResponseStarted.addListener(
-  (details: chrome.webRequest.WebResponseCacheDetails) => {
+  ({ tabId, url, responseHeaders, frameId, requestId }) => {
     (async () => {
-      const { tabId, url, responseHeaders, frameId } = details;
-      const tabUrl = syncCookieStore?.getTabUrl(tabId) ?? '';
+      if (!syncCookieStore) {
+        try {
+          await chrome.runtime.sendMessage({
+            type: 'ServiceWorker::DevTools::SERVICE_WORKER_STATE_UPDATE',
+            payload: { didServiceWorkerSleep: true },
+          });
+        } catch (error) {
+          //Fail silently. Ignoring the console.warn here because the only error this will throw is of "Error: Could not establish connection".
+        }
+        return;
+      }
+
+      const tabUrl = syncCookieStore.getTabUrl(tabId) ?? '';
 
       if (
         !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, responseHeaders)
@@ -104,7 +116,7 @@ chrome.webRequest.onResponseStarted.addListener(
               tabUrl,
               frameId,
               cdpCookies?.cookies ?? [],
-              details.requestId
+              requestId
             );
 
             return [...accumulator, cookie];
@@ -134,7 +146,19 @@ chrome.webRequest.onResponseStarted.addListener(
 chrome.webRequest.onBeforeSendHeaders.addListener(
   ({ url, requestHeaders, tabId, frameId, requestId }) => {
     (async () => {
-      const tabUrl = syncCookieStore?.getTabUrl(tabId) ?? '';
+      if (!syncCookieStore) {
+        try {
+          await chrome.runtime.sendMessage({
+            type: 'ServiceWorker::DevTools::SERVICE_WORKER_STATE_UPDATE',
+            payload: { didServiceWorkerSleep: true },
+          });
+        } catch (error) {
+          //Fail silently. Ignoring the console.warn here because the only error this will throw is of "Error: Could not establish connection".
+        }
+        return;
+      }
+
+      const tabUrl = syncCookieStore.getTabUrl(tabId) ?? '';
 
       if (
         !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, requestHeaders)
@@ -189,7 +213,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
         return;
       }
 
-      syncCookieStore?.update(tabId, cookies);
+      syncCookieStore.update(tabId, cookies);
     })();
   },
   { urls: ['*://*/*'] },
@@ -203,10 +227,6 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 chrome.tabs.onCreated.addListener((tab) => {
   if (!tab.id) {
     return;
-  }
-
-  if (!syncCookieStore) {
-    syncCookieStore = new SynchnorousCookieStore();
   }
 
   if (tabMode && tabMode !== 'unlimited') {
@@ -296,12 +316,6 @@ chrome.windows.onRemoved.addListener((windowId) => {
 chrome.runtime.onInstalled.addListener(async (details) => {
   syncCookieStore = new SynchnorousCookieStore();
   syncCookieStore?.clear();
-
-  // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
-  // Doing this to keep the service worker alive so that we dont loose any data and introduce any bug.
-  setInterval(() => {
-    chrome.storage.local.get();
-  }, 28000);
 
   // @todo Send tab data of the active tab only, also if sending only the difference would make it any faster.
   setInterval(() => {
@@ -513,6 +527,18 @@ chrome.runtime.onMessage.addListener(async (request) => {
     request?.type === 'DevTools::ServiceWorker::SET_TAB_TO_READ' ||
     request?.type === 'Popup::ServiceWorker::SET_TAB_TO_READ'
   ) {
+    if (!syncCookieStore) {
+      try {
+        chrome.runtime.sendMessage({
+          type: 'ServiceWorker::DevTools::SERVICE_WORKER_STATE_UPDATE',
+          payload: { didServiceWorkerSleep: true },
+        });
+      } catch (error) {
+        //Fail silently. Ignoring the console.warn here because the only error this will throw is of "Error: Could not establish connection".
+      }
+      return;
+    }
+
     tabToRead = request?.payload?.tabId?.toString();
     const newTab = await listenToNewTab(request?.payload?.tabId);
 
@@ -545,8 +571,10 @@ chrome.runtime.onMessage.addListener(async (request) => {
     request?.type === 'DevTools::ServiceWorker::DEVTOOLS_STATE_OPEN' &&
     request?.payload?.tabId
   ) {
-    const dataToSend: { [key: string]: string } = {};
+    const dataToSend: { [key: string]: string | boolean } = {};
+
     dataToSend['tabMode'] = tabMode;
+    dataToSend['didServiceWorkerSleep'] = syncCookieStore ? false : true;
 
     if (tabMode === 'single') {
       dataToSend['tabToRead'] = tabToRead;
@@ -589,6 +617,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
     if (tabMode === 'single') {
       dataToSend['tabToRead'] = tabToRead;
     }
+
     chrome.runtime.sendMessage({
       type: 'ServiceWorker::Popup::INITIAL_SYNC',
       payload: dataToSend,
@@ -627,6 +656,45 @@ chrome.runtime.onMessage.addListener(async (request) => {
       JSON.parse(request?.payload?.cookieData)
     );
   }
+
+  if (
+    request?.type === 'DevTools::ServiceWorker::ACTIVATE_SERVICE_WORKER' &&
+    request?.payload?.tabId
+  ) {
+    if (!syncCookieStore) {
+      syncCookieStore = new SynchnorousCookieStore();
+    }
+    const extensionStorage = await chrome.storage.sync.get();
+
+    if (Object.keys(extensionStorage).includes('allowedNumberOfTabs')) {
+      tabMode = extensionStorage?.allowedNumberOfTabs;
+    }
+
+    if (Object.keys(extensionStorage).includes('isUsingCDP')) {
+      globalIsUsingCDP = extensionStorage?.isUsingCDP;
+    }
+
+    syncCookieStore.addTabData(request?.payload?.tabId);
+    syncCookieStore.updateDevToolsState(request?.payload?.tabId, true);
+
+    //Send message to other devtools in multitab environement when service worker has been
+    //revived and syncCookieStore object has been recreated.
+    await chrome.runtime.sendMessage({
+      type: 'ServiceWorker::DevTools::SERVICE_WORKER_RELOADED',
+    });
+
+    setInterval(() => {
+      if (Object.keys(syncCookieStore?.tabsData ?? {}).length === 0) {
+        return;
+      }
+
+      Object.keys(syncCookieStore?.tabsData ?? {}).forEach((key) => {
+        syncCookieStore?.sendUpdatedDataToPopupAndDevTools(Number(key));
+      });
+    }, 1200);
+
+    await reloadCurrentTab(request?.payload?.tabId);
+  }
 });
 
 /**
@@ -635,12 +703,6 @@ chrome.runtime.onMessage.addListener(async (request) => {
  */
 chrome.windows.onCreated.addListener(async () => {
   const totalWindows = await chrome.windows.getAll();
-
-  // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
-  // Doing this to keep the service worker alive so that we dont loose any data and introduce any bug.
-  setInterval(() => {
-    chrome.storage.local.get();
-  }, 28000);
 
   // We do not want to clear content settings if a user has create one more window.
   if (totalWindows.length < 2) {
@@ -668,7 +730,8 @@ chrome.storage.sync.onChanged.addListener(
         type: 'ServiceWorker::DevTools::INITIAL_SYNC',
         payload: {
           tabMode,
-          tabToRead: tabToRead,
+          tabToRead,
+          didServiceWorkerSleep: syncCookieStore ? false : true,
         },
       });
 
@@ -676,7 +739,7 @@ chrome.storage.sync.onChanged.addListener(
         type: 'ServiceWorker::Popup::INITIAL_SYNC',
         payload: {
           tabMode,
-          tabToRead: tabToRead,
+          tabToRead,
         },
       });
 
@@ -700,7 +763,6 @@ chrome.storage.sync.onChanged.addListener(
         type: 'ServiceWorker::Popup::INITIAL_SYNC',
         payload: {
           tabMode,
-          tabToRead: tabToRead,
         },
       });
 
@@ -708,7 +770,6 @@ chrome.storage.sync.onChanged.addListener(
         type: 'ServiceWorker::DevTools::INITIAL_SYNC',
         payload: {
           tabMode,
-          tabToRead: tabToRead,
         },
       });
 

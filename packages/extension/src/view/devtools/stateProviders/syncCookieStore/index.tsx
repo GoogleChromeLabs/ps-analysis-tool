@@ -54,9 +54,11 @@ export interface CookieStoreContext {
     contextInvalidated: boolean;
     canStartInspecting: boolean;
     tabToRead: string | null;
+    serviceWorkerInactive: boolean;
     frameHasCookies: Record<string, boolean>;
   };
   actions: {
+    sendMessageToRefreshExtensionAndPage: () => void;
     setSelectedFrame: (key: string | null) => void;
     setIsInspecting: React.Dispatch<React.SetStateAction<boolean>>;
     changeListeningToThisTab: () => void;
@@ -79,9 +81,11 @@ const initialState: CookieStoreContext = {
     contextInvalidated: false,
     canStartInspecting: false,
     tabToRead: null,
+    serviceWorkerInactive: false,
     frameHasCookies: {},
   },
   actions: {
+    sendMessageToRefreshExtensionAndPage: noop,
     setSelectedFrame: noop,
     changeListeningToThisTab: noop,
     setIsInspecting: noop,
@@ -100,6 +104,8 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const loadingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [tabToRead, setTabToRead] = useState<string | null>(null);
   const [contextInvalidated, setContextInvalidated] = useState<boolean>(false);
+  const [serviceWorkerInactive, setServiceWorkerInactive] =
+    useState<boolean>(false);
 
   const [returningToSingleTab, setReturningToSingleTab] =
     useState<CookieStoreContext['state']['returningToSingleTab']>(false);
@@ -284,6 +290,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         cookieData?: TabCookies;
         tabToRead?: string;
         tabMode?: string;
+        didServiceWorkerSleep?: boolean;
       };
     }) => {
       if (message.type === 'ServiceWorker::SET_TAB_TO_READ') {
@@ -303,6 +310,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
       }
 
       if (message.type === 'ServiceWorker::DevTools::INITIAL_SYNC') {
+        if (typeof message?.payload?.didServiceWorkerSleep !== 'undefined') {
+          setServiceWorkerInactive(message?.payload?.didServiceWorkerSleep);
+        }
+
         if (message?.payload?.tabMode === 'unlimited') {
           isCurrentTabBeingListenedToRef.current = true;
           setTabToRead(null);
@@ -330,6 +341,19 @@ export const Provider = ({ children }: PropsWithChildren) => {
             setTabFrames(null);
           }
         }
+      }
+
+      if (
+        message.type === 'ServiceWorker::DevTools::SERVICE_WORKER_STATE_UPDATE'
+      ) {
+        if (typeof message?.payload?.didServiceWorkerSleep !== 'undefined') {
+          setServiceWorkerInactive(message?.payload?.didServiceWorkerSleep);
+        }
+      }
+
+      if (message.type === 'ServiceWorker::DevTools::SERVICE_WORKER_RELOADED') {
+        setServiceWorkerInactive(false);
+        window.location.reload();
       }
     };
 
@@ -429,6 +453,18 @@ export const Provider = ({ children }: PropsWithChildren) => {
     };
   }, [tabId]);
 
+  const sendMessageToRefreshExtensionAndPage = useCallback(() => {
+    if (serviceWorkerInactive && tabId) {
+      chrome.runtime.sendMessage({
+        type: 'DevTools::ServiceWorker::ACTIVATE_SERVICE_WORKER',
+        payload: {
+          tabId: tabId,
+        },
+      });
+      window.location.reload();
+    }
+  }, [serviceWorkerInactive, tabId]);
+
   return (
     <Context.Provider
       value={{
@@ -444,9 +480,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
           isInspecting,
           canStartInspecting,
           tabToRead,
+          serviceWorkerInactive,
           frameHasCookies,
         },
         actions: {
+          sendMessageToRefreshExtensionAndPage,
           setSelectedFrame,
           changeListeningToThisTab,
           getCookiesSetByJavascript,

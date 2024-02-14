@@ -59,8 +59,11 @@ const App: React.FC = () => {
     canStartInspecting,
     tabUrl,
     frameHasCookies,
+    serviceWorkerInactive,
+    sendMessageToRefreshExtensionAndPage,
   } = useCookieStore(({ state, actions }) => ({
     contextInvalidated: state.contextInvalidated,
+    serviceWorkerInactive: state.serviceWorkerInactive,
     setContextInvalidated: actions.setContextInvalidated,
     tabCookies: state.tabCookies,
     tabFrames: state.tabFrames,
@@ -71,6 +74,8 @@ const App: React.FC = () => {
     canStartInspecting: state.canStartInspecting,
     tabUrl: state.tabUrl,
     frameHasCookies: state.frameHasCookies,
+    sendMessageToRefreshExtensionAndPage:
+      actions.sendMessageToRefreshExtensionAndPage,
   }));
 
   const { allowedNumberOfTabs } = useSettingsStore(({ state }) => ({
@@ -257,9 +262,22 @@ const App: React.FC = () => {
     >
       {contextInvalidated && (
         <div className="flex flex-col items-center justify-center w-full h-full">
-          <ExtensionReloadNotification />
+          <ExtensionReloadNotification
+            text="Looks like extension has been updated since devtool was open."
+            onClick={() => window.location.reload()}
+          />
         </div>
       )}
+
+      {serviceWorkerInactive && (
+        <div className="flex flex-col items-center justify-center w-full h-full">
+          <ExtensionReloadNotification
+            text="Looks like the service worker was put to sleep. Please click on refresh to activate the service worker."
+            onClick={sendMessageToRefreshExtensionAndPage}
+          />
+        </div>
+      )}
+
       {!contextInvalidated && (
         <div className="w-full h-full flex flex-row">
           <Resizable
