@@ -48,6 +48,30 @@ const App: React.FC = () => {
   const [sidebarWidth, setSidebarWidth] = useState(200);
   const [sidebarData, setSidebarData] = useState(TABS);
   const contextInvalidatedRef = useRef(null);
+  const [toastMessageWidth, setToastMessageWidth] = useState(
+    (window.innerWidth || document.body.clientWidth) - 200
+  );
+
+  useEffect(() => {
+    let isWindowResized = false;
+    const onWindowResize = () => {
+      isWindowResized = true;
+
+      const width =
+        (window.innerWidth || document.body.clientWidth) - sidebarWidth;
+
+      setToastMessageWidth(width);
+    };
+
+    if (!isWindowResized) {
+      setToastMessageWidth(
+        (window.innerWidth || document.body.clientWidth) - sidebarWidth
+      );
+    }
+
+    window.addEventListener('resize', onWindowResize);
+    return () => window.removeEventListener('resize', onWindowResize);
+  }, [sidebarWidth]);
 
   const {
     contextInvalidated,
@@ -295,14 +319,19 @@ const App: React.FC = () => {
           <main className="h-full flex-1 overflow-auto">
             <div className="min-w-[40rem] h-full relative z-1">
               {activePanel}
-              {settingsChanged && (
-                <ToastMessage
-                  additionalStyles="pb-2 text-sm"
-                  text="To get accurate data and allow settings to take effect we need to reload all tab(s)."
-                  onClick={handleSettingsChange}
-                  textAdditionalStyles="pl-4"
-                />
-              )}
+              <div
+                className="fixed right-0 bottom-0"
+                style={{ width: toastMessageWidth + 'px' }}
+              >
+                {settingsChanged && (
+                  <ToastMessage
+                    additionalStyles={`text-sm`}
+                    text="To get accurate data and allow settings to take effect we need to reload all tab(s)."
+                    onClick={handleSettingsChange}
+                    textAdditionalStyles="text-sm"
+                  />
+                )}
+              </div>
             </div>
           </main>
         </div>

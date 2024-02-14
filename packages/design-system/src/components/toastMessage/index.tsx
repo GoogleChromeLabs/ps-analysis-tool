@@ -42,13 +42,15 @@ const ToastMessage = ({
 }: ToastMessageProps) => {
   return (
     <div
-      className={`${additionalStyles} sticky flex flex-row w-full z-2 left-0 bottom-0 items-center justify-between bg-white dark:bg-charleston-green shadow-xxs py-4`}
+      className={`${additionalStyles} w-full z-2 bg-white dark:bg-charleston-green shadow-xxs`}
     >
-      <div className={`w-5/6 dark:text-white ${textAdditionalStyles}`}>
-        {text}
-      </div>
-      <div className="w-1/6">
-        <Button text={buttonText} onClick={onClick} variant={variant} />
+      <div className="flex items-center justify-between p-4">
+        <div className={`w-5/6 dark:text-white ${textAdditionalStyles}`}>
+          {text}
+        </div>
+        <div className="w-1/6">
+          <Button text={buttonText} onClick={onClick} variant={variant} />
+        </div>
       </div>
     </div>
   );

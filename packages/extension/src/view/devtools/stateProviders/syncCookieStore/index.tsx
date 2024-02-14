@@ -300,6 +300,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         );
         isCurrentTabBeingListenedToRef.current =
           tabId?.toString() === message?.payload?.tabId;
+        setTabToRead(message?.payload?.tabId?.toString() || null);
         setTabFrames(null);
         setLoading(false);
         setCanStartInspecting(false);
