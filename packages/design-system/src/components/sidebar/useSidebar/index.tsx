@@ -23,8 +23,8 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { createContext, useContextSelector } from 'use-context-selector';
-import { noop } from '@ps-analysis-tool/common';
+import { createContext } from 'use-context-selector';
+import { noop, useContextSelector } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
