@@ -54,7 +54,7 @@ const App: React.FC = () => {
     returningToSingleTab: state.returningToSingleTab,
     allowedNumberOfTabs: state.allowedNumberOfTabs,
     onChromeUrl: state.onChromeUrl,
-    isUsingCDP: state.isUsingCDP,
+    isUsingCDP: state.isUsingCDPForSettingsDisplay,
     setIsUsingCDP: actions.setIsUsingCDP,
     handleSettingsChange: actions.handleSettingsChange,
     settingsChanged: state.settingsChanged,
