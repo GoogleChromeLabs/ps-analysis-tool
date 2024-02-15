@@ -24,6 +24,14 @@ export const shallowEqual = (a: unknown, b: unknown): boolean => {
   }
 
   if (Array.isArray(a) && Array.isArray(b)) {
+    if (
+      typeof a[0] === 'object' &&
+      typeof b[0] === 'object' &&
+      a.length === b.length
+    ) {
+      return a.every((item, index) => shallowEqualObjects(item, b[index]));
+    }
+
     return shallowEqualArrays(a, b);
   }
 

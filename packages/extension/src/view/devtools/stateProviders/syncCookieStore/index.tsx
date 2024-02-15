@@ -30,12 +30,12 @@ import {
   type TabCookies,
   type TabFrames,
   UNKNOWN_FRAME_KEY,
+  useContextSelector,
 } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import useContextSelector from '../../../../utils/useContextSelector';
 import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
 import setDocumentCookies from '../../../../utils/setDocumentCookies';
 import isOnRWS from '../../../../contentScript/utils/isOnRWS';
