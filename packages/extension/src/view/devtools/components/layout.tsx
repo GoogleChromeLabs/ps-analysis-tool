@@ -69,25 +69,15 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     activePanel,
     selectedItemKey,
     currentItemKey,
-    sidebarItems,
     isSidebarFocused,
-    setIsSidebarFocused,
     updateSelectedItemKey,
-    onKeyNavigation,
-    toggleDropdown,
-    isKeyAncestor,
     isKeySelected,
   } = useSidebar(({ state, actions }) => ({
     activePanel: state.activePanel,
     selectedItemKey: state.selectedItemKey,
     currentItemKey: state.currentItemKey,
-    sidebarItems: state.sidebarItems,
     isSidebarFocused: state.isSidebarFocused,
-    setIsSidebarFocused: actions.setIsSidebarFocused,
     updateSelectedItemKey: actions.updateSelectedItemKey,
-    onKeyNavigation: actions.onKeyNavigation,
-    toggleDropdown: actions.toggleDropdown,
-    isKeyAncestor: actions.isKeyAncestor,
     isKeySelected: actions.isKeySelected,
   }));
 
@@ -214,18 +204,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         }}
         className="h-full"
       >
-        <Sidebar
-          selectedItemKey={selectedItemKey}
-          sidebarItems={sidebarItems}
-          isSidebarFocused={isSidebarFocused}
-          setIsSidebarFocused={setIsSidebarFocused}
-          updateSelectedItemKey={updateSelectedItemKey}
-          onKeyNavigation={onKeyNavigation}
-          toggleDropdown={toggleDropdown}
-          isKeyAncestor={isKeyAncestor}
-          isKeySelected={isKeySelected}
-          visibleWidth={sidebarWidth}
-        />
+        <Sidebar visibleWidth={sidebarWidth} />
       </Resizable>
       <main className="h-full flex-1 overflow-auto">
         <div className="min-w-[40rem] h-full">{activePanel.element?.()}</div>
