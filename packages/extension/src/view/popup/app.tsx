@@ -81,10 +81,9 @@ const App: React.FC = () => {
             <ToastMessage
               additionalStyles="text-sm"
               text="For settings to take effect please reload all tab(s)."
-              variant="primary"
               buttonText="Reload"
               onClick={handleSettingsChange}
-              textAdditionalStyles="text-xs"
+              textAdditionalStyles="xxs:p-1 text-xxs leading-5"
             />
           )}
         </div>
@@ -122,10 +121,9 @@ const App: React.FC = () => {
             <ToastMessage
               additionalStyles="text-sm"
               text="For settings to take effect please reload all tab(s)."
-              variant="primary"
               buttonText="Reload"
               onClick={handleSettingsChange}
-              textAdditionalStyles="text-xs"
+              textAdditionalStyles="xxs:p-1 text-xxs leading-5"
             />
           )}
         </div>
@@ -154,10 +152,9 @@ const App: React.FC = () => {
             <ToastMessage
               additionalStyles="text-sm"
               text="For settings to take effect please reload all tab(s)."
-              variant="primary"
               buttonText="Reload"
               onClick={handleSettingsChange}
-              textAdditionalStyles="text-xs"
+              textAdditionalStyles="xxs:p-1 text-xxs leading-5"
             />
           )}
         </div>
@@ -203,10 +200,9 @@ const App: React.FC = () => {
           <ToastMessage
             additionalStyles="text-sm"
             text="For settings to take effect please reload all tab(s)."
-            variant="primary"
             buttonText="Reload"
             onClick={handleSettingsChange}
-            textAdditionalStyles="text-xs"
+            textAdditionalStyles="xxs:p-1 text-xxs leading-5"
           />
         )}
       </div>

@@ -60,7 +60,7 @@ const Button = ({
           name={name}
           onClick={onClick ? onClick : undefined}
           className={classNames(
-            'rounded flex items-center text-center py-3.5 px-9 xs:py-4 xs:px-2 text-white dark:bg-google-blue bg-smurf-blue hover:bg-beteleguese dark:hover:bg-bright-navy-blue dark:text-raisin-black',
+            'font-medium rounded-xs flex items-center text-center sm:max-2xl:py-3.5 xxs:p-2 sm:max-2xl:px-9 xs:py-4 xs:px-2 text-white dark:bg-google-blue bg-smurf-blue hover:bg-beteleguese dark:hover:bg-bright-navy-blue dark:text-raisin-black',
             extraClasses
           )}
         >
