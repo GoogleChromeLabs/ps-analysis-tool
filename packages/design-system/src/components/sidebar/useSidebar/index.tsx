@@ -16,7 +16,15 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { createContext, useContextSelector } from 'use-context-selector';
+import { noop } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -45,32 +53,57 @@ export type SidebarItems = {
   [key: string]: SidebarItemValue;
 };
 
-export interface SidebarOutput {
-  activePanel: React.ReactNode;
-  selectedItemKey: string | null; //Entire chained item key eg Privacy-Sandbox#cookies#frameUrl
-  currentItemKey: string | null; //Last sidebar item key in selectedItemKey eg frameUrl
-  sidebarItems: SidebarItems;
-  isSidebarFocused: boolean;
-  setIsSidebarFocused: React.Dispatch<boolean>;
-  updateSelectedItemKey: (key: string | null) => void;
-  onKeyNavigation: (
-    event: React.KeyboardEvent<HTMLDivElement>,
-    key: string | null
-  ) => void;
-  toggleDropdown: (action: boolean, key: string) => void;
-  isKeyAncestor: (key: string) => boolean;
-  isKeySelected: (key: string) => boolean;
-}
-
 interface useSidebarProps {
   data: SidebarItems;
   defaultSelectedItemKey?: string | null;
 }
 
-const useSidebar = ({
+export interface SidebarStoreContext {
+  state: {
+    activePanel: React.ReactNode;
+    selectedItemKey: string | null; //Entire chained item key eg Privacy-Sandbox#cookies#frameUrl
+    currentItemKey: string | null; //Last sidebar item key in selectedItemKey eg frameUrl
+    sidebarItems: SidebarItems;
+    isSidebarFocused: boolean;
+  };
+  actions: {
+    setIsSidebarFocused: React.Dispatch<boolean>;
+    updateSelectedItemKey: (key: string | null) => void;
+    onKeyNavigation: (
+      event: React.KeyboardEvent<HTMLDivElement>,
+      key: string | null
+    ) => void;
+    toggleDropdown: (action: boolean, key: string) => void;
+    isKeyAncestor: (key: string) => boolean;
+    isKeySelected: (key: string) => boolean;
+  };
+}
+
+const initialState: SidebarStoreContext = {
+  state: {
+    activePanel: null,
+    selectedItemKey: null,
+    currentItemKey: null,
+    sidebarItems: {},
+    isSidebarFocused: true,
+  },
+  actions: {
+    setIsSidebarFocused: noop,
+    updateSelectedItemKey: noop,
+    onKeyNavigation: noop,
+    toggleDropdown: noop,
+    isKeyAncestor: () => false,
+    isKeySelected: () => false,
+  },
+};
+
+export const SidebarContext = createContext<SidebarStoreContext>(initialState);
+
+export const SidebarProvider = ({
   data,
   defaultSelectedItemKey = null,
-}: useSidebarProps): SidebarOutput => {
+  children,
+}: PropsWithChildren<useSidebarProps>) => {
   const [selectedItemKey, setSelectedItemKey] = useState<string | null>(null);
   const [activePanel, setActivePanel] = useState<React.ReactNode>(); // TODO: Should we use React.ReactNode in state?
   const [sidebarItems, setSidebarItems] = useState<SidebarItems>({});
@@ -222,19 +255,42 @@ const useSidebar = ({
     [selectedItemKey]
   );
 
-  return {
-    activePanel,
-    selectedItemKey,
-    currentItemKey,
-    sidebarItems,
-    isSidebarFocused,
-    setIsSidebarFocused,
-    updateSelectedItemKey,
-    onKeyNavigation,
-    toggleDropdown,
-    isKeyAncestor,
-    isKeySelected,
-  };
+  return (
+    <SidebarContext.Provider
+      value={{
+        state: {
+          activePanel,
+          selectedItemKey,
+          currentItemKey,
+          sidebarItems,
+          isSidebarFocused,
+        },
+        actions: {
+          setIsSidebarFocused,
+          updateSelectedItemKey,
+          onKeyNavigation,
+          toggleDropdown,
+          isKeyAncestor,
+          isKeySelected,
+        },
+      }}
+    >
+      {children}
+    </SidebarContext.Provider>
+  );
 };
 
-export default useSidebar;
+export function useSidebar(): SidebarStoreContext;
+export function useSidebar<T>(selector: (state: SidebarStoreContext) => T): T;
+
+/**
+ * Hook to access the Sidebar context.
+ * @param selector Selector function to partially select state.
+ * @returns selected part of the state
+ */
+export function useSidebar<T>(
+  selector: (state: SidebarStoreContext) => T | SidebarStoreContext = (state) =>
+    state
+) {
+  return useContextSelector(SidebarContext, selector);
+}
