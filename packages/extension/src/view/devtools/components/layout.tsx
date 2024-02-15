@@ -116,6 +116,8 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
 
           return acc;
         }, {});
+      psData.children['cookies'].dropdownOpen =
+        Object.keys(psData.children['cookies'].children).length > 0;
 
       const showInspectButton =
         canStartInspecting && Boolean(Object.keys(tabFrames || {}).length);
