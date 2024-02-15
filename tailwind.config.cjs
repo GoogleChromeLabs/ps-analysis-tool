@@ -49,6 +49,11 @@ module.exports = {
       animation: {
         'horizontal-spinner': 'horizontal-spinner-keyframes 2s linear infinite',
       },
+      screens: {
+        ...defaultTheme.screens,
+        xxs: '360px',
+        xs: '480px',
+      },
     },
     fontFamily: {
       ...defaultTheme.fontFamily,
