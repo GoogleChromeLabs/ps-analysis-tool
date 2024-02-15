@@ -146,7 +146,7 @@ const Technologies = ({ selectedSite }: TechnologiesProps) => {
                 </p>
               </>
             )}
-            {selectedRow.name && (
+            {selectedRow.description && (
               <>
                 <p className="font-bold text-granite-gray dark:text-manatee mb-1">
                   Description
