@@ -122,9 +122,9 @@ const SidebarChild = ({
         {sidebarItem.icon && sidebarItem.selectedIcon && (
           <div className="mr-1 pointer-events-none">
             {isKeySelected(itemKey) && isSidebarFocused ? (
-              <>{sidebarItem.selectedIcon}</>
+              <>{sidebarItem.selectedIcon?.()}</>
             ) : (
-              <>{sidebarItem.icon}</>
+              <>{sidebarItem.icon?.()}</>
             )}
           </div>
         )}
@@ -135,7 +135,7 @@ const SidebarChild = ({
             left: visibleWidth ? visibleWidth - 35 : 0,
           }}
         >
-          {sidebarItem.extraInterfaceToTitle}
+          {sidebarItem.extraInterfaceToTitle?.()}
         </div>
       </div>
       <>

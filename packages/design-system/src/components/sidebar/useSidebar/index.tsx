@@ -41,11 +41,11 @@ export type SidebarItemValue = {
   title: string;
   children: SidebarItems;
   popupTitle?: string;
-  extraInterfaceToTitle?: React.ReactNode;
+  extraInterfaceToTitle?: () => React.JSX.Element;
   dropdownOpen?: boolean;
-  panel?: React.ReactNode;
-  icon?: React.ReactNode;
-  selectedIcon?: React.ReactNode;
+  panel?: () => React.JSX.Element;
+  icon?: () => React.JSX.Element;
+  selectedIcon?: () => React.JSX.Element;
   isBlurred?: boolean;
 };
 
@@ -60,7 +60,9 @@ interface useSidebarProps {
 
 export interface SidebarStoreContext {
   state: {
-    activePanel: React.ReactNode;
+    activePanel: {
+      element: () => React.JSX.Element;
+    };
     selectedItemKey: string | null; //Entire chained item key eg Privacy-Sandbox#cookies#frameUrl
     currentItemKey: string | null; //Last sidebar item key in selectedItemKey eg frameUrl
     sidebarItems: SidebarItems;
@@ -81,7 +83,9 @@ export interface SidebarStoreContext {
 
 const initialState: SidebarStoreContext = {
   state: {
-    activePanel: null,
+    activePanel: {
+      element: () => <></>,
+    },
     selectedItemKey: null,
     currentItemKey: null,
     sidebarItems: {},
@@ -105,7 +109,9 @@ export const SidebarProvider = ({
   children,
 }: PropsWithChildren<useSidebarProps>) => {
   const [selectedItemKey, setSelectedItemKey] = useState<string | null>(null);
-  const [activePanel, setActivePanel] = useState<React.ReactNode>(); // TODO: Should we use React.ReactNode in state?
+  const [activePanel, setActivePanel] = useState<
+    SidebarStoreContext['state']['activePanel']
+  >(initialState.state.activePanel);
   const [sidebarItems, setSidebarItems] = useState<SidebarItems>({});
   const [isSidebarFocused, setIsSidebarFocused] = useState(true);
 
@@ -138,7 +144,11 @@ export const SidebarProvider = ({
         }
 
         if (matchKey(selectedItemKey || '', itemKey)) {
-          setActivePanel(item.panel);
+          if (item.panel) {
+            setActivePanel({
+              element: item.panel,
+            });
+          }
 
           keyFound = true;
           return;

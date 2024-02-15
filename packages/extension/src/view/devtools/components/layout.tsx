@@ -96,7 +96,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
       const data = { ...prev };
       const psData = data['privacySandbox'];
 
-      psData.children['cookies'].panel = (
+      psData.children['cookies'].panel = () => (
         <Cookies setFilteredCookies={setFilteredCookies} />
       );
       psData.children['cookies'].children = Object.keys(tabFrames || {})
@@ -107,9 +107,9 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
           acc[url] = {
             title: url,
             popupTitle: `Cookies used by frames from ${url}`,
-            panel: <Cookies setFilteredCookies={setFilteredCookies} />,
-            icon: <CookieIcon />,
-            selectedIcon: <CookieIconWhite />,
+            panel: () => <Cookies setFilteredCookies={setFilteredCookies} />,
+            icon: () => <CookieIcon />,
+            selectedIcon: () => <CookieIconWhite />,
             children: {},
             isBlurred: !frameHasCookies?.[url],
           };
@@ -121,7 +121,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         canStartInspecting && Boolean(Object.keys(tabFrames || {}).length);
 
       if (showInspectButton) {
-        psData.children['cookies'].extraInterfaceToTitle = (
+        psData.children['cookies'].extraInterfaceToTitle = () => (
           <InspectButton
             isInspecting={isInspecting}
             setIsInspecting={setIsInspecting}
@@ -129,7 +129,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
           />
         );
       } else {
-        psData.children['cookies'].extraInterfaceToTitle = null;
+        psData.children['cookies'].extraInterfaceToTitle = () => <></>;
       }
 
       return data;
@@ -226,7 +226,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         />
       </Resizable>
       <main className="h-full flex-1 overflow-auto">
-        <div className="min-w-[40rem] h-full">{activePanel}</div>
+        <div className="min-w-[40rem] h-full">{activePanel.element?.()}</div>
       </main>
     </div>
   );
