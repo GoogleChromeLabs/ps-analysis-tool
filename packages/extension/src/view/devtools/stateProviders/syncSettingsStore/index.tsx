@@ -131,6 +131,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
       } else {
         setIsUsingCDPForSettingsPageDisplay(currentSettings.isUsingCDP);
       }
+    } else {
+      setAllowedNumberOfTabsForSettingsPageDisplay(
+        currentSettings.allowedNumberOfTabs
+      );
+      setIsUsingCDPForSettingsPageDisplay(currentSettings.isUsingCDP);
     }
 
     if (Object.keys(currentSettings).includes('allowedNumberOfTabs')) {
