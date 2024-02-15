@@ -328,7 +328,7 @@ const App: React.FC = () => {
                     additionalStyles={`text-sm`}
                     text="For settings to take effect please reload all tab(s)."
                     onClick={handleSettingsChange}
-                    textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xs leading-5"
+                    textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
                   />
                 )}
               </div>

@@ -66,7 +66,7 @@ module.exports = {
       ...defaultTheme.fontSize,
       xxxs: '0.625rem', // 10px - Only for edge cases
       xxl: '1.375rem', // 22px
-      xs: '0.9375rem',
+      xsm: '0.9375rem',
       xxs: '0.8125rem',
     },
     fontWeight: {
