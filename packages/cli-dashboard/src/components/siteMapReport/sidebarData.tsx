@@ -31,8 +31,8 @@ const sidebarData: SidebarItems = {
   'sitemap-affected-cookies': {
     title: 'Affected Cookies',
     children: {},
-    icon: <CookieIcon />,
-    selectedIcon: <CookieIconWhite />,
+    icon: () => <CookieIcon />,
+    selectedIcon: () => <CookieIconWhite />,
   },
 };
 
