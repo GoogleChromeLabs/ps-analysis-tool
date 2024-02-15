@@ -34,6 +34,7 @@ export { default as noop } from './utils/noop';
 export { default as getDevToolWorker } from './worker/devToolWorker';
 export { default as executeTaskInDevToolWorker } from './worker/executeTaskInDevToolWorker';
 export { default as getValueByKey } from './utils/getValueByKey';
+export { default as useContextSelector } from './utils/useContextSelector';
 export * from './worker/enums';
 export * from './utils/generateReports';
 export * from './cookies.types';
