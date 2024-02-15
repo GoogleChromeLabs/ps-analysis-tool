@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { Resizable } from 're-resizable';
 import {
   CookieIcon,
@@ -27,23 +27,22 @@ import {
   SiteBoundariesIcon,
   SiteBoundariesIconWhite,
 } from '@ps-analysis-tool/design-system';
+import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import { useContentStore } from '../stateProviders/contentStore';
-import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
-import TABS from '../tabs';
 import CookiesTab from '../tabs/cookies';
 import SiteAffectedCookies from '../tabs/siteAffectedCookies';
 import Technologies from '../tabs/technologies';
 
 interface LayoutProps {
   selectedSite: string | null;
+  setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
 }
 
-const Layout = ({ selectedSite }: LayoutProps) => {
-  const [data, setData] = useState<SidebarItems>(TABS);
+const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
   const { tabCookies, technologies } = useContentStore(({ state }) => ({
     tabCookies: state.tabCookies,
     technologies: state.technologies,
@@ -65,26 +64,21 @@ const Layout = ({ selectedSite }: LayoutProps) => {
     [tabCookies]
   );
 
-  const {
-    activePanel,
-    selectedItemKey,
-    sidebarItems,
-    isSidebarFocused,
-    setIsSidebarFocused,
-    updateSelectedItemKey,
-    onKeyNavigation,
-    toggleDropdown,
-    isKeyAncestor,
-    isKeySelected,
-  } = useSidebar({ data });
+  const { activePanel, selectedItemKey, updateSelectedItemKey } = useSidebar(
+    ({ state, actions }) => ({
+      activePanel: state.activePanel,
+      selectedItemKey: state.selectedItemKey,
+      updateSelectedItemKey: actions.updateSelectedItemKey,
+    })
+  );
 
   useEffect(() => {
-    setData((prev) => {
+    setSidebarData((prev) => {
       const _data = { ...prev };
 
       const keys = selectedItemKey?.split('#') ?? [];
 
-      _data['cookies'].panel = (
+      _data['cookies'].panel = () => (
         <CookiesTab selectedFrameUrl={null} selectedSite={selectedSite} />
       );
 
@@ -96,15 +90,15 @@ const Layout = ({ selectedSite }: LayoutProps) => {
         (acc: SidebarItems, url: string): SidebarItems => {
           acc[url] = {
             title: url,
-            panel: (
+            panel: () => (
               <CookiesTab
                 selectedFrameUrl={selectedFrameUrl}
                 selectedSite={selectedSite}
               />
             ),
             children: {},
-            icon: <CookieIcon />,
-            selectedIcon: <CookieIconWhite />,
+            icon: () => <CookieIcon />,
+            selectedIcon: () => <CookieIconWhite />,
           };
 
           return acc;
@@ -112,7 +106,7 @@ const Layout = ({ selectedSite }: LayoutProps) => {
         {}
       );
 
-      _data['affected-cookies'].panel = (
+      _data['affected-cookies'].panel = () => (
         <SiteAffectedCookies selectedSite={selectedSite} />
       );
 
@@ -120,9 +114,9 @@ const Layout = ({ selectedSite }: LayoutProps) => {
         _data['technologies'] = {
           title: 'Technologies',
           children: {},
-          icon: <SiteBoundariesIcon />,
-          selectedIcon: <SiteBoundariesIconWhite />,
-          panel: <Technologies selectedSite={selectedSite} />,
+          icon: () => <SiteBoundariesIcon />,
+          selectedIcon: () => <SiteBoundariesIconWhite />,
+          panel: () => <Technologies selectedSite={selectedSite} />,
         };
       } else {
         delete _data['technologies'];
@@ -130,7 +124,7 @@ const Layout = ({ selectedSite }: LayoutProps) => {
 
       return _data;
     });
-  }, [frameUrls, selectedItemKey, selectedSite, technologies]);
+  }, [frameUrls, selectedItemKey, selectedSite, setSidebarData, technologies]);
 
   useEffect(() => {
     if (selectedItemKey === null) {
@@ -157,19 +151,11 @@ const Layout = ({ selectedSite }: LayoutProps) => {
           right: true,
         }}
       >
-        <Sidebar
-          selectedItemKey={selectedItemKey}
-          sidebarItems={sidebarItems}
-          isSidebarFocused={isSidebarFocused}
-          setIsSidebarFocused={setIsSidebarFocused}
-          onKeyNavigation={onKeyNavigation}
-          updateSelectedItemKey={updateSelectedItemKey}
-          toggleDropdown={toggleDropdown}
-          isKeyAncestor={isKeyAncestor}
-          isKeySelected={isKeySelected}
-        />
+        <Sidebar />
       </Resizable>
-      <div className="flex-1 max-h-screen overflow-auto">{activePanel}</div>
+      <div className="flex-1 max-h-screen overflow-auto">
+        {activePanel.element?.()}
+      </div>
     </div>
   );
 };

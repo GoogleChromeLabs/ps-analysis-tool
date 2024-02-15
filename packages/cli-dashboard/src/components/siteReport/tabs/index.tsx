@@ -27,14 +27,14 @@ const Tabs: SidebarItems = {
   cookies: {
     title: 'Cookies',
     children: {},
-    icon: <CookieIcon />,
-    selectedIcon: <CookieIconWhite />,
+    icon: () => <CookieIcon />,
+    selectedIcon: () => <CookieIconWhite />,
   },
   'affected-cookies': {
     title: 'Affected Cookies',
     children: {},
-    icon: <CookieIcon />,
-    selectedIcon: <CookieIconWhite />,
+    icon: () => <CookieIcon />,
+    selectedIcon: () => <CookieIconWhite />,
   },
 };
 
