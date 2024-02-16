@@ -384,6 +384,13 @@ class SynchnorousCookieStore {
         (overrideForInitialSync || this.tabs[tabId].newUpdates > 0)
       ) {
         sentMessageAnyWhere = true;
+        // eslint-disable-next-line no-console
+        console.log(
+          'Sending type ServiceWorker::DevTools::NEW_COOKIE_DATA',
+          this.tabsData[tabId],
+          tabId,
+          this.tabsData
+        );
 
         await chrome.runtime.sendMessage({
           type: 'ServiceWorker::DevTools::NEW_COOKIE_DATA',
@@ -412,6 +419,8 @@ class SynchnorousCookieStore {
         this.tabs[tabId].newUpdates = 0;
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
+      console.warn(error);
       //Fail silently. Ignoring the console.warn here because the only error this will throw is of "Error: Could not establish connection".
     }
   }
