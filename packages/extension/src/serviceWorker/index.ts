@@ -664,7 +664,7 @@ chrome.storage.sync.onChanged.addListener(
     globalIsUsingCDP = changes?.isUsingCDP?.newValue;
 
     chrome.runtime.sendMessage({
-      type: SERVICEWORKER_CHANGE_CDP_SETTING,
+      type: CHANGE_CDP_SETTING,
       payload: {
         isUsingCDP: changes?.isUsingCDP?.newValue,
       },
