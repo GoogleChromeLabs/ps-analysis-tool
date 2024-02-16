@@ -47,6 +47,7 @@ import {
 import setDocumentCookies from '../../../../utils/setDocumentCookies';
 import isOnRWS from '../../../../contentScript/utils/isOnRWS';
 import { useSettingsStore } from '../syncSettingsStore';
+import { getTab } from '../../../../utils/getTab';
 
 export interface CookieStoreContext {
   state: {
@@ -240,15 +241,19 @@ export const Provider = ({ children }: PropsWithChildren) => {
     }
 
     await setDocumentCookies(_tabId?.toString());
-
-    chrome.devtools.inspectedWindow.eval(
-      'window.location.href',
-      (result, isException) => {
-        if (!isException && typeof result === 'string') {
-          setTabUrl(result);
+    const tab = await getTab(_tabId);
+    if (tab?.url) {
+      setTabUrl(tab?.url);
+    } else {
+      chrome.devtools.inspectedWindow.eval(
+        'window.location.href',
+        (result, isException) => {
+          if (!isException && typeof result === 'string') {
+            setTabUrl(result);
+          }
         }
-      }
-    );
+      );
+    }
 
     setLoading(false);
   }, [getAllFramesForCurrentTab]);
@@ -283,8 +288,8 @@ export const Provider = ({ children }: PropsWithChildren) => {
     }
   }, [allowedNumberOfTabs, tabFrames]);
 
-  useEffect(() => {
-    const listener = async (message: {
+  const messagePassingListener = useCallback(
+    async (message: {
       type: string;
       payload: {
         tabId?: number;
@@ -293,42 +298,47 @@ export const Provider = ({ children }: PropsWithChildren) => {
         tabMode?: string;
       };
     }) => {
-      if (message.type === SET_TAB_TO_READ) {
-        chrome.devtools.inspectedWindow.eval(
-          'window.location.href',
-          (result, isException) => {
-            if (!isException && typeof result === 'string') {
-              setTabUrl(result);
-            }
-          }
-        );
+      if (!message.type) {
+        return;
+      }
+
+      const incomingMessageType = message.type;
+
+      if (SET_TAB_TO_READ === incomingMessageType) {
+        const tab = await getTab(tabId?.toString() || '');
+        setTabUrl(tab?.url ?? '');
+
         isCurrentTabBeingListenedToRef.current =
           tabId?.toString() === message?.payload?.tabId;
+
         setTabFrames(null);
         setLoading(false);
         setCanStartInspecting(false);
       }
 
-      if (message.type === INITIAL_SYNC) {
-        if (message?.payload?.tabMode === 'unlimited') {
+      if (INITIAL_SYNC === incomingMessageType && message?.payload?.tabMode) {
+        if (message.payload.tabMode === 'unlimited') {
           isCurrentTabBeingListenedToRef.current = true;
           setTabToRead(null);
         } else {
           if (tabId?.toString() !== message?.payload?.tabToRead) {
             setTabFrames(null);
           }
+
           isCurrentTabBeingListenedToRef.current =
             tabId?.toString() === message?.payload?.tabToRead;
           setTabToRead(message?.payload?.tabToRead || null);
         }
       }
 
-      if (message.type === NEW_COOKIE_DATA) {
-        const data = message?.payload?.cookieData ?? {};
-        if (
-          message?.payload?.tabId &&
-          tabId?.toString() === message?.payload?.tabId.toString()
-        ) {
+      if (
+        NEW_COOKIE_DATA &&
+        message?.payload?.tabId &&
+        message?.payload?.cookieData
+      ) {
+        const data = message.payload.cookieData;
+
+        if (tabId?.toString() === message.payload.tabId.toString()) {
           if (isCurrentTabBeingListenedToRef.current) {
             await getAllFramesForCurrentTab(tabId);
             setTabToRead(tabId.toString());
@@ -338,14 +348,17 @@ export const Provider = ({ children }: PropsWithChildren) => {
           }
         }
       }
-    };
+    },
+    [getAllFramesForCurrentTab, tabId]
+  );
 
-    chrome.runtime.onMessage.addListener(listener);
+  useEffect(() => {
+    chrome.runtime.onMessage.addListener(messagePassingListener);
 
     return () => {
-      chrome.runtime.onMessage.removeListener(listener);
+      chrome.runtime.onMessage.removeListener(messagePassingListener);
     };
-  }, [getAllFramesForCurrentTab, tabId]);
+  }, [messagePassingListener]);
 
   const tabUpdateListener = useCallback(
     async (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
