@@ -71,6 +71,12 @@ const parseResponseCookieHeader = (
     parsedCookie.partitionKey = partitionKey;
   }
 
+  const isFoundInCDPCookieList = Boolean(
+    cdpCookiesList?.find((_cookie: Protocol.Network.Cookie) => {
+      return _cookie.name === parsedCookie.name;
+    })
+  );
+
   return {
     parsedCookie,
     analytics,
@@ -82,7 +88,7 @@ const parseResponseCookieHeader = (
           type: RESPONSE_EVENT.CHROME_WEBREQUEST_ON_RESPONSE_STARTED,
           requestId,
           url: url,
-          blocked: null,
+          blocked: !isFoundInCDPCookieList,
           timeStamp: Date.now(),
         },
       ],

@@ -85,7 +85,7 @@ export type requestEvent = {
   type: REQUEST_EVENT;
   requestId: string;
   url: string;
-  blocked: boolean | null;
+  blocked: boolean;
   timeStamp: number;
 };
 
@@ -93,7 +93,7 @@ export type responsEvent = {
   type: RESPONSE_EVENT;
   requestId: string;
   url: string;
-  blocked: boolean | null;
+  blocked: boolean;
   timeStamp: number;
 };
 

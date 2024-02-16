@@ -64,7 +64,7 @@ export default function parseRequestWillBeSentExtraInfo(
     }
 
     const singleCookie: CookieData = {
-      isBlocked: !(blockedReasons.length === 0),
+      isBlocked: blockedReasons.length !== 0,
       parsedCookie: {
         ...cookie,
         expires: effectiveExpirationDate,

@@ -18,11 +18,9 @@
  * External dependencies.
  */
 import {
-  RESPONSE_EVENT,
   type CookieData,
   type requestEvent,
   type responsEvent,
-  REQUEST_EVENT,
   BLOCK_STATUS,
 } from '@ps-analysis-tool/common';
 
@@ -40,19 +38,8 @@ function deriveInboundBlocking(respEvents: responsEvent[]): BLOCK_STATUS {
     return BLOCK_STATUS.NOT_BLOCKED;
   }
 
-  // Only the event RESPONSE_EVENT.CDP_RESPONSE_RECEIVED_EXTRA_INFO has info about blocking.
-  const CDPEvents = respEvents.filter(
-    ({ type }) => type === RESPONSE_EVENT.CDP_RESPONSE_RECEIVED_EXTRA_INFO
-  );
-
-  if (CDPEvents.length === 0) {
-    return BLOCK_STATUS.UKNOWN;
-  }
-
-  const numBlocked: number = CDPEvents.reduce((acc, event) => {
-    if (event.blocked === null) {
-      return acc;
-    } else if (event.blocked) {
+  const numBlocked: number = respEvents.reduce((acc, event) => {
+    if (event.blocked) {
       return acc + 1;
     } else {
       return acc;
@@ -61,7 +48,7 @@ function deriveInboundBlocking(respEvents: responsEvent[]): BLOCK_STATUS {
 
   if (numBlocked === 0) {
     return BLOCK_STATUS.NOT_BLOCKED;
-  } else if (0 < numBlocked && numBlocked < CDPEvents.length) {
+  } else if (0 < numBlocked && numBlocked < respEvents.length) {
     return BLOCK_STATUS.BLOCKED_IN_SOME_EVENTS;
   } else {
     return BLOCK_STATUS.BLOCKED_IN_ALL_EVENTS;
@@ -76,20 +63,8 @@ function deriveInboundBlocking(respEvents: responsEvent[]): BLOCK_STATUS {
  * 'true' means that is was blocked in atleast one of the requests.
  */
 function deriveOutboundBlocking(reqEvents: requestEvent[]): BLOCK_STATUS {
-  // Only the event REQUEST_EVENT.CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO has info about blocking.
-
-  const CDPEvents = reqEvents.filter(
-    ({ type }) => type === REQUEST_EVENT.CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO
-  );
-
-  if (CDPEvents.length === 0) {
-    return BLOCK_STATUS.UKNOWN;
-  }
-
-  const numBlocked: number = CDPEvents.reduce((acc, event) => {
-    if (event.blocked === null) {
-      return acc;
-    } else if (event.blocked) {
+  const numBlocked: number = reqEvents.reduce((acc, event) => {
+    if (event.blocked) {
       return acc + 1;
     } else {
       return acc;
@@ -98,7 +73,7 @@ function deriveOutboundBlocking(reqEvents: requestEvent[]): BLOCK_STATUS {
 
   if (numBlocked === 0) {
     return BLOCK_STATUS.NOT_BLOCKED;
-  } else if (0 < numBlocked && numBlocked < CDPEvents.length) {
+  } else if (0 < numBlocked && numBlocked < reqEvents.length) {
     return BLOCK_STATUS.BLOCKED_IN_SOME_EVENTS;
   } else {
     return BLOCK_STATUS.BLOCKED_IN_ALL_EVENTS;
