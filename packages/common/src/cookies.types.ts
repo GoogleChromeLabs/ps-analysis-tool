@@ -74,6 +74,13 @@ export enum REQUEST_EVENT {
   CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO = 'CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO',
 }
 
+export enum BLOCK_STATUS {
+  UKNOWN = 'UKNOWN',
+  BLOCKED_IN_ALL_EVENTS = 'BLOCKED_IN_ALL_EVENTS',
+  BLOCKED_IN_SOME_EVENTS = 'BLOCKED_IN_SOME_EVENTS',
+  NOT_BLOCKED = 'NOT_BLOCKED',
+}
+
 export type requestEvent = {
   type: REQUEST_EVENT;
   requestId: string;
@@ -109,8 +116,8 @@ export type CookieData = {
   warningReasons?: Protocol.Audits.CookieWarningReason[];
   isBlocked?: boolean | null;
   blockingStatus?: {
-    inboundBlock: boolean | null;
-    outboundBlock: boolean | null;
+    inboundBlock: BLOCK_STATUS;
+    outboundBlock: BLOCK_STATUS;
   };
 };
 

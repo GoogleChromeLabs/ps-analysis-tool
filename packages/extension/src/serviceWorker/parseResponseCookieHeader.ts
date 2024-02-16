@@ -87,10 +87,6 @@ const parseResponseCookieHeader = (
         },
       ],
     },
-    blockingStatus: {
-      inboundBlock: null,
-      outboundBlock: null,
-    },
     headerType: 'response',
     isFirstParty: _isFirstParty,
     frameIdList: [frameId],

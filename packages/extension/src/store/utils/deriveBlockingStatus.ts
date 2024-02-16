@@ -23,6 +23,7 @@ import {
   type requestEvent,
   type responsEvent,
   REQUEST_EVENT,
+  BLOCK_STATUS,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -33,10 +34,10 @@ import {
  * 'null' - The cookie wa blocked in atleast one or all of the response headers
  * 'true' - The cookie was blocked in all of the response headers.
  */
-function deriveInboundBlocking(respEvents: responsEvent[]): boolean | null {
+function deriveInboundBlocking(respEvents: responsEvent[]): BLOCK_STATUS {
   // if there are not response events the cookie must be stored in a previous visit
   if (respEvents.length === 0) {
-    return false;
+    return BLOCK_STATUS.NOT_BLOCKED;
   }
 
   // Only the event RESPONSE_EVENT.CDP_RESPONSE_RECEIVED_EXTRA_INFO has info about blocking.
@@ -45,7 +46,7 @@ function deriveInboundBlocking(respEvents: responsEvent[]): boolean | null {
   );
 
   if (CDPEvents.length === 0) {
-    return null;
+    return BLOCK_STATUS.UKNOWN;
   }
 
   const numBlocked: number = CDPEvents.reduce((acc, event) => {
@@ -59,11 +60,11 @@ function deriveInboundBlocking(respEvents: responsEvent[]): boolean | null {
   }, 0);
 
   if (numBlocked === 0) {
-    return false; // cookie is not blocked.
+    return BLOCK_STATUS.NOT_BLOCKED;
   } else if (0 < numBlocked && numBlocked < CDPEvents.length) {
-    return null; // cookie may be blocked.
+    return BLOCK_STATUS.BLOCKED_IN_SOME_EVENTS;
   } else {
-    return true; // cookie is blocked.
+    return BLOCK_STATUS.BLOCKED_IN_ALL_EVENTS;
   }
 }
 
@@ -74,7 +75,7 @@ function deriveInboundBlocking(respEvents: responsEvent[]): boolean | null {
  * 'false' implies that the cookie was never blocked.
  * 'true' means that is was blocked in atleast one of the requests.
  */
-function deriveOutboundBlocking(reqEvents: requestEvent[]): boolean | null {
+function deriveOutboundBlocking(reqEvents: requestEvent[]): BLOCK_STATUS {
   // Only the event REQUEST_EVENT.CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO has info about blocking.
 
   const CDPEvents = reqEvents.filter(
@@ -82,7 +83,7 @@ function deriveOutboundBlocking(reqEvents: requestEvent[]): boolean | null {
   );
 
   if (CDPEvents.length === 0) {
-    return null;
+    return BLOCK_STATUS.UKNOWN;
   }
 
   const numBlocked: number = CDPEvents.reduce((acc, event) => {
@@ -96,9 +97,11 @@ function deriveOutboundBlocking(reqEvents: requestEvent[]): boolean | null {
   }, 0);
 
   if (numBlocked === 0) {
-    return false; // cookie is not blocked.
+    return BLOCK_STATUS.NOT_BLOCKED;
+  } else if (0 < numBlocked && numBlocked < CDPEvents.length) {
+    return BLOCK_STATUS.BLOCKED_IN_SOME_EVENTS;
   } else {
-    return true; // cookie is blocked.
+    return BLOCK_STATUS.BLOCKED_IN_ALL_EVENTS;
   }
 }
 
@@ -112,8 +115,8 @@ export function deriveBlockingStatus(
 ): CookieData['blockingStatus'] {
   if (!networkEvents) {
     return {
-      inboundBlock: null,
-      outboundBlock: null,
+      inboundBlock: BLOCK_STATUS.UKNOWN,
+      outboundBlock: BLOCK_STATUS.UKNOWN,
     };
   }
   return {
