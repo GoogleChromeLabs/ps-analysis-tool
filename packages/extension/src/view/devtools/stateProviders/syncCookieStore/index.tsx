@@ -321,6 +321,8 @@ export const Provider = ({ children }: PropsWithChildren) => {
       }
 
       if (message.type === 'ServiceWorker::DevTools::NEW_COOKIE_DATA') {
+        // eslint-disable-next-line no-console
+        console.log(message, 'message');
         const data = message?.payload?.cookieData ?? {};
         if (
           message?.payload?.tabId &&
