@@ -32,7 +32,15 @@ import { type CookieData, type CookiesCount } from '@ps-analysis-tool/common';
  * Internal dependencies.
  */
 import { getCurrentTab } from '../../../../utils/getCurrentTabId';
-import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
+import {
+  ALLOWED_NUMBER_OF_TABS,
+  CHANGE_CDP_SETTING,
+  INITIAL_SYNC,
+  NEW_COOKIE_DATA,
+  POPUP_CLOSE,
+  POPUP_OPEN,
+  SET_TAB_TO_READ,
+} from '../../../../constants';
 
 export interface CookieStoreContext {
   state: {
@@ -132,7 +140,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const _setUsingCDP = useCallback((newValue: boolean) => {
     chrome.runtime.sendMessage({
-      type: 'Popup::ServiceWorker::CHANGE_CDP_SETTING',
+      type: CHANGE_CDP_SETTING,
       payload: {
         isUsingCDP: newValue,
       },
@@ -178,7 +186,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     chrome.runtime.sendMessage({
-      type: 'Popup::ServiceWorker::POPUP_STATE_OPEN',
+      type: POPUP_OPEN,
       payload: {
         tabId: tabId,
       },
@@ -186,7 +194,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
     return () => {
       chrome.runtime.sendMessage({
-        type: 'Popup::ServiceWorker::POPUP_STATE_CLOSE',
+        type: POPUP_CLOSE,
         payload: {
           tabId: tabId,
         },
@@ -196,7 +204,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const changeListeningToThisTab = useCallback(() => {
     chrome.runtime.sendMessage({
-      type: 'Popup::ServiceWorker::SET_TAB_TO_READ',
+      type: SET_TAB_TO_READ,
       payload: {
         tabId,
       },
@@ -215,20 +223,20 @@ export const Provider = ({ children }: PropsWithChildren) => {
         tabMode?: string;
       };
     }) => {
-      if (message.type === 'ServiceWorker::SET_TAB_TO_READ') {
+      if (message.type === SET_TAB_TO_READ) {
         setTabToRead(message?.payload?.tabId || '');
         setIsCurrentTabBeingListenedTo(true);
         setLoading(false);
       }
 
       if (
-        message.type === 'ServiceWorker::Popup::CHANGE_CDP_SETTING' &&
+        message.type === CHANGE_CDP_SETTING &&
         typeof message?.payload?.isUsingCDPNewValue !== 'undefined'
       ) {
         setIsUsingCDP(message?.payload?.isUsingCDPNewValue);
       }
 
-      if (message.type === 'ServiceWorker::Popup::NEW_COOKIE_DATA') {
+      if (message.type === NEW_COOKIE_DATA) {
         if (
           message?.payload?.tabId &&
           tabId?.toString() === message?.payload?.tabId.toString()
@@ -240,7 +248,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
       }
 
-      if (message.type === 'ServiceWorker::Popup::INITIAL_SYNC') {
+      if (message.type === INITIAL_SYNC) {
         if (message?.payload?.tabMode === 'unlimited') {
           setIsCurrentTabBeingListenedTo(true);
           setTabToRead('');

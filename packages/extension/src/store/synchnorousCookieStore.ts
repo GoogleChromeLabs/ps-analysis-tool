@@ -28,6 +28,7 @@ import type { Protocol } from 'devtools-protocol';
  */
 import updateCookieBadgeText from './utils/updateCookieBadgeText';
 import { deriveBlockingStatus } from './utils/deriveBlockingStatus';
+import { NEW_COOKIE_DATA } from '../constants';
 
 class SynchnorousCookieStore {
   /**
@@ -380,27 +381,14 @@ class SynchnorousCookieStore {
 
     try {
       if (
-        this.tabs[tabId].devToolsOpenState &&
-        (overrideForInitialSync || this.tabs[tabId].newUpdates > 0)
+        this.tabs[tabId].devToolsOpenState ||
+        (this.tabs[tabId].popupOpenState &&
+          (overrideForInitialSync || this.tabs[tabId].newUpdates > 0))
       ) {
         sentMessageAnyWhere = true;
 
         await chrome.runtime.sendMessage({
-          type: 'ServiceWorker::DevTools::NEW_COOKIE_DATA',
-          payload: {
-            tabId,
-            cookieData: this.tabsData[tabId],
-          },
-        });
-      }
-
-      if (
-        this.tabs[tabId].popupOpenState &&
-        (overrideForInitialSync || this.tabs[tabId].newUpdates > 0)
-      ) {
-        sentMessageAnyWhere = true;
-        await chrome.runtime.sendMessage({
-          type: 'ServiceWorker::Popup::NEW_COOKIE_DATA',
+          type: NEW_COOKIE_DATA,
           payload: {
             tabId,
             cookieData: this.tabsData[tabId],

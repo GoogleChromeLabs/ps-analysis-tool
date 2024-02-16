@@ -24,6 +24,7 @@ import React, {
   useCallback,
 } from 'react';
 import { noop } from '@ps-analysis-tool/design-system';
+import { CHANGE_CDP_SETTING } from '../../../../constants';
 
 enum PLATFORM_OS_MAP {
   mac = 'MacOS',
@@ -146,7 +147,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const _setUsingCDP = useCallback((newValue: boolean) => {
     chrome.runtime.sendMessage({
-      type: 'DevTools::ServiceWorker::CHANGE_CDP_SETTING',
+      type: CHANGE_CDP_SETTING,
       payload: {
         isUsingCDP: newValue,
       },
