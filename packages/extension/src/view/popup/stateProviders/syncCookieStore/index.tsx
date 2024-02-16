@@ -246,6 +246,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         Object.keys(changes.allowedNumberOfTabs).includes('newValue')
       ) {
         setAllowedNumberOfTabs(changes?.allowedNumberOfTabs?.newValue);
+        setSettingsChanged(true);
       }
 
       if (
@@ -253,6 +254,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         Object.keys(changes.isUsingCDP).includes('newValue')
       ) {
         setIsUsingCDP(changes?.isUsingCDP?.newValue);
+        setSettingsChanged(true);
       }
     },
     []
