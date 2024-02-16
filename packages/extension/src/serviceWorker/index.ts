@@ -435,6 +435,7 @@ const listenToNewTab = async (tabId?: number) => {
 
   if (tabMode && tabMode !== 'unlimited') {
     const storedTabData = Object.keys(syncCookieStore?.tabsData ?? {});
+
     await Promise.all(
       storedTabData.map(async (tabIdToDelete) => {
         syncCookieStore?.removeTabData(Number(tabIdToDelete));
