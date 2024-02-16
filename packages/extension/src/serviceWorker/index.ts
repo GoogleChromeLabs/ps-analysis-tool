@@ -115,14 +115,8 @@ chrome.webRequest.onResponseStarted.addListener(
         },
         []
       );
-      const currentTab = await getTab(tabId);
 
-      if (
-        !cookies ||
-        (cookies && cookies?.length === 0) ||
-        currentTab?.pendingUrl ||
-        currentTab?.url !== tabUrl
-      ) {
+      if (!cookies || (cookies && cookies?.length === 0)) {
         return;
       }
 
@@ -191,14 +185,8 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
         },
         []
       );
-      const currentTab = await getTab(tabId);
 
-      if (
-        !cookies ||
-        (cookies && cookies?.length === 0) ||
-        currentTab?.pendingUrl ||
-        currentTab?.url !== tabUrl
-      ) {
+      if (!cookies || (cookies && cookies?.length === 0)) {
         return;
       }
 
@@ -246,6 +234,10 @@ chrome.tabs.onRemoved.addListener((tabId) => {
   syncCookieStore?.removeTabData(tabId);
 });
 
+/**
+ * Fires when a profile with extension is started.
+ * @see https://developer.chrome.com/docs/extensions/reference/api/runtime#event-onStartup
+ */
 chrome.runtime.onStartup.addListener(async () => {
   const storage = await chrome.storage.sync.get();
 
@@ -267,8 +259,13 @@ chrome.runtime.onStartup.addListener(async () => {
  * @see https://developer.chrome.com/docs/extensions/reference/api/tabs#event-onUpdated
  */
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+  if (!tab.url) {
+    return;
+  }
+
+  syncCookieStore?.updateUrl(tabId, tab.url);
+
   if (changeInfo.status === 'loading' && tab.url) {
-    syncCookieStore?.updateUrl(tabId, tab.url);
     syncCookieStore?.removeCookieData(tabId);
   }
 

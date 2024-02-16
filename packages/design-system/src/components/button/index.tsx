@@ -113,9 +113,8 @@ const Button = ({
         </button>
       );
     default:
+      return <></>;
   }
-
-  return <></>;
 };
 
 export default Button;
