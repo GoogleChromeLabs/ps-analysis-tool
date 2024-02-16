@@ -22,18 +22,18 @@ import {
   COLOR_MAP,
   ProgressBar,
 } from '@ps-analysis-tool/design-system';
+import { extractUrl } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import LIBRARIES from '../../config';
-import type { LibraryData, DetectedSignature } from '../../types';
 import {
   filterMatchesBasedOnExceptions,
   useLibraryDetection,
   useLibraryDetectionContext,
 } from '../../core';
-import { extractUrl } from '@ps-analysis-tool/common';
+import LIBRARIES from '../../config';
+import type { LibraryData, DetectedSignature } from '../../types';
 
 const LibraryDetection = memo(function LibraryDetection() {
   useLibraryDetection();
@@ -45,6 +45,33 @@ const LibraryDetection = memo(function LibraryDetection() {
       tabDomain: state.tabDomain,
       isCurrentTabLoading: state.isCurrentTabLoading,
     }));
+
+  LIBRARIES.map((config) => {
+    let matches =
+      libraryMatches && libraryMatches[config.name as keyof LibraryData]
+        ? libraryMatches[config.name as keyof LibraryData]?.matches
+        : [];
+
+    const parsedUrl = extractUrl(tabDomain);
+
+    const parsedTabDomain = parsedUrl?.domain;
+
+    const isCurrentDomainExceptionDomain =
+      config?.exceptions?.[parsedTabDomain as string] &&
+      config?.exceptions?.[parsedTabDomain as string]?.signatures?.length > 0;
+
+    if (isCurrentDomainExceptionDomain) {
+      matches = filterMatchesBasedOnExceptions(
+        tabDomain,
+        config?.exceptions,
+        matches
+      );
+    }
+
+    libraryMatches[config.name as keyof LibraryData].matches = matches;
+
+    return matches;
+  });
 
   const names = Object.keys(libraryMatches);
 
@@ -67,27 +94,10 @@ const LibraryDetection = memo(function LibraryDetection() {
           const Component = config.component as React.FC<{
             matches: DetectedSignature[];
           }>;
-          let matches =
+          const matches =
             libraryMatches && libraryMatches[config.name as keyof LibraryData]
               ? libraryMatches[config.name as keyof LibraryData]?.matches
               : [];
-
-          const parsedUrl = extractUrl(tabDomain);
-
-          const parsedTabDomain = parsedUrl?.domain;
-
-          const isCurrentDomainExceptionDomain =
-            config?.exceptions?.[parsedTabDomain as string] &&
-            config?.exceptions?.[parsedTabDomain as string]?.signatures
-              ?.length > 0;
-
-          if (isCurrentDomainExceptionDomain) {
-            matches = filterMatchesBasedOnExceptions(
-              tabDomain,
-              config?.exceptions, //TODO: revist this after testing
-              matches
-            );
-          }
 
           return <Component key={config.name} matches={matches} />;
         })}
