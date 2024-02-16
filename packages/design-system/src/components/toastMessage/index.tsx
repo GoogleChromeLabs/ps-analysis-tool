@@ -38,7 +38,7 @@ const ToastMessage = ({
   additionalStyles = '',
   textAdditionalStyles = '',
   variant = 'large',
-  buttonText = 'Reload All Tabs',
+  buttonText = 'Reload',
 }: ToastMessageProps) => {
   return (
     <div
