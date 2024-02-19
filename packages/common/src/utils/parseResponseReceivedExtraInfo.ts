@@ -60,6 +60,13 @@ export default function parseResponseReceivedExtraInfo(
         return temporaryParsedCookie.name === parsedCookie.name;
       }
     });
+    //@ts-ignore
+    const exemptedCookie = response?.exemptedCookies?.find((c) => {
+      if (c.cookie) {
+        return c.cookie?.name === parsedCookie.name;
+      }
+      return false;
+    });
 
     const effectiveExpirationDate = calculateEffectiveExpiryDate(
       parsedCookie.expires
@@ -117,6 +124,7 @@ export default function parseResponseReceivedExtraInfo(
       isFirstParty: isFirstParty(domain, tabUrl),
       headerType: 'response' as CookieData['headerType'],
       frameIdList: [],
+      exemptionReason: exemptedCookie ? exemptedCookie?.exemptionReason : '',
     };
 
     cookies.push(singleCookie);

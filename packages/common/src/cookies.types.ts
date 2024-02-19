@@ -112,6 +112,7 @@ export type CookieData = {
     inboundBlock: boolean | null;
     outboundBlock: boolean | null;
   };
+  exemptionReason?: '';
 };
 
 export type CookieTableData = CookieData & {
