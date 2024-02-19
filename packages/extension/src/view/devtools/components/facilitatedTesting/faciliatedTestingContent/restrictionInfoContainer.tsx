@@ -15,49 +15,37 @@
  */
 
 /**
- * External dependencies.
+ * Internal dependencies.
  */
-import { Cookie, VisibilityOff } from '@ps-analysis-tool/design-system';
 import React from 'react';
+import { PSTimelineIcon } from '@ps-analysis-tool/design-system';
+
+/**
+ * Internal dependencies.
+ */
 import Link from './link';
 
 const RestrictionInfoContainer = () => (
-  <div className="bg-[#D4E3FC] rounded-lg p-6 flex w-full text-raisin-black">
-    <div className="flex-1">
-      <h2 className="text-2xl mb-3">
-        Prepare for third-party cookie restrictions
-      </h2>
-      <p className="text-base break-words mb-6">
-        <Link href="https://privacysandbox.com/" title="Privacy Sandbox" /> is a
-        multi-year{' '}
-        <Link
-          href="https://developer.chrome.com/docs/privacy-sandbox/"
-          title="initiative"
-        />{' '}
-        for building a more private web by defining a set of building blocks
-        (i.e. proposed APIs) enabling{' '}
-        <Link
-          href="https://github.com/michaelkleber/privacy-model"
-          title="a new privacy model for the web"
-        />
-        .
-      </p>
-      <p className="text-sm mb-7">
-        To facilitate testing,{' '}
-        <Link
-          href="https://developers.google.com/privacy-sandbox/blog/cookie-countdown-2024jan"
-          title="Chrome has restricted third-party cookies by default for 1% of users."
-        />
-      </p>
+  <div className="flex flex-col w-full text-sm text-raisin-black dark:text-bright-gray mb-7">
+    <p className="mb-7">
+      To facilitate testing,{' '}
+      <Link
+        href="https://developers.google.com/privacy-sandbox/blog/cookie-countdown-2024jan"
+        title="Chrome has restricted third-party cookies by default for 1% of users."
+      />
+    </p>
+    <div className="w-full grid place-items-center mb-2">
+      <PSTimelineIcon />
     </div>
-    <div className="w-[10rem] h-full relative">
-      <div className="absolute fill-[#A1A6B4] top-2">
-        <Cookie />
-      </div>
-      <div className="absolute top-16 left-8 fill-[#006E8C]">
-        <VisibilityOff />
-      </div>
-    </div>
+    <p>
+      During this testing period, it is important for sites and services to{' '}
+      <Link
+        href="https://developers.google.com/privacy-sandbox/3pcd/prepare/audit-cookies"
+        title="start preparing"
+      />{' '}
+      for third-party cookie restrictions, including moving to more private
+      alternatives.
+    </p>
   </div>
 );
 

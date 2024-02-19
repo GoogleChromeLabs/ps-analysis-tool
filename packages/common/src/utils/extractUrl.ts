@@ -13,26 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
-import React from 'react';
+import { parse } from 'tldts';
 
-interface LinkProps {
-  href: string;
-  title: string;
+/**
+ * Extracts the URL from the given string.
+ * @param url - The string containing the URL.
+ * @returns The extracted URL or an empty string if the URL cannot be parsed.
+ */
+export default function extractUrl(url: string) {
+  const parsedUrl = parse(url);
+  return parsedUrl || '';
 }
-
-const Link = ({ href, title }: LinkProps) => (
-  <a
-    href={href}
-    className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline"
-    target="_blank"
-    rel="noreferrer"
-  >
-    {title}
-  </a>
-);
-
-export default Link;
