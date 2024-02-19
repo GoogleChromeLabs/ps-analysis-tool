@@ -36,6 +36,11 @@ export type Config = {
   signatures: SignaturesConfig[];
   domainsToSkip: string[];
   helpUrl: string;
+  exceptions?: ExceptionUrls;
+};
+
+export type ExceptionUrls = {
+  [key: string]: { signatures: string[]; subDomains: string[] };
 };
 
 export type ScriptTagUnderCheck = {

@@ -62,6 +62,7 @@ export { default as ClearIcon } from './clear-icon.svg';
 export { default as PaddedCross } from './padded-cross.svg';
 export { default as Warning } from './warning-filled.svg';
 export { default as VisibilityOff } from './visibility-off.svg';
+export { default as PSTimelineIcon } from './ps-timeline.svg';
 export { default as InboundIcon } from './inbound-icon.svg';
 export { default as OutboundIcon } from './outbound-icon.svg';
 export { default as OutboundInboundIcon } from './outbound-inbound-icon.svg';

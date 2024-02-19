@@ -26,6 +26,7 @@ import {
   useSidebar,
   type SidebarItems,
   InspectButton,
+  ToastMessage,
 } from '@ps-analysis-tool/design-system';
 import {
   UNKNOWN_FRAME_KEY,
@@ -73,9 +74,15 @@ const App: React.FC = () => {
     frameHasCookies: state.frameHasCookies,
   }));
 
-  const { allowedNumberOfTabs } = useSettingsStore(({ state }) => ({
-    allowedNumberOfTabs: state.allowedNumberOfTabs,
-  }));
+  const mainRef = useRef<HTMLElement>(null);
+  const toastMessageRef = useRef<HTMLDivElement>(null);
+
+  const { allowedNumberOfTabs, settingsChanged, handleSettingsChange } =
+    useSettingsStore(({ state, actions }) => ({
+      allowedNumberOfTabs: state.allowedNumberOfTabs,
+      settingsChanged: state.settingsChanged,
+      handleSettingsChange: actions.handleSettingsChange,
+    }));
 
   const listenToMouseChange = useCallback(() => {
     if (contextInvalidatedRef.current) {
@@ -261,7 +268,7 @@ const App: React.FC = () => {
         </div>
       )}
       {!contextInvalidated && (
-        <div className="w-full h-full flex flex-row">
+        <div className="w-full h-full flex flex-row z-1">
           <Resizable
             size={{ width: sidebarWidth, height: '100%' }}
             defaultSize={{ width: '200px', height: '100%' }}
@@ -288,8 +295,26 @@ const App: React.FC = () => {
               visibleWidth={sidebarWidth}
             />
           </Resizable>
-          <main className="h-full flex-1 overflow-auto">
-            <div className="min-w-[40rem] h-full">{activePanel}</div>
+          <main
+            ref={mainRef}
+            onScroll={() => {
+              if (mainRef.current && toastMessageRef.current) {
+                toastMessageRef.current.style.bottom =
+                  '-' + mainRef.current.scrollTop + 'px';
+              }
+            }}
+            className="h-full flex-1 overflow-auto relative"
+          >
+            <div className="min-w-[40rem] h-full z-1">{activePanel}</div>
+            {settingsChanged && (
+              <ToastMessage
+                ref={toastMessageRef}
+                additionalStyles="text-sm"
+                text="For settings to take effect please reload all tab(s)."
+                onClick={handleSettingsChange}
+                textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
+              />
+            )}
           </main>
         </div>
       )}

@@ -123,9 +123,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
   // This was converted to useRef because setting state was creating a race condition in rerendering the provider.
   const isCurrentTabBeingListenedToRef = useRef(false);
 
-  const { allowedNumberOfTabs } = useSettingsStore(({ state }) => ({
-    allowedNumberOfTabs: state.allowedNumberOfTabs,
-  }));
+  const { allowedNumberOfTabs, setSettingsChanged } = useSettingsStore(
+    ({ state, actions }) => ({
+      allowedNumberOfTabs: state.allowedNumberOfTabs,
+      setSettingsChanged: actions.setSettingsChanged,
+    })
+  );
 
   /**
    * Set tab frames state for frame ids and frame URLs from using chrome.webNavigation.getAllFrames
@@ -297,6 +300,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         );
         isCurrentTabBeingListenedToRef.current =
           tabId?.toString() === message?.payload?.tabId;
+        setTabToRead(message?.payload?.tabId?.toString() || null);
         setTabFrames(null);
         setLoading(false);
         setCanStartInspecting(false);
@@ -333,6 +337,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
           }
         }
       }
+
+      if (message.type === 'ServiceWorker::DevTools::TABS_RELOADED') {
+        setSettingsChanged(false);
+      }
     };
 
     chrome.runtime.onMessage.addListener(listener);
@@ -340,7 +348,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     return () => {
       chrome.runtime.onMessage.removeListener(listener);
     };
-  }, [getAllFramesForCurrentTab, tabId]);
+  }, [getAllFramesForCurrentTab, tabId, setSettingsChanged]);
 
   const tabUpdateListener = useCallback(
     async (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
