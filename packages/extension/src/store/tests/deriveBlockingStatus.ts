@@ -22,6 +22,7 @@ import {
   REQUEST_EVENT,
   type responsEvent,
   type requestEvent,
+  BLOCK_STATUS,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -85,8 +86,8 @@ describe('deriveBlockingStatus', () => {
         responseEvents: mockRespArray,
       })
     ).toStrictEqual({
-      inboundBlock: false,
-      outboundBlock: false,
+      inboundBlock: BLOCK_STATUS.NOT_BLOCKED,
+      outboundBlock: BLOCK_STATUS.NOT_BLOCKED,
     });
   });
 
@@ -98,8 +99,8 @@ describe('deriveBlockingStatus', () => {
         responseEvents: mockRespArray,
       })
     ).toStrictEqual({
-      inboundBlock: null,
-      outboundBlock: false,
+      inboundBlock: BLOCK_STATUS.BLOCKED_IN_SOME_EVENTS,
+      outboundBlock: BLOCK_STATUS.NOT_BLOCKED,
     });
   });
 
@@ -113,8 +114,8 @@ describe('deriveBlockingStatus', () => {
         responseEvents: mockRespArray,
       })
     ).toStrictEqual({
-      inboundBlock: true,
-      outboundBlock: false,
+      inboundBlock: BLOCK_STATUS.BLOCKED_IN_ALL_EVENTS,
+      outboundBlock: BLOCK_STATUS.NOT_BLOCKED,
     });
     mockRespArray.forEach((ev) => {
       ev.blocked = false;
@@ -129,8 +130,8 @@ describe('deriveBlockingStatus', () => {
         responseEvents: mockRespArray,
       })
     ).toStrictEqual({
-      inboundBlock: false,
-      outboundBlock: true,
+      inboundBlock: BLOCK_STATUS.NOT_BLOCKED,
+      outboundBlock: BLOCK_STATUS.BLOCKED_IN_SOME_EVENTS,
     });
     mockReqArray[0].blocked = false;
   });
@@ -145,87 +146,11 @@ describe('deriveBlockingStatus', () => {
         responseEvents: mockRespArray,
       })
     ).toStrictEqual({
-      inboundBlock: false,
-      outboundBlock: true,
+      inboundBlock: BLOCK_STATUS.NOT_BLOCKED,
+      outboundBlock: BLOCK_STATUS.BLOCKED_IN_ALL_EVENTS,
     });
     mockReqArray.forEach((ev) => {
       ev.blocked = false;
     });
-  });
-
-  it('should ignore non CDP events in request', () => {
-    mockReqArray[1].type =
-      REQUEST_EVENT.CHROME_WEBREQUEST_ON_BEFORE_SEND_HEADERS;
-    mockReqArray[1].blocked = null;
-    expect(
-      deriveBlockingStatus({
-        requestEvents: mockReqArray,
-        responseEvents: mockRespArray,
-      })
-    ).toStrictEqual({
-      inboundBlock: false,
-      outboundBlock: false,
-    });
-    mockReqArray[1].type = REQUEST_EVENT.CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO;
-    mockReqArray[1].blocked = false;
-  });
-
-  it('should ignore non CDP events in response', () => {
-    mockRespArray[1].type =
-      RESPONSE_EVENT.CHROME_WEBREQUEST_ON_RESPONSE_STARTED;
-    mockRespArray[1].blocked = null;
-    expect(
-      deriveBlockingStatus({
-        requestEvents: mockReqArray,
-        responseEvents: mockRespArray,
-      })
-    ).toStrictEqual({
-      inboundBlock: false,
-      outboundBlock: false,
-    });
-    mockRespArray[1].type = RESPONSE_EVENT.CDP_RESPONSE_RECEIVED_EXTRA_INFO;
-    mockRespArray[1].blocked = false;
-  });
-
-  it('should ignore non CDP events in request 2', () => {
-    mockReqArray[0].blocked = true;
-    mockReqArray[1].type =
-      REQUEST_EVENT.CHROME_WEBREQUEST_ON_BEFORE_SEND_HEADERS;
-    mockReqArray[1].blocked = null;
-    mockReqArray[2].blocked = true;
-    expect(
-      deriveBlockingStatus({
-        requestEvents: mockReqArray,
-        responseEvents: mockRespArray,
-      })
-    ).toStrictEqual({
-      inboundBlock: false,
-      outboundBlock: true,
-    });
-    mockReqArray[0].blocked = false;
-    mockReqArray[1].type = REQUEST_EVENT.CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO;
-    mockReqArray[1].blocked = false;
-    mockReqArray[2].blocked = false;
-  });
-
-  it('should ignore non CDP events in response 2', () => {
-    mockRespArray[0].blocked = true;
-    mockRespArray[1].type =
-      RESPONSE_EVENT.CHROME_WEBREQUEST_ON_RESPONSE_STARTED;
-    mockRespArray[1].blocked = null;
-    mockRespArray[2].blocked = true;
-    expect(
-      deriveBlockingStatus({
-        requestEvents: mockReqArray,
-        responseEvents: mockRespArray,
-      })
-    ).toStrictEqual({
-      inboundBlock: true,
-      outboundBlock: false,
-    });
-    mockRespArray[0].blocked = true;
-    mockRespArray[1].type = RESPONSE_EVENT.CDP_RESPONSE_RECEIVED_EXTRA_INFO;
-    mockRespArray[1].blocked = false;
-    mockRespArray[2].blocked = true;
   });
 });

@@ -45,7 +45,9 @@ export type TableColumn = {
   accessorKey: string;
   cell?: (info: InfoType, details?: TableData) => React.JSX.Element | InfoType;
   enableHiding?: boolean;
-  enablePrefixIcon?: boolean;
+  enableBodyCellPrefixIcon?: boolean;
+  bodyCellPrefixIcon?: (row: TableRow) => React.JSX.Element;
+  showBodyCellPrefixIcon?: (row: TableRow) => boolean;
   widthWeightagePercentage?: number;
   width?: number; // For internal use only
 };

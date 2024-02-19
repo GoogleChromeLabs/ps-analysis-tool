@@ -140,7 +140,10 @@ class SynchnorousCookieStore {
           };
         } else {
           this.tabs[tabId].newUpdates++;
-          this.tabsData[tabId][cookieKey] = cookie;
+          this.tabsData[tabId][cookieKey] = {
+            ...cookie,
+            blockingStatus: deriveBlockingStatus(cookie.networkEvents),
+          };
         }
       }
 

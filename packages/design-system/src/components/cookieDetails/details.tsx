@@ -20,10 +20,21 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
 import {
+  BLOCK_STATUS,
   cookieIssueDetails,
   type CookieTableData,
 } from '@ps-analysis-tool/common';
-import { Warning } from '../../icons';
+
+/**
+ * Internal dependencies.
+ */
+import {
+  InboundIcon,
+  OutboundIcon,
+  OutboundInboundColoredIcon,
+  OutboundInboundIcon,
+  QuestionMark,
+} from '../../icons';
 
 export interface DetailsProps {
   isUsingCDP: boolean;
@@ -36,8 +47,10 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
 
   let blockedReasons = '';
   let warningReasons = '';
-  const inboundBlock = selectedCookie.blockingStatus?.inboundBlock;
-  const outboundBlock = selectedCookie.blockingStatus?.outboundBlock;
+  const inboundBlock =
+    selectedCookie.blockingStatus?.inboundBlock !== BLOCK_STATUS.NOT_BLOCKED;
+  const outboundBlock =
+    selectedCookie.blockingStatus?.outboundBlock !== BLOCK_STATUS.NOT_BLOCKED;
   const hasValidBlockedReason =
     selectedCookie.blockedReasons && selectedCookie.blockedReasons.length !== 0;
 
@@ -88,8 +101,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           </p>
         </div>
       )}
-
-      {(outboundBlock || inboundBlock || inboundBlock === null) &&
+      {(outboundBlock || inboundBlock) &&
         hasValidBlockedReason &&
         isUsingCDP && (
           <>
@@ -103,53 +115,136 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           </>
         )}
 
-      {inboundBlock === null &&
-        !outboundBlock &&
-        hasValidBlockedReason &&
+      {(outboundBlock || inboundBlock) &&
+        !hasValidBlockedReason &&
         isUsingCDP && (
-          <div className="flex gap-1 my-4">
-            <Warning className="h-4 text-warning-orange" />
+          <div className="flex gap-1 items-center mb-4">
+            <QuestionMark />
             <p className="text-outer-space-crayola dark:text-bright-gray">
-              This cookie was rejected by the browser in atleast one of the
-              response headers.
+              We could not identify this cookie&apos;s blocking status.
             </p>
             <br />
           </div>
         )}
 
-      {inboundBlock === null && !hasValidBlockedReason && isUsingCDP && (
-        <div className="flex gap-1 my-4">
-          <Warning className="h-4 text-warning-orange" />
-          <p className="text-outer-space-crayola dark:text-bright-gray">
-            We could not identify whether this cookie was blocked or not. Please
-            take a look at the network panel by copying the filter string from
-            the cookie&apos;s right-click context menu.
-          </p>
-          <br />
-        </div>
-      )}
+      {selectedCookie?.blockingStatus?.inboundBlock ===
+        BLOCK_STATUS.BLOCKED_IN_SOME_EVENTS &&
+        !outboundBlock &&
+        hasValidBlockedReason &&
+        isUsingCDP && (
+          <div className="flex gap-1 items-center my-4">
+            <InboundIcon className="stroke-[#FE8455]" />
+            <p className="text-outer-space-crayola dark:text-bright-gray">
+              This cookie was blocked in at least one of the responses.
+            </p>
+            <br />
+          </div>
+        )}
 
-      {inboundBlock !== null && inboundBlock && isUsingCDP && (
-        <div className="flex gap-1 my-4">
-          <Warning className="h-4 text-warning-orange" />
-          <p className="text-outer-space-crayola dark:text-bright-gray">
-            This cookie was rejected by the browser in all of the response
-            headers.
-          </p>
-          <br />
-        </div>
-      )}
+      {selectedCookie?.blockingStatus?.inboundBlock ===
+        BLOCK_STATUS.BLOCKED_IN_ALL_EVENTS &&
+        !outboundBlock &&
+        hasValidBlockedReason &&
+        isUsingCDP && (
+          <div className="flex gap-1 items-center my-4">
+            <InboundIcon className="stroke-[#D8302F]" />
+            <p className="text-outer-space-crayola dark:text-bright-gray">
+              This cookie was blocked in all responses.
+            </p>
+            <br />
+          </div>
+        )}
 
-      {outboundBlock !== null && outboundBlock && isUsingCDP && (
-        <div className="flex gap-1 my-4">
-          <Warning className="h-4 text-warning-orange" />
-          <p className="text-outer-space-crayola dark:text-bright-gray">
-            This cookie was rejected by the browser in one of the request
-            headers.
-          </p>
-          <br />
-        </div>
-      )}
+      {selectedCookie?.blockingStatus?.outboundBlock ===
+        BLOCK_STATUS.BLOCKED_IN_SOME_EVENTS &&
+        !inboundBlock &&
+        hasValidBlockedReason &&
+        isUsingCDP && (
+          <div className="flex gap-1 items-center my-4">
+            <OutboundIcon className="stroke-[#FE8455]" />
+            <p className="text-outer-space-crayola dark:text-bright-gray">
+              This cookie was blocked in at least one of the requests.
+            </p>
+            <br />
+          </div>
+        )}
+
+      {selectedCookie?.blockingStatus?.outboundBlock ===
+        BLOCK_STATUS.BLOCKED_IN_ALL_EVENTS &&
+        !inboundBlock &&
+        hasValidBlockedReason &&
+        isUsingCDP && (
+          <div className="flex gap-1 items-center my-4">
+            <OutboundIcon className="stroke-[#D8302F]" />
+            <p className="text-outer-space-crayola dark:text-bright-gray">
+              This cookie was blocked in all requests.
+            </p>
+            <br />
+          </div>
+        )}
+
+      {selectedCookie?.blockingStatus?.outboundBlock ===
+        BLOCK_STATUS.BLOCKED_IN_ALL_EVENTS &&
+        selectedCookie?.blockingStatus?.inboundBlock ===
+          BLOCK_STATUS.BLOCKED_IN_ALL_EVENTS &&
+        hasValidBlockedReason &&
+        isUsingCDP && (
+          <div className="flex gap-1 items-center my-4">
+            <OutboundInboundIcon className="stroke-[#D8302F] scale-150" />
+            <p className="text-outer-space-crayola dark:text-bright-gray">
+              This cookie was blocked in all of the requests and responses.
+            </p>
+            <br />
+          </div>
+        )}
+
+      {selectedCookie?.blockingStatus?.outboundBlock ===
+        BLOCK_STATUS.BLOCKED_IN_SOME_EVENTS &&
+        selectedCookie?.blockingStatus?.inboundBlock ===
+          BLOCK_STATUS.BLOCKED_IN_SOME_EVENTS &&
+        hasValidBlockedReason &&
+        isUsingCDP && (
+          <div className="flex gap-1 items-center my-4">
+            <OutboundInboundIcon className="stroke-[#FE8455] scale-150" />
+            <p className="text-outer-space-crayola dark:text-bright-gray">
+              This cookie was blocked in at least one of the requests and at
+              least one of the responses.
+            </p>
+            <br />
+          </div>
+        )}
+
+      {selectedCookie?.blockingStatus?.outboundBlock ===
+        BLOCK_STATUS.BLOCKED_IN_ALL_EVENTS &&
+        selectedCookie?.blockingStatus?.inboundBlock ===
+          BLOCK_STATUS.BLOCKED_IN_SOME_EVENTS &&
+        hasValidBlockedReason &&
+        isUsingCDP && (
+          <div className="flex gap-1 items-center my-4">
+            <OutboundInboundColoredIcon className="scale-150" />
+            <p className="text-outer-space-crayola dark:text-bright-gray">
+              This cookie was blocked in all requests and at least one of the
+              responses.
+            </p>
+            <br />
+          </div>
+        )}
+
+      {selectedCookie?.blockingStatus?.outboundBlock ===
+        BLOCK_STATUS.BLOCKED_IN_SOME_EVENTS &&
+        selectedCookie?.blockingStatus?.inboundBlock ===
+          BLOCK_STATUS.BLOCKED_IN_ALL_EVENTS &&
+        hasValidBlockedReason &&
+        isUsingCDP && (
+          <div className="flex gap-1 items-center my-4">
+            <OutboundInboundColoredIcon className="rotate-180 scale-150" />
+            <p className="text-outer-space-crayola dark:text-bright-gray">
+              This cookie was blocked in at least one of the requests and all of
+              the responses.
+            </p>
+            <br />
+          </div>
+        )}
 
       {selectedCookie?.warningReasons &&
         selectedCookie?.warningReasons?.length > 0 && (
@@ -163,7 +258,6 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
             />
           </>
         )}
-
       <p className="font-bold text-raising-black dark:text-bright-gray mb-1 text-semibold flex items-center">
         <span>Cookie Value</span>
         <label className="text-raising-black dark:text-bright-gray text-xs font-normal flex items-center">
