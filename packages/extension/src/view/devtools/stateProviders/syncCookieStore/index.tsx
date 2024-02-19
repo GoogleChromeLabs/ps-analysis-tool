@@ -45,9 +45,9 @@ import {
   SET_TAB_TO_READ,
 } from '../../../../constants';
 import setDocumentCookies from '../../../../utils/setDocumentCookies';
-import isOnRWS from '../../../../contentScript/utils/isOnRWS';
 import { useSettingsStore } from '../syncSettingsStore';
 import { getTab } from '../../../../utils/getTab';
+import getFramesForCurrentTab from '../../../../utils/getFramesForCurrentTab';
 
 export interface CookieStoreContext {
   state: {
@@ -137,49 +137,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   /**
    * Set tab frames state for frame ids and frame URLs from using chrome.webNavigation.getAllFrames
-   *
-   * TODO: Refactor: move it to a utility function.
    */
-  const getAllFramesForCurrentTab = useCallback(
-    async (_tabId: number | null) => {
-      if (!_tabId) {
-        return;
-      }
-
-      const regexForFrameUrl =
-        /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:/\n?]+)/;
-
-      const currentTabFrames = await chrome.webNavigation.getAllFrames({
-        tabId: _tabId,
-      });
-      const modifiedTabFrames: TabFrames = {};
-
-      currentTabFrames?.forEach(({ url, frameId, frameType }) => {
-        if (url && url.includes('http')) {
-          const parsedUrl = regexForFrameUrl.exec(url);
-          if (parsedUrl && parsedUrl[0]) {
-            if (modifiedTabFrames[parsedUrl[0]]) {
-              modifiedTabFrames[parsedUrl[0]].frameIds.push(frameId);
-            } else {
-              modifiedTabFrames[parsedUrl[0]] = {
-                frameIds: [frameId],
-                frameType,
-              };
-            }
-          }
-        }
-      });
-      await Promise.all(
-        Object.keys(modifiedTabFrames).map(async (tabFrame) => {
-          modifiedTabFrames[tabFrame].isOnRWS = await isOnRWS(tabFrame);
-          return tabFrame;
-        })
-      );
-      modifiedTabFrames[UNKNOWN_FRAME_KEY] = { frameIds: [] };
-      setTabFrames(modifiedTabFrames);
-    },
-    []
-  );
+  const getAllFramesForCurrentTab = useCallback(async () => {
+    const _tabFrames = await getFramesForCurrentTab();
+    setTabFrames(_tabFrames);
+  }, []);
 
   /**
    * Stores object with frame URLs as keys and boolean values indicating if the frame contains cookies.
@@ -237,7 +199,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     setTabId(_tabId);
 
     if (isCurrentTabBeingListenedToRef.current) {
-      await getAllFramesForCurrentTab(_tabId);
+      await getAllFramesForCurrentTab();
     }
 
     await setDocumentCookies(_tabId?.toString());
@@ -340,7 +302,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
         if (tabId?.toString() === message.payload.tabId.toString()) {
           if (isCurrentTabBeingListenedToRef.current) {
-            await getAllFramesForCurrentTab(tabId);
+            await getAllFramesForCurrentTab();
             setTabToRead(tabId.toString());
             setTabCookies(Object.keys(data).length > 0 ? data : null);
           } else {
@@ -381,7 +343,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           setSelectedFrame(null);
         } finally {
           setTabFrames(null);
-          await getAllFramesForCurrentTab(_tabId);
+          await getAllFramesForCurrentTab();
         }
       }
     },
