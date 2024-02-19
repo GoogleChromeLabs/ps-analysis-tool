@@ -76,6 +76,11 @@ const parseResponseCookieHeader = (
       return _cookie.name === parsedCookie.name;
     })
   );
+  let isExpired = false;
+
+  if (parsedCookie.expires) {
+    isExpired = new Date(parsedCookie.expires) < new Date();
+  }
 
   return {
     parsedCookie,
@@ -88,7 +93,7 @@ const parseResponseCookieHeader = (
           type: RESPONSE_EVENT.CHROME_WEBREQUEST_ON_RESPONSE_STARTED,
           requestId,
           url: url,
-          blocked: !isFoundInCDPCookieList,
+          blocked: isExpired ? false : !isFoundInCDPCookieList,
           timeStamp: Date.now(),
         },
       ],
