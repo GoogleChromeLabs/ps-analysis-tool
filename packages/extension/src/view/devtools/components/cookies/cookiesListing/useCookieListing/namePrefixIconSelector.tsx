@@ -49,16 +49,18 @@ const namePrefixIconSelector = ({ originalData }: TableRow) => {
   const isOutboundBlockedInAll =
     data?.blockingStatus?.outboundBlock === BLOCK_STATUS.BLOCKED_IN_ALL_EVENTS;
 
-  if (isInboundBlocked && isOutboundBlocked) {
-    const isInboundUnknown =
-      data?.blockingStatus?.inboundBlock === BLOCK_STATUS.UNKNOWN;
-    const isOutboundUnknown =
-      data?.blockingStatus?.outboundBlock === BLOCK_STATUS.UNKNOWN;
+  const hasValidBlockedReason =
+    data?.blockedReasons && data.blockedReasons.length !== 0;
 
-    if (isInboundUnknown && isOutboundUnknown) {
+  if (!hasValidBlockedReason) {
+    if (isInboundBlocked || isOutboundBlocked) {
       return <QuestionMark />;
     }
 
+    return <></>;
+  }
+
+  if (isInboundBlocked && isOutboundBlocked) {
     if (isInboundBlockedInAll && isOutboundBlockedInAll) {
       return <OutboundInboundIcon className="stroke-[#D8302F] scale-150" />;
     }

@@ -90,8 +90,8 @@ export function deriveBlockingStatus(
 ): CookieData['blockingStatus'] {
   if (!networkEvents) {
     return {
-      inboundBlock: BLOCK_STATUS.UKNOWN,
-      outboundBlock: BLOCK_STATUS.UKNOWN,
+      inboundBlock: BLOCK_STATUS.UNKNOWN,
+      outboundBlock: BLOCK_STATUS.UNKNOWN,
     };
   }
   return {
