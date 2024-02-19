@@ -74,6 +74,9 @@ const App: React.FC = () => {
     frameHasCookies: state.frameHasCookies,
   }));
 
+  const mainRef = useRef<HTMLElement>(null);
+  const toastMessageRef = useRef<HTMLDivElement>(null);
+
   const { allowedNumberOfTabs, settingsChanged, handleSettingsChange } =
     useSettingsStore(({ state, actions }) => ({
       allowedNumberOfTabs: state.allowedNumberOfTabs,
@@ -292,10 +295,20 @@ const App: React.FC = () => {
               visibleWidth={sidebarWidth}
             />
           </Resizable>
-          <main className="h-full flex-1 overflow-auto relative">
+          <main
+            ref={mainRef}
+            onScroll={() => {
+              if (mainRef.current && toastMessageRef.current) {
+                toastMessageRef.current.style.bottom =
+                  '-' + mainRef.current.scrollTop + 'px';
+              }
+            }}
+            className="h-full flex-1 overflow-auto relative"
+          >
             <div className="min-w-[40rem] h-full z-1">{activePanel}</div>
             {settingsChanged && (
               <ToastMessage
+                ref={toastMessageRef}
                 additionalStyles="text-sm"
                 text="For settings to take effect please reload all tab(s)."
                 onClick={handleSettingsChange}
