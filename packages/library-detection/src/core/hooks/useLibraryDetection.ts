@@ -33,7 +33,7 @@ import { sumUpDetectionResults, useLibraryDetectionContext } from '..';
 import type { LibraryData, ResourceTreeItem } from '../../types';
 
 // The delay after the page load, because some scripts arrive right after the page load.
-const LOADING_DELAY = 4000;
+const LOADING_DELAY = 2000;
 
 /**
  * Custom hook that handles the library detection logic.
