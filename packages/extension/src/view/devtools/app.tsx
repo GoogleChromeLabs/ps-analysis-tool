@@ -48,30 +48,6 @@ const App: React.FC = () => {
   const [sidebarWidth, setSidebarWidth] = useState(200);
   const [sidebarData, setSidebarData] = useState(TABS);
   const contextInvalidatedRef = useRef(null);
-  const [toastMessageWidth, setToastMessageWidth] = useState(
-    (window.innerWidth || document.body.clientWidth) - 200
-  );
-
-  useEffect(() => {
-    let isWindowResized = false;
-    const onWindowResize = () => {
-      isWindowResized = true;
-
-      const width =
-        (window.innerWidth || document.body.clientWidth) - sidebarWidth;
-
-      setToastMessageWidth(width);
-    };
-
-    if (!isWindowResized) {
-      setToastMessageWidth(
-        (window.innerWidth || document.body.clientWidth) - sidebarWidth
-      );
-    }
-
-    window.addEventListener('resize', onWindowResize);
-    return () => window.removeEventListener('resize', onWindowResize);
-  }, [sidebarWidth]);
 
   const {
     contextInvalidated,
@@ -316,23 +292,16 @@ const App: React.FC = () => {
               visibleWidth={sidebarWidth}
             />
           </Resizable>
-          <main className="h-full flex-1 overflow-auto">
-            <div className="min-w-[40rem] h-full relative z-1">
-              {activePanel}
-              <div
-                className="fixed right-0 bottom-0"
-                style={{ width: toastMessageWidth + 'px' }}
-              >
-                {settingsChanged && (
-                  <ToastMessage
-                    additionalStyles={`text-sm`}
-                    text="For settings to take effect please reload all tab(s)."
-                    onClick={handleSettingsChange}
-                    textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
-                  />
-                )}
-              </div>
-            </div>
+          <main className="h-full flex-1 overflow-auto relative">
+            <div className="min-w-[40rem] h-full z-1">{activePanel}</div>
+            {settingsChanged && (
+              <ToastMessage
+                additionalStyles="text-sm"
+                text="For settings to take effect please reload all tab(s)."
+                onClick={handleSettingsChange}
+                textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
+              />
+            )}
           </main>
         </div>
       )}

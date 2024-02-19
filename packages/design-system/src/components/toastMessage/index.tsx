@@ -42,7 +42,7 @@ const ToastMessage = ({
 }: ToastMessageProps) => {
   return (
     <div
-      className={`${additionalStyles} w-full z-2 bg-white dark:bg-charleston-green shadow-xxs`}
+      className={`${additionalStyles} absolute inset-x-0 bottom-0 w-full z-2 bg-white dark:bg-charleston-green shadow-xxs`}
     >
       <div className="flex items-center justify-between p-4">
         <div className={`w-5/6 dark:text-white ${textAdditionalStyles}`}>
