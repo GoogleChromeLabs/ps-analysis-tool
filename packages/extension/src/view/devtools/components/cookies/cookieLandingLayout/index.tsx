@@ -25,7 +25,7 @@ import CookiesSection from './cookiesSection';
 import FramesSection from './framesSection';
 import BlockedCookiesSection from './blockedCookiesSection';
 
-const AssembledCookiesLanding = () => {
+const Layout = () => {
   return (
     <>
       <CookiesSection />
@@ -35,4 +35,4 @@ const AssembledCookiesLanding = () => {
     </>
   );
 };
-export default AssembledCookiesLanding;
+export default Layout;

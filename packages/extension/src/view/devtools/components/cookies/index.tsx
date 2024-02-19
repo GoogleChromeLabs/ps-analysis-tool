@@ -30,7 +30,7 @@ import { type CookieTableData } from '@ps-analysis-tool/common';
 import { useSettingsStore } from '../../stateProviders/syncSettingsStore';
 import { useCookieStore } from '../../stateProviders/syncCookieStore';
 import CookiesListing from './cookiesListing';
-import AssembledCookiesLanding from './cookieLanding';
+import Layout from './cookieLandingLayout';
 
 interface CookiesProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;
@@ -87,7 +87,7 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
           <CookiesListing setFilteredCookies={setFilteredCookies} />
         ) : (
           <CookiesLanding>
-            <AssembledCookiesLanding />
+            <Layout />
           </CookiesLanding>
         )}
       </div>

@@ -33,6 +33,10 @@ const prepareCookieStatsComponents = (
   const blockedCookiesLegend: CookieStatsComponents['blockedCookiesLegend'] =
     [];
 
+  const exemptedCookiesStats: CookieStatsComponents['exempted'] = [];
+  const exemptedCookiesLegend: CookieStatsComponents['exemptedCookiesLegend'] =
+    [];
+
   Object.keys(cookieStats.blockedCookies).forEach((key: string) => {
     if (key === 'total') {
       return;
@@ -44,6 +48,24 @@ const prepareCookieStatsComponents = (
     });
 
     blockedCookiesLegend.push({
+      label: key,
+      count: cookieStats.blockedCookies[key],
+      color: COLOR_MAP[key].color,
+      countClassName: COLOR_MAP[key].className,
+    });
+  });
+
+  Object.keys(cookieStats.exemptedCookies).forEach((key: string) => {
+    if (key === 'total') {
+      return;
+    }
+
+    exemptedCookiesStats.push({
+      count: cookieStats.blockedCookies[key],
+      color: COLOR_MAP[key].color,
+    });
+
+    exemptedCookiesLegend.push({
       label: key,
       count: cookieStats.blockedCookies[key],
       color: COLOR_MAP[key].color,
@@ -121,6 +143,8 @@ const prepareCookieStatsComponents = (
     ],
     blocked: blockedCookiesStats,
     blockedCookiesLegend,
+    exempted: exemptedCookiesStats,
+    exemptedCookiesLegend,
   };
 };
 

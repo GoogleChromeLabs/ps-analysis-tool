@@ -30,6 +30,9 @@ const prepareCookiesCount = (cookies: { [key: string]: CookieData } | null) => {
     blockedCookies: {
       total: 0,
     },
+    exemptedCookies: {
+      total: 0,
+    },
     firstParty: {
       total: 0,
       functional: 0,
@@ -51,13 +54,13 @@ const prepareCookiesCount = (cookies: { [key: string]: CookieData } | null) => {
   }
 
   const cookieList = Object.values(cookies).filter(
-    (cookie) => cookie.parsedCookie && cookie.frameIdList?.length >= 1
+    (cookie) => cookie.parsedCookie && (cookie.frameIdList ?? []).length >= 1
   );
 
   cookiesCount.total = Object.keys(cookies).filter(
     (cookieKey) =>
       cookies[cookieKey].parsedCookie &&
-      cookies[cookieKey].frameIdList?.length >= 1
+      (cookies[cookieKey].frameIdList ?? []).length >= 1
   ).length;
 
   cookiesCount.blockedCookies.total = cookieList.filter(
@@ -75,6 +78,16 @@ const prepareCookiesCount = (cookies: { [key: string]: CookieData } | null) => {
           cookiesCount.blockedCookies[reason]++;
         }
       });
+    }
+  });
+
+  cookieList.forEach((cookie) => {
+    if (cookie.exemptionReason) {
+      if (!cookiesCount.exemptedCookies[cookie.exemptionReason]) {
+        cookiesCount.exemptedCookies[cookie.exemptionReason] = 1;
+      } else {
+        cookiesCount.blockedCookies[cookie.exemptionReason]++;
+      }
     }
   });
 
