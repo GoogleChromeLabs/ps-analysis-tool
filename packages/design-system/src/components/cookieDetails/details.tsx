@@ -118,7 +118,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
       {(outboundBlock || inboundBlock) &&
         !hasValidBlockedReason &&
         isUsingCDP && (
-          <div className="flex gap-1 items-center my-4">
+          <div className="flex gap-1 items-center mb-4">
             <QuestionMark />
             <p className="text-outer-space-crayola dark:text-bright-gray">
               We could not identify this cookie&apos;s blocking status.
