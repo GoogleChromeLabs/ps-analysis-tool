@@ -259,7 +259,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         tabMode?: string;
       };
     }) => {
-      if (!message.type) {
+      if (!message.type || !tabId) {
         return;
       }
 
@@ -270,7 +270,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         setTabUrl(tab?.url ?? '');
 
         isCurrentTabBeingListenedToRef.current =
-          tabId?.toString() === message?.payload?.tabId;
+          tabId === message?.payload?.tabId;
 
         setTabFrames(null);
         setLoading(false);
@@ -282,12 +282,12 @@ export const Provider = ({ children }: PropsWithChildren) => {
           isCurrentTabBeingListenedToRef.current = true;
           setTabToRead(null);
         } else {
-          if (tabId?.toString() !== message?.payload?.tabToRead) {
+          if (tabId.toString() !== message?.payload?.tabToRead) {
             setTabFrames(null);
           }
 
           isCurrentTabBeingListenedToRef.current =
-            tabId?.toString() === message?.payload?.tabToRead;
+            tabId.toString() === message?.payload?.tabToRead;
           setTabToRead(message?.payload?.tabToRead || null);
         }
       }
@@ -299,7 +299,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       ) {
         const data = message.payload.cookieData;
 
-        if (tabId?.toString() === message.payload.tabId.toString()) {
+        if (tabId.toString() === message.payload.tabId.toString()) {
           if (isCurrentTabBeingListenedToRef.current) {
             await getAllFramesForCurrentTab();
             setTabToRead(tabId.toString());
@@ -396,7 +396,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     chrome.runtime.sendMessage({
       type: DEVTOOLS_OPEN,
       payload: {
-        tabId: tabId,
+        tabId: chrome.devtools.inspectedWindow.tabId,
       },
     });
 
@@ -404,11 +404,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
       chrome.runtime.sendMessage({
         type: DEVTOOLS_CLOSE,
         payload: {
-          tabId: tabId,
+          tabId: chrome.devtools.inspectedWindow.tabId,
         },
       });
     };
-  }, [tabId]);
+  }, []);
 
   return (
     <Context.Provider
