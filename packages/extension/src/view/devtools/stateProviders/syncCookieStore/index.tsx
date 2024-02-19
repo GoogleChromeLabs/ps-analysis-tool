@@ -190,8 +190,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
   /**
    * Sets current frames for sidebar, detected if the current tab is to be analysed,
    * parses data currently in store, set current tab URL.
-   *
-   * TODO: Refactor: Break in smaller parts.
    */
   const intitialSync = useCallback(async () => {
     const _tabId = chrome.devtools.inspectedWindow.tabId;
@@ -204,6 +202,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
     await setDocumentCookies(_tabId?.toString());
     const tab = await getTab(_tabId);
+
     if (tab?.url) {
       setTabUrl(tab?.url);
     } else {
@@ -294,7 +293,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       }
 
       if (
-        NEW_COOKIE_DATA &&
+        NEW_COOKIE_DATA === incomingMessageType &&
         message?.payload?.tabId &&
         message?.payload?.cookieData
       ) {
