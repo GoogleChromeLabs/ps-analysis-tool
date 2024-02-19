@@ -16,17 +16,13 @@
 /**
  * External dependencies.
  */
-import React, { useMemo } from 'react';
+import React from 'react';
 import {
   Button,
   CookiesLanding,
   ProgressBar,
 } from '@ps-analysis-tool/design-system';
-import { LibraryDetection } from '@ps-analysis-tool/library-detection';
-import {
-  UNKNOWN_FRAME_KEY,
-  type CookieTableData,
-} from '@ps-analysis-tool/common';
+import { type CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -34,48 +30,31 @@ import {
 import { useSettingsStore } from '../../stateProviders/syncSettingsStore';
 import { useCookieStore } from '../../stateProviders/syncCookieStore';
 import CookiesListing from './cookiesListing';
+import AssembledCookiesLanding from './cookieLanding';
 
 interface CookiesProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;
 }
 
+// eslint-disable-next-line complexity
 const Cookies = ({ setFilteredCookies }: CookiesProps) => {
   const {
     isCurrentTabBeingListenedTo,
     loading,
     selectedFrame,
-    tabCookies,
-    tabFrames,
-    frameHasCookies,
-    changeListeningToThisTab,
     tabToRead,
+    changeListeningToThisTab,
   } = useCookieStore(({ state, actions }) => ({
-    tabToRead: state.tabToRead,
-    contextInvalidated: state.contextInvalidated,
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
     loading: state.loading,
-    returningToSingleTab: state.returningToSingleTab,
     selectedFrame: state.selectedFrame,
-    tabCookies: state.tabCookies,
-    tabFrames: state.tabFrames,
-    frameHasCookies: state.frameHasCookies,
+    tabToRead: state.tabToRead,
     changeListeningToThisTab: actions.changeListeningToThisTab,
   }));
 
-  const { allowedNumberOfTabs, isUsingCDP } = useSettingsStore(({ state }) => ({
+  const { allowedNumberOfTabs } = useSettingsStore(({ state }) => ({
     allowedNumberOfTabs: state.allowedNumberOfTabs,
-    isUsingCDP: state.isUsingCDP,
   }));
-
-  const processedTabFrames = useMemo(
-    () =>
-      Object.fromEntries(
-        Object.entries(tabFrames || {}).filter(([url]) =>
-          url === UNKNOWN_FRAME_KEY ? frameHasCookies[url] : true
-        )
-      ),
-    [tabFrames, frameHasCookies]
-  );
 
   if (
     loading ||
@@ -99,25 +78,6 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
       allowedNumberOfTabs === 'single') ||
     (allowedNumberOfTabs && allowedNumberOfTabs === 'unlimited')
   ) {
-    const description = !isUsingCDP ? (
-      <>
-        To gather data and insights regarding blocked cookies, please enable
-        PSAT to use the Chrome DevTools protocol. You can do this in the
-        Settings page or in the extension popup. For more information check the
-        PSAT&nbsp;
-        <a
-          target="_blank"
-          rel="noreferrer"
-          className="text-bright-navy-blue dark:text-jordy-blue"
-          href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki"
-        >
-          Wiki
-        </a>
-      </>
-    ) : (
-      ''
-    );
-
     return (
       <div
         className={`h-full ${selectedFrame ? '' : 'flex items-center'}`}
@@ -126,14 +86,9 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
         {selectedFrame ? (
           <CookiesListing setFilteredCookies={setFilteredCookies} />
         ) : (
-          <CookiesLanding
-            tabCookies={tabCookies}
-            tabFrames={processedTabFrames}
-            showBlockedCookiesSection
-            showFramesSection
-            description={description}
-            additionalComponents={{ libraryDetection: LibraryDetection }}
-          />
+          <CookiesLanding>
+            <AssembledCookiesLanding />
+          </CookiesLanding>
         )}
       </div>
     );
