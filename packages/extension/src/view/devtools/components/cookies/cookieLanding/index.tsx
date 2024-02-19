@@ -13,9 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies
+ */
+import React from 'react';
+import { LibraryDetection } from '@ps-analysis-tool/library-detection';
+/**
+ * Internal dependencies
+ */
+import CookiesSection from './cookiesSection';
+import FramesSection from './framesSection';
+import BlockedCookiesSection from './blockedCookiesSection';
 
-export { noop } from './noop';
-export { default as prepareCookiesCount } from './prepareCookiesCount';
-export { default as prepareCookieStatsComponents } from './prepareCookieStatsComponents';
-export { default as prepareFrameStatsComponent } from './prepareFrameStatsComponent';
-export { default as prepareCookieDataMapping } from './prepareCookieDataMapping';
+const AssembledCookiesLanding = () => {
+  return (
+    <>
+      <CookiesSection />
+      <BlockedCookiesSection />
+      <LibraryDetection />
+      <FramesSection />
+    </>
+  );
+};
+export default AssembledCookiesLanding;
