@@ -654,9 +654,8 @@ chrome.runtime.onMessage.addListener(async (request) => {
       globalIsUsingCDP = sessionStorage.isUsingCDP;
     }
 
+    await chrome.storage.session.remove(['allowedNumberOfTabs', 'isUsingCDP']);
     await chrome.storage.session.set({
-      allowedNumberOfTabs: tabMode,
-      isUsingCDP: globalIsUsingCDP,
       pendingReload: false,
     });
 
