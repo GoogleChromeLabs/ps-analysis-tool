@@ -83,7 +83,7 @@ describe('should match the json file data with the component', () => {
           .nextSibling;
         expect(devDocumentation).toHaveAttribute(
           'href',
-          output.devDocumentation
+          output.devDocumentation + '?utm_source=psat&utm_medium=extension'
         );
       }
     }
