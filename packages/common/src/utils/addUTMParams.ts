@@ -16,14 +16,20 @@
 
 type MediumType = 'extension' | 'cli';
 
-const addUTMParams = (url: string, medium: MediumType = 'extension') => {
+const addUTMParams = (
+  url: string,
+  medium: MediumType = 'extension'
+): string => {
   if (!url) {
     return url;
   }
 
-  const separator = url.includes('?') ? '&' : '?';
+  const urlParts = url.split('#');
+  const base = urlParts[0];
+  const hash = urlParts[1] ? `#${urlParts[1]}` : '';
+  const separator = base.includes('?') ? '&' : '?';
 
-  return `${url}${separator}utm_source=psat&utm_medium=${medium}`;
+  return `${base}${separator}utm_source=psat&utm_medium=${medium}${hash}`;
 };
 
 export default addUTMParams;

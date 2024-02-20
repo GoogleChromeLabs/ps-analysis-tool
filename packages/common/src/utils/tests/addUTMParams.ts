@@ -37,6 +37,18 @@ describe('addUTMParams', () => {
     );
   });
 
+  it('should add UTM parameters before the hash in the URL', () => {
+    expect(addUTMParams('http://example.com#anchor', 'cli')).toBe(
+      'http://example.com?utm_source=psat&utm_medium=cli#anchor'
+    );
+  });
+
+  it('should append UTM parameters to existing query before the hash', () => {
+    expect(addUTMParams('http://example.com?foo=bar#anchor', 'cli')).toBe(
+      'http://example.com?foo=bar&utm_source=psat&utm_medium=cli#anchor'
+    );
+  });
+
   it('should return the original URL if it is empty', () => {
     expect(addUTMParams('')).toBe('');
   });
