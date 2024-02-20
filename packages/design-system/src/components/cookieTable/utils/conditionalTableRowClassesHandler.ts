@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-import { CookieTableData, getCookieKey } from '@ps-analysis-tool/common';
+import {
+  BLOCK_STATUS,
+  CookieTableData,
+  getCookieKey,
+} from '@ps-analysis-tool/common';
 import classnames from 'classnames';
 
 import { TableRow } from '../../table';
@@ -32,7 +36,10 @@ const conditionalTableRowClassesHandler = (
   ) as string;
   const isBlocked = useIsBlockedToHighlight
     ? (row.originalData as CookieTableData)?.isBlocked
-    : (row.originalData as CookieTableData)?.blockingStatus?.inboundBlock;
+    : (row.originalData as CookieTableData)?.blockingStatus?.inboundBlock !==
+        BLOCK_STATUS.NOT_BLOCKED ||
+      (row.originalData as CookieTableData)?.blockingStatus?.outboundBlock !==
+        BLOCK_STATUS.NOT_BLOCKED;
   const isDomainInAllowList = (row.originalData as CookieTableData)
     ?.isDomainInAllowList;
 

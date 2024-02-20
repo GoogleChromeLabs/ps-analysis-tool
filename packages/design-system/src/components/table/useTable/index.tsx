@@ -50,7 +50,7 @@ export type TableColumn = {
   cell: (info: InfoType, details?: TableData) => React.JSX.Element | InfoType;
   enableHiding?: boolean;
   enableBodyCellPrefixIcon?: boolean;
-  bodyCellPrefixIcon?: () => React.JSX.Element;
+  bodyCellPrefixIcon?: (row: TableRow) => React.JSX.Element;
   showBodyCellPrefixIcon?: (row: TableRow) => boolean;
   widthWeightagePercentage?: number;
   width?: number; // For internal use only

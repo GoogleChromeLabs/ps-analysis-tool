@@ -22,13 +22,13 @@ import {
   getValueByKey,
   type CookieTableData,
   type TabCookies,
+  BLOCK_STATUS,
 } from '@ps-analysis-tool/common';
 import {
   RefreshButton,
   type InfoType,
   type TableColumn,
   type TableFilter,
-  Warning,
   type TableRow,
 } from '@ps-analysis-tool/design-system';
 
@@ -38,6 +38,7 @@ import {
 import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import useHighlighting from './useHighlighting';
 import { useSettingsStore } from '../../../../stateProviders/syncSettingsStore';
+import namePrefixIconSelector from './namePrefixIconSelector';
 
 const useCookieListing = (domainsInAllowList: Set<string>) => {
   const { selectedFrame, cookies, getCookiesSetByJavascript } = useCookieStore(
@@ -63,17 +64,19 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         enableHiding: false,
         widthWeightagePercentage: 13,
         enableBodyCellPrefixIcon: isUsingCDP,
-        bodyCellPrefixIcon: () => (
-          <Warning className="text-warning-orange w-4" />
-        ),
+        bodyCellPrefixIcon: namePrefixIconSelector,
         showBodyCellPrefixIcon: (row: TableRow) => {
-          const shouldShowWarningIcon =
+          const isBlocked = Boolean(
             (row.originalData as CookieTableData)?.blockingStatus
-              ?.outboundBlock ||
-            (row.originalData as CookieTableData)?.blockingStatus
-              ?.inboundBlock === null;
+              ?.inboundBlock !== BLOCK_STATUS.NOT_BLOCKED ||
+              (row.originalData as CookieTableData)?.blockingStatus
+                ?.outboundBlock !== BLOCK_STATUS.NOT_BLOCKED
+          );
+          const isDomainInAllowList = Boolean(
+            (row.originalData as CookieTableData)?.isDomainInAllowList
+          );
 
-          return shouldShowWarningIcon;
+          return isBlocked || isDomainInAllowList;
         },
       },
       {

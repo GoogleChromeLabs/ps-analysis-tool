@@ -105,22 +105,26 @@ const BodyRow = ({
             accessorKey,
             width,
             enableBodyCellPrefixIcon,
-            bodyCellPrefixIcon,
             showBodyCellPrefixIcon,
+            bodyCellPrefixIcon,
           },
           idx
         ) => (
           <BodyCell
             key={idx}
             onRowClick={onRowClick}
-            cell={row[accessorKey]?.value}
+            cell={row[accessorKey]?.value || ''}
             width={width || 0}
             isHighlighted={isHighlighted}
             isRowFocused={rowKey === selectedKey}
             row={row}
             hasIcon={enableBodyCellPrefixIcon}
-            showIcon={showBodyCellPrefixIcon?.(row)}
-            icon={bodyCellPrefixIcon}
+            showIcon={
+              showBodyCellPrefixIcon ? showBodyCellPrefixIcon(row) : false
+            }
+            icon={
+              bodyCellPrefixIcon ? () => bodyCellPrefixIcon(row) : undefined
+            }
           />
         )
       )}

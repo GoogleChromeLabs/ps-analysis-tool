@@ -71,8 +71,8 @@ const BodyCell = ({
       } cursor-default flex-1`}
     >
       {hasIcon && (
-        <div className="w-4 min-w-[1rem] h-3 mr-1 mt-[-2px]">
-          {Boolean(showIcon) && (icon ? icon() : <></>)}
+        <div className="h-full grid place-items-center min-w-[15px] pr-1">
+          {Boolean(showIcon) && icon?.()}
         </div>
       )}
       {cell?.() ?? ''}

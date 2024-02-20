@@ -38,8 +38,8 @@ interface settingsToReturnObject {
 const SettingsContainer = () => {
   const { allowedNumberOfTabs, isUsingCDP, setIsUsingCDP, setProcessingMode } =
     useSettingsStore(({ state, actions }) => ({
-      allowedNumberOfTabs: state.allowedNumberOfTabs,
-      isUsingCDP: state.isUsingCDP,
+      allowedNumberOfTabs: state.allowedNumberOfTabsForSettingsPageDisplay,
+      isUsingCDP: state.isUsingCDPForSettingsPageDisplay,
       setProcessingMode: actions.setProcessingMode,
       setIsUsingCDP: actions.setIsUsingCDP,
     }));

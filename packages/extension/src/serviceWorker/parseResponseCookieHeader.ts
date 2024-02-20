@@ -71,6 +71,17 @@ const parseResponseCookieHeader = (
     parsedCookie.partitionKey = partitionKey;
   }
 
+  const isFoundInCDPCookieList = Boolean(
+    cdpCookiesList?.find((_cookie: Protocol.Network.Cookie) => {
+      return _cookie.name === parsedCookie.name;
+    })
+  );
+  let isExpired = false;
+
+  if (parsedCookie.expires) {
+    isExpired = new Date(parsedCookie.expires) < new Date();
+  }
+
   return {
     parsedCookie,
     analytics,
@@ -82,14 +93,10 @@ const parseResponseCookieHeader = (
           type: RESPONSE_EVENT.CHROME_WEBREQUEST_ON_RESPONSE_STARTED,
           requestId,
           url: url,
-          blocked: null,
+          blocked: isExpired ? false : !isFoundInCDPCookieList,
           timeStamp: Date.now(),
         },
       ],
-    },
-    blockingStatus: {
-      inboundBlock: null,
-      outboundBlock: null,
     },
     headerType: 'response',
     isFirstParty: _isFirstParty,
