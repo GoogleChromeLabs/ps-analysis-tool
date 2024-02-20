@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   UNKNOWN_FRAME_KEY,
   type CookieTableData,
@@ -213,4 +213,4 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
   );
 };
 
-export default memo(Layout);
+export default Layout;

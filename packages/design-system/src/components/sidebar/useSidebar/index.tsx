@@ -62,6 +62,7 @@ export interface SidebarStoreContext {
   state: {
     activePanel: {
       element: () => React.JSX.Element;
+      query?: string;
     };
     selectedItemKey: string | null; //Entire chained item key eg Privacy-Sandbox#cookies#frameUrl
     currentItemKey: string | null; //Last sidebar item key in selectedItemKey eg frameUrl
@@ -70,7 +71,7 @@ export interface SidebarStoreContext {
   };
   actions: {
     setIsSidebarFocused: React.Dispatch<boolean>;
-    updateSelectedItemKey: (key: string | null) => void;
+    updateSelectedItemKey: (key: string | null, queryString?: string) => void;
     onKeyNavigation: (
       event: React.KeyboardEvent<HTMLDivElement>,
       key: string | null
@@ -85,6 +86,7 @@ const initialState: SidebarStoreContext = {
   state: {
     activePanel: {
       element: () => <></>,
+      query: '',
     },
     selectedItemKey: null,
     currentItemKey: null,
@@ -112,6 +114,7 @@ export const SidebarProvider = ({
   const [activePanel, setActivePanel] = useState<
     SidebarStoreContext['state']['activePanel']
   >(initialState.state.activePanel);
+  const [query, setQuery] = useState<string>('');
   const [sidebarItems, setSidebarItems] = useState<SidebarItems>({});
   const [isSidebarFocused, setIsSidebarFocused] = useState(true);
 
@@ -147,6 +150,7 @@ export const SidebarProvider = ({
           if (item.panel) {
             setActivePanel({
               element: item.panel,
+              query,
             });
           }
 
@@ -163,10 +167,10 @@ export const SidebarProvider = ({
     if (selectedItemKey) {
       findActivePanel(sidebarItems);
     }
-  }, [selectedItemKey, sidebarItems]);
+  }, [query, selectedItemKey, sidebarItems]);
 
   const updateSelectedItemKey = useCallback(
-    (key: string | null) => {
+    (key: string | null, queryString = '') => {
       const keyPath = createKeyPath(sidebarItems, key || '');
 
       if (!keyPath.length) {
@@ -175,6 +179,7 @@ export const SidebarProvider = ({
       }
 
       setSelectedItemKey(keyPath.join('#'));
+      setQuery(queryString);
     },
     [sidebarItems]
   );
