@@ -64,14 +64,18 @@ const prepareCookieStatsComponents = (
       return;
     }
 
+    if (isNaN(cookieStats.exemptedCookies[key])) {
+      return;
+    }
+
     exemptedCookiesStats.push({
-      count: cookieStats.blockedCookies[key],
+      count: cookieStats.exemptedCookies[key],
       color: COLOR_MAP[key].color,
     });
 
     exemptedCookiesLegend.push({
       label: key,
-      count: cookieStats.blockedCookies[key],
+      count: cookieStats.exemptedCookies[key],
       color: COLOR_MAP[key].color,
       countClassName: COLOR_MAP[key].className,
     });
