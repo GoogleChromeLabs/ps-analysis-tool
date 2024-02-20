@@ -86,7 +86,7 @@ const prepareCookiesCount = (cookies: { [key: string]: CookieData } | null) => {
       if (!cookiesCount.exemptedCookies[cookie.exemptionReason]) {
         cookiesCount.exemptedCookies[cookie.exemptionReason] = 1;
       } else {
-        cookiesCount.blockedCookies[cookie.exemptionReason]++;
+        cookiesCount.exemptedCookies[cookie.exemptionReason]++;
       }
     }
   });
