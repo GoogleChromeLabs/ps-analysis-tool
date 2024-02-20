@@ -29,6 +29,7 @@ import {
   CookieIconWhite,
   CookieIcon,
   InspectButton,
+  ToastMessage,
 } from '@ps-analysis-tool/design-system';
 import { Resizable } from 're-resizable';
 
@@ -38,6 +39,7 @@ import { Resizable } from 're-resizable';
 import Cookies from './cookies';
 import useFrameOverlay from '../hooks/useFrameOverlay';
 import { useCookieStore } from '../stateProviders/syncCookieStore';
+import { useSettingsStore } from '../stateProviders/syncSettingsStore';
 
 interface LayoutProps {
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
@@ -45,6 +47,16 @@ interface LayoutProps {
 
 const Layout = ({ setSidebarData }: LayoutProps) => {
   const [sidebarWidth, setSidebarWidth] = useState(200);
+  const mainRef = useRef<HTMLElement>(null);
+  const toastMessageRef = useRef<HTMLDivElement>(null);
+
+  const { settingsChanged, handleSettingsChange } = useSettingsStore(
+    ({ state, actions }) => ({
+      settingsChanged: state.settingsChanged,
+      handleSettingsChange: actions.handleSettingsChange,
+    })
+  );
+
   const {
     tabFrames,
     frameHasCookies,
@@ -190,7 +202,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
   useFrameOverlay(filteredCookies, handleUpdate);
 
   return (
-    <div className="w-full h-full flex flex-row">
+    <div className="w-full h-full flex flex-row z-1">
       <Resizable
         size={{ width: sidebarWidth, height: '100%' }}
         defaultSize={{ width: '200px', height: '100%' }}
@@ -206,8 +218,26 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
       >
         <Sidebar visibleWidth={sidebarWidth} />
       </Resizable>
-      <main className="h-full flex-1 overflow-auto">
-        <div className="min-w-[40rem] h-full">{activePanel.element?.()}</div>
+      <main
+        ref={mainRef}
+        onScroll={() => {
+          if (mainRef.current && toastMessageRef.current) {
+            toastMessageRef.current.style.bottom =
+              '-' + mainRef.current.scrollTop + 'px';
+          }
+        }}
+        className="h-full flex-1 overflow-auto relative"
+      >
+        <div className="min-w-[40rem] h-full z-1">{activePanel?.element()}</div>
+        {settingsChanged && (
+          <ToastMessage
+            ref={toastMessageRef}
+            additionalStyles="text-sm"
+            text="For settings to take effect please reload all tab(s)."
+            onClick={handleSettingsChange}
+            textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
+          />
+        )}
       </main>
     </div>
   );
