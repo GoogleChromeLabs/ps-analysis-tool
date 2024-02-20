@@ -245,6 +245,12 @@ chrome.runtime.onStartup.addListener(async () => {
     syncCookieStore = new SynchnorousCookieStore();
   }
 
+  // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
+  // Doing this to keep the service worker alive so that we dont loose any data and introduce any bug.
+  setInterval(() => {
+    chrome.storage.local.get();
+  }, 28000);
+
   if (Object.keys(storage).includes('allowedNumberOfTabs')) {
     tabMode = storage.allowedNumberOfTabs;
   }
