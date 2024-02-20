@@ -21,6 +21,7 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import SinonChrome from 'sinon-chrome';
 import { render, screen } from '@testing-library/react';
+import { addUTMParams } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -77,7 +78,7 @@ describe('should match the json file data with the component', () => {
           .nextSibling;
         expect(videoOverview).toHaveAttribute(
           'href',
-          output.videoOverview + '?utm_source=psat&utm_medium=extension'
+          addUTMParams(output.videoOverview)
         );
       }
 
@@ -86,7 +87,7 @@ describe('should match the json file data with the component', () => {
           .nextSibling;
         expect(devDocumentation).toHaveAttribute(
           'href',
-          output.devDocumentation + '?utm_source=psat&utm_medium=extension'
+          addUTMParams(output.devDocumentation)
         );
       }
     }
