@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
+import { addUTMParams } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -42,7 +43,9 @@ const GSIAccordion = ({ matches }: AccordionProps) => {
         supported. Review the following features and consider{' '}
         <a
           className="text-bright-navy-blue dark:text-jordy-blue"
-          href="https://developers.google.com/privacy-sandbox/3pcd/guides/identity#federated_identity"
+          href={addUTMParams(
+            'https://developers.google.com/privacy-sandbox/3pcd/guides/identity#federated_identity'
+          )}
           target="_blank"
           rel="noreferrer"
         >

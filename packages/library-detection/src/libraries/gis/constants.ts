@@ -13,6 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
+import { addUTMParams } from '@ps-analysis-tool/common';
+
+/**
+ * Internal dependencies.
+ */
 import type { ExceptionUrls } from '../../types';
 
 /*
@@ -63,8 +71,9 @@ export const GIS_SIGNATURE_WEAK_MATCHES = [
 
 export const GIS_SIGNATURE_STRONG_MATCHES = [];
 
-export const GIS_HELP_URL =
-  'https://developers.google.com/identity/gsi/web/guides/migration';
+export const GIS_HELP_URL = addUTMParams(
+  'https://developers.google.com/identity/gsi/web/guides/migration'
+);
 
 export const GIS_DOMAINS_TO_SKIP = ['accounts.google.com', 'gstatic.com'];
 
