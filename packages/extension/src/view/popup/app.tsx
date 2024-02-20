@@ -74,7 +74,7 @@ const App: React.FC = () => {
         />
         <p className="font-bold text-lg mb-2">Not much to analyze here</p>
         <p className="text-chart-label text-xs">
-          Its emptier than a cookie jar after a midnight snack! 🌌
+          Its emptier than a cookie jar after a midnight snack!
         </p>
         <div className="absolute right-0 bottom-0 w-full">
           {settingsChanged && (
