@@ -65,7 +65,7 @@ const App: React.FC = () => {
 
   if (onChromeUrl) {
     return (
-      <div className="w-full h-full flex justify-center items-center flex-col z-1 relative">
+      <div className="w-full h-full flex justify-center items-center flex-col z-1">
         <ToggleSwitch
           onLabel={cdpLabel}
           additionalStyles="top-2 left-2 absolute"
@@ -74,13 +74,13 @@ const App: React.FC = () => {
         />
         <p className="font-bold text-lg mb-2">Not much to analyze here</p>
         <p className="text-chart-label text-xs">
-          Its emptier than a cookie jar after a midnight snack! 🌌
+          Its emptier than a cookie jar after a midnight snack!
         </p>
         <div className="absolute right-0 bottom-0 w-full">
           {settingsChanged && (
             <ToastMessage
               additionalStyles="text-sm"
-              text="For settings to take effect please reload all tab(s)."
+              text="Settings changed, please reload all tabs."
               onClick={handleSettingsChange}
               textAdditionalStyles="xxs:p-1 text-xxs leading-5"
             />
@@ -119,7 +119,7 @@ const App: React.FC = () => {
           {settingsChanged && (
             <ToastMessage
               additionalStyles="text-sm"
-              text="For settings to take effect please reload all tab(s)."
+              text="Settings changed, please reload all tabs."
               onClick={handleSettingsChange}
               textAdditionalStyles="xxs:p-1 text-xxs leading-5"
             />
@@ -149,7 +149,7 @@ const App: React.FC = () => {
           {settingsChanged && (
             <ToastMessage
               additionalStyles="text-sm"
-              text="For settings to take effect please reload all tab(s)."
+              text="Settings changed, please reload all tabs."
               onClick={handleSettingsChange}
               textAdditionalStyles="xxs:p-1 text-xxs leading-5"
             />
@@ -196,7 +196,7 @@ const App: React.FC = () => {
         {settingsChanged && (
           <ToastMessage
             additionalStyles="text-sm"
-            text="For settings to take effect please reload all tab(s)."
+            text="Settings changed, please reload all tabs."
             onClick={handleSettingsChange}
             textAdditionalStyles="xxs:p-1 text-xxs leading-5"
           />

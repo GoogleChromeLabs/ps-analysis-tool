@@ -92,10 +92,6 @@ const parseRequestCookieHeader = (
           ],
           responseEvents: [],
         },
-        blockingStatus: {
-          inboundBlock: null,
-          outboundBlock: false,
-        },
         isFirstParty: _isFirstParty,
         frameIdList: [frameId],
       };
