@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import addUTMParams from '../addUTMParams'; // Adjust the import path as necessary
+import addUTMParams from '../addUTMParams';
 
 describe('addUTMParams', () => {
   it('should add UTM parameters with default medium', () => {
