@@ -78,16 +78,16 @@ const namePrefixIconSelector = ({ originalData }: TableRow) => {
 
   if (isInboundBlocked) {
     if (isInboundBlockedInAll) {
-      return <InboundIcon className="stroke-[#D8302F]" />;
+      return <InboundIcon className="stroke-[#D8302F] scale-150" />;
     }
-    return <InboundIcon className="stroke-[#FE8455]" />;
+    return <InboundIcon className="stroke-[#FE8455] scale-150" />;
   }
 
   if (isOutboundBlocked) {
     if (isOutboundBlockedInAll) {
-      return <OutboundIcon className="stroke-[#D8302F]" />;
+      return <OutboundIcon className="stroke-[#D8302F] scale-150" />;
     }
-    return <OutboundIcon className="stroke-[#FE8455]" />;
+    return <OutboundIcon className="stroke-[#FE8455] scale-150" />;
   }
 
   return <></>;
