@@ -387,13 +387,6 @@ class SynchnorousCookieStore {
         (overrideForInitialSync || this.tabs[tabId].newUpdates > 0)
       ) {
         sentMessageAnyWhere = true;
-        // eslint-disable-next-line no-console
-        console.log(
-          'Sending type ServiceWorker::DevTools::NEW_COOKIE_DATA',
-          this.tabsData[tabId],
-          tabId,
-          this.tabsData
-        );
 
         await chrome.runtime.sendMessage({
           type: 'ServiceWorker::DevTools::NEW_COOKIE_DATA',
