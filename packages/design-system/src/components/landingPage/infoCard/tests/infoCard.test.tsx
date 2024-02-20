@@ -75,7 +75,10 @@ describe('should match the json file data with the component', () => {
       if (output.videoOverview) {
         const videoOverview = (await screen.findByText('Video Overview'))
           .nextSibling;
-        expect(videoOverview).toHaveAttribute('href', output.videoOverview);
+        expect(videoOverview).toHaveAttribute(
+          'href',
+          output.videoOverview + '?utm_source=psat&utm_medium=extension'
+        );
       }
 
       if (output.devDocumentation) {

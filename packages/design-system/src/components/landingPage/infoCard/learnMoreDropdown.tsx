@@ -70,7 +70,9 @@ const LearnMoreDropdown = ({
               <RenderLink
                 key={index}
                 link={
-                  value.startsWith('https://developers.google.com')
+                  value.startsWith('https://developers.google.com') ||
+                  value.startsWith('https://www.youtube.com') ||
+                  value.startsWith('https://youtu.be/')
                     ? addUTMParams(value)
                     : value
                 }
