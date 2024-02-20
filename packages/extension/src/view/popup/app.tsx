@@ -22,6 +22,7 @@ import {
   Button,
   CirclePieChart,
   ProgressBar,
+  ToastMessage,
   ToggleSwitch,
   prepareCookieStatsComponents,
 } from '@ps-analysis-tool/design-system';
@@ -44,6 +45,8 @@ const App: React.FC = () => {
     allowedNumberOfTabs,
     isUsingCDP,
     setIsUsingCDP,
+    settingsChanged,
+    handleSettingsChange,
   } = useCookieStore(({ state, actions }) => ({
     cookieStats: state.tabCookieStats,
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
@@ -51,8 +54,10 @@ const App: React.FC = () => {
     returningToSingleTab: state.returningToSingleTab,
     allowedNumberOfTabs: state.allowedNumberOfTabs,
     onChromeUrl: state.onChromeUrl,
-    isUsingCDP: state.isUsingCDP,
+    isUsingCDP: state.isUsingCDPForSettingsDisplay,
     setIsUsingCDP: actions.setIsUsingCDP,
+    handleSettingsChange: actions.handleSettingsChange,
+    settingsChanged: state.settingsChanged,
     changeListeningToThisTab: actions.changeListeningToThisTab,
   }));
 
@@ -60,7 +65,7 @@ const App: React.FC = () => {
 
   if (onChromeUrl) {
     return (
-      <>
+      <div className="w-full h-full flex justify-center items-center flex-col z-1">
         <ToggleSwitch
           onLabel={cdpLabel}
           additionalStyles="top-2 left-2 absolute"
@@ -69,9 +74,19 @@ const App: React.FC = () => {
         />
         <p className="font-bold text-lg mb-2">Not much to analyze here</p>
         <p className="text-chart-label text-xs">
-          Its emptier than a cookie jar after a midnight snack! 🌌
+          Its emptier than a cookie jar after a midnight snack!
         </p>
-      </>
+        <div className="absolute right-0 bottom-0 w-full">
+          {settingsChanged && (
+            <ToastMessage
+              additionalStyles="text-sm"
+              text="For settings to take effect please reload all tab(s)."
+              onClick={handleSettingsChange}
+              textAdditionalStyles="xxs:p-1 text-xxs leading-5"
+            />
+          )}
+        </div>
+      </div>
     );
   }
 
@@ -92,7 +107,7 @@ const App: React.FC = () => {
     allowedNumberOfTabs !== 'unlimited'
   ) {
     return (
-      <>
+      <div className="w-full h-full flex justify-center items-center flex-col z-1">
         <ToggleSwitch
           onLabel={cdpLabel}
           additionalStyles="top-2 left-2 absolute"
@@ -100,7 +115,17 @@ const App: React.FC = () => {
           enabled={isUsingCDP}
         />
         <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
-      </>
+        <div className="absolute right-0 bottom-0 w-full">
+          {settingsChanged && (
+            <ToastMessage
+              additionalStyles="text-sm"
+              text="For settings to take effect please reload all tab(s)."
+              onClick={handleSettingsChange}
+              textAdditionalStyles="xxs:p-1 text-xxs leading-5"
+            />
+          )}
+        </div>
+      </div>
     );
   }
 
@@ -109,7 +134,7 @@ const App: React.FC = () => {
     (cookieStats?.firstParty.total === 0 && cookieStats?.thirdParty.total === 0)
   ) {
     return (
-      <>
+      <div className="w-full h-full flex justify-center items-center flex-col z-1">
         <ToggleSwitch
           onLabel={cdpLabel}
           additionalStyles="top-2 left-2 absolute"
@@ -120,13 +145,23 @@ const App: React.FC = () => {
         <p className="text-chart-label text-xs">
           Please try reloading the page
         </p>
-      </>
+        <div className="absolute right-0 bottom-0 w-full">
+          {settingsChanged && (
+            <ToastMessage
+              additionalStyles="text-sm"
+              text="For settings to take effect please reload all tab(s)."
+              onClick={handleSettingsChange}
+              textAdditionalStyles="xxs:p-1 text-xxs leading-5"
+            />
+          )}
+        </div>
+      </div>
     );
   }
   const statsComponents = prepareCookieStatsComponents(cookieStats);
 
   return (
-    <>
+    <div className="w-full h-full flex justify-center items-center flex-col z-1">
       <ToggleSwitch
         onLabel={cdpLabel}
         additionalStyles="top-2 left-2 absolute"
@@ -157,7 +192,17 @@ const App: React.FC = () => {
           {'Inspect cookies in the "Privacy Sandbox" panel of DevTools'}
         </p>
       </div>
-    </>
+      <div className="absolute right-0 bottom-0 w-full">
+        {settingsChanged && (
+          <ToastMessage
+            additionalStyles="text-sm"
+            text="For settings to take effect please reload all tab(s)."
+            onClick={handleSettingsChange}
+            textAdditionalStyles="xxs:p-1 text-xxs leading-5"
+          />
+        )}
+      </div>
+    </div>
   );
 };
 

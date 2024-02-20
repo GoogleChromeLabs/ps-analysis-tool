@@ -64,7 +64,7 @@ export default function parseRequestWillBeSentExtraInfo(
     }
 
     const singleCookie: CookieData = {
-      isBlocked: !(blockedReasons.length === 0),
+      isBlocked: blockedReasons.length !== 0,
       parsedCookie: {
         ...cookie,
         expires: effectiveExpirationDate,
@@ -82,10 +82,6 @@ export default function parseRequestWillBeSentExtraInfo(
           },
         ],
         responseEvents: [],
-      },
-      blockingStatus: {
-        inboundBlock: null,
-        outboundBlock: blockedReasons.length !== 0,
       },
       blockedReasons,
       analytics: cookieDB ? findAnalyticsMatch(cookie.name, cookieDB) : null, // In case CDP gets cookie first.

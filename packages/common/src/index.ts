@@ -30,6 +30,7 @@ export { default as cookieIssueDetails } from './data/cookieExclusionAndWarningR
 export { default as parseResponseReceivedExtraInfo } from './utils/parseResponseReceivedExtraInfo';
 export { default as parseRequestWillBeSentExtraInfo } from './utils/parseRequestWillBeSentExtraInfo';
 export { default as getDomainFromUrl } from './utils/getDomainFromUrl';
+export { default as extractUrl } from './utils/extractUrl';
 export { default as noop } from './utils/noop';
 export { default as getDevToolWorker } from './worker/devToolWorker';
 export { default as executeTaskInDevToolWorker } from './worker/executeTaskInDevToolWorker';

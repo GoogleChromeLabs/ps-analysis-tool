@@ -22,23 +22,56 @@ import {
   COLOR_MAP,
   ProgressBar,
 } from '@ps-analysis-tool/design-system';
+import { extractUrl } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
+import {
+  filterMatchesBasedOnExceptions,
+  useLibraryDetection,
+  useLibraryDetectionContext,
+} from '../../core';
 import LIBRARIES from '../../config';
 import type { LibraryData, DetectedSignature } from '../../types';
-import { useLibraryDetection, useLibraryDetectionContext } from '../../core';
 
 const LibraryDetection = memo(function LibraryDetection() {
   useLibraryDetection();
 
-  const { libraryMatches, showLoader } = useLibraryDetectionContext(
-    ({ state }) => ({
+  const { libraryMatches, showLoader, tabDomain, isCurrentTabLoading } =
+    useLibraryDetectionContext(({ state }) => ({
       libraryMatches: state.libraryMatches,
       showLoader: state.showLoader,
-    })
-  );
+      tabDomain: state.tabDomain,
+      isCurrentTabLoading: state.isCurrentTabLoading,
+    }));
+
+  LIBRARIES.map((config) => {
+    let matches =
+      libraryMatches && libraryMatches[config.name as keyof LibraryData]
+        ? libraryMatches[config.name as keyof LibraryData]?.matches
+        : [];
+
+    const parsedUrl = extractUrl(tabDomain);
+
+    const parsedTabDomain = parsedUrl?.domain;
+
+    const isCurrentDomainExceptionDomain =
+      config?.exceptions?.[parsedTabDomain as string] &&
+      config?.exceptions?.[parsedTabDomain as string]?.signatures?.length > 0;
+
+    if (isCurrentDomainExceptionDomain) {
+      matches = filterMatchesBasedOnExceptions(
+        tabDomain,
+        config?.exceptions,
+        matches
+      );
+    }
+
+    libraryMatches[config.name as keyof LibraryData].matches = matches;
+
+    return matches;
+  });
 
   const names = Object.keys(libraryMatches);
 
@@ -85,7 +118,9 @@ const LibraryDetection = memo(function LibraryDetection() {
         <>
           <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />
           <p className="text-center dark:text-bright-gray">
-            Checking libraries for any known breakages on the page..
+            {isCurrentTabLoading
+              ? 'Waiting for the page to load..'
+              : 'Checking libraries for any known breakages on the page..'}
           </p>
         </>
       ) : (
