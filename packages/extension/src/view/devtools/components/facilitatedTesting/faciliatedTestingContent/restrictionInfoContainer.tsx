@@ -19,6 +19,7 @@
  */
 import React from 'react';
 import { PSTimelineIcon } from '@ps-analysis-tool/design-system';
+import { addUTMParams } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -30,7 +31,9 @@ const RestrictionInfoContainer = () => (
     <p className="mb-7">
       To facilitate testing,{' '}
       <Link
-        href="https://developers.google.com/privacy-sandbox/blog/cookie-countdown-2024jan"
+        href={addUTMParams(
+          'https://developers.google.com/privacy-sandbox/blog/cookie-countdown-2024jan'
+        )}
         title="Chrome has restricted third-party cookies by default for 1% of users."
       />
     </p>
@@ -40,7 +43,9 @@ const RestrictionInfoContainer = () => (
     <p>
       During this testing period, it is important for sites and services to{' '}
       <Link
-        href="https://developers.google.com/privacy-sandbox/3pcd/prepare/audit-cookies"
+        href={addUTMParams(
+          'https://developers.google.com/privacy-sandbox/3pcd/prepare/audit-cookies'
+        )}
         title="start preparing"
       />{' '}
       for third-party cookie restrictions, including moving to more private

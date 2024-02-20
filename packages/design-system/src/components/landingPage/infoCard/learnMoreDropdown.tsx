@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import React from 'react';
+import { addUTMParams } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -68,7 +69,11 @@ const LearnMoreDropdown = ({
             (value, index) => (
               <RenderLink
                 key={index}
-                link={value}
+                link={
+                  value.startsWith('https://developers.google.com')
+                    ? addUTMParams(value)
+                    : value
+                }
                 label={LABELS[index].label}
                 linkLabel={LABELS[index].linkLabel}
               />
