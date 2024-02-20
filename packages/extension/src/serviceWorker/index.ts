@@ -251,6 +251,17 @@ chrome.runtime.onStartup.addListener(async () => {
     chrome.storage.local.get();
   }, 28000);
 
+  // @todo Send tab data of the active tab only, also if sending only the difference would make it any faster.
+  setInterval(() => {
+    if (Object.keys(syncCookieStore?.tabsData ?? {}).length === 0) {
+      return;
+    }
+
+    Object.keys(syncCookieStore?.tabsData ?? {}).forEach((key) => {
+      syncCookieStore?.sendUpdatedDataToPopupAndDevTools(Number(key));
+    });
+  }, 1200);
+
   if (Object.keys(storage).includes('allowedNumberOfTabs')) {
     tabMode = storage.allowedNumberOfTabs;
   }
