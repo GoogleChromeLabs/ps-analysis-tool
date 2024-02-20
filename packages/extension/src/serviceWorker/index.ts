@@ -688,12 +688,6 @@ chrome.runtime.onMessage.addListener(async (request) => {
 chrome.windows.onCreated.addListener(async () => {
   const totalWindows = await chrome.windows.getAll();
 
-  // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
-  // Doing this to keep the service worker alive so that we dont loose any data and introduce any bug.
-  setInterval(() => {
-    chrome.storage.local.get();
-  }, 28000);
-
   // We do not want to clear content settings if a user has create one more window.
   if (totalWindows.length < 2) {
     chrome.contentSettings.cookies.clear({});
