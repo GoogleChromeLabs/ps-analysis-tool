@@ -19,7 +19,7 @@
  */
 import React from 'react';
 import classNames from 'classnames';
-import { CookieTableData } from '@ps-analysis-tool/common';
+import { BLOCK_STATUS, CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -59,7 +59,10 @@ const BodyRow = ({
   const cookieKey = getRowObjectKey(row);
   const isBlocked = useIsBlockedToHighlight
     ? (row.originalData as CookieTableData)?.isBlocked
-    : (row.originalData as CookieTableData)?.blockingStatus?.inboundBlock;
+    : (row.originalData as CookieTableData)?.blockingStatus?.inboundBlock !==
+        BLOCK_STATUS.NOT_BLOCKED ||
+      (row.originalData as CookieTableData)?.blockingStatus?.outboundBlock !==
+        BLOCK_STATUS.NOT_BLOCKED;
   const isHighlighted = (row.originalData as CookieTableData)?.highlighted;
   const isDomainInAllowList = (row.originalData as CookieTableData)
     ?.isDomainInAllowList;
@@ -105,11 +108,6 @@ const BodyRow = ({
         : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver')
   );
 
-  const shouldShowWarningIcon =
-    (row.originalData as CookieTableData)?.blockingStatus?.outboundBlock ||
-    (row.originalData as CookieTableData)?.blockingStatus?.inboundBlock ===
-      null;
-
   return (
     <div
       id={index.toString()}
@@ -123,19 +121,35 @@ const BodyRow = ({
       {isDomainInAllowList && (
         <span className="absolute block top-0 bottom-0 left-0 border-l-2 border-emerald-600 dark:border-leaf-green-dark" />
       )}
-      {columns.map(({ accessorKey, width, enablePrefixIcon }, idx) => (
-        <BodyCell
-          key={idx}
-          onRowClick={onRowClick}
-          cell={row[accessorKey]?.value || ''}
-          width={width || 0}
-          isHighlighted={isHighlighted}
-          isRowFocused={cookieKey === selectedKey}
-          row={row}
-          hasIcon={enablePrefixIcon}
-          showWarningIcon={shouldShowWarningIcon}
-        />
-      ))}
+      {columns.map(
+        (
+          {
+            accessorKey,
+            width,
+            enableBodyCellPrefixIcon,
+            showBodyCellPrefixIcon,
+            bodyCellPrefixIcon,
+          },
+          idx
+        ) => (
+          <BodyCell
+            key={idx}
+            onRowClick={onRowClick}
+            cell={row[accessorKey]?.value || ''}
+            width={width || 0}
+            isHighlighted={isHighlighted}
+            isRowFocused={cookieKey === selectedKey}
+            row={row}
+            hasIcon={enableBodyCellPrefixIcon}
+            showWarningIcon={
+              showBodyCellPrefixIcon ? showBodyCellPrefixIcon(row) : false
+            }
+            icon={
+              bodyCellPrefixIcon ? () => bodyCellPrefixIcon(row) : undefined
+            }
+          />
+        )
+      )}
     </div>
   );
 };

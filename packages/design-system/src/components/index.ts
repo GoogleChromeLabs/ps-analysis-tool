@@ -40,6 +40,7 @@ export * from './table';
 export { default as SearchInput } from './searchInput';
 export * from './sidebar';
 export { default as InspectButton } from './inspectButton';
+export { default as ToastMessage } from './toastMessage';
 export {
   default as CookiesLandingContainer,
   type CookiesLandingContainerProps,

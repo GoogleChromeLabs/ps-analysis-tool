@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
+import { addUTMParams } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -44,7 +45,9 @@ const GISAccordion = ({ matches }: AccordionProps) => {
         <a
           className="text-bright-navy-blue dark:text-jordy-blue"
           target="_blank"
-          href="https://developers.google.com/identity/gsi/web/guides/fedcm-migration?utm_source=lighthouse&utm_medium=cli"
+          href={addUTMParams(
+            'https://developers.google.com/identity/gsi/web/guides/fedcm-migration?utm_source=lighthouse&utm_medium=cli'
+          )}
           rel="noreferrer"
         >
           migrate

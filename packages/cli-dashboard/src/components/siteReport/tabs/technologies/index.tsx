@@ -120,6 +120,7 @@ const Technologies = ({ selectedSite }: TechnologiesProps) => {
         className="h-full flex"
       >
         <Table
+          useIsBlockedToHighlight={true} // Hot Fix: To fail the condition intentionally and not highlight the rows.
           table={table}
           hideFiltering={true}
           showTopBar={true}
@@ -146,16 +147,14 @@ const Technologies = ({ selectedSite }: TechnologiesProps) => {
                 </p>
               </>
             )}
-            {selectedRow.name && (
-              <>
-                <p className="font-bold text-granite-gray dark:text-manatee mb-1">
-                  Description
-                </p>
-                <p className="text-outer-space-crayola dark:text-bright-gray">
-                  {selectedRow.description}
-                </p>
-              </>
-            )}
+            <>
+              <p className="font-bold text-granite-gray dark:text-manatee mb-1">
+                Description
+              </p>
+              <p className="text-outer-space-crayola dark:text-bright-gray">
+                {selectedRow?.description || 'No description available.'}
+              </p>
+            </>
           </div>
         ) : (
           <div className="h-full p-8 flex items-center">
