@@ -119,9 +119,10 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         !hasValidBlockedReason &&
         isUsingCDP && (
           <div className="flex gap-1 items-center mb-4">
-            <QuestionMark />
+            <QuestionMark className="scale-150 mr-1" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
-              We could not identify this cookie&apos;s blocking status.
+              We detected that the cookie was blocked however we could not
+              detect the reason.
             </p>
             <br />
           </div>
@@ -132,8 +133,8 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         !outboundBlock &&
         hasValidBlockedReason &&
         isUsingCDP && (
-          <div className="flex gap-1 items-center my-4">
-            <InboundIcon className="stroke-[#FE8455]" />
+          <div className="flex gap-1 items-center mb-4">
+            <InboundIcon className="stroke-[#FE8455] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
               This cookie was blocked in at least one of the responses.
             </p>
@@ -146,8 +147,8 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         !outboundBlock &&
         hasValidBlockedReason &&
         isUsingCDP && (
-          <div className="flex gap-1 items-center my-4">
-            <InboundIcon className="stroke-[#D8302F]" />
+          <div className="flex gap-1 items-center mb-4">
+            <InboundIcon className="stroke-[#D8302F] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
               This cookie was blocked in all responses.
             </p>
@@ -160,8 +161,8 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         !inboundBlock &&
         hasValidBlockedReason &&
         isUsingCDP && (
-          <div className="flex gap-1 items-center my-4">
-            <OutboundIcon className="stroke-[#FE8455]" />
+          <div className="flex gap-1 items-center mb-4">
+            <OutboundIcon className="stroke-[#FE8455] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
               This cookie was blocked in at least one of the requests.
             </p>
@@ -174,8 +175,8 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         !inboundBlock &&
         hasValidBlockedReason &&
         isUsingCDP && (
-          <div className="flex gap-1 items-center my-4">
-            <OutboundIcon className="stroke-[#D8302F]" />
+          <div className="flex gap-1 items-center mb-4">
+            <OutboundIcon className="stroke-[#D8302F] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
               This cookie was blocked in all requests.
             </p>
@@ -189,7 +190,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           BLOCK_STATUS.BLOCKED_IN_ALL_EVENTS &&
         hasValidBlockedReason &&
         isUsingCDP && (
-          <div className="flex gap-1 items-center my-4">
+          <div className="flex gap-1 items-center mb-4">
             <OutboundInboundIcon className="stroke-[#D8302F] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
               This cookie was blocked in all of the requests and responses.
@@ -204,7 +205,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           BLOCK_STATUS.BLOCKED_IN_SOME_EVENTS &&
         hasValidBlockedReason &&
         isUsingCDP && (
-          <div className="flex gap-1 items-center my-4">
+          <div className="flex gap-1 items-center mb-4">
             <OutboundInboundIcon className="stroke-[#FE8455] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
               This cookie was blocked in at least one of the requests and at
@@ -220,7 +221,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           BLOCK_STATUS.BLOCKED_IN_SOME_EVENTS &&
         hasValidBlockedReason &&
         isUsingCDP && (
-          <div className="flex gap-1 items-center my-4">
+          <div className="flex gap-1 items-center mb-4">
             <OutboundInboundColoredIcon className="scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
               This cookie was blocked in all requests and at least one of the
@@ -236,7 +237,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           BLOCK_STATUS.BLOCKED_IN_ALL_EVENTS &&
         hasValidBlockedReason &&
         isUsingCDP && (
-          <div className="flex gap-1 items-center my-4">
+          <div className="flex gap-1 items-center mb-4">
             <OutboundInboundColoredIcon className="rotate-180 scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
               This cookie was blocked in at least one of the requests and all of
