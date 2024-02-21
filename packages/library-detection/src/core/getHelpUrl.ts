@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 /**
+ * External dependencies.
+ */
+import { addUTMParams } from '@ps-analysis-tool/common';
+
+/**
  * Internal dependencies.
  */
 import type { SignaturesConfigItem } from '../types';
@@ -31,7 +36,9 @@ const getHelpUrl = (signature: string, helpUrls: SignaturesConfigItem[]) => {
     (item) => item.signature === signature
   );
 
-  return matchingSignatureItem ? matchingSignatureItem.helpUrl : '';
+  return matchingSignatureItem
+    ? addUTMParams(matchingSignatureItem.helpUrl)
+    : '';
 };
 
 export default getHelpUrl;
