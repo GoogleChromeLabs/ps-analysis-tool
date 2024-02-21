@@ -113,7 +113,7 @@ const BodyRow = ({
           <BodyCell
             key={idx}
             onRowClick={onRowClick}
-            cell={row[accessorKey]?.value || ''}
+            cell={row[accessorKey]?.value}
             width={width || 0}
             isHighlighted={isHighlighted}
             isRowFocused={rowKey === selectedKey}
