@@ -24,6 +24,7 @@ interface ProgressBarProps {
 const ProgressBar = ({ additionalStyles = '' }: ProgressBarProps) => {
   return (
     <div
+      data-testid="progress-bar"
       className={`${additionalStyles} flex justify-center flex-col gap-2 relative overflow-hidden`}
     >
       <div className="mb-6 h-1 w-full bg-gainsboro dark:bg-neutral-600 overflow-hidden">
