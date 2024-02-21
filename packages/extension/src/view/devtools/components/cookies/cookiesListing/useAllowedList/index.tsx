@@ -23,12 +23,12 @@ import { useEffect, useRef, useState } from 'react';
  * Internal dependencies.
  */
 import { getCurrentTab } from '../../../../../../utils/getCurrentTabId';
-import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
+import { useCookie } from '../../../../stateProviders';
 import setDomainsInAllowList from './setDomainsInAllowList';
 import getDotPrefixedDomain from './getDotPrefixedDomain';
 
 const useAllowedList = () => {
-  const { tabUrl, cookies } = useCookieStore(({ state }) => ({
+  const { tabUrl, cookies } = useCookie(({ state }) => ({
     tabUrl: state.tabUrl,
     cookies: state.tabCookies,
   }));

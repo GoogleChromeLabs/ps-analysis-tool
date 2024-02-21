@@ -26,17 +26,16 @@ import {
 /**
  * Internal dependencies
  */
-import { useCookieStore } from '../../../stateProviders/syncCookieStore';
+import { useCookie, useSettings } from '../../../stateProviders';
 import type { DataMapping } from '@ps-analysis-tool/design-system/src/components/cookiesLanding/landingHeader';
-import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
 
 const BlockedCookiesSection = () => {
-  const { tabCookies, tabFrames } = useCookieStore(({ state }) => ({
+  const { tabCookies, tabFrames } = useCookie(({ state }) => ({
     tabCookies: state.tabCookies,
     tabFrames: state.tabFrames,
   }));
 
-  const { isUsingCDP } = useSettingsStore(({ state }) => ({
+  const { isUsingCDP } = useSettings(({ state }) => ({
     isUsingCDP: state.isUsingCDP,
   }));
 

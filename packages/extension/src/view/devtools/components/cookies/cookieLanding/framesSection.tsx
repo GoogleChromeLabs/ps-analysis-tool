@@ -26,16 +26,14 @@ import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies
  */
-import { useCookieStore } from '../../../stateProviders/syncCookieStore';
+import { useCookie } from '../../../stateProviders';
 
 const FramesSection = () => {
-  const { tabCookies, tabFrames, frameHasCookies } = useCookieStore(
-    ({ state }) => ({
-      tabCookies: state.tabCookies,
-      tabFrames: state.tabFrames,
-      frameHasCookies: state.frameHasCookies,
-    })
-  );
+  const { tabCookies, tabFrames, frameHasCookies } = useCookie(({ state }) => ({
+    tabCookies: state.tabCookies,
+    tabFrames: state.tabFrames,
+    frameHasCookies: state.frameHasCookies,
+  }));
   const processedTabFrames = useMemo(
     () =>
       Object.fromEntries(

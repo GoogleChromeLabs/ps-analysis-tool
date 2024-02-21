@@ -23,8 +23,7 @@ import type { CookieTableData } from '@ps-analysis-tool/common';
  * Internal dependencies.
  */
 import { WEBPAGE_PORT_NAME } from '../../../constants';
-import { useCookieStore } from '../stateProviders/syncCookieStore';
-import { useSettingsStore } from '../stateProviders/syncSettingsStore';
+import { useCookie, useSettings } from '../stateProviders';
 import { getCurrentTabId } from '../../../utils/getCurrentTabId';
 
 interface Response {
@@ -46,7 +45,7 @@ const useFrameOverlay = (
     tabFrames,
     setCanStartInspecting,
     canStartInspecting,
-  } = useCookieStore(({ state, actions }) => ({
+  } = useCookie(({ state, actions }) => ({
     setContextInvalidated: actions.setContextInvalidated,
     isInspecting: state.isInspecting,
     setIsInspecting: actions.setIsInspecting,
@@ -57,7 +56,7 @@ const useFrameOverlay = (
     canStartInspecting: state.canStartInspecting,
   }));
 
-  const { allowedNumberOfTabs } = useSettingsStore(({ state }) => ({
+  const { allowedNumberOfTabs } = useSettings(({ state }) => ({
     allowedNumberOfTabs: state.allowedNumberOfTabs,
   }));
 

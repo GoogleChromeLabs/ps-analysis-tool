@@ -37,12 +37,11 @@ import {
  * Internal dependencies.
  */
 import TABS from './tabs';
-import { useCookieStore } from './stateProviders/syncCookieStore';
+import { useCookie, useSettings } from './stateProviders';
 import './app.css';
 import { Cookies } from './components';
 import useFrameOverlay from './hooks/useFrameOverlay';
 import { getCurrentTabId } from '../../utils/getCurrentTabId';
-import { useSettingsStore } from './stateProviders/syncSettingsStore';
 
 const App: React.FC = () => {
   const [sidebarWidth, setSidebarWidth] = useState(200);
@@ -60,7 +59,7 @@ const App: React.FC = () => {
     canStartInspecting,
     tabUrl,
     frameHasCookies,
-  } = useCookieStore(({ state, actions }) => ({
+  } = useCookie(({ state, actions }) => ({
     contextInvalidated: state.contextInvalidated,
     setContextInvalidated: actions.setContextInvalidated,
     tabCookies: state.tabCookies,
@@ -78,7 +77,7 @@ const App: React.FC = () => {
   const toastMessageRef = useRef<HTMLDivElement>(null);
 
   const { allowedNumberOfTabs, settingsChanged, handleSettingsChange } =
-    useSettingsStore(({ state, actions }) => ({
+    useSettings(({ state, actions }) => ({
       allowedNumberOfTabs: state.allowedNumberOfTabs,
       settingsChanged: state.settingsChanged,
       handleSettingsChange: actions.handleSettingsChange,

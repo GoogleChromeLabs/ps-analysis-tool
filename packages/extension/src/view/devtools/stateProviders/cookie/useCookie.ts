@@ -33,3 +33,5 @@ export function useCookie<T>(
 ) {
   return useContextSelector(Context, selector);
 }
+
+export default useCookie;

@@ -22,7 +22,7 @@ import classNames from 'classnames';
 /**
  * Internal dependencies
  */
-import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
+import { useSettings } from '../../../stateProviders';
 // @ts-ignore
 // eslint-disable-next-line import/no-relative-packages
 import InformationIcon from '../../../../../../../../third_party/icons/information-icon.svg';
@@ -32,7 +32,7 @@ import Done from '../../../../../../../../third_party/icons/done.svg';
 
 const InformationContainer = () => {
   const { currentTabs, currentExtensions, browserInformation, OSInformation } =
-    useSettingsStore(({ state }) => ({
+    useSettings(({ state }) => ({
       currentTabs: state.currentTabs,
       currentExtensions: state.currentExtensions,
       browserInformation: state.browserInformation,
