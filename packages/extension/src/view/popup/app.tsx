@@ -32,7 +32,7 @@ import {
  */
 import './app.css';
 import { Legend } from './components';
-import { useCookieStore } from './stateProviders/cookie';
+import { useCookie, useSettings } from './stateProviders';
 import { ALLOWED_NUMBER_OF_TABS } from '../../constants';
 
 const App: React.FC = () => {
@@ -40,25 +40,29 @@ const App: React.FC = () => {
     cookieStats,
     loading,
     isCurrentTabBeingListenedTo,
-    changeListeningToThisTab,
     onChromeUrl,
-    allowedNumberOfTabs,
-    isUsingCDP,
-    setIsUsingCDP,
-    settingsChanged,
-    handleSettingsChange,
-  } = useCookieStore(({ state, actions }) => ({
+    changeListeningToThisTab,
+  } = useCookie(({ state, actions }) => ({
     cookieStats: state.tabCookieStats,
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
     loading: state.loading,
     returningToSingleTab: state.returningToSingleTab,
-    allowedNumberOfTabs: state.allowedNumberOfTabs,
     onChromeUrl: state.onChromeUrl,
-    isUsingCDP: state.isUsingCDPForSettingsDisplay,
-    setIsUsingCDP: actions.setIsUsingCDP,
-    handleSettingsChange: actions.handleSettingsChange,
-    settingsChanged: state.settingsChanged,
     changeListeningToThisTab: actions.changeListeningToThisTab,
+  }));
+
+  const {
+    allowedNumberOfTabs,
+    isUsingCDP,
+    settingsChanged,
+    setUsingCDP,
+    handleSettingsChange,
+  } = useSettings(({ state, actions }) => ({
+    allowedNumberOfTabs: state.allowedNumberOfTabs,
+    isUsingCDP: state.isUsingCDPForSettingsDisplay,
+    settingsChanged: state.settingsChanged,
+    setUsingCDP: actions.setUsingCDP,
+    handleSettingsChange: actions.handleSettingsChange,
   }));
 
   const cdpLabel = isUsingCDP ? 'Disable CDP' : 'Enable CDP';
@@ -69,7 +73,7 @@ const App: React.FC = () => {
         <ToggleSwitch
           onLabel={cdpLabel}
           additionalStyles="top-2 left-2 absolute"
-          setEnabled={setIsUsingCDP}
+          setEnabled={setUsingCDP}
           enabled={isUsingCDP}
         />
         <p className="font-bold text-lg mb-2">Not much to analyze here</p>
@@ -111,7 +115,7 @@ const App: React.FC = () => {
         <ToggleSwitch
           onLabel={cdpLabel}
           additionalStyles="top-2 left-2 absolute"
-          setEnabled={setIsUsingCDP}
+          setEnabled={setUsingCDP}
           enabled={isUsingCDP}
         />
         <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
@@ -138,7 +142,7 @@ const App: React.FC = () => {
         <ToggleSwitch
           onLabel={cdpLabel}
           additionalStyles="top-2 left-2 absolute"
-          setEnabled={setIsUsingCDP}
+          setEnabled={setUsingCDP}
           enabled={isUsingCDP}
         />
         <p className="font-bold text-lg">No cookies found on this page</p>
@@ -165,7 +169,7 @@ const App: React.FC = () => {
       <ToggleSwitch
         onLabel={cdpLabel}
         additionalStyles="top-2 left-2 absolute"
-        setEnabled={setIsUsingCDP}
+        setEnabled={setUsingCDP}
         enabled={isUsingCDP}
       />
       <div className="w-full flex gap-x-6 justify-center border-b border-hex-gray pb-3.5">
