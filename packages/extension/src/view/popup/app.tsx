@@ -32,7 +32,7 @@ import {
  */
 import './app.css';
 import { Legend } from './components';
-import { useCookieStore } from './stateProviders/syncCookieStore';
+import { useCookieStore } from './stateProviders/cookie';
 import { ALLOWED_NUMBER_OF_TABS } from '../../constants';
 
 const App: React.FC = () => {
