@@ -191,7 +191,7 @@ describe.skip('CookieTab', () => {
   });
 
   it('should render a cookie card with placeholder text when no cookie is selected', async () => {
-    render(<CookieDetails selectedFrameCookie={null} />);
+    render(<CookieDetails isUsingCDP={false} selectedFrameCookie={null} />);
 
     expect(
       await screen.findByText('Select cookies to preview its value')
@@ -201,6 +201,7 @@ describe.skip('CookieTab', () => {
   it('should decode cookie value when input show URI decoded is checked', async () => {
     render(
       <Details
+        isUsingCDP={false}
         selectedCookie={mockResponse.tabCookies[uncategorized1pCookie.name]}
       />
     );
@@ -225,7 +226,12 @@ describe.skip('CookieTab', () => {
     const firstCookie =
       mockResponse.tabCookies[Object.keys(mockResponse.tabCookies)[0]];
 
-    render(<CookieDetails selectedFrameCookie={{ 1: firstCookie }} />);
+    render(
+      <CookieDetails
+        isUsingCDP={false}
+        selectedFrameCookie={{ 1: firstCookie }}
+      />
+    );
     const card = await screen.findByTestId('cookie-card');
 
     expect(card).toBeInTheDocument();
@@ -238,6 +244,7 @@ describe.skip('CookieTab', () => {
   it('should show a cookie card with the description about cookie', async () => {
     render(
       <CookieDetails
+        isUsingCDP={false}
         selectedFrameCookie={{
           1: mockResponse.tabCookies[known1pCookie.name],
         }}
@@ -256,6 +263,7 @@ describe.skip('CookieTab', () => {
   it('should show a cookie card with no description about cookie', async () => {
     render(
       <CookieDetails
+        isUsingCDP={false}
         selectedFrameCookie={{
           1: mockResponse.tabCookies[uncategorized1pCookie.name],
         }}
@@ -301,6 +309,7 @@ describe.skip('CookieTab', () => {
 
     render(
       <CookieDetails
+        isUsingCDP={false}
         selectedFrameCookie={{
           1: mockResponse.tabCookies[known3pCookieWithValue.name],
         }}
