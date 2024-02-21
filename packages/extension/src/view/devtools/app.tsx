@@ -258,6 +258,7 @@ const App: React.FC = () => {
 
   return (
     <div
+      data-testid="app"
       className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black"
       ref={contextInvalidatedRef}
     >
