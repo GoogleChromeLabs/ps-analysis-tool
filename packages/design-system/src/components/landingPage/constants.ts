@@ -13,6 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
+import { addUTMParams } from '@ps-analysis-tool/common';
+
 export const QUICK_LINKS = [
   {
     title: 'Learn more about PSAT',
@@ -32,6 +37,8 @@ export const QUICK_LINKS = [
   },
   {
     title: 'Request Additional Migration Time',
-    link: 'https://developer.chrome.com/origintrials/#/view_trial/3315212275698106369',
+    link: addUTMParams(
+      'https://developer.chrome.com/origintrials/#/view_trial/3315212275698106369'
+    ),
   },
 ];

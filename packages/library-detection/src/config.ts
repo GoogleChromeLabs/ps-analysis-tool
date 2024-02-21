@@ -26,6 +26,8 @@ import {
   GSI_HELP_URL,
   GIS_DOMAINS_TO_SKIP,
   GSI_DOMAINS_TO_SKIP,
+  GSIv2_EXCEPTIONS,
+  GIS_EXCEPTIONS,
 } from './libraries';
 
 const LIBRARIES = [
@@ -36,6 +38,7 @@ const LIBRARIES = [
       strongMatches: GSI_V2_SIGNATURE_STRONG_MATCHES,
       weakMatches: GSI_V2_SIGNATURE_WEAK_MATCHES,
     },
+    exceptions: GSIv2_EXCEPTIONS,
     domainsToSkip: GSI_DOMAINS_TO_SKIP,
     helpUrl: GSI_HELP_URL,
   },
@@ -46,6 +49,7 @@ const LIBRARIES = [
       strongMatches: [],
       weakMatches: GIS_SIGNATURE_WEAK_MATCHES,
     },
+    exceptions: GIS_EXCEPTIONS,
     domainsToSkip: GIS_DOMAINS_TO_SKIP,
     helpUrl: GIS_HELP_URL,
   },

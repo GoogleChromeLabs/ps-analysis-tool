@@ -140,7 +140,10 @@ class SynchnorousCookieStore {
           };
         } else {
           this.tabs[tabId].newUpdates++;
-          this.tabsData[tabId][cookieKey] = cookie;
+          this.tabsData[tabId][cookieKey] = {
+            ...cookie,
+            blockingStatus: deriveBlockingStatus(cookie.networkEvents),
+          };
         }
       }
 
@@ -412,6 +415,8 @@ class SynchnorousCookieStore {
         this.tabs[tabId].newUpdates = 0;
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
+      console.warn(error);
       //Fail silently. Ignoring the console.warn here because the only error this will throw is of "Error: Could not establish connection".
     }
   }
