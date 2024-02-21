@@ -22,7 +22,7 @@ import { act } from 'react-dom/test-utils';
 import { TableFilter } from '../../../useTable';
 import * as table from '../../../useTable';
 
-describe.skip('FiltersSidebar', () => {
+describe('FiltersSidebar', () => {
   const mockUseTable = jest.fn();
   jest.spyOn(table, 'useTable').mockImplementation(mockUseTable);
 
