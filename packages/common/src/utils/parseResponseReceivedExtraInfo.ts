@@ -111,10 +111,6 @@ export default function parseResponseReceivedExtraInfo(
           },
         ],
       },
-      blockingStatus: {
-        inboundBlock: blockedCookie ? true : false,
-        outboundBlock: null,
-      },
       analytics: cookieDB
         ? findAnalyticsMatch(parsedCookie.name, cookieDB)
         : null,

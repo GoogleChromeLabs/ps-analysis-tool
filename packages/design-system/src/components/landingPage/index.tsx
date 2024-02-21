@@ -93,7 +93,7 @@ const LandingPage = ({
                   setLoading(false);
                 }}
                 className={classNames(
-                  'w-full md:w-[70%] md:m-auto rounded-xl',
+                  'w-full md:w-[95%] md:m-auto rounded-xl',
                   iframeBorderClass
                 )}
               />

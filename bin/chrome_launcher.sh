@@ -2,7 +2,7 @@
 
 # Download Extension
 extension_setup() {
-  ps_analysis_tool_version=v0.5.0
+  ps_analysis_tool_version=v0.5.1
   extension_dir="/var/tmp"
   cd $extension_dir
   if [ ! -d $extension_dir/ps-analysis-tool-$ps_analysis_tool_version ]; then
@@ -24,7 +24,6 @@ if [[ "$(uname)" == "Darwin" ]]; then
           --no-default-browser-check \
           --no-first-run \
           --start-maximized \
-          --auto-open-devtools-for-tabs \
           --user-data-dir="${DATA_DIR}" \
           --silent-debugger-extension-api \
           "$@" https://example.com >/dev/null 2>&1 && rm -rf "${DATA_DIR}" &
@@ -39,7 +38,6 @@ elif [[ "$(uname)" == "Linux" ]]; then
         --no-default-browser-check \
         --no-first-run \
         --start-maximized \
-        --auto-open-devtools-for-tabs \
         --user-data-dir="${DATA_DIR}" \
         --silent-debugger-extension-api \
         "$@" https://example.com >/dev/null 2>&1 && rm -rf "${DATA_DIR}" &

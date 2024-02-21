@@ -62,7 +62,7 @@ export const sameSiteExcludeContextDowngradeReadCookieInsecure = `
 
 // Filename: NetworkRequest.ts
 export const ExcludeSameSiteUnspecifiedTreatedAsLax =
-  "This <code>Set-Cookie</code> header didn't specify a 'SameSite' attribute and was defaulted to <code>SameSite=Lax</code> and was blocked because it came from a cross-site response which was not the response to a top-level navigation. The <code>Set-Cookie</code> had to have been set with <code>SameSite=None</code> to enable cross-site usage.";
+  "<p>This <code>Set-Cookie</code> header didn't specify a 'SameSite' attribute and was defaulted to <code>SameSite=Lax</code> and was blocked because it came from a cross-site response which was not the response to a top-level navigation. The <code>Set-Cookie</code> had to have been set with <code>SameSite=None</code> to enable cross-site usage.</p><br />";
 
 // Filename: cookieCrossSiteRedirectDowngrade.md
 export const cookieCrossSiteRedirectDowngrade = `

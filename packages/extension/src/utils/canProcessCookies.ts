@@ -33,7 +33,7 @@ export default function canProcessCookies(
     return false;
   }
 
-  const _isSingleTabProcessingMode = tabMode && tabMode !== 'unlimited';
+  const _isSingleTabProcessingMode = tabMode !== 'unlimited';
 
   if (_isSingleTabProcessingMode) {
     if (currentTabId?.toString() !== tabToRead) {

@@ -19,6 +19,7 @@
  */
 import React, { useEffect, useState } from 'react';
 import { XMLParser } from 'fast-xml-parser';
+import { addUTMParams } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -26,10 +27,6 @@ import { XMLParser } from 'fast-xml-parser';
 import BulletList from '../bulletList';
 import { QUICK_LINKS } from './constants';
 import { ChevronRight } from '../../icons';
-
-/**
- * Internal dependencies.
- */
 
 const QuickLinksList = () => {
   const [news, setNews] = useState<BulletListItem[]>([]);
@@ -49,7 +46,7 @@ const QuickLinksList = () => {
           const newsArray = items
             .map((item: BulletListItem) => ({
               title: item.title,
-              link: item.link,
+              link: addUTMParams(item.link as string),
               date: item.pubDate ? new Date(item.pubDate).toISOString() : '',
             })) // @ts-ignore
             .sort((a, b) => b.date.localeCompare(a.date));
@@ -77,7 +74,7 @@ const QuickLinksList = () => {
 
           <div className="ml-6">
             <a
-              href="https://privacysandbox.com/news/"
+              href={addUTMParams('https://privacysandbox.com/news/')}
               target="_blank"
               rel="noreferrer"
               className="leading-6 text-sm text-bright-navy-blue dark:text-jordy-blue font-semibold px-3 border border-american-silver dark:border-quartz rounded inline-flex gap-2 items-center"
