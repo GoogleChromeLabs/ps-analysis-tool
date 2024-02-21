@@ -40,7 +40,7 @@ import {
   SERVICE_WORKER_RELOAD_MESSAGE,
   SET_TAB_TO_READ,
 } from '../../../../constants';
-import { useSettingsStore } from '../settings';
+import { useSettings } from '../settings';
 import Context, { type CookieStoreContext } from './context';
 
 const Provider = ({ children }: PropsWithChildren) => {
@@ -62,7 +62,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const loadingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const { setSettingsChanged } = useSettingsStore(({ actions }) => ({
+  const { setSettingsChanged } = useSettings(({ actions }) => ({
     setSettingsChanged: actions.setSettingsChanged,
   }));
 

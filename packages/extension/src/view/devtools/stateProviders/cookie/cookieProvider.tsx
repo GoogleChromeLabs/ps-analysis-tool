@@ -38,7 +38,7 @@ import {
   SET_TAB_TO_READ,
 } from '../../../../constants';
 import setDocumentCookies from '../../../../utils/setDocumentCookies';
-import { useSettingsStore } from '../syncSettingsStore';
+import { useSettings } from '../settings';
 import { getTab } from '../../../../utils/getTab';
 import getFramesForCurrentTab from '../../../../utils/getFramesForCurrentTab';
 import Context, { type CookieStoreContext } from './context';
@@ -71,7 +71,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   // This was converted to useRef because setting state was creating a race condition in rerendering the provider.
   const isCurrentTabBeingListenedToRef = useRef(false);
 
-  const { allowedNumberOfTabs, setSettingsChanged } = useSettingsStore(
+  const { allowedNumberOfTabs, setSettingsChanged } = useSettings(
     ({ state, actions }) => ({
       allowedNumberOfTabs: state.allowedNumberOfTabs,
       setSettingsChanged: actions.setSettingsChanged,
