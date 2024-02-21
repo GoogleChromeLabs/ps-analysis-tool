@@ -123,6 +123,7 @@ const InformationContainer = () => {
           )}
         >
           <button
+            data-testid="copy-button"
             disabled={copying}
             className="absolute right-1 top-1"
             onClick={handleCopy}
