@@ -414,6 +414,7 @@ describe('CookieTab', () => {
 
     expect(screen.getByText('Analyze this tab')).toBeInTheDocument();
   });
+
   it('should show progress bar', () => {
     mockUseCookieStore.mockReturnValue({
       loading: true,
