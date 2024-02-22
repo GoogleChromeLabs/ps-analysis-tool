@@ -37,6 +37,7 @@ import {
   INITIAL_SYNC,
   POPUP_CLOSE,
   POPUP_OPEN,
+  SERVICE_WORKER_TABS_RELOAD_COMMAND,
   SET_TAB_TO_READ,
 } from '../constants';
 import SynchnorousCookieStore from '../store/synchnorousCookieStore';
@@ -513,6 +514,44 @@ chrome.runtime.onMessage.addListener(async (request) => {
     await reloadCurrentTab(Number(newTab));
   }
 
+  if (SERVICE_WORKER_TABS_RELOAD_COMMAND === incomingMessageType) {
+    const sessionStorage = await chrome.storage.session.get();
+    if (Object.keys(sessionStorage).includes('allowedNumberOfTabs')) {
+      tabMode = sessionStorage.allowedNumberOfTabs;
+    }
+
+    if (Object.keys(sessionStorage).includes('isUsingCDP')) {
+      globalIsUsingCDP = sessionStorage.isUsingCDP;
+    }
+
+    await chrome.storage.session.remove(['allowedNumberOfTabs', 'isUsingCDP']);
+
+    await chrome.storage.session.set({
+      pendingReload: false,
+    });
+
+    await chrome.storage.sync.set({
+      allowedNumberOfTabs: tabMode,
+      isUsingCDP: globalIsUsingCDP,
+    });
+
+    const tabs = await chrome.tabs.query({});
+
+    await Promise.all(
+      tabs.map(async ({ id }) => {
+        if (!id) {
+          return;
+        }
+        resetCookieBadgeText(id);
+        await reloadCurrentTab(id);
+      })
+    );
+
+    await chrome.runtime.sendMessage({
+      type: 'ServiceWorker::DevTools::TABS_RELOADED',
+    });
+  }
+
   if (!request?.payload?.tabId) {
     return;
   }
@@ -585,47 +624,6 @@ chrome.runtime.onMessage.addListener(async (request) => {
 
   if (DEVTOOLS_SET_JAVASCSCRIPT_COOKIE === incomingMessageType) {
     syncCookieStore?.update(incomingMessageTabId, request?.payload?.cookieData);
-  }
-
-  if (
-    request?.type === 'DevTools::ServiceWorker::RELOAD_ALL_TABS' ||
-    request?.type === 'Popup::ServiceWorker::RELOAD_ALL_TABS'
-  ) {
-    const sessionStorage = await chrome.storage.session.get();
-    if (Object.keys(sessionStorage).includes('allowedNumberOfTabs')) {
-      tabMode = sessionStorage.allowedNumberOfTabs;
-    }
-
-    if (Object.keys(sessionStorage).includes('isUsingCDP')) {
-      globalIsUsingCDP = sessionStorage.isUsingCDP;
-    }
-
-    await chrome.storage.session.remove(['allowedNumberOfTabs', 'isUsingCDP']);
-
-    await chrome.storage.session.set({
-      pendingReload: false,
-    });
-
-    await chrome.storage.sync.set({
-      allowedNumberOfTabs: tabMode,
-      isUsingCDP: globalIsUsingCDP,
-    });
-
-    const tabs = await chrome.tabs.query({});
-
-    await Promise.all(
-      tabs.map(async ({ id }) => {
-        if (!id) {
-          return;
-        }
-        resetCookieBadgeText(id);
-        await reloadCurrentTab(id);
-      })
-    );
-
-    await chrome.runtime.sendMessage({
-      type: 'ServiceWorker::DevTools::TABS_RELOADED',
-    });
   }
 });
 

@@ -26,6 +26,7 @@ import React, {
  * Internal dependencies.
  */
 import Context, { type SettingsStoreContext } from './context';
+import { SERVICE_WORKER_TABS_RELOAD_COMMAND } from '../../../../constants';
 
 enum PLATFORM_OS_MAP {
   mac = 'MacOS',
@@ -204,7 +205,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   const handleSettingsChange = useCallback(async () => {
     if (settingsChanged) {
       await chrome.runtime.sendMessage({
-        type: 'DevTools::ServiceWorker::RELOAD_ALL_TABS',
+        type: SERVICE_WORKER_TABS_RELOAD_COMMAND,
       });
 
       setSettingsChanged(false);
