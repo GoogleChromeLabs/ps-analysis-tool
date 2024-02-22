@@ -47,6 +47,7 @@ module.exports = {
     '<rootDir>/data',
     '/stories/',
     '<rootDir>/packages/extension/src/view/devtools/index.tsx',
+    '<rootDir>/cli-dashboard/src/index.tsx',
     '<rootDir>/packages/extension/src/view/popup/index.tsx',
     '<rootDir>/packages/extension/src/view/devtools/devtools.ts',
     '<rootDir>/packages/extension/src/utils/test-data',

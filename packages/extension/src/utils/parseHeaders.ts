@@ -83,7 +83,8 @@ export default async function parseHeaders(
             tabUrl,
             frameId,
             cdpCookies?.cookies ?? [],
-            requestId
+            requestId,
+            globalIsUsingCDP
           );
 
           return [...accumulator, cookie];

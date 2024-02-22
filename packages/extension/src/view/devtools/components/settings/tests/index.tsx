@@ -21,6 +21,7 @@ import { render, screen } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import '@testing-library/jest-dom';
 import SinonChrome from 'sinon-chrome';
+import { noop } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies
  */
@@ -29,7 +30,6 @@ import Settings from '..';
 //@ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
-import { noop } from '@ps-analysis-tool/common';
 
 jest.mock('../../../stateProviders', () => ({
   useSettings: jest.fn(),

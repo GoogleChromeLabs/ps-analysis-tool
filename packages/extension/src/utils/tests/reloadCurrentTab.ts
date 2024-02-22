@@ -16,24 +16,30 @@
 /**
  * External dependencies.
  */
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
 import SinonChrome from 'sinon-chrome';
 /**
- * Internal dependencies
+ * Internal dependencies.
  */
-import Attribution from '../attribution';
-import Topics from '../topics';
+import reloadCurrentTab from '../reloadCurrentTab';
 //@ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
-import { act } from 'react-dom/test-utils';
-import PrivateAdvertising from '../privateAdvertising';
 
-describe('Private advertising Landing Pages', () => {
+describe('reloadCurrentTab : ', () => {
   beforeAll(() => {
-    globalThis.chrome = SinonChrome as unknown as typeof chrome;
+    globalThis.chrome = {
+      ...(SinonChrome as unknown as typeof chrome),
+      //@ts-ignore
+      tabs: {
+        reload: jest.fn(),
+        //@ts-ignore
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        query: (_, __) => {
+          return [{ id: 40245632, url: 'https://edition.cnn.com' }];
+        },
+      },
+    };
+
     globalThis.fetch = function () {
       return Promise.resolve({
         json: () =>
@@ -45,29 +51,15 @@ describe('Private advertising Landing Pages', () => {
     } as unknown as typeof fetch;
   });
 
-  it('should render Attribution', async () => {
-    act(() => {
-      render(<Attribution />);
-    });
-
-    expect(
-      await screen.findByTestId('attribution-content')
-    ).toBeInTheDocument();
+  it('should be called if tabId is passed', async () => {
+    await reloadCurrentTab(123);
+    expect(globalThis.chrome.tabs.reload).toHaveBeenCalled();
   });
 
-  it('should render Private advertising', async () => {
-    act(() => {
-      render(<PrivateAdvertising />);
+  it('should be called if tabId is not passed passed', async () => {
+    await reloadCurrentTab();
+    expect(globalThis.chrome.tabs.reload).toHaveBeenLastCalledWith(40245632, {
+      bypassCache: true,
     });
-
-    expect(await screen.findByText('Private Advertising')).toBeInTheDocument();
-  });
-
-  it('should render Topics', async () => {
-    act(() => {
-      render(<Topics />);
-    });
-
-    expect(await screen.findByTestId('topics-content')).toBeInTheDocument();
   });
 });
