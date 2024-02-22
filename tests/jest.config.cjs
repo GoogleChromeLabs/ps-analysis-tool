@@ -52,6 +52,7 @@ module.exports = {
     '<rootDir>/packages/extension/src/view/devtools/devtools.ts',
     '<rootDir>/packages/extension/src/utils/test-data',
     '<rootDir>/packages/design-system/src/test-data',
+    '<rootDir>/packages/extension/src/contentScript/index.ts',
   ],
   coverageReporters: ['lcov'],
   collectCoverageFrom: [
