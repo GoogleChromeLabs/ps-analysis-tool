@@ -414,4 +414,26 @@ describe('CookieTab', () => {
 
     expect(screen.getByText('Analyze this tab')).toBeInTheDocument();
   });
+  it('should show progress bar', () => {
+    mockUseCookieStore.mockReturnValue({
+      loading: true,
+      isCurrentTabBeingListenedTo: true,
+      tabToRead: '12345',
+      tabFrames: null,
+      tabCookies: null,
+    });
+
+    mockUseTablePersistentSettingStore.mockReturnValue({
+      getPreferences: () => '',
+      setPreferences: noop,
+    });
+
+    mockUseSettingsStore.mockReturnValue({
+      allowedNumberOfTabs: 'single',
+    });
+
+    render(<CookieTab setFilteredCookies={noop} />);
+
+    expect(screen.getByTestId('progress-bar')).toBeInTheDocument();
+  });
 });
