@@ -54,7 +54,7 @@ const useHighlighting = (
       }
       return prevState;
     });
-  }, [cookies, handleHighlighting, setTableData, domainsInAllowList.size]);
+  }, [cookies, handleHighlighting, setTableData, domainsInAllowList?.size]);
 };
 
 export default useHighlighting;
