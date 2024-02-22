@@ -502,14 +502,25 @@ chrome.runtime.onMessage.addListener(async (request) => {
   if (SET_TAB_TO_READ === incomingMessageType) {
     tabToRead = request?.payload?.tabId?.toString();
     const newTab = await listenToNewTab(request?.payload?.tabId);
-
     // Can't use sendResponse as delay is too long. So using sendMessage instead.
     chrome.runtime.sendMessage({
       type: SET_TAB_TO_READ,
       payload: {
-        tabId: newTab,
+        tabId: Number(newTab),
       },
     });
+
+    if (globalIsUsingCDP) {
+      await chrome.debugger.attach({ tabId: Number(newTab) }, '1.3');
+      await chrome.debugger.sendCommand(
+        { tabId: Number(newTab) },
+        'Network.enable'
+      );
+      await chrome.debugger.sendCommand(
+        { tabId: Number(newTab) },
+        'Audits.enable'
+      );
+    }
 
     await reloadCurrentTab(Number(newTab));
   }

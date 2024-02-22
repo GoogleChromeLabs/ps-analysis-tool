@@ -212,7 +212,6 @@ const Provider = ({ children }: PropsWithChildren) => {
       if (SET_TAB_TO_READ === incomingMessageType) {
         const tab = await getTab(tabId?.toString() || '');
         setTabUrl(tab?.url ?? '');
-
         isCurrentTabBeingListenedToRef.current =
           tabId === message?.payload?.tabId;
 
