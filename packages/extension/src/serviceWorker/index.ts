@@ -38,6 +38,7 @@ import {
   INITIAL_SYNC,
   POPUP_CLOSE,
   POPUP_OPEN,
+  SERVICE_WORKER_RELOAD_MESSAGE,
   SERVICE_WORKER_TABS_RELOAD_COMMAND,
   SET_TAB_TO_READ,
 } from '../constants';
@@ -614,7 +615,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
     );
 
     await chrome.runtime.sendMessage({
-      type: 'ServiceWorker::DevTools::TABS_RELOADED',
+      type: SERVICE_WORKER_RELOAD_MESSAGE,
     });
   }
 
