@@ -24,12 +24,14 @@ import { LibraryDetection } from '@ps-analysis-tool/library-detection';
 import CookiesSection from './cookiesSection';
 import FramesSection from './framesSection';
 import BlockedCookiesSection from './blockedCookiesSection';
+import ExemptedCookiesSection from './exemptedCookiesSection';
 
 const Layout = () => {
   return (
     <>
       <CookiesSection />
       <BlockedCookiesSection />
+      <ExemptedCookiesSection />
       <LibraryDetection />
       <FramesSection />
     </>

@@ -60,10 +60,9 @@ const prepareCookieStatsComponents = (
   });
 
   Object.keys(cookieStats.exemptedCookies).forEach((key: string) => {
-    if (key === 'total') {
+    if (key === 'total' || key.toLowerCase() === 'none') {
       return;
     }
-
     if (isNaN(cookieStats.exemptedCookies[key])) {
       return;
     }

@@ -46,9 +46,10 @@ const ExemptedCookiesSection = () => {
     {
       title: 'Exempted cookies',
       count: cookieStats.exemptedCookies.total,
-      data: cookiesStatsComponents.blocked,
+      data: cookiesStatsComponents.exempted,
     },
   ];
+
   const description = !isUsingCDP ? (
     <>
       To gather data and insights regarding blocked cookies and exempted

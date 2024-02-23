@@ -81,8 +81,18 @@ const prepareCookiesCount = (cookies: { [key: string]: CookieData } | null) => {
     }
   });
 
+  cookiesCount.exemptedCookies.total = cookieList.filter(
+    (cookie) =>
+      cookie.exemptionReason &&
+      cookie.exemptionReason.toLowerCase() !== 'none' &&
+      (cookie?.frameIdList ?? [])?.length >= 0
+  ).length;
+
   cookieList.forEach((cookie) => {
-    if (cookie.exemptionReason) {
+    if (
+      cookie.exemptionReason &&
+      cookie.exemptionReason.toLowerCase() !== 'none'
+    ) {
       if (!cookiesCount.exemptedCookies[cookie.exemptionReason]) {
         cookiesCount.exemptedCookies[cookie.exemptionReason] = 1;
       } else {

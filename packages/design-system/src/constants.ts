@@ -80,6 +80,18 @@ export const LEGEND_DESCRIPTION: LegendData = {
     'The count of frames which have unblocked cookies.',
   'Fenced frames':
     'A fenced frames is a proposed HTML element for embedded content, similar to an iframe. Unlike iframes, a fenced frame restricts communication with its embedding context to allow the frame access to cross-site data without sharing it with the embedding context.',
+  UserSetting: 'This cookie is allowed by user preference.',
+  TPCDMetadata:
+    'This cookie is allowed by a third-party cookie deprecation trial grace period.',
+  TPCDDeprecationTrial:
+    'This cookie is allowed by third-party cookie phaseout deprecation trial.',
+  TPCDHeuristics:
+    'This cookie is allowed by third-party cookie phaseout heuristics.',
+  EnterprisePolicy: 'This cookie is allowed by Chrome Enterprise policy.',
+  StorageAccess: 'This cookie is allowed by the Storage Access API.',
+  TopLevelStorageAccess:
+    'This cookie is allowed by the top-level Storage Access API.',
+  CorsOptIn: 'This cookie is allowed by CORS opt-in.',
 };
 
 export const EMPTY_FRAME_COUNT = [
