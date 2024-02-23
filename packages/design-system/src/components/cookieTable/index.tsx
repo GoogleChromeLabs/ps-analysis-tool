@@ -34,7 +34,7 @@ import { TableProvider } from '../table/useTable/provider';
 import { conditionalTableRowClassesHandler, exportCookies } from './utils';
 
 interface CookieTableProps {
-  useIsBlockedToHighlight?: boolean;
+  queryIsBlockedToHighlight?: boolean;
   data: TableData[];
   tableColumns: TableColumn[];
   tableFilters?: TableFilter;
@@ -64,7 +64,7 @@ const CookieTable = forwardRef<
   CookieTableProps
 >(function CookieTable(
   {
-    useIsBlockedToHighlight = false,
+    queryIsBlockedToHighlight = false,
     tableColumns,
     tableFilters,
     tableSearchKeys,
@@ -142,10 +142,10 @@ const CookieTable = forwardRef<
         isRowFocused,
         rowIndex,
         selectedKey,
-        useIsBlockedToHighlight
+        queryIsBlockedToHighlight
       );
     },
-    [selectedKey, useIsBlockedToHighlight]
+    [selectedKey, queryIsBlockedToHighlight]
   );
 
   const hasVerticalBar = useCallback((row: TableRow) => {

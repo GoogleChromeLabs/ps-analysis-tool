@@ -96,7 +96,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
         className="h-full flex"
       >
         <CookieTable
-          useIsBlockedToHighlight={!isUsingCDP} // TODO: Remove this, and mend cookie object, as it should not have data in blockedStatus when isUsingCDP is false.
+          queryIsBlockedToHighlight={!isUsingCDP} // TODO: Remove this, and mend cookie object, as it should not have data in blockedStatus when isUsingCDP is false.
           data={frameFilteredCookies}
           tableColumns={tableColumns}
           tableFilters={filters}
