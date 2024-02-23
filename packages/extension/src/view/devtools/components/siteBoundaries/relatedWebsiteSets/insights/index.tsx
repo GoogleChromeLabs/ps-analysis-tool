@@ -113,7 +113,16 @@ const Insights = () => {
                   {insightsData.isccTLD ? (
                     <p className="text-sm">
                       This site is a ccTLD of{' '}
-                      {insightsData.relatedWebsiteSet?.ccTLDParent}.
+                      <a
+                        href={insightsData.relatedWebsiteSet?.ccTLDParent}
+                        target="_blank"
+                        referrerPolicy="no-referrer"
+                        className="cursor-pointer hover:opacity-80 text-blue-500 underline dark:text-blue-400"
+                        rel="noreferrer"
+                      >
+                        {insightsData.relatedWebsiteSet?.ccTLDParent}
+                      </a>
+                      .
                     </p>
                   ) : (
                     <>
