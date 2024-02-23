@@ -161,6 +161,7 @@ const CookieTable = forwardRef<
     };
   }, []);
 
+  // TODO: Move TableProvider and logic to one level up in extension and cli-dashboard, for allowing modularity.
   return (
     <div className="flex-1 w-full h-full overflow-x-auto text-outer-space-crayola border-x border-american-silver dark:border-quartz">
       <TableProvider
