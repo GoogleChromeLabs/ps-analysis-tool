@@ -26,7 +26,7 @@ import '@testing-library/jest-dom';
  */
 import TableBody from '..';
 import table from '../../../../../test-data/cookieTableMockData';
-import * as useTable from '../../../useTable/provider';
+import * as useTable from '../../../useTable/useTable';
 
 const bodyRowProp = {
   row: table.rows[0],
