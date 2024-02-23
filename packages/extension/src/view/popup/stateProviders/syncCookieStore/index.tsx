@@ -16,7 +16,6 @@
 /**
  * External dependencies.
  */
-import { createContext } from 'use-context-selector';
 import React, {
   type PropsWithChildren,
   useEffect,
@@ -30,6 +29,7 @@ import {
   type CookieData,
   type CookiesCount,
   useContextSelector,
+  createContext,
 } from '@ps-analysis-tool/common';
 
 /**
