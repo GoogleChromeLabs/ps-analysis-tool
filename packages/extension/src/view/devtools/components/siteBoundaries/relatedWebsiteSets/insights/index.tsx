@@ -110,18 +110,28 @@ const Insights = () => {
               </p>
               {!insightsData.primary ? (
                 <>
-                  {Object.entries(
-                    insightsData.relatedWebsiteSet?.rationaleBySite || {}
-                  )
-                    .filter(
-                      ([domain]) => getDomain(domain) === insightsData.domain
-                    )
-                    .map(([domain, value]) => (
-                      <p key={domain} className="text-sm">
-                        Rationale:{' '}
-                        <span className="underline">{value as string}</span>
-                      </p>
-                    ))}
+                  {insightsData.isccTLD ? (
+                    <p className="text-sm">
+                      This site is a ccTLD of{' '}
+                      {insightsData.relatedWebsiteSet?.ccTLDParent}.
+                    </p>
+                  ) : (
+                    <>
+                      {Object.entries(
+                        insightsData.relatedWebsiteSet?.rationaleBySite || {}
+                      )
+                        .filter(
+                          ([domain]) =>
+                            getDomain(domain) === insightsData.domain
+                        )
+                        .map(([domain, value]) => (
+                          <p key={domain} className="text-sm">
+                            Rationale:{' '}
+                            <span className="underline">{value as string}</span>
+                          </p>
+                        ))}
+                    </>
+                  )}
                 </>
               ) : (
                 <p>
