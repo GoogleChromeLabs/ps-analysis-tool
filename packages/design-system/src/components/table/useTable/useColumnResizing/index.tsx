@@ -22,7 +22,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 /**
  * Internal dependencies.
  */
-import type { PersistentStorageData, TableColumn } from '..';
+import type { PersistentStorageData, TableColumn } from '../types';
 import { useTablePersistentSettingsStore } from '../../persistentSettingsStore';
 import { resizeColumns } from './resizeColumns';
 import { handleResizeOnColumnsVisibilityChange } from './handleResizeOnColumnsVisibilityChange';

@@ -30,7 +30,7 @@ import { CookieTableData, getCookieKey } from '@ps-analysis-tool/common';
  * Internal dependencies.
  */
 import { Table, TableColumn, TableData, TableFilter, TableRow } from '../table';
-import { TableProvider } from '../table/useTable';
+import { TableProvider } from '../table/useTable/provider';
 import { conditionalTableRowClassesHandler, exportCookies } from './utils';
 
 interface CookieTableProps {

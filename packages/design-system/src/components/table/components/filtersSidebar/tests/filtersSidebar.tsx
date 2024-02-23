@@ -19,8 +19,8 @@ import { render, screen, waitFor } from '@testing-library/react';
 import FiltersSidebar from '..';
 import '@testing-library/jest-dom';
 import { act } from 'react-dom/test-utils';
-import { TableFilter } from '../../../useTable';
-import * as table from '../../../useTable';
+import { TableFilter } from '../../../useTable/types';
+import * as table from '../../../useTable/useTable';
 
 describe('FiltersSidebar', () => {
   const mockUseTable = jest.fn();

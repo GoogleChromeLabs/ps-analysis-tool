@@ -21,7 +21,7 @@ import React, { useMemo } from 'react';
 /**
  * Internal dependencies.
  */
-import { TableFilter, useTable } from '../../useTable';
+import { useTable, type TableFilter } from '../../useTable';
 import Option from './option';
 
 interface SubListProps {
