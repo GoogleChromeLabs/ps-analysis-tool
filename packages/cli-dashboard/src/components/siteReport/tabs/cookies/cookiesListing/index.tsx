@@ -80,7 +80,6 @@ const CookiesListing = ({
         className="h-full flex"
       >
         <CookieTable
-          queryIsBlockedToHighlight={true}
           data={cookies}
           tableColumns={tableColumns}
           tableFilters={filters}

@@ -64,7 +64,7 @@ const CookieTable = forwardRef<
   CookieTableProps
 >(function CookieTable(
   {
-    queryIsBlockedToHighlight = false,
+    queryIsBlockedToHighlight = true,
     tableColumns,
     tableFilters,
     tableSearchKeys,
