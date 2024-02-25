@@ -13,23 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * External dependencies
  */
-import { shallowEqualArrays, shallowEqualObjects } from 'shallow-equal';
+import { createContext as createContextOrig } from 'use-context-selector';
 
-export const shallowEqual = (a: unknown, b: unknown): boolean => {
-  if (a === b) {
-    return true;
-  }
-
-  if (Array.isArray(a) && Array.isArray(b)) {
-    return shallowEqualArrays(a, b);
-  }
-
-  if (typeof a === 'object' && typeof b === 'object') {
-    return shallowEqualObjects(a, b);
-  }
-
-  return false;
+const createContext = <T>(defaultValue: T) => {
+  return createContextOrig(defaultValue);
 };
+
+export default createContext;
