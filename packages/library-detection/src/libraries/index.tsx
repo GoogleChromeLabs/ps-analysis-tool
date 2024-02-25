@@ -16,7 +16,7 @@
 // GSI
 export { default as GSIAccordion } from './gsi/accordion';
 export { default as checkForGSIv2 } from './gsi/checkForGSIv2';
-export { default as generateGSIV2Matches } from './gsi/generateGSIV2Matches';
+export { default as overrideGSIV2Matches } from './gsi/overrideGSIV2Matches';
 export * from './gsi/constants';
 
 // GIS

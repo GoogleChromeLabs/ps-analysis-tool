@@ -77,6 +77,10 @@ const detectMatchingSignatures = (
   }
 
   Object.entries(detectionAuditFunctions).forEach(([key, callback]) => {
+    if (!callback) {
+      return;
+    }
+
     const { matches, signatureMatches, moduleMatch = 0 } = libraryMatches[key];
 
     libraryMatches[key].matches = callback(

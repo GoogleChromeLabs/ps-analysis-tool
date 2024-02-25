@@ -23,11 +23,10 @@ import type { DetectedSignature } from '../../types';
  * Generates the Google Sign-In v2 api matches.
  * @param signatureMatches - The number of signature matches.
  * @param matches - The existing matches.
- * @param gsiV2ModuleMatch - The number of module matches.
- * @param moduleMatches
+ * @param moduleMatches - Matching modules.
  * @returns The matches.
  */
-const generateGSIV2Matches = (
+const overrideGSIV2Matches = (
   signatureMatches: number,
   matches: DetectedSignature[],
   moduleMatches: number
@@ -46,4 +45,4 @@ const generateGSIV2Matches = (
   return shouldClearMatches ? [] : matches;
 };
 
-export default generateGSIV2Matches;
+export default overrideGSIV2Matches;
