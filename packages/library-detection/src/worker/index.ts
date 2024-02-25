@@ -31,7 +31,7 @@ import { type PreDefinedLibraryWorkerTaskPayload } from './constants';
  */
 export const ldWorkerOnMessageCallback = (event: MessageEvent): void => {
   const task: LIBRARY_DETECTION_WORKER_TASK = event.data.task;
-  const payload: PreDefinedLibraryWorkerTaskPayload[LIBRARY_DETECTION_WORKER_TASK] =
+  const loadedScripts: PreDefinedLibraryWorkerTaskPayload[LIBRARY_DETECTION_WORKER_TASK] =
     event.data.payload;
 
   switch (task) {
@@ -43,10 +43,8 @@ export const ldWorkerOnMessageCallback = (event: MessageEvent): void => {
       const detectionAuditFunctions = {
         gsiV2: generateGSIV2Matches,
       };
-      const librariesToDetect = ['gis', 'gsiV2'];
       const detectedMatchingSignatures = detectMatchingSignatures(
-        librariesToDetect,
-        payload,
+        loadedScripts,
         detectionSubFunctions,
         detectionAuditFunctions
       );

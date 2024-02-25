@@ -30,7 +30,7 @@ import { getDomainFromUrl, noop } from '@ps-analysis-tool/common';
  * Internal dependencies.
  */
 import type { LibraryData } from '../../types';
-import LIBRARIES from '../../config';
+import getInitialLibraryData from '../getInitialLibraryData';
 
 /**
  * Represents the context for library detection state.
@@ -52,16 +52,7 @@ export interface LibraryDetectionContext {
   };
 }
 
-const initialLibraryMatches: LibraryData = Object.fromEntries(
-  LIBRARIES.map(({ name }) => [
-    name,
-    {
-      signatureMatches: 0,
-      moduleMatch: 0,
-      matches: [],
-    },
-  ])
-);
+const initialLibraryMatches: LibraryData = getInitialLibraryData();
 
 const initialState: LibraryDetectionContext = {
   state: {

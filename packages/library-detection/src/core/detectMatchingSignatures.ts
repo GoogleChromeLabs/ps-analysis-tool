@@ -22,6 +22,7 @@ import type {
   DetectionSubFunctions,
   DetectionAuditFunctions,
 } from '../types';
+import getInitialLibraryData from './getInitialLibraryData';
 
 /**
  * Checks if the origin of a script tag is Google-related.
@@ -39,30 +40,17 @@ const originIsGoogle = (script: ScriptTagUnderCheck) => {
 
 /**
  * Detects matching signatures of libraries in loaded scripts.
- * @param librariesToDetect - An array of libraries to detect.
  * @param loadedScripts - An array of loaded scripts to check.
  * @param detectionSubFunctions - An object containing detection sub-functions for each library.
  * @param detectionAuditFunctions - An object containing detection audit functions for each library.
  * @returns An object containing the matching signatures and matches for each library.
  */
-
 const detectMatchingSignatures = (
-  librariesToDetect: string[],
   loadedScripts: ScriptTagUnderCheck[],
   detectionSubFunctions: DetectionSubFunctions,
   detectionAuditFunctions: DetectionAuditFunctions
 ) => {
-  const libraryMatches: LibraryData = librariesToDetect.reduce(
-    (acc, library) => {
-      acc[library as keyof LibraryData] = {
-        signatureMatches: 0,
-        matches: [],
-        moduleMatch: 0,
-      };
-      return acc;
-    },
-    {} as LibraryData
-  );
+  const libraryMatches: LibraryData = getInitialLibraryData();
 
   for (const script of loadedScripts.filter(originIsGoogle)) {
     if (script.content === undefined) {
