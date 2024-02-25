@@ -78,28 +78,20 @@ export type DomainPaths = {
 };
 
 export type DetectionSubFunctions = {
-  gis: (
-    arg0: ScriptTagUnderCheck,
-    arg1: DetectedSignature[],
-    arg2: number
-  ) => {
-    signatureMatches: number;
-    matches: DetectedSignature[];
-  };
-  gsiV2: (
+  [key: string]: (
     arg0: ScriptTagUnderCheck,
     arg1: DetectedSignature[],
     arg2: number,
-    arg3: number
+    arg3?: number
   ) => {
     signatureMatches: number;
     matches: DetectedSignature[];
-    moduleMatch: number;
+    moduleMatch?: number;
   };
 };
 
 export type DetectionAuditFunctions = {
-  gsiV2: (
+  [key: string]: (
     arg1: number,
     arg2: DetectedSignature[],
     arg3: number

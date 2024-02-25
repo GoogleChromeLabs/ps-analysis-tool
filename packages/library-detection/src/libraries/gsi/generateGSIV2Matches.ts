@@ -24,36 +24,26 @@ import type { DetectedSignature } from '../../types';
  * @param signatureMatches - The number of signature matches.
  * @param matches - The existing matches.
  * @param gsiV2ModuleMatch - The number of module matches.
+ * @param moduleMatches
  * @returns The matches.
  */
 const generateGSIV2Matches = (
   signatureMatches: number,
   matches: DetectedSignature[],
-  gsiV2ModuleMatch: number
+  moduleMatches: number
 ) => {
-  let strongMatch = false;
+  const hasStrongMatch = matches.some((item) =>
+    GSI_V2_SIGNATURE_STRONG_MATCHES.some(
+      (strongMatchItem) => item.feature.text === strongMatchItem.signature
+    )
+  );
 
-  const strongMatchObject =
-    matches.find((item) =>
-      GSI_V2_SIGNATURE_STRONG_MATCHES.find(
-        (strongMatchItem) => item.feature.text === strongMatchItem.signature
-      )
-    ) || {};
+  const shouldClearMatches = !(
+    (signatureMatches > 0 && moduleMatches > 0) ||
+    hasStrongMatch
+  );
 
-  const moduleMatches = gsiV2ModuleMatch; // TODO: change this with network parsing
-
-  if (Object.keys(strongMatchObject).length > 0) {
-    strongMatch = true;
-  }
-
-  /* At least one JS object or method signature match along with a gapi.auth2 module match
-   * is necessary to report the audit as failed.
-   */
-  if (!((signatureMatches > 0 && moduleMatches > 0) || strongMatch === true)) {
-    matches = [];
-  }
-
-  return matches;
+  return shouldClearMatches ? [] : matches;
 };
 
 export default generateGSIV2Matches;

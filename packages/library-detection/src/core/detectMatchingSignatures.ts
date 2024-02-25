@@ -23,18 +23,21 @@ import type {
   DetectionAuditFunctions,
 } from '../types';
 import getInitialLibraryData from './getInitialLibraryData';
+import LIBRARIES from '../config';
 
 /**
- * Checks if the origin of a script tag is Google-related.
+ * Filter origins of a script tag from skipped origins.
  * @param script - The script tag to check.
- * @returns A boolean value indicating whether the origin is Google-related.
+ * @returns A boolean value indicating whether the origin is skipped
  */
-const originIsGoogle = (script: ScriptTagUnderCheck) => {
-  return !(
-    (
-      script.origin?.includes('accounts.google.com') ||
-      script.origin?.includes('gstatic.com')
-    ) // NOTE: intentionally removed apis.google.com from this list
+const filterDomainsToSkip = (script: ScriptTagUnderCheck): boolean => {
+  const domainsToSkip = [
+    ...new Set(LIBRARIES.flatMap((library) => library.domainsToSkip || [])),
+  ];
+
+  return (
+    script.origin !== null &&
+    !domainsToSkip.some((domain) => script?.origin?.includes(domain))
   );
 };
 
@@ -49,38 +52,39 @@ const detectMatchingSignatures = (
   loadedScripts: ScriptTagUnderCheck[],
   detectionSubFunctions: DetectionSubFunctions,
   detectionAuditFunctions: DetectionAuditFunctions
-) => {
+): LibraryData => {
   const libraryMatches: LibraryData = getInitialLibraryData();
 
-  for (const script of loadedScripts.filter(originIsGoogle)) {
+  for (const script of loadedScripts.filter(filterDomainsToSkip)) {
     if (script.content === undefined) {
       continue;
     }
 
-    const detectionSubFunctionsKeys = Object.keys(detectionSubFunctions);
+    Object.entries(detectionSubFunctions).forEach(([key, callback]) => {
+      const {
+        matches,
+        signatureMatches,
+        moduleMatch = 0,
+      } = libraryMatches[key];
 
-    for (let i = 0; i < detectionSubFunctionsKeys.length; i++) {
-      const key = detectionSubFunctionsKeys[i] as keyof LibraryData;
-      libraryMatches[key] = detectionSubFunctions[key](
+      libraryMatches[key] = callback(
         script,
-        libraryMatches[key].matches,
-        libraryMatches[key].signatureMatches,
-        libraryMatches[key].moduleMatch as number
+        matches,
+        signatureMatches,
+        moduleMatch
       );
-    }
+    });
   }
 
-  const detectionAuditFunctionsKeys = Object.keys(detectionAuditFunctions);
+  Object.entries(detectionAuditFunctions).forEach(([key, callback]) => {
+    const { matches, signatureMatches, moduleMatch = 0 } = libraryMatches[key];
 
-  for (let i = 0; i < detectionAuditFunctionsKeys.length; i++) {
-    const key = detectionAuditFunctionsKeys[i] as keyof DetectionAuditFunctions;
-
-    libraryMatches[key].matches = detectionAuditFunctions[key](
-      libraryMatches[key].signatureMatches,
-      libraryMatches[key].matches,
-      libraryMatches[key].moduleMatch as number
+    libraryMatches[key].matches = callback(
+      signatureMatches,
+      matches,
+      moduleMatch
     );
-  }
+  });
 
   return libraryMatches;
 };
