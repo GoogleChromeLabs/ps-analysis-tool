@@ -74,10 +74,13 @@ const useLibraryDetection = () => {
         LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING,
         resourcesWithContent,
         (realtimeComputationResult: LibraryData) => {
-          if (
-            realtimeComputationResult.gis.matches.length !== 0 ||
-            realtimeComputationResult.gsiV2.matches.length !== 0
-          ) {
+          const hasResults = Object.keys(realtimeComputationResult).find(
+            (key) =>
+              realtimeComputationResult[key as keyof LibraryData]?.matches
+                ?.length
+          );
+
+          if (hasResults) {
             setLibraryMatches((matches) => {
               return sumUpDetectionResults(matches, realtimeComputationResult);
             });
@@ -124,7 +127,7 @@ const useLibraryDetection = () => {
 
   // Get the initial data and listen to new resources.
   useEffect(() => {
-    // Only show loader if the page has not loaded yet.
+    // Show loader while page is loading.
     if (isCurrentTabLoading) {
       return;
     }
@@ -141,12 +144,10 @@ const useLibraryDetection = () => {
           timeout.current = 0;
         }, LOADING_DELAY);
       }
-
-      return;
+    } else {
+      // When the user revisits the landing page we do not need to show loader.
+      updateInitialData();
     }
-
-    // When the user revisits the landing page we do not need to show loader.
-    updateInitialData();
   }, [
     isCurrentTabLoading,
     loadedBefore,
@@ -154,6 +155,7 @@ const useLibraryDetection = () => {
     updateInitialData,
   ]);
 
+  // CLeanup on component unmount.
   useEffect(() => {
     return () => {
       removeListener();
