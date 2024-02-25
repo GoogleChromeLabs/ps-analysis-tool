@@ -74,10 +74,8 @@ const useLibraryDetection = () => {
         LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING,
         resourcesWithContent,
         (realtimeComputationResult: LibraryData) => {
-          const hasResults = Object.keys(realtimeComputationResult).find(
-            (key) =>
-              realtimeComputationResult[key as keyof LibraryData]?.matches
-                ?.length
+          const hasResults = Object.entries(realtimeComputationResult).find(
+            ([, result]) => result?.matches?.length
           );
 
           if (hasResults) {

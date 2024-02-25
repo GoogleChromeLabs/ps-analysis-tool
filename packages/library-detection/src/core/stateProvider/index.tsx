@@ -30,6 +30,7 @@ import { getDomainFromUrl, noop } from '@ps-analysis-tool/common';
  * Internal dependencies.
  */
 import type { LibraryData } from '../../types';
+import LIBRARIES from '../../config';
 
 /**
  * Represents the context for library detection state.
@@ -51,21 +52,20 @@ export interface LibraryDetectionContext {
   };
 }
 
-const INITIAL_STATE: LibraryData = {
-  gis: {
-    signatureMatches: 0,
-    matches: [],
-  },
-  gsiV2: {
-    signatureMatches: 0,
-    moduleMatch: 0,
-    matches: [],
-  },
-};
+const initialLibraryMatches: LibraryData = Object.fromEntries(
+  LIBRARIES.map(({ name }) => [
+    name,
+    {
+      signatureMatches: 0,
+      moduleMatch: 0,
+      matches: [],
+    },
+  ])
+);
 
 const initialState: LibraryDetectionContext = {
   state: {
-    libraryMatches: INITIAL_STATE,
+    libraryMatches: initialLibraryMatches,
     isCurrentTabLoading: false,
     loadedBefore: false,
     showLoader: true,
@@ -83,8 +83,9 @@ const initialState: LibraryDetectionContext = {
 export const Context = createContext<LibraryDetectionContext>(initialState);
 
 export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
-  const [libraryMatches, setLibraryMatches] =
-    useState<LibraryData>(INITIAL_STATE);
+  const [libraryMatches, setLibraryMatches] = useState<LibraryData>(
+    initialLibraryMatches
+  );
   const [isCurrentTabLoading, setIsCurrentTabLoading] =
     useState<boolean>(false); // TODO: Use first/current tab loaded state instead.
   const [loadedBefore, setLoadedBeforeState] = useState<boolean>(false);
@@ -118,7 +119,7 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
         if (changeInfo.status === 'complete') {
           setIsCurrentTabLoading(false);
         } else if (changeInfo.status === 'loading') {
-          setLibraryMatches(INITIAL_STATE);
+          setLibraryMatches(initialLibraryMatches);
           setIsCurrentTabLoading(true);
           setShowLoader(true);
           setLoadedBeforeState(false);
