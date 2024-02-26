@@ -16,7 +16,6 @@
 /**
  * External dependencies.
  */
-import { createContext } from 'use-context-selector';
 import React, {
   type PropsWithChildren,
   useEffect,
@@ -31,6 +30,7 @@ import {
   type TabFrames,
   UNKNOWN_FRAME_KEY,
   useContextSelector,
+  createContext,
 } from '@ps-analysis-tool/common';
 
 /**

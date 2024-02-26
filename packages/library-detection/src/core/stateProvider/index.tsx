@@ -16,7 +16,6 @@
 /**
  * External dependencies.
  */
-import { createContext } from 'use-context-selector';
 import React, {
   type PropsWithChildren,
   useState,
@@ -28,6 +27,7 @@ import {
   getDomainFromUrl,
   noop,
   useContextSelector,
+  createContext,
 } from '@ps-analysis-tool/common';
 
 /**

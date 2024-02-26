@@ -24,9 +24,8 @@ import React, {
   useMemo,
   useRef,
 } from 'react';
-import { createContext } from 'use-context-selector';
 import PQueue from 'p-queue';
-import { useContextSelector } from '@ps-analysis-tool/common';
+import { useContextSelector, createContext } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies
