@@ -25,9 +25,10 @@ import MatrixComponent, { type MatrixComponentProps } from './matrixComponent';
 
 interface MatrixProps {
   dataComponents: MatrixComponentProps[];
+  expand?: boolean;
 }
 
-const Matrix = ({ dataComponents }: MatrixProps) => {
+const Matrix = ({ dataComponents, expand }: MatrixProps) => {
   if (!dataComponents || !dataComponents.length) {
     return null;
   }
@@ -42,6 +43,7 @@ const Matrix = ({ dataComponents }: MatrixProps) => {
           return (
             <MatrixComponent
               key={index}
+              isExpanded={expand}
               {...dataComponent}
               containerClasses={`p-3.5 ${
                 !isLastTwoItems ? 'border-b' : ''
