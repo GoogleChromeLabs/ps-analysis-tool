@@ -21,6 +21,7 @@ import React from 'react';
 import { Button, CookiesLanding } from '@ps-analysis-tool/design-system';
 import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
 import CookiesSection from './cookieLanding/cookiesSection';
+import BlockedCookiesSection from './cookieLanding/blockedCookiesSection';
 
 interface CookiesLandingContainerProps {
   tabFrames: TabFrames;
@@ -47,10 +48,10 @@ const CookiesLandingContainer = ({
         </div>
       )}
       <CookiesLanding>
-        <CookiesSection
+        <CookiesSection tabCookies={tabCookies} tabFrames={tabFrames} />
+        <BlockedCookiesSection
           tabCookies={tabCookies}
           affectedCookies={affectedCookies}
-          tabFrames={tabFrames}
         />
       </CookiesLanding>
     </>
