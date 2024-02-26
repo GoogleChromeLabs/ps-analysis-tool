@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 export { default as cookieIssueDetails } from './cookieExclusionAndWarningReasons';
-export { default as cookieExemptionReason } from './cookieExemptionReason';
+export { cookieExemptionReason } from './cookieExemptionReason';
