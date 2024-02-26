@@ -56,7 +56,7 @@ const filterCookiesByFrame = (
       if (
         !hasFrame &&
         cookie.frameIdList !== undefined &&
-        cookie.frameIdList?.length > 0
+        cookie.frameIdList?.length >= 0
       ) {
         frameFilteredCookies[key] = cookie;
       }

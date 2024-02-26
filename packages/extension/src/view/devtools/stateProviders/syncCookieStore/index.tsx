@@ -210,7 +210,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
       });
 
-      if (!hasFrame && cookie.frameIdList?.length) {
+      if (!hasFrame && cookie.frameIdList && cookie.frameIdList?.length >= 0) {
         acc[UNKNOWN_FRAME_KEY] = true;
       }
 
