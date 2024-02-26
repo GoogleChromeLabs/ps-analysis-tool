@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import { useContextSelector } from 'use-context-selector';
+import { useContextSelector } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.

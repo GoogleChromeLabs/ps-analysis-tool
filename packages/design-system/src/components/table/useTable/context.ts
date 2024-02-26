@@ -16,8 +16,7 @@
 /**
  * External dependencies.
  */
-import { createContext } from 'use-context-selector';
-import { noop } from '@ps-analysis-tool/common';
+import { createContext, noop } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
