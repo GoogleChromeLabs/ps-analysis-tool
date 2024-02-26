@@ -26,6 +26,7 @@ import { LibraryDetection } from '@ps-analysis-tool/library-detection';
 import {
   UNKNOWN_FRAME_KEY,
   type CookieTableData,
+  UNMAPPED_FRAME_KEY,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -71,7 +72,9 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
     () =>
       Object.fromEntries(
         Object.entries(tabFrames || {}).filter(([url]) =>
-          url === UNKNOWN_FRAME_KEY ? frameHasCookies[url] : true
+          url === UNKNOWN_FRAME_KEY || url === UNMAPPED_FRAME_KEY
+            ? frameHasCookies[url]
+            : true
         )
       ),
     [tabFrames, frameHasCookies]

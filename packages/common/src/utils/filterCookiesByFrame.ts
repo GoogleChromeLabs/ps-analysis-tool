@@ -16,6 +16,7 @@
 /**
  * Internal dependencies.
  */
+import { UNKNOWN_FRAME_KEY, UNMAPPED_FRAME_KEY } from '../constants';
 import { CookieTableData } from '../cookies.types';
 
 interface Cookies {
@@ -31,6 +32,7 @@ const filterCookiesByFrame = (
   tabFrames: TabFrames | null,
   frameUrl: string | null
 ) => {
+  console.log(frameUrl);
   const frameFilteredCookies: { [key: string]: CookieTableData } = {};
   if (!cookies || !frameUrl || !tabFrames || !tabFrames[frameUrl]) {
     return Object.values(frameFilteredCookies);
@@ -53,12 +55,18 @@ const filterCookiesByFrame = (
           hasFrame = true;
         }
       });
-      if (
-        !hasFrame &&
-        cookie.frameIdList !== undefined &&
-        cookie.frameIdList?.length >= 0
-      ) {
-        frameFilteredCookies[key] = cookie;
+      if (!hasFrame && cookie.frameIdList !== undefined) {
+        if (
+          frameUrl === UNMAPPED_FRAME_KEY &&
+          cookie.frameIdList?.length === 0
+        ) {
+          frameFilteredCookies[key] = cookie;
+        } else if (
+          frameUrl === UNKNOWN_FRAME_KEY &&
+          cookie.frameIdList?.length > 0
+        ) {
+          frameFilteredCookies[key] = cookie;
+        }
       }
     });
   }

@@ -14,3 +14,4 @@
  * limitations under the License.
  */
 export const UNKNOWN_FRAME_KEY = 'Unknown Frames';
+export const UNMAPPED_FRAME_KEY = 'Unmapped Frames';

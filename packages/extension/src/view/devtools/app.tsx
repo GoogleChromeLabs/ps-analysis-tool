@@ -31,6 +31,7 @@ import {
 import {
   UNKNOWN_FRAME_KEY,
   type CookieTableData,
+  UNMAPPED_FRAME_KEY,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -143,7 +144,9 @@ const App: React.FC = () => {
       );
       psData.children['cookies'].children = Object.keys(tabFrames || {})
         .filter((url) => {
-          return url === UNKNOWN_FRAME_KEY ? frameHasCookies[url] : true;
+          return url === UNKNOWN_FRAME_KEY || url === UNMAPPED_FRAME_KEY
+            ? frameHasCookies[url]
+            : true;
         })
         .reduce<SidebarItems>((acc, url) => {
           acc[url] = {
