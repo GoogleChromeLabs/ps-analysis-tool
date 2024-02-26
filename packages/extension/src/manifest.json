@@ -17,7 +17,9 @@
     "cookies",
     "debugger",
     "management",
-    "contentSettings"
+    "contentSettings",
+    "scripting",
+    "activeTab"
   ],
   "host_permissions": ["*://*/*"],
   "devtools_page": "devtools/devtools.html",
