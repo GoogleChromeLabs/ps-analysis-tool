@@ -18,22 +18,23 @@
  */
 import React from 'react';
 import {
-  CookiesLandingContainer,
-  CookiesMatrix,
+  CookiesLandingWrapper,
+  type DataMapping,
   prepareCookieStatsComponents,
   prepareCookiesCount,
+  MatrixContainer,
+  type MatrixComponentProps,
+  LEGEND_DESCRIPTION,
 } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies
  */
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import type { DataMapping } from '@ps-analysis-tool/design-system/src/components/cookiesLanding/landingHeader';
 import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
 
 const BlockedCookiesSection = () => {
-  const { tabCookies, tabFrames } = useCookieStore(({ state }) => ({
+  const { tabCookies } = useCookieStore(({ state }) => ({
     tabCookies: state.tabCookies,
-    tabFrames: state.tabFrames,
   }));
 
   const { isUsingCDP } = useSettingsStore(({ state }) => ({
@@ -49,6 +50,17 @@ const BlockedCookiesSection = () => {
       data: cookiesStatsComponents.blocked,
     },
   ];
+  const dataComponents: MatrixComponentProps[] =
+    cookiesStatsComponents.blockedCookiesLegend.map((component) => {
+      const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
+      return {
+        ...component,
+        description: legendDescription,
+        title: component.label,
+        containerClasses: '',
+      };
+    });
+
   const description = !isUsingCDP ? (
     <>
       To gather data and insights regarding blocked cookies, please enable PSAT
@@ -68,23 +80,19 @@ const BlockedCookiesSection = () => {
   );
 
   return (
-    <CookiesLandingContainer
+    <CookiesLandingWrapper
       description={description}
       dataMapping={blockedCookieDataMapping}
       testId="blocked-cookies-insights"
     >
-      {cookiesStatsComponents.blockedCookiesLegend.length > 0 && (
-        <CookiesMatrix
+      {dataComponents.length > 0 && (
+        <MatrixContainer
           title="Blocked Reasons"
-          tabCookies={tabCookies}
-          componentData={cookiesStatsComponents.blockedCookiesLegend}
-          tabFrames={tabFrames}
-          showInfoIcon
-          showHorizontalMatrix={false}
+          matrixData={dataComponents}
           infoIconTitle="Cookies that have been blocked by the browser.(The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
         />
       )}
-    </CookiesLandingContainer>
+    </CookiesLandingWrapper>
   );
 };
 export default BlockedCookiesSection;

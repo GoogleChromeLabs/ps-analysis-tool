@@ -18,9 +18,11 @@
  */
 import React, { useMemo } from 'react';
 import {
-  CookiesLandingContainer,
-  CookiesMatrix,
+  CookiesLandingWrapper,
+  MatrixContainer,
   prepareFrameStatsComponent,
+  type MatrixComponentProps,
+  LEGEND_DESCRIPTION,
 } from '@ps-analysis-tool/design-system';
 import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
 /**
@@ -50,22 +52,29 @@ const FramesSection = () => {
     processedTabFrames,
     tabCookies
   );
+  const dataComponents: MatrixComponentProps[] = framesStats.legend.map(
+    (component) => {
+      const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
+      return {
+        ...component,
+        description: legendDescription,
+        title: component.label,
+        containerClasses: '',
+      };
+    }
+  );
 
   return (
-    <CookiesLandingContainer
+    <CookiesLandingWrapper
       dataMapping={framesStats.dataMapping}
       testId="frames-insights"
     >
-      <CookiesMatrix
+      <MatrixContainer
         title="Frames"
-        componentData={framesStats.legend}
-        showMatrix={true}
-        tabCookies={tabCookies}
-        tabFrames={tabFrames}
-        showHorizontalMatrix={false}
+        matrixData={dataComponents}
         infoIconTitle="The details regarding frames and associated cookies in this page."
       />
-    </CookiesLandingContainer>
+    </CookiesLandingWrapper>
   );
 };
 export default FramesSection;

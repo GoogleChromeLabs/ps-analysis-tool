@@ -18,7 +18,7 @@
  */
 import React from 'react';
 import {
-  CookiesLandingContainer,
+  CookiesLandingWrapper,
   CookiesMatrix,
   MessageBox,
   prepareCookieDataMapping,
@@ -32,14 +32,9 @@ import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
 
 interface CookiesSectionProps {
   tabCookies: TabCookies | null;
-  affectedCookies: TabCookies | null;
   tabFrames: TabFrames | null;
 }
-const CookiesSection = ({
-  tabCookies,
-  affectedCookies,
-  tabFrames,
-}: CookiesSectionProps) => {
+const CookiesSection = ({ tabCookies, tabFrames }: CookiesSectionProps) => {
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
   const cookieClassificationDataMapping = prepareCookieDataMapping(
@@ -48,7 +43,7 @@ const CookiesSection = ({
   );
 
   return (
-    <CookiesLandingContainer
+    <CookiesLandingWrapper
       dataMapping={cookieClassificationDataMapping}
       testId="cookies-insights"
     >
@@ -61,18 +56,12 @@ const CookiesSection = ({
             />
           ))}
       <CookiesMatrix
-        tabCookies={affectedCookies}
-        componentData={
-          prepareCookieStatsComponents(prepareCookiesCount(affectedCookies))
-            .legend
-        }
+        tabCookies={tabCookies}
+        componentData={cookiesStatsComponents.legend}
         tabFrames={tabFrames}
-        description=""
-        showInfoIcon={false}
         showHorizontalMatrix={false}
-        allowExpand={false}
       />
-    </CookiesLandingContainer>
+    </CookiesLandingWrapper>
   );
 };
 export default CookiesSection;
