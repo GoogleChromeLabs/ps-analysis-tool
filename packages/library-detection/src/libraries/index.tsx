@@ -23,3 +23,8 @@ export * from './gsi/constants';
 export { default as GISAccordion } from './gis/accordion';
 export { default as getGISMatches } from './gis/getGISMatches';
 export * from './gis/constants';
+
+// Facebook Comments
+export { default as FBCommentsAccordion } from './fb-comments/accordion';
+export { default as getFBCommentsMatches } from './fb-comments/getFBCommentsMatches';
+export * from './fb-comments/constants';

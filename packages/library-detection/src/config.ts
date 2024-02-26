@@ -19,9 +19,12 @@
 import {
   GSIAccordion,
   GISAccordion,
+  FBCommentsAccordion,
   GSI_V2_SIGNATURE_STRONG_MATCHES,
   GSI_V2_SIGNATURE_WEAK_MATCHES,
   GIS_SIGNATURE_WEAK_MATCHES,
+  FB_COMMENTS_SIGNATURE_STRONG_MATCHES,
+  FB_COMMENTS_SIGNATURE_WEAK_MATCHES,
   GIS_HELP_URL,
   GSI_HELP_URL,
   GIS_DOMAINS_TO_SKIP,
@@ -30,6 +33,7 @@ import {
   GIS_EXCEPTIONS,
   getGISMatches,
   getGSIV2Matches,
+  getFBCommentsMatches,
   overrideGSIV2Matches,
 } from './libraries';
 
@@ -58,6 +62,16 @@ const LIBRARIES = [
     domainsToSkip: GIS_DOMAINS_TO_SKIP,
     helpUrl: GIS_HELP_URL,
     detectionFunction: getGISMatches,
+  },
+  {
+    name: 'fb-comments',
+    component: FBCommentsAccordion,
+    signatures: {
+      strongMatches: FB_COMMENTS_SIGNATURE_STRONG_MATCHES,
+      weakMatches: FB_COMMENTS_SIGNATURE_WEAK_MATCHES,
+    },
+    helpUrl: GIS_HELP_URL,
+    detectionFunction: getFBCommentsMatches,
   },
 ];
 
