@@ -18,7 +18,7 @@
  */
 import React from 'react';
 import {
-  CookiesLandingContainer,
+  CookiesLandingWrapper,
   CookiesMatrix,
   MessageBox,
   prepareCookieDataMapping,
@@ -43,7 +43,7 @@ const CookiesSection = () => {
   );
 
   return (
-    <CookiesLandingContainer
+    <CookiesLandingWrapper
       dataMapping={cookieClassificationDataMapping}
       testId="cookies-insights"
     >
@@ -60,9 +60,8 @@ const CookiesSection = () => {
         componentData={cookiesStatsComponents.legend}
         tabFrames={tabFrames}
         showHorizontalMatrix={false}
-        showInfoIcon
       />
-    </CookiesLandingContainer>
+    </CookiesLandingWrapper>
   );
 };
 export default CookiesSection;
