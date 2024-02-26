@@ -16,7 +16,15 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { createContext } from 'use-context-selector';
+import { noop, useContextSelector } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -33,11 +41,11 @@ export type SidebarItemValue = {
   title: string;
   children: SidebarItems;
   popupTitle?: string;
-  extraInterfaceToTitle?: React.ReactNode;
+  extraInterfaceToTitle?: () => React.JSX.Element;
   dropdownOpen?: boolean;
-  panel?: React.ReactNode;
-  icon?: React.ReactNode;
-  selectedIcon?: React.ReactNode;
+  panel?: () => React.JSX.Element;
+  icon?: () => React.JSX.Element;
+  selectedIcon?: () => React.JSX.Element;
   isBlurred?: boolean;
 };
 
@@ -45,34 +53,68 @@ export type SidebarItems = {
   [key: string]: SidebarItemValue;
 };
 
-export interface SidebarOutput {
-  activePanel: React.ReactNode;
-  selectedItemKey: string | null; //Entire chained item key eg Privacy-Sandbox#cookies#frameUrl
-  currentItemKey: string | null; //Last sidebar item key in selectedItemKey eg frameUrl
-  sidebarItems: SidebarItems;
-  isSidebarFocused: boolean;
-  setIsSidebarFocused: React.Dispatch<boolean>;
-  updateSelectedItemKey: (key: string | null) => void;
-  onKeyNavigation: (
-    event: React.KeyboardEvent<HTMLDivElement>,
-    key: string | null
-  ) => void;
-  toggleDropdown: (action: boolean, key: string) => void;
-  isKeyAncestor: (key: string) => boolean;
-  isKeySelected: (key: string) => boolean;
-}
-
 interface useSidebarProps {
   data: SidebarItems;
   defaultSelectedItemKey?: string | null;
 }
 
-const useSidebar = ({
+export interface SidebarStoreContext {
+  state: {
+    activePanel: {
+      element: () => React.JSX.Element;
+      query?: string;
+    };
+    selectedItemKey: string | null; //Entire chained item key eg Privacy-Sandbox#cookies#frameUrl
+    currentItemKey: string | null; //Last sidebar item key in selectedItemKey eg frameUrl
+    sidebarItems: SidebarItems;
+    isSidebarFocused: boolean;
+  };
+  actions: {
+    setIsSidebarFocused: React.Dispatch<boolean>;
+    updateSelectedItemKey: (key: string | null, queryString?: string) => void;
+    onKeyNavigation: (
+      event: React.KeyboardEvent<HTMLDivElement>,
+      key: string | null
+    ) => void;
+    toggleDropdown: (action: boolean, key: string) => void;
+    isKeyAncestor: (key: string) => boolean;
+    isKeySelected: (key: string) => boolean;
+  };
+}
+
+const initialState: SidebarStoreContext = {
+  state: {
+    activePanel: {
+      element: () => <></>,
+      query: '',
+    },
+    selectedItemKey: null,
+    currentItemKey: null,
+    sidebarItems: {},
+    isSidebarFocused: true,
+  },
+  actions: {
+    setIsSidebarFocused: noop,
+    updateSelectedItemKey: noop,
+    onKeyNavigation: noop,
+    toggleDropdown: noop,
+    isKeyAncestor: () => false,
+    isKeySelected: () => false,
+  },
+};
+
+export const SidebarContext = createContext<SidebarStoreContext>(initialState);
+
+export const SidebarProvider = ({
   data,
   defaultSelectedItemKey = null,
-}: useSidebarProps): SidebarOutput => {
+  children,
+}: PropsWithChildren<useSidebarProps>) => {
   const [selectedItemKey, setSelectedItemKey] = useState<string | null>(null);
-  const [activePanel, setActivePanel] = useState<React.ReactNode>(); // TODO: Should we use React.ReactNode in state?
+  const [activePanel, setActivePanel] = useState<
+    SidebarStoreContext['state']['activePanel']
+  >(initialState.state.activePanel);
+  const [query, setQuery] = useState<string>('');
   const [sidebarItems, setSidebarItems] = useState<SidebarItems>({});
   const [isSidebarFocused, setIsSidebarFocused] = useState(true);
 
@@ -105,7 +147,12 @@ const useSidebar = ({
         }
 
         if (matchKey(selectedItemKey || '', itemKey)) {
-          setActivePanel(item.panel);
+          if (item.panel) {
+            setActivePanel({
+              element: item.panel,
+              query,
+            });
+          }
 
           keyFound = true;
           return;
@@ -120,10 +167,10 @@ const useSidebar = ({
     if (selectedItemKey) {
       findActivePanel(sidebarItems);
     }
-  }, [selectedItemKey, sidebarItems]);
+  }, [query, selectedItemKey, sidebarItems]);
 
   const updateSelectedItemKey = useCallback(
-    (key: string | null) => {
+    (key: string | null, queryString = '') => {
       const keyPath = createKeyPath(sidebarItems, key || '');
 
       if (!keyPath.length) {
@@ -132,6 +179,7 @@ const useSidebar = ({
       }
 
       setSelectedItemKey(keyPath.join('#'));
+      setQuery(queryString);
     },
     [sidebarItems]
   );
@@ -222,19 +270,42 @@ const useSidebar = ({
     [selectedItemKey]
   );
 
-  return {
-    activePanel,
-    selectedItemKey,
-    currentItemKey,
-    sidebarItems,
-    isSidebarFocused,
-    setIsSidebarFocused,
-    updateSelectedItemKey,
-    onKeyNavigation,
-    toggleDropdown,
-    isKeyAncestor,
-    isKeySelected,
-  };
+  return (
+    <SidebarContext.Provider
+      value={{
+        state: {
+          activePanel,
+          selectedItemKey,
+          currentItemKey,
+          sidebarItems,
+          isSidebarFocused,
+        },
+        actions: {
+          setIsSidebarFocused,
+          updateSelectedItemKey,
+          onKeyNavigation,
+          toggleDropdown,
+          isKeyAncestor,
+          isKeySelected,
+        },
+      }}
+    >
+      {children}
+    </SidebarContext.Provider>
+  );
 };
 
-export default useSidebar;
+export function useSidebar(): SidebarStoreContext;
+export function useSidebar<T>(selector: (state: SidebarStoreContext) => T): T;
+
+/**
+ * Hook to access the Sidebar context.
+ * @param selector Selector function to partially select state.
+ * @returns selected part of the state
+ */
+export function useSidebar<T>(
+  selector: (state: SidebarStoreContext) => T | SidebarStoreContext = (state) =>
+    state
+) {
+  return useContextSelector(SidebarContext, selector);
+}

@@ -17,7 +17,11 @@
  * External dependencies.
  */
 import React, { useEffect, useRef } from 'react';
-import { ArrowDown, ArrowDownWhite } from '@ps-analysis-tool/design-system';
+import {
+  ArrowDown,
+  ArrowDownWhite,
+  useSidebar,
+} from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
@@ -25,41 +29,42 @@ import { ArrowDown, ArrowDownWhite } from '@ps-analysis-tool/design-system';
 import type { SidebarItemValue } from './useSidebar';
 
 interface SidebarItemProps {
-  selectedItemKey: string | null;
   didUserInteract: boolean;
   setDidUserInteract: (didUserInteract: boolean) => void;
   itemKey: string;
   sidebarItem: SidebarItemValue;
-  isSidebarFocused: boolean;
-  setIsSidebarFocused: React.Dispatch<boolean>;
-  updateSelectedItemKey: (key: string | null) => void;
-  onKeyNavigation: (
-    event: React.KeyboardEvent<HTMLDivElement>,
-    key: string | null
-  ) => void;
-  toggleDropdown: (action: boolean, key: string) => void;
-  isKeyAncestor: (key: string) => boolean;
-  isKeySelected: (key: string) => boolean;
   recursiveStackIndex?: number;
   visibleWidth?: number;
 }
 
 const SidebarChild = ({
-  selectedItemKey,
   didUserInteract,
   setDidUserInteract,
   itemKey,
   sidebarItem,
-  isSidebarFocused,
-  setIsSidebarFocused,
-  updateSelectedItemKey,
-  onKeyNavigation,
-  toggleDropdown,
-  isKeyAncestor,
-  isKeySelected,
   recursiveStackIndex = 0,
   visibleWidth,
 }: SidebarItemProps) => {
+  const {
+    selectedItemKey,
+    isSidebarFocused,
+    setIsSidebarFocused,
+    updateSelectedItemKey,
+    toggleDropdown,
+    isKeyAncestor,
+    isKeySelected,
+    onKeyNavigation,
+  } = useSidebar(({ state, actions }) => ({
+    selectedItemKey: state.selectedItemKey,
+    isSidebarFocused: state.isSidebarFocused,
+    setIsSidebarFocused: actions.setIsSidebarFocused,
+    updateSelectedItemKey: actions.updateSelectedItemKey,
+    toggleDropdown: actions.toggleDropdown,
+    isKeyAncestor: actions.isKeyAncestor,
+    isKeySelected: actions.isKeySelected,
+    onKeyNavigation: actions.onKeyNavigation,
+  }));
+
   const itemRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -122,9 +127,9 @@ const SidebarChild = ({
         {sidebarItem.icon && sidebarItem.selectedIcon && (
           <div className="mr-1 pointer-events-none">
             {isKeySelected(itemKey) && isSidebarFocused ? (
-              <>{sidebarItem.selectedIcon}</>
+              <>{sidebarItem.selectedIcon?.()}</>
             ) : (
-              <>{sidebarItem.icon}</>
+              <>{sidebarItem.icon?.()}</>
             )}
           </div>
         )}
@@ -135,7 +140,7 @@ const SidebarChild = ({
             left: visibleWidth ? visibleWidth - 35 : 0,
           }}
         >
-          {sidebarItem.extraInterfaceToTitle}
+          {sidebarItem.extraInterfaceToTitle?.()}
         </div>
       </div>
       <>
@@ -145,18 +150,10 @@ const SidebarChild = ({
               {Object.entries(sidebarItem.children).map(([childKey, child]) => (
                 <React.Fragment key={childKey}>
                   <SidebarChild
-                    selectedItemKey={selectedItemKey}
                     didUserInteract={didUserInteract}
                     setDidUserInteract={setDidUserInteract}
                     itemKey={childKey}
                     sidebarItem={child}
-                    isSidebarFocused={isSidebarFocused}
-                    setIsSidebarFocused={setIsSidebarFocused}
-                    updateSelectedItemKey={updateSelectedItemKey}
-                    onKeyNavigation={onKeyNavigation}
-                    toggleDropdown={toggleDropdown}
-                    isKeyAncestor={isKeyAncestor}
-                    isKeySelected={isKeySelected}
                     recursiveStackIndex={recursiveStackIndex + 1}
                     visibleWidth={visibleWidth}
                   />

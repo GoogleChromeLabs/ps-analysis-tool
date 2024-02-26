@@ -16,24 +16,28 @@
 /**
  * External dependencies
  */
-import React from 'react';
-import {
-  CookieIcon,
-  CookieIconWhite,
-  type SidebarItems,
-} from '@ps-analysis-tool/design-system';
+import { shallowEqualArrays, shallowEqualObjects } from 'shallow-equal';
 
-const sidebarData: SidebarItems = {
-  'sitemap-landing-page': {
-    title: 'Sitemap Report',
-    children: {},
-  },
-  'sitemap-affected-cookies': {
-    title: 'Affected Cookies',
-    children: {},
-    icon: () => <CookieIcon />,
-    selectedIcon: () => <CookieIconWhite />,
-  },
+export const shallowEqual = (a: unknown, b: unknown): boolean => {
+  if (a === b) {
+    return true;
+  }
+
+  if (Array.isArray(a) && Array.isArray(b)) {
+    if (
+      typeof a[0] === 'object' &&
+      typeof b[0] === 'object' &&
+      a.length === b.length
+    ) {
+      return a.every((item, index) => shallowEqualObjects(item, b[index]));
+    }
+
+    return shallowEqualArrays(a, b);
+  }
+
+  if (typeof a === 'object' && typeof b === 'object') {
+    return shallowEqualObjects(a, b);
+  }
+
+  return false;
 };
-
-export default sidebarData;
