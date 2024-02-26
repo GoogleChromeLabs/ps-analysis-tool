@@ -120,6 +120,7 @@ const Technologies = ({ selectedSite }: TechnologiesProps) => {
         className="h-full flex"
       >
         <Table
+          useIsBlockedToHighlight={true} // Hot Fix: To fail the condition intentionally and not highlight the rows.
           table={table}
           hideFiltering={true}
           showTopBar={true}

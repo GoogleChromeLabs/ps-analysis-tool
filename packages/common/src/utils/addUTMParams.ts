@@ -13,23 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies
- */
-import { shallowEqualArrays, shallowEqualObjects } from 'shallow-equal';
 
-export const shallowEqual = (a: unknown, b: unknown): boolean => {
-  if (a === b) {
-    return true;
+type MediumType = 'extension' | 'cli';
+
+const addUTMParams = (
+  url: string,
+  medium: MediumType = 'extension'
+): string => {
+  if (!url) {
+    return url;
   }
 
-  if (Array.isArray(a) && Array.isArray(b)) {
-    return shallowEqualArrays(a, b);
-  }
+  const urlParts = url.split('#');
+  const base = urlParts[0];
+  const hash = urlParts[1] ? `#${urlParts[1]}` : '';
+  const separator = base.includes('?') ? '&' : '?';
 
-  if (typeof a === 'object' && typeof b === 'object') {
-    return shallowEqualObjects(a, b);
-  }
-
-  return false;
+  return `${base}${separator}utm_source=psat&utm_medium=${medium}${hash}`;
 };
+
+export default addUTMParams;
