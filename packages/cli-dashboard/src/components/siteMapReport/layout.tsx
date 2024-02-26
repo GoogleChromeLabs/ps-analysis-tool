@@ -41,7 +41,6 @@ import SiteReport from '../siteReport';
 import SiteMapAffectedCookies from './sitemapAffectedCookies';
 import CookiesLandingContainer from '../siteReport/tabs/cookies/cookiesLandingContainer';
 import reshapeCookies from '../utils/reshapeCookies';
-import sidebarData from './sidebarData';
 import { generateSiteMapReportandDownload } from '../utils/reportDownloader';
 
 interface LayoutProps {
@@ -49,6 +48,7 @@ interface LayoutProps {
   cookies: CookieFrameStorageType;
   technologies: TechnologyData[];
   completeJson: CompleteJson[] | null;
+  sidebarData: SidebarItems;
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
 }
 
@@ -57,9 +57,10 @@ const Layout = ({
   technologies,
   landingPageCookies,
   completeJson,
+  sidebarData,
+  setSidebarData,
 }: LayoutProps) => {
   const [sites, setSites] = useState<string[]>([]);
-  const [data, setData] = useState<SidebarItems>(sidebarData);
 
   useEffect(() => {
     const _sites = new Set<string>();
@@ -124,7 +125,7 @@ const Layout = ({
   }, [isKeySelected, technologies]);
 
   useEffect(() => {
-    setData((prev) => {
+    setSidebarData((prev) => {
       const _data = { ...prev };
 
       _data['sitemap-landing-page'].panel = () => (
@@ -180,16 +181,17 @@ const Layout = ({
     frames,
     isKeySelected,
     reshapedCookies,
+    setSidebarData,
     siteFilteredCookies,
     siteFilteredTechnologies,
     sites,
   ]);
 
   useEffect(() => {
-    if (selectedItemKey === null && Object.keys(data).length > 0) {
+    if (selectedItemKey === null && Object.keys(sidebarData).length > 0) {
       updateSelectedItemKey('sitemap-landing-page');
     }
-  }, [data, isKeySelected, selectedItemKey, updateSelectedItemKey]);
+  }, [isKeySelected, selectedItemKey, sidebarData, updateSelectedItemKey]);
 
   return (
     <div className="w-full h-screen flex">

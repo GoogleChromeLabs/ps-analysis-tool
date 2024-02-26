@@ -56,6 +56,7 @@ const SiteMapReport = ({
         cookies={cookies}
         technologies={technologies}
         completeJson={completeJson}
+        sidebarData={data}
         setSidebarData={setData}
       />
     </SidebarProvider>
