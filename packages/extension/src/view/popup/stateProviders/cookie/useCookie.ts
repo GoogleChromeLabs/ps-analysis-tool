@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 /**
+ * External dependencies
+ */
+import { useContextSelector } from '@ps-analysis-tool/common';
+
+/**
  * Internal dependencies.
  */
-import useContextSelector from '../../../../utils/useContextSelector';
 import Context, { type CookieStoreContext } from './context';
 
 export function useCookie(): CookieStoreContext;
