@@ -28,8 +28,8 @@ import {
   GSI_V2_DOMAINS_TO_SKIP,
   GSIV2_EXCEPTIONS,
   GIS_EXCEPTIONS,
-  checkForGIS,
-  checkForGSIv2,
+  getGISMatches,
+  getGSIV2Matches,
   overrideGSIV2Matches,
 } from './libraries';
 
@@ -44,7 +44,7 @@ const LIBRARIES = [
     exceptions: GSIV2_EXCEPTIONS,
     domainsToSkip: GSI_V2_DOMAINS_TO_SKIP,
     helpUrl: GSI_HELP_URL,
-    detectionFunction: checkForGSIv2,
+    detectionFunction: getGSIV2Matches,
     overrideMatchesFunction: overrideGSIV2Matches,
   },
   {
@@ -57,7 +57,7 @@ const LIBRARIES = [
     exceptions: GIS_EXCEPTIONS,
     domainsToSkip: GIS_DOMAINS_TO_SKIP,
     helpUrl: GIS_HELP_URL,
-    detectionFunction: checkForGIS,
+    detectionFunction: getGISMatches,
   },
 ];
 

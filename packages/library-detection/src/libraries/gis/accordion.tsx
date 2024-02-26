@@ -25,7 +25,7 @@ import { addUTMParams } from '@ps-analysis-tool/common';
 import { Accordion, FeatureList } from '../../components';
 import type { AccordionProps } from '../../types';
 
-const GSIAccordion = ({ matches }: AccordionProps) => {
+const FacebookCommentsAccordion = ({ matches }: AccordionProps) => {
   const featuresCount = matches && matches.length ? matches.length : 0;
 
   if (!featuresCount) {
@@ -34,7 +34,7 @@ const GSIAccordion = ({ matches }: AccordionProps) => {
 
   return (
     <Accordion
-      title={'Avoid use of deprecated Google Sign-In functionality.'}
+      title={'Facebook Comments.'}
       isLoading={false}
       featuresText={`${featuresCount} features`}
     >
@@ -58,4 +58,4 @@ const GSIAccordion = ({ matches }: AccordionProps) => {
   );
 };
 
-export default GSIAccordion;
+export default FacebookCommentsAccordion;

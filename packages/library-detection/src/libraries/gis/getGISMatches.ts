@@ -37,7 +37,7 @@ import {
  * @param signatureMatches - The number of signature matches.
  * @returns The number of signature matches and the items.
  */
-const checkForGIS = (
+const getGISMatches = (
   script: ScriptTagUnderCheck,
   existingItems: DetectedSignature[],
   signatureMatches: number
@@ -122,4 +122,4 @@ const checkForGIS = (
   };
 };
 
-export default checkForGIS;
+export default getGISMatches;

@@ -15,11 +15,11 @@
  */
 // GSI
 export { default as GSIAccordion } from './gsi/accordion';
-export { default as checkForGSIv2 } from './gsi/checkForGSIv2';
+export { default as getGSIV2Matches } from './gsi/getGSIV2Matches';
 export { default as overrideGSIV2Matches } from './gsi/overrideGSIV2Matches';
 export * from './gsi/constants';
 
 // GIS
 export { default as GISAccordion } from './gis/accordion';
-export { default as checkForGIS } from './gis/checkForGIS';
+export { default as getGISMatches } from './gis/getGISMatches';
 export * from './gis/constants';

@@ -38,7 +38,7 @@ import {
  * @param gsi2ModuleMatch - The number of module matches.
  * @returns The number of signature matches and the items.
  */
-const checkForGSIv2 = (
+const getGSIV2Matches = (
   script: ScriptTagUnderCheck,
   existingItems: DetectedSignature[],
   signatureMatches: number,
@@ -132,4 +132,4 @@ const checkForGSIv2 = (
   };
 };
 
-export default checkForGSIv2;
+export default getGSIV2Matches;
