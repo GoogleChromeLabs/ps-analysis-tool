@@ -55,6 +55,7 @@ const filterCookiesByFrame = (
           hasFrame = true;
         }
       });
+
       if (!hasFrame && cookie.frameIdList !== undefined) {
         if (
           frameUrl === UNMAPPED_FRAME_KEY &&
