@@ -16,7 +16,6 @@
 /**
  * External dependencies.
  */
-import { useContextSelector, createContext } from 'use-context-selector';
 import React, {
   type PropsWithChildren,
   useEffect,
@@ -24,6 +23,7 @@ import React, {
   useCallback,
 } from 'react';
 import { noop } from '@ps-analysis-tool/design-system';
+import { useContextSelector, createContext } from '@ps-analysis-tool/common';
 
 enum PLATFORM_OS_MAP {
   mac = 'MacOS',
