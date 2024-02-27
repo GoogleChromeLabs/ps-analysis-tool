@@ -31,10 +31,9 @@ import { CookieDatabase } from '../types';
  */
 export async function fetchDictionary(): Promise<CookieDatabase> {
   const data = JSON.parse(
-    await fs.readFile(
-      path.resolve('./third_party/data/open-cookie-database.json'),
-      { encoding: 'utf8' }
-    )
+    await fs.readFile(path.resolve('./assets/data/open-cookie-database.json'), {
+      encoding: 'utf8',
+    })
   );
 
   return data;
