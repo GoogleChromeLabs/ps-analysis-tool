@@ -42,6 +42,7 @@ export interface LibraryDetectionContext {
     loadedBefore: boolean;
     showLoader: boolean;
     tabDomain: string;
+    tabId: number;
   };
   actions: {
     setLibraryMatches: React.Dispatch<React.SetStateAction<LibraryData>>;
@@ -61,6 +62,7 @@ const initialState: LibraryDetectionContext = {
     loadedBefore: false,
     showLoader: true,
     tabDomain: '',
+    tabId: -1,
   },
   actions: {
     setLibraryMatches: noop,
@@ -143,6 +145,7 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
           loadedBefore,
           showLoader,
           tabDomain,
+          tabId: tabId.current,
         },
         actions: {
           setLibraryMatches,

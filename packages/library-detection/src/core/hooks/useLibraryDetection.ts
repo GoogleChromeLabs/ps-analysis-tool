@@ -31,6 +31,7 @@ import {
 } from '../../utils';
 import { sumUpDetectionResults, useLibraryDetectionContext } from '..';
 import type { LibraryData, ResourceTreeItem } from '../../types';
+import LIBRARIES from '../../config';
 
 // The delay after the page load, because some scripts arrive right after the page load.
 const LOADING_DELAY = 2000;
@@ -46,6 +47,7 @@ const useLibraryDetection = () => {
     setLibraryMatches,
     setLoadedBeforeState,
     setShowLoader,
+    tabId,
   } = useLibraryDetectionContext(({ state, actions }) => ({
     isCurrentTabLoading: state.isCurrentTabLoading,
     loadedBefore: state.loadedBefore,
@@ -53,6 +55,7 @@ const useLibraryDetection = () => {
     setLoadedBeforeState: actions.setLoadedBeforeState,
     setLibraryMatches: actions.setLibraryMatches,
     setShowLoader: actions.setShowLoader,
+    tabId: state.tabId,
   }));
 
   const timeout = useRef(0);
@@ -106,6 +109,18 @@ const useLibraryDetection = () => {
     //  chrome.devtools.inspectedWindow.getResources updates whenever new items are added.
     const scripts = await getNetworkResourcesWithContent();
 
+    LIBRARIES.forEach(async ({ name, domQueryFunction }) => {
+      if (domQueryFunction) {
+        const injectionResults = await chrome.scripting.executeScript({
+          target: { tabId: tabId, allFrames: false },
+          func: domQueryFunction,
+        });
+
+        // eslint-disable-next-line no-console
+        console.log(injectionResults, 'injectionResults', name, tabId);
+      }
+    });
+
     executeTaskInDevToolWorker(
       LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING,
       scripts,
@@ -115,7 +130,7 @@ const useLibraryDetection = () => {
         setShowLoader(false);
       }
     );
-  }, [setLibraryMatches, attachListener, setShowLoader]);
+  }, [setLibraryMatches, attachListener, setShowLoader, tabId]);
 
   useEffect(() => {
     if (showLoader) {

@@ -35,6 +35,7 @@ import {
   getGSIV2Matches,
   getFBCommentsMatches,
   overrideGSIV2Matches,
+  fbCommentsDOMQuery,
 } from './libraries';
 
 const LIBRARIES = [
@@ -72,6 +73,7 @@ const LIBRARIES = [
     },
     helpUrl: GIS_HELP_URL,
     detectionFunction: getFBCommentsMatches,
+    domQueryFunction: fbCommentsDOMQuery,
   },
 ];
 

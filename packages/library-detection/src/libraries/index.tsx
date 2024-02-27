@@ -27,4 +27,5 @@ export * from './gis/constants';
 // Facebook Comments
 export { default as FBCommentsAccordion } from './fb-comments/accordion';
 export { default as getFBCommentsMatches } from './fb-comments/getFBCommentsMatches';
+export { default as fbCommentsDOMQuery } from './fb-comments/fbCommentsDOMQuery';
 export * from './fb-comments/constants';
