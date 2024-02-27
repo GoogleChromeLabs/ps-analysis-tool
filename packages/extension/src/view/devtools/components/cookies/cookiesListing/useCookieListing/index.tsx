@@ -30,6 +30,7 @@ import {
   type TableColumn,
   type TableFilter,
   type TableRow,
+  useSidebar,
 } from '@ps-analysis-tool/design-system';
 
 /**
@@ -47,6 +48,18 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
       cookies: state.tabCookies || {},
       getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
     })
+  );
+
+  const { activePanelQuery, clearActivePanelQuery } = useSidebar(
+    ({ state }) => ({
+      activePanelQuery: state.activePanel.query,
+      clearActivePanelQuery: state.activePanel.clearQuery,
+    })
+  );
+
+  const parsedQuery = useMemo(
+    () => JSON.parse(activePanelQuery || '{}'),
+    [activePanelQuery]
   );
 
   const isUsingCDP = useSettingsStore(({ state }) => state.isUsingCDP);
@@ -179,23 +192,33 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
     blockedReason: TableFilter[keyof TableFilter]['filterValues'];
   }>(() => {
     const calculate = (
-      key: string
-    ): TableFilter[keyof TableFilter]['filterValues'] =>
-      Object.values(cookies).reduce((acc, cookie) => {
+      key: string,
+      options?: string[]
+    ): TableFilter[keyof TableFilter]['filterValues'] => {
+      const filters = Object.values(cookies).reduce((acc, cookie) => {
         const value = getValueByKey(key, cookie);
 
         if (!acc) {
           acc = {};
         }
 
-        if (value) {
+        if (value && !acc[value]) {
           acc[value] = {
             selected: false,
           };
+
+          if (options) {
+            acc[value].selected = options.includes(value);
+          }
         }
 
         return acc;
       }, {} as TableFilter[keyof TableFilter]['filterValues']);
+
+      clearActivePanelQuery?.();
+
+      return filters;
+    };
 
     const blockedReasonFilterValues = Object.values(cookies).reduce(
       (acc, cookie) => {
@@ -221,11 +244,14 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
     );
 
     return {
-      category: calculate('analytics.category'),
+      category: calculate(
+        'analytics.category',
+        parsedQuery?.filter?.['analytics.category']
+      ),
       platform: calculate('analytics.platform'),
       blockedReason: blockedReasonFilterValues,
     };
-  }, [cookies]);
+  }, [cookies, parsedQuery?.filter, clearActivePanelQuery]);
 
   const filters = useMemo<TableFilter>(
     () => ({
