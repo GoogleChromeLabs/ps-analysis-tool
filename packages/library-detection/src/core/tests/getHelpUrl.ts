@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 /**
+ * External dependencies.
+ */
+import { addUTMParams } from '@ps-analysis-tool/common';
+
+/**
  * Internal dependencies.
  */
 import getHelpUrl from '../getHelpUrl';
@@ -23,11 +28,11 @@ describe('Test for helpUrls function', () => {
     const signatureConfigItemArray = [
       {
         signature: 'google.accounts.id.prompt(', // XXX add check for optional callback parameter
-        helpUrl: 'helpfulLink1',
+        helpUrl: 'https://example1.com',
       },
       {
         signature: 'isDisplayMomment(',
-        helpUrl: 'helpfulLink2',
+        helpUrl: 'https://example2.com',
       },
     ];
 
@@ -36,7 +41,7 @@ describe('Test for helpUrls function', () => {
         signatureConfigItemArray[1].signature,
         signatureConfigItemArray
       )
-    ).toEqual(signatureConfigItemArray[1].helpUrl);
+    ).toEqual(addUTMParams(signatureConfigItemArray[1].helpUrl));
   });
 
   it('Should filter the fallback string as defined in the function', () => {

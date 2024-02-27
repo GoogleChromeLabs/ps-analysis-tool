@@ -77,7 +77,7 @@ const codeForCookieIssueDetails = (
 
   // ExcludeSameSiteStrict and ExcludeSameSiteLax require being paired with an appropriate warning. We didn't
   // find one of those warnings so return null to indicate there shouldn't be an issue created.
-  return `Something went wrong`; // null value was changed to error message.
+  return `<p>Something went wrong</p><br />`; // null value was changed to error message.
 };
 
 const CookieExclusionReason = {

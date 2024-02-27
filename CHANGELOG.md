@@ -240,3 +240,23 @@
 - Update d.c.c. links https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/417
 - Merge `main` into `develop` https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/451
 - Update flags and profile color in Chrome launcher https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/467
+
+# v0.5.0
+
+## Extension
+* Restructure `Facilitated Testing` landing page UI https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/493
+* Two-step process for toggling CDP state https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/494
+* Enhancement: Update cookie's blocking status enum and UI https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/507
+* Enhancement: Add UTM params to outgoing links https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/512
+* Fix: UI and change messaging in toast message https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/511
+* Fix: Library detection miscellaneous QA issues https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/495
+* Fix: Keep service worker alive https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/513
+* Fix: Slow loading cookies on page change https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/484
+* Style-Fix: Scale up cookie prefix icon and update message text in cookie details. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/514
+
+## CLI
+* Fix: Add mock UA string https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/487
+* Fix: Add conditional rendering in technology details panel https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/499
+
+## Others
+* Disable auto opening of Chrome DevTools by default for all tabs https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/491
