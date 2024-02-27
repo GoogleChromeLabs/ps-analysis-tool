@@ -54,6 +54,14 @@ const processAndStoreDocumentCookies = async ({
         ({ tabId: targetTabId }) => targetTabId && targetTabId === Number(tabId)
       );
 
+      const cdpCookies = await chrome.debugger.sendCommand(
+        { tabId: Number(tabId) },
+        'Network.getCookies',
+        {
+          urls: [tabUrl],
+        }
+      );
+
       if (!frame?.id) {
         return;
       }
@@ -69,7 +77,8 @@ const processAndStoreDocumentCookies = async ({
               value: rest.join('='),
             },
             tabUrl,
-            []
+            //@ts-ignore
+            cdpCookies?.cookies ?? []
           );
 
           if (dictionary) {

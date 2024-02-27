@@ -26,6 +26,7 @@ import { WEBPAGE_PORT_NAME } from '../../../constants';
 import { useCookieStore } from '../stateProviders/syncCookieStore';
 import { useSettingsStore } from '../stateProviders/syncSettingsStore';
 import { getCurrentTabId } from '../../../utils/getCurrentTabId';
+import { isOnRWS } from '../../../contentScript/utils';
 
 interface Response {
   attributes: { iframeOrigin: string | null; setInPage?: boolean };
@@ -293,6 +294,11 @@ const useFrameOverlay = (
                   return [...new Set([...previousReasons])];
                 }, [])
             : [];
+
+          const isFrameOnRWS = selectedFrame
+            ? await isOnRWS(selectedFrame)
+            : false;
+
           portRef.current?.postMessage({
             selectedFrame,
             removeAllFramePopovers: isFrameSelectedFromDevTool,
@@ -301,7 +307,7 @@ const useFrameOverlay = (
             blockedCookies: blockedCookies.length,
             blockedReasons: blockedReasons.join(', '),
             isInspecting,
-            isOnRWS: selectedFrame ? tabFrames[selectedFrame]?.isOnRWS : false,
+            isOnRWS: isFrameOnRWS,
           });
         }
       } catch (error) {
