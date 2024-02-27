@@ -23,21 +23,72 @@ import { getDomain } from 'tldts';
  */
 import type { RelatedWebsiteSetType } from '../@types';
 
+export type RWSSetOutputType = RelatedWebsiteSetType & {
+  ccTLDParent?: string;
+};
+
 const findRWSURLSets = (
   domain: string | null,
   rwsSets: RelatedWebsiteSetType[]
-): RelatedWebsiteSetType | undefined => {
-  return rwsSets.find((rws: RelatedWebsiteSetType) => {
-    const rwsDomains: string[] = Object.keys(rws.rationaleBySite || {}).map(
-      (_url) => getDomain(_url) || ''
-    );
+): RWSSetOutputType | undefined => {
+  if (!domain) {
+    return undefined;
+  }
 
-    if (domain === getDomain(rws.primary)) {
-      return true;
+  let ccTLDParentURL = '';
+
+  const res: RWSSetOutputType | undefined = rwsSets.find(
+    (rws: RelatedWebsiteSetType) => {
+      if (domain === getDomain(rws.primary)) {
+        return true;
+      }
+
+      const rwsDomains: string[] = Object.keys(rws.rationaleBySite || {}).map(
+        (_url) => getDomain(_url) || ''
+      );
+
+      if (rwsDomains.includes(domain)) {
+        return true;
+      }
+
+      const ccTLDs = Object.entries(rws.ccTLDs || {}).reduce(
+        (acc, [ccTLDParent, _ccTLDs]: [string, string[]]) => {
+          const ccTLDsObj = _ccTLDs.reduce(
+            (ccTLDAcc, ccTLD) => {
+              const ccTLDDomain = getDomain(ccTLD) || '';
+
+              if (ccTLDDomain) {
+                ccTLDAcc[ccTLDDomain] = ccTLDParent;
+              }
+
+              return ccTLDAcc;
+            },
+            {} as {
+              [ccTLD: string]: string;
+            }
+          );
+
+          return { ...acc, ...ccTLDsObj };
+        },
+        {} as {
+          [ccTLD: string]: string;
+        }
+      );
+
+      if (ccTLDs[domain]) {
+        ccTLDParentURL = ccTLDs[domain];
+        return true;
+      }
+
+      return false;
     }
+  );
 
-    return domain ? rwsDomains.includes(domain) : false;
-  });
+  if (ccTLDParentURL && res) {
+    res.ccTLDParent = ccTLDParentURL;
+  }
+
+  return res;
 };
 
 export default findRWSURLSets;

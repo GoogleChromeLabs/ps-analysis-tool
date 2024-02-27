@@ -24,21 +24,23 @@ import { getDomain } from 'tldts';
  */
 import fetchRWSInfo from '../../../../../../../utils/fetchRWSInfo';
 import getInspectedTabDomain from './getInspectedTabDomain';
-import type { RelatedWebsiteSetType } from '../../../../../../../@types';
-import findRWSURLSets from '../../../../../../../utils/findRWSURLSets';
+import findRWSURLSets, {
+  type RWSSetOutputType,
+} from '../../../../../../../utils/findRWSURLSets';
 
 export type CheckURLInRWSOutputType = {
   isURLInRWS: boolean;
   primary?: boolean;
   domain?: string;
-  relatedWebsiteSet?: RelatedWebsiteSetType;
+  isccTLD?: boolean;
+  relatedWebsiteSet?: RWSSetOutputType;
 };
 
 const checkURLInRWS = async () => {
   const tabDomain = (await getInspectedTabDomain()) || '';
-  const rwsSets: RelatedWebsiteSetType[] = (await fetchRWSInfo()).sets || [];
+  const rwsSets: RWSSetOutputType[] = (await fetchRWSInfo()).sets || [];
 
-  const urlInRWS: RelatedWebsiteSetType | undefined = findRWSURLSets(
+  const urlInRWS: RWSSetOutputType | undefined = findRWSURLSets(
     tabDomain,
     rwsSets
   );
@@ -53,6 +55,15 @@ const checkURLInRWS = async () => {
     return {
       isURLInRWS: true,
       primary: true,
+      domain: tabDomain,
+      relatedWebsiteSet: urlInRWS,
+    } as CheckURLInRWSOutputType;
+  }
+
+  if (urlInRWS.ccTLDParent) {
+    return {
+      isURLInRWS: true,
+      isccTLD: true,
       domain: tabDomain,
       relatedWebsiteSet: urlInRWS,
     } as CheckURLInRWSOutputType;
