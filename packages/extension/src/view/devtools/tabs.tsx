@@ -42,6 +42,7 @@ import {
   PrivacySandboxIconWhite,
   type SidebarItems,
   InfoIcon,
+  SIDEBAR_ITEMS_KEYS,
 } from '@ps-analysis-tool/design-system';
 
 /**
@@ -69,34 +70,34 @@ import {
 } from './components';
 
 const TABS: SidebarItems = {
-  privacySandbox: {
+  [SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]: {
     title: 'Privacy Sandbox',
     panel: () => <PrivacySandbox />,
     icon: () => <PrivacySandboxIcon />,
     selectedIcon: () => <PrivacySandboxIconWhite />,
     dropdownOpen: true,
     children: {
-      cookies: {
+      [SIDEBAR_ITEMS_KEYS.COOKIES]: {
         title: 'Cookies',
         icon: () => <CookieIcon />,
         selectedIcon: () => <CookieIconWhite />,
         children: {},
         dropdownOpen: true,
       },
-      siteBoundaries: {
+      [SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES]: {
         title: 'Site Boundaries',
         panel: () => <SiteBoundaries />,
         icon: () => <SiteBoundariesIcon />,
         selectedIcon: () => <SiteBoundariesIconWhite />,
         children: {
-          chips: {
+          [SIDEBAR_ITEMS_KEYS.CHIPS]: {
             title: 'CHIPS',
             panel: () => <Chips />,
             icon: () => <ChipsIcon />,
             selectedIcon: () => <ChipsIconWhite />,
             children: {},
           },
-          relatedWebsiteSets: {
+          [SIDEBAR_ITEMS_KEYS.RELATED_WEBSITE_SETS]: {
             title: 'Related Website Sets',
             panel: () => <RelatedWebsiteSets />,
             icon: () => <RelatedWebsiteSetsIcon />,
@@ -105,20 +106,20 @@ const TABS: SidebarItems = {
           },
         },
       },
-      privateAdvertising: {
+      [SIDEBAR_ITEMS_KEYS.PRIVATE_ADVERTISING]: {
         title: 'Private Advertising',
         panel: () => <PrivateAdvertising />,
         icon: () => <PrivateAdvertisingIcon />,
         selectedIcon: () => <PrivateAdvertisingIconWhite />,
         children: {
-          topics: {
+          [SIDEBAR_ITEMS_KEYS.TOPICS]: {
             title: 'Topics',
             panel: () => <Topics />,
             icon: () => <TopicsIcon />,
             selectedIcon: () => <TopicsIconWhite />,
             children: {},
           },
-          attribution: {
+          [SIDEBAR_ITEMS_KEYS.ATTRIBUTION]: {
             title: 'Attribution',
             panel: () => <Attribution />,
             icon: () => <AttributionIcon />,
@@ -127,20 +128,20 @@ const TABS: SidebarItems = {
           },
         },
       },
-      antiCovertTracking: {
+      [SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING]: {
         title: 'Tracking Protection',
         panel: () => <AntiCovertTracking />,
         icon: () => <AntiCovertTrackingIcon />,
         selectedIcon: () => <AntiCovertTrackingIconWhite />,
         children: {
-          bounceTracking: {
+          [SIDEBAR_ITEMS_KEYS.BOUNCE_TRACKING]: {
             title: 'Bounce Tracking',
             panel: () => <BounceTracking />,
             icon: () => <BounceTrackingIcon />,
             selectedIcon: () => <BounceTrackingIconWhite />,
             children: {},
           },
-          fingerprinting: {
+          [SIDEBAR_ITEMS_KEYS.FINGERPRINTING]: {
             title: 'Fingerprinting',
             panel: () => <Fingerprinting />,
             icon: () => <FingerPrintingIcon />,
@@ -151,7 +152,7 @@ const TABS: SidebarItems = {
       },
     },
   },
-  facilitatedTesting: {
+  [SIDEBAR_ITEMS_KEYS.FACILITATED_TESTING]: {
     title: 'Facilitated Testing',
     panel: () => <FacilitatedTesting />,
     icon: () => <InfoIcon className="fill-gray" />,
@@ -159,7 +160,7 @@ const TABS: SidebarItems = {
     dropdownOpen: false,
     children: {},
   },
-  settings: {
+  [SIDEBAR_ITEMS_KEYS.SETTINGS]: {
     title: 'Settings',
     panel: () => <Settings />,
     icon: () => <SettingsTab />,

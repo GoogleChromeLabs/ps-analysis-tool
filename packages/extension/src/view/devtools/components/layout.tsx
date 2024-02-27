@@ -30,6 +30,7 @@ import {
   CookieIcon,
   InspectButton,
   ToastMessage,
+  SIDEBAR_ITEMS_KEYS,
 } from '@ps-analysis-tool/design-system';
 import { Resizable } from 're-resizable';
 
@@ -96,12 +97,14 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
   useEffect(() => {
     setSidebarData((prev) => {
       const data = { ...prev };
-      const psData = data['privacySandbox'];
+      const psData = data[SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX];
 
-      psData.children['cookies'].panel = () => (
+      psData.children[SIDEBAR_ITEMS_KEYS.COOKIES].panel = () => (
         <Cookies setFilteredCookies={setFilteredCookies} />
       );
-      psData.children['cookies'].children = Object.keys(tabFrames || {})
+      psData.children[SIDEBAR_ITEMS_KEYS.COOKIES].children = Object.keys(
+        tabFrames || {}
+      )
         .filter((url) => {
           return url === UNKNOWN_FRAME_KEY ? frameHasCookies[url] : true;
         })
@@ -123,15 +126,19 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         canStartInspecting && Boolean(Object.keys(tabFrames || {}).length);
 
       if (showInspectButton) {
-        psData.children['cookies'].extraInterfaceToTitle = () => (
-          <InspectButton
-            isInspecting={isInspecting}
-            setIsInspecting={setIsInspecting}
-            isTabFocused={isSidebarFocused && isKeySelected('cookies')}
-          />
-        );
+        psData.children[SIDEBAR_ITEMS_KEYS.COOKIES].extraInterfaceToTitle =
+          () => (
+            <InspectButton
+              isInspecting={isInspecting}
+              setIsInspecting={setIsInspecting}
+              isTabFocused={
+                isSidebarFocused && isKeySelected(SIDEBAR_ITEMS_KEYS.COOKIES)
+              }
+            />
+          );
       } else {
-        psData.children['cookies'].extraInterfaceToTitle = () => <></>;
+        psData.children[SIDEBAR_ITEMS_KEYS.COOKIES].extraInterfaceToTitle =
+          () => <></>;
       }
 
       return data;
@@ -166,7 +173,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
       }
 
       if (!data[tabId]?.['selectedSidebarItem']) {
-        data[tabId]['selectedSidebarItem'] = 'cookies';
+        data[tabId]['selectedSidebarItem'] = SIDEBAR_ITEMS_KEYS.COOKIES;
       }
 
       data[tabId]['selectedSidebarItem'] = selectedItemKey;
@@ -185,14 +192,14 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
 
     lastUrl.current = tabUrl;
 
-    updateSelectedItemKey(selectedFrame || 'cookies');
+    updateSelectedItemKey(selectedFrame || SIDEBAR_ITEMS_KEYS.COOKIES);
   }, [selectedFrame, setSelectedFrame, tabUrl, updateSelectedItemKey]);
 
   const [filteredCookies, setFilteredCookies] = useState<CookieTableData[]>([]);
 
   const handleUpdate = useCallback(
     (key: string | null) => {
-      updateSelectedItemKey(key || 'cookies');
+      updateSelectedItemKey(key || SIDEBAR_ITEMS_KEYS.COOKIES);
     },
     [updateSelectedItemKey]
   );

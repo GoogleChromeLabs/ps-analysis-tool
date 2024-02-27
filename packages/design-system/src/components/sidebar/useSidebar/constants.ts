@@ -13,6 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './useSidebar';
-export * from './useSidebar/constants';
-export { default as Sidebar } from './sidebar';
+
+export enum SIDEBAR_ITEMS_KEYS {
+  COOKIES = 'cookies',
+  AFFECTED_COOKIES = 'affected-cookies',
+  TECHNOLOGIES = 'technologies',
+  PRIVACY_SANDBOX = 'privacy-sandbox',
+  SITE_BOUNDARIES = 'site-boundaries',
+  CHIPS = 'chips',
+  RELATED_WEBSITE_SETS = 'related-website-sets',
+  PRIVATE_ADVERTISING = 'private-advertising',
+  TOPICS = 'topics',
+  ATTRIBUTION = 'attribution',
+  ANTI_COVERT_TRACKING = 'anti-covert-tracking',
+  BOUNCE_TRACKING = 'bounce-tracking',
+  FINGERPRINTING = 'fingerprinting',
+  FACILITATED_TESTING = 'facilitated-testing',
+  SETTINGS = 'settings',
+}
