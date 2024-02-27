@@ -32,7 +32,6 @@ const filterCookiesByFrame = (
   tabFrames: TabFrames | null,
   frameUrl: string | null
 ) => {
-  console.log(frameUrl);
   const frameFilteredCookies: { [key: string]: CookieTableData } = {};
   if (!cookies || !frameUrl || !tabFrames || !tabFrames[frameUrl]) {
     return Object.values(frameFilteredCookies);
