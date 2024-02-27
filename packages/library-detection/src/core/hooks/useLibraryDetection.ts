@@ -111,13 +111,15 @@ const useLibraryDetection = () => {
 
     LIBRARIES.forEach(async ({ name, domQueryFunction }) => {
       if (domQueryFunction) {
-        const injectionResults = await chrome.scripting.executeScript({
+        const queryResult = await chrome.scripting.executeScript({
           target: { tabId: tabId, allFrames: false },
           func: domQueryFunction,
         });
 
-        // eslint-disable-next-line no-console
-        console.log(injectionResults, 'injectionResults', name, tabId);
+        setLibraryMatches((matches) => {
+          matches[name] = queryResult;
+          return matches;
+        });
       }
     });
 
