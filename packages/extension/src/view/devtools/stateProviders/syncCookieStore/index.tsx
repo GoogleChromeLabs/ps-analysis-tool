@@ -179,7 +179,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
                 modifiedTabFrames[parsedUrl[0]] = {
                   frameIds: Array.from(
                     new Set([
-                      frame?.id,
+                      frame.id,
                       ...(prevState?.[parsedUrl[0]]?.frameIds ?? []),
                     ])
                   ),
