@@ -46,10 +46,14 @@ const LibraryDetection = memo(function LibraryDetection() {
       isCurrentTabLoading: state.isCurrentTabLoading,
     }));
 
-  LIBRARIES.map((config) => {
+  LIBRARIES.forEach(({ name, exceptions }) => {
+    if (!exceptions) {
+      return;
+    }
+
     let matches =
-      libraryMatches && libraryMatches[config.name as keyof LibraryData]
-        ? libraryMatches[config.name as keyof LibraryData]?.matches
+      libraryMatches && libraryMatches[name as keyof LibraryData]
+        ? libraryMatches[name as keyof LibraryData]?.matches
         : [];
 
     const parsedUrl = extractUrl(tabDomain);
@@ -57,20 +61,15 @@ const LibraryDetection = memo(function LibraryDetection() {
     const parsedTabDomain = parsedUrl?.domain;
 
     const isCurrentDomainExceptionDomain =
-      config?.exceptions?.[parsedTabDomain as string] &&
-      config?.exceptions?.[parsedTabDomain as string]?.signatures?.length > 0;
+      exceptions?.[parsedTabDomain as string] &&
+      exceptions?.[parsedTabDomain as string]?.signatures?.length > 0;
 
     if (isCurrentDomainExceptionDomain) {
-      matches = filterMatchesBasedOnExceptions(
-        tabDomain,
-        config?.exceptions,
-        matches
-      );
+      matches = filterMatchesBasedOnExceptions(tabDomain, exceptions, matches);
     }
 
-    libraryMatches[config.name as keyof LibraryData].matches = matches;
-
-    return matches;
+    // @todo Wrong way of updating state, refactor code.
+    libraryMatches[name as keyof LibraryData].matches = matches;
   });
 
   const names = Object.keys(libraryMatches);
@@ -90,16 +89,17 @@ const LibraryDetection = memo(function LibraryDetection() {
   const result =
     detectedLibraryNames.length > 0 ? (
       <>
-        {LIBRARIES.map((config) => {
-          const Component = config.component as React.FC<{
+        {LIBRARIES.map((library) => {
+          const Component = library.component as React.FC<{
             matches: DetectedSignature[];
           }>;
+
           const matches =
-            libraryMatches && libraryMatches[config.name as keyof LibraryData]
-              ? libraryMatches[config.name as keyof LibraryData]?.matches
+            libraryMatches && libraryMatches[library.name as keyof LibraryData]
+              ? libraryMatches[library.name as keyof LibraryData]?.matches
               : [];
 
-          return <Component key={config.name} matches={matches} />;
+          return <Component key={library.name} matches={matches} />;
         })}
       </>
     ) : (

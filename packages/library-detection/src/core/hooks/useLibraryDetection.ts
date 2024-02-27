@@ -117,7 +117,7 @@ const useLibraryDetection = () => {
         });
 
         setLibraryMatches((matches) => {
-          matches[name] = queryResult;
+          matches[name] = { matches: queryResult[0]?.result };
           return matches;
         });
       }

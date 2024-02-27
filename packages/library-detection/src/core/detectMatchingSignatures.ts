@@ -53,6 +53,7 @@ const detectMatchingSignatures = (
   detectionSubFunctions: DetectionSubFunctions,
   detectionAuditFunctions: DetectionAuditFunctions
 ): LibraryData => {
+  // @todo Overriding matches.
   const libraryMatches: LibraryData = getInitialLibraryData();
 
   for (const script of loadedScripts.filter(filterDomainsToSkip)) {
