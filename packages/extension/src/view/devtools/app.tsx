@@ -149,9 +149,19 @@ const App: React.FC = () => {
             : true;
         })
         .reduce<SidebarItems>((acc, url) => {
+          let popupTitle = `Cookies used by frames from ${url}`;
+          if (url === UNKNOWN_FRAME_KEY) {
+            popupTitle =
+              'Frames that set these cookies were removed from the DOM, leaving these cookies orphaned.';
+          }
+
+          if (url === UNMAPPED_COOKIE_KEY) {
+            popupTitle = 'We could not map these cookies to any frame.';
+          }
+
           acc[url] = {
             title: url,
-            popupTitle: `Cookies used by frames from ${url}`,
+            popupTitle,
             panel: <Cookies setFilteredCookies={setFilteredCookies} />,
             icon: <CookieIcon />,
             selectedIcon: <CookieIconWhite />,
