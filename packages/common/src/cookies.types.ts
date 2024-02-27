@@ -162,6 +162,7 @@ export interface Legend {
   count: number;
   color: string;
   countClassName: string;
+  accessorKey?: string;
 }
 
 export interface CookieStatsComponents {

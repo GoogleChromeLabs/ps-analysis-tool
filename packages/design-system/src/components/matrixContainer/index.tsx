@@ -39,6 +39,7 @@ interface MatrixContainerProps {
   highlightTitle?: boolean;
   capitalizeTitle?: boolean;
   infoIconTitle?: string;
+  onClick?: (query: string) => void;
 }
 
 const MatrixContainer = ({
@@ -52,6 +53,7 @@ const MatrixContainer = ({
   highlightTitle = false,
   capitalizeTitle = false,
   infoIconTitle = '',
+  onClick,
 }: MatrixContainerProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -86,7 +88,11 @@ const MatrixContainer = ({
           )}
         </div>
         {showMatrix && (
-          <Matrix dataComponents={matrixData} expand={isExpanded} />
+          <Matrix
+            dataComponents={matrixData}
+            expand={isExpanded}
+            onClick={onClick}
+          />
         )}
       </div>
       {Boolean(horizontalMatrixData.length) && (

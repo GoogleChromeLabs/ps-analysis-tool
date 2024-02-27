@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
   CookiesLandingWrapper,
   CookiesMatrix,
@@ -24,6 +24,7 @@ import {
   prepareCookieDataMapping,
   prepareCookieStatsComponents,
   prepareCookiesCount,
+  useSidebar,
 } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies
@@ -40,6 +41,30 @@ const CookiesSection = () => {
   const cookieClassificationDataMapping = prepareCookieDataMapping(
     cookieStats,
     cookiesStatsComponents
+  );
+
+  const firstFrame = useMemo(
+    () => Object.keys(tabFrames || {})?.[0] || '',
+    [tabFrames]
+  );
+
+  const updateSelectedItemKey = useSidebar(
+    ({ actions }) => actions.updateSelectedItemKey
+  );
+
+  const selectedItemUpdater = useCallback(
+    (query: string) => {
+      const queryObject = JSON.parse(query) as Record<string, Array<string>>;
+
+      const modifiedQuery = {
+        filter: {
+          ...queryObject,
+        },
+      };
+
+      updateSelectedItemKey(firstFrame, JSON.stringify(modifiedQuery));
+    },
+    [firstFrame, updateSelectedItemKey]
   );
 
   return (
@@ -60,6 +85,7 @@ const CookiesSection = () => {
         componentData={cookiesStatsComponents.legend}
         tabFrames={tabFrames}
         showHorizontalMatrix={false}
+        onClick={selectedItemUpdater}
       />
     </CookiesLandingWrapper>
   );

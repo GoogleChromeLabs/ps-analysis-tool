@@ -46,6 +46,7 @@ interface CookiesMatrixProps {
   capitalizeTitle?: boolean;
   infoIconTitle?: string;
   matrixHorizontalData?: MatrixComponentHorizontalProps[] | null;
+  onClick?: (query: string) => void;
 }
 
 const CookiesMatrix = ({
@@ -63,6 +64,7 @@ const CookiesMatrix = ({
   capitalizeTitle = false,
   matrixHorizontalData = null,
   infoIconTitle = 'Cookies must be analyzed on a new, clean Chrome profile for an accurate report.',
+  onClick,
 }: CookiesMatrixProps) => {
   const dataComponents: MatrixComponentProps[] = [];
 
@@ -114,6 +116,7 @@ const CookiesMatrix = ({
         highlightTitle={highlightTitle}
         capitalizeTitle={capitalizeTitle}
         infoIconTitle={infoIconTitle}
+        onClick={onClick}
       />
     </div>
   );

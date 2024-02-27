@@ -16,7 +16,8 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useCallback } from 'react';
+import classnames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -26,9 +27,23 @@ import MatrixComponent, { type MatrixComponentProps } from './matrixComponent';
 interface MatrixProps {
   dataComponents: MatrixComponentProps[];
   expand?: boolean;
+  onClick?: (query: string) => void;
 }
 
-const Matrix = ({ dataComponents, expand }: MatrixProps) => {
+const Matrix = ({ dataComponents, expand, onClick }: MatrixProps) => {
+  const handleClick = useCallback(
+    (title: string, accessorKey?: string) => {
+      const query = accessorKey
+        ? JSON.stringify({
+            [accessorKey]: [title],
+          })
+        : '';
+
+      onClick?.(query);
+    },
+    [onClick]
+  );
+
   if (!dataComponents || !dataComponents.length) {
     return null;
   }
@@ -41,17 +56,27 @@ const Matrix = ({ dataComponents, expand }: MatrixProps) => {
             index === dataComponents.length - 1 ||
             index === dataComponents.length - 2;
           return (
-            <MatrixComponent
+            <button
               key={index}
-              isExpanded={expand}
-              {...dataComponent}
-              containerClasses={`p-3.5 ${
-                !isLastTwoItems ? 'border-b' : ''
-              } border-bright-gray dark:border-quartz`}
-              countClassName={
-                dataComponent.countClassName + ' text-xxl leading-none'
+              onClick={() =>
+                handleClick(dataComponent.title, dataComponent.accessorKey)
               }
-            />
+              className={classnames({
+                'hover:opacity-70 active:opacity-50': onClick,
+                'cursor-default': !onClick,
+              })}
+            >
+              <MatrixComponent
+                isExpanded={expand}
+                {...dataComponent}
+                containerClasses={`p-3.5 ${
+                  !isLastTwoItems ? 'border-b' : ''
+                } border-bright-gray dark:border-quartz`}
+                countClassName={
+                  dataComponent.countClassName + ' text-xxl leading-none'
+                }
+              />
+            </button>
           );
         }
         return null;
