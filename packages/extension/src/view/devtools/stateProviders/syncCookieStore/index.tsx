@@ -30,7 +30,7 @@ import {
   type TabCookies,
   type TabFrames,
   UNKNOWN_FRAME_KEY,
-  UNMAPPED_FRAME_KEY,
+  UNMAPPED_COOKIE_KEY,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -172,7 +172,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         })
       );
       modifiedTabFrames[UNKNOWN_FRAME_KEY] = { frameIds: [] };
-      modifiedTabFrames[UNMAPPED_FRAME_KEY] = { frameIds: [] };
+      modifiedTabFrames[UNMAPPED_COOKIE_KEY] = { frameIds: [] };
       setTabFrames(modifiedTabFrames);
     },
     []
@@ -217,7 +217,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       }
 
       if (!hasFrame && cookie.frameIdList && cookie.frameIdList?.length >= 0) {
-        acc[UNMAPPED_FRAME_KEY] = true;
+        acc[UNMAPPED_COOKIE_KEY] = true;
       }
 
       return acc;
