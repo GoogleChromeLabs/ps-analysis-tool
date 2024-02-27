@@ -61,6 +61,10 @@ const detectMatchingSignatures = (
     }
 
     Object.entries(detectionSubFunctions).forEach(([key, callback]) => {
+      if (!callback) {
+        return;
+      }
+
       const {
         matches,
         signatureMatches,

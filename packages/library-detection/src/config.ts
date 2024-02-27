@@ -23,17 +23,15 @@ import {
   GSI_V2_SIGNATURE_STRONG_MATCHES,
   GSI_V2_SIGNATURE_WEAK_MATCHES,
   GIS_SIGNATURE_WEAK_MATCHES,
-  FB_COMMENTS_SIGNATURE_STRONG_MATCHES,
-  FB_COMMENTS_SIGNATURE_WEAK_MATCHES,
   GIS_HELP_URL,
   GSI_HELP_URL,
+  FB_COMMENTS_HELP_URL,
   GIS_DOMAINS_TO_SKIP,
   GSI_V2_DOMAINS_TO_SKIP,
   GSIV2_EXCEPTIONS,
   GIS_EXCEPTIONS,
   getGISMatches,
   getGSIV2Matches,
-  getFBCommentsMatches,
   overrideGSIV2Matches,
   fbCommentsDOMQuery,
 } from './libraries';
@@ -67,12 +65,7 @@ const LIBRARIES = [
   {
     name: 'fb-comments',
     component: FBCommentsAccordion,
-    signatures: {
-      strongMatches: FB_COMMENTS_SIGNATURE_STRONG_MATCHES,
-      weakMatches: FB_COMMENTS_SIGNATURE_WEAK_MATCHES,
-    },
-    helpUrl: GIS_HELP_URL,
-    detectionFunction: getFBCommentsMatches,
+    helpUrl: FB_COMMENTS_HELP_URL,
     domQueryFunction: fbCommentsDOMQuery,
   },
 ];
