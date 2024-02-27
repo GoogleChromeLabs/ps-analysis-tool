@@ -34,16 +34,18 @@ import isFirstParty from './isFirstParty';
 /**
  * Parse Network.responseReceivedExtraInfo for extra information about a cookie.
  * @param {object} response Response to be parsed to get extra information about a cookie.
- * @param {object} requestMap An object for requestId to url.
- * @param {string} tabUrl - The top-level URL (URL in the tab's address bar).
+ * @param {string} requestUrl The request url.
+ * @param {string} tabUrl The top-level URL (URL in the tab's address bar).
  * @param {object} cookieDB Cookie database to find analytics from.
+ * @param {string} frameId The request to which the frame is associated to.
  * @returns {object} parsed cookies.
  */
 export default function parseResponseReceivedExtraInfo(
   response: Protocol.Network.ResponseReceivedExtraInfoEvent,
-  requestMap: { [requestId: string]: string },
+  requestUrl: string,
   tabUrl: string,
-  cookieDB: CookieDatabase
+  cookieDB: CookieDatabase,
+  frameId: string
 ) {
   const cookies: CookieData[] = [];
   const responseToParse =
@@ -72,17 +74,12 @@ export default function parseResponseReceivedExtraInfo(
       };
     }
 
-    let domain,
-      url = '';
-
-    if (requestMap && requestMap[response?.requestId]) {
-      url = requestMap[response?.requestId] ?? '';
-    }
+    let domain;
 
     if (parsedCookie?.domain) {
       domain = parsedCookie?.domain;
-    } else if (!parsedCookie?.domain && url) {
-      domain = new URL(url).hostname;
+    } else if (!parsedCookie?.domain && requestUrl) {
+      domain = new URL(requestUrl).hostname;
     }
 
     const singleCookie: CookieData = {
@@ -100,7 +97,7 @@ export default function parseResponseReceivedExtraInfo(
           {
             type: RESPONSE_EVENT.CDP_RESPONSE_RECEIVED_EXTRA_INFO,
             requestId: response.requestId,
-            url: url,
+            url: requestUrl,
             blocked: blockedCookie ? true : false,
             timeStamp: Date.now(),
           },
@@ -109,10 +106,10 @@ export default function parseResponseReceivedExtraInfo(
       analytics: cookieDB
         ? findAnalyticsMatch(parsedCookie.name, cookieDB)
         : null,
-      url,
+      url: requestUrl,
       isFirstParty: isFirstParty(domain, tabUrl),
       headerType: 'response' as CookieData['headerType'],
-      frameIdList: [],
+      frameIdList: [frameId],
     };
 
     cookies.push(singleCookie);

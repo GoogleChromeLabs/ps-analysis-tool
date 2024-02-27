@@ -33,15 +33,17 @@ import isFirstParty from './isFirstParty';
  * Parses Network.requestWillBeSentExtraInfo to get extra information about a cookie.
  * @param {object} request Request to be parsed to get extra information about a cookie.
  * @param {object} cookieDB Cookie database to find analytics from.
- * @param {object} requestMap An object for requestId to url.
+ * @param {string} requestUrl The request url.
  * @param {string} tabUrl - The top-level URL (URL in the tab's address bar).
+ * @param {string} frameId The request to which the frame is associated to.
  * @returns {object} parsed cookies.
  */
 export default function parseRequestWillBeSentExtraInfo(
   request: Protocol.Network.RequestWillBeSentExtraInfoEvent,
   cookieDB: CookieDatabase,
-  requestMap: { [requestId: string]: string },
-  tabUrl: string
+  requestUrl: string,
+  tabUrl: string,
+  frameId: string
 ) {
   const cookies: CookieData[] = [];
 
@@ -50,17 +52,12 @@ export default function parseRequestWillBeSentExtraInfo(
       cookie.expires
     );
 
-    let domain,
-      url = '';
-
-    if (requestMap && requestMap[request?.requestId]) {
-      url = requestMap[request?.requestId] ?? '';
-    }
+    let domain;
 
     if (cookie?.domain) {
       domain = cookie?.domain;
-    } else if (!cookie?.domain && url) {
-      domain = new URL(url).hostname;
+    } else if (!cookie?.domain && requestUrl) {
+      domain = new URL(requestUrl).hostname;
     }
 
     const singleCookie: CookieData = {
@@ -76,7 +73,7 @@ export default function parseRequestWillBeSentExtraInfo(
           {
             type: REQUEST_EVENT.CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO,
             requestId: request.requestId,
-            url: url,
+            url: requestUrl,
             blocked: blockedReasons.length !== 0,
             timeStamp: Date.now(),
           },
@@ -85,10 +82,10 @@ export default function parseRequestWillBeSentExtraInfo(
       },
       blockedReasons,
       analytics: cookieDB ? findAnalyticsMatch(cookie.name, cookieDB) : null, // In case CDP gets cookie first.
-      url,
+      url: requestUrl,
       headerType: 'request' as CookieData['headerType'],
       isFirstParty: isFirstParty(domain, tabUrl),
-      frameIdList: [],
+      frameIdList: [frameId],
     };
 
     cookies.push(singleCookie);

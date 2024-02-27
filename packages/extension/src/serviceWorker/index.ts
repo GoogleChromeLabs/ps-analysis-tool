@@ -28,12 +28,9 @@ import { Protocol } from 'devtools-protocol';
 /**
  * Internal dependencies.
  */
-import parseResponseCookieHeader from './parseResponseCookieHeader';
-import parseRequestCookieHeader from './parseRequestCookieHeader';
 import { fetchDictionary } from '../utils/fetchCookieDictionary';
 import { ALLOWED_NUMBER_OF_TABS } from '../constants';
 import SynchnorousCookieStore from '../store/synchnorousCookieStore';
-import canProcessCookies from '../utils/canProcessCookies';
 import { getTab } from '../utils/getTab';
 import reloadCurrentTab from '../utils/reloadCurrentTab';
 
@@ -42,7 +39,22 @@ let syncCookieStore: SynchnorousCookieStore | undefined;
 
 const requestIdToCDPURLMapping: {
   [tabId: string]: {
-    [requestId: string]: string;
+    [requestId: string]: {
+      frameId: string;
+      url: string;
+    };
+  };
+} = {};
+
+const unParsedRequestHeaders: {
+  [tabId: string]: {
+    [requestId: string]: Protocol.Network.RequestWillBeSentExtraInfoEvent;
+  };
+} = {};
+
+const unParsedResponseHeaders: {
+  [tabId: string]: {
+    [requestId: string]: Protocol.Network.ResponseReceivedExtraInfoEvent;
   };
 } = {};
 
@@ -55,147 +67,8 @@ const ALLOWED_EVENTS = [
   'Network.requestWillBeSentExtraInfo',
   'Network.responseReceivedExtraInfo',
   'Audits.issueAdded',
+  'Network.requestWillBeSent',
 ];
-
-/**
- * Fires when the browser receives a response from a web server.
- * @see https://developer.chrome.com/docs/extensions/reference/api/webRequest
- */
-chrome.webRequest.onResponseStarted.addListener(
-  (details: chrome.webRequest.WebResponseCacheDetails) => {
-    (async () => {
-      const { tabId, url, responseHeaders, frameId } = details;
-      const tabUrl = syncCookieStore?.getTabUrl(tabId) ?? '';
-
-      if (
-        !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, responseHeaders)
-      ) {
-        return;
-      }
-
-      if (!cookieDB) {
-        cookieDB = await fetchDictionary();
-      }
-
-      let cdpCookies: { [key: string]: Protocol.Network.Cookie[] };
-
-      // Since we are using CDP we might as well use it to get the proper cookies in the request this will further reduce the load of domain calculation
-      try {
-        cdpCookies = await chrome.debugger.sendCommand(
-          { tabId: tabId },
-          'Network.getCookies',
-          { urls: [url] }
-        );
-      } catch (error) {
-        // Fail silently
-      }
-
-      const cookies = responseHeaders?.reduce<CookieData[]>(
-        (accumulator, header) => {
-          if (
-            header.name.toLowerCase() === 'set-cookie' &&
-            header.value &&
-            tabUrl &&
-            cookieDB
-          ) {
-            const cookie = parseResponseCookieHeader(
-              url,
-              header.value,
-              cookieDB,
-              tabUrl,
-              frameId,
-              cdpCookies?.cookies ?? [],
-              details.requestId
-            );
-
-            return [...accumulator, cookie];
-          }
-
-          return accumulator;
-        },
-        []
-      );
-
-      if (!cookies || (cookies && cookies?.length === 0)) {
-        return;
-      }
-
-      // Adds the cookies from the request headers to the cookies object.
-      syncCookieStore?.update(tabId, cookies);
-    })();
-  },
-  { urls: ['*://*/*'] },
-  ['extraHeaders', 'responseHeaders']
-);
-
-/**
- * Fires before sending an HTTP request, once the request headers are available.
- * @see https://developer.chrome.com/docs/extensions/reference/api/webRequest#event-onBeforeSendHeaders
- */
-chrome.webRequest.onBeforeSendHeaders.addListener(
-  ({ url, requestHeaders, tabId, frameId, requestId }) => {
-    (async () => {
-      const tabUrl = syncCookieStore?.getTabUrl(tabId) ?? '';
-
-      if (
-        !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, requestHeaders)
-      ) {
-        return;
-      }
-
-      if (!cookieDB) {
-        cookieDB = await fetchDictionary();
-      }
-
-      let cdpCookies: { [key: string]: Protocol.Network.Cookie[] };
-
-      try {
-        cdpCookies = await chrome.debugger.sendCommand(
-          { tabId: tabId },
-          'Network.getCookies',
-          { urls: [url] }
-        );
-      } catch (error) {
-        // Fail silently
-      }
-
-      const cookies = requestHeaders?.reduce<CookieData[]>(
-        (accumulator, header) => {
-          if (
-            header.name.toLowerCase() === 'cookie' &&
-            header.value &&
-            url &&
-            tabUrl &&
-            cookieDB
-          ) {
-            const cookieList = parseRequestCookieHeader(
-              url,
-              header.value,
-              cookieDB,
-              tabUrl,
-              frameId,
-              cdpCookies?.cookies ?? [],
-              requestId
-            );
-
-            return [...accumulator, ...cookieList];
-          }
-
-          return accumulator;
-        },
-        []
-      );
-
-      if (!cookies || (cookies && cookies?.length === 0)) {
-        return;
-      }
-
-      syncCookieStore?.update(tabId, cookies);
-    })();
-  },
-  { urls: ['*://*/*'] },
-  ['extraHeaders', 'requestHeaders']
-);
 
 /**
  * Fires when a tab is created.
@@ -205,6 +78,10 @@ chrome.tabs.onCreated.addListener((tab) => {
   if (!tab.id) {
     return;
   }
+
+  unParsedRequestHeaders[tab.id.toString()] = {};
+  unParsedResponseHeaders[tab.id.toString()] = {};
+  requestIdToCDPURLMapping[tab.id.toString()] = {};
 
   if (!syncCookieStore) {
     syncCookieStore = new SynchnorousCookieStore();
@@ -368,7 +245,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
  * @see https://developer.chrome.com/docs/extensions/reference/api/debugger
  */
 // eslint-disable-next-line complexity
-chrome.debugger.onEvent.addListener((source, method, params) => {
+chrome.debugger.onEvent.addListener(async (source, method, params) => {
   if (!ALLOWED_EVENTS.includes(method)) {
     return;
   }
@@ -387,19 +264,46 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
     return;
   }
 
-  if (method === 'Network.responseReceived' && params) {
-    const request = params as Protocol.Network.ResponseReceivedEvent;
+  if (!cookieDB) {
+    cookieDB = await fetchDictionary();
+  }
+
+  if (method === 'Network.requestWillBeSent' && params) {
+    const request = params as Protocol.Network.RequestWillBeSentEvent;
 
     // To get domain from the request URL if not given in the cookie line.
     if (!requestIdToCDPURLMapping[tabId]) {
       requestIdToCDPURLMapping[tabId] = {
-        [request.requestId]: request?.response.url,
+        [request.requestId]: {
+          frameId: request?.frameId ?? '',
+          url: request?.request?.url,
+        },
       };
     } else {
       requestIdToCDPURLMapping[tabId] = {
         ...requestIdToCDPURLMapping[tabId],
-        [request.requestId]: request?.response.url,
+        [request.requestId]: {
+          frameId: request?.frameId ?? '',
+          url: request?.request?.url,
+        },
       };
+    }
+
+    if (unParsedRequestHeaders[tabId][request.requestId]) {
+      const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
+        unParsedRequestHeaders[tabId][request.requestId],
+        cookieDB ?? {},
+        request?.request?.url ?? '',
+        url ?? '',
+        requestIdToCDPURLMapping[tabId][request.requestId]?.frameId
+      );
+
+      if (cookies.length === 0) {
+        return;
+      }
+
+      syncCookieStore?.update(Number(tabId), cookies);
+      delete unParsedRequestHeaders[tabId][request.requestId];
     }
   }
 
@@ -411,18 +315,60 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       return;
     }
 
-    const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
-      requestParams,
-      cookieDB ?? {},
-      requestIdToCDPURLMapping[tabId],
-      url ?? ''
-    );
+    if (requestIdToCDPURLMapping[tabId][requestParams?.requestId]) {
+      const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
+        requestParams,
+        cookieDB ?? {},
+        requestIdToCDPURLMapping[tabId][requestParams?.requestId]?.url ?? '',
+        url ?? '',
+        requestIdToCDPURLMapping[tabId][requestParams.requestId]?.frameId
+      );
 
-    if (cookies.length === 0) {
-      return;
+      if (cookies.length === 0) {
+        return;
+      }
+
+      syncCookieStore?.update(Number(tabId), cookies);
+    } else {
+      unParsedRequestHeaders[tabId][requestParams?.requestId] = requestParams;
+    }
+  }
+
+  if (method === 'Network.responseReceived' && params) {
+    const request = params as Protocol.Network.ResponseReceivedEvent;
+
+    // To get domain from the request URL if not given in the cookie line.
+    if (!requestIdToCDPURLMapping[tabId]) {
+      requestIdToCDPURLMapping[tabId] = {
+        [request.requestId]: {
+          frameId: request?.frameId ?? '',
+          url: request?.response.url,
+        },
+      };
+    } else {
+      requestIdToCDPURLMapping[tabId] = {
+        ...requestIdToCDPURLMapping[tabId],
+        [request.requestId]: {
+          frameId: request?.frameId ?? '',
+          url: request?.response.url,
+        },
+      };
     }
 
-    syncCookieStore?.update(Number(tabId), cookies);
+    if (unParsedResponseHeaders[tabId][request.requestId]) {
+      const cookies: CookieData[] = parseResponseReceivedExtraInfo(
+        unParsedResponseHeaders[tabId][request.requestId],
+        request?.response.url ?? '',
+        url ?? '',
+        cookieDB ?? {},
+        requestIdToCDPURLMapping[tabId][request.requestId]?.frameId
+      );
+
+      syncCookieStore?.update(Number(tabId), cookies);
+
+      delete unParsedRequestHeaders[tabId][request.requestId];
+      delete requestIdToCDPURLMapping[tabId][request.requestId];
+    }
   }
 
   if (method === 'Network.responseReceivedExtraInfo' && params) {
@@ -437,14 +383,23 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       return;
     }
 
-    const cookies: CookieData[] = parseResponseReceivedExtraInfo(
-      responseParams,
-      requestIdToCDPURLMapping[tabId],
-      url ?? '',
-      cookieDB ?? {}
-    );
+    if (requestIdToCDPURLMapping[tabId][responseParams?.requestId]) {
+      const cookies: CookieData[] = parseResponseReceivedExtraInfo(
+        responseParams,
+        requestIdToCDPURLMapping[tabId][responseParams?.requestId]?.url ?? '',
+        url ?? '',
+        cookieDB ?? {},
+        requestIdToCDPURLMapping[tabId][responseParams?.requestId]?.frameId
+      );
 
-    syncCookieStore?.update(Number(tabId), cookies);
+      syncCookieStore?.update(Number(tabId), cookies);
+
+      delete unParsedRequestHeaders[tabId][responseParams?.requestId];
+      delete requestIdToCDPURLMapping[tabId][responseParams?.requestId];
+    } else {
+      unParsedResponseHeaders[tabId][responseParams?.requestId] =
+        responseParams;
+    }
   }
 
   if (method === 'Audits.issueAdded' && params) {
@@ -519,6 +474,10 @@ const listenToNewTab = async (tabId?: number) => {
   }
 
   tabToRead = newTabId;
+
+  unParsedRequestHeaders[newTabId] = {};
+  unParsedResponseHeaders[newTabId] = {};
+  requestIdToCDPURLMapping[newTabId] = {};
 
   syncCookieStore?.addTabData(Number(newTabId));
   syncCookieStore?.updateDevToolsState(Number(newTabId), true);
