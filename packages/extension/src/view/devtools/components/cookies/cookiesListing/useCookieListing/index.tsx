@@ -215,13 +215,17 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         return acc;
       }, {} as TableFilter[keyof TableFilter]['filterValues']);
 
-      clearActivePanelQuery?.();
+      if (options) {
+        clearActivePanelQuery?.();
+      }
 
       return filters;
     };
 
-    const blockedReasonFilterValues = Object.values(cookies).reduce(
-      (acc, cookie) => {
+    const calculateBlockedReasonFilterValues = (options?: string[]) => {
+      const filters = Object.values(cookies).reduce<
+        TableFilter[keyof TableFilter]['filterValues']
+      >((acc, cookie) => {
         const blockedReason = getValueByKey('blockedReasons', cookie);
 
         if (!cookie.frameIdList || cookie?.frameIdList?.length === 0) {
@@ -233,15 +237,26 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
             acc = {};
           }
 
-          acc[reason] = {
-            selected: false,
-          };
+          if (!acc[reason]) {
+            acc[reason] = {
+              selected: false,
+            };
+
+            if (options) {
+              acc[reason].selected = options.includes(reason);
+            }
+          }
         });
 
         return acc;
-      },
-      {} as TableFilter[keyof TableFilter]['filterValues']
-    );
+      }, {});
+
+      if (options) {
+        clearActivePanelQuery?.();
+      }
+
+      return filters;
+    };
 
     return {
       category: calculate(
@@ -249,7 +264,9 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         parsedQuery?.filter?.['analytics.category']
       ),
       platform: calculate('analytics.platform'),
-      blockedReason: blockedReasonFilterValues,
+      blockedReason: calculateBlockedReasonFilterValues(
+        parsedQuery?.filter?.blockedReasons
+      ),
     };
   }, [cookies, parsedQuery?.filter, clearActivePanelQuery]);
 
