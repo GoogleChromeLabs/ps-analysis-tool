@@ -147,33 +147,54 @@ export const Provider = ({ children }: PropsWithChildren) => {
       const currentTabFrames = await chrome.webNavigation.getAllFrames({
         tabId: _tabId,
       });
+
+      const currentTargets = await chrome.debugger.getTargets();
+
       const modifiedTabFrames: TabFrames = {};
 
-      currentTabFrames?.forEach(({ url, frameId, frameType }) => {
+      currentTabFrames?.forEach(({ url, frameType }) => {
         if (url && url.includes('http')) {
           const parsedUrl = regexForFrameUrl.exec(url);
-          if (parsedUrl && parsedUrl[0]) {
+          if (!parsedUrl || !parsedUrl[0]) {
+            return;
+          }
+
+          const frame = currentTargets.find(
+            ({ faviconUrl, url: targetUrl }) =>
+              tabUrl &&
+              faviconUrl?.includes(tabUrl) &&
+              targetUrl.includes(parsedUrl[0])
+          );
+
+          if (frame?.id) {
             if (modifiedTabFrames[parsedUrl[0]]) {
-              modifiedTabFrames[parsedUrl[0]].frameIds.push(frameId);
+              modifiedTabFrames[parsedUrl[0]].frameIds = Array.from(
+                new Set([
+                  ...(modifiedTabFrames[parsedUrl[0]].frameIds ?? []),
+                  frame.id,
+                ])
+              );
             } else {
               modifiedTabFrames[parsedUrl[0]] = {
-                frameIds: [frameId],
+                frameIds: [frame?.id],
                 frameType,
               };
             }
           }
         }
       });
+
       await Promise.all(
         Object.keys(modifiedTabFrames).map(async (tabFrame) => {
           modifiedTabFrames[tabFrame].isOnRWS = await isOnRWS(tabFrame);
           return tabFrame;
         })
       );
+
       modifiedTabFrames[UNKNOWN_FRAME_KEY] = { frameIds: [] };
       setTabFrames(modifiedTabFrames);
     },
-    []
+    [tabUrl]
   );
 
   /**

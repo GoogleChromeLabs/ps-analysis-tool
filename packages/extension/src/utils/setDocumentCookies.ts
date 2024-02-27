@@ -48,13 +48,15 @@ const processAndStoreDocumentCookies = async ({
     if (!isException && typeof tabUrlResult === 'string') {
       const tabUrl = tabUrlResult;
 
-      const frames = await chrome.webNavigation.getAllFrames({
-        tabId: Number(tabId),
-      });
+      const currentTargets = await chrome.debugger.getTargets();
 
-      const outerMostFrame = frames?.filter(
-        (frame) => frame.frameType === 'outermost_frame'
+      const frame = currentTargets.find(
+        ({ tabId: targetTabId }) => targetTabId && targetTabId === Number(tabId)
       );
+
+      if (!frame?.id) {
+        return;
+      }
 
       const parsedCookieData: CookieData[] = documentCookies.map(
         (singleCookie: string) => {
@@ -86,11 +88,7 @@ const processAndStoreDocumentCookies = async ({
             url: tabUrl,
             headerType: 'javascript', // @todo Update headerType name.
             isFirstParty: isFirstPartyCookie || null,
-            frameIdList: [
-              outerMostFrame && outerMostFrame[0]
-                ? outerMostFrame[0]?.frameId
-                : 0,
-            ],
+            frameIdList: [frame.id],
           };
         }
       );
