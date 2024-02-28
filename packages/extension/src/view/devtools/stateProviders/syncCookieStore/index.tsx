@@ -29,7 +29,7 @@ import { noop } from '@ps-analysis-tool/design-system';
 import {
   type TabCookies,
   type TabFrames,
-  UNKNOWN_FRAME_KEY,
+  ORPHANED_COOKIE_KEY,
   UNMAPPED_COOKIE_KEY,
 } from '@ps-analysis-tool/common';
 
@@ -171,7 +171,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           return tabFrame;
         })
       );
-      modifiedTabFrames[UNKNOWN_FRAME_KEY] = { frameIds: [] };
+      modifiedTabFrames[ORPHANED_COOKIE_KEY] = { frameIds: [] };
       modifiedTabFrames[UNMAPPED_COOKIE_KEY] = { frameIds: [] };
       setTabFrames(modifiedTabFrames);
     },
@@ -213,7 +213,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       });
 
       if (!hasFrame && cookie.frameIdList && cookie.frameIdList?.length > 0) {
-        acc[UNKNOWN_FRAME_KEY] = true;
+        acc[ORPHANED_COOKIE_KEY] = true;
       }
 
       if (!hasFrame && cookie.frameIdList && cookie.frameIdList?.length >= 0) {

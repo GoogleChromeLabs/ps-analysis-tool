@@ -14,4 +14,5 @@
  * limitations under the License.
  */
 export const UNKNOWN_FRAME_KEY = 'Unknown Frames';
+export const ORPHANED_COOKIE_KEY = 'Orphaned Cookies';
 export const UNMAPPED_COOKIE_KEY = 'Unmapped Cookies';

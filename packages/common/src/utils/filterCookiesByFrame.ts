@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import { UNKNOWN_FRAME_KEY, UNMAPPED_COOKIE_KEY } from '../constants';
+import { ORPHANED_COOKIE_KEY, UNMAPPED_COOKIE_KEY } from '../constants';
 import { CookieTableData } from '../cookies.types';
 
 interface Cookies {
@@ -62,7 +62,7 @@ const filterCookiesByFrame = (
         ) {
           frameFilteredCookies[key] = cookie;
         } else if (
-          frameUrl === UNKNOWN_FRAME_KEY &&
+          frameUrl === ORPHANED_COOKIE_KEY &&
           cookie.frameIdList?.length > 0
         ) {
           frameFilteredCookies[key] = cookie;
