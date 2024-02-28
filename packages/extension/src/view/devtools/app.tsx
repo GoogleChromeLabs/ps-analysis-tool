@@ -144,9 +144,15 @@ const App: React.FC = () => {
       );
       psData.children['cookies'].children = Object.keys(tabFrames || {})
         .filter((url) => {
-          return url === ORPHANED_COOKIE_KEY || url === UNMAPPED_COOKIE_KEY
-            ? frameHasCookies[url]
-            : true;
+          if (url === ORPHANED_COOKIE_KEY) {
+            return frameHasCookies[url];
+          }
+
+          if (url === UNMAPPED_COOKIE_KEY) {
+            return frameHasCookies[url];
+          }
+
+          return true;
         })
         .reduce<SidebarItems>((acc, url) => {
           let popupTitle = `Cookies used by frames from ${url}`;

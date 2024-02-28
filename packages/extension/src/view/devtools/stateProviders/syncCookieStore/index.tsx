@@ -216,7 +216,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         acc[ORPHANED_COOKIE_KEY] = true;
       }
 
-      if (!hasFrame && cookie.frameIdList && cookie.frameIdList?.length >= 0) {
+      if (!hasFrame && cookie.frameIdList && cookie.frameIdList?.length === 0) {
         acc[UNMAPPED_COOKIE_KEY] = true;
       }
 
