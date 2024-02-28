@@ -164,7 +164,7 @@ const App: React.FC = () => {
 
           if (url === UNMAPPED_COOKIE_KEY) {
             popupTitle = infoIconDescription =
-              'We could not map these cookies to any frame.';
+              'Cookies that could not be mapped to any frame.';
           }
 
           acc[url] = {
