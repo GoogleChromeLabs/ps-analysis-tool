@@ -59,6 +59,7 @@ const useLibraryDetection = () => {
   }));
 
   const timeout = useRef(0);
+  const initialDataUpdated = useRef(false);
 
   /**
    * Callback function used as a listener for resource changes.
@@ -106,6 +107,12 @@ const useLibraryDetection = () => {
   }, [listenerCallback, removeListener]);
 
   const updateInitialData = useCallback(async () => {
+    if (initialDataUpdated.current) {
+      return;
+    }
+
+    initialDataUpdated.current = true;
+
     //  chrome.devtools.inspectedWindow.getResources updates whenever new items are added.
     const scripts = await getNetworkResourcesWithContent();
 
@@ -174,6 +181,8 @@ const useLibraryDetection = () => {
   useEffect(() => {
     return () => {
       removeListener();
+
+      initialDataUpdated.current = false;
 
       if (timeout.current) {
         clearTimeout(timeout.current);
