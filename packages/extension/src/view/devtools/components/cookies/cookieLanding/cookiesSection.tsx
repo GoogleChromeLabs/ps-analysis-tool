@@ -54,7 +54,10 @@ const CookiesSection = () => {
 
   const selectedItemUpdater = useCallback(
     (query: string) => {
-      const queryObject = JSON.parse(query) as Record<string, Array<string>>;
+      const queryObject = JSON.parse(query || '{}') as Record<
+        string,
+        Array<string>
+      >;
 
       const modifiedQuery = {
         filter: {
@@ -70,6 +73,7 @@ const CookiesSection = () => {
   return (
     <CookiesLandingWrapper
       dataMapping={cookieClassificationDataMapping}
+      headerClickHandler={selectedItemUpdater}
       testId="cookies-insights"
     >
       {!cookieStats ||

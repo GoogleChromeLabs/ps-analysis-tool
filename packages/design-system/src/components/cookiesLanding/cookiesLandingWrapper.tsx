@@ -25,6 +25,7 @@ import LandingHeader, { type DataMapping } from './landingHeader';
 
 export interface CookiesLandingWrapperProps {
   dataMapping?: DataMapping[];
+  headerClickHandler?: (query: string) => void;
   showLandingHeader?: boolean;
   testId?: string | null;
   children?: React.ReactNode;
@@ -37,11 +38,17 @@ const CookiesLandingWrapper = ({
   testId = 'cookie-landing-insights',
   description = '',
   children,
+  headerClickHandler,
 }: CookiesLandingWrapperProps) => {
   return (
     <div className="w-full flex flex-col min-w-[40rem]">
       <div className="w-full min-w-[40rem]" data-testid={testId}>
-        {showLandingHeader && <LandingHeader dataMapping={dataMapping} />}
+        {showLandingHeader && (
+          <LandingHeader
+            dataMapping={dataMapping}
+            onClick={headerClickHandler}
+          />
+        )}
         {description && (
           <div className="text-center px-4 flex items-center justify-center -mt-2 mb-10">
             <p className="lg:max-w-[450px] text-gray dark:text-bright-gray">

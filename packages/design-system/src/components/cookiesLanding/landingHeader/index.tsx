@@ -16,8 +16,9 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useCallback } from 'react';
 import { CirclePieChart } from '@ps-analysis-tool/design-system';
+import classnames from 'classnames';
 
 export interface DataMapping {
   title: string;
@@ -26,13 +27,30 @@ export interface DataMapping {
     count: number;
     color: string;
   }[];
+  accessorKey?: string;
+  accessorValue?: string;
 }
 
 interface LandingHeaderProps {
   dataMapping?: DataMapping[];
+  onClick?: (query: string) => void;
 }
 
-const LandingHeader = ({ dataMapping = [] }: LandingHeaderProps) => {
+const LandingHeader = ({ dataMapping = [], onClick }: LandingHeaderProps) => {
+  const handleClick = useCallback(
+    (title?: string, accessorKey?: string) => {
+      const query =
+        accessorKey && title
+          ? JSON.stringify({
+              [accessorKey]: [title],
+            })
+          : '';
+
+      onClick?.(query);
+    },
+    [onClick]
+  );
+
   return (
     <div
       className={
@@ -43,14 +61,23 @@ const LandingHeader = ({ dataMapping = [] }: LandingHeaderProps) => {
       <div className="lg:max-w-[729px] flex gap-9 px-4">
         {dataMapping.map((circleData, index) => {
           return (
-            <div key={index} className="text-center w-16">
+            <button
+              key={index}
+              className={classnames('text-center w-16', {
+                'hover:opacity-70 active:opacity-50': onClick,
+                'cursor-default': !onClick,
+              })}
+              onClick={() => {
+                handleClick(circleData?.accessorValue, circleData?.accessorKey);
+              }}
+            >
               <CirclePieChart
                 title={circleData.title}
                 centerCount={circleData.count}
                 data={circleData.data}
                 infoIconClassName="absolute -right-3"
               />
-            </div>
+            </button>
           );
         })}
       </div>

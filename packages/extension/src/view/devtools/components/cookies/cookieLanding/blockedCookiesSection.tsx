@@ -74,6 +74,8 @@ const BlockedCookiesSection = () => {
       title: 'Blocked cookies',
       count: cookieStats.blockedCookies.total,
       data: cookiesStatsComponents.blocked,
+      accessorKey: 'blockedReasons',
+      accessorValue: 'All',
     },
   ];
   const dataComponents: MatrixComponentProps[] =
@@ -110,6 +112,7 @@ const BlockedCookiesSection = () => {
     <CookiesLandingWrapper
       description={description}
       dataMapping={blockedCookieDataMapping}
+      headerClickHandler={selectedItemUpdater}
       testId="blocked-cookies-insights"
     >
       {dataComponents.length > 0 && (

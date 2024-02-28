@@ -46,11 +46,15 @@ export default function prepareCookieDataMapping(
       title: '1st party cookies',
       count: cookieStats.firstParty.total,
       data: cookiesStatsComponents.firstParty,
+      accessorKey: 'isFirstParty',
+      accessorValue: 'First Party',
     },
     {
       title: '3rd party cookies',
       count: cookieStats.thirdParty.total,
       data: cookiesStatsComponents.thirdParty,
+      accessorKey: 'isFirstParty',
+      accessorValue: 'Third Party',
     },
   ];
 }
