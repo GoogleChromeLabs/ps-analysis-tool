@@ -82,10 +82,7 @@ const prepareCookieStatsComponents = (
         color: COLOR_MAP.uncategorized.color,
         countClassName: COLOR_MAP.uncategorized.className,
       },
-    ].map((component) => ({
-      ...component,
-      accessorKey: 'analytics.category',
-    })),
+    ],
     firstParty: [
       {
         count: cookieStats.firstParty.functional,

@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import React, { useCallback, useMemo } from 'react';
+import React from 'react';
 import {
   CookiesLandingWrapper,
   type DataMapping,
@@ -25,47 +25,24 @@ import {
   MatrixContainer,
   type MatrixComponentProps,
   LEGEND_DESCRIPTION,
-  useSidebar,
 } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies
  */
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
 import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
+import useSidebarQuery from './useSidebarQuery';
 
 const BlockedCookiesSection = () => {
-  const { tabCookies, tabFrames } = useCookieStore(({ state }) => ({
+  const { tabCookies } = useCookieStore(({ state }) => ({
     tabCookies: state.tabCookies,
-    tabFrames: state.tabFrames,
   }));
-
-  const firstFrame = useMemo(
-    () => Object.keys(tabFrames || {})?.[0] || '',
-    [tabFrames]
-  );
 
   const { isUsingCDP } = useSettingsStore(({ state }) => ({
     isUsingCDP: state.isUsingCDP,
   }));
 
-  const updateSelectedItemKey = useSidebar(
-    ({ actions }) => actions.updateSelectedItemKey
-  );
-
-  const selectedItemUpdater = useCallback(
-    (query: string) => {
-      const queryObject = JSON.parse(query) as Record<string, Array<string>>;
-
-      const modifiedQuery = {
-        filter: {
-          ...queryObject,
-        },
-      };
-
-      updateSelectedItemKey(firstFrame, JSON.stringify(modifiedQuery));
-    },
-    [firstFrame, updateSelectedItemKey]
-  );
+  const { selectedItemUpdater } = useSidebarQuery();
 
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
@@ -74,8 +51,7 @@ const BlockedCookiesSection = () => {
       title: 'Blocked cookies',
       count: cookieStats.blockedCookies.total,
       data: cookiesStatsComponents.blocked,
-      accessorKey: 'blockedReasons',
-      accessorValue: 'All',
+      onClick: () => selectedItemUpdater('All', 'blockedReasons'),
     },
   ];
   const dataComponents: MatrixComponentProps[] =
@@ -86,7 +62,8 @@ const BlockedCookiesSection = () => {
         description: legendDescription,
         title: component.label,
         containerClasses: '',
-        accessorKey: 'blockedReasons',
+        onClick: (title: string) =>
+          selectedItemUpdater(title, 'blockedReasons'),
       };
     });
 
@@ -112,7 +89,6 @@ const BlockedCookiesSection = () => {
     <CookiesLandingWrapper
       description={description}
       dataMapping={blockedCookieDataMapping}
-      headerClickHandler={selectedItemUpdater}
       testId="blocked-cookies-insights"
     >
       {dataComponents.length > 0 && (
@@ -120,7 +96,6 @@ const BlockedCookiesSection = () => {
           title="Blocked Reasons"
           matrixData={dataComponents}
           infoIconTitle="Cookies that have been blocked by the browser.(The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
-          onClick={selectedItemUpdater}
         />
       )}
     </CookiesLandingWrapper>

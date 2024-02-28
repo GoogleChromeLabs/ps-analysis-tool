@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback } from 'react';
+import React from 'react';
 import classnames from 'classnames';
 
 /**
@@ -27,23 +27,9 @@ import MatrixComponent, { type MatrixComponentProps } from './matrixComponent';
 interface MatrixProps {
   dataComponents: MatrixComponentProps[];
   expand?: boolean;
-  onClick?: (query: string) => void;
 }
 
-const Matrix = ({ dataComponents, expand, onClick }: MatrixProps) => {
-  const handleClick = useCallback(
-    (title: string, accessorKey?: string) => {
-      const query = accessorKey
-        ? JSON.stringify({
-            [accessorKey]: [title],
-          })
-        : '';
-
-      onClick?.(query);
-    },
-    [onClick]
-  );
-
+const Matrix = ({ dataComponents, expand }: MatrixProps) => {
   if (!dataComponents || !dataComponents.length) {
     return null;
   }
@@ -58,12 +44,10 @@ const Matrix = ({ dataComponents, expand, onClick }: MatrixProps) => {
           return (
             <button
               key={index}
-              onClick={() =>
-                handleClick(dataComponent.title, dataComponent.accessorKey)
-              }
+              onClick={() => dataComponent.onClick?.(dataComponent.title)}
               className={classnames({
-                'hover:opacity-70 active:opacity-50': onClick,
-                'cursor-default': !onClick,
+                'hover:opacity-70 active:opacity-50': dataComponent.onClick,
+                'cursor-default': !dataComponent.onClick,
               })}
             >
               <MatrixComponent

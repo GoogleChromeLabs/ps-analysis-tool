@@ -162,7 +162,7 @@ export interface Legend {
   count: number;
   color: string;
   countClassName: string;
-  accessorKey?: string;
+  onClick?: (title: string) => void;
 }
 
 export interface CookieStatsComponents {

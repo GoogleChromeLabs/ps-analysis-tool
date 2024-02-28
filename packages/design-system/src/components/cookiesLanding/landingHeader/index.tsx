@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback } from 'react';
+import React from 'react';
 import { CirclePieChart } from '@ps-analysis-tool/design-system';
 import classnames from 'classnames';
 
@@ -27,30 +27,14 @@ export interface DataMapping {
     count: number;
     color: string;
   }[];
-  accessorKey?: string;
-  accessorValue?: string;
+  onClick?: () => void;
 }
 
 interface LandingHeaderProps {
   dataMapping?: DataMapping[];
-  onClick?: (query: string) => void;
 }
 
-const LandingHeader = ({ dataMapping = [], onClick }: LandingHeaderProps) => {
-  const handleClick = useCallback(
-    (title?: string, accessorKey?: string) => {
-      const query =
-        accessorKey && title
-          ? JSON.stringify({
-              [accessorKey]: [title],
-            })
-          : '';
-
-      onClick?.(query);
-    },
-    [onClick]
-  );
-
+const LandingHeader = ({ dataMapping = [] }: LandingHeaderProps) => {
   return (
     <div
       className={
@@ -64,11 +48,11 @@ const LandingHeader = ({ dataMapping = [], onClick }: LandingHeaderProps) => {
             <button
               key={index}
               className={classnames('text-center w-16', {
-                'hover:opacity-70 active:opacity-50': onClick,
-                'cursor-default': !onClick,
+                'hover:opacity-70 active:opacity-50': circleData.onClick,
+                'cursor-default': !circleData.onClick,
               })}
               onClick={() => {
-                handleClick(circleData?.accessorValue, circleData?.accessorKey);
+                circleData.onClick?.();
               }}
             >
               <CirclePieChart

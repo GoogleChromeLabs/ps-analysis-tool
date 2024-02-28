@@ -30,31 +30,32 @@ import { DataMapping } from '../components/cookiesLanding/landingHeader';
  * Calcualte insights about frames to be shown on cookies landing page.
  * @param {CookiesCount} cookieStats The calculated cookie count for each type.
  * @param {CookieStatsComponents} cookiesStatsComponents cookies statistics of curent tab with the legend data.
+ * @param selectedItemUpdater The function to update the selected item.
  * @returns {DataMapping[]} Mapped data array for displaying the landing header.
  */
 export default function prepareCookieDataMapping(
   cookieStats: CookiesCount,
-  cookiesStatsComponents: CookieStatsComponents
+  cookiesStatsComponents: CookieStatsComponents,
+  selectedItemUpdater: (title: string, accessorKey?: string) => void
 ) {
   return [
     {
       title: 'Total cookies',
       count: cookieStats.total,
       data: cookiesStatsComponents.legend,
+      onClick: () => selectedItemUpdater('', 'isFirstParty'), // title is empty as we don't want to select any filter.
     },
     {
       title: '1st party cookies',
       count: cookieStats.firstParty.total,
       data: cookiesStatsComponents.firstParty,
-      accessorKey: 'isFirstParty',
-      accessorValue: 'First Party',
+      onClick: () => selectedItemUpdater('First Party', 'isFirstParty'),
     },
     {
       title: '3rd party cookies',
       count: cookieStats.thirdParty.total,
       data: cookiesStatsComponents.thirdParty,
-      accessorKey: 'isFirstParty',
-      accessorValue: 'Third Party',
+      onClick: () => selectedItemUpdater('Third Party', 'isFirstParty'),
     },
   ];
 }

@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import {
   CookiesLandingWrapper,
   CookiesMatrix,
@@ -24,56 +24,40 @@ import {
   prepareCookieDataMapping,
   prepareCookieStatsComponents,
   prepareCookiesCount,
-  useSidebar,
 } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies
  */
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
+import useSidebarQuery from './useSidebarQuery';
 
 const CookiesSection = () => {
   const { tabCookies, tabFrames } = useCookieStore(({ state }) => ({
     tabCookies: state.tabCookies,
     tabFrames: state.tabFrames,
   }));
+
+  const { selectedItemUpdater } = useSidebarQuery();
+
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
   const cookieClassificationDataMapping = prepareCookieDataMapping(
     cookieStats,
-    cookiesStatsComponents
+    cookiesStatsComponents,
+    selectedItemUpdater
   );
 
-  const firstFrame = useMemo(
-    () => Object.keys(tabFrames || {})?.[0] || '',
-    [tabFrames]
-  );
-
-  const updateSelectedItemKey = useSidebar(
-    ({ actions }) => actions.updateSelectedItemKey
-  );
-
-  const selectedItemUpdater = useCallback(
-    (query: string) => {
-      const queryObject = JSON.parse(query || '{}') as Record<
-        string,
-        Array<string>
-      >;
-
-      const modifiedQuery = {
-        filter: {
-          ...queryObject,
-        },
-      };
-
-      updateSelectedItemKey(firstFrame, JSON.stringify(modifiedQuery));
-    },
-    [firstFrame, updateSelectedItemKey]
-  );
+  const cookieComponentData = useMemo(() => {
+    return cookiesStatsComponents.legend.map((component) => ({
+      ...component,
+      onClick: (title: string) =>
+        selectedItemUpdater(title, 'analytics.category'),
+    }));
+  }, [cookiesStatsComponents.legend, selectedItemUpdater]);
 
   return (
     <CookiesLandingWrapper
       dataMapping={cookieClassificationDataMapping}
-      headerClickHandler={selectedItemUpdater}
       testId="cookies-insights"
     >
       {!cookieStats ||
@@ -86,10 +70,9 @@ const CookiesSection = () => {
           ))}
       <CookiesMatrix
         tabCookies={tabCookies}
-        componentData={cookiesStatsComponents.legend}
+        componentData={cookieComponentData}
         tabFrames={tabFrames}
         showHorizontalMatrix={false}
-        onClick={selectedItemUpdater}
       />
     </CookiesLandingWrapper>
   );

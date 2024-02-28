@@ -27,7 +27,7 @@ export interface MatrixComponentProps {
   color: string;
   title: string;
   description?: string;
-  accessorKey?: string;
+  onClick?: (title: string) => void;
   count: number;
   isExpanded?: boolean;
   countClassName: string;
