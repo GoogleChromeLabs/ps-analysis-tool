@@ -181,13 +181,16 @@ const useFiltering = (
       tableFilterData || {}
     )
       .filter(([, filter]) => filter.enableSelectAllOption)
-      .reduce<Record<string, { selected: boolean }>>((acc, [filterKey]) => {
-        acc[filterKey] = {
-          selected: false,
-        };
+      .reduce<Record<string, { selected: boolean }>>(
+        (acc, [filterKey, filterValueData]) => {
+          acc[filterKey] = {
+            selected: filterValueData.isSelectAllOptionSelected || false,
+          };
 
-        return acc;
-      }, {});
+          return acc;
+        },
+        {}
+      );
 
     setSelectAllFilterSelection((prev) => {
       const newSelectAllFilterSelection = { ...prev };
@@ -195,7 +198,12 @@ const useFiltering = (
       Object.entries(filtersWithSelectAllFilterEnabled).forEach(
         ([filterKey, filterValueData]) => {
           if (!newSelectAllFilterSelection[filterKey]) {
-            newSelectAllFilterSelection[filterKey] = filterValueData;
+            newSelectAllFilterSelection[filterKey] = {
+              selected:
+                newSelectAllFilterSelection[filterKey]?.selected ||
+                filterValueData.selected ||
+                false,
+            };
           }
         }
       );

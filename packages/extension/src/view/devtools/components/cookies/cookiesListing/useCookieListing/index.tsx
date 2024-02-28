@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   getValueByKey,
   type CookieTableData,
@@ -270,6 +270,54 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
     };
   }, [cookies, parsedQuery?.filter, clearActivePanelQuery]);
 
+  const evaluteStaticFilterValues = useCallback(
+    (
+      staticValues: TableFilter[keyof TableFilter]['filterValues'],
+      filterKey: string
+    ) => {
+      const options: string[] = parsedQuery?.filter?.[filterKey];
+
+      const filters = Object.entries(staticValues || {}).reduce(
+        (acc, [key, value]) => {
+          if (!acc) {
+            acc = {};
+          }
+
+          if (options) {
+            value.selected = options.includes(key);
+          }
+
+          acc[key] = value;
+
+          return acc;
+        },
+        {} as TableFilter[keyof TableFilter]['filterValues']
+      );
+
+      if (options) {
+        clearActivePanelQuery?.();
+      }
+
+      return filters;
+    },
+    [clearActivePanelQuery, parsedQuery?.filter]
+  );
+
+  const evaluateSelectAllOption = useCallback(
+    (filterKey: string) => {
+      const options: string[] = parsedQuery?.filter?.[filterKey];
+
+      if (options?.[0] === 'All') {
+        clearActivePanelQuery?.();
+
+        return true;
+      }
+
+      return false;
+    },
+    [parsedQuery?.filter, clearActivePanelQuery]
+  );
+
   const filters = useMemo<TableFilter>(
     () => ({
       'analytics.category': {
@@ -283,14 +331,18 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
       isFirstParty: {
         title: 'Scope',
         hasStaticFilterValues: true,
-        filterValues: {
-          'First Party': {
-            selected: false,
+        hasPrecalculatedFilterValues: true,
+        filterValues: evaluteStaticFilterValues(
+          {
+            'First Party': {
+              selected: false,
+            },
+            'Third Party': {
+              selected: false,
+            },
           },
-          'Third Party': {
-            selected: false,
-          },
-        },
+          'isFirstParty'
+        ),
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           const val = value as boolean;
@@ -419,6 +471,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
         enableSelectAllOption: true,
+        isSelectAllOptionSelected: evaluateSelectAllOption('blockedReasons'),
         filterValues: preCalculatedFilters.blockedReason,
         sortValues: true,
         useGenericPersistenceKey: true,
@@ -485,6 +538,8 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
       },
     }),
     [
+      evaluateSelectAllOption,
+      evaluteStaticFilterValues,
       preCalculatedFilters.blockedReason,
       preCalculatedFilters.category,
       preCalculatedFilters.platform,
