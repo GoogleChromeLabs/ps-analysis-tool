@@ -71,11 +71,17 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
   const processedTabFrames = useMemo(
     () =>
       Object.fromEntries(
-        Object.entries(tabFrames || {}).filter(([url]) =>
-          url === ORPHANED_COOKIE_KEY || url === UNMAPPED_COOKIE_KEY
-            ? frameHasCookies[url]
-            : true
-        )
+        Object.entries(tabFrames || {}).filter(([url]) => {
+          if (url === ORPHANED_COOKIE_KEY) {
+            return frameHasCookies[url];
+          }
+
+          if (url === UNMAPPED_COOKIE_KEY) {
+            return frameHasCookies[url];
+          }
+
+          return true;
+        })
       ),
     [tabFrames, frameHasCookies]
   );
