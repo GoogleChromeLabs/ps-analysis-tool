@@ -46,6 +46,12 @@ const requestIdToCDPURLMapping: {
   };
 } = {};
 
+const framesForTab: {
+  [tabId: string]: {
+    [url: string]: string[];
+  };
+} = {};
+
 const unParsedRequestHeaders: {
   [tabId: string]: {
     [requestId: string]: Protocol.Network.RequestWillBeSentExtraInfoEvent;
@@ -82,6 +88,7 @@ chrome.tabs.onCreated.addListener((tab) => {
   unParsedRequestHeaders[tab.id.toString()] = {};
   unParsedResponseHeaders[tab.id.toString()] = {};
   requestIdToCDPURLMapping[tab.id.toString()] = {};
+  framesForTab[tab.id.toString()] = {};
 
   if (!syncCookieStore) {
     syncCookieStore = new SynchnorousCookieStore();
@@ -168,6 +175,8 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
       await chrome.debugger.attach({ tabId }, '1.3');
       await chrome.debugger.sendCommand({ tabId }, 'Network.enable');
       await chrome.debugger.sendCommand({ tabId }, 'Audits.enable');
+      await chrome.debugger.sendCommand({ tabId }, 'Page.enable');
+      await chrome.debugger.sendCommand({ tabId }, 'DOM.enable');
     } else {
       await chrome.debugger.detach({ tabId });
     }
@@ -303,7 +312,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       }
 
       syncCookieStore?.update(Number(tabId), cookies);
-      delete unParsedRequestHeaders[tabId][request.requestId];
+      delete requestIdToCDPURLMapping[tabId][request.requestId];
     }
   }
 
@@ -329,6 +338,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       }
 
       syncCookieStore?.update(Number(tabId), cookies);
+      delete unParsedRequestHeaders[tabId][requestParams.requestId];
     } else {
       unParsedRequestHeaders[tabId][requestParams?.requestId] = requestParams;
     }
@@ -478,6 +488,7 @@ const listenToNewTab = async (tabId?: number) => {
   unParsedRequestHeaders[newTabId] = {};
   unParsedResponseHeaders[newTabId] = {};
   requestIdToCDPURLMapping[newTabId] = {};
+  framesForTab[newTabId] = {};
 
   syncCookieStore?.addTabData(Number(newTabId));
   syncCookieStore?.updateDevToolsState(Number(newTabId), true);

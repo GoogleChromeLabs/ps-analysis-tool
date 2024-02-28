@@ -23,7 +23,7 @@ interface Cookies {
 }
 
 interface TabFrames {
-  [key: string]: { frameIds: number[] };
+  [key: string]: { frameIds: string[] };
 }
 
 const filterCookiesByFrame = (
@@ -35,13 +35,13 @@ const filterCookiesByFrame = (
   if (!cookies || !frameUrl || !tabFrames || !tabFrames[frameUrl]) {
     return Object.values(frameFilteredCookies);
   }
-  let tabFramesIDMap: number[] = [];
+  let tabFramesIDMap: string[] = [];
 
   Object.keys(tabFrames)?.forEach((url) => {
     const frameIds = tabFrames[url].frameIds;
 
     if (frameIds) {
-      tabFramesIDMap = [...new Set<number>([...frameIds, ...tabFramesIDMap])];
+      tabFramesIDMap = [...new Set<string>([...frameIds, ...tabFramesIDMap])];
     }
   });
 
@@ -49,7 +49,7 @@ const filterCookiesByFrame = (
     Object.entries(cookies).forEach(([key, cookie]) => {
       let hasFrame = false;
       cookie.frameIdList?.forEach((frameId) => {
-        if (tabFramesIDMap.includes(frameId as number)) {
+        if (tabFramesIDMap.includes(frameId as string)) {
           hasFrame = true;
         }
       });

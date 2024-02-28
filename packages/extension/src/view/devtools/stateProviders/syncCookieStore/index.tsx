@@ -160,10 +160,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
             }
 
             const frame = currentTargets.find(
-              ({ faviconUrl, url: targetUrl }) =>
-                tabUrl &&
-                faviconUrl?.includes(tabUrl) &&
-                targetUrl.includes(parsedUrl[0])
+              ({ url: targetUrl, type }) =>
+                targetUrl.includes(parsedUrl[0]) &&
+                (type === 'page' || type === 'other')
             );
 
             if (frame?.id) {
@@ -195,7 +194,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         return modifiedTabFrames;
       });
     },
-    [tabUrl]
+    []
   );
 
   /**
