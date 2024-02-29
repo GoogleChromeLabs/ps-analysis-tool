@@ -47,8 +47,9 @@ const LandingHeader = ({ dataMapping = [] }: LandingHeaderProps) => {
           return (
             <button
               key={index}
-              className={classnames('text-center w-16', {
-                'hover:opacity-70 active:opacity-50': circleData.onClick,
+              className={classnames('group text-center w-20 p-2 h-full', {
+                'active:opacity-50 hover:scale-95 transition-all duration-300 ease-in-out cursor-pointer ':
+                  circleData.onClick,
                 'cursor-default': !circleData.onClick,
               })}
               onClick={() => {
@@ -60,6 +61,14 @@ const LandingHeader = ({ dataMapping = [] }: LandingHeaderProps) => {
                 centerCount={circleData.count}
                 data={circleData.data}
                 infoIconClassName="absolute -right-3"
+                centerTitleExtraClasses={classnames({
+                  'group-hover:scale-125 transition-all duration-300 ease-in-out':
+                    circleData.onClick,
+                })}
+                pieChartExtraClasses={classnames({
+                  'group-hover:scale-[1.15] transition-all duration-200 ease-in-out group-hover:bg-[#f3f3f3] group-hover:dark:bg-[#191919] rounded-full':
+                    circleData.onClick,
+                })}
               />
             </button>
           );
