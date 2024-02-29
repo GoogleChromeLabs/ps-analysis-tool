@@ -159,26 +159,32 @@ export const Provider = ({ children }: PropsWithChildren) => {
               return;
             }
 
-            const frame = currentTargets.find(
-              ({ url: targetUrl, type }) =>
-                targetUrl.includes(parsedUrl[0]) &&
-                (type === 'page' || type === 'other')
+            const frameIdsFromCDP = currentTargets.map(
+              ({ url: targetUrl, type, id }) => {
+                if (
+                  targetUrl.includes(parsedUrl[0]) &&
+                  (type === 'page' || type === 'other')
+                ) {
+                  return id;
+                }
+                return '';
+              }
             );
 
-            if (frame?.id) {
+            if (frameIdsFromCDP.length) {
               if (modifiedTabFrames[parsedUrl[0]]) {
                 modifiedTabFrames[parsedUrl[0]].frameIds = Array.from(
                   new Set([
                     ...(modifiedTabFrames[parsedUrl[0]].frameIds ?? []),
                     ...(prevState?.[parsedUrl[0]]?.frameIds ?? []),
-                    frame.id,
+                    ...(frameIdsFromCDP ?? []),
                   ])
                 );
               } else {
                 modifiedTabFrames[parsedUrl[0]] = {
                   frameIds: Array.from(
                     new Set([
-                      frame.id,
+                      ...(frameIdsFromCDP ?? []),
                       ...(prevState?.[parsedUrl[0]]?.frameIds ?? []),
                     ])
                   ),

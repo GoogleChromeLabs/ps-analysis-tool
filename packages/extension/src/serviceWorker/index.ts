@@ -33,6 +33,7 @@ import { ALLOWED_NUMBER_OF_TABS } from '../constants';
 import SynchnorousCookieStore from '../store/synchnorousCookieStore';
 import { getTab } from '../utils/getTab';
 import reloadCurrentTab from '../utils/reloadCurrentTab';
+import createCookieFromAuditsIssue from '../utils/createCookieFromAuditsIssue';
 
 let cookieDB: CookieDatabase | null = null;
 let syncCookieStore: SynchnorousCookieStore | undefined;
@@ -46,9 +47,9 @@ const requestIdToCDPURLMapping: {
   };
 } = {};
 
-const framesForTab: {
+const auditsIssueForTab: {
   [tabId: string]: {
-    [url: string]: string[];
+    [requestId: string]: Protocol.Audits.CookieIssueDetails;
   };
 } = {};
 
@@ -88,7 +89,7 @@ chrome.tabs.onCreated.addListener((tab) => {
   unParsedRequestHeaders[tab.id.toString()] = {};
   unParsedResponseHeaders[tab.id.toString()] = {};
   requestIdToCDPURLMapping[tab.id.toString()] = {};
-  framesForTab[tab.id.toString()] = {};
+  auditsIssueForTab[tab.id.toString()] = {};
 
   if (!syncCookieStore) {
     syncCookieStore = new SynchnorousCookieStore();
@@ -312,7 +313,6 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       }
 
       syncCookieStore?.update(Number(tabId), cookies);
-      delete requestIdToCDPURLMapping[tabId][request.requestId];
     }
   }
 
@@ -377,8 +377,23 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       syncCookieStore?.update(Number(tabId), cookies);
 
       delete unParsedRequestHeaders[tabId][request.requestId];
-      delete requestIdToCDPURLMapping[tabId][request.requestId];
     }
+
+    if (auditsIssueForTab[tabId][request.requestId]) {
+      const cookieObjectToUpdate = createCookieFromAuditsIssue(
+        auditsIssueForTab[tabId][request.requestId],
+        syncCookieStore?.getTabUrl(Number(tabId)) ?? '',
+        requestIdToCDPURLMapping[tabId][request.requestId].frameId,
+        requestIdToCDPURLMapping[tabId][request.requestId].url,
+        cookieDB
+      );
+
+      if (cookieObjectToUpdate) {
+        syncCookieStore?.update(Number(tabId), [cookieObjectToUpdate]);
+      }
+      delete auditsIssueForTab[tabId][request.requestId];
+    }
+    delete requestIdToCDPURLMapping[tabId][request.requestId];
   }
 
   if (method === 'Network.responseReceivedExtraInfo' && params) {
@@ -405,7 +420,6 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       syncCookieStore?.update(Number(tabId), cookies);
 
       delete unParsedRequestHeaders[tabId][responseParams?.requestId];
-      delete requestIdToCDPURLMapping[tabId][responseParams?.requestId];
     } else {
       unParsedResponseHeaders[tabId][responseParams?.requestId] =
         responseParams;
@@ -421,37 +435,31 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
     }
 
     if (
-      !details.cookieIssueDetails?.cookie &&
-      !details.cookieIssueDetails?.cookieWarningReasons &&
-      !details.cookieIssueDetails?.cookieExclusionReasons
+      !details.cookieIssueDetails?.cookie ||
+      !details.cookieIssueDetails?.cookieWarningReasons ||
+      !details.cookieIssueDetails?.cookieExclusionReasons ||
+      !details.cookieIssueDetails?.request
     ) {
       return;
     }
 
-    const { cookie, cookieExclusionReasons, cookieWarningReasons } =
-      details.cookieIssueDetails;
+    //@ts-ignore -- because this has been checked above
+    const { requestId = '' } = details.cookieIssueDetails.request;
 
-    const primaryDomain = cookie?.domain.startsWith('.')
-      ? cookie.domain
-      : '.' + cookie?.domain;
-
-    const secondaryDomain = cookie?.domain.startsWith('.')
-      ? cookie.domain.slice(1)
-      : cookie?.domain;
-
-    // Adding alternate domains here because our extension calculates domain differently that the application tab.
-    // This is done to capture both NID.google.com/ and NIDgoogle.com/ so that if we find either of the cookie we add issues to the cookie object
-    try {
-      syncCookieStore?.addCookieExclusionWarningReason(
-        cookie?.name + primaryDomain + cookie?.path,
-        //@ts-ignore since the details has been checked before sending them as parameter.
-        cookie?.name + secondaryDomain + cookie?.path,
-        cookieExclusionReasons,
-        cookieWarningReasons,
-        source.tabId
+    if (requestId && requestIdToCDPURLMapping[tabId][requestId]) {
+      const cookieObjectToUpdate = createCookieFromAuditsIssue(
+        details.cookieIssueDetails,
+        syncCookieStore?.getTabUrl(Number(tabId)) ?? '',
+        requestIdToCDPURLMapping[tabId][requestId].frameId,
+        requestIdToCDPURLMapping[tabId][requestId].url,
+        cookieDB
       );
-    } catch (error) {
-      // fail silently
+
+      if (cookieObjectToUpdate) {
+        syncCookieStore?.update(Number(tabId), [cookieObjectToUpdate]);
+      }
+    } else {
+      auditsIssueForTab[tabId][requestId] = details.cookieIssueDetails;
     }
   }
 });
@@ -459,6 +467,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
 const listenToNewTab = async (tabId?: number) => {
   const newTabId =
     tabId?.toString() || chrome.devtools.inspectedWindow.tabId.toString();
+  tabId;
 
   if (!newTabId) {
     return '';
@@ -488,7 +497,7 @@ const listenToNewTab = async (tabId?: number) => {
   unParsedRequestHeaders[newTabId] = {};
   unParsedResponseHeaders[newTabId] = {};
   requestIdToCDPURLMapping[newTabId] = {};
-  framesForTab[newTabId] = {};
+  auditsIssueForTab[newTabId] = {};
 
   syncCookieStore?.addTabData(Number(newTabId));
   syncCookieStore?.updateDevToolsState(Number(newTabId), true);
