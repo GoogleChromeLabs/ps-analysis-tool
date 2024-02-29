@@ -583,6 +583,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
     searchKeys,
     tablePersistentSettingsKey,
     extraInterfaceToTopBar,
+    isSidebarOpen: parsedQuery?.filter ? true : false,
   };
 };
 
