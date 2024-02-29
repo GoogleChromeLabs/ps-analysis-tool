@@ -34,15 +34,16 @@ import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
 import useSidebarQuery from './useSidebarQuery';
 
 const BlockedCookiesSection = () => {
-  const { tabCookies } = useCookieStore(({ state }) => ({
+  const { tabCookies, tabFrames } = useCookieStore(({ state }) => ({
     tabCookies: state.tabCookies,
+    tabFrames: state.tabFrames,
   }));
 
   const { isUsingCDP } = useSettingsStore(({ state }) => ({
     isUsingCDP: state.isUsingCDP,
   }));
 
-  const { selectedItemUpdater } = useSidebarQuery();
+  const { selectedItemUpdater } = useSidebarQuery(tabFrames || {});
 
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);

@@ -37,7 +37,7 @@ const CookiesSection = () => {
     tabFrames: state.tabFrames,
   }));
 
-  const { selectedItemUpdater } = useSidebarQuery();
+  const { selectedItemUpdater } = useSidebarQuery(tabFrames || {});
 
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);

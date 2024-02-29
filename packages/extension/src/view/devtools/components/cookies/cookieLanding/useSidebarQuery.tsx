@@ -19,17 +19,9 @@
  */
 import { useCallback, useMemo } from 'react';
 import { useSidebar } from '@ps-analysis-tool/design-system';
+import type { TabFrames } from '@ps-analysis-tool/common';
 
-/**
- * Internal dependencies
- */
-import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-
-const useSidebarQuery = () => {
-  const { tabFrames } = useCookieStore(({ state }) => ({
-    tabFrames: state.tabFrames,
-  }));
-
+const useSidebarQuery = (tabFrames: TabFrames) => {
   const firstFrame = useMemo(
     () => Object.keys(tabFrames || {})?.[0] || '',
     [tabFrames]
