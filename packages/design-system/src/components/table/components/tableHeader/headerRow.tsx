@@ -22,21 +22,23 @@ import React from 'react';
  * Internal dependencies.
  */
 import HeaderCell from './headerCell';
-import type { TableOutput } from '../../useTable';
+import { useTable } from '../../useTable';
 
 interface HeaderRowProps {
-  table: TableOutput;
   setIsRowFocused: (state: boolean) => void;
 }
 
-const HeaderRow = ({ table, setIsRowFocused }: HeaderRowProps) => {
+const HeaderRow = ({ setIsRowFocused }: HeaderRowProps) => {
+  const { columns } = useTable(({ state }) => ({
+    columns: state.columns,
+  }));
+
   return (
     <div className="bg-anti-flash-white dark:bg-charleston-green border-b border-american-silver dark:border-quartz divide-x divide-american-silver dark:divide-quartz flex">
-      {table.columns?.map((cell, idx) => (
+      {columns?.map((cell, idx) => (
         <HeaderCell
           key={idx}
           index={idx}
-          table={table}
           cell={cell}
           setIsRowFocused={setIsRowFocused}
         />

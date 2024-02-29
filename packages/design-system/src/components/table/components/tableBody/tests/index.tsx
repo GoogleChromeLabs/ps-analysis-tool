@@ -26,6 +26,7 @@ import '@testing-library/jest-dom';
  */
 import TableBody from '..';
 import table from '../../../../../test-data/cookieTableMockData';
+import * as useTable from '../../../useTable/useTable';
 
 const bodyRowProp = {
   row: table.rows[0],
@@ -47,6 +48,9 @@ const getRowObjectKey = jest.fn((row) => {
 });
 
 describe('TableBody', () => {
+  const mockUseTable = jest.fn();
+  jest.spyOn(useTable, 'useTable').mockImplementation(mockUseTable);
+
   beforeAll(() => {
     globalThis.chrome = SinonChrome as unknown as typeof chrome;
   });
@@ -56,18 +60,21 @@ describe('TableBody', () => {
   });
 
   it('should render Table Body component', () => {
+    mockUseTable.mockReturnValue({
+      rows: table.rows,
+      columns: table.columns,
+      onRowClick,
+      onRowContextMenu: jest.fn(),
+      getRowObjectKey,
+      conditionalTableRowClassesHandler: jest.fn(),
+      hasVerticalBar: () => false,
+    });
+
     render(
       <TableBody
-        // @ts-ignore
-        table={table}
-        getRowObjectKey={getRowObjectKey}
         isRowFocused={bodyRowProp.isRowFocused}
         setIsRowFocused={setIsRowFocused}
         selectedKey={bodyRowProp.selectedKey}
-        onRowClick={() => {
-          onRowClick(bodyRowProp.row?.originalData);
-          setIsRowFocused(true);
-        }}
       />
     );
 
@@ -95,18 +102,21 @@ describe('TableBody', () => {
   });
 
   it('should update focused row', () => {
+    mockUseTable.mockReturnValue({
+      rows: table.rows,
+      columns: table.columns,
+      onRowClick,
+      onRowContextMenu: jest.fn(),
+      getRowObjectKey,
+      conditionalTableRowClassesHandler: jest.fn(),
+      hasVerticalBar: () => false,
+    });
+
     render(
       <TableBody
-        // @ts-ignore
-        table={table}
-        getRowObjectKey={getRowObjectKey}
         isRowFocused={bodyRowProp.isRowFocused}
         setIsRowFocused={setIsRowFocused}
         selectedKey={bodyRowProp.selectedKey}
-        onRowClick={() => {
-          onRowClick(bodyRowProp.row?.originalData);
-          setIsRowFocused(true);
-        }}
       />
     );
 
