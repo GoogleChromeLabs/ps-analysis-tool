@@ -40,6 +40,7 @@
   },
   "devDependencies": {
     "@types/react-copy-to-clipboard": "^5.0.4",
-    "devtools-protocol": "^0.0.1236148"
+    "devtools-protocol": "^0.0.1236148",
+    "html-inline-script-webpack-plugin": "^3.2.1"
   }
 }

@@ -34,6 +34,7 @@ import {
 import { useSettingsStore } from '../../stateProviders/syncSettingsStore';
 import { useCookieStore } from '../../stateProviders/syncCookieStore';
 import CookiesListing from './cookiesListing';
+import downloadReport from '../../../../utils/downloadReport';
 
 interface CookiesProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;
@@ -126,14 +127,21 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
         {selectedFrame ? (
           <CookiesListing setFilteredCookies={setFilteredCookies} />
         ) : (
-          <CookiesLanding
-            tabCookies={tabCookies}
-            tabFrames={processedTabFrames}
-            showBlockedCookiesSection
-            showFramesSection
-            description={description}
-            additionalComponents={{ libraryDetection: LibraryDetection }}
-          />
+          <>
+            <button
+              onClick={() => downloadReport(tabCookies, tabFrames, description)}
+            >
+              Download report
+            </button>
+            <CookiesLanding
+              tabCookies={tabCookies}
+              tabFrames={processedTabFrames}
+              showBlockedCookiesSection
+              showFramesSection
+              description={description}
+              additionalComponents={{ libraryDetection: LibraryDetection }}
+            />
+          </>
         )}
       </div>
     );
