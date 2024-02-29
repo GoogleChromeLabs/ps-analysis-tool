@@ -18,8 +18,7 @@
  * External dependencies.
  */
 import React from 'react';
-import classNames from 'classnames';
-import { BLOCK_STATUS, CookieTableData } from '@ps-analysis-tool/common';
+import classnames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -28,67 +27,39 @@ import BodyCell from './bodyCell';
 import type { TableColumn, TableRow } from '../../useTable';
 
 interface BodyRowProps {
-  useIsBlockedToHighlight: boolean;
   row: TableRow;
   columns: TableColumn[];
   index: number;
-  isRowFocused: boolean;
   selectedKey: string | undefined | null;
+  isRowFocused: boolean;
+  getExtraClasses: () => string;
+  hasVerticalBar: boolean;
   getRowObjectKey: (row: TableRow) => string;
   onRowClick: (e: React.MouseEvent<HTMLDivElement>) => void;
   onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>, index: number) => void;
-  onRowContextMenu?: (
+  onRowContextMenu: (
     e: React.MouseEvent<HTMLDivElement>,
     row: TableRow
   ) => void;
 }
 
-// eslint-disable-next-line complexity
 const BodyRow = ({
-  useIsBlockedToHighlight,
   row,
   columns,
   index,
   selectedKey,
-  getRowObjectKey,
   isRowFocused,
+  getExtraClasses,
+  hasVerticalBar,
+  getRowObjectKey,
   onRowClick,
   onKeyDown,
-  onRowContextMenu = () => undefined,
+  onRowContextMenu,
 }: BodyRowProps) => {
-  const cookieKey = getRowObjectKey(row);
-  const isBlocked = useIsBlockedToHighlight
-    ? (row.originalData as CookieTableData)?.isBlocked
-    : (row.originalData as CookieTableData)?.blockingStatus?.inboundBlock !==
-        BLOCK_STATUS.NOT_BLOCKED ||
-      (row.originalData as CookieTableData)?.blockingStatus?.outboundBlock !==
-        BLOCK_STATUS.NOT_BLOCKED;
-  const isHighlighted = (row.originalData as CookieTableData)?.highlighted;
-  const isDomainInAllowList = (row.originalData as CookieTableData)
-    ?.isDomainInAllowList;
-
-  const tableRowClassName = classNames(
-    'outline-0 flex divide-x divide-american-silver dark:divide-quartz relative',
-    isBlocked &&
-      (cookieKey !== selectedKey
-        ? index % 2
-          ? 'dark:bg-flagged-row-even-dark bg-flagged-row-even-light'
-          : 'dark:bg-flagged-row-odd-dark bg-flagged-row-odd-light'
-        : isRowFocused
-        ? 'bg-gainsboro dark:bg-outer-space'
-        : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
-    isDomainInAllowList &&
-      !isBlocked &&
-      (cookieKey !== selectedKey
-        ? index % 2
-          ? 'dark:bg-jungle-green-dark bg-leaf-green-dark'
-          : 'dark:bg-jungle-green-light bg-leaf-green-light'
-        : isRowFocused
-        ? 'bg-gainsboro dark:bg-outer-space'
-        : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
-    cookieKey !== selectedKey &&
-      !isBlocked &&
-      !isDomainInAllowList &&
+  const rowKey = getRowObjectKey(row);
+  const isHighlighted = row.originalData?.highlighted;
+  const classes = classnames(
+    rowKey !== selectedKey &&
       (index % 2
         ? isHighlighted
           ? 'bg-dirty-pink'
@@ -96,9 +67,7 @@ const BodyRow = ({
         : isHighlighted
         ? 'bg-dirty-pink text-dirty-red dark:text-dirty-red text-dirty-red'
         : 'bg-white dark:bg-raisin-black'),
-    cookieKey === selectedKey &&
-      !isBlocked &&
-      !isDomainInAllowList &&
+    rowKey === selectedKey &&
       (isRowFocused
         ? isHighlighted
           ? 'bg-dirty-red'
@@ -107,18 +76,27 @@ const BodyRow = ({
         ? 'bg-dirty-pink text-dirty-red'
         : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver')
   );
+  const extraClasses = getExtraClasses();
 
   return (
     <div
       id={index.toString()}
-      className={tableRowClassName}
+      className={classnames(
+        'outline-0 flex divide-x divide-american-silver dark:divide-quartz relative',
+        {
+          [classes]: extraClasses.length === 0,
+        },
+        {
+          [extraClasses]: extraClasses.length > 0,
+        }
+      )}
       onClick={onRowClick}
       onKeyDown={(e) => onKeyDown(e, index)}
       onContextMenu={(e) => onRowContextMenu(e, row)}
       data-testid="body-row"
     >
-      {/* Vertical bar for allow-listed domain row at the left side */}
-      {isDomainInAllowList && (
+      {/* Vertical bar for for some indication, styles can also be made dynamic.*/}
+      {hasVerticalBar && (
         <span className="absolute block top-0 bottom-0 left-0 border-l-2 border-emerald-600 dark:border-leaf-green-dark" />
       )}
       {columns.map(
@@ -135,13 +113,13 @@ const BodyRow = ({
           <BodyCell
             key={idx}
             onRowClick={onRowClick}
-            cell={row[accessorKey]?.value || ''}
+            cell={row[accessorKey]?.value}
             width={width || 0}
             isHighlighted={isHighlighted}
-            isRowFocused={cookieKey === selectedKey}
+            isRowFocused={rowKey === selectedKey}
             row={row}
             hasIcon={enableBodyCellPrefixIcon}
-            showWarningIcon={
+            showIcon={
               showBodyCellPrefixIcon ? showBodyCellPrefixIcon(row) : false
             }
             icon={

@@ -22,21 +22,16 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
  * Internal dependencies.
  */
 import ListItem from './listItem';
-import type { TableFilter, TableOutput } from '../../useTable';
+import { useTable } from '../../useTable';
 
-interface FiltersSidebarProps {
-  filters: TableFilter;
-  toggleFilterSelection: TableOutput['toggleFilterSelection'];
-  toggleSelectAllFilter: TableOutput['toggleSelectAllFilter'];
-  isSelectAllFilterSelected: (filterKey: string) => boolean;
-}
+const FiltersSidebar = () => {
+  const { filters, isSelectAllFilterSelected } = useTable(
+    ({ state, actions }) => ({
+      filters: state.filters,
+      isSelectAllFilterSelected: actions.isSelectAllFilterSelected,
+    })
+  );
 
-const FiltersSidebar = ({
-  filters,
-  toggleFilterSelection,
-  toggleSelectAllFilter,
-  isSelectAllFilterSelected,
-}: FiltersSidebarProps) => {
   const [expandAll, setExpandAll] = useState(false);
   const expandedFilters = useRef(new Set<string>());
   const filterKeys = useMemo(() => {
@@ -101,8 +96,6 @@ const FiltersSidebar = ({
             key={filterKey}
             filter={filter}
             filterKey={filterKey}
-            toggleFilterSelection={toggleFilterSelection}
-            toggleSelectAllFilter={toggleSelectAllFilter}
             expandAll={expandAll}
             toggleFilterExpansion={toggleFilterExpansion}
             isSelectAllFilterSelected={isSelectAllFilterSelected(filterKey)}
