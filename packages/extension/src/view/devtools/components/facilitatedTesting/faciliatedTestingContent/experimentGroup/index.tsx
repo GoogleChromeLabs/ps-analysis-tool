@@ -16,10 +16,53 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
+/**
+ * Internal dependencies.
+ */
+import { getCurrentTabId } from '../../../../../../utils/getCurrentTabId';
 
 const ExperimentGroup = () => {
-  return <p>Group</p>;
+  const [label, setLabel] = useState('');
+
+  useEffect(() => {
+    (async () => {
+      const tabId = await getCurrentTabId();
+
+      if (!tabId) {
+        return;
+      }
+
+      const queryResult = await chrome.scripting.executeScript({
+        target: { tabId: Number(tabId), allFrames: false },
+        func: () => {
+          // Feature detect temporary API first
+          return new Promise((resolve, reject) => {
+            if ('cookieDeprecationLabel' in navigator) {
+              // Request value and resolve promise
+              navigator.cookieDeprecationLabel.getValue().then(resolve);
+            } else {
+              reject('Not Supported');
+            }
+          });
+        },
+      });
+
+      setLabel(queryResult ? queryResult[0]?.result : '');
+    })();
+  }, []);
+
+  return (
+    <div className="p-3 flex-1 bg-anti-flash-white dark:bg-charleston-green rounded-md">
+      <h4 className="text-base font-medium text-davys-grey dark:text-anti-flash-white mb-1">
+        Is Your Browser Part of the Experimental Group?
+      </h4>
+      <div className="overflow-auto">
+        <p>Label: {label}</p>
+      </div>
+    </div>
+  );
 };
 
 export default ExperimentGroup;
