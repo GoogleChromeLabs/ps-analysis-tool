@@ -25,13 +25,13 @@ import {
   MatrixContainer,
   type MatrixComponentProps,
   LEGEND_DESCRIPTION,
+  useFiltersMapping,
 } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies
  */
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
 import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
-import useSidebarQuery from './useSidebarQuery';
 
 const BlockedCookiesSection = () => {
   const { tabCookies, tabFrames } = useCookieStore(({ state }) => ({
@@ -43,7 +43,7 @@ const BlockedCookiesSection = () => {
     isUsingCDP: state.isUsingCDP,
   }));
 
-  const { selectedItemUpdater } = useSidebarQuery(tabFrames || {});
+  const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});
 
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);

@@ -24,12 +24,12 @@ import {
   prepareCookieDataMapping,
   prepareCookieStatsComponents,
   prepareCookiesCount,
+  useFiltersMapping,
 } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies
  */
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import useSidebarQuery from './useSidebarQuery';
 
 const CookiesSection = () => {
   const { tabCookies, tabFrames } = useCookieStore(({ state }) => ({
@@ -37,7 +37,7 @@ const CookiesSection = () => {
     tabFrames: state.tabFrames,
   }));
 
-  const { selectedItemUpdater } = useSidebarQuery(tabFrames || {});
+  const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});
 
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);

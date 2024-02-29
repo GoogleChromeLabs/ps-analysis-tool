@@ -24,6 +24,7 @@ import {
   prepareCookieDataMapping,
   prepareCookieStatsComponents,
   prepareCookiesCount,
+  useFiltersMapping,
 } from '@ps-analysis-tool/design-system';
 import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
 /**
@@ -35,11 +36,14 @@ interface CookiesSectionProps {
   tabFrames: TabFrames | null;
 }
 const CookiesSection = ({ tabCookies, tabFrames }: CookiesSectionProps) => {
+  const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});
+
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
   const cookieClassificationDataMapping = prepareCookieDataMapping(
     cookieStats,
-    cookiesStatsComponents
+    cookiesStatsComponents,
+    selectedItemUpdater
   );
 
   return (

@@ -21,7 +21,7 @@ import { useCallback, useMemo } from 'react';
 import { useSidebar } from '@ps-analysis-tool/design-system';
 import type { TabFrames } from '@ps-analysis-tool/common';
 
-const useSidebarQuery = (tabFrames: TabFrames) => {
+const useFiltersMapping = (tabFrames: TabFrames) => {
   const firstFrame = useMemo(
     () => Object.keys(tabFrames || {})?.[0] || '',
     [tabFrames]
@@ -53,4 +53,4 @@ const useSidebarQuery = (tabFrames: TabFrames) => {
   return { selectedItemUpdater };
 };
 
-export default useSidebarQuery;
+export default useFiltersMapping;
