@@ -13,26 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
 import React from 'react';
-import { LandingPage } from '@ps-analysis-tool/design-system';
 
-/**
- * Internal dependencies.
- */
-import FacilitatedTestingContent from './faciliatedTestingContent';
+const ExperimentGroup = () => {
+  return <p>Group</p>;
+};
 
-const FacilitatedTesting = () => (
-  <div data-testid="facilitated-testing-content" className="h-full w-full">
-    <LandingPage
-      title="Facilitated Testing"
-      contentPanel={<FacilitatedTestingContent />}
-      extraClasses="2xl:max-w-6xl xl:max-w-4xl max-w-2xl h-fit"
-    />
-  </div>
-);
-
-export default FacilitatedTesting;
+export default ExperimentGroup;
