@@ -75,8 +75,6 @@ const BlockedCookiesSection = ({
         description: legendDescription,
         title: component.label,
         containerClasses: '',
-        onClick: (title: string) =>
-          selectedItemUpdater(title, 'analytics.category'),
       };
     });
 

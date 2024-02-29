@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   CookiesLandingWrapper,
   CookiesMatrix,
@@ -46,6 +46,14 @@ const CookiesSection = ({ tabCookies, tabFrames }: CookiesSectionProps) => {
     selectedItemUpdater
   );
 
+  const cookieComponentData = useMemo(() => {
+    return cookiesStatsComponents.legend.map((component) => ({
+      ...component,
+      onClick: (title: string) =>
+        selectedItemUpdater(title, 'analytics.category'),
+    }));
+  }, [cookiesStatsComponents.legend, selectedItemUpdater]);
+
   return (
     <CookiesLandingWrapper
       dataMapping={cookieClassificationDataMapping}
@@ -61,7 +69,7 @@ const CookiesSection = ({ tabCookies, tabFrames }: CookiesSectionProps) => {
           ))}
       <CookiesMatrix
         tabCookies={tabCookies}
-        componentData={cookiesStatsComponents.legend}
+        componentData={cookieComponentData}
         tabFrames={tabFrames}
         showHorizontalMatrix={false}
       />
