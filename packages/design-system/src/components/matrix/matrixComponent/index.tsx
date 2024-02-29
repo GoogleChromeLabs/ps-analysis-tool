@@ -31,7 +31,6 @@ export interface MatrixComponentProps {
   count: number;
   isExpanded?: boolean;
   countClassName: string;
-  containerClasses: string;
 }
 
 const MatrixComponent = ({
@@ -41,10 +40,9 @@ const MatrixComponent = ({
   count,
   isExpanded = false,
   countClassName,
-  containerClasses,
 }: MatrixComponentProps) => {
   return (
-    <div className={containerClasses}>
+    <div>
       <div className="flex gap-x-4">
         <Circle color={color} />
         <div className="lg:max-w-[80%] lg:mr-8">
