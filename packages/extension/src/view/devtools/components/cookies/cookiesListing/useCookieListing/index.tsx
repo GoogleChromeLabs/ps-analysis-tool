@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   getValueByKey,
   type CookieTableData,
@@ -186,16 +186,24 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
     [isUsingCDP]
   );
 
-  const preCalculatedFilters = useMemo<{
-    category: TableFilter[keyof TableFilter]['filterValues'];
-    platform: TableFilter[keyof TableFilter]['filterValues'];
-    blockedReason: TableFilter[keyof TableFilter]['filterValues'];
-  }>(() => {
+  const [preCalculatedFilters, setPreCalculatedFilters] = useState<{
+    categories: TableFilter[keyof TableFilter]['filterValues'];
+    platforms: TableFilter[keyof TableFilter]['filterValues'];
+    blockedReasons: TableFilter[keyof TableFilter]['filterValues'];
+  }>({
+    categories: {},
+    platforms: {},
+    blockedReasons: {},
+  });
+
+  useEffect(() => {
     const calculate = (
       key: string,
       options?: string[]
     ): TableFilter[keyof TableFilter]['filterValues'] => {
-      const filters = Object.values(cookies).reduce((acc, cookie) => {
+      const filters = Object.values(cookies).reduce<
+        TableFilter[keyof TableFilter]['filterValues']
+      >((acc, cookie) => {
         const value = getValueByKey(key, cookie);
 
         if (!acc) {
@@ -213,7 +221,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         }
 
         return acc;
-      }, {} as TableFilter[keyof TableFilter]['filterValues']);
+      }, {});
 
       if (options) {
         clearActivePanelQuery?.();
@@ -258,16 +266,16 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
       return filters;
     };
 
-    return {
-      category: calculate(
+    setPreCalculatedFilters({
+      categories: calculate(
         'analytics.category',
         parsedQuery?.filter?.['analytics.category']
       ),
-      platform: calculate('analytics.platform'),
-      blockedReason: calculateBlockedReasonFilterValues(
+      platforms: calculate('analytics.platform'),
+      blockedReasons: calculateBlockedReasonFilterValues(
         parsedQuery?.filter?.blockedReasons
       ),
-    };
+    });
   }, [cookies, parsedQuery?.filter, clearActivePanelQuery]);
 
   const evaluteStaticFilterValues = useCallback(
@@ -324,7 +332,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         title: 'Category',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: preCalculatedFilters.category,
+        filterValues: preCalculatedFilters.categories,
         sortValues: true,
         useGenericPersistenceKey: true,
       },
@@ -462,7 +470,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         title: 'Platform',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: preCalculatedFilters.platform,
+        filterValues: preCalculatedFilters.platforms,
         sortValues: true,
         useGenericPersistenceKey: true,
       },
@@ -472,7 +480,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         hasPrecalculatedFilterValues: true,
         enableSelectAllOption: true,
         isSelectAllOptionSelected: evaluateSelectAllOption('blockedReasons'),
-        filterValues: preCalculatedFilters.blockedReason,
+        filterValues: preCalculatedFilters.blockedReasons,
         sortValues: true,
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
@@ -540,9 +548,9 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
     [
       evaluateSelectAllOption,
       evaluteStaticFilterValues,
-      preCalculatedFilters.blockedReason,
-      preCalculatedFilters.category,
-      preCalculatedFilters.platform,
+      preCalculatedFilters.blockedReasons,
+      preCalculatedFilters.categories,
+      preCalculatedFilters.platforms,
     ]
   );
 
@@ -559,7 +567,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
     return `cookieListing#${selectedFrame}`;
   }, [selectedFrame]);
 
-  const extraInterfaceToTopBar = useMemo(() => {
+  const extraInterfaceToTopBar = useCallback(() => {
     return (
       <RefreshButton
         onClick={getCookiesSetByJavascript}

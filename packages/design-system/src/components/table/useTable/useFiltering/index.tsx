@@ -23,7 +23,7 @@ import { getValueByKey } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import type { TableData, TableFilter } from '..';
+import type { TableData, TableFilter } from '../types';
 import useFiltersPersistence from './useFiltersPersistence';
 
 export type TableFilteringOutput = {
