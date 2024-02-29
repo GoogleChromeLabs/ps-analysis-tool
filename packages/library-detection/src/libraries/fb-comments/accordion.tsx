@@ -17,16 +17,16 @@
  * External dependencies.
  */
 import React from 'react';
-import { addUTMParams } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import { Accordion, FeatureList } from '../../components';
+import { Accordion } from '../../components';
 import type { AccordionProps } from '../../types';
 
-const FBCommentsAccordion = ({ matches }: AccordionProps) => {
-  const featuresCount = matches && matches.length ? matches.length : 0;
+const FBCommentsAccordion = ({ domQuerymatches }: AccordionProps) => {
+  const featuresCount =
+    domQuerymatches && domQuerymatches.length ? domQuerymatches.length : 0;
 
   if (!featuresCount) {
     return null;
@@ -38,22 +38,9 @@ const FBCommentsAccordion = ({ matches }: AccordionProps) => {
       isLoading={false}
       featuresText={`${featuresCount} features`}
     >
-      <p className="dark:text-bright-gray">
-        The Google Sign-In JavaScript library is deprecated and is no longer
-        supported. Review the following features and consider{' '}
-        <a
-          className="text-bright-navy-blue dark:text-jordy-blue"
-          href={addUTMParams(
-            'https://developers.google.com/privacy-sandbox/3pcd/guides/identity#federated_identity'
-          )}
-          target="_blank"
-          rel="noreferrer"
-        >
-          migrating
-        </a>{' '}
-        to a newer library if necessary.
-      </p>
-      <FeatureList matches={matches} />
+      {domQuerymatches?.map((match) => (
+        <p key={match}>{match}</p>
+      ))}
     </Accordion>
   );
 };

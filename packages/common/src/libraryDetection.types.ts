@@ -33,8 +33,9 @@ export type DetectedSignature = {
 
 export type LibraryData = {
   [key: string]: {
-    signatureMatches: number;
+    signatureMatches?: number;
     moduleMatch?: number;
-    matches: DetectedSignature[];
+    matches?: DetectedSignature[];
+    domQuerymatches?: [string];
   };
 };

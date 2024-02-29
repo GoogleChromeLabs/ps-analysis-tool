@@ -70,7 +70,8 @@ export type ResourceTreeItem = {
 };
 
 export type AccordionProps = {
-  matches: DetectedSignature[];
+  matches?: DetectedSignature[];
+  domQuerymatches?: [string] | null;
 };
 
 export type DomainPaths = {

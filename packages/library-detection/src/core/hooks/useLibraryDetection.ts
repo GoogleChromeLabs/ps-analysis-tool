@@ -115,6 +115,7 @@ const useLibraryDetection = () => {
 
     //  chrome.devtools.inspectedWindow.getResources updates whenever new items are added.
     const scripts = await getNetworkResourcesWithContent();
+    const domQueryMatches: LibraryData = {};
 
     LIBRARIES.forEach(async ({ name, domQueryFunction }) => {
       if (domQueryFunction) {
@@ -123,10 +124,9 @@ const useLibraryDetection = () => {
           func: domQueryFunction,
         });
 
-        setLibraryMatches((matches) => {
-          matches[name] = { matches: queryResult[0]?.result };
-          return matches;
-        });
+        domQueryMatches[name] = {
+          domQuerymatches: queryResult[0]?.result as [string],
+        };
       }
     });
 
@@ -134,7 +134,10 @@ const useLibraryDetection = () => {
       LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING,
       scripts,
       (detectedMatchingSignatures: LibraryData) => {
-        setLibraryMatches(detectedMatchingSignatures);
+        setLibraryMatches({
+          ...detectedMatchingSignatures,
+          ...domQueryMatches,
+        });
         attachListener();
         setShowLoader(false);
       }

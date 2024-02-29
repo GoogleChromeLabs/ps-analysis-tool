@@ -75,7 +75,9 @@ const LibraryDetection = memo(function LibraryDetection() {
   const names = Object.keys(libraryMatches);
 
   const detectedLibraryNames = names.filter(
-    (name) => libraryMatches[name as keyof LibraryData]?.matches?.length
+    (name) =>
+      libraryMatches[name as keyof LibraryData]?.matches?.length ||
+      libraryMatches[name as keyof LibraryData]?.domQuerymatches?.length
   );
 
   const dataMapping = [
@@ -91,15 +93,27 @@ const LibraryDetection = memo(function LibraryDetection() {
       <>
         {LIBRARIES.map((library) => {
           const Component = library.component as React.FC<{
-            matches: DetectedSignature[];
+            matches?: DetectedSignature[];
+            domQueryMatches?: [string] | null;
           }>;
 
           const matches =
             libraryMatches && libraryMatches[library.name as keyof LibraryData]
               ? libraryMatches[library.name as keyof LibraryData]?.matches
               : [];
+          const domQueryMatches =
+            libraryMatches && libraryMatches[library.name as keyof LibraryData]
+              ? libraryMatches[library.name as keyof LibraryData]
+                  ?.domQuerymatches
+              : null;
 
-          return <Component key={library.name} matches={matches} />;
+          return (
+            <Component
+              key={library.name}
+              matches={matches}
+              domQueryMatches={domQueryMatches}
+            />
+          );
         })}
       </>
     ) : (

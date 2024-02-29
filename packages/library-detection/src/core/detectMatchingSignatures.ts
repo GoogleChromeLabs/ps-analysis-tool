@@ -22,7 +22,6 @@ import type {
   DetectionSubFunctions,
   DetectionAuditFunctions,
 } from '../types';
-import getInitialLibraryData from './getInitialLibraryData';
 import LIBRARIES from '../config';
 
 /**
@@ -54,7 +53,18 @@ const detectMatchingSignatures = (
   detectionAuditFunctions: DetectionAuditFunctions
 ): LibraryData => {
   // @todo Overriding matches.
-  const libraryMatches: LibraryData = getInitialLibraryData();
+  const libraryMatches: LibraryData = Object.fromEntries(
+    LIBRARIES.filter(({ detectionFunction }) => detectionFunction).map(
+      ({ name }) => [
+        name,
+        {
+          signatureMatches: 0,
+          matches: [],
+          moduleMatch: 0,
+        },
+      ]
+    )
+  );
 
   for (const script of loadedScripts.filter(filterDomainsToSkip)) {
     if (script.content === undefined) {
