@@ -24,7 +24,11 @@ import React, {
   useRef,
   useMemo,
 } from 'react';
-import { type TabCookies, UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
+import {
+  type TabCookies,
+  ORPHANED_COOKIE_KEY,
+  UNMAPPED_COOKIE_KEY,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -121,8 +125,12 @@ const Provider = ({ children }: PropsWithChildren) => {
         }
       });
 
-      if (!hasFrame && cookie.frameIdList?.length) {
-        acc[UNKNOWN_FRAME_KEY] = true;
+      if (!hasFrame && cookie.frameIdList && cookie.frameIdList?.length > 0) {
+        acc[ORPHANED_COOKIE_KEY] = true;
+      }
+
+      if (!hasFrame && cookie.frameIdList && cookie.frameIdList?.length === 0) {
+        acc[UNMAPPED_COOKIE_KEY] = true;
       }
 
       return acc;

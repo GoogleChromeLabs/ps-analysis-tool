@@ -16,7 +16,11 @@
 /**
  * External dependencies
  */
-import { UNKNOWN_FRAME_KEY, type TabFrames } from '@ps-analysis-tool/common';
+import {
+  type TabFrames,
+  ORPHANED_COOKIE_KEY,
+  UNMAPPED_COOKIE_KEY,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies
@@ -62,6 +66,7 @@ export default async function getFramesForCurrentTab() {
       return tabFrame;
     })
   );
-  modifiedTabFrames[UNKNOWN_FRAME_KEY] = { frameIds: [] };
+  modifiedTabFrames[ORPHANED_COOKIE_KEY] = { frameIds: [] };
+  modifiedTabFrames[UNMAPPED_COOKIE_KEY] = { frameIds: [] };
   return modifiedTabFrames;
 }

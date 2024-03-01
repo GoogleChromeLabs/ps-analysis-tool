@@ -1,6 +1,6 @@
 {
   "name": "@ps-analysis-tool/design-system",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "A package for presentational components that are being used in multiple packages",
   "main": "./src/index.ts",
   "source":"./src/index.ts",
