@@ -36,6 +36,6 @@ export type LibraryData = {
     signatureMatches?: number;
     moduleMatch?: number;
     matches?: DetectedSignature[];
-    domQuerymatches?: [string];
+    domQuerymatches?: [string] | null;
   };
 };

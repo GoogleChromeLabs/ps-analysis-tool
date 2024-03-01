@@ -71,7 +71,7 @@ export type ResourceTreeItem = {
 
 export type AccordionProps = {
   matches?: DetectedSignature[];
-  domQuerymatches?: [string] | null;
+  domQueryMatches?: [string] | null;
 };
 
 export type DomainPaths = {

@@ -24,9 +24,9 @@ import React from 'react';
 import { Accordion } from '../../components';
 import type { AccordionProps } from '../../types';
 
-const FBCommentsAccordion = ({ domQuerymatches }: AccordionProps) => {
+const FBCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
   const featuresCount =
-    domQuerymatches && domQuerymatches.length ? domQuerymatches.length : 0;
+    domQueryMatches && domQueryMatches.length ? domQueryMatches.length : 0;
 
   if (!featuresCount) {
     return null;
@@ -38,7 +38,7 @@ const FBCommentsAccordion = ({ domQuerymatches }: AccordionProps) => {
       isLoading={false}
       featuresText={`${featuresCount} features`}
     >
-      {domQuerymatches?.map((match) => (
+      {domQueryMatches?.map((match) => (
         <p key={match}>{match}</p>
       ))}
     </Accordion>

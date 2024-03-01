@@ -84,7 +84,15 @@ const useLibraryDetection = () => {
 
           if (hasResults) {
             setLibraryMatches((matches) => {
-              return sumUpDetectionResults(matches, realtimeComputationResult);
+              const data = sumUpDetectionResults(
+                matches,
+                realtimeComputationResult
+              );
+
+              // eslint-disable-next-line no-console
+              console.log(data, 'listenerCallback');
+
+              return data;
             });
           }
         }
@@ -134,10 +142,13 @@ const useLibraryDetection = () => {
       LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING,
       scripts,
       (detectedMatchingSignatures: LibraryData) => {
-        setLibraryMatches({
+        const data = {
           ...detectedMatchingSignatures,
           ...domQueryMatches,
-        });
+        };
+        // eslint-disable-next-line no-console
+        console.log(data, 'updateInitialData');
+        setLibraryMatches(data);
         attachListener();
         setShowLoader(false);
       }

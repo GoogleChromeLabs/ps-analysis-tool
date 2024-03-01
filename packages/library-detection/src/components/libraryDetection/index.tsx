@@ -33,7 +33,7 @@ import {
   useLibraryDetectionContext,
 } from '../../core';
 import LIBRARIES from '../../config';
-import type { LibraryData, DetectedSignature } from '../../types';
+import type { LibraryData, AccordionProps } from '../../types';
 
 const LibraryDetection = memo(function LibraryDetection() {
   useLibraryDetection();
@@ -88,14 +88,14 @@ const LibraryDetection = memo(function LibraryDetection() {
     },
   ];
 
+  // eslint-disable-next-line no-console
+  console.log(libraryMatches, 'LibraryDetection');
+
   const result =
     detectedLibraryNames.length > 0 ? (
       <>
         {LIBRARIES.map((library) => {
-          const Component = library.component as React.FC<{
-            matches?: DetectedSignature[];
-            domQueryMatches?: [string] | null;
-          }>;
+          const Component = library.component as React.FC<AccordionProps>;
 
           const matches =
             libraryMatches && libraryMatches[library.name as keyof LibraryData]
@@ -106,6 +106,11 @@ const LibraryDetection = memo(function LibraryDetection() {
               ? libraryMatches[library.name as keyof LibraryData]
                   ?.domQuerymatches
               : null;
+
+          if (library.name === 'fb-comments') {
+            // eslint-disable-next-line no-console
+            console.log(domQueryMatches, 'domQueryMatches');
+          }
 
           return (
             <Component

@@ -21,14 +21,21 @@ import type { LibraryData } from '../types';
 
 const getInitialLibraryData = (): LibraryData => {
   return Object.fromEntries(
-    LIBRARIES.map(({ name }) => [
-      name,
-      {
+    LIBRARIES.map(({ name, domQueryFunction }) => {
+      let initialData = {
         signatureMatches: 0,
         matches: [],
         moduleMatch: 0,
-      },
-    ])
+      };
+
+      if (domQueryFunction) {
+        initialData = {
+          domQueryMatches: null,
+        };
+      }
+
+      return [name, initialData];
+    })
   );
 };
 
