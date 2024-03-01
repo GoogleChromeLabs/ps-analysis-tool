@@ -21,7 +21,7 @@ import React, { useMemo } from 'react';
 /**
  * Internal dependencies.
  */
-import { TableFilter, TableOutput } from '../../useTable';
+import { useTable, type TableFilter } from '../../useTable';
 import Option from './option';
 
 interface SubListProps {
@@ -29,9 +29,7 @@ interface SubListProps {
   filterKey: string;
   sort: boolean;
   isExpanded: boolean;
-  toggleFilterSelection: TableOutput['toggleFilterSelection'];
   isSelectAllFilterEnabled: boolean;
-  toggleSelectAllFilter: TableOutput['toggleSelectAllFilter'];
   isSelectAllFilterSelected: boolean;
 }
 
@@ -39,12 +37,17 @@ const SubList = ({
   filterValues,
   filterKey,
   sort,
-  toggleFilterSelection,
   isExpanded,
   isSelectAllFilterEnabled,
   isSelectAllFilterSelected,
-  toggleSelectAllFilter,
 }: SubListProps) => {
+  const { toggleFilterSelection, toggleSelectAllFilter } = useTable(
+    ({ actions }) => ({
+      toggleFilterSelection: actions.toggleFilterSelection,
+      toggleSelectAllFilter: actions.toggleSelectAllFilter,
+    })
+  );
+
   const sortedFilterValueKeys = useMemo(() => {
     if (!sort) {
       return Object.keys(filterValues || {});

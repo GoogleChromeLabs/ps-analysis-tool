@@ -22,25 +22,29 @@ import React, { useCallback, useRef } from 'react';
  * Internal dependencies.
  */
 import HeaderResizer from './headerResizer';
-import type { TableColumn, TableOutput } from '../../useTable';
+import { useTable, type TableColumn } from '../../useTable';
 import { ArrowDown } from '../../../../icons';
 
 interface HeaderCellProps {
-  table: TableOutput;
   index: number;
   cell: TableColumn;
   setIsRowFocused: (state: boolean) => void;
 }
 
-const HeaderCell = ({
-  table,
-  index,
-  cell,
-  setIsRowFocused,
-}: HeaderCellProps) => {
+const HeaderCell = ({ index, cell, setIsRowFocused }: HeaderCellProps) => {
+  const { sortKey, sortOrder, isResizing, setSortKey, onMouseDown } = useTable(
+    ({ state, actions }) => ({
+      sortKey: state.sortKey,
+      sortOrder: state.sortOrder,
+      isResizing: state.isResizing,
+      setSortKey: actions.setSortKey,
+      onMouseDown: actions.onMouseDown,
+    })
+  );
+
   const handleOnClick = useCallback(() => {
-    table.setSortKey(cell.accessorKey);
-  }, [cell.accessorKey, table]);
+    setSortKey(cell.accessorKey);
+  }, [cell.accessorKey, setSortKey]);
 
   const columnRef = useRef<HTMLTableHeaderCellElement>(null);
 
@@ -48,9 +52,9 @@ const HeaderCell = ({
     <div
       ref={columnRef}
       style={{ minWidth: cell.width }}
-      onClick={table.isResizing ? undefined : handleOnClick}
+      onClick={isResizing ? undefined : handleOnClick}
       className={`relative select-none touch-none font-normal truncate flex-1 ${
-        !table.isResizing && 'hover:bg-gainsboro dark:hover:bg-outer-space'
+        !isResizing && 'hover:bg-gainsboro dark:hover:bg-outer-space'
       }`}
       data-testid="header-cell"
     >
@@ -61,16 +65,16 @@ const HeaderCell = ({
       >
         <p className="px-1 py-px truncate text-xs">{cell.header}</p>
         <p className="mr-2 scale-125">
-          {table.sortKey === cell.accessorKey &&
+          {sortKey === cell.accessorKey &&
             {
               asc: <ArrowDown className="transform rotate-180" />,
               desc: <ArrowDown />,
-            }[table.sortOrder]}
+            }[sortOrder]}
         </p>
       </div>
       <HeaderResizer
         onMouseDown={() => {
-          table.onMouseDown(columnRef, index);
+          onMouseDown(columnRef, index);
         }}
       />
     </div>

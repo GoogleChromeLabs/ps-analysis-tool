@@ -22,10 +22,8 @@ import React, { useCallback } from 'react';
  * Internal dependencies.
  */
 import HeaderRow from './headerRow';
-import type { TableOutput } from '../../useTable';
 
 interface TableHeaderProps {
-  table: TableOutput;
   setColumnPosition: (position: { x: number; y: number }) => void;
   onRightClick: (
     event: React.MouseEvent<HTMLTableSectionElement, MouseEvent>
@@ -34,7 +32,6 @@ interface TableHeaderProps {
 }
 
 const TableHeader = ({
-  table,
   setColumnPosition,
   onRightClick,
   setIsRowFocused,
@@ -52,7 +49,7 @@ const TableHeader = ({
 
   return (
     <div onContextMenu={handleRightClick} className="sticky top-0 z-10">
-      <HeaderRow table={table} setIsRowFocused={setIsRowFocused} />
+      <HeaderRow setIsRowFocused={setIsRowFocused} />
     </div>
   );
 };

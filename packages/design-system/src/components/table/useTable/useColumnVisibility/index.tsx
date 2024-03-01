@@ -22,7 +22,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 /**
  * Internal dependencies.
  */
-import type { TableColumn } from '..';
+import type { TableColumn } from '../types';
 import { useTablePersistentSettingsStore } from '../../persistentSettingsStore';
 
 export type ColumnVisibilityOutput = {
@@ -86,12 +86,17 @@ const useColumnVisibility = (
     [hiddenKeys]
   );
 
-  const visibleColumns = useMemo(() => {
+  const [visibleColumns, setVisibleColumns] = useState<TableColumn[]>([]);
+
+  useEffect(() => {
     if (isDataLoading) {
-      return [];
+      setVisibleColumns([]);
+      return;
     }
 
-    return columns.filter(({ accessorKey }) => !hiddenKeys.has(accessorKey));
+    setVisibleColumns(
+      columns.filter(({ accessorKey }) => !hiddenKeys.has(accessorKey))
+    );
   }, [columns, hiddenKeys, isDataLoading]);
 
   const { getPreferences, setPreferences } = useTablePersistentSettingsStore(

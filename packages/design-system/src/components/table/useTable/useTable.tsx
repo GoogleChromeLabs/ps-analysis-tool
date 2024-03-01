@@ -13,28 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
-import fs from 'fs/promises';
-import path from 'path';
+import { useContextSelector } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import { CookieDatabase } from '../types';
+import { TableContext, TableStoreContext } from './context';
+
+export function useTable(): TableStoreContext;
+export function useTable<T>(selector: (state: TableStoreContext) => T): T;
 
 /**
- * Fetch dictionary from local data folder.
- * @returns {Promise<CookieDatabase>} Open Cookie Data base
+ * Table store hook.
+ * @param selector Selector function to partially select state.
+ * @returns selected part of the state
  */
-export async function fetchDictionary(): Promise<CookieDatabase> {
-  const data = JSON.parse(
-    await fs.readFile(path.resolve('./assets/data/open-cookie-database.json'), {
-      encoding: 'utf8',
-    })
-  );
-
-  return data;
+export function useTable<T>(
+  selector: (state: TableStoreContext) => T | TableStoreContext = (state) =>
+    state
+) {
+  return useContextSelector(TableContext, selector);
 }

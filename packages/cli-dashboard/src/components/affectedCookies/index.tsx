@@ -59,9 +59,7 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
       >
         <CookieTable
           data={cookies.map((cookie) => ({ ...cookie, isBlocked: undefined }))} // Hot Fix: To unhighlight cookies in the Affected Cookie table.
-          useIsBlockedToHighlight={true} // Hot Fix: To use isBlocked to highlight cookies in the Affected Cookie table.
           tableColumns={tableColumns}
-          showTopBar={true}
           tableFilters={filters}
           tableSearchKeys={searchKeys}
           tablePersistentSettingsKey={tablePersistentSettingsKey}
