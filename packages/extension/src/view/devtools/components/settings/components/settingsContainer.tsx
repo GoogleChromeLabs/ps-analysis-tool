@@ -25,7 +25,7 @@ import SettingOption from './settingOption';
 import { useSettings } from '../../../stateProviders';
 // @ts-ignore
 // eslint-disable-next-line import/no-relative-packages
-import Gear from '../../../../../../../../third_party/icons/gear.svg';
+import Gear from '../../../../../../../../assets/icons/gear.svg';
 import { SETTING_PAGE_CONTROLS } from '../../../../../constants';
 
 interface settingsToReturnObject {

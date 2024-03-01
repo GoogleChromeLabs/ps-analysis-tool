@@ -42,7 +42,7 @@ describe('BodyRow', () => {
     onRowClick: jest.fn(() => {
       BodyRowProp.isRowFocused = true;
     }),
-    onKeyDown: jest.fn(),
+    onKeyDown: () => '',
     domainsInAllowList: emptySet,
     setDomainsInAllowList: jest.fn((domains: Set<string>) => {
       BodyRowProp.domainsInAllowList = domains;
@@ -66,6 +66,7 @@ describe('BodyRow', () => {
         columns={BodyRowProp.columns}
         selectedKey={BodyRowProp.selectedKey}
         getRowObjectKey={BodyRowProp.getRowObjectKey}
+        getExtraClasses={() => ''}
         isRowFocused={BodyRowProp.isRowFocused}
         onRowClick={BodyRowProp.onRowClick}
         onKeyDown={BodyRowProp.onKeyDown}
@@ -100,6 +101,7 @@ describe('BodyRow', () => {
         columns={BodyRowProp.columns}
         selectedKey={BodyRowProp.selectedKey}
         getRowObjectKey={BodyRowProp.getRowObjectKey}
+        getExtraClasses={() => ''}
         isRowFocused={BodyRowProp.isRowFocused}
         onRowClick={BodyRowProp.onRowClick}
         onKeyDown={BodyRowProp.onKeyDown}
