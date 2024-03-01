@@ -340,7 +340,7 @@ describe('parseHeaders: ', () => {
           ],
         },
         parsedCookie: {
-          domain: '.cnn.com',
+          domain: 'cnn.com',
           expires: '2024-02-22T08:59:32.000Z',
           httponly: true,
           name: 'has_recent_activity',
