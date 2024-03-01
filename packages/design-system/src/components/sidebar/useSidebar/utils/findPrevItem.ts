@@ -41,12 +41,13 @@ const findPrevItem = (items: SidebarItems, keyPath: string[]) => {
     return parentKey;
   }
 
-  const prevKey = keys[currentIndex - 1];
-  const prevItem = children[prevKey];
+  let prevKey = keys[currentIndex - 1];
+  let prevItem = children[prevKey];
 
-  if (prevItem?.dropdownOpen) {
+  while (prevItem?.dropdownOpen) {
     const prevItemChildren = Object.keys(prevItem.children);
-    return prevItemChildren[prevItemChildren.length - 1];
+    prevItem = prevItem.children[prevItemChildren[prevItemChildren.length - 1]];
+    prevKey = prevItemChildren[prevItemChildren.length - 1];
   }
 
   return prevKey;

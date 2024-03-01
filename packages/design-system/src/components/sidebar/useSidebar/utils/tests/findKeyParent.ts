@@ -13,6 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const UNKNOWN_FRAME_KEY = 'Unknown Frames';
-export const ORPHANED_COOKIE_KEY = 'Orphaned Cookies';
-export const UNMAPPED_COOKIE_KEY = 'Unmapped Cookies';
+import findKeyParent from '../findKeyParent';
+
+describe('findKeyPareny', () => {
+  it('should find the parent key', () => {
+    const keyPath = ['item1', 'item2', 'item3', 'item4'];
+
+    const result = findKeyParent(keyPath);
+
+    expect(result).toEqual('item3');
+  });
+
+  it('should return null if there is no parent', () => {
+    const keyPath = ['item1'];
+
+    const result = findKeyParent(keyPath);
+
+    expect(result).toEqual(null);
+  });
+});
