@@ -39,7 +39,9 @@ const DisqusCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
       featuresText={`${featuresCount} features`}
     >
       {domQueryMatches?.map((match) => (
-        <p key={match}>{match}</p>
+        <p className="break-all" key={match}>
+          {match}
+        </p>
       ))}
     </Accordion>
   );

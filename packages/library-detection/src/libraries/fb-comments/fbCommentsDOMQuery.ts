@@ -22,15 +22,9 @@ const fbCommentsDOMQuery = () => {
   const iframeRegex =
     /^https:\/\/www\.facebook\.com\/v\d+\.\d+\/plugins\/comments\.php/;
 
-  if (root) {
-    matchItems.push('div[id]: fb-root');
-  }
-
-  if (commentClass) {
-    matchItems.push('div[class]: fb-comments');
-  }
-
   if (root && commentClass) {
+    matchItems.push('div[id]: fb-root');
+    matchItems.push('div[class]: fb-comments');
     const iframes = document.querySelectorAll('iframe');
 
     iframes.forEach((iframe) => {

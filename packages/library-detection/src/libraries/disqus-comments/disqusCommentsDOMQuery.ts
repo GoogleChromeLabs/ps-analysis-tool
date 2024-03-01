@@ -22,8 +22,6 @@ const disqusCommentsDOMQuery = () => {
   const disqusCommentIframeSrcRegex = /^https:\/\/disqus\.com\/embed\/comments/;
 
   if (disqusThreadId) {
-    matchItems.push('div[id]: disqus-thread');
-
     const iframes = document.querySelectorAll('iframe');
 
     iframes.forEach((iframe) => {
@@ -31,6 +29,10 @@ const disqusCommentsDOMQuery = () => {
         matchItems.push(`iframe[src]: ${iframe.src}`);
       }
     });
+
+    if (matchItems.length) {
+      matchItems.push('div[id]: disqus-thread');
+    }
   }
 
   return matchItems;

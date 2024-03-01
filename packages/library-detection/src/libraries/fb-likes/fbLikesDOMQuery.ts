@@ -17,13 +17,13 @@
 const fbLikesDOMQuery = () => {
   const matchItems: string[] = [];
 
-  const fbId = document.querySelector('#fb-root');
+  const root = document.getElementById('fb-root');
   const fbLikeClass = document.querySelector('.fb-like');
 
   const fbLikeIframeSrcRegex =
     /^https:\/\/www\.facebook\.com\/v\d+\.\d+\/plugins\/like\.php/;
 
-  if (fbId && fbLikeClass) {
+  if (root && fbLikeClass) {
     matchItems.push('div[id]: fb-root');
     matchItems.push('div[class]: fb-like');
 
