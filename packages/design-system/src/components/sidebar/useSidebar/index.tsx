@@ -41,7 +41,8 @@ export type SidebarItemValue = {
   title: string;
   children: SidebarItems;
   popupTitle?: string;
-  extraInterfaceToTitle?: () => React.JSX.Element;
+  infoIconDescription?: string;
+  extraInterfaceToTitle?: React.ReactNode;
   dropdownOpen?: boolean;
   panel?: () => React.JSX.Element;
   icon?: () => React.JSX.Element;

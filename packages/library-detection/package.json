@@ -1,6 +1,6 @@
 {
   "name": "@ps-analysis-tool/library-detection",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "A package for detecting libraries for potential breakage",
   "main": "./src/index.ts",
   "source": "./src/index.ts",
