@@ -17,11 +17,12 @@
 /**
  * External dependencies
  */
-import React, { useMemo } from 'react';
-import type {
-  InfoType,
-  TableColumn,
-  TableFilter,
+import React, { useCallback, useMemo } from 'react';
+import {
+  useSidebar,
+  type InfoType,
+  type TableColumn,
+  type TableFilter,
 } from '@ps-analysis-tool/design-system';
 import {
   calculateEffectiveExpiryDate,
@@ -36,6 +37,18 @@ const useCookieListing = (
   persistenceKey = 'cookiesListing',
   selectedSite?: string | null
 ) => {
+  const { activePanelQuery, clearActivePanelQuery } = useSidebar(
+    ({ state }) => ({
+      activePanelQuery: state.activePanel.query,
+      clearActivePanelQuery: state.activePanel.clearQuery,
+    })
+  );
+
+  const parsedQuery = useMemo(
+    () => JSON.parse(activePanelQuery || '{}'),
+    [activePanelQuery]
+  );
+
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
@@ -128,6 +141,54 @@ const useCookieListing = (
     []
   );
 
+  const evaluteStaticFilterValues = useCallback(
+    (
+      staticValues: TableFilter[keyof TableFilter]['filterValues'],
+      filterKey: string
+    ) => {
+      const options: string[] = parsedQuery?.filter?.[filterKey];
+
+      const filters = Object.entries(staticValues || {}).reduce(
+        (acc, [key, value]) => {
+          if (!acc) {
+            acc = {};
+          }
+
+          if (options) {
+            value.selected = options.includes(key);
+          }
+
+          acc[key] = value;
+
+          return acc;
+        },
+        {} as TableFilter[keyof TableFilter]['filterValues']
+      );
+
+      if (options) {
+        clearActivePanelQuery?.();
+      }
+
+      return filters;
+    },
+    [clearActivePanelQuery, parsedQuery?.filter]
+  );
+
+  const evaluateSelectAllOption = useCallback(
+    (filterKey: string) => {
+      const options: string[] = parsedQuery?.filter?.[filterKey];
+
+      if (options?.[0] === 'All') {
+        clearActivePanelQuery?.();
+
+        return true;
+      }
+
+      return false;
+    },
+    [parsedQuery?.filter, clearActivePanelQuery]
+  );
+
   const filters = useMemo<TableFilter>(
     () => ({
       'analytics.category': {
@@ -136,7 +197,9 @@ const useCookieListing = (
         hasPrecalculatedFilterValues: true,
         filterValues: calculateDynamicFilterValues(
           'analytics.category',
-          tabCookies
+          tabCookies,
+          parsedQuery?.filter?.['analytics.category'],
+          clearActivePanelQuery
         ),
         sortValues: true,
         useGenericPersistenceKey: true,
@@ -144,14 +207,18 @@ const useCookieListing = (
       isFirstParty: {
         title: 'Scope',
         hasStaticFilterValues: true,
-        filterValues: {
-          'First Party': {
-            selected: false,
+        hasPrecalculatedFilterValues: true,
+        filterValues: evaluteStaticFilterValues(
+          {
+            'First Party': {
+              selected: false,
+            },
+            'Third Party': {
+              selected: false,
+            },
           },
-          'Third Party': {
-            selected: false,
-          },
-        },
+          'isFirstParty'
+        ),
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           const val = value as boolean;
@@ -273,7 +340,9 @@ const useCookieListing = (
         hasPrecalculatedFilterValues: true,
         filterValues: calculateDynamicFilterValues(
           'analytics.platform',
-          tabCookies
+          tabCookies,
+          parsedQuery?.filter?.['analytics.platform'],
+          clearActivePanelQuery
         ),
         sortValues: true,
         useGenericPersistenceKey: true,
@@ -283,7 +352,12 @@ const useCookieListing = (
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
         enableSelectAllOption: true,
-        filterValues: calculateBlockedReasonsFilterValues(tabCookies),
+        isSelectAllOptionSelected: evaluateSelectAllOption('blockedReasons'),
+        filterValues: calculateBlockedReasonsFilterValues(
+          tabCookies,
+          parsedQuery?.filter?.blockedReasons,
+          clearActivePanelQuery
+        ),
         sortValues: true,
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
@@ -291,7 +365,13 @@ const useCookieListing = (
         },
       },
     }),
-    [tabCookies]
+    [
+      clearActivePanelQuery,
+      evaluateSelectAllOption,
+      evaluteStaticFilterValues,
+      parsedQuery?.filter,
+      tabCookies,
+    ]
   );
 
   const searchKeys = useMemo<string[]>(
@@ -312,6 +392,7 @@ const useCookieListing = (
     filters,
     searchKeys,
     tablePersistentSettingsKey,
+    isSidebarOpen: parsedQuery?.filter ? true : false,
   };
 };
 

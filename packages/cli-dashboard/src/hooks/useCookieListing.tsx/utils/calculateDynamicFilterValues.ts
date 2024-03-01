@@ -21,26 +21,37 @@ import type { TableFilter } from '@ps-analysis-tool/design-system';
 
 const calculateDynamicFilterValues = (
   key: string,
-  tabCookies: CookieTableData[]
+  tabCookies: CookieTableData[],
+  options: string[],
+  clearQuery?: () => void
 ): TableFilter[keyof TableFilter]['filterValues'] => {
-  return tabCookies.reduce<TableFilter[keyof TableFilter]['filterValues']>(
-    (acc, cookie) => {
-      const value = getValueByKey(key, cookie);
+  const filters = tabCookies.reduce<
+    TableFilter[keyof TableFilter]['filterValues']
+  >((acc, cookie) => {
+    const value = getValueByKey(key, cookie);
 
-      if (!acc) {
-        acc = {};
+    if (!acc) {
+      acc = {};
+    }
+
+    if (value && !acc[value]) {
+      acc[value] = {
+        selected: false,
+      };
+
+      if (options) {
+        acc[value].selected = options.includes(value);
       }
+    }
 
-      if (value) {
-        acc[value] = {
-          selected: false,
-        };
-      }
+    return acc;
+  }, {});
 
-      return acc;
-    },
-    {}
-  );
+  if (options) {
+    clearQuery?.();
+  }
+
+  return filters;
 };
 
 export default calculateDynamicFilterValues;

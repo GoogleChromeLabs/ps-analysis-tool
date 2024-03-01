@@ -29,6 +29,7 @@ const Tabs: SidebarItems = {
     children: {},
     icon: () => <CookieIcon />,
     selectedIcon: () => <CookieIconWhite />,
+    dropdownOpen: true,
   },
   'affected-cookies': {
     title: 'Affected Cookies',
