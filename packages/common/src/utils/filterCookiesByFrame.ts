@@ -16,6 +16,7 @@
 /**
  * Internal dependencies.
  */
+import { ORPHANED_COOKIE_KEY, UNMAPPED_COOKIE_KEY } from '../constants';
 import { CookieTableData } from '../cookies.types';
 
 interface Cookies {
@@ -53,12 +54,19 @@ const filterCookiesByFrame = (
           hasFrame = true;
         }
       });
-      if (
-        !hasFrame &&
-        cookie.frameIdList !== undefined &&
-        cookie.frameIdList?.length > 0
-      ) {
-        frameFilteredCookies[key] = cookie;
+
+      if (!hasFrame && cookie.frameIdList !== undefined) {
+        if (
+          frameUrl === UNMAPPED_COOKIE_KEY &&
+          cookie.frameIdList?.length === 0
+        ) {
+          frameFilteredCookies[key] = cookie;
+        } else if (
+          frameUrl === ORPHANED_COOKIE_KEY &&
+          cookie.frameIdList?.length > 0
+        ) {
+          frameFilteredCookies[key] = cookie;
+        }
       }
     });
   }

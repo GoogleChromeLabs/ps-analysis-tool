@@ -29,8 +29,9 @@ import {
   ToastMessage,
 } from '@ps-analysis-tool/design-system';
 import {
-  UNKNOWN_FRAME_KEY,
+  ORPHANED_COOKIE_KEY,
   type CookieTableData,
+  UNMAPPED_COOKIE_KEY,
 } from '@ps-analysis-tool/common';
 
 /**
@@ -143,15 +144,36 @@ const App: React.FC = () => {
       );
       psData.children['cookies'].children = Object.keys(tabFrames || {})
         .filter((url) => {
-          return url === UNKNOWN_FRAME_KEY ? frameHasCookies[url] : true;
+          if (url === ORPHANED_COOKIE_KEY) {
+            return frameHasCookies[url];
+          }
+
+          if (url === UNMAPPED_COOKIE_KEY) {
+            return frameHasCookies[url];
+          }
+
+          return true;
         })
         .reduce<SidebarItems>((acc, url) => {
+          let popupTitle = `Cookies used by frames from ${url}`;
+          let infoIconDescription = '';
+          if (url === ORPHANED_COOKIE_KEY) {
+            popupTitle = infoIconDescription =
+              'Frames that set these cookies were removed from the DOM, leaving these cookies orphaned.';
+          }
+
+          if (url === UNMAPPED_COOKIE_KEY) {
+            popupTitle = infoIconDescription =
+              'Cookies that could not be mapped to any frame.';
+          }
+
           acc[url] = {
             title: url,
-            popupTitle: `Cookies used by frames from ${url}`,
+            popupTitle,
             panel: <Cookies setFilteredCookies={setFilteredCookies} />,
             icon: <CookieIcon />,
             selectedIcon: <CookieIconWhite />,
+            infoIconDescription,
             children: {},
             isBlurred: !frameHasCookies?.[url],
           };
