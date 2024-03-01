@@ -14,27 +14,5 @@
  * limitations under the License.
  */
 
-/**
- * External dependencies.
- */
-import fs from 'fs/promises';
-import path from 'path';
-
-/**
- * Internal dependencies.
- */
-import { CookieDatabase } from '../types';
-
-/**
- * Fetch dictionary from local data folder.
- * @returns {Promise<CookieDatabase>} Open Cookie Data base
- */
-export async function fetchDictionary(): Promise<CookieDatabase> {
-  const data = JSON.parse(
-    await fs.readFile(path.resolve('./assets/data/open-cookie-database.json'), {
-      encoding: 'utf8',
-    })
-  );
-
-  return data;
-}
+export { default as exportCookies } from './exportCookies';
+export { default as conditionalTableRowClassesHandler } from './conditionalTableRowClassesHandler';

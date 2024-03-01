@@ -25,10 +25,10 @@ import classNames from 'classnames';
 import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
 // @ts-ignore
 // eslint-disable-next-line import/no-relative-packages
-import InformationIcon from '../../../../../../../../third_party/icons/information-icon.svg';
+import InformationIcon from '../../../../../../../../assets/icons/information-icon.svg';
 // @ts-ignore
 // eslint-disable-next-line import/no-relative-packages
-import Done from '../../../../../../../../third_party/icons/done.svg';
+import Done from '../../../../../../../../assets/icons/done.svg';
 
 const InformationContainer = () => {
   const { currentTabs, currentExtensions, browserInformation, OSInformation } =

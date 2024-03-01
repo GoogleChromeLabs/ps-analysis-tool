@@ -15,26 +15,23 @@
  */
 
 /**
- * External dependencies.
+ * External dependencies
  */
-import fs from 'fs/promises';
-import path from 'path';
+import { CookieTableData } from '@ps-analysis-tool/common';
+import { saveAs } from 'file-saver';
 
 /**
- * Internal dependencies.
+ * Internal dependencies
  */
-import { CookieDatabase } from '../types';
+import { TableRow } from '../../table';
+import { generateCookieTableCSV } from '../../table/utils';
 
-/**
- * Fetch dictionary from local data folder.
- * @returns {Promise<CookieDatabase>} Open Cookie Data base
- */
-export async function fetchDictionary(): Promise<CookieDatabase> {
-  const data = JSON.parse(
-    await fs.readFile(path.resolve('./assets/data/open-cookie-database.json'), {
-      encoding: 'utf8',
-    })
-  );
+const exportCookies = (rows: TableRow[]) => {
+  const _cookies = rows.map(({ originalData }) => originalData);
+  if (_cookies.length > 0 && 'parsedCookie' in _cookies[0]) {
+    const csvTextBlob = generateCookieTableCSV(_cookies as CookieTableData[]);
+    saveAs(csvTextBlob, 'Cookies Report.csv');
+  }
+};
 
-  return data;
-}
+export default exportCookies;

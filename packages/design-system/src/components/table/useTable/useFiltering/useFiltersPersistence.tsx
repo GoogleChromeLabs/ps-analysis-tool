@@ -18,8 +18,12 @@
  * Internal dependencies.
  */
 import { useCallback, useEffect, useMemo, useRef } from 'react';
+
+/**
+ * Internal dependencies.
+ */
 import { useTablePersistentSettingsStore } from '../../persistentSettingsStore';
-import { PersistentStorageData, TableFilter } from '..';
+import { PersistentStorageData, TableFilter } from '../types';
 
 const useFiltersPersistence = (
   filters: TableFilter | undefined,
