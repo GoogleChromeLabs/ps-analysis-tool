@@ -1,6 +1,6 @@
 {
   "name": "@ps-analysis-tool/common",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "A package for common utilities that are being used in multiple packages",
   "main": "./dist/index.js",
   "types": "./dist-types/index.d.ts",

@@ -23,19 +23,14 @@ import React from 'react';
  */
 import ChipList from './chipList';
 import { StopIcon } from '../../../../../icons';
-import type { TableFilter, TableOutput } from '../../../useTable';
+import { useTable } from '../../../useTable';
 
-interface ChipsBarProps {
-  selectedFilters: TableFilter;
-  toggleFilterSelection: TableOutput['toggleFilterSelection'];
-  resetFilters: TableOutput['resetFilters'];
-}
+const ChipsBar = () => {
+  const { selectedFilters, resetFilters } = useTable(({ state, actions }) => ({
+    selectedFilters: state.selectedFilters,
+    resetFilters: actions.resetFilters,
+  }));
 
-const ChipsBar = ({
-  selectedFilters,
-  toggleFilterSelection,
-  resetFilters,
-}: ChipsBarProps) => {
   const appliedFiltersCount = Object.values(selectedFilters).reduce(
     (acc, filter) => {
       acc += Number(Object.keys(filter.filterValues || {}).length);
@@ -62,10 +57,7 @@ const ChipsBar = ({
           <div className="w-[1px] bg-gainsboro dark:bg-quartz h-[20px]"></div>
         </button>
       )}
-      <ChipList
-        selectedFilters={selectedFilters}
-        toggleFilterSelection={toggleFilterSelection}
-      />
+      <ChipList />
     </div>
   );
 };

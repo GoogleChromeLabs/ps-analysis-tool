@@ -16,7 +16,6 @@
 /**
  * External dependencies.
  */
-import { useContextSelector, createContext } from 'use-context-selector';
 import React, {
   type PropsWithChildren,
   useEffect,
@@ -26,7 +25,12 @@ import React, {
 } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import { noop, prepareCookiesCount } from '@ps-analysis-tool/design-system';
-import { type CookieData, type CookiesCount } from '@ps-analysis-tool/common';
+import {
+  type CookieData,
+  type CookiesCount,
+  useContextSelector,
+  createContext,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.

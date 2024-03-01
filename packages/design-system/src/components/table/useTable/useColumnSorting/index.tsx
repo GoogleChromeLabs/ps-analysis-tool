@@ -23,7 +23,7 @@ import { getValueByKey } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import type { TableData } from '..';
+import type { TableData } from '../types';
 import { useTablePersistentSettingsStore } from '../../persistentSettingsStore';
 
 export type DefaultOptions = {
