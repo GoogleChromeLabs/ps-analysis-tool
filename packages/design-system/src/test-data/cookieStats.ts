@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 export default {
-  total: 7,
+  total: 1000,
   blockedCookies: {
     total: 0,
   },
   firstParty: {
-    total: 6,
+    total: 999,
     functional: 0,
     marketing: 0,
     analytics: 2,
-    uncategorized: 4,
+    uncategorized: 998,
   },
   thirdParty: {
     total: 1,

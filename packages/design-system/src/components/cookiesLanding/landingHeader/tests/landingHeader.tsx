@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
 /**
@@ -46,8 +46,10 @@ describe('LandingHeader', () => {
         data: [...cookiesStatsComponents.thirdParty],
       },
     ];
-    const { getByTestId } = render(<LandingHeader dataMapping={dataMapping} />);
+    render(<LandingHeader dataMapping={dataMapping} />);
 
-    expect(getByTestId('cookies-landing-header')).toBeInTheDocument();
+    expect(screen.getByTestId('cookies-landing-header')).toBeInTheDocument();
+    expect(screen.getByText('Total Cookies')).toBeInTheDocument();
+    expect(screen.getByText('999+')).toBeInTheDocument();
   });
 });
