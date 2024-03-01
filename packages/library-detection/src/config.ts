@@ -18,23 +18,42 @@
  */
 import {
   GSIAccordion,
-  GISAccordion,
-  FBCommentsAccordion,
-  GSI_V2_SIGNATURE_STRONG_MATCHES,
-  GSI_V2_SIGNATURE_WEAK_MATCHES,
-  GIS_SIGNATURE_WEAK_MATCHES,
-  GIS_HELP_URL,
-  GSI_HELP_URL,
-  FB_COMMENTS_HELP_URL,
-  GIS_DOMAINS_TO_SKIP,
-  GSI_V2_DOMAINS_TO_SKIP,
-  GSIV2_EXCEPTIONS,
-  GIS_EXCEPTIONS,
-  getGISMatches,
   getGSIV2Matches,
   overrideGSIV2Matches,
+  GSI_V2_SIGNATURE_STRONG_MATCHES,
+  GSI_V2_SIGNATURE_WEAK_MATCHES,
+  GSI_HELP_URL,
+  GSI_V2_DOMAINS_TO_SKIP,
+  GSIV2_EXCEPTIONS,
+} from './libraries/gsi';
+import {
+  GISAccordion,
+  getGISMatches,
+  GIS_SIGNATURE_WEAK_MATCHES,
+  GIS_HELP_URL,
+  GIS_EXCEPTIONS,
+  GIS_DOMAINS_TO_SKIP,
+} from './libraries/gis';
+import {
+  FBCommentsAccordion,
+  FB_COMMENTS_HELP_URL,
   fbCommentsDOMQuery,
-} from './libraries';
+} from './libraries/fb-comments';
+import {
+  FBLikesAccordion,
+  fbLikesDOMQuery,
+  FB_LIKES_HELP_URL,
+} from './libraries/fb-likes';
+import {
+  DisqusCommentsAccordion,
+  disqusCommentsDOMQuery,
+  DISQUS_COMMENTS_HELP_URL,
+} from './libraries/disqus-comments';
+import {
+  JetpackCommentsAccordion,
+  jetpackCommentsDOMQuery,
+  JETPACK_COMMENTS_HELP_URL,
+} from './libraries/jetpack-comments';
 
 const LIBRARIES = [
   {
@@ -67,6 +86,24 @@ const LIBRARIES = [
     component: FBCommentsAccordion,
     helpUrl: FB_COMMENTS_HELP_URL,
     domQueryFunction: fbCommentsDOMQuery,
+  },
+  {
+    name: 'fb-likes',
+    component: FBLikesAccordion,
+    helpUrl: FB_LIKES_HELP_URL,
+    domQueryFunction: fbLikesDOMQuery,
+  },
+  {
+    name: 'disqus-comments',
+    component: DisqusCommentsAccordion,
+    helpUrl: DISQUS_COMMENTS_HELP_URL,
+    domQueryFunction: disqusCommentsDOMQuery,
+  },
+  {
+    name: 'jetpack-comments',
+    component: JetpackCommentsAccordion,
+    helpUrl: JETPACK_COMMENTS_HELP_URL,
+    domQueryFunction: jetpackCommentsDOMQuery,
   },
 ];
 
