@@ -20,7 +20,7 @@ const jetpackCommentsDOMQuery = () => {
   const jetpackIframeAttrValue = 'jetpack_remote_comment';
 
   const jetpackCommentIframeSrcRegex =
-    /^https:\/\/www\.disqus\.com\/embed\/comments/;
+    /^https:\/\/jetpack\.wordpress\.com\/jetpack-comment/;
 
   const iframes = document.querySelectorAll('iframe');
 
