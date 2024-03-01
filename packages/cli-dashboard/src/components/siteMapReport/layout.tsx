@@ -30,7 +30,6 @@ import {
 import {
   type TabFrames,
   type TechnologyData,
-  UNKNOWN_FRAME_KEY,
   type CookieFrameStorageType,
   type CompleteJson,
 } from '@ps-analysis-tool/common';
@@ -72,15 +71,6 @@ const Layout = ({
     });
 
     setSites(Array.from(_sites));
-  }, [cookies]);
-
-  const frames = useMemo(() => {
-    return Object.keys(cookies).reduce((acc, frame) => {
-      if (frame?.includes('http') || frame === UNKNOWN_FRAME_KEY) {
-        acc[frame] = {} as TabFrames[string];
-      }
-      return acc;
-    }, {} as TabFrames);
   }, [cookies]);
 
   const reshapedCookies = useMemo(
@@ -132,7 +122,11 @@ const Layout = ({
       _data[SIDEBAR_ITEMS_KEYS.COOKIES].panel = () => (
         <CookiesLandingContainer
           tabCookies={reshapedCookies}
-          tabFrames={frames}
+          tabFrames={sites.reduce<TabFrames>((acc, site) => {
+            acc[site] = {} as TabFrames[string];
+
+            return acc;
+          }, {})}
           affectedCookies={affectedCookies}
           downloadReport={() => {
             if (!Array.isArray(completeJson)) {
@@ -179,7 +173,6 @@ const Layout = ({
   }, [
     affectedCookies,
     completeJson,
-    frames,
     isKeySelected,
     reshapedCookies,
     setSidebarData,
