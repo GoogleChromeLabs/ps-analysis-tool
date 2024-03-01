@@ -22,31 +22,32 @@ import React from 'react';
  * Internal dependencies.
  */
 import Chip from './chip';
-import type { TableFilter, TableOutput } from '../../../useTable';
+import { useTable } from '../../../useTable';
 
-interface ChipListProps {
-  selectedFilters: TableFilter;
-  toggleFilterSelection: TableOutput['toggleFilterSelection'];
-}
+const ChipList = () => {
+  const { selectedFilters, toggleFilterSelection } = useTable(
+    ({ state, actions }) => ({
+      selectedFilters: state.selectedFilters,
+      toggleFilterSelection: actions.toggleFilterSelection,
+    })
+  );
 
-const ChipList = ({
-  selectedFilters,
-  toggleFilterSelection,
-}: ChipListProps) => (
-  <div className="flex flex-nowrap max-w-full">
-    {Object.entries(selectedFilters).map(([filterKey, filter]) => {
-      return Object.keys(filter.filterValues || {}).map((filterValue) => (
-        <Chip
-          key={filterValue}
-          filterTitle={filter.title}
-          value={filterValue}
-          toggleFilterSelection={() => {
-            toggleFilterSelection(filterKey, filterValue, true);
-          }}
-        />
-      ));
-    })}
-  </div>
-);
+  return (
+    <div className="flex flex-nowrap max-w-full">
+      {Object.entries(selectedFilters).map(([filterKey, filter]) => {
+        return Object.keys(filter.filterValues || {}).map((filterValue) => (
+          <Chip
+            key={filterValue}
+            filterTitle={filter.title}
+            value={filterValue}
+            toggleFilterSelection={() => {
+              toggleFilterSelection(filterKey, filterValue, true);
+            }}
+          />
+        ));
+      })}
+    </div>
+  );
+};
 
 export default ChipList;

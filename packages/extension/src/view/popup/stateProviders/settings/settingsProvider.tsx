@@ -38,7 +38,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     setAllowedNumberOfTabsForSettingsDisplay,
   ] = useState<string | null>(null);
 
-  const [settingsChanged, _setSettingsChanged] = useState<boolean>(false);
+  const [settingsChanged, setSettingsChanged] = useState<boolean>(false);
 
   const [isUsingCDP, _setIsUsingCDP] = useState(false);
   const [isUsingCDPForSettingsDisplay, setIsUsingCDPForSettingsDisplay] =
@@ -49,7 +49,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     const currentSettings = await chrome.storage.sync.get();
 
     if (Object.keys(sessionStorage).includes('pendingReload')) {
-      _setSettingsChanged(sessionStorage?.pendingReload);
+      setSettingsChanged(sessionStorage?.pendingReload);
 
       if (Object.keys(sessionStorage).includes('allowedNumberOfTabs')) {
         setAllowedNumberOfTabsForSettingsDisplay(
@@ -82,9 +82,9 @@ const Provider = ({ children }: PropsWithChildren) => {
     }
   }, []);
 
-  const setUsingCDP = useCallback((newValue: boolean) => {
+  const setUsingCDP = useCallback(async (newValue: boolean) => {
     setIsUsingCDPForSettingsDisplay(newValue);
-    chrome.storage.session.set({
+    await chrome.storage.session.set({
       isUsingCDP: newValue,
       pendingReload: true,
     });
@@ -97,7 +97,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         Object.keys(changes.allowedNumberOfTabs).includes('newValue')
       ) {
         setAllowedNumberOfTabs(changes?.allowedNumberOfTabs?.newValue);
-        _setSettingsChanged(true);
+        setSettingsChanged(true);
       }
 
       if (
@@ -105,7 +105,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         Object.keys(changes.isUsingCDP).includes('newValue')
       ) {
         _setIsUsingCDP(changes?.isUsingCDP?.newValue);
-        _setSettingsChanged(true);
+        setSettingsChanged(true);
       }
     },
     []
@@ -116,7 +116,7 @@ const Provider = ({ children }: PropsWithChildren) => {
       await chrome.runtime.sendMessage({
         type: SERVICE_WORKER_TABS_RELOAD_COMMAND,
       });
-      _setSettingsChanged(false);
+      setSettingsChanged(false);
     }
   }, [settingsChanged]);
 
@@ -138,10 +138,6 @@ const Provider = ({ children }: PropsWithChildren) => {
     },
     []
   );
-
-  const setSettingsChanged = useCallback((newValue: boolean) => {
-    _setSettingsChanged(newValue);
-  }, []);
 
   useEffect(() => {
     intitialSync();

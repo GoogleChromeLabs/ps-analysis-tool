@@ -16,8 +16,7 @@
 /**
  * External dependencies.
  */
-import { createContext } from 'use-context-selector';
-import { noop } from '@ps-analysis-tool/common';
+import { noop, createContext } from '@ps-analysis-tool/common';
 
 export interface SettingsStoreContext {
   state: {

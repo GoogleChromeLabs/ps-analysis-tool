@@ -52,9 +52,10 @@ const useHighlighting = (
       if (Object.values(cookies).length > 0) {
         return handleHighlighting(cookies);
       }
+
       return prevState;
     });
-  }, [cookies, handleHighlighting, setTableData]);
+  }, [cookies, handleHighlighting, setTableData, domainsInAllowList?.size]);
 };
 
 export default useHighlighting;

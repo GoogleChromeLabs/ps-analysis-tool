@@ -17,12 +17,13 @@
  * External dependencies.
  */
 import React, { type PropsWithChildren, useMemo } from 'react';
-import { useContextSelector, createContext } from 'use-context-selector';
 import {
   type CompleteJson,
   type CookieJsonDataType,
   type CookieTableData,
   type TechnologyData,
+  useContextSelector,
+  createContext,
 } from '@ps-analysis-tool/common';
 
 /**

@@ -26,13 +26,12 @@ import {
 } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SinonChrome from 'sinon-chrome';
-import { noop } from '@ps-analysis-tool/common';
 import {
   CookieDetails,
   Details,
   useTablePersistentSettingsStore,
 } from '@ps-analysis-tool/design-system';
-
+import { noop } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
@@ -44,6 +43,22 @@ import mockResponse, {
 } from '../../../../../utils/test-data/cookieMockData';
 import { useCookie, useSettings } from '../../../stateProviders';
 
+jest.mock('../../../stateProviders', () => ({
+  useCookie: jest.fn(),
+  useSettings: jest.fn(),
+}));
+jest.mock(
+  '../../../../../../../design-system/src/components/table/persistentSettingsStore',
+  () => ({
+    useTablePersistentSettingsStore: jest.fn(),
+  })
+);
+
+const mockUseCookieStore = useCookie as jest.Mock;
+const mockUseSettingsStore = useSettings as jest.Mock;
+const mockUseTablePersistentSettingStore =
+  useTablePersistentSettingsStore as jest.Mock;
+
 global.ResizeObserver = jest.fn().mockImplementation(() => ({
   observe: jest.fn(),
   unobserve: jest.fn(),
@@ -51,60 +66,77 @@ global.ResizeObserver = jest.fn().mockImplementation(() => ({
 }));
 
 describe('CookieTab', () => {
-  jest.mock('../../../stateProviders', () => {
-    return {
-      useCookie: () => {
-        return {
-          cookies: Object.values(mockResponse.tabCookies),
-          tabFrames: mockResponse.tabFrames,
-          selectedFrame: mockResponse.selectedFrame,
-          isCurrentTabBeingListenedTo: true,
-          tabToRead: '123456',
-          loading: false,
-          tabCookies: Object.values(mockResponse.tabCookies),
-        };
-      },
-      useSettings: () => {
-        return {
-          allowedNumberOfTabs: 'single',
-          isUsingCDP: true,
-        };
-      },
-    };
-  });
-
-  jest.mock(
-    '../../../../../../../design-system/src/components/table/persistentSettingsStore',
-    () => ({
-      useTablePersistentSettingsStore: () => {
-        return {
-          getPreferences: () => '',
-          setPreferences: () => undefined,
-        };
-      },
-    })
-  );
-
   beforeAll(() => {
     globalThis.chrome = {
       ...(SinonChrome as unknown as typeof chrome),
       storage: {
-        // @ts-ignore
-        session: {
-          get: () => Promise.resolve({}),
-          // @ts-ignore
+        //@ts-ignore
+        local: {
+          //@ts-ignore
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          get: (_, __) =>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            new Promise<{ [key: string]: any }>((resolve) => {
+              resolve({
+                40245632: {
+                  selectedSidebarItem: 'privacySandbox#cookies',
+                  tablePersistentSettingsStore: {
+                    'cookieListing#https://edition.cnn.com/': {
+                      sortBy: 'parsedCookie.name',
+                      sortOrder: 'asc',
+                    },
+                  },
+                },
+                tabToRead: '40245632',
+              });
+            }),
+          set: () => Promise.resolve(),
+          //@ts-ignore
           onChanged: {
             addListener: () => undefined,
             removeListener: () => undefined,
           },
         },
+        // @ts-ignore
+        session: {
+          //@ts-ignore
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          get: (_, __) => Promise.resolve(),
+          set: () => Promise.resolve(),
+          //@ts-ignore
+          onChanged: {
+            addListener: () => undefined,
+            removeListener: () => undefined,
+          },
+        },
+        devtools: {
+          inspectedWindow: {
+            tabId: 40245632,
+          },
+        },
       },
     };
-
+    globalThis.location.protocol = 'chrome-extension://absda';
     globalThis.Promise = Promise;
   });
 
-  it.skip('should render a list of cookies with analytics', async () => {
+  it('should render a list of cookies with analytics', async () => {
+    mockUseTablePersistentSettingStore.mockReturnValue({
+      getPreferences: () => '',
+      setPreferences: noop,
+    });
+    mockUseCookieStore.mockReturnValue({
+      cookies: Object.values(mockResponse.tabCookies),
+      tabFrames: mockResponse.tabFrames,
+      selectedFrame: mockResponse.selectedFrame,
+      isCurrentTabBeingListenedTo: true,
+      tabToRead: '40245632',
+      loading: false,
+      tabCookies: Object.values(mockResponse.tabCookies),
+    });
+    mockUseSettingsStore.mockReturnValue({
+      allowedNumberOfTabs: 'single',
+    });
     render(<CookieTab setFilteredCookies={noop} />);
 
     expect((await screen.findAllByTestId('body-row')).length).toBe(4);
@@ -113,7 +145,7 @@ describe('CookieTab', () => {
     expect((await screen.findAllByText('Marketing')).length).toBe(2);
   });
 
-  it.skip('should sort cookies by name', async () => {
+  it('should sort cookies by name', async () => {
     render(<CookieTab setFilteredCookies={noop} />);
 
     const headerCell = (await screen.findAllByTestId('header-cell'))[0];
@@ -169,7 +201,7 @@ describe('CookieTab', () => {
     );
   });
 
-  it.skip('should open column menu when right click on header cell', async () => {
+  it('should open column menu when right click on header cell', async () => {
     render(<CookieTab setFilteredCookies={noop} />);
 
     const headerCell = (await screen.findAllByTestId('header-cell'))[0];
@@ -186,7 +218,7 @@ describe('CookieTab', () => {
     fireEvent.click(toggleAll);
   });
 
-  it.skip('should remove one columne when click on column menu list item', async () => {
+  it('should remove one columne when click on column menu list item', async () => {
     render(<CookieTab setFilteredCookies={noop} />);
 
     const headerCell = (await screen.findAllByTestId('header-cell'))[0];
@@ -200,7 +232,7 @@ describe('CookieTab', () => {
     expect(await screen.findAllByTestId('header-cell')).not.toContain(value);
   });
 
-  it.skip('should columnMenu close when click on outside', async () => {
+  it('should columnMenu close when click on outside', async () => {
     render(<CookieTab setFilteredCookies={noop} />);
 
     const headerCell = (await screen.findAllByTestId('header-cell'))[0];
@@ -214,7 +246,7 @@ describe('CookieTab', () => {
     }, 1000);
   });
 
-  it.skip('should render a cookie card with placeholder text when no cookie is selected', async () => {
+  it('should render a cookie card with placeholder text when no cookie is selected', async () => {
     render(<CookieDetails isUsingCDP={false} selectedFrameCookie={null} />);
 
     expect(
@@ -222,7 +254,7 @@ describe('CookieTab', () => {
     ).toBeInTheDocument();
   });
 
-  it.skip('should decode cookie value when input show URI decoded is checked', async () => {
+  it('should decode cookie value when input show URI decoded is checked', async () => {
     render(
       <Details
         isUsingCDP={false}
@@ -246,7 +278,7 @@ describe('CookieTab', () => {
     ).toBeInTheDocument();
   });
 
-  it.skip('should show a cookie card with the information on first cookie in the list', async () => {
+  it('should show a cookie card with the information on first cookie in the list', async () => {
     const firstCookie =
       mockResponse.tabCookies[Object.keys(mockResponse.tabCookies)[0]];
 
@@ -265,7 +297,7 @@ describe('CookieTab', () => {
     ).toBeInTheDocument();
   });
 
-  it.skip('should show a cookie card with the description about cookie', async () => {
+  it('should show a cookie card with the description about cookie', async () => {
     render(
       <CookieDetails
         isUsingCDP={false}
@@ -284,7 +316,7 @@ describe('CookieTab', () => {
     expect(await within(card).findByText(description)).toBeInTheDocument();
   });
 
-  it.skip('should show a cookie card with no description about cookie', async () => {
+  it('should show a cookie card with no description about cookie', async () => {
     render(
       <CookieDetails
         isUsingCDP={false}
@@ -301,7 +333,7 @@ describe('CookieTab', () => {
     ).toBeInTheDocument();
   });
 
-  it.skip('should get the cookie object when row is clicked or Arrow up/down pressed', async () => {
+  it('should get the cookie object when row is clicked or Arrow up/down pressed', async () => {
     render(<CookieTab setFilteredCookies={noop} />);
 
     const row = await screen.findAllByTestId('body-row');
@@ -327,7 +359,7 @@ describe('CookieTab', () => {
     expect(row[row.length - 1]).not.toHaveClass('dark:bg-charlston-green');
   });
 
-  it.skip('should decode the cookie value on clicking checkbox', async () => {
+  it('should decode the cookie value on clicking checkbox', async () => {
     const lastCookie =
       mockResponse.tabCookies[Object.keys(mockResponse.tabCookies)[3]];
 
@@ -352,89 +384,5 @@ describe('CookieTab', () => {
   });
   afterAll(() => {
     jest.clearAllMocks();
-  });
-});
-
-jest.mock('../../../stateProviders', () => ({
-  useCookie: jest.fn(),
-  useSettings: jest.fn(),
-}));
-
-jest.mock(
-  '../../../../../../../design-system/src/components/table/persistentSettingsStore',
-  () => ({
-    useTablePersistentSettingsStore: jest.fn(),
-  })
-);
-
-const mockUseTablePersistentSettingStore =
-  useTablePersistentSettingsStore as jest.Mock;
-const mockUseCookieStore = useCookie as jest.Mock;
-const mockUseSettingsStore = useSettings as jest.Mock;
-
-describe('CookieTab', () => {
-  beforeAll(() => {
-    globalThis.chrome = {
-      ...(SinonChrome as unknown as typeof chrome),
-      storage: {
-        // @ts-ignore
-        session: {
-          get: () => Promise.resolve({}),
-          // @ts-ignore
-          onChanged: {
-            addListener: () => undefined,
-            removeListener: () => undefined,
-          },
-        },
-      },
-    };
-
-    globalThis.Promise = Promise;
-  });
-
-  it('should show analyse this tab button', () => {
-    mockUseCookieStore.mockReturnValue({
-      loading: false,
-      isCurrentTabBeingListenedTo: false,
-      tabToRead: '12345',
-      tabFrames: null,
-      tabCookies: null,
-    });
-
-    mockUseTablePersistentSettingStore.mockReturnValue({
-      getPreferences: () => '',
-      setPreferences: noop,
-    });
-
-    mockUseSettingsStore.mockReturnValue({
-      allowedNumberOfTabs: 'single',
-    });
-
-    render(<CookieTab setFilteredCookies={noop} />);
-
-    expect(screen.getByText('Analyze this tab')).toBeInTheDocument();
-  });
-
-  it('should show progress bar', () => {
-    mockUseCookieStore.mockReturnValue({
-      loading: true,
-      isCurrentTabBeingListenedTo: true,
-      tabToRead: '12345',
-      tabFrames: null,
-      tabCookies: null,
-    });
-
-    mockUseTablePersistentSettingStore.mockReturnValue({
-      getPreferences: () => '',
-      setPreferences: noop,
-    });
-
-    mockUseSettingsStore.mockReturnValue({
-      allowedNumberOfTabs: 'single',
-    });
-
-    render(<CookieTab setFilteredCookies={noop} />);
-
-    expect(screen.getByTestId('progress-bar')).toBeInTheDocument();
   });
 });

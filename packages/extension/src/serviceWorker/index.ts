@@ -37,6 +37,7 @@ import {
   INITIAL_SYNC,
   POPUP_CLOSE,
   POPUP_OPEN,
+  SERVICE_WORKER_RELOAD_MESSAGE,
   SERVICE_WORKER_TABS_RELOAD_COMMAND,
   SET_TAB_TO_READ,
 } from '../constants';
@@ -244,6 +245,15 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   } catch (error) {
     //Fail silently
   }
+  if (!tab.url) {
+    return;
+  }
+
+  syncCookieStore?.updateUrl(tabId, tab.url);
+
+  if (changeInfo.status === 'loading' && tab.url) {
+    syncCookieStore?.removeCookieData(tabId);
+  }
 });
 
 /**
@@ -405,7 +415,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
   if (method === 'Audits.issueAdded' && params) {
     const auditParams = params as Protocol.Audits.IssueAddedEvent;
     const { code, details } = auditParams.issue;
-
     if (code !== 'CookieIssue' && !details.cookieIssueDetails) {
       return;
     }
@@ -502,14 +511,25 @@ chrome.runtime.onMessage.addListener(async (request) => {
   if (SET_TAB_TO_READ === incomingMessageType) {
     tabToRead = request?.payload?.tabId?.toString();
     const newTab = await listenToNewTab(request?.payload?.tabId);
-
     // Can't use sendResponse as delay is too long. So using sendMessage instead.
     chrome.runtime.sendMessage({
       type: SET_TAB_TO_READ,
       payload: {
-        tabId: newTab,
+        tabId: Number(newTab),
       },
     });
+
+    if (globalIsUsingCDP) {
+      await chrome.debugger.attach({ tabId: Number(newTab) }, '1.3');
+      await chrome.debugger.sendCommand(
+        { tabId: Number(newTab) },
+        'Network.enable'
+      );
+      await chrome.debugger.sendCommand(
+        { tabId: Number(newTab) },
+        'Audits.enable'
+      );
+    }
 
     await reloadCurrentTab(Number(newTab));
   }
@@ -548,7 +568,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
     );
 
     await chrome.runtime.sendMessage({
-      type: 'ServiceWorker::DevTools::TABS_RELOADED',
+      type: SERVICE_WORKER_RELOAD_MESSAGE,
     });
   }
 

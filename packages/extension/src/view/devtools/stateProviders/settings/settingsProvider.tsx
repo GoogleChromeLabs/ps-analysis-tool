@@ -136,20 +136,20 @@ const Provider = ({ children }: PropsWithChildren) => {
     }
   }, [OSInformation]);
 
-  const setProcessingMode = useCallback((newState: boolean) => {
+  const setProcessingMode = useCallback(async (newState: boolean) => {
     const valueToBeSet: boolean | string = newState ? 'unlimited' : 'single';
     setAllowedNumberOfTabsForSettingsPageDisplay(valueToBeSet);
     setSettingsChanged(true);
-    chrome.storage.session.set({
+    await chrome.storage.session.set({
       allowedNumberOfTabs: valueToBeSet,
       pendingReload: true,
     });
   }, []);
 
-  const _setUsingCDP = useCallback((newValue: boolean) => {
+  const _setUsingCDP = useCallback(async (newValue: boolean) => {
     setIsUsingCDPForSettingsPageDisplay(newValue);
     setSettingsChanged(true);
-    chrome.storage.session.set({
+    await chrome.storage.session.set({
       isUsingCDP: newValue,
       pendingReload: true,
     });

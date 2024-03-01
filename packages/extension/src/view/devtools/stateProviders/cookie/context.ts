@@ -16,9 +16,9 @@
 /**
  * External dependencies.
  */
-import { createContext } from 'use-context-selector';
 import {
   noop,
+  createContext,
   type TabCookies,
   type TabFrames,
 } from '@ps-analysis-tool/common';

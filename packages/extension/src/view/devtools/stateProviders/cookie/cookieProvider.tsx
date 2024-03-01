@@ -35,6 +35,7 @@ import {
   DEVTOOLS_OPEN,
   INITIAL_SYNC,
   NEW_COOKIE_DATA,
+  SERVICE_WORKER_RELOAD_MESSAGE,
   SET_TAB_TO_READ,
 } from '../../../../constants';
 import setDocumentCookies from '../../../../utils/setDocumentCookies';
@@ -212,7 +213,6 @@ const Provider = ({ children }: PropsWithChildren) => {
       if (SET_TAB_TO_READ === incomingMessageType) {
         const tab = await getTab(tabId?.toString() || '');
         setTabUrl(tab?.url ?? '');
-
         isCurrentTabBeingListenedToRef.current =
           tabId === message?.payload?.tabId;
 
@@ -255,7 +255,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         }
       }
 
-      if (message.type === 'ServiceWorker::DevTools::TABS_RELOADED') {
+      if (message.type === SERVICE_WORKER_RELOAD_MESSAGE) {
         setSettingsChanged(false);
       }
     },
