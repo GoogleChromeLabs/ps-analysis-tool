@@ -25,6 +25,7 @@ import {
   Sidebar,
   useSidebar,
   type SidebarItems,
+  SIDEBAR_ITEMS_KEYS,
 } from '@ps-analysis-tool/design-system';
 import {
   type TabFrames,
@@ -128,7 +129,7 @@ const Layout = ({
     setSidebarData((prev) => {
       const _data = { ...prev };
 
-      _data['sitemap-landing-page'].panel = () => (
+      _data[SIDEBAR_ITEMS_KEYS.COOKIES].panel = () => (
         <CookiesLandingContainer
           tabCookies={reshapedCookies}
           tabFrames={frames}
@@ -143,7 +144,7 @@ const Layout = ({
         />
       );
 
-      _data['sitemap-landing-page'].children = sites.reduce(
+      _data[SIDEBAR_ITEMS_KEYS.COOKIES].children = sites.reduce(
         (acc: SidebarItems, site: string) => {
           acc[site] = {
             title: site,
@@ -165,7 +166,7 @@ const Layout = ({
         {}
       );
 
-      _data['sitemap-affected-cookies'].panel = () => (
+      _data[SIDEBAR_ITEMS_KEYS.AFFECTED_COOKIES].panel = () => (
         <SiteMapAffectedCookies
           cookies={Object.values(reshapedCookies).filter(
             (cookie) => cookie.isBlocked
@@ -189,7 +190,7 @@ const Layout = ({
 
   useEffect(() => {
     if (selectedItemKey === null && Object.keys(sidebarData).length > 0) {
-      updateSelectedItemKey('sitemap-landing-page');
+      updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.COOKIES);
     }
   }, [isKeySelected, selectedItemKey, sidebarData, updateSelectedItemKey]);
 

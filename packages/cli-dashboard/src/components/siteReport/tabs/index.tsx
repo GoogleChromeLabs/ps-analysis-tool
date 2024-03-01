@@ -20,18 +20,19 @@ import React from 'react';
 import {
   CookieIcon,
   CookieIconWhite,
+  SIDEBAR_ITEMS_KEYS,
   type SidebarItems,
 } from '@ps-analysis-tool/design-system';
 
 const Tabs: SidebarItems = {
-  cookies: {
+  [SIDEBAR_ITEMS_KEYS.COOKIES]: {
     title: 'Cookies',
     children: {},
     icon: () => <CookieIcon />,
     selectedIcon: () => <CookieIconWhite />,
     dropdownOpen: true,
   },
-  'affected-cookies': {
+  [SIDEBAR_ITEMS_KEYS.AFFECTED_COOKIES]: {
     title: 'Affected Cookies',
     children: {},
     icon: () => <CookieIcon />,
