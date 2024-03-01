@@ -22,7 +22,10 @@ import {
   CookiesMatrix,
   prepareFrameStatsComponent,
 } from '@ps-analysis-tool/design-system';
-import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
+import {
+  ORPHANED_COOKIE_KEY,
+  UNMAPPED_COOKIE_KEY,
+} from '@ps-analysis-tool/common';
 /**
  * Internal dependencies
  */
@@ -34,12 +37,21 @@ const FramesSection = () => {
     tabFrames: state.tabFrames,
     frameHasCookies: state.frameHasCookies,
   }));
+
   const processedTabFrames = useMemo(
     () =>
       Object.fromEntries(
-        Object.entries(tabFrames || {}).filter(([url]) =>
-          url === UNKNOWN_FRAME_KEY ? frameHasCookies[url] : true
-        )
+        Object.entries(tabFrames || {}).filter(([url]) => {
+          if (url === ORPHANED_COOKIE_KEY) {
+            return frameHasCookies[url];
+          }
+
+          if (url === UNMAPPED_COOKIE_KEY) {
+            return frameHasCookies[url];
+          }
+
+          return true;
+        })
       ),
     [tabFrames, frameHasCookies]
   );
