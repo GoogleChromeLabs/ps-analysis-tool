@@ -69,7 +69,10 @@ describe('getFramesForCurrentTab : ', () => {
         isOnRWS: false,
         frameType: 'sub_frame',
       },
-      'Unknown Frames': {
+      'Orphaned Cookies': {
+        frameIds: [],
+      },
+      'Unmapped Cookies': {
         frameIds: [],
       },
     });
