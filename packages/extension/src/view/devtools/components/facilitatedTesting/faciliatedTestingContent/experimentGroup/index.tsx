@@ -45,19 +45,22 @@ const ExperimentGroup = () => {
         target: { tabId: Number(tabId), allFrames: false },
         func: () => {
           // Feature detect temporary API first
-          return new Promise((resolve) => {
+          return new Promise((resolve, reject) => {
             if ('cookieDeprecationLabel' in navigator) {
               (navigator as Navigator).cookieDeprecationLabel
                 .getValue()
                 .then(resolve);
+            } else {
+              reject(new Error('Not supported'));
             }
           });
         },
       });
 
-      const labelText: string = queryResult
-        ? String(queryResult[0]?.result)
-        : '';
+      const labelText: string =
+        queryResult && queryResult[0]?.result
+          ? String(queryResult[0]?.result)
+          : '';
 
       setLabel(labelText);
     })();
