@@ -325,9 +325,11 @@ const App: React.FC = () => {
                   '-' + mainRef.current.scrollTop + 'px';
               }
             }}
-            className="h-full flex-1 overflow-auto relative"
+            className="h-full flex-1 relative overflow-hidden"
           >
-            <div className="min-w-[40rem] h-full z-1">{activePanel}</div>
+            <div className="w-full h-full overflow-auto">
+              <div className="min-w-[40rem] h-full">{activePanel}</div>
+            </div>
             {settingsChanged && (
               <ToastMessage
                 ref={toastMessageRef}
