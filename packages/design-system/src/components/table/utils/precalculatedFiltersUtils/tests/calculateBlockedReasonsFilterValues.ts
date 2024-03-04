@@ -44,9 +44,38 @@ describe('calculateBlockedReasonsFilterValues', () => {
         selected: false,
       },
     };
+    const mockClearQuery = jest.fn();
 
-    const result = calculateBlockedReasonsFilterValues(tabCookies);
+    const result = calculateBlockedReasonsFilterValues(
+      tabCookies,
+      undefined,
+      mockClearQuery
+    );
 
     expect(result).toEqual(expected);
+    expect(mockClearQuery).not.toHaveBeenCalled();
+
+    const options = ['foo', 'bar'];
+
+    const expectedWithSelected = {
+      foo: {
+        selected: true,
+      },
+      bar: {
+        selected: true,
+      },
+      baz: {
+        selected: false,
+      },
+    };
+
+    const resultWithSelected = calculateBlockedReasonsFilterValues(
+      tabCookies,
+      options,
+      mockClearQuery
+    );
+
+    expect(resultWithSelected).toEqual(expectedWithSelected);
+    expect(mockClearQuery).toHaveBeenCalledTimes(1);
   });
 });
