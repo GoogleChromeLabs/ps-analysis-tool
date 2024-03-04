@@ -90,82 +90,82 @@ export const rows = [
   {
     // @ts-ignore
     'parsedCookie.name': {
-      value: 'guest_id',
+      value: () => 'guest_id',
     },
     'parsedCookie.value': {
-      value: 'v1%3A169761712418716012',
+      value: () => 'v1%3A169761712418716012',
     },
     'parsedCookie.domain': {
-      value: '.twitter.com',
+      value: () => '.twitter.com',
     },
     'parsedCookie.path': {
-      value: '/',
+      value: () => '/',
     },
     'parsedCookie.expires': {
-      value: '2024-11-21T08:18:44.337Z',
+      value: () => '2024-11-21T08:18:44.337Z',
     },
     'parsedCookie.httponly': {
-      value: <span className="font-serif">✓</span>,
+      value: () => <span className="font-serif">✓</span>,
     },
     'parsedCookie.samesite': {
-      value: <span className="capitalize"></span>,
+      value: () => <span className="capitalize"></span>,
     },
     'parsedCookie.secure': {
-      value: (
+      value: () => (
         <p className="flex justify-center items-center">
           <span className="font-serif">✓</span>
         </p>
       ),
     },
     'analytics.category': {
-      value: 'Marketing',
+      value: () => 'Marketing',
     },
     'analytics.platform': {
-      value: 'Twitter',
+      value: () => 'Twitter',
     },
     isFirstParty: {
-      value: 'Third Party',
+      value: () => 'Third Party',
     },
     originalData: originalData[0],
   },
   {
     // @ts-ignore
     'parsedCookie.name': {
-      value: 'personalization_id',
+      value: () => 'personalization_id',
     },
     'parsedCookie.value': {
-      value: 'v1_HJmmucUuUZDLmLGgaw/32w==',
+      value: () => 'v1_HJmmucUuUZDLmLGgaw/32w==',
     },
     'parsedCookie.domain': {
-      value: '.twitter.com',
+      value: () => '.twitter.com',
     },
     'parsedCookie.path': {
-      value: '/',
+      value: () => '/',
     },
     'parsedCookie.expires': {
-      value: '2024-11-21T08:18:44.337Z',
+      value: () => '2024-11-21T08:18:44.337Z',
     },
     'parsedCookie.httponly': {
-      value: <span className="font-serif">✓</span>,
+      value: () => <span className="font-serif">✓</span>,
     },
     'parsedCookie.samesite': {
-      value: <span className="capitalize"></span>,
+      value: () => <span className="capitalize"></span>,
     },
     'parsedCookie.secure': {
-      value: (
+      value: () => (
         <p className="flex justify-center items-center">
           <span className="font-serif">✓</span>
         </p>
       ),
     },
     'analytics.category': {
-      value: 'Marketing',
+      value: () => 'Marketing',
     },
     'analytics.platform': {
-      value: 'Twitter',
+      value: () => 'Twitter',
     },
     isFirstParty: {
-      value: 'Third Party',
+      value: () => 'Third Party',
     },
     originalData: originalData[1],
   },

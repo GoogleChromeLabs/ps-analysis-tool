@@ -1,6 +1,6 @@
 {
 	"name": "ps-analysis-tool",
-	"version": "0.5.1",
+	"version": "0.5.2",
 	"description": "Cookie Analysis Tool and CLI for analysis and understanding of cookie usage on web pages.",
 	"scripts": {
 		"cli:prebuild": "node ./scripts/delete-build-artifacts.cjs",

@@ -14,6 +14,5 @@
  * limitations under the License.
  */
 
-export { default as Table } from './components';
-export * from './persistentSettingsStore';
-export * from './useTable';
+export { default as exportCookies } from './exportCookies';
+export { default as conditionalTableRowClassesHandler } from './conditionalTableRowClassesHandler';

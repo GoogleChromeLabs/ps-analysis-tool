@@ -17,7 +17,7 @@
 /**
  * Internal dependencies
  */
-import { TableColumn } from '..';
+import { TableColumn } from '../types';
 
 export const resizeColumns = (
   columnsToResize: TableColumn[],

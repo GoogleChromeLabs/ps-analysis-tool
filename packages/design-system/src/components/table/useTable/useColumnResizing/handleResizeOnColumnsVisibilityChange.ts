@@ -17,7 +17,7 @@
 /**
  * Internal dependencies
  */
-import { TableColumn } from '..';
+import { TableColumn } from '../types';
 import { resizeColumns } from './resizeColumns';
 
 const getInitialColumnSize = (

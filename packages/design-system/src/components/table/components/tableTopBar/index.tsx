@@ -18,42 +18,38 @@
  */
 import React, { useCallback } from 'react';
 import classNames from 'classnames';
-import {
-  FilterIcon,
-  SearchInput,
-  TableOutput,
-} from '@ps-analysis-tool/design-system';
+import { FilterIcon, SearchInput } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
 import ExportButton from '../../../exportButton';
+import { useTable } from '../../useTable';
 
 interface TableTopBarProps {
-  searchValue: TableOutput['searchValue'];
-  setSearchValue: TableOutput['setSearchValue'];
   showFilterSidebar: boolean;
   setShowFilterSidebar: React.Dispatch<React.SetStateAction<boolean>>;
-  cookiesCount: number;
   hideFiltering?: boolean;
   disableFiltering?: boolean;
-  disableExport?: boolean;
-  extraInterface?: React.ReactNode;
-  exportCookies?: () => void;
+  extraInterface?: () => React.JSX.Element;
 }
 
 const TableTopBar = ({
-  searchValue,
-  setSearchValue,
   showFilterSidebar,
   setShowFilterSidebar,
-  cookiesCount,
   hideFiltering = false,
   disableFiltering = false,
-  disableExport = false,
-  extraInterface = null,
-  exportCookies,
+  extraInterface,
 }: TableTopBarProps) => {
+  const { rows, searchValue, setSearchValue, exportTableData } = useTable(
+    ({ state, actions }) => ({
+      rows: state.rows,
+      searchValue: state.searchValue,
+      setSearchValue: actions.setSearchValue,
+      exportTableData: actions.exportTableData,
+    })
+  );
+
   const handleInput = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearchValue(event.target.value);
@@ -91,18 +87,18 @@ const TableTopBar = ({
       <div className="h-full w-px bg-american-silver dark:bg-quartz mx-3" />
 
       <div className="flex gap-3">
-        {extraInterface}
-        {exportCookies && (
+        {extraInterface?.()}
+        {exportTableData && (
           <ExportButton
-            title={'Export Cookies Table'}
-            disabled={disableExport}
-            onClick={exportCookies}
+            title="Export Table Data"
+            disabled={rows.length === 0}
+            onClick={() => exportTableData(rows)}
           />
         )}
       </div>
 
       <div className="text-right w-full text-xxxs text-secondary">
-        Count: {cookiesCount ?? 0}
+        Count: {rows.length ?? 0}
       </div>
     </div>
   );

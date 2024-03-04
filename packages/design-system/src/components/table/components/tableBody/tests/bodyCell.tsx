@@ -38,7 +38,7 @@ describe('BodyCell', () => {
   it('should render Body Cell component', () => {
     render(
       <BodyCell
-        cell={'.example.com'}
+        cell={() => '.example.com'}
         width={50}
         isRowFocused={bodyCellProp.isRowFocused}
         // @ts-ignore
