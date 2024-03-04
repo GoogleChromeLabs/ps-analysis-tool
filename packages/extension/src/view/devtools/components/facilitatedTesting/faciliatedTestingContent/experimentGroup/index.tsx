@@ -24,6 +24,12 @@ import { addUTMParams } from '@ps-analysis-tool/common';
  */
 import { getCurrentTabId } from '../../../../../../utils/getCurrentTabId';
 
+interface Navigator {
+  cookieDeprecationLabel: {
+    getValue: () => Promise<string>;
+  };
+}
+
 const ExperimentGroup = () => {
   const [label, setLabel] = useState('');
 
@@ -39,12 +45,11 @@ const ExperimentGroup = () => {
         target: { tabId: Number(tabId), allFrames: false },
         func: () => {
           // Feature detect temporary API first
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             if ('cookieDeprecationLabel' in navigator) {
-              // Request value and resolve promise
-              navigator.cookieDeprecationLabel.getValue().then(resolve);
-            } else {
-              reject(new Error('Not Supported'));
+              (navigator as Navigator).cookieDeprecationLabel
+                .getValue()
+                .then(resolve);
             }
           });
         },
