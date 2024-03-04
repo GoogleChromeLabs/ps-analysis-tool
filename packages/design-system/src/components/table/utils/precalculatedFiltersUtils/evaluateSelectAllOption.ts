@@ -14,7 +14,20 @@
  * limitations under the License.
  */
 
-export { default as Table } from './components';
-export * from './persistentSettingsStore';
-export * from './useTable';
-export * from './utils';
+const evaluateSelectAllOption = (
+  filterKey: string,
+  parsedQuery: Record<string, any>,
+  clearActivePanelQuery?: () => void
+) => {
+  const options: string[] = parsedQuery?.filter?.[filterKey];
+
+  if (options?.[0] === 'All') {
+    clearActivePanelQuery?.();
+
+    return true;
+  }
+
+  return false;
+};
+
+export default evaluateSelectAllOption;

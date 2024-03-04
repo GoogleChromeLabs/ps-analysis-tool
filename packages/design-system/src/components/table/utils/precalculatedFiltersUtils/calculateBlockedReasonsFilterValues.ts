@@ -13,36 +13,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * External dependencies
  */
 import { getValueByKey, type CookieTableData } from '@ps-analysis-tool/common';
-import type { TableFilter } from '@ps-analysis-tool/design-system';
 
-const calculateDynamicFilterValues = (
-  key: string,
+/**
+ * Internal dependencies
+ */
+import { TableFilter } from '../../useTable';
+
+const calculateBlockedReasonsFilterValues = (
   tabCookies: CookieTableData[],
   options: string[],
   clearQuery?: () => void
-): TableFilter[keyof TableFilter]['filterValues'] => {
+) => {
   const filters = tabCookies.reduce<
     TableFilter[keyof TableFilter]['filterValues']
   >((acc, cookie) => {
-    const value = getValueByKey(key, cookie);
+    const blockedReason = getValueByKey('blockedReasons', cookie);
 
-    if (!acc) {
-      acc = {};
+    if (!cookie.frameIdList || cookie?.frameIdList?.length === 0) {
+      return acc;
     }
 
-    if (value && !acc[value]) {
-      acc[value] = {
-        selected: false,
-      };
-
-      if (options) {
-        acc[value].selected = options.includes(value);
+    blockedReason?.forEach((reason: string) => {
+      if (!acc) {
+        acc = {};
       }
-    }
+
+      if (!acc[reason]) {
+        acc[reason] = {
+          selected: false,
+        };
+
+        if (options) {
+          acc[reason].selected = options.includes(reason);
+        }
+      }
+    });
 
     return acc;
   }, {});
@@ -54,4 +64,4 @@ const calculateDynamicFilterValues = (
   return filters;
 };
 
-export default calculateDynamicFilterValues;
+export default calculateBlockedReasonsFilterValues;
