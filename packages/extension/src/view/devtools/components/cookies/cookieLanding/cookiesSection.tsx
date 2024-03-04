@@ -30,12 +30,19 @@ import {
  * Internal dependencies
  */
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
+import {
+  ORPHANED_COOKIE_KEY,
+  UNMAPPED_COOKIE_KEY,
+} from '@ps-analysis-tool/common';
 
 const CookiesSection = () => {
-  const { tabCookies, tabFrames } = useCookieStore(({ state }) => ({
-    tabCookies: state.tabCookies,
-    tabFrames: state.tabFrames,
-  }));
+  const { tabCookies, tabFrames, frameHasCookies } = useCookieStore(
+    ({ state }) => ({
+      tabCookies: state.tabCookies,
+      tabFrames: state.tabFrames,
+      frameHasCookies: state.frameHasCookies,
+    })
+  );
 
   const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});
 
@@ -55,6 +62,20 @@ const CookiesSection = () => {
     }));
   }, [cookiesStatsComponents.legend, selectedItemUpdater]);
 
+  const processedTabFrames = useMemo(
+    () =>
+      Object.fromEntries(
+        Object.entries(tabFrames || {}).filter(([url]) => {
+          if (url === ORPHANED_COOKIE_KEY || url === UNMAPPED_COOKIE_KEY) {
+            return frameHasCookies[url];
+          }
+
+          return true;
+        })
+      ),
+    [tabFrames, frameHasCookies]
+  );
+
   return (
     <CookiesLandingWrapper
       dataMapping={cookieClassificationDataMapping}
@@ -71,7 +92,7 @@ const CookiesSection = () => {
       <CookiesMatrix
         tabCookies={tabCookies}
         componentData={cookieComponentData}
-        tabFrames={tabFrames}
+        tabFrames={processedTabFrames}
         showHorizontalMatrix={false}
       />
     </CookiesLandingWrapper>

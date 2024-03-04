@@ -20,6 +20,7 @@ import React, { useEffect, useRef } from 'react';
 import {
   ArrowDown,
   ArrowDownWhite,
+  InfoIcon,
   useSidebar,
 } from '@ps-analysis-tool/design-system';
 
@@ -135,7 +136,20 @@ const SidebarChild = ({
             )}
           </div>
         )}
-        <p className="whitespace-nowrap pr-1">{sidebarItem.title}</p>
+        <p className="flex flex-row items-center justify-center whitespace-nowrap gap-x-1 pr-1">
+          {sidebarItem.title}
+          {sidebarItem.infoIconDescription ? (
+            <span title={sidebarItem.infoIconDescription}>
+              <InfoIcon
+                className={`${
+                  isKeySelected(itemKey) && isSidebarFocused
+                    ? 'fill-white'
+                    : 'fill-gray'
+                }`}
+              />
+            </span>
+          ) : null}
+        </p>
         <div
           className="absolute"
           style={{

@@ -1,7 +1,7 @@
 :: Chrome 3pcd with PS Extension
 
 :: Download PS Extension
-set "ps_analysis_tool_version=v0.5.1"
+set "ps_analysis_tool_version=v0.5.2"
 cd /d %TEMP%
 if not exist %TEMP%\ps-analysis-tool-%ps_analysis_tool_version% (
     mkdir %TEMP%\ps-analysis-tool-%ps_analysis_tool_version%

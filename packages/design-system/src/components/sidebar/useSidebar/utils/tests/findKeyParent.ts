@@ -13,23 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export default {
-  total: 1000,
-  blockedCookies: {
-    total: 0,
-  },
-  firstParty: {
-    total: 999,
-    functional: 0,
-    marketing: 0,
-    analytics: 2,
-    uncategorized: 998,
-  },
-  thirdParty: {
-    total: 1,
-    functional: 1,
-    marketing: 0,
-    analytics: 0,
-    uncategorized: 0,
-  },
-};
+import findKeyParent from '../findKeyParent';
+
+describe('findKeyPareny', () => {
+  it('should find the parent key', () => {
+    const keyPath = ['item1', 'item2', 'item3', 'item4'];
+
+    const result = findKeyParent(keyPath);
+
+    expect(result).toEqual('item3');
+  });
+
+  it('should return null if there is no parent', () => {
+    const keyPath = ['item1'];
+
+    const result = findKeyParent(keyPath);
+
+    expect(result).toEqual(null);
+  });
+});

@@ -241,7 +241,7 @@
 - Merge `main` into `develop` https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/451
 - Update flags and profile color in Chrome launcher https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/467
 
-# v0.5.0
+# v0.5.1
 
 ## Extension
 * Restructure `Facilitated Testing` landing page UI https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/493
@@ -260,3 +260,16 @@
 
 ## Others
 * Disable auto opening of Chrome DevTools by default for all tabs https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/491
+
+
+# v0.5.2
+
+## Extension
+* List unmapped and orphaned cookies https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/527
+* Fix: Allow-listed rows to highlight after frame change https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/531
+* Fix: Related website sets not recognizing ccTLDs as part of the group https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/523
+
+
+## Others
+* Rename `third_party` to `assets` https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/530
+
