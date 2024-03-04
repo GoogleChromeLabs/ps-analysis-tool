@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import React, { useEffect, useState } from 'react';
+import { addUTMParams } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -43,13 +44,17 @@ const ExperimentGroup = () => {
               // Request value and resolve promise
               navigator.cookieDeprecationLabel.getValue().then(resolve);
             } else {
-              reject('Not Supported');
+              reject(new Error('Not Supported'));
             }
           });
         },
       });
 
-      setLabel(queryResult ? queryResult[0]?.result : '');
+      const labelText: string = queryResult
+        ? String(queryResult[0]?.result)
+        : '';
+
+      setLabel(labelText);
     })();
   }, []);
 
@@ -58,9 +63,32 @@ const ExperimentGroup = () => {
       <h4 className="text-base font-medium text-davys-grey dark:text-anti-flash-white mb-1">
         Is Your Browser Part of the Experimental Group?
       </h4>
-      <div className="overflow-auto">
-        <p>Label: {label}</p>
-      </div>
+      {label ? (
+        <div className="overflow-auto mt-2">
+          <p>Your browser is part of an experimental group labeled as:</p>
+          <p>
+            <strong>Label:</strong> {label}
+          </p>
+          <p className="mt-3">
+            For more information about this label, please visit the{' '}
+            <a
+              className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline"
+              href={addUTMParams(
+                'https://developers.google.com/privacy-sandbox/setup/web/chrome-facilitated-testing'
+              )}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Chrome-facilitated testing{' '}
+            </a>
+            {''} documentation.
+          </p>
+        </div>
+      ) : (
+        <div className="overflow-auto mt-2">
+          <p>Your browser is not part of any experimental group.</p>
+        </div>
+      )}
     </div>
   );
 };
