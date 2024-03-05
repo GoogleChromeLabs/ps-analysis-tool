@@ -117,14 +117,16 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         .reduce<SidebarItems>((acc, url) => {
           let popupTitle = `Cookies used by frames from ${url}`;
           let infoIconDescription = '';
+
           if (url === ORPHANED_COOKIE_KEY) {
-            popupTitle = infoIconDescription =
+            popupTitle =
               'Frames that set these cookies were removed from the DOM, leaving these cookies orphaned.';
+            infoIconDescription = popupTitle;
           }
 
           if (url === UNMAPPED_COOKIE_KEY) {
-            popupTitle = infoIconDescription =
-              'Cookies that could not be mapped to any frame.';
+            popupTitle = 'Cookies that could not be mapped to any frame.';
+            infoIconDescription = popupTitle;
           }
 
           acc[url] = {
