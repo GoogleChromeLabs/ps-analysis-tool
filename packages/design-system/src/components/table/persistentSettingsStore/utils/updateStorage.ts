@@ -97,6 +97,11 @@ const updateChromeStorage = async (
 
   let tableData: TablePersistentSettingsStoreContext['state'] =
     data?.[tabId]?.[TABLE_PERSISTENT_SETTINGS_STORE_KEY];
+
+  if (!data[tabId]) {
+    data[tabId] = {};
+  }
+
   let requiredData = tableData?.[persistenceKey];
 
   if (requiredData) {
