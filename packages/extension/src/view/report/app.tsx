@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 /**
  * Internal dependencies
  */
@@ -27,21 +27,7 @@ import {
   CookiesMatrix,
 } from '@ps-analysis-tool/design-system';
 
-const App = () => {
-  const [data, setData] = useState<any>(null);
-
-  useEffect(() => {
-    //@ts-ignore
-    if (window.PSAT_DATA) {
-      //@ts-ignore
-      setData(window.PSAT_DATA);
-    }
-  }, []);
-
-  if (data === null) {
-    return <p>No data attached</p>;
-  }
-
+const App = ({ data }: { data: any }) => {
   return (
     <div className="h-full w-full flex flex-col">
       <CookiesLandingContainer

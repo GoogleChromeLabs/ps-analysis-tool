@@ -27,8 +27,10 @@ import App from './app';
 
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.getElementById('root');
+  //@ts-ignore custom data attached to window breaks types
+  const data = window.PSAT_DATA;
 
   if (root) {
-    createRoot(root).render(<App />);
+    createRoot(root).render(<App data={data} />);
   }
 });
