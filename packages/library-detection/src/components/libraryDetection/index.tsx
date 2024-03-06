@@ -88,9 +88,6 @@ const LibraryDetection = memo(function LibraryDetection() {
     },
   ];
 
-  // eslint-disable-next-line no-console
-  console.log(libraryMatches, 'LibraryDetection');
-
   const result =
     detectedLibraryNames.length > 0 ? (
       <>
@@ -106,11 +103,6 @@ const LibraryDetection = memo(function LibraryDetection() {
               ? libraryMatches[library.name as keyof LibraryData]
                   ?.domQuerymatches
               : null;
-
-          if (library.name === 'fb-comments') {
-            // eslint-disable-next-line no-console
-            console.log(domQueryMatches, 'domQueryMatches');
-          }
 
           return (
             <Component

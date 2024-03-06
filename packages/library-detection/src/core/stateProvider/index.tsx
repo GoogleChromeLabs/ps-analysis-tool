@@ -88,9 +88,6 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
     initialLibraryMatches
   );
 
-  // eslint-disable-next-line no-console
-  console.log(libraryMatches, 'LibraryDetectionProvider');
-
   const [isCurrentTabLoading, setIsCurrentTabLoading] =
     useState<boolean>(false); // TODO: Use first/current tab loaded state instead.
   const [isInitialDataUpdated, setIsInitialDataUpdated] = useState(false);
