@@ -199,9 +199,13 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         return;
       }
 
-      const data = await chrome.storage.session.get();
+      let data = await chrome.storage.session.get();
 
-      data['selectedSidebarItem#' + tabId] = selectedItemKey;
+      if (!data) {
+        data = {};
+      }
+
+      data['selectedSidebarItem' + tabId] = selectedItemKey;
 
       await chrome.storage.session.set(data);
     })();
