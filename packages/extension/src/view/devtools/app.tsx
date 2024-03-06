@@ -325,20 +325,22 @@ const App: React.FC = () => {
                   '-' + mainRef.current.scrollTop + 'px';
               }
             }}
-            className="h-full flex-1 relative overflow-hidden"
+            className="h-full flex-1 relative overflow-hidden flex flex-col"
           >
             <div className="w-full h-full overflow-auto">
               <div className="min-w-[40rem] h-full">{activePanel}</div>
             </div>
-            {settingsChanged && (
-              <ToastMessage
-                ref={toastMessageRef}
-                additionalStyles="text-sm"
-                text="Settings changed, please reload all tabs."
-                onClick={handleSettingsChange}
-                textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
-              />
-            )}
+            <div className="h-fit">
+              {settingsChanged && (
+                <ToastMessage
+                  ref={toastMessageRef}
+                  additionalStyles="text-sm"
+                  text="Settings changed, please reload all tabs."
+                  onClick={handleSettingsChange}
+                  textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
+                />
+              )}
+            </div>
           </main>
         </div>
       )}
