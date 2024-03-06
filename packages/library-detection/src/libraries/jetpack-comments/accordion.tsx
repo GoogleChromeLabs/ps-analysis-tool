@@ -23,6 +23,7 @@ import React from 'react';
  */
 import { Accordion } from '../../components';
 import type { AccordionProps } from '../../types';
+import { JETPACK_COMMENTS_HELP_URL } from './constants';
 
 const JetpackCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
   const featuresCount =
@@ -38,11 +39,11 @@ const JetpackCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
       isLoading={false}
       featuresText={`${featuresCount} features`}
     >
-      {domQueryMatches?.map((match) => (
-        <p className="break-all" key={match}>
-          {match}
-        </p>
-      ))}
+      <p>
+        Jetpack comment is known to experience issues due to the phaseout of
+        third-party cookies. For more information, please visit the Jetpack
+        <a href={JETPACK_COMMENTS_HELP_URL}>support forum</a>.
+      </p>
     </Accordion>
   );
 };

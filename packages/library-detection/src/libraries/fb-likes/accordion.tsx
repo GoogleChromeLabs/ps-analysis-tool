@@ -23,6 +23,7 @@ import React from 'react';
  */
 import { Accordion } from '../../components';
 import type { AccordionProps } from '../../types';
+import { FB_LIKES_HELP_URL } from './constants';
 
 const FBLikesAccordion = ({ domQueryMatches }: AccordionProps) => {
   const featuresCount =
@@ -34,15 +35,15 @@ const FBLikesAccordion = ({ domQueryMatches }: AccordionProps) => {
 
   return (
     <Accordion
-      title={'Facebook Likes.'}
+      title={'Facebook Like Plugin.'}
       isLoading={false}
       featuresText={`${featuresCount} features`}
     >
-      {domQueryMatches?.map((match) => (
-        <p className="break-all" key={match}>
-          {match}
-        </p>
-      ))}
+      <p>
+        Facebook like plugin is known to experience issues due to the phaseout
+        of third-party cookies. For more information, please visit the Facebook
+        <a href={FB_LIKES_HELP_URL}>support forum</a>.
+      </p>
     </Accordion>
   );
 };

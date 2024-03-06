@@ -23,6 +23,7 @@ import React from 'react';
  */
 import { Accordion } from '../../components';
 import type { AccordionProps } from '../../types';
+import { DISQUS_COMMENTS_HELP_URL } from './constants';
 
 const DisqusCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
   const featuresCount =
@@ -36,13 +37,13 @@ const DisqusCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
     <Accordion
       title={'Disqus Comments.'}
       isLoading={false}
-      featuresText={`${featuresCount} features`}
+      featuresText={`1 features`}
     >
-      {domQueryMatches?.map((match) => (
-        <p className="break-all" key={match}>
-          {match}
-        </p>
-      ))}
+      <p>
+        Disqus comments are known to experience issues due to the phaseout of
+        third-party cookies. For more information, please visit the Disqus
+        <a href={DISQUS_COMMENTS_HELP_URL}>support forum</a>.
+      </p>
     </Accordion>
   );
 };

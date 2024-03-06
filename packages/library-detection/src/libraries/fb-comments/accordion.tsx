@@ -23,6 +23,7 @@ import React from 'react';
  */
 import { Accordion } from '../../components';
 import type { AccordionProps } from '../../types';
+import { FB_COMMENTS_HELP_URL } from './constants';
 
 const FBCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
   const featuresCount =
@@ -34,15 +35,16 @@ const FBCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
 
   return (
     <Accordion
-      title={'Facebook Comments.'}
+      title={'Facebook Comments Plugin.'}
       isLoading={false}
-      featuresText={`${featuresCount} features`}
+      featuresText={`1 features`}
     >
-      {domQueryMatches?.map((match) => (
-        <p className="break-all" key={match}>
-          {match}
-        </p>
-      ))}
+      <p>
+        Facebook comments plugin is known to experience issues due to the
+        phaseout of third-party cookies. For more information, please visit the
+        Facebook
+        <a href={FB_COMMENTS_HELP_URL}>support forum</a>.
+      </p>
     </Accordion>
   );
 };

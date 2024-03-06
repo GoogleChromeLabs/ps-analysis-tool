@@ -92,9 +92,6 @@ const useLibraryDetection = () => {
                 realtimeComputationResult
               );
 
-              // eslint-disable-next-line no-console
-              console.log(data, 'listenerCallback');
-
               return data;
             });
           }
@@ -149,8 +146,7 @@ const useLibraryDetection = () => {
           ...detectedMatchingSignatures,
           ...domQueryMatches,
         };
-        // eslint-disable-next-line no-console
-        console.log(data, 'updateInitialData');
+
         setLibraryMatches(data);
         attachListener();
         setShowLoader(false);
