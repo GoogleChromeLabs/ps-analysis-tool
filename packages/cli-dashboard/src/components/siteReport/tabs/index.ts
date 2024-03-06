@@ -16,7 +16,6 @@
 /**
  * External dependencies.
  */
-import React from 'react';
 import {
   CookieIcon,
   CookieIconWhite,
@@ -27,14 +26,22 @@ const Tabs: SidebarItems = {
   cookies: {
     title: 'Cookies',
     children: {},
-    icon: () => <CookieIcon />,
-    selectedIcon: () => <CookieIconWhite />,
+    icon: {
+      Element: CookieIcon,
+    },
+    selectedIcon: {
+      Element: CookieIconWhite,
+    },
   },
   'affected-cookies': {
     title: 'Affected Cookies',
     children: {},
-    icon: () => <CookieIcon />,
-    selectedIcon: () => <CookieIconWhite />,
+    icon: {
+      Element: CookieIcon,
+    },
+    selectedIcon: {
+      Element: CookieIconWhite,
+    },
   },
 };
 

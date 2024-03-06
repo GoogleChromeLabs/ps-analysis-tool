@@ -94,14 +94,17 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     isKeySelected: actions.isKeySelected,
   }));
 
+  const { Element: PanelElement, props } = activePanel.panel;
+
   useEffect(() => {
     setSidebarData((prev) => {
       const data = { ...prev };
       const psData = data['privacySandbox'];
 
-      psData.children['cookies'].panel = () => (
-        <Cookies setFilteredCookies={setFilteredCookies} />
-      );
+      psData.children['cookies'].panel = {
+        Element: Cookies,
+        props: { setFilteredCookies },
+      };
       psData.children['cookies'].children = Object.keys(tabFrames || {})
         .filter((url) => {
           if (url === ORPHANED_COOKIE_KEY) {
@@ -132,9 +135,16 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
           acc[url] = {
             title: url,
             popupTitle,
-            panel: () => <Cookies setFilteredCookies={setFilteredCookies} />,
-            icon: () => <CookieIcon />,
-            selectedIcon: () => <CookieIconWhite />,
+            panel: {
+              Element: Cookies,
+              props: { setFilteredCookies },
+            },
+            icon: {
+              Element: CookieIcon,
+            },
+            selectedIcon: {
+              Element: CookieIconWhite,
+            },
             infoIconDescription,
             children: {},
             isBlurred: !frameHasCookies?.[url],
@@ -147,15 +157,16 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         canStartInspecting && Boolean(Object.keys(tabFrames || {}).length);
 
       if (showInspectButton) {
-        psData.children['cookies'].extraInterfaceToTitle = () => (
-          <InspectButton
-            isInspecting={isInspecting}
-            setIsInspecting={setIsInspecting}
-            isTabFocused={isSidebarFocused && isKeySelected('cookies')}
-          />
-        );
+        psData.children['cookies'].extraInterfaceToTitle = {
+          Element: InspectButton,
+          props: {
+            isInspecting,
+            setIsInspecting,
+            isTabFocused: isSidebarFocused && isKeySelected('cookies'),
+          },
+        };
       } else {
-        psData.children['cookies'].extraInterfaceToTitle = () => <></>;
+        psData.children['cookies'].extraInterfaceToTitle = {};
       }
 
       return data;
@@ -250,7 +261,9 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         }}
         className="h-full flex-1 overflow-auto relative"
       >
-        <div className="min-w-[40rem] h-full z-1">{activePanel?.element()}</div>
+        <div className="min-w-[40rem] h-full z-1">
+          {PanelElement && <PanelElement {...props} />}
+        </div>
         {settingsChanged && (
           <ToastMessage
             ref={toastMessageRef}
