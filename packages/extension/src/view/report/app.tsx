@@ -45,7 +45,6 @@ const App = ({ data }: { data: any }) => {
         />
       </CookiesLandingContainer>
       <CookiesLandingContainer
-        description={data.description}
         dataMapping={data.blockedCookieDataMapping}
         testId="blocked-cookies-insights"
       >

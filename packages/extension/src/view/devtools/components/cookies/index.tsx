@@ -137,11 +137,11 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
           <CookiesListing setFilteredCookies={setFilteredCookies} />
         ) : (
           <>
-            <button
+            <Button
+              extraClasses="absolute top-3 right-3"
               onClick={() => downloadReport(tabCookies, tabFrames, description)}
-            >
-              Download report
-            </button>
+              text="Download report"
+            />
             <CookiesLanding
               tabCookies={tabCookies}
               tabFrames={processedTabFrames}

@@ -27,11 +27,7 @@ import { saveAs } from 'file-saver';
  * @param tabFrames
  * @param description
  */
-export default async function downloadReport(
-  tabCookies: any,
-  tabFrames: any,
-  description: any
-) {
+export default async function downloadReport(tabCookies: any, tabFrames: any) {
   const htmlText = await (await fetch('../report/index.html')).text();
   const parser = new DOMParser();
   const reportDom = parser.parseFromString(htmlText, 'text/html');
@@ -73,7 +69,6 @@ export default async function downloadReport(
     tabFrames,
     showInfoIcon: true,
     showHorizontalMatrix: true,
-    description,
     blockedCookieDataMapping,
     showBlockedInfoIcon: true,
     frameStateCreator,
