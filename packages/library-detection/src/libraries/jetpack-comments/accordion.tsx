@@ -26,8 +26,11 @@ import type { AccordionProps } from '../../types';
 import { JETPACK_COMMENTS_HELP_URL } from './constants';
 
 const JetpackCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
-  const featuresCount =
-    domQueryMatches && domQueryMatches.length ? domQueryMatches.length : 0;
+  if (!domQueryMatches) {
+    return null;
+  }
+
+  const featuresCount = domQueryMatches.length;
 
   if (!featuresCount) {
     return null;

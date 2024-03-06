@@ -26,8 +26,11 @@ import type { AccordionProps } from '../../types';
 import { DISQUS_COMMENTS_HELP_URL } from './constants';
 
 const DisqusCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
-  const featuresCount =
-    domQueryMatches && domQueryMatches.length ? domQueryMatches.length : 0;
+  if (!domQueryMatches) {
+    return null;
+  }
+
+  const featuresCount = domQueryMatches.length;
 
   if (!featuresCount) {
     return null;
