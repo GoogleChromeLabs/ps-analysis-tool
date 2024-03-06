@@ -37,13 +37,21 @@ const FBCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
     <Accordion
       title={'Facebook Comments Plugin.'}
       isLoading={false}
-      featuresText={`1 features`}
+      featuresText=""
     >
-      <p>
+      <p className="dark:text-bright-gray">
         Facebook comments plugin is known to experience issues due to the
         phaseout of third-party cookies. For more information, please visit the
-        Facebook
-        <a href={FB_COMMENTS_HELP_URL}>support forum</a>.
+        Facebook{' '}
+        <a
+          target="_blank"
+          className="text-bright-navy-blue dark:text-jordy-blue"
+          href={FB_COMMENTS_HELP_URL}
+          rel="noreferrer"
+        >
+          support forum
+        </a>
+        .
       </p>
     </Accordion>
   );

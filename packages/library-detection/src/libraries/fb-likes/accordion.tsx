@@ -37,12 +37,20 @@ const FBLikesAccordion = ({ domQueryMatches }: AccordionProps) => {
     <Accordion
       title={'Facebook Like Plugin.'}
       isLoading={false}
-      featuresText={`${featuresCount} features`}
+      featuresText=""
     >
-      <p>
+      <p className="dark:text-bright-gray">
         Facebook like plugin is known to experience issues due to the phaseout
-        of third-party cookies. For more information, please visit the Facebook
-        <a href={FB_LIKES_HELP_URL}>support forum</a>.
+        of third-party cookies. For more information, please visit the Facebook{' '}
+        <a
+          target="_blank"
+          className="text-bright-navy-blue dark:text-jordy-blue"
+          href={FB_LIKES_HELP_URL}
+          rel="noreferrer"
+        >
+          support forum
+        </a>
+        .
       </p>
     </Accordion>
   );

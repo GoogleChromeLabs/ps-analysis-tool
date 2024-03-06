@@ -34,15 +34,19 @@ const DisqusCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
   }
 
   return (
-    <Accordion
-      title={'Disqus Comments.'}
-      isLoading={false}
-      featuresText={`1 features`}
-    >
-      <p>
+    <Accordion title={'Disqus Comments.'} isLoading={false} featuresText="">
+      <p className="dark:text-bright-gray">
         Disqus comments are known to experience issues due to the phaseout of
-        third-party cookies. For more information, please visit the Disqus
-        <a href={DISQUS_COMMENTS_HELP_URL}>support forum</a>.
+        third-party cookies. For more information, please visit the Disqus{' '}
+        <a
+          target="_blank"
+          className="text-bright-navy-blue dark:text-jordy-blue"
+          href={DISQUS_COMMENTS_HELP_URL}
+          rel="noreferrer"
+        >
+          support forum
+        </a>
+        .
       </p>
     </Accordion>
   );
