@@ -199,19 +199,11 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         return;
       }
 
-      const data = await chrome.storage.local.get();
+      const data = await chrome.storage.session.get();
 
-      if (!data?.[tabId]) {
-        data[tabId] = {};
-      }
+      data['selectedSidebarItem#' + tabId] = selectedItemKey;
 
-      if (!data[tabId]?.['selectedSidebarItem']) {
-        data[tabId]['selectedSidebarItem'] = 'cookies';
-      }
-
-      data[tabId]['selectedSidebarItem'] = selectedItemKey;
-
-      await chrome.storage.local.set(data);
+      await chrome.storage.session.set(data);
     })();
   }, [selectedItemKey]);
 
