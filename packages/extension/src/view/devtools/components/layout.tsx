@@ -41,6 +41,7 @@ import Cookies from './cookies';
 import useFrameOverlay from '../hooks/useFrameOverlay';
 import { useCookieStore } from '../stateProviders/syncCookieStore';
 import { useSettingsStore } from '../stateProviders/syncSettingsStore';
+import { getCurrentTabId } from '../../../utils/getCurrentTabId';
 
 interface LayoutProps {
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
@@ -192,7 +193,11 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
 
   useEffect(() => {
     (async () => {
-      const tabId = chrome.devtools.inspectedWindow.tabId.toString();
+      const tabId = await getCurrentTabId();
+
+      if (!tabId) {
+        return;
+      }
 
       const data = await chrome.storage.local.get();
 
