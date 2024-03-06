@@ -43,6 +43,7 @@ export interface LibraryDetectionContext {
   state: {
     libraryMatches: LibraryData;
     isCurrentTabLoading: boolean;
+    isInitialDataUpdated: boolean;
     loadedBefore: boolean;
     showLoader: boolean;
     tabDomain: string;
@@ -51,6 +52,7 @@ export interface LibraryDetectionContext {
   actions: {
     setLibraryMatches: React.Dispatch<React.SetStateAction<LibraryData>>;
     setIsCurrentTabLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsInitialDataUpdated: React.Dispatch<React.SetStateAction<boolean>>;
     setLoadedBeforeState: React.Dispatch<React.SetStateAction<boolean>>;
     setShowLoader: React.Dispatch<React.SetStateAction<boolean>>;
     setTabDomain: React.Dispatch<React.SetStateAction<string>>;
@@ -63,6 +65,7 @@ const initialState: LibraryDetectionContext = {
   state: {
     libraryMatches: initialLibraryMatches,
     isCurrentTabLoading: false,
+    isInitialDataUpdated: false,
     loadedBefore: false,
     showLoader: true,
     tabDomain: '',
@@ -71,6 +74,7 @@ const initialState: LibraryDetectionContext = {
   actions: {
     setLibraryMatches: noop,
     setIsCurrentTabLoading: noop,
+    setIsInitialDataUpdated: noop,
     setLoadedBeforeState: noop,
     setShowLoader: noop,
     setTabDomain: noop,
@@ -89,6 +93,7 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
 
   const [isCurrentTabLoading, setIsCurrentTabLoading] =
     useState<boolean>(false); // TODO: Use first/current tab loaded state instead.
+  const [isInitialDataUpdated, setIsInitialDataUpdated] = useState(false);
   const [loadedBefore, setLoadedBeforeState] = useState<boolean>(false);
   const [showLoader, setShowLoader] = useState<boolean>(true);
   const [tabDomain, setTabDomain] = useState<string>('');
@@ -124,6 +129,7 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
           setIsCurrentTabLoading(true);
           setShowLoader(true);
           setLoadedBeforeState(false);
+          setIsInitialDataUpdated(false);
         }
       }
     },
@@ -150,6 +156,7 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
         state: {
           libraryMatches,
           isCurrentTabLoading,
+          isInitialDataUpdated,
           loadedBefore,
           showLoader,
           tabDomain,
@@ -158,6 +165,7 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
         actions: {
           setLibraryMatches,
           setIsCurrentTabLoading,
+          setIsInitialDataUpdated,
           setLoadedBeforeState,
           setShowLoader,
           setTabDomain,

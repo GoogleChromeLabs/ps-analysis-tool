@@ -42,6 +42,8 @@ const LOADING_DELAY = 2000;
 const useLibraryDetection = () => {
   const {
     isCurrentTabLoading,
+    isInitialDataUpdated,
+    setIsInitialDataUpdated,
     loadedBefore,
     showLoader,
     setLibraryMatches,
@@ -50,6 +52,8 @@ const useLibraryDetection = () => {
     tabId,
   } = useLibraryDetectionContext(({ state, actions }) => ({
     isCurrentTabLoading: state.isCurrentTabLoading,
+    isInitialDataUpdated: state.isInitialDataUpdated,
+    setIsInitialDataUpdated: actions.setIsInitialDataUpdated,
     loadedBefore: state.loadedBefore,
     showLoader: state.showLoader,
     setLoadedBeforeState: actions.setLoadedBeforeState,
@@ -59,7 +63,6 @@ const useLibraryDetection = () => {
   }));
 
   const timeout = useRef(0);
-  const initialDataUpdated = useRef(false);
 
   /**
    * Callback function used as a listener for resource changes.
@@ -115,11 +118,11 @@ const useLibraryDetection = () => {
   }, [listenerCallback, removeListener]);
 
   const updateInitialData = useCallback(async () => {
-    if (initialDataUpdated.current) {
+    if (isInitialDataUpdated) {
       return;
     }
 
-    initialDataUpdated.current = true;
+    setIsInitialDataUpdated(true);
 
     //  chrome.devtools.inspectedWindow.getResources updates whenever new items are added.
     const scripts = await getNetworkResourcesWithContent();
@@ -153,7 +156,14 @@ const useLibraryDetection = () => {
         setShowLoader(false);
       }
     );
-  }, [setLibraryMatches, attachListener, setShowLoader, tabId]);
+  }, [
+    setLibraryMatches,
+    attachListener,
+    setShowLoader,
+    setIsInitialDataUpdated,
+    tabId,
+    isInitialDataUpdated,
+  ]);
 
   useEffect(() => {
     if (showLoader) {
@@ -195,8 +205,6 @@ const useLibraryDetection = () => {
   useEffect(() => {
     return () => {
       removeListener();
-
-      initialDataUpdated.current = false;
 
       if (timeout.current) {
         clearTimeout(timeout.current);
