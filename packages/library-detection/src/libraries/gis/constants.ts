@@ -77,9 +77,14 @@ export const GIS_HELP_URL = addUTMParams(
 
 export const GIS_DOMAINS_TO_SKIP = ['accounts.google.com', 'gstatic.com'];
 
+// @todo This shouldn't be required, as we should check at least two weak matches for successful detection.
 export const GIS_EXCEPTIONS: ExceptionUrls = {
   'cnn.com': {
     signatures: ['isDisplayed('],
     subDomains: ['edition'],
+  },
+  'psanalysis.site': {
+    signatures: ['isDisplayed('],
+    subDomains: [''],
   },
 };
