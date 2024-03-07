@@ -21,7 +21,6 @@ import React, {
   useState,
   useCallback,
   useEffect,
-  useRef,
 } from 'react';
 import {
   noop,
@@ -88,16 +87,16 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
   const [isInitialDataUpdated, setIsInitialDataUpdated] = useState(false);
   const [loadedBefore, setLoadedBeforeState] = useState<boolean>(false);
   const [showLoader, setShowLoader] = useState<boolean>(true);
-  const tabId = useRef(-1);
+  const [tabId, setTabId] = useState(-1);
 
   useEffect(() => {
-    tabId.current = chrome.devtools.inspectedWindow.tabId;
+    setTabId(chrome.devtools.inspectedWindow.tabId);
   }, []);
 
   // It is attached, next time the tab is updated or reloaded.
   const onTabUpdate = useCallback(
     (changingTabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
-      if (Number(changingTabId) === Number(tabId.current)) {
+      if (Number(changingTabId) === Number(tabId)) {
         if (changeInfo.status === 'complete') {
           setIsCurrentTabLoading(false);
         } else if (changeInfo.status === 'loading') {
@@ -114,6 +113,7 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
       setLibraryMatches,
       setShowLoader,
       setLoadedBeforeState,
+      tabId,
     ]
   );
 
@@ -135,7 +135,7 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
           isInitialDataUpdated,
           loadedBefore,
           showLoader,
-          tabId: tabId.current,
+          tabId,
         },
         actions: {
           setLibraryMatches,
