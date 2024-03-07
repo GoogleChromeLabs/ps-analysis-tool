@@ -19,7 +19,6 @@
 import {
   GSIAccordion,
   getGSIV2Matches,
-  overrideGSIV2Matches,
   GSI_V2_SIGNATURE_STRONG_MATCHES,
   GSI_V2_SIGNATURE_WEAK_MATCHES,
   GSI_HELP_URL,
@@ -64,7 +63,6 @@ const LIBRARIES = [
     domainsToSkip: GSI_V2_DOMAINS_TO_SKIP,
     helpUrl: GSI_HELP_URL,
     detectionFunction: getGSIV2Matches,
-    overrideMatchesFunction: overrideGSIV2Matches,
   },
   {
     name: 'gis',

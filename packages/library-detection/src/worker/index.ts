@@ -24,6 +24,7 @@ import { LIBRARY_DETECTION_WORKER_TASK } from '@ps-analysis-tool/common';
 import detectMatchingSignatures from '../core/detectMatchingSignatures';
 import { type PreDefinedLibraryWorkerTaskPayload } from './constants';
 import LIBRARIES from '../config';
+import type { DetectionFunctions } from '../types';
 
 /**
  * Library Detection worker function that handles tasks related to library detection.
@@ -37,16 +38,12 @@ export const ldWorkerOnMessageCallback = (event: MessageEvent): void => {
   const detectionFunctions = Object.fromEntries(
     LIBRARIES.map((library) => [library.name, library.detectionFunction])
   );
-  const overrideFunctions = Object.fromEntries(
-    LIBRARIES.map((library) => [library.name, library?.overrideMatchesFunction])
-  );
 
   switch (task) {
     case LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING: {
       const detectedMatchingSignatures = detectMatchingSignatures(
         loadedScripts,
-        detectionFunctions,
-        overrideFunctions
+        detectionFunctions as DetectionFunctions
       );
       postMessage(detectedMatchingSignatures);
       break;

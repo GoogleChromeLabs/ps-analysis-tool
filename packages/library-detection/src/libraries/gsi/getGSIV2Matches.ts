@@ -68,9 +68,14 @@ const getGSIV2Matches = (
   }
 
   const gsiSignatures = [
-    ...GSI_V2_SIGNATURE_WEAK_MATCHES.map((item) => item.signature),
-    ...GSI_V2_SIGNATURE_STRONG_MATCHES.map((item) => item.signature),
-  ];
+    ...GSI_V2_SIGNATURE_WEAK_MATCHES,
+    ...GSI_V2_SIGNATURE_STRONG_MATCHES,
+  ].map((item) => item.signature);
+
+  const gsiV2StrongSignatures = GSI_V2_SIGNATURE_STRONG_MATCHES.map(
+    (item) => item.signature
+  );
+
   /* Match all signatures in the capture group and return surrounding the text:
    *    /(?:.{0,63}?)(signature1|signature2|signature3)(?:.{0,63}?)/g
    */
@@ -123,6 +128,25 @@ const getGSIV2Matches = (
         },
       });
     }
+  }
+
+  const signatureOfDetectedMatches = items.map((item) => {
+    return item.feature.text;
+  });
+
+  const isStrongSignatureFound = signatureOfDetectedMatches.some(
+    (signature) => {
+      return gsiV2StrongSignatures.includes(signature);
+    }
+  );
+
+  // Audit step
+  if (
+    signatureMatches === 0 ||
+    (!isStrongSignatureFound && signatureMatches < 2)
+  ) {
+    // Clear array of signatures
+    items.splice(0, items.length);
   }
 
   return {

@@ -15,5 +15,4 @@
  */
 export { default as GSIAccordion } from './accordion';
 export { default as getGSIV2Matches } from './getGSIV2Matches';
-export { default as overrideGSIV2Matches } from './overrideGSIV2Matches';
 export * from './constants';

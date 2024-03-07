@@ -19,8 +19,7 @@
 import type {
   ScriptTagUnderCheck,
   LibraryData,
-  DetectionSubFunctions,
-  DetectionAuditFunctions,
+  DetectionFunctions,
 } from '../types';
 import LIBRARIES from '../config';
 
@@ -43,14 +42,12 @@ const filterDomainsToSkip = (script: ScriptTagUnderCheck): boolean => {
 /**
  * Detects matching signatures of libraries in loaded scripts.
  * @param loadedScripts - An array of loaded scripts to check.
- * @param detectionSubFunctions - An object containing detection sub-functions for each library.
- * @param detectionAuditFunctions - An object containing detection audit functions for each library.
+ * @param detectionFunctions - An object containing detection sub-functions for each library.
  * @returns An object containing the matching signatures and matches for each library.
  */
 const detectMatchingSignatures = (
   loadedScripts: ScriptTagUnderCheck[],
-  detectionSubFunctions: DetectionSubFunctions,
-  detectionAuditFunctions: DetectionAuditFunctions
+  detectionFunctions: DetectionFunctions
 ): LibraryData => {
   // @todo Overriding matches.
   const libraryMatches: LibraryData = Object.fromEntries(
@@ -71,7 +68,7 @@ const detectMatchingSignatures = (
       continue;
     }
 
-    Object.entries(detectionSubFunctions).forEach(([key, callback]) => {
+    Object.entries(detectionFunctions).forEach(([key, callback]) => {
       if (!callback) {
         return;
       }
@@ -90,20 +87,6 @@ const detectMatchingSignatures = (
       );
     });
   }
-
-  Object.entries(detectionAuditFunctions).forEach(([key, callback]) => {
-    if (!callback) {
-      return;
-    }
-
-    const { matches, signatureMatches, moduleMatch = 0 } = libraryMatches[key];
-
-    libraryMatches[key].matches = callback(
-      signatureMatches,
-      matches,
-      moduleMatch
-    );
-  });
 
   return libraryMatches;
 };

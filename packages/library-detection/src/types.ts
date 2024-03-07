@@ -73,12 +73,12 @@ export type DomainPaths = {
   [domain: string]: string[];
 };
 
-export type DetectionSubFunctions = {
+export type DetectionFunctions = {
   [key: string]: (
     arg0: ScriptTagUnderCheck,
-    arg1: DetectedSignature[],
-    arg2: number,
-    arg3?: number
+    arg1: DetectedSignature[] | undefined,
+    arg2: number | undefined,
+    arg3?: number | undefined
   ) => {
     signatureMatches: number;
     matches: DetectedSignature[];
