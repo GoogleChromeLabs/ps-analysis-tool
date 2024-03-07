@@ -81,9 +81,9 @@ const ExperimentGroup = () => {
       </h4>
       {isLibrarySupported ? (
         <div className="overflow-auto mt-2">
-          <p>Your browser is part of an experimental group labeled as:</p>
+          <p>Your browser is part of an experimental group.</p>
           <p>
-            <strong>Label:</strong> <span>{String(label)}</span>
+            <strong>Label:</strong> <span>{label ? label : '" "'}</span>
           </p>
           <p className="mt-3">
             For more information about this label, please visit the{' '}
