@@ -60,7 +60,9 @@ const ExperimentGroup = () => {
         },
       });
 
-      setIsLibrarySupported(queryResult?.result !== null);
+      if (queryResult?.result !== null) {
+        setIsLibrarySupported(true);
+      }
 
       const labelText: string =
         queryResult && queryResult?.result ? String(queryResult?.result) : '';
@@ -70,7 +72,10 @@ const ExperimentGroup = () => {
   }, []);
 
   return (
-    <div className="p-3 flex-1 bg-anti-flash-white dark:bg-charleston-green rounded-md">
+    <div
+      className="p-3 flex-1 bg-anti-flash-white dark:bg-charleston-green rounded-md"
+      data-testid="experiment-group"
+    >
       <h4 className="text-base font-medium text-davys-grey dark:text-anti-flash-white mb-1">
         Is Your Browser Part of the Experimental Group?
       </h4>
