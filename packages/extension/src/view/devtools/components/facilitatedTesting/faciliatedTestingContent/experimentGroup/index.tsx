@@ -32,6 +32,7 @@ interface Navigator {
 
 const ExperimentGroup = () => {
   const [label, setLabel] = useState('');
+  const [isLibrarySupported, setIsLibrarySupported] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -41,26 +42,28 @@ const ExperimentGroup = () => {
         return;
       }
 
-      const queryResult = await chrome.scripting.executeScript({
+      const [queryResult] = await chrome.scripting.executeScript({
         target: { tabId: Number(tabId), allFrames: false },
         func: () => {
           // Feature detect temporary API first
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             if ('cookieDeprecationLabel' in navigator) {
               (navigator as Navigator).cookieDeprecationLabel
                 .getValue()
                 .then(resolve);
             } else {
-              reject(new Error('Not supported'));
+              // If cookieDeprecationLabel is not available, they are not part of the 1% group.
+              // @see https://developers.google.com/privacy-sandbox/setup/web/chrome-facilitated-testing#accessing_the_cookiedeprecationlabel_javascript_api
+              resolve(null);
             }
           });
         },
       });
 
+      setIsLibrarySupported(queryResult?.result !== null);
+
       const labelText: string =
-        queryResult && queryResult[0]?.result
-          ? String(queryResult[0]?.result)
-          : '';
+        queryResult && queryResult?.result ? String(queryResult?.result) : '';
 
       setLabel(labelText);
     })();
@@ -71,11 +74,12 @@ const ExperimentGroup = () => {
       <h4 className="text-base font-medium text-davys-grey dark:text-anti-flash-white mb-1">
         Is Your Browser Part of the Experimental Group?
       </h4>
-      {label ? (
+      {isLibrarySupported ? (
         <div className="overflow-auto mt-2">
           <p>Your browser is part of an experimental group labeled as:</p>
           <p>
-            <strong>Label:</strong> {label}
+            <strong>Label:</strong>{' '}
+            <span>{label ? label : 'No label set'}</span>
           </p>
           <p className="mt-3">
             For more information about this label, please visit the{' '}
