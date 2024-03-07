@@ -43,9 +43,9 @@ const CookiesSection = () => {
       frameHasCookies: state.frameHasCookies,
     })
   );
-
+  
   const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});
-
+  
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
   const cookieClassificationDataMapping = prepareCookieDataMapping(

@@ -94,7 +94,6 @@ const CookiesListing = ({
           selectedFrameCookie={selectedFrameCookie}
           setSelectedFrameCookie={setSelectedFrameCookie}
           isFiltersSidebarOpen={isSidebarOpen}
-          hideExport
         />
       </Resizable>
       <CookieDetails
