@@ -41,7 +41,6 @@ const Option = ({
       e.preventDefault();
       e.stopPropagation();
       setTimeout(() => toggleFilterSelection(filterKey, filterValue));
-      toggleFilterSelection(filterKey, filterValue);
     },
     [filterKey, filterValue, toggleFilterSelection]
   );
