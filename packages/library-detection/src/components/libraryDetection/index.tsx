@@ -37,7 +37,6 @@ const LibraryDetection = memo(function LibraryDetection() {
     useLibraryDetectionContext(({ state }) => ({
       libraryMatches: state.libraryMatches,
       showLoader: state.showLoader,
-      tabDomain: state.tabDomain,
       isCurrentTabLoading: state.isCurrentTabLoading,
     }));
 

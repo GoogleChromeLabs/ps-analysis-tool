@@ -24,7 +24,6 @@ import React, {
   useRef,
 } from 'react';
 import {
-  getDomainFromUrl,
   noop,
   useContextSelector,
   createContext,
@@ -46,7 +45,6 @@ export interface LibraryDetectionContext {
     isInitialDataUpdated: boolean;
     loadedBefore: boolean;
     showLoader: boolean;
-    tabDomain: string;
     tabId: number;
   };
   actions: {
@@ -55,7 +53,6 @@ export interface LibraryDetectionContext {
     setIsInitialDataUpdated: React.Dispatch<React.SetStateAction<boolean>>;
     setLoadedBeforeState: React.Dispatch<React.SetStateAction<boolean>>;
     setShowLoader: React.Dispatch<React.SetStateAction<boolean>>;
-    setTabDomain: React.Dispatch<React.SetStateAction<string>>;
   };
 }
 
@@ -68,7 +65,6 @@ const initialState: LibraryDetectionContext = {
     isInitialDataUpdated: false,
     loadedBefore: false,
     showLoader: true,
-    tabDomain: '',
     tabId: -1,
   },
   actions: {
@@ -77,7 +73,6 @@ const initialState: LibraryDetectionContext = {
     setIsInitialDataUpdated: noop,
     setLoadedBeforeState: noop,
     setShowLoader: noop,
-    setTabDomain: noop,
   },
 };
 
@@ -93,32 +88,16 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
   const [isInitialDataUpdated, setIsInitialDataUpdated] = useState(false);
   const [loadedBefore, setLoadedBeforeState] = useState<boolean>(false);
   const [showLoader, setShowLoader] = useState<boolean>(true);
-  const [tabDomain, setTabDomain] = useState<string>('');
   const tabId = useRef(-1);
 
   useEffect(() => {
     tabId.current = chrome.devtools.inspectedWindow.tabId;
-    chrome.devtools.inspectedWindow.eval(
-      'window.location.href',
-      (result, isException) => {
-        if (!isException && typeof result === 'string') {
-          setTabDomain(getDomainFromUrl(result));
-        }
-      }
-    );
   }, []);
 
   // It is attached, next time the tab is updated or reloaded.
   const onTabUpdate = useCallback(
-    (
-      changingTabId: number,
-      changeInfo: chrome.tabs.TabChangeInfo,
-      tab: chrome.tabs.Tab
-    ) => {
+    (changingTabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
       if (Number(changingTabId) === Number(tabId.current)) {
-        if (tab.url) {
-          setTabDomain(getDomainFromUrl(tab.url));
-        }
         if (changeInfo.status === 'complete') {
           setIsCurrentTabLoading(false);
         } else if (changeInfo.status === 'loading') {
@@ -156,7 +135,6 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
           isInitialDataUpdated,
           loadedBefore,
           showLoader,
-          tabDomain,
           tabId: tabId.current,
         },
         actions: {
@@ -165,7 +143,6 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
           setIsInitialDataUpdated,
           setLoadedBeforeState,
           setShowLoader,
-          setTabDomain,
         },
       }}
     >

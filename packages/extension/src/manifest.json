@@ -18,8 +18,7 @@
     "debugger",
     "management",
     "contentSettings",
-    "scripting",
-    "activeTab"
+    "scripting"
   ],
   "host_permissions": ["*://*/*"],
   "devtools_page": "devtools/devtools.html",
