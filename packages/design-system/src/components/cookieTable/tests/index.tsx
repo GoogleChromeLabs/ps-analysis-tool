@@ -315,6 +315,9 @@ describe('CookieTable', () => {
     const test2Filter = await screen.findByText('test2Filter');
     act(() => fireEvent.click(test2Filter));
 
+    const test3Filter = await screen.findByText('test3Filter');
+    act(() => fireEvent.click(test3Filter));
+
     await waitFor(() => {
       const rows = screen.getAllByTestId('body-row');
       expect(rows.length).toBe(2);
