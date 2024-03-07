@@ -21,7 +21,7 @@ import { addUTMParams } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import type { ExceptionUrls, SignaturesConfigItem } from '../../types';
+import type { SignaturesConfigItem } from '../../types';
 
 export const GIS_SIGNATURE_WEAK_MATCHES = [
   {
@@ -61,5 +61,3 @@ export const GIS_HELP_URL = addUTMParams(
 );
 
 export const GIS_DOMAINS_TO_SKIP = ['accounts.google.com', 'gstatic.com'];
-
-export const GIS_EXCEPTIONS: ExceptionUrls = {};

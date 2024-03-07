@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { ExceptionUrls, SignaturesConfigItem } from '../../types';
+import type { SignaturesConfigItem } from '../../types';
 
 /*
  * Copyright 2023 Google LLC
@@ -181,5 +181,3 @@ export const GSI_HELP_URL =
   'https://developers.google.com/identity/gsi/web/guides/migration';
 
 export const GSI_V2_DOMAINS_TO_SKIP = ['accounts.google.com', 'gstatic.com'];
-
-export const GSIV2_EXCEPTIONS: ExceptionUrls = {};

@@ -24,14 +24,12 @@ import {
   GSI_V2_SIGNATURE_WEAK_MATCHES,
   GSI_HELP_URL,
   GSI_V2_DOMAINS_TO_SKIP,
-  GSIV2_EXCEPTIONS,
 } from './libraries/gsi';
 import {
   GISAccordion,
   getGISMatches,
   GIS_SIGNATURE_WEAK_MATCHES,
   GIS_HELP_URL,
-  GIS_EXCEPTIONS,
   GIS_DOMAINS_TO_SKIP,
 } from './libraries/gis';
 import {
@@ -63,7 +61,6 @@ const LIBRARIES = [
       strongMatches: GSI_V2_SIGNATURE_STRONG_MATCHES,
       weakMatches: GSI_V2_SIGNATURE_WEAK_MATCHES,
     },
-    exceptions: GSIV2_EXCEPTIONS,
     domainsToSkip: GSI_V2_DOMAINS_TO_SKIP,
     helpUrl: GSI_HELP_URL,
     detectionFunction: getGSIV2Matches,
@@ -76,7 +73,6 @@ const LIBRARIES = [
       strongMatches: [],
       weakMatches: GIS_SIGNATURE_WEAK_MATCHES,
     },
-    exceptions: GIS_EXCEPTIONS,
     domainsToSkip: GIS_DOMAINS_TO_SKIP,
     helpUrl: GIS_HELP_URL,
     detectionFunction: getGISMatches,

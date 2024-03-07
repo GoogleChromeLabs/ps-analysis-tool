@@ -22,55 +22,24 @@ import {
   COLOR_MAP,
   ProgressBar,
 } from '@ps-analysis-tool/design-system';
-import { extractUrl } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import {
-  filterMatchesBasedOnExceptions,
-  useLibraryDetection,
-  useLibraryDetectionContext,
-} from '../../core';
+import { useLibraryDetection, useLibraryDetectionContext } from '../../core';
 import LIBRARIES from '../../config';
 import type { LibraryData, AccordionProps } from '../../types';
 
 const LibraryDetection = memo(function LibraryDetection() {
   useLibraryDetection();
 
-  const { libraryMatches, showLoader, tabDomain, isCurrentTabLoading } =
+  const { libraryMatches, showLoader, isCurrentTabLoading } =
     useLibraryDetectionContext(({ state }) => ({
       libraryMatches: state.libraryMatches,
       showLoader: state.showLoader,
       tabDomain: state.tabDomain,
       isCurrentTabLoading: state.isCurrentTabLoading,
     }));
-
-  LIBRARIES.forEach(({ name, exceptions }) => {
-    if (!exceptions) {
-      return;
-    }
-
-    let matches =
-      libraryMatches && libraryMatches[name as keyof LibraryData]
-        ? libraryMatches[name as keyof LibraryData]?.matches
-        : [];
-
-    const parsedUrl = extractUrl(tabDomain);
-
-    const parsedTabDomain = parsedUrl?.domain;
-
-    const isCurrentDomainExceptionDomain =
-      exceptions?.[parsedTabDomain as string] &&
-      exceptions?.[parsedTabDomain as string]?.signatures?.length > 0;
-
-    if (isCurrentDomainExceptionDomain) {
-      matches = filterMatchesBasedOnExceptions(tabDomain, exceptions, matches);
-    }
-
-    // @todo Wrong way of updating state, refactor code.
-    libraryMatches[name as keyof LibraryData].matches = matches;
-  });
 
   const names = Object.keys(libraryMatches);
 
