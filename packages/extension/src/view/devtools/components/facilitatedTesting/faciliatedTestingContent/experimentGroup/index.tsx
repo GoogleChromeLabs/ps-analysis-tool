@@ -83,8 +83,7 @@ const ExperimentGroup = () => {
         <div className="overflow-auto mt-2">
           <p>Your browser is part of an experimental group labeled as:</p>
           <p>
-            <strong>Label:</strong>{' '}
-            <span>{label ? label : 'No label set'}</span>
+            <strong>Label:</strong> <span>{String(label)}</span>
           </p>
           <p className="mt-3">
             For more information about this label, please visit the{' '}
