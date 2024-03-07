@@ -62,10 +62,7 @@ const CookiesSection = ({
           ))}
       <CookiesMatrix
         tabCookies={affectedCookies}
-        componentData={
-          prepareCookieStatsComponents(prepareCookiesCount(affectedCookies))
-            .legend
-        }
+        componentData={cookiesStatsComponents.legend}
         tabFrames={tabFrames}
         description=""
         showInfoIcon={false}
