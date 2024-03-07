@@ -25,11 +25,6 @@ import React, {
 import { noop } from '@ps-analysis-tool/design-system';
 import { useContextSelector, createContext } from '@ps-analysis-tool/common';
 
-/**
- * Internal dependencies.
- */
-import { getCurrentTabId } from '../../../../utils/getCurrentTabId';
-
 enum PLATFORM_OS_MAP {
   mac = 'MacOS',
   win = 'Windows',
@@ -44,7 +39,6 @@ export interface SettingStoreContext {
   state: {
     allowedNumberOfTabs: string | null;
     currentTabs: number;
-    currentTabId: number;
     currentExtensions:
       | {
           extensionName: string;
@@ -70,7 +64,6 @@ const initialState: SettingStoreContext = {
   state: {
     allowedNumberOfTabs: null,
     currentTabs: 0,
-    currentTabId: -1,
     currentExtensions: null,
     browserInformation: null,
     OSInformation: null,
@@ -108,7 +101,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const [currentTabs, setCurrentTabs] =
     useState<SettingStoreContext['state']['currentTabs']>(0);
-  const [currentTabId, setCurrentTabId] = useState(-1);
   const [browserInformation, setBrowserInformation] = useState<string | null>(
     null
   );
@@ -120,11 +112,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const intitialSync = useCallback(async () => {
     const sessionStorage = await chrome.storage.session.get();
     const currentSettings = await chrome.storage.sync.get();
-    const tabId = await getCurrentTabId();
-
-    if (tabId) {
-      setCurrentTabId(Number(tabId));
-    }
 
     if (Object.keys(sessionStorage).includes('pendingReload')) {
       setSettingsChanged(sessionStorage?.pendingReload);
@@ -288,7 +275,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
         state: {
           allowedNumberOfTabs,
           currentTabs,
-          currentTabId,
           currentExtensions,
           browserInformation,
           OSInformation,
