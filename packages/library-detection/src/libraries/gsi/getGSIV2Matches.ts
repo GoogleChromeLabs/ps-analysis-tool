@@ -72,7 +72,7 @@ const getGSIV2Matches = (
     ...GSI_V2_SIGNATURE_STRONG_MATCHES,
   ].map((item) => item.signature);
 
-  const gsiV2StrongSignatures = GSI_V2_SIGNATURE_STRONG_MATCHES.map(
+  const strongSignatures = GSI_V2_SIGNATURE_STRONG_MATCHES.map(
     (item) => item.signature
   );
 
@@ -82,9 +82,9 @@ const getGSIV2Matches = (
   const captureGroup = gsiSignatures.map(escapeStringRegexp);
   const allCaptureGroups =
     '(?:.{0,63}?)(?<signature>' + captureGroup.join('|') + ')(?:.{0,63}?)';
-  const reSignatures = new RegExp(allCaptureGroups, 'dg');
+  const signaturesRegex = new RegExp(allCaptureGroups, 'dg');
 
-  for (const match of content.matchAll(reSignatures)) {
+  for (const match of content.matchAll(signaturesRegex)) {
     if (!match.groups || !('signature' in match.groups)) {
       continue;
     }
@@ -136,7 +136,7 @@ const getGSIV2Matches = (
 
   const isStrongSignatureFound = signatureOfDetectedMatches.some(
     (signature) => {
-      return gsiV2StrongSignatures.includes(signature);
+      return strongSignatures.includes(signature);
     }
   );
 

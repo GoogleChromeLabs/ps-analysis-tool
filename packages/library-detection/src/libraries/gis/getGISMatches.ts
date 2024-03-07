@@ -53,23 +53,23 @@ const getGISMatches = (
     };
   }
 
-  const gisSignatures = [
+  const signatures = [
     ...GIS_SIGNATURE_WEAK_MATCHES,
     ...GIS_SIGNATURE_STRONG_MATCHES,
   ].map((item) => item.signature);
 
-  const captureGroup = gisSignatures.map(escapeStringRegexp);
+  const captureGroup = signatures.map(escapeStringRegexp);
 
-  const gisStrongSignatures = GIS_SIGNATURE_STRONG_MATCHES.map(
+  const strongSignatures = GIS_SIGNATURE_STRONG_MATCHES.map(
     (item) => item.signature
   );
 
   const allCaptureGroups =
     '(?:.{0,63}?)(?<signature>' + captureGroup.join('|') + ')(?:.{0,63}?)';
 
-  const reSignatures = new RegExp(allCaptureGroups, 'dg');
+  const signaturesRegex = new RegExp(allCaptureGroups, 'dg');
 
-  for (const match of content.matchAll(reSignatures)) {
+  for (const match of content.matchAll(signaturesRegex)) {
     if (!match.groups || !('signature' in match.groups)) {
       continue;
     }
@@ -118,7 +118,7 @@ const getGISMatches = (
   const signatureOfDetectedMatches = items.map((item) => item.feature.text);
 
   const isStrongSignatureFound = signatureOfDetectedMatches.some((signature) =>
-    gisStrongSignatures.includes(signature)
+    strongSignatures.includes(signature)
   );
 
   // Audit step
