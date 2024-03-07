@@ -40,7 +40,7 @@ const Option = ({
     (e: React.MouseEvent<HTMLLIElement>) => {
       e.preventDefault();
       e.stopPropagation();
-      toggleFilterSelection(filterKey, filterValue);
+      setTimeout(() => toggleFilterSelection(filterKey, filterValue));
     },
     [filterKey, filterValue, toggleFilterSelection]
   );
