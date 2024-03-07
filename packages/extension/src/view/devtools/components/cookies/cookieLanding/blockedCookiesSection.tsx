@@ -22,12 +22,12 @@ import {
   CookiesMatrix,
   prepareCookieStatsComponents,
   prepareCookiesCount,
+  type DataMapping,
 } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies
  */
 import { useCookie, useSettings } from '../../../stateProviders';
-import type { DataMapping } from '@ps-analysis-tool/design-system/src/components/cookiesLanding/landingHeader';
 
 const BlockedCookiesSection = () => {
   const { tabCookies, tabFrames } = useCookie(({ state }) => ({
