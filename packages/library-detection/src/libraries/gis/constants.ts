@@ -21,7 +21,7 @@ import { addUTMParams } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import type { ExceptionUrls } from '../../types';
+import type { ExceptionUrls, SignaturesConfigItem } from '../../types';
 
 export const GIS_SIGNATURE_WEAK_MATCHES = [
   {
@@ -54,7 +54,7 @@ export const GIS_SIGNATURE_WEAK_MATCHES = [
   },
 ];
 
-export const GIS_SIGNATURE_STRONG_MATCHES = [];
+export const GIS_SIGNATURE_STRONG_MATCHES: SignaturesConfigItem[] = [];
 
 export const GIS_HELP_URL = addUTMParams(
   'https://developers.google.com/identity/gsi/web/guides/migration'
@@ -62,14 +62,4 @@ export const GIS_HELP_URL = addUTMParams(
 
 export const GIS_DOMAINS_TO_SKIP = ['accounts.google.com', 'gstatic.com'];
 
-// @todo This shouldn't be required, as we should check at least two weak matches for successful detection.
-export const GIS_EXCEPTIONS: ExceptionUrls = {
-  'cnn.com': {
-    signatures: ['isDisplayed('],
-    subDomains: ['edition'],
-  },
-  'psanalysis.site': {
-    signatures: ['isDisplayed('],
-    subDomains: [''],
-  },
-};
+export const GIS_EXCEPTIONS: ExceptionUrls = {};

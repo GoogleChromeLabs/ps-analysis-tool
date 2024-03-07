@@ -60,6 +60,10 @@ const getGISMatches = (
 
   const captureGroup = gisSignatures.map(escapeStringRegexp);
 
+  const gisStrongSignatures = GIS_SIGNATURE_STRONG_MATCHES.map(
+    (item) => item.signature
+  );
+
   const allCaptureGroups =
     '(?:.{0,63}?)(?<signature>' + captureGroup.join('|') + ')(?:.{0,63}?)';
 
@@ -111,8 +115,17 @@ const getGISMatches = (
     }
   }
 
+  const signatureOfDetectedMatches = items.map((item) => item.feature.text);
+
+  const isStrongSignatureFound = signatureOfDetectedMatches.some((signature) =>
+    gisStrongSignatures.includes(signature)
+  );
+
   // Audit step
-  if (signatureMatches === 0) {
+  if (
+    signatureMatches === 0 ||
+    (!isStrongSignatureFound && signatureMatches < 2)
+  ) {
     items = [];
   }
 

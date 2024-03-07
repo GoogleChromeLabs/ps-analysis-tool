@@ -17,7 +17,7 @@
 const disqusCommentsDOMQuery = () => {
   const matchItems: string[] = [];
 
-  const disqusThreadId = document.querySelector('#disqus_thread');
+  const disqusThreadId = document.getElementById('disqus_thread');
 
   const disqusCommentIframeSrcRegex = /^https:\/\/disqus\.com\/embed\/comments/;
 
@@ -31,7 +31,7 @@ const disqusCommentsDOMQuery = () => {
     });
 
     if (matchItems.length) {
-      matchItems.push('div[id]: disqus-thread');
+      matchItems.push('div[id]: disqus_thread');
     }
   }
 
