@@ -21,43 +21,49 @@ import {
   CookiesLandingContainer,
   CookiesMatrix,
   MessageBox,
-  prepareCookieDataMapping,
   prepareCookieStatsComponents,
   prepareCookiesCount,
+  type DataMapping,
 } from '@ps-analysis-tool/design-system';
 import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
-/**
- * Internal dependencies
- */
 
-interface CookiesSectionProps {
-  tabCookies: TabCookies | null;
+interface BlockedCookiesSectionProps {
+  affectedCookies: TabCookies | null;
   tabFrames: TabFrames | null;
 }
-const CookiesSection = ({ tabCookies, tabFrames }: CookiesSectionProps) => {
-  const cookieStats = prepareCookiesCount(tabCookies);
-  const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
-  const cookieClassificationDataMapping = prepareCookieDataMapping(
-    cookieStats,
-    cookiesStatsComponents
-  );
+const BlockedCookiesSection = ({
+  affectedCookies,
+  tabFrames,
+}: BlockedCookiesSectionProps) => {
+  const affectedCookiesStats = prepareCookiesCount(affectedCookies);
+
+  const affectedCookiesStatsComponents =
+    prepareCookieStatsComponents(affectedCookiesStats);
+
+  const cookieBlockedDataMapping: DataMapping[] = [
+    {
+      title: 'Blocked cookies',
+      count: affectedCookiesStats.blockedCookies.total,
+      data: affectedCookiesStatsComponents.blocked,
+    },
+  ];
 
   return (
     <CookiesLandingContainer
-      dataMapping={cookieClassificationDataMapping}
+      dataMapping={cookieBlockedDataMapping}
       testId="cookies-insights"
     >
-      {!cookieStats ||
-        (cookieStats?.firstParty.total === 0 &&
-          cookieStats?.thirdParty.total === 0 && (
+      {!affectedCookiesStats ||
+        (affectedCookiesStats?.firstParty.total === 0 &&
+          affectedCookiesStats?.thirdParty.total === 0 && (
             <MessageBox
               headerText="No cookies found on this page"
               bodyText="Please try reloading the page"
             />
           ))}
       <CookiesMatrix
-        tabCookies={tabCookies}
-        componentData={cookiesStatsComponents.legend}
+        tabCookies={affectedCookies}
+        componentData={affectedCookiesStatsComponents.legend}
         tabFrames={tabFrames}
         description=""
         showInfoIcon={false}
@@ -67,4 +73,4 @@ const CookiesSection = ({ tabCookies, tabFrames }: CookiesSectionProps) => {
     </CookiesLandingContainer>
   );
 };
-export default CookiesSection;
+export default BlockedCookiesSection;
