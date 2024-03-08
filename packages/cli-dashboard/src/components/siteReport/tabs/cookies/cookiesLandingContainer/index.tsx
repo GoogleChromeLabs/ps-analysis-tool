@@ -52,6 +52,7 @@ const CookiesLandingContainer = ({
       <CookiesLanding>
         <CookiesSection tabCookies={tabCookies} tabFrames={tabFrames} />
         <BlockedCookiesSection
+          tabCookies={tabCookies}
           affectedCookies={affectedCookies}
           tabFrames={tabFrames}
         />

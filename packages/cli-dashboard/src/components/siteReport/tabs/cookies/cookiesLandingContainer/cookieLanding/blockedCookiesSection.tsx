@@ -28,34 +28,39 @@ import {
 import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
 
 interface BlockedCookiesSectionProps {
+  tabCookies: TabCookies | null;
   affectedCookies: TabCookies | null;
   tabFrames: TabFrames | null;
 }
 const BlockedCookiesSection = ({
+  tabCookies,
   affectedCookies,
   tabFrames,
 }: BlockedCookiesSectionProps) => {
-  const affectedCookiesStats = prepareCookiesCount(affectedCookies);
+  const cookiesStats = prepareCookiesCount(tabCookies);
 
-  const affectedCookiesStatsComponents =
-    prepareCookieStatsComponents(affectedCookiesStats);
+  const cookiesStatsComponents = prepareCookieStatsComponents(cookiesStats);
 
   const cookieBlockedDataMapping: DataMapping[] = [
     {
       title: 'Blocked cookies',
-      count: affectedCookiesStats.blockedCookies.total,
-      data: affectedCookiesStatsComponents.blocked,
+      count: cookiesStats.blockedCookies.total,
+      data: cookiesStatsComponents.blocked,
     },
   ];
+
+  const blockedCookieStats = prepareCookiesCount(affectedCookies);
+  const blockedCookiesStatsComponents =
+    prepareCookieStatsComponents(blockedCookieStats);
 
   return (
     <CookiesLandingContainer
       dataMapping={cookieBlockedDataMapping}
       testId="cookies-insights"
     >
-      {!affectedCookiesStats ||
-        (affectedCookiesStats?.firstParty.total === 0 &&
-          affectedCookiesStats?.thirdParty.total === 0 && (
+      {!cookiesStats ||
+        (cookiesStats?.firstParty.total === 0 &&
+          cookiesStats?.thirdParty.total === 0 && (
             <MessageBox
               headerText="No cookies found on this page"
               bodyText="Please try reloading the page"
@@ -63,11 +68,20 @@ const BlockedCookiesSection = ({
           ))}
       <CookiesMatrix
         tabCookies={affectedCookies}
-        componentData={affectedCookiesStatsComponents.blockedCookiesLegend}
+        componentData={cookiesStatsComponents.blockedCookiesLegend}
         tabFrames={tabFrames}
         description=""
         infoIconTitle="Cookies that have been blocked by the browser.(The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
         showInfoIcon={true}
+        showHorizontalMatrix={false}
+        allowExpand={true}
+      />
+      <CookiesMatrix
+        tabCookies={affectedCookies}
+        componentData={blockedCookiesStatsComponents.legend}
+        tabFrames={tabFrames}
+        description=""
+        showInfoIcon={false}
         showHorizontalMatrix={false}
         allowExpand={false}
       />

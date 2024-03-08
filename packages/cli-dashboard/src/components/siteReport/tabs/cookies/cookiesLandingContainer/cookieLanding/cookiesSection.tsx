@@ -62,7 +62,7 @@ const CookiesSection = ({ tabCookies, tabFrames }: CookiesSectionProps) => {
         description=""
         showInfoIcon={false}
         showHorizontalMatrix={false}
-        allowExpand={false}
+        allowExpand={true}
       />
     </CookiesLandingContainer>
   );
