@@ -26,7 +26,7 @@ import '@testing-library/jest-dom';
 import FacebookCommentsAccordion from '../accordion';
 
 describe('Facebook Comments Accordion', () => {
-  const accordionTitleText = 'Facebook Comments Plugin.';
+  const accordionTitleText = 'Facebook Comments.';
   const accordionMessageText =
     'Facebook comments plugin is known to experience issues due to the phaseout of third-party cookies. For more information, please visit the Facebook support forum.';
 

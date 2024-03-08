@@ -26,9 +26,9 @@ import '@testing-library/jest-dom';
 import FacebookLikesAccordion from '../accordion';
 
 describe('Facebook Likes Accordion', () => {
-  const accordionTitleText = 'Facebook Like Plugin.';
+  const accordionTitleText = 'Facebook Like Button.';
   const accordionMessageText =
-    'Facebook like plugin is known to experience issues due to the phaseout of third-party cookies. For more information, please visit the Facebook support forum.';
+    'Facebook like button is known to experience issues due to the phaseout of third-party cookies. For more information, please visit the Facebook support forum.';
 
   it('should show accordion', () => {
     const domQueryMatches = [''];
