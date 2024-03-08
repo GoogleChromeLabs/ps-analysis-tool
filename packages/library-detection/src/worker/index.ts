@@ -32,7 +32,7 @@ import type { DetectionFunctions } from '../types';
  */
 export const ldWorkerOnMessageCallback = (event: MessageEvent): void => {
   const task: LIBRARY_DETECTION_WORKER_TASK = event.data.task;
-  const loadedScripts: PreDefinedLibraryWorkerTaskPayload[LIBRARY_DETECTION_WORKER_TASK] =
+  const scripts: PreDefinedLibraryWorkerTaskPayload[LIBRARY_DETECTION_WORKER_TASK] =
     event.data.payload;
 
   const detectionFunctions = Object.fromEntries(
@@ -42,7 +42,7 @@ export const ldWorkerOnMessageCallback = (event: MessageEvent): void => {
   switch (task) {
     case LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING: {
       const detectedMatchingSignatures = detectMatchingSignatures(
-        loadedScripts,
+        scripts,
         detectionFunctions as DetectionFunctions
       );
       postMessage(detectedMatchingSignatures);

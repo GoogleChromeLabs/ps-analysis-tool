@@ -41,15 +41,14 @@ const filterDomainsToSkip = (script: ScriptTagUnderCheck): boolean => {
 
 /**
  * Detects matching signatures of libraries in loaded scripts.
- * @param loadedScripts - An array of loaded scripts to check.
+ * @param scripts - An array of loaded scripts to check.
  * @param detectionFunctions - An object containing detection sub-functions for each library.
  * @returns An object containing the matching signatures and matches for each library.
  */
 const detectMatchingSignatures = (
-  loadedScripts: ScriptTagUnderCheck[],
+  scripts: ScriptTagUnderCheck[],
   detectionFunctions: DetectionFunctions
 ): LibraryData => {
-  // @todo Overriding matches.
   const libraryMatches: LibraryData = Object.fromEntries(
     LIBRARIES.filter(({ detectionFunction }) => detectionFunction).map(
       ({ name }) => [
@@ -63,23 +62,23 @@ const detectMatchingSignatures = (
     )
   );
 
-  for (const script of loadedScripts.filter(filterDomainsToSkip)) {
+  for (const script of scripts.filter(filterDomainsToSkip)) {
     if (script.content === undefined) {
       continue;
     }
 
-    Object.entries(detectionFunctions).forEach(([key, callback]) => {
-      if (!callback) {
+    Object.entries(detectionFunctions).forEach(([key, detectionFunction]) => {
+      if (!detectionFunction) {
         return;
       }
 
       const {
-        matches,
         signatureMatches,
+        matches,
         moduleMatch = 0,
       } = libraryMatches[key];
 
-      libraryMatches[key] = callback(
+      libraryMatches[key] = detectionFunction(
         script,
         matches,
         signatureMatches,

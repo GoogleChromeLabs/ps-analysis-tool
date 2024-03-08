@@ -32,18 +32,18 @@ import {
 
 /**
  * Checks for Google Identity Services api signatures.
- * @param script - The script tag to check.
- * @param existingItems - The existing items to check against.
+ * @param script - The script to parse for matching.
+ * @param matches - The existing items to check against.
  * @param signatureMatches - The number of signature matches.
  * @returns The number of signature matches and the items.
  */
 const getGISMatches = (
   script: ScriptTagUnderCheck,
-  existingItems: DetectedSignature[],
+  matches: DetectedSignature[],
   signatureMatches: number
 ) => {
   const content = script.content;
-  let items = existingItems;
+  let items = matches;
 
   if (!content) {
     // this case if no network request is present

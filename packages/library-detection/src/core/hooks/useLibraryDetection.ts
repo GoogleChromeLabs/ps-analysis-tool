@@ -127,13 +127,13 @@ const useLibraryDetection = () => {
 
     LIBRARIES.forEach(async ({ name, domQueryFunction }) => {
       if (domQueryFunction) {
-        const queryResult = await chrome.scripting.executeScript({
+        const [queryResult] = await chrome.scripting.executeScript({
           target: { tabId: tabId, allFrames: false },
           func: domQueryFunction,
         });
 
         domQueryMatches[name] = {
-          domQuerymatches: queryResult[0]?.result as [string],
+          domQuerymatches: queryResult?.result as [string],
         };
       }
     });

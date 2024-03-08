@@ -33,19 +33,19 @@ import {
 /**
  * Checks for Google Sign-In v2 api signatures.
  * @param script - The script tag to check.
- * @param existingItems - The existing items to check against.
+ * @param matches - The existing items to check against.
  * @param signatureMatches - The number of signature matches.
  * @param gsi2ModuleMatch - The number of module matches.
  * @returns The number of signature matches and the items.
  */
 const getGSIV2Matches = (
   script: ScriptTagUnderCheck,
-  existingItems: DetectedSignature[],
+  matches: DetectedSignature[],
   signatureMatches: number,
   gsi2ModuleMatch: number
 ) => {
   const content = script.content;
-  const items = existingItems;
+  let items = matches;
 
   const domainPaths = {
     'apis.google.com': ['/js/platform.js', '/js/api:client.js', '/js/api.js'],
@@ -67,7 +67,7 @@ const getGSIV2Matches = (
     };
   }
 
-  const gsiSignatures = [
+  const signatures = [
     ...GSI_V2_SIGNATURE_WEAK_MATCHES,
     ...GSI_V2_SIGNATURE_STRONG_MATCHES,
   ].map((item) => item.signature);
@@ -79,7 +79,7 @@ const getGSIV2Matches = (
   /* Match all signatures in the capture group and return surrounding the text:
    *    /(?:.{0,63}?)(signature1|signature2|signature3)(?:.{0,63}?)/g
    */
-  const captureGroup = gsiSignatures.map(escapeStringRegexp);
+  const captureGroup = signatures.map(escapeStringRegexp);
   const allCaptureGroups =
     '(?:.{0,63}?)(?<signature>' + captureGroup.join('|') + ')(?:.{0,63}?)';
   const signaturesRegex = new RegExp(allCaptureGroups, 'dg');
@@ -140,13 +140,10 @@ const getGSIV2Matches = (
     }
   );
 
-  // Audit step
-  if (
-    signatureMatches === 0 ||
-    (!isStrongSignatureFound && signatureMatches < 2)
-  ) {
+  // Reset if weak matches are less than one.
+  if (!isStrongSignatureFound && items.length < 2) {
     // Clear array of signatures
-    items.splice(0, items.length);
+    items = [];
   }
 
   return {
