@@ -56,7 +56,7 @@ const BlockedCookiesSection = ({
   return (
     <CookiesLandingContainer
       dataMapping={cookieBlockedDataMapping}
-      testId="cookies-insights"
+      testId="blocked-cookies-insights"
     >
       {!cookiesStats ||
         (cookiesStats?.firstParty.total === 0 &&
