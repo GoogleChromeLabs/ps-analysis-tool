@@ -63,10 +63,11 @@ const BlockedCookiesSection = ({
           ))}
       <CookiesMatrix
         tabCookies={affectedCookies}
-        componentData={affectedCookiesStatsComponents.legend}
+        componentData={affectedCookiesStatsComponents.blockedCookiesLegend}
         tabFrames={tabFrames}
         description=""
-        showInfoIcon={false}
+        infoIconTitle="Cookies that have been blocked by the browser.(The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
+        showInfoIcon={true}
         showHorizontalMatrix={false}
         allowExpand={false}
       />
