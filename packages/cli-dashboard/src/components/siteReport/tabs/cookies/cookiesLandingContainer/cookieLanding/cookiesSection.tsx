@@ -60,7 +60,7 @@ const CookiesSection = ({ tabCookies, tabFrames }: CookiesSectionProps) => {
         componentData={cookiesStatsComponents.legend}
         tabFrames={tabFrames}
         description=""
-        showInfoIcon={false}
+        showInfoIcon={true}
         showHorizontalMatrix={false}
         allowExpand={true}
       />
