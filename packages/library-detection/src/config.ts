@@ -51,6 +51,11 @@ import {
   jetpackCommentsDOMQuery,
   JETPACK_COMMENTS_HELP_URL,
 } from './libraries/jetpack-comments';
+import {
+  JetpackLikesAccordion,
+  jetpackLikesDOMQuery,
+  JETPACK_LIKES_HELP_URL,
+} from './libraries/jetpack-likes';
 
 const LIBRARIES = [
   {
@@ -98,6 +103,12 @@ const LIBRARIES = [
     component: JetpackCommentsAccordion,
     helpUrl: JETPACK_COMMENTS_HELP_URL,
     domQueryFunction: jetpackCommentsDOMQuery,
+  },
+  {
+    name: 'jetpack-likes',
+    component: JetpackLikesAccordion,
+    helpUrl: JETPACK_LIKES_HELP_URL,
+    domQueryFunction: jetpackLikesDOMQuery,
   },
 ];
 
