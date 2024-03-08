@@ -37,10 +37,10 @@ const JetpackLikesAccordion = ({ domQueryMatches }: AccordionProps) => {
   }
 
   return (
-    <Accordion title={'Jetpack Likes.'} isLoading={false} featuresText="">
+    <Accordion title={'Jetpack Like Button.'} isLoading={false} featuresText="">
       <p className="dark:text-bright-gray">
-        Jetpack likes widget is known to experience issues due to the phaseout
-        of third-party cookies. For more information, please visit the Jetpack{' '}
+        Jetpack like button is known to experience issues due to the phaseout of
+        third-party cookies. For more information, please visit the Jetpack{' '}
         <a
           target="_blank"
           className="text-bright-navy-blue dark:text-jordy-blue"

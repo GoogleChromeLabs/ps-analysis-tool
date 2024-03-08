@@ -39,8 +39,9 @@ const JetpackCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
   return (
     <Accordion title={'Jetpack Comments.'} isLoading={false} featuresText="">
       <p className="dark:text-bright-gray">
-        Jetpack comment is known to experience issues due to the phaseout of
-        third-party cookies. For more information, please visit the Jetpack{' '}
+        Jetpack comments widget is known to experience issues due to the
+        phaseout of third-party cookies. For more information, please visit the
+        Jetpack{' '}
         <a
           target="_blank"
           className="text-bright-navy-blue dark:text-jordy-blue"
