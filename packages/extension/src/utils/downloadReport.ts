@@ -68,7 +68,7 @@ export default async function downloadReport(tabCookies: any, tabFrames: any) {
     cookiesStatsComponents,
     tabFrames,
     showInfoIcon: true,
-    showHorizontalMatrix: true,
+    showHorizontalMatrix: false,
     blockedCookieDataMapping,
     showBlockedInfoIcon: true,
     frameStateCreator,
