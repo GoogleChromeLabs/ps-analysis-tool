@@ -88,21 +88,22 @@ const Provider = ({ children }: PropsWithChildren) => {
       isUsingCDP: newValue,
       pendingReload: true,
     });
+    setSettingsChanged(true);
   }, []);
 
   const sessionStoreChangeListener = useCallback(
     (changes: { [key: string]: chrome.storage.StorageChange }) => {
       if (changes?.['allowedNumberOfTabs']?.['newValue']) {
-        setAllowedNumberOfTabs(changes?.allowedNumberOfTabs?.newValue);
-        setSettingsChanged(true);
+        setAllowedNumberOfTabsForSettingsDisplay(
+          changes?.allowedNumberOfTabs?.newValue
+        );
       }
 
       if (
         Object.keys(changes).includes('isUsingCDP') &&
         Object.keys(changes.isUsingCDP).includes('newValue')
       ) {
-        _setIsUsingCDP(changes?.isUsingCDP?.newValue);
-        setSettingsChanged(true);
+        setIsUsingCDPForSettingsDisplay(changes?.isUsingCDP?.newValue);
       }
     },
     []
