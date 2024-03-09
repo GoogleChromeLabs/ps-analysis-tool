@@ -86,7 +86,7 @@ const ExperimentGroup = () => {
             <strong>Label:</strong> <span>{label ? label : '" "'}</span>
           </p>
           <p className="mt-3">
-            For more information about this label, please visit the{' '}
+            For more information about labels, please visit the{' '}
             <a
               className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline"
               href={addUTMParams(
