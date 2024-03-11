@@ -88,7 +88,6 @@ const Provider = ({ children }: PropsWithChildren) => {
       isUsingCDP: newValue,
       pendingReload: true,
     });
-    setSettingsChanged(true);
   }, []);
 
   const sessionStoreChangeListener = useCallback(
@@ -97,6 +96,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         setAllowedNumberOfTabsForSettingsDisplay(
           changes?.allowedNumberOfTabs?.newValue
         );
+        setSettingsChanged(true);
       }
 
       if (
@@ -104,6 +104,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         Object.keys(changes.isUsingCDP).includes('newValue')
       ) {
         setIsUsingCDPForSettingsDisplay(changes?.isUsingCDP?.newValue);
+        setSettingsChanged(true);
       }
     },
     []
