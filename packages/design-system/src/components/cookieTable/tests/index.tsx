@@ -320,7 +320,7 @@ describe('CookieTable', () => {
 
     await waitFor(() => {
       const rows = screen.getAllByTestId('body-row');
-      expect(rows.length).toBe(2);
+      expect(rows.length).toBe(3);
     });
 
     const clearFiltersButton = await screen.findByText('Clear all');
