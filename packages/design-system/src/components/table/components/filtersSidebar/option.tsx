@@ -17,9 +17,8 @@
 /**
  * External dependencies.
  */
-import React, { useCallback } from 'react';
+import React from 'react';
 import classNames from 'classnames';
-import { noop } from '@ps-analysis-tool/common';
 
 interface OptionProps {
   filterKey: string;
@@ -36,20 +35,13 @@ const Option = ({
   toggleFilterSelection,
   isExpanded,
 }: OptionProps) => {
-  const handleOnClick = useCallback(
-    (e: React.MouseEvent<HTMLLIElement>) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setTimeout(() => toggleFilterSelection(filterKey, filterValue));
-    },
-    [filterKey, filterValue, toggleFilterSelection]
-  );
-
   return (
     <li
-      className={isExpanded ? 'mx-3 mt-1' : 'ml-3 mt-1 hidden'}
+      className={classNames(
+        isExpanded ? 'mx-3 mt-1' : 'ml-3 mt-1 hidden',
+        'hover:opacity-80 transition-opacity duration-100 active:opacity-60'
+      )}
       data-testid="sub-list-item"
-      onClick={handleOnClick}
     >
       <label className="flex gap-x-2 cursor-pointer items-center">
         <input
@@ -57,14 +49,16 @@ const Option = ({
           type="checkbox"
           name={filterKey}
           className={classNames(
-            'accent-royal-blue dark:accent-orange-400 w-3 h-3 dark:bg-outer-space dark:min-h-[12px] dark:min-w-[12px]',
+            'accent-royal-blue dark:accent-orange-400 w-3 h-3 dark:bg-outer-space dark:min-h-[12px] dark:min-w-[12px] cursor-pointer',
             {
               'dark:appearance-none dark:text-manatee dark:border dark:rounded-[3px]':
                 !selected,
             }
           )}
           checked={selected}
-          onChange={noop}
+          onChange={() => {
+            toggleFilterSelection(filterKey, filterValue);
+          }}
         />
         <span className="text-asteriod-black dark:text-bright-gray leading-normal font-semi-thick">
           {String(filterValue)}
