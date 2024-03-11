@@ -75,8 +75,14 @@ export class BrowserManagement {
     this.debugLog('browser intialized');
   }
 
-  async clickOnAcceptBanner(sitePage: Page) {
-    await sitePage.evaluate(() => {
+  async clickOnAcceptBanner(url: string) {
+    const page = this.pageMap.get(url);
+
+    if (!page) {
+      throw new Error('no page with the provided id was found');
+    }
+
+    await page.evaluate(() => {
       const bannerNodes: Element[] = Array.from(
         (document.querySelector('body')?.childNodes || []) as Element[]
       )
@@ -87,7 +93,8 @@ export class BrowserManagement {
           }
           const regex =
             /\b(consent|policy|cookie policy|privacy policy|personalize|preferences)\b/;
-          return regex.test(node?.textContent.toLowerCase());
+
+          return regex.test(node.textContent.toLowerCase());
         });
 
       const buttonToClick: HTMLButtonElement[] = bannerNodes
@@ -97,7 +104,8 @@ export class BrowserManagement {
             (cnode) =>
               cnode.textContent &&
               (cnode.textContent.toLowerCase().includes('accept') ||
-                cnode.textContent.toLowerCase().includes('allow'))
+                cnode.textContent.toLowerCase().includes('allow') ||
+                cnode.textContent.toLowerCase().includes('agree'))
           );
 
           return isButtonForAccept[0];
@@ -141,7 +149,6 @@ export class BrowserManagement {
       );
       //ignore
     }
-    await this.clickOnAcceptBanner(page);
     await delay(this.pageWaitTime / 2);
 
     await page.evaluate(() => {
@@ -298,6 +305,7 @@ export class BrowserManagement {
     await Promise.all(
       urls.map(async (url) => {
         await this.navigateAndScroll(url);
+        await this.clickOnAcceptBanner(url);
       })
     );
 
