@@ -28,15 +28,20 @@ delete colors['blueGray'];
 module.exports = {
   darkMode: 'class',
   content: [
-    path.resolve(__dirname, './packages/extension/src/**/*.{tsx,js}'),
-    path.resolve(__dirname, './packages/design-system/src/**/*.{tsx,js}'),
-    path.resolve(__dirname, './packages/cli-dashboard/src/**/*.{tsx,js}'),
+    path.resolve(__dirname, './packages/extension/src/**/*.{tsx,ts,js}'),
+    path.resolve(__dirname, './packages/design-system/src/**/*.{tsx,ts,js}'),
+    path.resolve(__dirname, './packages/cli-dashboard/src/**/*.{tsx,ts,js}'),
+    path.resolve(
+      __dirname,
+      './packages/library-detection/src/**/*.{tsx,ts,js}'
+    ),
   ],
   theme: {
     extend: {
       boxShadow: {
         '3xl':
           '0px 38px 90px 0px rgba(0, 0, 0, 0.25), 0px 0px 2px 0px rgba(0, 0, 0, 0.05), 0px 0px 1px 0px rgba(0, 0, 0, 0.60)',
+        xxs: '0 -2px 2px 0 rgba(0, 0, 0, 0.1)',
       },
       keyframes: {
         'horizontal-spinner-keyframes': {
@@ -47,6 +52,15 @@ module.exports = {
       animation: {
         'horizontal-spinner': 'horizontal-spinner-keyframes 2s linear infinite',
       },
+      screens: {
+        ...defaultTheme.screens,
+        xxs: '360px',
+        xs: '480px',
+      },
+    },
+    borderRadius: {
+      ...defaultTheme.borderRadius,
+      xs: '3px',
     },
     fontFamily: {
       ...defaultTheme.fontFamily,
@@ -55,6 +69,8 @@ module.exports = {
       ...defaultTheme.fontSize,
       xxxs: '0.625rem', // 10px - Only for edge cases
       xxl: '1.375rem', // 22px
+      xsm: '0.9375rem',
+      xxs: '0.8125rem',
     },
     fontWeight: {
       ...defaultTheme.fontWeight,
@@ -126,10 +142,14 @@ module.exports = {
       'comet-grey': '#474747',
       'jet-black': '#202142',
       'warning-red': '#C33300',
+      'warning-orange': '#FE8d59',
     },
     backgroundColor: {
       ...colors,
       primary: '#FFF',
+      'google-blue': '#8AB4F8',
+      'smurf-blue': '#1967D2',
+      beteleguese: '#4285F4',
       'toggle-on': '#5CC971',
       'flagged-row-odd-dark': '#5e5108',
       'flagged-row-even-dark': '#796700',
@@ -166,7 +186,12 @@ module.exports = {
       'dynamic-grey': '#fbfbfb',
       'dirty-red': '#990000',
       'dirty-pink': '#FFD6D6',
+      'jungle-green-light': '#234F1E',
+      'jungle-green-dark': '#1C4218',
+      'leaf-green-light': '#99EDC3',
+      'leaf-green-dark': '#87DFB2',
       'eerie-black': '#1F1F1F0F',
+      'light-yellow': '#FEFCE0',
     },
     borderColor: {
       ...colors,
@@ -181,6 +206,7 @@ module.exports = {
       gainsboro: '#DADCE0',
       'chinese-silver': '#CDCDCD',
       'baby-blue-eyes': '#A8C7FA',
+      'leaf-green-dark': '#87DFB2',
       sapphire: '#0B57D0',
     },
     colors: {
@@ -194,6 +220,8 @@ module.exports = {
       'chinese-silver': '#CDCDCD',
       'charleston-green': '#292A2D',
       'outer-space': '#303942',
+      'granite-gray': '#5F6369',
+      gray: '#6E6E6E',
     },
     stroke: {
       'bright-gray': '#E8EAED',

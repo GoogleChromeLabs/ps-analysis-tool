@@ -31,17 +31,17 @@ describe('CookiesMatrix', () => {
   it('should render the cookies insights', () => {
     const tabCookies = mockResponse.tabCookies;
     const tabFrames = mockResponse.tabFrames;
+    const title = 'Title';
 
     const { getByTestId } = render(
       <CookiesMatrix
+        title="Title"
         tabCookies={tabCookies}
         componentData={cookiesStatsComponents.legend}
         tabFrames={tabFrames}
       />
     );
 
-    expect(
-      getByTestId('cookies-matrix-Cookie Classification')
-    ).toBeInTheDocument();
+    expect(getByTestId(`cookies-matrix-${title}`)).toBeInTheDocument();
   });
 });

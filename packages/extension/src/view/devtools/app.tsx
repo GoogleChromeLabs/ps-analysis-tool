@@ -26,8 +26,13 @@ import {
   useSidebar,
   type SidebarItems,
   InspectButton,
+  ToastMessage,
 } from '@ps-analysis-tool/design-system';
-import type { CookieTableData } from '@ps-analysis-tool/common';
+import {
+  ORPHANED_COOKIE_KEY,
+  type CookieTableData,
+  UNMAPPED_COOKIE_KEY,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -37,6 +42,8 @@ import { useCookieStore } from './stateProviders/syncCookieStore';
 import './app.css';
 import { Cookies } from './components';
 import useFrameOverlay from './hooks/useFrameOverlay';
+import { getCurrentTabId } from '../../utils/getCurrentTabId';
+import { useSettingsStore } from './stateProviders/syncSettingsStore';
 
 const App: React.FC = () => {
   const [sidebarWidth, setSidebarWidth] = useState(200);
@@ -53,9 +60,11 @@ const App: React.FC = () => {
     setIsInspecting,
     canStartInspecting,
     tabUrl,
+    frameHasCookies,
   } = useCookieStore(({ state, actions }) => ({
     contextInvalidated: state.contextInvalidated,
     setContextInvalidated: actions.setContextInvalidated,
+    tabCookies: state.tabCookies,
     tabFrames: state.tabFrames,
     selectedFrame: state.selectedFrame,
     setSelectedFrame: actions.setSelectedFrame,
@@ -63,12 +72,24 @@ const App: React.FC = () => {
     setIsInspecting: actions.setIsInspecting,
     canStartInspecting: state.canStartInspecting,
     tabUrl: state.tabUrl,
+    frameHasCookies: state.frameHasCookies,
   }));
+
+  const mainRef = useRef<HTMLElement>(null);
+  const toastMessageRef = useRef<HTMLDivElement>(null);
+
+  const { allowedNumberOfTabs, settingsChanged, handleSettingsChange } =
+    useSettingsStore(({ state, actions }) => ({
+      allowedNumberOfTabs: state.allowedNumberOfTabs,
+      settingsChanged: state.settingsChanged,
+      handleSettingsChange: actions.handleSettingsChange,
+    }));
 
   const listenToMouseChange = useCallback(() => {
     if (contextInvalidatedRef.current) {
       if (!chrome.runtime?.id) {
         setContextInvalidated(true);
+        localStorage.setItem('contextInvalidated', 'true');
       }
     }
   }, [setContextInvalidated]);
@@ -121,21 +142,44 @@ const App: React.FC = () => {
       psData.children['cookies'].panel = (
         <Cookies setFilteredCookies={setFilteredCookies} />
       );
-      psData.children['cookies'].children = Object.keys(tabFrames || {}).reduce(
-        (acc, url) => {
+      psData.children['cookies'].children = Object.keys(tabFrames || {})
+        .filter((url) => {
+          if (url === ORPHANED_COOKIE_KEY) {
+            return frameHasCookies[url];
+          }
+
+          if (url === UNMAPPED_COOKIE_KEY) {
+            return frameHasCookies[url];
+          }
+
+          return true;
+        })
+        .reduce<SidebarItems>((acc, url) => {
+          let popupTitle = `Cookies used by frames from ${url}`;
+          let infoIconDescription = '';
+          if (url === ORPHANED_COOKIE_KEY) {
+            popupTitle = infoIconDescription =
+              'Frames that set these cookies were removed from the DOM, leaving these cookies orphaned.';
+          }
+
+          if (url === UNMAPPED_COOKIE_KEY) {
+            popupTitle = infoIconDescription =
+              'Cookies that could not be mapped to any frame.';
+          }
+
           acc[url] = {
             title: url,
-            popupTitle: `Cookies used by frames from ${url}`,
+            popupTitle,
             panel: <Cookies setFilteredCookies={setFilteredCookies} />,
             icon: <CookieIcon />,
             selectedIcon: <CookieIconWhite />,
+            infoIconDescription,
             children: {},
+            isBlurred: !frameHasCookies?.[url],
           };
 
           return acc;
-        },
-        {} as SidebarItems
-      );
+        }, {});
 
       const showInspectButton =
         canStartInspecting && Boolean(Object.keys(tabFrames || {}).length);
@@ -156,6 +200,7 @@ const App: React.FC = () => {
     });
   }, [
     canStartInspecting,
+    frameHasCookies,
     isInspecting,
     isKeySelected,
     isSidebarFocused,
@@ -213,6 +258,25 @@ const App: React.FC = () => {
     [updateSelectedItemKey]
   );
 
+  useEffect(() => {
+    (async () => {
+      const localStorageFlag = localStorage.getItem('contextInvalidated');
+
+      if (
+        localStorageFlag &&
+        localStorageFlag === 'true' &&
+        allowedNumberOfTabs === 'unlimited'
+      ) {
+        const tabId = await getCurrentTabId();
+
+        if (tabId) {
+          chrome.tabs.reload(Number(tabId));
+          localStorage.removeItem('contextInvalidated');
+        }
+      }
+    })();
+  }, [allowedNumberOfTabs]);
+
   useFrameOverlay(filteredCookies, handleUpdate);
 
   return (
@@ -226,7 +290,7 @@ const App: React.FC = () => {
         </div>
       )}
       {!contextInvalidated && (
-        <div className="w-full h-full flex flex-row">
+        <div className="w-full h-full flex flex-row z-1">
           <Resizable
             size={{ width: sidebarWidth, height: '100%' }}
             defaultSize={{ width: '200px', height: '100%' }}
@@ -253,8 +317,26 @@ const App: React.FC = () => {
               visibleWidth={sidebarWidth}
             />
           </Resizable>
-          <main className="h-full flex-1 overflow-auto">
-            <div className="min-w-[40rem] h-full">{activePanel}</div>
+          <main
+            ref={mainRef}
+            onScroll={() => {
+              if (mainRef.current && toastMessageRef.current) {
+                toastMessageRef.current.style.bottom =
+                  '-' + mainRef.current.scrollTop + 'px';
+              }
+            }}
+            className="h-full flex-1 overflow-auto relative"
+          >
+            <div className="min-w-[40rem] h-full z-1">{activePanel}</div>
+            {settingsChanged && (
+              <ToastMessage
+                ref={toastMessageRef}
+                additionalStyles="text-sm"
+                text="Settings changed, please reload all tabs."
+                onClick={handleSettingsChange}
+                textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
+              />
+            )}
           </main>
         </div>
       )}

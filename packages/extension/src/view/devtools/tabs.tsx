@@ -41,11 +41,18 @@ import {
   PrivacySandboxIcon,
   PrivacySandboxIconWhite,
   type SidebarItems,
+  InfoIcon,
 } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
+// @ts-ignore
+// eslint-disable-next-line import/no-relative-packages
+import SettingsTab from '../../../../../assets/icons/settings-tab.svg';
+// @ts-ignore
+// eslint-disable-next-line import/no-relative-packages
+import SettingsTabWhite from '../../../../../assets/icons/settings-tab-white.svg';
 import {
   SiteBoundaries,
   Chips,
@@ -57,6 +64,8 @@ import {
   BounceTracking,
   Fingerprinting,
   PrivacySandbox,
+  Settings,
+  FacilitatedTesting,
 } from './components';
 
 const TABS: SidebarItems = {
@@ -141,6 +150,22 @@ const TABS: SidebarItems = {
         },
       },
     },
+  },
+  facilitatedTesting: {
+    title: 'Facilitated Testing',
+    panel: <FacilitatedTesting />,
+    icon: <InfoIcon className="fill-gray" />,
+    selectedIcon: <InfoIcon className="fill-white" />,
+    dropdownOpen: false,
+    children: {},
+  },
+  settings: {
+    title: 'Settings',
+    panel: <Settings />,
+    icon: <SettingsTab />,
+    selectedIcon: <SettingsTabWhite />,
+    dropdownOpen: false,
+    children: {},
   },
 };
 

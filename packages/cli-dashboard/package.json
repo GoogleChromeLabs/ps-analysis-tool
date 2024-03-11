@@ -1,6 +1,6 @@
 {
   "name": "@ps-analysis-tool/cli-dashboard",
-  "version": "0.4.0",
+  "version": "0.5.2",
   "description": "Dashboard for visualizing cli analysis output",
   "repository": {
     "type": "git",
@@ -12,7 +12,7 @@
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool#readme",
   "scripts": {
-    "serve": "node ./server/index.cjs",
+    "start": "webpack-dev-server --config webpack.config.cjs",
     "build": "webpack --config webpack.config.cjs",
     "dev": "webpack-dev-server --config webpack.config.cjs"
   },

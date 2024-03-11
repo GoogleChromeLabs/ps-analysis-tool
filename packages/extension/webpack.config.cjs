@@ -33,7 +33,7 @@ const root = {
       patterns: [
         { from: 'src/manifest.json', to: '' },
         { from: 'icons', to: 'icons' },
-        { from: '../../third_party', to: 'third_party' },
+        { from: '../../assets', to: 'assets' },
         { from: '../../data', to: 'data' },
       ],
     }),
@@ -49,6 +49,7 @@ const devTools = {
   entry: {
     index: './src/view/devtools/index.tsx',
     devtools: './src/view/devtools/devtools.ts',
+    worker: './src/worker/index.ts',
   },
   output: {
     path: path.resolve(__dirname, '../../dist/extension/devtools'),
@@ -97,26 +98,4 @@ const popup = {
   ...commonConfig,
 };
 
-const settings = {
-  entry: {
-    index: './src/view/settings/index.tsx',
-  },
-  output: {
-    path: path.resolve(__dirname, '../../dist/extension/settings'),
-    filename: 'index.js',
-  },
-  plugins: [
-    new WebpackBar({
-      name: 'Settings',
-      color: '#fcd8ba',
-    }),
-    new HtmlWebpackPlugin({
-      title: 'PSAT Settings',
-      template: './src/view/settings/index.html',
-      inject: false,
-    }),
-  ],
-  ...commonConfig,
-};
-
-module.exports = [root, devTools, popup, settings];
+module.exports = [root, devTools, popup];

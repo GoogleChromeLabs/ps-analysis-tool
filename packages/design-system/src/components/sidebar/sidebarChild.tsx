@@ -17,7 +17,11 @@
  * External dependencies.
  */
 import React, { useEffect, useRef } from 'react';
-import { ArrowDown, ArrowDownWhite } from '@ps-analysis-tool/design-system';
+import {
+  ArrowDown,
+  ArrowDownWhite,
+  InfoIcon,
+} from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
@@ -96,7 +100,7 @@ const SidebarChild = ({
               ? 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
               : 'bg-gainsboro dark:bg-outer-space'
             : 'bg-white dark:bg-raisin-black'
-        } cursor-pointer`}
+        } cursor-pointer ${sidebarItem.isBlurred ? 'opacity-50' : ''}`}
         style={{ paddingLeft: recursiveStackIndex * 16 + 12 }}
       >
         {Object.keys(sidebarItem.children)?.length !== 0 && (
@@ -128,7 +132,20 @@ const SidebarChild = ({
             )}
           </div>
         )}
-        <p className="whitespace-nowrap pr-1">{sidebarItem.title}</p>
+        <p className="flex flex-row items-center justify-center whitespace-nowrap gap-x-1 pr-1">
+          {sidebarItem.title}
+          {sidebarItem.infoIconDescription ? (
+            <span title={sidebarItem.infoIconDescription}>
+              <InfoIcon
+                className={`${
+                  isKeySelected(itemKey) && isSidebarFocused
+                    ? 'fill-white'
+                    : 'fill-gray'
+                }`}
+              />
+            </span>
+          ) : null}
+        </p>
         <div
           className="absolute"
           style={{

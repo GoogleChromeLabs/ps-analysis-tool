@@ -34,6 +34,7 @@ interface LandingPageProps {
   children?: ReactNode;
   psInfoKey?: PSInfoKeyType;
   iframeSrc?: string;
+  contentPanel?: ReactNode;
   iframeBorderClass?: string;
   extraClasses?: string;
 }
@@ -45,6 +46,7 @@ const LandingPage = ({
   iframeBorderClass,
   children,
   extraClasses,
+  contentPanel,
 }: LandingPageProps) => {
   const [loading, setLoading] = useState(iframeSrc ? true : false);
   const [open, setOpen] = useState(true);
@@ -60,7 +62,7 @@ const LandingPage = ({
       >
         <div className="p-4">
           <button
-            className="flex gap-2 text-2xl font-bold items-baseline dark:text-bright-gray cursor-pointer"
+            className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray cursor-pointer"
             onClick={() => setOpen((prevOpen) => !prevOpen)}
           >
             {title && <h1 className="text-left">{title}</h1>}
@@ -76,9 +78,11 @@ const LandingPage = ({
             id="#__psat-collapsible-content"
             className={classNames(
               { hidden: !open },
-              extraClasses,
               'flex flex-col gap-6 divide-y divide-american-silver dark:divide-quartz px-4 py-6',
-              { 'border-b border-american-silver dark:border-quartz': children }
+              {
+                'border-b border-american-silver dark:border-quartz': children,
+              },
+              extraClasses
             )}
           >
             {iframeSrc && (
@@ -89,12 +93,13 @@ const LandingPage = ({
                   setLoading(false);
                 }}
                 className={classNames(
-                  'w-full md:w-[70%] md:m-auto rounded-xl',
+                  'w-full md:w-[95%] md:m-auto rounded-xl',
                   iframeBorderClass
                 )}
               />
             )}
             {psInfoKey && <InfoCard infoKey={psInfoKey} />}
+            <div>{contentPanel}</div>
           </div>
 
           {children && (

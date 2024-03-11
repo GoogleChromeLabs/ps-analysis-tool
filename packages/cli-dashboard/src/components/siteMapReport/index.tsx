@@ -30,23 +30,25 @@ import {
   type TabFrames,
   type TechnologyData,
   UNKNOWN_FRAME_KEY,
+  type CookieFrameStorageType,
+  type CompleteJson,
 } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import type { CookieFrameStorageType, CompleteJson } from '../../types';
 import SiteReport from '../siteReport';
 import SiteMapAffectedCookies from './sitemapAffectedCookies';
 import CookiesLandingContainer from '../siteReport/tabs/cookies/cookiesLandingContainer';
 import reshapeCookies from '../utils/reshapeCookies';
 import sidebarData from './sidebarData';
+import { generateSiteMapReportandDownload } from '../utils/reportDownloader';
 
 interface SiteMapReportProps {
   landingPageCookies: CookieFrameStorageType;
   cookies: CookieFrameStorageType;
   technologies: TechnologyData[];
-  completeJson: CompleteJson | null;
+  completeJson: CompleteJson[] | null;
 }
 
 const SiteMapReport = ({
@@ -62,7 +64,7 @@ const SiteMapReport = ({
     const _sites = new Set<string>();
     Object.values(cookies).forEach((cookieData) => {
       Object.values(cookieData).forEach((cookie) => {
-        _sites.add(cookie.pageUrl);
+        _sites.add(cookie.pageUrl || '');
       });
     });
 
@@ -134,6 +136,13 @@ const SiteMapReport = ({
           tabCookies={reshapedCookies}
           tabFrames={frames}
           affectedCookies={affectedCookies}
+          downloadReport={() => {
+            if (!Array.isArray(completeJson)) {
+              return;
+            }
+
+            generateSiteMapReportandDownload(completeJson);
+          }}
         />
       );
 

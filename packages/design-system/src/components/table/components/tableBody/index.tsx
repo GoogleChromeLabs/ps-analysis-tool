@@ -24,30 +24,44 @@ import classNames from 'classnames';
  * Internal dependencies.
  */
 import BodyRow from './bodyRow';
-import type { TableData, TableOutput, TableRow } from '../../useTable';
+import { useTable } from '../../useTable';
 
 interface TableBodyProps {
-  table: TableOutput;
-  getRowObjectKey: (row: TableRow) => string;
   isRowFocused: boolean;
   setIsRowFocused: (state: boolean) => void;
   selectedKey: string | undefined | null;
-  onRowClick: (key: TableData | null) => void;
 }
 
 const TableBody = ({
-  table,
-  getRowObjectKey,
   isRowFocused,
   setIsRowFocused,
   selectedKey,
-  onRowClick,
 }: TableBodyProps) => {
+  const {
+    rows,
+    columns,
+    onRowClick,
+    onRowContextMenu,
+    getRowObjectKey,
+    conditionalTableRowClassesHandler,
+    hasVerticalBar,
+  } = useTable(({ state, actions }) => ({
+    rows: state.rows,
+    columns: state.columns,
+    onRowClick: actions.onRowClick,
+    onRowContextMenu: actions.onRowContextMenu,
+    getRowObjectKey: actions.getRowObjectKey,
+    conditionalTableRowClassesHandler:
+      actions.conditionalTableRowClassesHandler,
+    hasVerticalBar: actions.hasVerticalBar,
+  }));
+
   const tableBodyRef = useRef(null);
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>, index: number) => {
       event.preventDefault();
+
       //@ts-ignore - the `children` property will be available on the `current` property.
       const currentRow = tableBodyRef.current?.children.namedItem(index);
       let newRowId: string | undefined;
@@ -73,13 +87,13 @@ const TableBody = ({
         return;
       }
 
-      const newRow = table.rows.find((_, idx) => idx.toString() === newRowId);
+      const newRow = rows.find((_, idx) => idx.toString() === newRowId);
 
       if (newRow) {
         onRowClick(newRow?.originalData);
       }
     },
-    [onRowClick, table.rows]
+    [onRowClick, rows]
   );
 
   const handleEmptyRowKeyDown = useCallback(
@@ -87,13 +101,13 @@ const TableBody = ({
       event.preventDefault();
       event.stopPropagation();
 
-      const rowsLength = table.rows.length;
+      const rowsLength = rows.length;
 
       if (event.key === 'ArrowDown' || !rowsLength) {
         return;
       }
 
-      const newRow = table.rows[rowsLength - 1];
+      const newRow = rows[rowsLength - 1];
       // @ts-ignore - the `children` property will be available on the `current` property.
       const rowElement = tableBodyRef.current?.children.namedItem(
         rowsLength - 1
@@ -107,7 +121,7 @@ const TableBody = ({
       rowElement.focus();
       onRowClick(newRow?.originalData);
     },
-    [onRowClick, table.rows]
+    [onRowClick, rows]
   );
 
   const tableRowClassName = classNames(
@@ -117,27 +131,38 @@ const TableBody = ({
         ? 'bg-gainsboro dark:bg-outer-space'
         : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
     selectedKey !== null &&
-      (table.rows.length % 2
+      (rows.length % 2
         ? 'bg-anti-flash-white dark:bg-charleston-green'
         : 'bg-white dark:bg-raisin-black')
   );
 
   return (
-    <div ref={tableBodyRef} className="h-full flex flex-col">
-      {table.rows.map((row, index) => (
+    <div
+      ref={tableBodyRef}
+      className="h-full flex flex-col overflow-x-hidden overflow-y-auto"
+    >
+      {rows.map((row, index) => (
         <BodyRow
           key={index}
           index={index}
           row={row}
-          columns={table.columns}
+          columns={columns}
           selectedKey={selectedKey}
-          getRowObjectKey={getRowObjectKey}
           isRowFocused={isRowFocused}
+          getExtraClasses={() => {
+            return (
+              conditionalTableRowClassesHandler?.(row, isRowFocused, index) ??
+              ''
+            );
+          }}
+          hasVerticalBar={hasVerticalBar?.(row) ?? false}
+          getRowObjectKey={getRowObjectKey}
           onRowClick={() => {
             onRowClick(row?.originalData);
             setIsRowFocused(true);
           }}
           onKeyDown={handleKeyDown}
+          onRowContextMenu={onRowContextMenu}
         />
       ))}
       <div
@@ -150,12 +175,12 @@ const TableBody = ({
         }}
         onKeyDown={handleEmptyRowKeyDown}
       >
-        {table.columns.map(({ width }, index) => (
+        {columns.map(({ width }, index) => (
           <div
             key={index}
             className="px-1 py-px outline-0 flex-1"
             style={{
-              maxWidth: width,
+              minWidth: width,
             }}
           />
         ))}
@@ -166,12 +191,12 @@ const TableBody = ({
           setIsRowFocused(false);
         }}
       >
-        {table.columns.map(({ width }, index) => (
+        {columns.map(({ width }, index) => (
           <div
             key={index}
             className="px-1 py-px outline-0 h-full flex-1"
             style={{
-              maxWidth: width,
+              minWidth: width,
             }}
           />
         ))}

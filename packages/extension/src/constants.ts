@@ -16,31 +16,18 @@
 export const ALLOWED_NUMBER_OF_TABS = 1;
 export const WEBPAGE_PORT_NAME = 'psat-webpage';
 export const DEVTOOL_PORT_NAME = 'psat-devtool';
-export const BLOCKED_REASON_LIST = [
-  'SecureOnly',
-  'DomainMismatch',
-  'NotOnPath',
-  'SameSiteStrict',
-  'SameSiteLax',
-  'SameSiteUnspecifiedTreatedAsLax',
-  'SameSiteNoneInsecure',
-  'UserPreferences',
-  'ThirdPartyPhaseout',
-  'ThirdPartyBlockedInFirstPartySet',
-  'InvalidDomain',
-  'UnknownError',
-  'SchemefulSameSiteStrict',
-  'SchemefulSameSiteLax',
-  'SchemefulSameSiteUnspecifiedTreatedAsLax',
-  'SamePartyFromCrossPartyContext',
-  'NameValuePairExceedsMaxSize',
-  'ExcludeSameSiteUnspecifiedTreatedAsLax',
-  'ExcludeSameSiteNoneInsecure',
-  'ExcludeSameSiteLax',
-  'ExcludeSameSiteStrict',
-  'ExcludeInvalidSameParty',
-  'ExcludeSamePartyCrossPartyContext',
-  'ExcludeDomainNonASCII',
-  'ExcludeThirdPartyCookieBlockedInFirstPartySet',
-  'ExcludeThirdPartyPhaseout',
+
+export const SETTING_PAGE_CONTROLS = [
+  {
+    id: 'enableCDP',
+    heading: 'Enable CDP',
+    description:
+      'The Chrome DevTools Protocol allows for tools to instrument, inspect, debug and profile Chromium, Chrome and other Blink-based browsers. <a class="text-bright-navy-blue dark:text-jordy-blue" href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/PSAT-Settings-and-Permissions#enabling-chrome-devtools-protocol-in-psat" target="_blank">Learn More.</a>',
+  },
+  {
+    id: 'multitabDebugging',
+    heading: 'Multitab Debugging',
+    description:
+      "The PSAT tool is designed for efficient single-tab analysis. While <a class='text-bright-navy-blue dark:text-jordy-blue' href='https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/PSAT-Settings-and-Permissions#multi-tab-debugging' target='_blank'>multi-tab debugging</a> is available for more comprehensive analysis, it is intended for examining 2-3 tabs simultaneously. Using more tabs may impact the tool's responsiveness.",
+  },
 ];

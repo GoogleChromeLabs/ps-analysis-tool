@@ -20,13 +20,17 @@ import type { Protocol } from 'devtools-protocol';
 /**
  * Internal dependencies.
  */
-import type { CookieData, CookieDatabase } from '../cookies.types';
+import {
+  REQUEST_EVENT,
+  type CookieData,
+  type CookieDatabase,
+} from '../cookies.types';
 import calculateEffectiveExpiryDate from './calculateEffectiveExpiryDate';
 import findAnalyticsMatch from './findAnalyticsMatch';
 import isFirstParty from './isFirstParty';
 
 /**
- *
+ * Parses Network.requestWillBeSentExtraInfo to get extra information about a cookie.
  * @param {object} request Request to be parsed to get extra information about a cookie.
  * @param {object} cookieDB Cookie database to find analytics from.
  * @param {object} requestMap An object for requestId to url.
@@ -55,27 +59,40 @@ export default function parseRequestWillBeSentExtraInfo(
 
     if (cookie?.domain) {
       domain = cookie?.domain;
-    } else if (!cookie?.domain && requestMap[request?.requestId]) {
-      domain = new URL(requestMap[request?.requestId]).hostname;
-      url = requestMap[request?.requestId] ?? '';
+    } else if (!cookie?.domain && url) {
+      domain = new URL(url).hostname;
     }
 
-    const singleCookie = {
-      isBlocked: !(blockedReasons.length === 0),
+    const singleCookie: CookieData = {
+      isBlocked: blockedReasons.length !== 0,
       parsedCookie: {
         ...cookie,
         expires: effectiveExpirationDate,
         samesite: cookie.sameSite?.toLowerCase() ?? '',
         domain,
       },
+      networkEvents: {
+        requestEvents: [
+          {
+            type: REQUEST_EVENT.CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO,
+            requestId: request.requestId,
+            url: url,
+            blocked: blockedReasons.length !== 0,
+            timeStamp: Date.now(),
+          },
+        ],
+        responseEvents: [],
+      },
       blockedReasons,
-      analytics: cookieDB ? findAnalyticsMatch(cookie.name, cookieDB) : null,
+      analytics: cookieDB ? findAnalyticsMatch(cookie.name, cookieDB) : null, // In case CDP gets cookie first.
       url,
       headerType: 'request' as CookieData['headerType'],
       isFirstParty: isFirstParty(domain, tabUrl),
       frameIdList: [],
     };
+
     cookies.push(singleCookie);
   });
+
   return cookies;
 }

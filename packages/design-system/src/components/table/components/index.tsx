@@ -19,36 +19,33 @@
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Resizable } from 're-resizable';
+
 /**
  * Internal dependencies.
  */
 import TableHeader from './tableHeader';
 import TableBody from './tableBody';
 import ColumnMenu from './columnMenu';
-import { TableData, TableOutput, TableRow } from '../useTable';
+import { useTable } from '../useTable';
 import TableTopBar from './tableTopBar';
 import ChipsBar from './filtersSidebar/chips';
 import FiltersSidebar from './filtersSidebar';
 
 interface TableProps {
-  table: TableOutput;
   selectedKey: string | undefined | null;
-  getRowObjectKey: (row: TableRow) => string;
-  onRowClick: (row: TableData | null) => void;
-  showTopBar?: boolean;
   hideFiltering?: boolean;
-  extraInterfaceToTopBar?: React.ReactNode;
+  extraInterfaceToTopBar?: () => React.JSX.Element;
 }
 
 const Table = ({
-  table,
   selectedKey,
-  getRowObjectKey,
-  onRowClick,
-  showTopBar = false,
   hideFiltering = false,
   extraInterfaceToTopBar,
 }: TableProps) => {
+  const { tableContainerRef } = useTable(({ state }) => ({
+    tableContainerRef: state.tableContainerRef,
+  }));
+
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
   const [showFilterSidebar, setShowFilterSidebar] = useState(false);
   const [columnPosition, setColumnPosition] = useState({
@@ -68,6 +65,7 @@ const Table = ({
       }
     };
     document.addEventListener('click', handleClickOutside, true);
+
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
@@ -92,23 +90,13 @@ const Table = ({
 
   return (
     <div className="w-full h-full flex flex-col">
-      {showTopBar && (
-        <TableTopBar
-          searchValue={table.searchValue}
-          setSearchValue={table.setSearchValue}
-          showFilterSidebar={showFilterSidebar}
-          hideFiltering={hideFiltering}
-          disableFiltering={table.rows.length === 0 && !table.isFiltering}
-          setShowFilterSidebar={setShowFilterSidebar}
-          cookiesCount={table.rows.length}
-          extraInterface={extraInterfaceToTopBar}
-        />
-      )}
-      <ChipsBar
-        selectedFilters={table.selectedFilters}
-        toggleFilterSelection={table.toggleFilterSelection}
-        resetFilters={table.resetFilters}
+      <TableTopBar
+        showFilterSidebar={showFilterSidebar}
+        hideFiltering={hideFiltering}
+        setShowFilterSidebar={setShowFilterSidebar}
+        extraInterface={extraInterfaceToTopBar}
       />
+      <ChipsBar />
       <div className="w-full flex-1 overflow-hidden h-full flex divide-x divide-american-silver dark:divide-quartz">
         {showFilterSidebar && (
           <Resizable
@@ -117,43 +105,32 @@ const Table = ({
             enable={{
               right: true,
             }}
-            className={`${
-              table.rows.length === 0 && !table.isFiltering ? 'hidden' : 'block'
-            }`}
           >
-            <FiltersSidebar
-              filters={table.filters}
-              toggleFilterSelection={table.toggleFilterSelection}
-            />
+            <FiltersSidebar />
           </Resizable>
         )}
         <div
-          ref={table.tableContainerRef}
+          ref={tableContainerRef}
           className="relative h-full w-full overflow-auto"
         >
           <ColumnMenu
-            table={table}
             open={showColumnsMenu}
             onClose={setShowColumnsMenu}
             position={columnPosition}
           />
           <div
-            className="h-full w-full overflow-auto min-w-[70rem]"
+            className="h-full w-full overflow-hidden min-w-[70rem] flex flex-col"
             ref={tableRef}
           >
             <TableHeader
-              table={table}
               setColumnPosition={setColumnPosition}
               onRightClick={handleRightClick}
               setIsRowFocused={setIsRowFocused}
             />
             <TableBody
-              table={table}
-              getRowObjectKey={getRowObjectKey}
               isRowFocused={isRowFocused}
               setIsRowFocused={setIsRowFocused}
               selectedKey={selectedKey}
-              onRowClick={onRowClick}
             />
           </div>
         </div>

@@ -19,16 +19,6 @@ declare module '*.svg' {
   export default ReactComponent;
 }
 
-declare global {
-  interface Document {
-    browsingTopics(): Promise<Array<{ [key: string]: string | number }>>;
-    featurePolicy: {
-      allowsFeature: (arg0: string) => boolean;
-    };
-    prerendering?: boolean;
-  }
-}
-
 export type RelatedWebsiteSetType = {
   primary: string;
   contact: string;

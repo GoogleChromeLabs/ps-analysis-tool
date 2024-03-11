@@ -14,31 +14,41 @@
  * limitations under the License.
  */
 
-export const tempSinglePageData = {
+/**
+ * External dependencies
+ */
+import { UNKNOWN_FRAME_KEY, type CompleteJson } from '@ps-analysis-tool/common';
+
+export const tempSinglePageData: CompleteJson = {
   pageUrl: 'https://edition.cnn.com/sitemaps/sitemap-section.xml',
   cookieData: {
     'https://edition.cnn.com': {
       cookiesCount: 1,
       frameCookies: {
         'countryCode:.cnn.com:/': {
-          name: 'countryCode',
-          domain: '.cnn.com',
-          path: '/',
-          value: 'IN',
-          sameSite: 'None',
-          expires: 'Session',
-          httpOnly: false,
-          secure: true,
+          parsedCookie: {
+            name: 'countryCode',
+            domain: '.cnn.com',
+            path: '/',
+            value: 'IN',
+            sameSite: 'None',
+            expires: 'Session',
+            httpOnly: false,
+            secure: true,
+          },
+          analytics: {
+            platform: 'Unknown',
+            category: 'Uncategorized',
+            GDPR: '',
+            description: '',
+          },
+          url: '',
           isBlocked: false,
-          platform: 'Unknown',
-          category: 'Uncategorized',
-          GDPR: '',
-          description: '',
           isFirstParty: true,
         },
       },
     },
-    'Unknown frame(s)': {
+    [UNKNOWN_FRAME_KEY]: {
       frameCookies: {},
       cookiesCount: 0,
     },
@@ -64,7 +74,7 @@ export const tempSinglePageData = {
   ],
 };
 
-export const tempMultiPageData = [
+export const tempMultiPageData: CompleteJson[] = [
   {
     pageUrl: 'https://www.cnn.com/index.html',
     technologyData: [
@@ -91,24 +101,29 @@ export const tempMultiPageData = [
         cookiesCount: 1,
         frameCookies: {
           'countryCode:.cnn.com:/': {
-            name: 'countryCode',
-            domain: '.cnn.com',
-            path: '/',
-            value: 'IN',
-            sameSite: 'None',
-            expires: 'Session',
-            httpOnly: false,
-            secure: true,
+            parsedCookie: {
+              name: 'countryCode',
+              domain: '.cnn.com',
+              path: '/',
+              value: 'IN',
+              sameSite: 'None',
+              expires: 'Session',
+              httpOnly: false,
+              secure: true,
+            },
+            analytics: {
+              platform: 'Unknown',
+              category: 'Uncategorized',
+              GDPR: '',
+              description: '',
+            },
+            url: '',
             isBlocked: false,
-            platform: 'Unknown',
-            category: 'Uncategorized',
-            GDPR: '',
-            description: '',
             isFirstParty: true,
           },
         },
       },
-      'Unknown frame(s)': {
+      [UNKNOWN_FRAME_KEY]: {
         frameCookies: {},
         cookiesCount: 1,
       },
@@ -140,24 +155,29 @@ export const tempMultiPageData = [
         cookiesCount: 1,
         frameCookies: {
           'countryCode:.cnn.com:/': {
-            name: 'countryCode',
-            domain: '.cnn.com',
-            path: '/',
-            value: 'IN',
-            sameSite: 'None',
-            expires: 'Session',
-            httpOnly: false,
-            secure: true,
+            parsedCookie: {
+              name: 'countryCode',
+              domain: '.cnn.com',
+              path: '/',
+              value: 'IN',
+              sameSite: 'None',
+              expires: 'Session',
+              httpOnly: false,
+              secure: true,
+            },
+            analytics: {
+              platform: 'Unknown',
+              category: 'Uncategorized',
+              GDPR: '',
+              description: '',
+            },
+            url: '',
             isBlocked: false,
-            platform: 'Unknown',
-            category: 'Uncategorized',
-            GDPR: '',
-            description: '',
             isFirstParty: true,
           },
         },
       },
-      'Unknown frame(s)': {
+      [UNKNOWN_FRAME_KEY]: {
         frameCookies: {},
         cookiesCount: 1,
       },

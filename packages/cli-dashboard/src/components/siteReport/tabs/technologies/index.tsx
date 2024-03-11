@@ -21,13 +21,13 @@ import React, { useMemo, useState } from 'react';
 import { Resizable } from 're-resizable';
 import {
   Table,
-  useTable,
   type TableColumn,
   type InfoType,
   type TableRow,
   type TableFilter,
+  TableProvider,
 } from '@ps-analysis-tool/design-system';
-import type { TechnologyData } from '@ps-analysis-tool/common';
+import { noop, type TechnologyData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies
@@ -54,7 +54,11 @@ const Technologies = ({ selectedSite }: TechnologiesProps) => {
       {
         header: 'Description',
         accessorKey: 'description',
-        cell: (info: InfoType) => <p title={info as string}>{info}</p>,
+        cell: (info: InfoType) => (
+          <p title={info as string} className="truncate">
+            {info}
+          </p>
+        ),
       },
       {
         header: 'Confidence',
@@ -90,14 +94,6 @@ const Technologies = ({ selectedSite }: TechnologiesProps) => {
     return 'technologyListing';
   }, [selectedSite]);
 
-  const table = useTable({
-    data,
-    tableColumns,
-    tableFilterData: filters,
-    tableSearchKeys: searchKeys,
-    tablePersistentSettingsKey,
-  });
-
   return (
     <div className="w-full h-full text-outer-space-crayola border-x border-american-silver dark:border-quartz flex flex-col">
       <Resizable
@@ -115,34 +111,44 @@ const Technologies = ({ selectedSite }: TechnologiesProps) => {
         }}
         className="h-full flex"
       >
-        <Table
-          table={table}
-          hideFiltering={true}
-          showTopBar={true}
-          selectedKey={selectedRow?.slug}
+        <TableProvider
+          data={data}
+          tableColumns={tableColumns}
+          tableFilterData={filters}
+          tableSearchKeys={searchKeys}
+          tablePersistentSettingsKey={tablePersistentSettingsKey}
           onRowClick={(row) => {
             setSelectedRow(row as TechnologyData);
           }}
+          onRowContextMenu={noop}
           getRowObjectKey={(row: TableRow) => {
             return (row.originalData as TechnologyData).slug;
           }}
-        />
+        >
+          <Table hideFiltering={true} selectedKey={selectedRow?.slug} />
+        </TableProvider>
       </Resizable>
       <div className="flex-1 border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem]">
         {selectedRow ? (
           <div className="text-xs py-1 px-1.5">
-            <p className="font-bold text-granite-gray dark:text-manatee mb-1 text-semibold flex items-center">
-              <span>Technology Details</span>
-            </p>
-            <p className="mb-4 break-words text-outer-space-crayola dark:text-bright-gray">
-              {selectedRow.name}
-            </p>
-            <p className="font-bold text-granite-gray dark:text-manatee mb-1">
-              Description
-            </p>
-            <p className="text-outer-space-crayola dark:text-bright-gray">
-              {selectedRow.description}
-            </p>
+            {selectedRow.name && (
+              <>
+                <p className="font-bold text-granite-gray dark:text-manatee mb-1 text-semibold flex items-center">
+                  <span>Technology Details</span>
+                </p>
+                <p className="mb-4 break-words text-outer-space-crayola dark:text-bright-gray">
+                  {selectedRow.name}
+                </p>
+              </>
+            )}
+            <>
+              <p className="font-bold text-granite-gray dark:text-manatee mb-1">
+                Description
+              </p>
+              <p className="text-outer-space-crayola dark:text-bright-gray">
+                {selectedRow?.description || 'No description available.'}
+              </p>
+            </>
           </div>
         ) : (
           <div className="h-full p-8 flex items-center">

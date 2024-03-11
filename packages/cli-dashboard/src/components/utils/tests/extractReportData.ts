@@ -15,6 +15,10 @@
  */
 
 /**
+ * External dependencies
+ */
+import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
+/**
  * Internal dependencies
  */
 import extractReportData from '../extractReportData';
@@ -34,43 +38,51 @@ describe('extractReportData', () => {
       cookies: {
         'https://edition.cnn.com': {
           ['countryCode:.cnn.com:/https://www.cnn.com/index.html']: {
-            name: 'countryCode',
-            domain: '.cnn.com',
-            path: '/',
-            value: 'IN',
-            sameSite: 'None',
-            expires: 'Session',
-            httpOnly: false,
-            secure: true,
-            isBlocked: false,
-            platform: 'Unknown',
-            category: 'Uncategorized',
-            GDPR: '',
-            description: '',
-            isFirstParty: true,
+            parsedCookie: {
+              name: 'countryCode',
+              domain: '.cnn.com',
+              path: '/',
+              value: 'IN',
+              sameSite: 'None',
+              expires: 'Session',
+              httpOnly: false,
+              secure: true,
+            },
+            analytics: {
+              platform: 'Unknown',
+              category: 'Uncategorized',
+              GDPR: '',
+              description: '',
+            },
+            url: '',
             pageUrl: 'https://www.cnn.com/index.html',
-            frameUrl: 'https://edition.cnn.com',
+            isBlocked: false,
+            isFirstParty: true,
           },
           ['countryCode:.cnn.com:/https://edition.cnn.com/index.html']: {
-            name: 'countryCode',
-            domain: '.cnn.com',
-            path: '/',
-            value: 'IN',
-            sameSite: 'None',
-            expires: 'Session',
-            httpOnly: false,
-            secure: true,
-            isBlocked: false,
-            platform: 'Unknown',
-            category: 'Uncategorized',
-            GDPR: '',
-            description: '',
-            isFirstParty: true,
+            parsedCookie: {
+              name: 'countryCode',
+              domain: '.cnn.com',
+              path: '/',
+              value: 'IN',
+              sameSite: 'None',
+              expires: 'Session',
+              httpOnly: false,
+              secure: true,
+            },
+            analytics: {
+              platform: 'Unknown',
+              category: 'Uncategorized',
+              GDPR: '',
+              description: '',
+            },
+            url: '',
             pageUrl: 'https://edition.cnn.com/index.html',
-            frameUrl: 'https://edition.cnn.com',
+            isBlocked: false,
+            isFirstParty: true,
           },
         },
-        'Unknown frame(s)': {},
+        [UNKNOWN_FRAME_KEY]: {},
       },
       technologies: [
         {
@@ -113,25 +125,29 @@ describe('extractReportData', () => {
       landingPageCookies: {
         'https://edition.cnn.com': {
           ['countryCode:.cnn.com:/']: {
-            name: 'countryCode',
-            domain: '.cnn.com',
-            path: '/',
-            value: 'IN',
-            sameSite: 'None',
-            expires: 'Session',
-            httpOnly: false,
-            secure: true,
-            isBlocked: false,
-            platform: 'Unknown',
-            category: 'Uncategorized',
-            GDPR: '',
-            description: '',
-            isFirstParty: true,
+            parsedCookie: {
+              name: 'countryCode',
+              domain: '.cnn.com',
+              path: '/',
+              value: 'IN',
+              sameSite: 'None',
+              expires: 'Session',
+              httpOnly: false,
+              secure: true,
+            },
+            analytics: {
+              platform: 'Unknown',
+              category: 'Uncategorized',
+              GDPR: '',
+              description: '',
+            },
+            url: '',
             pageUrl: 'https://edition.cnn.com/index.html',
-            frameUrl: 'https://edition.cnn.com',
+            isBlocked: false,
+            isFirstParty: true,
           },
         },
-        'Unknown frame(s)': {},
+        [UNKNOWN_FRAME_KEY]: {},
       },
     });
   });

@@ -17,67 +17,71 @@
  * External dependencies.
  */
 import React, { useMemo } from 'react';
-import classNames from 'classnames';
 
 /**
  * Internal dependencies.
  */
-import { TableFilter, TableOutput } from '../../useTable';
+import { useTable, type TableFilter } from '../../useTable';
+import Option from './option';
 
 interface SubListProps {
   filterValues: TableFilter[keyof TableFilter]['filterValues'];
   filterKey: string;
   sort: boolean;
   isExpanded: boolean;
-  toggleFilterSelection: TableOutput['toggleFilterSelection'];
+  isSelectAllFilterEnabled: boolean;
+  isSelectAllFilterSelected: boolean;
 }
 
 const SubList = ({
   filterValues,
   filterKey,
   sort,
-  toggleFilterSelection,
   isExpanded,
+  isSelectAllFilterEnabled,
+  isSelectAllFilterSelected,
 }: SubListProps) => {
+  const { toggleFilterSelection, toggleSelectAllFilter } = useTable(
+    ({ actions }) => ({
+      toggleFilterSelection: actions.toggleFilterSelection,
+      toggleSelectAllFilter: actions.toggleSelectAllFilter,
+    })
+  );
+
   const sortedFilterValueKeys = useMemo(() => {
     if (!sort) {
       return Object.keys(filterValues || {});
     }
 
-    return Object.keys(filterValues || {}).sort(([a], [b]) =>
+    return Object.keys(filterValues || {}).sort((a, b) =>
       String(a).localeCompare(String(b))
     );
   }, [filterValues, sort]);
 
   return (
     <ul>
+      {isSelectAllFilterEnabled && (
+        <Option
+          filterKey={filterKey}
+          filterValue="All"
+          selected={isSelectAllFilterSelected}
+          toggleFilterSelection={() => toggleSelectAllFilter(filterKey)}
+          isExpanded={true}
+        />
+      )}
       {sortedFilterValueKeys.map((filterValue, index) => (
-        <li
-          key={index}
-          className={
-            index > 3 && !isExpanded ? 'ml-3 mt-1 hidden' : 'mx-3 mt-1'
-          }
-        >
-          <label className="flex gap-x-2 cursor-pointer items-center">
-            <input
-              role="checkbox"
-              type="checkbox"
-              name={filterKey}
-              className={classNames(
-                'accent-royal-blue dark:accent-orange-400 w-3 h-3 dark:bg-outer-space dark:min-h-[12px] dark:min-w-[12px]',
-                {
-                  'dark:appearance-none dark:text-manatee dark:border dark:rounded-[3px]':
-                    !filterValues?.[filterValue].selected,
-                }
-              )}
-              checked={filterValues?.[filterValue].selected}
-              onChange={() => toggleFilterSelection(filterKey, filterValue)}
-            />
-            <span className="text-asteriod-black dark:text-bright-gray leading-normal font-semi-thick">
-              {String(filterValue)}
-            </span>
-          </label>
-        </li>
+        <React.Fragment key={index}>
+          <Option
+            filterKey={filterKey}
+            filterValue={filterValue}
+            selected={
+              Boolean(filterValues?.[filterValue].selected) &&
+              (isSelectAllFilterEnabled ? !isSelectAllFilterSelected : true)
+            }
+            toggleFilterSelection={toggleFilterSelection}
+            isExpanded={index < 4 || isExpanded}
+          />
+        </React.Fragment>
       ))}
     </ul>
   );

@@ -15,9 +15,12 @@
  */
 
 /**
+ * External dependencies
+ */
+import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
+/**
  * Internal dependencies
  */
-import type { CookieFrameStorageType } from '../../../types';
 import reshapeCookies from '../reshapeCookies';
 
 describe('reshapeCookies', () => {
@@ -26,28 +29,34 @@ describe('reshapeCookies', () => {
   });
 
   it('should return an object with the cookies', () => {
-    const cookies: CookieFrameStorageType = {
+    const cookies = {
       'https://edition.cnn.com': {
         'countryCode:.cnn.com:/': {
-          name: 'countryCode',
-          domain: '.cnn.com',
-          path: '/',
-          value: 'IN',
-          sameSite: 'None',
-          expires: 'Session',
-          httpOnly: false,
-          secure: true,
+          parsedCookie: {
+            name: 'countryCode',
+            domain: '.cnn.com',
+            path: '/',
+            value: 'IN',
+            sameSite: 'None',
+            expires: 'Session',
+            httpOnly: false,
+            secure: true,
+          },
+          analytics: {
+            platform: 'Unknown',
+            category: 'Uncategorized',
+            GDPR: '',
+            description: '',
+          },
+          url: 'https://www.cnn.com/index.html',
           isBlocked: false,
-          platform: 'Unknown',
-          category: 'Uncategorized',
-          GDPR: '',
-          description: '',
+          blockedReasons: [],
           isFirstParty: true,
           pageUrl: 'https://www.cnn.com/index.html',
           frameUrls: { sadf: 'https://edition.cnn.com' },
         },
       },
-      'Unknown frame(s)': {},
+      [UNKNOWN_FRAME_KEY]: {},
     };
 
     expect(reshapeCookies(cookies)).toEqual({
@@ -58,20 +67,22 @@ describe('reshapeCookies', () => {
           domain: '.cnn.com',
           path: '/',
           expires: 'Session',
-          httponly: false,
+          httpOnly: false,
           secure: true,
-          samesite: 'None',
+          sameSite: 'None',
         },
         analytics: {
           platform: 'Unknown',
           category: 'Uncategorized',
           description: '',
+          GDPR: '',
         },
         isFirstParty: true,
         url: 'https://www.cnn.com/index.html',
         frameUrls: ['https://edition.cnn.com'],
         frameIdList: ['https://edition.cnn.com'],
         isBlocked: false,
+        blockedReasons: [],
         headerType: 'response',
       },
     });

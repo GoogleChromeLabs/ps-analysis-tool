@@ -22,15 +22,14 @@ import {
   isFirstParty,
   findAnalyticsMatch,
   type CookieData,
+  type CookieAnalytics,
+  type CookieDatabase,
+  REQUEST_EVENT,
 } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import type {
-  CookieAnalytics,
-  CookieDatabase,
-} from '../utils/fetchCookieDictionary';
 import { createCookieObject } from './createCookieObject';
 
 /**
@@ -41,46 +40,62 @@ import { createCookieObject } from './createCookieObject';
  * @param {CookieDatabase} dictionary Dictionary from open cookie database
  * @param {string} tabUrl top url of the tab from which the request originated.
  * @param {number} frameId Id of the frame the cookie is used in.
- * @param {Protocol.Network.Cookie[]} cookiesList List cookies from the request.
- * @returns {Promise<CookieData[]>} Parsed cookie object array.
+ * @param {Protocol.Network.Cookie[]} cdpCookiesList List cookies from the request.
+ * @param {string} requestId Request id.
+ * @returns {CookieData[]} Parsed cookie object array.
  */
-const parseRequestCookieHeader = async (
+const parseRequestCookieHeader = (
   url: string,
   value: string,
   dictionary: CookieDatabase,
   tabUrl: string,
   frameId: number,
-  cookiesList: Protocol.Network.Cookie[]
-): Promise<CookieData[]> => {
+  cdpCookiesList: Protocol.Network.Cookie[],
+  requestId: string
+): CookieData[] => {
   try {
-    return await Promise.all(
-      value?.split(';').map(async (cookieString) => {
-        let [name] = cookieString.split('=');
-        const [, ...rest] = cookieString.split('=');
-        name = name.trim();
+    return value?.split(';').map((cookieString) => {
+      let [name] = cookieString.split('=');
+      const [, ...rest] = cookieString.split('=');
 
-        let analytics: CookieAnalytics | null = null;
-        if (dictionary) {
-          analytics = findAnalyticsMatch(name, dictionary);
-        }
+      name = name.trim();
 
-        let parsedCookie = {
-          name,
-          value: rest.join('='),
-        } as CookieData['parsedCookie'];
-        parsedCookie = await createCookieObject(parsedCookie, url, cookiesList);
+      let analytics: CookieAnalytics | null = null;
 
-        const _isFirstParty = isFirstParty(parsedCookie.domain || '', tabUrl);
-        return {
-          parsedCookie,
-          analytics,
-          headerType: 'request',
-          url,
-          isFirstParty: _isFirstParty,
-          frameIdList: [frameId],
-        };
-      })
-    );
+      if (dictionary) {
+        analytics = findAnalyticsMatch(name, dictionary);
+      }
+
+      let parsedCookie = {
+        name,
+        value: rest.join('='),
+      } as CookieData['parsedCookie'];
+
+      parsedCookie = createCookieObject(parsedCookie, url, cdpCookiesList);
+
+      const _isFirstParty = isFirstParty(parsedCookie.domain || '', tabUrl);
+
+      return {
+        parsedCookie,
+        analytics,
+        headerType: 'request',
+        url,
+        networkEvents: {
+          requestEvents: [
+            {
+              type: REQUEST_EVENT.CHROME_WEBREQUEST_ON_BEFORE_SEND_HEADERS,
+              requestId,
+              url: url,
+              blocked: false,
+              timeStamp: Date.now(),
+            },
+          ],
+          responseEvents: [],
+        },
+        isFirstParty: _isFirstParty,
+        frameIdList: [frameId],
+      };
+    });
   } catch (error) {
     return [];
   }

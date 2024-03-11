@@ -175,3 +175,101 @@
 * Enhancement: Reorder column to get important data at https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/337
 * Update quick links on landing pages https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/329
 
+
+# v0.4.1
+### Extension
+
+- Enhancement: Allow blurring the sidebar items https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/384
+
+
+# v0.4.2
+
+### Extension
+
+- Feature: Provide switch to turn PSAT's debugging capabilities on and off https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/429
+- Chore: Update cookie database https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/430
+- Chore: Update related website sets data  https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/431
+
+# v0.5.0
+
+## Extension
+- Feature: Uniform filtering developer experience across frames https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/414
+- Feature: Add the capability of setting "allow list" content policy https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/376
+- Feature: Detect use of Google Sign In (GSI) libraries https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/425
+- Feature: Optimise cookie updating iterations to reduce the cookie loading time https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/436
+- Feat: Export cookie table data from the extension https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/457
+- Fix the method of fetching value for JS cookies https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/364
+- Fix: Update minor UI elements https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/367
+- Enhancement: Add 3PCD content to PS landing page https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/475
+- Feature: Update report downloader function to download sitemap report https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/368
+- Chore: Add missing docs and todos https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/413
+- Feature: Copy paste using keyboard https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/365
+- Enhancement: Add `Partition Key` filter to extension https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/442
+- Enhancement: Make UI/UX changes to `Blocked Reasons` filter. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/399
+- Chore: Add unit test for findAnalyticsMatch https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/438
+- Enhancement: Format columns width with `widthWeightagePercentage` https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/401
+- Fix miscellaneous allow list QA issues https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/460
+- Feature: Implement `All` filter value for `Blocked Reasons` filter https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/447
+- Feature: Add `Expand/Collapse All` button inside filters sidebar https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/446
+- Fix: Refresh page on context invalidate https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/465
+- Remove topics list feature https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/463
+- Feature: Make CLI dashboard filters dynamic https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/455
+- Enhancement: Addition of `Quick Links` on landing pages https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/468
+- Fix: Errors appearing on extension page https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/472
+- HotFix: Persist data using global variable https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/476
+- Fix: Library detection section occasional infinite loading https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/478
+- Fix: Zero cookie issue when window is reopened https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/479
+- Feature: Differentiate between cookies blocked in request or response https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/474
+- Feature: Create "Facilitated Testing" landing page https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/480
+
+## CLI
+- Enhancement: CLI decoupling - Save analysis results in a directory  https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/407
+- Fix: CLI dashboard not showing data https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/445
+- Feature: Add blocked reasons to CLI output data https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/435
+- Fix: Column order in output CSV files https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/443
+- Fix: Typos in CLI messages https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/449
+- Update miscellaneous UI elements https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/466
+- Style Fix: Rearrange and rename components in CLI dashboard https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/469
+
+
+## Others
+- Quickly Launch Different Chrome for Privacy Sandbox Demo https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/211
+- Enhancement: Add additional documentation with Chrome launcher commands https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/416
+- Correct the URL in the [[install.sh](http://install.sh/)](http://install.sh/) for the launcher script https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/470
+- Update: Change cookie database URL https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/415
+- Update d.c.c. links https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/417
+- Merge `main` into `develop` https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/451
+- Update flags and profile color in Chrome launcher https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/467
+
+# v0.5.1
+
+## Extension
+* Restructure `Facilitated Testing` landing page UI https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/493
+* Two-step process for toggling CDP state https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/494
+* Enhancement: Update cookie's blocking status enum and UI https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/507
+* Enhancement: Add UTM params to outgoing links https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/512
+* Fix: UI and change messaging in toast message https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/511
+* Fix: Library detection miscellaneous QA issues https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/495
+* Fix: Keep service worker alive https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/513
+* Fix: Slow loading cookies on page change https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/484
+* Style-Fix: Scale up cookie prefix icon and update message text in cookie details. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/514
+
+## CLI
+* Fix: Add mock UA string https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/487
+* Fix: Add conditional rendering in technology details panel https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/499
+
+## Others
+* Disable auto opening of Chrome DevTools by default for all tabs https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/491
+
+
+# v0.5.2
+
+## Extension
+* List unmapped and orphaned cookies https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/527
+* Fix: Allow-listed rows to highlight after frame change https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/531
+* Fix: Related website sets not recognizing ccTLDs as part of the group https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/523
+
+
+## Others
+* Rename `third_party` to `assets` https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/530
+

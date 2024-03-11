@@ -56,7 +56,7 @@ const CookiesMatrix = ({
   tabCookies,
   tabFrames,
   componentData = [],
-  title = 'Cookie Classification',
+  title = 'Categories',
   description = '',
   showHorizontalMatrix = true,
   showMatrix = true,
@@ -120,7 +120,7 @@ const CookiesMatrix = ({
               <span>{title}</span>
               {showInfoIcon && (
                 <span title={infoIconTitle}>
-                  <InfoIcon />
+                  <InfoIcon className="fill-granite-gray" />
                 </span>
               )}
               {count !== null && <span>: {Number(count) || 0}</span>}

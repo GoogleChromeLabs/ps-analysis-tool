@@ -21,16 +21,16 @@ import {
   isFirstParty,
   findAnalyticsMatch,
   type CookieData,
-  type NetworkCookie,
+  type CookieAnalytics,
+  type CookieDatabase,
+  RESPONSE_EVENT,
 } from '@ps-analysis-tool/common';
+import { getDomain } from 'tldts';
+import type { Protocol } from 'devtools-protocol';
 
 /**
  * Internal dependencies.
  */
-import type {
-  CookieAnalytics,
-  CookieDatabase,
-} from '../utils/fetchCookieDictionary';
 import { createCookieObject } from './createCookieObject';
 
 /**
@@ -41,42 +41,63 @@ import { createCookieObject } from './createCookieObject';
  * @param {CookieDatabase} dictionary Dictionary from open cookie database
  * @param {string} tabUrl top url of the tab from which the request originated.
  * @param {number} frameId Id of a frame in which this cookie is used.
- * @param {NetworkCookie[]} cookiesList List cookies from the request.
- * @returns {Promise<CookieData>} Parsed cookie object.
+ * @param {Protocol.Network.Cookie[]} cdpCookiesList List cookies from the request.
+ * @param {string} requestId Request id.
+ * @returns {CookieData} Parsed cookie object.
  */
-const parseResponseCookieHeader = async (
+const parseResponseCookieHeader = (
   url: string,
   value: string,
   dictionary: CookieDatabase,
   tabUrl: string,
   frameId: number,
-  cookiesList: NetworkCookie[]
-): Promise<CookieData> => {
+  cdpCookiesList: Protocol.Network.Cookie[],
+  requestId: string
+): CookieData => {
   let parsedCookie: CookieData['parsedCookie'] = cookie.parse(value);
 
-  parsedCookie = await createCookieObject(parsedCookie, url, cookiesList);
+  parsedCookie = createCookieObject(parsedCookie, url, cdpCookiesList);
 
   let analytics: CookieAnalytics | null = null;
+
   if (dictionary) {
     analytics = findAnalyticsMatch(parsedCookie.name, dictionary);
   }
 
   const _isFirstParty = isFirstParty(parsedCookie.domain || '', tabUrl);
-  const partitionKey =
-    new URL(tabUrl).protocol +
-    '//' +
-    new URL(tabUrl).hostname.replace('www.', '');
+  const partitionKey = new URL(tabUrl).protocol + '//' + getDomain(tabUrl);
+
   if (value.toLowerCase().includes('partitioned')) {
-    parsedCookie = {
-      ...parsedCookie,
-      partitionKey,
-    };
+    parsedCookie.partitionKey = partitionKey;
+  }
+
+  const isFoundInCDPCookieList = Boolean(
+    cdpCookiesList?.find((_cookie: Protocol.Network.Cookie) => {
+      return _cookie.name === parsedCookie.name;
+    })
+  );
+  let isExpired = false;
+
+  if (parsedCookie.expires) {
+    isExpired = new Date(parsedCookie.expires) < new Date();
   }
 
   return {
     parsedCookie,
     analytics,
     url,
+    networkEvents: {
+      requestEvents: [],
+      responseEvents: [
+        {
+          type: RESPONSE_EVENT.CHROME_WEBREQUEST_ON_RESPONSE_STARTED,
+          requestId,
+          url: url,
+          blocked: isExpired ? false : !isFoundInCDPCookieList,
+          timeStamp: Date.now(),
+        },
+      ],
+    },
     headerType: 'response',
     isFirstParty: _isFirstParty,
     frameIdList: [frameId],
