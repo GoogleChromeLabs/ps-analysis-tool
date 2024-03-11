@@ -67,7 +67,8 @@ const processAndStoreDocumentCookies = async ({
               value: rest.join('='),
             },
             tabUrl,
-            []
+            [],
+            'javascript'
           );
 
           if (dictionary) {

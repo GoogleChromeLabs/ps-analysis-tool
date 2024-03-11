@@ -23,24 +23,33 @@ import {
   getDomainFromUrl,
 } from '@ps-analysis-tool/common';
 import type { Protocol } from 'devtools-protocol';
+import isValidURL from './isValidURL';
 
 /**
  * Create cookie object from ChromeStorage API cookie object, previously saved parsed cookie object if any, and recently captured request/response cookie header.
  * @param parsedCookie Parsed cookie object from request/response.
  * @param url URL of the cookie from the request/response.
  * @param {Protocol.Network.Cookie[]} cdpCookiesList List cookies from the request.
+ * @param {CookieData['headerType']} type specifies whether to derive the domain if domain is not in set-cookie.
  * @returns {Promise<Protocol.Network.Cookie[]>} Cookie object.
  */
 export function createCookieObject(
   parsedCookie: CookieData['parsedCookie'],
   url: string,
-  cdpCookiesList: Protocol.Network.Cookie[]
+  cdpCookiesList: Protocol.Network.Cookie[],
+  type: CookieData['headerType']
 ) {
   const { name, value } = parsedCookie;
 
   const cdpCookie = cdpCookiesList?.find((cookie: Protocol.Network.Cookie) => {
     return cookie.name === name;
   });
+
+  let domainToSend = parsedCookie.domain;
+
+  if (!domainToSend && type === 'response' && isValidURL(url)) {
+    domainToSend = new URL(url).hostname;
+  }
 
   const domain = parseAttributeValues(
     'domain',
