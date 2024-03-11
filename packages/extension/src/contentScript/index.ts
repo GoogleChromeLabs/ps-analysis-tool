@@ -16,7 +16,13 @@
 /**
  * External dependencies
  */
-import { noop } from '@ps-analysis-tool/common';
+import {
+  noop,
+  type CookieData,
+  findAnalyticsMatch,
+  calculateEffectiveExpiryDate,
+  type CookieDatabase,
+} from '@ps-analysis-tool/common';
 import { computePosition, flip, shift } from '@floating-ui/core';
 import { autoUpdate, platform, arrow } from '@floating-ui/dom';
 /**
@@ -39,6 +45,8 @@ import {
   isFrameHidden,
 } from './utils';
 import './style.css';
+import { fetchDictionary } from '../utils/fetchCookieDictionary';
+import processAndStoreDocumentCookies from '../utils/processAndStoreDocumentCookies';
 
 /**
  * Represents the webpage's content script functionalities.
@@ -48,6 +56,16 @@ class WebpageContentScript {
    * Connection port
    */
   port: chrome.runtime.Port | null = null;
+
+  /**
+   * TabId of the current Tab
+   */
+  tabId: number | null = null;
+
+  /**
+   * TabId of the current Tab
+   */
+  cookieDB: CookieDatabase | null = null;
 
   /**
    * Cleanup function that needs to run when tooltip is removed from the screen.
@@ -96,7 +114,7 @@ class WebpageContentScript {
   /**
    * Listens for connection requests from devtool.
    */
-  listenToConnection() {
+  async listenToConnection() {
     // Message once on initialize, to let the devtool know that content script has loaded.
     if (chrome.runtime?.id) {
       chrome.runtime.sendMessage({
@@ -104,11 +122,29 @@ class WebpageContentScript {
       });
     }
 
-    chrome.runtime.onMessage.addListener((message, sender, response) => {
+    chrome.runtime.onMessage.addListener(async (message, sender, response) => {
       if (message.status === 'set?') {
         response({ setInPage: true });
       }
+
+      if (message?.payload?.type === 'SERVICEWORKER::WEBPAGE::TABID_STORAGE') {
+        this.tabId = message.payload.tabId;
+      }
+      if (message?.payload?.type === 'DEVTOOL::WEBPAGE::GET_JS_COOKIES') {
+        //@ts-ignore
+        const jsCookies = await cookieStore.getAll();
+        await processAndStoreDocumentCookies({
+          tabUrl: window.location.href,
+          tabId: message.payload.tabId,
+          documentCookies: jsCookies,
+        });
+      }
     });
+
+    //@ts-ignore
+    cookieStore.onchange = this.handleCookieChange;
+
+    this.cookieDB = await fetchDictionary();
 
     chrome.runtime.onConnect.addListener((port) => {
       if (port.name.startsWith(WEBPAGE_PORT_NAME)) {
@@ -142,6 +178,69 @@ class WebpageContentScript {
     this.docElement.removeEventListener('mouseleave', this.handleMouseMove);
     this.docElement.removeEventListener('mouseenter', this.handleMouseMove);
   }
+  /**
+   * Handle cookie change event.
+   * @param event Event fired at a CookieStore when any cookie changes occur
+   */
+  //@ts-ignore
+  handleCookieChange = (event: CookieChangedEvent) => {
+    if (!chrome.runtime.id) {
+      return;
+    }
+
+    if (
+      event.type !== 'change' ||
+      (event.changed && event.changed.length === 0) ||
+      !this.cookieDB
+    ) {
+      return;
+    }
+    try {
+      const jsCookies = [];
+      for (const cookie of event.changed) {
+        if (!cookie.name || !cookie.path) {
+          return;
+        }
+
+        const encoder = new TextEncoder();
+
+        const singleCookie: CookieData = {
+          parsedCookie: {
+            ...cookie,
+            expires: calculateEffectiveExpiryDate(cookie?.expires),
+            partitionKey: cookie?.partitioned,
+            size: encoder.encode(cookie.name + cookie.value).length,
+            domain: cookie.domain ?? window.location.hostname,
+          },
+          analytics: findAnalyticsMatch(cookie?.name, this.cookieDB),
+          url: window.location.href,
+          headerType: 'javascript',
+          frameIdList: [0],
+          blockedReasons: [],
+          warningReasons: [],
+          isBlocked: false,
+          isFirstParty: true,
+        };
+
+        jsCookies.push(singleCookie);
+      }
+
+      if (jsCookies.length === 0) {
+        return;
+      }
+
+      chrome.runtime.sendMessage({
+        type: 'DevTools::ServiceWorker::SET_JAVASCRIPT_COOKIE',
+        payload: {
+          tabId: this.tabId,
+          cookieData: jsCookies,
+        },
+      });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.warn(error);
+    }
+  };
 
   /**
    * Handle unload event
