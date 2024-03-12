@@ -184,7 +184,7 @@ class WebpageContentScript {
    */
   //@ts-ignore
   handleCookieChange = (event: CookieChangedEvent) => {
-    if (!chrome.runtime.id) {
+    if (!chrome.runtime?.id) {
       return;
     }
 
