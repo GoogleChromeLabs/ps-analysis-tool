@@ -21,7 +21,7 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { Accordion } from '../../components';
+import { Accordion, DetectionMessage } from '../../components';
 import type { AccordionProps } from '../../types';
 import { RECAPTCHA_HELP_URL } from './constants';
 
@@ -38,19 +38,11 @@ const ReCaptchaAccordion = ({ domQueryMatches }: AccordionProps) => {
 
   return (
     <Accordion title={'reCAPTCHA.'} isLoading={false} featuresText="">
-      <p className="dark:text-bright-gray">
-        reCAPTCHA is known to experience issues due to the phaseout of
-        third-party cookies. For more information, please visit the reCAPTCHA{' '}
-        <a
-          target="_blank"
-          className="text-bright-navy-blue dark:text-jordy-blue"
-          href={RECAPTCHA_HELP_URL}
-          rel="noreferrer"
-        >
-          support forum
-        </a>
-        .
-      </p>
+      <DetectionMessage
+        libraryName="reCAPTCHA"
+        provider="reCAPTCHA"
+        supportURL={RECAPTCHA_HELP_URL}
+      />
     </Accordion>
   );
 };

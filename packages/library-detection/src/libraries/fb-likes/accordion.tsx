@@ -21,10 +21,9 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { Accordion } from '../../components';
+import { Accordion, DetectionMessage } from '../../components';
 import type { AccordionProps } from '../../types';
 import { FB_LIKES_HELP_URL } from './constants';
-import DetectionMessage from '../../components/accordion/detectionMessage';
 
 const FBLikesAccordion = ({ domQueryMatches }: AccordionProps) => {
   if (!domQueryMatches) {

@@ -21,7 +21,7 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { Accordion } from '../../components';
+import { Accordion, DetectionMessage } from '../../components';
 import type { AccordionProps } from '../../types';
 import { JETPACK_COMMENTS_HELP_URL } from './constants';
 
@@ -38,20 +38,11 @@ const JetpackCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
 
   return (
     <Accordion title={'Jetpack Comments.'} isLoading={false} featuresText="">
-      <p className="dark:text-bright-gray">
-        Jetpack comments widget is known to experience issues due to the
-        phaseout of third-party cookies. For more information, please visit the
-        Jetpack{' '}
-        <a
-          target="_blank"
-          className="text-bright-navy-blue dark:text-jordy-blue"
-          href={JETPACK_COMMENTS_HELP_URL}
-          rel="noreferrer"
-        >
-          support forum
-        </a>
-        .
-      </p>
+      <DetectionMessage
+        libraryName="Jetpack comments widget"
+        provider="Jetpack"
+        supportURL={JETPACK_COMMENTS_HELP_URL}
+      />
     </Accordion>
   );
 };

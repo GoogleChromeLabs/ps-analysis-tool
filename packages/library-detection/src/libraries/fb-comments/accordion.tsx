@@ -21,7 +21,7 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { Accordion } from '../../components';
+import { Accordion, DetectionMessage } from '../../components';
 import type { AccordionProps } from '../../types';
 import { FB_COMMENTS_HELP_URL } from './constants';
 
@@ -38,20 +38,11 @@ const FBCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
 
   return (
     <Accordion title={'Facebook Comments.'} isLoading={false} featuresText="">
-      <p className="dark:text-bright-gray">
-        Facebook comments plugin is known to experience issues due to the
-        phaseout of third-party cookies. For more information, please visit the
-        Facebook{' '}
-        <a
-          target="_blank"
-          className="text-bright-navy-blue dark:text-jordy-blue"
-          href={FB_COMMENTS_HELP_URL}
-          rel="noreferrer"
-        >
-          support forum
-        </a>
-        .
-      </p>
+      <DetectionMessage
+        libraryName="Facebook comments plugin"
+        provider="Facebook"
+        supportURL={FB_COMMENTS_HELP_URL}
+      />
     </Accordion>
   );
 };
