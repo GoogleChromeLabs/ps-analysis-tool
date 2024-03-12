@@ -13,11 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as isRequestURLMatchingDomainPaths } from './isRequestURLMatchingDomainPaths';
-export { default as detectMatchingSignatures } from './detectMatchingSignatures';
-export { default as getHelpUrl } from './getHelpUrl';
-export { default as sumUpDetectionResults } from './sumUpDetectionResults';
-export { default as filterResources } from './filterResources';
-export { default as getInlineScriptContent } from './getInlineScriptContent';
-export { default as useLibraryDetection } from './hooks/useLibraryDetection';
-export * from './stateProvider';
+/**
+ * Internal dependencies.
+ */
+import LIBRARIES from '../config';
+import type { LibraryData } from '../types';
+
+const getInitialLibraryData = (): LibraryData => {
+  return Object.fromEntries(
+    LIBRARIES.map(({ name, domQueryFunction }) => {
+      let initialData = {
+        signatureMatches: 0,
+        matches: [],
+        moduleMatch: 0,
+      };
+
+      if (domQueryFunction) {
+        initialData = {
+          domQueryMatches: null,
+        };
+      }
+
+      return [name, initialData];
+    })
+  );
+};
+
+export default getInitialLibraryData;
