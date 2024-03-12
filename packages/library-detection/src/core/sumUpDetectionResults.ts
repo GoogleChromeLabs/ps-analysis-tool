@@ -29,41 +29,42 @@ const sumUpDetectionResults = (obj1: LibraryData, obj2: LibraryData) => {
 
   const libraryKeys = Object.keys(obj1);
 
-  if (!libraryKeys.length) {
-    return resultObj;
-  }
-
   for (let i = 0; i < libraryKeys.length; i++) {
     const key = libraryKeys[i] as keyof LibraryData;
 
-    if (resultObj[key]?.matches?.length) {
-      for (let j = 0; j < resultObj[key].matches.length; j++) {
-        const featureText = resultObj[key].matches[j].feature.text;
-        const sameFeatureInOtherObject = obj2[key].matches.find(
-          (match) => match.feature.text === featureText
-        );
+    const resultObjMatches = resultObj[key] ? resultObj[key].matches ?? [] : [];
+    const obj2Matches = obj2[key] ? obj2[key].matches ?? [] : [];
 
-        if (!sameFeatureInOtherObject) {
-          continue;
-        }
+    for (let j = 0; j < resultObjMatches.length; j++) {
+      const featureText = resultObjMatches[j].feature.text;
+      const sameFeatureInOtherObject = obj2Matches.find(
+        (match) => match.feature.text === featureText
+      );
 
-        const sameFeatureInOtherObjectIndex = obj2[key].matches.findIndex(
-          (match) => match.feature.text === featureText
-        );
-
-        obj2[key].matches.splice(sameFeatureInOtherObjectIndex, 1);
-
-        resultObj[key].matches[j].subItems.items = [
-          ...resultObj[key].matches[j].subItems.items,
-          ...sameFeatureInOtherObject.subItems.items,
-        ];
+      if (!sameFeatureInOtherObject) {
+        continue;
       }
+
+      const sameFeatureInOtherObjectIndex = obj2Matches.findIndex(
+        (match) => match.feature.text === featureText
+      );
+
+      obj2Matches.splice(sameFeatureInOtherObjectIndex, 1);
+
+      resultObjMatches[j].subItems.items = [
+        ...resultObjMatches[j].subItems.items,
+        ...sameFeatureInOtherObject.subItems.items,
+      ];
     }
 
-    resultObj[key].matches = [...resultObj[key].matches, ...obj2[key].matches];
+    resultObj[key].matches = [...resultObjMatches, ...obj2Matches];
 
-    resultObj[key].signatureMatches =
-      resultObj[key].signatureMatches + obj2[key].signatureMatches;
+    const resultObjSignature = resultObj[key]
+      ? resultObj[key].signatureMatches ?? 0
+      : 0;
+    const obj2Signature = obj2[key] ? obj2[key].signatureMatches ?? 0 : 0;
+
+    resultObj[key].signatureMatches = resultObjSignature + obj2Signature;
 
     if (resultObj[key].moduleMatch && obj2[key].moduleMatch) {
       resultObj[key].moduleMatch =
