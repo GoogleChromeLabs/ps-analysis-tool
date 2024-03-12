@@ -56,6 +56,11 @@ import {
   jetpackLikesDOMQuery,
   JETPACK_LIKES_HELP_URL,
 } from './libraries/jetpack-likes';
+import {
+  ReCaptchaAccordion,
+  reCaptchaDOMQuery,
+  RECAPTCHA_HELP_URL,
+} from './libraries/reCaptcha';
 
 const LIBRARIES = [
   {
@@ -109,6 +114,12 @@ const LIBRARIES = [
     component: JetpackLikesAccordion,
     helpUrl: JETPACK_LIKES_HELP_URL,
     domQueryFunction: jetpackLikesDOMQuery,
+  },
+  {
+    name: 'reCaptcha',
+    component: ReCaptchaAccordion,
+    helpUrl: RECAPTCHA_HELP_URL,
+    domQueryFunction: reCaptchaDOMQuery,
   },
 ];
 
