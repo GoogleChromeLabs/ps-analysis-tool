@@ -221,6 +221,10 @@ class WebpageContentScript {
             size: encoder.encode(cookie.name + cookie.value).length,
             domain,
           },
+          networkEvents: {
+            requestEvents: [],
+            responseEvents: [],
+          },
           analytics: findAnalyticsMatch(cookie?.name, this.cookieDB),
           url: window.location.href,
           headerType: 'javascript',

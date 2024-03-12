@@ -71,6 +71,10 @@ const processAndStoreDocumentCookies = async ({
 
         return {
           parsedCookie,
+          networkEvents: {
+            requestEvents: [],
+            responseEvents: [],
+          },
           analytics:
             analytics && Object.keys(analytics).length > 0 ? analytics : null,
           url: tabUrl,
