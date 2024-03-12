@@ -32,7 +32,9 @@ interface BodyCellProps {
   row: TableRow;
   hasIcon?: boolean;
   showIcon?: boolean | null;
-  icon?: () => React.JSX.Element;
+  icon?: {
+    Element: (props: any) => React.JSX.Element;
+  };
   onRowClick: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
@@ -40,11 +42,14 @@ const BodyCell = ({
   cell,
   width,
   isRowFocused,
+  row,
   hasIcon = false,
   showIcon = false,
   icon,
   isHighlighted = false,
 }: BodyCellProps) => {
+  const IconElement = icon?.Element;
+
   return (
     <div
       tabIndex={0}
@@ -72,7 +77,13 @@ const BodyCell = ({
     >
       {hasIcon && (
         <div className="h-full grid place-items-center min-w-[15px] pr-1">
-          {Boolean(showIcon) && icon?.()}
+          {Boolean(showIcon) && IconElement && (
+            <IconElement
+              {...{
+                originalData: row.originalData,
+              }}
+            />
+          )}
         </div>
       )}
       {cell?.() ?? ''}

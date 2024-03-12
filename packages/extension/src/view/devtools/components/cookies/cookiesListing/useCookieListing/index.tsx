@@ -37,7 +37,7 @@ import {
  */
 import { useCookie, useSettings } from '../../../../stateProviders';
 import useHighlighting from './useHighlighting';
-import namePrefixIconSelector from './namePrefixIconSelector';
+import NamePrefixIconSelector from './namePrefixIconSelector';
 
 const useCookieListing = (domainsInAllowList: Set<string>) => {
   const { selectedFrame, cookies, getCookiesSetByJavascript } = useCookie(
@@ -63,7 +63,9 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         enableHiding: false,
         widthWeightagePercentage: 13,
         enableBodyCellPrefixIcon: isUsingCDP,
-        bodyCellPrefixIcon: namePrefixIconSelector,
+        bodyCellPrefixIcon: {
+          Element: NamePrefixIconSelector,
+        },
         showBodyCellPrefixIcon: (row: TableRow) => {
           const isBlocked = Boolean(
             (row.originalData as CookieTableData)?.blockingStatus
