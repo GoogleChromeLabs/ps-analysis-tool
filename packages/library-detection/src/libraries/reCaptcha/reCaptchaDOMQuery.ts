@@ -19,8 +19,7 @@ const reCaptchaDOMQuery = () => {
 
   const reCaptchaClass = document.querySelector('.g-recaptcha');
 
-  const reCaptchaScriptSrcRegex =
-    /^https:\/\/www\.google\.com\/recaptcha\/api\.js/;
+  const reCaptchaScriptSrcRegex = /^https:\/\/www\.google\.com\/recaptcha/;
 
   const scripts = document.querySelectorAll('script');
 

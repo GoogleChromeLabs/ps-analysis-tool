@@ -24,6 +24,7 @@ import React from 'react';
 import { Accordion } from '../../components';
 import type { AccordionProps } from '../../types';
 import { FB_LIKES_HELP_URL } from './constants';
+import DetectionMessage from '../../components/accordion/detectionMessage';
 
 const FBLikesAccordion = ({ domQueryMatches }: AccordionProps) => {
   if (!domQueryMatches) {
@@ -42,19 +43,11 @@ const FBLikesAccordion = ({ domQueryMatches }: AccordionProps) => {
       isLoading={false}
       featuresText=""
     >
-      <p className="dark:text-bright-gray">
-        Facebook like button is known to experience issues due to the phaseout
-        of third-party cookies. For more information, please visit the Facebook{' '}
-        <a
-          target="_blank"
-          className="text-bright-navy-blue dark:text-jordy-blue"
-          href={FB_LIKES_HELP_URL}
-          rel="noreferrer"
-        >
-          support forum
-        </a>
-        .
-      </p>
+      <DetectionMessage
+        libraryName="Facebook like button"
+        provider="Facebook"
+        supportURL={FB_LIKES_HELP_URL}
+      />
     </Accordion>
   );
 };
