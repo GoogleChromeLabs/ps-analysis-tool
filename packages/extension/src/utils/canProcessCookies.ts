@@ -24,7 +24,7 @@
  */
 export default function canProcessCookies(
   tabMode: 'unlimited' | 'single',
-  tabUrl: string | null | undefined,
+  tabUrl: string | null,
   tabToRead: string,
   currentTabId: number,
   responseHeaders: chrome.webRequest.WebResponseHeadersDetails['responseHeaders']
