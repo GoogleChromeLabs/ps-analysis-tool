@@ -21,7 +21,7 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { Accordion } from '../../components';
+import { Accordion, DetectionMessage } from '../../components';
 import type { AccordionProps } from '../../types';
 import { DISQUS_COMMENTS_HELP_URL } from './constants';
 
@@ -38,19 +38,11 @@ const DisqusCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
 
   return (
     <Accordion title={'Disqus Comments.'} isLoading={false} featuresText="">
-      <p className="dark:text-bright-gray">
-        Disqus comments are known to experience issues due to the phaseout of
-        third-party cookies. For more information, please visit the Disqus{' '}
-        <a
-          target="_blank"
-          className="text-bright-navy-blue dark:text-jordy-blue"
-          href={DISQUS_COMMENTS_HELP_URL}
-          rel="noreferrer"
-        >
-          support forum
-        </a>
-        .
-      </p>
+      <DetectionMessage
+        libraryName="Disqus comments"
+        provider="Disqus"
+        supportURL={DISQUS_COMMENTS_HELP_URL}
+      />
     </Accordion>
   );
 };

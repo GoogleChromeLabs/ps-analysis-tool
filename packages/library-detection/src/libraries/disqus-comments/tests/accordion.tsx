@@ -28,7 +28,7 @@ import DisqusCommentsAccordion from '../accordion';
 describe('Disqus Comments Accordion', () => {
   const accordionTitleText = 'Disqus Comments.';
   const accordionMessageText =
-    'Disqus comments are known to experience issues due to the phaseout of third-party cookies. For more information, please visit the Disqus support forum.';
+    'Disqus comments functionality may not work properly due to the phaseout of third-party cookies. For more information, please visit theDisqus support forum.';
 
   it('should show accordion', () => {
     const domQueryMatches = [''];
