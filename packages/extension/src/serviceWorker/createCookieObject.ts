@@ -53,7 +53,7 @@ export function createCookieObject(
 
   const domain = parseAttributeValues(
     'domain',
-    parsedCookie.domain,
+    domainToSend,
     cdpCookie?.domain,
     url
   );
