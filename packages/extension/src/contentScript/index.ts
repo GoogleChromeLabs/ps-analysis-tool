@@ -201,6 +201,15 @@ class WebpageContentScript {
         if (!cookie.name || !cookie.path) {
           return;
         }
+        let domain = cookie.domain;
+
+        if (cookie.domain) {
+          domain = cookie.domain?.startsWith('.')
+            ? cookie.domain
+            : '.' + cookie.domain;
+        } else {
+          domain = window.location.hostname;
+        }
 
         const encoder = new TextEncoder();
 
@@ -210,7 +219,7 @@ class WebpageContentScript {
             expires: calculateEffectiveExpiryDate(cookie?.expires),
             partitionKey: cookie?.partitioned,
             size: encoder.encode(cookie.name + cookie.value).length,
-            domain: cookie.domain ?? window.location.hostname,
+            domain,
           },
           analytics: findAnalyticsMatch(cookie?.name, this.cookieDB),
           url: window.location.href,

@@ -65,7 +65,12 @@ chrome.webRequest.onResponseStarted.addListener(
   (details: chrome.webRequest.WebResponseCacheDetails) => {
     (async () => {
       const { tabId, url, responseHeaders, frameId } = details;
-      const tabUrl = syncCookieStore?.getTabUrl(tabId) ?? '';
+      const tab = await getTab(tabId);
+      let tabUrl = syncCookieStore?.getTabUrl(tabId);
+
+      if (tab && tab.pendingUrl) {
+        tabUrl = tab.pendingUrl;
+      }
 
       if (
         !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, responseHeaders)
@@ -135,7 +140,12 @@ chrome.webRequest.onResponseStarted.addListener(
 chrome.webRequest.onBeforeSendHeaders.addListener(
   ({ url, requestHeaders, tabId, frameId, requestId }) => {
     (async () => {
-      const tabUrl = syncCookieStore?.getTabUrl(tabId) ?? '';
+      const tab = await getTab(tabId);
+      let tabUrl = syncCookieStore?.getTabUrl(tabId);
+
+      if (tab && tab.pendingUrl) {
+        tabUrl = tab.pendingUrl;
+      }
 
       if (
         !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, requestHeaders)

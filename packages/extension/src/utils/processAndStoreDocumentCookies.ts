@@ -45,8 +45,18 @@ const processAndStoreDocumentCookies = async ({
 
     const parsedCookieData: CookieData[] = documentCookies.map(
       (singleCookie: ParsedCookie) => {
-        const parsedCookie = createCookieObject(
-          singleCookie,
+        let parsedCookie = {
+          ...singleCookie,
+        };
+
+        if (singleCookie.domain) {
+          parsedCookie.domain = singleCookie.domain?.startsWith('.')
+            ? singleCookie.domain
+            : '.' + singleCookie.domain;
+        }
+
+        parsedCookie = createCookieObject(
+          parsedCookie,
           tabUrl,
           [],
           'javascript'
