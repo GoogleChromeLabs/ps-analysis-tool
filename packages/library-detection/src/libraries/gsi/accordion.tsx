@@ -26,7 +26,11 @@ import { Accordion, FeatureList } from '../../components';
 import type { AccordionProps } from '../../types';
 
 const GISAccordion = ({ matches }: AccordionProps) => {
-  const featuresCount = matches && matches.length ? matches.length : 0;
+  if (!matches) {
+    return null;
+  }
+
+  const featuresCount = matches.length;
 
   if (!featuresCount) {
     return null;
