@@ -125,11 +125,29 @@ class WebpageContentScript {
     chrome.runtime.onMessage.addListener(async (message, sender, response) => {
       if (message.status === 'set?') {
         response({ setInPage: true });
+        //@ts-ignore
+        const jsCookies = await cookieStore.getAll();
+        await processAndStoreDocumentCookies({
+          tabUrl: window.location.href,
+          tabId: message.tabId,
+          documentCookies: jsCookies,
+        });
+      }
+
+      if (message.PSATDevToolsHidden) {
+        //@ts-ignore
+        cookieStore.onchange = null;
+      }
+
+      if (!message.PSATDevToolsHidden) {
+        //@ts-ignore
+        cookieStore.onchange = this.handleCookieChange;
       }
 
       if (message?.payload?.type === 'SERVICEWORKER::WEBPAGE::TABID_STORAGE') {
         this.tabId = message.payload.tabId;
       }
+
       if (message?.payload?.type === 'DEVTOOL::WEBPAGE::GET_JS_COOKIES') {
         //@ts-ignore
         const jsCookies = await cookieStore.getAll();
@@ -140,9 +158,6 @@ class WebpageContentScript {
         });
       }
     });
-
-    //@ts-ignore
-    cookieStore.onchange = this.handleCookieChange;
 
     this.cookieDB = await fetchDictionary();
 
