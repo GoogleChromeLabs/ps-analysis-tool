@@ -22,11 +22,8 @@ import React, {
   useCallback,
   useEffect,
 } from 'react';
-import {
-  noop,
-  useContextSelector,
-  createContext,
-} from '@ps-analysis-tool/common';
+import { createContext, useContextSelector } from 'use-context-selector';
+import { noop } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
