@@ -39,7 +39,7 @@ const ReCaptchaAccordion = ({ domQueryMatches }: AccordionProps) => {
   return (
     <Accordion title={'reCAPTCHA.'} isLoading={false} featuresText="">
       <p className="dark:text-bright-gray">
-        reCAPTCHA are known to experience issues due to the phaseout of
+        reCAPTCHA is known to experience issues due to the phaseout of
         third-party cookies. For more information, please visit the reCAPTCHA{' '}
         <a
           target="_blank"

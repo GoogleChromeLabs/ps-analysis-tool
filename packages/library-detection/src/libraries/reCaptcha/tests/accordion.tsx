@@ -28,7 +28,7 @@ import ReCaptchaAccordion from '../accordion';
 describe('reCAPTCHA Accordion', () => {
   const accordionTitleText = 'reCAPTCHA.';
   const accordionMessageText =
-    'reCAPTCHA are known to experience issues due to the phaseout of third-party cookies. For more information, please visit the reCAPTCHA support forum.';
+    'reCAPTCHA is known to experience issues due to the phaseout of third-party cookies. For more information, please visit the reCAPTCHA support forum.';
 
   it('should show accordion', () => {
     const domQueryMatches = [''];
