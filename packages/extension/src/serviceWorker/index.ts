@@ -297,6 +297,19 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   }
 
   try {
+    await chrome.tabs.sendMessage(tabId, {
+      tabId,
+      payload: {
+        type: 'SERVICEWORKER::WEBPAGE::TABID_STORAGE',
+        tabId,
+      },
+    });
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.warn(error);
+  }
+
+  try {
     if (globalIsUsingCDP) {
       await chrome.debugger.attach({ tabId }, '1.3');
       await chrome.debugger.sendCommand({ tabId }, 'Network.enable');
@@ -647,7 +660,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
   ) {
     syncCookieStore?.update(
       request?.payload?.tabId,
-      JSON.parse(request?.payload?.cookieData)
+      request?.payload?.cookieData
     );
   }
 

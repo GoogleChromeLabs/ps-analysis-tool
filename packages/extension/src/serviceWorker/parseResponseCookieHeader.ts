@@ -56,7 +56,12 @@ const parseResponseCookieHeader = (
 ): CookieData => {
   let parsedCookie: CookieData['parsedCookie'] = cookie.parse(value);
 
-  parsedCookie = createCookieObject(parsedCookie, url, cdpCookiesList);
+  parsedCookie = createCookieObject(
+    parsedCookie,
+    url,
+    cdpCookiesList,
+    'response'
+  );
 
   let analytics: CookieAnalytics | null = null;
 
