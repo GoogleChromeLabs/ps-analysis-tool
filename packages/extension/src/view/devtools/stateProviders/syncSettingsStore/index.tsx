@@ -206,6 +206,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
         Object.keys(changes.allowedNumberOfTabs).includes('newValue')
       ) {
         setAllowedNumberOfTabs(changes?.allowedNumberOfTabs?.newValue);
+        setAllowedNumberOfTabsForSettingsPageDisplay(
+          changes?.allowedNumberOfTabs?.newValue
+        );
       }
 
       if (
@@ -213,6 +216,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         Object.keys(changes.isUsingCDP).includes('newValue')
       ) {
         setIsUsingCDP(changes?.isUsingCDP?.newValue);
+        setIsUsingCDPForSettingsPageDisplay(changes?.isUsingCDP?.newValue);
       }
     },
     []
