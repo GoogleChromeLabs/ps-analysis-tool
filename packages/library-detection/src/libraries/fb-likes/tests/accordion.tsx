@@ -28,7 +28,7 @@ import FacebookLikesAccordion from '../accordion';
 describe('Facebook Likes Accordion', () => {
   const accordionTitleText = 'Facebook Like Button.';
   const accordionMessageText =
-    'Facebook like button functionality may not work properly due to the phaseout of third-party cookies. For more information, please visit theFacebook support forum.';
+    'Facebook like button functionality may not work properly due to the phaseout of third-party cookies. For more information, please visit the Facebook support forum.';
 
   it('should show accordion', () => {
     const domQueryMatches = [''];

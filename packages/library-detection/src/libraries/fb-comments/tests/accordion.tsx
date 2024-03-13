@@ -28,7 +28,7 @@ import FacebookCommentsAccordion from '../accordion';
 describe('Facebook Comments Accordion', () => {
   const accordionTitleText = 'Facebook Comments.';
   const accordionMessageText =
-    'Facebook comments plugin functionality may not work properly due to the phaseout of third-party cookies. For more information, please visit theFacebook support forum.';
+    'Facebook comments plugin functionality may not work properly due to the phaseout of third-party cookies. For more information, please visit the Facebook support forum.';
 
   it('should show accordion', () => {
     const domQueryMatches = [''];

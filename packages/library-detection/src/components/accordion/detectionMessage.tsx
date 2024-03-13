@@ -33,7 +33,7 @@ const DetectionMessage = ({
     <p className="dark:text-bright-gray">
       {libraryName} functionality may not work properly due to the phaseout of
       third-party cookies. For more information, please visit the
-      {provider + ' '}
+      {' ' + provider + ' '}
       <a
         target="_blank"
         className="text-bright-navy-blue dark:text-jordy-blue"
