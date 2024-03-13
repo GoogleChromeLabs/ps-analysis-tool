@@ -70,12 +70,17 @@ const filterCookiesByFrame = (
           const domainToCheck = cookie.parsedCookie.domain.startsWith('.')
             ? cookie.parsedCookie.domain.slice(1)
             : cookie.parsedCookie.domain;
+
           if (frameUrl.includes(domainToCheck)) {
             frameFilteredCookies[key] = cookie;
-          } else {
-            if (tabFrames[frameUrl].frameIds.includes(0)) {
-              frameFilteredCookies[key] = cookie;
-            }
+          }
+          if (
+            Object.keys(tabFrames).filter((frameKey) =>
+              frameKey.includes(domainToCheck)
+            ).length === 0 &&
+            tabFrames[frameUrl].frameIds.includes(0)
+          ) {
+            frameFilteredCookies[key] = cookie;
           }
         }
 
