@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as LibraryDetection } from './libraryDetection';
-export { default as Accordion } from './accordion';
-export { default as FeatureList } from './accordion/featureList';
-export { default as DetectionMessage } from './accordion/detectionMessage';
+export { default as ReCaptchaAccordion } from './accordion';
+export { default as reCaptchaDOMQuery } from './reCaptchaDOMQuery';
+export * from './constants';

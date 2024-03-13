@@ -13,7 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as LibraryDetection } from './libraryDetection';
-export { default as Accordion } from './accordion';
-export { default as FeatureList } from './accordion/featureList';
-export { default as DetectionMessage } from './accordion/detectionMessage';
+
+const jetpackLikesDOMQuery = () => {
+  const matchItems: string[] = [];
+
+  const frameSrcRegex = /^https:\/\/widgets\.wp\.com\/likes/;
+
+  const iframes = document.querySelectorAll('iframe');
+
+  iframes.forEach((iframe) => {
+    const name = iframe.getAttribute('name');
+
+    if (
+      iframe.src &&
+      frameSrcRegex.test(iframe.src) &&
+      name?.startsWith('like-comment-frame')
+    ) {
+      matchItems.push(`iframe[name]: ${name}`);
+      matchItems.push(`iframe[src]: ${iframe.src}`);
+    }
+  });
+
+  return matchItems;
+};
+
+export default jetpackLikesDOMQuery;

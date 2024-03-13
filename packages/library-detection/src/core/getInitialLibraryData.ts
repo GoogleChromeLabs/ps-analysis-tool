@@ -13,7 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as LibraryDetection } from './libraryDetection';
-export { default as Accordion } from './accordion';
-export { default as FeatureList } from './accordion/featureList';
-export { default as DetectionMessage } from './accordion/detectionMessage';
+/**
+ * Internal dependencies.
+ */
+import LIBRARIES from '../config';
+import type { LibraryData } from '../types';
+
+const getInitialLibraryData = (): LibraryData => {
+  return Object.fromEntries(
+    LIBRARIES.map(({ name, domQueryFunction }) => {
+      let initialData = {
+        signatureMatches: 0,
+        matches: [],
+        moduleMatch: 0,
+      };
+
+      if (domQueryFunction) {
+        initialData = {
+          domQueryMatches: null,
+        };
+      }
+
+      return [name, initialData];
+    })
+  );
+};
+
+export default getInitialLibraryData;
