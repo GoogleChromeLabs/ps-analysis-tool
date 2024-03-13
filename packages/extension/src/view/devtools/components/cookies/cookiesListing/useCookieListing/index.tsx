@@ -88,7 +88,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
             {!info ? 'Third Party' : 'First Party'}
           </p>
         ),
-        widthWeightagePercentage: 6.6,
+        widthWeightagePercentage: 6,
       },
       {
         header: 'Domain',
@@ -106,13 +106,13 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         header: 'SameSite',
         accessorKey: 'parsedCookie.samesite',
         cell: (info: InfoType) => <span className="capitalize">{info}</span>,
-        widthWeightagePercentage: 6.5,
+        widthWeightagePercentage: 6,
       },
       {
         header: 'Category',
         accessorKey: 'analytics.category',
         cell: (info: InfoType) => info,
-        widthWeightagePercentage: 7,
+        widthWeightagePercentage: 7.5,
       },
       {
         header: 'Platform',
@@ -173,10 +173,11 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
       {
         header: 'Orphaned Cookie',
         accessorKey: 'frameIdList',
+        isHiddenByDefault: true,
         cell: (info: InfoType) => (
           <OrphanedUnMappedInfoDisplay frameIdList={info as number[]} />
         ),
-        widthWeightagePercentage: 7,
+        widthWeightagePercentage: 7.6,
       },
       {
         header: 'Unmapped Cookie',

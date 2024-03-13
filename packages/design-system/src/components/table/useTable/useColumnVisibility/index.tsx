@@ -41,6 +41,16 @@ const useColumnVisibility = (
   const [hiddenKeys, setHiddenKeys] = useState<Set<string>>(new Set());
   const [isDataLoading, setIsDataLoading] = useState(true);
 
+  useEffect(() => {
+    setHiddenKeys(() => {
+      const _hiddenKeys = columns.filter(
+        ({ isHiddenByDefault }) => isHiddenByDefault
+      );
+
+      return new Set(_hiddenKeys.map(({ accessorKey }) => accessorKey));
+    });
+  }, [columns]);
+
   const hideColumn = useCallback((key: string) => {
     setHiddenKeys((prev) => new Set(prev.add(key)));
   }, []);
@@ -103,14 +113,13 @@ const useColumnVisibility = (
 
   useEffect(() => {
     if (tablePersistentSettingsKey) {
-      setHiddenKeys(new Set());
-
       const data = getPreferences(
         tablePersistentSettingsKey,
         'columnsVisibility'
       );
 
       if (data) {
+        setHiddenKeys(new Set());
         const _hiddenKeys = Object.entries(data)
           .filter(([, hidden]) => hidden)
           .map(([key]) => key);
