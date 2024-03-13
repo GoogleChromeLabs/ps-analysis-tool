@@ -368,6 +368,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   }
 
   if (details.reason === 'update') {
+    await chrome.storage.local.clear();
     const preSetSettings = await chrome.storage.sync.get();
     tabMode = preSetSettings?.allowedNumberOfTabs ?? 'single';
     globalIsUsingCDP = preSetSettings?.isUsingCDP ?? false;
@@ -379,7 +380,6 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     }
 
     await chrome.storage.sync.clear();
-    await chrome.storage.local.clear();
     await chrome.storage.sync.set({
       allowedNumberOfTabs: 'single',
       isUsingCDP: false,
