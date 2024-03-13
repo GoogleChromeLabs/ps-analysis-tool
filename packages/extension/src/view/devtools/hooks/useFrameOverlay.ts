@@ -159,7 +159,7 @@ const useFrameOverlay = (
               () => {
                 if (chrome.runtime.lastError) {
                   // eslint-disable-next-line no-console
-                  console.warn(chrome.runtime.lastError);
+                  console.log(chrome.runtime.lastError);
                 }
               }
             );
@@ -174,7 +174,7 @@ const useFrameOverlay = (
               () => {
                 if (chrome.runtime.lastError) {
                   // eslint-disable-next-line no-console
-                  console.warn(chrome.runtime.lastError);
+                  console.log(chrome.runtime.lastError);
                 }
               }
             );
