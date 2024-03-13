@@ -17,7 +17,7 @@
 /**
  * Internal dependencies.
  */
-import { ChromeStorage } from '../../../../../../store';
+import { ChromeStorage } from '../../../../../store';
 import removeFromAllowList from './removeFromAllowList';
 
 const onAllowListClick = async (

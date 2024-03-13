@@ -65,7 +65,12 @@ chrome.webRequest.onResponseStarted.addListener(
   (details: chrome.webRequest.WebResponseCacheDetails) => {
     (async () => {
       const { tabId, url, responseHeaders, frameId } = details;
-      const tabUrl = syncCookieStore?.getTabUrl(tabId) ?? '';
+      const tab = await getTab(tabId);
+      let tabUrl = syncCookieStore?.getTabUrl(tabId);
+
+      if (tab && tab.pendingUrl) {
+        tabUrl = tab.pendingUrl;
+      }
 
       if (
         !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, responseHeaders)
@@ -135,7 +140,12 @@ chrome.webRequest.onResponseStarted.addListener(
 chrome.webRequest.onBeforeSendHeaders.addListener(
   ({ url, requestHeaders, tabId, frameId, requestId }) => {
     (async () => {
-      const tabUrl = syncCookieStore?.getTabUrl(tabId) ?? '';
+      const tab = await getTab(tabId);
+      let tabUrl = syncCookieStore?.getTabUrl(tabId);
+
+      if (tab && tab.pendingUrl) {
+        tabUrl = tab.pendingUrl;
+      }
 
       if (
         !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, requestHeaders)
@@ -284,6 +294,19 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 
   if (changeInfo.status === 'loading' && tab.url) {
     syncCookieStore?.removeCookieData(tabId);
+  }
+
+  try {
+    await chrome.tabs.sendMessage(tabId, {
+      tabId,
+      payload: {
+        type: 'SERVICEWORKER::WEBPAGE::TABID_STORAGE',
+        tabId,
+      },
+    });
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.warn(error);
   }
 
   try {
@@ -637,7 +660,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
   ) {
     syncCookieStore?.update(
       request?.payload?.tabId,
-      JSON.parse(request?.payload?.cookieData)
+      request?.payload?.cookieData
     );
   }
 

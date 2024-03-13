@@ -32,14 +32,10 @@ export type DetectedSignature = {
 };
 
 export type LibraryData = {
-  gis: {
-    signatureMatches: number;
+  [key: string]: {
+    signatureMatches?: number;
     moduleMatch?: number;
-    matches: DetectedSignature[];
-  };
-  gsiV2: {
-    signatureMatches: number;
-    moduleMatch?: number;
-    matches: DetectedSignature[];
+    matches?: DetectedSignature[];
+    domQuerymatches?: [string] | null;
   };
 };

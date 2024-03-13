@@ -33,7 +33,6 @@ import { type TabCookies, type TabFrames } from '@ps-analysis-tool/common';
  */
 import useContextSelector from '../../../../utils/useContextSelector';
 import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
-import setDocumentCookies from '../../../../utils/setDocumentCookies';
 import isOnRWS from '../../../../contentScript/utils/isOnRWS';
 import { useSettingsStore } from '../syncSettingsStore';
 
@@ -211,8 +210,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
   /**
    * Sets current frames for sidebar, detected if the current tab is to be analysed,
    * parses data currently in store, set current tab URL.
-   *
-   * TODO: Refactor: Break in smaller parts.
    */
   const intitialSync = useCallback(async () => {
     const _tabId = chrome.devtools.inspectedWindow.tabId;
@@ -223,7 +220,14 @@ export const Provider = ({ children }: PropsWithChildren) => {
       await getAllFramesForCurrentTab(_tabId);
     }
 
-    await setDocumentCookies(_tabId?.toString());
+    if (chrome.devtools.inspectedWindow.tabId && canStartInspecting) {
+      await chrome.tabs.sendMessage(chrome.devtools.inspectedWindow.tabId, {
+        payload: {
+          type: 'DEVTOOL::WEBPAGE::GET_JS_COOKIES',
+          tabId: chrome.devtools.inspectedWindow.tabId,
+        },
+      });
+    }
 
     chrome.devtools.inspectedWindow.eval(
       'window.location.href',
@@ -235,13 +239,18 @@ export const Provider = ({ children }: PropsWithChildren) => {
     );
 
     setLoading(false);
-  }, [getAllFramesForCurrentTab]);
+  }, [getAllFramesForCurrentTab, canStartInspecting]);
 
   const getCookiesSetByJavascript = useCallback(async () => {
-    if (tabId) {
-      await setDocumentCookies(tabId.toString());
+    if (chrome.devtools.inspectedWindow.tabId) {
+      await chrome.tabs.sendMessage(chrome.devtools.inspectedWindow.tabId, {
+        payload: {
+          type: 'DEVTOOL::WEBPAGE::GET_JS_COOKIES',
+          tabId: chrome.devtools.inspectedWindow.tabId,
+        },
+      });
     }
-  }, [tabId]);
+  }, []);
 
   const changeListeningToThisTab = useCallback(() => {
     if (!tabId) {
