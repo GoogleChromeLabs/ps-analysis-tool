@@ -35,6 +35,7 @@ const filterCookiesByFrame = (
   if (!cookies || !frameUrl || !tabFrames || !tabFrames[frameUrl]) {
     return Object.values(frameFilteredCookies);
   }
+
   let tabFramesIDMap: number[] = [];
 
   Object.keys(tabFrames)?.forEach((url) => {
@@ -60,6 +61,7 @@ const filterCookiesByFrame = (
       });
 
       if (!hasFrame && cookie?.frameIdList) {
+        //For UnMapped Cookies
         if (
           cookie.frameIdList &&
           cookie.frameIdList.length === 0 &&
@@ -77,20 +79,14 @@ const filterCookiesByFrame = (
           }
         }
 
+        //For Orphaned Cookies
         if (
           cookie.frameIdList &&
           cookie.frameIdList.length > 0 &&
           cookie.parsedCookie.domain
         ) {
-          const domainToCheck = cookie.parsedCookie.domain.startsWith('.')
-            ? cookie.parsedCookie.domain.slice(1)
-            : cookie.parsedCookie.domain;
-          if (frameUrl.includes(domainToCheck)) {
+          if (tabFrames[frameUrl].frameIds.includes(0)) {
             frameFilteredCookies[key] = cookie;
-          } else {
-            if (tabFramesIDMap.includes(0)) {
-              frameFilteredCookies[key] = cookie;
-            }
           }
         }
       }
