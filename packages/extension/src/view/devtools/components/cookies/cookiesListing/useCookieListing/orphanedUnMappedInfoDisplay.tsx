@@ -30,11 +30,11 @@ const OrphanedUnMappedInfoDisplay = ({
   const tabFrames = useCookieStore(({ state }) => state.tabFrames);
 
   if (!tabFrames) {
-    return <></>;
+    return <span>{''}</span>;
   }
 
   if (frameIdList.length === 0) {
-    return <span className="font-serif">Unmapped Cookie</span>;
+    return <span>Unmapped Cookie</span>;
   }
 
   let tabFramesIDMap: Set<number> = new Set();
@@ -48,6 +48,7 @@ const OrphanedUnMappedInfoDisplay = ({
   });
 
   let hasFrame = true;
+
   frameIdList.forEach((id) => {
     if (!tabFramesIDMap.has(id)) {
       hasFrame = false;
@@ -57,7 +58,7 @@ const OrphanedUnMappedInfoDisplay = ({
   if (!hasFrame) {
     return <span>Orphaned Cookie</span>;
   }
-  return <></>;
+  return <span>{''}</span>;
 };
 
 export default OrphanedUnMappedInfoDisplay;
