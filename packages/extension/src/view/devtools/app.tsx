@@ -28,11 +28,7 @@ import {
   InspectButton,
   ToastMessage,
 } from '@ps-analysis-tool/design-system';
-import {
-  ORPHANED_COOKIE_KEY,
-  type CookieTableData,
-  UNMAPPED_COOKIE_KEY,
-} from '@ps-analysis-tool/common';
+import { type CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -142,44 +138,23 @@ const App: React.FC = () => {
       psData.children['cookies'].panel = (
         <Cookies setFilteredCookies={setFilteredCookies} />
       );
-      psData.children['cookies'].children = Object.keys(tabFrames || {})
-        .filter((url) => {
-          if (url === ORPHANED_COOKIE_KEY) {
-            return frameHasCookies[url];
-          }
+      psData.children['cookies'].children = Object.keys(
+        tabFrames || {}
+      ).reduce<SidebarItems>((acc, url) => {
+        const popupTitle = `Cookies used by frames from ${url}`;
 
-          if (url === UNMAPPED_COOKIE_KEY) {
-            return frameHasCookies[url];
-          }
+        acc[url] = {
+          title: url,
+          popupTitle,
+          panel: <Cookies setFilteredCookies={setFilteredCookies} />,
+          icon: <CookieIcon />,
+          selectedIcon: <CookieIconWhite />,
+          children: {},
+          isBlurred: !frameHasCookies?.[url],
+        };
 
-          return true;
-        })
-        .reduce<SidebarItems>((acc, url) => {
-          let popupTitle = `Cookies used by frames from ${url}`;
-          let infoIconDescription = '';
-          if (url === ORPHANED_COOKIE_KEY) {
-            popupTitle = infoIconDescription =
-              'Frames that set these cookies were removed from the DOM, leaving these cookies orphaned.';
-          }
-
-          if (url === UNMAPPED_COOKIE_KEY) {
-            popupTitle = infoIconDescription =
-              'Cookies that could not be mapped to any frame.';
-          }
-
-          acc[url] = {
-            title: url,
-            popupTitle,
-            panel: <Cookies setFilteredCookies={setFilteredCookies} />,
-            icon: <CookieIcon />,
-            selectedIcon: <CookieIconWhite />,
-            infoIconDescription,
-            children: {},
-            isBlurred: !frameHasCookies?.[url],
-          };
-
-          return acc;
-        }, {});
+        return acc;
+      }, {});
 
       const showInspectButton =
         canStartInspecting && Boolean(Object.keys(tabFrames || {}).length);

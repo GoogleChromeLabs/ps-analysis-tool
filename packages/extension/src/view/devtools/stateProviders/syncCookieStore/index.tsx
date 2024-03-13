@@ -26,12 +26,7 @@ import React, {
   useMemo,
 } from 'react';
 import { noop } from '@ps-analysis-tool/design-system';
-import {
-  type TabCookies,
-  type TabFrames,
-  ORPHANED_COOKIE_KEY,
-  UNMAPPED_COOKIE_KEY,
-} from '@ps-analysis-tool/common';
+import { type TabCookies, type TabFrames } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -171,8 +166,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
           return tabFrame;
         })
       );
-      modifiedTabFrames[ORPHANED_COOKIE_KEY] = { frameIds: [] };
-      modifiedTabFrames[UNMAPPED_COOKIE_KEY] = { frameIds: [] };
       setTabFrames(modifiedTabFrames);
     },
     []
@@ -201,24 +194,13 @@ export const Provider = ({ children }: PropsWithChildren) => {
     const _frameHasCookies = Object.values(tabCookies).reduce<
       Record<string, boolean>
     >((acc, cookie) => {
-      let hasFrame = false;
-
       cookie.frameIdList?.forEach((frameId) => {
         const url = tabFramesIdsWithURL[frameId];
 
         if (url) {
           acc[url] = true;
-          hasFrame = true;
         }
       });
-
-      if (!hasFrame && cookie.frameIdList && cookie.frameIdList?.length > 0) {
-        acc[ORPHANED_COOKIE_KEY] = true;
-      }
-
-      if (!hasFrame && cookie.frameIdList && cookie.frameIdList?.length === 0) {
-        acc[UNMAPPED_COOKIE_KEY] = true;
-      }
 
       return acc;
     }, {});

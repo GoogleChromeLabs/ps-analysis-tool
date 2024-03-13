@@ -19,6 +19,7 @@
  */
 import React from 'react';
 import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
+import { InfoIcon } from '@ps-analysis-tool/design-system';
 
 interface OrphanedUnMappedInfoDisplayProps {
   frameIdList: number[];
@@ -34,7 +35,15 @@ const OrphanedUnMappedInfoDisplay = ({
   }
 
   if (frameIdList.length === 0) {
-    return <span>Unmapped Cookie</span>;
+    return (
+      <span className="flex">
+        <InfoIcon
+          title="Cookies that could not be mapped to any frame."
+          className="fill-granite-gray"
+        />
+        Unmapped Cookie
+      </span>
+    );
   }
 
   let tabFramesIDMap: Set<number> = new Set();
@@ -56,7 +65,15 @@ const OrphanedUnMappedInfoDisplay = ({
   });
 
   if (!hasFrame) {
-    return <span>Orphaned Cookie</span>;
+    return (
+      <span className="flex">
+        <InfoIcon
+          title="Frames that set these cookies were removed from the DOM, leaving these cookies orphaned."
+          className="fill-granite-gray"
+        />
+        Orphaned Cookie
+      </span>
+    );
   }
   return <span>{''}</span>;
 };
