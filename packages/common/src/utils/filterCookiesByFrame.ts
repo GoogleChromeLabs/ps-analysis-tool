@@ -16,7 +16,6 @@
 /**
  * Internal dependencies.
  */
-import { ORPHANED_COOKIE_KEY, UNMAPPED_COOKIE_KEY } from '../constants';
 import { CookieTableData } from '../cookies.types';
 
 interface Cookies {
@@ -46,35 +45,54 @@ const filterCookiesByFrame = (
     }
   });
 
-  if (tabFrames[frameUrl].frameIds?.length === 0) {
-    Object.entries(cookies).forEach(([key, cookie]) => {
-      let hasFrame = false;
-      cookie.frameIdList?.forEach((frameId) => {
-        if (tabFramesIDMap.includes(frameId as number)) {
-          hasFrame = true;
-        }
-      });
-
-      if (!hasFrame && cookie.frameIdList !== undefined) {
-        if (
-          frameUrl === UNMAPPED_COOKIE_KEY &&
-          cookie.frameIdList?.length === 0
-        ) {
-          frameFilteredCookies[key] = cookie;
-        } else if (
-          frameUrl === ORPHANED_COOKIE_KEY &&
-          cookie.frameIdList?.length > 0
-        ) {
-          frameFilteredCookies[key] = cookie;
-        }
-      }
-    });
-  }
-
   Object.entries(cookies).forEach(([key, cookie]) => {
     tabFrames[frameUrl].frameIds?.forEach((frameId) => {
       if (cookie.frameIdList?.includes(frameId)) {
         frameFilteredCookies[key] = cookie;
+      }
+
+      //For orphaned/unmapped cookies
+      let hasFrame = false;
+      cookie.frameIdList?.forEach((cookieFrameId) => {
+        if (tabFramesIDMap.includes(cookieFrameId as number)) {
+          hasFrame = true;
+        }
+      });
+
+      if (!hasFrame && cookie?.frameIdList) {
+        if (
+          cookie.frameIdList &&
+          cookie.frameIdList.length === 0 &&
+          cookie.parsedCookie.domain
+        ) {
+          const domainToCheck = cookie.parsedCookie.domain.startsWith('.')
+            ? cookie.parsedCookie.domain.slice(1)
+            : cookie.parsedCookie.domain;
+          if (frameUrl.includes(domainToCheck)) {
+            frameFilteredCookies[key] = cookie;
+          } else {
+            if (tabFrames[frameUrl].frameIds.includes(0)) {
+              frameFilteredCookies[key] = cookie;
+            }
+          }
+        }
+
+        if (
+          cookie.frameIdList &&
+          cookie.frameIdList.length > 0 &&
+          cookie.parsedCookie.domain
+        ) {
+          const domainToCheck = cookie.parsedCookie.domain.startsWith('.')
+            ? cookie.parsedCookie.domain.slice(1)
+            : cookie.parsedCookie.domain;
+          if (frameUrl.includes(domainToCheck)) {
+            frameFilteredCookies[key] = cookie;
+          } else {
+            if (tabFramesIDMap.includes(0)) {
+              frameFilteredCookies[key] = cookie;
+            }
+          }
+        }
       }
     });
   });
