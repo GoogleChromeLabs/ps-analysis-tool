@@ -379,6 +379,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     }
 
     await chrome.storage.sync.clear();
+    await chrome.storage.local.clear();
     await chrome.storage.sync.set({
       allowedNumberOfTabs: 'single',
       isUsingCDP: false,
