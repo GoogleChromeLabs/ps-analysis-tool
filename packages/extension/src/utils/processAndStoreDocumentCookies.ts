@@ -29,7 +29,7 @@ import { type Cookie as ParsedCookie } from 'simple-cookie';
 import { createCookieObject } from '../serviceWorker/createCookieObject';
 import { fetchDictionary } from './fetchCookieDictionary';
 
-interface ProcessAndStoreDucmentCookiesProps {
+interface ProcessAndStoreDucmentCookies {
   tabUrl: string;
   tabId: string;
   documentCookies: ParsedCookie[];
@@ -39,7 +39,7 @@ const processAndStoreDocumentCookies = async ({
   tabUrl,
   tabId,
   documentCookies,
-}: ProcessAndStoreDucmentCookiesProps) => {
+}: ProcessAndStoreDucmentCookies) => {
   try {
     const cookieDB = await fetchDictionary();
 

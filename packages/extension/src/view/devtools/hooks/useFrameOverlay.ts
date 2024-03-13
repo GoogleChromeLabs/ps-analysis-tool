@@ -153,11 +153,10 @@ const useFrameOverlay = (
             chrome.tabs.sendMessage(
               chrome.devtools.inspectedWindow.tabId,
               { PSATDevToolsHidden: true },
-              (res) => {
-                if (!chrome.runtime.lastError) {
-                  if (res) {
-                    setCanStartInspecting(res.setInPage);
-                  }
+              () => {
+                if (chrome.runtime.lastError) {
+                  // eslint-disable-next-line no-console
+                  console.warn(chrome.runtime.lastError);
                 }
               }
             );
@@ -166,11 +165,10 @@ const useFrameOverlay = (
             chrome.tabs.sendMessage(
               chrome.devtools.inspectedWindow.tabId,
               { PSATDevToolsHidden: false },
-              (res) => {
-                if (!chrome.runtime.lastError) {
-                  if (res) {
-                    setCanStartInspecting(res.setInPage);
-                  }
+              () => {
+                if (chrome.runtime.lastError) {
+                  // eslint-disable-next-line no-console
+                  console.warn(chrome.runtime.lastError);
                 }
               }
             );
