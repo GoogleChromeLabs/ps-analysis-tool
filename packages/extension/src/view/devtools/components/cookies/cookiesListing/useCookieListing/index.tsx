@@ -178,6 +178,20 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         ),
         widthWeightagePercentage: 7,
       },
+      {
+        header: 'Unmapped Cookie',
+        accessorKey: 'frameIdList',
+        cell: (info: InfoType) => (
+          <p className="flex justify-center items-center">
+            {(info as number[]).length === 0 ? (
+              <span className="font-serif">✓</span>
+            ) : (
+              ''
+            )}
+          </p>
+        ),
+        widthWeightagePercentage: 7,
+      },
     ],
     [isUsingCDP]
   );
