@@ -288,6 +288,9 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
       allowedNumberOfTabs: queryParams.psat_multitab ? 'unlimited' : 'single',
       isUsingCDP: Boolean(queryParams.psat_cdp),
     });
+
+    globalIsUsingCDP = Boolean(queryParams.psat_cdp);
+    tabMode = queryParams.psat_multitab ? 'unlimited' : 'single';
   }
 
   syncCookieStore?.updateUrl(tabId, tab.url);
