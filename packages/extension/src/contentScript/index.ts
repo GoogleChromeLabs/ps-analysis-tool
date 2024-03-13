@@ -125,13 +125,7 @@ class WebpageContentScript {
     chrome.runtime.onMessage.addListener(async (message, sender, response) => {
       if (message.status === 'set?') {
         response({ setInPage: true });
-        //@ts-ignore
-        const jsCookies = await cookieStore.getAll();
-        await processAndStoreDocumentCookies({
-          tabUrl: window.location.href,
-          tabId: message.tabId,
-          documentCookies: jsCookies,
-        });
+        await this.getAndProcessJSCookies(message.tabId);
       }
 
       if (message.PSATDevToolsHidden) {
@@ -142,6 +136,7 @@ class WebpageContentScript {
       if (!message.PSATDevToolsHidden) {
         //@ts-ignore
         cookieStore.onchange = this.handleCookieChange;
+        await this.getAndProcessJSCookies(message.tabId);
       }
 
       if (message?.payload?.type === 'SERVICEWORKER::WEBPAGE::TABID_STORAGE') {
@@ -149,13 +144,7 @@ class WebpageContentScript {
       }
 
       if (message?.payload?.type === 'DEVTOOL::WEBPAGE::GET_JS_COOKIES') {
-        //@ts-ignore
-        const jsCookies = await cookieStore.getAll();
-        await processAndStoreDocumentCookies({
-          tabUrl: window.location.href,
-          tabId: message.payload.tabId,
-          documentCookies: jsCookies,
-        });
+        await this.getAndProcessJSCookies(message.payload.tabId);
       }
     });
 
@@ -167,6 +156,20 @@ class WebpageContentScript {
         port.onMessage.addListener(this.onMessage);
         port.onDisconnect.addListener(this.onDisconnect);
       }
+    });
+  }
+
+  /**
+   * This function will fetch and add cookies that have been set via JS.
+   * @param tabId The tabID whose cookies have to be fetched.
+   */
+  async getAndProcessJSCookies(tabId: string) {
+    //@ts-ignore
+    const jsCookies = await cookieStore.getAll();
+    await processAndStoreDocumentCookies({
+      tabUrl: window.location.href,
+      tabId,
+      documentCookies: jsCookies,
     });
   }
 
