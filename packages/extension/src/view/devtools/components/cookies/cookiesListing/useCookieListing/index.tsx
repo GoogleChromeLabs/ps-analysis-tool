@@ -39,6 +39,7 @@ import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import useHighlighting from './useHighlighting';
 import { useSettingsStore } from '../../../../stateProviders/syncSettingsStore';
 import namePrefixIconSelector from './namePrefixIconSelector';
+import OrphanedUnMappedInfoDisplay from './orphanedUnMappedInfoDisplay';
 
 const useCookieListing = (domainsInAllowList: Set<string>) => {
   const { selectedFrame, cookies, getCookiesSetByJavascript } = useCookieStore(
@@ -93,13 +94,13 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         header: 'Domain',
         accessorKey: 'parsedCookie.domain',
         cell: (info: InfoType) => info,
-        widthWeightagePercentage: 9,
+        widthWeightagePercentage: 8,
       },
       {
         header: 'Partition Key',
         accessorKey: 'parsedCookie.partitionKey',
         cell: (info: InfoType) => info,
-        widthWeightagePercentage: 9,
+        widthWeightagePercentage: 8,
       },
       {
         header: 'SameSite',
@@ -111,13 +112,13 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         header: 'Category',
         accessorKey: 'analytics.category',
         cell: (info: InfoType) => info,
-        widthWeightagePercentage: 8,
+        widthWeightagePercentage: 7,
       },
       {
         header: 'Platform',
         accessorKey: 'analytics.platform',
         cell: (info: InfoType) => <span>{info ? info : 'Unknown'}</span>,
-        widthWeightagePercentage: 10,
+        widthWeightagePercentage: 8,
       },
       {
         header: 'HttpOnly',
@@ -143,7 +144,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         header: 'Value',
         accessorKey: 'parsedCookie.value',
         cell: (info: InfoType) => info,
-        widthWeightagePercentage: 7.8,
+        widthWeightagePercentage: 7,
       },
       {
         header: 'Path',
@@ -155,19 +156,27 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         header: 'Expires / Max-Age',
         accessorKey: 'parsedCookie.expires',
         cell: (info: InfoType) => (info ? info : 'Session'),
-        widthWeightagePercentage: 7.8,
+        widthWeightagePercentage: 7,
       },
       {
         header: 'Priority',
         accessorKey: 'parsedCookie.priority',
         cell: (info: InfoType) => info,
-        widthWeightagePercentage: 5.4,
+        widthWeightagePercentage: 5,
       },
       {
         header: 'Size',
         accessorKey: 'parsedCookie.size',
         cell: (info: InfoType) => info,
         widthWeightagePercentage: 3.4,
+      },
+      {
+        header: 'Orphaned Cookie',
+        accessorKey: 'frameIdList',
+        cell: (info: InfoType) => (
+          <OrphanedUnMappedInfoDisplay frameIdList={info as number[]} />
+        ),
+        widthWeightagePercentage: 7,
       },
     ],
     [isUsingCDP]
