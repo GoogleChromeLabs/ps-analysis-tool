@@ -171,27 +171,13 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         widthWeightagePercentage: 3.4,
       },
       {
-        header: 'Orphaned Cookie',
+        header: 'Orphaned/Unmapped Cookie',
         accessorKey: 'frameIdList',
         isHiddenByDefault: true,
         cell: (info: InfoType) => (
           <OrphanedUnMappedInfoDisplay frameIdList={info as number[]} />
         ),
         widthWeightagePercentage: 7.6,
-      },
-      {
-        header: 'Unmapped Cookie',
-        accessorKey: 'frameIdList',
-        cell: (info: InfoType) => (
-          <p className="flex justify-center items-center">
-            {(info as number[]).length === 0 ? (
-              <span className="font-serif">✓</span>
-            ) : (
-              ''
-            )}
-          </p>
-        ),
-        widthWeightagePercentage: 7,
       },
     ],
     [isUsingCDP]

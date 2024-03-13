@@ -33,6 +33,10 @@ const OrphanedUnMappedInfoDisplay = ({
     return <></>;
   }
 
+  if (frameIdList.length === 0) {
+    return <span className="font-serif">Unmapped Cookie</span>;
+  }
+
   let tabFramesIDMap: Set<number> = new Set();
 
   Object.keys(tabFrames).forEach((url) => {
@@ -50,7 +54,10 @@ const OrphanedUnMappedInfoDisplay = ({
     }
   });
 
-  return hasFrame ? '' : <span className="font-serif">✓</span>;
+  if (!hasFrame) {
+    return <span>Orphaned Cookie</span>;
+  }
+  return <></>;
 };
 
 export default OrphanedUnMappedInfoDisplay;
