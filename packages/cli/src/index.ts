@@ -224,7 +224,7 @@ const startDashboardServer = async (dir: string) => {
 
   if (outDir) {
     await saveCSVReports(path.resolve(outputDir), result);
-    return;
+    process.exit(0);
   }
 
   startDashboardServer(
