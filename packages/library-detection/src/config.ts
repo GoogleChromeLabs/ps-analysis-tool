@@ -65,7 +65,7 @@ import {
 const LIBRARIES = [
   {
     name: 'gsiV2',
-    component: GISAccordion,
+    component: GSIAccordion,
     signatures: {
       strongMatches: GSI_V2_SIGNATURE_STRONG_MATCHES,
       weakMatches: GSI_V2_SIGNATURE_WEAK_MATCHES,
@@ -76,7 +76,7 @@ const LIBRARIES = [
   },
   {
     name: 'gis',
-    component: GSIAccordion,
+    component: GISAccordion,
     signatures: {
       strongMatches: [],
       weakMatches: GIS_SIGNATURE_WEAK_MATCHES,
