@@ -187,6 +187,10 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         isHiddenByDefault: true,
         widthWeightagePercentage: 5.4,
         cell: (_, details: TableData | undefined) => {
+          //skip calculation of blocking status when not using CDP
+          if (!isUsingCDP) {
+            return <></>;
+          }
           const cookieData = details as CookieTableData;
 
           const isInboundBlocked =
