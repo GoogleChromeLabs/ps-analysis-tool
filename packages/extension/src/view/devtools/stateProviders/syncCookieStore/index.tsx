@@ -201,6 +201,24 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
       });
 
+      if (cookie.frameIdList?.length === 0) {
+        if (
+          cookie.frameIdList &&
+          cookie.frameIdList.length === 0 &&
+          cookie.parsedCookie.domain
+        ) {
+          const domainToCheck = cookie.parsedCookie.domain.startsWith('.')
+            ? cookie.parsedCookie.domain.slice(1)
+            : cookie.parsedCookie.domain;
+
+          Object.values(tabFramesIdsWithURL).forEach((frameUrl) => {
+            if (frameUrl.includes(domainToCheck)) {
+              acc[frameUrl] = true;
+            }
+          });
+        }
+      }
+
       return acc;
     }, {});
 

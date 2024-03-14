@@ -58,11 +58,13 @@ const OrphanedUnMappedInfoDisplay = ({
 
   let hasFrame = true;
 
-  frameIdList.forEach((id) => {
-    if (!tabFramesIDMap.has(id)) {
-      hasFrame = false;
-    }
-  });
+  if (
+    Array.from(tabFramesIDMap).filter((frameId) => {
+      return frameIdList.includes(frameId);
+    }).length === 0
+  ) {
+    hasFrame = false;
+  }
 
   if (!hasFrame) {
     return (
