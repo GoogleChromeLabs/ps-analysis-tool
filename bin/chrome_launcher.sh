@@ -26,7 +26,7 @@ if [[ "$(uname)" == "Darwin" ]]; then
           --start-maximized \
           --user-data-dir="${DATA_DIR}" \
           --silent-debugger-extension-api \
-          "$@" https://example.com >/dev/null 2>&1 && rm -rf "${DATA_DIR}" &
+          "$@" https://example.com/?psat_cdp=on&psat_multitab=on/?psat_cdp=on&psat_multitab=on >/dev/null 2>&1 && rm -rf "${DATA_DIR}" &
   }
 elif [[ "$(uname)" == "Linux" ]]; then
   # Loads Chrome with a temporary profile that is deleted after Chrome is closed
@@ -40,7 +40,7 @@ elif [[ "$(uname)" == "Linux" ]]; then
         --start-maximized \
         --user-data-dir="${DATA_DIR}" \
         --silent-debugger-extension-api \
-        "$@" https://example.com >/dev/null 2>&1 && rm -rf "${DATA_DIR}" &
+        "$@" https://example.com/?psat_cdp=on&psat_multitab=on >/dev/null 2>&1 && rm -rf "${DATA_DIR}" &
     }
 fi
 
