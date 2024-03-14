@@ -173,7 +173,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         widthWeightagePercentage: 3,
       },
       {
-        header: 'Orphaned/Unmapped Cookie',
+        header: 'Mapping',
         accessorKey: 'frameIdList',
         isHiddenByDefault: true,
         cell: (info: InfoType) => (
