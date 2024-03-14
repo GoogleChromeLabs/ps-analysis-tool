@@ -27,7 +27,8 @@ const jetpackLikesDOMQuery = () => {
     if (
       iframe.src &&
       frameSrcRegex.test(iframe.src) &&
-      name?.startsWith('like-comment-frame')
+      (name?.startsWith('like-comment-frame') ||
+        name?.startsWith('like-post-frame'))
     ) {
       matchItems.push(`iframe[name]: ${name}`);
       matchItems.push(`iframe[src]: ${iframe.src}`);

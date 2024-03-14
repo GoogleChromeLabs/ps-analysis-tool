@@ -35,6 +35,7 @@ import { ALLOWED_NUMBER_OF_TABS } from '../constants';
 import SynchnorousCookieStore from '../store/synchnorousCookieStore';
 import canProcessCookies from '../utils/canProcessCookies';
 import { getTab } from '../utils/getTab';
+import getQueryParams from '../utils/getQueryParams';
 import reloadCurrentTab from '../utils/reloadCurrentTab';
 
 let cookieDB: CookieDatabase | null = null;
@@ -288,6 +289,19 @@ chrome.runtime.onStartup.addListener(async () => {
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   if (!tab.url) {
     return;
+  }
+
+  const queryParams = getQueryParams(tab.url);
+
+  if (queryParams.psat_cdp || queryParams.psat_multitab) {
+    await chrome.storage.sync.set({
+      allowedNumberOfTabs:
+        queryParams.psat_multitab === 'on' ? 'unlimited' : 'single',
+      isUsingCDP: queryParams.psat_cdp === 'on',
+    });
+
+    globalIsUsingCDP = queryParams.psat_cdp === 'on';
+    tabMode = queryParams.psat_multitab === 'on' ? 'unlimited' : 'single';
   }
 
   syncCookieStore?.updateUrl(tabId, tab.url);

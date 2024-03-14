@@ -41,7 +41,7 @@ const OrphanedUnMappedInfoDisplay = ({
         title="Cookies that could not be mapped to any frame."
       >
         <InfoIcon className="fill-granite-gray" />
-        Unmapped Cookie
+        <span className="ml-[2px] block">Unmapped</span>
       </span>
     );
   }
@@ -73,7 +73,7 @@ const OrphanedUnMappedInfoDisplay = ({
         title="Frames that set these cookies were removed from the DOM, leaving these cookies orphaned."
       >
         <InfoIcon className="fill-granite-gray" />
-        Orphaned Cookie
+        <span className="ml-[2px] block">Orphaned</span>
       </span>
     );
   }
