@@ -88,7 +88,8 @@ const LibraryDetection = memo(function LibraryDetection() {
       </p>
     ) : (
       <p className="text-center dark:text-bright-gray">
-        Please open a page with correct URL and reopen the DevTools Panel
+        A library detection error occurred. Please reopen the DevTool on a valid
+        URL.
       </p>
     );
 
