@@ -189,12 +189,19 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         cell: (_, details: TableData | undefined) => {
           const cookieData = details as CookieTableData;
 
+          const isInboundBlocked =
+            cookieData.blockingStatus?.inboundBlock !==
+            BLOCK_STATUS.NOT_BLOCKED;
+          const isOutboundBlocked =
+            cookieData.blockingStatus?.outboundBlock !==
+            BLOCK_STATUS.NOT_BLOCKED;
+          const hasValidBlockedReason =
+            cookieData?.blockedReasons &&
+            cookieData.blockedReasons.length !== 0;
+
           if (
-            !cookieData.blockedReasons?.length &&
-            (cookieData.blockingStatus?.inboundBlock !==
-              BLOCK_STATUS.NOT_BLOCKED ||
-              cookieData.blockingStatus?.outboundBlock !==
-                BLOCK_STATUS.NOT_BLOCKED)
+            (isInboundBlocked || isOutboundBlocked) &&
+            !hasValidBlockedReason
           ) {
             return (
               <span
@@ -205,6 +212,8 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
                 Undetermined
               </span>
             );
+          } else if (hasValidBlockedReason) {
+            return <span className="flex">Blocked</span>;
           } else {
             return <></>;
           }
