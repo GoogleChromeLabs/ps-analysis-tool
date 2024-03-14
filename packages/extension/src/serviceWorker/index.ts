@@ -285,12 +285,13 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 
   if (queryParams.psat_cdp || queryParams.psat_multitab) {
     await chrome.storage.sync.set({
-      allowedNumberOfTabs: queryParams.psat_multitab ? 'unlimited' : 'single',
-      isUsingCDP: Boolean(queryParams.psat_cdp),
+      allowedNumberOfTabs:
+        queryParams.psat_multitab === 'on' ? 'unlimited' : 'single',
+      isUsingCDP: queryParams.psat_cdp === 'on',
     });
 
-    globalIsUsingCDP = Boolean(queryParams.psat_cdp);
-    tabMode = queryParams.psat_multitab ? 'unlimited' : 'single';
+    globalIsUsingCDP = queryParams.psat_cdp === 'on';
+    tabMode = queryParams.psat_multitab === 'on' ? 'unlimited' : 'single';
   }
 
   syncCookieStore?.updateUrl(tabId, tab.url);
