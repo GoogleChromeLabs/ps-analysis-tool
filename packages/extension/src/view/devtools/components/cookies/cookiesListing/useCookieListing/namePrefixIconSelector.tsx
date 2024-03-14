@@ -24,7 +24,6 @@ import {
   GreenTick,
   InboundIcon,
   OutboundIcon,
-  QuestionMark,
   OutboundInboundIcon,
   OutboundInboundColoredIcon,
 } from '@ps-analysis-tool/design-system';
@@ -53,10 +52,6 @@ const namePrefixIconSelector = ({ originalData }: TableRow) => {
     data?.blockedReasons && data.blockedReasons.length !== 0;
 
   if (!hasValidBlockedReason) {
-    if (isInboundBlocked || isOutboundBlocked) {
-      return <QuestionMark />;
-    }
-
     return <></>;
   }
 
