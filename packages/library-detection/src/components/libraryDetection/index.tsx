@@ -33,9 +33,10 @@ import type { LibraryData, AccordionProps } from '../../types';
 const LibraryDetection = memo(function LibraryDetection() {
   useLibraryDetection();
 
-  const { libraryMatches, showLoader, isCurrentTabLoading } =
+  const { libraryMatches, showLoader, isCurrentTabLoading, errorOccured } =
     useLibraryDetectionContext(({ state }) => ({
       libraryMatches: state.libraryMatches,
+      errorOccured: state.errorOccured,
       showLoader: state.showLoader,
       isCurrentTabLoading: state.isCurrentTabLoading,
     }));
@@ -57,7 +58,7 @@ const LibraryDetection = memo(function LibraryDetection() {
   ];
 
   const result =
-    detectedLibraryNames.length > 0 ? (
+    !errorOccured && detectedLibraryNames.length > 0 ? (
       <>
         {LIBRARIES.map((library) => {
           const Component = library.component as React.FC<AccordionProps>;
@@ -81,9 +82,13 @@ const LibraryDetection = memo(function LibraryDetection() {
           );
         })}
       </>
-    ) : (
+    ) : !errorOccured ? (
       <p className="text-center dark:text-bright-gray">
         No libraries with known breakages found yet!
+      </p>
+    ) : (
+      <p className="text-center dark:text-bright-gray">
+        Please open a page with correct URL and reopen the DevTools Panel
       </p>
     );
 
@@ -93,7 +98,7 @@ const LibraryDetection = memo(function LibraryDetection() {
       testId="library-detection"
       description=""
     >
-      {showLoader ? (
+      {!errorOccured && showLoader ? (
         <>
           <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />
           <p className="text-center dark:text-bright-gray">
