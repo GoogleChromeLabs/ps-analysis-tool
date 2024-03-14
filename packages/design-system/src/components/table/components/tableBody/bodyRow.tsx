@@ -19,7 +19,7 @@
  */
 import React from 'react';
 import classNames from 'classnames';
-import { BLOCK_STATUS, CookieTableData } from '@ps-analysis-tool/common';
+import { CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -59,10 +59,7 @@ const BodyRow = ({
   const cookieKey = getRowObjectKey(row);
   const isBlocked = useIsBlockedToHighlight
     ? (row.originalData as CookieTableData)?.isBlocked
-    : (row.originalData as CookieTableData)?.blockingStatus?.inboundBlock !==
-        BLOCK_STATUS.NOT_BLOCKED ||
-      (row.originalData as CookieTableData)?.blockingStatus?.outboundBlock !==
-        BLOCK_STATUS.NOT_BLOCKED;
+    : Boolean((row.originalData as CookieTableData)?.blockedReasons?.length);
   const isHighlighted = (row.originalData as CookieTableData)?.highlighted;
   const isDomainInAllowList = (row.originalData as CookieTableData)
     ?.isDomainInAllowList;
