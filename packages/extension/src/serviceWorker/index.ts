@@ -504,11 +504,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
     const { cookie, cookieExclusionReasons, cookieWarningReasons } =
       details.cookieIssueDetails;
 
-    const primaryDomain = cookie?.domain.startsWith('.')
-      ? cookie.domain
-      : '.' + cookie?.domain;
-
-    const secondaryDomain = cookie?.domain.startsWith('.')
+    const domainToUse = cookie?.domain.startsWith('.')
       ? cookie.domain.slice(1)
       : cookie?.domain;
 
@@ -516,9 +512,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
     // This is done to capture both NID.google.com/ and NIDgoogle.com/ so that if we find either of the cookie we add issues to the cookie object
     try {
       syncCookieStore?.addCookieExclusionWarningReason(
-        cookie?.name + primaryDomain + cookie?.path,
-        //@ts-ignore since the details has been checked before sending them as parameter.
-        cookie?.name + secondaryDomain + cookie?.path,
+        cookie?.name + domainToUse + cookie?.path,
         cookieExclusionReasons,
         cookieWarningReasons,
         source.tabId
