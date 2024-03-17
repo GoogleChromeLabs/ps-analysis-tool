@@ -31,6 +31,7 @@ import { LibraryDetectionProvider } from '@ps-analysis-tool/library-detection';
 import App from './app';
 import { Provider as ExternalStoreProvider } from './stateProviders/syncCookieStore';
 import { Provider as SettingsStoreProvider } from './stateProviders/syncSettingsStore';
+import { Provider as AllowedListProvider } from './stateProviders/useAllowedList';
 
 const isDarkMode = chrome.devtools.panels.themeName === 'dark';
 document.body.classList.add(isDarkMode ? 'dark' : 'light');
@@ -44,7 +45,9 @@ if (root) {
         <ExternalStoreProvider>
           <TablePersistentSettingsProvider>
             <LibraryDetectionProvider>
-              <App />
+              <AllowedListProvider>
+                <App />
+              </AllowedListProvider>
             </LibraryDetectionProvider>
           </TablePersistentSettingsProvider>
         </ExternalStoreProvider>

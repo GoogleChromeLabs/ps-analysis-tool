@@ -55,7 +55,7 @@ describe('useHighlighting', () => {
       )
     );
 
-    expect(nextState['KRTBCOOKIE_290.pubmatic.com/']).toEqual(
+    expect(nextState['KRTBCOOKIE_290pubmatic.com/']).toEqual(
       expect.objectContaining(mock.default.tabCookies['KRTBCOOKIE_290'])
     );
   });

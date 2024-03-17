@@ -176,6 +176,11 @@ export const Provider = ({ children }: PropsWithChildren) => {
       } else {
         setIsUsingCDPForSettingsDisplay(currentSettings.isUsingCDP);
       }
+    } else {
+      setAllowedNumberOfTabsForSettingsDisplay(
+        currentSettings.allowedNumberOfTabs
+      );
+      setIsUsingCDPForSettingsDisplay(currentSettings.isUsingCDP);
     }
 
     if (Object.keys(currentSettings).includes('allowedNumberOfTabs')) {
@@ -241,11 +246,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const sessionStoreChangeListener = useCallback(
     (changes: { [key: string]: chrome.storage.StorageChange }) => {
-      if (
-        Object.keys(changes).includes('allowedNumberOfTabs') &&
-        Object.keys(changes.allowedNumberOfTabs).includes('newValue')
-      ) {
-        setAllowedNumberOfTabs(changes?.allowedNumberOfTabs?.newValue);
+      if (changes?.['allowedNumberOfTabs']?.['newValue']) {
+        setAllowedNumberOfTabsForSettingsDisplay(
+          changes?.allowedNumberOfTabs?.newValue
+        );
         setSettingsChanged(true);
       }
 
@@ -253,7 +257,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         Object.keys(changes).includes('isUsingCDP') &&
         Object.keys(changes.isUsingCDP).includes('newValue')
       ) {
-        setIsUsingCDP(changes?.isUsingCDP?.newValue);
+        setIsUsingCDPForSettingsDisplay(changes?.isUsingCDP?.newValue);
         setSettingsChanged(true);
       }
     },
@@ -338,6 +342,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
         Object.keys(changes.allowedNumberOfTabs).includes('newValue')
       ) {
         setAllowedNumberOfTabs(changes?.allowedNumberOfTabs?.newValue);
+        setAllowedNumberOfTabsForSettingsDisplay(
+          changes?.allowedNumberOfTabs?.newValue
+        );
       }
 
       if (
@@ -345,6 +352,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         Object.keys(changes.isUsingCDP).includes('newValue')
       ) {
         setIsUsingCDP(changes?.isUsingCDP?.newValue);
+        setIsUsingCDPForSettingsDisplay(changes?.isUsingCDP?.newValue);
       }
     },
     []

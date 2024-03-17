@@ -16,20 +16,20 @@
 /**
  * External dependencies.
  */
-import { createContext, useContextSelector } from 'use-context-selector';
 import React, {
   type PropsWithChildren,
   useState,
   useCallback,
   useEffect,
-  useRef,
 } from 'react';
-import { getDomainFromUrl, noop } from '@ps-analysis-tool/common';
+import { createContext, useContextSelector } from 'use-context-selector';
+import { noop } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import type { LibraryData } from '../../types';
+import getInitialLibraryData from '../getInitialLibraryData';
 
 /**
  * Represents the context for library detection state.
@@ -38,109 +38,125 @@ export interface LibraryDetectionContext {
   state: {
     libraryMatches: LibraryData;
     isCurrentTabLoading: boolean;
+    isInitialDataUpdated: boolean;
     loadedBefore: boolean;
     showLoader: boolean;
-    tabDomain: string;
+    tabId: number;
+    errorOccured: boolean;
   };
   actions: {
     setLibraryMatches: React.Dispatch<React.SetStateAction<LibraryData>>;
     setIsCurrentTabLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsInitialDataUpdated: React.Dispatch<React.SetStateAction<boolean>>;
     setLoadedBeforeState: React.Dispatch<React.SetStateAction<boolean>>;
     setShowLoader: React.Dispatch<React.SetStateAction<boolean>>;
-    setTabDomain: React.Dispatch<React.SetStateAction<string>>;
+    setErrorOccured: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
-const INITIAL_STATE: LibraryData = {
-  gis: {
-    signatureMatches: 0,
-    matches: [],
-  },
-  gsiV2: {
-    signatureMatches: 0,
-    moduleMatch: 0,
-    matches: [],
-  },
-};
+const initialLibraryMatches: LibraryData = getInitialLibraryData();
 
 const initialState: LibraryDetectionContext = {
   state: {
-    libraryMatches: INITIAL_STATE,
+    libraryMatches: initialLibraryMatches,
     isCurrentTabLoading: false,
+    isInitialDataUpdated: false,
     loadedBefore: false,
     showLoader: true,
-    tabDomain: '',
+    tabId: -1,
+    errorOccured: false,
   },
   actions: {
     setLibraryMatches: noop,
     setIsCurrentTabLoading: noop,
+    setIsInitialDataUpdated: noop,
     setLoadedBeforeState: noop,
     setShowLoader: noop,
-    setTabDomain: noop,
+    setErrorOccured: noop,
   },
 };
 
 export const Context = createContext<LibraryDetectionContext>(initialState);
 
 export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
-  const [libraryMatches, setLibraryMatches] =
-    useState<LibraryData>(INITIAL_STATE);
+  const [libraryMatches, setLibraryMatches] = useState<LibraryData>(
+    initialLibraryMatches
+  );
+
   const [isCurrentTabLoading, setIsCurrentTabLoading] =
     useState<boolean>(false); // TODO: Use first/current tab loaded state instead.
+  const [isInitialDataUpdated, setIsInitialDataUpdated] = useState(false);
   const [loadedBefore, setLoadedBeforeState] = useState<boolean>(false);
+  const [errorOccured, setErrorOccured] = useState<boolean>(false);
   const [showLoader, setShowLoader] = useState<boolean>(true);
-  const [tabDomain, setTabDomain] = useState<string>('');
-  const tabId = useRef(-1);
+  const [tabId, setTabId] = useState(-1);
 
   useEffect(() => {
-    tabId.current = chrome.devtools.inspectedWindow.tabId;
-    chrome.devtools.inspectedWindow.eval(
-      'window.location.href',
-      (result, isException) => {
-        if (!isException && typeof result === 'string') {
-          setTabDomain(getDomainFromUrl(result));
-        }
-      }
-    );
+    setTabId(chrome.devtools.inspectedWindow.tabId);
   }, []);
+
+  const onErrorOccuredListener = useCallback(
+    ({ frameId }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
+      if (frameId === 0) {
+        setErrorOccured(true);
+      }
+    },
+    []
+  );
 
   // It is attached, next time the tab is updated or reloaded.
   const onTabUpdate = useCallback(
-    (
-      changingTabId: number,
-      changeInfo: chrome.tabs.TabChangeInfo,
-      tab: chrome.tabs.Tab
-    ) => {
-      if (Number(changingTabId) === Number(tabId.current)) {
-        if (tab.url) {
-          setTabDomain(getDomainFromUrl(tab.url));
-        }
+    (changingTabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
+      if (Number(changingTabId) === Number(tabId)) {
         if (changeInfo.status === 'complete') {
           setIsCurrentTabLoading(false);
         } else if (changeInfo.status === 'loading') {
-          setLibraryMatches(INITIAL_STATE);
+          setLibraryMatches(initialLibraryMatches);
           setIsCurrentTabLoading(true);
           setShowLoader(true);
           setLoadedBeforeState(false);
+          setIsInitialDataUpdated(false);
         }
       }
     },
-    [
-      setIsCurrentTabLoading,
-      setLibraryMatches,
-      setShowLoader,
-      setLoadedBeforeState,
-    ]
+    [tabId]
+  );
+
+  const onNavigatedListener = useCallback(
+    ({ frameId }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
+      if (frameId === 0) {
+        setLibraryMatches(initialLibraryMatches);
+        setIsCurrentTabLoading(true);
+        setShowLoader(true);
+        setLoadedBeforeState(false);
+        setIsInitialDataUpdated(false);
+      }
+    },
+    []
+  );
+
+  const onCompleted = useCallback(
+    ({ frameId }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
+      if (frameId === 0) {
+        setErrorOccured(false);
+      }
+    },
+    []
   );
 
   useEffect(() => {
     chrome.tabs.onUpdated.removeListener(onTabUpdate);
     chrome.tabs.onUpdated.addListener(onTabUpdate);
+    chrome.webNavigation.onErrorOccurred.addListener(onErrorOccuredListener);
+    chrome.webNavigation.onBeforeNavigate.addListener(onNavigatedListener);
+    chrome.webNavigation.onCompleted.addListener(onCompleted);
 
     return () => {
       chrome.tabs.onUpdated.removeListener(onTabUpdate);
+      chrome.webNavigation.onBeforeNavigate.removeListener(onNavigatedListener);
+      chrome.webNavigation.onCompleted.removeListener(onCompleted);
     };
-  }, [onTabUpdate]);
+  }, [onTabUpdate, onErrorOccuredListener, onNavigatedListener, onCompleted]);
 
   return (
     <Context.Provider
@@ -148,16 +164,19 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
         state: {
           libraryMatches,
           isCurrentTabLoading,
+          isInitialDataUpdated,
           loadedBefore,
           showLoader,
-          tabDomain,
+          tabId,
+          errorOccured,
         },
         actions: {
           setLibraryMatches,
           setIsCurrentTabLoading,
+          setIsInitialDataUpdated,
           setLoadedBeforeState,
           setShowLoader,
-          setTabDomain,
+          setErrorOccured,
         },
       }}
     >

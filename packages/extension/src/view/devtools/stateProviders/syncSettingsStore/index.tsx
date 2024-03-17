@@ -46,6 +46,7 @@ export interface SettingStoreContext {
         }[]
       | null;
     browserInformation: string | null;
+    PSATVersion: string | null;
     OSInformation: string | null;
     isUsingCDP: boolean;
     settingsChanged: boolean;
@@ -66,6 +67,7 @@ const initialState: SettingStoreContext = {
     currentTabs: 0,
     currentExtensions: null,
     browserInformation: null,
+    PSATVersion: null,
     OSInformation: null,
     isUsingCDP: false,
     settingsChanged: false,
@@ -104,6 +106,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const [browserInformation, setBrowserInformation] = useState<string | null>(
     null
   );
+  const [PSATVersion, setPSATVersion] = useState<string | null>(null);
   const [currentExtensions, setCurrentExtensions] =
     useState<SettingStoreContext['state']['currentExtensions']>(null);
   const [OSInformation, setOSInformation] =
@@ -167,6 +170,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
     chrome.runtime.getPlatformInfo((platfrom) => {
       setOSInformation(`${PLATFORM_OS_MAP[platfrom.os]} (${platfrom.arch})`);
     });
+
+    const manifestData = chrome.runtime.getManifest();
+    setPSATVersion(manifestData.version);
   }, []);
 
   useEffect(() => {
@@ -206,6 +212,9 @@ export const Provider = ({ children }: PropsWithChildren) => {
         Object.keys(changes.allowedNumberOfTabs).includes('newValue')
       ) {
         setAllowedNumberOfTabs(changes?.allowedNumberOfTabs?.newValue);
+        setAllowedNumberOfTabsForSettingsPageDisplay(
+          changes?.allowedNumberOfTabs?.newValue
+        );
       }
 
       if (
@@ -213,6 +222,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         Object.keys(changes.isUsingCDP).includes('newValue')
       ) {
         setIsUsingCDP(changes?.isUsingCDP?.newValue);
+        setIsUsingCDPForSettingsPageDisplay(changes?.isUsingCDP?.newValue);
       }
     },
     []
@@ -277,6 +287,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
           currentTabs,
           currentExtensions,
           browserInformation,
+          PSATVersion,
           OSInformation,
           isUsingCDP,
           settingsChanged,

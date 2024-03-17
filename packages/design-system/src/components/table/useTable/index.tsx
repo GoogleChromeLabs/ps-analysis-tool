@@ -38,13 +38,14 @@ import useSearch, { TableSearchOutput } from './useSearch';
 
 export type TableData = CookieTableData | TechnologyData;
 
-export type InfoType = number | string | boolean | string[] | [];
+export type InfoType = number | string | boolean | Array<string | number> | [];
 
 export type TableColumn = {
   header: string;
   accessorKey: string;
   cell?: (info: InfoType, details?: TableData) => React.JSX.Element | InfoType;
   enableHiding?: boolean;
+  isHiddenByDefault?: boolean;
   enableBodyCellPrefixIcon?: boolean;
   bodyCellPrefixIcon?: (row: TableRow) => React.JSX.Element;
   showBodyCellPrefixIcon?: (row: TableRow) => boolean;
