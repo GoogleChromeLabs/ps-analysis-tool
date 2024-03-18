@@ -19,6 +19,10 @@
  */
 import React from 'react';
 import { LandingPage } from '@ps-analysis-tool/design-system';
+
+/**
+ * Internal dependencies.
+ */
 import FacilitatedTestingContent from './faciliatedTestingContent';
 
 const FacilitatedTesting = () => (

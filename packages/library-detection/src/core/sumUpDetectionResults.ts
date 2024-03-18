@@ -29,28 +29,35 @@ const sumUpDetectionResults = (obj1: LibraryData, obj2: LibraryData) => {
 
   const libraryKeys = Object.keys(obj1);
 
+  if (!libraryKeys.length) {
+    return resultObj;
+  }
+
   for (let i = 0; i < libraryKeys.length; i++) {
     const key = libraryKeys[i] as keyof LibraryData;
-    for (let j = 0; j < resultObj[key].matches.length; j++) {
-      const featureText = resultObj[key].matches[j].feature.text;
-      const sameFeatureInOtherObject = obj2[key].matches.find(
-        (match) => match.feature.text === featureText
-      );
 
-      if (!sameFeatureInOtherObject) {
-        continue;
+    if (resultObj[key]?.matches?.length) {
+      for (let j = 0; j < resultObj[key].matches.length; j++) {
+        const featureText = resultObj[key].matches[j].feature.text;
+        const sameFeatureInOtherObject = obj2[key].matches.find(
+          (match) => match.feature.text === featureText
+        );
+
+        if (!sameFeatureInOtherObject) {
+          continue;
+        }
+
+        const sameFeatureInOtherObjectIndex = obj2[key].matches.findIndex(
+          (match) => match.feature.text === featureText
+        );
+
+        obj2[key].matches.splice(sameFeatureInOtherObjectIndex, 1);
+
+        resultObj[key].matches[j].subItems.items = [
+          ...resultObj[key].matches[j].subItems.items,
+          ...sameFeatureInOtherObject.subItems.items,
+        ];
       }
-
-      const sameFeatureInOtherObjectIndex = obj2[key].matches.findIndex(
-        (match) => match.feature.text === featureText
-      );
-
-      obj2[key].matches.splice(sameFeatureInOtherObjectIndex, 1);
-
-      resultObj[key].matches[j].subItems.items = [
-        ...resultObj[key].matches[j].subItems.items,
-        ...sameFeatureInOtherObject.subItems.items,
-      ];
     }
 
     resultObj[key].matches = [...resultObj[key].matches, ...obj2[key].matches];
