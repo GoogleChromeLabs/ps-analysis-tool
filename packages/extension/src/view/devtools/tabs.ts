@@ -16,7 +16,6 @@
 /**
  * External dependencies
  */
-import React from 'react';
 import {
   CookieIcon,
   CookieIconWhite,
@@ -71,80 +70,144 @@ import {
 const TABS: SidebarItems = {
   privacySandbox: {
     title: 'Privacy Sandbox',
-    panel: () => <PrivacySandbox />,
-    icon: () => <PrivacySandboxIcon />,
-    selectedIcon: () => <PrivacySandboxIconWhite />,
+    panel: {
+      Element: PrivacySandbox,
+    },
+    icon: {
+      Element: PrivacySandboxIcon,
+    },
+    selectedIcon: {
+      Element: PrivacySandboxIconWhite,
+    },
     dropdownOpen: true,
     children: {
       cookies: {
         title: 'Cookies',
-        icon: () => <CookieIcon />,
-        selectedIcon: () => <CookieIconWhite />,
+        icon: {
+          Element: CookieIcon,
+        },
+        selectedIcon: {
+          Element: CookieIconWhite,
+        },
         children: {},
         dropdownOpen: true,
       },
       siteBoundaries: {
         title: 'Site Boundaries',
-        panel: () => <SiteBoundaries />,
-        icon: () => <SiteBoundariesIcon />,
-        selectedIcon: () => <SiteBoundariesIconWhite />,
+        panel: {
+          Element: SiteBoundaries,
+        },
+        icon: {
+          Element: SiteBoundariesIcon,
+        },
+        selectedIcon: {
+          Element: SiteBoundariesIconWhite,
+        },
         children: {
           chips: {
             title: 'CHIPS',
-            panel: () => <Chips />,
-            icon: () => <ChipsIcon />,
-            selectedIcon: () => <ChipsIconWhite />,
+            panel: {
+              Element: Chips,
+            },
+            icon: {
+              Element: ChipsIcon,
+            },
+            selectedIcon: {
+              Element: ChipsIconWhite,
+            },
             children: {},
           },
           relatedWebsiteSets: {
             title: 'Related Website Sets',
-            panel: () => <RelatedWebsiteSets />,
-            icon: () => <RelatedWebsiteSetsIcon />,
-            selectedIcon: () => <RelatedWebsiteSetsIconWhite />,
+            panel: {
+              Element: RelatedWebsiteSets,
+            },
+            icon: {
+              Element: RelatedWebsiteSetsIcon,
+            },
+            selectedIcon: {
+              Element: RelatedWebsiteSetsIconWhite,
+            },
             children: {},
           },
         },
       },
       privateAdvertising: {
         title: 'Private Advertising',
-        panel: () => <PrivateAdvertising />,
-        icon: () => <PrivateAdvertisingIcon />,
-        selectedIcon: () => <PrivateAdvertisingIconWhite />,
+        panel: {
+          Element: PrivateAdvertising,
+        },
+        icon: {
+          Element: PrivateAdvertisingIcon,
+        },
+        selectedIcon: {
+          Element: PrivateAdvertisingIconWhite,
+        },
         children: {
           topics: {
             title: 'Topics',
-            panel: () => <Topics />,
-            icon: () => <TopicsIcon />,
-            selectedIcon: () => <TopicsIconWhite />,
+            panel: {
+              Element: Topics,
+            },
+            icon: {
+              Element: TopicsIcon,
+            },
+            selectedIcon: {
+              Element: TopicsIconWhite,
+            },
             children: {},
           },
           attribution: {
             title: 'Attribution',
-            panel: () => <Attribution />,
-            icon: () => <AttributionIcon />,
-            selectedIcon: () => <AttributionIconWhite />,
+            panel: {
+              Element: Attribution,
+            },
+            icon: {
+              Element: AttributionIcon,
+            },
+            selectedIcon: {
+              Element: AttributionIconWhite,
+            },
             children: {},
           },
         },
       },
       antiCovertTracking: {
         title: 'Tracking Protection',
-        panel: () => <AntiCovertTracking />,
-        icon: () => <AntiCovertTrackingIcon />,
-        selectedIcon: () => <AntiCovertTrackingIconWhite />,
+        panel: {
+          Element: AntiCovertTracking,
+        },
+        icon: {
+          Element: AntiCovertTrackingIcon,
+        },
+        selectedIcon: {
+          Element: AntiCovertTrackingIconWhite,
+        },
         children: {
           bounceTracking: {
             title: 'Bounce Tracking',
-            panel: () => <BounceTracking />,
-            icon: () => <BounceTrackingIcon />,
-            selectedIcon: () => <BounceTrackingIconWhite />,
+            panel: {
+              Element: BounceTracking,
+            },
+            icon: {
+              Element: BounceTrackingIcon,
+            },
+            selectedIcon: {
+              Element: BounceTrackingIconWhite,
+            },
             children: {},
           },
           fingerprinting: {
             title: 'Fingerprinting',
-            panel: () => <Fingerprinting />,
-            icon: () => <FingerPrintingIcon />,
-            selectedIcon: () => <FingerPrintingIconWhite />,
+            panel: {
+              Element: Fingerprinting,
+            },
+            icon: {
+              Element: FingerPrintingIcon,
+            },
+            selectedIcon: {
+              Element: FingerPrintingIconWhite,
+            },
             children: {},
           },
         },
@@ -153,17 +216,35 @@ const TABS: SidebarItems = {
   },
   facilitatedTesting: {
     title: 'Facilitated Testing',
-    panel: () => <FacilitatedTesting />,
-    icon: () => <InfoIcon className="fill-gray" />,
-    selectedIcon: () => <InfoIcon className="fill-white" />,
+    panel: {
+      Element: FacilitatedTesting,
+    },
+    icon: {
+      Element: InfoIcon,
+      props: {
+        className: 'fill-gray',
+      },
+    },
+    selectedIcon: {
+      Element: InfoIcon,
+      props: {
+        className: 'fill-white',
+      },
+    },
     dropdownOpen: false,
     children: {},
   },
   settings: {
     title: 'Settings',
-    panel: () => <Settings />,
-    icon: () => <SettingsTab />,
-    selectedIcon: () => <SettingsTabWhite />,
+    panel: {
+      Element: Settings,
+    },
+    icon: {
+      Element: SettingsTab,
+    },
+    selectedIcon: {
+      Element: SettingsTabWhite,
+    },
     dropdownOpen: false,
     children: {},
   },

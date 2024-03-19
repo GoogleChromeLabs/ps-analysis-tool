@@ -41,6 +41,7 @@ import Cookies from './cookies';
 import useFrameOverlay from '../hooks/useFrameOverlay';
 import { useCookieStore } from '../stateProviders/syncCookieStore';
 import { useSettingsStore } from '../stateProviders/syncSettingsStore';
+import { getCurrentTabId } from '../../../utils/getCurrentTabId';
 
 interface LayoutProps {
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
@@ -94,14 +95,17 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     isKeySelected: actions.isKeySelected,
   }));
 
+  const { Element: PanelElement, props } = activePanel.panel;
+
   useEffect(() => {
     setSidebarData((prev) => {
       const data = { ...prev };
       const psData = data['privacySandbox'];
 
-      psData.children['cookies'].panel = () => (
-        <Cookies setFilteredCookies={setFilteredCookies} />
-      );
+      psData.children['cookies'].panel = {
+        Element: Cookies,
+        props: { setFilteredCookies },
+      };
       psData.children['cookies'].children = Object.keys(tabFrames || {})
         .filter((url) => {
           if (url === ORPHANED_COOKIE_KEY) {
@@ -117,22 +121,31 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         .reduce<SidebarItems>((acc, url) => {
           let popupTitle = `Cookies used by frames from ${url}`;
           let infoIconDescription = '';
+
           if (url === ORPHANED_COOKIE_KEY) {
-            popupTitle = infoIconDescription =
+            popupTitle =
               'Frames that set these cookies were removed from the DOM, leaving these cookies orphaned.';
+            infoIconDescription = popupTitle;
           }
 
           if (url === UNMAPPED_COOKIE_KEY) {
-            popupTitle = infoIconDescription =
-              'Cookies that could not be mapped to any frame.';
+            popupTitle = 'Cookies that could not be mapped to any frame.';
+            infoIconDescription = popupTitle;
           }
 
           acc[url] = {
             title: url,
             popupTitle,
-            panel: () => <Cookies setFilteredCookies={setFilteredCookies} />,
-            icon: () => <CookieIcon />,
-            selectedIcon: () => <CookieIconWhite />,
+            panel: {
+              Element: Cookies,
+              props: { setFilteredCookies },
+            },
+            icon: {
+              Element: CookieIcon,
+            },
+            selectedIcon: {
+              Element: CookieIconWhite,
+            },
             infoIconDescription,
             children: {},
             isBlurred: !frameHasCookies?.[url],
@@ -145,15 +158,16 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         canStartInspecting && Boolean(Object.keys(tabFrames || {}).length);
 
       if (showInspectButton) {
-        psData.children['cookies'].extraInterfaceToTitle = () => (
-          <InspectButton
-            isInspecting={isInspecting}
-            setIsInspecting={setIsInspecting}
-            isTabFocused={isSidebarFocused && isKeySelected('cookies')}
-          />
-        );
+        psData.children['cookies'].extraInterfaceToTitle = {
+          Element: InspectButton,
+          props: {
+            isInspecting,
+            setIsInspecting,
+            isTabFocused: isSidebarFocused && isKeySelected('cookies'),
+          },
+        };
       } else {
-        psData.children['cookies'].extraInterfaceToTitle = () => <></>;
+        psData.children['cookies'].extraInterfaceToTitle = {};
       }
 
       return data;
@@ -179,21 +193,21 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
 
   useEffect(() => {
     (async () => {
-      const tabId = chrome.devtools.inspectedWindow.tabId.toString();
+      const tabId = await getCurrentTabId();
 
-      const data = await chrome.storage.local.get();
-
-      if (!data?.[tabId]) {
-        data[tabId] = {};
+      if (!tabId) {
+        return;
       }
 
-      if (!data[tabId]?.['selectedSidebarItem']) {
-        data[tabId]['selectedSidebarItem'] = 'cookies';
+      let data = await chrome.storage.session.get();
+
+      if (!data) {
+        data = {};
       }
 
-      data[tabId]['selectedSidebarItem'] = selectedItemKey;
+      data['selectedSidebarItem' + tabId] = selectedItemKey;
 
-      await chrome.storage.local.set(data);
+      await chrome.storage.session.set(data);
     })();
   }, [selectedItemKey]);
 
@@ -248,7 +262,9 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         }}
         className="h-full flex-1 overflow-auto relative"
       >
-        <div className="min-w-[40rem] h-full z-1">{activePanel?.element()}</div>
+        <div className="min-w-[40rem] h-full z-1">
+          {PanelElement && <PanelElement {...props} />}
+        </div>
         {settingsChanged && (
           <ToastMessage
             ref={toastMessageRef}

@@ -103,6 +103,8 @@ const Layout = ({
       isKeySelected: actions.isKeySelected,
     }));
 
+  const { Element: PanelElement, props } = activePanel.panel;
+
   const siteFilteredCookies = useMemo(() => {
     return Object.entries(cookies).reduce(
       (acc: CookieFrameStorageType, [frame, _cookies]) => {
@@ -128,36 +130,42 @@ const Layout = ({
     setSidebarData((prev) => {
       const _data = { ...prev };
 
-      _data['sitemap-landing-page'].panel = () => (
-        <CookiesLandingContainer
-          tabCookies={reshapedCookies}
-          tabFrames={frames}
-          affectedCookies={affectedCookies}
-          downloadReport={() => {
+      _data['sitemap-landing-page'].panel = {
+        Element: CookiesLandingContainer,
+        props: {
+          tabCookies: reshapedCookies,
+          tabFrames: frames,
+          affectedCookies,
+          downloadReport: () => {
             if (!Array.isArray(completeJson)) {
               return;
             }
 
             generateSiteMapReportandDownload(completeJson);
-          }}
-        />
-      );
+          },
+        },
+      };
 
       _data['sitemap-landing-page'].children = sites.reduce(
         (acc: SidebarItems, site: string) => {
           acc[site] = {
             title: site,
-            panel: () => (
-              <SiteReport
-                cookies={siteFilteredCookies}
-                technologies={siteFilteredTechnologies}
-                completeJson={completeJson}
-                selectedSite={site}
-              />
-            ),
+            panel: {
+              Element: SiteReport,
+              props: {
+                cookies: siteFilteredCookies,
+                technologies: siteFilteredTechnologies,
+                completeJson,
+                selectedSite: site,
+              },
+            },
             children: {},
-            icon: () => <File />,
-            selectedIcon: () => <FileWhite />,
+            icon: {
+              Element: File,
+            },
+            selectedIcon: {
+              Element: FileWhite,
+            },
           };
 
           return acc;
@@ -165,13 +173,14 @@ const Layout = ({
         {}
       );
 
-      _data['sitemap-affected-cookies'].panel = () => (
-        <SiteMapAffectedCookies
-          cookies={Object.values(reshapedCookies).filter(
+      _data['sitemap-affected-cookies'].panel = {
+        Element: SiteMapAffectedCookies,
+        props: {
+          cookies: Object.values(reshapedCookies).filter(
             (cookie) => cookie.isBlocked
-          )}
-        />
-      );
+          ),
+        },
+      };
 
       return _data;
     });
@@ -206,7 +215,7 @@ const Layout = ({
         <Sidebar />
       </Resizable>
       <div className="flex-1 max-h-screen overflow-auto">
-        {activePanel.element?.()}
+        {PanelElement && <PanelElement {...props} />}
       </div>
     </div>
   );

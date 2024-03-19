@@ -37,16 +37,21 @@ import {
   matchKey,
 } from './utils';
 
+type SidebarComponent = {
+  Element?: (props: any) => React.JSX.Element;
+  props?: Record<string, unknown>;
+};
+
 export type SidebarItemValue = {
   title: string;
   children: SidebarItems;
   popupTitle?: string;
   infoIconDescription?: string;
-  extraInterfaceToTitle?: () => React.JSX.Element;
+  extraInterfaceToTitle?: SidebarComponent;
   dropdownOpen?: boolean;
-  panel?: () => React.JSX.Element;
-  icon?: () => React.JSX.Element;
-  selectedIcon?: () => React.JSX.Element;
+  panel?: SidebarComponent;
+  icon?: SidebarComponent;
+  selectedIcon?: SidebarComponent;
   isBlurred?: boolean;
 };
 
@@ -62,7 +67,7 @@ interface useSidebarProps {
 export interface SidebarStoreContext {
   state: {
     activePanel: {
-      element: () => React.JSX.Element;
+      panel: SidebarComponent;
       query?: string;
     };
     selectedItemKey: string | null; //Entire chained item key eg Privacy-Sandbox#cookies#frameUrl
@@ -86,7 +91,10 @@ export interface SidebarStoreContext {
 const initialState: SidebarStoreContext = {
   state: {
     activePanel: {
-      element: () => <></>,
+      panel: {
+        Element: () => <></>,
+        props: {},
+      },
       query: '',
     },
     selectedItemKey: null,
@@ -150,8 +158,8 @@ export const SidebarProvider = ({
         if (matchKey(selectedItemKey || '', itemKey)) {
           if (item.panel) {
             setActivePanel({
-              element: item.panel,
               query,
+              panel: item.panel,
             });
           }
 

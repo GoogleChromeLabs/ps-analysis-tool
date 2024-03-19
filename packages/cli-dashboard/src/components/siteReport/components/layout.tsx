@@ -72,15 +72,21 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
     })
   );
 
+  const { Element: PanelElement, props } = activePanel.panel;
+
   useEffect(() => {
     setSidebarData((prev) => {
       const _data = { ...prev };
 
       const keys = selectedItemKey?.split('#') ?? [];
 
-      _data['cookies'].panel = () => (
-        <CookiesTab selectedFrameUrl={null} selectedSite={selectedSite} />
-      );
+      _data['cookies'].panel = {
+        Element: CookiesTab,
+        props: {
+          selectedFrameUrl: null,
+          selectedSite,
+        },
+      };
 
       const selectedFrameUrl = frameUrls.find(
         (url) => url === keys[keys.length - 1]
@@ -90,15 +96,20 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
         (acc: SidebarItems, url: string): SidebarItems => {
           acc[url] = {
             title: url,
-            panel: () => (
-              <CookiesTab
-                selectedFrameUrl={selectedFrameUrl}
-                selectedSite={selectedSite}
-              />
-            ),
+            panel: {
+              Element: CookiesTab,
+              props: {
+                selectedFrameUrl,
+                selectedSite,
+              },
+            },
             children: {},
-            icon: () => <CookieIcon />,
-            selectedIcon: () => <CookieIconWhite />,
+            icon: {
+              Element: CookieIcon,
+            },
+            selectedIcon: {
+              Element: CookieIconWhite,
+            },
           };
 
           return acc;
@@ -106,17 +117,29 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
         {}
       );
 
-      _data['affected-cookies'].panel = () => (
-        <SiteAffectedCookies selectedSite={selectedSite} />
-      );
+      _data['affected-cookies'].panel = {
+        Element: SiteAffectedCookies,
+        props: {
+          selectedSite,
+        },
+      };
 
       if (technologies && technologies.length > 0) {
         _data['technologies'] = {
           title: 'Technologies',
           children: {},
-          icon: () => <SiteBoundariesIcon />,
-          selectedIcon: () => <SiteBoundariesIconWhite />,
-          panel: () => <Technologies selectedSite={selectedSite} />,
+          icon: {
+            Element: SiteBoundariesIcon,
+          },
+          selectedIcon: {
+            Element: SiteBoundariesIconWhite,
+          },
+          panel: {
+            Element: Technologies,
+            props: {
+              selectedSite,
+            },
+          },
         };
       } else {
         delete _data['technologies'];
@@ -154,7 +177,7 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
         <Sidebar />
       </Resizable>
       <div className="flex-1 max-h-screen overflow-auto">
-        {activePanel.element?.()}
+        {PanelElement && <PanelElement {...props} />}
       </div>
     </div>
   );
