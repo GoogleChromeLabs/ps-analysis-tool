@@ -508,8 +508,9 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       ? cookie.domain.slice(1)
       : cookie?.domain;
 
-    // Adding alternate domains here because our extension calculates domain differently that the application tab.
-    // This is done to capture both NID.google.com/ and NIDgoogle.com/ so that if we find either of the cookie we add issues to the cookie object
+    if (!domainToUse) {
+      return;
+    }
     try {
       syncCookieStore?.addCookieExclusionWarningReason(
         cookie?.name + domainToUse + cookie?.path,
