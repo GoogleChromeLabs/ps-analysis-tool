@@ -22,17 +22,19 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import type { InfoType, TableRow } from '../../useTable';
+import type { TableRow } from '../../useTable';
 
 interface BodyCellProps {
-  cell: React.JSX.Element | InfoType;
+  cell?: () => React.JSX.Element;
   width: number;
   isHighlighted?: boolean;
   isRowFocused: boolean;
   row: TableRow;
   hasIcon?: boolean;
-  showWarningIcon?: boolean | null;
-  icon?: () => React.JSX.Element;
+  showIcon?: boolean | null;
+  icon?: {
+    Element: (props: any) => React.JSX.Element;
+  };
   onRowClick: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
@@ -40,11 +42,14 @@ const BodyCell = ({
   cell,
   width,
   isRowFocused,
+  row,
   hasIcon = false,
-  showWarningIcon = false,
+  showIcon = false,
   icon,
   isHighlighted = false,
 }: BodyCellProps) => {
+  const IconElement = icon?.Element;
+
   return (
     <div
       tabIndex={0}
@@ -72,10 +77,16 @@ const BodyCell = ({
     >
       {hasIcon && (
         <div className="h-full grid place-items-center min-w-[15px] pr-1">
-          {Boolean(showWarningIcon) && icon?.()}
+          {Boolean(showIcon) && IconElement && (
+            <IconElement
+              {...{
+                originalData: row.originalData,
+              }}
+            />
+          )}
         </div>
       )}
-      {cell}
+      {cell?.() ?? ''}
     </div>
   );
 };

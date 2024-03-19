@@ -14,6 +14,5 @@
  * limitations under the License.
  */
 
-export { default as Table } from './components';
-export * from './persistentSettingsStore';
-export * from './useTable';
+export { default as useContextSelector } from './useContextSelector';
+export { default as createContext } from './createContext';
