@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
+import classnames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -49,7 +50,10 @@ const MatrixComponent = ({
           <h4 className="-mt-[3px] mb-1.5 text-xs font-medium dark:text-bright-gray">
             {title}
           </h4>
-          <p style={{ color }} className={countClassName}>
+          <p
+            style={{ color }}
+            className={classnames(countClassName, 'text-left')}
+          >
             {count}
           </p>
           {description && isExpanded && (
