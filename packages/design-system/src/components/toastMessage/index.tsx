@@ -46,15 +46,11 @@ const ToastMessage = forwardRef<HTMLDivElement, ToastMessageProps>(
     return (
       <div
         ref={ref}
-        className={`${additionalStyles} absolute inset-x-0 bottom-0 w-full z-2 bg-white dark:bg-charleston-green shadow-xxs`}
+        className={`${additionalStyles} w-full overflow-auto z-2 bg-white dark:bg-charleston-green shadow-xxs`}
       >
-        <div className="flex items-center justify-between p-4">
-          <div className={`w-5/6 dark:text-white ${textAdditionalStyles}`}>
-            {text}
-          </div>
-          <div className="w-1/6">
-            <Button text={buttonText} onClick={onClick} variant={variant} />
-          </div>
+        <div className="flex items-center justify-between p-4 gap-2 min-w-[20rem]">
+          <p className={`dark:text-white ${textAdditionalStyles}`}>{text}</p>
+          <Button text={buttonText} onClick={onClick} variant={variant} />
         </div>
       </div>
     );

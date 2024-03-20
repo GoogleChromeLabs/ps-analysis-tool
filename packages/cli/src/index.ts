@@ -46,7 +46,7 @@ const DELAY_TIME = 20000;
 const program = new Command();
 
 program
-  .version('0.5.2')
+  .version('0.6.0')
   .description('CLI to test a URL for 3p cookies')
   .option('-u, --url <value>', 'URL of a site')
   .option('-s, --sitemap-url <value>', 'URL of a sitemap')
@@ -224,7 +224,7 @@ const startDashboardServer = async (dir: string) => {
 
   if (outDir) {
     await saveCSVReports(path.resolve(outputDir), result);
-    return;
+    process.exit(0);
   }
 
   startDashboardServer(
