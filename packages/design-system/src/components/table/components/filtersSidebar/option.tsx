@@ -17,19 +17,15 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useCallback } from 'react';
 import classNames from 'classnames';
-
-/**
- * Internal dependencies.
- */
-import { TableOutput } from '../../useTable';
+import { noop } from '@ps-analysis-tool/common';
 
 interface OptionProps {
   filterKey: string;
   filterValue: string;
   selected: boolean;
-  toggleFilterSelection: TableOutput['toggleFilterSelection'];
+  toggleFilterSelection: (filterKey: string, filterValue: string) => void;
   isExpanded: boolean;
 }
 
@@ -39,34 +35,43 @@ const Option = ({
   selected,
   toggleFilterSelection,
   isExpanded,
-}: OptionProps) => (
-  <li
-    className={isExpanded ? 'mx-3 mt-1' : 'ml-3 mt-1 hidden'}
-    data-testid="sub-list-item"
-  >
-    <label className="flex gap-x-2 cursor-pointer items-center">
-      <input
-        role="checkbox"
-        type="checkbox"
-        name={filterKey}
-        className={classNames(
-          'accent-royal-blue dark:accent-orange-400 w-3 h-3 dark:bg-outer-space dark:min-h-[12px] dark:min-w-[12px]',
-          {
-            'dark:appearance-none dark:text-manatee dark:border dark:rounded-[3px]':
-              !selected,
-          }
-        )}
-        checked={selected}
-        onChange={() => {
-          // Use Event Loop to delay the toggleFilterSelection call as too many clicks in a short time provide wrong results
-          setTimeout(() => toggleFilterSelection(filterKey, filterValue));
-        }}
-      />
-      <span className="text-asteriod-black dark:text-bright-gray leading-normal font-semi-thick">
-        {String(filterValue)}
-      </span>
-    </label>
-  </li>
-);
+}: OptionProps) => {
+  const handleOnClick = useCallback(
+    (e: React.MouseEvent<HTMLLIElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleFilterSelection(filterKey, filterValue);
+    },
+    [filterKey, filterValue, toggleFilterSelection]
+  );
+
+  return (
+    <li
+      className={isExpanded ? 'mx-3 mt-1' : 'ml-3 mt-1 hidden'}
+      data-testid="sub-list-item"
+      onClick={handleOnClick}
+    >
+      <label className="flex gap-x-2 cursor-pointer items-center">
+        <input
+          role="checkbox"
+          type="checkbox"
+          name={filterKey}
+          className={classNames(
+            'accent-royal-blue dark:accent-orange-400 w-3 h-3 dark:bg-outer-space dark:min-h-[12px] dark:min-w-[12px]',
+            {
+              'dark:appearance-none dark:text-manatee dark:border dark:rounded-[3px]':
+                !selected,
+            }
+          )}
+          checked={selected}
+          onChange={noop}
+        />
+        <span className="text-asteriod-black dark:text-bright-gray leading-normal font-semi-thick">
+          {String(filterValue)}
+        </span>
+      </label>
+    </li>
+  );
+};
 
 export default Option;

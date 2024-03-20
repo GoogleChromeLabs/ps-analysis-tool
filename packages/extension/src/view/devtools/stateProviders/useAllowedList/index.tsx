@@ -23,8 +23,11 @@ import React, {
   useState,
   type PropsWithChildren,
 } from 'react';
-import { noop } from '@ps-analysis-tool/common';
-import { createContext } from 'use-context-selector';
+import {
+  noop,
+  createContext,
+  useContextSelector,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -33,7 +36,6 @@ import { getCurrentTab } from '../../../../utils/getCurrentTabId';
 import { useCookieStore } from '../syncCookieStore';
 import setDomainsInAllowList from './utils/setDomainsInAllowList';
 import getDotPrefixedDomain from './utils/getDotPrefixedDomain';
-import useContextSelector from '../../../../utils/useContextSelector';
 
 export interface AllowedListContext {
   state: {

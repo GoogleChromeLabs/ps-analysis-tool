@@ -235,7 +235,6 @@ class SynchnorousCookieStore {
     if (!this.tabsData[tabId]) {
       return;
     }
-
     if (this.tabsData[tabId] && this.tabsData[tabId][cookieName]) {
       this.tabsData[tabId][cookieName].blockedReasons = [
         ...new Set([
@@ -243,7 +242,6 @@ class SynchnorousCookieStore {
           ...exclusionReasons,
         ]),
       ];
-
       this.tabsData[tabId][cookieName].warningReasons = [
         ...new Set([
           ...(this.tabsData[tabId][cookieName].warningReasons ?? []),
