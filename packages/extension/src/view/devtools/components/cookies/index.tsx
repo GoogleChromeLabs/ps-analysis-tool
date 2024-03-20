@@ -31,6 +31,7 @@ import { type CookieTableData } from '@ps-analysis-tool/common';
 import { useSettingsStore } from '../../stateProviders/syncSettingsStore';
 import { useCookieStore } from '../../stateProviders/syncCookieStore';
 import CookiesListing from './cookiesListing';
+import downloadReport from '../../../../utils/downloadReport';
 
 interface CookiesProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;
@@ -116,14 +117,21 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
         {selectedFrame ? (
           <CookiesListing setFilteredCookies={setFilteredCookies} />
         ) : (
-          <CookiesLanding
-            tabCookies={tabCookies}
-            tabFrames={processedTabFrames}
-            showBlockedCookiesSection
-            showFramesSection
-            description={description}
-            additionalComponents={{ libraryDetection: LibraryDetection }}
-          />
+          <>
+            <Button
+              extraClasses="absolute top-3 right-3"
+              onClick={() => downloadReport(tabCookies, tabFrames)}
+              text="Download report"
+            />
+            <CookiesLanding
+              tabCookies={tabCookies}
+              tabFrames={processedTabFrames}
+              showBlockedCookiesSection
+              showFramesSection
+              description={description}
+              additionalComponents={{ libraryDetection: LibraryDetection }}
+            />
+          </>
         )}
       </div>
     );
