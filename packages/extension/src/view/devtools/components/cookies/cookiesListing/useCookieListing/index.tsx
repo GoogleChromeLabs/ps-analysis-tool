@@ -23,6 +23,7 @@ import {
   type CookieTableData,
   type TabCookies,
   BLOCK_STATUS,
+  filterCookiesByFrame,
 } from '@ps-analysis-tool/common';
 import {
   RefreshButton,
@@ -44,13 +45,13 @@ import NamePrefixIconSelector from './namePrefixIconSelector';
 import OrphanedUnMappedInfoDisplay from './orphanedUnMappedInfoDisplay';
 
 const useCookieListing = (domainsInAllowList: Set<string>) => {
-  const { selectedFrame, cookies, getCookiesSetByJavascript } = useCookieStore(
-    ({ state, actions }) => ({
+  const { selectedFrame, cookies, getCookiesSetByJavascript, tabFrames } =
+    useCookieStore(({ state, actions }) => ({
       selectedFrame: state.selectedFrame,
       cookies: state.tabCookies || {},
+      tabFrames: state.tabFrames,
       getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
-    })
-  );
+    }));
 
   const isUsingCDP = useSettingsStore(({ state }) => state.isUsingCDP);
 
@@ -290,6 +291,38 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
     });
   }, [cookies]);
 
+  const frameOnlyExemptionReasonValues = useMemo(() => {
+    const frameFilteredCookies = filterCookiesByFrame(
+      tableData,
+      tabFrames,
+      selectedFrame
+    );
+    const collectedExemptionReasons = Array.from(
+      new Set(
+        frameFilteredCookies.map(({ exemptionReason }) => {
+          if (!exemptionReason || exemptionReason.toLowerCase() === 'none') {
+            return null;
+          }
+          return exemptionReason;
+        })
+      )
+    );
+
+    return collectedExemptionReasons.reduce((acc, reason) => {
+      if (!acc) {
+        acc = {};
+      }
+
+      if (reason) {
+        acc[reason] = {
+          selected: false,
+        };
+      }
+
+      return acc;
+    }, {} as TableFilter[keyof TableFilter]['filterValues']);
+  }, [tableData, tabFrames, selectedFrame]);
+
   const filters = useMemo<TableFilter>(
     () => ({
       'analytics.category': {
@@ -503,13 +536,27 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         },
         useGenericPersistenceKey: true,
       },
+      exemptionReason: {
+        title: 'Exemption Reason',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        enableSelectAllOption: true,
+        filterValues: frameOnlyExemptionReasonValues,
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = value as string;
+          return val === filterValue;
+        },
+      },
     }),
     [
       preCalculatedFilters.blockedReasons,
       preCalculatedFilters.categories,
       preCalculatedFilters.platforms,
+      frameOnlyExemptionReasonValues,
     ]
   );
+
+  //console.log(preCalculatedFilters.blockedReason,frameOnlyExemptionReasonValues)
 
   const searchKeys = useMemo<string[]>(
     () => ['parsedCookie.name', 'parsedCookie.domain'],

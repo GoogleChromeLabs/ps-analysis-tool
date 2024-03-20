@@ -14,23 +14,27 @@
  * limitations under the License.
  */
 /**
- * External dependencies.
+ * External dependencies
  */
 import React from 'react';
+import { LibraryDetection } from '@ps-analysis-tool/library-detection';
+/**
+ * Internal dependencies
+ */
+import CookiesSection from './cookiesSection';
+import FramesSection from './framesSection';
+import BlockedCookiesSection from './blockedCookiesSection';
+import ExemptedCookiesSection from './exemptedCookiesSection';
 
-interface CookiesLandingProps {
-  children?: React.ReactNode;
-}
-
-const CookiesLanding = ({ children }: CookiesLandingProps) => {
+const Layout = () => {
   return (
-    <div
-      className="h-full w-full flex flex-col min-w-[40rem]"
-      data-testid="cookies-landing"
-    >
-      {children}
-    </div>
+    <>
+      <CookiesSection />
+      <BlockedCookiesSection />
+      <ExemptedCookiesSection />
+      <LibraryDetection />
+      <FramesSection />
+    </>
   );
 };
-
-export default CookiesLanding;
+export default Layout;

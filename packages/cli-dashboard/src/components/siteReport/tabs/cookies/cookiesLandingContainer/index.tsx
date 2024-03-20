@@ -18,14 +18,9 @@
  * External dependencies.
  */
 import React from 'react';
-import {
-  Button,
-  CookiesLanding,
-  CookiesMatrix,
-  prepareCookiesCount,
-  prepareCookieStatsComponents,
-} from '@ps-analysis-tool/design-system';
+import { Button, CookiesLanding } from '@ps-analysis-tool/design-system';
 import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
+import CookiesSection from './cookieLanding/cookiesSection';
 
 interface CookiesLandingContainerProps {
   tabFrames: TabFrames;
@@ -51,33 +46,12 @@ const CookiesLandingContainer = ({
           />
         </div>
       )}
-      <CookiesLanding
-        tabFrames={tabFrames}
-        tabCookies={tabCookies}
-        showInfoIcon={false}
-        showBlockedInfoIcon={true}
-        associatedCookiesCount={Object.values(tabFrames).length}
-        showMessageBoxBody={false}
-        showBlockedCookiesSection
-        cookieClassificationTitle="Categories"
-      >
-        <div className="flex flex-col">
-          <div className="pt-4">
-            <CookiesMatrix
-              tabCookies={affectedCookies}
-              componentData={
-                prepareCookieStatsComponents(
-                  prepareCookiesCount(affectedCookies)
-                ).legend
-              }
-              tabFrames={tabFrames}
-              description=""
-              showInfoIcon={false}
-              showHorizontalMatrix={false}
-              allowExpand={false}
-            />
-          </div>
-        </div>
+      <CookiesLanding>
+        <CookiesSection
+          tabCookies={tabCookies}
+          affectedCookies={affectedCookies}
+          tabFrames={tabFrames}
+        />
       </CookiesLanding>
     </>
   );

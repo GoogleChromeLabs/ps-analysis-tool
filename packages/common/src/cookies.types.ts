@@ -40,6 +40,10 @@ export type CookiesCount = {
     total: number;
     [key: string]: number;
   };
+  exemptedCookies: {
+    total: number;
+    [key: string]: number;
+  };
 };
 
 export type CookieAnalytics = {
@@ -119,6 +123,16 @@ export type CookieData = {
     inboundBlock: BLOCK_STATUS;
     outboundBlock: BLOCK_STATUS;
   };
+  exemptionReason?:
+    | 'None'
+    | 'UserSetting'
+    | 'TPCDMetadata'
+    | 'TPCDDeprecationTrial'
+    | 'TPCDHeuristics'
+    | 'EnterprisePolicy'
+    | 'StorageAccess'
+    | 'TopLevelStorageAccess'
+    | 'CorsOptIn';
 };
 
 export type CookieTableData = CookieData & {
@@ -166,6 +180,7 @@ export interface Legend {
 export interface CookieStatsComponents {
   legend: Legend[];
   blockedCookiesLegend: Legend[];
+  exemptedCookiesLegend: Legend[];
   firstParty: {
     count: number;
     color: string;
@@ -175,6 +190,10 @@ export interface CookieStatsComponents {
     color: string;
   }[];
   blocked: {
+    count: number;
+    color: string;
+  }[];
+  exempted: {
     count: number;
     color: string;
   }[];

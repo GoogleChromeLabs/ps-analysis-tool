@@ -13,9 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-export { noop } from './noop';
-export { default as prepareCookiesCount } from './prepareCookiesCount';
-export { default as prepareCookieStatsComponents } from './prepareCookieStatsComponents';
-export { default as prepareFrameStatsComponent } from './prepareFrameStatsComponent';
-export { default as prepareCookieDataMapping } from './prepareCookieDataMapping';
+export { default as cookieExemptionReason } from './exemptionReasons';

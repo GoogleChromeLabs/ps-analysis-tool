@@ -137,6 +137,9 @@ class SynchnorousCookieStore {
                 ? this.tabsData[tabId][cookieKey].headerType
                 : cookie.headerType,
             frameIdList,
+            exemptionReason:
+              cookie?.exemptionReason ||
+              this.tabsData[tabId][cookieKey]?.exemptionReason,
           };
         } else {
           this.tabs[tabId].newUpdates++;
