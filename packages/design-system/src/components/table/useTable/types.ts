@@ -97,5 +97,5 @@ export interface TableProviderProps {
   ) => string;
   exportTableData?: (rows: TableRow[]) => void;
   hasVerticalBar?: (row: TableRow) => boolean;
-  isRowSelected?: (cookie: CookieTableData | null) => boolean;
+  isRowSelected?: (cookie: TableData | null) => boolean;
 }

@@ -155,12 +155,13 @@ const CookieTable = forwardRef<
   }, []);
 
   const isRowSelected = useCallback(
-    (cookie: CookieTableData | null) => {
-      if (!cookie) {
+    (cookie: TableData | null) => {
+      const _cookie = cookie as CookieTableData;
+      if (!_cookie) {
         return true;
       }
 
-      const tableCookieKey = getCookieKey(cookie.parsedCookie);
+      const tableCookieKey = getCookieKey(_cookie.parsedCookie);
       return tableCookieKey === selectedKey;
     },
     [selectedKey]

@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import React, { PropsWithChildren, useEffect, useMemo, useState } from 'react';
-import { CookieTableData, getValueByKey } from '@ps-analysis-tool/common';
+import { getValueByKey } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
@@ -124,7 +124,7 @@ export const TableProvider = ({
 
   useEffect(() => {
     const filteredRows = rows.filter(
-      (row) => isRowSelected?.(row.originalData as CookieTableData) ?? true
+      (row) => isRowSelected?.(row.originalData) ?? true
     );
 
     if (filteredRows.length === 0) {
