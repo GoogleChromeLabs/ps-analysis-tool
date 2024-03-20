@@ -18,7 +18,11 @@
  * External dependencies.
  */
 import React, { PropsWithChildren, useEffect, useMemo, useState } from 'react';
-import { getValueByKey } from '@ps-analysis-tool/common';
+import {
+  CookieTableData,
+  getCookieKey,
+  getValueByKey,
+} from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
@@ -42,6 +46,7 @@ export const TableProvider = ({
   conditionalTableRowClassesHandler,
   exportTableData,
   hasVerticalBar,
+  selectedKey,
   children,
 }: PropsWithChildren<TableProviderProps>) => {
   const commonKey = useMemo(() => {
@@ -120,6 +125,25 @@ export const TableProvider = ({
     () => tableColumns.filter((column) => column.enableHiding !== false),
     [tableColumns]
   );
+
+  useEffect(() => {
+    if (selectedKey) {
+      const filteredRows = rows.filter((row) => {
+        if (!(row?.originalData as CookieTableData)?.parsedCookie) {
+          return true;
+        }
+
+        const tableCookieKey = getCookieKey(
+          (row?.originalData as CookieTableData)?.parsedCookie
+        );
+        return tableCookieKey === selectedKey;
+      });
+
+      if (filteredRows.length === 0) {
+        onRowClick(null);
+      }
+    }
+  }, [selectedKey, onRowClick, rows]);
 
   return (
     <TableContext.Provider

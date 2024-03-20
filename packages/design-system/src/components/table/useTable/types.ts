@@ -97,4 +97,5 @@ export interface TableProviderProps {
   ) => string;
   exportTableData?: (rows: TableRow[]) => void;
   hasVerticalBar?: (row: TableRow) => boolean;
+  selectedKey?: string | null;
 }

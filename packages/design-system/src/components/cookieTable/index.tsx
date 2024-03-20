@@ -155,21 +155,6 @@ const CookieTable = forwardRef<
   }, []);
 
   useEffect(() => {
-    if (selectedKey) {
-      const filteredRows = table.rows.filter(({ originalData }) => {
-        const tableCookieKey = getCookieKey(
-          (originalData as CookieTableData).parsedCookie
-        );
-        return tableCookieKey === getCookieKey(selectedKey.parsedCookie);
-      });
-
-      if (filteredRows.length === 0) {
-        setSelectedFrameCookie(null);
-      }
-    }
-  }, [selectedKey, setSelectedFrameCookie, table.rows]);
-
-  useEffect(() => {
     window.addEventListener('resize', () => forceUpdate());
     return () => {
       window.removeEventListener('resize', () => forceUpdate());
@@ -191,6 +176,7 @@ const CookieTable = forwardRef<
         conditionalTableRowClassesHandler={_conditionalTableRowClassesHandler}
         exportTableData={!hideExport ? exportCookies : undefined}
         hasVerticalBar={hasVerticalBar}
+        selectedKey={selectedKey}
       >
         <Table
           selectedKey={selectedKey}
