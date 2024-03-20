@@ -38,11 +38,25 @@ const useColumnVisibility = (
   columns: TableColumn[],
   tablePersistentSettingsKey?: string
 ): ColumnVisibilityOutput => {
-  const [hiddenKeys, setHiddenKeys] = useState<Set<string>>(new Set());
+  const [hiddenKeys, setHiddenKeys] = useState<Set<string> | null>(null);
   const [isDataLoading, setIsDataLoading] = useState(true);
 
+  useEffect(() => {
+    setHiddenKeys((prev) => {
+      if (prev !== null) {
+        return prev;
+      }
+
+      const _hiddenKeys = columns.filter(
+        ({ isHiddenByDefault }) => isHiddenByDefault
+      );
+
+      return new Set(_hiddenKeys.map(({ accessorKey }) => accessorKey));
+    });
+  }, [columns]);
+
   const hideColumn = useCallback((key: string) => {
-    setHiddenKeys((prev) => new Set(prev.add(key)));
+    setHiddenKeys((prev) => new Set(prev?.add(key)));
   }, []);
 
   const toggleVisibility = useCallback(() => {
@@ -66,10 +80,10 @@ const useColumnVisibility = (
 
   const areAllColumnsVisible = useMemo(() => {
     return (
-      hiddenKeys.size ===
+      hiddenKeys?.size ===
       columns.filter(({ enableHiding }) => enableHiding !== false).length
     );
-  }, [columns, hiddenKeys.size]);
+  }, [columns, hiddenKeys?.size]);
 
   const showColumn = useCallback((key: string) => {
     setHiddenKeys((prev) => {
@@ -81,7 +95,7 @@ const useColumnVisibility = (
 
   const isColumnHidden = useCallback(
     (key: string) => {
-      return hiddenKeys.has(key);
+      return Boolean(hiddenKeys?.has(key));
     },
     [hiddenKeys]
   );
@@ -95,7 +109,7 @@ const useColumnVisibility = (
     }
 
     setVisibleColumns(
-      columns.filter(({ accessorKey }) => !hiddenKeys.has(accessorKey))
+      columns.filter(({ accessorKey }) => !hiddenKeys?.has(accessorKey))
     );
   }, [columns, hiddenKeys, isDataLoading]);
 
@@ -108,14 +122,13 @@ const useColumnVisibility = (
 
   useEffect(() => {
     if (tablePersistentSettingsKey) {
-      setHiddenKeys(new Set());
-
       const data = getPreferences(
         tablePersistentSettingsKey,
         'columnsVisibility'
       );
 
       if (data) {
+        setHiddenKeys(new Set());
         const _hiddenKeys = Object.entries(data)
           .filter(([, hidden]) => hidden)
           .map(([key]) => key);

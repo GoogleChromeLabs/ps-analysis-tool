@@ -201,6 +201,10 @@ module.exports = {
       'leaf-green-dark': '#87DFB2',
       'eerie-black': '#1F1F1F0F',
       'light-yellow': '#FEFCE0',
+      'selection-green-light': '#117347',
+      'selection-green-dark': '#74d47e',
+      'selection-yellow-light': '#8b8f18',
+      'selection-yellow-dark': '#dbdb48',
     },
     borderColor: {
       ...colors,

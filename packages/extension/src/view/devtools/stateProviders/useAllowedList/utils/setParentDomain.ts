@@ -16,7 +16,7 @@
 /**
  * Internal dependencies.
  */
-import { ChromeStorage } from '../../../../../../store';
+import { ChromeStorage } from '../../../../../store';
 
 const setParentDomain = async (
   domain: string,

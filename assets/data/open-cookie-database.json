@@ -6153,6 +6153,17 @@
       "dataController": "Equativ.com",
       "gdprUrl": "https://equativ.com/end-users-privacy-policy/",
       "wildcard": "0"
+    },
+    {
+      "platform": "Emetric",
+      "category": "Marketing",
+      "name": "pid",
+      "domain": "xplosion.de",
+      "description": "This cookie is used by Xplosion/emetriq. Used to analyze the behavior of visitors to the website and derive preferences. These allow for interest-based advertising on third party websites.",
+      "retention": "1 year",
+      "dataController": "Emetric",
+      "gdprUrl": "https://www.emetriq.com/datenschutz/",
+      "wildcard": "0"
     }
   ],
   "pbw": [
@@ -7928,6 +7939,19 @@
       "platform": "Magento",
       "category": "Functional",
       "name": "last_visited_store",
+      "domain": "",
+      "description": "This cookie keeps track of the last website you visited. This is necessary to enable the correct language on the website.",
+      "retention": "1 day",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "store": [
+    {
+      "platform": "Magento",
+      "category": "Functional",
+      "name": "store",
       "domain": "",
       "description": "This cookie keeps track of the last website you visited. This is necessary to enable the correct language on the website.",
       "retention": "1 day",
@@ -17708,6 +17732,45 @@
       "wildcard": "0"
     }
   ],
+  "ud": [
+    {
+      "platform": "Nielsen",
+      "category": "Marketing",
+      "name": "ud",
+      "domain": "exelator.com",
+      "description": "Collects data related to the user’s visits to the website, such as the number of visits, average time spent on the website and what pages have been loaded, with the purpose of displaying targeted ads.",
+      "retention": "119 days",
+      "dataController": "Nielsen",
+      "gdprUrl": "https://www.nielsen.com/legal/privacy-principles/",
+      "wildcard": "0"
+    }
+  ],
+  "udo": [
+    {
+      "platform": "Nielsen",
+      "category": "Marketing",
+      "name": "udo",
+      "domain": "exelator.com",
+      "description": "Collects information on user behavior on multiple websites. This information is used in order to optimize the relevance of advertisement on the website.",
+      "retention": "119 days",
+      "dataController": "Nielsen",
+      "gdprUrl": "https://www.nielsen.com/legal/privacy-principles/",
+      "wildcard": "0"
+    }
+  ],
+  "EE": [
+    {
+      "platform": "Nielsen",
+      "category": "Marketing",
+      "name": "EE",
+      "domain": "exelator.com",
+      "description": "Collects data related to the user’s visits to the website, such as the number of visits, average time spent on the website and what pages have been loaded, with the purpose of displaying targeted ads.",
+      "retention": "119 days",
+      "dataController": "Nielsen",
+      "gdprUrl": "https://www.nielsen.com/legal/privacy-principles/",
+      "wildcard": "0"
+    }
+  ],
   "i00": [
     {
       "platform": "infOnline",
@@ -18524,6 +18587,149 @@
       "retention": "1 day",
       "dataController": "Postviewscounter",
       "gdprUrl": "https://postviewscounter.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "client_bslstaid": [
+    {
+      "platform": "Beslist.nl",
+      "category": "Analytics",
+      "name": "client_bslstaid",
+      "domain": "",
+      "description": "Registers statistical data about the behavior of visitors to the website. Used for internal analysis by the website administrator.",
+      "retention": "540 days",
+      "dataController": "Beslist.nl",
+      "gdprUrl": "https://www.beslist.nl/information/overprivacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "client_bslstmatch": [
+    {
+      "platform": "Beslist.nl",
+      "category": "Analytics",
+      "name": "client_bslstmatch",
+      "domain": "",
+      "description": "Registers statistical data about the behavior of visitors to the website. Used for internal analysis by the website administrator.",
+      "retention": "1 day",
+      "dataController": "Beslist.nl",
+      "gdprUrl": "https://www.beslist.nl/information/overprivacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "client_bslstsid": [
+    {
+      "platform": "Beslist.nl",
+      "category": "Analytics",
+      "name": "client_bslstsid",
+      "domain": "",
+      "description": "Unique identifier of the user session.",
+      "retention": "1 day",
+      "dataController": "Beslist.nl",
+      "gdprUrl": "https://www.beslist.nl/information/overprivacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "client_bslstuid": [
+    {
+      "platform": "Beslist.nl",
+      "category": "Analytics",
+      "name": "client_bslstuid",
+      "domain": "",
+      "description": "Registers statistical data about the behavior of visitors to the website. Used for internal analysis by the website administrator.",
+      "retention": "540 days",
+      "dataController": "Beslist.nl",
+      "gdprUrl": "https://www.beslist.nl/information/overprivacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "CGISESSID": [
+    {
+      "platform": "Perl",
+      "category": "Functional",
+      "name": "CGISESSID",
+      "domain": "",
+      "description": "Cookie generated by applications based on the Perl language. This is a general purpose identifier used to maintain user session variables.",
+      "retention": "session",
+      "dataController": "Perl",
+      "gdprUrl": "https://www.perl.org/siteinfo.html",
+      "wildcard": "0"
+    }
+  ],
+  "vglnk.Agent.p": [
+    {
+      "platform": "Disqus",
+      "category": "Marketing",
+      "name": "vglnk.Agent.p",
+      "domain": "disqus.com",
+      "description": "Cookie set by Disqus. Used to collect visitor behaviour in order to present more relevant advertisements.",
+      "retention": "1 year",
+      "dataController": "Disqus",
+      "gdprUrl": "https://help.disqus.com/en/articles/1717103-disqus-privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "vglnk.PartnerRfsh.p": [
+    {
+      "platform": "Disqus",
+      "category": "Marketing",
+      "name": "vglnk.PartnerRfsh.p",
+      "domain": "disqus.com",
+      "description": "This cookie is used to collect data from various website in order to present more relevant advertisement.",
+      "retention": "1 year",
+      "dataController": "Disqus",
+      "gdprUrl": "https://help.disqus.com/en/articles/1717103-disqus-privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "deuxesse_uxid": [
+    {
+      "platform": "Twiago",
+      "category": "Marketing",
+      "name": "deuxesse_uxid",
+      "domain": "twiago.com",
+      "description": "Sets a unique ID for the visitor, that allows third party advertisers to target the visitor with relevant advertisement. This pairing service is provided by third party advertisement hubs, which facilitates real-time bidding for advertisers.",
+      "retention": "29 days",
+      "dataController": "Twiago",
+      "gdprUrl": "https://www.twiago.com/datenschutz/",
+      "wildcard": "0"
+    }
+  ],
+  "pid_short": [
+    {
+      "platform": "Emetric",
+      "category": "Marketing",
+      "name": "pid_short",
+      "domain": "xplosion.de",
+      "description": "This cookie is used by Xplosion/emetriq. Used to analyze the behavior of visitors to the website and derive preferences. These allow for interest-based advertising on third party websites.",
+      "retention": "1 year",
+      "dataController": "Emetric",
+      "gdprUrl": "https://www.emetriq.com/datenschutz/",
+      "wildcard": "0"
+    }
+  ],
+  "pid_signature": [
+    {
+      "platform": "Emetric",
+      "category": "Marketing",
+      "name": "pid_signature",
+      "domain": "xplosion.de",
+      "description": "This cookie is used by Xplosion/emetriq. Used to analyze the behavior of visitors to the website and derive preferences. These allow for interest-based advertising on third party websites.",
+      "retention": "1 year",
+      "dataController": "Emetric",
+      "gdprUrl": "https://www.emetriq.com/datenschutz/",
+      "wildcard": "0"
+    }
+  ],
+  "ep": [
+    {
+      "platform": "Emetric",
+      "category": "Marketing",
+      "name": "ep",
+      "domain": "xplosion.de",
+      "description": "This cookie Is used by Xplosion / emetriq. Used to analyze the behavior of visitors to the website and derive preferences. These allow for interest-based advertising on third party websites.",
+      "retention": "1 year",
+      "dataController": "Emetric",
+      "gdprUrl": "https://www.emetriq.com/datenschutz/",
       "wildcard": "0"
     }
   ]
