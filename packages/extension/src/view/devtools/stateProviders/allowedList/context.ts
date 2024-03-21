@@ -13,6 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './cookie';
-export * from './settings';
-export * from './allowedList';
+
+/**
+ * External dependencies.
+ */
+import { noop, createContext } from '@ps-analysis-tool/common';
+
+export interface AllowedListStoreContext {
+  state: {
+    domainsInAllowList: Set<string>;
+    isIncognito: boolean;
+  };
+  actions: {
+    setDomainsInAllowListCallback: (list: Set<string>) => void;
+  };
+}
+
+const initialState: AllowedListStoreContext = {
+  state: {
+    domainsInAllowList: new Set(),
+    isIncognito: false,
+  },
+  actions: {
+    setDomainsInAllowListCallback: noop,
+  },
+};
+
+export default createContext<AllowedListStoreContext>(initialState);
