@@ -20,6 +20,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider as TablePersistentSettingsProvider } from '@ps-analysis-tool/design-system';
+import { TranslationProvider } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies
@@ -30,8 +31,10 @@ const root = document.getElementById('root');
 
 if (root) {
   createRoot(root).render(
-    <TablePersistentSettingsProvider>
-      <App />
-    </TablePersistentSettingsProvider>
+    <TranslationProvider>
+      <TablePersistentSettingsProvider>
+        <App />
+      </TablePersistentSettingsProvider>
+    </TranslationProvider>
   );
 }
