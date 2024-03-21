@@ -294,7 +294,7 @@ const App: React.FC = () => {
               isKeySelected={isKeySelected}
               visibleWidth={sidebarWidth}
             />
-            <>{getMessage('testString')}</>
+            <>{getMessage('testString', ['nothing', 'something'])}</>
           </Resizable>
           <main
             ref={mainRef}

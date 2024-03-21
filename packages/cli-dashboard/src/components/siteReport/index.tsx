@@ -56,7 +56,7 @@ const SiteReport = ({
       technologies={technologies}
       completeJson={completeJson}
     >
-      <>{getMessage('testString')}</>
+      <>{getMessage('testString', ['nothing', 'something'])}</>
       <Layout selectedSite={selectedSite} />
     </ContentStoreProvider>
   );
