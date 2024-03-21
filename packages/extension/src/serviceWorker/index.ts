@@ -40,6 +40,7 @@ import {
   SERVICE_WORKER_RELOAD_MESSAGE,
   SERVICE_WORKER_TABS_RELOAD_COMMAND,
   SET_TAB_TO_READ,
+  TABID_STORAGE,
 } from '../constants';
 import SynchnorousCookieStore from '../store/synchnorousCookieStore';
 import { getTab } from '../utils/getTab';
@@ -262,7 +263,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     await chrome.tabs.sendMessage(tabId, {
       tabId,
       payload: {
-        type: 'SERVICEWORKER::WEBPAGE::TABID_STORAGE',
+        type: TABID_STORAGE,
         tabId,
       },
     });

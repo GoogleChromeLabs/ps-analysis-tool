@@ -33,6 +33,7 @@ import {
   ALLOWED_NUMBER_OF_TABS,
   DEVTOOLS_CLOSE,
   DEVTOOLS_OPEN,
+  GET_JS_COOKIES,
   INITIAL_SYNC,
   NEW_COOKIE_DATA,
   SERVICE_WORKER_RELOAD_MESSAGE,
@@ -157,7 +158,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     if (chrome.devtools.inspectedWindow.tabId && canStartInspecting) {
       await chrome.tabs.sendMessage(chrome.devtools.inspectedWindow.tabId, {
         payload: {
-          type: 'DEVTOOL::WEBPAGE::GET_JS_COOKIES',
+          type: GET_JS_COOKIES,
           tabId: chrome.devtools.inspectedWindow.tabId,
         },
       });
@@ -183,7 +184,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     if (chrome.devtools.inspectedWindow.tabId) {
       await chrome.tabs.sendMessage(chrome.devtools.inspectedWindow.tabId, {
         payload: {
-          type: 'DEVTOOL::WEBPAGE::GET_JS_COOKIES',
+          type: GET_JS_COOKIES,
           tabId: chrome.devtools.inspectedWindow.tabId,
         },
       });
