@@ -23,6 +23,9 @@ import {
   getDomainFromUrl,
 } from '@ps-analysis-tool/common';
 import type { Protocol } from 'devtools-protocol';
+/**
+ * Internal dependencies
+ */
 import isValidURL from '../utils/isValidURL';
 
 /**
