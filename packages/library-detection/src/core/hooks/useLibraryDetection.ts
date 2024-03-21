@@ -31,6 +31,7 @@ import {
 } from '../../utils';
 import { sumUpDetectionResults, useLibraryDetectionContext } from '..';
 import type { LibraryData, ResourceTreeItem } from '../../types';
+import LIBRARIES from '../../config';
 
 // The delay after the page load, because some scripts arrive right after the page load.
 const LOADING_DELAY = 2000;
@@ -41,18 +42,24 @@ const LOADING_DELAY = 2000;
 const useLibraryDetection = () => {
   const {
     isCurrentTabLoading,
+    isInitialDataUpdated,
+    setIsInitialDataUpdated,
     loadedBefore,
     showLoader,
     setLibraryMatches,
     setLoadedBeforeState,
     setShowLoader,
+    tabId,
   } = useLibraryDetectionContext(({ state, actions }) => ({
     isCurrentTabLoading: state.isCurrentTabLoading,
+    isInitialDataUpdated: state.isInitialDataUpdated,
+    setIsInitialDataUpdated: actions.setIsInitialDataUpdated,
     loadedBefore: state.loadedBefore,
     showLoader: state.showLoader,
     setLoadedBeforeState: actions.setLoadedBeforeState,
     setLibraryMatches: actions.setLibraryMatches,
     setShowLoader: actions.setShowLoader,
+    tabId: state.tabId,
   }));
 
   const timeout = useRef(0);
@@ -74,12 +81,18 @@ const useLibraryDetection = () => {
         LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING,
         resourcesWithContent,
         (realtimeComputationResult: LibraryData) => {
-          if (
-            realtimeComputationResult.gis.matches.length !== 0 ||
-            realtimeComputationResult.gsiV2.matches.length !== 0
-          ) {
+          const hasResults = Object.entries(realtimeComputationResult).find(
+            ([, result]) => result?.matches?.length
+          );
+
+          if (hasResults) {
             setLibraryMatches((matches) => {
-              return sumUpDetectionResults(matches, realtimeComputationResult);
+              const data = sumUpDetectionResults(
+                matches,
+                realtimeComputationResult
+              );
+
+              return data;
             });
           }
         }
@@ -102,19 +115,51 @@ const useLibraryDetection = () => {
   }, [listenerCallback, removeListener]);
 
   const updateInitialData = useCallback(async () => {
+    if (isInitialDataUpdated) {
+      return;
+    }
+
+    setIsInitialDataUpdated(true);
+
     //  chrome.devtools.inspectedWindow.getResources updates whenever new items are added.
     const scripts = await getNetworkResourcesWithContent();
+    const domQueryMatches: LibraryData = {};
+
+    LIBRARIES.forEach(async ({ name, domQueryFunction }) => {
+      if (domQueryFunction) {
+        const [queryResult] = await chrome.scripting.executeScript({
+          target: { tabId: tabId, allFrames: false },
+          func: domQueryFunction,
+        });
+
+        domQueryMatches[name] = {
+          domQuerymatches: queryResult?.result as [string],
+        };
+      }
+    });
 
     executeTaskInDevToolWorker(
       LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING,
       scripts,
       (detectedMatchingSignatures: LibraryData) => {
-        setLibraryMatches(detectedMatchingSignatures);
+        const data = {
+          ...detectedMatchingSignatures,
+          ...domQueryMatches,
+        };
+
+        setLibraryMatches(data);
         attachListener();
         setShowLoader(false);
       }
     );
-  }, [setLibraryMatches, attachListener, setShowLoader]);
+  }, [
+    setLibraryMatches,
+    attachListener,
+    setShowLoader,
+    setIsInitialDataUpdated,
+    tabId,
+    isInitialDataUpdated,
+  ]);
 
   useEffect(() => {
     if (showLoader) {
@@ -124,7 +169,7 @@ const useLibraryDetection = () => {
 
   // Get the initial data and listen to new resources.
   useEffect(() => {
-    // Only show loader if the page has not loaded yet.
+    // Show loader while page is loading.
     if (isCurrentTabLoading) {
       return;
     }
@@ -141,12 +186,10 @@ const useLibraryDetection = () => {
           timeout.current = 0;
         }, LOADING_DELAY);
       }
-
-      return;
+    } else {
+      // When the user revisits the landing page we do not need to show loader.
+      updateInitialData();
     }
-
-    // When the user revisits the landing page we do not need to show loader.
-    updateInitialData();
   }, [
     isCurrentTabLoading,
     loadedBefore,
@@ -154,6 +197,7 @@ const useLibraryDetection = () => {
     updateInitialData,
   ]);
 
+  // CLeanup on component unmount.
   useEffect(() => {
     return () => {
       removeListener();

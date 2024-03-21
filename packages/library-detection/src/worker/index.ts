@@ -22,8 +22,9 @@ import { LIBRARY_DETECTION_WORKER_TASK } from '@ps-analysis-tool/common';
  * Internal dependencies.
  */
 import detectMatchingSignatures from '../core/detectMatchingSignatures';
-import { checkForGIS, checkForGSIv2, generateGSIV2Matches } from '../libraries';
 import { type PreDefinedLibraryWorkerTaskPayload } from './constants';
+import LIBRARIES from '../config';
+import type { DetectionFunctions } from '../types';
 
 /**
  * Library Detection worker function that handles tasks related to library detection.
@@ -31,24 +32,18 @@ import { type PreDefinedLibraryWorkerTaskPayload } from './constants';
  */
 export const ldWorkerOnMessageCallback = (event: MessageEvent): void => {
   const task: LIBRARY_DETECTION_WORKER_TASK = event.data.task;
-  const payload: PreDefinedLibraryWorkerTaskPayload[LIBRARY_DETECTION_WORKER_TASK] =
+  const scripts: PreDefinedLibraryWorkerTaskPayload[LIBRARY_DETECTION_WORKER_TASK] =
     event.data.payload;
+
+  const detectionFunctions = Object.fromEntries(
+    LIBRARIES.map((library) => [library.name, library.detectionFunction])
+  );
 
   switch (task) {
     case LIBRARY_DETECTION_WORKER_TASK.DETECT_SIGNATURE_MATCHING: {
-      const detectionSubFunctions = {
-        gis: checkForGIS,
-        gsiV2: checkForGSIv2,
-      };
-      const detectionAuditFunctions = {
-        gsiV2: generateGSIV2Matches,
-      };
-      const librariesToDetect = ['gis', 'gsiV2'];
       const detectedMatchingSignatures = detectMatchingSignatures(
-        librariesToDetect,
-        payload,
-        detectionSubFunctions,
-        detectionAuditFunctions
+        scripts,
+        detectionFunctions as DetectionFunctions
       );
       postMessage(detectedMatchingSignatures);
       break;

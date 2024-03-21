@@ -17,17 +17,49 @@
 /**
  * External dependencies.
  */
-import { useEffect, useRef, useState } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  type PropsWithChildren,
+} from 'react';
+import {
+  noop,
+  createContext,
+  useContextSelector,
+} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import { getCurrentTab } from '../../../../../../utils/getCurrentTabId';
-import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
-import setDomainsInAllowList from './setDomainsInAllowList';
-import getDotPrefixedDomain from './getDotPrefixedDomain';
+import { getCurrentTab } from '../../../../utils/getCurrentTabId';
+import { useCookieStore } from '../syncCookieStore';
+import setDomainsInAllowList from './utils/setDomainsInAllowList';
+import getDotPrefixedDomain from './utils/getDotPrefixedDomain';
 
-const useAllowedList = () => {
+export interface AllowedListContext {
+  state: {
+    domainsInAllowList: Set<string>;
+    isIncognito: boolean;
+  };
+  actions: {
+    setDomainsInAllowListCallback: (list: Set<string>) => void;
+  };
+}
+
+const initialState: AllowedListContext = {
+  state: {
+    domainsInAllowList: new Set(),
+    isIncognito: false,
+  },
+  actions: {
+    setDomainsInAllowListCallback: noop,
+  },
+};
+
+export const Context = createContext<AllowedListContext>(initialState);
+
+export const Provider = ({ children }: PropsWithChildren) => {
   const { tabUrl, cookies } = useCookieStore(({ state }) => ({
     tabUrl: state.tabUrl,
     cookies: state.tabCookies,
@@ -96,11 +128,36 @@ const useAllowedList = () => {
     })();
   }, [cookies, tabUrl]);
 
-  return {
-    domainsInAllowList,
-    setDomainsInAllowListCallback,
-    isIncognito: isIncognito.current,
-  };
+  return (
+    <Context.Provider
+      value={{
+        state: {
+          domainsInAllowList,
+          isIncognito: isIncognito.current,
+        },
+        actions: {
+          setDomainsInAllowListCallback,
+        },
+      }}
+    >
+      {children}
+    </Context.Provider>
+  );
 };
 
-export default useAllowedList;
+export function useAllowedList(): AllowedListContext;
+export function useAllowedList<T>(
+  selector: (state: AllowedListContext) => T
+): T;
+
+/**
+ * Allowed list hook.
+ * @param selector Selector function to partially select state.
+ * @returns selected part of the state
+ */
+export function useAllowedList<T>(
+  selector: (state: AllowedListContext) => T | AllowedListContext = (state) =>
+    state
+) {
+  return useContextSelector(Context, selector);
+}
