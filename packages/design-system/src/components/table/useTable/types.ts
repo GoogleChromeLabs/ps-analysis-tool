@@ -22,13 +22,14 @@ export type TableData = (CookieTableData | TechnologyData) & {
   highlighted?: boolean;
 };
 
-export type InfoType = number | string | boolean | string[] | [];
+export type InfoType = number | string | boolean | Array<string | number> | [];
 
 export type TableColumn = {
   header: string;
   accessorKey: string;
   cell: (info: InfoType, details?: TableData) => React.JSX.Element | InfoType;
   enableHiding?: boolean;
+  isHiddenByDefault?: boolean;
   enableBodyCellPrefixIcon?: boolean;
   bodyCellPrefixIcon?: {
     Element: (props: any) => React.JSX.Element;

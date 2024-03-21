@@ -15,3 +15,4 @@
  */
 export * from './cookie';
 export * from './settings';
+export * from './useAllowedList';

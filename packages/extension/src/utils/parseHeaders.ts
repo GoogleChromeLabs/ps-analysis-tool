@@ -47,7 +47,7 @@ export default async function parseHeaders(
   tabId: number,
   url: string,
   cookieDB: CookieDatabase,
-  tabUrl: string,
+  tabUrl: string | null | undefined,
   frameId: number,
   requestId: string,
   headers?: chrome.webRequest.HttpHeader[]

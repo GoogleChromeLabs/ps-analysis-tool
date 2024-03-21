@@ -24,11 +24,7 @@ import React, {
   useRef,
   useMemo,
 } from 'react';
-import {
-  type TabCookies,
-  ORPHANED_COOKIE_KEY,
-  UNMAPPED_COOKIE_KEY,
-} from '@ps-analysis-tool/common';
+import { type TabCookies } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -42,7 +38,6 @@ import {
   SERVICE_WORKER_RELOAD_MESSAGE,
   SET_TAB_TO_READ,
 } from '../../../../constants';
-import setDocumentCookies from '../../../../utils/setDocumentCookies';
 import { useSettings } from '../settings';
 import { getTab } from '../../../../utils/getTab';
 import getFramesForCurrentTab from '../../../../utils/getFramesForCurrentTab';
@@ -114,23 +109,30 @@ const Provider = ({ children }: PropsWithChildren) => {
     const _frameHasCookies = Object.values(tabCookies).reduce<
       Record<string, boolean>
     >((acc, cookie) => {
-      let hasFrame = false;
-
       cookie.frameIdList?.forEach((frameId) => {
         const url = tabFramesIdsWithURL[frameId];
 
         if (url) {
           acc[url] = true;
-          hasFrame = true;
         }
       });
 
-      if (!hasFrame && cookie.frameIdList && cookie.frameIdList?.length > 0) {
-        acc[ORPHANED_COOKIE_KEY] = true;
-      }
+      if (cookie.frameIdList?.length === 0) {
+        if (
+          cookie.frameIdList &&
+          cookie.frameIdList.length === 0 &&
+          cookie.parsedCookie.domain
+        ) {
+          const domainToCheck = cookie.parsedCookie.domain.startsWith('.')
+            ? cookie.parsedCookie.domain.slice(1)
+            : cookie.parsedCookie.domain;
 
-      if (!hasFrame && cookie.frameIdList && cookie.frameIdList?.length === 0) {
-        acc[UNMAPPED_COOKIE_KEY] = true;
+          Object.values(tabFramesIdsWithURL).forEach((frameUrl) => {
+            if (frameUrl.includes(domainToCheck)) {
+              acc[frameUrl] = true;
+            }
+          });
+        }
       }
 
       return acc;
@@ -150,8 +152,16 @@ const Provider = ({ children }: PropsWithChildren) => {
       await getAllFramesForCurrentTab();
     }
 
-    await setDocumentCookies(tabId?.toString());
     const tab = await getTab(tabId);
+
+    if (chrome.devtools.inspectedWindow.tabId && canStartInspecting) {
+      await chrome.tabs.sendMessage(chrome.devtools.inspectedWindow.tabId, {
+        payload: {
+          type: 'DEVTOOL::WEBPAGE::GET_JS_COOKIES',
+          tabId: chrome.devtools.inspectedWindow.tabId,
+        },
+      });
+    }
 
     if (tab?.url) {
       setTabUrl(tab?.url);
@@ -167,12 +177,16 @@ const Provider = ({ children }: PropsWithChildren) => {
     }
 
     setLoading(false);
-  }, [getAllFramesForCurrentTab]);
+  }, [getAllFramesForCurrentTab, canStartInspecting]);
 
   const getCookiesSetByJavascript = useCallback(async () => {
-    const tabId = chrome.devtools.inspectedWindow.tabId;
-    if (tabId) {
-      await setDocumentCookies(tabId.toString());
+    if (chrome.devtools.inspectedWindow.tabId) {
+      await chrome.tabs.sendMessage(chrome.devtools.inspectedWindow.tabId, {
+        payload: {
+          type: 'DEVTOOL::WEBPAGE::GET_JS_COOKIES',
+          tabId: chrome.devtools.inspectedWindow.tabId,
+        },
+      });
     }
   }, []);
 

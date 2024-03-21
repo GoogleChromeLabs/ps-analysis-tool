@@ -32,18 +32,18 @@ import {
 
 /**
  * Checks for Google Identity Services api signatures.
- * @param script - The script tag to check.
- * @param existingItems - The existing items to check against.
+ * @param script - The script to parse for matching.
+ * @param matches - The existing items to check against.
  * @param signatureMatches - The number of signature matches.
  * @returns The number of signature matches and the items.
  */
-const checkForGIS = (
+const getGISMatches = (
   script: ScriptTagUnderCheck,
-  existingItems: DetectedSignature[],
+  matches: DetectedSignature[],
   signatureMatches: number
 ) => {
   const content = script.content;
-  let items = existingItems;
+  let items = matches;
 
   if (!content) {
     // this case if no network request is present
@@ -53,19 +53,23 @@ const checkForGIS = (
     };
   }
 
-  const gisSignatures = [
+  const signatures = [
     ...GIS_SIGNATURE_WEAK_MATCHES,
     ...GIS_SIGNATURE_STRONG_MATCHES,
   ].map((item) => item.signature);
 
-  const captureGroup = gisSignatures.map(escapeStringRegexp);
+  const captureGroup = signatures.map(escapeStringRegexp);
+
+  const strongSignatures = GIS_SIGNATURE_STRONG_MATCHES.map(
+    (item) => item.signature
+  );
 
   const allCaptureGroups =
     '(?:.{0,63}?)(?<signature>' + captureGroup.join('|') + ')(?:.{0,63}?)';
 
-  const reSignatures = new RegExp(allCaptureGroups, 'dg');
+  const signaturesRegex = new RegExp(allCaptureGroups, 'dg');
 
-  for (const match of content.matchAll(reSignatures)) {
+  for (const match of content.matchAll(signaturesRegex)) {
     if (!match.groups || !('signature' in match.groups)) {
       continue;
     }
@@ -111,8 +115,17 @@ const checkForGIS = (
     }
   }
 
+  const signatureOfDetectedMatches = items.map((item) => item.feature.text);
+
+  const isStrongSignatureFound = signatureOfDetectedMatches.some((signature) =>
+    strongSignatures.includes(signature)
+  );
+
   // Audit step
-  if (signatureMatches === 0) {
+  if (
+    signatureMatches === 0 ||
+    (!isStrongSignatureFound && signatureMatches < 2)
+  ) {
     items = [];
   }
 
@@ -122,4 +135,4 @@ const checkForGIS = (
   };
 };
 
-export default checkForGIS;
+export default getGISMatches;
