@@ -35,6 +35,7 @@ const root = {
         { from: 'icons', to: 'icons' },
         { from: '../../assets', to: 'assets' },
         { from: '../../data', to: 'data' },
+        { from: '../../_locales', to: '_locales' },
       ],
     }),
     new WebpackBar({
