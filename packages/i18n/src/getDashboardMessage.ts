@@ -14,18 +14,55 @@
  * limitations under the License.
  */
 
-// Remove the following comments when params are used
-// eslint-disable-next-line eslint-comments/disable-enable-pair
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { IntlMessageFormat } from 'intl-messageformat';
+
 export const getDashboardMessage = (
   key: string,
   messages: any,
   substitutions?: string[],
   escapeLt?: boolean
 ) => {
-  if (messages[key]) {
-    return messages[key].message;
+  const messageObj: {
+    message: string;
+    description: string;
+    placeholders: {
+      [key: string]: {
+        content: string;
+        example: string;
+      };
+    };
+  } = messages[key];
+
+  if (!messageObj) {
+    return '';
   }
 
-  return '';
+  const message = messageObj.message
+    .split('$')
+    .map((part, idx) => {
+      if (idx % 2) {
+        return '{' + part + '}';
+      }
+
+      return part;
+    })
+    .join('');
+
+  const placeholders = Object.entries(messageObj.placeholders || {}).reduce<{
+    [key: string]: string;
+  }>((acc, [placeholderKey, val]) => {
+    const idx = Number(val.content.substring(1)) - 1;
+
+    if (substitutions?.[idx]) {
+      acc[placeholderKey] = substitutions[idx];
+    } else {
+      acc[placeholderKey] = '';
+    }
+
+    return acc;
+  }, {});
+
+  return new IntlMessageFormat(message, 'en', undefined, {
+    ignoreTag: escapeLt,
+  }).format(placeholders);
 };
