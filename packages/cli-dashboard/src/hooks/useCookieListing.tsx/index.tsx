@@ -177,7 +177,7 @@ const useCookieListing = (
         ),
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
-          const val = value as boolean;
+          const val = Boolean(value);
           return val === (filterValue === 'First Party');
         },
       },
@@ -197,7 +197,7 @@ const useCookieListing = (
         },
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
-          const val = value as boolean;
+          const val = Boolean(value);
           return val === (filterValue === 'True');
         },
       },
@@ -234,7 +234,7 @@ const useCookieListing = (
         },
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
-          const val = value as boolean;
+          const val = Boolean(value);
           return val === (filterValue === 'True');
         },
       },

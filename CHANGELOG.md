@@ -273,3 +273,25 @@
 ## Others
 * Rename `third_party` to `assets` https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/530
 
+
+# v0.6.0
+
+## Extension
+* Enhancement: Library detection package to identify more libraries https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/555
+* Miscellaneous settings page changes https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/544
+* Maintain selected row’s background color in row selection https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/556
+* Use `cookieStore` API to fetch JS cookies. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/550
+* Fix: Inconsistency of CDP switch state. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/554
+* Fix: Update filters comparator https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/549
+* Fix: Add provider to allowed list https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/551
+* Fix: Incorrect cookie scope classification https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/553
+* Fix: Remove unmapped orphan cookies. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/558
+* Enable CDP and multi-tab using query parameters https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/559
+* Fix: Highlighting logic for undetermined blocking status cookie and create a new column for it https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/557
+
+## CLI
+* Fix: CLI not quitting after generating output. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/552
+
+
+## Others
+* Chrome-Launcher: Open all example.com URLs with CDP and multi-tab on. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/560

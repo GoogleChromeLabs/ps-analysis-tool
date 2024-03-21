@@ -18,11 +18,7 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  type CookieTableData,
-  ORPHANED_COOKIE_KEY,
-  UNMAPPED_COOKIE_KEY,
-} from '@ps-analysis-tool/common';
+import { type CookieTableData } from '@ps-analysis-tool/common';
 import {
   Sidebar,
   useSidebar,
@@ -42,6 +38,7 @@ import Cookies from './cookies';
 import useFrameOverlay from '../hooks/useFrameOverlay';
 import { useCookieStore } from '../stateProviders/syncCookieStore';
 import { useSettingsStore } from '../stateProviders/syncSettingsStore';
+import { getCurrentTabId } from '../../../utils/getCurrentTabId';
 
 interface LayoutProps {
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
@@ -50,7 +47,6 @@ interface LayoutProps {
 const Layout = ({ setSidebarData }: LayoutProps) => {
   const [sidebarWidth, setSidebarWidth] = useState(200);
   const mainRef = useRef<HTMLElement>(null);
-  const toastMessageRef = useRef<HTMLDivElement>(null);
 
   const { settingsChanged, handleSettingsChange } = useSettingsStore(
     ({ state, actions }) => ({
@@ -95,72 +91,57 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     isKeySelected: actions.isKeySelected,
   }));
 
+  const { Element: PanelElement, props } = activePanel.panel;
+
   useEffect(() => {
     setSidebarData((prev) => {
       const data = { ...prev };
       const psData = data[SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX];
 
-      psData.children[SIDEBAR_ITEMS_KEYS.COOKIES].panel = () => (
-        <Cookies setFilteredCookies={setFilteredCookies} />
-      );
+      psData.children[SIDEBAR_ITEMS_KEYS.COOKIES].panel = {
+        Element: Cookies,
+        props: { setFilteredCookies },
+      };
       psData.children[SIDEBAR_ITEMS_KEYS.COOKIES].children = Object.keys(
         tabFrames || {}
-      )
-        .filter((url) => {
-          if (url === ORPHANED_COOKIE_KEY) {
-            return frameHasCookies[url];
-          }
+      ).reduce<SidebarItems>((acc, url) => {
+        const popupTitle = `Cookies used by frames from ${url}`;
 
-          if (url === UNMAPPED_COOKIE_KEY) {
-            return frameHasCookies[url];
-          }
+        acc[url] = {
+          title: url,
+          popupTitle,
+          panel: {
+            Element: Cookies,
+            props: { setFilteredCookies },
+          },
+          icon: {
+            Element: CookieIcon,
+          },
+          selectedIcon: {
+            Element: CookieIconWhite,
+          },
+          children: {},
+          isBlurred: !frameHasCookies?.[url],
+        };
 
-          return true;
-        })
-        .reduce<SidebarItems>((acc, url) => {
-          let popupTitle = `Cookies used by frames from ${url}`;
-          let infoIconDescription = '';
-          if (url === ORPHANED_COOKIE_KEY) {
-            popupTitle = infoIconDescription =
-              'Frames that set these cookies were removed from the DOM, leaving these cookies orphaned.';
-          }
-
-          if (url === UNMAPPED_COOKIE_KEY) {
-            popupTitle = infoIconDescription =
-              'Cookies that could not be mapped to any frame.';
-          }
-
-          acc[url] = {
-            title: url,
-            popupTitle,
-            panel: () => <Cookies setFilteredCookies={setFilteredCookies} />,
-            icon: () => <CookieIcon />,
-            selectedIcon: () => <CookieIconWhite />,
-            infoIconDescription,
-            children: {},
-            isBlurred: !frameHasCookies?.[url],
-          };
-
-          return acc;
-        }, {});
+        return acc;
+      }, {});
 
       const showInspectButton =
         canStartInspecting && Boolean(Object.keys(tabFrames || {}).length);
 
       if (showInspectButton) {
-        psData.children[SIDEBAR_ITEMS_KEYS.COOKIES].extraInterfaceToTitle =
-          () => (
-            <InspectButton
-              isInspecting={isInspecting}
-              setIsInspecting={setIsInspecting}
-              isTabFocused={
-                isSidebarFocused && isKeySelected(SIDEBAR_ITEMS_KEYS.COOKIES)
-              }
-            />
-          );
+        psData.children[SIDEBAR_ITEMS_KEYS.COOKIES].extraInterfaceToTitle = {
+          Element: InspectButton,
+          props: {
+            isInspecting,
+            setIsInspecting,
+            isTabFocused:
+              isSidebarFocused && isKeySelected(SIDEBAR_ITEMS_KEYS.COOKIES),
+          },
+        };
       } else {
-        psData.children[SIDEBAR_ITEMS_KEYS.COOKIES].extraInterfaceToTitle =
-          () => <></>;
+        psData.children[SIDEBAR_ITEMS_KEYS.COOKIES].extraInterfaceToTitle = {};
       }
 
       return data;
@@ -186,21 +167,21 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
 
   useEffect(() => {
     (async () => {
-      const tabId = chrome.devtools.inspectedWindow.tabId.toString();
+      const tabId = await getCurrentTabId();
 
-      const data = await chrome.storage.local.get();
-
-      if (!data?.[tabId]) {
-        data[tabId] = {};
+      if (!tabId) {
+        return;
       }
 
-      if (!data[tabId]?.['selectedSidebarItem']) {
-        data[tabId]['selectedSidebarItem'] = SIDEBAR_ITEMS_KEYS.COOKIES;
+      let data = await chrome.storage.session.get();
+
+      if (!data) {
+        data = {};
       }
 
-      data[tabId]['selectedSidebarItem'] = selectedItemKey;
+      data['selectedSidebarItem#' + tabId] = selectedItemKey;
 
-      await chrome.storage.local.set(data);
+      await chrome.storage.session.set(data);
     })();
   }, [selectedItemKey]);
 
@@ -247,24 +228,23 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
       </Resizable>
       <main
         ref={mainRef}
-        onScroll={() => {
-          if (mainRef.current && toastMessageRef.current) {
-            toastMessageRef.current.style.bottom =
-              '-' + mainRef.current.scrollTop + 'px';
-          }
-        }}
-        className="h-full flex-1 overflow-auto relative"
+        className="h-full flex-1 relative overflow-hidden flex flex-col"
       >
-        <div className="min-w-[40rem] h-full z-1">{activePanel?.element()}</div>
-        {settingsChanged && (
-          <ToastMessage
-            ref={toastMessageRef}
-            additionalStyles="text-sm"
-            text="Settings changed, please reload all tabs."
-            onClick={handleSettingsChange}
-            textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
-          />
-        )}
+        <div className="w-full h-full overflow-auto">
+          <div className="min-w-[40rem] h-full z-1">
+            {PanelElement && <PanelElement {...props} />}
+          </div>
+        </div>
+        <div className="h-fit">
+          {settingsChanged && (
+            <ToastMessage
+              additionalStyles="text-sm"
+              text="Settings changed, please reload all tabs."
+              onClick={handleSettingsChange}
+              textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
+            />
+          )}
+        </div>
       </main>
     </div>
   );

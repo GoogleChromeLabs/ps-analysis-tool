@@ -38,6 +38,7 @@ interface SidebarItemProps {
   visibleWidth?: number;
 }
 
+// eslint-disable-next-line complexity
 const SidebarChild = ({
   didUserInteract,
   setDidUserInteract,
@@ -79,6 +80,10 @@ const SidebarChild = ({
     selectedItemKey,
     setIsSidebarFocused,
   ]);
+
+  const SelectedIcon = sidebarItem.selectedIcon?.Element;
+  const Icon = sidebarItem.icon?.Element;
+  const ExtraInterfaceToTitle = sidebarItem.extraInterfaceToTitle?.Element;
 
   return (
     <>
@@ -129,11 +134,11 @@ const SidebarChild = ({
         )}
         {sidebarItem.icon && sidebarItem.selectedIcon && (
           <div className="mr-1 pointer-events-none">
-            {isKeySelected(itemKey) && isSidebarFocused ? (
-              <>{sidebarItem.selectedIcon?.()}</>
-            ) : (
-              <>{sidebarItem.icon?.()}</>
-            )}
+            {isKeySelected(itemKey) && isSidebarFocused
+              ? SelectedIcon && (
+                  <SelectedIcon {...sidebarItem.selectedIcon.props} />
+                )
+              : Icon && <Icon {...sidebarItem.icon.props} />}
           </div>
         )}
         <p className="flex flex-row items-center justify-center whitespace-nowrap gap-x-1 pr-1">
@@ -156,7 +161,11 @@ const SidebarChild = ({
             left: visibleWidth ? visibleWidth - 35 : 0,
           }}
         >
-          {sidebarItem.extraInterfaceToTitle?.()}
+          {ExtraInterfaceToTitle && (
+            <ExtraInterfaceToTitle
+              {...sidebarItem.extraInterfaceToTitle?.props}
+            />
+          )}
         </div>
       </div>
       <>
