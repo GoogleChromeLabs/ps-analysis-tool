@@ -17,17 +17,23 @@
 /**
  * External dependencies.
  */
-import { useEffect, useRef, useState } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  type PropsWithChildren,
+} from 'react';
 
 /**
  * Internal dependencies.
  */
-import { getCurrentTab } from '../../../../../../utils/getCurrentTabId';
-import { useCookie } from '../../../../stateProviders';
-import setDomainsInAllowList from './setDomainsInAllowList';
-import getDotPrefixedDomain from './getDotPrefixedDomain';
+import { getCurrentTab } from '../../../../utils/getCurrentTabId';
+import { useCookie } from '../cookie';
+import setDomainsInAllowList from './utils/setDomainsInAllowList';
+import getDotPrefixedDomain from './utils/getDotPrefixedDomain';
+import Context from './context';
 
-const useAllowedList = () => {
+const Provider = ({ children }: PropsWithChildren) => {
   const { tabUrl, cookies } = useCookie(({ state }) => ({
     tabUrl: state.tabUrl,
     cookies: state.tabCookies,
@@ -96,11 +102,21 @@ const useAllowedList = () => {
     })();
   }, [cookies, tabUrl]);
 
-  return {
-    domainsInAllowList,
-    setDomainsInAllowListCallback,
-    isIncognito: isIncognito.current,
-  };
+  return (
+    <Context.Provider
+      value={{
+        state: {
+          domainsInAllowList,
+          isIncognito: isIncognito.current,
+        },
+        actions: {
+          setDomainsInAllowListCallback,
+        },
+      }}
+    >
+      {children}
+    </Context.Provider>
+  );
 };
 
-export default useAllowedList;
+export default Provider;

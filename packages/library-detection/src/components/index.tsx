@@ -16,3 +16,4 @@
 export { default as LibraryDetection } from './libraryDetection';
 export { default as Accordion } from './accordion';
 export { default as FeatureList } from './accordion/featureList';
+export { default as DetectionMessage } from './accordion/detectionMessage';

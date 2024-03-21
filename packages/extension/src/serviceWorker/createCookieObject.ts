@@ -23,6 +23,9 @@ import {
   getDomainFromUrl,
 } from '@ps-analysis-tool/common';
 import type { Protocol } from 'devtools-protocol';
+/**
+ * Internal dependencies
+ */
 import isValidURL from '../utils/isValidURL';
 
 /**
@@ -30,7 +33,7 @@ import isValidURL from '../utils/isValidURL';
  * @param parsedCookie Parsed cookie object from request/response.
  * @param url URL of the cookie from the request/response.
  * @param {Protocol.Network.Cookie[]} cdpCookiesList List cookies from the request.
- * @param {CookieData['headerType']} type specifies whether the callee is request parser or response parser..
+ * @param {CookieData['headerType']} type specifies whether to derive the domain if domain is not in set-cookie.
  * @returns {Promise<Protocol.Network.Cookie[]>} Cookie object.
  */
 export function createCookieObject(

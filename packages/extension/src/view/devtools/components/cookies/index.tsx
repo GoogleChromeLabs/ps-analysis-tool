@@ -41,8 +41,8 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
     isCurrentTabBeingListenedTo,
     loading,
     selectedFrame,
-    tabToRead,
     changeListeningToThisTab,
+    tabToRead,
   } = useCookie(({ state, actions }) => ({
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
     loading: state.loading,

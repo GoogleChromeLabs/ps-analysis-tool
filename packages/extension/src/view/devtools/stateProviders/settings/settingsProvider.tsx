@@ -60,6 +60,8 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [browserInformation, setBrowserInformation] = useState<string | null>(
     null
   );
+  const [PSATVersion, setPSATVersion] =
+    useState<SettingsStoreContext['state']['PSATVersion']>(null);
   const [currentExtensions, setCurrentExtensions] =
     useState<SettingsStoreContext['state']['currentExtensions']>(null);
   const [OSInformation, setOSInformation] =
@@ -123,6 +125,9 @@ const Provider = ({ children }: PropsWithChildren) => {
     chrome.runtime.getPlatformInfo((platfrom) => {
       setOSInformation(`${PLATFORM_OS_MAP[platfrom.os]} (${platfrom.arch})`);
     });
+
+    const manifestData = chrome.runtime.getManifest();
+    setPSATVersion(manifestData.version);
   }, []);
 
   useEffect(() => {
@@ -157,11 +162,11 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const storeChangeListener = useCallback(
     (changes: { [key: string]: chrome.storage.StorageChange }) => {
-      if (
-        Object.keys(changes).includes('allowedNumberOfTabs') &&
-        Object.keys(changes.allowedNumberOfTabs).includes('newValue')
-      ) {
+      if (changes?.['allowedNumberOfTabs']?.['newValue']) {
         setAllowedNumberOfTabs(changes?.allowedNumberOfTabs?.newValue);
+        setAllowedNumberOfTabsForSettingsPageDisplay(
+          changes?.allowedNumberOfTabs?.newValue
+        );
       }
 
       if (
@@ -169,6 +174,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         Object.keys(changes.isUsingCDP).includes('newValue')
       ) {
         setIsUsingCDP(changes?.isUsingCDP?.newValue);
+        setIsUsingCDPForSettingsPageDisplay(changes?.isUsingCDP?.newValue);
       }
     },
     []
@@ -176,10 +182,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const sessionStoreChangeListener = useCallback(
     (changes: { [key: string]: chrome.storage.StorageChange }) => {
-      if (
-        Object.keys(changes).includes('allowedNumberOfTabs') &&
-        Object.keys(changes.allowedNumberOfTabs).includes('newValue')
-      ) {
+      if (changes?.['allowedNumberOfTabs']?.['newValue']) {
         setAllowedNumberOfTabsForSettingsPageDisplay(
           changes.allowedNumberOfTabs.newValue
         );
@@ -233,6 +236,7 @@ const Provider = ({ children }: PropsWithChildren) => {
           currentTabs,
           currentExtensions,
           browserInformation,
+          PSATVersion,
           OSInformation,
           isUsingCDP,
           settingsChanged,

@@ -33,7 +33,6 @@ import {
   OutboundIcon,
   OutboundInboundColoredIcon,
   OutboundInboundIcon,
-  QuestionMark,
 } from '../../icons';
 
 export interface DetailsProps {
@@ -113,19 +112,6 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
               dangerouslySetInnerHTML={{ __html: blockedReasons ?? '' }}
             />
           </>
-        )}
-
-      {(outboundBlock || inboundBlock) &&
-        !hasValidBlockedReason &&
-        isUsingCDP && (
-          <div className="flex gap-1 items-center mb-4">
-            <QuestionMark className="scale-150 mr-1" />
-            <p className="text-outer-space-crayola dark:text-bright-gray">
-              We detected that the cookie was blocked however we could not
-              detect the reason.
-            </p>
-            <br />
-          </div>
         )}
 
       {selectedCookie?.blockingStatus?.inboundBlock ===

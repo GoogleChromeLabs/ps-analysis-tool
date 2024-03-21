@@ -17,10 +17,7 @@
 /**
  * Internal dependencies.
  */
-import {
-  ChromeStorage,
-  type AllowedDomainObject,
-} from '../../../../../../store';
+import { ChromeStorage, type AllowedDomainObject } from '../../../../../store';
 
 /**
  * Remove object from allow list.

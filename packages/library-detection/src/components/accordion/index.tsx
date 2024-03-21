@@ -46,7 +46,7 @@ const Accordion = ({
   });
 
   return (
-    <div className={parentClass}>
+    <div className={parentClass} data-testid="library-detection-accordion">
       <AccordionHeading
         setIsOpen={setIsOpen}
         isOpen={isOpen}

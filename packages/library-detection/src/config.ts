@@ -18,40 +18,108 @@
  */
 import {
   GSIAccordion,
-  GISAccordion,
+  getGSIV2Matches,
   GSI_V2_SIGNATURE_STRONG_MATCHES,
   GSI_V2_SIGNATURE_WEAK_MATCHES,
+  GSI_HELP_URL,
+  GSI_V2_DOMAINS_TO_SKIP,
+} from './libraries/gsi';
+import {
+  GISAccordion,
+  getGISMatches,
   GIS_SIGNATURE_WEAK_MATCHES,
   GIS_HELP_URL,
-  GSI_HELP_URL,
   GIS_DOMAINS_TO_SKIP,
-  GSI_DOMAINS_TO_SKIP,
-  GSIv2_EXCEPTIONS,
-  GIS_EXCEPTIONS,
-} from './libraries';
+} from './libraries/gis';
+import {
+  FBCommentsAccordion,
+  FB_COMMENTS_HELP_URL,
+  fbCommentsDOMQuery,
+} from './libraries/fb-comments';
+import {
+  FBLikesAccordion,
+  fbLikesDOMQuery,
+  FB_LIKES_HELP_URL,
+} from './libraries/fb-likes';
+import {
+  DisqusCommentsAccordion,
+  disqusCommentsDOMQuery,
+  DISQUS_COMMENTS_HELP_URL,
+} from './libraries/disqus-comments';
+import {
+  JetpackCommentsAccordion,
+  jetpackCommentsDOMQuery,
+  JETPACK_COMMENTS_HELP_URL,
+} from './libraries/jetpack-comments';
+import {
+  JetpackLikesAccordion,
+  jetpackLikesDOMQuery,
+  JETPACK_LIKES_HELP_URL,
+} from './libraries/jetpack-likes';
+import {
+  ReCaptchaAccordion,
+  reCaptchaDOMQuery,
+  RECAPTCHA_HELP_URL,
+} from './libraries/reCaptcha';
 
 const LIBRARIES = [
   {
     name: 'gsiV2',
-    component: GISAccordion,
+    component: GSIAccordion,
     signatures: {
       strongMatches: GSI_V2_SIGNATURE_STRONG_MATCHES,
       weakMatches: GSI_V2_SIGNATURE_WEAK_MATCHES,
     },
-    exceptions: GSIv2_EXCEPTIONS,
-    domainsToSkip: GSI_DOMAINS_TO_SKIP,
+    domainsToSkip: GSI_V2_DOMAINS_TO_SKIP,
     helpUrl: GSI_HELP_URL,
+    detectionFunction: getGSIV2Matches,
   },
   {
     name: 'gis',
-    component: GSIAccordion,
+    component: GISAccordion,
     signatures: {
       strongMatches: [],
       weakMatches: GIS_SIGNATURE_WEAK_MATCHES,
     },
-    exceptions: GIS_EXCEPTIONS,
     domainsToSkip: GIS_DOMAINS_TO_SKIP,
     helpUrl: GIS_HELP_URL,
+    detectionFunction: getGISMatches,
+  },
+  {
+    name: 'fb-comments',
+    component: FBCommentsAccordion,
+    helpUrl: FB_COMMENTS_HELP_URL,
+    domQueryFunction: fbCommentsDOMQuery,
+  },
+  {
+    name: 'fb-likes',
+    component: FBLikesAccordion,
+    helpUrl: FB_LIKES_HELP_URL,
+    domQueryFunction: fbLikesDOMQuery,
+  },
+  {
+    name: 'disqus-comments',
+    component: DisqusCommentsAccordion,
+    helpUrl: DISQUS_COMMENTS_HELP_URL,
+    domQueryFunction: disqusCommentsDOMQuery,
+  },
+  {
+    name: 'jetpack-comments',
+    component: JetpackCommentsAccordion,
+    helpUrl: JETPACK_COMMENTS_HELP_URL,
+    domQueryFunction: jetpackCommentsDOMQuery,
+  },
+  {
+    name: 'jetpack-likes',
+    component: JetpackLikesAccordion,
+    helpUrl: JETPACK_LIKES_HELP_URL,
+    domQueryFunction: jetpackLikesDOMQuery,
+  },
+  {
+    name: 'reCaptcha',
+    component: ReCaptchaAccordion,
+    helpUrl: RECAPTCHA_HELP_URL,
+    domQueryFunction: reCaptchaDOMQuery,
   },
 ];
 

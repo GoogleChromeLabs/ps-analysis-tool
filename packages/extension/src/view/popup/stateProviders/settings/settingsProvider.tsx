@@ -92,11 +92,10 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const sessionStoreChangeListener = useCallback(
     (changes: { [key: string]: chrome.storage.StorageChange }) => {
-      if (
-        Object.keys(changes).includes('allowedNumberOfTabs') &&
-        Object.keys(changes.allowedNumberOfTabs).includes('newValue')
-      ) {
-        setAllowedNumberOfTabs(changes?.allowedNumberOfTabs?.newValue);
+      if (changes?.['allowedNumberOfTabs']?.['newValue']) {
+        setAllowedNumberOfTabsForSettingsDisplay(
+          changes?.allowedNumberOfTabs?.newValue
+        );
         setSettingsChanged(true);
       }
 
@@ -104,7 +103,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         Object.keys(changes).includes('isUsingCDP') &&
         Object.keys(changes.isUsingCDP).includes('newValue')
       ) {
-        _setIsUsingCDP(changes?.isUsingCDP?.newValue);
+        setIsUsingCDPForSettingsDisplay(changes?.isUsingCDP?.newValue);
         setSettingsChanged(true);
       }
     },
@@ -122,10 +121,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const changeSyncStorageListener = useCallback(
     (changes: { [key: string]: chrome.storage.StorageChange }) => {
-      if (
-        Object.keys(changes).includes('allowedNumberOfTabs') &&
-        Object.keys(changes.allowedNumberOfTabs).includes('newValue')
-      ) {
+      if (changes?.['allowedNumberOfTabs']?.['newValue']) {
         setAllowedNumberOfTabs(changes?.allowedNumberOfTabs?.newValue);
       }
 

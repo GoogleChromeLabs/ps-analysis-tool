@@ -15,6 +15,5 @@
  */
 
 export * from './sourceMapGenerator';
-export * from '../libraries/gsi/generateGSIV2Matches';
 export * from './getNetworkResourcesWithContent';
 export * from './getResourcesWithContent';

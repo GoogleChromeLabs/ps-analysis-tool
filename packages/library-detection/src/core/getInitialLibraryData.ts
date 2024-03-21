@@ -16,24 +16,27 @@
 /**
  * Internal dependencies.
  */
-import getDomainsForProcessing from '../getDomainsForProcessing';
+import LIBRARIES from '../config';
+import type { LibraryData } from '../types';
 
-describe('getDomainsForProcessing : ', () => {
-  it('Should return null if domain is not passed', () => {
-    expect(getDomainsForProcessing('')).toBe(null);
-  });
+const getInitialLibraryData = (): LibraryData => {
+  return Object.fromEntries(
+    LIBRARIES.map(({ name, domQueryFunction }) => {
+      let initialData = {
+        signatureMatches: 0,
+        matches: [],
+        moduleMatch: 0,
+      };
 
-  it('Should alternate domains for a given domain if it starts with .', () => {
-    expect(getDomainsForProcessing('.google.com')).toStrictEqual([
-      '.google.com',
-      'google.com',
-    ]);
-  });
+      if (domQueryFunction) {
+        initialData = {
+          domQueryMatches: null,
+        };
+      }
 
-  it('Should alternate domains for a given domain', () => {
-    expect(getDomainsForProcessing('google.com')).toStrictEqual([
-      '.google.com',
-      'google.com',
-    ]);
-  });
-});
+      return [name, initialData];
+    })
+  );
+};
+
+export default getInitialLibraryData;

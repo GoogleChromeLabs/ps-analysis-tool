@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { ExceptionUrls } from '../../types';
+import type { SignaturesConfigItem } from '../../types';
 
 /*
  * Copyright 2023 Google LLC
@@ -30,7 +30,7 @@ import type { ExceptionUrls } from '../../types';
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const GSI_V2_SIGNATURE_WEAK_MATCHES = [
+export const GSI_V2_SIGNATURE_WEAK_MATCHES: SignaturesConfigItem[] = [
   /* These signatures indicate use of OpenID Connect ID token for user sign-in,
    * link to the user authentication migration guide for user sign-in. */
   {
@@ -170,7 +170,7 @@ export const GSI_V2_SIGNATURE_WEAK_MATCHES = [
   },
 ];
 
-export const GSI_V2_SIGNATURE_STRONG_MATCHES = [
+export const GSI_V2_SIGNATURE_STRONG_MATCHES: SignaturesConfigItem[] = [
   {
     signature: 'gapi.auth2',
     helpUrl: 'https://developers.google.com/identity/gsi/web/guides/migration',
@@ -180,6 +180,4 @@ export const GSI_V2_SIGNATURE_STRONG_MATCHES = [
 export const GSI_HELP_URL =
   'https://developers.google.com/identity/gsi/web/guides/migration';
 
-export const GSI_DOMAINS_TO_SKIP = ['accounts.google.com', 'gstatic.com'];
-
-export const GSIv2_EXCEPTIONS: ExceptionUrls = {};
+export const GSI_V2_DOMAINS_TO_SKIP = ['accounts.google.com', 'gstatic.com'];
