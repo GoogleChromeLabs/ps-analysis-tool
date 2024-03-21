@@ -222,14 +222,12 @@ class SynchnorousCookieStore {
   /**
    * Adds exclusion and warning reasons for a given cookie.
    * @param {string} cookieName Name of the cookie.
-   * @param {string} alternateCookieName Alternate name of the cookie.
    * @param {string[]} exclusionReasons reasons to be added to the blocked reason array.
    * @param {string[]} warningReasons warning reasons to be added to the warning reason array.
    * @param {number} tabId tabId where change has to be made.
    */
   addCookieExclusionWarningReason(
     cookieName: string,
-    alternateCookieName: string,
     exclusionReasons: BlockedReason[],
     warningReasons: Protocol.Audits.CookieWarningReason[],
     tabId: number
@@ -238,11 +236,7 @@ class SynchnorousCookieStore {
       return;
     }
     // Check if primaryDomain cookie exists
-    if (
-      this.tabsData[tabId] &&
-      this.tabsData[tabId][cookieName] &&
-      !this.tabsData[tabId][alternateCookieName]
-    ) {
+    if (this.tabsData[tabId] && this.tabsData[tabId][cookieName]) {
       this.tabsData[tabId][cookieName].blockedReasons = [
         ...new Set([
           ...(this.tabsData[tabId][cookieName].blockedReasons ?? []),
@@ -260,38 +254,11 @@ class SynchnorousCookieStore {
         exclusionReasons.length > 0 ? true : false;
       this.tabs[tabId].newUpdates++;
       // Check if secondaryDomain cookie exists
-    } else if (
-      this.tabsData[tabId] &&
-      !this.tabsData[tabId][cookieName] &&
-      this.tabsData[tabId][alternateCookieName]
-    ) {
-      this.tabs[tabId].newUpdates++;
-      this.tabsData[tabId][alternateCookieName].blockedReasons = [
-        ...new Set([
-          ...(this.tabsData[tabId][alternateCookieName].blockedReasons ?? []),
-          ...exclusionReasons,
-        ]),
-      ];
-      this.tabsData[tabId][alternateCookieName].warningReasons = [
-        ...new Set([
-          ...(this.tabsData[tabId][alternateCookieName].warningReasons ?? []),
-          ...warningReasons,
-        ]),
-      ];
-
-      this.tabsData[tabId][alternateCookieName].isBlocked =
-        exclusionReasons.length > 0 ? true : false;
     } else {
       this.tabs[tabId].newUpdates++;
       // If none of them exists. This case is possible when the cookies hasnt processed and we already have an issue.
       this.tabsData[tabId] = {
         ...this.tabsData[tabId],
-        [alternateCookieName]: {
-          ...(this.tabsData[tabId][alternateCookieName] ?? {}),
-          blockedReasons: [...exclusionReasons],
-          warningReasons: [...warningReasons],
-          isBlocked: exclusionReasons.length > 0 ? true : false,
-        },
         [cookieName]: {
           ...(this.tabsData[tabId][cookieName] ?? {}),
           blockedReasons: [...exclusionReasons],

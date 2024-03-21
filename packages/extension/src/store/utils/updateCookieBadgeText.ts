@@ -35,7 +35,7 @@ export default function updateCookieBadgeText(
     const numCookies = Object.keys(storage).filter(
       (cookieKey) =>
         storage[cookieKey]?.parsedCookie &&
-        storage[cookieKey].frameIdList?.length >= 1
+        storage[cookieKey].frameIdList?.length >= 0
     ).length;
     if (numCookies >= 0) {
       chrome.action.setBadgeText(

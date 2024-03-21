@@ -20,16 +20,20 @@
 import React from 'react';
 import { BLOCK_STATUS, type CookieTableData } from '@ps-analysis-tool/common';
 import {
-  type TableRow,
   GreenTick,
   InboundIcon,
   OutboundIcon,
-  QuestionMark,
   OutboundInboundIcon,
   OutboundInboundColoredIcon,
 } from '@ps-analysis-tool/design-system';
 
-const namePrefixIconSelector = ({ originalData }: TableRow) => {
+interface NamePrefixIconSelectorProps {
+  originalData: CookieTableData;
+}
+
+const NamePrefixIconSelector = ({
+  originalData,
+}: NamePrefixIconSelectorProps) => {
   const data = originalData as CookieTableData;
 
   const isDomainInAllowList = data?.isDomainInAllowList;
@@ -53,10 +57,6 @@ const namePrefixIconSelector = ({ originalData }: TableRow) => {
     data?.blockedReasons && data.blockedReasons.length !== 0;
 
   if (!hasValidBlockedReason) {
-    if (isInboundBlocked || isOutboundBlocked) {
-      return <QuestionMark />;
-    }
-
     return <></>;
   }
 
@@ -93,4 +93,4 @@ const namePrefixIconSelector = ({ originalData }: TableRow) => {
   return <></>;
 };
 
-export default namePrefixIconSelector;
+export default NamePrefixIconSelector;
