@@ -17,60 +17,17 @@
 /**
  * External dependencies
  */
-import React, { PropsWithChildren, useMemo } from 'react';
-import { createContext, useContextSelector } from 'use-context-selector';
 
 /**
  * Internal dependencies
  */
-import I18n from '../i18n';
 
-interface Translation {
-  actions: {
-    getMessage: (
-      key: string,
-      substitutions?: string[],
-      escapeLt?: boolean
-    ) => string;
+const useTranslation = () => {
+  return {
+    getMessage: () => {
+      // console.log(key);
+    },
   };
-}
-
-const initialState: Translation = {
-  actions: {
-    getMessage: () => '',
-  },
 };
 
-export const Context = createContext<Translation>(initialState);
-
-export const Provider = ({ children }: PropsWithChildren) => {
-  const i18n = useMemo(() => {
-    return new I18n();
-  }, []);
-
-  return (
-    <Context.Provider
-      value={{
-        actions: {
-          getMessage: i18n.getMessage,
-        },
-      }}
-    >
-      {children}
-    </Context.Provider>
-  );
-};
-
-export function useTranslation(): Translation;
-export function useTranslation<T>(selector: (state: Translation) => T): T;
-
-/**
- * Cookie store hook.
- * @param selector Selector function to partially select state.
- * @returns selected part of the state
- */
-export function useTranslation<T>(
-  selector: (state: Translation) => T | Translation = (state) => state
-) {
-  return useContextSelector(Context, selector);
-}
+export default useTranslation;
