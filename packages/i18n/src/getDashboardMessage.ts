@@ -14,24 +14,18 @@
  * limitations under the License.
  */
 
-export default class I18n {
-  private _locale = 'en';
-
-  constructor() {
-    this._locale = 'en';
+// Remove the following comments when params are used
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable @typescript-eslint/no-unused-vars */
+export const getDashboardMessage = (
+  key: string,
+  messages: any,
+  substitutions?: string[],
+  escapeLt?: boolean
+) => {
+  if (messages[key]) {
+    return messages[key].message;
   }
 
-  getMessage(key: string, substitutions?: string[], escapeLt?: boolean) {
-    // console.log(key);
-    //@ts-ignore - Outdated definition
-    const res = chrome?.i18n?.getMessage?.(key, substitutions, {
-      escapeLt: Boolean(escapeLt),
-    });
-
-    if (res === undefined) {
-      return key;
-    }
-
-    return res;
-  }
-}
+  return '';
+};

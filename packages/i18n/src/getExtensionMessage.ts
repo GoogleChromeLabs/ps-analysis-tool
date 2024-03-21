@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
-export * from './useTranslation';
-export * from './getExtensionMessage';
-export * from './getDashboardMessage';
+export const getExtensionMessage = (
+  key: string,
+  substitutions?: string[],
+  escapeLt?: boolean
+) => {
+  //@ts-ignore - Outdated definition
+  return chrome?.i18n?.getMessage?.(key, substitutions, {
+    escapeLt: Boolean(escapeLt),
+  });
+};

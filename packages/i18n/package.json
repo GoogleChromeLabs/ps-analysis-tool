@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
   "dependencies": {
-		"react": "^18.2.0",
+    "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "use-context-selector": "^1.4.4"
   }
