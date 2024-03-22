@@ -21,9 +21,9 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { getExtensionMessage } from '../getExtensionMessage';
-import { getDashboardMessage } from '../getDashboardMessage';
 import { createContext, useContextSelector } from 'use-context-selector';
+import { getDashboardMessage } from './getDashboardMessage';
+import { getExtensionMessage } from './getExtensionMessage';
 
 interface TranslationContext {
   getMessage: (

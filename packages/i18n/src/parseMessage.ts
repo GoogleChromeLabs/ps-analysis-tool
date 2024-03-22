@@ -16,7 +16,7 @@
 
 import { IntlMessageFormat } from 'intl-messageformat';
 
-export const getDashboardMessage = (
+export const parseMessage = (
   key: string,
   messages: any,
   substitutions?: string[],
@@ -64,5 +64,5 @@ export const getDashboardMessage = (
 
   return new IntlMessageFormat(message, 'en', undefined, {
     ignoreTag: escapeLt,
-  }).format(placeholders);
+  }).format(placeholders) as string;
 };
