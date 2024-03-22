@@ -29,7 +29,8 @@ export const analyzeCookiesUrls = async (
   urls: string[],
   isHeadless: boolean,
   delayTime: number,
-  cookieDictionary: CookieDatabase
+  cookieDictionary: CookieDatabase,
+  shouldSkipAcceptBanner: boolean
 ) => {
   const browser = new BrowserManagement(
     {
@@ -43,7 +44,10 @@ export const analyzeCookiesUrls = async (
   );
 
   await browser.initializeBrowser(true);
-  const analysisCookieData = await browser.analyzeCookieUrls(urls);
+  const analysisCookieData = await browser.analyzeCookieUrls(
+    urls,
+    shouldSkipAcceptBanner
+  );
 
   const res = analysisCookieData.map(({ pageUrl, cookieData }) => {
     Object.entries(cookieData).forEach(([, frameData]) => {
