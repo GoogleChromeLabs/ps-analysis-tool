@@ -318,7 +318,7 @@ export class BrowserManagement {
     return frameIdMapFromTree;
   }
 
-  async analyzeCookieUrls(urls: string[]) {
+  async analyzeCookieUrls(urls: string[], shouldSkipAcceptBanner: boolean) {
     for (const url of urls) {
       const sitePage = await this.openPage();
       this.pageMap.set(url, sitePage);
@@ -329,7 +329,9 @@ export class BrowserManagement {
     await Promise.all(
       urls.map(async (url) => {
         await this.navigateToPage(url);
-        await this.clickOnAcceptBanner(url);
+        if (shouldSkipAcceptBanner) {
+          await this.clickOnAcceptBanner(url);
+        }
         await this.pageScroll(url);
       })
     );
