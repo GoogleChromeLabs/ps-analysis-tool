@@ -30,8 +30,8 @@ import { CookieDetails, CookieTable } from '@ps-analysis-tool/design-system';
 import { useCookieStore } from '../../../stateProviders/syncCookieStore';
 import useCookieListing from './useCookieListing';
 import RowContextMenu from './rowContextMenu';
-import useAllowedList from './useAllowedList';
 import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
+import { useAllowedList } from '../../../stateProviders/useAllowedList';
 
 interface CookiesListingProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;
@@ -47,7 +47,11 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
   const isUsingCDP = useSettingsStore(({ state }) => state.isUsingCDP);
 
   const { domainsInAllowList, setDomainsInAllowListCallback, isIncognito } =
-    useAllowedList();
+    useAllowedList(({ state, actions }) => ({
+      domainsInAllowList: state.domainsInAllowList,
+      setDomainsInAllowListCallback: actions.setDomainsInAllowListCallback,
+      isIncognito: state.isIncognito,
+    }));
 
   const {
     tableData,

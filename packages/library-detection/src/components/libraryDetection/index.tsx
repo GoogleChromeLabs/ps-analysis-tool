@@ -22,61 +22,31 @@ import {
   COLOR_MAP,
   ProgressBar,
 } from '@ps-analysis-tool/design-system';
-import { extractUrl } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import {
-  filterMatchesBasedOnExceptions,
-  useLibraryDetection,
-  useLibraryDetectionContext,
-} from '../../core';
+import { useLibraryDetection, useLibraryDetectionContext } from '../../core';
 import LIBRARIES from '../../config';
-import type { LibraryData, DetectedSignature } from '../../types';
+import type { LibraryData, AccordionProps } from '../../types';
 
 const LibraryDetection = memo(function LibraryDetection() {
   useLibraryDetection();
 
-  const { libraryMatches, showLoader, tabDomain, isCurrentTabLoading } =
+  const { libraryMatches, showLoader, isCurrentTabLoading, errorOccured } =
     useLibraryDetectionContext(({ state }) => ({
       libraryMatches: state.libraryMatches,
+      errorOccured: state.errorOccured,
       showLoader: state.showLoader,
-      tabDomain: state.tabDomain,
       isCurrentTabLoading: state.isCurrentTabLoading,
     }));
-
-  LIBRARIES.map((config) => {
-    let matches =
-      libraryMatches && libraryMatches[config.name as keyof LibraryData]
-        ? libraryMatches[config.name as keyof LibraryData]?.matches
-        : [];
-
-    const parsedUrl = extractUrl(tabDomain);
-
-    const parsedTabDomain = parsedUrl?.domain;
-
-    const isCurrentDomainExceptionDomain =
-      config?.exceptions?.[parsedTabDomain as string] &&
-      config?.exceptions?.[parsedTabDomain as string]?.signatures?.length > 0;
-
-    if (isCurrentDomainExceptionDomain) {
-      matches = filterMatchesBasedOnExceptions(
-        tabDomain,
-        config?.exceptions,
-        matches
-      );
-    }
-
-    libraryMatches[config.name as keyof LibraryData].matches = matches;
-
-    return matches;
-  });
 
   const names = Object.keys(libraryMatches);
 
   const detectedLibraryNames = names.filter(
-    (name) => libraryMatches[name as keyof LibraryData]?.matches?.length
+    (name) =>
+      libraryMatches[name as keyof LibraryData]?.matches?.length ||
+      libraryMatches[name as keyof LibraryData]?.domQuerymatches?.length
   );
 
   const dataMapping = [
@@ -88,23 +58,38 @@ const LibraryDetection = memo(function LibraryDetection() {
   ];
 
   const result =
-    detectedLibraryNames.length > 0 ? (
+    !errorOccured && detectedLibraryNames.length > 0 ? (
       <>
-        {LIBRARIES.map((config) => {
-          const Component = config.component as React.FC<{
-            matches: DetectedSignature[];
-          }>;
-          const matches =
-            libraryMatches && libraryMatches[config.name as keyof LibraryData]
-              ? libraryMatches[config.name as keyof LibraryData]?.matches
-              : [];
+        {LIBRARIES.map((library) => {
+          const Component = library.component as React.FC<AccordionProps>;
 
-          return <Component key={config.name} matches={matches} />;
+          const matches =
+            libraryMatches && libraryMatches[library.name as keyof LibraryData]
+              ? libraryMatches[library.name as keyof LibraryData]?.matches
+              : [];
+          const domQueryMatches =
+            libraryMatches && libraryMatches[library.name as keyof LibraryData]
+              ? libraryMatches[library.name as keyof LibraryData]
+                  ?.domQuerymatches
+              : null;
+
+          return (
+            <Component
+              key={library.name}
+              matches={matches}
+              domQueryMatches={domQueryMatches}
+            />
+          );
         })}
       </>
-    ) : (
+    ) : !errorOccured ? (
       <p className="text-center dark:text-bright-gray">
         No libraries with known breakages found yet!
+      </p>
+    ) : (
+      <p className="text-center dark:text-bright-gray">
+        A library detection error occurred. Please reopen the DevTool on a valid
+        URL.
       </p>
     );
 
@@ -114,7 +99,7 @@ const LibraryDetection = memo(function LibraryDetection() {
       testId="library-detection"
       description=""
     >
-      {showLoader ? (
+      {!errorOccured && showLoader ? (
         <>
           <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />
           <p className="text-center dark:text-bright-gray">

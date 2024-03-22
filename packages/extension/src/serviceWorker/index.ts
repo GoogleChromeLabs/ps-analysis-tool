@@ -35,6 +35,7 @@ import { ALLOWED_NUMBER_OF_TABS } from '../constants';
 import SynchnorousCookieStore from '../store/synchnorousCookieStore';
 import canProcessCookies from '../utils/canProcessCookies';
 import { getTab } from '../utils/getTab';
+import getQueryParams from '../utils/getQueryParams';
 import reloadCurrentTab from '../utils/reloadCurrentTab';
 
 let cookieDB: CookieDatabase | null = null;
@@ -65,7 +66,12 @@ chrome.webRequest.onResponseStarted.addListener(
   (details: chrome.webRequest.WebResponseCacheDetails) => {
     (async () => {
       const { tabId, url, responseHeaders, frameId } = details;
-      const tabUrl = syncCookieStore?.getTabUrl(tabId) ?? '';
+      const tab = await getTab(tabId);
+      let tabUrl = syncCookieStore?.getTabUrl(tabId);
+
+      if (tab && tab.pendingUrl) {
+        tabUrl = tab.pendingUrl;
+      }
 
       if (
         !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, responseHeaders)
@@ -135,7 +141,12 @@ chrome.webRequest.onResponseStarted.addListener(
 chrome.webRequest.onBeforeSendHeaders.addListener(
   ({ url, requestHeaders, tabId, frameId, requestId }) => {
     (async () => {
-      const tabUrl = syncCookieStore?.getTabUrl(tabId) ?? '';
+      const tab = await getTab(tabId);
+      let tabUrl = syncCookieStore?.getTabUrl(tabId);
+
+      if (tab && tab.pendingUrl) {
+        tabUrl = tab.pendingUrl;
+      }
 
       if (
         !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, requestHeaders)
@@ -280,10 +291,36 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     return;
   }
 
+  const queryParams = getQueryParams(tab.url);
+
+  if (queryParams.psat_cdp || queryParams.psat_multitab) {
+    await chrome.storage.sync.set({
+      allowedNumberOfTabs:
+        queryParams.psat_multitab === 'on' ? 'unlimited' : 'single',
+      isUsingCDP: queryParams.psat_cdp === 'on',
+    });
+
+    globalIsUsingCDP = queryParams.psat_cdp === 'on';
+    tabMode = queryParams.psat_multitab === 'on' ? 'unlimited' : 'single';
+  }
+
   syncCookieStore?.updateUrl(tabId, tab.url);
 
   if (changeInfo.status === 'loading' && tab.url) {
     syncCookieStore?.removeCookieData(tabId);
+  }
+
+  try {
+    await chrome.tabs.sendMessage(tabId, {
+      tabId,
+      payload: {
+        type: 'SERVICEWORKER::WEBPAGE::TABID_STORAGE',
+        tabId,
+      },
+    });
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.warn(error);
   }
 
   try {
@@ -354,6 +391,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   }
 
   if (details.reason === 'update') {
+    await chrome.storage.local.clear();
     const preSetSettings = await chrome.storage.sync.get();
     tabMode = preSetSettings?.allowedNumberOfTabs ?? 'single';
     globalIsUsingCDP = preSetSettings?.isUsingCDP ?? false;
@@ -474,11 +512,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
     const { cookie, cookieExclusionReasons, cookieWarningReasons } =
       details.cookieIssueDetails;
 
-    const primaryDomain = cookie?.domain.startsWith('.')
-      ? cookie.domain
-      : '.' + cookie?.domain;
-
-    const secondaryDomain = cookie?.domain.startsWith('.')
+    const domainToUse = cookie?.domain.startsWith('.')
       ? cookie.domain.slice(1)
       : cookie?.domain;
 
@@ -486,9 +520,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
     // This is done to capture both NID.google.com/ and NIDgoogle.com/ so that if we find either of the cookie we add issues to the cookie object
     try {
       syncCookieStore?.addCookieExclusionWarningReason(
-        cookie?.name + primaryDomain + cookie?.path,
-        //@ts-ignore since the details has been checked before sending them as parameter.
-        cookie?.name + secondaryDomain + cookie?.path,
+        cookie?.name + domainToUse + cookie?.path,
         cookieExclusionReasons,
         cookieWarningReasons,
         source.tabId
@@ -645,7 +677,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
   ) {
     syncCookieStore?.update(
       request?.payload?.tabId,
-      JSON.parse(request?.payload?.cookieData)
+      request?.payload?.cookieData
     );
   }
 

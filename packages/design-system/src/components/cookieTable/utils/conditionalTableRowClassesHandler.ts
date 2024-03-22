@@ -50,7 +50,7 @@ const conditionalTableRowClassesHandler = (
           ? 'dark:bg-flagged-row-even-dark bg-flagged-row-even-light'
           : 'dark:bg-flagged-row-odd-dark bg-flagged-row-odd-light'
         : isRowFocused
-        ? 'bg-gainsboro dark:bg-outer-space'
+        ? 'bg-selection-yellow-dark dark:bg-selection-yellow-light'
         : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
     isDomainInAllowList &&
       !isBlocked &&
@@ -59,7 +59,7 @@ const conditionalTableRowClassesHandler = (
           ? 'dark:bg-jungle-green-dark bg-leaf-green-dark'
           : 'dark:bg-jungle-green-light bg-leaf-green-light'
         : isRowFocused
-        ? 'bg-gainsboro dark:bg-outer-space'
+        ? 'bg-selection-green-dark dark:bg-selection-green-light'
         : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver')
   );
 

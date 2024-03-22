@@ -122,9 +122,7 @@ const BodyRow = ({
             showIcon={
               showBodyCellPrefixIcon ? showBodyCellPrefixIcon(row) : false
             }
-            icon={
-              bodyCellPrefixIcon ? () => bodyCellPrefixIcon(row) : undefined
-            }
+            icon={bodyCellPrefixIcon ?? undefined}
           />
         )
       )}
