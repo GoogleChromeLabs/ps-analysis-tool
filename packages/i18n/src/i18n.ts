@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { parseMessage } from './parseMessage';
+import { IntlMessageFormat } from 'intl-messageformat';
 
 class I18n {
   private messages: any;
@@ -31,7 +31,58 @@ class I18n {
       });
     }
 
-    return parseMessage(key, this.messages, substitutions, escapeLt);
+    return this._parseMessage(key, this.messages, substitutions, escapeLt);
+  }
+
+  private _parseMessage(
+    key: string,
+    messages: any,
+    substitutions?: string[],
+    escapeLt?: boolean
+  ) {
+    const messageObj: {
+      message: string;
+      description: string;
+      placeholders: {
+        [key: string]: {
+          content: string;
+          example: string;
+        };
+      };
+    } = messages[key];
+
+    if (!messageObj) {
+      return '';
+    }
+
+    const message = messageObj.message
+      .split('$')
+      .map((part, idx) => {
+        if (idx % 2) {
+          return '{' + part + '}';
+        }
+
+        return part;
+      })
+      .join('');
+
+    const placeholders = Object.entries(messageObj.placeholders || {}).reduce<{
+      [key: string]: string;
+    }>((acc, [placeholderKey, val]) => {
+      const idx = Number(val.content.substring(1)) - 1;
+
+      if (substitutions?.[idx]) {
+        acc[placeholderKey] = substitutions[idx];
+      } else {
+        acc[placeholderKey] = '';
+      }
+
+      return acc;
+    }, {});
+
+    return new IntlMessageFormat(message, 'en', undefined, {
+      ignoreTag: escapeLt,
+    }).format(placeholders) as string;
   }
 }
 
