@@ -166,6 +166,7 @@ const SidebarChild = ({
           )}
         </div>
       </div>
+      {/* Sidebar item's children */}
       <>
         {Object.keys(sidebarItem.children)?.length !== 0 &&
           sidebarItem.dropdownOpen && (
