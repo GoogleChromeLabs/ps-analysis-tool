@@ -31,12 +31,11 @@ class I18n {
       });
     }
 
-    return this._parseMessage(key, this.messages, substitutions, escapeLt);
+    return this._parseMessage(key, substitutions, escapeLt);
   }
 
   private _parseMessage(
     key: string,
-    messages: any,
     substitutions?: string[],
     escapeLt?: boolean
   ) {
@@ -49,7 +48,7 @@ class I18n {
           example: string;
         };
       };
-    } = messages[key];
+    } = this.messages[key];
 
     if (!messageObj) {
       return '';
