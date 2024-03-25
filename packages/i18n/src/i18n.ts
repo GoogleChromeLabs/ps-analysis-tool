@@ -24,7 +24,10 @@ class I18n {
   }
 
   getMessage(key: string, substitutions?: string[], escapeLt?: boolean) {
-    if (window?.location?.protocol === 'chrome-extension:') {
+    if (
+      typeof window !== 'undefined' &&
+      window.location.protocol === 'chrome-extension:'
+    ) {
       // @ts-ignore - Outdated definition.
       return chrome.i18n.getMessage(key, substitutions, {
         escapeLt: Boolean(escapeLt),
@@ -48,7 +51,7 @@ class I18n {
           example: string;
         };
       };
-    } = this.messages[key];
+    } = this.messages?.[key];
 
     if (!messageObj) {
       return '';
