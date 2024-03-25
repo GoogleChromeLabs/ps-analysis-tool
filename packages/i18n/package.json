@@ -2,7 +2,8 @@
   "name": "@ps-analysis-tool/i18n",
   "version": "0.6.0",
   "description": "A package that handles internationalization and localization.",
-  "main": "./src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist-types/index.d.ts",
   "source": "./src/index.ts",
   "customExports": {
     ".": {
@@ -10,8 +11,8 @@
     }
   },
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc-watch"
+    "build": "tsc --build",
+    "dev": "tsc-watch --build"
   },
   "repository": {
     "type": "git",

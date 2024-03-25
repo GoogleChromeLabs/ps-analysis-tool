@@ -14,6 +14,4 @@
  * limitations under the License.
  */
 
-export * from './useTranslation';
-export * from './getExtensionMessage';
-export * from './getDashboardMessage';
+export { default as I18n } from './i18n';

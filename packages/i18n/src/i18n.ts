@@ -14,13 +14,25 @@
  * limitations under the License.
  */
 
-export const getExtensionMessage = (
-  key: string,
-  substitutions?: string[],
-  escapeLt?: boolean
-) => {
-  //@ts-ignore - Outdated definition
-  return chrome?.i18n?.getMessage?.(key, substitutions, {
-    escapeLt: Boolean(escapeLt),
-  });
-};
+import { parseMessage } from './parseMessage';
+
+class I18n {
+  private messages: any;
+
+  initMessages(messages = {}) {
+    this.messages = messages;
+  }
+
+  getMessage(key: string, substitutions: string[], escapeLt?: boolean) {
+    if (window?.location?.protocol === 'chrome-extension:') {
+      // @ts-ignore - Outdated definition.
+      return chrome.i18n.getMessage(key, substitutions, {
+        escapeLt: Boolean(escapeLt),
+      });
+    }
+
+    return parseMessage(key, this.messages, substitutions, escapeLt);
+  }
+}
+
+export default new I18n();

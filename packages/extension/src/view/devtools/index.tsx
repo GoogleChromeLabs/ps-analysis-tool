@@ -24,7 +24,6 @@ import {
   Provider as TablePersistentSettingsProvider,
 } from '@ps-analysis-tool/design-system';
 import { LibraryDetectionProvider } from '@ps-analysis-tool/library-detection';
-import { TranslationProvider } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -42,19 +41,17 @@ const root = document.getElementById('root');
 if (root) {
   createRoot(root).render(
     <ErrorBoundary fallbackRender={ErrorFallback}>
-      <TranslationProvider>
-        <SettingsStoreProvider>
-          <ExternalStoreProvider>
-            <TablePersistentSettingsProvider>
-              <LibraryDetectionProvider>
-                <AllowedListProvider>
-                  <App />
-                </AllowedListProvider>
-              </LibraryDetectionProvider>
-            </TablePersistentSettingsProvider>
-          </ExternalStoreProvider>
-        </SettingsStoreProvider>
-      </TranslationProvider>
+      <SettingsStoreProvider>
+        <ExternalStoreProvider>
+          <TablePersistentSettingsProvider>
+            <LibraryDetectionProvider>
+              <AllowedListProvider>
+                <App />
+              </AllowedListProvider>
+            </LibraryDetectionProvider>
+          </TablePersistentSettingsProvider>
+        </ExternalStoreProvider>
+      </SettingsStoreProvider>
     </ErrorBoundary>
   );
 }

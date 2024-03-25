@@ -28,7 +28,6 @@ import {
   InspectButton,
   ToastMessage,
 } from '@ps-analysis-tool/design-system';
-import { useTranslation } from '@ps-analysis-tool/i18n';
 import { type CookieTableData } from '@ps-analysis-tool/common';
 
 /**
@@ -255,8 +254,6 @@ const App: React.FC = () => {
 
   useFrameOverlay(filteredCookies, handleUpdate);
 
-  const { getMessage } = useTranslation();
-
   return (
     <div
       className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black"
@@ -294,7 +291,6 @@ const App: React.FC = () => {
               isKeySelected={isKeySelected}
               visibleWidth={sidebarWidth}
             />
-            <>{getMessage('testString', ['nothing', 'something'])}</>
           </Resizable>
           <main
             ref={mainRef}
