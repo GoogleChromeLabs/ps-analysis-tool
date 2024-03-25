@@ -18,12 +18,13 @@
  */
 import { Command } from 'commander';
 import events from 'events';
-import { ensureFile, writeFile } from 'fs-extra';
+import { ensureFile, writeFile, readFileSync } from 'fs-extra';
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
 import { exec } from 'child_process';
 import path from 'path';
 import { CompleteJson } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -41,6 +42,10 @@ import {
 import { checkPortInUse } from './utils/checkPortInUse';
 
 events.EventEmitter.defaultMaxListeners = 15;
+
+const messages = JSON.parse(readFileSync('_locales/en/messages.json', 'utf-8'));
+
+I18n.initMessages(messages);
 
 const DELAY_TIME = 20000;
 const program = new Command();

@@ -14,27 +14,4 @@
  * limitations under the License.
  */
 
-/**
- * External dependencies
- */
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import { Provider as TablePersistentSettingsProvider } from '@ps-analysis-tool/design-system';
-
-/**
- * Internal dependencies
- */
-import App from './app';
-import { TranslationProvider } from './hooks/useTranslation';
-
-const root = document.getElementById('root');
-
-if (root) {
-  createRoot(root).render(
-    <TranslationProvider>
-      <TablePersistentSettingsProvider>
-        <App />
-      </TablePersistentSettingsProvider>
-    </TranslationProvider>
-  );
-}
+export { default as I18n } from './i18n';

@@ -1,0 +1,16 @@
+{
+  "testString": {
+    "message": "Testing $details$ with $format$",
+    "description": "This is a test string",
+    "placeholders": {
+      "details": {
+        "content": "$2",
+        "example": "Details of the test"
+      },
+      "format": {
+        "content": "$1",
+        "example": "Format of the test"
+      }
+    }
+  }
+}
