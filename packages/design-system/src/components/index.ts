@@ -47,3 +47,5 @@ export {
 } from './cookiesLanding/cookiesLandingWrapper';
 export { type DataMapping } from './cookiesLanding/landingHeader';
 export { default as MatrixContainer } from './matrixContainer';
+export { default as MenuBar } from './menuBar';
+export * from './menuBar';
