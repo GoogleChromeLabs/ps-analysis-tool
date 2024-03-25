@@ -29,7 +29,6 @@ import type {
  */
 import { Provider as ContentStoreProvider } from './stateProviders/contentStore';
 import Layout from './components/layout';
-import { useTranslation } from '@ps-analysis-tool/i18n';
 
 interface SiteReportProps {
   cookies: {
@@ -48,15 +47,12 @@ const SiteReport = ({
   completeJson,
   selectedSite,
 }: SiteReportProps) => {
-  const { getMessage } = useTranslation();
-
   return (
     <ContentStoreProvider
       cookies={cookies}
       technologies={technologies}
       completeJson={completeJson}
     >
-      <>{getMessage('testString', ['nothing', 'something'])}</>
       <Layout selectedSite={selectedSite} />
     </ContentStoreProvider>
   );

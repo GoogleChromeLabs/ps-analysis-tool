@@ -23,7 +23,7 @@ class I18n {
     this.messages = messages;
   }
 
-  getMessage(key: string, substitutions: string[], escapeLt?: boolean) {
+  getMessage(key: string, substitutions?: string[], escapeLt?: boolean) {
     if (window?.location?.protocol === 'chrome-extension:') {
       // @ts-ignore - Outdated definition.
       return chrome.i18n.getMessage(key, substitutions, {
