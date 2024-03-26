@@ -54,7 +54,7 @@ const QuickLinksList = () => {
           setNews(newsArray);
         }
       } catch (error) {
-        console.warn('Error fetching latest news', error);
+        // Fail silently.
       }
     })();
   }, []);

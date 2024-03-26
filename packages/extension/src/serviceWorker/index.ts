@@ -32,6 +32,7 @@ import { fetchDictionary } from '../utils/fetchCookieDictionary';
 import { ALLOWED_NUMBER_OF_TABS } from '../constants';
 import SynchnorousCookieStore from '../store/synchnorousCookieStore';
 import { getTab } from '../utils/getTab';
+import getQueryParams from '../utils/getQueryParams';
 import reloadCurrentTab from '../utils/reloadCurrentTab';
 import createCookieFromAuditsIssue from '../utils/createCookieFromAuditsIssue';
 
@@ -165,10 +166,36 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     return;
   }
 
+  const queryParams = getQueryParams(tab.url);
+
+  if (queryParams.psat_cdp || queryParams.psat_multitab) {
+    await chrome.storage.sync.set({
+      allowedNumberOfTabs:
+        queryParams.psat_multitab === 'on' ? 'unlimited' : 'single',
+      isUsingCDP: queryParams.psat_cdp === 'on',
+    });
+
+    globalIsUsingCDP = queryParams.psat_cdp === 'on';
+    tabMode = queryParams.psat_multitab === 'on' ? 'unlimited' : 'single';
+  }
+
   syncCookieStore?.updateUrl(tabId, tab.url);
 
   if (changeInfo.status === 'loading' && tab.url) {
     syncCookieStore?.removeCookieData(tabId);
+  }
+
+  try {
+    await chrome.tabs.sendMessage(tabId, {
+      tabId,
+      payload: {
+        type: 'SERVICEWORKER::WEBPAGE::TABID_STORAGE',
+        tabId,
+      },
+    });
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.warn(error);
   }
 
   try {
@@ -241,6 +268,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   }
 
   if (details.reason === 'update') {
+    await chrome.storage.local.clear();
     const preSetSettings = await chrome.storage.sync.get();
     tabMode = preSetSettings?.allowedNumberOfTabs ?? 'single';
     globalIsUsingCDP = preSetSettings?.isUsingCDP ?? false;
@@ -624,7 +652,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
   ) {
     syncCookieStore?.update(
       request?.payload?.tabId,
-      JSON.parse(request?.payload?.cookieData)
+      request?.payload?.cookieData
     );
   }
 
