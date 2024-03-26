@@ -85,8 +85,13 @@ export default function parseRequestWillBeSentExtraInfo(
       url: requestUrl,
       headerType: 'request' as CookieData['headerType'],
       isFirstParty: isFirstParty(domain, tabUrl),
-      frameIdList: [frameId],
+      frameIdList: [],
     };
+
+    //Sometimes frameId comes empty so it shows data in other frames where cookie should not be shown.
+    if (frameId) {
+      singleCookie.frameIdList = [frameId];
+    }
 
     cookies.push(singleCookie);
   });

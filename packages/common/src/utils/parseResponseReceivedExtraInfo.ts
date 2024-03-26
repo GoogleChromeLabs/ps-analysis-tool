@@ -109,8 +109,13 @@ export default function parseResponseReceivedExtraInfo(
       url: requestUrl,
       isFirstParty: isFirstParty(domain, tabUrl),
       headerType: 'response' as CookieData['headerType'],
-      frameIdList: [frameId],
+      frameIdList: [],
     };
+
+    //Sometimes frameId comes empty so it shows data in other frames where cookie should not be shown.
+    if (frameId) {
+      singleCookie.frameIdList = [frameId];
+    }
 
     cookies.push(singleCookie);
   });

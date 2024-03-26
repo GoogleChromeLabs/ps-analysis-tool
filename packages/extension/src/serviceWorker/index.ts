@@ -77,7 +77,6 @@ const ALLOWED_EVENTS = [
   'Audits.issueAdded',
   'Network.requestWillBeSent',
 ];
-
 /**
  * Fires when a tab is created.
  * @see https://developer.chrome.com/docs/extensions/reference/api/tabs#event-onCreated
@@ -317,7 +316,6 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
 
   if (method === 'Network.requestWillBeSent' && params) {
     const request = params as Protocol.Network.RequestWillBeSentEvent;
-
     // To get domain from the request URL if not given in the cookie line.
     if (!requestIdToCDPURLMapping[tabId]) {
       requestIdToCDPURLMapping[tabId] = {
@@ -361,7 +359,10 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       return;
     }
 
-    if (requestIdToCDPURLMapping[tabId][requestParams?.requestId]) {
+    if (
+      requestIdToCDPURLMapping[tabId][requestParams?.requestId].frameId &&
+      requestIdToCDPURLMapping[tabId][requestParams?.requestId].url
+    ) {
       const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
         requestParams,
         cookieDB ?? {},
@@ -430,7 +431,10 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       }
       delete auditsIssueForTab[tabId][request.requestId];
     }
-    delete requestIdToCDPURLMapping[tabId][request.requestId];
+
+    if (!request.hasExtraInfo) {
+      delete requestIdToCDPURLMapping[tabId][request.requestId];
+    }
   }
 
   if (method === 'Network.responseReceivedExtraInfo' && params) {
@@ -457,6 +461,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       syncCookieStore?.update(Number(tabId), cookies);
 
       delete unParsedRequestHeaders[tabId][responseParams?.requestId];
+      delete requestIdToCDPURLMapping[tabId][responseParams?.requestId];
     } else {
       unParsedResponseHeaders[tabId][responseParams?.requestId] =
         responseParams;
