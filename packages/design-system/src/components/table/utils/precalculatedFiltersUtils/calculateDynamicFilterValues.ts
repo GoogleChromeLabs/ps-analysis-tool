@@ -23,6 +23,15 @@ import { getValueByKey, type CookieTableData } from '@ps-analysis-tool/common';
  */
 import { TableFilter } from '../../useTable';
 
+/**
+ * Calculate the filter values for the provider key.
+ * Use options to preselect the filter values, if options are provided clear the query to avoid conflicts.
+ * @param key Key to calculate the filter values for.
+ * @param tabCookies Cookies to calculate the filter values from.
+ * @param options Options to preselect the filter values.
+ * @param clearQuery Function to clear the query(when options are provided) to avoid conflicts.
+ * @returns	Filters for the provider key.
+ */
 const calculateDynamicFilterValues = (
   key: string,
   tabCookies: CookieTableData[],

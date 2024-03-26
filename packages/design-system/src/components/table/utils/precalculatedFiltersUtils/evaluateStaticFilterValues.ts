@@ -16,6 +16,14 @@
 
 import { TableFilter } from '../../useTable';
 
+/**
+ * Preselect the static filter values based on the options provided.
+ * @param staticValues Filter values to evaluate.
+ * @param filterKey Filter key to evaluate.
+ * @param parsedQuery Query to evaluate from.
+ * @param clearActivePanelQuery Function to clear the query to avoid conflicts.
+ * @returns Filter values for the static filter.
+ */
 const evaluateStaticFilterValues = (
   staticValues: TableFilter[keyof TableFilter]['filterValues'],
   filterKey: string,

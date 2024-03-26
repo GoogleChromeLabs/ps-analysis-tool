@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
+/**
+ *	Evaluate if the 'All' option is present in parsedQuery.
+ * @param filterKey Filter key to evaluate.
+ * @param parsedQuery Query to evaluate from.
+ * @param clearActivePanelQuery Function to clear the query to avoid conflicts.
+ * @returns True if 'All' option is present in parsedQuery, false otherwise.
+ */
 const evaluateSelectAllOption = (
   filterKey: string,
   parsedQuery: Record<string, any>,

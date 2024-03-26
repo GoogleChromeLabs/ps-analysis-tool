@@ -21,6 +21,12 @@ import { useCallback, useMemo } from 'react';
 import { useSidebar } from '@ps-analysis-tool/design-system';
 import type { TabFrames } from '@ps-analysis-tool/common';
 
+/**
+ * Hook to expose the selectedItemUpdater function.
+ * This function is used to update the selected item key and set the query object.
+ * @param tabFrames Tab frames to get the first frame from.
+ * @returns Object containing the selectedItemUpdater function.
+ */
 const useFiltersMapping = (tabFrames: TabFrames) => {
   const firstFrame = useMemo(
     () => Object.keys(tabFrames || {})?.[0] || '',

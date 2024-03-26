@@ -24,6 +24,14 @@ import { getValueByKey, type CookieTableData } from '@ps-analysis-tool/common';
  */
 import { TableFilter } from '../../useTable';
 
+/**
+ * Calculate the filter values for the blocked reasons filter.
+ * Use options to preselect the filter values.
+ * @param tabCookies Cookies to calculate the filter values from.
+ * @param options Options to preselect the filter values.
+ * @param clearQuery Function to clear the query(when options are provided) to avoid conflicts.
+ * @returns Filter values for the blocked reasons filter.
+ */
 const calculateBlockedReasonsFilterValues = (
   tabCookies: CookieTableData[],
   options: string[],
