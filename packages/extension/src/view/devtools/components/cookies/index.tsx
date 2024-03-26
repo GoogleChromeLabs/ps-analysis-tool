@@ -23,10 +23,7 @@ import {
   ProgressBar,
 } from '@ps-analysis-tool/design-system';
 import { LibraryDetection } from '@ps-analysis-tool/library-detection';
-import {
-  UNKNOWN_FRAME_KEY,
-  type CookieTableData,
-} from '@ps-analysis-tool/common';
+import { type CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -46,7 +43,6 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
     selectedFrame,
     tabCookies,
     tabFrames,
-    frameHasCookies,
     changeListeningToThisTab,
     tabToRead,
   } = useCookieStore(({ state, actions }) => ({
@@ -58,7 +54,6 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
     selectedFrame: state.selectedFrame,
     tabCookies: state.tabCookies,
     tabFrames: state.tabFrames,
-    frameHasCookies: state.frameHasCookies,
     changeListeningToThisTab: actions.changeListeningToThisTab,
   }));
 
@@ -68,13 +63,8 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
   }));
 
   const processedTabFrames = useMemo(
-    () =>
-      Object.fromEntries(
-        Object.entries(tabFrames || {}).filter(([url]) =>
-          url === UNKNOWN_FRAME_KEY ? frameHasCookies[url] : true
-        )
-      ),
-    [tabFrames, frameHasCookies]
+    () => Object.fromEntries(Object.entries(tabFrames || {})),
+    [tabFrames]
   );
 
   if (

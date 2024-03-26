@@ -35,6 +35,7 @@ const filterCookiesByFrame = (
   if (!cookies || !frameUrl || !tabFrames || !tabFrames[frameUrl]) {
     return Object.values(frameFilteredCookies);
   }
+
   let tabFramesIDMap: number[] = [];
 
   Object.keys(tabFrames)?.forEach((url) => {
@@ -45,28 +46,54 @@ const filterCookiesByFrame = (
     }
   });
 
-  if (tabFrames[frameUrl].frameIds?.length === 0) {
-    Object.entries(cookies).forEach(([key, cookie]) => {
-      let hasFrame = false;
-      cookie.frameIdList?.forEach((frameId) => {
-        if (tabFramesIDMap.includes(frameId as number)) {
-          hasFrame = true;
-        }
-      });
-      if (
-        !hasFrame &&
-        cookie.frameIdList !== undefined &&
-        cookie.frameIdList?.length > 0
-      ) {
-        frameFilteredCookies[key] = cookie;
-      }
-    });
-  }
-
   Object.entries(cookies).forEach(([key, cookie]) => {
     tabFrames[frameUrl].frameIds?.forEach((frameId) => {
       if (cookie.frameIdList?.includes(frameId)) {
         frameFilteredCookies[key] = cookie;
+      }
+
+      //For orphaned/unmapped cookies
+      let hasFrame = false;
+      cookie.frameIdList?.forEach((cookieFrameId) => {
+        if (tabFramesIDMap.includes(cookieFrameId as number)) {
+          hasFrame = true;
+        }
+      });
+
+      if (!hasFrame && cookie?.frameIdList) {
+        //For UnMapped Cookies
+        if (
+          cookie.frameIdList &&
+          cookie.frameIdList.length === 0 &&
+          cookie.parsedCookie.domain
+        ) {
+          const domainToCheck = cookie.parsedCookie.domain.startsWith('.')
+            ? cookie.parsedCookie.domain.slice(1)
+            : cookie.parsedCookie.domain;
+
+          if (frameUrl.includes(domainToCheck)) {
+            frameFilteredCookies[key] = cookie;
+          }
+          if (
+            Object.keys(tabFrames).filter((frameKey) =>
+              frameKey.includes(domainToCheck)
+            ).length === 0 &&
+            tabFrames[frameUrl].frameIds.includes(0)
+          ) {
+            frameFilteredCookies[key] = cookie;
+          }
+        }
+
+        //For Orphaned Cookies
+        if (
+          cookie.frameIdList &&
+          cookie.frameIdList.length > 0 &&
+          cookie.parsedCookie.domain
+        ) {
+          if (tabFrames[frameUrl].frameIds.includes(0)) {
+            frameFilteredCookies[key] = cookie;
+          }
+        }
       }
     });
   });

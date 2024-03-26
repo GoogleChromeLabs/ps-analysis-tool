@@ -33,6 +33,7 @@ export type SidebarItemValue = {
   title: string;
   children: SidebarItems;
   popupTitle?: string;
+  infoIconDescription?: string;
   extraInterfaceToTitle?: React.ReactNode;
   dropdownOpen?: boolean;
   panel?: React.ReactNode;

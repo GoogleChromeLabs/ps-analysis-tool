@@ -28,10 +28,7 @@ import {
   InspectButton,
   ToastMessage,
 } from '@ps-analysis-tool/design-system';
-import {
-  UNKNOWN_FRAME_KEY,
-  type CookieTableData,
-} from '@ps-analysis-tool/common';
+import { type CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -141,23 +138,23 @@ const App: React.FC = () => {
       psData.children['cookies'].panel = (
         <Cookies setFilteredCookies={setFilteredCookies} />
       );
-      psData.children['cookies'].children = Object.keys(tabFrames || {})
-        .filter((url) => {
-          return url === UNKNOWN_FRAME_KEY ? frameHasCookies[url] : true;
-        })
-        .reduce<SidebarItems>((acc, url) => {
-          acc[url] = {
-            title: url,
-            popupTitle: `Cookies used by frames from ${url}`,
-            panel: <Cookies setFilteredCookies={setFilteredCookies} />,
-            icon: <CookieIcon />,
-            selectedIcon: <CookieIconWhite />,
-            children: {},
-            isBlurred: !frameHasCookies?.[url],
-          };
+      psData.children['cookies'].children = Object.keys(
+        tabFrames || {}
+      ).reduce<SidebarItems>((acc, url) => {
+        const popupTitle = `Cookies used by frames from ${url}`;
 
-          return acc;
-        }, {});
+        acc[url] = {
+          title: url,
+          popupTitle,
+          panel: <Cookies setFilteredCookies={setFilteredCookies} />,
+          icon: <CookieIcon />,
+          selectedIcon: <CookieIconWhite />,
+          children: {},
+          isBlurred: !frameHasCookies?.[url],
+        };
+
+        return acc;
+      }, {});
 
       const showInspectButton =
         canStartInspecting && Boolean(Object.keys(tabFrames || {}).length);
@@ -303,18 +300,22 @@ const App: React.FC = () => {
                   '-' + mainRef.current.scrollTop + 'px';
               }
             }}
-            className="h-full flex-1 overflow-auto relative"
+            className="h-full flex-1 relative overflow-hidden flex flex-col"
           >
-            <div className="min-w-[40rem] h-full z-1">{activePanel}</div>
-            {settingsChanged && (
-              <ToastMessage
-                ref={toastMessageRef}
-                additionalStyles="text-sm"
-                text="Settings changed, please reload all tabs."
-                onClick={handleSettingsChange}
-                textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
-              />
-            )}
+            <div className="w-full h-full overflow-auto">
+              <div className="min-w-[40rem] h-full">{activePanel}</div>
+            </div>
+            <div className="h-fit">
+              {settingsChanged && (
+                <ToastMessage
+                  ref={toastMessageRef}
+                  additionalStyles="text-sm"
+                  text="Settings changed, please reload all tabs."
+                  onClick={handleSettingsChange}
+                  textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
+                />
+              )}
+            </div>
           </main>
         </div>
       )}

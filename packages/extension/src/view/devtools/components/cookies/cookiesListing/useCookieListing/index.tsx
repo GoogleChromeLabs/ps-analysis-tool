@@ -30,6 +30,8 @@ import {
   type TableColumn,
   type TableFilter,
   type TableRow,
+  type TableData,
+  InfoIcon,
 } from '@ps-analysis-tool/design-system';
 
 /**
@@ -39,6 +41,7 @@ import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import useHighlighting from './useHighlighting';
 import { useSettingsStore } from '../../../../stateProviders/syncSettingsStore';
 import namePrefixIconSelector from './namePrefixIconSelector';
+import OrphanedUnMappedInfoDisplay from './orphanedUnMappedInfoDisplay';
 
 const useCookieListing = (domainsInAllowList: Set<string>) => {
   const { selectedFrame, cookies, getCookiesSetByJavascript } = useCookieStore(
@@ -87,37 +90,37 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
             {!info ? 'Third Party' : 'First Party'}
           </p>
         ),
-        widthWeightagePercentage: 6.6,
+        widthWeightagePercentage: 6,
       },
       {
         header: 'Domain',
         accessorKey: 'parsedCookie.domain',
         cell: (info: InfoType) => info,
-        widthWeightagePercentage: 9,
+        widthWeightagePercentage: 8,
       },
       {
         header: 'Partition Key',
         accessorKey: 'parsedCookie.partitionKey',
         cell: (info: InfoType) => info,
-        widthWeightagePercentage: 9,
+        widthWeightagePercentage: 8,
       },
       {
         header: 'SameSite',
         accessorKey: 'parsedCookie.samesite',
         cell: (info: InfoType) => <span className="capitalize">{info}</span>,
-        widthWeightagePercentage: 6.5,
+        widthWeightagePercentage: 6,
       },
       {
         header: 'Category',
         accessorKey: 'analytics.category',
         cell: (info: InfoType) => info,
-        widthWeightagePercentage: 8,
+        widthWeightagePercentage: 7.5,
       },
       {
         header: 'Platform',
         accessorKey: 'analytics.platform',
         cell: (info: InfoType) => <span>{info ? info : 'Unknown'}</span>,
-        widthWeightagePercentage: 10,
+        widthWeightagePercentage: 7.5,
       },
       {
         header: 'HttpOnly',
@@ -127,7 +130,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
             {info ? <span className="font-serif">✓</span> : ''}
           </p>
         ),
-        widthWeightagePercentage: 5,
+        widthWeightagePercentage: 4,
       },
       {
         header: 'Secure',
@@ -137,13 +140,13 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
             {info ? <span className="font-serif">✓</span> : ''}
           </p>
         ),
-        widthWeightagePercentage: 5,
+        widthWeightagePercentage: 4,
       },
       {
         header: 'Value',
         accessorKey: 'parsedCookie.value',
         cell: (info: InfoType) => info,
-        widthWeightagePercentage: 7.8,
+        widthWeightagePercentage: 7,
       },
       {
         header: 'Path',
@@ -155,19 +158,70 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         header: 'Expires / Max-Age',
         accessorKey: 'parsedCookie.expires',
         cell: (info: InfoType) => (info ? info : 'Session'),
-        widthWeightagePercentage: 7.8,
+        widthWeightagePercentage: 6,
       },
       {
         header: 'Priority',
         accessorKey: 'parsedCookie.priority',
         cell: (info: InfoType) => info,
-        widthWeightagePercentage: 5.4,
+        widthWeightagePercentage: 4,
       },
       {
         header: 'Size',
         accessorKey: 'parsedCookie.size',
         cell: (info: InfoType) => info,
-        widthWeightagePercentage: 3.4,
+        widthWeightagePercentage: 3,
+      },
+      {
+        header: 'Mapping',
+        accessorKey: 'frameIdList',
+        isHiddenByDefault: true,
+        cell: (info: InfoType) => (
+          <OrphanedUnMappedInfoDisplay frameIdList={info as number[]} />
+        ),
+        widthWeightagePercentage: 6.6,
+      },
+      {
+        header: 'Blocking Status',
+        accessorKey: 'isBlocked',
+        isHiddenByDefault: true,
+        widthWeightagePercentage: 5.4,
+        cell: (_, details: TableData | undefined) => {
+          //skip calculation of blocking status when not using CDP
+          if (!isUsingCDP) {
+            return <></>;
+          }
+          const cookieData = details as CookieTableData;
+
+          const isInboundBlocked =
+            cookieData.blockingStatus?.inboundBlock !==
+            BLOCK_STATUS.NOT_BLOCKED;
+          const isOutboundBlocked =
+            cookieData.blockingStatus?.outboundBlock !==
+            BLOCK_STATUS.NOT_BLOCKED;
+          const hasValidBlockedReason =
+            cookieData?.blockedReasons &&
+            cookieData.blockedReasons.length !== 0;
+
+          if (
+            (isInboundBlocked || isOutboundBlocked) &&
+            !hasValidBlockedReason
+          ) {
+            return (
+              <span
+                className="flex"
+                title="Please take a look at the network tab to get this cookie's blocking information."
+              >
+                <InfoIcon className="fill-granite-gray" />
+                Undetermined
+              </span>
+            );
+          } else if (hasValidBlockedReason) {
+            return <span className="flex">Blocked</span>;
+          } else {
+            return <></>;
+          }
+        },
       },
     ],
     [isUsingCDP]
@@ -250,7 +304,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         },
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
-          const val = value as boolean;
+          const val = Boolean(value);
           return val === (filterValue === 'First Party');
         },
       },
@@ -270,7 +324,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         },
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
-          const val = value as boolean;
+          const val = Boolean(value);
           return val === (filterValue === 'True');
         },
       },
@@ -307,7 +361,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         },
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
-          const val = value as boolean;
+          const val = Boolean(value);
           return val === (filterValue === 'True');
         },
       },

@@ -13,10 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Internal dependencies
- */
-import { getCurrentTabId } from '../../utils/getCurrentTabId';
 
 const callback = (panel: {
   onShown: { addListener: (arg0: () => void) => void };
@@ -28,15 +24,9 @@ const callback = (panel: {
       return;
     }
 
-    const currentTabId = await getCurrentTabId();
-
-    if (!currentTabId) {
-      return;
-    }
-
-    const sessionData = await chrome.storage.session.get();
-    sessionData[currentTabId] = true;
-    await chrome.storage.session.set(sessionData);
+    await chrome.storage.session.set({
+      [chrome.devtools.inspectedWindow.tabId]: true,
+    });
   });
 
   panel.onHidden.addListener(async () => {
@@ -44,15 +34,9 @@ const callback = (panel: {
       return;
     }
 
-    const currentTabId = await getCurrentTabId();
-
-    if (!currentTabId) {
-      return;
-    }
-
-    const sessionData = await chrome.storage.session.get();
-    sessionData[currentTabId] = false;
-    chrome.storage.session.set(sessionData);
+    await chrome.storage.session.set({
+      [chrome.devtools.inspectedWindow.tabId]: false,
+    });
   });
 };
 chrome.devtools.panels.create(

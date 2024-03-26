@@ -19,7 +19,7 @@
  */
 import React from 'react';
 import classNames from 'classnames';
-import { BLOCK_STATUS, CookieTableData } from '@ps-analysis-tool/common';
+import { CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -59,10 +59,7 @@ const BodyRow = ({
   const cookieKey = getRowObjectKey(row);
   const isBlocked = useIsBlockedToHighlight
     ? (row.originalData as CookieTableData)?.isBlocked
-    : (row.originalData as CookieTableData)?.blockingStatus?.inboundBlock !==
-        BLOCK_STATUS.NOT_BLOCKED ||
-      (row.originalData as CookieTableData)?.blockingStatus?.outboundBlock !==
-        BLOCK_STATUS.NOT_BLOCKED;
+    : Boolean((row.originalData as CookieTableData)?.blockedReasons?.length);
   const isHighlighted = (row.originalData as CookieTableData)?.highlighted;
   const isDomainInAllowList = (row.originalData as CookieTableData)
     ?.isDomainInAllowList;
@@ -75,7 +72,7 @@ const BodyRow = ({
           ? 'dark:bg-flagged-row-even-dark bg-flagged-row-even-light'
           : 'dark:bg-flagged-row-odd-dark bg-flagged-row-odd-light'
         : isRowFocused
-        ? 'bg-gainsboro dark:bg-outer-space'
+        ? 'bg-selection-yellow-dark dark:bg-selection-yellow-light'
         : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
     isDomainInAllowList &&
       !isBlocked &&
@@ -84,7 +81,7 @@ const BodyRow = ({
           ? 'dark:bg-jungle-green-dark bg-leaf-green-dark'
           : 'dark:bg-jungle-green-light bg-leaf-green-light'
         : isRowFocused
-        ? 'bg-gainsboro dark:bg-outer-space'
+        ? 'bg-selection-green-dark dark:bg-selection-green-light'
         : 'bg-royal-blue text-white dark:bg-medium-persian-blue dark:text-chinese-silver'),
     cookieKey !== selectedKey &&
       !isBlocked &&

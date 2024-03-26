@@ -19,79 +19,72 @@
 import type {
   ScriptTagUnderCheck,
   LibraryData,
-  DetectionSubFunctions,
-  DetectionAuditFunctions,
+  DetectionFunctions,
 } from '../types';
+import LIBRARIES from '../config';
 
 /**
- * Checks if the origin of a script tag is Google-related.
+ * Filter origins of a script tag from skipped origins.
  * @param script - The script tag to check.
- * @returns A boolean value indicating whether the origin is Google-related.
+ * @returns A boolean value indicating whether the origin is skipped
  */
-const originIsGoogle = (script: ScriptTagUnderCheck) => {
-  return !(
-    (
-      script.origin?.includes('accounts.google.com') ||
-      script.origin?.includes('gstatic.com')
-    ) // NOTE: intentionally removed apis.google.com from this list
+const filterDomainsToSkip = (script: ScriptTagUnderCheck): boolean => {
+  const domainsToSkip = [
+    ...new Set(LIBRARIES.flatMap((library) => library.domainsToSkip || [])),
+  ];
+
+  return (
+    script.origin !== null &&
+    !domainsToSkip.some((domain) => script?.origin?.includes(domain))
   );
 };
 
 /**
  * Detects matching signatures of libraries in loaded scripts.
- * @param librariesToDetect - An array of libraries to detect.
- * @param loadedScripts - An array of loaded scripts to check.
- * @param detectionSubFunctions - An object containing detection sub-functions for each library.
- * @param detectionAuditFunctions - An object containing detection audit functions for each library.
+ * @param scripts - An array of loaded scripts to check.
+ * @param detectionFunctions - An object containing detection sub-functions for each library.
  * @returns An object containing the matching signatures and matches for each library.
  */
-
 const detectMatchingSignatures = (
-  librariesToDetect: string[],
-  loadedScripts: ScriptTagUnderCheck[],
-  detectionSubFunctions: DetectionSubFunctions,
-  detectionAuditFunctions: DetectionAuditFunctions
-) => {
-  const libraryMatches: LibraryData = librariesToDetect.reduce(
-    (acc, library) => {
-      acc[library as keyof LibraryData] = {
-        signatureMatches: 0,
-        matches: [],
-        moduleMatch: 0,
-      };
-      return acc;
-    },
-    {} as LibraryData
+  scripts: ScriptTagUnderCheck[],
+  detectionFunctions: DetectionFunctions
+): LibraryData => {
+  const libraryMatches: LibraryData = Object.fromEntries(
+    LIBRARIES.filter(({ detectionFunction }) => detectionFunction).map(
+      ({ name }) => [
+        name,
+        {
+          signatureMatches: 0,
+          matches: [],
+          moduleMatch: 0,
+        },
+      ]
+    )
   );
 
-  for (const script of loadedScripts.filter(originIsGoogle)) {
+  for (const script of scripts.filter(filterDomainsToSkip)) {
     if (script.content === undefined) {
       continue;
     }
 
-    const detectionSubFunctionsKeys = Object.keys(detectionSubFunctions);
+    Object.entries(detectionFunctions).forEach(([key, detectionFunction]) => {
+      if (!detectionFunction) {
+        return;
+      }
 
-    for (let i = 0; i < detectionSubFunctionsKeys.length; i++) {
-      const key = detectionSubFunctionsKeys[i] as keyof LibraryData;
-      libraryMatches[key] = detectionSubFunctions[key](
+      const {
+        signatureMatches,
+        matches,
+        moduleMatch = 0,
+      } = libraryMatches[key];
+
+      libraryMatches[key] = detectionFunction(
         script,
-        libraryMatches[key].matches,
-        libraryMatches[key].signatureMatches,
-        libraryMatches[key].moduleMatch as number
+        matches,
+        signatureMatches,
+        moduleMatch
       );
-    }
-  }
-
-  const detectionAuditFunctionsKeys = Object.keys(detectionAuditFunctions);
-
-  for (let i = 0; i < detectionAuditFunctionsKeys.length; i++) {
-    const key = detectionAuditFunctionsKeys[i] as keyof DetectionAuditFunctions;
-
-    libraryMatches[key].matches = detectionAuditFunctions[key](
-      libraryMatches[key].signatureMatches,
-      libraryMatches[key].matches,
-      libraryMatches[key].moduleMatch as number
-    );
+    });
   }
 
   return libraryMatches;
