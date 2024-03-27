@@ -21,6 +21,16 @@ import { SidebarItems } from '..';
 import findItem from './findItem';
 import findKeyParent from './findKeyParent';
 
+/**
+ * Find the previous item in the sidebar based on the key path.
+ * The SidebarItems are assumed to be a tree structure.
+ * The key path is an array of keys that represent the path to the current item.
+ * Tree traversal is done in a depth-first manner to find the parent of the current item.
+ * And then the previous sibling of the current item.
+ * @param items Sidebar items.
+ * @param keyPath Key path.
+ * @returns Previous item key.
+ */
 const findPrevItem = (items: SidebarItems, keyPath: string[]) => {
   if (keyPath.length === 0) {
     return null;

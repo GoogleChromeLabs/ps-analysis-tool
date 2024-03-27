@@ -21,12 +21,28 @@ import { SidebarItemValue, SidebarItems } from '..';
 import findItem from './findItem';
 import findKeyParent from './findKeyParent';
 
+/**
+ * Handle the next item on the parent from the children.
+ * @param currentItem Current item.
+ * @returns Next item key.
+ */
 const handleNextItemOnParent = (currentItem: SidebarItemValue) => {
   const children = Object.keys(currentItem.children);
 
   return children.length ? children[0] : null;
 };
 
+/**
+ * Find the next item in the sidebar based on the key path.
+ * The SidebarItems are assumed to be a tree structure.
+ * The key path is an array of keys that represent the path to the current item.
+ * Tree traversal is done in a depth-first manner to find the parent of the current item.
+ * And then the next sibling of the current item.
+ * @param items Sidebar items.
+ * @param keyPath Key path.
+ * @param skipDropdown Skip dropdown if parent has only one child, so find parent's sibling.
+ * @returns Next item key.
+ */
 const findNextItem = (
   items: SidebarItems,
   keyPath: string[],
