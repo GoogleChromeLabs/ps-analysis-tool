@@ -20,6 +20,13 @@
 import { SidebarItems } from '..';
 import matchKey from './matchKey';
 
+/**
+ * Create a key path to the given key in the sidebar items.
+ * @param items Sidebar items.
+ * @param key Key up to which the path should be created.
+ * @param keyPath Prefix key path to start with.
+ * @returns Key path.
+ */
 const createKeyPath = (
   items: SidebarItems,
   key: string,

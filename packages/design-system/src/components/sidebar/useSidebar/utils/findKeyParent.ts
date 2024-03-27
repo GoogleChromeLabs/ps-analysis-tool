@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
+/**
+ * Find the parent key of the given key path.
+ * Eg if the key path is ['a', 'b', 'c'], the parent key is 'b'.
+ * @param keyPath Key path array.
+ * @returns Parent key.
+ */
 const findKeyParent = (keyPath: string[]) => {
   const length = keyPath.length;
 

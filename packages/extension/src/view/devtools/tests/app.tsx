@@ -110,7 +110,10 @@ describe('App', () => {
         session: {
           //@ts-ignore
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          get: (_, __) => Promise.resolve(),
+          get: (_, __) =>
+            Promise.resolve({
+              ['selectedSidebarItem#' + 40245632]: 'privacySandbox#cookies',
+            }),
           set: () => Promise.resolve(),
           //@ts-ignore
           onChanged: {

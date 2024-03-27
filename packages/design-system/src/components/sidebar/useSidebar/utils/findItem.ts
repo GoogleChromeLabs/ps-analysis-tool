@@ -20,6 +20,14 @@
 import { SidebarItemValue, SidebarItems } from '..';
 import matchKey from './matchKey';
 
+/**
+ * Find an item in the sidebar items by key.
+ * The SidebarItems are assumed to be a tree structure.
+ * Tree traversal is done in a depth-first manner to find the item.
+ * @param items Sidebar items.
+ * @param key Key to find.
+ * @returns Sidebar item.
+ */
 const findItem = (
   items: SidebarItems,
   key: string | null

@@ -17,18 +17,23 @@
 /**
  * External dependencies
  */
-import React from 'react';
+import React, { useState } from 'react';
 import type {
   CompleteJson,
   CookieJsonDataType,
   TechnologyData,
 } from '@ps-analysis-tool/common';
+import {
+  SidebarProvider,
+  type SidebarItems,
+} from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
 import { Provider as ContentStoreProvider } from './stateProviders/contentStore';
 import Layout from './components/layout';
+import Tabs from './tabs';
 
 interface SiteReportProps {
   cookies: {
@@ -47,13 +52,17 @@ const SiteReport = ({
   completeJson,
   selectedSite,
 }: SiteReportProps) => {
+  const [data, setData] = useState<SidebarItems>(Tabs);
+
   return (
     <ContentStoreProvider
       cookies={cookies}
       technologies={technologies}
       completeJson={completeJson}
     >
-      <Layout selectedSite={selectedSite} />
+      <SidebarProvider data={data}>
+        <Layout selectedSite={selectedSite} setSidebarData={setData} />
+      </SidebarProvider>
     </ContentStoreProvider>
   );
 };

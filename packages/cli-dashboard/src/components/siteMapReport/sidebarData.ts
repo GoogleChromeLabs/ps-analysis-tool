@@ -14,28 +14,29 @@
  * limitations under the License.
  */
 /**
- * External dependencies.
+ * External dependencies
  */
-import React from 'react';
 import {
   CookieIcon,
   CookieIconWhite,
   type SidebarItems,
 } from '@ps-analysis-tool/design-system';
 
-const Tabs: SidebarItems = {
-  cookies: {
-    title: 'Cookies',
+const sidebarData: SidebarItems = {
+  'sitemap-landing-page': {
+    title: 'Sitemap Report',
     children: {},
-    icon: <CookieIcon />,
-    selectedIcon: <CookieIconWhite />,
   },
-  'affected-cookies': {
+  'sitemap-affected-cookies': {
     title: 'Affected Cookies',
     children: {},
-    icon: <CookieIcon />,
-    selectedIcon: <CookieIconWhite />,
+    icon: {
+      Element: CookieIcon,
+    },
+    selectedIcon: {
+      Element: CookieIconWhite,
+    },
   },
 };
 
-export default Tabs;
+export default sidebarData;
