@@ -35,6 +35,8 @@ import { getTab } from '../utils/getTab';
 import getQueryParams from '../utils/getQueryParams';
 import reloadCurrentTab from '../utils/reloadCurrentTab';
 import createCookieFromAuditsIssue from '../utils/createCookieFromAuditsIssue';
+import attachCDP from './attachCDP';
+import { getCurrentTabId } from '../utils/getCurrentTabId';
 
 let cookieDB: CookieDatabase | null = null;
 let syncCookieStore: SynchnorousCookieStore | undefined;
@@ -199,11 +201,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 
   try {
     if (globalIsUsingCDP) {
-      await chrome.debugger.attach({ tabId }, '1.3');
-      await chrome.debugger.sendCommand({ tabId }, 'Network.enable');
-      await chrome.debugger.sendCommand({ tabId }, 'Audits.enable');
-      await chrome.debugger.sendCommand({ tabId }, 'Page.enable');
-      await chrome.debugger.sendCommand({ tabId }, 'DOM.enable');
+      await attachCDP({ tabId });
     } else {
       await chrome.debugger.detach({ tabId });
     }
@@ -296,15 +294,29 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
     return;
   }
 
-  let tabId = '';
+  let tabId = await getCurrentTabId();
+  try {
+    const targets = await chrome.debugger.getTargets();
+    await Promise.all(
+      targets.map(async ({ id }) => {
+        await chrome.debugger.attach({ targetId: id }, '1.3');
+        await chrome.debugger.sendCommand({ targetId: id }, 'Network.enable');
+        await chrome.debugger.sendCommand({ targetId: id }, 'Audits.enable');
+      })
+    );
+  } catch (error) {
+    //Fail silently since it gives only one kind of error. Debugger already attached to tabId.
+  }
 
-  if (!source?.tabId) {
+  if (source?.tabId) {
+    tabId = source?.tabId?.toString();
+  }
+
+  if (!tabId) {
     return;
   }
 
-  const url = syncCookieStore?.getTabUrl(source?.tabId);
-
-  tabId = source?.tabId?.toString();
+  const url = syncCookieStore?.getTabUrl(Number(tabId));
 
   if (tabMode && tabMode !== 'unlimited' && tabToRead !== tabId) {
     return;
@@ -359,10 +371,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       return;
     }
 
-    if (
-      requestIdToCDPURLMapping[tabId][requestParams?.requestId].frameId &&
-      requestIdToCDPURLMapping[tabId][requestParams?.requestId].url
-    ) {
+    if (requestIdToCDPURLMapping[tabId][requestParams?.requestId]) {
       const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
         requestParams,
         cookieDB ?? {},
@@ -411,7 +420,6 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         cookieDB ?? {},
         requestIdToCDPURLMapping[tabId][request.requestId]?.frameId
       );
-
       syncCookieStore?.update(Number(tabId), cookies);
 
       delete unParsedRequestHeaders[tabId][request.requestId];
@@ -429,6 +437,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       if (cookieObjectToUpdate) {
         syncCookieStore?.update(Number(tabId), [cookieObjectToUpdate]);
       }
+
       delete auditsIssueForTab[tabId][request.requestId];
     }
 
