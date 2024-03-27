@@ -40,10 +40,15 @@ import {
   saveCSVReports,
 } from './utils';
 import { checkPortInUse } from './utils/checkPortInUse';
+import doesLocaleFileExists from './utils/doesLocaleFileExists';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
-const messages = JSON.parse(readFileSync('_locales/en/messages.json', 'utf-8'));
+let locale = Intl.DateTimeFormat().resolvedOptions().locale;
+locale = doesLocaleFileExists(locale);
+const messages = JSON.parse(
+  readFileSync(`_locales/${locale}/messages.json`, 'utf-8')
+);
 
 I18n.initMessages(messages);
 

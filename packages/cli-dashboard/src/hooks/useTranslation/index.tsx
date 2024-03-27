@@ -41,14 +41,43 @@ export const TranslationProvider = ({ children }: PropsWithChildren) => {
   const [i18n, setI18n] = useState<typeof I18n | null>(null);
 
   useEffect(() => {
+    const locale = navigator.language || 'en';
+    const localeArray = [
+      locale,
+      locale.split('-')[0],
+      locale.split('_')[0],
+      'en',
+    ];
+
     (async () => {
-      const res = await fetch(`/_locales/en/messages.json`);
-      const data = await res.json();
+      let idx = 0;
 
-      const i18nObj = I18n;
-      i18nObj.initMessages(data);
+      const fetchWithRetry = async () => {
+        if (idx >= localeArray.length) {
+          return;
+        }
 
-      setI18n(i18nObj);
+        try {
+          const res = await fetch(
+            `/_locales/${localeArray[idx]}/messages.json`
+          );
+          if (!res.ok) {
+            throw new Error('Failed to fetch');
+          }
+
+          const data = await res.json();
+
+          const i18nObj = I18n;
+          i18nObj.initMessages(data);
+
+          setI18n(i18nObj);
+        } catch (error) {
+          idx++;
+          await fetchWithRetry();
+        }
+      };
+
+      await fetchWithRetry();
     })();
   }, []);
 
