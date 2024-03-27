@@ -18,6 +18,7 @@
  */
 import React from 'react';
 import { LibraryDetection } from '@ps-analysis-tool/library-detection';
+import { MenuBar, type MenuData } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies
  */
@@ -25,14 +26,41 @@ import CookiesSection from './cookiesSection';
 import FramesSection from './framesSection';
 import BlockedCookiesSection from './blockedCookiesSection';
 
+const menuData: MenuData = [
+  {
+    name: 'Cookies',
+    link: 'cookies',
+  },
+  {
+    name: 'Blocked Cookies',
+    link: 'blocked-cookies',
+  },
+  {
+    name: 'Library Detection',
+    link: 'library-detection',
+  },
+  {
+    name: 'Frames',
+    link: 'frames',
+  },
+];
+
 const AssembledCookiesLanding = () => {
   return (
-    <>
-      <CookiesSection />
-      <BlockedCookiesSection />
-      <LibraryDetection />
-      <FramesSection />
-    </>
+    <MenuBar menuData={menuData}>
+      <div id={menuData[0].link}>
+        <CookiesSection />
+      </div>
+      <div id={menuData[1].link}>
+        <BlockedCookiesSection />
+      </div>
+      <div id={menuData[2].link}>
+        <LibraryDetection />
+      </div>
+      <div id={menuData[3].link}>
+        <FramesSection />
+      </div>
+    </MenuBar>
   );
 };
 export default AssembledCookiesLanding;
