@@ -283,6 +283,29 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     const preSetSettings = await chrome.storage.sync.get();
     tabMode = preSetSettings?.allowedNumberOfTabs ?? 'single';
     globalIsUsingCDP = preSetSettings?.isUsingCDP ?? false;
+
+    if (tabMode === 'unlimited') {
+      const allTabs = await chrome.tabs.query({});
+      const targets = await chrome.debugger.getTargets();
+
+      allTabs.forEach((tab) => {
+        if (!tab.id) {
+          return;
+        }
+        unParsedRequestHeaders[tab.id.toString()] = {};
+        unParsedResponseHeaders[tab.id.toString()] = {};
+        requestIdToCDPURLMapping[tab.id.toString()] = {};
+        auditsIssueForTab[tab.id.toString()] = {};
+        tabIdToFrames[tab.id.toString()] = new Set();
+
+        const currentTab = targets.filter(
+          ({ tabId }) => tabId && tab.id && tabId === tab.id
+        );
+
+        tabIdToFrames[tab.id.toString()].add(currentTab[0].id);
+      });
+    }
+
     if (
       preSetSettings?.allowedNumberOfTabs &&
       Object.keys(preSetSettings).includes('isUsingCDP')
