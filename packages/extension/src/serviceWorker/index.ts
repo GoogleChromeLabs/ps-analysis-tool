@@ -78,12 +78,18 @@ const ALLOWED_EVENTS = [
   'Network.responseReceivedExtraInfo',
   'Audits.issueAdded',
   'Network.requestWillBeSent',
+  'Page.frameAttached',
 ];
+
+const tabIdToFrames: {
+  [tabId: string]: Set<string>;
+} = {};
+
 /**
  * Fires when a tab is created.
  * @see https://developer.chrome.com/docs/extensions/reference/api/tabs#event-onCreated
  */
-chrome.tabs.onCreated.addListener((tab) => {
+chrome.tabs.onCreated.addListener(async (tab) => {
   if (!tab.id) {
     return;
   }
@@ -92,6 +98,7 @@ chrome.tabs.onCreated.addListener((tab) => {
   unParsedResponseHeaders[tab.id.toString()] = {};
   requestIdToCDPURLMapping[tab.id.toString()] = {};
   auditsIssueForTab[tab.id.toString()] = {};
+  tabIdToFrames[tab.id.toString()] = new Set();
 
   if (!syncCookieStore) {
     syncCookieStore = new SynchnorousCookieStore();
@@ -108,6 +115,13 @@ chrome.tabs.onCreated.addListener((tab) => {
     }
     tabToRead = tab.id.toString();
     syncCookieStore?.addTabData(tab.id);
+
+    const targets = await chrome.debugger.getTargets();
+    const currentTab = targets.filter(
+      ({ tabId }) => tabId && tab.id && tabId === tab.id
+    );
+
+    tabIdToFrames[tab.id.toString()].add(currentTab[0].id);
   } else {
     syncCookieStore?.addTabData(tab.id);
   }
@@ -302,6 +316,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         await chrome.debugger.attach({ targetId: id }, '1.3');
         await chrome.debugger.sendCommand({ targetId: id }, 'Network.enable');
         await chrome.debugger.sendCommand({ targetId: id }, 'Audits.enable');
+        await chrome.debugger.sendCommand({ targetId: id }, 'Page.enable');
       })
     );
   } catch (error) {
@@ -324,6 +339,17 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
 
   if (!cookieDB) {
     cookieDB = await fetchDictionary();
+  }
+
+  if (method === 'Page.frameAttached' && params) {
+    const frameData = params as Protocol.Page.FrameAttachedEvent;
+    if (frameData?.parentFrameId) {
+      Object.values(tabIdToFrames).forEach((setOfFrames) => {
+        if (setOfFrames.has(frameData.parentFrameId)) {
+          setOfFrames.add(frameData.frameId);
+        }
+      });
+    }
   }
 
   if (method === 'Network.requestWillBeSent' && params) {
@@ -548,6 +574,7 @@ const listenToNewTab = async (tabId?: number) => {
   unParsedResponseHeaders[newTabId] = {};
   requestIdToCDPURLMapping[newTabId] = {};
   auditsIssueForTab[newTabId] = {};
+  tabIdToFrames[newTabId] = new Set();
 
   syncCookieStore?.addTabData(Number(newTabId));
   syncCookieStore?.updateDevToolsState(Number(newTabId), true);
@@ -698,11 +725,24 @@ chrome.runtime.onMessage.addListener(async (request) => {
     });
 
     const tabs = await chrome.tabs.query({});
+    const targets = await chrome.debugger.getTargets();
     await Promise.all(
       tabs.map(async (tab) => {
         if (!tab.id) {
           return;
         }
+        unParsedRequestHeaders[tab.id.toString()] = {};
+        unParsedResponseHeaders[tab.id.toString()] = {};
+        requestIdToCDPURLMapping[tab.id.toString()] = {};
+        auditsIssueForTab[tab.id.toString()] = {};
+        tabIdToFrames[tab.id.toString()] = new Set();
+
+        const currentTab = targets.filter(
+          ({ tabId }) => tabId && tab.id && tabId === tab.id
+        );
+
+        tabIdToFrames[tab.id.toString()].add(currentTab[0].id);
+
         await reloadCurrentTab(tab.id);
       })
     );
