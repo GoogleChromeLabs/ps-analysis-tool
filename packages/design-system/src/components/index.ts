@@ -47,3 +47,4 @@ export {
 } from './cookiesLanding/cookiesLandingWrapper';
 export { type DataMapping } from './cookiesLanding/landingHeader';
 export { default as MatrixContainer } from './matrixContainer';
+export { default as useFiltersMapping } from './cookiesLanding/useFiltersMapping';

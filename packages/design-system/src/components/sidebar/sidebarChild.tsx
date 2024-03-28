@@ -109,6 +109,7 @@ const SidebarChild = ({
             : 'bg-white dark:bg-raisin-black'
         } cursor-pointer ${sidebarItem.isBlurred ? 'opacity-50' : ''}`}
         style={{ paddingLeft: recursiveStackIndex * 16 + 12 }}
+        data-testid="sidebar-child"
       >
         {Object.keys(sidebarItem.children)?.length !== 0 && (
           <button
@@ -118,6 +119,7 @@ const SidebarChild = ({
             className={`origin-center transition-transform scale-125 p-0.5 mr-1 ${
               !sidebarItem.dropdownOpen && '-rotate-90'
             }`}
+            data-testid="sidebar-child-dropdown"
           >
             <div className="pointer-events-none">
               {isKeyAncestor(itemKey) ||

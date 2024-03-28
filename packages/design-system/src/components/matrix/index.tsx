@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
+import classnames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -41,17 +42,32 @@ const Matrix = ({ dataComponents, expand }: MatrixProps) => {
             index === dataComponents.length - 1 ||
             index === dataComponents.length - 2;
           return (
-            <MatrixComponent
+            <div
               key={index}
-              isExpanded={expand}
-              {...dataComponent}
-              containerClasses={`p-3.5 ${
-                !isLastTwoItems ? 'border-b' : ''
-              } border-bright-gray dark:border-quartz`}
-              countClassName={
-                dataComponent.countClassName + ' text-xxl leading-none'
-              }
-            />
+              className={classnames(
+                'py-1 border-bright-gray dark:border-quartz',
+                {
+                  'border-b': !isLastTwoItems,
+                }
+              )}
+            >
+              <button
+                onClick={() => dataComponent.onClick?.(dataComponent.title)}
+                className={classnames('p-3.5 w-full box-border', {
+                  'hover:opacity-90 active:opacity-50 hover:scale-[0.98] hover:bg-[#f5f5f5] hover:dark:bg-[#1d1d1d] hover:shadow-[inset_0_0_10px_5px_rgba(238,238,238,0.5)] hover:dark:shadow-[inset_0_0_10px_5px_rgba(32,32,32,0.1)] rounded-md transition-all duration-75 ease-in-out cursor-pointer':
+                    dataComponent.onClick,
+                  'cursor-default': !dataComponent.onClick,
+                })}
+              >
+                <MatrixComponent
+                  isExpanded={expand}
+                  {...dataComponent}
+                  countClassName={
+                    dataComponent.countClassName + ' text-xxl leading-none'
+                  }
+                />
+              </button>
+            </div>
           );
         }
         return null;

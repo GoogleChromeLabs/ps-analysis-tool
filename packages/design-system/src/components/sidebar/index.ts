@@ -14,4 +14,5 @@
  * limitations under the License.
  */
 export * from './useSidebar';
+export * from './useSidebar/constants';
 export { default as Sidebar } from './sidebar';

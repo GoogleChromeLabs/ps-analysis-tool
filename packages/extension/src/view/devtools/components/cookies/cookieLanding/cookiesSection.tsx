@@ -24,6 +24,7 @@ import {
   prepareCookieDataMapping,
   prepareCookieStatsComponents,
   prepareCookiesCount,
+  useFiltersMapping,
 } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies
@@ -42,12 +43,24 @@ const CookiesSection = () => {
       frameHasCookies: state.frameHasCookies,
     })
   );
+
+  const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});
+
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
   const cookieClassificationDataMapping = prepareCookieDataMapping(
     cookieStats,
-    cookiesStatsComponents
+    cookiesStatsComponents,
+    selectedItemUpdater
   );
+
+  const cookieComponentData = useMemo(() => {
+    return cookiesStatsComponents.legend.map((component) => ({
+      ...component,
+      onClick: (title: string) =>
+        selectedItemUpdater(title, 'analytics.category'),
+    }));
+  }, [cookiesStatsComponents.legend, selectedItemUpdater]);
 
   const processedTabFrames = useMemo(
     () =>
@@ -78,7 +91,7 @@ const CookiesSection = () => {
           ))}
       <CookiesMatrix
         tabCookies={tabCookies}
-        componentData={cookiesStatsComponents.legend}
+        componentData={cookieComponentData}
         tabFrames={processedTabFrames}
         showHorizontalMatrix={false}
       />
