@@ -103,7 +103,7 @@ describe('FiltersSidebar', () => {
     expect(filter2).toBeInTheDocument();
   });
 
-  it('should show options when clicked on filter', async () => {
+  it('should show options if already selected', async () => {
     mockUseTable.mockReturnValue({
       filters: props.filters,
       isSelectAllFilterSelected: props.isSelectAllFilterSelected,
@@ -119,15 +119,18 @@ describe('FiltersSidebar', () => {
     expect(filter1).toBeInTheDocument();
     expect(filter2).toBeInTheDocument();
 
-    act(() => {
-      filter1.click();
-    });
-
     const value1 = await screen.findByText('value1');
     const value2 = await screen.findByText('value2');
 
     expect(value1).toBeInTheDocument();
     expect(value2).toBeInTheDocument();
+
+    act(() => {
+      filter1.click();
+    });
+
+    expect(value1).not.toBeInTheDocument();
+    expect(value2).not.toBeInTheDocument();
   });
 
   it('should render Filter 3 as disabled', () => {
@@ -157,11 +160,6 @@ describe('FiltersSidebar', () => {
     });
 
     render(<FiltersSidebar />);
-
-    const filter1 = screen.getByText('Filter 1');
-    act(() => {
-      filter1.click();
-    });
 
     await waitFor(() => {
       const list = screen.getAllByTestId('sub-list-item');
@@ -292,11 +290,6 @@ describe('FiltersSidebar', () => {
     });
 
     const { rerender } = render(<FiltersSidebar />);
-
-    const filter1 = screen.getByText('Filter 1');
-    act(() => {
-      filter1.click();
-    });
 
     const selectAll = await screen.findByText('All');
     act(() => {

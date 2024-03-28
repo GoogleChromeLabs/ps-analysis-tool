@@ -65,6 +65,7 @@ const useFiltering = (
     setIsDataLoading(true);
   }, [specificTablePersistentSettingsKey]);
 
+  // extract filters from data
   useEffect(() => {
     setFilters((prevFilters) =>
       Object.fromEntries(
@@ -116,6 +117,7 @@ const useFiltering = (
     );
   }, [data, selectAllFilterSelection]);
 
+  // extract filters from precalculated filter values
   useEffect(() => {
     const filtersByKey = Object.fromEntries(
       Object.entries(tableFilterData || {})
@@ -148,14 +150,19 @@ const useFiltering = (
             if (!filter.filterValues?.[_filterValue]) {
               filterValues[_filterValue] = {
                 ...filterValueData,
-                selected: isSelectAllFilterSelected || false,
+                selected:
+                  isSelectAllFilterSelected ||
+                  filterValueData.selected ||
+                  false,
               };
             } else {
               filterValues[_filterValue] = {
                 ...filterValueData,
                 selected:
                   isSelectAllFilterSelected ||
-                  filter.filterValues[_filterValue].selected,
+                  filter.filterValues[_filterValue].selected ||
+                  filterValueData.selected ||
+                  false,
               };
             }
           }
@@ -168,18 +175,22 @@ const useFiltering = (
     });
   }, [selectAllFilterSelection, tableFilterData]);
 
+  // extract filterKeys with selectAllFilter enabled
   useEffect(() => {
     const filtersWithSelectAllFilterEnabled = Object.entries(
       tableFilterData || {}
     )
       .filter(([, filter]) => filter.enableSelectAllOption)
-      .reduce<Record<string, { selected: boolean }>>((acc, [filterKey]) => {
-        acc[filterKey] = {
-          selected: false,
-        };
+      .reduce<Record<string, { selected: boolean }>>(
+        (acc, [filterKey, filterValueData]) => {
+          acc[filterKey] = {
+            selected: filterValueData.isSelectAllOptionSelected || false,
+          };
 
-        return acc;
-      }, {});
+          return acc;
+        },
+        {}
+      );
 
     setSelectAllFilterSelection((prev) => {
       const newSelectAllFilterSelection = { ...prev };
@@ -187,7 +198,12 @@ const useFiltering = (
       Object.entries(filtersWithSelectAllFilterEnabled).forEach(
         ([filterKey, filterValueData]) => {
           if (!newSelectAllFilterSelection[filterKey]) {
-            newSelectAllFilterSelection[filterKey] = filterValueData;
+            newSelectAllFilterSelection[filterKey] = {
+              selected:
+                newSelectAllFilterSelection[filterKey]?.selected ||
+                filterValueData.selected ||
+                false,
+            };
           }
         }
       );

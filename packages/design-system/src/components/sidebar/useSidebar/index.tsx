@@ -69,6 +69,7 @@ export interface SidebarStoreContext {
     activePanel: {
       panel: SidebarComponent;
       query?: string;
+      clearQuery?: () => void;
     };
     selectedItemKey: string | null; //Entire chained item key eg Privacy-Sandbox#cookies#frameUrl
     currentItemKey: string | null; //Last sidebar item key in selectedItemKey eg frameUrl
@@ -96,6 +97,7 @@ const initialState: SidebarStoreContext = {
         props: {},
       },
       query: '',
+      clearQuery: noop,
     },
     selectedItemKey: null,
     currentItemKey: null,
@@ -179,6 +181,9 @@ export const SidebarProvider = ({
           if (item.panel) {
             setActivePanel({
               query,
+              clearQuery: () => {
+                setTimeout(() => setQuery(''));
+              },
               panel: item.panel,
             });
           }

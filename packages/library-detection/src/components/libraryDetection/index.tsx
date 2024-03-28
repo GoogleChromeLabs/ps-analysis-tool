@@ -18,7 +18,7 @@
  */
 import React, { memo } from 'react';
 import {
-  CookiesLandingContainer,
+  CookiesLandingWrapper,
   COLOR_MAP,
   ProgressBar,
 } from '@ps-analysis-tool/design-system';
@@ -94,7 +94,7 @@ const LibraryDetection = memo(function LibraryDetection() {
     );
 
   return (
-    <CookiesLandingContainer
+    <CookiesLandingWrapper
       dataMapping={dataMapping}
       testId="library-detection"
       description=""
@@ -111,7 +111,7 @@ const LibraryDetection = memo(function LibraryDetection() {
       ) : (
         result
       )}
-    </CookiesLandingContainer>
+    </CookiesLandingWrapper>
   );
 });
 

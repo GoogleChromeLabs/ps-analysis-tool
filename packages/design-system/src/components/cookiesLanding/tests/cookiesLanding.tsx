@@ -23,22 +23,12 @@ import '@testing-library/jest-dom/extend-expect';
 /**
  * Internal dependencies.
  */
-import mockResponse from '../../../test-data/cookieMockData';
 import CookiesLanding from '..';
 
 describe('CookiesLanding', () => {
   it('renders CookiesLanding with data', () => {
-    const { getByTestId, getAllByTestId } = render(
-      <CookiesLanding
-        tabCookies={mockResponse.tabCookies}
-        tabFrames={mockResponse.tabFrames}
-        showBlockedCookiesSection
-        showHorizontalMatrix
-      />
-    );
+    const { getByTestId } = render(<CookiesLanding />);
 
     expect(getByTestId('cookies-landing')).toBeInTheDocument();
-    expect(getAllByTestId('cookies-landing-header')[0]).toBeInTheDocument();
-    expect(getByTestId('cookies-matrix-Categories')).toBeInTheDocument();
   });
 });

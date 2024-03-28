@@ -17,3 +17,4 @@
 export { default as Table } from './components';
 export * from './persistentSettingsStore';
 export * from './useTable';
+export * from './utils';

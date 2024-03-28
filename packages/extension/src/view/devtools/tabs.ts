@@ -41,6 +41,7 @@ import {
   PrivacySandboxIconWhite,
   type SidebarItems,
   InfoIcon,
+  SIDEBAR_ITEMS_KEYS,
 } from '@ps-analysis-tool/design-system';
 
 /**
@@ -68,7 +69,7 @@ import {
 } from './components';
 
 const TABS: SidebarItems = {
-  privacySandbox: {
+  [SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]: {
     title: 'Privacy Sandbox',
     panel: {
       Element: PrivacySandbox,
@@ -81,7 +82,7 @@ const TABS: SidebarItems = {
     },
     dropdownOpen: true,
     children: {
-      cookies: {
+      [SIDEBAR_ITEMS_KEYS.COOKIES]: {
         title: 'Cookies',
         icon: {
           Element: CookieIcon,
@@ -92,7 +93,7 @@ const TABS: SidebarItems = {
         children: {},
         dropdownOpen: true,
       },
-      siteBoundaries: {
+      [SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES]: {
         title: 'Site Boundaries',
         panel: {
           Element: SiteBoundaries,
@@ -104,7 +105,7 @@ const TABS: SidebarItems = {
           Element: SiteBoundariesIconWhite,
         },
         children: {
-          chips: {
+          [SIDEBAR_ITEMS_KEYS.CHIPS]: {
             title: 'CHIPS',
             panel: {
               Element: Chips,
@@ -117,7 +118,7 @@ const TABS: SidebarItems = {
             },
             children: {},
           },
-          relatedWebsiteSets: {
+          [SIDEBAR_ITEMS_KEYS.RELATED_WEBSITE_SETS]: {
             title: 'Related Website Sets',
             panel: {
               Element: RelatedWebsiteSets,
@@ -132,7 +133,7 @@ const TABS: SidebarItems = {
           },
         },
       },
-      privateAdvertising: {
+      [SIDEBAR_ITEMS_KEYS.PRIVATE_ADVERTISING]: {
         title: 'Private Advertising',
         panel: {
           Element: PrivateAdvertising,
@@ -144,7 +145,7 @@ const TABS: SidebarItems = {
           Element: PrivateAdvertisingIconWhite,
         },
         children: {
-          topics: {
+          [SIDEBAR_ITEMS_KEYS.TOPICS]: {
             title: 'Topics',
             panel: {
               Element: Topics,
@@ -157,7 +158,7 @@ const TABS: SidebarItems = {
             },
             children: {},
           },
-          attribution: {
+          [SIDEBAR_ITEMS_KEYS.ATTRIBUTION]: {
             title: 'Attribution',
             panel: {
               Element: Attribution,
@@ -172,7 +173,7 @@ const TABS: SidebarItems = {
           },
         },
       },
-      antiCovertTracking: {
+      [SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING]: {
         title: 'Tracking Protection',
         panel: {
           Element: AntiCovertTracking,
@@ -184,7 +185,7 @@ const TABS: SidebarItems = {
           Element: AntiCovertTrackingIconWhite,
         },
         children: {
-          bounceTracking: {
+          [SIDEBAR_ITEMS_KEYS.BOUNCE_TRACKING]: {
             title: 'Bounce Tracking',
             panel: {
               Element: BounceTracking,
@@ -197,7 +198,7 @@ const TABS: SidebarItems = {
             },
             children: {},
           },
-          fingerprinting: {
+          [SIDEBAR_ITEMS_KEYS.FINGERPRINTING]: {
             title: 'Fingerprinting',
             panel: {
               Element: Fingerprinting,
@@ -214,7 +215,7 @@ const TABS: SidebarItems = {
       },
     },
   },
-  facilitatedTesting: {
+  [SIDEBAR_ITEMS_KEYS.FACILITATED_TESTING]: {
     title: 'Facilitated Testing',
     panel: {
       Element: FacilitatedTesting,
@@ -234,7 +235,7 @@ const TABS: SidebarItems = {
     dropdownOpen: false,
     children: {},
   },
-  settings: {
+  [SIDEBAR_ITEMS_KEYS.SETTINGS]: {
     title: 'Settings',
     panel: {
       Element: Settings,

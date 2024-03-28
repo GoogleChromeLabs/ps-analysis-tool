@@ -19,6 +19,7 @@
 import React, { useRef, useEffect, useCallback, useState } from 'react';
 import {
   ExtensionReloadNotification,
+  SIDEBAR_ITEMS_KEYS,
   SidebarProvider,
 } from '@ps-analysis-tool/design-system';
 
@@ -64,8 +65,9 @@ const App: React.FC = () => {
     };
   }, [listenToMouseChange]);
 
-  const [defaultSelectedItemKey, setDefaultSelectedItemKey] =
-    useState('privacySandbox');
+  const [defaultSelectedItemKey, setDefaultSelectedItemKey] = useState(
+    SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX
+  );
 
   useEffect(() => {
     (async () => {

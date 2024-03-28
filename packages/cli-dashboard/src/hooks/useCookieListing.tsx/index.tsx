@@ -18,21 +18,20 @@
  * External dependencies
  */
 import React, { useMemo } from 'react';
-import type {
-  InfoType,
-  TableColumn,
-  TableFilter,
+import {
+  useSidebar,
+  type InfoType,
+  type TableColumn,
+  type TableFilter,
+  calculateBlockedReasonsFilterValues,
+  calculateDynamicFilterValues,
+  evaluateSelectAllOption,
+  evaluateStaticFilterValues,
 } from '@ps-analysis-tool/design-system';
 import {
   calculateEffectiveExpiryDate,
   type CookieTableData,
 } from '@ps-analysis-tool/common';
-
-/**
- * Internal dependencies
- */
-import calculateDynamicFilterValues from './utils/calculateDynamicFilterValues';
-import calculateBlockedReasonsFilterValues from './utils/calculateBlockedReasonsFilterValues';
 
 const useCookieListing = (
   tabCookies: CookieTableData[],
@@ -40,6 +39,18 @@ const useCookieListing = (
   persistenceKey = 'cookiesListing',
   selectedSite?: string | null
 ) => {
+  const { activePanelQuery, clearActivePanelQuery } = useSidebar(
+    ({ state }) => ({
+      activePanelQuery: state.activePanel.query,
+      clearActivePanelQuery: state.activePanel.clearQuery,
+    })
+  );
+
+  const parsedQuery = useMemo(
+    () => JSON.parse(activePanelQuery || '{}'),
+    [activePanelQuery]
+  );
+
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
@@ -140,7 +151,9 @@ const useCookieListing = (
         hasPrecalculatedFilterValues: true,
         filterValues: calculateDynamicFilterValues(
           'analytics.category',
-          tabCookies
+          tabCookies,
+          parsedQuery?.filter?.['analytics.category'],
+          clearActivePanelQuery
         ),
         sortValues: true,
         useGenericPersistenceKey: true,
@@ -148,14 +161,20 @@ const useCookieListing = (
       isFirstParty: {
         title: 'Scope',
         hasStaticFilterValues: true,
-        filterValues: {
-          'First Party': {
-            selected: false,
+        hasPrecalculatedFilterValues: true,
+        filterValues: evaluateStaticFilterValues(
+          {
+            'First Party': {
+              selected: false,
+            },
+            'Third Party': {
+              selected: false,
+            },
           },
-          'Third Party': {
-            selected: false,
-          },
-        },
+          'isFirstParty',
+          parsedQuery,
+          clearActivePanelQuery
+        ),
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           const val = Boolean(value);
@@ -277,7 +296,9 @@ const useCookieListing = (
         hasPrecalculatedFilterValues: true,
         filterValues: calculateDynamicFilterValues(
           'analytics.platform',
-          tabCookies
+          tabCookies,
+          parsedQuery?.filter?.['analytics.platform'],
+          clearActivePanelQuery
         ),
         sortValues: true,
         useGenericPersistenceKey: true,
@@ -287,7 +308,16 @@ const useCookieListing = (
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
         enableSelectAllOption: true,
-        filterValues: calculateBlockedReasonsFilterValues(tabCookies),
+        isSelectAllOptionSelected: evaluateSelectAllOption(
+          'blockedReasons',
+          parsedQuery,
+          clearActivePanelQuery
+        ),
+        filterValues: calculateBlockedReasonsFilterValues(
+          tabCookies,
+          parsedQuery?.filter?.blockedReasons,
+          clearActivePanelQuery
+        ),
         sortValues: true,
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
@@ -295,7 +325,7 @@ const useCookieListing = (
         },
       },
     }),
-    [tabCookies]
+    [clearActivePanelQuery, parsedQuery, tabCookies]
   );
 
   const searchKeys = useMemo<string[]>(
@@ -316,6 +346,7 @@ const useCookieListing = (
     filters,
     searchKeys,
     tablePersistentSettingsKey,
+    isSidebarOpen: parsedQuery?.filter ? true : false,
   };
 };
 

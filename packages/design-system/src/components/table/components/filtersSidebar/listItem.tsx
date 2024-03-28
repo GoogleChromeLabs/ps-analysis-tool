@@ -40,6 +40,8 @@ const ListItem = ({
   toggleFilterExpansion,
   isSelectAllFilterSelected,
 }: ListItemProps) => {
+  const [hasScannedFiltersOnce, setHasScannedFiltersOnce] =
+    useState<boolean>(true);
   const [isExpanded, setExpanded] = useState<boolean>(false);
   const [showSubList, setShowSubList] = useState<boolean>(false);
 
@@ -72,6 +74,21 @@ const ListItem = ({
       });
     }
   }, [expandAll, filterKey, isDisabled, showSubList, toggleFilterExpansion]);
+
+  useEffect(() => {
+    if (!hasScannedFiltersOnce) {
+      return;
+    }
+
+    const areFiltersSelected = Object.values(filter.filterValues || {}).some(
+      (filterValue) => filterValue.selected
+    );
+
+    if (areFiltersSelected) {
+      setShowSubList(true);
+      setHasScannedFiltersOnce(false);
+    }
+  }, [filter.filterValues, hasScannedFiltersOnce]);
 
   return (
     <li className="py-[3px] text-xs">

@@ -19,15 +19,17 @@
 import {
   CookieIcon,
   CookieIconWhite,
+  SIDEBAR_ITEMS_KEYS,
   type SidebarItems,
 } from '@ps-analysis-tool/design-system';
 
 const sidebarData: SidebarItems = {
-  'sitemap-landing-page': {
+  [SIDEBAR_ITEMS_KEYS.COOKIES]: {
     title: 'Sitemap Report',
     children: {},
+    dropdownOpen: true,
   },
-  'sitemap-affected-cookies': {
+  [SIDEBAR_ITEMS_KEYS.AFFECTED_COOKIES]: {
     title: 'Affected Cookies',
     children: {},
     icon: {

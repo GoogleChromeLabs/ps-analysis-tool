@@ -32,28 +32,37 @@ describe('Matrix', () => {
     expect(container.firstChild).toBeNull();
   });
 
-  it('renders MatrixComponent for each dataComponent', () => {
+  it('renders MatrixComponent for each dataComponent', async () => {
     const mockDataComponents: MatrixComponentProps[] = [
       {
         color: 'red',
         title: 'Test title',
         count: 10,
-        countClassName: '',
+        countClassName: 'some-class',
         containerClasses: '',
+        description: 'Test description',
       },
       {
         color: 'blue',
-        title: 'Test title',
+        title: 'Test title1',
         count: 10,
-        countClassName: '',
+        countClassName: 'some-class-2',
         containerClasses: '',
       },
     ];
 
-    render(<Matrix dataComponents={mockDataComponents} />);
+    const { rerender } = render(
+      <Matrix dataComponents={mockDataComponents} expand={false} />
+    );
 
     const matrixContainer = screen.getByTestId('matrix');
 
     expect(matrixContainer).toBeInTheDocument();
+
+    expect(await screen.findByText('Test title')).toBeInTheDocument();
+
+    rerender(<Matrix dataComponents={mockDataComponents} expand={true} />);
+
+    expect(await screen.findByText('Test description')).toBeInTheDocument();
   });
 });

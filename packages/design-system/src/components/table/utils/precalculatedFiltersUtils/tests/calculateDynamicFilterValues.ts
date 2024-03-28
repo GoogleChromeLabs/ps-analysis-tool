@@ -43,10 +43,44 @@ describe('calculateDynamicFilterValues', () => {
       },
     };
 
+    const mockClearQuery = jest.fn();
+
     // Act
-    const result = calculateDynamicFilterValues('keyToExtract', tabCookies);
+    const result = calculateDynamicFilterValues(
+      'keyToExtract',
+      tabCookies,
+      undefined,
+      mockClearQuery
+    );
 
     // Assert
     expect(result).toEqual(expected);
+    expect(mockClearQuery).not.toHaveBeenCalled();
+
+    const options = ['value1', 'value2'];
+
+    const expectedWithSelected = {
+      value1: {
+        selected: true,
+      },
+      value2: {
+        selected: true,
+      },
+      value3: {
+        selected: false,
+      },
+    };
+
+    // Act
+    const resultWithSelected = calculateDynamicFilterValues(
+      'keyToExtract',
+      tabCookies,
+      options,
+      mockClearQuery
+    );
+
+    // Assert
+    expect(resultWithSelected).toEqual(expectedWithSelected);
+    expect(mockClearQuery).toHaveBeenCalledTimes(1);
   });
 });

@@ -42,6 +42,9 @@ export * from './sidebar';
 export { default as InspectButton } from './inspectButton';
 export { default as ToastMessage } from './toastMessage';
 export {
-  default as CookiesLandingContainer,
-  type CookiesLandingContainerProps,
-} from './cookiesLanding/cookieLandingHeaderContainer';
+  default as CookiesLandingWrapper,
+  type CookiesLandingWrapperProps,
+} from './cookiesLanding/cookiesLandingWrapper';
+export { type DataMapping } from './cookiesLanding/landingHeader';
+export { default as MatrixContainer } from './matrixContainer';
+export { default as useFiltersMapping } from './cookiesLanding/useFiltersMapping';

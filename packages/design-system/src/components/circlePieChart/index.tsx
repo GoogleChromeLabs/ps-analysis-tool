@@ -32,6 +32,8 @@ interface CirclePieChartProps {
   title?: string;
   fallbackText?: string;
   infoIconClassName?: string;
+  centerTitleExtraClasses?: string;
+  pieChartExtraClasses?: string;
 }
 
 export const MAX_COUNT = 999;
@@ -41,16 +43,18 @@ const CirclePieChart = ({
   data,
   title,
   infoIconClassName = '',
+  centerTitleExtraClasses = '',
+  pieChartExtraClasses = '',
 }: CirclePieChartProps) => {
   const centerTitleClasses = centerCount <= MAX_COUNT ? 'text-2xl' : 'text-l';
 
   return (
-    <>
+    <div className="w-full h-full flex flex-col items-center justify-start">
       <div className="inline-block align-bottom w-16">
         {centerCount <= 0 ? (
           <EmptyCirclePieChart />
         ) : (
-          <div className="w-full h-full relative">
+          <div className={`w-full h-full relative ${pieChartExtraClasses}`}>
             <VictoryPie
               padding={0}
               innerRadius={175}
@@ -62,7 +66,8 @@ const CirclePieChart = ({
             <p
               className={classNames(
                 'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-regular dark:text-bright-gray',
-                centerTitleClasses
+                centerTitleClasses,
+                centerTitleExtraClasses
               )}
             >
               {centerCount <= MAX_COUNT ? centerCount : MAX_COUNT + '+'}
@@ -85,7 +90,7 @@ const CirclePieChart = ({
           )}
         </div>
       )}
-    </>
+    </div>
   );
 };
 
