@@ -333,7 +333,7 @@ describe('CookieTab', () => {
     ).toBeInTheDocument();
   });
 
-  it.skip('should get the cookie object when row is clicked or Arrow up/down pressed', async () => {
+  it('should get the cookie object when row is clicked or Arrow up/down pressed', async () => {
     render(<CookieTab setFilteredCookies={noop} />);
 
     const row = await screen.findAllByTestId('body-row');
@@ -381,5 +381,8 @@ describe('CookieTab', () => {
     expect(
       await within(card).findByText('known3p_Cookie-with value')
     ).toBeInTheDocument();
+  });
+  afterAll(() => {
+    jest.clearAllMocks();
   });
 });

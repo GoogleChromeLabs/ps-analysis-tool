@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
@@ -29,7 +32,7 @@ jest.mock('../../../../stateProviders/settings', () => ({
 
 const mockUseSettingsStore = useSettings as jest.Mock;
 
-describe('informationContainer', () => {
+describe('InformationContainer', () => {
   it('should render the component', () => {
     mockUseSettingsStore.mockReturnValue({
       currentTabs: 0,
@@ -45,25 +48,47 @@ describe('informationContainer', () => {
     expect(screen.getByTestId('debugging-information')).toBeInTheDocument();
   });
 
+  it('Should show cookie table if frame is selected', () => {
+    mockUseSettingsStore.mockReturnValue({
+      currentTabs: 2,
+      currentExtensions: [
+        {
+          extensionName: 'Privacy Sandbox Analysis Tool',
+          extensionId: '1',
+        },
+      ],
+      browserInformation: '120.0.0.20',
+      OSInformation: 'MacOS (arm64)',
+    });
+
+    act(() => {
+      render(<InformationContainer />);
+    });
+
+    expect(
+      screen.getByText('Privacy Sandbox Analysis Tool: 1')
+    ).toBeInTheDocument();
+    expect(screen.getByText('MacOS (arm64)')).toBeInTheDocument();
+    expect(screen.getByText('120.0.0.20')).toBeInTheDocument();
+  });
+
   it('should copy the text to clipboard', () => {
     mockUseSettingsStore.mockReturnValue({
       currentTabs: 2,
       currentExtensions: [
         {
-          extensionName: 'test',
-          extensionId: 'test',
+          extensionName: 'Privacy Sandbox Analysis Tool',
+          extensionId: '1',
         },
       ],
-      browserInformation: 'test browser',
+      browserInformation: '120.0.0.20',
+      OSInformation: 'MacOS (arm64)',
       PSATVersion: '0.0.0',
-      OSInformation: '0.1.0',
     });
 
-    render(<InformationContainer />);
-
-    expect(mockUseSettingsStore).toHaveBeenCalled();
-    expect(screen.getByTestId('debugging-information')).toBeInTheDocument();
-    expect(screen.getByTestId('copy-button')).toBeInTheDocument();
+    act(() => {
+      render(<InformationContainer />);
+    });
 
     global.document.execCommand = jest.fn(() => 'copy');
     const events = {};
@@ -91,7 +116,7 @@ describe('informationContainer', () => {
 
     expect(e.clipboardData.setData).toHaveBeenCalledWith(
       'text/plain',
-      '**Open Tabs:** 2\n**Active Extensions:**\ntest: test\n**Chrome Version:** test browser\n**PSAT Version:** 0.0.0\n**OS - System Architecture:** 0.1.0'
+      '**Open Tabs:** 2\n**Active Extensions:**\nPrivacy Sandbox Analysis Tool: 1\n**Chrome Version:** 120.0.0.20\n**PSAT Version:** 0.0.0\n**OS - System Architecture:** MacOS (arm64)'
     );
     expect(e.preventDefault).toHaveBeenCalled();
   });

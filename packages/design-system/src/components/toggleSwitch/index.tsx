@@ -38,6 +38,7 @@ const ToggleSwitch = ({
       <>
         <label className="autoSaverSwitch relative inline-flex cursor-pointer select-none items-center">
           <input
+            data-testid="toggle-button-input"
             type="checkbox"
             name="autoSaver"
             className="sr-only"
@@ -45,6 +46,7 @@ const ToggleSwitch = ({
             onChange={() => setEnabled(!enabled)}
           />
           <span
+            data-testid="toggle-button"
             className={`slider mr-3 flex h-3 w-6 items-center rounded-full p-1 duration-200 ${
               enabled ? 'bg-toggle-on' : 'bg-quartz'
             }`}

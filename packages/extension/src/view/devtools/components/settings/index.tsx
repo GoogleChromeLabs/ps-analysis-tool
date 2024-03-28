@@ -42,6 +42,7 @@ const Settings = () => {
           }`}
         >
           <button
+            data-testid="settings-collapse-button"
             className="flex gap-2 text-2xl font-bold items-baseline dark:text-bright-gray cursor-pointer"
             onClick={() => setOpen((prevOpen) => !prevOpen)}
           >
@@ -53,7 +54,10 @@ const Settings = () => {
             </div>
           </button>
         </div>
-        <div className={classNames({ hidden: !open })}>
+        <div
+          data-testid="settings-main-content"
+          className={classNames({ hidden: !open })}
+        >
           <div className="lg:max-w-[729px] mx-auto flex justify-center flex-col mt-2 pb-10 px-4 gap-y-4">
             <SettingsContainer />
             <InformationContainer />
