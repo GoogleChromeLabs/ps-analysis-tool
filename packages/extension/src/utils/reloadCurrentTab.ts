@@ -25,7 +25,7 @@ const reloadCurrentTab = async (tabId: number | undefined = undefined) => {
   const _currentTabId = Number(currentTabId);
 
   if (_currentTabId) {
-    chrome.tabs.reload(_currentTabId);
+    chrome.tabs.reload(_currentTabId, { bypassCache: true });
   }
 };
 

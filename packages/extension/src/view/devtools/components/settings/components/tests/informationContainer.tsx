@@ -16,15 +16,18 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { useSettingsStore } from '../../../../stateProviders/syncSettingsStore';
-import InformationContainer from '../informationContainer';
 import { act } from 'react-dom/test-utils';
+/**
+ * Internal dependencies
+ */
+import { useSettings } from '../../../../stateProviders/settings';
+import InformationContainer from '../informationContainer';
 
-jest.mock('../../../../stateProviders/syncSettingsStore', () => ({
-  useSettingsStore: jest.fn(),
+jest.mock('../../../../stateProviders/settings', () => ({
+  useSettings: jest.fn(),
 }));
 
-const mockUseSettingsStore = useSettingsStore as jest.Mock;
+const mockUseSettingsStore = useSettings as jest.Mock;
 
 describe('informationContainer', () => {
   it('should render the component', () => {

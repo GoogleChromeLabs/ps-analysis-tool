@@ -38,7 +38,12 @@ import {
 } from './popovers';
 import type { ResponseType } from './types';
 import { TOOLTIP_CLASS } from './constants';
-import { WEBPAGE_PORT_NAME } from '../constants';
+import {
+  DEVTOOLS_SET_JAVASCSCRIPT_COOKIE,
+  GET_JS_COOKIES,
+  TABID_STORAGE,
+  WEBPAGE_PORT_NAME,
+} from '../constants';
 import {
   isElementVisibleInViewport,
   getFrameCount,
@@ -139,16 +144,18 @@ class WebpageContentScript {
         await this.getAndProcessJSCookies(message.tabId);
       }
 
-      if (message?.payload?.type === 'SERVICEWORKER::WEBPAGE::TABID_STORAGE') {
+      if (message?.payload?.type === TABID_STORAGE) {
         this.tabId = message.payload.tabId;
       }
 
-      if (message?.payload?.type === 'DEVTOOL::WEBPAGE::GET_JS_COOKIES') {
+      if (message?.payload?.type === GET_JS_COOKIES) {
         await this.getAndProcessJSCookies(message.payload.tabId);
       }
     });
 
-    this.cookieDB = await fetchDictionary();
+    if (!this.cookieDB) {
+      this.cookieDB = await fetchDictionary();
+    }
 
     chrome.runtime.onConnect.addListener((port) => {
       if (port.name.startsWith(WEBPAGE_PORT_NAME)) {
@@ -261,7 +268,7 @@ class WebpageContentScript {
       }
 
       chrome.runtime.sendMessage({
-        type: 'DevTools::ServiceWorker::SET_JAVASCRIPT_COOKIE',
+        type: DEVTOOLS_SET_JAVASCSCRIPT_COOKIE,
         payload: {
           tabId: this.tabId,
           cookieData: jsCookies,
