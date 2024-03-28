@@ -48,6 +48,9 @@ class SynchnorousCookieStore {
       devToolsOpenState: boolean;
       popupOpenState: boolean;
       newUpdates: number;
+      frameIdSet: {
+        [frameUrl: string]: string[];
+      };
     };
   } = {};
 
@@ -183,6 +186,35 @@ class SynchnorousCookieStore {
   }
 
   /**
+   * Gets the frameIDSet for the given tab id if tab exists.
+   * @param {number} tabId Tab id.
+   * @returns {string | null} The url of the tab if exists else null.
+   */
+  getFrameIDSet(tabId: number): { [frameUrl: string]: string[] } | null {
+    if (!this.tabs[tabId]) {
+      return null;
+    }
+
+    return this.tabs[tabId].frameIdSet;
+  }
+
+  /**
+   * Update FrameId set for a given url for a given tab.
+   * @param {number} tabId The url whose url needs to be update.
+   * @param {string} frameUrl The URL where frameId needs to be added.
+   * @param {string} frameIdToAdd The new frameId to be added.
+   */
+  updateFrameIdSet(tabId: number, frameUrl: string, frameIdToAdd: string) {
+    if (!this.tabs[tabId]) {
+      return;
+    } else {
+      this.tabs[tabId].frameIdSet[frameUrl] = [
+        ...new Set([...this.tabs[tabId].frameIdSet[frameUrl], frameIdToAdd]),
+      ];
+    }
+  }
+
+  /**
    * Update tab url for given tab
    * @param {number} tabId The url whose url needs to be update.
    * @param {string} url The updated URL.
@@ -304,6 +336,7 @@ class SynchnorousCookieStore {
       devToolsOpenState: false,
       popupOpenState: false,
       newUpdates: 0,
+      frameIdSet: {},
     };
   }
 

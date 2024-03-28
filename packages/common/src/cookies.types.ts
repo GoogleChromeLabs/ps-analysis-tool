@@ -150,8 +150,7 @@ export interface TabCookies {
 
 export interface TabFrames {
   [key: string]: {
-    frameIds: number[];
-    isOnRWS?: boolean;
+    frameIds: string[];
     frameType?: 'outermost_frame' | 'fenced_frame' | 'sub_frame';
   };
 }

@@ -36,7 +36,6 @@ import {
  * Internal dependencies.
  */
 import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
-import isOnRWS from '../../../../contentScript/utils/isOnRWS';
 import { useSettingsStore } from '../syncSettingsStore';
 
 export interface CookieStoreContext {
@@ -145,38 +144,63 @@ export const Provider = ({ children }: PropsWithChildren) => {
       const currentTabFrames = await chrome.webNavigation.getAllFrames({
         tabId: _tabId,
       });
-      const modifiedTabFrames: TabFrames = {};
 
-      currentTabFrames?.forEach(({ url, frameId, frameType }) => {
-        if (url && url.includes('http')) {
-          const parsedUrl = regexForFrameUrl.exec(url);
-          if (parsedUrl && parsedUrl[0]) {
-            if (modifiedTabFrames[parsedUrl[0]]) {
-              modifiedTabFrames[parsedUrl[0]].frameIds.push(frameId);
-            } else {
-              modifiedTabFrames[parsedUrl[0]] = {
-                frameIds: [frameId],
-                frameType,
-              };
+      const currentTargets = await chrome.debugger.getTargets();
+
+      setTabFrames((prevState) => {
+        const modifiedTabFrames: TabFrames = {};
+
+        currentTabFrames?.forEach(({ url, frameType }) => {
+          if (url && url.includes('http')) {
+            const parsedUrl = regexForFrameUrl.exec(url);
+            if (!parsedUrl || !parsedUrl[0]) {
+              return;
+            }
+
+            const frameIdsFromCDP = currentTargets.map(
+              ({ url: targetUrl, type, id }) => {
+                if (
+                  targetUrl.includes(parsedUrl[0]) &&
+                  (type === 'page' || type === 'other')
+                ) {
+                  return id;
+                }
+                return '';
+              }
+            );
+
+            if (frameIdsFromCDP.length) {
+              if (modifiedTabFrames[parsedUrl[0]]) {
+                modifiedTabFrames[parsedUrl[0]].frameIds = Array.from(
+                  new Set([
+                    ...(modifiedTabFrames[parsedUrl[0]].frameIds ?? []),
+                    ...(prevState?.[parsedUrl[0]]?.frameIds ?? []),
+                    ...(frameIdsFromCDP ?? []),
+                  ])
+                );
+              } else {
+                modifiedTabFrames[parsedUrl[0]] = {
+                  frameIds: Array.from(
+                    new Set([
+                      ...(frameIdsFromCDP ?? []),
+                      ...(prevState?.[parsedUrl[0]]?.frameIds ?? []),
+                    ])
+                  ),
+                  frameType,
+                };
+              }
             }
           }
-        }
+        });
+
+        return modifiedTabFrames;
       });
-      await Promise.all(
-        Object.keys(modifiedTabFrames).map(async (tabFrame) => {
-          modifiedTabFrames[tabFrame].isOnRWS = await isOnRWS(tabFrame);
-          return tabFrame;
-        })
-      );
-      setTabFrames(modifiedTabFrames);
     },
     []
   );
 
   /**
    * Stores object with frame URLs as keys and boolean values indicating if the frame contains cookies.
-   *
-   * TODO: Can be moved to a utility function.
    */
   const frameHasCookies = useMemo(() => {
     if (!tabCookies) {
