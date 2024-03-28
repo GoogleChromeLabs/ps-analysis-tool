@@ -25,9 +25,6 @@
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
   "dependencies": {
-    "intl-messageformat": "^10.5.11",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "use-context-selector": "^1.4.4"
+    "intl-messageformat": "^10.5.11"
   }
 }
