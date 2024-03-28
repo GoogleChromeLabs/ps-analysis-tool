@@ -42,6 +42,7 @@ export const TableProvider = ({
   conditionalTableRowClassesHandler,
   exportTableData,
   hasVerticalBar,
+  isRowSelected,
   children,
 }: PropsWithChildren<TableProviderProps>) => {
   const commonKey = useMemo(() => {
@@ -121,6 +122,15 @@ export const TableProvider = ({
     [tableColumns]
   );
 
+  useEffect(() => {
+    const filteredRows = rows.filter(
+      (row) => isRowSelected?.(row.originalData) ?? true
+    );
+
+    if (filteredRows.length === 0) {
+      onRowClick(null);
+    }
+  }, [isRowSelected, onRowClick, rows]);
   return (
     <TableContext.Provider
       value={{

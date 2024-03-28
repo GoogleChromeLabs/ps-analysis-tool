@@ -100,19 +100,17 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           </p>
         </div>
       )}
-      {(outboundBlock || inboundBlock) &&
-        hasValidBlockedReason &&
-        isUsingCDP && (
-          <>
-            <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
-              Blocked Reason
-            </p>
-            <p
-              className="text-outer-space-crayola dark:text-bright-gray"
-              dangerouslySetInnerHTML={{ __html: blockedReasons ?? '' }}
-            />
-          </>
-        )}
+      {hasValidBlockedReason && isUsingCDP && (
+        <>
+          <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
+            Blocked Reason
+          </p>
+          <p
+            className="text-outer-space-crayola dark:text-bright-gray"
+            dangerouslySetInnerHTML={{ __html: blockedReasons ?? '' }}
+          />
+        </>
+      )}
 
       {selectedCookie?.blockingStatus?.inboundBlock ===
         BLOCK_STATUS.BLOCKED_IN_SOME_EVENTS &&
