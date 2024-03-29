@@ -45,6 +45,6 @@ export {
   default as CookiesLandingWrapper,
   type CookiesLandingWrapperProps,
 } from './cookiesLanding/cookiesLandingWrapper';
-export { type DataMapping } from './cookiesLanding/landingHeader';
 export { default as MatrixContainer } from './matrixContainer';
 export { default as useFiltersMapping } from './cookiesLanding/useFiltersMapping';
+export type { DataMapping } from './cookiesLanding/landingHeader';
