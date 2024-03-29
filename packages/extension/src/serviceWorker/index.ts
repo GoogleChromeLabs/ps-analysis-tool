@@ -17,26 +17,24 @@
 /**
  * External dependencies.
  */
+import { Protocol } from 'devtools-protocol';
 import {
   type CookieDatabase,
   type CookieData,
   parseResponseReceivedExtraInfo,
   parseRequestWillBeSentExtraInfo,
 } from '@ps-analysis-tool/common';
-import { Protocol } from 'devtools-protocol';
 
 /**
  * Internal dependencies.
  */
-import parseResponseCookieHeader from './parseResponseCookieHeader';
-import parseRequestCookieHeader from './parseRequestCookieHeader';
 import { fetchDictionary } from '../utils/fetchCookieDictionary';
 import { ALLOWED_NUMBER_OF_TABS } from '../constants';
 import SynchnorousCookieStore from '../store/synchnorousCookieStore';
-import canProcessCookies from '../utils/canProcessCookies';
 import { getTab } from '../utils/getTab';
 import getQueryParams from '../utils/getQueryParams';
 import reloadCurrentTab from '../utils/reloadCurrentTab';
+import parseHeaders from '../utils/parseHeaders';
 
 let cookieDB: CookieDatabase | null = null;
 let syncCookieStore: SynchnorousCookieStore | undefined;
@@ -63,9 +61,8 @@ const ALLOWED_EVENTS = [
  * @see https://developer.chrome.com/docs/extensions/reference/api/webRequest
  */
 chrome.webRequest.onResponseStarted.addListener(
-  (details: chrome.webRequest.WebResponseCacheDetails) => {
+  ({ tabId, url, responseHeaders, frameId, requestId }) => {
     (async () => {
-      const { tabId, url, responseHeaders, frameId } = details;
       const tab = await getTab(tabId);
       let tabUrl = syncCookieStore?.getTabUrl(tabId);
 
@@ -73,53 +70,22 @@ chrome.webRequest.onResponseStarted.addListener(
         tabUrl = tab.pendingUrl;
       }
 
-      if (
-        !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, responseHeaders)
-      ) {
-        return;
-      }
-
       if (!cookieDB) {
         cookieDB = await fetchDictionary();
       }
 
-      let cdpCookies: { [key: string]: Protocol.Network.Cookie[] };
-
-      // Since we are using CDP we might as well use it to get the proper cookies in the request this will further reduce the load of domain calculation
-      try {
-        cdpCookies = await chrome.debugger.sendCommand(
-          { tabId: tabId },
-          'Network.getCookies',
-          { urls: [url] }
-        );
-      } catch (error) {
-        // Fail silently
-      }
-
-      const cookies = responseHeaders?.reduce<CookieData[]>(
-        (accumulator, header) => {
-          if (
-            header.name.toLowerCase() === 'set-cookie' &&
-            header.value &&
-            tabUrl &&
-            cookieDB
-          ) {
-            const cookie = parseResponseCookieHeader(
-              url,
-              header.value,
-              cookieDB,
-              tabUrl,
-              frameId,
-              cdpCookies?.cookies ?? [],
-              details.requestId
-            );
-
-            return [...accumulator, cookie];
-          }
-
-          return accumulator;
-        },
-        []
+      const cookies = await parseHeaders(
+        globalIsUsingCDP,
+        'response',
+        tabToRead,
+        tabMode,
+        tabId,
+        url,
+        cookieDB,
+        tabUrl,
+        frameId,
+        requestId,
+        responseHeaders
       );
 
       if (!cookies || (cookies && cookies?.length === 0)) {
@@ -148,59 +114,29 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
         tabUrl = tab.pendingUrl;
       }
 
-      if (
-        !canProcessCookies(tabMode, tabUrl, tabToRead, tabId, requestHeaders)
-      ) {
-        return;
-      }
-
       if (!cookieDB) {
         cookieDB = await fetchDictionary();
       }
 
-      let cdpCookies: { [key: string]: Protocol.Network.Cookie[] };
-
-      try {
-        cdpCookies = await chrome.debugger.sendCommand(
-          { tabId: tabId },
-          'Network.getCookies',
-          { urls: [url] }
-        );
-      } catch (error) {
-        // Fail silently
-      }
-
-      const cookies = requestHeaders?.reduce<CookieData[]>(
-        (accumulator, header) => {
-          if (
-            header.name.toLowerCase() === 'cookie' &&
-            header.value &&
-            url &&
-            tabUrl &&
-            cookieDB
-          ) {
-            const cookieList = parseRequestCookieHeader(
-              url,
-              header.value,
-              cookieDB,
-              tabUrl,
-              frameId,
-              cdpCookies?.cookies ?? [],
-              requestId
-            );
-
-            return [...accumulator, ...cookieList];
-          }
-
-          return accumulator;
-        },
-        []
+      const cookies = await parseHeaders(
+        globalIsUsingCDP,
+        'request',
+        tabToRead,
+        tabMode,
+        tabId,
+        url,
+        cookieDB,
+        tabUrl,
+        frameId,
+        requestId,
+        requestHeaders
       );
 
       if (!cookies || (cookies && cookies?.length === 0)) {
         return;
       }
 
+      // Adds the cookies from the request headers to the cookies object.
       syncCookieStore?.update(tabId, cookies);
     })();
   },
@@ -426,6 +362,10 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
     return;
   }
 
+  if (!params) {
+    return;
+  }
+
   const url = syncCookieStore?.getTabUrl(source?.tabId);
 
   tabId = source?.tabId?.toString();
@@ -434,7 +374,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
     return;
   }
 
-  if (method === 'Network.responseReceived' && params) {
+  if (method === 'Network.responseReceived') {
     const request = params as Protocol.Network.ResponseReceivedEvent;
 
     // To get domain from the request URL if not given in the cookie line.
@@ -450,7 +390,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
     }
   }
 
-  if (method === 'Network.requestWillBeSentExtraInfo' && params) {
+  if (method === 'Network.requestWillBeSentExtraInfo') {
     const requestParams =
       params as Protocol.Network.RequestWillBeSentExtraInfoEvent;
 
@@ -472,7 +412,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
     syncCookieStore?.update(Number(tabId), cookies);
   }
 
-  if (method === 'Network.responseReceivedExtraInfo' && params) {
+  if (method === 'Network.responseReceivedExtraInfo') {
     const responseParams =
       params as Protocol.Network.ResponseReceivedExtraInfoEvent;
 
@@ -515,6 +455,10 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
     const domainToUse = cookie?.domain.startsWith('.')
       ? cookie.domain.slice(1)
       : cookie?.domain;
+
+    if (!domainToUse || !cookie?.name) {
+      return;
+    }
 
     // Adding alternate domains here because our extension calculates domain differently that the application tab.
     // This is done to capture both NID.google.com/ and NIDgoogle.com/ so that if we find either of the cookie we add issues to the cookie object
