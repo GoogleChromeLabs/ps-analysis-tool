@@ -55,10 +55,7 @@ program
     '-p, --sitemap-path <value>',
     'Path to a sitemap saved in the file system'
   )
-  .option(
-    '-po, --dashboard-port <value>',
-    'A port for the CLI dashboard server.'
-  )
+  .option('-po, --port <value>', 'A port for the CLI dashboard server.')
   .option('-ul, --url-limit <value>', 'No of URLs to analyze')
   .option(
     '-nh, --no-headless ',
