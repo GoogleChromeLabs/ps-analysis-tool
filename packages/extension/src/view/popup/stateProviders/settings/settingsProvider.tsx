@@ -27,6 +27,7 @@ import React, {
  * Internal dependencies
  */
 import Context from './context';
+import { SERVICE_WORKER_TABS_RELOAD_COMMAND } from '../../../../constants';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [allowedNumberOfTabs, setAllowedNumberOfTabs] = useState<string | null>(
@@ -113,7 +114,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   const handleSettingsChange = useCallback(async () => {
     if (settingsChanged) {
       await chrome.runtime.sendMessage({
-        type: 'Popup::ServiceWorker::RELOAD_ALL_TABS',
+        type: SERVICE_WORKER_TABS_RELOAD_COMMAND,
       });
       _setSettingsChanged(false);
     }

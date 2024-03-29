@@ -43,3 +43,5 @@ export const SET_TAB_TO_READ = 'SET_TAB_TO_READ';
 export const INITIAL_SYNC = 'INITIAL_SYNC';
 export const NEW_COOKIE_DATA = 'NEW_COOKIE_DATA';
 export const SERVICE_WORKER_RELOAD_MESSAGE = 'ServiceWorker::TABS_RELOADED';
+export const SERVICE_WORKER_TABS_RELOAD_COMMAND =
+  'ServiceWorker::REOLAD_ALL_TABS';
