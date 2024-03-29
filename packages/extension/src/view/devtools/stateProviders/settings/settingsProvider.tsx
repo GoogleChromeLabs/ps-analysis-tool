@@ -22,8 +22,11 @@ import React, {
   useState,
   useCallback,
 } from 'react';
-import { noop } from '@ps-analysis-tool/design-system';
-import { useContextSelector, createContext } from '@ps-analysis-tool/common';
+/**
+ * Internal dependencies.
+ */
+import Context, { type SettingsStoreContext } from './context';
+import { SERVICE_WORKER_TABS_RELOAD_COMMAND } from '../../../../constants';
 
 enum PLATFORM_OS_MAP {
   mac = 'MacOS',
@@ -35,56 +38,7 @@ enum PLATFORM_OS_MAP {
   fuchsia = 'Fuchsia',
 }
 
-export interface SettingStoreContext {
-  state: {
-    allowedNumberOfTabs: string | null;
-    currentTabs: number;
-    currentExtensions:
-      | {
-          extensionName: string;
-          extensionId: string;
-        }[]
-      | null;
-    browserInformation: string | null;
-    PSATVersion: string | null;
-    OSInformation: string | null;
-    isUsingCDP: boolean;
-    settingsChanged: boolean;
-    allowedNumberOfTabsForSettingsPageDisplay: string | null;
-    isUsingCDPForSettingsPageDisplay: boolean;
-  };
-  actions: {
-    setProcessingMode: (newState: boolean) => void;
-    setIsUsingCDP: (newValue: boolean) => void;
-    handleSettingsChange: () => void;
-    setSettingsChanged: React.Dispatch<React.SetStateAction<boolean>>;
-  };
-}
-
-const initialState: SettingStoreContext = {
-  state: {
-    allowedNumberOfTabs: null,
-    currentTabs: 0,
-    currentExtensions: null,
-    browserInformation: null,
-    PSATVersion: null,
-    OSInformation: null,
-    isUsingCDP: false,
-    settingsChanged: false,
-    allowedNumberOfTabsForSettingsPageDisplay: null,
-    isUsingCDPForSettingsPageDisplay: false,
-  },
-  actions: {
-    setIsUsingCDP: noop,
-    setProcessingMode: noop,
-    handleSettingsChange: noop,
-    setSettingsChanged: noop,
-  },
-};
-
-export const Context = createContext<SettingStoreContext>(initialState);
-
-export const Provider = ({ children }: PropsWithChildren) => {
+const Provider = ({ children }: PropsWithChildren) => {
   const [allowedNumberOfTabs, setAllowedNumberOfTabs] = useState<string | null>(
     null
   );
@@ -102,15 +56,16 @@ export const Provider = ({ children }: PropsWithChildren) => {
   ] = useState(false);
 
   const [currentTabs, setCurrentTabs] =
-    useState<SettingStoreContext['state']['currentTabs']>(0);
+    useState<SettingsStoreContext['state']['currentTabs']>(0);
   const [browserInformation, setBrowserInformation] = useState<string | null>(
     null
   );
-  const [PSATVersion, setPSATVersion] = useState<string | null>(null);
+  const [PSATVersion, setPSATVersion] =
+    useState<SettingsStoreContext['state']['PSATVersion']>(null);
   const [currentExtensions, setCurrentExtensions] =
-    useState<SettingStoreContext['state']['currentExtensions']>(null);
+    useState<SettingsStoreContext['state']['currentExtensions']>(null);
   const [OSInformation, setOSInformation] =
-    useState<SettingStoreContext['state']['OSInformation']>(null);
+    useState<SettingsStoreContext['state']['OSInformation']>(null);
 
   const intitialSync = useCallback(async () => {
     const sessionStorage = await chrome.storage.session.get();
@@ -186,20 +141,20 @@ export const Provider = ({ children }: PropsWithChildren) => {
     }
   }, [OSInformation]);
 
-  const setProcessingMode = useCallback((newState: boolean) => {
+  const setProcessingMode = useCallback(async (newState: boolean) => {
     const valueToBeSet: boolean | string = newState ? 'unlimited' : 'single';
     setAllowedNumberOfTabsForSettingsPageDisplay(valueToBeSet);
     setSettingsChanged(true);
-    chrome.storage.session.set({
+    await chrome.storage.session.set({
       allowedNumberOfTabs: valueToBeSet,
       pendingReload: true,
     });
   }, []);
 
-  const _setUsingCDP = useCallback((newValue: boolean) => {
+  const _setUsingCDP = useCallback(async (newValue: boolean) => {
     setIsUsingCDPForSettingsPageDisplay(newValue);
     setSettingsChanged(true);
-    chrome.storage.session.set({
+    await chrome.storage.session.set({
       isUsingCDP: newValue,
       pendingReload: true,
     });
@@ -207,10 +162,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const storeChangeListener = useCallback(
     (changes: { [key: string]: chrome.storage.StorageChange }) => {
-      if (
-        Object.keys(changes).includes('allowedNumberOfTabs') &&
-        Object.keys(changes.allowedNumberOfTabs).includes('newValue')
-      ) {
+      if (changes?.['allowedNumberOfTabs']?.['newValue']) {
         setAllowedNumberOfTabs(changes?.allowedNumberOfTabs?.newValue);
         setAllowedNumberOfTabsForSettingsPageDisplay(
           changes?.allowedNumberOfTabs?.newValue
@@ -230,10 +182,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const sessionStoreChangeListener = useCallback(
     (changes: { [key: string]: chrome.storage.StorageChange }) => {
-      if (
-        Object.keys(changes).includes('allowedNumberOfTabs') &&
-        Object.keys(changes.allowedNumberOfTabs).includes('newValue')
-      ) {
+      if (changes?.['allowedNumberOfTabs']?.['newValue']) {
         setAllowedNumberOfTabsForSettingsPageDisplay(
           changes.allowedNumberOfTabs.newValue
         );
@@ -259,7 +208,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   const handleSettingsChange = useCallback(async () => {
     if (settingsChanged) {
       await chrome.runtime.sendMessage({
-        type: 'DevTools::ServiceWorker::RELOAD_ALL_TABS',
+        type: SERVICE_WORKER_TABS_RELOAD_COMMAND,
       });
 
       setSettingsChanged(false);
@@ -307,19 +256,4 @@ export const Provider = ({ children }: PropsWithChildren) => {
   );
 };
 
-export function useSettingsStore(): SettingStoreContext;
-export function useSettingsStore<T>(
-  selector: (state: SettingStoreContext) => T
-): T;
-
-/**
- * Cookie store hook.
- * @param selector Selector function to partially select state.
- * @returns selected part of the state
- */
-export function useSettingsStore<T>(
-  selector: (state: SettingStoreContext) => T | SettingStoreContext = (state) =>
-    state
-) {
-  return useContextSelector(Context, selector);
-}
+export default Provider;

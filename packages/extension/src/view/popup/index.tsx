@@ -24,16 +24,18 @@ import { createRoot } from 'react-dom/client';
  * Internal dependencies.
  */
 import App from './app';
-import { Provider as ExternalStoreProvider } from './stateProviders/syncCookieStore';
+import { CookieProvider, SettingsProvider } from './stateProviders';
 
 const root = document.getElementById('root');
 
 if (root) {
   createRoot(root).render(
-    <ExternalStoreProvider>
-      <div className="w-96 min-h-[318px] h-full p-5 mt-4 flex justify-center items-center flex-col">
-        <App />
-      </div>
-    </ExternalStoreProvider>
+    <SettingsProvider>
+      <CookieProvider>
+        <div className="w-96 min-h-[318px] h-full p-5 mt-4 flex justify-center items-center flex-col">
+          <App />
+        </div>
+      </CookieProvider>
+    </SettingsProvider>
   );
 }

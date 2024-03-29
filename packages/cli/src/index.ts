@@ -68,6 +68,10 @@ program
   .option(
     '-d, --out-dir <value>',
     'Directory path where the analysis data will be stored'
+  )
+  .option(
+    '-ab, --accept-banner',
+    'This will accept the GDPR banner if present.'
   );
 
 program.parse();
@@ -116,6 +120,7 @@ const startDashboardServer = async (dir: string) => {
   const shouldSkipPrompts = !program.opts().prompts;
   const shouldSkipTechnologyAnalysis = !program.opts().technology;
   const outDir = program.opts().outDir;
+  const shouldSkipAcceptBanner = program.opts().acceptBanner;
 
   validateArgs(
     url,
@@ -187,7 +192,8 @@ const startDashboardServer = async (dir: string) => {
     DELAY_TIME,
     cookieDictionary,
     3,
-    urlsToProcess.length !== 1 ? spinnies : undefined
+    urlsToProcess.length !== 1 ? spinnies : undefined,
+    shouldSkipAcceptBanner
   );
 
   spinnies.succeed('cookie-spinner', {

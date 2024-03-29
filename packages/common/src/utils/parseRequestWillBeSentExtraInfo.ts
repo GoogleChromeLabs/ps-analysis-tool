@@ -31,23 +31,25 @@ import isFirstParty from './isFirstParty';
 
 /**
  * Parses Network.requestWillBeSentExtraInfo to get extra information about a cookie.
- * @param {object} request Request to be parsed to get extra information about a cookie.
+ * @param {object} associatedCookies Cookies associated with the request being parsed.
  * @param {object} cookieDB Cookie database to find analytics from.
  * @param {string} requestUrl The request url.
  * @param {string} tabUrl - The top-level URL (URL in the tab's address bar).
  * @param {string} frameId The request to which the frame is associated to.
+ * @param {string} requestId - The requestId of the request being processed
  * @returns {object} parsed cookies.
  */
 export default function parseRequestWillBeSentExtraInfo(
-  request: Protocol.Network.RequestWillBeSentExtraInfoEvent,
+  associatedCookies: Protocol.Network.RequestWillBeSentExtraInfoEvent['associatedCookies'],
   cookieDB: CookieDatabase,
   requestUrl: string,
   tabUrl: string,
-  frameId: string
+  frameId: string,
+  requestId: string
 ) {
   const cookies: CookieData[] = [];
 
-  request.associatedCookies.forEach(({ blockedReasons, cookie }) => {
+  associatedCookies.forEach(({ blockedReasons, cookie }) => {
     const effectiveExpirationDate = calculateEffectiveExpiryDate(
       cookie.expires
     );
@@ -72,7 +74,7 @@ export default function parseRequestWillBeSentExtraInfo(
         requestEvents: [
           {
             type: REQUEST_EVENT.CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO,
-            requestId: request.requestId,
+            requestId,
             url: requestUrl,
             blocked: blockedReasons.length !== 0,
             timeStamp: Date.now(),

@@ -33,28 +33,33 @@ import isFirstParty from './isFirstParty';
 
 /**
  * Parse Network.responseReceivedExtraInfo for extra information about a cookie.
- * @param {object} response Response to be parsed to get extra information about a cookie.
- * @param {string} requestUrl The request url.
- * @param {string} tabUrl The top-level URL (URL in the tab's address bar).
+ * @param {object} headers Headers of resonse to be parsed to get extra information about a cookie.
+ * @param {object} blockedCookies Blocked Cookies associated with the response being parsed.
+ * @param {string|undefined} cookiePartitionKey Partittion key for the response.
+ * @param {string} requestUrl The associated request URL.
+ * @param {string} tabUrl - The top-level URL (URL in the tab's address bar).
  * @param {object} cookieDB Cookie database to find analytics from.
- * @param {string} frameId The request to which the frame is associated to.
+ * @param {string} frameId - The frameId the following cookies are associated to.
+ * @param {string} requestId - The requestId of the request being processed
  * @returns {object} parsed cookies.
  */
 export default function parseResponseReceivedExtraInfo(
-  response: Protocol.Network.ResponseReceivedExtraInfoEvent,
+  headers: Protocol.Network.ResponseReceivedExtraInfoEvent['headers'],
+  blockedCookies: Protocol.Network.ResponseReceivedExtraInfoEvent['blockedCookies'],
+  cookiePartitionKey: Protocol.Network.ResponseReceivedExtraInfoEvent['cookiePartitionKey'],
   requestUrl: string,
   tabUrl: string,
   cookieDB: CookieDatabase,
-  frameId: string
+  frameId: string,
+  requestId: string
 ) {
   const cookies: CookieData[] = [];
-  const responseToParse =
-    response.headers['set-cookie'] ?? response.headers['Set-Cookie'];
+  const responseToParse = headers['set-cookie'] ?? headers['Set-Cookie'];
 
   responseToParse?.split('\n').forEach((headerLine: string) => {
     let parsedCookie: CookieData['parsedCookie'] = parse(headerLine);
 
-    const blockedCookie = response.blockedCookies.find((c) => {
+    const blockedCookie = blockedCookies.find((c) => {
       if (c.cookie) {
         return c.cookie?.name === parsedCookie.name;
       } else {
@@ -70,7 +75,7 @@ export default function parseResponseReceivedExtraInfo(
     if (headerLine.toLowerCase().includes('partitioned')) {
       parsedCookie = {
         ...parsedCookie,
-        partitionKey: response?.cookiePartitionKey,
+        partitionKey: cookiePartitionKey,
       };
     }
 
@@ -96,7 +101,7 @@ export default function parseResponseReceivedExtraInfo(
         responseEvents: [
           {
             type: RESPONSE_EVENT.CDP_RESPONSE_RECEIVED_EXTRA_INFO,
-            requestId: response.requestId,
+            requestId: requestId,
             url: requestUrl,
             blocked: blockedCookie ? true : false,
             timeStamp: Date.now(),
