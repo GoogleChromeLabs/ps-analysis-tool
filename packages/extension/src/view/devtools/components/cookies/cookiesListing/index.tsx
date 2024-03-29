@@ -30,7 +30,7 @@ import { CookieDetails, CookieTable } from '@ps-analysis-tool/design-system';
 import { useCookie, useSettings } from '../../../stateProviders';
 import useCookieListing from './useCookieListing';
 import RowContextMenu from './rowContextMenu';
-import { useAllowedList } from '../../../stateProviders/useAllowedList';
+import { useAllowedList } from '../../../stateProviders/allowedList';
 
 interface CookiesListingProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;

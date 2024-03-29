@@ -29,8 +29,11 @@ import { LibraryDetectionProvider } from '@ps-analysis-tool/library-detection';
  * Internal dependencies.
  */
 import App from './app';
-import { Provider as AllowedListProvider } from './stateProviders/useAllowedList';
-import { CookieProvider, SettingsProvider } from './stateProviders';
+import {
+  CookieProvider,
+  SettingsProvider,
+  AllowedListProvider,
+} from './stateProviders';
 
 const isDarkMode = chrome.devtools.panels.themeName === 'dark';
 document.body.classList.add(isDarkMode ? 'dark' : 'light');

@@ -23,11 +23,6 @@ import React, {
   useState,
   type PropsWithChildren,
 } from 'react';
-import {
-  noop,
-  createContext,
-  useContextSelector,
-} from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -36,30 +31,9 @@ import { getCurrentTab } from '../../../../utils/getCurrentTabId';
 import { useCookie } from '../cookie';
 import setDomainsInAllowList from './utils/setDomainsInAllowList';
 import getDotPrefixedDomain from './utils/getDotPrefixedDomain';
+import Context from './context';
 
-export interface AllowedListContext {
-  state: {
-    domainsInAllowList: Set<string>;
-    isIncognito: boolean;
-  };
-  actions: {
-    setDomainsInAllowListCallback: (list: Set<string>) => void;
-  };
-}
-
-const initialState: AllowedListContext = {
-  state: {
-    domainsInAllowList: new Set(),
-    isIncognito: false,
-  },
-  actions: {
-    setDomainsInAllowListCallback: noop,
-  },
-};
-
-export const Context = createContext<AllowedListContext>(initialState);
-
-export const Provider = ({ children }: PropsWithChildren) => {
+const Provider = ({ children }: PropsWithChildren) => {
   const { tabUrl, cookies } = useCookie(({ state }) => ({
     tabUrl: state.tabUrl,
     cookies: state.tabCookies,
@@ -145,19 +119,4 @@ export const Provider = ({ children }: PropsWithChildren) => {
   );
 };
 
-export function useAllowedList(): AllowedListContext;
-export function useAllowedList<T>(
-  selector: (state: AllowedListContext) => T
-): T;
-
-/**
- * Allowed list hook.
- * @param selector Selector function to partially select state.
- * @returns selected part of the state
- */
-export function useAllowedList<T>(
-  selector: (state: AllowedListContext) => T | AllowedListContext = (state) =>
-    state
-) {
-  return useContextSelector(Context, selector);
-}
+export default Provider;
