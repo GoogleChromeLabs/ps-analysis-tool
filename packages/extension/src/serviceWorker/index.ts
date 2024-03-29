@@ -574,7 +574,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
 
   const incomingMessageTabId = request.payload.tabId;
 
-  if (incomingMessageType === DEVTOOLS_OPEN) {
+  if (DEVTOOLS_OPEN === incomingMessageType) {
     const dataToSend: { [key: string]: string } = {};
     dataToSend['tabMode'] = tabMode;
 
@@ -607,7 +607,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
     }
   }
 
-  if (incomingMessageType === POPUP_OPEN) {
+  if (POPUP_OPEN === incomingMessageType) {
     const dataToSend: { [key: string]: string } = {};
     dataToSend['tabMode'] = tabMode;
 
@@ -630,15 +630,15 @@ chrome.runtime.onMessage.addListener(async (request) => {
     }
   }
 
-  if (incomingMessageType === DEVTOOLS_CLOSE) {
+  if (DEVTOOLS_CLOSE === incomingMessageType) {
     syncCookieStore?.updateDevToolsState(incomingMessageTabId, false);
   }
 
-  if (incomingMessageType === POPUP_CLOSE) {
+  if (POPUP_CLOSE === incomingMessageType) {
     syncCookieStore?.updatePopUpState(incomingMessageTabId, false);
   }
 
-  if (incomingMessageType === DEVTOOLS_SET_JAVASCSCRIPT_COOKIE) {
+  if (DEVTOOLS_SET_JAVASCSCRIPT_COOKIE === incomingMessageType) {
     syncCookieStore?.update(incomingMessageTabId, request?.payload?.cookieData);
   }
 
