@@ -24,13 +24,7 @@ import React, {
   useRef,
   useMemo,
 } from 'react';
-import { noop } from '@ps-analysis-tool/design-system';
-import {
-  createContext,
-  useContextSelector,
-  type TabCookies,
-  type TabFrames,
-} from '@ps-analysis-tool/common';
+import { type TabCookies } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -46,60 +40,9 @@ import {
 import { useSettingsStore } from '../syncSettingsStore';
 import { getTab } from '../../../../utils/getTab';
 import getFramesForCurrentTab from '../../../../utils/getFramesForCurrentTab';
+import Context, { type CookieStoreContext } from './context';
 
-export interface CookieStoreContext {
-  state: {
-    tabCookies: TabCookies | null;
-    tabUrl: string | null;
-    loading: boolean;
-    tabFrames: TabFrames | null;
-    selectedFrame: string | null;
-    returningToSingleTab: boolean;
-    isCurrentTabBeingListenedTo: boolean;
-    isInspecting: boolean;
-    contextInvalidated: boolean;
-    canStartInspecting: boolean;
-    tabToRead: string | null;
-    frameHasCookies: Record<string, boolean>;
-  };
-  actions: {
-    setSelectedFrame: (key: string | null) => void;
-    setIsInspecting: React.Dispatch<React.SetStateAction<boolean>>;
-    changeListeningToThisTab: () => void;
-    getCookiesSetByJavascript: () => void;
-    setContextInvalidated: React.Dispatch<React.SetStateAction<boolean>>;
-    setCanStartInspecting: React.Dispatch<React.SetStateAction<boolean>>;
-  };
-}
-
-const initialState: CookieStoreContext = {
-  state: {
-    tabCookies: null,
-    tabUrl: null,
-    tabFrames: null,
-    selectedFrame: null,
-    loading: true,
-    isCurrentTabBeingListenedTo: false,
-    returningToSingleTab: false,
-    isInspecting: false,
-    contextInvalidated: false,
-    canStartInspecting: false,
-    tabToRead: null,
-    frameHasCookies: {},
-  },
-  actions: {
-    setSelectedFrame: noop,
-    changeListeningToThisTab: noop,
-    setIsInspecting: noop,
-    getCookiesSetByJavascript: noop,
-    setContextInvalidated: noop,
-    setCanStartInspecting: noop,
-  },
-};
-
-export const Context = createContext<CookieStoreContext>(initialState);
-
-export const Provider = ({ children }: PropsWithChildren) => {
+const Provider = ({ children }: PropsWithChildren) => {
   const [loading, setLoading] = useState<boolean>(true);
   const loadingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [tabToRead, setTabToRead] = useState<string | null>(null);
@@ -461,19 +404,4 @@ export const Provider = ({ children }: PropsWithChildren) => {
   );
 };
 
-export function useCookieStore(): CookieStoreContext;
-export function useCookieStore<T>(
-  selector: (state: CookieStoreContext) => T
-): T;
-
-/**
- * Cookie store hook.
- * @param selector Selector function to partially select state.
- * @returns selected part of the state
- */
-export function useCookieStore<T>(
-  selector: (state: CookieStoreContext) => T | CookieStoreContext = (state) =>
-    state
-) {
-  return useContextSelector(Context, selector);
-}
+export default Provider;
