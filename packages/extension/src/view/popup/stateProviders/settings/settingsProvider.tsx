@@ -82,9 +82,9 @@ const Provider = ({ children }: PropsWithChildren) => {
     }
   }, []);
 
-  const setUsingCDP = useCallback((newValue: boolean) => {
+  const setUsingCDP = useCallback(async (newValue: boolean) => {
     setIsUsingCDPForSettingsDisplay(newValue);
-    chrome.storage.session.set({
+    await chrome.storage.session.set({
       isUsingCDP: newValue,
       pendingReload: true,
     });
