@@ -199,6 +199,66 @@ export const Provider = ({ children }: PropsWithChildren) => {
     []
   );
 
+  useEffect(() => {
+    if (!tabFrames) {
+      return;
+    }
+
+    chrome.runtime.sendMessage({
+      type: 'SERVICE_WORKER_DEVTOOLS_GET_FRAME_IDS',
+      payload: {
+        tabId: chrome.devtools.inspectedWindow.tabId,
+      },
+    });
+  }, [tabFrames]);
+
+  /**
+   * Add more tabframes to the existing ones.
+   */
+  const addMoreTabIds = useCallback(
+    async (tabIds: string[]) => {
+      if (!tabFrames) {
+        return;
+      }
+
+      const modifiedTabFrames = tabFrames;
+
+      await Promise.all(
+        tabIds.map(async (id) => {
+          //@ts-ignore
+          try {
+            const frames = await chrome.debugger.sendCommand(
+              { targetId: id },
+              'Page.getFrameTree'
+            );
+            if (
+              //@ts-ignore
+              frames?.frameTree?.frame?.securityOrigin &&
+              //@ts-ignore
+              frames.frameTree.frame.id
+            ) {
+              modifiedTabFrames[
+                //@ts-ignore
+                frames?.frameTree?.frame?.securityOrigin
+              ].frameIds = [
+                ...new Set([
+                  //@ts-ignore
+                  ...modifiedTabFrames[frames.frameTree.frame.securityOrigin]
+                    .frameIds,
+                  //@ts-ignore
+                  frames.frameTree.frame.id,
+                ]),
+              ];
+            }
+          } catch (error) {
+            // fail silently
+          }
+        })
+      );
+      setTabFrames(modifiedTabFrames);
+    },
+    [tabFrames]
+  );
   /**
    * Stores object with frame URLs as keys and boolean values indicating if the frame contains cookies.
    */
@@ -329,6 +389,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         cookieData?: TabCookies;
         tabToRead?: string;
         tabMode?: string;
+        frames?: string[];
       };
     }) => {
       if (message.type === 'ServiceWorker::SET_TAB_TO_READ') {
@@ -378,6 +439,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
       }
 
+      if (message.type === 'ServiceWorker::DevTools::NEW_FRAMES_DATA') {
+        await addMoreTabIds(message.payload.frames ?? []);
+      }
+
       if (message.type === 'ServiceWorker::DevTools::TABS_RELOADED') {
         setSettingsChanged(false);
       }
@@ -388,7 +453,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
     return () => {
       chrome.runtime.onMessage.removeListener(listener);
     };
-  }, [getAllFramesForCurrentTab, tabId, setSettingsChanged]);
+  }, [getAllFramesForCurrentTab, tabId, setSettingsChanged, addMoreTabIds]);
 
   const tabUpdateListener = useCallback(
     async (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {

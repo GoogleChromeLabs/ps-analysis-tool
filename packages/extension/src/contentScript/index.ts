@@ -63,6 +63,11 @@ class WebpageContentScript {
   tabId: number | null = null;
 
   /**
+   * Main frame id.
+   */
+  frameId: string | null = null;
+
+  /**
    * TabId of the current Tab
    */
   cookieDB: CookieDatabase | null = null;
@@ -141,6 +146,7 @@ class WebpageContentScript {
 
       if (message?.payload?.type === 'SERVICEWORKER::WEBPAGE::TABID_STORAGE') {
         this.tabId = message.payload.tabId;
+        this.frameId = message.payload.frameId;
       }
 
       if (message?.payload?.type === 'DEVTOOL::WEBPAGE::GET_JS_COOKIES') {
@@ -164,11 +170,15 @@ class WebpageContentScript {
    * @param tabId The tabID whose cookies have to be fetched.
    */
   async getAndProcessJSCookies(tabId: string) {
+    if (!this.frameId) {
+      return;
+    }
     //@ts-ignore
     const jsCookies = await cookieStore.getAll();
     await processAndStoreDocumentCookies({
       tabUrl: window.location.href,
       tabId,
+      frameId: this.frameId,
       documentCookies: jsCookies,
     });
   }

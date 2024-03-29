@@ -32,12 +32,14 @@ import { fetchDictionary } from './fetchCookieDictionary';
 interface ProcessAndStoreDucmentCookies {
   tabUrl: string;
   tabId: string;
+  frameId: string;
   documentCookies: ParsedCookie[];
 }
 
 const processAndStoreDocumentCookies = async ({
   tabUrl,
   tabId,
+  frameId,
   documentCookies,
 }: ProcessAndStoreDucmentCookies) => {
   try {
@@ -80,7 +82,7 @@ const processAndStoreDocumentCookies = async ({
           url: tabUrl,
           headerType: 'javascript', // @todo Update headerType name.
           isFirstParty: isFirstPartyCookie || null,
-          frameIdList: [0],
+          frameIdList: [frameId],
         };
       }
     );
