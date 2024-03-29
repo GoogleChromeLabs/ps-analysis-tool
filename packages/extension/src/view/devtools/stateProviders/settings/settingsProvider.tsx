@@ -60,7 +60,8 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [browserInformation, setBrowserInformation] = useState<string | null>(
     null
   );
-  const [PSATVersion, setPSATVersion] = useState<string | null>(null);
+  const [PSATVersion, setPSATVersion] =
+    useState<SettingsStoreContext['state']['PSATVersion']>(null);
   const [currentExtensions, setCurrentExtensions] =
     useState<SettingsStoreContext['state']['currentExtensions']>(null);
   const [OSInformation, setOSInformation] =

@@ -147,9 +147,13 @@ const Provider = ({ children }: PropsWithChildren) => {
    * parses data currently in store, set current tab URL.
    */
   const intitialSync = useCallback(async () => {
+    const tabId = chrome.devtools.inspectedWindow.tabId;
+
     if (isCurrentTabBeingListenedToRef.current) {
       await getAllFramesForCurrentTab();
     }
+
+    const tab = await getTab(tabId);
 
     if (chrome.devtools.inspectedWindow.tabId && canStartInspecting) {
       await chrome.tabs.sendMessage(chrome.devtools.inspectedWindow.tabId, {
@@ -160,14 +164,18 @@ const Provider = ({ children }: PropsWithChildren) => {
       });
     }
 
-    chrome.devtools.inspectedWindow.eval(
-      'window.location.href',
-      (result, isException) => {
-        if (!isException && typeof result === 'string') {
-          setTabUrl(result);
+    if (tab?.url) {
+      setTabUrl(tab?.url);
+    } else {
+      chrome.devtools.inspectedWindow.eval(
+        'window.location.href',
+        (result, isException) => {
+          if (!isException && typeof result === 'string') {
+            setTabUrl(result);
+          }
         }
-      }
-    );
+      );
+    }
 
     setLoading(false);
   }, [getAllFramesForCurrentTab, canStartInspecting]);

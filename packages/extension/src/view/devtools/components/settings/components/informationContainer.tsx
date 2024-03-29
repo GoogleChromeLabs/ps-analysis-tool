@@ -35,14 +35,14 @@ const InformationContainer = () => {
     currentTabs,
     currentExtensions,
     browserInformation,
-    PSATVersion,
     OSInformation,
+    PSATVersion,
   } = useSettings(({ state }) => ({
     currentTabs: state.currentTabs,
     currentExtensions: state.currentExtensions,
     browserInformation: state.browserInformation,
-    PSATVersion: state.PSATVersion,
     OSInformation: state.OSInformation,
+    PSATVersion: state.PSATVersion,
   }));
 
   const [copying, setCopying] = useState(false);
