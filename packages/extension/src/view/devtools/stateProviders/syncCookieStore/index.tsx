@@ -312,7 +312,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       }
 
       if (
-        NEW_COOKIE_DATA &&
+        NEW_COOKIE_DATA === incomingMessageType &&
         message?.payload?.tabId &&
         message?.payload?.cookieData
       ) {
