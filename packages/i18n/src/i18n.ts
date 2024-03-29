@@ -17,7 +17,18 @@
 import { IntlMessageFormat } from 'intl-messageformat';
 
 class I18n {
-  private messages: any;
+  private messages: {
+    [key: string]: {
+      message: string;
+      description: string;
+      placeholders: {
+        [key: string]: {
+          content: string;
+          example: string;
+        };
+      };
+    };
+  } = {};
 
   initMessages(messages = {}) {
     this.messages = messages;
@@ -97,16 +108,7 @@ class I18n {
     substitutions?: string[],
     escapeLt?: boolean
   ) {
-    const messageObj: {
-      message: string;
-      description: string;
-      placeholders: {
-        [key: string]: {
-          content: string;
-          example: string;
-        };
-      };
-    } = this.messages?.[key];
+    const messageObj = this.messages?.[key];
 
     if (!messageObj) {
       return '';
