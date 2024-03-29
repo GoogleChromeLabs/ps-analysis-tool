@@ -26,24 +26,23 @@ import {
  * Internal dependencies.
  */
 import TABS from './tabs';
-import { useCookieStore } from './stateProviders/syncCookieStore';
+import { useCookie, useSettings } from './stateProviders';
 import './app.css';
 import { Layout } from './components';
 import { getCurrentTabId } from '../../utils/getCurrentTabId';
-import { useSettingsStore } from './stateProviders/syncSettingsStore';
 
 const App: React.FC = () => {
   const [sidebarData, setSidebarData] = useState(TABS);
   const contextInvalidatedRef = useRef(null);
 
-  const { contextInvalidated, setContextInvalidated } = useCookieStore(
+  const { contextInvalidated, setContextInvalidated } = useCookie(
     ({ state, actions }) => ({
       contextInvalidated: state.contextInvalidated,
       setContextInvalidated: actions.setContextInvalidated,
     })
   );
 
-  const { allowedNumberOfTabs } = useSettingsStore(({ state }) => ({
+  const { allowedNumberOfTabs } = useSettings(({ state }) => ({
     allowedNumberOfTabs: state.allowedNumberOfTabs,
   }));
 

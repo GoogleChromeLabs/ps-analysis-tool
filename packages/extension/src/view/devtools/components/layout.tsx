@@ -35,8 +35,7 @@ import { Resizable } from 're-resizable';
  */
 import Cookies from './cookies';
 import useFrameOverlay from '../hooks/useFrameOverlay';
-import { useCookieStore } from '../stateProviders/syncCookieStore';
-import { useSettingsStore } from '../stateProviders/syncSettingsStore';
+import { useCookie, useSettings } from '../stateProviders';
 import { getCurrentTabId } from '../../../utils/getCurrentTabId';
 
 interface LayoutProps {
@@ -47,7 +46,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
   const [sidebarWidth, setSidebarWidth] = useState(200);
   const mainRef = useRef<HTMLElement>(null);
 
-  const { settingsChanged, handleSettingsChange } = useSettingsStore(
+  const { settingsChanged, handleSettingsChange } = useSettings(
     ({ state, actions }) => ({
       settingsChanged: state.settingsChanged,
       handleSettingsChange: actions.handleSettingsChange,
@@ -63,7 +62,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     setIsInspecting,
     selectedFrame,
     setSelectedFrame,
-  } = useCookieStore(({ state, actions }) => ({
+  } = useCookie(({ state, actions }) => ({
     tabFrames: state.tabFrames,
     frameHasCookies: state.frameHasCookies,
     canStartInspecting: state.canStartInspecting,
