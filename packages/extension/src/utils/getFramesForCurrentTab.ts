@@ -16,8 +16,7 @@
 /**
  * External dependencies
  */
-import { UNKNOWN_FRAME_KEY, type TabFrames } from '@ps-analysis-tool/common';
-
+import type { TabFrames } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies
  */
@@ -62,6 +61,6 @@ export default async function getFramesForCurrentTab() {
       return tabFrame;
     })
   );
-  modifiedTabFrames[UNKNOWN_FRAME_KEY] = { frameIds: [] };
+
   return modifiedTabFrames;
 }
