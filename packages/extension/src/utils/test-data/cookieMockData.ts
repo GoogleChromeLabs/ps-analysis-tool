@@ -21,7 +21,7 @@ import { emptyAnalytics } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import type { CookieStoreContext } from '../../view/devtools/stateProviders/syncCookieStore';
+import { type CookieStoreContext } from '../../view/devtools/stateProviders/cookie';
 
 const emptyCookie = {
   name: '',

@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 export { default as CookieProvider } from './cookieProvider';
-export { default as CookieContext } from './context';
+export { default as CookieContext, type CookieStoreContext } from './context';
 export { default as useCookie } from './useCookie';

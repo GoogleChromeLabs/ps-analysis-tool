@@ -17,44 +17,27 @@
  * External dependencies.
  */
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import { act } from 'react-dom/test-utils';
+import { render } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 import SinonChrome from 'sinon-chrome';
-import { noop } from '@ps-analysis-tool/common';
-import { useTablePersistentSettingsStore } from '@ps-analysis-tool/design-system';
-
+import { CookiesLanding } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies.
  */
-import App from '../app';
-import { useCookie, useSettings } from '../stateProviders';
-// @ts-ignore
-// eslint-disable-next-line import/no-unresolved
-import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
-import data from '../../../utils/test-data/cookieMockData';
+import AssembledCookiesLanding from '../cookieLanding';
+import { useCookie, useSettings } from '../../../stateProviders';
+import data from '../../../../../utils/test-data/cookieMockData';
 
-jest.mock('../stateProviders', () => ({
+jest.mock('../../../stateProviders', () => ({
   useCookie: jest.fn(),
   useSettings: jest.fn(),
 }));
-
-jest.mock(
-  '../../../../../design-system/src/components/table/persistentSettingsStore',
-  () => ({
-    useTablePersistentSettingsStore: jest.fn(),
-  })
-);
-
 const mockUseCookieStore = useCookie as jest.Mock;
-const mockUseTablePersistentSettingStore =
-  useTablePersistentSettingsStore as jest.Mock;
 const mockUseSettingsStore = useSettings as jest.Mock;
 
-describe('App', () => {
+describe('CookiesLanding', () => {
   beforeAll(() => {
     globalThis.chrome = SinonChrome as unknown as typeof chrome;
-    globalThis.location.protocol = 'chrome-extension:';
     globalThis.chrome = {
       ...SinonChrome,
       storage: {
@@ -106,10 +89,7 @@ describe('App', () => {
         session: {
           //@ts-ignore
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          get: (_, __) =>
-            Promise.resolve({
-              ['selectedSidebarItem#' + 40245632]: 'privacySandbox#cookies',
-            }),
+          get: (_, __) => Promise.resolve(),
           set: () => Promise.resolve(),
           //@ts-ignore
           onChanged: {
@@ -126,6 +106,11 @@ describe('App', () => {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
           eval: (_, callback: any) => {
             callback('https://edition.cnn.com');
+          },
+          //@ts-ignore
+          onResourceAdded: {
+            addListener: () => undefined,
+            removeListener: () => undefined,
           },
         },
       },
@@ -153,84 +138,25 @@ describe('App', () => {
         }),
       },
     };
-    global.ResizeObserver = class MockedResizeObserver {
-      observe = jest.fn();
-      unobserve = jest.fn();
-      disconnect = jest.fn();
-    };
-    globalThis.fetch = function () {
-      return Promise.resolve({
-        json: () =>
-          Promise.resolve({
-            ...PSInfo,
-          }),
-      });
-    } as unknown as typeof fetch;
   });
 
-  it('Should show cookie table if frame is selected', async () => {
+  it('renders CookiesLanding with data', () => {
     mockUseCookieStore.mockReturnValue({
-      contextInvalidated: false,
-      setContextInvalidated: noop,
       tabCookies: data.tabCookies,
       tabFrames: data.tabFrames,
-      selectedFrame: data.selectedFrame,
-      cookies: data.tabCookies,
-      setSelectedFrame: noop,
-      isInspecting: false,
-      setIsInspecting: noop,
-      canStartInspecting: true,
-      tabUrl: data.tabUrl,
-      isCurrentTabBeingListenedTo: true,
-      tabToRead: '40245632',
+      frameHasCookies: {
+        'https://edition.cnn.com/': true,
+      },
     });
-    mockUseTablePersistentSettingStore.mockReturnValue({
-      getPreferences: () => '',
-      setPreferences: noop,
-    });
-    mockUseSettingsStore.mockReturnValue({
-      allowedNumberOfTabs: 'single',
-    });
+    mockUseSettingsStore.mockReturnValue({ isUsingCDP: false });
+    const { getByTestId, getAllByTestId } = render(
+      <CookiesLanding>
+        <AssembledCookiesLanding />
+      </CookiesLanding>
+    );
 
-    act(() => {
-      render(<App />);
-    });
-
-    expect((await screen.findAllByTestId('body-row')).length).toBe(4);
-  });
-
-  it('Should show refresh banner if context invalidated.', async () => {
-    mockUseCookieStore.mockReturnValue({
-      contextInvalidated: true,
-      setContextInvalidated: noop,
-      tabCookies: {},
-      tabFrames: null,
-      selectedFrame: null,
-      cookies: {},
-      setSelectedFrame: noop,
-      isInspecting: false,
-      setIsInspecting: noop,
-      canStartInspecting: true,
-      tabUrl: data.tabUrl,
-      isCurrentTabBeingListenedTo: true,
-    });
-    mockUseTablePersistentSettingStore.mockReturnValue({
-      getPreferences: () => '',
-      setPreferences: noop,
-    });
-    mockUseSettingsStore.mockReturnValue({
-      allowedNumberOfTabs: 'single',
-    });
-
-    act(() => {
-      render(<App />);
-    });
-
-    expect(await screen.findByText('Refresh panel')).toBeInTheDocument();
-  });
-
-  afterAll(() => {
-    globalThis.chrome = undefined as unknown as typeof chrome;
-    globalThis.fetch = undefined as unknown as typeof fetch;
+    expect(getByTestId('cookies-landing')).toBeInTheDocument();
+    expect(getAllByTestId('cookies-landing-header')[0]).toBeInTheDocument();
+    expect(getByTestId('cookies-matrix-Categories')).toBeInTheDocument();
   });
 });

@@ -25,12 +25,15 @@ import { renderHook } from '@testing-library/react';
  */
 import useCookieListing from '..';
 import * as mock from '../../../../../../../utils/test-data/cookieMockData';
-import * as ChromeStorage from '../../../../../stateProviders/cookie';
+import { useCookie } from '../../../../../stateProviders/cookie';
+
+jest.mock('../../../../../stateProviders/cookie', () => ({
+  useCookie: jest.fn(),
+}));
+
+const mockUseCookieStore = useCookie as jest.Mock;
 
 describe('useCookieListing', () => {
-  const mockUseCookieStore = jest.fn();
-  jest.spyOn(ChromeStorage, 'useCookie').mockImplementation(mockUseCookieStore);
-  const allowedListDomains = new Set<string>();
   const mockUseEffect = jest.fn();
   jest.spyOn(React, 'useEffect').mockImplementation(mockUseEffect);
 
@@ -55,7 +58,7 @@ describe('useCookieListing', () => {
     });
 
     const { result, rerender } = renderHook(() =>
-      useCookieListing(allowedListDomains)
+      useCookieListing(new Set<string>())
     );
 
     expect(result.current.tableColumns[0].header).toBe('Name');
