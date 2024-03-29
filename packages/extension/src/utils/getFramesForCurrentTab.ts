@@ -77,5 +77,9 @@ export default function getFramesForCurrentTab(
       }
     }
   });
-  return modifiedTabFrames;
+
+  return {
+    ...prevState,
+    ...modifiedTabFrames,
+  };
 }
