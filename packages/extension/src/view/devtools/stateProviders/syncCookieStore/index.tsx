@@ -100,8 +100,6 @@ const initialState: CookieStoreContext = {
 export const Context = createContext<CookieStoreContext>(initialState);
 
 export const Provider = ({ children }: PropsWithChildren) => {
-  // TODO: Refactor: create smaller providers and reduce state from here.
-  const [tabId, setTabId] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const loadingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [tabToRead, setTabToRead] = useState<string | null>(null);
@@ -204,10 +202,6 @@ export const Provider = ({ children }: PropsWithChildren) => {
    * parses data currently in store, set current tab URL.
    */
   const intitialSync = useCallback(async () => {
-    const _tabId = chrome.devtools.inspectedWindow.tabId;
-
-    setTabId(_tabId);
-
     if (isCurrentTabBeingListenedToRef.current) {
       await getAllFramesForCurrentTab();
     }
@@ -245,6 +239,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
   }, []);
 
   const changeListeningToThisTab = useCallback(() => {
+    const tabId = chrome.devtools.inspectedWindow.tabId;
     if (!tabId) {
       return;
     }
@@ -255,7 +250,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       },
     });
     setTabToRead(tabId.toString());
-  }, [tabId]);
+  }, []);
 
   useEffect(() => {
     if (
@@ -278,10 +273,10 @@ export const Provider = ({ children }: PropsWithChildren) => {
         tabMode?: string;
       };
     }) => {
-      if (!message.type || !tabId) {
+      if (!message.type) {
         return;
       }
-
+      const tabId = chrome.devtools.inspectedWindow.tabId;
       const incomingMessageType = message.type;
 
       if (SET_TAB_TO_READ === incomingMessageType) {
@@ -333,7 +328,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         setSettingsChanged(false);
       }
     },
-    [getAllFramesForCurrentTab, setSettingsChanged, tabId]
+    [getAllFramesForCurrentTab, setSettingsChanged]
   );
 
   useEffect(() => {
@@ -346,6 +341,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   const tabUpdateListener = useCallback(
     async (_tabId: number, changeInfo: chrome.tabs.TabChangeInfo) => {
+      const tabId = chrome.devtools.inspectedWindow.tabId;
       if (tabId === _tabId && changeInfo.url) {
         setIsInspecting(false);
         try {
@@ -369,7 +365,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
       }
     },
-    [tabId, tabUrl, getAllFramesForCurrentTab, selectedFrame]
+    [tabUrl, getAllFramesForCurrentTab, selectedFrame]
   );
 
   const tabRemovedListener = useCallback(async () => {
