@@ -309,6 +309,7 @@ class SynchnorousCookieStore {
     delete this.tabsData[tabId];
     this.tabsData[tabId] = {};
     this.tabs[tabId].newUpdates = 0;
+    this.tabs[tabId].frameIdSet = new Set();
     this.sendUpdatedDataToPopupAndDevTools(tabId, true);
   }
 
