@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies.
+ * Resets the extension badge text.
+ * @param {number} tabId Tab id where the badge text has to be reset.
  */
-import { getCurrentTabId } from './getCurrentTabId';
-
-const reloadCurrentTab = async (tabId: number | undefined = undefined) => {
-  const currentTabId: number | string | undefined =
-    tabId || (await getCurrentTabId());
-
-  const _currentTabId = Number(currentTabId);
-
-  if (_currentTabId) {
-    chrome.tabs.reload(_currentTabId, { bypassCache: true });
+export default function resetCookieBadgeText(tabId: number) {
+  if (!tabId) {
+    return;
   }
-};
-
-export default reloadCurrentTab;
+  chrome.action.setBadgeText({
+    tabId: tabId,
+    text: '',
+  });
+}

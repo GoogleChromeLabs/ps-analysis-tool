@@ -35,7 +35,14 @@ import {
 /**
  * Internal dependencies.
  */
-import { ALLOWED_NUMBER_OF_TABS } from '../../../../constants';
+import {
+  ALLOWED_NUMBER_OF_TABS,
+  DEVTOOLS_CLOSE,
+  DEVTOOLS_OPEN,
+  INITIAL_SYNC,
+  NEW_COOKIE_DATA,
+  SET_TAB_TO_READ,
+} from '../../../../constants';
 import isOnRWS from '../../../../contentScript/utils/isOnRWS';
 import { useSettingsStore } from '../syncSettingsStore';
 
@@ -278,7 +285,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
       return;
     }
     chrome.runtime.sendMessage({
-      type: 'DevTools::ServiceWorker::SET_TAB_TO_READ',
+      type: SET_TAB_TO_READ,
       payload: {
         tabId,
       },
@@ -307,7 +314,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         tabMode?: string;
       };
     }) => {
-      if (message.type === 'ServiceWorker::SET_TAB_TO_READ') {
+      if (message.type === SET_TAB_TO_READ) {
         chrome.devtools.inspectedWindow.eval(
           'window.location.href',
           (result, isException) => {
@@ -324,7 +331,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         setCanStartInspecting(false);
       }
 
-      if (message.type === 'ServiceWorker::DevTools::INITIAL_SYNC') {
+      if (message.type === INITIAL_SYNC) {
         if (message?.payload?.tabMode === 'unlimited') {
           isCurrentTabBeingListenedToRef.current = true;
           setTabToRead(null);
@@ -338,7 +345,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
         }
       }
 
-      if (message.type === 'ServiceWorker::DevTools::NEW_COOKIE_DATA') {
+      if (message.type === NEW_COOKIE_DATA) {
         const data = message?.payload?.cookieData ?? {};
         if (
           message?.payload?.tabId &&
@@ -439,7 +446,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     chrome.runtime.sendMessage({
-      type: 'DevTools::ServiceWorker::DEVTOOLS_STATE_OPEN',
+      type: DEVTOOLS_OPEN,
       payload: {
         tabId: tabId,
       },
@@ -447,7 +454,7 @@ export const Provider = ({ children }: PropsWithChildren) => {
 
     return () => {
       chrome.runtime.sendMessage({
-        type: 'DevTools::ServiceWorker::DEVTOOLS_STATE_CLOSE',
+        type: DEVTOOLS_CLOSE,
         payload: {
           tabId: tabId,
         },
