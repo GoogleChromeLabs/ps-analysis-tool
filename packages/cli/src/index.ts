@@ -25,6 +25,7 @@ import { exec } from 'child_process';
 import path from 'path';
 import { CompleteJson } from '@ps-analysis-tool/common';
 import { I18n } from '@ps-analysis-tool/i18n';
+import { existsSync } from 'fs';
 
 /**
  * Internal dependencies.
@@ -40,17 +41,11 @@ import {
   saveCSVReports,
 } from './utils';
 import { checkPortInUse } from './utils/checkPortInUse';
-import doesLocaleFileExists from './utils/doesLocaleFileExists';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
-let locale = Intl.DateTimeFormat().resolvedOptions().locale;
-locale = doesLocaleFileExists(locale);
-const messages = JSON.parse(
-  readFileSync(`_locales/${locale}/messages.json`, 'utf-8')
-);
-
-I18n.initMessages(messages);
+const locale = Intl.DateTimeFormat().resolvedOptions().locale;
+I18n.loadCLIMessagesData(locale, existsSync, readFileSync);
 
 const DELAY_TIME = 20000;
 const program = new Command();

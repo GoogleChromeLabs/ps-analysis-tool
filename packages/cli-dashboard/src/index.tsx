@@ -25,16 +25,13 @@ import { Provider as TablePersistentSettingsProvider } from '@ps-analysis-tool/d
  * Internal dependencies
  */
 import App from './app';
-import { TranslationProvider } from './hooks/useTranslation';
 
 const root = document.getElementById('root');
 
 if (root) {
   createRoot(root).render(
-    <TranslationProvider>
-      <TablePersistentSettingsProvider>
-        <App />
-      </TablePersistentSettingsProvider>
-    </TranslationProvider>
+    <TablePersistentSettingsProvider>
+      <App />
+    </TablePersistentSettingsProvider>
   );
 }

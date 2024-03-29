@@ -23,6 +23,7 @@ import type {
   CookieFrameStorageType,
   TechnologyData,
 } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies
@@ -46,6 +47,14 @@ const App = () => {
   const [completeJsonReport, setCompleteJsonReport] = useState<
     CompleteJson[] | null
   >(null);
+  const [, forceUpdate] = useState(0);
+
+  useEffect(() => {
+    const locale = navigator.language || 'en';
+    I18n.loadDashboardMessagesData(locale).then(() => {
+      forceUpdate((prev) => prev + 1);
+    });
+  }, []);
 
   const [type, path] = useMemo(() => {
     const urlParams = new URLSearchParams(window.location.search);

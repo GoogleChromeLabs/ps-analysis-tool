@@ -23,6 +23,61 @@ class I18n {
     this.messages = messages;
   }
 
+  private createLocaleArray(locale: string) {
+    return [locale, locale.split('-')[0], locale.split('_')[0], 'en'];
+  }
+
+  async loadDashboardMessagesData(locale: string) {
+    const localeArray = this.createLocaleArray(locale);
+
+    let idx = 0;
+
+    const fetchWithRetry = async () => {
+      if (idx >= localeArray.length) {
+        return;
+      }
+
+      try {
+        const res = await fetch(`/_locales/${localeArray[idx]}/messages.json`);
+        if (!res.ok) {
+          throw new Error(
+            `Failed to fetch messages for locale ${localeArray[idx]}`
+          );
+        }
+
+        const data = await res.json();
+
+        this.initMessages(data);
+      } catch (error) {
+        idx++;
+        await fetchWithRetry();
+      }
+    };
+
+    await fetchWithRetry();
+  }
+
+  loadCLIMessagesData(
+    locale: string,
+    existsSync: (path: string) => boolean,
+    readFileSync: any
+  ) {
+    const localeArray = this.createLocaleArray(locale);
+
+    for (const _locale of localeArray) {
+      if (existsSync(`_locales/${_locale}/messages.json`)) {
+        const messages = JSON.parse(
+          readFileSync(`_locales/${_locale}/messages.json`, {
+            encoding: 'utf-8',
+          })
+        );
+
+        this.initMessages(messages);
+        break;
+      }
+    }
+  }
+
   getMessage(key: string, substitutions?: string[], escapeLt?: boolean) {
     if (
       typeof window !== 'undefined' &&
