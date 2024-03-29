@@ -55,6 +55,10 @@ program
     '-p, --sitemap-path <value>',
     'Path to a sitemap saved in the file system'
   )
+  .option(
+    '-po, --dashboard-port <value>',
+    'A port for the CLI dashboard server.'
+  )
   .option('-ul, --url-limit <value>', 'No of URLs to analyze')
   .option(
     '-nh, --no-headless ',
@@ -76,19 +80,6 @@ program
 
 program.parse();
 
-const initialize = async () => {
-  //check if devserver port in already in use
-
-  const portInUse = await checkPortInUse(9000);
-
-  if (portInUse) {
-    console.error(
-      'Error: Report server port (9000) already in use. You might be already running CLI'
-    );
-    process.exit(1);
-  }
-};
-
 const saveResults = async (
   outDir: string,
   result: CompleteJson | CompleteJson[]
@@ -97,30 +88,42 @@ const saveResults = async (
   await writeFile(outDir + '/out.json', JSON.stringify(result, null, 4));
 };
 
-const startDashboardServer = async (dir: string) => {
-  exec('npm run cli-dashboard:dev');
+const startDashboardServer = async (dir: string, port: number) => {
+  exec(`npm run cli-dashboard:dev -- -- --port ${port}`);
 
   await delay(2000);
 
   console.log(
-    `Report is being served at the URL: http://localhost:9000?dir=${dir}`
+    `Report is being served at the URL: http://localhost:${port}?dir=${dir}`
   );
 };
 
 // eslint-disable-next-line complexity
 (async () => {
-  await initialize();
-
   const url = program.opts().url;
   const sitemapUrl = program.opts().sitemapUrl;
   const csvPath = program.opts().csvPath;
   const sitemapPath = program.opts().sitemapPath;
+  const dashboardPort = parseInt(program.opts().dashboardPort || '9000');
   const numberOfUrlsInput = program.opts().urlLimit;
   const isHeadless = Boolean(program.opts().headless);
   const shouldSkipPrompts = !program.opts().prompts;
   const shouldSkipTechnologyAnalysis = !program.opts().technology;
   const outDir = program.opts().outDir;
   const shouldSkipAcceptBanner = program.opts().acceptBanner;
+
+  //check if devserver port in already in use only if the dashboard is goint to be used
+
+  if (!outDir) {
+    const isPortInUse = await checkPortInUse(dashboardPort);
+
+    if (isPortInUse) {
+      console.error(
+        `Error: Report server port ${dashboardPort} already in use. You might be already running CLI`
+      );
+      process.exit(1);
+    }
+  }
 
   validateArgs(
     url,
@@ -235,6 +238,7 @@ const startDashboardServer = async (dir: string) => {
 
   startDashboardServer(
     encodeURIComponent(prefix) +
-      (sitemapUrl || csvPath || sitemapPath ? '&type=sitemap' : '')
+      (sitemapUrl || csvPath || sitemapPath ? '&type=sitemap' : ''),
+    dashboardPort
   );
 })();
