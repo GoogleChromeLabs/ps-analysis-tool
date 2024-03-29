@@ -16,8 +16,11 @@
 /**
  * External dependencies.
  */
-import { createContext } from 'use-context-selector';
-import { noop, type CookiesCount } from '@ps-analysis-tool/common';
+import {
+  noop,
+  createContext,
+  type CookiesCount,
+} from '@ps-analysis-tool/common';
 
 export interface CookieStoreContext {
   state: {
