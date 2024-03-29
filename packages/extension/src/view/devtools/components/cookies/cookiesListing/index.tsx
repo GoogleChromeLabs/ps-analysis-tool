@@ -27,10 +27,9 @@ import { CookieDetails, CookieTable } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies.
  */
-import { useCookieStore } from '../../../stateProviders/syncCookieStore';
+import { useCookie, useSettings } from '../../../stateProviders';
 import useCookieListing from './useCookieListing';
 import RowContextMenu from './rowContextMenu';
-import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
 import { useAllowedList } from '../../../stateProviders/useAllowedList';
 
 interface CookiesListingProps {
@@ -38,13 +37,13 @@ interface CookiesListingProps {
 }
 
 const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
-  const { selectedFrame, tabFrames, tabUrl } = useCookieStore(({ state }) => ({
+  const { selectedFrame, tabFrames, tabUrl } = useCookie(({ state }) => ({
     selectedFrame: state.selectedFrame,
     tabFrames: state.tabFrames,
     tabUrl: state.tabUrl,
   }));
 
-  const isUsingCDP = useSettingsStore(({ state }) => state.isUsingCDP);
+  const isUsingCDP = useSettings(({ state }) => state.isUsingCDP);
 
   const { domainsInAllowList, setDomainsInAllowListCallback, isIncognito } =
     useAllowedList(({ state, actions }) => ({

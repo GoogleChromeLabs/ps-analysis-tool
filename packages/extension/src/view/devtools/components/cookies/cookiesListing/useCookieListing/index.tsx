@@ -41,14 +41,13 @@ import {
 /**
  * Internal dependencies
  */
-import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
+import { useCookie, useSettings } from '../../../../stateProviders';
 import useHighlighting from './useHighlighting';
-import { useSettingsStore } from '../../../../stateProviders/syncSettingsStore';
 import NamePrefixIconSelector from './namePrefixIconSelector';
 import OrphanedUnMappedInfoDisplay from './orphanedUnMappedInfoDisplay';
 
 const useCookieListing = (domainsInAllowList: Set<string>) => {
-  const { selectedFrame, cookies, getCookiesSetByJavascript } = useCookieStore(
+  const { selectedFrame, cookies, getCookiesSetByJavascript } = useCookie(
     ({ state, actions }) => ({
       selectedFrame: state.selectedFrame,
       cookies: state.tabCookies || {},
@@ -68,7 +67,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
     [activePanelQuery]
   );
 
-  const isUsingCDP = useSettingsStore(({ state }) => state.isUsingCDP);
+  const isUsingCDP = useSettings(({ state }) => state.isUsingCDP);
 
   const [tableData, setTableData] = useState<TabCookies>(cookies);
 

@@ -39,9 +39,9 @@ import mockResponse, {
 } from '../../../../../utils/test-data/cookieMockData';
 import { noop } from '@ps-analysis-tool/common';
 
-jest.mock('../../../stateProviders/syncCookieStore', () => {
+jest.mock('../../../stateProviders/cookie', () => {
   return {
-    useCookieStore: () => {
+    useCookie: () => {
       return {
         cookies: Object.values(mockResponse.tabCookies),
         tabFrames: mockResponse.tabFrames,

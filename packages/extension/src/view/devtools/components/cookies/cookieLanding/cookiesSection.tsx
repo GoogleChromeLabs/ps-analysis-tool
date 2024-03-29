@@ -29,20 +29,18 @@ import {
 /**
  * Internal dependencies
  */
-import { useCookieStore } from '../../../stateProviders/syncCookieStore';
+import { useCookie } from '../../../stateProviders';
 import {
   ORPHANED_COOKIE_KEY,
   UNMAPPED_COOKIE_KEY,
 } from '@ps-analysis-tool/common';
 
 const CookiesSection = () => {
-  const { tabCookies, tabFrames, frameHasCookies } = useCookieStore(
-    ({ state }) => ({
-      tabCookies: state.tabCookies,
-      tabFrames: state.tabFrames,
-      frameHasCookies: state.frameHasCookies,
-    })
-  );
+  const { tabCookies, tabFrames, frameHasCookies } = useCookie(({ state }) => ({
+    tabCookies: state.tabCookies,
+    tabFrames: state.tabFrames,
+    frameHasCookies: state.frameHasCookies,
+  }));
 
   const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});
 

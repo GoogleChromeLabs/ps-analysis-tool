@@ -33,7 +33,7 @@ import {
  * Internal dependencies.
  */
 import { getCurrentTab } from '../../../../utils/getCurrentTabId';
-import { useCookieStore } from '../syncCookieStore';
+import { useCookie } from '../cookie';
 import setDomainsInAllowList from './utils/setDomainsInAllowList';
 import getDotPrefixedDomain from './utils/getDotPrefixedDomain';
 
@@ -60,7 +60,7 @@ const initialState: AllowedListContext = {
 export const Context = createContext<AllowedListContext>(initialState);
 
 export const Provider = ({ children }: PropsWithChildren) => {
-  const { tabUrl, cookies } = useCookieStore(({ state }) => ({
+  const { tabUrl, cookies } = useCookie(({ state }) => ({
     tabUrl: state.tabUrl,
     cookies: state.tabCookies,
   }));

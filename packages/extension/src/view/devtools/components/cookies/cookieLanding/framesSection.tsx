@@ -27,10 +27,10 @@ import {
 /**
  * Internal dependencies
  */
-import { useCookieStore } from '../../../stateProviders/syncCookieStore';
+import { useCookie } from '../../../stateProviders';
 
 const FramesSection = () => {
-  const { tabCookies, tabFrames } = useCookieStore(({ state }) => ({
+  const { tabCookies, tabFrames } = useCookie(({ state }) => ({
     tabCookies: state.tabCookies,
     tabFrames: state.tabFrames,
   }));
