@@ -13,29 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-
+import { useContextSelector } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import App from './app';
-import { CookieProvider, SettingsProvider } from './stateProviders';
+import Context, { type SettingsStoreContext } from './context';
 
-const root = document.getElementById('root');
+export function useSettings(): SettingsStoreContext;
+export function useSettings<T>(selector: (state: SettingsStoreContext) => T): T;
 
-if (root) {
-  createRoot(root).render(
-    <SettingsProvider>
-      <CookieProvider>
-        <div className="w-96 min-h-[318px] h-full p-5 mt-4 flex justify-center items-center flex-col">
-          <App />
-        </div>
-      </CookieProvider>
-    </SettingsProvider>
-  );
+/**
+ * Cookie store hook.
+ * @param selector Selector function to partially select state.
+ * @returns selected part of the state
+ */
+export function useSettings<T>(
+  selector: (state: SettingsStoreContext) => T | SettingsStoreContext = (
+    state
+  ) => state
+) {
+  return useContextSelector(Context, selector);
 }
+
+export default useSettings;

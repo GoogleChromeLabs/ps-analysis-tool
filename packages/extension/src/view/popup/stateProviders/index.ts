@@ -13,29 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * External dependencies.
- */
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-
-/**
- * Internal dependencies.
- */
-import App from './app';
-import { CookieProvider, SettingsProvider } from './stateProviders';
-
-const root = document.getElementById('root');
-
-if (root) {
-  createRoot(root).render(
-    <SettingsProvider>
-      <CookieProvider>
-        <div className="w-96 min-h-[318px] h-full p-5 mt-4 flex justify-center items-center flex-col">
-          <App />
-        </div>
-      </CookieProvider>
-    </SettingsProvider>
-  );
-}
+export * from './cookie';
+export * from './settings';
