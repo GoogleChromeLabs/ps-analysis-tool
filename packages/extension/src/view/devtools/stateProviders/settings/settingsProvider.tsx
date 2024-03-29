@@ -22,8 +22,10 @@ import React, {
   useState,
   useCallback,
 } from 'react';
-import { noop } from '@ps-analysis-tool/design-system';
-import { useContextSelector, createContext } from '@ps-analysis-tool/common';
+/**
+ * Internal dependencies.
+ */
+import Context, { type SettingsStoreContext } from './context';
 
 enum PLATFORM_OS_MAP {
   mac = 'MacOS',
@@ -35,56 +37,7 @@ enum PLATFORM_OS_MAP {
   fuchsia = 'Fuchsia',
 }
 
-export interface SettingStoreContext {
-  state: {
-    allowedNumberOfTabs: string | null;
-    currentTabs: number;
-    currentExtensions:
-      | {
-          extensionName: string;
-          extensionId: string;
-        }[]
-      | null;
-    browserInformation: string | null;
-    PSATVersion: string | null;
-    OSInformation: string | null;
-    isUsingCDP: boolean;
-    settingsChanged: boolean;
-    allowedNumberOfTabsForSettingsPageDisplay: string | null;
-    isUsingCDPForSettingsPageDisplay: boolean;
-  };
-  actions: {
-    setProcessingMode: (newState: boolean) => void;
-    setIsUsingCDP: (newValue: boolean) => void;
-    handleSettingsChange: () => void;
-    setSettingsChanged: React.Dispatch<React.SetStateAction<boolean>>;
-  };
-}
-
-const initialState: SettingStoreContext = {
-  state: {
-    allowedNumberOfTabs: null,
-    currentTabs: 0,
-    currentExtensions: null,
-    browserInformation: null,
-    PSATVersion: null,
-    OSInformation: null,
-    isUsingCDP: false,
-    settingsChanged: false,
-    allowedNumberOfTabsForSettingsPageDisplay: null,
-    isUsingCDPForSettingsPageDisplay: false,
-  },
-  actions: {
-    setIsUsingCDP: noop,
-    setProcessingMode: noop,
-    handleSettingsChange: noop,
-    setSettingsChanged: noop,
-  },
-};
-
-export const Context = createContext<SettingStoreContext>(initialState);
-
-export const Provider = ({ children }: PropsWithChildren) => {
+const Provider = ({ children }: PropsWithChildren) => {
   const [allowedNumberOfTabs, setAllowedNumberOfTabs] = useState<string | null>(
     null
   );
@@ -102,15 +55,15 @@ export const Provider = ({ children }: PropsWithChildren) => {
   ] = useState(false);
 
   const [currentTabs, setCurrentTabs] =
-    useState<SettingStoreContext['state']['currentTabs']>(0);
+    useState<SettingsStoreContext['state']['currentTabs']>(0);
   const [browserInformation, setBrowserInformation] = useState<string | null>(
     null
   );
   const [PSATVersion, setPSATVersion] = useState<string | null>(null);
   const [currentExtensions, setCurrentExtensions] =
-    useState<SettingStoreContext['state']['currentExtensions']>(null);
+    useState<SettingsStoreContext['state']['currentExtensions']>(null);
   const [OSInformation, setOSInformation] =
-    useState<SettingStoreContext['state']['OSInformation']>(null);
+    useState<SettingsStoreContext['state']['OSInformation']>(null);
 
   const intitialSync = useCallback(async () => {
     const sessionStorage = await chrome.storage.session.get();
@@ -307,19 +260,4 @@ export const Provider = ({ children }: PropsWithChildren) => {
   );
 };
 
-export function useSettingsStore(): SettingStoreContext;
-export function useSettingsStore<T>(
-  selector: (state: SettingStoreContext) => T
-): T;
-
-/**
- * Cookie store hook.
- * @param selector Selector function to partially select state.
- * @returns selected part of the state
- */
-export function useSettingsStore<T>(
-  selector: (state: SettingStoreContext) => T | SettingStoreContext = (state) =>
-    state
-) {
-  return useContextSelector(Context, selector);
-}
+export default Provider;
