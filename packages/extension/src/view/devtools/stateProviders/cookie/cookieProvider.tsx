@@ -82,17 +82,25 @@ const Provider = ({ children }: PropsWithChildren) => {
   /**
    * Set tab frames state for frame ids and frame URLs from using chrome.webNavigation.getAllFrames
    */
-  const getAllFramesForCurrentTab = useCallback(async () => {
-    const currentTabFrames = await chrome.webNavigation.getAllFrames({
-      tabId: chrome.devtools.inspectedWindow.tabId,
-    });
+  const getAllFramesForCurrentTab = useCallback(
+    async (extraFrameData?: Record<string, string[]>) => {
+      const currentTabFrames = await chrome.webNavigation.getAllFrames({
+        tabId: chrome.devtools.inspectedWindow.tabId,
+      });
 
-    const currentTargets = await chrome.debugger.getTargets();
+      const currentTargets = await chrome.debugger.getTargets();
 
-    setTabFrames((prevState) =>
-      getFramesForCurrentTab(prevState, currentTabFrames, currentTargets)
-    );
-  }, []);
+      setTabFrames((prevState) =>
+        getFramesForCurrentTab(
+          prevState,
+          currentTabFrames,
+          currentTargets,
+          extraFrameData ?? {}
+        )
+      );
+    },
+    []
+  );
 
   useEffect(() => {
     if (!tabFrames) {
@@ -135,24 +143,6 @@ const Provider = ({ children }: PropsWithChildren) => {
           acc[url] = true;
         }
       });
-
-      if (cookie.frameIdList?.length === 0) {
-        if (
-          cookie.frameIdList &&
-          cookie.frameIdList.length === 0 &&
-          cookie.parsedCookie.domain
-        ) {
-          const domainToCheck = cookie.parsedCookie.domain.startsWith('.')
-            ? cookie.parsedCookie.domain.slice(1)
-            : cookie.parsedCookie.domain;
-
-          Object.values(tabFramesIdsWithURL).forEach((frameUrl) => {
-            if (frameUrl.includes(domainToCheck)) {
-              acc[frameUrl] = true;
-            }
-          });
-        }
-      }
 
       return acc;
     }, {});
@@ -242,7 +232,9 @@ const Provider = ({ children }: PropsWithChildren) => {
         cookieData?: TabCookies;
         tabToRead?: string;
         tabMode?: string;
-        frames?: string[];
+        extraData?: {
+          extraFrameData?: Record<string, string[]>;
+        };
       };
     }) => {
       if (!message.type) {
@@ -285,12 +277,13 @@ const Provider = ({ children }: PropsWithChildren) => {
         message?.payload?.cookieData
       ) {
         const data = message.payload.cookieData;
+        const frameData = message.payload.extraData?.extraFrameData ?? {};
 
         if (tabId.toString() === message.payload.tabId.toString()) {
           if (isCurrentTabBeingListenedToRef.current) {
-            await getAllFramesForCurrentTab();
             setTabToRead(tabId.toString());
             setTabCookies(Object.keys(data).length > 0 ? data : null);
+            await getAllFramesForCurrentTab(frameData);
           } else {
             setTabFrames(null);
           }

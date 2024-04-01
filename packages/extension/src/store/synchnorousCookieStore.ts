@@ -50,6 +50,7 @@ class SynchnorousCookieStore {
       popupOpenState: boolean;
       newUpdates: number;
       frameIdSet: Set<string>;
+      frameIDURLSet: Record<string, string[]>;
     };
   } = {};
 
@@ -211,6 +212,32 @@ class SynchnorousCookieStore {
   }
 
   /**
+   * Updates FrameIdURLSet set for a given url for a given tab.
+   * @param {number} tabId The url whose url needs to be update.
+   * @param {string} frameId The new frameId to be added.
+   */
+  async updateFrameIdURLSet(tabId: number, frameId: string) {
+    const info = (await chrome.debugger.sendCommand(
+      { targetId: frameId },
+      'Target.getTargetInfo',
+      { targetId: frameId }
+    )) as { [key: string]: Protocol.Target.TargetInfo };
+
+    if (!info) {
+      return;
+    }
+
+    const url = new URL(info.targetInfo.url).origin;
+    if (!this.tabs[tabId].frameIDURLSet[url]) {
+      this.tabs[tabId].frameIDURLSet[url] = [];
+    }
+
+    this.tabs[tabId].frameIDURLSet[url] = [
+      ...new Set([...this.tabs[tabId].frameIDURLSet[url], frameId]),
+    ];
+  }
+
+  /**
    * Update tab url for given tab
    * @param {number} tabId The url whose url needs to be update.
    * @param {string} url The updated URL.
@@ -334,6 +361,7 @@ class SynchnorousCookieStore {
       popupOpenState: false,
       newUpdates: 0,
       frameIdSet: new Set(),
+      frameIDURLSet: {},
     };
   }
 
@@ -388,6 +416,9 @@ class SynchnorousCookieStore {
           payload: {
             tabId,
             cookieData: this.tabsData[tabId],
+            extraData: {
+              extraFrameData: this.tabs[tabId].frameIDURLSet,
+            },
           },
         });
       }

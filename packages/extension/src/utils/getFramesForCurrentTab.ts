@@ -23,52 +23,48 @@ import { type TabFrames } from '@ps-analysis-tool/common';
  * @param prevState Previous state to which data will be appended.
  * @param currentTabFrames Current frames in the tab.
  * @param currentTargets Current debugger targets in the browser.
+ * @param extraFrameData Extra frames data that has been provided by the serivce worker.
  * @returns {TabFrames|null} Tabframes and related details if available else null.
  */
 export default function getFramesForCurrentTab(
   prevState: TabFrames | null,
   currentTabFrames: chrome.webNavigation.GetAllFrameResultDetails[] | null,
-  currentTargets: chrome.debugger.TargetInfo[]
+  currentTargets: chrome.debugger.TargetInfo[],
+  extraFrameData: Record<string, string[]>
 ) {
-  const regexForFrameUrl =
-    /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:/\n?]+)/;
-
   const modifiedTabFrames: TabFrames = {};
 
   currentTabFrames?.forEach(({ url, frameType }) => {
     if (url && url.includes('http')) {
-      const parsedUrl = regexForFrameUrl.exec(url);
-      if (!parsedUrl || !parsedUrl[0]) {
+      const parsedUrl = new URL(url).origin;
+      if (!parsedUrl) {
         return;
       }
 
-      const frameIdsFromCDP = currentTargets.map(
-        ({ url: targetUrl, type, id }) => {
-          if (
-            targetUrl.includes(parsedUrl[0]) &&
-            (type === 'page' || type === 'other')
-          ) {
-            return id;
-          }
-          return '';
+      const frameIdsFromCDP: string[] = [];
+      currentTargets.forEach(({ url: targetUrl, type, id }) => {
+        if (url === targetUrl && (type === 'page' || type === 'other')) {
+          frameIdsFromCDP.push(id);
         }
-      );
+      });
 
       if (frameIdsFromCDP.length) {
-        if (modifiedTabFrames[parsedUrl[0]]) {
-          modifiedTabFrames[parsedUrl[0]].frameIds = Array.from(
+        if (modifiedTabFrames[parsedUrl]) {
+          modifiedTabFrames[parsedUrl].frameIds = Array.from(
             new Set([
-              ...(modifiedTabFrames[parsedUrl[0]].frameIds ?? []),
-              ...(prevState?.[parsedUrl[0]]?.frameIds ?? []),
+              ...(modifiedTabFrames[parsedUrl].frameIds ?? []),
+              ...(prevState?.[parsedUrl]?.frameIds ?? []),
+              ...(extraFrameData[parsedUrl] ?? []),
               ...(frameIdsFromCDP ?? []),
             ])
           );
         } else {
-          modifiedTabFrames[parsedUrl[0]] = {
+          modifiedTabFrames[parsedUrl] = {
             frameIds: Array.from(
               new Set([
                 ...(frameIdsFromCDP ?? []),
-                ...(prevState?.[parsedUrl[0]]?.frameIds ?? []),
+                ...(prevState?.[parsedUrl]?.frameIds ?? []),
+                ...(extraFrameData[parsedUrl] ?? []),
               ])
             ),
             frameType,
@@ -78,8 +74,25 @@ export default function getFramesForCurrentTab(
     }
   });
 
-  return {
-    ...prevState,
-    ...modifiedTabFrames,
-  };
+  Object.keys(extraFrameData).forEach((key) => {
+    if (key === 'null') {
+      return;
+    }
+
+    if (modifiedTabFrames[key]) {
+      modifiedTabFrames[key].frameIds = Array.from(
+        new Set([
+          ...(modifiedTabFrames[key].frameIds ?? []),
+          ...(extraFrameData[key] ?? []),
+        ])
+      );
+    } else {
+      modifiedTabFrames[key] = {
+        frameIds: extraFrameData[key] ?? [],
+        frameType: 'sub_frame',
+      };
+    }
+  });
+
+  return modifiedTabFrames;
 }

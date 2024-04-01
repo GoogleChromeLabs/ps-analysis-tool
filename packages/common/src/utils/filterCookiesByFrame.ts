@@ -39,15 +39,19 @@ const filterCookiesByFrame = (
 
   Object.keys(tabFrames)?.forEach((url) => {
     const frameIds = tabFrames[url].frameIds;
-
     if (frameIds) {
-      tabFramesIDMap = [...new Set<string>([...frameIds, ...tabFramesIDMap])];
+      const tabFramesIDMapSet = new Set<string>([
+        ...frameIds,
+        ...tabFramesIDMap,
+      ]);
+      tabFramesIDMapSet.delete('');
+      tabFramesIDMap = [...tabFramesIDMapSet];
     }
   });
 
   Object.entries(cookies).forEach(([key, cookie]) => {
     tabFrames[frameUrl].frameIds?.forEach((frameId) => {
-      if (cookie.frameIdList?.includes(frameId)) {
+      if (frameId && cookie.frameIdList?.includes(frameId)) {
         frameFilteredCookies[key] = cookie;
       }
     });

@@ -48,6 +48,7 @@ import getQueryParams from '../utils/getQueryParams';
 import reloadCurrentTab from '../utils/reloadCurrentTab';
 import createCookieFromAuditsIssue from '../utils/createCookieFromAuditsIssue';
 import attachCDP from './attachCDP';
+import isValidURL from '../utils/isValidURL';
 
 let cookieDB: CookieDatabase | null = null;
 let syncCookieStore: SynchnorousCookieStore | undefined;
@@ -78,7 +79,6 @@ const unParsedResponseHeaders: {
     [requestId: string]: Protocol.Network.ResponseReceivedExtraInfoEvent;
   };
 } = {};
-
 let tabMode: 'single' | 'unlimited' = 'single';
 let tabToRead = '';
 let globalIsUsingCDP = false;
@@ -378,15 +378,29 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
 
   if (method === 'Page.frameAttached' && params) {
     const frameData = params as Protocol.Page.FrameAttachedEvent;
+    try {
+      await attachCDP({ targetId: frameData.frameId });
+    } catch (error) {
+      /* empty */
+    }
+
     if (source.tabId) {
       syncCookieStore?.updateFrameIdSet(source.tabId, frameData.frameId);
+      await syncCookieStore?.updateFrameIdURLSet(
+        source.tabId,
+        frameData.frameId
+      );
     } else if (source.targetId) {
-      Object.keys(syncCookieStore?.tabs ?? {}).forEach((key) => {
+      Object.keys(syncCookieStore?.tabs ?? {}).forEach(async (key) => {
         if (
           source.targetId &&
           syncCookieStore?.tabs[Number(key)].frameIdSet.has(source.targetId)
         ) {
           syncCookieStore?.tabs[Number(key)].frameIdSet.add(frameData.frameId);
+          await syncCookieStore?.updateFrameIdURLSet(
+            Number(key),
+            frameData.frameId
+          );
         }
       });
     }
@@ -394,7 +408,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
 
   if (method === 'Page.frameNavigated' && params) {
     const {
-      frame: { parentId = '', id },
+      frame: { parentId = '', id, url },
     } = params as Protocol.Page.FrameNavigatedEvent;
 
     if (parentId) {
@@ -404,6 +418,20 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
           syncCookieStore?.tabs[Number(key)].frameIdSet.has(parentId)
         ) {
           syncCookieStore?.tabs[Number(key)].frameIdSet.add(id);
+
+          if (isValidURL(url)) {
+            const parsedUrl = new URL(url).origin;
+            if (!syncCookieStore?.tabs[Number(key)].frameIDURLSet[parsedUrl]) {
+              syncCookieStore.tabs[Number(key)].frameIDURLSet[parsedUrl] = [];
+            }
+
+            syncCookieStore.tabs[Number(key)].frameIDURLSet[parsedUrl] = [
+              ...new Set([
+                ...syncCookieStore.tabs[Number(key)].frameIDURLSet[parsedUrl],
+                id,
+              ]),
+            ];
+          }
         }
       });
     }
