@@ -71,7 +71,12 @@ const parseRequestCookieHeader = (
         value: rest.join('='),
       } as CookieData['parsedCookie'];
 
-      parsedCookie = createCookieObject(parsedCookie, url, cdpCookiesList);
+      parsedCookie = createCookieObject(
+        parsedCookie,
+        url,
+        cdpCookiesList,
+        'request'
+      );
 
       const _isFirstParty = isFirstParty(parsedCookie.domain || '', tabUrl);
 

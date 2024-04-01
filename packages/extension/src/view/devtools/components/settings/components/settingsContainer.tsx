@@ -22,7 +22,7 @@ import React, { useMemo } from 'react';
  * Internal dependencies
  */
 import SettingOption from './settingOption';
-import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
+import { useSettings } from '../../../stateProviders';
 // @ts-ignore
 // eslint-disable-next-line import/no-relative-packages
 import Gear from '../../../../../../../../assets/icons/gear.svg';
@@ -37,7 +37,7 @@ interface settingsToReturnObject {
 }
 const SettingsContainer = () => {
   const { allowedNumberOfTabs, isUsingCDP, setIsUsingCDP, setProcessingMode } =
-    useSettingsStore(({ state, actions }) => ({
+    useSettings(({ state, actions }) => ({
       allowedNumberOfTabs: state.allowedNumberOfTabsForSettingsPageDisplay,
       isUsingCDP: state.isUsingCDPForSettingsPageDisplay,
       setProcessingMode: actions.setProcessingMode,

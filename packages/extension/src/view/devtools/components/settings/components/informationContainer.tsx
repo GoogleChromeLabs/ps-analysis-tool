@@ -22,7 +22,7 @@ import classNames from 'classnames';
 /**
  * Internal dependencies
  */
-import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
+import { useSettings } from '../../../stateProviders';
 // @ts-ignore
 // eslint-disable-next-line import/no-relative-packages
 import InformationIcon from '../../../../../../../../assets/icons/information-icon.svg';
@@ -31,13 +31,19 @@ import InformationIcon from '../../../../../../../../assets/icons/information-ic
 import Done from '../../../../../../../../assets/icons/done.svg';
 
 const InformationContainer = () => {
-  const { currentTabs, currentExtensions, browserInformation, OSInformation } =
-    useSettingsStore(({ state }) => ({
-      currentTabs: state.currentTabs,
-      currentExtensions: state.currentExtensions,
-      browserInformation: state.browserInformation,
-      OSInformation: state.OSInformation,
-    }));
+  const {
+    currentTabs,
+    currentExtensions,
+    browserInformation,
+    OSInformation,
+    PSATVersion,
+  } = useSettings(({ state }) => ({
+    currentTabs: state.currentTabs,
+    currentExtensions: state.currentExtensions,
+    browserInformation: state.browserInformation,
+    OSInformation: state.OSInformation,
+    PSATVersion: state.PSATVersion,
+  }));
 
   const [copying, setCopying] = useState(false);
   const timeOutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -58,14 +64,15 @@ const InformationContainer = () => {
   const handleCopy = useCallback(() => {
     setCopying(true);
 
-    let clipboardText = `<strong>Open Tabs:</strong> ${currentTabs}<br/>`;
+    let clipboardText = `**Open Tabs:** ${currentTabs}\n`;
 
-    clipboardText += `<strong>Active Extensions:</strong><br/>`;
+    clipboardText += `**Active Extensions:**\n`;
     currentExtensions?.forEach((extension) => {
-      clipboardText += `${extension.extensionName}: ${extension.extensionId}<br/>`;
+      clipboardText += `${extension.extensionName}: ${extension.extensionId}\n`;
     });
-    clipboardText += `<strong>Chrome Version:</strong> ${browserInformation}<br/>`;
-    clipboardText += `<strong>OS - System Architecture:</strong> ${OSInformation}`;
+    clipboardText += `**Chrome Version:** ${browserInformation}\n`;
+    clipboardText += `**PSAT Version:** ${PSATVersion}\n`;
+    clipboardText += `**OS - System Architecture:** ${OSInformation}`;
 
     try {
       // Need to do this since chrome doesnt allow the clipboard access in extension.
@@ -83,12 +90,12 @@ const InformationContainer = () => {
       document.getSelection()?.addRange(range);
 
       document.addEventListener('copy', (e) => {
-        e.clipboardData?.setData('text/html', clipboardText);
+        e.clipboardData?.setData('text/plain', clipboardText);
         e.preventDefault();
       });
       document.execCommand('copy');
       document.removeEventListener('copy', (e) => {
-        e.clipboardData?.setData('text/html', clipboardText);
+        e.clipboardData?.setData('text/plain', clipboardText);
         e.preventDefault();
       });
 
@@ -97,7 +104,13 @@ const InformationContainer = () => {
     } catch (error) {
       //Fail silently
     }
-  }, [OSInformation, browserInformation, currentExtensions, currentTabs]);
+  }, [
+    OSInformation,
+    PSATVersion,
+    browserInformation,
+    currentExtensions,
+    currentTabs,
+  ]);
 
   return (
     <div data-testid="debugging-information">
@@ -125,6 +138,7 @@ const InformationContainer = () => {
           <button
             disabled={copying}
             className="absolute right-1 top-1"
+            data-testid="copy-button"
             onClick={handleCopy}
           >
             {copying ? (
@@ -146,6 +160,14 @@ const InformationContainer = () => {
               </span>
               <span className="text-xs text-darkest-gray dark:text-bright-gray">
                 {browserInformation}
+              </span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm dark:text-bright-gray">
+                PSAT version
+              </span>
+              <span className="text-xs text-darkest-gray dark:text-bright-gray">
+                {PSATVersion}
               </span>
             </div>
             <div className="flex flex-col">

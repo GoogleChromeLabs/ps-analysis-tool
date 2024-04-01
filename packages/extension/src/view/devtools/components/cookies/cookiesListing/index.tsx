@@ -27,27 +27,30 @@ import { CookieDetails, CookieTable } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies.
  */
-import { useCookieStore } from '../../../stateProviders/syncCookieStore';
+import { useCookie, useSettings } from '../../../stateProviders';
 import useCookieListing from './useCookieListing';
 import RowContextMenu from './rowContextMenu';
-import useAllowedList from './useAllowedList';
-import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
+import { useAllowedList } from '../../../stateProviders/allowedList';
 
 interface CookiesListingProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;
 }
 
 const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
-  const { selectedFrame, tabFrames, tabUrl } = useCookieStore(({ state }) => ({
+  const { selectedFrame, tabFrames, tabUrl } = useCookie(({ state }) => ({
     selectedFrame: state.selectedFrame,
     tabFrames: state.tabFrames,
     tabUrl: state.tabUrl,
   }));
 
-  const isUsingCDP = useSettingsStore(({ state }) => state.isUsingCDP);
+  const isUsingCDP = useSettings(({ state }) => state.isUsingCDP);
 
   const { domainsInAllowList, setDomainsInAllowListCallback, isIncognito } =
-    useAllowedList();
+    useAllowedList(({ state, actions }) => ({
+      domainsInAllowList: state.domainsInAllowList,
+      setDomainsInAllowListCallback: actions.setDomainsInAllowListCallback,
+      isIncognito: state.isIncognito,
+    }));
 
   const {
     tableData,

@@ -25,8 +25,12 @@ import { addUTMParams } from '@ps-analysis-tool/common';
 import { Accordion, FeatureList } from '../../components';
 import type { AccordionProps } from '../../types';
 
-const GSIAccordion = ({ matches }: AccordionProps) => {
-  const featuresCount = matches && matches.length ? matches.length : 0;
+const GISAccordion = ({ matches }: AccordionProps) => {
+  if (!matches) {
+    return null;
+  }
+
+  const featuresCount = matches.length;
 
   if (!featuresCount) {
     return null;
@@ -34,28 +38,29 @@ const GSIAccordion = ({ matches }: AccordionProps) => {
 
   return (
     <Accordion
-      title={'Avoid use of deprecated Google Sign-In functionality.'}
-      isLoading={false}
+      title={'Avoid use of unsupported Google Identity Services features.'}
       featuresText={`${featuresCount} features`}
     >
       <p className="dark:text-bright-gray">
-        The Google Sign-In JavaScript library is deprecated and is no longer
-        supported. Review the following features and consider{' '}
+        Due to Privacy Sandbox enforcements some features are backward
+        incompatible or deprecated. This report performs a page scan for script
+        src elements and affected JavaScript objects and methods. Review the
+        following features and{' '}
         <a
           className="text-bright-navy-blue dark:text-jordy-blue"
-          href={addUTMParams(
-            'https://developers.google.com/privacy-sandbox/3pcd/guides/identity#federated_identity'
-          )}
           target="_blank"
+          href={addUTMParams(
+            'https://developers.google.com/identity/gsi/web/guides/fedcm-migration?utm_source=lighthouse&utm_medium=cli'
+          )}
           rel="noreferrer"
         >
-          migrating
+          migrate
         </a>{' '}
-        to a newer library if necessary.
+        if necessary.
       </p>
       <FeatureList matches={matches} />
     </Accordion>
   );
 };
 
-export default GSIAccordion;
+export default GISAccordion;

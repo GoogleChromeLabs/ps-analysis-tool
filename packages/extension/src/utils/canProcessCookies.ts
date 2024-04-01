@@ -16,20 +16,20 @@
 /**
  * This function will return true if the current request can be processed or and false if it cannot be processed.
  * @param {string} tabMode The mode of processing of the extension.
- * @param {string} tabUrl Current tab url.
+ * @param {string | null | undefined} tabUrl Current tab url.
  * @param {string} tabToRead The current tab being read y extension in case of single processing mode.
  * @param {number} currentTabId The tabId of the current request is associated to.
- * @param {chrome.webRequest.WebResponseHeadersDetails['responseHeaders']} responseHeaders The tabId of the current request is associated to.
+ * @param {chrome.webRequest.HttpHeader[] | undefined} headers The tabId of the current request is associated to.
  * @returns {boolean}.
  */
 export default function canProcessCookies(
   tabMode: 'unlimited' | 'single',
-  tabUrl: string | null,
+  tabUrl: string | null | undefined,
   tabToRead: string,
   currentTabId: number,
-  responseHeaders: chrome.webRequest.WebResponseHeadersDetails['responseHeaders']
+  headers: chrome.webRequest.HttpHeader[] | undefined
 ) {
-  if (!tabUrl || !responseHeaders || tabUrl === 'chrome://newtab/') {
+  if (!tabUrl || !headers || tabUrl === 'chrome://newtab/') {
     return false;
   }
 

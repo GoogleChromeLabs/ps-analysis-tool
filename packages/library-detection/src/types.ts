@@ -36,11 +36,6 @@ export type Config = {
   signatures: SignaturesConfig[];
   domainsToSkip: string[];
   helpUrl: string;
-  exceptions?: ExceptionUrls;
-};
-
-export type ExceptionUrls = {
-  [key: string]: { signatures: string[]; subDomains: string[] };
 };
 
 export type ScriptTagUnderCheck = {
@@ -70,36 +65,29 @@ export type ResourceTreeItem = {
 };
 
 export type AccordionProps = {
-  matches: DetectedSignature[];
+  matches?: DetectedSignature[];
+  domQueryMatches?: string[] | null;
 };
 
 export type DomainPaths = {
   [domain: string]: string[];
 };
 
-export type DetectionSubFunctions = {
-  gis: (
+export type DetectionFunctions = {
+  [key: string]: (
     arg0: ScriptTagUnderCheck,
-    arg1: DetectedSignature[],
-    arg2: number
+    arg1: DetectedSignature[] | undefined,
+    arg2: number | undefined,
+    arg3?: number | undefined
   ) => {
     signatureMatches: number;
     matches: DetectedSignature[];
-  };
-  gsiV2: (
-    arg0: ScriptTagUnderCheck,
-    arg1: DetectedSignature[],
-    arg2: number,
-    arg3: number
-  ) => {
-    signatureMatches: number;
-    matches: DetectedSignature[];
-    moduleMatch: number;
+    moduleMatch?: number;
   };
 };
 
 export type DetectionAuditFunctions = {
-  gsiV2: (
+  [key: string]: (
     arg1: number,
     arg2: DetectedSignature[],
     arg3: number

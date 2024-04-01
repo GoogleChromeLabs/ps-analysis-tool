@@ -46,7 +46,7 @@ const DELAY_TIME = 20000;
 const program = new Command();
 
 program
-  .version('0.5.2')
+  .version('0.6.0')
   .description('CLI to test a URL for 3p cookies')
   .option('-u, --url <value>', 'URL of a site')
   .option('-s, --sitemap-url <value>', 'URL of a sitemap')
@@ -68,6 +68,10 @@ program
   .option(
     '-d, --out-dir <value>',
     'Directory path where the analysis data will be stored'
+  )
+  .option(
+    '-ab, --accept-banner',
+    'This will accept the GDPR banner if present.'
   );
 
 program.parse();
@@ -116,6 +120,7 @@ const startDashboardServer = async (dir: string) => {
   const shouldSkipPrompts = !program.opts().prompts;
   const shouldSkipTechnologyAnalysis = !program.opts().technology;
   const outDir = program.opts().outDir;
+  const shouldSkipAcceptBanner = program.opts().acceptBanner;
 
   validateArgs(
     url,
@@ -187,7 +192,8 @@ const startDashboardServer = async (dir: string) => {
     DELAY_TIME,
     cookieDictionary,
     3,
-    urlsToProcess.length !== 1 ? spinnies : undefined
+    urlsToProcess.length !== 1 ? spinnies : undefined,
+    shouldSkipAcceptBanner
   );
 
   spinnies.succeed('cookie-spinner', {
@@ -224,7 +230,7 @@ const startDashboardServer = async (dir: string) => {
 
   if (outDir) {
     await saveCSVReports(path.resolve(outputDir), result);
-    return;
+    process.exit(0);
   }
 
   startDashboardServer(
