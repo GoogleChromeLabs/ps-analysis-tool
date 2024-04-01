@@ -101,7 +101,7 @@ const startDashboardServer = async (dir: string, port: number) => {
   const sitemapUrl = program.opts().sitemapUrl;
   const csvPath = program.opts().csvPath;
   const sitemapPath = program.opts().sitemapPath;
-  const dashboardPort = parseInt(program.opts().dashboardPort || '9000');
+  const port = parseInt(program.opts().port || '9000');
   const numberOfUrlsInput = program.opts().urlLimit;
   const isHeadless = Boolean(program.opts().headless);
   const shouldSkipPrompts = !program.opts().prompts;
@@ -109,27 +109,28 @@ const startDashboardServer = async (dir: string, port: number) => {
   const outDir = program.opts().outDir;
   const shouldSkipAcceptBanner = program.opts().acceptBanner;
 
-  //check if devserver port in already in use only if the dashboard is goint to be used
-
-  if (!outDir) {
-    const isPortInUse = await checkPortInUse(dashboardPort);
-
-    if (isPortInUse) {
-      console.error(
-        `Error: Report server port ${dashboardPort} already in use. You might be already running CLI`
-      );
-      process.exit(1);
-    }
-  }
-
   validateArgs(
     url,
     sitemapUrl,
     csvPath,
     sitemapPath,
     numberOfUrlsInput,
-    outDir
+    outDir,
+    port
   );
+
+  //check if devserver port in already in use only if the dashboard is goint to be used
+
+  if (!outDir) {
+    const isPortInUse = await checkPortInUse(port);
+
+    if (isPortInUse) {
+      console.error(
+        `Error: Report server port ${port} already in use. You might be already running CLI`
+      );
+      process.exit(1);
+    }
+  }
 
   const prefix =
     url || sitemapUrl
@@ -236,6 +237,6 @@ const startDashboardServer = async (dir: string, port: number) => {
   startDashboardServer(
     encodeURIComponent(prefix) +
       (sitemapUrl || csvPath || sitemapPath ? '&type=sitemap' : ''),
-    dashboardPort
+    port
   );
 })();
