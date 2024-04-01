@@ -28,8 +28,8 @@ const sidebarData: SidebarItems = {
     title: 'Sitemap Report',
     children: {},
   },
-  'sitemap-affected-cookies': {
-    title: 'Affected Cookies',
+  'sitemap-cookies-with-issues': {
+    title: 'Cookies With Issues',
     children: {},
     icon: <CookieIcon />,
     selectedIcon: <CookieIconWhite />,

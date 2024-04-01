@@ -25,20 +25,28 @@ import { type CookieTableData } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import useCookieListing from '../../hooks/useCookieListing.tsx';
+import useCookieListing from '../../hooks/useCookieListing.tsx/index.jsx';
 
-interface AffectedCookiesProps {
+interface CookiesWithIssuesProps {
   cookies: CookieTableData[];
   selectedSite: string | null;
 }
 
-const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
+const CookiesWithIssues = ({
+  cookies,
+  selectedSite,
+}: CookiesWithIssuesProps) => {
   const [selectedFrameCookie, setSelectedFrameCookie] = useState<{
     [frame: string]: CookieTableData | null;
   } | null>(null);
 
   const { tableColumns, filters, searchKeys, tablePersistentSettingsKey } =
-    useCookieListing(cookies, 'frame', 'affectedCookiesListing', selectedSite);
+    useCookieListing(
+      cookies,
+      'frame',
+      'cookiesWithIssuesListing',
+      selectedSite
+    );
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -58,7 +66,7 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
         className="h-full flex"
       >
         <CookieTable
-          data={cookies.map((cookie) => ({ ...cookie, isBlocked: undefined }))} // Hot Fix: To unhighlight cookies in the Affected Cookie table.
+          data={cookies.map((cookie) => ({ ...cookie, isBlocked: undefined }))} // Hot Fix: To unhighlight cookies in the Cookies with issues table.
           tableColumns={tableColumns}
           tableFilters={filters}
           tableSearchKeys={searchKeys}
@@ -77,4 +85,4 @@ const AffectedCookies = ({ cookies, selectedSite }: AffectedCookiesProps) => {
   );
 };
 
-export default AffectedCookies;
+export default CookiesWithIssues;

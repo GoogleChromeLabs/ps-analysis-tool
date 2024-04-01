@@ -37,7 +37,7 @@ export const COOKIES_DATA_HEADER = [
   'Value',
   'Path',
   'Expires',
-  'Cookie Affected',
+  'Issues',
   'GDPRPortal',
 ];
 

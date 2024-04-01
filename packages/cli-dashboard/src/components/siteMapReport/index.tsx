@@ -38,7 +38,7 @@ import {
  * Internal dependencies.
  */
 import SiteReport from '../siteReport';
-import SiteMapAffectedCookies from './sitemapAffectedCookies';
+import SiteMapCookiesWithIssues from './sitemapCookiesWithIssues';
 import CookiesLandingContainer from '../siteReport/tabs/cookies/cookiesLandingContainer';
 import reshapeCookies from '../utils/reshapeCookies';
 import sidebarData from './sidebarData';
@@ -85,7 +85,7 @@ const SiteMapReport = ({
     [landingPageCookies]
   );
 
-  const affectedCookies = useMemo(
+  const cookiesWithIssues = useMemo(
     () =>
       Object.fromEntries(
         Object.entries(reshapedCookies).filter(([, cookie]) => cookie.isBlocked)
@@ -135,7 +135,7 @@ const SiteMapReport = ({
         <CookiesLandingContainer
           tabCookies={reshapedCookies}
           tabFrames={frames}
-          affectedCookies={affectedCookies}
+          cookiesWithIssues={cookiesWithIssues}
           downloadReport={() => {
             if (!Array.isArray(completeJson)) {
               return;
@@ -168,8 +168,8 @@ const SiteMapReport = ({
         {}
       );
 
-      _data['sitemap-affected-cookies'].panel = (
-        <SiteMapAffectedCookies
+      _data['sitemap-cookies-with-issues'].panel = (
+        <SiteMapCookiesWithIssues
           cookies={Object.values(reshapedCookies).filter(
             (cookie) => cookie.isBlocked
           )}
@@ -179,7 +179,7 @@ const SiteMapReport = ({
       return _data;
     });
   }, [
-    affectedCookies,
+    cookiesWithIssues,
     completeJson,
     frames,
     isKeySelected,
