@@ -13,19 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
 import {
   prepareCookieStatsComponents,
   prepareCookiesCount,
   prepareFrameStatsComponent,
+  type DataMapping,
 } from '@ps-analysis-tool/design-system';
-import type { DataMapping } from '@ps-analysis-tool/design-system/src/components/cookiesLanding/landingHeader';
 import { saveAs } from 'file-saver';
 
 /**
- *
- * @param tabCookies
- * @param tabFrames
- * @param description
+ * Utility function to download report.
+ * @param tabCookies Tab cookies.
+ * @param tabFrames Tab frames.
  */
 export default async function downloadReport(tabCookies: any, tabFrames: any) {
   const htmlText = await (await fetch('../report/index.html')).text();
@@ -73,11 +75,12 @@ export default async function downloadReport(tabCookies: any, tabFrames: any) {
     showBlockedInfoIcon: true,
     frameStateCreator,
   })}`;
+
   script.text = code;
   reportDom.head.appendChild(script);
 
   const injectedHtmlText = `<head>${reportDom.head.innerHTML}<head><body>${reportDom.body.innerHTML}</body>`;
-
   const html = new Blob([injectedHtmlText]);
+
   saveAs(html, 'report.html');
 }

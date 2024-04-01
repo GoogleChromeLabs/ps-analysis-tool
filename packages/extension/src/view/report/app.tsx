@@ -18,14 +18,15 @@
  * External dependencies
  */
 import React from 'react';
-/**
- * Internal dependencies
- */
-import './app.css';
 import {
   CookiesLandingContainer,
   CookiesMatrix,
 } from '@ps-analysis-tool/design-system';
+
+/**
+ * Internal dependencies
+ */
+import './app.css';
 
 const App = ({ data }: { data: any }) => {
   return (
@@ -49,17 +50,15 @@ const App = ({ data }: { data: any }) => {
         testId="blocked-cookies-insights"
       >
         {data.cookiesStatsComponents.blockedCookiesLegend.length > 0 && (
-          <>
-            <CookiesMatrix
-              title="Blocked Reasons"
-              tabCookies={data.tabCookies}
-              componentData={data.cookiesStatsComponents.blockedCookiesLegend}
-              tabFrames={data.tabFrames}
-              showInfoIcon={data.showBlockedInfoIcon}
-              showHorizontalMatrix={false}
-              infoIconTitle="Cookies that have been blocked by the browser.(The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
-            />
-          </>
+          <CookiesMatrix
+            title="Blocked Reasons"
+            tabCookies={data.tabCookies}
+            componentData={data.cookiesStatsComponents.blockedCookiesLegend}
+            tabFrames={data.tabFrames}
+            showInfoIcon={data.showBlockedInfoIcon}
+            showHorizontalMatrix={false}
+            infoIconTitle="Cookies that have been blocked by the browser.(The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
+          />
         )}
       </CookiesLandingContainer>
       <CookiesLandingContainer
