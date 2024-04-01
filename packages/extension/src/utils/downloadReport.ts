@@ -37,6 +37,7 @@ export default async function downloadReport(tabCookies: any, tabFrames: any) {
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
   const frameStateCreator = prepareFrameStatsComponent(tabFrames, tabCookies);
+
   const cookieClassificationDataMapping: DataMapping[] = [
     {
       title: 'Total cookies',
@@ -54,6 +55,7 @@ export default async function downloadReport(tabCookies: any, tabFrames: any) {
       data: cookiesStatsComponents.thirdParty,
     },
   ];
+
   const blockedCookieDataMapping: DataMapping[] = [
     {
       title: 'Blocked cookies',
@@ -62,7 +64,7 @@ export default async function downloadReport(tabCookies: any, tabFrames: any) {
     },
   ];
 
-  //injections
+  // Injections
   const script = reportDom.createElement('script');
   const code = `window.PSAT_DATA = ${JSON.stringify({
     cookieClassificationDataMapping,
