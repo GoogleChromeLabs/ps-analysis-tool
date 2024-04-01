@@ -25,7 +25,7 @@ import { type CookieTableData } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import useCookieListing from '../../hooks/useCookieListing.tsx/index.jsx';
+import useCookieListing from '../../hooks/useCookieListing';
 
 interface CookiesWithIssuesProps {
   cookies: CookieTableData[];
