@@ -107,13 +107,6 @@ const report = {
     path: path.resolve(__dirname, '../../dist/extension/report'),
     filename: '[name].js',
   },
-  devServer: {
-    static: {
-      directory: path.join(__dirname, './dist'),
-    },
-    compress: true,
-    port: 9000,
-  },
   plugins: [
     new WebpackBar({
       name: 'Report',
