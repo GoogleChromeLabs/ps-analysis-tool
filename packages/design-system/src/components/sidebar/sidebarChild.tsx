@@ -21,13 +21,13 @@ import {
   ArrowDown,
   ArrowDownWhite,
   InfoIcon,
+  SidebarItemValue,
   useSidebar,
 } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
-import type { SidebarItemValue } from './useSidebar';
 
 interface SidebarItemProps {
   didUserInteract: boolean;

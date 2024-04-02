@@ -23,8 +23,6 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { createContext } from 'use-context-selector';
-import { noop, useContextSelector } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -36,85 +34,8 @@ import {
   findPrevItem,
   matchKey,
 } from './utils';
-
-type SidebarComponent = {
-  Element?: (props: any) => React.JSX.Element;
-  props?: Record<string, unknown>;
-};
-
-export type SidebarItemValue = {
-  title: string;
-  children: SidebarItems;
-  popupTitle?: string;
-  infoIconDescription?: string;
-  extraInterfaceToTitle?: SidebarComponent;
-  dropdownOpen?: boolean;
-  panel?: SidebarComponent;
-  icon?: SidebarComponent;
-  selectedIcon?: SidebarComponent;
-  isBlurred?: boolean;
-};
-
-export type SidebarItems = {
-  [key: string]: SidebarItemValue;
-};
-
-interface useSidebarProps {
-  data: SidebarItems;
-  defaultSelectedItemKey?: string | null;
-}
-
-export interface SidebarStoreContext {
-  state: {
-    activePanel: {
-      panel: SidebarComponent;
-      query?: string;
-      clearQuery?: () => void;
-    };
-    selectedItemKey: string | null; //Entire chained item key eg Privacy-Sandbox#cookies#frameUrl
-    currentItemKey: string | null; //Last sidebar item key in selectedItemKey eg frameUrl
-    sidebarItems: SidebarItems;
-    isSidebarFocused: boolean;
-  };
-  actions: {
-    setIsSidebarFocused: React.Dispatch<boolean>;
-    updateSelectedItemKey: (key: string | null, queryString?: string) => void;
-    onKeyNavigation: (
-      event: React.KeyboardEvent<HTMLDivElement>,
-      key: string | null
-    ) => void;
-    toggleDropdown: (action: boolean, key: string) => void;
-    isKeyAncestor: (key: string) => boolean;
-    isKeySelected: (key: string) => boolean;
-  };
-}
-
-const initialState: SidebarStoreContext = {
-  state: {
-    activePanel: {
-      panel: {
-        Element: () => <></>,
-        props: {},
-      },
-      query: '',
-      clearQuery: noop,
-    },
-    selectedItemKey: null,
-    currentItemKey: null,
-    sidebarItems: {},
-    isSidebarFocused: true,
-  },
-  actions: {
-    setIsSidebarFocused: noop,
-    updateSelectedItemKey: noop,
-    onKeyNavigation: noop,
-    toggleDropdown: noop,
-    isKeyAncestor: () => false,
-    isKeySelected: () => false,
-  },
-};
-
-export const SidebarContext = createContext<SidebarStoreContext>(initialState);
+import { SidebarItems, useSidebarProps } from './types';
+import { SidebarContext, SidebarStoreContext, initialState } from './context';
 
 export const SidebarProvider = ({
   data,
@@ -361,18 +282,3 @@ export const SidebarProvider = ({
     </SidebarContext.Provider>
   );
 };
-
-export function useSidebar(): SidebarStoreContext;
-export function useSidebar<T>(selector: (state: SidebarStoreContext) => T): T;
-
-/**
- * Hook to access the Sidebar context.
- * @param selector Selector function to partially select state.
- * @returns selected part of the state
- */
-export function useSidebar<T>(
-  selector: (state: SidebarStoreContext) => T | SidebarStoreContext = (state) =>
-    state
-) {
-  return useContextSelector(SidebarContext, selector);
-}

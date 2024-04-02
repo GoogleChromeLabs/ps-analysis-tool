@@ -17,7 +17,7 @@
 /**
  * Internal dependencies
  */
-import { SidebarItemValue, SidebarItems } from '..';
+import { SidebarItemValue, SidebarItems } from '../types';
 import findItem from './findItem';
 import findKeyParent from './findKeyParent';
 
