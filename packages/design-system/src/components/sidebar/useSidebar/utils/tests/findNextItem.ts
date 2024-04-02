@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { SidebarItems } from '../..';
+import { SidebarItems } from '../../types';
 import findNextItem from '../findNextItem';
 
 describe('findNextItem', () => {
