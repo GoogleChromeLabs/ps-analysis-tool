@@ -35,7 +35,7 @@ import { useContentStore } from '../stateProviders/contentStore';
 import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
 import TABS from '../tabs';
 import CookiesTab from '../tabs/cookies';
-import SiteAffectedCookies from '../tabs/siteAffectedCookies';
+import SiteCookiesWithIssues from '../tabs/siteCookiesWithIssues';
 import Technologies from '../tabs/technologies';
 
 interface LayoutProps {
@@ -112,8 +112,8 @@ const Layout = ({ selectedSite }: LayoutProps) => {
         {}
       );
 
-      _data['affected-cookies'].panel = (
-        <SiteAffectedCookies selectedSite={selectedSite} />
+      _data['cookies-with-issues'].panel = (
+        <SiteCookiesWithIssues selectedSite={selectedSite} />
       );
 
       if (technologies && technologies.length > 0) {

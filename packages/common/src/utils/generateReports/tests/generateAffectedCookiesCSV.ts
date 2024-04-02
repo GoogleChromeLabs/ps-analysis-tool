@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import generateAffectedCookiesCSV from '../generateAffectedCookiesCSV';
+import generateCookiesWithIssuesCSV from '../generateCookiesWithIssuesCSV';
 import { mockData1 } from './data.mock';
 
-describe('generateAffectedCookiesCSV', () => {
-  it('should create CSV string for affected cookies', () => {
-    const CSVString = generateAffectedCookiesCSV(mockData1);
+describe('generateCookiesWithIssuesCSV', () => {
+  it('should create CSV string for cookies with issues', () => {
+    const CSVString = generateCookiesWithIssuesCSV(mockData1);
 
     expect(CSVString.split('\r\n').filter((str) => str).length).toBe(4);
   });
