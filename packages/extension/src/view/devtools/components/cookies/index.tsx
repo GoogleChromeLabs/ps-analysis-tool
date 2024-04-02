@@ -93,7 +93,11 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
           <CookiesLanding>
             <Button
               extraClasses="absolute top-3 right-3"
-              onClick={() => downloadReport(tabCookies, tabFrames)}
+              onClick={() => {
+                if (tabCookies && tabFrames) {
+                  downloadReport(tabCookies, tabFrames);
+                }
+              }}
               text="Download report"
             />
             <AssembledCookiesLanding />

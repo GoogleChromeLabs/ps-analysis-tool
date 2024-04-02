@@ -18,15 +18,7 @@
  */
 import React from 'react';
 import { CirclePieChart } from '@ps-analysis-tool/design-system';
-
-export interface DataMapping {
-  title: string;
-  count: number;
-  data: {
-    count: number;
-    color: string;
-  }[];
-}
+import { DataMapping } from '@ps-analysis-tool/common';
 
 interface LandingHeaderProps {
   dataMapping?: DataMapping[];

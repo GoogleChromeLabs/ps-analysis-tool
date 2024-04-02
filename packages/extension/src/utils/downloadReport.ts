@@ -16,6 +16,7 @@
 /**
  * External dependencies.
  */
+import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
 import {
   prepareCookieStatsComponents,
   prepareCookiesCount,
@@ -29,7 +30,10 @@ import { saveAs } from 'file-saver';
  * @param tabCookies Tab cookies.
  * @param tabFrames Tab frames.
  */
-export default async function downloadReport(tabCookies: any, tabFrames: any) {
+export default async function downloadReport(
+  tabCookies: TabCookies,
+  tabFrames: TabFrames
+) {
   const htmlText = await (await fetch('../report/index.html')).text();
   const parser = new DOMParser();
   const reportDom = parser.parseFromString(htmlText, 'text/html');

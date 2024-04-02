@@ -27,8 +27,29 @@ import {
  * Internal dependencies
  */
 import './app.css';
+import type {
+  CookieStatsComponents,
+  FrameStateCreator,
+  TabCookies,
+  TabFrames,
+  DataMapping,
+} from '@ps-analysis-tool/common';
 
-const App = ({ data }: { data: any }) => {
+interface AppProps {
+  data: {
+    cookieClassificationDataMapping: DataMapping[];
+    tabCookies: TabCookies;
+    cookiesStatsComponents: CookieStatsComponents;
+    tabFrames: TabFrames;
+    showInfoIcon: boolean;
+    showHorizontalMatrix: boolean;
+    blockedCookieDataMapping: DataMapping[];
+    showBlockedInfoIcon: boolean;
+    frameStateCreator: FrameStateCreator;
+  };
+}
+
+const App = ({ data }: AppProps) => {
   return (
     <div className="h-full w-full flex flex-col">
       <CookiesLandingContainer
@@ -36,13 +57,11 @@ const App = ({ data }: { data: any }) => {
         testId="cookies-insights"
       >
         <CookiesMatrix
-          title={data.cookieClassificationTitle}
           tabCookies={data.tabCookies}
           componentData={data.cookiesStatsComponents.legend}
           tabFrames={data.tabFrames}
           showInfoIcon={data.showInfoIcon}
           showHorizontalMatrix={data.showHorizontalMatrix}
-          associatedCookiesCount={data.associatedCookiesCount}
         />
       </CookiesLandingContainer>
       <CookiesLandingContainer
