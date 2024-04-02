@@ -90,10 +90,7 @@ class I18n {
   }
 
   getMessage(key: string, substitutions?: string[], escapeLt?: boolean) {
-    if (
-      typeof window !== 'undefined' &&
-      window.location.protocol === 'chrome-extension:'
-    ) {
+    if (typeof chrome !== 'undefined' && chrome?.i18n?.getMessage) {
       // @ts-ignore - Outdated definition.
       return chrome.i18n.getMessage(key, substitutions, {
         escapeLt: Boolean(escapeLt),
