@@ -82,6 +82,36 @@ const errorHandler = (err) => {
 };
 
 /**
+ * Add keys to the locale file and replace the text with keys in the formattedData.
+ * @param formattedData formatted data
+ */
+const addKeysToLocale = async (formattedData) => {
+  const messagesPath = path.resolve('./_locales/en/messages.json');
+  const messages = await fs.readJson(messagesPath);
+
+  const regex = /[:/ *-.%“”()[\]]/g;
+
+  Object.entries(formattedData).forEach(([key, [value]]) => {
+    const descriptionKey = `OCD_${key.replace(regex, '_')}_description`;
+    messages[descriptionKey] = {
+      message: value.description,
+      description: 'Description of the cookie from the Open Cookie DB',
+    };
+    value.description = descriptionKey;
+
+    const retentionKey = `OCD_retention_${value.retention.replace(regex, '_')}`;
+    messages[retentionKey] = {
+      message: value.retention,
+      description: 'Retention period of the cookie from the Open Cookie DB',
+    };
+
+    value.retention = retentionKey;
+  });
+
+  await fs.writeJson(messagesPath, messages, { spaces: 2 });
+};
+
+/**
  * Download the csv file from the Open Cookie DB, format the data and write it to open-cookie-database.json.
  */
 const main = async () => {
@@ -101,6 +131,9 @@ const main = async () => {
 
     // Format the raw data.
     const formattedData = await formatRawData(rawData);
+
+    // Add keys, messages to _locale/en/messages.json and replace the text with keys in the formattedData
+    await addKeysToLocale(formattedData);
 
     await fs.ensureFile(path.resolve(targetDIR, 'open-cookie-database.json'));
     // Write the formatted data to a file.
