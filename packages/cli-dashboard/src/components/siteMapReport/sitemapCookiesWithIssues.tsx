@@ -23,14 +23,16 @@ import type { CookieTableData } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import AffectedCookies from '../affectedCookies';
+import CookiesWithIssues from '../cookiesWithIssues';
 
-interface SiteMapAffectedCookiesProps {
+interface SiteMapCookiesWithIssuesProps {
   cookies: CookieTableData[];
 }
 
-const SiteMapAffectedCookies = ({ cookies }: SiteMapAffectedCookiesProps) => {
-  return <AffectedCookies cookies={cookies} selectedSite={null} />;
+const SiteMapCookiesWithIssues = ({
+  cookies,
+}: SiteMapCookiesWithIssuesProps) => {
+  return <CookiesWithIssues cookies={cookies} selectedSite={null} />;
 };
 
-export default SiteMapAffectedCookies;
+export default SiteMapCookiesWithIssues;

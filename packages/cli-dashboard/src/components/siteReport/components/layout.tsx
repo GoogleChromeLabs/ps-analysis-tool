@@ -35,7 +35,7 @@ import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
  */
 import { useContentStore } from '../stateProviders/contentStore';
 import CookiesTab from '../tabs/cookies';
-import SiteAffectedCookies from '../tabs/siteAffectedCookies';
+import SiteCookiesWithIssues from '../tabs/siteCookiesWithIssues';
 import Technologies from '../tabs/technologies';
 
 interface LayoutProps {
@@ -118,8 +118,8 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
         {}
       );
 
-      _data[SIDEBAR_ITEMS_KEYS.AFFECTED_COOKIES].panel = {
-        Element: SiteAffectedCookies,
+      _data[SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES].panel = {
+        Element: SiteCookiesWithIssues,
         props: {
           selectedSite,
         },

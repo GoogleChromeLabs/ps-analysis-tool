@@ -34,8 +34,8 @@ const Tabs: SidebarItems = {
       Element: CookieIconWhite,
     },
   },
-  [SIDEBAR_ITEMS_KEYS.AFFECTED_COOKIES]: {
-    title: 'Affected Cookies',
+  [SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES]: {
+    title: 'Cookies With Issues',
     children: {},
     icon: {
       Element: CookieIcon,

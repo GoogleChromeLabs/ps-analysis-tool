@@ -30,15 +30,15 @@ import {
 import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
 
 interface BlockedCookiesSectionProps {
-  tabCookies: TabCookies;
-  tabFrames: TabFrames;
-  affectedCookies: TabCookies;
+  tabCookies: TabCookies | null;
+  cookiesWithIssues: TabCookies | null;
+  tabFrames: TabFrames | null;
 }
 
 const BlockedCookiesSection = ({
   tabCookies,
+  cookiesWithIssues,
   tabFrames,
-  affectedCookies,
 }: BlockedCookiesSectionProps) => {
   const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});
   const cookieStats = prepareCookiesCount(tabCookies);
@@ -64,7 +64,7 @@ const BlockedCookiesSection = ({
       };
     });
 
-  const blockedCookiesStats = prepareCookiesCount(affectedCookies);
+  const blockedCookiesStats = prepareCookiesCount(cookiesWithIssues);
   const blockedCookiesStatsComponents =
     prepareCookieStatsComponents(blockedCookiesStats);
   const blockedDataComponents: MatrixComponentProps[] =

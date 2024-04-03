@@ -22,21 +22,23 @@ import React from 'react';
 /**
  * Internal dependencies
  */
-import AffectedCookies from '../../../affectedCookies';
+import CookiesWithIssues from '../../../cookiesWithIssues';
 import { useContentStore } from '../../stateProviders/contentStore';
 
-interface SiteAffectedCookiesProps {
+interface SiteCookiesWithIssuesProps {
   selectedSite: string | null;
 }
 
-const SiteAffectedCookies = ({ selectedSite }: SiteAffectedCookiesProps) => {
+const SiteCookiesWithIssues = ({
+  selectedSite,
+}: SiteCookiesWithIssuesProps) => {
   const { tabCookies } = useContentStore(({ state }) => ({
     tabCookies: Object.values(state.tabCookies).filter(
       (cookie) => cookie.isBlocked
     ),
   }));
 
-  return <AffectedCookies cookies={tabCookies} selectedSite={selectedSite} />;
+  return <CookiesWithIssues cookies={tabCookies} selectedSite={selectedSite} />;
 };
 
-export default SiteAffectedCookies;
+export default SiteCookiesWithIssues;
