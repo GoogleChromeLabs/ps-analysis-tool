@@ -24,7 +24,7 @@ import { LibraryDetection } from '@ps-analysis-tool/library-detection';
 import CookiesSection from './cookiesSection';
 import FramesSection from './framesSection';
 import BlockedCookiesSection from './blockedCookiesSection';
-import DownloadReportButton from '../ReportDownload';
+import DownloadReportButton from './reportDownload';
 
 const AssembledCookiesLanding = () => {
   return (

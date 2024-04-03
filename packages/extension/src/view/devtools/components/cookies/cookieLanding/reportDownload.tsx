@@ -23,8 +23,8 @@ import { useLibraryDetectionContext } from '@ps-analysis-tool/library-detection'
 /**
  * Internal dependencies.
  */
-import downloadReport from '../../../../utils/downloadReport';
-import { useCookie } from '../../stateProviders';
+import downloadReport from '../../../../../utils/downloadReport';
+import { useCookie } from '../../../stateProviders';
 
 const ReportDownloadButton = () => {
   const { tabCookies, tabFrames } = useCookie(({ state }) => ({
