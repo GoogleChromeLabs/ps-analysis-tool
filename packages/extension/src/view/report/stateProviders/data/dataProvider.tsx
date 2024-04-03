@@ -21,17 +21,27 @@ import React, { useEffect, useState, type PropsWithChildren } from 'react';
  * Internal dependencies.
  */
 import Context, { type DataStoreContext } from './context';
+import { useLibraryDetectionContext } from '@ps-analysis-tool/library-detection';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [data, setData] = useState<DataStoreContext['state']['data']>(null);
   const [isDataLoaded, setIsDataLoaded] =
     useState<DataStoreContext['state']['isDataLoaded']>(false);
 
+  const { setLibraryMatches, setShowLoader } = useLibraryDetectionContext(
+    ({ actions }) => ({
+      setLibraryMatches: actions.setLibraryMatches,
+      setShowLoader: actions.setShowLoader,
+    })
+  );
+
   useEffect(() => {
     //@ts-ignore custom data attached to window breaks types
     const _data = window.PSAT_DATA;
 
     setData(_data);
+    setLibraryMatches(_data.libraryMatches);
+    setShowLoader(false);
     setIsDataLoaded(true);
   }, []);
 

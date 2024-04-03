@@ -19,20 +19,58 @@
  */
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import { LibraryDetectionProvider } from '@ps-analysis-tool/library-detection';
 
 /**
  * Internal dependencies
  */
 import App from './app';
 import { DataProvider } from './stateProviders/data';
+import { noop } from '@ps-analysis-tool/common';
+
+//@ts-ignore this global mock is needed for the provider LibraryDetectionProvider and the component LibraryDetection to work
+chrome = {
+  tabs: {
+    onUpdated: {
+      addListener: noop,
+      removeListener: noop,
+    },
+  },
+  devtools: {
+    inspectedWindow: {
+      onResourceAdded: {
+        addListener: noop,
+        removeListener: noop,
+      },
+      getResources: noop,
+    },
+  },
+  webNavigation: {
+    onErrorOccurred: {
+      addListener: noop,
+      removeListener: noop,
+    },
+    onBeforeNavigate: {
+      addListener: noop,
+      removeListener: noop,
+    },
+    onCompleted: {
+      addListener: noop,
+      removeListener: noop,
+    },
+  },
+};
 
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.getElementById('root');
+
   if (root) {
     createRoot(root).render(
-      <DataProvider>
-        <App />
-      </DataProvider>
+      <LibraryDetectionProvider>
+        <DataProvider>
+          <App />
+        </DataProvider>
+      </LibraryDetectionProvider>
     );
   }
 });

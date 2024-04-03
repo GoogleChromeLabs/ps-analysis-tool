@@ -18,6 +18,7 @@
  * External dependencies
  */
 import React from 'react';
+import { LibraryDetection } from '@ps-analysis-tool/library-detection';
 /**
  * Internal dependencies
  */
@@ -33,6 +34,7 @@ const App = () => {
     <div className="h-full w-full flex flex-col">
       <CookiesSection />
       <BlockedCookiesSection />
+      <LibraryDetection />
       <FramesSection />
     </div>
   );
