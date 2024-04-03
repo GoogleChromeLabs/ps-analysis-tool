@@ -16,9 +16,13 @@
 /**
  * External dependencies
  */
-import React from 'react';
+import React, { useMemo } from 'react';
 import { LibraryDetection } from '@ps-analysis-tool/library-detection';
-import { MenuBar, type MenuData } from '@ps-analysis-tool/design-system';
+import {
+  MenuBar,
+  type CookiesLandingSection,
+  type MenuData,
+} from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies
  */
@@ -26,41 +30,58 @@ import CookiesSection from './cookiesSection';
 import FramesSection from './framesSection';
 import BlockedCookiesSection from './blockedCookiesSection';
 
-const menuData: MenuData = [
-  {
-    name: 'Cookies',
-    link: 'cookies',
-  },
-  {
-    name: 'Blocked Cookies',
-    link: 'blocked-cookies',
-  },
-  {
-    name: 'Library Detection',
-    link: 'library-detection',
-  },
-  {
-    name: 'Frames',
-    link: 'frames',
-  },
-];
-
 const AssembledCookiesLanding = () => {
+  const sections: Array<CookiesLandingSection> = useMemo(
+    () => [
+      {
+        name: 'Cookies',
+        link: 'cookies',
+        panel: {
+          Element: CookiesSection,
+        },
+      },
+      {
+        name: 'Blocked Cookies',
+        link: 'blocked-cookies',
+        panel: {
+          Element: BlockedCookiesSection,
+        },
+      },
+      {
+        name: 'Library Detection',
+        link: 'library-detection',
+        panel: {
+          Element: LibraryDetection,
+        },
+      },
+      {
+        name: 'Frames',
+        link: 'frames',
+        panel: {
+          Element: FramesSection,
+        },
+      },
+    ],
+    []
+  );
+
+  const menuData: MenuData = useMemo(
+    () => sections.map(({ name, link }) => ({ name, link })),
+    [sections]
+  );
+
   return (
-    <MenuBar menuData={menuData}>
-      <div id={menuData[0].link}>
-        <CookiesSection />
-      </div>
-      <div id={menuData[1].link}>
-        <BlockedCookiesSection />
-      </div>
-      <div id={menuData[2].link}>
-        <LibraryDetection />
-      </div>
-      <div id={menuData[3].link}>
-        <FramesSection />
-      </div>
-    </MenuBar>
+    <>
+      <MenuBar
+        menuData={menuData}
+        scrollContainerId="cookies-landing-scroll-container"
+      />
+      {sections.map(({ link, panel: { Element, props } }) => (
+        <div id={link} key={link} className="cookie-landing-section">
+          {Element && <Element {...(props || {})} />}
+        </div>
+      ))}
+    </>
   );
 };
 export default AssembledCookiesLanding;
