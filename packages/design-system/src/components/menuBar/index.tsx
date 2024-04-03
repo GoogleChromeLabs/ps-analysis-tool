@@ -48,7 +48,7 @@ const MenuBar = ({
     let timeout: NodeJS.Timeout;
     const element = document.getElementById(selectedItem);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView?.({ behavior: 'smooth' });
       timeout = setTimeout(() => {
         setIsListenerDisabled(false);
       }, 700);
