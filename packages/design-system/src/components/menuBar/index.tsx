@@ -17,8 +17,13 @@
 /**
  * External dependencies.
  */
-import React, { PropsWithChildren, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classnames from 'classnames';
+
+/**
+ * Internal dependencies.
+ */
+import { isInCenter } from './utils';
 
 export type MenuData = Array<{
   name: string;
@@ -27,37 +32,98 @@ export type MenuData = Array<{
 
 interface MenuBarProps {
   menuData: MenuData;
+  extraClasses?: string;
+  scrollContainerId: string;
 }
 
-const MenuBar = ({ children, menuData }: PropsWithChildren<MenuBarProps>) => {
-  const [selectedItem, setSelectedItem] = useState(menuData[0].link);
+const MenuBar = ({
+  menuData,
+  extraClasses,
+  scrollContainerId,
+}: MenuBarProps) => {
+  const [selectedItem, setSelectedItem] = useState<string>(menuData[0].link);
+  const [isListenerDisabled, setIsListenerDisabled] = useState<boolean>(false);
 
   useEffect(() => {
+    let timeout: NodeJS.Timeout;
     const element = document.getElementById(selectedItem);
-
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
+      timeout = setTimeout(() => {
+        setIsListenerDisabled(false);
+      }, 700);
     }
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
   }, [selectedItem]);
 
-  return (
-    <div data-testid="menu-bar">
-      <nav className="fixed top-0 right-0 flex flex-col gap-4">
-        {menuData.map((item, index) => (
-          <div
-            key={index}
-            className={classnames('dark:text-bright-gray hover:opacity-70', {
-              underline: selectedItem === item.link,
-            })}
-            onClick={() => setSelectedItem(item.link)}
-          >
-            {item.name}
-          </div>
-        ))}
-      </nav>
+  useEffect(() => {
+    const scrollContainer = document.getElementById(scrollContainerId);
+    const firstItemLink = menuData[0].link;
+    const lastItemLink = menuData[menuData.length - 1].link;
 
-      {children}
-    </div>
+    const handleScroll = () => {
+      if (isListenerDisabled || !scrollContainer) {
+        return;
+      }
+
+      const distanceScrolled = scrollContainer.scrollTop;
+      const maxScrollDistance =
+        scrollContainer.scrollHeight - scrollContainer.clientHeight;
+
+      menuData.forEach(({ link: id }) => {
+        const section = document.getElementById(id);
+        setSelectedItem((prev) => {
+          if (scrollContainer?.scrollTop === 0) {
+            return firstItemLink;
+          } else if (section && isInCenter(section) && prev !== id) {
+            return id;
+          } else if (maxScrollDistance - distanceScrolled < 5) {
+            return lastItemLink;
+          }
+          return prev;
+        });
+      });
+    };
+
+    scrollContainer?.addEventListener('scroll', handleScroll);
+    return () => {
+      scrollContainer?.removeEventListener('scroll', handleScroll);
+    };
+  }, [menuData, isListenerDisabled, scrollContainerId]);
+
+  return (
+    <nav
+      data-testid="menu-bar"
+      className={classnames(
+        'fixed right-6 flex flex-col gap-4 z-10',
+        extraClasses ? extraClasses : 'top-4'
+      )}
+    >
+      {menuData.map((item, index) => (
+        <div
+          key={index}
+          className={classnames(
+            'relative w-3 h-3 rounded-full cursor-pointer hover:bg-baby-blue-eyes transition-all ease-in-out group',
+            selectedItem === item.link
+              ? 'bg-ultramarine-blue'
+              : 'bg-bright-gray'
+          )}
+          onClick={() => {
+            setIsListenerDisabled(true);
+            setSelectedItem(item.link);
+          }}
+        >
+          <div className="absolute -top-1/2 right-6 w-max px-3 py-1 rounded invisible text-sm text-white bg-ultramarine-blue group-hover:visible transition-all ease-in-out">
+            {item.name}
+            <div className="absolute w-2 h-2 bg-ultramarine-blue top-1/3 -right-1 transform rotate-45" />
+          </div>
+        </div>
+      ))}
+    </nav>
   );
 };
 
