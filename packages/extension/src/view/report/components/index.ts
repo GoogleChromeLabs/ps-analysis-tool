@@ -14,25 +14,6 @@
  * limitations under the License.
  */
 
-/**
- * External dependencies
- */
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-
-/**
- * Internal dependencies
- */
-import App from './app';
-import { DataProvider } from './stateProviders/data';
-
-document.addEventListener('DOMContentLoaded', () => {
-  const root = document.getElementById('root');
-  if (root) {
-    createRoot(root).render(
-      <DataProvider>
-        <App />
-      </DataProvider>
-    );
-  }
-});
+export { default as CookiesSection } from './cookiesSection';
+export { default as BlockedCookiesSection } from './blockedCookiesSection';
+export { default as FramesSection } from './framesSection';

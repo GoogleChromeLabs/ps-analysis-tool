@@ -13,26 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies
  */
-import React from 'react';
-import { createRoot } from 'react-dom/client';
+import { useContextSelector } from '@ps-analysis-tool/common';
+/**
+ * Internal dependencies.
+ */
+import Context, { type DataStoreContext } from './context';
+
+export function useData(): DataStoreContext;
+export function useData<T>(selector: (state: DataStoreContext) => T): T;
 
 /**
- * Internal dependencies
+ * Data store hook.
+ * @param selector Selector function to partially select state.
+ * @returns selected part of the state
  */
-import App from './app';
-import { DataProvider } from './stateProviders/data';
+export function useData<T>(
+  selector: (state: DataStoreContext) => T | DataStoreContext = (state) => state
+) {
+  return useContextSelector(Context, selector);
+}
 
-document.addEventListener('DOMContentLoaded', () => {
-  const root = document.getElementById('root');
-  if (root) {
-    createRoot(root).render(
-      <DataProvider>
-        <App />
-      </DataProvider>
-    );
-  }
-});
+export default useData;

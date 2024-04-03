@@ -30,7 +30,6 @@ import { type CookieTableData } from '@ps-analysis-tool/common';
 import { useCookie, useSettings } from '../../stateProviders';
 import CookiesListing from './cookiesListing';
 import AssembledCookiesLanding from './cookieLanding';
-import downloadReport from '../../../../utils/downloadReport';
 
 interface CookiesProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;
@@ -44,16 +43,12 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
     selectedFrame,
     changeListeningToThisTab,
     tabToRead,
-    tabCookies,
-    tabFrames,
   } = useCookie(({ state, actions }) => ({
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
     loading: state.loading,
     selectedFrame: state.selectedFrame,
     tabToRead: state.tabToRead,
     changeListeningToThisTab: actions.changeListeningToThisTab,
-    tabCookies: state.tabCookies,
-    tabFrames: state.tabFrames,
   }));
 
   const { allowedNumberOfTabs } = useSettings(({ state }) => ({
@@ -91,15 +86,6 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
           <CookiesListing setFilteredCookies={setFilteredCookies} />
         ) : (
           <CookiesLanding>
-            <Button
-              extraClasses="absolute top-3 right-3"
-              onClick={() => {
-                if (tabCookies && tabFrames) {
-                  downloadReport(tabCookies, tabFrames);
-                }
-              }}
-              text="Download report"
-            />
             <AssembledCookiesLanding />
           </CookiesLanding>
         )}

@@ -13,26 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * External dependencies
- */
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-
-/**
- * Internal dependencies
- */
-import App from './app';
-import { DataProvider } from './stateProviders/data';
-
-document.addEventListener('DOMContentLoaded', () => {
-  const root = document.getElementById('root');
-  if (root) {
-    createRoot(root).render(
-      <DataProvider>
-        <App />
-      </DataProvider>
-    );
-  }
-});
+export { default as DataProvider } from './dataProvider';
+export { default as SettingsContext } from './context';
+export { default as useData } from './useData';

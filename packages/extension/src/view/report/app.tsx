@@ -18,83 +18,22 @@
  * External dependencies
  */
 import React from 'react';
-import {
-  CookiesLandingContainer,
-  CookiesMatrix,
-} from '@ps-analysis-tool/design-system';
-
 /**
  * Internal dependencies
  */
 import './app.css';
-import type {
-  CookieStatsComponents,
-  FrameStateCreator,
-  TabCookies,
-  TabFrames,
-  DataMapping,
-} from '@ps-analysis-tool/common';
+import {
+  CookiesSection,
+  BlockedCookiesSection,
+  FramesSection,
+} from './components';
 
-interface AppProps {
-  data: {
-    cookieClassificationDataMapping: DataMapping[];
-    tabCookies: TabCookies;
-    cookiesStatsComponents: CookieStatsComponents;
-    tabFrames: TabFrames;
-    showInfoIcon: boolean;
-    showHorizontalMatrix: boolean;
-    blockedCookieDataMapping: DataMapping[];
-    showBlockedInfoIcon: boolean;
-    frameStateCreator: FrameStateCreator;
-  };
-}
-
-const App = ({ data }: AppProps) => {
+const App = () => {
   return (
     <div className="h-full w-full flex flex-col">
-      <CookiesLandingContainer
-        dataMapping={data.cookieClassificationDataMapping}
-        testId="cookies-insights"
-      >
-        <CookiesMatrix
-          tabCookies={data.tabCookies}
-          componentData={data.cookiesStatsComponents.legend}
-          tabFrames={data.tabFrames}
-          showInfoIcon={data.showInfoIcon}
-          showHorizontalMatrix={data.showHorizontalMatrix}
-        />
-      </CookiesLandingContainer>
-      <CookiesLandingContainer
-        dataMapping={data.blockedCookieDataMapping}
-        testId="blocked-cookies-insights"
-      >
-        {data.cookiesStatsComponents.blockedCookiesLegend.length > 0 && (
-          <CookiesMatrix
-            title="Blocked Reasons"
-            tabCookies={data.tabCookies}
-            componentData={data.cookiesStatsComponents.blockedCookiesLegend}
-            tabFrames={data.tabFrames}
-            showInfoIcon={data.showBlockedInfoIcon}
-            showHorizontalMatrix={false}
-            infoIconTitle="Cookies that have been blocked by the browser.(The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
-          />
-        )}
-      </CookiesLandingContainer>
-      <CookiesLandingContainer
-        dataMapping={data.frameStateCreator.dataMapping}
-        testId="frames-insights"
-      >
-        <CookiesMatrix
-          title="Frames"
-          componentData={data.frameStateCreator.legend}
-          showMatrix={true}
-          tabCookies={data.tabCookies}
-          tabFrames={data.tabFrames}
-          showInfoIcon={data.showInfoIcon}
-          showHorizontalMatrix={false}
-          infoIconTitle="The details regarding frames and associated cookies in this page."
-        />
-      </CookiesLandingContainer>
+      <CookiesSection />
+      <BlockedCookiesSection />
+      <FramesSection />
     </div>
   );
 };

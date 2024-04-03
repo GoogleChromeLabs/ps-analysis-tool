@@ -16,7 +16,11 @@
 /**
  * External dependencies.
  */
-import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
+import type {
+  LibraryData,
+  TabCookies,
+  TabFrames,
+} from '@ps-analysis-tool/common';
 import {
   prepareCookieStatsComponents,
   prepareCookiesCount,
@@ -29,10 +33,12 @@ import { saveAs } from 'file-saver';
  * Utility function to download report.
  * @param tabCookies Tab cookies.
  * @param tabFrames Tab frames.
+ * @param libraryMatches
  */
 export default async function downloadReport(
   tabCookies: TabCookies,
-  tabFrames: TabFrames
+  tabFrames: TabFrames,
+  libraryMatches: LibraryData
 ) {
   const htmlText = await (await fetch('../report/index.html')).text();
   const parser = new DOMParser();
@@ -80,6 +86,7 @@ export default async function downloadReport(
     blockedCookieDataMapping,
     showBlockedInfoIcon: true,
     frameStateCreator,
+    libraryMatches,
   })}`;
 
   script.text = code;
