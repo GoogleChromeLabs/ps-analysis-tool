@@ -32,12 +32,16 @@ const ReportDownloadButton = () => {
     tabFrames: state.tabFrames,
   }));
 
-  const { libraryMatches } = useLibraryDetectionContext(({ state }) => ({
-    libraryMatches: state.libraryMatches,
-  }));
+  const { libraryMatches, showLoader } = useLibraryDetectionContext(
+    ({ state }) => ({
+      libraryMatches: state.libraryMatches,
+      showLoader: state.showLoader,
+    })
+  );
 
   return (
     <Button
+      disabled={showLoader}
       extraClasses="absolute top-3 right-6"
       onClick={() => {
         if (tabCookies && tabFrames && libraryMatches) {
