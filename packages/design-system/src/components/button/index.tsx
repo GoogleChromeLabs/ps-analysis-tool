@@ -27,6 +27,7 @@ interface ButtonProps {
   type?: 'button' | 'submit' | 'reset';
   variant?: 'primary' | 'secondary' | 'danger' | 'small' | 'large';
   extraClasses?: string;
+  disabled?: boolean;
 }
 const Button = ({
   text,
@@ -35,6 +36,7 @@ const Button = ({
   type = 'button',
   variant = 'primary',
   extraClasses = '',
+  disabled = false,
 }: ButtonProps) => {
   switch (variant) {
     case 'small':
@@ -43,10 +45,16 @@ const Button = ({
           data-test-id="button"
           type={type}
           name={name}
+          disabled={disabled}
           onClick={onClick ? onClick : undefined}
           className={classNames(
-            'rounded flex items-center text-center py-0.5 px-1.5 text-xs text-white dark:bg-baby-blue-eyes bg-sapphire hover:bg-tufts-blue dark:hover:bg-pale-cornflower-blue dark:text-raisin-black',
-            extraClasses
+            'rounded flex items-center text-center py-0.5 px-1.5 text-xs text-white dark:bg-baby-blue-eyes bg-sapphire dark:text-raisin-black',
+            extraClasses,
+            {
+              'opacity-70 cursor-default': disabled,
+              'hover:bg-tufts-blue dark:hover:bg-pale-cornflower-blue':
+                !disabled,
+            }
           )}
         >
           {text}
@@ -58,10 +66,15 @@ const Button = ({
           data-test-id="button"
           type={type}
           name={name}
+          disabled={disabled}
           onClick={onClick ? onClick : undefined}
           className={classNames(
-            'font-medium rounded-xs flex items-center text-center md:py-3.5 md:px-9 xxs:max-sm:p-2 xs:max-md:py-4 sm:max-md:px-2 text-white dark:bg-google-blue bg-smurf-blue hover:bg-beteleguese dark:hover:bg-bright-navy-blue dark:text-raisin-black',
-            extraClasses
+            'font-medium rounded-xs flex items-center text-center md:py-3.5 md:px-9 xxs:max-sm:p-2 xs:max-md:py-4 sm:max-md:px-2 text-white dark:bg-google-blue bg-smurf-blue dark:text-raisin-black',
+            extraClasses,
+            {
+              'opacity-70 cursor-default': disabled,
+              'hover:bg-beteleguese dark:hover:bg-bright-navy-blue': !disabled,
+            }
           )}
         >
           {text}
@@ -73,10 +86,16 @@ const Button = ({
           data-test-id="button"
           type={type}
           name={name}
+          disabled={disabled}
           onClick={onClick ? onClick : undefined}
           className={classNames(
-            'rounded flex items-center text-center py-1 px-2 font-medium text-white dark:bg-baby-blue-eyes bg-sapphire hover:bg-tufts-blue dark:hover:bg-pale-cornflower-blue dark:text-raisin-black',
-            extraClasses
+            'rounded flex items-center text-center py-1 px-2 font-medium text-white dark:bg-baby-blue-eyes bg-sapphire dark:text-raisin-black',
+            extraClasses,
+            {
+              'opacity-70 cursor-default': disabled,
+              'hover:bg-tufts-blue dark:hover:bg-pale-cornflower-blue':
+                !disabled,
+            }
           )}
         >
           {text}
@@ -88,10 +107,15 @@ const Button = ({
           data-test-id="button"
           type={type}
           name={name}
+          disabled={disabled}
           onClick={onClick ? onClick : undefined}
           className={classNames(
-            'rounded flex items-center text-center py-1 px-2 font-medium bg-transparent dark:bg-transparent dark:text-bright-gray text-raisin-black active:opacity-60 hover:opacity-80',
-            extraClasses
+            'rounded flex items-center text-center py-1 px-2 font-medium bg-transparent dark:bg-transparent dark:text-bright-gray text-raisin-black active:opacity-60',
+            extraClasses,
+            {
+              'opacity-70 cursor-default': disabled,
+              'hover:opacity-80': !disabled,
+            }
           )}
         >
           {text}
@@ -103,10 +127,15 @@ const Button = ({
           data-test-id="button"
           type={type}
           name={name}
+          disabled={disabled}
           onClick={onClick ? onClick : undefined}
           className={classNames(
-            'rounded flex items-center text-center py-1 px-2 font-medium text-white dark:text-white dark:bg-red-500 bg-red-500 hover:bg-red-600',
-            extraClasses
+            'rounded flex items-center text-center py-1 px-2 font-medium text-white dark:text-white dark:bg-red-500 bg-red-500',
+            extraClasses,
+            {
+              'opacity-70 cursor-default': disabled,
+              'hover:bg-red-600': !disabled,
+            }
           )}
         >
           {text}
