@@ -58,7 +58,10 @@ const Sidebar = ({ visibleWidth }: SidebarProps) => {
   }, [setIsSidebarFocused]);
 
   return (
-    <div className="w-full h-full overflow-auto border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz dark:bg-raisin-black">
+    <div
+      className="w-full h-full overflow-auto border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz dark:bg-raisin-black"
+      data-testid="sidebar"
+    >
       <div ref={sidebarContainerRef} className="min-w-fit">
         {Object.entries(sidebarItems).map(([itemKey, sidebarItem]) => (
           <SidebarChild

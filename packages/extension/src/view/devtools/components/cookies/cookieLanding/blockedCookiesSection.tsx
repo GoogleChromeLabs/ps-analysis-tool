@@ -25,21 +25,24 @@ import {
   MatrixContainer,
   type MatrixComponentProps,
   LEGEND_DESCRIPTION,
+  useFiltersMapping,
 } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies
  */
-import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
+import { useCookie, useSettings } from '../../../stateProviders';
 
 const BlockedCookiesSection = () => {
-  const { tabCookies } = useCookieStore(({ state }) => ({
+  const { tabCookies, tabFrames } = useCookie(({ state }) => ({
     tabCookies: state.tabCookies,
+    tabFrames: state.tabFrames,
   }));
 
-  const { isUsingCDP } = useSettingsStore(({ state }) => ({
+  const { isUsingCDP } = useSettings(({ state }) => ({
     isUsingCDP: state.isUsingCDP,
   }));
+
+  const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});
 
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
@@ -48,6 +51,7 @@ const BlockedCookiesSection = () => {
       title: 'Blocked cookies',
       count: cookieStats.blockedCookies.total,
       data: cookiesStatsComponents.blocked,
+      onClick: () => selectedItemUpdater('All', 'blockedReasons'),
     },
   ];
   const dataComponents: MatrixComponentProps[] =
@@ -58,6 +62,8 @@ const BlockedCookiesSection = () => {
         description: legendDescription,
         title: component.label,
         containerClasses: '',
+        onClick: (title: string) =>
+          selectedItemUpdater(title, 'blockedReasons'),
       };
     });
 

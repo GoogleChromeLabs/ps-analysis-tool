@@ -16,9 +16,10 @@
 /**
  * External dependencies.
  */
-import React, { useRef, useEffect, useCallback, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import {
   ExtensionReloadNotification,
+  SIDEBAR_ITEMS_KEYS,
   SidebarProvider,
 } from '@ps-analysis-tool/design-system';
 
@@ -26,46 +27,20 @@ import {
  * Internal dependencies.
  */
 import TABS from './tabs';
-import { useCookieStore } from './stateProviders/syncCookieStore';
 import './app.css';
 import { Layout } from './components';
 import { getCurrentTabId } from '../../utils/getCurrentTabId';
-import { useSettingsStore } from './stateProviders/syncSettingsStore';
+import useContextInvalidated from './hooks/useContextInvalidated';
 
 const App: React.FC = () => {
   const [sidebarData, setSidebarData] = useState(TABS);
   const contextInvalidatedRef = useRef(null);
 
-  const { contextInvalidated, setContextInvalidated } = useCookieStore(
-    ({ state, actions }) => ({
-      contextInvalidated: state.contextInvalidated,
-      setContextInvalidated: actions.setContextInvalidated,
-    })
+  const contextInvalidated = useContextInvalidated(contextInvalidatedRef);
+
+  const [defaultSelectedItemKey, setDefaultSelectedItemKey] = useState(
+    SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX
   );
-
-  const { allowedNumberOfTabs } = useSettingsStore(({ state }) => ({
-    allowedNumberOfTabs: state.allowedNumberOfTabs,
-  }));
-
-  const listenToMouseChange = useCallback(() => {
-    if (contextInvalidatedRef.current) {
-      if (!chrome.runtime?.id) {
-        setContextInvalidated(true);
-        localStorage.setItem('contextInvalidated', 'true');
-      }
-    }
-  }, [setContextInvalidated]);
-
-  useEffect(() => {
-    window.addEventListener('mouseover', listenToMouseChange);
-
-    return () => {
-      window.removeEventListener('mouseover', listenToMouseChange);
-    };
-  }, [listenToMouseChange]);
-
-  const [defaultSelectedItemKey, setDefaultSelectedItemKey] =
-    useState('privacySandbox');
 
   useEffect(() => {
     (async () => {
@@ -83,25 +58,6 @@ const App: React.FC = () => {
     })();
   }, []);
 
-  useEffect(() => {
-    (async () => {
-      const localStorageFlag = localStorage.getItem('contextInvalidated');
-
-      if (
-        localStorageFlag &&
-        localStorageFlag === 'true' &&
-        allowedNumberOfTabs === 'unlimited'
-      ) {
-        const tabId = await getCurrentTabId();
-
-        if (tabId) {
-          chrome.tabs.reload(Number(tabId));
-          localStorage.removeItem('contextInvalidated');
-        }
-      }
-    })();
-  }, [allowedNumberOfTabs]);
-
   return (
     <SidebarProvider
       data={sidebarData}
@@ -111,12 +67,13 @@ const App: React.FC = () => {
         className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black"
         ref={contextInvalidatedRef}
       >
-        {contextInvalidated && (
+        {!contextInvalidated ? (
+          <Layout setSidebarData={setSidebarData} />
+        ) : (
           <div className="flex flex-col items-center justify-center w-full h-full">
             <ExtensionReloadNotification />
           </div>
         )}
-        {!contextInvalidated && <Layout setSidebarData={setSidebarData} />}
       </div>
     </SidebarProvider>
   );

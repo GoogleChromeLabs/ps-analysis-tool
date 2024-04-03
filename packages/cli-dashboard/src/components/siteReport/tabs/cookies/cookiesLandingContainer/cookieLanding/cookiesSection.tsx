@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   CookiesLandingWrapper,
   CookiesMatrix,
@@ -24,6 +24,7 @@ import {
   prepareCookieDataMapping,
   prepareCookieStatsComponents,
   prepareCookiesCount,
+  useFiltersMapping,
 } from '@ps-analysis-tool/design-system';
 import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
 /**
@@ -35,12 +36,23 @@ interface CookiesSectionProps {
   tabFrames: TabFrames | null;
 }
 const CookiesSection = ({ tabCookies, tabFrames }: CookiesSectionProps) => {
+  const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});
+
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
   const cookieClassificationDataMapping = prepareCookieDataMapping(
     cookieStats,
-    cookiesStatsComponents
+    cookiesStatsComponents,
+    selectedItemUpdater
   );
+
+  const cookieComponentData = useMemo(() => {
+    return cookiesStatsComponents.legend.map((component) => ({
+      ...component,
+      onClick: (title: string) =>
+        selectedItemUpdater(title, 'analytics.category'),
+    }));
+  }, [cookiesStatsComponents.legend, selectedItemUpdater]);
 
   return (
     <CookiesLandingWrapper
@@ -57,7 +69,7 @@ const CookiesSection = ({ tabCookies, tabFrames }: CookiesSectionProps) => {
           ))}
       <CookiesMatrix
         tabCookies={tabCookies}
-        componentData={cookiesStatsComponents.legend}
+        componentData={cookieComponentData}
         tabFrames={tabFrames}
         showHorizontalMatrix={false}
       />

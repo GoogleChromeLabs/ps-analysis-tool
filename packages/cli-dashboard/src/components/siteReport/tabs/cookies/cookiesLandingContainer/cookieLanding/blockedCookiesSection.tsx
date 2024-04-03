@@ -25,18 +25,22 @@ import {
   MatrixContainer,
   type MatrixComponentProps,
   LEGEND_DESCRIPTION,
+  useFiltersMapping,
 } from '@ps-analysis-tool/design-system';
-import type { TabCookies } from '@ps-analysis-tool/common';
+import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
 
 interface BlockedCookiesSectionProps {
-  tabCookies: TabCookies;
-  affectedCookies: TabCookies;
+  tabCookies: TabCookies | null;
+  cookiesWithIssues: TabCookies | null;
+  tabFrames: TabFrames | null;
 }
 
 const BlockedCookiesSection = ({
   tabCookies,
-  affectedCookies,
+  cookiesWithIssues,
+  tabFrames,
 }: BlockedCookiesSectionProps) => {
+  const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
   const blockedCookieDataMapping: DataMapping[] = [
@@ -44,6 +48,7 @@ const BlockedCookiesSection = ({
       title: 'Blocked cookies',
       count: cookieStats.blockedCookies.total,
       data: cookiesStatsComponents.blocked,
+      onClick: () => selectedItemUpdater('All', 'blockedReasons'),
     },
   ];
   const dataComponents: MatrixComponentProps[] =
@@ -54,10 +59,12 @@ const BlockedCookiesSection = ({
         description: legendDescription,
         title: component.label,
         containerClasses: '',
+        onClick: (title: string) =>
+          selectedItemUpdater(title, 'blockedReasons'),
       };
     });
 
-  const blockedCookiesStats = prepareCookiesCount(affectedCookies);
+  const blockedCookiesStats = prepareCookiesCount(cookiesWithIssues);
   const blockedCookiesStatsComponents =
     prepareCookieStatsComponents(blockedCookiesStats);
   const blockedDataComponents: MatrixComponentProps[] =

@@ -24,30 +24,41 @@ import {
   prepareCookieDataMapping,
   prepareCookieStatsComponents,
   prepareCookiesCount,
+  useFiltersMapping,
 } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies
  */
-import { useCookieStore } from '../../../stateProviders/syncCookieStore';
+import { useCookie } from '../../../stateProviders';
 import {
   ORPHANED_COOKIE_KEY,
   UNMAPPED_COOKIE_KEY,
 } from '@ps-analysis-tool/common';
 
 const CookiesSection = () => {
-  const { tabCookies, tabFrames, frameHasCookies } = useCookieStore(
-    ({ state }) => ({
-      tabCookies: state.tabCookies,
-      tabFrames: state.tabFrames,
-      frameHasCookies: state.frameHasCookies,
-    })
-  );
+  const { tabCookies, tabFrames, frameHasCookies } = useCookie(({ state }) => ({
+    tabCookies: state.tabCookies,
+    tabFrames: state.tabFrames,
+    frameHasCookies: state.frameHasCookies,
+  }));
+
+  const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});
+
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
   const cookieClassificationDataMapping = prepareCookieDataMapping(
     cookieStats,
-    cookiesStatsComponents
+    cookiesStatsComponents,
+    selectedItemUpdater
   );
+
+  const cookieComponentData = useMemo(() => {
+    return cookiesStatsComponents.legend.map((component) => ({
+      ...component,
+      onClick: (title: string) =>
+        selectedItemUpdater(title, 'analytics.category'),
+    }));
+  }, [cookiesStatsComponents.legend, selectedItemUpdater]);
 
   const processedTabFrames = useMemo(
     () =>
@@ -78,7 +89,7 @@ const CookiesSection = () => {
           ))}
       <CookiesMatrix
         tabCookies={tabCookies}
-        componentData={cookiesStatsComponents.legend}
+        componentData={cookieComponentData}
         tabFrames={processedTabFrames}
         showHorizontalMatrix={false}
       />

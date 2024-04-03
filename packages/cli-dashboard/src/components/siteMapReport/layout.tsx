@@ -25,11 +25,11 @@ import {
   Sidebar,
   useSidebar,
   type SidebarItems,
+  SIDEBAR_ITEMS_KEYS,
 } from '@ps-analysis-tool/design-system';
 import {
   type TabFrames,
   type TechnologyData,
-  UNKNOWN_FRAME_KEY,
   type CookieFrameStorageType,
   type CompleteJson,
 } from '@ps-analysis-tool/common';
@@ -38,7 +38,7 @@ import {
  * Internal dependencies.
  */
 import SiteReport from '../siteReport';
-import SiteMapAffectedCookies from './sitemapAffectedCookies';
+import SiteMapCookiesWithIssues from './sitemapCookiesWithIssues';
 import CookiesLandingContainer from '../siteReport/tabs/cookies/cookiesLandingContainer';
 import reshapeCookies from '../utils/reshapeCookies';
 import { generateSiteMapReportandDownload } from '../utils/reportDownloader';
@@ -73,21 +73,12 @@ const Layout = ({
     setSites(Array.from(_sites));
   }, [cookies]);
 
-  const frames = useMemo(() => {
-    return Object.keys(cookies).reduce((acc, frame) => {
-      if (frame?.includes('http') || frame === UNKNOWN_FRAME_KEY) {
-        acc[frame] = {} as TabFrames[string];
-      }
-      return acc;
-    }, {} as TabFrames);
-  }, [cookies]);
-
   const reshapedCookies = useMemo(
     () => reshapeCookies(landingPageCookies),
     [landingPageCookies]
   );
 
-  const affectedCookies = useMemo(
+  const cookiesWithIssues = useMemo(
     () =>
       Object.fromEntries(
         Object.entries(reshapedCookies).filter(([, cookie]) => cookie.isBlocked)
@@ -130,12 +121,16 @@ const Layout = ({
     setSidebarData((prev) => {
       const _data = { ...prev };
 
-      _data['sitemap-landing-page'].panel = {
+      _data[SIDEBAR_ITEMS_KEYS.COOKIES].panel = {
         Element: CookiesLandingContainer,
         props: {
           tabCookies: reshapedCookies,
-          tabFrames: frames,
-          affectedCookies,
+          tabFrames: sites.reduce<TabFrames>((acc, site) => {
+            acc[site] = {} as TabFrames[string];
+
+            return acc;
+          }, {}),
+          cookiesWithIssues,
           downloadReport: () => {
             if (!Array.isArray(completeJson)) {
               return;
@@ -146,7 +141,7 @@ const Layout = ({
         },
       };
 
-      _data['sitemap-landing-page'].children = sites.reduce(
+      _data[SIDEBAR_ITEMS_KEYS.COOKIES].children = sites.reduce(
         (acc: SidebarItems, site: string) => {
           acc[site] = {
             title: site,
@@ -173,8 +168,8 @@ const Layout = ({
         {}
       );
 
-      _data['sitemap-affected-cookies'].panel = {
-        Element: SiteMapAffectedCookies,
+      _data[SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES].panel = {
+        Element: SiteMapCookiesWithIssues,
         props: {
           cookies: Object.values(reshapedCookies).filter(
             (cookie) => cookie.isBlocked
@@ -185,9 +180,8 @@ const Layout = ({
       return _data;
     });
   }, [
-    affectedCookies,
     completeJson,
-    frames,
+    cookiesWithIssues,
     isKeySelected,
     reshapedCookies,
     setSidebarData,
@@ -198,7 +192,7 @@ const Layout = ({
 
   useEffect(() => {
     if (selectedItemKey === null && Object.keys(sidebarData).length > 0) {
-      updateSelectedItemKey('sitemap-landing-page');
+      updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.COOKIES);
     }
   }, [isKeySelected, selectedItemKey, sidebarData, updateSelectedItemKey]);
 

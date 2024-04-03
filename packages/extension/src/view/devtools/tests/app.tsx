@@ -28,19 +28,15 @@ import { useTablePersistentSettingsStore } from '@ps-analysis-tool/design-system
  * Internal dependencies.
  */
 import App from '../app';
-import { useCookieStore } from '../stateProviders/syncCookieStore';
+import { useCookie, useSettings } from '../stateProviders';
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
 import data from '../../../utils/test-data/cookieMockData';
-import { useSettingsStore } from '../stateProviders/syncSettingsStore';
 
-jest.mock('../stateProviders/syncCookieStore', () => ({
-  useCookieStore: jest.fn(),
-}));
-
-jest.mock('../stateProviders/syncSettingsStore', () => ({
-  useSettingsStore: jest.fn(),
+jest.mock('../stateProviders', () => ({
+  useCookie: jest.fn(),
+  useSettings: jest.fn(),
 }));
 
 jest.mock(
@@ -50,10 +46,10 @@ jest.mock(
   })
 );
 
-const mockUseCookieStore = useCookieStore as jest.Mock;
+const mockUseCookieStore = useCookie as jest.Mock;
 const mockUseTablePersistentSettingStore =
   useTablePersistentSettingsStore as jest.Mock;
-const mockUseSettingsStore = useSettingsStore as jest.Mock;
+const mockUseSettingsStore = useSettings as jest.Mock;
 
 describe('App', () => {
   beforeAll(() => {

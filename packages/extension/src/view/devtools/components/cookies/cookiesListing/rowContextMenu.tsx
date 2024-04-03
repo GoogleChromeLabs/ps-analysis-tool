@@ -37,7 +37,7 @@ import {
   onAllowListClick,
   getDotPrefixedDomain,
   isCookieDomainInAllowList,
-} from '../../../stateProviders/useAllowedList/utils';
+} from '../../../stateProviders/allowedList/utils';
 
 interface RowContextMenuProps {
   domainsInAllowList: Set<string>;
