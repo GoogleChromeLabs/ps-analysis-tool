@@ -46,7 +46,7 @@ export type ScriptTagUnderCheck = {
 
 export type AccordionItem = {
   count: number;
-  isAffected: boolean;
+  hasIssues: boolean;
   title: string;
   superTitle: string;
   superTitleDescription: string;

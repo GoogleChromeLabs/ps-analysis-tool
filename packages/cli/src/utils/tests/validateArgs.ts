@@ -44,7 +44,7 @@ describe('validateArgs', () => {
       return;
     });
 
-    validateArgs('https://example.com', '', '', '', '', '');
+    validateArgs('https://example.com', '', '', '', '', '', 9000);
 
     expect(mockExit).toHaveBeenCalledTimes(0);
   });
@@ -59,7 +59,7 @@ describe('validateArgs', () => {
     jest.spyOn(fse, 'mkdir').mockImplementation(() => {
       return;
     });
-    validateArgs('', '', '', '', '', '');
+    validateArgs('', '', '', '', '', '', 9000);
 
     expect(mockExit).toHaveBeenCalled();
   });
@@ -80,7 +80,8 @@ describe('validateArgs', () => {
       '',
       '',
       '',
-      ''
+      '',
+      9000
     );
 
     expect(mockExit).toHaveBeenCalled();
@@ -92,7 +93,7 @@ describe('validateArgs', () => {
       return false;
     });
 
-    validateArgs('', '', '', './path/list.xml', '', '');
+    validateArgs('', '', '', './path/list.xml', '', '', 9000);
 
     expect(mockExit).toHaveBeenCalled();
   });
@@ -103,7 +104,7 @@ describe('validateArgs', () => {
       return true;
     });
 
-    validateArgs('', '', '', './path/list.xml', 'a', '');
+    validateArgs('', '', '', './path/list.xml', 'a', '', 9000);
 
     expect(mockExit).toHaveBeenCalled();
   });
