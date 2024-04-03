@@ -42,6 +42,7 @@ const ReportDownloadButton = () => {
   return (
     <Button
       disabled={showLoader}
+      title={showLoader ? 'Wait for library detection' : ''}
       extraClasses="absolute top-3 right-6"
       onClick={() => {
         if (tabCookies && tabFrames && libraryMatches) {
