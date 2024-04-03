@@ -164,12 +164,14 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
       {
         header: 'Priority',
         accessorKey: 'parsedCookie.priority',
+        isHiddenByDefault: true,
         cell: (info: InfoType) => info,
         widthWeightagePercentage: 4,
       },
       {
         header: 'Size',
         accessorKey: 'parsedCookie.size',
+        isHiddenByDefault: true,
         cell: (info: InfoType) => info,
         widthWeightagePercentage: 3,
       },

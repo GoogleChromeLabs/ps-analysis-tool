@@ -22,38 +22,20 @@ import {
   CookiesMatrix,
   prepareFrameStatsComponent,
 } from '@ps-analysis-tool/design-system';
-import {
-  ORPHANED_COOKIE_KEY,
-  UNMAPPED_COOKIE_KEY,
-} from '@ps-analysis-tool/common';
 /**
  * Internal dependencies
  */
 import { useCookie } from '../../../stateProviders';
 
 const FramesSection = () => {
-  const { tabCookies, tabFrames, frameHasCookies } = useCookie(({ state }) => ({
+  const { tabCookies, tabFrames } = useCookie(({ state }) => ({
     tabCookies: state.tabCookies,
     tabFrames: state.tabFrames,
-    frameHasCookies: state.frameHasCookies,
   }));
 
   const processedTabFrames = useMemo(
-    () =>
-      Object.fromEntries(
-        Object.entries(tabFrames || {}).filter(([url]) => {
-          if (url === ORPHANED_COOKIE_KEY) {
-            return frameHasCookies[url];
-          }
-
-          if (url === UNMAPPED_COOKIE_KEY) {
-            return frameHasCookies[url];
-          }
-
-          return true;
-        })
-      ),
-    [tabFrames, frameHasCookies]
+    () => Object.fromEntries(Object.entries(tabFrames || {})),
+    [tabFrames]
   );
 
   const framesStats = prepareFrameStatsComponent(
