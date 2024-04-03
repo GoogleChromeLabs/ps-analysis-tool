@@ -30,8 +30,8 @@ const Tabs: SidebarItems = {
     icon: <CookieIcon />,
     selectedIcon: <CookieIconWhite />,
   },
-  'affected-cookies': {
-    title: 'Affected Cookies',
+  'cookies-with-issues': {
+    title: 'Cookies With Issues',
     children: {},
     icon: <CookieIcon />,
     selectedIcon: <CookieIconWhite />,

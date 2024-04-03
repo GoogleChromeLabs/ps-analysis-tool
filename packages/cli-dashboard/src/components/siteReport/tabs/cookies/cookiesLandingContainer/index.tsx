@@ -28,14 +28,14 @@ import { CookiesSection, BlockedCookiesSection } from './cookieLanding';
 interface CookiesLandingContainerProps {
   tabFrames: TabFrames;
   tabCookies: TabCookies;
-  affectedCookies: TabCookies;
+  cookiesWithIssues: TabCookies;
   downloadReport?: () => void;
 }
 
 const CookiesLandingContainer = ({
   tabFrames,
   tabCookies,
-  affectedCookies,
+  cookiesWithIssues,
   downloadReport,
 }: CookiesLandingContainerProps) => {
   return (
@@ -53,7 +53,7 @@ const CookiesLandingContainer = ({
         <CookiesSection tabCookies={tabCookies} tabFrames={tabFrames} />
         <BlockedCookiesSection
           tabCookies={tabCookies}
-          affectedCookies={affectedCookies}
+          cookiesWithIssues={cookiesWithIssues}
           tabFrames={tabFrames}
         />
       </CookiesLanding>

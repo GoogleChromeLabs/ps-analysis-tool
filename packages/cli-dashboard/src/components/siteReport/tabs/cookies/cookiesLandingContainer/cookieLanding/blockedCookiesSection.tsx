@@ -29,12 +29,12 @@ import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
 
 interface BlockedCookiesSectionProps {
   tabCookies: TabCookies | null;
-  affectedCookies: TabCookies | null;
+  cookiesWithIssues: TabCookies | null;
   tabFrames: TabFrames | null;
 }
 const BlockedCookiesSection = ({
   tabCookies,
-  affectedCookies,
+  cookiesWithIssues,
   tabFrames,
 }: BlockedCookiesSectionProps) => {
   const cookiesStats = prepareCookiesCount(tabCookies);
@@ -49,7 +49,7 @@ const BlockedCookiesSection = ({
     },
   ];
 
-  const blockedCookieStats = prepareCookiesCount(affectedCookies);
+  const blockedCookieStats = prepareCookiesCount(cookiesWithIssues);
   const blockedCookiesStatsComponents =
     prepareCookieStatsComponents(blockedCookieStats);
 
@@ -67,7 +67,7 @@ const BlockedCookiesSection = ({
             />
           ))}
       <CookiesMatrix
-        tabCookies={affectedCookies}
+        tabCookies={cookiesWithIssues}
         componentData={cookiesStatsComponents.blockedCookiesLegend}
         tabFrames={tabFrames}
         description=""
@@ -77,7 +77,7 @@ const BlockedCookiesSection = ({
         allowExpand={true}
       />
       <CookiesMatrix
-        tabCookies={affectedCookies}
+        tabCookies={cookiesWithIssues}
         componentData={blockedCookiesStatsComponents.legend}
         tabFrames={tabFrames}
         description=""
