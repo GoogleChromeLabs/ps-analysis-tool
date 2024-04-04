@@ -29,7 +29,6 @@ import {
 import TABS from './tabs';
 import './app.css';
 import { Layout } from './components';
-import { getCurrentTabId } from '../../utils/getCurrentTabId';
 import useContextInvalidated from './hooks/useContextInvalidated';
 
 const App: React.FC = () => {
@@ -44,7 +43,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     (async () => {
-      const tabId = await getCurrentTabId();
+      const tabId = chrome.devtools.inspectedWindow.tabId;
 
       if (!tabId) {
         return;
