@@ -13,11 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './antiCovertTracking';
-export * from './privateAdvertising';
-export * from './siteBoundaries';
-export { default as Cookies } from './cookies';
-export { default as PrivacySandbox } from './privacySandbox';
-export { default as Settings } from './settings';
-export { default as FacilitatedTesting } from './facilitatedTesting';
-export { default as Layout } from './layout';
+/**
+ * External dependencies.
+ */
+import {
+  CookieIcon,
+  CookieIconWhite,
+  type SidebarItems,
+} from '@ps-analysis-tool/design-system';
+
+const Tabs: SidebarItems = {
+  cookies: {
+    title: 'Cookies',
+    children: {},
+    icon: {
+      Element: CookieIcon,
+    },
+    selectedIcon: {
+      Element: CookieIconWhite,
+    },
+  },
+  'cookies-with-issues': {
+    title: 'Cookies With Issues',
+    children: {},
+    icon: {
+      Element: CookieIcon,
+    },
+    selectedIcon: {
+      Element: CookieIconWhite,
+    },
+  },
+};
+
+export default Tabs;

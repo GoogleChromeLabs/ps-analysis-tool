@@ -14,17 +14,29 @@
  * limitations under the License.
  */
 
-/**
- * Match toMatch key with the last key in the chained key.
- * @param key chained key to match with.
- * @param toMatch String to match.
- * @returns Boolean.
- */
-const matchKey = (key: string, toMatch: string) => {
-  const keys = key.split('#');
-  const length = keys.length;
-
-  return keys[length - 1] === toMatch;
+export type SidebarComponent = {
+  Element?: (props: any) => React.JSX.Element;
+  props?: Record<string, unknown>;
 };
 
-export default matchKey;
+export type SidebarItemValue = {
+  title: string;
+  children: SidebarItems;
+  popupTitle?: string;
+  infoIconDescription?: string;
+  extraInterfaceToTitle?: SidebarComponent;
+  dropdownOpen?: boolean;
+  panel?: SidebarComponent;
+  icon?: SidebarComponent;
+  selectedIcon?: SidebarComponent;
+  isBlurred?: boolean;
+};
+
+export type SidebarItems = {
+  [key: string]: SidebarItemValue;
+};
+
+export interface useSidebarProps {
+  data: SidebarItems;
+  defaultSelectedItemKey?: string | null;
+}

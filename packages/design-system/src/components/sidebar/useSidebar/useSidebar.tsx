@@ -13,11 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './antiCovertTracking';
-export * from './privateAdvertising';
-export * from './siteBoundaries';
-export { default as Cookies } from './cookies';
-export { default as PrivacySandbox } from './privacySandbox';
-export { default as Settings } from './settings';
-export { default as FacilitatedTesting } from './facilitatedTesting';
-export { default as Layout } from './layout';
+
+import { useContextSelector } from '@ps-analysis-tool/common';
+import { SidebarContext, SidebarStoreContext } from './context';
+
+export function useSidebar(): SidebarStoreContext;
+export function useSidebar<T>(selector: (state: SidebarStoreContext) => T): T;
+
+/**
+ * Hook to access the Sidebar context.
+ * @param selector Selector function to partially select state.
+ * @returns selected part of the state
+ */
+export function useSidebar<T>(
+  selector: (state: SidebarStoreContext) => T | SidebarStoreContext = (state) =>
+    state
+) {
+  return useContextSelector(SidebarContext, selector);
+}

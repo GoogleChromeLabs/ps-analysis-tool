@@ -16,7 +16,6 @@
 /**
  * External dependencies
  */
-import React from 'react';
 import {
   CookieIcon,
   CookieIconWhite,
@@ -31,8 +30,12 @@ const sidebarData: SidebarItems = {
   'sitemap-cookies-with-issues': {
     title: 'Cookies With Issues',
     children: {},
-    icon: <CookieIcon />,
-    selectedIcon: <CookieIconWhite />,
+    icon: {
+      Element: CookieIcon,
+    },
+    selectedIcon: {
+      Element: CookieIconWhite,
+    },
   },
 };
 
