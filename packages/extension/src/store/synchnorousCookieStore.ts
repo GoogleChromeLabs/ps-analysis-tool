@@ -29,6 +29,7 @@ import type { Protocol } from 'devtools-protocol';
 import updateCookieBadgeText from './utils/updateCookieBadgeText';
 import { deriveBlockingStatus } from './utils/deriveBlockingStatus';
 import { NEW_COOKIE_DATA } from '../constants';
+import isValidURL from '../utils/isValidURL';
 
 class SynchnorousCookieStore {
   /**
@@ -227,7 +228,14 @@ class SynchnorousCookieStore {
       return;
     }
 
-    const url = new URL(info.targetInfo.url).origin;
+    const url = isValidURL(info.targetInfo.url)
+      ? new URL(info.targetInfo.url).origin
+      : '';
+
+    if (!url) {
+      return;
+    }
+
     if (!this.tabs[tabId].frameIDURLSet[url]) {
       this.tabs[tabId].frameIDURLSet[url] = [];
     }

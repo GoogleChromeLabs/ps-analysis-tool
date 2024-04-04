@@ -49,6 +49,7 @@ import reloadCurrentTab from '../utils/reloadCurrentTab';
 import createCookieFromAuditsIssue from '../utils/createCookieFromAuditsIssue';
 import attachCDP from './attachCDP';
 import isValidURL from '../utils/isValidURL';
+import fetchFrameResourceAndGetCookies from './fetchFrameResourceAndGetCookies';
 
 let cookieDB: CookieDatabase | null = null;
 let syncCookieStore: SynchnorousCookieStore | undefined;
@@ -79,6 +80,13 @@ const unParsedResponseHeaders: {
     [requestId: string]: Protocol.Network.ResponseReceivedExtraInfoEvent;
   };
 } = {};
+
+const initiatorToUrlMap: {
+  [tabId: string]: {
+    [initiatorDomain: string]: string[];
+  };
+} = {};
+
 let tabMode: 'single' | 'unlimited' = 'single';
 let tabToRead = '';
 let globalIsUsingCDP = false;
@@ -106,6 +114,7 @@ chrome.tabs.onCreated.addListener(async (tab) => {
   unParsedResponseHeaders[tab.id.toString()] = {};
   requestIdToCDPURLMapping[tab.id.toString()] = {};
   auditsIssueForTab[tab.id.toString()] = {};
+  initiatorToUrlMap[tab.id.toString()] = {};
 
   if (!syncCookieStore) {
     syncCookieStore = new SynchnorousCookieStore();
@@ -315,6 +324,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         unParsedResponseHeaders[tab.id.toString()] = {};
         requestIdToCDPURLMapping[tab.id.toString()] = {};
         auditsIssueForTab[tab.id.toString()] = {};
+        initiatorToUrlMap[tab.id.toString()] = {};
 
         const currentTab = targets.filter(
           ({ tabId }) => tabId && tab.id && tabId === tab.id
@@ -469,6 +479,27 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
           url: request?.request?.url,
         },
       };
+    }
+
+    const initiator = request.initiator.url ?? '';
+
+    if (initiator && isValidURL(initiator)) {
+      if (!initiatorToUrlMap[tabId][new URL(initiator).origin]) {
+        initiatorToUrlMap[tabId][new URL(initiator).origin] = [];
+      }
+
+      initiatorToUrlMap[tabId][new URL(initiator).origin].push(
+        request?.request?.url ?? ''
+      );
+
+      const gatheredCookies = await fetchFrameResourceAndGetCookies(
+        request?.frameId,
+        initiatorToUrlMap[tabId][new URL(initiator).origin],
+        cookieDB,
+        url ?? ''
+      );
+
+      syncCookieStore?.update(Number(tabId), gatheredCookies);
     }
 
     if (unParsedRequestHeaders[tabId][request.requestId]) {
@@ -695,6 +726,7 @@ const listenToNewTab = async (tabId?: number) => {
   unParsedResponseHeaders[newTabId] = {};
   requestIdToCDPURLMapping[newTabId] = {};
   auditsIssueForTab[newTabId] = {};
+  initiatorToUrlMap[newTabId] = {};
 
   syncCookieStore?.addTabData(Number(newTabId));
   syncCookieStore?.updateDevToolsState(Number(newTabId), true);
@@ -779,6 +811,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
           unParsedResponseHeaders[id.toString()] = {};
           requestIdToCDPURLMapping[id.toString()] = {};
           auditsIssueForTab[id.toString()] = {};
+          initiatorToUrlMap[id.toString()] = {};
 
           const currentTab = targets.filter(
             ({ tabId }) => tabId && id && tabId === id
