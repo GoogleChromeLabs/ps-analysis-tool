@@ -99,7 +99,7 @@ const MenuBar = ({
     <nav
       data-testid="menu-bar"
       className={classnames(
-        'fixed right-6 flex flex-col gap-4 z-10',
+        'fixed right-0 flex flex-col gap-4 z-10 w-9 p-2 bg-dynamic-grey dark:bg-charleston-green rounded-l-lg border border-bright-gray dark:border-quartz',
         extraClasses ? extraClasses : 'top-4'
       )}
     >
