@@ -22,6 +22,7 @@
 		"prepare": "husky install",
 		"cookie-db:update": "node scripts/update-cookie-db.cjs",
 		"rws-json:update": "node scripts/update-rws-json.cjs",
+		"merge-i18n-messages": "node packages/i18n/scripts/merge-messages.cjs",
 		"storybook": "storybook dev -p 6006",
 		"build-storybook": "storybook build",
 		"start": "npm install && npm run dev"
