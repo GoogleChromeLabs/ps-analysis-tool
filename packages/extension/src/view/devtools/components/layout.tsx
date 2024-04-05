@@ -27,6 +27,7 @@ import {
   CookieIcon,
   InspectButton,
   ToastMessage,
+  SIDEBAR_ITEMS_KEYS,
 } from '@ps-analysis-tool/design-system';
 import { Resizable } from 're-resizable';
 
@@ -94,13 +95,13 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
   useEffect(() => {
     setSidebarData((prev) => {
       const data = { ...prev };
-      const psData = data['privacySandbox'];
+      const psData = data[SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX];
 
-      psData.children['cookies'].panel = {
+      psData.children[SIDEBAR_ITEMS_KEYS.COOKIES].panel = {
         Element: Cookies,
         props: { setFilteredCookies },
       };
-      psData.children['cookies'].children = Object.keys(
+      psData.children[SIDEBAR_ITEMS_KEYS.COOKIES].children = Object.keys(
         tabFrames || {}
       ).reduce<SidebarItems>((acc, url) => {
         const popupTitle = `Cookies used by frames from ${url}`;
@@ -129,16 +130,17 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         canStartInspecting && Boolean(Object.keys(tabFrames || {}).length);
 
       if (showInspectButton) {
-        psData.children['cookies'].extraInterfaceToTitle = {
+        psData.children[SIDEBAR_ITEMS_KEYS.COOKIES].extraInterfaceToTitle = {
           Element: InspectButton,
           props: {
             isInspecting,
             setIsInspecting,
-            isTabFocused: isSidebarFocused && isKeySelected('cookies'),
+            isTabFocused:
+              isSidebarFocused && isKeySelected(SIDEBAR_ITEMS_KEYS.COOKIES),
           },
         };
       } else {
-        psData.children['cookies'].extraInterfaceToTitle = {};
+        psData.children[SIDEBAR_ITEMS_KEYS.COOKIES].extraInterfaceToTitle = {};
       }
 
       return data;
@@ -192,14 +194,14 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
 
     lastUrl.current = tabUrl;
 
-    updateSelectedItemKey(selectedFrame || 'cookies');
+    updateSelectedItemKey(selectedFrame || SIDEBAR_ITEMS_KEYS.COOKIES);
   }, [selectedFrame, setSelectedFrame, tabUrl, updateSelectedItemKey]);
 
   const [filteredCookies, setFilteredCookies] = useState<CookieTableData[]>([]);
 
   const handleUpdate = useCallback(
     (key: string | null) => {
-      updateSelectedItemKey(key || 'cookies');
+      updateSelectedItemKey(key || SIDEBAR_ITEMS_KEYS.COOKIES);
     },
     [updateSelectedItemKey]
   );
@@ -227,7 +229,10 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         ref={mainRef}
         className="h-full flex-1 relative overflow-hidden flex flex-col"
       >
-        <div className="w-full h-full overflow-auto">
+        <div
+          className="w-full h-full overflow-auto"
+          id="cookies-landing-scroll-container"
+        >
           <div className="min-w-[40rem] h-full z-1">
             {PanelElement && <PanelElement {...props} />}
           </div>

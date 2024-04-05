@@ -26,6 +26,7 @@ import {
   type SidebarItems,
   SiteBoundariesIcon,
   SiteBoundariesIconWhite,
+  SIDEBAR_ITEMS_KEYS,
 } from '@ps-analysis-tool/design-system';
 import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
 
@@ -80,7 +81,7 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
 
       const keys = selectedItemKey?.split('#') ?? [];
 
-      _data['cookies'].panel = {
+      _data[SIDEBAR_ITEMS_KEYS.COOKIES].panel = {
         Element: CookiesTab,
         props: {
           selectedFrameUrl: null,
@@ -92,7 +93,7 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
         (url) => url === keys[keys.length - 1]
       );
 
-      _data['cookies'].children = frameUrls.reduce(
+      _data[SIDEBAR_ITEMS_KEYS.COOKIES].children = frameUrls.reduce(
         (acc: SidebarItems, url: string): SidebarItems => {
           acc[url] = {
             title: url,
@@ -117,7 +118,7 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
         {}
       );
 
-      _data['cookies-with-issues'].panel = {
+      _data[SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES].panel = {
         Element: SiteCookiesWithIssues,
         props: {
           selectedSite,
@@ -125,7 +126,7 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
       };
 
       if (technologies && technologies.length > 0) {
-        _data['technologies'] = {
+        _data[SIDEBAR_ITEMS_KEYS.TECHNOLOGIES] = {
           title: 'Technologies',
           children: {},
           icon: {
@@ -142,7 +143,7 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
           },
         };
       } else {
-        delete _data['technologies'];
+        delete _data[SIDEBAR_ITEMS_KEYS.TECHNOLOGIES];
       }
 
       return _data;
@@ -151,7 +152,7 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
 
   useEffect(() => {
     if (selectedItemKey === null) {
-      updateSelectedItemKey('cookies');
+      updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.COOKIES);
     }
   }, [selectedItemKey, updateSelectedItemKey]);
 
@@ -159,7 +160,7 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
 
   useEffect(() => {
     if (selectedSite !== lastSelectedSite.current) {
-      updateSelectedItemKey('cookies');
+      updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.COOKIES);
       lastSelectedSite.current = selectedSite;
     }
   }, [selectedSite, updateSelectedItemKey]);
@@ -176,7 +177,10 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
       >
         <Sidebar />
       </Resizable>
-      <div className="flex-1 max-h-screen overflow-auto">
+      <div
+        className="flex-1 max-h-screen overflow-auto"
+        id="dashboard-layout-container"
+      >
         {PanelElement && <PanelElement {...props} />}
       </div>
     </div>

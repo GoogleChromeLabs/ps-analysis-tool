@@ -16,8 +16,7 @@
 /**
  * External dependencies
  */
-import { type TabFrames } from '@ps-analysis-tool/common';
-
+import type { TabFrames } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies
  */

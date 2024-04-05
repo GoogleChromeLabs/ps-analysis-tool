@@ -679,16 +679,6 @@ chrome.runtime.onMessage.addListener(async (request) => {
   if (DEVTOOLS_SET_JAVASCSCRIPT_COOKIE === incomingMessageType) {
     syncCookieStore?.update(incomingMessageTabId, request?.payload?.cookieData);
   }
-
-  if (
-    request?.type === 'DevTools::ServiceWorker::SET_JAVASCRIPT_COOKIE' &&
-    request?.payload?.tabId
-  ) {
-    syncCookieStore?.update(
-      request?.payload?.tabId,
-      request?.payload?.cookieData
-    );
-  }
 });
 
 /**
@@ -732,6 +722,18 @@ chrome.storage.sync.onChanged.addListener(
           tabMode,
           tabToRead: tabToRead,
         },
+      });
+
+      tabs.map((tab) => {
+        if (!tab?.id) {
+          return tab;
+        }
+
+        resetCookieBadgeText(tab.id);
+
+        syncCookieStore?.removeTabData(tab.id);
+
+        return tab;
       });
     } else {
       chrome.runtime.sendMessage({
@@ -784,6 +786,14 @@ chrome.storage.sync.onChanged.addListener(
           }
         })
       );
+    } else {
+      tabs.forEach(({ id }) => {
+        if (!id) {
+          return;
+        }
+
+        syncCookieStore?.sendUpdatedDataToPopupAndDevTools(id);
+      });
     }
   }
 );

@@ -16,11 +16,13 @@
 /**
  * External dependencies
  */
-import React, { useMemo } from 'react';
+import React from 'react';
 import {
-  CookiesLandingContainer,
-  CookiesMatrix,
+  CookiesLandingWrapper,
+  MatrixContainer,
   prepareFrameStatsComponent,
+  type MatrixComponentProps,
+  LEGEND_DESCRIPTION,
 } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies
@@ -33,31 +35,30 @@ const FramesSection = () => {
     tabFrames: state.tabFrames,
   }));
 
-  const processedTabFrames = useMemo(
-    () => Object.fromEntries(Object.entries(tabFrames || {})),
-    [tabFrames]
-  );
-
-  const framesStats = prepareFrameStatsComponent(
-    processedTabFrames,
-    tabCookies
+  const framesStats = prepareFrameStatsComponent(tabFrames, tabCookies);
+  const dataComponents: MatrixComponentProps[] = framesStats.legend.map(
+    (component) => {
+      const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
+      return {
+        ...component,
+        description: legendDescription,
+        title: component.label,
+        containerClasses: '',
+      };
+    }
   );
 
   return (
-    <CookiesLandingContainer
+    <CookiesLandingWrapper
       dataMapping={framesStats.dataMapping}
       testId="frames-insights"
     >
-      <CookiesMatrix
+      <MatrixContainer
         title="Frames"
-        componentData={framesStats.legend}
-        showMatrix={true}
-        tabCookies={tabCookies}
-        tabFrames={tabFrames}
-        showHorizontalMatrix={false}
+        matrixData={dataComponents}
         infoIconTitle="The details regarding frames and associated cookies in this page."
       />
-    </CookiesLandingContainer>
+    </CookiesLandingWrapper>
   );
 };
 export default FramesSection;

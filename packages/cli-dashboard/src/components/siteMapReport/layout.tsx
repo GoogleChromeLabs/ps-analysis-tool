@@ -25,11 +25,11 @@ import {
   Sidebar,
   useSidebar,
   type SidebarItems,
+  SIDEBAR_ITEMS_KEYS,
 } from '@ps-analysis-tool/design-system';
 import {
   type TabFrames,
   type TechnologyData,
-  UNKNOWN_FRAME_KEY,
   type CookieFrameStorageType,
   type CompleteJson,
 } from '@ps-analysis-tool/common';
@@ -71,15 +71,6 @@ const Layout = ({
     });
 
     setSites(Array.from(_sites));
-  }, [cookies]);
-
-  const frames = useMemo(() => {
-    return Object.keys(cookies).reduce((acc, frame) => {
-      if (frame?.includes('http') || frame === UNKNOWN_FRAME_KEY) {
-        acc[frame] = {} as TabFrames[string];
-      }
-      return acc;
-    }, {} as TabFrames);
   }, [cookies]);
 
   const reshapedCookies = useMemo(
@@ -130,11 +121,15 @@ const Layout = ({
     setSidebarData((prev) => {
       const _data = { ...prev };
 
-      _data['sitemap-landing-page'].panel = {
+      _data[SIDEBAR_ITEMS_KEYS.COOKIES].panel = {
         Element: CookiesLandingContainer,
         props: {
           tabCookies: reshapedCookies,
-          tabFrames: frames,
+          tabFrames: sites.reduce<TabFrames>((acc, site) => {
+            acc[site] = {} as TabFrames[string];
+
+            return acc;
+          }, {}),
           cookiesWithIssues,
           downloadReport: () => {
             if (!Array.isArray(completeJson)) {
@@ -146,7 +141,7 @@ const Layout = ({
         },
       };
 
-      _data['sitemap-landing-page'].children = sites.reduce(
+      _data[SIDEBAR_ITEMS_KEYS.COOKIES].children = sites.reduce(
         (acc: SidebarItems, site: string) => {
           acc[site] = {
             title: site,
@@ -173,7 +168,7 @@ const Layout = ({
         {}
       );
 
-      _data['sitemap-cookies-with-issues'].panel = {
+      _data[SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES].panel = {
         Element: SiteMapCookiesWithIssues,
         props: {
           cookies: Object.values(reshapedCookies).filter(
@@ -187,7 +182,6 @@ const Layout = ({
   }, [
     completeJson,
     cookiesWithIssues,
-    frames,
     isKeySelected,
     reshapedCookies,
     setSidebarData,
@@ -198,7 +192,7 @@ const Layout = ({
 
   useEffect(() => {
     if (selectedItemKey === null && Object.keys(sidebarData).length > 0) {
-      updateSelectedItemKey('sitemap-landing-page');
+      updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.COOKIES);
     }
   }, [isKeySelected, selectedItemKey, sidebarData, updateSelectedItemKey]);
 

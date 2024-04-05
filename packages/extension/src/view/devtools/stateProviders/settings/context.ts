@@ -30,8 +30,8 @@ export interface SettingsStoreContext {
       | null;
     browserInformation: string | null;
     OSInformation: string | null;
-    isUsingCDP: boolean;
     PSATVersion: string | null;
+    isUsingCDP: boolean;
     settingsChanged: boolean;
     allowedNumberOfTabsForSettingsPageDisplay: string | null;
     isUsingCDPForSettingsPageDisplay: boolean;
@@ -51,8 +51,8 @@ const initialState: SettingsStoreContext = {
     currentExtensions: null,
     browserInformation: null,
     OSInformation: null,
-    isUsingCDP: false,
     PSATVersion: null,
+    isUsingCDP: false,
     settingsChanged: false,
     allowedNumberOfTabsForSettingsPageDisplay: null,
     isUsingCDPForSettingsPageDisplay: false,

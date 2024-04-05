@@ -102,6 +102,9 @@ export const SidebarProvider = ({
           if (item.panel) {
             setActivePanel({
               query,
+              clearQuery: () => {
+                setTimeout(() => setQuery(''));
+              },
               panel: item.panel,
             });
           }

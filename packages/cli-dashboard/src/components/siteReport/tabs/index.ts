@@ -19,11 +19,12 @@
 import {
   CookieIcon,
   CookieIconWhite,
+  SIDEBAR_ITEMS_KEYS,
   type SidebarItems,
 } from '@ps-analysis-tool/design-system';
 
 const Tabs: SidebarItems = {
-  cookies: {
+  [SIDEBAR_ITEMS_KEYS.COOKIES]: {
     title: 'Cookies',
     children: {},
     icon: {
@@ -33,7 +34,7 @@ const Tabs: SidebarItems = {
       Element: CookieIconWhite,
     },
   },
-  'cookies-with-issues': {
+  [SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES]: {
     title: 'Cookies With Issues',
     children: {},
     icon: {
