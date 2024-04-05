@@ -123,16 +123,7 @@ export type CookieData = {
     inboundBlock: BLOCK_STATUS;
     outboundBlock: BLOCK_STATUS;
   };
-  exemptionReason?:
-    | 'None'
-    | 'UserSetting'
-    | 'TPCDMetadata'
-    | 'TPCDDeprecationTrial'
-    | 'TPCDHeuristics'
-    | 'EnterprisePolicy'
-    | 'StorageAccess'
-    | 'TopLevelStorageAccess'
-    | 'CorsOptIn';
+  exemptionReason?: Protocol.Network.CookieExemptionReason;
 };
 
 export type CookieTableData = CookieData & {

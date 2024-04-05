@@ -67,7 +67,7 @@ export default function parseResponseReceivedExtraInfo(
         return temporaryParsedCookie.name === parsedCookie.name;
       }
     });
-    //@ts-ignore
+
     const exemptedCookie = exemptedCookies?.find((c) => {
       if (c.cookie) {
         return c.cookie?.name === parsedCookie.name;
@@ -127,7 +127,7 @@ export default function parseResponseReceivedExtraInfo(
       isFirstParty: isFirstParty(domain, tabUrl),
       headerType: 'response' as CookieData['headerType'],
       frameIdList: [],
-      exemptionReason: exemptedCookie ? exemptedCookie?.exemptionReason : '',
+      exemptionReason: exemptedCookie?.exemptionReason,
     };
 
     cookies.push(singleCookie);
