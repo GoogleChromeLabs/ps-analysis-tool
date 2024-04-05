@@ -18,8 +18,12 @@
  * External dependencies.
  */
 import React from 'react';
-import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
 import { InfoIcon } from '@ps-analysis-tool/design-system';
+
+/**
+ * Internal dependencies
+ */
+import { useCookie } from '../../../../stateProviders';
 
 interface OrphanedUnMappedInfoDisplayProps {
   frameIdList: number[];
@@ -28,7 +32,7 @@ interface OrphanedUnMappedInfoDisplayProps {
 const OrphanedUnMappedInfoDisplay = ({
   frameIdList,
 }: OrphanedUnMappedInfoDisplayProps) => {
-  const tabFrames = useCookieStore(({ state }) => state.tabFrames);
+  const tabFrames = useCookie(({ state }) => state.tabFrames);
 
   if (!tabFrames) {
     return <span>{''}</span>;

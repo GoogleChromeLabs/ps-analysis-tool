@@ -23,36 +23,20 @@ import React, { useEffect, useRef, useState } from 'react';
  * Internal dependencies.
  */
 import SidebarChild from './sidebarChild';
-import type { SidebarItems } from './useSidebar';
+import { useSidebar } from './useSidebar';
 
 interface SidebarProps {
-  selectedItemKey: string | null;
-  sidebarItems: SidebarItems;
-  isSidebarFocused: boolean;
-  setIsSidebarFocused: React.Dispatch<boolean>;
-  updateSelectedItemKey: (key: string | null) => void;
-  onKeyNavigation: (
-    event: React.KeyboardEvent<HTMLDivElement>,
-    key: string | null
-  ) => void;
-  toggleDropdown: (action: boolean, key: string) => void;
-  isKeyAncestor: (key: string) => boolean;
-  isKeySelected: (key: string) => boolean;
   visibleWidth?: number;
 }
 
-const Sidebar = ({
-  selectedItemKey,
-  sidebarItems,
-  isSidebarFocused,
-  setIsSidebarFocused,
-  updateSelectedItemKey,
-  onKeyNavigation,
-  toggleDropdown,
-  isKeyAncestor,
-  isKeySelected,
-  visibleWidth,
-}: SidebarProps) => {
+const Sidebar = ({ visibleWidth }: SidebarProps) => {
+  const { sidebarItems, setIsSidebarFocused } = useSidebar(
+    ({ state, actions }) => ({
+      sidebarItems: state.sidebarItems,
+      setIsSidebarFocused: actions.setIsSidebarFocused,
+    })
+  );
+
   const [didUserInteract, setDidUserInteract] = useState(false);
   const sidebarContainerRef = useRef<HTMLDivElement>(null);
 
@@ -74,22 +58,17 @@ const Sidebar = ({
   }, [setIsSidebarFocused]);
 
   return (
-    <div className="w-full h-full overflow-auto border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz dark:bg-raisin-black">
+    <div
+      className="w-full h-full overflow-auto border border-l-0 border-t-0 border-b-0 border-gray-300 dark:border-quartz dark:bg-raisin-black"
+      data-testid="sidebar"
+    >
       <div ref={sidebarContainerRef} className="min-w-fit">
         {Object.entries(sidebarItems).map(([itemKey, sidebarItem]) => (
           <SidebarChild
-            selectedItemKey={selectedItemKey}
             didUserInteract={didUserInteract}
             setDidUserInteract={setDidUserInteract}
             itemKey={itemKey}
             sidebarItem={sidebarItem}
-            isSidebarFocused={isSidebarFocused}
-            setIsSidebarFocused={setIsSidebarFocused}
-            updateSelectedItemKey={updateSelectedItemKey}
-            onKeyNavigation={onKeyNavigation}
-            toggleDropdown={toggleDropdown}
-            isKeyAncestor={isKeyAncestor}
-            isKeySelected={isKeySelected}
             key={itemKey}
             visibleWidth={visibleWidth}
           />

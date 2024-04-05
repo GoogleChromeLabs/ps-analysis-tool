@@ -27,6 +27,7 @@ interface ButtonProps {
   type?: 'button' | 'submit' | 'reset';
   variant?: 'primary' | 'secondary' | 'danger' | 'small' | 'large';
   extraClasses?: string;
+  disabled?: boolean;
 }
 const Button = ({
   text,
@@ -35,86 +36,42 @@ const Button = ({
   type = 'button',
   variant = 'primary',
   extraClasses = '',
+  disabled = false,
 }: ButtonProps) => {
-  switch (variant) {
-    case 'small':
-      return (
-        <button
-          data-test-id="button"
-          type={type}
-          name={name}
-          onClick={onClick ? onClick : undefined}
-          className={classNames(
-            'rounded flex items-center text-center py-0.5 px-1.5 text-xs text-white dark:bg-baby-blue-eyes bg-sapphire hover:bg-tufts-blue dark:hover:bg-pale-cornflower-blue dark:text-raisin-black',
-            extraClasses
-          )}
-        >
-          {text}
-        </button>
-      );
-    case 'large':
-      return (
-        <button
-          data-test-id="button"
-          type={type}
-          name={name}
-          onClick={onClick ? onClick : undefined}
-          className={classNames(
-            'font-medium rounded-xs flex items-center text-center md:py-3.5 md:px-9 xxs:max-sm:p-2 xs:max-md:py-4 sm:max-md:px-2 text-white dark:bg-google-blue bg-smurf-blue hover:bg-beteleguese dark:hover:bg-bright-navy-blue dark:text-raisin-black',
-            extraClasses
-          )}
-        >
-          {text}
-        </button>
-      );
-    case 'primary':
-      return (
-        <button
-          data-test-id="button"
-          type={type}
-          name={name}
-          onClick={onClick ? onClick : undefined}
-          className={classNames(
-            'rounded flex items-center text-center py-1 px-2 font-medium text-white dark:bg-baby-blue-eyes bg-sapphire hover:bg-tufts-blue dark:hover:bg-pale-cornflower-blue dark:text-raisin-black',
-            extraClasses
-          )}
-        >
-          {text}
-        </button>
-      );
-    case 'secondary':
-      return (
-        <button
-          data-test-id="button"
-          type={type}
-          name={name}
-          onClick={onClick ? onClick : undefined}
-          className={classNames(
-            'rounded flex items-center text-center py-1 px-2 font-medium bg-transparent dark:bg-transparent dark:text-bright-gray text-raisin-black active:opacity-60 hover:opacity-80',
-            extraClasses
-          )}
-        >
-          {text}
-        </button>
-      );
-    case 'danger':
-      return (
-        <button
-          data-test-id="button"
-          type={type}
-          name={name}
-          onClick={onClick ? onClick : undefined}
-          className={classNames(
-            'rounded flex items-center text-center py-1 px-2 font-medium text-white dark:text-white dark:bg-red-500 bg-red-500 hover:bg-red-600',
-            extraClasses
-          )}
-        >
-          {text}
-        </button>
-      );
-    default:
-      return <></>;
-  }
+  return (
+    <button
+      data-test-id="button"
+      type={type}
+      name={name}
+      disabled={disabled}
+      onClick={onClick ? onClick : undefined}
+      className={classNames(
+        extraClasses,
+        'rounded flex items-center text-center py-1 px-2 font-medium text-white dark:text-raisin-black',
+        {
+          'py-0.5 px-1.5 text-xs bg-sapphire dark:bg-baby-blue-eyes ':
+            variant === 'small',
+          'rounded-xs md:py-3.5 md:px-9 xxs:max-sm:p-2 xs:max-md:py-4 sm:max-md:px-2 bg-smurf-blue dark:bg-google-blue':
+            variant === 'large',
+          'bg-sapphire dark:bg-baby-blue-eyes': variant === 'primary',
+          'bg-transparent text-raisin-black dark:text-bright-gray active:opacity-60':
+            variant === 'secondary',
+          'text-white dark:text-white bg-red-500': variant === 'danger',
+        },
+        {
+          'opacity-70 cursor-default': disabled,
+          'hover:bg-tufts-blue dark:hover:bg-pale-cornflower-blue':
+            !disabled && (variant === 'small' || variant === 'primary'),
+          'hover:bg-beteleguese dark:hover:bg-bright-navy-blue':
+            !disabled && variant === 'large',
+          'hover:opacity-80': !disabled && variant === 'secondary',
+          'hover:bg-red-600': !disabled && variant === 'danger',
+        }
+      )}
+    >
+      {text}
+    </button>
+  );
 };
 
 export default Button;

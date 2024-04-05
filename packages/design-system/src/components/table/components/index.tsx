@@ -33,12 +33,14 @@ import FiltersSidebar from './filtersSidebar';
 
 interface TableProps {
   selectedKey: string | undefined | null;
+  isFiltersSidebarOpen?: boolean;
   hideFiltering?: boolean;
   extraInterfaceToTopBar?: () => React.JSX.Element;
 }
 
 const Table = ({
   selectedKey,
+  isFiltersSidebarOpen = false,
   hideFiltering = false,
   extraInterfaceToTopBar,
 }: TableProps) => {
@@ -47,7 +49,8 @@ const Table = ({
   }));
 
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
-  const [showFilterSidebar, setShowFilterSidebar] = useState(false);
+  const [showFilterSidebar, setShowFilterSidebar] =
+    useState(isFiltersSidebarOpen);
   const [columnPosition, setColumnPosition] = useState({
     x: 0,
     y: 0,

@@ -26,16 +26,16 @@ import SinonChrome from 'sinon-chrome';
  * Internal dependencies.
  */
 import App from '../app';
-import { useCookieStore } from '../stateProviders/syncCookieStore';
+import { useCookie } from '../stateProviders';
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
 
-jest.mock('../stateProviders/syncCookieStore', () => ({
-  useCookieStore: jest.fn(),
+jest.mock('../stateProviders/cookie', () => ({
+  useCookie: jest.fn(),
 }));
 
-const mockUseCookieStore = useCookieStore as jest.Mock;
+const mockUseCookieStore = useCookie as jest.Mock;
 
 describe('App', () => {
   beforeAll(() => {

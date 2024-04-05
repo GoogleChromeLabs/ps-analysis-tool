@@ -18,6 +18,15 @@
  */
 import React from 'react';
 
+export type CookiesLandingSection = {
+  name: string;
+  link: string;
+  panel: {
+    Element: ((props: any) => React.JSX.Element) | React.NamedExoticComponent;
+    props?: Record<string, unknown>;
+  };
+};
+
 interface CookiesLandingProps {
   children?: React.ReactNode;
 }

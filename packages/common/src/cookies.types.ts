@@ -175,6 +175,7 @@ export interface Legend {
   count: number;
   color: string;
   countClassName: string;
+  onClick?: (title: string) => void;
 }
 
 export interface CookieStatsComponents {

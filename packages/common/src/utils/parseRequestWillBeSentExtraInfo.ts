@@ -31,72 +31,70 @@ import isFirstParty from './isFirstParty';
 
 /**
  * Parses Network.requestWillBeSentExtraInfo to get extra information about a cookie.
- * @param {object} request Request to be parsed to get extra information about a cookie.
+ * @param {object} associatedCookies Cookies associated with the request being parsed.
  * @param {object} cookieDB Cookie database to find analytics from.
  * @param {object} requestMap An object for requestId to url.
  * @param {string} tabUrl - The top-level URL (URL in the tab's address bar).
+ * @param {string} requestId - The requestId of the request being processed
  * @returns {object} parsed cookies.
  */
 export default function parseRequestWillBeSentExtraInfo(
-  request: Protocol.Network.RequestWillBeSentExtraInfoEvent,
+  associatedCookies: Protocol.Network.RequestWillBeSentExtraInfoEvent['associatedCookies'],
   cookieDB: CookieDatabase,
   requestMap: { [requestId: string]: string },
-  tabUrl: string
+  tabUrl: string,
+  requestId: string
 ) {
   const cookies: CookieData[] = [];
 
-  request.associatedCookies.forEach(
-    //@ts-ignore
-    ({ blockedReasons, cookie, exemptionReason = '' }) => {
-      const effectiveExpirationDate = calculateEffectiveExpiryDate(
-        cookie.expires
-      );
+  associatedCookies.forEach(({ blockedReasons, cookie }) => {
+    const effectiveExpirationDate = calculateEffectiveExpiryDate(
+      cookie.expires
+    );
 
-      let domain,
-        url = '';
+    let domain,
+      url = '';
 
-      if (requestMap && requestMap[request?.requestId]) {
-        url = requestMap[request?.requestId] ?? '';
-      }
-
-      if (cookie?.domain) {
-        domain = cookie?.domain;
-      } else if (!cookie?.domain && url) {
-        domain = new URL(url).hostname;
-      }
-
-      const singleCookie: CookieData = {
-        isBlocked: blockedReasons.length !== 0,
-        parsedCookie: {
-          ...cookie,
-          expires: effectiveExpirationDate,
-          samesite: cookie.sameSite?.toLowerCase() ?? '',
-          domain,
-        },
-        networkEvents: {
-          requestEvents: [
-            {
-              type: REQUEST_EVENT.CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO,
-              requestId: request.requestId,
-              url: url,
-              blocked: blockedReasons.length !== 0,
-              timeStamp: Date.now(),
-            },
-          ],
-          responseEvents: [],
-        },
-        blockedReasons,
-        analytics: cookieDB ? findAnalyticsMatch(cookie.name, cookieDB) : null, // In case CDP gets cookie first.
-        url,
-        headerType: 'request' as CookieData['headerType'],
-        isFirstParty: isFirstParty(domain, tabUrl),
-        frameIdList: [],
-        exemptionReason: exemptionReason,
-      };
-
-      cookies.push(singleCookie);
+    if (requestMap && requestMap[requestId]) {
+      url = requestMap[requestId] ?? '';
     }
-  );
+
+    if (cookie?.domain) {
+      domain = cookie?.domain;
+    } else if (!cookie?.domain && url) {
+      domain = new URL(url).hostname;
+    }
+
+    const singleCookie: CookieData = {
+      isBlocked: blockedReasons.length !== 0,
+      parsedCookie: {
+        ...cookie,
+        expires: effectiveExpirationDate,
+        samesite: cookie.sameSite?.toLowerCase() ?? '',
+        domain,
+      },
+      networkEvents: {
+        requestEvents: [
+          {
+            type: REQUEST_EVENT.CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO,
+            requestId,
+            url: url,
+            blocked: blockedReasons.length !== 0,
+            timeStamp: Date.now(),
+          },
+        ],
+        responseEvents: [],
+      },
+      blockedReasons,
+      analytics: cookieDB ? findAnalyticsMatch(cookie.name, cookieDB) : null, // In case CDP gets cookie first.
+      url,
+      headerType: 'request' as CookieData['headerType'],
+      isFirstParty: isFirstParty(domain, tabUrl),
+      frameIdList: [],
+    };
+
+    cookies.push(singleCookie);
+  });
 
   return cookies;
 }
