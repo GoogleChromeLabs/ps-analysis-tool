@@ -13,33 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import React from 'react';
 
-export type CookiesLandingSection = {
-  name: string;
-  link: string;
-  panel: {
-    Element: ((props: any) => React.JSX.Element) | React.NamedExoticComponent;
-    props?: Record<string, unknown>;
-  };
-};
-
-interface CookiesLandingProps {
-  children?: React.ReactNode;
-}
-
-const CookiesLanding = ({ children }: CookiesLandingProps) => {
-  return (
-    <div
-      className="h-full w-full flex flex-col min-w-[40rem]"
-      data-testid="cookies-landing"
-    >
-      {children}
-    </div>
-  );
-};
-
-export default CookiesLanding;
+export { default as isInCenter } from './isInCenter';

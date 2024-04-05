@@ -229,7 +229,10 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         ref={mainRef}
         className="h-full flex-1 relative overflow-hidden flex flex-col"
       >
-        <div className="w-full h-full overflow-auto">
+        <div
+          className="w-full h-full overflow-auto"
+          id="cookies-landing-scroll-container"
+        >
           <div className="min-w-[40rem] h-full z-1">
             {PanelElement && <PanelElement {...props} />}
           </div>
