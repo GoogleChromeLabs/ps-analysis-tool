@@ -86,7 +86,9 @@ const errorHandler = (err) => {
  * @param formattedData formatted data
  */
 const addKeysToLocale = async (formattedData) => {
-  const messagesPath = path.resolve('./_locales/en/messages.json');
+  const messagesPath = path.resolve(
+    'packages/i18n/_locales/messages/en/messages.json'
+  );
   const messages = await fs.readJson(messagesPath);
 
   const regex = /[:/ *-.%“”()[\]]/g;

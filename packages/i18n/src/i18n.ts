@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { existsSync, readFileSync } from 'fs';
 import { IntlMessageFormat } from 'intl-messageformat';
 
 class I18n {
@@ -68,11 +69,7 @@ class I18n {
     await fetchWithRetry();
   }
 
-  loadCLIMessagesData(
-    locale: string,
-    existsSync: (path: string) => boolean,
-    readFileSync: any
-  ) {
+  loadCLIMessagesData(locale: string) {
     const localeArray = this.createLocaleArray(locale);
 
     for (const _locale of localeArray) {

@@ -26,7 +26,9 @@ const errorHandler = (err) => {
 };
 
 const addKeysToLocale = async (data) => {
-  const messagesPath = path.resolve('./_locales/en/messages.json');
+  const messagesPath = path.resolve(
+    'packages/i18n/_locales/messages/en/messages.json'
+  );
   const messages = await fs.readJson(messagesPath);
 
   data.sets.forEach((set) => {
