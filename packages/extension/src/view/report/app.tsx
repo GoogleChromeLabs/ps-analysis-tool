@@ -34,7 +34,9 @@ const App = () => {
     <div className="h-full w-full flex flex-col">
       <CookiesSection />
       <BlockedCookiesSection />
-      <LibraryDetection />
+      <div className="text-xs">
+        <LibraryDetection />
+      </div>
       <FramesSection />
     </div>
   );
