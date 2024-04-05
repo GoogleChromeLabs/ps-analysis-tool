@@ -23,7 +23,7 @@ import React from 'react';
  */
 import LandingHeader, { type DataMapping } from './landingHeader';
 
-export interface CookiesLandingContainerProps {
+export interface CookiesLandingWrapperProps {
   dataMapping?: DataMapping[];
   showLandingHeader?: boolean;
   testId?: string | null;
@@ -31,13 +31,13 @@ export interface CookiesLandingContainerProps {
   description?: React.ReactNode;
 }
 
-const CookiesLandingContainer = ({
+const CookiesLandingWrapper = ({
   dataMapping = [],
   showLandingHeader = true,
   testId = 'cookie-landing-insights',
   description = '',
   children,
-}: CookiesLandingContainerProps) => {
+}: CookiesLandingWrapperProps) => {
   return (
     <div className="w-full flex flex-col min-w-[40rem]">
       <div className="w-full min-w-[40rem]" data-testid={testId}>
@@ -57,4 +57,4 @@ const CookiesLandingContainer = ({
   );
 };
 
-export default CookiesLandingContainer;
+export default CookiesLandingWrapper;

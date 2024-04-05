@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { Resizable } from 're-resizable';
 import {
   CookieIcon,
@@ -26,24 +26,24 @@ import {
   type SidebarItems,
   SiteBoundariesIcon,
   SiteBoundariesIconWhite,
+  SIDEBAR_ITEMS_KEYS,
 } from '@ps-analysis-tool/design-system';
+import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
 import { useContentStore } from '../stateProviders/contentStore';
-import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
-import TABS from '../tabs';
 import CookiesTab from '../tabs/cookies';
 import SiteCookiesWithIssues from '../tabs/siteCookiesWithIssues';
 import Technologies from '../tabs/technologies';
 
 interface LayoutProps {
   selectedSite: string | null;
+  setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
 }
 
-const Layout = ({ selectedSite }: LayoutProps) => {
-  const [data, setData] = useState<SidebarItems>(TABS);
+const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
   const { tabCookies, technologies } = useContentStore(({ state }) => ({
     tabCookies: state.tabCookies,
     technologies: state.technologies,
@@ -65,46 +65,52 @@ const Layout = ({ selectedSite }: LayoutProps) => {
     [tabCookies]
   );
 
-  const {
-    activePanel,
-    selectedItemKey,
-    sidebarItems,
-    isSidebarFocused,
-    setIsSidebarFocused,
-    updateSelectedItemKey,
-    onKeyNavigation,
-    toggleDropdown,
-    isKeyAncestor,
-    isKeySelected,
-  } = useSidebar({ data });
+  const { activePanel, selectedItemKey, updateSelectedItemKey } = useSidebar(
+    ({ state, actions }) => ({
+      activePanel: state.activePanel,
+      selectedItemKey: state.selectedItemKey,
+      updateSelectedItemKey: actions.updateSelectedItemKey,
+    })
+  );
+
+  const { Element: PanelElement, props } = activePanel.panel;
 
   useEffect(() => {
-    setData((prev) => {
+    setSidebarData((prev) => {
       const _data = { ...prev };
 
       const keys = selectedItemKey?.split('#') ?? [];
 
-      _data['cookies'].panel = (
-        <CookiesTab selectedFrameUrl={null} selectedSite={selectedSite} />
-      );
+      _data[SIDEBAR_ITEMS_KEYS.COOKIES].panel = {
+        Element: CookiesTab,
+        props: {
+          selectedFrameUrl: null,
+          selectedSite,
+        },
+      };
 
       const selectedFrameUrl = frameUrls.find(
         (url) => url === keys[keys.length - 1]
       );
 
-      _data['cookies'].children = frameUrls.reduce(
+      _data[SIDEBAR_ITEMS_KEYS.COOKIES].children = frameUrls.reduce(
         (acc: SidebarItems, url: string): SidebarItems => {
           acc[url] = {
             title: url,
-            panel: (
-              <CookiesTab
-                selectedFrameUrl={selectedFrameUrl}
-                selectedSite={selectedSite}
-              />
-            ),
+            panel: {
+              Element: CookiesTab,
+              props: {
+                selectedFrameUrl,
+                selectedSite,
+              },
+            },
             children: {},
-            icon: <CookieIcon />,
-            selectedIcon: <CookieIconWhite />,
+            icon: {
+              Element: CookieIcon,
+            },
+            selectedIcon: {
+              Element: CookieIconWhite,
+            },
           };
 
           return acc;
@@ -112,29 +118,41 @@ const Layout = ({ selectedSite }: LayoutProps) => {
         {}
       );
 
-      _data['cookies-with-issues'].panel = (
-        <SiteCookiesWithIssues selectedSite={selectedSite} />
-      );
+      _data[SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES].panel = {
+        Element: SiteCookiesWithIssues,
+        props: {
+          selectedSite,
+        },
+      };
 
       if (technologies && technologies.length > 0) {
-        _data['technologies'] = {
+        _data[SIDEBAR_ITEMS_KEYS.TECHNOLOGIES] = {
           title: 'Technologies',
           children: {},
-          icon: <SiteBoundariesIcon />,
-          selectedIcon: <SiteBoundariesIconWhite />,
-          panel: <Technologies selectedSite={selectedSite} />,
+          icon: {
+            Element: SiteBoundariesIcon,
+          },
+          selectedIcon: {
+            Element: SiteBoundariesIconWhite,
+          },
+          panel: {
+            Element: Technologies,
+            props: {
+              selectedSite,
+            },
+          },
         };
       } else {
-        delete _data['technologies'];
+        delete _data[SIDEBAR_ITEMS_KEYS.TECHNOLOGIES];
       }
 
       return _data;
     });
-  }, [frameUrls, selectedItemKey, selectedSite, technologies]);
+  }, [frameUrls, selectedItemKey, selectedSite, setSidebarData, technologies]);
 
   useEffect(() => {
     if (selectedItemKey === null) {
-      updateSelectedItemKey('cookies');
+      updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.COOKIES);
     }
   }, [selectedItemKey, updateSelectedItemKey]);
 
@@ -142,7 +160,7 @@ const Layout = ({ selectedSite }: LayoutProps) => {
 
   useEffect(() => {
     if (selectedSite !== lastSelectedSite.current) {
-      updateSelectedItemKey('cookies');
+      updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.COOKIES);
       lastSelectedSite.current = selectedSite;
     }
   }, [selectedSite, updateSelectedItemKey]);
@@ -157,19 +175,14 @@ const Layout = ({ selectedSite }: LayoutProps) => {
           right: true,
         }}
       >
-        <Sidebar
-          selectedItemKey={selectedItemKey}
-          sidebarItems={sidebarItems}
-          isSidebarFocused={isSidebarFocused}
-          setIsSidebarFocused={setIsSidebarFocused}
-          onKeyNavigation={onKeyNavigation}
-          updateSelectedItemKey={updateSelectedItemKey}
-          toggleDropdown={toggleDropdown}
-          isKeyAncestor={isKeyAncestor}
-          isKeySelected={isKeySelected}
-        />
+        <Sidebar />
       </Resizable>
-      <div className="flex-1 max-h-screen overflow-auto">{activePanel}</div>
+      <div
+        className="flex-1 max-h-screen overflow-auto"
+        id="dashboard-layout-container"
+      >
+        {PanelElement && <PanelElement {...props} />}
+      </div>
     </div>
   );
 };

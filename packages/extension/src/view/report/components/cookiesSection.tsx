@@ -19,7 +19,7 @@
  */
 import React from 'react';
 import {
-  CookiesLandingContainer,
+  CookiesLandingWrapper,
   CookiesMatrix,
 } from '@ps-analysis-tool/design-system';
 /**
@@ -35,7 +35,7 @@ const CookiesSection = () => {
   }
 
   return (
-    <CookiesLandingContainer
+    <CookiesLandingWrapper
       dataMapping={data.cookieClassificationDataMapping}
       testId="cookies-insights"
     >
@@ -43,10 +43,10 @@ const CookiesSection = () => {
         tabCookies={data.tabCookies}
         componentData={data.cookiesStatsComponents.legend}
         tabFrames={data.tabFrames}
-        showInfoIcon={data.showInfoIcon}
+        infoIconTitle=""
         showHorizontalMatrix={data.showHorizontalMatrix}
       />
-    </CookiesLandingContainer>
+    </CookiesLandingWrapper>
   );
 };
 

@@ -19,7 +19,7 @@
  */
 import React from 'react';
 import {
-  CookiesLandingContainer,
+  CookiesLandingWrapper,
   CookiesMatrix,
 } from '@ps-analysis-tool/design-system';
 /**
@@ -35,7 +35,7 @@ const CookiesSection = () => {
   }
 
   return (
-    <CookiesLandingContainer
+    <CookiesLandingWrapper
       dataMapping={data.frameStateCreator.dataMapping}
       testId="frames-insights"
     >
@@ -45,11 +45,10 @@ const CookiesSection = () => {
         showMatrix={true}
         tabCookies={data.tabCookies}
         tabFrames={data.tabFrames}
-        showInfoIcon={data.showInfoIcon}
         showHorizontalMatrix={false}
         infoIconTitle="The details regarding frames and associated cookies in this page."
       />
-    </CookiesLandingContainer>
+    </CookiesLandingWrapper>
   );
 };
 

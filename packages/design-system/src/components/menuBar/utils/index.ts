@@ -13,29 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import React from 'react';
-import {
-  CookieIcon,
-  CookieIconWhite,
-  type SidebarItems,
-} from '@ps-analysis-tool/design-system';
 
-const Tabs: SidebarItems = {
-  cookies: {
-    title: 'Cookies',
-    children: {},
-    icon: <CookieIcon />,
-    selectedIcon: <CookieIconWhite />,
-  },
-  'cookies-with-issues': {
-    title: 'Cookies With Issues',
-    children: {},
-    icon: <CookieIcon />,
-    selectedIcon: <CookieIconWhite />,
-  },
-};
-
-export default Tabs;
+export { default as isInCenter } from './isInCenter';

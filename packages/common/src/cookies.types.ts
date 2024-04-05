@@ -161,6 +161,7 @@ export interface Legend {
   count: number;
   color: string;
   countClassName: string;
+  onClick?: (title: string) => void;
 }
 
 export interface CookieStatsComponents {
@@ -237,6 +238,7 @@ export interface DataMapping {
     count: number;
     color: string;
   }[];
+  onClick?: () => void;
 }
 
 export type FrameStateCreator = {

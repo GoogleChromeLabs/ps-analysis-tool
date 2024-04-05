@@ -229,7 +229,6 @@ const Provider = ({ children }: PropsWithChildren) => {
       if (!message.type) {
         return;
       }
-
       const tabId = chrome.devtools.inspectedWindow.tabId;
       const incomingMessageType = message.type;
 
@@ -238,7 +237,6 @@ const Provider = ({ children }: PropsWithChildren) => {
         setTabUrl(tab?.url ?? '');
         isCurrentTabBeingListenedToRef.current =
           tabId === message?.payload?.tabId;
-
         setTabToRead(message?.payload?.tabId?.toString() || null);
         setTabFrames(null);
         setLoading(false);

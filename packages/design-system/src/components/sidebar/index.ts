@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-export { default as useSidebar } from './useSidebar';
 export * from './useSidebar';
+export * from './useSidebar/constants';
 export { default as Sidebar } from './sidebar';

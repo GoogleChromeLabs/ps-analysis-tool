@@ -13,27 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies
- */
-import React from 'react';
-import {
-  CookieIcon,
-  CookieIconWhite,
-  type SidebarItems,
-} from '@ps-analysis-tool/design-system';
+import findKeyParent from '../findKeyParent';
 
-const sidebarData: SidebarItems = {
-  'sitemap-landing-page': {
-    title: 'Sitemap Report',
-    children: {},
-  },
-  'sitemap-cookies-with-issues': {
-    title: 'Cookies With Issues',
-    children: {},
-    icon: <CookieIcon />,
-    selectedIcon: <CookieIconWhite />,
-  },
-};
+describe('findKeyPareny', () => {
+  it('should find the parent key', () => {
+    const keyPath = ['item1', 'item2', 'item3', 'item4'];
 
-export default sidebarData;
+    const result = findKeyParent(keyPath);
+
+    expect(result).toEqual('item3');
+  });
+
+  it('should return null if there is no parent', () => {
+    const keyPath = ['item1'];
+
+    const result = findKeyParent(keyPath);
+
+    expect(result).toEqual(null);
+  });
+});

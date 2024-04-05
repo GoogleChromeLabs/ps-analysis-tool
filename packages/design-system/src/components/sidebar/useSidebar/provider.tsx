@@ -16,7 +16,13 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 /**
  * Internal dependencies.
@@ -28,59 +34,34 @@ import {
   findPrevItem,
   matchKey,
 } from './utils';
+import { SidebarItems, useSidebarProps } from './types';
+import { SidebarContext, SidebarStoreContext, initialState } from './context';
 
-export type SidebarItemValue = {
-  title: string;
-  children: SidebarItems;
-  popupTitle?: string;
-  infoIconDescription?: string;
-  extraInterfaceToTitle?: React.ReactNode;
-  dropdownOpen?: boolean;
-  panel?: React.ReactNode;
-  icon?: React.ReactNode;
-  selectedIcon?: React.ReactNode;
-  isBlurred?: boolean;
-};
-
-export type SidebarItems = {
-  [key: string]: SidebarItemValue;
-};
-
-export interface SidebarOutput {
-  activePanel: React.ReactNode;
-  selectedItemKey: string | null; //Entire chained item key eg Privacy-Sandbox#cookies#frameUrl
-  currentItemKey: string | null; //Last sidebar item key in selectedItemKey eg frameUrl
-  sidebarItems: SidebarItems;
-  isSidebarFocused: boolean;
-  setIsSidebarFocused: React.Dispatch<boolean>;
-  updateSelectedItemKey: (key: string | null) => void;
-  onKeyNavigation: (
-    event: React.KeyboardEvent<HTMLDivElement>,
-    key: string | null
-  ) => void;
-  toggleDropdown: (action: boolean, key: string) => void;
-  isKeyAncestor: (key: string) => boolean;
-  isKeySelected: (key: string) => boolean;
-}
-
-interface useSidebarProps {
-  data: SidebarItems;
-  defaultSelectedItemKey?: string | null;
-}
-
-const useSidebar = ({
+export const SidebarProvider = ({
   data,
   defaultSelectedItemKey = null,
-}: useSidebarProps): SidebarOutput => {
+  children,
+}: PropsWithChildren<useSidebarProps>) => {
   const [selectedItemKey, setSelectedItemKey] = useState<string | null>(null);
-  const [activePanel, setActivePanel] = useState<React.ReactNode>(); // TODO: Should we use React.ReactNode in state?
+  const [activePanel, setActivePanel] = useState<
+    SidebarStoreContext['state']['activePanel']
+  >(initialState.state.activePanel);
+  const [query, setQuery] = useState<string>('');
   const [sidebarItems, setSidebarItems] = useState<SidebarItems>({});
   const [isSidebarFocused, setIsSidebarFocused] = useState(true);
 
+  /**
+   * Update the selected item key when the defaultSelectedItemKey loads.
+   */
   useEffect(() => {
     setSelectedItemKey(defaultSelectedItemKey);
   }, [defaultSelectedItemKey]);
 
+  /**
+   * Get the last sidebar item key in selectedItemKey chain.
+   * Eg: selectedItemKey = 'Privacy-Sandbox#cookies#frameUrl'
+   * currentItemKey = 'frameUrl'
+   */
   const currentItemKey = useMemo(() => {
     if (!selectedItemKey) {
       return null;
@@ -92,13 +73,25 @@ const useSidebar = ({
     return keys[length - 1];
   }, [selectedItemKey]);
 
+  /**
+   * Update the sidebar items when the sidebar data changes.
+   */
   useEffect(() => {
     setSidebarItems(data);
   }, [data]);
 
+  /**
+   * Find the active panel when the selected item key changes.
+   */
   useEffect(() => {
     let keyFound = false;
 
+    /**
+     * Find the active panel, if the selected item key is matched with the item key.
+     * If the item key is matched, set the active panel.
+     * If the item has children, recursively find the active panel.
+     * @param items Sidebar items.
+     */
     const findActivePanel = (items: SidebarItems) => {
       Object.entries(items).forEach(([itemKey, item]) => {
         if (keyFound) {
@@ -106,7 +99,15 @@ const useSidebar = ({
         }
 
         if (matchKey(selectedItemKey || '', itemKey)) {
-          setActivePanel(item.panel);
+          if (item.panel) {
+            setActivePanel({
+              query,
+              clearQuery: () => {
+                setTimeout(() => setQuery(''));
+              },
+              panel: item.panel,
+            });
+          }
 
           keyFound = true;
           return;
@@ -121,10 +122,15 @@ const useSidebar = ({
     if (selectedItemKey) {
       findActivePanel(sidebarItems);
     }
-  }, [selectedItemKey, sidebarItems]);
+  }, [query, selectedItemKey, sidebarItems]);
 
+  /**
+   * Update the selected item key and query string.
+   * @param key Selected item key.
+   * @param queryString Query string to pass to the new panel.
+   */
   const updateSelectedItemKey = useCallback(
-    (key: string | null) => {
+    (key: string | null, queryString = '') => {
       const keyPath = createKeyPath(sidebarItems, key || '');
 
       if (!keyPath.length) {
@@ -133,10 +139,16 @@ const useSidebar = ({
       }
 
       setSelectedItemKey(keyPath.join('#'));
+      setQuery(queryString);
     },
     [sidebarItems]
   );
 
+  /**
+   * Toggle the dropdown of the sidebar item.
+   * @param action Dropdown action.
+   * @param key Sidebar item key to toggle dropdown.
+   */
   const toggleDropdown = useCallback((action: boolean, key: string) => {
     setSidebarItems((prev) => {
       const items = { ...prev };
@@ -150,6 +162,11 @@ const useSidebar = ({
     });
   }, []);
 
+  /**
+   * Handle keyboard navigation in the sidebar.
+   * @param event Keyboard event.
+   * @param key Sidebar item key to navigate.
+   */
   const onKeyNavigation = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>, key: string | null) => {
       event.preventDefault();
@@ -166,12 +183,18 @@ const useSidebar = ({
         return;
       }
 
+      /**
+       * Open or close the dropdown based on the navigation action.
+       */
       if (navigationAction === 'ArrowRight') {
         toggleDropdown(true, key);
       } else if (navigationAction === 'ArrowLeft') {
         toggleDropdown(false, key);
       }
 
+      /**
+       * Navigate to the previous or next sidebar item based on the navigation action.
+       */
       if (navigationAction === 'ArrowUp') {
         const prevItem = findPrevItem(sidebarItems, keyPath);
 
@@ -195,6 +218,11 @@ const useSidebar = ({
     [sidebarItems, toggleDropdown, updateSelectedItemKey]
   );
 
+  /**
+   * Check if the key is an ancestor of the selected item key.
+   * @param key Sidebar item key to check.
+   * @returns boolean
+   */
   const isKeyAncestor = useCallback(
     (key: string) => {
       if (!selectedItemKey) {
@@ -209,6 +237,13 @@ const useSidebar = ({
     [selectedItemKey]
   );
 
+  /**
+   * Check if the key is present in the selected item key chain.
+   * Eg: selectedItemKey = 'Privacy-Sandbox#cookies#frameUrl'
+   * isKeySelected('frameUrl') => true
+   * @param key Sidebar item key to check.
+   * @returns boolean
+   */
   const isKeySelected = useCallback(
     (key: string) => {
       if (!selectedItemKey) {
@@ -223,19 +258,27 @@ const useSidebar = ({
     [selectedItemKey]
   );
 
-  return {
-    activePanel,
-    selectedItemKey,
-    currentItemKey,
-    sidebarItems,
-    isSidebarFocused,
-    setIsSidebarFocused,
-    updateSelectedItemKey,
-    onKeyNavigation,
-    toggleDropdown,
-    isKeyAncestor,
-    isKeySelected,
-  };
+  return (
+    <SidebarContext.Provider
+      value={{
+        state: {
+          activePanel,
+          selectedItemKey,
+          currentItemKey,
+          sidebarItems,
+          isSidebarFocused,
+        },
+        actions: {
+          setIsSidebarFocused,
+          updateSelectedItemKey,
+          onKeyNavigation,
+          toggleDropdown,
+          isKeyAncestor,
+          isKeySelected,
+        },
+      }}
+    >
+      {children}
+    </SidebarContext.Provider>
+  );
 };
-
-export default useSidebar;

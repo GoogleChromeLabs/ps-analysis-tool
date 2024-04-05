@@ -19,7 +19,7 @@
  */
 import React from 'react';
 import {
-  CookiesLandingContainer,
+  CookiesLandingWrapper,
   CookiesMatrix,
 } from '@ps-analysis-tool/design-system';
 /**
@@ -35,7 +35,7 @@ const CookiesSection = () => {
   }
 
   return (
-    <CookiesLandingContainer
+    <CookiesLandingWrapper
       dataMapping={data.blockedCookieDataMapping}
       testId="blocked-cookies-insights"
     >
@@ -45,12 +45,11 @@ const CookiesSection = () => {
           tabCookies={data.tabCookies}
           componentData={data.cookiesStatsComponents.blockedCookiesLegend}
           tabFrames={data.tabFrames}
-          showInfoIcon={data.showBlockedInfoIcon}
           showHorizontalMatrix={false}
           infoIconTitle="Cookies that have been blocked by the browser.(The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
         />
       )}
-    </CookiesLandingContainer>
+    </CookiesLandingWrapper>
   );
 };
 

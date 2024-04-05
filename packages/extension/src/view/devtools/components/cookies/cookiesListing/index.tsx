@@ -59,6 +59,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
     searchKeys,
     tablePersistentSettingsKey,
     extraInterfaceToTopBar,
+    isSidebarOpen,
   } = useCookieListing(domainsInAllowList);
 
   const frameFilteredCookies = useMemo(
@@ -99,12 +100,13 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
         className="h-full flex"
       >
         <CookieTable
-          queryIsBlockedToHighlight={!isUsingCDP} // TODO: Remove this, and mend cookie object, as it should not have data in blockedStatus when isUsingCDP is false.
+          queryIsBlockedToHighlight={!isUsingCDP}
           data={frameFilteredCookies}
           tableColumns={tableColumns}
           tableFilters={filters}
           tableSearchKeys={searchKeys}
           tablePersistentSettingsKey={tablePersistentSettingsKey}
+          isFiltersSidebarOpen={isSidebarOpen}
           selectedFrame={selectedFrame}
           selectedFrameCookie={selectedFrameCookie}
           setSelectedFrameCookie={setSelectedFrameCookie}
