@@ -48,7 +48,7 @@ const dashboard = {
     new CopyPlugin({
       patterns: [
         { from: '../../out', to: 'out' },
-        { from: '../../_locales', to: '_locales' },
+        { from: '../i18n/_locales', to: '_locales' },
       ],
     }),
   ],
