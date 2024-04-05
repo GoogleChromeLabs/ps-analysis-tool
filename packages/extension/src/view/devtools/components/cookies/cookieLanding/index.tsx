@@ -16,8 +16,13 @@
 /**
  * External dependencies
  */
-import React from 'react';
+import React, { useMemo } from 'react';
 import { LibraryDetection } from '@ps-analysis-tool/library-detection';
+import {
+  MenuBar,
+  type CookiesLandingSection,
+  type MenuData,
+} from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies
  */
@@ -26,12 +31,56 @@ import FramesSection from './framesSection';
 import BlockedCookiesSection from './blockedCookiesSection';
 
 const AssembledCookiesLanding = () => {
+  const sections: Array<CookiesLandingSection> = useMemo(
+    () => [
+      {
+        name: 'Cookies',
+        link: 'cookies',
+        panel: {
+          Element: CookiesSection,
+        },
+      },
+      {
+        name: 'Blocked Cookies',
+        link: 'blocked-cookies',
+        panel: {
+          Element: BlockedCookiesSection,
+        },
+      },
+      {
+        name: 'Library Detection',
+        link: 'library-detection',
+        panel: {
+          Element: LibraryDetection,
+        },
+      },
+      {
+        name: 'Frames',
+        link: 'frames',
+        panel: {
+          Element: FramesSection,
+        },
+      },
+    ],
+    []
+  );
+
+  const menuData: MenuData = useMemo(
+    () => sections.map(({ name, link }) => ({ name, link })),
+    [sections]
+  );
+
   return (
     <>
-      <CookiesSection />
-      <BlockedCookiesSection />
-      <LibraryDetection />
-      <FramesSection />
+      <MenuBar
+        menuData={menuData}
+        scrollContainerId="cookies-landing-scroll-container"
+      />
+      {sections.map(({ link, panel: { Element, props } }) => (
+        <div id={link} key={link} className="cookie-landing-section">
+          {Element && <Element {...(props || {})} />}
+        </div>
+      ))}
     </>
   );
 };

@@ -16,14 +16,15 @@
 /**
  * External dependencies
  */
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
-  CookiesLandingContainer,
+  CookiesLandingWrapper,
   CookiesMatrix,
   MessageBox,
   prepareCookieDataMapping,
   prepareCookieStatsComponents,
   prepareCookiesCount,
+  useFiltersMapping,
 } from '@ps-analysis-tool/design-system';
 import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
 /**
@@ -35,15 +36,26 @@ interface CookiesSectionProps {
   tabFrames: TabFrames | null;
 }
 const CookiesSection = ({ tabCookies, tabFrames }: CookiesSectionProps) => {
+  const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});
+
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
   const cookieClassificationDataMapping = prepareCookieDataMapping(
     cookieStats,
-    cookiesStatsComponents
+    cookiesStatsComponents,
+    selectedItemUpdater
   );
 
+  const cookieComponentData = useMemo(() => {
+    return cookiesStatsComponents.legend.map((component) => ({
+      ...component,
+      onClick: (title: string) =>
+        selectedItemUpdater(title, 'analytics.category'),
+    }));
+  }, [cookiesStatsComponents.legend, selectedItemUpdater]);
+
   return (
-    <CookiesLandingContainer
+    <CookiesLandingWrapper
       dataMapping={cookieClassificationDataMapping}
       testId="cookies-insights"
     >
@@ -57,14 +69,11 @@ const CookiesSection = ({ tabCookies, tabFrames }: CookiesSectionProps) => {
           ))}
       <CookiesMatrix
         tabCookies={tabCookies}
-        componentData={cookiesStatsComponents.legend}
+        componentData={cookieComponentData}
         tabFrames={tabFrames}
-        description=""
-        showInfoIcon={true}
         showHorizontalMatrix={false}
-        allowExpand={true}
       />
-    </CookiesLandingContainer>
+    </CookiesLandingWrapper>
   );
 };
 export default CookiesSection;

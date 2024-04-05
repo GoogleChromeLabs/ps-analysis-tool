@@ -69,12 +69,6 @@ describe('getFramesForCurrentTab : ', () => {
         isOnRWS: false,
         frameType: 'sub_frame',
       },
-      'Orphaned Cookies': {
-        frameIds: [],
-      },
-      'Unmapped Cookies': {
-        frameIds: [],
-      },
     });
   });
 });

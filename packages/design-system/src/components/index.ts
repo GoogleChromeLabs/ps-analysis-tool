@@ -27,6 +27,7 @@ export { default as Matrix } from './matrix';
 export { default as MatrixComponentHorizontal } from './matrix/matrixComponent/matrixComponentHorizontal';
 export type { MatrixComponentProps } from './matrix/matrixComponent';
 export { default as CookiesLanding } from './cookiesLanding';
+export * from './cookiesLanding';
 export type { DataMapping } from './cookiesLanding/landingHeader';
 export { default as CookiesMatrix } from './cookiesLanding/cookiesMatrix';
 export { default as CookieDetails } from './cookieDetails';
@@ -43,6 +44,10 @@ export * from './sidebar';
 export { default as InspectButton } from './inspectButton';
 export { default as ToastMessage } from './toastMessage';
 export {
-  default as CookiesLandingContainer,
-  type CookiesLandingContainerProps,
-} from './cookiesLanding/cookieLandingHeaderContainer';
+  default as CookiesLandingWrapper,
+  type CookiesLandingWrapperProps,
+} from './cookiesLanding/cookiesLandingWrapper';
+export { default as MatrixContainer } from './matrixContainer';
+export { default as MenuBar } from './menuBar';
+export * from './menuBar';
+export { default as useFiltersMapping } from './cookiesLanding/useFiltersMapping';

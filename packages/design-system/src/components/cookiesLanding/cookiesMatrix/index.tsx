@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React from 'react';
 import {
   type TabCookies,
   type TabFrames,
@@ -26,13 +26,10 @@ import {
 /**
  * Internal dependencies
  */
-import Matrix from '../../matrix';
 import type { MatrixComponentProps } from '../../matrix/matrixComponent';
-import { InfoIcon } from '../../../icons';
-import MatrixComponentHorizontal, {
-  type MatrixComponentHorizontalProps,
-} from '../../matrix/matrixComponent/matrixComponentHorizontal';
+import { type MatrixComponentHorizontalProps } from '../../matrix/matrixComponent/matrixComponentHorizontal';
 import { LEGEND_DESCRIPTION } from '../../../constants';
+import MatrixContainer from '../../matrixContainer';
 
 interface CookiesMatrixProps {
   tabCookies: TabCookies | null;
@@ -42,7 +39,6 @@ interface CookiesMatrixProps {
   description?: string;
   showHorizontalMatrix?: boolean;
   showMatrix?: boolean;
-  showInfoIcon?: boolean;
   count?: number | null;
   associatedCookiesCount?: number | null;
   allowExpand?: boolean;
@@ -60,7 +56,6 @@ const CookiesMatrix = ({
   description = '',
   showHorizontalMatrix = true,
   showMatrix = true,
-  showInfoIcon = true,
   count = null,
   associatedCookiesCount = null,
   allowExpand = true,
@@ -69,7 +64,6 @@ const CookiesMatrix = ({
   matrixHorizontalData = null,
   infoIconTitle = 'Cookies must be analyzed on a new, clean Chrome profile for an accurate report.',
 }: CookiesMatrixProps) => {
-  const [isExpanded, setIsExpanded] = useState(false);
   const dataComponents: MatrixComponentProps[] = [];
 
   componentData.forEach((component) => {
@@ -78,7 +72,6 @@ const CookiesMatrix = ({
       ...component,
       description: legendDescription,
       title: component.label,
-      isExpanded,
       containerClasses: '',
     });
   });
@@ -87,13 +80,12 @@ const CookiesMatrix = ({
   const framesWithCookies = filterFramesWithCookies(tabCookies, tabFrames);
 
   const matrixHorizontalComponents = matrixHorizontalData
-    ? matrixHorizontalData.map((data) => ({ ...data, expand: isExpanded }))
+    ? matrixHorizontalData
     : [
         {
           title: 'Number of Frames',
           description: 'Number of unique frames found across the page(s).',
           count: totalFrames,
-          expand: isExpanded,
         },
         {
           title: 'Number of Frames with Associated Cookies',
@@ -104,54 +96,25 @@ const CookiesMatrix = ({
             : framesWithCookies
             ? Object.keys(framesWithCookies).length
             : 0,
-          expand: isExpanded,
         },
       ];
+
   return (
     <div className="w-full" data-testid={`cookies-matrix-${title}`}>
-      <div>
-        <div className="flex gap-x-5 justify-between border-b border-bright-gray dark:border-quartz">
-          <div className="pb-3 flex flex-col gap-1.5">
-            <h4
-              className={`flex items-center gap-1 flex-1 grow text-xs font-bold text-darkest-gray dark:text-bright-gray ${
-                highlightTitle ? 'text-red-500 dark:text-red-500' : ''
-              } ${capitalizeTitle ? 'capitalize' : 'uppercase'}`}
-            >
-              <span>{title}</span>
-              {showInfoIcon && (
-                <span title={infoIconTitle}>
-                  <InfoIcon className="fill-granite-gray" />
-                </span>
-              )}
-              {count !== null && <span>: {Number(count) || 0}</span>}
-            </h4>
-            <p className="text-xs text-darkest-gray dark:text-bright-gray">
-              {description}
-            </p>
-          </div>
-          {allowExpand && (
-            <h4 className="pb-3 flex-1 grow text-xs font-bold text-darkest-gray dark:text-bright-gray text-right">
-              <button onClick={() => setIsExpanded((state) => !state)}>
-                {isExpanded ? 'Collapse View' : 'Expand View'}
-              </button>
-            </h4>
-          )}
-        </div>
-        {showMatrix && <Matrix dataComponents={dataComponents} />}
-      </div>
-      {showHorizontalMatrix && (
-        <div>
-          {matrixHorizontalComponents.map(
-            (matrixHorizontalComponent, index) => (
-              <MatrixComponentHorizontal
-                key={index}
-                {...matrixHorizontalComponent}
-                containerClasses="px-3.5 py-4"
-              />
-            )
-          )}
-        </div>
-      )}
+      <MatrixContainer
+        matrixData={dataComponents}
+        horizontalMatrixData={
+          showHorizontalMatrix ? matrixHorizontalComponents : undefined
+        }
+        title={title}
+        description={description}
+        showMatrix={showMatrix}
+        count={count}
+        allowExpand={allowExpand}
+        highlightTitle={highlightTitle}
+        capitalizeTitle={capitalizeTitle}
+        infoIconTitle={infoIconTitle}
+      />
     </div>
   );
 };

@@ -20,3 +20,4 @@ export { default as Cookies } from './cookies';
 export { default as PrivacySandbox } from './privacySandbox';
 export { default as Settings } from './settings';
 export { default as FacilitatedTesting } from './facilitatedTesting';
+export { default as Layout } from './layout';

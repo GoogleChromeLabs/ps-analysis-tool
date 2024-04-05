@@ -18,74 +18,89 @@
  */
 import React from 'react';
 import {
-  CookiesLandingContainer,
-  CookiesMatrix,
-  MessageBox,
+  CookiesLandingWrapper,
+  type DataMapping,
   prepareCookieStatsComponents,
   prepareCookiesCount,
-  type DataMapping,
+  MatrixContainer,
+  type MatrixComponentProps,
+  LEGEND_DESCRIPTION,
+  useFiltersMapping,
 } from '@ps-analysis-tool/design-system';
 import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
 
 interface BlockedCookiesSectionProps {
   tabCookies: TabCookies | null;
-  affectedCookies: TabCookies | null;
+  cookiesWithIssues: TabCookies | null;
   tabFrames: TabFrames | null;
 }
+
 const BlockedCookiesSection = ({
   tabCookies,
-  affectedCookies,
+  cookiesWithIssues,
   tabFrames,
 }: BlockedCookiesSectionProps) => {
-  const cookiesStats = prepareCookiesCount(tabCookies);
-
-  const cookiesStatsComponents = prepareCookieStatsComponents(cookiesStats);
-
-  const cookieBlockedDataMapping: DataMapping[] = [
+  const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});
+  const cookieStats = prepareCookiesCount(tabCookies);
+  const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
+  const blockedCookieDataMapping: DataMapping[] = [
     {
       title: 'Blocked cookies',
-      count: cookiesStats.blockedCookies.total,
+      count: cookieStats.blockedCookies.total,
       data: cookiesStatsComponents.blocked,
+      onClick: () => selectedItemUpdater('All', 'blockedReasons'),
     },
   ];
+  const dataComponents: MatrixComponentProps[] =
+    cookiesStatsComponents.blockedCookiesLegend.map((component) => {
+      const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
+      return {
+        ...component,
+        description: legendDescription,
+        title: component.label,
+        containerClasses: '',
+        onClick: (title: string) =>
+          selectedItemUpdater(title, 'blockedReasons'),
+      };
+    });
 
-  const blockedCookieStats = prepareCookiesCount(affectedCookies);
+  const blockedCookiesStats = prepareCookiesCount(cookiesWithIssues);
   const blockedCookiesStatsComponents =
-    prepareCookieStatsComponents(blockedCookieStats);
+    prepareCookieStatsComponents(blockedCookiesStats);
+  const blockedDataComponents: MatrixComponentProps[] =
+    blockedCookiesStatsComponents.legend.map((component) => {
+      const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
+      return {
+        ...component,
+        description: legendDescription,
+        title: component.label,
+        containerClasses: '',
+      };
+    });
 
   return (
-    <CookiesLandingContainer
-      dataMapping={cookieBlockedDataMapping}
+    <CookiesLandingWrapper
+      dataMapping={blockedCookieDataMapping}
       testId="blocked-cookies-insights"
     >
-      {!cookiesStats ||
-        (cookiesStats?.firstParty.total === 0 &&
-          cookiesStats?.thirdParty.total === 0 && (
-            <MessageBox
-              headerText="No cookies found on this page"
-              bodyText="Please try reloading the page"
-            />
-          ))}
-      <CookiesMatrix
-        tabCookies={affectedCookies}
-        componentData={cookiesStatsComponents.blockedCookiesLegend}
-        tabFrames={tabFrames}
-        description=""
-        infoIconTitle="Cookies that have been blocked by the browser.(The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
-        showInfoIcon={true}
-        showHorizontalMatrix={false}
-        allowExpand={true}
-      />
-      <CookiesMatrix
-        tabCookies={affectedCookies}
-        componentData={blockedCookiesStatsComponents.legend}
-        tabFrames={tabFrames}
-        description=""
-        showInfoIcon={false}
-        showHorizontalMatrix={false}
-        allowExpand={false}
-      />
-    </CookiesLandingContainer>
+      {dataComponents.length > 0 && (
+        <>
+          <MatrixContainer
+            title="Blocked Reasons"
+            matrixData={dataComponents}
+            infoIconTitle="Cookies that have been blocked by the browser.(The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
+          />
+          <div className="flex flex-col mt-8">
+            <div className="pt-4">
+              <MatrixContainer
+                matrixData={blockedDataComponents}
+                allowExpand={false}
+              />
+            </div>
+          </div>
+        </>
+      )}
+    </CookiesLandingWrapper>
   );
 };
 export default BlockedCookiesSection;
