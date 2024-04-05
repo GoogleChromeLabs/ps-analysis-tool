@@ -47,54 +47,57 @@ export default function parseRequestWillBeSentExtraInfo(
 ) {
   const cookies: CookieData[] = [];
 
-  associatedCookies.forEach(({ blockedReasons, cookie }) => {
-    const effectiveExpirationDate = calculateEffectiveExpiryDate(
-      cookie.expires
-    );
+  associatedCookies.forEach(
+    ({ blockedReasons, cookie, exemptionReason = '' }) => {
+      const effectiveExpirationDate = calculateEffectiveExpiryDate(
+        cookie.expires
+      );
 
-    let domain,
-      url = '';
+      let domain,
+        url = '';
 
-    if (requestMap && requestMap[requestId]) {
-      url = requestMap[requestId] ?? '';
+      if (requestMap && requestMap[requestId]) {
+        url = requestMap[requestId] ?? '';
+      }
+
+      if (cookie?.domain) {
+        domain = cookie?.domain;
+      } else if (!cookie?.domain && url) {
+        domain = new URL(url).hostname;
+      }
+
+      const singleCookie: CookieData = {
+        isBlocked: blockedReasons.length !== 0,
+        parsedCookie: {
+          ...cookie,
+          expires: effectiveExpirationDate,
+          samesite: cookie.sameSite?.toLowerCase() ?? '',
+          domain,
+        },
+        networkEvents: {
+          requestEvents: [
+            {
+              type: REQUEST_EVENT.CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO,
+              requestId,
+              url: url,
+              blocked: blockedReasons.length !== 0,
+              timeStamp: Date.now(),
+            },
+          ],
+          responseEvents: [],
+        },
+        blockedReasons,
+        analytics: cookieDB ? findAnalyticsMatch(cookie.name, cookieDB) : null, // In case CDP gets cookie first.
+        url,
+        headerType: 'request' as CookieData['headerType'],
+        isFirstParty: isFirstParty(domain, tabUrl),
+        frameIdList: [],
+        exemptionReason: exemptionReason,
+      };
+
+      cookies.push(singleCookie);
     }
-
-    if (cookie?.domain) {
-      domain = cookie?.domain;
-    } else if (!cookie?.domain && url) {
-      domain = new URL(url).hostname;
-    }
-
-    const singleCookie: CookieData = {
-      isBlocked: blockedReasons.length !== 0,
-      parsedCookie: {
-        ...cookie,
-        expires: effectiveExpirationDate,
-        samesite: cookie.sameSite?.toLowerCase() ?? '',
-        domain,
-      },
-      networkEvents: {
-        requestEvents: [
-          {
-            type: REQUEST_EVENT.CDP_REQUEST_WILL_BE_SENT_EXTRA_INFO,
-            requestId,
-            url: url,
-            blocked: blockedReasons.length !== 0,
-            timeStamp: Date.now(),
-          },
-        ],
-        responseEvents: [],
-      },
-      blockedReasons,
-      analytics: cookieDB ? findAnalyticsMatch(cookie.name, cookieDB) : null, // In case CDP gets cookie first.
-      url,
-      headerType: 'request' as CookieData['headerType'],
-      isFirstParty: isFirstParty(domain, tabUrl),
-      frameIdList: [],
-    };
-
-    cookies.push(singleCookie);
-  });
+  );
 
   return cookies;
 }

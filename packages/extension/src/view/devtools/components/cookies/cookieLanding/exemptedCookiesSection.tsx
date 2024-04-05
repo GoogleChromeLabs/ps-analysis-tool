@@ -55,8 +55,9 @@ const ExemptedCookiesSection = () => {
         description: legendDescription,
         title: component.label,
         containerClasses: '',
-        onClick: (title: string) =>
-          selectedItemUpdater(title, 'exemptedReason'),
+        onClick: (title: string) => {
+          selectedItemUpdater(title, 'exemptionReason');
+        },
       };
     });
   const exemptedCookiesDataMapping: DataMapping[] = [
@@ -64,7 +65,7 @@ const ExemptedCookiesSection = () => {
       title: 'Exempted cookies',
       count: cookieStats.exemptedCookies.total,
       data: cookiesStatsComponents.exempted,
-      onClick: () => selectedItemUpdater('All', 'exemptedReason'),
+      onClick: () => selectedItemUpdater('All', 'exemptionReason'),
     },
   ];
 

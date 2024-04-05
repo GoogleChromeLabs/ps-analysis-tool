@@ -68,6 +68,10 @@ function frameOnlyExemptionReasonValues(
       acc[reason] = {
         selected: false,
       };
+
+      if (options) {
+        acc[reason].selected = options.includes(reason);
+      }
     }
 
     return acc;
