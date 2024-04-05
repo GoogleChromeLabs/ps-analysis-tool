@@ -76,11 +76,16 @@ class I18n {
     const localeArray = this.createLocaleArray(locale);
 
     for (const _locale of localeArray) {
-      if (existsSync(`packages/i18n/_locales/${_locale}/messages.json`)) {
+      if (
+        existsSync(`packages/i18n/_locales/messages/${_locale}/messages.json`)
+      ) {
         const messages = JSON.parse(
-          readFileSync(`packages/i18n/_locales/${_locale}/messages.json`, {
-            encoding: 'utf-8',
-          })
+          readFileSync(
+            `packages/i18n/_locales/messages/${_locale}/messages.json`,
+            {
+              encoding: 'utf-8',
+            }
+          )
         );
 
         this.initMessages(messages);
