@@ -18,35 +18,53 @@
  */
 import React from 'react';
 import {
-  CookiesLandingContainer,
-  CookiesMatrix,
   prepareCookieStatsComponents,
   prepareCookiesCount,
+  type DataMapping,
+  useFiltersMapping,
+  MatrixContainer,
+  CookiesLandingWrapper,
+  type MatrixComponentProps,
+  LEGEND_DESCRIPTION,
 } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies
  */
-import { useCookieStore } from '../../../stateProviders/syncCookieStore';
-import type { DataMapping } from '@ps-analysis-tool/design-system/src/components/cookiesLanding/landingHeader';
-import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
+import { useSettings, useCookie } from '../../../stateProviders';
 
 const ExemptedCookiesSection = () => {
-  const { tabCookies, tabFrames } = useCookieStore(({ state }) => ({
+  const { tabCookies, tabFrames } = useCookie(({ state }) => ({
     tabCookies: state.tabCookies,
     tabFrames: state.tabFrames,
   }));
 
-  const { isUsingCDP } = useSettingsStore(({ state }) => ({
+  const { isUsingCDP } = useSettings(({ state }) => ({
     isUsingCDP: state.isUsingCDP,
   }));
 
+  const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});
+
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
+
+  const dataComponents: MatrixComponentProps[] =
+    cookiesStatsComponents.exemptedCookiesLegend.map((component) => {
+      const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
+      return {
+        ...component,
+        description: legendDescription,
+        title: component.label,
+        containerClasses: '',
+        onClick: (title: string) =>
+          selectedItemUpdater(title, 'exemptedReason'),
+      };
+    });
   const exemptedCookiesDataMapping: DataMapping[] = [
     {
       title: 'Exempted cookies',
       count: cookieStats.exemptedCookies.total,
       data: cookiesStatsComponents.exempted,
+      onClick: () => selectedItemUpdater('All', 'exemptedReason'),
     },
   ];
 
@@ -70,23 +88,19 @@ const ExemptedCookiesSection = () => {
   );
 
   return (
-    <CookiesLandingContainer
+    <CookiesLandingWrapper
       description={description}
       dataMapping={exemptedCookiesDataMapping}
-      testId="exempted-cookies-insights"
+      testId="blocked-cookies-insights"
     >
-      {cookiesStatsComponents.exemptedCookiesLegend.length > 0 && (
-        <CookiesMatrix
+      {dataComponents.length > 0 && (
+        <MatrixContainer
           title="Exemption Reasons"
-          tabCookies={tabCookies}
-          componentData={cookiesStatsComponents.exemptedCookiesLegend}
-          tabFrames={tabFrames}
-          showInfoIcon
-          showHorizontalMatrix={false}
+          matrixData={dataComponents}
           infoIconTitle="Cookies that should have been blocked by the browser but was exempted."
         />
       )}
-    </CookiesLandingContainer>
+    </CookiesLandingWrapper>
   );
 };
 export default ExemptedCookiesSection;

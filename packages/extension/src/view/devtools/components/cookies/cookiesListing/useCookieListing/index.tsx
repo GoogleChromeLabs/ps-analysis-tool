@@ -489,6 +489,10 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
         enableSelectAllOption: true,
+        isSelectAllOptionSelected: evaluateSelectAllOption(
+          'exemptionReason',
+          parsedQuery
+        ),
         filterValues: calculateExemptionReason(
           cookies,
           tabFrames,

@@ -29,6 +29,7 @@ import {
 import CookiesSection from './cookiesSection';
 import FramesSection from './framesSection';
 import BlockedCookiesSection from './blockedCookiesSection';
+import ExemptedCookiesSection from './exemptedCookiesSection';
 
 const AssembledCookiesLanding = () => {
   const sections: Array<CookiesLandingSection> = useMemo(
@@ -45,6 +46,13 @@ const AssembledCookiesLanding = () => {
         link: 'blocked-cookies',
         panel: {
           Element: BlockedCookiesSection,
+        },
+      },
+      {
+        name: 'Exemption Reason',
+        link: 'exemption-reasons',
+        panel: {
+          Element: ExemptedCookiesSection,
         },
       },
       {
