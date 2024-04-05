@@ -14,8 +14,12 @@
  * limitations under the License.
  */
 
-/** */
-
+/**
+ * Match toMatch key with the last key in the chained key.
+ * @param key chained key to match with.
+ * @param toMatch String to match.
+ * @returns Boolean.
+ */
 const matchKey = (key: string, toMatch: string) => {
   const keys = key.split('#');
   const length = keys.length;

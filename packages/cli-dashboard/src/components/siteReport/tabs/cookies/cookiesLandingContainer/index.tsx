@@ -17,29 +17,65 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   Button,
   CookiesLanding,
-  CookiesMatrix,
-  prepareCookiesCount,
-  prepareCookieStatsComponents,
+  MenuBar,
+  type CookiesLandingSection,
+  type MenuData,
 } from '@ps-analysis-tool/design-system';
 import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
+import CookiesSection from './cookieLanding/cookiesSection';
+import BlockedCookiesSection from './cookieLanding/blockedCookiesSection';
 
 interface CookiesLandingContainerProps {
   tabFrames: TabFrames;
   tabCookies: TabCookies;
-  affectedCookies: TabCookies;
+  cookiesWithIssues: TabCookies;
   downloadReport?: () => void;
 }
 
 const CookiesLandingContainer = ({
   tabFrames,
   tabCookies,
-  affectedCookies,
+  cookiesWithIssues,
   downloadReport,
 }: CookiesLandingContainerProps) => {
+  const sections: Array<CookiesLandingSection> = useMemo(
+    () => [
+      {
+        name: 'Cookies',
+        link: 'cookies',
+        panel: {
+          Element: CookiesSection,
+          props: {
+            tabCookies,
+            tabFrames,
+          },
+        },
+      },
+      {
+        name: 'Blocked Cookies',
+        link: 'blocked-cookies',
+        panel: {
+          Element: BlockedCookiesSection,
+          props: {
+            tabCookies,
+            cookiesWithIssues,
+            tabFrames,
+          },
+        },
+      },
+    ],
+    [tabCookies, tabFrames, cookiesWithIssues]
+  );
+
+  const menuData: MenuData = useMemo(
+    () => sections.map(({ name, link }) => ({ name, link })),
+    [sections]
+  );
+
   return (
     <>
       {downloadReport && (
@@ -51,33 +87,17 @@ const CookiesLandingContainer = ({
           />
         </div>
       )}
-      <CookiesLanding
-        tabFrames={tabFrames}
-        tabCookies={tabCookies}
-        showInfoIcon={false}
-        showBlockedInfoIcon={true}
-        associatedCookiesCount={Object.values(tabFrames).length}
-        showMessageBoxBody={false}
-        showBlockedCookiesSection
-        cookieClassificationTitle="Categories"
-      >
-        <div className="flex flex-col">
-          <div className="pt-4">
-            <CookiesMatrix
-              tabCookies={affectedCookies}
-              componentData={
-                prepareCookieStatsComponents(
-                  prepareCookiesCount(affectedCookies)
-                ).legend
-              }
-              tabFrames={tabFrames}
-              description=""
-              showInfoIcon={false}
-              showHorizontalMatrix={false}
-              allowExpand={false}
-            />
+      <CookiesLanding>
+        <MenuBar
+          menuData={menuData}
+          extraClasses="top-20"
+          scrollContainerId="dashboard-layout-container"
+        />
+        {sections.map(({ link, panel: { Element, props } }) => (
+          <div id={link} key={link} className="cookie-landing-section">
+            {Element && <Element {...(props || {})} />}
           </div>
-        </div>
+        ))}
       </CookiesLanding>
     </>
   );

@@ -36,7 +36,8 @@ export const analyzeCookiesUrlsInBatches = async (
       id: string,
       { text, indent }: { text: string; indent: number }
     ) => void;
-  }
+  },
+  shouldSkipAcceptBanner = false
 ) => {
   let report: {
     pageUrl: string;
@@ -66,7 +67,8 @@ export const analyzeCookiesUrlsInBatches = async (
       urlsWindow,
       isHeadless,
       delayTime,
-      cookieDictionary
+      cookieDictionary,
+      shouldSkipAcceptBanner
     );
 
     report = [...report, ...cookieAnalysis];

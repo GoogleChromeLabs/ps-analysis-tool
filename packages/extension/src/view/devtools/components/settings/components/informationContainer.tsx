@@ -22,7 +22,7 @@ import classNames from 'classnames';
 /**
  * Internal dependencies
  */
-import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
+import { useSettings } from '../../../stateProviders';
 // @ts-ignore
 // eslint-disable-next-line import/no-relative-packages
 import InformationIcon from '../../../../../../../../assets/icons/information-icon.svg';
@@ -35,14 +35,14 @@ const InformationContainer = () => {
     currentTabs,
     currentExtensions,
     browserInformation,
-    PSATVersion,
     OSInformation,
-  } = useSettingsStore(({ state }) => ({
+    PSATVersion,
+  } = useSettings(({ state }) => ({
     currentTabs: state.currentTabs,
     currentExtensions: state.currentExtensions,
     browserInformation: state.browserInformation,
-    PSATVersion: state.PSATVersion,
     OSInformation: state.OSInformation,
+    PSATVersion: state.PSATVersion,
   }));
 
   const [copying, setCopying] = useState(false);

@@ -60,6 +60,7 @@ program
     '-p, --sitemap-path <value>',
     'Path to a sitemap saved in the file system'
   )
+  .option('-po, --port <value>', 'A port for the CLI dashboard server.')
   .option('-ul, --url-limit <value>', 'No of URLs to analyze')
   .option(
     '-nh, --no-headless ',
@@ -73,22 +74,13 @@ program
   .option(
     '-d, --out-dir <value>',
     'Directory path where the analysis data will be stored'
+  )
+  .option(
+    '-ab, --accept-banner',
+    'This will accept the GDPR banner if present.'
   );
 
 program.parse();
-
-const initialize = async () => {
-  //check if devserver port in already in use
-
-  const portInUse = await checkPortInUse(9000);
-
-  if (portInUse) {
-    console.error(
-      'Error: Report server port (9000) already in use. You might be already running CLI'
-    );
-    process.exit(1);
-  }
-};
 
 const saveResults = async (
   outDir: string,
@@ -98,29 +90,29 @@ const saveResults = async (
   await writeFile(outDir + '/out.json', JSON.stringify(result, null, 4));
 };
 
-const startDashboardServer = async (dir: string) => {
-  exec('npm run cli-dashboard:dev');
+const startDashboardServer = async (dir: string, port: number) => {
+  exec(`npm run cli-dashboard:dev -- -- --port ${port}`);
 
   await delay(2000);
 
   console.log(
-    `Report is being served at the URL: http://localhost:9000?dir=${dir}`
+    `Report is being served at the URL: http://localhost:${port}?dir=${dir}`
   );
 };
 
 // eslint-disable-next-line complexity
 (async () => {
-  await initialize();
-
   const url = program.opts().url;
   const sitemapUrl = program.opts().sitemapUrl;
   const csvPath = program.opts().csvPath;
   const sitemapPath = program.opts().sitemapPath;
+  const port = parseInt(program.opts().port || '9000');
   const numberOfUrlsInput = program.opts().urlLimit;
   const isHeadless = Boolean(program.opts().headless);
   const shouldSkipPrompts = !program.opts().prompts;
   const shouldSkipTechnologyAnalysis = !program.opts().technology;
   const outDir = program.opts().outDir;
+  const shouldSkipAcceptBanner = program.opts().acceptBanner;
 
   validateArgs(
     url,
@@ -128,8 +120,22 @@ const startDashboardServer = async (dir: string) => {
     csvPath,
     sitemapPath,
     numberOfUrlsInput,
-    outDir
+    outDir,
+    port
   );
+
+  //check if devserver port in already in use only if the dashboard is goint to be used
+
+  if (!outDir) {
+    const isPortInUse = await checkPortInUse(port);
+
+    if (isPortInUse) {
+      console.error(
+        `Error: Report server port ${port} already in use. You might be already running CLI`
+      );
+      process.exit(1);
+    }
+  }
 
   const prefix =
     url || sitemapUrl
@@ -192,7 +198,8 @@ const startDashboardServer = async (dir: string) => {
     DELAY_TIME,
     cookieDictionary,
     3,
-    urlsToProcess.length !== 1 ? spinnies : undefined
+    urlsToProcess.length !== 1 ? spinnies : undefined,
+    shouldSkipAcceptBanner
   );
 
   spinnies.succeed('cookie-spinner', {
@@ -234,6 +241,7 @@ const startDashboardServer = async (dir: string) => {
 
   startDashboardServer(
     encodeURIComponent(prefix) +
-      (sitemapUrl || csvPath || sitemapPath ? '&type=sitemap' : '')
+      (sitemapUrl || csvPath || sitemapPath ? '&type=sitemap' : ''),
+    port
   );
 })();
