@@ -31,11 +31,13 @@ import { saveAs } from 'file-saver';
 
 /**
  * Utility function to download report.
+ * @param url Top level URL.
  * @param tabCookies Tab cookies.
  * @param tabFrames Tab frames.
  * @param libraryMatches
  */
 export default async function downloadReport(
+  url: string,
   tabCookies: TabCookies,
   tabFrames: TabFrames,
   libraryMatches: LibraryData
@@ -94,6 +96,7 @@ export default async function downloadReport(
 
   const injectedHtmlText = `<head>${reportDom.head.innerHTML}<head><body>${reportDom.body.innerHTML}</body>`;
   const html = new Blob([injectedHtmlText]);
+  const hostname = new URL(url).hostname;
 
-  saveAs(html, 'report.html');
+  saveAs(html, `${hostname.replace('.', '-')}-report.html`);
 }

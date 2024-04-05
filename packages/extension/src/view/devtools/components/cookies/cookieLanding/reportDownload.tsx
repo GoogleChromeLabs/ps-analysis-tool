@@ -27,9 +27,10 @@ import downloadReport from '../../../../../utils/downloadReport';
 import { useCookie } from '../../../stateProviders';
 
 const ReportDownloadButton = () => {
-  const { tabCookies, tabFrames } = useCookie(({ state }) => ({
+  const { url, tabCookies, tabFrames } = useCookie(({ state }) => ({
     tabCookies: state.tabCookies,
     tabFrames: state.tabFrames,
+    url: state.tabUrl,
   }));
 
   const { libraryMatches, showLoader } = useLibraryDetectionContext(
@@ -45,8 +46,8 @@ const ReportDownloadButton = () => {
       title={showLoader ? 'Wait for library detection' : ''}
       extraClasses="absolute top-3 right-6"
       onClick={() => {
-        if (tabCookies && tabFrames && libraryMatches) {
-          downloadReport(tabCookies, tabFrames, libraryMatches);
+        if (tabCookies && tabFrames && libraryMatches && url) {
+          downloadReport(url, tabCookies, tabFrames, libraryMatches);
         }
       }}
       text="Download report"

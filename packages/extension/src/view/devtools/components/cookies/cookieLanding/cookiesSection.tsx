@@ -30,10 +30,6 @@ import {
  * Internal dependencies
  */
 import { useCookie } from '../../../stateProviders';
-import {
-  ORPHANED_COOKIE_KEY,
-  UNMAPPED_COOKIE_KEY,
-} from '@ps-analysis-tool/common';
 
 const CookiesSection = () => {
   const { tabCookies, tabFrames, frameHasCookies } = useCookie(({ state }) => ({
@@ -61,16 +57,7 @@ const CookiesSection = () => {
   }, [cookiesStatsComponents.legend, selectedItemUpdater]);
 
   const processedTabFrames = useMemo(
-    () =>
-      Object.fromEntries(
-        Object.entries(tabFrames || {}).filter(([url]) => {
-          if (url === ORPHANED_COOKIE_KEY || url === UNMAPPED_COOKIE_KEY) {
-            return frameHasCookies[url];
-          }
-
-          return true;
-        })
-      ),
+    () => Object.fromEntries(Object.entries(tabFrames || {})),
     [tabFrames, frameHasCookies]
   );
 
