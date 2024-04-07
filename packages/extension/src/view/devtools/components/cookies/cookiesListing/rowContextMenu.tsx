@@ -31,18 +31,18 @@ import type { TableRow } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies
  */
-import setParentDomain from './useAllowedList/setParentDomain';
-import onAllowListClick from './useAllowedList/onAllowListClick';
 import reloadCurrentTab from '../../../../../utils/reloadCurrentTab';
-import getDotPrefixedDomain from './useAllowedList/getDotPrefixedDomain';
-import isCookieDomainInAllowList from './useAllowedList/isCookieDomainInAllowList';
+import {
+  setParentDomain,
+  onAllowListClick,
+  getDotPrefixedDomain,
+  isCookieDomainInAllowList,
+} from '../../../stateProviders/allowedList/utils';
 
 interface RowContextMenuProps {
   domainsInAllowList: Set<string>;
   isIncognito: boolean;
-  setDomainsInAllowListCallback: React.Dispatch<
-    React.SetStateAction<Set<string>>
-  >;
+  setDomainsInAllowListCallback: (list: Set<string>) => void;
   tabUrl: string;
   removeSelectedRow?: () => void;
 }

@@ -23,8 +23,7 @@ import type { CookieTableData } from '@ps-analysis-tool/common';
  * Internal dependencies.
  */
 import { WEBPAGE_PORT_NAME } from '../../../constants';
-import { useCookieStore } from '../stateProviders/syncCookieStore';
-import { useSettingsStore } from '../stateProviders/syncSettingsStore';
+import { useCookie, useSettings } from '../stateProviders';
 import { getCurrentTabId } from '../../../utils/getCurrentTabId';
 
 interface Response {
@@ -46,7 +45,7 @@ const useFrameOverlay = (
     tabFrames,
     setCanStartInspecting,
     canStartInspecting,
-  } = useCookieStore(({ state, actions }) => ({
+  } = useCookie(({ state, actions }) => ({
     setContextInvalidated: actions.setContextInvalidated,
     isInspecting: state.isInspecting,
     setIsInspecting: actions.setIsInspecting,
@@ -57,7 +56,7 @@ const useFrameOverlay = (
     canStartInspecting: state.canStartInspecting,
   }));
 
-  const { allowedNumberOfTabs } = useSettingsStore(({ state }) => ({
+  const { allowedNumberOfTabs } = useSettings(({ state }) => ({
     allowedNumberOfTabs: state.allowedNumberOfTabs,
   }));
 
@@ -136,13 +135,9 @@ const useFrameOverlay = (
   }, [listenIfContentScriptSet]);
 
   const sessionStoreChangedListener = useCallback(
-    async (changes: { [key: string]: chrome.storage.StorageChange }) => {
+    (changes: { [key: string]: chrome.storage.StorageChange }) => {
       try {
-        const syncStorage = await chrome.storage.sync.get();
-        if (syncStorage.isDev) {
-          return;
-        }
-        const currentTabId = await getCurrentTabId();
+        const currentTabId = chrome.devtools.inspectedWindow.tabId;
 
         if (!currentTabId) {
           return;
@@ -151,6 +146,37 @@ const useFrameOverlay = (
         if (changes && Object.keys(changes).includes(currentTabId.toString())) {
           if (!changes[currentTabId].newValue && portRef.current) {
             setIsInspecting(false);
+          }
+
+          if (!changes[currentTabId].newValue) {
+            chrome.tabs.sendMessage(
+              chrome.devtools.inspectedWindow.tabId,
+              {
+                PSATDevToolsHidden: true,
+                tabId: chrome.devtools.inspectedWindow.tabId,
+              },
+              () => {
+                if (chrome.runtime.lastError) {
+                  // eslint-disable-next-line no-console
+                  console.log(chrome.runtime.lastError);
+                }
+              }
+            );
+          }
+          if (changes[currentTabId].newValue) {
+            chrome.tabs.sendMessage(
+              chrome.devtools.inspectedWindow.tabId,
+              {
+                PSATDevToolsHidden: false,
+                tabId: chrome.devtools.inspectedWindow.tabId,
+              },
+              () => {
+                if (chrome.runtime.lastError) {
+                  // eslint-disable-next-line no-console
+                  console.log(chrome.runtime.lastError);
+                }
+              }
+            );
           }
         }
       } catch (error) {
@@ -162,28 +188,21 @@ const useFrameOverlay = (
   );
 
   useEffect(() => {
-    (async () => {
-      try {
-        const currentTabId = await getCurrentTabId();
-        if (!currentTabId) {
-          return;
-        }
-
-        chrome.tabs.sendMessage(
-          Number(currentTabId),
-          { status: 'set?' },
-          (res) => {
-            if (!chrome.runtime.lastError) {
-              if (res) {
-                setCanStartInspecting(res.setInPage);
-              }
+    try {
+      chrome.tabs.sendMessage(
+        chrome.devtools.inspectedWindow.tabId,
+        { status: 'set?', tabId: chrome.devtools.inspectedWindow.tabId },
+        (res) => {
+          if (!chrome.runtime.lastError) {
+            if (res) {
+              setCanStartInspecting(res.setInPage);
             }
           }
-        );
-      } catch (error) {
-        // Fail silently.
-      }
-    })();
+        }
+      );
+    } catch (error) {
+      // Fail silently.
+    }
   }, [setCanStartInspecting]);
 
   // When inspect button is clicked.

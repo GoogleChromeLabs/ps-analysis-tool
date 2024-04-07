@@ -22,15 +22,18 @@ export type TableData = (CookieTableData | TechnologyData) & {
   highlighted?: boolean;
 };
 
-export type InfoType = number | string | boolean | string[] | [];
+export type InfoType = number | string | boolean | Array<string | number> | [];
 
 export type TableColumn = {
   header: string;
   accessorKey: string;
   cell: (info: InfoType, details?: TableData) => React.JSX.Element | InfoType;
   enableHiding?: boolean;
+  isHiddenByDefault?: boolean;
   enableBodyCellPrefixIcon?: boolean;
-  bodyCellPrefixIcon?: (row: TableRow) => React.JSX.Element;
+  bodyCellPrefixIcon?: {
+    Element: (props: any) => React.JSX.Element;
+  };
   showBodyCellPrefixIcon?: (row: TableRow) => boolean;
   widthWeightagePercentage?: number;
   width?: number; // For internal use only
@@ -51,6 +54,7 @@ export type TableFilter = {
     hasStaticFilterValues?: boolean;
     hasPrecalculatedFilterValues?: boolean;
     enableSelectAllOption?: boolean;
+    isSelectAllOptionSelected?: boolean;
     filterValues?: {
       [filterValue: string]: {
         selected: boolean;

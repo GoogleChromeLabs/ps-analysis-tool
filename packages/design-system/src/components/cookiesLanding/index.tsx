@@ -17,157 +17,27 @@
  * External dependencies.
  */
 import React from 'react';
-import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
 
-/**
- * Internal dependencies.
- */
-import MessageBox from '../messageBox';
-import { type DataMapping } from './landingHeader';
-import CookiesMatrix from './cookiesMatrix';
-import CookiesLandingContainer from './cookieLandingHeaderContainer';
-import {
-  prepareCookieStatsComponents,
-  prepareCookiesCount,
-  prepareFrameStatsComponent,
-} from '../../utils';
+export type CookiesLandingSection = {
+  name: string;
+  link: string;
+  panel: {
+    Element: ((props: any) => React.JSX.Element) | React.NamedExoticComponent;
+    props?: Record<string, unknown>;
+  };
+};
 
 interface CookiesLandingProps {
-  tabFrames: TabFrames | null;
-  tabCookies: TabCookies | null;
   children?: React.ReactNode;
-  showInfoIcon?: boolean;
-  showBlockedInfoIcon?: boolean;
-  showHorizontalMatrix?: boolean;
-  associatedCookiesCount?: number | null;
-  showMessageBoxBody?: boolean;
-  showBlockedCookiesSection?: boolean;
-  additionalComponents?: {
-    [key: string]: React.FunctionComponent;
-  };
-  showFramesSection?: boolean;
-  description?: React.ReactNode;
-  cookieClassificationTitle?: string;
 }
 
-const CookiesLanding = ({
-  tabCookies,
-  tabFrames,
-  children,
-  showInfoIcon = true,
-  showBlockedInfoIcon = true,
-  associatedCookiesCount = null,
-  showMessageBoxBody = true,
-  showBlockedCookiesSection = false,
-  showFramesSection = false,
-  showHorizontalMatrix = false,
-  description = '',
-  additionalComponents = {},
-  cookieClassificationTitle,
-}: CookiesLandingProps) => {
-  const cookieStats = prepareCookiesCount(tabCookies);
-  const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
-  const frameStateCreator = prepareFrameStatsComponent(tabFrames, tabCookies);
-  const cookieClassificationDataMapping: DataMapping[] = [
-    {
-      title: 'Total cookies',
-      count: cookieStats.total,
-      data: cookiesStatsComponents.legend,
-    },
-    {
-      title: '1st party cookies',
-      count: cookieStats.firstParty.total,
-      data: cookiesStatsComponents.firstParty,
-    },
-    {
-      title: '3rd party cookies',
-      count: cookieStats.thirdParty.total,
-      data: cookiesStatsComponents.thirdParty,
-    },
-  ];
-
-  const blockedCookieDataMapping: DataMapping[] = [
-    {
-      title: 'Blocked cookies',
-      count: cookieStats.blockedCookies.total,
-      data: cookiesStatsComponents.blocked,
-    },
-  ];
-
+const CookiesLanding = ({ children }: CookiesLandingProps) => {
   return (
     <div
       className="h-full w-full flex flex-col min-w-[40rem]"
       data-testid="cookies-landing"
     >
-      <CookiesLandingContainer
-        dataMapping={cookieClassificationDataMapping}
-        testId="cookies-insights"
-      >
-        {!cookieStats ||
-          (cookieStats?.firstParty.total === 0 &&
-            cookieStats?.thirdParty.total === 0 && (
-              <MessageBox
-                headerText="No cookies found on this page"
-                bodyText={
-                  showMessageBoxBody ? 'Please try reloading the page' : ''
-                }
-              />
-            ))}
-        <CookiesMatrix
-          title={cookieClassificationTitle}
-          tabCookies={tabCookies}
-          componentData={cookiesStatsComponents.legend}
-          tabFrames={tabFrames}
-          showInfoIcon={showInfoIcon}
-          showHorizontalMatrix={showHorizontalMatrix}
-          associatedCookiesCount={associatedCookiesCount}
-        />
-      </CookiesLandingContainer>
-      {showBlockedCookiesSection && (
-        <CookiesLandingContainer
-          description={description}
-          dataMapping={blockedCookieDataMapping}
-          testId="blocked-cookies-insights"
-        >
-          {cookiesStatsComponents.blockedCookiesLegend.length > 0 && (
-            <>
-              <CookiesMatrix
-                title="Blocked Reasons"
-                tabCookies={tabCookies}
-                componentData={cookiesStatsComponents.blockedCookiesLegend}
-                tabFrames={tabFrames}
-                showInfoIcon={showBlockedInfoIcon}
-                showHorizontalMatrix={false}
-                infoIconTitle="Cookies that have been blocked by the browser.(The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
-              />
-            </>
-          )}
-          {children && <div className="mt-8">{children}</div>}
-        </CookiesLandingContainer>
-      )}
-      {/* TODO: This is not scalable. Refactor code so that components can be added from the the extension or dashboard package. */}
-      {Boolean(Object.keys(additionalComponents).length) &&
-        Object.keys(additionalComponents).map((key: string) => {
-          const Component = additionalComponents[key];
-          return <Component key={key} />;
-        })}
-      {showFramesSection && (
-        <CookiesLandingContainer
-          dataMapping={frameStateCreator.dataMapping}
-          testId="frames-insights"
-        >
-          <CookiesMatrix
-            title="Frames"
-            componentData={frameStateCreator.legend}
-            showMatrix={true}
-            tabCookies={tabCookies}
-            tabFrames={tabFrames}
-            showInfoIcon={showInfoIcon}
-            showHorizontalMatrix={false}
-            infoIconTitle="The details regarding frames and associated cookies in this page."
-          />
-        </CookiesLandingContainer>
-      )}
+      {children}
     </div>
   );
 };
