@@ -20,11 +20,6 @@
 import React from 'react';
 import { addUTMParams } from '@ps-analysis-tool/common';
 
-/**
- * Internal dependencies.
- */
-import ExperimentGroup from './experimentGroup';
-
 const EXPERIMENT_GROUP = 'Membership in Experiment Group';
 
 const INFO_CARDS_DATA = [
@@ -79,7 +74,11 @@ const InfoCards = () => {
                 className="text-sm break-words"
                 dangerouslySetInnerHTML={{ __html: card.content }}
               />
-              {card.heading === EXPERIMENT_GROUP && <ExperimentGroup />}
+              {card.heading === EXPERIMENT_GROUP && (
+                <div className="p-3 flex-1 bg-anti-flash-white dark:bg-charleston-green rounded-md">
+                  <p>Your browser is not part of any experimental group.</p>
+                </div>
+              )}
             </div>
           </div>
         </li>

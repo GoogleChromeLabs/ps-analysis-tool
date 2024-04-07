@@ -17,8 +17,7 @@
     "cookies",
     "debugger",
     "management",
-    "contentSettings",
-    "scripting"
+    "contentSettings"
   ],
   "host_permissions": ["*://*/*"],
   "devtools_page": "devtools/devtools.html",
