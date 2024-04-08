@@ -21,7 +21,11 @@ import sanitizeCsvRecord from '../sanitizeCsvRecord';
 /**
  * Internal dependencies
  */
-import type { CompleteJson, CookieJsonDataType } from '../../cookies.types';
+import {
+  BLOCK_STATUS,
+  type CompleteJson,
+  type CookieJsonDataType,
+} from '../../cookies.types';
 import calculateEffectiveExpiryDate from '../calculateEffectiveExpiryDate';
 
 export const COOKIES_DATA_HEADER = [
@@ -30,6 +34,7 @@ export const COOKIES_DATA_HEADER = [
   'Domain',
   'Partition Key',
   'Same Site',
+  'Blocking Status',
   'Category',
   'Platform',
   'Http Only',
@@ -56,6 +61,23 @@ const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
   let cookieRecords = '';
 
   for (const cookie of cookieMap.values()) {
+    const isInboundBlocked =
+      cookie.blockingStatus?.inboundBlock !== BLOCK_STATUS.NOT_BLOCKED;
+    const isOutboundBlocked =
+      cookie.blockingStatus?.outboundBlock !== BLOCK_STATUS.NOT_BLOCKED;
+    const hasValidBlockedReason =
+      cookie?.blockedReasons && cookie.blockedReasons.length !== 0;
+
+    let status = '';
+
+    if ((isInboundBlocked || isOutboundBlocked) && !hasValidBlockedReason) {
+      status = 'Undetermined';
+    } else if (hasValidBlockedReason) {
+      status = 'Blocked';
+    } else {
+      status = 'Not Blocked';
+    }
+
     //This should be in the same order as cookieDataHeader
     const recordsArray = [
       cookie.parsedCookie.name,
@@ -63,6 +85,7 @@ const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
       cookie.parsedCookie.domain || ' ',
       cookie.parsedCookie.partitionKey || ' ',
       cookie.parsedCookie.sameSite,
+      status,
       cookie.analytics.category,
       cookie.analytics.platform,
       cookie.parsedCookie.httpOnly ? 'Yes' : 'No',
