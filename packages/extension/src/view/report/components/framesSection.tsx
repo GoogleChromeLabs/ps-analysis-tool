@@ -20,7 +20,8 @@
 import React from 'react';
 import {
   CookiesLandingWrapper,
-  CookiesMatrix,
+  LEGEND_DESCRIPTION,
+  MatrixContainer,
 } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies
@@ -34,18 +35,24 @@ const CookiesSection = () => {
     return <></>;
   }
 
+  const _data = data.frameStateCreator.legend.map((component) => {
+    const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
+    return {
+      ...component,
+      description: legendDescription,
+      title: component.label,
+      containerClasses: '',
+    };
+  });
+
   return (
     <CookiesLandingWrapper
       dataMapping={data.frameStateCreator.dataMapping}
       testId="frames-insights"
     >
-      <CookiesMatrix
+      <MatrixContainer
         title="Frames"
-        componentData={data.frameStateCreator.legend}
-        showMatrix={true}
-        tabCookies={data.tabCookies}
-        tabFrames={data.tabFrames}
-        showHorizontalMatrix={false}
+        matrixData={_data}
         infoIconTitle="The details regarding frames and associated cookies in this page."
       />
     </CookiesLandingWrapper>
