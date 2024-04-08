@@ -21,6 +21,7 @@ const packages = [
   'common',
   'design-system',
   'extension',
+  'library-detection',
 ];
 const commonPath = 'packages/i18n/_locales';
 const target = `${commonPath}/messages/en/messages.json`;

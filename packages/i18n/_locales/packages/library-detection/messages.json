@@ -1,0 +1,17 @@
+{
+  "ldKnownBreakages": {
+    "message": "Known Breakages"
+  },
+  "ldNoLibraries": {
+    "message": "No libraries with known breakages found yet!"
+  },
+  "ldErrorOccurred": {
+    "message": "A library detection error occurred. Please reopen the DevTool on a valid URL."
+  },
+  "ldWaitingPageLoad": {
+    "message": "Waiting for the page to load.."
+  },
+  "ldCheckingLibraries": {
+    "message": "Checking libraries for any known breakages on the page..."
+  }
+}
