@@ -76,7 +76,11 @@ const InfoCards = () => {
               />
               {card.heading === EXPERIMENT_GROUP && (
                 <div className="p-3 flex-1 bg-anti-flash-white dark:bg-charleston-green rounded-md">
-                  <p>Your browser is not part of any experimental group.</p>
+                  <p>
+                    For browsers in the 1% group, users will get a new
+                    chrome://settings/trackingProtection page instead of
+                    chrome://settings/cookies
+                  </p>
                 </div>
               )}
             </div>
