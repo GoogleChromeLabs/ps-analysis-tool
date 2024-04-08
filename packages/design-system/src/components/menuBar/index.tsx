@@ -122,13 +122,13 @@ const MenuBar = ({
             downloadReport();
           }}
         >
-          <div className="absolute right-6 w-max px-3 py-1 rounded invisible text-sm text-white bg-ultramarine-blue group-hover:visible transition-all ease-in-out">
+          <div className="absolute flex items-center justify-center right-6 w-max px-3 py-1 rounded invisible text-sm text-white bg-ultramarine-blue group-hover:visible transition-all ease-in-out">
             {disableReportDownload
               ? 'Wait for library detection'
               : 'Download Report'}
             <div className="absolute w-2 h-2 bg-ultramarine-blue top-1/3 -right-1 transform rotate-45" />
           </div>
-          <Export className="text-white" />
+          <Export className="text-white scale-75" />
         </button>
       )}
       {menuData.map((item, index) => (
