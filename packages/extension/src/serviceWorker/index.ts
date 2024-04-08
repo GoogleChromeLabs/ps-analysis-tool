@@ -58,6 +58,7 @@ const requestIdToCDPURLMapping: {
   [tabId: string]: {
     [requestId: string]: {
       frameId: string;
+      loaderId: string;
       url: string;
     };
   };
@@ -78,12 +79,6 @@ const unParsedRequestHeaders: {
 const unParsedResponseHeaders: {
   [tabId: string]: {
     [requestId: string]: Protocol.Network.ResponseReceivedExtraInfoEvent;
-  };
-} = {};
-
-const initiatorToUrlMap: {
-  [tabId: string]: {
-    [initiatorDomain: string]: string[];
   };
 } = {};
 
@@ -114,7 +109,6 @@ chrome.tabs.onCreated.addListener(async (tab) => {
   unParsedResponseHeaders[tab.id.toString()] = {};
   requestIdToCDPURLMapping[tab.id.toString()] = {};
   auditsIssueForTab[tab.id.toString()] = {};
-  initiatorToUrlMap[tab.id.toString()] = {};
 
   if (!syncCookieStore) {
     syncCookieStore = new SynchnorousCookieStore();
@@ -324,7 +318,6 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         unParsedResponseHeaders[tab.id.toString()] = {};
         requestIdToCDPURLMapping[tab.id.toString()] = {};
         auditsIssueForTab[tab.id.toString()] = {};
-        initiatorToUrlMap[tab.id.toString()] = {};
 
         const currentTab = targets.filter(
           ({ tabId }) => tabId && tab.id && tabId === tab.id
@@ -469,6 +462,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         [request.requestId]: {
           frameId: request?.frameId ?? '',
           url: request?.request?.url,
+          loaderId: request?.loaderId,
         },
       };
     } else {
@@ -477,29 +471,9 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         [request.requestId]: {
           frameId: request?.frameId ?? '',
           url: request?.request?.url,
+          loaderId: request?.loaderId,
         },
       };
-    }
-
-    const initiator = request.initiator.url ?? '';
-
-    if (initiator && isValidURL(initiator)) {
-      if (!initiatorToUrlMap[tabId][new URL(initiator).origin]) {
-        initiatorToUrlMap[tabId][new URL(initiator).origin] = [];
-      }
-
-      initiatorToUrlMap[tabId][new URL(initiator).origin].push(
-        request?.request?.url ?? ''
-      );
-
-      const gatheredCookies = await fetchFrameResourceAndGetCookies(
-        request?.frameId,
-        initiatorToUrlMap[tabId][new URL(initiator).origin],
-        cookieDB,
-        url ?? ''
-      );
-
-      syncCookieStore?.update(Number(tabId), gatheredCookies);
     }
 
     if (unParsedRequestHeaders[tabId][request.requestId]) {
@@ -560,6 +534,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         [request.requestId]: {
           frameId: request?.frameId ?? '',
           url: request?.response.url,
+          loaderId: request?.loaderId,
         },
       };
     } else {
@@ -568,6 +543,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         [request.requestId]: {
           frameId: request?.frameId ?? '',
           url: request?.response.url,
+          loaderId: request?.loaderId,
         },
       };
     }
@@ -611,9 +587,21 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       delete auditsIssueForTab[tabId][request.requestId];
     }
 
-    if (!request.hasExtraInfo) {
-      delete requestIdToCDPURLMapping[tabId][request.requestId];
-    }
+    const cookiesFromSameLoaderId = Object.values(
+      requestIdToCDPURLMapping[tabId]
+    )
+      .filter(({ loaderId }) => loaderId && loaderId === request?.loaderId)
+      .map(({ url: resourceURL }) => resourceURL);
+
+    const gatheredCookies = await fetchFrameResourceAndGetCookies(
+      request?.frameId,
+      cookiesFromSameLoaderId,
+      cookieDB,
+      url ?? ''
+    );
+
+    syncCookieStore?.update(Number(tabId), gatheredCookies);
+    delete requestIdToCDPURLMapping[tabId][request.requestId];
   }
 
   if (method === 'Network.responseReceivedExtraInfo') {
@@ -647,7 +635,6 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       syncCookieStore?.update(Number(tabId), cookies);
 
       delete unParsedRequestHeaders[tabId][responseParams?.requestId];
-      delete requestIdToCDPURLMapping[tabId][responseParams?.requestId];
     } else {
       unParsedResponseHeaders[tabId][responseParams?.requestId] =
         responseParams;
@@ -726,7 +713,6 @@ const listenToNewTab = async (tabId?: number) => {
   unParsedResponseHeaders[newTabId] = {};
   requestIdToCDPURLMapping[newTabId] = {};
   auditsIssueForTab[newTabId] = {};
-  initiatorToUrlMap[newTabId] = {};
 
   syncCookieStore?.addTabData(Number(newTabId));
   syncCookieStore?.updateDevToolsState(Number(newTabId), true);
@@ -811,7 +797,6 @@ chrome.runtime.onMessage.addListener(async (request) => {
           unParsedResponseHeaders[id.toString()] = {};
           requestIdToCDPURLMapping[id.toString()] = {};
           auditsIssueForTab[id.toString()] = {};
-          initiatorToUrlMap[id.toString()] = {};
 
           const currentTab = targets.filter(
             ({ tabId }) => tabId && id && tabId === id

@@ -24,10 +24,6 @@ import {
   isFirstParty,
 } from '@ps-analysis-tool/common';
 import { Protocol } from 'devtools-protocol';
-
-interface GetResourceTreeOutput {
-  [frameTree: string]: Protocol.Page.FrameResourceTree;
-}
 interface GetCookiesOutput {
   [cookies: string]: Protocol.Network.Cookie[];
 }
@@ -36,14 +32,14 @@ interface GetCookiesOutput {
  * Chromium fetches all the resources for a paticular domain and then gets network cookies for those resources.Follow the call chain in the below link.
  * @see https://source.chromium.org/chromium/chromium/src/+/main:third_party/devtools-frontend/src/front_end/core/sdk/CookieModel.ts;l=131
  * @param targetId The targetId on which the function should work on.
- * @param extraResources The extra resources provided by the service worker.
+ * @param resourceURLs The resources that have been loaded using same loader Id.
  * @param cookieDB Cookie Database to find analytics match.
  * @param tabUrl The tabUrl for the specific request.
  * @returns {CookieData[]} The processed CookieData array.
  */
 async function fetchFrameResourceAndGetCookies(
   targetId: string | undefined,
-  extraResources: string[],
+  resourceURLs: string[],
   cookieDB: CookieDatabase | null,
   tabUrl: string | null
 ) {
@@ -51,23 +47,10 @@ async function fetchFrameResourceAndGetCookies(
     return [];
   }
 
-  const resources: string[] = [...extraResources];
-
-  const resourceTree: GetResourceTreeOutput =
-    (await chrome.debugger.sendCommand(
-      { targetId },
-      'Page.getResourceTree'
-    )) as GetResourceTreeOutput;
-
-  const resourceURLs: Protocol.Page.FrameResource[] =
-    resourceTree.frameTree.resources;
-
-  resources.push(...resourceURLs.map(({ url }) => url));
-
   const { cookies }: GetCookiesOutput = (await chrome.debugger.sendCommand(
     { targetId },
     'Network.getCookies',
-    { urls: resources }
+    { urls: resourceURLs }
   )) as GetCookiesOutput;
 
   const processedCookies: CookieData[] = [];
