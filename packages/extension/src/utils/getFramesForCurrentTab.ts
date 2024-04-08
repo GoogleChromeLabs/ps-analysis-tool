@@ -27,6 +27,7 @@ import { type TabFrames } from '@ps-analysis-tool/common';
  * @returns {TabFrames|null} Tabframes and related details if available else null.
  */
 export default function getFramesForCurrentTab(
+  prevState: TabFrames | null,
   currentTabFrames: chrome.webNavigation.GetAllFrameResultDetails[] | null,
   currentTargets: chrome.debugger.TargetInfo[],
   extraFrameData: Record<string, string[]>
@@ -52,12 +53,20 @@ export default function getFramesForCurrentTab(
           modifiedTabFrames[parsedUrl].frameIds = Array.from(
             new Set([
               ...(modifiedTabFrames[parsedUrl].frameIds ?? []),
+              ...(prevState?.[parsedUrl]?.frameIds ?? []),
+              ...(extraFrameData[parsedUrl] ?? []),
               ...(frameIdsFromCDP ?? []),
             ])
           );
         } else {
           modifiedTabFrames[parsedUrl] = {
-            frameIds: Array.from(new Set([...(frameIdsFromCDP ?? [])])),
+            frameIds: Array.from(
+              new Set([
+                ...(frameIdsFromCDP ?? []),
+                ...(prevState?.[parsedUrl]?.frameIds ?? []),
+                ...(extraFrameData[parsedUrl] ?? []),
+              ])
+            ),
             frameType,
           };
         }
@@ -70,7 +79,14 @@ export default function getFramesForCurrentTab(
       return;
     }
 
-    if (!modifiedTabFrames[key]) {
+    if (modifiedTabFrames[key]) {
+      modifiedTabFrames[key].frameIds = Array.from(
+        new Set([
+          ...(modifiedTabFrames[key].frameIds ?? []),
+          ...(extraFrameData[key] ?? []),
+        ])
+      );
+    } else {
       modifiedTabFrames[key] = {
         frameIds: extraFrameData[key] ?? [],
         frameType: 'sub_frame',

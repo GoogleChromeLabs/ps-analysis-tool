@@ -90,8 +90,9 @@ const Provider = ({ children }: PropsWithChildren) => {
 
       const currentTargets = await chrome.debugger.getTargets();
 
-      setTabFrames(() =>
+      setTabFrames((prevState) =>
         getFramesForCurrentTab(
+          prevState,
           currentTabFrames,
           currentTargets,
           extraFrameData ?? {}
