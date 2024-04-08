@@ -39,7 +39,7 @@ import isFirstParty from './isFirstParty';
  * @param {string} requestUrl The associated request URL.
  * @param {string} tabUrl - The top-level URL (URL in the tab's address bar).
  * @param {object} cookieDB Cookie database to find analytics from.
- * @param {string} frameId - The frameId the following cookies are associated to.
+ * @param {string[]} frameIds - The frameId the following cookies are associated to.
  * @param {string} requestId - The requestId of the request being processed
  * @returns {object} parsed cookies.
  */
@@ -50,7 +50,7 @@ export default function parseResponseReceivedExtraInfo(
   requestUrl: string,
   tabUrl: string,
   cookieDB: CookieDatabase,
-  frameId: string,
+  frameIds: string[],
   requestId: string
 ) {
   const cookies: CookieData[] = [];
@@ -118,8 +118,8 @@ export default function parseResponseReceivedExtraInfo(
     };
 
     //Sometimes frameId comes empty so it shows data in other frames where cookie should not be shown.
-    if (frameId) {
-      singleCookie.frameIdList = [frameId];
+    if (frameIds.length > 0) {
+      singleCookie.frameIdList = [...frameIds];
     }
 
     cookies.push(singleCookie);

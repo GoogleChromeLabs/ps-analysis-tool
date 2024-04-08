@@ -35,13 +35,15 @@ interface GetCookiesOutput {
  * @param resourceURLs The resources that have been loaded using same loader Id.
  * @param cookieDB Cookie Database to find analytics match.
  * @param tabUrl The tabUrl for the specific request.
+ * @param {string[]} frameIds frameId this cookie belongs to.
  * @returns {CookieData[]} The processed CookieData array.
  */
 async function fetchFrameResourceAndGetCookies(
   targetId: string | undefined,
   resourceURLs: string[],
   cookieDB: CookieDatabase | null,
-  tabUrl: string | null
+  tabUrl: string | null,
+  frameIds: string[]
 ) {
   if (!targetId || !cookieDB || !tabUrl) {
     return [];
@@ -74,7 +76,7 @@ async function fetchFrameResourceAndGetCookies(
       analytics: cookieDB ? findAnalyticsMatch(cookie.name, cookieDB) : null, // In case CDP gets cookie first.
       isFirstParty: isFirstParty(cookie.domain, tabUrl),
       url: '',
-      frameIdList: [targetId],
+      frameIdList: [...(frameIds ?? [])],
     };
     processedCookies.push(singleCookie);
   });

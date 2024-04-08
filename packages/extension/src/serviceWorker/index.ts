@@ -482,7 +482,9 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         cookieDB ?? {},
         request?.request?.url ?? '',
         url ?? '',
-        requestIdToCDPURLMapping[tabId][request.requestId]?.frameId,
+        Object.values(requestIdToCDPURLMapping[tabId])
+          .filter(({ loaderId }) => loaderId && loaderId === request?.loaderId)
+          .map(({ frameId }) => frameId),
         request?.requestId
       );
 
@@ -510,7 +512,15 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         cookieDB ?? {},
         requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
         url ?? '',
-        requestIdToCDPURLMapping[tabId][requestId]?.frameId,
+        Object.values(requestIdToCDPURLMapping[tabId])
+          .filter(
+            ({ loaderId }) =>
+              loaderId &&
+              loaderId ===
+                requestIdToCDPURLMapping[tabId][requestParams?.requestId]
+                  ?.loaderId
+          )
+          .map(({ frameId }) => frameId),
         requestId
       );
 
@@ -563,7 +573,9 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
         url ?? '',
         cookieDB ?? {},
-        requestIdToCDPURLMapping[tabId][request.requestId]?.frameId,
+        Object.values(requestIdToCDPURLMapping[tabId])
+          .filter(({ loaderId }) => loaderId && loaderId === request?.loaderId)
+          .map(({ frameId }) => frameId),
         requestId
       );
       syncCookieStore?.update(Number(tabId), cookies);
@@ -575,7 +587,9 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       const cookieObjectToUpdate = createCookieFromAuditsIssue(
         auditsIssueForTab[tabId][request.requestId],
         syncCookieStore?.getTabUrl(Number(tabId)) ?? '',
-        requestIdToCDPURLMapping[tabId][request.requestId].frameId,
+        Object.values(requestIdToCDPURLMapping[tabId])
+          .filter(({ loaderId }) => loaderId && loaderId === request?.loaderId)
+          .map(({ frameId }) => frameId),
         requestIdToCDPURLMapping[tabId][request.requestId].url,
         cookieDB
       );
@@ -597,7 +611,10 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       request?.frameId,
       cookiesFromSameLoaderId,
       cookieDB,
-      url ?? ''
+      url ?? '',
+      Object.values(requestIdToCDPURLMapping[tabId])
+        .filter(({ loaderId }) => loaderId && loaderId === request?.loaderId)
+        .map(({ frameId }) => frameId)
     );
 
     syncCookieStore?.update(Number(tabId), gatheredCookies);
@@ -628,7 +645,15 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         requestIdToCDPURLMapping[tabId][responseParams?.requestId]?.url ?? '',
         url ?? '',
         cookieDB ?? {},
-        requestIdToCDPURLMapping[tabId][responseParams?.requestId]?.frameId,
+        Object.values(requestIdToCDPURLMapping[tabId])
+          .filter(
+            ({ loaderId }) =>
+              loaderId &&
+              loaderId ===
+                requestIdToCDPURLMapping[tabId][responseParams?.requestId]
+                  ?.loaderId
+          )
+          .map(({ frameId }) => frameId),
         requestId
       );
 
@@ -664,7 +689,13 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       const cookieObjectToUpdate = createCookieFromAuditsIssue(
         details.cookieIssueDetails,
         syncCookieStore?.getTabUrl(Number(tabId)) ?? '',
-        requestIdToCDPURLMapping[tabId][requestId].frameId,
+        Object.values(requestIdToCDPURLMapping[tabId])
+          .filter(
+            ({ loaderId }) =>
+              loaderId &&
+              loaderId === requestIdToCDPURLMapping[tabId][requestId]?.loaderId
+          )
+          .map(({ frameId }) => frameId),
         requestIdToCDPURLMapping[tabId][requestId].url,
         cookieDB
       );

@@ -30,7 +30,7 @@ import { type Cookie, parse } from 'simple-cookie';
  * This function creates cookie object from the audits issue.
  * @param {Protocol.Audits.CookieIssueDetails} issue The cookieIssue Details.
  * @param {string} tabUrl The url of the tab.
- * @param {string} frameId frameId this cookie belongs to.
+ * @param {string[]} frameIds frameId this cookie belongs to.
  * @param {string} requestUrl The url of the request this cookie belongs to.
  * @param {CookieDatabase} cookieDB CookieDatabase to find analytics match.
  * @returns {CookieData | null} The create cookie object.
@@ -38,7 +38,7 @@ import { type Cookie, parse } from 'simple-cookie';
 export default function createCookieFromAuditsIssue(
   issue: Protocol.Audits.CookieIssueDetails,
   tabUrl: string,
-  frameId: string,
+  frameIds: string[],
   requestUrl: string,
   cookieDB: CookieDatabase
 ) {
@@ -92,7 +92,7 @@ export default function createCookieFromAuditsIssue(
     headerType: 'request',
     isFirstParty: isFirstParty(cookie?.domain, tabUrl ?? ''),
     url: url ?? requestUrl,
-    frameIdList: [frameId],
+    frameIdList: [...(frameIds ?? [])],
     analytics:
       cookie?.name && cookieDB
         ? findAnalyticsMatch(cookie?.name, cookieDB)
