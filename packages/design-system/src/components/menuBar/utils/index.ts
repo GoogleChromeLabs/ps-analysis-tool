@@ -14,23 +14,4 @@
  * limitations under the License.
  */
 
-/**
- * External dependencies.
- */
-import React from 'react';
-import type { CookieTableData } from '@ps-analysis-tool/common';
-
-/**
- * Internal dependencies.
- */
-import AffectedCookies from '../affectedCookies';
-
-interface SiteMapAffectedCookiesProps {
-  cookies: CookieTableData[];
-}
-
-const SiteMapAffectedCookies = ({ cookies }: SiteMapAffectedCookiesProps) => {
-  return <AffectedCookies cookies={cookies} selectedSite={null} />;
-};
-
-export default SiteMapAffectedCookies;
+export { default as isInCenter } from './isInCenter';

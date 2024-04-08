@@ -16,34 +16,66 @@
 /**
  * External dependencies
  */
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
-  CookiesLandingContainer,
+  CookiesLandingWrapper,
   CookiesMatrix,
   MessageBox,
   prepareCookieDataMapping,
   prepareCookieStatsComponents,
   prepareCookiesCount,
+  useFiltersMapping,
 } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies
  */
 import { useCookie } from '../../../stateProviders';
+import {
+  ORPHANED_COOKIE_KEY,
+  UNMAPPED_COOKIE_KEY,
+} from '@ps-analysis-tool/common';
 
 const CookiesSection = () => {
-  const { tabCookies, tabFrames } = useCookie(({ state }) => ({
+  const { tabCookies, tabFrames, frameHasCookies } = useCookie(({ state }) => ({
     tabCookies: state.tabCookies,
     tabFrames: state.tabFrames,
+    frameHasCookies: state.frameHasCookies,
   }));
+
+  const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});
+
   const cookieStats = prepareCookiesCount(tabCookies);
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
   const cookieClassificationDataMapping = prepareCookieDataMapping(
     cookieStats,
-    cookiesStatsComponents
+    cookiesStatsComponents,
+    selectedItemUpdater
+  );
+
+  const cookieComponentData = useMemo(() => {
+    return cookiesStatsComponents.legend.map((component) => ({
+      ...component,
+      onClick: (title: string) =>
+        selectedItemUpdater(title, 'analytics.category'),
+    }));
+  }, [cookiesStatsComponents.legend, selectedItemUpdater]);
+
+  const processedTabFrames = useMemo(
+    () =>
+      Object.fromEntries(
+        Object.entries(tabFrames || {}).filter(([url]) => {
+          if (url === ORPHANED_COOKIE_KEY || url === UNMAPPED_COOKIE_KEY) {
+            return frameHasCookies[url];
+          }
+
+          return true;
+        })
+      ),
+    [tabFrames, frameHasCookies]
   );
 
   return (
-    <CookiesLandingContainer
+    <CookiesLandingWrapper
       dataMapping={cookieClassificationDataMapping}
       testId="cookies-insights"
     >
@@ -57,12 +89,11 @@ const CookiesSection = () => {
           ))}
       <CookiesMatrix
         tabCookies={tabCookies}
-        componentData={cookiesStatsComponents.legend}
-        tabFrames={tabFrames}
+        componentData={cookieComponentData}
+        tabFrames={processedTabFrames}
         showHorizontalMatrix={false}
-        showInfoIcon
       />
-    </CookiesLandingContainer>
+    </CookiesLandingWrapper>
   );
 };
 export default CookiesSection;

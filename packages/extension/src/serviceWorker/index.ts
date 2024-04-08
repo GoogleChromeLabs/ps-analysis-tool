@@ -962,6 +962,18 @@ chrome.storage.sync.onChanged.addListener(
           tabToRead: tabToRead,
         },
       });
+
+      tabs.map((tab) => {
+        if (!tab?.id) {
+          return tab;
+        }
+
+        resetCookieBadgeText(tab.id);
+
+        syncCookieStore?.removeTabData(tab.id);
+
+        return tab;
+      });
     } else {
       chrome.runtime.sendMessage({
         type: INITIAL_SYNC,
@@ -1013,6 +1025,14 @@ chrome.storage.sync.onChanged.addListener(
           }
         })
       );
+    } else {
+      tabs.forEach(({ id }) => {
+        if (!id) {
+          return;
+        }
+
+        syncCookieStore?.sendUpdatedDataToPopupAndDevTools(id);
+      });
     }
   }
 );

@@ -17,27 +17,65 @@
 /**
  * External dependencies.
  */
-import React from 'react';
-import { Button, CookiesLanding } from '@ps-analysis-tool/design-system';
+import React, { useMemo } from 'react';
+import {
+  Button,
+  CookiesLanding,
+  MenuBar,
+  type CookiesLandingSection,
+  type MenuData,
+} from '@ps-analysis-tool/design-system';
 import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
-/**
- * Internal dependencies
- */
-import { CookiesSection, BlockedCookiesSection } from './cookieLanding';
+import CookiesSection from './cookieLanding/cookiesSection';
+import BlockedCookiesSection from './cookieLanding/blockedCookiesSection';
 
 interface CookiesLandingContainerProps {
   tabFrames: TabFrames;
   tabCookies: TabCookies;
-  affectedCookies: TabCookies;
+  cookiesWithIssues: TabCookies;
   downloadReport?: () => void;
 }
 
 const CookiesLandingContainer = ({
   tabFrames,
   tabCookies,
-  affectedCookies,
+  cookiesWithIssues,
   downloadReport,
 }: CookiesLandingContainerProps) => {
+  const sections: Array<CookiesLandingSection> = useMemo(
+    () => [
+      {
+        name: 'Cookies',
+        link: 'cookies',
+        panel: {
+          Element: CookiesSection,
+          props: {
+            tabCookies,
+            tabFrames,
+          },
+        },
+      },
+      {
+        name: 'Blocked Cookies',
+        link: 'blocked-cookies',
+        panel: {
+          Element: BlockedCookiesSection,
+          props: {
+            tabCookies,
+            cookiesWithIssues,
+            tabFrames,
+          },
+        },
+      },
+    ],
+    [tabCookies, tabFrames, cookiesWithIssues]
+  );
+
+  const menuData: MenuData = useMemo(
+    () => sections.map(({ name, link }) => ({ name, link })),
+    [sections]
+  );
+
   return (
     <>
       {downloadReport && (
@@ -50,12 +88,16 @@ const CookiesLandingContainer = ({
         </div>
       )}
       <CookiesLanding>
-        <CookiesSection tabCookies={tabCookies} tabFrames={tabFrames} />
-        <BlockedCookiesSection
-          tabCookies={tabCookies}
-          affectedCookies={affectedCookies}
-          tabFrames={tabFrames}
+        <MenuBar
+          menuData={menuData}
+          extraClasses="top-20"
+          scrollContainerId="dashboard-layout-container"
         />
+        {sections.map(({ link, panel: { Element, props } }) => (
+          <div id={link} key={link} className="cookie-landing-section">
+            {Element && <Element {...(props || {})} />}
+          </div>
+        ))}
       </CookiesLanding>
     </>
   );

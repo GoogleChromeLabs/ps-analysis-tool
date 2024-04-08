@@ -19,7 +19,7 @@
  */
 import type JSZip from 'jszip';
 import {
-  generateAffectedCookiesCSV,
+  generateCookiesWithIssuesCSV,
   generateAllCookiesCSV,
   generateSummaryDataCSV,
   generateTechnologyCSV,
@@ -32,13 +32,13 @@ const generateCSVFiles = (data: CompleteJson) => {
   if (data.technologyData.length > 0) {
     technologyDataCSV = generateTechnologyCSV(data);
   }
-  const affectedCookiesDataCSV = generateAffectedCookiesCSV(data);
+  const cookiesWithIssuesDataCSV = generateCookiesWithIssuesCSV(data);
   const summaryDataCSV = generateSummaryDataCSV(data);
 
   return {
     allCookiesCSV,
     technologyDataCSV,
-    affectedCookiesDataCSV,
+    cookiesWithIssuesDataCSV,
     summaryDataCSV,
   };
 };
@@ -47,7 +47,7 @@ export const createZip = (analysisData: CompleteJson, zipObject: JSZip) => {
   const {
     allCookiesCSV,
     technologyDataCSV,
-    affectedCookiesDataCSV,
+    cookiesWithIssuesDataCSV,
     summaryDataCSV,
   } = generateCSVFiles(analysisData);
 
@@ -55,7 +55,7 @@ export const createZip = (analysisData: CompleteJson, zipObject: JSZip) => {
   if (technologyDataCSV) {
     zipObject.file('technologies.csv', technologyDataCSV);
   }
-  zipObject.file('affected-cookies.csv', affectedCookiesDataCSV);
+  zipObject.file('cookies-with-issues.csv', cookiesWithIssuesDataCSV);
   zipObject.file('report.csv', summaryDataCSV);
   zipObject.file('report.json', JSON.stringify(analysisData, null, 4));
 };

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-export { default as generateAffectedCookiesCSV } from './generateAffectedCookiesCSV';
+export { default as generateCookiesWithIssuesCSV } from './generateCookiesWithIssuesCSV';
 export { default as generateAllCookiesCSV } from './generateAllCookiesCSV';
 export { default as generateSummaryDataCSV } from './generateSummaryDataCSV';
 export { default as generateTechnologyCSV } from './generateTechnologyCSV';

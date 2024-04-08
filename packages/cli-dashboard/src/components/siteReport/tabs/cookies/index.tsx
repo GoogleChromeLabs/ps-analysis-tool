@@ -48,7 +48,7 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
     [tabCookies]
   );
 
-  const affectedCookies = useMemo(
+  const cookiesWithIssues = useMemo(
     () =>
       Object.fromEntries(
         Object.entries(tabCookies).filter(([, cookie]) => cookie.isBlocked)
@@ -78,7 +78,7 @@ const CookiesTab = ({ selectedFrameUrl, selectedSite }: CookiesTabProps) => {
           <CookiesLandingContainer
             tabFrames={tabFrames}
             tabCookies={tabCookies}
-            affectedCookies={affectedCookies}
+            cookiesWithIssues={cookiesWithIssues}
             downloadReport={downloadReport}
           />
         </div>

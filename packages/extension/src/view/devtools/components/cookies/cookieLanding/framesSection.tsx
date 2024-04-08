@@ -16,66 +16,49 @@
 /**
  * External dependencies
  */
-import React, { useMemo } from 'react';
+import React from 'react';
 import {
-  CookiesLandingContainer,
-  CookiesMatrix,
+  CookiesLandingWrapper,
+  MatrixContainer,
   prepareFrameStatsComponent,
+  type MatrixComponentProps,
+  LEGEND_DESCRIPTION,
 } from '@ps-analysis-tool/design-system';
-import {
-  ORPHANED_COOKIE_KEY,
-  UNMAPPED_COOKIE_KEY,
-} from '@ps-analysis-tool/common';
 /**
  * Internal dependencies
  */
 import { useCookie } from '../../../stateProviders';
 
 const FramesSection = () => {
-  const { tabCookies, tabFrames, frameHasCookies } = useCookie(({ state }) => ({
+  const { tabCookies, tabFrames } = useCookie(({ state }) => ({
     tabCookies: state.tabCookies,
     tabFrames: state.tabFrames,
-    frameHasCookies: state.frameHasCookies,
   }));
 
-  const processedTabFrames = useMemo(
-    () =>
-      Object.fromEntries(
-        Object.entries(tabFrames || {}).filter(([url]) => {
-          if (url === ORPHANED_COOKIE_KEY) {
-            return frameHasCookies[url];
-          }
-
-          if (url === UNMAPPED_COOKIE_KEY) {
-            return frameHasCookies[url];
-          }
-
-          return true;
-        })
-      ),
-    [tabFrames, frameHasCookies]
-  );
-
-  const framesStats = prepareFrameStatsComponent(
-    processedTabFrames,
-    tabCookies
+  const framesStats = prepareFrameStatsComponent(tabFrames, tabCookies);
+  const dataComponents: MatrixComponentProps[] = framesStats.legend.map(
+    (component) => {
+      const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
+      return {
+        ...component,
+        description: legendDescription,
+        title: component.label,
+        containerClasses: '',
+      };
+    }
   );
 
   return (
-    <CookiesLandingContainer
+    <CookiesLandingWrapper
       dataMapping={framesStats.dataMapping}
       testId="frames-insights"
     >
-      <CookiesMatrix
+      <MatrixContainer
         title="Frames"
-        componentData={framesStats.legend}
-        showMatrix={true}
-        tabCookies={tabCookies}
-        tabFrames={tabFrames}
-        showHorizontalMatrix={false}
+        matrixData={dataComponents}
         infoIconTitle="The details regarding frames and associated cookies in this page."
       />
-    </CookiesLandingContainer>
+    </CookiesLandingWrapper>
   );
 };
 export default FramesSection;

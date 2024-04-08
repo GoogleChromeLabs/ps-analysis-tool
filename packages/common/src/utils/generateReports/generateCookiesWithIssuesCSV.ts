@@ -17,11 +17,11 @@
 /**
  * Internal dependencies
  */
-import { CompleteJson, CookieJsonDataType } from '../../cookies.types';
+import type { CompleteJson, CookieJsonDataType } from '../../cookies.types';
 import calculateEffectiveExpiryDate from '../calculateEffectiveExpiryDate';
 import sanitizeCsvRecord from '../sanitizeCsvRecord';
 
-export const AFFECTED_COOKIES_DATA_HEADERS = [
+export const COOKIES_WITH_ISSUES_DATA_HEADERS = [
   'Name',
   'Scope',
   'Domain',
@@ -37,23 +37,25 @@ export const AFFECTED_COOKIES_DATA_HEADERS = [
   'GDPRPortal',
 ];
 
-const generateAffectedCookiesCSV = (siteAnalysisData: CompleteJson): string => {
+const generateCookiesWithIssuesCSV = (
+  siteAnalysisData: CompleteJson
+): string => {
   const frameCookieDataMap = siteAnalysisData.cookieData;
 
-  const affectedCookieMap: Map<string, CookieJsonDataType> = new Map();
+  const CookieWithIssueMap: Map<string, CookieJsonDataType> = new Map();
 
   // More than one frame can use one cookie, need to make a map for getting unique entries.
   Object.entries(frameCookieDataMap).forEach(([, { frameCookies }]) => {
     Object.entries(frameCookies).forEach(([cookieKey, cookieData]) => {
       if (cookieData.isBlocked) {
-        affectedCookieMap.set(cookieKey, cookieData);
+        CookieWithIssueMap.set(cookieKey, cookieData);
       }
     });
   });
 
   let cookieRecords = '';
 
-  for (const cookie of affectedCookieMap.values()) {
+  for (const cookie of CookieWithIssueMap.values()) {
     //This should be in the same order as cookieDataHeader
     const recordsArray = [
       cookie.parsedCookie.name,
@@ -74,7 +76,7 @@ const generateAffectedCookiesCSV = (siteAnalysisData: CompleteJson): string => {
     cookieRecords += recordsArray.join(',') + '\r\n';
   }
 
-  return AFFECTED_COOKIES_DATA_HEADERS.join(',') + '\r\n' + cookieRecords;
+  return COOKIES_WITH_ISSUES_DATA_HEADERS.join(',') + '\r\n' + cookieRecords;
 };
 
-export default generateAffectedCookiesCSV;
+export default generateCookiesWithIssuesCSV;
