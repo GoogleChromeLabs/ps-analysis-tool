@@ -24,7 +24,6 @@ import Spinnies from 'spinnies';
 import { exec } from 'child_process';
 import path from 'path';
 import { CompleteJson } from '@ps-analysis-tool/common';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -43,8 +42,9 @@ import { checkPortInUse } from './utils/checkPortInUse';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
-const locale = Intl.DateTimeFormat().resolvedOptions().locale;
-I18n.loadCLIMessagesData(locale);
+// Not loading messages data for now, as I18n.getMessage is not used right now.
+// const locale = Intl.DateTimeFormat().resolvedOptions().locale;
+// I18n.loadCLIMessagesData(locale);
 
 const DELAY_TIME = 20000;
 const program = new Command();

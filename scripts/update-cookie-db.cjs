@@ -85,6 +85,7 @@ const errorHandler = (err) => {
  * Add keys to the locale file and replace the text with keys in the formattedData.
  * @param formattedData formatted data
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const addKeysToLocale = async (formattedData) => {
   const messagesPath = path.resolve(
     'packages/i18n/_locales/messages/en/messages.json'
@@ -135,7 +136,8 @@ const main = async () => {
     const formattedData = await formatRawData(rawData);
 
     // Add keys, messages to _locale/en/messages.json and replace the text with keys in the formattedData
-    await addKeysToLocale(formattedData);
+    // Not using i18n functions, so no need to add keys to locale for now.
+    // await addKeysToLocale(formattedData);
 
     await fs.ensureFile(path.resolve(targetDIR, 'open-cookie-database.json'));
     // Write the formatted data to a file.
