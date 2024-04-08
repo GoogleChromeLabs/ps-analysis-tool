@@ -22,6 +22,7 @@ import {
   MenuBar,
   type CookiesLandingSection,
   type MenuData,
+  prepareCookiesCount,
 } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies
@@ -30,10 +31,16 @@ import CookiesSection from './cookiesSection';
 import FramesSection from './framesSection';
 import BlockedCookiesSection from './blockedCookiesSection';
 import ExemptedCookiesSection from './exemptedCookiesSection';
+import { useCookie } from '../../../stateProviders';
 
 const AssembledCookiesLanding = () => {
-  const sections: Array<CookiesLandingSection> = useMemo(
-    () => [
+  const { tabCookies } = useCookie(({ state }) => ({
+    tabCookies: state.tabCookies,
+  }));
+
+  const cookieStats = prepareCookiesCount(tabCookies);
+  const sections: Array<CookiesLandingSection> = useMemo(() => {
+    const defaultSections = [
       {
         name: 'Cookies',
         link: 'cookies',
@@ -46,13 +53,6 @@ const AssembledCookiesLanding = () => {
         link: 'blocked-cookies',
         panel: {
           Element: BlockedCookiesSection,
-        },
-      },
-      {
-        name: 'Exemption Reason',
-        link: 'exemption-reasons',
-        panel: {
-          Element: ExemptedCookiesSection,
         },
       },
       {
@@ -69,9 +69,18 @@ const AssembledCookiesLanding = () => {
           Element: FramesSection,
         },
       },
-    ],
-    []
-  );
+    ];
+    if (cookieStats.exemptedCookies.total > 0) {
+      defaultSections.splice(2, 0, {
+        name: 'Exemption Reason',
+        link: 'exemption-reasons',
+        panel: {
+          Element: ExemptedCookiesSection,
+        },
+      });
+    }
+    return defaultSections;
+  }, [cookieStats.exemptedCookies.total]);
 
   const menuData: MenuData = useMemo(
     () => sections.map(({ name, link }) => ({ name, link })),
