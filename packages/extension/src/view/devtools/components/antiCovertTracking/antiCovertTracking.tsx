@@ -18,10 +18,6 @@
  * External Dependencies
  */
 import React from 'react';
-
-/**
- * Internal Dependencies
- */
 import { LandingPage } from '@ps-analysis-tool/design-system';
 
 const AntiCovertTracking = () => {

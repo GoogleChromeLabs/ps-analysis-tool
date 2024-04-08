@@ -24,6 +24,7 @@ import React from 'react';
  */
 import type { ContactEmailType } from '../types';
 import { RWSInput } from '../components';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface ContactEmailProps {
   contact: ContactEmailType;
@@ -39,8 +40,8 @@ const ContactEmail = ({
   return (
     <div className="my-4">
       <RWSInput
-        inputLabel="Contact"
-        inputPlaceholder="Email address or group alias if available"
+        inputLabel={I18n.getMessage('extContact')}
+        inputPlaceholder={I18n.getMessage('extContactNote')}
         inputValue={contact.email}
         inputChangeHandler={(e) => setContact(e.target.value)}
         error={contact.emailError}

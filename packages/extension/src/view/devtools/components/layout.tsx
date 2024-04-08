@@ -38,6 +38,7 @@ import Cookies from './cookies';
 import useFrameOverlay from '../hooks/useFrameOverlay';
 import { useCookie, useSettings } from '../stateProviders';
 import { getCurrentTabId } from '../../../utils/getCurrentTabId';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface LayoutProps {
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
@@ -104,7 +105,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
       psData.children[SIDEBAR_ITEMS_KEYS.COOKIES].children = Object.keys(
         tabFrames || {}
       ).reduce<SidebarItems>((acc, url) => {
-        const popupTitle = `Cookies used by frames from ${url}`;
+        const popupTitle = I18n.getMessage('extCookiesUsedByFrame', [url]);
 
         acc[url] = {
           title: url,
@@ -241,7 +242,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
           {settingsChanged && (
             <ToastMessage
               additionalStyles="text-sm"
-              text="Settings changed, please reload all tabs."
+              text={I18n.getMessage('extSettingsChanged')}
               onClick={handleSettingsChange}
               textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
             />

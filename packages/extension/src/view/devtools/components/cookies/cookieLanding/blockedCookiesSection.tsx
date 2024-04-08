@@ -31,6 +31,7 @@ import {
  * Internal dependencies
  */
 import { useCookie, useSettings } from '../../../stateProviders';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const BlockedCookiesSection = () => {
   const { tabCookies, tabFrames } = useCookie(({ state }) => ({
@@ -48,7 +49,7 @@ const BlockedCookiesSection = () => {
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
   const blockedCookieDataMapping: DataMapping[] = [
     {
-      title: 'Blocked cookies',
+      title: I18n.getMessage('extBlockedCookies'),
       count: cookieStats.blockedCookies.total,
       data: cookiesStatsComponents.blocked,
       onClick: () => selectedItemUpdater('All', 'blockedReasons'),
@@ -69,16 +70,14 @@ const BlockedCookiesSection = () => {
 
   const description = !isUsingCDP ? (
     <>
-      To gather data and insights regarding blocked cookies, please enable PSAT
-      to use the Chrome DevTools protocol. You can do this in the Settings page
-      or in the extension popup. For more information check the PSAT&nbsp;
+      {I18n.getMessage('extNotUsingCDP')}&nbsp;
       <a
         target="_blank"
         rel="noreferrer"
         className="text-bright-navy-blue dark:text-jordy-blue"
         href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki"
       >
-        Wiki
+        {I18n.getMessage('extWiki')}
       </a>
     </>
   ) : (
@@ -93,9 +92,9 @@ const BlockedCookiesSection = () => {
     >
       {dataComponents.length > 0 && (
         <MatrixContainer
-          title="Blocked Reasons"
+          title={I18n.getMessage('extBlockedReasons')}
           matrixData={dataComponents}
-          infoIconTitle="Cookies that have been blocked by the browser.(The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
+          infoIconTitle={I18n.getMessage('extCookiesBlockedNote')}
         />
       )}
     </CookiesLandingWrapper>

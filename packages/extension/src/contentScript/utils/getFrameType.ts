@@ -13,28 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import { I18n } from '@ps-analysis-tool/i18n';
+
 const getFrameType = (
   isHidden: boolean,
   insideFrame: HTMLIFrameElement | null,
   tagName: string
 ): string => {
   if (isHidden) {
-    return 'Hidden iframe';
+    return I18n.getMessage('extHiddenFrame');
   }
 
   if (insideFrame) {
-    return 'Nested iframe';
+    return I18n.getMessage('extNestedIframe');
   }
 
   if (tagName === 'BODY') {
-    return 'Main frame';
+    return I18n.getMessage('extMainFrame');
   }
 
   if (tagName === 'Unknown') {
-    return 'Unknown';
+    return I18n.getMessage('extUnknown');
   }
 
-  return 'iframe';
+  return I18n.getMessage('extIframe');
 };
 
 export default getFrameType;

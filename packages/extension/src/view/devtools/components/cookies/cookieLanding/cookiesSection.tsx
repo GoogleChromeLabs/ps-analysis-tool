@@ -30,13 +30,10 @@ import {
  * Internal dependencies
  */
 import { useCookie } from '../../../stateProviders';
-import {
-  ORPHANED_COOKIE_KEY,
-  UNMAPPED_COOKIE_KEY,
-} from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const CookiesSection = () => {
-  const { tabCookies, tabFrames, frameHasCookies } = useCookie(({ state }) => ({
+  const { tabCookies, tabFrames } = useCookie(({ state }) => ({
     tabCookies: state.tabCookies,
     tabFrames: state.tabFrames,
     frameHasCookies: state.frameHasCookies,
@@ -63,15 +60,11 @@ const CookiesSection = () => {
   const processedTabFrames = useMemo(
     () =>
       Object.fromEntries(
-        Object.entries(tabFrames || {}).filter(([url]) => {
-          if (url === ORPHANED_COOKIE_KEY || url === UNMAPPED_COOKIE_KEY) {
-            return frameHasCookies[url];
-          }
-
+        Object.entries(tabFrames || {}).filter(() => {
           return true;
         })
       ),
-    [tabFrames, frameHasCookies]
+    [tabFrames]
   );
 
   return (
@@ -83,8 +76,8 @@ const CookiesSection = () => {
         (cookieStats?.firstParty.total === 0 &&
           cookieStats?.thirdParty.total === 0 && (
             <MessageBox
-              headerText="No cookies found on this page"
-              bodyText="Please try reloading the page"
+              headerText={I18n.getMessage('extNoCookies')}
+              bodyText={I18n.getMessage('extTryReloading')}
             />
           ))}
       <CookiesMatrix

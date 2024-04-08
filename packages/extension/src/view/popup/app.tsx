@@ -34,6 +34,7 @@ import './app.css';
 import { Legend } from './components';
 import { useCookie, useSettings } from './stateProviders';
 import { ALLOWED_NUMBER_OF_TABS } from '../../constants';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const App: React.FC = () => {
   const {
@@ -65,7 +66,9 @@ const App: React.FC = () => {
     handleSettingsChange: actions.handleSettingsChange,
   }));
 
-  const cdpLabel = isUsingCDP ? 'Disable CDP' : 'Enable CDP';
+  const cdpLabel = isUsingCDP
+    ? I18n.getMessage('extDisableCDP')
+    : I18n.getMessage('extEnableCDP');
 
   if (onChromeUrl) {
     return (
@@ -76,15 +79,17 @@ const App: React.FC = () => {
           setEnabled={setUsingCDP}
           enabled={isUsingCDP}
         />
-        <p className="font-bold text-lg mb-2">Not much to analyze here</p>
+        <p className="font-bold text-lg mb-2">
+          {I18n.getMessage('extNoMoreAnalysis')}
+        </p>
         <p className="text-chart-label text-xs">
-          Its emptier than a cookie jar after a midnight snack!
+          {I18n.getMessage('extEmptyCookieJar')}
         </p>
         <div className="absolute right-0 bottom-0 w-full">
           {settingsChanged && (
             <ToastMessage
               additionalStyles="text-sm"
-              text="Settings changed, please reload all tabs."
+              text={I18n.getMessage('extSettingsChanged')}
               onClick={handleSettingsChange}
               textAdditionalStyles="xxs:p-1 text-xxs leading-5"
             />
@@ -118,12 +123,15 @@ const App: React.FC = () => {
           setEnabled={setUsingCDP}
           enabled={isUsingCDP}
         />
-        <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
+        <Button
+          onClick={changeListeningToThisTab}
+          text={I18n.getMessage('extAnalyzeThisTab')}
+        />
         <div className="absolute right-0 bottom-0 w-full">
           {settingsChanged && (
             <ToastMessage
               additionalStyles="text-sm"
-              text="Settings changed, please reload all tabs."
+              text={I18n.getMessage('extSettingsChanged')}
               onClick={handleSettingsChange}
               textAdditionalStyles="xxs:p-1 text-xxs leading-5"
             />
@@ -145,15 +153,15 @@ const App: React.FC = () => {
           setEnabled={setUsingCDP}
           enabled={isUsingCDP}
         />
-        <p className="font-bold text-lg">No cookies found on this page</p>
+        <p className="font-bold text-lg">{I18n.getMessage('extNoCookies')}</p>
         <p className="text-chart-label text-xs">
-          Please try reloading the page
+          {I18n.getMessage('extTryReloading')}
         </p>
         <div className="absolute right-0 bottom-0 w-full">
           {settingsChanged && (
             <ToastMessage
               additionalStyles="text-sm"
-              text="Settings changed, please reload all tabs."
+              text={I18n.getMessage('extSettingsChanged')}
               onClick={handleSettingsChange}
               textAdditionalStyles="xxs:p-1 text-xxs leading-5"
             />
@@ -177,14 +185,14 @@ const App: React.FC = () => {
           <CirclePieChart
             centerCount={cookieStats.firstParty.total}
             data={statsComponents.firstParty}
-            title="1st Party Cookies"
+            title={I18n.getMessage('extFirstPartyCookies')}
           />
         </div>
         <div className="w-32 text-center">
           <CirclePieChart
             centerCount={cookieStats.thirdParty.total}
             data={statsComponents.thirdParty}
-            title="3rd Party Cookies"
+            title={I18n.getMessage('extThirdPartyCookies')}
           />
         </div>
       </div>
@@ -193,14 +201,14 @@ const App: React.FC = () => {
       </div>
       <div className="w-full text-center">
         <p className="text-chart-label text-xs">
-          {'Inspect cookies in the "Privacy Sandbox" panel of DevTools'}
+          {I18n.getMessage('extInspectInPSATPanel', ['"Privacy Sandbox"'])}
         </p>
       </div>
       <div className="absolute right-0 bottom-0 w-full">
         {settingsChanged && (
           <ToastMessage
             additionalStyles="text-sm"
-            text="Settings changed, please reload all tabs."
+            text={I18n.getMessage('extSettingsChanged')}
             onClick={handleSettingsChange}
             textAdditionalStyles="xxs:p-1 text-xxs leading-5"
           />

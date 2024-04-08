@@ -23,7 +23,7 @@ const Chips = () => {
   return (
     <div data-testid="chips-content" className="h-full w-full">
       <LandingPage
-        title={'Cookies Having Independent Partitioned State (CHIPS)'}
+        title="Cookies Having Independent Partitioned State (CHIPS)"
         psInfoKey={PSInfoKey.Chips}
         extraClasses="max-w-2xl h-fit"
       />

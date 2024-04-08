@@ -27,6 +27,7 @@ import type {
   PrimaryWellKnownOutputType,
 } from '../types';
 import Output from './output';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface OtherDomainOutputProps {
   primaryWellKnownOutput: PrimaryWellKnownOutputType | null;
@@ -53,7 +54,7 @@ const OtherDomainOutput = ({
         <ul className="list-disc">
           {primaryWellKnownOutput && primaryWellKnownOutput.associatedSites && (
             <div className="mb-2">
-              <p className="text-sm">Associated Sites</p>
+              <p className="text-sm">{I18n.getMessage('extAssociatedSites')}</p>
               <div className="pl-4">
                 {primaryWellKnownOutput.associatedSites.map((url) => (
                   <li key={url} className="text-sm">
@@ -65,7 +66,7 @@ const OtherDomainOutput = ({
           )}
           {primaryWellKnownOutput && primaryWellKnownOutput.serviceSites && (
             <div className="mb-2">
-              <p className="text-sm">Service Sites</p>
+              <p className="text-sm">{I18n.getMessage('extServiceSites')}</p>
               <div className="pl-4">
                 {primaryWellKnownOutput.serviceSites.map((url) => (
                   <li key={url} className="text-sm">
@@ -77,7 +78,7 @@ const OtherDomainOutput = ({
           )}
           {primaryWellKnownOutput && primaryWellKnownOutput.ccTLDs && (
             <div className="mb-2">
-              <p className="text-sm">Country Sites</p>
+              <p className="text-sm">{I18n.getMessage('extCountrySites')}</p>
               <div className="pl-4">
                 {Object.values(primaryWellKnownOutput.ccTLDs).map((cctlds) =>
                   cctlds.map((cctld) => (

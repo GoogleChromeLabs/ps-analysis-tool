@@ -29,6 +29,7 @@ import InformationIcon from '../../../../../../../../assets/icons/information-ic
 // @ts-ignore
 // eslint-disable-next-line import/no-relative-packages
 import Done from '../../../../../../../../assets/icons/done.svg';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const InformationContainer = () => {
   const {
@@ -64,15 +65,23 @@ const InformationContainer = () => {
   const handleCopy = useCallback(() => {
     setCopying(true);
 
-    let clipboardText = `**Open Tabs:** ${currentTabs}\n`;
+    let clipboardText = `**${I18n.getMessage(
+      'extOpenTabs'
+    )}:** ${currentTabs}\n`;
 
-    clipboardText += `**Active Extensions:**\n`;
+    clipboardText += `**${I18n.getMessage('extActiveExtensions')}:**\n`;
     currentExtensions?.forEach((extension) => {
       clipboardText += `${extension.extensionName}: ${extension.extensionId}\n`;
     });
-    clipboardText += `**Chrome Version:** ${browserInformation}\n`;
-    clipboardText += `**PSAT Version:** ${PSATVersion}\n`;
-    clipboardText += `**OS - System Architecture:** ${OSInformation}`;
+    clipboardText += `**${I18n.getMessage(
+      'extChromeVersion'
+    )}:** ${browserInformation}\n`;
+    clipboardText += `**${I18n.getMessage(
+      'extPSATVersion'
+    )}:** ${PSATVersion}\n`;
+    clipboardText += `**${I18n.getMessage(
+      'extSystemArchitecture'
+    )}:** ${OSInformation}`;
 
     try {
       // Need to do this since chrome doesnt allow the clipboard access in extension.
@@ -122,7 +131,7 @@ const InformationContainer = () => {
           <div className="flex items-center flex-row pl-3 mb-2 gap-x-3">
             <InformationIcon className="dark:text-bright-gray" />
             <span className="text-base font-bold dark:text-bright-gray">
-              System Information
+              {I18n.getMessage('extSystemInformation')}
             </span>
           </div>
           <ArrowUp
@@ -149,14 +158,16 @@ const InformationContainer = () => {
           </button>
           <div className="flex flex-row gap-x-2 justify-between mt-4">
             <div className="flex flex-col">
-              <span className="text-sm dark:text-bright-gray">Open Tabs</span>
+              <span className="text-sm dark:text-bright-gray">
+                {I18n.getMessage('extOpenTabs')}
+              </span>
               <span className="text-xs text-darkest-gray dark:text-bright-gray">
                 {currentTabs}
               </span>
             </div>
             <div className="flex flex-col">
               <span className="text-sm dark:text-bright-gray">
-                Chrome version
+                {I18n.getMessage('extChromeVersion')}
               </span>
               <span className="text-xs text-darkest-gray dark:text-bright-gray">
                 {browserInformation}
@@ -164,7 +175,7 @@ const InformationContainer = () => {
             </div>
             <div className="flex flex-col">
               <span className="text-sm dark:text-bright-gray">
-                PSAT version
+                {I18n.getMessage('extPSATVersion')}
               </span>
               <span className="text-xs text-darkest-gray dark:text-bright-gray">
                 {PSATVersion}
@@ -172,7 +183,7 @@ const InformationContainer = () => {
             </div>
             <div className="flex flex-col">
               <span className="text-sm dark:text-bright-gray">
-                OS - System Architecture
+                {I18n.getMessage('extSystemArchitecture')}
               </span>
               <span className="text-xs text-darkest-gray dark:text-bright-gray">
                 {OSInformation}
@@ -182,7 +193,7 @@ const InformationContainer = () => {
           <div className="flex flex-row">
             <div className="mt-1">
               <span className="text-sm dark:text-bright-gray">
-                Active Extensions
+                {I18n.getMessage('extActiveExtensions')}
               </span>
               <ul className="list-disc ml-4 mt-1">
                 {currentExtensions?.map((extension, index) => {

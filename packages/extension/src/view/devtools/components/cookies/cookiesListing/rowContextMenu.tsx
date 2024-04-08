@@ -38,6 +38,7 @@ import {
   getDotPrefixedDomain,
   isCookieDomainInAllowList,
 } from '../../../stateProviders/allowedList/utils';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface RowContextMenuProps {
   domainsInAllowList: Set<string>;
@@ -196,7 +197,7 @@ const RowContextMenu = forwardRef<
                 onClick={handleCopy}
                 className="w-full text-xs rounded px-1 py-[3px] flex items-center hover:bg-royal-blue hover:text-white cursor-default"
               >
-                <span>Copy Network Filter String</span>
+                <span>{I18n.getMessage('extCopyNetworkFilter')}</span>
               </button>
 
               {isDomainInAllowList && parentDomain ? (
@@ -204,7 +205,11 @@ const RowContextMenu = forwardRef<
                   onClick={handleAllowListWithParentDomainClick}
                   className="w-full text-xs rounded px-1 py-[3px] flex items-center hover:bg-royal-blue hover:text-white cursor-default"
                 >
-                  <span>Remove `{parentDomain}` From Allow List</span>
+                  <span>
+                    {I18n.getMessage('extRemoveParentDomainFromAllowList', [
+                      parentDomain,
+                    ])}
+                  </span>
                 </button>
               ) : (
                 <button
@@ -213,8 +218,8 @@ const RowContextMenu = forwardRef<
                 >
                   <span id="allow-list-option">
                     {isDomainInAllowList
-                      ? 'Remove Domain from Allow List'
-                      : 'Allow Domain During Session'}
+                      ? I18n.getMessage('extRemoveDomainFromAllowList')
+                      : I18n.getMessage('extAllowDomin')}
                   </span>
                 </button>
               )}

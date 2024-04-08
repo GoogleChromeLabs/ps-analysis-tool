@@ -25,6 +25,7 @@ import React from 'react';
 import type { ServiceSiteType } from '../types';
 import type { SitePayloadType } from '../useGeneratorForm/types';
 import { AddButton, RWSInput, RemoveButton } from '../components';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface ServiceSitesProps {
   serviceSites: ServiceSiteType[];
@@ -44,7 +45,7 @@ const ServiceSites = ({
   return (
     <div className="p-3">
       <div className="flex justify-between items-center">
-        <p className="text-base">Service Subset</p>
+        <p className="text-base">{I18n.getMessage('extServiceSubset')}</p>
         <AddButton onClick={addServiceSite} />
       </div>
       <div id="serviceDomains">
@@ -53,7 +54,9 @@ const ServiceSites = ({
             <div key={idx} className="flex gap-10 my-5">
               <div className="flex-1">
                 <RWSInput
-                  inputLabel={`Service Domain #${idx + 1}`}
+                  inputLabel={I18n.getMessage('extServiceDomainIdx', [
+                    (idx + 1).toString(),
+                  ])}
                   inputPlaceholder="https://service.com"
                   inputValue={url}
                   inputChangeHandler={(e) => {
@@ -65,8 +68,10 @@ const ServiceSites = ({
               </div>
               <div className="flex-1">
                 <RWSInput
-                  inputLabel={`Rationale Domain #${idx + 1}`}
-                  inputPlaceholder="Affiliation to primary domain"
+                  inputLabel={I18n.getMessage('extRationaleDomainCount', [
+                    (idx + 1).toString(),
+                  ])}
+                  inputPlaceholder={I18n.getMessage('extAffiliationHeading')}
                   inputValue={rationale}
                   inputChangeHandler={(e) => {
                     setServiceSites({
@@ -78,10 +83,7 @@ const ServiceSites = ({
                   error={rationaleError}
                   formValidationFailed={formValidationFailed}
                 />
-                <span>
-                  How is the affiliation across domains presented and why users
-                  would expect it
-                </span>
+                <span>{I18n.getMessage('extAffiliationNote')}</span>
               </div>
               <div className="flex items-center">
                 <RemoveButton onClick={() => removeServiceSite(idx)} />

@@ -27,6 +27,7 @@ import type { Protocol } from 'devtools-protocol';
  * Internal dependencies
  */
 import isValidURL from '../utils/isValidURL';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Create cookie object from ChromeStorage API cookie object, previously saved parsed cookie object if any, and recently captured request/response cookie header.
@@ -178,7 +179,7 @@ function parseAttributeValues(
       }
       break;
     case 'priority':
-      value = value || 'Medium';
+      value = value || I18n.getMessage('extMedium');
       break;
     case 'partitionKey':
       value = value || '';

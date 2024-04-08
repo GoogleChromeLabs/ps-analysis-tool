@@ -29,6 +29,7 @@ import type { Protocol } from 'devtools-protocol';
 import updateCookieBadgeText from './utils/updateCookieBadgeText';
 import { deriveBlockingStatus } from './utils/deriveBlockingStatus';
 import { NEW_COOKIE_DATA } from '../constants';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 class SynchnorousCookieStore {
   /**
@@ -103,7 +104,7 @@ class SynchnorousCookieStore {
             priority:
               cookie.parsedCookie?.priority ??
               this.tabsData[tabId][cookieKey].parsedCookie?.priority ??
-              'Medium',
+              I18n.getMessage('extMedium'),
             partitionKey:
               cookie.parsedCookie?.partitionKey ??
               this.tabsData[tabId][cookieKey].parsedCookie?.partitionKey,

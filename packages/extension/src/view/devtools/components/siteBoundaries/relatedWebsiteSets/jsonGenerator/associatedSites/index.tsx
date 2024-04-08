@@ -26,6 +26,7 @@ import { InfoIcon } from '@ps-analysis-tool/design-system';
 import type { AssociatedSiteType } from '../types';
 import { RWSInput, AddButton, RemoveButton } from '../components';
 import type { SitePayloadType } from '../useGeneratorForm/types';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface AssociatedSitesProps {
   associatedSites: AssociatedSiteType[];
@@ -46,8 +47,8 @@ const AssociatedSites = ({
     <div className="p-3">
       <div className="flex justify-between items-center">
         <p className="text-base flex items-center gap-2 ">
-          Associated Subset
-          <span title="Browsers may enforce a limit on Associated Domains (e.g. Chrome's limit is 5)">
+          {I18n.getMessage('extAssociatedSubset')}
+          <span title={I18n.getMessage('extAssociatedDomainsLimit')}>
             <InfoIcon className="fill-granite-gray" />
           </span>
         </p>
@@ -75,9 +76,11 @@ const AssociatedSites = ({
               </div>
               <div className="flex-1">
                 <RWSInput
-                  inputLabel={`Rationale Domain #${idx + 1}`}
+                  inputLabel={I18n.getMessage('extRationaleDomainCount', [
+                    (idx + 1).toString(),
+                  ])}
                   inputValue={rationale}
-                  inputPlaceholder="Affiliation to primary domain"
+                  inputPlaceholder={I18n.getMessage('extAffiliationHeading')}
                   inputChangeHandler={(e) => {
                     setAssociatedSites({
                       idx,
@@ -88,10 +91,7 @@ const AssociatedSites = ({
                   error={rationaleError}
                   formValidationFailed={formValidationFailed}
                 />
-                <span>
-                  How is the affiliation across domains presented and why users
-                  would expect it
-                </span>
+                <span>{I18n.getMessage('extAffiliationNote')}</span>
               </div>
               <div className="flex items-center">
                 <RemoveButton onClick={() => removeAssociatedSite(idx)} />

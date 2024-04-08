@@ -1,0 +1,422 @@
+{
+  "extShowMore": {
+    "message": "Show more"
+  },
+  "extShowLess": {
+    "message": "Show less"
+  },
+  "extUnknown": {
+    "message": "Unknown"
+  },
+  "extYes": {
+    "message": "Yes"
+  },
+  "extNo": {
+    "message": "No"
+  },
+  "extHiddenIframe": {
+    "message": "Hidden iframe"
+  },
+  "extNestedIframe": {
+    "message": "Nested iframe"
+  },
+  "extMainFrame": {
+    "message": "Main frame"
+  },
+  "extIframe": {
+    "message": "iframe"
+  },
+  "extMedium": {
+    "message": "Medium"
+  },
+  "extUncateogorized": {
+    "message": "Uncategorized"
+  },
+  "extBlockedCookies": {
+    "message": "Blocked cookies"
+  },
+  "extNotUsingCDP": {
+    "message": "To gather data and insights regarding blocked cookies, please enable PSAT to use the Chrome DevTools protocol. You can do this in the Settings page or in the extension popup. For more information check the PSAT"
+  },
+  "extWiki": {
+    "message": "Wiki"
+  },
+  "extBlockedReasons": {
+    "message": "Blocked Reasons"
+  },
+  "extCookiesBlockedNote": {
+    "message": "Cookies that have been blocked by the browser. (The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
+  },
+  "extNoCookies": {
+    "message": "No cookies found on this page"
+  },
+  "extTryReloading": {
+    "message": "Please try reloading the page"
+  },
+  "extFrames": {
+    "message": "Frames"
+  },
+  "extFramesNote": {
+    "message": "The details regarding frames and associated cookies in this page."
+  },
+  "extCookies": {
+    "message": "Cookies"
+  },
+  "extLibraryDetection": {
+    "message": "Library Detection"
+  },
+  "extName": {
+    "message": "Name"
+  },
+  "extScope": {
+    "message": "Scope"
+  },
+  "extDomain": {
+    "message": "Domain"
+  },
+  "extPartitionKey": {
+    "message": "Partition Key"
+  },
+  "extSameSite": {
+    "message": "SameSite"
+  },
+  "extCategory": {
+    "message": "Category"
+  },
+  "extPlatform": {
+    "message": "Platform"
+  },
+  "extHttpOnly": {
+    "message": "HttpOnly"
+  },
+  "extSecure": {
+    "message": "Secure"
+  },
+  "extValue": {
+    "message": "Value"
+  },
+  "extPath": {
+    "message": "Path"
+  },
+  "extExpires": {
+    "message": "Expires / Max-Age"
+  },
+  "extPriority": {
+    "message": "Priority"
+  },
+  "extSize": {
+    "message": "Size"
+  },
+  "extMapping": {
+    "message": "Mapping"
+  },
+  "extBlockingStatus": {
+    "message": "Blocking Status"
+  },
+  "extLookAtNetworkTab": {
+    "message": "Please take a look at the network tab to get this cookie's blocking information."
+  },
+  "extUndetermined": {
+    "message": "Undetermined"
+  },
+  "extBlocked": {
+    "message": "Blocked"
+  },
+  "extFirstParty": {
+    "message": "First Party"
+  },
+  "extThirdParty": {
+    "message": "Third Party"
+  },
+  "extTrue": {
+    "message": "True"
+  },
+  "extFalse": {
+    "message": "False"
+  },
+  "extRetentionPeriod": {
+    "message": "Retention Period"
+  },
+  "extSession": {
+    "message": "Session"
+  },
+  "extShortTerm": {
+    "message": "Short Term (<24h)"
+  },
+  "extMediumTerm": {
+    "message": "Medium Term (24h - 1 week)"
+  },
+  "extLongTerm": {
+    "message": "Long Term (1 week - 1 month)"
+  },
+  "extExtentedTerm": {
+    "message": "Extended Term (>1 month)"
+  },
+  "extSet": {
+    "message": "Set"
+  },
+  "extNotSet": {
+    "message": "Not Set"
+  },
+  "extSetVia": {
+    "message": "Set Via"
+  },
+  "extHttp": {
+    "message": "HTTP"
+  },
+  "extJS": {
+    "message": "JS"
+  },
+  "extRefreshJSCookies": {
+    "message": "Refresh Cookies Set via JavaScript"
+  },
+  "extUnmapped": {
+    "message": "Unmapped"
+  },
+  "extCouldNotMapCookies": {
+    "message": "Cookies that could not be mapped to any frame."
+  },
+  "extOrphanedCookies": {
+    "message": "Frames that set these cookies were removed from the DOM, leaving these cookies orphaned."
+  },
+  "extOrphaned": {
+    "message": "Orphaned"
+  },
+  "extCopyNetworkFilter": {
+    "message": "Copy Network Filter String"
+  },
+  "extRemoveParentDomainFromAllowList": {
+    "message": "Remove $parentDomain$ From Allow List",
+    "placeholders": {
+      "parentDomain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "extRemoveDomainFromAllowList": {
+    "message": "Remove Domain From Allow List"
+  },
+  "extAllowDomin": {
+    "message": "Allow Domain During Session"
+  },
+  "extMembershipInExperimentGroup": {
+    "message": "Membership in Experiment Group"
+  },
+  "extOpenTabs": {
+    "message": "Open Tabs"
+  },
+  "extActiveExtensions": {
+    "message": "Active Extensions"
+  },
+  "extChromeVersion": {
+    "message": "Chrome Version"
+  },
+  "extPSATVersion": {
+    "message": "PSAT Version"
+  },
+  "extSystemArchitecture": {
+    "message": "OS - System Architecture"
+  },
+  "extSystemInformation": {
+    "message": "System Information"
+  },
+  "extPSATSettings": {
+    "message": "PSAT Extension Settings"
+  },
+  "extSettings": {
+    "message": "Settings"
+  },
+  "extLoading": {
+    "message": "Loading"
+  },
+  "extMembership": {
+    "message": "$rws$ Membership",
+    "placeholders": {
+      "rws": {
+        "content": "$1",
+        "example": "Related Website Set"
+      }
+    }
+  },
+  "extBelongsToRWS": {
+    "message": "This site belongs to a $rws$.",
+    "placeholders": {
+      "rws": {
+        "content": "$1",
+        "example": "Related Website Set"
+      }
+    }
+  },
+  "extPrimaryDomain": {
+    "message": "Primary Domain"
+  },
+  "extRationale": {
+    "message": "Rationale"
+  },
+  "extRWSPrimaryDomain": {
+    "message": "This site is the primary domain of the $rws$.",
+    "placeholders": {
+      "rws": {
+        "content": "$1",
+        "example": "Related Website Set"
+      }
+    }
+  },
+  "extAssociatedSites": {
+    "message": "Associated Sites"
+  },
+  "extServiceSites": {
+    "message": "Service Sites"
+  },
+  "extNotBelongToRWS": {
+    "message": "This site does not belong to any $rws$.",
+    "placeholders": {
+      "rws": {
+        "content": "$1",
+        "example": "Related Website Set"
+      }
+    },
+    "extAssociatedSubset": {
+      "message": "Associated Subset"
+    },
+    "extAssociatedDomainsLimit": {
+      "message": "Browsers may enforce a limit on Associated Domains (e.g. Chrome's limit is 5)"
+    },
+    "extRationaleDomainCount": {
+      "message": "Rationale Domain #$index$",
+      "placeholders": {
+        "index": {
+          "content": "$1",
+          "example": "1"
+        }
+      }
+    },
+    "extAffiliationHeading": {
+      "message": "Affiliation to primary domain"
+    },
+    "extAffiliationNote": {
+      "message": "How is the affiliation across domains presented and why users would expect it"
+    },
+    "extContact": {
+      "message": "Contact"
+    },
+    "extContactNote": {
+      "message": "Email address or group alias if available"
+    },
+    "extCountryCodeHeading": {
+      "message": "Country Code Top-level Domains (ccTLDs)"
+    },
+    "extWhichSiteccTLD": {
+      "message": "For which site is this ccTLD?"
+    },
+    "extSelectSite": {
+      "message": "Select a site"
+    },
+    "extccTLDIdx": {
+      "message": "ccTLD #$index$",
+      "placeholders": {
+        "index": {
+          "content": "$1",
+          "example": "1"
+        }
+      }
+    },
+    "extCountryCodeNote": {
+      "message": "Country code top-level domain related to the site"
+    },
+    "extRWSJSONHeading": {
+      "message": "Here are your JSON resources"
+    },
+    "extFollowInstructions": {
+      "message": "Please follow the steps below to submit your $rws$ to the canonical list.",
+      "placeholders": {
+        "rws": {
+          "content": "$1",
+          "example": "Related Website Set"
+        }
+      }
+    },
+    "extCreatePR": {
+      "message": "Create $pr$",
+      "placeholders": {
+        "pr": {
+          "content": "$1",
+          "example": "Pull Request"
+        }
+      }
+    },
+    "extPRGuide": {
+      "message": "View $pr$ guide",
+      "placeholders": {
+        "pr": {
+          "content": "$1",
+          "example": "Pull Request"
+        }
+      }
+    }
+  },
+  "extCountrySites": {
+    "message": "Country Sites"
+  },
+  "extSetPrimaryDomain": {
+    "message": "Set Primary Domain"
+  },
+  "extServiceSubset": {
+    "message": "Service Subset"
+  },
+  "extServiceDomainIdx": {
+    "message": "Service Domain #$index$",
+    "placeholders": {
+      "index": {
+        "content": "$1",
+        "example": "1"
+      }
+    }
+  },
+  "extShouldMatchFormat": {
+    "message": "should be matching the format https://<example.com>"
+  },
+  "extSettingsChanged": {
+    "message": "Settings changed, please reload all tabs."
+  },
+  "extCookiesUsedByFrame": {
+    "message": "Cookies used by frames from $url$",
+    "placeholders": {
+      "url": {
+        "content": "$1",
+        "example": "https://example.com"
+      }
+    }
+  },
+  "extDisableCDP": {
+    "message": "Disable CDP"
+  },
+  "extEnableCDP": {
+    "message": "Enable CDP"
+  },
+  "extNoMoreAnalysis": {
+    "message": "Not much to analyze here"
+  },
+  "extEmptyCookieJar": {
+    "message": "Its emptier than a cookie jar after a midnight snack!"
+  },
+  "extAnalyzeThisTab": {
+    "message": "Analyze this tab"
+  },
+  "extFirstPartyCookies": {
+    "message": "1st Party Cookies"
+  },
+  "extThirdPartyCookies": {
+    "message": "3rd Party Cookies"
+  },
+  "extInspectInPSATPanel": {
+    "message": "Inspect cookies in the $PS$ panel of DevTools",
+    "placeholders": {
+      "PS": {
+        "content": "$1",
+        "example": "PSAT"
+      }
+    }
+  }
+}

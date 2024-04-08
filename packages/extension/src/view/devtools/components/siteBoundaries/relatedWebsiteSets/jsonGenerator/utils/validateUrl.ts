@@ -17,6 +17,7 @@
 /**
  * External dependencies.
  */
+import { I18n } from '@ps-analysis-tool/i18n';
 import { validate } from 'validate.js';
 
 const validateUrl = (url: string) => {
@@ -25,7 +26,7 @@ const validateUrl = (url: string) => {
     {
       url: {
         url: {
-          message: 'should be matching the format https://<example.com>',
+          message: I18n.getMessage('extShouldMatchFormat'),
           schemes: ['https'],
         },
       },

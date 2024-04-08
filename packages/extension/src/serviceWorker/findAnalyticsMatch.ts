@@ -17,6 +17,7 @@
 /**
  * Internal dependencies.
  */
+import { I18n } from '@ps-analysis-tool/i18n';
 import type {
   CookieAnalytics,
   CookieDatabase,
@@ -40,7 +41,7 @@ const wildTest = (wildcard: string, str: string): boolean => {
 
 export const emptyAnalytics = {
   platform: '',
-  category: 'Uncategorized',
+  category: I18n.getMessage('extUncategorized'),
   name: '',
   domain: '',
   description: '',
@@ -75,7 +76,8 @@ const findAnalyticsMatch = (
     }
   });
 
-  analytics.category = analytics.category || 'Uncategorized';
+  analytics.category =
+    analytics.category || I18n.getMessage('extUncategorized');
 
   return analytics;
 };

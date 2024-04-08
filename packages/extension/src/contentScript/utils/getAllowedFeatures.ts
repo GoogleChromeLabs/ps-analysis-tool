@@ -16,11 +16,12 @@
 /**
  * Internal dependencies.
  */
+import { I18n } from '@ps-analysis-tool/i18n';
 import { PS_RELATED_ALLOWED_FEATURES } from '../constants';
 
 const getAllowedFeatures = (iframe: HTMLElement) => {
   if (!iframe || !iframe?.featurePolicy) {
-    return 'Unknown';
+    return I18n.getMessage('extUnknown');
   }
 
   const featurePolicy = iframe?.featurePolicy;

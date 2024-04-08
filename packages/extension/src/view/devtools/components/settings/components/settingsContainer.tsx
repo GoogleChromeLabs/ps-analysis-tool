@@ -27,6 +27,7 @@ import { useSettings } from '../../../stateProviders';
 // eslint-disable-next-line import/no-relative-packages
 import Gear from '../../../../../../../../assets/icons/gear.svg';
 import { SETTING_PAGE_CONTROLS } from '../../../../../constants';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface settingsToReturnObject {
   id: string;
@@ -77,7 +78,7 @@ const SettingsContainer = () => {
       <div className="flex items-center flex-row pl-3 mb-2 gap-x-3">
         <Gear className="dark:text-bright-gray" />
         <span className="text-base font-bold dark:text-bright-gray">
-          PSAT Extension Settings
+          {I18n.getMessage('extPSATSettings')}
         </span>
       </div>
       <div className="rounded w-full divide-y divide-hex-gray dark:divide-quartz px-2 border border-american-silver dark:border-quartz">

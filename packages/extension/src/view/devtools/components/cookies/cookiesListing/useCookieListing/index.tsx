@@ -45,6 +45,7 @@ import { useCookie, useSettings } from '../../../../stateProviders';
 import useHighlighting from './useHighlighting';
 import NamePrefixIconSelector from './namePrefixIconSelector';
 import OrphanedUnMappedInfoDisplay from './orphanedUnMappedInfoDisplay';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const useCookieListing = (domainsInAllowList: Set<string>) => {
   const { selectedFrame, cookies, getCookiesSetByJavascript } = useCookie(
@@ -76,7 +77,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
-        header: 'Name',
+        header: I18n.getMessage('extName'),
         accessorKey: 'parsedCookie.name',
         cell: (info: InfoType) => info,
         enableHiding: false,
@@ -100,7 +101,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         },
       },
       {
-        header: 'Scope',
+        header: I18n.getMessage('extScope'),
         accessorKey: 'isFirstParty',
         cell: (info: InfoType) => (
           <p className="truncate w-full">
@@ -110,37 +111,37 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         widthWeightagePercentage: 6,
       },
       {
-        header: 'Domain',
+        header: I18n.getMessage('extDomain'),
         accessorKey: 'parsedCookie.domain',
         cell: (info: InfoType) => info,
         widthWeightagePercentage: 8,
       },
       {
-        header: 'Partition Key',
+        header: I18n.getMessage('extPartitionKey'),
         accessorKey: 'parsedCookie.partitionKey',
         cell: (info: InfoType) => info,
         widthWeightagePercentage: 8,
       },
       {
-        header: 'SameSite',
+        header: I18n.getMessage('extSameSite'),
         accessorKey: 'parsedCookie.samesite',
         cell: (info: InfoType) => <span className="capitalize">{info}</span>,
         widthWeightagePercentage: 6,
       },
       {
-        header: 'Category',
+        header: I18n.getMessage('extCategory'),
         accessorKey: 'analytics.category',
         cell: (info: InfoType) => info,
         widthWeightagePercentage: 7.5,
       },
       {
-        header: 'Platform',
+        header: I18n.getMessage('extPlatform'),
         accessorKey: 'analytics.platform',
         cell: (info: InfoType) => <span>{info ? info : 'Unknown'}</span>,
         widthWeightagePercentage: 7.5,
       },
       {
-        header: 'HttpOnly',
+        header: I18n.getMessage('extHttpOnly'),
         accessorKey: 'parsedCookie.httponly',
         cell: (info: InfoType) => (
           <p className="flex justify-center items-center">
@@ -150,7 +151,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         widthWeightagePercentage: 4,
       },
       {
-        header: 'Secure',
+        header: I18n.getMessage('extSecure'),
         accessorKey: 'parsedCookie.secure',
         cell: (info: InfoType) => (
           <p className="flex justify-center items-center">
@@ -160,39 +161,39 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         widthWeightagePercentage: 4,
       },
       {
-        header: 'Value',
+        header: I18n.getMessage('extValue'),
         accessorKey: 'parsedCookie.value',
         cell: (info: InfoType) => info,
         widthWeightagePercentage: 7,
       },
       {
-        header: 'Path',
+        header: I18n.getMessage('extPath'),
         accessorKey: 'parsedCookie.path',
         cell: (info: InfoType) => info,
         widthWeightagePercentage: 3.5,
       },
       {
-        header: 'Expires / Max-Age',
+        header: I18n.getMessage('extExpires'),
         accessorKey: 'parsedCookie.expires',
         cell: (info: InfoType) => (info ? info : 'Session'),
         widthWeightagePercentage: 6,
       },
       {
-        header: 'Priority',
+        header: I18n.getMessage('extPriority'),
         accessorKey: 'parsedCookie.priority',
         isHiddenByDefault: true,
         cell: (info: InfoType) => info,
         widthWeightagePercentage: 4,
       },
       {
-        header: 'Size',
+        header: I18n.getMessage('extSize'),
         accessorKey: 'parsedCookie.size',
         isHiddenByDefault: true,
         cell: (info: InfoType) => info,
         widthWeightagePercentage: 3,
       },
       {
-        header: 'Mapping',
+        header: I18n.getMessage('extMapping'),
         accessorKey: 'frameIdList',
         isHiddenByDefault: true,
         cell: (info: InfoType) => (
@@ -201,7 +202,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         widthWeightagePercentage: 6.6,
       },
       {
-        header: 'Blocking Status',
+        header: I18n.getMessage('extBlockingStatus'),
         accessorKey: 'isBlocked',
         isHiddenByDefault: true,
         widthWeightagePercentage: 5.4,
@@ -229,14 +230,16 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
             return (
               <span
                 className="flex"
-                title="Please take a look at the network tab to get this cookie's blocking information."
+                title={I18n.getMessage('extLookAtNetworkTab')}
               >
                 <InfoIcon className="fill-granite-gray" />
-                Undetermined
+                {I18n.getMessage('extUndetermined')}
               </span>
             );
           } else if (hasValidBlockedReason) {
-            return <span className="flex">Blocked</span>;
+            return (
+              <span className="flex">{I18n.getMessage('extBlocked')}</span>
+            );
           } else {
             return <></>;
           }
@@ -249,7 +252,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
   const filters = useMemo<TableFilter>(
     () => ({
       'analytics.category': {
-        title: 'Category',
+        title: I18n.getMessage('extCategory'),
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
         filterValues: calculateDynamicFilterValues(
@@ -262,15 +265,15 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         useGenericPersistenceKey: true,
       },
       isFirstParty: {
-        title: 'Scope',
+        title: I18n.getMessage('extCategory'),
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
         filterValues: evaluateStaticFilterValues(
           {
-            'First Party': {
+            [I18n.getMessage('extFirstParty')]: {
               selected: false,
             },
-            'Third Party': {
+            [I18n.getMessage('extThirdParty')]: {
               selected: false,
             },
           },
@@ -281,31 +284,31 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           const val = Boolean(value);
-          return val === (filterValue === 'First Party');
+          return val === (filterValue === I18n.getMessage('extFirstParty'));
         },
       },
       'parsedCookie.domain': {
-        title: 'Domain',
+        title: I18n.getMessage('extDomain'),
       },
       'parsedCookie.httponly': {
-        title: 'HttpOnly',
+        title: I18n.getMessage('extHttpOnly'),
         hasStaticFilterValues: true,
         filterValues: {
-          True: {
+          [I18n.getMessage('extTrue')]: {
             selected: false,
           },
-          False: {
+          [I18n.getMessage('extFalse')]: {
             selected: false,
           },
         },
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           const val = Boolean(value);
-          return val === (filterValue === 'True');
+          return val === (filterValue === I18n.getMessage('extTrue'));
         },
       },
       'parsedCookie.samesite': {
-        title: 'SameSite',
+        title: I18n.getMessage('extSameSite'),
         hasStaticFilterValues: true,
         filterValues: {
           None: {
@@ -325,42 +328,42 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         },
       },
       'parsedCookie.secure': {
-        title: 'Secure',
+        title: I18n.getMessage('extSecure'),
         hasStaticFilterValues: true,
         filterValues: {
-          True: {
+          [I18n.getMessage('extTrue')]: {
             selected: false,
           },
-          False: {
+          [I18n.getMessage('extFalse')]: {
             selected: false,
           },
         },
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           const val = Boolean(value);
-          return val === (filterValue === 'True');
+          return val === (filterValue === I18n.getMessage('extTrue'));
         },
       },
       'parsedCookie.path': {
-        title: 'Path',
+        title: I18n.getMessage('extPath'),
       },
       'parsedCookie.expires': {
-        title: 'Retention Period',
+        title: I18n.getMessage('extRetentionPeriod'),
         hasStaticFilterValues: true,
         filterValues: {
-          Session: {
+          [I18n.getMessage('extSession')]: {
             selected: false,
           },
-          'Short Term (< 24h)': {
+          [I18n.getMessage('extShortTerm')]: {
             selected: false,
           },
-          'Medium Term (24h - 1 week)': {
+          [I18n.getMessage('extMediumTerm')]: {
             selected: false,
           },
-          'Long Term (1 week - 1 month)': {
+          [I18n.getMessage('extLongTerm')]: {
             selected: false,
           },
-          'Extended Term (> 1 month)': {
+          [I18n.getMessage('extExtentedTerm')]: {
             selected: false,
           },
         },
@@ -369,22 +372,22 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
           let diff = 0;
           const val = value as string;
           switch (filterValue) {
-            case 'Session':
-              return val === 'Session';
+            case I18n.getMessage('extSession'):
+              return val === I18n.getMessage('extSession');
 
-            case 'Short Term (< 24h)':
+            case I18n.getMessage('extShortTerm'):
               diff = Date.parse(val) - Date.now();
               return diff < 86400000;
 
-            case 'Medium Term (24h - 1 week)':
+            case I18n.getMessage('extMediumTerm'):
               diff = Date.parse(val) - Date.now();
               return diff >= 86400000 && diff < 604800000;
 
-            case 'Long Term (1 week - 1 month)':
+            case I18n.getMessage('extLongTerm'):
               diff = Date.parse(val) - Date.now();
               return diff >= 604800000 && diff < 2629743833;
 
-            case 'Extended Term (> 1 month)':
+            case I18n.getMessage('extExtentedTerm'):
               diff = Date.parse(val) - Date.now();
               return diff >= 2629743833;
 
@@ -394,7 +397,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         },
       },
       'analytics.platform': {
-        title: 'Platform',
+        title: I18n.getMessage('extPlatform'),
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
         filterValues: calculateDynamicFilterValues(
@@ -407,7 +410,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         useGenericPersistenceKey: true,
       },
       blockedReasons: {
-        title: 'Blocked Reasons',
+        title: I18n.getMessage('extBlockedReasons'),
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
         enableSelectAllOption: true,
@@ -428,39 +431,41 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         },
       },
       'parsedCookie.partitionKey': {
-        title: 'Partition Key',
+        title: I18n.getMessage('extPartitionKey'),
         hasStaticFilterValues: true,
         filterValues: {
-          Set: {
+          [I18n.getMessage('extSet')]: {
             selected: false,
           },
-          'Not Set': {
+          [I18n.getMessage('extNotSet')]: {
             selected: false,
           },
         },
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           const val = value as string;
-          return val ? filterValue === 'Set' : filterValue === 'Not Set';
+          return val
+            ? filterValue === I18n.getMessage('extSet')
+            : filterValue === I18n.getMessage('extNotSet');
         },
       },
       headerType: {
-        title: 'Set Via',
+        title: I18n.getMessage('extSetVia'),
         hasStaticFilterValues: true,
         filterValues: {
-          HTTP: {
+          [I18n.getMessage('extHttp')]: {
             selected: false,
           },
-          JS: {
+          [I18n.getMessage('extJS')]: {
             selected: false,
           },
         },
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           switch (filterValue) {
-            case 'JS':
+            case I18n.getMessage('extJS'):
               return value === 'javascript';
-            case 'HTTP':
+            case I18n.getMessage('extHttp'):
               return value === 'request' || value === 'response';
             default:
               return true;
@@ -468,7 +473,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         },
       },
       'parsedCookie.priority': {
-        title: 'Priority',
+        title: I18n.getMessage('extPriority'),
         hasStaticFilterValues: true,
         filterValues: {
           Low: {
@@ -504,7 +509,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
     return (
       <RefreshButton
         onClick={getCookiesSetByJavascript}
-        title="Refresh Cookies Set via Javascript"
+        title={I18n.getMessage('extRefreshJSCookies')}
       />
     );
   }, [getCookiesSetByJavascript]);

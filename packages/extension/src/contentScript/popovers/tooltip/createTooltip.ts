@@ -28,6 +28,7 @@ import {
 import type { ResponseType } from '../../types';
 import createShowMoreButton from './createShowMoreButton';
 import createTooltipHTML from './createTooltipHTML';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Creates a tooltip element for an iframe overlay.
@@ -81,13 +82,21 @@ const createTooltip = (
   }
 
   const infoData = getTooltipInfoData(
-    getFrameType(isHidden, insideFrame, frame ? frame.tagName : 'Unknown'),
+    getFrameType(
+      isHidden,
+      insideFrame,
+      frame ? frame.tagName : I18n.getMessage('extUnknown')
+    ),
     origin ?? '',
     numberOfVisibleFrames,
     numberOfHiddenFrames,
     data?.firstPartyCookies || 0,
     data?.thirdPartyCookies || 0,
-    origin ? (data?.isOnRWS ? 'Yes' : 'No') : 'N/A',
+    origin
+      ? data?.isOnRWS
+        ? I18n.getMessage('yes')
+        : I18n.getMessage('no')
+      : 'N/A',
     allowedFeatured,
     DISPLAY_SHOW_MORE_BUTTON,
     data?.blockedCookies || 0,

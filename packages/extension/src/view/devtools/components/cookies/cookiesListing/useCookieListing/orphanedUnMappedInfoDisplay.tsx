@@ -24,6 +24,7 @@ import { InfoIcon } from '@ps-analysis-tool/design-system';
  * Internal dependencies
  */
 import { useCookie } from '../../../../stateProviders';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface OrphanedUnMappedInfoDisplayProps {
   frameIdList: number[];
@@ -40,12 +41,9 @@ const OrphanedUnMappedInfoDisplay = ({
 
   if (frameIdList.length === 0) {
     return (
-      <span
-        className="flex"
-        title="Cookies that could not be mapped to any frame."
-      >
+      <span className="flex" title={I18n.getMessage('extCouldNotMapCookies')}>
         <InfoIcon className="fill-granite-gray" />
-        <span className="ml-[2px] block">Unmapped</span>
+        <span className="ml-[2px] block">{I18n.getMessage('extUnmapped')}</span>
       </span>
     );
   }
@@ -72,12 +70,9 @@ const OrphanedUnMappedInfoDisplay = ({
 
   if (!hasFrame) {
     return (
-      <span
-        className="flex"
-        title="Frames that set these cookies were removed from the DOM, leaving these cookies orphaned."
-      >
+      <span className="flex" title={I18n.getMessage('extOrphanedCookies')}>
         <InfoIcon className="fill-granite-gray" />
-        <span className="ml-[2px] block">Orphaned</span>
+        <span className="ml-[2px] block">{I18n.getMessage('extOrphaned')}</span>
       </span>
     );
   }

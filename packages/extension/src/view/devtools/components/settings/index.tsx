@@ -24,6 +24,7 @@ import { ArrowUp } from '@ps-analysis-tool/design-system';
  * Internal dependencies
  */
 import { InformationContainer, SettingsContainer } from './components';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const Settings = () => {
   const [open, setOpen] = useState(true);
@@ -45,7 +46,7 @@ const Settings = () => {
             className="flex gap-2 text-2xl font-bold items-baseline dark:text-bright-gray cursor-pointer"
             onClick={() => setOpen((prevOpen) => !prevOpen)}
           >
-            <h1 className="text-left">Settings</h1>
+            <h1 className="text-left">{I18n.getMessage('extSettings')}</h1>
             <div>
               <ArrowUp
                 className={classNames(open && 'rotate-180 -translate-y-1')}

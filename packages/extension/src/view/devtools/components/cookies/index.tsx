@@ -30,6 +30,7 @@ import { type CookieTableData } from '@ps-analysis-tool/common';
 import { useCookie, useSettings } from '../../stateProviders';
 import CookiesListing from './cookiesListing';
 import AssembledCookiesLanding from './cookieLanding';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface CookiesProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;
@@ -96,7 +97,10 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
   return (
     <div className="w-full h-screen overflow-hidden bg-white dark:bg-raisin-black">
       <div className="w-full h-full flex flex-col items-center justify-center">
-        <Button onClick={changeListeningToThisTab} text="Analyze this tab" />
+        <Button
+          onClick={changeListeningToThisTab}
+          text={I18n.getMessage('extAnalyzeThisTab')}
+        />
       </div>
     </div>
   );

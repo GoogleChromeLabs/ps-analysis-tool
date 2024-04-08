@@ -30,6 +30,7 @@ import type {
 import PrimaryDomainOutput from './primaryDomainOutput';
 import OtherDomainOutput from './otherDomainOutput';
 import PullRequestOutput from './pullRequestOutput';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface JsonOutputProps {
   primaryWellKnownOutput: PrimaryWellKnownOutputType | null;
@@ -64,11 +65,12 @@ const JsonOutput = ({
           className="mt-6 divide-y divide-american-silver dark:divide-quartz"
         >
           <h4 className="text-lg my-4 font-semibold">
-            Here are your JSON resources:
+            {I18n.getMessage('extRWSJSONHeading')}:
             <br />
             <span className="text-sm font-normal">
-              Please follow the steps below to submit your Related Website Set
-              to the canonical list.
+              {I18n.getMessage('extFollowInstructions', [
+                'Related Website Set',
+              ])}
             </span>
           </h4>
           <PrimaryDomainOutput
@@ -86,7 +88,7 @@ const JsonOutput = ({
               target="_blank"
               rel="noreferrer"
             >
-              <Button text={'Create Pull Request'} />
+              <Button text={I18n.getMessage('extCreatePR', ['Pull Request'])} />
             </a>
             <a
               title="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork"
@@ -97,7 +99,7 @@ const JsonOutput = ({
               <Button
                 text={
                   <>
-                    View pull request guide
+                    {I18n.getMessage('extPRGuide', ['Pull Request'])}
                     <span className="w-4 h-4 ml-2 inline-block">
                       <ArrowRight />
                     </span>
