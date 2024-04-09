@@ -18,21 +18,29 @@
  * External dependencies.
  */
 import React from 'react';
-import { LandingPage } from '@ps-analysis-tool/design-system';
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 
 /**
  * Internal dependencies.
  */
-import FacilitatedTestingContent from './faciliatedTestingContent';
+import SitesList from '../sitesList';
 
-const FacilitatedTesting = () => (
-  <div data-testid="facilitated-testing-content" className="h-full w-full">
-    <LandingPage
-      title="Facilitated Testing"
-      contentPanel={<FacilitatedTestingContent />}
-      extraClasses="2xl:max-w-6xl xl:max-w-4xl max-w-2xl h-fit"
-    />
-  </div>
-);
+describe('RelatedWebsiteSets Insights SitesList', () => {
+  test('should render nothing', () => {
+    const { container } = render(
+      <SitesList title="Associated sites" sites={[]} />
+    );
 
-export default FacilitatedTesting;
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  test('should render sites', () => {
+    render(
+      <SitesList title="Associated sites" sites={['https://livemint.com']} />
+    );
+
+    expect(screen.getByText('Associated sites')).toBeInTheDocument();
+    expect(screen.getByText('https://livemint.com')).toBeInTheDocument();
+  });
+});
