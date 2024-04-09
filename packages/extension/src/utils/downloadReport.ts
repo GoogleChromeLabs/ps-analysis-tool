@@ -21,13 +21,11 @@ import type {
   TabCookies,
   TabFrames,
 } from '@ps-analysis-tool/common';
-import {
-  prepareCookieStatsComponents,
-  prepareCookiesCount,
-  prepareFrameStatsComponent,
-  type DataMapping,
-} from '@ps-analysis-tool/design-system';
 import { saveAs } from 'file-saver';
+/**
+ * Internal dependencies.
+ */
+import generateReportObject from './generateReportObject';
 
 /**
  * Utility function to download report.
@@ -46,50 +44,16 @@ export default async function downloadReport(
   const parser = new DOMParser();
   const reportDom = parser.parseFromString(htmlText, 'text/html');
 
-  const cookieStats = prepareCookiesCount(tabCookies);
-  const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
-  const frameStateCreator = prepareFrameStatsComponent(tabFrames, tabCookies);
-
-  const cookieClassificationDataMapping: DataMapping[] = [
-    {
-      title: 'Total cookies',
-      count: cookieStats.total,
-      data: cookiesStatsComponents.legend,
-    },
-    {
-      title: '1st party cookies',
-      count: cookieStats.firstParty.total,
-      data: cookiesStatsComponents.firstParty,
-    },
-    {
-      title: '3rd party cookies',
-      count: cookieStats.thirdParty.total,
-      data: cookiesStatsComponents.thirdParty,
-    },
-  ];
-
-  const blockedCookieDataMapping: DataMapping[] = [
-    {
-      title: 'Blocked cookies',
-      count: cookieStats.blockedCookies.total,
-      data: cookiesStatsComponents.blocked,
-    },
-  ];
-
   // Injections
   const script = reportDom.createElement('script');
-  const code = `window.PSAT_DATA = ${JSON.stringify({
-    cookieClassificationDataMapping,
+
+  const reportData = generateReportObject(
     tabCookies,
-    cookiesStatsComponents,
     tabFrames,
-    showInfoIcon: true,
-    showHorizontalMatrix: false,
-    blockedCookieDataMapping,
-    showBlockedInfoIcon: true,
-    frameStateCreator,
-    libraryMatches,
-  })}`;
+    libraryMatches
+  );
+
+  const code = `window.PSAT_DATA = ${JSON.stringify(reportData)}`;
 
   script.text = code;
   reportDom.head.appendChild(script);
