@@ -138,6 +138,9 @@ class SynchnorousCookieStore {
                 ? this.tabsData[tabId][cookieKey].headerType
                 : cookie.headerType,
             frameIdList,
+            exemptionReason:
+              cookie?.exemptionReason ||
+              this.tabsData[tabId][cookieKey]?.exemptionReason,
           };
         } else {
           this.tabs[tabId].newUpdates++;
@@ -236,7 +239,6 @@ class SynchnorousCookieStore {
     if (!this.tabsData[tabId]) {
       return;
     }
-    // Check if primaryDomain cookie exists
     if (this.tabsData[tabId] && this.tabsData[tabId][cookieName]) {
       this.tabsData[tabId][cookieName].blockedReasons = [
         ...new Set([
@@ -254,7 +256,6 @@ class SynchnorousCookieStore {
       this.tabsData[tabId][cookieName].isBlocked =
         exclusionReasons.length > 0 ? true : false;
       this.tabs[tabId].newUpdates++;
-      // Check if secondaryDomain cookie exists
     } else {
       this.tabs[tabId].newUpdates++;
       // If none of them exists. This case is possible when the cookies hasnt processed and we already have an issue.

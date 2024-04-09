@@ -140,6 +140,9 @@ const EMPTY_STATS = {
   blockedCookies: {
     total: 0,
   },
+  exemptedCookies: {
+    total: 0,
+  },
   firstParty: {
     total: 0,
     functional: 0,
@@ -180,6 +183,9 @@ describe('prepareCookiesCount : ', () => {
     const expectedStats = {
       total: 8,
       blockedCookies: {
+        total: 0,
+      },
+      exemptedCookies: {
         total: 0,
       },
       firstParty: {

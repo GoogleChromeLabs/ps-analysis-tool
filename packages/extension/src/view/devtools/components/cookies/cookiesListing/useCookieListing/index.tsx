@@ -22,6 +22,7 @@ import {
   type CookieTableData,
   type TabCookies,
   BLOCK_STATUS,
+  filterCookiesByFrame,
 } from '@ps-analysis-tool/common';
 import {
   RefreshButton,
@@ -36,6 +37,7 @@ import {
   calculateBlockedReasonsFilterValues,
   type TableData,
   InfoIcon,
+  calculateExemptionReason,
 } from '@ps-analysis-tool/design-system';
 
 /**
@@ -47,19 +49,24 @@ import NamePrefixIconSelector from './namePrefixIconSelector';
 import OrphanedUnMappedInfoDisplay from './orphanedUnMappedInfoDisplay';
 
 const useCookieListing = (domainsInAllowList: Set<string>) => {
-  const { selectedFrame, cookies, getCookiesSetByJavascript } = useCookie(
-    ({ state, actions }) => ({
+  const { selectedFrame, cookies, getCookiesSetByJavascript, tabFrames } =
+    useCookie(({ state, actions }) => ({
       selectedFrame: state.selectedFrame,
       cookies: state.tabCookies || {},
+      tabFrames: state.tabFrames,
       getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
-    })
-  );
+    }));
 
   const { activePanelQuery, clearActivePanelQuery } = useSidebar(
     ({ state }) => ({
       activePanelQuery: state.activePanel.query,
       clearActivePanelQuery: state.activePanel.clearQuery,
     })
+  );
+
+  const frameFilteredCookies = useMemo(
+    () => filterCookiesByFrame(cookies, tabFrames, selectedFrame),
+    [cookies, selectedFrame, tabFrames]
   );
 
   const parsedQuery = useMemo(
@@ -483,8 +490,27 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         },
         useGenericPersistenceKey: true,
       },
+      exemptionReason: {
+        title: 'Exemption Reason',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        enableSelectAllOption: true,
+        isSelectAllOptionSelected: evaluateSelectAllOption(
+          'exemptionReason',
+          parsedQuery
+        ),
+        filterValues: calculateExemptionReason(
+          frameFilteredCookies,
+          clearActivePanelQuery,
+          parsedQuery?.filter?.exemptionReason
+        ),
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = value as string;
+          return val === filterValue;
+        },
+      },
     }),
-    [clearActivePanelQuery, cookies, parsedQuery]
+    [clearActivePanelQuery, cookies, frameFilteredCookies, parsedQuery]
   );
 
   const searchKeys = useMemo<string[]>(

@@ -427,6 +427,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       blockedCookies,
       requestId,
       cookiePartitionKey = '',
+      exemptedCookies = [],
     } = responseParams;
 
     // Sometimes CDP gives "set-cookie" and sometimes it gives "Set-Cookie".
@@ -437,6 +438,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
     const cookies: CookieData[] = parseResponseReceivedExtraInfo(
       headers,
       blockedCookies,
+      exemptedCookies,
       cookiePartitionKey,
       requestIdToCDPURLMapping[tabId],
       url ?? '',

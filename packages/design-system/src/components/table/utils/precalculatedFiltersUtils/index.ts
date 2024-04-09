@@ -18,3 +18,4 @@ export { default as calculateDynamicFilterValues } from './calculateDynamicFilte
 export { default as evaluateStaticFilterValues } from './evaluateStaticFilterValues';
 export { default as evaluateSelectAllOption } from './evaluateSelectAllOption';
 export { default as calculateBlockedReasonsFilterValues } from './calculateBlockedReasonsFilterValues';
+export { default as calculateExemptionReason } from './calculateExemptionReasons';

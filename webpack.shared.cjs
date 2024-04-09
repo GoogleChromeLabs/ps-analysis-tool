@@ -26,6 +26,9 @@ module.exports = {
         exclude: /node_modules/,
         resolve: {
           fullySpecified: false,
+          fallback: {
+            fs: false,
+          },
         },
         use: [
           {

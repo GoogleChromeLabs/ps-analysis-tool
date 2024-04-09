@@ -17,11 +17,15 @@
  * External dependencies
  */
 import React, { useMemo } from 'react';
-import { LibraryDetection } from '@ps-analysis-tool/library-detection';
+import {
+  LibraryDetection,
+  useLibraryDetectionContext,
+} from '@ps-analysis-tool/library-detection';
 import {
   MenuBar,
   type CookiesLandingSection,
   type MenuData,
+  prepareCookiesCount,
 } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies
@@ -29,10 +33,27 @@ import {
 import CookiesSection from './cookiesSection';
 import FramesSection from './framesSection';
 import BlockedCookiesSection from './blockedCookiesSection';
+import { useCookie } from '../../../stateProviders';
+import downloadReport from '../../../../../utils/downloadReport';
+import ExemptedCookiesSection from './exemptedCookiesSection';
 
 const AssembledCookiesLanding = () => {
-  const sections: Array<CookiesLandingSection> = useMemo(
-    () => [
+  const { url, tabCookies, tabFrames } = useCookie(({ state }) => ({
+    tabCookies: state.tabCookies,
+    tabFrames: state.tabFrames,
+    url: state.tabUrl,
+  }));
+
+  const { libraryMatches, showLoader } = useLibraryDetectionContext(
+    ({ state }) => ({
+      libraryMatches: state.libraryMatches,
+      showLoader: state.showLoader,
+    })
+  );
+
+  const cookieStats = prepareCookiesCount(tabCookies);
+  const sections: Array<CookiesLandingSection> = useMemo(() => {
+    const defaultSections = [
       {
         name: 'Cookies',
         link: 'cookies',
@@ -61,9 +82,18 @@ const AssembledCookiesLanding = () => {
           Element: FramesSection,
         },
       },
-    ],
-    []
-  );
+    ];
+    if (cookieStats.exemptedCookies.total > 0) {
+      defaultSections.splice(2, 0, {
+        name: 'Exemption Reason',
+        link: 'exemption-reasons',
+        panel: {
+          Element: ExemptedCookiesSection,
+        },
+      });
+    }
+    return defaultSections;
+  }, [cookieStats.exemptedCookies.total]);
 
   const menuData: MenuData = useMemo(
     () => sections.map(({ name, link }) => ({ name, link })),
@@ -73,6 +103,12 @@ const AssembledCookiesLanding = () => {
   return (
     <>
       <MenuBar
+        disableReportDownload={showLoader}
+        downloadReport={() => {
+          if (tabCookies && tabFrames && libraryMatches && url) {
+            downloadReport(url, tabCookies, tabFrames, libraryMatches);
+          }
+        }}
         menuData={menuData}
         scrollContainerId="cookies-landing-scroll-container"
       />

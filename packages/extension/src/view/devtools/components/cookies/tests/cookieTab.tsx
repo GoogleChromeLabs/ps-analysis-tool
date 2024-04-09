@@ -382,4 +382,7 @@ describe('CookieTab', () => {
       await within(card).findByText('known3p_Cookie-with value')
     ).toBeInTheDocument();
   });
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
 });
