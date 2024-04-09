@@ -25,16 +25,16 @@ const PACKAGES = [
   'design-system',
   'extension',
 ];
-const commonPath = 'packages/i18n/_locales';
-const target = `${commonPath}/messages/en/messages.json`;
+const COMMON_PATH = 'packages/i18n/_locales';
+const TARGET = `${COMMON_PATH}/messages/en/messages.json`;
 
 const main = () => {
-  fs.writeFileSync(target, '{}');
+  fs.writeFileSync(TARGET, '{}');
 
   const messages = {};
 
   PACKAGES.forEach((pkg) => {
-    const path = `${commonPath}/packages/${pkg}/messages.json`;
+    const path = `${COMMON_PATH}/packages/${pkg}/messages.json`;
     const data = fs.readFileSync(path, 'utf8') || '{}';
     const parsed = JSON.parse(data);
 
@@ -49,7 +49,7 @@ const main = () => {
     });
   });
 
-  fs.writeFileSync(target, JSON.stringify(messages, null, 2));
+  fs.writeFileSync(TARGET, JSON.stringify(messages, null, 2));
 };
 
 main();
