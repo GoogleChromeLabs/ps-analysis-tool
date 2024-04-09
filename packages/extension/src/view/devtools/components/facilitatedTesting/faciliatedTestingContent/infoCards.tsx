@@ -20,9 +20,11 @@
 import React from 'react';
 import { addUTMParams } from '@ps-analysis-tool/common';
 
+const EXPERIMENT_GROUP = 'Membership in Experiment Group';
+
 const INFO_CARDS_DATA = [
   {
-    heading: 'Membership in Experiment Group',
+    heading: EXPERIMENT_GROUP,
     content: `To prepare for third-party cookie deprecation, we will be providing Chrome-facilitated testing modes that allow sites to preview how site behavior and functionality work without third-party cookies. Check <a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" 
     href="${addUTMParams(
       'https://developers.google.com/privacy-sandbox/setup/web/chrome-facilitated-testing'
@@ -72,6 +74,15 @@ const InfoCards = () => {
                 className="text-sm break-words"
                 dangerouslySetInnerHTML={{ __html: card.content }}
               />
+              {card.heading === EXPERIMENT_GROUP && (
+                <div className="p-3 flex-1 bg-anti-flash-white dark:bg-charleston-green rounded-md">
+                  <p>
+                    For browsers in the 1% group, users will get a new
+                    chrome://settings/trackingProtection page instead of
+                    chrome://settings/cookies
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </li>

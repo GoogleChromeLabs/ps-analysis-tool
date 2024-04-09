@@ -156,6 +156,19 @@ const CookieTable = forwardRef<
     return Boolean(isDomainInAllowList);
   }, []);
 
+  const isRowSelected = useCallback(
+    (cookie: TableData | null) => {
+      const _cookie = cookie as CookieTableData;
+      if (!_cookie) {
+        return true;
+      }
+
+      const tableCookieKey = getCookieKey(_cookie.parsedCookie);
+      return tableCookieKey === selectedKey;
+    },
+    [selectedKey]
+  );
+
   useEffect(() => {
     window.addEventListener('resize', () => forceUpdate());
     return () => {
@@ -178,6 +191,7 @@ const CookieTable = forwardRef<
         conditionalTableRowClassesHandler={_conditionalTableRowClassesHandler}
         exportTableData={!hideExport ? exportCookies : undefined}
         hasVerticalBar={hasVerticalBar}
+        isRowSelected={isRowSelected}
       >
         <Table
           selectedKey={selectedKey}

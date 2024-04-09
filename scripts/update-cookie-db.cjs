@@ -82,6 +82,39 @@ const errorHandler = (err) => {
 };
 
 /**
+ * Add keys to the locale file and replace the text with keys in the formattedData.
+ * @param formattedData formatted data
+ */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const addKeysToLocale = async (formattedData) => {
+  const messagesPath = path.resolve(
+    'packages/i18n/_locales/messages/en/messages.json'
+  );
+  const messages = await fs.readJson(messagesPath);
+
+  const regex = /[:/ *-.%“”()[\]]/g;
+
+  Object.entries(formattedData).forEach(([key, [value]]) => {
+    const descriptionKey = `OCD_${key.replace(regex, '_')}_description`;
+    messages[descriptionKey] = {
+      message: value.description,
+      description: 'Description of the cookie from the Open Cookie DB',
+    };
+    value.description = descriptionKey;
+
+    const retentionKey = `OCD_retention_${value.retention.replace(regex, '_')}`;
+    messages[retentionKey] = {
+      message: value.retention,
+      description: 'Retention period of the cookie from the Open Cookie DB',
+    };
+
+    value.retention = retentionKey;
+  });
+
+  await fs.writeJson(messagesPath, messages, { spaces: 2 });
+};
+
+/**
  * Download the csv file from the Open Cookie DB, format the data and write it to open-cookie-database.json.
  */
 const main = async () => {
