@@ -34,10 +34,12 @@ import {
  */
 function deriveInboundBlocking(respEvents: responsEvent[]): BLOCK_STATUS {
   // if there are not response events the cookie must be stored in a previous visit
+  // Or there is a javascript not used in the request header.
   if (respEvents.length === 0) {
     return BLOCK_STATUS.NOT_BLOCKED;
   }
 
+  // Number of responses in which the cookie was blocked.
   const numBlocked: number = respEvents.reduce((acc, event) => {
     if (event.blocked) {
       return acc + 1;

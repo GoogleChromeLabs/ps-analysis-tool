@@ -37,11 +37,11 @@ const generateSummaryDataCSV = (siteAnalysisData: CompleteJson): string => {
   let functionalCookies = 0;
   let marketingCookies = 0;
   let uncategorisedCookies = 0;
-  let affectedCookies = 0;
-  let affectedAnalyticsCookies = 0;
-  let affectedFunctionalCookies = 0;
-  let affectedMarketingCookies = 0;
-  let affectedUncategorisedCookies = 0;
+  let cookiesWithIssues = 0;
+  let analyticsCookiesWithIssues = 0;
+  let functionalCookiesWithIssues = 0;
+  let marketingCookiesWithIssues = 0;
+  let uncategorisedCookiesWithIssues = 0;
 
   for (const cookie of cookieMap.values()) {
     if (cookie.isFirstParty) {
@@ -51,32 +51,32 @@ const generateSummaryDataCSV = (siteAnalysisData: CompleteJson): string => {
     }
 
     if (cookie.isBlocked) {
-      affectedCookies += 1;
+      cookiesWithIssues += 1;
     }
 
     switch (cookie.analytics.category) {
       case 'Analytics':
         analyticsCookies += 1;
         if (cookie.isBlocked) {
-          affectedAnalyticsCookies += 1;
+          analyticsCookiesWithIssues += 1;
         }
         break;
       case 'Functional':
         functionalCookies += 1;
         if (cookie.isBlocked) {
-          affectedFunctionalCookies += 1;
+          functionalCookiesWithIssues += 1;
         }
         break;
       case 'Marketing':
         marketingCookies += 1;
         if (cookie.isBlocked) {
-          affectedMarketingCookies += 1;
+          marketingCookiesWithIssues += 1;
         }
         break;
       case 'Uncategorized':
         uncategorisedCookies += 1;
         if (cookie.isBlocked) {
-          affectedUncategorisedCookies += 1;
+          uncategorisedCookiesWithIssues += 1;
         }
         break;
       default:
@@ -92,11 +92,11 @@ const generateSummaryDataCSV = (siteAnalysisData: CompleteJson): string => {
     'Functional Cookies': functionalCookies,
     'Marketing Cookies': marketingCookies,
     'Uncategorized Cookies': uncategorisedCookies,
-    'Affected Cookies': affectedCookies,
-    'Affected Analytics Cookies': affectedAnalyticsCookies,
-    'Affected Functional Cookies': affectedFunctionalCookies,
-    'Affected Marketing Cookies': affectedMarketingCookies,
-    'Affected Uncategorized Cookies': affectedUncategorisedCookies,
+    'Cookies With Issues': cookiesWithIssues,
+    'Analytics Cookies With Issues': analyticsCookiesWithIssues,
+    'Functional Cookies With Issues': functionalCookiesWithIssues,
+    'Marketing Cookies With Issues': marketingCookiesWithIssues,
+    'Uncategorized Cookies With Issues': uncategorisedCookiesWithIssues,
   };
 
   const CSVString = Object.entries(summary).reduce(

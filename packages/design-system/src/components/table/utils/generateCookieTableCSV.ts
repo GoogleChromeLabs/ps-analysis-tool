@@ -32,7 +32,7 @@ const COOKIES_TABLE_DATA_HEADER = [
   'Value',
   'Path',
   'Expires',
-  'Cookie Affected',
+  'Issues',
   'GDPRPortal',
   'Priority',
   'Size',

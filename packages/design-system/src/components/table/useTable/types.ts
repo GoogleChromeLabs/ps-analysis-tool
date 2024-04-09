@@ -54,6 +54,7 @@ export type TableFilter = {
     hasStaticFilterValues?: boolean;
     hasPrecalculatedFilterValues?: boolean;
     enableSelectAllOption?: boolean;
+    isSelectAllOptionSelected?: boolean;
     filterValues?: {
       [filterValue: string]: {
         selected: boolean;

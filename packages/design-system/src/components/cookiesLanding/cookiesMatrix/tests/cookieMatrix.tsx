@@ -28,14 +28,14 @@ import mockResponse from '../../../../test-data/cookieMockData';
 import cookiesStatsComponents from '../../../../test-data/cookiesStatsComponents';
 
 describe('CookiesMatrix', () => {
-  it('should render the cookies insights', () => {
+  it('should render the cookies insights', async () => {
     const tabCookies = mockResponse.tabCookies;
     const tabFrames = mockResponse.tabFrames;
     const title = 'Title';
 
-    const { getByTestId } = render(
+    const { getByTestId, findByText, findAllByText } = render(
       <CookiesMatrix
-        title="Title"
+        title={title}
         tabCookies={tabCookies}
         componentData={cookiesStatsComponents.legend}
         tabFrames={tabFrames}
@@ -43,5 +43,18 @@ describe('CookiesMatrix', () => {
     );
 
     expect(getByTestId(`cookies-matrix-${title}`)).toBeInTheDocument();
+
+    const expandButton = await findByText('Expand View');
+
+    expect(expandButton).toBeInTheDocument();
+
+    expandButton.click();
+
+    expect(await findByText('Collapse View')).toBeInTheDocument();
+
+    expect(await findByText('Functional')).toBeInTheDocument();
+    expect((await findAllByText('1'))[0]).toHaveClass(
+      cookiesStatsComponents.legend[0].countClassName
+    );
   });
 });

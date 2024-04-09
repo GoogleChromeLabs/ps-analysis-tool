@@ -15,3 +15,4 @@
  */
 
 export { default as generateCookieTableCSV } from './generateCookieTableCSV';
+export * from './precalculatedFiltersUtils';

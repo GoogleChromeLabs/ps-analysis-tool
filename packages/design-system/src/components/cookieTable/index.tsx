@@ -40,6 +40,7 @@ interface CookieTableProps {
   tableFilters?: TableFilter;
   tableSearchKeys?: string[];
   tablePersistentSettingsKey?: string;
+  isFiltersSidebarOpen?: boolean;
   selectedFrame: string | null;
   selectedFrameCookie: {
     [frame: string]: CookieTableData | null;
@@ -70,6 +71,7 @@ const CookieTable = forwardRef<
     tableSearchKeys,
     tablePersistentSettingsKey,
     data: cookies,
+    isFiltersSidebarOpen,
     selectedFrame,
     selectedFrameCookie,
     setSelectedFrameCookie,
@@ -194,6 +196,7 @@ const CookieTable = forwardRef<
         <Table
           selectedKey={selectedKey}
           extraInterfaceToTopBar={extraInterfaceToTopBar}
+          isFiltersSidebarOpen={isFiltersSidebarOpen}
         />
       </TableProvider>
     </div>

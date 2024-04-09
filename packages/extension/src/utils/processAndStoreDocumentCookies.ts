@@ -28,6 +28,7 @@ import { type Cookie as ParsedCookie } from 'simple-cookie';
  */
 import { createCookieObject } from '../serviceWorker/createCookieObject';
 import { fetchDictionary } from './fetchCookieDictionary';
+import { GET_JS_COOKIES } from '../constants';
 
 interface ProcessAndStoreDucmentCookies {
   tabUrl: string;
@@ -88,7 +89,7 @@ const processAndStoreDocumentCookies = async ({
     );
 
     await chrome.runtime.sendMessage({
-      type: 'DevTools::ServiceWorker::SET_JAVASCRIPT_COOKIE',
+      type: GET_JS_COOKIES,
       payload: {
         tabId,
         cookieData: parsedCookieData,
