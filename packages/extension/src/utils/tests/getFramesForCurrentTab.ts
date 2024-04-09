@@ -17,7 +17,7 @@
 /**
  * Internal dependencies.
  */
-import tabFrames from '../test-data/tabFrames';
+import tabFrames, { targetInfo } from '../test-data/tabFrames';
 import getFramesForCurrentTab from '../getFramesForCurrentTab';
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
@@ -37,13 +37,6 @@ describe('getFramesForCurrentTab : ', () => {
       runtime: {
         getURL: () => 'data/related_website_sets.json',
       },
-      //@ts-ignore
-      webNavigation: {
-        //@ts-ignore
-        getAllFrames: () => {
-          return Promise.resolve(tabFrames);
-        },
-      },
     };
 
     globalThis.fetch = function () {
@@ -57,16 +50,21 @@ describe('getFramesForCurrentTab : ', () => {
     } as unknown as typeof fetch;
   });
 
-  it('Should not return tab when tabId is negative', async () => {
-    expect(await getFramesForCurrentTab()).toStrictEqual({
+  it('Should not return tab when tabId is negative', () => {
+    expect(
+      getFramesForCurrentTab(
+        {},
+        tabFrames as chrome.webNavigation.GetAllFrameResultDetails[],
+        targetInfo,
+        {}
+      )
+    ).toStrictEqual({
       'https://edition.cnn.com': {
-        frameIds: [0, 3],
-        isOnRWS: false,
+        frameIds: ['SADASQ5546SDT45673'],
         frameType: 'outermost_frame',
       },
       'https://crxd.net': {
-        frameIds: [2],
-        isOnRWS: false,
+        frameIds: ['ASFGHSD2453465645568679FR', 'ADFSDGRW4365663SDGF'],
         frameType: 'sub_frame',
       },
     });
