@@ -13,21 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-const path = require('path');
-const rimraf = require('rimraf');
-
-const dirs = ['common', 'i18n'];
-
-dirs.forEach((dir) => {
-  const distDir = path.resolve(__dirname, `../packages/${dir}/dist`);
-  const distTypesDir = path.resolve(__dirname, `../packages/${dir}/dist-types`);
-  const tsconfigTsbuildinfo = path.resolve(
-    __dirname,
-    `../packages/${dir}/tsconfig.tsbuildinfo`
-  );
-
-  rimraf.sync(distDir);
-  rimraf.sync(distTypesDir);
-  rimraf.sync(tsconfigTsbuildinfo);
-});
+export { default as DataProvider } from './dataProvider';
+export { default as SettingsContext } from './context';
+export { default as useData } from './useData';

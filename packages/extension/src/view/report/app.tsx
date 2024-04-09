@@ -14,20 +14,32 @@
  * limitations under the License.
  */
 
-const path = require('path');
-const rimraf = require('rimraf');
+/**
+ * External dependencies
+ */
+import React from 'react';
+import { LibraryDetection } from '@ps-analysis-tool/library-detection';
+/**
+ * Internal dependencies
+ */
+import './app.css';
+import {
+  CookiesSection,
+  BlockedCookiesSection,
+  FramesSection,
+} from './components';
 
-const dirs = ['common', 'i18n'];
-
-dirs.forEach((dir) => {
-  const distDir = path.resolve(__dirname, `../packages/${dir}/dist`);
-  const distTypesDir = path.resolve(__dirname, `../packages/${dir}/dist-types`);
-  const tsconfigTsbuildinfo = path.resolve(
-    __dirname,
-    `../packages/${dir}/tsconfig.tsbuildinfo`
+const App = () => {
+  return (
+    <div className="h-full w-full flex flex-col">
+      <CookiesSection />
+      <BlockedCookiesSection />
+      <div className="text-xs">
+        <LibraryDetection />
+      </div>
+      <FramesSection />
+    </div>
   );
+};
 
-  rimraf.sync(distDir);
-  rimraf.sync(distTypesDir);
-  rimraf.sync(tsconfigTsbuildinfo);
-});
+export default App;

@@ -14,20 +14,6 @@
  * limitations under the License.
  */
 
-const path = require('path');
-const rimraf = require('rimraf');
-
-const dirs = ['common', 'i18n'];
-
-dirs.forEach((dir) => {
-  const distDir = path.resolve(__dirname, `../packages/${dir}/dist`);
-  const distTypesDir = path.resolve(__dirname, `../packages/${dir}/dist-types`);
-  const tsconfigTsbuildinfo = path.resolve(
-    __dirname,
-    `../packages/${dir}/tsconfig.tsbuildinfo`
-  );
-
-  rimraf.sync(distDir);
-  rimraf.sync(distTypesDir);
-  rimraf.sync(tsconfigTsbuildinfo);
-});
+export { default as CookiesSection } from './cookiesSection';
+export { default as BlockedCookiesSection } from './blockedCookiesSection';
+export { default as FramesSection } from './framesSection';

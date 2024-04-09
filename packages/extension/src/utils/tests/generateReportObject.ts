@@ -14,20 +14,14 @@
  * limitations under the License.
  */
 
-const path = require('path');
-const rimraf = require('rimraf');
+import generateReportObject from '../generateReportObject';
+import { data, libraryMatches, tabCookies, tabFrames } from './data.mock';
 
-const dirs = ['common', 'i18n'];
-
-dirs.forEach((dir) => {
-  const distDir = path.resolve(__dirname, `../packages/${dir}/dist`);
-  const distTypesDir = path.resolve(__dirname, `../packages/${dir}/dist-types`);
-  const tsconfigTsbuildinfo = path.resolve(
-    __dirname,
-    `../packages/${dir}/tsconfig.tsbuildinfo`
-  );
-
-  rimraf.sync(distDir);
-  rimraf.sync(distTypesDir);
-  rimraf.sync(tsconfigTsbuildinfo);
+describe('generateReport', () => {
+  it('should generate report object', () => {
+    expect(
+      //@ts-ignore
+      generateReportObject(tabCookies, tabFrames, libraryMatches)
+    ).toEqual(data);
+  });
 });

@@ -19,6 +19,7 @@
  */
 import React, { useEffect, useState } from 'react';
 import classnames from 'classnames';
+import { Export } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
@@ -31,12 +32,16 @@ export type MenuData = Array<{
 }>;
 
 interface MenuBarProps {
+  disableReportDownload: boolean;
+  downloadReport?: () => void;
   menuData: MenuData;
   extraClasses?: string;
   scrollContainerId: string;
 }
 
 const MenuBar = ({
+  disableReportDownload = true,
+  downloadReport,
   menuData,
   extraClasses,
   scrollContainerId,
@@ -103,6 +108,29 @@ const MenuBar = ({
         extraClasses ? extraClasses : 'top-4'
       )}
     >
+      {downloadReport && (
+        <button
+          disabled={disableReportDownload}
+          className={classnames(
+            'flex items-center relative justify-center w-5 h-5 p-1 right-1 rounded-full cursor-pointer transition-all ease-in-out group',
+            {
+              'bg-baby-blue-eyes': disableReportDownload,
+              'bg-ultramarine-blue': !disableReportDownload,
+            }
+          )}
+          onClick={() => {
+            downloadReport();
+          }}
+        >
+          <div className="absolute flex items-center justify-center right-6 w-max px-3 py-1 rounded invisible text-sm text-white bg-ultramarine-blue group-hover:visible transition-all ease-in-out">
+            {disableReportDownload
+              ? 'Wait for library detection'
+              : 'Download Report'}
+            <div className="absolute w-2 h-2 bg-ultramarine-blue top-1/3 -right-1 transform rotate-45" />
+          </div>
+          <Export className="text-white scale-75" />
+        </button>
+      )}
       {menuData.map((item, index) => (
         <div
           key={index}

@@ -17,7 +17,10 @@
  * External dependencies
  */
 import React, { useMemo } from 'react';
-import { LibraryDetection } from '@ps-analysis-tool/library-detection';
+import {
+  LibraryDetection,
+  useLibraryDetectionContext,
+} from '@ps-analysis-tool/library-detection';
 import {
   MenuBar,
   type CookiesLandingSection,
@@ -30,13 +33,23 @@ import {
 import CookiesSection from './cookiesSection';
 import FramesSection from './framesSection';
 import BlockedCookiesSection from './blockedCookiesSection';
-import ExemptedCookiesSection from './exemptedCookiesSection';
 import { useCookie } from '../../../stateProviders';
+import downloadReport from '../../../../../utils/downloadReport';
+import ExemptedCookiesSection from './exemptedCookiesSection';
 
 const AssembledCookiesLanding = () => {
-  const { tabCookies } = useCookie(({ state }) => ({
+  const { url, tabCookies, tabFrames } = useCookie(({ state }) => ({
     tabCookies: state.tabCookies,
+    tabFrames: state.tabFrames,
+    url: state.tabUrl,
   }));
+
+  const { libraryMatches, showLoader } = useLibraryDetectionContext(
+    ({ state }) => ({
+      libraryMatches: state.libraryMatches,
+      showLoader: state.showLoader,
+    })
+  );
 
   const cookieStats = prepareCookiesCount(tabCookies);
   const sections: Array<CookiesLandingSection> = useMemo(() => {
@@ -90,6 +103,12 @@ const AssembledCookiesLanding = () => {
   return (
     <>
       <MenuBar
+        disableReportDownload={showLoader}
+        downloadReport={() => {
+          if (tabCookies && tabFrames && libraryMatches && url) {
+            downloadReport(url, tabCookies, tabFrames, libraryMatches);
+          }
+        }}
         menuData={menuData}
         scrollContainerId="cookies-landing-scroll-container"
       />
