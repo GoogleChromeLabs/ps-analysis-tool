@@ -46,7 +46,7 @@ const MatrixComponent = ({
     <div>
       <div className="flex gap-x-4">
         <Circle color={color} />
-        <div className="lg:max-w-[80%] lg:mr-8">
+        <div className="lg:max-w-[80%] lg:mr-8 text-left">
           <h4 className="-mt-[3px] mb-1.5 text-xs font-medium dark:text-bright-gray">
             {title}
           </h4>
