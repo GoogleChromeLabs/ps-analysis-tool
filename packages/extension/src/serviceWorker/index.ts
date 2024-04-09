@@ -50,6 +50,7 @@ import createCookieFromAuditsIssue from '../utils/createCookieFromAuditsIssue';
 import attachCDP from './attachCDP';
 import isValidURL from '../utils/isValidURL';
 import fetchFrameResourceAndGetCookies from './fetchFrameResourceAndGetCookies';
+import resetCookieBadgeText from '../store/utils/resetCookieBadgeText';
 
 let cookieDB: CookieDatabase | null = null;
 let syncCookieStore: SynchnorousCookieStore | undefined;
@@ -358,10 +359,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
 
     await Promise.all(
       targets.map(async ({ id }) => {
-        await chrome.debugger.attach({ targetId: id }, '1.3');
-        await chrome.debugger.sendCommand({ targetId: id }, 'Network.enable');
-        await chrome.debugger.sendCommand({ targetId: id }, 'Audits.enable');
-        await chrome.debugger.sendCommand({ targetId: id }, 'Page.enable');
+        await attachCDP({ targetId: id });
       })
     );
   } catch (error) {
@@ -455,37 +453,44 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
   }
 
   if (method === 'Network.requestWillBeSent' && params) {
-    const request = params as Protocol.Network.RequestWillBeSentEvent;
-    // To get domain from the request URL if not given in the cookie line.
+    const {
+      requestId,
+      request: { url: requestUrl },
+      loaderId,
+      frameId = '',
+    } = params as Protocol.Network.RequestWillBeSentEvent;
+
+    const objectsFromSameLoaderId = Object.values(
+      requestIdToCDPURLMapping[tabId]
+    ).filter(({ loaderId: _loaderId }) => _loaderId && _loaderId === loaderId);
+
     if (!requestIdToCDPURLMapping[tabId]) {
       requestIdToCDPURLMapping[tabId] = {
-        [request.requestId]: {
-          frameId: request?.frameId ?? '',
-          url: request?.request?.url,
-          loaderId: request?.loaderId,
+        [requestId]: {
+          frameId,
+          url: requestUrl,
+          loaderId,
         },
       };
     } else {
       requestIdToCDPURLMapping[tabId] = {
         ...requestIdToCDPURLMapping[tabId],
-        [request.requestId]: {
-          frameId: request?.frameId ?? '',
-          url: request?.request?.url,
-          loaderId: request?.loaderId,
+        [requestId]: {
+          frameId,
+          url: requestUrl,
+          loaderId: loaderId,
         },
       };
     }
 
-    if (unParsedRequestHeaders[tabId][request.requestId]) {
+    if (unParsedRequestHeaders[tabId][requestId]) {
       const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
-        unParsedRequestHeaders[tabId][request.requestId].associatedCookies,
+        unParsedRequestHeaders[tabId][requestId].associatedCookies,
         cookieDB ?? {},
-        request?.request?.url ?? '',
+        requestUrl,
         url ?? '',
-        Object.values(requestIdToCDPURLMapping[tabId])
-          .filter(({ loaderId }) => loaderId && loaderId === request?.loaderId)
-          .map(({ frameId }) => frameId),
-        request?.requestId
+        objectsFromSameLoaderId.map(({ frameId: _frameId }) => _frameId),
+        requestId
       );
 
       if (cookies.length === 0) {
@@ -497,10 +502,16 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
   }
 
   if (method === 'Network.requestWillBeSentExtraInfo') {
-    const requestParams =
+    const { associatedCookies, requestId } =
       params as Protocol.Network.RequestWillBeSentExtraInfoEvent;
 
-    const { associatedCookies, requestId } = requestParams;
+    const objectsFromSameLoaderId = Object.values(
+      requestIdToCDPURLMapping[tabId]
+    ).filter(
+      ({ loaderId: _loaderId }) =>
+        _loaderId &&
+        _loaderId === requestIdToCDPURLMapping[tabId][requestId]?.loaderId
+    );
 
     if (associatedCookies.length === 0) {
       return;
@@ -512,15 +523,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         cookieDB ?? {},
         requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
         url ?? '',
-        Object.values(requestIdToCDPURLMapping[tabId])
-          .filter(
-            ({ loaderId }) =>
-              loaderId &&
-              loaderId ===
-                requestIdToCDPURLMapping[tabId][requestParams?.requestId]
-                  ?.loaderId
-          )
-          .map(({ frameId }) => frameId),
+        objectsFromSameLoaderId.map(({ frameId }) => frameId),
         requestId
       );
 
@@ -529,42 +532,50 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       }
 
       syncCookieStore?.update(Number(tabId), cookies);
-      delete unParsedRequestHeaders[tabId][requestParams.requestId];
+      delete unParsedRequestHeaders[tabId][requestId];
     } else {
-      unParsedRequestHeaders[tabId][requestParams?.requestId] = requestParams;
+      unParsedRequestHeaders[tabId][requestId] =
+        params as Protocol.Network.RequestWillBeSentExtraInfoEvent;
     }
   }
 
   if (method === 'Network.responseReceived' && params) {
-    const request = params as Protocol.Network.ResponseReceivedEvent;
+    const {
+      frameId = '',
+      response: { url: requestUrl },
+      loaderId,
+      requestId,
+    } = params as Protocol.Network.ResponseReceivedEvent;
 
-    // To get domain from the request URL if not given in the cookie line.
+    const objectsFromSameLoaderId = Object.values(
+      requestIdToCDPURLMapping[tabId]
+    ).filter(({ loaderId: _loaderId }) => _loaderId && _loaderId === loaderId);
+
     if (!requestIdToCDPURLMapping[tabId]) {
       requestIdToCDPURLMapping[tabId] = {
-        [request.requestId]: {
-          frameId: request?.frameId ?? '',
-          url: request?.response.url,
-          loaderId: request?.loaderId,
+        [requestId]: {
+          frameId,
+          url: requestUrl,
+          loaderId,
         },
       };
     } else {
       requestIdToCDPURLMapping[tabId] = {
         ...requestIdToCDPURLMapping[tabId],
-        [request.requestId]: {
-          frameId: request?.frameId ?? '',
-          url: request?.response.url,
-          loaderId: request?.loaderId,
+        [requestId]: {
+          frameId,
+          url: requestUrl,
+          loaderId,
         },
       };
     }
 
-    if (unParsedResponseHeaders[tabId][request.requestId]) {
+    if (unParsedResponseHeaders[tabId][requestId]) {
       const {
         headers,
         blockedCookies,
-        requestId,
         cookiePartitionKey = '',
-      } = unParsedResponseHeaders[tabId][request.requestId];
+      } = unParsedResponseHeaders[tabId][requestId];
 
       const cookies: CookieData[] = parseResponseReceivedExtraInfo(
         headers,
@@ -573,24 +584,20 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
         url ?? '',
         cookieDB ?? {},
-        Object.values(requestIdToCDPURLMapping[tabId])
-          .filter(({ loaderId }) => loaderId && loaderId === request?.loaderId)
-          .map(({ frameId }) => frameId),
+        objectsFromSameLoaderId.map(({ frameId: _frameId }) => _frameId),
         requestId
       );
       syncCookieStore?.update(Number(tabId), cookies);
 
-      delete unParsedRequestHeaders[tabId][request.requestId];
+      delete unParsedRequestHeaders[tabId][requestId];
     }
 
-    if (auditsIssueForTab[tabId][request.requestId]) {
+    if (auditsIssueForTab[tabId][requestId]) {
       const cookieObjectToUpdate = createCookieFromAuditsIssue(
-        auditsIssueForTab[tabId][request.requestId],
+        auditsIssueForTab[tabId][requestId],
         syncCookieStore?.getTabUrl(Number(tabId)) ?? '',
-        Object.values(requestIdToCDPURLMapping[tabId])
-          .filter(({ loaderId }) => loaderId && loaderId === request?.loaderId)
-          .map(({ frameId }) => frameId),
-        requestIdToCDPURLMapping[tabId][request.requestId].url,
+        objectsFromSameLoaderId.map(({ frameId: _frameId }) => _frameId),
+        requestIdToCDPURLMapping[tabId][requestId].url,
         cookieDB
       );
 
@@ -598,104 +605,101 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         syncCookieStore?.update(Number(tabId), [cookieObjectToUpdate]);
       }
 
-      delete auditsIssueForTab[tabId][request.requestId];
+      delete auditsIssueForTab[tabId][requestId];
     }
 
-    const cookiesFromSameLoaderId = Object.values(
-      requestIdToCDPURLMapping[tabId]
-    )
-      .filter(({ loaderId }) => loaderId && loaderId === request?.loaderId)
-      .map(({ url: resourceURL }) => resourceURL);
-
     const gatheredCookies = await fetchFrameResourceAndGetCookies(
-      request?.frameId,
-      cookiesFromSameLoaderId,
+      frameId,
+      objectsFromSameLoaderId.map(({ url: _url }) => _url),
       cookieDB,
       url ?? '',
-      Object.values(requestIdToCDPURLMapping[tabId])
-        .filter(({ loaderId }) => loaderId && loaderId === request?.loaderId)
-        .map(({ frameId }) => frameId)
+      objectsFromSameLoaderId.map(({ frameId: _frameId }) => _frameId)
     );
 
     syncCookieStore?.update(Number(tabId), gatheredCookies);
-    delete requestIdToCDPURLMapping[tabId][request.requestId];
   }
 
   if (method === 'Network.responseReceivedExtraInfo') {
-    const responseParams =
-      params as Protocol.Network.ResponseReceivedExtraInfoEvent;
-
     const {
       headers,
       blockedCookies,
       requestId,
       cookiePartitionKey = '',
-    } = responseParams;
+    } = params as Protocol.Network.ResponseReceivedExtraInfoEvent;
+
+    const objectsFromSameLoaderId = Object.values(
+      requestIdToCDPURLMapping[tabId]
+    ).filter(
+      ({ loaderId: _loaderId }) =>
+        _loaderId &&
+        _loaderId === requestIdToCDPURLMapping[tabId][requestId]?.loaderId
+    );
 
     // Sometimes CDP gives "set-cookie" and sometimes it gives "Set-Cookie".
     if (!headers['set-cookie'] && !headers['Set-Cookie']) {
       return;
     }
 
-    if (requestIdToCDPURLMapping[tabId][responseParams?.requestId]) {
+    if (requestIdToCDPURLMapping[tabId][requestId]) {
       const cookies: CookieData[] = parseResponseReceivedExtraInfo(
         headers,
         blockedCookies,
         cookiePartitionKey,
-        requestIdToCDPURLMapping[tabId][responseParams?.requestId]?.url ?? '',
+        requestIdToCDPURLMapping[tabId][requestId]?.url,
         url ?? '',
         cookieDB ?? {},
-        Object.values(requestIdToCDPURLMapping[tabId])
-          .filter(
-            ({ loaderId }) =>
-              loaderId &&
-              loaderId ===
-                requestIdToCDPURLMapping[tabId][responseParams?.requestId]
-                  ?.loaderId
-          )
-          .map(({ frameId }) => frameId),
+        objectsFromSameLoaderId.map(({ frameId }) => frameId),
         requestId
       );
 
       syncCookieStore?.update(Number(tabId), cookies);
 
-      delete unParsedRequestHeaders[tabId][responseParams?.requestId];
+      delete unParsedRequestHeaders[tabId][requestId];
     } else {
-      unParsedResponseHeaders[tabId][responseParams?.requestId] =
-        responseParams;
+      unParsedResponseHeaders[tabId][requestId] =
+        params as Protocol.Network.ResponseReceivedExtraInfoEvent;
     }
   }
 
   if (method === 'Audits.issueAdded' && params) {
     const auditParams = params as Protocol.Audits.IssueAddedEvent;
-    const { code, details } = auditParams.issue;
-    if (code !== 'CookieIssue' && !details.cookieIssueDetails) {
+    const {
+      code,
+      details: { cookieIssueDetails },
+    } = auditParams.issue;
+
+    if (code !== 'CookieIssue' && !cookieIssueDetails) {
       return;
     }
 
     if (
-      !details.cookieIssueDetails?.cookie ||
-      !details.cookieIssueDetails?.cookieWarningReasons ||
-      !details.cookieIssueDetails?.cookieExclusionReasons ||
-      !details.cookieIssueDetails?.request
+      !cookieIssueDetails?.cookie ||
+      !cookieIssueDetails?.cookieWarningReasons ||
+      !cookieIssueDetails?.cookieExclusionReasons ||
+      !cookieIssueDetails?.request
     ) {
       return;
     }
 
-    //@ts-ignore -- because this has been checked above
-    const { requestId = '' } = details.cookieIssueDetails.request;
+    const { requestId = '' } = cookieIssueDetails.request;
+
+    if (!requestId) {
+      return;
+    }
+
+    const objectsFromSameLoaderId = Object.values(
+      requestIdToCDPURLMapping[tabId]
+    ).filter(
+      ({ loaderId: _loaderId }) =>
+        _loaderId &&
+        _loaderId === requestIdToCDPURLMapping[tabId][requestId]?.loaderId
+    );
 
     if (requestId && requestIdToCDPURLMapping[tabId][requestId]) {
       const cookieObjectToUpdate = createCookieFromAuditsIssue(
-        details.cookieIssueDetails,
+        cookieIssueDetails,
         syncCookieStore?.getTabUrl(Number(tabId)) ?? '',
-        Object.values(requestIdToCDPURLMapping[tabId])
-          .filter(
-            ({ loaderId }) =>
-              loaderId &&
-              loaderId === requestIdToCDPURLMapping[tabId][requestId]?.loaderId
-          )
-          .map(({ frameId }) => frameId),
+        objectsFromSameLoaderId.map(({ frameId }) => frameId),
         requestIdToCDPURLMapping[tabId][requestId].url,
         cookieDB
       );
@@ -704,7 +708,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         syncCookieStore?.update(Number(tabId), [cookieObjectToUpdate]);
       }
     } else {
-      auditsIssueForTab[tabId][requestId] = details.cookieIssueDetails;
+      auditsIssueForTab[tabId][requestId] = cookieIssueDetails;
     }
   }
 });
@@ -780,15 +784,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
     });
 
     if (globalIsUsingCDP) {
-      await chrome.debugger.attach({ tabId: Number(newTab) }, '1.3');
-      await chrome.debugger.sendCommand(
-        { tabId: Number(newTab) },
-        'Network.enable'
-      );
-      await chrome.debugger.sendCommand(
-        { tabId: Number(newTab) },
-        'Audits.enable'
-      );
+      await attachCDP({ tabId: Number(newTab) });
     }
 
     await reloadCurrentTab(Number(newTab));
