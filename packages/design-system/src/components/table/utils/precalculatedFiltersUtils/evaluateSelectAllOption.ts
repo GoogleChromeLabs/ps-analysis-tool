@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { I18n } from '@ps-analysis-tool/i18n';
+
 /**
  *	Evaluate if the 'All' option is present in parsedQuery.
  * @param filterKey Filter key to evaluate.
@@ -28,7 +30,7 @@ const evaluateSelectAllOption = (
 ) => {
   const options: string[] = parsedQuery?.filter?.[filterKey];
 
-  if (options?.[0] === 'All') {
+  if (options?.[0] === I18n.getMessage('dsSelectAll')) {
     clearActivePanelQuery?.();
 
     return true;

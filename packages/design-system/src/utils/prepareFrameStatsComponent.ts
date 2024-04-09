@@ -22,6 +22,7 @@ import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
  * Internal dependencies
  */
 import { EMPTY_FRAME_COUNT, EMPTY_FRAME_LEGEND } from '../constants';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Calcualte insights about frames to be shown on cookies landing page.
@@ -84,7 +85,7 @@ export default function prepareFrameStatsComponent(
   return {
     dataMapping: [
       {
-        title: 'Frames',
+        title: I18n.getMessage('dsFrames'),
         count: Object.keys(tabFrames || {}).length,
         data: [
           {
@@ -114,31 +115,31 @@ export default function prepareFrameStatsComponent(
     ],
     legend: [
       {
-        label: 'Total frames',
+        label: I18n.getMessage('dsTotalFrames'),
         count: Object.keys(tabFrames || {}).length,
         color: '#25ACAD',
         countClassName: 'text-greenland-green',
       },
       {
-        label: 'Frames with cookies',
+        label: I18n.getMessage('dsFramesWithCookies'),
         count: cookieFrame.size,
         color: '#C5A06A',
         countClassName: 'text-good-life',
       },
       {
-        label: 'Frames with blocked cookies',
+        label: I18n.getMessage('dsFramesWithBlockedCookies'),
         count: blockedCookieFrame.size,
         color: '#AF7AA3',
         countClassName: 'text-victorian-violet',
       },
       {
-        label: 'Frames with unblocked cookies',
+        label: I18n.getMessage('dsFramesWithUnblockedCookies'),
         count: unBlockedCookieFrame.size,
         color: '#F54021',
         countClassName: 'text-strawberry-spinach-red',
       },
       {
-        label: 'Fenced frames',
+        label: I18n.getMessage('dsFencedFrames'),
         count: Object.values(tabFrames || {}).filter(
           (frame) => frame?.frameType === 'fenced_frame'
         ).length,

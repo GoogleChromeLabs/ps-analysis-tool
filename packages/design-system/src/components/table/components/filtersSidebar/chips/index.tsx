@@ -24,6 +24,7 @@ import React from 'react';
 import ChipList from './chipList';
 import { StopIcon } from '../../../../../icons';
 import { useTable } from '../../../useTable';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const ChipsBar = () => {
   const { selectedFilters, resetFilters } = useTable(({ state, actions }) => ({
@@ -52,7 +53,7 @@ const ChipsBar = () => {
         >
           <StopIcon className="text-gray min-w-[14px] min-h-[14px]" />
           <span className="ml-1 mr-2 dark:text-bright-gray bg-transparent">
-            Clear all
+            {I18n.getMessage('dsClearAll')}
           </span>
           <div className="w-[1px] bg-gainsboro dark:bg-quartz h-[20px]"></div>
         </button>

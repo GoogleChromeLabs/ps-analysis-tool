@@ -30,6 +30,7 @@ import type { MatrixComponentProps } from '../../matrix/matrixComponent';
 import { type MatrixComponentHorizontalProps } from '../../matrix/matrixComponent/matrixComponentHorizontal';
 import { LEGEND_DESCRIPTION } from '../../../constants';
 import MatrixContainer from '../../matrixContainer';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface CookiesMatrixProps {
   tabCookies: TabCookies | null;
@@ -62,7 +63,7 @@ const CookiesMatrix = ({
   highlightTitle = false,
   capitalizeTitle = false,
   matrixHorizontalData = null,
-  infoIconTitle = 'Cookies must be analyzed on a new, clean Chrome profile for an accurate report.',
+  infoIconTitle = I18n.getMessage('dsNewChromeProfile'),
 }: CookiesMatrixProps) => {
   const dataComponents: MatrixComponentProps[] = [];
 
@@ -72,7 +73,6 @@ const CookiesMatrix = ({
       ...component,
       description: legendDescription,
       title: component.label,
-      containerClasses: '',
     });
   });
 
@@ -83,14 +83,15 @@ const CookiesMatrix = ({
     ? matrixHorizontalData
     : [
         {
-          title: 'Number of Frames',
-          description: 'Number of unique frames found across the page(s).',
+          title: I18n.getMessage('dsNumberOfFrames'),
+          description: I18n.getMessage('dsNumberOfFramesNote'),
           count: totalFrames,
         },
         {
-          title: 'Number of Frames with Associated Cookies',
-          description:
-            'Unique frames across the page(s) that have cookies associated with them.',
+          title: I18n.getMessage('dsNumberOfFramesWithAssociatedCookies'),
+          description: I18n.getMessage(
+            'dsNumberOfFramesWithAssociatedCookiesNote'
+          ),
           count: associatedCookiesCount
             ? associatedCookiesCount
             : framesWithCookies

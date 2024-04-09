@@ -24,6 +24,7 @@ import type {
  * Internal dependencies.
  */
 import { COLOR_MAP } from '../theme/colors';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 // eslint-disable-next-line complexity
 const prepareCookieStatsComponents = (
@@ -54,28 +55,28 @@ const prepareCookieStatsComponents = (
   return {
     legend: [
       {
-        label: 'Functional',
+        label: I18n.getMessage('dsFunctional'),
         count:
           cookieStats.firstParty.functional + cookieStats.thirdParty.functional,
         color: COLOR_MAP.functional.color,
         countClassName: COLOR_MAP.functional.className,
       },
       {
-        label: 'Marketing',
+        label: I18n.getMessage('dsMarketing'),
         count:
           cookieStats.firstParty.marketing + cookieStats.thirdParty.marketing,
         color: COLOR_MAP.marketing.color,
         countClassName: COLOR_MAP.uncategorized.className,
       },
       {
-        label: 'Analytics',
+        label: I18n.getMessage('dsAnalytics'),
         count:
           cookieStats.firstParty.analytics + cookieStats.thirdParty.analytics,
         color: COLOR_MAP.analytics.color,
         countClassName: COLOR_MAP.uncategorized.className,
       },
       {
-        label: 'Uncategorized',
+        label: I18n.getMessage('dsUncategorized'),
         count:
           cookieStats.firstParty.uncategorized +
           cookieStats.thirdParty.uncategorized,

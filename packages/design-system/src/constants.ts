@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import { I18n } from '@ps-analysis-tool/i18n';
+
 interface LegendData {
   [key: string]: string;
 }
@@ -84,7 +87,7 @@ export const LEGEND_DESCRIPTION: LegendData = {
 
 export const EMPTY_FRAME_COUNT = [
   {
-    title: 'Frames',
+    title: I18n.getMessage('dsFrames'),
     count: 0,
     data: [
       {
@@ -105,25 +108,25 @@ export const EMPTY_FRAME_COUNT = [
 
 export const EMPTY_FRAME_LEGEND = [
   {
-    label: 'Total frames',
+    label: I18n.getMessage('dsTotalFrames'),
     count: 0,
     color: '#25ACAD',
     countClassName: 'text-greenland-green',
   },
   {
-    label: 'Frames with cookies',
+    label: I18n.getMessage('dsFramesWithCookies'),
     count: 0,
     color: '#C5A06A',
     countClassName: 'text-good-life',
   },
   {
-    label: 'Frames with blocked cookies',
+    label: I18n.getMessage('dsFramesWithBlockedCookies'),
     count: 0,
     color: '#AF7AA3',
     countClassName: 'text-victorian-violet',
   },
   {
-    label: 'Frames with unblocked cookies',
+    label: I18n.getMessage('dsFramesWithUnblockedCookies'),
     count: 0,
     color: '#F54021',
     countClassName: 'text-strawberry-spinach-red',

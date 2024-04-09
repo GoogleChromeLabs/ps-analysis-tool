@@ -22,15 +22,19 @@ import React from 'react';
  * Internal dependencies.
  */
 import Button from '../button';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const ExtensionReloadNotification = () => {
   return (
     <div className="w-full h-full px-2 flex flex-col items-center justify-center border-b border-american-silver dark:border-quartz bg-white dark:bg-charleston-green dark:text-white">
       <p className="text-xl text-center px-4">
-        Looks like extension has been updated since devtool was open.
+        {I18n.getMessage('dsExtensionUpdated')}
       </p>
       <div className="ml-2 mt-4">
-        <Button onClick={() => window.location.reload()} text="Refresh panel" />
+        <Button
+          onClick={() => window.location.reload()}
+          text={I18n.getMessage('dsRefreshPanel')}
+        />
       </div>
     </div>
   );

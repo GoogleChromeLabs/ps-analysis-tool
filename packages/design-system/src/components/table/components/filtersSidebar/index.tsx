@@ -23,6 +23,7 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
  */
 import ListItem from './listItem';
 import { useTable } from '../../useTable';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const FiltersSidebar = () => {
   const { filters, isSelectAllFilterSelected } = useTable(
@@ -88,7 +89,9 @@ const FiltersSidebar = () => {
         href="#"
         onClick={handleExpandAllClick}
       >
-        {expandAll ? 'Collapse All' : 'Expand All'}
+        {expandAll
+          ? I18n.getMessage('Collapse All')
+          : I18n.getMessage('Expand All')}
       </a>
       <ul>
         {Object.entries(filters).map(([filterKey, filter]) => (

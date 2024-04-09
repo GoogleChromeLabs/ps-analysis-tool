@@ -22,6 +22,7 @@ import React from 'react';
  * Internal dependencies.
  */
 import { InspectActiveIcon, InspectIcon, InspectWhiteIcon } from '../../icons';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface InspectButtonProps {
   isInspecting: boolean;
@@ -38,7 +39,7 @@ const InspectButton = ({
 
   return (
     <span
-      title="Hover over the iframes on the page or select frames below to inspect them."
+      title={I18n.getMessage('dsHoverOverIframes')}
       onClick={() => {
         setIsInspecting(!isInspecting);
       }}

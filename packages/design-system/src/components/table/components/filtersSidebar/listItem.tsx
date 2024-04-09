@@ -24,6 +24,7 @@ import { ArrowDown, InfoIcon } from '@ps-analysis-tool/design-system';
  */
 import SubList from './subList';
 import { TableFilter } from '../../useTable';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface ListItemProps {
   filter: TableFilter[keyof TableFilter];
@@ -128,7 +129,9 @@ const ListItem = ({
               className="text-link ml-2 mt-1 block text-royal-blue dark:text-medium-persian-blue"
               href="#"
             >
-              {isExpanded ? 'Show Less' : 'Show More'}
+              {isExpanded
+                ? I18n.getMessage('dsShowLess')
+                : I18n.getMessage('dsShowMore')}
             </a>
           )}
         </>

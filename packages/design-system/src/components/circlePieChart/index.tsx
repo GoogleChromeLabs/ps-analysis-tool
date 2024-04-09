@@ -25,6 +25,7 @@ import classNames from 'classnames';
  */
 import EmptyCirclePieChart from './emptyCirclePieChart';
 import { InfoIcon } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface CirclePieChartProps {
   centerCount: number;
@@ -80,10 +81,10 @@ const CirclePieChart = ({
           <p className="text-xs text-center font-semibold leading-relaxed dark:text-bright-gray">
             {title}
           </p>
-          {title === '3rd Party Cookies' && (
+          {title === I18n.getMessage('dsThirdPartyCookies') && (
             <p
               className={infoIconClassName}
-              title="Cookies must be analyzed on a new, clean Chrome profile for an accurate report"
+              title={I18n.getMessage('dsNewChromeProfile')}
             >
               <InfoIcon className="fill-granite-gray" />
             </p>

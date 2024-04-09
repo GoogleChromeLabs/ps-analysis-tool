@@ -25,6 +25,7 @@ import { getValueByKey } from '@ps-analysis-tool/common';
  */
 import type { TableData, TableFilter } from '../types';
 import useFiltersPersistence from './useFiltersPersistence';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 export type TableFilteringOutput = {
   filters: TableFilter;
@@ -396,7 +397,7 @@ const useFiltering = (
 
           Object.entries(savedFilterValues || {}).forEach(
             ([filterValue, filterValueData]) => {
-              if (filterValue === 'All') {
+              if (filterValue === I18n.getMessage('dsSelectAll')) {
                 return;
               }
 

@@ -22,6 +22,7 @@ import React from 'react';
  * Internal dependencies.
  */
 import Button from '../button';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface ToastMessageProps {
   text: string;
@@ -37,7 +38,7 @@ const ToastMessage = ({
   additionalStyles = '',
   textAdditionalStyles = '',
   variant = 'large',
-  buttonText = 'Reload',
+  buttonText = I18n.getMessage('dsReload'),
 }: ToastMessageProps) => {
   return (
     <div

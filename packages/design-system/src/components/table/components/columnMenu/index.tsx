@@ -26,6 +26,7 @@ import { createPortal } from 'react-dom';
  */
 import ColumnList from './columnList';
 import { useTable } from '../../useTable';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface ColumnMenuProps {
   position: { x: number; y: number };
@@ -102,7 +103,7 @@ const ColumnMenu = ({ position, open, onClose }: ColumnMenuProps) => {
                 >
                   ✓
                 </span>
-                <span>Toggle All</span>
+                <span>{I18n.getMessage('dsToggleAll')}</span>
               </button>
               <div>
                 <ColumnList

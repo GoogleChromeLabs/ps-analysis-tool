@@ -25,6 +25,7 @@ import { addUTMParams } from '@ps-analysis-tool/common';
  */
 import type { PSInfo as PSInfoType } from './fetchPSInfo';
 import RenderLink from './renderLink';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * @type {Array} LABELS - Array of objects containing the label and link label for each dropdown item.
@@ -33,20 +34,20 @@ import RenderLink from './renderLink';
  */
 const LABELS = [
   {
-    label: 'Proposal',
-    linkLabel: 'Public explanation for the proposed solution (Chrome)',
+    label: 'dsProposal',
+    linkLabel: 'dsProposalNote',
   },
   {
-    label: 'Public Discussion',
-    linkLabel: 'Public questions and feedback about the proposal',
+    label: 'dsPublicDiscussion',
+    linkLabel: 'dsPublicDiscussionNote',
   },
   {
-    label: 'Video Overview',
-    linkLabel: 'Short summary video',
+    label: 'dsVideoOverview',
+    linkLabel: 'dsVideoOverviewNote',
   },
   {
-    label: 'Dev Documentation',
-    linkLabel: 'Developer documentation',
+    label: 'dsDevDocumentation',
+    linkLabel: 'dsDevDocumentationNote',
   },
 ];
 
@@ -76,8 +77,8 @@ const LearnMoreDropdown = ({
                     ? addUTMParams(value)
                     : value
                 }
-                label={LABELS[index].label}
-                linkLabel={LABELS[index].linkLabel}
+                label={I18n.getMessage(LABELS[index].label)}
+                linkLabel={I18n.getMessage(LABELS[index].linkLabel)}
               />
             )
           )}

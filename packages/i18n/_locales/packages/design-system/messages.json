@@ -1,0 +1,237 @@
+{
+  "dsNoNews": {
+    "message": "No News"
+  },
+  "dsThirdPartyCookies": {
+    "message": "3rd Party Cookies"
+  },
+  "dsNewChromeProfile": {
+    "message": "Cookies must be analyzed on a new, clean Chrome profile for an accurate report"
+  },
+  "dsAllowListed": {
+    "message": "Allow Listed"
+  },
+  "dsAllowListedNote": {
+    "message": "The cookie domain was added to the allow-list for this session, however the browser may still block these cookies for various reasons, such as invalid attributes. You can check the allowed domains under $path$.",
+    "placeholders": {
+      "path": {
+        "content": "$1",
+        "example": "chrome://settings/content/siteData"
+      }
+    }
+  },
+  "dsBlockedReason": {
+    "message": "Blocked Reason"
+  },
+  "dsBlockedInAtLeastOne": {
+    "message": "This cookie was blocked in at least one of the $type$.",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "requests"
+      }
+    }
+  },
+  "dsBlockedInAll": {
+    "message": "This cookie was blocked in all $type$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "requests"
+      }
+    }
+  },
+  "dsBlockedInAllRequestResponse": {
+    "message": "This cookie was blocked in all of the requests and responses."
+  },
+  "dsBlockedInSomeRequestResponse": {
+    "message": "This cookie was blocked in some of the requests and responses."
+  },
+  "dsBlockedinSomeAndAll": {
+    "message": "This cookie was blocked in all $type1$ and at least one of the $type2$.",
+    "placeholders": {
+      "type1": {
+        "content": "$1",
+        "example": "requests"
+      },
+      "type2": {
+        "content": "$2",
+        "example": "responses"
+      }
+    }
+  },
+  "dsWarnings": {
+    "message": "Warnings"
+  },
+  "dsCookieValue": {
+    "message": "Cookie Value"
+  },
+  "dsURLDecoded": {
+    "message": "Show URL-decoded"
+  },
+  "dsDescription": {
+    "message": "Description"
+  },
+  "dsNoDescription": {
+    "message": "No description available."
+  },
+  "dsSelectCookie": {
+    "message": "Select cookies to preview its value"
+  },
+  "dsNumberOfFrames": {
+    "message": "Number of Frames"
+  },
+  "dsNumberOfFramesNote": {
+    "message": "'Number of unique frames found across the page(s).'"
+  },
+  "dsNumberOfFramesWithAssociatedCookies": {
+    "message": "Number of Frames with Associated Cookies"
+  },
+  "dsNumberOfFramesWithAssociatedCookiesNote": {
+    "message": "Unique frames across the page(s) that have cookies associated with them."
+  },
+  "dsExtensionUpdated": {
+    "message": "Looks like extension has been updated since devtool was open."
+  },
+  "dsRefreshPanel": {
+    "message": "Refresh Panel"
+  },
+  "dsWentWrong": {
+    "message": "Something went wrong!"
+  },
+  "dsOpenInNewTab": {
+    "message": "Please try opening this page in a new tab."
+  },
+  "dsHoverOverIframes": {
+    "message": "Hover over the iframes on the page or select frames below to inspect them."
+  },
+  "dsProposal": {
+    "message": "Proposal"
+  },
+  "dsProposalNote": {
+    "message": "Public explanation for the proposed solution (Chrome)"
+  },
+  "dsPublicDiscussion": {
+    "message": "Public Discussion"
+  },
+  "dsPublicDiscussionNote": {
+    "message": "Public questions and feedback about the proposal"
+  },
+  "dsVideoOverview": {
+    "message": "Video Overview"
+  },
+  "dsVideoOverviewNote": {
+    "message": "Short summary video"
+  },
+  "dsDevDocumentation": {
+    "message": "Dev Documentation"
+  },
+  "dsDevDocumentationNote": {
+    "message": "Developer documentation"
+  },
+  "dsLearnMore": {
+    "message": "Learn more about PSAT"
+  },
+  "dsJoinDiscussions": {
+    "message": "Join the discussions"
+  },
+  "dsReportBug": {
+    "message": "Report a bug"
+  },
+  "dsReportBreakage": {
+    "message": "Report a breakage"
+  },
+  "dsRequestMigrationTime": {
+    "message": "Request Additional Migration Time"
+  },
+  "dsQuickLinks": {
+    "message": "Quick Links"
+  },
+  "dsLatestNews": {
+    "message": "Latest News"
+  },
+  "dsViewMore": {
+    "message": "View More"
+  },
+  "dsCollapseView": {
+    "message": "Collapse View"
+  },
+  "dsExpandView": {
+    "message": "Expand View"
+  },
+  "dsSearch": {
+    "message": "Search"
+  },
+  "dsClearSearch": {
+    "message": "Clear Search"
+  },
+  "dsToggleAll": {
+    "message": "Toggle All"
+  },
+  "dsClearAll": {
+    "message": "Clear All"
+  },
+  "dsCollapseAll": {
+    "message": "Collapse All"
+  },
+  "dsExpandAll": {
+    "message": "Expand All"
+  },
+  "dsShowLess": {
+    "message": "Show Less"
+  },
+  "dsShowMore": {
+    "message": "Show More"
+  },
+  "dsSelectAll": {
+    "message": "All"
+  },
+  "dsCount": {
+    "message": "Count"
+  },
+  "dsReload": {
+    "message": "Reload"
+  },
+  "dsTotalCookies": {
+    "message": "Total Cookies"
+  },
+  "dsFirstPartyCookies": {
+    "message": "1st Party Cookies"
+  },
+  "dsFirstParty": {
+    "message": "First Party"
+  },
+  "dsThirdParty": {
+    "message": "Third Party"
+  },
+  "dsFunctional": {
+    "message": "Functional"
+  },
+  "dsMarketing": {
+    "message": "Marketing"
+  },
+  "dsAnalytics": {
+    "message": "Analytics"
+  },
+  "dsUncategorized": {
+    "message": "Uncategorized"
+  },
+  "dsFrames": {
+    "message": "Frames"
+  },
+  "dsTotalFrames": {
+    "message": "Total Frames"
+  },
+  "dsFramesWithCookies": {
+    "message": "Frames with Cookies"
+  },
+  "dsFramesWithBlockedCookies": {
+    "message": "Frames with Blocked Cookies"
+  },
+  "dsFramesWithUnblockedCookies": {
+    "message": "Frames with Unblocked Cookies"
+  },
+  "dsFencedFrames": {
+    "message": "Fenced Frames"
+  }
+}

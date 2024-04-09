@@ -34,6 +34,7 @@ import {
   OutboundInboundColoredIcon,
   OutboundInboundIcon,
 } from '../../icons';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 export interface DetailsProps {
   isUsingCDP: boolean;
@@ -90,13 +91,12 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
       {selectedCookie.isDomainInAllowList && (
         <div className="mb-4">
           <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
-            Allow Listed
+            {I18n.getMessage('dsAllowListed')}
           </p>
           <p className="text-outer-space-crayola dark:text-bright-gray">
-            The cookie domain was added to the allow-list for this session,
-            however the browser may still block these cookies for various
-            reasons, such as invalid attributes. You can check the allowed
-            domains under chrome://settings/content/siteData.
+            {I18n.getMessage('dsAllowListedNote', [
+              'chrome://settings/content/siteData',
+            ])}
           </p>
         </div>
       )}
@@ -105,7 +105,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         isUsingCDP && (
           <>
             <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
-              Blocked Reason
+              {I18n.getMessage('dsBlockedReason')}
             </p>
             <p
               className="text-outer-space-crayola dark:text-bright-gray"
@@ -122,7 +122,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           <div className="flex gap-1 items-center mb-4">
             <InboundIcon className="stroke-[#FE8455] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
-              This cookie was blocked in at least one of the responses.
+              {I18n.getMessage('dsBlockedInAtLeastOne', ['responses'])}
             </p>
             <br />
           </div>
@@ -136,7 +136,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           <div className="flex gap-1 items-center mb-4">
             <InboundIcon className="stroke-[#D8302F] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
-              This cookie was blocked in all responses.
+              {I18n.getMessage('dsBlockedInAll', ['responses'])}
             </p>
             <br />
           </div>
@@ -150,7 +150,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           <div className="flex gap-1 items-center mb-4">
             <OutboundIcon className="stroke-[#FE8455] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
-              This cookie was blocked in at least one of the requests.
+              {I18n.getMessage('dsBlockedInAtLeastOne', ['requests'])}
             </p>
             <br />
           </div>
@@ -164,7 +164,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           <div className="flex gap-1 items-center mb-4">
             <OutboundIcon className="stroke-[#D8302F] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
-              This cookie was blocked in all requests.
+              {I18n.getMessage('dsBlockedInAll', ['requests'])}
             </p>
             <br />
           </div>
@@ -179,7 +179,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           <div className="flex gap-1 items-center mb-4">
             <OutboundInboundIcon className="stroke-[#D8302F] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
-              This cookie was blocked in all of the requests and responses.
+              {I18n.getMessage('dsBlockedInAllRequestResponse')}
             </p>
             <br />
           </div>
@@ -194,8 +194,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           <div className="flex gap-1 items-center mb-4">
             <OutboundInboundIcon className="stroke-[#FE8455] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
-              This cookie was blocked in at least one of the requests and at
-              least one of the responses.
+              {I18n.getMessage('dsBlockedInSomeRequestResponse')}
             </p>
             <br />
           </div>
@@ -210,8 +209,10 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           <div className="flex gap-1 items-center mb-4">
             <OutboundInboundColoredIcon className="scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
-              This cookie was blocked in all requests and at least one of the
-              responses.
+              {I18n.getMessage('dsBlockedinSomeAndAll', [
+                'requests',
+                'responses',
+              ])}
             </p>
             <br />
           </div>
@@ -226,8 +227,10 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           <div className="flex gap-1 items-center mb-4">
             <OutboundInboundColoredIcon className="rotate-180 scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
-              This cookie was blocked in at least one of the requests and all of
-              the responses.
+              {I18n.getMessage('dsBlockedinSomeAndAll', [
+                'responses',
+                'requests',
+              ])}
             </p>
             <br />
           </div>
@@ -237,7 +240,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         selectedCookie?.warningReasons?.length > 0 && (
           <>
             <p className="font-bold text-raising-black dark:text-bright-gray">
-              Warnings
+              {I18n.getMessage('dsWarnings')}
             </p>
             <p
               className="text-outer-space-crayola dark:text-bright-gray"
@@ -246,7 +249,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           </>
         )}
       <p className="font-bold text-raising-black dark:text-bright-gray mb-1 text-semibold flex items-center">
-        <span>Cookie Value</span>
+        <span>{I18n.getMessage('dsCookieValue')}</span>
         <label className="text-raising-black dark:text-bright-gray text-xs font-normal flex items-center">
           <input
             data-testid="show-url-decoded-checkbox"
@@ -262,7 +265,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
             checked={showUrlDecoded}
             onChange={() => setShowUrlDecoded(!showUrlDecoded)}
           />
-          <span>Show URL-decoded</span>
+          <span>{I18n.getMessage('dsURLDecoded')}</span>
         </label>
       </p>
       <p className="mb-4 break-words text-outer-space-crayola dark:text-bright-gray">
@@ -271,10 +274,11 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           : selectedCookie.parsedCookie.value}
       </p>
       <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
-        Description
+        {I18n.getMessage('dsDescription')}
       </p>
       <p className="mb-4 text-outer-space-crayola dark:text-bright-gray">
-        {selectedCookie.analytics?.description || 'No description available.'}
+        {selectedCookie.analytics?.description ||
+          I18n.getMessage('dsNoDescription')}
       </p>
     </div>
   );

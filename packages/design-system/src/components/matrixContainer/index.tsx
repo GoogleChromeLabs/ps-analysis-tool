@@ -27,6 +27,7 @@ import MatrixComponentHorizontal, {
   MatrixComponentHorizontalProps,
 } from '../matrix/matrixComponent/matrixComponentHorizontal';
 import { MatrixComponentProps } from '../matrix/matrixComponent';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface MatrixContainerProps {
   matrixData?: MatrixComponentProps[];
@@ -80,7 +81,9 @@ const MatrixContainer = ({
           {allowExpand && (
             <h4 className="pb-3 flex-1 grow text-xs font-bold text-darkest-gray dark:text-bright-gray text-right">
               <button onClick={() => setIsExpanded((state) => !state)}>
-                {isExpanded ? 'Collapse View' : 'Expand View'}
+                {isExpanded
+                  ? I18n.getMessage('dsCollapseView')
+                  : I18n.getMessage('dsExpandView')}
               </button>
             </h4>
           )}

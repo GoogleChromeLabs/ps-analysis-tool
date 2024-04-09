@@ -25,6 +25,7 @@ import { FilterIcon, SearchInput } from '@ps-analysis-tool/design-system';
  */
 import ExportButton from '../../../exportButton';
 import { useTable } from '../../useTable';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface TableTopBarProps {
   showFilterSidebar: boolean;
@@ -98,7 +99,7 @@ const TableTopBar = ({
       </div>
 
       <div className="text-right w-full text-xxxs text-secondary">
-        Count: {rows.length ?? 0}
+        {I18n.getMessage('dsCount')}: {rows.length ?? 0}
       </div>
     </div>
   );

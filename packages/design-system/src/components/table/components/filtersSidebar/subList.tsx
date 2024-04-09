@@ -23,6 +23,7 @@ import React, { useMemo } from 'react';
  */
 import { useTable, type TableFilter } from '../../useTable';
 import Option from './option';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface SubListProps {
   filterValues: TableFilter[keyof TableFilter]['filterValues'];
@@ -63,7 +64,7 @@ const SubList = ({
       {isSelectAllFilterEnabled && (
         <Option
           filterKey={filterKey}
-          filterValue="All"
+          filterValue={I18n.getMessage('dsSelectAll')}
           selected={isSelectAllFilterSelected}
           toggleFilterSelection={() => toggleSelectAllFilter(filterKey)}
           isExpanded={true}

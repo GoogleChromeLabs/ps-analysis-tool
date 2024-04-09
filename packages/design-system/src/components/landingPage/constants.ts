@@ -20,23 +20,23 @@ import { addUTMParams } from '@ps-analysis-tool/common';
 
 export const QUICK_LINKS = [
   {
-    title: 'Learn more about PSAT',
+    title: 'dsLearnMore',
     link: 'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki',
   },
   {
-    title: 'Join the discussions',
+    title: 'dsJoinDiscussion',
     link: 'https://github.com/GoogleChromeLabs/ps-analysis-tool/discussions',
   },
   {
-    title: 'Report a bug',
+    title: 'dsReportBug',
     link: 'https://github.com/GoogleChromeLabs/ps-analysis-tool/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=',
   },
   {
-    title: 'Report a breakage',
+    title: 'dsReportBreakage',
     link: 'https://goo.gle/report-3pc-broken',
   },
   {
-    title: 'Request Additional Migration Time',
+    title: 'dsRequestMigrationTime',
     link: addUTMParams(
       'https://developer.chrome.com/origintrials/#/view_trial/3315212275698106369'
     ),

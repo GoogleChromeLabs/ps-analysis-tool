@@ -23,6 +23,7 @@ import React from 'react';
  * Internal dependencies.
  */
 import ListRow from './listRow';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 type BulletListProps = {
   rows: BulletListItem[];
@@ -42,7 +43,9 @@ const BulletList = ({ rows, heading }: BulletListProps) => {
       )}
       <div className="space-y-4">
         {rows.length === 0 ? (
-          <p className="text-darkest-gray dark:text-bright-gray">No News</p>
+          <p className="text-darkest-gray dark:text-bright-gray">
+            {I18n.getMessage('dsNoNews')}
+          </p>
         ) : (
           <>
             {rows.map((rowItem) => (
