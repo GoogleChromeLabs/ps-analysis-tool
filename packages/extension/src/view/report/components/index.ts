@@ -16,4 +16,5 @@
 
 export { default as CookiesSection } from './cookiesSection';
 export { default as BlockedCookiesSection } from './blockedCookiesSection';
+export { default as ExemptedCookiesSection } from './exemptedCookiesSection';
 export { default as FramesSection } from './framesSection';

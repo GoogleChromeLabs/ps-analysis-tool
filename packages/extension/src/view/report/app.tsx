@@ -27,13 +27,19 @@ import {
   CookiesSection,
   BlockedCookiesSection,
   FramesSection,
+  ExemptedCookiesSection,
 } from './components';
+import { useData } from './stateProviders/data';
 
 const App = () => {
+  const data = useData(({ state }) => state.data);
   return (
     <div className="h-full w-full flex flex-col">
       <CookiesSection />
       <BlockedCookiesSection />
+      {data && data?.cookiesStatsComponents?.exempted?.length > 0 && (
+        <ExemptedCookiesSection />
+      )}
       <div className="text-xs">
         <LibraryDetection />
       </div>

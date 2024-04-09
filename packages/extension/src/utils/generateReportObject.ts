@@ -72,6 +72,14 @@ export default function generateReportObject(
     },
   ];
 
+  const exemptedCookiesDataMapping: DataMapping[] = [
+    {
+      title: 'Exempted cookies',
+      count: cookieStats.exemptedCookies.total,
+      data: cookiesStatsComponents.exempted,
+    },
+  ];
+
   return {
     cookieClassificationDataMapping,
     tabCookies,
@@ -83,5 +91,6 @@ export default function generateReportObject(
     showBlockedInfoIcon: true,
     frameStateCreator,
     libraryMatches,
+    exemptedCookiesDataMapping,
   };
 }
