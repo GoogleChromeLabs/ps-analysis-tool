@@ -61,10 +61,6 @@ const main = async () => {
 
     const data = await response.json();
 
-    // Add keys, messages to _locale/en/messages.json and replace the text with keys in the formattedData
-    // Not using i18n functions, so no need to add keys to locale for now.
-    // await addKeysToLocale(data);
-
     await fs.writeFile(
       path.resolve(targetDIR, 'related_website_sets.json'),
       JSON.stringify(data, null, 2)
