@@ -108,6 +108,9 @@ describe('App', () => {
         blockedCookies: {
           total: 0,
         },
+        exemptedCookies: {
+          total: 0,
+        },
         firstParty: {
           total: 3,
           analytics: 1,

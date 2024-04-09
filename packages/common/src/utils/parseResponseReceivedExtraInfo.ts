@@ -35,6 +35,7 @@ import isFirstParty from './isFirstParty';
  * Parse Network.responseReceivedExtraInfo for extra information about a cookie.
  * @param {object} headers Headers of resonse to be parsed to get extra information about a cookie.
  * @param {object} blockedCookies Blocked Cookies associated with the response being parsed.
+ * @param {object} exemptedCookies Blocked Cookies associated with the response being parsed.
  * @param {string|undefined} cookiePartitionKey Partittion key for the response.
  * @param {object} requestMap An object for requestId to url.
  * @param {string} tabUrl - The top-level URL (URL in the tab's address bar).
@@ -45,6 +46,7 @@ import isFirstParty from './isFirstParty';
 export default function parseResponseReceivedExtraInfo(
   headers: Protocol.Network.ResponseReceivedExtraInfoEvent['headers'],
   blockedCookies: Protocol.Network.ResponseReceivedExtraInfoEvent['blockedCookies'],
+  exemptedCookies: Protocol.Network.ResponseReceivedExtraInfoEvent['exemptedCookies'],
   cookiePartitionKey: Protocol.Network.ResponseReceivedExtraInfoEvent['cookiePartitionKey'],
   requestMap: { [requestId: string]: string },
   tabUrl: string,
@@ -64,6 +66,13 @@ export default function parseResponseReceivedExtraInfo(
         const temporaryParsedCookie = parse(c.cookieLine);
         return temporaryParsedCookie.name === parsedCookie.name;
       }
+    });
+
+    const exemptedCookie = exemptedCookies?.find((c) => {
+      if (c.cookie) {
+        return c.cookie?.name === parsedCookie.name;
+      }
+      return false;
     });
 
     const effectiveExpirationDate = calculateEffectiveExpiryDate(
@@ -118,6 +127,7 @@ export default function parseResponseReceivedExtraInfo(
       isFirstParty: isFirstParty(domain, tabUrl),
       headerType: 'response' as CookieData['headerType'],
       frameIdList: [],
+      exemptionReason: exemptedCookie?.exemptionReason,
     };
 
     cookies.push(singleCookie);

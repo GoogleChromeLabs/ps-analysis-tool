@@ -28,7 +28,9 @@ import {
   CookiesSection,
   BlockedCookiesSection,
   FramesSection,
+  ExemptedCookiesSection,
 } from './components';
+import { useData } from './stateProviders/data';
 
 const App = () => {
   const print = useCallback(() => {
@@ -47,6 +49,8 @@ const App = () => {
     }, 1);
   }, []);
 
+  const data = useData(({ state }) => state.data);
+
   return (
     <div className="h-full w-full flex flex-col">
       <div className="absolute flex flex-col gap-2 top-5 right-5 text-sm print:hidden">
@@ -55,6 +59,9 @@ const App = () => {
       </div>
       <CookiesSection />
       <BlockedCookiesSection />
+      {data && data?.cookiesStatsComponents?.exempted?.length > 0 && (
+        <ExemptedCookiesSection />
+      )}
       <div className="text-xs">
         <LibraryDetection />
       </div>

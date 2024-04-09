@@ -40,6 +40,7 @@ export interface DataStoreContext {
       showBlockedInfoIcon: boolean;
       frameStateCreator: FrameStateCreator;
       libraryMatches: LibraryData;
+      exemptedCookiesDataMapping: DataMapping[];
     } | null;
   };
 }
@@ -54,6 +55,8 @@ const initialState: DataStoreContext = {
         firstParty: [],
         thirdParty: [],
         blocked: [],
+        exemptedCookiesLegend: [],
+        exempted: [],
       },
       tabCookies: {},
       tabFrames: {},
@@ -66,6 +69,7 @@ const initialState: DataStoreContext = {
         legend: [],
       },
       libraryMatches: {},
+      exemptedCookiesDataMapping: [],
     },
     isDataLoaded: false,
   },

@@ -25,6 +25,7 @@ import {
   MenuBar,
   type CookiesLandingSection,
   type MenuData,
+  prepareCookiesCount,
 } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies
@@ -34,6 +35,7 @@ import FramesSection from './framesSection';
 import BlockedCookiesSection from './blockedCookiesSection';
 import { useCookie } from '../../../stateProviders';
 import downloadReport from '../../../../../utils/downloadReport';
+import ExemptedCookiesSection from './exemptedCookiesSection';
 
 const AssembledCookiesLanding = () => {
   const { url, tabCookies, tabFrames } = useCookie(({ state }) => ({
@@ -48,8 +50,10 @@ const AssembledCookiesLanding = () => {
       showLoader: state.showLoader,
     })
   );
-  const sections: Array<CookiesLandingSection> = useMemo(
-    () => [
+
+  const cookieStats = prepareCookiesCount(tabCookies);
+  const sections: Array<CookiesLandingSection> = useMemo(() => {
+    const defaultSections = [
       {
         name: 'Cookies',
         link: 'cookies',
@@ -78,9 +82,18 @@ const AssembledCookiesLanding = () => {
           Element: FramesSection,
         },
       },
-    ],
-    []
-  );
+    ];
+    if (cookieStats.exemptedCookies.total > 0) {
+      defaultSections.splice(2, 0, {
+        name: 'Exemption Reason',
+        link: 'exemption-reasons',
+        panel: {
+          Element: ExemptedCookiesSection,
+        },
+      });
+    }
+    return defaultSections;
+  }, [cookieStats.exemptedCookies.total]);
 
   const menuData: MenuData = useMemo(
     () => sections.map(({ name, link }) => ({ name, link })),
