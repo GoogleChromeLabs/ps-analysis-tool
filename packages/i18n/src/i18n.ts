@@ -13,10 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/**
+ * External dependencies.
+ */
 import { existsSync, readFileSync } from 'fs';
 import { IntlMessageFormat } from 'intl-messageformat';
 
+/**
+ * Class representing Internationalization (i18n) functionality.
+ */
 class I18n {
   private messages: {
     [key: string]: {
@@ -31,14 +36,28 @@ class I18n {
     };
   } = {};
 
+  /**
+   * Initializes the messages object with the provided messages.
+   * @param {object} messages - The messages object containing translations.
+   */
   initMessages(messages = {}) {
     this.messages = messages;
   }
 
+  /**
+   * Creates an array of possible locale strings based on the provided locale.
+   * @param {string} locale - The locale string.
+   * @returns {string[]} An array of locale strings.
+   */
   private createLocaleArray(locale: string) {
     return [locale, locale.split('-')[0], locale.split('_')[0], 'en'];
   }
 
+  /**
+   * Asynchronously loads messages data for the dashboard.
+   * @param {string} locale - The locale string.
+   * @returns {Promise<void>} A promise that resolves when messages are loaded.
+   */
   async loadDashboardMessagesData(locale: string) {
     const localeArray = this.createLocaleArray(locale);
 
@@ -69,6 +88,10 @@ class I18n {
     await fetchWithRetry();
   }
 
+  /**
+   * Loads messages data for the CLI.
+   * @param {string} locale - The locale string.
+   */
   loadCLIMessagesData(locale: string) {
     const localeArray = this.createLocaleArray(locale);
 
@@ -91,6 +114,13 @@ class I18n {
     }
   }
 
+  /**
+   * Retrieves a translated message for a given key.
+   * @param {string} key - The key of the message to retrieve.
+   * @param {string[]} [substitutions] - An array of substitution values for placeholders in the message.
+   * @param {boolean} [escapeLt] - Whether to escape '<' characters.
+   * @returns {string} The translated message.
+   */
   getMessage(key: string, substitutions?: string[], escapeLt?: boolean) {
     if (typeof chrome !== 'undefined' && chrome?.i18n?.getMessage) {
       // @ts-ignore - Outdated definition.
@@ -102,6 +132,13 @@ class I18n {
     return this._parseMessage(key, substitutions, escapeLt);
   }
 
+  /**
+   * Parses a message with substitutions and placeholders.
+   * @param {string} key - The key of the message to parse.
+   * @param {string[]} [substitutions] - An array of substitution values for placeholders in the message.
+   * @param {boolean} [escapeLt] - Whether to escape '<' characters.
+   * @returns {string} The parsed message.
+   */
   private _parseMessage(
     key: string,
     substitutions?: string[],

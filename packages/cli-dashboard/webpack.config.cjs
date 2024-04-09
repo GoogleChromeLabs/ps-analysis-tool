@@ -46,10 +46,7 @@ const dashboard = {
       inject: false,
     }),
     new CopyPlugin({
-      patterns: [
-        { from: '../../out', to: 'out' },
-        // { from: '../i18n/_locales/messages', to: '_locales' },
-      ],
+      patterns: [{ from: '../../out', to: 'out' }],
     }),
   ],
   ...commonConfig,
