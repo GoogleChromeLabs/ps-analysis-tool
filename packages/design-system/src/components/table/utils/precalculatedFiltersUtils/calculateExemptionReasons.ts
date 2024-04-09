@@ -16,11 +16,7 @@
 /*
  * External dependencies
  */
-import {
-  TabCookies,
-  TabFrames,
-  filterCookiesByFrame,
-} from '@ps-analysis-tool/common';
+import { CookieTableData } from '@ps-analysis-tool/common';
 /*
  * Internal dependencies
  */
@@ -28,26 +24,16 @@ import { TableFilter } from '../../useTable';
 
 /**
  * This function will return set of non duplicated cookie execmption reason.
- * @param tableData The cookie table data.
- * @param tabFrames Frames in the tab.
- * @param selectedFrame Current selected frame.
+ * @param frameFilteredCookies The cookie table data.
  * @param clearQuery Function to clear the query(when options are provided) to avoid conflicts.
  * @param options Options to preselect the filter values.
  * @returns {string[]} Unique set of exemption reasons.
  */
 function frameOnlyExemptionReasonValues(
-  tableData: TabCookies | null,
-  tabFrames: TabFrames | null,
-  selectedFrame: string | null,
+  frameFilteredCookies: CookieTableData[],
   clearQuery?: () => void,
   options?: string[]
 ) {
-  const frameFilteredCookies = filterCookiesByFrame(
-    tableData,
-    tabFrames,
-    selectedFrame
-  );
-
   const collectedExemptionReasons = Array.from(
     new Set(
       frameFilteredCookies.map(({ exemptionReason }) => {

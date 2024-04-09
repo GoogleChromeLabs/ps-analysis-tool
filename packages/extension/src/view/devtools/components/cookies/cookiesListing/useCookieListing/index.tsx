@@ -22,6 +22,7 @@ import {
   type CookieTableData,
   type TabCookies,
   BLOCK_STATUS,
+  filterCookiesByFrame,
 } from '@ps-analysis-tool/common';
 import {
   RefreshButton,
@@ -61,6 +62,11 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
       activePanelQuery: state.activePanel.query,
       clearActivePanelQuery: state.activePanel.clearQuery,
     })
+  );
+
+  const frameFilteredCookies = useMemo(
+    () => filterCookiesByFrame(cookies, tabFrames, selectedFrame),
+    [cookies, selectedFrame, tabFrames]
   );
 
   const parsedQuery = useMemo(
@@ -494,9 +500,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
           parsedQuery
         ),
         filterValues: calculateExemptionReason(
-          cookies,
-          tabFrames,
-          selectedFrame,
+          frameFilteredCookies,
           clearActivePanelQuery,
           parsedQuery?.filter?.exemptionReason
         ),
@@ -506,7 +510,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         },
       },
     }),
-    [clearActivePanelQuery, cookies, parsedQuery, selectedFrame, tabFrames]
+    [clearActivePanelQuery, cookies, frameFilteredCookies, parsedQuery]
   );
 
   const searchKeys = useMemo<string[]>(
