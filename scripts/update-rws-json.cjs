@@ -25,6 +25,30 @@ const errorHandler = (err) => {
   process.exit(1);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const addKeysToLocale = async (data) => {
+  const messagesPath = path.resolve(
+    'packages/i18n/_locales/messages/en/messages.json'
+  );
+  const messages = await fs.readJson(messagesPath);
+
+  data.sets.forEach((set) => {
+    const rationalesObj = set.rationaleBySite;
+    Object.entries(rationalesObj).forEach(([site, rationale]) => {
+      const key = `RWS_rationale_${site.replace(/[:/ *-.%“”()[\]]/g, '_')}`;
+
+      messages[key] = {
+        message: rationale,
+        description: 'Rationale for a site in the related website set',
+      };
+
+      rationalesObj[site] = key;
+    });
+  });
+
+  await fs.writeJson(messagesPath, messages, { spaces: 2 });
+};
+
 const main = async () => {
   console.log('Updating related_website_sets.json file...'); // eslint-disable-line no-console
 
@@ -36,6 +60,7 @@ const main = async () => {
     }
 
     const data = await response.json();
+
     await fs.writeFile(
       path.resolve(targetDIR, 'related_website_sets.json'),
       JSON.stringify(data, null, 2)
