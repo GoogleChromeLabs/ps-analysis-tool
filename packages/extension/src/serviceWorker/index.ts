@@ -85,7 +85,7 @@ const unParsedResponseHeaders: {
 
 let tabMode: 'single' | 'unlimited' = 'single';
 let tabToRead = '';
-let globalIsUsingCDP = false;
+let globalIsUsingCDP = true;
 
 const ALLOWED_EVENTS = [
   'Network.responseReceived',
@@ -297,7 +297,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     await chrome.storage.sync.clear();
     await chrome.storage.sync.set({
       allowedNumberOfTabs: 'single',
-      isUsingCDP: false,
+      isUsingCDP: true,
     });
   }
 
@@ -338,7 +338,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     await chrome.storage.sync.clear();
     await chrome.storage.sync.set({
       allowedNumberOfTabs: 'single',
-      isUsingCDP: false,
+      isUsingCDP: true,
     });
   }
 });
