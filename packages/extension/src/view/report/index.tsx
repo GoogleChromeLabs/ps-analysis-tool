@@ -20,13 +20,13 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { LibraryDetectionProvider } from '@ps-analysis-tool/library-detection';
+import { noop } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies
  */
 import App from './app';
 import { DataProvider } from './stateProviders/data';
-import { noop } from '@ps-analysis-tool/common';
 
 //@ts-ignore this global mock is needed for the provider LibraryDetectionProvider and the component LibraryDetection to work
 chrome = {

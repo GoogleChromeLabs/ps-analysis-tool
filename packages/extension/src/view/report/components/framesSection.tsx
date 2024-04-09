@@ -32,7 +32,7 @@ const CookiesSection = () => {
   const data = useData(({ state }) => state.data);
 
   if (!data) {
-    return <></>;
+    return null;
   }
 
   const _data = data.frameStateCreator.legend.map((component) => {

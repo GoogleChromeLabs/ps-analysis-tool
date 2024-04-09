@@ -17,11 +17,11 @@
  * External dependencies.
  */
 import React, { useEffect, useState, type PropsWithChildren } from 'react';
+import { useLibraryDetectionContext } from '@ps-analysis-tool/library-detection';
 /**
  * Internal dependencies.
  */
 import Context, { type DataStoreContext } from './context';
-import { useLibraryDetectionContext } from '@ps-analysis-tool/library-detection';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [data, setData] = useState<DataStoreContext['state']['data']>(null);
