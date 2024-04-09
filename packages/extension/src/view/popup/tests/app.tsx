@@ -65,6 +65,17 @@ describe('App', () => {
     ).toBeInTheDocument();
   });
 
+  it('Should show loader', () => {
+    mockUseCookieStore.mockReturnValueOnce({
+      loading: true,
+    });
+    act(() => {
+      render(<App />);
+    });
+
+    expect(screen.getByTestId('progress-bar')).toBeInTheDocument();
+  });
+
   it('Should show No cookies found on this page message if no firstParty and thirdParty cookies are not available', () => {
     mockUseCookieStore.mockReturnValueOnce({
       isCurrentTabBeingListenedTo: true,

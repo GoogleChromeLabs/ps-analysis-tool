@@ -136,9 +136,9 @@ const InformationContainer = () => {
           )}
         >
           <button
+            data-testid="copy-button"
             disabled={copying}
             className="absolute right-1 top-1"
-            data-testid="copy-button"
             onClick={handleCopy}
           >
             {copying ? (

@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 /**
- * This determines the processing mode of the extension True if singleTabProcessingMode false if multiple tab being processed.
- * @returns boolean.
+ * Internal dependencies.
  */
-export default async function isSingleTabProcessingMode() {
-  const syncStorage = await chrome.storage.sync.get();
-  return (
-    syncStorage.allowedNumberOfTabs &&
-    syncStorage.allowedNumberOfTabs !== 'unlimited'
-  );
-}
+import removeTrailingSlash from '../removeTrailingSlash';
+
+describe('removeTrailingSlash', () => {
+  it('should return url with no trailing slash', () => {
+    const urls = ['https://example.com/', 'https://example.com'];
+    const urlWithNoTrailingSlash = 'https://example.com';
+
+    urls.forEach((url) => {
+      expect(removeTrailingSlash(url)).toBe(urlWithNoTrailingSlash);
+    });
+  });
+});

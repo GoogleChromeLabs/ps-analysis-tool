@@ -43,6 +43,7 @@ import { createCookieObject } from './createCookieObject';
  * @param {number} frameId Id of a frame in which this cookie is used.
  * @param {Protocol.Network.Cookie[]} cdpCookiesList List cookies from the request.
  * @param {string} requestId Request id.
+ * @param {boolean} globalIsUsingCDP Boolean to determie whether or not CDP is being used.
  * @returns {CookieData} Parsed cookie object.
  */
 const parseResponseCookieHeader = (
@@ -52,7 +53,8 @@ const parseResponseCookieHeader = (
   tabUrl: string,
   frameId: number,
   cdpCookiesList: Protocol.Network.Cookie[],
-  requestId: string
+  requestId: string,
+  globalIsUsingCDP: boolean
 ): CookieData => {
   let parsedCookie: CookieData['parsedCookie'] = cookie.parse(value);
 
@@ -98,7 +100,11 @@ const parseResponseCookieHeader = (
           type: RESPONSE_EVENT.CHROME_WEBREQUEST_ON_RESPONSE_STARTED,
           requestId,
           url: url,
-          blocked: isExpired ? false : !isFoundInCDPCookieList,
+          blocked: globalIsUsingCDP
+            ? isExpired
+              ? false
+              : !isFoundInCDPCookieList
+            : false,
           timeStamp: Date.now(),
         },
       ],
