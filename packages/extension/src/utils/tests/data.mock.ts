@@ -7295,6 +7295,8 @@ export const data = {
         countClassName: 'text-honey-wax',
       },
     ],
+    exempted: [],
+    exemptedCookiesLegend: [],
   },
   tabFrames: {
     'https://rtcamp.com': {
@@ -7443,4 +7445,11 @@ export const data = {
       ],
     },
   },
+  exemptedCookiesDataMapping: [
+    {
+      count: 0,
+      data: [],
+      title: 'Exempted cookies',
+    },
+  ],
 };

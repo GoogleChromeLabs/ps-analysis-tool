@@ -3767,6 +3767,20 @@ const data = {
         countClassName: 'text-jay-bird',
       },
     ],
+    exempted: [
+      {
+        count: 3,
+        color: '#F9DC5C',
+      },
+    ],
+    exemptedCookiesLegend: [
+      {
+        label: 'UserSetting',
+        count: 3,
+        color: '#F9DC5C',
+        countClassName: 'text-napels-yellow',
+      },
+    ],
   },
   tabFrames: {
     'https://rtcamp.com': {
@@ -3915,6 +3929,18 @@ const data = {
       ],
     },
   },
+  exemptedCookiesDataMapping: [
+    {
+      title: 'Exempted cookies',
+      count: 3,
+      data: [
+        {
+          count: 3,
+          color: '#F9DC5C',
+        },
+      ],
+    },
+  ],
 };
 
 export default data;
