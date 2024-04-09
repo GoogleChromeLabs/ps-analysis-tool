@@ -28,6 +28,7 @@ import {
 import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
 import CookiesSection from './cookieLanding/cookiesSection';
 import BlockedCookiesSection from './cookieLanding/blockedCookiesSection';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface CookiesLandingContainerProps {
   tabFrames: TabFrames;
@@ -45,7 +46,7 @@ const CookiesLandingContainer = ({
   const sections: Array<CookiesLandingSection> = useMemo(
     () => [
       {
-        name: 'Cookies',
+        name: I18n.getMessage('cdCookies'),
         link: 'cookies',
         panel: {
           Element: CookiesSection,
@@ -56,7 +57,7 @@ const CookiesLandingContainer = ({
         },
       },
       {
-        name: 'Blocked Cookies',
+        name: I18n.getMessage('cdBlockedCookies'),
         link: 'blocked-cookies',
         panel: {
           Element: BlockedCookiesSection,
@@ -82,7 +83,7 @@ const CookiesLandingContainer = ({
         <div className="absolute right-0 py-5 px-5">
           <Button
             extraClasses="w-fit text-sm flex justify-center items-center"
-            text="Download Report"
+            text={I18n.getMessage('cdDownloadReport')}
             onClick={downloadReport}
           />
         </div>

@@ -37,6 +37,7 @@ import { useContentStore } from '../stateProviders/contentStore';
 import CookiesTab from '../tabs/cookies';
 import SiteCookiesWithIssues from '../tabs/siteCookiesWithIssues';
 import Technologies from '../tabs/technologies';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface LayoutProps {
   selectedSite: string | null;
@@ -81,6 +82,7 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
 
       const keys = selectedItemKey?.split('#') ?? [];
 
+      _data[SIDEBAR_ITEMS_KEYS.COOKIES].title = I18n.getMessage('cdCookies');
       _data[SIDEBAR_ITEMS_KEYS.COOKIES].panel = {
         Element: CookiesTab,
         props: {
@@ -118,6 +120,9 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
         {}
       );
 
+      _data[SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES].title = I18n.getMessage(
+        'cdCookiesWithIssues'
+      );
       _data[SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES].panel = {
         Element: SiteCookiesWithIssues,
         props: {
@@ -127,7 +132,7 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
 
       if (technologies && technologies.length > 0) {
         _data[SIDEBAR_ITEMS_KEYS.TECHNOLOGIES] = {
-          title: 'Technologies',
+          title: I18n.getMessage('cdTechnologies'),
           children: {},
           icon: {
             Element: SiteBoundariesIcon,

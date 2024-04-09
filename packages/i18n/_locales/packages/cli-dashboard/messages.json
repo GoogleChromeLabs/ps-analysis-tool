@@ -1,0 +1,122 @@
+{
+  "cdSitemapReport": {
+    "message": "Sitemap report"
+  },
+  "cdCookiesWithIssues": {
+    "message": "Cookies With Issues"
+  },
+  "cdCookies": {
+    "message": "Cookies"
+  },
+  "cdTechnologies": {
+    "message": "Technologies"
+  },
+  "cdBlockedCookies": {
+    "message": "Blocked Cookies"
+  },
+  "cdBlockedReasons": {
+    "message": "Blocked Reasons"
+  },
+  "cdBlockedReasonsNote": {
+    "message": "Cookies that have been blocked by the browser.(The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
+  },
+  "cdSelectAll": {
+    "message": "All"
+  },
+  "cdNoCookies": {
+    "message": "No cookies found on this page"
+  },
+  "cdTryReloading": {
+    "message": "Please try reloading the page"
+  },
+  "cdDownloadReport": {
+    "message": "Download Report"
+  },
+  "cdName": {
+    "message": "Name"
+  },
+  "cdDescription": {
+    "message": "Description"
+  },
+  "cdConfidence": {
+    "message": "Confidence"
+  },
+  "cdWebsite": {
+    "message": "Website"
+  },
+  "cdCategory": {
+    "message": "Category"
+  },
+  "cdTechnologyDetails": {
+    "message": "Technology Details"
+  },
+  "cdSelectRowToPreview": {
+    "message": "Select row to preview its value"
+  },
+  "cdNoDescription": {
+    "message": "No description available"
+  },
+  "cdScope": {
+    "message": "Scope"
+  },
+  "cdDomain": {
+    "message": "Domain"
+  },
+  "cdPartitionKey": {
+    "message": "Partition Key"
+  },
+  "cdSameSite": {
+    "message": "SameSite"
+  },
+  "cdPlatform": {
+    "message": "Platform"
+  },
+  "cdHttpOnly": {
+    "message": "HttpOnly"
+  },
+  "cdSecure": {
+    "message": "Secure"
+  },
+  "cdValue": {
+    "message": "Value"
+  },
+  "cdPath": {
+    "message": "Path"
+  },
+  "cdExpires": {
+    "message": "Expires / Max-Age"
+  },
+  "cdFirstParty": {
+    "message": "First Party"
+  },
+  "cdThirdParty": {
+    "message": "Third Party"
+  },
+  "cdSession": {
+    "message": "Session"
+  },
+  "cdTrue": {
+    "message": "True"
+  },
+  "cdFalse": {
+    "message": "False"
+  },
+  "cdRetentionPeriod": {
+    "message": "Retention Period"
+  },
+  "cdShortTerm": {
+    "message": "Short Term (<24h)"
+  },
+  "cdMediumTerm": {
+    "message": "Medium Term (24h - 1 week)"
+  },
+  "cdLongTerm": {
+    "message": "Long Term (1 week - 1 month)"
+  },
+  "cdExtentedTerm": {
+    "message": "Extended Term (>1 month)"
+  },
+  "cdNoPathProvided": {
+    "message": "No path provided"
+  }
+}

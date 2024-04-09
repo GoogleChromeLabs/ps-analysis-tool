@@ -25,7 +25,7 @@ import {
 
 const Tabs: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.COOKIES]: {
-    title: 'Cookies',
+    title: 'cmCookies',
     children: {},
     icon: {
       Element: CookieIcon,
@@ -35,7 +35,7 @@ const Tabs: SidebarItems = {
     },
   },
   [SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES]: {
-    title: 'Cookies With Issues',
+    title: 'cdCookiesWithIssues',
     children: {},
     icon: {
       Element: CookieIcon,

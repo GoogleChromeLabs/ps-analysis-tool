@@ -28,6 +28,7 @@ import {
   useFiltersMapping,
 } from '@ps-analysis-tool/design-system';
 import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface BlockedCookiesSectionProps {
   tabCookies: TabCookies | null;
@@ -45,10 +46,11 @@ const BlockedCookiesSection = ({
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
   const blockedCookieDataMapping: DataMapping[] = [
     {
-      title: 'Blocked cookies',
+      title: I18n.getMessage('cdBlockedCookies'),
       count: cookieStats.blockedCookies.total,
       data: cookiesStatsComponents.blocked,
-      onClick: () => selectedItemUpdater('All', 'blockedReasons'),
+      onClick: () =>
+        selectedItemUpdater(I18n.getMessage('cdSelectAll'), 'blockedReasons'),
     },
   ];
   const dataComponents: MatrixComponentProps[] =
@@ -86,9 +88,9 @@ const BlockedCookiesSection = ({
       {dataComponents.length > 0 && (
         <>
           <MatrixContainer
-            title="Blocked Reasons"
+            title={I18n.getMessage('cdBlockedCookies')}
             matrixData={dataComponents}
-            infoIconTitle="Cookies that have been blocked by the browser.(The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
+            infoIconTitle={I18n.getMessage('cdBlockedReasonsNote')}
           />
           <div className="flex flex-col mt-8">
             <div className="pt-4">

@@ -42,6 +42,7 @@ import SiteMapCookiesWithIssues from './sitemapCookiesWithIssues';
 import CookiesLandingContainer from '../siteReport/tabs/cookies/cookiesLandingContainer';
 import reshapeCookies from '../utils/reshapeCookies';
 import { generateSiteMapReportandDownload } from '../utils/reportDownloader';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface LayoutProps {
   landingPageCookies: CookieFrameStorageType;
@@ -121,6 +122,8 @@ const Layout = ({
     setSidebarData((prev) => {
       const _data = { ...prev };
 
+      _data[SIDEBAR_ITEMS_KEYS.COOKIES].title =
+        I18n.getMessage('cdSitemapReport');
       _data[SIDEBAR_ITEMS_KEYS.COOKIES].panel = {
         Element: CookiesLandingContainer,
         props: {
@@ -168,6 +171,9 @@ const Layout = ({
         {}
       );
 
+      _data[SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES].title = I18n.getMessage(
+        'cdCookiesWithIssues'
+      );
       _data[SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES].panel = {
         Element: SiteMapCookiesWithIssues,
         props: {

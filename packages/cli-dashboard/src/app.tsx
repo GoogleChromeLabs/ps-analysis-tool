@@ -96,7 +96,7 @@ const App = () => {
   if (!path) {
     return (
       <div className="flex justify-center items-center">
-        <div className="text-2xl">No path provided</div>
+        <div className="text-2xl">{I18n.getMessage('cdNoPathProvided')}</div>
       </div>
     );
   }
