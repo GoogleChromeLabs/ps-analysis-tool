@@ -56,6 +56,9 @@ module.exports = {
         ...defaultTheme.screens,
         xxs: '360px',
         xs: '480px',
+        screens: {
+          print: { raw: 'print' },
+        },
       },
     },
     borderRadius: {

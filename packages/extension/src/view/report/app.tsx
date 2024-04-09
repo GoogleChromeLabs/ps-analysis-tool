@@ -17,8 +17,9 @@
 /**
  * External dependencies
  */
-import React from 'react';
+import React, { useCallback } from 'react';
 import { LibraryDetection } from '@ps-analysis-tool/library-detection';
+import { Button } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies
  */
@@ -30,8 +31,28 @@ import {
 } from './components';
 
 const App = () => {
+  const print = useCallback(() => {
+    window.print();
+  }, []);
+
+  const expandAndPrint = useCallback(() => {
+    Array.from(document.querySelectorAll('button'))
+      .filter((button) => button.innerText === 'Expand View')
+      .forEach((bt) => bt.click());
+    setTimeout(() => {
+      window.print();
+      Array.from(document.querySelectorAll('button'))
+        .filter((button) => button.innerText === 'Collapse View')
+        .forEach((bt) => bt.click());
+    }, 1);
+  }, []);
+
   return (
     <div className="h-full w-full flex flex-col">
+      <div className="absolute flex flex-col gap-2 top-5 right-5 text-sm print:hidden">
+        <Button text={'Print'} onClick={print} />
+        <Button text={'Expand and print'} onClick={expandAndPrint} />
+      </div>
       <CookiesSection />
       <BlockedCookiesSection />
       <div className="text-xs">
