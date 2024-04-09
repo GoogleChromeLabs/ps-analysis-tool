@@ -42,10 +42,6 @@ import { checkPortInUse } from './utils/checkPortInUse';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
-// Not loading messages data for now, as I18n.getMessage is not used right now.
-// const locale = Intl.DateTimeFormat().resolvedOptions().locale;
-// I18n.loadCLIMessagesData(locale);
-
 const DELAY_TIME = 20000;
 const program = new Command();
 

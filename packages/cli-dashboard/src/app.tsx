@@ -47,14 +47,6 @@ const App = () => {
     CompleteJson[] | null
   >(null);
 
-  // Not loading messages data for now, as I18n.getMessage is not used right now.
-  // useEffect(() => {
-  //   const locale = navigator.language || 'en';
-  //   I18n.loadDashboardMessagesData(locale).then(() => {
-  //     forceUpdate((prev) => prev + 1);
-  //   });
-  // }, []);
-
   const [type, path] = useMemo(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const dir = urlParams.get('dir');
