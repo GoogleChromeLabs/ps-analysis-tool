@@ -17,24 +17,25 @@
 /**
  * Internal dependencies
  */
+import { I18n } from '@ps-analysis-tool/i18n';
 import type { CompleteJson, CookieJsonDataType } from '../../cookies.types';
 import calculateEffectiveExpiryDate from '../calculateEffectiveExpiryDate';
 import sanitizeCsvRecord from '../sanitizeCsvRecord';
 
 export const COOKIES_WITH_ISSUES_DATA_HEADERS = [
-  'Name',
-  'Scope',
-  'Domain',
-  'Partition Key',
-  'Same Site',
-  'Category',
-  'Platform',
-  'Http Only',
-  'Secure',
-  'Value',
-  'Path',
-  'Expires',
-  'GDPRPortal',
+  I18n.getMessage('cmName'),
+  I18n.getMessage('cmScope'),
+  I18n.getMessage('cmDomain'),
+  I18n.getMessage('cmPartitionKey'),
+  I18n.getMessage('cmSameSite'),
+  I18n.getMessage('cmCategory'),
+  I18n.getMessage('cmPlatform'),
+  I18n.getMessage('cmHttpOnly'),
+  I18n.getMessage('cmSecure'),
+  I18n.getMessage('cmValue'),
+  I18n.getMessage('cmPath'),
+  I18n.getMessage('cmExpires'),
+  I18n.getMessage('cmGDPR'),
 ];
 
 const generateCookiesWithIssuesCSV = (
@@ -59,7 +60,9 @@ const generateCookiesWithIssuesCSV = (
     //This should be in the same order as cookieDataHeader
     const recordsArray = [
       cookie.parsedCookie.name,
-      cookie.isFirstParty ? 'First Party' : 'Third Party',
+      cookie.isFirstParty
+        ? I18n.getMessage('cmFirstParty')
+        : I18n.getMessage('cmThirdParty'),
       cookie.parsedCookie.domain || ' ',
       cookie.parsedCookie.partitionKey || ' ',
       cookie.parsedCookie.sameSite,

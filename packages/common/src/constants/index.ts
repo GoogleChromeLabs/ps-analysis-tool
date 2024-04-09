@@ -13,4 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const UNKNOWN_FRAME_KEY = 'Unknown Frames';
+import { I18n } from '@ps-analysis-tool/i18n';
+
+export const UNKNOWN_FRAME_KEY = I18n.getMessage('cmUnknownFrames');

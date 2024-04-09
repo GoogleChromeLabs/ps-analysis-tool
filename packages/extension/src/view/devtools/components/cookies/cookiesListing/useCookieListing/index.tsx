@@ -265,7 +265,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         useGenericPersistenceKey: true,
       },
       isFirstParty: {
-        title: I18n.getMessage('extCategory'),
+        title: I18n.getMessage('extScope'),
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
         filterValues: evaluateStaticFilterValues(

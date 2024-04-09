@@ -1,0 +1,68 @@
+{
+  "cmUnknownFrames": {
+    "message": "Unknown Frames"
+  },
+  "cmName": {
+    "message": "Name"
+  },
+  "cmScope": {
+    "message": "Scope"
+  },
+  "cmDomain": {
+    "message": "Domain"
+  },
+  "cmPartitionKey": {
+    "message": "Partition Key"
+  },
+  "cmSameSite": {
+    "message": "SameSite"
+  },
+  "cmCategory": {
+    "message": "Category"
+  },
+  "cmPlatform": {
+    "message": "Platform"
+  },
+  "cmHttpOnly": {
+    "message": "HttpOnly"
+  },
+  "cmSecure": {
+    "message": "Secure"
+  },
+  "cmValue": {
+    "message": "Value"
+  },
+  "cmPath": {
+    "message": "Path"
+  },
+  "cmExpires": {
+    "message": "Expires"
+  },
+  "cmIssues": {
+    "message": "Issues"
+  },
+  "cmGdpr": {
+    "message": "GDPR Portal"
+  },
+  "cmFirstParty": {
+    "message": "First Party"
+  },
+  "cmThirdParty": {
+    "message": "Third Party"
+  },
+  "cmDescription": {
+    "message": "Description"
+  },
+  "cmConfidence": {
+    "message": "Confidence"
+  },
+  "cmWebsite": {
+    "message": "Website"
+  },
+  "cmCategories": {
+    "message": "Categories"
+  },
+  "cmUncategorized": {
+    "message": "Uncategorized"
+  }
+}

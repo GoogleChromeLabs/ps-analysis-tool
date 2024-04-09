@@ -23,22 +23,23 @@ import sanitizeCsvRecord from '../sanitizeCsvRecord';
  */
 import type { CompleteJson, CookieJsonDataType } from '../../cookies.types';
 import calculateEffectiveExpiryDate from '../calculateEffectiveExpiryDate';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 export const COOKIES_DATA_HEADER = [
-  'Name',
-  'Scope',
-  'Domain',
-  'Partition Key',
-  'Same Site',
-  'Category',
-  'Platform',
-  'Http Only',
-  'Secure',
-  'Value',
-  'Path',
-  'Expires',
-  'Issues',
-  'GDPRPortal',
+  I18n.getMessage('cmName'),
+  I18n.getMessage('cmScope'),
+  I18n.getMessage('cmDomain'),
+  I18n.getMessage('cmPartitionKey'),
+  I18n.getMessage('cmSameSite'),
+  I18n.getMessage('cmCategory'),
+  I18n.getMessage('cmPlatform'),
+  I18n.getMessage('cmHttpOnly'),
+  I18n.getMessage('cmSecure'),
+  I18n.getMessage('cmValue'),
+  I18n.getMessage('cmPath'),
+  I18n.getMessage('cmExpires'),
+  I18n.getMessage('cmIssues'),
+  I18n.getMessage('cmGDPR'),
 ];
 
 const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
@@ -59,7 +60,9 @@ const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
     //This should be in the same order as cookieDataHeader
     const recordsArray = [
       cookie.parsedCookie.name,
-      cookie.isFirstParty ? 'First Party' : 'Third Party',
+      cookie.isFirstParty
+        ? I18n.getMessage('cmFirstParty')
+        : I18n.getMessage('cmThirdParty'),
       cookie.parsedCookie.domain || ' ',
       cookie.parsedCookie.partitionKey || ' ',
       cookie.parsedCookie.sameSite,

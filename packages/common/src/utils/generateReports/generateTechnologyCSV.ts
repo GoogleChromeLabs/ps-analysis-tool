@@ -19,13 +19,14 @@
  */
 import sanitizeCsvRecord from '../sanitizeCsvRecord';
 import { CompleteJson } from '../../cookies.types';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const TECHNOLOGIES_DATA_HEADER = [
-  'Name',
-  'Description',
-  'Confidence',
-  'Website',
-  'Categories',
+  I18n.getMessage('cmName'),
+  I18n.getMessage('cmDescription'),
+  I18n.getMessage('cmConfidence'),
+  I18n.getMessage('cmWebsite'),
+  I18n.getMessage('cmCategories'),
 ];
 
 const generateTechnologyCSV = (siteAnalysisData: CompleteJson): string => {
