@@ -47,7 +47,7 @@ export default function parseRequestWillBeSentExtraInfo(
 ) {
   const cookies: CookieData[] = [];
 
-  associatedCookies.forEach(({ blockedReasons, cookie }) => {
+  associatedCookies.forEach(({ blockedReasons, cookie, exemptionReason }) => {
     const effectiveExpirationDate = calculateEffectiveExpiryDate(
       cookie.expires
     );
@@ -91,6 +91,7 @@ export default function parseRequestWillBeSentExtraInfo(
       headerType: 'request' as CookieData['headerType'],
       isFirstParty: isFirstParty(domain, tabUrl),
       frameIdList: [],
+      exemptionReason: exemptionReason ? exemptionReason : undefined,
     };
 
     cookies.push(singleCookie);

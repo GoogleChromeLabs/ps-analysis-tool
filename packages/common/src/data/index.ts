@@ -13,8 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-export { default as CookiesSection } from './cookiesSection';
-export { default as BlockedCookiesSection } from './blockedCookiesSection';
-export { default as ExemptedCookiesSection } from './exemptedCookiesSection';
-export { default as FramesSection } from './framesSection';
+export { default as cookieIssueDetails } from './cookieExclusionAndWarningReasons';
+export { cookieExemptionReason } from './cookieExemptionReason';

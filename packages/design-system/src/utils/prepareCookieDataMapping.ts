@@ -37,7 +37,7 @@ export default function prepareCookieDataMapping(
   cookieStats: CookiesCount,
   cookiesStatsComponents: CookieStatsComponents,
   selectedItemUpdater: (title: string, accessorKey?: string) => void
-) {
+): DataMapping[] {
   return [
     {
       title: 'Total cookies',

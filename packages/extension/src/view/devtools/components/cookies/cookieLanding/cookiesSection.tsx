@@ -32,10 +32,9 @@ import {
 import { useCookie } from '../../../stateProviders';
 
 const CookiesSection = () => {
-  const { tabCookies, tabFrames, frameHasCookies } = useCookie(({ state }) => ({
+  const { tabCookies, tabFrames } = useCookie(({ state }) => ({
     tabCookies: state.tabCookies,
     tabFrames: state.tabFrames,
-    frameHasCookies: state.frameHasCookies,
   }));
 
   const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});
@@ -58,7 +57,7 @@ const CookiesSection = () => {
 
   const processedTabFrames = useMemo(
     () => Object.fromEntries(Object.entries(tabFrames || {})),
-    [tabFrames, frameHasCookies]
+    [tabFrames]
   );
 
   return (
