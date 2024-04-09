@@ -367,7 +367,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
 
   if (source?.tabId) {
     tabId = source?.tabId?.toString();
-  } else if (source.targetId) {
+  } else if (source.targetId && method !== 'Page.frameAttached') {
     const tab = Object.keys(syncCookieStore?.tabs ?? {}).filter(
       (key) =>
         source.targetId &&
