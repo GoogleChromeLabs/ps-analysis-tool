@@ -13,9 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
 const fs = require('fs');
 
-const packages = [
+const PACKAGES = [
   'cli',
   'cli-dashboard',
   'common',
@@ -30,7 +33,7 @@ const main = () => {
 
   const messages = {};
 
-  packages.forEach((pkg) => {
+  PACKAGES.forEach((pkg) => {
     const path = `${commonPath}/packages/${pkg}/messages.json`;
     const data = fs.readFileSync(path, 'utf8') || '{}';
     const parsed = JSON.parse(data);

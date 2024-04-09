@@ -69,14 +69,17 @@ class I18n {
       }
 
       try {
-        const res = await fetch(`/_locales/${localeArray[idx]}/messages.json`);
-        if (!res.ok) {
+        const response = await fetch(
+          `/_locales/${localeArray[idx]}/messages.json`
+        );
+
+        if (!response.ok) {
           throw new Error(
             `Failed to fetch messages for locale ${localeArray[idx]}`
           );
         }
 
-        const data = await res.json();
+        const data = await response.json();
 
         this.initMessages(data);
       } catch (error) {
@@ -152,13 +155,7 @@ class I18n {
 
     const message = messageObj.message
       .split('$')
-      .map((part, idx) => {
-        if (idx % 2) {
-          return '{' + part + '}';
-        }
-
-        return part;
-      })
+      .map((part, idx) => (idx % 2 ? `{${part}}` : part))
       .join('');
 
     const placeholders = Object.entries(messageObj.placeholders || {}).reduce<{
@@ -166,11 +163,7 @@ class I18n {
     }>((acc, [placeholderKey, val]) => {
       const idx = Number(val.content.substring(1)) - 1;
 
-      if (substitutions?.[idx]) {
-        acc[placeholderKey] = substitutions[idx];
-      } else {
-        acc[placeholderKey] = '';
-      }
+      acc[placeholderKey] = substitutions?.[idx] || '';
 
       return acc;
     }, {});
