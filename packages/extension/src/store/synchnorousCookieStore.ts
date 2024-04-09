@@ -216,24 +216,29 @@ class SynchnorousCookieStore {
    * Updates FrameIdURLSet set for a given url for a given tab.
    * @param {number} tabId The url whose url needs to be update.
    * @param {string} frameId The new frameId to be added.
+   * @param {string} targetUrl TargetUrl to be updated in frameIdSet.
    */
-  async updateFrameIdURLSet(tabId: number, frameId: string) {
-    const info = (await chrome.debugger.sendCommand(
-      { targetId: frameId },
-      'Target.getTargetInfo',
-      { targetId: frameId }
-    )) as { [key: string]: Protocol.Target.TargetInfo };
-
-    if (!info) {
-      return;
-    }
-
-    const url = isValidURL(info.targetInfo.url)
-      ? new URL(info.targetInfo.url).origin
-      : '';
+  async updateFrameIdURLSet(tabId: number, frameId: string, targetUrl = '') {
+    let url = isValidURL(targetUrl) ? new URL(targetUrl).origin : '';
 
     if (!url) {
-      return;
+      const info = (await chrome.debugger.sendCommand(
+        { targetId: frameId },
+        'Target.getTargetInfo',
+        { targetId: frameId }
+      )) as { [key: string]: Protocol.Target.TargetInfo };
+
+      if (!info) {
+        return;
+      }
+
+      url = isValidURL(info.targetInfo.url)
+        ? new URL(info.targetInfo.url).origin
+        : '';
+
+      if (!url) {
+        return;
+      }
     }
 
     if (!this.tabs[tabId].frameIDURLSet[url]) {

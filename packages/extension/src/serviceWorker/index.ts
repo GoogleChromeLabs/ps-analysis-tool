@@ -48,7 +48,6 @@ import getQueryParams from '../utils/getQueryParams';
 import reloadCurrentTab from '../utils/reloadCurrentTab';
 import createCookieFromAuditsIssue from '../utils/createCookieFromAuditsIssue';
 import attachCDP from './attachCDP';
-import isValidURL from '../utils/isValidURL';
 import fetchFrameResourceAndGetCookies from './fetchFrameResourceAndGetCookies';
 import resetCookieBadgeText from '../store/utils/resetCookieBadgeText';
 
@@ -368,7 +367,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
 
   if (source?.tabId) {
     tabId = source?.tabId?.toString();
-  } else if (source.targetId && method !== 'Page.frameAttached') {
+  } else if (source.targetId) {
     const tab = Object.keys(syncCookieStore?.tabs ?? {}).filter(
       (key) =>
         source.targetId &&
@@ -378,30 +377,24 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
   }
 
   if (method === 'Page.frameAttached' && params) {
-    const frameData = params as Protocol.Page.FrameAttachedEvent;
+    const { frameId } = params as Protocol.Page.FrameAttachedEvent;
     try {
-      await attachCDP({ targetId: frameData.frameId });
+      await attachCDP({ targetId: frameId });
     } catch (error) {
       /* empty */
     }
 
     if (source.tabId) {
-      syncCookieStore?.updateFrameIdSet(source.tabId, frameData.frameId);
-      await syncCookieStore?.updateFrameIdURLSet(
-        source.tabId,
-        frameData.frameId
-      );
+      syncCookieStore?.updateFrameIdSet(source.tabId, frameId);
+      await syncCookieStore?.updateFrameIdURLSet(source.tabId, frameId);
     } else if (source.targetId) {
       Object.keys(syncCookieStore?.tabs ?? {}).forEach(async (key) => {
         if (
           source.targetId &&
           syncCookieStore?.tabs[Number(key)].frameIdSet.has(source.targetId)
         ) {
-          syncCookieStore?.tabs[Number(key)].frameIdSet.add(frameData.frameId);
-          await syncCookieStore?.updateFrameIdURLSet(
-            Number(key),
-            frameData.frameId
-          );
+          syncCookieStore.updateFrameIdSet(Number(key), frameId);
+          await syncCookieStore?.updateFrameIdURLSet(Number(key), frameId);
         }
       });
     }
@@ -419,20 +412,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
           syncCookieStore?.tabs[Number(key)].frameIdSet.has(parentId)
         ) {
           syncCookieStore?.tabs[Number(key)].frameIdSet.add(id);
-
-          if (isValidURL(url)) {
-            const parsedUrl = new URL(url).origin;
-            if (!syncCookieStore?.tabs[Number(key)].frameIDURLSet[parsedUrl]) {
-              syncCookieStore.tabs[Number(key)].frameIDURLSet[parsedUrl] = [];
-            }
-
-            syncCookieStore.tabs[Number(key)].frameIDURLSet[parsedUrl] = [
-              ...new Set([
-                ...syncCookieStore.tabs[Number(key)].frameIDURLSet[parsedUrl],
-                id,
-              ]),
-            ];
-          }
+          syncCookieStore.updateFrameIdURLSet(Number(key), id, url);
         }
       });
     }
