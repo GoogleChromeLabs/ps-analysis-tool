@@ -31,7 +31,7 @@ const CookiesSection = () => {
   const data = useData(({ state }) => state.data);
 
   if (!data) {
-    return <></>;
+    return null;
   }
 
   return (
