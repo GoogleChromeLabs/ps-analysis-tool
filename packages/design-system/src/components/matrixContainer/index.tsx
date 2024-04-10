@@ -82,6 +82,7 @@ const MatrixContainer = ({
               <button
                 onClick={() => setIsExpanded((state) => !state)}
                 data-testid="expand-button"
+                title={isExpanded ? 'Collapse View' : 'Expand View'}
               >
                 {isExpanded ? (
                   <ArrowUp className="fill-granite-gray scale-150" />
