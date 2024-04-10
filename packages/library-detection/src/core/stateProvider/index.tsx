@@ -126,8 +126,11 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
   );
 
   const onNavigatedListener = useCallback(
-    ({ frameId }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
-      if (frameId === 0) {
+    ({
+      frameId,
+      tabId: _tabId,
+    }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
+      if (frameId === 0 && Number(tabId) === Number(_tabId)) {
         setLibraryMatches(initialLibraryMatches);
         setIsCurrentTabLoading(true);
         setShowLoader(true);
@@ -135,7 +138,7 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
         setIsInitialDataUpdated(false);
       }
     },
-    []
+    [tabId]
   );
 
   const onCompleted = useCallback(

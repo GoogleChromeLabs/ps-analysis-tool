@@ -6,7 +6,6 @@
 		"cli:prebuild": "node ./scripts/delete-build-artifacts.cjs",
 		"cli:dev": "tsc-watch --build",
 		"cli:build": "npm run cli:prebuild && tsc --build",
-		"cli-dashboard:start": "npm run dev --workspace=@ps-analysis-tool/cli-dashboard",
 		"cli-dashboard:dev": "npm run dev --workspace=@ps-analysis-tool/cli-dashboard",
 		"cli-dashboard:build": "npm run build --workspace=@ps-analysis-tool/cli-dashboard",
 		"cli": "node dist/cli/index.js",
@@ -22,6 +21,7 @@
 		"prepare": "husky install",
 		"cookie-db:update": "node scripts/update-cookie-db.cjs",
 		"rws-json:update": "node scripts/update-rws-json.cjs",
+		"merge-i18n-messages": "node packages/i18n/scripts/merge-messages.cjs",
 		"storybook": "storybook dev -p 6006",
 		"build-storybook": "storybook build",
 		"start": "npm install && npm run dev"

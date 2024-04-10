@@ -49,7 +49,7 @@ export default function parseRequestWillBeSentExtraInfo(
 ) {
   const cookies: CookieData[] = [];
 
-  associatedCookies.forEach(({ blockedReasons, cookie }) => {
+  associatedCookies.forEach(({ blockedReasons, cookie, exemptionReason }) => {
     const effectiveExpirationDate = calculateEffectiveExpiryDate(
       cookie.expires
     );
@@ -88,6 +88,7 @@ export default function parseRequestWillBeSentExtraInfo(
       headerType: 'request' as CookieData['headerType'],
       isFirstParty: isFirstParty(domain, tabUrl),
       frameIdList: [],
+      exemptionReason: exemptionReason ? exemptionReason : undefined,
     };
 
     //Sometimes frameId comes empty so it shows data in other frames where cookie should not be shown.

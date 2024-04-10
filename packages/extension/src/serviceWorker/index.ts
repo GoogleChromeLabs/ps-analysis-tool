@@ -555,11 +555,13 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         headers,
         blockedCookies,
         cookiePartitionKey = '',
+        exemptedCookies,
       } = unParsedResponseHeaders[tabId][requestId];
 
       const cookies: CookieData[] = parseResponseReceivedExtraInfo(
         headers,
         blockedCookies,
+        exemptedCookies,
         cookiePartitionKey,
         requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
         url ?? '',
@@ -605,15 +607,8 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       blockedCookies,
       requestId,
       cookiePartitionKey = '',
+      exemptedCookies = [],
     } = params as Protocol.Network.ResponseReceivedExtraInfoEvent;
-
-    const objectsFromSameLoaderId = Object.values(
-      requestIdToCDPURLMapping[tabId]
-    ).filter(
-      ({ loaderId: _loaderId }) =>
-        _loaderId &&
-        _loaderId === requestIdToCDPURLMapping[tabId][requestId]?.loaderId
-    );
 
     // Sometimes CDP gives "set-cookie" and sometimes it gives "Set-Cookie".
     if (!headers['set-cookie'] && !headers['Set-Cookie']) {
@@ -624,11 +619,12 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       const cookies: CookieData[] = parseResponseReceivedExtraInfo(
         headers,
         blockedCookies,
+        exemptedCookies,
         cookiePartitionKey,
         requestIdToCDPURLMapping[tabId][requestId]?.url,
         url ?? '',
         cookieDB ?? {},
-        objectsFromSameLoaderId.map(({ frameId }) => frameId),
+        [requestIdToCDPURLMapping[tabId][requestId]?.frameId],
         requestId
       );
 
@@ -764,7 +760,11 @@ chrome.runtime.onMessage.addListener(async (request) => {
     });
 
     if (globalIsUsingCDP) {
-      await attachCDP({ tabId: Number(newTab) });
+      try {
+        await attachCDP({ tabId: Number(newTab) });
+      } catch (error) {
+        //Fail silently
+      }
     }
 
     await reloadCurrentTab(Number(newTab));
@@ -810,6 +810,17 @@ chrome.runtime.onMessage.addListener(async (request) => {
           );
           syncCookieStore?.addTabData(id);
           syncCookieStore?.updateFrameIdSet(id, currentTab[0].id);
+        }
+        try {
+          if (globalIsUsingCDP) {
+            await chrome.debugger.attach({ tabId: id }, '1.3');
+            await chrome.debugger.sendCommand({ tabId: id }, 'Network.enable');
+            await chrome.debugger.sendCommand({ tabId: id }, 'Audits.enable');
+          } else {
+            await chrome.debugger.detach({ tabId: id });
+          }
+        } catch (error) {
+          //Fail silently
         }
 
         await reloadCurrentTab(id);

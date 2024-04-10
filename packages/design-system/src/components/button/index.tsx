@@ -21,6 +21,7 @@ import React from 'react';
 
 interface ButtonProps {
   text: string | React.ReactNode;
+  title?: string;
   name?: string;
   onClick?: () => void;
   loading?: boolean;
@@ -30,6 +31,7 @@ interface ButtonProps {
   disabled?: boolean;
 }
 const Button = ({
+  title = '',
   text,
   name = 'button',
   onClick = undefined,
@@ -40,6 +42,7 @@ const Button = ({
 }: ButtonProps) => {
   return (
     <button
+      title={title}
       data-test-id="button"
       type={type}
       name={name}
