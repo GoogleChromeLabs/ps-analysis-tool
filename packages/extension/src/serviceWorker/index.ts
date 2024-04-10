@@ -556,15 +556,23 @@ chrome.runtime.onMessage.addListener(async (request) => {
     });
 
     if (globalIsUsingCDP) {
-      await chrome.debugger.attach({ tabId: Number(newTab) }, '1.3');
-      await chrome.debugger.sendCommand(
-        { tabId: Number(newTab) },
-        'Network.enable'
-      );
-      await chrome.debugger.sendCommand(
-        { tabId: Number(newTab) },
-        'Audits.enable'
-      );
+      try {
+        if (globalIsUsingCDP) {
+          await chrome.debugger.attach({ tabId: Number(newTab) }, '1.3');
+          await chrome.debugger.sendCommand(
+            { tabId: Number(newTab) },
+            'Network.enable'
+          );
+          await chrome.debugger.sendCommand(
+            { tabId: Number(newTab) },
+            'Audits.enable'
+          );
+        } else {
+          await chrome.debugger.detach({ tabId: Number(newTab) });
+        }
+      } catch (error) {
+        //Fail silently
+      }
     }
 
     await reloadCurrentTab(Number(newTab));

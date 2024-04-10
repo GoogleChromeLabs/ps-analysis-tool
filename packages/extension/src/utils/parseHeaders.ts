@@ -59,12 +59,16 @@ export default async function parseHeaders(
   let cdpCookies: CDPCookiesType;
 
   if (globalIsUsingCDP) {
-    // Since we are using CDP we might as well use it to get the proper cookies in the request this will further reduce the load of domain calculation
-    cdpCookies = (await chrome.debugger.sendCommand(
-      { tabId: tabId },
-      'Network.getCookies',
-      { urls: [url] }
-    )) as CDPCookiesType;
+    try {
+      // Since we are using CDP we might as well use it to get the proper cookies in the request this will further reduce the load of domain calculation
+      cdpCookies = (await chrome.debugger.sendCommand(
+        { tabId: tabId },
+        'Network.getCookies',
+        { urls: [url] }
+      )) as CDPCookiesType;
+    } catch (error) {
+      //Fail silently
+    }
   }
 
   switch (type) {

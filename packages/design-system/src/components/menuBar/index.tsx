@@ -32,7 +32,7 @@ export type MenuData = Array<{
 }>;
 
 interface MenuBarProps {
-  disableReportDownload: boolean;
+  disableReportDownload?: boolean;
   downloadReport?: () => void;
   menuData: MenuData;
   extraClasses?: string;

@@ -64,9 +64,9 @@ const saveCSVReports = async (outDir: string, result: CompleteJson[]) => {
           );
         }
 
-        await ensureFile(path.join(fileDir, 'cookies-with-issues.csv'));
+        await ensureFile(path.join(fileDir, 'cookie-issues.csv'));
         await writeFile(
-          path.join(fileDir, 'cookies-with-issues.csv'),
+          path.join(fileDir, 'cookies-issues.csv'),
           cookiesWithIssuesDataCSV
         );
 
@@ -90,9 +90,9 @@ const saveCSVReports = async (outDir: string, result: CompleteJson[]) => {
       await writeFile(path.join(outDir, 'technologies.csv'), technologyDataCSV);
     }
 
-    await ensureFile(path.join(outDir, 'cookies-with-issues.csv'));
+    await ensureFile(path.join(outDir, 'cookie-issues.csv'));
     await writeFile(
-      path.join(outDir, 'cookies-with-issues.csv'),
+      path.join(outDir, 'cookie-issues.csv'),
       cookiesWithIssuesDataCSV
     );
 
