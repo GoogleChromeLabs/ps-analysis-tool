@@ -84,9 +84,9 @@ const MatrixContainer = ({
                 data-testid="expand-button"
               >
                 {isExpanded ? (
-                  <ArrowUp className="fill-granite-gray" />
+                  <ArrowUp className="fill-granite-gray scale-150" />
                 ) : (
-                  <ArrowUp className="fill-granite-gray rotate-180" />
+                  <ArrowUp className="fill-granite-gray scale-150 rotate-180" />
                 )}
               </button>
             </h4>
