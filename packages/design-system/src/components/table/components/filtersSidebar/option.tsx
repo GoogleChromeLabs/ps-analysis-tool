@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useCallback } from 'react';
 import classNames from 'classnames';
 
 interface OptionProps {
@@ -35,6 +35,10 @@ const Option = ({
   toggleFilterSelection,
   isExpanded,
 }: OptionProps) => {
+  const handleClick = useCallback(() => {
+    setTimeout(() => toggleFilterSelection(filterKey, filterValue));
+  }, [filterKey, filterValue, toggleFilterSelection]);
+
   return (
     <li
       className={classNames(
@@ -56,9 +60,7 @@ const Option = ({
             }
           )}
           checked={selected}
-          onChange={() => {
-            toggleFilterSelection(filterKey, filterValue);
-          }}
+          onChange={() => handleClick}
         />
         <span className="text-asteriod-black dark:text-bright-gray leading-normal font-semi-thick">
           {String(filterValue)}
