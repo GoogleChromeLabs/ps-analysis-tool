@@ -42,6 +42,7 @@ import isFirstParty from './isFirstParty';
  * @param {object} cookieDB Cookie database to find analytics from.
  * @param {string[]} frameIds - The frameId the following cookies are associated to.
  * @param {string} requestId - The requestId of the request being processed
+ * @param {string[]} initiatorUrls - The urls that made this request which made call for this cookies.
  * @returns {object} parsed cookies.
  */
 export default function parseResponseReceivedExtraInfo(
@@ -53,7 +54,8 @@ export default function parseResponseReceivedExtraInfo(
   tabUrl: string,
   cookieDB: CookieDatabase,
   frameIds: string[],
-  requestId: string
+  requestId: string,
+  initiatorUrls: string[]
 ) {
   const cookies: CookieData[] = [];
   const responseToParse = headers['set-cookie'] ?? headers['Set-Cookie'];
@@ -125,6 +127,7 @@ export default function parseResponseReceivedExtraInfo(
       headerType: 'response' as CookieData['headerType'],
       frameIdList: [],
       exemptionReason: exemptedCookie?.exemptionReason,
+      initiatorUrls,
     };
 
     //Sometimes frameId comes empty so it shows data in other frames where cookie should not be shown.

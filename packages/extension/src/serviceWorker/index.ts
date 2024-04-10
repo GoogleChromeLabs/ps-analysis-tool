@@ -58,6 +58,7 @@ const requestIdToCDPURLMapping: {
     [requestId: string]: {
       frameId: string;
       url: string;
+      initiatorUrls: string[];
     };
   };
 } = {};
@@ -92,7 +93,26 @@ const ALLOWED_EVENTS = [
   'Network.requestWillBeSent',
   'Page.frameAttached',
   'Page.frameNavigated',
+  'Target.attachedToTarget',
 ];
+
+/**
+ * This function will recursivly traverse the stack trace to fing the main initiator url.
+ * @param {Protocol.Network.Initiator['stack']} stack The stack trace for the url.
+ * @returns {string} the initiator url.
+ */
+function recursivelyGetInitiatorUrls(
+  stack: Protocol.Network.Initiator['stack']
+) {
+  if (!stack) {
+    return '';
+  }
+
+  if (stack.parent) {
+    return recursivelyGetInitiatorUrls(stack.parent);
+  }
+  return stack.callFrames[stack.callFrames.length - 1].url;
+}
 /**
  * Fires when a tab is created.
  * @see https://developer.chrome.com/docs/extensions/reference/api/tabs#event-onCreated
@@ -349,16 +369,32 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
   }
 
   let tabId = '';
+
   try {
     const targets = await chrome.debugger.getTargets();
 
     await Promise.all(
-      targets.map(async ({ id }) => {
-        await attachCDP({ targetId: id });
+      targets.map(async ({ id, attached, url }) => {
+        if (!attached && url.startsWith('http')) {
+          await attachCDP({ targetId: id });
+        }
       })
     );
   } catch (error) {
     //Fail silently since it gives only one kind of error. Debugger already attached to tabId.
+  }
+
+  if (method === 'Target.attachedToTarget' && params) {
+    const {
+      targetInfo: { targetId },
+    } = params as Protocol.Target.AttachedToTargetEvent;
+
+    await attachCDP({ targetId });
+
+    if (source.tabId) {
+      syncCookieStore?.updateFrameIdSet(source.tabId, targetId);
+    }
+    return;
   }
 
   if (source?.tabId) {
@@ -374,11 +410,8 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
 
   if (method === 'Page.frameAttached' && params) {
     const { frameId } = params as Protocol.Page.FrameAttachedEvent;
-    try {
-      await attachCDP({ targetId: frameId });
-    } catch (error) {
-      /* empty */
-    }
+
+    await attachCDP({ targetId: frameId });
 
     if (source.tabId) {
       syncCookieStore?.updateFrameIdSet(source.tabId, frameId);
@@ -396,6 +429,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         })
       );
     }
+    return;
   }
 
   if (method === 'Page.frameNavigated' && params) {
@@ -414,8 +448,6 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         }
       });
     }
-  }
-  if (!tabId) {
     return;
   }
 
@@ -434,6 +466,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       requestId,
       request: { url: requestUrl },
       frameId = '',
+      initiator,
     } = params as Protocol.Network.RequestWillBeSentEvent;
 
     if (!requestIdToCDPURLMapping[tabId]) {
@@ -441,6 +474,10 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         [requestId]: {
           frameId,
           url: requestUrl,
+          initiatorUrls: [
+            initiator.stack?.callFrames[0].url ?? '',
+            recursivelyGetInitiatorUrls(initiator.stack) ?? '',
+          ],
         },
       };
     } else {
@@ -449,6 +486,10 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         [requestId]: {
           frameId,
           url: requestUrl,
+          initiatorUrls: [
+            initiator.stack?.callFrames[0].url ?? '',
+            recursivelyGetInitiatorUrls(initiator.stack) ?? '',
+          ],
         },
       };
     }
@@ -460,7 +501,8 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         requestUrl,
         url ?? '',
         [frameId],
-        requestId
+        requestId,
+        requestIdToCDPURLMapping[tabId][requestId]?.initiatorUrls
       );
 
       if (cookies.length === 0) {
@@ -469,6 +511,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
 
       syncCookieStore?.update(Number(tabId), cookies);
     }
+    return;
   }
 
   if (method === 'Network.requestWillBeSentExtraInfo') {
@@ -486,7 +529,8 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
         url ?? '',
         [requestIdToCDPURLMapping[tabId][requestId]?.frameId],
-        requestId
+        requestId,
+        requestIdToCDPURLMapping[tabId][requestId]?.initiatorUrls
       );
 
       if (cookies.length === 0) {
@@ -499,6 +543,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       unParsedRequestHeaders[tabId][requestId] =
         params as Protocol.Network.RequestWillBeSentExtraInfoEvent;
     }
+    return;
   }
 
   if (method === 'Network.responseReceived' && params) {
@@ -511,6 +556,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
     if (!requestIdToCDPURLMapping[tabId]) {
       requestIdToCDPURLMapping[tabId] = {
         [requestId]: {
+          ...requestIdToCDPURLMapping[tabId][requestId],
           frameId,
           url: requestUrl,
         },
@@ -519,6 +565,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
       requestIdToCDPURLMapping[tabId] = {
         ...requestIdToCDPURLMapping[tabId],
         [requestId]: {
+          ...requestIdToCDPURLMapping[tabId][requestId],
           frameId,
           url: requestUrl,
         },
@@ -542,7 +589,8 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         url ?? '',
         cookieDB ?? {},
         [requestIdToCDPURLMapping[tabId][requestId]?.frameId],
-        requestId
+        requestId,
+        requestIdToCDPURLMapping[tabId][requestId]?.initiatorUrls
       );
       syncCookieStore?.update(Number(tabId), cookies);
 
@@ -564,16 +612,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
 
       delete auditsIssueForTab[tabId][requestId];
     }
-
-    // const gatheredCookies = await fetchFrameResourceAndGetCookies(
-    //   frameId,
-    //   objectsFromSameLoaderId.map(({ url: _url }) => _url),
-    //   cookieDB,
-    //   url ?? '',
-    //   objectsFromSameLoaderId.map(({ frameId: _frameId }) => _frameId)
-    // );
-
-    // syncCookieStore?.update(Number(tabId), gatheredCookies);
+    return;
   }
 
   if (method === 'Network.responseReceivedExtraInfo') {
@@ -600,16 +639,17 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
         url ?? '',
         cookieDB ?? {},
         [requestIdToCDPURLMapping[tabId][requestId]?.frameId],
-        requestId
+        requestId,
+        requestIdToCDPURLMapping[tabId][requestId]?.initiatorUrls
       );
 
       syncCookieStore?.update(Number(tabId), cookies);
-      await getFramesFromTabId(Number(tabId));
       delete unParsedRequestHeaders[tabId][requestId];
     } else {
       unParsedResponseHeaders[tabId][requestId] =
         params as Protocol.Network.ResponseReceivedExtraInfoEvent;
     }
+    return;
   }
 
   if (method === 'Audits.issueAdded' && params) {
@@ -653,6 +693,7 @@ chrome.debugger.onEvent.addListener(async (source, method, params) => {
     } else {
       auditsIssueForTab[tabId][requestId] = cookieIssueDetails;
     }
+    return;
   }
 });
 

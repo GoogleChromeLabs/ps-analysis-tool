@@ -23,6 +23,7 @@ import { useCallback, useEffect, type MutableRefObject } from 'react';
  */
 import { useCookie, useSettings } from '../stateProviders';
 import { getCurrentTabId } from '../../../utils/getCurrentTabId';
+import attachCDP from '../../../serviceWorker/attachCDP';
 
 const useContextInvalidated = (
   contextInvalidatedRef: MutableRefObject<boolean | null>
@@ -71,18 +72,7 @@ const useContextInvalidated = (
           chrome.tabs.reload(Number(tabId));
           if (isUsingCDP) {
             try {
-              await chrome.debugger.attach(
-                { tabId: chrome.devtools.inspectedWindow.tabId },
-                '1.3'
-              );
-              await chrome.debugger.sendCommand(
-                { tabId: chrome.devtools.inspectedWindow.tabId },
-                'Network.enable'
-              );
-              await chrome.debugger.sendCommand(
-                { tabId: chrome.devtools.inspectedWindow.tabId },
-                'Audits.enable'
-              );
+              await attachCDP({ tabId: Number(tabId) });
             } catch (error) {
               //Fail silently
             }

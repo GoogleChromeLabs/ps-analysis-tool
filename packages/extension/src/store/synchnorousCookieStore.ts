@@ -124,6 +124,13 @@ class SynchnorousCookieStore {
               ...(cookie.networkEvents?.responseEvents || []),
             ],
           };
+          const initiatorUrls = Array.from(
+            new Set<string>([
+              ...((cookie?.initiatorUrls ?? []) as string[]),
+              ...((this.tabsData[tabId]?.[cookieKey]?.initiatorUrls ??
+                []) as string[]),
+            ])
+          );
 
           this.tabsData[tabId][cookieKey] = {
             ...this.tabsData[tabId][cookieKey],
@@ -144,6 +151,7 @@ class SynchnorousCookieStore {
             exemptionReason:
               cookie?.exemptionReason ||
               this.tabsData[tabId][cookieKey]?.exemptionReason,
+            initiatorUrls,
           };
         } else {
           this.tabs[tabId].newUpdates++;

@@ -20,13 +20,12 @@
 export default async function attachCDP(target: {
   [key: string]: number | string;
 }) {
-  await chrome.debugger.attach(target, '1.3');
-  await chrome.debugger.sendCommand(target, 'Target.setAutoAttach', {
-    autoAttach: false,
-    flatten: true,
-    waitForDebuggerOnStart: true,
-  });
-  await chrome.debugger.sendCommand(target, 'Network.enable');
-  await chrome.debugger.sendCommand(target, 'Audits.enable');
-  await chrome.debugger.sendCommand(target, 'Page.enable');
+  try {
+    await chrome.debugger.attach(target, '1.3');
+    chrome.debugger.sendCommand(target, 'Network.enable');
+    chrome.debugger.sendCommand(target, 'Audits.enable');
+    chrome.debugger.sendCommand(target, 'Page.enable');
+  } catch (error) {
+    //Fail silently
+  }
 }
