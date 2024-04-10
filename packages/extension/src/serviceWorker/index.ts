@@ -598,6 +598,17 @@ chrome.runtime.onMessage.addListener(async (request) => {
         if (!id) {
           return;
         }
+        try {
+          if (globalIsUsingCDP) {
+            await chrome.debugger.attach({ tabId: id }, '1.3');
+            await chrome.debugger.sendCommand({ tabId: id }, 'Network.enable');
+            await chrome.debugger.sendCommand({ tabId: id }, 'Audits.enable');
+          } else {
+            await chrome.debugger.detach({ tabId: id });
+          }
+        } catch (error) {
+          //Fail silently
+        }
         resetCookieBadgeText(id);
         await reloadCurrentTab(id);
       })
