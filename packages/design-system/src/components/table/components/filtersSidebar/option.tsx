@@ -60,7 +60,7 @@ const Option = ({
             }
           )}
           checked={selected}
-          onChange={() => handleClick}
+          onChange={handleClick}
         />
         <span className="text-asteriod-black dark:text-bright-gray leading-normal font-semi-thick">
           {String(filterValue)}
