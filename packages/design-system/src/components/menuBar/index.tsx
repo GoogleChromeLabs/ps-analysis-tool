@@ -131,7 +131,7 @@ const MenuBar = ({
             </div>
             <Export className="text-white scale-75" />
           </button>
-          <div className="border-b border-bright-gray w-full" />
+          <div className="border-b border-quartz dark:border-bright-gray w-full" />
         </>
       )}
 
