@@ -21,7 +21,7 @@ import React, { useState } from 'react';
 /**
  * Internal dependencies
  */
-import { InfoIcon } from '../../icons';
+import { ArrowUp, InfoIcon } from '../../icons';
 import Matrix from '../matrix';
 import MatrixComponentHorizontal, {
   MatrixComponentHorizontalProps,
@@ -80,7 +80,11 @@ const MatrixContainer = ({
           {allowExpand && (
             <h4 className="pb-3 flex-1 grow text-xs font-bold text-darkest-gray dark:text-bright-gray text-right">
               <button onClick={() => setIsExpanded((state) => !state)}>
-                {isExpanded ? 'Collapse View' : 'Expand View'}
+                {isExpanded ? (
+                  <ArrowUp className="fill-granite-gray" />
+                ) : (
+                  <ArrowUp className="fill-granite-gray rotate-180" />
+                )}
               </button>
             </h4>
           )}
