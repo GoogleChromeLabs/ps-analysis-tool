@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
 /**
@@ -44,13 +44,11 @@ describe('CookiesMatrix', () => {
 
     expect(getByTestId(`cookies-matrix-${title}`)).toBeInTheDocument();
 
-    const expandButton = await findByText('Expand View');
+    const expandButton = await screen.findByTestId('expand-button');
 
     expect(expandButton).toBeInTheDocument();
 
     expandButton.click();
-
-    expect(await findByText('Collapse View')).toBeInTheDocument();
 
     expect(await findByText('Functional')).toBeInTheDocument();
     expect((await findAllByText('1'))[0]).toHaveClass(

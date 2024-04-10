@@ -79,7 +79,10 @@ const MatrixContainer = ({
           </div>
           {allowExpand && (
             <h4 className="pb-3 flex-1 grow text-xs font-bold text-darkest-gray dark:text-bright-gray text-right">
-              <button onClick={() => setIsExpanded((state) => !state)}>
+              <button
+                onClick={() => setIsExpanded((state) => !state)}
+                data-testid="expand-button"
+              >
                 {isExpanded ? (
                   <ArrowUp className="fill-granite-gray" />
                 ) : (
