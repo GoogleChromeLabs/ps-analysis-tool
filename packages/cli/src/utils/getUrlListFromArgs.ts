@@ -23,26 +23,21 @@ import { parseStringPromise } from 'xml2js';
  */
 import Utility from './utility';
 
-const parseUrlsFromSitemap = async (sitemapUrl: string, spinnies: any) => {
-  spinnies?.add('sitemap-spinner', {
-    text: 'Parsing Sitemap',
-  });
+const parseUrlsFromSitemap = async (sitemapUrl: string) => {
+  console.log('Parsing Sitemap');
 
   try {
     const _urls = await Utility.getUrlsFromSitemap(sitemapUrl);
-    spinnies?.succeed('sitemap-spinner', {
-      text: 'Done parsing Sitemap',
-    });
+    console.log('Done parsing Sitemap');
+
     return _urls;
   } catch (error) {
     throw new Error();
   }
 };
 
-const parseUrlsFromCSV = async (csvPath: string, spinnies: any) => {
-  spinnies?.add('csv-spinner', {
-    text: 'Parsing CSV File',
-  });
+const parseUrlsFromCSV = async (csvPath: string) => {
+  console.log('Parsing CSV File');
 
   try {
     const csvString = await readFile(csvPath, 'utf-8');
@@ -67,22 +62,16 @@ const parseUrlsFromCSV = async (csvPath: string, spinnies: any) => {
         process.exit(1);
       }
     });
-    spinnies?.succeed('csv-spinner', {
-      text: 'Done parsing CSV file',
-    });
+    console.log('Done parsing CSV file');
+
     return _urls;
   } catch (error) {
     throw new Error();
   }
 };
 
-const parseUrlsFromLocalSitemap = async (
-  sitemapPath: string,
-  spinnies: any
-) => {
-  spinnies?.add('sitemap-spinner', {
-    text: 'Parsing XML File',
-  });
+const parseUrlsFromLocalSitemap = async (sitemapPath: string) => {
+  console.log('Parsing XML File');
 
   const xmlString = await readFile(sitemapPath, 'utf-8');
   const data = await parseStringPromise(xmlString as string);
@@ -122,9 +111,7 @@ const parseUrlsFromLocalSitemap = async (
       throw new Error(`${_url} is not a valid URL`);
     }
   });
-  spinnies?.succeed('sitemap-spinner', {
-    text: 'Done parsing XML file',
-  });
+  console.log('Done parsing XML file');
 
   return _urls;
 };
@@ -135,16 +122,13 @@ const parseUrlsFromLocalSitemap = async (
  * @param {string} sitemapUrl Url of a sitemap.
  * @param {string} csvPath File system path to a csv file with urls.
  * @param {string} sitemapPath File system path to a sitemap xml file.
- * @param {any} spinnies handler for logging.
  * @returns {string[]} list of urls.
  */
 const getUrlListFromArgs = async (
   url: string,
   sitemapUrl?: string,
   csvPath?: string,
-  sitemapPath?: string,
-  // @ts-ignore Package does not support typescript.
-  spinnies
+  sitemapPath?: string
 ): Promise<string[]> => {
   let urls: string[] = [];
 
@@ -152,7 +136,7 @@ const getUrlListFromArgs = async (
     urls.push(url);
   } else if (sitemapUrl) {
     try {
-      const _urls = await parseUrlsFromSitemap(sitemapUrl, spinnies);
+      const _urls = await parseUrlsFromSitemap(sitemapUrl);
       urls = urls.concat(_urls);
     } catch (error) {
       console.log('Error parsing sitemap');
@@ -160,7 +144,7 @@ const getUrlListFromArgs = async (
     }
   } else if (csvPath) {
     try {
-      const _urls = await parseUrlsFromCSV(csvPath, spinnies);
+      const _urls = await parseUrlsFromCSV(csvPath);
       urls = urls.concat(_urls);
     } catch (error) {
       console.log('Error parsing CSV file');
@@ -168,7 +152,7 @@ const getUrlListFromArgs = async (
     }
   } else if (sitemapPath) {
     try {
-      const _urls = await parseUrlsFromLocalSitemap(sitemapPath, spinnies);
+      const _urls = await parseUrlsFromLocalSitemap(sitemapPath);
       urls = urls.concat(_urls);
     } catch (error) {
       if (error instanceof Error) {
