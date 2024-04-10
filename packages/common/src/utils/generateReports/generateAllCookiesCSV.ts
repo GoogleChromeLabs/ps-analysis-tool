@@ -33,7 +33,6 @@ export const COOKIES_DATA_HEADER = [
   'Domain',
   'Partition Key',
   'Same Site',
-  'Blocking Status',
   'Category',
   'Platform',
   'Http Only',
