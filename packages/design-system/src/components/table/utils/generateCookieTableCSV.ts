@@ -17,7 +17,11 @@
 /**
  * Internal dependencies.
  */
-import { CookieTableData, sanitizeCsvRecord } from '@ps-analysis-tool/common';
+import {
+  BLOCK_STATUS,
+  CookieTableData,
+  sanitizeCsvRecord,
+} from '@ps-analysis-tool/common';
 
 const COOKIES_TABLE_DATA_HEADER = [
   'Name',
@@ -25,6 +29,7 @@ const COOKIES_TABLE_DATA_HEADER = [
   'Domain',
   'Partition Key',
   'Same Site',
+  'Blocking Status',
   'Category',
   'Platform',
   'Http Only',
@@ -42,6 +47,22 @@ const generateCookieTableCSV = (cookies: CookieTableData[]): Blob => {
   let cookieRecords = '';
 
   for (const cookie of cookies) {
+    const isInboundBlocked =
+      cookie.blockingStatus?.inboundBlock !== BLOCK_STATUS.NOT_BLOCKED;
+    const isOutboundBlocked =
+      cookie.blockingStatus?.outboundBlock !== BLOCK_STATUS.NOT_BLOCKED;
+    const hasValidBlockedReason =
+      cookie?.blockedReasons && cookie.blockedReasons.length !== 0;
+
+    let status = '';
+
+    if ((isInboundBlocked || isOutboundBlocked) && !hasValidBlockedReason) {
+      status = 'Undetermined';
+    } else if (hasValidBlockedReason) {
+      status = 'Blocked';
+    } else {
+      status = 'Not Blocked';
+    }
     //This should be in the same order as cookieDataHeader
     const recordsArray = [
       cookie.parsedCookie.name,
@@ -49,6 +70,7 @@ const generateCookieTableCSV = (cookies: CookieTableData[]): Blob => {
       cookie.parsedCookie.domain || ' ',
       cookie.parsedCookie.partitionKey || ' ',
       cookie.parsedCookie.samesite,
+      status,
       cookie.analytics?.category,
       cookie.analytics?.platform,
       cookie.parsedCookie.httponly ? 'Yes' : 'No',
