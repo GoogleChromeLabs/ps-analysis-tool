@@ -30,7 +30,7 @@ const sidebarData: SidebarItems = {
     dropdownOpen: true,
   },
   [SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES]: {
-    title: 'Cookies With Issues',
+    title: 'Cookie Issues',
     children: {},
     icon: {
       Element: CookieIcon,
