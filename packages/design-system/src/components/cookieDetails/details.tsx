@@ -89,20 +89,21 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
 
   return (
     <div className="text-xs py-1 px-1.5">
-      {selectedCookie.exemptionReason && (
-        <div className="mb-4">
-          <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
-            Exemption Reason
-          </p>
-          <p className="text-outer-space-crayola dark:text-bright-gray">
-            {
-              cookieExemptionReason[
-                selectedCookie.exemptionReason as CookieData['exemptionReason']
-              ]
-            }
-          </p>
-        </div>
-      )}
+      {selectedCookie.exemptionReason &&
+        selectedCookie.exemptionReason.toLowerCase() !== 'none' && (
+          <div className="mb-4">
+            <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
+              Exemption Reason
+            </p>
+            <p className="text-outer-space-crayola dark:text-bright-gray">
+              {
+                cookieExemptionReason[
+                  selectedCookie.exemptionReason as CookieData['exemptionReason']
+                ]
+              }
+            </p>
+          </div>
+        )}
       {selectedCookie.isDomainInAllowList && (
         <div className="mb-4">
           <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
