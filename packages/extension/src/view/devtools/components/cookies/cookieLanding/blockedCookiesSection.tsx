@@ -26,6 +26,8 @@ import {
   type MatrixComponentProps,
   LEGEND_DESCRIPTION,
   useFiltersMapping,
+  SIDEBAR_ITEMS_KEYS,
+  useSidebar,
 } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies
@@ -42,6 +44,12 @@ const BlockedCookiesSection = () => {
     isUsingCDP: state.isUsingCDP,
   }));
 
+  // Callback selecting/updating the clicked item in the sidebar
+  const updateSelectedItemKey = useSidebar(
+    ({ actions }) => actions.updateSelectedItemKey
+  );
+
+  // For opening Cookies table with pre-filtered data, uses updateSelectedItemKey from useSidebar internally
   const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});
 
   const cookieStats = prepareCookiesCount(tabCookies);
@@ -72,9 +80,17 @@ const BlockedCookiesSection = () => {
 
   const description = !isUsingCDP ? (
     <>
-      To gather data and insights regarding blocked cookies, please enable PSAT
-      to use the Chrome DevTools protocol. You can do this in the Settings page
-      or in the extension popup. For more information check the PSAT&nbsp;
+      Enable PSAT to use CDP via the{' '}
+      <button
+        className="text-bright-navy-blue dark:text-jordy-blue"
+        onClick={() => {
+          updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
+        }}
+      >
+        Settings page
+      </button>
+      . <br />
+      For more information, visit the PSAT&nbsp;
       <a
         target="_blank"
         rel="noreferrer"
@@ -83,6 +99,7 @@ const BlockedCookiesSection = () => {
       >
         Wiki
       </a>
+      .
     </>
   ) : (
     ''
