@@ -55,7 +55,7 @@ export const createZip = (analysisData: CompleteJson, zipObject: JSZip) => {
   if (technologyDataCSV) {
     zipObject.file('technologies.csv', technologyDataCSV);
   }
-  zipObject.file('cookies-with-issues.csv', cookiesWithIssuesDataCSV);
+  zipObject.file('cookie-issues.csv', cookiesWithIssuesDataCSV);
   zipObject.file('report.csv', summaryDataCSV);
   zipObject.file('report.json', JSON.stringify(analysisData, null, 4));
 };

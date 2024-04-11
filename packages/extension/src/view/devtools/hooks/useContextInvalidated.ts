@@ -34,8 +34,9 @@ const useContextInvalidated = (
     })
   );
 
-  const { allowedNumberOfTabs } = useSettings(({ state }) => ({
+  const { allowedNumberOfTabs, isUsingCDP } = useSettings(({ state }) => ({
     allowedNumberOfTabs: state.allowedNumberOfTabs,
+    isUsingCDP: state.isUsingCDP,
   }));
 
   const listenToMouseChange = useCallback(() => {
@@ -68,11 +69,29 @@ const useContextInvalidated = (
 
         if (tabId) {
           chrome.tabs.reload(Number(tabId));
+          if (isUsingCDP) {
+            try {
+              await chrome.debugger.attach(
+                { tabId: chrome.devtools.inspectedWindow.tabId },
+                '1.3'
+              );
+              await chrome.debugger.sendCommand(
+                { tabId: chrome.devtools.inspectedWindow.tabId },
+                'Network.enable'
+              );
+              await chrome.debugger.sendCommand(
+                { tabId: chrome.devtools.inspectedWindow.tabId },
+                'Audits.enable'
+              );
+            } catch (error) {
+              //Fail silently
+            }
+          }
           localStorage.removeItem('contextInvalidated');
         }
       }
     })();
-  }, [allowedNumberOfTabs]);
+  }, [allowedNumberOfTabs, isUsingCDP]);
 
   return contextInvalidated;
 };
