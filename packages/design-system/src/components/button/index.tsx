@@ -50,13 +50,14 @@ const Button = ({
       onClick={onClick ? onClick : undefined}
       className={classNames(
         extraClasses,
-        'rounded flex items-center text-center py-1 px-2 font-medium text-white dark:text-raisin-black',
+        'rounded flex items-center text-center py-1 px-2 font-medium',
         {
-          'py-0.5 px-1.5 text-xs bg-sapphire dark:bg-baby-blue-eyes ':
+          'py-0.5 px-1.5 text-xs bg-sapphire dark:bg-baby-blue-eyes text-white dark:text-raisin-black':
             variant === 'small',
-          'rounded-xs md:py-3.5 md:px-9 xxs:max-sm:p-2 xs:max-md:py-4 sm:max-md:px-2 bg-smurf-blue dark:bg-google-blue':
+          'rounded-xs md:py-3.5 md:px-9 xxs:max-sm:p-2 xs:max-md:py-4 sm:max-md:px-2 bg-smurf-blue dark:bg-google-blue text-white dark:text-raisin-black':
             variant === 'large',
-          'bg-sapphire dark:bg-baby-blue-eyes': variant === 'primary',
+          'bg-sapphire dark:bg-baby-blue-eyes text-white dark:text-raisin-black':
+            variant === 'primary',
           'bg-transparent text-raisin-black dark:text-bright-gray active:opacity-60':
             variant === 'secondary',
           'text-white dark:text-white bg-red-500': variant === 'danger',

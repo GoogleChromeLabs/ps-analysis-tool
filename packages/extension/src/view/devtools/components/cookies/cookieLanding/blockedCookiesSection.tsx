@@ -51,7 +51,10 @@ const BlockedCookiesSection = () => {
       title: 'Blocked cookies',
       count: cookieStats.blockedCookies.total,
       data: cookiesStatsComponents.blocked,
-      onClick: () => selectedItemUpdater('All', 'blockedReasons'),
+      onClick:
+        cookieStats.blockedCookies.total > 0
+          ? () => selectedItemUpdater('All', 'blockedReasons')
+          : null,
     },
   ];
   const dataComponents: MatrixComponentProps[] =
