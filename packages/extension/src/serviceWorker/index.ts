@@ -85,6 +85,7 @@ const frameIdToResourceMap: {
     [frameId: string]: Set<string>;
   };
 } = {};
+
 //@ts-ignore
 globalThis.frameIdToResourceMap = frameIdToResourceMap;
 
@@ -374,12 +375,13 @@ chrome.runtime.onInstalled.addListener(async (details) => {
  * Fires whenever debugging target issues instrumentation event.
  * @see https://developer.chrome.com/docs/extensions/reference/api/debugger
  */
-// eslint-disable-next-line complexity
 chrome.debugger.onEvent.addListener((source, method, params) => {
-  if (!ALLOWED_EVENTS.includes(method)) {
-    return;
-  }
+  // eslint-disable-next-line complexity
   (async () => {
+    if (!ALLOWED_EVENTS.includes(method)) {
+      return;
+    }
+
     try {
       const targets = await chrome.debugger.getTargets();
 
@@ -393,301 +395,334 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
     } catch (error) {
       //Fail silently since it gives only one kind of error. Debugger already attached to tabId.
     }
-  })();
 
-  let tabId = '';
+    let tabId = '';
 
-  if (method === 'Target.attachedToTarget' && params) {
-    const {
-      targetInfo: { targetId },
-    } = params as Protocol.Target.AttachedToTargetEvent;
+    if (method === 'Target.attachedToTarget' && params) {
+      const {
+        targetInfo: { targetId },
+      } = params as Protocol.Target.AttachedToTargetEvent;
 
-    attachCDP({ targetId });
+      await attachCDP({ targetId });
 
-    if (source.tabId) {
-      syncCookieStore?.updateFrameIdSet(source.tabId, targetId);
+      if (source.tabId) {
+        syncCookieStore?.updateFrameIdSet(source.tabId, targetId);
+      }
+      return;
     }
-    return;
-  }
 
-  if (source?.tabId) {
-    tabId = source?.tabId?.toString();
-  } else if (source.targetId) {
-    const tab = Object.keys(syncCookieStore?.tabs ?? {}).filter(
-      (key) =>
-        source.targetId &&
-        syncCookieStore?.tabs[Number(key)].frameIdSet.has(source.targetId)
-    );
-    tabId = tab[0];
-  }
-
-  if (method === 'Page.frameAttached' && params) {
-    const { frameId } = params as Protocol.Page.FrameAttachedEvent;
-
-    attachCDP({ targetId: frameId });
-
-    if (source.tabId) {
-      syncCookieStore?.updateFrameIdSet(source.tabId, frameId);
+    if (source?.tabId) {
+      tabId = source?.tabId?.toString();
     } else if (source.targetId) {
-      Object.keys(syncCookieStore?.tabs ?? {}).map((key) => {
-        if (
+      const tab = Object.keys(syncCookieStore?.tabs ?? {}).filter(
+        (key) =>
           source.targetId &&
           syncCookieStore?.tabs[Number(key)].frameIdSet.has(source.targetId)
-        ) {
-          syncCookieStore.updateFrameIdSet(Number(key), frameId);
-        }
-        return key;
+      );
+      tabId = tab[0];
+    }
+
+    if (method === 'Page.frameAttached' && params) {
+      const { frameId } = params as Protocol.Page.FrameAttachedEvent;
+
+      await attachCDP({ targetId: frameId });
+
+      if (source.tabId) {
+        syncCookieStore?.updateFrameIdSet(source.tabId, frameId);
+      } else if (source.targetId) {
+        Object.keys(syncCookieStore?.tabs ?? {}).map((key) => {
+          if (
+            source.targetId &&
+            syncCookieStore?.tabs[Number(key)].frameIdSet.has(source.targetId)
+          ) {
+            syncCookieStore.updateFrameIdSet(Number(key), frameId);
+          }
+          return key;
+        });
+      }
+      return;
+    }
+
+    const url = syncCookieStore?.getTabUrl(Number(tabId));
+
+    if (tabMode !== 'unlimited' && tabToRead !== tabId) {
+      return;
+    }
+
+    if (method === 'Network.requestWillBeSent' && params) {
+      const {
+        requestId,
+        request: { url: requestUrl },
+        frameId = '',
+      } = params as Protocol.Network.RequestWillBeSentEvent;
+
+      if (!frameId) {
+        return;
+      }
+
+      if (!requestIdToCDPURLMapping[tabId]) {
+        requestIdToCDPURLMapping[tabId] = {
+          [requestId]: {
+            frameId,
+            url: requestUrl,
+          },
+        };
+      } else {
+        requestIdToCDPURLMapping[tabId] = {
+          ...requestIdToCDPURLMapping[tabId],
+          [requestId]: {
+            frameId,
+            url: requestUrl,
+          },
+        };
+      }
+      const targets = await chrome.debugger.getTargets();
+      const setTargets = new Set();
+
+      targets.map(({ id }) => {
+        setTargets.add(id);
+        return id;
       });
-    }
-    return;
-  }
 
-  const url = syncCookieStore?.getTabUrl(Number(tabId));
+      if (setTargets.has(frameId) && !frameIdToResourceMap[tabId][frameId]) {
+        frameIdToResourceMap[tabId][frameId] = new Set();
+        attachCDP({ targetId: frameId });
+      }
 
-  if (tabMode !== 'unlimited' && tabToRead !== tabId) {
-    return;
-  }
+      if (setTargets.has(frameId)) {
+        frameIdToResourceMap[tabId][frameId]?.add(requestUrl);
+      } else {
+        const mainFrame = targets.filter(
+          ({ tabId: mainFrameTabId }) =>
+            mainFrameTabId && tabId === mainFrameTabId.toString()
+        );
+        frameIdToResourceMap[tabId][mainFrame[0].id]?.add(requestUrl);
+      }
 
-  if (method === 'Network.requestWillBeSent' && params) {
-    const {
-      requestId,
-      request: { url: requestUrl },
-      frameId = '',
-    } = params as Protocol.Network.RequestWillBeSentEvent;
-    if (!frameId) {
+      if (unParsedRequestHeaders[tabId][requestId]) {
+        const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
+          unParsedRequestHeaders[tabId][requestId].associatedCookies,
+          cookieDB ?? {},
+          requestUrl,
+          url ?? '',
+          [frameId],
+          requestId
+        );
+
+        if (cookies.length === 0) {
+          return;
+        }
+
+        syncCookieStore?.update(Number(tabId), cookies);
+      }
       return;
     }
 
-    if (!requestIdToCDPURLMapping[tabId]) {
-      requestIdToCDPURLMapping[tabId] = {
-        [requestId]: {
-          frameId,
-          url: requestUrl,
-        },
-      };
-    } else {
-      requestIdToCDPURLMapping[tabId] = {
-        ...requestIdToCDPURLMapping[tabId],
-        [requestId]: {
-          frameId,
-          url: requestUrl,
-        },
-      };
-    }
-
-    if (frameId && !frameIdToResourceMap[tabId][frameId]) {
-      frameIdToResourceMap[tabId][frameId] = new Set();
-      attachCDP({ targetId: frameId });
-    }
-    frameIdToResourceMap[tabId][frameId].add(requestUrl);
-
-    if (unParsedRequestHeaders[tabId][requestId]) {
-      const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
-        unParsedRequestHeaders[tabId][requestId].associatedCookies,
-        cookieDB ?? {},
-        requestUrl,
-        url ?? '',
-        [frameId],
-        requestId
-      );
-
-      if (cookies.length === 0) {
-        return;
-      }
-
-      syncCookieStore?.update(Number(tabId), cookies);
-    }
-    return;
-  }
-
-  if (method === 'Network.requestWillBeSentExtraInfo') {
-    const { associatedCookies, requestId } =
-      params as Protocol.Network.RequestWillBeSentExtraInfoEvent;
-
-    if (associatedCookies.length === 0) {
-      return;
-    }
-
-    if (requestIdToCDPURLMapping[tabId][requestId]) {
-      const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
-        associatedCookies,
-        cookieDB ?? {},
-        requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
-        url ?? '',
-        [requestIdToCDPURLMapping[tabId][requestId]?.frameId],
-        requestId
-      );
-
-      if (cookies.length === 0) {
-        return;
-      }
-
-      syncCookieStore?.update(Number(tabId), cookies);
-      delete unParsedRequestHeaders[tabId][requestId];
-    } else {
-      unParsedRequestHeaders[tabId][requestId] =
+    if (method === 'Network.requestWillBeSentExtraInfo') {
+      const { associatedCookies, requestId } =
         params as Protocol.Network.RequestWillBeSentExtraInfoEvent;
-    }
-    return;
-  }
 
-  if (method === 'Network.responseReceived' && params) {
-    const {
-      frameId = '',
-      response: { url: requestUrl },
-      requestId,
-    } = params as Protocol.Network.ResponseReceivedEvent;
+      if (associatedCookies.length === 0) {
+        return;
+      }
 
-    if (!frameId) {
+      if (requestIdToCDPURLMapping[tabId][requestId]) {
+        const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
+          associatedCookies,
+          cookieDB ?? {},
+          requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
+          url ?? '',
+          [requestIdToCDPURLMapping[tabId][requestId]?.frameId],
+          requestId
+        );
+
+        if (cookies.length === 0) {
+          return;
+        }
+
+        syncCookieStore?.update(Number(tabId), cookies);
+        delete unParsedRequestHeaders[tabId][requestId];
+      } else {
+        unParsedRequestHeaders[tabId][requestId] =
+          params as Protocol.Network.RequestWillBeSentExtraInfoEvent;
+      }
       return;
     }
 
-    if (!requestIdToCDPURLMapping[tabId]) {
-      requestIdToCDPURLMapping[tabId] = {
-        [requestId]: {
-          ...requestIdToCDPURLMapping[tabId][requestId],
-          frameId,
-          url: requestUrl,
-        },
-      };
-    } else {
-      requestIdToCDPURLMapping[tabId] = {
-        ...requestIdToCDPURLMapping[tabId],
-        [requestId]: {
-          ...requestIdToCDPURLMapping[tabId][requestId],
-          frameId,
-          url: requestUrl,
-        },
-      };
+    if (method === 'Network.responseReceived' && params) {
+      const {
+        frameId = '',
+        response: { url: requestUrl },
+        requestId,
+      } = params as Protocol.Network.ResponseReceivedEvent;
+
+      if (!frameId) {
+        return;
+      }
+
+      if (!requestIdToCDPURLMapping[tabId]) {
+        requestIdToCDPURLMapping[tabId] = {
+          [requestId]: {
+            ...requestIdToCDPURLMapping[tabId][requestId],
+            frameId,
+            url: requestUrl,
+          },
+        };
+      } else {
+        requestIdToCDPURLMapping[tabId] = {
+          ...requestIdToCDPURLMapping[tabId],
+          [requestId]: {
+            ...requestIdToCDPURLMapping[tabId][requestId],
+            frameId,
+            url: requestUrl,
+          },
+        };
+      }
+      const targets = await chrome.debugger.getTargets();
+      const setTargets = new Set();
+
+      targets.map(({ id }) => {
+        setTargets.add(id);
+        return id;
+      });
+
+      if (setTargets.has(frameId) && !frameIdToResourceMap[tabId][frameId]) {
+        frameIdToResourceMap[tabId][frameId] = new Set();
+        attachCDP({ targetId: frameId });
+      }
+
+      if (setTargets.has(frameId)) {
+        frameIdToResourceMap[tabId][frameId]?.add(requestUrl);
+      } else {
+        const mainFrame = targets.filter(
+          ({ tabId: mainFrameTabId }) =>
+            mainFrameTabId && tabId === mainFrameTabId.toString()
+        );
+        frameIdToResourceMap[tabId][mainFrame[0].id]?.add(requestUrl);
+      }
+
+      if (unParsedResponseHeaders[tabId][requestId]) {
+        const {
+          headers,
+          blockedCookies,
+          cookiePartitionKey = '',
+          exemptedCookies,
+        } = unParsedResponseHeaders[tabId][requestId];
+
+        const cookies: CookieData[] = parseResponseReceivedExtraInfo(
+          headers,
+          blockedCookies,
+          exemptedCookies,
+          cookiePartitionKey,
+          requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
+          url ?? '',
+          cookieDB ?? {},
+          [requestIdToCDPURLMapping[tabId][requestId]?.frameId],
+          requestId
+        );
+        syncCookieStore?.update(Number(tabId), cookies);
+
+        delete unParsedRequestHeaders[tabId][requestId];
+      }
+
+      if (auditsIssueForTab[tabId][requestId]) {
+        const cookieObjectToUpdate = createCookieFromAuditsIssue(
+          auditsIssueForTab[tabId][requestId],
+          syncCookieStore?.getTabUrl(Number(tabId)) ?? '',
+          [requestIdToCDPURLMapping[tabId][requestId]?.frameId],
+          requestIdToCDPURLMapping[tabId][requestId].url,
+          cookieDB || {}
+        );
+
+        if (cookieObjectToUpdate) {
+          syncCookieStore?.update(Number(tabId), [cookieObjectToUpdate]);
+        }
+
+        delete auditsIssueForTab[tabId][requestId];
+      }
+      return;
     }
 
-    if (frameId && !frameIdToResourceMap[tabId][frameId]) {
-      frameIdToResourceMap[tabId][frameId] = new Set();
-      attachCDP({ targetId: frameId });
-    }
-    frameIdToResourceMap[tabId][frameId].add(requestUrl);
-
-    if (unParsedResponseHeaders[tabId][requestId]) {
+    if (method === 'Network.responseReceivedExtraInfo') {
       const {
         headers,
         blockedCookies,
+        requestId,
         cookiePartitionKey = '',
-        exemptedCookies,
-      } = unParsedResponseHeaders[tabId][requestId];
+        exemptedCookies = [],
+      } = params as Protocol.Network.ResponseReceivedExtraInfoEvent;
 
-      const cookies: CookieData[] = parseResponseReceivedExtraInfo(
-        headers,
-        blockedCookies,
-        exemptedCookies,
-        cookiePartitionKey,
-        requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
-        url ?? '',
-        cookieDB ?? {},
-        [requestIdToCDPURLMapping[tabId][requestId]?.frameId],
-        requestId
-      );
-      syncCookieStore?.update(Number(tabId), cookies);
-
-      delete unParsedRequestHeaders[tabId][requestId];
-    }
-
-    if (auditsIssueForTab[tabId][requestId]) {
-      const cookieObjectToUpdate = createCookieFromAuditsIssue(
-        auditsIssueForTab[tabId][requestId],
-        syncCookieStore?.getTabUrl(Number(tabId)) ?? '',
-        [requestIdToCDPURLMapping[tabId][requestId]?.frameId],
-        requestIdToCDPURLMapping[tabId][requestId].url,
-        cookieDB || {}
-      );
-
-      if (cookieObjectToUpdate) {
-        syncCookieStore?.update(Number(tabId), [cookieObjectToUpdate]);
+      // Sometimes CDP gives "set-cookie" and sometimes it gives "Set-Cookie".
+      if (!headers['set-cookie'] && !headers['Set-Cookie']) {
+        return;
       }
 
-      delete auditsIssueForTab[tabId][requestId];
-    }
-    return;
-  }
+      if (requestIdToCDPURLMapping[tabId][requestId]) {
+        const cookies: CookieData[] = parseResponseReceivedExtraInfo(
+          headers,
+          blockedCookies,
+          exemptedCookies,
+          cookiePartitionKey,
+          requestIdToCDPURLMapping[tabId][requestId]?.url,
+          url ?? '',
+          cookieDB ?? {},
+          [requestIdToCDPURLMapping[tabId][requestId]?.frameId],
+          requestId
+        );
 
-  if (method === 'Network.responseReceivedExtraInfo') {
-    const {
-      headers,
-      blockedCookies,
-      requestId,
-      cookiePartitionKey = '',
-      exemptedCookies = [],
-    } = params as Protocol.Network.ResponseReceivedExtraInfoEvent;
-
-    // Sometimes CDP gives "set-cookie" and sometimes it gives "Set-Cookie".
-    if (!headers['set-cookie'] && !headers['Set-Cookie']) {
-      return;
-    }
-
-    if (requestIdToCDPURLMapping[tabId][requestId]) {
-      const cookies: CookieData[] = parseResponseReceivedExtraInfo(
-        headers,
-        blockedCookies,
-        exemptedCookies,
-        cookiePartitionKey,
-        requestIdToCDPURLMapping[tabId][requestId]?.url,
-        url ?? '',
-        cookieDB ?? {},
-        [requestIdToCDPURLMapping[tabId][requestId]?.frameId],
-        requestId
-      );
-
-      syncCookieStore?.update(Number(tabId), cookies);
-      delete unParsedRequestHeaders[tabId][requestId];
-    } else {
-      unParsedResponseHeaders[tabId][requestId] =
-        params as Protocol.Network.ResponseReceivedExtraInfoEvent;
-    }
-    return;
-  }
-
-  if (method === 'Audits.issueAdded' && params) {
-    const auditParams = params as Protocol.Audits.IssueAddedEvent;
-    const {
-      code,
-      details: { cookieIssueDetails },
-    } = auditParams.issue;
-
-    if (code !== 'CookieIssue' && !cookieIssueDetails) {
-      return;
-    }
-
-    if (
-      !cookieIssueDetails?.cookie ||
-      !cookieIssueDetails?.cookieWarningReasons ||
-      !cookieIssueDetails?.cookieExclusionReasons ||
-      !cookieIssueDetails?.request
-    ) {
-      return;
-    }
-
-    const { requestId = '' } = cookieIssueDetails.request;
-
-    if (!requestId) {
-      return;
-    }
-
-    if (requestId && requestIdToCDPURLMapping[tabId][requestId]) {
-      const cookieObjectToUpdate = createCookieFromAuditsIssue(
-        cookieIssueDetails,
-        syncCookieStore?.getTabUrl(Number(tabId)) ?? '',
-        [requestIdToCDPURLMapping[tabId][requestId]?.frameId],
-        requestIdToCDPURLMapping[tabId][requestId].url,
-        cookieDB ?? {}
-      );
-
-      if (cookieObjectToUpdate) {
-        syncCookieStore?.update(Number(tabId), [cookieObjectToUpdate]);
+        syncCookieStore?.update(Number(tabId), cookies);
+        delete unParsedRequestHeaders[tabId][requestId];
+      } else {
+        unParsedResponseHeaders[tabId][requestId] =
+          params as Protocol.Network.ResponseReceivedExtraInfoEvent;
       }
-    } else {
-      auditsIssueForTab[tabId][requestId] = cookieIssueDetails;
+      return;
     }
-    return;
-  }
+
+    if (method === 'Audits.issueAdded' && params) {
+      const auditParams = params as Protocol.Audits.IssueAddedEvent;
+      const {
+        code,
+        details: { cookieIssueDetails },
+      } = auditParams.issue;
+
+      if (code !== 'CookieIssue' && !cookieIssueDetails) {
+        return;
+      }
+
+      if (
+        !cookieIssueDetails?.cookie ||
+        !cookieIssueDetails?.cookieWarningReasons ||
+        !cookieIssueDetails?.cookieExclusionReasons ||
+        !cookieIssueDetails?.request
+      ) {
+        return;
+      }
+
+      const { requestId = '' } = cookieIssueDetails.request;
+
+      if (!requestId) {
+        return;
+      }
+
+      if (requestId && requestIdToCDPURLMapping[tabId][requestId]) {
+        const cookieObjectToUpdate = createCookieFromAuditsIssue(
+          cookieIssueDetails,
+          syncCookieStore?.getTabUrl(Number(tabId)) ?? '',
+          [requestIdToCDPURLMapping[tabId][requestId]?.frameId],
+          requestIdToCDPURLMapping[tabId][requestId].url,
+          cookieDB ?? {}
+        );
+
+        if (cookieObjectToUpdate) {
+          syncCookieStore?.update(Number(tabId), [cookieObjectToUpdate]);
+        }
+      } else {
+        auditsIssueForTab[tabId][requestId] = cookieIssueDetails;
+      }
+      return;
+    }
+  })();
 });
 
 const listenToNewTab = async (tabId?: number) => {
