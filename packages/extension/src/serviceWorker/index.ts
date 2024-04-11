@@ -63,12 +63,6 @@ const requestIdToCDPURLMapping: {
   };
 } = {};
 
-const auditsIssueForTab: {
-  [tabId: string]: {
-    [requestId: string]: Protocol.Audits.CookieIssueDetails;
-  };
-} = {};
-
 const unParsedRequestHeaders: {
   [tabId: string]: {
     [requestId: string]: Protocol.Network.RequestWillBeSentExtraInfoEvent;
@@ -86,9 +80,6 @@ const frameIdToResourceMap: {
     [frameId: string]: Set<string>;
   };
 } = {};
-
-//@ts-ignore
-globalThis.frameIdToResourceMap = frameIdToResourceMap;
 
 let tabMode: 'single' | 'unlimited' = 'single';
 let tabToRead = '';
@@ -113,8 +104,14 @@ function initialiseVariablesForNewTab(tabId: string) {
   unParsedRequestHeaders[tabId] = {};
   unParsedResponseHeaders[tabId] = {};
   requestIdToCDPURLMapping[tabId] = {};
-  auditsIssueForTab[tabId] = {};
   frameIdToResourceMap[tabId] = {};
+  //@ts-ignore
+  globalThis.PSATAdditionalData = {
+    unParsedRequestHeaders,
+    unParsedResponseHeaders,
+    requestIdToCDPURLMapping,
+    frameIdToResourceMap,
+  };
 }
 
 /**
@@ -125,7 +122,6 @@ function deinitialiseVariablesForTab(tabId: string) {
   delete unParsedRequestHeaders[tabId];
   delete unParsedResponseHeaders[tabId];
   delete requestIdToCDPURLMapping[tabId];
-  delete auditsIssueForTab[tabId];
   delete frameIdToResourceMap[tabId];
 }
 /**
@@ -497,6 +493,23 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           return;
         }
 
+        targets = await chrome.debugger.getTargets();
+        const setTargets = new Set();
+
+        targets.map(({ id }) => {
+          setTargets.add(id);
+          return id;
+        });
+
+        if (setTargets.has(frameId) && !frameIdToResourceMap[tabId][frameId]) {
+          frameIdToResourceMap[tabId][frameId] = new Set();
+          attachCDP({ targetId: frameId });
+        }
+
+        if (setTargets.has(frameId)) {
+          frameIdToResourceMap[tabId][frameId]?.add(requestUrl);
+        }
+
         if (!requestIdToCDPURLMapping[tabId]) {
           requestIdToCDPURLMapping[tabId] = {
             [requestId]: {
@@ -514,29 +527,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           };
         }
 
-        targets = await chrome.debugger.getTargets();
-        const setTargets = new Set();
-
-        targets.map(({ id }) => {
-          setTargets.add(id);
-          return id;
-        });
-
-        if (setTargets.has(frameId) && !frameIdToResourceMap[tabId][frameId]) {
-          frameIdToResourceMap[tabId][frameId] = new Set();
-          attachCDP({ targetId: frameId });
-        }
-
-        if (setTargets.has(frameId)) {
-          frameIdToResourceMap[tabId][frameId]?.add(requestUrl);
-        } else {
-          const mainFrame = targets.filter(
-            ({ tabId: mainFrameTabId }) =>
-              mainFrameTabId && tabId === mainFrameTabId.toString()
-          );
-          frameIdToResourceMap[tabId][mainFrame[0].id]?.add(requestUrl);
-        }
-
         if (unParsedRequestHeaders[tabId][requestId]) {
           const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
             unParsedRequestHeaders[tabId][requestId].associatedCookies,
@@ -552,6 +542,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           }
 
           syncCookieStore?.update(Number(tabId), cookies);
+          delete unParsedRequestHeaders[tabId][requestId];
         }
         return;
       }
@@ -616,12 +607,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
         if (setTargets.has(frameId)) {
           frameIdToResourceMap[tabId][frameId]?.add(requestUrl);
-        } else {
-          const mainFrame = targets.filter(
-            ({ tabId: mainFrameTabId }) =>
-              mainFrameTabId && tabId === mainFrameTabId.toString()
-          );
-          frameIdToResourceMap[tabId][mainFrame[0].id]?.add(requestUrl);
         }
 
         if (!requestIdToCDPURLMapping[tabId]) {
@@ -646,6 +631,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         await Promise.all(
           Object.entries(frameIdToResourceMap[tabId]).map(
             async ([key, value]) => {
+              //@ts-ignore
               const { cookies = [] } = await chrome.debugger.sendCommand(
                 { targetId: key },
                 'Network.getCookies',
@@ -685,24 +671,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           );
           syncCookieStore?.update(Number(tabId), cookies);
 
-          delete unParsedRequestHeaders[tabId][requestId];
-          delete requestIdToCDPURLMapping[tabId][requestId];
-        }
-
-        if (auditsIssueForTab[tabId][requestId]) {
-          const cookieObjectToUpdate = createCookieFromAuditsIssue(
-            auditsIssueForTab[tabId][requestId],
-            syncCookieStore?.getTabUrl(Number(tabId)) ?? '',
-            [requestIdToCDPURLMapping[tabId][requestId]?.frameId],
-            requestIdToCDPURLMapping[tabId][requestId]?.url,
-            cookieDB || {}
-          );
-
-          if (cookieObjectToUpdate) {
-            syncCookieStore?.update(Number(tabId), [cookieObjectToUpdate]);
-          }
-
-          delete auditsIssueForTab[tabId][requestId];
+          delete unParsedResponseHeaders[tabId][requestId];
         }
         return;
       }
@@ -735,8 +704,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           );
 
           syncCookieStore?.update(Number(tabId), cookies);
-          delete unParsedRequestHeaders[tabId][requestId];
-          delete requestIdToCDPURLMapping[tabId][requestId];
+          delete unParsedResponseHeaders[tabId][requestId];
         } else {
           unParsedResponseHeaders[tabId][requestId] =
             params as Protocol.Network.ResponseReceivedExtraInfoEvent;
@@ -764,26 +732,23 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           return;
         }
 
-        const { requestId = '' } = cookieIssueDetails.request;
+        const { requestId = '', url: requestUrl = '' } =
+          cookieIssueDetails.request;
 
-        if (!requestId) {
+        if (!requestId || !requestUrl) {
           return;
         }
 
-        if (requestIdToCDPURLMapping[tabId]?.[requestId]) {
-          const cookieObjectToUpdate = createCookieFromAuditsIssue(
-            cookieIssueDetails,
-            syncCookieStore?.getTabUrl(Number(tabId)) ?? '',
-            [requestIdToCDPURLMapping[tabId][requestId]?.frameId],
-            requestIdToCDPURLMapping[tabId][requestId]?.url,
-            cookieDB ?? {}
-          );
+        const cookieObjectToUpdate = createCookieFromAuditsIssue(
+          cookieIssueDetails,
+          syncCookieStore?.getTabUrl(Number(tabId)) ?? '',
+          [],
+          requestIdToCDPURLMapping[tabId][requestId]?.url,
+          cookieDB ?? {}
+        );
 
-          if (cookieObjectToUpdate) {
-            syncCookieStore?.update(Number(tabId), [cookieObjectToUpdate]);
-          }
-        } else {
-          auditsIssueForTab[tabId][requestId] = cookieIssueDetails;
+        if (cookieObjectToUpdate) {
+          syncCookieStore?.update(Number(tabId), [cookieObjectToUpdate]);
         }
         return;
       }
@@ -824,11 +789,7 @@ const listenToNewTab = async (tabId?: number) => {
 
   tabToRead = newTabId;
 
-  unParsedRequestHeaders[newTabId] = {};
-  unParsedResponseHeaders[newTabId] = {};
-  requestIdToCDPURLMapping[newTabId] = {};
-  auditsIssueForTab[newTabId] = {};
-  frameIdToResourceMap[newTabId] = {};
+  initialiseVariablesForNewTab(newTabId);
 
   syncCookieStore?.addTabData(Number(newTabId));
   syncCookieStore?.updateDevToolsState(Number(newTabId), true);
@@ -905,10 +866,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
         }
 
         if (tabMode === 'unlimited') {
-          unParsedRequestHeaders[id.toString()] = {};
-          unParsedResponseHeaders[id.toString()] = {};
-          requestIdToCDPURLMapping[id.toString()] = {};
-          auditsIssueForTab[id.toString()] = {};
+          initialiseVariablesForNewTab(id.toString());
 
           const currentTab = targets.filter(
             ({ tabId }) => tabId && id && tabId === id
