@@ -84,6 +84,9 @@ const BlockedCookiesSection = () => {
       <button
         className="text-bright-navy-blue dark:text-jordy-blue"
         onClick={() => {
+          document
+            .getElementById('cookies-landing-scroll-container')
+            ?.scrollTo(0, 0);
           updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
         }}
       >
