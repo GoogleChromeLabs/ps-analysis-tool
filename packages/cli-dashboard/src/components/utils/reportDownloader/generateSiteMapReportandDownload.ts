@@ -34,7 +34,9 @@ const generateSiteMapReportandDownload = async (JSONReport: CompleteJson[]) => {
   const zip = new JSZip();
 
   JSONReport.forEach((data) => {
-    const zipFolder: JSZip | null = zip.folder(getFolderName(data.pageUrl));
+    const zipFolder: JSZip | null = zip.folder(
+      `psat_cli_report_${getFolderName(data.pageUrl)}_${Date.now()}`
+    );
 
     if (!zipFolder) {
       return;
@@ -44,7 +46,10 @@ const generateSiteMapReportandDownload = async (JSONReport: CompleteJson[]) => {
   });
 
   const content = await zip.generateAsync({ type: 'blob' });
-  saveAs(content, 'report.zip');
+  saveAs(
+    content,
+    `psat_cli_report_${getFolderName(JSONReport[0].pageUrl)}_${Date.now()}.zip`
+  );
 };
 
 export default generateSiteMapReportandDownload;

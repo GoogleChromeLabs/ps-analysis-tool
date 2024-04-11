@@ -46,7 +46,7 @@ const generateSiteReportandDownload = async (
   }
 
   const zipFolder: JSZip | null = zip.folder(
-    getFolderName(siteAnalysisData.pageUrl)
+    `psat_cli_report_${getFolderName(JSONReport[0].pageUrl)}_${Date.now()}`
   );
 
   if (!zipFolder) {
@@ -56,7 +56,10 @@ const generateSiteReportandDownload = async (
   createZip(siteAnalysisData, zipFolder);
 
   const content = await zip.generateAsync({ type: 'blob' });
-  saveAs(content, 'report.zip');
+  saveAs(
+    content,
+    `psat_cli_report_${getFolderName(JSONReport[0].pageUrl)}_${Date.now()}.zip`
+  );
 };
 
 export default generateSiteReportandDownload;

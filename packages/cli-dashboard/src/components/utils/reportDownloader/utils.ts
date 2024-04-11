@@ -64,7 +64,8 @@ export const getFolderName = (pageUrl: string) => {
   let folderName = pageUrl
     .trim()
     .replace(/^https?:\/\//, '')
-    .replace(/\/+/g, '-');
+    .replace(/\/+/g, '-')
+    .replace(/\./g, '-');
 
   if (folderName.endsWith('-')) {
     const lastDashIndex = folderName.lastIndexOf('-');
