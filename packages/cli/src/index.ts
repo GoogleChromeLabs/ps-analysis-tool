@@ -39,6 +39,7 @@ import {
   saveCSVReports,
 } from './utils';
 import { checkPortInUse } from './utils/checkPortInUse';
+import succeedTextLog from './utils/succeedTextLog';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
@@ -90,7 +91,7 @@ const startDashboardServer = async (dir: string, port: number) => {
 
   await delay(2000);
 
-  console.log(`Report : http://localhost:${port}?dir=${dir}`);
+  console.log(`  Report: http://localhost:${port}?dir=${dir}`);
 };
 
 // eslint-disable-next-line complexity
@@ -137,7 +138,7 @@ const startDashboardServer = async (dir: string, port: number) => {
 
   const outputDir = outDir ? outDir : `./out/${prefix}`;
 
-  const spinnies = new Spinnies();
+  const spinnies = new Spinnies({ succeedPrefix: ' ', succeedColor: 'white' });
 
   const urls = await getUrlListFromArgs(
     url,
@@ -167,10 +168,10 @@ const startDashboardServer = async (dir: string, port: number) => {
           ? urls.length
           : parseInt(userInput);
     } else if (numberOfUrlsInput) {
-      console.log(`Analysing ${numberOfUrlsInput} urls.`);
+      console.log(`  Analysing ${numberOfUrlsInput} urls.`);
       numberOfUrls = parseInt(numberOfUrlsInput);
     } else {
-      console.log(`Analysing all ${urls.length} urls.`);
+      console.log(`  Analysing all ${urls.length} urls.`);
       numberOfUrls = urls.length;
     }
 
@@ -182,7 +183,7 @@ const startDashboardServer = async (dir: string, port: number) => {
   const cookieDictionary = await fetchDictionary();
 
   spinnies.add('cookie-spinner', {
-    text: 'Analysing cookies on first page visit',
+    text: 'Analysing cookies on first site visit',
   });
 
   const cookieAnalysisData = await analyzeCookiesUrlsInBatches(
@@ -196,7 +197,7 @@ const startDashboardServer = async (dir: string, port: number) => {
   );
 
   spinnies.succeed('cookie-spinner');
-  console.log('Done Analyasing Cookies');
+  succeedTextLog('Done analysing cookies');
 
   let technologyAnalysisData: any = null;
 
@@ -211,8 +212,11 @@ const startDashboardServer = async (dir: string, port: number) => {
       urlsToProcess.length !== 1 ? spinnies : undefined
     );
 
-    spinnies.succeed('technology-spinner');
-    console.log('Done analyzing technologies.');
+    spinnies.succeed('technology-spinner', {
+      color: 'white',
+      succeedPrefix: '',
+    });
+    succeedTextLog('Done analysing technologies');
   }
 
   const result = urlsToProcess.map((_url, ind) => {

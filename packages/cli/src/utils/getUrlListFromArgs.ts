@@ -22,6 +22,7 @@ import { parseStringPromise } from 'xml2js';
  * Internal dependencies.
  */
 import Utility from './utility';
+import succeedTextLog from './succeedTextLog';
 
 const parseUrlsFromSitemap = async (sitemapUrl: string, spinnies: any) => {
   spinnies?.add('sitemap-spinner', {
@@ -31,7 +32,7 @@ const parseUrlsFromSitemap = async (sitemapUrl: string, spinnies: any) => {
   try {
     const _urls = await Utility.getUrlsFromSitemap(sitemapUrl);
     spinnies?.succeed('sitemap-spinner');
-    console.log('Done parsing Sitemap');
+    succeedTextLog('Done parsing Sitemap');
     return _urls;
   } catch (error) {
     throw new Error();
@@ -67,7 +68,7 @@ const parseUrlsFromCSV = async (csvPath: string, spinnies: any) => {
       }
     });
     spinnies?.succeed('csv-spinner');
-    console.log('Done parsing CSV file');
+    succeedTextLog('Done parsing CSV file');
     return _urls;
   } catch (error) {
     throw new Error();
@@ -121,8 +122,7 @@ const parseUrlsFromLocalSitemap = async (
     }
   });
   spinnies?.succeed('sitemap-spinner');
-
-  console.log('Done parsing XML file');
+  succeedTextLog('Done parsing XML file');
 
   return _urls;
 };
