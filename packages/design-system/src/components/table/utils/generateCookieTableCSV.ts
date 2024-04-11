@@ -58,11 +58,8 @@ const generateCookieTableCSV = (cookies: CookieTableData[]): Blob => {
 
     if ((isInboundBlocked || isOutboundBlocked) && !hasValidBlockedReason) {
       status = 'Undetermined';
-    } else if (hasValidBlockedReason) {
-      status = 'Blocked';
-    } else {
-      status = 'Not Blocked';
     }
+
     //This should be in the same order as cookieDataHeader
     const recordsArray = [
       cookie.parsedCookie.name,
