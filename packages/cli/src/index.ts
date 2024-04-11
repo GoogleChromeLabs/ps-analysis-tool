@@ -19,6 +19,8 @@
 import { Command } from 'commander';
 import events from 'events';
 import { ensureFile, writeFile } from 'fs-extra';
+// @ts-ignore Package does not support typescript.
+import Spinnies from 'spinnies';
 import { exec } from 'child_process';
 import path from 'path';
 import { CompleteJson } from '@ps-analysis-tool/common';
@@ -88,7 +90,9 @@ const startDashboardServer = async (dir: string, port: number) => {
 
   await delay(2000);
 
-  console.log(`Report : http://localhost:${port}?dir=${dir}`);
+  console.log(
+    `Report is being served at the URL: http://localhost:${port}?dir=${dir}`
+  );
 };
 
 // eslint-disable-next-line complexity
@@ -135,7 +139,15 @@ const startDashboardServer = async (dir: string, port: number) => {
 
   const outputDir = outDir ? outDir : `./out/${prefix}`;
 
-  const urls = await getUrlListFromArgs(url, sitemapUrl, csvPath, sitemapPath);
+  const spinnies = new Spinnies();
+
+  const urls = await getUrlListFromArgs(
+    url,
+    sitemapUrl,
+    csvPath,
+    sitemapPath,
+    spinnies
+  );
 
   let urlsToProcess: string[] = [];
 
@@ -171,7 +183,9 @@ const startDashboardServer = async (dir: string, port: number) => {
 
   const cookieDictionary = await fetchDictionary();
 
-  console.log('Analysing cookies on first page visit');
+  spinnies.add('cookie-spinner', {
+    text: 'Analysing cookies on first page visit',
+  });
 
   const cookieAnalysisData = await analyzeCookiesUrlsInBatches(
     urlsToProcess,
@@ -179,22 +193,30 @@ const startDashboardServer = async (dir: string, port: number) => {
     DELAY_TIME,
     cookieDictionary,
     3,
+    urlsToProcess.length !== 1 ? spinnies : undefined,
     shouldSkipAcceptBanner
   );
 
-  console.log('Done analyzing cookies.');
+  spinnies.succeed('cookie-spinner', {
+    text: 'Done analyzing cookies.',
+  });
 
   let technologyAnalysisData: any = null;
 
   if (!shouldSkipTechnologyAnalysis) {
-    console.log('Analysing technologies');
+    spinnies.add('technology-spinner', {
+      text: 'Analysing technologies',
+    });
 
     technologyAnalysisData = await analyzeTechnologiesUrlsInBatches(
       urlsToProcess,
-      3
+      3,
+      urlsToProcess.length !== 1 ? spinnies : undefined
     );
 
-    console.log('Done analyzing technologies.');
+    spinnies.succeed('technology-spinner', {
+      text: 'Done analyzing technologies.',
+    });
   }
 
   const result = urlsToProcess.map((_url, ind) => {

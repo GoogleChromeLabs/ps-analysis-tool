@@ -27,6 +27,16 @@ export const analyzeCookiesUrlsInBatches = async (
   delayTime: number,
   cookieDictionary: CookieDatabase,
   batchSize = 3,
+  spinnies?: {
+    add: (
+      id: string,
+      { text, indent }: { text: string; indent: number }
+    ) => void;
+    succeed: (
+      id: string,
+      { text, indent }: { text: string; indent: number }
+    ) => void;
+  },
   shouldSkipAcceptBanner = false
 ) => {
   let report: {
@@ -45,9 +55,11 @@ export const analyzeCookiesUrlsInBatches = async (
     const start = i;
     const end = Math.min(urls.length - 1, i + batchSize - 1);
 
-    if (urls.length !== 1) {
-      console.log(`Analyzing cookies in urls ${start + 1} - ${end + 1}`);
-    }
+    spinnies &&
+      spinnies.add(`cookie-batch-spinner`, {
+        text: `Analyzing cookies in urls ${start + 1} - ${end + 1} `,
+        indent: 2,
+      });
 
     const urlsWindow = urls.slice(start, end + 1);
 
@@ -61,9 +73,11 @@ export const analyzeCookiesUrlsInBatches = async (
 
     report = [...report, ...cookieAnalysis];
 
-    if (urls.length !== 1) {
-      console.log(`Done analyzing cookies in urls ${start + 1} - ${end + 1} `);
-    }
+    spinnies &&
+      spinnies.succeed(`cookie-batch-spinner`, {
+        text: `Done analyzing cookies in urls ${start + 1} - ${end + 1} `,
+        indent: 2,
+      });
   }
 
   return report;

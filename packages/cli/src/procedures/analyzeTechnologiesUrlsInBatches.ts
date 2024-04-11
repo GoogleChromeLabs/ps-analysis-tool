@@ -28,7 +28,17 @@ import { TechnologyDetailList } from '../types';
 
 export const analyzeTechnologiesUrlsInBatches = async (
   urls: Array<string>,
-  batchSize = 3
+  batchSize = 3,
+  spinnies?: {
+    add: (
+      id: string,
+      { text, indent }: { text: string; indent: number }
+    ) => void;
+    succeed: (
+      id: string,
+      { text, indent }: { text: string; indent: number }
+    ) => void;
+  }
 ): Promise<TechnologyDetailList[]> => {
   const wappalyzer = new Wapplalyzer();
 
@@ -39,9 +49,11 @@ export const analyzeTechnologiesUrlsInBatches = async (
     const end = Math.min(urls.length - 1, i + batchSize - 1);
     await wappalyzer.init();
 
-    if (urls.length !== 1) {
-      console.log(`Analyzing technologies in urls ${start + 1} - ${end + 1} `);
-    }
+    spinnies &&
+      spinnies.add(`tech-batch-spinner`, {
+        text: `Analyzing technologies in urls ${start + 1} - ${end + 1} `,
+        indent: 2,
+      });
 
     const urlsWindow = urls.slice(start, end + 1);
 
@@ -54,12 +66,11 @@ export const analyzeTechnologiesUrlsInBatches = async (
 
     report = [...report, ...technologyAnalysis];
 
-    if (urls.length !== 1) {
-      console.log(
-        `Done analyzing technology in urls ${start + 1} - ${end + 1} `
-      );
-    }
-
+    spinnies &&
+      spinnies.succeed(`tech-batch-spinner`, {
+        text: `Done analyzing technology in urls ${start + 1} - ${end + 1} `,
+        indent: 2,
+      });
     await wappalyzer.destroy();
   }
 

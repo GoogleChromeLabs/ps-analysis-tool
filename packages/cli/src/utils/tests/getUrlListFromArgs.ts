@@ -19,7 +19,7 @@ import getUrlListFromArgs from '../getUrlListFromArgs';
 describe('getUrlListFromArgs', () => {
   it('parses a url', async () => {
     expect(
-      await getUrlListFromArgs('https://example.com', '', '', '')
+      await getUrlListFromArgs('https://example.com', '', '', '', '')
     ).toStrictEqual(['https://example.com']);
   });
 });
