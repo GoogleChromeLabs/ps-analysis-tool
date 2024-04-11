@@ -768,6 +768,7 @@ chrome.storage.sync.onChanged.addListener(
         }
         syncCookieStore?.addTabData(tab.id);
         syncCookieStore?.sendUpdatedDataToPopupAndDevTools(tab.id);
+        syncCookieStore?.updateDevToolsState(tab.id, true);
       });
     }
   }
