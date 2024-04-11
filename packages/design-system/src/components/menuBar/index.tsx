@@ -104,12 +104,12 @@ const MenuBar = ({
     <nav
       data-testid="menu-bar"
       className={classnames(
-        'fixed right-0 flex flex-col gap-2 justify-center items-center z-10 w-9 p-2 bg-dynamic-grey dark:bg-charleston-green rounded-l-lg border border-bright-gray dark:border-quartz',
+        'fixed right-0 flex flex-col gap-4 justify-center items-center z-10 w-9 p-2 bg-dynamic-grey dark:bg-charleston-green rounded-l-lg border border-bright-gray dark:border-quartz',
         extraClasses ? extraClasses : 'top-4'
       )}
     >
       {downloadReport && (
-        <>
+        <div className="relative">
           <button
             disabled={disableReportDownload}
             className={classnames(
@@ -131,31 +131,30 @@ const MenuBar = ({
             </div>
             <Export className="text-white scale-75" />
           </button>
-          <div className="border-b border-bright-gray dark:border-quartz w-full" />
-        </>
+          <div className="absolute top-7 -left-2 border-b border-bright-gray dark:border-quartz w-9" />
+        </div>
       )}
-      <div className="flex flex-col gap-4">
-        {menuData.map((item, index) => (
-          <div
-            key={index}
-            className={classnames(
-              'relative w-3 h-3 rounded-full cursor-pointer hover:bg-baby-blue-eyes transition-all ease-in-out group',
-              selectedItem === item.link
-                ? 'bg-ultramarine-blue'
-                : 'bg-bright-gray'
-            )}
-            onClick={() => {
-              setIsListenerDisabled(true);
-              setSelectedItem(item.link);
-            }}
-          >
-            <div className="absolute -top-1/2 right-6 w-max px-3 py-1 rounded invisible text-sm text-white bg-ultramarine-blue group-hover:visible transition-all ease-in-out">
-              {item.name}
-              <div className="absolute w-2 h-2 bg-ultramarine-blue top-1/3 -right-1 transform rotate-45" />
-            </div>
+
+      {menuData.map((item, index) => (
+        <div
+          key={index}
+          className={classnames(
+            'relative w-3 h-3 rounded-full cursor-pointer hover:bg-baby-blue-eyes transition-all ease-in-out group',
+            selectedItem === item.link
+              ? 'bg-ultramarine-blue'
+              : 'bg-bright-gray'
+          )}
+          onClick={() => {
+            setIsListenerDisabled(true);
+            setSelectedItem(item.link);
+          }}
+        >
+          <div className="absolute -top-1/2 right-6 w-max px-3 py-1 rounded invisible text-sm text-white bg-ultramarine-blue group-hover:visible transition-all ease-in-out">
+            {item.name}
+            <div className="absolute w-2 h-2 bg-ultramarine-blue top-1/3 -right-1 transform rotate-45" />
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </nav>
   );
 };
