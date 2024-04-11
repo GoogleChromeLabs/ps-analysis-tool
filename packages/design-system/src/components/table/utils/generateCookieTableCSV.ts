@@ -29,7 +29,6 @@ const COOKIES_TABLE_DATA_HEADER = [
   'Domain',
   'Partition Key',
   'Same Site',
-  'Blocking Status',
   'Category',
   'Platform',
   'Http Only',
@@ -41,6 +40,7 @@ const COOKIES_TABLE_DATA_HEADER = [
   'GDPRPortal',
   'Priority',
   'Size',
+  'Blocking Status',
 ];
 
 const generateCookieTableCSV = (cookies: CookieTableData[]): Blob => {
@@ -70,7 +70,6 @@ const generateCookieTableCSV = (cookies: CookieTableData[]): Blob => {
       cookie.parsedCookie.domain || ' ',
       cookie.parsedCookie.partitionKey || ' ',
       cookie.parsedCookie.samesite,
-      status,
       cookie.analytics?.category,
       cookie.analytics?.platform,
       cookie.parsedCookie.httponly ? 'Yes' : 'No',
@@ -82,6 +81,7 @@ const generateCookieTableCSV = (cookies: CookieTableData[]): Blob => {
       cookie.analytics?.gdprUrl || 'NA',
       cookie.parsedCookie.priority || ' ',
       cookie.parsedCookie.size?.toString(),
+      status,
     ].map(sanitizeCsvRecord);
 
     cookieRecords += recordsArray.join(',') + '\r\n';
