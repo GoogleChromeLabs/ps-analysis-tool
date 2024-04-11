@@ -295,3 +295,38 @@
 
 ## Others
 * Chrome-Launcher: Open all example.com URLs with CDP and multi-tab on. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/560
+
+
+#v0.7.0
+
+## Extension
+* Feature: Export report in an HTML file https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/545
+* Feature: Show exempted cookies in extension https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/522
+* Feature: Add i18n module https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/575
+* Feature: Accept GDPR banner consent. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/372
+* Fix: Left over references and make some more space in the cookie table https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/584
+* Fix: Clear cookie preview area https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/568
+* Refactor: Update table storage and prefix icon type https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/546
+* Refactor: Extension UI and Service Worker. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/519
+* Refactor: Rename column cookie affected column to issues https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/580
+* Refactor: Add disabled state to the Button component https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/585
+* Refactor: Increase test coverage for extension package https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/520
+* Refactor: Restructure cookies landing page https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/528
+* Enhancement: Add information on how to verify if a user is part of 1% experimental group https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/543
+* Enhancement:Update extension icons https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/583
+* Enhancement: Enlarge extension icon https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/598
+* Enhancement : Add blocking status column in the CSV export from the table in extension https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/591
+* Enhancement: Add context provider to sidebar https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/498
+* Miscellaneous UI updates https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/599
+* Enhancement: Navigate to `Settings` page from `Blocked Cookies` section https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/603
+* Enhancement: Use the warning icon on the cookie issues panel https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/604
+
+## CLI
+* Feature: Add option to pass a port for development server https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/579
+* Enhancement: Move download report button in cli-dashboard to the sticky menu bar https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/595
+* Enhancement: CLI, replace "Cookies with issues" with "Cookie issues" in the sidebar. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/596
+* Enhancement: CLI updates https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/602
+* Fix: CLI dashboard showing multiple cookie entries for same cookies https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/597
+
+## Others
+* Add demo RWS for command line launcher https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/578
