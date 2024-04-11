@@ -124,13 +124,6 @@ class SynchnorousCookieStore {
               ...(cookie.networkEvents?.responseEvents || []),
             ],
           };
-          const initiatorUrls = Array.from(
-            new Set<string>([
-              ...((cookie?.initiatorUrls ?? []) as string[]),
-              ...((this.tabsData[tabId]?.[cookieKey]?.initiatorUrls ??
-                []) as string[]),
-            ])
-          );
 
           this.tabsData[tabId][cookieKey] = {
             ...this.tabsData[tabId][cookieKey],
@@ -151,7 +144,6 @@ class SynchnorousCookieStore {
             exemptionReason:
               cookie?.exemptionReason ||
               this.tabsData[tabId][cookieKey]?.exemptionReason,
-            initiatorUrls,
           };
         } else {
           this.tabs[tabId].newUpdates++;
@@ -230,35 +222,39 @@ class SynchnorousCookieStore {
    * @param {string} targetUrl TargetUrl to be updated in frameIdSet.
    */
   async updateFrameIdURLSet(tabId: number, frameId: string, targetUrl = '') {
-    let url = isValidURL(targetUrl) ? new URL(targetUrl).origin : '';
-
-    if (!url) {
-      const info = (await chrome.debugger.sendCommand(
-        { targetId: frameId },
-        'Target.getTargetInfo',
-        { targetId: frameId }
-      )) as { [key: string]: Protocol.Target.TargetInfo };
-
-      if (!info) {
-        return;
-      }
-
-      url = isValidURL(info.targetInfo.url)
-        ? new URL(info.targetInfo.url).origin
-        : '';
+    try {
+      let url = isValidURL(targetUrl) ? new URL(targetUrl).origin : '';
 
       if (!url) {
-        return;
+        const info = (await chrome.debugger.sendCommand(
+          { targetId: frameId },
+          'Target.getTargetInfo',
+          { targetId: frameId }
+        )) as { [key: string]: Protocol.Target.TargetInfo };
+
+        if (!info) {
+          return;
+        }
+
+        url = isValidURL(info.targetInfo.url)
+          ? new URL(info.targetInfo.url).origin
+          : '';
+
+        if (!url) {
+          return;
+        }
       }
-    }
 
-    if (!this.tabs[tabId].frameIDURLSet[url]) {
-      this.tabs[tabId].frameIDURLSet[url] = [];
-    }
+      if (!this.tabs[tabId].frameIDURLSet[url]) {
+        this.tabs[tabId].frameIDURLSet[url] = [];
+      }
 
-    this.tabs[tabId].frameIDURLSet[url] = [
-      ...new Set([...this.tabs[tabId].frameIDURLSet[url], frameId]),
-    ];
+      this.tabs[tabId].frameIDURLSet[url] = [
+        ...new Set([...this.tabs[tabId].frameIDURLSet[url], frameId]),
+      ];
+    } catch (error) {
+      //Fail silently. This is done because we are going to get either 2 errors invalid url or chrome.debugger error.
+    }
   }
 
   /**

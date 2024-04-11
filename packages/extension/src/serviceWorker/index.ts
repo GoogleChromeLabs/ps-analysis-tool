@@ -430,16 +430,20 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
       if (source.tabId) {
         syncCookieStore?.updateFrameIdSet(source.tabId, frameId);
+        await syncCookieStore?.updateFrameIdURLSet(source.tabId, frameId);
       } else if (source.targetId) {
-        Object.keys(syncCookieStore?.tabs ?? {}).map((key) => {
-          if (
-            source.targetId &&
-            syncCookieStore?.tabs[Number(key)].frameIdSet.has(source.targetId)
-          ) {
-            syncCookieStore.updateFrameIdSet(Number(key), frameId);
-          }
-          return key;
-        });
+        await Promise.all(
+          Object.keys(syncCookieStore?.tabs ?? {}).map(async (key) => {
+            if (
+              source.targetId &&
+              syncCookieStore?.tabs[Number(key)].frameIdSet.has(source.targetId)
+            ) {
+              syncCookieStore.updateFrameIdSet(Number(key), frameId);
+              await syncCookieStore?.updateFrameIdURLSet(Number(key), frameId);
+            }
+            return key;
+          })
+        );
       }
       return;
     }
