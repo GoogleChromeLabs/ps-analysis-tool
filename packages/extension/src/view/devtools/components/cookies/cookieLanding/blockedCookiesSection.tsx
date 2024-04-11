@@ -44,7 +44,7 @@ const BlockedCookiesSection = () => {
     isUsingCDP: state.isUsingCDP,
   }));
 
-  // Callback handling updating selected item from the sidebar
+  // Callback selecting/updating the clicked item in the sidebar
   const updateSelectedItemKey = useSidebar(
     ({ actions }) => actions.updateSelectedItemKey
   );
