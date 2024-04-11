@@ -156,7 +156,7 @@ export const parseNetworkDataToCookieData = (
     });
 
     frameIdCookiesMap.set(frameId, {
-      frameUrl: frameIdUrlMap.get(frameId) || pageUrl,
+      frameUrl: frameIdUrlMap.get(frameId) || new URL(pageUrl).origin,
       frameCookies: Object.fromEntries(_frameCookies),
     });
   }
@@ -174,6 +174,7 @@ export const parseNetworkDataToCookieData = (
     if (!data.frameUrl.includes('http')) {
       continue;
     }
+
     const _url = new URL(data.frameUrl);
 
     const newFrameCookies = {

@@ -365,7 +365,7 @@ export class BrowserManagement {
           requestMap,
           frameIdUrlMap,
           mainFrameId,
-          url
+          page.url()
         );
 
         const networkCookieKeySet = new Set();
