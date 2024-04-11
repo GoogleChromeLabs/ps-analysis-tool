@@ -33,6 +33,12 @@ const generateSiteReportandDownload = async (
     return;
   }
 
+  const today = new Date();
+
+  const day = String(today.getDate()).padStart(2, '0'); // Get the day and ensure it has leading zero if needed
+  const month = String(today.getMonth() + 1).padStart(2, '0'); // Get the month and ensure it has leading zero if needed
+  const year = today.getFullYear();
+
   const zip = new JSZip();
 
   let siteAnalysisData: CompleteJson;
@@ -46,7 +52,9 @@ const generateSiteReportandDownload = async (
   }
 
   const zipFolder: JSZip | null = zip.folder(
-    `psat_cli_report_${getFolderName(JSONReport[0].pageUrl)}_${Date.now()}`
+    `psat_cli_report_${getFolderName(JSONReport[0].pageUrl)}_${
+      day + month + year
+    }`
   );
 
   if (!zipFolder) {
@@ -58,7 +66,9 @@ const generateSiteReportandDownload = async (
   const content = await zip.generateAsync({ type: 'blob' });
   saveAs(
     content,
-    `psat_cli_report_${getFolderName(JSONReport[0].pageUrl)}_${Date.now()}.zip`
+    `psat_cli_report_${getFolderName(JSONReport[0].pageUrl)}_${
+      day + month + year
+    }.zip`
   );
 };
 
