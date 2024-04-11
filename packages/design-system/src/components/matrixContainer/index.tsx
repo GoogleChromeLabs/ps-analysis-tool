@@ -17,11 +17,12 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
+import classname from 'classnames';
 
 /**
  * Internal dependencies
  */
-import { ArrowUp, InfoIcon } from '../../icons';
+import { ChevronDown, InfoIcon } from '../../icons';
 import Matrix from '../matrix';
 import MatrixComponentHorizontal, {
   MatrixComponentHorizontalProps,
@@ -84,11 +85,11 @@ const MatrixContainer = ({
                 data-testid="expand-button"
                 title={isExpanded ? 'Collapse View' : 'Expand View'}
               >
-                {isExpanded ? (
-                  <ArrowUp className="fill-granite-gray scale-150" />
-                ) : (
-                  <ArrowUp className="fill-granite-gray scale-150 rotate-180" />
-                )}
+                <ChevronDown
+                  className={classname('fill-granite-gray', {
+                    'rotate-180': isExpanded,
+                  })}
+                />
               </button>
             </h4>
           )}
