@@ -12,7 +12,7 @@
 		"test": "jest --config=tests/jest.config.cjs",
 		"test:coverage": "npm run test -- --collectCoverage && open coverage/lcov-report/index.html",
 		"dev": "npm run dev --workspace=@ps-analysis-tool/extension",
-		"build": "npm run build --workspace=@ps-analysis-tool/extension",
+		"build": "rm -rf dist/extension && npm run build --workspace=@ps-analysis-tool/extension",
 		"serve": "webpack serve",
 		"lint": "npm-run-all --parallel lint:*",
 		"lint:js": "eslint .",
