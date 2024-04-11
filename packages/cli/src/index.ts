@@ -195,9 +195,8 @@ const startDashboardServer = async (dir: string, port: number) => {
     shouldSkipAcceptBanner
   );
 
-  spinnies.succeed('cookie-spinner', {
-    text: 'Done analyzing cookies.',
-  });
+  spinnies.succeed('cookie-spinner');
+  console.log('Done Analyasing Cookies');
 
   let technologyAnalysisData: any = null;
 
@@ -212,9 +211,8 @@ const startDashboardServer = async (dir: string, port: number) => {
       urlsToProcess.length !== 1 ? spinnies : undefined
     );
 
-    spinnies.succeed('technology-spinner', {
-      text: 'Done analyzing technologies.',
-    });
+    spinnies.succeed('technology-spinner');
+    console.log('Done analyzing technologies.');
   }
 
   const result = urlsToProcess.map((_url, ind) => {

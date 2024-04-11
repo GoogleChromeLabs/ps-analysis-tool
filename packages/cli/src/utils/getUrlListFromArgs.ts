@@ -30,9 +30,8 @@ const parseUrlsFromSitemap = async (sitemapUrl: string, spinnies: any) => {
 
   try {
     const _urls = await Utility.getUrlsFromSitemap(sitemapUrl);
-    spinnies?.succeed('sitemap-spinner', {
-      text: 'Done parsing Sitemap',
-    });
+    spinnies?.succeed('sitemap-spinner');
+    console.log('Done parsing Sitemap');
     return _urls;
   } catch (error) {
     throw new Error();
@@ -67,9 +66,8 @@ const parseUrlsFromCSV = async (csvPath: string, spinnies: any) => {
         process.exit(1);
       }
     });
-    spinnies?.succeed('csv-spinner', {
-      text: 'Done parsing CSV file',
-    });
+    spinnies?.succeed('csv-spinner');
+    console.log('Done parsing CSV file');
     return _urls;
   } catch (error) {
     throw new Error();
@@ -122,9 +120,9 @@ const parseUrlsFromLocalSitemap = async (
       throw new Error(`${_url} is not a valid URL`);
     }
   });
-  spinnies?.succeed('sitemap-spinner', {
-    text: 'Done parsing XML file',
-  });
+  spinnies?.succeed('sitemap-spinner');
+
+  console.log('Done parsing XML file');
 
   return _urls;
 };
