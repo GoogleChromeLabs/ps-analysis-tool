@@ -85,10 +85,14 @@ export const parseNetworkDataToCookieData = (
     data.responses?.forEach((response: ResponseData) => {
       response.cookies.forEach((cookie) => {
         // domain update required. Domain based on the server url
-        const parsedDomain =
+        let parsedDomain =
           cookie.parsedCookie.domain === ''
             ? getDomain(response.serverUrl)
             : cookie.parsedCookie.domain;
+
+        if (parsedDomain && parsedDomain[0] !== '.') {
+          parsedDomain = '.' + parsedDomain;
+        }
 
         const key =
           cookie.parsedCookie.name +
@@ -119,10 +123,14 @@ export const parseNetworkDataToCookieData = (
     data.requests?.forEach((request: RequestData) => {
       request.cookies.forEach((cookie) => {
         // domain update required. Domain based on the server url
-        const parsedDomain =
+        let parsedDomain =
           cookie.parsedCookie.domain === ''
             ? getDomain(request.serverUrl)
             : cookie.parsedCookie.domain;
+
+        if (parsedDomain && parsedDomain[0] !== '.') {
+          parsedDomain = '.' + parsedDomain;
+        }
 
         const key =
           cookie.parsedCookie.name +
@@ -148,7 +156,7 @@ export const parseNetworkDataToCookieData = (
     });
 
     frameIdCookiesMap.set(frameId, {
-      frameUrl: frameIdUrlMap.get(frameId) || pageUrl,
+      frameUrl: frameIdUrlMap.get(frameId) || new URL(pageUrl).origin,
       frameCookies: Object.fromEntries(_frameCookies),
     });
   }
@@ -166,6 +174,7 @@ export const parseNetworkDataToCookieData = (
     if (!data.frameUrl.includes('http')) {
       continue;
     }
+
     const _url = new URL(data.frameUrl);
 
     const newFrameCookies = {

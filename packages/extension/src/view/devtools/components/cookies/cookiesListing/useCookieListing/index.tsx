@@ -242,8 +242,6 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
                 Undetermined
               </span>
             );
-          } else if (hasValidBlockedReason) {
-            return <span className="flex">Blocked</span>;
           } else {
             return <></>;
           }

@@ -55,7 +55,7 @@ export const createZip = (analysisData: CompleteJson, zipObject: JSZip) => {
   if (technologyDataCSV) {
     zipObject.file('technologies.csv', technologyDataCSV);
   }
-  zipObject.file('cookies-with-issues.csv', cookiesWithIssuesDataCSV);
+  zipObject.file('cookie-issues.csv', cookiesWithIssuesDataCSV);
   zipObject.file('report.csv', summaryDataCSV);
   zipObject.file('report.json', JSON.stringify(analysisData, null, 4));
 };
@@ -64,7 +64,8 @@ export const getFolderName = (pageUrl: string) => {
   let folderName = pageUrl
     .trim()
     .replace(/^https?:\/\//, '')
-    .replace(/\/+/g, '-');
+    .replace(/\/+/g, '-')
+    .replace(/\./g, '-');
 
   if (folderName.endsWith('-')) {
     const lastDashIndex = folderName.lastIndexOf('-');

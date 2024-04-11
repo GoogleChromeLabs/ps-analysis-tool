@@ -17,9 +17,8 @@
  * External dependencies
  */
 import {
-  CookieIcon,
-  CookieIconWhite,
   SIDEBAR_ITEMS_KEYS,
+  WarningBare,
   type SidebarItems,
 } from '@ps-analysis-tool/design-system';
 
@@ -30,13 +29,19 @@ const sidebarData: SidebarItems = {
     dropdownOpen: true,
   },
   [SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES]: {
-    title: 'Cookies With Issues',
+    title: 'Cookie Issues',
     children: {},
     icon: {
-      Element: CookieIcon,
+      Element: WarningBare,
+      props: {
+        className: 'fill-granite-gray',
+      },
     },
     selectedIcon: {
-      Element: CookieIconWhite,
+      Element: WarningBare,
+      props: {
+        className: 'fill-white',
+      },
     },
   },
 };

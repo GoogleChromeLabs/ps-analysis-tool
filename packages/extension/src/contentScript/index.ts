@@ -177,17 +177,21 @@ class WebpageContentScript {
    * @param tabId The tabID whose cookies have to be fetched.
    */
   async getAndProcessJSCookies(tabId: string) {
-    if (!this.frameId) {
-      return;
+    try {
+      if (!this.frameId) {
+        return;
+      }
+      //@ts-ignore
+      const jsCookies = await cookieStore.getAll();
+      await processAndStoreDocumentCookies({
+        tabUrl: window.location.href,
+        tabId,
+        frameId: this.frameId,
+        documentCookies: jsCookies,
+      });
+    } catch (error) {
+      //Fail silently. No logging because sometimes cookieStore.getAll fails to run in some context.
     }
-    //@ts-ignore
-    const jsCookies = await cookieStore.getAll();
-    await processAndStoreDocumentCookies({
-      tabUrl: window.location.href,
-      tabId,
-      frameId: this.frameId,
-      documentCookies: jsCookies,
-    });
   }
 
   /**

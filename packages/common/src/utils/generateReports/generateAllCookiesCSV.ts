@@ -21,7 +21,10 @@ import sanitizeCsvRecord from '../sanitizeCsvRecord';
 /**
  * Internal dependencies
  */
-import type { CompleteJson, CookieJsonDataType } from '../../cookies.types';
+import {
+  type CompleteJson,
+  type CookieJsonDataType,
+} from '../../cookies.types';
 import calculateEffectiveExpiryDate from '../calculateEffectiveExpiryDate';
 
 export const COOKIES_DATA_HEADER = [

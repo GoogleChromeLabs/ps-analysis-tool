@@ -218,6 +218,10 @@ export type CookieJsonDataType = {
   requestUrls?: { [id: string]: string };
   frameUrls?: { [id: string]: string };
   isBlocked: boolean;
+  blockingStatus?: {
+    inboundBlock: BLOCK_STATUS;
+    outboundBlock: BLOCK_STATUS;
+  };
   blockedReasons?: BlockedReason[];
 };
 
