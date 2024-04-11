@@ -90,9 +90,7 @@ const startDashboardServer = async (dir: string, port: number) => {
 
   await delay(2000);
 
-  console.log(
-    `Report is being served at the URL: http://localhost:${port}?dir=${dir}`
-  );
+  console.log(`Report : http://localhost:${port}?dir=${dir}`);
 };
 
 // eslint-disable-next-line complexity
