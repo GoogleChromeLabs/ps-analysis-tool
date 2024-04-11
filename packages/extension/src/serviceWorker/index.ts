@@ -258,7 +258,6 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   if (changeInfo.status === 'loading' && tab.url) {
     syncCookieStore?.removeCookieData(tabId);
   }
-
   try {
     await chrome.tabs.sendMessage(tabId, {
       tabId,
@@ -282,15 +281,6 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     }
   } catch (error) {
     //Fail silently
-  }
-  if (!tab.url) {
-    return;
-  }
-
-  syncCookieStore?.updateUrl(tabId, tab.url);
-
-  if (changeInfo.status === 'loading' && tab.url) {
-    syncCookieStore?.removeCookieData(tabId);
   }
 });
 
@@ -736,14 +726,17 @@ chrome.storage.sync.onChanged.addListener(
 
     if (changes?.allowedNumberOfTabs?.newValue === 'single') {
       tabToRead = '';
-
-      chrome.runtime.sendMessage({
-        type: INITIAL_SYNC,
-        payload: {
-          tabMode,
-          tabToRead: tabToRead,
-        },
-      });
+      try {
+        await chrome.runtime.sendMessage({
+          type: INITIAL_SYNC,
+          payload: {
+            tabMode,
+            tabToRead: tabToRead,
+          },
+        });
+      } catch (error) {
+        //Fail silently
+      }
 
       tabs.map((tab) => {
         if (!tab?.id) {
@@ -757,13 +750,17 @@ chrome.storage.sync.onChanged.addListener(
         return tab;
       });
     } else {
-      chrome.runtime.sendMessage({
-        type: INITIAL_SYNC,
-        payload: {
-          tabMode,
-          tabToRead: tabToRead,
-        },
-      });
+      try {
+        await chrome.runtime.sendMessage({
+          type: INITIAL_SYNC,
+          payload: {
+            tabMode,
+            tabToRead: tabToRead,
+          },
+        });
+      } catch (error) {
+        //Fail silently
+      }
 
       tabs.forEach((tab) => {
         if (!tab?.id) {
@@ -771,7 +768,6 @@ chrome.storage.sync.onChanged.addListener(
         }
         syncCookieStore?.addTabData(tab.id);
         syncCookieStore?.sendUpdatedDataToPopupAndDevTools(tab.id);
-        syncCookieStore?.updateDevToolsState(tab.id, true);
       });
     }
   }
