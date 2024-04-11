@@ -80,7 +80,7 @@ const BlockedCookiesSection = () => {
 
   const description = !isUsingCDP ? (
     <>
-      Enable PSAT to use CDP for all cookie data, via the{' '}
+      Enable PSAT to use CDP via the{' '}
       <button
         className="text-bright-navy-blue dark:text-jordy-blue"
         onClick={() => {
