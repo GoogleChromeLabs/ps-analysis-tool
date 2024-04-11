@@ -143,17 +143,6 @@ const Provider = ({ children }: PropsWithChildren) => {
           acc[url] = true;
         }
       });
-      Object.keys(tabFrames || {}).forEach((frameUrl) => {
-        cookie.initiatorUrls?.forEach((cookieInitiatorUrl) => {
-          if (
-            cookieInitiatorUrl &&
-            cookieInitiatorUrl.startsWith('https') &&
-            new URL(cookieInitiatorUrl).origin === new URL(frameUrl).origin
-          ) {
-            acc[frameUrl] = true;
-          }
-        });
-      });
 
       return acc;
     }, {});
