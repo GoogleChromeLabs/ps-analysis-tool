@@ -624,27 +624,29 @@ chrome.runtime.onMessage.addListener(async (request) => {
   const incomingMessageTabId = request.payload.tabId;
 
   if (DEVTOOLS_OPEN === incomingMessageType) {
-    const dataToSend: { [key: string]: string } = {};
+    const dataToSend: { [key: string]: string | boolean } = {};
     dataToSend['tabMode'] = tabMode;
 
     if (tabMode === 'single') {
       dataToSend['tabToRead'] = tabToRead;
     }
 
-    chrome.runtime.sendMessage({
-      type: INITIAL_SYNC,
-      payload: dataToSend,
-    });
-
     if (
       !syncCookieStore?.tabs[incomingMessageTabId] &&
       tabMode === 'unlimited'
     ) {
       const currentTab = await getTab(incomingMessageTabId);
-
+      dataToSend['psatOpenedAfterPageLoad'] = request.payload.doNotReReload
+        ? false
+        : true;
       syncCookieStore?.addTabData(incomingMessageTabId);
       syncCookieStore?.updateUrl(incomingMessageTabId, currentTab?.url || '');
     }
+
+    chrome.runtime.sendMessage({
+      type: INITIAL_SYNC,
+      payload: dataToSend,
+    });
 
     syncCookieStore?.updateDevToolsState(incomingMessageTabId, true);
 
