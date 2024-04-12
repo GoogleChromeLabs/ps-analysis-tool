@@ -59,7 +59,14 @@ const requestIdToCDPURLMapping: {
     [requestId: string]: {
       frameId: string;
       url: string;
+      finalFrameId: string;
     };
+  };
+} = {};
+
+const parentChildFrameAssociation: {
+  [tabId: string]: {
+    [parentFrameId: string]: string;
   };
 } = {};
 
@@ -105,6 +112,7 @@ function initialiseVariablesForNewTab(tabId: string) {
   unParsedResponseHeaders[tabId] = {};
   requestIdToCDPURLMapping[tabId] = {};
   frameIdToResourceMap[tabId] = {};
+  parentChildFrameAssociation[tabId] = {};
   //@ts-ignore
   globalThis.PSATAdditionalData = {
     unParsedRequestHeaders,
@@ -123,6 +131,30 @@ function deinitialiseVariablesForTab(tabId: string) {
   delete unParsedResponseHeaders[tabId];
   delete requestIdToCDPURLMapping[tabId];
   delete frameIdToResourceMap[tabId];
+  delete parentChildFrameAssociation[tabId];
+}
+
+/**
+ * This function will deinitialise variables for given tab.
+ * @param {string} tabId The tab whose data has to be deinitialised.
+ * @param frameId The tab whose data has to be deinitialised.
+ * @param targetSet The tab whose data has to be deinitialised.
+ * @returns {string} The first ancestor frameId.
+ */
+function findFirstAncestorFrameId(
+  tabId: string,
+  frameId: string,
+  targetSet: Set<string>
+) {
+  if (targetSet.has(frameId)) {
+    return frameId;
+  } else {
+    return findFirstAncestorFrameId(
+      tabId,
+      parentChildFrameAssociation[tabId][frameId],
+      targetSet
+    );
+  }
 }
 /**
  * Fires when a tab is created.
@@ -427,12 +459,15 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
       // Using Page.frameAttached and Page.frameNavigated we will find the tabId using the frameId because in certain events source.tabId is missing and source.targetId is availale.
       if (method === 'Page.frameAttached' && params) {
-        const { frameId } = params as Protocol.Page.FrameAttachedEvent;
+        const { frameId, parentFrameId } =
+          params as Protocol.Page.FrameAttachedEvent;
 
         await attachCDP({ targetId: frameId });
 
         if (source.tabId) {
           syncCookieStore?.updateFrameIdSet(source.tabId, frameId);
+          parentChildFrameAssociation[source.tabId.toString()][frameId] =
+            parentFrameId;
           await syncCookieStore?.updateFrameIdURLSet(source.tabId, frameId);
         } else if (source.targetId) {
           await Promise.all(
@@ -444,6 +479,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
                 )
               ) {
                 syncCookieStore.updateFrameIdSet(Number(key), frameId);
+                parentChildFrameAssociation[key][frameId] = parentFrameId;
                 await syncCookieStore?.updateFrameIdURLSet(
                   Number(key),
                   frameId
@@ -461,12 +497,22 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         const {
           frame: { parentId = '', id, url: frameUrl },
         } = params as Protocol.Page.FrameNavigatedEvent;
-        if (parentId) {
+
+        if (!parentId) {
+          return;
+        }
+
+        if (source.tabId) {
+          syncCookieStore?.updateFrameIdSet(source.tabId, id);
+          parentChildFrameAssociation[source.tabId.toString()][id] = parentId;
+          await syncCookieStore?.updateFrameIdURLSet(source.tabId, id);
+        } else {
           Object.keys(syncCookieStore?.tabs ?? {}).forEach((key) => {
             if (
               source.targetId &&
               syncCookieStore?.tabs[Number(key)].frameIdSet.has(parentId)
             ) {
+              parentChildFrameAssociation[key][id] = parentId;
               syncCookieStore?.updateFrameIdSet(Number(key), id);
               syncCookieStore.updateFrameIdURLSet(Number(key), id, frameUrl);
             }
@@ -489,31 +535,48 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           frameId = '',
         } = params as Protocol.Network.RequestWillBeSentEvent;
 
-        if (!frameId) {
+        let finalFrameId = frameId;
+
+        if (!finalFrameId) {
           return;
         }
 
         targets = await chrome.debugger.getTargets();
-        const setTargets = new Set();
+        const setTargets = new Set<string>();
 
         targets.map(({ id }) => {
           setTargets.add(id);
           return id;
         });
 
-        if (setTargets.has(frameId) && !frameIdToResourceMap[tabId][frameId]) {
-          frameIdToResourceMap[tabId][frameId] = new Set();
-          attachCDP({ targetId: frameId });
+        if (
+          setTargets.has(frameId) &&
+          !frameIdToResourceMap[tabId][finalFrameId]
+        ) {
+          frameIdToResourceMap[tabId][finalFrameId] = new Set();
+          attachCDP({ targetId: finalFrameId });
         }
 
-        if (setTargets.has(frameId)) {
-          frameIdToResourceMap[tabId][frameId]?.add(requestUrl);
+        if (setTargets.has(finalFrameId)) {
+          frameIdToResourceMap[tabId][finalFrameId]?.add(requestUrl);
+        } else {
+          const ancestorFrameId = findFirstAncestorFrameId(
+            tabId,
+            finalFrameId,
+            setTargets
+          );
+
+          if (ancestorFrameId) {
+            frameIdToResourceMap[tabId][finalFrameId]?.add(requestUrl);
+            finalFrameId = ancestorFrameId;
+          }
         }
 
         if (!requestIdToCDPURLMapping[tabId]) {
           requestIdToCDPURLMapping[tabId] = {
             [requestId]: {
               frameId,
+              finalFrameId,
               url: requestUrl,
             },
           };
@@ -521,6 +584,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           requestIdToCDPURLMapping[tabId] = {
             ...requestIdToCDPURLMapping[tabId],
             [requestId]: {
+              finalFrameId,
               frameId,
               url: requestUrl,
             },
@@ -533,7 +597,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             cookieDB ?? {},
             requestUrl,
             url ?? '',
-            [frameId],
+            Array.from(new Set([finalFrameId, frameId])),
             requestId
           );
 
@@ -561,7 +625,12 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             cookieDB ?? {},
             requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
             url ?? '',
-            [requestIdToCDPURLMapping[tabId][requestId]?.frameId],
+            Array.from(
+              new Set([
+                requestIdToCDPURLMapping[tabId][requestId]?.finalFrameId,
+                requestIdToCDPURLMapping[tabId][requestId]?.frameId,
+              ])
+            ),
             requestId
           );
 
@@ -588,32 +657,48 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           requestId,
         } = params as Protocol.Network.ResponseReceivedEvent;
 
-        if (!frameId) {
+        let finalFrameId = frameId;
+
+        if (!finalFrameId) {
           return;
         }
 
         targets = await chrome.debugger.getTargets();
-        const setTargets = new Set();
+        const setTargets = new Set<string>();
 
         targets.map(({ id }) => {
           setTargets.add(id);
           return id;
         });
 
-        if (setTargets.has(frameId) && !frameIdToResourceMap[tabId][frameId]) {
-          frameIdToResourceMap[tabId][frameId] = new Set();
-          attachCDP({ targetId: frameId });
+        if (
+          setTargets.has(finalFrameId) &&
+          !frameIdToResourceMap[tabId][finalFrameId]
+        ) {
+          frameIdToResourceMap[tabId][finalFrameId] = new Set();
+          attachCDP({ targetId: finalFrameId });
         }
 
-        if (setTargets.has(frameId)) {
-          frameIdToResourceMap[tabId][frameId]?.add(requestUrl);
+        if (setTargets.has(finalFrameId)) {
+          frameIdToResourceMap[tabId][finalFrameId]?.add(requestUrl);
+        } else {
+          const ancestorFrameId = findFirstAncestorFrameId(
+            tabId,
+            finalFrameId,
+            setTargets
+          );
+
+          if (ancestorFrameId) {
+            frameIdToResourceMap[tabId][finalFrameId]?.add(requestUrl);
+            finalFrameId = ancestorFrameId;
+          }
         }
 
         if (!requestIdToCDPURLMapping[tabId]) {
           requestIdToCDPURLMapping[tabId] = {
             [requestId]: {
               ...requestIdToCDPURLMapping[tabId][requestId],
-              frameId,
+              frameId: finalFrameId,
               url: requestUrl,
             },
           };
@@ -622,7 +707,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             ...requestIdToCDPURLMapping[tabId],
             [requestId]: {
               ...requestIdToCDPURLMapping[tabId][requestId],
-              frameId,
+              frameId: finalFrameId,
               url: requestUrl,
             },
           };
@@ -666,7 +751,12 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
             url ?? '',
             cookieDB ?? {},
-            [requestIdToCDPURLMapping[tabId][requestId]?.frameId],
+            Array.from(
+              new Set([
+                requestIdToCDPURLMapping[tabId][requestId]?.finalFrameId,
+                requestIdToCDPURLMapping[tabId][requestId]?.frameId,
+              ])
+            ),
             requestId
           );
           syncCookieStore?.update(Number(tabId), cookies);
@@ -699,7 +789,12 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             requestIdToCDPURLMapping[tabId][requestId]?.url,
             url ?? '',
             cookieDB ?? {},
-            [requestIdToCDPURLMapping[tabId][requestId]?.frameId],
+            Array.from(
+              new Set([
+                requestIdToCDPURLMapping[tabId][requestId]?.finalFrameId,
+                requestIdToCDPURLMapping[tabId][requestId]?.frameId,
+              ])
+            ),
             requestId
           );
 
