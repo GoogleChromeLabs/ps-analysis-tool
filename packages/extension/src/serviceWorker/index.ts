@@ -64,12 +64,6 @@ const requestIdToCDPURLMapping: {
   };
 } = {};
 
-const parentChildFrameAssociation: {
-  [tabId: string]: {
-    [parentFrameId: string]: string;
-  };
-} = {};
-
 const unParsedRequestHeaders: {
   [tabId: string]: {
     [requestId: string]: Protocol.Network.RequestWillBeSentExtraInfoEvent;
@@ -112,7 +106,6 @@ function initialiseVariablesForNewTab(tabId: string) {
   unParsedResponseHeaders[tabId] = {};
   requestIdToCDPURLMapping[tabId] = {};
   frameIdToResourceMap[tabId] = {};
-  parentChildFrameAssociation[tabId] = {};
   //@ts-ignore
   globalThis.PSATAdditionalData = {
     unParsedRequestHeaders,
@@ -131,7 +124,6 @@ function deinitialiseVariablesForTab(tabId: string) {
   delete unParsedResponseHeaders[tabId];
   delete requestIdToCDPURLMapping[tabId];
   delete frameIdToResourceMap[tabId];
-  delete parentChildFrameAssociation[tabId];
 }
 
 /**
@@ -139,7 +131,7 @@ function deinitialiseVariablesForTab(tabId: string) {
  * @param {string} tabId The tab whose data has to be deinitialised.
  * @param frameId The tab whose data has to be deinitialised.
  * @param targetSet The tab whose data has to be deinitialised.
- * @returns {string} The first ancestor frameId.
+ * @returns {string | null} The first ancestor frameId.
  */
 function findFirstAncestorFrameId(
   tabId: string,
@@ -149,11 +141,18 @@ function findFirstAncestorFrameId(
   if (targetSet.has(frameId)) {
     return frameId;
   } else {
-    return findFirstAncestorFrameId(
-      tabId,
-      parentChildFrameAssociation[tabId][frameId],
-      targetSet
-    );
+    if (
+      syncCookieStore?.tabs[Number(tabId)]?.parentChildFrameAssociation[frameId]
+    ) {
+      return findFirstAncestorFrameId(
+        tabId,
+        syncCookieStore?.tabs[Number(tabId)]?.parentChildFrameAssociation[
+          frameId
+        ],
+        targetSet
+      );
+    }
+    return null;
   }
 }
 /**
@@ -189,7 +188,11 @@ chrome.tabs.onCreated.addListener(async (tab) => {
       ({ tabId }) => tabId && tab.id && tabId === tab.id
     );
 
-    syncCookieStore.updateFrameIdSet(tab.id, currentTab[0].id);
+    syncCookieStore.updateParentChildFrameAssociation(
+      tab.id,
+      currentTab[0].id,
+      '0'
+    );
   } else {
     syncCookieStore?.addTabData(tab.id);
     const currentTab = targets.filter(
@@ -198,7 +201,11 @@ chrome.tabs.onCreated.addListener(async (tab) => {
 
     initialiseVariablesForNewTab(tab.id.toString());
 
-    syncCookieStore.updateFrameIdSet(tab.id, currentTab[0].id);
+    syncCookieStore.updateParentChildFrameAssociation(
+      tab.id,
+      currentTab[0].id,
+      '0'
+    );
   }
 });
 
@@ -282,11 +289,12 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     deinitialiseVariablesForTab(tabId.toString());
     initialiseVariablesForNewTab(tabId.toString());
 
-    syncCookieStore?.updateFrameIdSet(
+    syncCookieStore?.updateParentChildFrameAssociation(
       tabId,
       (await chrome.debugger.getTargets()).filter(
         (target) => target.tabId && target.tabId === tabId
-      )[0].id
+      )[0].id,
+      '0'
     );
   }
 
@@ -392,7 +400,11 @@ chrome.runtime.onInstalled.addListener(async (details) => {
           ({ tabId }) => tabId && tab.id && tabId === tab.id
         );
         syncCookieStore?.addTabData(tab.id);
-        syncCookieStore?.updateFrameIdSet(tab.id, currentTab[0].id);
+        syncCookieStore?.updateParentChildFrameAssociation(
+          tab.id,
+          currentTab[0].id,
+          '0'
+        );
       });
     }
 
@@ -424,6 +436,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       }
 
       let targets = await chrome.debugger.getTargets();
+
       targets.map(async ({ id, url }) => {
         if (url.startsWith('http')) {
           await attachCDP({ targetId: id });
@@ -438,10 +451,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         } = params as Protocol.Target.AttachedToTargetEvent;
 
         await attachCDP({ targetId });
-
-        if (source.tabId) {
-          syncCookieStore?.updateFrameIdSet(source.tabId, targetId);
-        }
         return;
       }
 
@@ -452,7 +461,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         const tab = Object.keys(syncCookieStore?.tabs ?? {}).filter(
           (key) =>
             source.targetId &&
-            syncCookieStore?.tabs[Number(key)].frameIdSet.has(source.targetId)
+            syncCookieStore?.getFrameIDSet(Number(key))?.has(source.targetId)
         );
         tabId = tab[0];
       }
@@ -465,21 +474,29 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         await attachCDP({ targetId: frameId });
 
         if (source.tabId) {
-          syncCookieStore?.updateFrameIdSet(source.tabId, frameId);
-          parentChildFrameAssociation[source.tabId.toString()][frameId] =
-            parentFrameId;
+          syncCookieStore?.updateParentChildFrameAssociation(
+            source.tabId,
+            frameId,
+            parentFrameId
+          );
           await syncCookieStore?.updateFrameIdURLSet(source.tabId, frameId);
-        } else if (source.targetId) {
+        } else {
           await Promise.all(
             Object.keys(syncCookieStore?.tabs ?? {}).map(async (key) => {
+              const currentTabFrameIdSet = syncCookieStore?.getFrameIDSet(
+                Number(key)
+              );
+
               if (
                 source.targetId &&
-                syncCookieStore?.tabs[Number(key)].frameIdSet.has(
-                  source.targetId
-                )
+                currentTabFrameIdSet &&
+                currentTabFrameIdSet.has(source.targetId)
               ) {
-                syncCookieStore.updateFrameIdSet(Number(key), frameId);
-                parentChildFrameAssociation[key][frameId] = parentFrameId;
+                syncCookieStore?.updateParentChildFrameAssociation(
+                  Number(key),
+                  frameId,
+                  parentFrameId
+                );
                 await syncCookieStore?.updateFrameIdURLSet(
                   Number(key),
                   frameId
@@ -503,18 +520,24 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         }
 
         if (source.tabId) {
-          syncCookieStore?.updateFrameIdSet(source.tabId, id);
-          parentChildFrameAssociation[source.tabId.toString()][id] = parentId;
+          syncCookieStore?.updateParentChildFrameAssociation(
+            source.tabId,
+            id,
+            parentId
+          );
           await syncCookieStore?.updateFrameIdURLSet(source.tabId, id);
         } else {
           Object.keys(syncCookieStore?.tabs ?? {}).forEach((key) => {
-            if (
-              source.targetId &&
-              syncCookieStore?.tabs[Number(key)].frameIdSet.has(parentId)
-            ) {
-              parentChildFrameAssociation[key][id] = parentId;
-              syncCookieStore?.updateFrameIdSet(Number(key), id);
-              syncCookieStore.updateFrameIdURLSet(Number(key), id, frameUrl);
+            const currentTabFrameIdSet = syncCookieStore?.getFrameIDSet(
+              Number(key)
+            );
+            if (currentTabFrameIdSet && currentTabFrameIdSet.has(parentId)) {
+              syncCookieStore?.updateParentChildFrameAssociation(
+                Number(key),
+                id,
+                parentId
+              );
+              syncCookieStore?.updateFrameIdURLSet(Number(key), id, frameUrl);
             }
           });
         }
@@ -653,13 +676,13 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       if (method === 'Network.responseReceived' && params) {
         const {
           frameId = '',
-          response: { url: requestUrl },
           requestId,
+          response: { url: requestUrl },
         } = params as Protocol.Network.ResponseReceivedEvent;
 
         let finalFrameId = frameId;
 
-        if (!finalFrameId) {
+        if (!frameId) {
           return;
         }
 
@@ -712,28 +735,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             },
           };
         }
-
-        await Promise.all(
-          Object.entries(frameIdToResourceMap[tabId]).map(
-            async ([key, value]) => {
-              //@ts-ignore
-              const { cookies = [] } = await chrome.debugger.sendCommand(
-                { targetId: key },
-                'Network.getCookies',
-                { urls: Array.from(value) }
-              );
-
-              const parsedCookies = parseNetworkCookies(
-                cookies,
-                url ?? '',
-                cookieDB ?? {},
-                key
-              );
-
-              syncCookieStore?.update(Number(tabId), parsedCookies);
-            }
-          )
-        );
 
         if (unParsedResponseHeaders[tabId][requestId]) {
           const {
@@ -967,7 +968,11 @@ chrome.runtime.onMessage.addListener(async (request) => {
             ({ tabId }) => tabId && id && tabId === id
           );
           syncCookieStore?.addTabData(id);
-          syncCookieStore?.updateFrameIdSet(id, currentTab[0].id);
+          syncCookieStore?.updateParentChildFrameAssociation(
+            id,
+            currentTab[0].id,
+            '0'
+          );
         }
         try {
           if (globalIsUsingCDP) {
@@ -993,6 +998,38 @@ chrome.runtime.onMessage.addListener(async (request) => {
   }
 
   const incomingMessageTabId = request.payload.tabId;
+
+  if ('GET_REST_DATA_FROM_URL' === incomingMessageType) {
+    let allCookies: CookieData[] = [];
+    await Promise.all(
+      Object.entries(frameIdToResourceMap[incomingMessageTabId]).map(
+        async ([key, value]) => {
+          try {
+            //@ts-ignore
+            const { cookies = [] } = await chrome.debugger.sendCommand(
+              { targetId: key },
+              'Network.getCookies',
+              { urls: Array.from(value) }
+            );
+
+            const parsedCookies = parseNetworkCookies(
+              cookies,
+              syncCookieStore?.getTabUrl(incomingMessageTabId) ?? '',
+              cookieDB ?? {},
+              key
+            );
+            if (parsedCookies.length > 0) {
+              allCookies = [...allCookies, ...parsedCookies];
+            }
+          } catch (error) {
+            //Fail silently. There will be only one reason stating target id not found.
+          }
+        }
+      )
+    );
+
+    syncCookieStore?.update(Number(incomingMessageTabId), allCookies);
+  }
 
   if (DEVTOOLS_OPEN === incomingMessageType) {
     const dataToSend: { [key: string]: string } = {};

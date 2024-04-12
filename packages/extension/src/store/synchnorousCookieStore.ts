@@ -50,8 +50,8 @@ class SynchnorousCookieStore {
       devToolsOpenState: boolean;
       popupOpenState: boolean;
       newUpdates: number;
-      frameIdSet: Set<string>;
       frameIDURLSet: Record<string, string[]>;
+      parentChildFrameAssociation: Record<string, string>;
     };
   } = {};
 
@@ -199,19 +199,34 @@ class SynchnorousCookieStore {
       return null;
     }
 
-    return this.tabs[tabId].frameIdSet;
+    const formedSet = new Set<string>();
+
+    Object.entries(this.tabs[tabId].parentChildFrameAssociation).forEach(
+      ([frameId, parentId]) => {
+        formedSet.add(frameId);
+        formedSet.add(parentId);
+      }
+    );
+
+    return formedSet;
   }
 
   /**
    * Update FrameId set for a given url for a given tab.
    * @param {number} tabId The url whose url needs to be update.
    * @param {string} frameIdToAdd The new frameId to be added.
+   * @param {string} parentFrameId The parent frame id the frameIdToAdd is associated to
    */
-  updateFrameIdSet(tabId: number, frameIdToAdd: string) {
+  updateParentChildFrameAssociation(
+    tabId: number,
+    frameIdToAdd: string,
+    parentFrameId: string
+  ) {
     if (!this.tabs[tabId]) {
       return;
     } else {
-      this.tabs[tabId].frameIdSet.add(frameIdToAdd);
+      this.tabs[tabId].parentChildFrameAssociation[frameIdToAdd] =
+        parentFrameId;
     }
   }
 
@@ -354,8 +369,9 @@ class SynchnorousCookieStore {
     delete this.tabsData[tabId];
     this.tabsData[tabId] = {};
     this.tabs[tabId].newUpdates = 0;
-    this.tabs[tabId].frameIdSet = new Set();
     this.tabs[tabId].frameIDURLSet = {};
+    this.tabs[tabId].parentChildFrameAssociation = {};
+
     this.sendUpdatedDataToPopupAndDevTools(tabId, true);
   }
 
@@ -379,8 +395,8 @@ class SynchnorousCookieStore {
       devToolsOpenState: false,
       popupOpenState: false,
       newUpdates: 0,
-      frameIdSet: new Set(),
       frameIDURLSet: {},
+      parentChildFrameAssociation: {},
     };
   }
 

@@ -224,6 +224,16 @@ const Provider = ({ children }: PropsWithChildren) => {
     }
   }, [allowedNumberOfTabs, tabFrames]);
 
+  useEffect(() => {
+    chrome.runtime.sendMessage({
+      type: 'GET_REST_DATA_FROM_URL',
+      payload: {
+        tabId: chrome.devtools.inspectedWindow.tabId,
+        selectedFrame,
+      },
+    });
+  }, [selectedFrame]);
+
   const messagePassingListener = useCallback(
     async (message: {
       type: string;
