@@ -1,0 +1,220 @@
+{
+  "clAnalyzing": {
+    "message": "Analyzing $type$ in urls $one$ - $two$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "cookies"
+      },
+      "one": {
+        "content": "$2",
+        "example": "5"
+      },
+      "two": {
+        "content": "$3",
+        "example": "10"
+      }
+    }
+  },
+  "clDoneAnalyzing": {
+    "message": "Done analyzing $type$ in urls $one$ - $two$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "cookies"
+      },
+      "one": {
+        "content": "$2",
+        "example": "5"
+      },
+      "two": {
+        "content": "$3",
+        "example": "10"
+      }
+    }
+  },
+  "clErrorParsingSitemap": {
+    "message": "Error: error parsing sitemap"
+  },
+  "clParsingSitemap": {
+    "message": "Parsing sitemap"
+  },
+  "clDoneParsingSitemap": {
+    "message": "Done parsing sitemap"
+  },
+  "clParsingCSV": {
+    "message": "Parsing CSV file"
+  },
+  "clCSVHasNoUrls": {
+    "message": "Provided CSV file has no urls"
+  },
+  "clNotValidUrl": {
+    "message": "$url$ is not a valid url",
+    "placeholders": {
+      "url": {
+        "content": "$1",
+        "example": "http://www.example.com"
+      }
+    }
+  },
+  "clDoneParsingCSV": {
+    "message": "Done parsing CSV file"
+  },
+  "clParsingXML": {
+    "message": "Parsing XML file"
+  },
+  "clXMLSchemaNotSupported": {
+    "message": "Sorry, XML Schema for Sitemap index files is not supported by the tool"
+  },
+  "clNoUrlsInXMLUrlset": {
+    "message": "Provided XML files has no urls in its urlset"
+  },
+  "clNoUrlsInXML": {
+    "message": "Provided XML files has no urls"
+  },
+  "clDoneParsingXML": {
+    "message": "Done parsing XML file"
+  },
+  "clErrorParsingCSV": {
+    "message": "Error: error parsing CSV file"
+  },
+  "cliInvalidPort": {
+    "message": "Invalid port argument. Please provide a port >=0 and <=65536"
+  },
+  "cliProvideCLIArguments": {
+    "message": "Please provide one and only one of the following\n a) URL of a site (-u or --url)\n b) URL of a sitemap (-s or --sitemap-url)\n c) Path to a CSV file (-c or --csv-path)\n d) Path to an XML file (-p or --sitemap-path)"
+  },
+  "clNoFileFound": {
+    "message": "No file at $path$",
+    "placeholders": {
+      "path": {
+        "content": "$1",
+        "example": "/path/to/file"
+      }
+    }
+  },
+  "clNotValidNumber": {
+    "message": "$number$ is not a valid numberic value",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "cliUrlInvalid": {
+    "message": "Provided URL $url$ is not valid",
+    "placeholders": {
+      "url": {
+        "content": "$1",
+        "example": "http://www.example.com"
+      }
+    }
+  },
+  "clDirNotExists": {
+    "message": "Provided dir '$outDir$' does not exist. Creating now!!",
+    "placeholders": {
+      "outDir": {
+        "content": "$1",
+        "example": "/path/to/directory"
+      }
+    }
+  },
+  "clToTest3PCookies": {
+    "message": "CLI to test a URL for 3p cookies"
+  },
+  "clUrlOfSite": {
+    "message": "URL of a site"
+  },
+  "clUrlOfSitemap": {
+    "message": "URL of a sitemap"
+  },
+  "clPathToCSV": {
+    "message": "Path to a CSV file with a set of URLs."
+  },
+  "clPathToSitemap": {
+    "message": "Path to a sitemap saved in the file system"
+  },
+  "clPortForServer": {
+    "message": "A port for the CLI dashboard server."
+  },
+  "clUrlLimit": {
+    "message": "No of URLs to analyze"
+  },
+  "clNonHeadless": {
+    "message": "Flag for running puppeteer in non-headless mode"
+  },
+  "clNoPrompts": {
+    "message": "Flags for skipping all prompts. Default options will be used"
+  },
+  "clNoTechnology": {
+    "message": "Flags for skipping technology analysis."
+  },
+  "clOutDir": {
+    "message": "Directory path where the analysis data will be stored"
+  },
+  "clAcceptBanner": {
+    "message": "This will accept the GDPR banner if present."
+  },
+  "clReportServedAt": {
+    "message": "Report is being served at the URL: $url$",
+    "placeholders": {
+      "url": {
+        "content": "$1",
+        "example": "http://localhost:3000"
+      }
+    }
+  },
+  "clErrorInPort": {
+    "message": "Error: Report server port $port$ already in use. You might be already running CLI",
+    "placeholders": {
+      "port": {
+        "content": "$1",
+        "example": "3000"
+      }
+    }
+  },
+  "clUrlCountPrompt": {
+    "message": "Provided $type$ has $urlsLength$ pages. Please enter the number of pages you want to analyze (Default $urlsLength$):",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "sitemap"
+      },
+      "urlLength": {
+        "content": "$2",
+        "example": "5"
+      }
+    }
+  },
+  "clAnalyzingUrls": {
+    "message": "Analysing $numberOfUrls$ urls.",
+    "placeholders": {
+      "numberOfUrls": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "clAnalyzingAllUrls": {
+    "message": "Analysing all $urlsLength$ urls.",
+    "placeholders": {
+      "urlsLength": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "clAnalyzingCookies": {
+    "message": "Analysing cookies on first page visit"
+  },
+  "clDoneAnalyzingCookies": {
+    "message": "Done analyzing cookies."
+  },
+  "clAnalyzingTechnologies": {
+    "message": "Analyzing technologies"
+  },
+  "clDoneAnalyzingTechonlogies": {
+    "message": "Done analyzing technologies"
+  }
+}

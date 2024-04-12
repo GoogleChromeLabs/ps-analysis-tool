@@ -25,6 +25,7 @@ import Wapplalyzer from 'wappalyzer';
  * Internal dependencies.
  */
 import { TechnologyDetailList } from '../types';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 export const analyzeTechnologiesUrlsInBatches = async (
   urls: Array<string>,
@@ -51,7 +52,10 @@ export const analyzeTechnologiesUrlsInBatches = async (
 
     spinnies &&
       spinnies.add(`tech-batch-spinner`, {
-        text: `Analyzing technologies in urls ${start + 1} - ${end + 1} `,
+        text: I18n.getMessage('clAnalyzing', [
+          'technology',
+          ...[`${start + 1}`, `${end + 1}`],
+        ]),
         indent: 2,
       });
 
@@ -68,7 +72,10 @@ export const analyzeTechnologiesUrlsInBatches = async (
 
     spinnies &&
       spinnies.succeed(`tech-batch-spinner`, {
-        text: `Done analyzing technology in urls ${start + 1} - ${end + 1} `,
+        text: I18n.getMessage('clDoneAnalyzing', [
+          'technology',
+          ...[`${start + 1}`, `${end + 1}`],
+        ]),
         indent: 2,
       });
     await wappalyzer.destroy();

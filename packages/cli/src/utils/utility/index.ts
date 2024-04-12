@@ -23,6 +23,7 @@ import Sitemapper from 'sitemapper';
  * Internal dependencies.
  */
 import { Cookie } from '../../types';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Table = require('cli-table');
@@ -141,7 +142,7 @@ export default class Utility {
       const { sites } = await siteMapper.fetch();
       urls = sites;
     } catch (error) {
-      console.log('Error: error parsing sitemap ');
+      console.log(I18n.getMessage('clErrorParsingSitemap'));
     }
 
     return urls;

@@ -15,6 +15,7 @@
  */
 
 import { parseUrl } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 import { exists, mkdir } from 'fs-extra';
 import path from 'path';
 
@@ -39,7 +40,7 @@ const validateArgs = async (
   port: number
 ) => {
   if (isNaN(port) || (!isNaN(port) && (port < 0 || port > 65536))) {
-    console.log(`Invalid port argument. Please porvide a port >=0 and <=65536`);
+    console.log(I18n.getMessage('cliInvalidPort'));
     process.exit(1);
   }
 
@@ -54,20 +55,14 @@ const validateArgs = async (
   }, 0);
 
   if (numArgs !== 1) {
-    console.log(
-      `Please provide one and only one of the following
-        a) URL of a site (-u or --url)
-        b) URL of a sitemap (-s or --sitemap-url)
-        c) Path to a CSV file (-c or --csv-path)
-        d) Path to an XML file (-p or --sitemap-path)`
-    );
+    console.log(I18n.getMessage('cliProvideCLIArguments'));
     process.exit(1);
   }
 
   if (csvPath) {
     const csvFileExists = await exists(csvPath);
     if (!csvFileExists) {
-      console.log(`No file at ${csvPath}`);
+      console.log(I18n.getMessage('clNoFileFound', [csvPath]));
       process.exit(1);
     }
   }
@@ -75,7 +70,7 @@ const validateArgs = async (
   if (sitemapPath) {
     const sitemapFileExists = await exists(sitemapPath);
     if (!sitemapFileExists) {
-      console.log(`No file at ${sitemapPath}`);
+      console.log(I18n.getMessage('clNoFileFound', [sitemapPath]));
       process.exit(1);
     }
   }
@@ -86,14 +81,14 @@ const validateArgs = async (
     const parsedUrl = parseUrl(_url);
 
     if (parsedUrl === null) {
-      console.log(`Provided Url ${parsedUrl} is not valid`);
+      console.log(I18n.getMessage('cliUrlInvalid', [_url]));
       process.exit(1);
     }
   }
 
   if (numberOfUrls) {
     if (isNaN(parseInt(numberOfUrls))) {
-      console.log(`${numberOfUrls} is not valid numeric value`);
+      console.log(I18n.getMessage('clNotValidNumber'));
       process.exit(1);
     }
   }
@@ -101,9 +96,7 @@ const validateArgs = async (
   if (outDir) {
     const outDirExists = await exists(path.resolve(outDir));
     if (!outDirExists) {
-      console.log(
-        `Provided dir "${path.resolve(outDir)}" does not exist. Creating now!!`
-      );
+      console.log(I18n.getMessage('clDirNotExists', [path.resolve(outDir)]));
       await mkdir(path.resolve(outDir));
     }
   }

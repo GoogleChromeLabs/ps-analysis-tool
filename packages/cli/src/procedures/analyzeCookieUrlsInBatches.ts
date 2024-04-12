@@ -20,6 +20,7 @@
 import { CookieData } from '@ps-analysis-tool/common';
 import { CookieDatabase } from '../types';
 import { analyzeCookiesUrls } from './analyzeCookieUrls';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 export const analyzeCookiesUrlsInBatches = async (
   urls: string[],
@@ -57,7 +58,10 @@ export const analyzeCookiesUrlsInBatches = async (
 
     spinnies &&
       spinnies.add(`cookie-batch-spinner`, {
-        text: `Analyzing cookies in urls ${start + 1} - ${end + 1} `,
+        text: I18n.getMessage('clAnalyzing', [
+          'cookies',
+          ...[start + 1, end + 1].map(String),
+        ]),
         indent: 2,
       });
 
@@ -75,7 +79,10 @@ export const analyzeCookiesUrlsInBatches = async (
 
     spinnies &&
       spinnies.succeed(`cookie-batch-spinner`, {
-        text: `Done analyzing cookies in urls ${start + 1} - ${end + 1} `,
+        text: I18n.getMessage('clDoneAnalyzing', [
+          'cookies',
+          ...[start + 1, end + 1].map(String),
+        ]),
         indent: 2,
       });
   }

@@ -40,6 +40,7 @@ import {
   saveCSVReports,
 } from './utils';
 import { checkPortInUse } from './utils/checkPortInUse';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
@@ -51,33 +52,18 @@ const program = new Command();
 
 program
   .version('0.6.0')
-  .description('CLI to test a URL for 3p cookies')
-  .option('-u, --url <value>', 'URL of a site')
-  .option('-s, --sitemap-url <value>', 'URL of a sitemap')
-  .option('-c, --csv-path <value>', 'Path to a CSV file with a set of URLs.')
-  .option(
-    '-p, --sitemap-path <value>',
-    'Path to a sitemap saved in the file system'
-  )
-  .option('-po, --port <value>', 'A port for the CLI dashboard server.')
-  .option('-ul, --url-limit <value>', 'No of URLs to analyze')
-  .option(
-    '-nh, --no-headless ',
-    'Flag for running puppeteer in non-headless mode'
-  )
-  .option(
-    '-np, --no-prompts',
-    'Flags for skipping all prompts. Default options will be used'
-  )
-  .option('-nt, --no-technology', 'Flags for skipping technology analysis.')
-  .option(
-    '-d, --out-dir <value>',
-    'Directory path where the analysis data will be stored'
-  )
-  .option(
-    '-ab, --accept-banner',
-    'This will accept the GDPR banner if present.'
-  );
+  .description(I18n.getMessage('clToTest3PCookies'))
+  .option('-u, --url <value>', I18n.getMessage('clUrlOfSite'))
+  .option('-s, --sitemap-url <value>', I18n.getMessage('clUrlOfSitemap'))
+  .option('-c, --csv-path <value>', I18n.getMessage('clPathToCSV'))
+  .option('-p, --sitemap-path <value>', I18n.getMessage('clPathToSitemap'))
+  .option('-po, --port <value>', I18n.getMessage('clPortForServer'))
+  .option('-ul, --url-limit <value>', I18n.getMessage('clUrlLimit'))
+  .option('-nh, --no-headless ', I18n.getMessage('clNonHeadless'))
+  .option('-np, --no-prompts', I18n.getMessage('clNoPrompts'))
+  .option('-nt, --no-technology', I18n.getMessage('clNoTechnology'))
+  .option('-d, --out-dir <value>', I18n.getMessage('clOutputDir'))
+  .option('-ab, --accept-banner', I18n.getMessage('clAcceptBanner'));
 
 program.parse();
 
@@ -95,7 +81,9 @@ const startDashboardServer = async (dir: string, port: number) => {
   await delay(2000);
 
   console.log(
-    `Report is being served at the URL: http://localhost:${port}?dir=${dir}`
+    I18n.getMessage('clReportServedAt', [
+      `http://localhost:${port}/?dir=${dir}`,
+    ])
   );
 };
 
@@ -129,9 +117,7 @@ const startDashboardServer = async (dir: string, port: number) => {
     const isPortInUse = await checkPortInUse(port);
 
     if (isPortInUse) {
-      console.error(
-        `Error: Report server port ${port} already in use. You might be already running CLI`
-      );
+      console.error(I18n.getMessage('clErrorInPort', [port.toString()]));
       process.exit(1);
     }
   }
@@ -161,11 +147,10 @@ const startDashboardServer = async (dir: string, port: number) => {
 
     if (!shouldSkipPrompts && !numberOfUrlsInput) {
       userInput = await Utility.askUserInput(
-        `Provided ${sitemapUrl || sitemapPath ? 'Sitemap' : 'CSV file'} has ${
-          urls.length
-        } pages. Please enter the number of pages you want to analyze (Default ${
-          urls.length
-        }):`,
+        I18n.getMessage('clUrlCountPrompt', [
+          sitemapUrl || sitemapPath ? 'Sitemap' : 'CSV file',
+          urls.length.toString(),
+        ]),
         { default: urls.length.toString() }
       );
       numberOfUrls =
@@ -173,10 +158,12 @@ const startDashboardServer = async (dir: string, port: number) => {
           ? urls.length
           : parseInt(userInput);
     } else if (numberOfUrlsInput) {
-      console.log(`Analysing ${numberOfUrlsInput} urls.`);
+      console.log(I18n.getMessage('clAnalyzingUrls', [numberOfUrlsInput]));
       numberOfUrls = parseInt(numberOfUrlsInput);
     } else {
-      console.log(`Analysing all ${urls.length} urls.`);
+      console.log(
+        I18n.getMessage('clAnalyzingAllUrls', [urls.length.toString()])
+      );
       numberOfUrls = urls.length;
     }
 
@@ -188,7 +175,7 @@ const startDashboardServer = async (dir: string, port: number) => {
   const cookieDictionary = await fetchDictionary();
 
   spinnies.add('cookie-spinner', {
-    text: 'Analysing cookies on first page visit',
+    text: I18n.getMessage('clAnalyzingCookies'),
   });
 
   const cookieAnalysisData = await analyzeCookiesUrlsInBatches(
@@ -202,14 +189,14 @@ const startDashboardServer = async (dir: string, port: number) => {
   );
 
   spinnies.succeed('cookie-spinner', {
-    text: 'Done analyzing cookies.',
+    text: I18n.getMessage('clDoneAnalyzingCookies'),
   });
 
   let technologyAnalysisData: any = null;
 
   if (!shouldSkipTechnologyAnalysis) {
     spinnies.add('technology-spinner', {
-      text: 'Analysing technologies',
+      text: I18n.getMessage('clAnalyzingTechnologies'),
     });
 
     technologyAnalysisData = await analyzeTechnologiesUrlsInBatches(
@@ -219,7 +206,7 @@ const startDashboardServer = async (dir: string, port: number) => {
     );
 
     spinnies.succeed('technology-spinner', {
-      text: 'Done analyzing technologies.',
+      text: I18n.getMessage('clDoneAnalyzingTechnologies'),
     });
   }
 
