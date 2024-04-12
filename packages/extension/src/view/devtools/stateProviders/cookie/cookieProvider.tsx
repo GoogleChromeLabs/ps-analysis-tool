@@ -375,8 +375,12 @@ const Provider = ({ children }: PropsWithChildren) => {
       type: DEVTOOLS_OPEN,
       payload: {
         tabId: chrome.devtools.inspectedWindow.tabId,
+        doNotReReload: localStorage.getItem('contextInvalidated')
+          ? true
+          : false,
       },
     });
+    localStorage.removeItem('contextInvalidated');
 
     return () => {
       chrome.runtime.sendMessage({

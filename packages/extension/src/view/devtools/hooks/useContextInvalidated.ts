@@ -87,7 +87,6 @@ const useContextInvalidated = (
               //Fail silently
             }
           }
-          localStorage.removeItem('contextInvalidated');
         }
       }
     })();

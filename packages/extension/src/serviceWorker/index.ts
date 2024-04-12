@@ -636,7 +636,9 @@ chrome.runtime.onMessage.addListener(async (request) => {
       tabMode === 'unlimited'
     ) {
       const currentTab = await getTab(incomingMessageTabId);
-      dataToSend['psatOpenedAfterPageLoad'] = true;
+      dataToSend['psatOpenedAfterPageLoad'] = request.payload.doNotReReload
+        ? false
+        : true;
       syncCookieStore?.addTabData(incomingMessageTabId);
       syncCookieStore?.updateUrl(incomingMessageTabId, currentTab?.url || '');
     }
