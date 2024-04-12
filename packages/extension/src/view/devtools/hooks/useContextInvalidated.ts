@@ -23,7 +23,6 @@ import { useCallback, useEffect, type MutableRefObject } from 'react';
  */
 import { useCookie, useSettings } from '../stateProviders';
 import { getCurrentTabId } from '../../../utils/getCurrentTabId';
-import attachCDP from '../../../serviceWorker/attachCDP';
 
 const useContextInvalidated = (
   contextInvalidatedRef: MutableRefObject<boolean | null>
@@ -70,13 +69,6 @@ const useContextInvalidated = (
 
         if (tabId) {
           chrome.tabs.reload(Number(tabId));
-          if (isUsingCDP) {
-            try {
-              await attachCDP({ tabId: Number(tabId) });
-            } catch (error) {
-              //Fail silently
-            }
-          }
           localStorage.removeItem('contextInvalidated');
         }
       }
