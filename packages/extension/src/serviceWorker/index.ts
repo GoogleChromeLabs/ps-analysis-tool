@@ -258,7 +258,6 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   if (changeInfo.status === 'loading' && tab.url) {
     syncCookieStore?.removeCookieData(tabId);
   }
-
   try {
     await chrome.tabs.sendMessage(tabId, {
       tabId,
@@ -282,15 +281,6 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     }
   } catch (error) {
     //Fail silently
-  }
-  if (!tab.url) {
-    return;
-  }
-
-  syncCookieStore?.updateUrl(tabId, tab.url);
-
-  if (changeInfo.status === 'loading' && tab.url) {
-    syncCookieStore?.removeCookieData(tabId);
   }
 });
 
@@ -427,6 +417,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       blockedCookies,
       requestId,
       cookiePartitionKey = '',
+      exemptedCookies = [],
     } = responseParams;
 
     // Sometimes CDP gives "set-cookie" and sometimes it gives "Set-Cookie".
@@ -437,6 +428,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
     const cookies: CookieData[] = parseResponseReceivedExtraInfo(
       headers,
       blockedCookies,
+      exemptedCookies,
       cookiePartitionKey,
       requestIdToCDPURLMapping[tabId],
       url ?? '',
@@ -554,15 +546,23 @@ chrome.runtime.onMessage.addListener(async (request) => {
     });
 
     if (globalIsUsingCDP) {
-      await chrome.debugger.attach({ tabId: Number(newTab) }, '1.3');
-      await chrome.debugger.sendCommand(
-        { tabId: Number(newTab) },
-        'Network.enable'
-      );
-      await chrome.debugger.sendCommand(
-        { tabId: Number(newTab) },
-        'Audits.enable'
-      );
+      try {
+        if (globalIsUsingCDP) {
+          await chrome.debugger.attach({ tabId: Number(newTab) }, '1.3');
+          await chrome.debugger.sendCommand(
+            { tabId: Number(newTab) },
+            'Network.enable'
+          );
+          await chrome.debugger.sendCommand(
+            { tabId: Number(newTab) },
+            'Audits.enable'
+          );
+        } else {
+          await chrome.debugger.detach({ tabId: Number(newTab) });
+        }
+      } catch (error) {
+        //Fail silently
+      }
     }
 
     await reloadCurrentTab(Number(newTab));
@@ -595,6 +595,17 @@ chrome.runtime.onMessage.addListener(async (request) => {
       tabs.map(async ({ id }) => {
         if (!id) {
           return;
+        }
+        try {
+          if (globalIsUsingCDP) {
+            await chrome.debugger.attach({ tabId: id }, '1.3');
+            await chrome.debugger.sendCommand({ tabId: id }, 'Network.enable');
+            await chrome.debugger.sendCommand({ tabId: id }, 'Audits.enable');
+          } else {
+            await chrome.debugger.detach({ tabId: id });
+          }
+        } catch (error) {
+          //Fail silently
         }
         resetCookieBadgeText(id);
         await reloadCurrentTab(id);
@@ -715,14 +726,17 @@ chrome.storage.sync.onChanged.addListener(
 
     if (changes?.allowedNumberOfTabs?.newValue === 'single') {
       tabToRead = '';
-
-      chrome.runtime.sendMessage({
-        type: INITIAL_SYNC,
-        payload: {
-          tabMode,
-          tabToRead: tabToRead,
-        },
-      });
+      try {
+        await chrome.runtime.sendMessage({
+          type: INITIAL_SYNC,
+          payload: {
+            tabMode,
+            tabToRead: tabToRead,
+          },
+        });
+      } catch (error) {
+        //Fail silently
+      }
 
       tabs.map((tab) => {
         if (!tab?.id) {
@@ -736,13 +750,17 @@ chrome.storage.sync.onChanged.addListener(
         return tab;
       });
     } else {
-      chrome.runtime.sendMessage({
-        type: INITIAL_SYNC,
-        payload: {
-          tabMode,
-          tabToRead: tabToRead,
-        },
-      });
+      try {
+        await chrome.runtime.sendMessage({
+          type: INITIAL_SYNC,
+          payload: {
+            tabMode,
+            tabToRead: tabToRead,
+          },
+        });
+      } catch (error) {
+        //Fail silently
+      }
 
       tabs.forEach((tab) => {
         if (!tab?.id) {

@@ -17,11 +17,12 @@
  * External dependencies.
  */
 import React, { useState } from 'react';
+import classname from 'classnames';
 
 /**
  * Internal dependencies
  */
-import { InfoIcon } from '../../icons';
+import { ChevronDown, InfoIcon } from '../../icons';
 import Matrix from '../matrix';
 import MatrixComponentHorizontal, {
   MatrixComponentHorizontalProps,
@@ -80,10 +81,20 @@ const MatrixContainer = ({
           </div>
           {allowExpand && (
             <h4 className="pb-3 flex-1 grow text-xs font-bold text-darkest-gray dark:text-bright-gray text-right">
-              <button onClick={() => setIsExpanded((state) => !state)}>
-                {isExpanded
-                  ? I18n.getMessage('dsCollapseView')
-                  : I18n.getMessage('dsExpandView')}
+              <button
+                onClick={() => setIsExpanded((state) => !state)}
+                data-testid="expand-button"
+                title={
+                  isExpanded
+                    ? I18n.getMessage('dsCollapseView')
+                    : I18n.getMessage('dsExpandView')
+                }
+              >
+                <ChevronDown
+                  className={classname('fill-granite-gray', {
+                    'rotate-180': isExpanded,
+                  })}
+                />
               </button>
             </h4>
           )}

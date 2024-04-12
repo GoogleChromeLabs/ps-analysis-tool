@@ -19,7 +19,6 @@
  */
 import React, { useMemo } from 'react';
 import {
-  Button,
   CookiesLanding,
   MenuBar,
   type CookiesLandingSection,
@@ -79,17 +78,10 @@ const CookiesLandingContainer = ({
 
   return (
     <>
-      {downloadReport && (
-        <div className="absolute right-0 py-5 px-5">
-          <Button
-            extraClasses="w-fit text-sm flex justify-center items-center"
-            text={I18n.getMessage('cdDownloadReport')}
-            onClick={downloadReport}
-          />
-        </div>
-      )}
       <CookiesLanding>
         <MenuBar
+          disableReportDownload={false}
+          downloadReport={downloadReport}
           menuData={menuData}
           extraClasses="top-20"
           scrollContainerId="dashboard-layout-container"

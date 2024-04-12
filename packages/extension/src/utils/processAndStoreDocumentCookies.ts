@@ -54,6 +54,8 @@ const processAndStoreDocumentCookies = async ({
           parsedCookie.domain = singleCookie.domain?.startsWith('.')
             ? singleCookie.domain
             : '.' + singleCookie.domain;
+        } else {
+          parsedCookie.domain = window.location.hostname;
         }
 
         parsedCookie = createCookieObject(

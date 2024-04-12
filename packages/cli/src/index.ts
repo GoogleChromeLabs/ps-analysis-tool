@@ -40,7 +40,6 @@ import {
   saveCSVReports,
 } from './utils';
 import { checkPortInUse } from './utils/checkPortInUse';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 events.EventEmitter.defaultMaxListeners = 15;
 
@@ -51,7 +50,7 @@ const DELAY_TIME = 20000;
 const program = new Command();
 
 program
-  .version('0.6.0')
+  .version('0.7.0')
   .description(I18n.getMessage('clToTest3PCookies'))
   .option('-u, --url <value>', I18n.getMessage('clUrlOfSite'))
   .option('-s, --sitemap-url <value>', I18n.getMessage('clUrlOfSitemap'))

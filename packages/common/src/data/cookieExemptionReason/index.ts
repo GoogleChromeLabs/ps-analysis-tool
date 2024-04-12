@@ -13,14 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * This determines the processing mode of the extension True if singleTabProcessingMode false if multiple tab being processed.
- * @returns boolean.
- */
-export default async function isSingleTabProcessingMode() {
-  const syncStorage = await chrome.storage.sync.get();
-  return (
-    syncStorage.allowedNumberOfTabs &&
-    syncStorage.allowedNumberOfTabs !== 'unlimited'
-  );
-}
+export { default as cookieExemptionReason } from './exemptionReasons';

@@ -112,7 +112,7 @@
     }
   },
   "clDirNotExists": {
-    "message": "Provided dir '$outDir$' does not exist. Creating now!!",
+    "message": "$outDir$ does not exist, creating now.",
     "placeholders": {
       "outDir": {
         "content": "$1",
@@ -157,7 +157,7 @@
     "message": "This will accept the GDPR banner if present."
   },
   "clReportServedAt": {
-    "message": "Report is being served at the URL: $url$",
+    "message": "Report: $url$",
     "placeholders": {
       "url": {
         "content": "$1",
@@ -206,7 +206,7 @@
     }
   },
   "clAnalyzingCookies": {
-    "message": "Analysing cookies on first page visit"
+    "message": "Analysing cookies on first site visit"
   },
   "clDoneAnalyzingCookies": {
     "message": "Done analyzing cookies."

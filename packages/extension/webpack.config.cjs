@@ -15,6 +15,7 @@
  */
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const WebpackBar = require('webpackbar');
 const commonConfig = require('../../webpack.shared.cjs');
@@ -99,4 +100,28 @@ const popup = {
   ...commonConfig,
 };
 
-module.exports = [root, devTools, popup];
+const report = {
+  entry: {
+    index: './src/view/report/index.tsx',
+  },
+  output: {
+    path: path.resolve(__dirname, '../../dist/extension/report'),
+    filename: '[name].js',
+  },
+  plugins: [
+    new WebpackBar({
+      name: 'Report',
+      color: '#357B66',
+    }),
+    new HtmlWebpackPlugin({
+      title: 'Report',
+      template: './src/view/report/index.html',
+      filename: 'index.html',
+      inject: true,
+    }),
+    new HtmlInlineScriptPlugin(),
+  ],
+  ...commonConfig,
+};
+
+module.exports = [root, devTools, popup, report];

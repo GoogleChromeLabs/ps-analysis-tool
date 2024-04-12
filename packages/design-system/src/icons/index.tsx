@@ -69,3 +69,5 @@ export { default as OutboundInboundIcon } from './outbound-inbound-icon.svg';
 export { default as OutboundInboundColoredIcon } from './outbound-inbound-colored-icon.svg';
 export { default as QuestionMark } from './question-mark.svg';
 export { default as GreenTick } from './green-tick-icon.svg';
+export { default as ChevronDown } from './chevron-down.svg';
+export { default as WarningBare } from './warning.svg';

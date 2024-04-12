@@ -171,9 +171,8 @@ const Layout = ({
         {}
       );
 
-      _data[SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES].title = I18n.getMessage(
-        'cdCookiesWithIssues'
-      );
+      _data[SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES].title =
+        I18n.getMessage('cdCookieIssues');
       _data[SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES].panel = {
         Element: SiteMapCookiesWithIssues,
         props: {

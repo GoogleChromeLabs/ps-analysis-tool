@@ -2,8 +2,8 @@
   "cdSitemapReport": {
     "message": "Sitemap report"
   },
-  "cdCookiesWithIssues": {
-    "message": "Cookies With Issues"
+  "cdCookieIssues": {
+    "message": "Cookie Issues"
   },
   "cdCookies": {
     "message": "Cookies"

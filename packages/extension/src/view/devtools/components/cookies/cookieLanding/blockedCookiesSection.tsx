@@ -26,6 +26,8 @@ import {
   type MatrixComponentProps,
   LEGEND_DESCRIPTION,
   useFiltersMapping,
+  SIDEBAR_ITEMS_KEYS,
+  useSidebar,
 } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies
@@ -43,6 +45,12 @@ const BlockedCookiesSection = () => {
     isUsingCDP: state.isUsingCDP,
   }));
 
+  // Callback selecting/updating the clicked item in the sidebar
+  const updateSelectedItemKey = useSidebar(
+    ({ actions }) => actions.updateSelectedItemKey
+  );
+
+  // For opening Cookies table with pre-filtered data, uses updateSelectedItemKey from useSidebar internally
   const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});
 
   const cookieStats = prepareCookiesCount(tabCookies);
@@ -52,7 +60,10 @@ const BlockedCookiesSection = () => {
       title: I18n.getMessage('extBlockedCookies'),
       count: cookieStats.blockedCookies.total,
       data: cookiesStatsComponents.blocked,
-      onClick: () => selectedItemUpdater('All', 'blockedReasons'),
+      onClick:
+        cookieStats.blockedCookies.total > 0
+          ? () => selectedItemUpdater('All', 'blockedReasons')
+          : null,
     },
   ];
   const dataComponents: MatrixComponentProps[] =
@@ -71,6 +82,19 @@ const BlockedCookiesSection = () => {
   const description = !isUsingCDP ? (
     <>
       {I18n.getMessage('extNotUsingCDP')}&nbsp;
+      <button
+        className="text-bright-navy-blue dark:text-jordy-blue"
+        onClick={() => {
+          document
+            .getElementById('cookies-landing-scroll-container')
+            ?.scrollTo(0, 0);
+          updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
+        }}
+      >
+        {I18n.getMessage('extSettingsPage')}
+      </button>
+      . <br />
+      {I18n.getMessage('extVisitPSAT')}&nbsp;
       <a
         target="_blank"
         rel="noreferrer"
@@ -79,6 +103,7 @@ const BlockedCookiesSection = () => {
       >
         {I18n.getMessage('extWiki')}
       </a>
+      .
     </>
   ) : (
     ''

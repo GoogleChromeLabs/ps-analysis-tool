@@ -36,7 +36,13 @@
     "message": "Blocked cookies"
   },
   "extNotUsingCDP": {
-    "message": "To gather data and insights regarding blocked cookies, please enable PSAT to use the Chrome DevTools protocol. You can do this in the Settings page or in the extension popup. For more information check the PSAT"
+    "message": "Enable PSAT to use CDP via the"
+  },
+  "extSettingsPage": {
+    "message": "Settings page"
+  },
+  "extVisitPSAT": {
+    "message": "For more information, visit the PSAT"
   },
   "extWiki": {
     "message": "Wiki"

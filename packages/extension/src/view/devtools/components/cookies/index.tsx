@@ -36,7 +36,6 @@ interface CookiesProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;
 }
 
-// eslint-disable-next-line complexity
 const Cookies = ({ setFilteredCookies }: CookiesProps) => {
   const {
     isCurrentTabBeingListenedTo,

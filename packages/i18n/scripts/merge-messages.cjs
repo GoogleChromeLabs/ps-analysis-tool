@@ -13,26 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
 const fs = require('fs');
 
-const packages = [
+const PACKAGES = [
   'cli',
   'cli-dashboard',
   'common',
   'design-system',
   'extension',
-  'library-detection',
 ];
-const commonPath = 'packages/i18n/_locales';
-const target = `${commonPath}/messages/en/messages.json`;
+const COMMON_PATH = 'packages/i18n/_locales';
+const TARGET = `${COMMON_PATH}/messages/en/messages.json`;
 
 const main = () => {
-  fs.writeFileSync(target, '{}');
+  fs.writeFileSync(TARGET, '{}');
 
   const messages = {};
 
-  packages.forEach((pkg) => {
-    const path = `${commonPath}/packages/${pkg}/messages.json`;
+  PACKAGES.forEach((pkg) => {
+    const path = `${COMMON_PATH}/packages/${pkg}/messages.json`;
     const data = fs.readFileSync(path, 'utf8') || '{}';
     const parsed = JSON.parse(data);
 
@@ -47,7 +49,7 @@ const main = () => {
     });
   });
 
-  fs.writeFileSync(target, JSON.stringify(messages, null, 2));
+  fs.writeFileSync(TARGET, JSON.stringify(messages, null, 2));
 };
 
 main();
