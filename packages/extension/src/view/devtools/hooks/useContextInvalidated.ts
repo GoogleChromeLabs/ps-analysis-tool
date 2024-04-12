@@ -88,6 +88,7 @@ const useContextInvalidated = (
             }
           }
         }
+        localStorage.removeItem('contextInvalidated');
       }
     })();
   }, [allowedNumberOfTabs, isUsingCDP]);

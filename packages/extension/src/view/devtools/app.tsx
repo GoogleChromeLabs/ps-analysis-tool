@@ -35,6 +35,8 @@ const App: React.FC = () => {
   const [sidebarData, setSidebarData] = useState(TABS);
   const contextInvalidatedRef = useRef(null);
 
+  const tabIdRef = useRef(chrome.devtools.inspectedWindow.tabId);
+
   const contextInvalidated = useContextInvalidated(contextInvalidatedRef);
 
   const [defaultSelectedItemKey, setDefaultSelectedItemKey] = useState(
@@ -70,7 +72,7 @@ const App: React.FC = () => {
           <Layout setSidebarData={setSidebarData} />
         ) : (
           <div className="flex flex-col items-center justify-center w-full h-full">
-            <ExtensionReloadNotification />
+            <ExtensionReloadNotification tabId={tabIdRef.current} />
           </div>
         )}
       </div>

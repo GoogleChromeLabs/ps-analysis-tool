@@ -22,15 +22,34 @@ import React from 'react';
  * Internal dependencies.
  */
 import Button from '../button';
+interface ExtensionReloadNotificationProps {
+  tabId?: number;
+}
 
-const ExtensionReloadNotification = () => {
+const ExtensionReloadNotification = ({
+  tabId,
+}: ExtensionReloadNotificationProps) => {
   return (
     <div className="w-full h-full px-2 flex flex-col items-center justify-center border-b border-american-silver dark:border-quartz bg-white dark:bg-charleston-green dark:text-white">
       <p className="text-xl text-center px-4">
         Looks like extension has been updated since devtool was open.
       </p>
       <div className="ml-2 mt-4">
-        <Button onClick={() => window.location.reload()} text="Refresh panel" />
+        <Button
+          onClick={() => {
+            window.location.reload();
+            localStorage.removeItem('psatOpenedAfterPageLoad');
+            if (localStorage.getItem('psatOpenedAfterPageLoad') && tabId) {
+              try {
+                chrome.tabs.reload(tabId);
+                localStorage.removeItem('psatOpenedAfterPageLoad');
+              } catch (error) {
+                //Fail silenlty
+              }
+            }
+          }}
+          text="Refresh panel"
+        />
       </div>
     </div>
   );

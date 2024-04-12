@@ -252,6 +252,7 @@ const Provider = ({ children }: PropsWithChildren) => {
             message.payload.psatOpenedAfterPageLoad
           ) {
             setContextInvalidated(true);
+            localStorage.setItem('psatOpenedAfterPageLoad', 'true');
           }
           setTabToRead(null);
         } else {
@@ -375,12 +376,13 @@ const Provider = ({ children }: PropsWithChildren) => {
       type: DEVTOOLS_OPEN,
       payload: {
         tabId: chrome.devtools.inspectedWindow.tabId,
-        doNotReReload: localStorage.getItem('contextInvalidated')
-          ? true
-          : false,
+        doNotReReload:
+          localStorage.getItem('contextInvalidated') &&
+          !localStorage.getItem('psatOpenedAfterPageLoad')
+            ? true
+            : false,
       },
     });
-    localStorage.removeItem('contextInvalidated');
 
     return () => {
       chrome.runtime.sendMessage({
