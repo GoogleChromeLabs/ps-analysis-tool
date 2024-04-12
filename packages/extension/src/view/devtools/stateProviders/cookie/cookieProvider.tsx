@@ -372,15 +372,14 @@ const Provider = ({ children }: PropsWithChildren) => {
   }, []);
 
   useEffect(() => {
+    const doNotReReload =
+      localStorage.getItem('contextInvalidated') &&
+      !localStorage.getItem('psatOpenedAfterPageLoad');
     chrome.runtime.sendMessage({
       type: DEVTOOLS_OPEN,
       payload: {
         tabId: chrome.devtools.inspectedWindow.tabId,
-        doNotReReload:
-          localStorage.getItem('contextInvalidated') &&
-          !localStorage.getItem('psatOpenedAfterPageLoad')
-            ? true
-            : false,
+        doNotReReload,
       },
     });
 

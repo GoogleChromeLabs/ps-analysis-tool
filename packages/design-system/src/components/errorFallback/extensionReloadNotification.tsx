@@ -38,7 +38,6 @@ const ExtensionReloadNotification = ({
         <Button
           onClick={() => {
             window.location.reload();
-            localStorage.removeItem('psatOpenedAfterPageLoad');
             if (localStorage.getItem('psatOpenedAfterPageLoad') && tabId) {
               try {
                 chrome.tabs.reload(tabId);
