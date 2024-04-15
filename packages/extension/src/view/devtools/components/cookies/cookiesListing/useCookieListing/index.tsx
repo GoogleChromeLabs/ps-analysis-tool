@@ -506,6 +506,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
           const val = value as string;
           return val === filterValue;
         },
+        useGenericPersistenceKey: true,
       },
     }),
     [clearActivePanelQuery, cookies, frameFilteredCookies, parsedQuery]
