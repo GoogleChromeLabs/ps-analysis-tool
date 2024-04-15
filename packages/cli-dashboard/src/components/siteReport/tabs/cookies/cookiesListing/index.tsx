@@ -97,7 +97,7 @@ const CookiesListing = ({
         />
       </Resizable>
       <CookieDetails
-        isUsingCDP={true}
+        isUsingCDP={false}
         selectedFrameCookie={selectedFrameCookie}
       />
     </div>
