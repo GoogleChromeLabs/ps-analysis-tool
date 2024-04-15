@@ -320,6 +320,8 @@
 * Miscellaneous UI updates https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/599
 * Enhancement: Navigate to `Settings` page from `Blocked Cookies` section https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/603
 * Enhancement: Use the warning icon on the cookie issues panel https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/604
+* Refactor: Update cookies section on the landing page https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/615
+* Fix: Context invalidated for sites which do not send request after the site is loaded. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/611
 
 ## CLI
 * Feature: Add option to pass a port for development server https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/579
@@ -327,6 +329,7 @@
 * Enhancement: CLI, replace "Cookies with issues" with "Cookie issues" in the sidebar. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/596
 * Enhancement: CLI updates https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/602
 * Fix: CLI dashboard showing multiple cookie entries for same cookies https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/597
+* Fix: CLI dashboard blocking reason. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/618
 
 ## Others
 * Add demo RWS for command line launcher https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/578
