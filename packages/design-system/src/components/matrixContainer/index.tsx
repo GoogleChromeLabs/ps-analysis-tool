@@ -52,7 +52,7 @@ const MatrixContainer = ({
   allowExpand = true,
   highlightTitle = false,
   capitalizeTitle = false,
-  infoIconTitle = '',
+  infoIconTitle,
 }: MatrixContainerProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -82,6 +82,11 @@ const MatrixContainer = ({
               } ${capitalizeTitle ? 'capitalize' : 'uppercase'}`}
             >
               <span>{title}</span>
+              {Boolean(infoIconTitle) && (
+                <span title={infoIconTitle}>
+                  <InfoIcon className="fill-granite-gray" />
+                </span>
+              )}
               {count !== null && <span>: {Number(count) || 0}</span>}
             </h4>
             <p className="text-xs text-darkest-gray dark:text-bright-gray">
@@ -89,16 +94,6 @@ const MatrixContainer = ({
             </p>
           </div>
         </div>
-        {Boolean(infoIconTitle) && Boolean(isExpanded) && (
-          <div className="bg-hsl-light dark:bg-hsl-dark px-4 py-2 mx-4 my-2 leading-5 flex gap-2 justify-center items-center">
-            <div>
-              <InfoIcon className="fill-granite-gray" />
-            </div>
-            <p className="text-sm font-medium text-center text-raisin-black dark:text-bright-gray">
-              {infoIconTitle}
-            </p>
-          </div>
-        )}
         {showMatrix && (
           <Matrix dataComponents={matrixData} expand={isExpanded} />
         )}

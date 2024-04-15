@@ -57,6 +57,20 @@ const CookiesSection = ({ tabCookies, tabFrames }: CookiesSectionProps) => {
   return (
     <CookiesLandingWrapper
       dataMapping={cookieClassificationDataMapping}
+      infoIconTitle={
+        <>
+          Please setup the{' '}
+          <a
+            href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/Evaluation-Environment"
+            target="_blank"
+            rel="noreferrer"
+            className="text-bright-navy-blue dark:text-jordy-blue"
+          >
+            evaluation environment
+          </a>{' '}
+          before analyzing cookies.
+        </>
+      }
       testId="cookies-insights"
     >
       {!cookieStats ||

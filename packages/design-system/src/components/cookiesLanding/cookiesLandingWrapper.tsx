@@ -22,9 +22,11 @@ import React from 'react';
  * Internal dependencies.
  */
 import LandingHeader, { type DataMapping } from './landingHeader';
+import { InfoIcon } from '../../icons';
 
 export interface CookiesLandingWrapperProps {
   dataMapping?: DataMapping[];
+  infoIconTitle?: string | React.ReactNode;
   showLandingHeader?: boolean;
   testId?: string | null;
   children?: React.ReactNode;
@@ -33,6 +35,7 @@ export interface CookiesLandingWrapperProps {
 
 const CookiesLandingWrapper = ({
   dataMapping = [],
+  infoIconTitle = '',
   showLandingHeader = true,
   testId = 'cookie-landing-insights',
   description = '',
@@ -41,7 +44,22 @@ const CookiesLandingWrapper = ({
   return (
     <div className="w-full flex flex-col min-w-[40rem]">
       <div className="w-full min-w-[40rem]" data-testid={testId}>
-        {showLandingHeader && <LandingHeader dataMapping={dataMapping} />}
+        <div className="pb-5">
+          {showLandingHeader && <LandingHeader dataMapping={dataMapping} />}
+          {Boolean(infoIconTitle) && (
+            <div className="px-4 pt-2 mx-auto leading-5 flex gap-2 justify-center items-center max-w-2xl">
+              <div>
+                <InfoIcon className="w-3 h-3 fill-granite-gray" />
+              </div>
+              <p
+                className="text-xxxs font-medium text-center text-gray dark:text-bright-gray"
+                style={{ whiteSpace: 'pre-line' }}
+              >
+                {infoIconTitle}
+              </p>
+            </div>
+          )}
+        </div>
         {description && (
           <div className="text-center px-4 flex items-center justify-center -mt-2 mb-10">
             <p className="lg:max-w-[450px] text-gray dark:text-bright-gray">
