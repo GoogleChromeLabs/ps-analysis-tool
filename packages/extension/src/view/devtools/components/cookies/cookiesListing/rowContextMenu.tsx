@@ -37,7 +37,7 @@ import {
   onAllowListClick,
   getDotPrefixedDomain,
   isCookieDomainInAllowList,
-} from '../../../stateProviders/useAllowedList/utils';
+} from '../../../stateProviders/allowedList/utils';
 
 interface RowContextMenuProps {
   domainsInAllowList: Set<string>;
@@ -139,7 +139,7 @@ const RowContextMenu = forwardRef<
         setDomainsInAllowListCallback
       );
       setContextMenuOpen(false);
-      await reloadCurrentTab();
+      await reloadCurrentTab(chrome.devtools.inspectedWindow.tabId);
     },
     [
       dotPrefixedDomain,
@@ -165,7 +165,7 @@ const RowContextMenu = forwardRef<
         setDomainsInAllowListCallback
       );
       setContextMenuOpen(false);
-      await reloadCurrentTab();
+      await reloadCurrentTab(chrome.devtools.inspectedWindow.tabId);
     },
     [
       domainsInAllowList,

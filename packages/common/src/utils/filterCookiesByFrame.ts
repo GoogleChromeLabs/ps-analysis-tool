@@ -16,22 +16,17 @@
 /**
  * Internal dependencies.
  */
-import { CookieTableData } from '../cookies.types';
-
-interface Cookies {
-  [key: string]: CookieTableData;
-}
-
+import { TabCookies } from '../cookies.types';
 interface TabFrames {
   [key: string]: { frameIds: number[] };
 }
 
 const filterCookiesByFrame = (
-  cookies: Cookies | null,
+  cookies: TabCookies | null,
   tabFrames: TabFrames | null,
   frameUrl: string | null
 ) => {
-  const frameFilteredCookies: { [key: string]: CookieTableData } = {};
+  const frameFilteredCookies: TabCookies = {};
   if (!cookies || !frameUrl || !tabFrames || !tabFrames[frameUrl]) {
     return Object.values(frameFilteredCookies);
   }

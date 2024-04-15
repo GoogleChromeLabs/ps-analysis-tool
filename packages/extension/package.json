@@ -1,6 +1,6 @@
 {
   "name": "@ps-analysis-tool/extension",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Chrome extension for cookie analysis",
   "repository": {
     "type": "git",
@@ -40,6 +40,7 @@
   },
   "devDependencies": {
     "@types/react-copy-to-clipboard": "^5.0.4",
-    "devtools-protocol": "^0.0.1236148"
+    "devtools-protocol": "^0.0.1282316",
+    "html-inline-script-webpack-plugin": "^3.2.1"
   }
 }

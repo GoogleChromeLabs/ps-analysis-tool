@@ -19,9 +19,13 @@ import { render, screen, waitFor } from '@testing-library/react';
 import FiltersSidebar from '..';
 import '@testing-library/jest-dom';
 import { act } from 'react-dom/test-utils';
-import { TableFilter } from '../../../useTable';
+import { TableFilter } from '../../../useTable/types';
+import * as table from '../../../useTable/useTable';
 
 describe('FiltersSidebar', () => {
+  const mockUseTable = jest.fn();
+  jest.spyOn(table, 'useTable').mockImplementation(mockUseTable);
+
   const initialProps = {
     filters: {},
     toggleFilterSelection: () => undefined,
@@ -66,7 +70,14 @@ describe('FiltersSidebar', () => {
   };
 
   it('should render null', () => {
-    render(<FiltersSidebar {...initialProps} />);
+    mockUseTable.mockReturnValue({
+      filters: initialProps.filters,
+      isSelectAllFilterSelected: initialProps.isSelectAllFilterSelected,
+      toggleFilterSelection: initialProps.toggleFilterSelection,
+      toggleSelectAllFilter: initialProps.toggleSelectAllFilter,
+    });
+
+    render(<FiltersSidebar />);
 
     const filtersSidebar = screen.queryByTestId('filters-sidebar');
 
@@ -74,7 +85,14 @@ describe('FiltersSidebar', () => {
   });
 
   it('should render a list of filters', () => {
-    render(<FiltersSidebar {...props} />);
+    mockUseTable.mockReturnValue({
+      filters: props.filters,
+      isSelectAllFilterSelected: props.isSelectAllFilterSelected,
+      toggleFilterSelection: props.toggleFilterSelection,
+      toggleSelectAllFilter: props.toggleSelectAllFilter,
+    });
+
+    render(<FiltersSidebar />);
 
     const filtersSidebar = screen.getByTestId('filters-sidebar');
     const filter1 = screen.getByText('Filter 1');
@@ -85,8 +103,15 @@ describe('FiltersSidebar', () => {
     expect(filter2).toBeInTheDocument();
   });
 
-  it('should show options when clicked on filter', async () => {
-    render(<FiltersSidebar {...props} />);
+  it('should show options if already selected', async () => {
+    mockUseTable.mockReturnValue({
+      filters: props.filters,
+      isSelectAllFilterSelected: props.isSelectAllFilterSelected,
+      toggleFilterSelection: props.toggleFilterSelection,
+      toggleSelectAllFilter: props.toggleSelectAllFilter,
+    });
+
+    render(<FiltersSidebar />);
 
     const filter1 = screen.getByText('Filter 1');
     const filter2 = screen.getByText('Filter 2');
@@ -94,19 +119,29 @@ describe('FiltersSidebar', () => {
     expect(filter1).toBeInTheDocument();
     expect(filter2).toBeInTheDocument();
 
-    act(() => {
-      filter1.click();
-    });
-
     const value1 = await screen.findByText('value1');
     const value2 = await screen.findByText('value2');
 
     expect(value1).toBeInTheDocument();
     expect(value2).toBeInTheDocument();
+
+    act(() => {
+      filter1.click();
+    });
+
+    expect(value1).not.toBeInTheDocument();
+    expect(value2).not.toBeInTheDocument();
   });
 
   it('should render Filter 3 as disabled', () => {
-    render(<FiltersSidebar {...props} />);
+    mockUseTable.mockReturnValue({
+      filters: props.filters,
+      isSelectAllFilterSelected: props.isSelectAllFilterSelected,
+      toggleFilterSelection: props.toggleFilterSelection,
+      toggleSelectAllFilter: props.toggleSelectAllFilter,
+    });
+
+    render(<FiltersSidebar />);
 
     const filtersSidebar = screen.getByTestId('filters-sidebar');
     const filter3 = screen.getByText('Filter 3');
@@ -117,12 +152,14 @@ describe('FiltersSidebar', () => {
   });
 
   it('should show filters in alphabetical order', async () => {
-    render(<FiltersSidebar {...props} />);
-
-    const filter1 = screen.getByText('Filter 1');
-    act(() => {
-      filter1.click();
+    mockUseTable.mockReturnValue({
+      filters: props.filters,
+      isSelectAllFilterSelected: props.isSelectAllFilterSelected,
+      toggleFilterSelection: props.toggleFilterSelection,
+      toggleSelectAllFilter: props.toggleSelectAllFilter,
     });
+
+    render(<FiltersSidebar />);
 
     await waitFor(() => {
       const list = screen.getAllByTestId('sub-list-item');
@@ -132,7 +169,14 @@ describe('FiltersSidebar', () => {
   });
 
   it('should expand all filters', async () => {
-    const { rerender } = render(<FiltersSidebar {...props} />);
+    mockUseTable.mockReturnValue({
+      filters: props.filters,
+      isSelectAllFilterSelected: props.isSelectAllFilterSelected,
+      toggleFilterSelection: props.toggleFilterSelection,
+      toggleSelectAllFilter: props.toggleSelectAllFilter,
+    });
+
+    const { rerender } = render(<FiltersSidebar />);
 
     const expandAll = await screen.findByText('Expand All');
     act(() => {
@@ -167,25 +211,27 @@ describe('FiltersSidebar', () => {
       expect(listExpandArrows[1]).not.toHaveClass('-rotate-90');
     });
 
-    rerender(
-      <FiltersSidebar
-        {...props}
-        filters={{
-          ...props.filters,
-          filters3: {
-            filterValues: {
-              value5: {
-                selected: true,
-              },
-              value6: {
-                selected: false,
-              },
+    mockUseTable.mockReturnValue({
+      filters: {
+        ...props.filters,
+        filters3: {
+          filterValues: {
+            value5: {
+              selected: true,
             },
-            title: 'Filter 3',
+            value6: {
+              selected: false,
+            },
           },
-        }}
-      />
-    );
+          title: 'Filter 3',
+        },
+      },
+      isSelectAllFilterSelected: props.isSelectAllFilterSelected,
+      toggleFilterSelection: props.toggleFilterSelection,
+      toggleSelectAllFilter: props.toggleSelectAllFilter,
+    });
+
+    rerender(<FiltersSidebar />);
 
     act(() => {
       listExpandArrows[2].click();
@@ -198,7 +244,14 @@ describe('FiltersSidebar', () => {
       expect(listExpandArrows[2]).not.toHaveClass('-rotate-90');
     });
 
-    rerender(<FiltersSidebar {...props} />);
+    mockUseTable.mockReturnValue({
+      filters: props.filters,
+      isSelectAllFilterSelected: props.isSelectAllFilterSelected,
+      toggleFilterSelection: props.toggleFilterSelection,
+      toggleSelectAllFilter: props.toggleSelectAllFilter,
+    });
+
+    rerender(<FiltersSidebar />);
 
     await waitFor(() => {
       expect(expandAll.innerHTML).not.toEqual('Expand All');
@@ -228,19 +281,15 @@ describe('FiltersSidebar', () => {
   it('should handle select All filter option', async () => {
     const toggleSelectAllFilter = jest.fn();
     const toggleFilterSelection = jest.fn();
-    const { rerender } = render(
-      <FiltersSidebar
-        {...props}
-        toggleSelectAllFilter={toggleSelectAllFilter}
-        toggleFilterSelection={toggleFilterSelection}
-        isSelectAllFilterSelected={() => true}
-      />
-    );
 
-    const filter1 = screen.getByText('Filter 1');
-    act(() => {
-      filter1.click();
+    mockUseTable.mockReturnValue({
+      filters: props.filters,
+      isSelectAllFilterSelected: () => true,
+      toggleFilterSelection,
+      toggleSelectAllFilter,
     });
+
+    const { rerender } = render(<FiltersSidebar />);
 
     const selectAll = await screen.findByText('All');
     act(() => {
@@ -251,14 +300,14 @@ describe('FiltersSidebar', () => {
       expect(toggleSelectAllFilter).toHaveBeenCalledWith('filter1');
     });
 
-    rerender(
-      <FiltersSidebar
-        {...props}
-        toggleSelectAllFilter={toggleSelectAllFilter}
-        toggleFilterSelection={toggleFilterSelection}
-        isSelectAllFilterSelected={() => false}
-      />
-    );
+    mockUseTable.mockReturnValue({
+      filters: props.filters,
+      isSelectAllFilterSelected: () => false,
+      toggleFilterSelection,
+      toggleSelectAllFilter,
+    });
+
+    rerender(<FiltersSidebar />);
 
     await waitFor(() => {
       const filterCheckBoxes = screen.getAllByRole('checkbox');

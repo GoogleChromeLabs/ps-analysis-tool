@@ -1,0 +1,30 @@
+{
+  "name": "@ps-analysis-tool/i18n",
+  "version": "0.7.0",
+  "description": "A package that handles internationalization and localization.",
+  "main": "./dist/index.js",
+  "types": "./dist-types/index.d.ts",
+  "source": "./src/index.ts",
+  "customExports": {
+    ".": {
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "dev": "tsc-watch --build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GoogleChromeLabs/ps-analysis-tool"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"
+  },
+  "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
+  "dependencies": {
+    "intl-messageformat": "^10.5.11"
+  }
+}

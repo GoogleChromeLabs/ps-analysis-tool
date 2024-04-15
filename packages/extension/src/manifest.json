@@ -1,7 +1,7 @@
 {
   "name": "Privacy Sandbox Analysis Tool",
   "description": "Tooling for understanding cookie usage and guidance on new privacy-preserving Chrome APIs.",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "manifest_version": 3,
   "icons": {
     "16": "icons/icon-16.png",
@@ -38,7 +38,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["assets/data/*.json", "data/*json"],
+      "resources": ["assets/data/*.json", "data/*json", "report/index.html"],
       "matches": ["*://*/*"]
     }
   ]

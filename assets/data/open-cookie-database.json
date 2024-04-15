@@ -3013,6 +3013,19 @@
       "wildcard": "0"
     }
   ],
+  "esctx-*": [
+    {
+      "platform": "Microsoft",
+      "category": "Functional",
+      "name": "esctx-*",
+      "domain": ".login.microsoftonline.com",
+      "description": "This cookie is set by Microsoft for secure authentication of the users' login details",
+      "retention": "session",
+      "dataController": "Microsoft",
+      "gdprUrl": "https://account.microsoft.com/privacy",
+      "wildcard": "1"
+    }
+  ],
   "ASP.NET_SessionId": [
     {
       "platform": "ASP.net",
@@ -3852,7 +3865,7 @@
       "description": "Hotjar cookie. This cookie is set when the customer first lands on a page with the Hotjar script. It is used to persist the random user ID, unique to that site on the browser. This ensures that behavior in subsequent visits to the same site will be attributed to the same user ID.",
       "retention": "365 days",
       "dataController": "Hotjar",
-      "gdprUrl": "https://www.hotjar.com/legal/compliance/opt-out",
+      "gdprUrl": "https://www.hotjar.com/legal/policies/privacy/",
       "wildcard": "0"
     }
   ],
@@ -3865,7 +3878,7 @@
       "description": "Hotjar cookie. This session cookie is set to let Hotjar know whether that visitor is included in the sample which is used to generate funnels.",
       "retention": "365 days",
       "dataController": "Hotjar",
-      "gdprUrl": "https://www.hotjar.com/legal/compliance/opt-out",
+      "gdprUrl": "https://www.hotjar.com/legal/policies/privacy/",
       "wildcard": "0"
     }
   ],
@@ -3878,7 +3891,7 @@
       "description": "Hotjar cookie. This cookie is set once a visitor interacts with a Survey invitation modal popup. It is used to ensure that the same invite does not re-appear if it has already been shown.",
       "retention": "365 days",
       "dataController": "Hotjar",
-      "gdprUrl": "https://www.hotjar.com/legal/compliance/opt-out",
+      "gdprUrl": "https://www.hotjar.com/legal/policies/privacy/",
       "wildcard": "0"
     }
   ],
@@ -3891,7 +3904,7 @@
       "description": "Hotjar cookie. This cookie is set once a visitor completes a poll using the Feedback Poll widget. It is used to ensure that the same poll does not re-appear if it has already been filled in.",
       "retention": "365 days",
       "dataController": "Hotjar",
-      "gdprUrl": "https://www.hotjar.com/legal/compliance/opt-out",
+      "gdprUrl": "https://www.hotjar.com/legal/policies/privacy/",
       "wildcard": "0"
     }
   ],
@@ -3904,7 +3917,7 @@
       "description": "Hotjar cookie. This cookie is set once a visitor minimizes a Feedback Poll widget. It is used to ensure that the widget stays minimizes when the visitor navigates through your site.",
       "retention": "365 days",
       "dataController": "Hotjar",
-      "gdprUrl": "https://www.hotjar.com/legal/compliance/opt-out",
+      "gdprUrl": "https://www.hotjar.com/legal/policies/privacy/",
       "wildcard": "0"
     }
   ],
@@ -3917,7 +3930,7 @@
       "description": "Hotjar cookie. This cookie is set once a visitor submits their information in the Recruit User Testers widget. It is used to ensure that the same form does not re-appear if it has already been filled in.",
       "retention": "365 days",
       "dataController": "Hotjar",
-      "gdprUrl": "https://www.hotjar.com/legal/compliance/opt-out",
+      "gdprUrl": "https://www.hotjar.com/legal/policies/privacy/",
       "wildcard": "0"
     }
   ],
@@ -3930,7 +3943,7 @@
       "description": "Hotjar cookie. This cookie is set once a visitor minimizes a Recruit User Testers widget. It is used to ensure that the widget stays minimizes when the visitor navigates through your site.",
       "retention": "365 days",
       "dataController": "Hotjar",
-      "gdprUrl": "https://www.hotjar.com/legal/compliance/opt-out",
+      "gdprUrl": "https://www.hotjar.com/legal/policies/privacy/",
       "wildcard": "0"
     }
   ],
@@ -3943,7 +3956,7 @@
       "description": "This cookie is set when a visitor minimizes or completes Incoming Feedback. This is done so that the Incoming Feedback will load as minimized immediately if they navigate to another page where it is set to show.",
       "retention": "365 days",
       "dataController": "Hotjar",
-      "gdprUrl": "https://www.hotjar.com/legal/compliance/opt-out",
+      "gdprUrl": "https://www.hotjar.com/legal/policies/privacy/",
       "wildcard": "0"
     }
   ],
@@ -3956,7 +3969,7 @@
       "description": "When the Hotjar script executes we try to determine the most generic cookie path we should use, instead of the page hostname. This is done so that cookies can be shared across subdomains (where applicable). To determine this, we try to store the _hjTLDTest cookie for different URL substring alternatives until it fails. After this check, the cookie is removed.",
       "retention": "session",
       "dataController": "Hotjar",
-      "gdprUrl": "https://www.hotjar.com/legal/compliance/opt-out",
+      "gdprUrl": "https://www.hotjar.com/legal/policies/privacy/",
       "wildcard": "0"
     }
   ],
@@ -3969,7 +3982,7 @@
       "description": "User Attributes sent through the Hotjar Identify API are cached for the duration of the session in order to know when an attribute has changed and needs to be updated.",
       "retention": "session",
       "dataController": "Hotjar",
-      "gdprUrl": "https://www.hotjar.com/legal/compliance/opt-out",
+      "gdprUrl": "https://www.hotjar.com/legal/policies/privacy/",
       "wildcard": "0"
     }
   ],
@@ -3982,7 +3995,7 @@
       "description": "This cookie stores User Attributes which are sent through the Hotjar Identify API, whenever the user is not in the sample. These attributes will only be saved if the user interacts with a Hotjar Feedback tool.",
       "retention": "session",
       "dataController": "Hotjar",
-      "gdprUrl": "https://www.hotjar.com/legal/compliance/opt-out",
+      "gdprUrl": "https://www.hotjar.com/legal/policies/privacy/",
       "wildcard": "0"
     }
   ],
@@ -3995,7 +4008,7 @@
       "description": "This cookie is used to check if the Hotjar Tracking Script can use local storage. If it can, a value of 1 is set in this cookie. The data stored in_hjLocalStorageTest has no expiration time, but it is deleted immediately after creating it so the expected storage time is under 100ms.",
       "retention": "",
       "dataController": "Hotjar",
-      "gdprUrl": "https://www.hotjar.com/legal/compliance/opt-out",
+      "gdprUrl": "https://www.hotjar.com/legal/policies/privacy/",
       "wildcard": "0"
     }
   ],
@@ -4008,7 +4021,7 @@
       "description": "This cookie is set for logged in users of Hotjar, who have Admin Team Member permissions. It is used during pricing experiments to show the Admin consistent pricing across the site.",
       "retention": "session",
       "dataController": "Hotjar",
-      "gdprUrl": "https://www.hotjar.com/legal/compliance/opt-out",
+      "gdprUrl": "https://www.hotjar.com/legal/policies/privacy/",
       "wildcard": "0"
     }
   ],
@@ -4021,7 +4034,7 @@
       "description": "The cookie is set so Hotjar can track the beginning of the user's journey for a total session count. It does not contain any identifiable information.",
       "retention": "30 minutes",
       "dataController": "Hotjar",
-      "gdprUrl": "https://www.hotjar.com/legal/compliance/opt-out",
+      "gdprUrl": "https://www.hotjar.com/legal/policies/privacy/",
       "wildcard": "0"
     }
   ],
@@ -4034,7 +4047,7 @@
       "description": "The cookie is set so Hotjar can track the beginning of the user's journey for a total session count. It does not contain any identifiable information.",
       "retention": "30 minutes",
       "dataController": "Hotjar",
-      "gdprUrl": "https://www.hotjar.com/legal/compliance/opt-out",
+      "gdprUrl": "https://www.hotjar.com/legal/policies/privacy/",
       "wildcard": "0"
     }
   ],
@@ -4047,7 +4060,7 @@
       "description": "This cookie is set to let Hotjar know whether that visitor is included in the data sampling defined by your site's page view limit.",
       "retention": "30 minutes",
       "dataController": "Hotjar",
-      "gdprUrl": "https://www.hotjar.com/legal/compliance/opt-out",
+      "gdprUrl": "https://www.hotjar.com/legal/policies/privacy/",
       "wildcard": "0"
     }
   ],
@@ -4060,7 +4073,7 @@
       "description": "This cookie is set to let Hotjar know whether that visitor is included in the data sampling defined by your site's daily session limit",
       "retention": "30 minutes",
       "dataController": "Hotjar",
-      "gdprUrl": "https://www.hotjar.com/legal/compliance/opt-out",
+      "gdprUrl": "https://www.hotjar.com/legal/policies/privacy/",
       "wildcard": "1"
     }
   ],
@@ -4073,7 +4086,7 @@
       "description": "A cookie that holds the current session data. This ensues that subsequent requests within the session window will be attributed to the same Hotjar session.",
       "retention": "30 minutes",
       "dataController": "Hotjar",
-      "gdprUrl": "https://www.hotjar.com/legal/compliance/opt-out",
+      "gdprUrl": "https://www.hotjar.com/legal/policies/privacy/",
       "wildcard": "1"
     }
   ],
@@ -4086,7 +4099,7 @@
       "description": "Hotjar cookie that is set when a user first lands on a page with the Hotjar script. It is used to persist the Hotjar User ID, unique to that site on the browser. This ensures that behavior in subsequent visits to the same site will be attributed to the same user ID.",
       "retention": "365 days",
       "dataController": "Hotjar",
-      "gdprUrl": "https://www.hotjar.com/legal/compliance/opt-out",
+      "gdprUrl": "https://www.hotjar.com/legal/policies/privacy/",
       "wildcard": "1"
     }
   ],
@@ -4099,7 +4112,7 @@
       "description": "Causes Hotjar to stop collecting data if a session becomes too large. This is determined automatically by a signal from the WebSocket server if the session size exceeds the limit.",
       "retention": "session",
       "dataController": "Hotjar",
-      "gdprUrl": "https://www.hotjar.com/legal/compliance/opt-out",
+      "gdprUrl": "https://www.hotjar.com/legal/policies/privacy/",
       "wildcard": "0"
     }
   ],
@@ -4112,7 +4125,7 @@
       "description": "If present, this cookie will be set to 1 for the duration of a user’s session, if Hotjar rejected the session from connecting to our WebSocket due to server overload. This cookie is only applied in extremely rare situations to prevent severe performance issues.",
       "retention": "session",
       "dataController": "Hotjar",
-      "gdprUrl": "https://www.hotjar.com/legal/compliance/opt-out",
+      "gdprUrl": "https://www.hotjar.com/legal/policies/privacy/",
       "wildcard": "0"
     }
   ],
@@ -4125,7 +4138,7 @@
       "description": "A cookie that is set when a session/recording is reconnected to Hotjar servers after a break in connection.",
       "retention": "session",
       "dataController": "Hotjar",
-      "gdprUrl": "https://www.hotjar.com/legal/compliance/opt-out",
+      "gdprUrl": "https://www.hotjar.com/legal/policies/privacy/",
       "wildcard": "0"
     }
   ],
@@ -5564,7 +5577,7 @@
       "platform": "ComScore",
       "category": "Marketing",
       "name": "UIDR",
-      "domain": "scorecardresearch.com",
+      "domain": ".scorecardresearch.com",
       "description": "Collects information of the user and his/her movement, such as timestamp for visits, most recently loaded pages and IP address. The data is used by the marketing research network, Scorecard Research, to analyse traffic patterns and carry out surveys to help their clients better understand the customer's preferences.",
       "retention": "2 years",
       "dataController": "ComScore",
@@ -5580,6 +5593,32 @@
       "domain": ".scorecardresearch.com",
       "description": "Collects information of the user and his/her movement, such as timestamp for visits, most recently loaded pages and IP address. The data is used by the marketing research network, Scorecard Research, to analyse traffic patterns and carry out surveys to help their clients better understand the customer's preferences.",
       "retention": "2 years",
+      "dataController": "ComScore",
+      "gdprUrl": "https://www.comscore.com/About/Privacy-Policy",
+      "wildcard": "0"
+    }
+  ],
+  "PID": [
+    {
+      "platform": "ComScore",
+      "category": "Marketing",
+      "name": "PID",
+      "domain": ".scorecardresearch.com",
+      "description": "Collects a code that identifies the specific website or advertiser participating in the ScorecardResearch data collection program.",
+      "retention": "1 year",
+      "dataController": "ComScore",
+      "gdprUrl": "https://www.comscore.com/About/Privacy-Policy",
+      "wildcard": "0"
+    }
+  ],
+  "XID": [
+    {
+      "platform": "ComScore",
+      "category": "Marketing",
+      "name": "XID",
+      "domain": ".scorecardresearch.com",
+      "description": "Collects a unique identifier assigned to a device (computer, phone, tablet) to track the user across different websites.",
+      "retention": "1 year",
       "dataController": "ComScore",
       "gdprUrl": "https://www.comscore.com/About/Privacy-Policy",
       "wildcard": "0"
@@ -5923,27 +5962,79 @@
   ],
   "st_csd": [
     {
-      "platform": "seedtag.com",
+      "platform": "Seedtag",
       "category": "Marketing",
       "name": "st_csd",
       "domain": "seedtag.com",
       "description": "Date of the last cookie-syn",
       "retention": "1 year",
       "dataController": "seedtag.com",
-      "gdprUrl": "",
+      "gdprUrl": "https://www.seedtag.com/privacy/",
       "wildcard": "0"
     }
   ],
   "st_cs": [
     {
-      "platform": "seedtag.com",
+      "platform": "Seedtag",
       "category": "Marketing",
       "name": "st_cs",
       "domain": "seedtag.com",
       "description": "Unique identifiers of DSPs",
       "retention": "1 year",
       "dataController": "seedtag.com",
-      "gdprUrl": "",
+      "gdprUrl": "https://www.seedtag.com/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "st_uid": [
+    {
+      "platform": "Seedtag",
+      "category": "Marketing",
+      "name": "st_uid",
+      "domain": "seedtag.com",
+      "description": "This cookie is used to store randomly generated unique browser identifier",
+      "retention": "1 year",
+      "dataController": "seedtag.com",
+      "gdprUrl": "https://www.seedtag.com/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "st_cnt": [
+    {
+      "platform": "Seedtag",
+      "category": "Marketing",
+      "name": "st_cnt",
+      "domain": "seedtag.com",
+      "description": "This cookie is used to store low precision geolocation (Country, City)",
+      "retention": "1 year",
+      "dataController": "seedtag.com",
+      "gdprUrl": "https://www.seedtag.com/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "st_chc": [
+    {
+      "platform": "Seedtag",
+      "category": "Marketing",
+      "name": "st_chc",
+      "domain": "seedtag.com",
+      "description": "This cookie is used to store Cookie-sync",
+      "retention": "1 year",
+      "dataController": "seedtag.com",
+      "gdprUrl": "https://www.seedtag.com/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "st_ssp": [
+    {
+      "platform": "Seedtag",
+      "category": "Marketing",
+      "name": "st_ssp",
+      "domain": "seedtag.com",
+      "description": "This cookie is used to store low precision geolocation",
+      "retention": "1 year",
+      "dataController": "seedtag.com",
+      "gdprUrl": "https://www.seedtag.com/privacy/",
       "wildcard": "0"
     }
   ],
@@ -6266,7 +6357,46 @@
       "description": "This cookie is used to identify the visitor and optimize ad-relevance by collecting visitor data from multiple websites – this exchange of visitor data is normally provided by a third-party data-center or ad-exchange.",
       "retention": "3 months",
       "dataController": "TripleLift",
-      "gdprUrl": "",
+      "gdprUrl": "https://triplelift.com/advertising-technology-platform-cookie-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "tluidp": [
+    {
+      "platform": "TripleLift",
+      "category": "Marketing",
+      "name": "tluidp",
+      "domain": "3lift.com",
+      "description": "This cookie is used to identify the visitor and optimize ad-relevance by collecting visitor data from multiple websites with – this exchange of visitor data is normally provided by a third-party data-center or ad-exchange.",
+      "retention": "3 months",
+      "dataController": "TripleLift",
+      "gdprUrl": "https://triplelift.com/advertising-technology-platform-cookie-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "optout": [
+    {
+      "platform": "TripleLift",
+      "category": "Marketing",
+      "name": "optout",
+      "domain": "3lift.com",
+      "description": "This cookie is used to determine whether the visitor has accepted the cookie consent box.",
+      "retention": "5 years",
+      "dataController": "TripleLift",
+      "gdprUrl": "https://triplelift.com/advertising-technology-platform-cookie-notice/",
+      "wildcard": "0"
+    }
+  ],
+  "sync": [
+    {
+      "platform": "TripleLift",
+      "category": "Marketing",
+      "name": "sync",
+      "domain": "3lift.com",
+      "description": "This cookie is used in order to transact in digital advertising, TripleLift exchanges (or syncs) identifiers with other companies. This cookie keeps track of which companies have recently been synced in order to avoid syncing with the same companies repetitively.",
+      "retention": "3 months",
+      "dataController": "TripleLift",
+      "gdprUrl": "https://triplelift.com/advertising-technology-platform-cookie-notice/",
       "wildcard": "0"
     }
   ],
@@ -6276,7 +6406,7 @@
       "category": "Marketing",
       "name": "t_gid",
       "domain": "taboola.com",
-      "description": "This cookie gives a user who interacts with Taboola Widget a User ID allowing us to target advertisements and content to this specific user ID.",
+      "description": "This Partitioned cookie gives a user who interacts with Taboola Widget a User ID allowing us to target advertisements and content to this specific user ID.",
       "retention": "13 months",
       "dataController": "taboola.com",
       "gdprUrl": "",
@@ -7091,14 +7221,235 @@
   ],
   "everest_g_v2": [
     {
-      "platform": "Everest Technologies",
+      "platform": "Adobe Advertising",
       "category": "Marketing",
       "name": "everest_g_v2",
       "domain": "everesttech.net",
-      "description": "Created after a user initially clicks a client's ad, and used to map the current and subsequent clicks with other events on the client's website",
+      "description": "This cookie stores the browser and surfer ID.Created after a user initially clicks a client's ad, and used to map the current and subsequent clicks with other events on the client's website",
       "retention": "2 years",
-      "dataController": "Everest Technologies",
-      "gdprUrl": "",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "everest_session_v2": [
+    {
+      "platform": "Adobe Advertising",
+      "category": "Marketing",
+      "name": "everest_session_v2",
+      "domain": "everesttech.net",
+      "description": "This cookie stores the session ID",
+      "retention": "session",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "ev_tm": [
+    {
+      "platform": "Adobe Advertising",
+      "category": "Marketing",
+      "name": "ev_tm",
+      "domain": "everesttech.net",
+      "description": "This cookie stores the Adobe Advertising DSP (Demand Side Platform) ID. \tA third-party cookie that stores the DSP ID that corresponds to the surfer ID in the everest_g_v2 cookie",
+      "retention": "2 years",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "_tmae": [
+    {
+      "platform": "Adobe Advertising",
+      "category": "Marketing",
+      "name": "_tmae",
+      "domain": "everesttech.net",
+      "description": "This cookie stores Encoded IDs and time stamps for ad engagements using Adobe Advertising DSP tracking.A third-party cookie that stores user engagements with ads, such as 'last seen ad xyz123 on June 30, 2016'",
+      "retention": "1 year",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "_lcc": [
+    {
+      "platform": "Adobe Advertising",
+      "category": "Marketing",
+      "name": "_lcc",
+      "domain": "everesttech.net",
+      "description": "This cookie stores IDs and time stamps (in the format yyyymmdd) of display clicks. It is a third-party cookie used to determine if a click event on a display ad applies to an Adobe Analytics hit",
+      "retention": "15 minutes",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "ev_sync_ax": [
+    {
+      "platform": "Adobe Advertising",
+      "category": "Marketing",
+      "name": "ev_sync_ax",
+      "domain": "everesttech.net",
+      "description": "This cookie stores The date when synchronization is performed, in the format yyyymmdd. A third-party, ad exchange-specific cookie that syncs the Adobe Advertising surfer ID with the partner ad exchange. It's created for new surfers and sends a synchronization request when it's expired.",
+      "retention": "1 year",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "ev_sync_bk": [
+    {
+      "platform": "Adobe Advertising",
+      "category": "Marketing",
+      "name": "ev_sync_bk",
+      "domain": "everesttech.net",
+      "description": "This cookie stores The date when synchronization is performed, in the format yyyymmdd. A third-party, ad exchange-specific cookie that syncs the Adobe Advertising surfer ID with the partner ad exchange. It's created for new surfers and sends a synchronization request when it's expired.",
+      "retention": "1 year",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "ev_sync_dd": [
+    {
+      "platform": "Adobe Advertising",
+      "category": "Marketing",
+      "name": "ev_sync_dd",
+      "domain": "everesttech.net",
+      "description": "This cookie stores The date when synchronization is performed, in the format yyyymmdd. A third-party, ad exchange-specific cookie that syncs the Adobe Advertising surfer ID with the partner ad exchange. It's created for new surfers and sends a synchronization request when it's expired.",
+      "retention": "1 year",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "ev_sync_fs": [
+    {
+      "platform": "Adobe Advertising",
+      "category": "Marketing",
+      "name": "ev_sync_fs",
+      "domain": "everesttech.net",
+      "description": "This cookie stores The date when synchronization is performed, in the format yyyymmdd. A third-party, ad exchange-specific cookie that syncs the Adobe Advertising surfer ID with the partner ad exchange. It's created for new surfers and sends a synchronization request when it's expired.",
+      "retention": "1 year",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "ev_sync_ix": [
+    {
+      "platform": "Adobe Advertising",
+      "category": "Marketing",
+      "name": "ev_sync_ix",
+      "domain": "everesttech.net",
+      "description": "This cookie stores The date when synchronization is performed, in the format yyyymmdd. A third-party, ad exchange-specific cookie that syncs the Adobe Advertising surfer ID with the partner ad exchange. It's created for new surfers and sends a synchronization request when it's expired.",
+      "retention": "1 year",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "ev_sync_nx": [
+    {
+      "platform": "Adobe Advertising",
+      "category": "Marketing",
+      "name": "ev_sync_nx",
+      "domain": "everesttech.net",
+      "description": "This cookie stores The date when synchronization is performed, in the format yyyymmdd. A third-party, ad exchange-specific cookie that syncs the Adobe Advertising surfer ID with the partner ad exchange. It's created for new surfers and sends a synchronization request when it's expired.",
+      "retention": "1 year",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "ev_sync_ox": [
+    {
+      "platform": "Adobe Advertising",
+      "category": "Marketing",
+      "name": "ev_sync_ox",
+      "domain": "everesttech.net",
+      "description": "This cookie stores The date when synchronization is performed, in the format yyyymmdd. A third-party, ad exchange-specific cookie that syncs the Adobe Advertising surfer ID with the partner ad exchange. It's created for new surfers and sends a synchronization request when it's expired.",
+      "retention": "1 year",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "ev_sync_pm": [
+    {
+      "platform": "Adobe Advertising",
+      "category": "Marketing",
+      "name": "ev_sync_pm",
+      "domain": "everesttech.net",
+      "description": "This cookie stores The date when synchronization is performed, in the format yyyymmdd. A third-party, ad exchange-specific cookie that syncs the Adobe Advertising surfer ID with the partner ad exchange. It's created for new surfers and sends a synchronization request when it's expired.",
+      "retention": "1 year",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "ev_sync_rc": [
+    {
+      "platform": "Adobe Advertising",
+      "category": "Marketing",
+      "name": "ev_sync_rc",
+      "domain": "everesttech.net",
+      "description": "This cookie stores The date when synchronization is performed, in the format yyyymmdd. A third-party, ad exchange-specific cookie that syncs the Adobe Advertising surfer ID with the partner ad exchange. It's created for new surfers and sends a synchronization request when it's expired.",
+      "retention": "1 year",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "ev_sync_tm": [
+    {
+      "platform": "Adobe Advertising",
+      "category": "Marketing",
+      "name": "ev_sync_tm",
+      "domain": "everesttech.net",
+      "description": "This cookie stores The date when synchronization is performed, in the format yyyymmdd. A third-party, ad exchange-specific cookie that syncs the Adobe Advertising surfer ID with the partner ad exchange. It's created for new surfers and sends a synchronization request when it's expired.",
+      "retention": "1 year",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "ev_sync_yh": [
+    {
+      "platform": "Adobe Advertising",
+      "category": "Marketing",
+      "name": "ev_sync_yh",
+      "domain": "everesttech.net",
+      "description": "This cookie stores the date when synchronization is performed, in the format yyyymmdd. A third-party, ad exchange-specific cookie that syncs the Adobe Advertising surfer ID with the partner ad exchange. It's created for new surfers and sends a synchronization request when it's expired.",
+      "retention": "1 year",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "adcloud": [
+    {
+      "platform": "Adobe Advertising",
+      "category": "Marketing",
+      "name": "adcloud",
+      "domain": "",
+      "description": "This cookie stores The timestamps of the surfer's last visit to the advertiser’s website and the surfer's last search click, and the ef_id that was created when the user clicked an ad",
+      "retention": "1 year",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "id_adcloud": [
+    {
+      "platform": "Adobe Advertising",
+      "category": "Marketing",
+      "name": "id_adcloud",
+      "domain": "",
+      "description": "This cookie stores the surfer ID",
+      "retention": "91 days",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
       "wildcard": "0"
     }
   ],
@@ -7280,7 +7631,59 @@
       "description": "Registers data on visitors from multiple visits and on multiple websites. This information is used to measure the efficiency of advertisement on websites.",
       "retention": "10 years",
       "dataController": "Zeotap",
-      "gdprUrl": "https://www.zeotap.com/privacy_policy",
+      "gdprUrl": "https://zeotap.com/product-privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "zsc": [
+    {
+      "platform": "Zeotap",
+      "category": "Marketing",
+      "name": "zsc",
+      "domain": "zeotap.com",
+      "description": "Frequency capping for cookie syncing",
+      "retention": "1 day",
+      "dataController": "Zeotap",
+      "gdprUrl": "https://zeotap.com/product-privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "zi": [
+    {
+      "platform": "Zeotap",
+      "category": "Marketing",
+      "name": "zi",
+      "domain": "zeotap.com",
+      "description": "User Identification",
+      "retention": "1 year",
+      "dataController": "Zeotap",
+      "gdprUrl": "https://zeotap.com/product-privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "idp": [
+    {
+      "platform": "Zeotap",
+      "category": "Marketing",
+      "name": "idp",
+      "domain": "zeotap.com",
+      "description": "User Identification",
+      "retention": "1 year",
+      "dataController": "Zeotap",
+      "gdprUrl": "https://zeotap.com/product-privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "zuc": [
+    {
+      "platform": "Zeotap",
+      "category": "Marketing",
+      "name": "zuc",
+      "domain": "zeotap.com",
+      "description": "User Identification",
+      "retention": "1 year",
+      "dataController": "Zeotap",
+      "gdprUrl": "https://zeotap.com/product-privacy-policy/",
       "wildcard": "0"
     }
   ],
@@ -7955,6 +8358,19 @@
       "domain": "",
       "description": "This cookie keeps track of the last website you visited. This is necessary to enable the correct language on the website.",
       "retention": "1 day",
+      "dataController": "Adobe",
+      "gdprUrl": "https://www.adobe.com/privacy.html",
+      "wildcard": "0"
+    }
+  ],
+  "login_redirect": [
+    {
+      "platform": "Magento",
+      "category": "Functional",
+      "name": "login_redirect",
+      "domain": "",
+      "description": "Preserves the destination page that was loading before the customer was directed to log in.",
+      "retention": "session",
       "dataController": "Adobe",
       "gdprUrl": "https://www.adobe.com/privacy.html",
       "wildcard": "0"
@@ -9264,6 +9680,45 @@
       "domain": "hubspot.com",
       "description": "This cookie is used to recognize visitors who chat with you via the chatflows tool. If the visitor leaves your site before they're added as a contact, they will have this cookie associated with their browser.",
       "retention": "13 months",
+      "dataController": "HubSpot",
+      "gdprUrl": "https://legal.hubspot.com/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "hubspotapi": [
+    {
+      "platform": "Hubspot",
+      "category": "Marketing",
+      "name": "hubspotapi",
+      "domain": "hubspot.com",
+      "description": "This cookie allows the user to access the app with the correct permissions.",
+      "retention": "7 days",
+      "dataController": "HubSpot",
+      "gdprUrl": "https://legal.hubspot.com/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "hubspotapi-prefs": [
+    {
+      "platform": "Hubspot",
+      "category": "Functional",
+      "name": "hubspotapi-prefs",
+      "domain": "hubspot.com",
+      "description": "This is used with the hubspotapi cookie to remember whether the user checked the 'remember me' box (controls the expiration of the main cookie's authentication).",
+      "retention": "1 Year",
+      "dataController": "HubSpot",
+      "gdprUrl": "https://legal.hubspot.com/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "hubspotapi-csrf": [
+    {
+      "platform": "Hubspot",
+      "category": "Functional",
+      "name": "hubspotapi-csrf",
+      "domain": "hubspot.com",
+      "description": "This is used for CSRF prevention - preventing third party websites from accessing your data. Expires after a year.",
+      "retention": "1 year",
       "dataController": "HubSpot",
       "gdprUrl": "https://legal.hubspot.com/privacy-policy",
       "wildcard": "0"
@@ -11657,7 +12112,7 @@
       "description": "Unique identifier for the BlueConic profile.",
       "retention": "1 year",
       "dataController": "Blueconic.com",
-      "gdprUrl": "https://www.blueconic.com/privacy-policy/",
+      "gdprUrl": "https://www.blueconic.com/privacy-policy",
       "wildcard": "0"
     }
   ],
@@ -11670,7 +12125,7 @@
       "description": "Temporary unique identifier for the BlueConic profile, removed after BCSessionID is created.",
       "retention": "10 minutes",
       "dataController": "Blueconic.com",
-      "gdprUrl": "https://www.blueconic.com/privacy-policy/",
+      "gdprUrl": "https://www.blueconic.com/privacy-policy",
       "wildcard": "0"
     }
   ],
@@ -11683,7 +12138,7 @@
       "description": "Opt-in level (PERSONAL|ANONYMOUS|DO_NOT_TRACK)",
       "retention": "1 year",
       "dataController": "Blueconic.com",
-      "gdprUrl": "https://www.blueconic.com/privacy-policy/",
+      "gdprUrl": "https://www.blueconic.com/privacy-policy",
       "wildcard": "0"
     }
   ],
@@ -11696,7 +12151,7 @@
       "description": "Stores a custom bcChannelIdentifier as referrer. For these channels the actual referrer points to the website and not the overrule. The overrule would be lost if not stored in this cookie.",
       "retention": "1 year",
       "dataController": "Blueconic.com",
-      "gdprUrl": "https://www.blueconic.com/privacy-policy/",
+      "gdprUrl": "https://www.blueconic.com/privacy-policy",
       "wildcard": "0"
     }
   ],
@@ -11709,7 +12164,7 @@
       "description": "Used to store the identifiers of BlueConic Objectives that were explicitly refused.",
       "retention": "1 year",
       "dataController": "Blueconic.com",
-      "gdprUrl": "https://www.blueconic.com/privacy-policy/",
+      "gdprUrl": "https://www.blueconic.com/privacy-policy",
       "wildcard": "0"
     }
   ],
@@ -11722,7 +12177,7 @@
       "description": "Used to store requests that are sent to BlueConic, but haven't returned yet. On the next page view, if BCRevision still contains values, those requests are sent again, to prevent data loss. This information is now stored in localStorage; when this fails, the cookie solution is used as fallback.",
       "retention": "1 year",
       "dataController": "Blueconic.com",
-      "gdprUrl": "https://www.blueconic.com/privacy-policy/",
+      "gdprUrl": "https://www.blueconic.com/privacy-policy",
       "wildcard": "0"
     }
   ],
@@ -11735,7 +12190,7 @@
       "description": "Used for tracking the channel of an external tracker.",
       "retention": "10 seconds",
       "dataController": "Blueconic.com",
-      "gdprUrl": "https://www.blueconic.com/privacy-policy/",
+      "gdprUrl": "https://www.blueconic.com/privacy-policy",
       "wildcard": "0"
     }
   ],
@@ -11748,7 +12203,7 @@
       "description": "Gathers information on the user’s behavior, preferences and other personal data, which is sent to a third-party marketing and analysis service, for optimization of the website’s advertisement, analysis and general traffic.",
       "retention": "1 year",
       "dataController": "Blueconic.com",
-      "gdprUrl": "https://www.blueconic.com/privacy-policy/",
+      "gdprUrl": "https://www.blueconic.com/privacy-policy",
       "wildcard": "0"
     }
   ],
@@ -17998,7 +18453,7 @@
       "category": "Functional",
       "name": "__pid",
       "domain": "",
-      "description": "This cookie store the domain received on the frontend is used as a domain for other cookies (incl. __utp, __idr, __tae) Example value: .piano.io",
+      "description": "This cookie stores the domain received on the frontend is used as a domain for other cookies (incl. __utp, __idr, __tae) Example value: .piano.io",
       "retention": "30 days",
       "dataController": "Piano",
       "gdprUrl": "https://piano.io/privacy-policy/",
@@ -18076,7 +18531,7 @@
       "category": "Analytics",
       "name": "__pvi",
       "domain": "",
-      "description": "This cookie store data about the last visit to the site including the AID, lastTrackedVisitId, domain and time of the visit. Used for reporting only.",
+      "description": "This cookie stores data about the last visit to the site including the AID, lastTrackedVisitId, domain and time of the visit. Used for reporting only.",
       "retention": "1 day",
       "dataController": "Piano",
       "gdprUrl": "https://piano.io/privacy-policy/",
@@ -18089,7 +18544,7 @@
       "category": "Analytics",
       "name": "__pat",
       "domain": "",
-      "description": "This cookie store difference between the client’s application time zone and UTC. At midnight, (application's local time), the previous visit is expired and a new one is created. The cookie is used for calculation.",
+      "description": "This cookie stores difference between the client’s application time zone and UTC. At midnight, (application's local time), the previous visit is expired and a new one is created. The cookie is used for calculation.",
       "retention": "30 days",
       "dataController": "Piano",
       "gdprUrl": "https://piano.io/privacy-policy/",
@@ -18102,7 +18557,7 @@
       "category": "Functional",
       "name": "__pnahc",
       "domain": "",
-      "description": "This cookie store the result of previous Adblock detection, removes false-positive AdBlock detection clauses.",
+      "description": "This cookie stores the result of previous Adblock detection, removes false-positive AdBlock detection clauses.",
       "retention": "90 days",
       "dataController": "Piano",
       "gdprUrl": "https://piano.io/privacy-policy/",
@@ -18115,7 +18570,7 @@
       "category": "Functional",
       "name": "LANG",
       "domain": "tinypass.com",
-      "description": "This cookie store the selected locale",
+      "description": "This cookie stores the selected locale",
       "retention": "1500 days",
       "dataController": "Piano",
       "gdprUrl": "https://piano.io/privacy-policy/",
@@ -18128,7 +18583,7 @@
       "category": "Functional",
       "name": "LANG_CHANGED",
       "domain": "tinypass.com",
-      "description": "This cookie store the temporarily selected locale (e.g. impersonation in Admin dashboard).",
+      "description": "This cookie stores the temporarily selected locale (e.g. impersonation in Admin dashboard).",
       "retention": "1 day",
       "dataController": "Piano",
       "gdprUrl": "https://piano.io/privacy-policy/",
@@ -18730,6 +19185,305 @@
       "retention": "1 year",
       "dataController": "Emetric",
       "gdprUrl": "https://www.emetriq.com/datenschutz/",
+      "wildcard": "0"
+    }
+  ],
+  "_pangle": [
+    {
+      "platform": "Pangle",
+      "category": "Marketing",
+      "name": "_pangle",
+      "domain": "analytics.pangle-ads.com",
+      "description": "This cookie is to measure and improve the performance of your advertising campaigns and to personalize the user's ad experiences delivered by the Pangle ad network.",
+      "retention": "13 months",
+      "dataController": "Pangle",
+      "gdprUrl": "https://www.pangleglobal.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "u": [
+    {
+      "platform": "Totvs",
+      "category": "Marketing",
+      "name": "u",
+      "domain": "t.tailtarget.com",
+      "description": "This cookie is Used for audience segmentation for advertising",
+      "retention": "1 year",
+      "dataController": "Totvs",
+      "gdprUrl": "https://www.totvs.com/protecao-e-privacidade-de-dados/",
+      "wildcard": "0"
+    }
+  ],
+  "_ssc": [
+    {
+      "platform": "Totvs",
+      "category": "Marketing",
+      "name": "_ssc",
+      "domain": "t.tailtarget.com",
+      "description": "This is a cookie used for generating access and internet traffic statistics.",
+      "retention": "1 day",
+      "dataController": "Totvs",
+      "gdprUrl": "https://www.totvs.com/protecao-e-privacidade-de-dados/",
+      "wildcard": "0"
+    }
+  ],
+  "NSC_*": [
+    {
+      "platform": "Citrix",
+      "category": "Functional",
+      "name": "NSC_*",
+      "domain": "",
+      "description": "This cookie name is associated with the Netscaler load balancing service from Citrix. This is a pattern type cookie with the root being NSC_ and the rest of the name being a unique encrypted alpha numeric identifier for the virtual server it originated from. The cookie is used to ensure traffic and user data is routed to the correct locations where a site is hosted on multiple servers, so that the end user has a consistent experience.",
+      "retention": "12 hours",
+      "dataController": "Citrix",
+      "gdprUrl": "https://www.citrix.com/about/trust-center/privacy-compliance/",
+      "wildcard": "1"
+    }
+  ],
+  "bitoIsSecure": [
+    {
+      "platform": "Beeswax",
+      "category": "Marketing",
+      "name": "bitoIsSecure",
+      "domain": "bidr.io",
+      "description": "This cookie is associated with bidr.io. It allows third party advertisers to target the visitor with relevant advertising. This pairing service is provided by third party advertisement hubs, which facilitate real-time bidding for advertisers.",
+      "retention": "1 year",
+      "dataController": "Beeswax",
+      "gdprUrl": "https://www.beeswax.com/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "bito": [
+    {
+      "platform": "Beeswax",
+      "category": "Marketing",
+      "name": "bito",
+      "domain": "bidr.io",
+      "description": "This cookie is generally provided by bidr.io and is used for advertising purposes.",
+      "retention": "1 year",
+      "dataController": "Beeswax",
+      "gdprUrl": "https://www.beeswax.com/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "WMF-Last-Access": [
+    {
+      "platform": "Wikimedia",
+      "category": "Analytics",
+      "name": "WMF-Last-Access",
+      "domain": ".wikimedia.org",
+      "description": "This cookie is used by the Wikimedia Foundation. It is used to determine the last time a user visited a page, and is used for various statistics.",
+      "retention": "session",
+      "dataController": "Wikipedia",
+      "gdprUrl": "https://foundation.wikimedia.org/wiki/Policy:Privacy_policy",
+      "wildcard": "0"
+    }
+  ],
+  "loginnotify_prevlogins": [
+    {
+      "platform": "Wikimedia",
+      "category": "Functional",
+      "name": "loginnotify_prevlogins",
+      "domain": ".wikimedia.org",
+      "description": "This cookie verifies that you are logging in from a known device. This affects the threshold for how many unsuccessful login attempts trigger a notification to the user..",
+      "retention": "180 days",
+      "dataController": "Wikipedia",
+      "gdprUrl": "https://foundation.wikimedia.org/wiki/Policy:Privacy_policy",
+      "wildcard": "0"
+    }
+  ],
+  "stopMobileRedirect": [
+    {
+      "platform": "Wikimedia",
+      "category": "Functional",
+      "name": "stopMobileRedirect",
+      "domain": ".wikimedia.org",
+      "description": "This cookie tells us not to redirect to the mobile site if you do not like that..",
+      "retention": "30 days",
+      "dataController": "Wikipedia",
+      "gdprUrl": "https://foundation.wikimedia.org/wiki/Policy:Privacy_policy",
+      "wildcard": "0"
+    }
+  ],
+  "centralnotice_bucket": [
+    {
+      "platform": "Wikimedia",
+      "category": "Analytics",
+      "name": "centralnotice_bucket",
+      "domain": ".wikimedia.org",
+      "description": "This cookie helps us understand the effectiveness of notices provided to users through the CentralNotice extension..",
+      "retention": "session",
+      "dataController": "Wikipedia",
+      "gdprUrl": "https://foundation.wikimedia.org/wiki/Policy:Privacy_policy",
+      "wildcard": "0"
+    }
+  ],
+  "GeoIP": [
+    {
+      "platform": "Wikimedia",
+      "category": "Analytics",
+      "name": "GeoIP",
+      "domain": ".wikimedia.org",
+      "description": "This cookie is used to try and understand the user's geographical location (country) based on their IP address.",
+      "retention": "session",
+      "dataController": "Wikipedia",
+      "gdprUrl": "https://foundation.wikimedia.org/wiki/Policy:Privacy_policy",
+      "wildcard": "0"
+    }
+  ],
+  "NetWorkProbeLimit": [
+    {
+      "platform": "Wikimedia",
+      "category": "Analytics",
+      "name": "NetWorkProbeLimit",
+      "domain": ".wikimedia.org",
+      "description": "This cookie is used to set NetworkProbeLimit cookie to override the default network probe limit value.",
+      "retention": "1 hour",
+      "dataController": "Wikipedia",
+      "gdprUrl": "https://foundation.wikimedia.org/wiki/Policy:Privacy_policy",
+      "wildcard": "0"
+    }
+  ],
+  "auid": [
+    {
+      "platform": "Acuity",
+      "category": "Marketing",
+      "name": "auid",
+      "domain": ".acuityplatform.com",
+      "description": "This cookie is used to identify the visitor and cookie-tracking solutions and marketing and advertising services..",
+      "retention": "1 year",
+      "dataController": "Acuity",
+      "gdprUrl": "",
+      "wildcard": "0"
+    }
+  ],
+  "aum": [
+    {
+      "platform": "Acuity",
+      "category": "Marketing",
+      "name": "aum",
+      "domain": ".acuityplatform.com",
+      "description": "This cookie is used to identify the visitor and the company provides a range of cookie-tracking solutions and marketing and advertising services.",
+      "retention": "1 year",
+      "dataController": "Acuity",
+      "gdprUrl": "",
+      "wildcard": "0"
+    }
+  ],
+  "ablyft_exps": [
+    {
+      "platform": "ABlyft",
+      "category": "Analytics",
+      "name": "ablyft_exps",
+      "domain": "",
+      "description": "Is set and updated when a visitor is bucketed into an experiment/variation.",
+      "retention": "1 year",
+      "dataController": "ABlyft",
+      "gdprUrl": "https://ablyft.com/en/privacy-notice",
+      "wildcard": "0"
+    }
+  ],
+  "ablyft_queue": [
+    {
+      "platform": "ABlyft",
+      "category": "Analytics",
+      "name": "ablyft_queue",
+      "domain": "",
+      "description": "Is set when a visitor triggers an event/goal. After sending the event to ABlyft it is cleared.",
+      "retention": "1 year",
+      "dataController": "ABlyft",
+      "gdprUrl": "https://ablyft.com/en/privacy-notice",
+      "wildcard": "0"
+    }
+  ],
+  "ablyft_uvs": [
+    {
+      "platform": "ABlyft",
+      "category": "Analytics",
+      "name": "ablyft_uvs",
+      "domain": "",
+      "description": "Is set on the first pageview and update with every further pageview of a visitor.",
+      "retention": "1 year",
+      "dataController": "ABlyft",
+      "gdprUrl": "https://ablyft.com/en/privacy-notice",
+      "wildcard": "0"
+    }
+  ],
+  "ablyft_tracking_consent": [
+    {
+      "platform": "ABlyft",
+      "category": "Analytics",
+      "name": "ablyft_tracking_consent",
+      "domain": "",
+      "description": "Is set when enableTrackingConsent or disableTrackingConsent is triggered via API.",
+      "retention": "1 year",
+      "dataController": "ABlyft",
+      "gdprUrl": "https://ablyft.com/en/privacy-notice",
+      "wildcard": "0"
+    }
+  ],
+  "_d2id": [
+    {
+      "platform": "MercadoLibre",
+      "category": "Marketing",
+      "name": "_d2id",
+      "domain": ".mercadolibre.com",
+      "description": "This cookie is required for shopping cart functionality on the website.",
+      "retention": "1 year",
+      "dataController": "MercadoLibre",
+      "gdprUrl": "https://www.mercadolibre.com.ar/privacidad",
+      "wildcard": "0"
+    }
+  ],
+  "edsid": [
+    {
+      "platform": "MercadoLibre",
+      "category": "Marketing",
+      "name": "edsid",
+      "domain": ".mercadolibre.com",
+      "description": "This cookie is used to identify users to implement fraud prevention",
+      "retention": "1 year",
+      "dataController": "MercadoLibre",
+      "gdprUrl": "https://www.mercadolibre.com.ar/privacidad",
+      "wildcard": ""
+    }
+  ],
+  "ftid": [
+    {
+      "platform": "MercadoLibre",
+      "category": "Marketing",
+      "name": "ftid",
+      "domain": ".mercadolibre.com",
+      "description": "This cookie is used to identify users to implement fraud prevention",
+      "retention": "1 year",
+      "dataController": "MercadoLibre",
+      "gdprUrl": "https://www.mercadolibre.com.ar/privacidad",
+      "wildcard": "0"
+    }
+  ],
+  "aniC": [
+    {
+      "platform": "Aniview",
+      "category": "Marketing",
+      "name": "aniC",
+      "domain": ".aniview.com",
+      "description": "This cookie is used in context with video-advertisement. The cookie limits the number of times a user is shown the same advertisement. The cookie is also used to ensure relevance of the video-advertisement to the specific user.",
+      "retention": "20 Days",
+      "dataController": "Aniview",
+      "gdprUrl": "https://www.aniview.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "version": [
+    {
+      "platform": "Anivew",
+      "category": "Marketing",
+      "name": "version",
+      "domain": "track1.aniview.com",
+      "description": "This cookie is used by the website's operator in context with multi-variate testing. This is a tool used to combine or change content on the website. This allows the website to find the best variation/edition of the site.",
+      "retention": "Session",
+      "dataController": "Aniview",
+      "gdprUrl": "https://www.aniview.com/privacy-policy/",
       "wildcard": "0"
     }
   ]

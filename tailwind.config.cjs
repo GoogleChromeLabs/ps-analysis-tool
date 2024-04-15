@@ -28,10 +28,13 @@ delete colors['blueGray'];
 module.exports = {
   darkMode: 'class',
   content: [
-    path.resolve(__dirname, './packages/extension/src/**/*.{tsx,js}'),
-    path.resolve(__dirname, './packages/design-system/src/**/*.{tsx,js}'),
-    path.resolve(__dirname, './packages/cli-dashboard/src/**/*.{tsx,js}'),
-    path.resolve(__dirname, './packages/library-detection/src/**/*.{tsx,js}'),
+    path.resolve(__dirname, './packages/extension/src/**/*.{tsx,ts,js}'),
+    path.resolve(__dirname, './packages/design-system/src/**/*.{tsx,ts,js}'),
+    path.resolve(__dirname, './packages/cli-dashboard/src/**/*.{tsx,ts,js}'),
+    path.resolve(
+      __dirname,
+      './packages/library-detection/src/**/*.{tsx,ts,js}'
+    ),
   ],
   theme: {
     extend: {
@@ -140,6 +143,15 @@ module.exports = {
       'jet-black': '#202142',
       'warning-red': '#C33300',
       'warning-orange': '#FE8d59',
+      charcoal: '#465362',
+      'napels-yellow': '#F9DC5C',
+      'red-corolla': '#ED254E',
+      moonstone: '#08A4BD',
+      'noon-blue': '#446DF6',
+      'chocolate-cosmos': '#4C212A',
+      'cocoa-brown': '#D96C06',
+      'persian-indigo': '#3A1772',
+      'hollywood-cerise': '#D741A7',
     },
     backgroundColor: {
       ...colors,
@@ -189,6 +201,9 @@ module.exports = {
       'leaf-green-dark': '#87DFB2',
       'eerie-black': '#1F1F1F0F',
       'light-yellow': '#FEFCE0',
+      'bright-gray': '#E8EAED',
+      'blue-berry': '#4582F4',
+      'ultramarine-blue': '#3173EE',
       'selection-green-light': '#117347',
       'selection-green-dark': '#74d47e',
       'selection-yellow-light': '#8b8f18',

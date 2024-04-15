@@ -99,7 +99,7 @@ const LandingPage = ({
               />
             )}
             {psInfoKey && <InfoCard infoKey={psInfoKey} />}
-            <div>{contentPanel}</div>
+            {contentPanel && <div>{contentPanel}</div>}
           </div>
 
           {children && (

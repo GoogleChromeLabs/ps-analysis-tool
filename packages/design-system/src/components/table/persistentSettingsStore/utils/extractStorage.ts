@@ -45,14 +45,12 @@ const extractChromeStorage = async (
 ): Promise<TablePersistentSettingsStoreContext['state']> => {
   const tabId = chrome.devtools.inspectedWindow.tabId.toString();
 
-  const data = await chrome.storage.local.get();
-  const tableData = data?.[tabId];
+  const data = await chrome.storage.session.get();
+  const tableData = data?.[tabId + persistenceKey];
   if (tableData) {
-    const persistenceData = tableData?.[persistenceKey];
-    if (persistenceData) {
-      return persistenceData;
-    }
+    return tableData;
   }
+
   return {} as TablePersistentSettingsStoreContext['state'];
 };
 

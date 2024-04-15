@@ -25,7 +25,7 @@ import type { CookieTableData } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies
  */
-import useCookieListing from '../../../../../hooks/useCookieListing.tsx';
+import useCookieListing from '../../../../../hooks/useCookieListing';
 import { useContentStore } from '../../../stateProviders/contentStore';
 
 /**
@@ -57,13 +57,18 @@ const CookiesListing = ({
     [tabCookies, selectedFrameUrl]
   );
 
-  const { tableColumns, filters, searchKeys, tablePersistentSettingsKey } =
-    useCookieListing(
-      Object.values(tabCookies),
-      selectedFrameUrl,
-      'cookiesListing',
-      selectedSite
-    );
+  const {
+    tableColumns,
+    filters,
+    searchKeys,
+    tablePersistentSettingsKey,
+    isSidebarOpen,
+  } = useCookieListing(
+    Object.values(tabCookies),
+    selectedFrameUrl,
+    'cookiesListing',
+    selectedSite
+  );
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -80,21 +85,19 @@ const CookiesListing = ({
         className="h-full flex"
       >
         <CookieTable
-          useIsBlockedToHighlight={true}
           data={cookies}
           tableColumns={tableColumns}
-          showTopBar={true}
           tableFilters={filters}
           tableSearchKeys={searchKeys}
           tablePersistentSettingsKey={tablePersistentSettingsKey}
           selectedFrame={selectedFrameUrl}
           selectedFrameCookie={selectedFrameCookie}
-          hideExport
           setSelectedFrameCookie={setSelectedFrameCookie}
+          isFiltersSidebarOpen={isSidebarOpen}
         />
       </Resizable>
       <CookieDetails
-        isUsingCDP={false}
+        isUsingCDP={true}
         selectedFrameCookie={selectedFrameCookie}
       />
     </div>

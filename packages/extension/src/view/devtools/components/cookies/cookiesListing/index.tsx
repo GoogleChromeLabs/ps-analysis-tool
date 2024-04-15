@@ -27,24 +27,23 @@ import { CookieDetails, CookieTable } from '@ps-analysis-tool/design-system';
 /**
  * Internal dependencies.
  */
-import { useCookieStore } from '../../../stateProviders/syncCookieStore';
+import { useCookie, useSettings } from '../../../stateProviders';
 import useCookieListing from './useCookieListing';
 import RowContextMenu from './rowContextMenu';
-import { useSettingsStore } from '../../../stateProviders/syncSettingsStore';
-import { useAllowedList } from '../../../stateProviders/useAllowedList';
+import { useAllowedList } from '../../../stateProviders/allowedList';
 
 interface CookiesListingProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;
 }
 
 const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
-  const { selectedFrame, tabFrames, tabUrl } = useCookieStore(({ state }) => ({
+  const { selectedFrame, tabFrames, tabUrl } = useCookie(({ state }) => ({
     selectedFrame: state.selectedFrame,
     tabFrames: state.tabFrames,
     tabUrl: state.tabUrl,
   }));
 
-  const isUsingCDP = useSettingsStore(({ state }) => state.isUsingCDP);
+  const isUsingCDP = useSettings(({ state }) => state.isUsingCDP);
 
   const { domainsInAllowList, setDomainsInAllowListCallback, isIncognito } =
     useAllowedList(({ state, actions }) => ({
@@ -60,6 +59,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
     searchKeys,
     tablePersistentSettingsKey,
     extraInterfaceToTopBar,
+    isSidebarOpen,
   } = useCookieListing(domainsInAllowList);
 
   const frameFilteredCookies = useMemo(
@@ -100,13 +100,13 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
         className="h-full flex"
       >
         <CookieTable
-          useIsBlockedToHighlight={!isUsingCDP} // TODO: Remove this, and mend cookie object, as it should not have data in blockedStatus when isUsingCDP is false.
+          queryIsBlockedToHighlight={!isUsingCDP}
           data={frameFilteredCookies}
           tableColumns={tableColumns}
-          showTopBar={true}
           tableFilters={filters}
           tableSearchKeys={searchKeys}
           tablePersistentSettingsKey={tablePersistentSettingsKey}
+          isFiltersSidebarOpen={isSidebarOpen}
           selectedFrame={selectedFrame}
           selectedFrameCookie={selectedFrameCookie}
           setSelectedFrameCookie={setSelectedFrameCookie}

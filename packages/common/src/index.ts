@@ -26,7 +26,7 @@ export { default as calculateEffectiveExpiryDate } from './utils/calculateEffect
 export { default as sanitizeCsvRecord } from './utils/sanitizeCsvRecord';
 export { parseUrl } from './utils/parseUrl';
 export { default as fetchLocalData } from './utils/fetchLocalData';
-export { default as cookieIssueDetails } from './data/cookieExclusionAndWarningReasons';
+export * from './data';
 export { default as parseResponseReceivedExtraInfo } from './utils/parseResponseReceivedExtraInfo';
 export { default as parseRequestWillBeSentExtraInfo } from './utils/parseRequestWillBeSentExtraInfo';
 export { default as getDomainFromUrl } from './utils/getDomainFromUrl';
@@ -35,6 +35,7 @@ export { default as noop } from './utils/noop';
 export { default as getDevToolWorker } from './worker/devToolWorker';
 export { default as executeTaskInDevToolWorker } from './worker/executeTaskInDevToolWorker';
 export { default as getValueByKey } from './utils/getValueByKey';
+export * from './utils/contextSelector';
 export { default as addUTMParams } from './utils/addUTMParams';
 export * from './worker/enums';
 export * from './utils/generateReports';

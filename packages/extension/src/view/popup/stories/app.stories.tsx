@@ -23,7 +23,7 @@ import type { Meta, StoryObj } from '@storybook/react';
  * Internal dependencies.
  */
 import App from '../app';
-import { Provider as ExternalStoreProvider } from '../stateProviders/syncCookieStore';
+import { Provider as ExternalStoreProvider } from '../stateProviders/cookie';
 
 const meta: Meta<typeof App> = {
   title: 'Extension/Popup/Page',

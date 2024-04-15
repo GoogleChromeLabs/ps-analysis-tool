@@ -26,16 +26,16 @@ import SinonChrome from 'sinon-chrome';
  * Internal dependencies.
  */
 import App from '../app';
-import { useCookieStore } from '../stateProviders/syncCookieStore';
+import { useCookie } from '../stateProviders';
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
 
-jest.mock('../stateProviders/syncCookieStore', () => ({
-  useCookieStore: jest.fn(),
+jest.mock('../stateProviders/cookie', () => ({
+  useCookie: jest.fn(),
 }));
 
-const mockUseCookieStore = useCookieStore as jest.Mock;
+const mockUseCookieStore = useCookie as jest.Mock;
 
 describe('App', () => {
   beforeAll(() => {
@@ -63,6 +63,17 @@ describe('App', () => {
     expect(
       screen.getByText('Please try reloading the page')
     ).toBeInTheDocument();
+  });
+
+  it('Should show loader', () => {
+    mockUseCookieStore.mockReturnValueOnce({
+      loading: true,
+    });
+    act(() => {
+      render(<App />);
+    });
+
+    expect(screen.getByTestId('progress-bar')).toBeInTheDocument();
   });
 
   it('Should show No cookies found on this page message if no firstParty and thirdParty cookies are not available', () => {
@@ -95,6 +106,9 @@ describe('App', () => {
       cookieStats: {
         total: 6,
         blockedCookies: {
+          total: 0,
+        },
+        exemptedCookies: {
           total: 0,
         },
         firstParty: {

@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
+import classnames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -27,10 +28,10 @@ export interface MatrixComponentProps {
   color: string;
   title: string;
   description?: string;
+  onClick?: (title: string) => void;
   count: number;
   isExpanded?: boolean;
   countClassName: string;
-  containerClasses: string;
 }
 
 const MatrixComponent = ({
@@ -40,17 +41,16 @@ const MatrixComponent = ({
   count,
   isExpanded = false,
   countClassName,
-  containerClasses,
 }: MatrixComponentProps) => {
   return (
-    <div className={containerClasses}>
+    <div>
       <div className="flex gap-x-4">
         <Circle color={color} />
-        <div className="lg:max-w-[80%] lg:mr-8">
+        <div className="lg:max-w-[80%] lg:mr-8 text-left">
           <h4 className="-mt-[3px] mb-1.5 text-xs font-medium dark:text-bright-gray">
             {title}
           </h4>
-          <p style={{ color }} className={countClassName}>
+          <p style={{ color }} className={classnames(countClassName)}>
             {count}
           </p>
           {description && isExpanded && (

@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
- * Internal dependencies.
+ * External dependencies.
  */
-import { CookieTableData, sanitizeCsvRecord } from '@ps-analysis-tool/common';
+import {
+  BLOCK_STATUS,
+  CookieTableData,
+  sanitizeCsvRecord,
+} from '@ps-analysis-tool/common';
 
 const COOKIES_TABLE_DATA_HEADER = [
   'Name',
@@ -32,16 +35,30 @@ const COOKIES_TABLE_DATA_HEADER = [
   'Value',
   'Path',
   'Expires',
-  'Cookie Affected',
+  'Issues',
   'GDPRPortal',
   'Priority',
   'Size',
+  'Blocking Status',
 ];
 
 const generateCookieTableCSV = (cookies: CookieTableData[]): Blob => {
   let cookieRecords = '';
 
   for (const cookie of cookies) {
+    const isInboundBlocked =
+      cookie.blockingStatus?.inboundBlock !== BLOCK_STATUS.NOT_BLOCKED;
+    const isOutboundBlocked =
+      cookie.blockingStatus?.outboundBlock !== BLOCK_STATUS.NOT_BLOCKED;
+    const hasValidBlockedReason =
+      cookie?.blockedReasons && cookie.blockedReasons.length !== 0;
+
+    let status = '';
+
+    if ((isInboundBlocked || isOutboundBlocked) && !hasValidBlockedReason) {
+      status = 'Undetermined';
+    }
+
     //This should be in the same order as cookieDataHeader
     const recordsArray = [
       cookie.parsedCookie.name,
@@ -60,6 +77,7 @@ const generateCookieTableCSV = (cookies: CookieTableData[]): Blob => {
       cookie.analytics?.gdprUrl || 'NA',
       cookie.parsedCookie.priority || ' ',
       cookie.parsedCookie.size?.toString(),
+      status,
     ].map(sanitizeCsvRecord);
 
     cookieRecords += recordsArray.join(',') + '\r\n';

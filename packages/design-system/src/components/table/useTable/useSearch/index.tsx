@@ -23,7 +23,7 @@ import { getValueByKey } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import { PersistentStorageData, TableData } from '..';
+import { PersistentStorageData, TableData } from '../types';
 import { useTablePersistentSettingsStore } from '../../persistentSettingsStore';
 
 export type TableSearchOutput = {
