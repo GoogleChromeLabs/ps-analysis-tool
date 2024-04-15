@@ -47,7 +47,7 @@ const CookiesLandingWrapper = ({
         <div className="pb-5">
           {showLandingHeader && <LandingHeader dataMapping={dataMapping} />}
           {Boolean(infoIconTitle) && (
-            <div className="px-4 pt-2 mx-auto leading-5 flex gap-2 justify-center items-center max-w-2xl">
+            <div className="px-4 pt-2 mx-auto leading-5 flex gap-1 justify-center items-center max-w-2xl">
               <div>
                 <InfoIcon className="w-3 h-3 fill-granite-gray" />
               </div>
