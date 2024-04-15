@@ -69,7 +69,7 @@ const MatrixContainer = ({
               >
                 <ChevronDown
                   className={classname('fill-granite-gray', {
-                    '-rotate-90': !isExpanded,
+                    'rotate-180': isExpanded,
                   })}
                 />
               </button>
