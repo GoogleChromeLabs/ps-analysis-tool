@@ -46,6 +46,7 @@ export interface LibraryDetectionContext {
     showLoader: boolean;
     tabId: number;
     errorOccured: boolean;
+    tabUrl: string | null;
   };
   actions: {
     setLibraryMatches: React.Dispatch<React.SetStateAction<LibraryData>>;
@@ -68,6 +69,7 @@ const initialState: LibraryDetectionContext = {
     showLoader: true,
     tabId: -1,
     errorOccured: false,
+    tabUrl: null,
   },
   actions: {
     setLibraryMatches: noop,
@@ -85,7 +87,7 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
   const [libraryMatches, setLibraryMatches] = useState<LibraryData>(
     initialLibraryMatches
   );
-
+  const [tabUrl, setTabUrl] = useState<string | null>(null);
   const [isCurrentTabLoading, setIsCurrentTabLoading] =
     useState<boolean>(false); // TODO: Use first/current tab loaded state instead.
   const [isInitialDataUpdated, setIsInitialDataUpdated] = useState(false);
@@ -97,6 +99,17 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     setTabId(chrome.devtools.inspectedWindow.tabId);
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      const tab = chrome.devtools.inspectedWindow.tabId
+        ? await chrome.tabs.get(chrome.devtools.inspectedWindow.tabId)
+        : null;
+      if (tab && tab?.url) {
+        setTabUrl(tab?.url);
+      }
+    })();
+  }, [tabId]);
 
   const onErrorOccuredListener = useCallback(
     ({ frameId }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
@@ -175,6 +188,7 @@ export const LibraryDetectionProvider = ({ children }: PropsWithChildren) => {
           showLoader,
           tabId,
           errorOccured,
+          tabUrl,
         },
         actions: {
           setLibraryMatches,

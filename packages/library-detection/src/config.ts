@@ -73,6 +73,11 @@ const LIBRARIES = [
     domainsToSkip: GSI_V2_DOMAINS_TO_SKIP,
     helpUrl: GSI_HELP_URL,
     detectionFunction: getGSIV2Matches,
+    exceptions: {
+      'cnn.com': {
+        signatures: ['.authorize(', '.signIn('],
+      },
+    },
   },
   {
     name: 'gis',

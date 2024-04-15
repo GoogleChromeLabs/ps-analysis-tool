@@ -16,37 +16,68 @@
 /**
  * External dependencies.
  */
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import {
   CookiesLandingWrapper,
   COLOR_MAP,
   ProgressBar,
 } from '@ps-analysis-tool/design-system';
-
 /**
  * Internal dependencies.
  */
 import { useLibraryDetection, useLibraryDetectionContext } from '../../core';
 import LIBRARIES from '../../config';
 import type { LibraryData, AccordionProps } from '../../types';
+import filterMatchesBasedOnExceptions from '../../utils/filterMatchesBasedOnExceptions';
 
 const LibraryDetection = memo(function LibraryDetection() {
   useLibraryDetection();
 
-  const { libraryMatches, showLoader, isCurrentTabLoading, errorOccured } =
-    useLibraryDetectionContext(({ state }) => ({
-      libraryMatches: state.libraryMatches,
-      errorOccured: state.errorOccured,
-      showLoader: state.showLoader,
-      isCurrentTabLoading: state.isCurrentTabLoading,
-    }));
+  const {
+    libraryMatches,
+    showLoader,
+    isCurrentTabLoading,
+    errorOccured,
+    tabUrl,
+  } = useLibraryDetectionContext(({ state }) => ({
+    libraryMatches: state.libraryMatches,
+    errorOccured: state.errorOccured,
+    showLoader: state.showLoader,
+    tabUrl: state.tabUrl,
+    isCurrentTabLoading: state.isCurrentTabLoading,
+  }));
 
-  const names = Object.keys(libraryMatches);
+  const filteredMatches = useMemo(() => {
+    const parsedMatches: LibraryData = {};
+    LIBRARIES.forEach((library) => {
+      const key = library.name;
+      const value = libraryMatches[library.name]?.matches;
+
+      if (value && value.length > 0) {
+        parsedMatches[key] = {
+          ...libraryMatches[library.name],
+          matches: filterMatchesBasedOnExceptions(
+            //@ts-ignore
+            library?.exceptions,
+            value,
+            tabUrl
+          ),
+        };
+      } else {
+        parsedMatches[key] = {
+          ...libraryMatches[library.name],
+        };
+      }
+    });
+    return parsedMatches;
+  }, [libraryMatches, tabUrl]);
+
+  const names = Object.keys(filteredMatches);
 
   const detectedLibraryNames = names.filter(
     (name) =>
-      libraryMatches[name as keyof LibraryData]?.matches?.length ||
-      libraryMatches[name as keyof LibraryData]?.domQuerymatches?.length
+      filteredMatches[name as keyof LibraryData]?.matches?.length ||
+      filteredMatches[name as keyof LibraryData]?.domQuerymatches?.length
   );
 
   const dataMapping = [
@@ -63,7 +94,7 @@ const LibraryDetection = memo(function LibraryDetection() {
         {LIBRARIES.map((library) => {
           const Component = library.component as React.FC<AccordionProps>;
 
-          const matches =
+          let matches =
             libraryMatches && libraryMatches[library.name as keyof LibraryData]
               ? libraryMatches[library.name as keyof LibraryData]?.matches
               : [];
@@ -72,6 +103,13 @@ const LibraryDetection = memo(function LibraryDetection() {
               ? libraryMatches[library.name as keyof LibraryData]
                   ?.domQuerymatches
               : null;
+
+          matches = filterMatchesBasedOnExceptions(
+            //@ts-ignore
+            library?.exceptions,
+            matches,
+            tabUrl
+          );
 
           return (
             <Component

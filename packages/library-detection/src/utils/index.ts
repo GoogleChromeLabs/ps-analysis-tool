@@ -17,3 +17,4 @@
 export * from './sourceMapGenerator';
 export * from './getNetworkResourcesWithContent';
 export * from './getResourcesWithContent';
+export * from './filterMatchesBasedOnExceptions';
