@@ -24,14 +24,27 @@ import { saveAs } from 'file-saver';
  * Internal dependencies
  */
 import { TableRow } from '../../table';
-import { generateCookieTableCSV } from '../../table/utils';
+import {
+  generateCLICookieTableCSV,
+  generateExtensionCookieTableCSV,
+} from '../../table/utils';
 
-const exportCookies = (rows: TableRow[]) => {
-  const _cookies = rows.map(({ originalData }) => originalData);
-  if (_cookies.length > 0 && 'parsedCookie' in _cookies[0]) {
-    const csvTextBlob = generateCookieTableCSV(_cookies as CookieTableData[]);
-    saveAs(csvTextBlob, 'Cookies Report.csv');
-  }
-};
+const exportCookies =
+  (isCLI = false) =>
+  (rows: TableRow[]) => {
+    const _cookies = rows.map(({ originalData }) => originalData);
+    if (_cookies.length > 0 && 'parsedCookie' in _cookies[0]) {
+      let csvTextBlob: Blob;
+
+      if (isCLI) {
+        csvTextBlob = generateCLICookieTableCSV(_cookies as CookieTableData[]);
+      } else {
+        csvTextBlob = generateExtensionCookieTableCSV(
+          _cookies as CookieTableData[]
+        );
+      }
+      saveAs(csvTextBlob, 'Cookies Report.csv');
+    }
+  };
 
 export default exportCookies;

@@ -94,6 +94,7 @@ const CookiesListing = ({
           selectedFrameCookie={selectedFrameCookie}
           setSelectedFrameCookie={setSelectedFrameCookie}
           isFiltersSidebarOpen={isSidebarOpen}
+          isCLI
         />
       </Resizable>
       <CookieDetails

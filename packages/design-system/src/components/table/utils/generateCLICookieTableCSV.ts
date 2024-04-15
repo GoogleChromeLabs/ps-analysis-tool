@@ -16,13 +16,9 @@
 /**
  * External dependencies.
  */
-import {
-  BLOCK_STATUS,
-  CookieTableData,
-  sanitizeCsvRecord,
-} from '@ps-analysis-tool/common';
+import { CookieTableData, sanitizeCsvRecord } from '@ps-analysis-tool/common';
 
-const COOKIES_TABLE_DATA_HEADER = [
+const COOKIES_TABLE_DATA_HEADER_CLI = [
   'Name',
   'Scope',
   'Domain',
@@ -37,28 +33,12 @@ const COOKIES_TABLE_DATA_HEADER = [
   'Expires',
   'Issues',
   'GDPRPortal',
-  'Priority',
-  'Size',
-  'Blocking Status',
 ];
 
-const generateCookieTableCSV = (cookies: CookieTableData[]): Blob => {
+const generateCLICookieTableCSV = (cookies: CookieTableData[]): Blob => {
   let cookieRecords = '';
 
   for (const cookie of cookies) {
-    const isInboundBlocked =
-      cookie.blockingStatus?.inboundBlock !== BLOCK_STATUS.NOT_BLOCKED;
-    const isOutboundBlocked =
-      cookie.blockingStatus?.outboundBlock !== BLOCK_STATUS.NOT_BLOCKED;
-    const hasValidBlockedReason =
-      cookie?.blockedReasons && cookie.blockedReasons.length !== 0;
-
-    let status = '';
-
-    if ((isInboundBlocked || isOutboundBlocked) && !hasValidBlockedReason) {
-      status = 'Undetermined';
-    }
-
     //This should be in the same order as cookieDataHeader
     const recordsArray = [
       cookie.parsedCookie.name,
@@ -75,17 +55,14 @@ const generateCookieTableCSV = (cookies: CookieTableData[]): Blob => {
       cookie.parsedCookie.expires,
       cookie.isBlocked ? 'Yes' : 'No',
       cookie.analytics?.gdprUrl || 'NA',
-      cookie.parsedCookie.priority || ' ',
-      cookie.parsedCookie.size?.toString(),
-      status,
     ].map(sanitizeCsvRecord);
 
     cookieRecords += recordsArray.join(',') + '\r\n';
   }
 
   return new Blob([
-    COOKIES_TABLE_DATA_HEADER.join(',') + '\r\n' + cookieRecords,
+    COOKIES_TABLE_DATA_HEADER_CLI.join(',') + '\r\n' + cookieRecords,
   ]);
 };
 
-export default generateCookieTableCSV;
+export default generateCLICookieTableCSV;
