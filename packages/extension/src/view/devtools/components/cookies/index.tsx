@@ -16,21 +16,20 @@
 /**
  * External dependencies.
  */
-import React, { useMemo } from 'react';
+import React from 'react';
 import {
   Button,
   CookiesLanding,
   ProgressBar,
 } from '@ps-analysis-tool/design-system';
-import { LibraryDetection } from '@ps-analysis-tool/library-detection';
 import { type CookieTableData } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import { useSettingsStore } from '../../stateProviders/syncSettingsStore';
-import { useCookieStore } from '../../stateProviders/syncCookieStore';
+import { useCookie, useSettings } from '../../stateProviders';
 import CookiesListing from './cookiesListing';
+import AssembledCookiesLanding from './cookieLanding';
 
 interface CookiesProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;
@@ -41,31 +40,19 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
     isCurrentTabBeingListenedTo,
     loading,
     selectedFrame,
-    tabCookies,
-    tabFrames,
-    changeListeningToThisTab,
     tabToRead,
-  } = useCookieStore(({ state, actions }) => ({
-    tabToRead: state.tabToRead,
-    contextInvalidated: state.contextInvalidated,
+    changeListeningToThisTab,
+  } = useCookie(({ state, actions }) => ({
     isCurrentTabBeingListenedTo: state.isCurrentTabBeingListenedTo,
     loading: state.loading,
-    returningToSingleTab: state.returningToSingleTab,
     selectedFrame: state.selectedFrame,
-    tabCookies: state.tabCookies,
-    tabFrames: state.tabFrames,
+    tabToRead: state.tabToRead,
     changeListeningToThisTab: actions.changeListeningToThisTab,
   }));
 
-  const { allowedNumberOfTabs, isUsingCDP } = useSettingsStore(({ state }) => ({
+  const { allowedNumberOfTabs } = useSettings(({ state }) => ({
     allowedNumberOfTabs: state.allowedNumberOfTabs,
-    isUsingCDP: state.isUsingCDP,
   }));
-
-  const processedTabFrames = useMemo(
-    () => Object.fromEntries(Object.entries(tabFrames || {})),
-    [tabFrames]
-  );
 
   if (
     loading ||
@@ -89,25 +76,6 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
       allowedNumberOfTabs === 'single') ||
     (allowedNumberOfTabs && allowedNumberOfTabs === 'unlimited')
   ) {
-    const description = !isUsingCDP ? (
-      <>
-        To gather data and insights regarding blocked cookies, please enable
-        PSAT to use the Chrome DevTools protocol. You can do this in the
-        Settings page or in the extension popup. For more information check the
-        PSAT&nbsp;
-        <a
-          target="_blank"
-          rel="noreferrer"
-          className="text-bright-navy-blue dark:text-jordy-blue"
-          href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki"
-        >
-          Wiki
-        </a>
-      </>
-    ) : (
-      ''
-    );
-
     return (
       <div
         className={`h-full ${selectedFrame ? '' : 'flex items-center'}`}
@@ -116,14 +84,9 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
         {selectedFrame ? (
           <CookiesListing setFilteredCookies={setFilteredCookies} />
         ) : (
-          <CookiesLanding
-            tabCookies={tabCookies}
-            tabFrames={processedTabFrames}
-            showBlockedCookiesSection
-            showFramesSection
-            description={description}
-            additionalComponents={{ libraryDetection: LibraryDetection }}
-          />
+          <CookiesLanding>
+            <AssembledCookiesLanding />
+          </CookiesLanding>
         )}
       </div>
     );

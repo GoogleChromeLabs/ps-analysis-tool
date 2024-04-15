@@ -17,9 +17,8 @@
 /**
  * External dependencies
  */
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
-  getValueByKey,
   type CookieTableData,
   type TabCookies,
   BLOCK_STATUS,
@@ -30,21 +29,26 @@ import {
   type TableColumn,
   type TableFilter,
   type TableRow,
+  useSidebar,
+  calculateDynamicFilterValues,
+  evaluateStaticFilterValues,
+  evaluateSelectAllOption,
+  calculateBlockedReasonsFilterValues,
   type TableData,
   InfoIcon,
+  calculateExemptionReason,
 } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies
  */
-import { useCookieStore } from '../../../../stateProviders/syncCookieStore';
+import { useCookie, useSettings } from '../../../../stateProviders';
 import useHighlighting from './useHighlighting';
-import { useSettingsStore } from '../../../../stateProviders/syncSettingsStore';
-import namePrefixIconSelector from './namePrefixIconSelector';
+import NamePrefixIconSelector from './namePrefixIconSelector';
 import OrphanedUnMappedInfoDisplay from './orphanedUnMappedInfoDisplay';
 
 const useCookieListing = (domainsInAllowList: Set<string>) => {
-  const { selectedFrame, cookies, getCookiesSetByJavascript } = useCookieStore(
+  const { selectedFrame, cookies, getCookiesSetByJavascript } = useCookie(
     ({ state, actions }) => ({
       selectedFrame: state.selectedFrame,
       cookies: state.tabCookies || {},
@@ -52,7 +56,19 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
     })
   );
 
-  const isUsingCDP = useSettingsStore(({ state }) => state.isUsingCDP);
+  const { activePanelQuery, clearActivePanelQuery } = useSidebar(
+    ({ state }) => ({
+      activePanelQuery: state.activePanel.query,
+      clearActivePanelQuery: state.activePanel.clearQuery,
+    })
+  );
+
+  const parsedQuery = useMemo(
+    () => JSON.parse(activePanelQuery || '{}'),
+    [activePanelQuery]
+  );
+
+  const isUsingCDP = useSettings(({ state }) => state.isUsingCDP);
 
   const [tableData, setTableData] = useState<TabCookies>(cookies);
 
@@ -67,7 +83,9 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         enableHiding: false,
         widthWeightagePercentage: 13,
         enableBodyCellPrefixIcon: isUsingCDP,
-        bodyCellPrefixIcon: namePrefixIconSelector,
+        bodyCellPrefixIcon: {
+          Element: NamePrefixIconSelector,
+        },
         showBodyCellPrefixIcon: (row: TableRow) => {
           const isBlocked = Boolean(
             (row.originalData as CookieTableData)?.blockingStatus
@@ -163,12 +181,14 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
       {
         header: 'Priority',
         accessorKey: 'parsedCookie.priority',
+        isHiddenByDefault: true,
         cell: (info: InfoType) => info,
         widthWeightagePercentage: 4,
       },
       {
         header: 'Size',
         accessorKey: 'parsedCookie.size',
+        isHiddenByDefault: true,
         cell: (info: InfoType) => info,
         widthWeightagePercentage: 3,
       },
@@ -216,8 +236,6 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
                 Undetermined
               </span>
             );
-          } else if (hasValidBlockedReason) {
-            return <span className="flex">Blocked</span>;
           } else {
             return <></>;
           }
@@ -227,81 +245,38 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
     [isUsingCDP]
   );
 
-  const preCalculatedFilters = useMemo<{
-    category: TableFilter[keyof TableFilter]['filterValues'];
-    platform: TableFilter[keyof TableFilter]['filterValues'];
-    blockedReason: TableFilter[keyof TableFilter]['filterValues'];
-  }>(() => {
-    const calculate = (
-      key: string
-    ): TableFilter[keyof TableFilter]['filterValues'] =>
-      Object.values(cookies).reduce((acc, cookie) => {
-        const value = getValueByKey(key, cookie);
-
-        if (!acc) {
-          acc = {};
-        }
-
-        if (value) {
-          acc[value] = {
-            selected: false,
-          };
-        }
-
-        return acc;
-      }, {} as TableFilter[keyof TableFilter]['filterValues']);
-
-    const blockedReasonFilterValues = Object.values(cookies).reduce(
-      (acc, cookie) => {
-        const blockedReason = getValueByKey('blockedReasons', cookie);
-
-        if (!cookie.frameIdList || cookie?.frameIdList?.length === 0) {
-          return acc;
-        }
-
-        blockedReason?.forEach((reason: string) => {
-          if (!acc) {
-            acc = {};
-          }
-
-          acc[reason] = {
-            selected: false,
-          };
-        });
-
-        return acc;
-      },
-      {} as TableFilter[keyof TableFilter]['filterValues']
-    );
-
-    return {
-      category: calculate('analytics.category'),
-      platform: calculate('analytics.platform'),
-      blockedReason: blockedReasonFilterValues,
-    };
-  }, [cookies]);
-
   const filters = useMemo<TableFilter>(
     () => ({
       'analytics.category': {
         title: 'Category',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: preCalculatedFilters.category,
+        filterValues: calculateDynamicFilterValues(
+          'analytics.category',
+          Object.values(cookies),
+          parsedQuery?.filter?.['analytics.category'],
+          clearActivePanelQuery
+        ),
         sortValues: true,
         useGenericPersistenceKey: true,
       },
       isFirstParty: {
         title: 'Scope',
         hasStaticFilterValues: true,
-        filterValues: {
-          'First Party': {
-            selected: false,
+        hasPrecalculatedFilterValues: true,
+        filterValues: evaluateStaticFilterValues(
+          {
+            'First Party': {
+              selected: false,
+            },
+            'Third Party': {
+              selected: false,
+            },
           },
-          'Third Party': {
-            selected: false,
-          },
-        },
+          'isFirstParty',
+          parsedQuery,
+          clearActivePanelQuery
+        ),
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
           const val = Boolean(value);
@@ -421,7 +396,12 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         title: 'Platform',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: preCalculatedFilters.platform,
+        filterValues: calculateDynamicFilterValues(
+          'analytics.platform',
+          Object.values(cookies),
+          parsedQuery?.filter?.['analytics.platform'],
+          clearActivePanelQuery
+        ),
         sortValues: true,
         useGenericPersistenceKey: true,
       },
@@ -430,7 +410,15 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
         enableSelectAllOption: true,
-        filterValues: preCalculatedFilters.blockedReason,
+        isSelectAllOptionSelected: evaluateSelectAllOption(
+          'blockedReasons',
+          parsedQuery
+        ),
+        filterValues: calculateBlockedReasonsFilterValues(
+          Object.values(cookies),
+          parsedQuery?.filter?.blockedReasons,
+          clearActivePanelQuery
+        ),
         sortValues: true,
         useGenericPersistenceKey: true,
         comparator: (value: InfoType, filterValue: string) => {
@@ -494,12 +482,28 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         },
         useGenericPersistenceKey: true,
       },
+      exemptionReason: {
+        title: 'Exemption Reason',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        enableSelectAllOption: true,
+        isSelectAllOptionSelected: evaluateSelectAllOption(
+          'exemptionReason',
+          parsedQuery
+        ),
+        filterValues: calculateExemptionReason(
+          Object.values(cookies),
+          clearActivePanelQuery,
+          parsedQuery?.filter?.exemptionReason
+        ),
+        comparator: (value: InfoType, filterValue: string) => {
+          const val = value as string;
+          return val === filterValue;
+        },
+        useGenericPersistenceKey: true,
+      },
     }),
-    [
-      preCalculatedFilters.blockedReason,
-      preCalculatedFilters.category,
-      preCalculatedFilters.platform,
-    ]
+    [clearActivePanelQuery, cookies, parsedQuery]
   );
 
   const searchKeys = useMemo<string[]>(
@@ -515,7 +519,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
     return `cookieListing#${selectedFrame}`;
   }, [selectedFrame]);
 
-  const extraInterfaceToTopBar = useMemo(() => {
+  const extraInterfaceToTopBar = useCallback(() => {
     return (
       <RefreshButton
         onClick={getCookiesSetByJavascript}
@@ -531,6 +535,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
     searchKeys,
     tablePersistentSettingsKey,
     extraInterfaceToTopBar,
+    isSidebarOpen: parsedQuery?.filter ? true : false,
   };
 };
 

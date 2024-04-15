@@ -22,7 +22,7 @@ import { getCookieKey, type TabCookies } from '@ps-analysis-tool/common';
 /**
  * Internal dependencies.
  */
-import { isCookieDomainInAllowList } from '../../../../stateProviders/useAllowedList/utils';
+import { isCookieDomainInAllowList } from '../../../../stateProviders/allowedList/utils';
 
 const useHighlighting = (
   cookies: TabCookies,
@@ -52,6 +52,7 @@ const useHighlighting = (
       if (Object.values(cookies).length > 0) {
         return handleHighlighting(cookies);
       }
+
       return prevState;
     });
   }, [cookies, handleHighlighting, setTableData, domainsInAllowList?.size]);

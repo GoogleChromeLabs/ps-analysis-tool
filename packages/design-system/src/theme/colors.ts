@@ -144,4 +144,47 @@ export const COLOR_MAP: {
     color: '#D5CABD',
     className: 'text-hotrod-brown',
   },
+  None: {
+    color: '#465362',
+    className: 'text-color-charcoal',
+  },
+  UserSetting: {
+    color: '#F9DC5C',
+    className: 'text-napels-yellow',
+  },
+
+  TPCDMetadata: {
+    color: '#ED254E',
+    className: 'text-red-corolla',
+  },
+
+  TPCDDeprecationTrial: {
+    color: '#08A4BD',
+    className: 'text-moonstone',
+  },
+
+  TPCDHeuristics: {
+    color: '#446DF6',
+    className: 'text-noon-blue',
+  },
+
+  EnterprisePolicy: {
+    color: '#4C212A',
+    className: 'text-chocolate-cosmos',
+  },
+
+  StorageAccess: {
+    color: '#D96C06',
+    className: 'text-cocoa-brown',
+  },
+
+  TopLevelStorageAccess: {
+    color: '#3A1772',
+    className: 'text-persian-indigo',
+  },
+
+  CorsOptIn: {
+    color: '#D741A7',
+    className: 'text-hollywood-cerise',
+  },
 };

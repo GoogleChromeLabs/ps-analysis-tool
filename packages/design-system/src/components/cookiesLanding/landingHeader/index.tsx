@@ -18,15 +18,8 @@
  */
 import React from 'react';
 import { CirclePieChart } from '@ps-analysis-tool/design-system';
-
-export interface DataMapping {
-  title: string;
-  count: number;
-  data: {
-    count: number;
-    color: string;
-  }[];
-}
+import { DataMapping } from '@ps-analysis-tool/common';
+import classnames from 'classnames';
 
 interface LandingHeaderProps {
   dataMapping?: DataMapping[];
@@ -36,20 +29,40 @@ const LandingHeader = ({ dataMapping = [] }: LandingHeaderProps) => {
   return (
     <div
       className={
-        'flex justify-center border-hex-gray pt-5 pb-5 dark:border-quartz border-t'
+        'flex justify-center border-hex-gray pt-5 dark:border-quartz border-t'
       }
       data-testid="cookies-landing-header"
     >
       <div className="lg:max-w-[729px] flex gap-9 px-4">
         {dataMapping.map((circleData, index) => {
           return (
-            <div key={index} className="text-center w-16">
-              <CirclePieChart
-                title={circleData.title}
-                centerCount={circleData.count}
-                data={circleData.data}
-                infoIconClassName="absolute -right-3"
-              />
+            <div key={index} className="text-center w-16 h-fit">
+              <button
+                key={index}
+                className={classnames('group text-center w-20 p-2 h-full', {
+                  'active:opacity-50 hover:scale-95 transition-all duration-300 ease-in-out cursor-pointer ':
+                    circleData.onClick,
+                  'cursor-default': !circleData.onClick,
+                })}
+                onClick={() => {
+                  circleData.onClick?.();
+                }}
+              >
+                <CirclePieChart
+                  title={circleData.title}
+                  centerCount={circleData.count}
+                  data={circleData.data}
+                  infoIconClassName="absolute -right-3"
+                  centerTitleExtraClasses={classnames({
+                    'group-hover:scale-125 transition-all duration-300 ease-in-out':
+                      circleData.onClick,
+                  })}
+                  pieChartExtraClasses={classnames({
+                    'group-hover:scale-[1.15] transition-all duration-200 ease-in-out group-hover:bg-[#f3f3f3] group-hover:dark:bg-[#191919] rounded-full':
+                      circleData.onClick,
+                  })}
+                />
+              </button>
             </div>
           );
         })}

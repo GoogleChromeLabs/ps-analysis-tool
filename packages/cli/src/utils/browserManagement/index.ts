@@ -75,6 +75,52 @@ export class BrowserManagement {
     this.debugLog('browser intialized');
   }
 
+  async clickOnAcceptBanner(url: string) {
+    const page = this.pageMap.get(url);
+
+    if (!page) {
+      throw new Error('no page with the provided id was found');
+    }
+
+    await page.evaluate(() => {
+      const bannerNodes: Element[] = Array.from(
+        (document.querySelector('body')?.childNodes || []) as Element[]
+      )
+        .filter((node: Element) => node && node?.tagName === 'DIV')
+        .filter((node) => {
+          if (!node || !node?.textContent) {
+            return false;
+          }
+          const regex =
+            /\b(consent|policy|cookie policy|privacy policy|personalize|preferences)\b/;
+
+          return regex.test(node.textContent.toLowerCase());
+        });
+
+      if (bannerNodes.length > 0) {
+        this.debugLog(`found GDPR banner in the page.`);
+      }
+
+      const buttonToClick: HTMLButtonElement[] = bannerNodes
+        .map((node: Element) => {
+          const buttonNodes = Array.from(node.getElementsByTagName('button'));
+          const isButtonForAccept = buttonNodes.filter(
+            (cnode) =>
+              cnode.textContent &&
+              (cnode.textContent.toLowerCase().includes('accept') ||
+                cnode.textContent.toLowerCase().includes('allow') ||
+                cnode.textContent.toLowerCase().includes('agree'))
+          );
+
+          return isButtonForAccept[0];
+        })
+        .filter((button) => button);
+      buttonToClick[0]?.click();
+    });
+
+    await delay(this.pageWaitTime / 2);
+  }
+
   async openPage(): Promise<Page> {
     if (!this.browser) {
       throw new Error('Browser not intialized');
@@ -90,33 +136,51 @@ export class BrowserManagement {
       height: 790,
       deviceScaleFactor: 1,
     });
+
     this.debugLog('Page opened');
+
     return sitePage;
   }
 
-  async navigateAndScroll(url: string) {
+  async navigateToPage(url: string) {
     const page = this.pageMap.get(url);
+
     if (!page) {
       throw new Error('no page with the provided id was found');
     }
+
     this.debugLog(`starting navigation to url ${url}`);
+
     try {
       await page.goto(url, { timeout: 10000 });
+      this.debugLog(`done with navigation to url:${url}`);
     } catch (error) {
       this.debugLog(
         `navigation did not finish in 10 seconds moving on to scrolling`
       );
       //ignore
     }
+  }
+
+  async pageScroll(url: string) {
+    const page = this.pageMap.get(url);
+
+    if (!page) {
+      throw new Error('no page with the provided id was found');
+    }
+
+    try {
+      await page.evaluate(() => {
+        window.scrollBy(0, 10000);
+      });
+    } catch (error) {
+      this.debugLog(`scrolling the page to the end.`);
+      //ignore
+    }
 
     await delay(this.pageWaitTime / 2);
 
-    await page.evaluate(() => {
-      window.scrollBy(0, 10000);
-    });
-
-    await delay(this.pageWaitTime / 2);
-    this.debugLog(`done navigating and scrolling to url:${url}`);
+    this.debugLog(`scrolling on url:${url}`);
   }
 
   async attachNetworkListenersToPage(pageId: string) {
@@ -254,7 +318,7 @@ export class BrowserManagement {
     return frameIdMapFromTree;
   }
 
-  async analyzeCookieUrls(urls: string[]) {
+  async analyzeCookieUrls(urls: string[], shouldSkipAcceptBanner: boolean) {
     for (const url of urls) {
       const sitePage = await this.openPage();
       this.pageMap.set(url, sitePage);
@@ -264,7 +328,11 @@ export class BrowserManagement {
     // start navigation in parallel
     await Promise.all(
       urls.map(async (url) => {
-        await this.navigateAndScroll(url);
+        await this.navigateToPage(url);
+        if (shouldSkipAcceptBanner) {
+          await this.clickOnAcceptBanner(url);
+        }
+        await this.pageScroll(url);
       })
     );
 
@@ -297,7 +365,7 @@ export class BrowserManagement {
           requestMap,
           frameIdUrlMap,
           mainFrameId,
-          url
+          page.url()
         );
 
         const networkCookieKeySet = new Set();

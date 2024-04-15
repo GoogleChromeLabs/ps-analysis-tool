@@ -18,3 +18,4 @@ export { noop } from './noop';
 export { default as prepareCookiesCount } from './prepareCookiesCount';
 export { default as prepareCookieStatsComponents } from './prepareCookieStatsComponents';
 export { default as prepareFrameStatsComponent } from './prepareFrameStatsComponent';
+export { default as prepareCookieDataMapping } from './prepareCookieDataMapping';

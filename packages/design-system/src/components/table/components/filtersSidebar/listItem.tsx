@@ -17,23 +17,17 @@
  * External dependencies.
  */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import {
-  ArrowDown,
-  InfoIcon,
-  TableFilter,
-  TableOutput,
-} from '@ps-analysis-tool/design-system';
+import { ArrowDown, InfoIcon } from '@ps-analysis-tool/design-system';
 
 /**
  * Internal dependencies.
  */
 import SubList from './subList';
+import { TableFilter } from '../../useTable';
 
 interface ListItemProps {
   filter: TableFilter[keyof TableFilter];
   filterKey: string;
-  toggleFilterSelection: TableOutput['toggleFilterSelection'];
-  toggleSelectAllFilter: TableOutput['toggleSelectAllFilter'];
   expandAll: boolean;
   isSelectAllFilterSelected: boolean;
   toggleFilterExpansion: (filterKey: string, expand?: boolean) => void;
@@ -42,12 +36,12 @@ interface ListItemProps {
 const ListItem = ({
   filter,
   filterKey,
-  toggleFilterSelection,
-  toggleSelectAllFilter,
   expandAll,
   toggleFilterExpansion,
   isSelectAllFilterSelected,
 }: ListItemProps) => {
+  const [hasScannedFiltersOnce, setHasScannedFiltersOnce] =
+    useState<boolean>(true);
   const [isExpanded, setExpanded] = useState<boolean>(false);
   const [showSubList, setShowSubList] = useState<boolean>(false);
 
@@ -81,6 +75,21 @@ const ListItem = ({
     }
   }, [expandAll, filterKey, isDisabled, showSubList, toggleFilterExpansion]);
 
+  useEffect(() => {
+    if (!hasScannedFiltersOnce) {
+      return;
+    }
+
+    const areFiltersSelected = Object.values(filter.filterValues || {}).some(
+      (filterValue) => filterValue.selected
+    );
+
+    if (areFiltersSelected) {
+      setShowSubList(true);
+      setHasScannedFiltersOnce(false);
+    }
+  }, [filter.filterValues, hasScannedFiltersOnce]);
+
   return (
     <li className="py-[3px] text-xs">
       <div className="flex gap-2 items-center">
@@ -109,10 +118,8 @@ const ListItem = ({
             filterValues={filter.filterValues}
             filterKey={filterKey}
             sort={!filter.hasStaticFilterValues || Boolean(filter.sortValues)}
-            toggleFilterSelection={toggleFilterSelection}
             isExpanded={isExpanded}
             isSelectAllFilterEnabled={Boolean(filter.enableSelectAllOption)}
-            toggleSelectAllFilter={toggleSelectAllFilter}
             isSelectAllFilterSelected={isSelectAllFilterSelected}
           />
           {Number(Object.keys(filter.filterValues || {}).length) > 4 && (

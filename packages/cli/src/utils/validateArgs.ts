@@ -26,6 +26,7 @@ import path from 'path';
  * @param {string} sitemapPath File system path to a sitemap xml file.
  * @param {string} numberOfUrls Url limit argument.
  * @param {string} outDir File system path to the output directory.
+ * @param port
  */
 // eslint-disable-next-line complexity
 const validateArgs = async (
@@ -34,8 +35,14 @@ const validateArgs = async (
   csvPath: string,
   sitemapPath: string,
   numberOfUrls: string,
-  outDir: string
+  outDir: string,
+  port: number
 ) => {
+  if (isNaN(port) || (!isNaN(port) && (port < 0 || port > 65536))) {
+    console.log(`Invalid port argument. Please porvide a port >=0 and <=65536`);
+    process.exit(1);
+  }
+
   const numArgs: number = [
     Boolean(url),
     Boolean(sitemapUrl),
@@ -94,9 +101,7 @@ const validateArgs = async (
   if (outDir) {
     const outDirExists = await exists(path.resolve(outDir));
     if (!outDirExists) {
-      console.log(
-        `Provided dir "${path.resolve(outDir)}" does not exist. Creating now!!`
-      );
+      console.log(`"${path.resolve(outDir)}" does not exist, creating now.`);
       await mkdir(path.resolve(outDir));
     }
   }

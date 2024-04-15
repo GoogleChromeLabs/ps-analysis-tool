@@ -40,6 +40,10 @@ export type CookiesCount = {
     total: number;
     [key: string]: number;
   };
+  exemptedCookies: {
+    total: number;
+    [key: string]: number;
+  };
 };
 
 export type CookieAnalytics = {
@@ -119,11 +123,11 @@ export type CookieData = {
     inboundBlock: BLOCK_STATUS;
     outboundBlock: BLOCK_STATUS;
   };
+  exemptionReason?: Protocol.Network.CookieExemptionReason;
 };
 
 export type CookieTableData = CookieData & {
   frameUrls?: string | string[];
-  highlighted?: boolean;
   isDomainInAllowList?: boolean;
 };
 
@@ -162,11 +166,13 @@ export interface Legend {
   count: number;
   color: string;
   countClassName: string;
+  onClick?: (title: string) => void;
 }
 
 export interface CookieStatsComponents {
   legend: Legend[];
   blockedCookiesLegend: Legend[];
+  exemptedCookiesLegend: Legend[];
   firstParty: {
     count: number;
     color: string;
@@ -176,6 +182,10 @@ export interface CookieStatsComponents {
     color: string;
   }[];
   blocked: {
+    count: number;
+    color: string;
+  }[];
+  exempted: {
     count: number;
     color: string;
   }[];
@@ -209,6 +219,10 @@ export type CookieJsonDataType = {
   requestUrls?: { [id: string]: string };
   frameUrls?: { [id: string]: string };
   isBlocked: boolean;
+  blockingStatus?: {
+    inboundBlock: BLOCK_STATUS;
+    outboundBlock: BLOCK_STATUS;
+  };
   blockedReasons?: BlockedReason[];
 };
 
@@ -229,4 +243,19 @@ export type CompleteJson = {
     };
   };
   technologyData: TechnologyData[];
+};
+
+export interface DataMapping {
+  title: string;
+  count: number;
+  data: {
+    count: number;
+    color: string;
+  }[];
+  onClick?: () => void;
+}
+
+export type FrameStateCreator = {
+  dataMapping: DataMapping[];
+  legend: Legend[];
 };
