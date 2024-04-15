@@ -258,7 +258,6 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   if (changeInfo.status === 'loading' && tab.url) {
     syncCookieStore?.removeCookieData(tabId);
   }
-
   try {
     await chrome.tabs.sendMessage(tabId, {
       tabId,
@@ -282,15 +281,6 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     }
   } catch (error) {
     //Fail silently
-  }
-  if (!tab.url) {
-    return;
-  }
-
-  syncCookieStore?.updateUrl(tabId, tab.url);
-
-  if (changeInfo.status === 'loading' && tab.url) {
-    syncCookieStore?.removeCookieData(tabId);
   }
 });
 
@@ -634,27 +624,29 @@ chrome.runtime.onMessage.addListener(async (request) => {
   const incomingMessageTabId = request.payload.tabId;
 
   if (DEVTOOLS_OPEN === incomingMessageType) {
-    const dataToSend: { [key: string]: string } = {};
+    const dataToSend: { [key: string]: string | boolean } = {};
     dataToSend['tabMode'] = tabMode;
 
     if (tabMode === 'single') {
       dataToSend['tabToRead'] = tabToRead;
     }
 
-    chrome.runtime.sendMessage({
-      type: INITIAL_SYNC,
-      payload: dataToSend,
-    });
-
     if (
       !syncCookieStore?.tabs[incomingMessageTabId] &&
       tabMode === 'unlimited'
     ) {
       const currentTab = await getTab(incomingMessageTabId);
-
+      dataToSend['psatOpenedAfterPageLoad'] = request.payload.doNotReReload
+        ? false
+        : true;
       syncCookieStore?.addTabData(incomingMessageTabId);
       syncCookieStore?.updateUrl(incomingMessageTabId, currentTab?.url || '');
     }
+
+    chrome.runtime.sendMessage({
+      type: INITIAL_SYNC,
+      payload: dataToSend,
+    });
 
     syncCookieStore?.updateDevToolsState(incomingMessageTabId, true);
 
@@ -736,14 +728,17 @@ chrome.storage.sync.onChanged.addListener(
 
     if (changes?.allowedNumberOfTabs?.newValue === 'single') {
       tabToRead = '';
-
-      chrome.runtime.sendMessage({
-        type: INITIAL_SYNC,
-        payload: {
-          tabMode,
-          tabToRead: tabToRead,
-        },
-      });
+      try {
+        await chrome.runtime.sendMessage({
+          type: INITIAL_SYNC,
+          payload: {
+            tabMode,
+            tabToRead: tabToRead,
+          },
+        });
+      } catch (error) {
+        //Fail silently
+      }
 
       tabs.map((tab) => {
         if (!tab?.id) {
@@ -757,13 +752,17 @@ chrome.storage.sync.onChanged.addListener(
         return tab;
       });
     } else {
-      chrome.runtime.sendMessage({
-        type: INITIAL_SYNC,
-        payload: {
-          tabMode,
-          tabToRead: tabToRead,
-        },
-      });
+      try {
+        await chrome.runtime.sendMessage({
+          type: INITIAL_SYNC,
+          payload: {
+            tabMode,
+            tabToRead: tabToRead,
+          },
+        });
+      } catch (error) {
+        //Fail silently
+      }
 
       tabs.forEach((tab) => {
         if (!tab?.id) {
