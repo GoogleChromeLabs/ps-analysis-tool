@@ -82,7 +82,6 @@ const CookiesLandingContainer = ({
           disableReportDownload={false}
           downloadReport={downloadReport}
           menuData={menuData}
-          extraClasses="top-20"
           scrollContainerId="dashboard-layout-container"
         />
         {sections.map(({ link, panel: { Element, props } }) => (
