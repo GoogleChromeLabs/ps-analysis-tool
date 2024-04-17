@@ -424,5 +424,38 @@
         "example": "PSAT"
       }
     }
+  },
+  "PSPrivateStateToken": {
+    "message": "Allows websites and services to evaluate a user's authenticity without needing to know the user's identity.   With this API, a website/service can issue a batch of Private State Tokens (renamed to Private state tokens from Trust Tokens) to a user's browser. The tokens are stored on the user’s browser and can then be “redeemed” by other sites and services as a signal of the user's authenticity."
+  },
+  "PSTopics": {
+    "message": "Provide a way for advertising to reach users based on interests inferred from the sites or apps the user visits, without needing to know the specific sites or apps the user has visited"
+  },
+  "PSProtectedAudience": {
+    "message": "A proposal to serve remarketing and custom audience use cases by allowing custom defined interested groups to be stored on-device and allowing an on-device auction that then matches appropriate ads with people in a desired interest group."
+  },
+  "PSAttributionReporting": {
+    "message": "Allow the recording and matching of ad events with conversion events to occur on-device. </br> Event-level: Determine the effectiveness of specific ad interactions to help drive optimization. </br>Summary Reporting: Allows for more detail about the overall conversions (e.g. region, revenue, time of day, etc) that their advertising has delivered, while minimizing details about individual conversions."
+  },
+  "PSRelatedWebsiteSets": {
+    "message": "A new web platform mechanism that would allow a company that owns multiple sites to declare a collection of related domains as being in a Related Website Sets. Sites that are part of a Related Website Set would be able to access cookies across the set of included domains."
+  },
+  "PSSharedStorage": {
+    "message": "The Shared Storage API allows sites to store and access unpartitioned cross-site data as to prevent cross-site user tracking, browsers are partitioning all forms of storage (cookies, localStorage, caches, etc). However, there are a number of legitimate use cases that rely on unpartitioned storage which would be impossible without help from new web APIs."
+  },
+  "PSChips": {
+    "message": "A new way to enable 3rd party developers to access cookies on sites where their services are embedded on a per-site basis (meaning a different cookie on each site), restricting the ability to track users across sites."
+  },
+  "PSFencedFrames": {
+    "message": "A fenced frame (<fencedframe>) is a proposed HTML element for embedded content, similar to an iframe. Unlike iframes, a fenced frame restricts communication with its embedding context to allow the frame access to cross-site data without sharing it with the embedding context."
+  },
+  "PSFedCM": {
+    "message": "FedCM is a proposal for a privacy-preserving approach to federated identity services (such as \"Sign in with...\") where users can log into sites without sharing their personal information with the identity service or the site."
+  },
+  "PSBounceTracking": {
+    "message": "Bounce Tracking Mitigation is a Privacy Sandbox proposal to mitigate bounce tracking, a technique used to track users across sites by abusing the referrer header."
+  },
+  "PSUserAgentReduction": {
+    "message": "User-Agent (UA) reduction minimizes the identifying information shared in the User-Agent string, which may be used for passive fingerprinting."
   }
 }

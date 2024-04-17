@@ -65,149 +65,437 @@
   "cmUncategorized": {
     "message": "Uncategorized"
   },
-  "body_SecureOnly": "This cookie was blocked because it had the 'Secure' attribute and the connection was not secure.",
-  "body_NotOnPath": "This cookie was blocked because its path was not an exact match for, or a superdirectory of, the request URL's path.",
-  "body_DomainMismatch": "This cookie was blocked because the request URL's domain did not exactly match the cookie's domain, nor was the request URL's domain a subdomain of the cookie's Domain attribute value.",
-  "body_SameSiteStrict": "This cookie was blocked because it had the 'SameSite=Strict' attribute and the request was made from a different site. This includes top-level navigation requests initiated by other sites.",
-  "body_SameSiteLax": "This cookie was blocked because it had the 'SameSite=Lax' attribute and the request was made from a different site and was not initiated by a top-level navigation.",
-  "body_SameSiteUnspecifiedTreatedAsLax": "This cookie didn't specify a 'SameSite' attribute when it was stored, was defaulted to 'SameSite=Lax', and was blocked because the request was made from a different site and was not initiated by a top-level navigation. The cookie had to have been set with 'SameSite=None' to enable cross-site usage.",
-  "body_SameSiteNoneInsecure": "This cookie was blocked because it had the 'SameSite=None' attribute but was not marked 'Secure'. Cookies without SameSite restrictions must be marked 'Secure' and sent over a secure connection.",
-  "body_UserPreferences": "This cookie was blocked due to user preferences.",
-  "body_ThirdPartyPhaseout": "Prepare for phasing out third-party cookies.",
-  "body_ThirdPartyBlockedInFirstPartySet": "The cookie was blocked by third-party cookie blocking between sites in the same First-Party Set.",
-  "body_UnknownError": "Unknown error.",
-  "body_SchemefulSameSiteStrict": "This cookie was blocked because it had the 'SameSite=Strict' attribute but the request was cross-site. This includes top-level navigation requests initiated by other sites. This request is considered cross-site because the URL has a different scheme than the current site.",
-  "body_SchemefulSameSiteLax": "This cookie was blocked because it had the 'SameSite=Lax' attribute but the request was cross-site and was not initiated by a top-level navigation. This request is considered cross-site because the URL has a different scheme than the current site.",
-  "body_SchemefulSameSiteUnspecifiedTreatedAsLax": "This cookie didn't specify a 'SameSite' attribute when it was stored, was defaulted to 'SameSite=Lax', and was blocked because the request was cross-site and was not initiated by a top-level navigation. The cookie had to have been set with 'SameSite=None' to enable cross-site usage. This request is considered cross-site because the URL has a different scheme than the current site.",
-  "body_SamePartyFromCrossPartyContext": "This cookie was blocked because it had the 'SameParty' attribute but the request was cross-party. The request was considered cross-party because the domain of the resource's URL and the domains of the resource's enclosing frames/documents are neither owners nor members in the same first-party set.",
-  "body_NameValuePairExceedsMaxSize": "This cookie was blocked because it was too large. The combined size of the name and value must be less than or equal to 4,096 characters.",
-  "body_InvalidDomain": "This attempt to set a cookie via 'Set-Cookie' header was blocked because its Domain value was invalid with regards to the current host url.",
-  "header_sameSiteExcludeNavigationContextDowngradeSecure": "Migrate entirely to HTTPS to have cookies sent on same-site requests",
-  "body_1_sameSiteExcludeNavigationContextDowngradeSecure": "A cookie was not sent to a secure origin from an insecure context on a navigation. Because this cookie would have been sent across schemes on the same site, it was not sent. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers.",
-  "body_2_sameSiteExcludeNavigationContextDowngradeSecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case.",
-  "header_sameSiteExcludeNavigationContextDowngradeInsecure": "Migrate entirely to HTTPS to have cookies sent on same-site requests",
-  "body_1_sameSiteExcludeNavigationContextDowngradeInsecure": "A cookie was not sent to an insecure origin from a secure context on a navigation. Because this cookie would have been sent across schemes on the same site, it was not sent. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers.",
-  "body_2_sameSiteExcludeNavigationContextDowngradeInsecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case.",
-  "header_sameSiteExcludeContextDowngradeSetCookieSecure": "Migrate entirely to HTTPS to allow cookies to be set by same-site subresources",
-  "body_1_sameSiteExcludeContextDowngradeSetCookieSecure": "A cookie was not set by an insecure origin in a secure context. Because this cookie would have been set across schemes on the same site, it was blocked. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers.",
-  "body_2_sameSiteExcludeContextDowngradeSetCookieSecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case.",
-  "header_sameSiteExcludeContextDowngradeSetCookieInsecure": "Migrate entirely to HTTPS to allow cookies to be set by same-site subresources",
-  "body_1_sameSiteExcludeContextDowngradeSetCookieInsecure": "A cookie was not set by a secure origin in an insecure context. Because this cookie would have been set across schemes on the same site, it was blocked. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers.",
-  "body_2_sameSiteExcludeContextDowngradeSetCookieInsecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case.",
-  "header_sameSiteExcludeContextDowngradeReadCookieSecure": "Migrate entirely to HTTPS to have cookies sent to same-site subresources",
-  "body_1_sameSiteExcludeContextDowngradeReadCookieSecure": "A cookie was not sent to a secure origin from an insecure context. Because this cookie would have been sent across schemes on the same site, it was not sent. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers.",
-  "body_2_sameSiteExcludeContextDowngradeReadCookieSecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case.",
-  "header_sameSiteExcludeContextDowngradeReadCookieInsecure": "Migrate entirely to HTTPS to have cookies sent to same-site subresources",
-  "body_1_sameSiteExcludeContextDowngradeReadCookieInsecure": "A cookie was not sent to an insecure origin from a secure context. Because this cookie would have been sent across schemes on the same site, it was not sent. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers.",
-  "body_2_sameSiteExcludeContextDowngradeReadCookieInsecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case.",
-  "body_ExcludeSameSiteUnspecifiedTreatedAsLax": "This 'Set-Cookie' header didn't specify a 'SameSite' attribute and was defaulted to 'SameSite=Lax' and was blocked because it came from a cross-site response which was not the response to a top-level navigation. The 'Set-Cookie' had to have been set with 'SameSite=None' to enable cross-site usage.",
-  "header_cookieCrossSiteRedirectDowngrade": "Cookie is blocked due to a cross-site redirect chain",
-  "body_1_cookieCrossSiteRedirectDowngrade": "The cookie was blocked because the URL redirect chain was not fully same-site, meaning the final request was treated as a cross-site request. Like other cross-site requests, this blocks cookies with 'SameSite=Lax' or 'SameSite=Strict'.",
-  "body_2_cookieCrossSiteRedirectDowngrade": "For example: If site A redirects to site B which then redirects back to site A, the final request to site A will be a cross-site request.",
-  "header_ExcludeSameSiteNoneInsecureSetCookie": "Mark cross-site cookies as Secure to allow setting them in cross-site contexts",
-  "body_ExcludeSameSiteNoneInsecureSetCookie": "Cookies marked with 'SameSite=None' must also be marked with 'Secure' to allow setting them in a cross-site context. This behavior protects user data from being sent over an insecure connection.",
-  "header_ExcludeSameSiteNoneInsecureReadCookie": "Mark cross-site cookies as Secure to allow them to be sent in cross-site requests",
-  "body_ExcludeSameSiteNoneInsecureReadCookie": "Cookies marked with 'SameSite=None' must also be marked with 'Secure' to get sent in cross-site requests. This behavior protects user data from being sent over an insecure connection.",
-  "header_ExcludeInvalidSameParty": "Mark SameParty cookies as Secure and do not use SameSite=Strict for SameParty cookies",
-  "body_ExcludeInvalidSameParty": "Cookies marked with 'SameParty' must also be marked with 'Secure'. In addition, cookies marked with 'SameParty' cannot use 'SameSite=Strict'.",
-  "header_ExcludeSamePartyCrossPartyContext": "Make sure a cookie is using the SameParty attribute correctly",
-  "body_ExcludeSamePartyCrossPartyContext": "Setting cross-site cookies with the 'SameParty' attribute is only possible if both domains are a part of the same First-Party Set.",
-  "header_ExcludeDomainNonASCII": "Ensure cookie 'Domain' attribute values only contain ASCII characters",
-  "body_1_ExcludeDomainNonASCII": "'Domain' attributes in cookies are restricted to the ASCII character set. Any cookies that contain characters outside of the ASCII range in their 'Domain' attribute will be ignored.",
-  "body_2_ExcludeDomainNonASCII": "To resolve this issue, you need to remove all non-ASCII characters from the 'Domain' attribute of the affected cookies.",
-  "body_3_ExcludeDomainNonASCII": "If your site has an internationalized domain name (IDN), you should use punycode representation for the 'Domain' attribute instead.",
-  "header_ExcludeThirdPartyCookieBlockedInFirstPartySet": "Third-party cookie blocked within the same First-Party Set",
-  "body_ExcludeThirdPartyCookieBlockedInFirstPartySet": "A cookie embedded by a site in the top-level page's First-Party Set was blocked by third-party cookie blocking.",
-  "header_ExcludeThirdPartyPhaseoutReadCookie": "Cookie is blocked when sent in cross-site context",
-  "body_ExcludeThirdPartyPhaseoutReadCookie": "Cookies marked with 'SameSite=None; Secure;' and not 'Partitioned' are blocked in cross-site requests. This behavior protects user data from cross-site tracking.",
-  "header_ExcludeThirdPartyPhaseoutSetCookie": "Cookie is blocked when set in cross-site context",
-  "body_ExcludeThirdPartyPhaseoutSetCookie": "Cookies marked with 'SameSite=None; Secure' and not 'Partitioned' are blocked in cross-site contexts. This behavior protects user data from cross-site tracking.",
-  "header_WarnSameSiteUnspecifiedCrossSiteContextReadCookie": "Indicate whether to send a cookie in a cross-site request by specifying its SameSite attribute",
-  "body_WarnSameSiteUnspecifiedCrossSiteContextReadCookie": "Because a cookie's 'SameSite' attribute was not set or is invalid, it defaults to 'SameSite=Lax', which will prevent the cookie from being sent in a cross-site request in a future version of the browser. This behavior protects user data from accidentally leaking to third parties and cross-site request forgery.",
-  "header_WarnSameSiteUnspecifiedCrossSiteContextSetCookie": "Indicate whether a cookie is intended to be set in cross-site context by specifying its SameSite attribute",
-  "body_WarnSameSiteUnspecifiedCrossSiteContextSetCookie": "Because a cookie's 'SameSite' attribute was not set or is invalid, it defaults to 'SameSite=Lax', which will prevent the cookie from being set in a cross-site context in a future version of the browser. This behavior protects user data from accidentally leaking to third parties and cross-site request forgery.",
-  "header_WarnSameSiteNoneInsecureReadCookie": "Mark cross-site cookies as Secure to allow them to be sent in cross-site requests",
-  "body_WarnSameSiteNoneInsecureReadCookie": "In a future version of the browser, cookies marked with 'SameSite=None' must also be marked with 'Secure' to get sent in cross-site requests. This behavior protects user data from being sent over an insecure connection.",
-  "header_WarnSameSiteNoneInsecureSetCookie": "Mark cross-site cookies as Secure to allow setting them in cross-site contexts",
-  "body_WarnSameSiteNoneInsecureSetCookie": "In a future version of the browser, cookies marked with 'SameSite=None' must also be marked with 'Secure' to allow setting them in a cross-site context. This behavior protects user data from being sent over an insecure connection.",
-  "header_WarnSameSiteUnspecifiedLaxAllowUnsafeReadCookie": "Indicate whether to send a cookie in a cross-site request by specifying its SameSite attribute",
-  "body_WarnSameSiteUnspecifiedLaxAllowUnsafeReadCookie": "Because a cookie's 'SameSite' attribute was not set or is invalid, it defaults to 'SameSite=Lax', which will prevent the cookie from being sent in a cross-site request in a future version of the browser. This behavior protects user data from accidentally leaking to third parties and cross-site request forgery.",
-  "header_WarnSameSiteUnspecifiedLaxAllowUnsafeSetCookie": "Indicate whether a cookie is intended to be set in cross-site context by specifying its SameSite attribute",
-  "body_WarnSameSiteUnspecifiedLaxAllowUnsafeSetCookie": "Because a cookie's 'SameSite' attribute was not set or is invalid, it defaults to 'SameSite=Lax', which will prevents the cookie from being set in a cross-site context in a future version of the browser. This behavior protects user data from accidentally leaking to third parties and cross-site request forgery.",
-  "header_WarnSameSiteStrictLaxDowngradeStrictSecure": "Migrate entirely to HTTPS to continue having cookies sent on same-site requests",
-  "body_1_WarnSameSiteStrictLaxDowngradeStrictSecure": "A cookie is being sent to a secure origin from an insecure context on a navigation. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers.",
-  "body_2_WarnSameSiteStrictLaxDowngradeStrictSecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case.",
-  "header_WarnSameSiteStrictLaxDowngradeStrictInsecure": "Migrate entirely to HTTPS to continue having cookies sent on same-site requests",
-  "body_1_WarnSameSiteStrictLaxDowngradeStrictInsecure": "A cookie is being sent to an insecure origin from a secure context on a navigation. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers.",
-  "body_2_WarnSameSiteStrictLaxDowngradeStrictInsecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case.",
-  "header_WarnSameSiteStrictCrossDowngradeStrictReadCookieSecure": "Migrate entirely to HTTPS to continue having cookies sent to same-site subresources",
-  "body_1_WarnSameSiteStrictCrossDowngradeStrictReadCookieSecure": "A cookie is being sent to a secure origin from an insecure context. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers.",
-  "body_2_WarnSameSiteStrictCrossDowngradeStrictReadCookieSecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case.",
-  "header_WarnSameSiteStrictCrossDowngradeStrictReadCookieInsecure": "Migrate entirely to HTTPS to continue having cookies sent to same-site subresources",
-  "body_1_WarnSameSiteStrictCrossDowngradeStrictReadCookieInsecure": "A cookie is being sent to an insecure origin from a secure context. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers.",
-  "body_2_WarnSameSiteStrictCrossDowngradeStrictReadCookieInsecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case.",
-  "header_WarnSameSiteStrictCrossDowngradeStrictSetCookieSecure": "Migrate entirely to HTTPS to continue allowing cookies to be set by same-site subresources",
-  "body_1_WarnSameSiteStrictCrossDowngradeStrictSetCookieSecure": "A cookie is being set by a secure origin in an insecure context. Because this cookie is being set across schemes on the same site, it will be blocked in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.",
-  "body_2_WarnSameSiteStrictCrossDowngradeStrictSetCookieSecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.",
-  "header_WarnSameSiteStrictCrossDowngradeStrictSetCookieInsecure": "Migrate entirely to HTTPS to continue allowing cookies to be set by same-site subresources",
-  "body_1_WarnSameSiteStrictCrossDowngradeStrictSetCookieInsecure": "A cookie is being set by an insecure origin in a secure context. Because this cookie is being set across schemes on the same site, it will be blocked in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.",
-  "body_2_WarnSameSiteStrictCrossDowngradeStrictSetCookieInsecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.",
-  "header_WarnSameSiteStrictCrossDowngradeLaxReadCookieSecure": "Migrate entirely to HTTPS to continue having cookies sent to same-site subresources",
-  "body_1_WarnSameSiteStrictCrossDowngradeLaxReadCookieSecure": "A cookie is being sent to a secure origin from an insecure context. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.",
-  "body_2_WarnSameSiteStrictCrossDowngradeLaxReadCookieSecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.",
-  "header_WarnSameSiteStrictCrossDowngradeLaxReadCookieInsecure": "Migrate entirely to HTTPS to continue having cookies sent to same-site subresources",
-  "body_1_WarnSameSiteStrictCrossDowngradeLaxReadCookieInsecure": "A cookie is being sent to an insecure origin from a secure context. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.",
-  "body_2_WarnSameSiteStrictCrossDowngradeLaxReadCookieInsecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.",
-  "header_WarnSameSiteStrictCrossDowngradeLaxSetCookieSecure": "Migrate entirely to HTTPS to continue allowing cookies to be set by same-site subresources",
-  "body_1_WarnSameSiteStrictCrossDowngradeLaxSetCookieSecure": "A cookie is being set by a secure origin in an insecure context. Because this cookie is being set across schemes on the same site, it will be blocked in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.",
-  "body_2_WarnSameSiteStrictCrossDowngradeLaxSetCookieSecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.",
-  "header_WarnSameSiteStrictCrossDowngradeLaxSetCookieInsecure": "Migrate entirely to HTTPS to continue allowing cookies to be set by same-site subresources",
-  "body_1_WarnSameSiteStrictCrossDowngradeLaxSetCookieInsecure": "A cookie is being set by an insecure origin in a secure context. Because this cookie is being set across schemes on the same site, it will be blocked in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.",
-  "body_2_WarnSameSiteStrictCrossDowngradeLaxSetCookieInsecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.",
-  "header_WarnSameSiteLaxCrossDowngradeStrictReadCookieSecure": "Migrate entirely to HTTPS to continue having cookies sent to same-site subresources",
-  "body_1_WarnSameSiteLaxCrossDowngradeStrictReadCookieSecure": "A cookie is being sent to a secure origin from an insecure context. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.",
-  "body_2_WarnSameSiteLaxCrossDowngradeStrictReadCookieSecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.",
-  "header_WarnSameSiteLaxCrossDowngradeStrictReadCookieInsecure": "Migrate entirely to HTTPS to continue having cookies sent to same-site subresources",
-  "body_1_WarnSameSiteLaxCrossDowngradeStrictReadCookieInsecure": "A cookie is being sent to an insecure origin from a secure context. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.",
-  "body_2_WarnSameSiteLaxCrossDowngradeStrictReadCookieInsecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.",
-  "header_WarnSameSiteLaxCrossDowngradeStrictSetCookieSecure": "Migrate entirely to HTTPS to continue allowing cookies to be set by same-site subresources",
-  "body_1_WarnSameSiteLaxCrossDowngradeStrictSetCookieSecure": "A cookie is being set by a secure origin in an insecure context. Because this cookie is being set across schemes on the same site, it will be blocked in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.",
-  "body_2_WarnSameSiteLaxCrossDowngradeStrictSetCookieSecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.",
-  "header_WarnSameSiteLaxCrossDowngradeStrictSetCookieInsecure": "Migrate entirely to HTTPS to continue allowing cookies to be set by same-site subresource",
-  "body_1_WarnSameSiteLaxCrossDowngradeStrictSetCookieInsecure": "A cookie is being set by an insecure origin in a secure context. Because this cookie is being set across schemes on the same site, it will be blocked in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.",
-  "body_2_WarnSameSiteLaxCrossDowngradeStrictSetCookieInsecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.",
-  "header_WarnSameSiteLaxCrossDowngradeLaxReadCookieSecure": "Migrate entirely to HTTPS to continue having cookies sent to same-site subresources",
-  "body_1_WarnSameSiteLaxCrossDowngradeLaxReadCookieSecure": "A cookie is being sent to a secure origin from an insecure context. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.",
-  "body_2_WarnSameSiteLaxCrossDowngradeLaxReadCookieSecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.",
-  "header_WarnSameSiteLaxCrossDowngradeLaxReadCookieInsecure": "Migrate entirely to HTTPS to continue having cookies sent to same-site subresources",
-  "body_1_WarnSameSiteLaxCrossDowngradeLaxReadCookieInsecure": "A cookie is being sent to an insecure origin from a secure context. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.",
-  "body_2_WarnSameSiteLaxCrossDowngradeLaxReadCookieInsecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.",
-  "header_WarnSameSiteLaxCrossDowngradeLaxSetCookieSecure": "Migrate entirely to HTTPS to continue allowing cookies to be set by same-site subresources",
-  "body_1_WarnSameSiteLaxCrossDowngradeLaxSetCookieSecure": "A cookie is being set by a secure origin in an insecure context. Because this cookie is being set across schemes on the same site, it will be blocked in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.",
-  "body_2_WarnSameSiteLaxCrossDowngradeLaxSetCookieSecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.",
-  "header_WarnSameSiteLaxCrossDowngradeLaxSetCookieInsecure": "Migrate entirely to HTTPS to continue allowing cookies to be set by same-site subresources",
-  "body_1_WarnSameSiteLaxCrossDowngradeLaxSetCookieInsecure": "A cookie is being set by an insecure origin in a secure context. Because this cookie is being set across schemes on the same site, it will be blocked in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers.",
-  "body_2_WarnSameSiteLaxCrossDowngradeLaxSetCookieInsecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case.",
-  "header_WarnAttributeValueExceedsMaxSize": "Ensure cookie attribute values don't exceed 1024 characters",
-  "body_1_WarnAttributeValueExceedsMaxSize": "Cookie attribute values exceeding 1024 characters in size will result in the attribute being ignored. This could lead to unexpected behavior since the cookie will be processed as if the offending attribute / attribute value pair were not present.",
-  "body_2_WarnAttributeValueExceedsMaxSize": "Resolve this issue by ensuring that cookie attribute values don't exceed 1024 characters.",
-  "header_WarnDomainNonASCII": "Ensure cookie <code>Domain</code> attribute values only contain ASCII characters",
-  "body_1_WarnDomainNonASCII": "<code>Domain</code> attributes in cookies are restricted to the ASCII character set. Any cookies that contain characters outside of the ASCII range in their <code>Domain</code> attribute will be ignored in the future.",
-  "body_2_WarnDomainNonASCII": "To resolve this issue, you need to remove all non-ASCII characters from the <code>Domain</code> attribute of the affected cookies.",
-  "body_3_WarnDomainNonASCII": "If your site has an internationalized domain name (IDN), you should use punycode representation for the <code>Domain</code> attribute instead.",
-  "header_WarnThirdPartyPhaseoutReadCookie": "Cookie sent in cross-site context will be blocked in future Chrome versions",
-  "body_WarnThirdPartyPhaseoutReadCookie": "In a future version of the browser, cookies marked with <code>SameSite=None; Secure</code> and not <code>Partitioned</code> will be blocked in cross-site requests. This behavior protects user data from cross-site tracking.",
-  "header_WarnThirdPartyPhaseoutSetCookie": "Cookie set in cross-site context will be blocked in future Chrome versions",
-  "body_WarnThirdPartyPhaseoutSetCookie": "In a future version of the browser, cookies marked with <code>SameSite=None; Secure</code> and not <code>Partitioned</code> will be blocked in cross-site context. This behavior protects user data from cross-site tracking.",
-  "header_WarnCrossSiteRedirectDowngradeChangesInclusion": "Cookie is blocked due to a cross-site redirect chain",
-  "body_1_WarnCrossSiteRedirectDowngradeChangesInclusion": "The cookie was blocked because the URL redirect chain was not fully same-site, meaning the final request was treated as a cross-site request. Like other cross-site requests, this blocks cookies with <code>SameSite=Lax</code> or <code>SameSite=Strict</code>.",
-  "body_2_WarnCrossSiteRedirectDowngradeChangesInclusion": "For example: If site A redirects to site B which then redirects back to site A, the final request to site A will be a cross-site request.",
-  "exemptionReasonUserSetting": "This cookie is allowed by user preference.",
-  "exemptionReasonTPCDMetadata": "This cookie is allowed by a third-party cookie deprecation trial grace period.",
-  "exemptionReasonTPCDDeprecationTrial": "This cookie is allowed by third-party cookie phaseout deprecation trial.",
-  "exemptionReasonTPCDHeuristics": "This cookie is allowed by third-party cookie phaseout heuristics.",
-  "exemptionReasonEnterprisePolicy": "This cookie is allowed by Chrome Enterprise policy.",
-  "exemptionReasonStorageAccessAPI": "This cookie is allowed by the Storage Access API.",
-  "exemptionTopLevelAccessAPI": "This cookie is allowed by the top-level Storage Access API.",
-  "exemptionReasonCorsOptIn": "This cookie is allowed by CORS opt-in"
+  "body_SecureOnly": {
+    "message": "This cookie was blocked because it had the 'Secure' attribute and the connection was not secure."
+  },
+  "body_NotOnPath": {
+    "message": "This cookie was blocked because its path was not an exact match for, or a superdirectory of, the request URL's path."
+  },
+  "body_DomainMismatch": {
+    "message": "This cookie was blocked because the request URL's domain did not exactly match the cookie's domain, nor was the request URL's domain a subdomain of the cookie's Domain attribute value."
+  },
+  "body_SameSiteStrict": {
+    "message": "This cookie was blocked because it had the 'SameSite=Strict' attribute and the request was made from a different site. This includes top-level navigation requests initiated by other sites."
+  },
+  "body_SameSiteLax": {
+    "message": "This cookie was blocked because it had the 'SameSite=Lax' attribute and the request was made from a different site and was not initiated by a top-level navigation."
+  },
+  "body_SameSiteUnspecifiedTreatedAsLax": {
+    "message": "This cookie didn't specify a 'SameSite' attribute when it was stored, was defaulted to 'SameSite=Lax', and was blocked because the request was made from a different site and was not initiated by a top-level navigation. The cookie had to have been set with 'SameSite=None' to enable cross-site usage."
+  },
+  "body_SameSiteNoneInsecure": {
+    "message": "This cookie was blocked because it had the 'SameSite=None' attribute but was not marked 'Secure'. Cookies without SameSite restrictions must be marked 'Secure' and sent over a secure connection."
+  },
+  "body_UserPreferences": {
+    "message": "This cookie was blocked due to user preferences."
+  },
+  "body_ThirdPartyPhaseout": {
+    "message": "Prepare for phasing out third-party cookies."
+  },
+  "body_ThirdPartyBlockedInFirstPartySet": {
+    "message": "The cookie was blocked by third-party cookie blocking between sites in the same First-Party Set."
+  },
+  "body_UnknownError": { "message": "Unknown error." },
+  "body_SchemefulSameSiteStrict": {
+    "message": "This cookie was blocked because it had the 'SameSite=Strict' attribute but the request was cross-site. This includes top-level navigation requests initiated by other sites. This request is considered cross-site because the URL has a different scheme than the current site."
+  },
+  "body_SchemefulSameSiteLax": {
+    "message": "This cookie was blocked because it had the 'SameSite=Lax' attribute but the request was cross-site and was not initiated by a top-level navigation. This request is considered cross-site because the URL has a different scheme than the current site."
+  },
+  "body_SchemefulSameSiteUnspecifiedTreatedAsLax": {
+    "message": "This cookie didn't specify a 'SameSite' attribute when it was stored, was defaulted to 'SameSite=Lax', and was blocked because the request was cross-site and was not initiated by a top-level navigation. The cookie had to have been set with 'SameSite=None' to enable cross-site usage. This request is considered cross-site because the URL has a different scheme than the current site."
+  },
+  "body_SamePartyFromCrossPartyContext": {
+    "message": "This cookie was blocked because it had the 'SameParty' attribute but the request was cross-party. The request was considered cross-party because the domain of the resource's URL and the domains of the resource's enclosing frames/documents are neither owners nor members in the same first-party set."
+  },
+  "body_NameValuePairExceedsMaxSize": {
+    "message": "This cookie was blocked because it was too large. The combined size of the name and value must be less than or equal to 4,096 characters."
+  },
+  "body_InvalidDomain": {
+    "message": "This attempt to set a cookie via 'Set-Cookie' header was blocked because its Domain value was invalid with regards to the current host url."
+  },
+  "header_sameSiteExcludeNavigationContextDowngradeSecure": {
+    "message": "Migrate entirely to HTTPS to have cookies sent on same-site requests"
+  },
+  "body_1_sameSiteExcludeNavigationContextDowngradeSecure": {
+    "message": "A cookie was not sent to a secure origin from an insecure context on a navigation. Because this cookie would have been sent across schemes on the same site, it was not sent. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers."
+  },
+  "body_2_sameSiteExcludeNavigationContextDowngradeSecure": {
+    "message": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case."
+  },
+  "header_sameSiteExcludeNavigationContextDowngradeInsecure": {
+    "message": "Migrate entirely to HTTPS to have cookies sent on same-site requests"
+  },
+  "body_1_sameSiteExcludeNavigationContextDowngradeInsecure": {
+    "message": "A cookie was not sent to an insecure origin from a secure context on a navigation. Because this cookie would have been sent across schemes on the same site, it was not sent. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers."
+  },
+  "body_2_sameSiteExcludeNavigationContextDowngradeInsecure": {
+    "message": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case."
+  },
+  "header_sameSiteExcludeContextDowngradeSetCookieSecure": {
+    "message": "Migrate entirely to HTTPS to allow cookies to be set by same-site subresources"
+  },
+  "body_1_sameSiteExcludeContextDowngradeSetCookieSecure": {
+    "message": "A cookie was not set by an insecure origin in a secure context. Because this cookie would have been set across schemes on the same site, it was blocked. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers."
+  },
+  "body_2_sameSiteExcludeContextDowngradeSetCookieSecure": {
+    "message": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case."
+  },
+  "header_sameSiteExcludeContextDowngradeSetCookieInsecure": {
+    "message": "Migrate entirely to HTTPS to allow cookies to be set by same-site subresources"
+  },
+  "body_1_sameSiteExcludeContextDowngradeSetCookieInsecure": {
+    "message": "A cookie was not set by a secure origin in an insecure context. Because this cookie would have been set across schemes on the same site, it was blocked. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers."
+  },
+  "body_2_sameSiteExcludeContextDowngradeSetCookieInsecure": {
+    "message": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case."
+  },
+  "header_sameSiteExcludeContextDowngradeReadCookieSecure": {
+    "message": "Migrate entirely to HTTPS to have cookies sent to same-site subresources"
+  },
+  "body_1_sameSiteExcludeContextDowngradeReadCookieSecure": {
+    "message": "A cookie was not sent to a secure origin from an insecure context. Because this cookie would have been sent across schemes on the same site, it was not sent. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers."
+  },
+  "body_2_sameSiteExcludeContextDowngradeReadCookieSecure": {
+    "message": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case."
+  },
+  "header_sameSiteExcludeContextDowngradeReadCookieInsecure": {
+    "message": "Migrate entirely to HTTPS to have cookies sent to same-site subresources"
+  },
+  "body_1_sameSiteExcludeContextDowngradeReadCookieInsecure": {
+    "message": "A cookie was not sent to an insecure origin from a secure context. Because this cookie would have been sent across schemes on the same site, it was not sent. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers."
+  },
+  "body_2_sameSiteExcludeContextDowngradeReadCookieInsecure": {
+    "message": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case."
+  },
+  "body_ExcludeSameSiteUnspecifiedTreatedAsLax": {
+    "message": "This 'Set-Cookie' header didn't specify a 'SameSite' attribute and was defaulted to 'SameSite=Lax' and was blocked because it came from a cross-site response which was not the response to a top-level navigation. The 'Set-Cookie' had to have been set with 'SameSite=None' to enable cross-site usage."
+  },
+  "header_cookieCrossSiteRedirectDowngrade": {
+    "message": "Cookie is blocked due to a cross-site redirect chain"
+  },
+  "body_1_cookieCrossSiteRedirectDowngrade": {
+    "message": "The cookie was blocked because the URL redirect chain was not fully same-site, meaning the final request was treated as a cross-site request. Like other cross-site requests, this blocks cookies with 'SameSite=Lax' or 'SameSite=Strict'."
+  },
+  "body_2_cookieCrossSiteRedirectDowngrade": {
+    "message": "For example: If site A redirects to site B which then redirects back to site A, the final request to site A will be a cross-site request."
+  },
+  "header_ExcludeSameSiteNoneInsecureSetCookie": {
+    "message": "Mark cross-site cookies as Secure to allow setting them in cross-site contexts"
+  },
+  "body_ExcludeSameSiteNoneInsecureSetCookie": {
+    "message": "Cookies marked with 'SameSite=None' must also be marked with 'Secure' to allow setting them in a cross-site context. This behavior protects user data from being sent over an insecure connection."
+  },
+  "header_ExcludeSameSiteNoneInsecureReadCookie": {
+    "message": "Mark cross-site cookies as Secure to allow them to be sent in cross-site requests"
+  },
+  "body_ExcludeSameSiteNoneInsecureReadCookie": {
+    "message": "Cookies marked with 'SameSite=None' must also be marked with 'Secure' to get sent in cross-site requests. This behavior protects user data from being sent over an insecure connection."
+  },
+  "header_ExcludeInvalidSameParty": {
+    "message": "Mark SameParty cookies as Secure and do not use SameSite=Strict for SameParty cookies"
+  },
+  "body_ExcludeInvalidSameParty": {
+    "message": "Cookies marked with 'SameParty' must also be marked with 'Secure'. In addition, cookies marked with 'SameParty' cannot use 'SameSite=Strict'."
+  },
+  "header_ExcludeSamePartyCrossPartyContext": {
+    "message": "Make sure a cookie is using the SameParty attribute correctly"
+  },
+  "body_ExcludeSamePartyCrossPartyContext": {
+    "message": "Setting cross-site cookies with the 'SameParty' attribute is only possible if both domains are a part of the same First-Party Set."
+  },
+  "header_ExcludeDomainNonASCII": {
+    "message": "Ensure cookie 'Domain' attribute values only contain ASCII characters"
+  },
+  "body_1_ExcludeDomainNonASCII": {
+    "message": "'Domain' attributes in cookies are restricted to the ASCII character set. Any cookies that contain characters outside of the ASCII range in their 'Domain' attribute will be ignored."
+  },
+  "body_2_ExcludeDomainNonASCII": {
+    "message": "To resolve this issue, you need to remove all non-ASCII characters from the 'Domain' attribute of the affected cookies."
+  },
+  "body_3_ExcludeDomainNonASCII": {
+    "message": "If your site has an internationalized domain name (IDN), you should use punycode representation for the 'Domain' attribute instead."
+  },
+  "header_ExcludeThirdPartyCookieBlockedInFirstPartySet": {
+    "message": "Third-party cookie blocked within the same First-Party Set"
+  },
+  "body_ExcludeThirdPartyCookieBlockedInFirstPartySet": {
+    "message": "A cookie embedded by a site in the top-level page's First-Party Set was blocked by third-party cookie blocking."
+  },
+  "header_ExcludeThirdPartyPhaseoutReadCookie": {
+    "message": "Cookie is blocked when sent in cross-site context"
+  },
+  "body_ExcludeThirdPartyPhaseoutReadCookie": {
+    "message": "Cookies marked with 'SameSite=None; Secure;' and not 'Partitioned' are blocked in cross-site requests. This behavior protects user data from cross-site tracking."
+  },
+  "header_ExcludeThirdPartyPhaseoutSetCookie": {
+    "message": "Cookie is blocked when set in cross-site context"
+  },
+  "body_ExcludeThirdPartyPhaseoutSetCookie": {
+    "message": "Cookies marked with 'SameSite=None; Secure' and not 'Partitioned' are blocked in cross-site contexts. This behavior protects user data from cross-site tracking."
+  },
+  "header_WarnSameSiteUnspecifiedCrossSiteContextReadCookie": {
+    "message": "Indicate whether to send a cookie in a cross-site request by specifying its SameSite attribute"
+  },
+  "body_WarnSameSiteUnspecifiedCrossSiteContextReadCookie": {
+    "message": "Because a cookie's 'SameSite' attribute was not set or is invalid, it defaults to 'SameSite=Lax', which will prevent the cookie from being sent in a cross-site request in a future version of the browser. This behavior protects user data from accidentally leaking to third parties and cross-site request forgery."
+  },
+  "header_WarnSameSiteUnspecifiedCrossSiteContextSetCookie": {
+    "message": "Indicate whether a cookie is intended to be set in cross-site context by specifying its SameSite attribute"
+  },
+  "body_WarnSameSiteUnspecifiedCrossSiteContextSetCookie": {
+    "message": "Because a cookie's 'SameSite' attribute was not set or is invalid, it defaults to 'SameSite=Lax', which will prevent the cookie from being set in a cross-site context in a future version of the browser. This behavior protects user data from accidentally leaking to third parties and cross-site request forgery."
+  },
+  "header_WarnSameSiteNoneInsecureReadCookie": {
+    "message": "Mark cross-site cookies as Secure to allow them to be sent in cross-site requests"
+  },
+  "body_WarnSameSiteNoneInsecureReadCookie": {
+    "message": "In a future version of the browser, cookies marked with 'SameSite=None' must also be marked with 'Secure' to get sent in cross-site requests. This behavior protects user data from being sent over an insecure connection."
+  },
+  "header_WarnSameSiteNoneInsecureSetCookie": {
+    "message": "Mark cross-site cookies as Secure to allow setting them in cross-site contexts"
+  },
+  "body_WarnSameSiteNoneInsecureSetCookie": {
+    "message": "In a future version of the browser, cookies marked with 'SameSite=None' must also be marked with 'Secure' to allow setting them in a cross-site context. This behavior protects user data from being sent over an insecure connection."
+  },
+  "header_WarnSameSiteUnspecifiedLaxAllowUnsafeReadCookie": {
+    "message": "Indicate whether to send a cookie in a cross-site request by specifying its SameSite attribute"
+  },
+  "body_WarnSameSiteUnspecifiedLaxAllowUnsafeReadCookie": {
+    "message": "Because a cookie's 'SameSite' attribute was not set or is invalid, it defaults to 'SameSite=Lax', which will prevent the cookie from being sent in a cross-site request in a future version of the browser. This behavior protects user data from accidentally leaking to third parties and cross-site request forgery."
+  },
+  "header_WarnSameSiteUnspecifiedLaxAllowUnsafeSetCookie": {
+    "message": "Indicate whether a cookie is intended to be set in cross-site context by specifying its SameSite attribute"
+  },
+  "body_WarnSameSiteUnspecifiedLaxAllowUnsafeSetCookie": {
+    "message": "Because a cookie's 'SameSite' attribute was not set or is invalid, it defaults to 'SameSite=Lax', which will prevents the cookie from being set in a cross-site context in a future version of the browser. This behavior protects user data from accidentally leaking to third parties and cross-site request forgery."
+  },
+  "header_WarnSameSiteStrictLaxDowngradeStrictSecure": {
+    "message": "Migrate entirely to HTTPS to continue having cookies sent on same-site requests"
+  },
+  "body_1_WarnSameSiteStrictLaxDowngradeStrictSecure": {
+    "message": "A cookie is being sent to a secure origin from an insecure context on a navigation. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers."
+  },
+  "body_2_WarnSameSiteStrictLaxDowngradeStrictSecure": {
+    "message": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case."
+  },
+  "header_WarnSameSiteStrictLaxDowngradeStrictInsecure": {
+    "message": "Migrate entirely to HTTPS to continue having cookies sent on same-site requests"
+  },
+  "body_1_WarnSameSiteStrictLaxDowngradeStrictInsecure": {
+    "message": "A cookie is being sent to an insecure origin from a secure context on a navigation. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers."
+  },
+  "body_2_WarnSameSiteStrictLaxDowngradeStrictInsecure": {
+    "message": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case."
+  },
+  "header_WarnSameSiteStrictCrossDowngradeStrictReadCookieSecure": {
+    "message": "Migrate entirely to HTTPS to continue having cookies sent to same-site subresources"
+  },
+  "body_1_WarnSameSiteStrictCrossDowngradeStrictReadCookieSecure": {
+    "message": "A cookie is being sent to a secure origin from an insecure context. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers."
+  },
+  "body_2_WarnSameSiteStrictCrossDowngradeStrictReadCookieSecure": {
+    "message": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case."
+  },
+  "header_WarnSameSiteStrictCrossDowngradeStrictReadCookieInsecure": {
+    "message": "Migrate entirely to HTTPS to continue having cookies sent to same-site subresources"
+  },
+  "body_1_WarnSameSiteStrictCrossDowngradeStrictReadCookieInsecure": {
+    "message": "A cookie is being sent to an insecure origin from a secure context. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers."
+  },
+  "body_2_WarnSameSiteStrictCrossDowngradeStrictReadCookieInsecure": {
+    "message": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case."
+  },
+  "header_WarnSameSiteStrictCrossDowngradeStrictSetCookieSecure": {
+    "message": "Migrate entirely to HTTPS to continue allowing cookies to be set by same-site subresources"
+  },
+  "body_1_WarnSameSiteStrictCrossDowngradeStrictSetCookieSecure": {
+    "message": "A cookie is being set by a secure origin in an insecure context. Because this cookie is being set across schemes on the same site, it will be blocked in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers."
+  },
+  "body_2_WarnSameSiteStrictCrossDowngradeStrictSetCookieSecure": {
+    "message": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case."
+  },
+  "header_WarnSameSiteStrictCrossDowngradeStrictSetCookieInsecure": {
+    "message": "Migrate entirely to HTTPS to continue allowing cookies to be set by same-site subresources"
+  },
+  "body_1_WarnSameSiteStrictCrossDowngradeStrictSetCookieInsecure": {
+    "message": "A cookie is being set by an insecure origin in a secure context. Because this cookie is being set across schemes on the same site, it will be blocked in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers."
+  },
+  "body_2_WarnSameSiteStrictCrossDowngradeStrictSetCookieInsecure": {
+    "message": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case."
+  },
+  "header_WarnSameSiteStrictCrossDowngradeLaxReadCookieSecure": {
+    "message": "Migrate entirely to HTTPS to continue having cookies sent to same-site subresources"
+  },
+  "body_1_WarnSameSiteStrictCrossDowngradeLaxReadCookieSecure": {
+    "message": "A cookie is being sent to a secure origin from an insecure context. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers."
+  },
+  "body_2_WarnSameSiteStrictCrossDowngradeLaxReadCookieSecure": {
+    "message": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case."
+  },
+  "header_WarnSameSiteStrictCrossDowngradeLaxReadCookieInsecure": {
+    "message": "Migrate entirely to HTTPS to continue having cookies sent to same-site subresources"
+  },
+  "body_1_WarnSameSiteStrictCrossDowngradeLaxReadCookieInsecure": {
+    "message": "A cookie is being sent to an insecure origin from a secure context. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers."
+  },
+  "body_2_WarnSameSiteStrictCrossDowngradeLaxReadCookieInsecure": {
+    "message": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case."
+  },
+  "header_WarnSameSiteStrictCrossDowngradeLaxSetCookieSecure": {
+    "message": "Migrate entirely to HTTPS to continue allowing cookies to be set by same-site subresources"
+  },
+  "body_1_WarnSameSiteStrictCrossDowngradeLaxSetCookieSecure": {
+    "message": "A cookie is being set by a secure origin in an insecure context. Because this cookie is being set across schemes on the same site, it will be blocked in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers."
+  },
+  "body_2_WarnSameSiteStrictCrossDowngradeLaxSetCookieSecure": {
+    "message": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case."
+  },
+  "header_WarnSameSiteStrictCrossDowngradeLaxSetCookieInsecure": {
+    "message": "Migrate entirely to HTTPS to continue allowing cookies to be set by same-site subresources"
+  },
+  "body_1_WarnSameSiteStrictCrossDowngradeLaxSetCookieInsecure": {
+    "message": "A cookie is being set by an insecure origin in a secure context. Because this cookie is being set across schemes on the same site, it will be blocked in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers."
+  },
+  "body_2_WarnSameSiteStrictCrossDowngradeLaxSetCookieInsecure": {
+    "message": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case."
+  },
+  "header_WarnSameSiteLaxCrossDowngradeStrictReadCookieSecure": {
+    "message": "Migrate entirely to HTTPS to continue having cookies sent to same-site subresources"
+  },
+  "body_1_WarnSameSiteLaxCrossDowngradeStrictReadCookieSecure": {
+    "message": "A cookie is being sent to a secure origin from an insecure context. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers."
+  },
+  "body_2_WarnSameSiteLaxCrossDowngradeStrictReadCookieSecure": {
+    "message": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case."
+  },
+  "header_WarnSameSiteLaxCrossDowngradeStrictReadCookieInsecure": {
+    "message": "Migrate entirely to HTTPS to continue having cookies sent to same-site subresources"
+  },
+  "body_1_WarnSameSiteLaxCrossDowngradeStrictReadCookieInsecure": {
+    "message": "A cookie is being sent to an insecure origin from a secure context. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers."
+  },
+  "body_2_WarnSameSiteLaxCrossDowngradeStrictReadCookieInsecure": {
+    "message": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case."
+  },
+  "header_WarnSameSiteLaxCrossDowngradeStrictSetCookieSecure": {
+    "message": "Migrate entirely to HTTPS to continue allowing cookies to be set by same-site subresources"
+  },
+  "body_1_WarnSameSiteLaxCrossDowngradeStrictSetCookieSecure": {
+    "message": "A cookie is being set by a secure origin in an insecure context. Because this cookie is being set across schemes on the same site, it will be blocked in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers."
+  },
+  "body_2_WarnSameSiteLaxCrossDowngradeStrictSetCookieSecure": {
+    "message": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case."
+  },
+  "header_WarnSameSiteLaxCrossDowngradeStrictSetCookieInsecure": {
+    "message": "Migrate entirely to HTTPS to continue allowing cookies to be set by same-site subresource"
+  },
+  "body_1_WarnSameSiteLaxCrossDowngradeStrictSetCookieInsecure": {
+    "message": "A cookie is being set by an insecure origin in a secure context. Because this cookie is being set across schemes on the same site, it will be blocked in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers."
+  },
+  "body_2_WarnSameSiteLaxCrossDowngradeStrictSetCookieInsecure": {
+    "message": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case."
+  },
+  "header_WarnSameSiteLaxCrossDowngradeLaxReadCookieSecure": {
+    "message": "Migrate entirely to HTTPS to continue having cookies sent to same-site subresources"
+  },
+  "body_1_WarnSameSiteLaxCrossDowngradeLaxReadCookieSecure": {
+    "message": "A cookie is being sent to a secure origin from an insecure context. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers."
+  },
+  "body_2_WarnSameSiteLaxCrossDowngradeLaxReadCookieSecure": {
+    "message": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case."
+  },
+  "header_WarnSameSiteLaxCrossDowngradeLaxReadCookieInsecure": {
+    "message": "Migrate entirely to HTTPS to continue having cookies sent to same-site subresources"
+  },
+  "body_1_WarnSameSiteLaxCrossDowngradeLaxReadCookieInsecure": {
+    "message": "A cookie is being sent to an insecure origin from a secure context. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers."
+  },
+  "body_2_WarnSameSiteLaxCrossDowngradeLaxReadCookieInsecure": {
+    "message": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case."
+  },
+  "header_WarnSameSiteLaxCrossDowngradeLaxSetCookieSecure": {
+    "message": "Migrate entirely to HTTPS to continue allowing cookies to be set by same-site subresources"
+  },
+  "body_1_WarnSameSiteLaxCrossDowngradeLaxSetCookieSecure": {
+    "message": "A cookie is being set by a secure origin in an insecure context. Because this cookie is being set across schemes on the same site, it will be blocked in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers."
+  },
+  "body_2_WarnSameSiteLaxCrossDowngradeLaxSetCookieSecure": {
+    "message": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case."
+  },
+  "header_WarnSameSiteLaxCrossDowngradeLaxSetCookieInsecure": {
+    "message": "Migrate entirely to HTTPS to continue allowing cookies to be set by same-site subresources"
+  },
+  "body_1_WarnSameSiteLaxCrossDowngradeLaxSetCookieInsecure": {
+    "message": "A cookie is being set by an insecure origin in a secure context. Because this cookie is being set across schemes on the same site, it will be blocked in a future version of Chrome. This behavior enhances the <code>SameSite</code> attribute's protection of user data from request forgery by network attackers."
+  },
+  "body_2_WarnSameSiteLaxCrossDowngradeLaxSetCookieInsecure": {
+    "message": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the <code>Secure</code> attribute if that is not already the case."
+  },
+  "header_WarnAttributeValueExceedsMaxSize": {
+    "message": "Ensure cookie attribute values don't exceed 1024 characters"
+  },
+  "body_1_WarnAttributeValueExceedsMaxSize": {
+    "message": "Cookie attribute values exceeding 1024 characters in size will result in the attribute being ignored. This could lead to unexpected behavior since the cookie will be processed as if the offending attribute / attribute value pair were not present."
+  },
+  "body_2_WarnAttributeValueExceedsMaxSize": {
+    "message": "Resolve this issue by ensuring that cookie attribute values don't exceed 1024 characters."
+  },
+  "header_WarnDomainNonASCII": {
+    "message": "Ensure cookie <code>Domain</code> attribute values only contain ASCII characters"
+  },
+  "body_1_WarnDomainNonASCII": {
+    "message": "<code>Domain</code> attributes in cookies are restricted to the ASCII character set. Any cookies that contain characters outside of the ASCII range in their <code>Domain</code> attribute will be ignored in the future."
+  },
+  "body_2_WarnDomainNonASCII": {
+    "message": "To resolve this issue, you need to remove all non-ASCII characters from the <code>Domain</code> attribute of the affected cookies."
+  },
+  "body_3_WarnDomainNonASCII": {
+    "message": "If your site has an internationalized domain name (IDN), you should use punycode representation for the <code>Domain</code> attribute instead."
+  },
+  "header_WarnThirdPartyPhaseoutReadCookie": {
+    "message": "Cookie sent in cross-site context will be blocked in future Chrome versions"
+  },
+  "body_WarnThirdPartyPhaseoutReadCookie": {
+    "message": "In a future version of the browser, cookies marked with <code>SameSite=None; Secure</code> and not <code>Partitioned</code> will be blocked in cross-site requests. This behavior protects user data from cross-site tracking."
+  },
+  "header_WarnThirdPartyPhaseoutSetCookie": {
+    "message": "Cookie set in cross-site context will be blocked in future Chrome versions"
+  },
+  "body_WarnThirdPartyPhaseoutSetCookie": {
+    "message": "In a future version of the browser, cookies marked with <code>SameSite=None; Secure</code> and not <code>Partitioned</code> will be blocked in cross-site context. This behavior protects user data from cross-site tracking."
+  },
+  "header_WarnCrossSiteRedirectDowngradeChangesInclusion": {
+    "message": "Cookie is blocked due to a cross-site redirect chain"
+  },
+  "body_1_WarnCrossSiteRedirectDowngradeChangesInclusion": {
+    "message": "The cookie was blocked because the URL redirect chain was not fully same-site, meaning the final request was treated as a cross-site request. Like other cross-site requests, this blocks cookies with <code>SameSite=Lax</code> or <code>SameSite=Strict</code>."
+  },
+  "body_2_WarnCrossSiteRedirectDowngradeChangesInclusion": {
+    "message": "For example: If site A redirects to site B which then redirects back to site A, the final request to site A will be a cross-site request."
+  },
+  "exemptionReasonUserSetting": {
+    "message": "This cookie is allowed by user preference."
+  },
+  "exemptionReasonTPCDMetadata": {
+    "message": "This cookie is allowed by a third-party cookie deprecation trial grace period."
+  },
+  "exemptionReasonTPCDDeprecationTrial": {
+    "message": "This cookie is allowed by third-party cookie phaseout deprecation trial."
+  },
+  "exemptionReasonTPCDHeuristics": {
+    "message": "This cookie is allowed by third-party cookie phaseout heuristics."
+  },
+  "exemptionReasonEnterprisePolicy": {
+    "message": "This cookie is allowed by Chrome Enterprise policy."
+  },
+  "exemptionReasonStorageAccessAPI": {
+    "message": "This cookie is allowed by the Storage Access API."
+  },
+  "exemptionTopLevelAccessAPI": {
+    "message": "This cookie is allowed by the top-level Storage Access API."
+  },
+  "exemptionReasonCorsOptIn": {
+    "message": "This cookie is allowed by CORS opt-in"
+  }
 }
