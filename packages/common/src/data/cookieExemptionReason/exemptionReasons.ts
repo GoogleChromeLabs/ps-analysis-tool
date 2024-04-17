@@ -15,18 +15,14 @@
  */
 //For source see https://source.chromium.org/chromium/chromium/src/+/main:third_party/devtools-frontend/src/front_end/core/sdk/NetworkRequest.ts
 const CookieExemptionReason = {
-  UserSetting: 'This cookie is allowed by user preference.',
-  TPCDMetadata:
-    'This cookie is allowed by a third-party cookie deprecation trial grace period.',
-  TPCDDeprecationTrial:
-    'This cookie is allowed by third-party cookie phaseout deprecation trial.',
-  TPCDHeuristics:
-    'This cookie is allowed by third-party cookie phaseout heuristics.',
-  EnterprisePolicy: 'This cookie is allowed by Chrome Enterprise policy.',
-  StorageAccessAPI: 'This cookie is allowed by the Storage Access API.',
-  TopLevelStorageAccessAPI:
-    'This cookie is allowed by the top-level Storage Access API.',
-  CorsOptIn: 'This cookie is allowed by CORS opt-in',
+  UserSetting: 'exemptionReasonUserSetting',
+  TPCDMetadata: 'exemptionReasonTPCDMetadata',
+  TPCDDeprecationTrial: 'exemptionReasonTPCDDeprecationTrial',
+  TPCDHeuristics: 'exemptionReasonTPCDHeuristics',
+  EnterprisePolicy: 'exemptionReasonEnterprisePolicy',
+  StorageAccessAPI: 'exemptionReasonStorageAccessAPI',
+  TopLevelStorageAccessAPI: 'exemptionReasonTopLevelStorageAccessAPI',
+  CorsOptIn: 'exemptionReasonCorsOptIn',
 };
 
 export default CookieExemptionReason;

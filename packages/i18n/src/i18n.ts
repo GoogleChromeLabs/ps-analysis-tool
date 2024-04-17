@@ -172,6 +172,31 @@ class I18n {
       ignoreTag: escapeLt,
     }).format(placeholders) as string;
   }
+
+  /**
+   * Returns messages wrapped with HTML tags.
+   * Prefix keys with 'header_{key}', 'body_{count}_{key}' to wrap with appropriate tags.
+   * @param keys - The keys of the messages to retrieve.
+   * @returns {string} The formatted messages.
+   */
+  getFormattedMessages(keys: string[]) {
+    return keys
+      .map((key) => {
+        const [type] = key.split('_');
+
+        const message = this.getMessage(key);
+
+        switch (type) {
+          case 'header':
+            return `<h1 className='font-semibold'>${message}</h1>`;
+          case 'body':
+            return `<p>${message}</p>`;
+          default:
+            return message;
+        }
+      })
+      .join('');
+  }
 }
 
 export default new I18n();

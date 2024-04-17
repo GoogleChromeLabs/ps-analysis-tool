@@ -1,15 +1,1147 @@
 {
-  "testString": {
-    "message": "Testing $details$ with $format$",
-    "description": "This is a test string",
+  "clAnalyzing": {
+    "message": "Analyzing $type$ in urls $one$ - $two$",
     "placeholders": {
-      "details": {
-        "content": "$2",
-        "example": "Details of the test"
-      },
-      "format": {
+      "type": {
         "content": "$1",
-        "example": "Format of the test"
+        "example": "cookies"
+      },
+      "one": {
+        "content": "$2",
+        "example": "5"
+      },
+      "two": {
+        "content": "$3",
+        "example": "10"
+      }
+    }
+  },
+  "clDoneAnalyzing": {
+    "message": "Done analyzing $type$ in urls $one$ - $two$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "cookies"
+      },
+      "one": {
+        "content": "$2",
+        "example": "5"
+      },
+      "two": {
+        "content": "$3",
+        "example": "10"
+      }
+    }
+  },
+  "clErrorParsingSitemap": {
+    "message": "Error: error parsing sitemap"
+  },
+  "clParsingSitemap": {
+    "message": "Parsing sitemap"
+  },
+  "clDoneParsingSitemap": {
+    "message": "Done parsing sitemap"
+  },
+  "clParsingCSV": {
+    "message": "Parsing CSV file"
+  },
+  "clCSVHasNoUrls": {
+    "message": "Provided CSV file has no urls"
+  },
+  "clNotValidUrl": {
+    "message": "$url$ is not a valid url",
+    "placeholders": {
+      "url": {
+        "content": "$1",
+        "example": "http://www.example.com"
+      }
+    }
+  },
+  "clDoneParsingCSV": {
+    "message": "Done parsing CSV file"
+  },
+  "clParsingXML": {
+    "message": "Parsing XML file"
+  },
+  "clXMLSchemaNotSupported": {
+    "message": "Sorry, XML Schema for Sitemap index files is not supported by the tool"
+  },
+  "clNoUrlsInXMLUrlset": {
+    "message": "Provided XML files has no urls in its urlset"
+  },
+  "clNoUrlsInXML": {
+    "message": "Provided XML files has no urls"
+  },
+  "clDoneParsingXML": {
+    "message": "Done parsing XML file"
+  },
+  "clErrorParsingCSV": {
+    "message": "Error: error parsing CSV file"
+  },
+  "cliInvalidPort": {
+    "message": "Invalid port argument. Please provide a port >=0 and <=65536"
+  },
+  "cliProvideCLIArguments": {
+    "message": "Please provide one and only one of the following\n a) URL of a site (-u or --url)\n b) URL of a sitemap (-s or --sitemap-url)\n c) Path to a CSV file (-c or --csv-path)\n d) Path to an XML file (-p or --sitemap-path)"
+  },
+  "clNoFileFound": {
+    "message": "No file at $path$",
+    "placeholders": {
+      "path": {
+        "content": "$1",
+        "example": "/path/to/file"
+      }
+    }
+  },
+  "clNotValidNumber": {
+    "message": "$number$ is not a valid numberic value",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "cliUrlInvalid": {
+    "message": "Provided URL $url$ is not valid",
+    "placeholders": {
+      "url": {
+        "content": "$1",
+        "example": "http://www.example.com"
+      }
+    }
+  },
+  "clDirNotExists": {
+    "message": "$outDir$ does not exist, creating now.",
+    "placeholders": {
+      "outDir": {
+        "content": "$1",
+        "example": "/path/to/directory"
+      }
+    }
+  },
+  "clToTest3PCookies": {
+    "message": "CLI to test a URL for 3p cookies"
+  },
+  "clUrlOfSite": {
+    "message": "URL of a site"
+  },
+  "clUrlOfSitemap": {
+    "message": "URL of a sitemap"
+  },
+  "clPathToCSV": {
+    "message": "Path to a CSV file with a set of URLs."
+  },
+  "clPathToSitemap": {
+    "message": "Path to a sitemap saved in the file system"
+  },
+  "clPortForServer": {
+    "message": "A port for the CLI dashboard server."
+  },
+  "clUrlLimit": {
+    "message": "No of URLs to analyze"
+  },
+  "clNonHeadless": {
+    "message": "Flag for running puppeteer in non-headless mode"
+  },
+  "clNoPrompts": {
+    "message": "Flags for skipping all prompts. Default options will be used"
+  },
+  "clNoTechnology": {
+    "message": "Flags for skipping technology analysis."
+  },
+  "clOutDir": {
+    "message": "Directory path where the analysis data will be stored"
+  },
+  "clAcceptBanner": {
+    "message": "This will accept the GDPR banner if present."
+  },
+  "clReportServedAt": {
+    "message": "Report: $url$",
+    "placeholders": {
+      "url": {
+        "content": "$1",
+        "example": "http://localhost:3000"
+      }
+    }
+  },
+  "clErrorInPort": {
+    "message": "Error: Report server port $port$ already in use. You might be already running CLI",
+    "placeholders": {
+      "port": {
+        "content": "$1",
+        "example": "3000"
+      }
+    }
+  },
+  "clUrlCountPrompt": {
+    "message": "Provided $type$ has $urlsLength$ pages. Please enter the number of pages you want to analyze (Default $urlsLength$):",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "sitemap"
+      },
+      "urlLength": {
+        "content": "$2",
+        "example": "5"
+      }
+    }
+  },
+  "clAnalyzingUrls": {
+    "message": "Analysing $numberOfUrls$ urls.",
+    "placeholders": {
+      "numberOfUrls": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "clAnalyzingAllUrls": {
+    "message": "Analysing all $urlsLength$ urls.",
+    "placeholders": {
+      "urlsLength": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "clAnalyzingCookies": {
+    "message": "Analysing cookies on first site visit"
+  },
+  "clDoneAnalyzingCookies": {
+    "message": "Done analyzing cookies."
+  },
+  "clAnalyzingTechnologies": {
+    "message": "Analyzing technologies"
+  },
+  "clDoneAnalyzingTechonlogies": {
+    "message": "Done analyzing technologies"
+  },
+  "cdSitemapReport": {
+    "message": "Sitemap report"
+  },
+  "cdCookieIssues": {
+    "message": "Cookie Issues"
+  },
+  "cdCookies": {
+    "message": "Cookies"
+  },
+  "cdTechnologies": {
+    "message": "Technologies"
+  },
+  "cdBlockedCookies": {
+    "message": "Blocked Cookies"
+  },
+  "cdBlockedReasons": {
+    "message": "Blocked Reasons"
+  },
+  "cdBlockedReasonsNote": {
+    "message": "Cookies that have been blocked by the browser.(The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
+  },
+  "cdSelectAll": {
+    "message": "All"
+  },
+  "cdNoCookies": {
+    "message": "No cookies found on this page"
+  },
+  "cdTryReloading": {
+    "message": "Please try reloading the page"
+  },
+  "cdDownloadReport": {
+    "message": "Download Report"
+  },
+  "cdName": {
+    "message": "Name"
+  },
+  "cdDescription": {
+    "message": "Description"
+  },
+  "cdConfidence": {
+    "message": "Confidence"
+  },
+  "cdWebsite": {
+    "message": "Website"
+  },
+  "cdCategory": {
+    "message": "Category"
+  },
+  "cdTechnologyDetails": {
+    "message": "Technology Details"
+  },
+  "cdSelectRowToPreview": {
+    "message": "Select row to preview its value"
+  },
+  "cdNoDescription": {
+    "message": "No description available"
+  },
+  "cdScope": {
+    "message": "Scope"
+  },
+  "cdDomain": {
+    "message": "Domain"
+  },
+  "cdPartitionKey": {
+    "message": "Partition Key"
+  },
+  "cdSameSite": {
+    "message": "SameSite"
+  },
+  "cdPlatform": {
+    "message": "Platform"
+  },
+  "cdHttpOnly": {
+    "message": "HttpOnly"
+  },
+  "cdSecure": {
+    "message": "Secure"
+  },
+  "cdValue": {
+    "message": "Value"
+  },
+  "cdPath": {
+    "message": "Path"
+  },
+  "cdExpires": {
+    "message": "Expires / Max-Age"
+  },
+  "cdFirstParty": {
+    "message": "First Party"
+  },
+  "cdThirdParty": {
+    "message": "Third Party"
+  },
+  "cdSession": {
+    "message": "Session"
+  },
+  "cdTrue": {
+    "message": "True"
+  },
+  "cdFalse": {
+    "message": "False"
+  },
+  "cdRetentionPeriod": {
+    "message": "Retention Period"
+  },
+  "cdShortTerm": {
+    "message": "Short Term (<24h)"
+  },
+  "cdMediumTerm": {
+    "message": "Medium Term (24h - 1 week)"
+  },
+  "cdLongTerm": {
+    "message": "Long Term (1 week - 1 month)"
+  },
+  "cdExtentedTerm": {
+    "message": "Extended Term (>1 month)"
+  },
+  "cdNoPathProvided": {
+    "message": "No path provided"
+  },
+  "cmUnknownFrames": {
+    "message": "Unknown Frames"
+  },
+  "cmName": {
+    "message": "Name"
+  },
+  "cmScope": {
+    "message": "Scope"
+  },
+  "cmDomain": {
+    "message": "Domain"
+  },
+  "cmPartitionKey": {
+    "message": "Partition Key"
+  },
+  "cmSameSite": {
+    "message": "SameSite"
+  },
+  "cmCategory": {
+    "message": "Category"
+  },
+  "cmPlatform": {
+    "message": "Platform"
+  },
+  "cmHttpOnly": {
+    "message": "HttpOnly"
+  },
+  "cmSecure": {
+    "message": "Secure"
+  },
+  "cmValue": {
+    "message": "Value"
+  },
+  "cmPath": {
+    "message": "Path"
+  },
+  "cmExpires": {
+    "message": "Expires"
+  },
+  "cmIssues": {
+    "message": "Issues"
+  },
+  "cmGdpr": {
+    "message": "GDPR Portal"
+  },
+  "cmFirstParty": {
+    "message": "First Party"
+  },
+  "cmThirdParty": {
+    "message": "Third Party"
+  },
+  "cmDescription": {
+    "message": "Description"
+  },
+  "cmConfidence": {
+    "message": "Confidence"
+  },
+  "cmWebsite": {
+    "message": "Website"
+  },
+  "cmCategories": {
+    "message": "Categories"
+  },
+  "cmUncategorized": {
+    "message": "Uncategorized"
+  },
+  "body_SecureOnly": "This cookie was blocked because it had the 'Secure' attribute and the connection was not secure.",
+  "body_NotOnPath": "This cookie was blocked because its path was not an exact match for, or a superdirectory of, the request URL's path.",
+  "body_DomainMismatch": "This cookie was blocked because the request URL's domain did not exactly match the cookie's domain, nor was the request URL's domain a subdomain of the cookie's Domain attribute value.",
+  "body_SameSiteStrict": "This cookie was blocked because it had the 'SameSite=Strict' attribute and the request was made from a different site. This includes top-level navigation requests initiated by other sites.",
+  "body_SameSiteLax": "This cookie was blocked because it had the 'SameSite=Lax' attribute and the request was made from a different site and was not initiated by a top-level navigation.",
+  "body_SameSiteUnspecifiedTreatedAsLax": "This cookie didn't specify a 'SameSite' attribute when it was stored, was defaulted to 'SameSite=Lax', and was blocked because the request was made from a different site and was not initiated by a top-level navigation. The cookie had to have been set with 'SameSite=None' to enable cross-site usage.",
+  "body_SameSiteNoneInsecure": "This cookie was blocked because it had the 'SameSite=None' attribute but was not marked 'Secure'. Cookies without SameSite restrictions must be marked 'Secure' and sent over a secure connection.",
+  "body_UserPreferences": "This cookie was blocked due to user preferences.",
+  "body_ThirdPartyPhaseout": "Prepare for phasing out third-party cookies.",
+  "body_ThirdPartyBlockedInFirstPartySet": "The cookie was blocked by third-party cookie blocking between sites in the same First-Party Set.",
+  "body_UnknownError": "Unknown error.",
+  "body_SchemefulSameSiteStrict": "This cookie was blocked because it had the 'SameSite=Strict' attribute but the request was cross-site. This includes top-level navigation requests initiated by other sites. This request is considered cross-site because the URL has a different scheme than the current site.",
+  "body_SchemefulSameSiteLax": "This cookie was blocked because it had the 'SameSite=Lax' attribute but the request was cross-site and was not initiated by a top-level navigation. This request is considered cross-site because the URL has a different scheme than the current site.",
+  "body_SchemefulSameSiteUnspecifiedTreatedAsLax": "This cookie didn't specify a 'SameSite' attribute when it was stored, was defaulted to 'SameSite=Lax', and was blocked because the request was cross-site and was not initiated by a top-level navigation. The cookie had to have been set with 'SameSite=None' to enable cross-site usage. This request is considered cross-site because the URL has a different scheme than the current site.",
+  "body_SamePartyFromCrossPartyContext": "This cookie was blocked because it had the 'SameParty' attribute but the request was cross-party. The request was considered cross-party because the domain of the resource's URL and the domains of the resource's enclosing frames/documents are neither owners nor members in the same first-party set.",
+  "body_NameValuePairExceedsMaxSize": "This cookie was blocked because it was too large. The combined size of the name and value must be less than or equal to 4,096 characters.",
+  "body_InvalidDomain": "This attempt to set a cookie via 'Set-Cookie' header was blocked because its Domain value was invalid with regards to the current host url.",
+  "header_sameSiteExcludeNavigationContextDowngradeSecure": "Migrate entirely to HTTPS to have cookies sent on same-site requests",
+  "body_1_sameSiteExcludeNavigationContextDowngradeSecure": "A cookie was not sent to a secure origin from an insecure context on a navigation. Because this cookie would have been sent across schemes on the same site, it was not sent. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers.",
+  "body_2_sameSiteExcludeNavigationContextDowngradeSecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case.",
+  "header_sameSiteExcludeNavigationContextDowngradeInsecure": "Migrate entirely to HTTPS to have cookies sent on same-site requests",
+  "body_1_sameSiteExcludeNavigationContextDowngradeInsecure": "A cookie was not sent to an insecure origin from a secure context on a navigation. Because this cookie would have been sent across schemes on the same site, it was not sent. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers.",
+  "body_2_sameSiteExcludeNavigationContextDowngradeInsecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case.",
+  "header_sameSiteExcludeContextDowngradeSetCookieSecure": "Migrate entirely to HTTPS to allow cookies to be set by same-site subresources",
+  "body_1_sameSiteExcludeContextDowngradeSetCookieSecure": "A cookie was not set by an insecure origin in a secure context. Because this cookie would have been set across schemes on the same site, it was blocked. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers.",
+  "body_2_sameSiteExcludeContextDowngradeSetCookieSecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case.",
+  "header_sameSiteExcludeContextDowngradeSetCookieInsecure": "Migrate entirely to HTTPS to allow cookies to be set by same-site subresources",
+  "body_1_sameSiteExcludeContextDowngradeSetCookieInsecure": "A cookie was not set by a secure origin in an insecure context. Because this cookie would have been set across schemes on the same site, it was blocked. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers.",
+  "body_2_sameSiteExcludeContextDowngradeSetCookieInsecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case.",
+  "header_sameSiteExcludeContextDowngradeReadCookieSecure": "Migrate entirely to HTTPS to have cookies sent to same-site subresources",
+  "body_1_sameSiteExcludeContextDowngradeReadCookieSecure": "A cookie was not sent to a secure origin from an insecure context. Because this cookie would have been sent across schemes on the same site, it was not sent. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers.",
+  "body_2_sameSiteExcludeContextDowngradeReadCookieSecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case.",
+  "header_sameSiteExcludeContextDowngradeReadCookieInsecure": "Migrate entirely to HTTPS to have cookies sent to same-site subresources",
+  "body_1_sameSiteExcludeContextDowngradeReadCookieInsecure": "A cookie was not sent to an insecure origin from a secure context. Because this cookie would have been sent across schemes on the same site, it was not sent. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers.",
+  "body_2_sameSiteExcludeContextDowngradeReadCookieInsecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case.",
+  "body_ExcludeSameSiteUnspecifiedTreatedAsLax": "This 'Set-Cookie' header didn't specify a 'SameSite' attribute and was defaulted to 'SameSite=Lax' and was blocked because it came from a cross-site response which was not the response to a top-level navigation. The 'Set-Cookie' had to have been set with 'SameSite=None' to enable cross-site usage.",
+  "header_cookieCrossSiteRedirectDowngrade": "Cookie is blocked due to a cross-site redirect chain",
+  "body_1_cookieCrossSiteRedirectDowngrade": "The cookie was blocked because the URL redirect chain was not fully same-site, meaning the final request was treated as a cross-site request. Like other cross-site requests, this blocks cookies with 'SameSite=Lax' or 'SameSite=Strict'.",
+  "body_2_cookieCrossSiteRedirectDowngrade": "For example: If site A redirects to site B which then redirects back to site A, the final request to site A will be a cross-site request.",
+  "header_ExcludeSameSiteNoneInsecureSetCookie": "Mark cross-site cookies as Secure to allow setting them in cross-site contexts",
+  "body_ExcludeSameSiteNoneInsecureSetCookie": "Cookies marked with 'SameSite=None' must also be marked with 'Secure' to allow setting them in a cross-site context. This behavior protects user data from being sent over an insecure connection.",
+  "header_ExcludeSameSiteNoneInsecureReadCookie": "Mark cross-site cookies as Secure to allow them to be sent in cross-site requests",
+  "body_ExcludeSameSiteNoneInsecureReadCookie": "Cookies marked with 'SameSite=None' must also be marked with 'Secure' to get sent in cross-site requests. This behavior protects user data from being sent over an insecure connection.",
+  "header_ExcludeInvalidSameParty": "Mark SameParty cookies as Secure and do not use SameSite=Strict for SameParty cookies",
+  "body_ExcludeInvalidSameParty": "Cookies marked with 'SameParty' must also be marked with 'Secure'. In addition, cookies marked with 'SameParty' cannot use 'SameSite=Strict'.",
+  "header_ExcludeSamePartyCrossPartyContext": "Make sure a cookie is using the SameParty attribute correctly",
+  "body_ExcludeSamePartyCrossPartyContext": "Setting cross-site cookies with the 'SameParty' attribute is only possible if both domains are a part of the same First-Party Set.",
+  "header_ExcludeDomainNonASCII": "Ensure cookie 'Domain' attribute values only contain ASCII characters",
+  "body_1_ExcludeDomainNonASCII": "'Domain' attributes in cookies are restricted to the ASCII character set. Any cookies that contain characters outside of the ASCII range in their 'Domain' attribute will be ignored.",
+  "body_2_ExcludeDomainNonASCII": "To resolve this issue, you need to remove all non-ASCII characters from the 'Domain' attribute of the affected cookies.",
+  "body_3_ExcludeDomainNonASCII": "If your site has an internationalized domain name (IDN), you should use punycode representation for the 'Domain' attribute instead.",
+  "header_ExcludeThirdPartyCookieBlockedInFirstPartySet": "Third-party cookie blocked within the same First-Party Set",
+  "body_ExcludeThirdPartyCookieBlockedInFirstPartySet": "A cookie embedded by a site in the top-level page's First-Party Set was blocked by third-party cookie blocking.",
+  "header_ExcludeThirdPartyPhaseoutReadCookie": "Cookie is blocked when sent in cross-site context",
+  "body_ExcludeThirdPartyPhaseoutReadCookie": "Cookies marked with 'SameSite=None; Secure;' and not 'Partitioned' are blocked in cross-site requests. This behavior protects user data from cross-site tracking.",
+  "header_ExcludeThirdPartyPhaseoutSetCookie": "Cookie is blocked when set in cross-site context",
+  "body_ExcludeThirdPartyPhaseoutSetCookie": "Cookies marked with 'SameSite=None; Secure' and not 'Partitioned' are blocked in cross-site contexts. This behavior protects user data from cross-site tracking.",
+  "header_WarnSameSiteUnspecifiedCrossSiteContextReadCookie": "Indicate whether to send a cookie in a cross-site request by specifying its SameSite attribute",
+  "body_WarnSameSiteUnspecifiedCrossSiteContextReadCookie": "Because a cookie's 'SameSite' attribute was not set or is invalid, it defaults to 'SameSite=Lax', which will prevent the cookie from being sent in a cross-site request in a future version of the browser. This behavior protects user data from accidentally leaking to third parties and cross-site request forgery.",
+  "header_WarnSameSiteUnspecifiedCrossSiteContextSetCookie": "Indicate whether a cookie is intended to be set in cross-site context by specifying its SameSite attribute",
+  "body_WarnSameSiteUnspecifiedCrossSiteContextSetCookie": "Because a cookie's 'SameSite' attribute was not set or is invalid, it defaults to 'SameSite=Lax', which will prevent the cookie from being set in a cross-site context in a future version of the browser. This behavior protects user data from accidentally leaking to third parties and cross-site request forgery.",
+  "header_WarnSameSiteNoneInsecureReadCookie": "Mark cross-site cookies as Secure to allow them to be sent in cross-site requests",
+  "body_WarnSameSiteNoneInsecureReadCookie": "In a future version of the browser, cookies marked with 'SameSite=None' must also be marked with 'Secure' to get sent in cross-site requests. This behavior protects user data from being sent over an insecure connection.",
+  "header_WarnSameSiteNoneInsecureSetCookie": "Mark cross-site cookies as Secure to allow setting them in cross-site contexts",
+  "body_WarnSameSiteNoneInsecureSetCookie": "In a future version of the browser, cookies marked with 'SameSite=None' must also be marked with 'Secure' to allow setting them in a cross-site context. This behavior protects user data from being sent over an insecure connection.",
+  "header_WarnSameSiteUnspecifiedLaxAllowUnsafeReadCookie": "Indicate whether to send a cookie in a cross-site request by specifying its SameSite attribute",
+  "body_WarnSameSiteUnspecifiedLaxAllowUnsafeReadCookie": "Because a cookie's 'SameSite' attribute was not set or is invalid, it defaults to 'SameSite=Lax', which will prevent the cookie from being sent in a cross-site request in a future version of the browser. This behavior protects user data from accidentally leaking to third parties and cross-site request forgery.",
+  "header_WarnSameSiteUnspecifiedLaxAllowUnsafeSetCookie": "Indicate whether a cookie is intended to be set in cross-site context by specifying its SameSite attribute",
+  "body_WarnSameSiteUnspecifiedLaxAllowUnsafeSetCookie": "Because a cookie's 'SameSite' attribute was not set or is invalid, it defaults to 'SameSite=Lax', which will prevents the cookie from being set in a cross-site context in a future version of the browser. This behavior protects user data from accidentally leaking to third parties and cross-site request forgery.",
+  "header_WarnSameSiteStrictLaxDowngradeStrictSecure": "Migrate entirely to HTTPS to continue having cookies sent on same-site requests",
+  "body_1_WarnSameSiteStrictLaxDowngradeStrictSecure": "A cookie is being sent to a secure origin from an insecure context on a navigation. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers.",
+  "body_2_WarnSameSiteStrictLaxDowngradeStrictSecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case.",
+  "header_WarnSameSiteStrictLaxDowngradeStrictInsecure": "Migrate entirely to HTTPS to continue having cookies sent on same-site requests",
+  "body_1_WarnSameSiteStrictLaxDowngradeStrictInsecure": "A cookie is being sent to an insecure origin from a secure context on a navigation. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers.",
+  "body_2_WarnSameSiteStrictLaxDowngradeStrictInsecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case.",
+  "header_WarnSameSiteStrictCrossDowngradeStrictReadCookieSecure": "Migrate entirely to HTTPS to continue having cookies sent to same-site subresources",
+  "body_1_WarnSameSiteStrictCrossDowngradeStrictReadCookieSecure": "A cookie is being sent to a secure origin from an insecure context. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers.",
+  "body_2_WarnSameSiteStrictCrossDowngradeStrictReadCookieSecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case.",
+  "header_WarnSameSiteStrictCrossDowngradeStrictReadCookieInsecure": "Migrate entirely to HTTPS to continue having cookies sent to same-site subresources",
+  "body_1_WarnSameSiteStrictCrossDowngradeStrictReadCookieInsecure": "A cookie is being sent to an insecure origin from a secure context. Because this cookie is being sent across schemes on the same site, it will not be sent in a future version of Chrome. This behavior enhances the 'SameSite' attribute's protection of user data from request forgery by network attackers.",
+  "body_2_WarnSameSiteStrictCrossDowngradeStrictReadCookieInsecure": "Resolve this issue by migrating your site (as defined by the eTLD+1) entirely to HTTPS. It is also recommended to mark the cookie with the 'Secure' attribute if that is not already the case.",
+  "dsNoNews": {
+    "message": "No News"
+  },
+  "dsThirdPartyCookies": {
+    "message": "3rd Party Cookies"
+  },
+  "dsNewChromeProfile": {
+    "message": "Cookies must be analyzed on a new, clean Chrome profile for an accurate report"
+  },
+  "dsAllowListed": {
+    "message": "Allow Listed"
+  },
+  "dsAllowListedNote": {
+    "message": "The cookie domain was added to the allow-list for this session, however the browser may still block these cookies for various reasons, such as invalid attributes. You can check the allowed domains under $path$.",
+    "placeholders": {
+      "path": {
+        "content": "$1",
+        "example": "chrome://settings/content/siteData"
+      }
+    }
+  },
+  "dsBlockedReason": {
+    "message": "Blocked Reason"
+  },
+  "dsBlockedInAtLeastOne": {
+    "message": "This cookie was blocked in at least one of the $type$.",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "requests"
+      }
+    }
+  },
+  "dsBlockedInAll": {
+    "message": "This cookie was blocked in all $type$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "requests"
+      }
+    }
+  },
+  "dsBlockedInAllRequestResponse": {
+    "message": "This cookie was blocked in all of the requests and responses."
+  },
+  "dsBlockedInSomeRequestResponse": {
+    "message": "This cookie was blocked in some of the requests and responses."
+  },
+  "dsBlockedinSomeAndAll": {
+    "message": "This cookie was blocked in all $type1$ and at least one of the $type2$.",
+    "placeholders": {
+      "type1": {
+        "content": "$1",
+        "example": "requests"
+      },
+      "type2": {
+        "content": "$2",
+        "example": "responses"
+      }
+    }
+  },
+  "dsWarnings": {
+    "message": "Warnings"
+  },
+  "dsCookieValue": {
+    "message": "Cookie Value"
+  },
+  "dsURLDecoded": {
+    "message": "Show URL-decoded"
+  },
+  "dsDescription": {
+    "message": "Description"
+  },
+  "dsNoDescription": {
+    "message": "No description available."
+  },
+  "dsSelectCookie": {
+    "message": "Select cookies to preview its value"
+  },
+  "dsNumberOfFrames": {
+    "message": "Number of Frames"
+  },
+  "dsNumberOfFramesNote": {
+    "message": "'Number of unique frames found across the page(s).'"
+  },
+  "dsNumberOfFramesWithAssociatedCookies": {
+    "message": "Number of Frames with Associated Cookies"
+  },
+  "dsNumberOfFramesWithAssociatedCookiesNote": {
+    "message": "Unique frames across the page(s) that have cookies associated with them."
+  },
+  "dsExtensionUpdated": {
+    "message": "Looks like extension has been updated since devtool was open."
+  },
+  "dsRefreshPanel": {
+    "message": "Refresh Panel"
+  },
+  "dsWentWrong": {
+    "message": "Something went wrong!"
+  },
+  "dsOpenInNewTab": {
+    "message": "Please try opening this page in a new tab."
+  },
+  "dsHoverOverIframes": {
+    "message": "Hover over the iframes on the page or select frames below to inspect them."
+  },
+  "dsProposal": {
+    "message": "Proposal"
+  },
+  "dsProposalNote": {
+    "message": "Public explanation for the proposed solution (Chrome)"
+  },
+  "dsPublicDiscussion": {
+    "message": "Public Discussion"
+  },
+  "dsPublicDiscussionNote": {
+    "message": "Public questions and feedback about the proposal"
+  },
+  "dsVideoOverview": {
+    "message": "Video Overview"
+  },
+  "dsVideoOverviewNote": {
+    "message": "Short summary video"
+  },
+  "dsDevDocumentation": {
+    "message": "Dev Documentation"
+  },
+  "dsDevDocumentationNote": {
+    "message": "Developer documentation"
+  },
+  "dsLearnMore": {
+    "message": "Learn more about PSAT"
+  },
+  "dsJoinDiscussions": {
+    "message": "Join the discussions"
+  },
+  "dsReportBug": {
+    "message": "Report a bug"
+  },
+  "dsReportBreakage": {
+    "message": "Report a breakage"
+  },
+  "dsRequestMigrationTime": {
+    "message": "Request Additional Migration Time"
+  },
+  "dsQuickLinks": {
+    "message": "Quick Links"
+  },
+  "dsLatestNews": {
+    "message": "Latest News"
+  },
+  "dsViewMore": {
+    "message": "View More"
+  },
+  "dsCollapseView": {
+    "message": "Collapse View"
+  },
+  "dsExpandView": {
+    "message": "Expand View"
+  },
+  "dsSearch": {
+    "message": "Search"
+  },
+  "dsClearSearch": {
+    "message": "Clear Search"
+  },
+  "dsToggleAll": {
+    "message": "Toggle All"
+  },
+  "dsClearAll": {
+    "message": "Clear All"
+  },
+  "dsCollapseAll": {
+    "message": "Collapse All"
+  },
+  "dsExpandAll": {
+    "message": "Expand All"
+  },
+  "dsShowLess": {
+    "message": "Show Less"
+  },
+  "dsShowMore": {
+    "message": "Show More"
+  },
+  "dsSelectAll": {
+    "message": "All"
+  },
+  "dsCount": {
+    "message": "Count"
+  },
+  "dsReload": {
+    "message": "Reload"
+  },
+  "dsTotalCookies": {
+    "message": "Total Cookies"
+  },
+  "dsFirstPartyCookies": {
+    "message": "1st Party Cookies"
+  },
+  "dsFirstParty": {
+    "message": "First Party"
+  },
+  "dsThirdParty": {
+    "message": "Third Party"
+  },
+  "dsFunctional": {
+    "message": "Functional"
+  },
+  "dsMarketing": {
+    "message": "Marketing"
+  },
+  "dsAnalytics": {
+    "message": "Analytics"
+  },
+  "dsUncategorized": {
+    "message": "Uncategorized"
+  },
+  "dsFrames": {
+    "message": "Frames"
+  },
+  "dsTotalFrames": {
+    "message": "Total Frames"
+  },
+  "dsFramesWithCookies": {
+    "message": "Frames with Cookies"
+  },
+  "dsFramesWithBlockedCookies": {
+    "message": "Frames with Blocked Cookies"
+  },
+  "dsFramesWithUnblockedCookies": {
+    "message": "Frames with Unblocked Cookies"
+  },
+  "dsFencedFrames": {
+    "message": "Fenced Frames"
+  },
+  "extShowMore": {
+    "message": "Show more"
+  },
+  "extShowLess": {
+    "message": "Show less"
+  },
+  "extUnknown": {
+    "message": "Unknown"
+  },
+  "extYes": {
+    "message": "Yes"
+  },
+  "extNo": {
+    "message": "No"
+  },
+  "extHiddenIframe": {
+    "message": "Hidden iframe"
+  },
+  "extNestedIframe": {
+    "message": "Nested iframe"
+  },
+  "extMainFrame": {
+    "message": "Main frame"
+  },
+  "extIframe": {
+    "message": "iframe"
+  },
+  "extMedium": {
+    "message": "Medium"
+  },
+  "extUncateogorized": {
+    "message": "Uncategorized"
+  },
+  "extBlockedCookies": {
+    "message": "Blocked cookies"
+  },
+  "extNotUsingCDP": {
+    "message": "Enable PSAT to use CDP via the"
+  },
+  "extSettingsPage": {
+    "message": "Settings page"
+  },
+  "extVisitPSAT": {
+    "message": "For more information, visit the PSAT"
+  },
+  "extWiki": {
+    "message": "Wiki"
+  },
+  "extBlockedReasons": {
+    "message": "Blocked Reasons"
+  },
+  "extCookiesBlockedNote": {
+    "message": "Cookies that have been blocked by the browser. (The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
+  },
+  "extNoCookies": {
+    "message": "No cookies found on this page"
+  },
+  "extTryReloading": {
+    "message": "Please try reloading the page"
+  },
+  "extFrames": {
+    "message": "Frames"
+  },
+  "extFramesNote": {
+    "message": "The details regarding frames and associated cookies in this page."
+  },
+  "extCookies": {
+    "message": "Cookies"
+  },
+  "extLibraryDetection": {
+    "message": "Library Detection"
+  },
+  "extName": {
+    "message": "Name"
+  },
+  "extScope": {
+    "message": "Scope"
+  },
+  "extDomain": {
+    "message": "Domain"
+  },
+  "extPartitionKey": {
+    "message": "Partition Key"
+  },
+  "extSameSite": {
+    "message": "SameSite"
+  },
+  "extCategory": {
+    "message": "Category"
+  },
+  "extPlatform": {
+    "message": "Platform"
+  },
+  "extHttpOnly": {
+    "message": "HttpOnly"
+  },
+  "extSecure": {
+    "message": "Secure"
+  },
+  "extValue": {
+    "message": "Value"
+  },
+  "extPath": {
+    "message": "Path"
+  },
+  "extExpires": {
+    "message": "Expires / Max-Age"
+  },
+  "extPriority": {
+    "message": "Priority"
+  },
+  "extSize": {
+    "message": "Size"
+  },
+  "extMapping": {
+    "message": "Mapping"
+  },
+  "extBlockingStatus": {
+    "message": "Blocking Status"
+  },
+  "extLookAtNetworkTab": {
+    "message": "Please take a look at the network tab to get this cookie's blocking information."
+  },
+  "extUndetermined": {
+    "message": "Undetermined"
+  },
+  "extBlocked": {
+    "message": "Blocked"
+  },
+  "extFirstParty": {
+    "message": "First Party"
+  },
+  "extThirdParty": {
+    "message": "Third Party"
+  },
+  "extTrue": {
+    "message": "True"
+  },
+  "extFalse": {
+    "message": "False"
+  },
+  "extRetentionPeriod": {
+    "message": "Retention Period"
+  },
+  "extSession": {
+    "message": "Session"
+  },
+  "extShortTerm": {
+    "message": "Short Term (<24h)"
+  },
+  "extMediumTerm": {
+    "message": "Medium Term (24h - 1 week)"
+  },
+  "extLongTerm": {
+    "message": "Long Term (1 week - 1 month)"
+  },
+  "extExtentedTerm": {
+    "message": "Extended Term (>1 month)"
+  },
+  "extSet": {
+    "message": "Set"
+  },
+  "extNotSet": {
+    "message": "Not Set"
+  },
+  "extSetVia": {
+    "message": "Set Via"
+  },
+  "extHttp": {
+    "message": "HTTP"
+  },
+  "extJS": {
+    "message": "JS"
+  },
+  "extRefreshJSCookies": {
+    "message": "Refresh Cookies Set via JavaScript"
+  },
+  "extUnmapped": {
+    "message": "Unmapped"
+  },
+  "extCouldNotMapCookies": {
+    "message": "Cookies that could not be mapped to any frame."
+  },
+  "extOrphanedCookies": {
+    "message": "Frames that set these cookies were removed from the DOM, leaving these cookies orphaned."
+  },
+  "extOrphaned": {
+    "message": "Orphaned"
+  },
+  "extCopyNetworkFilter": {
+    "message": "Copy Network Filter String"
+  },
+  "extRemoveParentDomainFromAllowList": {
+    "message": "Remove $parentDomain$ From Allow List",
+    "placeholders": {
+      "parentDomain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "extRemoveDomainFromAllowList": {
+    "message": "Remove Domain From Allow List"
+  },
+  "extAllowDomin": {
+    "message": "Allow Domain During Session"
+  },
+  "extMembershipInExperimentGroup": {
+    "message": "Membership in Experiment Group"
+  },
+  "extOpenTabs": {
+    "message": "Open Tabs"
+  },
+  "extActiveExtensions": {
+    "message": "Active Extensions"
+  },
+  "extChromeVersion": {
+    "message": "Chrome Version"
+  },
+  "extPSATVersion": {
+    "message": "PSAT Version"
+  },
+  "extSystemArchitecture": {
+    "message": "OS - System Architecture"
+  },
+  "extSystemInformation": {
+    "message": "System Information"
+  },
+  "extPSATSettings": {
+    "message": "PSAT Extension Settings"
+  },
+  "extSettings": {
+    "message": "Settings"
+  },
+  "extLoading": {
+    "message": "Loading"
+  },
+  "extMembership": {
+    "message": "$rws$ Membership",
+    "placeholders": {
+      "rws": {
+        "content": "$1",
+        "example": "Related Website Set"
+      }
+    }
+  },
+  "extBelongsToRWS": {
+    "message": "This site belongs to a $rws$.",
+    "placeholders": {
+      "rws": {
+        "content": "$1",
+        "example": "Related Website Set"
+      }
+    }
+  },
+  "extPrimaryDomain": {
+    "message": "Primary Domain"
+  },
+  "extRationale": {
+    "message": "Rationale"
+  },
+  "extRWSPrimaryDomain": {
+    "message": "This site is the primary domain of the $rws$.",
+    "placeholders": {
+      "rws": {
+        "content": "$1",
+        "example": "Related Website Set"
+      }
+    }
+  },
+  "extAssociatedSites": {
+    "message": "Associated Sites"
+  },
+  "extServiceSites": {
+    "message": "Service Sites"
+  },
+  "extNotBelongToRWS": {
+    "message": "This site does not belong to any $rws$.",
+    "placeholders": {
+      "rws": {
+        "content": "$1",
+        "example": "Related Website Set"
+      }
+    },
+    "extAssociatedSubset": {
+      "message": "Associated Subset"
+    },
+    "extAssociatedDomainsLimit": {
+      "message": "Browsers may enforce a limit on Associated Domains (e.g. Chrome's limit is 5)"
+    },
+    "extRationaleDomainCount": {
+      "message": "Rationale Domain #$index$",
+      "placeholders": {
+        "index": {
+          "content": "$1",
+          "example": "1"
+        }
+      }
+    },
+    "extAffiliationHeading": {
+      "message": "Affiliation to primary domain"
+    },
+    "extAffiliationNote": {
+      "message": "How is the affiliation across domains presented and why users would expect it"
+    },
+    "extContact": {
+      "message": "Contact"
+    },
+    "extContactNote": {
+      "message": "Email address or group alias if available"
+    },
+    "extCountryCodeHeading": {
+      "message": "Country Code Top-level Domains (ccTLDs)"
+    },
+    "extWhichSiteccTLD": {
+      "message": "For which site is this ccTLD?"
+    },
+    "extSelectSite": {
+      "message": "Select a site"
+    },
+    "extccTLDIdx": {
+      "message": "ccTLD #$index$",
+      "placeholders": {
+        "index": {
+          "content": "$1",
+          "example": "1"
+        }
+      }
+    },
+    "extCountryCodeNote": {
+      "message": "Country code top-level domain related to the site"
+    },
+    "extRWSJSONHeading": {
+      "message": "Here are your JSON resources"
+    },
+    "extFollowInstructions": {
+      "message": "Please follow the steps below to submit your $rws$ to the canonical list.",
+      "placeholders": {
+        "rws": {
+          "content": "$1",
+          "example": "Related Website Set"
+        }
+      }
+    },
+    "extCreatePR": {
+      "message": "Create $pr$",
+      "placeholders": {
+        "pr": {
+          "content": "$1",
+          "example": "Pull Request"
+        }
+      }
+    },
+    "extPRGuide": {
+      "message": "View $pr$ guide",
+      "placeholders": {
+        "pr": {
+          "content": "$1",
+          "example": "Pull Request"
+        }
+      }
+    }
+  },
+  "extCountrySites": {
+    "message": "Country Sites"
+  },
+  "extSetPrimaryDomain": {
+    "message": "Set Primary Domain"
+  },
+  "extServiceSubset": {
+    "message": "Service Subset"
+  },
+  "extServiceDomainIdx": {
+    "message": "Service Domain #$index$",
+    "placeholders": {
+      "index": {
+        "content": "$1",
+        "example": "1"
+      }
+    }
+  },
+  "extShouldMatchFormat": {
+    "message": "should be matching the format https://<example.com>"
+  },
+  "extSettingsChanged": {
+    "message": "Settings changed, please reload all tabs."
+  },
+  "extCookiesUsedByFrame": {
+    "message": "Cookies used by frames from $url$",
+    "placeholders": {
+      "url": {
+        "content": "$1",
+        "example": "https://example.com"
+      }
+    }
+  },
+  "extDisableCDP": {
+    "message": "Disable CDP"
+  },
+  "extEnableCDP": {
+    "message": "Enable CDP"
+  },
+  "extNoMoreAnalysis": {
+    "message": "Not much to analyze here"
+  },
+  "extEmptyCookieJar": {
+    "message": "Its emptier than a cookie jar after a midnight snack!"
+  },
+  "extAnalyzeThisTab": {
+    "message": "Analyze this tab"
+  },
+  "extFirstPartyCookies": {
+    "message": "1st Party Cookies"
+  },
+  "extThirdPartyCookies": {
+    "message": "3rd Party Cookies"
+  },
+  "extInspectInPSATPanel": {
+    "message": "Inspect cookies in the $PS$ panel of DevTools",
+    "placeholders": {
+      "PS": {
+        "content": "$1",
+        "example": "PSAT"
       }
     }
   }
