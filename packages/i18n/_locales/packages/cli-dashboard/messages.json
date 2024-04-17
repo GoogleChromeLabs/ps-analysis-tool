@@ -18,7 +18,7 @@
     "message": "Blocked Reasons"
   },
   "cdBlockedReasonsNote": {
-    "message": "Cookies that have been blocked by the browser.(The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
+    "message": "Cookies that have been blocked by the browser. (The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
   },
   "cdSelectAll": {
     "message": "All"

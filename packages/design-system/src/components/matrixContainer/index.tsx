@@ -53,14 +53,33 @@ const MatrixContainer = ({
   allowExpand = true,
   highlightTitle = false,
   capitalizeTitle = false,
-  infoIconTitle = '',
+  infoIconTitle,
 }: MatrixContainerProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
     <div className="w-full" data-testid={`matrix-${title}`}>
       <div>
-        <div className="flex gap-x-5 justify-between border-b border-bright-gray dark:border-quartz">
+        <div className="flex gap-2 justify-start border-b border-bright-gray dark:border-quartz">
+          {allowExpand && (
+            <h4 className="pb-3 text-xs font-bold text-darkest-gray dark:text-bright-gray text-right">
+              <button
+                onClick={() => setIsExpanded((state) => !state)}
+                data-testid="expand-button"
+                title={
+                  isExpanded
+                    ? I18n.getMessage('dsCollapseView')
+                    : I18n.getMessage('dsExpandView')
+                }
+              >
+                <ChevronDown
+                  className={classname('fill-granite-gray', {
+                    'rotate-180': isExpanded,
+                  })}
+                />
+              </button>
+            </h4>
+          )}
           <div className="pb-3 flex flex-col gap-1.5">
             <h4
               className={`flex items-center gap-1 flex-1 grow text-xs font-bold text-darkest-gray dark:text-bright-gray ${
@@ -79,25 +98,6 @@ const MatrixContainer = ({
               {description}
             </p>
           </div>
-          {allowExpand && (
-            <h4 className="pb-3 flex-1 grow text-xs font-bold text-darkest-gray dark:text-bright-gray text-right">
-              <button
-                onClick={() => setIsExpanded((state) => !state)}
-                data-testid="expand-button"
-                title={
-                  isExpanded
-                    ? I18n.getMessage('dsCollapseView')
-                    : I18n.getMessage('dsExpandView')
-                }
-              >
-                <ChevronDown
-                  className={classname('fill-granite-gray', {
-                    'rotate-180': isExpanded,
-                  })}
-                />
-              </button>
-            </h4>
-          )}
         </div>
         {showMatrix && (
           <Matrix dataComponents={matrixData} expand={isExpanded} />

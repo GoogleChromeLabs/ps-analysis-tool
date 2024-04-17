@@ -45,8 +45,8 @@ interface CookiesMatrixProps {
   allowExpand?: boolean;
   highlightTitle?: boolean;
   capitalizeTitle?: boolean;
-  infoIconTitle?: string;
   matrixHorizontalData?: MatrixComponentHorizontalProps[] | null;
+  infoIconTitle?: string;
 }
 
 const CookiesMatrix = ({
@@ -63,7 +63,7 @@ const CookiesMatrix = ({
   highlightTitle = false,
   capitalizeTitle = false,
   matrixHorizontalData = null,
-  infoIconTitle = I18n.getMessage('dsNewChromeProfile'),
+  infoIconTitle,
 }: CookiesMatrixProps) => {
   const dataComponents: MatrixComponentProps[] = [];
 

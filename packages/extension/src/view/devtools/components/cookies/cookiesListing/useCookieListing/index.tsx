@@ -22,7 +22,6 @@ import {
   type CookieTableData,
   type TabCookies,
   BLOCK_STATUS,
-  filterCookiesByFrame,
 } from '@ps-analysis-tool/common';
 import {
   RefreshButton,
@@ -50,24 +49,19 @@ import NamePrefixIconSelector from './namePrefixIconSelector';
 import OrphanedUnMappedInfoDisplay from './orphanedUnMappedInfoDisplay';
 
 const useCookieListing = (domainsInAllowList: Set<string>) => {
-  const { selectedFrame, cookies, getCookiesSetByJavascript, tabFrames } =
-    useCookie(({ state, actions }) => ({
+  const { selectedFrame, cookies, getCookiesSetByJavascript } = useCookie(
+    ({ state, actions }) => ({
       selectedFrame: state.selectedFrame,
       cookies: state.tabCookies || {},
-      tabFrames: state.tabFrames,
       getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
-    }));
+    })
+  );
 
   const { activePanelQuery, clearActivePanelQuery } = useSidebar(
     ({ state }) => ({
       activePanelQuery: state.activePanel.query,
       clearActivePanelQuery: state.activePanel.clearQuery,
     })
-  );
-
-  const frameFilteredCookies = useMemo(
-    () => filterCookiesByFrame(cookies, tabFrames, selectedFrame),
-    [cookies, selectedFrame, tabFrames]
   );
 
   const parsedQuery = useMemo(
@@ -501,7 +495,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
           parsedQuery
         ),
         filterValues: calculateExemptionReason(
-          frameFilteredCookies,
+          Object.values(cookies),
           clearActivePanelQuery,
           parsedQuery?.filter?.exemptionReason
         ),
@@ -509,9 +503,10 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
           const val = value as string;
           return val === filterValue;
         },
+        useGenericPersistenceKey: true,
       },
     }),
-    [clearActivePanelQuery, cookies, frameFilteredCookies, parsedQuery]
+    [clearActivePanelQuery, cookies, parsedQuery]
   );
 
   const searchKeys = useMemo<string[]>(

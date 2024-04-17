@@ -23,8 +23,13 @@ import { I18n } from '@ps-analysis-tool/i18n';
  * Internal dependencies.
  */
 import Button from '../button';
+interface ExtensionReloadNotificationProps {
+  tabId?: number;
+}
 
-const ExtensionReloadNotification = () => {
+const ExtensionReloadNotification = ({
+  tabId,
+}: ExtensionReloadNotificationProps) => {
   return (
     <div className="w-full h-full px-2 flex flex-col items-center justify-center border-b border-american-silver dark:border-quartz bg-white dark:bg-charleston-green dark:text-white">
       <p className="text-xl text-center px-4">
@@ -32,7 +37,17 @@ const ExtensionReloadNotification = () => {
       </p>
       <div className="ml-2 mt-4">
         <Button
-          onClick={() => window.location.reload()}
+          onClick={() => {
+            window.location.reload();
+            if (localStorage.getItem('psatOpenedAfterPageLoad') && tabId) {
+              try {
+                chrome.tabs.reload(tabId);
+                localStorage.removeItem('psatOpenedAfterPageLoad');
+              } catch (error) {
+                //Fail silenlty
+              }
+            }
+          }}
           text={I18n.getMessage('dsRefreshPanel')}
         />
       </div>
