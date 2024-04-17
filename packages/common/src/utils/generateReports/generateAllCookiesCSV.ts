@@ -18,6 +18,7 @@
  * External dependencies
  */
 import sanitizeCsvRecord from '../sanitizeCsvRecord';
+import { I18n } from '@ps-analysis-tool/i18n';
 /**
  * Internal dependencies
  */
@@ -26,7 +27,6 @@ import {
   type CookieJsonDataType,
 } from '../../cookies.types';
 import calculateEffectiveExpiryDate from '../calculateEffectiveExpiryDate';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 export const COOKIES_DATA_HEADER = [
   I18n.getMessage('cmName'),

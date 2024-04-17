@@ -25,9 +25,13 @@ import {
   type MenuData,
 } from '@ps-analysis-tool/design-system';
 import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
+
+/**
+ * Internal dependencies.
+ */
 import CookiesSection from './cookieLanding/cookiesSection';
 import BlockedCookiesSection from './cookieLanding/blockedCookiesSection';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 interface CookiesLandingContainerProps {
   tabFrames: TabFrames;

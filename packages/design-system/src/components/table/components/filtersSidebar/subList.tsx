@@ -17,13 +17,13 @@
  * External dependencies.
  */
 import React, { useMemo } from 'react';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
  */
 import { useTable, type TableFilter } from '../../useTable';
 import Option from './option';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 interface SubListProps {
   filterValues: TableFilter[keyof TableFilter]['filterValues'];

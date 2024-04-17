@@ -19,13 +19,13 @@
  */
 import React from 'react';
 import { addUTMParams } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
  */
 import type { PSInfo as PSInfoType } from './fetchPSInfo';
 import RenderLink from './renderLink';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * @type {Array} LABELS - Array of objects containing the label and link label for each dropdown item.

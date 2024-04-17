@@ -16,8 +16,8 @@
 /**
  * External dependencies.
  */
-import { I18n } from '@ps-analysis-tool/i18n';
 import React from 'react';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface ErrorFallbackProps {
   error: Record<string, string>;

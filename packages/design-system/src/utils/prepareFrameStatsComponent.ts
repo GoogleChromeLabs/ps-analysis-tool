@@ -17,12 +17,12 @@
  * External dependencies
  */
 import type { TabCookies, TabFrames } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies
  */
 import { EMPTY_FRAME_COUNT, EMPTY_FRAME_LEGEND } from '../constants';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Calcualte insights about frames to be shown on cookies landing page.

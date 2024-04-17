@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -24,7 +25,6 @@ import React from 'react';
 import ChipList from './chipList';
 import { StopIcon } from '../../../../../icons';
 import { useTable } from '../../../useTable';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 const ChipsBar = () => {
   const { selectedFilters, resetFilters } = useTable(({ state, actions }) => ({

@@ -39,6 +39,7 @@ import {
   InfoIcon,
   calculateExemptionReason,
 } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies
@@ -47,7 +48,6 @@ import { useCookie, useSettings } from '../../../../stateProviders';
 import useHighlighting from './useHighlighting';
 import NamePrefixIconSelector from './namePrefixIconSelector';
 import OrphanedUnMappedInfoDisplay from './orphanedUnMappedInfoDisplay';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 const useCookieListing = (domainsInAllowList: Set<string>) => {
   const { selectedFrame, cookies, getCookiesSetByJavascript, tabFrames } =

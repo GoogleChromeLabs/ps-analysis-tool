@@ -18,13 +18,13 @@
  * External dependencies.
  */
 import React from 'react';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
  */
 import type { PrimaryDomainType } from '../types';
 import { RWSInput } from '../components';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 interface PrimaryDomainProps {
   primaryDomain: PrimaryDomainType;

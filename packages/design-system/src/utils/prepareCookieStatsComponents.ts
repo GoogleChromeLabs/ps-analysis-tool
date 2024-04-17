@@ -20,11 +20,11 @@ import type {
   CookieStatsComponents,
   CookiesCount,
 } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 /**
  * Internal dependencies.
  */
 import { COLOR_MAP } from '../theme/colors';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 // eslint-disable-next-line complexity
 const prepareCookieStatsComponents = (

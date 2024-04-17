@@ -19,12 +19,12 @@
  */
 import React from 'react';
 import { InfoIcon } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies
  */
 import { useCookie } from '../../../../stateProviders';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 interface OrphanedUnMappedInfoDisplayProps {
   frameIdList: number[];

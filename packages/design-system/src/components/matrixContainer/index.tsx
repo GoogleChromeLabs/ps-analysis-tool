@@ -18,6 +18,7 @@
  */
 import React, { useState } from 'react';
 import classname from 'classnames';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies
@@ -28,7 +29,6 @@ import MatrixComponentHorizontal, {
   MatrixComponentHorizontalProps,
 } from '../matrix/matrixComponent/matrixComponentHorizontal';
 import { MatrixComponentProps } from '../matrix/matrixComponent';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 interface MatrixContainerProps {
   matrixData?: MatrixComponentProps[];

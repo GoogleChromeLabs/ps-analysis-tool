@@ -17,12 +17,12 @@
  * External dependencies.
  */
 import React from 'react';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
  */
 import Button from '../button';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 const ExtensionReloadNotification = () => {
   return (

@@ -19,6 +19,7 @@
  */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { getDomain } from 'tldts';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies
@@ -27,7 +28,6 @@ import checkURLInRWS, {
   type CheckURLInRWSOutputType,
 } from './utils/checkURLInRWS';
 import SitesList from './sitesList';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 const Insights = () => {
   const [insightsData, setInsightsData] =

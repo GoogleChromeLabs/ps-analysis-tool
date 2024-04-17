@@ -18,12 +18,12 @@
  */
 import promptly from 'promptly';
 import Sitemapper from 'sitemapper';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
  */
 import { Cookie } from '../../types';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Table = require('cli-table');

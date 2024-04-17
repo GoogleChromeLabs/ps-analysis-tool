@@ -27,6 +27,7 @@ import React, {
 import { createPortal } from 'react-dom';
 import { noop, type CookieTableData } from '@ps-analysis-tool/common';
 import type { TableRow } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies
@@ -38,7 +39,6 @@ import {
   getDotPrefixedDomain,
   isCookieDomainInAllowList,
 } from '../../../stateProviders/allowedList/utils';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 interface RowContextMenuProps {
   domainsInAllowList: Set<string>;

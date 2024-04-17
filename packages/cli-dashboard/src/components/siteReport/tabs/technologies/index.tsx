@@ -28,12 +28,12 @@ import {
   TableProvider,
 } from '@ps-analysis-tool/design-system';
 import { noop, type TechnologyData } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies
  */
 import { useContentStore } from '../../stateProviders/contentStore';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 interface TechnologiesProps {
   selectedSite: string | null;

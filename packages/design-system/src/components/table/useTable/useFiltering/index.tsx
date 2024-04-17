@@ -19,13 +19,13 @@
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { getValueByKey } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
  */
 import type { TableData, TableFilter } from '../types';
 import useFiltersPersistence from './useFiltersPersistence';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 export type TableFilteringOutput = {
   filters: TableFilter;

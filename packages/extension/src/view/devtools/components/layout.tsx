@@ -30,6 +30,7 @@ import {
   SIDEBAR_ITEMS_KEYS,
 } from '@ps-analysis-tool/design-system';
 import { Resizable } from 're-resizable';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -38,7 +39,6 @@ import Cookies from './cookies';
 import useFrameOverlay from '../hooks/useFrameOverlay';
 import { useCookie, useSettings } from '../stateProviders';
 import { getCurrentTabId } from '../../../utils/getCurrentTabId';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 interface LayoutProps {
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;

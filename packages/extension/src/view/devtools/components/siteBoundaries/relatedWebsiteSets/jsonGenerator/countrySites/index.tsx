@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import React, { useEffect } from 'react';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -25,7 +26,6 @@ import React, { useEffect } from 'react';
 import type { CountrySiteType } from '../types';
 import type { SitePayloadType } from '../useGeneratorForm/types';
 import { AddButton, RWSInput, RWSSelect, RemoveButton } from '../components';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 interface CountrySitesProps {
   countrySites: CountrySiteType[];

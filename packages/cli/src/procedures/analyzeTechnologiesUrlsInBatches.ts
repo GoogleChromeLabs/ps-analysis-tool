@@ -20,12 +20,12 @@
 
 // @ts-ignore Package does not support typescript.
 import Wapplalyzer from 'wappalyzer';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
  */
 import { TechnologyDetailList } from '../types';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 export const analyzeTechnologiesUrlsInBatches = async (
   urls: Array<string>,

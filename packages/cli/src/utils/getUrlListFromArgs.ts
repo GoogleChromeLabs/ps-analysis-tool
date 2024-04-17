@@ -18,11 +18,11 @@
  */
 import { readFile } from 'fs-extra';
 import { parseStringPromise } from 'xml2js';
+import { I18n } from '@ps-analysis-tool/i18n';
 /**
  * Internal dependencies.
  */
 import Utility from './utility';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 const parseUrlsFromSitemap = async (sitemapUrl: string, spinnies: any) => {
   spinnies?.add('sitemap-spinner', {

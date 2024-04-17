@@ -18,13 +18,13 @@
  * External dependencies.
  */
 import React from 'react';
+import type { CookieTableData } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
  */
-import type { CookieTableData } from '@ps-analysis-tool/common';
 import Details from './details';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 interface CookieDetailsProps {
   isUsingCDP: boolean;

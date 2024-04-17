@@ -19,13 +19,13 @@
 import React from 'react';
 import { VictoryPie } from 'victory';
 import classNames from 'classnames';
+import { InfoIcon } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
  */
 import EmptyCirclePieChart from './emptyCirclePieChart';
-import { InfoIcon } from '@ps-analysis-tool/design-system';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 interface CirclePieChartProps {
   centerCount: number;

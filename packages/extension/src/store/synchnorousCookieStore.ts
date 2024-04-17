@@ -22,6 +22,7 @@ import {
   type BlockedReason,
 } from '@ps-analysis-tool/common';
 import type { Protocol } from 'devtools-protocol';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -29,7 +30,6 @@ import type { Protocol } from 'devtools-protocol';
 import updateCookieBadgeText from './utils/updateCookieBadgeText';
 import { deriveBlockingStatus } from './utils/deriveBlockingStatus';
 import { NEW_COOKIE_DATA } from '../constants';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 class SynchnorousCookieStore {
   /**

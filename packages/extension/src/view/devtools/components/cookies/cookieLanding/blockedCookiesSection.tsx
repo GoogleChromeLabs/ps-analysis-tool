@@ -29,11 +29,11 @@ import {
   SIDEBAR_ITEMS_KEYS,
   useSidebar,
 } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 /**
  * Internal dependencies
  */
 import { useCookie, useSettings } from '../../../stateProviders';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 const BlockedCookiesSection = () => {
   const { tabCookies, tabFrames } = useCookie(({ state }) => ({

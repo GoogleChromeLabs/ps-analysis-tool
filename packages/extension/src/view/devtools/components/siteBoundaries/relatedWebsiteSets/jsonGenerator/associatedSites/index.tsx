@@ -19,6 +19,7 @@
  */
 import React from 'react';
 import { InfoIcon } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -26,7 +27,6 @@ import { InfoIcon } from '@ps-analysis-tool/design-system';
 import type { AssociatedSiteType } from '../types';
 import { RWSInput, AddButton, RemoveButton } from '../components';
 import type { SitePayloadType } from '../useGeneratorForm/types';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 interface AssociatedSitesProps {
   associatedSites: AssociatedSiteType[];

@@ -19,12 +19,12 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
 import { ArrowUp } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies
  */
 import { InformationContainer, SettingsContainer } from './components';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 const Settings = () => {
   const [open, setOpen] = useState(true);

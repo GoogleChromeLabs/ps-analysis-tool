@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/**
+ * External dependencies
+ */
+import { I18n } from '@ps-analysis-tool/i18n';
 /**
  * Internal dependencies
  */
 import sanitizeCsvRecord from '../sanitizeCsvRecord';
 import { CompleteJson } from '../../cookies.types';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 const TECHNOLOGIES_DATA_HEADER = [
   I18n.getMessage('cmName'),

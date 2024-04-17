@@ -19,6 +19,7 @@
  */
 import React, { useCallback, useEffect, useRef } from 'react';
 import { ArrowRight, Button } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -30,7 +31,6 @@ import type {
 import PrimaryDomainOutput from './primaryDomainOutput';
 import OtherDomainOutput from './otherDomainOutput';
 import PullRequestOutput from './pullRequestOutput';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 interface JsonOutputProps {
   primaryWellKnownOutput: PrimaryWellKnownOutputType | null;

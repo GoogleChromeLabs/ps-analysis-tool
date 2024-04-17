@@ -18,12 +18,12 @@
  * External dependencies.
  */
 import React from 'react';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
  */
 import ListRow from './listRow';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 type BulletListProps = {
   rows: BulletListItem[];

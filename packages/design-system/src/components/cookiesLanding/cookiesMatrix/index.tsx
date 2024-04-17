@@ -23,6 +23,7 @@ import {
   Legend,
   filterFramesWithCookies,
 } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 /**
  * Internal dependencies
  */
@@ -30,7 +31,6 @@ import type { MatrixComponentProps } from '../../matrix/matrixComponent';
 import { type MatrixComponentHorizontalProps } from '../../matrix/matrixComponent/matrixComponentHorizontal';
 import { LEGEND_DESCRIPTION } from '../../../constants';
 import MatrixContainer from '../../matrixContainer';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 interface CookiesMatrixProps {
   tabCookies: TabCookies | null;

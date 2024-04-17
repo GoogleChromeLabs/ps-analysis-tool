@@ -18,13 +18,13 @@
  */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ArrowDown, InfoIcon } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
  */
 import SubList from './subList';
 import { TableFilter } from '../../useTable';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 interface ListItemProps {
   filter: TableFilter[keyof TableFilter];

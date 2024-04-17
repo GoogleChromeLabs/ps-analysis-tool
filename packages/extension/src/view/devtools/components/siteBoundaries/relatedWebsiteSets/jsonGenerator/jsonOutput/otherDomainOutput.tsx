@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import React from 'react';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -27,7 +28,6 @@ import type {
   PrimaryWellKnownOutputType,
 } from '../types';
 import Output from './output';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 interface OtherDomainOutputProps {
   primaryWellKnownOutput: PrimaryWellKnownOutputType | null;

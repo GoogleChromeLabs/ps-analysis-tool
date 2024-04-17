@@ -17,13 +17,13 @@
  * External dependencies.
  */
 import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
  */
 import ListItem from './listItem';
 import { useTable } from '../../useTable';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 const FiltersSidebar = () => {
   const { filters, isSelectAllFilterSelected } = useTable(

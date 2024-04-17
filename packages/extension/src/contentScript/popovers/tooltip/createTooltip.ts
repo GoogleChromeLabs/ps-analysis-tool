@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 /**
+ * External dependencies.
+ */
+import { I18n } from '@ps-analysis-tool/i18n';
+/**
  * Internal dependencies.
  */
 import { TOOLTIP_CLASS, DISPLAY_SHOW_MORE_BUTTON } from '../../constants';
@@ -28,7 +32,6 @@ import {
 import type { ResponseType } from '../../types';
 import createShowMoreButton from './createShowMoreButton';
 import createTooltipHTML from './createTooltipHTML';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Creates a tooltip element for an iframe overlay.

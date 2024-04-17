@@ -20,6 +20,7 @@
 import React, { useEffect, useState } from 'react';
 import { XMLParser } from 'fast-xml-parser';
 import { addUTMParams } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -27,7 +28,6 @@ import { addUTMParams } from '@ps-analysis-tool/common';
 import BulletList from '../bulletList';
 import { QUICK_LINKS } from './constants';
 import { ChevronRight } from '../../icons';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 const QuickLinksList = () => {
   const [news, setNews] = useState<BulletListItem[]>([]);

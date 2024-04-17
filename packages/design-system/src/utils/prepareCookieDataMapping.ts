@@ -20,12 +20,12 @@ import type {
   CookieStatsComponents,
   CookiesCount,
 } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies
  */
 import { DataMapping } from '../components/cookiesLanding/landingHeader';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Calcualte insights about frames to be shown on cookies landing page.

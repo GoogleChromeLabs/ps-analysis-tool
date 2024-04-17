@@ -23,11 +23,11 @@ import {
   getDomainFromUrl,
 } from '@ps-analysis-tool/common';
 import type { Protocol } from 'devtools-protocol';
+import { I18n } from '@ps-analysis-tool/i18n';
 /**
  * Internal dependencies
  */
 import isValidURL from '../utils/isValidURL';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Create cookie object from ChromeStorage API cookie object, previously saved parsed cookie object if any, and recently captured request/response cookie header.

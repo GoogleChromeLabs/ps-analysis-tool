@@ -33,6 +33,7 @@ import {
   type CookieFrameStorageType,
   type CompleteJson,
 } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -42,7 +43,6 @@ import SiteMapCookiesWithIssues from './sitemapCookiesWithIssues';
 import CookiesLandingContainer from '../siteReport/tabs/cookies/cookiesLandingContainer';
 import reshapeCookies from '../utils/reshapeCookies';
 import { generateSiteMapReportandDownload } from '../utils/reportDownloader';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 interface LayoutProps {
   landingPageCookies: CookieFrameStorageType;

@@ -18,12 +18,12 @@
  * External dependencies.
  */
 import React, { useEffect, useRef, useState } from 'react';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
  */
 import { PaddedCross } from '../../icons';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 interface SearchInputProps {
   value: string;

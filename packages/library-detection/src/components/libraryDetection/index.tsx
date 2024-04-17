@@ -22,6 +22,7 @@ import {
   COLOR_MAP,
   ProgressBar,
 } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -29,7 +30,6 @@ import {
 import { useLibraryDetection, useLibraryDetectionContext } from '../../core';
 import LIBRARIES from '../../config';
 import type { LibraryData, AccordionProps } from '../../types';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 const LibraryDetection = memo(function LibraryDetection() {
   useLibraryDetection();

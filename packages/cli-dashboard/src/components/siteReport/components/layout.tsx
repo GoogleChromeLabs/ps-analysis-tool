@@ -29,6 +29,7 @@ import {
   SIDEBAR_ITEMS_KEYS,
 } from '@ps-analysis-tool/design-system';
 import { UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -37,7 +38,6 @@ import { useContentStore } from '../stateProviders/contentStore';
 import CookiesTab from '../tabs/cookies';
 import SiteCookiesWithIssues from '../tabs/siteCookiesWithIssues';
 import Technologies from '../tabs/technologies';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 interface LayoutProps {
   selectedSite: string | null;

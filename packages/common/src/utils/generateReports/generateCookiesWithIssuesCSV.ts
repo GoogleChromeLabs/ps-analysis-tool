@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/**
+ * External dependencies.
+ */
+import { I18n } from '@ps-analysis-tool/i18n';
 /**
  * Internal dependencies
  */
-import { I18n } from '@ps-analysis-tool/i18n';
 import type { CompleteJson, CookieJsonDataType } from '../../cookies.types';
 import calculateEffectiveExpiryDate from '../calculateEffectiveExpiryDate';
 import sanitizeCsvRecord from '../sanitizeCsvRecord';

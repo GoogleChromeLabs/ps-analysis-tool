@@ -20,13 +20,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { createPortal } from 'react-dom';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
  */
 import ColumnList from './columnList';
 import { useTable } from '../../useTable';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 interface ColumnMenuProps {
   position: { x: number; y: number };

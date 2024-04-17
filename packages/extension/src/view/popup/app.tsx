@@ -26,6 +26,7 @@ import {
   ToggleSwitch,
   prepareCookieStatsComponents,
 } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -34,7 +35,6 @@ import './app.css';
 import { Legend } from './components';
 import { useCookie, useSettings } from './stateProviders';
 import { ALLOWED_NUMBER_OF_TABS } from '../../constants';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 const App: React.FC = () => {
   const {

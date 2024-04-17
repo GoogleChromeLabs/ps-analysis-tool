@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import React, { useMemo } from 'react';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies
@@ -27,7 +28,6 @@ import { useSettings } from '../../../stateProviders';
 // eslint-disable-next-line import/no-relative-packages
 import Gear from '../../../../../../../../assets/icons/gear.svg';
 import { SETTING_PAGE_CONTROLS } from '../../../../../constants';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 interface settingsToReturnObject {
   id: string;

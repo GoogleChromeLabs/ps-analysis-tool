@@ -19,6 +19,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowUp, Copy } from '@ps-analysis-tool/design-system';
 import classNames from 'classnames';
+import { I18n } from '@ps-analysis-tool/i18n';
 /**
  * Internal dependencies
  */
@@ -29,7 +30,6 @@ import InformationIcon from '../../../../../../../../assets/icons/information-ic
 // @ts-ignore
 // eslint-disable-next-line import/no-relative-packages
 import Done from '../../../../../../../../assets/icons/done.svg';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 const InformationContainer = () => {
   const {

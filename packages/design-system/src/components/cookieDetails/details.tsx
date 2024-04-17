@@ -26,6 +26,7 @@ import {
   cookieIssueDetails,
   type CookieTableData,
 } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -36,7 +37,6 @@ import {
   OutboundInboundColoredIcon,
   OutboundInboundIcon,
 } from '../../icons';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 export interface DetailsProps {
   isUsingCDP: boolean;

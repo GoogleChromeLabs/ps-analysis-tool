@@ -23,6 +23,7 @@ import {
   ProgressBar,
 } from '@ps-analysis-tool/design-system';
 import { type CookieTableData } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -30,7 +31,6 @@ import { type CookieTableData } from '@ps-analysis-tool/common';
 import { useCookie, useSettings } from '../../stateProviders';
 import CookiesListing from './cookiesListing';
 import AssembledCookiesLanding from './cookieLanding';
-import { I18n } from '@ps-analysis-tool/i18n';
 
 interface CookiesProps {
   setFilteredCookies: React.Dispatch<CookieTableData[]>;
