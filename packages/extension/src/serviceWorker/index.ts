@@ -435,12 +435,13 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       }
 
       let targets = await chrome.debugger.getTargets();
-
-      targets.map(async ({ id, url }) => {
-        if (url.startsWith('http')) {
-          await attachCDP({ targetId: id });
-        }
-      });
+      await Promise.all(
+        targets.map(async ({ id, url }) => {
+          if (url.startsWith('http')) {
+            await attachCDP({ targetId: id });
+          }
+        })
+      );
 
       let tabId = '';
       // This is to get a list of all targets being attached to the main frame.
@@ -720,7 +721,8 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           requestIdToCDPURLMapping[tabId] = {
             [requestId]: {
               ...requestIdToCDPURLMapping[tabId][requestId],
-              frameId: finalFrameId,
+              frameId,
+              finalFrameId,
               url: requestUrl,
             },
           };
@@ -729,7 +731,8 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             ...requestIdToCDPURLMapping[tabId],
             [requestId]: {
               ...requestIdToCDPURLMapping[tabId][requestId],
-              frameId: finalFrameId,
+              frameId,
+              finalFrameId,
               url: requestUrl,
             },
           };
@@ -1001,7 +1004,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
   if ('GET_REST_DATA_FROM_URL' === incomingMessageType) {
     let allCookies: CookieData[] = [];
     await Promise.all(
-      Object.entries(frameIdToResourceMap[incomingMessageTabId]).map(
+      Object.entries(frameIdToResourceMap[incomingMessageTabId] ?? {}).map(
         async ([key, value]) => {
           try {
             //@ts-ignore
