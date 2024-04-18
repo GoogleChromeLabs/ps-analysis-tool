@@ -74,7 +74,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         const {
           targetInfo: { targetId },
         } = params as Protocol.Target.AttachedToTargetEvent;
-
         await attachCDP({ targetId });
         return;
       }
@@ -140,7 +139,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           frame: { parentId = '', id, url: frameUrl },
         } = params as Protocol.Page.FrameNavigatedEvent;
 
-        if (!parentId) {
+        if (!parentId && !source.targetId) {
           return;
         }
 

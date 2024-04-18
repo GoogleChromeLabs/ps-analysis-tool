@@ -109,7 +109,6 @@ class SynchnorousCookieStore {
 
       for (const cookie of cookies) {
         const cookieKey = getCookieKey(cookie.parsedCookie);
-
         if (!cookieKey) {
           continue;
         }

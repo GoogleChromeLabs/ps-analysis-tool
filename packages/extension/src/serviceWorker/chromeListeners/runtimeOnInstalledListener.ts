@@ -63,7 +63,8 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   if (details.reason === 'update') {
     await chrome.storage.local.clear();
     const preSetSettings = await chrome.storage.sync.get();
-    preSetSettings?.allowedNumberOfTabs ?? 'single';
+    synchnorousCookieStore.tabMode =
+      preSetSettings?.allowedNumberOfTabs ?? 'single';
     synchnorousCookieStore.globalIsUsingCDP =
       preSetSettings?.isUsingCDP ?? false;
 
