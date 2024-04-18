@@ -13,11 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import './runtimeStartUpListener';
+import './runtimeOnInstalledListener';
+import './runtimeOnMessageListener';
+
+import './syncStorageOnChangedListener';
+
 import './tabOnCreatedListener';
 import './tabOnRemovedListener';
 import './tabsOnUpdatedListener';
 
-import './runtimeStartUpListener';
-import './runtimeOnInstalledListener';
-
 import './windowsOnRemovedListener';
+import './windowsOnCreatedListener';

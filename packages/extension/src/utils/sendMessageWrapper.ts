@@ -13,19 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * This function will attach the debugger to the given target.
- * @param {{ [key: string]: number | string }} target The target where debugger needs to be attached.
- */
-export default async function attachCDP(target: {
-  [key: string]: number | string;
-}) {
+const sendMessageWrapper = async (
+  type: string,
+  payload?: Record<string, any>
+) => {
   try {
-    await chrome.debugger.attach(target, '1.3');
-    await chrome.debugger.sendCommand(target, 'Network.enable');
-    await chrome.debugger.sendCommand(target, 'Audits.enable');
-    await chrome.debugger.sendCommand(target, 'Page.enable');
+    await chrome.runtime.sendMessage({
+      type,
+      payload,
+    });
   } catch (error) {
-    //Fail silently
+    // Fail silently. The only error which will be thrown is receiving end does not exist.
   }
-}
+};
+
+export default sendMessageWrapper;

@@ -13,19 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * This function will attach the debugger to the given target.
- * @param {{ [key: string]: number | string }} target The target where debugger needs to be attached.
- */
-export default async function attachCDP(target: {
-  [key: string]: number | string;
-}) {
-  try {
-    await chrome.debugger.attach(target, '1.3');
-    await chrome.debugger.sendCommand(target, 'Network.enable');
-    await chrome.debugger.sendCommand(target, 'Audits.enable');
-    await chrome.debugger.sendCommand(target, 'Page.enable');
-  } catch (error) {
-    //Fail silently
+chrome.windows.onCreated.addListener(async () => {
+  const totalWindows = await chrome.windows.getAll();
+
+  // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
+  // Doing this to keep the service worker alive so that we dont loose any data and introduce any bug.
+  setInterval(() => {
+    chrome.storage.local.get();
+  }, 28000);
+
+  // We do not want to clear content settings if a user has create one more window.
+  if (totalWindows.length < 2) {
+    chrome.contentSettings.cookies.clear({});
   }
-}
+});
