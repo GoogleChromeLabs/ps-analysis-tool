@@ -42,6 +42,46 @@ class SynchnorousCookieStore {
   } = {};
 
   /**
+   * The cookie data of the tabs.
+   */
+  tabMode = 'single';
+
+  /**
+   * The cookie data of the tabs.
+   */
+  tabToRead = '';
+
+  requestIdToCDPURLMapping: {
+    [tabId: string]: {
+      [requestId: string]: {
+        frameId: string;
+        url: string;
+        finalFrameId: string;
+      };
+    };
+  } = {};
+
+  unParsedRequestHeaders: {
+    [tabId: string]: {
+      [requestId: string]: Protocol.Network.RequestWillBeSentExtraInfoEvent;
+    };
+  } = {};
+
+  unParsedResponseHeaders: {
+    [tabId: string]: {
+      [requestId: string]: Protocol.Network.ResponseReceivedExtraInfoEvent;
+    };
+  } = {};
+
+  frameIdToResourceMap: {
+    [tabId: string]: {
+      [frameId: string]: Set<string>;
+    };
+  } = {};
+
+  globalIsUsingCDP = true;
+
+  /**
    * Required data of the tabs and PSAT panel of the tab.
    */
   tabs: {
@@ -174,6 +214,61 @@ class SynchnorousCookieStore {
     });
     this.tabsData = {};
     this.tabs = {};
+  }
+
+  /**
+   * This function will initialise variables for given tab.
+   * @param {string} tabId The tab whose data has to be initialised.
+   */
+  initialiseVariablesForNewTab(tabId: string) {
+    this.unParsedRequestHeaders[tabId] = {};
+    this.unParsedResponseHeaders[tabId] = {};
+    this.requestIdToCDPURLMapping[tabId] = {};
+    this.frameIdToResourceMap[tabId] = {};
+    //@ts-ignore
+    globalThis.PSATAdditionalData = {
+      unParsedRequestHeaders: this.unParsedRequestHeaders,
+      unParsedResponseHeaders: this.unParsedResponseHeaders,
+      requestIdToCDPURLMapping: this.requestIdToCDPURLMapping,
+      frameIdToResourceMap: this.frameIdToResourceMap,
+    };
+  }
+
+  /**
+   * This function will deinitialise variables for given tab.
+   * @param {string} tabId The tab whose data has to be deinitialised.
+   */
+  deinitialiseVariablesForTab(tabId: string) {
+    delete this.unParsedRequestHeaders[tabId];
+    delete this.unParsedResponseHeaders[tabId];
+    delete this.requestIdToCDPURLMapping[tabId];
+    delete this.frameIdToResourceMap[tabId];
+  }
+
+  /**
+   * This function will deinitialise variables for given tab.
+   * @param {string} tabId The tab whose data has to be deinitialised.
+   * @param frameId The tab whose data has to be deinitialised.
+   * @param targetSet The tab whose data has to be deinitialised.
+   * @returns {string | null} The first ancestor frameId.
+   */
+  findFirstAncestorFrameId(
+    tabId: string,
+    frameId: string,
+    targetSet: Set<string>
+  ): string | null {
+    if (targetSet.has(frameId)) {
+      return frameId;
+    } else {
+      if (this.tabs[Number(tabId)]?.parentChildFrameAssociation[frameId]) {
+        return this.findFirstAncestorFrameId(
+          tabId,
+          this.tabs[Number(tabId)]?.parentChildFrameAssociation[frameId],
+          targetSet
+        );
+      }
+      return null;
+    }
   }
 
   /**
@@ -469,4 +564,4 @@ class SynchnorousCookieStore {
   }
 }
 
-export default SynchnorousCookieStore;
+export default new SynchnorousCookieStore();

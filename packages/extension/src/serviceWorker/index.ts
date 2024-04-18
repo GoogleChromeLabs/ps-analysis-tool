@@ -30,7 +30,6 @@ import {
  */
 import { fetchDictionary } from '../utils/fetchCookieDictionary';
 import {
-  ALLOWED_NUMBER_OF_TABS,
   DEVTOOLS_CLOSE,
   DEVTOOLS_OPEN,
   DEVTOOLS_SET_JAVASCSCRIPT_COOKIE,
@@ -40,51 +39,17 @@ import {
   SERVICE_WORKER_RELOAD_MESSAGE,
   SERVICE_WORKER_TABS_RELOAD_COMMAND,
   SET_TAB_TO_READ,
-  TABID_STORAGE,
 } from '../constants';
-import SynchnorousCookieStore from '../store/synchnorousCookieStore';
+import syncCookieStore from '../store/synchnorousCookieStore';
 import { getTab } from '../utils/getTab';
-import getQueryParams from '../utils/getQueryParams';
 import reloadCurrentTab from '../utils/reloadCurrentTab';
 import createCookieFromAuditsIssue from '../utils/createCookieFromAuditsIssue';
 import attachCDP from './attachCDP';
 import resetCookieBadgeText from '../store/utils/resetCookieBadgeText';
 import parseNetworkCookies from '../utils/parseNetworkCookies';
+import './chromeListeners';
 
 let cookieDB: CookieDatabase | null = null;
-let syncCookieStore: SynchnorousCookieStore | undefined;
-
-const requestIdToCDPURLMapping: {
-  [tabId: string]: {
-    [requestId: string]: {
-      frameId: string;
-      url: string;
-      finalFrameId: string;
-    };
-  };
-} = {};
-
-const unParsedRequestHeaders: {
-  [tabId: string]: {
-    [requestId: string]: Protocol.Network.RequestWillBeSentExtraInfoEvent;
-  };
-} = {};
-
-const unParsedResponseHeaders: {
-  [tabId: string]: {
-    [requestId: string]: Protocol.Network.ResponseReceivedExtraInfoEvent;
-  };
-} = {};
-
-const frameIdToResourceMap: {
-  [tabId: string]: {
-    [frameId: string]: Set<string>;
-  };
-} = {};
-
-let tabMode: 'single' | 'unlimited' = 'single';
-let tabToRead = '';
-let globalIsUsingCDP = true;
 
 const ALLOWED_EVENTS = [
   'Network.responseReceived',
@@ -96,331 +61,6 @@ const ALLOWED_EVENTS = [
   'Page.frameNavigated',
   'Target.attachedToTarget',
 ];
-
-/**
- * This function will initialise variables for given tab.
- * @param {string} tabId The tab whose data has to be initialised.
- */
-function initialiseVariablesForNewTab(tabId: string) {
-  unParsedRequestHeaders[tabId] = {};
-  unParsedResponseHeaders[tabId] = {};
-  requestIdToCDPURLMapping[tabId] = {};
-  frameIdToResourceMap[tabId] = {};
-  //@ts-ignore
-  globalThis.PSATAdditionalData = {
-    unParsedRequestHeaders,
-    unParsedResponseHeaders,
-    requestIdToCDPURLMapping,
-    frameIdToResourceMap,
-  };
-}
-
-/**
- * This function will deinitialise variables for given tab.
- * @param {string} tabId The tab whose data has to be deinitialised.
- */
-function deinitialiseVariablesForTab(tabId: string) {
-  delete unParsedRequestHeaders[tabId];
-  delete unParsedResponseHeaders[tabId];
-  delete requestIdToCDPURLMapping[tabId];
-  delete frameIdToResourceMap[tabId];
-}
-
-/**
- * This function will deinitialise variables for given tab.
- * @param {string} tabId The tab whose data has to be deinitialised.
- * @param frameId The tab whose data has to be deinitialised.
- * @param targetSet The tab whose data has to be deinitialised.
- * @returns {string | null} The first ancestor frameId.
- */
-function findFirstAncestorFrameId(
-  tabId: string,
-  frameId: string,
-  targetSet: Set<string>
-) {
-  if (targetSet.has(frameId)) {
-    return frameId;
-  } else {
-    if (
-      syncCookieStore?.tabs[Number(tabId)]?.parentChildFrameAssociation[frameId]
-    ) {
-      return findFirstAncestorFrameId(
-        tabId,
-        syncCookieStore?.tabs[Number(tabId)]?.parentChildFrameAssociation[
-          frameId
-        ],
-        targetSet
-      );
-    }
-    return null;
-  }
-}
-/**
- * Fires when a tab is created.
- * @see https://developer.chrome.com/docs/extensions/reference/api/tabs#event-onCreated
- */
-chrome.tabs.onCreated.addListener(async (tab) => {
-  if (!tab.id) {
-    return;
-  }
-
-  if (!syncCookieStore) {
-    syncCookieStore = new SynchnorousCookieStore();
-  }
-
-  const targets = await chrome.debugger.getTargets();
-
-  if (tabMode && tabMode !== 'unlimited') {
-    const doesTabExist = tabToRead;
-    if (
-      Object.keys(syncCookieStore?.tabsData ?? {}).length >=
-        ALLOWED_NUMBER_OF_TABS &&
-      doesTabExist
-    ) {
-      return;
-    }
-    tabToRead = tab.id.toString();
-    syncCookieStore?.addTabData(tab.id);
-
-    initialiseVariablesForNewTab(tab.id.toString());
-
-    const currentTab = targets.filter(
-      ({ tabId }) => tabId && tab.id && tabId === tab.id
-    );
-
-    syncCookieStore.updateParentChildFrameAssociation(
-      tab.id,
-      currentTab[0].id,
-      '0'
-    );
-  } else {
-    syncCookieStore?.addTabData(tab.id);
-    const currentTab = targets.filter(
-      ({ tabId }) => tabId && tab.id && tabId === tab.id
-    );
-
-    initialiseVariablesForNewTab(tab.id.toString());
-
-    syncCookieStore.updateParentChildFrameAssociation(
-      tab.id,
-      currentTab[0].id,
-      '0'
-    );
-  }
-});
-
-/**
- * Fires when a tab is closed.
- * @see https://developer.chrome.com/docs/extensions/reference/api/tabs#event-onRemoved
- */
-chrome.tabs.onRemoved.addListener((tabId) => {
-  deinitialiseVariablesForTab(tabId.toString());
-
-  syncCookieStore?.removeTabData(tabId);
-});
-
-/**
- * Fires when a profile with extension is started.
- * @see https://developer.chrome.com/docs/extensions/reference/api/runtime#event-onStartup
- */
-chrome.runtime.onStartup.addListener(async () => {
-  const storage = await chrome.storage.sync.get();
-
-  if (!syncCookieStore) {
-    syncCookieStore = new SynchnorousCookieStore();
-  }
-
-  if (!cookieDB) {
-    cookieDB = await fetchDictionary();
-  }
-
-  // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
-  // Doing this to keep the service worker alive so that we dont loose any data and introduce any bug.
-  setInterval(() => {
-    chrome.storage.local.get();
-  }, 28000);
-
-  // @todo Send tab data of the active tab only, also if sending only the difference would make it any faster.
-  setInterval(() => {
-    if (Object.keys(syncCookieStore?.tabsData ?? {}).length === 0) {
-      return;
-    }
-
-    Object.keys(syncCookieStore?.tabsData ?? {}).forEach((key) => {
-      syncCookieStore?.sendUpdatedDataToPopupAndDevTools(Number(key));
-    });
-  }, 1200);
-
-  if (Object.keys(storage).includes('allowedNumberOfTabs')) {
-    tabMode = storage.allowedNumberOfTabs;
-  }
-
-  if (Object.keys(storage).includes('isUsingCDP')) {
-    globalIsUsingCDP = storage.isUsingCDP;
-  }
-});
-
-/**
- * Fires when a tab is updated.
- * @see https://developer.chrome.com/docs/extensions/reference/api/tabs#event-onUpdated
- */
-chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-  if (!tab.url) {
-    return;
-  }
-
-  const queryParams = getQueryParams(tab.url);
-
-  if (queryParams.psat_cdp || queryParams.psat_multitab) {
-    await chrome.storage.sync.set({
-      allowedNumberOfTabs:
-        queryParams.psat_multitab === 'on' ? 'unlimited' : 'single',
-      isUsingCDP: queryParams.psat_cdp === 'on',
-    });
-
-    globalIsUsingCDP = queryParams.psat_cdp === 'on';
-    tabMode = queryParams.psat_multitab === 'on' ? 'unlimited' : 'single';
-  }
-
-  syncCookieStore?.updateUrl(tabId, tab.url);
-
-  if (changeInfo.status === 'loading' && tab.url) {
-    syncCookieStore?.removeCookieData(tabId);
-    deinitialiseVariablesForTab(tabId.toString());
-    initialiseVariablesForNewTab(tabId.toString());
-
-    syncCookieStore?.updateParentChildFrameAssociation(
-      tabId,
-      (await chrome.debugger.getTargets()).filter(
-        (target) => target.tabId && target.tabId === tabId
-      )[0].id,
-      '0'
-    );
-  }
-  try {
-    if (globalIsUsingCDP) {
-      await attachCDP({ tabId });
-    } else {
-      await chrome.debugger.detach({ tabId });
-    }
-
-    await chrome.tabs.sendMessage(tabId, {
-      tabId,
-      payload: {
-        type: TABID_STORAGE,
-        tabId,
-        frameId: (
-          await chrome.debugger.getTargets()
-        ).filter((target) => target.tabId && target.tabId === tabId)[0].id,
-      },
-    });
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.warn(error);
-  }
-});
-
-/**
- * Fires when a window is removed (closed).
- * @see https://developer.chrome.com/docs/extensions/reference/api/windows#event-onRemoved
- */
-chrome.windows.onRemoved.addListener((windowId) => {
-  chrome.tabs.query({ windowId }, (tabs) => {
-    tabs.map((tab) => {
-      if (tab.id) {
-        deinitialiseVariablesForTab(tab.id.toString());
-      }
-      return tab;
-    });
-  });
-
-  syncCookieStore?.removeWindowData(windowId);
-});
-
-/**
- * Fires when the extension is first installed,
- * when clicked on the extension refresh button from chrome://extensions/
- * when the extension is updated to a new version,
- * when Chrome is updated to a new version.
- * @see https://developer.chrome.com/docs/extensions/reference/api/runtime#event-onInstalled
- * @todo Shouldn't have to reinstall the extension.
- */
-chrome.runtime.onInstalled.addListener(async (details) => {
-  syncCookieStore = new SynchnorousCookieStore();
-  syncCookieStore?.clear();
-
-  if (!cookieDB) {
-    cookieDB = await fetchDictionary();
-  }
-
-  // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
-  // Doing this to keep the service worker alive so that we dont loose any data and introduce any bug.
-  setInterval(() => {
-    chrome.storage.local.get();
-  }, 28000);
-
-  // @todo Send tab data of the active tab only, also if sending only the difference would make it any faster.
-  setInterval(() => {
-    if (Object.keys(syncCookieStore?.tabsData ?? {}).length === 0) {
-      return;
-    }
-
-    Object.keys(syncCookieStore?.tabsData ?? {}).forEach((key) => {
-      syncCookieStore?.sendUpdatedDataToPopupAndDevTools(Number(key));
-    });
-  }, 1200);
-
-  if (details.reason === 'install') {
-    await chrome.storage.sync.clear();
-    await chrome.storage.sync.set({
-      allowedNumberOfTabs: 'single',
-      isUsingCDP: true,
-    });
-  }
-
-  if (details.reason === 'update') {
-    await chrome.storage.local.clear();
-    const preSetSettings = await chrome.storage.sync.get();
-    tabMode = preSetSettings?.allowedNumberOfTabs ?? 'single';
-    globalIsUsingCDP = preSetSettings?.isUsingCDP ?? false;
-
-    if (tabMode === 'unlimited') {
-      const allTabs = await chrome.tabs.query({});
-      const targets = await chrome.debugger.getTargets();
-
-      allTabs.forEach((tab) => {
-        if (!tab.id) {
-          return;
-        }
-
-        initialiseVariablesForNewTab(tab.id.toString());
-
-        const currentTab = targets.filter(
-          ({ tabId }) => tabId && tab.id && tabId === tab.id
-        );
-        syncCookieStore?.addTabData(tab.id);
-        syncCookieStore?.updateParentChildFrameAssociation(
-          tab.id,
-          currentTab[0].id,
-          '0'
-        );
-      });
-    }
-
-    if (
-      preSetSettings?.allowedNumberOfTabs &&
-      Object.keys(preSetSettings).includes('isUsingCDP')
-    ) {
-      return;
-    }
-
-    await chrome.storage.sync.clear();
-    await chrome.storage.sync.set({
-      allowedNumberOfTabs: 'single',
-      isUsingCDP: true,
-    });
-  }
-});
 
 /**
  * Fires whenever debugging target issues instrumentation event.
@@ -545,8 +185,15 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
       const url = syncCookieStore?.getTabUrl(Number(tabId));
 
-      if (tabMode !== 'unlimited' && tabToRead !== tabId) {
+      if (
+        syncCookieStore.tabMode !== 'unlimited' &&
+        syncCookieStore.tabToRead !== tabId
+      ) {
         return;
+      }
+
+      if (!cookieDB) {
+        cookieDB = await fetchDictionary();
       }
 
       //If we get requestWillBeSent before requestWillBeSentExtraInfo then we add the frame if to the object.
@@ -574,29 +221,33 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
         if (
           setTargets.has(frameId) &&
-          !frameIdToResourceMap[tabId][finalFrameId]
+          !syncCookieStore.frameIdToResourceMap[tabId][finalFrameId]
         ) {
-          frameIdToResourceMap[tabId][finalFrameId] = new Set();
+          syncCookieStore.frameIdToResourceMap[tabId][finalFrameId] = new Set();
           attachCDP({ targetId: finalFrameId });
         }
 
         if (setTargets.has(finalFrameId)) {
-          frameIdToResourceMap[tabId][finalFrameId]?.add(requestUrl);
+          syncCookieStore.frameIdToResourceMap[tabId][finalFrameId]?.add(
+            requestUrl
+          );
         } else {
-          const ancestorFrameId = findFirstAncestorFrameId(
+          const ancestorFrameId = syncCookieStore.findFirstAncestorFrameId(
             tabId,
             finalFrameId,
             setTargets
           );
 
           if (ancestorFrameId) {
-            frameIdToResourceMap[tabId][finalFrameId]?.add(requestUrl);
+            syncCookieStore.frameIdToResourceMap[tabId][finalFrameId]?.add(
+              requestUrl
+            );
             finalFrameId = ancestorFrameId;
           }
         }
 
-        if (!requestIdToCDPURLMapping[tabId]) {
-          requestIdToCDPURLMapping[tabId] = {
+        if (!syncCookieStore.requestIdToCDPURLMapping[tabId]) {
+          syncCookieStore.requestIdToCDPURLMapping[tabId] = {
             [requestId]: {
               frameId,
               finalFrameId,
@@ -604,8 +255,8 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             },
           };
         } else {
-          requestIdToCDPURLMapping[tabId] = {
-            ...requestIdToCDPURLMapping[tabId],
+          syncCookieStore.requestIdToCDPURLMapping[tabId] = {
+            ...syncCookieStore.requestIdToCDPURLMapping[tabId],
             [requestId]: {
               finalFrameId,
               frameId,
@@ -614,9 +265,10 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           };
         }
 
-        if (unParsedRequestHeaders[tabId][requestId]) {
+        if (syncCookieStore.unParsedRequestHeaders[tabId][requestId]) {
           const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
-            unParsedRequestHeaders[tabId][requestId].associatedCookies,
+            syncCookieStore.unParsedRequestHeaders[tabId][requestId]
+              .associatedCookies,
             cookieDB ?? {},
             requestUrl,
             url ?? '',
@@ -629,7 +281,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           }
 
           syncCookieStore?.update(Number(tabId), cookies);
-          delete unParsedRequestHeaders[tabId][requestId];
+          delete syncCookieStore.unParsedRequestHeaders[tabId][requestId];
         }
         return;
       }
@@ -642,16 +294,19 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           return;
         }
 
-        if (requestIdToCDPURLMapping[tabId]?.[requestId]) {
+        if (syncCookieStore.requestIdToCDPURLMapping[tabId]?.[requestId]) {
           const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
             associatedCookies,
             cookieDB ?? {},
-            requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
+            syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]?.url ??
+              '',
             url ?? '',
             Array.from(
               new Set([
-                requestIdToCDPURLMapping[tabId][requestId]?.finalFrameId,
-                requestIdToCDPURLMapping[tabId][requestId]?.frameId,
+                syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
+                  ?.finalFrameId,
+                syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
+                  ?.frameId,
               ])
             ),
             requestId
@@ -662,9 +317,9 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           }
 
           syncCookieStore?.update(Number(tabId), cookies);
-          delete unParsedRequestHeaders[tabId][requestId];
+          delete syncCookieStore.unParsedRequestHeaders[tabId][requestId];
         } else {
-          unParsedRequestHeaders[tabId][requestId] =
+          syncCookieStore.unParsedRequestHeaders[tabId][requestId] =
             params as Protocol.Network.RequestWillBeSentExtraInfoEvent;
         }
         return;
@@ -696,41 +351,45 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
         if (
           setTargets.has(finalFrameId) &&
-          !frameIdToResourceMap[tabId][finalFrameId]
+          !syncCookieStore.frameIdToResourceMap[tabId][finalFrameId]
         ) {
-          frameIdToResourceMap[tabId][finalFrameId] = new Set();
+          syncCookieStore.frameIdToResourceMap[tabId][finalFrameId] = new Set();
           attachCDP({ targetId: finalFrameId });
         }
 
         if (setTargets.has(finalFrameId)) {
-          frameIdToResourceMap[tabId][finalFrameId]?.add(requestUrl);
+          syncCookieStore.frameIdToResourceMap[tabId][finalFrameId]?.add(
+            requestUrl
+          );
         } else {
-          const ancestorFrameId = findFirstAncestorFrameId(
+          const ancestorFrameId = syncCookieStore.findFirstAncestorFrameId(
             tabId,
             finalFrameId,
             setTargets
           );
 
           if (ancestorFrameId) {
-            frameIdToResourceMap[tabId][finalFrameId]?.add(requestUrl);
+            syncCookieStore.frameIdToResourceMap[tabId][finalFrameId]?.add(
+              requestUrl
+            );
             finalFrameId = ancestorFrameId;
           }
         }
 
-        if (!requestIdToCDPURLMapping[tabId]) {
-          requestIdToCDPURLMapping[tabId] = {
+        if (!syncCookieStore.requestIdToCDPURLMapping[tabId]) {
+          syncCookieStore.requestIdToCDPURLMapping[tabId] = {
             [requestId]: {
-              ...requestIdToCDPURLMapping[tabId][requestId],
+              ...syncCookieStore.requestIdToCDPURLMapping[tabId][requestId],
               frameId,
               finalFrameId,
               url: requestUrl,
             },
           };
         } else {
-          requestIdToCDPURLMapping[tabId] = {
-            ...requestIdToCDPURLMapping[tabId],
+          syncCookieStore.requestIdToCDPURLMapping[tabId] = {
+            ...syncCookieStore.requestIdToCDPURLMapping[tabId],
             [requestId]: {
-              ...requestIdToCDPURLMapping[tabId][requestId],
+              ...syncCookieStore.requestIdToCDPURLMapping[tabId][requestId],
               frameId,
               finalFrameId,
               url: requestUrl,
@@ -738,33 +397,36 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           };
         }
 
-        if (unParsedResponseHeaders[tabId][requestId]) {
+        if (syncCookieStore.unParsedResponseHeaders[tabId][requestId]) {
           const {
             headers,
             blockedCookies,
             cookiePartitionKey = '',
             exemptedCookies,
-          } = unParsedResponseHeaders[tabId][requestId];
+          } = syncCookieStore.unParsedResponseHeaders[tabId][requestId];
 
           const cookies: CookieData[] = parseResponseReceivedExtraInfo(
             headers,
             blockedCookies,
             exemptedCookies,
             cookiePartitionKey,
-            requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
+            syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]?.url ??
+              '',
             url ?? '',
             cookieDB ?? {},
             Array.from(
               new Set([
-                requestIdToCDPURLMapping[tabId][requestId]?.finalFrameId,
-                requestIdToCDPURLMapping[tabId][requestId]?.frameId,
+                syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
+                  ?.finalFrameId,
+                syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
+                  ?.frameId,
               ])
             ),
             requestId
           );
           syncCookieStore?.update(Number(tabId), cookies);
 
-          delete unParsedResponseHeaders[tabId][requestId];
+          delete syncCookieStore.unParsedResponseHeaders[tabId][requestId];
         }
         return;
       }
@@ -783,28 +445,30 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           return;
         }
 
-        if (requestIdToCDPURLMapping[tabId]?.[requestId]) {
+        if (syncCookieStore.requestIdToCDPURLMapping[tabId]?.[requestId]) {
           const cookies: CookieData[] = parseResponseReceivedExtraInfo(
             headers,
             blockedCookies,
             exemptedCookies,
             cookiePartitionKey,
-            requestIdToCDPURLMapping[tabId][requestId]?.url,
+            syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]?.url,
             url ?? '',
             cookieDB ?? {},
             Array.from(
               new Set([
-                requestIdToCDPURLMapping[tabId][requestId]?.finalFrameId,
-                requestIdToCDPURLMapping[tabId][requestId]?.frameId,
+                syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
+                  ?.finalFrameId,
+                syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
+                  ?.frameId,
               ])
             ),
             requestId
           );
 
           syncCookieStore?.update(Number(tabId), cookies);
-          delete unParsedResponseHeaders[tabId][requestId];
+          delete syncCookieStore.unParsedResponseHeaders[tabId][requestId];
         } else {
-          unParsedResponseHeaders[tabId][requestId] =
+          syncCookieStore.unParsedResponseHeaders[tabId][requestId] =
             params as Protocol.Network.ResponseReceivedExtraInfoEvent;
         }
         return;
@@ -841,7 +505,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           cookieIssueDetails,
           syncCookieStore?.getTabUrl(Number(tabId)) ?? '',
           [],
-          requestIdToCDPURLMapping[tabId][requestId]?.url,
+          syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]?.url,
           cookieDB ?? {}
         );
 
@@ -865,7 +529,7 @@ const listenToNewTab = async (tabId?: number) => {
     return '';
   }
 
-  if (tabMode && tabMode !== 'unlimited') {
+  if (syncCookieStore.tabMode && syncCookieStore.tabMode !== 'unlimited') {
     const storedTabData = Object.keys(syncCookieStore?.tabsData ?? {});
 
     await Promise.all(
@@ -885,9 +549,9 @@ const listenToNewTab = async (tabId?: number) => {
     );
   }
 
-  tabToRead = newTabId;
+  syncCookieStore.tabToRead = newTabId;
 
-  initialiseVariablesForNewTab(newTabId);
+  syncCookieStore.initialiseVariablesForNewTab(newTabId);
 
   syncCookieStore?.addTabData(Number(newTabId));
   syncCookieStore?.updateDevToolsState(Number(newTabId), true);
@@ -913,7 +577,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
   const incomingMessageType = request.type;
 
   if (SET_TAB_TO_READ === incomingMessageType) {
-    tabToRead = request?.payload?.tabId?.toString();
+    syncCookieStore.tabToRead = request?.payload?.tabId?.toString();
     const newTab = await listenToNewTab(request?.payload?.tabId);
     // Can't use sendResponse as delay is too long. So using sendMessage instead.
     chrome.runtime.sendMessage({
@@ -923,7 +587,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
       },
     });
 
-    if (globalIsUsingCDP) {
+    if (syncCookieStore.globalIsUsingCDP) {
       try {
         await attachCDP({ tabId: Number(newTab) });
       } catch (error) {
@@ -937,11 +601,11 @@ chrome.runtime.onMessage.addListener(async (request) => {
   if (SERVICE_WORKER_TABS_RELOAD_COMMAND === incomingMessageType) {
     const sessionStorage = await chrome.storage.session.get();
     if (Object.keys(sessionStorage).includes('allowedNumberOfTabs')) {
-      tabMode = sessionStorage.allowedNumberOfTabs;
+      syncCookieStore.tabMode = sessionStorage.allowedNumberOfTabs;
     }
 
     if (Object.keys(sessionStorage).includes('isUsingCDP')) {
-      globalIsUsingCDP = sessionStorage.isUsingCDP;
+      syncCookieStore.globalIsUsingCDP = sessionStorage.isUsingCDP;
     }
 
     await chrome.storage.session.remove(['allowedNumberOfTabs', 'isUsingCDP']);
@@ -951,8 +615,8 @@ chrome.runtime.onMessage.addListener(async (request) => {
     });
 
     await chrome.storage.sync.set({
-      allowedNumberOfTabs: tabMode,
-      isUsingCDP: globalIsUsingCDP,
+      allowedNumberOfTabs: syncCookieStore.tabMode,
+      isUsingCDP: syncCookieStore.globalIsUsingCDP,
     });
 
     const tabs = await chrome.tabs.query({});
@@ -963,8 +627,8 @@ chrome.runtime.onMessage.addListener(async (request) => {
           return;
         }
 
-        if (tabMode === 'unlimited') {
-          initialiseVariablesForNewTab(id.toString());
+        if (syncCookieStore.tabMode === 'unlimited') {
+          syncCookieStore.initialiseVariablesForNewTab(id.toString());
 
           const currentTab = targets.filter(
             ({ tabId }) => tabId && id && tabId === id
@@ -977,7 +641,7 @@ chrome.runtime.onMessage.addListener(async (request) => {
           );
         }
         try {
-          if (globalIsUsingCDP) {
+          if (syncCookieStore.globalIsUsingCDP) {
             await attachCDP({ tabId: id });
           } else {
             await chrome.debugger.detach({ tabId: id });
@@ -1004,30 +668,30 @@ chrome.runtime.onMessage.addListener(async (request) => {
   if ('GET_REST_DATA_FROM_URL' === incomingMessageType) {
     let allCookies: CookieData[] = [];
     await Promise.all(
-      Object.entries(frameIdToResourceMap[incomingMessageTabId] ?? {}).map(
-        async ([key, value]) => {
-          try {
-            //@ts-ignore
-            const { cookies = [] } = await chrome.debugger.sendCommand(
-              { targetId: key },
-              'Network.getCookies',
-              { urls: Array.from(value) }
-            );
+      Object.entries(
+        syncCookieStore.frameIdToResourceMap[incomingMessageTabId] ?? {}
+      ).map(async ([key, value]) => {
+        try {
+          //@ts-ignore
+          const { cookies = [] } = await chrome.debugger.sendCommand(
+            { targetId: key },
+            'Network.getCookies',
+            { urls: Array.from(value) }
+          );
 
-            const parsedCookies = parseNetworkCookies(
-              cookies,
-              syncCookieStore?.getTabUrl(incomingMessageTabId) ?? '',
-              cookieDB ?? {},
-              key
-            );
-            if (parsedCookies.length > 0) {
-              allCookies = [...allCookies, ...parsedCookies];
-            }
-          } catch (error) {
-            //Fail silently. There will be only one reason stating target id not found.
+          const parsedCookies = parseNetworkCookies(
+            cookies,
+            syncCookieStore?.getTabUrl(incomingMessageTabId) ?? '',
+            cookieDB ?? {},
+            key
+          );
+          if (parsedCookies.length > 0) {
+            allCookies = [...allCookies, ...parsedCookies];
           }
+        } catch (error) {
+          //Fail silently. There will be only one reason stating target id not found.
         }
-      )
+      })
     );
 
     syncCookieStore?.update(Number(incomingMessageTabId), allCookies);
@@ -1035,15 +699,15 @@ chrome.runtime.onMessage.addListener(async (request) => {
 
   if (DEVTOOLS_OPEN === incomingMessageType) {
     const dataToSend: { [key: string]: string | boolean } = {};
-    dataToSend['tabMode'] = tabMode;
+    dataToSend['tabMode'] = syncCookieStore.tabMode;
 
-    if (tabMode === 'single') {
-      dataToSend['tabToRead'] = tabToRead;
+    if (syncCookieStore.tabMode === 'single') {
+      dataToSend['tabToRead'] = syncCookieStore.tabToRead;
     }
 
     if (
       !syncCookieStore?.tabs[incomingMessageTabId] &&
-      tabMode === 'unlimited'
+      syncCookieStore.tabMode === 'unlimited'
     ) {
       const currentTab = await getTab(incomingMessageTabId);
       dataToSend['psatOpenedAfterPageLoad'] = request.payload.doNotReReload
@@ -1070,10 +734,10 @@ chrome.runtime.onMessage.addListener(async (request) => {
 
   if (POPUP_OPEN === incomingMessageType) {
     const dataToSend: { [key: string]: string } = {};
-    dataToSend['tabMode'] = tabMode;
+    dataToSend['tabMode'] = syncCookieStore.tabMode;
 
-    if (tabMode === 'single') {
-      dataToSend['tabToRead'] = tabToRead;
+    if (syncCookieStore.tabMode === 'single') {
+      dataToSend['tabToRead'] = syncCookieStore.tabToRead;
     }
 
     chrome.runtime.sendMessage({
@@ -1132,18 +796,18 @@ chrome.storage.sync.onChanged.addListener(
     ) {
       return;
     }
-    tabMode = changes.allowedNumberOfTabs.newValue;
+    syncCookieStore.tabMode = changes.allowedNumberOfTabs.newValue;
 
     const tabs = await chrome.tabs.query({});
 
     if (changes?.allowedNumberOfTabs?.newValue === 'single') {
-      tabToRead = '';
+      syncCookieStore.tabToRead = '';
       try {
         await chrome.runtime.sendMessage({
           type: INITIAL_SYNC,
           payload: {
-            tabMode,
-            tabToRead: tabToRead,
+            tabMode: syncCookieStore.tabMode,
+            tabToRead: syncCookieStore.tabToRead,
           },
         });
       } catch (error) {
@@ -1166,8 +830,8 @@ chrome.storage.sync.onChanged.addListener(
         await chrome.runtime.sendMessage({
           type: INITIAL_SYNC,
           payload: {
-            tabMode,
-            tabToRead: tabToRead,
+            tabMode: syncCookieStore.tabMode,
+            tabToRead: syncCookieStore.tabToRead,
           },
         });
       } catch (error) {
@@ -1196,7 +860,7 @@ chrome.storage.sync.onChanged.addListener(
       return;
     }
 
-    globalIsUsingCDP = changes?.isUsingCDP?.newValue;
+    syncCookieStore.globalIsUsingCDP = changes?.isUsingCDP?.newValue;
 
     const tabs = await chrome.tabs.query({});
 
