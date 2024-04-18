@@ -18,13 +18,11 @@
  */
 import SinonChrome from 'sinon-chrome';
 import data from '../../utils/test-data/cookieMockData';
-import SynchnorousCookieStore from '../synchnorousCookieStore';
+import synchnorousCookieStore from '../synchnorousCookieStore';
 
-let synchnorousCookieStore: SynchnorousCookieStore;
 describe('SynchnorousCookieStore:', () => {
   beforeAll(() => {
     globalThis.chrome = SinonChrome as unknown as typeof chrome;
-    synchnorousCookieStore = new SynchnorousCookieStore();
   });
 
   beforeEach(() => {
