@@ -69,8 +69,26 @@ const useContextInvalidated = (
 
         if (tabId) {
           chrome.tabs.reload(Number(tabId));
-          localStorage.removeItem('contextInvalidated');
+          if (isUsingCDP) {
+            try {
+              await chrome.debugger.attach(
+                { tabId: chrome.devtools.inspectedWindow.tabId },
+                '1.3'
+              );
+              await chrome.debugger.sendCommand(
+                { tabId: chrome.devtools.inspectedWindow.tabId },
+                'Network.enable'
+              );
+              await chrome.debugger.sendCommand(
+                { tabId: chrome.devtools.inspectedWindow.tabId },
+                'Audits.enable'
+              );
+            } catch (error) {
+              //Fail silently
+            }
+          }
         }
+        localStorage.removeItem('contextInvalidated');
       }
     })();
   }, [allowedNumberOfTabs, isUsingCDP]);

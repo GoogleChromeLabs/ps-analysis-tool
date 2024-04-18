@@ -235,6 +235,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   }, [selectedFrame]);
 
   const messagePassingListener = useCallback(
+    // eslint-disable-next-line complexity
     async (message: {
       type: string;
       payload: {
@@ -245,6 +246,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         extraData?: {
           extraFrameData?: Record<string, string[]>;
         };
+        psatOpenedAfterPageLoad?: boolean;
       };
     }) => {
       if (!message.type) {
@@ -267,6 +269,13 @@ const Provider = ({ children }: PropsWithChildren) => {
       if (INITIAL_SYNC === incomingMessageType && message?.payload?.tabMode) {
         if (message.payload.tabMode === 'unlimited') {
           isCurrentTabBeingListenedToRef.current = true;
+          if (
+            Object.keys(message.payload).includes('psatOpenedAfterPageLoad') &&
+            message.payload.psatOpenedAfterPageLoad
+          ) {
+            setContextInvalidated(true);
+            localStorage.setItem('psatOpenedAfterPageLoad', 'true');
+          }
           setTabToRead(null);
         } else {
           if (tabId.toString() !== message?.payload?.tabToRead) {
@@ -386,10 +395,14 @@ const Provider = ({ children }: PropsWithChildren) => {
   }, []);
 
   useEffect(() => {
+    const doNotReReload =
+      localStorage.getItem('contextInvalidated') &&
+      !localStorage.getItem('psatOpenedAfterPageLoad');
     chrome.runtime.sendMessage({
       type: DEVTOOLS_OPEN,
       payload: {
         tabId: chrome.devtools.inspectedWindow.tabId,
+        doNotReReload,
       },
     });
 

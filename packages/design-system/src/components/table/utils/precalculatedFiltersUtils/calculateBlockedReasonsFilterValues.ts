@@ -42,7 +42,7 @@ const calculateBlockedReasonsFilterValues = (
   >((acc, cookie) => {
     const blockedReason = getValueByKey('blockedReasons', cookie);
 
-    if (!cookie.frameIdList || cookie?.frameIdList?.length === 0) {
+    if (!cookie.frameIdList) {
       return acc;
     }
 

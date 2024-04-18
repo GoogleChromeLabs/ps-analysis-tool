@@ -43,7 +43,6 @@ const CookiesSection = () => {
         tabCookies={data.tabCookies}
         componentData={data.cookiesStatsComponents.legend}
         tabFrames={data.tabFrames}
-        infoIconTitle=""
         showHorizontalMatrix={data.showHorizontalMatrix}
       />
     </CookiesLandingWrapper>

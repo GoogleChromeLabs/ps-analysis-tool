@@ -24,19 +24,19 @@ import { TableFilter } from '../../useTable';
 
 /**
  * This function will return set of non duplicated cookie execmption reason.
- * @param frameFilteredCookies The cookie table data.
+ * @param cookies The cookie table data.
  * @param clearQuery Function to clear the query(when options are provided) to avoid conflicts.
  * @param options Options to preselect the filter values.
  * @returns {string[]} Unique set of exemption reasons.
  */
 function frameOnlyExemptionReasonValues(
-  frameFilteredCookies: CookieTableData[],
+  cookies: CookieTableData[],
   clearQuery?: () => void,
   options?: string[]
 ) {
   const collectedExemptionReasons = Array.from(
     new Set(
-      frameFilteredCookies.map(({ exemptionReason }) => {
+      cookies.map(({ exemptionReason }) => {
         if (!exemptionReason || exemptionReason.toLowerCase() === 'none') {
           return null;
         }
