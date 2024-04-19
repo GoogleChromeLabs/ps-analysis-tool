@@ -97,10 +97,6 @@ export class BrowserManagement {
           return regex.test(node.textContent.toLowerCase());
         });
 
-      if (bannerNodes.length > 0) {
-        this.debugLog(`found GDPR banner in the page.`);
-      }
-
       const buttonToClick: HTMLButtonElement[] = bannerNodes
         .map((node: Element) => {
           const buttonNodes = Array.from(node.getElementsByTagName('button'));
