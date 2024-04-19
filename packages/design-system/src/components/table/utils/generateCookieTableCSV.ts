@@ -33,7 +33,7 @@ const COOKIES_TABLE_DATA_HEADER = [
   I18n.getMessage('platform'),
   I18n.getMessage('httpOnly'),
   I18n.getMessage('secure'),
-  I18n.getMessage('Value'),
+  I18n.getMessage('value'),
   I18n.getMessage('path'),
   I18n.getMessage('expires'),
   I18n.getMessage('issues'),

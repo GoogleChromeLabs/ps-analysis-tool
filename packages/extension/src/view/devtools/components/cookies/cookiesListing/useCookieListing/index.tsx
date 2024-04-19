@@ -164,7 +164,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         widthWeightagePercentage: 4,
       },
       {
-        header: I18n.getMessage('Value'),
+        header: I18n.getMessage('value'),
         accessorKey: 'parsedCookie.value',
         cell: (info: InfoType) => info,
         widthWeightagePercentage: 7,

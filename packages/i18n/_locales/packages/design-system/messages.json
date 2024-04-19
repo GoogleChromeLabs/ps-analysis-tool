@@ -114,7 +114,7 @@
   "videoOverview": {
     "message": "Video Overview"
   },
-  "uideoOverviewNote": {
+  "videoOverviewNote": {
     "message": "Short summary video"
   },
   "devDocumentation": {
@@ -144,7 +144,7 @@
   "latestNews": {
     "message": "Latest News"
   },
-  "uiewMore": {
+  "viewMore": {
     "message": "View More"
   },
   "collapseView": {

@@ -24,7 +24,7 @@ export const QUICK_LINKS = [
     link: 'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki',
   },
   {
-    title: 'joinDiscussion',
+    title: 'joinDiscussions',
     link: 'https://github.com/GoogleChromeLabs/ps-analysis-tool/discussions',
   },
   {

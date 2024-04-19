@@ -34,14 +34,16 @@ const INFO_CARDS_DATA = [
     ]),
   },
   {
-    heading: I18n.getMessage('requestingAdditionalTime'),
-    content: I18n.getMessage('requestingAdditionalTimeNote', [
+    heading: I18n.getMessage('requestAdditionalMigrationTime'),
+    content: I18n.getMessage('requestAdditionalMigrationTimeNote', [
       `<a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="${addUTMParams(
         'https://developers.google.com/privacy-sandbox/3pcd/temporary-exceptions/first-party-deprecation-trial?hl=en'
       )}" target="_blank">`,
+      '</a>',
       `<a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="${addUTMParams(
         'https://developers.google.com/privacy-sandbox/3pcd/temporary-exceptions/first-party-deprecation-trial#apply_for_the_first-party_deprecation_trial'
       )}" target="_blank">`,
+      '</a>',
     ]),
   },
   {

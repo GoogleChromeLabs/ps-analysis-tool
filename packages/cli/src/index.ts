@@ -61,7 +61,7 @@ program
   .option('-nh, --no-headless ', I18n.getMessage('nonHeadless'))
   .option('-np, --no-prompts', I18n.getMessage('noPrompts'))
   .option('-nt, --no-technology', I18n.getMessage('noTechnology'))
-  .option('-d, --out-dir <value>', I18n.getMessage('outputDir'))
+  .option('-d, --out-dir <value>', I18n.getMessage('outDir'))
   .option('-ab, --accept-banner', I18n.getMessage('acceptBanner'));
 
 program.parse();
@@ -203,7 +203,7 @@ const startDashboardServer = async (dir: string, port: number) => {
     );
 
     spinnies.succeed('technology-spinner', {
-      text: I18n.getMessage('doneAnalyzingTechnologies'),
+      text: I18n.getMessage('doneAnalyzingTechonlogies'),
     });
   }
 

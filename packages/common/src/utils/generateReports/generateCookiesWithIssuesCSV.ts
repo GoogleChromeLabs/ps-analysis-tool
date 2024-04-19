@@ -34,7 +34,7 @@ export const COOKIES_WITH_ISSUES_DATA_HEADERS = [
   I18n.getMessage('platform'),
   I18n.getMessage('httpOnly'),
   I18n.getMessage('secure'),
-  I18n.getMessage('Value'),
+  I18n.getMessage('value'),
   I18n.getMessage('path'),
   I18n.getMessage('expires'),
   I18n.getMessage('gDPR'),

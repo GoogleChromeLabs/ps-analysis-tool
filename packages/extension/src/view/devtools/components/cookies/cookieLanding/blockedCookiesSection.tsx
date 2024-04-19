@@ -94,7 +94,7 @@ const BlockedCookiesSection = () => {
         {I18n.getMessage('settingsPage')}
       </button>
       . <br />
-      {I18n.getMessage('VisitPSAT')}&nbsp;
+      {I18n.getMessage('visitPSAT')}&nbsp;
       <a
         target="_blank"
         rel="noreferrer"

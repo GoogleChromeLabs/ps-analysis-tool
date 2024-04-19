@@ -52,7 +52,7 @@ const LibraryDetection = memo(function LibraryDetection() {
 
   const dataMapping = [
     {
-      title: I18n.getMessage('KnownBreakages'),
+      title: I18n.getMessage('knownBreakages'),
       count: Number(detectedLibraryNames.length),
       data: [{ count: 1, color: COLOR_MAP.uncategorized.color }],
     },

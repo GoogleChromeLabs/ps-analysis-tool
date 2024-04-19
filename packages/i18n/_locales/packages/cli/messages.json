@@ -181,7 +181,7 @@
         "content": "$1",
         "example": "sitemap"
       },
-      "urlLength": {
+      "urlsLength": {
         "content": "$2",
         "example": "5"
       }

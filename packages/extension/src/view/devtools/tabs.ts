@@ -147,7 +147,7 @@ const TABS: SidebarItems = {
         },
         children: {
           [SIDEBAR_ITEMS_KEYS.TOPICS]: {
-            title: I18n.getMessage('Topics'),
+            title: I18n.getMessage('topics'),
             panel: {
               Element: Topics,
             },

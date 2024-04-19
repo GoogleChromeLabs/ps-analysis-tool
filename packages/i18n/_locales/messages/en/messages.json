@@ -181,7 +181,7 @@
         "content": "$1",
         "example": "sitemap"
       },
-      "urlLength": {
+      "urlsLength": {
         "content": "$2",
         "example": "5"
       }
@@ -242,7 +242,7 @@
     "message": "Technologies"
   },
   "blockedCookies": {
-    "message": "Blocked cookies"
+    "message": "Blocked Cookies"
   },
   "blockedReasons": {
     "message": "Blocked Reasons"
@@ -284,7 +284,7 @@
     "message": "Select row to preview its value"
   },
   "noDescription": {
-    "message": "No description available."
+    "message": "No description available"
   },
   "scope": {
     "message": "Scope"
@@ -956,7 +956,7 @@
   "videoOverview": {
     "message": "Video Overview"
   },
-  "uideoOverviewNote": {
+  "videoOverviewNote": {
     "message": "Short summary video"
   },
   "devDocumentation": {
@@ -986,7 +986,7 @@
   "latestNews": {
     "message": "Latest News"
   },
-  "uiewMore": {
+  "viewMore": {
     "message": "View More"
   },
   "collapseView": {
@@ -1014,10 +1014,10 @@
     "message": "Expand All"
   },
   "showLess": {
-    "message": "Show less"
+    "message": "Show Less"
   },
   "showMore": {
-    "message": "Show more"
+    "message": "Show More"
   },
   "count": {
     "message": "Count"
@@ -1424,10 +1424,10 @@
   "unknownFrameNote": {
     "message": "We are unable to detect this frame as it may be an iframe nested inside one or more iframes."
   },
-  "ext1stPartyCookies": {
+  "1stPartyCookies": {
     "message": "1st Party Cookies"
   },
-  "ext3rdPartyCookies": {
+  "3rdPartyCookies": {
     "message": "3rd Party Cookies"
   },
   "exemptedCookies": {
@@ -1512,7 +1512,7 @@
     "message": "Reporting Breakages"
   },
   "reportingBreakagesNote": {
-    "message": "If your site or a service you depend on is breaking with third-party cookies disabled, you should file an issue $a_tag_1_start$here$a_tag_1_end$. And if you have questions or feedback about Privacy Sandbox, you can raise a new issue $a_tag_2_start$here$a_taf_2_end$  using the third-party cookie deprecation.",
+    "message": "If your site or a service you depend on is breaking with third-party cookies disabled, you should file an issue $a_tag_1_start$here$a_tag_1_end$. And if you have questions or feedback about Privacy Sandbox, you can raise a new issue $a_tag_2_start$here$a_tag_2_end$  using the third-party cookie deprecation.",
     "placeholders": {
       "a_tag_1_start": {
         "content": "$1",
@@ -1684,5 +1684,118 @@
   },
   "bounceTrackingMitigation": {
     "message": "Bounce Tracking Mitigation"
+  },
+  "knownBreakages": {
+    "message": "Known Breakages"
+  },
+  "noLibraries": {
+    "message": "No libraries with known breakages found yet!"
+  },
+  "errorOccurred": {
+    "message": "A library detection error occurred. Please reopen the DevTool on a valid URL."
+  },
+  "waitingPageLoad": {
+    "message": "Waiting for the page to load.."
+  },
+  "checkingLibraries": {
+    "message": "Checking libraries for any known breakages on the page..."
+  },
+  "detectionMessage": {
+    "message": "$library$ functionality may not work properly due to the phaseout of third-party cookies. For more information, please visit the $provider$ $a_tag_start$support forum$a_tag_end$.",
+    "placeholders": {
+      "library": {
+        "content": "$1",
+        "example": "Google Analytics"
+      },
+      "provider": {
+        "content": "$2",
+        "example": "Google"
+      },
+      "a_tag_start": {
+        "content": "$3",
+        "example": "<a href='https://support.google.com/analytics/answer/9976101'>"
+      },
+      "a_tag_end": {
+        "content": "$4",
+        "example": "</a>"
+      }
+    }
+  },
+  "disqusComments": {
+    "message": "Disqus Comments"
+  },
+  "disqus": {
+    "message": "Disqus"
+  },
+  "fBComments": {
+    "message": "Facebook Comments"
+  },
+  "fBCommentsPlugin": {
+    "message": "Facebook comments plugin"
+  },
+  "fB": {
+    "message": "Facebook"
+  },
+  "fBLike": {
+    "message": "Facebook Like Button"
+  },
+  "gISTitle": {
+    "message": "Avoid use of unsupported Google Identity Services features."
+  },
+  "featureCount": {
+    "message": "$count$ features",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "gISNote": {
+    "message": "Due to Privacy Sandbox enforcements some features are backward incompatible or deprecated. This report performs a page scan for script src elements and affected JavaScript objects and methods. Review the following features and $a_tag_start$migrate$a_tag_end$ if necessary.",
+    "placeholders": {
+      "a_tag_start": {
+        "content": "$1",
+        "example": "<a href='https://developers.google.com/identity/gsi/web/guides/migrate'>"
+      },
+      "a_tag_end": {
+        "content": "$2",
+        "example": "</a>"
+      }
+    }
+  },
+  "gSITitle": {
+    "message": "Avoid use of deprecated Google Sign-In functionality."
+  },
+  "gSInote": {
+    "message": "The Google Sign-In JavaScript library is deprecated and is no longer supported. Review the following features and consider $a_tag_start$migrating$a_tag_end$ to a newer library if necessary.",
+    "placeholders": {
+      "a_tag_start": {
+        "content": "$1",
+        "example": "<a href='https://developers.google.com/identity/sign-in/web/migration-guide'>"
+      },
+      "a_tag_end": {
+        "content": "$2",
+        "example": "</a>"
+      }
+    }
+  },
+  "jetpackComments": {
+    "message": "Jetpack Comments"
+  },
+  "jetpackCommentsWidget": {
+    "message": "Jetpack comments widget"
+  },
+  "jetpack": {
+    "message": "Jetpack"
+  },
+  "jetpackLikeButton": {
+    "message": "Jetpack Like Button"
+  },
+  "ldreCaptcha": {
+    "message": "reCAPTCHA"
+  },
+  "taskNotDefined": {
+    "message": "Task not defined"
   }
 }

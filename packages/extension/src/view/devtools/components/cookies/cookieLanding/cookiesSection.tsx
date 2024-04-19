@@ -68,7 +68,7 @@ const CookiesSection = () => {
         <p
           dangerouslySetInnerHTML={{
             __html: I18n.getMessage('setUpEvaluationEnvironment', [
-              '<a href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/Evaluation-Environment" target="_blank" rel="noreferrer" className="text-bright-navy-blue dark:text-jordy-blue">',
+              '<a href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/Evaluation-Environment" target="_blank" rel="noreferrer" class="text-bright-navy-blue dark:text-jordy-blue">',
               '</a>',
             ]),
           }}

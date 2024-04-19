@@ -136,7 +136,8 @@ const Provider = ({ children }: PropsWithChildren) => {
       const browserInfo = /Chrome\/([0-9.]+)/.exec(navigator.userAgent);
       if (browserInfo) {
         setBrowserInformation(
-          I18n.getMessage('Version') +
+          I18n.getMessage('version') +
+            ' ' +
             browserInfo[1] +
             ' ' +
             OSInformation?.split(' ')[1]

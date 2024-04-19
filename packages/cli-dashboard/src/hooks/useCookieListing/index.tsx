@@ -124,7 +124,7 @@ const useCookieListing = (
         widthWeightagePercentage: 5,
       },
       {
-        header: I18n.getMessage('Value'),
+        header: I18n.getMessage('value'),
         accessorKey: 'parsedCookie.value',
         cell: (info: InfoType) => info,
         widthWeightagePercentage: 10,

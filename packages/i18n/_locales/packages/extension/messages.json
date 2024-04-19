@@ -332,10 +332,10 @@
   "unknownFrameNote": {
     "message": "We are unable to detect this frame as it may be an iframe nested inside one or more iframes."
   },
-  "ext1stPartyCookies": {
+  "1stPartyCookies": {
     "message": "1st Party Cookies"
   },
-  "ext3rdPartyCookies": {
+  "3rdPartyCookies": {
     "message": "3rd Party Cookies"
   },
   "exemptedCookies": {
@@ -420,7 +420,7 @@
     "message": "Reporting Breakages"
   },
   "reportingBreakagesNote": {
-    "message": "If your site or a service you depend on is breaking with third-party cookies disabled, you should file an issue $a_tag_1_start$here$a_tag_1_end$. And if you have questions or feedback about Privacy Sandbox, you can raise a new issue $a_tag_2_start$here$a_taf_2_end$  using the third-party cookie deprecation.",
+    "message": "If your site or a service you depend on is breaking with third-party cookies disabled, you should file an issue $a_tag_1_start$here$a_tag_1_end$. And if you have questions or feedback about Privacy Sandbox, you can raise a new issue $a_tag_2_start$here$a_tag_2_end$  using the third-party cookie deprecation.",
     "placeholders": {
       "a_tag_1_start": {
         "content": "$1",
