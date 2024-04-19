@@ -13,5 +13,103 @@
   },
   "ldCheckingLibraries": {
     "message": "Checking libraries for any known breakages on the page..."
+  },
+  "ldDetectionMessage": {
+    "message": "$library$ functionality may not work properly due to the phaseout of third-party cookies. For more information, please visit the $provider$ $a_tag_start$support forum$a_tag_end$.",
+    "placeholders": {
+      "library": {
+        "content": "$1",
+        "example": "Google Analytics"
+      },
+      "provider": {
+        "content": "$2",
+        "example": "Google"
+      },
+      "a_tag_start": {
+        "content": "$3",
+        "example": "<a href='https://support.google.com/analytics/answer/9976101'>"
+      },
+      "a_tag_end": {
+        "content": "$4",
+        "example": "</a>"
+      }
+    }
+  },
+  "ldDisqusComments": {
+    "message": "Disqus Comments"
+  },
+  "ldDisqus": {
+    "message": "Disqus"
+  },
+  "ldFBComments": {
+    "message": "Facebook Comments"
+  },
+  "ldFBCommentsPlugin": {
+    "message": "Facebook comments plugin"
+  },
+  "ldFB": {
+    "message": "Facebook"
+  },
+  "ldFBLike": {
+    "message": "Facebook Like Button"
+  },
+  "ldGISTitle": {
+    "message": "Avoid use of unsupported Google Identity Services features."
+  },
+  "ldFeatureCount": {
+    "message": "$count$ features",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "ldGISNote": {
+    "message": "Due to Privacy Sandbox enforcements some features are backward incompatible or deprecated. This report performs a page scan for script src elements and affected JavaScript objects and methods. Review the following features and $a_tag_start$migrate$a_tag_end$ if necessary.",
+    "placeholders": {
+      "a_tag_start": {
+        "content": "$1",
+        "example": "<a href='https://developers.google.com/identity/gsi/web/guides/migrate'>"
+      },
+      "a_tag_end": {
+        "content": "$2",
+        "example": "</a>"
+      }
+    }
+  },
+  "ldGSITitle": {
+    "message": "Avoid use of deprecated Google Sign-In functionality."
+  },
+  "ldGSInote": {
+    "message": "The Google Sign-In JavaScript library is deprecated and is no longer supported. Review the following features and consider $a_tag_start$migrating$a_tag_end$ to a newer library if necessary.",
+    "placeholders": {
+      "a_tag_start": {
+        "content": "$1",
+        "example": "<a href='https://developers.google.com/identity/sign-in/web/migration-guide'>"
+      },
+      "a_tag_end": {
+        "content": "$2",
+        "example": "</a>"
+      }
+    }
+  },
+  "ldJetpackComments": {
+    "message": "Jetpack Comments"
+  },
+  "ldJetpackCommentsWidget": {
+    "message": "Jetpack comments widget"
+  },
+  "ldJetpack": {
+    "message": "Jetpack"
+  },
+  "ldJetpackLikeButton": {
+    "message": "Jetpack Like Button"
+  },
+  "ldreCaptcha": {
+    "message": "reCAPTCHA"
+  },
+  "ldTaskNotDefined": {
+    "message": "Task not defined"
   }
 }

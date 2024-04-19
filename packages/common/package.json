@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
   "dependencies": {
+    "@ps-analysis-tool/i18n": "*",
     "tldts": "^6.0.14"
   },
   "devDependencies": {

@@ -497,5 +497,47 @@
   },
   "exemptionReasonCorsOptIn": {
     "message": "This cookie is allowed by CORS opt-in"
+  },
+  "cmYes": {
+    "message": "Yes"
+  },
+  "cmNo": {
+    "message": "No"
+  },
+  "cmTotalCookies": {
+    "message": "Total Cookies"
+  },
+  "cmTotalFirstPartyCookies": {
+    "message": "Total First Party Cookies"
+  },
+  "cmTotalThirdPartyCookies": {
+    "message": "Total Third Party Cookies"
+  },
+  "cmAnalyticsCookies": {
+    "message": "Analytics Cookies"
+  },
+  "cmFunctionalCookies": {
+    "message": "Functional Cookies"
+  },
+  "cmMarketingCookies": {
+    "message": "Marketing Cookies"
+  },
+  "cmUncategorizedCookies": {
+    "message": "Uncategorized Cookies"
+  },
+  "cmCookiesWithIssues": {
+    "message": "Cookies with Issues"
+  },
+  "cmAnalyticsCookiesWithIssues": {
+    "message": "Analytics Cookies with Issues"
+  },
+  "cmFunctionalCookiesWithIssues": {
+    "message": "Functional Cookies with Issues"
+  },
+  "cmMarketingCookiesWithIssues": {
+    "message": "Marketing Cookies with Issues"
+  },
+  "cmUncategorizedCookiesWithIssues": {
+    "message": "Uncategorized Cookies with Issues"
   }
 }

@@ -24,6 +24,7 @@ import React from 'react';
 import { Accordion, DetectionMessage } from '../../components';
 import type { AccordionProps } from '../../types';
 import { RECAPTCHA_HELP_URL } from './constants';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const ReCaptchaAccordion = ({ domQueryMatches }: AccordionProps) => {
   if (!domQueryMatches) {
@@ -37,10 +38,14 @@ const ReCaptchaAccordion = ({ domQueryMatches }: AccordionProps) => {
   }
 
   return (
-    <Accordion title={'reCAPTCHA.'} isLoading={false} featuresText="">
+    <Accordion
+      title={I18n.getMessage('ldreCaptcha')}
+      isLoading={false}
+      featuresText=""
+    >
       <DetectionMessage
-        libraryName="reCAPTCHA"
-        provider="reCAPTCHA"
+        libraryName={I18n.getMessage('ldreCaptcha')}
+        provider={I18n.getMessage('ldreCaptcha')}
         supportURL={RECAPTCHA_HELP_URL}
       />
     </Accordion>

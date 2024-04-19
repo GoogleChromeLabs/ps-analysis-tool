@@ -84,15 +84,17 @@ const AssembledCookiesLanding = () => {
         },
       },
     ];
+
     if (cookieStats.exemptedCookies.total > 0) {
       defaultSections.splice(2, 0, {
-        name: 'Exemption Reason',
+        name: I18n.getMessage('extExemptionReasons'),
         link: 'exemption-reasons',
         panel: {
           Element: ExemptedCookiesSection,
         },
       });
     }
+
     return defaultSections;
   }, [cookieStats.exemptedCookies.total]);
 

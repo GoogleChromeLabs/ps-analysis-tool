@@ -97,14 +97,12 @@ const addKeysToLocale = async (formattedData) => {
     const descriptionKey = `OCD_${key.replace(regex, '_')}_description`;
     messages[descriptionKey] = {
       message: value.description,
-      description: 'Description of the cookie from the Open Cookie DB',
     };
     value.description = descriptionKey;
 
     const retentionKey = `OCD_retention_${value.retention.replace(regex, '_')}`;
     messages[retentionKey] = {
       message: value.retention,
-      description: 'Retention period of the cookie from the Open Cookie DB',
     };
 
     value.retention = retentionKey;

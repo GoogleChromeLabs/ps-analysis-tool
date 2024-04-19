@@ -18,12 +18,13 @@
  */
 import React from 'react';
 import { LandingPage, PSInfoKey } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const Topics = () => {
   return (
     <div data-testid="topics-content" className="h-full w-full">
       <LandingPage
-        title="Topics"
+        title={I18n.getMessage('extTopics')}
         psInfoKey={PSInfoKey.Topics}
         extraClasses="max-w-2xl h-fit"
       />

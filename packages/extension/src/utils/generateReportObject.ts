@@ -29,6 +29,7 @@ import {
   prepareFrameStatsComponent,
   type DataMapping,
 } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Utility function to generate report object.
@@ -48,17 +49,17 @@ export default function generateReportObject(
 
   const cookieClassificationDataMapping: DataMapping[] = [
     {
-      title: 'Total cookies',
+      title: I18n.getMessage('dsTotalCookies'),
       count: cookieStats.total,
       data: cookiesStatsComponents.legend,
     },
     {
-      title: '1st party cookies',
+      title: I18n.getMessage('ds1stPartyCookies'),
       count: cookieStats.firstParty.total,
       data: cookiesStatsComponents.firstParty,
     },
     {
-      title: '3rd party cookies',
+      title: I18n.getMessage('ds3rdPartyCookies'),
       count: cookieStats.thirdParty.total,
       data: cookiesStatsComponents.thirdParty,
     },
@@ -66,7 +67,7 @@ export default function generateReportObject(
 
   const blockedCookieDataMapping: DataMapping[] = [
     {
-      title: 'Blocked cookies',
+      title: I18n.getMessage('dsBlockedCookies'),
       count: cookieStats.blockedCookies.total,
       data: cookiesStatsComponents.blocked,
     },
@@ -74,7 +75,7 @@ export default function generateReportObject(
 
   const exemptedCookiesDataMapping: DataMapping[] = [
     {
-      title: 'Exempted cookies',
+      title: I18n.getMessage('dsExemptedCookies'),
       count: cookieStats.exemptedCookies.total,
       data: cookiesStatsComponents.exempted,
     },

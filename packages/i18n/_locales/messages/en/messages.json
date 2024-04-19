@@ -217,6 +217,12 @@
   "clDoneAnalyzingTechonlogies": {
     "message": "Done analyzing technologies"
   },
+  "clUnknown": {
+    "message": "Unknown"
+  },
+  "clUncategorized": {
+    "message": "Uncategorized"
+  },
   "cdSitemapReport": {
     "message": "Sitemap report"
   },

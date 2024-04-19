@@ -118,5 +118,17 @@
   },
   "cdNoPathProvided": {
     "message": "No path provided"
+  },
+  "cdNone": {
+    "message": "None"
+  },
+  "cdLax": {
+    "message": "Lax"
+  },
+  "cdStrict": {
+    "message": "Strict"
+  },
+  "cdUncategorized": {
+    "message": "Uncategorized"
   }
 }

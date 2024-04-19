@@ -24,6 +24,7 @@ import { isFirstParty, findAnalyticsMatch } from '@ps-analysis-tool/common';
  */
 import { CookieDatabase } from '../types';
 import { BrowserManagement } from '../utils/browserManagement';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 export const analyzeCookiesUrls = async (
   urls: string[],
@@ -59,8 +60,8 @@ export const analyzeCookiesUrls = async (
         );
 
         frameCookies[key].analytics = {
-          platform: analytics?.platform || 'Unknown',
-          category: analytics?.category || 'Uncategorized',
+          platform: analytics?.platform || I18n.getMessage('clUnknown'),
+          category: analytics?.category || I18n.getMessage('cmUncategorized'),
           gdprUrl: analytics?.gdprUrl || '',
           description: analytics?.description,
         };

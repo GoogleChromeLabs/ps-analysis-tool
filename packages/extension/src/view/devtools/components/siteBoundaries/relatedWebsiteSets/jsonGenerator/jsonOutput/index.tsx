@@ -88,7 +88,7 @@ const JsonOutput = ({
               target="_blank"
               rel="noreferrer"
             >
-              <Button text={I18n.getMessage('extCreatePR', ['Pull Request'])} />
+              <Button text={I18n.getMessage('extCreatePR')} />
             </a>
             <a
               title="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork"
@@ -99,7 +99,7 @@ const JsonOutput = ({
               <Button
                 text={
                   <>
-                    {I18n.getMessage('extPRGuide', ['Pull Request'])}
+                    {I18n.getMessage('extPRGuide')}
                     <span className="w-4 h-4 ml-2 inline-block">
                       <ArrowRight />
                     </span>

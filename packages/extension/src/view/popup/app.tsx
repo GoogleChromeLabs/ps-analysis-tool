@@ -201,7 +201,7 @@ const App: React.FC = () => {
       </div>
       <div className="w-full text-center">
         <p className="text-chart-label text-xs">
-          {I18n.getMessage('extInspectInPSATPanel', ['"Privacy Sandbox"'])}
+          {I18n.getMessage('extInspectInPSATPanel')}
         </p>
       </div>
       <div className="absolute right-0 bottom-0 w-full">

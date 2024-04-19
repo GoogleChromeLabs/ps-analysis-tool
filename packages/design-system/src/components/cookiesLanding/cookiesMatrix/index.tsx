@@ -53,7 +53,7 @@ const CookiesMatrix = ({
   tabCookies,
   tabFrames,
   componentData = [],
-  title = 'Categories',
+  title = I18n.getMessage('dsCategories'),
   description = '',
   showHorizontalMatrix = true,
   showMatrix = true,

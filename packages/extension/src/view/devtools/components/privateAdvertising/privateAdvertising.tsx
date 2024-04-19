@@ -23,11 +23,12 @@ import React from 'react';
  * Internal Dependencies
  */
 import { LandingPage } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const PrivateAdvertising = () => {
   return (
     <LandingPage
-      title="Private Advertising"
+      title={I18n.getMessage('extPrivateAdvertising')}
       iframeSrc="https://privacysandbox.info/en/privacy-sandbox/measure-digital-ads"
       extraClasses="h-[78vh] w-full"
     />

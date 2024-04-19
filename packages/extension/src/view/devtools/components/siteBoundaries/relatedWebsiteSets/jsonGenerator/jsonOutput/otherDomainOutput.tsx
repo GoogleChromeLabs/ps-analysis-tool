@@ -45,9 +45,7 @@ const OtherDomainOutput = ({
           2
         </p>
         <p className="text-base">
-          Add the file <code>related-website-set.json</code> in the directory
-          <code>.well-known</code> of <b>all the other domains</b> in your set
-          with the following content:
+          {I18n.getMessage('extAddToRwsOtherDomains')}
         </p>
       </div>
       <div id="domainsListOutput">

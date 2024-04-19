@@ -27,6 +27,7 @@ import {
   type MatrixComponentProps,
   LEGEND_DESCRIPTION,
 } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 /**
  * Internal dependencies
  */
@@ -69,6 +70,7 @@ const ExemptedCookiesSection = () => {
     },
   ];
 
+  // Can we remove this description, as we don't show when CDP is off?
   const description = !isUsingCDP ? (
     <>
       To gather data and insights regarding blocked cookies and exempted
@@ -96,9 +98,9 @@ const ExemptedCookiesSection = () => {
     >
       {dataComponents.length > 0 && (
         <MatrixContainer
-          title="Exemption Reasons"
+          title={I18n.getMessage('extExemptionReasons')}
           matrixData={dataComponents}
-          infoIconTitle="Cookies that should have been blocked by the browser but was exempted."
+          infoIconTitle={I18n.getMessage('extExemptionReasonsNote')}
         />
       )}
     </CookiesLandingWrapper>

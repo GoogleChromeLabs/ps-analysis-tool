@@ -18,6 +18,7 @@
  */
 import React from 'react';
 import { addUTMParams } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 /**
  * Internal dependencies.
@@ -38,26 +39,22 @@ const GISAccordion = ({ matches }: AccordionProps) => {
 
   return (
     <Accordion
-      title={'Avoid use of unsupported Google Identity Services features.'}
-      featuresText={`${featuresCount} features`}
+      title={I18n.getMessage('ldGISTitle')}
+      featuresText={I18n.getMessage('ldFeatureCount', [
+        featuresCount.toString(),
+      ])}
     >
-      <p className="dark:text-bright-gray">
-        Due to Privacy Sandbox enforcements some features are backward
-        incompatible or deprecated. This report performs a page scan for script
-        src elements and affected JavaScript objects and methods. Review the
-        following features and{' '}
-        <a
-          className="text-bright-navy-blue dark:text-jordy-blue"
-          target="_blank"
-          href={addUTMParams(
-            'https://developers.google.com/identity/gsi/web/guides/fedcm-migration?utm_source=lighthouse&utm_medium=cli'
-          )}
-          rel="noreferrer"
-        >
-          migrate
-        </a>{' '}
-        if necessary.
-      </p>
+      <p
+        className="dark:text-bright-gray"
+        dangerouslySetInnerHTML={{
+          __html: I18n.getMessage('ldGISNote', [
+            `<a className="text-bright-navy-blue dark:text-jordy-blue" target="_blank" href="${addUTMParams(
+              'https://developers.google.com/identity/gsi/web/guides/fedcm-migration?utm_source=lighthouse&utm_medium=cli'
+            )}" rel="noreferrer">`,
+            '</a>',
+          ]),
+        }}
+      />
       <FeatureList matches={matches} />
     </Accordion>
   );

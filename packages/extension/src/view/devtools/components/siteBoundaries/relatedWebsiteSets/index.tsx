@@ -24,12 +24,13 @@ import { LandingPage, PSInfoKey } from '@ps-analysis-tool/design-system';
  */
 import RWSJsonGenerator from './jsonGenerator';
 import Insights from './insights';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const RelatedWebsiteSets = () => {
   return (
     <div data-testid="related-website-sets-content" className="h-full w-full">
       <LandingPage
-        title="Related Website Sets"
+        title={I18n.getMessage('extRws')}
         psInfoKey={PSInfoKey.RelatedWebsiteSets}
         extraClasses="max-w-2xl h-fit"
       >

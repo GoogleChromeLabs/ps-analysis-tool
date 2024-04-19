@@ -16,6 +16,7 @@
 /**
  * Internal dependencies.
  */
+import { I18n } from '@ps-analysis-tool/i18n';
 import * as CookieWarningReasonHTMLContent from './cookieWarningReasonHTMLContent';
 
 const isURLSecure = (cookieUrl: string): boolean => {
@@ -29,34 +30,50 @@ const CookieWarningReason = {
   WarnSameSiteUnspecifiedCrossSiteContext: (operation: string): string => {
     // For SetCookie operation.
     if (operation === 'SetCookie') {
-      return CookieWarningReasonHTMLContent.WarnSameSiteUnspecifiedCrossSiteContextSetCookie;
+      return I18n.getFormattedMessages(
+        CookieWarningReasonHTMLContent.WarnSameSiteUnspecifiedCrossSiteContextSetCookie
+      );
     }
     // For ReadCookie operation.
-    return CookieWarningReasonHTMLContent.WarnSameSiteUnspecifiedCrossSiteContextReadCookie;
+    return I18n.getFormattedMessages(
+      CookieWarningReasonHTMLContent.WarnSameSiteUnspecifiedCrossSiteContextReadCookie
+    );
   },
   WarnSameSiteNoneInsecure: (operation: string): string => {
     // For SetCookie operation.
     if (operation === 'SetCookie') {
-      return CookieWarningReasonHTMLContent.WarnSameSiteNoneInsecureSetCookie;
+      return I18n.getFormattedMessages(
+        CookieWarningReasonHTMLContent.WarnSameSiteNoneInsecureSetCookie
+      );
     }
     // For ReadCookie operation.
-    return CookieWarningReasonHTMLContent.WarnSameSiteNoneInsecureReadCookie;
+    return I18n.getFormattedMessages(
+      CookieWarningReasonHTMLContent.WarnSameSiteNoneInsecureReadCookie
+    );
   },
   WarnSameSiteUnspecifiedLaxAllowUnsafe: (operation: string): string => {
     // For SetCookie operation.
     if (operation === 'SetCookie') {
-      return CookieWarningReasonHTMLContent.WarnSameSiteUnspecifiedLaxAllowUnsafeSetCookie;
+      return I18n.getFormattedMessages(
+        CookieWarningReasonHTMLContent.WarnSameSiteUnspecifiedLaxAllowUnsafeSetCookie
+      );
     }
     // For ReadCookie operation.
-    return CookieWarningReasonHTMLContent.WarnSameSiteUnspecifiedLaxAllowUnsafeReadCookie;
+    return I18n.getFormattedMessages(
+      CookieWarningReasonHTMLContent.WarnSameSiteUnspecifiedLaxAllowUnsafeReadCookie
+    );
   },
   WarnSameSiteStrictLaxDowngradeStrict: (cookieURL: string): string => {
     // For secure URL.
     if (isURLSecure(cookieURL)) {
-      return CookieWarningReasonHTMLContent.WarnSameSiteStrictLaxDowngradeStrictSecure;
+      return I18n.getFormattedMessages(
+        CookieWarningReasonHTMLContent.WarnSameSiteStrictLaxDowngradeStrictSecure
+      );
     }
     // For insecure URL.
-    return CookieWarningReasonHTMLContent.WarnSameSiteStrictLaxDowngradeStrictInsecure;
+    return I18n.getFormattedMessages(
+      CookieWarningReasonHTMLContent.WarnSameSiteStrictLaxDowngradeStrictInsecure
+    );
   },
   WarnSameSiteStrictCrossDowngradeStrict: (
     operation: string,
@@ -66,18 +83,26 @@ const CookieWarningReason = {
     if (operation === 'SetCookie') {
       // For secure URL.
       if (isURLSecure(cookieURL)) {
-        return CookieWarningReasonHTMLContent.WarnSameSiteStrictCrossDowngradeStrictSetCookieSecure;
+        return I18n.getFormattedMessages(
+          CookieWarningReasonHTMLContent.WarnSameSiteStrictCrossDowngradeStrictSetCookieSecure
+        );
       }
       // For insecure URL.
-      return CookieWarningReasonHTMLContent.WarnSameSiteStrictCrossDowngradeStrictSetCookieInsecure;
+      return I18n.getFormattedMessages(
+        CookieWarningReasonHTMLContent.WarnSameSiteStrictCrossDowngradeStrictSetCookieInsecure
+      );
     }
     // For ReadCookie operation.
     // For secure URL.
     if (isURLSecure(cookieURL)) {
-      return CookieWarningReasonHTMLContent.WarnSameSiteStrictCrossDowngradeStrictReadCookieSecure;
+      return I18n.getFormattedMessages(
+        CookieWarningReasonHTMLContent.WarnSameSiteStrictCrossDowngradeStrictReadCookieSecure
+      );
     }
     // For insecure URL.
-    return CookieWarningReasonHTMLContent.WarnSameSiteStrictCrossDowngradeStrictReadCookieInsecure;
+    return I18n.getFormattedMessages(
+      CookieWarningReasonHTMLContent.WarnSameSiteStrictCrossDowngradeStrictReadCookieInsecure
+    );
   },
   WarnSameSiteStrictCrossDowngradeLax: (
     operation: string,
@@ -87,18 +112,26 @@ const CookieWarningReason = {
     if (operation === 'SetCookie') {
       // For secure URL.
       if (isURLSecure(cookieURL)) {
-        return CookieWarningReasonHTMLContent.WarnSameSiteStrictCrossDowngradeLaxSetCookieSecure;
+        return I18n.getFormattedMessages(
+          CookieWarningReasonHTMLContent.WarnSameSiteStrictCrossDowngradeLaxSetCookieSecure
+        );
       }
       // For insecure URL.
-      return CookieWarningReasonHTMLContent.WarnSameSiteStrictCrossDowngradeLaxSetCookieInsecure;
+      return I18n.getFormattedMessages(
+        CookieWarningReasonHTMLContent.WarnSameSiteStrictCrossDowngradeLaxSetCookieInsecure
+      );
     }
     // For ReadCookie operation.
     // For secure URL.
     if (isURLSecure(cookieURL)) {
-      return CookieWarningReasonHTMLContent.WarnSameSiteStrictCrossDowngradeLaxReadCookieSecure;
+      return I18n.getFormattedMessages(
+        CookieWarningReasonHTMLContent.WarnSameSiteStrictCrossDowngradeLaxReadCookieSecure
+      );
     }
     // For insecure URL.
-    return CookieWarningReasonHTMLContent.WarnSameSiteStrictCrossDowngradeLaxReadCookieInsecure;
+    return I18n.getFormattedMessages(
+      CookieWarningReasonHTMLContent.WarnSameSiteStrictCrossDowngradeLaxReadCookieInsecure
+    );
   },
   WarnSameSiteLaxCrossDowngradeStrict: (
     operation: string,
@@ -108,18 +141,26 @@ const CookieWarningReason = {
     if (operation === 'SetCookie') {
       // For secure URL.
       if (isURLSecure(cookieURL)) {
-        return CookieWarningReasonHTMLContent.WarnSameSiteLaxCrossDowngradeStrictSetCookieSecure;
+        return I18n.getFormattedMessages(
+          CookieWarningReasonHTMLContent.WarnSameSiteLaxCrossDowngradeStrictSetCookieSecure
+        );
       }
       // For insecure URL.
-      return CookieWarningReasonHTMLContent.WarnSameSiteLaxCrossDowngradeStrictSetCookieInsecure;
+      return I18n.getFormattedMessages(
+        CookieWarningReasonHTMLContent.WarnSameSiteLaxCrossDowngradeStrictSetCookieInsecure
+      );
     }
     // For ReadCookie operation.
     // For secure URL.
     if (isURLSecure(cookieURL)) {
-      return CookieWarningReasonHTMLContent.WarnSameSiteLaxCrossDowngradeStrictReadCookieSecure;
+      return I18n.getFormattedMessages(
+        CookieWarningReasonHTMLContent.WarnSameSiteLaxCrossDowngradeStrictReadCookieSecure
+      );
     }
     // For insecure URL.
-    return CookieWarningReasonHTMLContent.WarnSameSiteLaxCrossDowngradeStrictReadCookieInsecure;
+    return I18n.getFormattedMessages(
+      CookieWarningReasonHTMLContent.WarnSameSiteLaxCrossDowngradeStrictReadCookieInsecure
+    );
   },
   WarnSameSiteLaxCrossDowngradeLax: (
     operation: string,
@@ -129,35 +170,53 @@ const CookieWarningReason = {
     if (operation === 'SetCookie') {
       // For secure URL.
       if (isURLSecure(cookieURL)) {
-        return CookieWarningReasonHTMLContent.WarnSameSiteLaxCrossDowngradeLaxSetCookieSecure;
+        return I18n.getFormattedMessages(
+          CookieWarningReasonHTMLContent.WarnSameSiteLaxCrossDowngradeLaxSetCookieSecure
+        );
       }
       // For insecure URL.
-      return CookieWarningReasonHTMLContent.WarnSameSiteLaxCrossDowngradeLaxSetCookieInsecure;
+      return I18n.getFormattedMessages(
+        CookieWarningReasonHTMLContent.WarnSameSiteLaxCrossDowngradeLaxSetCookieInsecure
+      );
     }
     // For ReadCookie operation.
     // For secure URL.
     if (isURLSecure(cookieURL)) {
-      return CookieWarningReasonHTMLContent.WarnSameSiteLaxCrossDowngradeLaxReadCookieSecure;
+      return I18n.getFormattedMessages(
+        CookieWarningReasonHTMLContent.WarnSameSiteLaxCrossDowngradeLaxReadCookieSecure
+      );
     }
     // For insecure URL.
-    return CookieWarningReasonHTMLContent.WarnSameSiteLaxCrossDowngradeLaxReadCookieInsecure;
+    return I18n.getFormattedMessages(
+      CookieWarningReasonHTMLContent.WarnSameSiteLaxCrossDowngradeLaxReadCookieInsecure
+    );
   },
   WarnAttributeValueExceedsMaxSize: (): string => {
-    return CookieWarningReasonHTMLContent.WarnAttributeValueExceedsMaxSize;
+    return I18n.getFormattedMessages(
+      CookieWarningReasonHTMLContent.WarnAttributeValueExceedsMaxSize
+    );
   },
   WarnDomainNonASCII: (): string => {
-    return CookieWarningReasonHTMLContent.WarnDomainNonASCII;
+    return I18n.getFormattedMessages(
+      CookieWarningReasonHTMLContent.WarnDomainNonASCII
+    );
   },
   WarnThirdPartyPhaseout: (operation: string): string => {
     // For SetCookie operation.
     if (operation === 'SetCookie') {
-      return CookieWarningReasonHTMLContent.WarnThirdPartyPhaseoutSetCookie;
+      return I18n.getFormattedMessages(
+        CookieWarningReasonHTMLContent.WarnThirdPartyPhaseoutSetCookie
+      );
     }
     // For ReadCookie operation.
-    return CookieWarningReasonHTMLContent.WarnThirdPartyPhaseoutReadCookie;
+    return I18n.getFormattedMessages(
+      CookieWarningReasonHTMLContent.WarnThirdPartyPhaseoutReadCookie
+    );
   },
   WarnCrossSiteRedirectDowngradeChangesInclusion: (): string => {
-    return CookieWarningReasonHTMLContent.WarnCrossSiteRedirectDowngradeChangesInclusion;
+    return I18n.getFormattedMessages(
+      CookieWarningReasonHTMLContent.WarnCrossSiteRedirectDowngradeChangesInclusion
+    );
   },
 };
 

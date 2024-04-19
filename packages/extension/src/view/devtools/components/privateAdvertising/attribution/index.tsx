@@ -18,12 +18,13 @@
  */
 import React from 'react';
 import { LandingPage, PSInfoKey } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const Attribution = () => {
   return (
     <div data-testid="attribution-content" className="h-full w-full">
       <LandingPage
-        title="Attribution Reporting"
+        title={I18n.getMessage('extAttributionReporting')}
         psInfoKey={PSInfoKey.AttributionReporting}
         extraClasses="max-w-2xl h-fit"
       />

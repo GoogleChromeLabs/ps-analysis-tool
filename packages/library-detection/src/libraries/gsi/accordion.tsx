@@ -24,6 +24,7 @@ import { addUTMParams } from '@ps-analysis-tool/common';
  */
 import { Accordion, FeatureList } from '../../components';
 import type { AccordionProps } from '../../types';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const GSIAccordion = ({ matches }: AccordionProps) => {
   if (!matches) {
@@ -42,21 +43,19 @@ const GSIAccordion = ({ matches }: AccordionProps) => {
       isLoading={false}
       featuresText={`${featuresCount} features`}
     >
-      <p className="dark:text-bright-gray">
-        The Google Sign-In JavaScript library is deprecated and is no longer
-        supported. Review the following features and consider{' '}
-        <a
-          className="text-bright-navy-blue dark:text-jordy-blue"
-          href={addUTMParams(
-            'https://developers.google.com/privacy-sandbox/3pcd/guides/identity#federated_identity'
-          )}
-          target="_blank"
-          rel="noreferrer"
-        >
-          migrating
-        </a>{' '}
-        to a newer library if necessary.
-      </p>
+      <p
+        className="dark:text-bright-gray"
+        dangerouslySetInnerHTML={{
+          __html: I18n.getMessage('ldGSInote', [
+            `<a className="text-bright-navy-blue dark:text-jordy-blue" href=${addUTMParams(
+              'https://developers.google.com/privacy-sandbox/3pcd/guides/identity#federated_identity'
+            )}
+						target="_blank"
+						rel="noreferrer">`,
+            '</a>',
+          ]),
+        }}
+      />
       <FeatureList matches={matches} />
     </Accordion>
   );

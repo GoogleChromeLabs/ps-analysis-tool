@@ -16,6 +16,7 @@
 /**
  * External dependencies.
  */
+import { I18n } from '@ps-analysis-tool/i18n';
 import React from 'react';
 
 interface DetectionMessageProps {
@@ -30,20 +31,22 @@ const DetectionMessage = ({
   supportURL,
 }: DetectionMessageProps) => {
   return (
-    <p className="dark:text-bright-gray">
-      {libraryName} functionality may not work properly due to the phaseout of
-      third-party cookies. For more information, please visit the
-      {' ' + provider + ' '}
-      <a
+    <p
+      className="dark:text-bright-gray"
+      dangerouslySetInnerHTML={{
+        __html: I18n.getMessage('ldDetectionMessage', [
+          libraryName,
+          provider,
+          `<a
         target="_blank"
         className="text-bright-navy-blue dark:text-jordy-blue"
-        href={supportURL}
+        href="${supportURL}"
         rel="noreferrer"
-      >
-        support forum
-      </a>
-      .
-    </p>
+      >`,
+          '</a>',
+        ]),
+      }}
+    />
   );
 };
 

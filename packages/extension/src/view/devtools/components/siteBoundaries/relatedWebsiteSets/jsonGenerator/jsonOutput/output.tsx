@@ -27,6 +27,7 @@ import type {
   OtherWellKnownOutputType,
   PrimaryWellKnownOutputType,
 } from '../types';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 interface OutputProps {
   data: PrimaryWellKnownOutputType | OtherWellKnownOutputType | null;
@@ -44,7 +45,9 @@ const Output = ({ data }: OutputProps) => {
           setTimeout(() => setCopied(false), 2000);
         }}
       >
-        <button className="float-right">{copied ? 'Copied!' : 'Copy'}</button>
+        <button className="float-right">
+          {copied ? I18n.getMessage('extCopied') : I18n.getMessage('extCopy')}
+        </button>
       </CopyToClipboard>
       <code data-testid="rws-output">
         {data && JSON.stringify(data, null, 2)}

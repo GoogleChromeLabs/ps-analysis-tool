@@ -138,7 +138,9 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
       {
         header: I18n.getMessage('extPlatform'),
         accessorKey: 'analytics.platform',
-        cell: (info: InfoType) => <span>{info ? info : 'Unknown'}</span>,
+        cell: (info: InfoType) => (
+          <span>{info ? info : I18n.getMessage('extUnknown')}</span>
+        ),
         widthWeightagePercentage: 7.5,
       },
       {
@@ -176,7 +178,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
       {
         header: I18n.getMessage('extExpires'),
         accessorKey: 'parsedCookie.expires',
-        cell: (info: InfoType) => (info ? info : 'Session'),
+        cell: (info: InfoType) => (info ? info : I18n.getMessage('extSession')),
         widthWeightagePercentage: 6,
       },
       {
@@ -308,13 +310,13 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         title: I18n.getMessage('extSameSite'),
         hasStaticFilterValues: true,
         filterValues: {
-          None: {
+          [I18n.getMessage('extNone')]: {
             selected: false,
           },
-          Lax: {
+          [I18n.getMessage('extLax')]: {
             selected: false,
           },
-          Strict: {
+          [I18n.getMessage('extStrict')]: {
             selected: false,
           },
         },
@@ -486,7 +488,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         useGenericPersistenceKey: true,
       },
       exemptionReason: {
-        title: 'Exemption Reason',
+        title: I18n.getMessage('extExemptionReasons'),
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
         enableSelectAllOption: true,

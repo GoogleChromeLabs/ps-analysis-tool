@@ -16,6 +16,7 @@
 /**
  * Internal Dependencies.
  */
+import { I18n } from '@ps-analysis-tool/i18n';
 import { NUMBER_OF_ALLOWED_FEATURES_IN_COMPACT_VIEW } from '../constants';
 
 const getTooltipInfoData = (
@@ -81,8 +82,7 @@ const getTooltipInfoData = (
     : allowedFeatureInExpandedView;
 
   if (frameType === 'Unknown') {
-    info['Note'] =
-      'We are unable to detect this frame as it may be an iframe nested inside one or more iframes.';
+    info['Note'] = I18n.getMessage('extUnknownFrameNote');
   } else {
     info['Belongs to RWS'] = belongsToRWS;
     attr['allowedFeaturesInCompactView'] = allowedFeaturesInCompactView;

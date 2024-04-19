@@ -24,11 +24,12 @@ import { LandingPage } from '@ps-analysis-tool/design-system';
  * Internal dependencies.
  */
 import FacilitatedTestingContent from './faciliatedTestingContent';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const FacilitatedTesting = () => (
   <div data-testid="facilitated-testing-content" className="h-full w-full">
     <LandingPage
-      title="Facilitated Testing"
+      title={I18n.getMessage('extFacilitatedTesting')}
       contentPanel={<FacilitatedTestingContent />}
       extraClasses="2xl:max-w-6xl xl:max-w-4xl max-w-2xl h-fit"
     />

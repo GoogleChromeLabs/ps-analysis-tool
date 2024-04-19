@@ -27,6 +27,7 @@ import {
  * Internal dependencies
  */
 import { useData } from '../stateProviders/data';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const CookiesSection = () => {
   const data = useData(({ state }) => state.data);
@@ -51,9 +52,9 @@ const CookiesSection = () => {
       testId="frames-insights"
     >
       <MatrixContainer
-        title="Frames"
+        title={I18n.getMessage('extFrames')}
         matrixData={_data}
-        infoIconTitle="The details regarding frames and associated cookies in this page."
+        infoIconTitle={I18n.getMessage('extFramesNote')}
       />
     </CookiesLandingWrapper>
   );

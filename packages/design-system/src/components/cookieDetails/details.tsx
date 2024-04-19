@@ -94,7 +94,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         selectedCookie.exemptionReason.toLowerCase() !== 'none' && (
           <div className="mb-4">
             <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
-              Exemption Reason
+              {I18n.getMessage('dsExemptionReason')}
             </p>
             <p className="text-outer-space-crayola dark:text-bright-gray">
               {

@@ -89,13 +89,13 @@ const Insights = () => {
       ) : (
         <div className="space-y-3">
           <h3 className="text-xl font-semibold">
-            {I18n.getMessage('extMembership', ['Related Website Sets'])}
+            {I18n.getMessage('extMembership')}
           </h3>
           {insightsData?.isURLInRWS ? (
             <>
               <p className="text-lg font-medium">
                 <span className="font-serif text-green-700">✓</span>{' '}
-                {I18n.getMessage('extBelongsToRWS', ['Related Website Set'])}
+                {I18n.getMessage('extBelongsToRWS')}
               </p>
               <p className="text-sm">
                 {I18n.getMessage('extPrimaryDomain')}:{' '}
@@ -113,7 +113,7 @@ const Insights = () => {
                 <>
                   {insightsData.isccTLD ? (
                     <p className="text-sm">
-                      This site is a ccTLD of
+                      {I18n.getMessage('extSiteccTldOf')}
                       <a
                         href={insightsData.relatedWebsiteSet?.ccTLDParent}
                         target="_blank"
@@ -143,11 +143,7 @@ const Insights = () => {
                   )}
                 </>
               ) : (
-                <p>
-                  {I18n.getMessage('extRWSPrimaryDomain', [
-                    'Related Website Set',
-                  ])}
-                </p>
+                <p>{I18n.getMessage('extRWSPrimaryDomain')}</p>
               )}
 
               <div className="flex flex-row gap-4 overflow-auto">
@@ -165,7 +161,7 @@ const Insights = () => {
           ) : (
             <p className="text-lg font-medium flex items-center gap-2">
               <span className="text-red-500">✗</span>
-              {I18n.getMessage('extNotBelongToRWS', ['Related Website Set'])}
+              {I18n.getMessage('extNotBelongToRWS')}
             </p>
           )}
         </div>

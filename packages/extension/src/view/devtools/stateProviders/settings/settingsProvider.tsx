@@ -27,6 +27,7 @@ import React, {
  */
 import Context, { type SettingsStoreContext } from './context';
 import { SERVICE_WORKER_TABS_RELOAD_COMMAND } from '../../../../constants';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 enum PLATFORM_OS_MAP {
   mac = 'MacOS',
@@ -135,7 +136,10 @@ const Provider = ({ children }: PropsWithChildren) => {
       const browserInfo = /Chrome\/([0-9.]+)/.exec(navigator.userAgent);
       if (browserInfo) {
         setBrowserInformation(
-          'Version ' + browserInfo[1] + ' ' + OSInformation?.split(' ')[1]
+          I18n.getMessage('extVersion') +
+            browserInfo[1] +
+            ' ' +
+            OSInformation?.split(' ')[1]
         );
       }
     }

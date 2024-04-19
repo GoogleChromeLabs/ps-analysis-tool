@@ -16,6 +16,7 @@
 /**
  * Internal dependencies.
  */
+import { I18n } from '@ps-analysis-tool/i18n';
 import * as CookieExclusionReasonHTMLContent from './cookieExclusionReasonHTMLContent';
 
 const codeForCookieIssueDetails = (
@@ -32,10 +33,14 @@ const codeForCookieIssueDetails = (
     if (warningReasons.includes('WarnSameSiteStrictLaxDowngradeStrict')) {
       // For secure URL.
       if (isURLSecure) {
-        return CookieExclusionReasonHTMLContent.sameSiteExcludeNavigationContextDowngradeSecure;
+        return I18n.getFormattedMessages(
+          CookieExclusionReasonHTMLContent.sameSiteExcludeNavigationContextDowngradeSecure
+        );
       }
       // For insecure URL.
-      return CookieExclusionReasonHTMLContent.sameSiteExcludeNavigationContextDowngradeInsecure;
+      return I18n.getFormattedMessages(
+        CookieExclusionReasonHTMLContent.sameSiteExcludeNavigationContextDowngradeInsecure
+      );
     }
 
     if (
@@ -48,31 +53,43 @@ const codeForCookieIssueDetails = (
       if (operation === 'SetCookie') {
         // For secure URL.
         if (isURLSecure) {
-          return CookieExclusionReasonHTMLContent.sameSiteExcludeContextDowngradeSetCookieSecure;
+          return I18n.getFormattedMessages(
+            CookieExclusionReasonHTMLContent.sameSiteExcludeContextDowngradeSetCookieSecure
+          );
         }
         // For insecure URL.
-        return CookieExclusionReasonHTMLContent.sameSiteExcludeContextDowngradeSetCookieInsecure;
+        return I18n.getFormattedMessages(
+          CookieExclusionReasonHTMLContent.sameSiteExcludeContextDowngradeSetCookieInsecure
+        );
       }
       // For ReadCookie operation.
       // For secure URL.
       if (isURLSecure) {
-        return CookieExclusionReasonHTMLContent.sameSiteExcludeContextDowngradeReadCookieSecure;
+        return I18n.getFormattedMessages(
+          CookieExclusionReasonHTMLContent.sameSiteExcludeContextDowngradeReadCookieSecure
+        );
       }
       // For insecure URL.
-      return CookieExclusionReasonHTMLContent.sameSiteExcludeContextDowngradeReadCookieInsecure;
+      return I18n.getFormattedMessages(
+        CookieExclusionReasonHTMLContent.sameSiteExcludeContextDowngradeReadCookieInsecure
+      );
     }
   }
 
   if (
     warningReasons?.includes('WarnCrossSiteRedirectDowngradeChangesInclusion')
   ) {
-    return CookieExclusionReasonHTMLContent.cookieCrossSiteRedirectDowngrade;
+    return I18n.getFormattedMessages(
+      CookieExclusionReasonHTMLContent.cookieCrossSiteRedirectDowngrade
+    );
   }
 
   // If we have ExcludeSameSiteUnspecifiedTreatedAsLax but no corresponding warnings, then add just
   // the Issue code for ExcludeSameSiteUnspecifiedTreatedAsLax.
   if (reason === 'ExcludeSameSiteUnspecifiedTreatedAsLax') {
-    return CookieExclusionReasonHTMLContent.ExcludeSameSiteUnspecifiedTreatedAsLax;
+    return I18n.getFormattedMessages(
+      CookieExclusionReasonHTMLContent.ExcludeSameSiteUnspecifiedTreatedAsLax
+    );
   }
 
   // ExcludeSameSiteStrict and ExcludeSameSiteLax require being paired with an appropriate warning. We didn't
@@ -97,10 +114,14 @@ const CookieExclusionReason = {
   ExcludeSameSiteNoneInsecure: (operation?: string): string => {
     // For SetCookie operation.
     if (operation === 'SetCookie') {
-      return CookieExclusionReasonHTMLContent.ExcludeSameSiteNoneInsecureSetCookie;
+      return I18n.getFormattedMessages(
+        CookieExclusionReasonHTMLContent.ExcludeSameSiteNoneInsecureSetCookie
+      );
     }
     // For ReadCookie operation.
-    return CookieExclusionReasonHTMLContent.ExcludeSameSiteNoneInsecureReadCookie;
+    return I18n.getFormattedMessages(
+      CookieExclusionReasonHTMLContent.ExcludeSameSiteNoneInsecureReadCookie
+    );
   },
   ExcludeSameSiteLax: (
     warningReasons?: string[],
@@ -129,24 +150,36 @@ const CookieExclusionReason = {
     );
   },
   ExcludeInvalidSameParty: (): string => {
-    return CookieExclusionReasonHTMLContent.ExcludeInvalidSameParty;
+    return I18n.getFormattedMessages(
+      CookieExclusionReasonHTMLContent.ExcludeInvalidSameParty
+    );
   },
   ExcludeSamePartyCrossPartyContext: (): string => {
-    return CookieExclusionReasonHTMLContent.ExcludeSamePartyCrossPartyContext;
+    return I18n.getFormattedMessages(
+      CookieExclusionReasonHTMLContent.ExcludeSamePartyCrossPartyContext
+    );
   },
   ExcludeDomainNonASCII: (): string => {
-    return CookieExclusionReasonHTMLContent.ExcludeDomainNonASCII;
+    return I18n.getFormattedMessages(
+      CookieExclusionReasonHTMLContent.ExcludeDomainNonASCII
+    );
   },
   ExcludeThirdPartyCookieBlockedInFirstPartySet: (): string => {
-    return CookieExclusionReasonHTMLContent.ExcludeThirdPartyCookieBlockedInFirstPartySet;
+    return I18n.getFormattedMessages(
+      CookieExclusionReasonHTMLContent.ExcludeThirdPartyCookieBlockedInFirstPartySet
+    );
   },
   ExcludeThirdPartyPhaseout: (operation?: string): string => {
     // For SetCookie operation.
     if (operation === 'SetCookie') {
-      return CookieExclusionReasonHTMLContent.ExcludeThirdPartyPhaseoutSetCookie;
+      return I18n.getFormattedMessages(
+        CookieExclusionReasonHTMLContent.ExcludeThirdPartyPhaseoutSetCookie
+      );
     }
     // For ReadCookie operation.
-    return CookieExclusionReasonHTMLContent.ExcludeThirdPartyPhaseoutReadCookie;
+    return I18n.getFormattedMessages(
+      CookieExclusionReasonHTMLContent.ExcludeThirdPartyPhaseoutReadCookie
+    );
   },
 };
 

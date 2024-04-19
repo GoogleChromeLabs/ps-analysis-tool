@@ -26,6 +26,7 @@ import {
  * Internal dependencies
  */
 import { useData } from '../stateProviders/data';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const CookiesSection = () => {
   const data = useData(({ state }) => state.data);
@@ -41,12 +42,12 @@ const CookiesSection = () => {
     >
       {data.cookiesStatsComponents.blockedCookiesLegend.length > 0 && (
         <CookiesMatrix
-          title="Blocked Reasons"
+          title={I18n.getMessage('extBlockedReasons')}
           tabCookies={data.tabCookies}
           componentData={data.cookiesStatsComponents.blockedCookiesLegend}
           tabFrames={data.tabFrames}
           showHorizontalMatrix={false}
-          infoIconTitle="Cookies that have been blocked by the browser.(The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
+          infoIconTitle={I18n.getMessage('extCookiesBlockedNote')}
         />
       )}
     </CookiesLandingWrapper>

@@ -233,5 +233,47 @@
   },
   "dsFencedFrames": {
     "message": "Fenced Frames"
+  },
+  "dsExemptionReason": {
+    "message": "Exemption Reason"
+  },
+  "dsWaitForLD": {
+    "message": "Wait for library detection"
+  },
+  "dsDownloadReport": {
+    "message": "Download Report"
+  },
+  "dsOpenFilterOptions": {
+    "message": "Open Filter Options"
+  },
+  "dsCategories": {
+    "message": "Categories"
+  },
+  "header_ExcludeSameSiteNoneInsecure": {
+    "message": "Mark cross-site cookies as Secure to allow them to be sent in cross-site requests"
+  },
+  "body_ExcludeSameSiteNoneInsecure": {
+    "message": "Cookies marked with 'SameSite=None' must also be marked with 'Secure' to get sent in cross-site requests. This behavior protects user data from being sent over an insecure connection."
+  },
+  "dsSomethingWentWrong": {
+    "message": "Something went wrong!"
+  },
+  "body_ExcludeThirdPartyPhaseout": {
+    "message": "Cookie is blocked when sent in cross-site context. Cookies marked with 'SameSite=None; Secure;' and not 'Partitioned' are blocked in cross-site requests. This behavior protects user data from cross-site tracking."
+  },
+  "dsTotalFramesNote": {
+    "message": "The total frames present inside the current page."
+  },
+  "dsFramesWithCookiesNote": {
+    "message": "The count of frames which have cookies in them"
+  },
+  "dsFramesWithBlockedCookiesNote": {
+    "message": "The count of frames which have blocked cookies"
+  },
+  "dsFramesWithUnblockedCookiesNote": {
+    "message": "The count of frames which have unblocked cookies"
+  },
+  "dsFencedFramesNote": {
+    "message": "A fenced frames is a proposed HTML element for embedded content, similar to an iframe. Unlike iframes, a fenced frame restricts communication with its embedding context to allow the frame access to cross-site data without sharing it with the embedding context."
   }
 }

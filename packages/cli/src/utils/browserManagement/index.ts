@@ -27,6 +27,7 @@ import { ResponseData, RequestData, ViewportConfig } from './types';
 import { parseNetworkDataToCookieData } from './parseNetworkDataToCookieData';
 import delay from '../delay';
 import { CookieData, UNKNOWN_FRAME_KEY } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 export class BrowserManagement {
   viewportConfig: ViewportConfig;
@@ -231,8 +232,8 @@ export class BrowserManagement {
                 domain: parsedCookie.domain,
                 path: parsedCookie.path || '/',
                 value: parsedCookie.value,
-                sameSite: parsedCookie.samesite || 'Lax',
-                expires: parsedCookie.expires || 'Session',
+                sameSite: parsedCookie.samesite || I18n.getMessage('clLax'),
+                expires: parsedCookie.expires || I18n.getMessage('clSession'),
                 httpOnly: parsedCookie.httponly || false,
                 secure: parsedCookie.secure || false,
                 partitionKey,
@@ -276,8 +277,11 @@ export class BrowserManagement {
                 domain: associatedCookie.cookie.domain,
                 path: associatedCookie.cookie.path || '/',
                 value: associatedCookie.cookie.value,
-                sameSite: associatedCookie.cookie.sameSite || 'Lax',
-                expires: associatedCookie.cookie.expires || 'Session',
+                sameSite:
+                  associatedCookie.cookie.sameSite || I18n.getMessage('clLax'),
+                expires:
+                  associatedCookie.cookie.expires ||
+                  I18n.getMessage('clSession'),
                 httpOnly: associatedCookie.cookie.httpOnly || false,
                 secure: associatedCookie.cookie.secure || false,
                 partitionKey: associatedCookie.cookie.partitionKey,

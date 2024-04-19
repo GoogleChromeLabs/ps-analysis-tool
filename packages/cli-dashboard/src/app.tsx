@@ -47,14 +47,6 @@ const App = () => {
   const [completeJsonReport, setCompleteJsonReport] = useState<
     CompleteJson[] | null
   >(null);
-  const [, forceUpdate] = useState(0);
-
-  useEffect(() => {
-    const locale = navigator.language || 'en';
-    I18n.loadDashboardMessagesData(locale).then(() => {
-      forceUpdate((prev) => prev + 1);
-    });
-  }, []);
 
   const [type, path] = useMemo(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -70,6 +62,9 @@ const App = () => {
 
   useEffect(() => {
     (async () => {
+      const locale = navigator.language || 'en';
+      await I18n.loadDashboardMessagesData(locale);
+
       const response = await fetch(path);
       const data: CompleteJson[] = await response.json();
       setCompleteJsonReport(data);

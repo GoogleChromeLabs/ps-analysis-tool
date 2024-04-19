@@ -13,16 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import { I18n } from '@ps-analysis-tool/i18n';
+
 //For source see https://source.chromium.org/chromium/chromium/src/+/main:third_party/devtools-frontend/src/front_end/core/sdk/NetworkRequest.ts
 const CookieExemptionReason = {
-  UserSetting: 'exemptionReasonUserSetting',
-  TPCDMetadata: 'exemptionReasonTPCDMetadata',
-  TPCDDeprecationTrial: 'exemptionReasonTPCDDeprecationTrial',
-  TPCDHeuristics: 'exemptionReasonTPCDHeuristics',
-  EnterprisePolicy: 'exemptionReasonEnterprisePolicy',
-  StorageAccessAPI: 'exemptionReasonStorageAccessAPI',
-  TopLevelStorageAccessAPI: 'exemptionReasonTopLevelStorageAccessAPI',
-  CorsOptIn: 'exemptionReasonCorsOptIn',
+  UserSetting: I18n.getMessage('exemptionReasonUserSetting'),
+  TPCDMetadata: I18n.getMessage('exemptionReasonTPCDMetadata'),
+  TPCDDeprecationTrial: I18n.getMessage('exemptionReasonTPCDDeprecationTrial'),
+  TPCDHeuristics: I18n.getMessage('exemptionReasonTPCDHeuristics'),
+  EnterprisePolicy: I18n.getMessage('exemptionReasonEnterprisePolicy'),
+  StorageAccessAPI: I18n.getMessage('exemptionReasonStorageAccessAPI'),
+  TopLevelStorageAccessAPI: I18n.getMessage(
+    'exemptionReasonTopLevelStorageAccessAPI'
+  ),
+  CorsOptIn: I18n.getMessage('exemptionReasonCorsOptIn'),
 };
 
 export default CookieExemptionReason;

@@ -19,11 +19,12 @@
  */
 import React from 'react';
 import { LandingPage } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const AntiCovertTracking = () => {
   return (
     <LandingPage
-      title="Tracking Protection"
+      title={I18n.getMessage('extTrackingProtection')}
       iframeSrc="https://privacysandbox.info/en/privacy-sandbox/prevent-covert-tracking"
       extraClasses="h-[78vh] w-full"
     />

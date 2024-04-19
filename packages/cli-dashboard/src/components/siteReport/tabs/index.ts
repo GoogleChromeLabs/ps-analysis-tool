@@ -26,7 +26,7 @@ import {
 
 const Tabs: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.COOKIES]: {
-    title: 'cmCookies',
+    title: 'cdCookies',
     children: {},
     icon: {
       Element: CookieIcon,

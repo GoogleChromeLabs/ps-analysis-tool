@@ -67,7 +67,7 @@ const TableTopBar = ({
           })}
           onClick={() => setShowFilterSidebar(!showFilterSidebar)}
           disabled={disableFiltering}
-          title="Open filter options"
+          title={I18n.getMessage('dsOpenFilterOptions')}
         >
           <FilterIcon
             className={

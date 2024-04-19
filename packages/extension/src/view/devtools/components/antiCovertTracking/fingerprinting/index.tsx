@@ -18,12 +18,13 @@
  */
 import React from 'react';
 import { LandingPage, PSInfoKey } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const Fingerprinting = () => {
   return (
     <div data-testid="fingerprinting-content" className="h-full w-full">
       <LandingPage
-        title="User Agent Reduction"
+        title={I18n.getMessage('extUserAgentReduction')}
         psInfoKey={PSInfoKey.UserAgentReduction}
         extraClasses="max-w-2xl h-fit"
       />

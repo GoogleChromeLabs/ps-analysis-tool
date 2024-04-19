@@ -25,6 +25,7 @@ import {
  * Internal dependencies
  */
 import { useData } from '../stateProviders/data';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const ExemptedCookiesSection = () => {
   const data = useData(({ state }) => state.data);
@@ -40,12 +41,12 @@ const ExemptedCookiesSection = () => {
     >
       {data.cookiesStatsComponents.exemptedCookiesLegend.length > 0 && (
         <CookiesMatrix
-          title="Exemption Reasons"
+          title={I18n.getMessage('extExemptionReasons')}
           tabCookies={data.tabCookies}
           tabFrames={data.tabFrames}
           componentData={data.cookiesStatsComponents.exemptedCookiesLegend}
           showHorizontalMatrix={false}
-          infoIconTitle="Cookies that should have been blocked by the browser but was exempted."
+          infoIconTitle={I18n.getMessage('extExemptionReasonsNote')}
         />
       )}
     </CookiesLandingWrapper>

@@ -60,7 +60,9 @@ const AssociatedSites = ({
             <div key={idx} className="flex gap-10 my-5">
               <div className="flex-1">
                 <RWSInput
-                  inputLabel={`Associated Domain #${idx + 1}`}
+                  inputLabel={I18n.getMessage('extAssociatedDomainIdx', [
+                    (idx + 1).toString(),
+                  ])}
                   inputValue={url}
                   inputPlaceholder="https://associated.com"
                   inputChangeHandler={(e) => {

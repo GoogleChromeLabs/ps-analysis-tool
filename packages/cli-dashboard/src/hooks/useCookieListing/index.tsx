@@ -210,13 +210,13 @@ const useCookieListing = (
         title: I18n.getMessage('cdSameSite'),
         hasStaticFilterValues: true,
         filterValues: {
-          None: {
+          [I18n.getMessage('clNone')]: {
             selected: false,
           },
-          Lax: {
+          [I18n.getMessage('clLax')]: {
             selected: false,
           },
-          Strict: {
+          [I18n.getMessage('clStrict')]: {
             selected: false,
           },
         },

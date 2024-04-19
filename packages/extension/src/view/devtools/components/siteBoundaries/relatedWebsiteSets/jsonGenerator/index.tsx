@@ -30,6 +30,7 @@ import ServiceSites from './serviceSites';
 import CountrySites from './countrySites';
 import JsonOutput from './jsonOutput';
 import useGeneratorForm from './useGeneratorForm';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const RWSJsonGenerator = () => {
   const {
@@ -66,26 +67,26 @@ const RWSJsonGenerator = () => {
       <div className="overflow-auto py-6">
         <div className="text-raisin-black dark:text-bright-gray w-full min-w-[33rem]">
           <h1 className="text-lg font-semibold">
-            Related Website Sets JSON Generator
+            {I18n.getMessage('extRwsJsonGenerator')}
           </h1>
-          <p className="text-xs py-3">
-            This tool generates the JSON resources needed to make a Related
-            Website Sets(RWS) submission. It <b>does not</b> perform all the
-            required technical validations (see full requirements{' '}
-            <a
+          <p
+            className="text-xs py-3"
+            dangerouslySetInnerHTML={{
+              __html: I18n.getMessage('extRwsJsonGeneratorNote', [
+                `<a
               className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80"
               title="https://github.com/GoogleChrome/related-website-sets/blob/main/RWS-Submission_Guidelines.md"
               href="https://github.com/GoogleChrome/related-website-sets/blob/main/RWS-Submission_Guidelines.md"
               target="_blank"
               rel="noreferrer"
-            >
-              here
-            </a>
-            ).
-          </p>
+            >`,
+                '</a>',
+              ]),
+            }}
+          />
           <div className="mt-4 bg-anti-flash-white dark:bg-charleston-green border rounded-xl border-gray-200 dark:border-quartz px-4 py-3 shadow">
             <p className="text-base my-3">
-              Enter your Related Website Sets details below:
+              {I18n.getMessage('extEnterRwsDetails')}
             </p>
             <form onSubmit={submitForm} onReset={resetForm}>
               <ContactEmail

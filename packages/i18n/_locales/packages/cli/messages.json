@@ -216,5 +216,17 @@
   },
   "clDoneAnalyzingTechonlogies": {
     "message": "Done analyzing technologies"
+  },
+  "clUnknown": {
+    "message": "Unknown"
+  },
+  "clUncategorized": {
+    "message": "Uncategorized"
+  },
+  "clLax": {
+    "message": "Lax"
+  },
+  "clSession": {
+    "message": "Session"
   }
 }

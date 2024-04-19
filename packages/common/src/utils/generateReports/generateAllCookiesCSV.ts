@@ -71,12 +71,16 @@ const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
       cookie.parsedCookie.sameSite,
       cookie.analytics.category,
       cookie.analytics.platform,
-      cookie.parsedCookie.httpOnly ? 'Yes' : 'No',
-      cookie.parsedCookie.secure ? 'Yes' : 'No',
+      cookie.parsedCookie.httpOnly
+        ? I18n.getMessage('cmYes')
+        : I18n.getMessage('cmNo'),
+      cookie.parsedCookie.secure
+        ? I18n.getMessage('cmYes')
+        : I18n.getMessage('cmNo'),
       cookie.parsedCookie.value,
       cookie.parsedCookie.path,
       calculateEffectiveExpiryDate(cookie.parsedCookie.expires),
-      cookie.isBlocked ? 'Yes' : 'No',
+      cookie.isBlocked ? I18n.getMessage('cmYes') : I18n.getMessage('cmNo'),
       cookie.analytics.GDPR || 'NA',
     ].map(sanitizeCsvRecord);
 

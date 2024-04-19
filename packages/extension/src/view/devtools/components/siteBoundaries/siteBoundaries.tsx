@@ -18,11 +18,12 @@
  */
 import React from 'react';
 import { LandingPage } from '@ps-analysis-tool/design-system';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const SiteBoundaries = () => {
   return (
     <LandingPage
-      title="Site Boundaries"
+      title={I18n.getMessage('extSiteBoundaries')}
       iframeSrc="https://privacysandbox.info/en/privacy-sandbox/strengthen-privacy-boundaries"
       extraClasses="h-[78vh] w-full"
     />

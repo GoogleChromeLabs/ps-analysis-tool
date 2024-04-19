@@ -21,25 +21,26 @@ import {
   CookieTableData,
   sanitizeCsvRecord,
 } from '@ps-analysis-tool/common';
+import { I18n } from '@ps-analysis-tool/i18n';
 
 const COOKIES_TABLE_DATA_HEADER = [
-  'Name',
-  'Scope',
-  'Domain',
-  'Partition Key',
-  'Same Site',
-  'Category',
-  'Platform',
-  'Http Only',
-  'Secure',
-  'Value',
-  'Path',
-  'Expires',
-  'Issues',
-  'GDPRPortal',
-  'Priority',
-  'Size',
-  'Blocking Status',
+  I18n.getMessage('extName'),
+  I18n.getMessage('extScope'),
+  I18n.getMessage('extDomain'),
+  I18n.getMessage('extPartitionKey'),
+  I18n.getMessage('extSameSite'),
+  I18n.getMessage('extCategory'),
+  I18n.getMessage('extPlatform'),
+  I18n.getMessage('extHttpOnly'),
+  I18n.getMessage('extSecure'),
+  I18n.getMessage('extValue'),
+  I18n.getMessage('extPath'),
+  I18n.getMessage('extExpires'),
+  I18n.getMessage('extIssues'),
+  I18n.getMessage('extGDPRUrl'),
+  I18n.getMessage('extPriority'),
+  I18n.getMessage('extSize'),
+  I18n.getMessage('extBlockingStatus'),
 ];
 
 const generateCookieTableCSV = (cookies: CookieTableData[]): Blob => {
@@ -56,24 +57,30 @@ const generateCookieTableCSV = (cookies: CookieTableData[]): Blob => {
     let status = '';
 
     if ((isInboundBlocked || isOutboundBlocked) && !hasValidBlockedReason) {
-      status = 'Undetermined';
+      status = I18n.getMessage('extUndetermined');
     }
 
     //This should be in the same order as cookieDataHeader
     const recordsArray = [
       cookie.parsedCookie.name,
-      cookie.isFirstParty ? 'First Party' : 'Third Party',
+      cookie.isFirstParty
+        ? I18n.getMessage('extFirstParty')
+        : I18n.getMessage('extThirdParty'),
       cookie.parsedCookie.domain || ' ',
       cookie.parsedCookie.partitionKey || ' ',
       cookie.parsedCookie.samesite,
       cookie.analytics?.category,
       cookie.analytics?.platform,
-      cookie.parsedCookie.httponly ? 'Yes' : 'No',
-      cookie.parsedCookie.secure ? 'Yes' : 'No',
+      cookie.parsedCookie.httponly
+        ? I18n.getMessage('extYes')
+        : I18n.getMessage('extNo'),
+      cookie.parsedCookie.secure
+        ? I18n.getMessage('extYes')
+        : I18n.getMessage('extNo'),
       cookie.parsedCookie.value,
       cookie.parsedCookie.path,
       cookie.parsedCookie.expires,
-      cookie.isBlocked ? 'Yes' : 'No',
+      cookie.isBlocked ? I18n.getMessage('extYes') : I18n.getMessage('extNo'),
       cookie.analytics?.gdprUrl || 'NA',
       cookie.parsedCookie.priority || ' ',
       cookie.parsedCookie.size?.toString(),
