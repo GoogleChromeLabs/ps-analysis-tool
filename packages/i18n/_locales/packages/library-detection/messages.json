@@ -1,20 +1,20 @@
 {
-  "ldKnownBreakages": {
+  "knownBreakages": {
     "message": "Known Breakages"
   },
-  "ldNoLibraries": {
+  "noLibraries": {
     "message": "No libraries with known breakages found yet!"
   },
-  "ldErrorOccurred": {
+  "errorOccurred": {
     "message": "A library detection error occurred. Please reopen the DevTool on a valid URL."
   },
-  "ldWaitingPageLoad": {
+  "waitingPageLoad": {
     "message": "Waiting for the page to load.."
   },
-  "ldCheckingLibraries": {
+  "checkingLibraries": {
     "message": "Checking libraries for any known breakages on the page..."
   },
-  "ldDetectionMessage": {
+  "detectionMessage": {
     "message": "$library$ functionality may not work properly due to the phaseout of third-party cookies. For more information, please visit the $provider$ $a_tag_start$support forum$a_tag_end$.",
     "placeholders": {
       "library": {
@@ -35,28 +35,28 @@
       }
     }
   },
-  "ldDisqusComments": {
+  "disqusComments": {
     "message": "Disqus Comments"
   },
-  "ldDisqus": {
+  "disqus": {
     "message": "Disqus"
   },
-  "ldFBComments": {
+  "fBComments": {
     "message": "Facebook Comments"
   },
-  "ldFBCommentsPlugin": {
+  "fBCommentsPlugin": {
     "message": "Facebook comments plugin"
   },
-  "ldFB": {
+  "fB": {
     "message": "Facebook"
   },
-  "ldFBLike": {
+  "fBLike": {
     "message": "Facebook Like Button"
   },
-  "ldGISTitle": {
+  "gISTitle": {
     "message": "Avoid use of unsupported Google Identity Services features."
   },
-  "ldFeatureCount": {
+  "featureCount": {
     "message": "$count$ features",
     "placeholders": {
       "count": {
@@ -65,7 +65,7 @@
       }
     }
   },
-  "ldGISNote": {
+  "gISNote": {
     "message": "Due to Privacy Sandbox enforcements some features are backward incompatible or deprecated. This report performs a page scan for script src elements and affected JavaScript objects and methods. Review the following features and $a_tag_start$migrate$a_tag_end$ if necessary.",
     "placeholders": {
       "a_tag_start": {
@@ -78,10 +78,10 @@
       }
     }
   },
-  "ldGSITitle": {
+  "gSITitle": {
     "message": "Avoid use of deprecated Google Sign-In functionality."
   },
-  "ldGSInote": {
+  "gSInote": {
     "message": "The Google Sign-In JavaScript library is deprecated and is no longer supported. Review the following features and consider $a_tag_start$migrating$a_tag_end$ to a newer library if necessary.",
     "placeholders": {
       "a_tag_start": {
@@ -94,22 +94,22 @@
       }
     }
   },
-  "ldJetpackComments": {
+  "jetpackComments": {
     "message": "Jetpack Comments"
   },
-  "ldJetpackCommentsWidget": {
+  "jetpackCommentsWidget": {
     "message": "Jetpack comments widget"
   },
-  "ldJetpack": {
+  "jetpack": {
     "message": "Jetpack"
   },
-  "ldJetpackLikeButton": {
+  "jetpackLikeButton": {
     "message": "Jetpack Like Button"
   },
   "ldreCaptcha": {
     "message": "reCAPTCHA"
   },
-  "ldTaskNotDefined": {
+  "taskNotDefined": {
     "message": "Task not defined"
   }
 }

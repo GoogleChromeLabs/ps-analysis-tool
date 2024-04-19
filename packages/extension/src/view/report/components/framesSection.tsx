@@ -52,9 +52,9 @@ const CookiesSection = () => {
       testId="frames-insights"
     >
       <MatrixContainer
-        title={I18n.getMessage('extFrames')}
+        title={I18n.getMessage('frames')}
         matrixData={_data}
-        infoIconTitle={I18n.getMessage('extFramesNote')}
+        infoIconTitle={I18n.getMessage('framesNote')}
       />
     </CookiesLandingWrapper>
   );

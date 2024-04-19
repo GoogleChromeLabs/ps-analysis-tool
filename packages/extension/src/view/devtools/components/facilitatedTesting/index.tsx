@@ -29,7 +29,7 @@ import { I18n } from '@ps-analysis-tool/i18n';
 const FacilitatedTesting = () => (
   <div data-testid="facilitated-testing-content" className="h-full w-full">
     <LandingPage
-      title={I18n.getMessage('extFacilitatedTesting')}
+      title={I18n.getMessage('facilitatedTesting')}
       contentPanel={<FacilitatedTestingContent />}
       extraClasses="2xl:max-w-6xl xl:max-w-4xl max-w-2xl h-fit"
     />

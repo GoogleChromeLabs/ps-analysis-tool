@@ -34,20 +34,20 @@ import RenderLink from './renderLink';
  */
 const LABELS = [
   {
-    label: 'dsProposal',
-    linkLabel: 'dsProposalNote',
+    label: 'proposal',
+    linkLabel: 'proposalNote',
   },
   {
-    label: 'dsPublicDiscussion',
-    linkLabel: 'dsPublicDiscussionNote',
+    label: 'publicDiscussion',
+    linkLabel: 'publicDiscussionNote',
   },
   {
-    label: 'dsVideoOverview',
-    linkLabel: 'dsVideoOverviewNote',
+    label: 'VideoOverview',
+    linkLabel: 'VideoOverviewNote',
   },
   {
-    label: 'dsDevDocumentation',
-    linkLabel: 'dsDevDocumentationNote',
+    label: 'devDocumentation',
+    linkLabel: 'devDocumentationNote',
   },
 ];
 

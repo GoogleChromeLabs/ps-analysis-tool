@@ -41,9 +41,9 @@ const OrphanedUnMappedInfoDisplay = ({
 
   if (frameIdList.length === 0) {
     return (
-      <span className="flex" title={I18n.getMessage('extCouldNotMapCookies')}>
+      <span className="flex" title={I18n.getMessage('couldNotMapCookies')}>
         <InfoIcon className="fill-granite-gray" />
-        <span className="ml-[2px] block">{I18n.getMessage('extUnmapped')}</span>
+        <span className="ml-[2px] block">{I18n.getMessage('unmapped')}</span>
       </span>
     );
   }
@@ -70,9 +70,9 @@ const OrphanedUnMappedInfoDisplay = ({
 
   if (!hasFrame) {
     return (
-      <span className="flex" title={I18n.getMessage('extOrphanedCookies')}>
+      <span className="flex" title={I18n.getMessage('orphanedCookies')}>
         <InfoIcon className="fill-granite-gray" />
-        <span className="ml-[2px] block">{I18n.getMessage('extOrphaned')}</span>
+        <span className="ml-[2px] block">{I18n.getMessage('orphaned')}</span>
       </span>
     );
   }

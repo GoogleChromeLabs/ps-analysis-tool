@@ -67,12 +67,12 @@ const RWSJsonGenerator = () => {
       <div className="overflow-auto py-6">
         <div className="text-raisin-black dark:text-bright-gray w-full min-w-[33rem]">
           <h1 className="text-lg font-semibold">
-            {I18n.getMessage('extRwsJsonGenerator')}
+            {I18n.getMessage('rwsJsonGenerator')}
           </h1>
           <p
             className="text-xs py-3"
             dangerouslySetInnerHTML={{
-              __html: I18n.getMessage('extRwsJsonGeneratorNote', [
+              __html: I18n.getMessage('rwsJsonGeneratorNote', [
                 `<a
               className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80"
               title="https://github.com/GoogleChrome/related-website-sets/blob/main/RWS-Submission_Guidelines.md"
@@ -86,7 +86,7 @@ const RWSJsonGenerator = () => {
           />
           <div className="mt-4 bg-anti-flash-white dark:bg-charleston-green border rounded-xl border-gray-200 dark:border-quartz px-4 py-3 shadow">
             <p className="text-base my-3">
-              {I18n.getMessage('extEnterRwsDetails')}
+              {I18n.getMessage('enterRwsDetails')}
             </p>
             <form onSubmit={submitForm} onReset={resetForm}>
               <ContactEmail

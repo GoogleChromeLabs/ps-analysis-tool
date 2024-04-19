@@ -397,7 +397,7 @@ const useFiltering = (
 
           Object.entries(savedFilterValues || {}).forEach(
             ([filterValue, filterValueData]) => {
-              if (filterValue === I18n.getMessage('dsSelectAll')) {
+              if (filterValue === I18n.getMessage('selectAll')) {
                 return;
               }
 

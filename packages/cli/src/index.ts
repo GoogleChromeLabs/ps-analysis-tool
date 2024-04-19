@@ -51,18 +51,18 @@ const program = new Command();
 
 program
   .version('0.7.0')
-  .description(I18n.getMessage('clToTest3PCookies'))
-  .option('-u, --url <value>', I18n.getMessage('clUrlOfSite'))
-  .option('-s, --sitemap-url <value>', I18n.getMessage('clUrlOfSitemap'))
-  .option('-c, --csv-path <value>', I18n.getMessage('clPathToCSV'))
-  .option('-p, --sitemap-path <value>', I18n.getMessage('clPathToSitemap'))
-  .option('-po, --port <value>', I18n.getMessage('clPortForServer'))
-  .option('-ul, --url-limit <value>', I18n.getMessage('clUrlLimit'))
-  .option('-nh, --no-headless ', I18n.getMessage('clNonHeadless'))
-  .option('-np, --no-prompts', I18n.getMessage('clNoPrompts'))
-  .option('-nt, --no-technology', I18n.getMessage('clNoTechnology'))
-  .option('-d, --out-dir <value>', I18n.getMessage('clOutputDir'))
-  .option('-ab, --accept-banner', I18n.getMessage('clAcceptBanner'));
+  .description(I18n.getMessage('toTest3PCookies'))
+  .option('-u, --url <value>', I18n.getMessage('urlOfSite'))
+  .option('-s, --sitemap-url <value>', I18n.getMessage('urlOfSitemap'))
+  .option('-c, --csv-path <value>', I18n.getMessage('pathToCSV'))
+  .option('-p, --sitemap-path <value>', I18n.getMessage('pathToSitemap'))
+  .option('-po, --port <value>', I18n.getMessage('portForServer'))
+  .option('-ul, --url-limit <value>', I18n.getMessage('urlLimit'))
+  .option('-nh, --no-headless ', I18n.getMessage('nonHeadless'))
+  .option('-np, --no-prompts', I18n.getMessage('noPrompts'))
+  .option('-nt, --no-technology', I18n.getMessage('noTechnology'))
+  .option('-d, --out-dir <value>', I18n.getMessage('outputDir'))
+  .option('-ab, --accept-banner', I18n.getMessage('acceptBanner'));
 
 program.parse();
 
@@ -80,9 +80,7 @@ const startDashboardServer = async (dir: string, port: number) => {
   await delay(2000);
 
   console.log(
-    I18n.getMessage('clReportServedAt', [
-      `http://localhost:${port}/?dir=${dir}`,
-    ])
+    I18n.getMessage('reportServedAt', [`http://localhost:${port}/?dir=${dir}`])
   );
 };
 
@@ -116,7 +114,7 @@ const startDashboardServer = async (dir: string, port: number) => {
     const isPortInUse = await checkPortInUse(port);
 
     if (isPortInUse) {
-      console.error(I18n.getMessage('clErrorInPort', [port.toString()]));
+      console.error(I18n.getMessage('errorInPort', [port.toString()]));
       process.exit(1);
     }
   }
@@ -146,7 +144,7 @@ const startDashboardServer = async (dir: string, port: number) => {
 
     if (!shouldSkipPrompts && !numberOfUrlsInput) {
       userInput = await Utility.askUserInput(
-        I18n.getMessage('clUrlCountPrompt', [
+        I18n.getMessage('urlCountPrompt', [
           sitemapUrl || sitemapPath ? 'Sitemap' : 'CSV file',
           urls.length.toString(),
         ]),
@@ -157,11 +155,11 @@ const startDashboardServer = async (dir: string, port: number) => {
           ? urls.length
           : parseInt(userInput);
     } else if (numberOfUrlsInput) {
-      console.log(I18n.getMessage('clAnalyzingUrls', [numberOfUrlsInput]));
+      console.log(I18n.getMessage('analyzingUrls', [numberOfUrlsInput]));
       numberOfUrls = parseInt(numberOfUrlsInput);
     } else {
       console.log(
-        I18n.getMessage('clAnalyzingAllUrls', [urls.length.toString()])
+        I18n.getMessage('analyzingAllUrls', [urls.length.toString()])
       );
       numberOfUrls = urls.length;
     }
@@ -174,7 +172,7 @@ const startDashboardServer = async (dir: string, port: number) => {
   const cookieDictionary = await fetchDictionary();
 
   spinnies.add('cookie-spinner', {
-    text: I18n.getMessage('clAnalyzingCookies'),
+    text: I18n.getMessage('analyzingCookies'),
   });
 
   const cookieAnalysisData = await analyzeCookiesUrlsInBatches(
@@ -188,14 +186,14 @@ const startDashboardServer = async (dir: string, port: number) => {
   );
 
   spinnies.succeed('cookie-spinner', {
-    text: I18n.getMessage('clDoneAnalyzingCookies'),
+    text: I18n.getMessage('doneAnalyzingCookies'),
   });
 
   let technologyAnalysisData: any = null;
 
   if (!shouldSkipTechnologyAnalysis) {
     spinnies.add('technology-spinner', {
-      text: I18n.getMessage('clAnalyzingTechnologies'),
+      text: I18n.getMessage('analyzingTechnologies'),
     });
 
     technologyAnalysisData = await analyzeTechnologiesUrlsInBatches(
@@ -205,7 +203,7 @@ const startDashboardServer = async (dir: string, port: number) => {
     );
 
     spinnies.succeed('technology-spinner', {
-      text: I18n.getMessage('clDoneAnalyzingTechnologies'),
+      text: I18n.getMessage('doneAnalyzingTechnologies'),
     });
   }
 

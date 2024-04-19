@@ -24,7 +24,7 @@ import { I18n } from '@ps-analysis-tool/i18n';
 const AntiCovertTracking = () => {
   return (
     <LandingPage
-      title={I18n.getMessage('extTrackingProtection')}
+      title={I18n.getMessage('trackingProtection')}
       iframeSrc="https://privacysandbox.info/en/privacy-sandbox/prevent-covert-tracking"
       extraClasses="h-[78vh] w-full"
     />

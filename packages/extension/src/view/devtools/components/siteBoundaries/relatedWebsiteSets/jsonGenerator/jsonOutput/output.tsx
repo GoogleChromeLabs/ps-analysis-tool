@@ -46,7 +46,7 @@ const Output = ({ data }: OutputProps) => {
         }}
       >
         <button className="float-right">
-          {copied ? I18n.getMessage('extCopied') : I18n.getMessage('extCopy')}
+          {copied ? I18n.getMessage('copied') : I18n.getMessage('copy')}
         </button>
       </CopyToClipboard>
       <code data-testid="rws-output">

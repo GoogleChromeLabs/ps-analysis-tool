@@ -88,7 +88,7 @@ const createTooltip = (
     getFrameType(
       isHidden,
       insideFrame,
-      frame ? frame.tagName : I18n.getMessage('extUnknown')
+      frame ? frame.tagName : I18n.getMessage('unknown')
     ),
     origin ?? '',
     numberOfVisibleFrames,

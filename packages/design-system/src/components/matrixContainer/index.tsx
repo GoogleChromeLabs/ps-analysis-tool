@@ -68,8 +68,8 @@ const MatrixContainer = ({
                 data-testid="expand-button"
                 title={
                   isExpanded
-                    ? I18n.getMessage('dsCollapseView')
-                    : I18n.getMessage('dsExpandView')
+                    ? I18n.getMessage('collapseView')
+                    : I18n.getMessage('expandView')
                 }
               >
                 <ChevronDown

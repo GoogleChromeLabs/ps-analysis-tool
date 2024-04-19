@@ -88,21 +88,19 @@ const generateSummaryDataCSV = (siteAnalysisData: CompleteJson): string => {
   }
 
   const summary = {
-    [I18n.getMessage('cmTotalCookies')]: cookieMap.size,
-    [I18n.getMessage('cmTotalFirstPartyCookies')]: totalFirstPartyCookies,
-    [I18n.getMessage('cmTotalThirdPartyCookies')]: totalThirdPartyCookies,
-    [I18n.getMessage('cmAnalyticsCookies')]: analyticsCookies,
-    [I18n.getMessage('cmFunctionalCookies')]: functionalCookies,
-    [I18n.getMessage('cmMarketingCookies')]: marketingCookies,
-    [I18n.getMessage('cmUncategorizedCookies')]: uncategorisedCookies,
-    [I18n.getMessage('cmCookiesWithIssues')]: cookiesWithIssues,
-    [I18n.getMessage('cmAnalyticsCookiesWithIssues')]:
-      analyticsCookiesWithIssues,
-    [I18n.getMessage('cmFunctionalCookiesWithIssues')]:
+    [I18n.getMessage('totalCookies')]: cookieMap.size,
+    [I18n.getMessage('totalFirstPartyCookies')]: totalFirstPartyCookies,
+    [I18n.getMessage('totalThirdPartyCookies')]: totalThirdPartyCookies,
+    [I18n.getMessage('analyticsCookies')]: analyticsCookies,
+    [I18n.getMessage('functionalCookies')]: functionalCookies,
+    [I18n.getMessage('marketingCookies')]: marketingCookies,
+    [I18n.getMessage('uncategorizedCookies')]: uncategorisedCookies,
+    [I18n.getMessage('cookiesWithIssues')]: cookiesWithIssues,
+    [I18n.getMessage('analyticsCookiesWithIssues')]: analyticsCookiesWithIssues,
+    [I18n.getMessage('functionalCookiesWithIssues')]:
       functionalCookiesWithIssues,
-    [I18n.getMessage('cmMarketingCookiesWithIssues')]:
-      marketingCookiesWithIssues,
-    [I18n.getMessage('cmUncategorizedCookiesWithIssues')]:
+    [I18n.getMessage('marketingCookiesWithIssues')]: marketingCookiesWithIssues,
+    [I18n.getMessage('uncategorizedCookiesWithIssues')]:
       uncategorisedCookiesWithIssues,
   };
 

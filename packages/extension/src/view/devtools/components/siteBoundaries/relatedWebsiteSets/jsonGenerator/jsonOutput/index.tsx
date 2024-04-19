@@ -65,12 +65,10 @@ const JsonOutput = ({
           className="mt-6 divide-y divide-american-silver dark:divide-quartz"
         >
           <h4 className="text-lg my-4 font-semibold">
-            {I18n.getMessage('extRWSJSONHeading')}:
+            {I18n.getMessage('rWSJSONHeading')}:
             <br />
             <span className="text-sm font-normal">
-              {I18n.getMessage('extFollowInstructions', [
-                'Related Website Set',
-              ])}
+              {I18n.getMessage('followInstructions', ['Related Website Set'])}
             </span>
           </h4>
           <PrimaryDomainOutput
@@ -88,7 +86,7 @@ const JsonOutput = ({
               target="_blank"
               rel="noreferrer"
             >
-              <Button text={I18n.getMessage('extCreatePR')} />
+              <Button text={I18n.getMessage('createPR')} />
             </a>
             <a
               title="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork"
@@ -99,7 +97,7 @@ const JsonOutput = ({
               <Button
                 text={
                   <>
-                    {I18n.getMessage('extPRGuide')}
+                    {I18n.getMessage('pRGuide')}
                     <span className="w-4 h-4 ml-2 inline-block">
                       <ArrowRight />
                     </span>

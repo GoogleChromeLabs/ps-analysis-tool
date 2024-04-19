@@ -82,7 +82,7 @@ const getTooltipInfoData = (
     : allowedFeatureInExpandedView;
 
   if (frameType === 'Unknown') {
-    info['Note'] = I18n.getMessage('extUnknownFrameNote');
+    info['Note'] = I18n.getMessage('unknownFrameNote');
   } else {
     info['Belongs to RWS'] = belongsToRWS;
     attr['allowedFeaturesInCompactView'] = allowedFeaturesInCompactView;

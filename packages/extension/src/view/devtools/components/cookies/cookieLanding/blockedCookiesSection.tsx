@@ -57,7 +57,7 @@ const BlockedCookiesSection = () => {
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
   const blockedCookieDataMapping: DataMapping[] = [
     {
-      title: I18n.getMessage('extBlockedCookies'),
+      title: I18n.getMessage('blockedCookies'),
       count: cookieStats.blockedCookies.total,
       data: cookiesStatsComponents.blocked,
       onClick:
@@ -81,7 +81,7 @@ const BlockedCookiesSection = () => {
 
   const description = !isUsingCDP ? (
     <>
-      {I18n.getMessage('extNotUsingCDP')}&nbsp;
+      {I18n.getMessage('notUsingCDP')}&nbsp;
       <button
         className="text-bright-navy-blue dark:text-jordy-blue"
         onClick={() => {
@@ -91,17 +91,17 @@ const BlockedCookiesSection = () => {
           updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
         }}
       >
-        {I18n.getMessage('extSettingsPage')}
+        {I18n.getMessage('settingsPage')}
       </button>
       . <br />
-      {I18n.getMessage('extVisitPSAT')}&nbsp;
+      {I18n.getMessage('VisitPSAT')}&nbsp;
       <a
         target="_blank"
         rel="noreferrer"
         className="text-bright-navy-blue dark:text-jordy-blue"
         href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki"
       >
-        {I18n.getMessage('extWiki')}
+        {I18n.getMessage('wiki')}
       </a>
       .
     </>
@@ -117,9 +117,9 @@ const BlockedCookiesSection = () => {
     >
       {dataComponents.length > 0 && (
         <MatrixContainer
-          title={I18n.getMessage('extBlockedReasons')}
+          title={I18n.getMessage('blockedReasons')}
           matrixData={dataComponents}
-          infoIconTitle={I18n.getMessage('extCookiesBlockedNote')}
+          infoIconTitle={I18n.getMessage('cookiesBlockedNote')}
         />
       )}
     </CookiesLandingWrapper>

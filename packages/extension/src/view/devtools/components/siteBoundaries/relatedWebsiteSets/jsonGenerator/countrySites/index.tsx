@@ -65,7 +65,7 @@ const CountrySites = ({
   return (
     <div className="p-3">
       <div className="flex justify-between items-center">
-        <p className="text-base">{I18n.getMessage('extCountryCodeHeading')}</p>
+        <p className="text-base">{I18n.getMessage('countryCodeHeading')}</p>
         <AddButton onClick={addCountrySite} />
       </div>
       <div id="countryDomains">
@@ -73,12 +73,12 @@ const CountrySites = ({
           <div key={idx} className="flex gap-10 my-5">
             <div className="flex-1">
               <RWSSelect
-                selectLabel={I18n.getMessage('extWhichSiteccTLD')}
+                selectLabel={I18n.getMessage('whichSiteccTLD')}
                 selectValue={site}
                 selectChangeHandler={(e) => {
                   setCountrySites({ idx, key: 'site', value: e.target.value });
                 }}
-                defaultOption={I18n.getMessage('extSelectSite')}
+                defaultOption={I18n.getMessage('selectSite')}
                 options={availableSites}
                 error={siteError}
                 formValidationFailed={formValidationFailed}
@@ -97,7 +97,7 @@ const CountrySites = ({
                 error={cctldError}
                 formValidationFailed={formValidationFailed}
               />
-              <span>{I18n.getMessage('extCountryCodeNote')}</span>
+              <span>{I18n.getMessage('countryCodeNote')}</span>
             </div>
             <div className="flex items-center">
               <RemoveButton onClick={() => removeCountrySite(idx)} />

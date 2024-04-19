@@ -98,7 +98,7 @@ const Cookies = ({ setFilteredCookies }: CookiesProps) => {
       <div className="w-full h-full flex flex-col items-center justify-center">
         <Button
           onClick={changeListeningToThisTab}
-          text={I18n.getMessage('extAnalyzeThisTab')}
+          text={I18n.getMessage('analyzeThisTab')}
         />
       </div>
     </div>

@@ -24,7 +24,7 @@ const Topics = () => {
   return (
     <div data-testid="topics-content" className="h-full w-full">
       <LandingPage
-        title={I18n.getMessage('extTopics')}
+        title={I18n.getMessage('topics')}
         psInfoKey={PSInfoKey.Topics}
         extraClasses="max-w-2xl h-fit"
       />

@@ -85,7 +85,7 @@ export default function prepareFrameStatsComponent(
   return {
     dataMapping: [
       {
-        title: I18n.getMessage('dsFrames'),
+        title: I18n.getMessage('frames'),
         count: Object.keys(tabFrames || {}).length,
         data: [
           {
@@ -115,31 +115,31 @@ export default function prepareFrameStatsComponent(
     ],
     legend: [
       {
-        label: I18n.getMessage('dsTotalFrames'),
+        label: I18n.getMessage('totalFrames'),
         count: Object.keys(tabFrames || {}).length,
         color: '#25ACAD',
         countClassName: 'text-greenland-green',
       },
       {
-        label: I18n.getMessage('dsFramesWithCookies'),
+        label: I18n.getMessage('framesWithCookies'),
         count: cookieFrame.size,
         color: '#C5A06A',
         countClassName: 'text-good-life',
       },
       {
-        label: I18n.getMessage('dsFramesWithBlockedCookies'),
+        label: I18n.getMessage('framesWithBlockedCookies'),
         count: blockedCookieFrame.size,
         color: '#AF7AA3',
         countClassName: 'text-victorian-violet',
       },
       {
-        label: I18n.getMessage('dsFramesWithUnblockedCookies'),
+        label: I18n.getMessage('framesWithUnblockedCookies'),
         count: unBlockedCookieFrame.size,
         color: '#F54021',
         countClassName: 'text-strawberry-spinach-red',
       },
       {
-        label: I18n.getMessage('dsFencedFrames'),
+        label: I18n.getMessage('fencedFrames'),
         count: Object.values(tabFrames || {}).filter(
           (frame) => frame?.frameType === 'fenced_frame'
         ).length,

@@ -42,12 +42,12 @@ const CookiesSection = () => {
     >
       {data.cookiesStatsComponents.blockedCookiesLegend.length > 0 && (
         <CookiesMatrix
-          title={I18n.getMessage('extBlockedReasons')}
+          title={I18n.getMessage('blockedReasons')}
           tabCookies={data.tabCookies}
           componentData={data.cookiesStatsComponents.blockedCookiesLegend}
           tabFrames={data.tabFrames}
           showHorizontalMatrix={false}
-          infoIconTitle={I18n.getMessage('extCookiesBlockedNote')}
+          infoIconTitle={I18n.getMessage('cookiesBlockedNote')}
         />
       )}
     </CookiesLandingWrapper>

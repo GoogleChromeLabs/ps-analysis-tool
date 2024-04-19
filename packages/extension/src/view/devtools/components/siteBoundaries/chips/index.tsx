@@ -24,7 +24,7 @@ const Chips = () => {
   return (
     <div data-testid="chips-content" className="h-full w-full">
       <LandingPage
-        title={I18n.getMessage('extChipsExpanded')}
+        title={I18n.getMessage('chipsExpanded')}
         psInfoKey={PSInfoKey.Chips}
         extraClasses="max-w-2xl h-fit"
       />

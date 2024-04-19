@@ -179,7 +179,7 @@ function parseAttributeValues(
       }
       break;
     case 'priority':
-      value = value || I18n.getMessage('extMedium');
+      value = value || I18n.getMessage('medium');
       break;
     case 'partitionKey':
       value = value || '';

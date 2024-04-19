@@ -84,28 +84,28 @@ const prepareCookieStatsComponents = (
   return {
     legend: [
       {
-        label: I18n.getMessage('dsFunctional'),
+        label: I18n.getMessage('functional'),
         count:
           cookieStats.firstParty.functional + cookieStats.thirdParty.functional,
         color: COLOR_MAP.functional.color,
         countClassName: COLOR_MAP.functional.className,
       },
       {
-        label: I18n.getMessage('dsMarketing'),
+        label: I18n.getMessage('marketing'),
         count:
           cookieStats.firstParty.marketing + cookieStats.thirdParty.marketing,
         color: COLOR_MAP.marketing.color,
         countClassName: COLOR_MAP.uncategorized.className,
       },
       {
-        label: I18n.getMessage('dsAnalytics'),
+        label: I18n.getMessage('analytics'),
         count:
           cookieStats.firstParty.analytics + cookieStats.thirdParty.analytics,
         color: COLOR_MAP.analytics.color,
         countClassName: COLOR_MAP.uncategorized.className,
       },
       {
-        label: I18n.getMessage('dsUncategorized'),
+        label: I18n.getMessage('uncategorized'),
         count:
           cookieStats.firstParty.uncategorized +
           cookieStats.thirdParty.uncategorized,

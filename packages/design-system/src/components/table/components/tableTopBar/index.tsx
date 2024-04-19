@@ -67,7 +67,7 @@ const TableTopBar = ({
           })}
           onClick={() => setShowFilterSidebar(!showFilterSidebar)}
           disabled={disableFiltering}
-          title={I18n.getMessage('dsOpenFilterOptions')}
+          title={I18n.getMessage('openFilterOptions')}
         >
           <FilterIcon
             className={
@@ -99,7 +99,7 @@ const TableTopBar = ({
       </div>
 
       <div className="text-right w-full text-xxxs text-secondary">
-        {I18n.getMessage('dsCount')}: {rows.length ?? 0}
+        {I18n.getMessage('count')}: {rows.length ?? 0}
       </div>
     </div>
   );

@@ -32,7 +32,7 @@ const evaluateSelectAllOption = (
 ) => {
   const options: string[] = parsedQuery?.filter?.[filterKey];
 
-  if (options?.[0] === I18n.getMessage('dsSelectAll')) {
+  if (options?.[0] === I18n.getMessage('selectAll')) {
     clearActivePanelQuery?.();
 
     return true;

@@ -197,7 +197,7 @@ const RowContextMenu = forwardRef<
                 onClick={handleCopy}
                 className="w-full text-xs rounded px-1 py-[3px] flex items-center hover:bg-royal-blue hover:text-white cursor-default"
               >
-                <span>{I18n.getMessage('extCopyNetworkFilter')}</span>
+                <span>{I18n.getMessage('copyNetworkFilter')}</span>
               </button>
 
               {isDomainInAllowList && parentDomain ? (
@@ -206,7 +206,7 @@ const RowContextMenu = forwardRef<
                   className="w-full text-xs rounded px-1 py-[3px] flex items-center hover:bg-royal-blue hover:text-white cursor-default"
                 >
                   <span>
-                    {I18n.getMessage('extRemoveParentDomainFromAllowList', [
+                    {I18n.getMessage('removeParentDomainFromAllowList', [
                       parentDomain,
                     ])}
                   </span>
@@ -218,8 +218,8 @@ const RowContextMenu = forwardRef<
                 >
                   <span id="allow-list-option">
                     {isDomainInAllowList
-                      ? I18n.getMessage('extRemoveDomainFromAllowList')
-                      : I18n.getMessage('extAllowDomin')}
+                      ? I18n.getMessage('removeDomainFromAllowList')
+                      : I18n.getMessage('allowDomin')}
                   </span>
                 </button>
               )}

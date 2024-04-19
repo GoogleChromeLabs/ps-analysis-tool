@@ -40,8 +40,8 @@ const ContactEmail = ({
   return (
     <div className="my-4">
       <RWSInput
-        inputLabel={I18n.getMessage('extContact')}
-        inputPlaceholder={I18n.getMessage('extContactNote')}
+        inputLabel={I18n.getMessage('contact')}
+        inputPlaceholder={I18n.getMessage('contactNote')}
         inputValue={contact.email}
         inputChangeHandler={(e) => setContact(e.target.value)}
         error={contact.emailError}

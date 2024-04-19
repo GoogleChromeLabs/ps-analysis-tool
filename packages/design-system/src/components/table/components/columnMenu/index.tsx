@@ -103,7 +103,7 @@ const ColumnMenu = ({ position, open, onClose }: ColumnMenuProps) => {
                 >
                   ✓
                 </span>
-                <span>{I18n.getMessage('dsToggleAll')}</span>
+                <span>{I18n.getMessage('toggleAll')}</span>
               </button>
               <div>
                 <ColumnList

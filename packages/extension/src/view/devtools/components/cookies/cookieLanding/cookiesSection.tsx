@@ -67,7 +67,7 @@ const CookiesSection = () => {
       infoIconTitle={
         <p
           dangerouslySetInnerHTML={{
-            __html: I18n.getMessage('extSetUpEvaluationEnvironment', [
+            __html: I18n.getMessage('setUpEvaluationEnvironment', [
               '<a href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/Evaluation-Environment" target="_blank" rel="noreferrer" className="text-bright-navy-blue dark:text-jordy-blue">',
               '</a>',
             ]),
@@ -80,8 +80,8 @@ const CookiesSection = () => {
         (cookieStats?.firstParty.total === 0 &&
           cookieStats?.thirdParty.total === 0 && (
             <MessageBox
-              headerText={I18n.getMessage('extNoCookies')}
-              bodyText={I18n.getMessage('extTryReloading')}
+              headerText={I18n.getMessage('noCookies')}
+              bodyText={I18n.getMessage('tryReloading')}
             />
           ))}
       <CookiesMatrix

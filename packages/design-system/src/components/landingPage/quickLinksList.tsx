@@ -68,14 +68,11 @@ const QuickLinksList = () => {
   return (
     <div className="flex flex-col md:flex-row px-4 pt-6 pb-24 gap-10">
       <div className="md:w-[35%] flex flex-col gap-4">
-        <BulletList
-          rows={quickLinks}
-          heading={I18n.getMessage('dsQuickLinks')}
-        />
+        <BulletList rows={quickLinks} heading={I18n.getMessage('quickLinks')} />
       </div>
       <div className="md:w-[65%] flex flex-col gap-4">
         <h2 className="text-xs font-bold uppercase text-darkest-gray dark:text-bright-gray">
-          {I18n.getMessage('dsLatestNews')}
+          {I18n.getMessage('latestNews')}
         </h2>
         <hr className="border-0 border-b border-hex-gray dark:border-quartz" />
         <div className="space-y-4">
@@ -88,7 +85,7 @@ const QuickLinksList = () => {
               rel="noreferrer"
               className="leading-6 text-sm text-bright-navy-blue dark:text-jordy-blue font-semibold px-3 border border-american-silver dark:border-quartz rounded inline-flex gap-2 items-center"
             >
-              {I18n.getMessage('dsViewMore')}
+              {I18n.getMessage('ViewMore')}
               <ChevronRight className="text-bright-navy-blue dark:text-jordy-blue" />
             </a>
           </div>

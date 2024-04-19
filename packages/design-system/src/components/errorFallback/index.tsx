@@ -28,10 +28,10 @@ const ErrorFallback = ({ error }: ErrorFallbackProps) => {
 
   return (
     <div className="p-4 text-center" role="alert">
-      <p className="font-bold mb-5 text-xl">{I18n.getMessage('dsWentWrong')}</p>
-      <p className="mb-10">{I18n.getMessage('dsOpenInNewTab')}</p>
+      <p className="font-bold mb-5 text-xl">{I18n.getMessage('wentWrong')}</p>
+      <p className="mb-10">{I18n.getMessage('openInNewTab')}</p>
       <pre className="text-red-700 text-xs bg-slate-50 p-5 text-left border-l-4">
-        {error?.message} {I18n.getMessage('dsOpenInNewTab')}
+        {error?.message} {I18n.getMessage('openInNewTab')}
       </pre>
     </div>
   );

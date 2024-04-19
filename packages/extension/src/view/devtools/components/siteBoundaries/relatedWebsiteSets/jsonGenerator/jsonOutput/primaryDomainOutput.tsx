@@ -39,7 +39,7 @@ const PrimaryDomainOutput = ({
         <p className="text-xs leading-6 min-w-[1.5rem] min-h-[1.5rem] flex items-center justify-center bg-bright-navy-blue text-white rounded-full">
           1
         </p>
-        <p className="text-base">{I18n.getMessage('extAddToRws')}</p>
+        <p className="text-base">{I18n.getMessage('addToRws')}</p>
       </div>
       <ul className="mb-2">
         <li id="primaryOutput" className="text-sm">

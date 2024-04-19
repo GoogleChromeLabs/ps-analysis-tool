@@ -50,6 +50,6 @@ export const ldWorkerOnMessageCallback = (event: MessageEvent): void => {
       break;
     }
     default:
-      postMessage(I18n.getMessage('ldTaskNotDefined'));
+      postMessage(I18n.getMessage('taskNotDefined'));
   }
 };

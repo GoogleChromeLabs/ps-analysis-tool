@@ -40,7 +40,7 @@ const PrimaryDomain = ({
   return (
     <div className="my-4">
       <RWSInput
-        inputLabel={I18n.getMessage('extSetPrimaryDomain')}
+        inputLabel={I18n.getMessage('setPrimaryDomain')}
         inputPlaceholder="https://primary.com"
         inputValue={primaryDomain.url}
         inputChangeHandler={(e) => setPrimaryDomain(e.target.value)}

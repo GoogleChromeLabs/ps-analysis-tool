@@ -62,7 +62,7 @@ const validateArgs = async (
   if (csvPath) {
     const csvFileExists = await exists(csvPath);
     if (!csvFileExists) {
-      console.log(I18n.getMessage('clNoFileFound', [csvPath]));
+      console.log(I18n.getMessage('noFileFound', [csvPath]));
       process.exit(1);
     }
   }
@@ -70,7 +70,7 @@ const validateArgs = async (
   if (sitemapPath) {
     const sitemapFileExists = await exists(sitemapPath);
     if (!sitemapFileExists) {
-      console.log(I18n.getMessage('clNoFileFound', [sitemapPath]));
+      console.log(I18n.getMessage('noFileFound', [sitemapPath]));
       process.exit(1);
     }
   }
@@ -88,7 +88,7 @@ const validateArgs = async (
 
   if (numberOfUrls) {
     if (isNaN(parseInt(numberOfUrls))) {
-      console.log(I18n.getMessage('clNotValidNumber'));
+      console.log(I18n.getMessage('notValidNumber'));
       process.exit(1);
     }
   }
@@ -96,7 +96,7 @@ const validateArgs = async (
   if (outDir) {
     const outDirExists = await exists(path.resolve(outDir));
     if (!outDirExists) {
-      console.log(I18n.getMessage('clDirNotExists', [path.resolve(outDir)]));
+      console.log(I18n.getMessage('dirNotExists', [path.resolve(outDir)]));
       await mkdir(path.resolve(outDir));
     }
   }

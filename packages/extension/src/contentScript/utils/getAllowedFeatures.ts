@@ -24,7 +24,7 @@ import { PS_RELATED_ALLOWED_FEATURES } from '../constants';
 
 const getAllowedFeatures = (iframe: HTMLElement) => {
   if (!iframe || !iframe?.featurePolicy) {
-    return I18n.getMessage('extUnknown');
+    return I18n.getMessage('unknown');
   }
 
   const featurePolicy = iframe?.featurePolicy;

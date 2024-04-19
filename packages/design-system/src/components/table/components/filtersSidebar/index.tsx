@@ -90,8 +90,8 @@ const FiltersSidebar = () => {
         onClick={handleExpandAllClick}
       >
         {expandAll
-          ? I18n.getMessage('dsCollapseAll')
-          : I18n.getMessage('dsExpandAll')}
+          ? I18n.getMessage('collapseAll')
+          : I18n.getMessage('expandAll')}
       </a>
       <ul>
         {Object.entries(filters).map(([filterKey, filter]) => (

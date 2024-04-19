@@ -21,12 +21,12 @@ import React from 'react';
 import { addUTMParams } from '@ps-analysis-tool/common';
 import { I18n } from '@ps-analysis-tool/i18n';
 
-const EXPERIMENT_GROUP = I18n.getMessage('extMemberShipInExperimentGroup');
+const EXPERIMENT_GROUP = I18n.getMessage('memberShipInExperimentGroup');
 
 const INFO_CARDS_DATA = [
   {
     heading: EXPERIMENT_GROUP,
-    content: I18n.getMessage('extMemberShipInExperimentGroupNote', [
+    content: I18n.getMessage('memberShipInExperimentGroupNote', [
       `<a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="${addUTMParams(
         'https://developers.google.com/privacy-sandbox/setup/web/chrome-facilitated-testing'
       )}" target="_blank">`,
@@ -34,8 +34,8 @@ const INFO_CARDS_DATA = [
     ]),
   },
   {
-    heading: I18n.getMessage('extRequestingAdditionalTime'),
-    content: I18n.getMessage('extRequestingAdditionalTimeNote', [
+    heading: I18n.getMessage('requestingAdditionalTime'),
+    content: I18n.getMessage('requestingAdditionalTimeNote', [
       `<a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="${addUTMParams(
         'https://developers.google.com/privacy-sandbox/3pcd/temporary-exceptions/first-party-deprecation-trial?hl=en'
       )}" target="_blank">`,
@@ -45,8 +45,8 @@ const INFO_CARDS_DATA = [
     ]),
   },
   {
-    heading: I18n.getMessage('extAttestationEnrollment'),
-    content: I18n.getMessage('extAttestationEnrollmentNote', [
+    heading: I18n.getMessage('attestationEnrollment'),
+    content: I18n.getMessage('attestationEnrollmentNote', [
       `<a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="${addUTMParams(
         'https://developer.chrome.com/blog/announce-enrollment-privacy-sandbox/'
       )}" target="_blank">`,
@@ -54,8 +54,8 @@ const INFO_CARDS_DATA = [
     ]),
   },
   {
-    heading: I18n.getMessage('extReportingBreakages'),
-    content: I18n.getMessage('extReportingBreakagesNote', [
+    heading: I18n.getMessage('reportingBreakages'),
+    content: I18n.getMessage('reportingBreakagesNote', [
       '<a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="https://goo.gle/report-3pc-broken" target="_blank">',
       '</a>',
       '<a class="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline" href="https://github.com/GoogleChromeLabs/privacy-sandbox-dev-support/issues/new/choose" target="_blank">',
@@ -80,7 +80,7 @@ const InfoCards = () => {
               />
               {card.heading === EXPERIMENT_GROUP && (
                 <div className="p-3 flex-1 bg-anti-flash-white dark:bg-charleston-green rounded-md">
-                  <p>{I18n.getMessage('extPartOfExperimentGroup')}</p>
+                  <p>{I18n.getMessage('partOfExperimentGroup')}</p>
                 </div>
               )}
             </div>

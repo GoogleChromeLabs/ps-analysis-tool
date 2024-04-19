@@ -39,7 +39,7 @@ const wildTest = (wildcard: string, str: string): boolean => {
 
 export const emptyAnalytics = {
   platform: '',
-  category: I18n.getMessage('cmUncategorized'),
+  category: I18n.getMessage('uncategorized'),
   name: '',
   domain: '',
   description: '',
@@ -74,7 +74,7 @@ const findAnalyticsMatch = (
     }
   });
 
-  analytics.category = analytics.category || I18n.getMessage('cmUncategorized');
+  analytics.category = analytics.category || I18n.getMessage('uncategorized');
 
   return analytics;
 };

@@ -52,7 +52,7 @@ const LibraryDetection = memo(function LibraryDetection() {
 
   const dataMapping = [
     {
-      title: I18n.getMessage('ldKnownBreakages'),
+      title: I18n.getMessage('KnownBreakages'),
       count: Number(detectedLibraryNames.length),
       data: [{ count: 1, color: COLOR_MAP.uncategorized.color }],
     },
@@ -85,11 +85,11 @@ const LibraryDetection = memo(function LibraryDetection() {
       </>
     ) : !errorOccured ? (
       <p className="text-center dark:text-bright-gray">
-        {I18n.getMessage('ldNoLibraries')}
+        {I18n.getMessage('noLibraries')}
       </p>
     ) : (
       <p className="text-center dark:text-bright-gray">
-        {I18n.getMessage('ldErrorOccured')}
+        {I18n.getMessage('errorOccured')}
       </p>
     );
 
@@ -104,8 +104,8 @@ const LibraryDetection = memo(function LibraryDetection() {
           <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />
           <p className="text-center dark:text-bright-gray">
             {isCurrentTabLoading
-              ? I18n.getMessage('ldWaitingPageLoad')
-              : I18n.getMessage('ldCheckingLibraries')}
+              ? I18n.getMessage('waitingPageLoad')
+              : I18n.getMessage('checkingLibraries')}
           </p>
         </>
       ) : (

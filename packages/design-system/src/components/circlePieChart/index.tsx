@@ -81,10 +81,10 @@ const CirclePieChart = ({
           <p className="text-xs text-center font-semibold leading-relaxed dark:text-bright-gray">
             {title}
           </p>
-          {title === I18n.getMessage('dsThirdPartyCookies') && (
+          {title === I18n.getMessage('thirdPartyCookies') && (
             <p
               className={infoIconClassName}
-              title={I18n.getMessage('dsNewChromeProfile')}
+              title={I18n.getMessage('newChromeProfile')}
             >
               <InfoIcon className="fill-granite-gray" />
             </p>

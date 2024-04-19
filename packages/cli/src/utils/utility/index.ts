@@ -142,7 +142,7 @@ export default class Utility {
       const { sites } = await siteMapper.fetch();
       urls = sites;
     } catch (error) {
-      console.log(I18n.getMessage('clErrorParsingSitemap'));
+      console.log(I18n.getMessage('errorParsingSitemap'));
     }
 
     return urls;

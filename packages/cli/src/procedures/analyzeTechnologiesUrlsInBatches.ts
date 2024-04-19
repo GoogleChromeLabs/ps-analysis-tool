@@ -52,7 +52,7 @@ export const analyzeTechnologiesUrlsInBatches = async (
 
     spinnies &&
       spinnies.add(`tech-batch-spinner`, {
-        text: I18n.getMessage('clAnalyzing', [
+        text: I18n.getMessage('analyzing', [
           'technology',
           ...[`${start + 1}`, `${end + 1}`],
         ]),
@@ -72,7 +72,7 @@ export const analyzeTechnologiesUrlsInBatches = async (
 
     spinnies &&
       spinnies.succeed(`tech-batch-spinner`, {
-        text: I18n.getMessage('clDoneAnalyzing', [
+        text: I18n.getMessage('doneAnalyzing', [
           'technology',
           ...[`${start + 1}`, `${end + 1}`],
         ]),

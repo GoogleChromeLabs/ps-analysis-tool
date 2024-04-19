@@ -24,12 +24,12 @@ import {
 
 const sidebarData: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.COOKIES]: {
-    title: 'cdSitemapReport',
+    title: 'sitemapReport',
     children: {},
     dropdownOpen: true,
   },
   [SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES]: {
-    title: 'cdCookieIssues',
+    title: 'cookieIssues',
     children: {},
     icon: {
       Element: WarningBare,

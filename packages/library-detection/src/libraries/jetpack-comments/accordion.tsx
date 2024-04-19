@@ -39,13 +39,13 @@ const JetpackCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
 
   return (
     <Accordion
-      title={I18n.getMessage('ldJetpackComments')}
+      title={I18n.getMessage('jetpackComments')}
       isLoading={false}
       featuresText=""
     >
       <DetectionMessage
-        libraryName={I18n.getMessage('ldJetpackCommentsWidget')}
-        provider={I18n.getMessage('ldJetpack')}
+        libraryName={I18n.getMessage('jetpackCommentsWidget')}
+        provider={I18n.getMessage('jetpack')}
         supportURL={JETPACK_COMMENTS_HELP_URL}
       />
     </Accordion>

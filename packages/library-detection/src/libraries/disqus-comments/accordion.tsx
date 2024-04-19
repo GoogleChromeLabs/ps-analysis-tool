@@ -39,13 +39,13 @@ const DisqusCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
 
   return (
     <Accordion
-      title={I18n.getMessage('ldDisqusComments')}
+      title={I18n.getMessage('disqusComments')}
       isLoading={false}
       featuresText=""
     >
       <DetectionMessage
-        libraryName={I18n.getMessage('ldDisqusComments')}
-        provider={I18n.getMessage('ldDisqus')}
+        libraryName={I18n.getMessage('disqusComments')}
+        provider={I18n.getMessage('disqus')}
         supportURL={DISQUS_COMMENTS_HELP_URL}
       />
     </Accordion>

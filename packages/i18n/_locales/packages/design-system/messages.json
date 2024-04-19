@@ -1,17 +1,17 @@
 {
-  "dsNoNews": {
+  "noNews": {
     "message": "No News"
   },
-  "dsThirdPartyCookies": {
+  "thirdPartyCookies": {
     "message": "3rd Party Cookies"
   },
-  "dsNewChromeProfile": {
+  "newChromeProfile": {
     "message": "Cookies must be analyzed on a new, clean Chrome profile for an accurate report"
   },
-  "dsAllowListed": {
+  "allowListed": {
     "message": "Allow Listed"
   },
-  "dsAllowListedNote": {
+  "allowListedNote": {
     "message": "The cookie domain was added to the allow-list for this session, however the browser may still block these cookies for various reasons, such as invalid attributes. You can check the allowed domains under $path$.",
     "placeholders": {
       "path": {
@@ -20,10 +20,10 @@
       }
     }
   },
-  "dsBlockedReason": {
+  "blockedReason": {
     "message": "Blocked Reason"
   },
-  "dsBlockedInAtLeastOne": {
+  "blockedInAtLeastOne": {
     "message": "This cookie was blocked in at least one of the $type$.",
     "placeholders": {
       "type": {
@@ -32,7 +32,7 @@
       }
     }
   },
-  "dsBlockedInAll": {
+  "blockedInAll": {
     "message": "This cookie was blocked in all $type$",
     "placeholders": {
       "type": {
@@ -41,13 +41,13 @@
       }
     }
   },
-  "dsBlockedInAllRequestResponse": {
+  "blockedInAllRequestResponse": {
     "message": "This cookie was blocked in all of the requests and responses."
   },
-  "dsBlockedInSomeRequestResponse": {
+  "blockedInSomeRequestResponse": {
     "message": "This cookie was blocked in some of the requests and responses."
   },
-  "dsBlockedinSomeAndAll": {
+  "blockedinSomeAndAll": {
     "message": "This cookie was blocked in all $type1$ and at least one of the $type2$.",
     "placeholders": {
       "type1": {
@@ -60,194 +60,167 @@
       }
     }
   },
-  "dsWarnings": {
+  "warnings": {
     "message": "Warnings"
   },
-  "dsCookieValue": {
+  "cookieValue": {
     "message": "Cookie Value"
   },
-  "dsURLDecoded": {
+  "uRLDecoded": {
     "message": "Show URL-decoded"
   },
-  "dsDescription": {
-    "message": "Description"
-  },
-  "dsNoDescription": {
-    "message": "No description available."
-  },
-  "dsSelectCookie": {
+  "selectCookie": {
     "message": "Select cookies to preview its value"
   },
-  "dsNumberOfFrames": {
+  "numberOfFrames": {
     "message": "Number of Frames"
   },
-  "dsNumberOfFramesNote": {
+  "numberOfFramesNote": {
     "message": "'Number of unique frames found across the page(s).'"
   },
-  "dsNumberOfFramesWithAssociatedCookies": {
+  "numberOfFramesWithAssociatedCookies": {
     "message": "Number of Frames with Associated Cookies"
   },
-  "dsNumberOfFramesWithAssociatedCookiesNote": {
+  "numberOfFramesWithAssociatedCookiesNote": {
     "message": "Unique frames across the page(s) that have cookies associated with them."
   },
-  "dsExtensionUpdated": {
+  "extensionUpdated": {
     "message": "Looks like extension has been updated since devtool was open."
   },
-  "dsRefreshPanel": {
+  "refreshPanel": {
     "message": "Refresh Panel"
   },
-  "dsWentWrong": {
+  "wentWrong": {
     "message": "Something went wrong!"
   },
-  "dsOpenInNewTab": {
+  "openInNewTab": {
     "message": "Please try opening this page in a new tab."
   },
-  "dsHoverOverIframes": {
+  "hoverOverIframes": {
     "message": "Hover over the iframes on the page or select frames below to inspect them."
   },
-  "dsProposal": {
+  "proposal": {
     "message": "Proposal"
   },
-  "dsProposalNote": {
+  "proposalNote": {
     "message": "Public explanation for the proposed solution (Chrome)"
   },
-  "dsPublicDiscussion": {
+  "publicDiscussion": {
     "message": "Public Discussion"
   },
-  "dsPublicDiscussionNote": {
+  "publicDiscussionNote": {
     "message": "Public questions and feedback about the proposal"
   },
-  "dsVideoOverview": {
+  "videoOverview": {
     "message": "Video Overview"
   },
-  "dsVideoOverviewNote": {
+  "uideoOverviewNote": {
     "message": "Short summary video"
   },
-  "dsDevDocumentation": {
+  "devDocumentation": {
     "message": "Dev Documentation"
   },
-  "dsDevDocumentationNote": {
+  "devDocumentationNote": {
     "message": "Developer documentation"
   },
-  "dsLearnMore": {
+  "learnMore": {
     "message": "Learn more about PSAT"
   },
-  "dsJoinDiscussions": {
+  "joinDiscussions": {
     "message": "Join the discussions"
   },
-  "dsReportBug": {
+  "reportBug": {
     "message": "Report a bug"
   },
-  "dsReportBreakage": {
+  "reportBreakage": {
     "message": "Report a breakage"
   },
-  "dsRequestMigrationTime": {
+  "requestMigrationTime": {
     "message": "Request Additional Migration Time"
   },
-  "dsQuickLinks": {
+  "quickLinks": {
     "message": "Quick Links"
   },
-  "dsLatestNews": {
+  "latestNews": {
     "message": "Latest News"
   },
-  "dsViewMore": {
+  "uiewMore": {
     "message": "View More"
   },
-  "dsCollapseView": {
+  "collapseView": {
     "message": "Collapse View"
   },
-  "dsExpandView": {
+  "expandView": {
     "message": "Expand View"
   },
-  "dsSearch": {
+  "search": {
     "message": "Search"
   },
-  "dsClearSearch": {
+  "clearSearch": {
     "message": "Clear Search"
   },
-  "dsToggleAll": {
+  "toggleAll": {
     "message": "Toggle All"
   },
-  "dsClearAll": {
+  "clearAll": {
     "message": "Clear All"
   },
-  "dsCollapseAll": {
+  "collapseAll": {
     "message": "Collapse All"
   },
-  "dsExpandAll": {
+  "expandAll": {
     "message": "Expand All"
   },
-  "dsShowLess": {
+  "showLess": {
     "message": "Show Less"
   },
-  "dsShowMore": {
+  "showMore": {
     "message": "Show More"
   },
-  "dsSelectAll": {
-    "message": "All"
-  },
-  "dsCount": {
+  "count": {
     "message": "Count"
   },
-  "dsReload": {
+  "reload": {
     "message": "Reload"
   },
-  "dsTotalCookies": {
-    "message": "Total Cookies"
-  },
-  "dsFirstPartyCookies": {
+  "firstPartyCookies": {
     "message": "1st Party Cookies"
   },
-  "dsFirstParty": {
-    "message": "First Party"
-  },
-  "dsThirdParty": {
-    "message": "Third Party"
-  },
-  "dsFunctional": {
+  "functional": {
     "message": "Functional"
   },
-  "dsMarketing": {
+  "marketing": {
     "message": "Marketing"
   },
-  "dsAnalytics": {
+  "analytics": {
     "message": "Analytics"
   },
-  "dsUncategorized": {
-    "message": "Uncategorized"
-  },
-  "dsFrames": {
+  "frames": {
     "message": "Frames"
   },
-  "dsTotalFrames": {
+  "totalFrames": {
     "message": "Total Frames"
   },
-  "dsFramesWithCookies": {
+  "framesWithCookies": {
     "message": "Frames with Cookies"
   },
-  "dsFramesWithBlockedCookies": {
+  "framesWithBlockedCookies": {
     "message": "Frames with Blocked Cookies"
   },
-  "dsFramesWithUnblockedCookies": {
+  "framesWithUnblockedCookies": {
     "message": "Frames with Unblocked Cookies"
   },
-  "dsFencedFrames": {
+  "fencedFrames": {
     "message": "Fenced Frames"
   },
-  "dsExemptionReason": {
+  "exemptionReason": {
     "message": "Exemption Reason"
   },
-  "dsWaitForLD": {
+  "waitForLD": {
     "message": "Wait for library detection"
   },
-  "dsDownloadReport": {
-    "message": "Download Report"
-  },
-  "dsOpenFilterOptions": {
+  "openFilterOptions": {
     "message": "Open Filter Options"
-  },
-  "dsCategories": {
-    "message": "Categories"
   },
   "header_ExcludeSameSiteNoneInsecure": {
     "message": "Mark cross-site cookies as Secure to allow them to be sent in cross-site requests"
@@ -255,25 +228,25 @@
   "body_ExcludeSameSiteNoneInsecure": {
     "message": "Cookies marked with 'SameSite=None' must also be marked with 'Secure' to get sent in cross-site requests. This behavior protects user data from being sent over an insecure connection."
   },
-  "dsSomethingWentWrong": {
+  "somethingWentWrong": {
     "message": "Something went wrong!"
   },
   "body_ExcludeThirdPartyPhaseout": {
     "message": "Cookie is blocked when sent in cross-site context. Cookies marked with 'SameSite=None; Secure;' and not 'Partitioned' are blocked in cross-site requests. This behavior protects user data from cross-site tracking."
   },
-  "dsTotalFramesNote": {
+  "totalFramesNote": {
     "message": "The total frames present inside the current page."
   },
-  "dsFramesWithCookiesNote": {
+  "framesWithCookiesNote": {
     "message": "The count of frames which have cookies in them"
   },
-  "dsFramesWithBlockedCookiesNote": {
+  "framesWithBlockedCookiesNote": {
     "message": "The count of frames which have blocked cookies"
   },
-  "dsFramesWithUnblockedCookiesNote": {
+  "framesWithUnblockedCookiesNote": {
     "message": "The count of frames which have unblocked cookies"
   },
-  "dsFencedFramesNote": {
+  "fencedFramesNote": {
     "message": "A fenced frames is a proposed HTML element for embedded content, similar to an iframe. Unlike iframes, a fenced frame restricts communication with its embedding context to allow the frame access to cross-site data without sharing it with the embedding context."
   }
 }

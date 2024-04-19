@@ -23,7 +23,7 @@ import { I18n } from '@ps-analysis-tool/i18n';
 const PrivacySandbox = () => (
   <div data-testid="privacy-sandbox-content" className="h-full w-full">
     <LandingPage
-      title={I18n.getMessage('extPrivacySandbox')}
+      title={I18n.getMessage('privacySandbox')}
       extraClasses="h-[78vh] w-full"
       iframeSrc="https://privacysandbox.com"
       iframeBorderClass="border border-hex-gray dark:border-quartz"

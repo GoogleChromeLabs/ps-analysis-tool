@@ -41,12 +41,12 @@ const ExemptedCookiesSection = () => {
     >
       {data.cookiesStatsComponents.exemptedCookiesLegend.length > 0 && (
         <CookiesMatrix
-          title={I18n.getMessage('extExemptionReasons')}
+          title={I18n.getMessage('exemptionReasons')}
           tabCookies={data.tabCookies}
           tabFrames={data.tabFrames}
           componentData={data.cookiesStatsComponents.exemptedCookiesLegend}
           showHorizontalMatrix={false}
-          infoIconTitle={I18n.getMessage('extExemptionReasonsNote')}
+          infoIconTitle={I18n.getMessage('exemptionReasonsNote')}
         />
       )}
     </CookiesLandingWrapper>

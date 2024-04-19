@@ -15,4 +15,4 @@
  */
 import { I18n } from '@ps-analysis-tool/i18n';
 
-export const UNKNOWN_FRAME_KEY = I18n.getMessage('cmUnknownFrames');
+export const UNKNOWN_FRAME_KEY = I18n.getMessage('unknownFrames');

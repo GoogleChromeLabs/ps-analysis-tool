@@ -104,7 +104,7 @@ class SynchnorousCookieStore {
             priority:
               cookie.parsedCookie?.priority ??
               this.tabsData[tabId][cookieKey].parsedCookie?.priority ??
-              I18n.getMessage('extMedium'),
+              I18n.getMessage('medium'),
             partitionKey:
               cookie.parsedCookie?.partitionKey ??
               this.tabsData[tabId][cookieKey].parsedCookie?.partitionKey,

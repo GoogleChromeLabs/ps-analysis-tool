@@ -47,8 +47,8 @@ const AssociatedSites = ({
     <div className="p-3">
       <div className="flex justify-between items-center">
         <p className="text-base flex items-center gap-2 ">
-          {I18n.getMessage('extAssociatedSubset')}
-          <span title={I18n.getMessage('extAssociatedDomainsLimit')}>
+          {I18n.getMessage('associatedSubset')}
+          <span title={I18n.getMessage('associatedDomainsLimit')}>
             <InfoIcon className="fill-granite-gray" />
           </span>
         </p>
@@ -60,7 +60,7 @@ const AssociatedSites = ({
             <div key={idx} className="flex gap-10 my-5">
               <div className="flex-1">
                 <RWSInput
-                  inputLabel={I18n.getMessage('extAssociatedDomainIdx', [
+                  inputLabel={I18n.getMessage('associatedDomainIdx', [
                     (idx + 1).toString(),
                   ])}
                   inputValue={url}
@@ -78,11 +78,11 @@ const AssociatedSites = ({
               </div>
               <div className="flex-1">
                 <RWSInput
-                  inputLabel={I18n.getMessage('extRationaleDomainCount', [
+                  inputLabel={I18n.getMessage('rationaleDomainCount', [
                     (idx + 1).toString(),
                   ])}
                   inputValue={rationale}
-                  inputPlaceholder={I18n.getMessage('extAffiliationHeading')}
+                  inputPlaceholder={I18n.getMessage('affiliationHeading')}
                   inputChangeHandler={(e) => {
                     setAssociatedSites({
                       idx,
@@ -93,7 +93,7 @@ const AssociatedSites = ({
                   error={rationaleError}
                   formValidationFailed={formValidationFailed}
                 />
-                <span>{I18n.getMessage('extAffiliationNote')}</span>
+                <span>{I18n.getMessage('affiliationNote')}</span>
               </div>
               <div className="flex items-center">
                 <RemoveButton onClick={() => removeAssociatedSite(idx)} />

@@ -28,7 +28,7 @@ import { I18n } from '@ps-analysis-tool/i18n';
 const PrivateAdvertising = () => {
   return (
     <LandingPage
-      title={I18n.getMessage('extPrivateAdvertising')}
+      title={I18n.getMessage('privateAdvertising')}
       iframeSrc="https://privacysandbox.info/en/privacy-sandbox/measure-digital-ads"
       extraClasses="h-[78vh] w-full"
     />

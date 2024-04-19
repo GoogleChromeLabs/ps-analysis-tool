@@ -47,13 +47,13 @@ const Technologies = ({ selectedSite }: TechnologiesProps) => {
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
-        header: I18n.getMessage('cdName'),
+        header: I18n.getMessage('name'),
         accessorKey: 'name',
         cell: (info: InfoType) => info,
         enableHiding: false,
       },
       {
-        header: I18n.getMessage('cdDescription'),
+        header: I18n.getMessage('description'),
         accessorKey: 'description',
         cell: (info: InfoType) => (
           <p title={info as string} className="truncate">
@@ -62,19 +62,19 @@ const Technologies = ({ selectedSite }: TechnologiesProps) => {
         ),
       },
       {
-        header: I18n.getMessage('cdConfidence'),
+        header: I18n.getMessage('confidence'),
         accessorKey: 'confidence',
         cell: (info: InfoType) => (
           <span className="w-full flex justify-center">{info + '%'}</span>
         ),
       },
       {
-        header: I18n.getMessage('cdWebsite'),
+        header: I18n.getMessage('website'),
         accessorKey: 'website',
         cell: (info: InfoType) => info,
       },
       {
-        header: I18n.getMessage('cdCategory'),
+        header: I18n.getMessage('category'),
         accessorKey: 'categories',
         cell: (info: InfoType) =>
           (info as TechnologyData['categories']).map((i) => i.name).join(' | '),
@@ -135,7 +135,7 @@ const Technologies = ({ selectedSite }: TechnologiesProps) => {
             {selectedRow.name && (
               <>
                 <p className="font-bold text-granite-gray dark:text-manatee mb-1 text-semibold flex items-center">
-                  <span>{I18n.getMessage('cdTechnologyDetails')}</span>
+                  <span>{I18n.getMessage('technologyDetails')}</span>
                 </p>
                 <p className="mb-4 break-words text-outer-space-crayola dark:text-bright-gray">
                   {selectedRow.name}
@@ -144,17 +144,17 @@ const Technologies = ({ selectedSite }: TechnologiesProps) => {
             )}
             <>
               <p className="font-bold text-granite-gray dark:text-manatee mb-1">
-                {I18n.getMessage('cdDescription')}
+                {I18n.getMessage('description')}
               </p>
               <p className="text-outer-space-crayola dark:text-bright-gray">
-                {selectedRow?.description || I18n.getMessage('cdNoDescription')}
+                {selectedRow?.description || I18n.getMessage('noDescription')}
               </p>
             </>
           </div>
         ) : (
           <div className="h-full p-8 flex items-center">
             <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">
-              {I18n.getMessage('cdSelectRowToPreview')}
+              {I18n.getMessage('selectRowToPreview')}
             </p>
           </div>
         )}

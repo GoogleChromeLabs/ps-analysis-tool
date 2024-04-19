@@ -67,8 +67,8 @@ const App: React.FC = () => {
   }));
 
   const cdpLabel = isUsingCDP
-    ? I18n.getMessage('extDisableCDP')
-    : I18n.getMessage('extEnableCDP');
+    ? I18n.getMessage('disableCDP')
+    : I18n.getMessage('enableCDP');
 
   if (onChromeUrl) {
     return (
@@ -80,16 +80,16 @@ const App: React.FC = () => {
           enabled={isUsingCDP}
         />
         <p className="font-bold text-lg mb-2">
-          {I18n.getMessage('extNoMoreAnalysis')}
+          {I18n.getMessage('noMoreAnalysis')}
         </p>
         <p className="text-chart-label text-xs">
-          {I18n.getMessage('extEmptyCookieJar')}
+          {I18n.getMessage('emptyCookieJar')}
         </p>
         <div className="absolute right-0 bottom-0 w-full">
           {settingsChanged && (
             <ToastMessage
               additionalStyles="text-sm"
-              text={I18n.getMessage('extSettingsChanged')}
+              text={I18n.getMessage('settingsChanged')}
               onClick={handleSettingsChange}
               textAdditionalStyles="xxs:p-1 text-xxs leading-5"
             />
@@ -125,13 +125,13 @@ const App: React.FC = () => {
         />
         <Button
           onClick={changeListeningToThisTab}
-          text={I18n.getMessage('extAnalyzeThisTab')}
+          text={I18n.getMessage('analyzeThisTab')}
         />
         <div className="absolute right-0 bottom-0 w-full">
           {settingsChanged && (
             <ToastMessage
               additionalStyles="text-sm"
-              text={I18n.getMessage('extSettingsChanged')}
+              text={I18n.getMessage('settingsChanged')}
               onClick={handleSettingsChange}
               textAdditionalStyles="xxs:p-1 text-xxs leading-5"
             />
@@ -153,15 +153,15 @@ const App: React.FC = () => {
           setEnabled={setUsingCDP}
           enabled={isUsingCDP}
         />
-        <p className="font-bold text-lg">{I18n.getMessage('extNoCookies')}</p>
+        <p className="font-bold text-lg">{I18n.getMessage('noCookies')}</p>
         <p className="text-chart-label text-xs">
-          {I18n.getMessage('extTryReloading')}
+          {I18n.getMessage('tryReloading')}
         </p>
         <div className="absolute right-0 bottom-0 w-full">
           {settingsChanged && (
             <ToastMessage
               additionalStyles="text-sm"
-              text={I18n.getMessage('extSettingsChanged')}
+              text={I18n.getMessage('settingsChanged')}
               onClick={handleSettingsChange}
               textAdditionalStyles="xxs:p-1 text-xxs leading-5"
             />
@@ -185,14 +185,14 @@ const App: React.FC = () => {
           <CirclePieChart
             centerCount={cookieStats.firstParty.total}
             data={statsComponents.firstParty}
-            title={I18n.getMessage('extFirstPartyCookies')}
+            title={I18n.getMessage('firstPartyCookies')}
           />
         </div>
         <div className="w-32 text-center">
           <CirclePieChart
             centerCount={cookieStats.thirdParty.total}
             data={statsComponents.thirdParty}
-            title={I18n.getMessage('extThirdPartyCookies')}
+            title={I18n.getMessage('thirdPartyCookies')}
           />
         </div>
       </div>
@@ -201,14 +201,14 @@ const App: React.FC = () => {
       </div>
       <div className="w-full text-center">
         <p className="text-chart-label text-xs">
-          {I18n.getMessage('extInspectInPSATPanel')}
+          {I18n.getMessage('inspectInPSATPanel')}
         </p>
       </div>
       <div className="absolute right-0 bottom-0 w-full">
         {settingsChanged && (
           <ToastMessage
             additionalStyles="text-sm"
-            text={I18n.getMessage('extSettingsChanged')}
+            text={I18n.getMessage('settingsChanged')}
             onClick={handleSettingsChange}
             textAdditionalStyles="xxs:p-1 text-xxs leading-5"
           />

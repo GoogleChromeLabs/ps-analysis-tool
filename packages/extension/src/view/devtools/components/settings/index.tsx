@@ -47,7 +47,7 @@ const Settings = () => {
             className="flex gap-2 text-2xl font-bold items-baseline dark:text-bright-gray cursor-pointer"
             onClick={() => setOpen((prevOpen) => !prevOpen)}
           >
-            <h1 className="text-left">{I18n.getMessage('extSettings')}</h1>
+            <h1 className="text-left">{I18n.getMessage('settings')}</h1>
             <div>
               <ArrowUp
                 className={classNames(open && 'rotate-180 -translate-y-1')}

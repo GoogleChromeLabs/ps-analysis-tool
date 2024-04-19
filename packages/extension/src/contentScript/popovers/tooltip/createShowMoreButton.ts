@@ -31,7 +31,7 @@ const createShowMoreButton = (): HTMLElement => {
     'ps-tooltip-info-toggle-btn',
     'ps-tooltip-compact'
   );
-  tooltipShowButton.innerText = I18n.getMessage('extShowMore');
+  tooltipShowButton.innerText = I18n.getMessage('showMore');
 
   tooltipShowButton.onclick = (event) => {
     const showMoreButton = event.target as HTMLElement;
@@ -53,7 +53,7 @@ const createShowMoreButton = (): HTMLElement => {
     const isCompact = showMoreButton.classList.contains('ps-tooltip-compact');
 
     if (isCompact) {
-      showMoreButton.innerText = I18n.getMessage('extShowLess');
+      showMoreButton.innerText = I18n.getMessage('showLess');
       showMoreButton.classList.remove('ps-tooltip-compact');
       const hiddenElements = tooltipContainer.querySelectorAll('.hidden');
       hiddenElements.forEach((element) => {
@@ -61,7 +61,7 @@ const createShowMoreButton = (): HTMLElement => {
       });
       allowedFeatures.innerText = expandedAllowedFeatures ?? 'N/A';
     } else {
-      showMoreButton.innerText = I18n.getMessage('extShowMore');
+      showMoreButton.innerText = I18n.getMessage('showMore');
       showMoreButton.classList.add('ps-tooltip-compact');
       const compactViewHiddenElements =
         tooltipContainer.querySelectorAll('.ps-compact');

@@ -53,7 +53,7 @@ const ChipsBar = () => {
         >
           <StopIcon className="text-gray min-w-[14px] min-h-[14px]" />
           <span className="ml-1 mr-2 dark:text-bright-gray bg-transparent">
-            {I18n.getMessage('dsClearAll')}
+            {I18n.getMessage('clearAll')}
           </span>
           <div className="w-[1px] bg-gainsboro dark:bg-quartz h-[20px]"></div>
         </button>

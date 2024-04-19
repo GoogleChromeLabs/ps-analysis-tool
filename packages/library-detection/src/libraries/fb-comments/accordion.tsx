@@ -39,13 +39,13 @@ const FBCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
 
   return (
     <Accordion
-      title={I18n.getMessage('ldFBComments')}
+      title={I18n.getMessage('fBComments')}
       isLoading={false}
       featuresText=""
     >
       <DetectionMessage
-        libraryName={I18n.getMessage('ldFBCommentsPlugin')}
-        provider={I18n.getMessage('ldFB')}
+        libraryName={I18n.getMessage('fBCommentsPlugin')}
+        provider={I18n.getMessage('fB')}
         supportURL={FB_COMMENTS_HELP_URL}
       />
     </Accordion>

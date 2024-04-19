@@ -1,5 +1,5 @@
 {
-  "clAnalyzing": {
+  "analyzing": {
     "message": "Analyzing $type$ in urls $one$ - $two$",
     "placeholders": {
       "type": {
@@ -16,7 +16,7 @@
       }
     }
   },
-  "clDoneAnalyzing": {
+  "doneAnalyzing": {
     "message": "Done analyzing $type$ in urls $one$ - $two$",
     "placeholders": {
       "type": {
@@ -33,22 +33,22 @@
       }
     }
   },
-  "clErrorParsingSitemap": {
+  "errorParsingSitemap": {
     "message": "Error: error parsing sitemap"
   },
-  "clParsingSitemap": {
+  "parsingSitemap": {
     "message": "Parsing sitemap"
   },
-  "clDoneParsingSitemap": {
+  "doneParsingSitemap": {
     "message": "Done parsing sitemap"
   },
-  "clParsingCSV": {
+  "parsingCSV": {
     "message": "Parsing CSV file"
   },
-  "clCSVHasNoUrls": {
+  "cSVHasNoUrls": {
     "message": "Provided CSV file has no urls"
   },
-  "clNotValidUrl": {
+  "notValidUrl": {
     "message": "$url$ is not a valid url",
     "placeholders": {
       "url": {
@@ -57,25 +57,25 @@
       }
     }
   },
-  "clDoneParsingCSV": {
+  "doneParsingCSV": {
     "message": "Done parsing CSV file"
   },
-  "clParsingXML": {
+  "parsingXML": {
     "message": "Parsing XML file"
   },
-  "clXMLSchemaNotSupported": {
+  "xMLSchemaNotSupported": {
     "message": "Sorry, XML Schema for Sitemap index files is not supported by the tool"
   },
-  "clNoUrlsInXMLUrlset": {
+  "noUrlsInXMLUrlset": {
     "message": "Provided XML files has no urls in its urlset"
   },
-  "clNoUrlsInXML": {
+  "noUrlsInXML": {
     "message": "Provided XML files has no urls"
   },
-  "clDoneParsingXML": {
+  "doneParsingXML": {
     "message": "Done parsing XML file"
   },
-  "clErrorParsingCSV": {
+  "errorParsingCSV": {
     "message": "Error: error parsing CSV file"
   },
   "cliInvalidPort": {
@@ -84,7 +84,7 @@
   "cliProvideCLIArguments": {
     "message": "Please provide one and only one of the following\n a) URL of a site (-u or --url)\n b) URL of a sitemap (-s or --sitemap-url)\n c) Path to a CSV file (-c or --csv-path)\n d) Path to an XML file (-p or --sitemap-path)"
   },
-  "clNoFileFound": {
+  "noFileFound": {
     "message": "No file at $path$",
     "placeholders": {
       "path": {
@@ -93,7 +93,7 @@
       }
     }
   },
-  "clNotValidNumber": {
+  "notValidNumber": {
     "message": "$number$ is not a valid numberic value",
     "placeholders": {
       "number": {
@@ -111,7 +111,7 @@
       }
     }
   },
-  "clDirNotExists": {
+  "dirNotExists": {
     "message": "$outDir$ does not exist, creating now.",
     "placeholders": {
       "outDir": {
@@ -120,43 +120,43 @@
       }
     }
   },
-  "clToTest3PCookies": {
+  "toTest3PCookies": {
     "message": "CLI to test a URL for 3p cookies"
   },
-  "clUrlOfSite": {
+  "urlOfSite": {
     "message": "URL of a site"
   },
-  "clUrlOfSitemap": {
+  "urlOfSitemap": {
     "message": "URL of a sitemap"
   },
-  "clPathToCSV": {
+  "pathToCSV": {
     "message": "Path to a CSV file with a set of URLs."
   },
-  "clPathToSitemap": {
+  "pathToSitemap": {
     "message": "Path to a sitemap saved in the file system"
   },
-  "clPortForServer": {
+  "portForServer": {
     "message": "A port for the CLI dashboard server."
   },
-  "clUrlLimit": {
+  "urlLimit": {
     "message": "No of URLs to analyze"
   },
-  "clNonHeadless": {
+  "nonHeadless": {
     "message": "Flag for running puppeteer in non-headless mode"
   },
-  "clNoPrompts": {
+  "noPrompts": {
     "message": "Flags for skipping all prompts. Default options will be used"
   },
-  "clNoTechnology": {
+  "noTechnology": {
     "message": "Flags for skipping technology analysis."
   },
-  "clOutDir": {
+  "outDir": {
     "message": "Directory path where the analysis data will be stored"
   },
-  "clAcceptBanner": {
+  "acceptBanner": {
     "message": "This will accept the GDPR banner if present."
   },
-  "clReportServedAt": {
+  "reportServedAt": {
     "message": "Report: $url$",
     "placeholders": {
       "url": {
@@ -165,7 +165,7 @@
       }
     }
   },
-  "clErrorInPort": {
+  "errorInPort": {
     "message": "Error: Report server port $port$ already in use. You might be already running CLI",
     "placeholders": {
       "port": {
@@ -174,7 +174,7 @@
       }
     }
   },
-  "clUrlCountPrompt": {
+  "urlCountPrompt": {
     "message": "Provided $type$ has $urlsLength$ pages. Please enter the number of pages you want to analyze (Default $urlsLength$):",
     "placeholders": {
       "type": {
@@ -187,7 +187,7 @@
       }
     }
   },
-  "clAnalyzingUrls": {
+  "analyzingUrls": {
     "message": "Analysing $numberOfUrls$ urls.",
     "placeholders": {
       "numberOfUrls": {
@@ -196,7 +196,7 @@
       }
     }
   },
-  "clAnalyzingAllUrls": {
+  "analyzingAllUrls": {
     "message": "Analysing all $urlsLength$ urls.",
     "placeholders": {
       "urlsLength": {
@@ -205,28 +205,28 @@
       }
     }
   },
-  "clAnalyzingCookies": {
+  "analyzingCookies": {
     "message": "Analysing cookies on first site visit"
   },
-  "clDoneAnalyzingCookies": {
+  "doneAnalyzingCookies": {
     "message": "Done analyzing cookies."
   },
-  "clAnalyzingTechnologies": {
+  "analyzingTechnologies": {
     "message": "Analyzing technologies"
   },
-  "clDoneAnalyzingTechonlogies": {
+  "doneAnalyzingTechonlogies": {
     "message": "Done analyzing technologies"
   },
-  "clUnknown": {
+  "unknown": {
     "message": "Unknown"
   },
-  "clUncategorized": {
+  "uncategorized": {
     "message": "Uncategorized"
   },
-  "clLax": {
+  "lax": {
     "message": "Lax"
   },
-  "clSession": {
+  "session": {
     "message": "Session"
   }
 }

@@ -39,13 +39,13 @@ const FBLikesAccordion = ({ domQueryMatches }: AccordionProps) => {
 
   return (
     <Accordion
-      title={I18n.getMessage('ldFBLike')}
+      title={I18n.getMessage('fBLike')}
       isLoading={false}
       featuresText=""
     >
       <DetectionMessage
-        libraryName={I18n.getMessage('ldFBLike')}
-        provider={I18n.getMessage('ldFB')}
+        libraryName={I18n.getMessage('fBLike')}
+        provider={I18n.getMessage('fB')}
         supportURL={FB_LIKES_HELP_URL}
       />
     </Accordion>

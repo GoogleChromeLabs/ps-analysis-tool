@@ -23,7 +23,7 @@ import { I18n } from '@ps-analysis-tool/i18n';
 const SiteBoundaries = () => {
   return (
     <LandingPage
-      title={I18n.getMessage('extSiteBoundaries')}
+      title={I18n.getMessage('siteBoundaries')}
       iframeSrc="https://privacysandbox.info/en/privacy-sandbox/strengthen-privacy-boundaries"
       extraClasses="h-[78vh] w-full"
     />

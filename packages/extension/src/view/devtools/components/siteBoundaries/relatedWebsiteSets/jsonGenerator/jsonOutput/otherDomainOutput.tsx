@@ -44,15 +44,13 @@ const OtherDomainOutput = ({
         <p className="text-xs leading-6 min-w-[1.5rem] min-h-[1.5rem] flex items-center justify-center bg-bright-navy-blue text-white rounded-full">
           2
         </p>
-        <p className="text-base">
-          {I18n.getMessage('extAddToRwsOtherDomains')}
-        </p>
+        <p className="text-base">{I18n.getMessage('addToRwsOtherDomains')}</p>
       </div>
       <div id="domainsListOutput">
         <ul className="list-disc">
           {primaryWellKnownOutput && primaryWellKnownOutput.associatedSites && (
             <div className="mb-2">
-              <p className="text-sm">{I18n.getMessage('extAssociatedSites')}</p>
+              <p className="text-sm">{I18n.getMessage('associatedSites')}</p>
               <div className="pl-4">
                 {primaryWellKnownOutput.associatedSites.map((url) => (
                   <li key={url} className="text-sm">
@@ -64,7 +62,7 @@ const OtherDomainOutput = ({
           )}
           {primaryWellKnownOutput && primaryWellKnownOutput.serviceSites && (
             <div className="mb-2">
-              <p className="text-sm">{I18n.getMessage('extServiceSites')}</p>
+              <p className="text-sm">{I18n.getMessage('serviceSites')}</p>
               <div className="pl-4">
                 {primaryWellKnownOutput.serviceSites.map((url) => (
                   <li key={url} className="text-sm">
@@ -76,7 +74,7 @@ const OtherDomainOutput = ({
           )}
           {primaryWellKnownOutput && primaryWellKnownOutput.ccTLDs && (
             <div className="mb-2">
-              <p className="text-sm">{I18n.getMessage('extCountrySites')}</p>
+              <p className="text-sm">{I18n.getMessage('countrySites')}</p>
               <div className="pl-4">
                 {Object.values(primaryWellKnownOutput.ccTLDs).map((cctlds) =>
                   cctlds.map((cctld) => (

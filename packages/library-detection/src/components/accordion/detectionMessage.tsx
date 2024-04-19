@@ -34,7 +34,7 @@ const DetectionMessage = ({
     <p
       className="dark:text-bright-gray"
       dangerouslySetInnerHTML={{
-        __html: I18n.getMessage('ldDetectionMessage', [
+        __html: I18n.getMessage('detectionMessage', [
           libraryName,
           provider,
           `<a

@@ -49,7 +49,7 @@ const CookiesLandingContainer = ({
   const sections: Array<CookiesLandingSection> = useMemo(
     () => [
       {
-        name: I18n.getMessage('cdCookies'),
+        name: I18n.getMessage('cookies'),
         link: 'cookies',
         panel: {
           Element: CookiesSection,
@@ -60,7 +60,7 @@ const CookiesLandingContainer = ({
         },
       },
       {
-        name: I18n.getMessage('cdBlockedCookies'),
+        name: I18n.getMessage('blockedCookies'),
         link: 'blocked-cookies',
         panel: {
           Element: BlockedCookiesSection,

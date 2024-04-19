@@ -64,7 +64,7 @@ const SubList = ({
       {isSelectAllFilterEnabled && (
         <Option
           filterKey={filterKey}
-          filterValue={I18n.getMessage('dsSelectAll')}
+          filterValue={I18n.getMessage('selectAll')}
           selected={isSelectAllFilterSelected}
           toggleFilterSelection={() => toggleSelectAllFilter(filterKey)}
           isExpanded={true}

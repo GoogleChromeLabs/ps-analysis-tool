@@ -67,8 +67,8 @@ export const LEGEND_DESCRIPTION: LegendData = {
     'header_ExcludeSameSiteNoneInsecure',
     'body_ExcludeSameSiteNoneInsecure',
   ]),
-  ExcludeSameSiteLax: I18n.getMessage('dsSomethingWentWrong'),
-  ExcludeSameSiteStrict: I18n.getMessage('dsSomethingWentWrong'),
+  ExcludeSameSiteLax: I18n.getMessage('somethingWentWrong'),
+  ExcludeSameSiteStrict: I18n.getMessage('somethingWentWrong'),
   ExcludeInvalidSameParty: I18n.getFormattedMessages([
     'header_ExcludeInvalidSameParty',
     'body_ExcludeInvalidSameParty',
@@ -90,15 +90,15 @@ export const LEGEND_DESCRIPTION: LegendData = {
   ExcludeThirdPartyPhaseout: I18n.getFormattedMessages([
     'body_ExcludeThirdPartyPhaseout',
   ]),
-  'Total frames': I18n.getMessage('dsTotalFramesNote'),
-  'Frames with cookies': I18n.getMessage('dsFramesWithCookiesNote'),
+  'Total frames': I18n.getMessage('totalFramesNote'),
+  'Frames with cookies': I18n.getMessage('framesWithCookiesNote'),
   'Frames with blocked cookies': I18n.getMessage(
-    'dsFramesWithBlockedCookiesNote'
+    'framesWithBlockedCookiesNote'
   ),
   'Frames with unblocked cookies': I18n.getMessage(
-    'dsFramesWithUnblockedCookiesNote'
+    'framesWithUnblockedCookiesNote'
   ),
-  'Fenced frames': I18n.getMessage('dsFencedFramesNote'),
+  'Fenced frames': I18n.getMessage('fencedFramesNote'),
   UserSetting: I18n.getMessage('exemptionReasonUserSetting'),
   TPCDMetadata: I18n.getMessage('exemptionReasonTPCDMetadata'),
   TPCDDeprecationTrial: I18n.getMessage('exemptionReasonTPCDDeprecationTrial'),
@@ -113,7 +113,7 @@ export const LEGEND_DESCRIPTION: LegendData = {
 
 export const EMPTY_FRAME_COUNT = [
   {
-    title: I18n.getMessage('dsFrames'),
+    title: I18n.getMessage('frames'),
     count: 0,
     data: [
       {
@@ -134,25 +134,25 @@ export const EMPTY_FRAME_COUNT = [
 
 export const EMPTY_FRAME_LEGEND = [
   {
-    label: I18n.getMessage('dsTotalFrames'),
+    label: I18n.getMessage('totalFrames'),
     count: 0,
     color: '#25ACAD',
     countClassName: 'text-greenland-green',
   },
   {
-    label: I18n.getMessage('dsFramesWithCookies'),
+    label: I18n.getMessage('framesWithCookies'),
     count: 0,
     color: '#C5A06A',
     countClassName: 'text-good-life',
   },
   {
-    label: I18n.getMessage('dsFramesWithBlockedCookies'),
+    label: I18n.getMessage('framesWithBlockedCookies'),
     count: 0,
     color: '#AF7AA3',
     countClassName: 'text-victorian-violet',
   },
   {
-    label: I18n.getMessage('dsFramesWithUnblockedCookies'),
+    label: I18n.getMessage('framesWithUnblockedCookies'),
     count: 0,
     color: '#F54021',
     countClassName: 'text-strawberry-spinach-red',

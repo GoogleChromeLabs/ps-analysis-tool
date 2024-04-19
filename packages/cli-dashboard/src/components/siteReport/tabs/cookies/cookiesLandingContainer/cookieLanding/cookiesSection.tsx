@@ -64,8 +64,8 @@ const CookiesSection = ({ tabCookies, tabFrames }: CookiesSectionProps) => {
         (cookieStats?.firstParty.total === 0 &&
           cookieStats?.thirdParty.total === 0 && (
             <MessageBox
-              headerText={I18n.getMessage('cdNoCookies')}
-              bodyText={I18n.getMessage('cdTryReloading')}
+              headerText={I18n.getMessage('noCookies')}
+              bodyText={I18n.getMessage('tryReloading')}
             />
           ))}
       <CookiesMatrix

@@ -105,7 +105,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
       psData.children[SIDEBAR_ITEMS_KEYS.COOKIES].children = Object.keys(
         tabFrames || {}
       ).reduce<SidebarItems>((acc, url) => {
-        const popupTitle = I18n.getMessage('extCookiesUsedByFrame', [url]);
+        const popupTitle = I18n.getMessage('cookiesUsedByFrame', [url]);
 
         acc[url] = {
           title: url,
@@ -242,7 +242,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
           {settingsChanged && (
             <ToastMessage
               additionalStyles="text-sm"
-              text={I18n.getMessage('extSettingsChanged')}
+              text={I18n.getMessage('settingsChanged')}
               onClick={handleSettingsChange}
               textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
             />

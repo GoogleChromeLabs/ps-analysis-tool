@@ -27,7 +27,7 @@ const RestrictionInfoContainer = () => (
     <p
       className="mb-7"
       dangerouslySetInnerHTML={{
-        __html: I18n.getMessage('extFacilitateTesting', [
+        __html: I18n.getMessage('facilitateTesting', [
           `<a 
 						className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline"
 						target="_blank"
@@ -44,7 +44,7 @@ const RestrictionInfoContainer = () => (
     </div>
     <p
       dangerouslySetInnerHTML={{
-        __html: I18n.getMessage('extFaciliatedTestingPeriod', [
+        __html: I18n.getMessage('faciliatedTestingPeriod', [
           `<a 
 				className="text-bright-navy-blue dark:text-jordy-blue hover:opacity-80 underline"
 				target="_blank"

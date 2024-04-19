@@ -78,7 +78,7 @@ const SettingsContainer = () => {
       <div className="flex items-center flex-row pl-3 mb-2 gap-x-3">
         <Gear className="dark:text-bright-gray" />
         <span className="text-base font-bold dark:text-bright-gray">
-          {I18n.getMessage('extPSATSettings')}
+          {I18n.getMessage('pSATSettings')}
         </span>
       </div>
       <div className="rounded w-full divide-y divide-hex-gray dark:divide-quartz px-2 border border-american-silver dark:border-quartz">

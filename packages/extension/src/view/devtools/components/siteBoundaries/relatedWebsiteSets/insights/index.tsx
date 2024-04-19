@@ -83,22 +83,22 @@ const Insights = () => {
     <div className="text-raisin-black dark:text-bright-gray">
       {loading ? (
         <div className="flex gap-2 items-center justify-start">
-          <p className="text-sm">{I18n.getMessage('extLoading')}...</p>
+          <p className="text-sm">{I18n.getMessage('loading')}...</p>
           <div className="w-6 h-6 rounded-full animate-spin border-t-transparent border-solid border-blue-700 border-2" />
         </div>
       ) : (
         <div className="space-y-3">
           <h3 className="text-xl font-semibold">
-            {I18n.getMessage('extMembership')}
+            {I18n.getMessage('membership')}
           </h3>
           {insightsData?.isURLInRWS ? (
             <>
               <p className="text-lg font-medium">
                 <span className="font-serif text-green-700">✓</span>{' '}
-                {I18n.getMessage('extBelongsToRWS')}
+                {I18n.getMessage('belongsToRWS')}
               </p>
               <p className="text-sm">
-                {I18n.getMessage('extPrimaryDomain')}:{' '}
+                {I18n.getMessage('primaryDomain')}:{' '}
                 <a
                   href={insightsData.relatedWebsiteSet?.primary}
                   target="_blank"
@@ -113,7 +113,7 @@ const Insights = () => {
                 <>
                   {insightsData.isccTLD ? (
                     <p className="text-sm">
-                      {I18n.getMessage('extSiteccTldOf')}
+                      {I18n.getMessage('siteccTldOf')}
                       <a
                         href={insightsData.relatedWebsiteSet?.ccTLDParent}
                         target="_blank"
@@ -135,7 +135,7 @@ const Insights = () => {
                         )
                         .map(([domain, value]) => (
                           <p key={domain} className="text-sm">
-                            {I18n.getMessage('extRationale')}:{' '}
+                            {I18n.getMessage('rationale')}:{' '}
                             <span className="underline">{value as string}</span>
                           </p>
                         ))}
@@ -143,16 +143,16 @@ const Insights = () => {
                   )}
                 </>
               ) : (
-                <p>{I18n.getMessage('extRWSPrimaryDomain')}</p>
+                <p>{I18n.getMessage('rWSPrimaryDomain')}</p>
               )}
 
               <div className="flex flex-row gap-4 overflow-auto">
                 <SitesList
-                  title={I18n.getMessage('extAssociatedSites')}
+                  title={I18n.getMessage('associatedSites')}
                   sites={insightsData.relatedWebsiteSet?.associatedSites || []}
                 />
                 <SitesList
-                  title={I18n.getMessage('extServiceSites')}
+                  title={I18n.getMessage('serviceSites')}
                   sites={insightsData.relatedWebsiteSet?.serviceSites || []}
                 />
                 <SitesList title="ccTLDs" sites={cctlds} />
@@ -161,7 +161,7 @@ const Insights = () => {
           ) : (
             <p className="text-lg font-medium flex items-center gap-2">
               <span className="text-red-500">✗</span>
-              {I18n.getMessage('extNotBelongToRWS')}
+              {I18n.getMessage('notBelongToRWS')}
             </p>
           )}
         </div>

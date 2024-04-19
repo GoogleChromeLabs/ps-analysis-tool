@@ -24,7 +24,7 @@ const Fingerprinting = () => {
   return (
     <div data-testid="fingerprinting-content" className="h-full w-full">
       <LandingPage
-        title={I18n.getMessage('extUserAgentReduction')}
+        title={I18n.getMessage('userAgentReduction')}
         psInfoKey={PSInfoKey.UserAgentReduction}
         extraClasses="max-w-2xl h-fit"
       />

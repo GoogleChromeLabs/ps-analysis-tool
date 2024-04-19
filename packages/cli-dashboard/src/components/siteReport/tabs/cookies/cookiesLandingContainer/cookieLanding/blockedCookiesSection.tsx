@@ -46,11 +46,11 @@ const BlockedCookiesSection = ({
   const cookiesStatsComponents = prepareCookieStatsComponents(cookieStats);
   const blockedCookieDataMapping: DataMapping[] = [
     {
-      title: I18n.getMessage('cdBlockedCookies'),
+      title: I18n.getMessage('blockedCookies'),
       count: cookieStats.blockedCookies.total,
       data: cookiesStatsComponents.blocked,
       onClick: () =>
-        selectedItemUpdater(I18n.getMessage('cdSelectAll'), 'blockedReasons'),
+        selectedItemUpdater(I18n.getMessage('selectAll'), 'blockedReasons'),
     },
   ];
   const dataComponents: MatrixComponentProps[] =
@@ -88,9 +88,9 @@ const BlockedCookiesSection = ({
       {dataComponents.length > 0 && (
         <>
           <MatrixContainer
-            title={I18n.getMessage('cdBlockedCookies')}
+            title={I18n.getMessage('blockedCookies')}
             matrixData={dataComponents}
-            infoIconTitle={I18n.getMessage('cdBlockedReasonsNote')}
+            infoIconTitle={I18n.getMessage('blockedReasonsNote')}
           />
           <div className="flex flex-col mt-8">
             <div className="pt-4">

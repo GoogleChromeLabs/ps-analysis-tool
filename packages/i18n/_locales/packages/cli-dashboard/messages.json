@@ -1,134 +1,125 @@
 {
-  "cdSitemapReport": {
+  "sitemapReport": {
     "message": "Sitemap report"
   },
-  "cdCookieIssues": {
+  "cookieIssues": {
     "message": "Cookie Issues"
   },
-  "cdCookies": {
+  "cookies": {
     "message": "Cookies"
   },
-  "cdTechnologies": {
+  "technologies": {
     "message": "Technologies"
   },
-  "cdBlockedCookies": {
+  "blockedCookies": {
     "message": "Blocked Cookies"
   },
-  "cdBlockedReasons": {
+  "blockedReasons": {
     "message": "Blocked Reasons"
   },
-  "cdBlockedReasonsNote": {
+  "blockedReasonsNote": {
     "message": "Cookies that have been blocked by the browser. (The total count might not be same as cumulative reason count because cookie might be blocked due to more than 1 reason)."
   },
-  "cdSelectAll": {
+  "selectAll": {
     "message": "All"
   },
-  "cdNoCookies": {
+  "noCookies": {
     "message": "No cookies found on this page"
   },
-  "cdTryReloading": {
+  "tryReloading": {
     "message": "Please try reloading the page"
   },
-  "cdDownloadReport": {
+  "downloadReport": {
     "message": "Download Report"
   },
-  "cdName": {
+  "name": {
     "message": "Name"
   },
-  "cdDescription": {
+  "description": {
     "message": "Description"
   },
-  "cdConfidence": {
+  "confidence": {
     "message": "Confidence"
   },
-  "cdWebsite": {
+  "website": {
     "message": "Website"
   },
-  "cdCategory": {
+  "category": {
     "message": "Category"
   },
-  "cdTechnologyDetails": {
+  "technologyDetails": {
     "message": "Technology Details"
   },
-  "cdSelectRowToPreview": {
+  "selectRowToPreview": {
     "message": "Select row to preview its value"
   },
-  "cdNoDescription": {
+  "noDescription": {
     "message": "No description available"
   },
-  "cdScope": {
+  "scope": {
     "message": "Scope"
   },
-  "cdDomain": {
+  "domain": {
     "message": "Domain"
   },
-  "cdPartitionKey": {
+  "partitionKey": {
     "message": "Partition Key"
   },
-  "cdSameSite": {
+  "sameSite": {
     "message": "SameSite"
   },
-  "cdPlatform": {
+  "platform": {
     "message": "Platform"
   },
-  "cdHttpOnly": {
+  "httpOnly": {
     "message": "HttpOnly"
   },
-  "cdSecure": {
+  "secure": {
     "message": "Secure"
   },
-  "cdValue": {
+  "value": {
     "message": "Value"
   },
-  "cdPath": {
+  "path": {
     "message": "Path"
   },
-  "cdExpires": {
+  "expires": {
     "message": "Expires / Max-Age"
   },
-  "cdFirstParty": {
+  "firstParty": {
     "message": "First Party"
   },
-  "cdThirdParty": {
+  "thirdParty": {
     "message": "Third Party"
   },
-  "cdSession": {
-    "message": "Session"
-  },
-  "cdTrue": {
+  "true": {
     "message": "True"
   },
-  "cdFalse": {
+  "false": {
     "message": "False"
   },
-  "cdRetentionPeriod": {
+  "retentionPeriod": {
     "message": "Retention Period"
   },
-  "cdShortTerm": {
+  "shortTerm": {
     "message": "Short Term (<24h)"
   },
-  "cdMediumTerm": {
+  "mediumTerm": {
     "message": "Medium Term (24h - 1 week)"
   },
-  "cdLongTerm": {
+  "longTerm": {
     "message": "Long Term (1 week - 1 month)"
   },
-  "cdExtentedTerm": {
+  "extentedTerm": {
     "message": "Extended Term (>1 month)"
   },
-  "cdNoPathProvided": {
+  "noPathProvided": {
     "message": "No path provided"
   },
-  "cdNone": {
+  "none": {
     "message": "None"
   },
-  "cdLax": {
-    "message": "Lax"
-  },
-  "cdStrict": {
+  "strict": {
     "message": "Strict"
-  },
-  "cdUncategorized": {
-    "message": "Uncategorized"
   }
 }

@@ -41,24 +41,24 @@ export default function prepareCookieDataMapping(
 ): DataMapping[] {
   return [
     {
-      title: I18n.getMessage('dsTotalCookies'),
+      title: I18n.getMessage('totalCookies'),
       count: cookieStats.total,
       data: cookiesStatsComponents.legend,
       onClick: () => selectedItemUpdater('', 'isFirstParty'), // title is empty as we don't want to select any filter.
     },
     {
-      title: I18n.getMessage('dsFirstPartyCookies'),
+      title: I18n.getMessage('firstPartyCookies'),
       count: cookieStats.firstParty.total,
       data: cookiesStatsComponents.firstParty,
       onClick: () =>
-        selectedItemUpdater(I18n.getMessage('dsFirstParty'), 'isFirstParty'),
+        selectedItemUpdater(I18n.getMessage('firstParty'), 'isFirstParty'),
     },
     {
-      title: I18n.getMessage('dsThirdPartyCookies'),
+      title: I18n.getMessage('thirdPartyCookies'),
       count: cookieStats.thirdParty.total,
       data: cookiesStatsComponents.thirdParty,
       onClick: () =>
-        selectedItemUpdater(I18n.getMessage('dsThirdParty'), 'isFirstParty'),
+        selectedItemUpdater(I18n.getMessage('thirdParty'), 'isFirstParty'),
     },
   ];
 }

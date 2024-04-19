@@ -82,7 +82,7 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
 
       const keys = selectedItemKey?.split('#') ?? [];
 
-      _data[SIDEBAR_ITEMS_KEYS.COOKIES].title = I18n.getMessage('cdCookies');
+      _data[SIDEBAR_ITEMS_KEYS.COOKIES].title = I18n.getMessage('cookies');
       _data[SIDEBAR_ITEMS_KEYS.COOKIES].panel = {
         Element: CookiesTab,
         props: {
@@ -121,7 +121,7 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
       );
 
       _data[SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES].title =
-        I18n.getMessage('cdCookieIssues');
+        I18n.getMessage('cookieIssues');
       _data[SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES].panel = {
         Element: SiteCookiesWithIssues,
         props: {
@@ -131,7 +131,7 @@ const Layout = ({ selectedSite, setSidebarData }: LayoutProps) => {
 
       if (technologies && technologies.length > 0) {
         _data[SIDEBAR_ITEMS_KEYS.TECHNOLOGIES] = {
-          title: I18n.getMessage('cdTechnologies'),
+          title: I18n.getMessage('technologies'),
           children: {},
           icon: {
             Element: SiteBoundariesIcon,

@@ -24,23 +24,23 @@ import {
 import { I18n } from '@ps-analysis-tool/i18n';
 
 const COOKIES_TABLE_DATA_HEADER = [
-  I18n.getMessage('extName'),
-  I18n.getMessage('extScope'),
-  I18n.getMessage('extDomain'),
-  I18n.getMessage('extPartitionKey'),
-  I18n.getMessage('extSameSite'),
-  I18n.getMessage('extCategory'),
-  I18n.getMessage('extPlatform'),
-  I18n.getMessage('extHttpOnly'),
-  I18n.getMessage('extSecure'),
-  I18n.getMessage('extValue'),
-  I18n.getMessage('extPath'),
-  I18n.getMessage('extExpires'),
-  I18n.getMessage('extIssues'),
-  I18n.getMessage('extGDPRUrl'),
-  I18n.getMessage('extPriority'),
-  I18n.getMessage('extSize'),
-  I18n.getMessage('extBlockingStatus'),
+  I18n.getMessage('name'),
+  I18n.getMessage('scope'),
+  I18n.getMessage('domain'),
+  I18n.getMessage('partitionKey'),
+  I18n.getMessage('sameSite'),
+  I18n.getMessage('category'),
+  I18n.getMessage('platform'),
+  I18n.getMessage('httpOnly'),
+  I18n.getMessage('secure'),
+  I18n.getMessage('Value'),
+  I18n.getMessage('path'),
+  I18n.getMessage('expires'),
+  I18n.getMessage('issues'),
+  I18n.getMessage('gDPRUrl'),
+  I18n.getMessage('priority'),
+  I18n.getMessage('size'),
+  I18n.getMessage('blockingStatus'),
 ];
 
 const generateCookieTableCSV = (cookies: CookieTableData[]): Blob => {
@@ -57,30 +57,30 @@ const generateCookieTableCSV = (cookies: CookieTableData[]): Blob => {
     let status = '';
 
     if ((isInboundBlocked || isOutboundBlocked) && !hasValidBlockedReason) {
-      status = I18n.getMessage('extUndetermined');
+      status = I18n.getMessage('undetermined');
     }
 
     //This should be in the same order as cookieDataHeader
     const recordsArray = [
       cookie.parsedCookie.name,
       cookie.isFirstParty
-        ? I18n.getMessage('extFirstParty')
-        : I18n.getMessage('extThirdParty'),
+        ? I18n.getMessage('firstParty')
+        : I18n.getMessage('thirdParty'),
       cookie.parsedCookie.domain || ' ',
       cookie.parsedCookie.partitionKey || ' ',
       cookie.parsedCookie.samesite,
       cookie.analytics?.category,
       cookie.analytics?.platform,
       cookie.parsedCookie.httponly
-        ? I18n.getMessage('extYes')
-        : I18n.getMessage('extNo'),
+        ? I18n.getMessage('yes')
+        : I18n.getMessage('no'),
       cookie.parsedCookie.secure
-        ? I18n.getMessage('extYes')
-        : I18n.getMessage('extNo'),
+        ? I18n.getMessage('yes')
+        : I18n.getMessage('no'),
       cookie.parsedCookie.value,
       cookie.parsedCookie.path,
       cookie.parsedCookie.expires,
-      cookie.isBlocked ? I18n.getMessage('extYes') : I18n.getMessage('extNo'),
+      cookie.isBlocked ? I18n.getMessage('yes') : I18n.getMessage('no'),
       cookie.analytics?.gdprUrl || 'NA',
       cookie.parsedCookie.priority || ' ',
       cookie.parsedCookie.size?.toString(),

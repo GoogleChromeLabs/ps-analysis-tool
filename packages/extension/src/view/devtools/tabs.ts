@@ -71,7 +71,7 @@ import { I18n } from '@ps-analysis-tool/i18n';
 
 const TABS: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]: {
-    title: I18n.getMessage('extPrivacySandbox'),
+    title: I18n.getMessage('privacySandbox'),
     panel: {
       Element: PrivacySandbox,
     },
@@ -84,7 +84,7 @@ const TABS: SidebarItems = {
     dropdownOpen: true,
     children: {
       [SIDEBAR_ITEMS_KEYS.COOKIES]: {
-        title: I18n.getMessage('extCookies'),
+        title: I18n.getMessage('cookies'),
         icon: {
           Element: CookieIcon,
         },
@@ -95,7 +95,7 @@ const TABS: SidebarItems = {
         dropdownOpen: true,
       },
       [SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES]: {
-        title: I18n.getMessage('extSiteBoundaries'),
+        title: I18n.getMessage('siteBoundaries'),
         panel: {
           Element: SiteBoundaries,
         },
@@ -107,7 +107,7 @@ const TABS: SidebarItems = {
         },
         children: {
           [SIDEBAR_ITEMS_KEYS.CHIPS]: {
-            title: I18n.getMessage('extChips'),
+            title: I18n.getMessage('chips'),
             panel: {
               Element: Chips,
             },
@@ -120,7 +120,7 @@ const TABS: SidebarItems = {
             children: {},
           },
           [SIDEBAR_ITEMS_KEYS.RELATED_WEBSITE_SETS]: {
-            title: I18n.getMessage('extRws'),
+            title: I18n.getMessage('rws'),
             panel: {
               Element: RelatedWebsiteSets,
             },
@@ -135,7 +135,7 @@ const TABS: SidebarItems = {
         },
       },
       [SIDEBAR_ITEMS_KEYS.PRIVATE_ADVERTISING]: {
-        title: I18n.getMessage('extPrivateAdvertising'),
+        title: I18n.getMessage('privateAdvertising'),
         panel: {
           Element: PrivateAdvertising,
         },
@@ -160,7 +160,7 @@ const TABS: SidebarItems = {
             children: {},
           },
           [SIDEBAR_ITEMS_KEYS.ATTRIBUTION]: {
-            title: I18n.getMessage('extAttribution'),
+            title: I18n.getMessage('attribution'),
             panel: {
               Element: Attribution,
             },
@@ -175,7 +175,7 @@ const TABS: SidebarItems = {
         },
       },
       [SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING]: {
-        title: I18n.getMessage('extTrackingProtection'),
+        title: I18n.getMessage('trackingProtection'),
         panel: {
           Element: AntiCovertTracking,
         },
@@ -187,7 +187,7 @@ const TABS: SidebarItems = {
         },
         children: {
           [SIDEBAR_ITEMS_KEYS.BOUNCE_TRACKING]: {
-            title: I18n.getMessage('extBounceTracking'),
+            title: I18n.getMessage('bounceTracking'),
             panel: {
               Element: BounceTracking,
             },
@@ -200,7 +200,7 @@ const TABS: SidebarItems = {
             children: {},
           },
           [SIDEBAR_ITEMS_KEYS.FINGERPRINTING]: {
-            title: I18n.getMessage('extFingerprinting'),
+            title: I18n.getMessage('fingerprinting'),
             panel: {
               Element: Fingerprinting,
             },
@@ -217,7 +217,7 @@ const TABS: SidebarItems = {
     },
   },
   [SIDEBAR_ITEMS_KEYS.FACILITATED_TESTING]: {
-    title: I18n.getMessage('extFacilitatedTesting'),
+    title: I18n.getMessage('facilitatedTesting'),
     panel: {
       Element: FacilitatedTesting,
     },
@@ -237,7 +237,7 @@ const TABS: SidebarItems = {
     children: {},
   },
   [SIDEBAR_ITEMS_KEYS.SETTINGS]: {
-    title: I18n.getMessage('extSettings'),
+    title: I18n.getMessage('settings'),
     panel: {
       Element: Settings,
     },

@@ -130,8 +130,8 @@ const ListItem = ({
               href="#"
             >
               {isExpanded
-                ? I18n.getMessage('dsShowLess')
-                : I18n.getMessage('dsShowMore')}
+                ? I18n.getMessage('showLess')
+                : I18n.getMessage('showMore')}
             </a>
           )}
         </>

@@ -49,17 +49,17 @@ export default function generateReportObject(
 
   const cookieClassificationDataMapping: DataMapping[] = [
     {
-      title: I18n.getMessage('dsTotalCookies'),
+      title: I18n.getMessage('totalCookies'),
       count: cookieStats.total,
       data: cookiesStatsComponents.legend,
     },
     {
-      title: I18n.getMessage('ds1stPartyCookies'),
+      title: I18n.getMessage('1stPartyCookies'),
       count: cookieStats.firstParty.total,
       data: cookiesStatsComponents.firstParty,
     },
     {
-      title: I18n.getMessage('ds3rdPartyCookies'),
+      title: I18n.getMessage('3rdPartyCookies'),
       count: cookieStats.thirdParty.total,
       data: cookiesStatsComponents.thirdParty,
     },
@@ -67,7 +67,7 @@ export default function generateReportObject(
 
   const blockedCookieDataMapping: DataMapping[] = [
     {
-      title: I18n.getMessage('dsBlockedCookies'),
+      title: I18n.getMessage('blockedCookies'),
       count: cookieStats.blockedCookies.total,
       data: cookiesStatsComponents.blocked,
     },
@@ -75,7 +75,7 @@ export default function generateReportObject(
 
   const exemptedCookiesDataMapping: DataMapping[] = [
     {
-      title: I18n.getMessage('dsExemptedCookies'),
+      title: I18n.getMessage('exemptedCookies'),
       count: cookieStats.exemptedCookies.total,
       data: cookiesStatsComponents.exempted,
     },

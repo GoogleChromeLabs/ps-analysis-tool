@@ -24,7 +24,7 @@ const BounceTracking = () => {
   return (
     <div data-testid="bounce-tracking-content" className="h-full w-full">
       <LandingPage
-        title={I18n.getMessage('extBounceTrackingMitigation')}
+        title={I18n.getMessage('bounceTrackingMitigation')}
         psInfoKey={PSInfoKey.BounceTracking}
         extraClasses="max-w-2xl h-fit"
       />

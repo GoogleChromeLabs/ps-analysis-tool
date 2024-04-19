@@ -98,9 +98,9 @@ const ExemptedCookiesSection = () => {
     >
       {dataComponents.length > 0 && (
         <MatrixContainer
-          title={I18n.getMessage('extExemptionReasons')}
+          title={I18n.getMessage('exemptionReasons')}
           matrixData={dataComponents}
-          infoIconTitle={I18n.getMessage('extExemptionReasonsNote')}
+          infoIconTitle={I18n.getMessage('exemptionReasonsNote')}
         />
       )}
     </CookiesLandingWrapper>

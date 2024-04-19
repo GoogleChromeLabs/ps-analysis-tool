@@ -24,7 +24,7 @@ const Attribution = () => {
   return (
     <div data-testid="attribution-content" className="h-full w-full">
       <LandingPage
-        title={I18n.getMessage('extAttributionReporting')}
+        title={I18n.getMessage('attributionReporting')}
         psInfoKey={PSInfoKey.AttributionReporting}
         extraClasses="max-w-2xl h-fit"
       />

@@ -53,7 +53,7 @@ const CookiesMatrix = ({
   tabCookies,
   tabFrames,
   componentData = [],
-  title = I18n.getMessage('dsCategories'),
+  title = I18n.getMessage('categories'),
   description = '',
   showHorizontalMatrix = true,
   showMatrix = true,
@@ -83,14 +83,14 @@ const CookiesMatrix = ({
     ? matrixHorizontalData
     : [
         {
-          title: I18n.getMessage('dsNumberOfFrames'),
-          description: I18n.getMessage('dsNumberOfFramesNote'),
+          title: I18n.getMessage('numberOfFrames'),
+          description: I18n.getMessage('numberOfFramesNote'),
           count: totalFrames,
         },
         {
-          title: I18n.getMessage('dsNumberOfFramesWithAssociatedCookies'),
+          title: I18n.getMessage('numberOfFramesWithAssociatedCookies'),
           description: I18n.getMessage(
-            'dsNumberOfFramesWithAssociatedCookiesNote'
+            'numberOfFramesWithAssociatedCookiesNote'
           ),
           count: associatedCookiesCount
             ? associatedCookiesCount

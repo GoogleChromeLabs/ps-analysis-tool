@@ -38,7 +38,7 @@ const ToastMessage = ({
   additionalStyles = '',
   textAdditionalStyles = '',
   variant = 'large',
-  buttonText = I18n.getMessage('dsReload'),
+  buttonText = I18n.getMessage('reload'),
 }: ToastMessageProps) => {
   return (
     <div

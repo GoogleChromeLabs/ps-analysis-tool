@@ -123,7 +123,7 @@ const Layout = ({
       const _data = { ...prev };
 
       _data[SIDEBAR_ITEMS_KEYS.COOKIES].title =
-        I18n.getMessage('cdSitemapReport');
+        I18n.getMessage('sitemapReport');
       _data[SIDEBAR_ITEMS_KEYS.COOKIES].panel = {
         Element: CookiesLandingContainer,
         props: {
@@ -172,7 +172,7 @@ const Layout = ({
       );
 
       _data[SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES].title =
-        I18n.getMessage('cdCookieIssues');
+        I18n.getMessage('cookieIssues');
       _data[SIDEBAR_ITEMS_KEYS.COOKIES_WITH_ISSUES].panel = {
         Element: SiteMapCookiesWithIssues,
         props: {

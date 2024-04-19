@@ -49,7 +49,7 @@ const CookieDetails = ({
       ) : (
         <div className="h-full p-8 flex items-center">
           <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">
-            {I18n.getMessage('dsSelectCookie')}
+            {I18n.getMessage('selectCookie')}
           </p>
         </div>
       )}

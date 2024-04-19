@@ -232,8 +232,8 @@ export class BrowserManagement {
                 domain: parsedCookie.domain,
                 path: parsedCookie.path || '/',
                 value: parsedCookie.value,
-                sameSite: parsedCookie.samesite || I18n.getMessage('clLax'),
-                expires: parsedCookie.expires || I18n.getMessage('clSession'),
+                sameSite: parsedCookie.samesite || I18n.getMessage('lax'),
+                expires: parsedCookie.expires || I18n.getMessage('session'),
                 httpOnly: parsedCookie.httponly || false,
                 secure: parsedCookie.secure || false,
                 partitionKey,
@@ -278,10 +278,9 @@ export class BrowserManagement {
                 path: associatedCookie.cookie.path || '/',
                 value: associatedCookie.cookie.value,
                 sameSite:
-                  associatedCookie.cookie.sameSite || I18n.getMessage('clLax'),
+                  associatedCookie.cookie.sameSite || I18n.getMessage('lax'),
                 expires:
-                  associatedCookie.cookie.expires ||
-                  I18n.getMessage('clSession'),
+                  associatedCookie.cookie.expires || I18n.getMessage('session'),
                 httpOnly: associatedCookie.cookie.httpOnly || false,
                 secure: associatedCookie.cookie.secure || false,
                 partitionKey: associatedCookie.cookie.partitionKey,

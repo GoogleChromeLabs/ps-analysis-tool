@@ -26,13 +26,13 @@ import Utility from './utility';
 
 const parseUrlsFromSitemap = async (sitemapUrl: string, spinnies: any) => {
   spinnies?.add('sitemap-spinner', {
-    text: I18n.getMessage('clParsingSitemap'),
+    text: I18n.getMessage('parsingSitemap'),
   });
 
   try {
     const _urls = await Utility.getUrlsFromSitemap(sitemapUrl);
     spinnies?.succeed('sitemap-spinner', {
-      text: I18n.getMessage('clDoneParsingSitemap'),
+      text: I18n.getMessage('doneParsingSitemap'),
     });
     return _urls;
   } catch (error) {
@@ -42,7 +42,7 @@ const parseUrlsFromSitemap = async (sitemapUrl: string, spinnies: any) => {
 
 const parseUrlsFromCSV = async (csvPath: string, spinnies: any) => {
   spinnies?.add('csv-spinner', {
-    text: I18n.getMessage('clParsingCSV'),
+    text: I18n.getMessage('parsingCSV'),
   });
 
   try {
@@ -59,17 +59,17 @@ const parseUrlsFromCSV = async (csvPath: string, spinnies: any) => {
     }, [] as string[]);
 
     if (_urls.length === 0) {
-      console.log(I18n.getMessage('clCSVHasNoUrls'));
+      console.log(I18n.getMessage('cSVHasNoUrls'));
       process.exit(1);
     }
     _urls.forEach((_url) => {
       if (!_url.includes('http')) {
-        console.log(I18n.getMessage('clNotValidUrl', [_url]));
+        console.log(I18n.getMessage('notValidUrl', [_url]));
         process.exit(1);
       }
     });
     spinnies?.succeed('csv-spinner', {
-      text: I18n.getMessage('clDoneParsingCSV'),
+      text: I18n.getMessage('doneParsingCSV'),
     });
     return _urls;
   } catch (error) {
@@ -82,7 +82,7 @@ const parseUrlsFromLocalSitemap = async (
   spinnies: any
 ) => {
   spinnies?.add('sitemap-spinner', {
-    text: I18n.getMessage('clParsingXML'),
+    text: I18n.getMessage('parsingXML'),
   });
 
   const xmlString = await readFile(sitemapPath, 'utf-8');
@@ -92,11 +92,11 @@ const parseUrlsFromLocalSitemap = async (
   const isSiteMap = Boolean(data['urlset']);
 
   if (isSiteIndex) {
-    throw new Error(I18n.getMessage('clXMLSchemaNotSupported'));
+    throw new Error(I18n.getMessage('xMLSchemaNotSupported'));
   }
 
   if (!isSiteMap) {
-    throw new Error(I18n.getMessage('clXMLSchemaNotSupported'));
+    throw new Error(I18n.getMessage('xMLSchemaNotSupported'));
   }
 
   let _urls: string[] = [];
@@ -108,19 +108,19 @@ const parseUrlsFromLocalSitemap = async (
       []
     );
   } catch (error) {
-    throw new Error(I18n.getMessage('clNoUrlsInXMLUrlset'));
+    throw new Error(I18n.getMessage('noUrlsInXMLUrlset'));
   }
 
   if (_urls.length === 0) {
-    throw new Error(I18n.getMessage('clNoUrlsInXML'));
+    throw new Error(I18n.getMessage('noUrlsInXML'));
   }
   _urls.forEach((_url) => {
     if (!_url.includes('http')) {
-      throw new Error(I18n.getMessage('clNotValidUrl'));
+      throw new Error(I18n.getMessage('notValidUrl'));
     }
   });
   spinnies?.succeed('sitemap-spinner', {
-    text: I18n.getMessage('clDoneParsingXML'),
+    text: I18n.getMessage('doneParsingXML'),
   });
 
   return _urls;
@@ -152,7 +152,7 @@ const getUrlListFromArgs = async (
       const _urls = await parseUrlsFromSitemap(sitemapUrl, spinnies);
       urls = urls.concat(_urls);
     } catch (error) {
-      console.log(I18n.getMessage('clErrorParsingSitemap'));
+      console.log(I18n.getMessage('errorParsingSitemap'));
       process.exit(1);
     }
   } else if (csvPath) {
@@ -160,7 +160,7 @@ const getUrlListFromArgs = async (
       const _urls = await parseUrlsFromCSV(csvPath, spinnies);
       urls = urls.concat(_urls);
     } catch (error) {
-      console.log(I18n.getMessage('clErrorParsingCSV'));
+      console.log(I18n.getMessage('errorParsingCSV'));
       process.exit(1);
     }
   } else if (sitemapPath) {

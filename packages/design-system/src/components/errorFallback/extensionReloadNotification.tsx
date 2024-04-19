@@ -33,7 +33,7 @@ const ExtensionReloadNotification = ({
   return (
     <div className="w-full h-full px-2 flex flex-col items-center justify-center border-b border-american-silver dark:border-quartz bg-white dark:bg-charleston-green dark:text-white">
       <p className="text-xl text-center px-4">
-        {I18n.getMessage('dsExtensionUpdated')}
+        {I18n.getMessage('extensionUpdated')}
       </p>
       <div className="ml-2 mt-4">
         <Button
@@ -48,7 +48,7 @@ const ExtensionReloadNotification = ({
               }
             }
           }}
-          text={I18n.getMessage('dsRefreshPanel')}
+          text={I18n.getMessage('refreshPanel')}
         />
       </div>
     </div>

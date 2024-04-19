@@ -44,7 +44,7 @@ const BulletList = ({ rows, heading }: BulletListProps) => {
       <div className="space-y-4">
         {rows.length === 0 ? (
           <p className="text-darkest-gray dark:text-bright-gray">
-            {I18n.getMessage('dsNoNews')}
+            {I18n.getMessage('noNews')}
           </p>
         ) : (
           <>

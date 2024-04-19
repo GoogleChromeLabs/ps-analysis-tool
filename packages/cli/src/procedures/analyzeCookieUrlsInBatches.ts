@@ -61,7 +61,7 @@ export const analyzeCookiesUrlsInBatches = async (
 
     spinnies &&
       spinnies.add(`cookie-batch-spinner`, {
-        text: I18n.getMessage('clAnalyzing', [
+        text: I18n.getMessage('analyzing', [
           'cookies',
           ...[start + 1, end + 1].map(String),
         ]),
@@ -82,7 +82,7 @@ export const analyzeCookiesUrlsInBatches = async (
 
     spinnies &&
       spinnies.succeed(`cookie-batch-spinner`, {
-        text: I18n.getMessage('clDoneAnalyzing', [
+        text: I18n.getMessage('doneAnalyzing', [
           'cookies',
           ...[start + 1, end + 1].map(String),
         ]),

@@ -29,20 +29,20 @@ import {
 import calculateEffectiveExpiryDate from '../calculateEffectiveExpiryDate';
 
 export const COOKIES_DATA_HEADER = [
-  I18n.getMessage('cmName'),
-  I18n.getMessage('cmScope'),
-  I18n.getMessage('cmDomain'),
-  I18n.getMessage('cmPartitionKey'),
-  I18n.getMessage('cmSameSite'),
-  I18n.getMessage('cmCategory'),
-  I18n.getMessage('cmPlatform'),
-  I18n.getMessage('cmHttpOnly'),
-  I18n.getMessage('cmSecure'),
-  I18n.getMessage('cmValue'),
-  I18n.getMessage('cmPath'),
-  I18n.getMessage('cmExpires'),
-  I18n.getMessage('cmIssues'),
-  I18n.getMessage('cmGDPR'),
+  I18n.getMessage('name'),
+  I18n.getMessage('scope'),
+  I18n.getMessage('domain'),
+  I18n.getMessage('partitionKey'),
+  I18n.getMessage('sameSite'),
+  I18n.getMessage('category'),
+  I18n.getMessage('platform'),
+  I18n.getMessage('httpOnly'),
+  I18n.getMessage('secure'),
+  I18n.getMessage('Value'),
+  I18n.getMessage('path'),
+  I18n.getMessage('expires'),
+  I18n.getMessage('issues'),
+  I18n.getMessage('gDPR'),
 ];
 
 const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
@@ -64,23 +64,23 @@ const generateAllCookiesCSV = (siteAnalysisData: CompleteJson): string => {
     const recordsArray = [
       cookie.parsedCookie.name,
       cookie.isFirstParty
-        ? I18n.getMessage('cmFirstParty')
-        : I18n.getMessage('cmThirdParty'),
+        ? I18n.getMessage('firstParty')
+        : I18n.getMessage('thirdParty'),
       cookie.parsedCookie.domain || ' ',
       cookie.parsedCookie.partitionKey || ' ',
       cookie.parsedCookie.sameSite,
       cookie.analytics.category,
       cookie.analytics.platform,
       cookie.parsedCookie.httpOnly
-        ? I18n.getMessage('cmYes')
-        : I18n.getMessage('cmNo'),
+        ? I18n.getMessage('yes')
+        : I18n.getMessage('no'),
       cookie.parsedCookie.secure
-        ? I18n.getMessage('cmYes')
-        : I18n.getMessage('cmNo'),
+        ? I18n.getMessage('yes')
+        : I18n.getMessage('no'),
       cookie.parsedCookie.value,
       cookie.parsedCookie.path,
       calculateEffectiveExpiryDate(cookie.parsedCookie.expires),
-      cookie.isBlocked ? I18n.getMessage('cmYes') : I18n.getMessage('cmNo'),
+      cookie.isBlocked ? I18n.getMessage('yes') : I18n.getMessage('no'),
       cookie.analytics.GDPR || 'NA',
     ].map(sanitizeCsvRecord);
 

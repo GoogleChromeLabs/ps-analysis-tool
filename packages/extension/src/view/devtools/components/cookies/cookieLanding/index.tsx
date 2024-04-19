@@ -56,28 +56,28 @@ const AssembledCookiesLanding = () => {
   const sections: Array<CookiesLandingSection> = useMemo(() => {
     const defaultSections = [
       {
-        name: I18n.getMessage('extCookies'),
+        name: I18n.getMessage('cookies'),
         link: 'cookies',
         panel: {
           Element: CookiesSection,
         },
       },
       {
-        name: I18n.getMessage('extBlockedCookies'),
+        name: I18n.getMessage('blockedCookies'),
         link: 'blocked-cookies',
         panel: {
           Element: BlockedCookiesSection,
         },
       },
       {
-        name: I18n.getMessage('extLibraryDetection'),
+        name: I18n.getMessage('libraryDetection'),
         link: 'library-detection',
         panel: {
           Element: LibraryDetection,
         },
       },
       {
-        name: I18n.getMessage('extFrames'),
+        name: I18n.getMessage('frames'),
         link: 'frames',
         panel: {
           Element: FramesSection,
@@ -87,7 +87,7 @@ const AssembledCookiesLanding = () => {
 
     if (cookieStats.exemptedCookies.total > 0) {
       defaultSections.splice(2, 0, {
-        name: I18n.getMessage('extExemptionReasons'),
+        name: I18n.getMessage('exemptionReasons'),
         link: 'exemption-reasons',
         panel: {
           Element: ExemptedCookiesSection,

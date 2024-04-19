@@ -24,11 +24,11 @@ import sanitizeCsvRecord from '../sanitizeCsvRecord';
 import { CompleteJson } from '../../cookies.types';
 
 const TECHNOLOGIES_DATA_HEADER = [
-  I18n.getMessage('cmName'),
-  I18n.getMessage('cmDescription'),
-  I18n.getMessage('cmConfidence'),
-  I18n.getMessage('cmWebsite'),
-  I18n.getMessage('cmCategories'),
+  I18n.getMessage('name'),
+  I18n.getMessage('description'),
+  I18n.getMessage('confidence'),
+  I18n.getMessage('website'),
+  I18n.getMessage('categories'),
 ];
 
 const generateTechnologyCSV = (siteAnalysisData: CompleteJson): string => {

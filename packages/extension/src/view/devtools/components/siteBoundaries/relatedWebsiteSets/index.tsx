@@ -30,7 +30,7 @@ const RelatedWebsiteSets = () => {
   return (
     <div data-testid="related-website-sets-content" className="h-full w-full">
       <LandingPage
-        title={I18n.getMessage('extRws')}
+        title={I18n.getMessage('rws')}
         psInfoKey={PSInfoKey.RelatedWebsiteSets}
         extraClasses="max-w-2xl h-fit"
       >

@@ -1,69 +1,15 @@
 {
-  "cmUnknownFrames": {
+  "unknownFrames": {
     "message": "Unknown Frames"
   },
-  "cmName": {
-    "message": "Name"
-  },
-  "cmScope": {
-    "message": "Scope"
-  },
-  "cmDomain": {
-    "message": "Domain"
-  },
-  "cmPartitionKey": {
-    "message": "Partition Key"
-  },
-  "cmSameSite": {
-    "message": "SameSite"
-  },
-  "cmCategory": {
-    "message": "Category"
-  },
-  "cmPlatform": {
-    "message": "Platform"
-  },
-  "cmHttpOnly": {
-    "message": "HttpOnly"
-  },
-  "cmSecure": {
-    "message": "Secure"
-  },
-  "cmValue": {
-    "message": "Value"
-  },
-  "cmPath": {
-    "message": "Path"
-  },
-  "cmExpires": {
-    "message": "Expires"
-  },
-  "cmIssues": {
+  "issues": {
     "message": "Issues"
   },
-  "cmGdpr": {
+  "gdpr": {
     "message": "GDPR Portal"
   },
-  "cmFirstParty": {
-    "message": "First Party"
-  },
-  "cmThirdParty": {
-    "message": "Third Party"
-  },
-  "cmDescription": {
-    "message": "Description"
-  },
-  "cmConfidence": {
-    "message": "Confidence"
-  },
-  "cmWebsite": {
-    "message": "Website"
-  },
-  "cmCategories": {
+  "categories": {
     "message": "Categories"
-  },
-  "cmUncategorized": {
-    "message": "Uncategorized"
   },
   "body_SecureOnly": {
     "message": "This cookie was blocked because it had the 'Secure' attribute and the connection was not secure."
@@ -95,7 +41,9 @@
   "body_ThirdPartyBlockedInFirstPartySet": {
     "message": "The cookie was blocked by third-party cookie blocking between sites in the same First-Party Set."
   },
-  "body_UnknownError": { "message": "Unknown error." },
+  "body_UnknownError": {
+    "message": "Unknown error."
+  },
   "body_SchemefulSameSiteStrict": {
     "message": "This cookie was blocked because it had the 'SameSite=Strict' attribute but the request was cross-site. This includes top-level navigation requests initiated by other sites. This request is considered cross-site because the URL has a different scheme than the current site."
   },
@@ -498,46 +446,46 @@
   "exemptionReasonCorsOptIn": {
     "message": "This cookie is allowed by CORS opt-in"
   },
-  "cmYes": {
+  "yes": {
     "message": "Yes"
   },
-  "cmNo": {
+  "no": {
     "message": "No"
   },
-  "cmTotalCookies": {
+  "totalCookies": {
     "message": "Total Cookies"
   },
-  "cmTotalFirstPartyCookies": {
+  "totalFirstPartyCookies": {
     "message": "Total First Party Cookies"
   },
-  "cmTotalThirdPartyCookies": {
+  "totalThirdPartyCookies": {
     "message": "Total Third Party Cookies"
   },
-  "cmAnalyticsCookies": {
+  "analyticsCookies": {
     "message": "Analytics Cookies"
   },
-  "cmFunctionalCookies": {
+  "functionalCookies": {
     "message": "Functional Cookies"
   },
-  "cmMarketingCookies": {
+  "marketingCookies": {
     "message": "Marketing Cookies"
   },
-  "cmUncategorizedCookies": {
+  "uncategorizedCookies": {
     "message": "Uncategorized Cookies"
   },
-  "cmCookiesWithIssues": {
+  "cookiesWithIssues": {
     "message": "Cookies with Issues"
   },
-  "cmAnalyticsCookiesWithIssues": {
+  "analyticsCookiesWithIssues": {
     "message": "Analytics Cookies with Issues"
   },
-  "cmFunctionalCookiesWithIssues": {
+  "functionalCookiesWithIssues": {
     "message": "Functional Cookies with Issues"
   },
-  "cmMarketingCookiesWithIssues": {
+  "marketingCookiesWithIssues": {
     "message": "Marketing Cookies with Issues"
   },
-  "cmUncategorizedCookiesWithIssues": {
+  "uncategorizedCookiesWithIssues": {
     "message": "Uncategorized Cookies with Issues"
   }
 }

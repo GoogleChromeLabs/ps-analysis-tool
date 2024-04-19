@@ -26,7 +26,7 @@ const validateUrl = (url: string) => {
     {
       url: {
         url: {
-          message: I18n.getMessage('extShouldMatchFormat'),
+          message: I18n.getMessage('shouldMatchFormat'),
           schemes: ['https'],
         },
       },

@@ -22,22 +22,22 @@ const getFrameType = (
   tagName: string
 ): string => {
   if (isHidden) {
-    return I18n.getMessage('extHiddenFrame');
+    return I18n.getMessage('hiddenFrame');
   }
 
   if (insideFrame) {
-    return I18n.getMessage('extNestedIframe');
+    return I18n.getMessage('nestedIframe');
   }
 
   if (tagName === 'BODY') {
-    return I18n.getMessage('extMainFrame');
+    return I18n.getMessage('mainFrame');
   }
 
   if (tagName === 'Unknown') {
-    return I18n.getMessage('extUnknown');
+    return I18n.getMessage('unknown');
   }
 
-  return I18n.getMessage('extIframe');
+  return I18n.getMessage('iframe');
 };
 
 export default getFrameType;

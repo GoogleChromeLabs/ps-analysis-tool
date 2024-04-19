@@ -60,8 +60,8 @@ export const analyzeCookiesUrls = async (
         );
 
         frameCookies[key].analytics = {
-          platform: analytics?.platform || I18n.getMessage('clUnknown'),
-          category: analytics?.category || I18n.getMessage('cmUncategorized'),
+          platform: analytics?.platform || I18n.getMessage('unknown'),
+          category: analytics?.category || I18n.getMessage('uncategorized'),
           gdprUrl: analytics?.gdprUrl || '',
           description: analytics?.description,
         };

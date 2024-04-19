@@ -39,15 +39,13 @@ const GISAccordion = ({ matches }: AccordionProps) => {
 
   return (
     <Accordion
-      title={I18n.getMessage('ldGISTitle')}
-      featuresText={I18n.getMessage('ldFeatureCount', [
-        featuresCount.toString(),
-      ])}
+      title={I18n.getMessage('gISTitle')}
+      featuresText={I18n.getMessage('featureCount', [featuresCount.toString()])}
     >
       <p
         className="dark:text-bright-gray"
         dangerouslySetInnerHTML={{
-          __html: I18n.getMessage('ldGISNote', [
+          __html: I18n.getMessage('gISNote', [
             `<a className="text-bright-navy-blue dark:text-jordy-blue" target="_blank" href="${addUTMParams(
               'https://developers.google.com/identity/gsi/web/guides/fedcm-migration?utm_source=lighthouse&utm_medium=cli'
             )}" rel="noreferrer">`,

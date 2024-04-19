@@ -39,7 +39,7 @@ const InspectButton = ({
 
   return (
     <span
-      title={I18n.getMessage('dsHoverOverIframes')}
+      title={I18n.getMessage('hoverOverIframes')}
       onClick={() => {
         setIsInspecting(!isInspecting);
       }}

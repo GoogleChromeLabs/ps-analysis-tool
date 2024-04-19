@@ -22,16 +22,16 @@ export const DEVTOOL_PORT_NAME = 'psat-devtool';
 export const SETTING_PAGE_CONTROLS = [
   {
     id: 'enableCDP',
-    heading: I18n.getMessage('extEnableCDP'),
-    description: I18n.getMessage('extEnableCDPNote', [
+    heading: I18n.getMessage('enableCDP'),
+    description: I18n.getMessage('enableCDPNote', [
       `<a class="text-bright-navy-blue dark:text-jordy-blue" href="https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/PSAT-Settings-and-Permissions#enabling-chrome-devtools-protocol-in-psat" target="_blank">`,
       '</a>',
     ]),
   },
   {
     id: 'multitabDebugging',
-    heading: I18n.getMessage('extMultitabDebugging'),
-    description: I18n.getMessage('extMultitabDebuggingNote', [
+    heading: I18n.getMessage('multitabDebugging'),
+    description: I18n.getMessage('multitabDebuggingNote', [
       `<a class='text-bright-navy-blue dark:text-jordy-blue' href='https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/PSAT-Settings-and-Permissions#multi-tab-debugging' target='_blank'>`,
       '</a>',
     ]),

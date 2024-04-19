@@ -46,7 +46,7 @@ const GSIAccordion = ({ matches }: AccordionProps) => {
       <p
         className="dark:text-bright-gray"
         dangerouslySetInnerHTML={{
-          __html: I18n.getMessage('ldGSInote', [
+          __html: I18n.getMessage('gSInote', [
             `<a className="text-bright-navy-blue dark:text-jordy-blue" href=${addUTMParams(
               'https://developers.google.com/privacy-sandbox/3pcd/guides/identity#federated_identity'
             )}
