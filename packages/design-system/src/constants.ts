@@ -23,14 +23,10 @@ interface LegendData {
 }
 
 export const LEGEND_DESCRIPTION: LegendData = {
-  Functional:
-    'Cookies necessary for a website to function properly. They enable basic functionalities such as page navigation, access to secure areas, and remembering user preferences (e.g., language, font size, etc.)',
-  Marketing:
-    "Cookies used to track visitors across websites, gathering information about their browsing habits. The data collected is often used by advertisers to deliver targeted advertisements that are relevant to the user's interests.",
-  Analytics:
-    'Cookies used to gather information about how users interact with a website. They provide website owners with insights into user behavior, such as the number of visitors, the most popular pages, and the average time spent on the site.',
-  Uncategorized:
-    'Cookies that could not be categorized. You may check sites like cookiedatabase.org and cookiesearch.org to acquire additional details about these cookies.',
+  Functional: I18n.getMessage('functionalNote'),
+  Marketing: I18n.getMessage('marketingNote'),
+  Analytics: I18n.getMessage('analyticsNote'),
+  Uncategorized: I18n.getMessage('uncategorizedNote'),
   SecureOnly: I18n.getFormattedMessages(['body_SecureOnly']),
   NotOnPath: I18n.getFormattedMessages(['body_NotOnPath']),
   DomainMismatch: I18n.getFormattedMessages(['body_DomainMismatch']),

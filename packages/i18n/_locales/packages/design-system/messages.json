@@ -248,5 +248,17 @@
   },
   "fencedFramesNote": {
     "message": "A fenced frames is a proposed HTML element for embedded content, similar to an iframe. Unlike iframes, a fenced frame restricts communication with its embedding context to allow the frame access to cross-site data without sharing it with the embedding context."
+  },
+  "functionalNote": {
+    "message": "Cookies necessary for a website to function properly. They enable basic functionalities such as page navigation, access to secure areas, and remembering user preferences (e.g., language, font size, etc.)"
+  },
+  "marketingNote": {
+    "message": "Cookies used to track visitors across websites, gathering information about their browsing habits. The data collected is often used by advertisers to deliver targeted advertisements that are relevant to the user's interests."
+  },
+  "analyticsNote": {
+    "message": "Cookies used to gather information about how users interact with a website. They provide website owners with insights into user behavior, such as the number of visitors, the most popular pages, and the average time spent on the site."
+  },
+  "uncategorizedNote": {
+    "message": "Cookies that could not be categorized. You may check sites like cookiedatabase.org and cookiesearch.org to acquire additional details about these cookies."
   }
 }

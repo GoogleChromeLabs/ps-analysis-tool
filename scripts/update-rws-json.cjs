@@ -38,7 +38,6 @@ const addKeysToLocale = async (data) => {
 
       messages[key] = {
         message: rationale,
-        description: 'Rationale for a site in the related website set',
       };
 
       rationalesObj[site] = key;
