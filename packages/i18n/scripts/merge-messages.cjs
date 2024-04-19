@@ -30,8 +30,6 @@ const COMMON_PATH = 'packages/i18n/_locales';
 const TARGET = `${COMMON_PATH}/messages/en/messages.json`;
 
 const main = () => {
-  fs.writeFileSync(TARGET, '{}');
-
   const messages = {};
 
   PACKAGES.forEach((pkg) => {
@@ -48,6 +46,13 @@ const main = () => {
 
       messages[key] = value;
     });
+
+    console.log(`Merged ${pkg} messages`);
+
+    fs.unlinkSync(path);
+    fs.writeFileSync(path, '{}');
+
+    console.log(`Deleted ${pkg} messages`);
   });
 
   fs.writeFileSync(TARGET, JSON.stringify(messages, null, 2));
