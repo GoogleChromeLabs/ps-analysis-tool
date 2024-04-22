@@ -45,7 +45,7 @@ const ChipsBar = () => {
         'w-full h-6 px-2 py-1 flex items-center overflow-x-scroll no-scrollbar bg-anti-flash-white dark:bg-raisin-black border-b border-gray-300 dark:border-quartz'
       }
     >
-      {appliedFiltersCount > 1 && (
+      {appliedFiltersCount > 0 && (
         <button
           className="h-full flex items-center text-link text-xs whitespace-nowrap"
           onClick={resetFilters}
