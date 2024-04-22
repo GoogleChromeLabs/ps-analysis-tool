@@ -44,7 +44,7 @@ class SynchnorousCookieStore {
   /**
    * The cookie data of the tabs.
    */
-  tabMode = 'single';
+  tabMode: 'single' | 'unlimited' = 'single';
 
   /**
    * The cookie data of the tabs.

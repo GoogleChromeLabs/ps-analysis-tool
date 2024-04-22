@@ -55,7 +55,10 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
   // eslint-disable-next-line complexity
   (async () => {
     try {
-      if (!ALLOWED_EVENTS.includes(method)) {
+      if (
+        !ALLOWED_EVENTS.includes(method) ||
+        !syncCookieStore.globalIsUsingCDP
+      ) {
         return;
       }
 
