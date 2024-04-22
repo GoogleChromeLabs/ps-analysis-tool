@@ -191,7 +191,7 @@ export interface CookieStatsComponents {
 }
 
 export interface FramesWithCookies {
-  [key: string]: { frameIds: number[] };
+  [key: string]: { frameIds: number[] | string[] };
 }
 
 export type CookieJsonDataType = {

@@ -52,18 +52,6 @@ const filterCookiesByFrame = (
     });
   });
 
-  Object.entries(cookies).forEach(([key, cookie]) => {
-    cookie.initiatorUrls?.forEach((cookieInitiatorUrl) => {
-      if (
-        cookieInitiatorUrl &&
-        cookieInitiatorUrl.startsWith('https') &&
-        new URL(cookieInitiatorUrl).origin === new URL(frameUrl).origin
-      ) {
-        frameFilteredCookies[key] = cookie;
-      }
-    });
-  });
-
   return Object.values(frameFilteredCookies);
 };
 
