@@ -295,13 +295,10 @@ class SynchnorousCookieStore {
 
     const formedSet = new Set<string>();
 
-    Object.entries(this.tabs[tabId].parentChildFrameAssociation).forEach(
-      ([frameId, parentId]) => {
-        formedSet.add(frameId);
-        formedSet.add(parentId);
-      }
-    );
-
+    Object.keys(this.tabs[tabId].parentChildFrameAssociation).forEach((key) => {
+      formedSet.add(key);
+      formedSet.add(this.tabs[tabId].parentChildFrameAssociation[key]);
+    });
     return formedSet;
   }
 

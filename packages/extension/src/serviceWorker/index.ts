@@ -92,7 +92,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         );
         tabId = tab[0];
       }
-
       // Using Page.frameAttached and Page.frameNavigated we will find the tabId using the frameId because in certain events source.tabId is missing and source.targetId is availale.
       if (method === 'Page.frameAttached' && params) {
         const { frameId, parentFrameId } =
