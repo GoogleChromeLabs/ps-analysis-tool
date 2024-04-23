@@ -28,45 +28,54 @@ import { getTab } from '../../utils/getTab';
 
 let cookieDB: CookieDatabase | null = null;
 
-chrome.webRequest.onResponseStarted.addListener(
-  ({ tabId, url, responseHeaders, frameId, requestId }) => {
-    if (synchnorousCookieStore.globalIsUsingCDP) {
+export const onResponseStartedListener = ({
+  tabId,
+  url,
+  responseHeaders,
+  frameId,
+  requestId,
+}: chrome.webRequest.WebResponseCacheDetails) => {
+  if (synchnorousCookieStore.globalIsUsingCDP) {
+    return;
+  }
+
+  (async () => {
+    const tab = await getTab(tabId);
+    let tabUrl = synchnorousCookieStore?.getTabUrl(tabId);
+
+    if (tab && tab.pendingUrl) {
+      tabUrl = tab.pendingUrl;
+    }
+
+    if (!cookieDB) {
+      cookieDB = await fetchDictionary();
+    }
+
+    const cookies = await parseHeaders(
+      synchnorousCookieStore.globalIsUsingCDP,
+      'response',
+      synchnorousCookieStore.tabToRead,
+      synchnorousCookieStore.tabMode,
+      tabId,
+      url,
+      cookieDB,
+      tabUrl,
+      frameId,
+      requestId,
+      responseHeaders
+    );
+
+    if (!cookies || (cookies && cookies?.length === 0)) {
       return;
     }
-    (async () => {
-      const tab = await getTab(tabId);
-      let tabUrl = synchnorousCookieStore?.getTabUrl(tabId);
 
-      if (tab && tab.pendingUrl) {
-        tabUrl = tab.pendingUrl;
-      }
+    // Adds the cookies from the request headers to the cookies object.
+    synchnorousCookieStore?.update(tabId, cookies);
+  })();
+};
 
-      if (!cookieDB) {
-        cookieDB = await fetchDictionary();
-      }
-
-      const cookies = await parseHeaders(
-        synchnorousCookieStore.globalIsUsingCDP,
-        'response',
-        synchnorousCookieStore.tabToRead,
-        synchnorousCookieStore.tabMode,
-        tabId,
-        url,
-        cookieDB,
-        tabUrl,
-        frameId,
-        requestId,
-        responseHeaders
-      );
-
-      if (!cookies || (cookies && cookies?.length === 0)) {
-        return;
-      }
-
-      // Adds the cookies from the request headers to the cookies object.
-      synchnorousCookieStore?.update(tabId, cookies);
-    })();
-  },
+chrome.webRequest.onResponseStarted.addListener(
+  onResponseStartedListener,
   { urls: ['*://*/*'] },
   ['extraHeaders', 'responseHeaders']
 );

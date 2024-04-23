@@ -32,7 +32,10 @@
  * Internal dependencies
  */
 import synchnorousCookieStore from '../../store/synchnorousCookieStore';
-chrome.runtime.onInstalled.addListener(async (details) => {
+
+export const runtimeOnInstalledListener = async (
+  details: chrome.runtime.InstalledDetails
+) => {
   synchnorousCookieStore?.clear();
 
   // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
@@ -104,4 +107,6 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       isUsingCDP: true,
     });
   }
-});
+};
+
+chrome.runtime.onInstalled.addListener(runtimeOnInstalledListener);

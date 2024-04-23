@@ -21,7 +21,11 @@ import synchnorousCookieStore from '../../store/synchnorousCookieStore';
 import getQueryParams from '../../utils/getQueryParams';
 import attachCDP from '../attachCDP';
 
-chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+export const onUpdatedListener = async (
+  tabId: number,
+  changeInfo: chrome.tabs.TabChangeInfo,
+  tab: chrome.tabs.Tab
+) => {
   if (!tab.url) {
     return;
   }
@@ -76,4 +80,6 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     // eslint-disable-next-line no-console
     console.warn(error);
   }
-});
+};
+
+chrome.tabs.onUpdated.addListener(onUpdatedListener);

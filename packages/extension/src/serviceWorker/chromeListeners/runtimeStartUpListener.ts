@@ -18,7 +18,7 @@
  */
 import synchnorousCookieStore from '../../store/synchnorousCookieStore';
 
-chrome.runtime.onStartup.addListener(async () => {
+const onStartUpListener = async () => {
   const storage = await chrome.storage.sync.get();
 
   // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
@@ -45,4 +45,6 @@ chrome.runtime.onStartup.addListener(async () => {
   if (Object.keys(storage).includes('isUsingCDP')) {
     synchnorousCookieStore.globalIsUsingCDP = storage.isUsingCDP;
   }
-});
+};
+
+chrome.runtime.onStartup.addListener(onStartUpListener);

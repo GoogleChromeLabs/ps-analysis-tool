@@ -21,88 +21,93 @@ import synchnorousCookieStore from '../../store/synchnorousCookieStore';
 import resetCookieBadgeText from '../../store/utils/resetCookieBadgeText';
 import sendMessageWrapper from '../../utils/sendMessageWrapper';
 
-chrome.storage.sync.onChanged.addListener(
-  async (changes: { [key: string]: chrome.storage.StorageChange }) => {
-    if (
-      !changes?.allowedNumberOfTabs ||
-      !changes?.allowedNumberOfTabs?.newValue ||
-      !changes?.allowedNumberOfTabs?.oldValue
-    ) {
-      return;
-    }
-    synchnorousCookieStore.tabMode = changes.allowedNumberOfTabs.newValue;
-
-    const tabs = await chrome.tabs.query({});
-    await sendMessageWrapper(INITIAL_SYNC, {
-      tabMode: synchnorousCookieStore.tabMode,
-      tabToRead: synchnorousCookieStore.tabToRead,
-    });
-
-    if (changes?.allowedNumberOfTabs?.newValue === 'single') {
-      synchnorousCookieStore.tabToRead = '';
-
-      tabs.map((tab) => {
-        if (!tab?.id) {
-          return tab;
-        }
-
-        resetCookieBadgeText(tab.id);
-
-        synchnorousCookieStore?.removeTabData(tab.id);
-
-        return tab;
-      });
-    } else {
-      tabs.forEach((tab) => {
-        if (!tab?.id) {
-          return;
-        }
-        synchnorousCookieStore?.addTabData(tab.id);
-        synchnorousCookieStore?.sendUpdatedDataToPopupAndDevTools(tab.id);
-        synchnorousCookieStore?.updateDevToolsState(tab.id, true);
-      });
-    }
+export const onSyncStorageChangedListenerForMultiTab = async (changes: {
+  [key: string]: chrome.storage.StorageChange;
+}) => {
+  if (
+    !changes?.allowedNumberOfTabs ||
+    !changes?.allowedNumberOfTabs?.newValue ||
+    !changes?.allowedNumberOfTabs?.oldValue
+  ) {
+    return;
   }
-);
+  synchnorousCookieStore.tabMode = changes.allowedNumberOfTabs.newValue;
 
-chrome.storage.sync.onChanged.addListener(
-  async (changes: { [key: string]: chrome.storage.StorageChange }) => {
-    if (
-      !changes?.isUsingCDP ||
-      typeof changes?.isUsingCDP?.newValue === 'undefined' ||
-      typeof changes?.isUsingCDP?.oldValue === 'undefined'
-    ) {
-      return;
-    }
+  const tabs = await chrome.tabs.query({});
+  await sendMessageWrapper(INITIAL_SYNC, {
+    tabMode: synchnorousCookieStore.tabMode,
+    tabToRead: synchnorousCookieStore.tabToRead,
+  });
 
-    synchnorousCookieStore.globalIsUsingCDP = changes?.isUsingCDP?.newValue;
+  if (changes?.allowedNumberOfTabs?.newValue === 'single') {
+    synchnorousCookieStore.tabToRead = '';
 
-    const tabs = await chrome.tabs.query({});
+    tabs.map((tab) => {
+      if (!tab?.id) {
+        return tab;
+      }
 
-    if (!changes?.isUsingCDP?.newValue) {
-      await Promise.all(
-        tabs.map(async ({ id }) => {
-          if (!id) {
-            return;
-          }
+      resetCookieBadgeText(tab.id);
 
-          try {
-            await chrome.debugger.detach({ tabId: id });
-            synchnorousCookieStore?.sendUpdatedDataToPopupAndDevTools(id);
-          } catch (error) {
-            // eslint-disable-next-line no-console
-            console.warn(error);
-          }
-        })
-      );
-    } else {
-      tabs.forEach(({ id }) => {
+      synchnorousCookieStore?.removeTabData(tab.id);
+
+      return tab;
+    });
+  } else {
+    tabs.forEach((tab) => {
+      if (!tab?.id) {
+        return;
+      }
+      synchnorousCookieStore?.addTabData(tab.id);
+      synchnorousCookieStore?.sendUpdatedDataToPopupAndDevTools(tab.id);
+      synchnorousCookieStore?.updateDevToolsState(tab.id, true);
+    });
+  }
+};
+
+export const onSyncStorageChangedListenerForCDP = async (changes: {
+  [key: string]: chrome.storage.StorageChange;
+}) => {
+  if (
+    !changes?.isUsingCDP ||
+    typeof changes?.isUsingCDP?.newValue === 'undefined' ||
+    typeof changes?.isUsingCDP?.oldValue === 'undefined'
+  ) {
+    return;
+  }
+
+  synchnorousCookieStore.globalIsUsingCDP = changes?.isUsingCDP?.newValue;
+
+  const tabs = await chrome.tabs.query({});
+
+  if (!changes?.isUsingCDP?.newValue) {
+    await Promise.all(
+      tabs.map(async ({ id }) => {
         if (!id) {
           return;
         }
 
-        synchnorousCookieStore?.sendUpdatedDataToPopupAndDevTools(id);
-      });
-    }
+        try {
+          await chrome.debugger.detach({ tabId: id });
+          synchnorousCookieStore?.sendUpdatedDataToPopupAndDevTools(id);
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.warn(error);
+        }
+      })
+    );
+  } else {
+    tabs.forEach(({ id }) => {
+      if (!id) {
+        return;
+      }
+
+      synchnorousCookieStore?.sendUpdatedDataToPopupAndDevTools(id);
+    });
   }
+};
+
+chrome.storage.sync.onChanged.addListener(onSyncStorageChangedListenerForCDP);
+chrome.storage.sync.onChanged.addListener(
+  onSyncStorageChangedListenerForMultiTab
 );

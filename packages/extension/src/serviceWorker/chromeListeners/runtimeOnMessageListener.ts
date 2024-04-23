@@ -40,12 +40,9 @@ import parseNetworkCookies from '../../utils/parseNetworkCookies';
 import { fetchDictionary } from '../../utils/fetchCookieDictionary';
 import { getTab } from '../../utils/getTab';
 import sendMessageWrapper from '../../utils/sendMessageWrapper';
-/**
- * Fires when a message is sent from either an extension process (by runtime.sendMessage) or a content script (by tabs.sendMessage).
- * @see https://developer.chrome.com/docs/extensions/reference/api/runtime#event-onMessage
- */
+
 // eslint-disable-next-line complexity
-chrome.runtime.onMessage.addListener(async (request) => {
+export const runtimeOnMessageListener = async (request: any) => {
   let cookieDB: CookieDatabase | null = null;
   if (!request.type) {
     return;
@@ -237,4 +234,10 @@ chrome.runtime.onMessage.addListener(async (request) => {
       request?.payload?.cookieData
     );
   }
-});
+};
+
+/**
+ * Fires when a message is sent from either an extension process (by runtime.sendMessage) or a content script (by tabs.sendMessage).
+ * @see https://developer.chrome.com/docs/extensions/reference/api/runtime#event-onMessage
+ */
+chrome.runtime.onMessage.addListener(runtimeOnMessageListener);

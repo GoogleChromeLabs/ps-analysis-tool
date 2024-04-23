@@ -16,7 +16,7 @@
 import { ALLOWED_NUMBER_OF_TABS } from '../../constants';
 import syncCookieStore from '../../store/synchnorousCookieStore';
 
-chrome.tabs.onCreated.addListener(async (tab) => {
+export const onTabCreatedListener = async (tab: chrome.tabs.Tab) => {
   if (!tab.id) {
     return;
   }
@@ -60,4 +60,6 @@ chrome.tabs.onCreated.addListener(async (tab) => {
       '0'
     );
   }
-});
+};
+
+chrome.tabs.onCreated.addListener(onTabCreatedListener);
