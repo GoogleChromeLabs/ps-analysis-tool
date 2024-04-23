@@ -107,7 +107,7 @@ const startDashboardServer = async (dir: string, port: number) => {
   const outDir = program.opts().outDir;
   const shouldSkipAcceptBanner = program.opts().acceptBanner;
 
-  validateArgs(
+  await validateArgs(
     url,
     sitemapUrl,
     csvPath,

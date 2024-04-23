@@ -99,19 +99,25 @@ const validateArgs = async (
   }
 
   if (outDir) {
-    if (!path.isAbsolute(outDir)) {
-      const outDirExists = await exists(path.resolve('./out', outDir));
-      if (!outDirExists) {
-        console.log(
-          `"${path.resolve('./out', outDir)}" does not exist, creating now.`
-        );
-        await mkdir(path.resolve('./out', outDir));
-      }
+    const parentDirExists = await exists(path.resolve('./out'));
+
+    if (!parentDirExists) {
+      await mkdir(path.resolve('./out'));
     }
-    const outDirExists = await exists(path.resolve(outDir));
+
+    let output;
+
+    if (!path.isAbsolute(outDir)) {
+      output = path.resolve('./out', outDir);
+    } else {
+      output = path.resolve(outDir);
+    }
+
+    const outDirExists = await exists(output);
+
     if (!outDirExists) {
-      console.log(`"${path.resolve(outDir)}" does not exist, creating now.`);
-      await mkdir(path.resolve(outDir));
+      console.log(`"${output}" does not exist, creating now.`);
+      await mkdir(output);
     }
   }
 };
