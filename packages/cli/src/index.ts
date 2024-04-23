@@ -140,7 +140,7 @@ const startDashboardServer = async (dir: string, port: number) => {
   if (outDir && path.isAbsolute(outDir)) {
     outputDir = outDir;
   } else if (outDir && !path.isAbsolute(outDir)) {
-    outputDir = path.join("./out",outDir);
+    outputDir = path.join('./out', outDir);
   } else {
     outputDir = `./out/${prefix}`;
   }
