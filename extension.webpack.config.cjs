@@ -18,24 +18,24 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const WebpackBar = require('webpackbar');
-const commonConfig = require('../../webpack.shared.cjs');
+const commonConfig = require('./webpack.shared.cjs');
 
 const root = {
   entry: {
-    'service-worker': './src/serviceWorker/index.ts',
-    'content-script': './src/contentScript/index.ts',
+    'service-worker': './packages/extension/src/serviceWorker/index.ts',
+    'content-script': './packages/extension/src/contentScript/index.ts',
   },
   output: {
-    path: path.resolve(__dirname, '../../dist/extension'),
+    path: path.resolve(__dirname, './dist/extension'),
     filename: '[name].js',
   },
   plugins: [
     new CopyPlugin({
       patterns: [
-        { from: 'src/manifest.json', to: '' },
-        { from: 'icons', to: 'icons' },
-        { from: '../../assets', to: 'assets' },
-        { from: '../../data', to: 'data' },
+        { from: './packages/extension/src/manifest.json', to: '' },
+        { from: './packages/extension/icons', to: 'icons' },
+        { from: './assets', to: 'assets' },
+        { from: './data', to: 'data' },
       ],
     }),
     new WebpackBar({
@@ -48,9 +48,9 @@ const root = {
 
 const devTools = {
   entry: {
-    index: './src/view/devtools/index.tsx',
-    devtools: './src/view/devtools/devtools.ts',
-    worker: './src/worker/index.ts',
+    index: './packages/extension/src/view/devtools/index.tsx',
+    devtools: './packages/extension/src/view/devtools/devtools.ts',
+    worker: './packages/extension/src/worker/index.ts',
   },
   output: {
     path: path.resolve(__dirname, '../../dist/extension/devtools'),
@@ -63,13 +63,13 @@ const devTools = {
     }),
     new HtmlWebpackPlugin({
       title: 'PSAT Devtool',
-      template: './src/view/devtools/index.html',
+      template: './packages/extension/src/view/devtools/index.html',
       filename: 'index.html',
       inject: false,
     }),
     new HtmlWebpackPlugin({
       title: 'PSAT',
-      template: './src/view/devtools/devtools.html',
+      template: './packages/extension/src/view/devtools/devtools.html',
       filename: 'devtools.html',
       inject: true,
     }),
@@ -79,10 +79,10 @@ const devTools = {
 
 const popup = {
   entry: {
-    index: './src/view/popup/index.tsx',
+    index: './packages/extension/src/view/popup/index.tsx',
   },
   output: {
-    path: path.resolve(__dirname, '../../dist/extension/popup'),
+    path: path.resolve(__dirname, './dist/extension/popup'),
     filename: 'index.js',
   },
   plugins: [
@@ -92,7 +92,7 @@ const popup = {
     }),
     new HtmlWebpackPlugin({
       title: 'PSAT Popup',
-      template: './src/view/popup/index.html',
+      template: './packages/extension/src/view/popup/index.html',
       inject: false,
     }),
   ],
@@ -101,10 +101,10 @@ const popup = {
 
 const report = {
   entry: {
-    index: './src/view/report/index.tsx',
+    index: './packages/report/src/index.tsx',
   },
   output: {
-    path: path.resolve(__dirname, '../../dist/extension/report'),
+    path: path.resolve(__dirname, './dist/extension/report'),
     filename: '[name].js',
   },
   plugins: [
@@ -114,7 +114,7 @@ const report = {
     }),
     new HtmlWebpackPlugin({
       title: 'Report',
-      template: './src/view/report/index.html',
+      template: './packages/report/public/index.html',
       filename: 'index.html',
       inject: true,
     }),
