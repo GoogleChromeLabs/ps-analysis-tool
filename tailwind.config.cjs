@@ -79,6 +79,7 @@ module.exports = {
     textColor: {
       ...colors,
       'text-medium-gray': '#BDBDBD',
+      'dim-gray': '#6C6C6C',
       'chestnut-gold': '#A98307',
       'battle-dress': '#7D8471',
       brownstone: '#79553D',

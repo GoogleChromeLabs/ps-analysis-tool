@@ -30,7 +30,7 @@ const CookieLanding = ({ children }: PropsWithChildren) => {
   const cdpLabel = isUsingCDP ? 'Disable CDP' : 'Enable CDP';
 
   return (
-    <div className="w-full h-full flex justify-center items-center flex-col z-1">
+    <div className="w-full h-full flex justify-center items-center flex-col flex-1 z-1">
       <ToggleSwitch
         onLabel={cdpLabel}
         additionalStyles="top-2 left-2 absolute"
