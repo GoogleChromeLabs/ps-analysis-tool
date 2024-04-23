@@ -1,0 +1,2323 @@
+[
+    {
+        "pageUrl": "https://www.aljazeera.com/",
+        "technologyData": [
+            {
+                "slug": "node-js",
+                "name": "Node.js",
+                "description": "Node.js is an open-source, cross-platform, JavaScript runtime environment that executes JavaScript code outside a web browser.",
+                "confidence": 100,
+                "version": null,
+                "icon": "Node.js.svg",
+                "website": "https://nodejs.org",
+                "cpe": "cpe:2.3:a:nodejs:node.js:*:*:*:*:*:*:*:*",
+                "categories": [
+                    {
+                        "id": 27,
+                        "slug": "programming-languages",
+                        "name": "Programming languages"
+                    }
+                ]
+            },
+            {
+                "slug": "brightcove",
+                "name": "Brightcove",
+                "description": "Brightcove is a cloud-based online video platform.",
+                "confidence": 100,
+                "version": null,
+                "icon": "Brightcove.png",
+                "website": "https://www.brightcove.com",
+                "cpe": null,
+                "categories": [
+                    {
+                        "id": 14,
+                        "slug": "video-players",
+                        "name": "Video players"
+                    }
+                ]
+            },
+            {
+                "slug": "react",
+                "name": "React",
+                "description": "React is an open-source JavaScript library for building user interfaces or UI components.",
+                "confidence": 100,
+                "version": null,
+                "icon": "React.svg",
+                "website": "https://reactjs.org",
+                "cpe": "cpe:2.3:a:facebook:react:*:*:*:*:*:*:*:*",
+                "categories": [
+                    {
+                        "id": 12,
+                        "slug": "javascript-frameworks",
+                        "name": "JavaScript frameworks"
+                    }
+                ],
+                "rootPath": true
+            },
+            {
+                "slug": "emotion",
+                "name": "Emotion",
+                "description": "Emotion is a library designed for writing CSS styles with JavaScript.",
+                "confidence": 100,
+                "version": null,
+                "icon": "Emotion.png",
+                "website": "https://emotion.sh",
+                "cpe": null,
+                "categories": [
+                    {
+                        "id": 12,
+                        "slug": "javascript-frameworks",
+                        "name": "JavaScript frameworks"
+                    },
+                    {
+                        "id": 47,
+                        "slug": "development",
+                        "name": "Development"
+                    }
+                ],
+                "rootPath": true
+            },
+            {
+                "slug": "nginx",
+                "name": "Nginx",
+                "description": "Nginx is a web server that can also be used as a reverse proxy, load balancer, mail proxy and HTTP cache.",
+                "confidence": 100,
+                "version": null,
+                "icon": "Nginx.svg",
+                "website": "https://nginx.org/en",
+                "cpe": "cpe:2.3:a:f5:nginx:*:*:*:*:*:*:*:*",
+                "categories": [
+                    {
+                        "id": 22,
+                        "slug": "web-servers",
+                        "name": "Web servers"
+                    },
+                    {
+                        "id": 64,
+                        "slug": "reverse-proxies",
+                        "name": "Reverse proxies"
+                    }
+                ],
+                "rootPath": true
+            },
+            {
+                "slug": "express",
+                "name": "Express",
+                "description": "Express is a web application framework for Node.js, released as free and open-source software under the MIT License. It is designed for building web applications and APIs.",
+                "confidence": 100,
+                "version": null,
+                "icon": "Express.svg",
+                "website": "https://expressjs.com",
+                "cpe": "cpe:2.3:a:expressjs:express:*:*:*:*:*:*:*:*",
+                "categories": [
+                    {
+                        "id": 18,
+                        "slug": "web-frameworks",
+                        "name": "Web frameworks"
+                    },
+                    {
+                        "id": 22,
+                        "slug": "web-servers",
+                        "name": "Web servers"
+                    }
+                ],
+                "rootPath": true
+            },
+            {
+                "slug": "onetrust",
+                "name": "OneTrust",
+                "description": "OneTrust is a cloud-based data privacy management compliance platform.",
+                "confidence": 100,
+                "version": null,
+                "icon": "OneTrust.svg",
+                "website": "https://www.onetrust.com",
+                "cpe": null,
+                "categories": [
+                    {
+                        "id": 67,
+                        "slug": "cookie-compliance",
+                        "name": "Cookie compliance"
+                    }
+                ],
+                "rootPath": true
+            },
+            {
+                "slug": "google-tag-manager",
+                "name": "Google Tag Manager",
+                "description": "Google Tag Manager is a tag management system (TMS) that allows you to quickly and easily update measurement codes and related code fragments collectively known as tags on your website or mobile app.",
+                "confidence": 100,
+                "version": null,
+                "icon": "Google Tag Manager.svg",
+                "website": "https://www.google.com/tagmanager",
+                "cpe": null,
+                "categories": [
+                    {
+                        "id": 42,
+                        "slug": "tag-managers",
+                        "name": "Tag managers"
+                    }
+                ],
+                "rootPath": true
+            },
+            {
+                "slug": "amplitude",
+                "name": "Amplitude",
+                "description": "Amplitude is a web and mobile analytics solution with cross-platform user journey tracking, user behavior analysis and segmentation capabilities.",
+                "confidence": 100,
+                "version": null,
+                "icon": "Amplitude.svg",
+                "website": "https://amplitude.com",
+                "cpe": null,
+                "categories": [
+                    {
+                        "id": 10,
+                        "slug": "analytics",
+                        "name": "Analytics"
+                    }
+                ],
+                "rootPath": true
+            },
+            {
+                "slug": "recaptcha",
+                "name": "reCAPTCHA",
+                "description": "reCAPTCHA is a free service from Google that helps protect websites from spam and abuse.",
+                "confidence": 100,
+                "version": null,
+                "icon": "reCAPTCHA.svg",
+                "website": "https://www.google.com/recaptcha/",
+                "cpe": null,
+                "categories": [
+                    {
+                        "id": 16,
+                        "slug": "security",
+                        "name": "Security"
+                    }
+                ],
+                "rootPath": true
+            },
+            {
+                "slug": "google-analytics",
+                "name": "Google Analytics",
+                "description": "Google Analytics is a free web analytics service that tracks and reports website traffic.",
+                "confidence": 100,
+                "version": null,
+                "icon": "Google Analytics.svg",
+                "website": "https://google.com/analytics",
+                "cpe": null,
+                "categories": [
+                    {
+                        "id": 10,
+                        "slug": "analytics",
+                        "name": "Analytics"
+                    }
+                ],
+                "rootPath": true
+            },
+            {
+                "slug": "chartbeat",
+                "name": "Chartbeat",
+                "description": null,
+                "confidence": 100,
+                "version": null,
+                "icon": "Chartbeat.png",
+                "website": "https://chartbeat.com",
+                "cpe": null,
+                "categories": [
+                    {
+                        "id": 10,
+                        "slug": "analytics",
+                        "name": "Analytics"
+                    }
+                ],
+                "rootPath": true
+            },
+            {
+                "slug": "priority-hints",
+                "name": "Priority Hints",
+                "description": "Priority Hints exposes a mechanism for developers to signal a relative priority for browsers to consider when fetching resources.",
+                "confidence": 100,
+                "version": null,
+                "icon": "Priority Hints.svg",
+                "website": "https://wicg.github.io/priority-hints/",
+                "cpe": null,
+                "categories": [
+                    {
+                        "id": 92,
+                        "slug": "performance",
+                        "name": "Performance"
+                    }
+                ],
+                "rootPath": true
+            },
+            {
+                "slug": "loadable-components",
+                "name": "Loadable-Components",
+                "description": "Loadable-Components is a library to solve the React code-splitting client-side and server-side.",
+                "confidence": 100,
+                "version": null,
+                "icon": "Loadable-Components.png",
+                "website": "https://github.com/gregberge/loadable-components",
+                "cpe": null,
+                "categories": [
+                    {
+                        "id": 59,
+                        "slug": "javascript-libraries",
+                        "name": "JavaScript libraries"
+                    }
+                ],
+                "rootPath": true
+            },
+            {
+                "slug": "web-vitals",
+                "name": "web-vitals",
+                "description": "The web-vitals JavaScript is a tiny, modular library for measuring all the web vitals metrics on real users.",
+                "confidence": 100,
+                "version": null,
+                "icon": "web-vitals.svg",
+                "website": "https://github.com/GoogleChrome/web-vitals",
+                "cpe": null,
+                "categories": [
+                    {
+                        "id": 59,
+                        "slug": "javascript-libraries",
+                        "name": "JavaScript libraries"
+                    },
+                    {
+                        "id": 78,
+                        "slug": "rum",
+                        "name": "RUM"
+                    }
+                ]
+            },
+            {
+                "slug": "hsts",
+                "name": "HSTS",
+                "description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+                "confidence": 100,
+                "version": null,
+                "icon": "default.svg",
+                "website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+                "cpe": null,
+                "categories": [
+                    {
+                        "id": 16,
+                        "slug": "security",
+                        "name": "Security"
+                    }
+                ],
+                "rootPath": true
+            },
+            {
+                "slug": "digicert",
+                "name": "DigiCert",
+                "description": null,
+                "confidence": 100,
+                "version": null,
+                "icon": "DigiCert.svg",
+                "website": "https://www.digicert.com/",
+                "cpe": null,
+                "categories": [
+                    {
+                        "id": 70,
+                        "slug": "ssl-tls-certificate-authorities",
+                        "name": "SSL/TLS certificate authorities"
+                    }
+                ],
+                "rootPath": true
+            },
+            {
+                "slug": "rss",
+                "name": "RSS",
+                "description": "RSS is a family of web feed formats used to publish frequently updated works—such as blog entries, news headlines, audio, and video—in a standardized format.",
+                "confidence": 100,
+                "version": null,
+                "icon": "RSS.svg",
+                "website": "https://www.rssboard.org/rss-specification",
+                "cpe": null,
+                "categories": [
+                    {
+                        "id": 19,
+                        "slug": "miscellaneous",
+                        "name": "Miscellaneous"
+                    }
+                ],
+                "rootPath": true
+            },
+            {
+                "slug": "open-graph",
+                "name": "Open Graph",
+                "description": "Open Graph is a protocol that is used to integrate any web page into the social graph.",
+                "confidence": 100,
+                "version": null,
+                "icon": "Open Graph.png",
+                "website": "https://ogp.me",
+                "cpe": null,
+                "categories": [
+                    {
+                        "id": 19,
+                        "slug": "miscellaneous",
+                        "name": "Miscellaneous"
+                    }
+                ],
+                "rootPath": true
+            }
+        ],
+        "cookieData": {
+            "https://www.aljazeera.com": {
+                "cookiesCount": 63,
+                "frameCookies": {
+                    "ljt_reader:.lijit.com:/": {
+                        "parsedCookie": {
+                            "name": "ljt_reader",
+                            "domain": ".lijit.com",
+                            "path": "/",
+                            "value": "IibsABZH-XSK8A2yQXu3lIwX",
+                            "sameSite": "None",
+                            "expires": "2025-04-23T07:08:09.370Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://ap.lijit.com/rtb/bid?src=prebid_prebid_8.30.0",
+                        "analytics": {
+                            "platform": "Federated Media Publishing",
+                            "category": "Marketing",
+                            "gdprUrl": "",
+                            "description": "Collects data related to reader interests, context, demographics and other information on behalf of the Lijit platform with the purpose of finding interested users on websites with related content."
+                        },
+                        "isFirstParty": false
+                    },
+                    "test_cookie:.doubleclick.net:/": {
+                        "parsedCookie": {
+                            "name": "test_cookie",
+                            "domain": ".doubleclick.net",
+                            "path": "/",
+                            "value": "CheckForPermission",
+                            "sameSite": "none",
+                            "expires": "2024-04-23T07:23:10.000Z",
+                            "httpOnly": true,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://securepubads.g.doubleclick.net/gampad/ads?pvsid=1961807745633872&correlator=59552959078&eid=31081517%2C31082700&output=ldjh&gdfp_req=1&vrg=202404170101&ptt=17&impl=fifs&iu_parts=15184186%3A5287%2Caljazeera_leaderboard_mid&enc_prev_ius=%2F0%2F1&prev_iu_szs=970x250&ifi=3&sfv=1-0-40&eri=1&sc=1&cookie=ID%3D5c8b6997242d3c15%3AT%3D1713856088%3ART%3D1713856088%3AS%3DALNI_MbtjqN6Bfq5ncrFLOdFvmS3-NNnOA&gpic=UID%3D00000df6e0e21f1a%3AT%3D1713856088%3ART%3D1713856088%3AS%3DALNI_MZrqtOh-RcnXUfXZXBkxvRD11CIgA&abxe=1&dt=1713856089927&lmt=1713856089&adxs=235&adys=1232&biw=1440&bih=790&scr_x=0&scr_y=0&btvi=2&ucis=3&oid=2&u_his=2&u_h=900&u_w=1440&u_ah=900&u_aw=1440&u_cd=30&u_sd=1&u_tz=330&dmc=8&bc=31&nvt=1&uach=WyIiLCIiLCIiLCIiLCIiLG51bGwsMCxudWxsLCIiLG51bGwsMF0.&url=https%3A%2F%2Fwww.aljazeera.com%2F&vis=1&psz=970x0&msz=970x0&fws=0&ohw=0&psts=AOrYGslXqzWxZnMwa10HhsoG5C0a&ga_vid=1935037212.1713856088&ga_sid=1713856089&ga_hid=1264633337&ga_fc=true&ga_cid=1155918229.1713856088&a3p=EhkKCnVpZGFwaS5jb20YuJOizvAxSABSAghk&dlt=1713856086937&idt=1300&prev_scp=fsrefresh%3D0%26fsrebid%3D0%26fs_uuid%3D94a47519-36b5-4da4-a884-8605c2b37dbc%26fs_placementName%3Daljazeera_leaderboard_mid%26fs_ad_product%3DlazyLoad%26fs-auuid%3D7d627f40-b329-458f-add9-67b31838a1f9%26fsbid%3Dtimeout&cust_params=fs_session_id%3Dea674d70-adfd-4b1a-ae90-ab0559f963b2%26fs_pageview_id%3D966feb6a1b671a351822489c2205bdc0%26fsitf%3DY--Y---Y-Y--YY--------------------------%26user-agent%3DChrome%26pagetype%3DHome%2520Page%26keywords%3DNews%252C%2520analysis%2520from%2520the%2520Middle%2520East%2520%2526%2520worldwide%252C%2520multimedia%2520%2526%2520interactives%252C%2520opinions%252C%2520documentaries%252C%2520podcasts%252C%2520long%2520reads%2520and%2520broadcast%2520schedule.%26tags%3DBreaking%2520News%252C%2520World%2520News%2520and%2520Video%2520from%2520Al%2520Jazeera%26floors_user%3D1&adks=2494497682&frm=20&eo_id_str=ID%3D771325dbd80e2f60%3AT%3D1713856088%3ART%3D1713856088%3AS%3DAA-AfjbYnVEIBzBBtEcPXBIxFvBx",
+                        "analytics": {
+                            "platform": "DoubleClick/Google Marketing",
+                            "category": "Functional",
+                            "gdprUrl": "https://privacy.google.com/take-control.html",
+                            "description": "This cookie is set by DoubleClick (which is owned by Google) to determine if the website visitor's browser supports cookies."
+                        },
+                        "isFirstParty": false
+                    },
+                    "DSID:.doubleclick.net:/": {
+                        "parsedCookie": {
+                            "name": "DSID",
+                            "domain": ".doubleclick.net",
+                            "path": "/",
+                            "value": "NO_DATA",
+                            "sameSite": "none",
+                            "expires": "2024-04-23T08:08:10.000Z",
+                            "httpOnly": true,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://googleads.g.doubleclick.net/pagead/drt/si?st=NO_DATA",
+                        "analytics": {
+                            "platform": "DoubleClick/Google Marketing",
+                            "category": "Marketing",
+                            "gdprUrl": "https://privacy.google.com/take-control.html",
+                            "description": "This cookie is used for targeting, analyzing and optimisation of ad campaigns in DoubleClick/Google Marketing Suite"
+                        },
+                        "isFirstParty": false
+                    },
+                    "_fsuid:.pub.network:/": {
+                        "parsedCookie": {
+                            "name": "_fsuid",
+                            "domain": ".pub.network",
+                            "path": "/",
+                            "value": "3e774865-c024-4663-9cc8-69d083792bfe",
+                            "sameSite": "None",
+                            "expires": "2026-04-23T18:46:40.937Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://c.pub.network/v2/c",
+                        "analytics": {
+                            "platform": "Unknown",
+                            "category": "Uncategorized",
+                            "gdprUrl": "",
+                            "description": ""
+                        },
+                        "isFirstParty": false
+                    },
+                    "mc:.quantserve.com:/": {
+                        "parsedCookie": {
+                            "name": "mc",
+                            "domain": ".quantserve.com",
+                            "path": "/",
+                            "value": "66275e58-0ed66-a5034-49a25",
+                            "sameSite": "None",
+                            "expires": "2025-05-24T07:08:08.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://pixel.quantserve.com/pixel;r=1869428771;source=gtm;rf=0;a=p-DAMBunjxFvwVp;url=https%3A%2F%2Fwww.aljazeera.com%2F;uht=2;fpan=1;fpa=P0-1828388-1713856087822;pbc=;ns=0;ce=1;qjs=1;qv=b70d35e8-20231208114759;cm=;gdpr=0;ref=;d=aljazeera.com;dst=0;et=1713856087907;tzo=-330;ogl=type.article%2Curl.https%3A%2F%2Fwww%252Ealjazeera%252Ecom%2Ctitle.Breaking%20News%252C%20World%20News%20and%20Video%20from%20Al%20Jazeera%2Csite_name.Al%20Jazeera%2Cimage.https%3A%2F%2Fwww%252Ealjazeera%252Ecom%2Fimages%2Flogo_aje_social%252Epng;ses=23ca1e5b-4fcb-4607-9577-d7d655b57a64;mdl=",
+                        "analytics": {
+                            "platform": "Quantcast",
+                            "category": "Marketing",
+                            "gdprUrl": "https://www.quantcast.com/privacy/",
+                            "description": "Tracking of users and measure and improve performance and supports personalisation"
+                        },
+                        "isFirstParty": false
+                    },
+                    "UID:.scorecardresearch.com:/": {
+                        "parsedCookie": {
+                            "name": "UID",
+                            "domain": ".scorecardresearch.com",
+                            "path": "/",
+                            "value": "1D972f2e4a8010d6f17a81d1713856088",
+                            "sameSite": "None",
+                            "expires": "2026-04-13T07:08:08.313Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://sb.scorecardresearch.com/b2?c1=2&c2=23384447&cs_it=b9&cv=4.0.0%2B2301240627&ns__t=1713856087999&ns_c=UTF-8&cs_ucfr=&c7=https%3A%2F%2Fwww.aljazeera.com%2F&c8=Breaking%20News%2C%20World%20News%20and%20Video%20from%20Al%20Jazeera&c9=",
+                        "analytics": {
+                            "platform": "ComScore",
+                            "category": "Marketing",
+                            "gdprUrl": "https://www.comscore.com/About/Privacy-Policy",
+                            "description": "Collects information of the user and his/her movement, such as timestamp for visits, most recently loaded pages and IP address. The data is used by the marketing research network, Scorecard Research, to analyse traffic patterns and carry out surveys to help their clients better understand the customer's preferences."
+                        },
+                        "isFirstParty": false
+                    },
+                    "PID:.scorecardresearch.com:/": {
+                        "parsedCookie": {
+                            "name": "PID",
+                            "domain": ".scorecardresearch.com",
+                            "path": "/",
+                            "value": "10372f2e4a64e0d6f17a66a1713856088",
+                            "sameSite": "None",
+                            "expires": "2024-07-22T07:08:08.313Z",
+                            "httpOnly": false,
+                            "secure": true,
+                            "partitionKey": "https://aljazeera.com"
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://sb.scorecardresearch.com/b2?c1=2&c2=23384447&cs_it=b9&cv=4.0.0%2B2301240627&ns__t=1713856087999&ns_c=UTF-8&cs_ucfr=&c7=https%3A%2F%2Fwww.aljazeera.com%2F&c8=Breaking%20News%2C%20World%20News%20and%20Video%20from%20Al%20Jazeera&c9=",
+                        "analytics": {
+                            "platform": "ComScore",
+                            "category": "Marketing",
+                            "gdprUrl": "https://www.comscore.com/About/Privacy-Policy",
+                            "description": "Collects a code that identifies the specific website or advertiser participating in the ScorecardResearch data collection program."
+                        },
+                        "isFirstParty": false
+                    },
+                    "XID:.scorecardresearch.com:/": {
+                        "parsedCookie": {
+                            "name": "XID",
+                            "domain": ".scorecardresearch.com",
+                            "path": "/",
+                            "value": "1D972f2e4a8010d6f17a81d1713856088",
+                            "sameSite": "None",
+                            "expires": "2026-04-13T07:08:08.313Z",
+                            "httpOnly": false,
+                            "secure": true,
+                            "partitionKey": "https://aljazeera.com"
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://sb.scorecardresearch.com/b2?c1=2&c2=23384447&cs_it=b9&cv=4.0.0%2B2301240627&ns__t=1713856087999&ns_c=UTF-8&cs_ucfr=&c7=https%3A%2F%2Fwww.aljazeera.com%2F&c8=Breaking%20News%2C%20World%20News%20and%20Video%20from%20Al%20Jazeera&c9=",
+                        "analytics": {
+                            "platform": "ComScore",
+                            "category": "Marketing",
+                            "gdprUrl": "https://www.comscore.com/About/Privacy-Policy",
+                            "description": "Collects a unique identifier assigned to a device (computer, phone, tablet) to track the user across different websites."
+                        },
+                        "isFirstParty": false
+                    },
+                    "muc_ads:.t.co:/": {
+                        "parsedCookie": {
+                            "name": "muc_ads",
+                            "domain": ".t.co",
+                            "path": "/",
+                            "value": "2e0b9570-34ce-452a-a768-3a28890c0b89",
+                            "sameSite": "None",
+                            "expires": "2026-04-23T07:08:08.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://t.co/1/i/adsct?bci=4&eci=3&event=%7B%7D&event_id=4a81a781-76e0-4764-8722-87d371310161&integration=gtm&p_id=Twitter&p_user_id=0&pl_id=d1c3cff0-3ee1-4c03-bee8-982c429438e7&tw_document_href=https%3A%2F%2Fwww.aljazeera.com%2F&tw_iframe_status=0&txn_id=o2jva&type=javascript&version=2.3.30",
+                        "analytics": {
+                            "platform": "X",
+                            "category": "Marketing",
+                            "gdprUrl": "https://twitter.com/en/privacy",
+                            "description": "These cookies are placed when you come to our website via X. A cookie from X is also placed on our website, with which we can later show a relevant offer on X"
+                        },
+                        "isFirstParty": false
+                    },
+                    "guest_id_marketing:.twitter.com:/": {
+                        "parsedCookie": {
+                            "name": "guest_id_marketing",
+                            "domain": ".twitter.com",
+                            "path": "/",
+                            "value": "v1%3A171385608851639737",
+                            "sameSite": "None",
+                            "expires": "2026-04-23T07:08:08.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://analytics.twitter.com/1/i/adsct?bci=4&eci=3&event=%7B%7D&event_id=4a81a781-76e0-4764-8722-87d371310161&integration=gtm&p_id=Twitter&p_user_id=0&pl_id=d1c3cff0-3ee1-4c03-bee8-982c429438e7&tw_document_href=https%3A%2F%2Fwww.aljazeera.com%2F&tw_iframe_status=0&txn_id=o2jva&type=javascript&version=2.3.30",
+                        "analytics": {
+                            "platform": "X",
+                            "category": "Marketing",
+                            "gdprUrl": "https://twitter.com/en/privacy",
+                            "description": "This cookie is for advertising when logged out"
+                        },
+                        "isFirstParty": false
+                    },
+                    "guest_id_ads:.twitter.com:/": {
+                        "parsedCookie": {
+                            "name": "guest_id_ads",
+                            "domain": ".twitter.com",
+                            "path": "/",
+                            "value": "v1%3A171385608851639737",
+                            "sameSite": "None",
+                            "expires": "2026-04-23T07:08:08.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://analytics.twitter.com/1/i/adsct?bci=4&eci=3&event=%7B%7D&event_id=4a81a781-76e0-4764-8722-87d371310161&integration=gtm&p_id=Twitter&p_user_id=0&pl_id=d1c3cff0-3ee1-4c03-bee8-982c429438e7&tw_document_href=https%3A%2F%2Fwww.aljazeera.com%2F&tw_iframe_status=0&txn_id=o2jva&type=javascript&version=2.3.30",
+                        "analytics": {
+                            "platform": "X",
+                            "category": "Marketing",
+                            "gdprUrl": "https://twitter.com/en/privacy",
+                            "description": "This cookie is for advertising when logged out"
+                        },
+                        "isFirstParty": false
+                    },
+                    "personalization_id:.twitter.com:/": {
+                        "parsedCookie": {
+                            "name": "personalization_id",
+                            "domain": ".twitter.com",
+                            "path": "/",
+                            "value": "\"v1_NIqOcJgavhi3RWDbd793oA==\"",
+                            "sameSite": "None",
+                            "expires": "2026-04-23T07:08:08.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://analytics.twitter.com/1/i/adsct?bci=4&eci=3&event=%7B%7D&event_id=4a81a781-76e0-4764-8722-87d371310161&integration=gtm&p_id=Twitter&p_user_id=0&pl_id=d1c3cff0-3ee1-4c03-bee8-982c429438e7&tw_document_href=https%3A%2F%2Fwww.aljazeera.com%2F&tw_iframe_status=0&txn_id=o2jva&type=javascript&version=2.3.30",
+                        "analytics": {
+                            "platform": "X",
+                            "category": "Marketing",
+                            "gdprUrl": "https://help.twitter.com/nl/safety-and-security#ads-and-data-privacy",
+                            "description": "Unique value with which users can be identified by X. Collected information is used to be personalize X services, including X trends, stories, ads and suggestions."
+                        },
+                        "isFirstParty": false
+                    },
+                    "guest_id:.twitter.com:/": {
+                        "parsedCookie": {
+                            "name": "guest_id",
+                            "domain": ".twitter.com",
+                            "path": "/",
+                            "value": "v1%3A171385608851639737",
+                            "sameSite": "None",
+                            "expires": "2026-04-23T07:08:08.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://analytics.twitter.com/1/i/adsct?bci=4&eci=3&event=%7B%7D&event_id=4a81a781-76e0-4764-8722-87d371310161&integration=gtm&p_id=Twitter&p_user_id=0&pl_id=d1c3cff0-3ee1-4c03-bee8-982c429438e7&tw_document_href=https%3A%2F%2Fwww.aljazeera.com%2F&tw_iframe_status=0&txn_id=o2jva&type=javascript&version=2.3.30",
+                        "analytics": {
+                            "platform": "X",
+                            "category": "Marketing",
+                            "gdprUrl": "https://help.twitter.com/nl/safety-and-security#ads-and-data-privacy",
+                            "description": "This cookie is set by X to identify and track the website visitor. Registers if a users is signed in the X platform and collects information about ad preferences."
+                        },
+                        "isFirstParty": false
+                    },
+                    "TDID:.adsrvr.org:/": {
+                        "parsedCookie": {
+                            "name": "TDID",
+                            "domain": ".adsrvr.org",
+                            "path": "/",
+                            "value": "5313f548-706a-464b-af68-5e24fd5f2755",
+                            "sameSite": "none",
+                            "expires": "2025-04-23T07:08:09.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://match.adsrvr.org/track/cmb/generic?ttd_pid=l3a2x8p&ttd_tpi=1&gdpr=&gdpr_consent=&us_privacy=&redir=",
+                        "analytics": {
+                            "platform": "The Tradedesk",
+                            "category": "Marketing",
+                            "gdprUrl": "https://adsrvr.org/",
+                            "description": "Registers a unique ID that identifies a returning user's device. The ID is used for targeted ads."
+                        },
+                        "isFirstParty": false
+                    },
+                    "receive-cookie-deprecation:.openx.net:/": {
+                        "parsedCookie": {
+                            "name": "receive-cookie-deprecation",
+                            "domain": ".openx.net",
+                            "path": "/",
+                            "value": "1",
+                            "sameSite": "None",
+                            "expires": "2025-04-23T07:08:08.923Z",
+                            "httpOnly": true,
+                            "secure": true,
+                            "partitionKey": "https://aljazeera.com"
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://rtb.openx.net/openrtbb/prebidjs",
+                        "analytics": {
+                            "platform": "Google",
+                            "category": "Functional",
+                            "gdprUrl": "https://privacy.google.com/take-control.html",
+                            "description": "This cookie ensures browers in an experiment group of the Chrome-facilitated testing period include the Sec-Cookie-Deprecation request header as soon as it becomes available."
+                        },
+                        "isFirstParty": false
+                    },
+                    "yieldmo_id:.yieldmo.com:/": {
+                        "parsedCookie": {
+                            "name": "yieldmo_id",
+                            "domain": ".yieldmo.com",
+                            "path": "/",
+                            "value": "Vc3h8l7dh47RFmBhMTvp%7C1713830400000%7C0",
+                            "sameSite": "None",
+                            "expires": "2025-04-23T07:08:09.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://s2s.t13.io/setuid?bidder=yieldmo&f=i&uid=Vc3h8l7dh47RFmBhMTvp&gdpr=&gdpr_consent=&gpp=&gpp_sid=&us_privacy=",
+                        "analytics": {
+                            "platform": "Unknown",
+                            "category": "Uncategorized",
+                            "gdprUrl": "",
+                            "description": ""
+                        },
+                        "isFirstParty": false
+                    },
+                    "receive-cookie-deprecation:.3lift.com:/": {
+                        "parsedCookie": {
+                            "name": "receive-cookie-deprecation",
+                            "domain": ".3lift.com",
+                            "path": "/",
+                            "value": "1",
+                            "sameSite": "None",
+                            "expires": "2024-07-22T07:08:08.994Z",
+                            "httpOnly": true,
+                            "secure": true,
+                            "partitionKey": "https://aljazeera.com"
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://tlx.3lift.com/header/auction?lib=prebid&v=8.30.0&referrer=https%3A%2F%2Fwww.aljazeera.com%2F&tmax=1200",
+                        "analytics": {
+                            "platform": "Google",
+                            "category": "Functional",
+                            "gdprUrl": "https://privacy.google.com/take-control.html",
+                            "description": "This cookie ensures browers in an experiment group of the Chrome-facilitated testing period include the Sec-Cookie-Deprecation request header as soon as it becomes available."
+                        },
+                        "isFirstParty": false
+                    },
+                    "tluid:.3lift.com:/": {
+                        "parsedCookie": {
+                            "name": "tluid",
+                            "domain": ".3lift.com",
+                            "path": "/",
+                            "value": "3319921699903741977387",
+                            "sameSite": "None",
+                            "expires": "2024-07-22T07:08:09.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://tlx.3lift.com/header/auction?lib=prebid&v=8.30.0&referrer=https%3A%2F%2Fwww.aljazeera.com%2F&tmax=1200",
+                        "analytics": {
+                            "platform": "TripleLift",
+                            "category": "Marketing",
+                            "gdprUrl": "https://triplelift.com/advertising-technology-platform-cookie-notice/",
+                            "description": "This cookie is used to identify the visitor and optimize ad-relevance by collecting visitor data from multiple websites – this exchange of visitor data is normally provided by a third-party data-center or ad-exchange."
+                        },
+                        "isFirstParty": false
+                    },
+                    "tt_viewer:.teads.tv:/": {
+                        "parsedCookie": {
+                            "name": "tt_viewer",
+                            "domain": ".teads.tv",
+                            "path": "/",
+                            "value": "8cf2c981-6654-4f2d-b34a-5b499eee6c01",
+                            "sameSite": "None",
+                            "expires": "2025-04-22T07:08:08.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://a.teads.tv/hb/bid-request",
+                        "analytics": {
+                            "platform": "Teads",
+                            "category": "Marketing",
+                            "gdprUrl": "https://www.teads.com/privacy-policy/",
+                            "description": "Teads uses a “tt_viewer” cookie to help personalize the video ads you see on our partner websites."
+                        },
+                        "isFirstParty": false
+                    },
+                    "receive-cookie-deprecation:.teads.tv:/": {
+                        "parsedCookie": {
+                            "name": "receive-cookie-deprecation",
+                            "domain": ".teads.tv",
+                            "path": "/",
+                            "value": "1",
+                            "sameSite": "None",
+                            "expires": "2025-04-22T07:08:08.000Z",
+                            "httpOnly": true,
+                            "secure": true,
+                            "partitionKey": "https://aljazeera.com"
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://a.teads.tv/hb/bid-request",
+                        "analytics": {
+                            "platform": "Google",
+                            "category": "Functional",
+                            "gdprUrl": "https://privacy.google.com/take-control.html",
+                            "description": "This cookie ensures browers in an experiment group of the Chrome-facilitated testing period include the Sec-Cookie-Deprecation request header as soon as it becomes available."
+                        },
+                        "isFirstParty": false
+                    },
+                    "receive-cookie-deprecation:.casalemedia.com:/": {
+                        "parsedCookie": {
+                            "name": "receive-cookie-deprecation",
+                            "domain": ".casalemedia.com",
+                            "path": "/",
+                            "value": "1",
+                            "sameSite": "None",
+                            "expires": "2025-04-23T07:08:09.000Z",
+                            "httpOnly": true,
+                            "secure": true,
+                            "partitionKey": "https://aljazeera.com"
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://htlb.casalemedia.com/openrtb/pbjs?s=470230",
+                        "analytics": {
+                            "platform": "Google",
+                            "category": "Functional",
+                            "gdprUrl": "https://privacy.google.com/take-control.html",
+                            "description": "This cookie ensures browers in an experiment group of the Chrome-facilitated testing period include the Sec-Cookie-Deprecation request header as soon as it becomes available."
+                        },
+                        "isFirstParty": false
+                    },
+                    "XANDR_PANID:.adnxs.com:/": {
+                        "parsedCookie": {
+                            "name": "XANDR_PANID",
+                            "domain": ".adnxs.com",
+                            "path": "/",
+                            "value": "F2CPCy1HbwRd_Fhlj6TR4S9Ddvpd8b4S_es1n4vfhHTWqIZzGeKGu5d6GNpZzOzpMuYu5p-xyaQVf6xXq0hrsK8UWcb1wdzId8rGIre0qWo.",
+                            "sameSite": "None",
+                            "expires": "2024-07-22T07:08:09.000Z",
+                            "httpOnly": false,
+                            "secure": true,
+                            "partitionKey": "https://aljazeera.com"
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://ids.ad.gt/api/v1/match?id=AU1D-0100-001713856090-9T28JWQT-RHU5&adnxs_id=2701619831150931906&gdpr=0",
+                        "analytics": {
+                            "platform": "Xandr",
+                            "category": "Marketing",
+                            "gdprUrl": "https://about.ads.microsoft.com/en-us/solutions/xandr/platform-privacy-policy",
+                            "description": "This cookie registers data on the visitor. The information is used to optimize advertisement relevance."
+                        },
+                        "isFirstParty": false
+                    },
+                    "receive-cookie-deprecation:.adnxs.com:/": {
+                        "parsedCookie": {
+                            "name": "receive-cookie-deprecation",
+                            "domain": ".adnxs.com",
+                            "path": "/",
+                            "value": "1",
+                            "sameSite": "None",
+                            "expires": "2034-04-11T07:08:09.000Z",
+                            "httpOnly": true,
+                            "secure": true,
+                            "partitionKey": "https://aljazeera.com"
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://ids.ad.gt/api/v1/match?id=AU1D-0100-001713856090-9T28JWQT-RHU5&adnxs_id=2701619831150931906&gdpr=0",
+                        "analytics": {
+                            "platform": "Google",
+                            "category": "Functional",
+                            "gdprUrl": "https://privacy.google.com/take-control.html",
+                            "description": "This cookie ensures browers in an experiment group of the Chrome-facilitated testing period include the Sec-Cookie-Deprecation request header as soon as it becomes available."
+                        },
+                        "isFirstParty": false
+                    },
+                    "uuid2:.adnxs.com:/": {
+                        "parsedCookie": {
+                            "name": "uuid2",
+                            "domain": ".adnxs.com",
+                            "path": "/",
+                            "value": "2701619831150931906",
+                            "sameSite": "None",
+                            "expires": "2024-07-22T07:08:09.000Z",
+                            "httpOnly": true,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://s2s.t13.io/setuid?bidder=adnxs&gdpr=&gdpr_consent=&us_privacy=&gpp=&gpp_sid=&f=i&uid=2701619831150931906",
+                        "analytics": {
+                            "platform": "Xandr",
+                            "category": "Marketing",
+                            "gdprUrl": "https://about.ads.microsoft.com/en-us/solutions/xandr/platform-privacy-policy",
+                            "description": "This cookie contains a unique randomly-generated value that enables the Platform to distinguish browsers and devices."
+                        },
+                        "isFirstParty": false
+                    },
+                    "uids:.t13.io:/": {
+                        "parsedCookie": {
+                            "name": "uids",
+                            "domain": ".t13.io",
+                            "path": "/",
+                            "value": "eyJ0ZW1wVUlEcyI6eyJyZXNldGRpZ2l0YWwiOnsidWlkIjoiMDAwMDAxM0NCM0FDMDlBRCIsImV4cGlyZXMiOiIyMDI0LTA1LTA3VDA3OjA4OjEyLjQxNzY0Njk1NloifX19",
+                            "sameSite": "None",
+                            "expires": "2024-07-22T07:08:12.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://s2s.t13.io/setuid?bidder=resetdigital&gdpr=&gdpr_consent=&us_privacy=&gpp=&gpp_sid=&f=i&uid=0000013CB3AC09AD",
+                        "analytics": {
+                            "platform": "Admatic",
+                            "category": "Marketing",
+                            "gdprUrl": "http://www.admatic.com.tr/en/privacy-policy.html",
+                            "description": "Registers user behaviour and navigation on the website, and any interaction with active campaigns. This is used for optimizing advertisement and for efficient retargeting."
+                        },
+                        "isFirstParty": false
+                    },
+                    "khaos:.rubiconproject.com:/": {
+                        "parsedCookie": {
+                            "name": "khaos",
+                            "domain": ".rubiconproject.com",
+                            "path": "/",
+                            "value": "LVC1NYGQ-H-GHUA",
+                            "sameSite": "None",
+                            "expires": "2025-04-23T07:08:09.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://token.rubiconproject.com/token?pid=50242&puid=AU1D-0100-001713856090-9T28JWQT-RHU5&gdpr=0",
+                        "analytics": {
+                            "platform": "Magnite",
+                            "category": "Marketing",
+                            "gdprUrl": "https://www.magnite.com/legal/platform-cookie-statement/",
+                            "description": "Rubicon Project cookie used for tracking advertising campaigns and collect anonymized user behavior statistics"
+                        },
+                        "isFirstParty": false
+                    },
+                    "audit:.rubiconproject.com:/": {
+                        "parsedCookie": {
+                            "name": "audit",
+                            "domain": ".rubiconproject.com",
+                            "path": "/",
+                            "value": "1|kPrYXe5nrzoWYyEd20EHxS1+VlfAGmiPeDfW1uJiGaLg+kq8IyzqG3BCWl4IsKKXzmfvUZfYcC/yUhTWCqUS/Pv31DA4fHDqMp0HTDw5gZ7V/IjBlWfcnYlof2zsNOX2kHYAl06nm5uoEczF1NS0LUCtTwxByv9HYPDxny9O7hNPVHjylZIeXNAPlTu0R9RN",
+                            "sameSite": "None",
+                            "expires": "2025-04-23T07:08:09.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://token.rubiconproject.com/token?pid=50242&puid=AU1D-0100-001713856090-9T28JWQT-RHU5&gdpr=0",
+                        "analytics": {
+                            "platform": "Magnite",
+                            "category": "Marketing",
+                            "gdprUrl": "https://www.magnite.com/legal/platform-cookie-statement/",
+                            "description": "Set by Rubicon Project to record cookie consent data."
+                        },
+                        "isFirstParty": false
+                    },
+                    "TDCPM:.adsrvr.org:/": {
+                        "parsedCookie": {
+                            "name": "TDCPM",
+                            "domain": ".adsrvr.org",
+                            "path": "/",
+                            "value": "CAEYBSgCMgsIutKJ0tvb8TwQBTgB",
+                            "sameSite": "none",
+                            "expires": "2025-04-23T07:08:09.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://match.adsrvr.org/track/cmb/generic?ttd_pid=l3a2x8p&ttd_tpi=1&gdpr=&gdpr_consent=&us_privacy=&redir=",
+                        "analytics": {
+                            "platform": "The Tradedesk",
+                            "category": "Marketing",
+                            "gdprUrl": "https://adsrvr.org/",
+                            "description": "Registers a unique ID that identifies a returning user's device. The ID is used for targeted ads."
+                        },
+                        "isFirstParty": false
+                    },
+                    "i:.openx.net:/": {
+                        "parsedCookie": {
+                            "name": "i",
+                            "domain": ".openx.net",
+                            "path": "/",
+                            "value": "34ad690d-c554-4783-b230-1526a8da1301|1713856089",
+                            "sameSite": "None",
+                            "expires": "2025-04-23T07:08:09.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://ids.ad.gt/api/v1/openx?openx_id=ce414f31-e55f-4788-bb1d-c99edb82eff8&id=AU1D-0100-001713856090-9T28JWQT-RHU5&auid=AU1D-0100-001713856090-9T28JWQT-RHU5",
+                        "analytics": {
+                            "platform": "openx.net",
+                            "category": "Marketing",
+                            "gdprUrl": "https://www.openx.com/privacy-center/privacy-policy/",
+                            "description": "Registers user data, such as IP address, geographical location, websites visited and on which advertisements the user has clicked, with the aim of optimizing the display of advertisements based on user relocation on websites that use the same advertising network."
+                        },
+                        "isFirstParty": false
+                    },
+                    "TapAd_TS:.tapad.com:/": {
+                        "parsedCookie": {
+                            "name": "TapAd_TS",
+                            "domain": ".tapad.com",
+                            "path": "/",
+                            "value": "1713856089820",
+                            "sameSite": "None",
+                            "expires": "2024-06-22T07:08:09.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://match.adsrvr.org/track/cmb/generic?ttd_pid=tapad&ttd_tpi=1&ttd_puid=3006ecb9-a928-4070-8366-0d645278777d%252Chttps%25253A%25252F%25252Fids.ad.gt%25252Fapi%25252Fv1%25252Ftapad_match%25253Fid%25253DAU1D-0100-001713856090-9T28JWQT-RHU5%252526tapad_id%25253D3006ecb9-a928-4070-8366-0d645278777d%252C&gdpr=0&gdpr_consent=",
+                        "analytics": {
+                            "platform": "Tapad",
+                            "category": "Marketing",
+                            "gdprUrl": "https://www.tapad.com/privacy",
+                            "description": "Used to determine what type of devices (smartphones, tablets, computers, TVs etc.) is used by a user."
+                        },
+                        "isFirstParty": false
+                    },
+                    "TapAd_DID:.tapad.com:/": {
+                        "parsedCookie": {
+                            "name": "TapAd_DID",
+                            "domain": ".tapad.com",
+                            "path": "/",
+                            "value": "3006ecb9-a928-4070-8366-0d645278777d",
+                            "sameSite": "None",
+                            "expires": "2024-06-22T07:08:09.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://match.adsrvr.org/track/cmb/generic?ttd_pid=tapad&ttd_tpi=1&ttd_puid=3006ecb9-a928-4070-8366-0d645278777d%252Chttps%25253A%25252F%25252Fids.ad.gt%25252Fapi%25252Fv1%25252Ftapad_match%25253Fid%25253DAU1D-0100-001713856090-9T28JWQT-RHU5%252526tapad_id%25253D3006ecb9-a928-4070-8366-0d645278777d%252C&gdpr=0&gdpr_consent=",
+                        "analytics": {
+                            "platform": "Tapad",
+                            "category": "Marketing",
+                            "gdprUrl": "https://www.tapad.com/privacy",
+                            "description": "Used to determine what type of devices (smartphones, tablets, computers, TVs etc.) is used by a user."
+                        },
+                        "isFirstParty": false
+                    },
+                    "TapAd_3WAY_SYNCS:.tapad.com:/": {
+                        "parsedCookie": {
+                            "name": "TapAd_3WAY_SYNCS",
+                            "domain": ".tapad.com",
+                            "path": "/",
+                            "value": "",
+                            "sameSite": "None",
+                            "expires": "2024-06-22T07:08:09.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://match.adsrvr.org/track/cmb/generic?ttd_pid=tapad&ttd_tpi=1&ttd_puid=3006ecb9-a928-4070-8366-0d645278777d%252Chttps%25253A%25252F%25252Fids.ad.gt%25252Fapi%25252Fv1%25252Ftapad_match%25253Fid%25253DAU1D-0100-001713856090-9T28JWQT-RHU5%252526tapad_id%25253D3006ecb9-a928-4070-8366-0d645278777d%252C&gdpr=0&gdpr_consent=",
+                        "analytics": {
+                            "platform": "Tapad",
+                            "category": "Marketing",
+                            "gdprUrl": "https://www.tapad.com/privacy",
+                            "description": "Used for data-synchronization with advertisement networks"
+                        },
+                        "isFirstParty": false
+                    },
+                    "KTPCACOOKIE:.pubmatic.com:/": {
+                        "parsedCookie": {
+                            "name": "KTPCACOOKIE",
+                            "domain": ".pubmatic.com",
+                            "path": "/",
+                            "value": "true",
+                            "sameSite": "None",
+                            "expires": "2024-07-22T07:08:09.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://image2.pubmatic.com/AdServer/UCookieSetPug?ird=1&rd=https%3A%2F%2Fids.ad.gt%2Fapi%2Fv1%2Fpbm_match%3Fpbm%3D%23PM_USER_ID%26id%3DAU1D-0100-001713856090-9T28JWQT-RHU5",
+                        "analytics": {
+                            "platform": "PubMatic",
+                            "category": "Functional",
+                            "gdprUrl": "https://pubmatic.com/legal/privacy/",
+                            "description": "We use this cookie to check if third-party cookies are enabled on the user’s browser."
+                        },
+                        "isFirstParty": false
+                    },
+                    "uid:.adform.net:/": {
+                        "parsedCookie": {
+                            "name": "uid",
+                            "domain": ".adform.net",
+                            "path": "/",
+                            "value": "8958357066883611142",
+                            "sameSite": "none",
+                            "expires": "2024-06-22T07:08:09.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://cm.adform.net/cookie?redirect_url=https%3A%2F%2Fs2s.t13.io%2Fsetuid%3Fbidder%3Dadf%26gdpr%3D%26gdpr_consent%3D%26us_privacy%3D%26gpp%3D%26gpp_sid%3D%26f%3Di%26uid%3D%24UID",
+                        "analytics": {
+                            "platform": "Adform",
+                            "category": "Marketing",
+                            "gdprUrl": "https://site.adform.com/privacy-center/overview",
+                            "description": "Contains a unique ID to identify a user"
+                        },
+                        "isFirstParty": false
+                    },
+                    "uid:.turn.com:/": {
+                        "parsedCookie": {
+                            "name": "uid",
+                            "domain": ".turn.com",
+                            "path": "/",
+                            "value": "7877051274786523075",
+                            "sameSite": "None",
+                            "expires": "2024-10-20T07:08:10.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://ids.ad.gt/api/v1/amo_match?turn_id=7877051274786523075&id=AU1D-0100-001713856090-9T28JWQT-RHU5",
+                        "analytics": {
+                            "platform": "Adform",
+                            "category": "Marketing",
+                            "gdprUrl": "https://site.adform.com/privacy-center/overview",
+                            "description": "Contains a unique ID to identify a user"
+                        },
+                        "isFirstParty": false
+                    },
+                    "V:.contextweb.com:/": {
+                        "parsedCookie": {
+                            "name": "V",
+                            "domain": ".contextweb.com",
+                            "path": "/",
+                            "value": "giINuzYGPl4B",
+                            "sameSite": "None",
+                            "expires": "2025-04-18T07:08:10.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://s2s.t13.io/setuid?bidder=pulsepointfsx&gdpr=&gdpr_consent=&us_privacy=&gpp=&gpp_sid=&f=i&uid=giINuzYGPl4B&ev=1&gpp_sid=&gpp=&us_privacy=&pid=563220",
+                        "analytics": {
+                            "platform": "Unknown",
+                            "category": "Uncategorized",
+                            "gdprUrl": "",
+                            "description": ""
+                        },
+                        "isFirstParty": false
+                    },
+                    "VP:.contextweb.com:/": {
+                        "parsedCookie": {
+                            "name": "VP",
+                            "domain": ".contextweb.com",
+                            "path": "/",
+                            "value": "part_giINuzYGPl4B",
+                            "sameSite": "None",
+                            "expires": "2025-04-18T07:08:10.000Z",
+                            "httpOnly": false,
+                            "secure": true,
+                            "partitionKey": "https://aljazeera.com"
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://s2s.t13.io/setuid?bidder=pulsepointfsx&gdpr=&gdpr_consent=&us_privacy=&gpp=&gpp_sid=&f=i&uid=giINuzYGPl4B&ev=1&gpp_sid=&gpp=&us_privacy=&pid=563220",
+                        "analytics": {
+                            "platform": "Unknown",
+                            "category": "Uncategorized",
+                            "gdprUrl": "",
+                            "description": ""
+                        },
+                        "isFirstParty": false
+                    },
+                    "pb_rtb_ev:.contextweb.com:/": {
+                        "parsedCookie": {
+                            "name": "pb_rtb_ev",
+                            "domain": ".contextweb.com",
+                            "path": "/",
+                            "value": "3-1qyq|8rT.0.1",
+                            "sameSite": "None",
+                            "expires": "2025-04-23T07:08:10.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://s2s.t13.io/setuid?bidder=pulsepointfsx&gdpr=&gdpr_consent=&us_privacy=&gpp=&gpp_sid=&f=i&uid=giINuzYGPl4B&ev=1&gpp_sid=&gpp=&us_privacy=&pid=563220",
+                        "analytics": {
+                            "platform": "Unknown",
+                            "category": "Uncategorized",
+                            "gdprUrl": "",
+                            "description": ""
+                        },
+                        "isFirstParty": false
+                    },
+                    "pb_rtb_ev_part:.contextweb.com:/": {
+                        "parsedCookie": {
+                            "name": "pb_rtb_ev_part",
+                            "domain": ".contextweb.com",
+                            "path": "/",
+                            "value": "3-1qyq|8rT.0.1",
+                            "sameSite": "None",
+                            "expires": "2025-04-23T07:08:10.000Z",
+                            "httpOnly": false,
+                            "secure": true,
+                            "partitionKey": "https://aljazeera.com"
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://s2s.t13.io/setuid?bidder=pulsepointfsx&gdpr=&gdpr_consent=&us_privacy=&gpp=&gpp_sid=&f=i&uid=giINuzYGPl4B&ev=1&gpp_sid=&gpp=&us_privacy=&pid=563220",
+                        "analytics": {
+                            "platform": "Unknown",
+                            "category": "Uncategorized",
+                            "gdprUrl": "",
+                            "description": ""
+                        },
+                        "isFirstParty": false
+                    },
+                    "INGRESSCOOKIE:.t13.io:/": {
+                        "parsedCookie": {
+                            "name": "INGRESSCOOKIE",
+                            "domain": ".t13.io",
+                            "path": "/",
+                            "value": "a5c0d4279b11c378",
+                            "sameSite": "None",
+                            "expires": "Session",
+                            "httpOnly": true,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://s2s.t13.io/setuid?bidder=pulsepointfsx&gdpr=&gdpr_consent=&us_privacy=&gpp=&gpp_sid=&f=i&uid=giINuzYGPl4B&ev=1&gpp_sid=&gpp=&us_privacy=&pid=563220",
+                        "analytics": {
+                            "platform": "NGINX Ingresss",
+                            "category": "Functional",
+                            "gdprUrl": "",
+                            "description": "Registers which server-cluster is serving the visitor. This is used in context with load balancing, in order to optimize user experience."
+                        },
+                        "isFirstParty": false
+                    },
+                    "ckbk:.resetdigital.co:/": {
+                        "parsedCookie": {
+                            "name": "ckbk",
+                            "domain": ".resetdigital.co",
+                            "path": "/",
+                            "value": "0000013CB3AC09AD",
+                            "sameSite": "None",
+                            "expires": "2024-07-22T07:08:12.296Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://s2s.t13.io/setuid?bidder=resetdigital&gdpr=&gdpr_consent=&us_privacy=&gpp=&gpp_sid=&f=i&uid=0000013CB3AC09AD",
+                        "analytics": {
+                            "platform": "Unknown",
+                            "category": "Uncategorized",
+                            "gdprUrl": "",
+                            "description": ""
+                        },
+                        "isFirstParty": false
+                    },
+                    "_cb:.aljazeera.com:/": {
+                        "parsedCookie": {
+                            "name": "_cb",
+                            "domain": ".aljazeera.com",
+                            "path": "/",
+                            "value": "237xLCfzqTikJvmq",
+                            "sameSite": "Lax",
+                            "expires": 1747984087,
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://www.aljazeera.com/wp-content/uploads/2024/04/2024-02-08T155932Z_806946109_RC29Y5A96RDO_RTRMADP_3_SYRIA-SECURITY-KURDS-1713771883.jpg?resize=770%2C513&quality=80",
+                        "analytics": {
+                            "platform": "Unknown",
+                            "category": "Uncategorized",
+                            "gdprUrl": "",
+                            "description": ""
+                        },
+                        "isFirstParty": true
+                    },
+                    "_chartbeat2:.aljazeera.com:/": {
+                        "parsedCookie": {
+                            "name": "_chartbeat2",
+                            "domain": ".aljazeera.com",
+                            "path": "/",
+                            "value": ".1713856087445.1713856087445.1.ByQO9rpYNlVry5VnBPGceuU9mSx.1",
+                            "sameSite": "Lax",
+                            "expires": 1747984087,
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://www.aljazeera.com/wp-content/uploads/2024/04/2024-02-08T155932Z_806946109_RC29Y5A96RDO_RTRMADP_3_SYRIA-SECURITY-KURDS-1713771883.jpg?resize=770%2C513&quality=80",
+                        "analytics": {
+                            "platform": "Chartbeat",
+                            "category": "Analytics",
+                            "gdprUrl": "https://chartbeat.com/privacy/",
+                            "description": "Cookie is used to register if a person has visited the domain before (to calculate new vs returning users)."
+                        },
+                        "isFirstParty": true
+                    },
+                    "_cb_svref:.aljazeera.com:/": {
+                        "parsedCookie": {
+                            "name": "_cb_svref",
+                            "domain": ".aljazeera.com",
+                            "path": "/",
+                            "value": "external",
+                            "sameSite": "Lax",
+                            "expires": 1713857887,
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://www.aljazeera.com/wp-content/uploads/2024/04/2024-02-08T155932Z_806946109_RC29Y5A96RDO_RTRMADP_3_SYRIA-SECURITY-KURDS-1713771883.jpg?resize=770%2C513&quality=80",
+                        "analytics": {
+                            "platform": "Unknown",
+                            "category": "Uncategorized",
+                            "gdprUrl": "",
+                            "description": ""
+                        },
+                        "isFirstParty": true
+                    },
+                    "_splunk_rum_sid:.www.aljazeera.com:/": {
+                        "parsedCookie": {
+                            "name": "_splunk_rum_sid",
+                            "domain": ".www.aljazeera.com",
+                            "path": "/",
+                            "value": "%7B%22id%22%3A%22f69a7ace67bb5e251cb78861ec31d587%22%2C%22startTime%22%3A1713856087449%7D",
+                            "sameSite": "Strict",
+                            "expires": 1713856987.449438,
+                            "httpOnly": false,
+                            "secure": false
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://www.aljazeera.com/wp-content/uploads/2024/04/2024-02-08T155932Z_806946109_RC29Y5A96RDO_RTRMADP_3_SYRIA-SECURITY-KURDS-1713771883.jpg?resize=770%2C513&quality=80",
+                        "analytics": {
+                            "platform": "Unknown",
+                            "category": "Uncategorized",
+                            "gdprUrl": "",
+                            "description": ""
+                        },
+                        "isFirstParty": true
+                    },
+                    "_gid:.aljazeera.com:/": {
+                        "parsedCookie": {
+                            "name": "_gid",
+                            "domain": ".aljazeera.com",
+                            "path": "/",
+                            "value": "GA1.2.1155918229.1713856088",
+                            "sameSite": "Lax",
+                            "expires": 1713942489,
+                            "httpOnly": false,
+                            "secure": false
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://www.aljazeera.com/wp-content/uploads/2024/04/2024-02-08T155932Z_806946109_RC29Y5A96RDO_RTRMADP_3_SYRIA-SECURITY-KURDS-1713771883.jpg?resize=770%2C513&quality=80",
+                        "analytics": {
+                            "platform": "Google Analytics",
+                            "category": "Analytics",
+                            "gdprUrl": "https://privacy.google.com/take-control.html",
+                            "description": "ID used to identify users for 24 hours after last activity"
+                        },
+                        "isFirstParty": true
+                    },
+                    "_gat_gtag_UA_1615344_7:.aljazeera.com:/": {
+                        "parsedCookie": {
+                            "name": "_gat_gtag_UA_1615344_7",
+                            "domain": ".aljazeera.com",
+                            "path": "/",
+                            "value": "1",
+                            "sameSite": "Lax",
+                            "expires": 1713856147,
+                            "httpOnly": false,
+                            "secure": false
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://www.aljazeera.com/wp-content/uploads/2024/04/2024-02-08T155932Z_806946109_RC29Y5A96RDO_RTRMADP_3_SYRIA-SECURITY-KURDS-1713771883.jpg?resize=770%2C513&quality=80",
+                        "analytics": {
+                            "platform": "Google Analytics",
+                            "category": "Analytics",
+                            "gdprUrl": "https://privacy.google.com/take-control.html",
+                            "description": "Used to monitor number of Google Analytics server requests when using Google Tag Manager"
+                        },
+                        "isFirstParty": true
+                    },
+                    "_ga_XN9JB9Q0M1:.aljazeera.com:/": {
+                        "parsedCookie": {
+                            "name": "_ga_XN9JB9Q0M1",
+                            "domain": ".aljazeera.com",
+                            "path": "/",
+                            "value": "GS1.1.1713856087.1.0.1713856087.0.0.0",
+                            "sameSite": "Lax",
+                            "expires": 1748416087.651902,
+                            "httpOnly": false,
+                            "secure": false
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://www.aljazeera.com/wp-content/uploads/2024/04/2024-02-08T155932Z_806946109_RC29Y5A96RDO_RTRMADP_3_SYRIA-SECURITY-KURDS-1713771883.jpg?resize=770%2C513&quality=80",
+                        "analytics": {
+                            "platform": "Google Analytics",
+                            "category": "Analytics",
+                            "gdprUrl": "https://privacy.google.com/take-control.html",
+                            "description": "ID used to identify users"
+                        },
+                        "isFirstParty": true
+                    },
+                    "OptanonConsent:.aljazeera.com:/": {
+                        "parsedCookie": {
+                            "name": "OptanonConsent",
+                            "domain": ".aljazeera.com",
+                            "path": "/",
+                            "value": "isGpcEnabled=0&datestamp=Tue+Apr+23+2024+12%3A38%3A07+GMT%2B0530+(India+Standard+Time)&version=202401.2.0&browserGpcFlag=0&isIABGlobal=false&hosts=&consentId=41440149-c47c-494a-ad3a-820dd3dbe907&interactionCount=0&landingPath=https%3A%2F%2Fwww.aljazeera.com%2F&groups=C0001%3A1%2CC0007%3A1%2CC0002%3A1%2CC0003%3A1%2CC0004%3A1%2CC0005%3A1",
+                            "sameSite": "Lax",
+                            "expires": 1745392087,
+                            "httpOnly": false,
+                            "secure": false
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://www.aljazeera.com/wp-content/uploads/2024/04/2024-02-08T155932Z_806946109_RC29Y5A96RDO_RTRMADP_3_SYRIA-SECURITY-KURDS-1713771883.jpg?resize=770%2C513&quality=80",
+                        "analytics": {
+                            "platform": "OneTrust",
+                            "category": "Functional",
+                            "gdprUrl": "https://www.onetrust.com/privacy-notice/",
+                            "description": "This cookie is set by the cookie compliance solution from OneTrust. It stores information about the categories of cookies the site uses and whether visitors have given or withdrawn consent for the use of each category. This enables site owners to prevent cookies in each category from being set in the user’s browser, when consent is not given. The cookie has a normal lifespan of one year, so that returning visitors to the site will have their preferences remembered. It contains no information that can identify the site visitor."
+                        },
+                        "isFirstParty": true
+                    },
+                    "_fbp:.aljazeera.com:/": {
+                        "parsedCookie": {
+                            "name": "_fbp",
+                            "domain": ".aljazeera.com",
+                            "path": "/",
+                            "value": "fb.1.1713856087778.310531374",
+                            "sameSite": "Lax",
+                            "expires": 1721632087,
+                            "httpOnly": false,
+                            "secure": false
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://www.aljazeera.com/wp-content/uploads/2024/04/2024-02-08T155932Z_806946109_RC29Y5A96RDO_RTRMADP_3_SYRIA-SECURITY-KURDS-1713771883.jpg?resize=770%2C513&quality=80",
+                        "analytics": {
+                            "platform": "Facebook",
+                            "category": "Marketing",
+                            "gdprUrl": "https://www.facebook.com/about/privacy/",
+                            "description": "Used by Facebook to deliver a series of advertisement products such as real time bidding from third party advertisers"
+                        },
+                        "isFirstParty": true
+                    },
+                    "AMP_9e2bdeb55f:.aljazeera.com:/": {
+                        "parsedCookie": {
+                            "name": "AMP_9e2bdeb55f",
+                            "domain": ".aljazeera.com",
+                            "path": "/",
+                            "value": "JTdCJTIyZGV2aWNlSWQlMjIlM0ElMjJhZmY2ZGExZS0yYTgyLTRjNWEtODJkMi04ZDcwMDg2ZjhjYzAlMjIlMkMlMjJzZXNzaW9uSWQlMjIlM0ExNzEzODU2MDg3NTQ0JTJDJTIyb3B0T3V0JTIyJTNBZmFsc2UlMkMlMjJsYXN0RXZlbnRUaW1lJTIyJTNBMTcxMzg1NjA4Nzk4NyUyQyUyMmxhc3RFdmVudElkJTIyJTNBMSU3RA==",
+                            "sameSite": "Lax",
+                            "expires": 1745392087,
+                            "httpOnly": false,
+                            "secure": false
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://www.aljazeera.com/wp-content/uploads/2024/04/2024-02-08T155932Z_806946109_RC29Y5A96RDO_RTRMADP_3_SYRIA-SECURITY-KURDS-1713771883.jpg?resize=770%2C513&quality=80",
+                        "analytics": {
+                            "platform": "Unknown",
+                            "category": "Uncategorized",
+                            "gdprUrl": "",
+                            "description": ""
+                        },
+                        "isFirstParty": true
+                    },
+                    "__qca:.aljazeera.com:/": {
+                        "parsedCookie": {
+                            "name": "__qca",
+                            "domain": ".aljazeera.com",
+                            "path": "/",
+                            "value": "P0-1828388-1713856087822",
+                            "sameSite": "Lax",
+                            "expires": 1747724888,
+                            "httpOnly": false,
+                            "secure": false
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://www.aljazeera.com/wp-content/uploads/2024/04/2024-02-08T155932Z_806946109_RC29Y5A96RDO_RTRMADP_3_SYRIA-SECURITY-KURDS-1713771883.jpg?resize=770%2C513&quality=80",
+                        "analytics": {
+                            "platform": "Quantcast",
+                            "category": "Marketing",
+                            "gdprUrl": "https://www.quantcast.com/privacy/",
+                            "description": "This cookie is set by Quantcast, who present targeted advertising. Stores browser and HTTP request information."
+                        },
+                        "isFirstParty": true
+                    },
+                    "cookie:.aljazeera.com:/": {
+                        "parsedCookie": {
+                            "name": "cookie",
+                            "domain": ".aljazeera.com",
+                            "path": "/",
+                            "value": "51f292a1-b21f-4c5f-979c-0833debc2ecc",
+                            "sameSite": "Lax",
+                            "expires": 1716275288,
+                            "httpOnly": false,
+                            "secure": false
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://www.aljazeera.com/wp-content/uploads/2024/04/2024-02-08T155932Z_806946109_RC29Y5A96RDO_RTRMADP_3_SYRIA-SECURITY-KURDS-1713771883.jpg?resize=770%2C513&quality=80",
+                        "analytics": {
+                            "platform": "Unknown",
+                            "category": "Uncategorized",
+                            "gdprUrl": "",
+                            "description": ""
+                        },
+                        "isFirstParty": true
+                    },
+                    "cookie_cst:.aljazeera.com:/": {
+                        "parsedCookie": {
+                            "name": "cookie_cst",
+                            "domain": ".aljazeera.com",
+                            "path": "/",
+                            "value": "zix7LPQsHA%3D%3D",
+                            "sameSite": "Lax",
+                            "expires": 1716275288,
+                            "httpOnly": false,
+                            "secure": false
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://www.aljazeera.com/wp-content/uploads/2024/04/2024-02-08T155932Z_806946109_RC29Y5A96RDO_RTRMADP_3_SYRIA-SECURITY-KURDS-1713771883.jpg?resize=770%2C513&quality=80",
+                        "analytics": {
+                            "platform": "Unknown",
+                            "category": "Uncategorized",
+                            "gdprUrl": "",
+                            "description": ""
+                        },
+                        "isFirstParty": true
+                    },
+                    "_lr_retry_request:.www.aljazeera.com:/": {
+                        "parsedCookie": {
+                            "name": "_lr_retry_request",
+                            "domain": ".www.aljazeera.com",
+                            "path": "/",
+                            "value": "true",
+                            "sameSite": "Lax",
+                            "expires": 1713859688,
+                            "httpOnly": false,
+                            "secure": false
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://www.aljazeera.com/wp-content/uploads/2024/04/2024-02-08T155932Z_806946109_RC29Y5A96RDO_RTRMADP_3_SYRIA-SECURITY-KURDS-1713771883.jpg?resize=770%2C513&quality=80",
+                        "analytics": {
+                            "platform": "Unknown",
+                            "category": "Uncategorized",
+                            "gdprUrl": "",
+                            "description": ""
+                        },
+                        "isFirstParty": true
+                    },
+                    "_lr_env_src_ats:.www.aljazeera.com:/": {
+                        "parsedCookie": {
+                            "name": "_lr_env_src_ats",
+                            "domain": ".www.aljazeera.com",
+                            "path": "/",
+                            "value": "false",
+                            "sameSite": "Lax",
+                            "expires": 1716448088,
+                            "httpOnly": false,
+                            "secure": false
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://www.aljazeera.com/wp-content/uploads/2024/04/2024-02-08T155932Z_806946109_RC29Y5A96RDO_RTRMADP_3_SYRIA-SECURITY-KURDS-1713771883.jpg?resize=770%2C513&quality=80",
+                        "analytics": {
+                            "platform": "Unknown",
+                            "category": "Uncategorized",
+                            "gdprUrl": "",
+                            "description": ""
+                        },
+                        "isFirstParty": true
+                    },
+                    "__gads:.aljazeera.com:/": {
+                        "parsedCookie": {
+                            "name": "__gads",
+                            "domain": ".aljazeera.com",
+                            "path": "/",
+                            "value": "ID=5c8b6997242d3c15:T=1713856088:RT=1713856088:S=ALNI_MbtjqN6Bfq5ncrFLOdFvmS3-NNnOA",
+                            "sameSite": "Lax",
+                            "expires": 1747552088,
+                            "httpOnly": false,
+                            "secure": false
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://www.aljazeera.com/wp-content/uploads/2024/04/2024-02-08T155932Z_806946109_RC29Y5A96RDO_RTRMADP_3_SYRIA-SECURITY-KURDS-1713771883.jpg?resize=770%2C513&quality=80",
+                        "analytics": {
+                            "platform": "DoubleClick/Google Marketing",
+                            "category": "Marketing",
+                            "gdprUrl": "https://privacy.google.com/take-control.html",
+                            "description": "This cookie is used by Google for a variety of purposes (e.g., ensuring Frequency Caps work correctly). It includes AdSense if you have AdSense enabled. This cookie is associated with the DoubleClick for Publishers service from Google. Its purpose is to monitor the showing of advertisements on the site, for which the owner may earn some revenue. The main purpose of this cookie is targeting/advertising."
+                        },
+                        "isFirstParty": true
+                    },
+                    "__gpi:.aljazeera.com:/": {
+                        "parsedCookie": {
+                            "name": "__gpi",
+                            "domain": ".aljazeera.com",
+                            "path": "/",
+                            "value": "UID=00000df6e0e21f1a:T=1713856088:RT=1713856088:S=ALNI_MZrqtOh-RcnXUfXZXBkxvRD11CIgA",
+                            "sameSite": "Lax",
+                            "expires": 1747552088,
+                            "httpOnly": false,
+                            "secure": false
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://www.aljazeera.com/wp-content/uploads/2024/04/2024-02-08T155932Z_806946109_RC29Y5A96RDO_RTRMADP_3_SYRIA-SECURITY-KURDS-1713771883.jpg?resize=770%2C513&quality=80",
+                        "analytics": {
+                            "platform": "Google Adsense",
+                            "category": "Marketing",
+                            "gdprUrl": "https://privacy.google.com/take-control.html",
+                            "description": "Collects information on user behaviour on multiple websites. This information is used in order to optimize the relevance of advertisement on the website."
+                        },
+                        "isFirstParty": true
+                    },
+                    "__eoi:.aljazeera.com:/": {
+                        "parsedCookie": {
+                            "name": "__eoi",
+                            "domain": ".aljazeera.com",
+                            "path": "/",
+                            "value": "ID=771325dbd80e2f60:T=1713856088:RT=1713856088:S=AA-AfjbYnVEIBzBBtEcPXBIxFvBx",
+                            "sameSite": "Lax",
+                            "expires": 1729408088,
+                            "httpOnly": false,
+                            "secure": false
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://www.aljazeera.com/wp-content/uploads/2024/04/2024-02-08T155932Z_806946109_RC29Y5A96RDO_RTRMADP_3_SYRIA-SECURITY-KURDS-1713771883.jpg?resize=770%2C513&quality=80",
+                        "analytics": {
+                            "platform": "Unknown",
+                            "category": "Uncategorized",
+                            "gdprUrl": "",
+                            "description": ""
+                        },
+                        "isFirstParty": true
+                    },
+                    "_au_1d:.aljazeera.com:/": {
+                        "parsedCookie": {
+                            "name": "_au_1d",
+                            "domain": ".aljazeera.com",
+                            "path": "/",
+                            "value": "AU1D-0100-001713856090-9T28JWQT-RHU5",
+                            "sameSite": "None",
+                            "expires": 1745392089.509389,
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://www.aljazeera.com/wp-content/uploads/2024/04/2024-02-08T155932Z_806946109_RC29Y5A96RDO_RTRMADP_3_SYRIA-SECURITY-KURDS-1713771883.jpg?resize=770%2C513&quality=80",
+                        "analytics": {
+                            "platform": "Unknown",
+                            "category": "Uncategorized",
+                            "gdprUrl": "",
+                            "description": ""
+                        },
+                        "isFirstParty": true
+                    },
+                    "_ga:.aljazeera.com:/": {
+                        "parsedCookie": {
+                            "name": "_ga",
+                            "domain": ".aljazeera.com",
+                            "path": "/",
+                            "value": "GA1.2.1935037212.1713856088",
+                            "sameSite": "Lax",
+                            "expires": 1748416089.778504,
+                            "httpOnly": false,
+                            "secure": false
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://www.aljazeera.com/wp-content/uploads/2024/04/2024-02-08T155932Z_806946109_RC29Y5A96RDO_RTRMADP_3_SYRIA-SECURITY-KURDS-1713771883.jpg?resize=770%2C513&quality=80",
+                        "analytics": {
+                            "platform": "Google Analytics",
+                            "category": "Analytics",
+                            "gdprUrl": "https://privacy.google.com/take-control.html",
+                            "description": "ID used to identify users"
+                        },
+                        "isFirstParty": true
+                    },
+                    "cto_bundle:.aljazeera.com:/": {
+                        "parsedCookie": {
+                            "name": "cto_bundle",
+                            "domain": ".aljazeera.com",
+                            "path": "/",
+                            "value": "t9J1EV95VWdibVZVQ2lEUFQlMkZoOEVzcUh1Vk1WZnNZdUZXaWhDbFdENHc0UFB6OFVqJTJCZExsZyUyRjVIY1JIUVk5d1lDQjJmcFNESDc5ZnRWbDhXM3VldFB1QmN2TSUyQmZJUW1kc3V1WnZNdGM0SmJjNFV6RENWMjY4RnA3MHZ0ZVJMeGRGU2xnaVgyZFlGMlM5NmdBUGsxWVYwNEtUcldmOFpacks2S0huQ29wV2R5S1NGcyUzRA",
+                            "sameSite": "Lax",
+                            "expires": 1747571888,
+                            "httpOnly": false,
+                            "secure": false
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://www.aljazeera.com/wp-content/uploads/2024/04/2024-02-08T155932Z_806946109_RC29Y5A96RDO_RTRMADP_3_SYRIA-SECURITY-KURDS-1713771883.jpg?resize=770%2C513&quality=80",
+                        "analytics": {
+                            "platform": "Adform",
+                            "category": "Marketing",
+                            "gdprUrl": "https://site.adform.com/privacy-center/overview",
+                            "description": "Identifies the last click membership for third-party pixels on advertiser's pages"
+                        },
+                        "isFirstParty": true
+                    },
+                    "cto_bidid:.aljazeera.com:/": {
+                        "parsedCookie": {
+                            "name": "cto_bidid",
+                            "domain": ".aljazeera.com",
+                            "path": "/",
+                            "value": "kYkakl85cERrVExSWDlNR1E4VERzUWIyekElMkZQRUIxbjFxR0xuczFiUTNQVUQ3SFNDWmZpa2c1bFlWSUo4elluMUdXMFU2V2FGJTJGYmVQJTJCRHdoJTJCdW5TTmFoUWhrMmpiaUJCUDRUT1VJNWFwU0JwaUVqdk1RbDNHODlCMDJPZTB5S0RhJTJCaDU",
+                            "sameSite": "Lax",
+                            "expires": 1747571888,
+                            "httpOnly": false,
+                            "secure": false
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://www.aljazeera.com/wp-content/uploads/2024/04/2024-02-08T155932Z_806946109_RC29Y5A96RDO_RTRMADP_3_SYRIA-SECURITY-KURDS-1713771883.jpg?resize=770%2C513&quality=80",
+                        "analytics": {
+                            "platform": "Adform",
+                            "category": "Marketing",
+                            "gdprUrl": "https://site.adform.com/privacy-center/overview",
+                            "description": "Identifies the last click membership for third-party pixels on advertiser's pages"
+                        },
+                        "isFirstParty": true
+                    }
+                }
+            },
+            "https://ssum-sec.casalemedia.com": {
+                "cookiesCount": 4,
+                "frameCookies": {
+                    "CMID:.casalemedia.com:/": {
+                        "parsedCookie": {
+                            "name": "CMID",
+                            "domain": ".casalemedia.com",
+                            "path": "/",
+                            "value": "ZideWxdaRLAAAHAICC05.AAA",
+                            "sameSite": "None",
+                            "expires": "2025-04-23T07:08:11.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://ssum-sec.casalemedia.com/usermatch?cb=https%3A%2F%2Fs2s.t13.io%2Fsetuid%3Fgpp%3D%26gpp_sid%3D%26bidder%3Dix%26gdpr%3D%26gdpr_consent%3D%26us_privacy%3D%26gpp%3D%26gpp_sid%3D%26f%3Db%26uid%3D&gdpr=&gdpr_consent=&gpp=&gpp_sid=&s=184674&us_privacy=&C=1",
+                        "analytics": {
+                            "platform": "Casale Media",
+                            "category": "Marketing",
+                            "gdprUrl": "https://casalemedia.com",
+                            "description": "Collects visitor data related to the user's visits to the website, such as the number of visits, average time spent on the website and what pages have been loaded, with the purpose of displaying targeted ads."
+                        },
+                        "isFirstParty": false
+                    },
+                    "CMPS:.casalemedia.com:/": {
+                        "parsedCookie": {
+                            "name": "CMPS",
+                            "domain": ".casalemedia.com",
+                            "path": "/",
+                            "value": "5485",
+                            "sameSite": "None",
+                            "expires": "2024-07-22T07:08:11.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://ssum-sec.casalemedia.com/usermatch?cb=https%3A%2F%2Fs2s.t13.io%2Fsetuid%3Fgpp%3D%26gpp_sid%3D%26bidder%3Dix%26gdpr%3D%26gdpr_consent%3D%26us_privacy%3D%26gpp%3D%26gpp_sid%3D%26f%3Db%26uid%3D&gdpr=&gdpr_consent=&gpp=&gpp_sid=&s=184674&us_privacy=&C=1",
+                        "analytics": {
+                            "platform": "Casale Media",
+                            "category": "Marketing",
+                            "gdprUrl": "https://casalemedia.com",
+                            "description": "Collects visitor data related to the user's visits to the website, such as the number of visits, average time spent on the website and what pages have been loaded, with the purpose of displaying targeted ads"
+                        },
+                        "isFirstParty": false
+                    },
+                    "CMPRO:.casalemedia.com:/": {
+                        "parsedCookie": {
+                            "name": "CMPRO",
+                            "domain": ".casalemedia.com",
+                            "path": "/",
+                            "value": "5485",
+                            "sameSite": "None",
+                            "expires": "2024-07-22T07:08:11.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://ssum-sec.casalemedia.com/usermatch?cb=https%3A%2F%2Fs2s.t13.io%2Fsetuid%3Fgpp%3D%26gpp_sid%3D%26bidder%3Dix%26gdpr%3D%26gdpr_consent%3D%26us_privacy%3D%26gpp%3D%26gpp_sid%3D%26f%3Db%26uid%3D&gdpr=&gdpr_consent=&gpp=&gpp_sid=&s=184674&us_privacy=&C=1",
+                        "analytics": {
+                            "platform": "Casale Media",
+                            "category": "Marketing",
+                            "gdprUrl": "https://casalemedia.com",
+                            "description": "Collects data on visitor behaviour from multiple websites, in order to present more relevant advertisement - This also allows the website to limit the number of times that the visitor is shown the same advertisement."
+                        },
+                        "isFirstParty": false
+                    },
+                    "receive-cookie-deprecation:.casalemedia.com:/": {
+                        "parsedCookie": {
+                            "name": "receive-cookie-deprecation",
+                            "domain": ".casalemedia.com",
+                            "path": "/",
+                            "value": "1",
+                            "sameSite": "None",
+                            "expires": 1745392089.223786,
+                            "httpOnly": true,
+                            "secure": true,
+                            "partitionKey": "https://aljazeera.com"
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://ssum-sec.casalemedia.com/usermatch?cb=https%3A%2F%2Fs2s.t13.io%2Fsetuid%3Fgpp%3D%26gpp_sid%3D%26bidder%3Dix%26gdpr%3D%26gdpr_consent%3D%26us_privacy%3D%26gpp%3D%26gpp_sid%3D%26f%3Db%26uid%3D&gdpr=&gdpr_consent=&gpp=&gpp_sid=&s=184674&us_privacy=&C=1",
+                        "analytics": {
+                            "platform": "Google",
+                            "category": "Functional",
+                            "gdprUrl": "https://privacy.google.com/take-control.html",
+                            "description": "This cookie ensures browers in an experiment group of the Chrome-facilitated testing period include the Sec-Cookie-Deprecation request header as soon as it becomes available."
+                        },
+                        "isFirstParty": false
+                    }
+                }
+            },
+            "https://prebid.a-mo.net": {
+                "cookiesCount": 2,
+                "frameCookies": {
+                    "amuid2:.a-mo.net:/": {
+                        "parsedCookie": {
+                            "name": "amuid2",
+                            "domain": ".a-mo.net",
+                            "path": "/",
+                            "value": "bb3a17c6-f824-402f-9b12-402f2772b61c",
+                            "sameSite": "None",
+                            "expires": "2025-04-23T07:08:12.000Z",
+                            "httpOnly": true,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://prebid.a-mo.net/isyn?gdpr=&gdpr_consent=&us_privacy=&gpp=&gpp_sid=&s=pbs&cb=https%3A%2F%2Fs2s.t13.io%2Fsetuid%3Fbidder%3Damx%26gdpr%3D%26gdpr_consent%3D%26us_privacy%3D%26gpp%3D%26gpp_sid%3D%26f%3Db%26uid%3D",
+                        "analytics": {
+                            "platform": "Unknown",
+                            "category": "Uncategorized",
+                            "gdprUrl": "",
+                            "description": ""
+                        },
+                        "isFirstParty": false
+                    },
+                    "sd_amuid2:.prebid.a-mo.net:/": {
+                        "parsedCookie": {
+                            "name": "sd_amuid2",
+                            "domain": ".prebid.a-mo.net",
+                            "path": "/",
+                            "value": "bb3a17c6-f824-402f-9b12-402f2772b61c",
+                            "sameSite": "None",
+                            "expires": "2025-04-23T07:08:12.000Z",
+                            "httpOnly": true,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://prebid.a-mo.net/isyn?gdpr=&gdpr_consent=&us_privacy=&gpp=&gpp_sid=&s=pbs&cb=https%3A%2F%2Fs2s.t13.io%2Fsetuid%3Fbidder%3Damx%26gdpr%3D%26gdpr_consent%3D%26us_privacy%3D%26gpp%3D%26gpp_sid%3D%26f%3Db%26uid%3D",
+                        "analytics": {
+                            "platform": "Unknown",
+                            "category": "Uncategorized",
+                            "gdprUrl": "",
+                            "description": ""
+                        },
+                        "isFirstParty": false
+                    }
+                }
+            },
+            "https://freestar-d.openx.net": {
+                "cookiesCount": 2,
+                "frameCookies": {
+                    "i:.openx.net:/": {
+                        "parsedCookie": {
+                            "name": "i",
+                            "domain": ".openx.net",
+                            "path": "/",
+                            "value": "d098f0da-35cb-0f3f-33ef-3d930a4f74e3|1713856093",
+                            "sameSite": "None",
+                            "expires": "2025-04-23T07:08:13.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://freestar-d.openx.net/w/1.0/pd?cc=1",
+                        "analytics": {
+                            "platform": "openx.net",
+                            "category": "Marketing",
+                            "gdprUrl": "https://www.openx.com/privacy-center/privacy-policy/",
+                            "description": "Registers user data, such as IP address, geographical location, websites visited and on which advertisements the user has clicked, with the aim of optimizing the display of advertisements based on user relocation on websites that use the same advertising network."
+                        },
+                        "isFirstParty": false
+                    },
+                    "receive-cookie-deprecation:.openx.net:/": {
+                        "parsedCookie": {
+                            "name": "receive-cookie-deprecation",
+                            "domain": ".openx.net",
+                            "path": "/",
+                            "value": "1",
+                            "sameSite": "None",
+                            "expires": 1745392088.922406,
+                            "httpOnly": true,
+                            "secure": true,
+                            "partitionKey": "https://aljazeera.com"
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://freestar-d.openx.net/w/1.0/pd?cc=1",
+                        "analytics": {
+                            "platform": "Google",
+                            "category": "Functional",
+                            "gdprUrl": "https://privacy.google.com/take-control.html",
+                            "description": "This cookie ensures browers in an experiment group of the Chrome-facilitated testing period include the Sec-Cookie-Deprecation request header as soon as it becomes available."
+                        },
+                        "isFirstParty": false
+                    }
+                }
+            },
+            "https://ads.yieldmo.com": {
+                "cookiesCount": 2,
+                "frameCookies": {
+                    "yieldmo_id:.yieldmo.com:/": {
+                        "parsedCookie": {
+                            "name": "yieldmo_id",
+                            "domain": ".yieldmo.com",
+                            "path": "/",
+                            "value": "Vc3hS77dh47nAu7Eepza%7C1713830400000%7C0",
+                            "sameSite": "None",
+                            "expires": "2025-04-23T07:08:13.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://ads.yieldmo.com/pbcas?us_privacy=&gdpr=0&gdpr_consent=&type=iframe",
+                        "analytics": {
+                            "platform": "Unknown",
+                            "category": "Uncategorized",
+                            "gdprUrl": "",
+                            "description": ""
+                        },
+                        "isFirstParty": false
+                    },
+                    "re_sync:.ads.yieldmo.com:/": {
+                        "parsedCookie": {
+                            "name": "re_sync",
+                            "domain": ".ads.yieldmo.com",
+                            "path": "/",
+                            "value": "pp%3D1191017%7Ct%3D1191017%7Ctapad%3D1191017%7Cdv360%3D1191017%7Can%3D1191017",
+                            "sameSite": "None",
+                            "expires": "2025-04-23T07:08:13.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://ads.yieldmo.com/pbcas?us_privacy=&gdpr=0&gdpr_consent=&type=iframe",
+                        "analytics": {
+                            "platform": "Unknown",
+                            "category": "Uncategorized",
+                            "gdprUrl": "",
+                            "description": ""
+                        },
+                        "isFirstParty": false
+                    }
+                }
+            },
+            "https://eb2.3lift.com": {
+                "cookiesCount": 3,
+                "frameCookies": {
+                    "tluidp:.3lift.com:/": {
+                        "parsedCookie": {
+                            "name": "tluidp",
+                            "domain": ".3lift.com",
+                            "path": "/",
+                            "value": "3667959670813638088079",
+                            "sameSite": "None",
+                            "expires": 1721632093.205278,
+                            "httpOnly": false,
+                            "secure": true,
+                            "partitionKey": "https://aljazeera.com"
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://eb2.3lift.com/sync?&ld=1",
+                        "analytics": {
+                            "platform": "TripleLift",
+                            "category": "Marketing",
+                            "gdprUrl": "https://triplelift.com/advertising-technology-platform-cookie-notice/",
+                            "description": "This cookie is used to identify the visitor and optimize ad-relevance by collecting visitor data from multiple websites with – this exchange of visitor data is normally provided by a third-party data-center or ad-exchange."
+                        },
+                        "isFirstParty": false
+                    },
+                    "tluid:.3lift.com:/": {
+                        "parsedCookie": {
+                            "name": "tluid",
+                            "domain": ".3lift.com",
+                            "path": "/",
+                            "value": "3667959670813638088079",
+                            "sameSite": "None",
+                            "expires": "2024-07-22T07:08:13.000Z",
+                            "httpOnly": false,
+                            "secure": true
+                        },
+                        "isBlocked": true,
+                        "blockedReasons": [
+                            "ThirdPartyPhaseout"
+                        ],
+                        "url": "https://eb2.3lift.com/sync?&ld=1",
+                        "analytics": {
+                            "platform": "TripleLift",
+                            "category": "Marketing",
+                            "gdprUrl": "https://triplelift.com/advertising-technology-platform-cookie-notice/",
+                            "description": "This cookie is used to identify the visitor and optimize ad-relevance by collecting visitor data from multiple websites – this exchange of visitor data is normally provided by a third-party data-center or ad-exchange."
+                        },
+                        "isFirstParty": false
+                    },
+                    "receive-cookie-deprecation:.3lift.com:/": {
+                        "parsedCookie": {
+                            "name": "receive-cookie-deprecation",
+                            "domain": ".3lift.com",
+                            "path": "/",
+                            "value": "1",
+                            "sameSite": "None",
+                            "expires": 1721632088.993135,
+                            "httpOnly": true,
+                            "secure": true,
+                            "partitionKey": "https://aljazeera.com"
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://eb2.3lift.com/sync?&ld=1",
+                        "analytics": {
+                            "platform": "Google",
+                            "category": "Functional",
+                            "gdprUrl": "https://privacy.google.com/take-control.html",
+                            "description": "This cookie ensures browers in an experiment group of the Chrome-facilitated testing period include the Sec-Cookie-Deprecation request header as soon as it becomes available."
+                        },
+                        "isFirstParty": false
+                    }
+                }
+            },
+            "https://acdn.adnxs.com": {
+                "cookiesCount": 2,
+                "frameCookies": {
+                    "XANDR_PANID:.adnxs.com:/": {
+                        "parsedCookie": {
+                            "name": "XANDR_PANID",
+                            "domain": ".adnxs.com",
+                            "path": "/",
+                            "value": "F2CPCy1HbwRd_Fhlj6TR4S9Ddvpd8b4S_es1n4vfhHTWqIZzGeKGu5d6GNpZzOzpMuYu5p-xyaQVf6xXq0hrsK8UWcb1wdzId8rGIre0qWo.",
+                            "sameSite": "None",
+                            "expires": 1721632089.592094,
+                            "httpOnly": false,
+                            "secure": true,
+                            "partitionKey": "https://aljazeera.com"
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://acdn.adnxs.com/dmp/async_usersync.html",
+                        "analytics": {
+                            "platform": "Xandr",
+                            "category": "Marketing",
+                            "gdprUrl": "https://about.ads.microsoft.com/en-us/solutions/xandr/platform-privacy-policy",
+                            "description": "This cookie registers data on the visitor. The information is used to optimize advertisement relevance."
+                        },
+                        "isFirstParty": false
+                    },
+                    "receive-cookie-deprecation:.adnxs.com:/": {
+                        "parsedCookie": {
+                            "name": "receive-cookie-deprecation",
+                            "domain": ".adnxs.com",
+                            "path": "/",
+                            "value": "1",
+                            "sameSite": "None",
+                            "expires": 1748416089.592141,
+                            "httpOnly": true,
+                            "secure": true,
+                            "partitionKey": "https://aljazeera.com"
+                        },
+                        "isBlocked": false,
+                        "blockedReasons": [],
+                        "url": "https://acdn.adnxs.com/dmp/async_usersync.html",
+                        "analytics": {
+                            "platform": "Google",
+                            "category": "Functional",
+                            "gdprUrl": "https://privacy.google.com/take-control.html",
+                            "description": "This cookie ensures browers in an experiment group of the Chrome-facilitated testing period include the Sec-Cookie-Deprecation request header as soon as it becomes available."
+                        },
+                        "isFirstParty": false
+                    }
+                }
+            },
+            "Unknown Frames": {
+                "frameCookies": {
+                    "_lr_retry_request:www.aljazeera.com:/": {
+                        "parsedCookie": {
+                            "name": "_lr_retry_request",
+                            "value": "true",
+                            "domain": "www.aljazeera.com",
+                            "path": "/",
+                            "expires": 1713859688,
+                            "size": 21,
+                            "httpOnly": false,
+                            "secure": false,
+                            "session": false,
+                            "priority": "Medium",
+                            "sameParty": false,
+                            "sourceScheme": "Secure",
+                            "sourcePort": 443
+                        },
+                        "url": "",
+                        "analytics": {
+                            "platform": "Unknown",
+                            "category": "Uncategorized",
+                            "gdprUrl": "",
+                            "description": ""
+                        },
+                        "isFirstParty": true
+                    },
+                    "receive-cookie-deprecation:.rubiconproject.com:/": {
+                        "parsedCookie": {
+                            "name": "receive-cookie-deprecation",
+                            "value": "1",
+                            "domain": ".rubiconproject.com",
+                            "path": "/",
+                            "expires": 1721632094.449735,
+                            "size": 27,
+                            "httpOnly": true,
+                            "secure": true,
+                            "session": false,
+                            "sameSite": "None",
+                            "priority": "Medium",
+                            "sameParty": false,
+                            "sourceScheme": "Secure",
+                            "sourcePort": 443,
+                            "partitionKey": "https://aljazeera.com"
+                        },
+                        "url": "",
+                        "analytics": {
+                            "platform": "Google",
+                            "category": "Functional",
+                            "gdprUrl": "https://privacy.google.com/take-control.html",
+                            "description": "This cookie ensures browers in an experiment group of the Chrome-facilitated testing period include the Sec-Cookie-Deprecation request header as soon as it becomes available."
+                        },
+                        "isFirstParty": false
+                    },
+                    "_splunk_rum_sid:www.aljazeera.com:/": {
+                        "parsedCookie": {
+                            "name": "_splunk_rum_sid",
+                            "value": "%7B%22id%22%3A%22f69a7ace67bb5e251cb78861ec31d587%22%2C%22startTime%22%3A1713856087449%7D",
+                            "domain": "www.aljazeera.com",
+                            "path": "/",
+                            "expires": 1713856987.449438,
+                            "size": 104,
+                            "httpOnly": false,
+                            "secure": false,
+                            "session": false,
+                            "sameSite": "Strict",
+                            "priority": "Medium",
+                            "sameParty": false,
+                            "sourceScheme": "Secure",
+                            "sourcePort": 443
+                        },
+                        "url": "",
+                        "analytics": {
+                            "platform": "Unknown",
+                            "category": "Uncategorized",
+                            "gdprUrl": "",
+                            "description": ""
+                        },
+                        "isFirstParty": true
+                    },
+                    "_lr_env_src_ats:www.aljazeera.com:/": {
+                        "parsedCookie": {
+                            "name": "_lr_env_src_ats",
+                            "value": "false",
+                            "domain": "www.aljazeera.com",
+                            "path": "/",
+                            "expires": 1716448088,
+                            "size": 20,
+                            "httpOnly": false,
+                            "secure": false,
+                            "session": false,
+                            "priority": "Medium",
+                            "sameParty": false,
+                            "sourceScheme": "Secure",
+                            "sourcePort": 443
+                        },
+                        "url": "",
+                        "analytics": {
+                            "platform": "Unknown",
+                            "category": "Uncategorized",
+                            "gdprUrl": "",
+                            "description": ""
+                        },
+                        "isFirstParty": true
+                    }
+                },
+                "cookiesCount": 4
+            }
+        }
+    }
+]

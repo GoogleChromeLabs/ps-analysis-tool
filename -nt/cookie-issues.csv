@@ -1,0 +1,38 @@
+Name,Scope,Domain,Partition Key,Same Site,Category,Platform,Http Only,Secure,Value,Path,Expires,GDPRPortal
+ljt_reader,Third Party,.lijit.com, ,None,Marketing,Federated Media Publishing,No,Yes,IibsABZH-XSK8A2yQXu3lIwX,/,2025-04-23T07:08:09.370Z,NA
+test_cookie,Third Party,.doubleclick.net, ,none,Functional,DoubleClick/Google Marketing,Yes,Yes,CheckForPermission,/,2024-04-23T07:23:10.000Z,NA
+DSID,Third Party,.doubleclick.net, ,none,Marketing,DoubleClick/Google Marketing,Yes,Yes,NO_DATA,/,2024-04-23T08:08:10.000Z,NA
+_fsuid,Third Party,.pub.network, ,None,Uncategorized,Unknown,No,Yes,3e774865-c024-4663-9cc8-69d083792bfe,/,2026-04-23T18:46:40.937Z,NA
+mc,Third Party,.quantserve.com, ,None,Marketing,Quantcast,No,Yes,66275e58-0ed66-a5034-49a25,/,2025-05-24T07:08:08.000Z,NA
+UID,Third Party,.scorecardresearch.com, ,None,Marketing,ComScore,No,Yes,1D972f2e4a8010d6f17a81d1713856088,/,2026-04-13T07:08:08.313Z,NA
+muc_ads,Third Party,.t.co, ,None,Marketing,X,No,Yes,2e0b9570-34ce-452a-a768-3a28890c0b89,/,2026-04-23T07:08:08.000Z,NA
+guest_id_marketing,Third Party,.twitter.com, ,None,Marketing,X,No,Yes,v1%3A171385608851639737,/,2026-04-23T07:08:08.000Z,NA
+guest_id_ads,Third Party,.twitter.com, ,None,Marketing,X,No,Yes,v1%3A171385608851639737,/,2026-04-23T07:08:08.000Z,NA
+personalization_id,Third Party,.twitter.com, ,None,Marketing,X,No,Yes,""v1_NIqOcJgavhi3RWDbd793oA=="",/,2026-04-23T07:08:08.000Z,NA
+guest_id,Third Party,.twitter.com, ,None,Marketing,X,No,Yes,v1%3A171385608851639737,/,2026-04-23T07:08:08.000Z,NA
+TDID,Third Party,.adsrvr.org, ,none,Marketing,The Tradedesk,No,Yes,5313f548-706a-464b-af68-5e24fd5f2755,/,2025-04-23T07:08:09.000Z,NA
+yieldmo_id,Third Party,.yieldmo.com, ,None,Uncategorized,Unknown,No,Yes,Vc3hS77dh47nAu7Eepza%7C1713830400000%7C0,/,2025-04-23T07:08:13.000Z,NA
+tluid,Third Party,.3lift.com, ,None,Marketing,TripleLift,No,Yes,3667959670813638088079,/,2024-07-22T07:08:13.000Z,NA
+tt_viewer,Third Party,.teads.tv, ,None,Marketing,Teads,No,Yes,8cf2c981-6654-4f2d-b34a-5b499eee6c01,/,2025-04-22T07:08:08.000Z,NA
+uuid2,Third Party,.adnxs.com, ,None,Marketing,Xandr,Yes,Yes,2701619831150931906,/,2024-07-22T07:08:09.000Z,NA
+uids,Third Party,.t13.io, ,None,Marketing,Admatic,No,Yes,eyJ0ZW1wVUlEcyI6eyJyZXNldGRpZ2l0YWwiOnsidWlkIjoiMDAwMDAxM0NCM0FDMDlBRCIsImV4cGlyZXMiOiIyMDI0LTA1LTA3VDA3OjA4OjEyLjQxNzY0Njk1NloifX19,/,2024-07-22T07:08:12.000Z,NA
+khaos,Third Party,.rubiconproject.com, ,None,Marketing,Magnite,No,Yes,LVC1NYGQ-H-GHUA,/,2025-04-23T07:08:09.000Z,NA
+audit,Third Party,.rubiconproject.com, ,None,Marketing,Magnite,No,Yes,1|kPrYXe5nrzoWYyEd20EHxS1+VlfAGmiPeDfW1uJiGaLg+kq8IyzqG3BCWl4IsKKXzmfvUZfYcC/yUhTWCqUS/Pv31DA4fHDqMp0HTDw5gZ7V/IjBlWfcnYlof2zsNOX2kHYAl06nm5uoEczF1NS0LUCtTwxByv9HYPDxny9O7hNPVHjylZIeXNAPlTu0R9RN,/,2025-04-23T07:08:09.000Z,NA
+TDCPM,Third Party,.adsrvr.org, ,none,Marketing,The Tradedesk,No,Yes,CAEYBSgCMgsIutKJ0tvb8TwQBTgB,/,2025-04-23T07:08:09.000Z,NA
+i,Third Party,.openx.net, ,None,Marketing,openx.net,No,Yes,d098f0da-35cb-0f3f-33ef-3d930a4f74e3|1713856093,/,2025-04-23T07:08:13.000Z,NA
+TapAd_TS,Third Party,.tapad.com, ,None,Marketing,Tapad,No,Yes,1713856089820,/,2024-06-22T07:08:09.000Z,NA
+TapAd_DID,Third Party,.tapad.com, ,None,Marketing,Tapad,No,Yes,3006ecb9-a928-4070-8366-0d645278777d,/,2024-06-22T07:08:09.000Z,NA
+TapAd_3WAY_SYNCS,Third Party,.tapad.com, ,None,Marketing,Tapad,No,Yes,,/,2024-06-22T07:08:09.000Z,NA
+KTPCACOOKIE,Third Party,.pubmatic.com, ,None,Functional,PubMatic,No,Yes,true,/,2024-07-22T07:08:09.000Z,NA
+uid,Third Party,.adform.net, ,none,Marketing,Adform,No,Yes,8958357066883611142,/,2024-06-22T07:08:09.000Z,NA
+uid,Third Party,.turn.com, ,None,Marketing,Adform,No,Yes,7877051274786523075,/,2024-10-20T07:08:10.000Z,NA
+V,Third Party,.contextweb.com, ,None,Uncategorized,Unknown,No,Yes,giINuzYGPl4B,/,2025-04-18T07:08:10.000Z,NA
+pb_rtb_ev,Third Party,.contextweb.com, ,None,Uncategorized,Unknown,No,Yes,3-1qyq|8rT.0.1,/,2025-04-23T07:08:10.000Z,NA
+INGRESSCOOKIE,Third Party,.t13.io, ,None,Functional,NGINX Ingresss,Yes,Yes,a5c0d4279b11c378,/,,NA
+ckbk,Third Party,.resetdigital.co, ,None,Uncategorized,Unknown,No,Yes,0000013CB3AC09AD,/,2024-07-22T07:08:12.296Z,NA
+CMID,Third Party,.casalemedia.com, ,None,Marketing,Casale Media,No,Yes,ZideWxdaRLAAAHAICC05.AAA,/,2025-04-23T07:08:11.000Z,NA
+CMPS,Third Party,.casalemedia.com, ,None,Marketing,Casale Media,No,Yes,5485,/,2024-07-22T07:08:11.000Z,NA
+CMPRO,Third Party,.casalemedia.com, ,None,Marketing,Casale Media,No,Yes,5485,/,2024-07-22T07:08:11.000Z,NA
+amuid2,Third Party,.a-mo.net, ,None,Uncategorized,Unknown,Yes,Yes,bb3a17c6-f824-402f-9b12-402f2772b61c,/,2025-04-23T07:08:12.000Z,NA
+sd_amuid2,Third Party,.prebid.a-mo.net, ,None,Uncategorized,Unknown,Yes,Yes,bb3a17c6-f824-402f-9b12-402f2772b61c,/,2025-04-23T07:08:12.000Z,NA
+re_sync,Third Party,.ads.yieldmo.com, ,None,Uncategorized,Unknown,No,Yes,pp%3D1191017%7Ct%3D1191017%7Ctapad%3D1191017%7Cdv360%3D1191017%7Can%3D1191017,/,2025-04-23T07:08:13.000Z,NA

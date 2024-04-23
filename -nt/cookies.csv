@@ -1,0 +1,75 @@
+Name,Scope,Domain,Partition Key,Same Site,Category,Platform,Http Only,Secure,Value,Path,Expires,Issues,GDPRPortal
+ljt_reader,Third Party,.lijit.com, ,None,Marketing,Federated Media Publishing,No,Yes,IibsABZH-XSK8A2yQXu3lIwX,/,2025-04-23T07:08:09.370Z,Yes,NA
+test_cookie,Third Party,.doubleclick.net, ,none,Functional,DoubleClick/Google Marketing,Yes,Yes,CheckForPermission,/,2024-04-23T07:23:10.000Z,Yes,NA
+DSID,Third Party,.doubleclick.net, ,none,Marketing,DoubleClick/Google Marketing,Yes,Yes,NO_DATA,/,2024-04-23T08:08:10.000Z,Yes,NA
+_fsuid,Third Party,.pub.network, ,None,Uncategorized,Unknown,No,Yes,3e774865-c024-4663-9cc8-69d083792bfe,/,2026-04-23T18:46:40.937Z,Yes,NA
+mc,Third Party,.quantserve.com, ,None,Marketing,Quantcast,No,Yes,66275e58-0ed66-a5034-49a25,/,2025-05-24T07:08:08.000Z,Yes,NA
+UID,Third Party,.scorecardresearch.com, ,None,Marketing,ComScore,No,Yes,1D972f2e4a8010d6f17a81d1713856088,/,2026-04-13T07:08:08.313Z,Yes,NA
+PID,Third Party,.scorecardresearch.com,https://aljazeera.com,None,Marketing,ComScore,No,Yes,10372f2e4a64e0d6f17a66a1713856088,/,2024-07-22T07:08:08.313Z,No,NA
+XID,Third Party,.scorecardresearch.com,https://aljazeera.com,None,Marketing,ComScore,No,Yes,1D972f2e4a8010d6f17a81d1713856088,/,2026-04-13T07:08:08.313Z,No,NA
+muc_ads,Third Party,.t.co, ,None,Marketing,X,No,Yes,2e0b9570-34ce-452a-a768-3a28890c0b89,/,2026-04-23T07:08:08.000Z,Yes,NA
+guest_id_marketing,Third Party,.twitter.com, ,None,Marketing,X,No,Yes,v1%3A171385608851639737,/,2026-04-23T07:08:08.000Z,Yes,NA
+guest_id_ads,Third Party,.twitter.com, ,None,Marketing,X,No,Yes,v1%3A171385608851639737,/,2026-04-23T07:08:08.000Z,Yes,NA
+personalization_id,Third Party,.twitter.com, ,None,Marketing,X,No,Yes,""v1_NIqOcJgavhi3RWDbd793oA=="",/,2026-04-23T07:08:08.000Z,Yes,NA
+guest_id,Third Party,.twitter.com, ,None,Marketing,X,No,Yes,v1%3A171385608851639737,/,2026-04-23T07:08:08.000Z,Yes,NA
+TDID,Third Party,.adsrvr.org, ,none,Marketing,The Tradedesk,No,Yes,5313f548-706a-464b-af68-5e24fd5f2755,/,2025-04-23T07:08:09.000Z,Yes,NA
+receive-cookie-deprecation,Third Party,.openx.net,https://aljazeera.com,None,Functional,Google,Yes,Yes,1,/,2025-04-23T07:08:08.922Z,No,NA
+yieldmo_id,Third Party,.yieldmo.com, ,None,Uncategorized,Unknown,No,Yes,Vc3hS77dh47nAu7Eepza%7C1713830400000%7C0,/,2025-04-23T07:08:13.000Z,Yes,NA
+receive-cookie-deprecation,Third Party,.3lift.com,https://aljazeera.com,None,Functional,Google,Yes,Yes,1,/,2024-07-22T07:08:08.993Z,No,NA
+tluid,Third Party,.3lift.com, ,None,Marketing,TripleLift,No,Yes,3667959670813638088079,/,2024-07-22T07:08:13.000Z,Yes,NA
+tt_viewer,Third Party,.teads.tv, ,None,Marketing,Teads,No,Yes,8cf2c981-6654-4f2d-b34a-5b499eee6c01,/,2025-04-22T07:08:08.000Z,Yes,NA
+receive-cookie-deprecation,Third Party,.teads.tv,https://aljazeera.com,None,Functional,Google,Yes,Yes,1,/,2025-04-22T07:08:08.000Z,No,NA
+receive-cookie-deprecation,Third Party,.casalemedia.com,https://aljazeera.com,None,Functional,Google,Yes,Yes,1,/,2025-04-23T07:08:09.223Z,No,NA
+XANDR_PANID,Third Party,.adnxs.com,https://aljazeera.com,None,Marketing,Xandr,No,Yes,F2CPCy1HbwRd_Fhlj6TR4S9Ddvpd8b4S_es1n4vfhHTWqIZzGeKGu5d6GNpZzOzpMuYu5p-xyaQVf6xXq0hrsK8UWcb1wdzId8rGIre0qWo.,/,2024-07-22T07:08:09.592Z,No,NA
+receive-cookie-deprecation,Third Party,.adnxs.com,https://aljazeera.com,None,Functional,Google,Yes,Yes,1,/,2025-05-28T07:08:09.592Z,No,NA
+uuid2,Third Party,.adnxs.com, ,None,Marketing,Xandr,Yes,Yes,2701619831150931906,/,2024-07-22T07:08:09.000Z,Yes,NA
+uids,Third Party,.t13.io, ,None,Marketing,Admatic,No,Yes,eyJ0ZW1wVUlEcyI6eyJyZXNldGRpZ2l0YWwiOnsidWlkIjoiMDAwMDAxM0NCM0FDMDlBRCIsImV4cGlyZXMiOiIyMDI0LTA1LTA3VDA3OjA4OjEyLjQxNzY0Njk1NloifX19,/,2024-07-22T07:08:12.000Z,Yes,NA
+khaos,Third Party,.rubiconproject.com, ,None,Marketing,Magnite,No,Yes,LVC1NYGQ-H-GHUA,/,2025-04-23T07:08:09.000Z,Yes,NA
+audit,Third Party,.rubiconproject.com, ,None,Marketing,Magnite,No,Yes,1|kPrYXe5nrzoWYyEd20EHxS1+VlfAGmiPeDfW1uJiGaLg+kq8IyzqG3BCWl4IsKKXzmfvUZfYcC/yUhTWCqUS/Pv31DA4fHDqMp0HTDw5gZ7V/IjBlWfcnYlof2zsNOX2kHYAl06nm5uoEczF1NS0LUCtTwxByv9HYPDxny9O7hNPVHjylZIeXNAPlTu0R9RN,/,2025-04-23T07:08:09.000Z,Yes,NA
+TDCPM,Third Party,.adsrvr.org, ,none,Marketing,The Tradedesk,No,Yes,CAEYBSgCMgsIutKJ0tvb8TwQBTgB,/,2025-04-23T07:08:09.000Z,Yes,NA
+i,Third Party,.openx.net, ,None,Marketing,openx.net,No,Yes,d098f0da-35cb-0f3f-33ef-3d930a4f74e3|1713856093,/,2025-04-23T07:08:13.000Z,Yes,NA
+TapAd_TS,Third Party,.tapad.com, ,None,Marketing,Tapad,No,Yes,1713856089820,/,2024-06-22T07:08:09.000Z,Yes,NA
+TapAd_DID,Third Party,.tapad.com, ,None,Marketing,Tapad,No,Yes,3006ecb9-a928-4070-8366-0d645278777d,/,2024-06-22T07:08:09.000Z,Yes,NA
+TapAd_3WAY_SYNCS,Third Party,.tapad.com, ,None,Marketing,Tapad,No,Yes,,/,2024-06-22T07:08:09.000Z,Yes,NA
+KTPCACOOKIE,Third Party,.pubmatic.com, ,None,Functional,PubMatic,No,Yes,true,/,2024-07-22T07:08:09.000Z,Yes,NA
+uid,Third Party,.adform.net, ,none,Marketing,Adform,No,Yes,8958357066883611142,/,2024-06-22T07:08:09.000Z,Yes,NA
+uid,Third Party,.turn.com, ,None,Marketing,Adform,No,Yes,7877051274786523075,/,2024-10-20T07:08:10.000Z,Yes,NA
+V,Third Party,.contextweb.com, ,None,Uncategorized,Unknown,No,Yes,giINuzYGPl4B,/,2025-04-18T07:08:10.000Z,Yes,NA
+VP,Third Party,.contextweb.com,https://aljazeera.com,None,Uncategorized,Unknown,No,Yes,part_giINuzYGPl4B,/,2025-04-18T07:08:10.000Z,No,NA
+pb_rtb_ev,Third Party,.contextweb.com, ,None,Uncategorized,Unknown,No,Yes,3-1qyq|8rT.0.1,/,2025-04-23T07:08:10.000Z,Yes,NA
+pb_rtb_ev_part,Third Party,.contextweb.com,https://aljazeera.com,None,Uncategorized,Unknown,No,Yes,3-1qyq|8rT.0.1,/,2025-04-23T07:08:10.000Z,No,NA
+INGRESSCOOKIE,Third Party,.t13.io, ,None,Functional,NGINX Ingresss,Yes,Yes,a5c0d4279b11c378,/,,Yes,NA
+ckbk,Third Party,.resetdigital.co, ,None,Uncategorized,Unknown,No,Yes,0000013CB3AC09AD,/,2024-07-22T07:08:12.296Z,Yes,NA
+_cb,First Party,.aljazeera.com, ,Lax,Uncategorized,Unknown,No,Yes,237xLCfzqTikJvmq,/,2025-05-23T07:08:07.000Z,No,NA
+_chartbeat2,First Party,.aljazeera.com, ,Lax,Analytics,Chartbeat,No,Yes,.1713856087445.1713856087445.1.ByQO9rpYNlVry5VnBPGceuU9mSx.1,/,2025-05-23T07:08:07.000Z,No,NA
+_cb_svref,First Party,.aljazeera.com, ,Lax,Uncategorized,Unknown,No,Yes,external,/,2024-04-23T07:38:07.000Z,No,NA
+_splunk_rum_sid,First Party,.www.aljazeera.com, ,Strict,Uncategorized,Unknown,No,No,%7B%22id%22%3A%22f69a7ace67bb5e251cb78861ec31d587%22%2C%22startTime%22%3A1713856087449%7D,/,2024-04-23T07:23:07.449Z,No,NA
+_gid,First Party,.aljazeera.com, ,Lax,Analytics,Google Analytics,No,No,GA1.2.1155918229.1713856088,/,2024-04-24T07:08:09.000Z,No,NA
+_gat_gtag_UA_1615344_7,First Party,.aljazeera.com, ,Lax,Analytics,Google Analytics,No,No,1,/,2024-04-23T07:09:07.000Z,No,NA
+_ga_XN9JB9Q0M1,First Party,.aljazeera.com, ,Lax,Analytics,Google Analytics,No,No,GS1.1.1713856087.1.0.1713856087.0.0.0,/,2025-05-28T07:08:07.651Z,No,NA
+OptanonConsent,First Party,.aljazeera.com, ,Lax,Functional,OneTrust,No,No,isGpcEnabled=0&datestamp=Tue+Apr+23+2024+12%3A38%3A07+GMT%2B0530+(India+Standard+Time)&version=202401.2.0&browserGpcFlag=0&isIABGlobal=false&hosts=&consentId=41440149-c47c-494a-ad3a-820dd3dbe907&interactionCount=0&landingPath=https%3A%2F%2Fwww.aljazeera.com%2F&groups=C0001%3A1%2CC0007%3A1%2CC0002%3A1%2CC0003%3A1%2CC0004%3A1%2CC0005%3A1,/,2025-04-23T07:08:07.000Z,No,NA
+_fbp,First Party,.aljazeera.com, ,Lax,Marketing,Facebook,No,No,fb.1.1713856087778.310531374,/,2024-07-22T07:08:07.000Z,No,NA
+AMP_9e2bdeb55f,First Party,.aljazeera.com, ,Lax,Uncategorized,Unknown,No,No,JTdCJTIyZGV2aWNlSWQlMjIlM0ElMjJhZmY2ZGExZS0yYTgyLTRjNWEtODJkMi04ZDcwMDg2ZjhjYzAlMjIlMkMlMjJzZXNzaW9uSWQlMjIlM0ExNzEzODU2MDg3NTQ0JTJDJTIyb3B0T3V0JTIyJTNBZmFsc2UlMkMlMjJsYXN0RXZlbnRUaW1lJTIyJTNBMTcxMzg1NjA4Nzk4NyUyQyUyMmxhc3RFdmVudElkJTIyJTNBMSU3RA==,/,2025-04-23T07:08:07.000Z,No,NA
+__qca,First Party,.aljazeera.com, ,Lax,Marketing,Quantcast,No,No,P0-1828388-1713856087822,/,2025-05-20T07:08:08.000Z,No,NA
+cookie,First Party,.aljazeera.com, ,Lax,Uncategorized,Unknown,No,No,51f292a1-b21f-4c5f-979c-0833debc2ecc,/,2024-05-21T07:08:08.000Z,No,NA
+cookie_cst,First Party,.aljazeera.com, ,Lax,Uncategorized,Unknown,No,No,zix7LPQsHA%3D%3D,/,2024-05-21T07:08:08.000Z,No,NA
+_lr_retry_request,First Party,.www.aljazeera.com, ,Lax,Uncategorized,Unknown,No,No,true,/,2024-04-23T08:08:08.000Z,No,NA
+_lr_env_src_ats,First Party,.www.aljazeera.com, ,Lax,Uncategorized,Unknown,No,No,false,/,2024-05-23T07:08:08.000Z,No,NA
+__gads,First Party,.aljazeera.com, ,Lax,Marketing,DoubleClick/Google Marketing,No,No,ID=5c8b6997242d3c15:T=1713856088:RT=1713856088:S=ALNI_MbtjqN6Bfq5ncrFLOdFvmS3-NNnOA,/,2025-05-18T07:08:08.000Z,No,NA
+__gpi,First Party,.aljazeera.com, ,Lax,Marketing,Google Adsense,No,No,UID=00000df6e0e21f1a:T=1713856088:RT=1713856088:S=ALNI_MZrqtOh-RcnXUfXZXBkxvRD11CIgA,/,2025-05-18T07:08:08.000Z,No,NA
+__eoi,First Party,.aljazeera.com, ,Lax,Uncategorized,Unknown,No,No,ID=771325dbd80e2f60:T=1713856088:RT=1713856088:S=AA-AfjbYnVEIBzBBtEcPXBIxFvBx,/,2024-10-20T07:08:08.000Z,No,NA
+_au_1d,First Party,.aljazeera.com, ,None,Uncategorized,Unknown,No,Yes,AU1D-0100-001713856090-9T28JWQT-RHU5,/,2025-04-23T07:08:09.509Z,No,NA
+_ga,First Party,.aljazeera.com, ,Lax,Analytics,Google Analytics,No,No,GA1.2.1935037212.1713856088,/,2025-05-28T07:08:09.778Z,No,NA
+cto_bundle,First Party,.aljazeera.com, ,Lax,Marketing,Adform,No,No,t9J1EV95VWdibVZVQ2lEUFQlMkZoOEVzcUh1Vk1WZnNZdUZXaWhDbFdENHc0UFB6OFVqJTJCZExsZyUyRjVIY1JIUVk5d1lDQjJmcFNESDc5ZnRWbDhXM3VldFB1QmN2TSUyQmZJUW1kc3V1WnZNdGM0SmJjNFV6RENWMjY4RnA3MHZ0ZVJMeGRGU2xnaVgyZFlGMlM5NmdBUGsxWVYwNEtUcldmOFpacks2S0huQ29wV2R5S1NGcyUzRA,/,2025-05-18T12:38:08.000Z,No,NA
+cto_bidid,First Party,.aljazeera.com, ,Lax,Marketing,Adform,No,No,kYkakl85cERrVExSWDlNR1E4VERzUWIyekElMkZQRUIxbjFxR0xuczFiUTNQVUQ3SFNDWmZpa2c1bFlWSUo4elluMUdXMFU2V2FGJTJGYmVQJTJCRHdoJTJCdW5TTmFoUWhrMmpiaUJCUDRUT1VJNWFwU0JwaUVqdk1RbDNHODlCMDJPZTB5S0RhJTJCaDU,/,2025-05-18T12:38:08.000Z,No,NA
+CMID,Third Party,.casalemedia.com, ,None,Marketing,Casale Media,No,Yes,ZideWxdaRLAAAHAICC05.AAA,/,2025-04-23T07:08:11.000Z,Yes,NA
+CMPS,Third Party,.casalemedia.com, ,None,Marketing,Casale Media,No,Yes,5485,/,2024-07-22T07:08:11.000Z,Yes,NA
+CMPRO,Third Party,.casalemedia.com, ,None,Marketing,Casale Media,No,Yes,5485,/,2024-07-22T07:08:11.000Z,Yes,NA
+amuid2,Third Party,.a-mo.net, ,None,Uncategorized,Unknown,Yes,Yes,bb3a17c6-f824-402f-9b12-402f2772b61c,/,2025-04-23T07:08:12.000Z,Yes,NA
+sd_amuid2,Third Party,.prebid.a-mo.net, ,None,Uncategorized,Unknown,Yes,Yes,bb3a17c6-f824-402f-9b12-402f2772b61c,/,2025-04-23T07:08:12.000Z,Yes,NA
+re_sync,Third Party,.ads.yieldmo.com, ,None,Uncategorized,Unknown,No,Yes,pp%3D1191017%7Ct%3D1191017%7Ctapad%3D1191017%7Cdv360%3D1191017%7Can%3D1191017,/,2025-04-23T07:08:13.000Z,Yes,NA
+tluidp,Third Party,.3lift.com,https://aljazeera.com,None,Marketing,TripleLift,No,Yes,3667959670813638088079,/,2024-07-22T07:08:13.205Z,No,NA
+_lr_retry_request,First Party,www.aljazeera.com, ,,Uncategorized,Unknown,No,No,true,/,2024-04-23T08:08:08.000Z,No,NA
+receive-cookie-deprecation,Third Party,.rubiconproject.com,https://aljazeera.com,None,Functional,Google,Yes,Yes,1,/,2024-07-22T07:08:14.449Z,No,NA
+_splunk_rum_sid,First Party,www.aljazeera.com, ,Strict,Uncategorized,Unknown,No,No,%7B%22id%22%3A%22f69a7ace67bb5e251cb78861ec31d587%22%2C%22startTime%22%3A1713856087449%7D,/,2024-04-23T07:23:07.449Z,No,NA
+_lr_env_src_ats,First Party,www.aljazeera.com, ,,Uncategorized,Unknown,No,No,false,/,2024-05-23T07:08:08.000Z,No,NA
