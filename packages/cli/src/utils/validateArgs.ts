@@ -99,6 +99,15 @@ const validateArgs = async (
   }
 
   if (outDir) {
+    if (!path.isAbsolute(outDir)) {
+      const outDirExists = await exists(path.resolve('./out', outDir));
+      if (!outDirExists) {
+        console.log(
+          `"${path.resolve('./out', outDir)}" does not exist, creating now.`
+        );
+        await mkdir(path.resolve('./out', outDir));
+      }
+    }
     const outDirExists = await exists(path.resolve(outDir));
     if (!outDirExists) {
       console.log(`"${path.resolve(outDir)}" does not exist, creating now.`);
