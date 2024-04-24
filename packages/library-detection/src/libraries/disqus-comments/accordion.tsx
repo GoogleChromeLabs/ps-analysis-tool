@@ -37,7 +37,7 @@ const DisqusCommentsAccordion = ({ domQueryMatches }: AccordionProps) => {
   }
 
   return (
-    <Accordion title={'Disqus Comments.'} isLoading={false} featuresText="">
+    <Accordion title={'Disqus Comments'} isLoading={false} featuresText="">
       <DetectionMessage
         libraryName="Disqus comments"
         provider="Disqus"

@@ -37,7 +37,7 @@ const GISAccordion = ({ matches }: AccordionProps) => {
 
   return (
     <Accordion
-      title={'Avoid use of unsupported Google Identity Services features.'}
+      title={'Avoid use of unsupported Google Identity Services features'}
     >
       <p className="dark:text-bright-gray">
         Due to Privacy Sandbox enforcements some features are backward

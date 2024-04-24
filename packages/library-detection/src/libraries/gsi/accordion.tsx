@@ -37,7 +37,7 @@ const GSIAccordion = ({ matches }: AccordionProps) => {
 
   return (
     <Accordion
-      title={'Avoid use of deprecated Google Sign-In functionality.'}
+      title={'Avoid use of deprecated Google Sign-In functionality'}
       isLoading={false}
     >
       <p className="dark:text-bright-gray">
