@@ -21,7 +21,7 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
-import { Accordion } from '../../components';
+import { Accordion, DetectionMessage } from '../../components';
 import type { AccordionProps } from '../../types';
 
 const GISAccordion = ({ matches }: AccordionProps) => {
@@ -37,11 +37,11 @@ const GISAccordion = ({ matches }: AccordionProps) => {
 
   return (
     <Accordion title={'Unsupported Google Identity Services'}>
-      <p className="dark:text-bright-gray">
-        Due to Privacy Sandbox enforcements some features are backward
-        incompatible or deprecated. This report performs a page scan for script
-        src elements and affected JavaScript objects and methods.
-      </p>
+      <DetectionMessage
+        libraryName="Google Identity Services"
+        provider="Google Identity Services"
+        supportURL={''}
+      />
     </Accordion>
   );
 };
