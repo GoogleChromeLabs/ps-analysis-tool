@@ -17,12 +17,11 @@
  * External dependencies.
  */
 import React from 'react';
-import { addUTMParams } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
  */
-import { Accordion, FeatureList } from '../../components';
+import { Accordion } from '../../components';
 import type { AccordionProps } from '../../types';
 
 const GISAccordion = ({ matches }: AccordionProps) => {
@@ -39,26 +38,11 @@ const GISAccordion = ({ matches }: AccordionProps) => {
   return (
     <Accordion
       title={'Avoid use of unsupported Google Identity Services features.'}
-      featuresText={`${featuresCount} features`}
     >
       <p className="dark:text-bright-gray">
         Due to Privacy Sandbox enforcements some features are backward
         incompatible or deprecated. This report performs a page scan for script
-        src elements and affected JavaScript objects and methods. Review the
-        following features and{' '}
-        <a
-          className="text-bright-navy-blue dark:text-jordy-blue"
-          target="_blank"
-          href={addUTMParams(
-            'https://developers.google.com/identity/gsi/web/guides/fedcm-migration?utm_source=lighthouse&utm_medium=cli'
-          )}
-          rel="noreferrer"
-        >
-          migrate
-        </a>{' '}
-        if necessary.
       </p>
-      <FeatureList matches={matches} />
     </Accordion>
   );
 };
