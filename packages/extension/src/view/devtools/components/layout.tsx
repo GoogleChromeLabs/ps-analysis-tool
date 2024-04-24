@@ -38,6 +38,7 @@ import Cookies from './cookies';
 import useFrameOverlay from '../hooks/useFrameOverlay';
 import { useCookie, useSettings } from '../stateProviders';
 import { getCurrentTabId } from '../../../utils/getCurrentTabId';
+import TransitionBanner from './transitionBanner';
 
 interface LayoutProps {
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
@@ -229,6 +230,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         ref={mainRef}
         className="h-full flex-1 relative overflow-hidden flex flex-col"
       >
+        <TransitionBanner />
         <div
           className="w-full h-full overflow-auto"
           id="cookies-landing-scroll-container"
