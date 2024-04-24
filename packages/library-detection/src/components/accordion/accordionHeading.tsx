@@ -47,7 +47,7 @@ const AccordionHeading = ({
       <span className="flex items-center px-2">
         <Ellipse />
       </span>
-      <p className="flex-1 dark:text-bright-gray">
+      <p className="flex-1 dark:text-bright-gray font-medium">
         {title}
         {featuresText && (
           <span className="text-gray ml-2 dark:text-bright-gray">
