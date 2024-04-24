@@ -53,7 +53,7 @@ const devTools = {
     worker: './packages/extension/src/worker/index.ts',
   },
   output: {
-    path: path.resolve(__dirname, '../../dist/extension/devtools'),
+    path: path.resolve(__dirname, './dist/extension/devtools'),
     filename: '[name].js',
   },
   plugins: [
