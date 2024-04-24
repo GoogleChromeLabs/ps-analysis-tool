@@ -32,7 +32,7 @@ const DetectionMessage = ({
   return (
     <p className="dark:text-bright-gray">
       {libraryName} functionality may not work properly due to the phaseout of
-      third-party cookies. For more information, please visit the
+      third-party cookies. To inquire further about the same, please visit the
       {' ' + provider + ' '}
       <a
         target="_blank"
