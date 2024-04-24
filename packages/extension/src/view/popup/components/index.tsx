@@ -15,3 +15,4 @@
  */
 export { default as Legend } from './legend';
 export { default as CookieLanding } from './cookieLanding';
+export { default as TransitionBanner } from './transitionBanner';
