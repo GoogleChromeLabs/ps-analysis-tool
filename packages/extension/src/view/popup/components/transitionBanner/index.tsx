@@ -26,10 +26,14 @@ import { Button, ClearIcon } from '@ps-analysis-tool/design-system';
 // @ts-ignore
 import PSIcon from '../../../../../icons/icon.svg';
 
-const TransitionBanner = () => {
+interface TransitionBannerProps {
+  closeBanner: () => void;
+}
+
+const TransitionBanner = ({ closeBanner }: TransitionBannerProps) => {
   return (
     <div className="flex-1 flex items-center flex-col h-full w-full bg-bright-gray rounded-lg p-3">
-      <button className="h-fit w-full text-dim-gray">
+      <button className="h-fit w-full text-dim-gray" onClick={closeBanner}>
         <ClearIcon className="w-3 h-3 float-right" />
       </button>
       <PSIcon className="w-12 h-12" />

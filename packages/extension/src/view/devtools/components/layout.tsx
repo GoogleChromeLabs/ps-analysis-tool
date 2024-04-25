@@ -209,6 +209,20 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
 
   useFrameOverlay(filteredCookies, handleUpdate);
 
+  const [showBanner, setShowBanner] = useState(false);
+
+  useEffect(() => {
+    const _showBanner = Boolean(
+      currentExtensions?.some(
+        (extension) =>
+          extension.extensionName === 'Privacy Sandbox Analysis Tool' &&
+          extension.extensionId === 'ehbnpceebmgpanbbfckhoefhdibijkef'
+      )
+    );
+
+    setShowBanner(_showBanner);
+  }, [currentExtensions]);
+
   return (
     <div className="w-full h-full flex flex-row z-1">
       <Resizable
@@ -230,11 +244,13 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         ref={mainRef}
         className="h-full flex-1 relative overflow-hidden flex flex-col"
       >
-        {currentExtensions?.some(
-          (extension) =>
-            extension.extensionName === 'Privacy Sandbox Analysis Tool' &&
-            extension.extensionId === 'ehbnpceebmgpanbbfckhoefhdibijkef'
-        ) && <TransitionBanner />}
+        {showBanner && (
+          <TransitionBanner
+            closeBanner={() => {
+              setShowBanner(false);
+            }}
+          />
+        )}
         <div
           className="w-full h-full overflow-auto"
           id="cookies-landing-scroll-container"

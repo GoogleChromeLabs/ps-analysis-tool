@@ -57,7 +57,7 @@ const App: React.FC = () => {
       handleSettingsChange: actions.handleSettingsChange,
     }));
 
-  const [showBanner, setShowBanner] = useState<boolean>(false);
+  const [showBanner, setShowBanner] = useState<boolean | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -75,9 +75,15 @@ const App: React.FC = () => {
   }, []);
 
   if (showBanner) {
-    <CookieLanding>
-      <TransitionBanner />
-    </CookieLanding>;
+    return (
+      <CookieLanding>
+        <TransitionBanner
+          closeBanner={() => {
+            setShowBanner(false);
+          }}
+        />
+      </CookieLanding>
+    );
   }
 
   if (onChromeUrl) {
