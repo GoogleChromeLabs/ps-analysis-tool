@@ -37,9 +37,9 @@ const TransitionBanner = () => {
         PSAT Extension has a new home
       </h3>
       <p className="max-w-[226px] text-sm text-center text-charcoal mt-6">
-        Please download the new version at the Chrome web store
+        Please download the new version from the Chrome web store
       </p>
-      <Button text="Go to Chrome Web Store" extraClasses="mt-6 py-2" />
+      <Button text="Add to Chrome" extraClasses="mt-6 py-2" />
     </div>
   );
 };

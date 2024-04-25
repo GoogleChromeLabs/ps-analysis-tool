@@ -40,10 +40,10 @@ const TransitionBanner = () => {
               PSAT Extension has a new home
             </h3>
             <p className="text-sm text-charcoal dark:text-manatee">
-              Please download the new version at the Chrome web store
+              Please download the new version from the Chrome web store
             </p>
           </div>
-          <Button text="Go to Chrome Web Store" extraClasses="py-2 min-w-fit" />
+          <Button text="Add to Chrome" extraClasses="py-2 min-w-fit" />
         </div>
       </div>
     </div>
