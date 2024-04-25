@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import type { CookieData, CookieDatabase } from '@ps-analysis-tool/common';
+import type { CookieDatabase } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies
@@ -36,7 +36,6 @@ import {
 import listenToNewTab from '../../utils/listenToNewTab';
 import attachCDP from '../attachCDP';
 import reloadCurrentTab from '../../utils/reloadCurrentTab';
-import parseNetworkCookies from '../../utils/parseNetworkCookies';
 import { fetchDictionary } from '../../utils/fetchCookieDictionary';
 import { getTab } from '../../utils/getTab';
 import sendMessageWrapper from '../../utils/sendMessageWrapper';
@@ -132,38 +131,6 @@ export const runtimeOnMessageListener = async (request: any) => {
   }
 
   const incomingMessageTabId = request.payload.tabId;
-
-  if ('GET_REST_DATA_FROM_URL' === incomingMessageType) {
-    let allCookies: CookieData[] = [];
-    await Promise.all(
-      Object.entries(
-        synchnorousCookieStore.frameIdToResourceMap[incomingMessageTabId] ?? {}
-      ).map(async ([key, value]) => {
-        try {
-          //@ts-ignore
-          const { cookies = [] } = await chrome.debugger.sendCommand(
-            { targetId: key },
-            'Network.getCookies',
-            { urls: Array.from(value) }
-          );
-
-          const parsedCookies = parseNetworkCookies(
-            cookies,
-            synchnorousCookieStore?.getTabUrl(incomingMessageTabId) ?? '',
-            cookieDB ?? {},
-            key
-          );
-          if (parsedCookies.length > 0) {
-            allCookies = [...allCookies, ...parsedCookies];
-          }
-        } catch (error) {
-          //Fail silently. There will be only one reason stating target id not found.
-        }
-      })
-    );
-
-    synchnorousCookieStore?.update(Number(incomingMessageTabId), allCookies);
-  }
 
   if (DEVTOOLS_OPEN === incomingMessageType) {
     const dataToSend: { [key: string]: string | boolean } = {};

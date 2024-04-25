@@ -55,29 +55,53 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
   // eslint-disable-next-line complexity
   (async () => {
     try {
-      if (
-        !ALLOWED_EVENTS.includes(method) ||
-        !syncCookieStore.globalIsUsingCDP
-      ) {
+      if (!ALLOWED_EVENTS.includes(method)) {
         return;
       }
 
       let targets = await chrome.debugger.getTargets();
-      await Promise.all(
-        targets.map(async ({ id, url }) => {
-          if (url.startsWith('http')) {
-            await attachCDP({ targetId: id });
-          }
-        })
-      );
 
       let tabId = '';
       // This is to get a list of all targets being attached to the main frame.
       if (method === 'Target.attachedToTarget' && params) {
         const {
-          targetInfo: { targetId },
+          targetInfo: { targetId, browserContextId, url },
         } = params as Protocol.Target.AttachedToTargetEvent;
+
         await attachCDP({ targetId });
+
+        if (source.tabId) {
+          const parentFrameId = targets.filter(
+            (target) => target?.tabId && target.tabId === source.tabId
+          )[0].id;
+          syncCookieStore?.updateParentChildFrameAssociation(
+            source.tabId,
+            targetId,
+            parentFrameId === targetId ? '0' : parentFrameId
+          );
+
+          syncCookieStore?.updateFrameIdURLSet(source.tabId, targetId, url);
+        } else {
+          Object(syncCookieStore.tabs ?? {}).forEach((tab: string) => {
+            if (browserContextId) {
+              if (
+                syncCookieStore.tabs[Number(tab)].browserContextId ===
+                browserContextId
+              ) {
+                syncCookieStore?.updateParentChildFrameAssociation(
+                  Number(tab),
+                  targetId,
+                  source.targetId
+                );
+                syncCookieStore?.updateFrameIdURLSet(
+                  Number(tab),
+                  targetId,
+                  url
+                );
+              }
+            }
+          });
+        }
         return;
       }
 
@@ -96,8 +120,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       if (method === 'Page.frameAttached' && params) {
         const { frameId, parentFrameId } =
           params as Protocol.Page.FrameAttachedEvent;
-
-        await attachCDP({ targetId: frameId });
 
         if (source.tabId) {
           syncCookieStore?.updateParentChildFrameAssociation(
@@ -127,7 +149,9 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
                   Number(key),
                   frameId
                 );
+                return key;
               }
+
               return key;
             })
           );
@@ -157,7 +181,12 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             const currentTabFrameIdSet = syncCookieStore?.getFrameIDSet(
               Number(key)
             );
-            if (currentTabFrameIdSet && currentTabFrameIdSet.has(parentId)) {
+
+            if (
+              source.targetId &&
+              currentTabFrameIdSet &&
+              currentTabFrameIdSet.has(source.targetId)
+            ) {
               syncCookieStore?.updateParentChildFrameAssociation(
                 Number(key),
                 id,
@@ -210,7 +239,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           !syncCookieStore.frameIdToResourceMap[tabId][finalFrameId]
         ) {
           syncCookieStore.frameIdToResourceMap[tabId][finalFrameId] = new Set();
-          await attachCDP({ targetId: finalFrameId });
         }
 
         if (setTargets.has(finalFrameId)) {
@@ -340,7 +368,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           !syncCookieStore.frameIdToResourceMap[tabId][finalFrameId]
         ) {
           syncCookieStore.frameIdToResourceMap[tabId][finalFrameId] = new Set();
-          attachCDP({ targetId: finalFrameId });
         }
 
         if (setTargets.has(finalFrameId)) {
@@ -414,6 +441,27 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
           delete syncCookieStore.unParsedResponseHeaders[tabId][requestId];
         }
+
+        if (syncCookieStore.unParsedRequestHeaders[tabId][requestId]) {
+          const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
+            syncCookieStore.unParsedRequestHeaders[tabId][requestId]
+              .associatedCookies,
+            cookieDB ?? {},
+            requestUrl,
+            url ?? '',
+            Array.from(new Set([finalFrameId, frameId])),
+            requestId
+          );
+
+          if (cookies.length === 0) {
+            return;
+          }
+
+          syncCookieStore?.update(Number(tabId), cookies);
+          delete syncCookieStore.unParsedRequestHeaders[tabId][requestId];
+        }
+
+        delete syncCookieStore.requestIdToCDPURLMapping[tabId][requestId];
         return;
       }
 
@@ -453,6 +501,34 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
           syncCookieStore?.update(Number(tabId), cookies);
           delete syncCookieStore.unParsedResponseHeaders[tabId][requestId];
+
+          if (syncCookieStore.unParsedRequestHeaders[tabId][requestId]) {
+            const allCookies: CookieData[] = parseRequestWillBeSentExtraInfo(
+              syncCookieStore.unParsedRequestHeaders[tabId][requestId]
+                .associatedCookies,
+              cookieDB ?? {},
+              syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]?.url,
+              url ?? '',
+              Array.from(
+                new Set([
+                  syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
+                    ?.finalFrameId,
+                  syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
+                    ?.frameId,
+                ])
+              ),
+              requestId
+            );
+
+            if (cookies.length === 0) {
+              return;
+            }
+
+            syncCookieStore?.update(Number(tabId), allCookies);
+            delete syncCookieStore.unParsedRequestHeaders[tabId][requestId];
+          }
+
+          delete syncCookieStore.requestIdToCDPURLMapping[tabId][requestId];
         } else {
           syncCookieStore.unParsedResponseHeaders[tabId][requestId] =
             params as Protocol.Network.ResponseReceivedExtraInfoEvent;

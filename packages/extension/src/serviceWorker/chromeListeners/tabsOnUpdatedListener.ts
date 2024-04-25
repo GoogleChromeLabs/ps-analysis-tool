@@ -46,26 +46,29 @@ export const onUpdatedListener = async (
 
   synchnorousCookieStore?.updateUrl(tabId, tab.url);
 
-  if (changeInfo.status === 'loading' && tab.url) {
+  if (
+    changeInfo.status === 'loading' &&
+    tab.url &&
+    !tab.url.startsWith('chrome://')
+  ) {
     synchnorousCookieStore?.removeCookieData(tabId);
-    synchnorousCookieStore.deinitialiseVariablesForTab(tabId.toString());
-    synchnorousCookieStore.initialiseVariablesForNewTab(tabId.toString());
 
-    synchnorousCookieStore?.updateParentChildFrameAssociation(
-      tabId,
-      (await chrome.debugger.getTargets()).filter(
-        (target) => target.tabId && target.tabId === tabId
-      )[0].id,
-      '0'
-    );
+    if (synchnorousCookieStore.globalIsUsingCDP) {
+      synchnorousCookieStore.deinitialiseVariablesForTab(tabId.toString());
+      synchnorousCookieStore.initialiseVariablesForNewTab(tabId.toString());
+
+      await attachCDP({ tabId });
+
+      const {
+        targetInfo: { browserContextId = '' },
+      } = await chrome.debugger.sendCommand({ tabId }, 'Target.getTargetInfo', {
+        tabId,
+      });
+
+      synchnorousCookieStore.tabs[tabId].browserContextId = browserContextId;
+    }
   }
   try {
-    if (synchnorousCookieStore.globalIsUsingCDP) {
-      await attachCDP({ tabId });
-    } else {
-      await chrome.debugger.detach({ tabId });
-    }
-
     await chrome.tabs.sendMessage(tabId, {
       tabId,
       payload: {

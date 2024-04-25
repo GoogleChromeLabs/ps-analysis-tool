@@ -17,6 +17,7 @@
  * Internal dependencies
  */
 import synchnorousCookieStore from '../../store/synchnorousCookieStore';
+import { getAndParseNetworkCookies } from '../../utils/getAndParseNetworkCookies';
 
 const onStartUpListener = async () => {
   const storage = await chrome.storage.sync.get();
@@ -37,6 +38,17 @@ const onStartUpListener = async () => {
       synchnorousCookieStore?.sendUpdatedDataToPopupAndDevTools(Number(key));
     });
   }, 1200);
+
+  // @todo Send tab data of the active tab only, also if sending only the difference would make it any faster.
+  setInterval(() => {
+    if (Object.keys(synchnorousCookieStore?.tabsData ?? {}).length === 0) {
+      return;
+    }
+
+    Object.keys(synchnorousCookieStore?.tabsData ?? {}).forEach((key) => {
+      getAndParseNetworkCookies(key, {});
+    });
+  }, 5000);
 
   if (Object.keys(storage).includes('allowedNumberOfTabs')) {
     synchnorousCookieStore.tabMode = storage.allowedNumberOfTabs;

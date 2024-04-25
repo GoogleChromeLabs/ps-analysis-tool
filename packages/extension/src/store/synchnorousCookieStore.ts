@@ -92,6 +92,7 @@ class SynchnorousCookieStore {
       newUpdates: number;
       frameIDURLSet: Record<string, string[]>;
       parentChildFrameAssociation: Record<string, string>;
+      browserContextId: string;
     };
   } = {};
 
@@ -305,14 +306,18 @@ class SynchnorousCookieStore {
   /**
    * Update FrameId set for a given url for a given tab.
    * @param {number} tabId The url whose url needs to be update.
-   * @param {string} frameIdToAdd The new frameId to be added.
-   * @param {string} parentFrameId The parent frame id the frameIdToAdd is associated to
+   * @param {string | undefined} frameIdToAdd The new frameId to be added.
+   * @param {string | undefined} parentFrameId The parent frame id the frameIdToAdd is associated to
    */
   updateParentChildFrameAssociation(
     tabId: number,
-    frameIdToAdd: string,
-    parentFrameId: string
+    frameIdToAdd: string | undefined,
+    parentFrameId: string | undefined
   ) {
+    if (!parentFrameId || !frameIdToAdd) {
+      return;
+    }
+
     if (!this.tabs[tabId]) {
       return;
     } else {
@@ -345,10 +350,10 @@ class SynchnorousCookieStore {
         url = isValidURL(info.targetInfo.url)
           ? new URL(info.targetInfo.url).origin
           : '';
+      }
 
-        if (!url) {
-          return;
-        }
+      if (!url) {
+        return;
       }
 
       if (!this.tabs[tabId].frameIDURLSet[url]) {
@@ -488,6 +493,7 @@ class SynchnorousCookieStore {
       newUpdates: 0,
       frameIDURLSet: {},
       parentChildFrameAssociation: {},
+      browserContextId: '',
     };
   }
 

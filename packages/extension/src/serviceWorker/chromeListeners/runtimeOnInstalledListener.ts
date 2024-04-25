@@ -32,6 +32,8 @@
  * Internal dependencies
  */
 import synchnorousCookieStore from '../../store/synchnorousCookieStore';
+import { getAndParseNetworkCookies } from '../../utils/getAndParseNetworkCookies';
+import attachCDP from '../attachCDP';
 
 export const runtimeOnInstalledListener = async (
   details: chrome.runtime.InstalledDetails
@@ -51,9 +53,21 @@ export const runtimeOnInstalledListener = async (
     }
 
     Object.keys(synchnorousCookieStore?.tabsData ?? {}).forEach((key) => {
+      // getAndParseNetworkCookies(key, {});
       synchnorousCookieStore?.sendUpdatedDataToPopupAndDevTools(Number(key));
     });
   }, 1200);
+
+  // @todo Send tab data of the active tab only, also if sending only the difference would make it any faster.
+  setInterval(() => {
+    if (Object.keys(synchnorousCookieStore?.tabsData ?? {}).length === 0) {
+      return;
+    }
+
+    Object.keys(synchnorousCookieStore?.tabsData ?? {}).forEach((key) => {
+      getAndParseNetworkCookies(key, {});
+    });
+  }, 5000);
 
   if (details.reason === 'install') {
     await chrome.storage.sync.clear();
@@ -74,24 +88,32 @@ export const runtimeOnInstalledListener = async (
     if (synchnorousCookieStore.tabMode === 'unlimited') {
       const allTabs = await chrome.tabs.query({});
       const targets = await chrome.debugger.getTargets();
+      await Promise.all(
+        allTabs.map(async (tab) => {
+          if (!tab.id || tab.url?.startsWith('chrome://')) {
+            return;
+          }
 
-      allTabs.forEach((tab) => {
-        if (!tab.id) {
-          return;
-        }
+          synchnorousCookieStore?.addTabData(tab.id);
 
-        synchnorousCookieStore.initialiseVariablesForNewTab(tab.id.toString());
+          if (synchnorousCookieStore.globalIsUsingCDP) {
+            synchnorousCookieStore.initialiseVariablesForNewTab(
+              tab.id.toString()
+            );
 
-        const currentTab = targets.filter(
-          ({ tabId }) => tabId && tab.id && tabId === tab.id
-        );
-        synchnorousCookieStore?.addTabData(tab.id);
-        synchnorousCookieStore?.updateParentChildFrameAssociation(
-          tab.id,
-          currentTab[0].id,
-          '0'
-        );
-      });
+            await attachCDP({ tabId: tab.id });
+
+            const currentTab = targets.filter(
+              ({ tabId }) => tabId && tab.id && tabId === tab.id
+            );
+            synchnorousCookieStore?.updateParentChildFrameAssociation(
+              tab.id,
+              currentTab[0].id,
+              '0'
+            );
+          }
+        })
+      );
     }
 
     if (
