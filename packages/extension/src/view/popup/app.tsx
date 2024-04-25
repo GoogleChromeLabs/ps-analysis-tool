@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   CirclePieChart,
@@ -30,7 +30,7 @@ import {
  * Internal dependencies.
  */
 import './app.css';
-import { Legend, CookieLanding } from './components';
+import { Legend, CookieLanding, TransitionBanner } from './components';
 import { useCookie, useSettings } from './stateProviders';
 import { ALLOWED_NUMBER_OF_TABS } from '../../constants';
 
@@ -56,6 +56,29 @@ const App: React.FC = () => {
       settingsChanged: state.settingsChanged,
       handleSettingsChange: actions.handleSettingsChange,
     }));
+
+  const [showBanner, setShowBanner] = useState<boolean>(false);
+
+  useEffect(() => {
+    (async () => {
+      const extensions = await chrome.management.getAll();
+
+      const _showBanner = extensions?.some((extension) => {
+        return (
+          extension.name === 'Privacy Sandbox Analysis Tool' &&
+          extension.id === 'ehbnpceebmgpanbbfckhoefhdibijkef'
+        );
+      });
+
+      setShowBanner(_showBanner);
+    })();
+  }, []);
+
+  if (showBanner) {
+    <CookieLanding>
+      <TransitionBanner />
+    </CookieLanding>;
+  }
 
   if (onChromeUrl) {
     return (

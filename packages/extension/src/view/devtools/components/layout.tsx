@@ -48,12 +48,12 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
   const [sidebarWidth, setSidebarWidth] = useState(200);
   const mainRef = useRef<HTMLElement>(null);
 
-  const { settingsChanged, handleSettingsChange } = useSettings(
-    ({ state, actions }) => ({
+  const { settingsChanged, handleSettingsChange, currentExtensions } =
+    useSettings(({ state, actions }) => ({
       settingsChanged: state.settingsChanged,
       handleSettingsChange: actions.handleSettingsChange,
-    })
-  );
+      currentExtensions: state.currentExtensions,
+    }));
 
   const {
     tabFrames,
@@ -230,7 +230,11 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         ref={mainRef}
         className="h-full flex-1 relative overflow-hidden flex flex-col"
       >
-        <TransitionBanner />
+        {currentExtensions?.some(
+          (extension) =>
+            extension.extensionName === 'Privacy Sandbox Analysis Tool' &&
+            extension.extensionId === 'ehbnpceebmgpanbbfckhoefhdibijkef'
+        ) && <TransitionBanner />}
         <div
           className="w-full h-full overflow-auto"
           id="cookies-landing-scroll-container"
