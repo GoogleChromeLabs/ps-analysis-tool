@@ -29,7 +29,7 @@ import PSIcon from '../../../../../icons/icon.svg';
 const TransitionBanner = () => {
   return (
     <div className="w-full border-b border-bright-gray dark:border-quartz">
-      <div className="w-full m-6 mb-0 overflow-auto">
+      <div className="w-full p-6 pb-0 overflow-auto">
         <div className="min-w-[35rem] max-w-[50rem] h-[100px] mx-auto mb-6 px-8 py-6 relative flex items-center justify-between gap-6 bg-bright-gray dark:bg-charleston-green rounded-lg">
           <button className="absolute top-3 right-3 text-dim-gray">
             <ClearIcon className="w-3 h-3" />
