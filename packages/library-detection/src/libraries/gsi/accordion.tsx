@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
+import { addUTMParams } from '@ps-analysis-tool/common';
 
 /**
  * Internal dependencies.
@@ -39,7 +40,19 @@ const GSIAccordion = ({ matches }: AccordionProps) => {
     <Accordion title={'Deprecated Google Sign-In'} isLoading={false}>
       <p className="dark:text-bright-gray">
         The Google Sign-In JavaScript library is deprecated and is no longer
-        supported.
+        supported. Some features of Google Identity Services are in use. Please
+        review the following documentation and{' '}
+        <a
+          className="text-bright-navy-blue dark:text-jordy-blue"
+          href={addUTMParams(
+            'https://developers.google.com/privacy-sandbox/3pcd/guides/identity#federated_identity'
+          )}
+          target="_blank"
+          rel="noreferrer"
+        >
+          migrate
+        </a>{' '}
+        if necessary.
       </p>
     </Accordion>
   );
