@@ -55,9 +55,9 @@ const AccordionHeading = ({
           </span>
         )}
       </p>
-      <span className="flex items-center px-2 dark:text-bright-gray">
+      <span className="flex items-center px-2 text-granite-gray dark:text-bright-gray">
         <ChevronDown
-          className={classNames('fill-granite-gray', {
+          className={classNames({
             'rotate-180': isOpen,
           })}
         />

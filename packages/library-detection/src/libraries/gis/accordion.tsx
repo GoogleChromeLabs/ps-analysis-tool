@@ -38,7 +38,7 @@ const GISAccordion = ({ matches }: AccordionProps) => {
 
   return (
     <Accordion title={'Unsupported Google Identity Services'}>
-      <p className="dark:text-bright-gray">
+      <p className="text-granite-gray dark:text-bright-gray">
         Due to Privacy Sandbox enforcements some features are backward
         incompatible or deprecated. Some features of Google Identity Services
         are in use. Please review the following documentation and{' '}
