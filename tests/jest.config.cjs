@@ -31,10 +31,10 @@ module.exports = {
   },
   testEnvironment: 'jsdom',
   testMatch: ['**/tests/**/*.{js,jsx,ts,tsx}'],
+  setupFilesAfterEnv: ['<rootDir>/tests/jest.setup.cjs'],
   globals: {
     chrome,
   },
-  setupFilesAfterEnv: ['<rootDir>/tests/jest.setup.cjs'],
   testPathIgnorePatterns: [
     '<rootDir>/.git',
     '<rootDir>/dist',
