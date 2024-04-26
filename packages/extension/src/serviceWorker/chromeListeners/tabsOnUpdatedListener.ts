@@ -29,6 +29,11 @@ export const onUpdatedListener = async (
   if (!tab.url) {
     return;
   }
+  const mainFrameId = synchnorousCookieStore?.globalIsUsingCDP
+    ? (await chrome.debugger.getTargets()).filter(
+        (target) => target.tabId && target.tabId === tabId
+      )[0].id
+    : 0;
 
   const queryParams = getQueryParams(tab.url);
 
@@ -60,23 +65,26 @@ export const onUpdatedListener = async (
       await attachCDP({ tabId });
 
       const {
-        targetInfo: { browserContextId = '' },
+        targetInfo: { targetId },
       } = await chrome.debugger.sendCommand({ tabId }, 'Target.getTargetInfo', {
-        tabId,
+        targetId: mainFrameId,
       });
-
-      synchnorousCookieStore.tabs[tabId].browserContextId = browserContextId;
+      synchnorousCookieStore.tabs[tabId].mainFrameId = targetId;
+      synchnorousCookieStore.updateParentChildFrameAssociation(
+        tabId,
+        targetId,
+        '0'
+      );
     }
   }
+
   try {
     await chrome.tabs.sendMessage(tabId, {
       tabId,
       payload: {
         type: TABID_STORAGE,
         tabId,
-        frameId: (
-          await chrome.debugger.getTargets()
-        ).filter((target) => target.tabId && target.tabId === tabId)[0].id,
+        frameId: mainFrameId,
       },
     });
   } catch (error) {

@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Internal dependencies
+ */
 import { ALLOWED_NUMBER_OF_TABS } from '../../constants';
 import syncCookieStore from '../../store/synchnorousCookieStore';
 
@@ -35,30 +38,33 @@ export const onTabCreatedListener = async (tab: chrome.tabs.Tab) => {
     syncCookieStore.tabToRead = tab.id.toString();
     syncCookieStore?.addTabData(tab.id);
 
-    syncCookieStore.initialiseVariablesForNewTab(tab.id.toString());
-
-    const currentTab = targets.filter(
-      ({ tabId }) => tabId && tab.id && tabId === tab.id
-    );
-
-    syncCookieStore.updateParentChildFrameAssociation(
-      tab.id,
-      currentTab[0].id,
-      '0'
-    );
+    if (syncCookieStore.globalIsUsingCDP) {
+      const currentTab = targets.filter(
+        ({ tabId }) => tabId && tab.id && tabId === tab.id
+      );
+      syncCookieStore.initialiseVariablesForNewTab(tab.id.toString());
+      syncCookieStore.tabs[tab.id].mainFrameId = currentTab[0].id;
+      syncCookieStore.updateParentChildFrameAssociation(
+        tab.id,
+        currentTab[0].id,
+        '0'
+      );
+    }
   } else {
     syncCookieStore?.addTabData(tab.id);
-    const currentTab = targets.filter(
-      ({ tabId }) => tabId && tab.id && tabId === tab.id
-    );
 
-    syncCookieStore.initialiseVariablesForNewTab(tab.id.toString());
-
-    syncCookieStore.updateParentChildFrameAssociation(
-      tab.id,
-      currentTab[0].id,
-      '0'
-    );
+    if (syncCookieStore.globalIsUsingCDP) {
+      const currentTab = targets.filter(
+        ({ tabId }) => tabId && tab.id && tabId === tab.id
+      );
+      syncCookieStore.initialiseVariablesForNewTab(tab.id.toString());
+      syncCookieStore.tabs[tab.id].mainFrameId = currentTab[0].id;
+      syncCookieStore.updateParentChildFrameAssociation(
+        tab.id,
+        currentTab[0].id,
+        '0'
+      );
+    }
   }
 };
 

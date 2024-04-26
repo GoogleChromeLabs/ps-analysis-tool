@@ -70,3 +70,73 @@ export const requestHeaders = [
       'ckns_policy=111; ckns_explicit=0; dnsDisplayed=undefined; ccpaApplies=true; signedLspa=undefined; _sp_su=false; ckpf_ppid=7d0bd88ecf324db19821be161cb5ad91; blaize_session=ea3cb167-b847-4104-99ba-f431c90ebca2; blaize_tracking_id=f65e2382-2d6f-481d-9af5-739fe68d366e; optimizelyEndUserId=oeu1713868228553r0.5596691584936613; _cb=Dc8zQZBgqC4hDMk73y; _chartbeat2=.1713868228779.1713868228779.1.Ck0GLA0g2mgD8fTrDDOOWkrDBd6gQ.1; _cb_svref=external; pa_privacy=%22optin%22; _pcid=%7B%22browserId%22%3A%22lvc8w5f71rc6q8yv%22%2C%22_t%22%3A%22mb0ntmrb%7Clvc8w5fb%22%7D; _pctx=%7Bu%7DN4IgrgzgpgThIC4B2YA2qA05owMoBcBDfSREQpAeyRCwgEt8oBJAE0RXSwH18yBbAEYAGJPn4xBAH1QA3AMYAOAO4BWAGaCQAXyA; ccpaUUID=d39f1884-d63e-482c-b930-1e985086ccba; __gads=ID=6108e835b29f8b3c:T=1713868229:RT=1713868229:S=ALNI_MZ0vaDLqS7ojil37yQ4YD5rcMXQFg; __gpi=UID=00000df700db65bb:T=1713868229:RT=1713868229:S=ALNI_MbjgojPDkG9qvDDeEZeT_nnC3J2hw; __eoi=ID=347bbb3c9dcf685a:T=1713868229:RT=1713868229:S=AA-AfjY0xW3okcSSZeF3n4hYuF3h; DM_SitId1778=1; DM_SitId1778SecId13934=1; permutive-id=660c0cbe-527d-420e-81f8-d8a6d753712c; ecos.dt=1713868244876',
   },
 ];
+
+export const responseHeaders = [
+  {
+    name: 'content-type',
+    value: 'application/javascript',
+  },
+  {
+    name: 'content-length',
+    value: '0',
+  },
+  {
+    name: 'date',
+    value: 'Thu, 25 Apr 2024 12:38:09 GMT',
+  },
+  {
+    name: 'server',
+    value: 'Kestrel',
+  },
+  {
+    name: 'access-control-allow-credentials',
+    value: 'true',
+  },
+  {
+    name: 'access-control-allow-headers',
+    value: 'Content-Type, Authorization, Accept, X-Requested-With',
+  },
+  {
+    name: 'access-control-allow-methods',
+    value: 'POST, GET, PUT, DELETE, OPTIONS',
+  },
+  {
+    name: 'access-control-allow-origin',
+    value: 'https://www.bbc.com',
+  },
+  {
+    name: 'cache-control',
+    value: 'no-cache',
+  },
+  {
+    name: 'p3p',
+    value:
+      'policyref="https://uk-script.dotmetrics.net/w3c/p3p.xml", CP="NOI DSP LAW CURa ADMa DEVa PSAa HISa OUR IND STA"',
+  },
+  {
+    name: 'x-cache',
+    value: 'Miss from cloudfront',
+  },
+  {
+    name: 'via',
+    value: '1.1 b20b2466b25d82e16d99dbc5c99cfe3e.cloudfront.net (CloudFront)',
+  },
+  {
+    name: 'x-amz-cf-pop',
+    value: 'BOM54-P1',
+  },
+  {
+    name: 'x-amz-cf-id',
+    value: 'dydln3ts4sE6lhqGnXt4HeOEnt2WBnpplUQhSmanGxzvBZgrfUSY0w==',
+  },
+  {
+    name: 'set-cookie',
+    value:
+      'DotMetrics.DeviceKey=DeviceID=; expires=Fri, 25 Apr 2025 12:38:09 GMT; domain=.dotmetrics.net; path=/; SameSite=None; secure',
+  },
+  {
+    name: 'set-cookie',
+    value:
+      'DotMetrics.UniqueUserIdentityCookie=UserID=cf92e7f8-16f4-4caf-acb6-f4fcd61639c4&Created=04/25/2024 12:38:09&UserMode=0&guid=e7c1f426-58e5-415e-b233-5730639dab5a&ver=1; expires=Fri, 25 Apr 2025 12:38:09 GMT; domain=.dotmetrics.net; path=/; SameSite=None; secure',
+  },
+];

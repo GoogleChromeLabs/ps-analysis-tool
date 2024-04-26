@@ -54,7 +54,6 @@ export default function getFramesForCurrentTab(
             new Set([
               ...(modifiedTabFrames[parsedUrl].frameIds ?? []),
               ...(prevState?.[parsedUrl]?.frameIds ?? []),
-              ...(extraFrameData[parsedUrl] ?? []),
               ...(frameIdsFromCDP ?? []),
             ])
           );
@@ -64,7 +63,6 @@ export default function getFramesForCurrentTab(
               new Set([
                 ...(frameIdsFromCDP ?? []),
                 ...(prevState?.[parsedUrl]?.frameIds ?? []),
-                ...(extraFrameData[parsedUrl] ?? []),
               ])
             ),
             frameType,

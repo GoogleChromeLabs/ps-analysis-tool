@@ -56,7 +56,6 @@ class SynchnorousCookieStore {
       [requestId: string]: {
         frameId: string;
         url: string;
-        finalFrameId: string;
       };
     };
   } = {};
@@ -92,7 +91,7 @@ class SynchnorousCookieStore {
       newUpdates: number;
       frameIDURLSet: Record<string, string[]>;
       parentChildFrameAssociation: Record<string, string>;
-      browserContextId: string;
+      mainFrameId: string;
     };
   } = {};
 
@@ -249,26 +248,26 @@ class SynchnorousCookieStore {
    * This function will deinitialise variables for given tab.
    * @param {string} tabId The tab whose data has to be deinitialised.
    * @param frameId The tab whose data has to be deinitialised.
-   * @param targetSet The tab whose data has to be deinitialised.
    * @returns {string | null} The first ancestor frameId.
    */
-  findFirstAncestorFrameId(
-    tabId: string,
-    frameId: string,
-    targetSet: Set<string>
-  ): string | null {
-    if (targetSet.has(frameId)) {
-      return frameId;
-    } else {
-      if (this.tabs[Number(tabId)]?.parentChildFrameAssociation[frameId]) {
-        return this.findFirstAncestorFrameId(
-          tabId,
-          this.tabs[Number(tabId)]?.parentChildFrameAssociation[frameId],
-          targetSet
-        );
+  findFirstAncestorFrameId(tabId: string, frameId: string): string | null {
+    let ancestorFrameId = frameId;
+
+    while (
+      ancestorFrameId &&
+      this.tabs[Number(tabId)]?.parentChildFrameAssociation[ancestorFrameId]
+    ) {
+      if (
+        this.tabs[Number(tabId)]?.parentChildFrameAssociation[
+          ancestorFrameId
+        ] === this.tabs[Number(tabId)]?.mainFrameId
+      ) {
+        return ancestorFrameId;
       }
-      return null;
+      ancestorFrameId =
+        this.tabs[Number(tabId)]?.parentChildFrameAssociation[ancestorFrameId];
     }
+    return ancestorFrameId;
   }
 
   /**
@@ -493,7 +492,7 @@ class SynchnorousCookieStore {
       newUpdates: 0,
       frameIDURLSet: {},
       parentChildFrameAssociation: {},
-      browserContextId: '',
+      mainFrameId: '',
     };
   }
 

@@ -106,13 +106,10 @@ const Provider = ({ children }: PropsWithChildren) => {
     if (!tabFrames) {
       return;
     }
-
-    chrome.runtime.sendMessage({
-      type: 'SERVICE_WORKER_DEVTOOLS_GET_FRAME_IDS',
-      payload: {
-        tabId: chrome.devtools.inspectedWindow.tabId,
-      },
-    });
+    globalThis.TabFrames = {
+      ...globalThis.TabFrames,
+      [chrome.devtools.inspectedWindow.tabId]: tabFrames,
+    };
   }, [tabFrames]);
 
   /**
