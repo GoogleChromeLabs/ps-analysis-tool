@@ -26,9 +26,9 @@ import '@testing-library/jest-dom';
 import ReCaptchaAccordion from '../accordion';
 
 describe('reCAPTCHA Accordion', () => {
-  const accordionTitleText = 'reCAPTCHA.';
+  const accordionTitleText = 'reCAPTCHA';
   const accordionMessageText =
-    'reCAPTCHA functionality may not work properly due to the phaseout of third-party cookies. For more information, please visit the reCAPTCHA support forum.';
+    'reCAPTCHA functionality may not work properly due to the phaseout of third-party cookies. To inquire further about the same, please visit the reCAPTCHA support forum.';
 
   it('should show accordion', () => {
     const domQueryMatches = [''];
