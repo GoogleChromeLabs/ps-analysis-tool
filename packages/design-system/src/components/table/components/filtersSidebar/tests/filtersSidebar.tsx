@@ -21,6 +21,7 @@ import '@testing-library/jest-dom';
 import { act } from 'react-dom/test-utils';
 import { TableFilter } from '../../../useTable/types';
 import * as table from '../../../useTable/useTable';
+import ChipsBar from '../chips';
 
 describe('FiltersSidebar', () => {
   const mockUseTable = jest.fn();
@@ -28,9 +29,11 @@ describe('FiltersSidebar', () => {
 
   const initialProps = {
     filters: {},
+    selectedFilters: {},
     toggleFilterSelection: () => undefined,
     toggleSelectAllFilter: () => undefined,
     isSelectAllFilterSelected: () => false,
+    resetFilters: () => undefined,
   };
 
   const props = {
@@ -65,6 +68,24 @@ describe('FiltersSidebar', () => {
       filters3: {
         filterValues: {} as TableFilter['filterValues'],
         title: 'Filter 3',
+      },
+    },
+    selectedFilters: {
+      filter1: {
+        filterValues: {
+          value1: {
+            selected: true,
+          },
+        },
+        title: 'Filter 1',
+      },
+      filter2: {
+        filterValues: {
+          value3: {
+            selected: true,
+          },
+        },
+        title: 'Filter 2',
       },
     },
   };
@@ -324,6 +345,37 @@ describe('FiltersSidebar', () => {
 
     await waitFor(() => {
       expect(toggleFilterSelection).toHaveBeenCalledWith('filter1', 'value1');
+    });
+  });
+
+  it('should show clear all button', async () => {
+    const resetFilters = jest.fn();
+
+    mockUseTable.mockReturnValue({
+      filters: props.filters,
+      selectedFilters: props.selectedFilters,
+      isSelectAllFilterSelected: props.isSelectAllFilterSelected,
+      toggleFilterSelection: props.toggleFilterSelection,
+      toggleSelectAllFilter: props.toggleSelectAllFilter,
+      resetFilters: resetFilters,
+    });
+
+    render(
+      <>
+        <ChipsBar />
+        <FiltersSidebar />
+      </>
+    );
+
+    const clearAll = await screen.findByText('Clear all');
+    expect(clearAll).toBeInTheDocument();
+
+    act(() => {
+      clearAll.click();
+    });
+
+    await waitFor(() => {
+      expect(resetFilters).toHaveBeenCalled();
     });
   });
 });
