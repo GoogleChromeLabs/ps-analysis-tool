@@ -19,10 +19,10 @@
 import React from 'react';
 import {
   Ellipse,
-  ArrowDown,
-  ArrowUp,
   BorderProgressBar,
+  ChevronDown,
 } from '@ps-analysis-tool/design-system';
+import classNames from 'classnames';
 
 interface AccodionHeadingProps {
   setIsOpen: (isOpen: boolean) => void;
@@ -56,7 +56,11 @@ const AccordionHeading = ({
         )}
       </p>
       <span className="flex items-center px-2 dark:text-bright-gray">
-        {isOpen ? <ArrowUp /> : <ArrowDown />}
+        <ChevronDown
+          className={classNames('fill-granite-gray', {
+            'rotate-180': isOpen,
+          })}
+        />
       </span>
       {loading && (
         <div className="absolute top-0 left-0 w-full">
