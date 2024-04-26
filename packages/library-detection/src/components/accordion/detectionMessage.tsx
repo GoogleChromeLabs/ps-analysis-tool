@@ -30,7 +30,7 @@ const DetectionMessage = ({
   supportURL,
 }: DetectionMessageProps) => {
   return (
-    <p className="text-granite-gray dark:text-bright-gray">
+    <p className="text-darkest-gray dark:text-bright-gray">
       {libraryName} functionality may not work properly due to the phaseout of
       third-party cookies. To inquire further about the same, please visit the
       {' ' + provider + ' '}

@@ -38,7 +38,7 @@ const GSIAccordion = ({ matches }: AccordionProps) => {
 
   return (
     <Accordion title={'Deprecated Google Sign-In'} isLoading={false}>
-      <p className="text-granite-gray dark:text-bright-gray">
+      <p className="text-darkest-gray dark:text-bright-gray">
         The Google Sign-In JavaScript library is deprecated and is no longer
         supported. Some features of Google Identity Services are in use. Please
         review the following documentation and{' '}
