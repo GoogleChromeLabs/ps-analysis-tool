@@ -85,6 +85,7 @@ const prepareCookieStatsComponents = (
     legend: [
       {
         label: I18n.getMessage('functional'),
+        descriptionKey: 'Functional',
         count:
           cookieStats.firstParty.functional + cookieStats.thirdParty.functional,
         color: COLOR_MAP.functional.color,
@@ -92,6 +93,7 @@ const prepareCookieStatsComponents = (
       },
       {
         label: I18n.getMessage('marketing'),
+        descriptionKey: 'Marketing',
         count:
           cookieStats.firstParty.marketing + cookieStats.thirdParty.marketing,
         color: COLOR_MAP.marketing.color,
@@ -99,6 +101,7 @@ const prepareCookieStatsComponents = (
       },
       {
         label: I18n.getMessage('analytics'),
+        descriptionKey: 'Analytics',
         count:
           cookieStats.firstParty.analytics + cookieStats.thirdParty.analytics,
         color: COLOR_MAP.analytics.color,
@@ -106,6 +109,7 @@ const prepareCookieStatsComponents = (
       },
       {
         label: I18n.getMessage('uncategorized'),
+        descriptionKey: 'Uncategorized',
         count:
           cookieStats.firstParty.uncategorized +
           cookieStats.thirdParty.uncategorized,

@@ -39,10 +39,14 @@ const FramesSection = () => {
   const framesStats = prepareFrameStatsComponent(tabFrames, tabCookies);
   const dataComponents: MatrixComponentProps[] = framesStats.legend.map(
     (component) => {
-      const legendDescription = LEGEND_DESCRIPTION[component.label] || '';
+      const legendDescription =
+        LEGEND_DESCRIPTION[component.descriptionKey] || '';
       return {
         ...component,
-        description: legendDescription,
+        description:
+          typeof legendDescription === 'string'
+            ? I18n.getMessage(legendDescription)
+            : I18n.getFormattedMessages(legendDescription),
         title: component.label,
         containerClasses: '',
       };

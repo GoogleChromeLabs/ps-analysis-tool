@@ -19,92 +19,70 @@
 import { I18n } from '@ps-analysis-tool/i18n';
 
 interface LegendData {
-  [key: string]: string;
+  [key: string]: string | string[];
 }
 
 export const LEGEND_DESCRIPTION: LegendData = {
-  Functional: I18n.getMessage('functionalNote'),
-  Marketing: I18n.getMessage('marketingNote'),
-  Analytics: I18n.getMessage('analyticsNote'),
-  Uncategorized: I18n.getMessage('uncategorizedNote'),
-  SecureOnly: I18n.getFormattedMessages(['body_SecureOnly']),
-  NotOnPath: I18n.getFormattedMessages(['body_NotOnPath']),
-  DomainMismatch: I18n.getFormattedMessages(['body_DomainMismatch']),
-  SameSiteStrict: I18n.getFormattedMessages(['body_SameSiteStrict']),
-  SameSiteUnspecifiedTreatedAsLax: I18n.getFormattedMessages([
-    'body_SameSiteUnspecifiedTreatedAsLax',
-  ]),
-  SameSiteNoneInsecure: I18n.getFormattedMessages([
-    'body_SameSiteNoneInsecure',
-  ]),
-  UserPreferences: I18n.getFormattedMessages(['body_UserPreferences']),
-  ThirdPartyPhaseout: I18n.getFormattedMessages(['body_ThirdPartyPhaseout']),
-  ThirdPartyBlockedInFirstPartySet: I18n.getFormattedMessages([
-    'body_ThirdPartyBlockedInFirstPartySet',
-  ]),
-  UnknownError: I18n.getFormattedMessages(['body_UnknownError']),
-  SchemefulSameSiteStrict: I18n.getFormattedMessages([
-    'body_SchemefulSameSiteStrict',
-  ]),
-  SchemefulSameSiteLax: I18n.getFormattedMessages([
-    'body_SchemefulSameSiteLax',
-  ]),
-  SchemefulSameSiteUnspecifiedTreatedAsLax: I18n.getFormattedMessages([
+  Functional: 'functionalNote',
+  Marketing: 'marketingNote',
+  Analytics: 'analyticsNote',
+  Uncategorized: 'uncategorizedNote',
+  SecureOnly: ['body_SecureOnly'],
+  NotOnPath: ['body_NotOnPath'],
+  DomainMismatch: ['body_DomainMismatch'],
+  SameSiteStrict: ['body_SameSiteStrict'],
+  SameSiteUnspecifiedTreatedAsLax: ['body_SameSiteUnspecifiedTreatedAsLax'],
+  SameSiteNoneInsecure: ['body_SameSiteNoneInsecure'],
+  UserPreferences: ['body_UserPreferences'],
+  ThirdPartyPhaseout: ['body_ThirdPartyPhaseout'],
+  ThirdPartyBlockedInFirstPartySet: ['body_ThirdPartyBlockedInFirstPartySet'],
+  UnknownError: ['body_UnknownError'],
+  SchemefulSameSiteStrict: ['body_SchemefulSameSiteStrict'],
+  SchemefulSameSiteLax: ['body_SchemefulSameSiteLax'],
+  SchemefulSameSiteUnspecifiedTreatedAsLax: [
     'body_SchemefulSameSiteUnspecifiedTreatedAsLax',
-  ]),
-  SamePartyFromCrossPartyContext: I18n.getFormattedMessages([
-    'body_SamePartyFromCrossPartyContext',
-  ]),
-  NameValuePairExceedsMaxSize: I18n.getFormattedMessages([
-    'body_NameValuePairExceedsMaxSize',
-  ]),
-  InvalidDomain: I18n.getFormattedMessages(['body_InvalidDomain']),
-  ExcludeSameSiteNoneInsecure: I18n.getFormattedMessages([
+  ],
+  SamePartyFromCrossPartyContext: ['body_SamePartyFromCrossPartyContext'],
+  NameValuePairExceedsMaxSize: ['body_NameValuePairExceedsMaxSize'],
+  InvalidDomain: ['body_InvalidDomain'],
+  ExcludeSameSiteNoneInsecure: [
     'header_ExcludeSameSiteNoneInsecure',
     'body_ExcludeSameSiteNoneInsecure',
-  ]),
-  ExcludeSameSiteLax: I18n.getMessage('somethingWentWrong'),
-  ExcludeSameSiteStrict: I18n.getMessage('somethingWentWrong'),
-  ExcludeInvalidSameParty: I18n.getFormattedMessages([
+  ],
+  ExcludeSameSiteLax: 'somethingWentWrong',
+  ExcludeSameSiteStrict: 'somethingWentWrong',
+  ExcludeInvalidSameParty: [
     'header_ExcludeInvalidSameParty',
     'body_ExcludeInvalidSameParty',
-  ]),
-  ExcludeSamePartyCrossPartyContext: I18n.getFormattedMessages([
+  ],
+  ExcludeSamePartyCrossPartyContext: [
     'header_ExcludeSamePartyCrossPartyContext',
     'body_ExcludeSamePartyCrossPartyContext',
-  ]),
-  ExcludeDomainNonASCII: I18n.getFormattedMessages([
+  ],
+  ExcludeDomainNonASCII: [
     'header_ExcludeDomainNonASCII',
     'body_1_ExcludeDomainNonASCII',
     'body_2_ExcludeDomainNonASCII',
     'body_3_ExcludeDomainNonASCII',
-  ]),
-  ExcludeThirdPartyCookieBlockedInFirstPartySet: I18n.getFormattedMessages([
+  ],
+  ExcludeThirdPartyCookieBlockedInFirstPartySet: [
     'header_ExcludeThirdPartyCookieBlockedInFirstPartySet',
     'body_ExcludeThirdPartyCookieBlockedInFirstPartySet',
-  ]),
-  ExcludeThirdPartyPhaseout: I18n.getFormattedMessages([
-    'body_ExcludeThirdPartyPhaseout',
-  ]),
-  'Total frames': I18n.getMessage('totalFramesNote'),
-  'Frames with cookies': I18n.getMessage('framesWithCookiesNote'),
-  'Frames with blocked cookies': I18n.getMessage(
-    'framesWithBlockedCookiesNote'
-  ),
-  'Frames with unblocked cookies': I18n.getMessage(
-    'framesWithUnblockedCookiesNote'
-  ),
-  'Fenced frames': I18n.getMessage('fencedFramesNote'),
-  UserSetting: I18n.getMessage('exemptionReasonUserSetting'),
-  TPCDMetadata: I18n.getMessage('exemptionReasonTPCDMetadata'),
-  TPCDDeprecationTrial: I18n.getMessage('exemptionReasonTPCDDeprecationTrial'),
-  TPCDHeuristics: I18n.getMessage('exemptionReasonTPCDHeuristics'),
-  EnterprisePolicy: I18n.getMessage('exemptionReasonEnterprisePolicy'),
-  StorageAccessAPI: I18n.getMessage('exemptionReasonStorageAccessAPI'),
-  TopLevelStorageAccessAPI: I18n.getMessage(
-    'exemptionReasonTopLevelStorageAccessAPI'
-  ),
-  CorsOptIn: I18n.getMessage('exemptionReasonCorsOptIn'),
+  ],
+  ExcludeThirdPartyPhaseout: ['body_ExcludeThirdPartyPhaseout'],
+  'Total frames': 'totalFramesNote',
+  'Frames with cookies': 'framesWithCookiesNote',
+  'Frames with blocked cookies': 'framesWithBlockedCookiesNote',
+  'Frames with unblocked cookies': 'framesWithUnblockedCookiesNote',
+  'Fenced frames': 'fencedFramesNote',
+  UserSetting: 'exemptionReasonUserSetting',
+  TPCDMetadata: 'exemptionReasonTPCDMetadata',
+  TPCDDeprecationTrial: 'exemptionReasonTPCDDeprecationTrial',
+  TPCDHeuristics: 'exemptionReasonTPCDHeuristics',
+  EnterprisePolicy: 'exemptionReasonEnterprisePolicy',
+  StorageAccessAPI: 'exemptionReasonStorageAccessAPI',
+  TopLevelStorageAccessAPI: 'exemptionReasonTopLevelStorageAccessAPI',
+  CorsOptIn: 'exemptionReasonCorsOptIn',
 };
 
 export const EMPTY_FRAME_COUNT = [
@@ -131,24 +109,28 @@ export const EMPTY_FRAME_COUNT = [
 export const EMPTY_FRAME_LEGEND = [
   {
     label: I18n.getMessage('totalFrames'),
+    descriptionKey: 'Total frames',
     count: 0,
     color: '#25ACAD',
     countClassName: 'text-greenland-green',
   },
   {
     label: I18n.getMessage('framesWithCookies'),
+    descriptionKey: 'Frames with cookies',
     count: 0,
     color: '#C5A06A',
     countClassName: 'text-good-life',
   },
   {
     label: I18n.getMessage('framesWithBlockedCookies'),
+    descriptionKey: 'Frames with blocked cookies',
     count: 0,
     color: '#AF7AA3',
     countClassName: 'text-victorian-violet',
   },
   {
     label: I18n.getMessage('framesWithUnblockedCookies'),
+    descriptionKey: 'Frames with unblocked cookies',
     count: 0,
     color: '#F54021',
     countClassName: 'text-strawberry-spinach-red',

@@ -59,7 +59,9 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
   selectedCookie?.blockedReasons?.forEach((reason) => {
     const cookieExclusionReason =
       cookieIssueDetails.CookieExclusionReason[reason];
-    const cookieBlockedReason = cookieIssueDetails.CookieBlockedReason[reason];
+    const cookieBlockedReason = I18n.getFormattedMessages(
+      cookieIssueDetails.CookieBlockedReason[reason]
+    );
 
     if (cookieBlockedReason) {
       blockedReasons = blockedReasons + cookieBlockedReason;

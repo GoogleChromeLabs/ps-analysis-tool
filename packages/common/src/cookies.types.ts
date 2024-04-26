@@ -163,6 +163,7 @@ export interface TabFrames {
 
 export interface Legend {
   label: string;
+  descriptionKey?: string;
   count: number;
   color: string;
   countClassName: string;

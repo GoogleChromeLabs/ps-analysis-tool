@@ -136,7 +136,9 @@ const Insights = () => {
                         .map(([domain, value]) => (
                           <p key={domain} className="text-sm">
                             {I18n.getMessage('rationale')}:{' '}
-                            <span className="underline">{value as string}</span>
+                            <span className="underline">
+                              {I18n.getMessage(value)}
+                            </span>
                           </p>
                         ))}
                     </>

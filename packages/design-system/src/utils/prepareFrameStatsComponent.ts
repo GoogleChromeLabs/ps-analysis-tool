@@ -116,30 +116,35 @@ export default function prepareFrameStatsComponent(
     legend: [
       {
         label: I18n.getMessage('totalFrames'),
+        descriptionKey: 'Total frames',
         count: Object.keys(tabFrames || {}).length,
         color: '#25ACAD',
         countClassName: 'text-greenland-green',
       },
       {
         label: I18n.getMessage('framesWithCookies'),
+        descriptionKey: 'Frames with cookies',
         count: cookieFrame.size,
         color: '#C5A06A',
         countClassName: 'text-good-life',
       },
       {
         label: I18n.getMessage('framesWithBlockedCookies'),
+        descriptionKey: 'Frames with blocked cookies',
         count: blockedCookieFrame.size,
         color: '#AF7AA3',
         countClassName: 'text-victorian-violet',
       },
       {
         label: I18n.getMessage('framesWithUnblockedCookies'),
+        descriptionKey: 'Frames with unblocked cookies',
         count: unBlockedCookieFrame.size,
         color: '#F54021',
         countClassName: 'text-strawberry-spinach-red',
       },
       {
         label: I18n.getMessage('fencedFrames'),
+        descriptionKey: 'Fenced frames',
         count: Object.values(tabFrames || {}).filter(
           (frame) => frame?.frameType === 'fenced_frame'
         ).length,
