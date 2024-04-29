@@ -96,6 +96,266 @@ class SynchnorousCookieStore {
   } = {};
 
   /**
+   * Adds exclusion and warning reasons for a given cookie.
+   * @param {string} cookieName Name of the cookie.
+   * @param {string[]} exclusionReasons reasons to be added to the blocked reason array.
+   * @param {string[]} warningReasons warning reasons to be added to the warning reason array.
+   * @param {number} tabId tabId where change has to be made.
+   */
+  addCookieExclusionWarningReason(
+    cookieName: string,
+    exclusionReasons: BlockedReason[],
+    warningReasons: Protocol.Audits.CookieWarningReason[],
+    tabId: number
+  ) {
+    if (!this.tabsData[tabId]) {
+      return;
+    }
+    if (this.tabsData[tabId] && this.tabsData[tabId][cookieName]) {
+      this.tabsData[tabId][cookieName].blockedReasons = [
+        ...new Set([
+          ...(this.tabsData[tabId][cookieName].blockedReasons ?? []),
+          ...exclusionReasons,
+        ]),
+      ];
+      this.tabsData[tabId][cookieName].warningReasons = [
+        ...new Set([
+          ...(this.tabsData[tabId][cookieName].warningReasons ?? []),
+          ...warningReasons,
+        ]),
+      ];
+
+      this.tabsData[tabId][cookieName].isBlocked =
+        exclusionReasons.length > 0 ? true : false;
+      this.tabs[tabId].newUpdates++;
+    } else {
+      this.tabs[tabId].newUpdates++;
+      // If none of them exists. This case is possible when the cookies hasnt processed and we already have an issue.
+      this.tabsData[tabId] = {
+        ...this.tabsData[tabId],
+        [cookieName]: {
+          ...(this.tabsData[tabId][cookieName] ?? {}),
+          blockedReasons: [...exclusionReasons],
+          warningReasons: [...warningReasons],
+          isBlocked: exclusionReasons.length > 0 ? true : false,
+        },
+      };
+    }
+  }
+
+  /**
+   * Creates an entry for a tab
+   * @param {number} tabId The tab id.
+   */
+  addTabData(tabId: number) {
+    if (this.tabsData[tabId] && this.tabs[tabId]) {
+      return;
+    }
+    //@ts-ignore Since this is for debugging the data to check the data being collected by the storage.
+    globalThis.PSAT = {
+      tabsData: this.tabsData,
+      tabs: this.tabs,
+    };
+
+    this.tabsData[tabId] = {};
+    this.tabs[tabId] = {
+      url: '',
+      devToolsOpenState: false,
+      popupOpenState: false,
+      newUpdates: 0,
+      frameIDURLSet: {},
+      parentChildFrameAssociation: {},
+    };
+  }
+
+  /**
+   * Clears the whole storage.
+   */
+  clear() {
+    Object.keys(this.tabsData).forEach((key) => {
+      delete this.tabsData[Number(key)];
+    });
+    Object.keys(this.tabs).forEach((key) => {
+      delete this.tabs[Number(key)];
+    });
+    this.tabsData = {};
+    this.tabs = {};
+  }
+
+  /**
+   * This function will deinitialise variables for given tab.
+   * @param {string} tabId The tab whose data has to be deinitialised.
+   */
+  deinitialiseVariablesForTab(tabId: string) {
+    delete this.unParsedRequestHeaders[tabId];
+    delete this.unParsedResponseHeaders[tabId];
+    delete this.requestIdToCDPURLMapping[tabId];
+    delete this.frameIdToResourceMap[tabId];
+  }
+
+  /**
+   * This function will deinitialise variables for given tab.
+   * @param {string} tabId The tab whose data has to be deinitialised.
+   * @param frameId The tab whose data has to be deinitialised.
+   * @param targetSet The tab whose data has to be deinitialised.
+   * @returns {string | null} The first ancestor frameId.
+   */
+  findFirstAncestorFrameId(
+    tabId: string,
+    frameId: string,
+    targetSet: Set<string>
+  ): string | null {
+    if (targetSet.has(frameId)) {
+      return frameId;
+    } else {
+      if (this.tabs[Number(tabId)]?.parentChildFrameAssociation[frameId]) {
+        return this.findFirstAncestorFrameId(
+          tabId,
+          this.tabs[Number(tabId)]?.parentChildFrameAssociation[frameId],
+          targetSet
+        );
+      }
+      return null;
+    }
+  }
+
+  /**
+   * Gets the tabUrl for the given tab id if tab exists.
+   * @param {number} tabId Tab id.
+   * @returns {string | null} The url of the tab if exists else null.
+   */
+  getTabUrl(tabId: number): string | null {
+    if (!this.tabs[tabId]) {
+      return null;
+    }
+
+    return this.tabs[tabId].url;
+  }
+
+  /**
+   * Gets the frameIDSet for the given tab id if tab exists.
+   * @param {number} tabId Tab id.
+   * @returns {string | null} The url of the tab if exists else null.
+   */
+  getFrameIDSet(tabId: number): Set<string> | null {
+    if (!this.tabs[tabId]) {
+      return null;
+    }
+
+    const formedSet = new Set<string>();
+
+    Object.keys(this.tabs[tabId].parentChildFrameAssociation).forEach((key) => {
+      formedSet.add(key);
+      formedSet.add(this.tabs[tabId].parentChildFrameAssociation[key]);
+    });
+    return formedSet;
+  }
+
+  /**
+   * This function will initialise variables for given tab.
+   * @param {string} tabId The tab whose data has to be initialised.
+   */
+  initialiseVariablesForNewTab(tabId: string) {
+    this.unParsedRequestHeaders[tabId] = {};
+    this.unParsedResponseHeaders[tabId] = {};
+    this.requestIdToCDPURLMapping[tabId] = {};
+    this.frameIdToResourceMap[tabId] = {};
+    //@ts-ignore
+    globalThis.PSATAdditionalData = {
+      unParsedRequestHeaders: this.unParsedRequestHeaders,
+      unParsedResponseHeaders: this.unParsedResponseHeaders,
+      requestIdToCDPURLMapping: this.requestIdToCDPURLMapping,
+      frameIdToResourceMap: this.frameIdToResourceMap,
+    };
+  }
+
+  /**
+   * Clear cookie data from cached cookie data for the given tabId
+   * @param {number} tabId The active tab id.
+   */
+  removeCookieData(tabId: number) {
+    if (!this.tabs[tabId] || !this.tabsData[tabId]) {
+      return;
+    }
+
+    delete this.tabsData[tabId];
+    this.tabsData[tabId] = {};
+    this.tabs[tabId].newUpdates = 0;
+    this.tabs[tabId].frameIDURLSet = {};
+    this.tabs[tabId].parentChildFrameAssociation = {};
+
+    this.sendUpdatedDataToPopupAndDevTools(tabId, true);
+  }
+
+  /**
+   * Remove the tab data from the store.
+   * @param {number} tabId The tab id.
+   */
+  removeTabData(tabId: number) {
+    delete this.tabsData[tabId];
+    delete this.tabs[tabId];
+  }
+
+  /**
+   * Remove the window's all tabs data from the store.
+   * @param {number} windowId The window id.
+   */
+  removeWindowData(windowId: number) {
+    chrome.tabs.query({ windowId }, (tabs) => {
+      tabs.map((tab) => {
+        if (tab.id) {
+          this.removeTabData(tab.id);
+        }
+        return tab;
+      });
+    });
+  }
+
+  /**
+   * Sends updated data to the popup and devtools
+   * @param {number} tabId The window id.
+   * @param {boolean} overrideForInitialSync Optional is only passed when we want to override the newUpdate condition for initial sync.
+   */
+  async sendUpdatedDataToPopupAndDevTools(
+    tabId: number,
+    overrideForInitialSync = false
+  ) {
+    if (!this.tabs[tabId] || !this.tabsData[tabId]) {
+      return;
+    }
+    let sentMessageAnyWhere = false;
+
+    try {
+      if (
+        this.tabs[tabId].devToolsOpenState ||
+        (this.tabs[tabId].popupOpenState &&
+          (overrideForInitialSync || this.tabs[tabId].newUpdates > 0))
+      ) {
+        sentMessageAnyWhere = true;
+
+        await chrome.runtime.sendMessage({
+          type: NEW_COOKIE_DATA,
+          payload: {
+            tabId,
+            cookieData: this.tabsData[tabId],
+            extraData: {
+              extraFrameData: this.tabs[tabId].frameIDURLSet,
+            },
+          },
+        });
+      }
+
+      if (sentMessageAnyWhere) {
+        this.tabs[tabId].newUpdates = 0;
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.warn(error);
+      //Fail silently. Ignoring the console.warn here because the only error this will throw is of "Error: Could not establish connection".
+    }
+  }
+
+  /**
    * Update cookie store.
    * @param {number} tabId Tab id.
    * @param {Array} cookies Cookies data.
@@ -202,107 +462,6 @@ class SynchnorousCookieStore {
   }
 
   /**
-   * Clears the whole storage.
-   */
-  clear() {
-    Object.keys(this.tabsData).forEach((key) => {
-      delete this.tabsData[Number(key)];
-    });
-    Object.keys(this.tabs).forEach((key) => {
-      delete this.tabs[Number(key)];
-    });
-    this.tabsData = {};
-    this.tabs = {};
-  }
-
-  /**
-   * This function will initialise variables for given tab.
-   * @param {string} tabId The tab whose data has to be initialised.
-   */
-  initialiseVariablesForNewTab(tabId: string) {
-    this.unParsedRequestHeaders[tabId] = {};
-    this.unParsedResponseHeaders[tabId] = {};
-    this.requestIdToCDPURLMapping[tabId] = {};
-    this.frameIdToResourceMap[tabId] = {};
-    //@ts-ignore
-    globalThis.PSATAdditionalData = {
-      unParsedRequestHeaders: this.unParsedRequestHeaders,
-      unParsedResponseHeaders: this.unParsedResponseHeaders,
-      requestIdToCDPURLMapping: this.requestIdToCDPURLMapping,
-      frameIdToResourceMap: this.frameIdToResourceMap,
-    };
-  }
-
-  /**
-   * This function will deinitialise variables for given tab.
-   * @param {string} tabId The tab whose data has to be deinitialised.
-   */
-  deinitialiseVariablesForTab(tabId: string) {
-    delete this.unParsedRequestHeaders[tabId];
-    delete this.unParsedResponseHeaders[tabId];
-    delete this.requestIdToCDPURLMapping[tabId];
-    delete this.frameIdToResourceMap[tabId];
-  }
-
-  /**
-   * This function will deinitialise variables for given tab.
-   * @param {string} tabId The tab whose data has to be deinitialised.
-   * @param frameId The tab whose data has to be deinitialised.
-   * @param targetSet The tab whose data has to be deinitialised.
-   * @returns {string | null} The first ancestor frameId.
-   */
-  findFirstAncestorFrameId(
-    tabId: string,
-    frameId: string,
-    targetSet: Set<string>
-  ): string | null {
-    if (targetSet.has(frameId)) {
-      return frameId;
-    } else {
-      if (this.tabs[Number(tabId)]?.parentChildFrameAssociation[frameId]) {
-        return this.findFirstAncestorFrameId(
-          tabId,
-          this.tabs[Number(tabId)]?.parentChildFrameAssociation[frameId],
-          targetSet
-        );
-      }
-      return null;
-    }
-  }
-
-  /**
-   * Gets the tabUrl for the given tab id if tab exists.
-   * @param {number} tabId Tab id.
-   * @returns {string | null} The url of the tab if exists else null.
-   */
-  getTabUrl(tabId: number): string | null {
-    if (!this.tabs[tabId]) {
-      return null;
-    }
-
-    return this.tabs[tabId].url;
-  }
-
-  /**
-   * Gets the frameIDSet for the given tab id if tab exists.
-   * @param {number} tabId Tab id.
-   * @returns {string | null} The url of the tab if exists else null.
-   */
-  getFrameIDSet(tabId: number): Set<string> | null {
-    if (!this.tabs[tabId]) {
-      return null;
-    }
-
-    const formedSet = new Set<string>();
-
-    Object.keys(this.tabs[tabId].parentChildFrameAssociation).forEach((key) => {
-      formedSet.add(key);
-      formedSet.add(this.tabs[tabId].parentChildFrameAssociation[key]);
-    });
-    return formedSet;
-  }
-
-  /**
    * Update FrameId set for a given url for a given tab.
    * @param {number} tabId The url whose url needs to be update.
    * @param {string | undefined} frameIdToAdd The new frameId to be added.
@@ -402,165 +561,6 @@ class SynchnorousCookieStore {
       return;
     }
     this.tabs[tabId].devToolsOpenState = state;
-  }
-
-  /**
-   * Adds exclusion and warning reasons for a given cookie.
-   * @param {string} cookieName Name of the cookie.
-   * @param {string[]} exclusionReasons reasons to be added to the blocked reason array.
-   * @param {string[]} warningReasons warning reasons to be added to the warning reason array.
-   * @param {number} tabId tabId where change has to be made.
-   */
-  addCookieExclusionWarningReason(
-    cookieName: string,
-    exclusionReasons: BlockedReason[],
-    warningReasons: Protocol.Audits.CookieWarningReason[],
-    tabId: number
-  ) {
-    if (!this.tabsData[tabId]) {
-      return;
-    }
-    if (this.tabsData[tabId] && this.tabsData[tabId][cookieName]) {
-      this.tabsData[tabId][cookieName].blockedReasons = [
-        ...new Set([
-          ...(this.tabsData[tabId][cookieName].blockedReasons ?? []),
-          ...exclusionReasons,
-        ]),
-      ];
-      this.tabsData[tabId][cookieName].warningReasons = [
-        ...new Set([
-          ...(this.tabsData[tabId][cookieName].warningReasons ?? []),
-          ...warningReasons,
-        ]),
-      ];
-
-      this.tabsData[tabId][cookieName].isBlocked =
-        exclusionReasons.length > 0 ? true : false;
-      this.tabs[tabId].newUpdates++;
-    } else {
-      this.tabs[tabId].newUpdates++;
-      // If none of them exists. This case is possible when the cookies hasnt processed and we already have an issue.
-      this.tabsData[tabId] = {
-        ...this.tabsData[tabId],
-        [cookieName]: {
-          ...(this.tabsData[tabId][cookieName] ?? {}),
-          blockedReasons: [...exclusionReasons],
-          warningReasons: [...warningReasons],
-          isBlocked: exclusionReasons.length > 0 ? true : false,
-        },
-      };
-    }
-  }
-
-  /**
-   * Clear cookie data from cached cookie data for the given tabId
-   * @param {number} tabId The active tab id.
-   */
-  removeCookieData(tabId: number) {
-    if (!this.tabs[tabId] || !this.tabsData[tabId]) {
-      return;
-    }
-
-    delete this.tabsData[tabId];
-    this.tabsData[tabId] = {};
-    this.tabs[tabId].newUpdates = 0;
-    this.tabs[tabId].frameIDURLSet = {};
-    this.tabs[tabId].parentChildFrameAssociation = {};
-
-    this.sendUpdatedDataToPopupAndDevTools(tabId, true);
-  }
-
-  /**
-   * Creates an entry for a tab
-   * @param {number} tabId The tab id.
-   */
-  addTabData(tabId: number) {
-    if (this.tabsData[tabId] && this.tabs[tabId]) {
-      return;
-    }
-    //@ts-ignore Since this is for debugging the data to check the data being collected by the storage.
-    globalThis.PSAT = {
-      tabsData: this.tabsData,
-      tabs: this.tabs,
-    };
-
-    this.tabsData[tabId] = {};
-    this.tabs[tabId] = {
-      url: '',
-      devToolsOpenState: false,
-      popupOpenState: false,
-      newUpdates: 0,
-      frameIDURLSet: {},
-      parentChildFrameAssociation: {},
-    };
-  }
-
-  /**
-   * Remove the tab data from the store.
-   * @param {number} tabId The tab id.
-   */
-  removeTabData(tabId: number) {
-    delete this.tabsData[tabId];
-    delete this.tabs[tabId];
-  }
-
-  /**
-   * Remove the window's all tabs data from the store.
-   * @param {number} windowId The window id.
-   */
-  removeWindowData(windowId: number) {
-    chrome.tabs.query({ windowId }, (tabs) => {
-      tabs.map((tab) => {
-        if (tab.id) {
-          this.removeTabData(tab.id);
-        }
-        return tab;
-      });
-    });
-  }
-
-  /**
-   * Sends updated data to the popup and devtools
-   * @param {number} tabId The window id.
-   * @param {boolean} overrideForInitialSync Optional is only passed when we want to override the newUpdate condition for initial sync.
-   */
-  async sendUpdatedDataToPopupAndDevTools(
-    tabId: number,
-    overrideForInitialSync = false
-  ) {
-    if (!this.tabs[tabId] || !this.tabsData[tabId]) {
-      return;
-    }
-    let sentMessageAnyWhere = false;
-
-    try {
-      if (
-        this.tabs[tabId].devToolsOpenState ||
-        (this.tabs[tabId].popupOpenState &&
-          (overrideForInitialSync || this.tabs[tabId].newUpdates > 0))
-      ) {
-        sentMessageAnyWhere = true;
-
-        await chrome.runtime.sendMessage({
-          type: NEW_COOKIE_DATA,
-          payload: {
-            tabId,
-            cookieData: this.tabsData[tabId],
-            extraData: {
-              extraFrameData: this.tabs[tabId].frameIDURLSet,
-            },
-          },
-        });
-      }
-
-      if (sentMessageAnyWhere) {
-        this.tabs[tabId].newUpdates = 0;
-      }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.warn(error);
-      //Fail silently. Ignoring the console.warn here because the only error this will throw is of "Error: Could not establish connection".
-    }
   }
 }
 
