@@ -124,6 +124,9 @@ const Provider = ({ children }: PropsWithChildren) => {
       Record<string, string>
     >((acc, [url, frame]) => {
       frame.frameIds?.forEach((id) => {
+        if (!id) {
+          return;
+        }
         acc[id] = url;
       });
 

@@ -20,6 +20,9 @@ import {
   getCookieKey,
   type CookieData,
   type BlockedReason,
+  parseResponseReceivedExtraInfo,
+  type CookieDatabase,
+  parseRequestWillBeSentExtraInfo,
 } from '@ps-analysis-tool/common';
 import type { Protocol } from 'devtools-protocol';
 
@@ -30,6 +33,7 @@ import updateCookieBadgeText from './utils/updateCookieBadgeText';
 import { deriveBlockingStatus } from './utils/deriveBlockingStatus';
 import { NEW_COOKIE_DATA } from '../constants';
 import isValidURL from '../utils/isValidURL';
+import { doesFrameExist } from '../utils/doesFrameExist';
 
 class SynchnorousCookieStore {
   /**
@@ -94,6 +98,178 @@ class SynchnorousCookieStore {
       parentChildFrameAssociation: Record<string, string>;
     };
   } = {};
+
+  /**
+   * This function adds frame to the appropriate tab.
+   * @param {number} tabId The tabId of the event to which the event is pointing to.
+   * @param {string} frameId The frameId of the frame to determine which the requestUrl is for.
+   * @param {Set<string>} setTargets Set of targets available in the tab.
+   * @param {string} requestUrl The request url to be added to the frameResouceMap.
+   * @returns {string} An alternate frameId if available.
+   */
+  addFrameIdAndRequestUrlToResourceMap(
+    tabId: string,
+    frameId: string,
+    setTargets: Set<string>,
+    requestUrl: string
+  ) {
+    if (setTargets.has(frameId)) {
+      this.frameIdToResourceMap[tabId][frameId].add(requestUrl);
+      return frameId;
+    } else {
+      const ancestorFrameId = this.findFirstAncestorFrameId(
+        tabId,
+        frameId,
+        setTargets
+      );
+
+      if (ancestorFrameId) {
+        if (!this.frameIdToResourceMap[tabId][frameId]) {
+          this.frameIdToResourceMap[tabId][frameId] = new Set();
+        }
+        this.frameIdToResourceMap[tabId][frameId].add(requestUrl);
+        return ancestorFrameId;
+      }
+      return '';
+    }
+  }
+
+  /**
+   * This function parses response headers
+   * @param {Protocol.Network.ResponseReceivedExtraInfoEvent} response The response to be parsed.
+   * @param {string} requestId This is used to get the related data for parsing the response.
+   * @param {string} tabId The tabId this request is associated to.
+   * @param {CookieDatabase} cookieDB This is used to fetch an analytics match from the cookie database.
+   * @param {string[]} frameIds This is used to associate the cookies from request to set of frameIds.
+   */
+  parseResponseHeaders(
+    response: Protocol.Network.ResponseReceivedExtraInfoEvent,
+    requestId: string,
+    tabId: string,
+    cookieDB: CookieDatabase,
+    frameIds: string[]
+  ) {
+    const {
+      headers,
+      blockedCookies,
+      cookiePartitionKey = '',
+      exemptedCookies,
+    } = response;
+
+    const cookies: CookieData[] = parseResponseReceivedExtraInfo(
+      headers,
+      blockedCookies,
+      exemptedCookies,
+      cookiePartitionKey,
+      this.requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
+      this.tabs[Number(tabId)].url ?? '',
+      cookieDB ?? {},
+      frameIds,
+      requestId
+    );
+    this.update(Number(tabId), cookies);
+
+    delete this.unParsedResponseHeaders[tabId][requestId];
+  }
+
+  /**
+   * This function parses request headers
+   * @param {Protocol.Network.RequestWillBeSentExtraInfoEvent} request The response to be parsed.
+   * @param {string} requestId This is used to get the related data for parsing the response.
+   * @param {string} tabId The tabId this request is associated to.
+   * @param {CookieDatabase} cookieDB This is used to fetch an analytics match from the cookie database.
+   * @param {string[]} frameIds This is used to associate the cookies from request to set of frameIds.
+   */
+  parseRequestHeaders(
+    request: Protocol.Network.RequestWillBeSentExtraInfoEvent,
+    requestId: string,
+    tabId: string,
+    cookieDB: CookieDatabase,
+    frameIds: string[]
+  ) {
+    const { associatedCookies } = request;
+
+    const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
+      associatedCookies,
+      cookieDB ?? {},
+      this.requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
+      this.tabs[Number(tabId)].url ?? '',
+      frameIds,
+      requestId
+    );
+
+    delete this.unParsedRequestHeaders[tabId][requestId];
+    if (cookies.length === 0) {
+      return;
+    }
+
+    this.update(Number(tabId), cookies);
+    delete this.unParsedRequestHeaders[tabId][requestId];
+  }
+
+  /**
+   * This function adds frame to the appropriate tab.
+   * @param {number} tabId The tabId of the event if available.
+   * @param {string} targetId The targetId for which frame has to be added.
+   * @param {string} frameId The frameId of the frame that has been added.
+   * @param {string} parentFrameId The parent frame id to which the frame has been added to.
+   * @param {string} frameUrl This is and optional parameter that is sent to decide if we need to run the command for updating the frame url with async function.
+   */
+  async addFrameToTabAndUpdateMetadata(
+    tabId: number | null,
+    targetId: string | null,
+    frameId: string,
+    parentFrameId: string,
+    frameUrl?: string
+  ) {
+    if (!tabId && !targetId) {
+      return;
+    }
+
+    if (tabId) {
+      this.updateParentChildFrameAssociation(tabId, frameId, parentFrameId);
+      if (frameUrl) {
+        this.updateFrameIdURLSet(tabId, frameId, frameUrl);
+        return;
+      } else {
+        await this.updateFrameIdURLSet(tabId, frameId);
+        return;
+      }
+    }
+
+    const isFrameIdInPage = await doesFrameExist(frameId);
+
+    await Promise.all(
+      Object.keys(this?.tabs ?? {}).map(async (key) => {
+        const currentTabFrameIdSet = this.getFrameIDSet(Number(key));
+        if (
+          targetId &&
+          currentTabFrameIdSet &&
+          currentTabFrameIdSet.has(targetId)
+        ) {
+          this.updateParentChildFrameAssociation(
+            Number(key),
+            frameId,
+            parentFrameId
+          );
+
+          if (frameUrl) {
+            this.updateFrameIdURLSet(
+              Number(key),
+              isFrameIdInPage ? frameId : '',
+              frameUrl
+            );
+            return key;
+          } else {
+            await this.updateFrameIdURLSet(Number(key), frameId);
+            return key;
+          }
+        }
+
+        return key;
+      })
+    );
+  }
 
   /**
    * Adds exclusion and warning reasons for a given cookie.

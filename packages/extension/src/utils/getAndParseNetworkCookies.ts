@@ -60,33 +60,5 @@ export const getAndParseNetworkCookies = async (
     })
   );
 
-  Object.values(
-    synchnorousCookieStore.tabs[Number(450275070)].frameIDURLSet ?? {}
-  ).map(async (key) => {
-    await Promise.all(
-      key.map(async (k) => {
-        try {
-          //@ts-ignore
-          const { cookies = [] } = await chrome.debugger.sendCommand(
-            { targetId: k },
-            'Network.getCookies'
-          );
-
-          const parsedCookies = parseNetworkCookies(
-            cookies,
-            synchnorousCookieStore?.getTabUrl(Number(tabId)) ?? '',
-            cookieDB ?? {},
-            k
-          );
-          if (parsedCookies.length > 0) {
-            allCookies = [...allCookies, ...parsedCookies];
-          }
-        } catch (error) {
-          //Fail silently. There will be only one reason stating target id not found.
-        }
-      })
-    );
-  });
-
   synchnorousCookieStore.update(Number(tabId), allCookies);
 };
