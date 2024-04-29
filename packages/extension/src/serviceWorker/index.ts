@@ -61,6 +61,14 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       }
 
       let tabId = '';
+      targets = await chrome.debugger.getTargets();
+      await Promise.all(
+        targets.map(async ({ id, url }) => {
+          if (url.startsWith('http')) {
+            await attachCDP({ targetId: id });
+          }
+        })
+      );
       // This is to get a list of all targets being attached to the main frame.
       if (method === 'Target.attachedToTarget' && params) {
         const {
@@ -78,7 +86,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           source.tabId ?? null,
           source.targetId ?? null,
           targetId,
-          parentFrameId,
+          parentFrameId ?? source.targetId,
           url
         );
 
@@ -100,7 +108,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       if (method === 'Page.frameAttached' && params) {
         const { frameId, parentFrameId } =
           params as Protocol.Page.FrameAttachedEvent;
-
+        await attachCDP({ targetId: frameId });
         await syncCookieStore?.addFrameToTabAndUpdateMetadata(
           source.tabId ?? null,
           source.targetId ?? null,
@@ -149,7 +157,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           frameId = '',
         } = params as Protocol.Network.RequestWillBeSentEvent;
 
-        let finalFrameId: string | null = frameId;
+        let finalFrameId = frameId;
 
         if (!finalFrameId) {
           return;
@@ -195,7 +203,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             requestId,
             tabId,
             cookieDB,
-            Array.from(new Set([finalFrameId ?? '', frameId]))
+            Array.from(new Set([finalFrameId, frameId]))
           );
         }
         return;
@@ -214,7 +222,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             Array.from(
               new Set([
                 syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
-                  ?.finalFrameId ?? '',
+                  ?.finalFrameId,
                 syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
                   ?.frameId,
               ])
@@ -237,7 +245,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           response: { url: requestUrl },
         } = params as Protocol.Network.ResponseReceivedEvent;
 
-        let finalFrameId: string | null = frameId;
+        let finalFrameId = frameId;
 
         if (!finalFrameId) {
           return;
@@ -283,7 +291,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             requestId,
             tabId,
             cookieDB,
-            Array.from(new Set([finalFrameId ?? '', frameId]))
+            Array.from(new Set([finalFrameId, frameId]))
           );
         }
 
@@ -293,7 +301,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             requestId,
             tabId,
             cookieDB,
-            Array.from(new Set([finalFrameId ?? '', frameId]))
+            Array.from(new Set([finalFrameId, frameId]))
           );
         }
 
@@ -314,7 +322,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           const frameIds = Array.from(
             new Set([
               syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
-                ?.finalFrameId ?? '',
+                ?.finalFrameId,
               syncCookieStore.requestIdToCDPURLMapping[tabId][requestId]
                 ?.frameId,
             ])
@@ -386,6 +394,8 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       }
     } catch (error) {
       //Fail silently.
+      // eslint-disable-next-line no-console
+      console.warn(error);
     }
   })();
 });

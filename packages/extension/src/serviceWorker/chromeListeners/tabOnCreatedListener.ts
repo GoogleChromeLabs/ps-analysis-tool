@@ -58,7 +58,7 @@ export const onTabCreatedListener = async (tab: chrome.tabs.Tab) => {
         ({ tabId }) => tabId && tab.id && tabId === tab.id
       );
       syncCookieStore.initialiseVariablesForNewTab(tab.id.toString());
-      syncCookieStore.tabs[tab.id].mainFrameId = currentTab[0].id;
+
       syncCookieStore.updateParentChildFrameAssociation(
         tab.id,
         currentTab[0].id,
